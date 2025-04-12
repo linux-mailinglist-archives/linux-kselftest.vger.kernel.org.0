@@ -1,133 +1,131 @@
-Return-Path: <linux-kselftest+bounces-30638-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30639-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E69BA86D8A
-	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Apr 2025 16:11:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07B77A86E40
+	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Apr 2025 19:06:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 765ED8C73B8
-	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Apr 2025 14:11:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 80FC0171E92
+	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Apr 2025 17:06:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 295391EA7D8;
-	Sat, 12 Apr 2025 14:11:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48EFA1FC0E6;
+	Sat, 12 Apr 2025 17:06:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="RRMoS31T"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BZ1mI9Ha"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0CBE2367BC;
-	Sat, 12 Apr 2025 14:11:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB6711662E7;
+	Sat, 12 Apr 2025 17:06:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744467074; cv=none; b=W7BH6fFZOgcfNbI1ndf/3zugZ6EhMUopAgK/C2X1aSFcFm0E2nAhzAJOiyviArFV+FoQsAwvSIJzDXMEaV+Hf5j4m06fmXLGi+oE0d3VtFzi7nB0o8zKvqLlzsdhiZgWvRIDcsgLw9qCoOPNgA8PmOHFJQeIKI41XdcL8JE9wqI=
+	t=1744477599; cv=none; b=fXJqCwv0ecrKKgQ94FiczfrW4SusdAg65kta+VZs732xLmris9K6ZkRFyXjHIuUP5Y2tFG3Y3dRKOPivoEJhFciLZPzDR7BukA6krATuArCQw7qFUQtcoMBAD4p3Y9pVEa7vGYdGW+zQPAB52iKXUg3bgwPRwd4vLJS9jiZU9zU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744467074; c=relaxed/simple;
-	bh=6UupgWJqX74K4rb42t9zk7pR4gsrJNFwzwL4a7gqYCw=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=QuxKJC1Xd2yQsgMJrPOGmEo9tG5LWJvaXQiBz0b04jfWf0tyf6x7Y+LPP37ST3J3BCD9f4IlrPUll69/aBq7MkLvk+l66OCoLF7p2Cf1kggENjqnYyjafcl3Cm/QyxNruWpyIcRpfU+BD0vrko2iw4+IEJX/1cEOCGspRZZPnmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=RRMoS31T; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from narnia (unknown [167.220.2.28])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 7A2A321165B8;
-	Sat, 12 Apr 2025 07:11:04 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7A2A321165B8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1744467072;
-	bh=pTnd2Oc8i8/ma8A52qza9zwPziCRMHwOGThxeMcufiE=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=RRMoS31T422OQGTx+ALxBabnWUobD2SGOF9kKhtax/Q9kNBsnMTF30iIo6s62oUcd
-	 9hayyqT4XBOzTiMuXmDqpBpb3kjYL34C0pagTkdwl+BsCNobtK8HIYmwSTpnWM72sc
-	 7MbXa9/e4EXJcrbLuqpTIOI03a2CVhMn3o5hgH1k=
-From: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Matteo Croce
- <technoboy85@gmail.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, David Howells <dhowells@redhat.com>,
- Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller"
- <davem@davemloft.net>, Paul Moore <paul@paul-moore.com>, James Morris
- <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Masahiro Yamada
- <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas
- Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>, =?utf-8?Q?Mick?=
- =?utf-8?Q?a=C3=ABl_Sala=C3=BCn?=
- <mic@digikod.net>, =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Nick
- Desaulniers
- <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>, Jarkko Sakkinen
- <jarkko@kernel.org>, Jan Stancek <jstancek@redhat.com>, Neal Gompa
- <neal@gompa.dev>, "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
- LKML <linux-kernel@vger.kernel.org>, keyrings@vger.kernel.org, Linux
- Crypto Mailing List <linux-crypto@vger.kernel.org>, LSM List
- <linux-security-module@vger.kernel.org>, Linux Kbuild mailing list
- <linux-kbuild@vger.kernel.org>, "open list:KERNEL SELFTEST FRAMEWORK"
- <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
- clang-built-linux <llvm@lists.linux.dev>, nkapron@google.com, Matteo Croce
- <teknoraver@meta.com>, Roberto Sassu <roberto.sassu@huawei.com>, Cong Wang
- <xiyou.wangcong@gmail.com>
-Subject: Re: [PATCH v2 security-next 1/4] security: Hornet LSM
-In-Reply-To: <CAADnVQJ5VaXVN=L+0ygEWJkMtPZnqAVEoeFiLBvikntX0zD49w@mail.gmail.com>
-References: <20250404215527.1563146-1-bboscaccy@linux.microsoft.com>
- <20250404215527.1563146-2-bboscaccy@linux.microsoft.com>
- <CAADnVQJyNRZVLPj_nzegCyo+BzM1-whbnajotCXu+GW+5-=P6w@mail.gmail.com>
- <CAFnufp1erGboUtRaqLoKC48c+9jmqzEfFW8W46xt77JMC0PFpQ@mail.gmail.com>
- <CAADnVQJ5VaXVN=L+0ygEWJkMtPZnqAVEoeFiLBvikntX0zD49w@mail.gmail.com>
-Date: Sat, 12 Apr 2025 07:11:01 -0700
-Message-ID: <87plhhjwqy.fsf@microsoft.com>
+	s=arc-20240116; t=1744477599; c=relaxed/simple;
+	bh=4M7MIAR8fg1JNtgZTxQ7Z8KhaeG1APh1tXeqKA3NEvQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uf5q10AvocRGeHTVBClPKkMEs3YkO2+l4ub9juedjIinTfM5iUwfQuYqjkp9z+vSTZtWJ629RtirdB+X18pI2/zWa/yRyqpJJTDjcMOJ9HSivk8ALpSZS+F243XI6XtaCRE+v3503YTdSmUsRHVJuXC0BYUCMK9y7nkl+gtEYv0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BZ1mI9Ha; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-7399838db7fso2950675b3a.0;
+        Sat, 12 Apr 2025 10:06:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1744477597; x=1745082397; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wDfkpLrFjXgARz5gUMVb0iGct0QwoJRyYU1szy4WksY=;
+        b=BZ1mI9HaBvy7eXW4HMqINjpYT3MFBi2tFpDMTPlV/W4sbszc22kv6FbQ+9iR4hC6ES
+         nmeDw/k6uyFhtuwxg9tpKtb/yllCLsQ0LWApqOJzJ4BM/7FXEyAsF0Pbxka5UiiCDAbw
+         m9LcNsop70/tJS6xqf6kx3wm6VdaWhmjBkvZdJtWh1NNXCDlq3w+kFW259frrWOeDmZx
+         S7KowkvZ5Th1OEY6LmJ9uOM5HA3eR1Jr92vKKT/r8xDSBuqP193JSTWk+7oc6Ck61NR2
+         9mp2lVGuUe3Td3jY/ZQaa+ER+8vxOd9zDX+kEOKrTW9Y7CsHNq69AJ9e39DDR4PaNHAM
+         JVqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744477597; x=1745082397;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wDfkpLrFjXgARz5gUMVb0iGct0QwoJRyYU1szy4WksY=;
+        b=MqvRoRX+G4IGXcv12IE/ouTq9fiSCVj35RFV3oREF0stUAWzo+lbWW/NRlCxys37v0
+         8Ff+lLteCdRT7cc4gpDrVGOnQJOZAn5BXGa0NoTjgRsi/aZQDc6FzpogOMIPIQAY9PTH
+         JLd8PdLib/PY17OSTID0Cai3QTYHEey6FueQkJzCGW42wKSqOOMU7aZckzButvyWqDto
+         L1za+fxAG6+AJiQ8Vd/QYQ5wDj9ANd0Gsrv0jATMkOebJd7gWb8S/xTgO7JQReraCtSk
+         7D5pfYncUtdhJSPGOl3T3MmUIT+xmTeOuyXzfuzRCfDnlDeNUwLQBjRnjFBBb9PxG4oE
+         LRig==
+X-Forwarded-Encrypted: i=1; AJvYcCV9SnigoVP8zjrVuH6ZB4mStsRc98YvaRn6s1hs0C1u/0JuSMPjh6MgCx7/YVn0GVzeeTCfbt7q4gaDQiLGCAJm@vger.kernel.org, AJvYcCX53eDACOKGz3si63FMsrk8wSeDc5YdJ9p+z+/kj8LAUpIyBIE8+QPXQzvtu6GKPshKaqmM0D1cwVVooXQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwO68iRPphGUa28CSuUmiNpZUeb9AMEiAbHPqbU3qj5VwPfjz3D
+	Cmbgj3ezDQxqkK1VnkCArtHvKcxHhNRY8yMyTndniT/2HWOFeb9f
+X-Gm-Gg: ASbGncuyXLKDzvbKhvzzPcdjnnF1xBemcab/6/HiXUa5QyrjalYuP+1FxiJbKwhEE+X
+	CDj3Y7AsSn7SX9PSJD4t6OxnMCZiFy25MnBNxN/BqGMid5p7EnO0wPkIRMajpEZAiKPzEuLoyZq
+	KBiFZkvd8oA8phSmdsbrZyqxVMXvRKfrsGdSjcvS/QDsTGAb8i+qTmd4/FjfHeFxnb5kszVbsCj
+	0SwUxWVB3FQIyCKTyCH9ri8Ct5Wb43Xz7PrEfEtozkDePzkrPH2Vxaf8+XbQuPS8VROIrkuou17
+	DfDkufKOOc+8oGKHTqxK4XjBUp75eU5OqpLpNSFDnBpv
+X-Google-Smtp-Source: AGHT+IFmHTbrhMwLyhHd3P9FPqMobUomm6+KomqsrHzvH8JYKaw49WhnpAdB1C+A99DlziEO5YWqng==
+X-Received: by 2002:a05:6a20:9f45:b0:1f3:26ae:7792 with SMTP id adf61e73a8af0-201795ec5cbmr8837115637.18.1744477596779;
+        Sat, 12 Apr 2025 10:06:36 -0700 (PDT)
+Received: from ubuntu2404.. ([125.121.98.110])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73bd21c20f3sm3610710b3a.39.2025.04.12.10.06.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 12 Apr 2025 10:06:36 -0700 (PDT)
+From: KaFai Wan <mannkafai@gmail.com>
+X-Google-Original-From: KaFai Wan <kafai.wan@hotmail.com>
+To: martin.lau@linux.dev,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	mykolal@fb.com,
+	shuah@kernel.org,
+	memxor@gmail.com
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kafai.wan@hotmail.com,
+	leon.hwang@linux.dev
+Subject: [PATCH bpf-next 0/2] bpf: Allow access to const void pointer arguments in tracing programs
+Date: Sun, 13 Apr 2025 01:06:24 +0800
+Message-ID: <20250412170626.3638516-1-kafai.wan@hotmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
+hi, 
+Tracing programs can access arguments via BTF [1]. Currently we allow 
+tracing programs to access pointers to string (char pointer), 
+void pointers, pointers to structs, and int pointers [2].
 
-> On Fri, Apr 11, 2025 at 5:30=E2=80=AFPM Matteo Croce <technoboy85@gmail.c=
-om> wrote:
->>
->> Il giorno sab 12 apr 2025 alle ore 02:19 Alexei Starovoitov
->> <alexei.starovoitov@gmail.com> ha scritto:
->>
->> Similar to what I proposed here?
->>
->> https://lore.kernel.org/bpf/20211203191844.69709-2-mcroce@linux.microsof=
-t.com/
-> ...
->> @@ -1346,6 +1346,8 @@ union bpf_attr {
->>   __aligned_u64 fd_array; /* array of FDs */
->>   __aligned_u64 core_relos;
->>   __u32 core_relo_rec_size; /* sizeof(struct bpf_core_relo) */
->> + __aligned_u64 signature; /* instruction's signature */
->> + __u32 sig_len; /* signature size */
->
-> Well, yeah, two fields are obvious.
-> But not like that link from 2021.
-> KP proposed them a year later in 2022 on top of lskel
-> which was much closer to be acceptable.
-> We need to think it through and complete the work,
-> since there are various ways to do it.
-> For example, lskel has a map and a prog.
-> A signature in a prog may cover both, but
-> not necessary it's a good design.
-> A signature for the map plus a signature for the prog
-> that is tied to a map might be a better option.
-> At map creation time the contents can be checked,
-> the map is frozen, and then the verifier can proceed
-> with prog's signature checking.
-> lskel doesn't support all the bpf feature yet, so we need
-> to make sure that the signature verification process
-> is extensible when lskel gains new features.
->
-> Attaching was also brought up at lsfmm.
-> Without checking the attach point the whole thing is quite
-> questionable from security pov.
+If we try to access argument which is pointer to const void like 2nd 
+argument in kfree, it's an UNKNOWN type, verifier will fail to load. 
+typedef void (*btf_trace_kfree)(void *, long unsigned int, const void *);
 
-That statement is quite questionable. Yes, IIRC you brought that up. And
-again, runtime policy enforcement has nothing to do with proving code
-provenance. They are completely independent concerns.
+[1] https://lore.kernel.org/bpf/20191016032505.2089704-7-ast@kernel.org/
+[2] https://lore.kernel.org/bpf/20211208193245.172141-1-jolsa@kernel.org/
+---
+KaFai Wan (2):
+  bpf: Allow access to const void pointer arguments in tracing programs
+  selftests/bpf: Add test to access const void pointer argument in
+    tracing program
 
-That would be akin to saying that having locks on a door is questionable
-without having surveillance cameras installed.
+ kernel/bpf/btf.c                                       | 10 +++++++++-
+ .../selftests/bpf/progs/verifier_btf_ctx_access.c      |  9 +++++++++
+ 2 files changed, 18 insertions(+), 1 deletion(-)
+
+-- 
+2.43.0
+
 
