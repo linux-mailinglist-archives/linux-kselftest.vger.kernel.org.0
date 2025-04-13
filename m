@@ -1,143 +1,191 @@
-Return-Path: <linux-kselftest+bounces-30641-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30642-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63A13A86E44
-	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Apr 2025 19:07:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10DC4A87076
+	for <lists+linux-kselftest@lfdr.de>; Sun, 13 Apr 2025 05:15:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 88700174B0D
-	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Apr 2025 17:07:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E0EE7178F3D
+	for <lists+linux-kselftest@lfdr.de>; Sun, 13 Apr 2025 03:15:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A0F82036EC;
-	Sat, 12 Apr 2025 17:06:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6798139CF2;
+	Sun, 13 Apr 2025 03:15:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D7bXo9Un"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WMUAkrpw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A03301662E7;
-	Sat, 12 Apr 2025 17:06:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B84228249F
+	for <linux-kselftest@vger.kernel.org>; Sun, 13 Apr 2025 03:15:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744477610; cv=none; b=k4JBP+iqWED0L9dTaK6NCvNwcJI9IqXVB6oYZmVxfD+4SkMQDYqC9Yyq4b1d5xzLwF/8S+BV8ec8pWv2dDnjDT8leAR/xKVjCy1lLt3fhUw5JvFhQaWFg+X+dvS6ouKOZJTc5PQkfoPMk36kq+NgcPwGMjYTBHDYJtVWfrXUkyU=
+	t=1744514108; cv=none; b=fUISMNeVPzdh7wDAZjJWYBcs8d1wsx54GniIlGuugU/oU02LLrBSq5Hu68xI8eEddb9nbbHqkQ6o6MS9H3x4aImrB9UU7qmNkF5myn8jXEqDQMFuicCD2U11h/MoR+Ee98+SJ4JUavnxdUmJ1FAh3bgRGCgZBhDDRFSE/hbeg9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744477610; c=relaxed/simple;
-	bh=xFYhN6FwRAsyWFqlpeGlTcvXCPwLaEf5hlQEci9C0+k=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JRPxORjKnDFSSu/zIbp0821T6MwWHophCrhi30ryGGEI3M94qOByAF1P7+qIQ682Wlf6kr++8dUjszIMvgQyWaFvci0NQy/J9ooEwbRBWzYifqwV5/x+eiswn3L5luQixy9fPgGEagg7VrRVOfFJuuwAGZh2kliXNH5zO0GvI4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D7bXo9Un; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-7369ce5d323so2490060b3a.1;
-        Sat, 12 Apr 2025 10:06:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744477608; x=1745082408; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hWvWft/Ilf3Ni77MiBJ218Cck/EYMRSjxeQtmM2Wmk8=;
-        b=D7bXo9UnXh9O3jOVfE4wlWRhkoiCUga7MXJCA6nyR9AN5RA5x9uUb9bgGnNSUEkBwN
-         /bK6fr4B6bQArjdqpLzNGOgSgV2DFilvNZ51sqMJXzzorBAXpNiN2zHGe/2o1sHlBUvR
-         wk49SFt9VlrJZQ5NLfM9M6DZNVj2+OXpar/ORYXgUfk9V4on66PxmVJq6w21TpyrUgSj
-         kL8HkeskFECOrSnchooqt4dBPIgh190gX8XFHzgnl/Sj81GspiDq4Ts6Cj6xoZRnvkQz
-         WbbhLUzn1W8rDvwS0TGZtGWCg9smxYwPhsWARRDtMa37tmJA3DawnQ2o7zvQDGYXiNus
-         4rGA==
+	s=arc-20240116; t=1744514108; c=relaxed/simple;
+	bh=GXoItoIHVQGxDk0GZCjHQsM8qdSgDcBsL2mFmkWaNc8=;
+	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=FZBhF5/8IWahVeEIgjIQFTzOZ8JiW2mWUAeGbMoOdwnf2ZV6cdQHqG2QeCcOeXrbArQO7HCTVYtTFgOHwa8ylI78UHfIE6704aVg5ODzGtt/NpFe+yp3VWOV0aNMLLMGEYPiT9Yt7KUXUTHvKlBQXLnsRdzz9RJgrJSio9c9Y4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WMUAkrpw; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1744514105;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=BZ2AIgXN2yGPN7Sxu2wl5jNXWejeTiuda2OwXuQQY0I=;
+	b=WMUAkrpwkpKSbdggmy+HjO0VBj17OE1AcLqqaDOTl4l2yQ8cHfhUX3mtI3g2MCS6sWvX6c
+	X89j+PrcOOug+6G9i1hfEh/8DXCPFrnWEpSH8/d/PFwFqxiRxnWQv/1gqBC2b03Lq3vmdx
+	WwYe1bbz4g5Y2c6qGCXuFWyvT00RfDk=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-45-_qS4DinhOQqCG43VzTrMdQ-1; Sat, 12 Apr 2025 23:15:04 -0400
+X-MC-Unique: _qS4DinhOQqCG43VzTrMdQ-1
+X-Mimecast-MFC-AGG-ID: _qS4DinhOQqCG43VzTrMdQ_1744514103
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-7c5e28d0cc0so575134785a.3
+        for <linux-kselftest@vger.kernel.org>; Sat, 12 Apr 2025 20:15:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744477608; x=1745082408;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hWvWft/Ilf3Ni77MiBJ218Cck/EYMRSjxeQtmM2Wmk8=;
-        b=Sjo213MRdZoy05jigNCHxJKcc9Z0iZ1ESXe+5Dyq43kmI+H7dLoYCBNAeiY6orh9K9
-         +O0Ruc1uTWwkEz5Mj8Qpl/Rji4Ju7d8h0swouo/fZ/wHrveRFHtLcIs8Ne3Lf+MT0U0u
-         2rZ14L9AaEiYLUBDOPCZ7rrOYeVf6/LRxa6qMzVYUzVyri69Wz91j2mxNuunALcpqmfL
-         p7NOsp1VothFc8trowi3G+Y8VMp0A2eUjxAq36yG1KOhjjx1lw7m2/83LOrl5j0OuTbD
-         JF4alXDyedz5VIuk+n13j1TXhrNbTTcXObs7hsa8I6Sd4zGRb4ZTaXygq/Liqsug6552
-         VSSA==
-X-Forwarded-Encrypted: i=1; AJvYcCW4cF4un2UQQTKzLqlvXeTVanjY7MLSuiV+2lf11lrZ/2yLlUxsz9ustbTTXjRrDrCEVV/bc+NOmS8Dm1aXmLAQ@vger.kernel.org, AJvYcCWj36nswBjzg12RLh7/de+sokovwDBPkxTZpm2CoubRcevYrEg5TkM5zqyvcsY5WdDHuGVHjrUazOIlWN8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzT9qyu49wpw1HSPT9JDQBfLb77vMUcOVuRD+EgzXrOa/qrYrec
-	pcXpKkqQ19I0wzYcB0DVc1VoXxc4r4J+3pTmXqoOLHUfsq8J1tJp
-X-Gm-Gg: ASbGncsOa1AxOLPyEZszznoVyNzulRmnLpJ0z7XiXPMFx4PhDLbMo5mHtcUL76sr6BT
-	ATjOICC41Rui1nDzGQiH7oK0QrRj3Ie3SJxvPkaOaVVOQv5EUagCT5atUuGsaMM5olh+h0KKslm
-	bxDEA17p7XfiJ9/97REjddsw5ZZBbOo+6VEK99Snj2DaxkAePVeokWOOv0RNIvmKA0Vyyk3kBEC
-	GTZUd9ga9+0IHL90TjMzdJFWQ+FJ04SW/LRCzEPEyHd+iOP9Fst0z+pJbyWQvqNcDtm+QBvfUXK
-	qL0/IWJTJftZXOEwWSCZmi3W349MaCQjjEAlMis91FyF
-X-Google-Smtp-Source: AGHT+IFF9kQVXw4HN+npCAkPkNtd1zKYV9lEhCojLLriVZO+7NCdzgR6hv2pjLwmrj5MuNCYLsPKyw==
-X-Received: by 2002:a05:6a00:1387:b0:730:75b1:7219 with SMTP id d2e1a72fcca58-73bd1202f32mr8107832b3a.12.1744477607784;
-        Sat, 12 Apr 2025 10:06:47 -0700 (PDT)
-Received: from ubuntu2404.. ([125.121.98.110])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73bd21c20f3sm3610710b3a.39.2025.04.12.10.06.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Apr 2025 10:06:47 -0700 (PDT)
-From: KaFai Wan <mannkafai@gmail.com>
-X-Google-Original-From: KaFai Wan <kafai.wan@hotmail.com>
-To: martin.lau@linux.dev,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	mykolal@fb.com,
-	shuah@kernel.org,
-	memxor@gmail.com
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kafai.wan@hotmail.com,
-	leon.hwang@linux.dev
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Add test to access const void pointer argument in tracing program
-Date: Sun, 13 Apr 2025 01:06:26 +0800
-Message-ID: <20250412170626.3638516-3-kafai.wan@hotmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250412170626.3638516-1-kafai.wan@hotmail.com>
-References: <20250412170626.3638516-1-kafai.wan@hotmail.com>
+        d=1e100.net; s=20230601; t=1744514103; x=1745118903;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:user-agent:mime-version:date:message-id:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BZ2AIgXN2yGPN7Sxu2wl5jNXWejeTiuda2OwXuQQY0I=;
+        b=UHWbFaA8SWvl6Xes3GGeebjMubClvtRU+/1o9/Z2PUbT4ZMbdvyHHrCj6avegHY5gt
+         JOTLpXZlN9N/hISzQ6F8iY502NWYAXAvnYD6udcofpKLjyQK8uI4JkkyMB6esDdxuO7Q
+         u1K0uVdkldJAvFFvbLtHaEucpcVt9+FdsyD6Fk0caw0dDXWQSSdaDNcwXegMTB4nhKUi
+         yFwucgVNZi7Avlm3Cgs2dVGef62w1w/EC3o8Rj2fU4bNbrTok+L8ivKVV9nWBlNLw+dw
+         NvzpcboLNxFJtJPlXvqHCwVlyml3m/WlGtBb7XO8jQAIntKqOZDn7FV/9uwVjdcUDFVW
+         DS0g==
+X-Forwarded-Encrypted: i=1; AJvYcCVBhJzEEXSb8PqrcBtHyvO4vEj8HZEr5adq5mlbAqVMLx4K22EXWQRvOx2LkslQ8OLs4TQWOB5IcCMl5jo5J7w=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzb3jMWFXQwSR4WGoYOxMNLPGKC6ODRl8XCiv0oeJxJbC1kSb+R
+	JZ96aKMZogn9M99GyuSagLl7aflFw7Z4nO12VZELRQLFUdDGWRQIth5bpw6Q81OIG9nr27aItj0
+	1xag13ffyZHqEKOp8y40KdYnPItVet6tCjDMF7dUlvZ6US8VyuSub4SD1+ufoWZAG4JKky+mCpA
+	==
+X-Gm-Gg: ASbGncslQ5kbtLw7t62p6Q5FPBj4omyhcPTzoU/O84+p6FPcLM9hhZtGmnlOeXdLbfY
+	gRE7IsnBZvIOn4EYeHU2tQiB1574kiq3ct16HFrSHlHhLlh1fvaf51sm2ctWDwdNURts+hNj0eT
+	Fm0NceM1mGiidF2JUoef7a2ceak3gpGU5mym8jQcr3Mlz0OfzIF3uu9JnceLTsE0ei9FoYbBJR7
+	iUvWiGQWGdEaeklebE7qbT3SA6zp/WmB49JVRgXYNg4ublFnpnKWh14PdRiJPyvM+ScpcUSQ8TF
+	z2H1o6A0e4oqlCI/trTQaTzFjEYXhVT5THrFCcugfPndqVh+KsajMA==
+X-Received: by 2002:a05:620a:f0c:b0:7c5:50ab:de07 with SMTP id af79cd13be357-7c7af0d4854mr1206658285a.21.1744514103027;
+        Sat, 12 Apr 2025 20:15:03 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHEgZdkNpb8M2sLPV1/LXGt3hDMHfPduIrP6ippNwIGXHw9JexKgaMOOMOlNxn4UhxXHLuaKg==
+X-Received: by 2002:a05:620a:f0c:b0:7c5:50ab:de07 with SMTP id af79cd13be357-7c7af0d4854mr1206655885a.21.1744514102577;
+        Sat, 12 Apr 2025 20:15:02 -0700 (PDT)
+Received: from [172.20.3.175] (syn-108-176-116-062.biz.spectrum.com. [108.176.116.62])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c7a8a0f1fasm495773985a.112.2025.04.12.20.15.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 12 Apr 2025 20:15:01 -0700 (PDT)
+From: Waiman Long <llong@redhat.com>
+X-Google-Original-From: Waiman Long <longman@redhat.com>
+Message-ID: <bbc48f40-274c-44ec-9a98-7c18b64628c0@redhat.com>
+Date: Sat, 12 Apr 2025 23:15:00 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/2] selftests: memcg: Increase error tolerance of
+ child memory.current check in test_memcg_protection()
+To: Roman Gushchin <roman.gushchin@linux.dev>
+Cc: Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>,
+ Andrew Morton <akpm@linux-foundation.org>, Tejun Heo <tj@kernel.org>,
+ =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ cgroups@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+References: <20250406024010.1177927-1-longman@redhat.com>
+ <20250406024010.1177927-3-longman@redhat.com> <Z_Wht7kyWyk62IBU@google.com>
+Content-Language: en-US
+In-Reply-To: <Z_Wht7kyWyk62IBU@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Adding verifier test for accessing const void pointer argument in
-tracing programs.
 
-The test program loads 2nd argument of kfree tp_btf which is
-const void pointer and checks that verifier allows that.
+On 4/8/25 6:22 PM, Roman Gushchin wrote:
+> On Sat, Apr 05, 2025 at 10:40:10PM -0400, Waiman Long wrote:
+>> The test_memcg_protection() function is used for the test_memcg_min and
+>> test_memcg_low sub-tests. This function generates a set of parent/child
+>> cgroups like:
+>>
+>>    parent:  memory.min/low = 50M
+>>    child 0: memory.min/low = 75M,  memory.current = 50M
+>>    child 1: memory.min/low = 25M,  memory.current = 50M
+>>    child 2: memory.min/low = 0,    memory.current = 50M
+>>
+>> After applying memory pressure, the function expects the following
+>> actual memory usages.
+>>
+>>    parent:  memory.current ~= 50M
+>>    child 0: memory.current ~= 29M
+>>    child 1: memory.current ~= 21M
+>>    child 2: memory.current ~= 0
+>>
+>> In reality, the actual memory usages can differ quite a bit from the
+>> expected values. It uses an error tolerance of 10% with the values_close()
+>> helper.
+>>
+>> Both the test_memcg_min and test_memcg_low sub-tests can fail
+>> sporadically because the actual memory usage exceeds the 10% error
+>> tolerance. Below are a sample of the usage data of the tests runs
+>> that fail.
+>>
+>>    Child   Actual usage    Expected usage    %err
+>>    -----   ------------    --------------    ----
+>>      1       16990208         22020096      -12.9%
+>>      1       17252352         22020096      -12.1%
+>>      0       37699584         30408704      +10.7%
+>>      1       14368768         22020096      -21.0%
+>>      1       16871424         22020096      -13.2%
+>>
+>> The current 10% error tolerenace might be right at the time
+>> test_memcontrol.c was first introduced in v4.18 kernel, but memory
+>> reclaim have certainly evolved quite a bit since then which may result
+>> in a bit more run-to-run variation than previously expected.
+>>
+>> Increase the error tolerance to 15% for child 0 and 20% for child 1 to
+>> minimize the chance of this type of failure. The tolerance is bigger
+>> for child 1 because an upswing in child 0 corresponds to a smaller
+>> %err than a similar downswing in child 1 due to the way %err is used
+>> in values_close().
+>>
+>> Before this patch, a 100 test runs of test_memcontrol produced the
+>> following results:
+>>
+>>       17 not ok 1 test_memcg_min
+>>       22 not ok 2 test_memcg_low
+>>
+>> After applying this patch, there were no test failure for test_memcg_min
+>> and test_memcg_low in 100 test runs.
+> Ideally we want to calculate these values dynamically based on the machine
+> size (number of cpus and total memory size).
+>
+> We can calculate the memcg error margin and scale memcg sizes if necessarily.
+> It's the only way to make it pass both on a 2-CPU's vm and 512-CPU's physical
+> server.
+>
+> Not a blocker for this patch, just an idea for the future.
 
-Signed-off-by: KaFai Wan <kafai.wan@hotmail.com>
----
- .../selftests/bpf/progs/verifier_btf_ctx_access.c        | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Thanks for the suggestion.
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_btf_ctx_access.c b/tools/testing/selftests/bpf/progs/verifier_btf_ctx_access.c
-index 28b939572cda..a6cec7f73dcd 100644
---- a/tools/testing/selftests/bpf/progs/verifier_btf_ctx_access.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_btf_ctx_access.c
-@@ -65,4 +65,13 @@ __naked void ctx_access_u32_pointer_reject_8(void)
- "	::: __clobber_all);
- }
- 
-+SEC("tp_btf/kfree")
-+__description("btf_ctx_access const void pointer accept")
-+int ctx_access_const_void_pointer_accept(void)
-+{
-+	/* load 2nd argument value (const void pointer) */
-+	asm volatile ("r2 = *(u64 *)(r1 + 8); ");
-+	return 0;
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.43.0
+As I said in a previous mail, the way the test works is by waiting until 
+the the memory.current of the parent is close to 50M, then it checks the 
+memory.current's of its children to see how much usage each of them 
+have. I am not sure if nr of CPUs or total memory size is really a 
+factor here. We will probably need to run some experiments to find out. 
+Anyway, it will be a future patch if they are really a factor here.
+
+Cheers,
+Longman
+
+>
+> Thanks!
+>
 
 
