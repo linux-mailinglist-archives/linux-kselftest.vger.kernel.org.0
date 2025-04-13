@@ -1,49 +1,50 @@
-Return-Path: <linux-kselftest+bounces-30645-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30646-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1F42A8714D
-	for <lists+linux-kselftest@lfdr.de>; Sun, 13 Apr 2025 11:35:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64CD6A87150
+	for <lists+linux-kselftest@lfdr.de>; Sun, 13 Apr 2025 11:36:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB6B63B99CD
-	for <lists+linux-kselftest@lfdr.de>; Sun, 13 Apr 2025 09:35:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D7438179137
+	for <lists+linux-kselftest@lfdr.de>; Sun, 13 Apr 2025 09:35:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CFCB1A238E;
-	Sun, 13 Apr 2025 09:35:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A13F1A314D;
+	Sun, 13 Apr 2025 09:35:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YMeFN2pt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D/pgXU/H"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AF871A0BFD;
-	Sun, 13 Apr 2025 09:35:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57D571A3145;
+	Sun, 13 Apr 2025 09:35:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744536901; cv=none; b=u/InF2Xn/sNFhDih2cocrgbgUSTlA2LOzcG9zSJnUU3Ik4+t33UF58uTA0ed+apFD4DDku8vXwD12otn+xolqpU1RUi+PBiE7jwUorJUU6HcVlbZ5Iq7/hX5MraWSsdoykaBRZbnqhBkCh32MhQQ3py0uPcKFUoU5EkjBymjM9U=
+	t=1744536904; cv=none; b=a8x5W3mQY7WIYf5qllKfSbUXS09MVKYieCDSr1hZJIYiMLOZ8y3lllrpP4lWeYvie/vDCq/RfVQJQVayaqRsJtT2KM6vgIB2Fn5plfhotw414cLFRkBOStCeExOkSUeW9aHQZwJezyZOjZU9ZpZoTwYsTiBtBD4s3Jbc79CsH7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744536901; c=relaxed/simple;
-	bh=jQ20O7DhqTMfar+V5CaRvgDGRxvFp3gqHN2voLWChWM=;
+	s=arc-20240116; t=1744536904; c=relaxed/simple;
+	bh=Ed73cRHm7tHOkgc9qekoaFLdbmR1sHWKWLgmp0Roygk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=g8OLiEqEz0fxBECw3mtYHDX4gsaXFE3yEaGFRBezAIXYeb2gXQ4+NNPpL1GLlaaL5pDRniI2GHYMIrZAaIuqKtrfGgF4r7/kawjagQenViqil0KPUcH+pquM7nJcXdHTm2NkPD/YKKaQ6NMD/ds3ljE3j4z+FOdCDrrjAAzeTGU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YMeFN2pt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89976C4CEEC;
-	Sun, 13 Apr 2025 09:34:58 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=FXp/cBrno0/YG65WS0+s1ERoZmtE9//Y4Gt0vci5aboNkgPOlxfZ4y4Ar0tU+I1yM+VaPGNWbFKhRigmTcJqnSleIq8+1pE6Je/L27kEXJTeuKMq4dXhWNMED2JaqBZSm4ElkNK/NKRorVJd+oQNHAB+rI4aerWJnwrDbH24Slg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D/pgXU/H; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42070C4CEDD;
+	Sun, 13 Apr 2025 09:35:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744536900;
-	bh=jQ20O7DhqTMfar+V5CaRvgDGRxvFp3gqHN2voLWChWM=;
+	s=k20201202; t=1744536903;
+	bh=Ed73cRHm7tHOkgc9qekoaFLdbmR1sHWKWLgmp0Roygk=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=YMeFN2pt/g7ckbCq/fyz93MFpkaRLfaXaNUebwpOLAnjUDCNK7F6CyQdNryOx0nT9
-	 QnPDLUIEyoJqvTYC4s13dR1BAbAbuHrLMEbdGvtEkgnaXDi+DHPGjbAY7v+6k3nsia
-	 skx3jVcQmxZzyMC1EVVy3xrNzD1Pw+g/mGr59Y/JTRZ1RBsoU5RvwTT/vforcG8Tky
-	 rH0gzZa0T/r+LNsU74+pu8msNScxnMQvWibu2qY8bx528OVweNO74qE8iSOE3HvUT5
-	 TWL1i61QLG5/eU7Xl7kwU6K4kiKsCmSWYHLFsXsvoksmpTX45eBqlq54tI0fn/T6dL
-	 mGJjl64CrVJXA==
+	b=D/pgXU/HhKrITYgh/b4NJsAEMrhWZe/rJ4oxqzy4N3eDRB2U2BtPeedsxlhLUbUkN
+	 iKsf332AyGTm52Qs65ay3jL02ddjsfMihieeSnvDPVavx2QeziXX0Uy3ej0Qg4fZxi
+	 iMfXnVX7N+2+VrR1MrfBJP1d84HnEetkoGLlKWWRgVDqZ9I1kHToZD1XdBTvNAvoNT
+	 XTQqM3U+K2hUis60waLXWtS89V8ygF2DV5adllbjqpcZ61gKxB75Fk3oxnmMRlsS5I
+	 C1PqYcyXTtmPduapkpERDzCoLEa5BZpkpwpHffDCgWe0TYXyZq9nht7yB+2HvFz5X5
+	 t7A91BmOHnmsQ==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Sun, 13 Apr 2025 11:34:33 +0200
-Subject: [PATCH net-next v2 2/8] mptcp: sched: split validation part
+Date: Sun, 13 Apr 2025 11:34:34 +0200
+Subject: [PATCH net-next v2 3/8] mptcp: pm: Return local variable instead
+ of freed pointer
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250413-net-next-mptcp-sched-mib-sft-misc-v2-2-0f83a4350150@kernel.org>
+Message-Id: <20250413-net-next-mptcp-sched-mib-sft-misc-v2-3-0f83a4350150@kernel.org>
 References: <20250413-net-next-mptcp-sched-mib-sft-misc-v2-0-0f83a4350150@kernel.org>
 In-Reply-To: <20250413-net-next-mptcp-sched-mib-sft-misc-v2-0-0f83a4350150@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -63,88 +64,69 @@ To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, 
  "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- Geliang Tang <geliang@kernel.org>
+ Thorsten Blum <thorsten.blum@linux.dev>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2140; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=Prj8WuhgjJsXvrTgfPfnV6nlpjcjQek+PSeM494ueS4=;
- b=owEBbQKS/ZANAwAKAfa3gk9CaaBzAcsmYgBn+4UzgZLLBKQd6uAAloCrvdIEJRNvhIMENTfYZ
- aG+QaZYkbmJAjMEAAEKAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZ/uFMwAKCRD2t4JPQmmg
- c/QyEACDdO5T85GLhDhQ7b4dANeZxKqKpxMxhL5lN+h8Rkf15CCs4J05yiDc0HFG6/w/kPRSX9Y
- md/VM8VQ/KiDH/hL+B1uhs3Jh/vdLPNFaU2dozHP+ETXm8NjjDZnbOh9shlr0bEH+xCh83miMzs
- /EgfoluU+bqVjZ52Vd90kkeCviW3cVR/FRqlqVZFuynGat+4aW7le1wIQ49CCfOFeLF5GheTVVh
- T0LJ31q/o5gLtjCLv24Mopz7qZAa6P4EILqaEYHdRen+KysG0swse8nNXYZxF7yCnqinH1CxIb5
- E/Li7GlAkYXyuIqflsqm8ci2so2hPRFBvhNWOatpVtLC5N8i7Vfd8c6XpeT/we6E/jF0gxmtSkz
- fhaMv8UyJg5IYlTapbMKVhX0foYhD7SFU36gYXkd48YDI/dOKzrw/Sr286NMr/uJocO/RudPMNG
- zVLXkqppv5D7zsP79/3cMCbf/CEQ9BauS+k8bEoe8PUPilWkZC7YLD8+qvWuF9LYEHSb36g8dnB
- +nCUKZG8q18kQGqKkio7O7OzFX3vygKdJ1YE3LonN1JIOmXI45p+mSe+TLrqtE48ysONaMn7lUX
- Fyf6ocKie4LNwPUOEUTjHl7iIa0grZlbpFwKkpuEwqsh232KDYLP9t/xxwokOXr7Pp+8m8oud1G
- d526OVgvsak7cXQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1602; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=jApLlQe9kLWnNYT+J4tjFKFNld+C/W/579HgmrPr8y0=;
+ b=owEBbQKS/ZANAwAKAfa3gk9CaaBzAcsmYgBn+4U1vKShTBG77hMueQNozZqbUWL5yvz4Efe+8
+ ehBUrIpdYWJAjMEAAEKAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZ/uFNQAKCRD2t4JPQmmg
+ c9ySD/48hs8A/Y4pTcTMbDzbWisj+eQkRF3kKiheAtuxchaqxLX/7CK2e32MQrmIz6zDNFqs6fL
+ JXNhW2z7+kKLGC9Zh909rPumRTK1g+358FMzj9GL0JpCaUWWfAquOjfWVQjZ2RbPM8U+uUMjL6+
+ CZd2vNMYhV1BsHno7bCo4egpsmAL+NYkMvz3egU2GMjAbadeuLNqwd/hFkPRrt8yBTAdfCwd2/8
+ 5tObN7dXvFVeU18tNOTnYkbo9I0hkLa6wIU6q1+GMenpf5JfvKq5gu3oMAEXBQ9E0d4YY8LAw1p
+ M+j5lcqpXcV3BMsYDf4gyC3cMvioQbTtY9N1amqiuy9vHijV3Fd2/xeyGPC/h6G5HVopdfG9PsF
+ bgR1zbBe6YrHTF/fK2GmneuxFm+K5HSFHktJ+4/VYPerwG5co/xrojEjvPUhYtdJ0dogJner53+
+ I0eF2OxEg5sVgqU88XztYO7gtQpjh+LFqY9VLTIjrMRewd4fBCjo4O8P9pKJO9Lo2YUgNwn0rdg
+ G9oneVC4k5u3JaaDP8bBvToqMdpwABpEk5nlh/w4Jey0sPAElnRwFmPXvkCe8rjUMgScYeABZAh
+ IrF2dR+i89wIaNo8R2w77yiJEpqDchccs707XsLP5kdsyt+tGlU0IU7SqiZ/MC6+Eo8Bq4NxFiG
+ FF8mPhg+OvRGIOw==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+From: Thorsten Blum <thorsten.blum@linux.dev>
 
-A new interface .validate has been added in struct bpf_struct_ops
-recently. This patch prepares a future struct_ops support by
-implementing it as a new helper mptcp_validate_scheduler() for struct
-mptcp_sched_ops.
+Commit e4c28e3d5c090 ("mptcp: pm: move generic PM helpers to pm.c")
+removed an unnecessary if-check, which resulted in returning a freed
+pointer.
 
-In this helper, check whether the required ops "get_subflow" of struct
-mptcp_sched_ops has been implemented.
+This still works due to the implicit boolean conversion when returning
+the freed pointer from mptcp_remove_anno_list_by_saddr(), but it can be
+confusing and potentially error-prone. To improve clarity, add a local
+variable to explicitly return a boolean value instead.
 
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-Reviewed-by: Mat Martineau <martineau@kernel.org>
+Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
 Notes:
-- v2: fix Author field (--no-mailmap).
+- a previous version has already been sent to Netdev. ChangeLog:
+  - Remove the if-check again as suggested by Matthieu Baerts
+  - Target net-next, not net (not a fix) and rephrase the commit message
+  - Link to this version:
+    https://lore.kernel.org/20250325110639.49399-2-thorsten.blum@linux.dev
 ---
- net/mptcp/protocol.h |  1 +
- net/mptcp/sched.c    | 17 +++++++++++++++--
- 2 files changed, 16 insertions(+), 2 deletions(-)
+ net/mptcp/pm.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/net/mptcp/protocol.h b/net/mptcp/protocol.h
-index d409586b5977f93bff14fffd83b1d3020d57353b..7aa38d74fef6b5f00d97a114d74b711014d0a52d 100644
---- a/net/mptcp/protocol.h
-+++ b/net/mptcp/protocol.h
-@@ -744,6 +744,7 @@ void mptcp_info2sockaddr(const struct mptcp_addr_info *info,
- 			 struct sockaddr_storage *addr,
- 			 unsigned short family);
- struct mptcp_sched_ops *mptcp_sched_find(const char *name);
-+int mptcp_validate_scheduler(struct mptcp_sched_ops *sched);
- int mptcp_register_scheduler(struct mptcp_sched_ops *sched);
- void mptcp_unregister_scheduler(struct mptcp_sched_ops *sched);
- void mptcp_sched_init(void);
-diff --git a/net/mptcp/sched.c b/net/mptcp/sched.c
-index f09f7eb1d63f86b9899c72b5c2fd36c8445898a8..1e59072d478c9b52c7f7b60431b589f6ca3abe65 100644
---- a/net/mptcp/sched.c
-+++ b/net/mptcp/sched.c
-@@ -82,10 +82,23 @@ void mptcp_get_available_schedulers(char *buf, size_t maxlen)
- 	rcu_read_unlock();
+diff --git a/net/mptcp/pm.c b/net/mptcp/pm.c
+index 31747f974941fae3f80bfc8313e82c41f92562eb..1306d4dc287b842ebf7efd52d121b096d5cb43e0 100644
+--- a/net/mptcp/pm.c
++++ b/net/mptcp/pm.c
+@@ -151,10 +151,13 @@ bool mptcp_remove_anno_list_by_saddr(struct mptcp_sock *msk,
+ 				     const struct mptcp_addr_info *addr)
+ {
+ 	struct mptcp_pm_add_entry *entry;
++	bool ret;
+ 
+ 	entry = mptcp_pm_del_add_timer(msk, addr, false);
++	ret = entry;
+ 	kfree(entry);
+-	return entry;
++
++	return ret;
  }
  
-+int mptcp_validate_scheduler(struct mptcp_sched_ops *sched)
-+{
-+	if (!sched->get_send) {
-+		pr_err("%s does not implement required ops\n", sched->name);
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
- int mptcp_register_scheduler(struct mptcp_sched_ops *sched)
- {
--	if (!sched->get_send)
--		return -EINVAL;
-+	int ret;
-+
-+	ret = mptcp_validate_scheduler(sched);
-+	if (ret)
-+		return ret;
- 
- 	spin_lock(&mptcp_sched_list_lock);
- 	if (mptcp_sched_find(sched->name)) {
+ bool mptcp_pm_sport_in_anno_list(struct mptcp_sock *msk, const struct sock *sk)
 
 -- 
 2.48.1
