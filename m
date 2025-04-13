@@ -1,191 +1,153 @@
-Return-Path: <linux-kselftest+bounces-30642-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30643-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10DC4A87076
-	for <lists+linux-kselftest@lfdr.de>; Sun, 13 Apr 2025 05:15:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E36BEA87147
+	for <lists+linux-kselftest@lfdr.de>; Sun, 13 Apr 2025 11:35:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E0EE7178F3D
-	for <lists+linux-kselftest@lfdr.de>; Sun, 13 Apr 2025 03:15:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9CC103B93A7
+	for <lists+linux-kselftest@lfdr.de>; Sun, 13 Apr 2025 09:34:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6798139CF2;
-	Sun, 13 Apr 2025 03:15:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3666818A6DF;
+	Sun, 13 Apr 2025 09:34:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WMUAkrpw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kuF1CAQt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B84228249F
-	for <linux-kselftest@vger.kernel.org>; Sun, 13 Apr 2025 03:15:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00A2A22339;
+	Sun, 13 Apr 2025 09:34:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744514108; cv=none; b=fUISMNeVPzdh7wDAZjJWYBcs8d1wsx54GniIlGuugU/oU02LLrBSq5Hu68xI8eEddb9nbbHqkQ6o6MS9H3x4aImrB9UU7qmNkF5myn8jXEqDQMFuicCD2U11h/MoR+Ee98+SJ4JUavnxdUmJ1FAh3bgRGCgZBhDDRFSE/hbeg9w=
+	t=1744536896; cv=none; b=WllgF0pQiffRZa1U7vicBjmUnoX7KmXy5LVScEWRLpaIY7CuPN6wm3Sgrrq7Uc32yfk4LdKuYVlt6gRcW6SxtNIDeGk9vVl/t+tHFDO6/4ZKb6eXjv2zL+W3Cm0t+SW632aSAepNnSdC3GXkiKL5sAELbHfhWKH1ydYhccihd+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744514108; c=relaxed/simple;
-	bh=GXoItoIHVQGxDk0GZCjHQsM8qdSgDcBsL2mFmkWaNc8=;
-	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=FZBhF5/8IWahVeEIgjIQFTzOZ8JiW2mWUAeGbMoOdwnf2ZV6cdQHqG2QeCcOeXrbArQO7HCTVYtTFgOHwa8ylI78UHfIE6704aVg5ODzGtt/NpFe+yp3VWOV0aNMLLMGEYPiT9Yt7KUXUTHvKlBQXLnsRdzz9RJgrJSio9c9Y4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WMUAkrpw; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1744514105;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=BZ2AIgXN2yGPN7Sxu2wl5jNXWejeTiuda2OwXuQQY0I=;
-	b=WMUAkrpwkpKSbdggmy+HjO0VBj17OE1AcLqqaDOTl4l2yQ8cHfhUX3mtI3g2MCS6sWvX6c
-	X89j+PrcOOug+6G9i1hfEh/8DXCPFrnWEpSH8/d/PFwFqxiRxnWQv/1gqBC2b03Lq3vmdx
-	WwYe1bbz4g5Y2c6qGCXuFWyvT00RfDk=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-45-_qS4DinhOQqCG43VzTrMdQ-1; Sat, 12 Apr 2025 23:15:04 -0400
-X-MC-Unique: _qS4DinhOQqCG43VzTrMdQ-1
-X-Mimecast-MFC-AGG-ID: _qS4DinhOQqCG43VzTrMdQ_1744514103
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-7c5e28d0cc0so575134785a.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 12 Apr 2025 20:15:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744514103; x=1745118903;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BZ2AIgXN2yGPN7Sxu2wl5jNXWejeTiuda2OwXuQQY0I=;
-        b=UHWbFaA8SWvl6Xes3GGeebjMubClvtRU+/1o9/Z2PUbT4ZMbdvyHHrCj6avegHY5gt
-         JOTLpXZlN9N/hISzQ6F8iY502NWYAXAvnYD6udcofpKLjyQK8uI4JkkyMB6esDdxuO7Q
-         u1K0uVdkldJAvFFvbLtHaEucpcVt9+FdsyD6Fk0caw0dDXWQSSdaDNcwXegMTB4nhKUi
-         yFwucgVNZi7Avlm3Cgs2dVGef62w1w/EC3o8Rj2fU4bNbrTok+L8ivKVV9nWBlNLw+dw
-         NvzpcboLNxFJtJPlXvqHCwVlyml3m/WlGtBb7XO8jQAIntKqOZDn7FV/9uwVjdcUDFVW
-         DS0g==
-X-Forwarded-Encrypted: i=1; AJvYcCVBhJzEEXSb8PqrcBtHyvO4vEj8HZEr5adq5mlbAqVMLx4K22EXWQRvOx2LkslQ8OLs4TQWOB5IcCMl5jo5J7w=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzb3jMWFXQwSR4WGoYOxMNLPGKC6ODRl8XCiv0oeJxJbC1kSb+R
-	JZ96aKMZogn9M99GyuSagLl7aflFw7Z4nO12VZELRQLFUdDGWRQIth5bpw6Q81OIG9nr27aItj0
-	1xag13ffyZHqEKOp8y40KdYnPItVet6tCjDMF7dUlvZ6US8VyuSub4SD1+ufoWZAG4JKky+mCpA
-	==
-X-Gm-Gg: ASbGncslQ5kbtLw7t62p6Q5FPBj4omyhcPTzoU/O84+p6FPcLM9hhZtGmnlOeXdLbfY
-	gRE7IsnBZvIOn4EYeHU2tQiB1574kiq3ct16HFrSHlHhLlh1fvaf51sm2ctWDwdNURts+hNj0eT
-	Fm0NceM1mGiidF2JUoef7a2ceak3gpGU5mym8jQcr3Mlz0OfzIF3uu9JnceLTsE0ei9FoYbBJR7
-	iUvWiGQWGdEaeklebE7qbT3SA6zp/WmB49JVRgXYNg4ublFnpnKWh14PdRiJPyvM+ScpcUSQ8TF
-	z2H1o6A0e4oqlCI/trTQaTzFjEYXhVT5THrFCcugfPndqVh+KsajMA==
-X-Received: by 2002:a05:620a:f0c:b0:7c5:50ab:de07 with SMTP id af79cd13be357-7c7af0d4854mr1206658285a.21.1744514103027;
-        Sat, 12 Apr 2025 20:15:03 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHEgZdkNpb8M2sLPV1/LXGt3hDMHfPduIrP6ippNwIGXHw9JexKgaMOOMOlNxn4UhxXHLuaKg==
-X-Received: by 2002:a05:620a:f0c:b0:7c5:50ab:de07 with SMTP id af79cd13be357-7c7af0d4854mr1206655885a.21.1744514102577;
-        Sat, 12 Apr 2025 20:15:02 -0700 (PDT)
-Received: from [172.20.3.175] (syn-108-176-116-062.biz.spectrum.com. [108.176.116.62])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c7a8a0f1fasm495773985a.112.2025.04.12.20.15.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 12 Apr 2025 20:15:01 -0700 (PDT)
-From: Waiman Long <llong@redhat.com>
-X-Google-Original-From: Waiman Long <longman@redhat.com>
-Message-ID: <bbc48f40-274c-44ec-9a98-7c18b64628c0@redhat.com>
-Date: Sat, 12 Apr 2025 23:15:00 -0400
+	s=arc-20240116; t=1744536896; c=relaxed/simple;
+	bh=bitNoWLp7gWRg5g3H7/7vRwGv+5PlqpKDCihNEeI1PI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=E57U936ckJFhpoHBivz9vpnL2ZKuX3v6B3xq6xQkpVtYXBft0LC33aFQrYoCab/kSnwr7kTvW71x3n4ztiBMRi6sz0vScH79EamjSrzazhtHBrpeMTNZ442vVrHUPTFS+EE207LyEKfHkqJkyoFFXCJMvH4tV/+cOL7fkXFhYwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kuF1CAQt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4367C4CEDD;
+	Sun, 13 Apr 2025 09:34:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744536895;
+	bh=bitNoWLp7gWRg5g3H7/7vRwGv+5PlqpKDCihNEeI1PI=;
+	h=From:Subject:Date:To:Cc:From;
+	b=kuF1CAQtsrXBGbQndw03q+6GhmDLAn4AEl92yuTs/omUI9nGrov1zvtEeYanzbehR
+	 uOzNyiBbtwTdDR+u3hGU2VmSb55h0thyrkBkhG4myXrJqTTuizgpKBccJTSWAij8Ir
+	 kMQIgBfAHJWT/p3fqvs+R19rvzFmC9SN7nU+2i/UZpeXYjqKWwdAel4yPL08XI2Pfb
+	 9OeE8/C1Pi0wVKnM0DKT88Yr2fTJ0pbmg2nA/ZT4UU4YhMxZZ29JOroX/sff58G+d+
+	 Q9t9B3vfJcavQhDMkvFLqwNG+X7Ck+hAoBfZfSBfStCTjHh7Bx4vf/qly/b+1G1my3
+	 WQirhLvL4vY/w==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Subject: [PATCH net-next v2 0/8] mptcp: various small and unrelated
+ improvements
+Date: Sun, 13 Apr 2025 11:34:31 +0200
+Message-Id: <20250413-net-next-mptcp-sched-mib-sft-misc-v2-0-0f83a4350150@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] selftests: memcg: Increase error tolerance of
- child memory.current check in test_memcg_protection()
-To: Roman Gushchin <roman.gushchin@linux.dev>
-Cc: Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
- Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>, Tejun Heo <tj@kernel.org>,
- =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
- Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
- cgroups@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-References: <20250406024010.1177927-1-longman@redhat.com>
- <20250406024010.1177927-3-longman@redhat.com> <Z_Wht7kyWyk62IBU@google.com>
-Content-Language: en-US
-In-Reply-To: <Z_Wht7kyWyk62IBU@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACeF+2cC/5WNwQqDMBBEf0X23C0mNRJ66n+IBxs3urRGyQaxi
+ P/eIPQDepjDzDDzdhCKTAL3YodIKwvPIRt9KcCNXRgIuc8edKlNWSmFgVLWlnBakltQ3Eg9Tvx
+ E8TljcaiNN12tlfW9hfyzRPK8nYwGfnNoczOypDl+Tviqzv4PzqqwRGs6Z11dm8rdHi+Kgd7XO
+ Q7QHsfxBQcWmDTdAAAA
+X-Change-ID: 20250411-net-next-mptcp-sched-mib-sft-misc-25f5a6218fd8
+To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
+ Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
+ Thorsten Blum <thorsten.blum@linux.dev>, 
+ zhenwei pi <pizhenwei@bytedance.com>, Geliang Tang <geliang@kernel.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2534; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=bitNoWLp7gWRg5g3H7/7vRwGv+5PlqpKDCihNEeI1PI=;
+ b=owEBbQKS/ZANAwAKAfa3gk9CaaBzAcsmYgBn+4Uxrk5MUMws5vC38B+qvG6yK5zMRGc26Ihb2
+ rf9ONzbQkaJAjMEAAEKAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZ/uFMQAKCRD2t4JPQmmg
+ cw11D/9O2c/5YvA3oj5JlckLYrx9Gz7AK7HdgdmA69YHskA7ILX2Lt5+9wIeAPStNGv9EAluFG3
+ NqBMQBhiM74glMwVqw11S1mrJtFkxqfLPRbaTDa6vsER7aW4LV5TL/DQKdzh/yfPi3a5IszWLQZ
+ UX73tvX/uobBxFUXF/6Ix7HCtzk0l98FN3IUR3EeqmicnxmKG/DEdpS9YBncxLqWlYRmH9kli1j
+ UFFQc6jk+JC04ba2mOBNILg8C8kkfUV3DTzK5ylZYa8DoMVIL4Irz45KZfcLBVd51PaTvpN8uL1
+ eOMGj1WF0QfKPaXM2cArMT4PCIgcoR+ZoYiaQPFYiLhFgT2a57pY032iEzRnPt4bzocmkDAMPAM
+ aACsSDEiwmEaZ+aAT5tIlBpf/BbkOBfzIKj8OwHy2AItPV4VEiK+JcmZ96vz6VVNU8KMcnYBbp3
+ LAVNSTgazbQ+4o8v4f5Qd95UrpL5y7hbNgaud+j7MBAPfrX7sFqiJ99OMJGv11mrIv20ID4+JIE
+ yCnH+MCbfBJwBA4f/DaJ1kIhlFvkKFOfWzrMgRuzIILVHcw+L98A7xY7pWQY474FzM5WOG7FjCq
+ eh5F675x5j9ofjGhtBnyDYpHiUjxzJTGD/k2srA0xSrl+uKpDRbDkFw2g+5iciUbZOm/00L6GhW
+ 6k7bAP74Ckvpq1w==
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
+Here are various unrelated patches:
 
-On 4/8/25 6:22 PM, Roman Gushchin wrote:
-> On Sat, Apr 05, 2025 at 10:40:10PM -0400, Waiman Long wrote:
->> The test_memcg_protection() function is used for the test_memcg_min and
->> test_memcg_low sub-tests. This function generates a set of parent/child
->> cgroups like:
->>
->>    parent:  memory.min/low = 50M
->>    child 0: memory.min/low = 75M,  memory.current = 50M
->>    child 1: memory.min/low = 25M,  memory.current = 50M
->>    child 2: memory.min/low = 0,    memory.current = 50M
->>
->> After applying memory pressure, the function expects the following
->> actual memory usages.
->>
->>    parent:  memory.current ~= 50M
->>    child 0: memory.current ~= 29M
->>    child 1: memory.current ~= 21M
->>    child 2: memory.current ~= 0
->>
->> In reality, the actual memory usages can differ quite a bit from the
->> expected values. It uses an error tolerance of 10% with the values_close()
->> helper.
->>
->> Both the test_memcg_min and test_memcg_low sub-tests can fail
->> sporadically because the actual memory usage exceeds the 10% error
->> tolerance. Below are a sample of the usage data of the tests runs
->> that fail.
->>
->>    Child   Actual usage    Expected usage    %err
->>    -----   ------------    --------------    ----
->>      1       16990208         22020096      -12.9%
->>      1       17252352         22020096      -12.1%
->>      0       37699584         30408704      +10.7%
->>      1       14368768         22020096      -21.0%
->>      1       16871424         22020096      -13.2%
->>
->> The current 10% error tolerenace might be right at the time
->> test_memcontrol.c was first introduced in v4.18 kernel, but memory
->> reclaim have certainly evolved quite a bit since then which may result
->> in a bit more run-to-run variation than previously expected.
->>
->> Increase the error tolerance to 15% for child 0 and 20% for child 1 to
->> minimize the chance of this type of failure. The tolerance is bigger
->> for child 1 because an upswing in child 0 corresponds to a smaller
->> %err than a similar downswing in child 1 due to the way %err is used
->> in values_close().
->>
->> Before this patch, a 100 test runs of test_memcontrol produced the
->> following results:
->>
->>       17 not ok 1 test_memcg_min
->>       22 not ok 2 test_memcg_low
->>
->> After applying this patch, there were no test failure for test_memcg_min
->> and test_memcg_low in 100 test runs.
-> Ideally we want to calculate these values dynamically based on the machine
-> size (number of cpus and total memory size).
->
-> We can calculate the memcg error margin and scale memcg sizes if necessarily.
-> It's the only way to make it pass both on a 2-CPU's vm and 512-CPU's physical
-> server.
->
-> Not a blocker for this patch, just an idea for the future.
+- Patch 1: sched: remove unused structure.
 
-Thanks for the suggestion.
+- Patch 2: sched: split the validation part, a preparation for later.
 
-As I said in a previous mail, the way the test works is by waiting until 
-the the memory.current of the parent is close to 50M, then it checks the 
-memory.current's of its children to see how much usage each of them 
-have. I am not sure if nr of CPUs or total memory size is really a 
-factor here. We will probably need to run some experiments to find out. 
-Anyway, it will be a future patch if they are really a factor here.
+- Patch 3: pm: clarify code, not to think there is a possible UaF.
+  Note: a previous version has already been sent individually to Netdev.
 
-Cheers,
-Longman
+- Patch 4: subflow: simplify subflow_hmac_valid by passing subflow_req.
 
->
-> Thanks!
->
+- Patch 5: mib: add counter for MPJoin rejected by the PM.
+
+- Patch 6: selftests: validate this new MPJoinRejected counter.
+
+- Patch 7: selftests: define nlh variable only where needed.
+
+- Patch 8: selftests: show how to use IPPROTO_MPTCP with getaddrinfo.
+  Note: a previous version has already been sent individually to Netdev.
+
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+---
+Changes in v2:
+- Force b4 to use 'git show' with '--no-mailmap' not to modify patches
+  2 and 7/8. The code has not been modified.
+- Link to v1: https://lore.kernel.org/r/20250411-net-next-mptcp-sched-mib-sft-misc-v1-0-85ac8c6654c3@kernel.org
+
+---
+Geliang Tang (2):
+      mptcp: sched: split validation part
+      selftests: mptcp: diag: drop nlh parameter of recv_nlmsg
+
+Matthieu Baerts (NGI0) (4):
+      mptcp: sched: remove mptcp_sched_data
+      mptcp: pass right struct to subflow_hmac_valid
+      mptcp: add MPJoinRejected MIB counter
+      selftests: mptcp: validate MPJoinRejected counter
+
+Thorsten Blum (1):
+      mptcp: pm: Return local variable instead of freed pointer
+
+zhenwei pi (1):
+      selftests: mptcp: use IPPROTO_MPTCP for getaddrinfo
+
+ include/net/mptcp.h                               | 13 ++-------
+ net/mptcp/mib.c                                   |  1 +
+ net/mptcp/mib.h                                   |  1 +
+ net/mptcp/pm.c                                    |  5 +++-
+ net/mptcp/protocol.c                              |  4 ++-
+ net/mptcp/protocol.h                              |  1 +
+ net/mptcp/sched.c                                 | 35 ++++++++++++++---------
+ net/mptcp/subflow.c                               | 12 ++++----
+ tools/testing/selftests/net/mptcp/mptcp_connect.c | 21 +++++++++++---
+ tools/testing/selftests/net/mptcp/mptcp_diag.c    |  7 ++---
+ tools/testing/selftests/net/mptcp/mptcp_join.sh   | 26 +++++++++++++----
+ 11 files changed, 80 insertions(+), 46 deletions(-)
+---
+base-commit: 6a325aed130bb68790e765f923e76ec5669d2da7
+change-id: 20250411-net-next-mptcp-sched-mib-sft-misc-25f5a6218fd8
+
+Best regards,
+-- 
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
 
 
