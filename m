@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-30649-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30650-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75E6BA87157
-	for <lists+linux-kselftest@lfdr.de>; Sun, 13 Apr 2025 11:36:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C298A8715F
+	for <lists+linux-kselftest@lfdr.de>; Sun, 13 Apr 2025 11:38:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6F2267AAF65
-	for <lists+linux-kselftest@lfdr.de>; Sun, 13 Apr 2025 09:35:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 24BBE1897DFD
+	for <lists+linux-kselftest@lfdr.de>; Sun, 13 Apr 2025 09:37:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89C111AC458;
-	Sun, 13 Apr 2025 09:35:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E413A1B041A;
+	Sun, 13 Apr 2025 09:35:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T+0OoWhX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MRYDOa9l"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5932F1A727D;
-	Sun, 13 Apr 2025 09:35:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4B2E19E96B;
+	Sun, 13 Apr 2025 09:35:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744536912; cv=none; b=qnZ4/BFPaMgtCSB2lga8tJ+rr+ePVU8aVIPRA2XQMXnZK3G2VlGfLxHN+60kxN1Kk7V38x+D+utHWNdhZfhX7S9lX6qi+rbh3puhyN9GoyyF/X7SRoBIwBS/0gDiC8zy2tEYQjqCni2cp+KSW3WH0hGXNjcvqTytHvhFmg+Q6WE=
+	t=1744536914; cv=none; b=sCfcdXWlccX3aMgVnYTJjpYeJWiqR6PFFkBkJ0SOFAFWxjBfG1dT78knW5Jr1wTaMAYPuNIYRRmiVfdZE0P5HSR0bssxkse3BdmZhPecrZ7qY5EhrUP4D2S+35aAvjT9CEYNyClLK7zpDPym5YrIHSsWVXJFk+vV0NojzTGxfYI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744536912; c=relaxed/simple;
-	bh=uEth5ubTM50FPsdKeFiaB6fDW7T8PGg6j4wHqWQHCKM=;
+	s=arc-20240116; t=1744536914; c=relaxed/simple;
+	bh=tyy9AFxNFtpd26xDDYsU7GNnn1KTKoGzwj1OZPYWBw4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=pIwxF5Owazu7WxvQfbDCKvh2vKZ05aU8PTs0Qg4KDaKQzEzBxvoO4BLMFHVA+WsoyicVeI8RrXgxhF4CslEkIy/YMICSG1wBHVl+g6mLrQS9VRWHG736HM5J7ll7QO86963CpuPX0Q2nU5kiWw+xPsqZ4BtVJHOEf3aj6kPniT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T+0OoWhX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D42AC4CEED;
-	Sun, 13 Apr 2025 09:35:09 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=AJO2U/T0lCAiJu3avX5mHQvtjiuFTTxovK+4EtSlyIdvsAJ8YaTtAi59ZbyYi8FmJaQiTTvt538esW9sSmo6JoDdWiLOiX9qhk0uLXOw15NDaVes/6VeIfvgjZ3E2b27p48kSurrsIWKmUJt7l4LWAQf9xK6aDFLU2B1mckFUV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MRYDOa9l; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47528C4CEEB;
+	Sun, 13 Apr 2025 09:35:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744536911;
-	bh=uEth5ubTM50FPsdKeFiaB6fDW7T8PGg6j4wHqWQHCKM=;
+	s=k20201202; t=1744536914;
+	bh=tyy9AFxNFtpd26xDDYsU7GNnn1KTKoGzwj1OZPYWBw4=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=T+0OoWhXNyd8CqvhmjMI2hBGb1DrN4Q9ybNz3mQtifZ7CA7UgeDdT1pYPv3g7SthN
-	 o1NGGGJd7Nnu7p/XQzIsZELMIhOOdCdbDWocMXsUspXDgZPYhhxn1mLL14f0oNnmGM
-	 4Crz1GW9UslsUfprReKkHXZ6jql0Ld0pV9aX9nz6GqcRUotmA8L1ARCZsgS8gsMmhs
-	 Sd/dFcqVTE1wgEEAHKh7khnfhwax0G3t+rN8ZylUUA4MZzvsR02ZpcIKkfibmj/x5p
-	 hAEnSaOuOfla0Q+EDFI3pxSn17H6MX9FkN86AqzoJNt6MgLerO191mq29ZePbNqnLx
-	 Elg+27pZMbWYQ==
+	b=MRYDOa9l3HfhY8NenYGEDpYZ4fhMGQXGH22X0HkIZExqoYzKEpOi09jv6j6paNqRp
+	 Q3SiBK6+DoawQUHernVieq2QrSh8c5EqA79YMkBnjLAN302pp3zslj9DkfaotC9f5K
+	 cvd9u9LCfaca4obDzQRBy6Q4CD6gtpe77RCHRVEtlR9gqJpWKFhScKPH1zE+XEPW7V
+	 X2cG0zXlj72RgpE5qmr6Ela3S2QXw6JGNLdjiCEvCXqBGETfizOKzGNE9fbGRtyP9i
+	 bXefufR652qY9Nupm90QtsEXH90ZpSul3HwANmxDDKIhM5ybTdcSeWlYNDUAEZ6f3/
+	 5tVBm9vNsPOSw==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Sun, 13 Apr 2025 11:34:37 +0200
-Subject: [PATCH net-next v2 6/8] selftests: mptcp: validate MPJoinRejected
- counter
+Date: Sun, 13 Apr 2025 11:34:38 +0200
+Subject: [PATCH net-next v2 7/8] selftests: mptcp: diag: drop nlh parameter
+ of recv_nlmsg
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250413-net-next-mptcp-sched-mib-sft-misc-v2-6-0f83a4350150@kernel.org>
+Message-Id: <20250413-net-next-mptcp-sched-mib-sft-misc-v2-7-0f83a4350150@kernel.org>
 References: <20250413-net-next-mptcp-sched-mib-sft-misc-v2-0-0f83a4350150@kernel.org>
 In-Reply-To: <20250413-net-next-mptcp-sched-mib-sft-misc-v2-0-0f83a4350150@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -63,133 +63,86 @@ To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
  Shuah Khan <shuah@kernel.org>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, 
- "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
+ Geliang Tang <geliang@kernel.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3395; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=uEth5ubTM50FPsdKeFiaB6fDW7T8PGg6j4wHqWQHCKM=;
- b=owEBbQKS/ZANAwAKAfa3gk9CaaBzAcsmYgBn+4U5/1jsCuzuudCNCpj9kt+Yoa03wOP3SEl+U
- uiI0JFnmceJAjMEAAEKAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZ/uFOQAKCRD2t4JPQmmg
- c+gZD/9SnOx/wyI3D5gtY3tx6PqPlkg3VScmdIUE3qpAMoh2ewKL50CIsaCgwjQzO6JhVgknq9A
- bi5G4CM3qwlpiLRhUS4D1dRNz4EWnKSF0IW6vYYhiuna2UYyjnYdoA4Vx55XrrC2RKLIGhb+VU7
- 5xCUAv9rf2O5rUIO9hl9X2Jt9xQC8KCUDjVtnkb4gGUJiOxGrgpu+iOTVmdOEpWg+uMxnUuq51v
- /hGVGvejRONuAdN9mgD2Qc+IYgUY6e6+FI/QF8OG47gFFS6Obik6Ntaikcexub0nTLTVpVpzb4r
- L7vORJGmXm2yq1r5Pb7lndR7OhSSfwRIfgslzEf8SALYzd2kyRG33T8GQ7lm6Bf9KLSuAFO2t9Y
- 4RvUBcp4irjn2+D3rpm0l1EAjmM0Aw4R4UTVb+Zeji0fg4IcSA0z6r0QRn8W7i9JmctpQPCp+nQ
- rX4W80CaxKHWHSURGmwbjTKsr00UM2UeLeLgoccJRoMpwJUm/GuBr1vTHBBozGu4rOGG+75eQvB
- NeDDX9YUUIUXHjiPOrgobzzNulUbUJiT3U10jcVsUxJ/Tbk1hGVNBXI5LbeJQUMhymInIPmwPU9
- aUEZvlJ26l9sIQDhDOFl01cmatFZoZOjISg+0Xn3iAIxY5EHZaum39aG/QtGlDhdkz4RoyrHVjK
- fL73ubCsqzzYMcA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1962; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=bSgd3cMF0dhmJtw1234qL3slJn2RJqdF55LFpsUz5og=;
+ b=owEBbQKS/ZANAwAKAfa3gk9CaaBzAcsmYgBn+4U6WG0UbsFgcXLd5ERQenqZRz2xRwKMDRDGn
+ JeieHxQ/62JAjMEAAEKAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZ/uFOgAKCRD2t4JPQmmg
+ c/XWD/40p1aYJ7ocmwkSwJ8wRB2DSXKApBDjXauT0aSaey+NGJv0Ocj+lPhc17U5x1Du7Zm3Vn8
+ NCQ/Mr6xEEzafZfkH8zQMbRXhADgY1ost1vvSENeNf38r60CqS9nIRr3RMKpcbg+RebkCy1QIDq
+ XzYWLvpRw6vg4ZHkqroufMdqS7CUApuERjjly8zgrDrHazrLyjnRtM/laPqmiHmKJVkeUY/tDOc
+ tsft3kIBETMOoXnu696iq6XyfYEpgaIy29VDFlyu0MqSP3ukxtVnBLbBD+aoNiXgQqCR1a7s1DT
+ mixBnTY+wG5gMcReB9OOZEFGBiP3brYdjYpNcj9/xKBTRy/p/dt23tVwNQBOu+jHm0wROraETfT
+ FlcZ49GnAjbM6KU+05h7bSxiiR4oLCVeW6tBss0Os8wUnMwPrk1GFAa0MbR0o9Wxos+TGGNfEXP
+ uxz0JT1N1GtmhC5CT/CpdF2u9vr1JT0QiZ/vziNexerdj5HcJh1RdzZMXn68y8Dgz3gMVIGGzTQ
+ Vu7L/c1Ay4BJXwDdnvm6h8gPLE9RO0LalKqpK1NZiI83CsiZk00+8jWIqZOdLXPCEJDQFfU6a56
+ xknWEcbRm6b3LseSjWXhHfvg4J6Eaiuya5Q74/lbTwg2efPhSx8aCOVAYidPYiU4PyML3ZV4N65
+ eS5FOEtytafS+2w==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-The parent commit adds this new counter, incremented when receiving a
-connection request, if the PM didn't allow the creation of new subflows.
+From: Geliang Tang <tanggeliang@kylinos.cn>
 
-Most of the time, it is then kept at 0, except when the PM limits cause
-the receiver side to reject new MPJoin connections. This is the case in
-the following tests:
+It's strange that 'nlh' variable is set to NULL in get_mptcpinfo() and then
+this NULL pointer is passed to recv_nlmsg(). In fact, this variable should
+be defined in recv_nlmsg(), not get_mptcpinfo().
 
- - single subflow, limited by server
- - multiple subflows, limited by server
- - subflows limited by server w cookies
- - userspace pm type rejects join
- - userspace pm type prevents mp_prio
+So this patch drops this useless 'nlh' parameter of recv_nlmsg() and define
+'nlh' variable in recv_nlmsg().
 
-Simply set join_syn_rej=1 when checking the MPJoin counters for these
-tests.
-
-Reviewed-by: Geliang Tang <geliang@kernel.org>
+Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- tools/testing/selftests/net/mptcp/mptcp_join.sh | 26 ++++++++++++++++++++-----
- 1 file changed, 21 insertions(+), 5 deletions(-)
+Notes:
+- v2: fix Author field (--no-mailmap).
+---
+ tools/testing/selftests/net/mptcp/mptcp_diag.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-index befa66f5a366bb738f8e6d6d84677f5c07488720..b8af65373b3ada96472347171924ad3a6cf14777 100755
---- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-@@ -62,6 +62,7 @@ unset sflags
- unset fastclose
- unset fullmesh
- unset speed
-+unset join_syn_rej
- unset join_csum_ns1
- unset join_csum_ns2
- unset join_fail_nr
-@@ -1403,6 +1404,7 @@ chk_join_nr()
- 	local syn_nr=$1
- 	local syn_ack_nr=$2
- 	local ack_nr=$3
-+	local syn_rej=${join_syn_rej:-0}
- 	local csum_ns1=${join_csum_ns1:-0}
- 	local csum_ns2=${join_csum_ns2:-0}
- 	local fail_nr=${join_fail_nr:-0}
-@@ -1468,6 +1470,15 @@ chk_join_nr()
- 		fail_test "got $count JOIN[s] ack HMAC failure expected 0"
- 	fi
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_diag.c b/tools/testing/selftests/net/mptcp/mptcp_diag.c
+index 284286c524cfeff5f49b0af1a4da5a376c9e3140..37d5015ad08c44485f1964593ecb1a7b25d95934 100644
+--- a/tools/testing/selftests/net/mptcp/mptcp_diag.c
++++ b/tools/testing/selftests/net/mptcp/mptcp_diag.c
+@@ -185,9 +185,10 @@ static void parse_nlmsg(struct nlmsghdr *nlh)
+ 	}
+ }
  
-+	count=$(mptcp_lib_get_counter ${ns1} "MPTcpExtMPJoinRejected")
-+	if [ -z "$count" ]; then
-+		rc=${KSFT_SKIP}
-+	elif [ "$count" != "$syn_rej" ]; then
-+		rc=${KSFT_FAIL}
-+		print_check "syn rejected"
-+		fail_test "got $count JOIN[s] syn rejected expected $syn_rej"
-+	fi
-+
- 	print_results "join Rx" ${rc}
+-static void recv_nlmsg(int fd, struct nlmsghdr *nlh)
++static void recv_nlmsg(int fd)
+ {
+ 	char rcv_buff[8192];
++	struct nlmsghdr *nlh = (struct nlmsghdr *)rcv_buff;
+ 	struct sockaddr_nl rcv_nladdr = {
+ 		.nl_family = AF_NETLINK
+ 	};
+@@ -204,7 +205,6 @@ static void recv_nlmsg(int fd, struct nlmsghdr *nlh)
+ 	int len;
  
- 	join_syn_tx="${join_syn_tx:-${syn_nr}}" \
-@@ -1963,7 +1974,8 @@ subflows_tests()
- 		pm_nl_set_limits $ns2 0 1
- 		pm_nl_add_endpoint $ns2 10.0.3.2 flags subflow
- 		run_tests $ns1 $ns2 10.0.1.1
--		chk_join_nr 1 1 0
-+		join_syn_rej=1 \
-+			chk_join_nr 1 1 0
- 	fi
+ 	len = recvmsg(fd, &rcv_msg, 0);
+-	nlh = (struct nlmsghdr *)rcv_buff;
  
- 	# subflow
-@@ -1992,7 +2004,8 @@ subflows_tests()
- 		pm_nl_add_endpoint $ns2 10.0.3.2 flags subflow
- 		pm_nl_add_endpoint $ns2 10.0.2.2 flags subflow
- 		run_tests $ns1 $ns2 10.0.1.1
--		chk_join_nr 2 2 1
-+		join_syn_rej=1 \
-+			chk_join_nr 2 2 1
- 	fi
+ 	while (NLMSG_OK(nlh, len)) {
+ 		if (nlh->nlmsg_type == NLMSG_DONE) {
+@@ -225,7 +225,6 @@ static void recv_nlmsg(int fd, struct nlmsghdr *nlh)
  
- 	# single subflow, dev
-@@ -3061,7 +3074,8 @@ syncookies_tests()
- 		pm_nl_add_endpoint $ns2 10.0.3.2 flags subflow
- 		pm_nl_add_endpoint $ns2 10.0.2.2 flags subflow
- 		run_tests $ns1 $ns2 10.0.1.1
--		chk_join_nr 2 1 1
-+		join_syn_rej=1 \
-+			chk_join_nr 2 1 1
- 	fi
+ static void get_mptcpinfo(__u32 token)
+ {
+-	struct nlmsghdr *nlh = NULL;
+ 	int fd;
  
- 	# test signal address with cookies
-@@ -3545,7 +3559,8 @@ userspace_tests()
- 		pm_nl_set_limits $ns2 1 1
- 		pm_nl_add_endpoint $ns2 10.0.3.2 flags subflow
- 		run_tests $ns1 $ns2 10.0.1.1
--		chk_join_nr 1 1 0
-+		join_syn_rej=1 \
-+			chk_join_nr 1 1 0
- 	fi
+ 	fd = socket(AF_NETLINK, SOCK_RAW, NETLINK_SOCK_DIAG);
+@@ -233,7 +232,7 @@ static void get_mptcpinfo(__u32 token)
+ 		die_perror("Netlink socket");
  
- 	# userspace pm type does not send join
-@@ -3568,7 +3583,8 @@ userspace_tests()
- 		pm_nl_add_endpoint $ns2 10.0.3.2 flags subflow
- 		sflags=backup speed=slow \
- 			run_tests $ns1 $ns2 10.0.1.1
--		chk_join_nr 1 1 0
-+		join_syn_rej=1 \
-+			chk_join_nr 1 1 0
- 		chk_prio_nr 0 0 0 0
- 	fi
+ 	send_query(fd, token);
+-	recv_nlmsg(fd, nlh);
++	recv_nlmsg(fd);
  
+ 	close(fd);
+ }
 
 -- 
 2.48.1
