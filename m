@@ -1,61 +1,62 @@
-Return-Path: <linux-kselftest+bounces-30718-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30719-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBFF2A88371
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Apr 2025 15:57:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C8D3A883BC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Apr 2025 16:05:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 378827A8B90
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Apr 2025 13:56:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A99821696AF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Apr 2025 14:00:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AE84274FC6;
-	Mon, 14 Apr 2025 13:31:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83FA12DA8EA;
+	Mon, 14 Apr 2025 13:31:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dKr7PKW7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b4tW+CUj"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F311C291163;
-	Mon, 14 Apr 2025 13:31:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56DD42DA8E4;
+	Mon, 14 Apr 2025 13:31:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744637470; cv=none; b=VVvq1S03ZpUeQQRfvZKuTtO3sMGeK6a4dNto7TKhQVMYjrZV8XhOEU09hnqXXSNvCLwtHdIOb7xYgd1nIuaW47GMvfBT1ZptsNOir9EUzwHU0/aFDUxnMztw1j4n0jFnh9i+dv+VSppHrarqC7f5B9Hwf8dYJAIDNLOEEZaTsp0=
+	t=1744637494; cv=none; b=M2qsUyy2zym5w/rLzA311kP01BUInogrXoAcbB1hud9+FCBpooX/AcEagyEbv7SM9ve6wKZ+Ns7u8eQbE9puO2Sr7rN8Pl1j8+QnhrAa1lwAh5fwN4ivBA3v9ymznzB997AXYD6xEosLK5FErQvmhX9haRZRvbRTKh+crnzYjhc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744637470; c=relaxed/simple;
-	bh=Jt1TTZOEwctOuFMJvt8J8VyDkGcR6F2KZ+EnGDmCWcs=;
+	s=arc-20240116; t=1744637494; c=relaxed/simple;
+	bh=Skw2haJGpIZiFYqO2n3E1IxwuSukQmD1H2oxwPBWPho=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=QwG1WoxYWxTBgE30rdTyvzgHSJcpqUcDSeaz3u070CBe9hv4+CjRMfO0I/ee96ui7pz7gbup1oq/ggCVtNxlZdWH/mHMOY13zeqCaJwV6vDw7eagCCLMT1BJ2S7yKigqoRavYgEhv6CmolAYsWFPH15ludD+8DiWOr8rIWFYVFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dKr7PKW7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B01A7C4CEEB;
-	Mon, 14 Apr 2025 13:31:08 +0000 (UTC)
+	 MIME-Version; b=gozjBvdAGPG3X0fC8d7KIUUeqBlKHsPGAqAI/0zsO8bFGaRbUGGqrjiSS64Z6mmnAhatyVRodvfwLoNQYllfJmM0t4aa4yAz8ClfiYPPaPoYW4Ax4Oy6B8RlIx8NvXIDtrvxf0hPI96WUOKqmjpYVLhsSjslmAt2d+DFFxPmc6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b4tW+CUj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0D86C4CEE2;
+	Mon, 14 Apr 2025 13:31:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744637469;
-	bh=Jt1TTZOEwctOuFMJvt8J8VyDkGcR6F2KZ+EnGDmCWcs=;
+	s=k20201202; t=1744637494;
+	bh=Skw2haJGpIZiFYqO2n3E1IxwuSukQmD1H2oxwPBWPho=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=dKr7PKW7I4F9rnxj9GbOy2csKN7vIZLiNb8XDfSM0C93AlTFj9bZTP86BfboS7MMY
-	 JI03WqmOAMn1LvQUFC31ZQFdgdq+r8cjPnhEatETiHiOw3VrnHbw//0j6bUqFzNiNi
-	 BPGSzC6AeDDyGPiyYL58vmViiJLAOa5WWY4k0n5/+S103k7igHNdUFGmrPZylUHKEH
-	 D0Ee8ViETLNf1Y25T4J19Pl/ZCGBn2Cj5/gFtxzXbFS8owM564jsojfDHy7h/ZyWbI
-	 aHWu2PIvvRYFYRXjJXCzKVci8I5rHpsaiF6g9KVeJM+NFvJJVV7PcKa3i9YSPuw/Lz
-	 TJxRF0Y2HjfgA==
+	b=b4tW+CUjN73BLx3DcBPJbKCL/Frqvwp+T4QPhn2jyWd9mhP+GJvHRrFU5dkddDopd
+	 WZ67wxd2erptktlk+DZ0M/LCI4BQmJK4gkbif8OcAVUo1CHFCkkLJv9l6O3LcSq+7r
+	 y9Co9d6qTlet87Qs5ADbXaYnN/gfHX5FTtlqD03tPv2uVqNzYFaBpTeQtGv1Hp9BOy
+	 XCI9O/WrTPUJR0YajbeuN47nvOv6H9ziXNmR0+abOO43zMg3j40aJ0kpbkIjxwTumZ
+	 WX9bSid4ELlDjVzfHVHEawmj7DoQruKWS1EQk1qETChYSWx916LNtuwlHQqOZYWm9c
+	 r8J+hfpEoGIYw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-	Yi Lai <yi1.lai@intel.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
+Cc: Ming Lei <ming.lei@redhat.com>,
+	Uday Shankar <ushankar@purestorage.com>,
+	Jens Axboe <axboe@kernel.dk>,
 	Sasha Levin <sashal@kernel.org>,
 	shuah@kernel.org,
+	linux-block@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 10/17] selftests/mincore: Allow read-ahead pages to reach the end of the file
-Date: Mon, 14 Apr 2025 09:30:41 -0400
-Message-Id: <20250414133048.680608-10-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 03/15] selftests: ublk: fix test_stripe_04
+Date: Mon, 14 Apr 2025 09:31:13 -0400
+Message-Id: <20250414133126.680846-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250414133048.680608-1-sashal@kernel.org>
-References: <20250414133048.680608-1-sashal@kernel.org>
+In-Reply-To: <20250414133126.680846-1-sashal@kernel.org>
+References: <20250414133126.680846-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -64,62 +65,59 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.134
+X-stable-base: Linux 5.15.180
 Content-Transfer-Encoding: 8bit
 
-From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+From: Ming Lei <ming.lei@redhat.com>
 
-[ Upstream commit 197c1eaa7ba633a482ed7588eea6fd4aa57e08d4 ]
+[ Upstream commit 72070e57b0a518ec8e562a2b68fdfc796ef5c040 ]
 
-When running the mincore_selftest on a system with an XFS file system, it
-failed the "check_file_mmap" test case due to the read-ahead pages reaching
-the end of the file. The failure log is as below:
+Commit 57ed58c13256 ("selftests: ublk: enable zero copy for stripe target")
+added test entry of test_stripe_04, but forgot to add the test script.
 
-   RUN           global.check_file_mmap ...
-  mincore_selftest.c:264:check_file_mmap:Expected i (1024) < vec_size (1024)
-  mincore_selftest.c:265:check_file_mmap:Read-ahead pages reached the end of the file
-  check_file_mmap: Test failed
-           FAIL  global.check_file_mmap
+So fix the test by adding the script file.
 
-This is because the read-ahead window size of the XFS file system on this
-machine is 4 MB, which is larger than the size from the #PF address to the
-end of the file. As a result, all the pages for this file are populated.
-
-  blockdev --getra /dev/nvme0n1p5
-    8192
-  blockdev --getbsz /dev/nvme0n1p5
-    512
-
-This issue can be fixed by extending the current FILE_SIZE 4MB to a larger
-number, but it will still fail if the read-ahead window size of the file
-system is larger enough. Additionally, in the real world, read-ahead pages
-reaching the end of the file can happen and is an expected behavior.
-Therefore, allowing read-ahead pages to reach the end of the file is a
-better choice for the "check_file_mmap" test case.
-
-Link: https://lore.kernel.org/r/20250311080940.21413-1-qiuxu.zhuo@intel.com
-Reported-by: Yi Lai <yi1.lai@intel.com>
-Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Reported-by: Uday Shankar <ushankar@purestorage.com>
+Signed-off-by: Ming Lei <ming.lei@redhat.com>
+Reviewed-by: Uday Shankar <ushankar@purestorage.com>
+Link: https://lore.kernel.org/r/20250404001849.1443064-1-ming.lei@redhat.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/mincore/mincore_selftest.c | 3 ---
- 1 file changed, 3 deletions(-)
+ .../testing/selftests/ublk/test_stripe_04.sh  | 24 +++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+ create mode 100755 tools/testing/selftests/ublk/test_stripe_04.sh
 
-diff --git a/tools/testing/selftests/mincore/mincore_selftest.c b/tools/testing/selftests/mincore/mincore_selftest.c
-index 4c88238fc8f05..c0ae86c28d7f3 100644
---- a/tools/testing/selftests/mincore/mincore_selftest.c
-+++ b/tools/testing/selftests/mincore/mincore_selftest.c
-@@ -261,9 +261,6 @@ TEST(check_file_mmap)
- 		TH_LOG("No read-ahead pages found in memory");
- 	}
- 
--	EXPECT_LT(i, vec_size) {
--		TH_LOG("Read-ahead pages reached the end of the file");
--	}
- 	/*
- 	 * End of the readahead window. The rest of the pages shouldn't
- 	 * be in memory.
+diff --git a/tools/testing/selftests/ublk/test_stripe_04.sh b/tools/testing/selftests/ublk/test_stripe_04.sh
+new file mode 100755
+index 0000000000000..1f2b642381d17
+--- /dev/null
++++ b/tools/testing/selftests/ublk/test_stripe_04.sh
+@@ -0,0 +1,24 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++. "$(cd "$(dirname "$0")" && pwd)"/test_common.sh
++
++TID="stripe_04"
++ERR_CODE=0
++
++_prep_test "stripe" "mkfs & mount & umount on zero copy"
++
++backfile_0=$(_create_backfile 256M)
++backfile_1=$(_create_backfile 256M)
++dev_id=$(_add_ublk_dev -t stripe -z -q 2 "$backfile_0" "$backfile_1")
++_check_add_dev $TID $? "$backfile_0" "$backfile_1"
++
++_mkfs_mount_test /dev/ublkb"${dev_id}"
++ERR_CODE=$?
++
++_cleanup_test "stripe"
++
++_remove_backfile "$backfile_0"
++_remove_backfile "$backfile_1"
++
++_show_result $TID $ERR_CODE
 -- 
 2.39.5
 
