@@ -1,141 +1,108 @@
-Return-Path: <linux-kselftest+bounces-30727-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30728-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19E2EA884CB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Apr 2025 16:27:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75669A884B6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Apr 2025 16:25:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8F7441902046
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Apr 2025 14:18:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8146F17FFCE
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Apr 2025 14:21:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75A422957B7;
-	Mon, 14 Apr 2025 13:55:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB65229A3DF;
+	Mon, 14 Apr 2025 13:56:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="GDIRMpZv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gD3zNjMx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4365C2957A2
-	for <linux-kselftest@vger.kernel.org>; Mon, 14 Apr 2025 13:55:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C47C729A3DB;
+	Mon, 14 Apr 2025 13:56:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744638945; cv=none; b=ripltnpKkTEflUQ1Z+IqRza/pu3B2a3mBvKeIZgr91IVM5kOyD6MlhrFNVMcrNe7yyuLC1XDSrmSejkmKSpL9RUOnpHFktf8XEBReQuO+qgKe3ZX2Mzdt4lCUMhlZza0aoqPu7KQYUx0/CQGJFtM8TMs/v22I5/qsEX1LVETXuk=
+	t=1744639005; cv=none; b=cgPzNEt/NaOOmdd4U5NqND4u8s4XfKNnef9uRzuXJmJ+sIKSY9xWWuYf2LSJiZxA/MrtS6Ibc7dl2BO3Thcak0mR+YSjONsDXyMSKTmKW9UETcCsREIRGBiLvSc3+jLpuSGWMz20QHxZ9SB/KSsxbxXiSjeJ8bvk/+J+YHlWHaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744638945; c=relaxed/simple;
-	bh=Bp2rSa7YgUjksfq92C6U0dpNu6ZFkat6qi1m4BsAbjA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rvt0cyrKVuQ+tOZHUEyAQJ59BclA9Of7Q2TRgNo2wquawCdORDn9axQqta6N2QvGePQI2dCPkymzszESmOIdW4sRqkgH7H+O+Z0xERbrDV4yoGGi4Ujy2ec09BhOTz0fohfcHzP9EZHGmdB2PvYzGyo5OLl2I+YtjwLijiax4Jk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=GDIRMpZv; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-39c13fa05ebso2596619f8f.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Apr 2025 06:55:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1744638941; x=1745243741; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bp2rSa7YgUjksfq92C6U0dpNu6ZFkat6qi1m4BsAbjA=;
-        b=GDIRMpZvl+/8VO44OTGbpWiu5+9aCofVCpYp1w18TrO4wRmTD5ZQsoD/iBsCUghKzk
-         7k71qk4s8cGduamOve6y4LH5RQRhtKF4WzcYsDelh9VRjxHqo/eUSFIHhMC8w81A+LAf
-         AkvktK/LZXQr58cEmMdODb4WiCsxS8ULVO+dYDlCBXJii0lTuKx+bL9+XGXTuVMUvtg7
-         0UNyryap99iKXj5f4Dunmuo1C8fGxsS3EFdlRiDzAGlWi5cNaSeCrYMeFl4sqcKqu608
-         wRjyMR0d2kdneAYYEHG8d42cSM4VlrcoGM9DF8JpNtuH2Kuug3oEXcoRzcWSo8z63gzC
-         nLZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744638941; x=1745243741;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Bp2rSa7YgUjksfq92C6U0dpNu6ZFkat6qi1m4BsAbjA=;
-        b=esXf6wjMIqKFTIN4YC5m3/lZAABvm1AgwelmaL2Cf3Tj5oAGtluybGsKtYJ2KUNP71
-         rOi9r9EhIre31oh+76kLymp9HsLmnzdM+DWDGj01Xbk1Nl1ihAe6O0E71NEfr3HdNRXB
-         WnHKUUpJp2QmqakXhjtZxTZD8B0RPih1Q1+lB7m/WZq6OyiOdzqzc2QCfffynn9SsfFy
-         05GJd49sr6lm+LT56s1WSlfIEaK5V757DokkYFEyZhtNi2EwzW4PF1phKbvsv/fxP/SE
-         BhNw+H7sQMP0/V55X/yNXICLFTPnzSBk4zgI95YLYTfAcEPSbji5JJQDkIh0qtoFIj0/
-         4zNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWOo6rRyAMsGzW26QNlbkkMd7ouLzeZMnrjDb/ayYSddnlmVG/MlgHyVNXtl0AkB28UIMWMISdUXERW32w5acI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw2bNyOHi2ufDmy+YLd7TLWABx2gV31lSAsM1jOVM8sNXiVI16o
-	e/BDPccepDscYWYzEUrrHM0d9M6rpahRV7IUtHbN7KHcrPqIMacHvfEajBuwHrE=
-X-Gm-Gg: ASbGnctCuIJiVUeZQOSe6yW1Z+xdONgLEZo/AE+1XhRohl/fCCqVzs0ee48n185EASK
-	Mu2aeqwE9dhxw7i1VtJFEBMgMvFPLGKYLDnpPeaBA/ieqf/uTrA+xP1NPS824UMdav0d/WUWhE6
-	rYMFQRgHOClAst5TQNbYmaiCxFBEOuQrPvlr97ghhQvn2t6ZGb2FUXgWDcFSM0vqU8NggtNqZBg
-	P2rS3bLeaHYq4zCJ7jMXV86ylSCXuJSaX3bJpSmOdeZXzPY0yx1fKyfDB9Kpgpmpv1G1uZyvW9n
-	GMdzSXhZu3lSeObsFvSu23KzUxme1UlcunZLX2ACAl4=
-X-Google-Smtp-Source: AGHT+IH7XfnEongCTvrfF5mvPiNUytCuC/Zcaba7Gv1vTVVOnakln7HNMXeyFjeGknI7uqcmE+o1wA==
-X-Received: by 2002:a05:6000:4205:b0:39b:ede7:8906 with SMTP id ffacd0b85a97d-39ea5200a2dmr8697154f8f.19.1744638941281;
-        Mon, 14 Apr 2025 06:55:41 -0700 (PDT)
-Received: from blackdock.suse.cz ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39eaf445772sm11160518f8f.91.2025.04.14.06.55.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Apr 2025 06:55:40 -0700 (PDT)
-Date: Mon, 14 Apr 2025 15:55:39 +0200
-From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To: Waiman Long <llong@redhat.com>
-Cc: Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Muchun Song <muchun.song@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
-	Tejun Heo <tj@kernel.org>, Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
-	cgroups@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 1/2] mm/vmscan: Skip memcg with !usage in
- shrink_node_memcgs()
-Message-ID: <uaxa3qttqmaqxsphwukrxdbfrx6px7t4iytjdksuroqiu6w7in@75o4bigysttw>
-References: <20250414021249.3232315-1-longman@redhat.com>
- <20250414021249.3232315-2-longman@redhat.com>
- <kwvo4y6xjojvjf47pzv3uk545c2xewkl36ddpgwznctunoqvkx@lpqzxszmmkmj>
- <6572da04-d6d6-4f5e-9f17-b22d5a94b9fa@redhat.com>
+	s=arc-20240116; t=1744639005; c=relaxed/simple;
+	bh=ZAw0rHdYHsm4evGnkWZ6KIEQGptodt30tgz836La/HY=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=Kz2VvdTeYVrQcwiqZNQzidVUIPuHrKOKgiiQcOhJDnSvYcOH2MvZZJPXVVfLoN2SyJmz68hCUm5bBOtI6byOFq9f86y4X/oCNdGcTdaLecVj+uAqDozS5XSZdaERKO4rdFs0WWcczXvVJ3Wf7MLu0wKs7jdQpBrHuCGTcay23KM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gD3zNjMx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7991BC4CEED;
+	Mon, 14 Apr 2025 13:56:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744639005;
+	bh=ZAw0rHdYHsm4evGnkWZ6KIEQGptodt30tgz836La/HY=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=gD3zNjMx+NwICMshEJGHrE5oUFGg8UQD4kNOdY89wYsBRUStTxlGeKGZmbZlahnPW
+	 da5GxwqY231FG7vGMx4nEu78rct97eMnEKTDl6+jxnmYI28IE3gnIR6y0AG3yNN9Qq
+	 I++0jj0VUAessSvNDnkhK2mKLHILmgr8U8HV9/jvGN2eEIugF0HszcXE8IaMZ+NhF2
+	 gZH52EO2x3x7zv2uHFPBP/HpmVe0PilYVyXpcOqd07HVOpWtJfPPwnDxCt4Zsyafyj
+	 7BGGVkfLyjgHJGfctBvVxUjVb7Sgrf5P6hn17+ypHJxBPmpn2g7iLLScP6U7OrkuxA
+	 b02B1Qnz4quPA==
+From: Mark Brown <broonie@kernel.org>
+To: brendan.higgins@linux.dev, davidgow@google.com, rmoar@google.com, 
+ npache@redhat.com, Richard Fitzgerald <rf@opensource.cirrus.com>
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+ linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
+In-Reply-To: <20250411123608.1676462-1-rf@opensource.cirrus.com>
+References: <20250411123608.1676462-1-rf@opensource.cirrus.com>
+Subject: Re: [PATCH 0/3] Fix up building KUnit tests for Cirrus Logic
+ modules
+Message-Id: <174463900319.86688.13547575756527850636.b4-ty@kernel.org>
+Date: Mon, 14 Apr 2025 14:56:43 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="bldxszh4zmrjgwhd"
-Content-Disposition: inline
-In-Reply-To: <6572da04-d6d6-4f5e-9f17-b22d5a94b9fa@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-c25d1
 
+On Fri, 11 Apr 2025 13:36:05 +0100, Richard Fitzgerald wrote:
+> This series fixes the KConfig for cs_dsp and cs-amp-lib tests so that
+> CONFIG_KUNIT_ALL_TESTS doesn't cause them to add modules to the build.
+> 
+> Patch 1 adds the ASoC CS35L56 driver to KUnit all_tests.config so that
+>         cs_dsp and cs-amp-lib will be included in the test build.
+> 
+> Patch 2 and 3 fixup the KConfig entries for cs_dsp and cs-amp-lib.
+> 
+> [...]
 
---bldxszh4zmrjgwhd
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Subject: Re: [PATCH v6 1/2] mm/vmscan: Skip memcg with !usage in
- shrink_node_memcgs()
-MIME-Version: 1.0
+Applied to
 
-On Mon, Apr 14, 2025 at 09:15:57AM -0400, Waiman Long <llong@redhat.com> wrote:
-> I did see some low event in the no usage case because of the ">=" comparison
-> used in mem_cgroup_below_min().
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-Do you refer to A/B/E or A/B/F from the test?
-It's OK to see some events if there was non-zero usage initially.
+Thanks!
 
-Nevertheless, which situation this patch changes that is not handled by
-mem_cgroup_below_min() already?
+[1/3] kunit: configs: Add some Cirrus Logic modules to all_tests
+      commit: 1aa495a6572f8641da4ec4cd32210deca61bed64
+[2/3] ASoC: cs-amp-lib-test: Don't select SND_SOC_CS_AMP_LIB
+      commit: 96014d91cffb335d3b396771524ff2aba3549865
+[3/3] firmware: cs_dsp: tests: Depend on FW_CS_DSP rather then enabling it
+      commit: a0b887f6eb9a0d1be3c57d00b0f3ba8408d3018a
 
-> Yes, low event count for E is 0 in the !memory_recursiveprot case, but C/D
-> still have low events and setting no_low_events_index to -1 will fail the
-> test and it is not the same as not checking low event counts at all.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-I added yet another ignore_low_events_index variable (in my original
-proposal) not to fail the test. But feel free to come up with another
-implementation, I wanted to point out the "not specified" expectation
-for E with memory_recursiveprot.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-Michal
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
---bldxszh4zmrjgwhd
-Content-Type: application/pgp-signature; name="signature.asc"
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
------BEGIN PGP SIGNATURE-----
+Thanks,
+Mark
 
-iHUEABYKAB0WIQTd6mfF2PbEZnpdoAkt3Wney77BSQUCZ/0T2QAKCRAt3Wney77B
-SbJPAP0dXFDJG2wSX/yIyDLlLnQPzAglEx7DlhFbKKZN1ujpywD/cWz5HMwZq6XA
-v7d3QWoUA0RmWL0qHKFogwG/fe+bNQQ=
-=9Pga
------END PGP SIGNATURE-----
-
---bldxszh4zmrjgwhd--
 
