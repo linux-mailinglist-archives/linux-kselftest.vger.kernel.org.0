@@ -1,60 +1,62 @@
-Return-Path: <linux-kselftest+bounces-30795-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30796-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C34A9A88F04
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Apr 2025 00:25:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 648B8A88F06
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Apr 2025 00:26:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D14E73B1E2C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Apr 2025 22:25:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 99F6A189B6B6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Apr 2025 22:26:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49D321F4295;
-	Mon, 14 Apr 2025 22:25:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 077DD1F3FE3;
+	Mon, 14 Apr 2025 22:25:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZHNtrNJo"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dxU6xZ/4"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 491CE1F12FF
-	for <linux-kselftest@vger.kernel.org>; Mon, 14 Apr 2025 22:25:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D9511F3BAB
+	for <linux-kselftest@vger.kernel.org>; Mon, 14 Apr 2025 22:25:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744669538; cv=none; b=cGJcPWR2FNnstEOZMvurKDFiZQVvdr+tud+rQggHocnPGBis4bAGLGTx7ys5K6/mmFIO6foiy522Shq67DSUBpjZR59tLks1AbmBTqclJko7BSk0s8Tv3XHtL5Z5vlfxjALtwYS8lXyjl2uLhbryUbffLzakptPer7C80L/xMGo=
+	t=1744669558; cv=none; b=vCvRaFWVRGhqVeF5jiQZAmlsuZQN8zuTbYgJQbVeuH6rTdbkSpjkdT4omTl6BPTHDhclmaO8NVzxoPRIvnFDEyY+1PAOYg1fC7xWqTXyJhT+vgND3wcLt0HL+yJe0fhQfnbNVxgP6iO1E5Gv9F4LtSM5rZmLpXja5PVQ4V6WC+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744669538; c=relaxed/simple;
-	bh=yJh360MlnBAEJy/QLsiSOsRpkj+tmEeTtyeIyewln0o=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FyD7JKsAAzD4mNOlfOc8FDLqblui3xPS2INLQGy3HJULcXdYor9MP+wwDNO6oYuR4bbQ/G+LuSM4hVvWlIrEqUBQ8T/3GrHcT1M90OxlqU9Kd0qQ2wTNZC9JfPbFn5tyA9zDX0zeeeAcOjb+wWIi+lq5rxCw0qbK/P0EFY0Y274=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZHNtrNJo; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1744669558; c=relaxed/simple;
+	bh=g9kdSNZmzjMow3T3hCtXuM8Ih81BoMLPCkHoErDGl2g=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=amnUHBX2Hg7533qHx0Sjm7N6XnOLXPeM99ktvA6qDw/M/fIf/okWrmiXsa9dSlSx73dJANw1t1JbpFS/EBhVR5T8TVcsEpfeqq416/hTCwNu9VZcak9QaVwbCz+MTyVBYT8x9qmhQWCcsrNuKvDYx/fkiwXk5mNtjoG5xc7U8ig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dxU6xZ/4; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1744669535;
+	s=mimecast20190719; t=1744669555;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Wasdk2OzhDHLNgttFk1rmIb7qXMNrsMULtRHlj6BUo4=;
-	b=ZHNtrNJoBr6/6Z6IYKQymF6neO0mL8OywUygM/GKtc1vBxUUjDVXVKcCfHSAUcUytP/8C7
-	CldSk/m//UoXCwICJXCmiVfhSigcfVjC6mlnzZT9ZDJoUylH8yywX1RjIW9uWarBDkH+54
-	0gPKclxStHSjqDAUHqFw4WnSBS9fM1Q=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=FwpqttvBCnxGqGYUL3sPRwZ5zL6bMm0W6vYtJG5uftA=;
+	b=dxU6xZ/4qztslGsKfTuzKdyelxH0T6L2vzURU4n/LIm0OhspR8DxlROEw67+blEIHFh3Xp
+	gX8p/rAJkSlT5bOarqXNDG0eCgJc2oKAYzN6TOGKkSO7gbEuiZGePImRk8GxgGOxdj1fi5
+	Hua0kiOyLRf1N+2k/PHYa7NrAQ0CMMI=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-588-nNWww7m0NbSHMf6qDuTOAw-1; Mon,
- 14 Apr 2025 18:25:29 -0400
-X-MC-Unique: nNWww7m0NbSHMf6qDuTOAw-1
-X-Mimecast-MFC-AGG-ID: nNWww7m0NbSHMf6qDuTOAw_1744669525
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-154-__A_VGTmMayXFMB3zUZXyg-1; Mon,
+ 14 Apr 2025 18:25:51 -0400
+X-MC-Unique: __A_VGTmMayXFMB3zUZXyg-1
+X-Mimecast-MFC-AGG-ID: __A_VGTmMayXFMB3zUZXyg_1744669540
 Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6CDC61800349;
-	Mon, 14 Apr 2025 22:25:24 +0000 (UTC)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CB0AA1809CA6;
+	Mon, 14 Apr 2025 22:25:39 +0000 (UTC)
 Received: from h1.redhat.com (unknown [10.22.64.91])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C771F180B487;
-	Mon, 14 Apr 2025 22:25:13 +0000 (UTC)
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id BD70C180B488;
+	Mon, 14 Apr 2025 22:25:24 +0000 (UTC)
 From: Nico Pache <npache@redhat.com>
 To: linux-mm@kvack.org,
 	linux-doc@vger.kernel.org,
@@ -97,9 +99,11 @@ Cc: akpm@linux-foundation.org,
 	mathieu.desnoyers@efficios.com,
 	mhiramat@kernel.org,
 	rostedt@goodmis.org
-Subject: [PATCH v3 0/4] mm: introduce THP deferred setting
-Date: Mon, 14 Apr 2025 16:24:52 -0600
-Message-ID: <20250414222456.43212-1-npache@redhat.com>
+Subject: [PATCH v3 1/4] mm: defer THP insertion to khugepaged
+Date: Mon, 14 Apr 2025 16:24:53 -0600
+Message-ID: <20250414222456.43212-2-npache@redhat.com>
+In-Reply-To: <20250414222456.43212-1-npache@redhat.com>
+References: <20250414222456.43212-1-npache@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -109,89 +113,155 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-This series is a follow-up to [1], which adds mTHP support to khugepaged.
-mTHP khugepaged support is a "loose" dependency for the sysfs/sysctl
-configs to make sense. Without it global="defer" and  mTHP="inherit" case
-is "undefined" behavior.
+setting /transparent_hugepages/enabled=always allows applications
+to benefit from THPs without having to madvise. However, the pf handler
+takes very few considerations to decide weather or not to actually use a
+THP. This can lead to a lot of wasted memory. khugepaged only operates
+on memory that was either allocated with enabled=always or MADV_HUGEPAGE.
 
-We've seen cases were customers switching from RHEL7 to RHEL8 see a
-significant increase in the memory footprint for the same workloads.
+Introduce the ability to set enabled=defer, which will prevent THPs from
+being allocated by the page fault handler unless madvise is set,
+leaving it up to khugepaged to decide which allocations will collapse to a
+THP. This should allow applications to benefits from THPs, while curbing
+some of the memory waste.
 
-Through our investigations we found that a large contributing factor to
-the increase in RSS was an increase in THP usage.
+Co-developed-by: Rafael Aquini <raquini@redhat.com>
+Signed-off-by: Rafael Aquini <raquini@redhat.com>
+Signed-off-by: Nico Pache <npache@redhat.com>
+---
+ include/linux/huge_mm.h | 15 +++++++++++++--
+ mm/huge_memory.c        | 31 +++++++++++++++++++++++++++----
+ 2 files changed, 40 insertions(+), 6 deletions(-)
 
-For workloads like MySQL, or when using allocators like jemalloc, it is
-often recommended to set /transparent_hugepages/enabled=never. This is
-in part due to performance degradations and increased memory waste.
-
-This series introduces enabled=defer, this setting acts as a middle
-ground between always and madvise. If the mapping is MADV_HUGEPAGE, the
-page fault handler will act normally, making a hugepage if possible. If
-the allocation is not MADV_HUGEPAGE, then the page fault handler will
-default to the base size allocation. The caveat is that khugepaged can
-still operate on pages thats not MADV_HUGEPAGE.
-
-This allows for three things... one, applications specifically designed to
-use hugepages will get them, and two, applications that don't use
-hugepages can still benefit from them without aggressively inserting
-THPs at every possible chance. This curbs the memory waste, and defers
-the use of hugepages to khugepaged. Khugepaged can then scan the memory
-for eligible collapsing. Lastly there is the added benefit for those who want
-THPs but experience higher latency PFs. Now you can get base page performance at
-the PF handler and Hugepage performance for those mappings after they collapse.
-
-Admins may want to lower max_ptes_none, if not, khugepaged may
-aggressively collapse single allocations into hugepages.
-
-TESTING:
-- Built for x86_64, aarch64, ppc64le, and s390x
-- selftests mm
-- In [1] I provided a script [2] that has multiple access patterns
-- lots of general use. These changes have been running in my VM for some time
-- redis testing. This test was my original case for the defer mode. What I was
-   able to prove was that THP=always leads to increased max_latency cases; hence
-   why it is recommended to disable THPs for redis servers. However with 'defer'
-   we dont have the max_latency spikes and can still get the system to utilize
-   THPs. I further tested this with the mTHP defer setting and found that redis
-   (and probably other jmalloc users) can utilize THPs via defer (+mTHP defer)
-   without a large latency penalty and some potential gains.
-   I uploaded some mmtest results here [3] which compares:
-       stock+thp=never
-       stock+(m)thp=always
-       khugepaged-mthp + defer (max_ptes_none=64)
-
-  The results show that (m)THPs can cause some throughput regression in some
-  cases, but also has gains in other cases. The mTHP+defer results have more
-  gains and less losses over the (m)THP=always case.
-
-V3 Changes:
-- moved some Documentation to the other series and merged the remaining
-   Documentation updates into one
-
-V2 Changes:
-- base changes on mTHP khugepaged support
-- Fix selftests parsing issue
-- add mTHP defer option
-- add mTHP defer Documentation
-
-[1] - https://lore.kernel.org/lkml/20250414220557.35388-1-npache@redhat.com/
-[2] - https://gitlab.com/npache/khugepaged_mthp_test
-[3] - https://people.redhat.com/npache/mthp_khugepaged_defer/testoutput2/output.html
-
-Nico Pache (4):
-  mm: defer THP insertion to khugepaged
-  mm: document (m)THP defer usage
-  khugepaged: add defer option to mTHP options
-  selftests: mm: add defer to thp setting parser
-
- Documentation/admin-guide/mm/transhuge.rst | 31 +++++++---
- include/linux/huge_mm.h                    | 18 +++++-
- mm/huge_memory.c                           | 69 +++++++++++++++++++---
- mm/khugepaged.c                            | 10 ++--
- tools/testing/selftests/mm/thp_settings.c  |  1 +
- tools/testing/selftests/mm/thp_settings.h  |  1 +
- 6 files changed, 107 insertions(+), 23 deletions(-)
-
+diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
+index 95be9d266eff..b154bd11bd93 100644
+--- a/include/linux/huge_mm.h
++++ b/include/linux/huge_mm.h
+@@ -48,6 +48,7 @@ enum transparent_hugepage_flag {
+ 	TRANSPARENT_HUGEPAGE_UNSUPPORTED,
+ 	TRANSPARENT_HUGEPAGE_FLAG,
+ 	TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG,
++	TRANSPARENT_HUGEPAGE_DEFER_PF_INST_FLAG,
+ 	TRANSPARENT_HUGEPAGE_DEFRAG_DIRECT_FLAG,
+ 	TRANSPARENT_HUGEPAGE_DEFRAG_KSWAPD_FLAG,
+ 	TRANSPARENT_HUGEPAGE_DEFRAG_KSWAPD_OR_MADV_FLAG,
+@@ -186,6 +187,7 @@ static inline bool hugepage_global_enabled(void)
+ {
+ 	return transparent_hugepage_flags &
+ 			((1<<TRANSPARENT_HUGEPAGE_FLAG) |
++			(1<<TRANSPARENT_HUGEPAGE_DEFER_PF_INST_FLAG) |
+ 			(1<<TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG));
+ }
+ 
+@@ -195,6 +197,12 @@ static inline bool hugepage_global_always(void)
+ 			(1<<TRANSPARENT_HUGEPAGE_FLAG);
+ }
+ 
++static inline bool hugepage_global_defer(void)
++{
++	return transparent_hugepage_flags &
++			(1<<TRANSPARENT_HUGEPAGE_DEFER_PF_INST_FLAG);
++}
++
+ static inline int highest_order(unsigned long orders)
+ {
+ 	return fls_long(orders) - 1;
+@@ -291,13 +299,16 @@ unsigned long thp_vma_allowable_orders(struct vm_area_struct *vma,
+ 				       unsigned long tva_flags,
+ 				       unsigned long orders)
+ {
++	if ((tva_flags & TVA_IN_PF) && hugepage_global_defer() &&
++			!(vm_flags & VM_HUGEPAGE))
++		return 0;
++
+ 	/* Optimization to check if required orders are enabled early. */
+ 	if ((tva_flags & TVA_ENFORCE_SYSFS) && vma_is_anonymous(vma)) {
+ 		unsigned long mask = READ_ONCE(huge_anon_orders_always);
+-
+ 		if (vm_flags & VM_HUGEPAGE)
+ 			mask |= READ_ONCE(huge_anon_orders_madvise);
+-		if (hugepage_global_always() ||
++		if (hugepage_global_always() || hugepage_global_defer() ||
+ 		    ((vm_flags & VM_HUGEPAGE) && hugepage_global_enabled()))
+ 			mask |= READ_ONCE(huge_anon_orders_inherit);
+ 
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 35515bff392b..4eee0001e0fa 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -297,12 +297,15 @@ static ssize_t enabled_show(struct kobject *kobj,
+ 	const char *output;
+ 
+ 	if (test_bit(TRANSPARENT_HUGEPAGE_FLAG, &transparent_hugepage_flags))
+-		output = "[always] madvise never";
++		output = "[always] madvise defer never";
+ 	else if (test_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG,
+ 			  &transparent_hugepage_flags))
+-		output = "always [madvise] never";
++		output = "always [madvise] defer never";
++	else if (test_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_INST_FLAG,
++			  &transparent_hugepage_flags))
++		output = "always madvise [defer] never";
+ 	else
+-		output = "always madvise [never]";
++		output = "always madvise defer [never]";
+ 
+ 	return sysfs_emit(buf, "%s\n", output);
+ }
+@@ -315,13 +318,20 @@ static ssize_t enabled_store(struct kobject *kobj,
+ 
+ 	if (sysfs_streq(buf, "always")) {
+ 		clear_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG, &transparent_hugepage_flags);
++		clear_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_INST_FLAG, &transparent_hugepage_flags);
+ 		set_bit(TRANSPARENT_HUGEPAGE_FLAG, &transparent_hugepage_flags);
++	} else if (sysfs_streq(buf, "defer")) {
++		clear_bit(TRANSPARENT_HUGEPAGE_FLAG, &transparent_hugepage_flags);
++		clear_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG, &transparent_hugepage_flags);
++		set_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_INST_FLAG, &transparent_hugepage_flags);
+ 	} else if (sysfs_streq(buf, "madvise")) {
+ 		clear_bit(TRANSPARENT_HUGEPAGE_FLAG, &transparent_hugepage_flags);
++		clear_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_INST_FLAG, &transparent_hugepage_flags);
+ 		set_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG, &transparent_hugepage_flags);
+ 	} else if (sysfs_streq(buf, "never")) {
+ 		clear_bit(TRANSPARENT_HUGEPAGE_FLAG, &transparent_hugepage_flags);
+ 		clear_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG, &transparent_hugepage_flags);
++		clear_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_INST_FLAG, &transparent_hugepage_flags);
+ 	} else
+ 		ret = -EINVAL;
+ 
+@@ -954,18 +964,31 @@ static int __init setup_transparent_hugepage(char *str)
+ 			&transparent_hugepage_flags);
+ 		clear_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG,
+ 			  &transparent_hugepage_flags);
++		clear_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_INST_FLAG,
++			  &transparent_hugepage_flags);
+ 		ret = 1;
++	} else if (!strcmp(str, "defer")) {
++		clear_bit(TRANSPARENT_HUGEPAGE_FLAG,
++			  &transparent_hugepage_flags);
++		clear_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG,
++			  &transparent_hugepage_flags);
++		set_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_INST_FLAG,
++			  &transparent_hugepage_flags);
+ 	} else if (!strcmp(str, "madvise")) {
+ 		clear_bit(TRANSPARENT_HUGEPAGE_FLAG,
+ 			  &transparent_hugepage_flags);
++		clear_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_INST_FLAG,
++			  &transparent_hugepage_flags);
+ 		set_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG,
+-			&transparent_hugepage_flags);
++			  &transparent_hugepage_flags);
+ 		ret = 1;
+ 	} else if (!strcmp(str, "never")) {
+ 		clear_bit(TRANSPARENT_HUGEPAGE_FLAG,
+ 			  &transparent_hugepage_flags);
+ 		clear_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG,
+ 			  &transparent_hugepage_flags);
++		clear_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_INST_FLAG,
++			  &transparent_hugepage_flags);
+ 		ret = 1;
+ 	}
+ out:
 -- 
 2.48.1
 
