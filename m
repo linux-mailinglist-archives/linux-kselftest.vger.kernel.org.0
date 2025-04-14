@@ -1,206 +1,100 @@
-Return-Path: <linux-kselftest+bounces-30668-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30669-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DA4BA87E5A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Apr 2025 13:04:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C34E8A87E71
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Apr 2025 13:08:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 10A003B5049
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Apr 2025 11:04:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CEC1D1766BF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Apr 2025 11:08:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B2EE28368C;
-	Mon, 14 Apr 2025 11:04:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44CD528C5AD;
+	Mon, 14 Apr 2025 11:08:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BGNaNF5U"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kf1uHmjt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63D10281529;
-	Mon, 14 Apr 2025 11:04:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EB33280A3E;
+	Mon, 14 Apr 2025 11:08:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744628689; cv=none; b=RNeWwTbcZdlkOSuoFOjWimNBi/YWZN5dWjo78HnJzqcQPbnEjrM9a0VGmRp1o0HO3Z7BHXaQGLbSz+Q4JY1LJFw7JAeLNhCrzEULXEaO5JFun/tmYANkxqWE6h1plHFaeNN0isYrCblR7o8zO0boGb0J7XJEAwVn7Gn8yWPF4sA=
+	t=1744628914; cv=none; b=VraFtLWtxkwno7/vnkwPbYZAZcA9bqzsSBPhXUIyHRQ2veDvUsP5DptC6D6qdd9jSiUAxp1hY6hGaEqsRC/wPX2hSQxGUTJ7fJQv7dYLDFLKHEqqk8sLjb1W7CXg8Yxso4YlSb3IIFxf2bHKI++teo55q4kDhcW+3/z+0JynKiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744628689; c=relaxed/simple;
-	bh=IAENeMhSD6LNx9q+NKZ4mbl9NprCZvlsuBAutNFVpnI=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XwS/Fz77EMUT20BhV7tcGsmmX9Yy45mkHBwsb9OvV9fWo6X/y166J5UUfYb32gdFrT9ncRVrSNd3zmU0/YkP0cwnyWpLwBbBOLqAWoMD212ICJLX6eH+j9mDI6Qfz4yXSuWiSAFY/8lnBb9vB5+e7p8fbj/9b1lJxGD9ESavVbY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BGNaNF5U; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-39ac56756f6so3624999f8f.2;
-        Mon, 14 Apr 2025 04:04:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744628685; x=1745233485; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=sKIv+Ew1hQAFZsKTKMtzV43PXBAkEaoS28OQ89MT8N8=;
-        b=BGNaNF5UmFR0Y4+RxE2CSaSRjbgHPdWiyfC2NhHxl00X771C1N8DONvJn+TWy7ugj9
-         UAtWhY08vS7i83Bn6KwF+FL9iTUsrEHzXeBI27GIccYTk1y9KHTzwq0gfOuemip/AfNP
-         DtQMHl5aOSm0Hf3BtYRQGfpiIsupyjMrbax9da0JBrRZKhq5cdRUXrxZm9XRAXVGxC/8
-         idH5NESck9w1spCEK8fKtzjBhMMe6D3c8NAQJ/G0aRfjZwMv3BBFdutg3zx0ZXVlAFnx
-         PlyFFGUuXx3UWtSABecUkiw/LAeJVAuKSmumwZ61FP9wLx8Sa9YdWfQIyM7GGEXw2C5D
-         Vxmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744628685; x=1745233485;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sKIv+Ew1hQAFZsKTKMtzV43PXBAkEaoS28OQ89MT8N8=;
-        b=VGkKJOd5XwTngarAessm9CaOtFAd/HtWE9k503k8FY3ETLdmtFLAUuDXJrdtF0pED6
-         yqGulqXfxvElWr12uE46rgpr5PQPE/kQ6rwHq3ap0FXVPCBf6c+EJQNRRDFZlYfa/B1+
-         bDEziug/qvdyBJ0WU6JtuYqY5r/bagIEPIzmjrB6IaA7qYNeBqTRQGUKhuFgKbh1XKKx
-         D1rK0tHEwSpaW5/2/wIqRRX7MkkmmMiA1GMi8AbSuvchLUzWwwax8vko/KkXfjSN8d9f
-         eOCZ+I2Z767w6iLbdPQaotBJGc9Ggd5jfD7K4zqs6Hwqv8YaNaETeyPBFYvuzAwU/yRP
-         PEPg==
-X-Forwarded-Encrypted: i=1; AJvYcCUb0SsVutq+nzDNZZBmLhPPqaa+kpC+MDKMFcRGGc2bcL+fELVOVMIV6N2FQ7KVyCClGAU=@vger.kernel.org, AJvYcCWJsIogQ+GRHW+wl1BJH2ItgaZMY2SG3ZaANHffgZtFsDKkDvYfkvgZJh1rAFlM11mGfQOu7enycdWxtDSA@vger.kernel.org, AJvYcCX4phxHXFZiCPPmdwUan13bGlrVMvnmVKxnfzPlGz5lG3znt7ccxgf/Q47fB/ukE2zyMMw0fwRyaZlss/WYLY6Y@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxm8T7uze2z1hQK7j4HttIJCrelvD5babHNvZbiGFyTZyKFc3df
-	zyAVtFNgRP2vw095gCONILA61jj+po5pXa3XKsfuIBEIBP2Q07Pi
-X-Gm-Gg: ASbGncvDN5ifzjFXPV6+FTxp6Drvw+P6bNeVZYBK3rauuDlh7scX/2P74ZrKolCSpjC
-	hco1l5t4Q8saXvV7sYbVYSg/5OwvlBsjmkngs2V9X0e7nXXw/exZxWGhhFojtCZ3WCZcsci3PTL
-	u5Q7mgA5H3ZK29qHqnirW9JiZYIwwcl07kPhHCefRPbZd/CD0bkMSzeE7J/D2/zyR0DfVTMFsW1
-	344aXwhzsSU1ulyFtlyMW+/uV3HpEd5XsfSYngijERJ3zWZhKnyiNACg3nk2DazutiLzn9B1atk
-	gkPF95vjaxY7iy2+R38qb99Zb/YoGws=
-X-Google-Smtp-Source: AGHT+IGrvwgLQedKQvifH2Jvu4TYIj9/pf5+d/bwg1/VjkLHL4cwxQAuHsTjKrrtJbJPnThtPqVuQg==
-X-Received: by 2002:a05:6000:144b:b0:399:6dc0:f134 with SMTP id ffacd0b85a97d-39eaaed20c4mr9243328f8f.51.1744628685126;
-        Mon, 14 Apr 2025 04:04:45 -0700 (PDT)
-Received: from krava ([2a00:102a:4007:73e1:1681:405:90b2:869b])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39eae9777a0sm10625743f8f.43.2025.04.14.04.04.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Apr 2025 04:04:44 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Mon, 14 Apr 2025 13:04:41 +0200
-To: Alexis =?iso-8859-1?Q?Lothor=E9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Puranjay Mohan <puranjay@kernel.org>,
-	Xu Kuohai <xukuohai@huaweicloud.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+	s=arc-20240116; t=1744628914; c=relaxed/simple;
+	bh=Xdy9D5Bqc7njSHzOj1S++m6E2MnsrUv9gGmsdEPEskc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=N5PFRLn+3lqNVK/kc40C1hjJ9HbbnRX2kfz8UZ62JgDebF/uDK7pLkDjQZ1zxkIvBYrXA1CikSJ6/7tRNA2K1UxOdZV3CL804rWoxFscIiIKCIe7W9WVO/X8T2/D6/pqZSNCQDr0wqBI/+kGC6WfXZz61DGRY4uBVQa+M1Vphzo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kf1uHmjt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E1BCC4CEE5;
+	Mon, 14 Apr 2025 11:08:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744628914;
+	bh=Xdy9D5Bqc7njSHzOj1S++m6E2MnsrUv9gGmsdEPEskc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Kf1uHmjtuyTVJ2dL7Z3InjXnxMN0ij1nMdM0VaxyVCtJ+XVgnbfDG3qUu5giho5if
+	 OQAOGBJIoYTzy6MnB8AHsysI1il5NaqC6d7TcDOOjSBAkwxBFtN4g6J2TRdzMgZlYH
+	 wpLbRD4k88Bs4tMoRP29I5Cn5OD8FrUktoCwCPiyEIfnzNSqKNKUcKTcQiGkgBpiQI
+	 9D+zj6WooQ1Uczqa1qnU+h1BNqq76Crk3fzygpgg1/2RnDQa4wsfJMsdmXg9S3Gy/P
+	 PKkaDDlNyD5uUdStZJmyDsU460f9tTEnmOwpBC0yJ2HiToiLlPfuPyKMbKyQj6ybxY
+	 +v7v6imwaB+zQ==
+From: Christian Brauner <brauner@kernel.org>
+To: Nam Cao <namcao@linutronix.de>
+Cc: Christian Brauner <brauner@kernel.org>,
 	Shuah Khan <shuah@kernel.org>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Florent Revest <revest@chromium.org>,
-	Bastien Curutchet <bastien.curutchet@bootlin.com>,
-	ebpf@linuxfoundation.org,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
+	John Ogness <john.ogness@linutronix.de>,
 	linux-kselftest@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH RFC bpf-next 1/4] bpf: add struct largest member size in
- func model
-Message-ID: <Z_zryQkfmrSXYN4k@krava>
-References: <20250411-many_args_arm64-v1-0-0a32fe72339e@bootlin.com>
- <20250411-many_args_arm64-v1-1-0a32fe72339e@bootlin.com>
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] selftests: coredump: Some bug fixes
+Date: Mon, 14 Apr 2025 13:08:28 +0200
+Message-ID: <20250414-wertigkeit-sozusagen-506b362280cd@brauner>
+X-Mailer: git-send-email 2.47.2
+In-Reply-To: <cover.1744383419.git.namcao@linutronix.de>
+References: <cover.1744383419.git.namcao@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1275; i=brauner@kernel.org; h=from:subject:message-id; bh=Xdy9D5Bqc7njSHzOj1S++m6E2MnsrUv9gGmsdEPEskc=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaT/ebM2ve6Eh3GR27Rup9a1XQvOt/6sf/TRn3fPyRzrn 2UBp67YdZSyMIhxMciKKbI4tJuEyy3nqdhslKkBM4eVCWQIAxenAEyk8hkjQwcTg/+jbPtLS3+z c1s8Wu320IFfKHnFMn2FlR82LEg4lMnIMPHa8uQ9HlclhGz9Ph/LWVfiG/573aHctupcVdNJtip nuAE=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250411-many_args_arm64-v1-1-0a32fe72339e@bootlin.com>
 
-On Fri, Apr 11, 2025 at 10:32:10PM +0200, Alexis Lothoré (eBPF Foundation) wrote:
-> In order to properly JIT the trampolines needed to attach BPF programs
-> to functions, some architectures like ARM64 need to know about the
-> alignment needed for the function arguments. Such alignment can
-> generally be deduced from the argument size, but that's not completely
-> true for composite types. In the specific case of ARM64, the AAPCS64 ABI
-> defines that a composite type which needs to be passed through stack
-> must be aligned on the maximum between 8 and the largest alignment
-> constraint of its first-level members. So the JIT compiler needs more
-> information about the arguments to make sure to generate code that
-> respects those alignment constraints.
+On Fri, 11 Apr 2025 17:09:40 +0200, Nam Cao wrote:
+> While trying the coredump test on qemu-system-riscv64, I observed test
+> failures for various reasons.
 > 
-> For struct arguments, add information about the size of the largest
-> first-level member in the struct btf_func_model to allow the JIT
-> compiler to guess the needed alignment. The information is quite
-> specific, but it allows to keep arch-specific concerns (ie: guessing the
-> final needed alignment for an argument) isolated in each JIT compiler.
+> This series makes the test works on qemu-system-riscv64.
 > 
-> Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
-> ---
->  include/linux/bpf.h |  1 +
->  kernel/bpf/btf.c    | 25 +++++++++++++++++++++++++
->  2 files changed, 26 insertions(+)
+> Best regards,
+> Nam
 > 
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 3f0cc89c0622cb1a097999afb78c17102593b6bb..8b34dcf60a0ce09228ff761b962ab67b6a3e2263 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -1106,6 +1106,7 @@ struct btf_func_model {
->  	u8 nr_args;
->  	u8 arg_size[MAX_BPF_FUNC_ARGS];
->  	u8 arg_flags[MAX_BPF_FUNC_ARGS];
-> +	u8 arg_largest_member_size[MAX_BPF_FUNC_ARGS];
->  };
->  
->  /* Restore arguments before returning from trampoline to let original function
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 16ba36f34dfab7531babf5753cab9f368cddefa3..5d40911ec90210086a6175d569abb6e52d75ad17 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -7318,6 +7318,29 @@ static int __get_type_size(struct btf *btf, u32 btf_id,
->  	return -EINVAL;
->  }
->  
-> +static u8 __get_largest_member_size(struct btf *btf, const struct btf_type *t)
-> +{
-> +	const struct btf_member *member;
-> +	const struct btf_type *mtype;
-> +	u8 largest_member_size = 0;
-> +	int i;
-> +
-> +	if (!__btf_type_is_struct(t))
-> +		return largest_member_size;
-> +
-> +	for_each_member(i, t, member) {
-> +		mtype = btf_type_by_id(btf, member->type);
-> +		while (mtype && btf_type_is_modifier(mtype))
-> +			mtype = btf_type_by_id(btf, mtype->type);
-> +		if (!mtype)
-> +			return -EINVAL;
+> [...]
 
-should we use __get_type_size for member->type instead ?
+Applied to the vfs-6.16.coredump branch of the vfs/vfs.git tree.
+Patches in the vfs-6.16.coredump branch should appear in linux-next soon.
 
-jirka
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
 
-> +		if (mtype->size > largest_member_size)
-> +			largest_member_size = mtype->size;
-> +	}
-> +
-> +	return largest_member_size;
-> +}
-> +
->  static u8 __get_type_fmodel_flags(const struct btf_type *t)
->  {
->  	u8 flags = 0;
-> @@ -7396,6 +7419,8 @@ int btf_distill_func_proto(struct bpf_verifier_log *log,
->  		}
->  		m->arg_size[i] = ret;
->  		m->arg_flags[i] = __get_type_fmodel_flags(t);
-> +		m->arg_largest_member_size[i] =
-> +			__get_largest_member_size(btf, t);
->  	}
->  	m->nr_args = nargs;
->  	return 0;
-> 
-> -- 
-> 2.49.0
-> 
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
+
+Note that commit hashes shown below are subject to change due to rebase,
+trailer updates or similar. If in doubt, please check the listed branch.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: vfs-6.16.coredump
+
+[1/3] selftests: coredump: Properly initialize pointer
+      https://git.kernel.org/vfs/vfs/c/b3da3c6ce9f6
+[2/3] selftests: coredump: Fix test failure for slow machines
+      https://git.kernel.org/vfs/vfs/c/05ac92f73615
+[3/3] selftests: coredump: Raise timeout to 2 minutes
+      https://git.kernel.org/vfs/vfs/c/52cfbe664dc9
 
