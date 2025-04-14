@@ -1,100 +1,144 @@
-Return-Path: <linux-kselftest+bounces-30669-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30672-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C34E8A87E71
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Apr 2025 13:08:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 86A23A88078
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Apr 2025 14:36:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CEC1D1766BF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Apr 2025 11:08:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7A32116A17C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Apr 2025 12:36:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44CD528C5AD;
-	Mon, 14 Apr 2025 11:08:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 598392BEC59;
+	Mon, 14 Apr 2025 12:35:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kf1uHmjt"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="nasWIn7E"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EB33280A3E;
-	Mon, 14 Apr 2025 11:08:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0140F190057
+	for <linux-kselftest@vger.kernel.org>; Mon, 14 Apr 2025 12:35:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744628914; cv=none; b=VraFtLWtxkwno7/vnkwPbYZAZcA9bqzsSBPhXUIyHRQ2veDvUsP5DptC6D6qdd9jSiUAxp1hY6hGaEqsRC/wPX2hSQxGUTJ7fJQv7dYLDFLKHEqqk8sLjb1W7CXg8Yxso4YlSb3IIFxf2bHKI++teo55q4kDhcW+3/z+0JynKiI=
+	t=1744634159; cv=none; b=JDC/DEo1WHeNQieY8v8g/NHgxQOiZ9AszXSUIri+PdYDgU3YZdna5LhNuLoZj2W0aYvKWDbf01JlPzbPNYQt1g0rB8qmG6Kqz565eOJ0zKpwJ/UN0FcnVkcUHBBzugiB2SjWJ4M349MPImqSZQeh86Dsq7LZS5QRZ8PZj6N0+VU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744628914; c=relaxed/simple;
-	bh=Xdy9D5Bqc7njSHzOj1S++m6E2MnsrUv9gGmsdEPEskc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=N5PFRLn+3lqNVK/kc40C1hjJ9HbbnRX2kfz8UZ62JgDebF/uDK7pLkDjQZ1zxkIvBYrXA1CikSJ6/7tRNA2K1UxOdZV3CL804rWoxFscIiIKCIe7W9WVO/X8T2/D6/pqZSNCQDr0wqBI/+kGC6WfXZz61DGRY4uBVQa+M1Vphzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kf1uHmjt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E1BCC4CEE5;
-	Mon, 14 Apr 2025 11:08:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744628914;
-	bh=Xdy9D5Bqc7njSHzOj1S++m6E2MnsrUv9gGmsdEPEskc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Kf1uHmjtuyTVJ2dL7Z3InjXnxMN0ij1nMdM0VaxyVCtJ+XVgnbfDG3qUu5giho5if
-	 OQAOGBJIoYTzy6MnB8AHsysI1il5NaqC6d7TcDOOjSBAkwxBFtN4g6J2TRdzMgZlYH
-	 wpLbRD4k88Bs4tMoRP29I5Cn5OD8FrUktoCwCPiyEIfnzNSqKNKUcKTcQiGkgBpiQI
-	 9D+zj6WooQ1Uczqa1qnU+h1BNqq76Crk3fzygpgg1/2RnDQa4wsfJMsdmXg9S3Gy/P
-	 PKkaDDlNyD5uUdStZJmyDsU460f9tTEnmOwpBC0yJ2HiToiLlPfuPyKMbKyQj6ybxY
-	 +v7v6imwaB+zQ==
-From: Christian Brauner <brauner@kernel.org>
-To: Nam Cao <namcao@linutronix.de>
-Cc: Christian Brauner <brauner@kernel.org>,
+	s=arc-20240116; t=1744634159; c=relaxed/simple;
+	bh=2mocTyMZccQWl6hqt2SiR6urZCNyzBGg08Agjt8O9rQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=dMdMBehCa20SB8c+5DcWb9ptHwI6VWr9t1nFOT0rSaoGzjBiB5ui2U7gJB5F4DieRjQua+E0Kk7vbLCbAkalp0+qNl/J7kM6CTRhf59tOJ6DGeRZDSyRBSWIR/mmIi6C39vHI7qTyFETrXb53Ge5uDCPSlqqCm8qlxA4PSRe4gc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=nasWIn7E; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-43d04dc73b7so44167525e9.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Apr 2025 05:35:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1744634153; x=1745238953; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WQmio3wqLQnFz3mNwa+nQ7W5ScqINI2CxtaTzG1u6QU=;
+        b=nasWIn7EGt5/MBjrKgbeLE+0Acn/uqcYzqxhewurgrw8Lor1bsor/mS9Owd7yYJOT4
+         XfQd84eOjHJb/Ycvj5Dew0EZZ7SlO+sqF26ym+J45dZ2eN2jQdboOYeUIhG7hOjAUFtG
+         KaQAi/gRVZAjgy5HKEWj/gA96KPuZi2xWl/JbFanbSMPZ+vyRrWthrduBybk3+ReNLQI
+         HntP5zT5pHwIUZzDeI9Dmb/NPgbLWLGmmstmGp5pGxXlbgWutVqVSCpZl8YY1yAd7ox+
+         zBeOaLGi+6iIEi/PT0xIp/JnmsvKFzYEYdK9WR7qqtcvTlc8iKtN+tIJga8G2b+/MonG
+         zUGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744634153; x=1745238953;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WQmio3wqLQnFz3mNwa+nQ7W5ScqINI2CxtaTzG1u6QU=;
+        b=ucajLYQjSfHSi7fiSrcNxcsFzi5K5tznOB1fh0a1HjlPoCxhxgJj/+SFsYbN0gR0i7
+         PqKG+MEpa1+eQAIuHXDkGj+efZ5ZmGYVz/1kz8rjrGkhuI+C6Doree4keN8z82l/NtS/
+         /5QiOQGfB4EN5nIpWfTvF36CWVH5FOChHJhQpRqC3uSq4fktRjpdVQVnmmF2x0l1Zze/
+         jWYS86MnlXJ/ReTKOXzQ8wR8ooEMayzfyQbskqE8LvDS1CmdCqZmKBYdOZ5b3WK2QHRI
+         sK3IAEoNGDjBXw6XMmGowjB1j4MMjNx61cD2niJpioxE564rWwPPngwyz9SAUNdt621e
+         djhA==
+X-Forwarded-Encrypted: i=1; AJvYcCX9koGoOkMJz83aEaC22TTaaNRcqqvQKEDuawMY2chNzwbx6Vpld6DgmIkhkA5/xLZdwLG4S9yJPPswcUIdkRc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YypVAiTdu8noFYmx5/VgDtfCU70Rnfw/xSzH9Ufm8FhzeF4o+xm
+	smzBGkF14pfhurXWvRz5RZAlCYnXfN82/nPmDgsWU2V0K4vjc3bqN5omHMc8WDc8RDXDuBe6ISm
+	t
+X-Gm-Gg: ASbGncseeDq7Q67c2MhkWCn0P2X+BYWdw3Hy3DrW5n8PmXFjH/Ex7dTs0p1xbGWfzwK
+	iqlzceSJ6t16l/RHqulis/8/AnisyUx7yQrSLlwzOHtr5zgyyN9qrrVhLgR+RMB9XIkZyWI4eC8
+	E2UIRz6VkoJJ+9juECOWxXn/S/yOhlOfpErC0q0vsajFxBQlmDiUcUgfyjmFBpGFOIDj5MrqNvJ
+	szEPKKo3O5GbhuPKdUyS7exQ1FDOo6iokhqg79snI7h71F4EKiavgQOlyCJJ7BMh7Cjgs4mmEs1
+	37prpgf1DXLu4uSvCyyMWfRPJ8oFJanRnvaUXCf8fg==
+X-Google-Smtp-Source: AGHT+IFJJtwFHDUCk/X/IbkfQRGm+JIG/6RFDceYpwEU9uYCKZDnLPKJFVJZ9lYtIGA9fiFwvtiSuQ==
+X-Received: by 2002:a05:600c:348a:b0:43d:aed:f7d0 with SMTP id 5b1f17b1804b1-43f3a9be478mr93613435e9.28.1744634153055;
+        Mon, 14 Apr 2025 05:35:53 -0700 (PDT)
+Received: from carbon-x1.. ([2a01:e0a:e17:9700:16d2:7456:6634:9626])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39eae9780a0sm11003166f8f.50.2025.04.14.05.35.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Apr 2025 05:35:52 -0700 (PDT)
+From: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>
+To: linux-doc@vger.kernel.org (open list:DOCUMENTATION),
+	linux-kernel@vger.kernel.org (open list),
+	linux-riscv@lists.infradead.org (open list:RISC-V ARCHITECTURE),
+	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
+Cc: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
 	Shuah Khan <shuah@kernel.org>,
-	John Ogness <john.ogness@linutronix.de>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] selftests: coredump: Some bug fixes
-Date: Mon, 14 Apr 2025 13:08:28 +0200
-Message-ID: <20250414-wertigkeit-sozusagen-506b362280cd@brauner>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <cover.1744383419.git.namcao@linutronix.de>
-References: <cover.1744383419.git.namcao@linutronix.de>
+	Andrew Jones <ajones@ventanamicro.com>,
+	Samuel Holland <samuel.holland@sifive.com>
+Subject: [PATCH 0/5] riscv: misaligned: fix interruptible context and add tests
+Date: Mon, 14 Apr 2025 14:34:40 +0200
+Message-ID: <20250414123543.1615478-1-cleger@rivosinc.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1275; i=brauner@kernel.org; h=from:subject:message-id; bh=Xdy9D5Bqc7njSHzOj1S++m6E2MnsrUv9gGmsdEPEskc=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaT/ebM2ve6Eh3GR27Rup9a1XQvOt/6sf/TRn3fPyRzrn 2UBp67YdZSyMIhxMciKKbI4tJuEyy3nqdhslKkBM4eVCWQIAxenAEyk8hkjQwcTg/+jbPtLS3+z c1s8Wu320IFfKHnFMn2FlR82LEg4lMnIMPHa8uQ9HlclhGz9Ph/LWVfiG/573aHctupcVdNJtip nuAE=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On Fri, 11 Apr 2025 17:09:40 +0200, Nam Cao wrote:
-> While trying the coredump test on qemu-system-riscv64, I observed test
-> failures for various reasons.
-> 
-> This series makes the test works on qemu-system-riscv64.
-> 
-> Best regards,
-> Nam
-> 
-> [...]
+This series fixes misaligned access handling when in non interruptible
+context by reenabling interrupts when possible. A previous commit
+changed raw_copy_from_user() with copy_from_user() which enables page
+faulting and thus can sleep. While correct, a warning is now triggered
+due to being called in an invalid context (sleeping in
+non-interruptible). This series fixes that problem by factorizing
+misaligned load/store entry in a single function than reenables
+interrupt if the interrupted context had interrupts enabled.
+In order for misaligned handling problems to be caught sooner, add a
+kselftest for all the currently supported instructions .
 
-Applied to the vfs-6.16.coredump branch of the vfs/vfs.git tree.
-Patches in the vfs-6.16.coredump branch should appear in linux-next soon.
+Note: these commits were actually part of another larger series for
+misaligned request delegation but was split since it isn't directly
+required.
 
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
 
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
+Clément Léger (5):
+  riscv: misaligned: factorize trap handling
+  riscv: misaligned: enable IRQs while handling misaligned accesses
+  riscv: misaligned: use get_user() instead of __get_user()
+  Documentation/sysctl: add riscv to unaligned-trap supported archs
+  selftests: riscv: add misaligned access testing
 
-Note that commit hashes shown below are subject to change due to rebase,
-trailer updates or similar. If in doubt, please check the listed branch.
+ Documentation/admin-guide/sysctl/kernel.rst   |   4 +-
+ arch/riscv/kernel/traps.c                     |  57 ++--
+ arch/riscv/kernel/traps_misaligned.c          |   2 +-
+ .../selftests/riscv/misaligned/.gitignore     |   1 +
+ .../selftests/riscv/misaligned/Makefile       |  12 +
+ .../selftests/riscv/misaligned/common.S       |  33 +++
+ .../testing/selftests/riscv/misaligned/fpu.S  | 180 +++++++++++++
+ tools/testing/selftests/riscv/misaligned/gp.S | 103 +++++++
+ .../selftests/riscv/misaligned/misaligned.c   | 254 ++++++++++++++++++
+ 9 files changed, 614 insertions(+), 32 deletions(-)
+ create mode 100644 tools/testing/selftests/riscv/misaligned/.gitignore
+ create mode 100644 tools/testing/selftests/riscv/misaligned/Makefile
+ create mode 100644 tools/testing/selftests/riscv/misaligned/common.S
+ create mode 100644 tools/testing/selftests/riscv/misaligned/fpu.S
+ create mode 100644 tools/testing/selftests/riscv/misaligned/gp.S
+ create mode 100644 tools/testing/selftests/riscv/misaligned/misaligned.c
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs-6.16.coredump
+-- 
+2.49.0
 
-[1/3] selftests: coredump: Properly initialize pointer
-      https://git.kernel.org/vfs/vfs/c/b3da3c6ce9f6
-[2/3] selftests: coredump: Fix test failure for slow machines
-      https://git.kernel.org/vfs/vfs/c/05ac92f73615
-[3/3] selftests: coredump: Raise timeout to 2 minutes
-      https://git.kernel.org/vfs/vfs/c/52cfbe664dc9
 
