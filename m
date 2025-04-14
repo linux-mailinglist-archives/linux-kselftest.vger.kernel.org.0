@@ -1,146 +1,98 @@
-Return-Path: <linux-kselftest+bounces-30665-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30666-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88F42A87DC5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Apr 2025 12:35:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 008C7A87E0D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Apr 2025 12:53:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BAE507A8888
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Apr 2025 10:34:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B04F17574D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Apr 2025 10:53:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6358325FA04;
-	Mon, 14 Apr 2025 10:35:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B79ED27C16E;
+	Mon, 14 Apr 2025 10:53:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="akRgTUF6"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=proton.me header.i=@proton.me header.b="BegFfWdY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-10631.protonmail.ch (mail-10631.protonmail.ch [79.135.106.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99C001AAC9;
-	Mon, 14 Apr 2025 10:35:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9239278165;
+	Mon, 14 Apr 2025 10:53:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.31
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744626922; cv=none; b=Ac+saxKc/FQKhiNG2E8W9yP/alRbn4XJcxvJxwiBoNLUFfcy5wQTIXj7QhLBuqUmcKXu4wXpJo3Diti2bCrKyUaocSxr1ukXYcmTiUwkxU0A3oRBdV22M089kQBBRj7ip+Q3v+i6VNba8cBYzeOSX/7f+VsEVb16wmjyxe+ymy8=
+	t=1744627985; cv=none; b=DwbLtb0bUK2USBEW7ht2XPxDeCrB05yr8rn+fR4Irl6ZYwPUCSzJQpItJ5yArJ4JK4ZkyaXyopTWj1BZ+KJq0gsD5W3z6/4Wpy6BnxbozJMsuzySD55foeLG9xUzYBxDOcRGwv2vk8hktccBZqaFbKCE85eBr08vTgaZaOmZi0E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744626922; c=relaxed/simple;
-	bh=LzFNm7vUuTMwLQdoaai+8RBoRPXVgM0ZaNqT2+v26qw=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dKqmdfbE503TMDUh7LRgyKMfIvy9skqLhaVmjtbCjYaJPpUb5F3DKvEwwUiHhtcjliKYGokXVVZ3Fbyirnc27dgqdjpO4gMa8tVcXYcLZSm4Y5O+yWa3OLkZiqgVn10v4Odknu4eq/iOKj7NOnd2DoiqO+I120bWGRpTFeR8jzM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=akRgTUF6; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4394a0c65fcso41750385e9.1;
-        Mon, 14 Apr 2025 03:35:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744626918; x=1745231718; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bHZDEc/B6Kb6mtgnIuZFWtkfOPOyK5ZAt1zozERr6RE=;
-        b=akRgTUF6UIxRQK5dgirpd6EX1HK57/kXaaDwXoe+SOZcXExlRRKwcFp4tD7itwMc6w
-         aPRTxkSCpwKA0Kq6Yz+aNCOPBZwTmIi9fdmDGoqALZ6pfU8WsjoQ6K5weymAlApetOck
-         4RMHhc2g9Xc9YOplrcR8q57Uke4brf6A4AaqeTTBBA30E30k3YLNvwpBhLgNJkOEv7jz
-         MaU98ZXjHhuabAlKnWN7HQAfgImfDhIWVXGL+liPWEiUWTtnS/YhhEX4coYqExtu2TdM
-         OLqWE04iqhx90bEKbVWKvoX6txemFdmeCMRTEuvVZ/yN2SLSUvs1YstTUcKEkz/IKToW
-         zQdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744626918; x=1745231718;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bHZDEc/B6Kb6mtgnIuZFWtkfOPOyK5ZAt1zozERr6RE=;
-        b=WiiuRgsYJhgqKd6zifIEpS7Li8mV8nblAjf+Rz6LmsfK6jLDKNS731uEhufes8xZBj
-         5LXjm5S5jVTyHU+5tQraUZzFCv7kFbXWRNjL0xgLTiFf0EmdCl5V9dRLR1r6Sa+mIke8
-         +Vi72YVC5JLX9F3KUBDQv4prOn2zGes/JRS0xEBpBSOOvyJu4E+42NzDXzC0cKgtlYwK
-         xbj9xAQu8+fl+53L4I1L5LaFHr/csMyZAAbTCArTKdZQh/FUYvlJ+FXYmYpUSP7H5eAe
-         KnLYQadaXPzJ8cQe5E+aeai0P2VP9Mg5E35SRuNKD/MmtptORnopIIe2cHgEtFhZc6dP
-         gIgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUMnndgmYdLWlzE+rtQ87KwqmHEspzIhpLBJJ4z47pB+NvOzxAcIYHrB5Zf0eqqkxKAf71rm13fMJ1EobjXBcN0@vger.kernel.org, AJvYcCUUN1npG49i0bSOvW3bku3UBPlS3/yTHhGeZDLJfutjp+SCd6TXJ3fiwqpr8GH43ZE589A=@vger.kernel.org, AJvYcCWaEfCCyVEba9bTFrmEbPUrrkfMuNoeRSPCh5m0c6PZ2LHvSmzsC+WQqF84HTmJiWBw5UlxSmeL4Nvw7jmR@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx4ihyDM6eWH70OzJfQ7wrytElxBXzUFUNbSaFLK3zG6Co2BEJA
-	VbKpyp5hRqXyc2lIOCTieXGMFvaKI/g4gq5EYec7wq+sFff7BN5i
-X-Gm-Gg: ASbGncsCBLW82nQhpzrFd7PXgmMOqEmEmkFfuNuC7UYLIjUaDVuslfHlhyU0jbkP3YC
-	XdfJst20pP/3eOHr5zJW2n2Nirj1Bj3DY9xbty0NnmetoKHvrgKVzc7/Tnb3EDKueIR8kgJAsy9
-	Xf6dZqCUrmsru7CeRNYGksE1MBllR08jI45PYjAGJwblLtBRL0vibVz4/Ujk5o2wkRHE5D2nqF/
-	OiftT00GDjZ8P3DzmdSMVfF/tcap+tBqdBFC8gTjlmNq+eQt50BIJyYGTr2kqBGcPlSdvn7Vzb4
-	sc993j4J/gTvKFT7fOp9z8802HKdlts=
-X-Google-Smtp-Source: AGHT+IGKgbDkOBsgyieL1ngIJMsRTaNiQCZVtd8adA6qZtmNI2oATQF04wrT4zcBBmJiHXuXLlIKlg==
-X-Received: by 2002:a05:6000:4285:b0:39c:16a0:feef with SMTP id ffacd0b85a97d-39eaaec76bemr8253781f8f.38.1744626917733;
-        Mon, 14 Apr 2025 03:35:17 -0700 (PDT)
-Received: from krava ([2a00:102a:4007:73e1:1681:405:90b2:869b])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39eae96403dsm10400456f8f.4.2025.04.14.03.35.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Apr 2025 03:35:17 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Mon, 14 Apr 2025 12:35:14 +0200
-To: KaFai Wan <mannkafai@gmail.com>
-Cc: martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
-	andrii@kernel.org, eddyz87@gmail.com, song@kernel.org,
-	yonghong.song@linux.dev, john.fastabend@gmail.com,
-	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
-	mykolal@fb.com, shuah@kernel.org, memxor@gmail.com,
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kafai.wan@hotmail.com,
-	leon.hwang@linux.dev
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add test to access const
- void pointer argument in tracing program
-Message-ID: <Z_zk4kg_qQviauLE@krava>
-References: <20250412170626.3638516-1-kafai.wan@hotmail.com>
- <20250412170626.3638516-3-kafai.wan@hotmail.com>
+	s=arc-20240116; t=1744627985; c=relaxed/simple;
+	bh=hp/iT9vRY4WLbkXBJM0HMTKnmsgkT83gkCn0+xI8TDs=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=eVSsLVle+Eqrwi2jkzqKu/Y264w1iWBuPS3FBaMrSu0osjmk50ZvzeSHdwcUOEQZNAYKql2VQZobq5Bh3Q7HrblB53MNtfp4PcVabXhz4C3Nlr1oH4jQydaF0WmDkrfHuLA45jIEnsqoozYRjzvI6KbxVULNUD5Xfl+83tHz6vQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=BegFfWdY; arc=none smtp.client-ip=79.135.106.31
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=xkpzb5yfxnf2jeuzp7tothlcbe.protonmail; t=1744627980; x=1744887180;
+	bh=cGneafMdb7E/5GcVD98UZZZtBXjzJsDf2In9bf3AS80=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
+	b=BegFfWdYH4OhAyD9Vvv7x2GV3KDqo1ZdIa4E1vDwLL1zYU+n0iu7x/BeBvqz8KItD
+	 GDOj/qovBvhDYAgxwurvOPV4B5kaKfgzdIJK90kxmeSI/vZ9nc4wMn2yrjl83TNmRV
+	 aUtOAtPUFwMQ4obXOllmUTSJ1Hb4ggZEdjnCh2xk3po2dfCSfYaV5Fyjns7UdfevHL
+	 TpQNAPlce1lLPOQTB7WtXA13fie3Bytsq41rfbB3b5pSrw6cFQMzsIoPAxgH4iCGnJ
+	 PiyPMQARv9EXxWlP0kBJ4X5NI1T61eWT7rjmyhWhDFsYvfDDkxZgDbb0NKHMbDUr0R
+	 j3CebiM1XQJVw==
+Date: Mon, 14 Apr 2025 10:52:54 +0000
+To: Tamir Duberstein <tamird@gmail.com>, Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, Bjorn Helgaas <bhelgaas@google.com>, Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, Abdiel Janulgue <abdiel.janulgue@gmail.com>, Daniel Almeida <daniel.almeida@collabora.com>, Robin Murphy <robin.murphy@arm.com>, Maarten Lankhorst
+	<maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, FUJITA Tomonori <fujita.tomonori@gmail.com>, Nicolas Schier <nicolas.schier@linux.dev>, Frederic Weisbecker <frederic@kernel.org>, Lyude Paul <lyude@redhat.com>, Thomas Gleixner <tglx@linutronix.de>, Anna-Maria Behnsen <anna-maria@linutronix.de>
+From: Benno Lossin <benno.lossin@proton.me>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, linux-pci@vger.kernel.org, linux-block@vger.kernel.org, devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org, netdev@vger.kernel.org
+Subject: Re: [PATCH v8 6/6] rust: enable `clippy::ref_as_ptr` lint
+Message-ID: <D96B00U9SS2Q.1YHLNBOIEWSNE@proton.me>
+In-Reply-To: <20250409-ptr-as-ptr-v8-6-3738061534ef@gmail.com>
+References: <20250409-ptr-as-ptr-v8-0-3738061534ef@gmail.com> <20250409-ptr-as-ptr-v8-6-3738061534ef@gmail.com>
+Feedback-ID: 71780778:user:proton
+X-Pm-Message-ID: 192a33aecbd50a9b6c4225576203521e98318959
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250412170626.3638516-3-kafai.wan@hotmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Apr 13, 2025 at 01:06:26AM +0800, KaFai Wan wrote:
-> Adding verifier test for accessing const void pointer argument in
-> tracing programs.
-> 
-> The test program loads 2nd argument of kfree tp_btf which is
-> const void pointer and checks that verifier allows that.
-> 
-> Signed-off-by: KaFai Wan <kafai.wan@hotmail.com>
+On Wed Apr 9, 2025 at 4:47 PM CEST, Tamir Duberstein wrote:
+> In Rust 1.78.0, Clippy introduced the `ref_as_ptr` lint [1]:
+>
+>> Using `as` casts may result in silently changing mutability or type.
+>
+> While this doesn't eliminate unchecked `as` conversions, it makes such
+> conversions easier to scrutinize.  It also has the slight benefit of
+> removing a degree of freedom on which to bikeshed. Thus apply the
+> changes and enable the lint -- no functional change intended.
+>
+> Link: https://rust-lang.github.io/rust-clippy/master/index.html#ref_as_pt=
+r [1]
+> Suggested-by: Benno Lossin <benno.lossin@proton.me>
+> Link: https://lore.kernel.org/all/D8PGG7NTWB6U.3SS3A5LN4XWMN@proton.me/
+> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+
+Reviewed-by: Benno Lossin <benno.lossin@proton.me>
+
+---
+Cheers,
+Benno
+
 > ---
->  .../selftests/bpf/progs/verifier_btf_ctx_access.c        | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_btf_ctx_access.c b/tools/testing/selftests/bpf/progs/verifier_btf_ctx_access.c
-> index 28b939572cda..a6cec7f73dcd 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_btf_ctx_access.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_btf_ctx_access.c
-> @@ -65,4 +65,13 @@ __naked void ctx_access_u32_pointer_reject_8(void)
->  "	::: __clobber_all);
->  }
->  
-> +SEC("tp_btf/kfree")
-> +__description("btf_ctx_access const void pointer accept")
-> +int ctx_access_const_void_pointer_accept(void)
-> +{
-> +	/* load 2nd argument value (const void pointer) */
-> +	asm volatile ("r2 = *(u64 *)(r1 + 8); ");
+>  Makefile                 |  1 +
+>  rust/bindings/lib.rs     |  1 +
+>  rust/kernel/device_id.rs |  3 ++-
+>  rust/kernel/fs/file.rs   |  3 ++-
+>  rust/kernel/str.rs       |  6 ++++--
+>  rust/kernel/uaccess.rs   | 10 ++++------
+>  rust/uapi/lib.rs         |  1 +
+>  7 files changed, 15 insertions(+), 10 deletions(-)
 
-I think we should follow formatting of other tests in the file,
-a do smth like:
-
-	asm volatile ("				\
-	r2 = *(u64 *)(r1 + 8); ");   /* load 2nd argument value (const void pointer) */\
-	...
-
-thanks,
-jirka
-
-
-> +	return 0;
-> +}
-> +
->  char _license[] SEC("license") = "GPL";
-> -- 
-> 2.43.0
-> 
 
