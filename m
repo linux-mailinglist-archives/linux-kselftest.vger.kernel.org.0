@@ -1,203 +1,209 @@
-Return-Path: <linux-kselftest+bounces-30731-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30732-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BF22A88756
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Apr 2025 17:35:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD2DAA88815
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Apr 2025 18:11:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 262F7189F180
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Apr 2025 15:26:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 341FE3B565B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Apr 2025 16:09:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A940274FF1;
-	Mon, 14 Apr 2025 15:25:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB33927FD6F;
+	Mon, 14 Apr 2025 16:08:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="mKR+RszO"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Mumwvm/8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2049.outbound.protection.outlook.com [40.107.100.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAE9B2DFA3B;
-	Mon, 14 Apr 2025 15:25:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.100.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744644346; cv=fail; b=cAju+hu3rjNMbZPp54l7yXrAceymAl7s0H5Nz3sZIKtNhV20khiFqeKnoYo/GPyKxDcHHkExP024CHUM2kX+fWaFHm9MMVW1APSc736c2JsOOVVQ2OuJuA/H2I5o2lgtJ4AfsB9qDu1E6TylVfO7azhkPVQo2etTMouUqQVp4LA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744644346; c=relaxed/simple;
-	bh=MZ2Lu3sVZ3RBeGRlYvrnKwR3Ow8Y3MSvQYMAoJCIWaQ=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=Vj5V4WjpjMWCtZtp9SkXcbIcIqO8WzjYAbFBK34KtHjpjLmmT8I1Yaxg5nwK1JE633snfjag/pCPgFdl0a0UzE9MMicdguVpg3RLMYkpNwQ+ULB+LEAVl+vn2wTXYIRo7ifCR6cKcdsQOGm5zS7QyL/yxTz4iPXjvgU3SkkD9tI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=mKR+RszO; arc=fail smtp.client-ip=40.107.100.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=yMA4rLmZ0sFtKr24P+WkRY5EybDYAZSpEcnfxneyf4YXOqN0m+VSvzChBu6BLBIQOrykeHp6L5TdpSNFK2UJu6JUIeouOj29oevdEP70vXg+ecSno5QPurwVC+D3ogwYyq4sild7+pUwe+QOTyFb4dQ7go6Md71W+uvKF6hmoscx3K4O3Xn1sV3ytamK1gBfyQN/xEqRqsPiDMUZ+TYnR8hXFAuI/14mdspacKS9A0M2KbUJlZZGca5V5qdntFwaBk4YA3KkS972q0AC2HmNX9UxJ+c81OUxWlCTPD3E6T24RiOX09YGrgfrr40LO/Wst3oSulRy96thBM4Adh+11A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MZ2Lu3sVZ3RBeGRlYvrnKwR3Ow8Y3MSvQYMAoJCIWaQ=;
- b=Ab7z0wRrRP8brxbZQy4kWlfuJUxEdOAhhTjT+OWXoYzkgYnsU/tcHcLfhQrqbkYkm0vXmglkPDxPWIn5mLT0geqE9FZCPVYMAaAzT0a16Y/FRJiSdLM2Th72wRZKR9jYGKwDLK5D6w8yTSNl112cD9GdWtHl3pTZvMZ9SAfm9ZV/3uUotS+W8zOpoKBWp3WS42KeffdkelNx5J6uGDf2siLUIw5PVlQiG4QZU0da8lAQCi87R1LP5s82Kw8QV+2n1kC91V08nofnVWDXyZTfJaKBFC3qOj+ER0sgXVwyr5ftQ7plAr2F/8gZutkxQH0htWi/KDqulQTXDtdQE23yYw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MZ2Lu3sVZ3RBeGRlYvrnKwR3Ow8Y3MSvQYMAoJCIWaQ=;
- b=mKR+RszO9j91HsAWgIK0dB7hx4xVitwHIkS7qejr5+9kNCBfOSytwaHl3fN8YwIKfZD1JCG+6CvWbh0sOxjGkyTVhwrtdObOOTya6hemH+glGNgMTY+a/GOlONQUgTIfO7iVSa/Bqyufa+7rwJJmuDpQ8XVrPbdYmeI5WQTDGiVobRUQ7Pruq2WU7jBrOD4S0/g94Y5+s4MG4Cp0HETMSzNPowGtKEAcRC8tHITEQ49ywAOtA2In0EKW70EyH0jlqyHnpshS/4/3cXazMd2yGbxGOXeXcxVXXkugEeM5Elz7TJJ5HnANSW+toOFcxZRLyD2eJqQuN8bdhdeHokNpgQ==
-Received: from MW6PR12MB8897.namprd12.prod.outlook.com (2603:10b6:303:24a::19)
- by LV8PR12MB9450.namprd12.prod.outlook.com (2603:10b6:408:202::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8632.33; Mon, 14 Apr
- 2025 15:25:41 +0000
-Received: from MW6PR12MB8897.namprd12.prod.outlook.com
- ([fe80::7c55:5a45:be80:e971]) by MW6PR12MB8897.namprd12.prod.outlook.com
- ([fe80::7c55:5a45:be80:e971%4]) with mapi id 15.20.8632.025; Mon, 14 Apr 2025
- 15:25:40 +0000
-From: Matt Ochs <mochs@nvidia.com>
-To: Nicolin Chen <nicolinc@nvidia.com>
-CC: Jason Gunthorpe <jgg@nvidia.com>, Kevin Tian <kevin.tian@intel.com>,
-	"corbet@lwn.net" <corbet@lwn.net>, Will Deacon <will@kernel.org>,
-	"robin.murphy@arm.com" <robin.murphy@arm.com>, "joro@8bytes.org"
-	<joro@8bytes.org>, "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-	Krishna Reddy <vdumpa@nvidia.com>, Jon Hunter <jonathanh@nvidia.com>,
-	"shuah@kernel.org" <shuah@kernel.org>, "praan@google.com" <praan@google.com>,
-	"nathan@kernel.org" <nathan@kernel.org>, "peterz@infradead.org"
-	<peterz@infradead.org>, "yi.l.liu@intel.com" <yi.l.liu@intel.com>,
-	"jsnitsel@redhat.com" <jsnitsel@redhat.com>, "mshavit@google.com"
-	<mshavit@google.com>, "zhangzekun11@huawei.com" <zhangzekun11@huawei.com>,
-	"iommu@lists.linux.dev" <iommu@lists.linux.dev>, "linux-doc@vger.kernel.org"
-	<linux-doc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-tegra@vger.kernel.org"
-	<linux-tegra@vger.kernel.org>, "linux-kselftest@vger.kernel.org"
-	<linux-kselftest@vger.kernel.org>, "patches@lists.linux.dev"
-	<patches@lists.linux.dev>
-Subject: Re: [PATCH v1 03/16] iommu: Add iommu_copy_struct_to_user helper
-Thread-Topic: [PATCH v1 03/16] iommu: Add iommu_copy_struct_to_user helper
-Thread-Index: AQHbqqxycY3zsiQC70qs19S+0CsyIbOjTY+A
-Date: Mon, 14 Apr 2025 15:25:40 +0000
-Message-ID: <86881827-8E2D-461C-BDA3-FA8FD14C343C@nvidia.com>
-References: <cover.1744353300.git.nicolinc@nvidia.com>
- <65b51f57d08069c9da909586faf4e73d247a54f5.1744353300.git.nicolinc@nvidia.com>
-In-Reply-To:
- <65b51f57d08069c9da909586faf4e73d247a54f5.1744353300.git.nicolinc@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MW6PR12MB8897:EE_|LV8PR12MB9450:EE_
-x-ms-office365-filtering-correlation-id: ae5d3336-aa03-4cdc-ad0c-08dd7b689d63
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|376014|7416014|366016|38070700018;
-x-microsoft-antispam-message-info:
- =?utf-8?B?bFRsY3JaUXpidVlTZ0ZxQmFSY1pFTnRnUUlQc2NpMHpOSjc4TGpZWXMxWjdY?=
- =?utf-8?B?YkpKcGZCQ3BJWGJPRnlUZ2d5b2FHbUYxdmpodC9PRyt1aGRoMkg2cTJZOER5?=
- =?utf-8?B?TE5ORi9XelVpUjY4TGhseUxROXdMbzhES1k4Y0c1NnIrUUlhZXFzWXB1N2dS?=
- =?utf-8?B?Z2tRaWwrN2t2YnprTmN4ZkFocS83aHMyYzU0eW1PQnNOcjZTRGhBYnBxNjBE?=
- =?utf-8?B?YWVRRGJIVjBLdFNNNWRhVG5rNlRqOGUyNWo4Q2plQWNxaDdWL24yN3JFLzNS?=
- =?utf-8?B?Tk41dlhTeEU4bk5lK0RrSkQ3Z1I0MklORWhPQVBTeFZJSjhESzhuNk93bEUx?=
- =?utf-8?B?WERXZWFsUTZ0UFpNV0loNzF3dDBaalB4cS9ybkZTdjRjT2sram9RaDdjREZi?=
- =?utf-8?B?dnZxOU9BWjhlemhJTzh5VHVtQTRqSzNObDBzV1ExbFhFTFFRcGpXL1pYUWM3?=
- =?utf-8?B?SFhyckhMWWxVc3dGQ0oyWlFjNjJndlBycVVvb2ZzV2RXMUp6dFVxRGlwY0RG?=
- =?utf-8?B?RVlTNDU2OEpKajV3ZUU0Qm1Dc2VQcHRDeUsxUDc5cmdDRjNpKzhHa1lPbjJN?=
- =?utf-8?B?M1hjYlJpQjIvcU9Rd3YvUCtqUks1ejJ0eXRGR1QwL0srejNRZHFUcjNCK1Zw?=
- =?utf-8?B?d3R2dWM1cmdFYndub0VuNDA3U3BiVFBuODYrZ3Z0ZVNOYXlhUG1GZWVMOTlL?=
- =?utf-8?B?WWlSMHVNWXp2SjFFc0VOcWx6TmJ2c0N4azhveUhMcmpxWmhHd3dFUittQm1w?=
- =?utf-8?B?djhsWVkxZlo4OFBDK09UMWNGWVdBVVB5cktXek90clZoTG5Vd3JGd1pGRnBY?=
- =?utf-8?B?cWJDZUNwLzRKMi9zM1IxRDVMSHJQZzBvM3BOSGY1cHlnS20xRlpIemdGWjBD?=
- =?utf-8?B?SG53Zmw4V3k1dExPR3l0aVpmWW1HMXByU3pSUng5N2NFZEt3WUpIMEtSc2Y1?=
- =?utf-8?B?L2NEWVpjZC9oWWplNGJwN29BZzJBaWV4cVUyY3hnY1RicDVwTTBqMGVoMVcy?=
- =?utf-8?B?STRVeGhZR05XZW12YUc3dWEzK2RmMWM1UVlGaVFwTlNaRFVqRThVdkZFcDZY?=
- =?utf-8?B?cGp3b2U4eUNaRjB4UFhVeUxDcFFmaVZzZFUyTTZnSzVvcUY2bzh4bE01NWI3?=
- =?utf-8?B?NmRUa2M2Zytrb1NKRzhtK0xybUl6N0VNTDB4eGZtTTB4UW1ZZ1ZnN3hQT0hX?=
- =?utf-8?B?MW9jSlJ3dFZjbTNtcUxyYWVEREFvYmExbEprbW5PRUdod2hzanprSzkwNlZo?=
- =?utf-8?B?NUg4QmViVFdUM3FrTGdaeVJZemVpcFVZVXM5b045dWlYZEVWNUp6WEd4eWFS?=
- =?utf-8?B?UFZWNTdXdkZqUHFGaTFoZHRxQ0Q0V2w1NmRyM0Vxc2JxNlZiNExja2d6Z2Fs?=
- =?utf-8?B?azF3M0xPc3NYTmJBaGZWR2Q0aG41ajMzYXZwalNyNEUwUUNwRXlRNHJrNkEv?=
- =?utf-8?B?Sjk4ZzJZRnhJbmVhTldWNktNSG9rY2xnSWJQMzdpbzlvS28xK0IwdWtxazNw?=
- =?utf-8?B?aE14cXdxNFBWMEVReER3ZHhxV3F5TCtETFNVbVJGRWRrZUtudTdmeFBLVDdH?=
- =?utf-8?B?UHRBRFp4ZEFVWC9oV20raWRoUFhWcWJKRUx4NWIzcnVBazJJYUhCK1g4ajBI?=
- =?utf-8?B?YUMwYXJJZUY1V0FWb0ttKzRJUXVvK2dFcGNaankzVmYzZG0zSXBKdnJZNGlB?=
- =?utf-8?B?WFdiSFBvRjlrQzVxazVoemRUa1JuNm1SRkdWT29vVllZQ3FUY0xLY0RDRWRQ?=
- =?utf-8?B?Q3ZFNjNVeFhocElGR0VLb3hYNTU1Szg1TFA4ZFBzcE92bzR4U1dPc0JOVDlH?=
- =?utf-8?B?b2tqU1o1SVZrZDN6VDV4OFdtRE5BOGRCS2E1WDh6MEIranlzbFNaRVlWdmwz?=
- =?utf-8?B?VG1vYjBEUHZhcFZSMFdQTFU2bEloS2ZYM2tYV2JNZ2NpL0RQYXNjWmp0dVhG?=
- =?utf-8?B?ek1YR3RNcUhzK2NxTm4zd3ZuSTNySCt3VDRsQ1NibzA2ZXBKdlk2eHBlQlJM?=
- =?utf-8?B?bmQ3cERTZ29nPT0=?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW6PR12MB8897.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?RjdZVFJYeDJEU1B0eGJnWDd1V3ZLbnhWR0hlM0FtWEVVcEI2emU5SlAvWExj?=
- =?utf-8?B?UGY4MVlYNjFiWHg1R0hxRFVvaUgxVTVqcmFBYXhNWnR6VUpGbTNFdVRadHA1?=
- =?utf-8?B?V2NTczIzZjBiYm9hNlM4QUtFNDBEMy9temJyR0tXdEZkbDVuRC9LSnNORmg5?=
- =?utf-8?B?Q2g4cmdNY1ZYUXRqNFh4Y1FIcDhVYk5PM1lsaUhxYXRVOEFXWE1hNG00cTRt?=
- =?utf-8?B?OTNzL3JEM2E2dTd3Rm56Z3JQRlI5cEhUUlFxYWFBS1RRVjZHTWZETEUwcHlS?=
- =?utf-8?B?NFY3R1hieTl2T3k2UzdFODZIZlZPK3VFb2pFdFlBemI5NDBQR3BJRm5mQmxw?=
- =?utf-8?B?ODJHU1lLb2dhb2plWVlhQkc4WXVtbFdwSUt3ZlV1Nm9OZTRGL3NoZkdFaFhj?=
- =?utf-8?B?MDFzL0xPVUJOSmtjOGV0ZlFWeFlFeUp3dUs3NTJBWnJEajhONXdXZHlHc0Vt?=
- =?utf-8?B?bFc1VWtOZ01jQlhmZndUMisrOTl0bERoclpBS0ZNOEp4NGFYbHdaU2hvNE1l?=
- =?utf-8?B?bEdTaEtCNVh5bFV2U1FoLzB6QnJ3SVFUM05ZZ1U1bHBtenBkd2NvdjR6ckt2?=
- =?utf-8?B?Uy9nS3A3Mm5nb0RyTGtYRWp0cDFyd2I2NVRsM1lMSVIxV0RseHNQNXVlaTVu?=
- =?utf-8?B?Zk1DVmYvd0p2VWxOekdGSVFKejBBN0NhNmtkUGk3TGVOTGVTMDJjZTBob0lP?=
- =?utf-8?B?KzEvYWprRHhTMDFHK2NHeDdqTTU0dDBJQUswS3pJbmo3REsxS2x5RkY4c3ow?=
- =?utf-8?B?RjVFK0VKUXkrcmJKNk1qNVpUMnRTKytqZTBNdzA1MmNwZlFjZ2picWw2RGRB?=
- =?utf-8?B?ZFd3U3FKWmFzc0lScy9XQzhQRXBoWXdUMy9EN0RLaVRnb25PY2tXSXlZNVlX?=
- =?utf-8?B?M0ZEYytEeXQ5NDVRSHZjT0w4cTd2bmxWNXluQW15ODltTmQzdGRES25Fc1hm?=
- =?utf-8?B?NXpVbWRyVjJCYkpXZzlyMU1NVHZqOC80b0E0Yzc0dnlmMEdrUFJNM09RQ1pJ?=
- =?utf-8?B?LytsNTBkWUNBK2xFU0VicjBJdUdzNGQyUlZxQUFxSGhOQStsbHI0WUVMM3pM?=
- =?utf-8?B?RjlUNVhrd3hiNHBBMndBYVRjNHdCNFBDVG5iWFhVVVNDcjJUdGpPTjNnVVh2?=
- =?utf-8?B?N2RDQW9RTE5aREJWWG45V2FMRXJ2clRqd2RCbjFFdzBBa0tkQ3NXVlhaa2VL?=
- =?utf-8?B?dUhMemphaGViaEFsV2pGbUhVSVBMS2NodFRuN1VHZzFuQjRvMUdBT1VKVU96?=
- =?utf-8?B?RU1BMGFUWUk2NUJlZzlXRnU4ZmF6Q2czaVlybXFUZTlGTDBtWE01aEtMMGJk?=
- =?utf-8?B?QmxKcnRvaWs4c0FSMXZmbTNtSTdBbHBJR3V5U1VqS0JibGt4K3JLZ2xQNTdZ?=
- =?utf-8?B?cTVCSHNKSnNDak14cU1FT1JucWdQUU5hMUhOekVFRXE2SUNCTTEzc1dWY0Zx?=
- =?utf-8?B?N1JMZjNkb1JYV0d4UzY4RldPZjNHRVA4Yks0ejN6N1dKR2NkcGcxci9maUJT?=
- =?utf-8?B?SE9KaFJKRFpmMjJWRXlxSlpmK3FqdmtBNzJLVm9mTStSQ3dGQWJYQzR5NWFq?=
- =?utf-8?B?VFZVME5FQWdqVFpIYTBZTHlPOUVoaG1BQjk3YmNXM0lPR3FjN0tRV0hQQ2F2?=
- =?utf-8?B?Uy8xZ2l3QUhHQjk1dUNPL1BMempWVTI4UVVCYlJlL0ZRQlAwbUFxazhheGpJ?=
- =?utf-8?B?Sk9iZDlJWEo0QUs1T3RBZkptV0VFWmlrOFRPa3dWU3hQZ3RtejIvSjFkQVJk?=
- =?utf-8?B?TDhWVmN5ZDJIem44UXVNYlF5aGZRWGtYT3owMlAyTDZzOGxEYkk1TmNUb3hS?=
- =?utf-8?B?RVJzbEIvL2plY1lnbEp4MUU0TzE0VzM4SUwvSlVzdThDOEtHM0hndU5peUZQ?=
- =?utf-8?B?ZjZUc3o0cjZXcVRVMXhJK25hb0FaY3VYa0VvNWwvdlpKT2lyUDdONnBnTlZG?=
- =?utf-8?B?RnlFMlRHbnVjVjUvM1M1eTh2M2VtdnF3WDV6SW1icFhZSFhjSzhvZm1wSHN1?=
- =?utf-8?B?OUtvTGtFbVY1Z3RJbUhOSkVkR3Q2NHIzNVQwS0dNdGd4QUd0b1V3dzB6MkNY?=
- =?utf-8?B?R1lzQ2NpR2ZXUGdETW5oNnhibnpNZGl5dlo3WExFcmlmREQ5SXBIb2FFOFpr?=
- =?utf-8?Q?wHHEts+dUWop6r+9QOJqZNLX3?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <0B96BC78D1A4DA4CBB02157AA0AEB438@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA81D28B4EB
+	for <linux-kselftest@vger.kernel.org>; Mon, 14 Apr 2025 16:08:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744646903; cv=none; b=SR0OYZ3b3FEvU9TelGU55VgocZjrL72H9hUlLn+BtNBV+2sCifG519Q0Vs1h+FocHDoAVcnEcwwIS8VSCu86RuIuEs2VmAJeil00v6293JUx95hXjkzYmy1rgUCuWhqbruPcjYREeD0tQ21PySzegwfGCVKKEFdZ988qZZhZ7IU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744646903; c=relaxed/simple;
+	bh=UM2X1MMDXZM7fTOBoaVl4irheKjkJEoFW6yGloSDkIU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HToY/QT4S/KL7rGsX45glm0yWLxSWA78saduVrrfBpSdfGMb/BsQ3aB090fVMuFUff7umhxsBE7+xzaAES0w8MrKI8QHQmDpQkkx9czX9xSR0qzfxOZB/ErgywA2vDha67pWSxuGdzFbukbDqBL0TsyKkE9WSUO01FvssW+cOhA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Mumwvm/8; arc=none smtp.client-ip=209.85.219.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-e6e50418da6so4175201276.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Apr 2025 09:08:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1744646900; x=1745251700; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CL3vhJ/AOwi9smEiZpaLEqVlOaMdXAZ9MQuarYjoWe8=;
+        b=Mumwvm/8Y5rtsz0IvKUFkpE8ruDsmgBOjoUBw6i35+BbgBlhTboR4WV1z9gUU1ywLH
+         If2Yai0i6Q6qV8vm/ZQQZL0v9dYK03JXD0IhGFtp9mbK19ZLCDLnhXw/Uf/vH2kQ+taV
+         z3gj/9kyjkXNnsJWvBnbscoWFRL03Ll5QTZUTC2l+vzaVamEWnHzXlRUPZ/Nr5Bu7ppt
+         P307C8L/eQjyp29jdZkkMH6TcWCd6a8kcUjlFLyfvoFFuv0+9y0c+K0ho2d945G7mDRV
+         TST1aqnUXcHWpERl3ZCxsaVHdRAEe7WupgH9tpJDTMG1CJbCaOFvsU20YqAQ3wwsSnh1
+         TXnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744646900; x=1745251700;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CL3vhJ/AOwi9smEiZpaLEqVlOaMdXAZ9MQuarYjoWe8=;
+        b=Bjs5Qv30BECNCG2a5DCm72N2ZQCGfbBoTyxAK22b5DFR+ja+AhVSPk01V2CHmNDQu9
+         zaE86hrbXngKxoM6P+e8Vfz9NYI1DqUSLPnGDoeav0nvSy1od4+6NYncPnY79DffMdjx
+         0/SmlAA+VUXXIVhd246iq8SP8pCt4YCZWahpKggl3Rm+GtpgBpFbaVKxxfyQ3h+ILwpI
+         GFJBdbkCSGZnPUOUFiJNlxT5amzcrl4HF6lWCnUFz96w+8Eo7/6mLvR5OekE+UFoObk6
+         5+7PrXiq3tY27WjfhrD6vgiXp93mj8hy1urMZPEdZ/eJl1t2w9YJD852wLohs5+sQtmC
+         R9Vg==
+X-Forwarded-Encrypted: i=1; AJvYcCUMPM0g7DhZRug23G8tSFBXvWOaLFhdAiY9JBvLXsQHlNXNVt9kBeR2J9qSNWUe6t7jJpL0RDJ/xhXQSFlUwro=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzyAQevSLqS6IHwMMzVM8qnkSpGl0u7BDb7Qa/mDX1k9h1TMGm7
+	5whvaw2LHgQccnKZR242efsAdBuZV7zbsyzKCRaecnXr+ZnsUF0ws29RNSQdRQLrlqSBtIPY+79
+	ksXNZlxfBDsRCiFWksaBWoKkFxMzTtbHOScEH
+X-Gm-Gg: ASbGnctfQptQRNLwvsncz/TgV03yugw3AhOvM1NSjxEEd70xgTEhONPRrSH2MPtP7pX
+	1mjhEnubCUi+yvAYNKRNon34/CMEbPHZQtrhRCJPr/Hr9IvWJcd6JTUfOA4zjF+scypG3Zk09/5
+	PyKycRqmhB/Q3SNmNXfbtaAA==
+X-Google-Smtp-Source: AGHT+IEIR0Yjon2HOlR6cN2sFBuht845hyAi0y0g8G/WBIBmJsXWf+CNllSW2DnKB64zYskb2VqpvQmI+s8gSsNUMNs=
+X-Received: by 2002:a05:6902:2086:b0:e6d:e3f8:5167 with SMTP id
+ 3f1490d57ef6-e704e00541cmr21022948276.39.1744646899625; Mon, 14 Apr 2025
+ 09:08:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW6PR12MB8897.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ae5d3336-aa03-4cdc-ad0c-08dd7b689d63
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Apr 2025 15:25:40.3576
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: nYejHqIuvgbha7orDV8orosavfpaaLZ3n4dP5Xov8LPcTBtfGI2kV22AhppQWdqekBaxQ/OwF4X4I7YDHScVEQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR12MB9450
+References: <20250404215527.1563146-1-bboscaccy@linux.microsoft.com>
+ <20250404215527.1563146-2-bboscaccy@linux.microsoft.com> <CAADnVQJyNRZVLPj_nzegCyo+BzM1-whbnajotCXu+GW+5-=P6w@mail.gmail.com>
+ <87semdjxcp.fsf@microsoft.com>
+In-Reply-To: <87semdjxcp.fsf@microsoft.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Mon, 14 Apr 2025 12:08:08 -0400
+X-Gm-Features: ATxdqUE4xsXRFht60hSZa09A9jxdssSnYGr-dDs5eKOQiFPM4gPTEA6FMREhjdE
+Message-ID: <CAHC9VhQ-Zs56LG9D-9Xs14Au-ub8aR4W+THDJfEsza_54CJf-Q@mail.gmail.com>
+Subject: Re: [PATCH v2 security-next 1/4] security: Hornet LSM
+To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>, 
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, David Howells <dhowells@redhat.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Jarkko Sakkinen <jarkko@kernel.org>, 
+	Jan Stancek <jstancek@redhat.com>, Neal Gompa <neal@gompa.dev>, 
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	keyrings@vger.kernel.org, 
+	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, 
+	LSM List <linux-security-module@vger.kernel.org>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, nkapron@google.com, 
+	Matteo Croce <teknoraver@meta.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
+	Cong Wang <xiyou.wangcong@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-PiBPbiBBcHIgMTEsIDIwMjUsIGF0IDE6MzfigK9BTSwgTmljb2xpbiBDaGVuIDxuaWNvbGluY0Bu
-dmlkaWEuY29tPiB3cm90ZToNCj4gK19faW9tbXVfY29weV9zdHJ1Y3RfdG9fdXNlcihjb25zdCBz
-dHJ1Y3QgaW9tbXVfdXNlcl9kYXRhICpkc3RfZGF0YSwNCj4gKyAgICB2b2lkICpzcmNfZGF0YSwg
-dW5zaWduZWQgaW50IGRhdGFfdHlwZSwNCj4gKyAgICBzaXplX3QgZGF0YV9sZW4sIHNpemVfdCBt
-aW5fbGVuKQ0KPiArew0KPiArIGlmIChkc3RfZGF0YS0+dHlwZSAhPSBkYXRhX3R5cGUpDQo+ICsg
-cmV0dXJuIC1FSU5WQUw7DQo+ICsgaWYgKFdBUk5fT04oIWRzdF9kYXRhIHx8ICFzcmNfZGF0YSkp
-DQo+ICsgcmV0dXJuIC1FSU5WQUw7DQoNClRoZSBOVUxMIHBvaW50ZXIgY2hlY2sgc2hvdWxkIGJl
-IGZpcnN0Lg0KDQoNCi1tYXR0DQoNCg==
+On Sat, Apr 12, 2025 at 9:58=E2=80=AFAM Blaise Boscaccy
+<bboscaccy@linux.microsoft.com> wrote:
+> Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
+> > On Fri, Apr 4, 2025 at 2:56=E2=80=AFPM Blaise Boscaccy
+> > <bboscaccy@linux.microsoft.com> wrote:
+
+...
+
+> > Above are serious layering violations.
+> > LSMs should not be looking that deep into bpf instructions.
+>
+> These aren't BPF internals; this is data passed in from
+> userspace. Inspecting userspace function inputs is definitely within the
+> purview of an LSM.
+>
+> Lskel signature verification doesn't actually need a full disassembly,
+> but it does need all the maps used by the lskel. Due to API design
+> choices, this unfortunately requires disassembling the program to see
+> which array indexes are being used.
+>
+> > Calling into sys_bpf from LSM is plain nack.
+> >
+>
+> kern_sys_bpf is an EXPORT_SYMBOL, which means that it should be callable
+> from a module. Lskels without frozen maps are vulnerable to a TOCTOU
+> attack from a sufficiently privileged user. Lskels currently pass
+> unfrozen maps into the kernel, and there is nothing stopping someone
+> from modifying them between BPF_PROG_LOAD and BPF_PROG_RUN.
+
+I agree with Blaise on both the issue of iterating through the eBPF
+program as well as calling into EXPORT_SYMBOL'd functions; I see no
+reason why these things couldn't be used in a LSM.  These are both
+"public" interfaces; reading/iterating through the eBPF instructions
+falls under a "don't break userspace" API, and EXPORT_SYMBOL is
+essentially public by definition.
+
+It is a bit odd that the eBPF code is creating an exported symbol and
+not providing a declaration in a kernel wide header file, but that's a
+different issue.
+
+> > The verification of module signatures is a job of the module loading pr=
+ocess.
+> > The same thing should be done by the bpf system.
+> > The signature needs to be passed into sys_bpf syscall
+> > as a part of BPF_PROG_LOAD command.
+> > It probably should be two new fields in union bpf_attr
+> > (signature and length),
+> > and the whole thing should be processed as part of the loading
+> > with human readable error reported back through the verifier log
+> > in case of signature mismatch, etc.
+> >
+>
+> I don't necessarily disagree, but my main concern with this is that
+> previous code signing patchsets seem to get gaslit or have the goalposts
+> moved until they die or are abandoned.
+
+My understanding from the previous threads is that the recommendation
+from the BPF devs was that anyone wanting to implement BPF program
+signature validation at load time should implement a LSM that
+leverages a light skeleton based loading mechanism and implement a
+gatekeeper which would authorize BPF program loading based on
+signatures.  From what I can see that is exactly what Blaise has done
+with Hornet.  While Hornet is implemented in C, that alone should not
+be reason for rejection; from the perspective of the overall LSM
+framework, we don't accept or reject individual LSMs based on their
+source language, we have both BPF and C based LSMs today, and we've
+been working with the Rust folks to ensure we have the right things in
+place to support Rust in the future.  If your response to Hornet is
+that it isn't acceptable because it is written in C and not BPF, you
+need to know that such a response isn't an acceptable objection.
+
+> Are you saying that at this point, you would be amenable to an in-tree
+> set of patches that enforce signature verification of lskels during
+> BPF_PROG_LOAD that live in syscall.c, without adding extra non-code
+> signing requirements like attachment point verification, completely
+> eBPF-based solutions, or rich eBPF-based program run-time policy
+> enforcement?
+
+I worry that we are now circling back to the original idea of doing
+BPF program signature validation in the BPF subsystem itself.  To be
+clear, I think that would be okay, if not ultimately preferable, but I
+think we've all seen this attempted numerous times in the past and it
+has been delayed, dismissed in favor of alternatives, or simply
+rejected for one reason or another.  If there is a clearly defined
+path forward for validation of signatures on BPF programs within the
+context of the BPF subsystem that doesn't require a trusted userspace
+loader/library/etc. that is one thing, but I don't believe we
+currently have that, despite user/dev requests for such a feature
+stretching out over several years.
+
+I believe there are a few questions/issues that have been identified
+in Hornet's latest round of reviews which may take Blaise a few days
+(week?) to address; if the BPF devs haven't provided a proposal in
+which one could acceptably implement in-kernel BPF signature
+validation by that time, I see no reason why development and review of
+Hornet shouldn't continue into a v3 revision.
+
+--=20
+paul-moore.com
 
