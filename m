@@ -1,177 +1,198 @@
-Return-Path: <linux-kselftest+bounces-30794-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30795-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD6F3A88E87
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Apr 2025 23:57:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C34A9A88F04
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Apr 2025 00:25:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 08C977A305C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Apr 2025 21:56:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D14E73B1E2C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Apr 2025 22:25:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24FAA1F4E27;
-	Mon, 14 Apr 2025 21:49:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49D321F4295;
+	Mon, 14 Apr 2025 22:25:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RLxdKTY8"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZHNtrNJo"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A7622356A8
-	for <linux-kselftest@vger.kernel.org>; Mon, 14 Apr 2025 21:49:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 491CE1F12FF
+	for <linux-kselftest@vger.kernel.org>; Mon, 14 Apr 2025 22:25:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744667367; cv=none; b=F4DarduT/MdkLn9t5x4gfd7HsdLkHIal6y4KHs1YZWA7p3GKIutnLMYaulNWeFGPikrB0Q59D9/f8QtWO3cWdIVmvPi+9E5zaraREDlXtplPGLTZ+Napq5O8nSKW5WSmcv7s6U/CZDvBLREcQO2LLeidQYwY62CI3j2bd7OynTk=
+	t=1744669538; cv=none; b=cGJcPWR2FNnstEOZMvurKDFiZQVvdr+tud+rQggHocnPGBis4bAGLGTx7ys5K6/mmFIO6foiy522Shq67DSUBpjZR59tLks1AbmBTqclJko7BSk0s8Tv3XHtL5Z5vlfxjALtwYS8lXyjl2uLhbryUbffLzakptPer7C80L/xMGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744667367; c=relaxed/simple;
-	bh=0s0eRAzp79ZyqJlag/s9T0KZQwLlfgI5CTpQtvOBf1o=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Gr01X9bq2xqLkENlk86WRbaon21t3N5RxxFUxIlxjelFb0knQpR+2g2BVcxv+IDpqU50W+G5WHK/p6wgwJs1/Z9joWuROZVqBtvlc//ZVSAHLnd4y5ijoCy5hkFHHGYT3l11B21S55gtAQ6585oGhzZ2Ya9Z1aWX1rWq5AlEdoU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sagis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RLxdKTY8; arc=none smtp.client-ip=209.85.210.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sagis.bounces.google.com
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-736cd27d51fso3958237b3a.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Apr 2025 14:49:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1744667364; x=1745272164; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PBSumKkK0GopQQbf4kIGENs+zTxb+YbX4N+rBsmVgUU=;
-        b=RLxdKTY8Kax25vuWCeEG7w9NP835NfPOog24dW4r0CUYdEQ8k8HYWsp9mj2Wulb1Xy
-         UfOu8nDE1BRZCvc8rTRVNlHoRrhIzxu3S619npXswMfnDVfK/2woTnLBT7qJdShxYP0s
-         hwD9PkN4IsgJLoB6MpoE1gm+hqd5Z75SZf1msf7UdjQdly4VPyRKJpnTwC5dUXaeExG8
-         IqA+/KLQBR7Rq0O0ZlESYtAJHgAhJtgfrIsXBBO0xxu/uedkYKdyROJDhxHtuAjyW4Uc
-         oY5gDtBiXk4H+IIyjPrj8UawxI1nyptQCSnLhsLoGTo8S+TNS8+IDRUkjIF9NN3BzYNX
-         s94w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744667364; x=1745272164;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PBSumKkK0GopQQbf4kIGENs+zTxb+YbX4N+rBsmVgUU=;
-        b=XuQroUTDtanXvna7Z3oBdxcp/JwwtrTw6QXcLzlD6y6KvRRrGAoMqlzP5OKTUBEj5s
-         O02SxdS0X8qcygHVujgp2Hsd7qbj2ZjFB3FQmNJ0BZZBqLf9lWj6Avpof4lGdCvIdDEW
-         bFVkwe8IqFCf/mmAt3dvgGfsQmiKICicy5s2CzFmJePjURR9rTHfBsDKFbRq0T/dEQZS
-         vLoHQ7jrrb/s0thMmTXOCOiFWzL3i68bH+/1t4pDOnhbT5cQaY9hYE72sAMWPEYxCFKr
-         ZOJlPs486y9WSKCyfV3lXE8Jwi8w/Npr5/GRIhMQfzE8MeEz/x8J9EpFyBZlqqdW6g9+
-         0hYQ==
-X-Gm-Message-State: AOJu0Yzla6Kpu4hOq21B/dBIlYWoub/aKfuKh6eIsWNSQMFg9g6mRf1+
-	g/it2CFGPVeFzm3oBFb43dwNJqaifMFLVQKVjdbDS9MBUEaM90hPofDiPp7ZVW4yB5N4739xPO2
-	LOOuAe5wgvkz6/I7ykCNPt+ax4mhbWMrQ/ZCPdsPO7krHGQZBnCzuHEaFMIDMJySU1PAgkch8U1
-	38d9JgFg8tkQ2rR/NtJFvxKsfh5lTcgruAV9pWMmA=
-X-Google-Smtp-Source: AGHT+IGAf9r8FGSlKp+K/4EeU8L9n+YGVWZYWn0f4xUb+jtnHNJ+DjWrf/1g8NbljgvPb7hNXCk6l26e0g==
-X-Received: from pfbha18.prod.google.com ([2002:a05:6a00:8512:b0:736:59f0:d272])
- (user=sagis job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:2286:b0:736:4110:5579
- with SMTP id d2e1a72fcca58-73bd119d755mr17279180b3a.2.1744667364222; Mon, 14
- Apr 2025 14:49:24 -0700 (PDT)
-Date: Mon, 14 Apr 2025 14:47:59 -0700
-In-Reply-To: <20250414214801.2693294-1-sagis@google.com>
+	s=arc-20240116; t=1744669538; c=relaxed/simple;
+	bh=yJh360MlnBAEJy/QLsiSOsRpkj+tmEeTtyeIyewln0o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FyD7JKsAAzD4mNOlfOc8FDLqblui3xPS2INLQGy3HJULcXdYor9MP+wwDNO6oYuR4bbQ/G+LuSM4hVvWlIrEqUBQ8T/3GrHcT1M90OxlqU9Kd0qQ2wTNZC9JfPbFn5tyA9zDX0zeeeAcOjb+wWIi+lq5rxCw0qbK/P0EFY0Y274=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZHNtrNJo; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1744669535;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Wasdk2OzhDHLNgttFk1rmIb7qXMNrsMULtRHlj6BUo4=;
+	b=ZHNtrNJoBr6/6Z6IYKQymF6neO0mL8OywUygM/GKtc1vBxUUjDVXVKcCfHSAUcUytP/8C7
+	CldSk/m//UoXCwICJXCmiVfhSigcfVjC6mlnzZT9ZDJoUylH8yywX1RjIW9uWarBDkH+54
+	0gPKclxStHSjqDAUHqFw4WnSBS9fM1Q=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-588-nNWww7m0NbSHMf6qDuTOAw-1; Mon,
+ 14 Apr 2025 18:25:29 -0400
+X-MC-Unique: nNWww7m0NbSHMf6qDuTOAw-1
+X-Mimecast-MFC-AGG-ID: nNWww7m0NbSHMf6qDuTOAw_1744669525
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6CDC61800349;
+	Mon, 14 Apr 2025 22:25:24 +0000 (UTC)
+Received: from h1.redhat.com (unknown [10.22.64.91])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C771F180B487;
+	Mon, 14 Apr 2025 22:25:13 +0000 (UTC)
+From: Nico Pache <npache@redhat.com>
+To: linux-mm@kvack.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: akpm@linux-foundation.org,
+	corbet@lwn.net,
+	shuah@kernel.org,
+	david@redhat.com,
+	baohua@kernel.org,
+	baolin.wang@linux.alibaba.com,
+	ryan.roberts@arm.com,
+	willy@infradead.org,
+	peterx@redhat.com,
+	ioworker0@gmail.com,
+	ziy@nvidia.com,
+	wangkefeng.wang@huawei.com,
+	dev.jain@arm.com,
+	mhocko@suse.com,
+	rientjes@google.com,
+	hannes@cmpxchg.org,
+	zokeefe@google.com,
+	surenb@google.com,
+	jglisse@google.com,
+	cl@gentwo.org,
+	jack@suse.cz,
+	dave.hansen@linux.intel.com,
+	will@kernel.org,
+	tiwai@suse.de,
+	catalin.marinas@arm.com,
+	anshuman.khandual@arm.com,
+	raquini@redhat.com,
+	aarcange@redhat.com,
+	kirill.shutemov@linux.intel.com,
+	yang@os.amperecomputing.com,
+	thomas.hellstrom@linux.intel.com,
+	vishal.moola@gmail.com,
+	sunnanyong@huawei.com,
+	usamaarif642@gmail.com,
+	mathieu.desnoyers@efficios.com,
+	mhiramat@kernel.org,
+	rostedt@goodmis.org
+Subject: [PATCH v3 0/4] mm: introduce THP deferred setting
+Date: Mon, 14 Apr 2025 16:24:52 -0600
+Message-ID: <20250414222456.43212-1-npache@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250414214801.2693294-1-sagis@google.com>
-X-Mailer: git-send-email 2.49.0.777.g153de2bbd5-goog
-Message-ID: <20250414214801.2693294-31-sagis@google.com>
-Subject: [PATCH v6 30/30] KVM: selftests: TDX: Test LOG_DIRTY_PAGES flag to a
- non-GUEST_MEMFD memslot
-From: Sagi Shahar <sagis@google.com>
-To: linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, Sean Christopherson <seanjc@google.com>, 
-	Ackerley Tng <ackerleytng@google.com>, Ryan Afranji <afranji@google.com>, 
-	Andrew Jones <ajones@ventanamicro.com>, Isaku Yamahata <isaku.yamahata@intel.com>, 
-	Erdem Aktas <erdemaktas@google.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
-	Sagi Shahar <sagis@google.com>, Roger Wang <runanwang@google.com>, 
-	Binbin Wu <binbin.wu@linux.intel.com>, Oliver Upton <oliver.upton@linux.dev>, 
-	"Pratik R. Sampat" <pratikrajesh.sampat@amd.com>, Reinette Chatre <reinette.chatre@intel.com>
-Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
-	Yan Zhao <yan.y.zhao@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-From: Yan Zhao <yan.y.zhao@intel.com>
+This series is a follow-up to [1], which adds mTHP support to khugepaged.
+mTHP khugepaged support is a "loose" dependency for the sysfs/sysctl
+configs to make sense. Without it global="defer" and  mTHP="inherit" case
+is "undefined" behavior.
 
-Add a selftest to verify that adding flag KVM_MEM_LOG_DIRTY_PAGES to a
-!KVM_MEM_GUEST_MEMFD memslot does not produce host errors in TDX.
+We've seen cases were customers switching from RHEL7 to RHEL8 see a
+significant increase in the memory footprint for the same workloads.
 
-Signed-off-by: Yan Zhao <yan.y.zhao@intel.com>
-Signed-off-by: Sagi Shahar <sagis@google.com>
----
- tools/testing/selftests/kvm/x86/tdx_vm_test.c | 45 ++++++++++++++++++-
- 1 file changed, 44 insertions(+), 1 deletion(-)
+Through our investigations we found that a large contributing factor to
+the increase in RSS was an increase in THP usage.
 
-diff --git a/tools/testing/selftests/kvm/x86/tdx_vm_test.c b/tools/testing/selftests/kvm/x86/tdx_vm_test.c
-index 82acc17a66ab..410d814dd39a 100644
---- a/tools/testing/selftests/kvm/x86/tdx_vm_test.c
-+++ b/tools/testing/selftests/kvm/x86/tdx_vm_test.c
-@@ -1167,6 +1167,47 @@ void verify_tdcall_vp_info(void)
- 	printf("\t ... PASSED\n");
- }
- 
-+#define TDX_LOG_DIRTY_PAGES_FLAG_TEST_GPA (0xc0000000)
-+#define TDX_LOG_DIRTY_PAGES_FLAG_TEST_GVA_SHARED (0x90000000)
-+#define TDX_LOG_DIRTY_PAGES_FLAG_REGION_SLOT 10
-+#define TDX_LOG_DIRTY_PAGES_FLAG_REGION_NR_PAGES (0x1000 / getpagesize())
-+
-+void guest_code_log_dirty_flag(void)
-+{
-+	memset((void *)TDX_LOG_DIRTY_PAGES_FLAG_TEST_GVA_SHARED, 1, 8);
-+	tdx_test_success();
-+}
-+
-+/*
-+ * Verify adding flag KVM_MEM_LOG_DIRTY_PAGES to a !KVM_MEM_GUEST_MEMFD memslot
-+ * in a TD does not produce host errors.
-+ */
-+void verify_log_dirty_pages_flag_on_non_gmemfd_slot(void)
-+{
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+
-+	vm = td_create();
-+	td_initialize(vm, VM_MEM_SRC_ANONYMOUS, 0);
-+	vcpu = td_vcpu_add(vm, 0, guest_code_log_dirty_flag);
-+
-+	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
-+				    TDX_LOG_DIRTY_PAGES_FLAG_TEST_GPA,
-+				    TDX_LOG_DIRTY_PAGES_FLAG_REGION_SLOT,
-+				    TDX_LOG_DIRTY_PAGES_FLAG_REGION_NR_PAGES,
-+				    KVM_MEM_LOG_DIRTY_PAGES);
-+	virt_map_shared(vm, TDX_LOG_DIRTY_PAGES_FLAG_TEST_GVA_SHARED,
-+			(uint64_t)TDX_LOG_DIRTY_PAGES_FLAG_TEST_GPA,
-+			TDX_LOG_DIRTY_PAGES_FLAG_REGION_NR_PAGES);
-+	td_finalize(vm);
-+
-+	printf("Verifying Log dirty flag:\n");
-+	vcpu_run(vcpu);
-+	tdx_test_assert_success(vcpu);
-+	kvm_vm_free(vm);
-+	printf("\t ... PASSED\n");
-+}
-+
- int main(int argc, char **argv)
- {
- 	ksft_print_header();
-@@ -1174,7 +1215,7 @@ int main(int argc, char **argv)
- 	if (!is_tdx_enabled())
- 		ksft_exit_skip("TDX is not supported by the KVM. Exiting.\n");
- 
--	ksft_set_plan(15);
-+	ksft_set_plan(16);
- 	ksft_test_result(!run_in_new_process(&verify_td_lifecycle),
- 			 "verify_td_lifecycle\n");
- 	ksft_test_result(!run_in_new_process(&verify_report_fatal_error),
-@@ -1205,6 +1246,8 @@ int main(int argc, char **argv)
- 			 "verify_host_reading_private_mem\n");
- 	ksft_test_result(!run_in_new_process(&verify_tdcall_vp_info),
- 			 "verify_tdcall_vp_info\n");
-+	ksft_test_result(!run_in_new_process(&verify_log_dirty_pages_flag_on_non_gmemfd_slot),
-+			 "verify_log_dirty_pages_flag_on_non_gmemfd_slot\n");
- 
- 	ksft_finished();
- 	return 0;
+For workloads like MySQL, or when using allocators like jemalloc, it is
+often recommended to set /transparent_hugepages/enabled=never. This is
+in part due to performance degradations and increased memory waste.
+
+This series introduces enabled=defer, this setting acts as a middle
+ground between always and madvise. If the mapping is MADV_HUGEPAGE, the
+page fault handler will act normally, making a hugepage if possible. If
+the allocation is not MADV_HUGEPAGE, then the page fault handler will
+default to the base size allocation. The caveat is that khugepaged can
+still operate on pages thats not MADV_HUGEPAGE.
+
+This allows for three things... one, applications specifically designed to
+use hugepages will get them, and two, applications that don't use
+hugepages can still benefit from them without aggressively inserting
+THPs at every possible chance. This curbs the memory waste, and defers
+the use of hugepages to khugepaged. Khugepaged can then scan the memory
+for eligible collapsing. Lastly there is the added benefit for those who want
+THPs but experience higher latency PFs. Now you can get base page performance at
+the PF handler and Hugepage performance for those mappings after they collapse.
+
+Admins may want to lower max_ptes_none, if not, khugepaged may
+aggressively collapse single allocations into hugepages.
+
+TESTING:
+- Built for x86_64, aarch64, ppc64le, and s390x
+- selftests mm
+- In [1] I provided a script [2] that has multiple access patterns
+- lots of general use. These changes have been running in my VM for some time
+- redis testing. This test was my original case for the defer mode. What I was
+   able to prove was that THP=always leads to increased max_latency cases; hence
+   why it is recommended to disable THPs for redis servers. However with 'defer'
+   we dont have the max_latency spikes and can still get the system to utilize
+   THPs. I further tested this with the mTHP defer setting and found that redis
+   (and probably other jmalloc users) can utilize THPs via defer (+mTHP defer)
+   without a large latency penalty and some potential gains.
+   I uploaded some mmtest results here [3] which compares:
+       stock+thp=never
+       stock+(m)thp=always
+       khugepaged-mthp + defer (max_ptes_none=64)
+
+  The results show that (m)THPs can cause some throughput regression in some
+  cases, but also has gains in other cases. The mTHP+defer results have more
+  gains and less losses over the (m)THP=always case.
+
+V3 Changes:
+- moved some Documentation to the other series and merged the remaining
+   Documentation updates into one
+
+V2 Changes:
+- base changes on mTHP khugepaged support
+- Fix selftests parsing issue
+- add mTHP defer option
+- add mTHP defer Documentation
+
+[1] - https://lore.kernel.org/lkml/20250414220557.35388-1-npache@redhat.com/
+[2] - https://gitlab.com/npache/khugepaged_mthp_test
+[3] - https://people.redhat.com/npache/mthp_khugepaged_defer/testoutput2/output.html
+
+Nico Pache (4):
+  mm: defer THP insertion to khugepaged
+  mm: document (m)THP defer usage
+  khugepaged: add defer option to mTHP options
+  selftests: mm: add defer to thp setting parser
+
+ Documentation/admin-guide/mm/transhuge.rst | 31 +++++++---
+ include/linux/huge_mm.h                    | 18 +++++-
+ mm/huge_memory.c                           | 69 +++++++++++++++++++---
+ mm/khugepaged.c                            | 10 ++--
+ tools/testing/selftests/mm/thp_settings.c  |  1 +
+ tools/testing/selftests/mm/thp_settings.h  |  1 +
+ 6 files changed, 107 insertions(+), 23 deletions(-)
+
 -- 
-2.49.0.504.g3bcea36a83-goog
+2.48.1
 
 
