@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-30778-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30779-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0013CA88E54
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Apr 2025 23:52:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 021E4A88E58
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Apr 2025 23:53:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2F58E7A695A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Apr 2025 21:51:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB4E43A6682
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Apr 2025 21:52:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E68DE21D5A9;
-	Mon, 14 Apr 2025 21:49:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49BEA221273;
+	Mon, 14 Apr 2025 21:49:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wn9cE2dJ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BhUm5raR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0F4821C168
-	for <linux-kselftest@vger.kernel.org>; Mon, 14 Apr 2025 21:48:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8702F21D585
+	for <linux-kselftest@vger.kernel.org>; Mon, 14 Apr 2025 21:49:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744667341; cv=none; b=X7HLyR09E63U7hUx5Fmzd5iIMKJS/lD3fqUbhlGKCNzDMk62Em2agPC6yyBwKM8oGalkv/Afzwpzi/ugtojA9OQH3UgTkqzOLDonW8nKP3VqP4w8mdb3ZjeG11KmpK05chNPVEqt1DeqCYVjMmlepaTq/7xy32nFq+pwRXen/SY=
+	t=1744667343; cv=none; b=lQpI3abRdnz+t6JzPbYhe8KQEtbdqVQ+YvG6sL9QaD+L+OpIp0fSBtqYOg1ZBzBGgvrSyH298slHxGD6ZmU+QH2GCGGx1DRNVMd+bQxOWv5Y6XfX17XfNR14G4K9lKWC5xp2vo/2hWfeVtiLtWw8LXnaGsxpRyUwhYRmCn/TBfw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744667341; c=relaxed/simple;
-	bh=SzuLpOtOjZ4283rbOdX2eus9Xjdq4xVD7b4UypnO9Mw=;
+	s=arc-20240116; t=1744667343; c=relaxed/simple;
+	bh=m6XZAFr9d7k1sePSC8lrRT9WZsZlOgeaGPEDDsdQtiY=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Lld+A6tGIyOiPsnoeUUPOBGR3HG7l/V7D1y0AevxF/q7ukLv9HvkUmiaXnwI/9amHErIxsvRHTauNJ0ZchKww5oqUUeFADSQlSN07D067G7INOf+zd/g5B1NG98xRT88nPDyK7/xHxgKuyKs0OLzOgzeoMvDC7M7pdRskaImKMI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sagis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wn9cE2dJ; arc=none smtp.client-ip=209.85.215.201
+	 To:Cc:Content-Type; b=BrvsW07S1pj5W6zKE+Mx9nM6rxBVospb7UGMidJ3pY5xJGTczOLRXcjt0uf26zApHPXvi2tzjrinGtl40r4HDynlKOqFs+EhBqfmext5ZwBefZl2eugL0c6yavISIbZPfxIpEf+bJVGgF8bbR38bd/3e4OVllsYzrDhvESzrvMw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sagis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BhUm5raR; arc=none smtp.client-ip=209.85.215.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sagis.bounces.google.com
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-b078af4b07dso959940a12.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Apr 2025 14:48:59 -0700 (PDT)
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-af96cdd7f5bso3055138a12.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Apr 2025 14:49:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1744667339; x=1745272139; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1744667340; x=1745272140; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AZKN3GfIxfYZ7IMwoz+StT3fWXyoh2WeyUI3/2uuukE=;
-        b=wn9cE2dJmHuC1uxgxgtjMn4MpPvNom03r6YCuBqaDA04nGoFErR3xjjvfbrMrzL0RS
-         JxgLy3CKNHHABCwkuSFqvsphwTfMlpd+QncJeu1aE6O7rxKJFiyO0kyvnhwD93J7ckPC
-         82+Lx0LtncV6AxNRM7BSLS/yFpVG29a1icipFIu5ICPZkmJrlGXd8P44avkFSc/EVvfu
-         wSrBskNR/LCjQ9ovA29vfpna1cbEZ5usSN99ZVSGGockSwvr5pkbwNAwj/+fAdc2rimM
-         4U6O/5OaPOoNYPjkeQxwoE5/idD8fLHvcyuSN/cf19Ii2ZT9BRwQwuRkBCq+p8jYoFfI
-         Clig==
+        bh=pSkGn0jO8D7u6Mzmo2Skc2pJxtV9/HYvntZJQxqwflU=;
+        b=BhUm5raRcFe1Gb+Ok+pXJnlCIL6Ub9hqnkBFUR8G6DqRwL6SQnfDcaL0HGLxOFJksz
+         Ux5fjCoPhlFUfoQJ2+m8jMJLJHuE3Wx+CLBDYW/yXkJYnVLn+nDbQ0N41aa3NDC1hjrI
+         zLNxSMg7kAGjJAtvm2las05pE+rBDG0yUlIkvpDXhPYFoFVHuRqa96O8xMVP0UabcdaR
+         43zi+O60RPVob89vKqMREKaN/xj0HmqsJ1E0BvvPeyTPVE3a6f03H20RITL7UZo/e5iG
+         2fj2QTaNQZgBLTRws5wtTt8UAzy8Bef4d5AFtz/it3DhbPLI5wW/V+XL4fHlbmMXU90k
+         09dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744667339; x=1745272139;
+        d=1e100.net; s=20230601; t=1744667340; x=1745272140;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AZKN3GfIxfYZ7IMwoz+StT3fWXyoh2WeyUI3/2uuukE=;
-        b=IX+K3XPfG9EmJhwuYl4JvpfITNIEFzyaiJSyWDieD3rcgt56a/2bQdyNF5Xvk6wHa/
-         3mC6TiljgmWnXmn5bk6BjNcNbnTSlngnSvsPaS8OKovPEZUKRD2eSs55i3RpB588rkT8
-         yU5VWVgzbSSCZbNQTti6axunqMOW0g7aza9v5h8hoA6pF5tWFnlKbQV5MOSQgwEggcQr
-         G86rlvGP2s/bO8UXw00bUkjhs9tRvPwCPYHJVBtWbf7XnNb8BX0OcZHlt5OLrUaLTXIM
-         /ZfiEpcr4XATLQoIJjoYj7PDwXFKHCp3CoPGeov7hGJcwdCdU37ot7w7RRHX6w5ISPgo
-         uFiw==
-X-Gm-Message-State: AOJu0Yx2vIG3C9BT3SmqSXfU81TZPU3Q/6TBLHjMQchh9Ds7AXYzyncy
-	f9J5t5NGSgjfu4GU8FnYd8LfFzYQjJDMdKEKIztQsrEaC2XeBZF/c/9ABgjTwMvxf964pZ4WysG
-	kYn1kQ6JWpSSeq9uZ9DZ1fiTrPJz7CLJz2Tb2NDiAxdAW7cmlT0HMHHQ+bPor3675y84UZYuFL6
-	Y/RAXBU0YcISVzIe8z/49YF5ceicD03en4MVCMMkA=
-X-Google-Smtp-Source: AGHT+IFwz6bs3Jno4CBwjDP6DY/136fQKAMa28TRHFuzEFMDStfePRgpN6f0IE+VncQ4sU0XUX7lPUXivw==
-X-Received: from pfbcd18.prod.google.com ([2002:a05:6a00:4212:b0:739:3659:ad9])
- (user=sagis job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:f688:b0:215:b473:1dc9
- with SMTP id d9443c01a7336-22bea502637mr188034325ad.46.1744667339098; Mon, 14
- Apr 2025 14:48:59 -0700 (PDT)
-Date: Mon, 14 Apr 2025 14:47:43 -0700
+        bh=pSkGn0jO8D7u6Mzmo2Skc2pJxtV9/HYvntZJQxqwflU=;
+        b=dDNtChWcXvuFpH5f68SekuQb0GuOvWGwoHtlLKprhnX6nYWUF/MxZla9QoYa50Sdt+
+         olfTZF5GI1FvN49cIeFa382WnPzSnbmWHauxmd8iis0Os6l9YssF5GbumfB7Pf2Akrx4
+         VBTSBDAPXL/b/4/AyF42l0F14esSbuJnAfiUhE6MuTtRI2EoyHciafCIqAMi68Z1kYi9
+         Pq7LXTy/FpUzC1y64wF1nvQH1z1llCGCue0RxgMlhZfh0tCzDjB1+11W0p9giwpQgUM/
+         j9n//BX2cx5KHSbsu2ma84lQ9M5nL5cROVII05WqmVnB5kQdfuqnWJHk2U6Mc+aIdJO6
+         ZQPQ==
+X-Gm-Message-State: AOJu0YxOZhrZOGWhcLen/Sb1hxWihKjUhmlcsWObRFbrc4CVZOp3CcSQ
+	BStK54/qfo2c2i7p2UCEoiAYp40GicuxBPa3E8+sODxikWCkOtJ+icBRAJBCH1/vlW2dPM2Ofkj
+	vIGRozPPunIrXaVRHmH1rMswJd++irh2lYscsZxd3vTtq9MVtxMXZtR8J1zs/Pe8Jm8OExcDmtm
+	WiJg4qFwOkI/2Yn79V/HzwIS9b6HehOLdebxn7qV8=
+X-Google-Smtp-Source: AGHT+IE63zYFHniLEiomnIcid+bNx1GXO6+bLTGlcZ1tDQ3qmoI0tt9VtY+yKOzizresPhzJaGwy4CulQg==
+X-Received: from pfgt32.prod.google.com ([2002:a05:6a00:13a0:b0:736:b37b:f363])
+ (user=sagis job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:1a03:b0:220:fce7:d3a6
+ with SMTP id d9443c01a7336-22bea4bca1cmr186211395ad.23.1744667340531; Mon, 14
+ Apr 2025 14:49:00 -0700 (PDT)
+Date: Mon, 14 Apr 2025 14:47:44 -0700
 In-Reply-To: <20250414214801.2693294-1-sagis@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250414214801.2693294-1-sagis@google.com>
 X-Mailer: git-send-email 2.49.0.777.g153de2bbd5-goog
-Message-ID: <20250414214801.2693294-15-sagis@google.com>
-Subject: [PATCH v6 14/30] KVM: selftests: TDX: Add TDX IO writes test
+Message-ID: <20250414214801.2693294-16-sagis@google.com>
+Subject: [PATCH v6 15/30] KVM: selftests: TDX: Add TDX IO reads test
 From: Sagi Shahar <sagis@google.com>
 To: linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>, 
 	Shuah Khan <shuah@kernel.org>, Sean Christopherson <seanjc@google.com>, 
@@ -88,99 +88,81 @@ To: linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
 Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-The test verifies IO writes of various sizes from the guest to the host.
+The test verifies IO reads of various sizes from the host to the guest.
 
 Signed-off-by: Sagi Shahar <sagis@google.com>
 ---
- .../selftests/kvm/include/x86/tdx/tdcall.h    |  3 +
- tools/testing/selftests/kvm/x86/tdx_vm_test.c | 79 ++++++++++++++++++-
- 2 files changed, 81 insertions(+), 1 deletion(-)
+ tools/testing/selftests/kvm/x86/tdx_vm_test.c | 76 ++++++++++++++++++-
+ 1 file changed, 75 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/kvm/include/x86/tdx/tdcall.h b/tools/testing/selftests/kvm/include/x86/tdx/tdcall.h
-index a6c966e93486..e7440f7fe259 100644
---- a/tools/testing/selftests/kvm/include/x86/tdx/tdcall.h
-+++ b/tools/testing/selftests/kvm/include/x86/tdx/tdcall.h
-@@ -7,6 +7,9 @@
- #include <linux/bits.h>
- #include <linux/types.h>
- 
-+#define TDG_VP_VMCALL_SUCCESS 0x0000000000000000
-+#define TDG_VP_VMCALL_INVALID_OPERAND 0x8000000000000000
-+
- #define TDX_HCALL_HAS_OUTPUT BIT(0)
- 
- #define TDX_HYPERCALL_STANDARD 0
 diff --git a/tools/testing/selftests/kvm/x86/tdx_vm_test.c b/tools/testing/selftests/kvm/x86/tdx_vm_test.c
-index 22143d16e0d1..f646da032004 100644
+index f646da032004..ae5749e5c605 100644
 --- a/tools/testing/selftests/kvm/x86/tdx_vm_test.c
 +++ b/tools/testing/selftests/kvm/x86/tdx_vm_test.c
-@@ -308,6 +308,81 @@ void verify_get_td_vmcall_info(void)
+@@ -383,6 +383,78 @@ void verify_guest_writes(void)
  	printf("\t ... PASSED\n");
  }
  
-+#define TDX_IO_WRITES_TEST_PORT 0x51
++#define TDX_IO_READS_TEST_PORT 0x52
 +
 +/*
-+ * Verifies IO functionality by writing values of different sizes
-+ * to the host.
++ * Verifies IO functionality by reading values of different sizes
++ * from the host.
 + */
-+void guest_io_writes(void)
++void guest_io_reads(void)
 +{
-+	uint64_t byte_4 = 0xFFABCDEF;
-+	uint64_t byte_2 = 0xABCD;
-+	uint64_t byte_1 = 0xAB;
++	uint64_t data;
 +	uint64_t ret;
 +
-+	ret = tdg_vp_vmcall_instruction_io(TDX_IO_WRITES_TEST_PORT, 1,
-+					   PORT_WRITE, &byte_1);
++	ret = tdg_vp_vmcall_instruction_io(TDX_IO_READS_TEST_PORT, 1,
++					   PORT_READ, &data);
 +	tdx_assert_error(ret);
++	if (data != 0xAB)
++		tdx_test_fatal(1);
 +
-+	ret = tdg_vp_vmcall_instruction_io(TDX_IO_WRITES_TEST_PORT, 2,
-+					   PORT_WRITE, &byte_2);
++	ret = tdg_vp_vmcall_instruction_io(TDX_IO_READS_TEST_PORT, 2,
++					   PORT_READ, &data);
 +	tdx_assert_error(ret);
++	if (data != 0xABCD)
++		tdx_test_fatal(2);
 +
-+	ret = tdg_vp_vmcall_instruction_io(TDX_IO_WRITES_TEST_PORT, 4,
-+					   PORT_WRITE, &byte_4);
++	ret = tdg_vp_vmcall_instruction_io(TDX_IO_READS_TEST_PORT, 4,
++					   PORT_READ, &data);
 +	tdx_assert_error(ret);
++	if (data != 0xFFABCDEF)
++		tdx_test_fatal(4);
 +
-+	/* Write an invalid number of bytes. */
-+	ret = tdg_vp_vmcall_instruction_io(TDX_IO_WRITES_TEST_PORT, 5,
-+					   PORT_WRITE, &byte_4);
++	/* Read an invalid number of bytes. */
++	ret = tdg_vp_vmcall_instruction_io(TDX_IO_READS_TEST_PORT, 5,
++					   PORT_READ, &data);
 +	tdx_assert_error(ret);
 +
 +	tdx_test_success();
 +}
 +
-+void verify_guest_writes(void)
++void verify_guest_reads(void)
 +{
 +	struct kvm_vcpu *vcpu;
 +	struct kvm_vm *vm;
-+	uint32_t byte_4;
-+	uint16_t byte_2;
-+	uint8_t byte_1;
 +
 +	vm = td_create();
 +	td_initialize(vm, VM_MEM_SRC_ANONYMOUS, 0);
-+	vcpu = td_vcpu_add(vm, 0, guest_io_writes);
++	vcpu = td_vcpu_add(vm, 0, guest_io_reads);
 +	td_finalize(vm);
 +
-+	printf("Verifying guest writes:\n");
++	printf("Verifying guest reads:\n");
 +
 +	tdx_run(vcpu);
-+	tdx_test_assert_io(vcpu, TDX_IO_WRITES_TEST_PORT, 1, PORT_WRITE);
-+	byte_1 = *(uint8_t *)((void *)vcpu->run + vcpu->run->io.data_offset);
++	tdx_test_assert_io(vcpu, TDX_IO_READS_TEST_PORT, 1, PORT_READ);
++	*(uint8_t *)((void *)vcpu->run + vcpu->run->io.data_offset) = 0xAB;
 +
 +	tdx_run(vcpu);
-+	tdx_test_assert_io(vcpu, TDX_IO_WRITES_TEST_PORT, 2, PORT_WRITE);
-+	byte_2 = *(uint16_t *)((void *)vcpu->run + vcpu->run->io.data_offset);
++	tdx_test_assert_io(vcpu, TDX_IO_READS_TEST_PORT, 2, PORT_READ);
++	*(uint16_t *)((void *)vcpu->run + vcpu->run->io.data_offset) = 0xABCD;
 +
 +	tdx_run(vcpu);
-+	tdx_test_assert_io(vcpu, TDX_IO_WRITES_TEST_PORT, 4, PORT_WRITE);
-+	byte_4 = *(uint32_t *)((void *)vcpu->run + vcpu->run->io.data_offset);
-+
-+	TEST_ASSERT_EQ(byte_1, 0xAB);
-+	TEST_ASSERT_EQ(byte_2, 0xABCD);
-+	TEST_ASSERT_EQ(byte_4, 0xFFABCDEF);
++	tdx_test_assert_io(vcpu, TDX_IO_READS_TEST_PORT, 4, PORT_READ);
++	*(uint32_t *)((void *)vcpu->run + vcpu->run->io.data_offset) = 0xFFABCDEF;
 +
 +	td_vcpu_run(vcpu);
 +	TEST_ASSERT_EQ(vcpu->run->exit_reason, KVM_EXIT_SYSTEM_EVENT);
@@ -196,21 +178,21 @@ index 22143d16e0d1..f646da032004 100644
  int main(int argc, char **argv)
  {
  	ksft_print_header();
-@@ -315,7 +390,7 @@ int main(int argc, char **argv)
+@@ -390,7 +462,7 @@ int main(int argc, char **argv)
  	if (!is_tdx_enabled())
  		ksft_exit_skip("TDX is not supported by the KVM. Exiting.\n");
  
--	ksft_set_plan(5);
-+	ksft_set_plan(6);
+-	ksft_set_plan(6);
++	ksft_set_plan(7);
  	ksft_test_result(!run_in_new_process(&verify_td_lifecycle),
  			 "verify_td_lifecycle\n");
  	ksft_test_result(!run_in_new_process(&verify_report_fatal_error),
-@@ -326,6 +401,8 @@ int main(int argc, char **argv)
- 			 "verify_td_cpuid\n");
- 	ksft_test_result(!run_in_new_process(&verify_get_td_vmcall_info),
+@@ -403,6 +475,8 @@ int main(int argc, char **argv)
  			 "verify_get_td_vmcall_info\n");
-+	ksft_test_result(!run_in_new_process(&verify_guest_writes),
-+			 "verify_guest_writes\n");
+ 	ksft_test_result(!run_in_new_process(&verify_guest_writes),
+ 			 "verify_guest_writes\n");
++	ksft_test_result(!run_in_new_process(&verify_guest_reads),
++			 "verify_guest_reads\n");
  
  	ksft_finished();
  	return 0;
