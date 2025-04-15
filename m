@@ -1,97 +1,92 @@
-Return-Path: <linux-kselftest+bounces-30819-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30821-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2229A893B7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Apr 2025 08:15:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F158A8944B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Apr 2025 08:58:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C3B7B1882AA4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Apr 2025 06:15:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8EDA417BCD1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Apr 2025 06:58:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37169275860;
-	Tue, 15 Apr 2025 06:15:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="VRn/5uPt"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 385B2274FC7;
+	Tue, 15 Apr 2025 06:58:12 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A74FD274642;
-	Tue, 15 Apr 2025 06:15:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.101
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5859A21E0A8
+	for <linux-kselftest@vger.kernel.org>; Tue, 15 Apr 2025 06:58:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744697712; cv=none; b=GdFv9G1aVCG9ZMC/HEwvPHuGrE9kfUk0UMNv8A4QarfrEZHhoYF6+bcBfWe1C8cbfcAECJyDCBY8U132VxPHxzPf5M8h3kHeMEo3yjnN7qd2Md4079f19tX7SGB1d6HDZyYLHnLJp92iLG+UssgH7yISkFFBpg9rSydNgkII11s=
+	t=1744700292; cv=none; b=Rz0amiDsoQZKxBTzD+UEIpXriDrWZV0tL4e72BGJ4TUv8eq58RTL/iBJvlHDbMQRpFOb1XPtGdyzI+NtMQ5u6xMrjOI1APPjkFfAB0tzVMmyN3LOj1ciwCIVXSugcNQac/vS+YwgaXNTbYfci/AB0jmlY2QzQLfDNW70npokY2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744697712; c=relaxed/simple;
-	bh=Jj+9El0gv9RJRnKdz5Z6J1EoU0iho4atfdClLS8c21Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=iQguCoT0RX56tIyivAoNKmif4lCZ2vyeXB8kroKfv+rQYqcPyRnKom3PgEH3gbFlXMglqVCi6BUxnEZqmdFRnfe5ghQRMIYUuF6CsQyzOaxNNoEOSK4OYNUbumSLXIAaVGGqjkAkNT80Q8CYHWUzYMMFn8eC2IsNfSB7xg+N2LY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=VRn/5uPt; arc=none smtp.client-ip=115.124.30.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1744697705; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=+2LZ3sbql60OCXVn+A8aGl6V+b4sdyQtm8MhWSm6Pv8=;
-	b=VRn/5uPtZZRO+nAIim3MOiE2c6fI6LxqKx5+d+/nT8bdwM/eHVY2HgHQs3miQA6bDOvNUVoe/YQKFSpD9beg8RLoWIIgji0FE9Zhzfrpsl/XIarvT2drm5kvkFIrZ5OS6Hq2x61As5IMFZeAym4WuykK5igXxMWdL5bbDILmjik=
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0WX3bW8J_1744697699 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Tue, 15 Apr 2025 14:15:05 +0800
-From: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To: ast@kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	mykolal@fb.com,
-	shuah@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-	Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] selftest/bpf/benchs: Remove duplicate sys/types.h header
-Date: Tue, 15 Apr 2025 14:14:59 +0800
-Message-Id: <20250415061459.11644-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.32.0.3.g01195cf9f
+	s=arc-20240116; t=1744700292; c=relaxed/simple;
+	bh=Nv532wBnBiUnkujq5QrWRKLamPupcjWtUOrZzrJSbIs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AemhJ4X/HmpOc1vswK2jhoc9ZQ2hL4B8nArjSpMVqUoTT4nw7uX3PCs64WnyPbnGS2b/Egb2ifHeaXqJ+YCvGqhiXPLZ84Z3QhLX2qXATXCTHraBomZkKSqWiW3/aqCkntzzvz2Gav7v58c9YilsuU0G7/Xl4kENI00mUhysnww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 085F215A1;
+	Mon, 14 Apr 2025 23:58:08 -0700 (PDT)
+Received: from [10.163.49.104] (unknown [10.163.49.104])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2B5043F66E;
+	Mon, 14 Apr 2025 23:58:06 -0700 (PDT)
+Message-ID: <098f5acc-f367-4188-acbd-2c91c52d57f4@arm.com>
+Date: Tue, 15 Apr 2025 12:28:03 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/mm: Restore default nr_hugepages value during
+ cleanup in hugetlb_reparenting_test.sh
+To: Donet Tom <donettom@linux.ibm.com>,
+ Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>
+Cc: Ritesh Harjani <ritesh.list@gmail.com>, longman@redhat.com,
+ Li Wang <liwang@redhat.com>
+References: <20250410100748.2310-1-donettom@linux.ibm.com>
+Content-Language: en-US
+From: Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20250410100748.2310-1-donettom@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-./tools/testing/selftests/bpf/benchs/bench_sockmap.c: sys/types.h is included more than once.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=20436
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- tools/testing/selftests/bpf/benchs/bench_sockmap.c | 1 -
- 1 file changed, 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/benchs/bench_sockmap.c b/tools/testing/selftests/bpf/benchs/bench_sockmap.c
-index 54f4e7c03cd2..8ebf563a67a2 100644
---- a/tools/testing/selftests/bpf/benchs/bench_sockmap.c
-+++ b/tools/testing/selftests/bpf/benchs/bench_sockmap.c
-@@ -3,7 +3,6 @@
- #include <error.h>
- #include <sys/types.h>
- #include <sys/socket.h>
--#include <sys/types.h>
- #include <netinet/in.h>
- #include <sys/sendfile.h>
- #include <arpa/inet.h>
--- 
-2.32.0.3.g01195cf9f
+On 4/10/25 15:37, Donet Tom wrote:
+> During cleanup, the value of /proc/sys/vm/nr_hugepages is currently
+> being set to 0. At the end of the test, if all tests pass, the
+> original nr_hugepages value is restored. However, if any test fails,
+> it remains set to 0.
+> 
+> With this patch, we ensure that the original nr_hugepages value is
+> restored during cleanup, regardless of whether the test passes or fails.
+> 
+> Fixes: 29750f71a9b4 ("hugetlb_cgroup: add hugetlb_cgroup reservation tests")
+Although this change makes sense as an improvement or a cleanup but
+not sure if this also deserves a Fixes: tag as well.
 
+> Signed-off-by: Donet Tom <donettom@linux.ibm.com>
+> ---
+>  tools/testing/selftests/mm/hugetlb_reparenting_test.sh | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/mm/hugetlb_reparenting_test.sh b/tools/testing/selftests/mm/hugetlb_reparenting_test.sh
+> index 11f9bbe7dc22..114875a2b018 100755
+> --- a/tools/testing/selftests/mm/hugetlb_reparenting_test.sh
+> +++ b/tools/testing/selftests/mm/hugetlb_reparenting_test.sh
+> @@ -56,7 +56,7 @@ function cleanup() {
+>    rmdir "$CGROUP_ROOT"/a/b 2>/dev/null
+>    rmdir "$CGROUP_ROOT"/a 2>/dev/null
+>    rmdir "$CGROUP_ROOT"/test1 2>/dev/null
+> -  echo 0 >/proc/sys/vm/nr_hugepages
+> +  echo $nr_hugepgs >/proc/sys/vm/nr_hugepages
+>    set -e
+>  }
+>  
 
