@@ -1,111 +1,100 @@
-Return-Path: <linux-kselftest+bounces-30882-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30883-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF08FA8A2AF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Apr 2025 17:30:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0E76A8A2DC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Apr 2025 17:35:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 52310189E579
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Apr 2025 15:30:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D27CF166EF3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Apr 2025 15:35:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B86E51DF963;
-	Tue, 15 Apr 2025 15:29:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7445D207A3A;
+	Tue, 15 Apr 2025 15:35:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sfiR6T+A"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RYa4JyTF"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84FB7145FE0;
-	Tue, 15 Apr 2025 15:29:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C3A72DFA29;
+	Tue, 15 Apr 2025 15:35:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744730998; cv=none; b=X/YOZ+oNbtIGkE7nq1uEEvBvxD4lzGBqB6pT8U7kiPZ3MBFoKyaZD6ALHT6LumOvDA7YJxdLVwLsDMCMkiLEimj9eO8PON5P/rW6PxjsRLgaak5U9D96IQyfdAtqbivc1zpYCs2jJV0/sB/Ry2bMJpOwMquQsKs4iEBgCxQkPdU=
+	t=1744731311; cv=none; b=KZOPttbzMyeca0Rvq62Y/B2E9/VZrYE/K5XrGCq47yuEJxIDka4bKhVzwaMWAN4gVFHVc12v7dUAC1tTXMOCuu6ekgDt9NcBtXrbLTi12dCOSpyRQIDtYRT4xcyLwLuQuBGH5QpiQ3rD9m6ANu4eQGXZ3yOegD/GxUMgcEw2K6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744730998; c=relaxed/simple;
-	bh=Nb8PuR7yLYMsD7vKccqLdB79LGQ7+UDHzf/LfFpFsOI=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=Y6b4p3OkbPszi8EoULW1hk5jNvW5kI3uYFM7SE+zeEdprkMNXWs43/PDpnfK0bh4b0OhNRK2zq74gsW7RaPD8kLISqfrlAlbAAPn6a9WFLWweTw2VDjMbDUNAfdau73+ZdgpgPjS6Bemp3R5c/kdb1nWir0V6nmT9Cmx8cFg938=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sfiR6T+A; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F0A1C4CEEB;
-	Tue, 15 Apr 2025 15:29:58 +0000 (UTC)
+	s=arc-20240116; t=1744731311; c=relaxed/simple;
+	bh=z3awKsfQhHqS7FsFGRtKTtKJdDGWwliVe/DBvRf1HG8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=kzHV3Hi363/lc0JIyhMp7kPldprYtbjzFysmxyJSvOrYeOyHJpDaq67hlum6ftOuwRXRWXIArjHbi5qMsNkJCBuRPkjUiHlXXZXXeenAFWqAvCl0RRzxhEG+2IzQl/ILroBaMTqTJ9/RXaYKv+SGDVwzh26EeAjeGTOc4kHi1QA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RYa4JyTF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D14CC4CEEB;
+	Tue, 15 Apr 2025 15:35:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744730998;
-	bh=Nb8PuR7yLYMsD7vKccqLdB79LGQ7+UDHzf/LfFpFsOI=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=sfiR6T+AyBHbCYHylx/cFJ0sCRUnYkuO6iD9AVh9oGPU5RRZnHQmBkqQuVip9LWmH
-	 qV/NDDA7E8tGuU9oRyUisWO4P8NXun6xncrZKE91cauVE1r1Ruppy7ZU15iUSMqb23
-	 SwiT1NgHQyISu0tZFNthVsWbJ8YmCN9KPbY/YcVXaT1KVLaAzQs50wiC95ABORcnbg
-	 oOdCYjBC7n73yOTWvcvFzwDe7JrNdVoDIV1pSgbATduqOkGhTFMPdUJEM4ezcgHyGI
-	 HLrAzYaKM6PD7SmFp+LR1EsMihYrRe1h+YwJ0ZgEOlq58lyYNFKdlVXDFxw3Y7aL1n
-	 IWAUwzDfT6GnQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70E853822D55;
-	Tue, 15 Apr 2025 15:30:37 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1744731310;
+	bh=z3awKsfQhHqS7FsFGRtKTtKJdDGWwliVe/DBvRf1HG8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=RYa4JyTF1G9dK4c9HZn+UsC7lVQJuadnPCczswFQrSN0vIYU0rICn4JMKU8dDzAZ7
+	 gCNyjzzr5sTLvLeB9OIvD+jyyDZcAI9nnUbiWXm5SqURTpbGpi68ykFJpqWU+odOly
+	 NWpAnsy+T/7wlN6QqOqQn+AXuMiFW8n7ccwt1tnj05U9wROMhh35FVJK6/okC8fmmr
+	 E3JznvGqTbl2Ns8j0vryyASmviMeFiYCE3geoY1i11Zs+5MB71DJIrE07nRqmwcCDK
+	 kTx4U94cr9vVNhxAWPNTm/bo5REvsVf+U98sx3vLxDIue7/HGIEHMxvI5hbF6hZ1e7
+	 sZY4MvZ4qszKA==
+Date: Tue, 15 Apr 2025 08:35:08 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>
+Cc: "xandfury@gmail.com" <xandfury@gmail.com>, "netdev@vger.kernel.org"
+ <netdev@vger.kernel.org>, "dave.taht@gmail.com" <dave.taht@gmail.com>,
+ "pabeni@redhat.com" <pabeni@redhat.com>, "jhs@mojatatu.com"
+ <jhs@mojatatu.com>, "stephen@networkplumber.org"
+ <stephen@networkplumber.org>, "xiyou.wangcong@gmail.com"
+ <xiyou.wangcong@gmail.com>, "jiri@resnulli.us" <jiri@resnulli.us>,
+ "davem@davemloft.net" <davem@davemloft.net>, "edumazet@google.com"
+ <edumazet@google.com>, "horms@kernel.org" <horms@kernel.org>,
+ "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>, "donald.hunter@gmail.com"
+ <donald.hunter@gmail.com>, "ast@fiberby.net" <ast@fiberby.net>,
+ "liuhangbin@gmail.com" <liuhangbin@gmail.com>, "shuah@kernel.org"
+ <shuah@kernel.org>, "linux-kselftest@vger.kernel.org"
+ <linux-kselftest@vger.kernel.org>, "ij@kernel.org" <ij@kernel.org>,
+ "ncardwell@google.com" <ncardwell@google.com>, "Koen De Schepper (Nokia)"
+ <koen.de_schepper@nokia-bell-labs.com>, "g.white" <g.white@cablelabs.com>,
+ "ingemar.s.johansson@ericsson.com" <ingemar.s.johansson@ericsson.com>,
+ "mirja.kuehlewind@ericsson.com" <mirja.kuehlewind@ericsson.com>,
+ "cheshire@apple.com" <cheshire@apple.com>, "rs.ietf@gmx.at"
+ <rs.ietf@gmx.at>, "Jason_Livingood@comcast.com"
+ <Jason_Livingood@comcast.com>, vidhi_goel <vidhi_goel@apple.com>
+Subject: Re: [PATCH v11 net-next 0/5] DUALPI2 patch
+Message-ID: <20250415083508.3ea899bc@kernel.org>
+In-Reply-To: <PAXPR07MB798477409AF023CAC191C70CA3B22@PAXPR07MB7984.eurprd07.prod.outlook.com>
+References: <20250415124317.11561-1-chia-yu.chang@nokia-bell-labs.com>
+	<20250415075814.5b182f04@kernel.org>
+	<PAXPR07MB798477409AF023CAC191C70CA3B22@PAXPR07MB7984.eurprd07.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2 0/8] mptcp: various small and unrelated
- improvements
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <174473103627.2677629.8047021471337613014.git-patchwork-notify@kernel.org>
-Date: Tue, 15 Apr 2025 15:30:36 +0000
-References: <20250413-net-next-mptcp-sched-mib-sft-misc-v2-0-0f83a4350150@kernel.org>
-In-Reply-To: <20250413-net-next-mptcp-sched-mib-sft-misc-v2-0-0f83a4350150@kernel.org>
-To: Matthieu Baerts <matttbe@kernel.org>
-Cc: mptcp@lists.linux.dev, martineau@kernel.org, geliang@kernel.org,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- horms@kernel.org, shuah@kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- thorsten.blum@linux.dev, pizhenwei@bytedance.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Sun, 13 Apr 2025 11:34:31 +0200 you wrote:
-> Here are various unrelated patches:
+On Tue, 15 Apr 2025 15:05:29 +0000 Chia-Yu Chang (Nokia) wrote:
+> > 24 hours means 24 hours, not 23, especially when you're reposting
+> > because your previous version did not build!
+> > 
+> > Our infra is severely behind on testing, such sloppiness is
+> > impacting our ability to process patches :|  
 > 
-> - Patch 1: sched: remove unused structure.
+> Really sorry for submitting within 23 hours.
 > 
-> - Patch 2: sched: split the validation part, a preparation for later.
-> 
-> - Patch 3: pm: clarify code, not to think there is a possible UaF.
->   Note: a previous version has already been sent individually to Netdev.
-> 
-> [...]
+> Shall I resubmit such v11 after another 24 hours again? Or shall I
+> submit now?
 
-Here is the summary with links:
-  - [net-next,v2,1/8] mptcp: sched: remove mptcp_sched_data
-    https://git.kernel.org/netdev/net-next/c/6e83166dd800
-  - [net-next,v2,2/8] mptcp: sched: split validation part
-    https://git.kernel.org/netdev/net-next/c/760ff076695c
-  - [net-next,v2,3/8] mptcp: pm: Return local variable instead of freed pointer
-    https://git.kernel.org/netdev/net-next/c/def9d0958bef
-  - [net-next,v2,4/8] mptcp: pass right struct to subflow_hmac_valid
-    https://git.kernel.org/netdev/net-next/c/60cbf3158513
-  - [net-next,v2,5/8] mptcp: add MPJoinRejected MIB counter
-    https://git.kernel.org/netdev/net-next/c/4ce7fb8de556
-  - [net-next,v2,6/8] selftests: mptcp: validate MPJoinRejected counter
-    https://git.kernel.org/netdev/net-next/c/98dea4fd6315
-  - [net-next,v2,7/8] selftests: mptcp: diag: drop nlh parameter of recv_nlmsg
-    https://git.kernel.org/netdev/net-next/c/f9c7504d3055
-  - [net-next,v2,8/8] selftests: mptcp: use IPPROTO_MPTCP for getaddrinfo
-    https://git.kernel.org/netdev/net-next/c/a862771d1aa4
+No, no. Let's give people a chance to review v11.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+I'm just asking you to be more careful next time. You may also want 
+to consider posting via a different SMTP server. Your first attempt 
+at the v3 posting of the TCP patches is still trickling thru to the 
+list. Not sure what happened there..
 
