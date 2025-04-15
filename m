@@ -1,169 +1,153 @@
-Return-Path: <linux-kselftest+bounces-30899-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30901-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8EEBA8A9C4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Apr 2025 23:05:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F782A8AA62
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Apr 2025 23:48:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1EDA31902373
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Apr 2025 21:05:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E7EDC17DD5E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Apr 2025 21:48:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 323A725C70F;
-	Tue, 15 Apr 2025 21:04:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE58C258CF6;
+	Tue, 15 Apr 2025 21:48:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YJHG5oHM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UIzhDmRX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CC32258CC3
-	for <linux-kselftest@vger.kernel.org>; Tue, 15 Apr 2025 21:04:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30081256C7A;
+	Tue, 15 Apr 2025 21:48:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744751082; cv=none; b=AhtUnRgfS2/xMCKOYS98Go4wiD5QU21sXfUU3ISI0MSJeGZtLaXVXkzwmcHFNyshh+Ik3U1ka6zFiovpcB1m2IWFBuWVgxod0O9vnOhav9xhFtZe+YVP2nMbpOEUEI4fMso2UFyFq6p9vCwlASHopBPp9zkFnrFsVJU/SMvY17s=
+	t=1744753719; cv=none; b=LKeRWwdOHqEZGWFcKa5F+pCULpiiwWUAiVLQ771A0l67tBG1KP95e9dL74jbA8M/8whbGe1ylUbVQrA8Z3wpZuOz307u5Zs49oL3zTJ48DomNXKU7gjuRW4hXAAu2M/1b8uJtpZm1sz1czzwjfTmk+ZmbT+LGenpn9owEOFo/Zw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744751082; c=relaxed/simple;
-	bh=h9sHC1QdfDR4YOoK0WmGnIHEWEqeP38aMKL48i3RraY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bC2NBfE4ovKhxsX2ojnSBpvlcK6qBaQeKYFytn4I8agXYjmKvuQshF4+ZfqnEanIXdtL90m67JG6yQo/iVn4afhmABEH1LkUsFILAjKNTs+PoF/zUifch+KcHCHvTwAGw+Zr06OtA3Hx387nc2Ijx1nOHJfL9eEXvFp9wejdwYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YJHG5oHM; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1744751079;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=G181R4Ce8Y0oezWUB5dkYUGLwtFvIKy14kWYL4Idox0=;
-	b=YJHG5oHM9dNshL0Aac/D3aCXpaLItAWQb5hSwLVcVuBX4dipevXhrxf/KF8z0cfguEr71+
-	KMUNLgFXGRA/0NnannG3SNQg2+eqy+BfoUwZGkjLYDcOQvXUF2fexftg6EoPdOGoHXfr2G
-	J/E73ecHkYBKAhvKVdZ/y/HvC34T6k0=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-527-ja4OLp0VOwmG-_HocO_yiA-1; Tue,
- 15 Apr 2025 17:04:35 -0400
-X-MC-Unique: ja4OLp0VOwmG-_HocO_yiA-1
-X-Mimecast-MFC-AGG-ID: ja4OLp0VOwmG-_HocO_yiA_1744751074
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id F213C1808985;
-	Tue, 15 Apr 2025 21:04:33 +0000 (UTC)
-Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.22.64.119])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 02B6C19792DC;
-	Tue, 15 Apr 2025 21:04:30 +0000 (UTC)
-From: Waiman Long <longman@redhat.com>
-To: Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Tejun Heo <tj@kernel.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	cgroups@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	Waiman Long <longman@redhat.com>
-Subject: [PATCH v7 2/2] selftests: memcg: Increase error tolerance of child memory.current check in test_memcg_protection()
-Date: Tue, 15 Apr 2025 17:04:15 -0400
-Message-ID: <20250415210415.13414-3-longman@redhat.com>
-In-Reply-To: <20250415210415.13414-1-longman@redhat.com>
-References: <20250415210415.13414-1-longman@redhat.com>
+	s=arc-20240116; t=1744753719; c=relaxed/simple;
+	bh=bDUCnKz7jvBuxw+pBQ6fXlAerwaY3e5AwmiudA8kAZE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QDdShDuRLevS32UltDruJe9DwLffWQFSn5T0Fj1TvRdafXbq3W68x1FSvB3VRYL+iTcgeIRCzftlLq+/CQ6D9sbGtA+Z4tyYEE0KWC6/PFNtHgj9dJa+q8ehdihIFm0AnuiYiN6UCROqBS+PtY6JjCNNJUcovUa0l4fcCKiKN/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UIzhDmRX; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-39c1efc457bso4094539f8f.2;
+        Tue, 15 Apr 2025 14:48:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1744753716; x=1745358516; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bDUCnKz7jvBuxw+pBQ6fXlAerwaY3e5AwmiudA8kAZE=;
+        b=UIzhDmRXF5Tz1DvLt++5m5X+28qnagMvVtoHaBD81Y4m6M4BO9O7scHbT1N4NgWPh2
+         LLV3K+OQH9TznqbP8atdpXB5YA+8F5kUbNA7hu/rZ2e+RO8OKqJ/T0InssQPkIebTtX2
+         pqR6MB8+l76jcoFokNbUVAc7sgliTx6ZWHzSDWNiCgGsA8aPC1RH85Qy8eeJEgmPFez3
+         oav3/tb2PCSoqsZtXCa+5oSSOUSEurXQNdwlg9jxdRHKPbZNpYmsLefz03uEK9vvn6sH
+         rwE5JZ/WUcxV88pl6FeuEVwBWemXH9kZRTZsBIccq0AMfpM4qhyHuuDgzbbz/Fpr1kO+
+         OiYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744753716; x=1745358516;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bDUCnKz7jvBuxw+pBQ6fXlAerwaY3e5AwmiudA8kAZE=;
+        b=ta9VMhR/rwewI8BE3dgu3ifzZ34YGydRrmRlSYnh1BwrSMPeWCTfk9jKLy9J38rXVQ
+         FxtLXpLT8AkcvNfsy++ni004JT9gJdRtH0nOxu3nBkrPqivqaezF766xbaeqwc73blyW
+         XdTL6w3nBT6Mc0HLjZRwnbx7F57c7cluYXSiZ6PfL81RCltIypl2Oxr938TRDmBbHKQM
+         zULIyLQDrPGsYcZ/85DhaK8LraIm4w/oIDfVzuziBcTv2Hqq//GKuDAFO5YD2hB4hMUn
+         4+GQScNBjVK1C63fwhgmskpO1ulVs2qIRQkrjeiHwKaXR7FfQw4/GbFvCU/x2TeegBFW
+         WdhA==
+X-Forwarded-Encrypted: i=1; AJvYcCUFma4BXBmz7Nu22C/6QVtaPfN2KSb+P0NCKb7DD0KxWT7WUTkT3QlGsslWA7R3ZZuoUU7RfWhhThrg@vger.kernel.org, AJvYcCUO7nwAzN8tSFVq4aaxm2KWZm9pVKBx3OtAQwIycEq2R4lwiZzwExmQY3tc/M5lZnUyP0uinTrgleU=@vger.kernel.org, AJvYcCUZmkAVfuPisXN0jfubNQNmgZkCwsfQk3BFca5Gr5X/isH+UNEJCHrDHcs0S9iah3m7VHvkLgc0D2HMDgIm@vger.kernel.org, AJvYcCUjIv8ovlezhHzZQxX29uBXfK8DmVdGvwu5T1Ba42OegxFxSwPqoQxKVQOMHkkfU4yE56E=@vger.kernel.org, AJvYcCV5wS9UO2uOzzJOSsqSUI24HKLXXRJsisqeMcG6GxujdeF6gKBo1DKA+FhBQo2diyLKJLMbzu65MiMYabiW@vger.kernel.org, AJvYcCVbPGs9ahdORgeLVkjSQUvwN0/uVt3K/FAY+3qHIr1exsLgJqwj3GcYAcvzkk2sYBpcrfUH+VycJWPjD76yjiw+2FJJUggk@vger.kernel.org, AJvYcCVe0zaDr1WdRh0zs4oJ5L5eSUmfsBytkHpni9jiQX0js40nKI6CnBokMvKdPEOk2hRuMe8x2FZAd83yhdnX7D9S@vger.kernel.org, AJvYcCWHmjwboInoyYU1WSbDQXV1sMRRvYE+COn7Tfus3JDbQFoGsoiKk3Ltu+Tydvrr5GOqdbe5drQn+60LJjco@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx+ADIjeoIqe1TG8zNL+ziqSqWQObasaXslRYgmMgzx6RcCCFjw
+	B6wgun7r/BRlsFiUdWvhNfGz9UJLF2FPzqa+sXtqIMVGzUIs8r6cUAHpX4BESGz3LLuUaHL+NdB
+	YeQ+fgAoAmIpIsZvPSRrefydTgys=
+X-Gm-Gg: ASbGncvDm6W/qLFoiT2w8OqW8yQ/rY1wm5cQsmplw42m8akbYJ59OudbQN75Bej0Gkd
+	qPuuEvFKnHdcKXTDpPYF+7N18te4sCaxtFWdTkpXO8KSn1UQ5/fQ9n63Dbo/xN+uYVy/WqHKNEE
+	KB1DuCkUphBBvxSu8QWDEvbJQXvfj/YnS2HyO0EA==
+X-Google-Smtp-Source: AGHT+IGGvZX4RMVGIBW2ATOMhdA1FNXZL7oI8sJ+361tymECy+71f84VHdCSfBxdvsipmbp6Ulc15gt+XS9d+glagyk=
+X-Received: by 2002:a5d:64ed:0:b0:39b:ede7:8906 with SMTP id
+ ffacd0b85a97d-39ee2737c5amr829452f8f.19.1744753716233; Tue, 15 Apr 2025
+ 14:48:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+References: <20250404215527.1563146-1-bboscaccy@linux.microsoft.com>
+ <20250404215527.1563146-2-bboscaccy@linux.microsoft.com> <CAADnVQJyNRZVLPj_nzegCyo+BzM1-whbnajotCXu+GW+5-=P6w@mail.gmail.com>
+ <87semdjxcp.fsf@microsoft.com> <CAADnVQ+JGfwRgsoe2=EHkXdTyQ8ycn0D9nh1k49am++4oXUPHg@mail.gmail.com>
+ <87friajmd5.fsf@microsoft.com> <CAADnVQKb3gPBFz+n+GoudxaTrugVegwMb8=kUfxOea5r2NNfUA@mail.gmail.com>
+ <87a58hjune.fsf@microsoft.com>
+In-Reply-To: <87a58hjune.fsf@microsoft.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 15 Apr 2025 14:48:25 -0700
+X-Gm-Features: ATxdqUErECmwoqEuL6CX7Ju8rfNledrvqrqzcf3Vfcvy2kBD9Sk5E3enWPn-LJw
+Message-ID: <CAADnVQ+LMAnyT4yV5iuJ=vswgtUu97cHKnvysipc6o7HZfEbUA@mail.gmail.com>
+Subject: Re: [PATCH v2 security-next 1/4] security: Hornet LSM
+To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, David Howells <dhowells@redhat.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Jarkko Sakkinen <jarkko@kernel.org>, 
+	Jan Stancek <jstancek@redhat.com>, Neal Gompa <neal@gompa.dev>, 
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	keyrings@vger.kernel.org, 
+	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, 
+	LSM List <linux-security-module@vger.kernel.org>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, nkapron@google.com, 
+	Matteo Croce <teknoraver@meta.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
+	Cong Wang <xiyou.wangcong@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The test_memcg_protection() function is used for the test_memcg_min and
-test_memcg_low sub-tests. This function generates a set of parent/child
-cgroups like:
+On Tue, Apr 15, 2025 at 8:45=E2=80=AFAM Blaise Boscaccy
+<bboscaccy@linux.microsoft.com> wrote:
+>
+> The eBPF dev community has spent what, 4-5 years on this, with little to
+> no progress. I have little faith that this is going to progress on your
+> end in a timely manner or at all, and frankly we (and others) needed
+> this yesterday.
 
-  parent:  memory.min/low = 50M
-  child 0: memory.min/low = 75M,  memory.current = 50M
-  child 1: memory.min/low = 25M,  memory.current = 50M
-  child 2: memory.min/low = 0,    memory.current = 50M
+History repeats itself.
+1. the problem is hard.
+2. you're only interested in addressing your own use case.
+There is no end-to-end design here and no attempt to
+think it through how it will work for others.
 
-After applying memory pressure, the function expects the following
-actual memory usages.
+> Hornet has zero impact on the bpf subsystem, yet you
+> seem viscerally opposed to us doing this.
 
-  parent:  memory.current ~= 50M
-  child 0: memory.current ~= 29M
-  child 1: memory.current ~= 21M
-  child 2: memory.current ~= 0
+Hacking into bpf internal objects like maps is not acceptable.
 
-In reality, the actual memory usages can differ quite a bit from the
-expected values. It uses an error tolerance of 10% with the values_close()
-helper.
+> Why are you trying to stop us
+> from securing our cloud?
 
-Both the test_memcg_min and test_memcg_low sub-tests can fail
-sporadically because the actual memory usage exceeds the 10% error
-tolerance. Below are a sample of the usage data of the tests runs
-that fail.
+Keep your lsm hack out-of-tree, please.
 
-  Child   Actual usage    Expected usage    %err
-  -----   ------------    --------------    ----
-    1       16990208         22020096      -12.9%
-    1       17252352         22020096      -12.1%
-    0       37699584         30408704      +10.7%
-    1       14368768         22020096      -21.0%
-    1       16871424         22020096      -13.2%
+> Since this will require an LSM no matter what, there is zero reason for
+> us not to proceed with Hornet. If or when you actually figure out how to
+> sign an lskel and upstream updated LSM hooks, I can always rework Hornet
+> to use that instead.
 
-The current 10% error tolerenace might be right at the time
-test_memcontrol.c was first introduced in v4.18 kernel, but memory
-reclaim have certainly evolved quite a bit since then which may result
-in a bit more run-to-run variation than previously expected.
+You can do whatever you want out-of-tree including re-exporting kern_sys_bp=
+f.
 
-Increase the error tolerance to 15% for child 0 and 20% for child 1 to
-minimize the chance of this type of failure. The tolerance is bigger
-for child 1 because an upswing in child 0 corresponds to a smaller
-%err than a similar downswing in child 1 due to the way %err is used
-in values_close().
+> code signing last week. All we are trying to do is make our cloud
+> ever-so-slightly more secure and share the results with the community.
 
-Before this patch, a 100 test runs of test_memcontrol produced the
-following results:
+You're pushing for a custom microsoft specific hack while
+ignoring community feedback.
 
-     17 not ok 1 test_memcg_min
-     22 not ok 2 test_memcg_low
+> The attack vectors I'm looking at are things like CVE-2021-33200.
 
-After applying this patch, there were no test failure for test_memcg_min
-and test_memcg_low in 100 test runs. However, these tests may still fail
-once in a while if the memory usage goes beyond the newly extended range.
-
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- tools/testing/selftests/cgroup/test_memcontrol.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-index 5a5dcbe57b56..2ef07b8fa718 100644
---- a/tools/testing/selftests/cgroup/test_memcontrol.c
-+++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-@@ -495,10 +495,10 @@ static int test_memcg_protection(const char *root, bool min)
- 	for (i = 0; i < ARRAY_SIZE(children); i++)
- 		c[i] = cg_read_long(children[i], "memory.current");
- 
--	if (!values_close(c[0], MB(29), 10))
-+	if (!values_close(c[0], MB(29), 15))
- 		goto cleanup;
- 
--	if (!values_close(c[1], MB(21), 10))
-+	if (!values_close(c[1], MB(21), 20))
- 		goto cleanup;
- 
- 	if (c[3] != 0)
--- 
-2.49.0
-
+4 year old bug ? If your kernels are so old you have lots of
+other vulnerabilities.
 
