@@ -1,80 +1,139 @@
-Return-Path: <linux-kselftest+bounces-30811-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30812-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 258A8A890E5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Apr 2025 02:50:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 435A4A89102
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Apr 2025 03:07:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 901A81897C73
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Apr 2025 00:50:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 99CD21893EC9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Apr 2025 01:07:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 366D75336D;
-	Tue, 15 Apr 2025 00:50:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="jF8PKxXT"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B87A19B5B1;
+	Tue, 15 Apr 2025 01:07:30 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0112E6FC5;
-	Tue, 15 Apr 2025 00:50:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29956E552;
+	Tue, 15 Apr 2025 01:07:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744678220; cv=none; b=fRgrR7ewnwqvZ0RA45TgL9Kpz7iUjSuftFlGbXjIZtAVvibOcDavFjNiHJ25Q8omyLh5b17vU4gvcWL6m6AvpLp0MBVcFhush241T5CodvNNGjoxDzlpJGHIWfKU0rx/X1Cyjmh8I9GAFDq42XWdPe50yxE62+AuL/erZ1TqaRY=
+	t=1744679250; cv=none; b=jPeegKXZps6ClqaRjZYzcVzcC+jCwXQxNk5EUKu0Q7/W/fSI+EOKh5XRYDJLEN4vTQvxRXCrqXXdl0QLH6XorDhzmB4VHfHSlLYT7Z5e8w6hxlWxqgzTvOesDJzXcvAFwjTHsFplSTagnAH106ZfYIxQHSp1rOCcN6dbYZi9iGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744678220; c=relaxed/simple;
-	bh=fkIT4XOhmgQ9Dgwghj4eYY0BwPt0ZkTj4KhWD2vfeM4=;
-	h=Date:From:To:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=FH5lvHYn76hO2au1SMrtf/vLQEXO4txTj7pWMwAlv644qE0zVlx6xOe7kocZrzHe70F8vnmVBr5Y2wR1zTp4qJbiOBrXMceE2+1eya0eOMWCK5RSXfAbiAgHTTkwswdGQ3VxnO0EX/cDMq+ld7gwxobgY5+cIBn0Xj8ZBwnrPXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=jF8PKxXT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FA5EC4CEE2;
-	Tue, 15 Apr 2025 00:50:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1744678219;
-	bh=fkIT4XOhmgQ9Dgwghj4eYY0BwPt0ZkTj4KhWD2vfeM4=;
-	h=Date:From:To:Subject:In-Reply-To:References:From;
-	b=jF8PKxXTj/N1UV0q80okyrWrgOjARI0AeiQqrGWHe8a1efJ2U8u8oDRund6nyswIf
-	 FiZqBYIzxNPULTV6+3dfQqLqlPJBLwAXG8q+oiXyWLach1PkSSIStRLD770BPj873k
-	 ulnUYLbvRhACyOXIIkXo0ZO3uhIL6D6TSxa5jIbA=
-Date: Mon, 14 Apr 2025 17:50:17 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Nico Pache <npache@redhat.com>, linux-mm@kvack.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, corbet@lwn.net, shuah@kernel.org,
- david@redhat.com, baohua@kernel.org, baolin.wang@linux.alibaba.com,
- ryan.roberts@arm.com, willy@infradead.org, peterx@redhat.com,
- ioworker0@gmail.com, ziy@nvidia.com, wangkefeng.wang@huawei.com,
- dev.jain@arm.com, mhocko@suse.com, rientjes@google.com, hannes@cmpxchg.org,
- zokeefe@google.com, surenb@google.com, jglisse@google.com, cl@gentwo.org,
- jack@suse.cz, dave.hansen@linux.intel.com, will@kernel.org, tiwai@suse.de,
- catalin.marinas@arm.com, anshuman.khandual@arm.com, raquini@redhat.com,
- aarcange@redhat.com, kirill.shutemov@linux.intel.com,
- yang@os.amperecomputing.com, thomas.hellstrom@linux.intel.com,
- vishal.moola@gmail.com, sunnanyong@huawei.com, usamaarif642@gmail.com,
- mathieu.desnoyers@efficios.com, mhiramat@kernel.org, rostedt@goodmis.org
-Subject: Re: [PATCH v3 0/4] mm: introduce THP deferred setting
-Message-Id: <20250414175017.872f9cf6d475674b28922a92@linux-foundation.org>
-In-Reply-To: <20250414173735.b6df2f87c2e8dea610efa901@linux-foundation.org>
-References: <20250414222456.43212-1-npache@redhat.com>
-	<20250414173735.b6df2f87c2e8dea610efa901@linux-foundation.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1744679250; c=relaxed/simple;
+	bh=KEKYNbGROJcLOPsF4oFGeclcgykvueLsJrKulbwE26I=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=IVhxYZhiNVTZpIr2NR9gcAnL8q8133Ww5rjAcQhF9WSi6fgL8IC1h202KYY/DjAf/7tBSzCh8NNmjJvWPh7aJLB1J6DXl7rDAGnS10Za8RRdub6dWgDfuDLk9umQzPHeMUsu7GfGzEZzzsm9XGAhzmpZNylnTQOReaShG2I7E0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A14CC4CEE2;
+	Tue, 15 Apr 2025 01:07:28 +0000 (UTC)
+Date: Mon, 14 Apr 2025 21:09:00 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: LKML <linux-kernel@vger.kernel.org>, Linux Trace Kernel
+ <linux-trace-kernel@vger.kernel.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Mark Rutland <mark.rutland@arm.com>, Mark
+ Brown <broonie@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
+ linux-kselftest@vger.kernel.org
+Subject: [PATCH] selftests/ftrace: Differentiate bash and dash in
+ dynevent_limitations.tc
+Message-ID: <20250414210900.4de5e8b9@gandalf.local.home>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Mon, 14 Apr 2025 17:37:35 -0700 Andrew Morton <akpm@linux-foundation.org> wrote:
+From: Steven Rostedt <rostedt@goodmis.org>
 
-> This will need updating to latest kernels, please.
+bash and dash evaluate variables differently.
+dash will evaluate '\\' every time it is read whereas bash does not.
 
-There I go, applying patchsets in reverse time order again.
+  TEST_STRING="$TEST_STRING \\$i"
+  echo $TEST_STRING
 
-"[PATCH v3 07/12] khugepaged: add mTHP support" has one reject against
-current mainline, and two against current mm.git.
+With i=123
+On bash, that will print "\123"
+but on dash, that will print the escape sequence of \123 as the \ will be
+interpreted again in the echo.
+
+The dynevent_limitations.tc test created a very large list of arguments to
+test the maximum number of arguments to pass to the dynamic events file.
+It had a loop of:
+
+   TEST_STRING=$1
+   # Acceptable
+   for i in `seq 1 $MAX_ARGS`; do
+     TEST_STRING="$TEST_STRING \\$i"
+   done
+   echo "$TEST_STRING" >> dynamic_events
+
+This worked fine on bash, but when run on dash it failed.
+
+This was due to dash interpreting the "\\$i" twice. Once when it was
+assigned to TEST_STRING and a second time with the echo $TEST_STRING.
+
+bash does not process the backslash more than the first time.
+
+To solve this, assign a double backslash to a variable "bs" and then echo
+it to "ts". If "ts" changes, it is dash, if not, it is bash. Then update
+"bs" accordingly, and use that to assign TEST_STRING.
+
+Now this could possibly just check if "$BASH" is defined or not, but this
+is testing if the issue exists and not just which shell is being used.
+
+Fixes: 581a7b26ab364 ("selftests/ftrace: Add dynamic events argument limitation test case")
+Reported-by: Mark Brown <broonie@kernel.org>
+Closes: https://lore.kernel.org/all/ccc40f2b-4b9e-4abd-8daf-d22fce2a86f0@sirena.org.uk/
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ .../test.d/dynevent/dynevent_limitations.tc   | 23 ++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/dynevent_limitations.tc b/tools/testing/selftests/ftrace/test.d/dynevent/dynevent_limitations.tc
+index 6b94b678741a..885631c02623 100644
+--- a/tools/testing/selftests/ftrace/test.d/dynevent/dynevent_limitations.tc
++++ b/tools/testing/selftests/ftrace/test.d/dynevent/dynevent_limitations.tc
+@@ -7,11 +7,32 @@
+ MAX_ARGS=128
+ EXCEED_ARGS=$((MAX_ARGS + 1))
+ 
++# bash and dash evaluate variables differently.
++# dash will evaluate '\\' every time it is read whereas bash does not.
++#
++#   TEST_STRING="$TEST_STRING \\$i"
++#   echo $TEST_STRING
++#
++# With i=123
++# On bash, that will print "\123"
++# but on dash, that will print the escape sequence of \123 as the \ will
++# be interpreted again in the echo.
++#
++# Set a variable "bs" to save a double backslash, then echo that
++# to "ts" to see if $ts changed or not. If it changed, it's dash,
++# if not, it's bash, and then bs can equal a single backslash.
++bs='\\'
++ts=`echo $bs`
++if [ "$ts" = '\\' ]; then
++  # this is bash
++  bs='\'
++fi
++
+ check_max_args() { # event_header
+   TEST_STRING=$1
+   # Acceptable
+   for i in `seq 1 $MAX_ARGS`; do
+-    TEST_STRING="$TEST_STRING \\$i"
++    TEST_STRING="$TEST_STRING $bs$i"
+   done
+   echo "$TEST_STRING" >> dynamic_events
+   echo > dynamic_events
+-- 
+2.47.2
+
 
