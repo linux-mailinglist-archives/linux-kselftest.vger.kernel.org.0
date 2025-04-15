@@ -1,159 +1,79 @@
-Return-Path: <linux-kselftest+bounces-30892-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30893-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CDCEA8A699
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Apr 2025 20:18:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A3C94A8A77A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Apr 2025 21:09:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 526EB17F000
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Apr 2025 18:18:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C3A5216E75D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Apr 2025 19:08:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 613C32206BE;
-	Tue, 15 Apr 2025 18:18:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1213B23D2A5;
+	Tue, 15 Apr 2025 19:08:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aSfwFKd6"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="AS9yEFHC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23C1E20C02E;
-	Tue, 15 Apr 2025 18:18:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DE6A23BF91;
+	Tue, 15 Apr 2025 19:08:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744741083; cv=none; b=JtbfaH1Apmtp5MfNTazcDR+OG+rERORiL+f7NMxZ3H9TNxoYdKjdbTfHI9GKIGovJHM7hhjd5jmJuhvRCAK2ZdEVLcdWD+Uq2TC9WUKEUuSrkwEkVCuhcIItIrQG3oTu/C7W+KevGX+abL5SMELYDpRsNYh0ammkvxCFpU6gXFA=
+	t=1744744131; cv=none; b=p7cvhgvahEe6jZzfe98wtRev97PAHGeULPQpZJyAHVO45E+u2drjOWQegd9TLUp+8DfhBpMO7VJCp5t8w2/X6wpVju/Ab9jyqykHj4jyaxLm5GQKbpB/GBdvRzcOgDAXEqs+4zdsLQLrm2NWrx0IkRaj6plcNVWQHqvFDRMYLjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744741083; c=relaxed/simple;
-	bh=hBQWsWabfwGfXwS58TZeuoy5jyXcr/PgT5bDAAydwYg=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KhbbIbfn3ZUDvzjgkNKPfBo2/sNMI0rqOoNLwYtyidv/MfBIDuqbu8CSlKUXuHJ+i5eubDs1mZh7W7lHyWPpeZNvodPXs1rwUBPWl6ZGonXn/qNLrMJHXsvff4IJUDOc/OxRZGDkV/tDhM4DerJ0viiOM0GRGIBASywU+BJd6U8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aSfwFKd6; arc=none smtp.client-ip=209.85.222.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-7c592764e54so696534485a.3;
-        Tue, 15 Apr 2025 11:18:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744741079; x=1745345879; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:subject:cc:to:from:date:feedback-id
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=ExhlIGj+yTSPW/bDWyFi4TK2XTBBWSbc3TeamRQDEM0=;
-        b=aSfwFKd6meZM2jmxG2i72fr4E8UljvEpwQ/+OFPV3iBr1rhXJXBo+qjHkzyr1x15fu
-         QGmjATakcPvfU0mqpCZY4JPYhobeQh1REcmSvjHr59rxYRqZWUdDixIVkJoxj7du8R49
-         gvoRcd+bfazrjXroaUOEaz5l5K/p1U/gsfTzuSq4JM+2+3O6mxuU/fsnuv5Ii6mnFIFl
-         0eWhJosL8EOBMsJBiB8LlmqU4G0tdhAAnLEk8C7/USbqoYdyVY3PgY2C8QM/mnnpXc/h
-         c3hjEdoF0O1V5SaDnCp2mt4gYWOY3gbTUjR5mu0iDZ80erNr1K3IexZ7KgHa4YivzkXy
-         lvKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744741079; x=1745345879;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:subject:cc:to:from:date:feedback-id
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ExhlIGj+yTSPW/bDWyFi4TK2XTBBWSbc3TeamRQDEM0=;
-        b=TKQ2FQWAvPzj6Y2LWTshy39a6MUCMQTqYSMwxgSnQoJqusOQBV+n1p8H9RpuuyQ8uE
-         n6NF/hwAzbIOS9TNdwCcCUBWrxCV+oLQVwoQst91cS4fvYiRoWp+sm51EUHlyRW6685u
-         ro3wm2t3HYwS1VkSPQXQbQYzXcYZb79ecpJ/08FbiiDLAQmpZrzQQnbExtl8Be8WL+Tq
-         eU5bD9EWR4L74/4dbUQWCLs6B7QgD7LwieWY7RFOiy430IhkT0xROxXRjE2UURX5Lre3
-         v0uWOabRK1M/IoNuXTv8ItqXMEcUWMouakCc59Go1HKwosAvtbvFr0INEJBSn/84LDuG
-         nKjA==
-X-Forwarded-Encrypted: i=1; AJvYcCUU7Lfd+LMJ9xqv3QyYXKZ8PkyYPoap69a4rYO97ZfEMYRqZ7XyDbtWwtxMlWOBDffNgtYRK6i0nkYz@vger.kernel.org, AJvYcCUqwJlSjqfmjV4XZv0g0V1Msbm8s/hk8vwOtEz4VC+iPyT6MDeXI8HM4LnYu3DK8EDOry2NT2SUWogn9d+Yv8Q=@vger.kernel.org, AJvYcCVDFz5p90dIj8ZVwhWUIQBzNxApNsCAlQac9deFeL+05m3mXMSp3GG6OSJBqUdDTPIYoBwr7XShXnj6@vger.kernel.org, AJvYcCVT5J/LmWXLaPq6/k7EDIxtB58P7vHVCGVxmlQ/WcNhp5Y8M9AYm5Z3ujHEcyfNEw6L7dDAlkZnCpbx9ITN@vger.kernel.org, AJvYcCVri6KjmZ/6IbRwSbCv1m+bXouvVK48kWnD/7gHggObEmJoN1QBEu3uq6AmjD28DjYfhTXNJvcvH8Nb9ps=@vger.kernel.org, AJvYcCW5BTW3GbwJ+lme+7pf8+2h3v0dRZeNyXlFc6NDL9wieEQWHBRBrmSQqH1Q8cqNRFJzUxesV5OznsD7EEgd@vger.kernel.org, AJvYcCWlnL+pxEN8R9+75UaWUwUHMn53g7f2dPD7iGaDNj4on5C3eN3HDm4VAHoaYABON+gHhzmajqfo@vger.kernel.org, AJvYcCXBTk1ilBiP40l0yXl5nIJZoA9EyVsVHIbATcSRKRy0wFYZqcsQdPcv8/TrgDiAf7nV1FIeDj+zDT2LmoyUKVdU@vger.kernel.org
-X-Gm-Message-State: AOJu0YwEbuhrYp1T0DGFDl2B4cOBqams4SuTaBiyrnYLQx6bDTF7TkL1
-	52EVDmlaM4qZvuE6wgKyivUYcQ5w1JdBLOcvoiHlVhjoQeYrLTRK
-X-Gm-Gg: ASbGnctOacj02QTN7KeQuisExaEHRyrbupB1lpW+LTfF9pfbU9aJHKbtBDRLdx/J23j
-	ilY8t/Shn1Ty7xZqpwvuqTcNyQ3SAOWHuasGOVXvyH7cS7dcNOb6nvrTUhpMrbS1N6GQ0g/GxUg
-	Nrs0A5K+90OzcSGXck+G534PrO5P5EIrtHc7XI3KcVXE5OW9qA4zO+gnZk6LKIxsprzovAT6Rjp
-	n3TC3cg48kBaAEX/f0lQbmAcbKdDJEjQVdFdc2O3EJsSoVKc3edMyI9/YAD5hHJeoC6Qkr+jwXR
-	wwib9tq+ys03V7zgES2EkoM58x4XbpDaoH+9rnSwvjb4f81sgkSmNnEj4ykogvg9+q9s2yAB+Xg
-	jD4yQVQSjFGoFLKl+zFakCwZBC9h5Uns=
-X-Google-Smtp-Source: AGHT+IFVhSC6OL+aHzP4UlljX/heiemumch2r3K6vBxStW09sbsikfEhG8+kvEM3mf7eRSQiqbICcQ==
-X-Received: by 2002:a05:620a:bcc:b0:7c5:3ca5:58fb with SMTP id af79cd13be357-7c91415d59emr74272085a.4.1744741079462;
-        Tue, 15 Apr 2025 11:17:59 -0700 (PDT)
-Received: from fauth-a1-smtp.messagingengine.com (fauth-a1-smtp.messagingengine.com. [103.168.172.200])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c7a8951562sm936825785a.35.2025.04.15.11.17.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Apr 2025 11:17:58 -0700 (PDT)
-Message-ID: <67fea2d6.050a0220.8fa7f.6690@mx.google.com>
-X-Google-Original-Message-ID: <Z_6i0yjysPAaySGW@winterfell.>
-Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
-	by mailfauth.phl.internal (Postfix) with ESMTP id D1ACA1200069;
-	Tue, 15 Apr 2025 14:17:57 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-04.internal (MEProxy); Tue, 15 Apr 2025 14:17:57 -0400
-X-ME-Sender: <xms:1aL-ZzOZ7kkx6oxN54FGRf3pqCp4eRIaxCOhh4pwFwYV8BSAoE68sA>
-    <xme:1aL-Z98oNZWbcy7I7imgoURM7wrGUlGwt87cF0JY67yzZVOJoKUl4idcScql3_NDK
-    8hqw7iHfzt-5ux_uw>
-X-ME-Received: <xmr:1aL-ZyQZT1Fnk6K32y51NUIZVCOSEkXr9XkKDLh3Xn-KlNM2K587N9isrYgX>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvvdegudelucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnegoufhushhpvggtthffohhmrghinhculdegledmnecujfgu
-    rhepfffhvfevuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpeeuohhquhhnuc
-    fhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrthht
-    vghrnhepgfeiffdvheeiheeuudejgeeuffeiledvvdffvdduteehvdfhiedvffdukeevhf
-    ehnecuffhomhgrihhnpehgihhthhhusgdrihhopdhkvghrnhgvlhdrohhrghdpihgushdr
-    rghspdhgihhthhhusgdrtghomhdpphhtrhgprghspghpthhrrdhrshenucevlhhushhtvg
-    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhht
-    phgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqd
-    gsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvgdpnhgs
-    pghrtghpthhtohepgeejpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehtrghmih
-    hrugesghhmrghilhdrtghomhdprhgtphhtthhopehmrghsrghhihhrohihsehkvghrnhgv
-    lhdrohhrghdprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhgpdhrtghpth
-    htohepohhjvggurgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghlvgigrdhgrgih
-    nhhorhesghhmrghilhdrtghomhdprhgtphhtthhopehgrghrhiesghgrrhihghhuohdrnh
-    gvthdprhgtphhtthhopegsjhhorhhnfegpghhhsehprhhothhonhhmrghilhdrtghomhdp
-    rhgtphhtthhopegsvghnnhhordhlohhsshhinhesphhrohhtohhnrdhmvgdprhgtphhtth
-    hopegrrdhhihhnuggsohhrgheskhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:1aL-Z3t4V1nrnDRpDe3waAoDcwL-GT2iKdz-e9M1OlfleZb4jENPyA>
-    <xmx:1aL-Z7eSJJgAc9FzMJTBxxOc2BlYKIs16ufbEqnCTVnUFBnVzUW3sg>
-    <xmx:1aL-Zz1-_Rbwhxszl-I2Fi4Fh-tnnCR2L9c2t2uyyWEL-p59Ujgbaw>
-    <xmx:1aL-Z38fM0JFsuSXIKsSdFYK73Z2nyEo2suHLtyJcymmhVEpWDmX0A>
-    <xmx:1aL-Z-9P1VFxFc4GoBFdNDkQp0zG9p8sGfilqgSN_7dnXPmKSilVoZy->
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 15 Apr 2025 14:17:57 -0400 (EDT)
-Date: Tue, 15 Apr 2025 11:17:55 -0700
-From: Boqun Feng <boqun.feng@gmail.com>
-To: Tamir Duberstein <tamird@gmail.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Abdiel Janulgue <abdiel.janulgue@gmail.com>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	FUJITA Tomonori <fujita.tomonori@gmail.com>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Frederic Weisbecker <frederic@kernel.org>,	Lyude Paul <lyude@redhat.com>,
- Thomas Gleixner <tglx@linutronix.de>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com, linux-pci@vger.kernel.org,
-	linux-block@vger.kernel.org, devicetree@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v8 6/6] rust: enable `clippy::ref_as_ptr` lint
-References: <20250409-ptr-as-ptr-v8-0-3738061534ef@gmail.com>
- <20250409-ptr-as-ptr-v8-6-3738061534ef@gmail.com>
- <67fe9975.c80a0220.1b5785.66e7@mx.google.com>
- <CAJ-ks9mzyfvsxkyud_wLXfhLD_zP95bivCQ9i2aC-3ea=Y7+0A@mail.gmail.com>
+	s=arc-20240116; t=1744744131; c=relaxed/simple;
+	bh=4eWiV3xFSoCwxXhSUAmK+LTrSgb/zidrUlBszwJv2G8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Hb7afgbbjEhWEb0AmUqoz5zWtFpNGLxeALnBXsfP3OOkrHVCvPLY7seb6+/sochTlS4B7ZAqhkgL3iBl0C2zMCi3BQc9gLp3p+syd5qeO+Ib4DwbZbBvm4/9YctXRJgEY26lgn8y6AZv7vMCz0V7eMjRo66bOl9N0YvNr0EMlTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=AS9yEFHC; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from narnia (unknown [167.220.2.28])
+	by linux.microsoft.com (Postfix) with ESMTPSA id C6928210C44B;
+	Tue, 15 Apr 2025 12:08:36 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C6928210C44B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1744744124;
+	bh=BdAKgQD8XvssHU2ejUtRgPSTUQI3oZF7Hbk69mY3whE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=AS9yEFHCRtFQdy/Co3VaXp6LM+zR5raFycED9EFImPEQbvThLkYHd3TPauwA8DfN6
+	 4+MYqpFx6UrSh/E11pLyX0OFZ9wJmP7h3Vmy18TWalhknx2D+noUDWNvn5ftisxJJF
+	 0pDGP7uDpemcGPaz7+EFXOweCPdLu0+b8gWD20LU=
+From: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, David Howells <dhowells@redhat.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller"
+ <davem@davemloft.net>, Paul Moore <paul@paul-moore.com>, James Morris
+ <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Masahiro Yamada
+ <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas
+ Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>, =?utf-8?Q?Mick?=
+ =?utf-8?Q?a=C3=ABl_Sala=C3=BCn?=
+ <mic@digikod.net>, =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Nick
+ Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Jarkko Sakkinen
+ <jarkko@kernel.org>, Jan Stancek <jstancek@redhat.com>, Neal Gompa
+ <neal@gompa.dev>, "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>, keyrings@vger.kernel.org, Linux
+ Crypto Mailing List <linux-crypto@vger.kernel.org>, LSM List
+ <linux-security-module@vger.kernel.org>, Linux Kbuild mailing list
+ <linux-kbuild@vger.kernel.org>, "open list:KERNEL SELFTEST FRAMEWORK"
+ <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+ clang-built-linux <llvm@lists.linux.dev>, nkapron@google.com, Matteo Croce
+ <teknoraver@meta.com>, Roberto Sassu <roberto.sassu@huawei.com>, Cong Wang
+ <xiyou.wangcong@gmail.com>
+Subject: Re: [PATCH v2 security-next 1/4] security: Hornet LSM
+In-Reply-To: <87a58hjune.fsf@microsoft.com>
+References: <20250404215527.1563146-1-bboscaccy@linux.microsoft.com>
+ <20250404215527.1563146-2-bboscaccy@linux.microsoft.com>
+ <CAADnVQJyNRZVLPj_nzegCyo+BzM1-whbnajotCXu+GW+5-=P6w@mail.gmail.com>
+ <87semdjxcp.fsf@microsoft.com>
+ <CAADnVQ+JGfwRgsoe2=EHkXdTyQ8ycn0D9nh1k49am++4oXUPHg@mail.gmail.com>
+ <87friajmd5.fsf@microsoft.com>
+ <CAADnVQKb3gPBFz+n+GoudxaTrugVegwMb8=kUfxOea5r2NNfUA@mail.gmail.com>
+ <87a58hjune.fsf@microsoft.com>
+Date: Tue, 15 Apr 2025 12:08:34 -0700
+Message-ID: <874iypjl8t.fsf@microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -161,146 +81,243 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJ-ks9mzyfvsxkyud_wLXfhLD_zP95bivCQ9i2aC-3ea=Y7+0A@mail.gmail.com>
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 15, 2025 at 01:58:41PM -0400, Tamir Duberstein wrote:
-> Hi Boqun, thanks for having a look!
-> 
-> On Tue, Apr 15, 2025 at 1:37 PM Boqun Feng <boqun.feng@gmail.com> wrote:
-> >
-> > On Wed, Apr 09, 2025 at 10:47:23AM -0400, Tamir Duberstein wrote:
-> > > In Rust 1.78.0, Clippy introduced the `ref_as_ptr` lint [1]:
-> > >
-> > > > Using `as` casts may result in silently changing mutability or type.
-> > >
-> > > While this doesn't eliminate unchecked `as` conversions, it makes such
-> > > conversions easier to scrutinize.  It also has the slight benefit of
-> > > removing a degree of freedom on which to bikeshed. Thus apply the
-> > > changes and enable the lint -- no functional change intended.
-> > >
-> > > Link: https://rust-lang.github.io/rust-clippy/master/index.html#ref_as_ptr [1]
-> > > Suggested-by: Benno Lossin <benno.lossin@proton.me>
-> > > Link: https://lore.kernel.org/all/D8PGG7NTWB6U.3SS3A5LN4XWMN@proton.me/
-> > > Signed-off-by: Tamir Duberstein <tamird@gmail.com>
-> > > ---
-> > >  Makefile                 |  1 +
-> > >  rust/bindings/lib.rs     |  1 +
-> > >  rust/kernel/device_id.rs |  3 ++-
-> > >  rust/kernel/fs/file.rs   |  3 ++-
-> > >  rust/kernel/str.rs       |  6 ++++--
-> > >  rust/kernel/uaccess.rs   | 10 ++++------
-> > >  rust/uapi/lib.rs         |  1 +
-> > >  7 files changed, 15 insertions(+), 10 deletions(-)
-> > >
-> > > diff --git a/Makefile b/Makefile
-> > > index eb5a942241a2..2a16e02f26db 100644
-> > > --- a/Makefile
-> > > +++ b/Makefile
-> > > @@ -485,6 +485,7 @@ export rust_common_flags := --edition=2021 \
-> > >                           -Wclippy::no_mangle_with_rust_abi \
-> > >                           -Wclippy::ptr_as_ptr \
-> > >                           -Wclippy::ptr_cast_constness \
-> > > +                         -Wclippy::ref_as_ptr \
-> > >                           -Wclippy::undocumented_unsafe_blocks \
-> > >                           -Wclippy::unnecessary_safety_comment \
-> > >                           -Wclippy::unnecessary_safety_doc \
-> > > diff --git a/rust/bindings/lib.rs b/rust/bindings/lib.rs
-> > > index b105a0d899cc..2b69016070c6 100644
-> > > --- a/rust/bindings/lib.rs
-> > > +++ b/rust/bindings/lib.rs
-> > > @@ -27,6 +27,7 @@
-> > >  #[allow(dead_code)]
-> > >  #[allow(clippy::cast_lossless)]
-> > >  #[allow(clippy::ptr_as_ptr)]
-> > > +#[allow(clippy::ref_as_ptr)]
-> > >  #[allow(clippy::undocumented_unsafe_blocks)]
-> > >  mod bindings_raw {
-> > >      // Manual definition for blocklisted types.
-> > > diff --git a/rust/kernel/device_id.rs b/rust/kernel/device_id.rs
-> > > index 4063f09d76d9..37cc03d1df4c 100644
-> > > --- a/rust/kernel/device_id.rs
-> > > +++ b/rust/kernel/device_id.rs
-> > > @@ -136,7 +136,8 @@ impl<T: RawDeviceId, U, const N: usize> IdTable<T, U> for IdArray<T, U, N> {
-> > >      fn as_ptr(&self) -> *const T::RawType {
-> > >          // This cannot be `self.ids.as_ptr()`, as the return pointer must have correct provenance
-> > >          // to access the sentinel.
-> > > -        (self as *const Self).cast()
-> > > +        let this: *const Self = self;
-> >
-> > Hmm.. so this lint usually just requires to use a let statement instead
-> > of as expression when casting a reference to a pointer? Not 100%
-> > convinced this results into better code TBH..
-> 
-> The rationale is in the lint description and quoted in the commit
-> message: "Using `as` casts may result in silently changing mutability
-> or type.".
-> 
+Blaise Boscaccy <bboscaccy@linux.microsoft.com> writes:
 
-Could you show me how you can silently change the mutability or type? A
-simple try like below doesn't compile:
+> Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
+>
+>> On Mon, Apr 14, 2025 at 5:32=E2=80=AFPM Blaise Boscaccy
+>> <bboscaccy@linux.microsoft.com> wrote:
+>>>
+>>> Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
+>>>
+>>> > On Sat, Apr 12, 2025 at 6:58=E2=80=AFAM Blaise Boscaccy
+>>> > <bboscaccy@linux.microsoft.com> wrote:
+>>> >>
+>>> >> TAlexei Starovoitov <alexei.starovoitov@gmail.com> writes:
+>>> >>
+>>> >> > On Fri, Apr 4, 2025 at 2:56=E2=80=AFPM Blaise Boscaccy
+>>> >> > <bboscaccy@linux.microsoft.com> wrote:
+>>> >> >> +
+>>> >> >> +static int hornet_find_maps(struct bpf_prog *prog, struct hornet=
+_maps *maps)
+>>> >> >> +{
+>>> >> >> +       struct bpf_insn *insn =3D prog->insnsi;
+>>> >> >> +       int insn_cnt =3D prog->len;
+>>> >> >> +       int i;
+>>> >> >> +       int err;
+>>> >> >> +
+>>> >> >> +       for (i =3D 0; i < insn_cnt; i++, insn++) {
+>>> >> >> +               if (insn[0].code =3D=3D (BPF_LD | BPF_IMM | BPF_D=
+W)) {
+>>> >> >> +                       switch (insn[0].src_reg) {
+>>> >> >> +                       case BPF_PSEUDO_MAP_IDX_VALUE:
+>>> >> >> +                       case BPF_PSEUDO_MAP_IDX:
+>>> >> >> +                               err =3D add_used_map(maps, insn[0=
+].imm);
+>>> >> >> +                               if (err < 0)
+>>> >> >> +                                       return err;
+>>> >> >> +                               break;
+>>> >> >> +                       default:
+>>> >> >> +                               break;
+>>> >> >> +                       }
+>>> >> >> +               }
+>>> >> >> +       }
+>>> >> >
+>>> >> > ...
+>>> >> >
+>>> >> >> +               if (!map->frozen) {
+>>> >> >> +                       attr.map_fd =3D fd;
+>>> >> >> +                       err =3D kern_sys_bpf(BPF_MAP_FREEZE, &att=
+r, sizeof(attr));
+>>> >> >
+>>> >> > Sorry for the delay. Still swamped after conferences and the merge=
+ window.
+>>> >> >
+>>> >>
+>>> >> No worries.
+>>> >>
+>>> >> > Above are serious layering violations.
+>>> >> > LSMs should not be looking that deep into bpf instructions.
+>>> >>
+>>> >> These aren't BPF internals; this is data passed in from
+>>> >> userspace. Inspecting userspace function inputs is definitely within=
+ the
+>>> >> purview of an LSM.
+>>> >>
+>>> >> Lskel signature verification doesn't actually need a full disassembl=
+y,
+>>> >> but it does need all the maps used by the lskel. Due to API design
+>>> >> choices, this unfortunately requires disassembling the program to see
+>>> >> which array indexes are being used.
+>>> >>
+>>> >> > Calling into sys_bpf from LSM is plain nack.
+>>> >> >
+>>> >>
+>>> >> kern_sys_bpf is an EXPORT_SYMBOL, which means that it should be call=
+able
+>>> >> from a module.
+>>> >
+>>> > It's a leftover.
+>>> > kern_sys_bpf() is not something that arbitrary kernel
+>>> > modules should call.
+>>> > It was added to work for cases where kernel modules
+>>> > carry their own lskels.
+>>> > That use case is gone, so EXPORT_SYMBOL will be removed.
+>>> >
+>>>
+>>> I'm not following that at all. You recommended using module-based lskels
+>>> to get around code signing requirements at lsfmmbpf and now you want to
+>>> nuke that entire feature? And further, skel_internal will no longer be
+>>> usable from within the kernel and bpf_preload is no longer going to be
+>>> supported?
+>
+> The eBPF dev community has spent what, 4-5 years on this, with little to
+> no progress. I have little faith that this is going to progress on your
+> end in a timely manner or at all, and frankly we (and others) needed
+> this yesterday. Hornet has zero impact on the bpf subsystem, yet you
+> seem viscerally opposed to us doing this. Why are you trying to stop us
+> from securing our cloud?
+>
+>>
+>> It was exported to modules to run lskel-s from modules.
+>> It's bpf internal api, but seeing how you want to abuse it
+>> the feature has to go. Sadly.
+>>
 
-	let x = &42;
-	let ptr = x as *mut i32; // <- error
-	let another_ptr = x as *const i64; // <- error
+In the interest of not harming downstream users that possibly rely on
+BPF_PRELOAD, it would be completely fine on our end to not call
+kern_sys_bpf since maps can easily be frozen in userspace by the
+loader. I'd prefer LSMs to be not mutating things if at all possible as
+well.
 
-also from the link document you shared, looks like the suggestion is to
-use core::ptr::from_{ref,mut}(), was this ever considered?
+If we agreed to not call that function so-as you can keep that
+feature for everyone, would you be ammenable to a simple patch in
+skel_internal.h that freezes maps? e.g
 
-> >
-> > > +        this.cast()
-> > >      }
-> > >
-> > >      fn id(&self, index: usize) -> &T::RawType {
-> > > diff --git a/rust/kernel/fs/file.rs b/rust/kernel/fs/file.rs
-> > > index 791f493ada10..559a4bfa123f 100644
-> > > --- a/rust/kernel/fs/file.rs
-> > > +++ b/rust/kernel/fs/file.rs
-> > > @@ -359,12 +359,13 @@ impl core::ops::Deref for File {
-> > >      type Target = LocalFile;
-> > >      #[inline]
-> > >      fn deref(&self) -> &LocalFile {
-> > > +        let this: *const Self = self;
-> > >          // SAFETY: The caller provides a `&File`, and since it is a reference, it must point at a
-> > >          // valid file for the desired duration.
-> > >          //
-> > >          // By the type invariants, there are no `fdget_pos` calls that did not take the
-> > >          // `f_pos_lock` mutex.
-> > > -        unsafe { LocalFile::from_raw_file((self as *const Self).cast()) }
-> > > +        unsafe { LocalFile::from_raw_file(this.cast()) }
-> > >      }
-> > >  }
-> > >
-> > > diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
-> > > index 40034f77fc2f..75b4a18c67c4 100644
-> > > --- a/rust/kernel/str.rs
-> > > +++ b/rust/kernel/str.rs
-> > > @@ -28,8 +28,9 @@ pub const fn is_empty(&self) -> bool {
-> > >      /// Creates a [`BStr`] from a `[u8]`.
-> > >      #[inline]
-> > >      pub const fn from_bytes(bytes: &[u8]) -> &Self {
-> > > +        let bytes: *const [u8] = bytes;
-> > >          // SAFETY: `BStr` is transparent to `[u8]`.
-> > > -        unsafe { &*(bytes as *const [u8] as *const BStr) }
-> > > +        unsafe { &*(bytes as *const BStr) }
-> >
-> >         unsafe { &*(bytes.cast::<BStr>()) }
-> >
-> > ? I'm curious why this dodged the other lint (ptr_as_ptr).
-> 
-> The reason it has to be written this way is that BStr is !Sized, and
-> `pointer::cast` has an implicit Sized bound.
-> 
-> Perhaps the lint is smart enough to avoid the suggestion in that case?
-> Seems like yes:
-> https://github.com/rust-lang/rust-clippy/blob/d3267e9230940757fde2fcb608605bf8dbfd85e1/clippy_lints/src/casts/ptr_as_ptr.rs#L36.
-> 
 
-Oh, I see, so fat pointers get their way from this check? Hmm... however
-fat pointers also suffer the same problem that ptr_as_ptr prevents,
-right? How should we avoid that?
+diff --git a/tools/lib/bpf/skel_internal.h b/tools/lib/bpf/skel_internal.h
+index 4d5fa079b5d6..51e72dc23062 100644
+--- a/tools/lib/bpf/skel_internal.h
++++ b/tools/lib/bpf/skel_internal.h
+@@ -263,6 +263,17 @@ static inline int skel_map_delete_elem(int fd, const v=
+oid *key)
+        return skel_sys_bpf(BPF_MAP_DELETE_ELEM, &attr, attr_sz);
+ }
+=20
++static inline int skel_map_freeze(int fd)
++{
++       const size_t attr_sz =3D offsetofend(union bpf_attr, map_fd);
++       union bpf_attr attr;
++
++       memset(&attr, 0, attr_sz);
++       attr.map_fd =3D fd;
++
++       return skel_sys_bpf(BPF_MAP_FREEZE, &attr, attr_sz);
++}
++
+ static inline int skel_map_get_fd_by_id(__u32 id)
+ {
+        const size_t attr_sz =3D offsetofend(union bpf_attr, flags);
+@@ -327,6 +338,13 @@ static inline int bpf_load_and_run(struct bpf_load_and=
+_run_opts *opts)
+                goto out;
+        }
+=20
++       err =3D skel_map_freeze(map_fd);
++       if (err < 0) {
++               opts->errstr =3D "failed to freeze map";
++               set_err;
++               goto out;
++       }
++
+        memset(&attr, 0, prog_load_attr_sz);
+        attr.prog_type =3D BPF_PROG_TYPE_SYSCALL;
+        attr.insns =3D (long) opts->insns;
 
-Regards,
-Boqun
+>>> >> Lskels without frozen maps are vulnerable to a TOCTOU
+>>> >> attack from a sufficiently privileged user. Lskels currently pass
+>>> >> unfrozen maps into the kernel, and there is nothing stopping someone
+>>> >> from modifying them between BPF_PROG_LOAD and BPF_PROG_RUN.
+>>> >>
+>>> >> > The verification of module signatures is a job of the module loadi=
+ng process.
+>>> >> > The same thing should be done by the bpf system.
+>>> >> > The signature needs to be passed into sys_bpf syscall
+>>> >> > as a part of BPF_PROG_LOAD command.
+>>> >> > It probably should be two new fields in union bpf_attr
+>>> >> > (signature and length),
+>>> >> > and the whole thing should be processed as part of the loading
+>>> >> > with human readable error reported back through the verifier log
+>>> >> > in case of signature mismatch, etc.
+>>> >> >
+>>> >>
+>>> >> I don't necessarily disagree, but my main concern with this is that
+>>> >> previous code signing patchsets seem to get gaslit or have the goalp=
+osts
+>>> >> moved until they die or are abandoned.
+>>> >
+>>> > Previous attempts to add signing failed because
+>>> > 1. It's a difficult problem to solve
+>>> > 2. people only cared about their own narrow use case and not
+>>> > considering the needs of bpf ecosystem as a whole.
+>>> >
+>>> >> Are you saying that at this point, you would be amenable to an in-tr=
+ee
+>>> >> set of patches that enforce signature verification of lskels during
+>>> >> BPF_PROG_LOAD that live in syscall.c,
+>>> >
+>>> > that's the only way to do it.
+>>> >
+>>>
+>>> So the notion of forcing people into writing bpf-based gatekeeper progr=
+ams
+>>> is being abandoned? e.g.
+>>>
+>>> https://lore.kernel.org/bpf/bqxgv2tqk3hp3q3lcdqsw27btmlwqfkhyg6kohsw7lw=
+dgbeol7@nkbxnrhpn7qr/#t
+>>> https://lore.kernel.org/bpf/61aae2da8c7b0_68de0208dd@john.notmuch/
+>>
+>> Not abandoned.
+>> bpf-based tuning of load conditions is still necessary.
+>> The bpf_prog_load command will check the signature only.
+>> It won't start rejecting progs that don't have a signature.
+>> For that a one liner bpf-lsm or C-based lsm would be needed
+>> to address your dont-trust-root use case.
+>>
+>
+> Since this will require an LSM no matter what, there is zero reason for
+> us not to proceed with Hornet. If or when you actually figure out how to
+> sign an lskel and upstream updated LSM hooks, I can always rework Hornet
+> to use that instead.
+>
+>>>
+>>> >> without adding extra non-code
+>>> >> signing requirements like attachment point verification, completely
+>>> >> eBPF-based solutions, or rich eBPF-based program run-time policy
+>>> >> enforcement?
+>>> >
+>>> > Those are secondary considerations that should also be discussed.
+>>> > Not necessarily a blocker.
+>>>
+>>> Again, I'm confused here since you recently stated this whole thing
+>>> was "questionable" without attachment point verification.
+>>
+>> Correct.
+>> For fentry prog type the attachment point is checked during the load,
+>> but for tracepoints it's not, and anyone who is claiming that
+>> their system is secure because the tracepoint prog was signed
+>> is simply clueless in how bpf works.
+>
+> No one is making that claim, although I do appreciate the lovely
+> ad-hominem attack and absolutist standpoint. It's not like we invented
+> code signing last week. All we are trying to do is make our cloud
+> ever-so-slightly more secure and share the results with the community.
+>
+> The attack vectors I'm looking at are things like CVE-2021-33200. ACLs
+> for attachment points do nothing to stop that whereas code signing is a
+> possible countermeasure. This kind of thing is probably a non-issue with
+> your private cloud, but it's a very real issue with publicly accessible
+> ones.=20=20
 
