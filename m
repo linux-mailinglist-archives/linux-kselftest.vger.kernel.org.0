@@ -1,153 +1,181 @@
-Return-Path: <linux-kselftest+bounces-30901-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30902-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F782A8AA62
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Apr 2025 23:48:57 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B700A8AB65
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Apr 2025 00:48:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E7EDC17DD5E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Apr 2025 21:48:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 00D7E7AD175
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Apr 2025 22:47:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE58C258CF6;
-	Tue, 15 Apr 2025 21:48:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 390C02C2AB7;
+	Tue, 15 Apr 2025 22:48:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UIzhDmRX"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3qz6yR0F"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30081256C7A;
-	Tue, 15 Apr 2025 21:48:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04A622C2AA2
+	for <linux-kselftest@vger.kernel.org>; Tue, 15 Apr 2025 22:47:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744753719; cv=none; b=LKeRWwdOHqEZGWFcKa5F+pCULpiiwWUAiVLQ771A0l67tBG1KP95e9dL74jbA8M/8whbGe1ylUbVQrA8Z3wpZuOz307u5Zs49oL3zTJ48DomNXKU7gjuRW4hXAAu2M/1b8uJtpZm1sz1czzwjfTmk+ZmbT+LGenpn9owEOFo/Zw=
+	t=1744757281; cv=none; b=DF6Wyd31o0K8UK70Ubl5+/Vn1MlH81yYSQARlg+egLpjfw1hpenzCYYhLzmTObyVdEfzRWX8+xbk0CvBptS+IkrzhS++QGPKDGTlzIOZsd2Ek6M6UrvSWYTn9mqyjP7QpUXuKBdWsRfXfq/i8MQOOjwSWZTcR2pKdDI/G5uWqo0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744753719; c=relaxed/simple;
-	bh=bDUCnKz7jvBuxw+pBQ6fXlAerwaY3e5AwmiudA8kAZE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QDdShDuRLevS32UltDruJe9DwLffWQFSn5T0Fj1TvRdafXbq3W68x1FSvB3VRYL+iTcgeIRCzftlLq+/CQ6D9sbGtA+Z4tyYEE0KWC6/PFNtHgj9dJa+q8ehdihIFm0AnuiYiN6UCROqBS+PtY6JjCNNJUcovUa0l4fcCKiKN/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UIzhDmRX; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-39c1efc457bso4094539f8f.2;
-        Tue, 15 Apr 2025 14:48:37 -0700 (PDT)
+	s=arc-20240116; t=1744757281; c=relaxed/simple;
+	bh=cQDqckBf0hmDXK4g9ynIco3ZrZkTnIyGRhG/+zQ4Cws=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=NyEbZknFs5g9HXkMlmfuXFH+5HF5A7TtCheNKZ/OrCUM7VKLUyWTYXIRsCq8F8yx5MzsUR9AfG5HQ6ntx+tvP4FphsPHjnmGOCC/YNwHotYguAUQZ1KhgRIL6YjGdWV5GSK13LCZhQbqiXjI4KPUXBWarmmRxc/WuLzBh2e6ykk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3qz6yR0F; arc=none smtp.client-ip=209.85.216.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-2ff581215f7so4753101a91.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Apr 2025 15:47:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744753716; x=1745358516; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bDUCnKz7jvBuxw+pBQ6fXlAerwaY3e5AwmiudA8kAZE=;
-        b=UIzhDmRXF5Tz1DvLt++5m5X+28qnagMvVtoHaBD81Y4m6M4BO9O7scHbT1N4NgWPh2
-         LLV3K+OQH9TznqbP8atdpXB5YA+8F5kUbNA7hu/rZ2e+RO8OKqJ/T0InssQPkIebTtX2
-         pqR6MB8+l76jcoFokNbUVAc7sgliTx6ZWHzSDWNiCgGsA8aPC1RH85Qy8eeJEgmPFez3
-         oav3/tb2PCSoqsZtXCa+5oSSOUSEurXQNdwlg9jxdRHKPbZNpYmsLefz03uEK9vvn6sH
-         rwE5JZ/WUcxV88pl6FeuEVwBWemXH9kZRTZsBIccq0AMfpM4qhyHuuDgzbbz/Fpr1kO+
-         OiYQ==
+        d=google.com; s=20230601; t=1744757278; x=1745362078; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ZMYJ9mghgsGT04ywh+6f5ef6ONFOD7mnlTWJ6KE3E4s=;
+        b=3qz6yR0FiMUEFUB1Nrq/27lO5WG0ZimiJYgxRhcc23eI35T6nCVB8QWXisDHK5Df1p
+         EbaQ2tbbuGdeBsVo0oTsTokr/aZtSCgRhK3ThClF4AI45m2ujigIrdXol89LLGIfWAJe
+         210jqNjkmUlSQh5kqoBhvX80l8+CjTfxVDjrjae6yYRcN/wdeQyQahiAfUQzWrVwBB1i
+         0RGBlGwOvT3GA2Rd/oqrxErsybrmBbcbnYaUcHGWJ1Y86ZRAkHwcaQv9T1QXz28e4rJR
+         /b8EsVT2eKtYJ52wx3rwln/w3bAQXskXqBeU3CPkN6BLClkv0M3z1hrVJmRZIwUkwFAa
+         cehw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744753716; x=1745358516;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bDUCnKz7jvBuxw+pBQ6fXlAerwaY3e5AwmiudA8kAZE=;
-        b=ta9VMhR/rwewI8BE3dgu3ifzZ34YGydRrmRlSYnh1BwrSMPeWCTfk9jKLy9J38rXVQ
-         FxtLXpLT8AkcvNfsy++ni004JT9gJdRtH0nOxu3nBkrPqivqaezF766xbaeqwc73blyW
-         XdTL6w3nBT6Mc0HLjZRwnbx7F57c7cluYXSiZ6PfL81RCltIypl2Oxr938TRDmBbHKQM
-         zULIyLQDrPGsYcZ/85DhaK8LraIm4w/oIDfVzuziBcTv2Hqq//GKuDAFO5YD2hB4hMUn
-         4+GQScNBjVK1C63fwhgmskpO1ulVs2qIRQkrjeiHwKaXR7FfQw4/GbFvCU/x2TeegBFW
-         WdhA==
-X-Forwarded-Encrypted: i=1; AJvYcCUFma4BXBmz7Nu22C/6QVtaPfN2KSb+P0NCKb7DD0KxWT7WUTkT3QlGsslWA7R3ZZuoUU7RfWhhThrg@vger.kernel.org, AJvYcCUO7nwAzN8tSFVq4aaxm2KWZm9pVKBx3OtAQwIycEq2R4lwiZzwExmQY3tc/M5lZnUyP0uinTrgleU=@vger.kernel.org, AJvYcCUZmkAVfuPisXN0jfubNQNmgZkCwsfQk3BFca5Gr5X/isH+UNEJCHrDHcs0S9iah3m7VHvkLgc0D2HMDgIm@vger.kernel.org, AJvYcCUjIv8ovlezhHzZQxX29uBXfK8DmVdGvwu5T1Ba42OegxFxSwPqoQxKVQOMHkkfU4yE56E=@vger.kernel.org, AJvYcCV5wS9UO2uOzzJOSsqSUI24HKLXXRJsisqeMcG6GxujdeF6gKBo1DKA+FhBQo2diyLKJLMbzu65MiMYabiW@vger.kernel.org, AJvYcCVbPGs9ahdORgeLVkjSQUvwN0/uVt3K/FAY+3qHIr1exsLgJqwj3GcYAcvzkk2sYBpcrfUH+VycJWPjD76yjiw+2FJJUggk@vger.kernel.org, AJvYcCVe0zaDr1WdRh0zs4oJ5L5eSUmfsBytkHpni9jiQX0js40nKI6CnBokMvKdPEOk2hRuMe8x2FZAd83yhdnX7D9S@vger.kernel.org, AJvYcCWHmjwboInoyYU1WSbDQXV1sMRRvYE+COn7Tfus3JDbQFoGsoiKk3Ltu+Tydvrr5GOqdbe5drQn+60LJjco@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+ADIjeoIqe1TG8zNL+ziqSqWQObasaXslRYgmMgzx6RcCCFjw
-	B6wgun7r/BRlsFiUdWvhNfGz9UJLF2FPzqa+sXtqIMVGzUIs8r6cUAHpX4BESGz3LLuUaHL+NdB
-	YeQ+fgAoAmIpIsZvPSRrefydTgys=
-X-Gm-Gg: ASbGncvDm6W/qLFoiT2w8OqW8yQ/rY1wm5cQsmplw42m8akbYJ59OudbQN75Bej0Gkd
-	qPuuEvFKnHdcKXTDpPYF+7N18te4sCaxtFWdTkpXO8KSn1UQ5/fQ9n63Dbo/xN+uYVy/WqHKNEE
-	KB1DuCkUphBBvxSu8QWDEvbJQXvfj/YnS2HyO0EA==
-X-Google-Smtp-Source: AGHT+IGGvZX4RMVGIBW2ATOMhdA1FNXZL7oI8sJ+361tymECy+71f84VHdCSfBxdvsipmbp6Ulc15gt+XS9d+glagyk=
-X-Received: by 2002:a5d:64ed:0:b0:39b:ede7:8906 with SMTP id
- ffacd0b85a97d-39ee2737c5amr829452f8f.19.1744753716233; Tue, 15 Apr 2025
- 14:48:36 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1744757278; x=1745362078;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZMYJ9mghgsGT04ywh+6f5ef6ONFOD7mnlTWJ6KE3E4s=;
+        b=jM8FvzseX0Y+leTYY/CF7aJ3MO/VSEfQoo9NBqikDHZ3lKVp6WmtmdMz80gyNDwaDQ
+         sRAie9xIUcPPl6mX7wDA8pftQfhj8JzU1/9q9IsW26gyQ07c9BbN2llX8Ode3/JPXFIA
+         LHFNpth08eFmwoMgKxWV3+Q9YnNq7B8ZxhzCnWFO+6V+XiOFxDrBj+b5Gm9hB1xjsvvO
+         Da4lsbvYaiK4Q8Erdi3EAHr4FPN9zBPyYJJYe73WfxaFylOqooQiwJsj2VBY6agGs+MG
+         e6BXDEDDDWEa6DTK8qA0c4hDTNDhgzck6sIbmp2AXnp+M+M5Y4/cIWUTC8h8i77n7++A
+         XwDQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVyxeo7qfVyFdvvc1id5H1Ku6l1NunHK+aGrb4OeAX3fd/f5JJagIj2Mi/7R4opOSvP3XHuRCqVFTtFWlngJUo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCEDkRHStdAXD9X602/0T6lc9Btae104kUFO9bQGSOknn8BioF
+	0+2KGvT9Y51emXN87fcbpH8ehi2wSZesf1ha534GZIgCq+5Dy6uvewSZf262JrWJUgX5t9HIYTu
+	6ZgKWiLWdbyJ7TPaeRU4RfA==
+X-Google-Smtp-Source: AGHT+IGJWEyQPog40oxrMqoGsHI/uR3lYwzFocZD/EUJPpg1Ph4n4p94UxN7V/pG7QlDhDYzCI99CzW4KOsDU+Dcvw==
+X-Received: from pjbso12.prod.google.com ([2002:a17:90b:1f8c:b0:2fc:13d6:b4cb])
+ (user=almasrymina job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:90b:3c8a:b0:308:5273:4dee with SMTP id 98e67ed59e1d1-3085ef200bemr1637324a91.15.1744757278334;
+ Tue, 15 Apr 2025 15:47:58 -0700 (PDT)
+Date: Tue, 15 Apr 2025 22:47:48 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250404215527.1563146-1-bboscaccy@linux.microsoft.com>
- <20250404215527.1563146-2-bboscaccy@linux.microsoft.com> <CAADnVQJyNRZVLPj_nzegCyo+BzM1-whbnajotCXu+GW+5-=P6w@mail.gmail.com>
- <87semdjxcp.fsf@microsoft.com> <CAADnVQ+JGfwRgsoe2=EHkXdTyQ8ycn0D9nh1k49am++4oXUPHg@mail.gmail.com>
- <87friajmd5.fsf@microsoft.com> <CAADnVQKb3gPBFz+n+GoudxaTrugVegwMb8=kUfxOea5r2NNfUA@mail.gmail.com>
- <87a58hjune.fsf@microsoft.com>
-In-Reply-To: <87a58hjune.fsf@microsoft.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 15 Apr 2025 14:48:25 -0700
-X-Gm-Features: ATxdqUErECmwoqEuL6CX7Ju8rfNledrvqrqzcf3Vfcvy2kBD9Sk5E3enWPn-LJw
-Message-ID: <CAADnVQ+LMAnyT4yV5iuJ=vswgtUu97cHKnvysipc6o7HZfEbUA@mail.gmail.com>
-Subject: Re: [PATCH v2 security-next 1/4] security: Hornet LSM
-To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, David Howells <dhowells@redhat.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>, 
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>, 
-	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Jarkko Sakkinen <jarkko@kernel.org>, 
-	Jan Stancek <jstancek@redhat.com>, Neal Gompa <neal@gompa.dev>, 
-	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	keyrings@vger.kernel.org, 
-	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, 
-	LSM List <linux-security-module@vger.kernel.org>, 
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, nkapron@google.com, 
-	Matteo Croce <teknoraver@meta.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Cong Wang <xiyou.wangcong@gmail.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.49.0.777.g153de2bbd5-goog
+Message-ID: <20250415224756.152002-1-almasrymina@google.com>
+Subject: [PATCH net-next v8 1/9] netmem: add niov->type attribute to
+ distinguish different net_iov types
+From: Mina Almasry <almasrymina@google.com>
+To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, io-uring@vger.kernel.org, kvm@vger.kernel.org, 
+	virtualization@lists.linux.dev, linux-kselftest@vger.kernel.org
+Cc: Mina Almasry <almasrymina@google.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Donald Hunter <donald.hunter@gmail.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	Jeroen de Borst <jeroendb@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
+	Kuniyuki Iwashima <kuniyu@amazon.com>, Willem de Bruijn <willemb@google.com>, Jens Axboe <axboe@kernel.dk>, 
+	Pavel Begunkov <asml.silence@gmail.com>, David Ahern <dsahern@kernel.org>, 
+	Neal Cardwell <ncardwell@google.com>, Stefan Hajnoczi <stefanha@redhat.com>, 
+	Stefano Garzarella <sgarzare@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
+	"=?UTF-8?q?Eugenio=20P=C3=A9rez?=" <eperezma@redhat.com>, Shuah Khan <shuah@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 15, 2025 at 8:45=E2=80=AFAM Blaise Boscaccy
-<bboscaccy@linux.microsoft.com> wrote:
->
-> The eBPF dev community has spent what, 4-5 years on this, with little to
-> no progress. I have little faith that this is going to progress on your
-> end in a timely manner or at all, and frankly we (and others) needed
-> this yesterday.
+Later patches in the series adds TX net_iovs where there is no pp
+associated, so we can't rely on niov->pp->mp_ops to tell what is the
+type of the net_iov.
 
-History repeats itself.
-1. the problem is hard.
-2. you're only interested in addressing your own use case.
-There is no end-to-end design here and no attempt to
-think it through how it will work for others.
+Add a type enum to the net_iov which tells us the net_iov type.
 
-> Hornet has zero impact on the bpf subsystem, yet you
-> seem viscerally opposed to us doing this.
+Signed-off-by: Mina Almasry <almasrymina@google.com>
 
-Hacking into bpf internal objects like maps is not acceptable.
+---
 
-> Why are you trying to stop us
-> from securing our cloud?
+v8:
+- Since io_uring zcrx is now in net-next, update io_uring net_iov type
+  setting and remove the NET_IOV_UNSPECIFIED type
 
-Keep your lsm hack out-of-tree, please.
+v7:
+- New patch
 
-> Since this will require an LSM no matter what, there is zero reason for
-> us not to proceed with Hornet. If or when you actually figure out how to
-> sign an lskel and upstream updated LSM hooks, I can always rework Hornet
-> to use that instead.
 
-You can do whatever you want out-of-tree including re-exporting kern_sys_bp=
-f.
+fix iouring
 
-> code signing last week. All we are trying to do is make our cloud
-> ever-so-slightly more secure and share the results with the community.
+---
+ include/net/netmem.h | 11 ++++++++++-
+ io_uring/zcrx.c      |  1 +
+ net/core/devmem.c    |  3 ++-
+ 3 files changed, 13 insertions(+), 2 deletions(-)
 
-You're pushing for a custom microsoft specific hack while
-ignoring community feedback.
+diff --git a/include/net/netmem.h b/include/net/netmem.h
+index c61d5b21e7b4..64af9a288c80 100644
+--- a/include/net/netmem.h
++++ b/include/net/netmem.h
+@@ -20,8 +20,17 @@ DECLARE_STATIC_KEY_FALSE(page_pool_mem_providers);
+  */
+ #define NET_IOV 0x01UL
+ 
++enum net_iov_type {
++	NET_IOV_DMABUF,
++	NET_IOV_IOURING,
++
++	/* Force size to unsigned long to make the NET_IOV_ASSERTS below pass.
++	 */
++	NET_IOV_MAX = ULONG_MAX,
++};
++
+ struct net_iov {
+-	unsigned long __unused_padding;
++	enum net_iov_type type;
+ 	unsigned long pp_magic;
+ 	struct page_pool *pp;
+ 	struct net_iov_area *owner;
+diff --git a/io_uring/zcrx.c b/io_uring/zcrx.c
+index 0f46e0404c04..17a54e74ed5d 100644
+--- a/io_uring/zcrx.c
++++ b/io_uring/zcrx.c
+@@ -247,6 +247,7 @@ static int io_zcrx_create_area(struct io_zcrx_ifq *ifq,
+ 		niov->owner = &area->nia;
+ 		area->freelist[i] = i;
+ 		atomic_set(&area->user_refs[i], 0);
++		niov->type = NET_IOV_IOURING;
+ 	}
+ 
+ 	area->free_count = nr_iovs;
+diff --git a/net/core/devmem.c b/net/core/devmem.c
+index 6e27a47d0493..f5c3a7e6dbb7 100644
+--- a/net/core/devmem.c
++++ b/net/core/devmem.c
+@@ -30,7 +30,7 @@ static const struct memory_provider_ops dmabuf_devmem_ops;
+ 
+ bool net_is_devmem_iov(struct net_iov *niov)
+ {
+-	return niov->pp->mp_ops == &dmabuf_devmem_ops;
++	return niov->type == NET_IOV_DMABUF;
+ }
+ 
+ static void net_devmem_dmabuf_free_chunk_owner(struct gen_pool *genpool,
+@@ -266,6 +266,7 @@ net_devmem_bind_dmabuf(struct net_device *dev, unsigned int dmabuf_fd,
+ 
+ 		for (i = 0; i < owner->area.num_niovs; i++) {
+ 			niov = &owner->area.niovs[i];
++			niov->type = NET_IOV_DMABUF;
+ 			niov->owner = &owner->area;
+ 			page_pool_set_dma_addr_netmem(net_iov_to_netmem(niov),
+ 						      net_devmem_get_dma_addr(niov));
 
-> The attack vectors I'm looking at are things like CVE-2021-33200.
+base-commit: bbfc077d457272bcea4f14b3a28247ade99b196d
+-- 
+2.49.0.777.g153de2bbd5-goog
 
-4 year old bug ? If your kernels are so old you have lots of
-other vulnerabilities.
 
