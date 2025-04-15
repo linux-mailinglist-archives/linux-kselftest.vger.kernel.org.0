@@ -1,179 +1,235 @@
-Return-Path: <linux-kselftest+bounces-30828-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30829-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 597C1A89692
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Apr 2025 10:30:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 979DCA89693
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Apr 2025 10:30:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 98023189D8E6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Apr 2025 08:30:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 35DB63B7C19
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Apr 2025 08:29:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08E2927F75F;
-	Tue, 15 Apr 2025 08:26:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A66F82820A8;
+	Tue, 15 Apr 2025 08:26:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rQaRk84I"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mVcNpqGt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E146C27F4F8
-	for <linux-kselftest@vger.kernel.org>; Tue, 15 Apr 2025 08:26:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C234127FD4C
+	for <linux-kselftest@vger.kernel.org>; Tue, 15 Apr 2025 08:26:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744705608; cv=none; b=pc+d8971WMwJMByBEcAVacCXAYPr8fSWx3UiMOnG8zTLu71ARi5CXTJ2Vg1VEmmVrrTkOAapA90i/Tbr8AJvxogMBuMJuOMnJd8WLbr5cpWzg4sWEsh6IAd5GsZombCZTmlyOnCYqvsIcBqpLJY75CPHqCugffdHiPHuH6wVEp4=
+	t=1744705611; cv=none; b=j+0wi8i3UZbwLxh/EuZ9xsWE4xtHrUXMGhHh1Nkibgmzt0073mpxZwUPDIX9koz+pAQXSj7xVPDGo6Rt4KwXv4rGPAHTQr82AxLrBOyRIguoQEDPPLblc3WJhU3zLcGSJ+l9vg00oePhLjP4NHtw7hLH6tHTGmOXWTh9QIqpHq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744705608; c=relaxed/simple;
-	bh=JqUHo5m6uAsUCbPz6JVbbipOGAm43LbLZfTVV4EsYZQ=;
+	s=arc-20240116; t=1744705611; c=relaxed/simple;
+	bh=XYfxm7lRBy+E81MvaNcYmadDdMuIGJaLn6yxeKF3MpA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Wo4PPXHySFd4QjVFvQAq0BRnX/1n5l/GVBlMQ9LKRr8en2E9eyEoBak9Lb3k2yUUvFGhLfzpptWyEMei4EkjSYuX2GOG8Kc24vecBZdVs3tisxGLp+/w1PEMzBlpL9CGDkavwlKH+QwErLaYW69DqfRGAhHVpV8D1jxk+Et1+7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rQaRk84I; arc=none smtp.client-ip=209.85.219.50
+	 To:Cc:Content-Type; b=sOupk29ZzUjUPG9CRkvdhLDoPOA3+uWYF04pTcgMgrCUC2T+G7cFr5xSAIATa3L0vdYxLVo1H3Jz8FoFD/JYgMuRxhhLq3unC++ZsU/s8RRbfhMbyHK3IMHQ684q+F8gaaIG/cOQ6vx7rqTk9CDoLO63xeSnmct6Ly3W56/n5Ik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mVcNpqGt; arc=none smtp.client-ip=209.85.222.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-6ecfc2cb1aaso55370236d6.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Apr 2025 01:26:45 -0700 (PDT)
+Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-7c5a88b34a6so504881485a.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Apr 2025 01:26:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1744705605; x=1745310405; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1744705609; x=1745310409; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=a3koRfd3ugatzvnWcvcrU6PQCuYkY/YImNetRNUo2Jk=;
-        b=rQaRk84Iy/TmZEp+mke2SIQ8aAFo/NN20dzFC7Gh0geLfJUD5CWe67O5IcEq/vynOd
-         4NQ1gDZoQPhxPfSeKToq0mD6McSO1qj5Vh3smFkaWCEmWYzz+rI6cqBGOuXzBwO0UCEz
-         P59llxqekLMkevu0Y/OgMm9KfWhvumC6VPaJODk3IXXmwo7/4R/vYVQWgEuV6/S3PjTd
-         h43V1I23Pd1a6N3ZysCY9JtHlCFjV0Y7rKbewP5529hfd97MkajFdOT2J0/hWMG8ZIvv
-         8YfysyTFrTqYlRiSPlVxugL7GgI0nnNRpqJdmwskL35TleLKSTT1/nxU+XNrUeRzoI0Q
-         /IBQ==
+        bh=36mhK7BIeZEyRMUidDL6vDPUMxJlTuKvSPgmW3fEfOI=;
+        b=mVcNpqGtUR8anZS8oo2WT2ujPcg5nF5giBTmgbpOWTWuH8zaoHqIauJfo5rJ9T2dng
+         pAR39vpgcEKEQXwz5KKEnz7V1sW6lJKc1eRW6+KLWCzn2SZEaiiVfg6oinHMMFvbdhyz
+         bRWxuxwbnyTKEuD/etQwpafkaddjywA08HiMwaQuCd6TGK6u3qkeN/D7pGic1kG13LTq
+         UVS4o3T1Rfkcvm/BMHEbi1DgVY6VNWx1vZefrYVr6Q6mxcnIe3u469wj2dskqeo/WF6N
+         qsUwwQijlDnPK5WK6spdTSg7WAbVJnahrUBnJhShNhZeu4lyAsMTVraQ7Esc3Xrs2co3
+         NObg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744705605; x=1745310405;
+        d=1e100.net; s=20230601; t=1744705609; x=1745310409;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=a3koRfd3ugatzvnWcvcrU6PQCuYkY/YImNetRNUo2Jk=;
-        b=iEDqmCba/tHqhPsQR0VGASukNyo7RPakGDJE5f+av8vGKcSXVnTmD6u31OqfuFfOt5
-         mBEVO2EBewC3xkf2tBhifnMyhEmTqKj7uFgmdUESQRR/acgC50w3CN7f5zlYS9KH4APZ
-         Lnl7wV5uM0jrjAJi0t8PFepom4ZPWq/SBn5E3CGOA4C6RVwiFR8Y/zJhgiDYY24OOZwk
-         elT43ObtiWOHoEei6I8sKqWq9F5LMzb7roCTjZG5qGiJbMN0A8OBhXHevOIu12HbEaKi
-         ozkDNU8NIncnXRqEkfNI88bhuTj81fOHxQq2pvewUiLzu/Vs9tbVS2R6deRe+C8bnx7f
-         XWxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV89M1a++Ay8LBFuYIJGuiDiKVF3gxdpRgZyWOepPzUM9f3JcxJ9AxWaxAl9bsOQd3fqdql3gz0ve4J3qihVPM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YylLvODdNN7g0skBEmwcN4l+8KVhdyx+KNtjdnoQrhvEE3CGq1T
-	eUMIbN11y6QR+60GFTvoVChIikBkqNdFCoWxnPL2fFkPWG0CbhhUNZIuEWUlO2j7h0AitOvM1HP
-	3cK//R5yzyqt5enaAPqqpz7X6MpgfJPlSStXP
-X-Gm-Gg: ASbGnctxUJK+/zT8T0H/63LPddYnFsoc24bmPkbjE/iwD9HcXFzIrlPtceC7uCZW3WJ
-	nXV62eW6DEjT8G17X0b9QK903Et77J+2Bj0sWYErFZIkxc+y80l3mJTRI9dPfgty31oOyoW0+/L
-	cEp23ls6WxfAPXXLsJ1ineFg4=
-X-Google-Smtp-Source: AGHT+IGyUvg0Xg67n9AJGe0enuLQqWHs6UNth8HvvFAW0sChxeMCdkfk5Sb0kgepq+R9c61fibX+NjS/8UHRLWHj3Yk=
-X-Received: by 2002:ad4:576c:0:b0:6e8:f905:aff0 with SMTP id
- 6a1803df08f44-6f23f13293emr217868226d6.35.1744705604638; Tue, 15 Apr 2025
- 01:26:44 -0700 (PDT)
+        bh=36mhK7BIeZEyRMUidDL6vDPUMxJlTuKvSPgmW3fEfOI=;
+        b=JGCfqkfe8Ak6OH2g9G02en6CT6epAjBKXP+oUQ6YuD8CeuatkFSLSryEzpKH+cV5A6
+         033ooHzygHRaH8xYRpGcTEtpz3DXkTQX1d664u/JeR/P383Xr45IfGEQ7TwSLHfieZnC
+         FeK4ntFsPUBfqFI95+yuTdSEzU/H1AyQTgiW5/xacqXvSQhwmM+em9frWDG0XDMnAqey
+         77M8fW+i0HqNLFyyoUJolAjQX6lBvRqyAwIQa7JTKQQXfeKHSzG9h4OjnFOYVaMei0Qe
+         NqunHZPw03YK4cw7SNzU7zAnbbUZUEv6R6SdIAxDf8dkWqP5v8yNxd0EhmhojlLOvBcV
+         +BBg==
+X-Forwarded-Encrypted: i=1; AJvYcCUh2dSkIA7HWVHmW8FxAFIk7DZjuXudm3vl00gezcP5eZKqhxyTKwvKqNKqB8qUjT+y3/5rof47Evs9fTHKAd8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwkjiUF6iE/Hi+mCY9pqu32rLZfM490Beyh4SFt/Z8vqu6m4q3F
+	CIloC8QmL8eq+bN+I3LfFcckMoU7SHspqyluo9eo9pyrMk92mNJApE1sUjjIVr2c/XypDaFPkM+
+	/OwXbq6nuPCYX241E3wGo31GObvdCIB8Im7sl
+X-Gm-Gg: ASbGncvnCQOijZsmnSA+it6Ck3Z3Ehmj8F4WjFpAgIc+osMYhcAqZufJdkkfcJMLmZE
+	JjwbVdD6iUngl7RXLlwXmTT7AxCTH3XOkArcqqnILuZEK+31k8xwsPKakCvNfAGYDde1G91/2jI
+	c7tdlZrrbmSoqMqKMHadoSSC0=
+X-Google-Smtp-Source: AGHT+IGHXMBpnFEKgrvNYSfgOgdNAj2t5br74Ns0ujzf2JkqvYEzJ0GoquiLHiY6mEhVaNX7EwtItyJ7QehuXdNca9g=
+X-Received: by 2002:a05:620a:2887:b0:7c7:a5cb:2b65 with SMTP id
+ af79cd13be357-7c7af14e2f3mr1843775685a.26.1744705608510; Tue, 15 Apr 2025
+ 01:26:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250415-kunit-mips-v3-0-4ec2461b5a7e@linutronix.de> <20250415-kunit-mips-v3-1-4ec2461b5a7e@linutronix.de>
-In-Reply-To: <20250415-kunit-mips-v3-1-4ec2461b5a7e@linutronix.de>
+References: <20250415-kunit-mips-v3-0-4ec2461b5a7e@linutronix.de> <20250415-kunit-mips-v3-2-4ec2461b5a7e@linutronix.de>
+In-Reply-To: <20250415-kunit-mips-v3-2-4ec2461b5a7e@linutronix.de>
 From: David Gow <davidgow@google.com>
-Date: Tue, 15 Apr 2025 16:26:30 +0800
-X-Gm-Features: ATxdqUHShNA4ncH0WdvjCIFdWJT6j9Qm-Ubzv0Zw8BR9PO7gR4hhrZVuQIibV-E
-Message-ID: <CABVgOSkd4v7EE2YSVVb9pezYdhZvY+6=8mbHex+CtFCp8FjGDw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] MIPS: Don't crash in stack_top() for tasks without
- ABI or vDSO
+Date: Tue, 15 Apr 2025 16:26:34 +0800
+X-Gm-Features: ATxdqUGMdfu8V5coif4GbIRv4cQyyOVSNJS0mYgKNE44UdIBfCOgwXQlLVBaG6A
+Message-ID: <CABVgOSn3DbDy1Vb7KGejb73ahf-JuTF_-u+nM7-F=0iGpSuebw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] kunit: qemu_configs: Add MIPS configurations
 To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Brendan Higgins <brendan.higgins@linux.dev>, 
 	Rae Moar <rmoar@google.com>, Huacai Chen <chenhuacai@kernel.org>, linux-mips@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
 	kunit-dev@googlegroups.com
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000d41cdd0632ccede2"
+	boundary="0000000000001096500632ccee02"
 
---000000000000d41cdd0632ccede2
+--0000000000001096500632ccee02
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 On Tue, 15 Apr 2025 at 15:10, Thomas Wei=C3=9Fschuh
 <thomas.weissschuh@linutronix.de> wrote:
 >
-> Not all tasks have an ABI associated or vDSO mapped,
-> for example kthreads never do.
-> If such a task ever ends up calling stack_top(), it will derefence the
-> NULL ABI pointer and crash.
->
-> This can for example happen when using kunit:
->
->     mips_stack_top+0x28/0xc0
->     arch_pick_mmap_layout+0x190/0x220
->     kunit_vm_mmap_init+0xf8/0x138
->     __kunit_add_resource+0x40/0xa8
->     kunit_vm_mmap+0x88/0xd8
->     usercopy_test_init+0xb8/0x240
->     kunit_try_run_case+0x5c/0x1a8
->     kunit_generic_run_threadfn_adapter+0x28/0x50
->     kthread+0x118/0x240
->     ret_from_kernel_thread+0x14/0x1c
->
-> Only dereference the ABI point if it is set.
->
-> Also move the randomization adjustment into the same conditional.
+> Add basic support to run various MIPS variants via kunit_tool using the
+> virtualized malta platform.
 >
 > Signed-off-by: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
 > ---
 
-This looks good to me -- we've hit what's effectively the same issue
-on other architectures with this test, with similar resolutions.
+Seems to work fine here. Thanks very much!
 
 Reviewed-by: David Gow <davidgow@google.com>
 
-I'm happy to have this (and the following path) go in via the KUnit
-tree, but if you'd rather have it go via MIPS, that's fine, too. (The
-qemu_configs won't generate any merge conflicts.)
-
+Cheers,
 -- David
 
->  arch/mips/kernel/process.c | 16 +++++++++-------
->  1 file changed, 9 insertions(+), 7 deletions(-)
+
+
+>  tools/testing/kunit/qemu_configs/mips.py     | 18 ++++++++++++++++++
+>  tools/testing/kunit/qemu_configs/mips64.py   | 19 +++++++++++++++++++
+>  tools/testing/kunit/qemu_configs/mips64el.py | 19 +++++++++++++++++++
+>  tools/testing/kunit/qemu_configs/mipsel.py   | 18 ++++++++++++++++++
+>  4 files changed, 74 insertions(+)
 >
-> diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
-> index b630604c577f9ff3f2493b0f254363e499c8318c..02aa6a04a21da437909eeac4f=
-149155cc298f5b5 100644
-> --- a/arch/mips/kernel/process.c
-> +++ b/arch/mips/kernel/process.c
-> @@ -690,18 +690,20 @@ unsigned long mips_stack_top(void)
->         }
->
->         /* Space for the VDSO, data page & GIC user page */
-> -       top -=3D PAGE_ALIGN(current->thread.abi->vdso->size);
-> -       top -=3D PAGE_SIZE;
-> -       top -=3D mips_gic_present() ? PAGE_SIZE : 0;
-> +       if (current->thread.abi) {
-> +               top -=3D PAGE_ALIGN(current->thread.abi->vdso->size);
-> +               top -=3D PAGE_SIZE;
-> +               top -=3D mips_gic_present() ? PAGE_SIZE : 0;
+> diff --git a/tools/testing/kunit/qemu_configs/mips.py b/tools/testing/kun=
+it/qemu_configs/mips.py
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..8899ac157b30bd2ee847eacd5=
+b90fe6ad4e5fb04
+> --- /dev/null
+> +++ b/tools/testing/kunit/qemu_configs/mips.py
+> @@ -0,0 +1,18 @@
+> +# SPDX-License-Identifier: GPL-2.0
 > +
-> +               /* Space to randomize the VDSO base */
-> +               if (current->flags & PF_RANDOMIZE)
-> +                       top -=3D VDSO_RANDOMIZE_SIZE;
-> +       }
->
->         /* Space for cache colour alignment */
->         if (cpu_has_dc_aliases)
->                 top -=3D shm_align_mask + 1;
->
-> -       /* Space to randomize the VDSO base */
-> -       if (current->flags & PF_RANDOMIZE)
-> -               top -=3D VDSO_RANDOMIZE_SIZE;
-> -
->         return top;
->  }
->
+> +from ..qemu_config import QemuArchParams
+> +
+> +QEMU_ARCH =3D QemuArchParams(linux_arch=3D'mips',
+> +                           kconfig=3D'''
+> +CONFIG_32BIT=3Dy
+> +CONFIG_CPU_BIG_ENDIAN=3Dy
+> +CONFIG_MIPS_MALTA=3Dy
+> +CONFIG_SERIAL_8250=3Dy
+> +CONFIG_SERIAL_8250_CONSOLE=3Dy
+> +CONFIG_POWER_RESET=3Dy
+> +CONFIG_POWER_RESET_SYSCON=3Dy
+> +''',
+> +                           qemu_arch=3D'mips',
+> +                           kernel_path=3D'vmlinuz',
+> +                           kernel_command_line=3D'console=3DttyS0',
+> +                           extra_qemu_params=3D['-M', 'malta'])
+> diff --git a/tools/testing/kunit/qemu_configs/mips64.py b/tools/testing/k=
+unit/qemu_configs/mips64.py
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..1478aed05b94da4914f34c6a8=
+affdcfe34eb88ea
+> --- /dev/null
+> +++ b/tools/testing/kunit/qemu_configs/mips64.py
+> @@ -0,0 +1,19 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +from ..qemu_config import QemuArchParams
+> +
+> +QEMU_ARCH =3D QemuArchParams(linux_arch=3D'mips',
+> +                           kconfig=3D'''
+> +CONFIG_CPU_MIPS64_R2=3Dy
+> +CONFIG_64BIT=3Dy
+> +CONFIG_CPU_BIG_ENDIAN=3Dy
+> +CONFIG_MIPS_MALTA=3Dy
+> +CONFIG_SERIAL_8250=3Dy
+> +CONFIG_SERIAL_8250_CONSOLE=3Dy
+> +CONFIG_POWER_RESET=3Dy
+> +CONFIG_POWER_RESET_SYSCON=3Dy
+> +''',
+> +                           qemu_arch=3D'mips64',
+> +                           kernel_path=3D'vmlinuz',
+> +                           kernel_command_line=3D'console=3DttyS0',
+> +                           extra_qemu_params=3D['-M', 'malta', '-cpu', '=
+5KEc'])
+> diff --git a/tools/testing/kunit/qemu_configs/mips64el.py b/tools/testing=
+/kunit/qemu_configs/mips64el.py
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..300c711d7a82500b2ebcb4cf1=
+467b6f72b5c17aa
+> --- /dev/null
+> +++ b/tools/testing/kunit/qemu_configs/mips64el.py
+> @@ -0,0 +1,19 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +from ..qemu_config import QemuArchParams
+> +
+> +QEMU_ARCH =3D QemuArchParams(linux_arch=3D'mips',
+> +                           kconfig=3D'''
+> +CONFIG_CPU_MIPS64_R2=3Dy
+> +CONFIG_64BIT=3Dy
+> +CONFIG_CPU_LITTLE_ENDIAN=3Dy
+> +CONFIG_MIPS_MALTA=3Dy
+> +CONFIG_SERIAL_8250=3Dy
+> +CONFIG_SERIAL_8250_CONSOLE=3Dy
+> +CONFIG_POWER_RESET=3Dy
+> +CONFIG_POWER_RESET_SYSCON=3Dy
+> +''',
+> +                           qemu_arch=3D'mips64el',
+> +                           kernel_path=3D'vmlinuz',
+> +                           kernel_command_line=3D'console=3DttyS0',
+> +                           extra_qemu_params=3D['-M', 'malta', '-cpu', '=
+5KEc'])
+> diff --git a/tools/testing/kunit/qemu_configs/mipsel.py b/tools/testing/k=
+unit/qemu_configs/mipsel.py
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..3d3543315b45776d0e77fb5c0=
+0c8c0a89eafdffd
+> --- /dev/null
+> +++ b/tools/testing/kunit/qemu_configs/mipsel.py
+> @@ -0,0 +1,18 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +from ..qemu_config import QemuArchParams
+> +
+> +QEMU_ARCH =3D QemuArchParams(linux_arch=3D'mips',
+> +                           kconfig=3D'''
+> +CONFIG_32BIT=3Dy
+> +CONFIG_CPU_LITTLE_ENDIAN=3Dy
+> +CONFIG_MIPS_MALTA=3Dy
+> +CONFIG_SERIAL_8250=3Dy
+> +CONFIG_SERIAL_8250_CONSOLE=3Dy
+> +CONFIG_POWER_RESET=3Dy
+> +CONFIG_POWER_RESET_SYSCON=3Dy
+> +''',
+> +                           qemu_arch=3D'mipsel',
+> +                           kernel_path=3D'vmlinuz',
+> +                           kernel_command_line=3D'console=3DttyS0',
+> +                           extra_qemu_params=3D['-M', 'malta'])
 >
 > --
 > 2.49.0
 >
 
---000000000000d41cdd0632ccede2
+--0000000000001096500632ccee02
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -263,14 +319,14 @@ uFrCoYIRlx4rSVHpBIKgnsgdm0SFQK72MPmIkfhfq9Fh0h8AjhF73sLO7K5BfwWkx1gwMySyNY0e
 PCRYr6WEVOkUJS0a0fui693ymMPFLQAimmz8EpyFok4Ju066StkYO1dIgUIla4x61auxkWHwnzGC
 Al0wggJZAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
 BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAcDMKctW1GQKDKqEUSh4
-pjANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQghb+VzZWx81ICEkcx9VbFn/r17HxM
-Tr7MWoi9iLPSc6gwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUw
-NDE1MDgyNjQ1WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+pjANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQg+auRn3FUhKELrjooLIb5+LIemuir
+0pEY3vXExZ8sG/YwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUw
+NDE1MDgyNjQ5WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
 YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcN
-AQEBBQAEggEAFy1GJHzWJZ2xO7qz2kbnRUHFS/JRcAr9jaUvAxWdqBIZj1s9y6mBV36mFongOyMt
-HsyL/VJR2pb570nVTD0hON7FvF3OUZMk+8ux2GVlEHTcq00fbiQerxYbl7g8TVlif7TyHTj6ey3Z
-HMub5/ZaHKCm9//Ot0D+1qsW28QNZqrrSQICFo30dIW+pC1u48DD/e2XgVeVuzeylmOtAAF60dii
-OzWhINQJi8y1ZSqET/zvMpWfsruV8pXw/+rMRmS9C70lbwdEuj164L+rUosD8utsxUGGfgcmK2nQ
-MjYa0E+CX218iBBrqFYMgPiboa1zwhz54ZatO1vurQCVBcElHg==
---000000000000d41cdd0632ccede2--
+AQEBBQAEggEAnznTiZ64MzLSUYlqXWHLJbasD0ewBqU/JfY95MFWojZncEBl0Yl/Z9qLrsqxRpvL
+N03uTn1PZTkMSW6Xe1GSMxc66odRm1PVzDSXpihQaSrBig5oRQdxrYRgUP6RIqrb5GwMa3ybjIYn
+M0X0H4nCVJIYWJQ7xZkQKj45J0O9y8QAKacIqf1wElKIdDR39Oj2GliWKCZ6dfqsmoDOR4miW4yH
+8Sscjj+U3oGR/VwNatTEBYIomzoE1ZsiJ7NKjanegMljsi+OPAh4HCuvsxFqmpKao9ViH71WrIbR
+gYpJfzGZc3UEOYykV/6v9tq+qFLJaGxdnFE3A1OYSvFlxC3WPA==
+--0000000000001096500632ccee02--
 
