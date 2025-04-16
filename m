@@ -1,105 +1,162 @@
-Return-Path: <linux-kselftest+bounces-30984-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30985-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70556A90E8A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Apr 2025 00:19:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A295A90EF2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Apr 2025 00:52:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E541B3B684C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Apr 2025 22:19:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E4847189C7BD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Apr 2025 22:52:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3164922A80E;
-	Wed, 16 Apr 2025 22:19:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82EFF2459DA;
+	Wed, 16 Apr 2025 22:51:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WSLP5NHu"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="b5/XzFrA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08D8F2135AC;
-	Wed, 16 Apr 2025 22:19:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84520245037
+	for <linux-kselftest@vger.kernel.org>; Wed, 16 Apr 2025 22:51:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744841953; cv=none; b=l8kEclvJxapFVGjD5Pceph6cBJvaQvYgHJBvN0i8loqnL9b+tcZA8WMLi32oSX0hUvkbD9fwYz0+dgPcYtrkch2+US/WRQ4oII8FmNeAAz6WjiIKJfW8sF/Px9DxkrbZ9efG2HEBqB/akwjB6RGG02vA76g2u7vM8FC8VozzuMk=
+	t=1744843914; cv=none; b=Y0VO1HZPXPRr7j8pCwAjj13BSMkRdVOZGYIkXfjAPnVxp717ceiiJRl7HA+s5T//0GpMNN9gAbyb0i2OcTeQu7bUi5l5Zb0XTWj8/t1E2AYPoixPg332ZPczCBJ7GBz6KTB1w6mYVNYX5rwuhjnui+Xf2iBH1LEDEiCRUQALlyk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744841953; c=relaxed/simple;
-	bh=JxjGlO8io3o7nQA//oy7HKFVNPtQVrdR0OgOA+KwBco=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bKVlSpJL7WK3SRQZsBcQvBfvNU4eZ6ulrC//BsVmH+WL7LKlbf/ijiH6diDhzX9X/NXv/5A5DtDDGE2sWrK7tRyQ+AkTvsoWU/vC5+ga2waDKTRtb+bnzgaDavHVoXEIccorGwPOWnKRXiaKcC+asQkU23ImE2rgYWnKYWuqdhs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WSLP5NHu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FA17C4CEE2;
-	Wed, 16 Apr 2025 22:19:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744841952;
-	bh=JxjGlO8io3o7nQA//oy7HKFVNPtQVrdR0OgOA+KwBco=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=WSLP5NHu5iw2+GoSncRSbxr2XcbnTPvdJvucfjQ6Uz0ET4qWnFk5zNzRF4NiJn35P
-	 V0r2lEtDQh6wNpCeby0GWl8ExkitEoSeSS8IiDn7WZR1RupyWeF1sde83R4ApwEpT+
-	 I7EkZgsDp01MJvIxSebEUKDXYU7YkxTkdIXUA0g8XibvkIN89DCdLLyGQT8bxE+VSX
-	 NfvHmGHTRWUqEEWRLM3HhvAWRrR5oCJf8t2lGpE8ANEk2T3rvo1bPX2ukbQcug3zgO
-	 euRhWt9dMwpIlk1Ynzya5dqbGQ0zUUqD7APhN6BpRp5/ya2KOJCNzYr65EzQ2foXGY
-	 gFiMtOy+uX0QQ==
-Date: Wed, 16 Apr 2025 15:19:10 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Victor Nogueira <victor@mojatatu.com>
-Cc: chia-yu.chang@nokia-bell-labs.com, xandfury@gmail.com,
- netdev@vger.kernel.org, dave.taht@gmail.com, pabeni@redhat.com,
- jhs@mojatatu.com, stephen@networkplumber.org, xiyou.wangcong@gmail.com,
- jiri@resnulli.us, davem@davemloft.net, edumazet@google.com,
- horms@kernel.org, andrew+netdev@lunn.ch, donald.hunter@gmail.com,
- ast@fiberby.net, liuhangbin@gmail.com, shuah@kernel.org,
- linux-kselftest@vger.kernel.org, ij@kernel.org, ncardwell@google.com,
- koen.de_schepper@nokia-bell-labs.com, g.white@cablelabs.com,
- ingemar.s.johansson@ericsson.com, mirja.kuehlewind@ericsson.com,
- cheshire@apple.com, rs.ietf@gmx.at, Jason_Livingood@comcast.com,
- vidhi_goel@apple.com
-Subject: Re: [PATCH v11 net-next 2/5] selftests/tc-testing: Add selftests
- for qdisc DualPI2
-Message-ID: <20250416151910.6eaaf506@kernel.org>
-In-Reply-To: <8272f999-fe55-4afb-894a-57a7cc161473@mojatatu.com>
-References: <20250415124317.11561-1-chia-yu.chang@nokia-bell-labs.com>
-	<20250415124317.11561-3-chia-yu.chang@nokia-bell-labs.com>
-	<20250416065223.4e4c4379@kernel.org>
-	<8272f999-fe55-4afb-894a-57a7cc161473@mojatatu.com>
+	s=arc-20240116; t=1744843914; c=relaxed/simple;
+	bh=IoJJSCOlCHUpZacswypeEIdZhmajgDkZrYjCwe4+91k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MmDRq10w1qM0BzRLyfhKtTYhg7H2cZr5Oo+XG58SRp1S0Z7HyVyJ1iE+TQ9fpc0iRaXkP4Pjuttm4cGF9O+mlXD3zrqW/j/VDd7QAzzfn291+h4+16bjt0DmrnYv8MqDusqBzkgM72zG8sj+6D1/vWbyVv5ZdrkKkB/ml8I7XbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=b5/XzFrA; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-43d5f10e1aaso25675e9.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Apr 2025 15:51:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1744843911; x=1745448711; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xgiFznxyXwNZAjYFXBtqbEchRNoGqLP4Udb3wMlePFc=;
+        b=b5/XzFrAbTLxITj8fEBhq+9TXE7M2zoaCl27FWagkLvqpsGuFKZYBr15J8SQArMn2X
+         PPpOgftSvgtG52poAdg86cS6H1cWhaioEbDgmCFtUH+VpMM0jtAnWrye9ZWXLodMfrDt
+         wEJmXouc254BJfa7SMDIwU0fX7vg3dP2tRJpGteI+93EUDDTb/9Acy6KFUtYPRXv+MNr
+         b0UCqUB9Via5KtkhSjK+63mulH9PocDSlsx2pV7hDJsl/vsiSerrSxBBIC+Lnizuyn9Z
+         3MWviFf41F7XxykpbM6AzcywbT7pYwmQwkH9AGEiHG7Rh6aqxeqkAbScYAmQBqsmUs++
+         pKPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744843911; x=1745448711;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xgiFznxyXwNZAjYFXBtqbEchRNoGqLP4Udb3wMlePFc=;
+        b=j1FBpCu2ERyXVSwwc8Rm2PcRvXQoWkfec+ghslOMz4ZjSOFgTQZLZlGjHAziG6YMN6
+         MPWrKVW/Wzt2XLVHgyhZcn9GTDRl4/Qr5m1BPpZUm/Cw3rBmduaMynCF4eTKwDTB/qTv
+         8u17irc3YCZZUQKqtBg85c1QxtneyDoDII2Dui7a2CClqZ4ADvSfRsuH6BjNqpWBNMmm
+         qGxGQnJTI1fboT56zTmNYe4/PxIgeGNQJm6Rq1r2nuUxlcq2zTWXnpRRSu1/anPvQobt
+         R9FtkNYTyq5P0PHaxKp9JThTzsYiMKjxwoTeNtUAag4GADmNGQFNFXL662XUP04Nk2qc
+         uLzw==
+X-Forwarded-Encrypted: i=1; AJvYcCU6eU6icfQdFe+c8rBBW8NVCQmZKyN09uPH4B7EDY8tPdpAcLTrUxxXKgXUUopLlyIWppHes7KsR+JIeR5y1rw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxuF0tEh38Hp9JXBJZC9stenROsNNfhrlci9A64XWCVmtFLzYNX
+	P5Ueumb/ikSANiGgnfGtD4zO7vY8v4ULJ1CZMJhJN53KIl0tKIm/D8w9bBq0xOkN8BpcNyGnn4T
+	O5KWt/E9/OhmDd25/yJssi+jSYG0HpjIPm1KR
+X-Gm-Gg: ASbGncupVdjwtfVrbdjnIl4SMqwSw6vDad2+j+EVNod2CphrEU1W/m2M2e3XMoggG+W
+	MfCZqcEILEhRSHhV63aOEypEZwu8kft6VzVyRXV4B9mUntO9RZ95NqL8zwIYbO7oiE8vPRI2qVm
+	UcOIn0Vu4cVRPbXecpiiR+5v28nl0m0RGVrbF3YjTPBb6LxxKG72koE0kxP+dI/Q==
+X-Google-Smtp-Source: AGHT+IHXWGWfGEo9AOua5ZBzOd3bdHf6i/F7EC52V5Mq1yV8M20CMUTcOJBN7M+4okB7URR+SAXHkZhutXlJ3SZFaXo=
+X-Received: by 2002:a05:600c:3509:b0:43b:b106:bb1c with SMTP id
+ 5b1f17b1804b1-44062a3ef31mr505705e9.0.1744843910585; Wed, 16 Apr 2025
+ 15:51:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20250414225227.3642618-1-tjmercier@google.com>
+ <20250414225227.3642618-3-tjmercier@google.com> <CAPhsuW6sgGvjeAcciskmGO7r6+eeDo_KVS3y7C8fCDPptzCebw@mail.gmail.com>
+In-Reply-To: <CAPhsuW6sgGvjeAcciskmGO7r6+eeDo_KVS3y7C8fCDPptzCebw@mail.gmail.com>
+From: "T.J. Mercier" <tjmercier@google.com>
+Date: Wed, 16 Apr 2025 15:51:38 -0700
+X-Gm-Features: ATxdqUF2F5Lgo5RIa4ABADC_SqcPejYG0M9lcwCAu9guCcJWCuAb8fIDqfWHFPg
+Message-ID: <CABdmKX0bgxZFYuvQvQPK0AnAHEE3FebY_eA1+Vo=ScH1MbfzMg@mail.gmail.com>
+Subject: Re: [PATCH 2/4] bpf: Add dmabuf iterator
+To: Song Liu <song@kernel.org>
+Cc: sumit.semwal@linaro.org, christian.koenig@amd.com, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
+	skhan@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	linaro-mm-sig@lists.linaro.org, linux-doc@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, android-mm@google.com, 
+	simona@ffwll.ch, corbet@lwn.net, eddyz87@gmail.com, yonghong.song@linux.dev, 
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, 
+	jolsa@kernel.org, mykolal@fb.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 16 Apr 2025 11:00:35 -0300 Victor Nogueira wrote:
-> On 4/16/25 10:52, Jakub Kicinski wrote:
-> > On Tue, 15 Apr 2025 14:43:14 +0200 chia-yu.chang@nokia-bell-labs.com
-> > wrote:  
-> >> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-> >>
-> >> Update configuration of tc-tests and preload DualPI2 module for self-tests,
-> >> and add folloiwng self-test cases for DualPI2:
-> >>
-> >>    Test a4c7: Create DualPI2 with default setting
-> >>    Test 2130: Create DualPI2 with typical_rtt and max_rtt
-> >>    Test 90c1: Create DualPI2 with max_rtt
-> >>    Test 7b3c: Create DualPI2 with any_ect option
-> >>    Test 49a3: Create DualPI2 with overflow option
-> >>    Test d0a1: Create DualPI2 with drop_enqueue option
-> >>    Test f051: Create DualPI2 with no_split_gso option  
-> > 
-> > it appears applying this causes the tdc test runner to break,
-> > could you take a look?
-> > 
-> > https://github.com/p4tc-dev/tc-executor/blob/storage/artifacts/79725/1-tdc-sh/stdout  
-> 
-> It seems like the breakage happens because the iproute2 patch
-> is not in yet. I applied the iproute2 patch locally and the
-> tests succeeded. The next iteration should run with it applied
-> so the breakage should stop.
+On Wed, Apr 16, 2025 at 3:02=E2=80=AFPM Song Liu <song@kernel.org> wrote:
+>
+> On Mon, Apr 14, 2025 at 3:53=E2=80=AFPM T.J. Mercier <tjmercier@google.co=
+m> wrote:
+> [...]
+> > +
+> > +BTF_ID_LIST_GLOBAL_SINGLE(bpf_dmabuf_btf_id, struct, dma_buf)
+> > +DEFINE_BPF_ITER_FUNC(dmabuf, struct bpf_iter_meta *meta, struct dma_bu=
+f *dmabuf)
+> > +
+> > +static void *dmabuf_iter_seq_start(struct seq_file *seq, loff_t *pos)
+> > +{
+> > +       struct dma_buf *dmabuf, *ret =3D NULL;
+> > +
+> > +       if (*pos) {
+> > +               *pos =3D 0;
+> > +               return NULL;
+> > +       }
+> > +       /* Look for the first buffer we can obtain a reference to.
+> > +        * The list mutex does not protect a dmabuf's refcount, so it c=
+an be
+> > +        * zeroed while we are iterating. Therefore we cannot call get_=
+dma_buf()
+> > +        * since the caller of this program may not already own a refer=
+ence to
+> > +        * the buffer.
+> > +        */
+> > +       mutex_lock(&dmabuf_debugfs_list_mutex);
+> > +       list_for_each_entry(dmabuf, &dmabuf_debugfs_list, list_node) {
+> > +               if (file_ref_get(&dmabuf->file->f_ref)) {
+> > +                       ret =3D dmabuf;
+> > +                       break;
+> > +               }
+> > +       }
+> > +       mutex_unlock(&dmabuf_debugfs_list_mutex);
+>
+> IIUC, the iterator simply traverses elements in a linked list. I feel it =
+is
+> an overkill to implement a new BPF iterator for it.
 
-Thank you! returned the patches to the queue, 
-the net-next-2025-04-17--00-00 branch should have them again.
+Like other BPF iterators such as kmem_cache_iter or task_iter.
+Cgroup_iter iterates trees instead of lists. This is iterating over
+kernel objects just like the docs say, "A BPF iterator is a type of
+BPF program that allows users to iterate over specific types of kernel
+objects". More complicated iteration should not be a requirement here.
 
+> Maybe we simply
+> use debugging tools like crash or drgn for this? The access with
+> these tools will not be protected by the mutex. But from my personal
+> experience, this is not a big issue for user space debugging tools.
+
+drgn is *way* too slow, and even if it weren't the dependencies for
+running it aren't available. crash needs debug symbols which also
+aren't available on user builds. This is not just for manual
+debugging, it's for reporting memory use in production. Or anything
+else someone might care to extract like attachment info or refcounts.
+
+> Thanks,
+> Song
+>
+>
+> > +
+> > +       return ret;
+> > +}
 
