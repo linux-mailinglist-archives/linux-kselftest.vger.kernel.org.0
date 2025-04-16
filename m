@@ -1,309 +1,897 @@
-Return-Path: <linux-kselftest+bounces-30961-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30962-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 073F7A9095D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Apr 2025 18:51:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34DB4A909F0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Apr 2025 19:26:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 606AD188213E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Apr 2025 16:51:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 945CB3ACE22
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Apr 2025 17:26:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A5AF211497;
-	Wed, 16 Apr 2025 16:51:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58DA321517B;
+	Wed, 16 Apr 2025 17:26:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="FVq7l8zD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eQTO+ZTQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013068.outbound.protection.outlook.com [40.107.162.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E27A218870C;
-	Wed, 16 Apr 2025 16:51:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.68
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744822275; cv=fail; b=OVAd5NLNrpGsc/t80ZtdsuPIq02SV2RsToBhLBa3RPDTOpBh/TwkfjciIZ8dG1cEhCN5OGz8BObJE2yamOFoaBxc6HRDyPtHZoUc6Vl33ZPg8gP6zc3vxlAtKf42ZxQ2u+lFcIpcrxLAqJZvmwnfhvJ9McYR/9NDMNqGvWnQvmQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744822275; c=relaxed/simple;
-	bh=i34yHPRcY0MBZ8vNpu4ZjA5Y0EwyJClyXvXtp3/9yo0=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=dzNCaOYMknIzNjACHjUUa9DlwYM22TtaR5TgJrzj5iB4utptyhjDITKGCiujU/ZmtIRgNtNK7wTL+/3Yj6NkzHz1/kM88Zy/bSCbFjcTOKeW5aqLCS/fDKkOLnK0V2Fi1qql+6ir8P0gGBxA257odwGK9EXmxKlpxHlqS6fagFI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=FVq7l8zD; arc=fail smtp.client-ip=40.107.162.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=nzS4uniwCygG+KlJ4r4q//NGIUcqXCT8WPi8MUsdCKiNHYY3UdITDKl0oq7qPgLJv5asXIBX4xiq6FppmdQ45+REdrxRpL/brSBj4iyu43ob3uEGc0aa1mJ9PAkHW93TmlMTKU8FcpZE7Ria2OxVs1uAKV3ULB2zEGKOefa+7wXHElghM253AGH/x9t/7orET22uT68xiKpeySt+fF59xQA5OLWZy8ERSOizZN2GCzEm6VrXtabY2V8pwSal1ptWctP/aTAazOFnhZb0H921P31T6x3lSTC29r/0blL9FIK+C+fT1RP5gKlKXToJEO8Y8b68/WjjJLtwIojOBDouBA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GQSp8nFsccUy58tEScFn8Y1byIOOqxC3T3mHJ4igE+o=;
- b=VYN8ECuqhvTzoku9bqH4781GCchlx0ZOemnobFwsmPCTbYM7FHkp92M3/NjoI54ekI+cr0mpohlJUO1HWgNlDGPQswwfFmgXxuOQ1SmrYHuW2bgB+L2sm0FuMzkhoOQw65nOH+HY7sn1IZN4op2SAudJaZnDkgzzzIMEnFBIpufYfLVs/W7Ig1LOyYagi+b9vAMwvBrnJw8joCnh4aVANkLkyn/AvbutrF0Jt5/518M59nbG+lxNgbi7z24Ywe9X++fYXKhFpwnn6MExFJLUIGskzh820SklZGspblm+ZsFMFRjzLc6XHOFAK35LMRyVYgyce+JfnJ39bElOKG8+Iw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nokia-bell-labs.com; dmarc=pass action=none
- header.from=nokia-bell-labs.com; dkim=pass header.d=nokia-bell-labs.com;
- arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GQSp8nFsccUy58tEScFn8Y1byIOOqxC3T3mHJ4igE+o=;
- b=FVq7l8zDAdHJd8VvYP04c2T96urMnHzlR3/8FyU5yp4wLDllvVQWVMAcBo2pXWZBplL5sMnJVrl0mquCyd336ub2ZRPkmoJJRxRLaeB0f+Npvo1P2p1s5jNAaCXz2vlSGFd/hTffKsEMj577CsLgXspei5YRHgqKX9VPrqjdG7Tb7+GGnY1tyPtX+9aHCoOhAdVHE9Wi4Y6MmRfd3O8+1IqfPND9NFKdd7/cBPmcwS0nIkrW3A+orKTu1fTNkXsLlD+7DmSps/x7Vz1PT2mNLAE2Q0Dtzr1wSCOmBQ4r1jBCPocEZA8XWg9xvfE4gk0hLoAGomAQTQGyEoU8rcmFBw==
-Received: from PAXPR07MB7984.eurprd07.prod.outlook.com (2603:10a6:102:133::12)
- by DB8PR07MB6345.eurprd07.prod.outlook.com (2603:10a6:10:137::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8632.32; Wed, 16 Apr
- 2025 16:51:07 +0000
-Received: from PAXPR07MB7984.eurprd07.prod.outlook.com
- ([fe80::b7f8:dc0a:7e8d:56]) by PAXPR07MB7984.eurprd07.prod.outlook.com
- ([fe80::b7f8:dc0a:7e8d:56%2]) with mapi id 15.20.8632.030; Wed, 16 Apr 2025
- 16:51:07 +0000
-From: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>
-To: Victor Nogueira <victor@mojatatu.com>, "netdev@vger.kernel.org"
-	<netdev@vger.kernel.org>, "dave.taht@gmail.com" <dave.taht@gmail.com>,
-	"pabeni@redhat.com" <pabeni@redhat.com>, "jhs@mojatatu.com"
-	<jhs@mojatatu.com>, "kuba@kernel.org" <kuba@kernel.org>,
-	"stephen@networkplumber.org" <stephen@networkplumber.org>,
-	"xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>, "jiri@resnulli.us"
-	<jiri@resnulli.us>, "davem@davemloft.net" <davem@davemloft.net>,
-	"edumazet@google.com" <edumazet@google.com>, "horms@kernel.org"
-	<horms@kernel.org>, "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
-	"donald.hunter@gmail.com" <donald.hunter@gmail.com>, "ast@fiberby.net"
-	<ast@fiberby.net>, "liuhangbin@gmail.com" <liuhangbin@gmail.com>,
-	"shuah@kernel.org" <shuah@kernel.org>, "linux-kselftest@vger.kernel.org"
-	<linux-kselftest@vger.kernel.org>, "ij@kernel.org" <ij@kernel.org>,
-	"ncardwell@google.com" <ncardwell@google.com>, "Koen De Schepper (Nokia)"
-	<koen.de_schepper@nokia-bell-labs.com>, g.white <g.white@cablelabs.com>,
-	"ingemar.s.johansson@ericsson.com" <ingemar.s.johansson@ericsson.com>,
-	"mirja.kuehlewind@ericsson.com" <mirja.kuehlewind@ericsson.com>,
-	"cheshire@apple.com" <cheshire@apple.com>, "rs.ietf@gmx.at" <rs.ietf@gmx.at>,
-	"Jason_Livingood@comcast.com" <Jason_Livingood@comcast.com>, vidhi_goel
-	<vidhi_goel@apple.com>
-CC: Olga Albisser <olga@albisser.org>, "Olivier Tilmans (Nokia)"
-	<olivier.tilmans@nokia.com>, Bob Briscoe <research@bobbriscoe.net>, Henrik
- Steen <henrist@henrist.net>
-Subject: RE: [PATCH v5 RESEND iproute2-next 1/1] tc: add dualpi2 scheduler
- module
-Thread-Topic: [PATCH v5 RESEND iproute2-next 1/1] tc: add dualpi2 scheduler
- module
-Thread-Index: AQHbrT/UYQZ/4/K/DkidXZDf34zdwrOmOcaAgABK5UA=
-Date: Wed, 16 Apr 2025 16:51:07 +0000
-Message-ID:
- <PAXPR07MB798432ABD92FBDAA04D644B8A3BD2@PAXPR07MB7984.eurprd07.prod.outlook.com>
-References: <20250414131859.97517-1-chia-yu.chang@nokia-bell-labs.com>
- <20250414131859.97517-2-chia-yu.chang@nokia-bell-labs.com>
- <ef8c59a0-be86-4ddc-b25a-d198051f12b2@mojatatu.com>
-In-Reply-To: <ef8c59a0-be86-4ddc-b25a-d198051f12b2@mojatatu.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nokia-bell-labs.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PAXPR07MB7984:EE_|DB8PR07MB6345:EE_
-x-ms-office365-filtering-correlation-id: 06b379d0-256b-440a-50a3-08dd7d06e26b
-x-ld-processed: 5d471751-9675-428d-917b-70f44f9630b0,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|376014|7416014|1800799024|366016|921020|38070700018|7053199007;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?lNJk+BU7METU7FK/Vuv20tm/FJHPb4xlCNVww8yvnm6oKtcy8AyysOnI2RpB?=
- =?us-ascii?Q?RK0d36Jv57bhXXXQtGMHW+mYSOi88DIRx/oIoTQvimbNe8JzbRMV4PAuvOvF?=
- =?us-ascii?Q?65WgmdiKL8XqO65Q7MF1FLtCvuv+0HBVmy4fFWgqlFxmaiWtgByyeQuHIseZ?=
- =?us-ascii?Q?g/fBIFEBkSp7MrMgNp21PunlXigjAn8x2OGXsMYSwHoWhrhp6L7BXfTcD1Nx?=
- =?us-ascii?Q?srQjSdwGM5O+KybZ2KOPEg5ydr3PXtzO8FHVO5rMwm+KJa2ak3HyVa1yoPyC?=
- =?us-ascii?Q?Ktzc+CQe1w7mrWwhy9kqHTK7MdVcYLOnGpecT2cH6kDddVCWLTgXP98FXixD?=
- =?us-ascii?Q?H7nIPfVaYiI3+9L+tpWsXCoyGO6H84CHzoSPWK0TOoAneTGPR6cK0rDQoEHu?=
- =?us-ascii?Q?jGt5xtCS2DTqmNzN8j/vc9Eh/AYv0mTuXlFYzFS0Vzvxj6XNH5cGJZzeS4qq?=
- =?us-ascii?Q?qQFXlaWFxTev9EBAbJ7MYZPSpc/ZD6bH6mLcvAVGSmqyXY2BY0TGek2wHMLb?=
- =?us-ascii?Q?e/PrWFu40dMi2Og5m+LYf7x9Km0UUcnNJ45IRqVK2McOx5Mw45rfoEHdQ1Mf?=
- =?us-ascii?Q?/7XCROlHUFDYC9egWRvhvQS8S9bjZ3Sted8eG745+pQoNi23O6obFQwLrqvt?=
- =?us-ascii?Q?C+kd449D3EfBZDQHv7LZkO9Wv1FYO7UE4t3EW6T4mX8w2kLPl+P84lXdv3jc?=
- =?us-ascii?Q?RuieAZpHjJw7z2eUobW3RmdylHJVe6xWMll90kMNtEeL37XiiX6W4RThv404?=
- =?us-ascii?Q?Bd55DT2MmyCr1ko8rQ6qUhQLjUNjoUo8OM+cHffXTfC9iKbFgRUeBsE9fzq+?=
- =?us-ascii?Q?pWnKkVE2EldXfy4Q5ntsO6SbxRw8aMu1mUo9Lkx9k9bmQGp8I2GfRPlY8kj0?=
- =?us-ascii?Q?0YhAdE1YEi0D9P2MJjMJ0pbNfKb9GCN4FgMOTcNEJX078sN+f/8wh5bscfkD?=
- =?us-ascii?Q?R5yAWHwRss/5eKUzn5pxWG3ZARdWf6F7ZlcF2TSpXWFA2giZGWOg7wsPSk/X?=
- =?us-ascii?Q?7t5CUH2Z6zJT14Rq/m0djW3zWsj/LXu8UfFWPTlxcgHHq5iX8w2cmmBDqEwE?=
- =?us-ascii?Q?vzL3McKA2NM6NkMJV1bpWJMWy7k7RGvff/byNbuy5XRMCddtLEDsym5R0/Zu?=
- =?us-ascii?Q?8dLr3iVhegGd28O5UiVW92c7BmPyzGCunju0BCQFU4ifjFt6HhY3aq057xgG?=
- =?us-ascii?Q?5/AJIJ7dnl3yIoRfTG4uYJxUcK+mF1m2ceAgy6YhUX7lku/GA7+Sp0be2pyQ?=
- =?us-ascii?Q?+VQWipWu1s5IibC9grVpKtKyRMDIOqR7F0qXcOcDuedmRLRrH6B7mp57LBxQ?=
- =?us-ascii?Q?96By1HB8pTt9tA2O38mtA+BNQoFwF4kAjvH+wM1ktKuhyIpdoI3bMsuYPHrs?=
- =?us-ascii?Q?16Nt42VOwDYDi0Bw1SaeFsOEoS9rZl4ZeeuuWz85WQf8d5C3oW8B6A3rEOsi?=
- =?us-ascii?Q?vrG+y2b8tpVre24lh7IBzXp00wJtp6050rSl5dIzefgOT5P/W9ST4hnwMvox?=
- =?us-ascii?Q?41btDCIa8PLx7uPz4w+fU1Yn+deV+Wlzp2+M?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR07MB7984.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(921020)(38070700018)(7053199007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?kNQrjiw0WMJZdu9WgZjpNyD1ZAUaPSA5rnXb3g8BV0WvgaOquWoWT8BrJkxh?=
- =?us-ascii?Q?gw/XyLAiyh8QsVoQEYcREM/WRVzAJdtjMvrRyuyGYUybFqWunm6QxC/hrsXA?=
- =?us-ascii?Q?u6zOMGvNV6cv+P22lZn4/QZC6arTqDk8AHpAeI51/rNkhnVVAwnrT9OHrTz1?=
- =?us-ascii?Q?a6FGAz1LviVl2QMh2yVwhkFHD4xFD06kVuHGMXYZYgxwPblSLnskd/cz9D/i?=
- =?us-ascii?Q?OKs/tnuUiaCD/FkZyCDIDQhZItBuTvaemYq6Mv+N7jwwn/3Yt0JUJ35G8SUu?=
- =?us-ascii?Q?y4DDGLVR++C6rRnVyCm3Z1AXm8P9mmffHoYH9thMj94eQLAjer5ih0Ej91BT?=
- =?us-ascii?Q?ZomVdVAYBbL2aKz4To04Cg/56418hcJDDk3fsx/tY3EVDsaB3/RBfKsySAt/?=
- =?us-ascii?Q?xo3jCGXEAdBkF4h9voT6OBv95jU9afivg8m3wxZLGIzmzH9TsvO7JR0NytAv?=
- =?us-ascii?Q?6bn04jGyN8DwlRRn14cW9h7GARalH+2pueEsdUgvFEBpaHxAypK6DcReGFyk?=
- =?us-ascii?Q?lVzYQEf/8UaXbTgex5P3dn7VWkWY2jo7P4l3IZDL4V9K7fmFMjwiQlVxKgRt?=
- =?us-ascii?Q?+8+dcqF6aLWna6mOK8u24yYs0CGNgDWPZR3jwhQZmyUB2EWmrDXaBDpiVrjy?=
- =?us-ascii?Q?YRGAmBJWAJBHoaTZ9IuTzEtlIW1WmPXR9EPfi59VCJIpFTggSDfeRn2lU/oe?=
- =?us-ascii?Q?nXxg50xqPJ36zlvgoN17QOvMRbrIa4tptTi2aPtjVY1pVRSEzbgSR8pGltr2?=
- =?us-ascii?Q?HY2PlauqodrQg2gur6OA/b0ZYPUXLvDh/x+qf7yLIScLdMWV8Byn8Tci6X3T?=
- =?us-ascii?Q?TI0jc494PEriyxvJmIO9fyOWeoggB7XZIx8Bk8YQgyoQwRAvwnT1IfmhMFHi?=
- =?us-ascii?Q?ZwVshPyYq6ocUZB+Pb26O92OlyMlH4au3tFxt8V1qEa9KrkQlGrpJrmL2a6Q?=
- =?us-ascii?Q?Cfr8GKV8n1dfkx39JwaawNJDrZTt6IddbiS3jNrSkXWqPwQXmkXQ//4IrQi0?=
- =?us-ascii?Q?EvXDBZCLfDK299mJgKFbYZyHA2uz1P+rWS87Ufe0Jc+Gx7nUUGxeIde15l91?=
- =?us-ascii?Q?TWYc6RrMnLuy+kvY92RkmvIchfnEJ9WKn62mtg5blANLusg0ZuIJzCHacO5e?=
- =?us-ascii?Q?HNqlEhpJkVYxycakSVMXLA7Ez8dIExYheoxREgZnTZHB/MuSiK65KpjEyegw?=
- =?us-ascii?Q?BfoUMAU+TrAlMIa0kLdMSSOi/BfJyXW6hPiRSHFFa5fPzQP0dbS4LDl59CM2?=
- =?us-ascii?Q?JrgoJp6SvqHKxwpapkDFjvaUqZ6hzs1IPeVJ0g6m/zbAsvdAW8ylNlutsQk/?=
- =?us-ascii?Q?tMYxkLQb+vdGCK0b1I505s03l6q3Thxru8SD4KEax16TZip2Fm/N62oihfre?=
- =?us-ascii?Q?DIpoXHGOP1OPOAqPP9Y/5QRicax7ocRO5Q4096Dzel46crBcEq6l1sKje7Rt?=
- =?us-ascii?Q?miVDy44eabOWyJd89+v/yVJa4Uoq2NZ1Hzh40ENvfqVKV3+axSvqJNXmxLGX?=
- =?us-ascii?Q?uVEMqthuF2dpDDfRuTQsmTLWD8xfkBDdwqYvEdFZAp+yIKMa4XoHpiH4GaLY?=
- =?us-ascii?Q?OfAzKZVplBYzXM0wCz7wsxBLY179gvp2yFd+jbjOIB2kKVFvNrXucRqPl6kz?=
- =?us-ascii?Q?Hw=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BB33207E1D;
+	Wed, 16 Apr 2025 17:26:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744824383; cv=none; b=ealk6EFdU0vCaoTryhgy3Fk3vEmgRR0qdI5q10VRWR2BzKI1sYa3nmQLyPGh7iNII+D1bsAyJHe5rW4LEIGNgc2sZIwJcVxdgL3OJ2z3S47rOTomV/vOvjdaLF1QXni/ybZxyibRILNfsgxis9YPzTCDQCdIxUg2w9sdftjc2J8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744824383; c=relaxed/simple;
+	bh=FbyUH9Bh6iIK+R4s7jCo7E7G1tF8phIalIejn+yv1FU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=f4AfttzMGksg88ZtBYZdILVnEsalwRmy16qxTbZ8p56ClGHyC1O5TYx4SvkmpUrtIzNf3iuf2bPBMa+gEBw7kZe7e3MiLq5aOGSUJWEoW09okXNPlHo+yg6TKswxj+rYkG34+cCh7V2KGvY0gzUt+AttAzpANsUi9kq9EG3Xz7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eQTO+ZTQ; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-73712952e1cso6916902b3a.1;
+        Wed, 16 Apr 2025 10:26:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1744824377; x=1745429177; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UpfXwUbl9sOBERpJjFZvJgZimEb0qN5DzdPTCUAvREQ=;
+        b=eQTO+ZTQFFHze1wQLbshTs/3JbSvUeQHzutDfSNzPylY+G5OqNzjovR5h/127yaEdq
+         D3VQcqmk201oJCGtpmKgATs/BFBzeyWMhmKbjGCEnKXk6hO5Upg7Wm6B/fhauD1OOdCh
+         MNUfwxKy955ONSv9C7OkY4+ODwLCCo+7Q/1W4E0JgBqL2lXyPqXxkBOtA/bMklEplixd
+         0+J16mA23dvBHRd+P+J3tkZLWneTXefzLbxiofVTc9Rk5MR81ybURQ6KQksDJUBtW+7F
+         EwUTTl/3O1zOZdyz+/Y1YeJJEp7L98r5p8/YP1/qssyArSF1KclGBYM8aP6mc/OZ18br
+         hjEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744824377; x=1745429177;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UpfXwUbl9sOBERpJjFZvJgZimEb0qN5DzdPTCUAvREQ=;
+        b=myQ590QI07LjQiqJhE3RonFN6HcQbeyrrbDEdFzoU2IoOipBvTS5I8d5y54TMHf26I
+         MUeYxRTC7U4zL09MtZCT5xnqt/n/v0zRqH++QamhYwNIcRs5ngoVmYHXiUaqV1T7Upo5
+         qFYcvIWuru+fWiAC3XdOmBLH8JPeWsz/31lf3rGlRNB/NGwT72c64P6+kORxOhJYEfKh
+         btm3lywQaTh4RDAWpwyL6dIADPF3JZa/ttPEynLQiqRlfJKV/CTmSxyFm0UNO+bUhlVO
+         KgeEj90nLUtv/PAYKEG1KgT3C9m5DAPWZYoIFAdx52FiX1lVE/dbpJLZdRQVehnnjd3C
+         0LcQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUnanNo/kSQohXaW9IOLz2V0zah41su6KHgdAwBcdCrrY/QrfcVV4uU7TJ7opVG5cfMnNJB@vger.kernel.org, AJvYcCVEy96hDGCYQq2JTR+gn3xY/MnRGezQlwV6B+KiFhWaVDcmIJlL3KQoMP7vCaRgFsln/LCJbQ9Aa9H5SJ81@vger.kernel.org, AJvYcCVNjc3s9B6CSQcDeJm/D1yYiwItW9wlhvMqGhcilUkdC0wSpH4O2ctY75y6AY3lbzPWgQ0Kjm/vs8lCxanenZLE@vger.kernel.org, AJvYcCWhgBnCJQVOdX1G7lctHlx12WvlY/Z+9XGgcYuvBF4WP6FJjjp9TlI/2SXITi7lYrQopu2plQFBHHJe@vger.kernel.org, AJvYcCXCXlxpoN01pLbYgNo8zEj6VnUhG6DVflln3RusPtyBuTgDr16NARrysvXD8eesxqk2DW8XNJjMDQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJB7GOjLzI1fISHsg5d1xE9VldiVO10ubDF955d29q5qawIu3b
+	GiE8EWX01JRnfdMlL62gB+nAAXSF+duX/4mYhXRWnA5Q+Aeskbg=
+X-Gm-Gg: ASbGnctad9U5eIZEMTCNhsnPfn0myCTrvT5Ls4brSbcyT7ye4ISytpqX94oMHdSlTbV
+	WnZ2FS0KYrPzdKdAeYFBe6DLx96u4M1NjCP3oGwbBWqs+gI3j4Wq8RIWr9N46/dJB72K/dPIFZq
+	SLOKFDv/RSbKeIhW/CHVLu9dsfKbCz2Hp1iMJIo0GI72RupceTw0kKUUNoA5nN95/DR+ZKph7v9
+	ehFbfNJFj6MNF9Diw5R+K45ZB9rRwCNpvKQWlFfV9gu8mHD1XjSgn2aCiqwJIvdp/v740LdbxXN
+	qmH2P62FfVOvNPRjruviEjEY/yZuFxK1NNuRqP92
+X-Google-Smtp-Source: AGHT+IFvESgg+cSE/0j040cZkZJ81uyq2b6hJEaiYQ/BAOTXEwbuhBtGhTMyBC8YbKXFKlgO8OHwXw==
+X-Received: by 2002:a05:6a21:6d89:b0:1f5:839e:ece8 with SMTP id adf61e73a8af0-203b3e500c7mr5324166637.2.1744824376952;
+        Wed, 16 Apr 2025 10:26:16 -0700 (PDT)
+Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
+        by smtp.gmail.com with UTF8SMTPSA id d2e1a72fcca58-73bd2198b53sm10691169b3a.21.2025.04.16.10.26.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Apr 2025 10:26:16 -0700 (PDT)
+Date: Wed, 16 Apr 2025 10:26:15 -0700
+From: Stanislav Fomichev <stfomichev@gmail.com>
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, io-uring@vger.kernel.org,
+	kvm@vger.kernel.org, virtualization@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Jeroen de Borst <jeroendb@google.com>,
+	Harshitha Ramamurthy <hramamurthy@google.com>,
+	Kuniyuki Iwashima <kuniyu@amazon.com>,
+	Willem de Bruijn <willemb@google.com>, Jens Axboe <axboe@kernel.dk>,
+	Pavel Begunkov <asml.silence@gmail.com>,
+	David Ahern <dsahern@kernel.org>,
+	Neal Cardwell <ncardwell@google.com>,
+	Stefan Hajnoczi <stefanha@redhat.com>,
+	Stefano Garzarella <sgarzare@redhat.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Kaiyuan Zhang <kaiyuanz@google.com>
+Subject: Re: [PATCH net-next v8 4/9] net: devmem: Implement TX path
+Message-ID: <Z__oN6HTawqLDfyG@mini-arch>
+References: <20250415224756.152002-1-almasrymina@google.com>
+ <20250415224756.152002-4-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nokia-bell-labs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR07MB7984.eurprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 06b379d0-256b-440a-50a3-08dd7d06e26b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Apr 2025 16:51:07.8387
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: G8pDn4HJRznlpykyregYS+NcIYIIvTQ3pSUGdIoXnUe2mPe8y4LJuNqRJRvtNsUYouJIOwLiYC5iUZfPhY7NBmcQ6wvO3pdGay7aiKCJmt3ZK4BlYEz1SjOIlklUQkVx
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR07MB6345
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250415224756.152002-4-almasrymina@google.com>
 
-> -----Original Message-----
-> From: Victor Nogueira <victor@mojatatu.com>=20
-> Sent: Wednesday, April 16, 2025 2:22 PM
-> To: Chia-Yu Chang (Nokia) <chia-yu.chang@nokia-bell-labs.com>; netdev@vge=
-r.kernel.org; dave.taht@gmail.com; pabeni@redhat.com; jhs@mojatatu.com; kub=
-a@kernel.org; stephen@networkplumber.org; xiyou.wangcong@gmail.com; jiri@re=
-snulli.us; davem@davemloft.net; edumazet@google.com; horms@kernel.org; andr=
-ew+netdev@lunn.ch; donald.hunter@gmail.com; ast@fiberby.net; liuhangbin@gma=
-il.com; shuah@kernel.org; linux-kselftest@vger.kernel.org; ij@kernel.org; n=
-cardwell@google.com; Koen De Schepper (Nokia) <koen.de_schepper@nokia-bell-=
-labs.com>; g.white <g.white@cablelabs.com>; ingemar.s.johansson@ericsson.co=
-m; mirja.kuehlewind@ericsson.com; cheshire@apple.com; rs.ietf@gmx.at; Jason=
-_Livingood@comcast.com; vidhi_goel <vidhi_goel@apple.com>
-> Cc: Olga Albisser <olga@albisser.org>; Olivier Tilmans (Nokia) <olivier.t=
-ilmans@nokia.com>; Bob Briscoe <research@bobbriscoe.net>; Henrik Steen <hen=
-rist@henrist.net>
-> Subject: Re: [PATCH v5 RESEND iproute2-next 1/1] tc: add dualpi2 schedule=
-r module
->=20
-> [You don't often get email from victor@mojatatu.com. Learn why this is im=
-portant at https://aka.ms/LearnAboutSenderIdentification ]
->=20
-> CAUTION: This is an external email. Please be very careful when clicking =
-links or opening attachments. See the URL nok.it/ext for additional informa=
-tion.
->=20
->=20
->=20
-> On 4/14/25 10:18, chia-yu.chang@nokia-bell-labs.com wrote:
-> > From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-> >
-> > DUALPI2 AQM is a combination of the DUALQ Coupled-AQM with a PI2=20
-> > base-AQM. The PI2 AQM is in turn both an extension and a=20
-> > simplification of the PIE AQM. PI2 makes quite some PIE heuristics=20
-> > unnecessary, while being able to control scalable congestion controls l=
-ike TCP-Prague.
-> > With PI2, both Reno/Cubic can be used in parallel with Prague,=20
-> > maintaining window fairness. DUALQ provides latency separation between=
-=20
-> > low latency Prague flows and Reno/Cubic flows that need a bigger queue.
-> >
-> > This patch adds support to tc to configure it through its netlink=20
-> > interface.
-> >
-> > Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-> > Co-developed-by: Olga Albisser <olga@albisser.org>
-> > Signed-off-by: Olga Albisser <olga@albisser.org>
-> > Co-developed-by: Koen De Schepper=20
-> > <koen.de_schepper@nokia-bell-labs.com>
-> > Signed-off-by: Koen De Schepper <koen.de_schepper@nokia-bell-labs.com>
-> > Co-developed-by: Oliver Tilmans <olivier.tilmans@nokia.com>
-> > Signed-off-by: Oliver Tilmans <olivier.tilmans@nokia.com>
-> > Signed-off-by: Bob Briscoe <research@bobbriscoe.net>
-> > Co-developed-by: Henrik Steen <henrist@henrist.net>
-> > Signed-off-by: Henrik Steen <henrist@henrist.net>
-> > ---
-> >   bash-completion/tc             |  11 +-
-> >   include/uapi/linux/pkt_sched.h |  39 +++
-> >   include/utils.h                |   2 +
-> >   ip/iplink_can.c                |  14 -
-> >   lib/utils.c                    |  30 ++
-> >   man/man8/tc-dualpi2.8          | 249 ++++++++++++++++
-> >   tc/Makefile                    |   1 +
-> >   tc/q_dualpi2.c                 | 519 ++++++++++++++++++++++++++++++++=
+On 04/15, Mina Almasry wrote:
+> Augment dmabuf binding to be able to handle TX. Additional to all the RX
+> binding, we also create tx_vec needed for the TX path.
+> 
+> Provide API for sendmsg to be able to send dmabufs bound to this device:
+> 
+> - Provide a new dmabuf_tx_cmsg which includes the dmabuf to send from.
+> - MSG_ZEROCOPY with SCM_DEVMEM_DMABUF cmsg indicates send from dma-buf.
+> 
+> Devmem is uncopyable, so piggyback off the existing MSG_ZEROCOPY
+> implementation, while disabling instances where MSG_ZEROCOPY falls back
+> to copying.
+> 
+> We additionally pipe the binding down to the new
+> zerocopy_fill_skb_from_devmem which fills a TX skb with net_iov netmems
+> instead of the traditional page netmems.
+> 
+> We also special case skb_frag_dma_map to return the dma-address of these
+> dmabuf net_iovs instead of attempting to map pages.
+> 
+> The TX path may release the dmabuf in a context where we cannot wait.
+> This happens when the user unbinds a TX dmabuf while there are still
+> references to its netmems in the TX path. In that case, the netmems will
+> be put_netmem'd from a context where we can't unmap the dmabuf, Resolve
+> this by making __net_devmem_dmabuf_binding_free schedule_work'd.
+> 
+> Based on work by Stanislav Fomichev <sdf@fomichev.me>. A lot of the meat
+> of the implementation came from devmem TCP RFC v1[1], which included the
+> TX path, but Stan did all the rebasing on top of netmem/net_iov.
+> 
+> Cc: Stanislav Fomichev <sdf@fomichev.me>
+> Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
+> Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+> 
+> ---
+> 
+> v8:
+> - move adding the binding to the net_devmem_dmabuf_bindings after it's
+>   been fully initialized to eliminate potential for races with send path
+>   (Stan).
+> - Use net_devmem_get_by_index_lock instead of rtnl_locking
+> 
+> v6:
+> - Retain behavior that MSG_FASTOPEN succeeds even if cmsg is invalid
+>   (Paolo).
+> - Rework the freeing of tx_vec slightly to improve readability. Now it
+>   has its own err label (Paolo).
+> - Squash making unbinding scheduled work (Paolo).
+> - Add comment to clarify that net_iovs stuck in the transmit path hold
+>   a ref on the underlying dmabuf binding (David).
+> - Fix the comment on how binding refcounting works on RX (the comment
+>   was not matching the existing code behavior).
+> 
+> v5:
+> - Return -EFAULT from zerocopy_fill_skb_from_devmem (Stan)
+> - don't null check before kvfree (stan).
+> 
+> v4:
+> - Remove dmabuf_tx_cmsg definition and just use __u32 for the dma-buf id
+>   (Willem).
+> - Check that iov_iter_type() is ITER_IOVEC in
+>   zerocopy_fill_skb_from_iter() (Pavel).
+> - Fix binding->tx_vec not being freed on error paths (Paolo).
+> - Make devmem patch mutually exclusive with msg->ubuf_info path (Pavel).
+> - Check that MSG_ZEROCOPY and SOCK_ZEROCOPY are provided when
+>   sockc.dmabuf_id is provided.
+> - Don't mm_account_pinned_pages() on devmem TX (Pavel).
+> 
+> v3:
+> - Use kvmalloc_array instead of kcalloc (Stan).
+> - Fix unreachable code warning (Simon).
+> 
+> v2:
+> - Remove dmabuf_offset from the dmabuf cmsg.
+> - Update zerocopy_fill_skb_from_devmem to interpret the
+>   iov_base/iter_iov_addr as the offset into the dmabuf to send from
+>   (Stan).
+> - Remove the confusing binding->tx_iter which is not needed if we
+>   interpret the iov_base/iter_iov_addr as offset into the dmabuf (Stan).
+> - Remove check for binding->sgt and binding->sgt->nents in dmabuf
+>   binding.
+> - Simplify the calculation of binding->tx_vec.
+> - Check in net_devmem_get_binding that the binding we're returning
+>   has ifindex matching the sending socket (Willem).
+> ---
+>  include/linux/skbuff.h                  |  17 +++-
+>  include/net/sock.h                      |   1 +
+>  net/core/datagram.c                     |  48 ++++++++-
+>  net/core/devmem.c                       | 127 ++++++++++++++++++++----
+>  net/core/devmem.h                       |  61 ++++++++++--
+>  net/core/netdev-genl.c                  |  62 +++++++++++-
+>  net/core/skbuff.c                       |  18 ++--
+>  net/core/sock.c                         |   6 ++
+>  net/ipv4/ip_output.c                    |   3 +-
+>  net/ipv4/tcp.c                          |  50 ++++++++--
+>  net/ipv6/ip6_output.c                   |   3 +-
+>  net/vmw_vsock/virtio_transport_common.c |   5 +-
+>  12 files changed, 338 insertions(+), 63 deletions(-)
+> 
+> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+> index f1381aff0f89..10dc0a439108 100644
+> --- a/include/linux/skbuff.h
+> +++ b/include/linux/skbuff.h
+> @@ -1710,13 +1710,16 @@ static inline void skb_set_end_offset(struct sk_buff *skb, unsigned int offset)
+>  extern const struct ubuf_info_ops msg_zerocopy_ubuf_ops;
+>  
+>  struct ubuf_info *msg_zerocopy_realloc(struct sock *sk, size_t size,
+> -				       struct ubuf_info *uarg);
+> +				       struct ubuf_info *uarg, bool devmem);
+>  
+>  void msg_zerocopy_put_abort(struct ubuf_info *uarg, bool have_uref);
+>  
+> +struct net_devmem_dmabuf_binding;
+> +
+>  int __zerocopy_sg_from_iter(struct msghdr *msg, struct sock *sk,
+>  			    struct sk_buff *skb, struct iov_iter *from,
+> -			    size_t length);
+> +			    size_t length,
+> +			    struct net_devmem_dmabuf_binding *binding);
+>  
+>  int zerocopy_fill_skb_from_iter(struct sk_buff *skb,
+>  				struct iov_iter *from, size_t length);
+> @@ -1724,12 +1727,14 @@ int zerocopy_fill_skb_from_iter(struct sk_buff *skb,
+>  static inline int skb_zerocopy_iter_dgram(struct sk_buff *skb,
+>  					  struct msghdr *msg, int len)
+>  {
+> -	return __zerocopy_sg_from_iter(msg, skb->sk, skb, &msg->msg_iter, len);
+> +	return __zerocopy_sg_from_iter(msg, skb->sk, skb, &msg->msg_iter, len,
+> +				       NULL);
+>  }
+>  
+>  int skb_zerocopy_iter_stream(struct sock *sk, struct sk_buff *skb,
+>  			     struct msghdr *msg, int len,
+> -			     struct ubuf_info *uarg);
+> +			     struct ubuf_info *uarg,
+> +			     struct net_devmem_dmabuf_binding *binding);
+>  
+>  /* Internal */
+>  #define skb_shinfo(SKB)	((struct skb_shared_info *)(skb_end_pointer(SKB)))
+> @@ -3700,6 +3705,10 @@ static inline dma_addr_t __skb_frag_dma_map(struct device *dev,
+>  					    size_t offset, size_t size,
+>  					    enum dma_data_direction dir)
+>  {
+> +	if (skb_frag_is_net_iov(frag)) {
+> +		return netmem_to_net_iov(frag->netmem)->dma_addr + offset +
+> +		       frag->offset;
+> +	}
+>  	return dma_map_page(dev, skb_frag_page(frag),
+>  			    skb_frag_off(frag) + offset, size, dir);
+>  }
+> diff --git a/include/net/sock.h b/include/net/sock.h
+> index bb4d6189292f..5cb10cc0ca6e 100644
+> --- a/include/net/sock.h
+> +++ b/include/net/sock.h
+> @@ -1851,6 +1851,7 @@ struct sockcm_cookie {
+>  	u32 tsflags;
+>  	u32 ts_opt_id;
+>  	u32 priority;
+> +	u32 dmabuf_id;
+>  };
+>  
+>  static inline void sockcm_init(struct sockcm_cookie *sockc,
+> diff --git a/net/core/datagram.c b/net/core/datagram.c
+> index f0634f0cb834..042a7dceb85a 100644
+> --- a/net/core/datagram.c
+> +++ b/net/core/datagram.c
+> @@ -63,6 +63,8 @@
+>  #include <net/busy_poll.h>
+>  #include <crypto/hash.h>
+>  
+> +#include "devmem.h"
+> +
+>  /*
+>   *	Is a socket 'connection oriented' ?
+>   */
+> @@ -691,9 +693,49 @@ int zerocopy_fill_skb_from_iter(struct sk_buff *skb,
+>  	return 0;
+>  }
+>  
+> +static int
+> +zerocopy_fill_skb_from_devmem(struct sk_buff *skb, struct iov_iter *from,
+> +			      int length,
+> +			      struct net_devmem_dmabuf_binding *binding)
+> +{
+> +	int i = skb_shinfo(skb)->nr_frags;
+> +	size_t virt_addr, size, off;
+> +	struct net_iov *niov;
+> +
+> +	/* Devmem filling works by taking an IOVEC from the user where the
+> +	 * iov_addrs are interpreted as an offset in bytes into the dma-buf to
+> +	 * send from. We do not support other iter types.
+> +	 */
+> +	if (iov_iter_type(from) != ITER_IOVEC)
+> +		return -EFAULT;
+> +
+> +	while (length && iov_iter_count(from)) {
+> +		if (i == MAX_SKB_FRAGS)
+> +			return -EMSGSIZE;
+> +
+> +		virt_addr = (size_t)iter_iov_addr(from);
+> +		niov = net_devmem_get_niov_at(binding, virt_addr, &off, &size);
+> +		if (!niov)
+> +			return -EFAULT;
+> +
+> +		size = min_t(size_t, size, length);
+> +		size = min_t(size_t, size, iter_iov_len(from));
+> +
+> +		get_netmem(net_iov_to_netmem(niov));
+> +		skb_add_rx_frag_netmem(skb, i, net_iov_to_netmem(niov), off,
+> +				       size, PAGE_SIZE);
+> +		iov_iter_advance(from, size);
+> +		length -= size;
+> +		i++;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  int __zerocopy_sg_from_iter(struct msghdr *msg, struct sock *sk,
+>  			    struct sk_buff *skb, struct iov_iter *from,
+> -			    size_t length)
+> +			    size_t length,
+> +			    struct net_devmem_dmabuf_binding *binding)
+>  {
+>  	unsigned long orig_size = skb->truesize;
+>  	unsigned long truesize;
+> @@ -701,6 +743,8 @@ int __zerocopy_sg_from_iter(struct msghdr *msg, struct sock *sk,
+>  
+>  	if (msg && msg->msg_ubuf && msg->sg_from_iter)
+>  		ret = msg->sg_from_iter(skb, from, length);
+> +	else if (unlikely(binding))
+> +		ret = zerocopy_fill_skb_from_devmem(skb, from, length, binding);
+>  	else
+>  		ret = zerocopy_fill_skb_from_iter(skb, from, length);
+>  
+> @@ -734,7 +778,7 @@ int zerocopy_sg_from_iter(struct sk_buff *skb, struct iov_iter *from)
+>  	if (skb_copy_datagram_from_iter(skb, 0, from, copy))
+>  		return -EFAULT;
+>  
+> -	return __zerocopy_sg_from_iter(NULL, NULL, skb, from, ~0U);
+> +	return __zerocopy_sg_from_iter(NULL, NULL, skb, from, ~0U, NULL);
+>  }
+>  EXPORT_SYMBOL(zerocopy_sg_from_iter);
+>  
+> diff --git a/net/core/devmem.c b/net/core/devmem.c
+> index dca2ff7cf692..9599a82990e6 100644
+> --- a/net/core/devmem.c
+> +++ b/net/core/devmem.c
+> @@ -16,6 +16,7 @@
+>  #include <net/netdev_rx_queue.h>
+>  #include <net/page_pool/helpers.h>
+>  #include <net/page_pool/memory_provider.h>
+> +#include <net/sock.h>
+>  #include <trace/events/page_pool.h>
+>  
+>  #include "devmem.h"
+> @@ -52,8 +53,10 @@ static dma_addr_t net_devmem_get_dma_addr(const struct net_iov *niov)
+>  	       ((dma_addr_t)net_iov_idx(niov) << PAGE_SHIFT);
+>  }
+>  
+> -void __net_devmem_dmabuf_binding_free(struct net_devmem_dmabuf_binding *binding)
+> +void __net_devmem_dmabuf_binding_free(struct work_struct *wq)
+>  {
+> +	struct net_devmem_dmabuf_binding *binding = container_of(wq, typeof(*binding), unbind_w);
+> +
+>  	size_t size, avail;
+>  
+>  	gen_pool_for_each_chunk(binding->chunk_pool,
+> @@ -71,8 +74,10 @@ void __net_devmem_dmabuf_binding_free(struct net_devmem_dmabuf_binding *binding)
+>  	dma_buf_detach(binding->dmabuf, binding->attachment);
+>  	dma_buf_put(binding->dmabuf);
+>  	xa_destroy(&binding->bound_rxqs);
+> +	kvfree(binding->tx_vec);
+>  	kfree(binding);
+>  }
+> +EXPORT_SYMBOL(__net_devmem_dmabuf_binding_free);
+>  
+>  struct net_iov *
+>  net_devmem_alloc_dmabuf(struct net_devmem_dmabuf_binding *binding)
+> @@ -117,6 +122,13 @@ void net_devmem_unbind_dmabuf(struct net_devmem_dmabuf_binding *binding)
+>  	unsigned long xa_idx;
+>  	unsigned int rxq_idx;
+>  
+> +	xa_erase(&net_devmem_dmabuf_bindings, binding->id);
+> +
+> +	/* Ensure no tx net_devmem_lookup_dmabuf() are in flight after the
+> +	 * erase.
+> +	 */
+> +	synchronize_net();
+> +
+>  	if (binding->list.next)
+>  		list_del(&binding->list);
+>  
+> @@ -131,8 +143,6 @@ void net_devmem_unbind_dmabuf(struct net_devmem_dmabuf_binding *binding)
+>  		__net_mp_close_rxq(binding->dev, rxq_idx, &mp_params);
+>  	}
+>  
+> -	xa_erase(&net_devmem_dmabuf_bindings, binding->id);
+> -
+>  	net_devmem_dmabuf_binding_put(binding);
+>  }
+>  
+> @@ -166,8 +176,9 @@ int net_devmem_bind_dmabuf_to_queue(struct net_device *dev, u32 rxq_idx,
+>  }
+>  
+>  struct net_devmem_dmabuf_binding *
+> -net_devmem_bind_dmabuf(struct net_device *dev, unsigned int dmabuf_fd,
+> -		       struct netlink_ext_ack *extack)
+> +net_devmem_bind_dmabuf(struct net_device *dev,
+> +		       enum dma_data_direction direction,
+> +		       unsigned int dmabuf_fd, struct netlink_ext_ack *extack)
+>  {
+>  	struct net_devmem_dmabuf_binding *binding;
+>  	static u32 id_alloc_next;
+> @@ -189,43 +200,44 @@ net_devmem_bind_dmabuf(struct net_device *dev, unsigned int dmabuf_fd,
+>  	}
+>  
+>  	binding->dev = dev;
+> -
+> -	err = xa_alloc_cyclic(&net_devmem_dmabuf_bindings, &binding->id,
+> -			      binding, xa_limit_32b, &id_alloc_next,
+> -			      GFP_KERNEL);
+> -	if (err < 0)
+> -		goto err_free_binding;
+> -
+>  	xa_init_flags(&binding->bound_rxqs, XA_FLAGS_ALLOC);
+> -
+>  	refcount_set(&binding->ref, 1);
+> -
+>  	binding->dmabuf = dmabuf;
+>  
+>  	binding->attachment = dma_buf_attach(binding->dmabuf, dev->dev.parent);
+>  	if (IS_ERR(binding->attachment)) {
+>  		err = PTR_ERR(binding->attachment);
+>  		NL_SET_ERR_MSG(extack, "Failed to bind dmabuf to device");
+> -		goto err_free_id;
+> +		goto err_free_binding;
+>  	}
+>  
+>  	binding->sgt = dma_buf_map_attachment_unlocked(binding->attachment,
+> -						       DMA_FROM_DEVICE);
+> +						       direction);
+>  	if (IS_ERR(binding->sgt)) {
+>  		err = PTR_ERR(binding->sgt);
+>  		NL_SET_ERR_MSG(extack, "Failed to map dmabuf attachment");
+>  		goto err_detach;
+>  	}
+>  
+> +	if (direction == DMA_TO_DEVICE) {
+> +		binding->tx_vec = kvmalloc_array(dmabuf->size / PAGE_SIZE,
+> +						 sizeof(struct net_iov *),
+> +						 GFP_KERNEL);
+> +		if (!binding->tx_vec) {
+> +			err = -ENOMEM;
+> +			goto err_unmap;
+> +		}
+> +	}
+> +
+>  	/* For simplicity we expect to make PAGE_SIZE allocations, but the
+>  	 * binding can be much more flexible than that. We may be able to
+>  	 * allocate MTU sized chunks here. Leave that for future work...
+>  	 */
+> -	binding->chunk_pool =
+> -		gen_pool_create(PAGE_SHIFT, dev_to_node(&dev->dev));
+> +	binding->chunk_pool = gen_pool_create(PAGE_SHIFT,
+> +					      dev_to_node(&dev->dev));
+>  	if (!binding->chunk_pool) {
+>  		err = -ENOMEM;
+> -		goto err_unmap;
+> +		goto err_tx_vec;
+>  	}
+>  
+>  	virtual = 0;
+> @@ -270,24 +282,35 @@ net_devmem_bind_dmabuf(struct net_device *dev, unsigned int dmabuf_fd,
+>  			niov->owner = &owner->area;
+>  			page_pool_set_dma_addr_netmem(net_iov_to_netmem(niov),
+>  						      net_devmem_get_dma_addr(niov));
+> +			if (direction == DMA_TO_DEVICE)
+> +				binding->tx_vec[owner->area.base_virtual / PAGE_SIZE + i] = niov;
+>  		}
+>  
+>  		virtual += len;
+>  	}
+>  
+> +	err = xa_alloc_cyclic(&net_devmem_dmabuf_bindings, &binding->id,
+> +			      binding, xa_limit_32b, &id_alloc_next,
+> +			      GFP_KERNEL);
+> +	if (err < 0)
+> +		goto err_free_id;
+> +
+> +
+>  	return binding;
+>  
+> +err_free_id:
+> +	xa_erase(&net_devmem_dmabuf_bindings, binding->id);
+>  err_free_chunks:
+>  	gen_pool_for_each_chunk(binding->chunk_pool,
+>  				net_devmem_dmabuf_free_chunk_owner, NULL);
+>  	gen_pool_destroy(binding->chunk_pool);
+> +err_tx_vec:
+> +	kvfree(binding->tx_vec);
+>  err_unmap:
+>  	dma_buf_unmap_attachment_unlocked(binding->attachment, binding->sgt,
+>  					  DMA_FROM_DEVICE);
+>  err_detach:
+>  	dma_buf_detach(dmabuf, binding->attachment);
+> -err_free_id:
+> -	xa_erase(&net_devmem_dmabuf_bindings, binding->id);
+>  err_free_binding:
+>  	kfree(binding);
+>  err_put_dmabuf:
+> @@ -295,6 +318,21 @@ net_devmem_bind_dmabuf(struct net_device *dev, unsigned int dmabuf_fd,
+>  	return ERR_PTR(err);
+>  }
+>  
+> +struct net_devmem_dmabuf_binding *net_devmem_lookup_dmabuf(u32 id)
+> +{
+> +	struct net_devmem_dmabuf_binding *binding;
+> +
+> +	rcu_read_lock();
+> +	binding = xa_load(&net_devmem_dmabuf_bindings, id);
+> +	if (binding) {
+> +		if (!net_devmem_dmabuf_binding_get(binding))
+> +			binding = NULL;
+> +	}
+> +	rcu_read_unlock();
+> +
+> +	return binding;
+> +}
+> +
+>  void net_devmem_get_net_iov(struct net_iov *niov)
+>  {
+>  	net_devmem_dmabuf_binding_get(net_devmem_iov_binding(niov));
+> @@ -305,6 +343,53 @@ void net_devmem_put_net_iov(struct net_iov *niov)
+>  	net_devmem_dmabuf_binding_put(net_devmem_iov_binding(niov));
+>  }
+>  
+> +struct net_devmem_dmabuf_binding *net_devmem_get_binding(struct sock *sk,
+> +							 unsigned int dmabuf_id)
+> +{
+> +	struct net_devmem_dmabuf_binding *binding;
+> +	struct dst_entry *dst = __sk_dst_get(sk);
+> +	int err = 0;
+> +
+> +	binding = net_devmem_lookup_dmabuf(dmabuf_id);
+> +	if (!binding || !binding->tx_vec) {
+> +		err = -EINVAL;
+> +		goto out_err;
+> +	}
+> +
+> +	/* The dma-addrs in this binding are only reachable to the corresponding
+> +	 * net_device.
+> +	 */
+> +	if (!dst || !dst->dev || dst->dev->ifindex != binding->dev->ifindex) {
+> +		err = -ENODEV;
+> +		goto out_err;
+> +	}
+> +
+> +	return binding;
+> +
+> +out_err:
+> +	if (binding)
+> +		net_devmem_dmabuf_binding_put(binding);
+> +
+> +	return ERR_PTR(err);
+> +}
+> +
+> +struct net_iov *
+> +net_devmem_get_niov_at(struct net_devmem_dmabuf_binding *binding,
+> +		       size_t virt_addr, size_t *off, size_t *size)
+> +{
+> +	size_t idx;
+> +
+> +	if (virt_addr >= binding->dmabuf->size)
+> +		return NULL;
+> +
+> +	idx = virt_addr / PAGE_SIZE;
+> +
+> +	*off = virt_addr % PAGE_SIZE;
+> +	*size = PAGE_SIZE - *off;
+> +
+> +	return binding->tx_vec[idx];
+> +}
+> +
+>  /*** "Dmabuf devmem memory provider" ***/
+>  
+>  int mp_dmabuf_devmem_init(struct page_pool *pool)
+> diff --git a/net/core/devmem.h b/net/core/devmem.h
+> index 946f2e015746..67168aae5e5b 100644
+> --- a/net/core/devmem.h
+> +++ b/net/core/devmem.h
+> @@ -23,8 +23,9 @@ struct net_devmem_dmabuf_binding {
+>  
+>  	/* The user holds a ref (via the netlink API) for as long as they want
+>  	 * the binding to remain alive. Each page pool using this binding holds
+> -	 * a ref to keep the binding alive. Each allocated net_iov holds a
+> -	 * ref.
+> +	 * a ref to keep the binding alive. The page_pool does not release the
+> +	 * ref until all the net_iovs allocated from this binding are released
+> +	 * back to the page_pool.
+>  	 *
+>  	 * The binding undos itself and unmaps the underlying dmabuf once all
+>  	 * those refs are dropped and the binding is no longer desired or in
+> @@ -32,7 +33,10 @@ struct net_devmem_dmabuf_binding {
+>  	 *
+>  	 * net_devmem_get_net_iov() on dmabuf net_iovs will increment this
+>  	 * reference, making sure that the binding remains alive until all the
+> -	 * net_iovs are no longer used.
+> +	 * net_iovs are no longer used. net_iovs allocated from this binding
+> +	 * that are stuck in the TX path for any reason (such as awaiting
+> +	 * retransmits) hold a reference to the binding until the skb holding
+> +	 * them is freed.
+>  	 */
+>  	refcount_t ref;
+>  
+> @@ -48,6 +52,14 @@ struct net_devmem_dmabuf_binding {
+>  	 * active.
+>  	 */
+>  	u32 id;
+> +
+> +	/* Array of net_iov pointers for this binding, sorted by virtual
+> +	 * address. This array is convenient to map the virtual addresses to
+> +	 * net_iovs in the TX path.
+> +	 */
+> +	struct net_iov **tx_vec;
+> +
+> +	struct work_struct unbind_w;
+>  };
+>  
+>  #if defined(CONFIG_NET_DEVMEM)
+> @@ -64,14 +76,17 @@ struct dmabuf_genpool_chunk_owner {
+>  	dma_addr_t base_dma_addr;
+>  };
+>  
+> -void __net_devmem_dmabuf_binding_free(struct net_devmem_dmabuf_binding *binding);
+> +void __net_devmem_dmabuf_binding_free(struct work_struct *wq);
+>  struct net_devmem_dmabuf_binding *
+> -net_devmem_bind_dmabuf(struct net_device *dev, unsigned int dmabuf_fd,
+> -		       struct netlink_ext_ack *extack);
+> +net_devmem_bind_dmabuf(struct net_device *dev,
+> +		       enum dma_data_direction direction,
+> +		       unsigned int dmabuf_fd, struct netlink_ext_ack *extack);
+> +struct net_devmem_dmabuf_binding *net_devmem_lookup_dmabuf(u32 id);
+>  void net_devmem_unbind_dmabuf(struct net_devmem_dmabuf_binding *binding);
+>  int net_devmem_bind_dmabuf_to_queue(struct net_device *dev, u32 rxq_idx,
+>  				    struct net_devmem_dmabuf_binding *binding,
+>  				    struct netlink_ext_ack *extack);
+> +void net_devmem_bind_tx_release(struct sock *sk);
+>  
+>  static inline struct dmabuf_genpool_chunk_owner *
+>  net_devmem_iov_to_chunk_owner(const struct net_iov *niov)
+> @@ -100,10 +115,10 @@ static inline unsigned long net_iov_virtual_addr(const struct net_iov *niov)
+>  	       ((unsigned long)net_iov_idx(niov) << PAGE_SHIFT);
+>  }
+>  
+> -static inline void
+> +static inline bool
+>  net_devmem_dmabuf_binding_get(struct net_devmem_dmabuf_binding *binding)
+>  {
+> -	refcount_inc(&binding->ref);
+> +	return refcount_inc_not_zero(&binding->ref);
+>  }
+>  
+>  static inline void
+> @@ -112,7 +127,8 @@ net_devmem_dmabuf_binding_put(struct net_devmem_dmabuf_binding *binding)
+>  	if (!refcount_dec_and_test(&binding->ref))
+>  		return;
+>  
+> -	__net_devmem_dmabuf_binding_free(binding);
+> +	INIT_WORK(&binding->unbind_w, __net_devmem_dmabuf_binding_free);
+> +	schedule_work(&binding->unbind_w);
+>  }
+>  
+>  void net_devmem_get_net_iov(struct net_iov *niov);
+> @@ -123,6 +139,11 @@ net_devmem_alloc_dmabuf(struct net_devmem_dmabuf_binding *binding);
+>  void net_devmem_free_dmabuf(struct net_iov *ppiov);
+>  
+>  bool net_is_devmem_iov(struct net_iov *niov);
+> +struct net_devmem_dmabuf_binding *
+> +net_devmem_get_binding(struct sock *sk, unsigned int dmabuf_id);
+> +struct net_iov *
+> +net_devmem_get_niov_at(struct net_devmem_dmabuf_binding *binding, size_t addr,
+> +		       size_t *off, size_t *size);
+>  
+>  #else
+>  struct net_devmem_dmabuf_binding;
+> @@ -140,18 +161,23 @@ static inline void net_devmem_put_net_iov(struct net_iov *niov)
+>  {
+>  }
+>  
+> -static inline void
+> -__net_devmem_dmabuf_binding_free(struct net_devmem_dmabuf_binding *binding)
+> +static inline void __net_devmem_dmabuf_binding_free(struct work_struct *wq)
+>  {
+>  }
+>  
+>  static inline struct net_devmem_dmabuf_binding *
+>  net_devmem_bind_dmabuf(struct net_device *dev, unsigned int dmabuf_fd,
+> +		       enum dma_data_direction direction,
+>  		       struct netlink_ext_ack *extack)
+>  {
+>  	return ERR_PTR(-EOPNOTSUPP);
+>  }
+>  
+> +static inline struct net_devmem_dmabuf_binding *net_devmem_lookup_dmabuf(u32 id)
+> +{
+> +	return NULL;
+> +}
+> +
+>  static inline void
+>  net_devmem_unbind_dmabuf(struct net_devmem_dmabuf_binding *binding)
+>  {
+> @@ -190,6 +216,19 @@ static inline bool net_is_devmem_iov(struct net_iov *niov)
+>  {
+>  	return false;
+>  }
+> +
+> +static inline struct net_devmem_dmabuf_binding *
+> +net_devmem_get_binding(struct sock *sk, unsigned int dmabuf_id)
+> +{
+> +	return ERR_PTR(-EOPNOTSUPP);
+> +}
+> +
+> +static inline struct net_iov *
+> +net_devmem_get_niov_at(struct net_devmem_dmabuf_binding *binding, size_t addr,
+> +		       size_t *off, size_t *size)
+> +{
+> +	return NULL;
+> +}
+>  #endif
+>  
+>  #endif /* _NET_DEVMEM_H */
+> diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
+> index 5e42f800dfcf..56502923f885 100644
+> --- a/net/core/netdev-genl.c
+> +++ b/net/core/netdev-genl.c
+> @@ -873,7 +873,8 @@ int netdev_nl_bind_rx_doit(struct sk_buff *skb, struct genl_info *info)
+>  		goto err_unlock;
+>  	}
+>  
+> -	binding = net_devmem_bind_dmabuf(netdev, dmabuf_fd, info->extack);
+> +	binding = net_devmem_bind_dmabuf(netdev, DMA_FROM_DEVICE, dmabuf_fd,
+> +					 info->extack);
+>  	if (IS_ERR(binding)) {
+>  		err = PTR_ERR(binding);
+>  		goto err_unlock;
+> @@ -934,10 +935,65 @@ int netdev_nl_bind_rx_doit(struct sk_buff *skb, struct genl_info *info)
+>  	return err;
+>  }
+>  
+> -/* stub */
+>  int netdev_nl_bind_tx_doit(struct sk_buff *skb, struct genl_info *info)
+>  {
+> -	return 0;
+> +	struct net_devmem_dmabuf_binding *binding;
+> +	struct list_head *sock_binding_list;
+> +	struct net_device *netdev;
+> +	u32 ifindex, dmabuf_fd;
+> +	struct sk_buff *rsp;
+> +	int err = 0;
+> +	void *hdr;
+> +
+> +	if (GENL_REQ_ATTR_CHECK(info, NETDEV_A_DEV_IFINDEX) ||
+> +	    GENL_REQ_ATTR_CHECK(info, NETDEV_A_DMABUF_FD))
+> +		return -EINVAL;
+> +
+> +	ifindex = nla_get_u32(info->attrs[NETDEV_A_DEV_IFINDEX]);
+> +	dmabuf_fd = nla_get_u32(info->attrs[NETDEV_A_DMABUF_FD]);
+> +
+> +	sock_binding_list = genl_sk_priv_get(&netdev_nl_family,
+> +					     NETLINK_CB(skb).sk);
+> +	if (IS_ERR(sock_binding_list))
+> +		return PTR_ERR(sock_binding_list);
+> +
+> +	rsp = genlmsg_new(GENLMSG_DEFAULT_SIZE, GFP_KERNEL);
+> +	if (!rsp)
+> +		return -ENOMEM;
+> +
+> +	hdr = genlmsg_iput(rsp, info);
+> +	if (!hdr) {
+> +		err = -EMSGSIZE;
+> +		goto err_genlmsg_free;
+> +	}
+> +
+> +	netdev = netdev_get_by_index_lock(genl_info_net(info), ifindex);
+> +	if (!netdev || !netif_device_present(netdev)) {
+> +		err = -ENODEV;
+> +		goto err_unlock;
+> +	}
+> +
+> +	binding = net_devmem_bind_dmabuf(netdev, DMA_TO_DEVICE, dmabuf_fd,
+> +					 info->extack);
+> +	if (IS_ERR(binding)) {
+> +		err = PTR_ERR(binding);
+> +		goto err_unlock;
+> +	}
+> +
+> +	list_add(&binding->list, sock_binding_list);
+> +
+> +	nla_put_u32(rsp, NETDEV_A_DMABUF_ID, binding->id);
+> +	genlmsg_end(rsp, hdr);
+> +
+> +	netdev_unlock(netdev);
+> +
+> +	return genlmsg_reply(rsp, info);
+> +
+> +err_unlock:
+> +	netdev_unlock(netdev);
+> +err_genlmsg_free:
+> +	nlmsg_free(rsp);
+> +	return err;
+>  }
+
+The above needs to be converted to netdev_nl_sock? Untested:
+
+diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
+index 33cf5b21aeef..1c6b1dfa5742 100644
+--- a/net/core/netdev-genl.c
++++ b/net/core/netdev-genl.c
+@@ -938,7 +938,7 @@ int netdev_nl_bind_rx_doit(struct sk_buff *skb, struct genl_info *info)
+ int netdev_nl_bind_tx_doit(struct sk_buff *skb, struct genl_info *info)
+ {
+ 	struct net_devmem_dmabuf_binding *binding;
+-	struct list_head *sock_binding_list;
++	struct netdev_nl_sock *priv;
+ 	struct net_device *netdev;
+ 	u32 ifindex, dmabuf_fd;
+ 	struct sk_buff *rsp;
+@@ -952,10 +952,9 @@ int netdev_nl_bind_tx_doit(struct sk_buff *skb, struct genl_info *info)
+ 	ifindex = nla_get_u32(info->attrs[NETDEV_A_DEV_IFINDEX]);
+ 	dmabuf_fd = nla_get_u32(info->attrs[NETDEV_A_DMABUF_FD]);
+ 
+-	sock_binding_list = genl_sk_priv_get(&netdev_nl_family,
+-					     NETLINK_CB(skb).sk);
+-	if (IS_ERR(sock_binding_list))
+-		return PTR_ERR(sock_binding_list);
++	priv = genl_sk_priv_get(&netdev_nl_family, NETLINK_CB(skb).sk);
++	if (IS_ERR(priv))
++		return PTR_ERR(priv);
+ 
+ 	rsp = genlmsg_new(GENLMSG_DEFAULT_SIZE, GFP_KERNEL);
+ 	if (!rsp)
+@@ -967,10 +966,12 @@ int netdev_nl_bind_tx_doit(struct sk_buff *skb, struct genl_info *info)
+ 		goto err_genlmsg_free;
+ 	}
+ 
++	mutex_lock(&priv->lock);
 +
-> >   8 files changed, 850 insertions(+), 15 deletions(-)
-> >   create mode 100644 man/man8/tc-dualpi2.8
-> >   create mode 100644 tc/q_dualpi2.c
->=20
-> Hi!
->=20
-> I compiled your patch and am seeing the following warnings:
->=20
-> q_dualpi2.c: In function 'dualpi2_parse_opt':
-> q_dualpi2.c:218:37: warning: pointer targets in passing argument 1 of 'ge=
-t_u32' differ in signedness [-Wpointer-sign]
->    218 |                         if (get_u32(&min_qlen_step, *argv, 10)) =
-{
->        |                                     ^~~~~~~~~~~~~~
->        |                                     |
->        |                                     int32_t * {aka int *}
-> In file included from q_dualpi2.c:39:
-> ../include/utils.h:157:20: note: expected '__u32 *' {aka 'unsigned int *'=
-} but argument is of type 'int32_t *' {aka 'int *'}
->    157 | int get_u32(__u32 *val, const char *arg, int base);
->        |             ~~~~~~~^~~
-> q_dualpi2.c: At top level:
-> q_dualpi2.c:516:27: warning: initialization of 'int (*)(const struct qdis=
-c_util *, int,  char **, struct nlmsghdr *, const char *)' from incompatibl=
-e pointer type 'int (*)(struct qdisc_util *, int,  char **, struct nlmsghdr=
- *, const char *)' [-Wincompatible-pointer-types]
->    516 |         .parse_qopt     =3D dualpi2_parse_opt,
->        |                           ^~~~~~~~~~~~~~~~~
-> q_dualpi2.c:516:27: note: (near initialization for
-> 'dualpi2_qdisc_util.parse_qopt')
-> q_dualpi2.c:517:27: warning: initialization of 'int (*)(const struct qdis=
-c_util *, FILE *, struct rtattr *)' from incompatible pointer type 'int (*)=
-(struct qdisc_util *, FILE *, struct rtattr *)'
-> [-Wincompatible-pointer-types]
->    517 |         .print_qopt     =3D dualpi2_print_opt,
->        |                           ^~~~~~~~~~~~~~~~~
-> q_dualpi2.c:517:27: note: (near initialization for
-> 'dualpi2_qdisc_util.print_qopt')
-> q_dualpi2.c:518:27: warning: initialization of 'int (*)(const struct qdis=
-c_util *, FILE *, struct rtattr *)' from incompatible pointer type 'int (*)=
-(struct qdisc_util *, FILE *, struct rtattr *)'
-> [-Wincompatible-pointer-types]
->    518 |         .print_xstats   =3D dualpi2_print_xstats,
->        |                           ^~~~~~~~~~~~~~~~~~~~
-> q_dualpi2.c:518:27: note: (near initialization for
-> 'dualpi2_qdisc_util.print_xstats')
->=20
-> cheers,
-> Victor
-
-Hi Victor,
-
-Thanks for prompt feedback, I will fix these warning in the next version.
-
-BRs,
-Chia-Yu
+ 	netdev = netdev_get_by_index_lock(genl_info_net(info), ifindex);
+ 	if (!netdev || !netif_device_present(netdev)) {
+ 		err = -ENODEV;
+-		goto err_unlock;
++		goto err_unlock_sock;
+ 	}
+ 
+ #if 0
+@@ -989,17 +990,21 @@ int netdev_nl_bind_tx_doit(struct sk_buff *skb, struct genl_info *info)
+ 		goto err_unlock;
+ 	}
+ 
+-	list_add(&binding->list, sock_binding_list);
++	list_add(&binding->list, &priv->bindings);
+ 
+ 	nla_put_u32(rsp, NETDEV_A_DMABUF_ID, binding->id);
+ 	genlmsg_end(rsp, hdr);
+ 
+ 	netdev_unlock(netdev);
+ 
++	mutex_unlock(&priv->lock);
++
+ 	return genlmsg_reply(rsp, info);
+ 
+ err_unlock:
+ 	netdev_unlock(netdev);
++err_unlock_sock:
++	mutex_unlock(&priv->lock);
+ err_genlmsg_free:
+ 	nlmsg_free(rsp);
+ 	return err;
 
