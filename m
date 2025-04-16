@@ -1,172 +1,309 @@
-Return-Path: <linux-kselftest+bounces-30960-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30961-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91809A908E3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Apr 2025 18:28:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 073F7A9095D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Apr 2025 18:51:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E0164166C88
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Apr 2025 16:28:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 606AD188213E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Apr 2025 16:51:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B4AB212D69;
-	Wed, 16 Apr 2025 16:28:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A5AF211497;
+	Wed, 16 Apr 2025 16:51:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DMt5At1z"
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="FVq7l8zD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013068.outbound.protection.outlook.com [40.107.162.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BCB9212B0D
-	for <linux-kselftest@vger.kernel.org>; Wed, 16 Apr 2025 16:28:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744820909; cv=none; b=GJja8VKl/SsRu0Y5Ef9tazQSxiVsS4WNYwvWP8w4yxLc9VJiAAt98DmyX/XxrtyWpRHyND5sVNgI5LzGS7cBO9SzfEGGadNl9CXtmiMdNFXMXmKDWnriVf76l9+yXGCdWwkUFWF4BRsXhkO+2JHaHyQNWD5cuFILruZZPG7kl2A=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744820909; c=relaxed/simple;
-	bh=V5EjEqLAI6VF4m0ym14G0zP2Lk1AAeOTupEjRA2/fhk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QACrgutKr4BjAv8djXAQQ4/CKHkCVzHVAB/WhgRkv+m2b6KHGUtAOkHHLa49McZkiLFj92wKmVgNzWIKbKyOFV+V8DphEfolQWEWKavjyQUJTKZMR/xZutzlbT3jWA3g16ufi+AzhFywVb2LqySIbGyA/4uV3Kw6EBdFK22kQdY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DMt5At1z; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-43d5f10e1aaso75965e9.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Apr 2025 09:28:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1744820905; x=1745425705; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dcKONrIAwY+Efjpusl4unIszUT6B68ir1oyM8EH1UJY=;
-        b=DMt5At1zuEraXQDFdfoUFyvRo93WxwpM9AIaXjydcUOd8acdr4WnZ6Od9BCDBrfZoS
-         IpXaXURIRkBaAdzsoDppwKFlPtFA597blEBXLIQ1jzW7DAp13/CExsblaURmFHAXV8QS
-         DrO+HYC4JjqVac0hoL4iQ3zlCoSC7/pMpMWwN7GEIIxd3vjAg19/VB4ZS7cQoqOAnw0c
-         MdgvX2MYGIRzNlqFIrtG70316UJiEz5U0phJ7y7ft2ylDXQiMkb6xKPnzp7nbG6cuUbZ
-         1cNgss8+3qC8TmXwbbCnlq9Hi+8kYLMWCI8qfmxw+aLQrm8d020+hs9ra7i1jJ65Vi0x
-         S4dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744820905; x=1745425705;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dcKONrIAwY+Efjpusl4unIszUT6B68ir1oyM8EH1UJY=;
-        b=t0zwvv+k1HWQvNZjD1i7lAwzglY3qtoQVnAMiLI2nJX4r6BH6MTKJcGuCwKqE4OzAY
-         +Z1L6JGj8urBYk0sCJprGs91/duf6/9iKr43voKWh1D97k9MzMDuOa5BOv9LdqB2P48a
-         bl+QwEVxbH6GqgeYcxix+oq2S5EaCWIoml+k5KeJP+CMuZyTthLYsFTqrZcBUBnVMAaP
-         sSuPWxNBERUm/AwyONOqlUigPJyfwYSDtmlQfl+xC1+x0Pf+GyyC2USAcqtXdMLL4A9W
-         Ym3QD462ihmltCK9AUOP4ZpdvCvOPnBjWGxEeiw1CDDKynb2FIMu44vf0m5VNUW04dRq
-         ascQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXogkJOu8AK4fwuWWfC5M33X2VvvrRTAzYnrny0vB0FBoPa3b0I/CEU1iam38/N7znpU1gbB8lZ+oQxmvlncvg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy940MHmX1WlE1JV4KWz0i+19h0rTJbp/aT5sighDliVGWloNfa
-	EklAeoDpu0nHIlXxVs3xXevdU4sPb9PeZ84GRrqoNLMh0FmdqTGGtKHpC2QGm/q8iEdW1BRJXdQ
-	i+NR6fgmMI5KdSzhcEXsL5jJet7qUD7ncQ4jX
-X-Gm-Gg: ASbGncu3ze9aKgL4awFFE4ZBt7j2JTvWwTJUbs+ONGsaPdi7NeCTRHKa/cdgA8g0xDG
-	MUZ7wv2OOQwu8UlJdz5rehREjN6fWp0lfSOLgKblbyUBLXQ7lk9uF9PGGf4PpYF4ox7V94lSa9c
-	HrbIGByJvLrCM6mmvcM/TzCUiB8q3Q+0iga01AfyRGZ0c1qybcDuwS
-X-Google-Smtp-Source: AGHT+IECcvlnv6xPe9UB0/XJHO7q92sQEEqdeeGFlPVCn4BZ/toc+Qo3v9Dc1e4mY/RgIEckbUeu3UbXyA3ppO6oN3o=
-X-Received: by 2002:a05:600c:6a87:b0:439:4a76:c246 with SMTP id
- 5b1f17b1804b1-4405d26eadcmr1009515e9.6.1744820905359; Wed, 16 Apr 2025
- 09:28:25 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E27A218870C;
+	Wed, 16 Apr 2025 16:51:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.68
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744822275; cv=fail; b=OVAd5NLNrpGsc/t80ZtdsuPIq02SV2RsToBhLBa3RPDTOpBh/TwkfjciIZ8dG1cEhCN5OGz8BObJE2yamOFoaBxc6HRDyPtHZoUc6Vl33ZPg8gP6zc3vxlAtKf42ZxQ2u+lFcIpcrxLAqJZvmwnfhvJ9McYR/9NDMNqGvWnQvmQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744822275; c=relaxed/simple;
+	bh=i34yHPRcY0MBZ8vNpu4ZjA5Y0EwyJClyXvXtp3/9yo0=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=dzNCaOYMknIzNjACHjUUa9DlwYM22TtaR5TgJrzj5iB4utptyhjDITKGCiujU/ZmtIRgNtNK7wTL+/3Yj6NkzHz1/kM88Zy/bSCbFjcTOKeW5aqLCS/fDKkOLnK0V2Fi1qql+6ir8P0gGBxA257odwGK9EXmxKlpxHlqS6fagFI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=FVq7l8zD; arc=fail smtp.client-ip=40.107.162.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=nzS4uniwCygG+KlJ4r4q//NGIUcqXCT8WPi8MUsdCKiNHYY3UdITDKl0oq7qPgLJv5asXIBX4xiq6FppmdQ45+REdrxRpL/brSBj4iyu43ob3uEGc0aa1mJ9PAkHW93TmlMTKU8FcpZE7Ria2OxVs1uAKV3ULB2zEGKOefa+7wXHElghM253AGH/x9t/7orET22uT68xiKpeySt+fF59xQA5OLWZy8ERSOizZN2GCzEm6VrXtabY2V8pwSal1ptWctP/aTAazOFnhZb0H921P31T6x3lSTC29r/0blL9FIK+C+fT1RP5gKlKXToJEO8Y8b68/WjjJLtwIojOBDouBA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GQSp8nFsccUy58tEScFn8Y1byIOOqxC3T3mHJ4igE+o=;
+ b=VYN8ECuqhvTzoku9bqH4781GCchlx0ZOemnobFwsmPCTbYM7FHkp92M3/NjoI54ekI+cr0mpohlJUO1HWgNlDGPQswwfFmgXxuOQ1SmrYHuW2bgB+L2sm0FuMzkhoOQw65nOH+HY7sn1IZN4op2SAudJaZnDkgzzzIMEnFBIpufYfLVs/W7Ig1LOyYagi+b9vAMwvBrnJw8joCnh4aVANkLkyn/AvbutrF0Jt5/518M59nbG+lxNgbi7z24Ywe9X++fYXKhFpwnn6MExFJLUIGskzh820SklZGspblm+ZsFMFRjzLc6XHOFAK35LMRyVYgyce+JfnJ39bElOKG8+Iw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nokia-bell-labs.com; dmarc=pass action=none
+ header.from=nokia-bell-labs.com; dkim=pass header.d=nokia-bell-labs.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GQSp8nFsccUy58tEScFn8Y1byIOOqxC3T3mHJ4igE+o=;
+ b=FVq7l8zDAdHJd8VvYP04c2T96urMnHzlR3/8FyU5yp4wLDllvVQWVMAcBo2pXWZBplL5sMnJVrl0mquCyd336ub2ZRPkmoJJRxRLaeB0f+Npvo1P2p1s5jNAaCXz2vlSGFd/hTffKsEMj577CsLgXspei5YRHgqKX9VPrqjdG7Tb7+GGnY1tyPtX+9aHCoOhAdVHE9Wi4Y6MmRfd3O8+1IqfPND9NFKdd7/cBPmcwS0nIkrW3A+orKTu1fTNkXsLlD+7DmSps/x7Vz1PT2mNLAE2Q0Dtzr1wSCOmBQ4r1jBCPocEZA8XWg9xvfE4gk0hLoAGomAQTQGyEoU8rcmFBw==
+Received: from PAXPR07MB7984.eurprd07.prod.outlook.com (2603:10a6:102:133::12)
+ by DB8PR07MB6345.eurprd07.prod.outlook.com (2603:10a6:10:137::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8632.32; Wed, 16 Apr
+ 2025 16:51:07 +0000
+Received: from PAXPR07MB7984.eurprd07.prod.outlook.com
+ ([fe80::b7f8:dc0a:7e8d:56]) by PAXPR07MB7984.eurprd07.prod.outlook.com
+ ([fe80::b7f8:dc0a:7e8d:56%2]) with mapi id 15.20.8632.030; Wed, 16 Apr 2025
+ 16:51:07 +0000
+From: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>
+To: Victor Nogueira <victor@mojatatu.com>, "netdev@vger.kernel.org"
+	<netdev@vger.kernel.org>, "dave.taht@gmail.com" <dave.taht@gmail.com>,
+	"pabeni@redhat.com" <pabeni@redhat.com>, "jhs@mojatatu.com"
+	<jhs@mojatatu.com>, "kuba@kernel.org" <kuba@kernel.org>,
+	"stephen@networkplumber.org" <stephen@networkplumber.org>,
+	"xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>, "jiri@resnulli.us"
+	<jiri@resnulli.us>, "davem@davemloft.net" <davem@davemloft.net>,
+	"edumazet@google.com" <edumazet@google.com>, "horms@kernel.org"
+	<horms@kernel.org>, "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
+	"donald.hunter@gmail.com" <donald.hunter@gmail.com>, "ast@fiberby.net"
+	<ast@fiberby.net>, "liuhangbin@gmail.com" <liuhangbin@gmail.com>,
+	"shuah@kernel.org" <shuah@kernel.org>, "linux-kselftest@vger.kernel.org"
+	<linux-kselftest@vger.kernel.org>, "ij@kernel.org" <ij@kernel.org>,
+	"ncardwell@google.com" <ncardwell@google.com>, "Koen De Schepper (Nokia)"
+	<koen.de_schepper@nokia-bell-labs.com>, g.white <g.white@cablelabs.com>,
+	"ingemar.s.johansson@ericsson.com" <ingemar.s.johansson@ericsson.com>,
+	"mirja.kuehlewind@ericsson.com" <mirja.kuehlewind@ericsson.com>,
+	"cheshire@apple.com" <cheshire@apple.com>, "rs.ietf@gmx.at" <rs.ietf@gmx.at>,
+	"Jason_Livingood@comcast.com" <Jason_Livingood@comcast.com>, vidhi_goel
+	<vidhi_goel@apple.com>
+CC: Olga Albisser <olga@albisser.org>, "Olivier Tilmans (Nokia)"
+	<olivier.tilmans@nokia.com>, Bob Briscoe <research@bobbriscoe.net>, Henrik
+ Steen <henrist@henrist.net>
+Subject: RE: [PATCH v5 RESEND iproute2-next 1/1] tc: add dualpi2 scheduler
+ module
+Thread-Topic: [PATCH v5 RESEND iproute2-next 1/1] tc: add dualpi2 scheduler
+ module
+Thread-Index: AQHbrT/UYQZ/4/K/DkidXZDf34zdwrOmOcaAgABK5UA=
+Date: Wed, 16 Apr 2025 16:51:07 +0000
+Message-ID:
+ <PAXPR07MB798432ABD92FBDAA04D644B8A3BD2@PAXPR07MB7984.eurprd07.prod.outlook.com>
+References: <20250414131859.97517-1-chia-yu.chang@nokia-bell-labs.com>
+ <20250414131859.97517-2-chia-yu.chang@nokia-bell-labs.com>
+ <ef8c59a0-be86-4ddc-b25a-d198051f12b2@mojatatu.com>
+In-Reply-To: <ef8c59a0-be86-4ddc-b25a-d198051f12b2@mojatatu.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nokia-bell-labs.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PAXPR07MB7984:EE_|DB8PR07MB6345:EE_
+x-ms-office365-filtering-correlation-id: 06b379d0-256b-440a-50a3-08dd7d06e26b
+x-ld-processed: 5d471751-9675-428d-917b-70f44f9630b0,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|376014|7416014|1800799024|366016|921020|38070700018|7053199007;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?lNJk+BU7METU7FK/Vuv20tm/FJHPb4xlCNVww8yvnm6oKtcy8AyysOnI2RpB?=
+ =?us-ascii?Q?RK0d36Jv57bhXXXQtGMHW+mYSOi88DIRx/oIoTQvimbNe8JzbRMV4PAuvOvF?=
+ =?us-ascii?Q?65WgmdiKL8XqO65Q7MF1FLtCvuv+0HBVmy4fFWgqlFxmaiWtgByyeQuHIseZ?=
+ =?us-ascii?Q?g/fBIFEBkSp7MrMgNp21PunlXigjAn8x2OGXsMYSwHoWhrhp6L7BXfTcD1Nx?=
+ =?us-ascii?Q?srQjSdwGM5O+KybZ2KOPEg5ydr3PXtzO8FHVO5rMwm+KJa2ak3HyVa1yoPyC?=
+ =?us-ascii?Q?Ktzc+CQe1w7mrWwhy9kqHTK7MdVcYLOnGpecT2cH6kDddVCWLTgXP98FXixD?=
+ =?us-ascii?Q?H7nIPfVaYiI3+9L+tpWsXCoyGO6H84CHzoSPWK0TOoAneTGPR6cK0rDQoEHu?=
+ =?us-ascii?Q?jGt5xtCS2DTqmNzN8j/vc9Eh/AYv0mTuXlFYzFS0Vzvxj6XNH5cGJZzeS4qq?=
+ =?us-ascii?Q?qQFXlaWFxTev9EBAbJ7MYZPSpc/ZD6bH6mLcvAVGSmqyXY2BY0TGek2wHMLb?=
+ =?us-ascii?Q?e/PrWFu40dMi2Og5m+LYf7x9Km0UUcnNJ45IRqVK2McOx5Mw45rfoEHdQ1Mf?=
+ =?us-ascii?Q?/7XCROlHUFDYC9egWRvhvQS8S9bjZ3Sted8eG745+pQoNi23O6obFQwLrqvt?=
+ =?us-ascii?Q?C+kd449D3EfBZDQHv7LZkO9Wv1FYO7UE4t3EW6T4mX8w2kLPl+P84lXdv3jc?=
+ =?us-ascii?Q?RuieAZpHjJw7z2eUobW3RmdylHJVe6xWMll90kMNtEeL37XiiX6W4RThv404?=
+ =?us-ascii?Q?Bd55DT2MmyCr1ko8rQ6qUhQLjUNjoUo8OM+cHffXTfC9iKbFgRUeBsE9fzq+?=
+ =?us-ascii?Q?pWnKkVE2EldXfy4Q5ntsO6SbxRw8aMu1mUo9Lkx9k9bmQGp8I2GfRPlY8kj0?=
+ =?us-ascii?Q?0YhAdE1YEi0D9P2MJjMJ0pbNfKb9GCN4FgMOTcNEJX078sN+f/8wh5bscfkD?=
+ =?us-ascii?Q?R5yAWHwRss/5eKUzn5pxWG3ZARdWf6F7ZlcF2TSpXWFA2giZGWOg7wsPSk/X?=
+ =?us-ascii?Q?7t5CUH2Z6zJT14Rq/m0djW3zWsj/LXu8UfFWPTlxcgHHq5iX8w2cmmBDqEwE?=
+ =?us-ascii?Q?vzL3McKA2NM6NkMJV1bpWJMWy7k7RGvff/byNbuy5XRMCddtLEDsym5R0/Zu?=
+ =?us-ascii?Q?8dLr3iVhegGd28O5UiVW92c7BmPyzGCunju0BCQFU4ifjFt6HhY3aq057xgG?=
+ =?us-ascii?Q?5/AJIJ7dnl3yIoRfTG4uYJxUcK+mF1m2ceAgy6YhUX7lku/GA7+Sp0be2pyQ?=
+ =?us-ascii?Q?+VQWipWu1s5IibC9grVpKtKyRMDIOqR7F0qXcOcDuedmRLRrH6B7mp57LBxQ?=
+ =?us-ascii?Q?96By1HB8pTt9tA2O38mtA+BNQoFwF4kAjvH+wM1ktKuhyIpdoI3bMsuYPHrs?=
+ =?us-ascii?Q?16Nt42VOwDYDi0Bw1SaeFsOEoS9rZl4ZeeuuWz85WQf8d5C3oW8B6A3rEOsi?=
+ =?us-ascii?Q?vrG+y2b8tpVre24lh7IBzXp00wJtp6050rSl5dIzefgOT5P/W9ST4hnwMvox?=
+ =?us-ascii?Q?41btDCIa8PLx7uPz4w+fU1Yn+deV+Wlzp2+M?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR07MB7984.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(921020)(38070700018)(7053199007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?kNQrjiw0WMJZdu9WgZjpNyD1ZAUaPSA5rnXb3g8BV0WvgaOquWoWT8BrJkxh?=
+ =?us-ascii?Q?gw/XyLAiyh8QsVoQEYcREM/WRVzAJdtjMvrRyuyGYUybFqWunm6QxC/hrsXA?=
+ =?us-ascii?Q?u6zOMGvNV6cv+P22lZn4/QZC6arTqDk8AHpAeI51/rNkhnVVAwnrT9OHrTz1?=
+ =?us-ascii?Q?a6FGAz1LviVl2QMh2yVwhkFHD4xFD06kVuHGMXYZYgxwPblSLnskd/cz9D/i?=
+ =?us-ascii?Q?OKs/tnuUiaCD/FkZyCDIDQhZItBuTvaemYq6Mv+N7jwwn/3Yt0JUJ35G8SUu?=
+ =?us-ascii?Q?y4DDGLVR++C6rRnVyCm3Z1AXm8P9mmffHoYH9thMj94eQLAjer5ih0Ej91BT?=
+ =?us-ascii?Q?ZomVdVAYBbL2aKz4To04Cg/56418hcJDDk3fsx/tY3EVDsaB3/RBfKsySAt/?=
+ =?us-ascii?Q?xo3jCGXEAdBkF4h9voT6OBv95jU9afivg8m3wxZLGIzmzH9TsvO7JR0NytAv?=
+ =?us-ascii?Q?6bn04jGyN8DwlRRn14cW9h7GARalH+2pueEsdUgvFEBpaHxAypK6DcReGFyk?=
+ =?us-ascii?Q?lVzYQEf/8UaXbTgex5P3dn7VWkWY2jo7P4l3IZDL4V9K7fmFMjwiQlVxKgRt?=
+ =?us-ascii?Q?+8+dcqF6aLWna6mOK8u24yYs0CGNgDWPZR3jwhQZmyUB2EWmrDXaBDpiVrjy?=
+ =?us-ascii?Q?YRGAmBJWAJBHoaTZ9IuTzEtlIW1WmPXR9EPfi59VCJIpFTggSDfeRn2lU/oe?=
+ =?us-ascii?Q?nXxg50xqPJ36zlvgoN17QOvMRbrIa4tptTi2aPtjVY1pVRSEzbgSR8pGltr2?=
+ =?us-ascii?Q?HY2PlauqodrQg2gur6OA/b0ZYPUXLvDh/x+qf7yLIScLdMWV8Byn8Tci6X3T?=
+ =?us-ascii?Q?TI0jc494PEriyxvJmIO9fyOWeoggB7XZIx8Bk8YQgyoQwRAvwnT1IfmhMFHi?=
+ =?us-ascii?Q?ZwVshPyYq6ocUZB+Pb26O92OlyMlH4au3tFxt8V1qEa9KrkQlGrpJrmL2a6Q?=
+ =?us-ascii?Q?Cfr8GKV8n1dfkx39JwaawNJDrZTt6IddbiS3jNrSkXWqPwQXmkXQ//4IrQi0?=
+ =?us-ascii?Q?EvXDBZCLfDK299mJgKFbYZyHA2uz1P+rWS87Ufe0Jc+Gx7nUUGxeIde15l91?=
+ =?us-ascii?Q?TWYc6RrMnLuy+kvY92RkmvIchfnEJ9WKn62mtg5blANLusg0ZuIJzCHacO5e?=
+ =?us-ascii?Q?HNqlEhpJkVYxycakSVMXLA7Ez8dIExYheoxREgZnTZHB/MuSiK65KpjEyegw?=
+ =?us-ascii?Q?BfoUMAU+TrAlMIa0kLdMSSOi/BfJyXW6hPiRSHFFa5fPzQP0dbS4LDl59CM2?=
+ =?us-ascii?Q?JrgoJp6SvqHKxwpapkDFjvaUqZ6hzs1IPeVJ0g6m/zbAsvdAW8ylNlutsQk/?=
+ =?us-ascii?Q?tMYxkLQb+vdGCK0b1I505s03l6q3Thxru8SD4KEax16TZip2Fm/N62oihfre?=
+ =?us-ascii?Q?DIpoXHGOP1OPOAqPP9Y/5QRicax7ocRO5Q4096Dzel46crBcEq6l1sKje7Rt?=
+ =?us-ascii?Q?miVDy44eabOWyJd89+v/yVJa4Uoq2NZ1Hzh40ENvfqVKV3+axSvqJNXmxLGX?=
+ =?us-ascii?Q?uVEMqthuF2dpDDfRuTQsmTLWD8xfkBDdwqYvEdFZAp+yIKMa4XoHpiH4GaLY?=
+ =?us-ascii?Q?OfAzKZVplBYzXM0wCz7wsxBLY179gvp2yFd+jbjOIB2kKVFvNrXucRqPl6kz?=
+ =?us-ascii?Q?Hw=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250414225227.3642618-3-tjmercier@google.com> <202504161015.x2XLaha2-lkp@intel.com>
-In-Reply-To: <202504161015.x2XLaha2-lkp@intel.com>
-From: "T.J. Mercier" <tjmercier@google.com>
-Date: Wed, 16 Apr 2025 09:28:13 -0700
-X-Gm-Features: ATxdqUFoAbnFhGEzvGofJporgvqMuSJROlNX-nlFC0ORBP_b5Axo3RH1otfUvlU
-Message-ID: <CABdmKX16QttfxRYHaq1B92U8nw+S6Gte+mFVhOTnCy4H3cLFcA@mail.gmail.com>
-Subject: Re: [PATCH 2/4] bpf: Add dmabuf iterator
-To: kernel test robot <lkp@intel.com>
-Cc: sumit.semwal@linaro.org, christian.koenig@amd.com, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
-	skhan@linuxfoundation.org, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	linaro-mm-sig@lists.linaro.org, linux-doc@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, android-mm@google.com, 
-	simona@ffwll.ch, corbet@lwn.net, eddyz87@gmail.com, song@kernel.org, 
-	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
-	sdf@fomichev.me, jolsa@kernel.org, mykolal@fb.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-OriginatorOrg: nokia-bell-labs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR07MB7984.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 06b379d0-256b-440a-50a3-08dd7d06e26b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Apr 2025 16:51:07.8387
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: G8pDn4HJRznlpykyregYS+NcIYIIvTQ3pSUGdIoXnUe2mPe8y4LJuNqRJRvtNsUYouJIOwLiYC5iUZfPhY7NBmcQ6wvO3pdGay7aiKCJmt3ZK4BlYEz1SjOIlklUQkVx
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR07MB6345
 
-On Tue, Apr 15, 2025 at 9:43=E2=80=AFPM kernel test robot <lkp@intel.com> w=
-rote:
->
-> Hi Mercier,
->
-> kernel test robot noticed the following build errors:
->
-> [auto build test ERROR on bpf-next/net]
-> [also build test ERROR on bpf-next/master bpf/master linus/master v6.15-r=
-c2 next-20250415]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/T-J-Mercier/dma-bu=
-f-Rename-and-expose-debugfs-symbols/20250415-065354
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git =
-net
-> patch link:    https://lore.kernel.org/r/20250414225227.3642618-3-tjmerci=
-er%40google.com
-> patch subject: [PATCH 2/4] bpf: Add dmabuf iterator
-> config: i386-buildonly-randconfig-005-20250416
-> compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df=
-0ef89dd64126512e4ee27b4ac3fd8ddf6247)
-> reproduce (this is a W=3D1 build):
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202504161015.x2XLaha2-lkp=
-@intel.com/
->
-> All errors (new ones prefixed by >>):
->
-> >> ld.lld: error: undefined symbol: dmabuf_debugfs_list_mutex
->    >>> referenced by dmabuf_iter.c:44 (kernel/bpf/dmabuf_iter.c:44)
->    >>>               vmlinux.o:(dmabuf_iter_seq_next)
->    >>> referenced by dmabuf_iter.c:53 (kernel/bpf/dmabuf_iter.c:53)
->    >>>               vmlinux.o:(dmabuf_iter_seq_next)
->    >>> referenced by dmabuf_iter.c:26 (kernel/bpf/dmabuf_iter.c:26)
->    >>>               vmlinux.o:(dmabuf_iter_seq_start)
->    >>> referenced 1 more times
-> --
-> >> ld.lld: error: undefined symbol: dma_buf_put
->    >>> referenced by dmabuf_iter.c:45 (kernel/bpf/dmabuf_iter.c:45)
->    >>>               vmlinux.o:(dmabuf_iter_seq_next)
->    >>> referenced by dmabuf_iter.c:90 (kernel/bpf/dmabuf_iter.c:90)
->    >>>               vmlinux.o:(dmabuf_iter_seq_stop)
-> --
-> >> ld.lld: error: undefined symbol: dmabuf_debugfs_list
->    >>> referenced by list.h:354 (include/linux/list.h:354)
->    >>>               vmlinux.o:(dmabuf_iter_seq_next)
->    >>> referenced by dmabuf_iter.c:0 (kernel/bpf/dmabuf_iter.c:0)
->    >>>               vmlinux.o:(dmabuf_iter_seq_start)
->    >>> referenced by list.h:364 (include/linux/list.h:364)
->    >>>               vmlinux.o:(dmabuf_iter_seq_start)
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+> -----Original Message-----
+> From: Victor Nogueira <victor@mojatatu.com>=20
+> Sent: Wednesday, April 16, 2025 2:22 PM
+> To: Chia-Yu Chang (Nokia) <chia-yu.chang@nokia-bell-labs.com>; netdev@vge=
+r.kernel.org; dave.taht@gmail.com; pabeni@redhat.com; jhs@mojatatu.com; kub=
+a@kernel.org; stephen@networkplumber.org; xiyou.wangcong@gmail.com; jiri@re=
+snulli.us; davem@davemloft.net; edumazet@google.com; horms@kernel.org; andr=
+ew+netdev@lunn.ch; donald.hunter@gmail.com; ast@fiberby.net; liuhangbin@gma=
+il.com; shuah@kernel.org; linux-kselftest@vger.kernel.org; ij@kernel.org; n=
+cardwell@google.com; Koen De Schepper (Nokia) <koen.de_schepper@nokia-bell-=
+labs.com>; g.white <g.white@cablelabs.com>; ingemar.s.johansson@ericsson.co=
+m; mirja.kuehlewind@ericsson.com; cheshire@apple.com; rs.ietf@gmx.at; Jason=
+_Livingood@comcast.com; vidhi_goel <vidhi_goel@apple.com>
+> Cc: Olga Albisser <olga@albisser.org>; Olivier Tilmans (Nokia) <olivier.t=
+ilmans@nokia.com>; Bob Briscoe <research@bobbriscoe.net>; Henrik Steen <hen=
+rist@henrist.net>
+> Subject: Re: [PATCH v5 RESEND iproute2-next 1/1] tc: add dualpi2 schedule=
+r module
+>=20
+> [You don't often get email from victor@mojatatu.com. Learn why this is im=
+portant at https://aka.ms/LearnAboutSenderIdentification ]
+>=20
+> CAUTION: This is an external email. Please be very careful when clicking =
+links or opening attachments. See the URL nok.it/ext for additional informa=
+tion.
+>=20
+>=20
+>=20
+> On 4/14/25 10:18, chia-yu.chang@nokia-bell-labs.com wrote:
+> > From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+> >
+> > DUALPI2 AQM is a combination of the DUALQ Coupled-AQM with a PI2=20
+> > base-AQM. The PI2 AQM is in turn both an extension and a=20
+> > simplification of the PIE AQM. PI2 makes quite some PIE heuristics=20
+> > unnecessary, while being able to control scalable congestion controls l=
+ike TCP-Prague.
+> > With PI2, both Reno/Cubic can be used in parallel with Prague,=20
+> > maintaining window fairness. DUALQ provides latency separation between=
+=20
+> > low latency Prague flows and Reno/Cubic flows that need a bigger queue.
+> >
+> > This patch adds support to tc to configure it through its netlink=20
+> > interface.
+> >
+> > Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+> > Co-developed-by: Olga Albisser <olga@albisser.org>
+> > Signed-off-by: Olga Albisser <olga@albisser.org>
+> > Co-developed-by: Koen De Schepper=20
+> > <koen.de_schepper@nokia-bell-labs.com>
+> > Signed-off-by: Koen De Schepper <koen.de_schepper@nokia-bell-labs.com>
+> > Co-developed-by: Oliver Tilmans <olivier.tilmans@nokia.com>
+> > Signed-off-by: Oliver Tilmans <olivier.tilmans@nokia.com>
+> > Signed-off-by: Bob Briscoe <research@bobbriscoe.net>
+> > Co-developed-by: Henrik Steen <henrist@henrist.net>
+> > Signed-off-by: Henrik Steen <henrist@henrist.net>
+> > ---
+> >   bash-completion/tc             |  11 +-
+> >   include/uapi/linux/pkt_sched.h |  39 +++
+> >   include/utils.h                |   2 +
+> >   ip/iplink_can.c                |  14 -
+> >   lib/utils.c                    |  30 ++
+> >   man/man8/tc-dualpi2.8          | 249 ++++++++++++++++
+> >   tc/Makefile                    |   1 +
+> >   tc/q_dualpi2.c                 | 519 ++++++++++++++++++++++++++++++++=
++
+> >   8 files changed, 850 insertions(+), 15 deletions(-)
+> >   create mode 100644 man/man8/tc-dualpi2.8
+> >   create mode 100644 tc/q_dualpi2.c
+>=20
+> Hi!
+>=20
+> I compiled your patch and am seeing the following warnings:
+>=20
+> q_dualpi2.c: In function 'dualpi2_parse_opt':
+> q_dualpi2.c:218:37: warning: pointer targets in passing argument 1 of 'ge=
+t_u32' differ in signedness [-Wpointer-sign]
+>    218 |                         if (get_u32(&min_qlen_step, *argv, 10)) =
+{
+>        |                                     ^~~~~~~~~~~~~~
+>        |                                     |
+>        |                                     int32_t * {aka int *}
+> In file included from q_dualpi2.c:39:
+> ../include/utils.h:157:20: note: expected '__u32 *' {aka 'unsigned int *'=
+} but argument is of type 'int32_t *' {aka 'int *'}
+>    157 | int get_u32(__u32 *val, const char *arg, int base);
+>        |             ~~~~~~~^~~
+> q_dualpi2.c: At top level:
+> q_dualpi2.c:516:27: warning: initialization of 'int (*)(const struct qdis=
+c_util *, int,  char **, struct nlmsghdr *, const char *)' from incompatibl=
+e pointer type 'int (*)(struct qdisc_util *, int,  char **, struct nlmsghdr=
+ *, const char *)' [-Wincompatible-pointer-types]
+>    516 |         .parse_qopt     =3D dualpi2_parse_opt,
+>        |                           ^~~~~~~~~~~~~~~~~
+> q_dualpi2.c:516:27: note: (near initialization for
+> 'dualpi2_qdisc_util.parse_qopt')
+> q_dualpi2.c:517:27: warning: initialization of 'int (*)(const struct qdis=
+c_util *, FILE *, struct rtattr *)' from incompatible pointer type 'int (*)=
+(struct qdisc_util *, FILE *, struct rtattr *)'
+> [-Wincompatible-pointer-types]
+>    517 |         .print_qopt     =3D dualpi2_print_opt,
+>        |                           ^~~~~~~~~~~~~~~~~
+> q_dualpi2.c:517:27: note: (near initialization for
+> 'dualpi2_qdisc_util.print_qopt')
+> q_dualpi2.c:518:27: warning: initialization of 'int (*)(const struct qdis=
+c_util *, FILE *, struct rtattr *)' from incompatible pointer type 'int (*)=
+(struct qdisc_util *, FILE *, struct rtattr *)'
+> [-Wincompatible-pointer-types]
+>    518 |         .print_xstats   =3D dualpi2_print_xstats,
+>        |                           ^~~~~~~~~~~~~~~~~~~~
+> q_dualpi2.c:518:27: note: (near initialization for
+> 'dualpi2_qdisc_util.print_xstats')
+>=20
+> cheers,
+> Victor
 
-This is due to no CONFIG_DMA_SHARED_BUFFER. Fixed by:
+Hi Victor,
 
---- a/kernel/bpf/Makefile
-+++ b/kernel/bpf/Makefile
-@@ -53,7 +53,7 @@ obj-$(CONFIG_BPF_SYSCALL) +=3D relo_core.o
- obj-$(CONFIG_BPF_SYSCALL) +=3D btf_iter.o
- obj-$(CONFIG_BPF_SYSCALL) +=3D btf_relocate.o
- obj-$(CONFIG_BPF_SYSCALL) +=3D kmem_cache_iter.o
--ifeq ($(CONFIG_DEBUG_FS),y)
-+ifeq ($(CONFIG_DMA_SHARED_BUFFER)$(CONFIG_DEBUG_FS),yy)
- obj-$(CONFIG_BPF_SYSCALL) +=3D dmabuf_iter.o
- endif
+Thanks for prompt feedback, I will fix these warning in the next version.
+
+BRs,
+Chia-Yu
 
