@@ -1,59 +1,59 @@
-Return-Path: <linux-kselftest+bounces-30951-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30952-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04D1AA8B933
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Apr 2025 14:34:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58FF8A8B936
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Apr 2025 14:34:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 60A235A0C19
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Apr 2025 12:33:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC3463AB34F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Apr 2025 12:34:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56C1D13777E;
-	Wed, 16 Apr 2025 12:33:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0276B1BF58;
+	Wed, 16 Apr 2025 12:34:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="FZ0weLGh"
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="lW39PM8L"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 294ED1AAC4
-	for <linux-kselftest@vger.kernel.org>; Wed, 16 Apr 2025 12:33:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 907F34A24;
+	Wed, 16 Apr 2025 12:34:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744806818; cv=none; b=Ytgl+4P1Jj0SBqypTgPYS8XWn1i2987bEZfOb6dzEm6O8kDH96Y4z9Fu4HiTGcov6DLrJVMd/nGKVqoOx3YUIS92HrrhiLThgj2AzPb9qm05k1FMu6VLUgdWNlaZhy2W31zeoptsERCISGJlZua/kcldV5kyWdikfTlKZCwhFEc=
+	t=1744806870; cv=none; b=DDuulVWgh/HRYMh7AllnY1GIr8XCNRrfAdJYOXg03gKBe8AtzMSwQIPAVYTkziMTDkOUBfzrWTdDiJ0U+d6k4XrHKGZyKgq2y3KFKzBy9osA7PxoXDrjt13Wg4FlwRHbPJPa3phgYkL4jGVQoKIlhHg7IgAlHEfYThwkMtv29ok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744806818; c=relaxed/simple;
-	bh=9d94ym3bPDNkwZlJGX1nTqM8nOdX3wW3K5m0RSRbFEs=;
+	s=arc-20240116; t=1744806870; c=relaxed/simple;
+	bh=WWcwwTC7EZdfHdRfTryGVgalV2DWfrLjxVOpvMgt8U0=;
 	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=XZxz/eVZTyG2ZMFMcpiNeZGxSurXZhv/jUAsmjvQv6EAU0ROR18LM3zCuH1bjhcY2B+yUTEhvZXMlE269nhr0T9Scvv6XlcC/8NOgNgqZGjl1kxNgCMLqw390PmBgE52cArfs5VJsogmUskqmCYcSQGtN5kDOUdGsf3qBGKbkJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=FZ0weLGh; arc=none smtp.client-ip=185.226.149.37
+	 In-Reply-To:Content-Type; b=sfEGWriHi0ojcJmsOK/JiJqRqzTee7Zd8aa01S3Bh7TQU4swhSyoZLf7pEZXRi2Ju0c2f/Q/pFhDudHmyyfj2vM1WkVZRmPu6bElcDFsWHkSIneejIhwLYiW8Pk1NL5VUNtvpFsJqiDkyqn8gJmdFa2nsaDmMplWNTetSulptRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=lW39PM8L; arc=none smtp.client-ip=185.226.149.38
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
-Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
-	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <mhal@rbox.co>)
-	id 1u51xD-002mks-82; Wed, 16 Apr 2025 14:33:23 +0200
+	id 1u51y6-002cy9-3G; Wed, 16 Apr 2025 14:34:18 +0200
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
 	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
 	Cc:To:Subject:From:MIME-Version:Date:Message-ID;
-	bh=V1Q5znUGpZkb+vVcXtQ/KxHIEvFXCx3Bs5in36njKjM=; b=FZ0weLGhuMgVgOKLyimlvfC4+o
-	WbZyd74vpg0y8hU5z9m79uce8y0DCtW74FHTQulxV7vV9clAOsJ0QCBSGiN5xKrZNdNNXNDch8dpT
-	/ZSytHJGrekPchJ8DDnJl1GSjanx8QtTcS1F07gUeocY37RvCNsoChz1fLtuWn9HETA5QYbD8nL+M
-	5da01vX+RWqat3xwgiQB5a2nGUPeqF4IyShRB7oAKKc+PLA+hTr+8STvnlAegNo+aGcoCv74p6ImM
-	qcbNsW1TjoB3xytj0jvrd3kBa9/v2KsiQURmHYm0f41NZWIft6IngVSFk/U+1U2COV64rjmYACWKX
-	3zDondXg==;
-Received: from [10.9.9.73] (helo=submission02.runbox)
-	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	bh=UjqFfqPx6cvEdccJ7oOBXQZaC6kTqAwp1SpYt+j3Nkc=; b=lW39PM8LFm7wlVgceI3BzJ7ww7
+	WgizwU0MwPokEk38E4P+a8BzogJpl40MwoGfW6A6/deK5sv7jnxoUANTcwECI8mpr7KqT4damgkQQ
+	hwTeRRN+sXAac17IdM9ChTP99T9WFX8Sfkd+Q0SQirHE7Up0T20or+iZl1eDBc/6ralfzc98ZKgbf
+	DKU1ufcnq6rBX1VWqYqtdcLdUlTZuWafbQhmPRFP6VC5VezKMijh5PACFXXNa6Q/JzBLpUbBMgZky
+	QRnPSj8DZrPs3fsICGD6LW2DfkOYgqt8/f4fQoSsx4eKKqTl8IqErW9l++pUi5Sxwobix1a+5g/4I
+	HAt/1qYg==;
+Received: from [10.9.9.74] (helo=submission03.runbox)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <mhal@rbox.co>)
-	id 1u51xC-0000hv-T6; Wed, 16 Apr 2025 14:33:23 +0200
-Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	id 1u51xz-0005AD-Gd; Wed, 16 Apr 2025 14:34:11 +0200
+Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.93)
-	id 1u51xB-008Dyl-Pm; Wed, 16 Apr 2025 14:33:21 +0200
-Message-ID: <66bf942f-dfdb-4ce9-bd95-8b734e7afa53@rbox.co>
-Date: Wed, 16 Apr 2025 14:33:20 +0200
+	id 1u51xm-007llz-BQ; Wed, 16 Apr 2025 14:33:58 +0200
+Message-ID: <adbb8f18-4490-4785-aa5c-2942a53c09c3@rbox.co>
+Date: Wed, 16 Apr 2025 14:33:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -64,7 +64,7 @@ User-Agent: Mozilla Thunderbird
 From: Michal Luczaj <mhal@rbox.co>
 Subject: Re: [PATCH bpf-next v2 5/9] selftests/bpf: Add selftest for
  sockmap/hashmap redirection
-To: Jiayuan Chen <mrpre@163.com>
+To: Jakub Sitnicki <jakub@cloudflare.com>, Jiayuan Chen <mrpre@163.com>
 Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
  <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
  Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
@@ -75,71 +75,45 @@ Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
  Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
  Jonathan Corbet <corbet@lwn.net>, bpf@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, Jakub Sitnicki <jakub@cloudflare.com>
+ linux-doc@vger.kernel.org
 References: <20250411-selftests-sockmap-redir-v2-0-5f9b018d6704@rbox.co>
  <20250411-selftests-sockmap-redir-v2-5-5f9b018d6704@rbox.co>
- <ghhz3pi3oh3rylyd5t6gfa3x7m35q4ei5liwytmcbfit4r4pit@4al5vrpx7exl>
+ <fnsy7wey4vaewoyur5363w2q2nb7dvljmaroijflgq2hfqbumo@gqdged7tly47>
+ <87a58mh9co.fsf@cloudflare.com>
 Content-Language: pl-PL, en-GB
-In-Reply-To: <ghhz3pi3oh3rylyd5t6gfa3x7m35q4ei5liwytmcbfit4r4pit@4al5vrpx7exl>
+In-Reply-To: <87a58mh9co.fsf@cloudflare.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 4/11/25 16:31, Jiayuan Chen wrote:
-> On Fri, Apr 11, 2025 at 01:32:41PM +0200, Michal Luczaj wrote:
->> +static void test_send_redir_recv(int sd_send, int send_flags, int sd_peer,
->> +				 int sd_in, int sd_out, int sd_recv,
->> +				 struct maps *maps, int status)
->> +{
->> +	unsigned int drop, pass;
->> +	char *send_buf = "ab";
->> +	char recv_buf = '\0';
->> +	ssize_t n, len = 1;
->> +	/* Zero out the verdict map */
->> +	if (xbpf_map_update_elem(maps->verd, &u32(SK_DROP), &u32(0), BPF_ANY) ||
->> +	    xbpf_map_update_elem(maps->verd, &u32(SK_PASS), &u32(0), BPF_ANY))
->> +		return;
->> +
->> +	if (xbpf_map_update_elem(maps->in, &u32(0), &u64(sd_in), BPF_NOEXIST))
->> +		return;
->> +
->> +	if (xbpf_map_update_elem(maps->out, &u32(0), &u64(sd_out), BPF_NOEXIST))
->> +		goto del_in;
->> +
->> +	/* Last byte is OOB data when send_flags has MSG_OOB bit set */
->> +	if (send_flags & MSG_OOB)
->> +		len++;
->> +	n = send(sd_send, send_buf, len, send_flags);
->> +	if (n >= 0 && n < len)
->> +		FAIL("incomplete send");
->> +	if (n < 0) {
->> +		/* sk_msg redirect combo not supported? */
->> +		if (status & SUPPORTED || errno != EACCES)
->> +			FAIL_ERRNO("send");
->> +		goto out;
->> +	}
->> +
->> +	if (!(status & SUPPORTED)) {
->> +		handle_unsupported(sd_send, sd_peer, sd_in, sd_out, sd_recv,
->> +				   maps->verd, status);
->> +		goto out;
->> +	}
->> +
->> +	errno = 0;
->> +	n = recv_timeout(sd_recv, &recv_buf, 1, 0, IO_TIMEOUT_SEC);
->> +	if (n != 1) {
->> +		FAIL_ERRNO("recv_timeout()");
->> +		goto out;
->> +	}
-> I prefer multiple send and receive operations, or implementing a loop at
-> the outer level.
+On 4/11/25 19:54, Jakub Sitnicki wrote:
+> On Fri, Apr 11, 2025 at 09:09 PM +08, Jiayuan Chen wrote:
+>> On Fri, Apr 11, 2025 at 01:32:41PM +0200, Michal Luczaj wrote:
+>>> Test redirection logic. All supported and unsupported redirect combinations
+>>> are tested for success and failure respectively.
+>>>
+>>> BPF_MAP_TYPE_SOCKMAP
+>>> BPF_MAP_TYPE_SOCKHASH
+>>> 	x
+>>> sk_msg-to-egress
+>>> sk_msg-to-ingress
+>>> sk_skb-to-egress
+>>> sk_skb-to-ingress
+>>
+>> Could we also add test cases for SK_PASS (and even SK_DROP)?
+>> Previously, we encountered deadlocks and incorrect sequence issues when
+>> the program returned SK_PASS, so explicit testing for these cases would
+>> be helpful.
+>>
+>> If implemented, this test would fully exercise all code paths and
+>> demonstrate a complete example that covers every aspect of
+>> sockmap's packet steering and connection management capabilities.
+> 
+> This could easily be a follow up in my mind.
+> 
+> [...]
 
-If you referring to MSG_OOB that "emulates" multiple send(), that's quite
-deliberate: to exercise what is actually happening on
-unix_stream_sendmsg(, MSG_OOB). And, well, to follow the selftests logic
-in sockmap_listen.c:pairs_redir_to_connected().
+Yeah, I wouldn't mind doing this in multiple steps.
 
-Would you rather have it split anyway?
-
-Thanks,
-Michal
+That said, with SK_PASS/SK_DROP involved, are we sticking with the name
+"sockmap_redir"?
 
