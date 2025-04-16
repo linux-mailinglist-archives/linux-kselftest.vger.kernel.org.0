@@ -1,162 +1,240 @@
-Return-Path: <linux-kselftest+bounces-30940-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30941-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A4A0A8B578
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Apr 2025 11:34:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83DB0A8B59A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Apr 2025 11:38:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B0BD84440F1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Apr 2025 09:34:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8BE37444D4A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Apr 2025 09:38:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD238230BED;
-	Wed, 16 Apr 2025 09:34:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9974623536B;
+	Wed, 16 Apr 2025 09:38:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JSsi8jt1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4839140E5F
-	for <linux-kselftest@vger.kernel.org>; Wed, 16 Apr 2025 09:34:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F363123373F
+	for <linux-kselftest@vger.kernel.org>; Wed, 16 Apr 2025 09:38:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744796051; cv=none; b=qb2zIeloHFzQU6qxtD4Bfpx5W+0v45i3WZfmVxXLswoVs65L3+57VB0fi7w3oS5H/j1NweIKAVNbfFphhTPuTS+hukjqFrAL34lGi0qtSixtTOGTsBIcPshCtGdVzTneFDDN83Dct3n9jo/0J0nb1BwN5jftWPYy3mmP3re6NHI=
+	t=1744796301; cv=none; b=h6u+2Ki3u4zlIgC31QotHfpieJfM85219Fq1wW/ehxdSztAiBvKLVwQv40cWpEkTm2kxgLXMb6yNhwzRK506I3bR/lPDmltQBHTku8xmGgX7hFpRZUPwNsZdlF2vTnHC3U1HphsUCo9R8YAo7BXjD248Uc89DxZxQME1OMHzn+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744796051; c=relaxed/simple;
-	bh=1cQ9Bo7hlVWZLcKOGksiuzi03AWoJ23xdgj4ZMbGROM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nUWrCliXRZpB+Gms6ieAnrei6M9hGge6K7Kj58R11gKO4jITqV8lHhA+E3biwyi1cKbZSl169VVIP2RP40/aa++O7jE9NLkQ3J3ICMUKAQEwgLOWBVrW6Z6CbXaN9TjHWaZZkrKgvODxr1KGOIxYDfB+kMImIKQ9UF8jz+4LzEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13589C4CEE9;
-	Wed, 16 Apr 2025 09:34:07 +0000 (UTC)
-Date: Wed, 16 Apr 2025 10:34:05 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Maxime Ripard <mripard@kernel.org>
-Cc: Simona Vetter <simona.vetter@ffwll.ch>,
-	David Airlie <airlied@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	dri-devel@lists.freedesktop.org,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v2] drm/tests: Drop drm_kunit_helper_acquire_ctx_alloc()
-Message-ID: <Z_95jWM2YMTGy3pi@arm.com>
-References: <20250220132537.2834168-1-mripard@kernel.org>
+	s=arc-20240116; t=1744796301; c=relaxed/simple;
+	bh=HuH0k1dpyyVt/xT0Ywz7Ib/9x+wiZSOqQOu1xuCzJjk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=V7DfbhwfVrTI6QNFrmCDKY05J3AsTJrzCKLw2XOCSbehlV73/NacBLvlri1DFEwN1RXWssZV0gK9uot+iq02fm5YlJu1e05umYiJR/Y588QW5dQVJ08P9C2TcMPvimMJzA1szqIyJWrE/U5+ZYgTbSn0MSXYmwnebtCAwRdDPts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JSsi8jt1; arc=none smtp.client-ip=209.85.219.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-6e8efefec89so59925886d6.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Apr 2025 02:38:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1744796299; x=1745401099; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OUZ5ZjPwc8xSYN9HZFC9PqirPAt1FarfxEeB/0Gc9eg=;
+        b=JSsi8jt1HLIS6VTxZOOIgne8mQ8owOckScme6gfuvRn5LaMuu2x9rmHJjKxaDZZ2RH
+         d9IoLjPdenAL6Qp7uScyWIzB8ZqY3igK4WkO1EVcItZKKVtIBd9hBfXNuG7sqYbUXleb
+         tZT8oKIYEWeWQVph3s3b1A2Dp55VtsaixQpRTEK60JTEqvUHInVBS87RJX/FG2Bq8Gwf
+         QjuAbF6B8kYQQRyETe81JU3JlQDcFdqm+nhLbla9oRklcn8uKQzCENn4IQdi1R02Fjde
+         m5MJ7iayow/nyHWYUz36ALcQXS2y6xMrEe0re3sONXJDDbc5gKu1zcryehbyimIwdzPD
+         3YYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744796299; x=1745401099;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OUZ5ZjPwc8xSYN9HZFC9PqirPAt1FarfxEeB/0Gc9eg=;
+        b=oy0TY9wkz4ooJeQim3MsRDrdHADWa+jHoivDeF3uL3S5V3GPSgv73YliWnAhir7C9Y
+         F8n09UjYUu8MeVKFy7aHGOqCDSUvvpt7COnbFZ6uF3q2oW+S+jzjv2fa6ryqeBNW+uIY
+         Ohxw78oAIfy4xf7nDuZwpdgpFgGCEBIbv9BdHI0JHb5CZGU0ITfgtuwA27gSmU8uIEWq
+         0ZcxCBdtI7pQanVHAQMgRQu+GyLcEnsJwsPWkAVVklNBdnQqd14WBduDlQEqFDSidOd9
+         8014julp/fwhWdbC6n7n7VikED3FbDbbpRXdHVC3DEt0fcQVN/wYbxYGZCoY+NmUrlJ/
+         /2iA==
+X-Forwarded-Encrypted: i=1; AJvYcCUgrcaRHLU1sGKuDllVLij8daJH/eAkGHA7oafIotr08rygILnNrKR2A2De5QtlLOWBEoFe2+ncVVZdbVBoq+M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyqDWH98DHNepqGNylf5KsyEIhac/AMUuzRItGwKsWj8YTCA0Ye
+	ShpBAc2siD/lNFMrSvUVQTQ3W3pDksmY98NfTg0POLb0f8cmeAf8RP7m7gTHCkxkWhaN5Lv4e4M
+	/fQ/vaoZxLRD51LqQthlEhIWI4v/Qq851tqmJ
+X-Gm-Gg: ASbGnctG6QehKzpGu2maJP3iPkWnwAoPvscmkDL4o+MOlpDNJVKnZ5RJfoQ9c1Pz+gJ
+	IPZzW3tFPUMH8R4GvawpkFYYhlDe2ubHfJEJcn9H9UcLdTVqUZYlMeHopyEXtRRILPa1ClSQa7F
+	f9FQ9+EvDtgm6UCh9Zuw88bu4=
+X-Google-Smtp-Source: AGHT+IEu8ULAZ3yUx6VErK3ehHrBykkRdgGPuR6aoMNdGmiQ+ScZ4rb6eHNoviBt6gnzqxp63hpgcXMq95eXIwhkwYc=
+X-Received: by 2002:ad4:5f4c:0:b0:6e1:f40c:b558 with SMTP id
+ 6a1803df08f44-6f2b30864cdmr14828566d6.44.1744796298528; Wed, 16 Apr 2025
+ 02:38:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250220132537.2834168-1-mripard@kernel.org>
+References: <20250415-kunit-qemu-sparc64-v1-0-253906f61102@linutronix.de> <20250415-kunit-qemu-sparc64-v1-1-253906f61102@linutronix.de>
+In-Reply-To: <20250415-kunit-qemu-sparc64-v1-1-253906f61102@linutronix.de>
+From: David Gow <davidgow@google.com>
+Date: Wed, 16 Apr 2025 17:38:03 +0800
+X-Gm-Features: ATxdqUG1whiCyMQsWguffGTwakNWPkf73Zh_ohCkyOjv3230fKDGX5kp7N-DoxM
+Message-ID: <CABVgOS=AQ0XS4DnKxZTZWBLdkg1_kwxusa3fGDe=pSuTFR=5Tw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kunit: qemu_configs: sparc: Explicitly enable CONFIG_SPARC32=y
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-kernel@vger.kernel.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="0000000000009d13920632e20bbe"
 
-Hi Maxime,
+--0000000000009d13920632e20bbe
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 20, 2025 at 02:25:37PM +0100, Maxime Ripard wrote:
-> lockdep complains when a lock is released in a separate thread the
-> lock is taken in, and it turns out that kunit does run its actions in a
-> separate thread than the test ran in.
-> 
-> This means that drm_kunit_helper_acquire_ctx_alloc() just cannot work as
-> it's supposed to, so let's just get rid of it.
-> 
-> Suggested-by: Simona Vetter <simona.vetter@ffwll.ch>
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Maxime Ripard <mripard@kernel.org>
-
-My scripts for running all possible kunit tests (under arm64 qemu)
-started failing with 6.15-rc1. I bisected it to commit 30188df0c387
-("drm/tests: Drop drm_kunit_helper_acquire_ctx_alloc()"). No idea
-whether it fails on other architectures but it's fairly easy to
-reproduce on arm64. Starting from defconfig, enable CONFIG_KUNIT=m and
-CONFIG_DRM_VC4_KUNIT_TEST=m, build the kernel with gcc. Once a prompt is
-reached, "modprobe vc4" and the most noticeable thing is the kernel
-panic with stack protector enabled (by default on arm64):
-
-  Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: drm_vc4_test_pv_muxing+0x2a4/0x2a4 [vc4]
-  CPU: 14 UID: 0 PID: 311 Comm: kunit_try_catch Tainted: G        W        N  6.15.0-rc2 #1 PREEMPT
-  Tainted: [W]=WARN, [N]=TEST
-  Hardware name: QEMU KVM Virtual Machine, BIOS 2024.08-4 10/25/2024
-  Call trace:
-   show_stack+0x18/0x24 (C)
-   dump_stack_lvl+0x60/0x80
-   dump_stack+0x18/0x24
-   panic+0x168/0x360
-   __ktime_get_real_seconds+0x0/0x20
-   vc4_test_pv_muxing_gen_params+0x0/0x94 [vc4]
-   kunit_try_run_case+0x6c/0x160 [kunit]
-   kunit_generic_run_threadfn_adapter+0x28/0x4c [kunit]
-   kthread+0x12c/0x204
-   ret_from_fork+0x10/0x20
-  SMP: stopping secondary CPUs
-  Kernel Offset: 0x431a85f00000 from 0xffff800080000000
-  PHYS_OFFSET: 0xfff0e8f3c0000000
-  CPU features: 0x0002,00000268,01002640,82004203
-  Memory Limit: none
-  ---[ end Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: drm_vc4_test_pv_muxing+0x2a4/0x2a4 [vc4] ]---
-
-Scrolling through the log, I also get a lot of warnings before the
-panic:
-
-  WARNING: CPU: 14 PID: 311 at drivers/gpu/drm/drm_modeset_lock.c:296 drm_modeset_lock+0xbc/0xfc [drm]
-  Modules linked in: vc4 snd_soc_hdmi_codec drm_kunit_helpers drm_exec cec drm_display_helper drm_client_lib drm_dma_helper kunit drm_kms_helper drm backlight dm_mod ip_tables x_tables ipv6
-  CPU: 14 UID: 0 PID: 311 Comm: kunit_try_catch Tainted: G        W        N  6.15.0-rc2 #1 PREEMPT
-  Tainted: [W]=WARN, [N]=TEST
-  Hardware name: QEMU KVM Virtual Machine, BIOS 2024.08-4 10/25/2024
-  pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-  pc : drm_modeset_lock+0xbc/0xfc [drm]
-  lr : drm_atomic_get_private_obj_state+0x78/0x180 [drm]
-  sp : ffff800080b0bbd0
-  x29: ffff800080b0bbd0 x28: 0000000000000004 x27: ffff170d4829a480
-  x26: ffff170d42968000 x25: ffff170d4829a480 x24: ffff170d40eaf540
-  x23: 0000000000000038 x22: ffff170d42964400 x21: ffff170d4829a480
-  x20: ffff170d42968958 x19: ffff800080b0bd58 x18: 00000000ffffffff
-  x17: 0000000000000000 x16: ffffc31b065888a0 x15: 0000000000000000
-  x14: 0000000000000040 x13: 01e0000002800280 x12: 0000000000000000
-  x11: 0000000000000000 x10: 000001e001e001e0 x9 : 0000000000000020
-  x8 : ffff170d40b70148 x7 : 0000000000000021 x6 : 0000000000000fdf
-  x5 : 0000000000000fdf x4 : 0000000000000004 x3 : ffff170d429688f0
-  x2 : ffff170d40eaf540 x1 : 0000000000000000 x0 : ffff800080b0be10
-  Call trace:
-   drm_modeset_lock+0xbc/0xfc [drm] (P)
-   drm_atomic_get_private_obj_state+0x78/0x180 [drm]
-   vc4_atomic_check+0x47c/0x754 [vc4]
-   drm_atomic_check_only+0x4d4/0x914 [drm]
-   drm_vc4_test_pv_muxing+0xe0/0x2a4 [vc4]
-   kunit_try_run_case+0x6c/0x160 [kunit]
-   kunit_generic_run_threadfn_adapter+0x28/0x4c [kunit]
-   kthread+0x12c/0x204
-   ret_from_fork+0x10/0x20
-
-Reverting the above commit makes these go away. I did not have time to
-look deeper, I thought I'd report it here first.
-
-The panic is with gcc 14.2.0 from Debian unstable. I tried with gcc
-12.2.0 in Debian stable and I don't get the stack protector panic, only
-the lock warnings.
-
-With clang 14 and 19, I get NULL pointer dereferences with this call
-trace (decoded):
-
-  Unable to handle kernel NULL pointer dereference at virtual address 0000000000000008
-  [...]
-  drm_modeset_lock (include/linux/list.h:153 include/linux/list.h:169 drivers/gpu/drm/drm_modeset_lock.c:318 drivers/gpu/drm/drm_modeset_lock.c:396) drm (P)
-  drm_atomic_get_connector_state (drm.mod.c:?) drm
-  vc4_mock_atomic_add_output (drivers/gpu/drm/vc4/tests/vc4_mock_output.c:?) vc4
-  drm_vc4_test_pv_muxing (drivers/gpu/drm/vc4/tests/vc4_test_pv_muxing.c:688) vc4
-  kunit_try_run_case (lib/kunit/test.c:400) kunit
-  kunit_generic_run_threadfn_adapter (lib/kunit/try-catch.c:31) kunit
-  kthread (kernel/kthread.c:466)
-  ret_from_fork (arch/arm64/kernel/entry.S:863)
-
-I can run more tests if you'd like, decode the stack traces.
+On Tue, 15 Apr 2025 at 21:38, Thomas Wei=C3=9Fschuh
+<thomas.weissschuh@linutronix.de> wrote:
+>
+> The configuration generated by kunit ends up with a 32bit configuration.
+> A new kunit configuration for 64bit is to be added.
+> To make the difference clearer spell out the variant in the kunit
+> reference config.
+>
+> Signed-off-by: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
+> ---
 
 Thanks.
 
--- 
-Catalin
+It looks like the sparc32 configuration can't handle faulting tests,
+so I'll send a follow-up to disable CONFIG_KUNIT_FAULT_TEST here as
+well.
+
+Otherwise,
+Reviewed-by: David Gow <davidgow@google.com>
+
+Cheers,
+-- David
+
+
+>  tools/testing/kunit/qemu_configs/sparc.py | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/tools/testing/kunit/qemu_configs/sparc.py b/tools/testing/ku=
+nit/qemu_configs/sparc.py
+> index 256d9573b44646533d1a6f768976628adc87921e..3131dd299a6e34f027402e99e=
+34d85ddcaa359b7 100644
+> --- a/tools/testing/kunit/qemu_configs/sparc.py
+> +++ b/tools/testing/kunit/qemu_configs/sparc.py
+> @@ -2,6 +2,7 @@ from ..qemu_config import QemuArchParams
+>
+>  QEMU_ARCH =3D QemuArchParams(linux_arch=3D'sparc',
+>                            kconfig=3D'''
+> +CONFIG_SPARC32=3Dy
+>  CONFIG_SERIAL_SUNZILOG=3Dy
+>  CONFIG_SERIAL_SUNZILOG_CONSOLE=3Dy
+>  ''',
+>
+> --
+> 2.49.0
+>
+
+--0000000000009d13920632e20bbe
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIUnQYJKoZIhvcNAQcCoIIUjjCCFIoCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ghIEMIIGkTCCBHmgAwIBAgIQfofDAVIq0iZG5Ok+mZCT2TANBgkqhkiG9w0BAQwFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSNjETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMzA0MTkwMzUzNDdaFw0zMjA0MTkwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFI2IFNNSU1FIENBIDIwMjMwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDYydcdmKyg
+4IBqVjT4XMf6SR2Ix+1ChW2efX6LpapgGIl63csmTdJQw8EcbwU9C691spkltzTASK2Ayi4aeosB
+mk63SPrdVjJNNTkSbTowej3xVVGnYwAjZ6/qcrIgRUNtd/mbtG7j9W80JoP6o2Szu6/mdjb/yxRM
+KaCDlloE9vID2jSNB5qOGkKKvN0x6I5e/B1Y6tidYDHemkW4Qv9mfE3xtDAoe5ygUvKA4KHQTOIy
+VQEFpd/ZAu1yvrEeA/egkcmdJs6o47sxfo9p/fGNsLm/TOOZg5aj5RHJbZlc0zQ3yZt1wh+NEe3x
+ewU5ZoFnETCjjTKz16eJ5RE21EmnCtLb3kU1s+t/L0RUU3XUAzMeBVYBEsEmNnbo1UiiuwUZBWiJ
+vMBxd9LeIodDzz3ULIN5Q84oYBOeWGI2ILvplRe9Fx/WBjHhl9rJgAXs2h9dAMVeEYIYkvW+9mpt
+BIU9cXUiO0bky1lumSRRg11fOgRzIJQsphStaOq5OPTb3pBiNpwWvYpvv5kCG2X58GfdR8SWA+fm
+OLXHcb5lRljrS4rT9MROG/QkZgNtoFLBo/r7qANrtlyAwPx5zPsQSwG9r8SFdgMTHnA2eWCZPOmN
+1Tt4xU4v9mQIHNqQBuNJLjlxvalUOdTRgw21OJAFt6Ncx5j/20Qw9FECnP+B3EPVmQIDAQABo4IB
+ZTCCAWEwDgYDVR0PAQH/BAQDAgGGMDMGA1UdJQQsMCoGCCsGAQUFBwMCBggrBgEFBQcDBAYJKwYB
+BAGCNxUGBgkrBgEEAYI3FQUwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQUM7q+o9Q5TSoZ
+18hmkmiB/cHGycYwHwYDVR0jBBgwFoAUrmwFo5MT4qLn4tcc1sfwf8hnU6AwewYIKwYBBQUHAQEE
+bzBtMC4GCCsGAQUFBzABhiJodHRwOi8vb2NzcDIuZ2xvYmFsc2lnbi5jb20vcm9vdHI2MDsGCCsG
+AQUFBzAChi9odHRwOi8vc2VjdXJlLmdsb2JhbHNpZ24uY29tL2NhY2VydC9yb290LXI2LmNydDA2
+BgNVHR8ELzAtMCugKaAnhiVodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL3Jvb3QtcjYuY3JsMBEG
+A1UdIAQKMAgwBgYEVR0gADANBgkqhkiG9w0BAQwFAAOCAgEAVc4mpSLg9A6QpSq1JNO6tURZ4rBI
+MkwhqdLrEsKs8z40RyxMURo+B2ZljZmFLcEVxyNt7zwpZ2IDfk4URESmfDTiy95jf856Hcwzdxfy
+jdwx0k7n4/0WK9ElybN4J95sgeGRcqd4pji6171bREVt0UlHrIRkftIMFK1bzU0dgpgLMu+ykJSE
+0Bog41D9T6Swl2RTuKYYO4UAl9nSjWN6CVP8rZQotJv8Kl2llpe83n6ULzNfe2QT67IB5sJdsrNk
+jIxSwaWjOUNddWvCk/b5qsVUROOuctPyYnAFTU5KY5qhyuiFTvvVlOMArFkStNlVKIufop5EQh6p
+jqDGT6rp4ANDoEWbHKd4mwrMtvrh51/8UzaJrLzj3GjdkJ/sPWkDbn+AIt6lrO8hbYSD8L7RQDqK
+C28FheVr4ynpkrWkT7Rl6npWhyumaCbjR+8bo9gs7rto9SPDhWhgPSR9R1//WF3mdHt8SKERhvtd
+NFkE3zf36V9Vnu0EO1ay2n5imrOfLkOVF3vtAjleJnesM/R7v5tMS0tWoIr39KaQNURwI//WVuR+
+zjqIQVx5s7Ta1GgEL56z0C5GJoNE1LvGXnQDyvDO6QeJVThFNgwkossyvmMAaPOJYnYCrYXiXXle
+A6TpL63Gu8foNftUO0T83JbV/e6J8iCOnGZwZDrubOtYn1QwggWDMIIDa6ADAgECAg5F5rsDgzPD
+hWVI5v9FUTANBgkqhkiG9w0BAQwFADBMMSAwHgYDVQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBS
+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
+YE9NAgMBAAGjggHgMIIB3DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1UdDwEB
+/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFHgsCGkO2Hex
+N6ybc+GeQEb6790qMFgGA1UdIARRME8wCQYHZ4EMAQUBAjBCBgorBgEEAaAyCgMDMDQwMgYIKwYB
+BQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQC
+MAAwgZoGCCsGAQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWdu
+LmNvbS9jYS9nc2F0bGFzcjZzbWltZWNhMjAyMzBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5n
+bG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3J0MB8GA1UdIwQYMBaA
+FDO6vqPUOU0qGdfIZpJogf3BxsnGMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFs
+c2lnbi5jb20vY2EvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3JsMA0GCSqGSIb3DQEBCwUAA4ICAQAs
+exV05yVDmPhHRqOq9lAbfWOUvEf8zydxabZUHna6bayb83jD2eb9nMGGEprfuNBRmFg35sgF1TyN
++ieuQakvQYmY8tzK49hhHa2Y3qhGCTqYTHO3ypHvhHsZiGbL0gmdgB9P8ssVIws//34ae99GUOxo
+XKTxPwwsQ5Arq42besv3/HXAW+4nRAT8d3ht5ZWCHc5rjL/vdGzu7PaYo3u0da69AZ8Sh4Gf5yoc
+QANr2ZkMrxXbLmSmnRvbkQrzlZp2YbTFnczx46429D6q75/FNFOL1vAjxtRAPzkyACvW0eKvchza
+TMvvD3IWERLlcBL5yXpENc3rI8/wVjqgAWYxlFg1b/4b/TCgYe2MZC0rx4Uh3zTIbmPNiHdN6QZ9
+oDiYzWUcqWZ5jCO4bMKNlVJXeCvdANLHuhcC8FONj5VzNgYXs6gWkp9/Wt6XnQPX4dF4JBa8JdL/
+cT46RJIzoiJHEx/8syO5FparZHIKbkunoq6niPsRaQUGeqWc56H4Z1sQXuBJN9fhqkIkG0Ywfrwt
+uFrCoYIRlx4rSVHpBIKgnsgdm0SFQK72MPmIkfhfq9Fh0h8AjhF73sLO7K5BfwWkx1gwMySyNY0e
+PCRYr6WEVOkUJS0a0fui693ymMPFLQAimmz8EpyFok4Ju066StkYO1dIgUIla4x61auxkWHwnzGC
+Al0wggJZAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
+BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAcDMKctW1GQKDKqEUSh4
+pjANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQgwBKFbSLqf0STDdaVv5zogECbKZ9g
+i6r8duVW3DVcRCUwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUw
+NDE2MDkzODE5WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcN
+AQEBBQAEggEAOOTDjWUEBi5TwkL6X4Xqhn/2V4OdFMpJgbyeWm87pXkcNbrNLcf1soZQZB2H1gEx
+Vev3Y+c4pmXeoSwK8tB3VW87JqnJdfOKcS19+vXYAyTTR2M4xxV63uU+u1VwW281RVInyHOvr9v4
+VkqTjV0+V7k8IfLMQQsKvy2cbvDtdomp9vzA/hGzQYZFedo7QRH85sd2lPQYQIRyJldWflsU6PgT
+zXHQEwnB5z5ym0dZryhFl+9mfEaGAjH9xAvlO3luUHlZ4w6XNSOnPrZzXMxRJM8o+MaFcB6TUkHy
+amrapLy4e2C7UBIIzeoAKL4qzUF105HO50v5I3+2bdhRk/bSMw==
+--0000000000009d13920632e20bbe--
 
