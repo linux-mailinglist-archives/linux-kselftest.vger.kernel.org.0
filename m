@@ -1,129 +1,154 @@
-Return-Path: <linux-kselftest+bounces-31036-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31037-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1611EA912A9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Apr 2025 07:30:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92770A914D4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Apr 2025 09:14:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 801DD5A153B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Apr 2025 05:29:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 488D04459A7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Apr 2025 07:14:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0265C1DE883;
-	Thu, 17 Apr 2025 05:30:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7861218845;
+	Thu, 17 Apr 2025 07:14:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gppObXx0"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="YEhNjld6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 394EA18DB2B
-	for <linux-kselftest@vger.kernel.org>; Thu, 17 Apr 2025 05:29:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEA271DDA0C;
+	Thu, 17 Apr 2025 07:14:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744867799; cv=none; b=bwZ2nrAIoJkIW+rYxzA3O4iUI04rEhTa825LS5Rk+3kDZtiK/01JZfkbkhTn90HUxyqYntqpAAi4LIdI/kFRtOXAeBwH+QLAHDDhTBjcL9NZIg8VrPKyiCgHxUrNZ3KL9jBUs+/vwiE0o53GzfK3ba8kRSVGaF6J1OKuNIPl/Tk=
+	t=1744874067; cv=none; b=Oa6pRsWtwa+eObRL1X3N0J4LaouTTQtd3Wj6Uta7gqBYpcWW+zKcDSdFsHCE7OAJAcgnlRTBw+aHrQCUurJDVGwNjUGTFJJT8Ez9nL5ujqIjlRw9L0sf2JpNJKZEuuh8oaWYwNF+EE4O63J9n6ouN9HKrpIsgIF+fBtc08dLsIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744867799; c=relaxed/simple;
-	bh=8IRUAWuyG9XC3pN0aPIS/KTtqadjkSf+Hpg2rRtqp40=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pexqnnGWbb81gTl2W2tI34xr+ZrHh8Guy6Hu6HUXCS2VmDonS9CXaCyL9NEhnSiVqdWhXwZCZWjqht8ZnjxlkEr2CtESw0ODj70w+rgW0vS0FW9rjsjlfRlynAD8KmAlX0sGa61eBoiPoyNz2lmX612zI1uL7o43aou6yu2b3DA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gppObXx0; arc=none smtp.client-ip=209.85.167.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-54addb5a139so437451e87.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Apr 2025 22:29:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1744867796; x=1745472596; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/tbq98NwkRxfOjYm7weOTRHKupXkAEHniDZUVgeT5NY=;
-        b=gppObXx0daXauwXNinllK3Gn5/8vH1/XDhdrvtczv3r5m85tD/P4XNDAG8qKqqzI7v
-         SgBkJaM0n5jWXojlSPGtEJqjMjwFSI2ol4261qFU+0nDK2QjM3t+VtNZra/NvHUSv71I
-         yUH3QytrnFSb8ht2kdViEA2pEoO3/DrfJ1WiDST8DfCRfDiikGVCQIbhQkCs5jGTfbhz
-         UA4ksWjT4kYLVS6MN1QbtQKzLIJ5o+ZjWBplpaffynqDccHD/cV5VENt+hAOhjXkJSbz
-         G94oMUc59HPkeKZXatG7eApGmJwseHPUNEREA6LpbTyqXumRFUkeIPGCH4iMxa6pUo4w
-         n0jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744867796; x=1745472596;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/tbq98NwkRxfOjYm7weOTRHKupXkAEHniDZUVgeT5NY=;
-        b=PRB4Ck0THpq1eBNwlQT1j+SGSLExKmf/IAlUmbjkz7+MStvu6gm/5CUr3mIu1xx+0M
-         /yJKSIdRAPBQC6RpanJAfTafDyw7hj5bp5jBN1+zHoxIwymZFAMkeq6JotyIBX6YGmx8
-         o5w4YJ137LBN5nGAPmQojuMVdJLCKP53atuTmULg5Ve6Pjt8ngoGHr0YsUSOMuLXTHoY
-         daXRyhzy9KW4xgnKATkmbxdL0n3tPszanLu0lfyWTE832l1SC5kDR5LiUUFFfszh+bCF
-         ksq++mq9WjJF3xYmIY3xcLHgEnUbfgX6j7d9yhrLAS3kF3xuOBKwlRIRs/QbtWzLQVxX
-         ep3A==
-X-Forwarded-Encrypted: i=1; AJvYcCU4mpFoC1LTNW9iI6ABdUvsjKu6APIVcDOaJUxcX2k9s5NiCntNrnWUohypVPJnLlMOv0mnqPZNJCRN2DpCcpU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxLeQjla5ipkgRqjH7+ie/twJxLP2qBon1ZnYHUxPR4oPKaXi9z
-	Of64XCrhQDaL0BWKdDpyUc0ZQehaAgYqlJGhvVjgv48iSMBfD95xDutgifWoeWASoyZNpEWasQE
-	RLLnD4Opz/sdp6MuD8jS7pBWgEZv2EeNQLEJhpZmzwnTxTdNWY5g=
-X-Gm-Gg: ASbGncuy7byM4sHp35he0mDBLRmmE7hJ9/rP9dkR62ni4z7dd82YCAZAwMDQC+Coxoh
-	+BdXDVeqfpM532PX/QwMvwxq3b0yMUMc21VUb0LPnNQl3fx9tZKtSnhlkpnTvqnQvJh5Lqxx4cZ
-	T/ZjF0q8O2evR4a/w84rQX38CEfL9OOnMHypS+gv7c+B2fPiOZ+/hdgq6/DkB1WQ==
-X-Google-Smtp-Source: AGHT+IFJsMYdvqU27gQJon+URzkUuZBB06ki2I46tRCTIgHeKrXMiYT2i6HfyxRplJ+POPGp9j0hKgQgUp4Pj9Dsnbw=
-X-Received: by 2002:a05:6512:ac5:b0:549:903a:1b3 with SMTP id
- 2adb3069b0e04-54d64aea494mr1431419e87.42.1744867796065; Wed, 16 Apr 2025
- 22:29:56 -0700 (PDT)
+	s=arc-20240116; t=1744874067; c=relaxed/simple;
+	bh=YYgBl4XslUIPANcfaH0UDI8ZQnEJjTNt9jHQJbKWOHU=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:Mime-Version:
+	 References:In-Reply-To; b=lm0PeDGs3hwBWWjopQ6frs0a5Uc7DFPgwZ1UJ0jtwTbpA2uwmHFVuMixmKHvBUC8hv10I6y5ZodCSw9QGiS6BsfWFMF2mGwDa9xLEP50Y1BDezmCq3aV7w7Q0vjhHEtwYSj3yU2VcVMKrj3GTxlbfUvfUICREAfPSQKEQn01EXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=YEhNjld6; arc=none smtp.client-ip=217.70.183.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4313F439D4;
+	Thu, 17 Apr 2025 07:14:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1744874062;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YYgBl4XslUIPANcfaH0UDI8ZQnEJjTNt9jHQJbKWOHU=;
+	b=YEhNjld6ymNJqLjNHhBzpSnN7oxSp7ezkwtyyDXqHLLiBD8JhNvqejYTXoBMtvZDkSP9do
+	k/g8vZ3fmZQuP3/3LiwBWp9ucZU5wxsKptb6ID4sRXNlXlDzNCdwKBE4ud8E4tGTCxlp8L
+	r8mhLATCbpRcjr3kWeU0PDea0TtRrFjiETGwKZZLdbapYValXtnWGRLPuXGOGxpyB6ZoN+
+	ox0SjwLvBXBPurAx36kStx7furqEBRLvFub9fqKWABp708RJsO3lOioWNEgT0zqj7dQbbR
+	7wM7fZzmaeCPebZvlE5TDNCHnvG32PEWeTnAiwHpspnGjirRTX/je3h/ohWATw==
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 17 Apr 2025 09:14:16 +0200
+Message-Id: <D98Q8BRNUVS9.11J60C67L1ALR@bootlin.com>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu"
+ <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "KP Singh"
+ <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>, "Hao Luo"
+ <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>, "Puranjay Mohan"
+ <puranjay@kernel.org>, "Xu Kuohai" <xukuohai@huaweicloud.com>, "Catalin
+ Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>,
+ "Mykola Lysenko" <mykolal@fb.com>, "Shuah Khan" <shuah@kernel.org>, "Maxime
+ Coquelin" <mcoquelin.stm32@gmail.com>, "Alexandre Torgue"
+ <alexandre.torgue@foss.st.com>, "Florent Revest" <revest@chromium.org>,
+ "Bastien Curutchet" <bastien.curutchet@bootlin.com>,
+ <ebpf@linuxfoundation.org>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+ <linux-kselftest@vger.kernel.org>,
+ <linux-stm32@st-md-mailman.stormreply.com>
+Subject: Re: [PATCH RFC bpf-next 1/4] bpf: add struct largest member size in
+ func model
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: "Andrii Nakryiko" <andrii.nakryiko@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250320200306.1712599-1-jstultz@google.com> <Z-KURRE_Gr72Xv_n@localhost>
- <874izezv3c.ffs@tglx> <Z-Vx8kV4M3khPknC@localhost> <Z-qsg6iDGlcIJulJ@localhost>
- <87o6xgwftc.ffs@tglx> <Z-vL3cVZuQ8XQXhG@localhost> <87iknnwxa4.ffs@tglx>
- <Z-5HlSUEh1xgCi4f@localhost> <877c41wkis.ffs@tglx> <87h632wals.ffs@tglx>
-In-Reply-To: <87h632wals.ffs@tglx>
-From: John Stultz <jstultz@google.com>
-Date: Wed, 16 Apr 2025 22:29:43 -0700
-X-Gm-Features: ATxdqUFRIk__GaYDInAsvbeQ0YVaEScg1GGtg38lyC7CTsJPCjHDcqn17UbtfGY
-Message-ID: <CANDhNCpAVo7FsmGhTVRMkazUT18dZG42M82O3QPQE8XobsWOaw@mail.gmail.com>
-Subject: Re: [PATCH] timekeeping: Prevent coarse clocks going backwards
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: Miroslav Lichvar <mlichvar@redhat.com>, LKML <linux-kernel@vger.kernel.org>, 
-	Stephen Boyd <sboyd@kernel.org>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
-	Frederic Weisbecker <frederic@kernel.org>, Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, 
-	kernel-team@android.com, Lei Chen <lei.chen@smartx.com>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+X-Mailer: aerc 0.20.1-0-g2ecb8770224a
+References: <20250411-many_args_arm64-v1-0-0a32fe72339e@bootlin.com>
+ <20250411-many_args_arm64-v1-1-0a32fe72339e@bootlin.com>
+ <CAEf4Bzbn6BdXTOb0dTcsQmOMZpp5=DzGS2hHHQ3+dwcja=gv+w@mail.gmail.com>
+In-Reply-To: <CAEf4Bzbn6BdXTOb0dTcsQmOMZpp5=DzGS2hHHQ3+dwcja=gv+w@mail.gmail.com>
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvvdekieefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpegtfffkvefuhffvggfgofhfjgesthhqredtredtjeenucfhrhhomheptehlvgigihhsucfnohhthhhorhoruceorghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpedvhfdvjeektefggfdvhfejveehleeugfeiieelgfffheeggefhvddvudefiedtfeenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepledtrdekledrudeifedruddvjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeeltddrkeelrdduieefrdduvdejpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepfedtpdhrtghpthhtoheprghnughrihhirdhnrghkrhihihhkohesghhmrghilhdrtghomhdprhgtphhtthhopegrshhtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprhgtphhtthhopehjohhhnhdrfhgrshhtrggsvghnugesghhmrghilhdrtghomhdprhgtphhtthhopegrnhgur
+ hhiiheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdhrtghpthhtohepvgguugihiiekjeesghhmrghilhdrtghomhdprhgtphhtthhopehsohhngheskhgvrhhnvghlrdhorhhg
+X-GND-Sasl: alexis.lothore@bootlin.com
 
-On Sat, Apr 5, 2025 at 2:40=E2=80=AFPM Thomas Gleixner <tglx@linutronix.de>=
- wrote:
->
-> Lei Chen raised an issue with CLOCK_MONOTONIC_COARSE seeing time
-> inconsistencies. Lei tracked down that this was being caused by the
-> adjustment
->
->     tk->tkr_mono.xtime_nsec -=3D offset;
->
-> which is made to compensate for the unaccumulated cycles in offset when t=
-he
-> multiplicator is adjusted forward, so that the non-_COARSE clockids don't
-> see inconsistencies.
->
-> However, the _COARSE clockid getter functions use the adjusted xtime_nsec
-> value directly and do not compensate the negative offset via the
-> clocksource delta multiplied with the new multiplicator. In that case the
-> caller can observe time going backwards in consecutive calls.
->
+Hi Andrii,
 
-Hey Thomas!
-  Thanks so much for reviving this version of the fix and my apologies
-for apparently taking us down the wrong path with the earlier
-solution.
+On Wed Apr 16, 2025 at 11:24 PM CEST, Andrii Nakryiko wrote:
+> On Fri, Apr 11, 2025 at 1:32=E2=80=AFPM Alexis Lothor=C3=A9 (eBPF Foundat=
+ion)
+> <alexis.lothore@bootlin.com> wrote:
+>>
+>> In order to properly JIT the trampolines needed to attach BPF programs
+>> to functions, some architectures like ARM64 need to know about the
+>> alignment needed for the function arguments. Such alignment can
+>> generally be deduced from the argument size, but that's not completely
+>> true for composite types. In the specific case of ARM64, the AAPCS64 ABI
+>> defines that a composite type which needs to be passed through stack
+>> must be aligned on the maximum between 8 and the largest alignment
+>> constraint of its first-level members. So the JIT compiler needs more
+>> information about the arguments to make sure to generate code that
+>> respects those alignment constraints.
+>>
+>> For struct arguments, add information about the size of the largest
+>> first-level member in the struct btf_func_model to allow the JIT
+>> compiler to guess the needed alignment. The information is quite
+>
+> I might be missing something, but how can the *size* of the field be
+> used to calculate that argument's *alignment*? i.e., I don't
+> understand why arg_largest_member_size needs to be calculated instead
+> of arg_largest_member_alignment...
 
-Looking over the patch, it seems ok to me, but in a test run with it,
-I've seen an error with CLOCK_REALTIME_COARSE during the
-clocksource-switch test  (as well as some seemingly unrelated test
-errors, which I need to investigate) so I'm looking at the zeroing
-done in timekeeping_forward_now and will try to look more into this
-tomorrow.
+Indeed I initially checked whether I could return directly some alignment
+info from btf, but it then involves the alignment computation in the btf
+module. Since there could be minor differences between architectures about
+alignment requirements, I though it would be better to in fact keep alignme=
+nt
+computation out of the btf module. For example, I see that 128 bits values
+are aligned on 16 bytes on ARM64, while being aligned on 8 bytes on S390.=
+=20
 
-thanks
--john
+And since for ARM64, all needed alignments are somehow derived from size
+(it is either directly size for fundamental types, or alignment of the
+largest member for structs, which is then size of largest member),
+returning the size seems to be enough to allow the JIT side to compute
+alignments.
+
+>> specific, but it allows to keep arch-specific concerns (ie: guessing the
+>> final needed alignment for an argument) isolated in each JIT compiler.
+>
+> couldn't all this information be calculated in the JIT compiler (if
+> JIT needs that) from BTF?
+
+From what I understand, the JIT compiler does not have access to BTF info,
+only a substract from it, arranged in a struct btf_func_model ? This
+struct btf_func_model already has size info for standard types, but for
+structs we need some additional info about the members, hence this
+arg_largest_member_alignment addition in btf_func_model.
+
+Thanks,
+
+Alexis
+
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
 
