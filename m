@@ -1,266 +1,185 @@
-Return-Path: <linux-kselftest+bounces-31029-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31030-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68694A91138
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Apr 2025 03:34:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8227A91175
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Apr 2025 04:09:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F221169F28
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Apr 2025 01:34:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4DAC41906DAD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Apr 2025 02:09:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C64B1DE8B5;
-	Thu, 17 Apr 2025 01:33:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42D6A1AB6C8;
+	Thu, 17 Apr 2025 02:09:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="Z14ren/J"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JzYLMow2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE4C1DE4C8
-	for <linux-kselftest@vger.kernel.org>; Thu, 17 Apr 2025 01:33:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4668B199EB2
+	for <linux-kselftest@vger.kernel.org>; Thu, 17 Apr 2025 02:09:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744853599; cv=none; b=AXUZoCnQu0hpRYhC5drw4Eyvva9kmho2T7V0394GeNS7MzhSMO0xQEg8qbNRCV9e+bxjAamrGdvp1eubAvaIdiworSGBXZDh9GYn2Nj1jVpGTFi75gnFU1wObxYihcu0BMGvngG/gVJJeUBPPSoIkSuZKFmV+Kynm3Nfcxt8d4Y=
+	t=1744855760; cv=none; b=hQQ2ybQx+kbsHtDrx350FGbVt8vbrHYldLGzFYgMvlqy7nnWYyML5Mj9rJnzs3wD5aH/IBjxa1G46+B8/Xl3K9rLYcty5OymRaf1y5FjaGy7qy64eoTwUr8s/xxtgCDDUt3rC9WefD+XzLiAKxzlsrnBi0uxEbJ2raNlzWJ7FHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744853599; c=relaxed/simple;
-	bh=7/43IpTzeRiEM6Px6bilPKt+XjpfXGEavwRwx/SGMHg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=D7tQTzzjYKweHjPURSt2LrJ2xR4QBmzxaGEW0Ei2UTb4W53ExNQVC3eZ5gGBFEeiE2NJbGOXSstYMLrbFdDwV1Sgeg4I8jVL5VBJdxjUAg0kGp3Wl1ZM8ywqXwmUKVnxqBgMKUOugJB4OdZfw8M7DaoWetGWA8q4gBMBzV16k/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=Z14ren/J; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-73bb647eb23so177889b3a.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Apr 2025 18:33:17 -0700 (PDT)
+	s=arc-20240116; t=1744855760; c=relaxed/simple;
+	bh=KSelZMOHGBCAC6ffhylcs5ml2BXN3psxianAepa1Pw0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KAnlYW/Q+Bsa8F89YyWNZHmnQxaKl1tlvQWax15MRTYH8l/VytkpXIStGmp/17RUWlZjXO4GliCJv7XqFK+UzLNow0uTpDTPjWi326QC1XESa/S82LrYfAd/PQmbGeuzjaMB38K+yd/wV2DPmyRnx9mSg+wiSg+KUFrVZW2M+R0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JzYLMow2; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-43cf3192d8bso20205e9.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Apr 2025 19:09:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastly.com; s=google; t=1744853597; x=1745458397; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1744855756; x=1745460556; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=06V3AHEiTyRxQXWcUBqLLERPc2tH+snQC0VRRM2/tsY=;
-        b=Z14ren/JMi4GWFhzOQNe0vyUdMCPw6kGzhVeVtems/5lF7WmdmNIbQeCP93QqYBdFW
-         +9dpZKdQm4SEo3YsyocQpjhvRm0x7OgDDyHMDb4LO/pyusZPkRxTP6un8mCJW+GnQkKl
-         uNl/OC0YeogNPsYjR35mujRmrEpw1Th0JOeEw=
+        bh=KSelZMOHGBCAC6ffhylcs5ml2BXN3psxianAepa1Pw0=;
+        b=JzYLMow2LkLFPXSefmx1gmC72CSr7O902d+IMLLKHcYAnh4cz8Z42hzFCxR278ZFOh
+         rgTm2RhJ8s4j9zKTKcCTzvxUeqkG2ffMfGvV2NpV9o3YnmhZbd6HAWygJywKPPHOBQHT
+         v6GIose+LN7ZeN91pXPT1Szt17BECGMYNYtx6/0mCaBNr13XKGiBlBj+5a5QNHqerh+x
+         4QXhYYFltm1e2vCJOOijX/HmedyvwaQHIb4WuFedgAfA2W9bVYAgvet+0f1ILZloSDi+
+         jgdGGbsEFNJwAzwz7c5kGbLAugnCQp+WN9XRSo8wN4tV3uHaAP2EiTZbCGdRkqhwKqmI
+         TI6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744853597; x=1745458397;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1744855756; x=1745460556;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=06V3AHEiTyRxQXWcUBqLLERPc2tH+snQC0VRRM2/tsY=;
-        b=H07S9d8Jfq9k0qWUpZ0VRjkXL6IeU0Ap/QZW1XDsO6xoTRPeI/BScDmOTw30/Wykzp
-         3GPNkTHDqM3vib9WEDEd33Hm6tI7cvM2NUUpZ5cHBeik83mzmPuB7M4VihvsHGd60eqk
-         j/lT9PVcM6g5D8mBRcZUVYgLl9CHLyV7HfcZR56QI3mG3c6Zb3pyt/bHe6zMZbkDKNmc
-         qivuTjUPQ/ssFt6imOmwNcUpVjD47Kt3WnCEYMWgM/H87HxYiLBLISy2mJ1lVL086Sa4
-         hcgHttpm2Ctn3ymmt3cKsek66SaYZ7DunjWtUfLfa/dMXovnmMOm4fQjrik3Inq3VtqO
-         WLSg==
-X-Forwarded-Encrypted: i=1; AJvYcCVJXa3RJFnuoDZQ+5N3J6OXlKFDvOF2JMb2tZ8BWicITJWARTU7kY+BP48VoMKPhY4TDiPUBSz/pQB1iHgcx7E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwYz3l2plFBXfZKKLKPvCexzmfuLNJVwijKXpTZF7edVbuJZoSZ
-	xEB/03RhDFu3x2kx89gGlE/PnBPC5wEZqbxuA3/ImUeplpTggA7nno+nYO7v79+E6YoN2QJsacP
-	j
-X-Gm-Gg: ASbGncvUGNh925kpKb5WNTHLtssrcW9N0xFtjU26p/H4S7rVP+wdGDDVxqXwzkpOgFE
-	GFo3l9+WLyJG2FreOM6w+1Csl1w25cc+V53+hG9grSZYfTz47Nq14l1cSg5Wy+pZDkzIQ9RNFGd
-	hZaJatOZjHlf73iqrmoTmW0SRBDWkY77figOcIvG6hOp68n2LtigDfttD6Pfe26QSLu4raFz+6i
-	2MX53hwY9KGhNjt3EaS6jZSx7zxV+5cre53hVX8wOTcJJHYwo8NsRh7vRwPjvR7wdHQurCxudyz
-	Fgu9jKFfaqR5N3MPxvIT357H/SMoEbGQ5BHv35QNtC9aCd0q
-X-Google-Smtp-Source: AGHT+IFwch9vZHyhnlVsQfTQrueevfR77nz+jh/2oHSkFCsSh+vQ8ZBfNCPWGD7K+cO6E4Q2GoQ9ww==
-X-Received: by 2002:a17:90b:5211:b0:2ee:f22a:61dd with SMTP id 98e67ed59e1d1-3086417cbacmr5223592a91.32.1744853596874;
-        Wed, 16 Apr 2025 18:33:16 -0700 (PDT)
-Received: from localhost.localdomain ([2620:11a:c019:0:65e:3115:2f58:c5fd])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22c33ef11c7sm21349505ad.37.2025.04.16.18.33.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Apr 2025 18:33:16 -0700 (PDT)
-From: Joe Damato <jdamato@fastly.com>
-To: netdev@vger.kernel.org
-Cc: kuba@kernel.org,
-	Joe Damato <jdamato@fastly.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	linux-kernel@vger.kernel.org (open list),
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-	bpf@vger.kernel.org (open list:XDP (eXpress Data Path):Keyword:(?:\b|_)xdp(?:\b|_))
-Subject: [PATCH net-next v2 4/4] selftests: drv-net: Test that NAPI ID is non-zero
-Date: Thu, 17 Apr 2025 01:32:42 +0000
-Message-ID: <20250417013301.39228-5-jdamato@fastly.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250417013301.39228-1-jdamato@fastly.com>
-References: <20250417013301.39228-1-jdamato@fastly.com>
+        bh=KSelZMOHGBCAC6ffhylcs5ml2BXN3psxianAepa1Pw0=;
+        b=DGaySbsAfd7Wgtrbkiq6l9BLNpsMqp0bEKOIGsq/wLQgwBetUFFm2Y+HRbyCHlpdEj
+         jQHO/ffAU6BMkKxTf4iH/IMlV7HgkfRPECqdu/lPL/ADvebRmS7Uy27pRaaQO0xNKJZ0
+         F9T5vV/3eWb4ODZYlPGXM7q5hoOvEL1EdYObL8gIVXgAe42kAcuj0QpyjhI5gMXmQFYI
+         WnTnCHNoJzeFnqTgVwnn6MDSzuyBBqkAzegogg3Ext7GykHeen2nSI9x7MvbHz/mBZD2
+         bgGP28U9wY7PmFT3gnsMFEurHeBRrjxkFQZ52uCiquhqCaAqFffeSvIq6lCn73dqdVzC
+         WoYg==
+X-Forwarded-Encrypted: i=1; AJvYcCUFf6psjWRJfq9+aWOlcd8KUJznKLHBJWS0uWr0HwWGfZdygRnmWtzEtkRGYzb8mAtuD+M0SsVRDmfkYz+LhYI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPcgJV6a8rzKMGJUzmCaBRs18miVqEC7KlS+LILBCWdoVvSDBg
+	WF0O2DrSP5Gt7ne5KcKzLE2ULjzORq+UzjnurKo/qnjaiZ/cuOxF7XJz3G+rDV1aue5uqFLDLFU
+	nqYcZsWoLU0L5m3AWoVrkOGuc5dEwxrS5BL85
+X-Gm-Gg: ASbGncudO8RujJNw23JW3SWxh4QR7xooTCsIK7nKD1E0F7kL4ITiFB+tlePMc+LkqTQ
+	0jK7wEmM+5F/1URmGRIzFckKq3zEZuGGuxI0AVRmTuSNeXpt9F43aJE5XozMQuXoWtvYQM4bzCk
+	R58cE+HJ2dQjNtT3bOUVNS/Dtui/oqLs8=
+X-Google-Smtp-Source: AGHT+IFrppytZV5cSJfrYgzaifTbDrHqkypNt5Bohd7JB9cXbxaDZ8Ylu35PtX/6cVUznzvu+dDy2IZggStg9q0OeRc=
+X-Received: by 2002:a05:600c:3042:b0:439:9434:1b66 with SMTP id
+ 5b1f17b1804b1-44063d2802cmr294225e9.1.1744855756423; Wed, 16 Apr 2025
+ 19:09:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250414225227.3642618-1-tjmercier@google.com>
+ <20250414225227.3642618-3-tjmercier@google.com> <CAPhsuW6sgGvjeAcciskmGO7r6+eeDo_KVS3y7C8fCDPptzCebw@mail.gmail.com>
+ <CABdmKX0bgxZFYuvQvQPK0AnAHEE3FebY_eA1+Vo=ScH1MbfzMg@mail.gmail.com>
+ <CAPhsuW72Q2--E9tQQY8xADghTV6bYy9vHpFQoCWNh0V_QBWafA@mail.gmail.com>
+ <CABdmKX1tDv3fSFURDN7=txFSbQ1xTjp8ZhLP8tFAvLcO9_-4_A@mail.gmail.com> <CAPhsuW7xvSYjWvy8K9Ev_tMwDRy2dpEiBcHYai3n-wAa0xvLow@mail.gmail.com>
+In-Reply-To: <CAPhsuW7xvSYjWvy8K9Ev_tMwDRy2dpEiBcHYai3n-wAa0xvLow@mail.gmail.com>
+From: "T.J. Mercier" <tjmercier@google.com>
+Date: Wed, 16 Apr 2025 19:09:04 -0700
+X-Gm-Features: ATxdqUFLL37LKBoNbpt1TbRt2xDWynqShrVasUjLiM1tjzZW-eK8x-aahsy-M1I
+Message-ID: <CABdmKX1p0KgbipTSW1Ywi4bTBabQmsg21gA14Bp5atYHg8FeXQ@mail.gmail.com>
+Subject: Re: [PATCH 2/4] bpf: Add dmabuf iterator
+To: Song Liu <song@kernel.org>
+Cc: sumit.semwal@linaro.org, christian.koenig@amd.com, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
+	skhan@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	linaro-mm-sig@lists.linaro.org, linux-doc@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, android-mm@google.com, 
+	simona@ffwll.ch, corbet@lwn.net, eddyz87@gmail.com, yonghong.song@linux.dev, 
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, 
+	jolsa@kernel.org, mykolal@fb.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Test that the SO_INCOMING_NAPI_ID of a network file descriptor is
-non-zero. This ensures that either the core networking stack or, in some
-cases like netdevsim, the driver correctly sets the NAPI ID.
+On Wed, Apr 16, 2025 at 6:26=E2=80=AFPM Song Liu <song@kernel.org> wrote:
+>
+> On Wed, Apr 16, 2025 at 4:40=E2=80=AFPM T.J. Mercier <tjmercier@google.co=
+m> wrote:
+> >
+> > On Wed, Apr 16, 2025 at 4:08=E2=80=AFPM Song Liu <song@kernel.org> wrot=
+e:
+> > >
+> > > On Wed, Apr 16, 2025 at 3:51=E2=80=AFPM T.J. Mercier <tjmercier@googl=
+e.com> wrote:
+> > > [...]
+> > > > >
+> > > > > IIUC, the iterator simply traverses elements in a linked list. I =
+feel it is
+> > > > > an overkill to implement a new BPF iterator for it.
+> > > >
+> > > > Like other BPF iterators such as kmem_cache_iter or task_iter.
+> > > > Cgroup_iter iterates trees instead of lists. This is iterating over
+> > > > kernel objects just like the docs say, "A BPF iterator is a type of
+> > > > BPF program that allows users to iterate over specific types of ker=
+nel
+> > > > objects". More complicated iteration should not be a requirement he=
+re.
+> > > >
+> > > > > Maybe we simply
+> > > > > use debugging tools like crash or drgn for this? The access with
+> > > > > these tools will not be protected by the mutex. But from my perso=
+nal
+> > > > > experience, this is not a big issue for user space debugging tool=
+s.
+> > > >
+> > > > drgn is *way* too slow, and even if it weren't the dependencies for
+> > > > running it aren't available. crash needs debug symbols which also
+> > > > aren't available on user builds. This is not just for manual
+> > > > debugging, it's for reporting memory use in production. Or anything
+> > > > else someone might care to extract like attachment info or refcount=
+s.
+> > >
+> > > Could you please share more information about the use cases and
+> > > the time constraint here, and why drgn is too slow. Is most of the de=
+lay
+> > > comes from parsing DWARF? This is mostly for my curiosity, because
+> > > I have been thinking about using drgn to do some monitoring in
+> > > production.
+> > >
+> > > Thanks,
+> > > Song
+> >
+> > These RunCommands have 10 second timeouts for example. It's rare that
+> > I see them get exceeded but it happens occasionally.:
+> > https://cs.android.com/android/platform/superproject/main/+/main:framew=
+orks/native/cmds/dumpstate/dumpstate.cpp;drc=3D98bdc04b7658fde0a99403fc052d=
+1d18e7d48ea6;l=3D2008
+>
+> Thanks for sharing this information.
+>
+> > The last time I used drgn (admittedly back in 2023) it took over a
+> > minute to iterate through less than 200 cgroups. I'm not sure what the
+> > root cause of the slowness was, but I'd expect the DWARF processing to
+> > be done up-front once and the slowness I experienced was not just at
+> > startup. Eventually I switched over to tracefs for that issue, which
+> > we still use for some telemetry.
+>
+> I haven't tried drgn on Android. On server side, iterating should 200
+> cgroups should be fairly fast (< 5 seconds, where DWARF parsing is
+> the most expensive part).
+>
+> > Other uses are by statsd for telemetry, memory reporting on app kills
+> > or death, and for "dumpsys meminfo".
+>
+> Here is another rookie question, it appears to me there is a file descrip=
+tor
+> associated with each DMA buffer, can we achieve the same goal with
+> a task-file iterator?
 
-Signed-off-by: Joe Damato <jdamato@fastly.com>
----
- .../testing/selftests/drivers/net/.gitignore  |  1 +
- tools/testing/selftests/drivers/net/Makefile  |  6 +-
- .../testing/selftests/drivers/net/napi_id.py  | 24 ++++++
- .../selftests/drivers/net/napi_id_helper.c    | 83 +++++++++++++++++++
- 4 files changed, 113 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/drivers/net/napi_id.py
- create mode 100644 tools/testing/selftests/drivers/net/napi_id_helper.c
-
-diff --git a/tools/testing/selftests/drivers/net/.gitignore b/tools/testing/selftests/drivers/net/.gitignore
-index ec746f374e85..71bd7d651233 100644
---- a/tools/testing/selftests/drivers/net/.gitignore
-+++ b/tools/testing/selftests/drivers/net/.gitignore
-@@ -1,2 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0-only
- xdp_helper
-+napi_id_helper
-diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
-index 0c95bd944d56..47247c2ef948 100644
---- a/tools/testing/selftests/drivers/net/Makefile
-+++ b/tools/testing/selftests/drivers/net/Makefile
-@@ -6,9 +6,13 @@ TEST_INCLUDES := $(wildcard lib/py/*.py) \
- 		 ../../net/net_helper.sh \
- 		 ../../net/lib.sh \
- 
--TEST_GEN_FILES := xdp_helper
-+TEST_GEN_FILES := \
-+	napi_id_helper \
-+	xdp_helper \
-+# end of TEST_GEN_FILES
- 
- TEST_PROGS := \
-+	napi_id.py \
- 	netcons_basic.sh \
- 	netcons_fragmented_msg.sh \
- 	netcons_overflow.sh \
-diff --git a/tools/testing/selftests/drivers/net/napi_id.py b/tools/testing/selftests/drivers/net/napi_id.py
-new file mode 100755
-index 000000000000..aee6f90be49b
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/napi_id.py
-@@ -0,0 +1,24 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+from lib.py import ksft_run, ksft_exit
-+from lib.py import ksft_eq, NetDrvEpEnv
-+from lib.py import bkg, cmd, rand_port, NetNSEnter
-+
-+def test_napi_id(cfg) -> None:
-+    port = rand_port()
-+    listen_cmd = f'{cfg.test_dir / "napi_id_helper"} {cfg.addr_v['4']} {port}'
-+
-+    with bkg(listen_cmd, ksft_wait=3) as server:
-+        with NetNSEnter('net', '/proc/self/ns/'):
-+          cmd(f"echo a | socat - TCP:{cfg.addr_v['4']}:{port}", host=cfg.remote, shell=True)
-+
-+    ksft_eq(0, server.ret)
-+
-+def main() -> None:
-+    with NetDrvEpEnv(__file__) as cfg:
-+        ksft_run([test_napi_id], args=(cfg,))
-+    ksft_exit()
-+
-+if __name__ == "__main__":
-+    main()
-diff --git a/tools/testing/selftests/drivers/net/napi_id_helper.c b/tools/testing/selftests/drivers/net/napi_id_helper.c
-new file mode 100644
-index 000000000000..7e8e7d373b61
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/napi_id_helper.c
-@@ -0,0 +1,83 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <errno.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <arpa/inet.h>
-+#include <sys/socket.h>
-+
-+#include "ksft.h"
-+
-+int main(int argc, char *argv[])
-+{
-+	struct sockaddr_in address;
-+	unsigned int napi_id;
-+	unsigned int port;
-+	socklen_t optlen;
-+	char buf[1024];
-+	int opt = 1;
-+	int server;
-+	int client;
-+	int ret;
-+
-+	server = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-+	if (server < 0) {
-+		perror("socket creation failed");
-+		if (errno == EAFNOSUPPORT)
-+			return -1;
-+		return 1;
-+	}
-+
-+	port = atoi(argv[2]);
-+
-+	if (setsockopt(server, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt))) {
-+		perror("setsockopt");
-+		return 1;
-+	}
-+
-+	address.sin_family = AF_INET;
-+	inet_pton(AF_INET, argv[1], &address.sin_addr);
-+	address.sin_port = htons(port);
-+
-+	if (bind(server, (struct sockaddr *)&address, sizeof(address)) < 0) {
-+		perror("bind failed");
-+		return 1;
-+	}
-+
-+	if (listen(server, 1) < 0) {
-+		perror("listen");
-+		return 1;
-+	}
-+
-+	ksft_ready();
-+
-+	client = accept(server, NULL, 0);
-+	if (client < 0) {
-+		perror("accept");
-+		return 1;
-+	}
-+
-+	optlen = sizeof(napi_id);
-+	ret = getsockopt(client, SOL_SOCKET, SO_INCOMING_NAPI_ID, &napi_id,
-+			 &optlen);
-+	if (ret != 0) {
-+		perror("getsockopt");
-+		return 1;
-+	}
-+
-+	read(client, buf, 1024);
-+
-+	ksft_wait();
-+
-+	if (napi_id == 0) {
-+		fprintf(stderr, "napi ID is 0\n");
-+		return 1;
-+	}
-+
-+	close(client);
-+	close(server);
-+
-+	return 0;
-+}
--- 
-2.43.0
-
+That would find almost all of them, but not the kernel-only
+allocations. (kernel_rss in the dmabuf_dump output I attached earlier.
+If there's a leak, it's likely to show up in kernel_rss because some
+driver forgot to release its reference(s).) Also wouldn't that be a
+ton more iterations since we'd have to visit every FD to find the
+small portion that are dmabufs? I'm not actually sure if buffers that
+have been mapped, and then have had their file descriptors closed
+would show up in task_struct->files; if not I think that would mean
+scanning both files and vmas for each task.
 
