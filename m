@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-31017-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31018-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81F0FA9109A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Apr 2025 02:31:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18EDAA9109F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Apr 2025 02:32:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3E563A2977
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Apr 2025 00:31:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 82E7C189CAB5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Apr 2025 00:32:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5453022756A;
-	Thu, 17 Apr 2025 00:27:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64B6522A4E6;
+	Thu, 17 Apr 2025 00:27:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SW6XkpCW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RJlXr4Kh"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24758226D17;
-	Thu, 17 Apr 2025 00:27:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33E951ADFFE;
+	Thu, 17 Apr 2025 00:27:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744849622; cv=none; b=OFhW6ba6IJaKfWMVS7uKI5biAF3FR+aL6Or/OVW5A7vOd4lJs0qFo6xH5Br0kCWG2/F23tPevi4SWaMRsFbPfVxgIeZhJo0dXAeq7wDrHDbhXAKzfrHVuIkRp4+HsrMY5xjX1w9iEOjOJW7i3VUjAdkvhyKA/o0Yr/Wc85fPP6s=
+	t=1744849626; cv=none; b=HvDgmzFTvGRyokyKlA+qTCnz5/wBj5+RN29Ip7rFfV5xIVNFoU/hZbVD4no09c/o/vwqxVytwIbbSS1+dVNx1bbEtRsGUBmpEtpVqwU8gC/K5hPDbYwF9gkkJ+6gQ+MwgMdnojs7/GHc0csUkWTQAU0gfW7JUYhASrKBAz6rh4c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744849622; c=relaxed/simple;
-	bh=Cvq6eABdDqP2hcq/eRmzqfXa00dzXj2dZhiT5XmdxBo=;
+	s=arc-20240116; t=1744849626; c=relaxed/simple;
+	bh=nFaCx//F7H/LvnEphuyPhU8UFj/so9Qf29YNe93/sWQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=gRTa2UJ1JohKoq90/BvZo3KVgnXxiwRseuUmmjUuxndRIKB8hauLEY2LJUkSaErj4ZhsT+83IlnLZdeGvUquhu0SPPSHKUt94ZDkXg/eUcXR0DlLUro6BqEA16XLT8kn3ud8gTYXt9pihkRtJTi7bboVuWTcDdofwjzKDn029Ts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SW6XkpCW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4633C4CEED;
-	Thu, 17 Apr 2025 00:26:58 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=AlmoHlIlJWXNkBeHvHVdMqPvKuW8hwWa0DCRBp02j1UdLU4I82vXqgbTt1tOThwsDJUq0MAMbB0fRN94JXoSqduEjUQE/Pbb5OdyQb7ww+MksbI2mIbIisYVove0gazUNC73gYxk5JKrPEQgzDqMkqQB4OVjrYwTr14naX9B3ec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RJlXr4Kh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A9ADC4CEE2;
+	Thu, 17 Apr 2025 00:27:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744849622;
-	bh=Cvq6eABdDqP2hcq/eRmzqfXa00dzXj2dZhiT5XmdxBo=;
+	s=k20201202; t=1744849626;
+	bh=nFaCx//F7H/LvnEphuyPhU8UFj/so9Qf29YNe93/sWQ=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=SW6XkpCWvc+XEbG8iE7WT1gmZ58DpBgpmmyUmeLTjzpYOU6jOtzsZwcBgIP9Tsr0L
-	 KQ1eQfa+NG7K4llLcQrD+NdmaOSr53ZdcukkJOo9o7y0643/eyjBTvnmyFCwztkZ/f
-	 dsYXbZiXn9F/vf9+7BbLI8c1BZ8M4liTneCk+jQKsIaZExABvvkzyO1SKu2N3YartF
-	 a1t+sWemSpJmd/qpq2QeB99iApUnZPpU9PsMyqpWMmsSw2EiqfwHF1r0OfR43vtGUq
-	 hLNDPhSX/cK8eNFhPnn6O3xWlX8q0+UshiO+GBHsBcqMpJIboy4sVrXFD6dXpMGR9r
-	 yb0AtUJ2xeIZQ==
+	b=RJlXr4Khiboh+fiAYNqZCRuXD/y9FGmhIYm5DWrVWvWVqjygql3XDRAo5+iI0/TeM
+	 VX12E07JppVfduQ3lhaBTV5Vh2SEkwt0p+ih6MiKOdIvAHRGiTdv/FcmGzmUIZBmgf
+	 VMAevwWtnYLrJTXd3Xl90XfDZhRGoazjrQ/BrPbxINuROkQmvwj02PEG1uGgWBDX2j
+	 NQ/yGta7YYw/tCjYTaolYWjmXDRUA2V7iamywATLdd8P2zMGzfHG6BvVOjL4CktY7l
+	 FlLea1qVtpn0WlLS4xD3k0Zta7D0j2qv+PK5Ad7qcOQMG7WYVOEcMC4sby3dIfx1B8
+	 bQKERHGAE/tkA==
 From: Mark Brown <broonie@kernel.org>
-Date: Thu, 17 Apr 2025 01:25:25 +0100
-Subject: [PATCH v5 21/28] KVM: arm64: Flush register state on writes to
- SVCR.SM and SVCR.ZA
+Date: Thu, 17 Apr 2025 01:25:26 +0100
+Subject: [PATCH v5 22/28] KVM: arm64: Expose SME specific state to
+ userspace
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250417-kvm-arm64-sme-v5-21-f469a2d5f574@kernel.org>
+Message-Id: <20250417-kvm-arm64-sme-v5-22-f469a2d5f574@kernel.org>
 References: <20250417-kvm-arm64-sme-v5-0-f469a2d5f574@kernel.org>
 In-Reply-To: <20250417-kvm-arm64-sme-v5-0-f469a2d5f574@kernel.org>
 To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
@@ -67,111 +67,216 @@ Cc: Dave Martin <Dave.Martin@arm.com>, Fuad Tabba <tabba@google.com>,
  linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.15-dev-c25d1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3370; i=broonie@kernel.org;
- h=from:subject:message-id; bh=Cvq6eABdDqP2hcq/eRmzqfXa00dzXj2dZhiT5XmdxBo=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBoAEp/rjAQoyRjhEAHaxvC9+m6jLrGDd2SZVIFUxUe
- 1scs86OJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaABKfwAKCRAk1otyXVSH0PLbB/
- 908/iRrkOt7rAypIV4yIV1NhagBAAwKxHrrJe2L5XGQfUDa1RILLmW9AibuqrlL2LFsi9LuG7UnMRZ
- vUISSTyOYGTOwPf51nN1DW9lKUXiaiMC1OKTlzZYRPKye+J4ulrLGSyx+k0IiDoPBaKTJ07QqOuKsE
- GIlIxFfEUGMyNzDD8qKlWyoWRsCLao/FjS+vx8jFYfGXK4Urkr1pO8DadS2eBH297o633Ye7Z0Fr8y
- /boGga7O1O9yjcTpTfM5uh3IOdIEtpTK7KUzyUr+ESoL4Mh/fb+CWIXpkpaYW2EIL976+BvcWAj93n
- dJp77Fr/n0RHITnkcjawRL7uLLOETN
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6845; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=nFaCx//F7H/LvnEphuyPhU8UFj/so9Qf29YNe93/sWQ=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBoAEqA9rdk2gHwsdmjE8ZYQh2D1iWyiLDTQEbm/+DJ
+ dhUnMauJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaABKgAAKCRAk1otyXVSH0FlGB/
+ 47tSz1P5azhKmNsskckhwGWpsyDBWyr5YrTuTQem1nqfN8gInK9OldcvtWQeMO028sFEAImMOBFiWf
+ 8KjDe+BkqG0tWmVqGt6803nErLBHx+7pJukMgPtoLpdofiGOCReBx7CQeyjIiAUQED/BWFLMHTe6KL
+ maX+DaFJxs6+oAFTFfJv/6W2O1TiP3bLY6uW2Dha8M9KcVTNxudk4zAYWc2bO/3yNycYjNRy/v/nj8
+ 5oZT0hMyLYNXuQG5Ve0uDapq2jHo+QNpXdUvJSYd+eWMA0KEmYdiekV6zh5UcsbLsSCfvKSgYEdJBQ
+ nRI1suOCrT5DW2DXDKl+3x6/etTRd8
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-Writes to the physical SVCR.SM and SVCR.ZA change the state of PSTATE.SM
-and PSTATE.ZA, causing other floating point state to reset. Emulate this
-behaviour for writes done via the KVM userspace ABI.
+SME introduces two new registers, the ZA matrix register and the ZT0 LUT
+register.  Both of these registers are only accessible when PSTATE.ZA is
+set and ZT0 is only present if SME2 is enabled for the guest. Provide
+support for configuring these from VMMs.
 
-Setting PSTATE.ZA to 1 causes ZA and ZT0 to be reset to 0, these are stored
-in sme_state. Setting PSTATE.ZA to 0 causes ZA and ZT0 to become inaccesible
-so no reset is needed.
+The ZA matrix is a single SVL*SVL register which is available when
+PSTATE.ZA is set. We follow the pattern established by the architecture
+itself and expose this to userspace as a series of horizontal SVE vectors
+with the streaming mode vector length, using the format already established
+for the SVE vectors themselves.
 
-Any change in PSTATE.SM causes the V, Z, P, FFR and FPMR registers to be
-reset to 0 and FPSR to be reset to 0x800009f.
+ZT0 is a single register with a refreshingly fixed size 512 bit register
+which is like ZA accessible only when PSTATE.ZA is set. Add support for it
+to the userspace API, as with ZA we allow the register to be read or written
+regardless of the state of PSTATE.ZA in order to simplify userspace usage.
+The value will be reset to 0 whenever PSTATE.ZA changes from 0 to 1,
+userspace can read stale values but these are not observable by the guest
+without manipulation of PSTATE.ZA by userspace.
+
+While there is currently only one ZT register the naming as ZT0 and the
+instruction encoding clearly leave room for future extensions adding more
+ZT registers. This encoding can readily support such an extension if one is
+introduced.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/include/asm/kvm_host.h | 18 ++++++++++++++++++
- arch/arm64/kvm/sys_regs.c         | 29 ++++++++++++++++++++++++++++-
- 2 files changed, 46 insertions(+), 1 deletion(-)
+ arch/arm64/include/uapi/asm/kvm.h |  17 ++++++
+ arch/arm64/kvm/guest.c            | 114 +++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 129 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-index 09351c14032f..ef8b60222ac9 100644
---- a/arch/arm64/include/asm/kvm_host.h
-+++ b/arch/arm64/include/asm/kvm_host.h
-@@ -1066,6 +1066,24 @@ struct kvm_vcpu_arch {
- 	__size_ret;							\
- })
+diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
+index c0a8aa8c67ea..2ecdd29c0677 100644
+--- a/arch/arm64/include/uapi/asm/kvm.h
++++ b/arch/arm64/include/uapi/asm/kvm.h
+@@ -357,6 +357,23 @@ struct kvm_arm_counter_offset {
+ /* SME registers */
+ #define KVM_REG_ARM64_SME		(0x17 << KVM_REG_ARM_COPROC_SHIFT)
  
-+#define vcpu_sme_state(vcpu) (kern_hyp_va((vcpu)->arch.sme_state))
++#define KVM_ARM64_SME_VQ_MIN __SVE_VQ_MIN
++#define KVM_ARM64_SME_VQ_MAX __SVE_VQ_MAX
 +
-+#define vcpu_sme_state_size(vcpu) ({					\
-+	size_t __size_ret;						\
-+	unsigned int __vcpu_vq;						\
-+									\
-+	if (WARN_ON(!sve_vl_valid((vcpu)->arch.max_vl[ARM64_VEC_SME]))) { \
-+		__size_ret = 0;						\
-+	} else {							\
-+		__vcpu_vq = vcpu_sme_max_vq(vcpu);			\
-+		__size_ret = ZA_SIG_REGS_SIZE(__vcpu_vq);		\
-+		if (vcpu_has_sme2(vcpu))				\
-+			__size_ret += ZT_SIG_REG_SIZE;			\
-+	}								\
-+									\
-+	__size_ret;							\
-+})
++/* ZA and ZTn occupy blocks at the following offsets within this range: */
++#define KVM_REG_ARM64_SME_ZA_BASE	0
++#define KVM_REG_ARM64_SME_ZT_BASE	0x600
 +
- /*
-  * Only use __vcpu_sys_reg/ctxt_sys_reg if you know you want the
-  * memory backed version of a register, and not the one most recently
-diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
-index 7cfc0c2801ed..0f08f791e3fe 100644
---- a/arch/arm64/kvm/sys_regs.c
-+++ b/arch/arm64/kvm/sys_regs.c
-@@ -806,6 +806,33 @@ static bool access_smidr(struct kvm_vcpu *vcpu,
- 	return true;
++#define KVM_ARM64_SME_MAX_ZAHREG	(__SVE_VQ_BYTES * KVM_ARM64_SME_VQ_MAX)
++
++#define KVM_REG_ARM64_SME_ZAHREG(n, i)					\
++	(KVM_REG_ARM64 | KVM_REG_ARM64_SME | KVM_REG_ARM64_SME_ZA_BASE | \
++	 KVM_REG_SIZE_U2048 |						\
++	 (((n) & (KVM_ARM64_SME_MAX_ZAHREG - 1)) << 5) |		\
++	 ((i) & (KVM_ARM64_SVE_MAX_SLICES - 1)))
++
++#define KVM_REG_ARM64_SME_ZTREG_SIZE	(512 / 8)
++
+ /* Vector lengths pseudo-register: */
+ #define KVM_REG_ARM64_SME_VLS		(KVM_REG_ARM64 | KVM_REG_ARM64_SME | \
+ 					 KVM_REG_SIZE_U512 | 0xffff)
+diff --git a/arch/arm64/kvm/guest.c b/arch/arm64/kvm/guest.c
+index 4ba0afa369d5..6ed5f4fe6126 100644
+--- a/arch/arm64/kvm/guest.c
++++ b/arch/arm64/kvm/guest.c
+@@ -594,23 +594,133 @@ static int set_sme_vls(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
+ 	return set_vec_vls(ARM64_VEC_SME, vcpu, reg);
  }
  
-+static int set_svcr(struct kvm_vcpu *vcpu, const struct sys_reg_desc *rd,
-+		    u64 val)
++/*
++ * Validate SVE register ID and get sanitised bounds for user/kernel SVE
++ * register copy
++ */
++static int sme_reg_to_region(struct vec_state_reg_region *region,
++			     struct kvm_vcpu *vcpu,
++			     const struct kvm_one_reg *reg)
 +{
-+	u64 old = __vcpu_sys_reg(vcpu, rd->reg);
++	/* reg ID ranges for ZA.H[n] registers */
++	unsigned int vq = vcpu_sme_max_vq(vcpu) - 1;
++	const u64 za_h_max = vq * __SVE_VQ_BYTES;
++	const u64 zah_id_min = KVM_REG_ARM64_SME_ZAHREG(0, 0);
++	const u64 zah_id_max = KVM_REG_ARM64_SME_ZAHREG(za_h_max - 1,
++						       SVE_NUM_SLICES - 1);
++	unsigned int reg_num;
 +
-+	if (val & SVCR_RES0)
++	unsigned int reqoffset, reqlen; /* User-requested offset and length */
++	unsigned int maxlen; /* Maximum permitted length */
++
++	size_t sme_state_size;
++
++	reg_num = (reg->id & SVE_REG_ID_MASK) >> SVE_REG_ID_SHIFT;
++
++	if (reg->id >= zah_id_min && reg->id <= zah_id_max) {
++		if (!vcpu_has_sme(vcpu) || (reg->id & SVE_REG_SLICE_MASK) > 0)
++			return -ENOENT;
++
++		/* ZA is exposed as SVE vectors ZA.H[n] */
++		reqoffset = ZA_SIG_ZAV_OFFSET(vq, reg_num) -
++			ZA_SIG_REGS_OFFSET;
++		reqlen = KVM_SVE_ZREG_SIZE;
++		maxlen = SVE_SIG_ZREG_SIZE(vq);
++	} else if (reg->id == KVM_REG_ARM64_SME_ZT_BASE) {
++		/* ZA is exposed as SVE vectors ZA.H[n] */
++		if (!kvm_has_feat(vcpu->kvm, ID_AA64PFR1_EL1, SME, SME2) ||
++		    (reg->id & SVE_REG_SLICE_MASK) > 0 ||
++		    reg_num > 0)
++			return -ENOENT;
++
++		/* ZT0 is stored after ZA */
++		reqlen = KVM_REG_ARM64_SME_ZTREG_SIZE;
++		maxlen = KVM_REG_ARM64_SME_ZTREG_SIZE;
++	} else {
 +		return -EINVAL;
-+
-+	if ((val & SVCR_ZA) && !(old & SVCR_ZA) && vcpu->arch.sme_state)
-+		memset(vcpu->arch.sme_state, 0, vcpu_sme_state_size(vcpu));
-+
-+	if ((val & SVCR_SM) != (old & SVCR_SM)) {
-+		memset(vcpu->arch.ctxt.fp_regs.vregs, 0,
-+		       sizeof(vcpu->arch.ctxt.fp_regs.vregs));
-+
-+		if (vcpu->arch.sve_state)
-+			memset(vcpu->arch.sve_state, 0,
-+			       vcpu_sve_state_size(vcpu));
-+
-+		__vcpu_sys_reg(vcpu, FPMR) = 0;
-+		vcpu->arch.ctxt.fp_regs.fpsr = 0x800009f;
 +	}
 +
-+	__vcpu_sys_reg(vcpu, rd->reg) = val;
++	sme_state_size = vcpu_sme_state_size(vcpu);
++	if (WARN_ON(!sme_state_size))
++		return -EINVAL;
++
++	region->koffset = array_index_nospec(reqoffset, sme_state_size);
++	region->klen = min(maxlen, reqlen);
++	region->upad = reqlen - region->klen;
++
 +	return 0;
 +}
 +
- static unsigned int pmu_visibility(const struct kvm_vcpu *vcpu,
- 				   const struct sys_reg_desc *r)
++/*
++ * ZA is exposed as an array of horizontal vectors with the same
++ * format as SVE, mirroring the architecture's LDR ZA[Wv, offs], [Xn]
++ * instruction.
++ */
++
+ static int get_sme_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
  {
-@@ -3115,7 +3142,7 @@ static const struct sys_reg_desc sys_reg_descs[] = {
- 		    CTR_EL0_DminLine_MASK |
- 		    CTR_EL0_L1Ip_MASK |
- 		    CTR_EL0_IminLine_MASK),
--	{ SYS_DESC(SYS_SVCR), undef_access, reset_val, SVCR, 0, .visibility = sme_visibility  },
-+	{ SYS_DESC(SYS_SVCR), undef_access, reset_val, SVCR, 0, .visibility = sme_visibility, .set_user = set_svcr },
- 	{ SYS_DESC(SYS_FPMR), undef_access, reset_val, FPMR, 0, .visibility = fp8_visibility },
++	int ret;
++	struct vec_state_reg_region region;
++	char __user *uptr = (char __user *)reg->addr;
++
+ 	/* Handle the KVM_REG_ARM64_SME_VLS pseudo-reg as a special case: */
+ 	if (reg->id == KVM_REG_ARM64_SME_VLS)
+ 		return get_sme_vls(vcpu, reg);
  
- 	{ PMU_SYS_REG(PMCR_EL0), .access = access_pmcr, .reset = reset_pmcr,
+-	return -EINVAL;
++	/* Try to interpret reg ID as an architectural SME register... */
++	ret = sme_reg_to_region(&region, vcpu, reg);
++	if (ret)
++		return ret;
++
++	if (!kvm_arm_vcpu_vec_finalized(vcpu))
++		return -EPERM;
++
++	/*
++	 * None of the SME specific registers are accessible unless
++	 * PSTATE.ZA is set.
++	 */
++	if (!vcpu_za_enabled(vcpu))
++		return -EINVAL;
++
++	if (copy_from_user(vcpu->arch.sme_state + region.koffset, uptr,
++			   region.klen))
++		return -EFAULT;
++
++	return 0;
+ }
+ 
+ static int set_sme_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
+ {
++	int ret;
++	struct vec_state_reg_region region;
++	char __user *uptr = (char __user *)reg->addr;
++
+ 	/* Handle the KVM_REG_ARM64_SME_VLS pseudo-reg as a special case: */
+ 	if (reg->id == KVM_REG_ARM64_SME_VLS)
+ 		return set_sme_vls(vcpu, reg);
+ 
+-	return -EINVAL;
++	/* Try to interpret reg ID as an architectural SME register... */
++	ret = sme_reg_to_region(&region, vcpu, reg);
++	if (ret)
++		return ret;
++
++	if (!kvm_arm_vcpu_vec_finalized(vcpu))
++		return -EPERM;
++
++	/*
++	 * None of the SME specific registers are accessible unless
++	 * PSTATE.ZA is set.
++	 */
++	if (!vcpu_za_enabled(vcpu))
++		return -EINVAL;
++
++	if (copy_from_user(vcpu->arch.sme_state + region.koffset, uptr,
++			   region.klen))
++		return -EFAULT;
++
++	return 0;
+ }
++
+ int kvm_arch_vcpu_ioctl_get_regs(struct kvm_vcpu *vcpu, struct kvm_regs *regs)
+ {
+ 	return -EINVAL;
 
 -- 
 2.39.5
