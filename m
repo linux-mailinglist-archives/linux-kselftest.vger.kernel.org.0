@@ -1,163 +1,156 @@
-Return-Path: <linux-kselftest+bounces-31024-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31025-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8AE5A910B7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Apr 2025 02:34:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C955A9111D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Apr 2025 03:26:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8D6537ACA16
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Apr 2025 00:32:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D9769190477B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Apr 2025 01:26:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EFCE22FDEB;
-	Thu, 17 Apr 2025 00:27:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 201FB199EAD;
+	Thu, 17 Apr 2025 01:26:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pdRpeEn7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="airZdFGw"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F21922E00A;
-	Thu, 17 Apr 2025 00:27:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D663319AA5D;
+	Thu, 17 Apr 2025 01:26:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744849654; cv=none; b=idplwAkvxYVR2DhzCVyhDHSIKQZOgi7mXJRtql291clwR/fpznirTTm0sNUgZvn/n8MLtHLyqFq1TygRHciD9EIBTOOaD++DftM/pTjl6j9LYG4fdX788Y/DmPhMT6JHhcwLYN0gAzbJARBqh0kAQJSpnNc6YQt37Uck0Cj+JYQ=
+	t=1744853167; cv=none; b=ATw00v4is9Ii0iNFbLCugD3JQkI5pHQCzXmbkBNffawItn8d/Y31gnH9DHlO/brqMpvHOCSnMKoKbMk2aDn0RzQ43BlnHqkEBdympC/owWE3/hZVaDhTTRZa3IasMBDCBr3Flc/G/9Etqtcl7zIeHkc/vOlnqLPlM5+P2yHzw2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744849654; c=relaxed/simple;
-	bh=c22FTsDBl8on7JkOPsVEpDLeW97hqa6VyOk90f5/da4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=K5APvQ5iNSLXyy/PTM7gycOZHvHVTJfNXU3QUI1TfXDymJFMCqfYxs6jIR+wbPy59gFsZEVVjuXIotaDiPyDbs+hwELghW2r1+UXQO32CrLt+l7xHeSE9Q+di/3sfxevhbpUWQaIRgBmDh+1qn1Zk6qPsPbmuD/XyVbSvIz9TMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pdRpeEn7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A729C4CEED;
-	Thu, 17 Apr 2025 00:27:30 +0000 (UTC)
+	s=arc-20240116; t=1744853167; c=relaxed/simple;
+	bh=Pb9pVqKpDofUm9GlwrhQ7qK1jHIfS2Iexjbs+sWfBWc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dNRR8V0atTHfOH5yoO3RdV5Gb1Lck7rDIMUPHn5xk3GkcR828VHLvr6J63vNgHVDBH9i/q9zGbDbT7dtjp4BZwhn5Ud+15pyUBq6+nqS9E4LGLVUkLRRhNtlgc5/GcJqjV/TZTMc/qi0L6GribNzfhCI10FqKw+Z9ItCwI7XI/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=airZdFGw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52A19C4CEF2;
+	Thu, 17 Apr 2025 01:26:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744849654;
-	bh=c22FTsDBl8on7JkOPsVEpDLeW97hqa6VyOk90f5/da4=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=pdRpeEn7CrcVPx+kUfDsoI5/OAvjUj7WFrbF4LkM3BYxCHjzqplZNqkJMkrUaTzuV
-	 c7my1t3zDLG8eWNQTgNcya0XNY9zCVVJB2htQNW5WV/9RzpmC86gmY4X1sjpCsDPx5
-	 ZisOkzq8p2/j69nPr1xnLvRJicSLEIHSGDVvdd3hZNuKn44zioZjnZzuZT+Qr/Pu1H
-	 xbGnvNP3pqhkZHUA6p3+i7j11Sp8t+8f5Te4Hs6CWoNgLg4hvgrJE1HdN9li+qKPVV
-	 frAjLJt8WYVZZLAlF4fGIROL7u0mf+Cdt9+gEQlK28A6q2/45GUcRa5Y6ORTcFrzye
-	 G0p7B2RoL+IhA==
-From: Mark Brown <broonie@kernel.org>
-Date: Thu, 17 Apr 2025 01:25:32 +0100
-Subject: [PATCH v5 28/28] KVM: arm64: selftests: Add SME to set_id_regs
- test
+	s=k20201202; t=1744853166;
+	bh=Pb9pVqKpDofUm9GlwrhQ7qK1jHIfS2Iexjbs+sWfBWc=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=airZdFGw3wpvOs40mW8E2YLru8wKJmhYXXJD0BFDmfADYDBUMviTecaZGkl7LqzLG
+	 5+qYPv331/DuQi6JkA9bylQHRpkECdd6M8dWfwaGLlUyu/caUFmfTqTSm1b0saM8Vw
+	 Niaj949lhqYDglKwgumwONPzxhpRVI6OqVuAFHqqqHoCKD5TCllIroudCtHWygAsZL
+	 BehR13jsV8jC2jQky+D97kPAjPdvbO5C8yBcSTFpEWieubXFAkK1D+QIA4txyswnyf
+	 kt3fQQ9ts1uoQuLVCknhKoJ3iDRh/k7WMNshJtAQLtz/PiKqBcHRQqXLYkfSJAMGx9
+	 usGqfkWtOCnSQ==
+Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-47688ae873fso2614471cf.0;
+        Wed, 16 Apr 2025 18:26:06 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU+b/m/R/BfmUmC4my/cYrLFLkwPPQ3ydBYDBRwwE265uFySHzTKFmCRybkF4EsLhSvzvDQjtb4GbMj1kTq@vger.kernel.org, AJvYcCUfghfjipWU/c1TGkptruw7+U/eb1iEwu/tk2jgARtMsI4dKjcTw98VCyV9+1Awm8zym8k1LJTeGJ5CTOc=@vger.kernel.org, AJvYcCUmjV67qLFjwuDUbNsBi57R0t+GicAeKFGpx75fM8+lUVLJtd7RnPsGKewg5KRT8EBz0hd8TUTeqo7E@vger.kernel.org, AJvYcCW7Ehe9Y4esHtPLN3j4h+nMCqKA3u7VCyOE2Mf2Sls4nDPlPWS3EhHboN9rXyqeaoWureE=@vger.kernel.org, AJvYcCWEBbIe25TPJYTh1KJwd2XMGGMco3fqe7rjMhQb/GO3nVDP4IGnWjkBH3SRY6sq2eG8atbboKNZ0IkQIJrC2k3l@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1t03tzySJtaKYw1/3NXe+SjbgymcWOYiX1wR7viGo96x8bPqj
+	PUTMjgD0UxslsUpQeP/FfKhgq9hczfv2oWSgQifcRiBiPNoKneqEfLAhGhbHaDFCR792+Gz9F+w
+	IJpuzZa/89qXy65BzzPFB4W8nXoc=
+X-Google-Smtp-Source: AGHT+IH+IOWI0C/2mrprWoiDphyhjDZa4XjFqxPGvR745gNdFLLsLYbpwl+N9PVJmnqgIXxV32totXw4girR2aT01Tc=
+X-Received: by 2002:a05:622a:305:b0:476:b7e2:385e with SMTP id
+ d75a77b69052e-47ad80b9d1bmr51204791cf.17.1744853165338; Wed, 16 Apr 2025
+ 18:26:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250417-kvm-arm64-sme-v5-28-f469a2d5f574@kernel.org>
-References: <20250417-kvm-arm64-sme-v5-0-f469a2d5f574@kernel.org>
-In-Reply-To: <20250417-kvm-arm64-sme-v5-0-f469a2d5f574@kernel.org>
-To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
- Joey Gouly <joey.gouly@arm.com>, Catalin Marinas <catalin.marinas@arm.com>, 
- Suzuki K Poulose <suzuki.poulose@arm.com>, Will Deacon <will@kernel.org>, 
- Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <shuah@kernel.org>
-Cc: Dave Martin <Dave.Martin@arm.com>, Fuad Tabba <tabba@google.com>, 
- Mark Rutland <mark.rutland@arm.com>, linux-arm-kernel@lists.infradead.org, 
- kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.15-dev-c25d1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3711; i=broonie@kernel.org;
- h=from:subject:message-id; bh=c22FTsDBl8on7JkOPsVEpDLeW97hqa6VyOk90f5/da4=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBoAEqEPmF1UWC0EBNqc6FOONN5AgLp5u4ISmCdeQ3d
- +1tXd0qJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaABKhAAKCRAk1otyXVSH0Gh/B/
- 9HAFpSzIdzlDrDNhb9algwishiTaXUKWuASjSDPBm1wCg6xVIGVPOWp9/N83PHSqzHCeYjpo4X4K0u
- gyHfVWPM9eDHZ8m9XrAzvEVRLv7Zr+HE3obFad8s3tkORdQfil/0/vGWXhpXQwXUiMyUHJM8f9QcKo
- sSs5j37wkt+KRS4anKOc8HrgvRR7MaxEnREFXI7II9vJmqNVAmSuvZC4mYCeHR3uZs4HOudiOBLt4N
- C2RJwtqS9Q+PQliixkCFALO12w7K5QPcAfdORLnmXwdjDIT7OaeIRO91nDZfQpdXkKHVgn8d2W0G56
- s1Ln1aXjPH01uX1yqB7S2fjKUu+5Ej
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+References: <20250414225227.3642618-1-tjmercier@google.com>
+ <20250414225227.3642618-3-tjmercier@google.com> <CAPhsuW6sgGvjeAcciskmGO7r6+eeDo_KVS3y7C8fCDPptzCebw@mail.gmail.com>
+ <CABdmKX0bgxZFYuvQvQPK0AnAHEE3FebY_eA1+Vo=ScH1MbfzMg@mail.gmail.com>
+ <CAPhsuW72Q2--E9tQQY8xADghTV6bYy9vHpFQoCWNh0V_QBWafA@mail.gmail.com> <CABdmKX1tDv3fSFURDN7=txFSbQ1xTjp8ZhLP8tFAvLcO9_-4_A@mail.gmail.com>
+In-Reply-To: <CABdmKX1tDv3fSFURDN7=txFSbQ1xTjp8ZhLP8tFAvLcO9_-4_A@mail.gmail.com>
+From: Song Liu <song@kernel.org>
+Date: Wed, 16 Apr 2025 18:25:53 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW7xvSYjWvy8K9Ev_tMwDRy2dpEiBcHYai3n-wAa0xvLow@mail.gmail.com>
+X-Gm-Features: ATxdqUFeEdI62EdJA7S6mr-T1-xMxtG3tzu_ONZ5VOwpfwB7f0lVzKO-NZuipkk
+Message-ID: <CAPhsuW7xvSYjWvy8K9Ev_tMwDRy2dpEiBcHYai3n-wAa0xvLow@mail.gmail.com>
+Subject: Re: [PATCH 2/4] bpf: Add dmabuf iterator
+To: "T.J. Mercier" <tjmercier@google.com>
+Cc: sumit.semwal@linaro.org, christian.koenig@amd.com, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
+	skhan@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	linaro-mm-sig@lists.linaro.org, linux-doc@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, android-mm@google.com, 
+	simona@ffwll.ch, corbet@lwn.net, eddyz87@gmail.com, yonghong.song@linux.dev, 
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, 
+	jolsa@kernel.org, mykolal@fb.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add coverage of the SME ID registers to set_id_regs, ID_AA64PFR1_EL1.SME
-becomes writable and we add ID_AA64SMFR_EL1 and it's subfields.
+On Wed, Apr 16, 2025 at 4:40=E2=80=AFPM T.J. Mercier <tjmercier@google.com>=
+ wrote:
+>
+> On Wed, Apr 16, 2025 at 4:08=E2=80=AFPM Song Liu <song@kernel.org> wrote:
+> >
+> > On Wed, Apr 16, 2025 at 3:51=E2=80=AFPM T.J. Mercier <tjmercier@google.=
+com> wrote:
+> > [...]
+> > > >
+> > > > IIUC, the iterator simply traverses elements in a linked list. I fe=
+el it is
+> > > > an overkill to implement a new BPF iterator for it.
+> > >
+> > > Like other BPF iterators such as kmem_cache_iter or task_iter.
+> > > Cgroup_iter iterates trees instead of lists. This is iterating over
+> > > kernel objects just like the docs say, "A BPF iterator is a type of
+> > > BPF program that allows users to iterate over specific types of kerne=
+l
+> > > objects". More complicated iteration should not be a requirement here=
+.
+> > >
+> > > > Maybe we simply
+> > > > use debugging tools like crash or drgn for this? The access with
+> > > > these tools will not be protected by the mutex. But from my persona=
+l
+> > > > experience, this is not a big issue for user space debugging tools.
+> > >
+> > > drgn is *way* too slow, and even if it weren't the dependencies for
+> > > running it aren't available. crash needs debug symbols which also
+> > > aren't available on user builds. This is not just for manual
+> > > debugging, it's for reporting memory use in production. Or anything
+> > > else someone might care to extract like attachment info or refcounts.
+> >
+> > Could you please share more information about the use cases and
+> > the time constraint here, and why drgn is too slow. Is most of the dela=
+y
+> > comes from parsing DWARF? This is mostly for my curiosity, because
+> > I have been thinking about using drgn to do some monitoring in
+> > production.
+> >
+> > Thanks,
+> > Song
+>
+> These RunCommands have 10 second timeouts for example. It's rare that
+> I see them get exceeded but it happens occasionally.:
+> https://cs.android.com/android/platform/superproject/main/+/main:framewor=
+ks/native/cmds/dumpstate/dumpstate.cpp;drc=3D98bdc04b7658fde0a99403fc052d1d=
+18e7d48ea6;l=3D2008
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/kvm/arm64/set_id_regs.c | 30 +++++++++++++++++++++++--
- 1 file changed, 28 insertions(+), 2 deletions(-)
+Thanks for sharing this information.
 
-diff --git a/tools/testing/selftests/kvm/arm64/set_id_regs.c b/tools/testing/selftests/kvm/arm64/set_id_regs.c
-index 322b9d3b0125..bcb00bb6be2d 100644
---- a/tools/testing/selftests/kvm/arm64/set_id_regs.c
-+++ b/tools/testing/selftests/kvm/arm64/set_id_regs.c
-@@ -138,6 +138,7 @@ static const struct reg_ftr_bits ftr_id_aa64pfr0_el1[] = {
- 
- static const struct reg_ftr_bits ftr_id_aa64pfr1_el1[] = {
- 	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64PFR1_EL1, CSV2_frac, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64PFR1_EL1, SME, 0),
- 	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64PFR1_EL1, SSBS, ID_AA64PFR1_EL1_SSBS_NI),
- 	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64PFR1_EL1, BT, 0),
- 	REG_FTR_END,
-@@ -185,6 +186,28 @@ static const struct reg_ftr_bits ftr_id_aa64mmfr2_el1[] = {
- 	REG_FTR_END,
- };
- 
-+static const struct reg_ftr_bits ftr_id_aa64smfr0_el1[] = {
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, FA64, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, LUTv2, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, SMEver, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, I16I64, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, F64F64, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, I16I32, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, B16B16, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, F16F16, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, F8F16, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, F8F32, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, I8I32, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, F16F32, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, B16F32, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, BI32I32, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, F32F32, 0)
-+,	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, SF8FMA, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, SF8DP4, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, SF8DP2, 0),
-+	REG_FTR_END,
-+};
-+
- static const struct reg_ftr_bits ftr_id_aa64zfr0_el1[] = {
- 	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64ZFR0_EL1, F64MM, 0),
- 	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64ZFR0_EL1, F32MM, 0),
-@@ -215,6 +238,7 @@ static struct test_feature_reg test_regs[] = {
- 	TEST_REG(SYS_ID_AA64MMFR0_EL1, ftr_id_aa64mmfr0_el1),
- 	TEST_REG(SYS_ID_AA64MMFR1_EL1, ftr_id_aa64mmfr1_el1),
- 	TEST_REG(SYS_ID_AA64MMFR2_EL1, ftr_id_aa64mmfr2_el1),
-+	TEST_REG(SYS_ID_AA64SMFR0_EL1, ftr_id_aa64smfr0_el1),
- 	TEST_REG(SYS_ID_AA64ZFR0_EL1, ftr_id_aa64zfr0_el1),
- };
- 
-@@ -231,6 +255,7 @@ static void guest_code(void)
- 	GUEST_REG_SYNC(SYS_ID_AA64MMFR0_EL1);
- 	GUEST_REG_SYNC(SYS_ID_AA64MMFR1_EL1);
- 	GUEST_REG_SYNC(SYS_ID_AA64MMFR2_EL1);
-+	GUEST_REG_SYNC(SYS_ID_AA64SMFR0_EL1);
- 	GUEST_REG_SYNC(SYS_ID_AA64ZFR0_EL1);
- 	GUEST_REG_SYNC(SYS_CTR_EL0);
- 	GUEST_REG_SYNC(SYS_MIDR_EL1);
-@@ -700,8 +725,9 @@ int main(void)
- 		   ARRAY_SIZE(ftr_id_aa64isar2_el1) + ARRAY_SIZE(ftr_id_aa64pfr0_el1) +
- 		   ARRAY_SIZE(ftr_id_aa64pfr1_el1) + ARRAY_SIZE(ftr_id_aa64mmfr0_el1) +
- 		   ARRAY_SIZE(ftr_id_aa64mmfr1_el1) + ARRAY_SIZE(ftr_id_aa64mmfr2_el1) +
--		   ARRAY_SIZE(ftr_id_aa64zfr0_el1) - ARRAY_SIZE(test_regs) + 3 +
--		   MPAM_IDREG_TEST;
-+
-+		   ARRAY_SIZE(ftr_id_aa64zfr0_el1) + ARRAY_SIZE(ftr_id_aa64smfr0_el1) -
-+		   ARRAY_SIZE(test_regs) + 3 + MPAM_IDREG_TEST;
- 
- 	ksft_set_plan(test_cnt);
- 
+> The last time I used drgn (admittedly back in 2023) it took over a
+> minute to iterate through less than 200 cgroups. I'm not sure what the
+> root cause of the slowness was, but I'd expect the DWARF processing to
+> be done up-front once and the slowness I experienced was not just at
+> startup. Eventually I switched over to tracefs for that issue, which
+> we still use for some telemetry.
 
--- 
-2.39.5
+I haven't tried drgn on Android. On server side, iterating should 200
+cgroups should be fairly fast (< 5 seconds, where DWARF parsing is
+the most expensive part).
 
+> Other uses are by statsd for telemetry, memory reporting on app kills
+> or death, and for "dumpsys meminfo".
+
+Here is another rookie question, it appears to me there is a file descripto=
+r
+associated with each DMA buffer, can we achieve the same goal with
+a task-file iterator?
+
+Thanks,
+Song
 
