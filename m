@@ -1,106 +1,155 @@
-Return-Path: <linux-kselftest+bounces-31071-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31072-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 723EBA922F0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Apr 2025 18:43:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8C1AA922FE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Apr 2025 18:48:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 836F2464C74
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Apr 2025 16:43:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A4C93ACDA2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Apr 2025 16:48:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C9172550BA;
-	Thu, 17 Apr 2025 16:43:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6891B2505C7;
+	Thu, 17 Apr 2025 16:48:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="hFP13GVt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l8N2Q9Ab"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1356F254B18
-	for <linux-kselftest@vger.kernel.org>; Thu, 17 Apr 2025 16:43:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59B3819DF9A;
+	Thu, 17 Apr 2025 16:48:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744908209; cv=none; b=fDGTKDu0BAfzICkmnACH7sjbf4CkmVTH9txgCTXtgPBaxp2Hq5UKtmgA6bDJXcL7qQodycxvX0Wlca4kIR3q1nDBqmEksGKdaWXt/U3BnvR6/kPsirZ3gHiuxo7FPyx7gm3PCsh1+hiAAZ78sjtw7TvQwGjFUFNg0sZslw+VDr8=
+	t=1744908530; cv=none; b=FQf2f4aAWgSw7mBx/lM9YkvWXpz+BuL95+6IuEcWIrnwqKZEVIDWKek67r1qFLZqQb5nFvHZwMe1su5Xf0OOUk41IcavC4Zt+0Q1CQBQdVu+IJ3h/Bz3IwG63Ke6Rv8AZqzHZgh1rP5WpGPUNjK2XT9EntIbPSCanxiGcrxhGU4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744908209; c=relaxed/simple;
-	bh=cE0SsJXubMVoO/NUjivTf4Jtt0m+Kx9DZncRgLItiJ8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZDfHnFZ0eQnxxP6ZZ8pGLNoUNq+K82G6R3cgcynAYR/B2SPc9A+xfdZIv6HTmsLfyuxQmKn2uIP/wskLRkxQlXyt6k4ayfvGQzxpJkGF2GMTmxubbm75qOFnlhXd8L9ekXQOsCOyDhNNk0ARfbEDjO+Xr1GgxeQdvMKvZh5oyks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=hFP13GVt; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-7369ce5d323so931407b3a.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Apr 2025 09:43:26 -0700 (PDT)
+	s=arc-20240116; t=1744908530; c=relaxed/simple;
+	bh=Oyf2h/nbUjXzaklEa9162zb07nLF2t9e4pozt3Q1l3M=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GT7AEA+NY2L8pmSy6xJEiAVVTAx3cTSj5UasvyttToGQBgJhPOKvzS60bFyuiWpLk0iPPtZUbDlIojImmtBx85AkiUAfZTn6UWufdMhoXUROXkLfAmNFhfO09DfG7OzrvgkmM06gG5NDNVxBhoN2JRmBhgbcEq5sEu8eNlGcHSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l8N2Q9Ab; arc=none smtp.client-ip=209.85.222.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-7c08fc20194so190262185a.2;
+        Thu, 17 Apr 2025 09:48:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastly.com; s=google; t=1744908206; x=1745513006; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HJs3R27mGXFnUc6xsOALgXGRVDRyXs8OoUcWIG3enHk=;
-        b=hFP13GVtwYn8MV8aG2khVJWT1njBW5N2uFkrWfNIV4v+CTVErrPkFiBGt6Mnnp+j1j
-         f1bIW6/SyZhCQWNRNuV2paZCvpH4lwtXa2Ww3iSVipiSnrMfqmer2evE1yHz+261x9Vh
-         bsQfyf5nTXFJ+whm6X1eTfJPdePEcOeHYdZsQ=
+        d=gmail.com; s=20230601; t=1744908527; x=1745513327; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:feedback-id:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=z0pUawgfEW0CPBUqb9LoWc3jadoXhqOKMLKHi6zM6mQ=;
+        b=l8N2Q9AbcT4gzSOgq48de2WSYMeOvetteRO7LwCoFozbAdNMIWd4LXtlrKPLxhmzvt
+         BjAM46h+KhD+rN/9iHfs7nZ5Qh2+2JeyU7isV0+zAyD0AzRp6D98lVnbYXMa8/0I1k12
+         iTW4XzJvKknRVG79Le4KHBg1J+rgIb1D3at1MmHpk444ZRoMeoA2CQujoJXAwNpmVoJN
+         fyubTzSKb9OeogTQnivw6C9MK5rSMpXX8nuLsquIG6zMK2kQV+t6fkFwpEuraAcxrX0z
+         V9q8EwVYG22EdA8ujlZuQBHFANy3uHK2DW8eOwSPyHzGKuIKhfWObfBz1ObCeSIFJsKk
+         LdTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744908206; x=1745513006;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HJs3R27mGXFnUc6xsOALgXGRVDRyXs8OoUcWIG3enHk=;
-        b=K1HNxRpVZucRPsLWCAZ58Gv8r+zx1Z0qyAhH57wFDVkpR29EHISl3AZraExfULpb1a
-         /arTYATCSNjOTuKGQ5ucq79eXPov6R/+wCOaYgpqr6kAegTVZeIR1qS1WsZ7ViLZwR7A
-         cqx8y2komYze8VDhZiMV+bdK7T/fhcZbwkVQAiNtibbPlwtcEd7NNLyD1daxGqSN/y/W
-         SSz1k5YqwtKkanUEAWdscVLAKillKHuXXstCkDanIKXBxQwEl4U9fuaLEAJC6K8GkGlU
-         ocYke5VjcjY0qrfb94DxKFeuGcNCx/DKei3atyxpr8RdOfLm31c2aeftNuiOg0Vu02WZ
-         WbYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV7qWQo9v7S3wNMkElWN5aqaV/9WHEdrikXgeYaBbSKma7/VhaJisvlNJn6qH/NveC3e5UVM7IPNh2xniwjoDI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzmh2SBAw1xivzLyF72mVUbjvDUlWQBiPcz0Gvvjz2uVqOjRiPV
-	KB77D7aTlYMcFyi2TsVqXjunA64f0D23o9UVpz071UhRcS+yPYzeKcrk58SvUjY=
-X-Gm-Gg: ASbGncu2GEI+uiOmCnrxqfHZ7Fj1aWoEOxFmPqDxzLH5m14qUnr94ecCsrogXJxMFhj
-	5KiH1E5gn7z/4od5nc20/m02Q6RyylSGf3oEHAUG+ftQhhgc2NQaR3d2g6QaHPKhIkv5ZFvFMwr
-	+rFmBhEF2suvISF6sikwyjrKze6saIwGOv4QrF/Xa/t9LvmqZ9TCqhi+pFLUG9fJuYWVmWbXdn+
-	w9TbBDPtEaXdFq4ODNj9As9rMjDnRzvvSd+0WZKBcZJ0rDlS8TTFUcod3L9grnqm2/5yq3a74k4
-	cMWsKbFQmMXGIz+/AwaGW2qY6OXnuY1vuJLgb5LhTIHrOE22MU1nx3Q+/Hnek00dh+0CYtBGnQB
-	XviUEfls9LQVn
-X-Google-Smtp-Source: AGHT+IG+XpQJVC4yi6kR32NZ5IA6ihEOayDuhg24CWyM1y1U1cd5X2UW8o/p/Y+LyClf8OSD/ROclA==
-X-Received: by 2002:aa7:88d2:0:b0:735:d89c:4b9f with SMTP id d2e1a72fcca58-73c264c4cb4mr8349614b3a.0.1744908206170;
-        Thu, 17 Apr 2025 09:43:26 -0700 (PDT)
-Received: from LQ3V64L9R2 (c-24-6-151-244.hsd1.ca.comcast.net. [24.6.151.244])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73dbf8bf802sm63829b3a.13.2025.04.17.09.43.24
+        d=1e100.net; s=20230601; t=1744908527; x=1745513327;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:feedback-id:message-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=z0pUawgfEW0CPBUqb9LoWc3jadoXhqOKMLKHi6zM6mQ=;
+        b=of6tyRnvBZwjnteMw84zd9sT2NoqOnR6a2uol6b+h164FZBNkYFJmeAsPKDZNmnIDb
+         +FgU17VW+0SdKtYzb9zmwty5fZZ6tQUx/Zt07J9GPWGiK20H4bqQDybu/u7ea89uzq5e
+         PsERrtdFOUdIUV+2PnVhe4ImL/NgXQfN5LvMDT9St/MIyVPuVQNZPh4Tde78RGaehFms
+         6K5C6+XoEZQhq+ULFw6Ua4grGOzNM0XeTfmmukKM2GHv5J3sDVONQDhwOQi8HDRu+t7z
+         PbISi474Vnu1UfxCE7ftXXnSmNIG7T61Tx6qEZDjGrHVhPhlSTbdH7PIvFcKQJRnjhO5
+         Ob2g==
+X-Forwarded-Encrypted: i=1; AJvYcCU9KbQNqzh+hnmy12zmJ5XEhegU1TdPrpNWMKr5fSvcZ46t2nzOIbrfrpLcut/o0HjMa9SOsECdh/Mg@vger.kernel.org, AJvYcCUrZW3brYZ9wFKQroVL6f+xzmxAMLVWlUrskgb6JGPHK1M9BtQAjvV+U380N98rjORkAEIAlc2+@vger.kernel.org, AJvYcCV01R+o4a+6sqD3gKUpx2FIS2DfmTc/cKC57rbytlHuih3/Iqx4obTqnoh2m+DvsL1Dw7KgPThRLWwo@vger.kernel.org, AJvYcCVivbcbVG1W+h06dVZp9V71TG1RQ2NRbV+L2Rsg70B85h2ZjCoRznm73NqXpVOh+65X1qPA90Iu3poqXH9b@vger.kernel.org, AJvYcCVrkZfEbLaWOv9Wrr8KSyVgQ6bX2wQNdf114T+z2YNjfxLCr8YDWUhAL5iiIKHjg4onkJ3o602L4w+z/O5E@vger.kernel.org, AJvYcCWewEoI7gT070ExiuOKTQesdYSMPcAWw/j0eeobyJHiLpvOTvsINxTOWML/SZZ4o1pFO0mQvfHodTict71lUaaq@vger.kernel.org, AJvYcCX2d+tvWHKeJ7bOGW++d06aQRzg4HK/OK1uPrcQmF0hpITf1pWwJqubdRJzEen6E0x7r4PPF0TIi8n7htc=@vger.kernel.org, AJvYcCXTKdCGeChCI0MHyXUViuV9Tq96IfqS0PGjAUX2nConaWjaHUYSgJ9duDwftNDpYzaF9qK7CjMcXP5wgRoKOdY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyAnJfAOGLwmzmpC1wFYyU0qkZiWfEsAaiiOOqKh/eIppiOwMv0
+	FGxg0HAhHIspji4zlJdmWBrzICTlcqBgzZhQg0vFO01k3lSy8hVT
+X-Gm-Gg: ASbGncsh1W0f2ZgATRUupKzVSLmP+PF/W2bY8oAESAwLZb4er18hBtlJ/+JweAQipAf
+	Fb5pniPIhf6beMgsvkp5hMQ9J441I5j8PnJM/5N3/zYpfiqOGa3DtJMrG3cvn0YRr2OMLLxB3Au
+	W4ecQRv5w2ZbpsPg25FTGCL9l9NMnHo8UG9gHOBsNYzJVAFOfnqwfGD6t91nM6vAPcrGkK075Qj
+	ikwDx5XXV1z/mzx9YHLSgmdFLdmSc5KBm6aqorHiyjKvxN7s/Y2zkbccawDLVv+WBcHZZaNisZr
+	ecfeB0/WJGGF5HxXKuZ4QunwuGAVJZUQj/L+y6TqUHGGXP8xisieq52TX61PF/HrCT16Yz7DR8/
+	1lHSsiEURr1bIjsAyx4k4HRIeXgOkHH4=
+X-Google-Smtp-Source: AGHT+IFqkF5iMwBpXMvWqqewwowNgnxq9EadSO8ifpl/XPQFt56qdQuYpaKX5BT0fokVGfFcYHT2Ow==
+X-Received: by 2002:a05:620a:2989:b0:7c5:9fd3:a90b with SMTP id af79cd13be357-7c91908401fmr1075906385a.47.1744908527121;
+        Thu, 17 Apr 2025 09:48:47 -0700 (PDT)
+Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c925b6a3c9sm9483185a.100.2025.04.17.09.48.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Apr 2025 09:43:25 -0700 (PDT)
-Date: Thu, 17 Apr 2025 09:43:23 -0700
-From: Joe Damato <jdamato@fastly.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-	"open list:XDP (eXpress Data Path):Keyword:(?:b|_)xdp(?:b|_)" <bpf@vger.kernel.org>
-Subject: Re: [PATCH net-next v2 4/4] selftests: drv-net: Test that NAPI ID is
- non-zero
-Message-ID: <aAEvq_oLLzboJeIB@LQ3V64L9R2>
-Mail-Followup-To: Joe Damato <jdamato@fastly.com>,
-	Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-	"open list:XDP (eXpress Data Path):Keyword:(?:b|_)xdp(?:b|_)" <bpf@vger.kernel.org>
-References: <20250417013301.39228-1-jdamato@fastly.com>
- <20250417013301.39228-5-jdamato@fastly.com>
- <20250417064615.10aba96b@kernel.org>
+        Thu, 17 Apr 2025 09:48:46 -0700 (PDT)
+Message-ID: <680130ee.050a0220.393a1.0995@mx.google.com>
+X-Google-Original-Message-ID: <aAEw60BILp8RZGu3@winterfell.>
+Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
+	by mailfauth.phl.internal (Postfix) with ESMTP id A9F6C120007A;
+	Thu, 17 Apr 2025 12:48:45 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-09.internal (MEProxy); Thu, 17 Apr 2025 12:48:45 -0400
+X-ME-Sender: <xms:7TABaAH-jdZcQcOxerlipQT_koonBUeu8UgPUZegwdwik1L638QDmQ>
+    <xme:7TABaJUojDtbB3jfQ4o-3Q2R_fDNYgrhWuJHAewiRPpTngh362wooPsDcL94zhnT7
+    mozpsPXjlyPqLrZIQ>
+X-ME-Received: <xmr:7TABaKJ93915T2vT-PypctMLcVw9jjLSz7g1t6AKiBq4H_8bF5IBtddAOIo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvvdeljeelucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnegoufhushhpvggtthffohhmrghinhculdegledmnecujfgu
+    rhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcuhf
+    gvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtthgv
+    rhhnpeekjefgudefhfeigffghfdtheeggfdtuddvkeejleffheeufeffteetvefgfeeuje
+    enucffohhmrghinhepghhithhhuhgsrdhiohenucevlhhushhtvghrufhiiigvpedtnecu
+    rfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghrsh
+    honhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvghn
+    gheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvgdpnhgspghrtghpthhtohepge
+    ejpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehtrghmihhrugesghhmrghilhdr
+    tghomhdprhgtphhtthhopehmrghsrghhihhrohihsehkvghrnhgvlhdrohhrghdprhgtph
+    htthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepohhjvggurges
+    khgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghlvgigrdhgrgihnhhorhesghhmrghilh
+    drtghomhdprhgtphhtthhopehgrghrhiesghgrrhihghhuohdrnhgvthdprhgtphhtthho
+    pegsjhhorhhnfegpghhhsehprhhothhonhhmrghilhdrtghomhdprhgtphhtthhopegsvg
+    hnnhhordhlohhsshhinhesphhrohhtohhnrdhmvgdprhgtphhtthhopegrrdhhihhnuggs
+    ohhrgheskhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:7TABaCF2Q9VAnNaVCci07g_j4WAk86p_F36oOLXLlogh7DgFK1zJSA>
+    <xmx:7TABaGW2iiqKclwpLocPWmZdhgRRLKUSFuS0244ZHM2SViDTyRH2EA>
+    <xmx:7TABaFMD8fiLH8R9nEaZAjdOOYTIpS6-51h5fwH2eAY6amkB0mci0Q>
+    <xmx:7TABaN2NvASHYA-UXVAg1C8la2gbX43EpgPYcnyrOHneqkvOP2yYcQ>
+    <xmx:7TABaPXBKeLtxfoZkALq6Jv5FqyuGPj49rlRazoccB9gDtT4jGK3ABXa>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 17 Apr 2025 12:48:44 -0400 (EDT)
+Date: Thu, 17 Apr 2025 09:48:43 -0700
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Tamir Duberstein <tamird@gmail.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	Abdiel Janulgue <abdiel.janulgue@gmail.com>,
+	Daniel Almeida <daniel.almeida@collabora.com>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	FUJITA Tomonori <fujita.tomonori@gmail.com>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Frederic Weisbecker <frederic@kernel.org>,	Lyude Paul <lyude@redhat.com>,
+ Thomas Gleixner <tglx@linutronix.de>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	rust-for-linux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com, linux-pci@vger.kernel.org,
+	linux-block@vger.kernel.org, devicetree@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, netdev@vger.kernel.org
+Subject: Re: [PATCH v9 1/6] rust: enable `clippy::ptr_as_ptr` lint
+References: <20250416-ptr-as-ptr-v9-0-18ec29b1b1f3@gmail.com>
+ <20250416-ptr-as-ptr-v9-1-18ec29b1b1f3@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -109,82 +158,108 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250417064615.10aba96b@kernel.org>
+In-Reply-To: <20250416-ptr-as-ptr-v9-1-18ec29b1b1f3@gmail.com>
 
-On Thu, Apr 17, 2025 at 06:46:15AM -0700, Jakub Kicinski wrote:
-> On Thu, 17 Apr 2025 01:32:42 +0000 Joe Damato wrote:
-> > Test that the SO_INCOMING_NAPI_ID of a network file descriptor is
-> > non-zero. This ensures that either the core networking stack or, in some
-> > cases like netdevsim, the driver correctly sets the NAPI ID.
-> > 
-> > Signed-off-by: Joe Damato <jdamato@fastly.com>
-> > ---
-> >  .../testing/selftests/drivers/net/.gitignore  |  1 +
-> >  tools/testing/selftests/drivers/net/Makefile  |  6 +-
-> >  .../testing/selftests/drivers/net/napi_id.py  | 24 ++++++
-> >  .../selftests/drivers/net/napi_id_helper.c    | 83 +++++++++++++++++++
-> >  4 files changed, 113 insertions(+), 1 deletion(-)
-> >  create mode 100755 tools/testing/selftests/drivers/net/napi_id.py
-> >  create mode 100644 tools/testing/selftests/drivers/net/napi_id_helper.c
-> > 
-> > diff --git a/tools/testing/selftests/drivers/net/.gitignore b/tools/testing/selftests/drivers/net/.gitignore
-> > index ec746f374e85..71bd7d651233 100644
-> > --- a/tools/testing/selftests/drivers/net/.gitignore
-> > +++ b/tools/testing/selftests/drivers/net/.gitignore
-> > @@ -1,2 +1,3 @@
-> >  # SPDX-License-Identifier: GPL-2.0-only
-> >  xdp_helper
-> > +napi_id_helper
+On Wed, Apr 16, 2025 at 01:36:05PM -0400, Tamir Duberstein wrote:
+> In Rust 1.51.0, Clippy introduced the `ptr_as_ptr` lint [1]:
 > 
-> sort alphabetically, pls
-
-Thanks, fixed.
-
-> > diff --git a/tools/testing/selftests/drivers/net/napi_id.py b/tools/testing/selftests/drivers/net/napi_id.py
-> > new file mode 100755
-> > index 000000000000..aee6f90be49b
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/drivers/net/napi_id.py
-> > @@ -0,0 +1,24 @@
-> > +#!/usr/bin/env python3
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +
-> > +from lib.py import ksft_run, ksft_exit
-> > +from lib.py import ksft_eq, NetDrvEpEnv
-> > +from lib.py import bkg, cmd, rand_port, NetNSEnter
-> > +
-> > +def test_napi_id(cfg) -> None:
-> > +    port = rand_port()
-> > +    listen_cmd = f'{cfg.test_dir / "napi_id_helper"} {cfg.addr_v['4']} {port}'
+> > Though `as` casts between raw pointers are not terrible,
+> > `pointer::cast` is safer because it cannot accidentally change the
+> > pointer's mutability, nor cast the pointer to other types like `usize`.
 > 
-> you need to deploy, in case test is running with a real remote machine
-> and the binary has to be copied over:
+> There are a few classes of changes required:
+> - Modules generated by bindgen are marked
+>   `#[allow(clippy::ptr_as_ptr)]`.
+> - Inferred casts (` as _`) are replaced with `.cast()`.
+> - Ascribed casts (` as *... T`) are replaced with `.cast::<T>()`.
+> - Multistep casts from references (` as *const _ as *const T`) are
+>   replaced with `core::ptr::from_ref(&x).cast()` with or without `::<T>`
+>   according to the previous rules. The `core::ptr::from_ref` call is
+>   required because `(x as *const _).cast::<T>()` results in inference
+>   failure.
+> - Native literal C strings are replaced with `c_str!().as_char_ptr()`.
+> - `*mut *mut T as _` is replaced with `let *mut *const T = (*mut *mut
+>   T)`.cast();` since pointer to pointer can be confusing.
 > 
-> 	bin_remote = cfg.remote.deploy(cfg.test_dir / "napi_id_helper")
-> 	listen_cmd = f'{bin_remote} {cfg.addr_v['4']} {port}' 
-
-Thanks, fixed.
-
-> > +    with bkg(listen_cmd, ksft_wait=3) as server:
-> > +        with NetNSEnter('net', '/proc/self/ns/'):
-> > +          cmd(f"echo a | socat - TCP:{cfg.addr_v['4']}:{port}", host=cfg.remote, shell=True)
+> Apply these changes and enable the lint -- no functional change
+> intended.
 > 
-> Like Xiao Liang said, just host=cfg.remote should work.
+> Link: https://rust-lang.github.io/rust-clippy/master/index.html#ptr_as_ptr [1]
+> Reviewed-by: Benno Lossin <benno.lossin@proton.me>
+> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 
-You are both correct; sorry about the noise. I thought I tried this
-last night and it was failing, but clearly I was wrong/something
-else was broken.
+Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
 
-I've fixed this locally and dropped patch 3 which is now
-unnecessary.
+A few nits below though...
 
-I think the main outstanding thing is Paolo's feedback which maybe
-(?) is due to a Python version difference? If you have any guidance
-on how to proceed on that, I'd appreciate it [1].
+> ---
+>  Makefile                               |  1 +
+>  rust/bindings/lib.rs                   |  1 +
+>  rust/kernel/alloc/allocator_test.rs    |  2 +-
+>  rust/kernel/alloc/kvec.rs              |  4 ++--
+>  rust/kernel/device.rs                  |  4 ++--
+>  rust/kernel/devres.rs                  |  2 +-
+>  rust/kernel/dma.rs                     |  4 ++--
+>  rust/kernel/error.rs                   |  2 +-
+>  rust/kernel/firmware.rs                |  3 ++-
+>  rust/kernel/fs/file.rs                 |  2 +-
+>  rust/kernel/kunit.rs                   | 11 +++++++----
+>  rust/kernel/list/impl_list_item_mod.rs |  2 +-
+>  rust/kernel/pci.rs                     |  2 +-
+>  rust/kernel/platform.rs                |  4 +++-
+>  rust/kernel/print.rs                   |  6 +++---
+>  rust/kernel/seq_file.rs                |  2 +-
+>  rust/kernel/str.rs                     |  2 +-
+>  rust/kernel/sync/poll.rs               |  2 +-
+>  rust/kernel/time/hrtimer/pin.rs        |  2 +-
+>  rust/kernel/time/hrtimer/pin_mut.rs    |  2 +-
+>  rust/kernel/workqueue.rs               | 10 +++++-----
+>  rust/uapi/lib.rs                       |  1 +
+>  22 files changed, 40 insertions(+), 31 deletions(-)
+> 
+[...]
+> diff --git a/rust/kernel/list/impl_list_item_mod.rs b/rust/kernel/list/impl_list_item_mod.rs
+> index a0438537cee1..1f9498c1458f 100644
+> --- a/rust/kernel/list/impl_list_item_mod.rs
+> +++ b/rust/kernel/list/impl_list_item_mod.rs
+> @@ -34,7 +34,7 @@ pub unsafe trait HasListLinks<const ID: u64 = 0> {
+>      unsafe fn raw_get_list_links(ptr: *mut Self) -> *mut ListLinks<ID> {
+>          // SAFETY: The caller promises that the pointer is valid. The implementer promises that the
+>          // `OFFSET` constant is correct.
+> -        unsafe { (ptr as *mut u8).add(Self::OFFSET) as *mut ListLinks<ID> }
+> +        unsafe { ptr.cast::<u8>().add(Self::OFFSET).cast() }
 
-My guess is that I could rewrite that line to concat the strings
-instead of interpolate and it would work both on Paolo's system and
-mine. Would that be the right way to go?
+I think we better do:
 
-[1]: https://lore.kernel.org/netdev/aAEtSppgCFNd8vr4@LQ3V64L9R2/
+	unsafe { ptr.byte_add(Self::OFFSET).cast() }
+
+here, similar for a few instances below. Maybe in a follow-up patch?
+byte_add() is way more clear about what is done here.
+
+Regards,
+Boqun
+
+>      }
+>  }
+>  
+[...]
+> @@ -457,7 +457,7 @@ fn get_work_offset(&self) -> usize {
+>      #[inline]
+>      unsafe fn raw_get_work(ptr: *mut Self) -> *mut Work<T, ID> {
+>          // SAFETY: The caller promises that the pointer is valid.
+> -        unsafe { (ptr as *mut u8).add(Self::OFFSET) as *mut Work<T, ID> }
+> +        unsafe { ptr.cast::<u8>().add(Self::OFFSET).cast::<Work<T, ID>>() }
+>      }
+>  
+>      /// Returns a pointer to the struct containing the [`Work<T, ID>`] field.
+> @@ -472,7 +472,7 @@ unsafe fn work_container_of(ptr: *mut Work<T, ID>) -> *mut Self
+>      {
+>          // SAFETY: The caller promises that the pointer points at a field of the right type in the
+>          // right kind of struct.
+> -        unsafe { (ptr as *mut u8).sub(Self::OFFSET) as *mut Self }
+> +        unsafe { ptr.cast::<u8>().sub(Self::OFFSET).cast::<Self>() }
+>      }
+>  }
+>  
+[...]
 
