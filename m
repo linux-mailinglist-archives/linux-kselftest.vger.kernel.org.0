@@ -1,154 +1,150 @@
-Return-Path: <linux-kselftest+bounces-31037-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31038-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92770A914D4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Apr 2025 09:14:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C431EA9151B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Apr 2025 09:26:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 488D04459A7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Apr 2025 07:14:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DFA25446068
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Apr 2025 07:26:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7861218845;
-	Thu, 17 Apr 2025 07:14:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 162CD21ADAB;
+	Thu, 17 Apr 2025 07:26:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="YEhNjld6"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YwTsQGIt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEA271DDA0C;
-	Thu, 17 Apr 2025 07:14:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 743302192FA
+	for <linux-kselftest@vger.kernel.org>; Thu, 17 Apr 2025 07:26:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744874067; cv=none; b=Oa6pRsWtwa+eObRL1X3N0J4LaouTTQtd3Wj6Uta7gqBYpcWW+zKcDSdFsHCE7OAJAcgnlRTBw+aHrQCUurJDVGwNjUGTFJJT8Ez9nL5ujqIjlRw9L0sf2JpNJKZEuuh8oaWYwNF+EE4O63J9n6ouN9HKrpIsgIF+fBtc08dLsIQ=
+	t=1744874791; cv=none; b=ru4ItquBjE4YaZEWsEFS63L/SIWGudvhMsk63SJbJj7smH9FDdxRm5D8cxnmXxJTD4Ey2qmxBdmga77157HkkFZzrZxRRSQ6Hs0QviHQCaGpAoauLBg0PUDd5Nx+692UWDwQztThnglUUOnIzRfOoEtK3kybBx8VDS65Z9XSGQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744874067; c=relaxed/simple;
-	bh=YYgBl4XslUIPANcfaH0UDI8ZQnEJjTNt9jHQJbKWOHU=;
-	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:Mime-Version:
-	 References:In-Reply-To; b=lm0PeDGs3hwBWWjopQ6frs0a5Uc7DFPgwZ1UJ0jtwTbpA2uwmHFVuMixmKHvBUC8hv10I6y5ZodCSw9QGiS6BsfWFMF2mGwDa9xLEP50Y1BDezmCq3aV7w7Q0vjhHEtwYSj3yU2VcVMKrj3GTxlbfUvfUICREAfPSQKEQn01EXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=YEhNjld6; arc=none smtp.client-ip=217.70.183.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4313F439D4;
-	Thu, 17 Apr 2025 07:14:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1744874062;
+	s=arc-20240116; t=1744874791; c=relaxed/simple;
+	bh=Pt4wMjTOPxLyncUhsljlu78aefYEy0zJC2OQzWrprQE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=F14M/5SkGfHlqdfL/q3JsW8t6gRB39Kt3x6qocY8L3crzOX6zTLnDNp8LajJOCmIy2VxwR2mrjVYwugx6goD27BCYtQdeTyXD8drUhkGs6G/7rCH6jWlkw6h22L9dwbQMfx50VxjF/a6PGsjhVotUNZe39da2jAr0yztGfMBS80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YwTsQGIt; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1744874788;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=YYgBl4XslUIPANcfaH0UDI8ZQnEJjTNt9jHQJbKWOHU=;
-	b=YEhNjld6ymNJqLjNHhBzpSnN7oxSp7ezkwtyyDXqHLLiBD8JhNvqejYTXoBMtvZDkSP9do
-	k/g8vZ3fmZQuP3/3LiwBWp9ucZU5wxsKptb6ID4sRXNlXlDzNCdwKBE4ud8E4tGTCxlp8L
-	r8mhLATCbpRcjr3kWeU0PDea0TtRrFjiETGwKZZLdbapYValXtnWGRLPuXGOGxpyB6ZoN+
-	ox0SjwLvBXBPurAx36kStx7furqEBRLvFub9fqKWABp708RJsO3lOioWNEgT0zqj7dQbbR
-	7wM7fZzmaeCPebZvlE5TDNCHnvG32PEWeTnAiwHpspnGjirRTX/je3h/ohWATw==
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 17 Apr 2025 09:14:16 +0200
-Message-Id: <D98Q8BRNUVS9.11J60C67L1ALR@bootlin.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu"
- <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "KP Singh"
- <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>, "Hao Luo"
- <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>, "Puranjay Mohan"
- <puranjay@kernel.org>, "Xu Kuohai" <xukuohai@huaweicloud.com>, "Catalin
- Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>,
- "Mykola Lysenko" <mykolal@fb.com>, "Shuah Khan" <shuah@kernel.org>, "Maxime
- Coquelin" <mcoquelin.stm32@gmail.com>, "Alexandre Torgue"
- <alexandre.torgue@foss.st.com>, "Florent Revest" <revest@chromium.org>,
- "Bastien Curutchet" <bastien.curutchet@bootlin.com>,
- <ebpf@linuxfoundation.org>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
- <linux-kselftest@vger.kernel.org>,
- <linux-stm32@st-md-mailman.stormreply.com>
-Subject: Re: [PATCH RFC bpf-next 1/4] bpf: add struct largest member size in
- func model
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: "Andrii Nakryiko" <andrii.nakryiko@gmail.com>
+	bh=Udp20JCu0lxnLB5nbtOFfZ2GpP06hSOWr1XwI2XNqTs=;
+	b=YwTsQGItdi6+imIMzgmeMpHYDQE+ULd34i8Ptza9OWjt+4UlGyl1S1qe9qVCGhmuhp1DPm
+	sraAHv4IYTEWH3eU4P5sJHREnG1L73yUCRUmGJYpsQSWwoZ9nRq1kVGiljSQLcsC//iNbL
+	9qvXXAGgaQKHmnxVYn2bWpi9GhqltM8=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-424-TD0FWqpXNg6X0bNQK86y9A-1; Thu, 17 Apr 2025 03:26:25 -0400
+X-MC-Unique: TD0FWqpXNg6X0bNQK86y9A-1
+X-Mimecast-MFC-AGG-ID: TD0FWqpXNg6X0bNQK86y9A_1744874784
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-391492acb59so243749f8f.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Apr 2025 00:26:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744874784; x=1745479584;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Udp20JCu0lxnLB5nbtOFfZ2GpP06hSOWr1XwI2XNqTs=;
+        b=JTUx1JB+sGbdu4NxQTHsvms3gh9LMfZnhtfXhHREphpeyR6yOy5bxu/ur9t5EEq/97
+         xWO2NM/K/jjTxhgoI3Uz3Wyaqi5otyq+OP0P5+3lATZcGjiyWFVsE/AU80mA1sAvTbiJ
+         YLyGMJENJdPvnAXbSxGndZJyd7QolneYjS1ebcje5JKyaj3RGgQ6llWitMp/kofeGryn
+         R4y1KQ6ArjklZIYITiSikjiP8HlzhJ5J/c5XGs7ls93Vl4Xh8YtrQx50qRgSdH9FYxD9
+         qaXP/6fwiJri/eSLZgx5VXWDbdmmeEQYyZicL1s6snBfSL8oeerhB6XwwZX2moklUMFq
+         OuTA==
+X-Forwarded-Encrypted: i=1; AJvYcCUi1mYzGWJvHWpE0vp3EWrDlrHIsxotbg6R1GQZtfmRGwHqPT7TfYXTYBx8QHm2xlKqQ7AHDyhO/CL7ybYjcrg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzsW6ng/7wNextK9avk/WDVWC6+LTxn/zJOLM65HZ7eIYD08PI2
+	eb/asMxh3/RB1LyUrkaQ4RtjTwBiakEWem3sK5CHaRZG2hAM7QRGys0MZHXUJOitBudTLJOcZd/
+	ChHqdIu3ndskjX3xdZS6unTIDDVvbSvU67cgFKouBuawI7T39R1ZEdTiu8sVw00lT/g==
+X-Gm-Gg: ASbGncv4HFyWmIyCkZqfLLEwTYAtbKhoJRmBUNUtzc0Gvz4VEHgACBObD01BonYRnz2
+	rZfSQAIt4F3FOhxkgHLDwT9fF91HqLNqB1ueu90xptNONonXdgAprospgcx9aqM8WDW+60P5cUD
+	cHJtfA4jr/t8567/OZdq0zH3eRMLWqD33b5XgwQR1HO1VgzdJ6lBMN15m5XmeGxKp7Pjq1kw5iF
+	1f4YfVFU1KRp0O67QJyEefdX3rOiPPkXq3x0RIQavq7f7CJB1BrqEYqGXj4Uke1LW2V5zRVjq6g
+	8JKOJ2SPd9FDE/W1aeyJkxqvDFHg0XafG+XqzxE4aA==
+X-Received: by 2002:a05:6000:144f:b0:391:241d:a13e with SMTP id ffacd0b85a97d-39ee5b9f5b6mr4191468f8f.48.1744874784108;
+        Thu, 17 Apr 2025 00:26:24 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEX40ws3+eqraZDVy9FNzNzHM8/7zc1TFMhaZr7xBFr7xp/tveKs9AoQ1WnxQPtgH7HvwyHGw==
+X-Received: by 2002:a05:6000:144f:b0:391:241d:a13e with SMTP id ffacd0b85a97d-39ee5b9f5b6mr4191442f8f.48.1744874783782;
+        Thu, 17 Apr 2025 00:26:23 -0700 (PDT)
+Received: from [192.168.88.253] (146-241-55-253.dyn.eolo.it. [146.241.55.253])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39eae96c03dsm18792656f8f.24.2025.04.17.00.26.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Apr 2025 00:26:23 -0700 (PDT)
+Message-ID: <b1fa9607-f9bd-4feb-a22f-55453a9403e9@redhat.com>
+Date: Thu, 17 Apr 2025 09:26:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: aerc 0.20.1-0-g2ecb8770224a
-References: <20250411-many_args_arm64-v1-0-0a32fe72339e@bootlin.com>
- <20250411-many_args_arm64-v1-1-0a32fe72339e@bootlin.com>
- <CAEf4Bzbn6BdXTOb0dTcsQmOMZpp5=DzGS2hHHQ3+dwcja=gv+w@mail.gmail.com>
-In-Reply-To: <CAEf4Bzbn6BdXTOb0dTcsQmOMZpp5=DzGS2hHHQ3+dwcja=gv+w@mail.gmail.com>
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvvdekieefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpegtfffkvefuhffvggfgofhfjgesthhqredtredtjeenucfhrhhomheptehlvgigihhsucfnohhthhhorhoruceorghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpedvhfdvjeektefggfdvhfejveehleeugfeiieelgfffheeggefhvddvudefiedtfeenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepledtrdekledrudeifedruddvjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeeltddrkeelrdduieefrdduvdejpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepfedtpdhrtghpthhtoheprghnughrihhirdhnrghkrhihihhkohesghhmrghilhdrtghomhdprhgtphhtthhopegrshhtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprhgtphhtthhopehjohhhnhdrfhgrshhtrggsvghnugesghhmrghilhdrtghomhdprhgtphhtthhopegrnhgur
- hhiiheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdhrtghpthhtohepvgguugihiiekjeesghhmrghilhdrtghomhdprhgtphhtthhopehsohhngheskhgvrhhnvghlrdhorhhg
-X-GND-Sasl: alexis.lothore@bootlin.com
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v2 4/4] selftests: drv-net: Test that NAPI ID is
+ non-zero
+To: Joe Damato <jdamato@fastly.com>, netdev@vger.kernel.org
+Cc: kuba@kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ open list <linux-kernel@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ "open list:XDP (eXpress Data Path):Keyword:(?:b|_)xdp(?:b|_)"
+ <bpf@vger.kernel.org>
+References: <20250417013301.39228-1-jdamato@fastly.com>
+ <20250417013301.39228-5-jdamato@fastly.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20250417013301.39228-5-jdamato@fastly.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Andrii,
+On 4/17/25 3:32 AM, Joe Damato wrote:
+> diff --git a/tools/testing/selftests/drivers/net/napi_id.py b/tools/testing/selftests/drivers/net/napi_id.py
+> new file mode 100755
+> index 000000000000..aee6f90be49b
+> --- /dev/null
+> +++ b/tools/testing/selftests/drivers/net/napi_id.py
+> @@ -0,0 +1,24 @@
+> +#!/usr/bin/env python3
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +from lib.py import ksft_run, ksft_exit
+> +from lib.py import ksft_eq, NetDrvEpEnv
+> +from lib.py import bkg, cmd, rand_port, NetNSEnter
+> +
+> +def test_napi_id(cfg) -> None:
+> +    port = rand_port()
+> +    listen_cmd = f'{cfg.test_dir / "napi_id_helper"} {cfg.addr_v['4']} {port}'
 
-On Wed Apr 16, 2025 at 11:24 PM CEST, Andrii Nakryiko wrote:
-> On Fri, Apr 11, 2025 at 1:32=E2=80=AFPM Alexis Lothor=C3=A9 (eBPF Foundat=
-ion)
-> <alexis.lothore@bootlin.com> wrote:
->>
->> In order to properly JIT the trampolines needed to attach BPF programs
->> to functions, some architectures like ARM64 need to know about the
->> alignment needed for the function arguments. Such alignment can
->> generally be deduced from the argument size, but that's not completely
->> true for composite types. In the specific case of ARM64, the AAPCS64 ABI
->> defines that a composite type which needs to be passed through stack
->> must be aligned on the maximum between 8 and the largest alignment
->> constraint of its first-level members. So the JIT compiler needs more
->> information about the arguments to make sure to generate code that
->> respects those alignment constraints.
->>
->> For struct arguments, add information about the size of the largest
->> first-level member in the struct btf_func_model to allow the JIT
->> compiler to guess the needed alignment. The information is quite
->
-> I might be missing something, but how can the *size* of the field be
-> used to calculate that argument's *alignment*? i.e., I don't
-> understand why arg_largest_member_size needs to be calculated instead
-> of arg_largest_member_alignment...
+Not really a full review, but this is apparently causing self-tests
+failures:
 
-Indeed I initially checked whether I could return directly some alignment
-info from btf, but it then involves the alignment computation in the btf
-module. Since there could be minor differences between architectures about
-alignment requirements, I though it would be better to in fact keep alignme=
-nt
-computation out of the btf module. For example, I see that 128 bits values
-are aligned on 16 bytes on ARM64, while being aligned on 8 bytes on S390.=
-=20
+# selftests: drivers/net: napi_id.py
+#   File
+"/home/virtme/testing-17/tools/testing/selftests/drivers/net/./napi_id.py",
+line 10
+#     listen_cmd = f'{cfg.test_dir / "napi_id_helper"} {cfg.addr_v['4']}
+{port}'
+#                                                                   ^
+# SyntaxError: f-string: unmatched '['
+not ok 1 selftests: drivers/net: napi_id.py # exit=1
 
-And since for ARM64, all needed alignments are somehow derived from size
-(it is either directly size for fundamental types, or alignment of the
-largest member for structs, which is then size of largest member),
-returning the size seems to be enough to allow the JIT side to compute
-alignments.
+the second "'" char is closing the python format string, truncating the
+cfg.addr_v['4'] expression.
 
->> specific, but it allows to keep arch-specific concerns (ie: guessing the
->> final needed alignment for an argument) isolated in each JIT compiler.
->
-> couldn't all this information be calculated in the JIT compiler (if
-> JIT needs that) from BTF?
+Please run the self test locally before the next submission, thanks!
 
-From what I understand, the JIT compiler does not have access to BTF info,
-only a substract from it, arranged in a struct btf_func_model ? This
-struct btf_func_model already has size info for standard types, but for
-structs we need some additional info about the members, hence this
-arg_largest_member_alignment addition in btf_func_model.
-
-Thanks,
-
-Alexis
-
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+/P
 
 
