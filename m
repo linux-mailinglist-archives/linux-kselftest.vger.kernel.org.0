@@ -1,44 +1,44 @@
-Return-Path: <linux-kselftest+bounces-31101-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31102-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6788CA92DD2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Apr 2025 01:13:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66EA2A92DD8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Apr 2025 01:13:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 99EE43BB960
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Apr 2025 23:12:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E27991B661FB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Apr 2025 23:13:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E99C221710;
-	Thu, 17 Apr 2025 23:09:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D637221DA0;
+	Thu, 17 Apr 2025 23:11:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="O+EkSq1c"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="oJgJBS7Z"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8829221568;
-	Thu, 17 Apr 2025 23:09:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1145321C177;
+	Thu, 17 Apr 2025 23:11:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744931384; cv=none; b=REd1rNepViEIDGX80nGnsFRVg8B+92q9nsjIPAtplAqs2LTLf0k61SomXLYEqZ1CXYjzT9PD3qbupPHn4QeNAP4S8wUaHARlYZe2spsNKwHBTIdj36JEelxIvavcAf0UBRVXNknNVC5+fkDtIWj9iPJLyyljcjVWXQDIL+18uZM=
+	t=1744931518; cv=none; b=oHK1+lpfDDRitCkhydh2HfEcUHphXrIZv9iDNU7Zt/D6f6tDNyebDEJFzXJDgz7fcvwVMArEBE0B6KuvT2sSohhOvdLqrZdieLYhoSr3sz+R9sCc7045JNqL7abMzXfSQVFJvs9jFYS74/a1o6cuGLQu4Pb4dySBFvyxu9Olzm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744931384; c=relaxed/simple;
-	bh=1wudyAEeo9ZxUBCPzH6bp44SfvfV/MxkFpdCzNjXyRM=;
+	s=arc-20240116; t=1744931518; c=relaxed/simple;
+	bh=EeKnel7qr9AOqAQgn2twWI0/sIIDoxrDQ4CYwhn6dvw=;
 	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=GrBMvAbACi2y6qGb34yHDzk3B/xUMMpaGVHfgsBJv1MrMMj+SbjGaswIPRYh4hQ5sSn7Gp2olmiM9J/zYFJQGkaWe+/UIzzyGvQLH2an0RLVf36G+JcE1fn3gX1KGU/XpCBmBZWGyW+YGPoKxThVS0mLq6LfnAFqpJEHXEtZu74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=O+EkSq1c; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1F4AC4CEE4;
-	Thu, 17 Apr 2025 23:09:41 +0000 (UTC)
+	 Mime-Version:Content-Type; b=IKyrhvJUEemHKpDKer+VxyMTjkXLA2GaJY9jmGCaFUFmGUBj1vX3p01p+00RMMtAoImRB286mC44jwVU1Z2i+6/A/jg2y+cM/f8Njusox+isMVXVlP9JlBepua195tvEfgEZ3qTaQv8gFtH3j860JxJyMGHZ50aZP1vwFMeCMNM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=oJgJBS7Z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B834C4CEE4;
+	Thu, 17 Apr 2025 23:11:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1744931383;
-	bh=1wudyAEeo9ZxUBCPzH6bp44SfvfV/MxkFpdCzNjXyRM=;
+	s=korg; t=1744931517;
+	bh=EeKnel7qr9AOqAQgn2twWI0/sIIDoxrDQ4CYwhn6dvw=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=O+EkSq1cerYI3SpW1BKN3OV+bECvq47aHuz2MTB9FCJJh3Zc0iyAcMhgnoQLf8GsG
-	 rg0WsCP6Euyo8wqA/81nTZZxdd8h7TjePa48hqZpHBc+161kj6UfS+k1+YUp+ykIbs
-	 fKpGjG1PHuo18A46Jib3VtwI4DaHai+6pSEKjDuI=
-Date: Thu, 17 Apr 2025 16:09:41 -0700
+	b=oJgJBS7Zxa9b5NbMPZl0Jcm5lskpEWwWaGjQ1kf0v6DOi2JTp4gfB3WbxYlrxdzCA
+	 47V6tY4qvSyH+ig+W1tBNa/Gjx374KGNvigMyGAoKa1RUYW9HkNOwl0JO8LHwB8buJ
+	 tzXY6MC/3OBRXqHma594adAOlNRTKnPpWHEgJOEI=
+Date: Thu, 17 Apr 2025 16:11:55 -0700
 From: Andrew Morton <akpm@linux-foundation.org>
 To: Nico Pache <npache@redhat.com>
 Cc: linux-mm@kvack.org, linux-doc@vger.kernel.org,
@@ -56,11 +56,10 @@ Cc: linux-mm@kvack.org, linux-doc@vger.kernel.org,
  jglisse@google.com, surenb@google.com, zokeefe@google.com,
  hannes@cmpxchg.org, rientjes@google.com, mhocko@suse.com,
  rdunlap@infradead.org
-Subject: Re: [PATCH v4 3/4] khugepaged: add defer option to mTHP options
-Message-Id: <20250417160941.5e6c8063c990e1acf0c0ef2e@linux-foundation.org>
-In-Reply-To: <20250417001846.81480-4-npache@redhat.com>
+Subject: Re: [PATCH v4 0/4] mm: introduce THP deferred setting
+Message-Id: <20250417161155.3e160d8af14eac86c80d1e49@linux-foundation.org>
+In-Reply-To: <20250417001846.81480-1-npache@redhat.com>
 References: <20250417001846.81480-1-npache@redhat.com>
-	<20250417001846.81480-4-npache@redhat.com>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -71,12 +70,51 @@ Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Wed, 16 Apr 2025 18:18:45 -0600 Nico Pache <npache@redhat.com> wrote:
+On Wed, 16 Apr 2025 18:18:42 -0600 Nico Pache <npache@redhat.com> wrote:
 
-> Now that we have defer to globally disable THPs at fault time, lets add
-> a defer setting to the mTHP options. This will allow khugepaged to
-> operate at that order, while avoiding it at PF time.
+> This series is a follow-up to [1], which adds mTHP support to khugepaged.
+> mTHP khugepaged support is a "loose" dependency for the sysfs/sysctl
+> configs to make sense. Without it global="defer" and  mTHP="inherit" case
+> is "undefined" behavior.
+> 
+> We've seen cases were customers switching from RHEL7 to RHEL8 see a
+> significant increase in the memory footprint for the same workloads.
+> 
+> Through our investigations we found that a large contributing factor to
+> the increase in RSS was an increase in THP usage.
+> 
+> For workloads like MySQL, or when using allocators like jemalloc, it is
+> often recommended to set /transparent_hugepages/enabled=never. This is
+> in part due to performance degradations and increased memory waste.
+> 
+> This series introduces enabled=defer, this setting acts as a middle
+> ground between always and madvise. If the mapping is MADV_HUGEPAGE, the
+> page fault handler will act normally, making a hugepage if possible. If
+> the allocation is not MADV_HUGEPAGE, then the page fault handler will
+> default to the base size allocation. The caveat is that khugepaged can
+> still operate on pages thats not MADV_HUGEPAGE.
+> 
+> This allows for three things... one, applications specifically designed to
+> use hugepages will get them, and two, applications that don't use
+> hugepages can still benefit from them without aggressively inserting
+> THPs at every possible chance. This curbs the memory waste, and defers
+> the use of hugepages to khugepaged. Khugepaged can then scan the memory
+> for eligible collapsing. Lastly there is the added benefit for those who
+> want THPs but experience higher latency PFs. Now you can get base page
+> performance at the PF handler and Hugepage performance for those mappings
+> after they collapse.
+> 
+> Admins may want to lower max_ptes_none, if not, khugepaged may
+> aggressively collapse single allocations into hugepages.
+> 
+> TESTING:
+> - Built for x86_64, aarch64, ppc64le, and s390x
+> - selftests mm
+> - In [1] I provided a script [2] that has multiple access patterns
 
-khugepaged.c has changed somewhat in mm.git's mm-new branch.  Can you
-pleae take a look?
+Namely https://gitlab.com/npache/khugepaged_mthp_test?
+
+Looks useful and could perhaps be directly linked to from this
+patchset's [0/N] changelog?
+
 
