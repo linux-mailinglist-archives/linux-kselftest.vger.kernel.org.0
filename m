@@ -1,121 +1,145 @@
-Return-Path: <linux-kselftest+bounces-31177-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31178-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70697A93CD0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Apr 2025 20:33:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D51DA93D2C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Apr 2025 20:40:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B15503BD41F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Apr 2025 18:32:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E1C38A5818
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Apr 2025 18:40:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 071EC2248B9;
-	Fri, 18 Apr 2025 18:33:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD174224237;
+	Fri, 18 Apr 2025 18:40:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DTkfKw4e"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Jm7Mc944"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FF591C5F2C;
-	Fri, 18 Apr 2025 18:32:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02AE021B9E7
+	for <linux-kselftest@vger.kernel.org>; Fri, 18 Apr 2025 18:40:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745001180; cv=none; b=boDnlNv+Yi5QbEuOVIes93DBzsLnInucxe/hF6QJ9a+ljmb3g6lM6uoWpOV9UmoGDgUNFZdOat3jD1u0QgHfmAmXvxzCa4I+HkoaDGLh24UUNPic1XVIt4sbiOp2tgJje0KFH76wp2i8N7vv69xHtyZTLMYDFXSgukmpiUp3Heg=
+	t=1745001651; cv=none; b=BCvHFMWs4z8wfUjdq9f3SlLZZh8BgBkS6o3QOVCxfXPbD56hZKW48pypCEhEKE9/FHLCAb6rHQT8HNfy96aHpGH2SHPcUOdiy1IofCi5zX6pM3KaaGr9lPZHZr+2aUMNtMfiQkQvai9MAZa6JR5FKe2AnpvTSJ5VG/teMj3QjiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745001180; c=relaxed/simple;
-	bh=ou5tcv9JxiL2u1j3f5J7z0CBvUbEeh6Xv6UWW41q/Ts=;
+	s=arc-20240116; t=1745001651; c=relaxed/simple;
+	bh=cqw05yzHdahroJKLOI/H3fvXy55QPQV2NEI62iCX4pI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PIKGvnzxPoBsNSjHGV7G/i5tIHPHR6XzM0SRVp8mU2ReJjuX74SQDJE/fVYLmQU8vUswxRfxZO9ekltSaDgzF4IhHnKpiLMnzD4ZzyAz7uGnmeBp4Ug8Oe5BFCzhmYcbptKDMBG5W3rQ089BBi5FVewIBDIO0qZ8nftemLsRoak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DTkfKw4e; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-227e29b6c55so3339165ad.1;
-        Fri, 18 Apr 2025 11:32:59 -0700 (PDT)
+	 To:Cc:Content-Type; b=c03emtE0TdnkpH+Q2k+0MJ7PL8YMP9W9LmM3ez3s7ZRcTG2kbYVN2zHPCp+w7J6/8ZrLpaOMWuc7oOJ2Sg3s38dhWcPc3NCtHp6vyIBAAVvFW/diAJgXW+1PuEgnNifNyISiRKdXfN2RgCOsR4KFPcY6Alzrct2Klfv6YJhqeT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Jm7Mc944; arc=none smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-548409cd2a8so2857381e87.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Apr 2025 11:40:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745001179; x=1745605979; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1745001648; x=1745606448; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HFANXjtKTfEx9kV/YD0moYxXkPIgDxsA41WYPtohNLk=;
-        b=DTkfKw4etkWpNh+RFUp8WY1PgivSEv9PZw17qp44dcaCOl3v7OYsw2IPxNSuD7N2k+
-         eWGOXbUuIfoYl9XNNNmKnxQrbqmTPXrOK7lnf0rj40wSQjandtGCbllalR1idb5xZbFR
-         YkwW5YQDYzdTcAcd/RaF++/VlPVZVtWmx78DZW2Cpp4DBCe6PTPDcY48KN3DDg6qmM12
-         4iayocZ2eJFMo0DOl78m97Mm8F1g6lv3qa73/Fp3cMVqUjWWUfSXaL1AkTp8avv8MJzM
-         2tpaWNbLwSx+RFg4K6446CdmdXcJVSMYYCfCYsUgI+fZRQNnEhH8ya0ui9R3uaX0rhL6
-         bg+w==
+        bh=JmJRxZYKBul0NPpO5GbE0uoXdY8UOk5hBegV76Q7fvc=;
+        b=Jm7Mc944UYFh7EKr/mZXZf1buMlsmvQwBqkU5xR6U/56q+PvkymTmpodsAomjuzqOi
+         TFDghhdPZbwTidr8j0jxSskJDi2fd7z3fj6aRUhs5Q7Ta9coUYRTFep+JiCgpzfgWqU9
+         0MtT9zgUJnIAusixkRYbtGoRiZY3vqcX9JynJJJ7DGibIenPrejRpZz3MVqfmbnlx+lf
+         JOVnZh/vuHfcjRUDK+SvQjZ506csIqEJ2gboWarMERUckKf4KIe/pgUly6f1g83gnbB+
+         0dJP18GgT2WNOKtyTus+wMYZiI/BILU9K9hSJd8m/FVWlfQP3ChgcUZ0/Dk9u4688ejW
+         UJ7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745001179; x=1745605979;
+        d=1e100.net; s=20230601; t=1745001648; x=1745606448;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HFANXjtKTfEx9kV/YD0moYxXkPIgDxsA41WYPtohNLk=;
-        b=DfD7NCvQCl4XBQzpuyMYsjh7WQgIPnik++OqFFv+dDbteWxE81kEZFWZ9Qf9KyPMlI
-         yw9R1WqxrPTgD9juQsx8fxdib6B+iyG3xT03HZzzo/+341U6KRxBDXQAV9ka/MfshVZk
-         mmu/HQN7OlBlt7oaaHrhKy9nkBNJ/E+T0SBx98aHocGTnWeHZfAy/ufjuu8wyuj2hrfW
-         +hTDkIMtVPyPM0Zbpf/yrarWDr5pRXHMrbYC4uuPKofr0zPOFjZHQAu/p9MiV7UUdbsQ
-         14ff+8oBgrFe4UQXuC4gOz/IzbN6ddrK8tG8Z2oIu1KRGNfUFoAve5QbGE1qPmPeAhFL
-         mdzg==
-X-Forwarded-Encrypted: i=1; AJvYcCVCv31lp3b3yhOT0tHEzABNB3MZh1FML4CtPe/9knpAOxzsVRzo5wuC4XIgjNRxF/2JPLT5W62OsfYQCe7oy0U=@vger.kernel.org, AJvYcCVFMqCYaN+nQe8rfjF8W3CSMV9C1t+parxQ6h4FccePISEDj4cR8pjng8zO7y4AcJqdVq5o@vger.kernel.org, AJvYcCVdg0h/ox9pTpMpVSs294Jrs/vkl7u8Lwz6+GE3dppBU7jis/r91GJoqFRs2XGdJTWx+ud1J9QEGlwpxu2wiLbh@vger.kernel.org, AJvYcCWdEP0lb1EiHWqMeam0t9glxtbC/KJGMZig4sc4SiwtdoMqs1eziVHT4KTBda6uw7qIeP/oqm8tFYZFNe8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLrgXMqFevOaeqoJg3hkL6mPY5eglY7jH/WqP18RE5tdpANI0q
-	Hwp7qDYTU/3DQELJYspcosEEPFHoCyJnpUc/RHvypz4y/8bFIyFqxITx6/SkVNUUov7b91IIMpp
-	Wkl7FOgZLtlE5Tb+6vUpIzZEPI/Q=
-X-Gm-Gg: ASbGncu1tjehtdweVcFwppYC6Qmkuyexnk5H135pjuJEUWDgHv+ImTcE1RqZcJ4NRgO
-	usb9xkRg6cM/2j6gAv9/l2vRek0RgX16G5mtNjA1Cpif4ypwb1B7R96QF6zW1KfH12JX+XWJpmY
-	8xhHbH4/rt7f1wPmDQmBKQSA==
-X-Google-Smtp-Source: AGHT+IFADhdep+T0QJPWyAyGB7omOjzqUUQUGaXKFwOncpJL98lO4epAjyTx4Uxd27a0AOpj/taau4IzgTr9RsgnsRg=
-X-Received: by 2002:a17:90b:1b44:b0:2fe:7f51:d2ec with SMTP id
- 98e67ed59e1d1-3087ba5cf08mr1856703a91.0.1745001178768; Fri, 18 Apr 2025
- 11:32:58 -0700 (PDT)
+        bh=JmJRxZYKBul0NPpO5GbE0uoXdY8UOk5hBegV76Q7fvc=;
+        b=srv/3X4BTcZ9cD668tC9wF6OuUZASoV4lNoFOT5bwAgZsTpAr24X32Zu5w1Q9hrq8F
+         iSYY4593aqDPxb/WmJozEYTuJJK40rrX3rvftzFHPz2jQMkglGRFdg/p5ttEr752y0oP
+         812EJESBKv+xX6k3nmk4EOzr0PWeT3RgU0mfC4PHC4yxOkBBdWMEDoP9D+N/oYhq26AC
+         xAHjDTrqUvp/Bgp5XF8btMB1pecvCzLLJYR+J1oB5t0w85r9kCKNWjXtLdJVZlQ9Yaax
+         Tn/w8TPlOE6w0kESA9cMZXBG4fPl9C8zQdF7IpsxtDefioDvvUWmZ3pA8DbqSvJVPOIF
+         TQJg==
+X-Forwarded-Encrypted: i=1; AJvYcCXbUqWjZzfxSehCdfVEYUrXjaL1+CzAjZfmADdyJi/xdeVgWvLa3Sbh+ABeGwwN0EMsXKhvkhzdM2H1Ea1h8UY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy7wh5H55STBE9F6m4FoDa2lxc83oQ+Uf2pI7zegP1AJREFoQ5k
+	hnh4k4bFnvhjb4Tq+LPSITfvGrTul9NwVoGrkjoiUn8pMuoavUSD/J9v6pU1K0aEvVz75JxTinm
+	v0p9p29A6rgcPzqRwugdMGgObKTFeWOpjMf8=
+X-Gm-Gg: ASbGnctKzNhDQ2Mx7fyHSdBKwEWII/pneJx5M7PUG0ojkYiktjY/J+Yx0VzaK8bdCUM
+	aoRm6coB9IOYeQTni4oj89ojYjWTLnap8hpONV3j83rL4CtcF+Pm/Gy4YHIMPb1A9iB5eFxEIT/
+	Qf1QyRVIEGFN0JL/u2jfqtKrjt2txxECT6tUkscdHQ4GT/TgUin9c=
+X-Google-Smtp-Source: AGHT+IHwauR7oICVDPTufhPDofzFlYVO2KmfnqSJasO3/jpSYaW0ewuRj6/e23srPSp/mjovhyFhKvvdFvxaFMAMeWc=
+X-Received: by 2002:a05:6512:2315:b0:54a:cbfb:b62e with SMTP id
+ 2adb3069b0e04-54d6e657553mr1402614e87.35.1745001647864; Fri, 18 Apr 2025
+ 11:40:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250418161005.2425391-1-joelagnelf@nvidia.com>
- <20250418161005.2425391-13-joelagnelf@nvidia.com> <CANiq72nCfBdsfKzP72DWxLBh+Eueack9sS-E97wtsr0UtkAnUA@mail.gmail.com>
- <42da7c8e-08ff-4b04-ab58-6c0c2e287eb3@paulmck-laptop>
-In-Reply-To: <42da7c8e-08ff-4b04-ab58-6c0c2e287eb3@paulmck-laptop>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 18 Apr 2025 20:32:46 +0200
-X-Gm-Features: ATxdqUE11d5kf2E85BZuTAmKAI_UEsrp_SwqW-Oi0y3Ijarw0S_IvhRNYkCwLgs
-Message-ID: <CANiq72nE2cH93W2qZrzAxfbz3hjsw4Xy0YYNwOUQ74SeGiirgw@mail.gmail.com>
-Subject: Re: [PATCH 12/14] torture: Add testing of RCU's Rust bindings to torture.sh
-To: paulmck@kernel.org
-Cc: Joel Fernandes <joelagnelf@nvidia.com>, linux-kernel@vger.kernel.org, 
-	Josh Triplett <josh@joshtriplett.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>, 
-	Shuah Khan <shuah@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, rcu@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	llvm@lists.linux.dev
+References: <20250320200306.1712599-1-jstultz@google.com> <Z-KURRE_Gr72Xv_n@localhost>
+ <874izezv3c.ffs@tglx> <Z-Vx8kV4M3khPknC@localhost> <Z-qsg6iDGlcIJulJ@localhost>
+ <87o6xgwftc.ffs@tglx> <Z-vL3cVZuQ8XQXhG@localhost> <87iknnwxa4.ffs@tglx>
+ <Z-5HlSUEh1xgCi4f@localhost> <877c41wkis.ffs@tglx> <87h632wals.ffs@tglx>
+ <CANDhNCrUhZktW=_h9YTZndmyHwe9YbUMG6uVYaEuQyuKsG4AEg@mail.gmail.com> <87tt6mq8jz.ffs@tglx>
+In-Reply-To: <87tt6mq8jz.ffs@tglx>
+From: John Stultz <jstultz@google.com>
+Date: Fri, 18 Apr 2025 11:40:35 -0700
+X-Gm-Features: ATxdqUEVFnbxOsO7kS3fCud4zm8XAeBb8rxR4hR9fCFdWvV-CzY8t1AtIxHhH0U
+Message-ID: <CANDhNCrNYuxP7xqNLKWGnhMOBEHGhD9-FceNAj7n=fQUsLwvMA@mail.gmail.com>
+Subject: Re: [PATCH] timekeeping: Prevent coarse clocks going backwards
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: Miroslav Lichvar <mlichvar@redhat.com>, LKML <linux-kernel@vger.kernel.org>, 
+	Stephen Boyd <sboyd@kernel.org>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
+	Frederic Weisbecker <frederic@kernel.org>, Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, 
+	kernel-team@android.com, Lei Chen <lei.chen@smartx.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 18, 2025 at 8:04=E2=80=AFPM Paul E. McKenney <paulmck@kernel.or=
-g> wrote:
+On Thu, Apr 17, 2025 at 11:37=E2=80=AFPM Thomas Gleixner <tglx@linutronix.d=
+e> wrote:
+> On Thu, Apr 17 2025 at 17:46, John Stultz wrote:
+> > On Sat, Apr 5, 2025 at 2:40=E2=80=AFPM Thomas Gleixner <tglx@linutronix=
+.de> wrote:
+> >> +static inline void tk_update_coarse_nsecs(struct timekeeper *tk, u64 =
+offset)
+> >> +{
+> >> +       offset *=3D tk->tkr_mono.mult;
+> >> +       tk->coarse_nsec =3D (tk->tkr_mono.xtime_nsec + offset) >> tk->=
+tkr_mono.shift;
+> >> +}
+> >
+> > Thinking more on this, I get that you're providing the offset to save
+> > the "at the point" time into the coarse value, but I think this ends
+> > up complicating things.
+> >
+> > Instead it seems like we should just do:
+> >   tk->coarse_nsec =3D tk->tkr_mono.xtime_nsec >> tk->tkr_mono.shift;
 >
-> Suppose we fired up a guest OS and captured the console output.  Is there
-> a way to make that guest OS shut down automatically at the end of the
-> test and to extract the test results?
+> You end up with the same problem again because xtime_nsec can move
+> backwards when the multiplier is updated, no?
 
-Ah, sorry, I thought you were already doing something like that, i.e.
-that perhaps you could reuse some kernel build you already had and
-avoiding a full rebuild/`mrproper`. The KUnit Python script uses QEMU
-and parses the results; e.g. you could look for the results lines
-like:
+That's assuming you update coarse_nsec on every call to do_adjtimex,
+which I don't think is necessary (or wanted - as it would sort of be a
+behavior change to the COARSE clockids).
 
-    # Totals: pass:133 fail:0 skip:0 total:133
-    ok 2 rust_doctests_kernel
+The root issue here has been that there was a mistaken assumption that
+the small negative adjustment done to the xtime_nsec base to match the
+mult adjustment would only happen after a larger accumulation, but the
+timekeeping_advance() call from do_adjtimex() doesn't actually intend
+to advance the clock (just change the frequency), so those small
+negative adjustments made via do_adjtimex() between accumulations
+become visible to the coarse clockids.
 
-Cheers,
-Miguel
+Since the coarse clockids are expected to provide ~tick-granular time,
+if we are keeping separate state, we should only be
+incrementing/setting that state when we accumulate (with each
+cycle_interval). We don't need to be making updates to the coarse
+clock between ticks on every do_adjtime call. So saving off the
+tk->tkr_mono.xtime_nsec >> tk->tkr_mono.shift value after we actually
+accumulated something should be fine. Any inter-tick frequency
+adjustments to xtime_nsec can be ignored by the coarse clockid state.
+
+I'll test with your updated patch here, as I suspect it will avoid the
+problem I'm seeing, but I do think things can be further simplified.
+
+thanks
+-john
 
