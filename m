@@ -1,62 +1,62 @@
-Return-Path: <linux-kselftest+bounces-31142-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31143-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44667A93A67
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Apr 2025 18:12:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BFABA93A65
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Apr 2025 18:12:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A328920C40
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Apr 2025 16:12:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 23EB146070F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Apr 2025 16:12:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED2B521CC4A;
-	Fri, 18 Apr 2025 16:10:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B173D21D59F;
+	Fri, 18 Apr 2025 16:10:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="HvWNoB4T"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="k+oRolIY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2061.outbound.protection.outlook.com [40.107.94.61])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2049.outbound.protection.outlook.com [40.107.94.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3471F21C195;
-	Fri, 18 Apr 2025 16:10:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.61
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8E2B21CC64;
+	Fri, 18 Apr 2025 16:10:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.49
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744992647; cv=fail; b=lttKcVXu6Kyq4+LUn55hHqRzTmr6K7il3uckDgTU4HMFTFur6ijjdzhcFwc2yUTxJ+F4mZcfSnYmIYYSe8CfYTwCcx45X/ci2yjJQwvG4l5NP1nNy2BK5t5TipXSqDePkfyFv7Odq8epBktS8KKWuFJNFZJ+O1OJmddo67eoL2E=
+	t=1744992650; cv=fail; b=mypHfzIl8rzMIdsjq7iaHAVqF/Gs5dNO0Ds/gOzL/4pTcsspsXxRVxgPgkP8eBeQvdpxsBUysCjvlSeNM0e2BLM5l4ZWCnWKJWFTcWldkikElihVFn7LtCJhJkIe68UNmj6e6jf54KgtU9WLa8WaJNa04XT27/oHENxOXXArYU4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744992647; c=relaxed/simple;
-	bh=4uKQLHu9ErUqylJTYJa2qwPHIVmJendn1wsCwPIVucc=;
+	s=arc-20240116; t=1744992650; c=relaxed/simple;
+	bh=B2IfNVHDv5xZoK7Kxgf2ac11w+Xt/RMn0+cXJnYbk5M=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=YYRS8C93cdF6QqGYsUDHa8RH1oW5/1m4xQCH3y7MSNVideus0Sn2smsb2SIIl3pr6YdW+S+o+SR9YDqjJhbLpx11VjawxxZDAAbuZZ2s0caDsOApQ/Z/pwZlnRykPh387LRcDdgbLymql+P7McTBEr6cAXH6YP++crWQLMLU9es=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=HvWNoB4T; arc=fail smtp.client-ip=40.107.94.61
+	 Content-Type:MIME-Version; b=oTXXcrqg7w7Poc56+AZ023Choh6h/8KudfjKqM0ufdqaQ3hU6xRfxToUj3iXJVLv/UTttQiU3GisVxrjH9Xg0CIraZHgU4JyAY5YHCGkuuuUpw8fkWS/AQJKvsXCfSZuN6ywjSMDEskvgCU8hLFHGnieeqq61XhFKRnU/ABXGzg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=k+oRolIY; arc=fail smtp.client-ip=40.107.94.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=rh8Hi1oA/javOoNvrE+XJtDThrZCTc7Mm572InnhG5vvCjyWumUpnE5NVDM25vCkyKRb8Ms+TgJ+w8LV7oluT1QKwkKAk6QIBQPTM2Y/ki+3U6A8FypQvB9vv4JTcpEkcTFVzgvRAkZXg5RyPYITJoiCyiZmYKtJnbeijvq9mZq9Dh85l0j3SbiYMbyaZ+bgMcubwdZdxtsxAQBA1cJLZ60km2QhYBwYPpjhqeGZMyRwvgxcmgpN/TUPgNH695L7ll3J4XvUX5+0sH66+Yu6bDlD7SJ3G4xkGnxrYeI+hITJZETa32mku93RDkjyQaTLkA/OGok2FQnkO0n1RZ9OOA==
+ b=EdwtqAe8Sp7Nu6IEVVDCDGpA1u68iManQ6pvU9dd9+rke+NBkD+AZpLKkuq7g/04ZC6nKGhk2mpmryfj77Msf5e0Ru4EZrRx7iPs23F+IAgfj5w/hVI3b9ZC/VILJdHZLVgXIchAFXbaSbBJkQaSx0wa5L/uzvatcTDZHbcB7Lg1kI0fNxFENtqENh/EI+ODT16ecWMky/knAqfFvcpRIIo94Ij52lBd4DllU9+w77GsmWMFdYZtdgN4fNnc0OJ7kFgy+vdbOpvwlhdTjIyvhtzFzeVDiXdysEmpFKZ1rWUZmz8l3wsur78WlnsxtkQFBVlEhOmCwIY16c+CPAk5+Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/KfwQ9RJMtB5Am+gQtSg3UVueRQOr5TpM0BRFUFqOjE=;
- b=SEpoaBxoKazpqV6NpcFBORJahiDH4JeLIG5MAZ+Mz76adLgokGs1tTgqoYvVdJTiuHcMlje5C9DRRuiU5mQt4NSqRfYtcvm5GngWSm2XA6PK3UJop4CzgCxxQeQysfOr721NsIONN/h+33RsYS2IVHrJFpqrBcQUSussm0BJDA0ZDPU2DaXjqhmjTSiRfPYmAdPZFgCggVcBQpSgaT8YhfxcSqvT1/81+9RrFcuVDWmum4Xpuh085e9cD0lrpYw56ngWkwRV23rlZR9I28+8FA/zOVGvW8av3UlMrs23VBiblFlc9NuAHqvSoWm16IL8Y8q5V3jpYifCC1VQ45SUFw==
+ bh=FQWODUaNmaa6BcJPz1bVkgvzg1YNsZunAFGHltw3IlU=;
+ b=cKYoZvHtvLi8jsSkztNn2XEi2g3TI1wvHYiQQpI0VWT3AOszQe12KovK63gElcAUFrwpwcYiq2P1c87YWxgoD3GZJ2JSunlo4+DNmZ6o1picEOQOfTL1gGyWykDmeC3RPSlVk/Iv0UjTVeMWJjJ7MwsUAvnacOaNqidUjiBIL3k0gkUXXfGjTuk6FeLIGFJqRkMcITsmmlPE002Oq6BJ6KuHDf6wpOTq0kRuWEm1aW8GMOah2W/rhjbHiLgdPlJjIG3D90LyTV7qE+Qv4tikPWsaVnr7gJ3U6jDm8LoHa7x0ao8yG+OzCcrKZg/b3zHf2rBv5onkUyGBE5KphghaHw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/KfwQ9RJMtB5Am+gQtSg3UVueRQOr5TpM0BRFUFqOjE=;
- b=HvWNoB4T0QboY++A3xXfEDoi7CXny92467E538/fG3cRHDH8yChigExOBVcdEimmv//ZhaT0zvVi/9tKa6y+J1iSY32YZ3sgh+MUzpwHWYFm6htjkHwMLowTLAaGmXBgdw/3bUsX9hsLMgluV7ijbyj0gDlXBbUd0suumezJSDewUUHfSfDck3IoM3oZT4P03QgTzYZi0/3FyrPmQxPQ3K3sS7R0PZiw1pjC5ksHVzpnw54+bi75ksAsufTYWN10dWcZ04kqmUOC1emYWWcJ1KXR6ovEUUyR3OYFmA3dg+sl/CuS+dSDBATc39pxM7BK4EAI83R75/KIkC56D2r+ww==
+ bh=FQWODUaNmaa6BcJPz1bVkgvzg1YNsZunAFGHltw3IlU=;
+ b=k+oRolIYcZPBN5DY/AiIFE/durbnR8usLU2Xi7N812s5OOEBwCtMu9AFmxlt+aZPp3aNt0niF5/CrgF47eMNLkuFSOR+RG3H6hxylLF9S2gITjrWTtcEw1ZBg3CYpyTwwgraaSGn3r62rzz+3Nc3xqIAq2eH9DYIndmxEX+/I35XOaLh6lL2ss9JRoyDPMYOt3d+Se+ot5+RL/nxt8SaYt+HpBpUp4CEOCHT8WMS2Swd+TPvUtBfBIyemJDSmNPRl2UH46gDujTT+2k91wz4XNO+7cH7JjGZ9tgId6G9vmhkC5sxTHJXEW1T0pPvvMOuKl4llC5S12bErkGjBf1nzg==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from SN7PR12MB8059.namprd12.prod.outlook.com (2603:10b6:806:32b::7)
  by CYYPR12MB8962.namprd12.prod.outlook.com (2603:10b6:930:c4::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8655.22; Fri, 18 Apr
- 2025 16:10:44 +0000
+ 2025 16:10:46 +0000
 Received: from SN7PR12MB8059.namprd12.prod.outlook.com
  ([fe80::4ee2:654e:1fe8:4b91]) by SN7PR12MB8059.namprd12.prod.outlook.com
  ([fe80::4ee2:654e:1fe8:4b91%6]) with mapi id 15.20.8655.022; Fri, 18 Apr 2025
- 16:10:44 +0000
+ 16:10:46 +0000
 From: Joel Fernandes <joelagnelf@nvidia.com>
 To: linux-kernel@vger.kernel.org,
 	"Paul E. McKenney" <paulmck@kernel.org>,
@@ -64,20 +64,36 @@ To: linux-kernel@vger.kernel.org,
 	Steven Rostedt <rostedt@goodmis.org>,
 	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
 	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Shuah Khan <shuah@kernel.org>
+	Shuah Khan <shuah@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
 Cc: rcu@vger.kernel.org,
 	Joel Fernandes <joelagnelf@nvidia.com>,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH 11/14] torture: Add --do-{,no-}normal to torture.sh
-Date: Fri, 18 Apr 2025 12:09:43 -0400
-Message-ID: <20250418161005.2425391-12-joelagnelf@nvidia.com>
+	linux-kselftest@vger.kernel.org,
+	rust-for-linux@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH 12/14] torture: Add testing of RCU's Rust bindings to torture.sh
+Date: Fri, 18 Apr 2025 12:09:44 -0400
+Message-ID: <20250418161005.2425391-13-joelagnelf@nvidia.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250418161005.2425391-1-joelagnelf@nvidia.com>
 References: <20250418161005.2425391-1-joelagnelf@nvidia.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: BLAP220CA0019.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:208:32c::24) To SN7PR12MB8059.namprd12.prod.outlook.com
+X-ClientProxiedBy: BN9PR03CA0072.namprd03.prod.outlook.com
+ (2603:10b6:408:fc::17) To SN7PR12MB8059.namprd12.prod.outlook.com
  (2603:10b6:806:32b::7)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -87,168 +103,173 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: SN7PR12MB8059:EE_|CYYPR12MB8962:EE_
-X-MS-Office365-Filtering-Correlation-Id: fef0e34f-36af-49ed-588b-08dd7e9392a6
+X-MS-Office365-Filtering-Correlation-Id: f3563a52-9a78-4b04-8595-08dd7e9393e8
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|1800799024|366016|921020;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?zgGWPJ3rWI3O4qiuY268RaXWXG8Bui3euyvnDjnx698fXdYMwGb54xSklnIh?=
- =?us-ascii?Q?bAjxGw0lGXDgcS7U7MpYvc/nDx6f6eYR5oXBUR1ba85BA6ULo67dLPKFXXHq?=
- =?us-ascii?Q?aTorr/gY5oni23W3AjiBnYV9UWAC9mHKkzqVI2zBKT/XMoM1w7/5PEGVzv88?=
- =?us-ascii?Q?SxlisPEZ3mIX7Ki9FlGxllW1b21qYDcwebt2vJ5xPoVHnjjTrOhqdLXpeIuo?=
- =?us-ascii?Q?NcLYipn26nkC66KfoJ9PWK7Kz3R7qS3fnGaJGu2csJYRGNa1B7rnMeEXp7rT?=
- =?us-ascii?Q?0pe/CDIZcC+ZlhqNY4Rk8qv6wmxXWDdIE3g/zI3ArziU6Ob4hniS951RrPwl?=
- =?us-ascii?Q?1c/1C8G9VIb5L4MKOYwnx5IsB7/q7VQqOkkmfYm2VFFxwuQi/t9PptsKXH4I?=
- =?us-ascii?Q?Y+mzRmAwOPSkN+FelOKf0/fJVA/IoNuiSNbXLZKTCeLtOGtauVnxTMdB/ZHq?=
- =?us-ascii?Q?YDKf0PxPbKZjdvDDOJY5kqP8T5XVTMRfLUmMbrxBzCNeFaWi3S+a5yMDwYJ0?=
- =?us-ascii?Q?CeKm0Vx7Uiu9XKLehtbFa4jskZGoKYBxX/DE2MeaIU81BqaVmLcO2hBdL+QF?=
- =?us-ascii?Q?ZfZw9u7UF/66HefSXidWCmFa0v0cMczbA/1D0H0d5WgIEcOK0/cPuK8ks/XS?=
- =?us-ascii?Q?j/Enxnr//5ynlyMmpyKxLIWiQ4swkv67ateUdo1KRvWkrptpLJ7nD86lGmDa?=
- =?us-ascii?Q?XaxhpueCr9H0Jb7Oi8lerdvrAv1h+KcFvHeNg5UiXtR5Te+Z1T7z7zodMSWG?=
- =?us-ascii?Q?Qt92ejIz6lMHwXDwaZEZFrTVl5gsVRNuv4UsvtxA97nh6UXWDg13a9UjFW98?=
- =?us-ascii?Q?1M8ugWzA1rJgoncUR8vHkHFMsMMQPDck4k1+cexAqkrVixvHwfJbT5JWxnCO?=
- =?us-ascii?Q?Fg0Tr6Zo0t6eymCCTuuTQa08l4HpYZq5dr2ZZHtnxKpTy7iLUD9yaejSub/Y?=
- =?us-ascii?Q?W8csNDuCzMA80nDRxL1Oi5e0ryTjbdzBz9UVSW7+lDeOywv0fOmRZTWER4he?=
- =?us-ascii?Q?b/tpEAJ1x30Gjt9HamEYCABnuce4eLyqzgOczi+niDt4fkbjdW77QSiDry0d?=
- =?us-ascii?Q?VT8QxY90cs/vuXXQPg/ep6vODjlKS+4NEeXfsnK8E+PChuo7E67iyzmiPl4N?=
- =?us-ascii?Q?psn71mf0o7GSX6h3NZ6a2ImbxHiPmrRTL4aptoGaeMQmCYeF9DsLo/3sHoV7?=
- =?us-ascii?Q?Wc9OLLaHVCewmd7ds1bBk2I0g8Zoh1taKqMCWxXHxhW1TNiHHeE7d4teUiJA?=
- =?us-ascii?Q?6TTHsEhpBr4UcA1YOOBrhj0pcB+V+vfFtWUQ7CHRNULDqbJbshxE9FAQ/Kr7?=
- =?us-ascii?Q?WQWeBL087QL3FLHpxZdzQ5gq9LajWhP12uHHh95Cj1EjzVbQxOg+c8t9j5nJ?=
- =?us-ascii?Q?MoXunTdxU+CNuRNRjaM98pSbPR3CFArx7lB4pOdTSdSkk13UYBLv9sCWtRhs?=
- =?us-ascii?Q?6HcWzn9Ltbs=3D?=
+	=?us-ascii?Q?9NQFMHq8lcHbbIYzHWoI9CTjylgS0vZYcyiZvL7K2ImAGFzS11E5268U2lnw?=
+ =?us-ascii?Q?cjyOKt0J6r/HNMyn11Q/dP7eTQ4i1ZLmobnB0/L8neiw3AuJFMhfdq9wtyNq?=
+ =?us-ascii?Q?qjKjBLjH1K14zM04uKAebfo3Zg6SOEMDMwAW9/rEykM0JCEUyiTRA9wp+0Ga?=
+ =?us-ascii?Q?muupyZSYuSzB1hPRirvAk3wGKrsQFkVrnY08nwt8O42XZdkGFnRWuAYllHRU?=
+ =?us-ascii?Q?PWyLoXThvU+hFkrbmoR38yowEapnvHIjajRpPYp+rUaSpOWgkKFgyrSKbcSz?=
+ =?us-ascii?Q?X8lqrcmGh03v+rf+r+wznO+T1j4u3SqdSUIvFgoX+EI1appAYSn1Bu2cnBP6?=
+ =?us-ascii?Q?Bu5tUu3Wow/jJOubR2VMvq2Vw2H635BUgDeWMLF17RFfIDYQQlF2i1Nfoijg?=
+ =?us-ascii?Q?lhfhXsMLmW28dguFjRhatBbuAd1n210YPEO8bOfS7nyEi1zX+VlEHqPM4V/g?=
+ =?us-ascii?Q?vvdXfRiPkfTvroE0cJ2bMX8XjdkVGX6WciAE0VcIF4AZLjoXEPNVt9bZwNZw?=
+ =?us-ascii?Q?GFEb2uXhoi4ckMAN929NOEpCTXQf9wrl9RM8dZv0nEj78/BA+NDlNQNnhcQj?=
+ =?us-ascii?Q?w/Q3KYSO+ph28tIh9VDU6NB8gwoX+UXk45iV01tdCdDPO5Fx62juteei6MZH?=
+ =?us-ascii?Q?rpS0AU4g07NQai+jMLQJ9tprBMerNv6JJYEFT+dBVSslVfKVlazMGcqPtRG7?=
+ =?us-ascii?Q?FxTnDswLaoQQyzprX5zCvePIx48s2uOjvCtube+epthNLA6yDKEtFmkwtvgB?=
+ =?us-ascii?Q?7lsEVm0ZCZbMv/ildnFD8G5LayXj4e9sVWM7hZAfeJTVQqPLYg+4pPtJ6Sde?=
+ =?us-ascii?Q?KLvBTzh14Z4JXA7QbzWQDlriwVHDsZKIeaEPj5TnEtJ97ES4bl46pHan82G+?=
+ =?us-ascii?Q?0P2fN37y7jO5ERNBIN3aT6Fn2qDnXhlW5WWtQCvkKwU9cwkdlWsIJHUIQsMM?=
+ =?us-ascii?Q?rzSG4mnb9PLnLjcrAy5IJbnaWQVj+W0JVgkaLIH8LcxpfwdLrNBmFyJjx716?=
+ =?us-ascii?Q?Nor2f/ndLX3eWxV4bq52tmcMJ5zdfy+LzpRyun8+cuQ/qj2EZhn5M5klxhWk?=
+ =?us-ascii?Q?y/0VngxzLKsp2YWjwJSW2hM0gGZvA3IKcj1p9MRWFy0vPO6Lf4Eq5g9DvEXn?=
+ =?us-ascii?Q?6Hct/mZu01bC/rXU0CNdIA/7OjIMqe701j3zy1AgNZckpeB6egSDx+xpy2Dc?=
+ =?us-ascii?Q?cOIbSFErPHYFpBKGZ/38F2HidMGpIdgVwc7a4jxwvF/r6XOVjaUFFxEYYpUQ?=
+ =?us-ascii?Q?6XTXF8oRaQpwp1Vt4pC0wWDyXfsUKnpSFh6sNxPnEk1PMu/9HURyPvN9eD9v?=
+ =?us-ascii?Q?ibtCPnvWQWhAjg4fKYBqVHiIqHg5YmxdQOj4frb651/92s9CI91V+t60T834?=
+ =?us-ascii?Q?sVptaL7TfsKdCO30RzPW4ZwXtuJUjh8CHrt5aSFsQHY2u7a+VLAmTg3/YQ4C?=
+ =?us-ascii?Q?PKwU1HZOfirx3kx751trsJF5GllSiCXuJZMVeGGI9feMBm+LUXQTXw=3D=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN7PR12MB8059.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN7PR12MB8059.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(921020);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?7frVH3U+jNJmvgpQQBkKP8JAfCZ86osjnrJd9bny+A9wvTLB+zDCta032z1x?=
- =?us-ascii?Q?tVtM3BeU6NBJCGxAPDThZZBiO+y7GllqW7YSoOs6Qwoki5mtjA8OgQG4ObdU?=
- =?us-ascii?Q?PdQk92PP1tkKkXuHf+c0moM+QlCt1IbtZBA5vD29qs1m61IDULKg8/T9LgK3?=
- =?us-ascii?Q?LB3Y89/4RqYjKQOsNDzHHO50xZXWWQcmaiMRBLS1yIgBrNzy2XYW61c/7RzN?=
- =?us-ascii?Q?37CN4quESN4CC550xM8Y308j/rdLvT3iz+ndANkFdxHYHks3ph1KgHbpwgDm?=
- =?us-ascii?Q?hrrETbB7e8BPPOiYlbKfHQ/sF1DT1rG/MSHOIyVlLtq3X0Pnhuw9X/gUR6Ow?=
- =?us-ascii?Q?m79LTJzbZTcfpCkFDO0klxJ/n/IKQRn4DLix2LzNmPc9kFgTEd5TEyNkL+rt?=
- =?us-ascii?Q?zp9bLqpZFahSaREYdPYTrOIeurZFRV+atudP5hhBCFmaSD/kSYXYOMYzWYv7?=
- =?us-ascii?Q?DKSa1u6z1b+cP8U+b/axTTBOUYWPRNfZSpp5tO2t3YYlew9ORaF/Et8CMfaw?=
- =?us-ascii?Q?45fWrK+X8lQUdQ9RxM4bR4/sEkPZtkQkQLVDOqy3i2yDyjyUkXb9s5BNepO0?=
- =?us-ascii?Q?2amG7CYpm7SFgHYp3DiayfpBjjgk0wHClzu78bcBaHbWnDVuonE3j7TFqrlU?=
- =?us-ascii?Q?HG8OGQ4ZTtQYr/gsdzjxedw/JRiyKh7ZRai+K+xALC/SprayW6hL3uJjfkB1?=
- =?us-ascii?Q?gs8kIyYGcPX55QKuU5Y9zCxEfNo4z6bDaDHLCcb0ePgB43RUcZaJmOxm46QW?=
- =?us-ascii?Q?OFVCSgavdG02EOM1xNILxwuYGL7nJJjS029JdUTCWGBDmKonCeL0J/0Ec/VM?=
- =?us-ascii?Q?8HA96yoI/SIvG7pcqxltMWyH8g3F2AO9mEibhHmS0iBpmrAaJTlTbiTRaWBY?=
- =?us-ascii?Q?tTqJGxabmuY+G2aGIhqTb0xAJTSkAS1E9lCqJRwDKNJZJ0M4K9SqFVMc2nXJ?=
- =?us-ascii?Q?ZkdMVfulE7iM3aW7p5cl5cYniPu17TwsUYQneK3aXv0ToKw8gfTv/V8KvEgq?=
- =?us-ascii?Q?+5vC5KAa/1LumHJdCCZOEPj+Zc4sDqPkggTRbJ6E4NAIjzly0oDMiKHsOANA?=
- =?us-ascii?Q?vU1iK2yJ2LRQiFDO2FfT3l6n3HGrtKQeySIoE2RORLV5msRYlEcTzMDJT/IP?=
- =?us-ascii?Q?jej0EmqGv1Tq7xVgfuQ9j72JDASaoEV6mqGCJmBIfJ5JcHT4eqW36DPM8fVZ?=
- =?us-ascii?Q?McxEFH5PppNMOMuCn2LFOh7qMpOkSjYotJJqy0E9VWOEx1f23Kt/uHGgbmij?=
- =?us-ascii?Q?XulcsAJWdmbQ58ePe1zRCR+eSnTIi4vshqOhry2URRxGp+4XloAFbspIB1Zj?=
- =?us-ascii?Q?MKVDCuIXV1hm2Masdfca8gLnoq4IvkHXvjgy8DBJwt/7wXvCwwdgyCumgPko?=
- =?us-ascii?Q?KOFLnPVb7FyNXy/vPX6TpgrGep4XfY4n37W4oa1/fqjIqTIDvVRAAtjpZn/Z?=
- =?us-ascii?Q?8XkcBCKoGpiDtaaimP5cC+YfThN4KvyUzZlbD+qJL8xp52sL93ZGfM7ToqNi?=
- =?us-ascii?Q?YwFzaZPRwORFVjDMYFXbM7cBTvSNmQDUoR7ng8eG4Qaj0lTMdsqrjywBd2d/?=
- =?us-ascii?Q?wVFqpDWQfOnk8mcS2/76Exbiu4ssfU8d9Am+rbhB?=
+	=?us-ascii?Q?i6B31siCP2pI0FVdJL7cZEZ/+BGPrxsuwJBXJjYqZity1pY88UtzqnxY7cLx?=
+ =?us-ascii?Q?aBlyfbfDZhuZR417X103TvIzbr2A4H+zFJ3KnlPqA1v9tx789B3lmRDyZhJk?=
+ =?us-ascii?Q?5m5xnW7T3kZ4WvH2RmnesXv7CP922WQlQDNCV2lGYQ20KpOwnCRZ0MtGUpyw?=
+ =?us-ascii?Q?Xc35cbq67IjIH7pw+xmxGf83B9XyqBcA81o7O0j8aF+pQe0dDjQ3cABhSX4b?=
+ =?us-ascii?Q?MILXly52VI0QJRHdo6cNm4Sn/fFjIrFJCCqz/B3JC0nLw6dbOxPEikGLJ5t2?=
+ =?us-ascii?Q?KgEfzJ8qtiZrYp9vRDUwLJr2CBoESl35C2Sn5wWcOGSdhasipt0YzeimQ8hA?=
+ =?us-ascii?Q?ml2MHJYZoCENzatN9BQ47al5DykocY/jVBc6scpynBGbEFV0nsCZjkuKIXwC?=
+ =?us-ascii?Q?/fRja4ZCfjXUHft8Se/nSmQs19uj3FKmAtx8nD0rZ0jooC83ALzhwF0y07We?=
+ =?us-ascii?Q?L0l4Tgrxlb2uVwbBw4OP/Fefxt3EKV7/VDCHfVXeTrAVMsw2QEUrwZGIgfKT?=
+ =?us-ascii?Q?SnIiSiXwL1IYwrRnMGuItJWr2fSSIiGjimNLFGs8e/MlRStdL90TWcouIdGY?=
+ =?us-ascii?Q?FwwhJxwQMeSYibvYuyIvj/hifZWdvPKMHW7mcKtQNGORw+aSDVINPbUN1qwI?=
+ =?us-ascii?Q?qUidKLQEo2iW/+R/MuRYNLWB5prJ5BYVrsagWYEwEwF550EWQiceaqcW9HvC?=
+ =?us-ascii?Q?yQ4IlAu2BCexjyMD7zeUD496v4IbSu7gH4lusZ8TI2vGMUKcp5Elq1ZQJmgT?=
+ =?us-ascii?Q?Wh7mqoWNS4Q/2wCVUXrStPc/cEsbtjkNdQLEtmYJ8coIpWqJtUk768T7Spzy?=
+ =?us-ascii?Q?tk5wvKZ4O+o+9MLC3OfeEWYZ3lEZSNrqYA3UCltOlJqtCqEOab6hdlKvVsc+?=
+ =?us-ascii?Q?LdE9iPCssNQCJSZorhmGzXe5WCGfLQ6hS+FokGZXUA7sL+9nv+kR58SNNyYc?=
+ =?us-ascii?Q?a+DZzuKjX2HkzIwBEqSl/c7fk9ue1DtiSDAUVkiSujs6iOCk6OzI6bfRJ4L0?=
+ =?us-ascii?Q?7Z7y+Cmjm/YbFQl6kjkr2127xxEuNkqOMdgPuIEqgQg5+fal4uwQ5ft6dFKI?=
+ =?us-ascii?Q?2GSvkiZlDRAQNqEQ8kJ3pa4yw2y7qUwk3sowDjAs6nVaTAG/CY0oPHF161j2?=
+ =?us-ascii?Q?M9DupU/fOXExKPZ7O/4Zdg8/JzC0yP2Lf6tPQLSolXi1MQK4gGnT0m+UdbpW?=
+ =?us-ascii?Q?F7dKDXREbVM0FWiAf+yOj9xH9oiVWVTFvdh4e+r305AdxNZ/kPH0rGIl8C0/?=
+ =?us-ascii?Q?NO7EzKEcl2OWMaPIdMQjva42SX+wZDd3c+z6yt0Rp5CStTmTZtI9X+XnW3k5?=
+ =?us-ascii?Q?q9zL/0K2hOCfevlO39bV3KFMFS4Bcekd6Hn7UH01OKMATHWgABhzFShtL9bg?=
+ =?us-ascii?Q?WVKpFy4Zwnj2PYOmuLXpuTig+LOndm+DXeg4uIt1G0FZZM51nR3MhFf+Ah36?=
+ =?us-ascii?Q?pxg1odW97sd0dhvzPjmLkvMTYJmuIjtmCil5rcyxUb2qKXfFO8cXUh9flMzv?=
+ =?us-ascii?Q?BtsFEXjQuZeYCeWHUxUEe9fnHFyRrfgIM2GM7X5Mh7g6r+soAIo9JAS3QMU0?=
+ =?us-ascii?Q?mtHqvjEkPo4gJJ5YnZBH4/vur4g+s1swCo0nykTM?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fef0e34f-36af-49ed-588b-08dd7e9392a6
+X-MS-Exchange-CrossTenant-Network-Message-Id: f3563a52-9a78-4b04-8595-08dd7e9393e8
 X-MS-Exchange-CrossTenant-AuthSource: SN7PR12MB8059.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Apr 2025 16:10:44.3066
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Apr 2025 16:10:46.4344
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DNmoYD328QL/+a09quQ8V/vnR+ce1CPPY4v0YQe8Wzn/7vujQJEsUpJgLBX1U7iUYd/juQ5IGK5mzgZY67Wd2Q==
+X-MS-Exchange-CrossTenant-UserPrincipalName: NscfphxaJ/B9UST5EmUqqN16uRQdNgSQf2cX3AGElEXBHAyYX39+UjFUmaJVSv7zOKfgsVtLvoirCMFHxbnSuA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR12MB8962
 
 From: "Paul E. McKenney" <paulmck@kernel.org>
 
-Right now, torture.sh runs normal runs unconditionally, which can be slow
-and thus annoying when you only want to test --kcsan or --kasan runs.
-This commit therefore adds a --do-normal argument so that "--kcsan
---do-no-kasan --do-no-normal" runs only KCSAN runs.  Note that specifying
-"--do-no-kasan --do-no-kcsan --do-no-normal" gets normal runs, so you
-should not try to use this as a synonym for --do-none.
+This commit adds a --do-rcu-rust parameter to torture.sh, which invokes
+a rust_doctests_kernel kunit run.  Note that kunit wants a clean source
+tree, so this runs "make mrproper", which might come as a surprise to
+some users.  Should there be a --mrproper parameter to torture.sh to make
+the user explicitly ask for it?
 
+Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
+Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Joel Fernandes <joelagnelf@nvidia.com>
 ---
- .../selftests/rcutorture/bin/torture.sh       | 30 +++++++++++++++++--
- 1 file changed, 27 insertions(+), 3 deletions(-)
+ .../selftests/rcutorture/bin/torture.sh       | 45 +++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
 diff --git a/tools/testing/selftests/rcutorture/bin/torture.sh b/tools/testing/selftests/rcutorture/bin/torture.sh
-index b64b356f55ff..475f758f6216 100755
+index 475f758f6216..e03fdaca89b3 100755
 --- a/tools/testing/selftests/rcutorture/bin/torture.sh
 +++ b/tools/testing/selftests/rcutorture/bin/torture.sh
-@@ -51,6 +51,8 @@ do_scftorture=yes
- do_rcuscale=yes
- do_refscale=yes
- do_kvfree=yes
-+do_normal=yes
-+explicit_normal=no
- do_kasan=yes
- do_kcsan=no
- do_clocksourcewd=yes
-@@ -128,6 +130,8 @@ do
- 		do_refscale=yes
- 		do_rt=yes
- 		do_kvfree=yes
-+		do_normal=yes
-+		explicit_normal=no
- 		do_kasan=yes
- 		do_kcsan=yes
- 		do_clocksourcewd=yes
-@@ -161,11 +165,17 @@ do
- 		do_refscale=no
- 		do_rt=no
- 		do_kvfree=no
-+		do_normal=no
-+		explicit_normal=no
- 		do_kasan=no
- 		do_kcsan=no
- 		do_clocksourcewd=no
- 		do_srcu_lockdep=no
- 		;;
-+	--do-normal|--do-no-normal|--no-normal)
-+		do_normal=`doyesno "$1" --do-normal`
-+		explicit_normal=yes
-+		;;
- 	--do-rcuscale|--do-no-rcuscale|--no-rcuscale)
- 		do_rcuscale=`doyesno "$1" --do-rcuscale`
- 		;;
-@@ -242,6 +252,17 @@ trap 'rm -rf $T' 0 2
- echo " --- " $scriptname $args | tee -a $T/log
- echo " --- Results directory: " $ds | tee -a $T/log
+@@ -59,6 +59,7 @@ do_clocksourcewd=yes
+ do_rt=yes
+ do_rcutasksflavors=yes
+ do_srcu_lockdep=yes
++do_rcu_rust=no
  
-+if test "$do_normal" = "no" && test "$do_kasan" = "no" && test "$do_kcsan" = "no"
+ # doyesno - Helper function for yes/no arguments
+ function doyesno () {
+@@ -89,6 +90,7 @@ usage () {
+ 	echo "       --do-rcutorture / --do-no-rcutorture / --no-rcutorture"
+ 	echo "       --do-refscale / --do-no-refscale / --no-refscale"
+ 	echo "       --do-rt / --do-no-rt / --no-rt"
++	echo "       --do-rcu-rust / --do-no-rcu-rust / --no-rcu-rust"
+ 	echo "       --do-scftorture / --do-no-scftorture / --no-scftorture"
+ 	echo "       --do-srcu-lockdep / --do-no-srcu-lockdep / --no-srcu-lockdep"
+ 	echo "       --duration [ <minutes> | <hours>h | <days>d ]"
+@@ -191,6 +193,9 @@ do
+ 	--do-rt|--do-no-rt|--no-rt)
+ 		do_rt=`doyesno "$1" --do-rt`
+ 		;;
++	--do-rcu-rust|--do-no-rcu-rust|--no-rcu-rust)
++		do_rcu_rust=`doyesno "$1" --do-rcu-rust`
++		;;
+ 	--do-scftorture|--do-no-scftorture|--no-scftorture)
+ 		do_scftorture=`doyesno "$1" --do-scftorture`
+ 		;;
+@@ -485,6 +490,46 @@ then
+ 	torture_set "rcurttorture-exp" tools/testing/selftests/rcutorture/bin/kvm.sh --allcpus --duration "$duration_rcutorture" --configs "TREE03" --kconfig "CONFIG_PREEMPT_RT=y CONFIG_EXPERT=y CONFIG_HZ_PERIODIC=n CONFIG_NO_HZ_FULL=y CONFIG_RCU_NOCB_CPU=y" --trust-make
+ fi
+ 
++if test "$do_rcu_rust" = "yes"
 +then
-+	# Match old scripts so that "--do-none --do-rcutorture" does
-+	# normal rcutorture testing, but no KASAN or KCSAN testing.
-+	if test $explicit_normal = yes
++	echo " --- do-rcu-rust:" Start `date` | tee -a $T/log
++	rrdir="tools/testing/selftests/rcutorture/res/$ds/results-rcu-rust"
++	mkdir -p "$rrdir"
++	echo " --- make LLVM=1 rustavailable " | tee -a $rrdir/log > $rrdir/rustavailable.out
++	make LLVM=1 rustavailable > $T/rustavailable.out 2>&1
++	retcode=$?
++	echo $retcode > $rrdir/rustavailable.exitcode
++	cat $T/rustavailable.out | tee -a $rrdir/log >> $rrdir/rustavailable.out 2>&1
++	buildphase=rustavailable
++	if test "$retcode" -eq 0
 +	then
-+		echo " --- Everything disabled, so explicit --do-normal overridden" | tee -a $T/log
++		echo " --- Running 'make mrproper' in order to run kunit." | tee -a $rrdir/log > $rrdir/mrproper.out
++		make mrproper > $rrdir/mrproper.out 2>&1
++		retcode=$?
++		echo $retcode > $rrdir/mrproper.exitcode
++		buildphase=mrproper
 +	fi
-+	do_normal=yes
++	if test "$retcode" -eq 0
++	then
++		echo " --- Running rust_doctests_kernel." | tee -a $rrdir/log > $rrdir/rust_doctests_kernel.out
++		./tools/testing/kunit/kunit.py run --make_options LLVM=1 --make_options CLIPPY=1 --arch arm64 --kconfig_add CONFIG_SMP=y --kconfig_add CONFIG_WERROR=y --kconfig_add CONFIG_RUST=y rust_doctests_kernel >> $rrdir/rust_doctests_kernel.out 2>&1
++		# @@@ Remove "--arch arm64" in order to test on native architecture?
++		# @@@ Analyze $rrdir/rust_doctests_kernel.out contents?
++		retcode=$?
++		echo $retcode > $rrdir/rust_doctests_kernel.exitcode
++		buildphase=rust_doctests_kernel
++	fi
++	if test "$retcode" -eq 0
++	then
++		echo "rcu-rust($retcode)" $rrdir >> $T/successes
++		echo Success >> $rrdir/log
++	else
++		echo "rcu-rust($retcode)" $rrdir >> $T/failures
++		echo " --- rcu-rust Test summary:" >> $rrdir/log
++		echo " --- Summary: Exit code $retcode from $buildphase, see $rrdir/$buildphase.out" >> $rrdir/log
++	fi
 +fi
 +
- # Calculate rcutorture defaults and apportion time
- if test -z "$configs_rcutorture"
+ if test "$do_srcu_lockdep" = "yes"
  then
-@@ -332,9 +353,12 @@ function torture_set {
- 	local kcsan_kmake_tag=
- 	local flavor=$1
- 	shift
--	curflavor=$flavor
--	torture_one "$@"
--	mv $T/last-resdir $T/last-resdir-nodebug || :
-+	if test "$do_normal" = "yes"
-+	then
-+		curflavor=$flavor
-+		torture_one "$@"
-+		mv $T/last-resdir $T/last-resdir-nodebug || :
-+	fi
- 	if test "$do_kasan" = "yes"
- 	then
- 		curflavor=${flavor}-kasan
+ 	echo " --- do-srcu-lockdep:" Start `date` | tee -a $T/log
 -- 
 2.43.0
 
