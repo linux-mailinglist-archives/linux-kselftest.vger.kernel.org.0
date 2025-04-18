@@ -1,623 +1,299 @@
-Return-Path: <linux-kselftest+bounces-31112-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31113-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D53C9A92E1F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Apr 2025 01:19:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 83BE9A92EF0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Apr 2025 02:47:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D2CD1895EFB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Apr 2025 23:20:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0FEC61B6116F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Apr 2025 00:47:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12ADD2566CF;
-	Thu, 17 Apr 2025 23:16:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D15A1BA2D;
+	Fri, 18 Apr 2025 00:47:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RFBl1qpS"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JZe0T/U4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C9D6238173
-	for <linux-kselftest@vger.kernel.org>; Thu, 17 Apr 2025 23:15:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C12E68836
+	for <linux-kselftest@vger.kernel.org>; Fri, 18 Apr 2025 00:47:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744931762; cv=none; b=Aip8yNF1clENY+C8PMEo9bm3dTxdkmc8X4yTqZ2jdj3Iow6Qm/pikq9AZkyE3r0/jW4JQXpdEVBIii9E/iGwm1g5A8pv2lm/zHpXny1KIFiVhuLVCHWPLQeo/8YisXelxvtkTF6dACToMYdCId7NbYveupoPBG4jZIkyRid59Hw=
+	t=1744937233; cv=none; b=qqcYM6qOnmZNkBDXmygCvsaY4PEcrLb3cR0nbmclgOToW/aVLs9PCklQDtKP8cqFw1PpPa+tC9yqdYJsi1kgMtWBL9JcGzSQZw9q9P+OWPIMQehuWWIS1PJQKMffNcLXv9pP8xa5s3Pkhl0WXEi/mU0/t8Y6GS507AB2ymobDzY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744931762; c=relaxed/simple;
-	bh=EUMQ+oYsfQ+XsQtIRL6m6jDKl84jO4tSi7ABTsxE9FI=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=OreOF1Ndfl09AvBvbRheRSRqDmbZ+ZlbKgnKpnabjbWna7ssWt5xgzz1/LCMBH6I+2xrG3jDcxJ86KAoytXIE9cW3s5YyV6tdrl6vdyQxIu4DVTdZA/TQueuHNtdss8xwJtdYxGinMXWsu2CdrTMTg0gHlBds6KwFoue6adVJfQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RFBl1qpS; arc=none smtp.client-ip=209.85.215.202
+	s=arc-20240116; t=1744937233; c=relaxed/simple;
+	bh=xsUPSKH2+wBYbQgRxfQGdV4PrrjsEBlxP/tdcdmYO8w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SLkfc9WnfXeny9mwoTwejViUUd78uJDXjtZP8pCU9/OzHJ4MyDRKToiTB6C4FtQxbZGvjyOyeW08xiYEAP+7Bbow4pAET8EUkgxXVPsQLLZ+UZlN8uA34A+BVt6m1Li//5XMeJ+ylaJm/8SPeVi0ljGWm4wMX9nIQ9euSoIqTKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JZe0T/U4; arc=none smtp.client-ip=209.85.208.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-af9564001cbso777362a12.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Apr 2025 16:15:58 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-30db1bd3bebso14311071fa.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Apr 2025 17:47:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1744931758; x=1745536558; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qFn6/fkG+uVL9IfgXExy6dTJRMGzSiOxiZ+2kZV41/0=;
-        b=RFBl1qpSFBRDjMUTB0Mn2V6WZ3ssnZr7I9t1H0LWjwGnTUJANKwKDnDa38q+ceXohZ
-         7owgwBNex0U9rOHUCRsbH7UphcLgpZK393nhqwTd2KriByuKDlczsa4lj0eNLdHigzZw
-         JKqwH560c77DNfKgF14/QjW9Ufgh+9l8JPPX7FJbjg13hXKybyHTmmwfwmXdqMjUt9ip
-         Xwk1jC3NTBuy3vRuoRNhwOGTZpU+V0tVjYgm1vlyYkKVRN6LGex5cT/7BdgZzW7PL2QM
-         ReOJtGyjX0umuLrnloyhE7aWtFxVmauuZol7d5LS406QKhZ/U+8W4G0W5yB3rgA7QuTC
-         k6fQ==
+        d=google.com; s=20230601; t=1744937230; x=1745542030; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nWxcfLT2DbM1nYGWqoXqzwBh7pImqNDDTl/6RDx8HAI=;
+        b=JZe0T/U4H1QTdWUPX5Gud/VSoharfT/tyAyB+6MwMoLu6w0CrVcxknoFveKhIVlcT2
+         oZmVWGVXMcYgoMi5S34FGu6LO3Ohety3uQXHvXNpNoPL98sKAqX/V2QF0w4YwkgEOoG3
+         2Y4L+c2Yj1x4TsGzcUm6AJccGdBghivWGc3i1dYYaWvNcQX1UfMc3OfoSySbHtbbOgqf
+         DuKCwGgez8rSJJBEqVpBoHmOPZVBK22U4CBbm//mBA/M0wxEamH+jco9uvakz6Iymku3
+         dEHmz+j6jsl0ucFNGZL4KA6RRgUa0Za2XatrgwntqIGzRR/SDvCYtWX+e6sZUsijYP7V
+         oKpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744931758; x=1745536558;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qFn6/fkG+uVL9IfgXExy6dTJRMGzSiOxiZ+2kZV41/0=;
-        b=JbQ8xY1ZbygQf2QmtU31DeuA0zJ1KvFdNEfZB7TfvVctmGIvp7kAti36SZUBjHygyI
-         MTeO3j3Q0DLYJ9UlJh1V/K/YTXqpn8H36GIfkXqLG/+pes5/UmXk6GnxLlCJVpopKQM4
-         bUceH+ZJ1P55rPmj4cgcZ8qiVYprB5i7wLcOOg71pA4prnkj5L3qTvR3epLy+PJo87Se
-         JJhEOTG4wSfJ4nMUkUzLkRfEaSTWTtplDofNp5VE/S+0X2HDslinrDAYiqdXEAvQWsbc
-         kJzac2JtHIfh6iTEVvobd7T4OsPbZ0vlSe7z4zwbhTSeQylW+kqLRhwrVv5kw6PxyWT8
-         6WUw==
-X-Forwarded-Encrypted: i=1; AJvYcCXfH1XjdWMGBvbG7MpmjSmzHnCdpL1o3jsY/VbIR/IDV7mVZyfjTVsBLW/DSjyVS1I1iazA0h0tXPr7qQNcg+A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhWikM8RpzpzAWrM0Odwv6NEH0YVup4IHeIX/FPdinnB767JEP
-	9an774Svq/xjiMcCCbgovXnqPgge0Lv+5nJza5HxL3E6NROtLPp8VjPDc+dfI3aITaSNz+AubPe
-	FJdKoQQ40ZQUlNYvs9rxmRg==
-X-Google-Smtp-Source: AGHT+IGyfn9bTZXJPUKQRId6hUYpGobcZbK2hoJ+30LIbp2W3VTAftEaA/hYuL3rWxSs+vehxe1sZWc2PD8G4m24XA==
-X-Received: from pjbsl12.prod.google.com ([2002:a17:90b:2e0c:b0:2fb:fa85:1678])
- (user=almasrymina job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:4ed0:b0:2ea:3f34:f18f with SMTP id 98e67ed59e1d1-3087bb69c30mr946621a91.19.1744931758166;
- Thu, 17 Apr 2025 16:15:58 -0700 (PDT)
-Date: Thu, 17 Apr 2025 23:15:40 +0000
-In-Reply-To: <20250417231540.2780723-1-almasrymina@google.com>
+        d=1e100.net; s=20230601; t=1744937230; x=1745542030;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nWxcfLT2DbM1nYGWqoXqzwBh7pImqNDDTl/6RDx8HAI=;
+        b=fI0fqTCB+O2SQRWdcPgk+n+YDEX0Sl/9XN0DrFXIZTrcKsYv2w/RWb5RXxPIwNjKez
+         KxG2tn/0S4DJeV7zfQ67SLegS5DgZHj6R21c2GXXl43DvMdSOc11zcVIGiY9JER/rgiJ
+         hdszE4WcumP03oE83YinihSKzZqzCbyhH5hGhs4ZtVxfGViaKnCO9J5ox6+R/k4B5riF
+         Z0tWlcjhdTOnNa/1fYpFZyZfgp5gX0CJIqGqk+bvM9CacxrYI2Mp11oiPe6ENFxYOuEV
+         ffhsXAV6yWghKlmOudijxdjy/jodgIigf6eeBNLgxxcerexdLi45cIJfA2EgSChkc6wA
+         CJnw==
+X-Forwarded-Encrypted: i=1; AJvYcCWeBSJ0V+mbqSiGuTucpdxTT5+Agk0qF06FXZgu0EVVN3imBSMoK5+YFn1d5RD6WVdDrVcaD+IJSq87Bd3WwdE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxmBfdzF3YNhbQYULhNPeM1L8CcS2tWfd3u59CsdpebNtMiFUjn
+	HjLus7+EZkma/ilRaWxIaaOMFk80O7/FFjAQM9XfWRbCDWGV+jb/gPCjqekiOHuyxa4ZpYuaVKp
+	GuT0i23K+XPp9f/4B+9wUeIV1X15JBs47c+0=
+X-Gm-Gg: ASbGncvm+H93Vre0gquagey3QgOYrJsixj27748r3XhX2OpyBWedp49cWnbUuuk41GN
+	9vjpDpoJmmsCoGx1WejLBbF4TjckWjmulf8z6M5DnPgjM45/9flbjopysdQqxzW7BQBwUeu+HA2
+	uozl2e6J8yh1eYA54lvBrDwdM/dAgmx2M7hby72wkMjZHFoaM29rU=
+X-Google-Smtp-Source: AGHT+IEc6Im0Zn7F5XRjKpieePwe21f0bhqbHOj4bbX2dB1/4bG9j+wnki57fq++7PlvrNgqgBT5s5fiLzWPCslbQFI=
+X-Received: by 2002:a05:651c:b08:b0:30c:b2c:edb6 with SMTP id
+ 38308e7fff4ca-31090501c0emr2475301fa.18.1744937229514; Thu, 17 Apr 2025
+ 17:47:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250417231540.2780723-1-almasrymina@google.com>
-X-Mailer: git-send-email 2.49.0.805.g082f7c87e0-goog
-Message-ID: <20250417231540.2780723-10-almasrymina@google.com>
-Subject: [PATCH net-next v9 9/9] selftests: ncdevmem: Implement devmem TCP TX
-From: Mina Almasry <almasrymina@google.com>
-To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, io-uring@vger.kernel.org, 
-	virtualization@lists.linux.dev, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Cc: Mina Almasry <almasrymina@google.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Donald Hunter <donald.hunter@gmail.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	Jeroen de Borst <jeroendb@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Kuniyuki Iwashima <kuniyu@amazon.com>, Willem de Bruijn <willemb@google.com>, Jens Axboe <axboe@kernel.dk>, 
-	Pavel Begunkov <asml.silence@gmail.com>, David Ahern <dsahern@kernel.org>, 
-	Neal Cardwell <ncardwell@google.com>, "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
-	"=?UTF-8?q?Eugenio=20P=C3=A9rez?=" <eperezma@redhat.com>, Stefan Hajnoczi <stefanha@redhat.com>, 
-	Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>, sdf@fomichev.me, dw@davidwei.uk, 
-	Jamal Hadi Salim <jhs@mojatatu.com>, Victor Nogueira <victor@mojatatu.com>, 
-	Pedro Tammela <pctammela@mojatatu.com>, Samiullah Khawaja <skhawaja@google.com>
+MIME-Version: 1.0
+References: <20250320200306.1712599-1-jstultz@google.com> <Z-KURRE_Gr72Xv_n@localhost>
+ <874izezv3c.ffs@tglx> <Z-Vx8kV4M3khPknC@localhost> <Z-qsg6iDGlcIJulJ@localhost>
+ <87o6xgwftc.ffs@tglx> <Z-vL3cVZuQ8XQXhG@localhost> <87iknnwxa4.ffs@tglx>
+ <Z-5HlSUEh1xgCi4f@localhost> <877c41wkis.ffs@tglx> <87h632wals.ffs@tglx>
+In-Reply-To: <87h632wals.ffs@tglx>
+From: John Stultz <jstultz@google.com>
+Date: Thu, 17 Apr 2025 17:46:57 -0700
+X-Gm-Features: ATxdqUEs1Zbm6oVk1iLDp0vkXSMLyXTQ9GbjqNi-RXG3XiCpK3IVc4PpGrLJTZ4
+Message-ID: <CANDhNCrUhZktW=_h9YTZndmyHwe9YbUMG6uVYaEuQyuKsG4AEg@mail.gmail.com>
+Subject: Re: [PATCH] timekeeping: Prevent coarse clocks going backwards
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: Miroslav Lichvar <mlichvar@redhat.com>, LKML <linux-kernel@vger.kernel.org>, 
+	Stephen Boyd <sboyd@kernel.org>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
+	Frederic Weisbecker <frederic@kernel.org>, Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, 
+	kernel-team@android.com, Lei Chen <lei.chen@smartx.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add support for devmem TX in ncdevmem.
+On Sat, Apr 5, 2025 at 2:40=E2=80=AFPM Thomas Gleixner <tglx@linutronix.de>=
+ wrote:
+>
+> Lei Chen raised an issue with CLOCK_MONOTONIC_COARSE seeing time
+> inconsistencies. Lei tracked down that this was being caused by the
+> adjustment
+>
+>     tk->tkr_mono.xtime_nsec -=3D offset;
+>
+> which is made to compensate for the unaccumulated cycles in offset when t=
+he
+> multiplicator is adjusted forward, so that the non-_COARSE clockids don't
+> see inconsistencies.
+>
+> However, the _COARSE clockid getter functions use the adjusted xtime_nsec
+> value directly and do not compensate the negative offset via the
+> clocksource delta multiplied with the new multiplicator. In that case the
+> caller can observe time going backwards in consecutive calls.
+>
+> By design, this negative adjustment should be fine, because the logic run
+> from timekeeping_adjust() is done after it accumulated approximately
+>
+>      multiplicator * interval_cycles
+>
+> into xtime_nsec.  The accumulated value is always larger then the
+>
+>      mult_adj * offset
+>
+> value, which is subtracted from xtime_nsec. Both operations are done
+> together under the tk_core.lock, so the net change to xtime_nsec is alway=
+s
+> always be positive.
+>
+> However, do_adjtimex() calls into timekeeping_advance() as well, to
+> apply the NTP frequency adjustment immediately. In this case,
+> timekeeping_advance() does not return early when the offset is smaller
+> then interval_cycles. In that case there is no time accumulated into
+> xtime_nsec. But the subsequent call into timekeeping_adjust(), which
+> modifies the multiplicator, subtracts from xtime_nsec to correct for the
+> new multiplicator.
+>
+> Here because there was no accumulation, xtime_nsec becomes smaller than
+> before, which opens a window up to the next accumulation, where the
+> _COARSE clockid getters, which don't compensate for the offset, can
+> observe the inconsistency.
+>
+> This has been tried to be fixed by forwarding the timekeeper in the case
+> that adjtimex() adjusts the multiplier, which resets the offset to zero:
+>
+>   757b000f7b93 ("timekeeping: Fix possible inconsistencies in _COARSE clo=
+ckids")
+>
+> That works correctly, but unfortunately causes a regression on the
+> adjtimex() side. There are two issues:
+>
+>    1) The forwarding of the base time moves the update out of the origina=
+l
+>       period and establishes a new one.
+>
+>    2) The clearing of the accumulated NTP error is changing the behaviour=
+ as
+>       well.
+>
+> Userspace expects that multiplier/frequency updates are in effect, when t=
+he
+> syscall returns, so delaying the update to the next tick is not solving t=
+he
+> problem either.
+>
+> Commit 757b000f7b93 was reverted so that the established expectations of
+> user space implementations (ntpd, chronyd) are restored, but that obvious=
+ly
+> brought the inconsistencies back.
+>
+> One of the initial approaches to fix this was to establish a seperate
+> storage for the coarse time getter nanoseconds part by calculating it fro=
+m
+> the offset. That was dropped on the floor because not having yet another
+> state to maintain was simpler. But given the result of the above exercise=
+,
+> this solution turns out to be the right one. Bring it back in a slightly
+> modified form.
+>
+> The coarse time keeper uses xtime_nsec for calculating the nanoseconds pa=
+rt
+> of the coarse time stamp. After timekeeping_advance() adjusted the
+> multiplier in timekeeping_adjust(), the current time's nanosecond part is=
+:
+>
+>   nsec =3D (xtime_nsec + offset * mult) >> shift;
+>
+> Introduce timekeeper::coarse_nsec and store that nanoseconds part in it,
+> switch the time getter functions and the VDSO update to use that value.
+> coarse_nsec is cleared on all operations which forward or initialize the
+> timekeeper because those operations do not have a remaining offset.
+>
+> This leaves the adjtimex() behaviour unmodified and prevents coarse time
+> from going backwards.
+>
+> Fixes: da15cfdae033 ("time: Introduce CLOCK_REALTIME_COARSE")
+> Reported-by: Lei Chen <lei.chen@smartx.com>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Closes: https://lore.kernel.org/lkml/20250310030004.3705801-1-lei.chen@sm=
+artx.com/
 
-This is a combination of the ncdevmem from the devmem TCP series RFCv1
-which included the TX path, and work by Stan to include the netlink API
-and refactored on top of his generic memory_provider support.
 
-Signed-off-by: Mina Almasry <almasrymina@google.com>
-Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+> @@ -252,6 +261,7 @@ static void tk_setup_internals(struct ti
+>         tk->tkr_raw.clock =3D clock;
+>         tk->tkr_raw.mask =3D clock->mask;
+>         tk->tkr_raw.cycle_last =3D tk->tkr_mono.cycle_last;
+> +       tk->coarse_nsec =3D 0;
+>
+>         /* Do the ns -> cycle conversion first, using original mult */
+>         tmp =3D NTP_INTERVAL_LENGTH;
+> @@ -708,6 +718,12 @@ static void timekeeping_forward_now(stru
+>                 tk_normalize_xtime(tk);
+>                 delta -=3D incr;
+>         }
+> +
+> +       /*
+> +        * Clear the offset for the coarse time as the above forward
+> +        * brought the offset down to zero.
+> +        */
+> +       tk->coarse_nsec =3D 0;
+>  }
+...
+> @@ -1831,6 +1847,8 @@ void timekeeping_resume(void)
+>         /* Re-base the last cycle value */
+>         tks->tkr_mono.cycle_last =3D cycle_now;
+>         tks->tkr_raw.cycle_last  =3D cycle_now;
+> +       /* Reset the offset for the coarse time getters */
+> +       tks->coarse_nsec =3D 0;
+>
+>         tks->ntp_error =3D 0;
+>         timekeeping_suspended =3D 0;
 
----
 
-v5:
-- Remove unnecassyr socat bindings (Stan).
-- Add exit_wait=True (Stan)
-- Remove unnecessary -c arg to ncdevmem in check_tx.
+So using the clocksource-switch test in kselftest, I can pretty easily
+hit inconsistencies with this.
 
-v4:
-- Add TX test to devmem.py (Paolo).
+The reason is since we use the coarse_nsec as the nanosecond portion
+of the coarse clockids, I don't think we ever want to set it to zero,
+as whenever we do so, we lose the previous contents and cause the
+coarse time to jump back.
 
-v3:
-- Update ncdevmem docs to run validation with RX-only and RX-with-TX.
-- Fix build warnings (Stan).
-- Make the validation expect new lines in the pattern so we can have the
-  TX path behave like netcat (Stan).
-- Change ret to errno in error() calls (Stan).
-- Handle the case where client_ip is not provided (Stan).
-- Don't assume mid is <= 2000 (Stan).
+It seems more likely that we'd want to do something similar to
+tk_update_coarse_nsecs() filling it in with the shifted down
+tk->tkr_mono.xtime_nsec.
 
-v2:
-- make errors a static variable so that we catch instances where there
-  are less than 20 errors across different buffers.
-- Fix the issue where the seed is reset to 0 instead of its starting
-  value 1.
-- Use 1000ULL instead of 1000 to guard against overflow (Willem).
-- Do not set POLLERR (Willem).
-- Update the test to use the new interface where iov_base is the
-  dmabuf_offset.
-- Update the test to send 2 iov instead of 1, so we get some test
-  coverage over sending multiple iovs at once.
-- Print the ifindex the test is using, useful for debugging issues where
-  maybe the test may fail because the ifindex of the socket is different
-  from the dmabuf binding.
 
----
- .../selftests/drivers/net/hw/devmem.py        |  26 +-
- .../selftests/drivers/net/hw/ncdevmem.c       | 300 +++++++++++++++++-
- 2 files changed, 311 insertions(+), 15 deletions(-)
+> @@ -2152,6 +2170,33 @@ static u64 logarithmic_accumulation(stru
+>  }
+>
+>  /*
+> + * Update the nanoseconds part for the coarse time keepers. They can't r=
+ely
+> + * on xtime_nsec because xtime_nsec is adjusted when the multiplication
+> + * factor of the clock is adjusted. See timekeeping_apply_adjustment().
+> + *
+> + * This is required because tk_read::cycle_last must be advanced by
+> + * timekeeper::cycle_interval so that the accumulation happens with a
+> + * periodic reference.
+> + *
+> + * But that adjustment of xtime_nsec can make it go backward to compensa=
+te
+> + * for a larger multiplicator.
+> + *
+> + * timekeeper::offset contains the leftover cycles which were not accumu=
+lated.
+> + * Therefore the nanoseconds portion of the time when the clocksource wa=
+s
+> + * read in timekeeping_advance() is:
+> + *
+> + *     nsec =3D (xtime_nsec + offset * mult) >> shift;
+> + *
+> + * Calculate that value and store it in timekeeper::coarse_nsec, from wh=
+ere
+> + * the coarse time getters consume it.
+> + */
+> +static inline void tk_update_coarse_nsecs(struct timekeeper *tk, u64 off=
+set)
+> +{
+> +       offset *=3D tk->tkr_mono.mult;
+> +       tk->coarse_nsec =3D (tk->tkr_mono.xtime_nsec + offset) >> tk->tkr=
+_mono.shift;
+> +}
 
-diff --git a/tools/testing/selftests/drivers/net/hw/devmem.py b/tools/testing/selftests/drivers/net/hw/devmem.py
-index 3947e9157115..7fc686cf47a2 100755
---- a/tools/testing/selftests/drivers/net/hw/devmem.py
-+++ b/tools/testing/selftests/drivers/net/hw/devmem.py
-@@ -1,6 +1,7 @@
- #!/usr/bin/env python3
- # SPDX-License-Identifier: GPL-2.0
- 
-+from os import path
- from lib.py import ksft_run, ksft_exit
- from lib.py import ksft_eq, KsftSkipEx
- from lib.py import NetDrvEpEnv
-@@ -10,8 +11,7 @@ from lib.py import ksft_disruptive
- 
- def require_devmem(cfg):
-     if not hasattr(cfg, "_devmem_probed"):
--        port = rand_port()
--        probe_command = f"./ncdevmem -f {cfg.ifname}"
-+        probe_command = f"{cfg.bin_local} -f {cfg.ifname}"
-         cfg._devmem_supported = cmd(probe_command, fail=False, shell=True).ret == 0
-         cfg._devmem_probed = True
- 
-@@ -25,7 +25,7 @@ def check_rx(cfg) -> None:
-     require_devmem(cfg)
- 
-     port = rand_port()
--    listen_cmd = f"./ncdevmem -l -f {cfg.ifname} -s {cfg.addr_v['6']} -p {port}"
-+    listen_cmd = f"{cfg.bin_local} -l -f {cfg.ifname} -s {cfg.addr_v['6']} -p {port}"
- 
-     with bkg(listen_cmd) as socat:
-         wait_port_listen(port)
-@@ -34,9 +34,27 @@ def check_rx(cfg) -> None:
-     ksft_eq(socat.stdout.strip(), "hello\nworld")
- 
- 
-+@ksft_disruptive
-+def check_tx(cfg) -> None:
-+    cfg.require_ipver("6")
-+    require_devmem(cfg)
-+
-+    port = rand_port()
-+    listen_cmd = f"socat -U - TCP6-LISTEN:{port}"
-+
-+    with bkg(listen_cmd, exit_wait=True) as socat:
-+        wait_port_listen(port)
-+        cmd(f"echo -e \"hello\\nworld\"| {cfg.bin_remote} -f {cfg.ifname} -s {cfg.addr_v['6']} -p {port}", host=cfg.remote, shell=True)
-+
-+    ksft_eq(socat.stdout.strip(), "hello\nworld")
-+
-+
- def main() -> None:
-     with NetDrvEpEnv(__file__) as cfg:
--        ksft_run([check_rx],
-+        cfg.bin_local = path.abspath(path.dirname(__file__) + "/ncdevmem")
-+        cfg.bin_remote = cfg.remote.deploy(cfg.bin_local)
-+
-+        ksft_run([check_rx, check_tx],
-                  args=(cfg, ))
-     ksft_exit()
- 
-diff --git a/tools/testing/selftests/drivers/net/hw/ncdevmem.c b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
-index 2bf14ac2b8c6..f801a1b3545f 100644
---- a/tools/testing/selftests/drivers/net/hw/ncdevmem.c
-+++ b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
-@@ -9,22 +9,31 @@
-  *     ncdevmem -s <server IP> [-c <client IP>] -f eth1 -l -p 5201
-  *
-  *     On client:
-- *     echo -n "hello\nworld" | nc -s <server IP> 5201 -p 5201
-+ *     echo -n "hello\nworld" | \
-+ *		ncdevmem -s <server IP> [-c <client IP>] -p 5201 -f eth1
-  *
-- * Test data validation:
-+ * Note this is compatible with regular netcat. i.e. the sender or receiver can
-+ * be replaced with regular netcat to test the RX or TX path in isolation.
-+ *
-+ * Test data validation (devmem TCP on RX only):
-  *
-  *     On server:
-  *     ncdevmem -s <server IP> [-c <client IP>] -f eth1 -l -p 5201 -v 7
-  *
-  *     On client:
-  *     yes $(echo -e \\x01\\x02\\x03\\x04\\x05\\x06) | \
-- *             tr \\n \\0 | \
-- *             head -c 5G | \
-+ *             head -c 1G | \
-  *             nc <server IP> 5201 -p 5201
-  *
-+ * Test data validation (devmem TCP on RX and TX, validation happens on RX):
-  *
-- * Note this is compatible with regular netcat. i.e. the sender or receiver can
-- * be replaced with regular netcat to test the RX or TX path in isolation.
-+ *	On server:
-+ *	ncdevmem -s <server IP> [-c <client IP>] -l -p 5201 -v 8 -f eth1
-+ *
-+ *	On client:
-+ *	yes $(echo -e \\x01\\x02\\x03\\x04\\x05\\x06\\x07) | \
-+ *		head -c 1M | \
-+ *		ncdevmem -s <server IP> [-c <client IP>] -p 5201 -f eth1
-  */
- #define _GNU_SOURCE
- #define __EXPORTED_HEADERS__
-@@ -40,15 +49,18 @@
- #include <fcntl.h>
- #include <malloc.h>
- #include <error.h>
-+#include <poll.h>
- 
- #include <arpa/inet.h>
- #include <sys/socket.h>
- #include <sys/mman.h>
- #include <sys/ioctl.h>
- #include <sys/syscall.h>
-+#include <sys/time.h>
- 
- #include <linux/memfd.h>
- #include <linux/dma-buf.h>
-+#include <linux/errqueue.h>
- #include <linux/udmabuf.h>
- #include <linux/types.h>
- #include <linux/netlink.h>
-@@ -79,6 +91,8 @@ static int num_queues = -1;
- static char *ifname;
- static unsigned int ifindex;
- static unsigned int dmabuf_id;
-+static uint32_t tx_dmabuf_id;
-+static int waittime_ms = 500;
- 
- struct memory_buffer {
- 	int fd;
-@@ -92,6 +106,8 @@ struct memory_buffer {
- struct memory_provider {
- 	struct memory_buffer *(*alloc)(size_t size);
- 	void (*free)(struct memory_buffer *ctx);
-+	void (*memcpy_to_device)(struct memory_buffer *dst, size_t off,
-+				 void *src, int n);
- 	void (*memcpy_from_device)(void *dst, struct memory_buffer *src,
- 				   size_t off, int n);
- };
-@@ -152,6 +168,20 @@ static void udmabuf_free(struct memory_buffer *ctx)
- 	free(ctx);
- }
- 
-+static void udmabuf_memcpy_to_device(struct memory_buffer *dst, size_t off,
-+				     void *src, int n)
-+{
-+	struct dma_buf_sync sync = {};
-+
-+	sync.flags = DMA_BUF_SYNC_START | DMA_BUF_SYNC_WRITE;
-+	ioctl(dst->fd, DMA_BUF_IOCTL_SYNC, &sync);
-+
-+	memcpy(dst->buf_mem + off, src, n);
-+
-+	sync.flags = DMA_BUF_SYNC_END | DMA_BUF_SYNC_WRITE;
-+	ioctl(dst->fd, DMA_BUF_IOCTL_SYNC, &sync);
-+}
-+
- static void udmabuf_memcpy_from_device(void *dst, struct memory_buffer *src,
- 				       size_t off, int n)
- {
-@@ -169,6 +199,7 @@ static void udmabuf_memcpy_from_device(void *dst, struct memory_buffer *src,
- static struct memory_provider udmabuf_memory_provider = {
- 	.alloc = udmabuf_alloc,
- 	.free = udmabuf_free,
-+	.memcpy_to_device = udmabuf_memcpy_to_device,
- 	.memcpy_from_device = udmabuf_memcpy_from_device,
- };
- 
-@@ -187,14 +218,16 @@ void validate_buffer(void *line, size_t size)
- {
- 	static unsigned char seed = 1;
- 	unsigned char *ptr = line;
--	int errors = 0;
-+	unsigned char expected;
-+	static int errors;
- 	size_t i;
- 
- 	for (i = 0; i < size; i++) {
--		if (ptr[i] != seed) {
-+		expected = seed ? seed : '\n';
-+		if (ptr[i] != expected) {
- 			fprintf(stderr,
- 				"Failed validation: expected=%u, actual=%u, index=%lu\n",
--				seed, ptr[i], i);
-+				expected, ptr[i], i);
- 			errors++;
- 			if (errors > 20)
- 				error(1, 0, "validation failed.");
-@@ -393,6 +426,49 @@ static int bind_rx_queue(unsigned int ifindex, unsigned int dmabuf_fd,
- 	return -1;
- }
- 
-+static int bind_tx_queue(unsigned int ifindex, unsigned int dmabuf_fd,
-+			 struct ynl_sock **ys)
-+{
-+	struct netdev_bind_tx_req *req = NULL;
-+	struct netdev_bind_tx_rsp *rsp = NULL;
-+	struct ynl_error yerr;
-+
-+	*ys = ynl_sock_create(&ynl_netdev_family, &yerr);
-+	if (!*ys) {
-+		fprintf(stderr, "YNL: %s\n", yerr.msg);
-+		return -1;
-+	}
-+
-+	req = netdev_bind_tx_req_alloc();
-+	netdev_bind_tx_req_set_ifindex(req, ifindex);
-+	netdev_bind_tx_req_set_fd(req, dmabuf_fd);
-+
-+	rsp = netdev_bind_tx(*ys, req);
-+	if (!rsp) {
-+		perror("netdev_bind_tx");
-+		goto err_close;
-+	}
-+
-+	if (!rsp->_present.id) {
-+		perror("id not present");
-+		goto err_close;
-+	}
-+
-+	fprintf(stderr, "got tx dmabuf id=%d\n", rsp->id);
-+	tx_dmabuf_id = rsp->id;
-+
-+	netdev_bind_tx_req_free(req);
-+	netdev_bind_tx_rsp_free(rsp);
-+
-+	return 0;
-+
-+err_close:
-+	fprintf(stderr, "YNL failed: %s\n", (*ys)->err.msg);
-+	netdev_bind_tx_req_free(req);
-+	ynl_sock_destroy(*ys);
-+	return -1;
-+}
-+
- static void enable_reuseaddr(int fd)
- {
- 	int opt = 1;
-@@ -431,7 +507,7 @@ static int parse_address(const char *str, int port, struct sockaddr_in6 *sin6)
- 	return 0;
- }
- 
--int do_server(struct memory_buffer *mem)
-+static int do_server(struct memory_buffer *mem)
- {
- 	char ctrl_data[sizeof(int) * 20000];
- 	struct netdev_queue_id *queues;
-@@ -685,6 +761,206 @@ void run_devmem_tests(void)
- 	provider->free(mem);
- }
- 
-+static uint64_t gettimeofday_ms(void)
-+{
-+	struct timeval tv;
-+
-+	gettimeofday(&tv, NULL);
-+	return (tv.tv_sec * 1000ULL) + (tv.tv_usec / 1000ULL);
-+}
-+
-+static int do_poll(int fd)
-+{
-+	struct pollfd pfd;
-+	int ret;
-+
-+	pfd.revents = 0;
-+	pfd.fd = fd;
-+
-+	ret = poll(&pfd, 1, waittime_ms);
-+	if (ret == -1)
-+		error(1, errno, "poll");
-+
-+	return ret && (pfd.revents & POLLERR);
-+}
-+
-+static void wait_compl(int fd)
-+{
-+	int64_t tstop = gettimeofday_ms() + waittime_ms;
-+	char control[CMSG_SPACE(100)] = {};
-+	struct sock_extended_err *serr;
-+	struct msghdr msg = {};
-+	struct cmsghdr *cm;
-+	__u32 hi, lo;
-+	int ret;
-+
-+	msg.msg_control = control;
-+	msg.msg_controllen = sizeof(control);
-+
-+	while (gettimeofday_ms() < tstop) {
-+		if (!do_poll(fd))
-+			continue;
-+
-+		ret = recvmsg(fd, &msg, MSG_ERRQUEUE);
-+		if (ret < 0) {
-+			if (errno == EAGAIN)
-+				continue;
-+			error(1, errno, "recvmsg(MSG_ERRQUEUE)");
-+			return;
-+		}
-+		if (msg.msg_flags & MSG_CTRUNC)
-+			error(1, 0, "MSG_CTRUNC\n");
-+
-+		for (cm = CMSG_FIRSTHDR(&msg); cm; cm = CMSG_NXTHDR(&msg, cm)) {
-+			if (cm->cmsg_level != SOL_IP &&
-+			    cm->cmsg_level != SOL_IPV6)
-+				continue;
-+			if (cm->cmsg_level == SOL_IP &&
-+			    cm->cmsg_type != IP_RECVERR)
-+				continue;
-+			if (cm->cmsg_level == SOL_IPV6 &&
-+			    cm->cmsg_type != IPV6_RECVERR)
-+				continue;
-+
-+			serr = (void *)CMSG_DATA(cm);
-+			if (serr->ee_origin != SO_EE_ORIGIN_ZEROCOPY)
-+				error(1, 0, "wrong origin %u", serr->ee_origin);
-+			if (serr->ee_errno != 0)
-+				error(1, 0, "wrong errno %d", serr->ee_errno);
-+
-+			hi = serr->ee_data;
-+			lo = serr->ee_info;
-+
-+			fprintf(stderr, "tx complete [%d,%d]\n", lo, hi);
-+			return;
-+		}
-+	}
-+
-+	error(1, 0, "did not receive tx completion");
-+}
-+
-+static int do_client(struct memory_buffer *mem)
-+{
-+	char ctrl_data[CMSG_SPACE(sizeof(__u32))];
-+	struct sockaddr_in6 server_sin;
-+	struct sockaddr_in6 client_sin;
-+	struct ynl_sock *ys = NULL;
-+	struct msghdr msg = {};
-+	ssize_t line_size = 0;
-+	struct cmsghdr *cmsg;
-+	struct iovec iov[2];
-+	char *line = NULL;
-+	unsigned long mid;
-+	size_t len = 0;
-+	int socket_fd;
-+	__u32 ddmabuf;
-+	int opt = 1;
-+	int ret;
-+
-+	ret = parse_address(server_ip, atoi(port), &server_sin);
-+	if (ret < 0)
-+		error(1, 0, "parse server address");
-+
-+	socket_fd = socket(AF_INET6, SOCK_STREAM, 0);
-+	if (socket_fd < 0)
-+		error(1, socket_fd, "create socket");
-+
-+	enable_reuseaddr(socket_fd);
-+
-+	ret = setsockopt(socket_fd, SOL_SOCKET, SO_BINDTODEVICE, ifname,
-+			 strlen(ifname) + 1);
-+	if (ret)
-+		error(1, errno, "bindtodevice");
-+
-+	if (bind_tx_queue(ifindex, mem->fd, &ys))
-+		error(1, 0, "Failed to bind\n");
-+
-+	if (client_ip) {
-+		ret = parse_address(client_ip, atoi(port), &client_sin);
-+		if (ret < 0)
-+			error(1, 0, "parse client address");
-+
-+		ret = bind(socket_fd, &client_sin, sizeof(client_sin));
-+		if (ret)
-+			error(1, errno, "bind");
-+	}
-+
-+	ret = setsockopt(socket_fd, SOL_SOCKET, SO_ZEROCOPY, &opt, sizeof(opt));
-+	if (ret)
-+		error(1, errno, "set sock opt");
-+
-+	fprintf(stderr, "Connect to %s %d (via %s)\n", server_ip,
-+		ntohs(server_sin.sin6_port), ifname);
-+
-+	ret = connect(socket_fd, &server_sin, sizeof(server_sin));
-+	if (ret)
-+		error(1, errno, "connect");
-+
-+	while (1) {
-+		free(line);
-+		line = NULL;
-+		line_size = getline(&line, &len, stdin);
-+
-+		if (line_size < 0)
-+			break;
-+
-+		mid = (line_size / 2) + 1;
-+
-+		iov[0].iov_base = (void *)1;
-+		iov[0].iov_len = mid;
-+		iov[1].iov_base = (void *)(mid + 2);
-+		iov[1].iov_len = line_size - mid;
-+
-+		provider->memcpy_to_device(mem, (size_t)iov[0].iov_base, line,
-+					   iov[0].iov_len);
-+		provider->memcpy_to_device(mem, (size_t)iov[1].iov_base,
-+					   line + iov[0].iov_len,
-+					   iov[1].iov_len);
-+
-+		fprintf(stderr,
-+			"read line_size=%ld iov[0].iov_base=%lu, iov[0].iov_len=%lu, iov[1].iov_base=%lu, iov[1].iov_len=%lu\n",
-+			line_size, (unsigned long)iov[0].iov_base,
-+			iov[0].iov_len, (unsigned long)iov[1].iov_base,
-+			iov[1].iov_len);
-+
-+		msg.msg_iov = iov;
-+		msg.msg_iovlen = 2;
-+
-+		msg.msg_control = ctrl_data;
-+		msg.msg_controllen = sizeof(ctrl_data);
-+
-+		cmsg = CMSG_FIRSTHDR(&msg);
-+		cmsg->cmsg_level = SOL_SOCKET;
-+		cmsg->cmsg_type = SCM_DEVMEM_DMABUF;
-+		cmsg->cmsg_len = CMSG_LEN(sizeof(__u32));
-+
-+		ddmabuf = tx_dmabuf_id;
-+
-+		*((__u32 *)CMSG_DATA(cmsg)) = ddmabuf;
-+
-+		ret = sendmsg(socket_fd, &msg, MSG_ZEROCOPY);
-+		if (ret < 0)
-+			error(1, errno, "Failed sendmsg");
-+
-+		fprintf(stderr, "sendmsg_ret=%d\n", ret);
-+
-+		if (ret != line_size)
-+			error(1, errno, "Did not send all bytes");
-+
-+		wait_compl(socket_fd);
-+	}
-+
-+	fprintf(stderr, "%s: tx ok\n", TEST_PREFIX);
-+
-+	free(line);
-+	close(socket_fd);
-+
-+	if (ys)
-+		ynl_sock_destroy(ys);
-+
-+	return 0;
-+}
-+
- int main(int argc, char *argv[])
- {
- 	struct memory_buffer *mem;
-@@ -728,6 +1004,8 @@ int main(int argc, char *argv[])
- 
- 	ifindex = if_nametoindex(ifname);
- 
-+	fprintf(stderr, "using ifindex=%u\n", ifindex);
-+
- 	if (!server_ip && !client_ip) {
- 		if (start_queue < 0 && num_queues < 0) {
- 			num_queues = rxq_num(ifindex);
-@@ -778,7 +1056,7 @@ int main(int argc, char *argv[])
- 		error(1, 0, "Missing -p argument\n");
- 
- 	mem = provider->alloc(getpagesize() * NUM_PAGES);
--	ret = is_server ? do_server(mem) : 1;
-+	ret = is_server ? do_server(mem) : do_client(mem);
- 	provider->free(mem);
- 
- 	return ret;
--- 
-2.49.0.805.g082f7c87e0-goog
+Thinking more on this, I get that you're providing the offset to save
+the "at the point" time into the coarse value, but I think this ends
+up complicating things.
 
+Instead it seems like we should just do:
+  tk->coarse_nsec =3D tk->tkr_mono.xtime_nsec >> tk->tkr_mono.shift;
+
+However, we would need to skip doing the update if we didn't
+accumulate anything. This would perserve the coarse clockid only
+updating on tick interval boundaries and avoid the potential negative
+correction to the xtime_nsec when we do the frequency adjustment.
+
+I've got a patch in testing that is avoiding the inconsistency so far.
+I'll try to send it out tomorrow.
+
+thanks
+-john
 
