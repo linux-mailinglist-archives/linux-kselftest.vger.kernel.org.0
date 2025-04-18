@@ -1,274 +1,370 @@
-Return-Path: <linux-kselftest+bounces-31153-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31154-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD0DCA93B64
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Apr 2025 18:54:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9ABCEA93B7E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Apr 2025 18:58:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ADD011B62E47
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Apr 2025 16:54:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D96817B3279
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Apr 2025 16:56:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE4AD1DED51;
-	Fri, 18 Apr 2025 16:53:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 986D7217734;
+	Fri, 18 Apr 2025 16:57:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j+LMRDGB"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b="IS8/DfFB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender3-pp-f112.zoho.com (sender3-pp-f112.zoho.com [136.143.184.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FBA621A43B;
-	Fri, 18 Apr 2025 16:53:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744995228; cv=none; b=MnB26BJKBn/Ui9s0E6JEQJpd54N9DLPboRx+8D7ITPBhBSLBSdIetxGOTXcDz7mYQNJTXDR0wuELAv5ULO7BEfd+ZFRgqAnQfh5DWEMzK41myjprikyjYT2zTl9ErskUm0j8586am87zLJSMuV2xqR21+SxG+XbU3BqrUDY/aoI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744995228; c=relaxed/simple;
-	bh=tZYYONwzDkApmp/34Q7EaXBholg+tMiIkIlNEDsexvg=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t/WJ2gfqTJh4JTwFruzqZpIVkjMN6N06VyudifVLbc8gQjOoM3oeWRjBIbylhLUIt4vQu8mHdQTdPlnH1T3V6fk9Y4g9EXivl/jo6nuT/4B7hd41Cic787MwVYAUIuuo0lBfI8BhYidZQqGSKVb8H2BYPzibXiKGZj7u4uuOPJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j+LMRDGB; arc=none smtp.client-ip=209.85.219.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-6e8ec399427so16345876d6.2;
-        Fri, 18 Apr 2025 09:53:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744995226; x=1745600026; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:subject:cc:to:from:date:feedback-id
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=3t/WaZrLOk89oF+EDQCe/b1X08N9WTsCNvmuCONFWag=;
-        b=j+LMRDGB0RNfCBFu3APD/ADBdWP2yGo3HeB2kYiJH3BPx8xnrhsnofsceuQonW6lCi
-         GXeAPl09qTocEpxQDsKS6fRg/dR0lMRDYA8X/meXr/ZVbrIEJYIsAfWDDZYYQFcexvi9
-         fUSR1TJEKvFkQYd7aHXEAVUILic2aTvc8MolyQ7H/7J90yOQ3Er6yvaY7C1afDoAiryu
-         ReQGPK2JYNYc1urNodWKW+EfXrVnnmy1CnHk4Ov8XRN+rFbr7/MgfmISwDWm8q5B8XHK
-         Io2Vu7KHED0RimZWTIKwIWKjC1b3ZrucMtIoUzBqlHtWaATL0FK0uYHP0CKKLRxKhtc5
-         cDKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744995226; x=1745600026;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:subject:cc:to:from:date:feedback-id
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3t/WaZrLOk89oF+EDQCe/b1X08N9WTsCNvmuCONFWag=;
-        b=mlP3mzrpt46SPfX1kLokiPsQE/b+Vi0SPDGCNwdVtM9nIeg7p3yRLd8nHadvHXAY0K
-         TsWdOCmsQPS8iPGf0u5EC+UPz2abUodEFvGeI/MfBrn2DI96+q7lLonh+2kAZDBrTdPg
-         eDXd7zL69EeBDXv+KQVF7prAzu674Ps0gEI8rEk5651d1s6OH/D7T4YuPpF3vUjBQTLs
-         wfTixHzyqBk9+5iCzAASSpjEto89WSHgozSfXtgKXEHV7KeCxGvylPNReBFw549LBg1v
-         vJvyxC642JuZP4zjo+zaSRmex6V5Dh5fw1Kfkm1QYUp5rlPXDaRmPCQzQGD12XIGzkPd
-         Su4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUBE9oRQ/5V7XpC9Uqzs7EYWPxNwXOqc5ETip11M0SyD72BkJLl2suYg/ULkkNB6L6WId/xEnz4un8ZS1Ml@vger.kernel.org, AJvYcCUg9TlaW61hVdd8zQeQbnXDTnKgt3P9qN+TBh/Cva/mRMCKExizPbSW8vQL2ko140x1FKOPufV6C5EqLM2o0Eo=@vger.kernel.org, AJvYcCUnFsiTdzk9fMp5WkAz+ijRCHJj6YjPT3EOuMf1Q+X+/0qAv/bQLr14H6yL2uuufi+R80ZeZMUfSwR/@vger.kernel.org, AJvYcCVmJ5DruueRyRDgAFTxbD8U5XfCByrfgPrcYOzwzPy8yGPoWdtipm6Vlsrzh1ouIpkhDULXaQISJFkO@vger.kernel.org, AJvYcCWKJKFAyMsM//5kd8nKyRSexgm/3MiQwMOXg7MZID0um801q7Gau5SpW0O1WFRESomNrNG6yBSNvcp+Ajw=@vger.kernel.org, AJvYcCWXbrtg/SRQq6HA7oYojQ+fUmQ83zsC+BwRoG8MMr0anmVGrjI2wpC+qj+WHa1bJAzE4HEJ6v79lObf0v26fY8d@vger.kernel.org, AJvYcCWdeHJC4ySQx4Uhe6Lsrn8yq4FQ9VGrKeLSJtGaQvGedNoKD+1y9RM8y2hPWvwvFHn/k0TobzEk@vger.kernel.org, AJvYcCXkLbhSUggWgFML2i+pVusc/Gkw1Ovmy19Q4m8QjCi2247rsgxW+DFvTfexj/QxdWATjF2od/vBu6ZT1wXU@vger.kernel.org
-X-Gm-Message-State: AOJu0YwyNH3ysd8YlIFxiW1fXvdlUhGx3V+ws9B9hLOMJptpczWTmP14
-	P6zG2WOQi4BuSNGFqcB6cScdTc9o0f/nFUCjYnCzZXB1k0QFLJ4m
-X-Gm-Gg: ASbGncsLiG+sCa/xL5Uq2LcLGp38ZWOyl9BVLyhpuBNTLR/DzeeT8CbhK5WDZOizDSR
-	Kr8u9rmSjJPirv7kUR08JQnG1/RIutB+YbU576v8h6amF+mThZPczc0oiMtJiiBpmKkxIKzCuOW
-	4Hnrr3F7nqVVT3qaUhnH/ManTz4mWKlTc7Qj7aWVF8WHUbRt+q/BsE835NQkowdRWrPnN0QODXP
-	pqYKSZmOvbIvFNdzJcQsOkDldgV/+UbvD8ldUEykbjjK1LWw2Cp74ZJecpKu45u7M7A7aHkHL2j
-	ZbLJL02Br13SjGpYZL5IurAMvVeubGDYC4VA4auzSTwSU1iZTuXsKIv97QVkg+ge0y13X3ZQCHr
-	4Xi1H7Q0WKZdrHIjBL5Lk/9QdmyqtW6k=
-X-Google-Smtp-Source: AGHT+IFK5F7pjTh+gDI22NM3J/gMlBfdXSYFP16c7YCh2IMcJ2ycP9QTVW7R2aFWqMe//5+hwErVFQ==
-X-Received: by 2002:ad4:5d4a:0:b0:6e6:61f1:458a with SMTP id 6a1803df08f44-6f2c454e561mr61427996d6.14.1744995225599;
-        Fri, 18 Apr 2025 09:53:45 -0700 (PDT)
-Received: from fauth-a1-smtp.messagingengine.com (fauth-a1-smtp.messagingengine.com. [103.168.172.200])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6f2c2b0dc58sm12429256d6.30.2025.04.18.09.53.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Apr 2025 09:53:45 -0700 (PDT)
-Message-ID: <68028399.0c0a0220.389db7.61aa@mx.google.com>
-X-Google-Original-Message-ID: <aAKDlapFVulZac94@winterfell.>
-Received: from phl-compute-01.internal (phl-compute-01.phl.internal [10.202.2.41])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 066C51200043;
-	Fri, 18 Apr 2025 12:53:44 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-01.internal (MEProxy); Fri, 18 Apr 2025 12:53:44 -0400
-X-ME-Sender: <xms:l4MCaOS0MZu7VrDm1Ob2LRUYzATn3lvCrSx3mxKtRJynmiJf91vuQw>
-    <xme:l4MCaDz51H7htPFXnN1I5J2eYclIkY2hxlzLEpBwVsysaX8a6d4yyVxY1Z2XsvVGA
-    osS__YVT1a0RizI-w>
-X-ME-Received: <xmr:l4MCaL1eShu7QA0LgrTDuktgHW2xyyXGbxMkMlvWru2HnE6VgzKO-vQd-oIGFw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfedvieekucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnegoufhushhpvggtthffohhmrghinhculdegledmnecujfgu
-    rhepfffhvfevuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpeeuohhquhhnuc
-    fhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrthht
-    vghrnhepkeekheeuudefgeelfedthfduheehkeellefhleegveeljeduheeufeelkeejie
-    egnecuffhomhgrihhnpehgihhthhhusgdrihhopdhkvghrnhgvlhdrohhrghenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvg
-    hsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheeh
-    hedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvg
-    dpnhgspghrtghpthhtohepgeejpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopeht
-    rghmihhrugesghhmrghilhdrtghomhdprhgtphhtthhopehmrghsrghhihhrohihsehkvg
-    hrnhgvlhdrohhrghdprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhgpdhr
-    tghpthhtohepohhjvggurgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghlvgigrd
-    hgrgihnhhorhesghhmrghilhdrtghomhdprhgtphhtthhopehgrghrhiesghgrrhihghhu
-    ohdrnhgvthdprhgtphhtthhopegsjhhorhhnfegpghhhsehprhhothhonhhmrghilhdrtg
-    homhdprhgtphhtthhopegsvghnnhhordhlohhsshhinhesphhrohhtohhnrdhmvgdprhgt
-    phhtthhopegrrdhhihhnuggsohhrgheskhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:l4MCaKCQ5_AOxgrM9RUujgkgseBZnmKKzmalnkhJG6SECBu9lWm2pg>
-    <xmx:l4MCaHgYTO7zyl3noT53XHpiSgVpbmcFFmbFQNR8UOf2kvASWVyHpA>
-    <xmx:l4MCaGrX6PPw9obSYJcN3qrnBS7WfC_zXPJu5mxchXy92dGdyigYSQ>
-    <xmx:l4MCaKiFAgA2HoDBXSctPHo_XFldUBwHaFxEgeDfvkjr87N1ON2s_A>
-    <xmx:mIMCaGSluDRYYRt5sBgRuiMWR_Dz1ykK0mZeKIfuwnIwbJoOeQ4WxXkb>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 18 Apr 2025 12:53:43 -0400 (EDT)
-Date: Fri, 18 Apr 2025 09:53:41 -0700
-From: Boqun Feng <boqun.feng@gmail.com>
-To: Tamir Duberstein <tamird@gmail.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Abdiel Janulgue <abdiel.janulgue@gmail.com>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	FUJITA Tomonori <fujita.tomonori@gmail.com>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Frederic Weisbecker <frederic@kernel.org>,	Lyude Paul <lyude@redhat.com>,
- Thomas Gleixner <tglx@linutronix.de>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com, linux-pci@vger.kernel.org,
-	linux-block@vger.kernel.org, devicetree@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v10 5/6] rust: enable `clippy::cast_lossless` lint
-References: <20250418-ptr-as-ptr-v10-0-3d63d27907aa@gmail.com>
- <20250418-ptr-as-ptr-v10-5-3d63d27907aa@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50147217701;
+	Fri, 18 Apr 2025 16:57:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.184.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744995468; cv=pass; b=J0xLgt+EYlG9ZuoRQ0BEF+AKxkV4gDIf+qOSzPvgveA2mxlIf2GDIaIcJ0xQwzpvLbly1wVB5ZoPfqMSd7VbJymZwwfYD4ufSFw6oYL+/jbQqiVBY+5x9leyo2JjQ04K8OgIggCewoglxdO+BemqktFG36rrKcKQ2HrCzbBFEDk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744995468; c=relaxed/simple;
+	bh=j394sdPoy1TFOK1NiTfP3tI9XfMt6T/lkVA9MdGbBUA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Gvum4r7R3M08biiILy9SiMCsOpfBc1HSThdhLnXEyeY3+eyGjsQwBhbgpwWlQRa7Vv/d8WQo9K47gtMmUqVC2zf0rS2TCJEsPNvq9Qr9JEH58XfXZAUCG1OqwkqOgofrJYvfseWp0Up2DOebdW8gi2skQrvtgzLuHT+mIK1BqNk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b=IS8/DfFB; arc=pass smtp.client-ip=136.143.184.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1744995421; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=m1l6bh+A2YrsA39PhYyRcGzWvfFc1vfiHGbqvfePWe2fXvlmZMsR3f+xtv5xHus4El9eObu2BwNQC29/S8JaBWhKUz55wEqsQsniqh6xHdOw3P+5Q40eKPzhsyzugIz5zCfHxM3jlaD7UzAg5BPPZOqlVrR8kUH1IrzDoKxTwmE=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1744995421; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=oRPC2ItHMkxFaau4AxBrLR7CttxC8Jjy7+M9RiyFnhw=; 
+	b=ZdzrIlvZS1D5UM9N1jOIql5Zy3jmNgQ8XF2aIPRUls0wUWCf9kjOX6ADfdNbbM57uuTXoPafzwkKIeQFpMUUBa/1f+RS/1whnJpS5Xw2M2+xlvGRKXAecI5Il7Jfo3v/xLloY1fg8UEsRsVA+TtPiWuYdbC/lqK4in6jkuAa9QY=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=usama.anjum@collabora.com;
+	dmarc=pass header.from=<usama.anjum@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1744995421;
+	s=zohomail; d=collabora.com; i=usama.anjum@collabora.com;
+	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=oRPC2ItHMkxFaau4AxBrLR7CttxC8Jjy7+M9RiyFnhw=;
+	b=IS8/DfFBioAvmltZyKjibFhrc5tM0FULPhNrd7ugoZ7GYyBqEMfbdGY86hHXUycG
+	PMXjzBSEIci84IM1ni01CVdBk/NsYgVIEtPg+o9fB1D66H9/W7TgsK0KzUqDqPAp3IV
+	W3J8RfbzAu5rI9a+PjRToKhZEwbalvzPDLwgx8WY=
+Received: by mx.zohomail.com with SMTPS id 1744995418289730.5392988040163;
+	Fri, 18 Apr 2025 09:56:58 -0700 (PDT)
+Message-ID: <6477df86-86ca-40df-989b-babe181f6fdb@collabora.com>
+Date: Fri, 18 Apr 2025 21:56:50 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 01/32] selftests: harness: Add kselftest harness
+ selftest
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+ Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
+ Willy Tarreau <w@1wt.eu>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?=
+ <linux@weissschuh.net>, Kees Cook <kees@kernel.org>
+Cc: Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20250411-nolibc-kselftest-harness-v3-0-4d9c0295893f@linutronix.de>
+ <20250411-nolibc-kselftest-harness-v3-1-4d9c0295893f@linutronix.de>
+Content-Language: en-US
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20250411-nolibc-kselftest-harness-v3-1-4d9c0295893f@linutronix.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250418-ptr-as-ptr-v10-5-3d63d27907aa@gmail.com>
+X-ZohoMailClient: External
 
-On Fri, Apr 18, 2025 at 11:37:21AM -0400, Tamir Duberstein wrote:
-> Before Rust 1.29.0, Clippy introduced the `cast_lossless` lint [1]:
+On 4/11/25 2:00 PM, Thomas Weißschuh wrote:
+> Add a selftest for the kselftest harness itself so any changes can be
+> validated.
 > 
-> > Rust’s `as` keyword will perform many kinds of conversions, including
-> > silently lossy conversions. Conversion functions such as `i32::from`
-> > will only perform lossless conversions. Using the conversion functions
-> > prevents conversions from becoming silently lossy if the input types
-> > ever change, and makes it clear for people reading the code that the
-> > conversion is lossless.
-> 
-> While this doesn't eliminate unchecked `as` conversions, it makes such
-> conversions easier to scrutinize.  It also has the slight benefit of
-> removing a degree of freedom on which to bikeshed. Thus apply the
-> changes and enable the lint -- no functional change intended.
-> 
-> Link: https://rust-lang.github.io/rust-clippy/master/index.html#cast_lossless [1]
-> Suggested-by: Benno Lossin <benno.lossin@proton.me>
-> Link: https://lore.kernel.org/all/D8ORTXSUTKGL.1KOJAGBM8F8TN@proton.me/
-> Reviewed-by: Benno Lossin <benno.lossin@proton.me>
+> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
-
-Regards,
-Boqun
-
-> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 > ---
->  Makefile                        | 1 +
->  drivers/gpu/drm/drm_panic_qr.rs | 2 +-
->  rust/bindings/lib.rs            | 1 +
->  rust/kernel/net/phy.rs          | 4 ++--
->  rust/uapi/lib.rs                | 1 +
->  5 files changed, 6 insertions(+), 3 deletions(-)
+>  MAINTAINERS                                        |   1 +
+>  tools/testing/selftests/Makefile                   |   1 +
+>  .../testing/selftests/kselftest_harness/.gitignore |   2 +
+>  tools/testing/selftests/kselftest_harness/Makefile |   7 ++
+>  .../selftests/kselftest_harness/harness-selftest.c | 129 +++++++++++++++++++++
+>  .../kselftest_harness/harness-selftest.expected    |  62 ++++++++++
+>  .../kselftest_harness/harness-selftest.sh          |  13 +++
+>  7 files changed, 215 insertions(+)
 > 
-> diff --git a/Makefile b/Makefile
-> index 57080a64913f..eb5a942241a2 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -476,6 +476,7 @@ export rust_common_flags := --edition=2021 \
->  			    -Wclippy::all \
->  			    -Wclippy::as_ptr_cast_mut \
->  			    -Wclippy::as_underscore \
-> +			    -Wclippy::cast_lossless \
->  			    -Wclippy::ignored_unit_patterns \
->  			    -Wclippy::mut_mut \
->  			    -Wclippy::needless_bitwise_bool \
-> diff --git a/drivers/gpu/drm/drm_panic_qr.rs b/drivers/gpu/drm/drm_panic_qr.rs
-> index f2a99681b998..7555513a4fd8 100644
-> --- a/drivers/gpu/drm/drm_panic_qr.rs
-> +++ b/drivers/gpu/drm/drm_panic_qr.rs
-> @@ -386,7 +386,7 @@ fn next(&mut self) -> Option<Self::Item> {
->          match self.segment {
->              Segment::Binary(data) => {
->                  if self.offset < data.len() {
-> -                    let byte = data[self.offset] as u16;
-> +                    let byte = u16::from(data[self.offset]);
->                      self.offset += 1;
->                      Some((byte, 8))
->                  } else {
-> diff --git a/rust/bindings/lib.rs b/rust/bindings/lib.rs
-> index 0486a32ed314..b105a0d899cc 100644
-> --- a/rust/bindings/lib.rs
-> +++ b/rust/bindings/lib.rs
-> @@ -25,6 +25,7 @@
->  )]
->  
->  #[allow(dead_code)]
-> +#[allow(clippy::cast_lossless)]
->  #[allow(clippy::ptr_as_ptr)]
->  #[allow(clippy::undocumented_unsafe_blocks)]
->  mod bindings_raw {
-> diff --git a/rust/kernel/net/phy.rs b/rust/kernel/net/phy.rs
-> index a59469c785e3..f821480ad72b 100644
-> --- a/rust/kernel/net/phy.rs
-> +++ b/rust/kernel/net/phy.rs
-> @@ -142,7 +142,7 @@ pub fn is_autoneg_enabled(&self) -> bool {
->          // SAFETY: The struct invariant ensures that we may access
->          // this field without additional synchronization.
->          let bit_field = unsafe { &(*self.0.get())._bitfield_1 };
-> -        bit_field.get(13, 1) == bindings::AUTONEG_ENABLE as u64
-> +        bit_field.get(13, 1) == u64::from(bindings::AUTONEG_ENABLE)
->      }
->  
->      /// Gets the current auto-negotiation state.
-> @@ -426,7 +426,7 @@ impl<T: Driver> Adapter<T> {
->          // where we hold `phy_device->lock`, so the accessors on
->          // `Device` are okay to call.
->          let dev = unsafe { Device::from_raw(phydev) };
-> -        T::match_phy_device(dev) as i32
-> +        T::match_phy_device(dev).into()
->      }
->  
->      /// # Safety
-> diff --git a/rust/uapi/lib.rs b/rust/uapi/lib.rs
-> index f03b7aead35a..d5dab4dfabec 100644
-> --- a/rust/uapi/lib.rs
-> +++ b/rust/uapi/lib.rs
-> @@ -14,6 +14,7 @@
->  #![cfg_attr(test, allow(unsafe_op_in_unsafe_fn))]
->  #![allow(
->      clippy::all,
-> +    clippy::cast_lossless,
->      clippy::ptr_as_ptr,
->      clippy::undocumented_unsafe_blocks,
->      dead_code,
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 96b82704950184bd71623ff41fc4df31e4c7fe87..9d5278df33c8b63b3b08155991b789b3a998f80e 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -21742,6 +21742,7 @@ F:	include/linux/seccomp.h
+>  F:	include/uapi/linux/seccomp.h
+>  F:	kernel/seccomp.c
+>  F:	tools/testing/selftests/kselftest_harness.h
+> +F:	tools/testing/selftests/kselftest_harness/
+>  F:	tools/testing/selftests/seccomp/*
+>  K:	\bsecure_computing
+>  K:	\bTIF_SECCOMP\b
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index c77c8c8e3d9bdd8047c9cb7722c3830447e504e5..27592909a5969da009d71be6c8330fe6779e7354 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -48,6 +48,7 @@ TARGETS += ipc
+>  TARGETS += ir
+>  TARGETS += kcmp
+>  TARGETS += kexec
+> +TARGETS += kselftest_harness
+>  TARGETS += kvm
+>  TARGETS += landlock
+>  TARGETS += lib
+> diff --git a/tools/testing/selftests/kselftest_harness/.gitignore b/tools/testing/selftests/kselftest_harness/.gitignore
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..e4e476a333c912602161448bc61787732a6fa2e2
+> --- /dev/null
+> +++ b/tools/testing/selftests/kselftest_harness/.gitignore
+> @@ -0,0 +1,2 @@
+> +/harness-selftest
+> +/harness-selftest.seen
+> diff --git a/tools/testing/selftests/kselftest_harness/Makefile b/tools/testing/selftests/kselftest_harness/Makefile
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..0617535a6ce424ff977e033b0a3a01c3117aefcf
+> --- /dev/null
+> +++ b/tools/testing/selftests/kselftest_harness/Makefile
+> @@ -0,0 +1,7 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +TEST_GEN_PROGS_EXTENDED := harness-selftest
+> +TEST_PROGS := harness-selftest.sh
+> +EXTRA_CLEAN := harness-selftest.seen
+> +
+> +include ../lib.mk
+> diff --git a/tools/testing/selftests/kselftest_harness/harness-selftest.c b/tools/testing/selftests/kselftest_harness/harness-selftest.c
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..8d39e7a0b99c41a5d33edfe2dbf875cac04c098d
+> --- /dev/null
+> +++ b/tools/testing/selftests/kselftest_harness/harness-selftest.c
+> @@ -0,0 +1,129 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <stdio.h>
+> +
+> +#ifndef NOLIBC
+> +#include <sys/resource.h>
+> +#include <sys/prctl.h>
+> +#endif
+> +
+> +/* Avoid any inconsistencies */
+> +#define TH_LOG_STREAM stdout
+> +
+> +#include "../kselftest_harness.h"
+> +
+> +TEST(standalone_pass) {
+> +	TH_LOG("before");
+> +	ASSERT_EQ(0, 0);
+> +	EXPECT_EQ(0, 0);
+> +	TH_LOG("after");
+> +}
+> +
+> +TEST(standalone_fail) {
+> +	TH_LOG("before");
+> +	EXPECT_EQ(0, 0);
+> +	EXPECT_EQ(0, 1);
+> +	ASSERT_EQ(0, 1);
+> +	TH_LOG("after");
+> +}
+> +
+> +TEST_SIGNAL(signal_pass, SIGUSR1) {
+> +	TH_LOG("before");
+> +	ASSERT_EQ(0, 0);
+> +	TH_LOG("after");
+> +	kill(getpid(), SIGUSR1);
+> +}
+> +
+> +TEST_SIGNAL(signal_fail, SIGUSR1) {
+> +	TH_LOG("before");
+> +	ASSERT_EQ(0, 1);
+> +	TH_LOG("after");
+> +	kill(getpid(), SIGUSR1);
+> +}
+> +
+> +FIXTURE(fixture) {
+> +	pid_t testpid;
+> +};
+> +
+> +FIXTURE_SETUP(fixture) {
+> +	TH_LOG("setup");
+> +	self->testpid = getpid();
+> +}
+> +
+> +FIXTURE_TEARDOWN(fixture) {
+> +	TH_LOG("teardown same-process=%d", self->testpid == getpid());
+> +}
+> +
+> +TEST_F(fixture, pass) {
+> +	TH_LOG("before");
+> +	ASSERT_EQ(0, 0);
+> +	TH_LOG("after");
+> +}
+> +
+> +TEST_F(fixture, fail) {
+> +	TH_LOG("before");
+> +	ASSERT_EQ(0, 1);
+> +	TH_LOG("after");
+> +}
+> +
+> +TEST_F_TIMEOUT(fixture, timeout, 1) {
+> +	TH_LOG("before");
+> +	sleep(2);
+> +	TH_LOG("after");
+> +}
+> +
+> +FIXTURE(fixture_parent) {
+> +	pid_t testpid;
+> +};
+> +
+> +FIXTURE_SETUP(fixture_parent) {
+> +	TH_LOG("setup");
+> +	self->testpid = getpid();
+> +}
+> +
+> +FIXTURE_TEARDOWN_PARENT(fixture_parent) {
+> +	TH_LOG("teardown same-process=%d", self->testpid == getpid());
+> +}
+> +
+> +TEST_F(fixture_parent, pass) {
+> +	TH_LOG("before");
+> +	ASSERT_EQ(0, 0);
+> +	TH_LOG("after");
+> +}
+> +
+> +FIXTURE(fixture_setup_failure) {
+> +	pid_t testpid;
+> +};
+> +
+> +FIXTURE_SETUP(fixture_setup_failure) {
+> +	TH_LOG("setup");
+> +	self->testpid = getpid();
+> +	ASSERT_EQ(0, 1);
+> +}
+> +
+> +FIXTURE_TEARDOWN(fixture_setup_failure) {
+> +	TH_LOG("teardown same-process=%d", self->testpid == getpid());
+> +}
+> +
+> +TEST_F(fixture_setup_failure, pass) {
+> +	TH_LOG("before");
+> +	ASSERT_EQ(0, 0);
+> +	TH_LOG("after");
+> +}
+> +
+> +int main(int argc, char **argv)
+> +{
+> +	/*
+> +	 * The harness uses abort() to signal assertion failures, which triggers coredumps.
+> +	 * This may be useful to debug real failures but not for this selftest, disable them.
+> +	 */
+> +	struct rlimit rlimit = {
+> +		.rlim_cur = 0,
+> +		.rlim_max = 0,
+> +	};
+> +
+> +	prctl(PR_SET_DUMPABLE, 0, 0, 0, 0);
+> +	setrlimit(RLIMIT_CORE, &rlimit);
+> +
+> +	return test_harness_run(argc, argv);
+> +}
+> diff --git a/tools/testing/selftests/kselftest_harness/harness-selftest.expected b/tools/testing/selftests/kselftest_harness/harness-selftest.expected
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..1aa6461db90d4e7cc0679f19b69aadf4032875ec
+> --- /dev/null
+> +++ b/tools/testing/selftests/kselftest_harness/harness-selftest.expected
+> @@ -0,0 +1,62 @@
+> +TAP version 13
+> +1..9
+> +# Starting 9 tests from 4 test cases.
+> +#  RUN           global.standalone_pass ...
+> +# harness-selftest.c:16:standalone_pass:before
+> +# harness-selftest.c:19:standalone_pass:after
+> +#            OK  global.standalone_pass
+> +ok 1 global.standalone_pass
+> +#  RUN           global.standalone_fail ...
+> +# harness-selftest.c:23:standalone_fail:before
+> +# harness-selftest.c:25:standalone_fail:Expected 0 (0) == 1 (1)
+> +# harness-selftest.c:26:standalone_fail:Expected 0 (0) == 1 (1)
+> +# standalone_fail: Test terminated by assertion
+> +#          FAIL  global.standalone_fail
+> +not ok 2 global.standalone_fail
+> +#  RUN           global.signal_pass ...
+> +# harness-selftest.c:31:signal_pass:before
+> +# harness-selftest.c:33:signal_pass:after
+> +#            OK  global.signal_pass
+> +ok 3 global.signal_pass
+> +#  RUN           global.signal_fail ...
+> +# harness-selftest.c:38:signal_fail:before
+> +# harness-selftest.c:39:signal_fail:Expected 0 (0) == 1 (1)
+> +# signal_fail: Test terminated by assertion
+> +#          FAIL  global.signal_fail
+> +not ok 4 global.signal_fail
+> +#  RUN           fixture.pass ...
+> +# harness-selftest.c:49:pass:setup
+> +# harness-selftest.c:58:pass:before
+> +# harness-selftest.c:60:pass:after
+> +# harness-selftest.c:54:pass:teardown same-process=1
+> +#            OK  fixture.pass
+> +ok 5 fixture.pass
+> +#  RUN           fixture.fail ...
+> +# harness-selftest.c:49:fail:setup
+> +# harness-selftest.c:64:fail:before
+> +# harness-selftest.c:65:fail:Expected 0 (0) == 1 (1)
+> +# harness-selftest.c:54:fail:teardown same-process=1
+> +# fail: Test terminated by assertion
+> +#          FAIL  fixture.fail
+> +not ok 6 fixture.fail
+> +#  RUN           fixture.timeout ...
+> +# harness-selftest.c:49:timeout:setup
+> +# harness-selftest.c:70:timeout:before
+> +# timeout: Test terminated by timeout
+> +#          FAIL  fixture.timeout
+> +not ok 7 fixture.timeout
+> +#  RUN           fixture_parent.pass ...
+> +# harness-selftest.c:80:pass:setup
+> +# harness-selftest.c:89:pass:before
+> +# harness-selftest.c:91:pass:after
+> +# harness-selftest.c:85:pass:teardown same-process=0
+> +#            OK  fixture_parent.pass
+> +ok 8 fixture_parent.pass
+> +#  RUN           fixture_setup_failure.pass ...
+> +# harness-selftest.c:99:pass:setup
+> +# harness-selftest.c:101:pass:Expected 0 (0) == 1 (1)
+> +# pass: Test terminated by assertion
+> +#          FAIL  fixture_setup_failure.pass
+> +not ok 9 fixture_setup_failure.pass
+> +# FAILED: 4 / 9 tests passed.
+> +# Totals: pass:4 fail:5 xfail:0 xpass:0 skip:0 error:0
+> diff --git a/tools/testing/selftests/kselftest_harness/harness-selftest.sh b/tools/testing/selftests/kselftest_harness/harness-selftest.sh
+> new file mode 100755
+> index 0000000000000000000000000000000000000000..fe72d16370fe5bc16706289ff4e1ff44db180017
+> --- /dev/null
+> +++ b/tools/testing/selftests/kselftest_harness/harness-selftest.sh
+> @@ -0,0 +1,13 @@
+> +#!/bin/sh
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# Selftest for kselftest_harness.h
+> +#
+> +
+> +set -e
+> +
+> +DIR="$(dirname $(readlink -f "$0"))"
+> +
+> +"$DIR"/harness-selftest > harness-selftest.seen || true
+> +
+> +diff -u "$DIR"/harness-selftest.expected harness-selftest.seen
 > 
-> -- 
-> 2.49.0
-> 
+
+
+-- 
+Regards,
+Usama
 
