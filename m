@@ -1,97 +1,103 @@
-Return-Path: <linux-kselftest+bounces-31117-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31118-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23E6FA92F60
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Apr 2025 03:39:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3088A92F6A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Apr 2025 03:43:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2E35D7B0086
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Apr 2025 01:37:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 602701B65CF2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Apr 2025 01:43:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C22361E8342;
-	Fri, 18 Apr 2025 01:37:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 280F21DF75D;
+	Fri, 18 Apr 2025 01:42:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="CK2rtsJw"
+	dkim=pass (2048-bit key) header.d=byte-forge-io.20230601.gappssmtp.com header.i=@byte-forge-io.20230601.gappssmtp.com header.b="tZHOk7Pz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C645E1E51F5
-	for <linux-kselftest@vger.kernel.org>; Fri, 18 Apr 2025 01:37:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58F471DF277
+	for <linux-kselftest@vger.kernel.org>; Fri, 18 Apr 2025 01:42:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744940273; cv=none; b=kEfMDOSsFO8hfsfaFwYFyQcJQINTAn1liyCSolkPsGxg3SDQb6d9PwlGAND/SI4k4/qErKH36zCIj6RlBiahjexH9Gty9OKsXui36FsFc7W6tn10n+UjyH9PIvJS39I0s666o4pc+UMqvdDvipVDUjzvufcWIk+zcAG1xvqCrtY=
+	t=1744940538; cv=none; b=IIxMUkLRNBEVFdxK4wOzcRUNYDZCTG3craXfe5tksKBDIMprRPSqDbqSv18MM2k9FOX8E2k/y/1WCz8M/ZlxZS0MItjmOnhisBrlMCESiLWCfbiqD99yygarg01D30//1p5OK+4/cH6C62Q+T+TbdNrQ+nL0Z3RdslSmbLTHry0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744940273; c=relaxed/simple;
-	bh=5isKImih2WAb/F2yZrBoG1nc7SxgJF4zQ9WtVoGOqQU=;
+	s=arc-20240116; t=1744940538; c=relaxed/simple;
+	bh=AsXerO6M3JJeGimaY8r23ZEYRge1XS9d6tD5VYo6WLQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hamCzFZmJWzW8ib++CLlthOm4nEPGCim2gP3z1KKsbEe95LKM/va3gr3teOMsDT52NxnKk1XjeGAgRBpkqQhMkxZ1aQX5bUVC7hAzQd8L5Ub+qJvlwFKqdnz6Ia7hBQlMTveSTZ4HS7pQq6kxiydcMkdyW1dJ/b5hBRX1K8M/AY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=CK2rtsJw; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3015001f862so1121311a91.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Apr 2025 18:37:50 -0700 (PDT)
+	 MIME-Version; b=TrnbsjCx/P/jwEyik3GGLe6hDBGA+c1TisT+Ub7dXKd6RAVi0PHOjLoEjTWBSk6waWc3UbHpzl1z+r3IPiQ9dJtBxnLynB9BH12IOUlxOuWl2ALSGjWNAhXuv74SzyjtxCIcj3GA6wcT/fnIQdltG+bqsBRBbzCfrG/XbQNsvVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=antoniohickey.com; spf=pass smtp.mailfrom=byte-forge.io; dkim=pass (2048-bit key) header.d=byte-forge-io.20230601.gappssmtp.com header.i=@byte-forge-io.20230601.gappssmtp.com header.b=tZHOk7Pz; arc=none smtp.client-ip=209.85.128.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=antoniohickey.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=byte-forge.io
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-6fee50bfea5so12382017b3.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Apr 2025 18:42:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastly.com; s=google; t=1744940270; x=1745545070; darn=vger.kernel.org;
+        d=byte-forge-io.20230601.gappssmtp.com; s=20230601; t=1744940535; x=1745545335; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qsW2tptfFjso20mcti4Mqp8BKgow+rWkfzTJM2yOxR4=;
-        b=CK2rtsJwSQOW3WZE+jQPK5kxSCjeRb2OZeXEEh0r4xSzkyxRSe8BUdxMq/IGiTxTFO
-         nJvWprk2b9Rxh5fayTx0liCUk7zfBLCsXAV5ozgpyb+f7ho68P0iEaewUVvIq9Kbk/Ad
-         cjdQKseWY2NWldC0RueXcMrydXgvO8P95ZBew=
+        bh=3KVr9YoaGaQgWb5xariEP7OGZvSaNc2U9G9atBahdE8=;
+        b=tZHOk7PzZ5hFQbMPVsYyOaQUAZ3JAJ1orsikVgKRG9OEAyR4jScQ7Yr4ElW5hRnL21
+         OmFOuol0VAqCdbX+Jh/8qGV1MR8S4q+xt5Bb46XcVYPolCbXYZEoXPr3vcyJzXci5ZKt
+         XaYILBnoIimuWv1t21Cql7K6U6bLLLYpePG6ZIGqIPqaAE7KdCmTUs0aNWhyR+hGBD+h
+         ibiSxKauIUoACs7eJ2BAOTUm+wvSY2mfS/pElIV6o2q7HOFO7QlrBy99M+4U4YvZODG9
+         bhn/m5/jbQ+CPBlhcKGIg4lFz2j4Oz3ITZujljPXixUGDSnnZJ/d8tvBySuCI5rPzrhM
+         3/wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744940270; x=1745545070;
+        d=1e100.net; s=20230601; t=1744940535; x=1745545335;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qsW2tptfFjso20mcti4Mqp8BKgow+rWkfzTJM2yOxR4=;
-        b=R1JDG/NRtZuBWde3XE0rFf/w2uq44Ahakj8xkHZU6K3I9w2EJNrrPlZkhoNzSGe9HA
-         ly3lHuOZf9U3x+EKx5mpRV18rsK9ngY7uw2rfGLn/4xg3G6U14zLSN3zZ2k6fy8o2VLq
-         r3LOAc5vAdBPxqONrliifQpjGGjJa3ffxUDeuorGeOh1EZy9v3p63BRkbncR0zCWc/cS
-         ID7Kd47TwAbIKazPidrfWihtXvTcGSn5Bn+PXpw0F4kgZd9vZqwQPtsSAQBQpscp1Jkh
-         kUzOfOgzKJRTV9l+MTFKNkDm0JTx404Bcwo0ylitY7W/w5dpbt1PeSiSUBVZNLYZlSKN
-         932Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUsiXvcfwqo+PqbMKmELUGnDb1t+g/aEnjeTQwBrhT/P+/OIgyybQ+x2TPIcid6T1b1rEuqmTJEyc81vzdn6BU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy4A+RlJAsJ1a/EdVPCMXbRACsYK/bvZSTevOeKyyBPtFgvUMfl
-	UL6SCc0WNH9o/ccvpOJE6IfuAjwp6oAjR0ckzpbW4SqQDbdKjXHelVk3Swr4fIM=
-X-Gm-Gg: ASbGncvLHdi+Te4Lzi6A5yaZvDNRlgHEAMxX3EiPrVnT8lKTfAMgAP9xP5oa9B76dPH
-	VYjcRdW/WZoAlXDdBNld9O+VPLpVKOVBnPsts1Lqu8I0IPOZD5UMaGMTuFQRT2WufvV+GzPXOXo
-	Ogxx9MilkjIwaP1bWHbZ/DOOskDIgLt6f1AxItAMBWMuq9IzKb9p+72uOeKxAK5tjZaFLOMZrIr
-	ZcKFwVfPmIkaa+3aN1wYSLbiQV5JAKliltiLGLYvaWuJ28tJw/K4LZ9U4Y+8uaLulkk4kbOIZLN
-	3yCGVM+SiNfETsjx9WdSSKVQgGHpReABfHxPQfdFRk6BOnPM0Evz/OnHlV4=
-X-Google-Smtp-Source: AGHT+IEBM+dr8qCKWbxlJkdrIj4JsBo+lV0XGAheAzqt3MqfLaRT2FSWdNWTE5tc821wHEYJSxvyZA==
-X-Received: by 2002:a17:90b:3b8d:b0:2ee:aed2:c15c with SMTP id 98e67ed59e1d1-3087bbaeb98mr1365692a91.28.1744940270069;
-        Thu, 17 Apr 2025 18:37:50 -0700 (PDT)
-Received: from localhost.localdomain ([2620:11a:c019:0:65e:3115:2f58:c5fd])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3087df21278sm131772a91.29.2025.04.17.18.37.48
+        bh=3KVr9YoaGaQgWb5xariEP7OGZvSaNc2U9G9atBahdE8=;
+        b=Yu4p74Kdfd4A2C/ZMCPB7lqJwqISAsAPn9VAefrdPdvGzlU0WYeYT8+dGZTYUvXpd2
+         74PgW9HXVKeX7qGedxLcQpOsKM7zcJWbsL8nhE0fcEZmJwBiBmXAeeRqdaOvyHOFPFAu
+         nVus7g89wCN0qtFq0G8Wr4VhebSuj2My+XAxXvJkjkqR39dJqPRIMZOtoMOo6ow3b7N/
+         UdsSB8kDzl9oeK113LC88QVQKoTpK/H/N8QRq+NbqZ/+Xk9nGqgLDWG6rYFs2yNK2nUX
+         jeyJOH9Vz4meAUP1k8gd1iy+nzIC5WW4TJOj4mX+Pqp945dKIlFNEVv3N03AByWKM6mb
+         LWRg==
+X-Forwarded-Encrypted: i=1; AJvYcCWa/0Oh4EweWBt8JErGYpT2gnPUXIp+z97FwD6frHSQl9Zlt7ZmADNfGfVgzbYUrVr9/mDGKvExgzjKPKgml3Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YynghK1oa3PANOJreDXjw9erX7m1ne8ouUcNwvR/zyz/JV+xCtl
+	ZE1VVZxA45slf5pbSV1eZ3g0FpzxgDLLABMm191F+wrV0dWBdz8/119Q/rgaNww=
+X-Gm-Gg: ASbGncuyXe80irTeMqOH8cl0i7zLWagcIajDo924by2Etr71h3NDCNV3eE8quVNPU9w
+	NRAdpLTy6+UHn1FJ/yKuEPv8WoWKT9Uq+dEkcLDQTfFMOtAwx9ufHQF6a9thGZR5+tR9C4+XGyt
+	/M07gydmPeQVXL14rL9gA3KYdW979UrqAoke0Lkq2hbcnzDFJeJMPXye8s+EpXVAXbmDR3eH+GJ
+	tbjnhw1at/ZQhJSlRUSZBDZ64fchyjNG+0jTvEdG6Bnlui0viz3AO7kbj3tC5xAEhLGu2io5wST
+	i5DUhXI/uk00ePkLChL8k/iV82XjPJMMXsFONVB+hMCWz3Y0tH42SkMPWt6UjbeKMWBN8xrAH11
+	TXGPpt7P7pkTEUvmCQO/wEjWy69cCBHgqXfCr
+X-Google-Smtp-Source: AGHT+IE/O6gWkQMozzU/sZ0vQ7iAMIJZ80Gw3gnlvoeuFzX09jFzx3stefvWq4XPYCQQb119QbF5Vg==
+X-Received: by 2002:a05:690c:670b:b0:6fb:9c08:4980 with SMTP id 00721157ae682-706cce0e007mr15660347b3.27.1744940535286;
+        Thu, 17 Apr 2025 18:42:15 -0700 (PDT)
+Received: from Machine.localdomain (107-219-75-226.lightspeed.wepbfl.sbcglobal.net. [107.219.75.226])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-706ca44fd13sm2804597b3.20.2025.04.17.18.42.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Apr 2025 18:37:49 -0700 (PDT)
-From: Joe Damato <jdamato@fastly.com>
-To: netdev@vger.kernel.org
-Cc: kuba@kernel.org,
-	pabeni@redhat.com,
-	shaw.leon@gmail.com,
-	Joe Damato <jdamato@fastly.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	linux-kernel@vger.kernel.org (open list),
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-	bpf@vger.kernel.org (open list:XDP (eXpress Data Path):Keyword:(?:\b|_)xdp(?:\b|_))
-Subject: [PATCH net-next v3 3/3] selftests: drv-net: Test that NAPI ID is non-zero
-Date: Fri, 18 Apr 2025 01:37:05 +0000
-Message-ID: <20250418013719.12094-4-jdamato@fastly.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250418013719.12094-1-jdamato@fastly.com>
-References: <20250418013719.12094-1-jdamato@fastly.com>
+        Thu, 17 Apr 2025 18:42:14 -0700 (PDT)
+From: Antonio Hickey <contact@antoniohickey.com>
+To: Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>,
+	Rae Moar <rmoar@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>
+Cc: Antonio Hickey <contact@antoniohickey.com>,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v6 05/18] rust: kunit: refactor to use `&raw [const|mut]`
+Date: Thu, 17 Apr 2025 21:41:26 -0400
+Message-ID: <20250418014143.888022-6-contact@antoniohickey.com>
+X-Mailer: git-send-email 2.48.1
+In-Reply-To: <20250418014143.888022-1-contact@antoniohickey.com>
+References: <20250418014143.888022-1-contact@antoniohickey.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -100,167 +106,55 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Test that the SO_INCOMING_NAPI_ID of a network file descriptor is
-non-zero. This ensures that either the core networking stack or, in some
-cases like netdevsim, the driver correctly sets the NAPI ID.
+Replacing all occurrences of `addr_of!(place)` and `addr_of_mut!(place)`
+with `&raw const place` and `&raw mut place` respectively.
 
-Signed-off-by: Joe Damato <jdamato@fastly.com>
+This will allow us to reduce macro complexity, and improve consistency
+with existing reference syntax as `&raw const`, `&raw mut` are similar
+to `&`, `&mut` making it fit more naturally with other existing code.
+
+Suggested-by: Benno Lossin <benno.lossin@proton.me>
+Link: https://github.com/Rust-for-Linux/linux/issues/1148
+Signed-off-by: Antonio Hickey <contact@antoniohickey.com>
 ---
- .../testing/selftests/drivers/net/.gitignore  |  1 +
- tools/testing/selftests/drivers/net/Makefile  |  6 +-
- .../testing/selftests/drivers/net/napi_id.py  | 24 ++++++
- .../selftests/drivers/net/napi_id_helper.c    | 83 +++++++++++++++++++
- 4 files changed, 113 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/drivers/net/napi_id.py
- create mode 100644 tools/testing/selftests/drivers/net/napi_id_helper.c
+ rust/kernel/kunit.rs | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/drivers/net/.gitignore b/tools/testing/selftests/drivers/net/.gitignore
-index ec746f374e85..72d2124fd513 100644
---- a/tools/testing/selftests/drivers/net/.gitignore
-+++ b/tools/testing/selftests/drivers/net/.gitignore
-@@ -1,2 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+napi_id_helper
- xdp_helper
-diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
-index 0c95bd944d56..47247c2ef948 100644
---- a/tools/testing/selftests/drivers/net/Makefile
-+++ b/tools/testing/selftests/drivers/net/Makefile
-@@ -6,9 +6,13 @@ TEST_INCLUDES := $(wildcard lib/py/*.py) \
- 		 ../../net/net_helper.sh \
- 		 ../../net/lib.sh \
- 
--TEST_GEN_FILES := xdp_helper
-+TEST_GEN_FILES := \
-+	napi_id_helper \
-+	xdp_helper \
-+# end of TEST_GEN_FILES
- 
- TEST_PROGS := \
-+	napi_id.py \
- 	netcons_basic.sh \
- 	netcons_fragmented_msg.sh \
- 	netcons_overflow.sh \
-diff --git a/tools/testing/selftests/drivers/net/napi_id.py b/tools/testing/selftests/drivers/net/napi_id.py
-new file mode 100755
-index 000000000000..54e51633a70a
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/napi_id.py
-@@ -0,0 +1,24 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+from lib.py import ksft_run, ksft_exit
-+from lib.py import ksft_eq, NetDrvEpEnv
-+from lib.py import bkg, cmd, rand_port, NetNSEnter
-+
-+def test_napi_id(cfg) -> None:
-+    port = rand_port()
-+    bin_remote = cfg.remote.deploy(cfg.test_dir / "napi_id_helper")
-+    listen_cmd = f"{bin_remote} {cfg.addr_v['4']} {port}"
-+
-+    with bkg(listen_cmd, ksft_wait=3) as server:
-+        cmd(f"echo a | socat - TCP:{cfg.addr_v['4']}:{port}", host=cfg.remote, shell=True)
-+
-+    ksft_eq(0, server.ret)
-+
-+def main() -> None:
-+    with NetDrvEpEnv(__file__) as cfg:
-+        ksft_run([test_napi_id], args=(cfg,))
-+    ksft_exit()
-+
-+if __name__ == "__main__":
-+    main()
-diff --git a/tools/testing/selftests/drivers/net/napi_id_helper.c b/tools/testing/selftests/drivers/net/napi_id_helper.c
-new file mode 100644
-index 000000000000..7e8e7d373b61
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/napi_id_helper.c
-@@ -0,0 +1,83 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <errno.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <arpa/inet.h>
-+#include <sys/socket.h>
-+
-+#include "ksft.h"
-+
-+int main(int argc, char *argv[])
-+{
-+	struct sockaddr_in address;
-+	unsigned int napi_id;
-+	unsigned int port;
-+	socklen_t optlen;
-+	char buf[1024];
-+	int opt = 1;
-+	int server;
-+	int client;
-+	int ret;
-+
-+	server = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-+	if (server < 0) {
-+		perror("socket creation failed");
-+		if (errno == EAFNOSUPPORT)
-+			return -1;
-+		return 1;
-+	}
-+
-+	port = atoi(argv[2]);
-+
-+	if (setsockopt(server, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt))) {
-+		perror("setsockopt");
-+		return 1;
-+	}
-+
-+	address.sin_family = AF_INET;
-+	inet_pton(AF_INET, argv[1], &address.sin_addr);
-+	address.sin_port = htons(port);
-+
-+	if (bind(server, (struct sockaddr *)&address, sizeof(address)) < 0) {
-+		perror("bind failed");
-+		return 1;
-+	}
-+
-+	if (listen(server, 1) < 0) {
-+		perror("listen");
-+		return 1;
-+	}
-+
-+	ksft_ready();
-+
-+	client = accept(server, NULL, 0);
-+	if (client < 0) {
-+		perror("accept");
-+		return 1;
-+	}
-+
-+	optlen = sizeof(napi_id);
-+	ret = getsockopt(client, SOL_SOCKET, SO_INCOMING_NAPI_ID, &napi_id,
-+			 &optlen);
-+	if (ret != 0) {
-+		perror("getsockopt");
-+		return 1;
-+	}
-+
-+	read(client, buf, 1024);
-+
-+	ksft_wait();
-+
-+	if (napi_id == 0) {
-+		fprintf(stderr, "napi ID is 0\n");
-+		return 1;
-+	}
-+
-+	close(client);
-+	close(server);
-+
-+	return 0;
-+}
+diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
+index 1604fb6a5b1b..9f8165b15a37 100644
+--- a/rust/kernel/kunit.rs
++++ b/rust/kernel/kunit.rs
+@@ -130,9 +130,9 @@ unsafe impl Sync for UnaryAssert {}
+             unsafe {
+                 $crate::bindings::__kunit_do_failed_assertion(
+                     kunit_test,
+-                    core::ptr::addr_of!(LOCATION.0),
++                    &raw const LOCATION.0,
+                     $crate::bindings::kunit_assert_type_KUNIT_ASSERTION,
+-                    core::ptr::addr_of!(ASSERTION.0.assert),
++                    &raw const ASSERTION.0.assert,
+                     Some($crate::bindings::kunit_unary_assert_format),
+                     core::ptr::null(),
+                 );
+@@ -261,7 +261,7 @@ macro_rules! kunit_unsafe_test_suite {
+                     // (as documented) must be valid for the lifetime of
+                     // the suite (i.e., static).
+                     test_cases: unsafe {
+-                        ::core::ptr::addr_of_mut!($test_cases)
++                        (&raw mut $test_cases)
+                             .cast::<::kernel::bindings::kunit_case>()
+                     },
+                     suite_init: None,
+@@ -283,7 +283,7 @@ macro_rules! kunit_unsafe_test_suite {
+             #[cfg_attr(not(target_os = "macos"), link_section = ".kunit_test_suites")]
+             static mut KUNIT_TEST_SUITE_ENTRY: *const ::kernel::bindings::kunit_suite =
+                 // SAFETY: `KUNIT_TEST_SUITE` is static.
+-                unsafe { ::core::ptr::addr_of_mut!(KUNIT_TEST_SUITE) };
++                unsafe { &raw mut KUNIT_TEST_SUITE };
+         };
+     };
+ }
 -- 
-2.43.0
+2.48.1
 
 
