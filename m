@@ -1,404 +1,129 @@
-Return-Path: <linux-kselftest+bounces-31191-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31192-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 438ADA941D8
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Apr 2025 07:48:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EF04A941DF
+	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Apr 2025 07:56:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E1571710EA
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Apr 2025 05:48:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C2ECD19E0E39
+	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Apr 2025 05:56:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56622147C9B;
-	Sat, 19 Apr 2025 05:48:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B760914901B;
+	Sat, 19 Apr 2025 05:56:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hrU6msr6"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="O0M2k4EM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FA3B823DE
-	for <linux-kselftest@vger.kernel.org>; Sat, 19 Apr 2025 05:47:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D83A3184F
+	for <linux-kselftest@vger.kernel.org>; Sat, 19 Apr 2025 05:55:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745041681; cv=none; b=JN3OeGWtgJLuRckNE43sE4Q/zLUaBS/pAO8eEuWovwmKzxakVDyt0zVu5ZbOYT6IRCx0ezBf6W8JtnYV/z3OItiXRPQh/JlQD1g2jcBJBlJvR0145D1pVnVxPDlIJFriWrnHMSqQ9lkHgJ6yun/e4J1wJdBxwwsq7uPRkYUc+8w=
+	t=1745042161; cv=none; b=qUWz19x+2x7yNZtdcopyB85IGpmaHtGN/VgW4RfGp9hjcf9lB3VcgE766Qf3rZSVVJCapldQWe/MbbTpNgncB9/VfPgwxOC40PeiWOK219MzKNWM1R12Cq1ED1W/ZQfTHqZ1rPAP3xLcZWzqIBcuvaD16/PY+B6Rd+oxCbRWQXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745041681; c=relaxed/simple;
-	bh=T36w7T6WsGB+nWqm2COg4Z23poGoMCRvgw0i8WcZNv4=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=gKKn1WmDMJG1J6NPV+bl/pj/rM3nR66TBi7OBDFzwrLzpYliU9b8K1rSynYPn7GG2IVKaPD0v3Ir07cIxwjnFwhbfl5ymV5IGJ4IC90t+ffEXvXPmxVuDow+I35OtPWMKFBnZgq/3uJQiZfR1KJh3ckpihB/uOIYXSKyIFNngGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jstultz.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hrU6msr6; arc=none smtp.client-ip=209.85.210.201
+	s=arc-20240116; t=1745042161; c=relaxed/simple;
+	bh=Ow5OzIdQrw1DFiXgXxbjMJWQK3tqwXy5Fav+FGiBbw0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bV9PLfpeHcRftcrUG3hBBH8jQQzTCxK6oWbY6LQrcI1uiAMynF8vsUD0jJpWZWlsCab2Q4yWBusyPilnCcMX4RM9zmBjtz8uLTXzx7iKqFK7Oze/eiJcztc/FGNiz1Ak7MAGmpi5IwVFp2e1BsPAWno//BrVnsx4OpZe69dapvc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=O0M2k4EM; arc=none smtp.client-ip=209.85.167.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jstultz.bounces.google.com
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-7369c5ed395so2479786b3a.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Apr 2025 22:47:59 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-54991d85f99so3850227e87.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Apr 2025 22:55:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1745041678; x=1745646478; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SdJKpwbPcy6gRTD8c2n1oCcw85CayJPijKUia1p0ZF4=;
-        b=hrU6msr6kFo/5RIEHAUUsVtB9T9y5V/BUzTd7Nm4DCI7SXfPovv9aXkq+k99M5frsD
-         UB8jucdoFf7hoYuAsr6HeQeg1hPMBLzLFWylUhQhLv1J1IoDBuycoXK3VlGGt1XQ432x
-         LHiAwOFVp1nr0N3OVsVKaB7/Le6q8x5v03vsFdmEaS1hS3w2GOFl/hryKTZgM3v0UAk9
-         qk36xXTsJJ5/hxWCG5EGVGfA5HbO6SHM73QLg4OQ8d22YMOfxes6KlCLMUCpXolm1yxA
-         ZAedSXxr6q8PY5T9Ijh6ViHH6tDnTl06yqGzOXGiA7CbpkkIFVZZvDYidF9fzPtwnpl1
-         H49w==
+        d=google.com; s=20230601; t=1745042158; x=1745646958; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XdPIwZMbbH/v4IfyGs8wVOWQZOeGXcJa+MlXzZtV0wg=;
+        b=O0M2k4EMdNYKsB4wsF2xOYGGIev4+1sujkeVG6+tfZKZaQFTz6BKg7QbBwhCKrW8qv
+         JEN0E6jW/YDV90DpLYp5MccTWuD0+eA/SoQxNyL9MNPXiqnR41FSosKRTOiWwBgqMEVl
+         DW2hBqQfOxmQuFKQg4+WbJ3lRP3hrGOvrSrbll2FTMout70QdgLC2HefLM00QQ3isfSE
+         8ihm0YYoKs2dl1DJMixvBiuiQCMuu6xlu5P4qBaEhLoKgXB6C9mW2Y8VD3mFNe4eU4+Z
+         8Mf3faMGCSbidIyjb8nENdlYIgWyiwz+cahiKWrZ1fP9HLkf5VjIVT4vA4EAfzBFZba+
+         E6WA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745041678; x=1745646478;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SdJKpwbPcy6gRTD8c2n1oCcw85CayJPijKUia1p0ZF4=;
-        b=Bo6goN1L9z2Q8HFHD+EKb1FAMnChpOuCHeYeyfeQN6hZ/5EUTrnplI1IUFjMJjUio4
-         JtemAOkX9236/2H8u5h37kxjNF+89pjh7BfQqROeV7jBSQk9sNb22CZh4bXJnwcXlo6H
-         5WPfIQKKh4lp/7vyypRYrE3pRZ2MfnbfPl99CNUkSVO8Dh5P0PlqHFYPGKLHuTLFYNuL
-         0w8il5ePFs6E3JVRP/KH2zTME01agjf7yooTSOBB5p3VUhD/TSJPZoD8Rn8xs/ioeQXD
-         dLzRJ8OqaHAIn6mMNYxVw/QgZImUKRLn5ioEeC806I6yyeZzQVlRVUrculkJBVvW2+ou
-         znGw==
-X-Forwarded-Encrypted: i=1; AJvYcCXE2AgluO7K2CiE1ZuT/1AjEn9685NxLxHf+hzLCLpXck/6eTeNqLptP5vutGaeFtarHn2VHzunmW0atsdLLf8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyPqzJMmTRuagv0PbMAmSHggaj37CgVKBjgGvieMzM4SOjdtFkN
-	2T5xZ9NXO6UomJr5hXUCqXKafUcoY+7PTB7aQpvMP4pl5xYUGDFGDoOcHJLcezYMK1DdZObD1cJ
-	s1eQ+
-X-Google-Smtp-Source: AGHT+IG1zUCrEEgDh4YEOCfxrp+PRvSy7bLVCAiyGydhxQAJdgGbPUV4CQEDGgo07a33wuJ5mEF+r/MZQKJQ
-X-Received: from pfbjc2.prod.google.com ([2002:a05:6a00:6c82:b0:73c:26eb:39b0])
- (user=jstultz job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:1305:b0:736:42a8:a742
- with SMTP id d2e1a72fcca58-73dc14ccd73mr6440107b3a.11.1745041678543; Fri, 18
- Apr 2025 22:47:58 -0700 (PDT)
-Date: Fri, 18 Apr 2025 22:46:52 -0700
-In-Reply-To: <CANDhNCrNYuxP7xqNLKWGnhMOBEHGhD9-FceNAj7n=fQUsLwvMA@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1745042158; x=1745646958;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XdPIwZMbbH/v4IfyGs8wVOWQZOeGXcJa+MlXzZtV0wg=;
+        b=KgIBb45/7liIvbbV89UOzUlwqUt8BtMP20b6Y5lNJjixkY+2J7dnjb70MrmHxH0YqD
+         rpnt7AHPBUSJghF2BP97wffVs5/fpOaumBAyArf5uw5cOagkHPO/uHaaGqi0g96VABUq
+         Saw/B3RvI+5rLJTMAYlcNlIM/r/fCbBuUkNax7dcHguZYuK07QzwOoBtr7PwrY9a+TMH
+         vfOfD5Q0xmd1VHO1kB5+xALAh9ohT/RUFefdIHjzMuQdEhXDOUA3FYmSGSiYridSapu9
+         HiEKxFGUdzHJ4GW8N5NY1vwxAziiX70k+efY9zlhQ0rzkT2YYA9a9Lj9MFVJaok18YUM
+         q+3g==
+X-Forwarded-Encrypted: i=1; AJvYcCUXxHlzB9fbuchCObPaVvlLD7Ix7KWbO1qfPOkPIwtt6PyB2M4WHIxI90GLJy1t/lIuTmBcfLheXiHsf8y5u7A=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3NbzEbWfytm5+Bd3r21tNPu7eqQQb1dMneniIbtEYwYuP268l
+	9ARmAONSG9WS7xBKIhP5XLqplb9Vh/Rt3YesuL4GVKS8TJo9SPaUil8Nzpa86ShZ7nIgRRxESqH
+	4LOTu0uW16kP3NJXnlnfnhUOKcLNJA1e8JGM=
+X-Gm-Gg: ASbGncsViKDUNY0lFAkaID9SKerdoMGKkpi2NrgEPu471NfkfCZ+WnOVpxPzDPpTf4C
+	3yKdU9dfHL98PIMBBbjekD3bnLrggcXkY8ZU7Rl2X0742S2R7ahIYdb9uHMhvgbmwcG6SjJ+col
+	nMEnmDGQOoDC0sCyUmLJ0cNvrPDKKAyY2v4yfsu0ewaD5PgYHgm7pWh+WrgOUUeQ==
+X-Google-Smtp-Source: AGHT+IEcHxjZqljPDfrwZ+WwyAACsxSZEdF+AnzuNtbkAxWcFAZWBScBT4hoQ7usLT55L4a5MJ5+ffD8mkHxy7acQLs=
+X-Received: by 2002:a05:6512:31cf:b0:54b:117f:686f with SMTP id
+ 2adb3069b0e04-54d6e7f4e06mr1275061e87.28.1745042157705; Fri, 18 Apr 2025
+ 22:55:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <CANDhNCrNYuxP7xqNLKWGnhMOBEHGhD9-FceNAj7n=fQUsLwvMA@mail.gmail.com>
-X-Mailer: git-send-email 2.49.0.805.g082f7c87e0-goog
-Message-ID: <20250419054706.2319105-1-jstultz@google.com>
-Subject: [PATCH v3] timekeeping: Prevent coarse clocks going backwards
+MIME-Version: 1.0
+References: <20250320200306.1712599-1-jstultz@google.com> <Z-KURRE_Gr72Xv_n@localhost>
+ <874izezv3c.ffs@tglx> <Z-Vx8kV4M3khPknC@localhost> <Z-qsg6iDGlcIJulJ@localhost>
+ <87o6xgwftc.ffs@tglx> <Z-vL3cVZuQ8XQXhG@localhost> <87iknnwxa4.ffs@tglx>
+ <Z-5HlSUEh1xgCi4f@localhost> <877c41wkis.ffs@tglx> <87h632wals.ffs@tglx>
+ <CANDhNCrUhZktW=_h9YTZndmyHwe9YbUMG6uVYaEuQyuKsG4AEg@mail.gmail.com>
+ <87tt6mq8jz.ffs@tglx> <87r01qq7hp.ffs@tglx>
+In-Reply-To: <87r01qq7hp.ffs@tglx>
 From: John Stultz <jstultz@google.com>
-To: LKML <linux-kernel@vger.kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Miroslav Lichvar <mlichvar@redhat.com>, 
-	Lei Chen <lei.chen@smartx.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Anna-Maria Behnsen <anna-maria@linutronix.de>, Frederic Weisbecker <frederic@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, kernel-team@android.com, 
-	John Stultz <jstultz@google.com>
+Date: Fri, 18 Apr 2025 22:55:45 -0700
+X-Gm-Features: ATxdqUHKCUss3Lu3EUOBiHOPQD5kXjTO7sufFV19DZLFsnOExQXyOVNeazDE9Mw
+Message-ID: <CANDhNCr21HXQOqfhcJFM6x7pNHCevSEKdg2_jz7KbLj=g8+0Sg@mail.gmail.com>
+Subject: Re: [PATCH] timekeeping: Prevent coarse clocks going backwards
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: Miroslav Lichvar <mlichvar@redhat.com>, LKML <linux-kernel@vger.kernel.org>, 
+	Stephen Boyd <sboyd@kernel.org>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
+	Frederic Weisbecker <frederic@kernel.org>, Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, 
+	kernel-team@android.com, Lei Chen <lei.chen@smartx.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Thomas Gleixner <tglx@linutronix.de>
+On Fri, Apr 18, 2025 at 12:00=E2=80=AFAM Thomas Gleixner <tglx@linutronix.d=
+e> wrote:
+> On Fri, Apr 18 2025 at 08:37, Thomas Gleixner wrote:
+> > On Thu, Apr 17 2025 at 17:46, John Stultz wrote:
+> >> Instead it seems like we should just do:
+> >>   tk->coarse_nsec =3D tk->tkr_mono.xtime_nsec >> tk->tkr_mono.shift;
+> >
+> > You end up with the same problem again because xtime_nsec can move
+> > backwards when the multiplier is updated, no?
+>
+> Something like the below should work.
 
-Lei Chen raised an issue with CLOCK_MONOTONIC_COARSE seeing time
-inconsistencies. Lei tracked down that this was being caused by the
-adjustment
+Hey Thomas,
+  So I did test this version (I'll call it v2) of the patch and it
+does avoid the problem I was seeing earlier with your first patch.
 
-    tk->tkr_mono.xtime_nsec -= offset;
+Though I also just sent my own slight rework of your patch
+(https://lore.kernel.org/lkml/20250419054706.2319105-1-jstultz@google.com/)=
+.
+The main difference with my version is just the avoidance of mid-tick
+updates to the coarse clock by adjtime calls (and the slight benefit
+of avoiding the mult in the update path, but this is probably minor).
 
-which is made to compensate for the unaccumulated cycles in offset when the
-multiplicator is adjusted forward, so that the non-_COARSE clockids don't
-see inconsistencies.
+It's done ok in my testing so far, but obviously the effects of these
+changes can be subtle.
 
-However, the _COARSE clockid getter functions use the adjusted xtime_nsec
-value directly and do not compensate the negative offset via the
-clocksource delta multiplied with the new multiplicator. In that case the
-caller can observe time going backwards in consecutive calls.
+I'm ok with either approach, so let me know what you'd prefer.
+For your version:
+  Acked-by: John Stultz <jstultz@google.com>
 
-By design, this negative adjustment should be fine, because the logic run
-from timekeeping_adjust() is done after it accumulated approximately
-
-     multiplicator * interval_cycles
-
-into xtime_nsec.  The accumulated value is always larger then the
-
-     mult_adj * offset
-
-value, which is subtracted from xtime_nsec. Both operations are done
-together under the tk_core.lock, so the net change to xtime_nsec is always
-always be positive.
-
-However, do_adjtimex() calls into timekeeping_advance() as well, to
-apply the NTP frequency adjustment immediately. In this case,
-timekeeping_advance() does not return early when the offset is smaller
-then interval_cycles. In that case there is no time accumulated into
-xtime_nsec. But the subsequent call into timekeeping_adjust(), which
-modifies the multiplicator, subtracts from xtime_nsec to correct for the
-new multiplicator.
-
-Here because there was no accumulation, xtime_nsec becomes smaller than
-before, which opens a window up to the next accumulation, where the
-_COARSE clockid getters, which don't compensate for the offset, can
-observe the inconsistency.
-
-This has been tried to be fixed by forwarding the timekeeper in the case
-that adjtimex() adjusts the multiplier, which resets the offset to zero:
-
-  757b000f7b93 ("timekeeping: Fix possible inconsistencies in _COARSE clockids")
-
-That works correctly, but unfortunately causes a regression on the
-adjtimex() side. There are two issues:
-
-   1) The forwarding of the base time moves the update out of the original
-      period and establishes a new one.
-
-   2) The clearing of the accumulated NTP error is changing the behaviour as
-      well.
-
-Userspace expects that multiplier/frequency updates are in effect, when the
-syscall returns, so delaying the update to the next tick is not solving the
-problem either.
-
-Commit 757b000f7b93 was reverted so that the established expectations of
-user space implementations (ntpd, chronyd) are restored, but that obviously
-brought the inconsistencies back.
-
-One of the initial approaches to fix this was to establish a separate
-storage for the coarse time getter nanoseconds part by calculating it from
-the offset. That was dropped on the floor because not having yet another
-state to maintain was simpler. But given the result of the above exercise,
-this solution turns out to be the right one. Bring it back in a slightly
-modified form.
-
-Thus introduce timekeeper::coarse_nsec and store that nanoseconds part in
-it, switch the time getter functions and the VDSO update to use that value.
-coarse_nsec is set on operations which forward or initialize the timekeeper
-or after we have accumulated time during a tick
-
-This leaves the adjtimex() behaviour unmodified and prevents coarse time
-from going backwards.
-
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Miroslav Lichvar <mlichvar@redhat.com>
-Cc: Lei Chen <lei.chen@smartx.com>
-Cc: Stephen Boyd <sboyd@kernel.org>
-Cc: Anna-Maria Behnsen <anna-maria@linutronix.de>
-Cc: Frederic Weisbecker <frederic@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org
-Cc: kernel-team@android.com
-Fixes: da15cfdae033 ("time: Introduce CLOCK_REALTIME_COARSE")
-Reported-by: Lei Chen <lei.chen@smartx.com>
-Closes: https://lore.kernel.org/lkml/20250310030004.3705801-1-lei.chen@smartx.com/
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-[jstultz: Simplified the coarse_nsec calculation and kept behavior so
-coarse clockids aren't adjusted on each inter-tick adjtimex call,
-slightly reworking the comments and commit message]
-Signed-off-by: John Stultz <jstultz@google.com>
----
-v3:
-* John's Rework of Thomas' version here:
-  - https://lore.kernel.org/lkml/87r01qq7hp.ffs@tglx/
----
- include/linux/timekeeper_internal.h |  8 +++--
- kernel/time/timekeeping.c           | 50 ++++++++++++++++++++++++-----
- kernel/time/vsyscall.c              |  4 +--
- 3 files changed, 49 insertions(+), 13 deletions(-)
-
-diff --git a/include/linux/timekeeper_internal.h b/include/linux/timekeeper_internal.h
-index e39d4d563b197..785048a3b3e60 100644
---- a/include/linux/timekeeper_internal.h
-+++ b/include/linux/timekeeper_internal.h
-@@ -51,7 +51,7 @@ struct tk_read_base {
-  * @offs_real:			Offset clock monotonic -> clock realtime
-  * @offs_boot:			Offset clock monotonic -> clock boottime
-  * @offs_tai:			Offset clock monotonic -> clock tai
-- * @tai_offset:			The current UTC to TAI offset in seconds
-+ * @coarse_nsec:		The nanoseconds part for coarse time getters
-  * @tkr_raw:			The readout base structure for CLOCK_MONOTONIC_RAW
-  * @raw_sec:			CLOCK_MONOTONIC_RAW  time in seconds
-  * @clock_was_set_seq:		The sequence number of clock was set events
-@@ -76,6 +76,7 @@ struct tk_read_base {
-  *				ntp shifted nano seconds.
-  * @ntp_err_mult:		Multiplication factor for scaled math conversion
-  * @skip_second_overflow:	Flag used to avoid updating NTP twice with same second
-+ * @tai_offset:			The current UTC to TAI offset in seconds
-  *
-  * Note: For timespec(64) based interfaces wall_to_monotonic is what
-  * we need to add to xtime (or xtime corrected for sub jiffy times)
-@@ -100,7 +101,7 @@ struct tk_read_base {
-  * which results in the following cacheline layout:
-  *
-  * 0:	seqcount, tkr_mono
-- * 1:	xtime_sec ... tai_offset
-+ * 1:	xtime_sec ... coarse_nsec
-  * 2:	tkr_raw, raw_sec
-  * 3,4: Internal variables
-  *
-@@ -121,7 +122,7 @@ struct timekeeper {
- 	ktime_t			offs_real;
- 	ktime_t			offs_boot;
- 	ktime_t			offs_tai;
--	s32			tai_offset;
-+	u32			coarse_nsec;
- 
- 	/* Cacheline 2: */
- 	struct tk_read_base	tkr_raw;
-@@ -144,6 +145,7 @@ struct timekeeper {
- 	u32			ntp_error_shift;
- 	u32			ntp_err_mult;
- 	u32			skip_second_overflow;
-+	s32			tai_offset;
- };
- 
- #ifdef CONFIG_GENERIC_TIME_VSYSCALL
-diff --git a/kernel/time/timekeeping.c b/kernel/time/timekeeping.c
-index 1e67d076f1955..a009c91f7b05f 100644
---- a/kernel/time/timekeeping.c
-+++ b/kernel/time/timekeeping.c
-@@ -164,10 +164,34 @@ static inline struct timespec64 tk_xtime(const struct timekeeper *tk)
- 	return ts;
- }
- 
-+static inline struct timespec64 tk_xtime_coarse(const struct timekeeper *tk)
-+{
-+	struct timespec64 ts;
-+
-+	ts.tv_sec = tk->xtime_sec;
-+	ts.tv_nsec = tk->coarse_nsec;
-+	return ts;
-+}
-+
-+/*
-+ * Update the nanoseconds part for the coarse time keepers. They can't rely
-+ * on xtime_nsec because xtime_nsec could be adjusted by a small negative
-+ * amount when the multiplication factor of the clock is adjusted, which
-+ * could cause the coarse clocks to go slightly backwards. See
-+ * timekeeping_apply_adjustment(). Thus we keep a separate copy for the coarse
-+ * clockids which only is updated when the clock has been set or  we have
-+ * accumulated time.
-+ */
-+static inline void tk_update_coarse_nsecs(struct timekeeper *tk)
-+{
-+	tk->coarse_nsec = tk->tkr_mono.xtime_nsec >> tk->tkr_mono.shift;
-+}
-+
- static void tk_set_xtime(struct timekeeper *tk, const struct timespec64 *ts)
- {
- 	tk->xtime_sec = ts->tv_sec;
- 	tk->tkr_mono.xtime_nsec = (u64)ts->tv_nsec << tk->tkr_mono.shift;
-+	tk_update_coarse_nsecs(tk);
- }
- 
- static void tk_xtime_add(struct timekeeper *tk, const struct timespec64 *ts)
-@@ -175,6 +199,7 @@ static void tk_xtime_add(struct timekeeper *tk, const struct timespec64 *ts)
- 	tk->xtime_sec += ts->tv_sec;
- 	tk->tkr_mono.xtime_nsec += (u64)ts->tv_nsec << tk->tkr_mono.shift;
- 	tk_normalize_xtime(tk);
-+	tk_update_coarse_nsecs(tk);
- }
- 
- static void tk_set_wall_to_mono(struct timekeeper *tk, struct timespec64 wtm)
-@@ -708,6 +733,7 @@ static void timekeeping_forward_now(struct timekeeper *tk)
- 		tk_normalize_xtime(tk);
- 		delta -= incr;
- 	}
-+	tk_update_coarse_nsecs(tk);
- }
- 
- /**
-@@ -804,8 +830,8 @@ EXPORT_SYMBOL_GPL(ktime_get_with_offset);
- ktime_t ktime_get_coarse_with_offset(enum tk_offsets offs)
- {
- 	struct timekeeper *tk = &tk_core.timekeeper;
--	unsigned int seq;
- 	ktime_t base, *offset = offsets[offs];
-+	unsigned int seq;
- 	u64 nsecs;
- 
- 	WARN_ON(timekeeping_suspended);
-@@ -813,7 +839,7 @@ ktime_t ktime_get_coarse_with_offset(enum tk_offsets offs)
- 	do {
- 		seq = read_seqcount_begin(&tk_core.seq);
- 		base = ktime_add(tk->tkr_mono.base, *offset);
--		nsecs = tk->tkr_mono.xtime_nsec >> tk->tkr_mono.shift;
-+		nsecs = tk->coarse_nsec;
- 
- 	} while (read_seqcount_retry(&tk_core.seq, seq));
- 
-@@ -2161,7 +2187,7 @@ static bool timekeeping_advance(enum timekeeping_adv_mode mode)
- 	struct timekeeper *real_tk = &tk_core.timekeeper;
- 	unsigned int clock_set = 0;
- 	int shift = 0, maxshift;
--	u64 offset;
-+	u64 offset, orig_offset;
- 
- 	guard(raw_spinlock_irqsave)(&tk_core.lock);
- 
-@@ -2172,7 +2198,7 @@ static bool timekeeping_advance(enum timekeeping_adv_mode mode)
- 	offset = clocksource_delta(tk_clock_read(&tk->tkr_mono),
- 				   tk->tkr_mono.cycle_last, tk->tkr_mono.mask,
- 				   tk->tkr_mono.clock->max_raw_delta);
--
-+	orig_offset = offset;
- 	/* Check if there's really nothing to do */
- 	if (offset < real_tk->cycle_interval && mode == TK_ADV_TICK)
- 		return false;
-@@ -2205,6 +2231,14 @@ static bool timekeeping_advance(enum timekeeping_adv_mode mode)
- 	 */
- 	clock_set |= accumulate_nsecs_to_secs(tk);
- 
-+	/*
-+	 * To avoid inconsistencies caused adjtimex TK_ADV_FREQ calls
-+	 * making small negative adjustments to the base xtime_nsec
-+	 * value, only update the coarse clocks if we accumulated time
-+	 */
-+	if (orig_offset != offset)
-+		tk_update_coarse_nsecs(tk);
-+
- 	timekeeping_update_from_shadow(&tk_core, clock_set);
- 
- 	return !!clock_set;
-@@ -2248,7 +2282,7 @@ void ktime_get_coarse_real_ts64(struct timespec64 *ts)
- 	do {
- 		seq = read_seqcount_begin(&tk_core.seq);
- 
--		*ts = tk_xtime(tk);
-+		*ts = tk_xtime_coarse(tk);
- 	} while (read_seqcount_retry(&tk_core.seq, seq));
- }
- EXPORT_SYMBOL(ktime_get_coarse_real_ts64);
-@@ -2271,7 +2305,7 @@ void ktime_get_coarse_real_ts64_mg(struct timespec64 *ts)
- 
- 	do {
- 		seq = read_seqcount_begin(&tk_core.seq);
--		*ts = tk_xtime(tk);
-+		*ts = tk_xtime_coarse(tk);
- 		offset = tk_core.timekeeper.offs_real;
- 	} while (read_seqcount_retry(&tk_core.seq, seq));
- 
-@@ -2350,12 +2384,12 @@ void ktime_get_coarse_ts64(struct timespec64 *ts)
- 	do {
- 		seq = read_seqcount_begin(&tk_core.seq);
- 
--		now = tk_xtime(tk);
-+		now = tk_xtime_coarse(tk);
- 		mono = tk->wall_to_monotonic;
- 	} while (read_seqcount_retry(&tk_core.seq, seq));
- 
- 	set_normalized_timespec64(ts, now.tv_sec + mono.tv_sec,
--				now.tv_nsec + mono.tv_nsec);
-+				  now.tv_nsec + mono.tv_nsec);
- }
- EXPORT_SYMBOL(ktime_get_coarse_ts64);
- 
-diff --git a/kernel/time/vsyscall.c b/kernel/time/vsyscall.c
-index 01c2ab1e89719..32ef27c71b57a 100644
---- a/kernel/time/vsyscall.c
-+++ b/kernel/time/vsyscall.c
-@@ -98,12 +98,12 @@ void update_vsyscall(struct timekeeper *tk)
- 	/* CLOCK_REALTIME_COARSE */
- 	vdso_ts		= &vc[CS_HRES_COARSE].basetime[CLOCK_REALTIME_COARSE];
- 	vdso_ts->sec	= tk->xtime_sec;
--	vdso_ts->nsec	= tk->tkr_mono.xtime_nsec >> tk->tkr_mono.shift;
-+	vdso_ts->nsec	= tk->coarse_nsec;
- 
- 	/* CLOCK_MONOTONIC_COARSE */
- 	vdso_ts		= &vc[CS_HRES_COARSE].basetime[CLOCK_MONOTONIC_COARSE];
- 	vdso_ts->sec	= tk->xtime_sec + tk->wall_to_monotonic.tv_sec;
--	nsec		= tk->tkr_mono.xtime_nsec >> tk->tkr_mono.shift;
-+	nsec		= tk->coarse_nsec;
- 	nsec		= nsec + tk->wall_to_monotonic.tv_nsec;
- 	vdso_ts->sec	+= __iter_div_u64_rem(nsec, NSEC_PER_SEC, &vdso_ts->nsec);
- 
--- 
-2.49.0.805.g082f7c87e0-goog
-
+thanks
+-john
 
