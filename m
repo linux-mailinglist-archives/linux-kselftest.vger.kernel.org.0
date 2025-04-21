@@ -1,161 +1,210 @@
-Return-Path: <linux-kselftest+bounces-31270-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31271-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A356A9570A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Apr 2025 22:13:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64D76A95769
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Apr 2025 22:40:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C4EA53AEA37
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Apr 2025 20:12:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 99091171A40
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Apr 2025 20:40:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84B271E5B89;
-	Mon, 21 Apr 2025 20:13:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 465671F09BF;
+	Mon, 21 Apr 2025 20:40:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F0+rLbLe"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dausynZJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0CAA1EF090;
-	Mon, 21 Apr 2025 20:13:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39BED1F03FA
+	for <linux-kselftest@vger.kernel.org>; Mon, 21 Apr 2025 20:40:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745266388; cv=none; b=snZ3DF1Q7Ri4bUZR3oE13o4gZHsCl85yusITwP2qf8RtCxVd/UGsN5Nm7fRh4YrlM9JBRH5qiY6IC2rVHF4ARTwMw4D5AlwDr/IH//sznoJPwiay2l7R35YruSTHU6B1rtcr3IcfP3KhhNBh9lklqU3LRYeAuOOK26J/gCJ9wQ0=
+	t=1745268049; cv=none; b=FenCoXmJAUVOjv+Y8QpV3fOhk2NmBdju1Ot3qfvO/9NX8NKUXPSedSg10j0CtQqoxIlRBbPIcS8If5OBQcJ0HuY8g4Az6qfuzSGAGyq425dnZG6J6m9fIMUtfu81PB1iQW99mCAZT7aozWw5m7WF/+oRT0zyKMzcZhuqGF1/V+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745266388; c=relaxed/simple;
-	bh=KuPglRXXva+tRt/1RLlrTkqN4JV8/fN1ppPKTXytjUk=;
+	s=arc-20240116; t=1745268049; c=relaxed/simple;
+	bh=HPo1U1bOEBIqpKO3dXYxoCWodJ4tVhT3FiOemlOnrz8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oKB5HQHt4FlOOsFz2zy6+Mvj67FKk62ZPilJvETQqwYGmHRWT6i0OxYgL3jUjG3CIMcL6bfno8YKhI1kyRK/QF382cA63rgxp/R973aFCv3U+bKutPWlmYqOTKoBJlYbVCGACVVo1jwS0AyYHyjqMeuuCFqUFZRWv1J6Jp5mf6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F0+rLbLe; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-39c1ef4ae3aso2595004f8f.1;
-        Mon, 21 Apr 2025 13:13:06 -0700 (PDT)
+	 To:Cc:Content-Type; b=KQrvb+6wpMSL2OcLHZcvd6nPm4bSn7nAUDmRVv2G2LJfJfQLIJXqGC3cDqaRX2bpRB27SrtZxNxN80Kt+PlLqCr1QQDc8nhWpRO5Vxqt7mgQeP81ABHfglmt2hjtv+oqMFcDYkk/M+Ye6ezFheb1T12/6Y6LWsf6c20T2zqLASs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dausynZJ; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-43cfe808908so179885e9.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Apr 2025 13:40:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745266385; x=1745871185; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1745268045; x=1745872845; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KuPglRXXva+tRt/1RLlrTkqN4JV8/fN1ppPKTXytjUk=;
-        b=F0+rLbLeNxQmLiUHq6UehsU1hKKU5uiV/66bpZ/3eECH/iIVwfQdG+MkziMC3tk5NV
-         tf/EDEhNkM3qC0gkYwOCifXrWe6G4I2hwFWx8zhDnEuXKhv+mx/ohAAtjriveQeGVDWf
-         q1jWR5WB1asYQoUIrE+VGDGINRf3DA4iKYrapgPPE44L6lzh716WQjawxJEFxKCs1SG/
-         cUawQO8uKiqxEcnM8VNkRm+frBR/6PjV7XUd8HScSsU5WJrnoll612b0d+dqemz0nwC6
-         Gq2QWH9fK6Ku3s7sOVVcbvKcGuu5oPYBh6If6yErVXbGfnLpRw7bQ198mazKUch43GAL
-         83fg==
+        bh=/hk3KoCQ3cfNcS9T6WIJOvBbJ6pbk94kV2LEPNPjexo=;
+        b=dausynZJgBKI3+nPgYAJpN6vp/vHVH+hAWPpkz+ODVCKFsD1Uva0khcagArMClc/lV
+         WlN6CIN7RN5nSSh2iylmURg5eM/MnA3XgSCRhjhR8OZNuNoxHs7hju2LRPnpg82UZWkw
+         fu1SDBfrfyahOOVRVPtWAyYQKHiQAO2ZPr5ZFAr6w88sQ3Y5G2X1CWDmPNXSUL+d4hjl
+         TPTHKA2+Bl84yr42rVA/EWN12RdDDuWDiMMrDSZy6JmUsaGC4UyOMs9c94iWsFWs3TPe
+         qoGr/N//G07ss4JtKTwTlhxpwtdpcD3hDvT2Tca0eysPu1qarLrgjvjREASwIYOTh82Q
+         WFIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745266385; x=1745871185;
+        d=1e100.net; s=20230601; t=1745268045; x=1745872845;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KuPglRXXva+tRt/1RLlrTkqN4JV8/fN1ppPKTXytjUk=;
-        b=SKgBrUGZSH7a6hLyWp5pu5+Qr3QIv5E1qrrHU8Mgt6ydMGHDdbO4jFcC1GasnDq/6g
-         repBvstjIQGJeh8/8Bat+OtWY4bC/yv4g9Adr9kwRlDxb4cSNwPanc60IE4Ulcc/Pi7V
-         yqoLgj/70sjKsoZq0XA82cO2PX/NbqA2RFWo6X7Zdk45cPF9ayP4YjkrmrX+rYJk4Yi5
-         JdWPahs/0GHEy48DyVptWN0xvPLdZkrEJcna0z746YIUmxf7mhtgRkkEfCj5vTh4nFgz
-         8Rsj1DOU60983UGazl70rO6n6xypiTHxEDMzmmAf4gGD2lrgBfct7iJvnDR83N1h9iGz
-         zaUg==
-X-Forwarded-Encrypted: i=1; AJvYcCV8u6r+03YZDmt7EbER9u44Wn6SsGTmz4jtAUWxvbttFp31XvWj1XltYqWl9AyiBCrdwDJx5XqFUUtlUz6t@vger.kernel.org, AJvYcCWB4vwcbu5eKUokyhVxsQ40Phy2doFob1PhEK2sp1OXCU65fNWXC7rpZCbtfqftBCO5xqU=@vger.kernel.org, AJvYcCWH+T3xX3e7fZQMPdhY4idcK72UEPRI4VishyR239cIqpM/DKiydhzxy0tupOgRlGuoAGCWNaO18j8ztsTY@vger.kernel.org, AJvYcCWXsMKeBPw+9TLCsJHBnCQ7xtEfOD/gGgfwGwUmznoGlVGfUrJY0tbMlcJnc6Hn8do1IixhhYvUmn8W@vger.kernel.org, AJvYcCWbSRf4UQc1mN6qA31CseskaHRSwIr/Fzd9wJtmikk3thFfRjYKS9Fc9V6nfHkOk8x2RAaBMAusBgwu95/r@vger.kernel.org, AJvYcCWmdIQaOxVg0PPa+NqVqRtvTW+qUb1TBj6WDh9tbKLVtvUkP+KGUEx9zOWNV4A/tOhvgPO3JjBMtyT6IXtOHODMbnzvYr27@vger.kernel.org, AJvYcCX1f2eas/YJS4C48ZN0GwEw+bD1oZHLfHy/liBMr7NIPWdlJSIRTP9jm4cZRsmhd3XKwHHPWqRCtLE=@vger.kernel.org, AJvYcCXE0Dzfu1SXnGdwNdwwrXYZGUkG1u9xe73H2o9gOHKH7pMO45DL24HoweEsd3qw/fVDFVEI6MXyvBE4NzUlJ/td@vger.kernel.org
-X-Gm-Message-State: AOJu0YzORCojolxKqUy2dXwYqWrVqVGtya7MGaM+OF1b6JfMzewYNrhu
-	5UgRUQ+7z2suCA5vapa/tGShlCiIgDjxa05zGcvqC67lDszC2EtXC9rEjO6Yqb8B4egKF3gmZKB
-	I4QPoZrYqQPvhXlLZjrRYtR7HmP8=
-X-Gm-Gg: ASbGncuS1MKLmCN1hoOmym+I2gItZ9QV3rXmxoUvLvK/YysQv/jdkBcHvPNgyzc1Ydb
-	jdZBRl48OGjztfJkvcYVvV7Caa/2mrkKPcnDzxsKoXmqS6qyorg90mvCeW6ZlhSDYdDiX4OuwJd
-	yZmqbEkts8qirQs5RSJSNEZq3cKwSuXVX5KmZiQg==
-X-Google-Smtp-Source: AGHT+IENKQ7OPTDyXPDMm1eLtepnMBhG5YwiFzhKG6wQNnttfR2T/r01wwOVnACt/7hy7lkYefJ9i7RiLoFp/wuHfL0=
-X-Received: by 2002:a05:6000:2285:b0:39e:cbca:74cf with SMTP id
- ffacd0b85a97d-39efbd5a34bmr10154288f8f.6.1745266384670; Mon, 21 Apr 2025
- 13:13:04 -0700 (PDT)
+        bh=/hk3KoCQ3cfNcS9T6WIJOvBbJ6pbk94kV2LEPNPjexo=;
+        b=rYkte7yIHMRMKClQxKKoGtOgVd89DWOFBjQ/tzBSSAmzv9WTVpp33YXHNx7NVOq4wo
+         ZrQpoT75UzL0J5Xi2qHJ1jOUd5BclIswCGNbAWQCCdRgTc+qjUcPDcn70Bk+D+Z2k1rA
+         jOr7lM2cpC8xu9KcsNfxEpEEDA3qUaBbKh3+EJX+dsWj+Dw8kcqrjT9ecVbIFEU8AA6g
+         cVOxsDWDoerWG0pRGcF9rUGu5rFU9uS7ZTDuuhg+CcqDlFv9fu/xs7A4BnQz7uekWD+9
+         fXz2ZhJQI5qHNnR7pJ9iXJq3n2AyrlUbUE34AgA2dRwK58jj1N6tCkydvID5VGljr3Vx
+         GYyg==
+X-Forwarded-Encrypted: i=1; AJvYcCVrOJ7gvC5ncnySAh3ICsE477Ka36VwnpWfqY0Tr9skqFrZ83p7fagLXR99RDn1kivZpcFT1Bb94FNdLX0zRIA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxNEN8LHVFxAFhhje19WPH5Q0V4hXDE+ixD+dvY+tMPBWmIGaKj
+	SAvBhIPMmgJPt8PvJ6dmpqiaBbuaeWStPc7hU7qDGPIqXnGM7Uoj1FoD0PwcUlgA8v2y07RBMQB
+	OknR5cy8UdzFcjM10+BAQJWF/2i9I3SJo8oHe
+X-Gm-Gg: ASbGncssPNuNwnHaXb82lGhKhogeslqMnkPvrfwZqhkS0ixkHdsDtBhwNtw8pHLYmai
+	zc7Zqc5GADu7AyEC/etrXtJCe0gt/3gzfYncRv4g+OA0VyKiatEUA8AHO8X+GCjpRutLscG7ccg
+	01cN39i0VHGho/MsLAP08BYN0LOegxFGOm
+X-Google-Smtp-Source: AGHT+IGWcp45aLSZt8FM85c+hC9w5ExOa3HAud/x2yrnqew4c284QGEuar9sexOtbZfwcaDamqAvguiKQzmIHXztEi0=
+X-Received: by 2002:a05:600c:4e47:b0:43d:169e:4d75 with SMTP id
+ 5b1f17b1804b1-4406b5e061dmr4739435e9.1.1745268045300; Mon, 21 Apr 2025
+ 13:40:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250404215527.1563146-1-bboscaccy@linux.microsoft.com>
- <20250404215527.1563146-2-bboscaccy@linux.microsoft.com> <CAADnVQJyNRZVLPj_nzegCyo+BzM1-whbnajotCXu+GW+5-=P6w@mail.gmail.com>
- <87semdjxcp.fsf@microsoft.com> <CAADnVQ+JGfwRgsoe2=EHkXdTyQ8ycn0D9nh1k49am++4oXUPHg@mail.gmail.com>
- <87friajmd5.fsf@microsoft.com> <CAADnVQKb3gPBFz+n+GoudxaTrugVegwMb8=kUfxOea5r2NNfUA@mail.gmail.com>
- <87a58hjune.fsf@microsoft.com> <CAADnVQ+LMAnyT4yV5iuJ=vswgtUu97cHKnvysipc6o7HZfEbUA@mail.gmail.com>
- <87y0w0hv2x.fsf@microsoft.com>
-In-Reply-To: <87y0w0hv2x.fsf@microsoft.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 21 Apr 2025 13:12:53 -0700
-X-Gm-Features: ATxdqUHHcxXreT9hXAZ5WwrofB06M_gd4QuHmZEieMGyBqtir206iJME0ypgG-U
-Message-ID: <CAADnVQKF+B_YYwOCFsPBbrTBGKe4b22WVJFb8C0PHGmRAjbusQ@mail.gmail.com>
-Subject: Re: [PATCH v2 security-next 1/4] security: Hornet LSM
-To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, David Howells <dhowells@redhat.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>, 
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>, 
-	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Jarkko Sakkinen <jarkko@kernel.org>, 
-	Jan Stancek <jstancek@redhat.com>, Neal Gompa <neal@gompa.dev>, 
-	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	keyrings@vger.kernel.org, 
-	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, 
-	LSM List <linux-security-module@vger.kernel.org>, 
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, nkapron@google.com, 
-	Matteo Croce <teknoraver@meta.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Cong Wang <xiyou.wangcong@gmail.com>
+References: <20250414225227.3642618-1-tjmercier@google.com>
+ <20250414225227.3642618-3-tjmercier@google.com> <CAPhsuW54g5YCmLVX=cc3m2nfQTZrMH+6ZMBgouEMMfqcccOtww@mail.gmail.com>
+In-Reply-To: <CAPhsuW54g5YCmLVX=cc3m2nfQTZrMH+6ZMBgouEMMfqcccOtww@mail.gmail.com>
+From: "T.J. Mercier" <tjmercier@google.com>
+Date: Mon, 21 Apr 2025 13:40:32 -0700
+X-Gm-Features: ATxdqUHzaEdOwMz7Tlm_8h9gjvDy0ZSo4bia9-RfsuFhcpdkvxrkrY5bpFAEPyo
+Message-ID: <CABdmKX1OqLLsY5+LSMU-c=DDUxTFaivNcyXG3ntD8D0ty1Pwig@mail.gmail.com>
+Subject: Re: [PATCH 2/4] bpf: Add dmabuf iterator
+To: Song Liu <song@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	martin.lau@linux.dev, skhan@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	linaro-mm-sig@lists.linaro.org, linux-doc@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, android-mm@google.com, 
+	simona@ffwll.ch, corbet@lwn.net, eddyz87@gmail.com, yonghong.song@linux.dev, 
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, 
+	jolsa@kernel.org, mykolal@fb.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 16, 2025 at 10:31=E2=80=AFAM Blaise Boscaccy
-<bboscaccy@linux.microsoft.com> wrote:
+On Mon, Apr 21, 2025 at 10:58=E2=80=AFAM Song Liu <song@kernel.org> wrote:
 >
-> > Hacking into bpf internal objects like maps is not acceptable.
+> On Mon, Apr 14, 2025 at 3:53=E2=80=AFPM T.J. Mercier <tjmercier@google.co=
+m> wrote:
+> >
+> > The dmabuf iterator traverses the list of all DMA buffers. The list is
+> > maintained only when CONFIG_DEBUG_FS is enabled.
+> >
+> > DMA buffers are refcounted through their associated struct file. A
+> > reference is taken on each buffer as the list is iterated to ensure eac=
+h
+> > buffer persists for the duration of the bpf program execution without
+> > holding the list mutex.
+> >
+> > Signed-off-by: T.J. Mercier <tjmercier@google.com>
+> > ---
+> >  include/linux/btf_ids.h  |   1 +
+> >  kernel/bpf/Makefile      |   3 +
+> >  kernel/bpf/dmabuf_iter.c | 130 +++++++++++++++++++++++++++++++++++++++
+> >  3 files changed, 134 insertions(+)
+> >  create mode 100644 kernel/bpf/dmabuf_iter.c
+> >
+> > diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
+> > index 139bdececdcf..899ead57d89d 100644
+> > --- a/include/linux/btf_ids.h
+> > +++ b/include/linux/btf_ids.h
+> > @@ -284,5 +284,6 @@ extern u32 bpf_cgroup_btf_id[];
+> >  extern u32 bpf_local_storage_map_btf_id[];
+> >  extern u32 btf_bpf_map_id[];
+> >  extern u32 bpf_kmem_cache_btf_id[];
+> > +extern u32 bpf_dmabuf_btf_id[];
 >
-> We've heard your concerns about kern_sys_bpf and we agree that the LSM
-> should not be calling it. The proposal in this email should meet both of
-> our needs
-> https://lore.kernel.org/bpf/874iypjl8t.fsf@microsoft.com/
+> This is not necessary. See below.
+>
+> >
+> >  #endif
+> > diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
+> > index 70502f038b92..5b30d37ef055 100644
+> > --- a/kernel/bpf/Makefile
+> > +++ b/kernel/bpf/Makefile
+> > @@ -53,6 +53,9 @@ obj-$(CONFIG_BPF_SYSCALL) +=3D relo_core.o
+> >  obj-$(CONFIG_BPF_SYSCALL) +=3D btf_iter.o
+> >  obj-$(CONFIG_BPF_SYSCALL) +=3D btf_relocate.o
+> >  obj-$(CONFIG_BPF_SYSCALL) +=3D kmem_cache_iter.o
+> > +ifeq ($(CONFIG_DEBUG_FS),y)
+> > +obj-$(CONFIG_BPF_SYSCALL) +=3D dmabuf_iter.o
+> > +endif
+> >
+> >  CFLAGS_REMOVE_percpu_freelist.o =3D $(CC_FLAGS_FTRACE)
+> >  CFLAGS_REMOVE_bpf_lru_list.o =3D $(CC_FLAGS_FTRACE)
+> > diff --git a/kernel/bpf/dmabuf_iter.c b/kernel/bpf/dmabuf_iter.c
+> > new file mode 100644
+> > index 000000000000..b4b8be1d6aa4
+> > --- /dev/null
+> > +++ b/kernel/bpf/dmabuf_iter.c
+>
+> Maybe we should add this file to drivers/dma-buf. I would like to
+> hear other folks thoughts on this.
 
-kern_sys_bpf was one example of a layering violation.
-Calling bpf_map_get() and
-map->ops->map_lookup_elem() from a module is not ok either.
+This is fine with me, and would save us the extra
+CONFIG_DMA_SHARED_BUFFER check that's currently needed in
+kernel/bpf/Makefile but would require checking CONFIG_BPF instead.
+Sumit / Christian any objections to moving the dmabuf bpf iterator
+implementation into drivers/dma-buf?
 
-lskel doing skel_map_freeze is not solving the issue.
-It is still broken from TOCTOU pov.
-freeze only makes a map readonly to user space.
-Any program can still read/write it.
-That's why freeze wasn't done back then when lskel was introduced.
-There is still work to do to make signing practical.
-One needs to think of libbpf equivalent loaders in golang and rust.
-The solution has to work for them too.
-In that sense bpf signing is not analogous to kernel module signing.
-Programs are not distributed as elf files.
-elf is an intermediate step in a build process.
-bpftool takes elf and generates skel or lskel and
-user space does #include <skel.h>
-to access maps and global variables directly.
-See how systemd does it.
-bpf progs are part of various skel.h-s in there.
-systemd is also using an old style bpf progs written in bpf assembly.
-We need to figure out how to make them signed too.
+> > @@ -0,0 +1,130 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/* Copyright (c) 2025 Google LLC */
+> > +#include <linux/bpf.h>
+> > +#include <linux/btf_ids.h>
+> > +#include <linux/dma-buf.h>
+> > +#include <linux/kernel.h>
+> > +#include <linux/seq_file.h>
+> > +
+> > +BTF_ID_LIST_GLOBAL_SINGLE(bpf_dmabuf_btf_id, struct, dma_buf)
+>
+> Use BTF_ID_LIST_SINGLE(), then we don't need this in btf_ids.h
+>
+> > +DEFINE_BPF_ITER_FUNC(dmabuf, struct bpf_iter_meta *meta, struct dma_bu=
+f *dmabuf)
+> > +
+> > +static void *dmabuf_iter_seq_start(struct seq_file *seq, loff_t *pos)
+> > +{
+> > +       struct dma_buf *dmabuf, *ret =3D NULL;
+> > +
+> > +       if (*pos) {
+> > +               *pos =3D 0;
+> > +               return NULL;
+> > +       }
+> > +       /* Look for the first buffer we can obtain a reference to.
+> > +        * The list mutex does not protect a dmabuf's refcount, so it c=
+an be
+> > +        * zeroed while we are iterating. Therefore we cannot call get_=
+dma_buf()
+> > +        * since the caller of this program may not already own a refer=
+ence to
+> > +        * the buffer.
+> > +        */
+>
+> We should use kernel comment style for new code. IOW,
+> /*
+>  * Look for ...
+>  */
+>
+>
+> Thanks,
+> Song
 
-The signing problem is big and difficult.
-It will take time to figure out all these challenges.
-Introduction of lskel back in 2021 was the first step towards signing
-(as the commit log clearly states).
-lskel approach is likely a solution for a large class of bpf users,
-but not for all. It won't work for bpftrace and bcc.
-lskel loading is also opaque.
-The verifier errors are not propagated from the loader prog back to the use=
-r.
-To load normal skeleton the user space can do:
-LIBBPF_OPTS(bpf_object_open_opts, opts);
-opts.kernel_log_buf =3D my_verifier_log_buf;
-myskel__open_opts(&opts);
-There is no __open_opts() equivalent for lskel.
-It needs to be fixed before we can recommend lksel as a solution
-to signing.
+Thanks, I have incorporated all of your comments and retested. I will
+give some time for more feedback before sending a v2.
+>
+> [...]
 
