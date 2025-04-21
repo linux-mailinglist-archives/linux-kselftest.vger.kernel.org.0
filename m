@@ -1,210 +1,181 @@
-Return-Path: <linux-kselftest+bounces-31271-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31272-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64D76A95769
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Apr 2025 22:40:53 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46E8AA958E1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Apr 2025 00:04:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 99091171A40
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Apr 2025 20:40:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DEC8F7A7C47
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Apr 2025 22:03:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 465671F09BF;
-	Mon, 21 Apr 2025 20:40:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D02C21D59B;
+	Mon, 21 Apr 2025 22:04:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dausynZJ"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="TM0jYe6K"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39BED1F03FA
-	for <linux-kselftest@vger.kernel.org>; Mon, 21 Apr 2025 20:40:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E3C6221FAE
+	for <linux-kselftest@vger.kernel.org>; Mon, 21 Apr 2025 22:04:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745268049; cv=none; b=FenCoXmJAUVOjv+Y8QpV3fOhk2NmBdju1Ot3qfvO/9NX8NKUXPSedSg10j0CtQqoxIlRBbPIcS8If5OBQcJ0HuY8g4Az6qfuzSGAGyq425dnZG6J6m9fIMUtfu81PB1iQW99mCAZT7aozWw5m7WF/+oRT0zyKMzcZhuqGF1/V+g=
+	t=1745273049; cv=none; b=HeHjMzuScw/gsw67EEDo9PoHbmdcanuppFX0xJ2Fry09xpd2TgHJyUe/xtbrPiKbBJcqkzhH5IMhE72xtSNFMTKAWrEEjRK9RujbAV/Br+Wi9eHSvdYomNWTRTLlkCw0qcszE18i/5B0wkfDgFmnRxtjTz8vOpenMz3Hk3sGG4o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745268049; c=relaxed/simple;
-	bh=HPo1U1bOEBIqpKO3dXYxoCWodJ4tVhT3FiOemlOnrz8=;
+	s=arc-20240116; t=1745273049; c=relaxed/simple;
+	bh=+muycKiBaV5UQqyraI1xwjnbIAioVU0Qup0KnvqWYU8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KQrvb+6wpMSL2OcLHZcvd6nPm4bSn7nAUDmRVv2G2LJfJfQLIJXqGC3cDqaRX2bpRB27SrtZxNxN80Kt+PlLqCr1QQDc8nhWpRO5Vxqt7mgQeP81ABHfglmt2hjtv+oqMFcDYkk/M+Ye6ezFheb1T12/6Y6LWsf6c20T2zqLASs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dausynZJ; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-43cfe808908so179885e9.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Apr 2025 13:40:46 -0700 (PDT)
+	 To:Cc:Content-Type; b=VAAxUTad/NaM6hnk5lNi6twMDzbL67/wIcRLrOQMRAsDhiqYfMsACPDSbZ/rMC4w2S2Pbc2obmxz2yMRqnKlWEe4uDlTFwOuBNaWmoTDsmEdRiCuGjyO3nqRRFZPi7EB0jb6KCsJL/ZwtP+M9lj8R7vd0Ns9hh1AIZ5h0ssbLWM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=TM0jYe6K; arc=none smtp.client-ip=209.85.128.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-70575d66612so36093117b3.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Apr 2025 15:04:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1745268045; x=1745872845; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1745273046; x=1745877846; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/hk3KoCQ3cfNcS9T6WIJOvBbJ6pbk94kV2LEPNPjexo=;
-        b=dausynZJgBKI3+nPgYAJpN6vp/vHVH+hAWPpkz+ODVCKFsD1Uva0khcagArMClc/lV
-         WlN6CIN7RN5nSSh2iylmURg5eM/MnA3XgSCRhjhR8OZNuNoxHs7hju2LRPnpg82UZWkw
-         fu1SDBfrfyahOOVRVPtWAyYQKHiQAO2ZPr5ZFAr6w88sQ3Y5G2X1CWDmPNXSUL+d4hjl
-         TPTHKA2+Bl84yr42rVA/EWN12RdDDuWDiMMrDSZy6JmUsaGC4UyOMs9c94iWsFWs3TPe
-         qoGr/N//G07ss4JtKTwTlhxpwtdpcD3hDvT2Tca0eysPu1qarLrgjvjREASwIYOTh82Q
-         WFIw==
+        bh=zJkBF2Iq9gEiEg9l+Unpndzsq5ns/iefqc51nXn2fRQ=;
+        b=TM0jYe6KZQyjxuohb24LcAj0BwGkJx71bYweV1zBZAi5uSods9LE7nYSYB1weQAJyA
+         Asb3SNeaVe0WNePwYwLlc587gtrepTlWlFyQI7UVxBJV6w4goVbXoPrJ0DFzCTjj3yT9
+         gfR7Oo7ioVNRFiJGTyzI0VvU8FKpw//ZJh9tYCUKeTlAvD+xzihdwZSTl7dig7sbgpVp
+         ZpM8Sd01p7AgiTdwukFEyS2IwOVYdrtBnZk98SewZ8NkMNAuq4Iio5UMOAA+xWWLJ7Sw
+         /r7LHhjsmDL9n9lv1o0MmTvFgCOzTZcDqqKACG77tU57Y3oHtX8pnnQALz81AvoNuz9G
+         fsbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745268045; x=1745872845;
+        d=1e100.net; s=20230601; t=1745273046; x=1745877846;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/hk3KoCQ3cfNcS9T6WIJOvBbJ6pbk94kV2LEPNPjexo=;
-        b=rYkte7yIHMRMKClQxKKoGtOgVd89DWOFBjQ/tzBSSAmzv9WTVpp33YXHNx7NVOq4wo
-         ZrQpoT75UzL0J5Xi2qHJ1jOUd5BclIswCGNbAWQCCdRgTc+qjUcPDcn70Bk+D+Z2k1rA
-         jOr7lM2cpC8xu9KcsNfxEpEEDA3qUaBbKh3+EJX+dsWj+Dw8kcqrjT9ecVbIFEU8AA6g
-         cVOxsDWDoerWG0pRGcF9rUGu5rFU9uS7ZTDuuhg+CcqDlFv9fu/xs7A4BnQz7uekWD+9
-         fXz2ZhJQI5qHNnR7pJ9iXJq3n2AyrlUbUE34AgA2dRwK58jj1N6tCkydvID5VGljr3Vx
-         GYyg==
-X-Forwarded-Encrypted: i=1; AJvYcCVrOJ7gvC5ncnySAh3ICsE477Ka36VwnpWfqY0Tr9skqFrZ83p7fagLXR99RDn1kivZpcFT1Bb94FNdLX0zRIA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxNEN8LHVFxAFhhje19WPH5Q0V4hXDE+ixD+dvY+tMPBWmIGaKj
-	SAvBhIPMmgJPt8PvJ6dmpqiaBbuaeWStPc7hU7qDGPIqXnGM7Uoj1FoD0PwcUlgA8v2y07RBMQB
-	OknR5cy8UdzFcjM10+BAQJWF/2i9I3SJo8oHe
-X-Gm-Gg: ASbGncssPNuNwnHaXb82lGhKhogeslqMnkPvrfwZqhkS0ixkHdsDtBhwNtw8pHLYmai
-	zc7Zqc5GADu7AyEC/etrXtJCe0gt/3gzfYncRv4g+OA0VyKiatEUA8AHO8X+GCjpRutLscG7ccg
-	01cN39i0VHGho/MsLAP08BYN0LOegxFGOm
-X-Google-Smtp-Source: AGHT+IGWcp45aLSZt8FM85c+hC9w5ExOa3HAud/x2yrnqew4c284QGEuar9sexOtbZfwcaDamqAvguiKQzmIHXztEi0=
-X-Received: by 2002:a05:600c:4e47:b0:43d:169e:4d75 with SMTP id
- 5b1f17b1804b1-4406b5e061dmr4739435e9.1.1745268045300; Mon, 21 Apr 2025
- 13:40:45 -0700 (PDT)
+        bh=zJkBF2Iq9gEiEg9l+Unpndzsq5ns/iefqc51nXn2fRQ=;
+        b=j/qZrBoTetMlLXS80timp39wZi/htiIayqxa8DTB/cmEdhc14nEaHhiX7TADpOfLS/
+         02gJNLADOujxBNAzd76YIL8AN6itrz1vaZs2cD0dnoyUIYeolPvnrt7rE1LAJ5YPylF1
+         iBbsIY6jA3hi2kZKUN6vuxOceDbwxHYBG8rcIVqQ53mGY+4Dqh4DrX9qH/58AGFJeM33
+         /r8Afg8Z+DXrHs9QGpn0dYC/qqzvcvL1JIPPElfjdt2/C8O0Ys4HzbyEPTNtelWOL2ri
+         QWgypgytVHSQJ1/LJm9KyBoZ8dZcmz+z5lC6cChigOxfFF+NXd4gMfxiRrnfjohHYxIe
+         UYZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVIRwNhhNhWzJGKlPhsJbfEokodJpRwATeCqbglvQVRSqDFs6ZqaVLSRCHJVJJjo41TeQwLlc7+dHfEuOUTwqc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYYLZP2PWQ0ThfBV7YSUItEQTk9OFogbTcZ4JC4Gxn6sAqVAgU
+	Am+n05VmLpX+yGCRScc6IWB6XIu7+DAAIaaa/6DHwHFxShznzyyIt3c2e/OEsWZj8P/WoFOfv/9
+	CLHnKNdiN5CYZaIOKhLxNTtloB0oogrPyijBMspoChX7vkJnYtw==
+X-Gm-Gg: ASbGncuUg/Qws1ZJUNnION4MDTTJkqq6bELL80MAPME8O92Ee5z+gMhI3nbV8xWlrLv
+	bNJGL0QZw2XZldDZS+r6tH3F+cPmRa1QZBo0O2eMTTMrbbvEI7S6Kd7Gmzhn0UKEGoohDXwYpGr
+	mp8WWonm6wlEaPVc5LQU0x+w==
+X-Google-Smtp-Source: AGHT+IFjErmdtD9yYgSCvg50nxSRhAaGxDl0MNp2zLoVowjSrOfaMAYKD0cmZ307fSWsTGOXpc7lz6KmktYrMh1O/kc=
+X-Received: by 2002:a05:690c:380a:b0:706:aedf:4d91 with SMTP id
+ 00721157ae682-706cccfa7f8mr180651297b3.14.1745273045751; Mon, 21 Apr 2025
+ 15:04:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250414225227.3642618-1-tjmercier@google.com>
- <20250414225227.3642618-3-tjmercier@google.com> <CAPhsuW54g5YCmLVX=cc3m2nfQTZrMH+6ZMBgouEMMfqcccOtww@mail.gmail.com>
-In-Reply-To: <CAPhsuW54g5YCmLVX=cc3m2nfQTZrMH+6ZMBgouEMMfqcccOtww@mail.gmail.com>
-From: "T.J. Mercier" <tjmercier@google.com>
-Date: Mon, 21 Apr 2025 13:40:32 -0700
-X-Gm-Features: ATxdqUHzaEdOwMz7Tlm_8h9gjvDy0ZSo4bia9-RfsuFhcpdkvxrkrY5bpFAEPyo
-Message-ID: <CABdmKX1OqLLsY5+LSMU-c=DDUxTFaivNcyXG3ntD8D0ty1Pwig@mail.gmail.com>
-Subject: Re: [PATCH 2/4] bpf: Add dmabuf iterator
-To: Song Liu <song@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	martin.lau@linux.dev, skhan@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	linaro-mm-sig@lists.linaro.org, linux-doc@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, android-mm@google.com, 
-	simona@ffwll.ch, corbet@lwn.net, eddyz87@gmail.com, yonghong.song@linux.dev, 
-	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, 
-	jolsa@kernel.org, mykolal@fb.com
+References: <20250404215527.1563146-1-bboscaccy@linux.microsoft.com>
+ <20250404215527.1563146-2-bboscaccy@linux.microsoft.com> <CAADnVQJyNRZVLPj_nzegCyo+BzM1-whbnajotCXu+GW+5-=P6w@mail.gmail.com>
+ <87semdjxcp.fsf@microsoft.com> <CAADnVQ+JGfwRgsoe2=EHkXdTyQ8ycn0D9nh1k49am++4oXUPHg@mail.gmail.com>
+ <87friajmd5.fsf@microsoft.com> <CAADnVQKb3gPBFz+n+GoudxaTrugVegwMb8=kUfxOea5r2NNfUA@mail.gmail.com>
+ <87a58hjune.fsf@microsoft.com> <CAADnVQ+LMAnyT4yV5iuJ=vswgtUu97cHKnvysipc6o7HZfEbUA@mail.gmail.com>
+ <87y0w0hv2x.fsf@microsoft.com> <CAADnVQKF+B_YYwOCFsPBbrTBGKe4b22WVJFb8C0PHGmRAjbusQ@mail.gmail.com>
+In-Reply-To: <CAADnVQKF+B_YYwOCFsPBbrTBGKe4b22WVJFb8C0PHGmRAjbusQ@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Mon, 21 Apr 2025 18:03:54 -0400
+X-Gm-Features: ATxdqUFcqFjq20jX5yxtvOH3DHCD3LQ0LRd6y2kU6Qtvx6XNCs0BPjy44J04_l4
+Message-ID: <CAHC9VhS0kQf1mdrvdrs4F675ZbGh9Yw8r2noZqDUpOxRYoTL8Q@mail.gmail.com>
+Subject: Re: [PATCH v2 security-next 1/4] security: Hornet LSM
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Blaise Boscaccy <bboscaccy@linux.microsoft.com>, Jonathan Corbet <corbet@lwn.net>, 
+	David Howells <dhowells@redhat.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	"David S. Miller" <davem@davemloft.net>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Jarkko Sakkinen <jarkko@kernel.org>, 
+	Jan Stancek <jstancek@redhat.com>, Neal Gompa <neal@gompa.dev>, 
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	keyrings@vger.kernel.org, 
+	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, 
+	LSM List <linux-security-module@vger.kernel.org>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, nkapron@google.com, 
+	Matteo Croce <teknoraver@meta.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
+	Cong Wang <xiyou.wangcong@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 21, 2025 at 10:58=E2=80=AFAM Song Liu <song@kernel.org> wrote:
->
-> On Mon, Apr 14, 2025 at 3:53=E2=80=AFPM T.J. Mercier <tjmercier@google.co=
-m> wrote:
+On Mon, Apr 21, 2025 at 4:13=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+> On Wed, Apr 16, 2025 at 10:31=E2=80=AFAM Blaise Boscaccy
+> <bboscaccy@linux.microsoft.com> wrote:
 > >
-> > The dmabuf iterator traverses the list of all DMA buffers. The list is
-> > maintained only when CONFIG_DEBUG_FS is enabled.
+> > > Hacking into bpf internal objects like maps is not acceptable.
 > >
-> > DMA buffers are refcounted through their associated struct file. A
-> > reference is taken on each buffer as the list is iterated to ensure eac=
-h
-> > buffer persists for the duration of the bpf program execution without
-> > holding the list mutex.
-> >
-> > Signed-off-by: T.J. Mercier <tjmercier@google.com>
-> > ---
-> >  include/linux/btf_ids.h  |   1 +
-> >  kernel/bpf/Makefile      |   3 +
-> >  kernel/bpf/dmabuf_iter.c | 130 +++++++++++++++++++++++++++++++++++++++
-> >  3 files changed, 134 insertions(+)
-> >  create mode 100644 kernel/bpf/dmabuf_iter.c
-> >
-> > diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
-> > index 139bdececdcf..899ead57d89d 100644
-> > --- a/include/linux/btf_ids.h
-> > +++ b/include/linux/btf_ids.h
-> > @@ -284,5 +284,6 @@ extern u32 bpf_cgroup_btf_id[];
-> >  extern u32 bpf_local_storage_map_btf_id[];
-> >  extern u32 btf_bpf_map_id[];
-> >  extern u32 bpf_kmem_cache_btf_id[];
-> > +extern u32 bpf_dmabuf_btf_id[];
->
-> This is not necessary. See below.
->
-> >
-> >  #endif
-> > diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
-> > index 70502f038b92..5b30d37ef055 100644
-> > --- a/kernel/bpf/Makefile
-> > +++ b/kernel/bpf/Makefile
-> > @@ -53,6 +53,9 @@ obj-$(CONFIG_BPF_SYSCALL) +=3D relo_core.o
-> >  obj-$(CONFIG_BPF_SYSCALL) +=3D btf_iter.o
-> >  obj-$(CONFIG_BPF_SYSCALL) +=3D btf_relocate.o
-> >  obj-$(CONFIG_BPF_SYSCALL) +=3D kmem_cache_iter.o
-> > +ifeq ($(CONFIG_DEBUG_FS),y)
-> > +obj-$(CONFIG_BPF_SYSCALL) +=3D dmabuf_iter.o
-> > +endif
-> >
-> >  CFLAGS_REMOVE_percpu_freelist.o =3D $(CC_FLAGS_FTRACE)
-> >  CFLAGS_REMOVE_bpf_lru_list.o =3D $(CC_FLAGS_FTRACE)
-> > diff --git a/kernel/bpf/dmabuf_iter.c b/kernel/bpf/dmabuf_iter.c
-> > new file mode 100644
-> > index 000000000000..b4b8be1d6aa4
-> > --- /dev/null
-> > +++ b/kernel/bpf/dmabuf_iter.c
->
-> Maybe we should add this file to drivers/dma-buf. I would like to
-> hear other folks thoughts on this.
+> > We've heard your concerns about kern_sys_bpf and we agree that the LSM
+> > should not be calling it. The proposal in this email should meet both o=
+f
+> > our needs
+> > https://lore.kernel.org/bpf/874iypjl8t.fsf@microsoft.com/
 
-This is fine with me, and would save us the extra
-CONFIG_DMA_SHARED_BUFFER check that's currently needed in
-kernel/bpf/Makefile but would require checking CONFIG_BPF instead.
-Sumit / Christian any objections to moving the dmabuf bpf iterator
-implementation into drivers/dma-buf?
+...
 
-> > @@ -0,0 +1,130 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/* Copyright (c) 2025 Google LLC */
-> > +#include <linux/bpf.h>
-> > +#include <linux/btf_ids.h>
-> > +#include <linux/dma-buf.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/seq_file.h>
-> > +
-> > +BTF_ID_LIST_GLOBAL_SINGLE(bpf_dmabuf_btf_id, struct, dma_buf)
->
-> Use BTF_ID_LIST_SINGLE(), then we don't need this in btf_ids.h
->
-> > +DEFINE_BPF_ITER_FUNC(dmabuf, struct bpf_iter_meta *meta, struct dma_bu=
-f *dmabuf)
-> > +
-> > +static void *dmabuf_iter_seq_start(struct seq_file *seq, loff_t *pos)
-> > +{
-> > +       struct dma_buf *dmabuf, *ret =3D NULL;
-> > +
-> > +       if (*pos) {
-> > +               *pos =3D 0;
-> > +               return NULL;
-> > +       }
-> > +       /* Look for the first buffer we can obtain a reference to.
-> > +        * The list mutex does not protect a dmabuf's refcount, so it c=
-an be
-> > +        * zeroed while we are iterating. Therefore we cannot call get_=
-dma_buf()
-> > +        * since the caller of this program may not already own a refer=
-ence to
-> > +        * the buffer.
-> > +        */
->
-> We should use kernel comment style for new code. IOW,
-> /*
->  * Look for ...
->  */
->
->
-> Thanks,
-> Song
+> Calling bpf_map_get() and
+> map->ops->map_lookup_elem() from a module is not ok either.
 
-Thanks, I have incorporated all of your comments and retested. I will
-give some time for more feedback before sending a v2.
->
-> [...]
+A quick look uncovers code living under net/ which calls into these APIs.
+
+> lskel doing skel_map_freeze is not solving the issue.
+> It is still broken from TOCTOU pov.
+> freeze only makes a map readonly to user space.
+> Any program can still read/write it.
+
+When you say "any program" you are referring to any BPF program loaded
+into the kernel, correct?  At least that is my understanding of
+"freezing" a BPF map, while userspace is may be unable to modify the
+map's contents, it is still possible for a BPF program to modify it.
+If I'm mistaken, I would appreciate a pointer to a correct description
+of map freezing.
+
+Assuming the above is correct, that a malicious bit of code running in
+kernel context could cause mischief, isn't a new concern, and in fact
+it is one of the reasons why Hornet is valuable.  Hornet allows
+admins/users to have some assurance that the BPF programs they load
+into their system come from a trusted source (trusted not to
+intentionally do Bad Things in the kernel) and haven't been modified
+to do Bad Things (like modify lskel maps).
+
+> One needs to think of libbpf equivalent loaders in golang and rust.
+...
+> systemd is also using an old style bpf progs written in bpf assembly.
+
+I've briefly talked with Blaise about the systemd issue in particular,
+and I believe there are some relatively easy ways to work around the
+ELF issue in the current version of Hornet.  I know Blaise is tied up
+for the next couple of days on another fire, but I'm sure the next
+revision will have a solution for this.
+
+> Introduction of lskel back in 2021 was the first step towards signing
+> (as the commit log clearly states).
+> lskel approach is likely a solution for a large class of bpf users,
+> but not for all. It won't work for bpftrace and bcc.
+
+As most everyone on the To/CC line already knows, Linux kernel
+development is often iterative.  Not only is it easier for the kernel
+devs to develop and review incremental additions to functionality, it
+also enables a feedback loop where users can help drive the direction
+of the functionality as it is built.  I view Hornet as an iterative
+improvement, building on the lskel concept, that helps users towards
+their goal of load time verification of code running inside the
+kernel.  Hornet, as currently described, may not be the solution for
+everything, but it can be the solution for something that users are
+desperately struggling with today and as far as I'm concerned, that is
+a good thing worth supporting.
+
+--=20
+paul-moore.com
 
