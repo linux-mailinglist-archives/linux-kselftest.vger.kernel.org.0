@@ -1,38 +1,38 @@
-Return-Path: <linux-kselftest+bounces-31227-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31228-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64934A94CD8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Apr 2025 09:21:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC8FAA94CE5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Apr 2025 09:23:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 99F0D16D1F2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Apr 2025 07:21:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 76FD13AACED
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Apr 2025 07:22:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8F221B4244;
-	Mon, 21 Apr 2025 07:21:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3B0A20E032;
+	Mon, 21 Apr 2025 07:22:50 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7421E1ADC98;
-	Mon, 21 Apr 2025 07:21:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C240120D516;
+	Mon, 21 Apr 2025 07:22:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745220086; cv=none; b=QG6+dwgXbaZjtNxuois/I7fHGGF+MlAU1IEjQJAPh0Cf8anKkPLkOl5ga2nOIrutr0X65gpnDl/ZLDEn9P46LWCyYVSjhD3rSYvy+oj00x77l9vjKvsc1ITsaXbE9JHyB8F7GcHWiCLq05/T4GyIw/0MIct8Aj4vZaiLd34OSws=
+	t=1745220170; cv=none; b=Po5BaB7ONQWIVvh1E+Yr8Y63fO/Y97oWWAIN4ezCmXTuk2+NF2cM4ZSY8TjKrYRUO2AackmhS/7dxF2WTCIKhGZvt94mJxLQv3MJHu/Fofhf+49cBN8/pNc2zszLf3E7Su+1uYDQZAsnsQJVI5IH+hobziLyrLfPJjYuF+hvnV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745220086; c=relaxed/simple;
-	bh=WTyiMCMZ6ijxrHuUViQAAvsvE09RVd9etBrf2x8xzig=;
+	s=arc-20240116; t=1745220170; c=relaxed/simple;
+	bh=CgG69MQ/EYPTgruTAu52tqABJWetDvK3CxES8vaBp0o=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=u85cI27PWyhratMQuI0JPHy0ZU4yz3tjnFl/d/l+O7Gbv007Pgcl7IXi6x38YSI+Xy5mxDpZR26Wwb8hFrGHKpK5LNVzaDgcKPIPBmowNffoUPcoMfRwEUHJm86HQIOjgEYnlu4qPEV4g6uql2CHNtgdFqIRMlQv1zaYzxbWvM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.183.199
+	 In-Reply-To:Content-Type; b=WPml/LZQSvR6nt6RcMU8CNAGT8tLjYgfoqbt7KCzxNrKK0+3BaB6wPAPCekUrw2OsJX43DeQXDRpDL2WWgnYRhOHzlGn4Wc3MObo5vcdiJXdUr5cBEWnT1TDOEzu2ZxDfJbWftWX5jXHlmNr9PE5kriagBOQEvf1C4ckmW/U3K4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.183.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ghiti.fr
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4C44444201;
-	Mon, 21 Apr 2025 07:21:21 +0000 (UTC)
-Message-ID: <cd642ab7-e6ea-459b-89f7-63b12505f576@ghiti.fr>
-Date: Mon, 21 Apr 2025 09:21:20 +0200
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 91A761FCE9;
+	Mon, 21 Apr 2025 07:22:45 +0000 (UTC)
+Message-ID: <95cefab6-4d9c-4ad2-bc75-d117e0aefc62@ghiti.fr>
+Date: Mon, 21 Apr 2025 09:22:45 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -40,8 +40,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/5] riscv: misaligned: use get_user() instead of
- __get_user()
+Subject: Re: [PATCH 4/5] Documentation/sysctl: add riscv to unaligned-trap
+ supported archs
 Content-Language: en-US
 To: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>,
  "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
@@ -54,40 +54,41 @@ Cc: Jonathan Corbet <corbet@lwn.net>, Paul Walmsley
  Andrew Jones <ajones@ventanamicro.com>,
  Samuel Holland <samuel.holland@sifive.com>
 References: <20250414123543.1615478-1-cleger@rivosinc.com>
- <20250414123543.1615478-4-cleger@rivosinc.com>
+ <20250414123543.1615478-5-cleger@rivosinc.com>
 From: Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <20250414123543.1615478-4-cleger@rivosinc.com>
+In-Reply-To: <20250414123543.1615478-5-cleger@rivosinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvgedtvddvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfesthekredttddvjeenucfhrhhomheptehlvgigrghnughrvgcuifhhihhtihcuoegrlhgvgiesghhhihhtihdrfhhrqeenucggtffrrghtthgvrhhnpedtgeeuhffhveeujeetveevieekleekvdffudefleevgefgieekkefggefhtddtveenucfkphepvddttddumeekiedumeeffeekvdemvghfledtmedufhehjeemvgdutggumedukegutdemtgdtvdeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddttddumeekiedumeeffeekvdemvghfledtmedufhehjeemvgdutggumedukegutdemtgdtvdekpdhhvghloheplgfkrfggieemvddttddumeekiedumeeffeekvdemvghfledtmedufhehjeemvgdutggumedukegutdemtgdtvdekngdpmhgrihhlfhhrohhmpegrlhgvgiesghhhihhtihdrfhhrpdhnsggprhgtphhtthhopeduvddprhgtphhtthhopegtlhgvghgvrhesrhhivhhoshhinhgtrdgtohhmpdhrtghpthhtoheplhhinhhugidqughotgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrr
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvgedtvdefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfesthekredttddvjeenucfhrhhomheptehlvgigrghnughrvgcuifhhihhtihcuoegrlhgvgiesghhhihhtihdrfhhrqeenucggtffrrghtthgvrhhnpedtgeeuhffhveeujeetveevieekleekvdffudefleevgefgieekkefggefhtddtveenucfkphepvddttddumeekiedumeeffeekvdemvghfledtmedufhehjeemvgdutggumedukegutdemtgdtvdeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddttddumeekiedumeeffeekvdemvghfledtmedufhehjeemvgdutggumedukegutdemtgdtvdekpdhhvghloheplgfkrfggieemvddttddumeekiedumeeffeekvdemvghfledtmedufhehjeemvgdutggumedukegutdemtgdtvdekngdpmhgrihhlfhhrohhmpegrlhgvgiesghhhihhtihdrfhhrpdhnsggprhgtphhtthhopeduvddprhgtphhtthhopegtlhgvghgvrhesrhhivhhoshhinhgtrdgtohhmpdhrtghpthhtoheplhhinhhugidqughotgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrr
  dhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhrihhstghvsehlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoheplhhinhhugidqkhhsvghlfhhtvghsthesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegtohhrsggvtheslhifnhdrnhgvthdprhgtphhtthhopehprghulhdrfigrlhhmshhlvgihsehsihhfihhvvgdrtghomhdprhgtphhtthhopehprghlmhgvrhesuggrsggsvghlthdrtghomh
 X-GND-Sasl: alex@ghiti.fr
 
 On 14/04/2025 14:34, Clément Léger wrote:
-> Now that we can safely handle user memory accesses while in the
-> misaligned access handlers, use get_user() instead of __get_user() to
-> have user memory access checks.
+> riscv supports the "unaligned-trap" sysctl variable, add it to the list
+> of supported architectures.
 >
 > Signed-off-by: Clément Léger <cleger@rivosinc.com>
 > ---
->   arch/riscv/kernel/traps_misaligned.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>   Documentation/admin-guide/sysctl/kernel.rst | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> diff --git a/arch/riscv/kernel/traps_misaligned.c b/arch/riscv/kernel/traps_misaligned.c
-> index 4354c87c0376..97c674d7d34f 100644
-> --- a/arch/riscv/kernel/traps_misaligned.c
-> +++ b/arch/riscv/kernel/traps_misaligned.c
-> @@ -268,7 +268,7 @@ static unsigned long get_f32_rs(unsigned long insn, u8 fp_reg_offset,
->   	int __ret;					\
->   							\
->   	if (user_mode(regs)) {				\
-> -		__ret = __get_user(insn, (type __user *) insn_addr); \
-> +		__ret = get_user(insn, (type __user *) insn_addr); \
->   	} else {					\
->   		insn = *(type *)insn_addr;		\
->   		__ret = 0;				\
+> diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
+> index dd49a89a62d3..a38e91c4d92c 100644
+> --- a/Documentation/admin-guide/sysctl/kernel.rst
+> +++ b/Documentation/admin-guide/sysctl/kernel.rst
+> @@ -1595,8 +1595,8 @@ unaligned-trap
+>   
+>   On architectures where unaligned accesses cause traps, and where this
+>   feature is supported (``CONFIG_SYSCTL_ARCH_UNALIGN_ALLOW``; currently,
+> -``arc``, ``parisc`` and ``loongarch``), controls whether unaligned traps
+> -are caught and emulated (instead of failing).
+> +``arc``, ``parisc``, ``loongarch`` and ``riscv``), controls whether unaligned
+> +traps are caught and emulated (instead of failing).
+>   
+>   = ========================================================
+>   0 Do not emulate unaligned accesses.
 
 
 Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
@@ -95,6 +96,5 @@ Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
 Thanks,
 
 Alex
-
 
 
