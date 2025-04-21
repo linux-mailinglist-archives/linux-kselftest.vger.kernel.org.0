@@ -1,128 +1,168 @@
-Return-Path: <linux-kselftest+bounces-31259-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31260-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66215A9550E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Apr 2025 19:08:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3153FA95511
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Apr 2025 19:16:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5DB0A18954FB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Apr 2025 17:08:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 15ECA188D5AE
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Apr 2025 17:16:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EAD31E5B82;
-	Mon, 21 Apr 2025 17:08:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A72321D54E3;
+	Mon, 21 Apr 2025 17:16:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pw+kYY86"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="25UioA/J"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F42F1E8358;
-	Mon, 21 Apr 2025 17:08:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0457E41C69
+	for <linux-kselftest@vger.kernel.org>; Mon, 21 Apr 2025 17:16:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745255296; cv=none; b=g2jLDxNyaIHl7Vnn7kUAmkB1cBjsoj4K9kiXzCEzIUQrXeBlv1nfoJJGEQ/FCw3o/Bv1pwAee73Cia0OR0U7+7KzS9T7ZFbVrKFmZtQ1Y3sz60Jq1Sd2no/9DukbFi8uv7J2Y1EyxXUAbjFd6pUEKRMfuUYiXa0+KHEQKUnOfdA=
+	t=1745255800; cv=none; b=u/R3mAJ+pkVDbUtdDpONEt9rUdNPMvsYU8+jALLv8OJVKT2yN+rN+BzUo1BvvP1jdVG5889MwQdabQh9dJE6S6zNXcyIrGyI8ac9MSaHTcJ1aJ6oerRyXDIWc+NVDImr1UThNHsXR6ODJVasXjDNr6sd044eT53mpk4YGMLgwT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745255296; c=relaxed/simple;
-	bh=7M9VEbNw/wxshPV8CHZ1wPPNOjwcbLcxoHMPDHW572c=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=EKlLUBUtDxYEZRUafRzhBQRhdBQyfSnbNn1/4ItlUsPPyROQ7mOidBypU5scqJyMNnxUSo5zAlJyOxquakMx0VabbvMoGklui+b5LU87iH5oL+DJ08HGAxpMLO0IhANgj/o7qbmYpOKJJtF7y1M6DLZmkZn3w0jCKNXvb5G73GQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pw+kYY86; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 219F8C4CEEC;
-	Mon, 21 Apr 2025 17:08:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745255295;
-	bh=7M9VEbNw/wxshPV8CHZ1wPPNOjwcbLcxoHMPDHW572c=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=pw+kYY86U/fEJhD1CJycV+A1ZxHSyEYx2Z7m9Z+F2BO2KnJ65R+knO8VAk5df248g
-	 V111OQbe0+bTwBxxsoEaSW1LUP7cLcn60TNzHgaNOL+oN1qpfdlWFVqYG/OO1v/9QH
-	 z4JY2hvqfp2riUkpL7XbEaRAJir5LODbX2Mw5jnnkZeAyjTfJc6UszGVeMbtxe15+C
-	 dvrvY1pL5Q6qcbi4Fsy0UC7CdeSNneR1cuurpqJzshcWwywmYBmDdG/N60zLjZZ6Wz
-	 LpUXsEjCOXfv8UXkV6HEDeojsyACrWAEhEjHzVd70ElSxag5OrYq8Bz5df+hbxxIdN
-	 3Eem0+G2GHWZQ==
-From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Mon, 21 Apr 2025 19:07:14 +0200
-Subject: [PATCH net 2/2] selftests: mptcp: diag: use
- mptcp_lib_get_info_value
+	s=arc-20240116; t=1745255800; c=relaxed/simple;
+	bh=ZFCSLHiDysg927Y/Nr3V/lVaKcJ7uAxp7qwb1bHSUZA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MmttbnkdAKhfpzRKSMmXLUdJyXLnh4UYDlGuFmE47tLI40++36slFqaN7tKNevk9Z/xt/iShbN/rLRWXBs+KUuoGg8uJIWbWTHgFiCubPaiQUqgQUSPgxJmIp+D217HoMkgywZMl2G70K0nYOQSgFn56LCuqkCsKjwaslxXmDOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=25UioA/J; arc=none smtp.client-ip=209.85.160.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-4774611d40bso1038461cf.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Apr 2025 10:16:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1745255798; x=1745860598; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RuURjUDWNXAz9lMXw8+fH47R9FvQohgPWajg37i/laE=;
+        b=25UioA/JF//XcrrCf2YEFIbTMNAOw2KZwYl2luCH5vkxjKxcHR5Jm/9gdcE4nI1p68
+         0+E3WoCZf7BH8kbW+AaFM2kdfiF6+vlxDVi69voKguVa4TVs9CVLcjadXmZSx2MvaHt5
+         weLVhD9tV7SQ7LHKthoscEIAZC4a/6iR54PHmiMaexmhRJXOki5FgjcIsVamA65czAbT
+         J/yV/Xpj4m2CckscQU2ExVE4OPfC7jH+oMGEPDRDY7Ov0p/QMVtHC1bLvFwCIuLbcrya
+         2V71Sy3P5bBgUKTpZeCIV8FdfYAkZX64BHhUH9gaGkWXUqvHqV9GXywArBtOU68YWCno
+         whgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745255798; x=1745860598;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RuURjUDWNXAz9lMXw8+fH47R9FvQohgPWajg37i/laE=;
+        b=QWEDBljFOm+kscy8I29ywqjJ0xir5BNjVH4xpbztRw5XzdB4czUumdHBh/GY75p3dz
+         vv3v7r1nHNZMkT9Bmo7bquWQHfALLEbo7ywg33aRXA1KEZVIX6Fa4pmjNzTCKCuiUDAv
+         KCxa9uxMIIk2dwZqgJZE+/J/XMHjnPbO8DJXYxxrFlLb+L2YDIXje5HTieHRWI+RQKTU
+         8qRbudkf64zlz+woYQwYdbFoQ5XzxQCej8fLdB0Kp2So028wjmXFxAH94ECtwlbjNnpe
+         EG7Nu43CrTnvnJLUKBFPujQ4yYbv3O1N2fI0J8FzR9R70Nef0LfknNaFBqU16IkEwOM2
+         IpgA==
+X-Forwarded-Encrypted: i=1; AJvYcCUsq7/8J67paAjTCSUR6TEsywwmBoDjEsKtYScZI09hCxZ0t5pzfqGyhs949NGjOduGyjw4qdQRHfOFxUdGucA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxw8+jL+GIUlqN3PLi9PDxjf0HVqhkVpUkOo/6HN8xUNt0tIEyy
+	W3imCUz7rHsjSXJaudQKdKQtnF0tIEu+isFux12W3eun/gmazwA6ev4EGYlr9Tcn8qNgoM0sqko
+	+C8dOYlY1lFHG60/qBxfqOKkfNh51mgWuvVah
+X-Gm-Gg: ASbGncuVyyYjKGY1bAoTArbwi7KbrpTXG63TFAburXLI+UBqQXE7RpKnkQYyOKwGq1n
+	/UjXx4m9dmidg7bqVlLbmYOGSfpXjdtUkuIIbAkOuFXv5dwaMBbgTIR+cg6OWpGV48Xv2X2W+De
+	zsvXg7S//cJE/o74rI1mJu
+X-Google-Smtp-Source: AGHT+IEe07pf382BuG5t+h0cxkhNonB9S2hb+4NBUwiHHOIgvisi/X1Rvk0m70CnMe3Yxh9IFdbEwfSfBL+DkDE8WEU=
+X-Received: by 2002:ac8:5901:0:b0:467:84a1:df08 with SMTP id
+ d75a77b69052e-47aecc928f3mr9502881cf.23.1745255797522; Mon, 21 Apr 2025
+ 10:16:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250421-net-mptcp-pm-defer-freeing-v1-2-e731dc6e86b9@kernel.org>
-References: <20250421-net-mptcp-pm-defer-freeing-v1-0-e731dc6e86b9@kernel.org>
-In-Reply-To: <20250421-net-mptcp-pm-defer-freeing-v1-0-e731dc6e86b9@kernel.org>
-To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
- Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, Gang Yan <yangang@kylinos.cn>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, 
- "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- Geliang Tang <geliang@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1945; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=5uqavJtPDjFSLzxOBtTDk/jrKu7HjOYDEmUMS8zpsNA=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDLYqsv+SbQJ5EoX8b19GpCwXKd91ZHuB7EHfs1WENfh2
- fpcoMW4o5SFQYyLQVZMkUW6LTJ/5vMq3hIvPwuYOaxMIEMYuDgFYCKtRxkZ3ul3Tek8ah2/NDbI
- watk8Y7qGU/3Mz6xYjHdXTv3wvdDTgy/WS89eu/3+u5Ts8k2ZxTP1KzT2HU/znb/xAU+Z2uaovk
- 4eQA=
-X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+References: <20231206103702.3873743-1-surenb@google.com> <20231206103702.3873743-3-surenb@google.com>
+ <8bcb7e5f-3c05-4d92-98f7-b62afa17e2fb@lucifer.local> <rns3bplwlxhdkueowpehtrej6avjbmh6mauwl33pfvr4qptmlg@swctg52xpyya>
+In-Reply-To: <rns3bplwlxhdkueowpehtrej6avjbmh6mauwl33pfvr4qptmlg@swctg52xpyya>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Mon, 21 Apr 2025 10:16:26 -0700
+X-Gm-Features: ATxdqUH-V1xozHecneL38ihhUBup30dXmnQSZc7psqoLu7St8-YIj64ka4pAWwg
+Message-ID: <CAJuCfpFjx2NB8X8zVSGyrcaOfwMApZRfGfuia3ERBKj0XaPgaw@mail.gmail.com>
+Subject: Re: [PATCH v6 2/5] userfaultfd: UFFDIO_MOVE uABI
+To: Alejandro Colomar <alx@kernel.org>
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, aarcange@redhat.com, 
+	linux-man@vger.kernel.org, akpm@linux-foundation.org, viro@zeniv.linux.org.uk, 
+	brauner@kernel.org, shuah@kernel.org, lokeshgidra@google.com, 
+	peterx@redhat.com, david@redhat.com, ryan.roberts@arm.com, hughd@google.com, 
+	mhocko@suse.com, axelrasmussen@google.com, rppt@kernel.org, 
+	willy@infradead.org, Liam.Howlett@oracle.com, jannh@google.com, 
+	zhangpeng362@huawei.com, bgeffon@google.com, kaleshsingh@google.com, 
+	ngeoffray@google.com, jdduke@google.com, linux-mm@kvack.org, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+On Sat, Apr 19, 2025 at 12:26=E2=80=AFPM Alejandro Colomar <alx@kernel.org>=
+ wrote:
+>
+> Hi Lorenzo, Suren, Andrea,
+>
+> On Sat, Apr 19, 2025 at 07:57:36PM +0100, Lorenzo Stoakes wrote:
+> > +cc Alejandro
+>
+> Thanks!
+>
+> > On Wed, Dec 06, 2023 at 02:36:56AM -0800, Suren Baghdasaryan wrote:
+> > > From: Andrea Arcangeli <aarcange@redhat.com>
+> > >
+> > > Implement the uABI of UFFDIO_MOVE ioctl.
+>
+> [...]
+>
+> > >
+> > > [1] https://lore.kernel.org/all/1425575884-2574-1-git-send-email-aarc=
+ange@redhat.com/
+> > > [2] https://lore.kernel.org/linux-mm/CA+EESO4uO84SSnBhArH4HvLNhaUQ5nZ=
+KNKXqxRCyjniNVjp0Aw@mail.gmail.com/
+> > >
+> > > Update for the ioctl_userfaultfd(2)  manpage:
+> >
+> > Sorry to resurrect an old thread but... I don't think this update was e=
+ver
+> > propagated anywhere?
+> >
+> > If you did send separately to man-pages list or whatnot maybe worth nud=
+ging
+> > again?
+> >
+> > I don't see anything at [0].
 
-When running diag.sh in a loop, chk_dump_one will report the following
-"grep: write error":
+Thanks for bringing it up! This must have slipped from my attention.
 
- 13 ....chk 2 cestab                                  [ OK ]
- grep: write error
- 14 ....chk dump_one                                  [ OK ]
- 15 ....chk 2->0 msk in use after flush               [ OK ]
- 16 ....chk 2->0 cestab after flush                   [ OK ]
+> >
+> > [0]: https://man7.org/linux/man-pages/man2/ioctl_userfaultfd.2.html
+> >
+> > Thanks!
+> >
+> > >
+> > >    UFFDIO_MOVE
+> > >        (Since Linux xxx)  Move a continuous memory chunk into the
+>
+> Nope, it seems this was never sent to linux-man@.
+> <https://lore.kernel.org/linux-man/?q=3DUFFDIO_MOVE>:
 
-This error is caused by a broken pipe. When the output of 'ss' is processed
-by grep, 'head -n 1' will exit immediately after getting the first line,
-causing the subsequent pipe to close. At this time, if 'grep' is still
-trying to write data to the closed pipe, it will trigger a SIGPIPE signal,
-causing a write error.
+Sorry for missing that part.
 
-One solution is not to use this problematic "head -n 1" command, but to use
-mptcp_lib_get_info_value() helper defined in mptcp_lib.sh to get the value
-of 'token'.
+>
+>         [No results found]
+>
+> Please re-send including linux-man@ in CC, as specified in
+> <https://git.kernel.org/pub/scm/docs/man-pages/man-pages.git/tree/CONTRIB=
+UTING>
 
-Fixes: ba2400166570 ("selftests: mptcp: add a test for mptcp_diag_dump_one")
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-Tested-by: Gang Yan <yangang@kylinos.cn>
-Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
----
- tools/testing/selftests/net/mptcp/diag.sh | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+Thanks for the reference. Will post the documentation update later today.
+Thanks,
+Suren.
 
-diff --git a/tools/testing/selftests/net/mptcp/diag.sh b/tools/testing/selftests/net/mptcp/diag.sh
-index 4f55477ffe087721ad13774e82a5e2b1e6cec7c4..e7a75341f0f32304ff4e58c9b2500d405124dc74 100755
---- a/tools/testing/selftests/net/mptcp/diag.sh
-+++ b/tools/testing/selftests/net/mptcp/diag.sh
-@@ -206,9 +206,8 @@ chk_dump_one()
- 	local token
- 	local msg
- 
--	ss_token="$(ss -inmHMN $ns | grep 'token:' |\
--		    head -n 1 |\
--		    sed 's/.*token:\([0-9a-f]*\).*/\1/')"
-+	ss_token="$(ss -inmHMN $ns |
-+		    mptcp_lib_get_info_value "token" "token")"
- 
- 	token="$(ip netns exec $ns ./mptcp_diag -t $ss_token |\
- 		 awk -F':[ \t]+' '/^token/ {print $2}')"
-
--- 
-2.48.1
-
+>
+>
+> Have a lovely night!
+> Alex
+>
+> --
+> <https://www.alejandro-colomar.es/>
 
