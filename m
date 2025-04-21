@@ -1,49 +1,50 @@
-Return-Path: <linux-kselftest+bounces-31257-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31258-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 119D1A95506
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Apr 2025 19:08:15 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77254A9550D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Apr 2025 19:08:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 48C04168BE8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Apr 2025 17:08:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2D3037A3DF0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Apr 2025 17:07:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82EDA1E32D6;
-	Mon, 21 Apr 2025 17:08:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D16F1E5B93;
+	Mon, 21 Apr 2025 17:08:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SJumR7wQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IB3E96zN"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BDE219CD1D;
-	Mon, 21 Apr 2025 17:08:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A42C1E5B82;
+	Mon, 21 Apr 2025 17:08:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745255290; cv=none; b=e5kiIQq71bxTZ1YKO6e6WY3w7vKomaYD6+R7rfb3b2skjAzImIwczqhYDKYhnGZVkDRAzw6iIZENqUEv8oRW0zt1Z757rYPLB3d7XVJ0XHcLpDxOFwZWzkVNyCktX3zo1+dbXYynTWkH4jaCmMxDoVPDFExQBRbvKZejU99zN1U=
+	t=1745255293; cv=none; b=Ijc7dufRsIc+07QTkMSdmrZruhayxJ35Lqdj+NhQJ5KRTbYDzx24mVy1K6d48kJ5m5BoCwfDijng71xiORFO9Xkv/CQTjvhJUrHYwYky/xSZuGT5OY9mTGcSVhchB35D9x5Bn2GHmAiQcTwYm/CzghqCMLLI4tZVuPa/9DBS3ws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745255290; c=relaxed/simple;
-	bh=J14MkTd+JCXpakqM03SaDXb7lljFMGaebEw96oEYtv0=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=CdWhYV6OXLt/s6iLUasAcWpv8Br4Si3GgwBgDb3T2fn0MqGWOLCJIpJ/M51cfpst1Hzb+E7PQLMYpn4YM7PgeMq7LUnqwX/yQTPMNE75+T+Srgq7kkmTaqQhA5q0LReUrVwx/Gup3JjtpAU6CVElr0Nw7HOqHQgILle45v8IshE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SJumR7wQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EC17C4CEE4;
-	Mon, 21 Apr 2025 17:08:07 +0000 (UTC)
+	s=arc-20240116; t=1745255293; c=relaxed/simple;
+	bh=aFqGH0paYxGxHUjSJw30+gqhavTKRlHfTAmSY/feUhI=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=TM1/5YahSv0lwSchwI/aiQCLRptCtH/syjE3DyXGuXw+Xs7M0BuMOdP2+NiE/93JCBDr8x0zBPQi95mtxkSVS0Mf7H7J1/UXyMgVSyfKxRo4ckqomYwTyIVnh+omuQNzTVA8m7RPlTuPH6jMJLw4CUiZbZFYIhzT+vD4NWBdNHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IB3E96zN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 307C1C4CEEA;
+	Mon, 21 Apr 2025 17:08:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745255289;
-	bh=J14MkTd+JCXpakqM03SaDXb7lljFMGaebEw96oEYtv0=;
-	h=From:Subject:Date:To:Cc:From;
-	b=SJumR7wQOpw+4UwBkNc60AHPKTl6mqeKvuvHCGaFwKry8ltbVCxkB+VRA96KsEH9t
-	 q9wyCaV8JFf/Wtt3LDSWiuHsxFOpBj01PdyBU2smzYATo4QZYfXECPSM29wQxSzOSo
-	 iLawDFDHoYMyokqFMfCZEj5zeSSICQIHrc0K50wyYlmhatwWU8ofUdDjDmlFcVSOCd
-	 0+lylRs65uu9IIs6yVMw/iGxlDZOJp99KlNRdksSTzLO57vA0vVirwwT+HgOP0KawP
-	 fgk2Pw8KJ4wtBYZrQH3gdMzV5uRsOrfJfTdJ2iye992gu07cyvKLD5rluVi3cspi20
-	 2myPAdbhnyW9Q==
+	s=k20201202; t=1745255292;
+	bh=aFqGH0paYxGxHUjSJw30+gqhavTKRlHfTAmSY/feUhI=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=IB3E96zNGsPSIrWWQpwDyy6vjnLhVLxsO3ylLubuDB3vAfi73esoOvLAzwIvCSpdn
+	 XywG8B1E4jYgFcyqw7vA4YR14ymyKyXLny7VTN8J1qtR5iQaQ4zY6llrBmQCuZ48b5
+	 BgJb2/w8w62/QRGTIP7FgTDn4HG9/Eu/nDdUIKY3axPtc9yBchEXA0bIj26Pi11H61
+	 FJiwp009mu3/aAu5erFE2TYdhp8Lz1W6yIC9JdbOJKTzWQAwP2GJ/Og3SVoCAg+VhS
+	 oZhMgS+v7H9VS47kBA3x8ydL6UPuuzBmCWqpCnzILKpXl05CeX8lALR0pcL3//PanJ
+	 MGzxgWbSta6hg==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Subject: [PATCH net 0/2] mptcp: pm: Defer freeing userspace pm entries
-Date: Mon, 21 Apr 2025 19:07:12 +0200
-Message-Id: <20250421-net-mptcp-pm-defer-freeing-v1-0-e731dc6e86b9@kernel.org>
+Date: Mon, 21 Apr 2025 19:07:13 +0200
+Subject: [PATCH net 1/2] mptcp: pm: Defer freeing of MPTCP userspace path
+ manager entries
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,10 +53,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAEB7BmgC/x3MQQqDMBBG4avIrDswiZZir1K60OSPnYUxTKQUx
- LsbuvwW7x1UYYpKz+4gw1erbrnB3ToKnykvYI3N5MXfZfCOM3Zeyx4Kl5UjEoyTAZoXTmOI4ua
- HyNBTGxRD0t9//qLW0fs8L6QXdENxAAAA
-X-Change-ID: 20250421-net-mptcp-pm-defer-freeing-f9cd01b70043
+Message-Id: <20250421-net-mptcp-pm-defer-freeing-v1-1-e731dc6e86b9@kernel.org>
+References: <20250421-net-mptcp-pm-defer-freeing-v1-0-e731dc6e86b9@kernel.org>
+In-Reply-To: <20250421-net-mptcp-pm-defer-freeing-v1-0-e731dc6e86b9@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
  Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
  Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
@@ -63,42 +63,57 @@ To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
  Shuah Khan <shuah@kernel.org>, Gang Yan <yangang@kylinos.cn>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, 
- "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, stable@vger.kernel.org, 
- Geliang Tang <geliang@kernel.org>
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, stable@vger.kernel.org
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=789; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=J14MkTd+JCXpakqM03SaDXb7lljFMGaebEw96oEYtv0=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDLYqkukJQt+aaxsard9y772Z2bNV2GzteaOkxavPDPD9
- GFfcuKtjlIWBjEuBlkxRRbptsj8mc+reEu8/Cxg5rAygQxh4OIUgIkcO8vwT9Vzx6OQpTzdl3Kf
- aadUThYKzhaLPfxReqGAimzv34zjvQz/1LyOzvOeHbf7fWb0WYsrfinxV/Zpc4dLeHp5Pt4wJeQ
- 4GwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1536; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=hG631LGYz4PCLJEqqRwKqfnXdY9WVYg4k+smAbalb/g=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDLYqksPtKrL5IhaNZ269ibFkFvcd+bfwCkvdy9Y8/DMn
+ 8XZ7d80O0pZGMS4GGTFFFmk2yLzZz6v4i3x8rOAmcPKBDKEgYtTACYS+5HhrxjLg/PbJhpk/Tps
+ +HqXzk//ez3Lr/a4Fb7YH9dm2LlNUozhr8Q7Td0l21s0mg4s2PJS7qmyarIJQ8ELHQHxtFM50r3
+ HmAE=
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-Here are two unrelated fixes for MPTCP:
+From: Mat Martineau <martineau@kernel.org>
 
-- Patch 1: free userspace PM entry with RCU helpers. A fix for v6.14.
+When path manager entries are deleted from the local address list, they
+are first unlinked from the address list using list_del_rcu(). The
+entries must not be freed until after the RCU grace period, but the
+existing code immediately frees the entry.
 
-- Patch 2: avoid a warning when running diag.sh selftest. A fix for
-  v6.15-rc1.
+Use kfree_rcu_mightsleep() and adjust sk_omem_alloc in open code instead
+of using the sock_kfree_s() helper. This code path is only called in a
+netlink handler, so the "might sleep" function is preferable to adding
+a rarely-used rcu_head member to struct mptcp_pm_addr_entry.
 
+Fixes: 88d097316371 ("mptcp: drop free_list for deleting entries")
+Cc: stable@vger.kernel.org
+Signed-off-by: Mat Martineau <martineau@kernel.org>
+Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
-Geliang Tang (1):
-      selftests: mptcp: diag: use mptcp_lib_get_info_value
+ net/mptcp/pm_userspace.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Mat Martineau (1):
-      mptcp: pm: Defer freeing of MPTCP userspace path manager entries
+diff --git a/net/mptcp/pm_userspace.c b/net/mptcp/pm_userspace.c
+index 2cb62f026b1f4420c549ab8ee6f54ffe3880d453..a715dcbe0146ed0c055d071c63257047a90a9afd 100644
+--- a/net/mptcp/pm_userspace.c
++++ b/net/mptcp/pm_userspace.c
+@@ -337,7 +337,11 @@ int mptcp_pm_nl_remove_doit(struct sk_buff *skb, struct genl_info *info)
+ 
+ 	release_sock(sk);
+ 
+-	sock_kfree_s(sk, match, sizeof(*match));
++	kfree_rcu_mightsleep(match);
++	/* Adjust sk_omem_alloc like sock_kfree_s() does, to match
++	 * with allocation of this memory by sock_kmemdup()
++	 */
++	atomic_sub(sizeof(*match), &sk->sk_omem_alloc);
+ 
+ 	err = 0;
+ out:
 
- net/mptcp/pm_userspace.c                  | 6 +++++-
- tools/testing/selftests/net/mptcp/diag.sh | 5 ++---
- 2 files changed, 7 insertions(+), 4 deletions(-)
----
-base-commit: 750d0ac001e85b754404178ee8ce01cbc76a03be
-change-id: 20250421-net-mptcp-pm-defer-freeing-f9cd01b70043
-
-Best regards,
 -- 
-Matthieu Baerts (NGI0) <matttbe@kernel.org>
+2.48.1
 
 
