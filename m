@@ -1,38 +1,38 @@
-Return-Path: <linux-kselftest+bounces-31229-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31231-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CC89A94D2E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Apr 2025 09:31:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A4C2A94D36
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Apr 2025 09:32:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4871B170951
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Apr 2025 07:31:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C11B2170968
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Apr 2025 07:32:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A05F41E98EA;
-	Mon, 21 Apr 2025 07:31:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1506920F091;
+	Mon, 21 Apr 2025 07:31:26 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58BDE1E8329;
-	Mon, 21 Apr 2025 07:31:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4B0412E5D;
+	Mon, 21 Apr 2025 07:31:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745220684; cv=none; b=l9bJ9HUhymKAN/SUI1Dp48AaOHrxvYr7cN1ZpDQN8iK7+YZ5kCGJW6/jTISy5LpXoXDBLgcPcW+N24ERKdJ4mlTq3b/PH7d1mNj4AVTnYi6wWmoop43bXaUu6zTpv/SXdhI7F+5DSH31KayPQJjK824sH9Z3/+xKn39+hRjqgew=
+	t=1745220686; cv=none; b=MqULlmCxvkY0WwqMZvV9ODuRq1bmBzuR2A9okbco964WwqcdvrpI0N9AsoHVAptDz5Aam+8OgIJ7UNcAxSqh2W9yrjbiNASoxsJ0wlWzfYdeycG9yTdilEE1UgNBeoWzclOmMnmo7MBz2Ma1Xu1iNsMREL09SPAUH686UH6MsmM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745220684; c=relaxed/simple;
-	bh=qFjcpY7G4UvAvpezP2J+wXOuhfZlC9khcrCE9vkGDFE=;
+	s=arc-20240116; t=1745220686; c=relaxed/simple;
+	bh=lp6dm5tn1NQwQeWjlqDyDfVJVa0IiHQ45n/mZv2tIGY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=s4NnM75TICM4BLSFUf0s6TX+Dv+oHu9Qp7UHeYl4Yy5AGGigmsYXubDOBZZxdI84+SQ8X0IBjCkehpLPKsdd4j6QSSd+q04FO0xNK3HTQZT850LN1vUBPb4O2z2kAtVTcfpykYvIwELX+zRKUDdYSGO58s8tRbtqXjcudhPJNvE=
+	 MIME-Version; b=g2WP/VVHeNtMuIB5NVVEeEFbmUG6vF6wFh+Q/mMiORW2IwK0s+GYsH6Ji30uHGrhOGmx0R25KppTNMatIT91HU7mpKdKRKfR9mT0VCRdZ71cf2ZTUoM+zCcUrQwNuRofBhgPyKL8Gjy88q7eDitpHW3MZ3kpC/lRENBKRiKIpmU=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
 Received: from loongson.cn (unknown [10.2.5.213])
-	by gateway (Coremail) with SMTP id _____8Bx365F9AVoc0nDAA--.42988S3;
-	Mon, 21 Apr 2025 15:31:17 +0800 (CST)
+	by gateway (Coremail) with SMTP id _____8AxlnBH9AVod0nDAA--.60599S3;
+	Mon, 21 Apr 2025 15:31:19 +0800 (CST)
 Received: from localhost.localdomain (unknown [10.2.5.213])
-	by front1 (Coremail) with SMTP id qMiowMBxn8U+9AVopeqNAA--.25751S3;
-	Mon, 21 Apr 2025 15:31:16 +0800 (CST)
+	by front1 (Coremail) with SMTP id qMiowMBxn8U+9AVopeqNAA--.25751S4;
+	Mon, 21 Apr 2025 15:31:17 +0800 (CST)
 From: Bibo Mao <maobibo@loongson.cn>
 To: Paolo Bonzini <pbonzini@redhat.com>,
 	Huacai Chen <chenhuacai@kernel.org>,
@@ -41,9 +41,9 @@ Cc: Shuah Khan <shuah@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	kvm@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v10 1/5] KVM: selftests: Add VM_MODE_P47V47_16K vm mode
-Date: Mon, 21 Apr 2025 15:31:06 +0800
-Message-Id: <20250421073110.2259397-2-maobibo@loongson.cn>
+Subject: [PATCH v10 2/5] KVM: selftests: Add KVM selftests header files for LoongArch
+Date: Mon, 21 Apr 2025 15:31:07 +0800
+Message-Id: <20250421073110.2259397-3-maobibo@loongson.cn>
 X-Mailer: git-send-email 2.39.3
 In-Reply-To: <20250421073110.2259397-1-maobibo@loongson.cn>
 References: <20250421073110.2259397-1-maobibo@loongson.cn>
@@ -54,61 +54,201 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowMBxn8U+9AVopeqNAA--.25751S3
+X-CM-TRANSID:qMiowMBxn8U+9AVopeqNAA--.25751S4
 X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
 X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
 	ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
 	nUUI43ZEXa7xR_UUUUUUUUU==
 
-On LoongArch system, GVA width is 47 bit and GPA width is 47 bit also,
-here add new vm mode VM_MODE_P47V47_16K.
+Add KVM selftests header files for LoongArch, including processor.h
+and kvm_util_base.h. It mainly contains LoongArch CSR register
+definition and page table entry definition.
 
 Signed-off-by: Bibo Mao <maobibo@loongson.cn>
 ---
- tools/testing/selftests/kvm/include/kvm_util.h | 1 +
- tools/testing/selftests/kvm/lib/kvm_util.c     | 3 +++
- 2 files changed, 4 insertions(+)
+ .../testing/selftests/kvm/include/kvm_util.h  |   5 +
+ .../kvm/include/loongarch/kvm_util_arch.h     |   7 +
+ .../kvm/include/loongarch/processor.h         | 141 ++++++++++++++++++
+ 3 files changed, 153 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/include/loongarch/kvm_util_arch.h
+ create mode 100644 tools/testing/selftests/kvm/include/loongarch/processor.h
 
 diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-index 373912464fb4..f8faed8c8024 100644
+index f8faed8c8024..93013564428b 100644
 --- a/tools/testing/selftests/kvm/include/kvm_util.h
 +++ b/tools/testing/selftests/kvm/include/kvm_util.h
-@@ -177,6 +177,7 @@ enum vm_guest_mode {
- 	VM_MODE_P36V48_4K,
- 	VM_MODE_P36V48_16K,
- 	VM_MODE_P36V48_64K,
-+	VM_MODE_P47V47_16K,
- 	VM_MODE_P36V47_16K,
- 	NUM_VM_MODES,
- };
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 815bc45dd8dc..5649cf2f40e8 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -222,6 +222,7 @@ const char *vm_guest_mode_string(uint32_t i)
- 		[VM_MODE_P36V48_4K]	= "PA-bits:36,  VA-bits:48,  4K pages",
- 		[VM_MODE_P36V48_16K]	= "PA-bits:36,  VA-bits:48, 16K pages",
- 		[VM_MODE_P36V48_64K]	= "PA-bits:36,  VA-bits:48, 64K pages",
-+		[VM_MODE_P47V47_16K]	= "PA-bits:47,  VA-bits:47, 16K pages",
- 		[VM_MODE_P36V47_16K]	= "PA-bits:36,  VA-bits:47, 16K pages",
- 	};
- 	_Static_assert(sizeof(strings)/sizeof(char *) == NUM_VM_MODES,
-@@ -248,6 +249,7 @@ const struct vm_guest_mode_params vm_guest_mode_params[] = {
- 	[VM_MODE_P36V48_4K]	= { 36, 48,  0x1000, 12 },
- 	[VM_MODE_P36V48_16K]	= { 36, 48,  0x4000, 14 },
- 	[VM_MODE_P36V48_64K]	= { 36, 48, 0x10000, 16 },
-+	[VM_MODE_P47V47_16K]	= { 47, 47,  0x4000, 14 },
- 	[VM_MODE_P36V47_16K]	= { 36, 47,  0x4000, 14 },
- };
- _Static_assert(sizeof(vm_guest_mode_params)/sizeof(struct vm_guest_mode_params) == NUM_VM_MODES,
-@@ -319,6 +321,7 @@ struct kvm_vm *____vm_create(struct vm_shape shape)
- 	case VM_MODE_P36V48_16K:
- 		vm->pgtable_levels = 4;
- 		break;
-+	case VM_MODE_P47V47_16K:
- 	case VM_MODE_P36V47_16K:
- 		vm->pgtable_levels = 3;
- 		break;
+@@ -233,6 +233,11 @@ extern enum vm_guest_mode vm_mode_default;
+ #define MIN_PAGE_SHIFT			12U
+ #define ptes_per_page(page_size)	((page_size) / 8)
+ 
++#elif defined(__loongarch__)
++#define VM_MODE_DEFAULT			VM_MODE_P47V47_16K
++#define MIN_PAGE_SHIFT			12U
++#define ptes_per_page(page_size)	((page_size) / 8)
++
+ #endif
+ 
+ #define VM_SHAPE_DEFAULT	VM_SHAPE(VM_MODE_DEFAULT)
+diff --git a/tools/testing/selftests/kvm/include/loongarch/kvm_util_arch.h b/tools/testing/selftests/kvm/include/loongarch/kvm_util_arch.h
+new file mode 100644
+index 000000000000..e43a57d99b56
+--- /dev/null
++++ b/tools/testing/selftests/kvm/include/loongarch/kvm_util_arch.h
+@@ -0,0 +1,7 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef SELFTEST_KVM_UTIL_ARCH_H
++#define SELFTEST_KVM_UTIL_ARCH_H
++
++struct kvm_vm_arch {};
++
++#endif  // SELFTEST_KVM_UTIL_ARCH_H
+diff --git a/tools/testing/selftests/kvm/include/loongarch/processor.h b/tools/testing/selftests/kvm/include/loongarch/processor.h
+new file mode 100644
+index 000000000000..6427a3275e6a
+--- /dev/null
++++ b/tools/testing/selftests/kvm/include/loongarch/processor.h
+@@ -0,0 +1,141 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++
++#ifndef SELFTEST_KVM_PROCESSOR_H
++#define SELFTEST_KVM_PROCESSOR_H
++
++#ifndef __ASSEMBLER__
++#include "ucall_common.h"
++
++#else
++/* general registers */
++#define zero				$r0
++#define ra				$r1
++#define tp				$r2
++#define sp				$r3
++#define a0				$r4
++#define a1				$r5
++#define a2				$r6
++#define a3				$r7
++#define a4				$r8
++#define a5				$r9
++#define a6				$r10
++#define a7				$r11
++#define t0				$r12
++#define t1				$r13
++#define t2				$r14
++#define t3				$r15
++#define t4				$r16
++#define t5				$r17
++#define t6				$r18
++#define t7				$r19
++#define t8				$r20
++#define u0				$r21
++#define fp				$r22
++#define s0				$r23
++#define s1				$r24
++#define s2				$r25
++#define s3				$r26
++#define s4				$r27
++#define s5				$r28
++#define s6				$r29
++#define s7				$r30
++#define s8				$r31
++#endif
++
++/*
++ * LoongArch page table entry definition
++ * Original header file arch/loongarch/include/asm/loongarch.h
++ */
++#define _PAGE_VALID_SHIFT		0
++#define _PAGE_DIRTY_SHIFT		1
++#define _PAGE_PLV_SHIFT			2  /* 2~3, two bits */
++#define  PLV_KERN			0
++#define  PLV_USER			3
++#define  PLV_MASK			0x3
++#define _CACHE_SHIFT			4  /* 4~5, two bits */
++#define _PAGE_PRESENT_SHIFT		7
++#define _PAGE_WRITE_SHIFT		8
++
++#define _PAGE_VALID			BIT_ULL(_PAGE_VALID_SHIFT)
++#define _PAGE_PRESENT			BIT_ULL(_PAGE_PRESENT_SHIFT)
++#define _PAGE_WRITE			BIT_ULL(_PAGE_WRITE_SHIFT)
++#define _PAGE_DIRTY			BIT_ULL(_PAGE_DIRTY_SHIFT)
++#define _PAGE_USER			(PLV_USER << _PAGE_PLV_SHIFT)
++#define   __READABLE			(_PAGE_VALID)
++#define   __WRITEABLE			(_PAGE_DIRTY | _PAGE_WRITE)
++/* Coherent Cached */
++#define _CACHE_CC			BIT_ULL(_CACHE_SHIFT)
++#define PS_4K				0x0000000c
++#define PS_16K				0x0000000e
++#define PS_64K				0x00000010
++#define PS_DEFAULT_SIZE			PS_16K
++
++/* LoongArch Basic CSR registers */
++#define LOONGARCH_CSR_CRMD		0x0 /* Current mode info */
++#define  CSR_CRMD_PG_SHIFT		4
++#define  CSR_CRMD_PG			BIT_ULL(CSR_CRMD_PG_SHIFT)
++#define  CSR_CRMD_IE_SHIFT		2
++#define  CSR_CRMD_IE			BIT_ULL(CSR_CRMD_IE_SHIFT)
++#define  CSR_CRMD_PLV_SHIFT		0
++#define  CSR_CRMD_PLV_WIDTH		2
++#define  CSR_CRMD_PLV			(0x3UL << CSR_CRMD_PLV_SHIFT)
++#define  PLV_MASK			0x3
++#define LOONGARCH_CSR_PRMD		0x1
++#define LOONGARCH_CSR_EUEN		0x2
++#define LOONGARCH_CSR_ECFG		0x4
++#define LOONGARCH_CSR_ESTAT		0x5  /* Exception status */
++#define LOONGARCH_CSR_ERA		0x6  /* ERA */
++#define LOONGARCH_CSR_BADV		0x7  /* Bad virtual address */
++#define LOONGARCH_CSR_EENTRY		0xc
++#define LOONGARCH_CSR_TLBIDX		0x10 /* TLB Index, EHINV, PageSize */
++#define  CSR_TLBIDX_PS_SHIFT		24
++#define  CSR_TLBIDX_PS_WIDTH		6
++#define  CSR_TLBIDX_PS			(0x3fUL << CSR_TLBIDX_PS_SHIFT)
++#define  CSR_TLBIDX_SIZEM		0x3f000000
++#define  CSR_TLBIDX_SIZE		CSR_TLBIDX_PS_SHIFT
++#define LOONGARCH_CSR_ASID		0x18 /* ASID */
++#define LOONGARCH_CSR_PGDL		0x19
++#define LOONGARCH_CSR_PGDH		0x1a
++/* Page table base */
++#define LOONGARCH_CSR_PGD		0x1b
++#define LOONGARCH_CSR_PWCTL0		0x1c
++#define LOONGARCH_CSR_PWCTL1		0x1d
++#define LOONGARCH_CSR_STLBPGSIZE	0x1e
++#define LOONGARCH_CSR_CPUID		0x20
++#define LOONGARCH_CSR_KS0		0x30
++#define LOONGARCH_CSR_KS1		0x31
++#define LOONGARCH_CSR_TMID		0x40
++#define LOONGARCH_CSR_TCFG		0x41
++/* TLB refill exception entry */
++#define LOONGARCH_CSR_TLBRENTRY		0x88
++#define LOONGARCH_CSR_TLBRSAVE		0x8b
++#define LOONGARCH_CSR_TLBREHI		0x8e
++#define  CSR_TLBREHI_PS_SHIFT		0
++#define  CSR_TLBREHI_PS			(0x3fUL << CSR_TLBREHI_PS_SHIFT)
++
++#define EXREGS_GPRS			(32)
++
++#ifndef __ASSEMBLER__
++void handle_tlb_refill(void);
++void handle_exception(void);
++
++struct ex_regs {
++	unsigned long regs[EXREGS_GPRS];
++	unsigned long pc;
++	unsigned long estat;
++	unsigned long badv;
++};
++
++#define PC_OFFSET_EXREGS		offsetof(struct ex_regs, pc)
++#define ESTAT_OFFSET_EXREGS		offsetof(struct ex_regs, estat)
++#define BADV_OFFSET_EXREGS		offsetof(struct ex_regs, badv)
++#define EXREGS_SIZE			sizeof(struct ex_regs)
++
++#else
++#define PC_OFFSET_EXREGS		((EXREGS_GPRS + 0) * 8)
++#define ESTAT_OFFSET_EXREGS		((EXREGS_GPRS + 1) * 8)
++#define BADV_OFFSET_EXREGS		((EXREGS_GPRS + 2) * 8)
++#define EXREGS_SIZE			((EXREGS_GPRS + 3) * 8)
++#endif
++
++#endif /* SELFTEST_KVM_PROCESSOR_H */
 -- 
 2.39.3
 
