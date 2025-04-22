@@ -1,127 +1,110 @@
-Return-Path: <linux-kselftest+bounces-31305-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31306-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95B18A9703C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Apr 2025 17:15:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02B89A97049
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Apr 2025 17:17:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6EBEE189D188
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Apr 2025 15:15:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E74FB173113
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Apr 2025 15:17:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93D9228EA50;
-	Tue, 22 Apr 2025 15:15:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF6CA28EA5E;
+	Tue, 22 Apr 2025 15:17:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z1seoP+A"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DZv0FcEm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 204B0EEBB;
-	Tue, 22 Apr 2025 15:15:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5F34EEBB;
+	Tue, 22 Apr 2025 15:17:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745334931; cv=none; b=OFt6RvxrgBAK1d1uH5ZuXbFMb7Pu1NRlLjSDGhtbqX82u9aRc8u4+oFCrW6oK4x5sdZI7bsjOqmaue8Rk6MdbD48UEK02BZ4ZmuBFJ9wiLUpWUl9wSUUF5Ri3IbcYwzki3c5l374K0uugZngZkqJV7ZOV6kxfQ/SIagb2UZOzbk=
+	t=1745335053; cv=none; b=pADtOPQURBEvm7+5WSs3z7la4fTiCNY2Ubrf4B6DgLfBEgTKsOBgIa9Ysv/RYSSG3C/mjzXG1y7a+wBq1fkkXna+5RxiJRXnnNMhIP4osKsYJtGEse6ZbWj/HezEXVP8N/hiohTQfGr+p3k3Z5n5mq2vCycinRBW6Ikxsrve3QM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745334931; c=relaxed/simple;
-	bh=zZKF9nOH8sEPJErHTOsvwYFx9dUfb3L1BJmkI6VuiUo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NQsLCmduvc+NTPoXud6xxbT3R6pkkO68nC2hEx3SnQz9w4JWDCgjHAtHxxf8Jzs71jbbgl5k11KiX+Xb+/Wz98N0WXbXr2Jnw0iQPqn1DrafS+kqIWm9MGXMi1vBDdimz7CFARG+2fKbzaw4POGZ2Qm+5GwKMBO7dD1WfCFN0pY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z1seoP+A; arc=none smtp.client-ip=209.85.215.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-af8cb6258bcso239816a12.3;
-        Tue, 22 Apr 2025 08:15:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745334929; x=1745939729; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zZKF9nOH8sEPJErHTOsvwYFx9dUfb3L1BJmkI6VuiUo=;
-        b=Z1seoP+AZVnbXBhyUfCB5LcGeR/jQwabr+dVjCbLXVgwwBtYX3fHEbWVrxb+z/VIor
-         /1KXQkom5I1Mqmzupqc7HjQr5Sg7ISLOO+YTkUboHFAatku/Li1/+XUEHh0cw4iev5I7
-         PS9yMJGIa7HF4+A8WxdaQipy/OtcpWE2HmytJSID++6qHYjDRqjX+W9nX2Dzw7e21H7v
-         3iokcj/DJ2ezKxBY2zidC+eHC20IgmAdc4Xh8hOG1VMgw15VYU6ILbHkBKt1IcMQC19r
-         tQEHi0rH8dQQ3Maa0OGycOcan6FwnNSIOqo/DJH7aS7PjMSkTdaJ5flA7THRVlM0aBx1
-         J9+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745334929; x=1745939729;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zZKF9nOH8sEPJErHTOsvwYFx9dUfb3L1BJmkI6VuiUo=;
-        b=r+DCZHJixW1FxhfWCpLsiremgsGnIf3NWJptAqcVdt6CktPMODu92KveFQjcc8wzjO
-         SAmRzk9bSimYGFSrcT5U/3p3dKi9I/NRy0AgQMKuFQdtk4hPM92Nv6z2dBf67YYGR9d7
-         pZvXaqEoPXM5rVUR2RRFeE446szAtvwV0KVF7Q460F3COq0oSr1bNTnl/hGjRtHw+6/I
-         l8v4BGTiRAVmBs0FE0/LGMMyZLf/yuyf6J72FpRnzC8gDkZ1lC3hxon45+t4/2+mBH2a
-         8f72ZRYP4tuktIwrqKPgHRm1JD47PR3TYXHkFytOvTkaJRxrVHF31Z6H9mYDrwKNCUcn
-         3WeA==
-X-Forwarded-Encrypted: i=1; AJvYcCU8WoPXH7Ly5lHdsjLzD3BjhUdiLkXNiSIvRIxY/JvSpFo+kPMoDiCJXGeOSx+rCYre1tAgg4IRnBjCtrCb@vger.kernel.org, AJvYcCUbk6jUOADrQWGooGnCdGaowN/f52dCs0sm8u6u1dSIRnffBuxI+uq9YUVa3RcLtaBqgZw1IJ3xMirIZjE3CjTV@vger.kernel.org, AJvYcCUevxR7Ij5CySBz9r95QYMaQxRCQDeF5ld0jnxwO0Gb059dwTQk8Cn/E3roybov1VKMYHWFpPMDfU1A6bA=@vger.kernel.org, AJvYcCVtqx1wSdGvEaZrAQK+R1ZeaCxsQQUfli3Nm09aldhyTQ44ATI2X1In8HbC3by/CTtbc83gOvBiS/sD@vger.kernel.org, AJvYcCVymSz5SKJXWKsHsTdJlNS0fxYADwqvkKAwaFqOVw5tUrmrgekxF6XIgEouKytlrqOC+sKuBZhNvubBfBhuskA=@vger.kernel.org, AJvYcCWKgGM6Z007qiWPCPjpzMN9VDbE4tSoMbsc4msQgiWQ6uKcT9f8nosUyH2nCI9ENcJgBevrpsv1JTBz@vger.kernel.org, AJvYcCWOH0OKf/VsJ4z6o3vufLSv+qRFC2UNL8/pJJ5M+GDc6WX8caXYytMb1Ttz09eopP5Cj9BIFBmpfXHUytwM@vger.kernel.org, AJvYcCXViCqsSfu1rijaOTBgaKmZqlGH3yjGiWUFadRzCF49g1UON8ESzM/xf9yTPUlY0XlAC/6sZfuH@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy+lng6FjWA2ZOhYq7FnlJ1f2Wzgyb7voiCOODwmVWV8sfO/IWw
-	+U7z30+fE1/GJCEkxtIyLznKS1+hWB7534AHVH8tzP1MxwLGQHoJ5W66iJwSQB7ucIdrgAaD4I9
-	nKpNTY8NCBb26hMK3TkB8qP2ECYo=
-X-Gm-Gg: ASbGncuxu90GAftl1muSeiY+m6S59aO7p3e9MnfY78sEvaDHab+uDTTo/7OTRAApnHM
-	pOHa4/BkMN3vMVoP/x/Nhl/OVgfrbHLTjsgIKW9VvUV+I6LtuO7D4Krv1grES0TJDd3JnZ1G/2U
-	F3pgHvzQaBWQGayHsoN6prGQ==
-X-Google-Smtp-Source: AGHT+IEuT6KxYsdhSw5cCeMrUaqYdXW9YE/wChmli/G+cfCYNzLRiA7m7gmwaKew+OoBnqvuuEbFo8HJGHR2tvaOM7M=
-X-Received: by 2002:a17:90b:3501:b0:2ff:7970:d2b6 with SMTP id
- 98e67ed59e1d1-3087bde06ddmr9204562a91.5.1745334929331; Tue, 22 Apr 2025
- 08:15:29 -0700 (PDT)
+	s=arc-20240116; t=1745335053; c=relaxed/simple;
+	bh=gm2YtakWua6MgLU2MMARUhkStvU91vYswH2RlQrRvmM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nC/Pg3wgQZm5eGE/4TdYehCUB/DXBjy0pS85TE55a+rO3LviSk8ZTBq9y6Xi0JAsnIzwblPwEGgVymwN7de7LFm35gmYNVszaKOpUuhF5kJSll9dB347S1e9GXrcUK9rnbc5Dh22ipnAj9YMIwK928crHX4TT2YKjB20j4jZkfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DZv0FcEm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C978C4CEED;
+	Tue, 22 Apr 2025 15:17:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745335053;
+	bh=gm2YtakWua6MgLU2MMARUhkStvU91vYswH2RlQrRvmM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DZv0FcEmXwnwBYh5A3BQhodZ654sV9WP0Ct/QcxXpV+HT6pCfoOJ42TAoSPxNzfF8
+	 UuOet1+RTGfAdp4gmB2LSt+gCcbsE+QMw1CVNr7jHCZLRmng+UypBhQ+62OUSWb22n
+	 tE5jV7Lm5dse3VXl9p5d1PWPlHPHDXJ7enNlYsx5JfVwZ/ZP4anpkTWKPkfNYAtgbz
+	 IL48GoxbMb/j2f0yjvyj06J3+zkh2sNHtBJdOrxDpYp23hQKsdiK4YPz20HDaBsMtz
+	 wC9+S6wfGq1eFixXrdeAtf6wYrdhU/ZX4u9tYtX98mACqcDWwyFla8BEulGp5DIsaQ
+	 Z9OB8yOaB4Rxg==
+Date: Tue, 22 Apr 2025 16:17:28 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Kees Cook <kees@kernel.org>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>,
+	Tamir Duberstein <tamird@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] lib: PRIME_NUMBERS_KUNIT_TEST should not select
+ PRIME_NUMBERS
+Message-ID: <7e03d4e6-5ae7-4fb9-b072-051d4e24f413@sirena.org.uk>
+References: <40f8a40eef4930d3ac9febd205bc171eb04e171c.1744641237.git.geert@linux-m68k.org>
+ <f2a55a3f-6c56-43fa-bfda-25cc11fe5212@sirena.org.uk>
+ <202504220759.67C0120FF@keescook>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250416-ptr-as-ptr-v9-0-18ec29b1b1f3@gmail.com>
- <20250416-ptr-as-ptr-v9-4-18ec29b1b1f3@gmail.com> <68014084.0c0a0220.394e75.122c@mx.google.com>
- <CAJ-ks9muaNU9v2LZ5=cmfXV6R5AO+joNOoPP=+hs-GJN=APfKQ@mail.gmail.com>
- <680160b8.050a0220.223d09.180f@mx.google.com> <CAJ-ks9=TXjk8W18ZMG4mx0JpYvXr4nwnUJqjCnqvW9zu2Y1xjA@mail.gmail.com>
- <aAJrOV88S-4Qb5o0@Mac.home>
-In-Reply-To: <aAJrOV88S-4Qb5o0@Mac.home>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 22 Apr 2025 17:15:16 +0200
-X-Gm-Features: ATxdqUEzkXpfnBhiY7k29QsDY3HizJvfa3BhU5YB5Skka6eAvbENy4JVzwfqVy4
-Message-ID: <CANiq72meaJr5noasX+4p7r5BM1H4tCa33eLrsta00Vpk-cF7VQ@mail.gmail.com>
-Subject: Re: [PATCH v9 4/6] rust: enable `clippy::as_underscore` lint
-To: Boqun Feng <boqun.feng@gmail.com>
-Cc: Tamir Duberstein <tamird@gmail.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>, 
-	Saravana Kannan <saravanak@google.com>, Abdiel Janulgue <abdiel.janulgue@gmail.com>, 
-	Daniel Almeida <daniel.almeida@collabora.com>, Robin Murphy <robin.murphy@arm.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	FUJITA Tomonori <fujita.tomonori@gmail.com>, Nicolas Schier <nicolas.schier@linux.dev>, 
-	Frederic Weisbecker <frederic@kernel.org>, Lyude Paul <lyude@redhat.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, linux-pci@vger.kernel.org, 
-	linux-block@vger.kernel.org, devicetree@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="AMxZP8oKYqpRSRxv"
+Content-Disposition: inline
+In-Reply-To: <202504220759.67C0120FF@keescook>
+X-Cookie: Why are you so hard to ignore?
 
-On Fri, Apr 18, 2025 at 5:09=E2=80=AFPM Boqun Feng <boqun.feng@gmail.com> w=
-rote:
->
-> I'm leaning towards to 2 and then 3, because using `as` can sometimes
-> surprise you when you change the type. Thoughts?
 
-Having explicit functions sounds good to me, and would also help
-migrating later easily to anything else (because all cases are
-explicitly tagged and easy to grep for).
+--AMxZP8oKYqpRSRxv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Cheers,
-Miguel
+On Tue, Apr 22, 2025 at 08:03:09AM -0700, Kees Cook wrote:
+> On Tue, Apr 22, 2025 at 01:10:47PM +0100, Mark Brown wrote:
+
+> > This commit, which is now in mainline, causes the prime numbers test to
+> > vanish from my CI which is a regression - the selftests config fragment
+> > is obviously not picked up by the kunit runner when it builds the
+> > kernel.  You should add any KUnit tests to one of the configs in
+> > tools/testing/kunit/configs/ - generally all_tests.config.
+
+> Ah! Thanks -- I forgot about these (apparently my memory horizon is at
+> most 2 years, considering commit 4d9060981f88 ("kunit: tool: Enable
+> CONFIG_FORTIFY_SOURCE under UML").
+
+> Does this look like you're expecting?
+
+Yes, in fact I actually have roughly that patch in my CI already.
+
+--AMxZP8oKYqpRSRxv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmgHswcACgkQJNaLcl1U
+h9D3YQf/dqeIXtguSHIZFGeY3YzYcyhDRFK4xiwAHqZzvXeKnBn6wSf64JY0Q3qS
+mx8IjfXuE17PuyVRzZrkOAtBWAdlvUW2swBstcnauc+ZVC5RzwEH89YiEHx2d/l0
+wvM3/GPzGkUhCexkvesbE4CFZCLmexwujiz33diFPRHitNFx01UQmGZRY7IPSfHC
+nV702kGVHOoIM3TT5pL7fSsuWpibFp9/Ckt8S7u60+0F2SbL8BqaE70aHwxe1ITv
+XXJItunnq7Lrwhj4SDC9FxT91c7eKJ6TuOgf3mqjZZRSxiSp5cpaQeIAiTsk6J7C
+QNK3XzaZ1Ditvw7C6zFn9YI8JkXizg==
+=chZ3
+-----END PGP SIGNATURE-----
+
+--AMxZP8oKYqpRSRxv--
 
