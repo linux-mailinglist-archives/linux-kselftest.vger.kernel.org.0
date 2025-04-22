@@ -1,136 +1,141 @@
-Return-Path: <linux-kselftest+bounces-31342-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31343-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B2A5A9745C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Apr 2025 20:18:55 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7CB2CA97462
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Apr 2025 20:19:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DC2F73A7F4C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Apr 2025 18:18:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E3B8E7AA956
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Apr 2025 18:18:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F62D28FFC4;
-	Tue, 22 Apr 2025 18:18:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF26029346F;
+	Tue, 22 Apr 2025 18:19:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fFI41pZM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com [209.85.221.181])
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBAA5A59;
-	Tue, 22 Apr 2025 18:18:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D4461DE3D9;
+	Tue, 22 Apr 2025 18:19:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745345931; cv=none; b=Wn0jRA2AuAomTXkH4fEzkuxvJKa+9dB4gV0zM+35pLqzHt+Q0TDWt4cMKkfVJfsGMA39yF2KpQG2qs3f0yvFqqM3y8fCUB9PjWSCx1xSumaE/+0Jph5NyfC8H360XBu+Po6QRYzftNAeVw5HmC7I+04r1AqHLPcNU8kswbgK9fk=
+	t=1745345989; cv=none; b=tfyVdJWp4TU9/UifsfyZBu+KYkG/Npd3U5ElhsbnI3g02SLbyLxN1szcMmXAq4YDtUtsT1mxFVN204C/1JZFHHcKEZgLa9r6ICeNglEmQN0LYlTxghR8UrkyH8SBS06y91Z4DBalcZlj5qNMS84hO931QOBzesUtVjQrLHAi1Ig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745345931; c=relaxed/simple;
-	bh=TkG8zcBa7KfXe1GXRQCpN45740PFccsRwnCtPJ9YJlc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SYKA27/KSFEeXVXzSRYaluEEi1PVfyzerysdTRS5aytJPh9Pf/nWw2YRxn8sY8BeUJ2dpe4QJGQ9fsvdXaQ8mIps8pQ61OUivcTuqtoGbrbhUQhbtkAyoLaBFKWFXvQjO5uKLfa3itJROchDPSO3YL79xzo5WfS+LvZgAG23NiI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+	s=arc-20240116; t=1745345989; c=relaxed/simple;
+	bh=8wYCXgZqpbTDarUW031W7MRIpH1sLDyCBxxD/Ri5fVI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SvjIBfT0r70IrK53zYIB3mj1zPNkZ+xQI2flM3Pqqu5c6G8o+teNkogr18wsueL37pDTsRnbLW7IPl7ad7ium3LSk5OqPRfA62txIcTyO1rcexfGRBTNQuQrIGGK4nbeP/ucMeQz1z6wZ25m/rOzdEHmdOnZqKhSRDjo2fHukxo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fFI41pZM; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f181.google.com with SMTP id 71dfb90a1353d-525b44b7720so2104441e0c.0;
-        Tue, 22 Apr 2025 11:18:48 -0700 (PDT)
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-39c30d9085aso4112410f8f.1;
+        Tue, 22 Apr 2025 11:19:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1745345986; x=1745950786; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=V4wU0CuSU6YOeYRo+NJ/4ERb7AGDM75DMO3ccWS5aBc=;
+        b=fFI41pZMhvq9311eYU4XvdZK2X1BiSZ1kDpnO5pI2gDW8zfhCC0yLORqDWQm+cVbwV
+         4FBBoAquFYU8e3xZWbSfYXS6qHEPNsmdaCoGa/Saj9W1n2npjclApBTCMcHB3jfZBN0d
+         VWb+DIdeQmgAcXdSDiX3XGPUq2jHa5OiEnzNItTNmj2AehqvZYog1cGUEhyETtmlywch
+         59SzQn9A8hoTCNX7njFf8HsC7FOGJKj9BMehhy+yesUQtbMYDouPVeB+Bjymw01lj9+P
+         qwkZVntm+FXp6RFLVWmwYDPFGL3RyWiXPbEfxy0XrcCPjMxLAgSpIYjNHSJcPdmJccqB
+         j+aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745345927; x=1745950727;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=s9Uj7nSS8274bk83vAZdkd/UvrMtjHtOyVSltqRyvBo=;
-        b=vssXj0Y0gotZyrOS1HKclgo2uGGqLHBBg2D9oFTEtysjMRqTQzdg5lcdeTqArAaZOl
-         zpQm7LLNYSOToMA5tUtczCI/dPhTfx9pvt3pjO93z/boSpXez0HAoHKJmUipVBRNFoHE
-         jbq/DylRluBtOFMm13N2pks8cFPhx/TlfcqAVQqfjMMKUekXcHzI3OWmY6UPVU2quBOj
-         aCpI7Rrmhrtn2AKFjC96vpXhXVq0mlss0Shy++IErNZjjNbVgGDZM44HBnsLig/VLJhV
-         kcEfQf61nmhupL6nkf1fM9mNj2vLFZ8rMY5SKtA5P79VOuVXwDek1jqoQxjA7J4hGsMc
-         rsHA==
-X-Forwarded-Encrypted: i=1; AJvYcCV+dY1rLE8ea4yer5nBr8ANL+StDAGvjSm7jubqKmzE6st3dMkQsSRI0Dm4/FXdCKOg52K36mP4Skf+MhwS0dOC@vger.kernel.org, AJvYcCXIX6MwzGg4mJHEcCosPgZdDsXu4PEbgGkCDAeQmMLcCtfqQj4Frn+t2RZhIjFar605OP+Akq9qPS/7OdY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwGVwNTIPcRF8PxrdxcriV0UFrZp3uaTzX16JJKC1+a0SnjLlcz
-	ZQ2LOtWkQmk6P/fHAOo0oydXQzU904MxY8ZHxkinviqeUGp2/901PAsQWHwM
-X-Gm-Gg: ASbGncv70M+lvMnRxrDRVftgW4P8ZnGg6kFZ284oWgiQW8jWl57qfW/79VYgNuuQq7z
-	2l5vGHezcXKCNeL9QnRKIH8kRhHvAfnb73qXMgvLr/gw/YeB+2GP/w6030anLV4PPITEKkADn/h
-	pJkOJXn7wYUMB7fMoJweQt+u1AfXVgg+PhmIEEATR+Li+RsqxiLuvnHhZpU0//FF+Q+q2aTNju1
-	3DO8EWKdLnU8IANPm7Z7Wa6ZhOOJpYs+jshpUteD1mCoab+Zya/dOKYz1eZGe4v8eKFQ5aCS0LC
-	wkACU6Fm8GSjxsTs0MumuGH3ItRQYEkEWQC0mJNtg7CHcU1uDgwXCx/zZP1SefYfCNqTgHHnZao
-	FpGk=
-X-Google-Smtp-Source: AGHT+IHD5nyOEHlW7+Qg6RWb3fNazEajANp02OLIRp/F2N6JuPmLr/VTiEO4IGb/QPmEd72zU5zneA==
-X-Received: by 2002:a05:6122:2a13:b0:520:60c2:3fd with SMTP id 71dfb90a1353d-529253df487mr14224907e0c.3.1745345927456;
-        Tue, 22 Apr 2025 11:18:47 -0700 (PDT)
-Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com. [209.85.222.45])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-52922bebf8fsm2009586e0c.3.2025.04.22.11.18.47
+        d=1e100.net; s=20230601; t=1745345986; x=1745950786;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=V4wU0CuSU6YOeYRo+NJ/4ERb7AGDM75DMO3ccWS5aBc=;
+        b=nG5GkK3X1xxyvWyRJ5BdeDKu/Cwd27DAf5JB457CiekWUmTAju3b+LV64z4s2bql+h
+         F1XlVWraXqz5XjWmxc+Mc/78ktXfLCrtRn8rpxVCBILUZ1eq57q3C6Akpk9pq8uJvMDP
+         q17h3yDyIUHS0/8QJR+Ka/u6T3B0sNNkZ7vRmJxm4Faos4FCdi/uG0Z7F3OlR1iHFAUy
+         BXje57bZHi0hHfknjo/tp46KNKHWgCZSPBSkXYAyRIp1RsgAlKgP5TceFYaNXWE21xs6
+         NiCqps4HKxoBpOgoT3dofi4VAyG5SaY1W4/DoZgttL/7Z0570dlO84ZVj000qzJhBhMv
+         7SVA==
+X-Forwarded-Encrypted: i=1; AJvYcCUalTr0SqmQ+M0qZkJ+cF4twPxat8QzHRVnGb9K36KXO0j5GSfDSIwvgBH2Ifi3PRhTyqcCZ1xlfw==@vger.kernel.org, AJvYcCVr0v4E/k5cN/LtiU66QTL7KzM1cO2wq4UDAmocoJi8zXvZMt1b5/bYIPqcZD+iPOAm26v1TG53EBuCCGZG@vger.kernel.org, AJvYcCXHL+z3FYAO5kIOgLOr8Dw5WBJ21Qu49RFPVRFvQorpzfAR7Ip6QfhwnqUFyByBInXeiYtx7FvDSByjlbBsWkcx@vger.kernel.org, AJvYcCXQlEO2y1AZ2dLVvsDgN1IXq6h4z5Jus6HTODNJj1+kVVjABalKFfhyE8WQyXj1bO/zRiafMO7uSdGm@vger.kernel.org, AJvYcCXj97CHAyEOSRGYxLpeuXvSiIA9uT+rIZq8f9sC5ZvAH1VGgfwL11ONLtqCeX1i/MFNvRis@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzr3f+2OSHGdggGyghjI+XMLYZgX5sDXJkQlYLsQaIJwZIE/V3Y
+	4M6eAR4aepdqRTTjJmRJVAu/QoN6XZp2v+f1i7JrcPSZusr4v8Zv
+X-Gm-Gg: ASbGnctB1REMRlqbKwxTauF7PbUgBbMegdUSNH8LVyMyo2X1Pvx2gqEe1BO3nlryH3R
+	mt+6GCe7s+0dUVulcYLg5b30q7MkJJK1k7YpAyCGcQDzseQvxmzd90NMnuYnnHM6qGwY8dE/WSF
+	cTkPH8/2YBgJvCYCr8zEo9T7Wb7/MPSgXU1sHfjkEytdfLiD2qYYpB3Qfea6WS+IhKAFgWikJXx
+	3S2b1crxehpHPkiT/rrPnu0waFjwtR/TZJ+SkYpUR6u4yFW7YL9JCQUNAajqWEorZegib1N9teF
+	DQ/xifZq+TbRiPVKbE1ThvlzTQhVoVBDbVf5jLsEY9m+6E77
+X-Google-Smtp-Source: AGHT+IGsGcBMmgVltHKkfzj/5mF0Ny9f6RgMByhyMlB833FKD6rDdwvWOUJDBJsAjsbBce/iJtRETg==
+X-Received: by 2002:a5d:584e:0:b0:39c:140c:25e with SMTP id ffacd0b85a97d-39efba560b1mr12910171f8f.24.1745345986104;
+        Tue, 22 Apr 2025 11:19:46 -0700 (PDT)
+Received: from [192.168.8.100] ([85.255.235.90])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39efa42082csm15911065f8f.3.2025.04.22.11.19.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Apr 2025 11:18:47 -0700 (PDT)
-Received: by mail-ua1-f45.google.com with SMTP id a1e0cc1a2514c-86fbc8717fcso2063428241.2;
-        Tue, 22 Apr 2025 11:18:47 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXMQEGNi3kRfNHEhMIZvFDdTFLS+QBkaPAdeJ88SGdrUEL69lpRKjCwcLE91Y28jm5qdnuPHezRenih9g4=@vger.kernel.org, AJvYcCXkRUZB96cLTR9um7KuOXFLQxUn9DDrS9XhtjYhUALkjcuAYTC7QAGdwpY5+HfapfTpxbuuf741U+sWmOAnklcw@vger.kernel.org
-X-Received: by 2002:a05:6122:793:b0:526:19e6:fa34 with SMTP id
- 71dfb90a1353d-529253b90d1mr12333603e0c.1.1745345927133; Tue, 22 Apr 2025
- 11:18:47 -0700 (PDT)
+        Tue, 22 Apr 2025 11:19:45 -0700 (PDT)
+Message-ID: <957b74ed-f29c-4bb8-b819-af4e1168d6c1@gmail.com>
+Date: Tue, 22 Apr 2025 19:20:59 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250422-lib-fix-prime-numbers-kunit-v1-1-4278c1d4a4ae@kernel.org>
-In-Reply-To: <20250422-lib-fix-prime-numbers-kunit-v1-1-4278c1d4a4ae@kernel.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 22 Apr 2025 20:18:35 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWj_bap0Lb3OXuLQBfLwTVVD0_-Jpm-VYf6fbFfK8MOUw@mail.gmail.com>
-X-Gm-Features: ATxdqUFX3oavo1tFI9SarX7EhH7m_kTLzABVcQKLqBnzcLzgWkOGb3ggZLd8XAI
-Message-ID: <CAMuHMdWj_bap0Lb3OXuLQBfLwTVVD0_-Jpm-VYf6fbFfK8MOUw@mail.gmail.com>
-Subject: Re: [PATCH] lib: Ensure prime numbers tests are included in KUnit
- test runs
-To: Mark Brown <broonie@kernel.org>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
-	Rae Moar <rmoar@google.com>, Tamir Duberstein <tamird@gmail.com>, Kees Cook <kees@kernel.org>, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v9 2/9] net: add get_netmem/put_netmem support
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, io-uring@vger.kernel.org,
+ virtualization@lists.linux.dev, kvm@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, Jeroen de Borst <jeroendb@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Kuniyuki Iwashima <kuniyu@amazon.com>, Willem de Bruijn
+ <willemb@google.com>, Jens Axboe <axboe@kernel.dk>,
+ David Ahern <dsahern@kernel.org>, Neal Cardwell <ncardwell@google.com>,
+ "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>,
+ Xuan Zhuo <xuanzhuo@linux.alibaba.com>, =?UTF-8?Q?Eugenio_P=C3=A9rez?=
+ <eperezma@redhat.com>, Stefan Hajnoczi <stefanha@redhat.com>,
+ Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ sdf@fomichev.me, dw@davidwei.uk, Jamal Hadi Salim <jhs@mojatatu.com>,
+ Victor Nogueira <victor@mojatatu.com>, Pedro Tammela
+ <pctammela@mojatatu.com>, Samiullah Khawaja <skhawaja@google.com>
+References: <20250417231540.2780723-1-almasrymina@google.com>
+ <20250417231540.2780723-3-almasrymina@google.com>
+ <484ecaad-56de-4c0d-b7fa-a3337557b0bf@gmail.com>
+ <CAHS8izPw9maOMqLALTLc22eOKnutyLK9azOs4FzO1pfaY8xE6g@mail.gmail.com>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <CAHS8izPw9maOMqLALTLc22eOKnutyLK9azOs4FzO1pfaY8xE6g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Mark,
+On 4/22/25 14:56, Mina Almasry wrote:
+> On Tue, Apr 22, 2025 at 1:43 AM Pavel Begunkov <asml.silence@gmail.com> wrote:
+>>
+>> On 4/18/25 00:15, Mina Almasry wrote:
+>>> Currently net_iovs support only pp ref counts, and do not support a
+>>> page ref equivalent.
+>>
+>> Makes me wonder why it's needed. In theory, nobody should ever be
+>> taking page references without going through struct ubuf_info
+>> handling first, all in kernel users of these pages should always
+>> be paired with ubuf_info, as it's user memory, it's not stable,
+>> and without ubuf_info the user is allowed to overwrite it.
+>>
+> 
+> The concern about the stability of the from-userspace data is already
+> called out in the MSG_ZEROCOPY documentation that we're piggybacking
+> devmem TX onto:
 
-Thanks for your patch!
-
-On Tue, 22 Apr 2025 at 17:43, Mark Brown <broonie@kernel.org> wrote:
-> When the select of PRIME_MUMBERS was removed from it's KUnit test
-> Kconfig nothing was added to the KUnit configs, meaning that when run
-> via the KUnit runner the tests are neither built nor run.  Add
-> PRIME_NUMBERS to all_tests.config so they are enabled when the KUnit
-> runner builds the kernel.
->
-> Fixes: 3f2925174f8b ("lib/prime_numbers: KUnit test should not select PRIME_NUMBERS")
-
-Sorry, I wasn't aware there was yet another config file that needed
-an update...
-
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-
-> --- a/tools/testing/kunit/configs/all_tests.config
-> +++ b/tools/testing/kunit/configs/all_tests.config
-
-Given this is the sole file that contains CONFIG_REGMAP_BUILD=y,
-it must be the right one ;-)
-
-> @@ -43,6 +43,8 @@ CONFIG_REGMAP_BUILD=y
->
->  CONFIG_AUDIT=y
->
-> +CONFIG_PRIME_NUMBERS=y
-> +
->  CONFIG_SECURITY=y
->  CONFIG_SECURITY_APPARMOR=y
->  CONFIG_SECURITY_LANDLOCK=y
-
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Gr{oetje,eeting}s,
-
-                        Geert
+Sure, I didn't object that. There is no problem as long as the
+ubuf_info semantics is followed, which by extension mean that
+any ref manipulation should already be gated on ubuf_info, and
+there should be no need in changing generic paths.
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Pavel Begunkov
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
 
