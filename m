@@ -1,80 +1,79 @@
-Return-Path: <linux-kselftest+bounces-31278-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31279-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12536A96046
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Apr 2025 10:00:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3492A960CC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Apr 2025 10:16:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 32C373AEC47
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Apr 2025 07:59:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9729C3A6166
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Apr 2025 08:16:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F31B225335A;
-	Tue, 22 Apr 2025 07:57:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68A5D1EC01D;
+	Tue, 22 Apr 2025 08:16:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="M691sO3x"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NA+VTaMG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F1ED22A7E9
-	for <linux-kselftest@vger.kernel.org>; Tue, 22 Apr 2025 07:57:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A90322F3E;
+	Tue, 22 Apr 2025 08:16:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745308638; cv=none; b=iuqtitWcdXDAEHAnGLkvgE8spfxzZSJzk8OcBXTpiJkvxWmTtbP0BfgEYNd3HEBDbP15rbMTReiBIsKhM5fXvvaWxo16HHzRIYlk08MEs+tMR+5LMqsZwakEq9amu9T9iKJSh4A87JjLlyDFQuK+FFcHG6yNPXRphgE0PQmACFM=
+	t=1745309792; cv=none; b=dHcXZE+G5MWfBGWfcIXcqWtGUmhuz5OI4kXN5pvWRVn6f3h/+VX2zavO/4COdwCjF3pFcGPRApItzphy/tLDlD4P/5oqWY8go83dhlLj5MHTuolk6pCQKpUa3h95Skr9t1Y20q7GdQjr+srg6+4hGksb6VDY9Zx27vQDTlPRJho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745308638; c=relaxed/simple;
-	bh=W6fiirVxDej/XyiK9p1ILMBMNLmS8HDMUagTWQuqTDQ=;
+	s=arc-20240116; t=1745309792; c=relaxed/simple;
+	bh=IxR9R4dznHC7A3UhAAi8NByT8Ge6lacYIRr4lsdjXE0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZtJkmwF6eFe9lzX/IdgVvlnBlu/Z5+fXaJRJQ/tqpjHXbBAq3GY+JyPsW/++tRBjiRl4rIOZc6l30iYy3txzdnIrMeWTq8eAmjEImi0Kn3erZG5c+fafEjKz0fM3iGj/SWYBPKE8ESB9GJMJx5igNbXontGCBqdYEj/YBGGscOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=M691sO3x; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-43cfe63c592so55320245e9.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Apr 2025 00:57:14 -0700 (PDT)
+	 In-Reply-To:Content-Type; b=OWMzOz7hEA5laGuiV4IF7y48uC/o9n+5VuONFx/tbw0mvDpk4ZcM96Yfi2K0lzogGFanMRnrBqmU1iKTx1xCf3lDsnjr5N7z9/u9pWaIr2sw539fItMYWr2dDf4p1hWEWJ7cHzJKMAsrWqOY5QLJMTN8CaLPkscWXmLkj5py/wI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NA+VTaMG; arc=none smtp.client-ip=209.85.218.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-ac339f53df9so828304166b.1;
+        Tue, 22 Apr 2025 01:16:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1745308633; x=1745913433; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1745309789; x=1745914589; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=EqBOHlwj4256j3dBDjYtf6K6K4BniWJZiGKAMEj4vds=;
-        b=M691sO3xTi7Jzd+ly4D7LcCoHV3DDMjrtH4LCxW+4o468T5+onnhBbB/0t7nE88Fjv
-         YIezrgi+oDbDJ0qGOXd8Uf08hWaGOUWHhgxLR2KvH9Fy4tjAOq4emnwNYF0E80tMkjMX
-         VueV87n91mW0S2gweXv9hSCuWHZjmrJyUGjC+cb838W/D2/oepI56hLjvccrujsFpYTc
-         5rvILSSOiVexy1juMW5l1KsdVDOqGdbHo7sX0ladIEHYA5ZOsBbqHOndgfID5A0jueB0
-         kgc0ZvhtLncVrqp96LK3kOTaXbPBHywOQR/CISLODw81npnDGiOSuN3I/lYM5nVxS3Ft
-         ELmw==
+        bh=cOlwuce44vKtv1OuDBF9isVVZKdS5EgivWfm0t2JhLQ=;
+        b=NA+VTaMG5Jd5S6hrAveld3neuGsqIXH/L8IQqWYkNHxVuDghVQekrvl/3qEJojJbrZ
+         XI5m/gGP8j6eKOSG6DFR19G5zKPoHaxWu8be6OT9tMZmjD4BYLDkcN3gb8GhPDDXHuP5
+         lZ8IoqWyl9wCMJYVi1oPKiU/ZNd3J2j2HyWziXSxhnSU0JaLgmTu+lHrbPFnnUYv38qM
+         JoGh7u1W37TaqcywpU66pyb/dApCB5gc5KlFAZB5KPml14sSib+K9rG7CuKXKEZENdbL
+         lp4JW5hz1bm4BrOukiu4VsrKwynJdumNgySHPpmlDU7j4tM02fASaNMFCIO0Rx6oUGmp
+         KcTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745308633; x=1745913433;
+        d=1e100.net; s=20230601; t=1745309789; x=1745914589;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EqBOHlwj4256j3dBDjYtf6K6K4BniWJZiGKAMEj4vds=;
-        b=hociXAn1Qwi81x+g2JvwjsyL6hFLzjgjBg4UKZsomXdg2lxZk9VdxYyw235aLZA+gQ
-         H+ldGJA5v/9FTycqNVJhXgeEtXQfOBp5jpmpXiypMpHe5APUV8QKb54gXsJYm//WjS5K
-         p7kk4A4ezqFFPY7pJFpKPp1DC01sQ0G8HlkOC+T46hQWx/mdOKyf04e/Aa1dRcbybsUs
-         y9/A0SM0a0RQo8U7M5rIkLAPnsGfFHBF+yXJ4+tqlTediRW3Lxlk53KHmsxaSxx3Vo0z
-         OQ9CftmtbRQFUEMg9sVwKK10rjnKBwk43BZ+p6ZxkYFEs0JJqrVkrXtnw/Q+nXjv7wXO
-         swJA==
-X-Forwarded-Encrypted: i=1; AJvYcCVaRLqEu2/mk8hQqObBWL941gVWqceB6bVsZT4wRXT70s0XxNLIYeS/GTZJ6Qky3d7gyTQbSkzhrWth/k3Lcz8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/4aaHL9oJ/15o9U1LS6Zb3c8WEEHKj4IhjC8igv/Wg9g/YF+A
-	EK5WqYxHuWDEklVotAQYyLGP7D39l7UMcnG96nCoRswUIO781bnRTjhkaTSr4iM=
-X-Gm-Gg: ASbGnctpawVpEuL5s/Z4BQde6SI8Y9pizAX61eBEaEkhTMxs92fgl2YGPskmKIZr5R/
-	CAwx8SPDF457pLAt3b6Jba+Eb/wtznQ45602sOexw7+7iBdHloubFY1Q1OojJ+8lQ3xUZq0MYQ/
-	YOZVwACVQ+VkumTFI2Y7SzAobqE99EYSf/46hCAQyPJamgc7Jsw4sKHkB64yz/yX54Po5h4Iler
-	Rwt5BNnYgovVJkdIIkVpuCx4sNeDNJc9a7keifQELz77ilBKzhxGCMj/ju2BJcbFSi+I9GDhr7c
-	gMJzOTrUAf9a3yclW7ZSB+CQ6imnHvTSvALRIdxE9hnE0MqHfDOqFJU9DDFkcd+lG7tfpSnEbev
-	rat4cKRJROw==
-X-Google-Smtp-Source: AGHT+IGhvdPbJvZOktQCBqw/2wUTXP1WKMQk4VP2N0DETPu5Pgx5Z2h8MnL3dE4kU4vPi/MEVPmpBQ==
-X-Received: by 2002:a05:600c:1547:b0:439:6118:c188 with SMTP id 5b1f17b1804b1-4406aba756emr107164305e9.19.1745308633516;
-        Tue, 22 Apr 2025 00:57:13 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:e17:9700:16d2:7456:6634:9626? ([2a01:e0a:e17:9700:16d2:7456:6634:9626])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4406d5d7a3dsm160623495e9.38.2025.04.22.00.57.12
+        bh=cOlwuce44vKtv1OuDBF9isVVZKdS5EgivWfm0t2JhLQ=;
+        b=GlkNBoOMf1eZi46VsEq1+11Ju7yltK7Lj6oCG+0ctnC17ZBOSmzIrQMrBchGnrA7sk
+         lv0jkVYM9y7EoxF9HtGXOcJQHcuQJP2G6XdqjWmuJumOL4TpokSxx1H4a1Zz8rbeDt4v
+         AvdFCQOtT8bJHwOiEKd+8wbLQtUGd3ypQwPh5YL60zCCiKn2NO0sbyhkMIYiN3Cn5PUv
+         Pkk4R0ZeTSLMBa60VkpVYWfHpesywm7LzcVOFoEeoqwY+r/YnRW/qUu+Rt1lvZmfOQek
+         zupT7NPQM6LXj0xxnswzMhW4SIRfVzSLDRgsp4lXUTB/rOQu9DT2dYQ/bUixKwwA1gGO
+         aOxA==
+X-Forwarded-Encrypted: i=1; AJvYcCV7ySgTppYCT1s/9mo7lwv7A654rXDrFcVVcEi4k94VC02f7scUUPhl2Ex/yl8XkTAtapRI@vger.kernel.org, AJvYcCVJE+ZeFwSSi7uASHkkMkxF79kLb/PAn4IVnL4Qx4TNX3mcHdIu4BvBub1M3l2Fqebc0qpqIGPQbiav@vger.kernel.org, AJvYcCVivvua8bq+MOaFmJqyF0Ht5ndA9dQ1x1ija//9eGIPNgD3S1hVaftIvqOUC9DKMgsYjuldUemAZNdmNP+rMTBr@vger.kernel.org, AJvYcCVroBig5FWPglu9lbLgg3SbM+Tl0xte7cT6v2hXqs7FJjznoGJ0beFLSZ/exW/cJi/csXdeG0uQSXEYkIyM@vger.kernel.org, AJvYcCWH3Iz6v/EmZuE1nGWFTbsmmeklluFubRdE0JdjuJWADxohQKQKqabLhhtRDhwz2g4/1CIWujH4@vger.kernel.org, AJvYcCX0Q1ok3Y3PwEJT8/KFc0u5ZEHyteMAr9/h8sbvuwT/Z1OdwgnFSBgvKKhl4gnEVbP1qe/B1Asfkw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywtir3K1vLec5Steeamrmr0/q2eMM009bbMD5ASLgwUbtaia389
+	b7Ryes+DxxOkgjKnLgmvXh7JAGjwXmjo4CBV5tb3M3gkIeWa/xke
+X-Gm-Gg: ASbGncvAbXPaUzb+R9CWOK7VYjHczqcEChuD1fFvRL1klzHAqDdtIy5/imtpfmQSO06
+	z1wGw2iDSoGmfHdhIBsC1C9CS/9/s3dZxqcWJbNXDbbUW8/gjo76JWjXnM9K2YtbpmltdZffnUl
+	I8jZDLMCUnWLIB/B3hzpHyrXn30q4lPj7PA3pobucm3KsodCMRnHeHg2fmTiuEx9aDku9tIZzii
+	X6t8J+MZY6MpP4B8mTtYuj8vFKn2BbpD9CIx1va9+UDwrI1/fUMs06pL+LzSqZ8uQiHK3NDyOdQ
+	tixvJXD7uX8/SObDlTK5J7fUTfL6GvSUZB0abzgP1nig4xTo5lHoRA==
+X-Google-Smtp-Source: AGHT+IEoDhdUk4JqptbNDk1DSYTZqleRkQiE6D7lLk3MmjHoZyxA8pbW4BbGT1g4lHeJT+lVTudacg==
+X-Received: by 2002:a17:907:7f88:b0:acb:5f9a:72f4 with SMTP id a640c23a62f3a-acb74b8368dmr1158109666b.30.1745309788661;
+        Tue, 22 Apr 2025 01:16:28 -0700 (PDT)
+Received: from ?IPV6:2620:10d:c096:325::158? ([2620:10d:c092:600::1:558d])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-acb8cca2323sm471150066b.181.2025.04.22.01.16.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Apr 2025 00:57:12 -0700 (PDT)
-Message-ID: <2c4f4422-d9c9-4d36-b0ef-f68779b91ee9@rivosinc.com>
-Date: Tue, 22 Apr 2025 09:57:12 +0200
+        Tue, 22 Apr 2025 01:16:27 -0700 (PDT)
+Message-ID: <f7a96367-1bb0-4ed2-8fbf-af7558fccc20@gmail.com>
+Date: Tue, 22 Apr 2025 09:17:43 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -82,158 +81,52 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/5] riscv: misaligned: factorize trap handling
-To: Alexandre Ghiti <alex@ghiti.fr>,
- "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>,
- "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>, Paul Walmsley
- <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Shuah Khan <shuah@kernel.org>,
- Andrew Jones <ajones@ventanamicro.com>,
- Samuel Holland <samuel.holland@sifive.com>,
- Peter Zijlstra <peterz@infradead.org>
-References: <20250414123543.1615478-1-cleger@rivosinc.com>
- <20250414123543.1615478-2-cleger@rivosinc.com>
- <ba11b910-9959-4845-b3a3-dd9a52466823@ghiti.fr>
+Subject: Re: [PATCH net-next v9 1/9] netmem: add niov->type attribute to
+ distinguish different net_iov types
+To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ io-uring@vger.kernel.org, virtualization@lists.linux.dev,
+ kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, Jeroen de Borst <jeroendb@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Kuniyuki Iwashima <kuniyu@amazon.com>, Willem de Bruijn
+ <willemb@google.com>, Jens Axboe <axboe@kernel.dk>,
+ David Ahern <dsahern@kernel.org>, Neal Cardwell <ncardwell@google.com>,
+ "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>,
+ Xuan Zhuo <xuanzhuo@linux.alibaba.com>, =?UTF-8?Q?Eugenio_P=C3=A9rez?=
+ <eperezma@redhat.com>, Stefan Hajnoczi <stefanha@redhat.com>,
+ Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ sdf@fomichev.me, dw@davidwei.uk, Jamal Hadi Salim <jhs@mojatatu.com>,
+ Victor Nogueira <victor@mojatatu.com>, Pedro Tammela
+ <pctammela@mojatatu.com>, Samiullah Khawaja <skhawaja@google.com>
+References: <20250417231540.2780723-1-almasrymina@google.com>
+ <20250417231540.2780723-2-almasrymina@google.com>
 Content-Language: en-US
-From: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
-In-Reply-To: <ba11b910-9959-4845-b3a3-dd9a52466823@ghiti.fr>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <20250417231540.2780723-2-almasrymina@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+On 4/18/25 00:15, Mina Almasry wrote:
+> Later patches in the series adds TX net_iovs where there is no pp
+> associated, so we can't rely on niov->pp->mp_ops to tell what is the
+> type of the net_iov.
 
+That's fine, but that needs a NULL pp check in io_uring as well,
+specifically in io_zcrx_recv_frag().
 
-On 21/04/2025 09:06, Alexandre Ghiti wrote:
-> Hi Clément,
-> 
-> 
-> On 14/04/2025 14:34, Clément Léger wrote:
->> misaligned accesses traps are not nmi and should be treated as normal
->> one using irqentry_enter()/exit().
-> 
-> 
-> All the traps that come from kernel mode are treated as nmi as it was
-> suggested by Peter here: https://lore.kernel.org/linux-riscv/
-> Yyhv4UUXuSfvMOw+@hirez.programming.kicks-ass.net/
-> 
-> I don't know the differences between irq_nmi_entry/exit() and irq_entry/
-> exit(), so is that still correct to now treat the kernel traps as non-nmi?
+You can also move it to struct net_iov_area and check niov->owner->type
+instead. It's a safer choice than aliasing with struct page, there is
+no cost as you're loading ->owner anyway (e.g. for
+net_iov_virtual_addr()), and it's better in terms of normalisation /
+not unnecessary duplicating it, assuming we'll never have niovs of
+different types bound to the same struct net_iov_area.
 
-Hi Alex,
-
-Actually, this discussion was raised on a previous series [1] by Maciej
-which replied that we should actually reenable interrupt depending on
-the state that was interrupted. Looking at other architecture/code, it
-seems like treating misaligned accesses as NMI is probably not the right
-way. For instance, loongarch treats them as normal IRQ using a
-irqentry_enter()/exit() and reenabling IRQS if possible.
-
-Moreover, it looks like to me that misaligned access traps are similar
-(in the way they can be handled) to how the page fault are handled in
-RISC-V. It uses irqentry_enter()/exit() and reenables interrupts if
-needed. Additionally, the misaligned access handling does will not take
-any locks if handling a misaligned access taken while in kernel so even
-if we interrupt a kernel critical section that does not have interrupts
-disable, we are good to go. But my understanding might be wrong as well
-and I might be missing specific cases :)
-
-Thanks,
-
-Clément
-
-https://lore.kernel.org/lkml/alpine.DEB.2.21.2501070143250.18889@angie.orcam.me.uk/
-[1]
-
-> 
-> Thanks,
-> 
-> Alex
-> 
-> 
->> Since both load/store and user/kernel
->> should use almost the same path and that we are going to add some code
->> around that, factorize it.
->>
->> Signed-off-by: Clément Léger<cleger@rivosinc.com>
->> ---
->>   arch/riscv/kernel/traps.c | 49 ++++++++++++++++-----------------------
->>   1 file changed, 20 insertions(+), 29 deletions(-)
->>
->> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
->> index 8ff8e8b36524..55d9f3450398 100644
->> --- a/arch/riscv/kernel/traps.c
->> +++ b/arch/riscv/kernel/traps.c
->> @@ -198,47 +198,38 @@ asmlinkage __visible __trap_section void
->> do_trap_insn_illegal(struct pt_regs *re
->>   DO_ERROR_INFO(do_trap_load_fault,
->>       SIGSEGV, SEGV_ACCERR, "load access fault");
->>   -asmlinkage __visible __trap_section void
->> do_trap_load_misaligned(struct pt_regs *regs)
->> +enum misaligned_access_type {
->> +    MISALIGNED_STORE,
->> +    MISALIGNED_LOAD,
->> +};
->> +
->> +static void do_trap_misaligned(struct pt_regs *regs, enum
->> misaligned_access_type type)
->>   {
->> -    if (user_mode(regs)) {
->> -        irqentry_enter_from_user_mode(regs);
->> +    irqentry_state_t state = irqentry_enter(regs);
->>   +    if (type ==  MISALIGNED_LOAD) {
->>           if (handle_misaligned_load(regs))
->>               do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
->> -                  "Oops - load address misaligned");
->> -
->> -        irqentry_exit_to_user_mode(regs);
->> +                      "Oops - load address misaligned");
->>       } else {
->> -        irqentry_state_t state = irqentry_nmi_enter(regs);
->> -
->> -        if (handle_misaligned_load(regs))
->> +        if (handle_misaligned_store(regs))
->>               do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
->> -                  "Oops - load address misaligned");
->> -
->> -        irqentry_nmi_exit(regs, state);
->> +                      "Oops - store (or AMO) address misaligned");
->>       }
->> +
->> +    irqentry_exit(regs, state);
->>   }
->>   -asmlinkage __visible __trap_section void
->> do_trap_store_misaligned(struct pt_regs *regs)
->> +asmlinkage __visible __trap_section void
->> do_trap_load_misaligned(struct pt_regs *regs)
->>   {
->> -    if (user_mode(regs)) {
->> -        irqentry_enter_from_user_mode(regs);
->> -
->> -        if (handle_misaligned_store(regs))
->> -            do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
->> -                "Oops - store (or AMO) address misaligned");
->> -
->> -        irqentry_exit_to_user_mode(regs);
->> -    } else {
->> -        irqentry_state_t state = irqentry_nmi_enter(regs);
->> -
->> -        if (handle_misaligned_store(regs))
->> -            do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
->> -                "Oops - store (or AMO) address misaligned");
->> +    do_trap_misaligned(regs, MISALIGNED_LOAD);
->> +}
->>   -        irqentry_nmi_exit(regs, state);
->> -    }
->> +asmlinkage __visible __trap_section void
->> do_trap_store_misaligned(struct pt_regs *regs)
->> +{
->> +    do_trap_misaligned(regs, MISALIGNED_STORE);
->>   }
->> +
->>   DO_ERROR_INFO(do_trap_store_fault,
->>       SIGSEGV, SEGV_ACCERR, "store (or AMO) access fault");
->>   DO_ERROR_INFO(do_trap_ecall_s,
+-- 
+Pavel Begunkov
 
 
