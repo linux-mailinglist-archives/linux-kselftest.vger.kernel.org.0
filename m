@@ -1,73 +1,73 @@
-Return-Path: <linux-kselftest+bounces-31301-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31302-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E4D3A96D96
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Apr 2025 15:58:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26079A96DE5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Apr 2025 16:05:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CA3413BFEE8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Apr 2025 13:57:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D52433A5527
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Apr 2025 14:03:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACD252853EA;
-	Tue, 22 Apr 2025 13:56:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA167283CA4;
+	Tue, 22 Apr 2025 14:03:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="F12AWa1h"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="diHRM3SS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F421228136B
-	for <linux-kselftest@vger.kernel.org>; Tue, 22 Apr 2025 13:56:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E893928150B
+	for <linux-kselftest@vger.kernel.org>; Tue, 22 Apr 2025 14:03:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745330193; cv=none; b=uY6zxVz9nP5g283ttxaBUZRAVSQyxgJU1KanwkYQHoz/TrN0zstHDbAuK6d34N1dEa2TtRPveRBYqv3eCa3/LPZ1DoxS6qoSkEW/eE9HBN7/VsSjKZU0mlmXLXL5sDDZeAXGQlF2mO45DkpcRrajmpbU5iTZIe5WWUdaBBW/BZo=
+	t=1745330622; cv=none; b=E1NYnR23ZkFnresjJIT5crjfMP63PsietZeS95I/6t4w1pAl13AScyrFl4pw/JpiRmZHmg21HOGLJsAWiVvlGxItWZ3BpSlkZ5K5sUXCOxLBRwhZCLw+FQ4h4fsjBcnP2UVqhdN2S67tDvJ1Ek3Sz1YYVaHQ5DM642QYyW3CVE4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745330193; c=relaxed/simple;
-	bh=5UhTPLXTy54HSw4bbuMVr6NHCHxgfaB24c/UygOGD5o=;
+	s=arc-20240116; t=1745330622; c=relaxed/simple;
+	bh=DI5wbiqZFhNjcg4g07wsE2rRpyR+Bg6kHqEcrbHze4Y=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jwhSHtDU85GCHR9Hqmd9mrPkkoWCTXqh2CGhglEempSc7iX9MEzQM+buRD/4d/E5txHy2z/I3oUUpuTopDf1WH4mg5T/TzKFsMsdVZaYgLN0YjJ5G8UxDMJ/Yw64oAiCYNJJZkkSgALbcLLDBplGOWgv8kwKYKm8ItlTl+7inFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=F12AWa1h; arc=none smtp.client-ip=209.85.214.180
+	 To:Cc:Content-Type; b=iY4cBDbujO+Nes4MsZboMvTUdbOvh9Zmds2NldWNaozShYXrDh1kkGlpfTFO1dn2JB80MoH9zOv22qbuTgIdrHhbben9l5qxMwRF6E6S6WqK7Z5EVebbN7yCNqcElgyvAm827sQ4pSB35X+VCIJJyGMyS1GKPqIQ7aDLD5ZoC2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=diHRM3SS; arc=none smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2242ac37caeso119025ad.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Apr 2025 06:56:31 -0700 (PDT)
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2242ac37caeso121155ad.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Apr 2025 07:03:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1745330191; x=1745934991; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1745330620; x=1745935420; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5UhTPLXTy54HSw4bbuMVr6NHCHxgfaB24c/UygOGD5o=;
-        b=F12AWa1haXcsCudCgDYHjn2nNfZXI3lbEma09OMg5nCnR7GzJuX8RBzTsy+aLZxnlP
-         G3KDr+MgQbOHQschhs2yKHUMROZvYMDuvkA2dOkccaWcJNess9Hp4TfbIqXjoGqli4kI
-         +U9yYc2mKurzkivWGlJqXif6GYJ28rvsIfCD8cvv2EBltZDLmnDViJWWOYnCPSJ5BWuB
-         strzglMGQBpP7YIbUEyB4vnYUBvjCuH11iIdAWWRCHUyZW75wzZPWGy2NSd8M+g+HmdR
-         NoRgXS6T12hgTXSfSz24ARES3ZTJvZXG0GmbkKSy5ko8M/v0HdSGZMmYcx/neG7gmt9c
-         YyDw==
+        bh=wxtxQ2q5f2CesvMzHl2K/43Dvf+KKs8Sp+BtzyImVRI=;
+        b=diHRM3SSYX1rhVTrFh85dMgmHNY8sO2ecyPwPFFxn5sQbKf8uyHGCTCokaasiZyg6F
+         VKxRmeoGqd8z3gNfYfdYx9nRIt0sO2m4rZspMiU89vOTce8M36DF/iBjf+yUOw63OKP3
+         hITordz6p0dyt9ILX6PjDqmdftBpNagsZ2+9Q43sianlor0YDckrxv6UHr73LrRP40nl
+         0RhaPUqvIJhdfxVTKdVpFekbtxJ6p6mBz3v5CgPtgZJFLkFtAW0VeT+gmLV9s0iEgJ0l
+         8gyzbdup2vQ5J4dKQketbtzn+Miv5FOylJYS/7yQo/70s3oaoMk8nilN940PIjwG8SKq
+         /+mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745330191; x=1745934991;
+        d=1e100.net; s=20230601; t=1745330620; x=1745935420;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5UhTPLXTy54HSw4bbuMVr6NHCHxgfaB24c/UygOGD5o=;
-        b=vZVipR5k5SJCY6YQbpXofSSOBrbak7GTS4mb8zYg4KvSb8q92MBJ5peps6Jg21oKTj
-         UXf7KG6XAycHTVWM1tIB+6nlZqtmTVOzIkLyzN9XYQvdqAHbS0cgFa43jJ5wQ+24SuVU
-         3uBQdhSNgQedlu+KPRi/ME/YWGSUhIS0bld8uJkbzTANjKuWPuezLnIXwSHAs+fEfDID
-         mBLxq9qa7yBr5OnpffQqT0LvJgBh/Ay2quxYYrZZt6EpOUeGG0/OwyQQ3qd0y/6xhW6W
-         aCykQ6mUEWKU/oVtevou44yctt+DdvWnjC5eCgGnDCqTuaoF1bo9IMhA/Sx/9JivFYsm
-         SzPg==
-X-Forwarded-Encrypted: i=1; AJvYcCWhQZtIbFEacNrfWaOLiSyKHQXzKNmEvmTbOlMXgMEJIgZDyvwUiIHRBAnUcK9vl7gtZVW/n0DrDsW3SOQPNzU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwwPuSbrgmlSTVBPE7EnqLAgYgeQQrTpINRqfNTlRo3WIXB12LO
-	j07ccum7RQ4GkV30r/LX8Uu5wmdFrJAZjOOpBEiqTa9bHLS/GWhiG1kOa9p0E49VPH+tHVtVMqY
-	591ULBcJ6MfbIQ6qwVBqKYGoxIzL0YrJVyMhE
-X-Gm-Gg: ASbGncuX0JYOl8j0fqyNsqTx6xbT8k7UdoZGhdlW7WqlQLWM6O7tI7/nxOjjAZuhTxJ
-	qtNlctbPeXZsyIqQqlzveIR6/rHFkhULFkyV6vUK7SuMo+cce3nE7c2uq+fW8Gyq+brv3o6K5CH
-	Ga5BS5w6izrS7SFpSI8AxUz7Q=
-X-Google-Smtp-Source: AGHT+IH/hAru3MKmJ60Z25FXBslSMx5hLypeOWFuJfnaTmWFJ711/aVQCwonng9BnnPokRail3ZgA21iLnH/6NJDRM0=
-X-Received: by 2002:a17:902:ce0a:b0:220:ce33:6385 with SMTP id
- d9443c01a7336-22c54797b1bmr9643675ad.9.1745330190914; Tue, 22 Apr 2025
- 06:56:30 -0700 (PDT)
+        bh=wxtxQ2q5f2CesvMzHl2K/43Dvf+KKs8Sp+BtzyImVRI=;
+        b=VBEvxo/eP0oGQzSljn5ydS4v9E06nmVB3jz8PZTRZOo3CMiD/3ijD8RGQjC9Q4G5+L
+         nEKZOkwhNcEMq5HPDT25bqvkY60Or73kj4RMfnZjvQmUjRMyLgdWP+s1XEyu1204FqT9
+         +0GdJ/br9yzYp65N//E6ci2eAoE+wuIG84ZB3+0cpQ2SQLE84h2RQTzmV3oQWXen26zC
+         kq/g3t36dOHAWAmEIkrV8pSOrgWgh8DssLNNjkYIfSQ54j8IYWcOG0JVZh2yRCsi81to
+         SbETbA1TXstOo5KSspiODpdqIlhIHm94rT2HF2GHIDEr9Dcl4DZie+GXtBpB+6VjAoXM
+         r+tw==
+X-Forwarded-Encrypted: i=1; AJvYcCWLMGWvKCpdFmMmsOgalOrNe5z362+5qD1d+uBo7UDFKqEzGrsWNA7EXlPamHKnGDjpILr1hKmWhMqJ0g7bHJw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YywWoeK9RuliFzmGsTThAd53TlF1/XWOmKHAC6i+H+ZkYoqtQCW
+	loMywZk0/RMJQe/tCa4ELdlE+uvm85fkA3KxgEanMwH/PHV6n9EoUit9EpdjKffNwKWpxiGgDf9
+	HuiV4fT0zWa4v/x/QO5B9NqBgopy/r/wXvcnv
+X-Gm-Gg: ASbGncsL+2xmLrnpRq5jpIi+mre1djUtVXr7JAVO7pNCZb47f1Mgi9eJs5cjdp9PTCU
+	hH8gj9vGb702rLfdtJilRMHlHjG5qrtXh3PLlNgPXf+M7mbB5codyctClyw3zxutlVDmKubW6Lr
+	cYAMxTvpJDlx3s37SAV4YDPaLDDj6jWuc9bg==
+X-Google-Smtp-Source: AGHT+IG0i+651pdR53K0l/n7uIQCSuRiQEGLD3Fi7ND1TmWV2npssXiwnzzo30HBpgP42jyUy2IALw8wxWFt/Kz8RzE=
+X-Received: by 2002:a17:902:ebc3:b0:22c:33b4:c2ed with SMTP id
+ d9443c01a7336-22c52a93c28mr10089535ad.26.1745330619867; Tue, 22 Apr 2025
+ 07:03:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -75,13 +75,14 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20250417231540.2780723-1-almasrymina@google.com>
- <20250417231540.2780723-3-almasrymina@google.com> <484ecaad-56de-4c0d-b7fa-a3337557b0bf@gmail.com>
-In-Reply-To: <484ecaad-56de-4c0d-b7fa-a3337557b0bf@gmail.com>
+ <20250417231540.2780723-2-almasrymina@google.com> <f7a96367-1bb0-4ed2-8fbf-af7558fccc20@gmail.com>
+In-Reply-To: <f7a96367-1bb0-4ed2-8fbf-af7558fccc20@gmail.com>
 From: Mina Almasry <almasrymina@google.com>
-Date: Tue, 22 Apr 2025 06:56:17 -0700
-X-Gm-Features: ATxdqUFU-Nv8GeoWu8ltonWAw6xNaP21dKReuqOOxLDIWBd4SeZRRiQwqzNABOY
-Message-ID: <CAHS8izPw9maOMqLALTLc22eOKnutyLK9azOs4FzO1pfaY8xE6g@mail.gmail.com>
-Subject: Re: [PATCH net-next v9 2/9] net: add get_netmem/put_netmem support
+Date: Tue, 22 Apr 2025 07:03:26 -0700
+X-Gm-Features: ATxdqUHgiM0jEZwKYWOLJlVXJ7i1N-PNg4kE-n9ns-g62S6RZ7kqQTTDhmeVqPw
+Message-ID: <CAHS8izMFxDG5E07ZdqnDH_2D_g1fW8X0M7u3gGyV8efzxDNZbg@mail.gmail.com>
+Subject: Re: [PATCH net-next v9 1/9] netmem: add niov->type attribute to
+ distinguish different net_iov types
 To: Pavel Begunkov <asml.silence@gmail.com>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-doc@vger.kernel.org, io-uring@vger.kernel.org, 
@@ -102,50 +103,43 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 22, 2025 at 1:43=E2=80=AFAM Pavel Begunkov <asml.silence@gmail.=
+On Tue, Apr 22, 2025 at 1:16=E2=80=AFAM Pavel Begunkov <asml.silence@gmail.=
 com> wrote:
 >
 > On 4/18/25 00:15, Mina Almasry wrote:
-> > Currently net_iovs support only pp ref counts, and do not support a
-> > page ref equivalent.
+> > Later patches in the series adds TX net_iovs where there is no pp
+> > associated, so we can't rely on niov->pp->mp_ops to tell what is the
+> > type of the net_iov.
 >
-> Makes me wonder why it's needed. In theory, nobody should ever be
-> taking page references without going through struct ubuf_info
-> handling first, all in kernel users of these pages should always
-> be paired with ubuf_info, as it's user memory, it's not stable,
-> and without ubuf_info the user is allowed to overwrite it.
+> That's fine, but that needs a NULL pp check in io_uring as well,
+> specifically in io_zcrx_recv_frag().
 >
 
-The concern about the stability of the from-userspace data is already
-called out in the MSG_ZEROCOPY documentation that we're piggybacking
-devmem TX onto:
+I think you mean this update in the code:
 
-https://www.kernel.org/doc/html/v4.15/networking/msg_zerocopy.html
+if (!niov->pp || niov->pp->mp_ops !=3D &io_uring_pp_zc_ops ||
+    io_pp_to_ifq(niov->pp) !=3D ifq)
+return -EFAULT;
 
-Basically the userspace passes the memory to the kernel and waits for
-a notification for when it's safe to reuse/overwrite the data. I don't
-know that it's a security concern. Basically if the userspace modifies
-the data before it gets the notification from the kernel, then it will
-mess up its own TX. The notification is sent by the kernel to the
-userspace when the skb is freed I believe, at that point it's safe to
-reuse the buffer as the kernel no longer needs it for TX.
+Yes, thanks, will do.
 
-For devmem we do need to pin the binding until all TX users are done
-with it, so get_netmem will increase the refcount on the binding to
-keep it alive until the net stack is done with it.
-
-> Maybe there are some gray area cases like packet inspection or
-> tracing? However in this case, after the ubuf_info is dropped, the
-> user can overwrite the memory with its secrets. Definitely iffy
-> in security terms.
+> You can also move it to struct net_iov_area and check niov->owner->type
+> instead. It's a safer choice than aliasing with struct page, there is
+> no cost as you're loading ->owner anyway (e.g. for
+> net_iov_virtual_addr()), and it's better in terms of normalisation /
+> not unnecessary duplicating it, assuming we'll never have niovs of
+> different types bound to the same struct net_iov_area.
 >
 
-You can look at all the callers of skb_frag_ref to see all the code
-paths that grab a page ref on the frag today. There is also an
-inspection by me in the v5 changelog.
+Putting it in niov->owner->type is an alternative approach. I don't
+see a strong reason to go with one over the other. I'm thinking there
+will be fast code paths that want to know the type of the frag or skb
+and don't need the owner, so it will be good to save loading another
+cacheline. We have more space in struct net_iov than we know what to
+do with anyway.
 
 
---=20
+--
 Thanks,
 Mina
 
