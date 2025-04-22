@@ -1,142 +1,193 @@
-Return-Path: <linux-kselftest+bounces-31286-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31287-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48202A96577
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Apr 2025 12:09:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85B56A965AB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Apr 2025 12:18:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 360BF16C75E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Apr 2025 10:09:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 66857189E5B3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Apr 2025 10:18:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AEE6212B18;
-	Tue, 22 Apr 2025 10:08:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 043F120C49E;
+	Tue, 22 Apr 2025 10:17:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JgTjI+I2"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="DR+rBiFT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C0FD202F79;
-	Tue, 22 Apr 2025 10:08:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D58E20D51F
+	for <linux-kselftest@vger.kernel.org>; Tue, 22 Apr 2025 10:17:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745316520; cv=none; b=VvTMPgawnVTGyi0Xu/ipUzQ1C29d5jpV/JkdCBSLawsdrOSQXuC0OQxL1qG4iSFiJaDsINhETFQJl7newnR7YGkJnatHEgExudu+RjEaPXtbGSGTpMMPA9xKrCzbyu6z/rh4OyUBIsxtRGjDTzwLoVVkAkehdlGk9VUpWPqSRBc=
+	t=1745317073; cv=none; b=XD8swvi6MgQjv9T7DC3pXEpkn3HPKptJaIzeOsy1JWArJxr/zZVFgR/5Rouyq4oWPW/5qPkP9W7hDc9z0EiyvpYkxmyEgath0PWn1AePGXlIkNyMPZTWfDiFfTLt2mUbCS8GZzGz2R/3GkLaeHj63v3YXyFZ5AGOJp7+8zJEdXI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745316520; c=relaxed/simple;
-	bh=cmE8YOSD3nfPKU0R/K5fUCUrCwHtSNRvccoHPupB8EY=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Sq5tNB1JOqsk+LUuyab3g6JHGTuJtLeqQdG6nCLznK3mnjFfohUQuKRtY986XOMvbln/WhxlS2ZTO/BqimMSEL8LlWaPH0zYwdpfMj0P/LJM4BMeJAimcOVzmVa9r3MY39QvgfMgTsOESJ/m9xxbheFzzAZQ1COxBnglLbe9xVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JgTjI+I2; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-ac6e8cf9132so849782366b.2;
-        Tue, 22 Apr 2025 03:08:37 -0700 (PDT)
+	s=arc-20240116; t=1745317073; c=relaxed/simple;
+	bh=eEoQfmmABCHvojNLudV31VngPDmfK2fp9xWJpCXogBI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eQCNrA3QhfZk3e93IzxjvSVDwrbzUafS+uVAFPQtBx6jRg+qkGKy9+94hc+qfptxg8wgiBSMkW/b1d4AkfO8CzX5xAHn0gxA6qjOp/wNAyroWp5/yMNkllnrWlVn6r8ewQV1jsXMesZr0A98z77CO39Va5SyzO+Clu1UzhOmp5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=DR+rBiFT; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-22435603572so50859355ad.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Apr 2025 03:17:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745316516; x=1745921316; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=02mF3Rq0/qOkVGAo4rt0MUzwR2m/OHZu+4wbFsIWOQg=;
-        b=JgTjI+I2c5CQ/HeRE58HjqBUZE+UIf8XeEYybuI22o6Q709E7c8SKPNTeCh4p6DGB6
-         yzc1KaObj5t/5SGC5V1qhtd0iIUY03xe/LBIQCriXHj31b0vbNg9oKguJS8QTlQ40nGT
-         8IOBoK0r4+jHHl091CaeVcFizyzEqwVEoZvP4RTBr/Rdp97tRXGZxONG6UA+kZ9HBE5E
-         qZGazvZ4M002KSs5n9QEN6LDZ0PixRmTfs7nO5dQI20dqCZdgJnK/6BSAr9S/ToqN++9
-         Op9uuBDPkNE+dDfgUzxXCNAANm67Eg1GNvbPf2l9pozAHVozzCpESptilEgzrJKs1rnd
-         XlSw==
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1745317071; x=1745921871; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=X00I2bs07xTT0JGn+iRC8lIN0+rPW4VodnvME71Mc4w=;
+        b=DR+rBiFTDQ02CG5jgmqdbeQODyy5NqmoKx3UjfcPQVEHgHqvU+ieoB7Nru5mSGXIBe
+         58M1bC8WWpD3IOrY43N+M4mfglusQNWvU2YB57wDiRMqtfDb82bWDWofk/qWOETQaiSx
+         vHUNh1SNiTQk2Ni5CLTpr/hlX9aR2hG6whV0WhLDrl6AR+o5MKtbK4ZtCASvA75SzgYC
+         5qxCiCDva6vj1CmLOz0E0JniHPz/D66LujHGBoyq4iJxZ4tI6r/dTTlXcs+rJXVez8gi
+         w9V+wAQlrorEJ2ioyN4yao/DsBZj2XIMfyn/Emd+9u2LFZqFV6wRk4ylR9Bvb/mmo4Bg
+         FZnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745316516; x=1745921316;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=02mF3Rq0/qOkVGAo4rt0MUzwR2m/OHZu+4wbFsIWOQg=;
-        b=sTl1TmH4ikaRQqc9SFIKUw96ukp4FijtyOUGg9MKnGA8F+zhQqaa674WsowndCW0yX
-         A4UBUzGEDr9W9ZX8TPjTX3fQ6i3WF0XrJZ2TWfKYngCObSovhOO9RB89cxFV0/HVFPtv
-         PfUZaFQehbtAwRVsnJAalJyk8IJJ5skHbqDevtKxqBA84aCjG5Q/kAQFZZ0BF8Ji3pwt
-         0aVmaJ6rlsdE6AsFa/zLt6iwnjt45mnN6p0TJyUetrlm00qAX/yKPWbxrZfDuPVVbskF
-         nDUWI76VLrKO0UD4/dQDEZzY8fAcDP47iuYoBnU8MOPIAx6SeIUoo87aQci8CyzAsoNO
-         vOCQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX04DPxssDrqmTvD4ks1FS/A/FBKcwTl8+G2Py45fGOvccA/tfocZHzXy1fVLVmdbJA0uw=@vger.kernel.org, AJvYcCXEsNqSsKnh5gSPOLZz7KA8QXSW02uS+5daL4GmI2op5P5ADOkLBLKLTMzHAXG7ZBSQIfLQT/wKG6XF56jC1SO+@vger.kernel.org, AJvYcCXdnK/GGv5QoCoZ0BOyw4syANCWya1jGpdgwrlxOBFvueEtAT3dWViRUkBcUXTi8fBUr07+a7YAAzelaatl@vger.kernel.org
-X-Gm-Message-State: AOJu0YxnhPQgmSR1+qv92teTbIFhhUXv6K2v0kvzzeR8t/lmKxXGlSlt
-	70u4LAwDWh9SRiaEMHoZExnCRVHjpIWtF5xgO3ipLAeg2I0xD1hw
-X-Gm-Gg: ASbGncsCCaZttHSVD00KHPftx3CviAfnFWuF0xBixAuXgDNpfByJQOqUdyjGG0qXC0L
-	Pg7ZZRba9p0opV/nHnxcRMqJKL3JWmCusM1voFWy1B/BKHUfrj91OJghnwdCbFJDkIW+Z2xRmec
-	OL/qqGftrt2FrBw5CTLstlSVbIcnruMvzfOb9FDhgtGpN8a9WjGeQ+X7gkQTNui7/tBhxOZADue
-	T1TOgnpHU3zEvbFDn5bEuLVJluABILXWySZf6W8gmNHSLUYS67TTOi6/3uA+RmuKQebQejt0jjF
-	9kkyhu/Q2oYPqd5ZTb2EqgPIlHk0fXwTyMF6qESDbRg7T4cu16pm37G2Dg==
-X-Google-Smtp-Source: AGHT+IFnCAYlkq3Gsut6BPvsW7FS9GPw2LCxU0ujmgViSKToqZ4BWTh8QSqWECU7TAzy9pEgX1rIiQ==
-X-Received: by 2002:a17:906:c113:b0:ac4:2ae:c970 with SMTP id a640c23a62f3a-acb74b38723mr1444597166b.21.1745316516183;
-        Tue, 22 Apr 2025 03:08:36 -0700 (PDT)
-Received: from krava (85-193-35-57.rib.o2.cz. [85.193.35.57])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-acb6eefc685sm644632266b.96.2025.04.22.03.08.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Apr 2025 03:08:35 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Tue, 22 Apr 2025 12:08:34 +0200
-To: KaFai Wan <mannkafai@gmail.com>
-Cc: martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
-	andrii@kernel.org, eddyz87@gmail.com, song@kernel.org,
-	yonghong.song@linux.dev, john.fastabend@gmail.com,
-	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, horms@kernel.org, mykolal@fb.com,
-	shuah@kernel.org, memxor@gmail.com, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kafai.wan@hotmail.com, leon.hwang@linux.dev
-Subject: Re: [PATCH bpf-next v3 0/2] bpf: Allow access to const void pointer
- arguments in tracing programs
-Message-ID: <aAdqorjuW68ld6ps@krava>
-References: <20250417151548.1276279-1-kafai.wan@hotmail.com>
+        d=1e100.net; s=20230601; t=1745317071; x=1745921871;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=X00I2bs07xTT0JGn+iRC8lIN0+rPW4VodnvME71Mc4w=;
+        b=U6zJOeylG3pzhcthtzbhd0ILGKhOmOL1ongLjbvfakyu4SdW5rkGp/G2KJV3y8G1Vw
+         tLfeduvpgeT2YVSMo94IQb7MvJiYYnX3BYkyV7X1cWG5dQvlRFZSsbmMoIZV79Eqq32d
+         aEj2ogkUy6vLAMAaHQYQ02xhRM+t1hLiUHPz+4DqfOO4E9StQxiTJg9lfBZZhml/NEQY
+         Wbngfnmr1mRiKTFjFUMxQR7reviWntJb551D6Uj2bLteHXwdq/9NlZqOj8tjn+mIN1s/
+         phDi4nXiuKVChOo6thDf5o0zkmUSvuhxY6KBd3UG8Se9A/ktdu1rQrKgRohlfOKY8HwV
+         JsLw==
+X-Forwarded-Encrypted: i=1; AJvYcCUSqTs+aNi4DKRzg1MRfzq8ULS1ZK7bys7tGVs4r565WHSACnHLOlwcr/vQtan7oPjgBkQG8h+2/gD13DZUoU4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQZdXBNB4Xrt9+4oaz6xeWW2doKjberBqwbzyvcI9gy0GUkTFU
+	kxMXqZs9p6hELKZNhA+YtnntjiEyZODOVTmJEWd4wivHZ1x2mnHQGar5rjfbUL8=
+X-Gm-Gg: ASbGncsGSclzI5wn+ubXdvLhUesbnOkjlnmfogZ84jkE45eMajgDDGkedVXXiHLjECO
+	mbGXGoCwtBcYAaZt/kMWixIL98f0ywkJvUilNn0BFWcqzE6VxlWe1FitzYGrbNyP2ofN9Ve5GtI
+	XrD3Q11XMJEVNCR5vZf6nkZkPQsA3ZAPIXzLUOpPsT8350M2nTGW5Lt3WK1uiUWRsyg7GzCaU8V
+	BNt0VWaI0rYvXWP8XlY1pMPuwI7rtZjoCQtBz5zscG511XarF4oeKYMf2mKRRe8XjW5qpWBC5to
+	HRjuiJGWZFHlHVT5yMOQy8JnEfWWzpXaDyL5uxipxoObtiQxqanZiGM1TnT6SAqld+1FIOvj7Vx
+	j9ZfeGeViKw==
+X-Google-Smtp-Source: AGHT+IF66lPXUZ8d1HsX69+jyxVc1Jh9SjZT766uy6dI5gqKQ1najh//E0HYQ7PJOsBvmK715VAAPg==
+X-Received: by 2002:a17:902:d489:b0:224:e33:8896 with SMTP id d9443c01a7336-22c53285bbbmr210518825ad.11.1745317071386;
+        Tue, 22 Apr 2025 03:17:51 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:e17:9700:16d2:7456:6634:9626? ([2a01:e0a:e17:9700:16d2:7456:6634:9626])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73dbf8bf794sm8493042b3a.10.2025.04.22.03.17.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Apr 2025 03:17:50 -0700 (PDT)
+Message-ID: <6e2ed6a9-aed0-4727-b1e3-903d3a7751b5@rivosinc.com>
+Date: Tue, 22 Apr 2025 12:17:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250417151548.1276279-1-kafai.wan@hotmail.com>
-
-On Thu, Apr 17, 2025 at 11:15:46PM +0800, KaFai Wan wrote:
-> If we try to access argument which is pointer to const void, it's an 
-> UNKNOWN type, verifier will fail to load.
-> 
-> Use is_void_or_int_ptr to check if type is void or int pointer. 
-> Add a selftest to check it.
-> 
-> ---
-> KaFai Wan (2):
->   bpf: Allow access to const void pointer arguments in tracing programs
->   selftests/bpf: Add test to access const void pointer argument in
->     tracing program
-> 
->  kernel/bpf/btf.c                                    | 13 +++----------
->  net/bpf/test_run.c                                  |  8 +++++++-
->  .../selftests/bpf/progs/verifier_btf_ctx_access.c   | 12 ++++++++++++
->  3 files changed, 22 insertions(+), 11 deletions(-)
-> 
-> Changelog:
-> v2->v3: Addressed comments from jirka
-> - remove duplicate checks for void pointer
-> Details in here:
-> https://lore.kernel.org/bpf/20250416161756.1079178-1-kafai.wan@hotmail.com/
-
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-
-thanks,
-jirka
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/5] riscv: misaligned: factorize trap handling
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Alexandre Ghiti <alex@ghiti.fr>,
+ "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>,
+ "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Paul Walmsley <paul.walmsley@sifive.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Shuah Khan <shuah@kernel.org>, Andrew Jones <ajones@ventanamicro.com>,
+ Samuel Holland <samuel.holland@sifive.com>
+References: <20250414123543.1615478-1-cleger@rivosinc.com>
+ <20250414123543.1615478-2-cleger@rivosinc.com>
+ <ba11b910-9959-4845-b3a3-dd9a52466823@ghiti.fr>
+ <2c4f4422-d9c9-4d36-b0ef-f68779b91ee9@rivosinc.com>
+ <20250422094419.GC14170@noisy.programming.kicks-ass.net>
+Content-Language: en-US
+From: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
+In-Reply-To: <20250422094419.GC14170@noisy.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
 
+
+On 22/04/2025 11:44, Peter Zijlstra wrote:
+> On Tue, Apr 22, 2025 at 09:57:12AM +0200, Clément Léger wrote:
+>>
+>>
+>> On 21/04/2025 09:06, Alexandre Ghiti wrote:
+>>> Hi Clément,
+>>>
+>>>
+>>> On 14/04/2025 14:34, Clément Léger wrote:
+>>>> misaligned accesses traps are not nmi and should be treated as normal
+>>>> one using irqentry_enter()/exit().
+>>>
+>>>
+>>> All the traps that come from kernel mode are treated as nmi as it was
+>>> suggested by Peter here: https://lore.kernel.org/linux-riscv/
+>>> Yyhv4UUXuSfvMOw+@hirez.programming.kicks-ass.net/
+>>>
+>>> I don't know the differences between irq_nmi_entry/exit() and irq_entry/
+>>> exit(), so is that still correct to now treat the kernel traps as non-nmi?
+>>
+>> Hi Alex,
+>>
+>> Actually, this discussion was raised on a previous series [1] by Maciej
+>> which replied that we should actually reenable interrupt depending on
+>> the state that was interrupted. Looking at other architecture/code, it
+>> seems like treating misaligned accesses as NMI is probably not the right
+>> way. For instance, loongarch treats them as normal IRQ using a
+>> irqentry_enter()/exit() and reenabling IRQS if possible.
 > 
-> v1->v2: Addressed comments from jirka
-> - use btf_type_is_void to check if type is void
-> - merge is_void_ptr and is_int_ptr to is_void_or_int_ptr
-> - fix selftests
-> Details in here:
-> https://lore.kernel.org/all/20250412170626.3638516-1-kafai.wan@hotmail.com/
+> So, a trap that happens in kernel space while IRQs are disabled, SHOULD
+> really be NMI-like.
 > 
-> -- 
-> 2.43.0
+> You then have a choice, make all such traps from kernel space NMI-like;
+> this makes it easy on the trap handler, since the context is always the
+> same. Mistakes are 'easy' to find.
 > 
+> Or,.. do funny stuff and only make it NMI like if IRQs were disabled.
+> Which gives inconsistent context for the handler and you'll find
+> yourself scratching your head at some point in the future wondering why
+> this one rare occasion goes BOOM.
+
+Hi Peter,
+
+Yeah agreed, that might be hazardous.
+
+> 
+> x86 mostly does the first, any trap that can happen with IRQs disabled
+> is treated unconditionally as NMI like. The obvious exception is
+> page-fault, but that already has a from-non-preemptible-context branch
+> that is 'careful'.
+> 
+> As to unaligned traps from kernel space, I would imagine they mostly BUG
+> the kernel, except when there's an exception entry for that location, in
+> which case it might do a fixup?
+
+The misaligned access exception handling currently handles misaligned
+access for the kernel as well (except if explicitly disabled).
+
+> 
+> 
+> Anyway, the reason these exceptions should be NMI like, is because
+> interrupts are not allowed to nest. Notably something like:
+> 
+> 
+>   raw_spin_lock_irqsave(&foo);
+>   <IRQ>
+>     raw_spin_lock_irqsave(&foo);
+>     ...
+> 
+> Is an obvious problem. Exceptions that can run while IRQs are disabled,
+> must not use locks -- treating them as NMI-like (they are non-maskable
+> after all), ensures this.
+
+As said in my previous reply, the misaligned handling code does not
+currently access any locks (when handling kernel misaligned accesses)
+and is self contained. That being said, that assumption might not be
+true in future so that might be better to take your approach and treat
+the misaligned access like an NMI.
+
+Thanks,
+
+Clément
+
+
 
