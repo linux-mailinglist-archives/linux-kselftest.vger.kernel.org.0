@@ -1,215 +1,160 @@
-Return-Path: <linux-kselftest+bounces-31428-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31424-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B76BA993CA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 18:03:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 242EAA993F6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 18:06:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D4F989A2F9D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 15:56:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6247B3BB939
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 15:42:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 938EE28E600;
-	Wed, 23 Apr 2025 15:44:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ABD9281374;
+	Wed, 23 Apr 2025 15:30:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mOQ4yyOr"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xMdCxPPM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E549228368C
-	for <linux-kselftest@vger.kernel.org>; Wed, 23 Apr 2025 15:44:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F01BA79F5
+	for <linux-kselftest@vger.kernel.org>; Wed, 23 Apr 2025 15:30:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745423056; cv=none; b=h7Nji/ZBTnTe+XMgCFkWLsxjYW/5Ide30vroE8IiVWUvL5/vFgPkYh2fzlj8MbDexqaoEyTrHGlRE4asuxZT7cEzP0s9H6PQLfedUpHX+D//SuduAJCvbaPVRoqPEk7RoXFhDTj0Q56/yqyw/KFi0bJInfVjT1Yclh1pJYa433A=
+	t=1745422221; cv=none; b=LcuHmHWWI2wiBdskF0lUtRJnLkUDnHmLDp532y+4I4hawfZepq0099uWXpf/Shzqyvq9jNRWBWqs5Q7EL6JJSxjJ2NRpc9j/vhFQs6OE3f8oT4z7idPOZB5CqYQXlagVj2CjKo/ekJc3lGmOjfWITdPfOOshXkg9tsLghJDIn/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745423056; c=relaxed/simple;
-	bh=PTgTXbiqBZbLrDvwU4F+5aFy0KIW3wzX+95atzxzKbA=;
+	s=arc-20240116; t=1745422221; c=relaxed/simple;
+	bh=Vq6vhsxs40tP9d5NlmjPRy8NhwbWi1gHcz6l7t5TzC4=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=BqQIyMz4+7oBHCAv9sTwfaovY7BCm22i5YNt27dGlkCO16iIcuIAqjA9pb6ts9MQLUA46ZMdH2COgw1SXSlBXiCQM4lGIapatg8UC77j+EZ+Djsb4c/lyjm9pKS2LuAWT7Dnx+hWIM50p7kgOciC+lwfECsYqwdjmJdYbs59Oj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mOQ4yyOr; arc=none smtp.client-ip=209.85.216.74
+	 To:Cc:Content-Type; b=q2j452KAiYmjuYw/tN/cjAeE8GhWBvIm+nZTamImH/egfW5bpQwc3KHEoBvTXM99wXazZ3eM5X9/lNuQ+XDpobLG0kHjmHBbajMvQ11KqesR22PegGukRXkTHJw2N9DY9B0xB3GBgqzduDwH+HFE6ewaYF7K9yk2m64Wit1+ELQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xMdCxPPM; arc=none smtp.client-ip=209.85.214.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-3032f4eca83so5886757a91.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Apr 2025 08:44:14 -0700 (PDT)
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-22410b910b0so51736435ad.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Apr 2025 08:30:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1745423054; x=1746027854; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1745422218; x=1746027018; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xPhgwd63apwbZo6TL59hfQlqDly5iGnPFF4jLyqPwhs=;
-        b=mOQ4yyOrnUzvbqmyr6oY/g9TCACDLTHTNMncaFJuZ35sps44FmIEQ3KJtl6hHpnRrU
-         5TAJQvfxG/ccara+f5N6I/cvkOt8fNx7hqFBq5PYTNd3a7Xm41x0bB7Myko2W4sG3nSm
-         /17CYN3GuhCrhTMTIt1QmDfahqVN+EIwWl5EMQXn3FKPi4hwq/lUNR/4Du4jduePbf7+
-         w3SsyZFkuC2Ogk7YA6QAJAXgmJ9qDgLiZnwEyH2GZ4kLLocM1IlDo6klw237/1f8XPPY
-         8dUmerUbBk0L6SpucHGtGQdqIQK+yinNaZtEnZvpSj0c0Wmf0ptX8zbdoa0/EM87qCba
-         NFFQ==
+        bh=RuF5aM5uvUzwQnspTEzQdS23ITC9dWctjltafpb1GqA=;
+        b=xMdCxPPM5ihdKRIpdHW5+de76Nle+U9DtelaxlpWiaIU31i5ZgcUp5PVyllBDYq0NL
+         RARdQK2Pwyv98sbDvDt14RcOoGqg8+zrLOZYGKoTP96jBYBE5sECjssCrooqKH0jOclu
+         QvWZ4K3kHU2LGEQ+KSwkky9xjc/Lvro1hw5EVtQ3KTbXd1GPurerOQxw/+L3gRnpPEJP
+         pmcGZbGT+dTojTUD+gpZmI1bwxSeogjnlcZdgp+X1oUZhssq50clE9693ZpSjtr3nNZ6
+         vbsZipsqNo59nrdFFqSd+kBpPNOuAiTEiCaslQdv5ZMGnpU7yoLrgCvrRwEbmtPMaPI4
+         VOKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745423054; x=1746027854;
+        d=1e100.net; s=20230601; t=1745422218; x=1746027018;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xPhgwd63apwbZo6TL59hfQlqDly5iGnPFF4jLyqPwhs=;
-        b=TU+FBCu6z7pLhFdRm+qKnsrbrxcvE7hiJY6LI6Gzoliz5CmrESRAPo6adYxdXI9GnN
-         skbLQeLFrniPLMXPlkqA04Sv6hpYhg66iJHh+ZMPiM6s+qPTbN4fmG8oV0/GEhUD2SCf
-         Aan0lAOS46l1juVG/JOvS3qsdaIZ1+s2oMURGoJxq8NjWO3rLM7TDMmoEAAhE4iAkpHw
-         Obue/g5ecm9Otl6FzECxT0fWKLlpPi1CS4Jcsdtfsy8kfGYaEJg3+Hun5cyfK+muenQu
-         bW/2encOoPIkN6fGFs9AoYRfQuy6+kz1/FpG0d9dS0WFHB0AEe19Rgl6xEd1lXhb+LBL
-         /d6A==
-X-Forwarded-Encrypted: i=1; AJvYcCXmIS+dgnxBfUQpN1Xc5ayppTqemx7Yoxh84lfE9KbC/p/lIhTSYbse0cL5C2qJS//rx8VKo1jsQrr0AMUkPjM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzP9OVQD0gBI1WYWWlkCpCR+hR8HMvl1KG1JRBu/KT/MlBeYXa3
-	3ZQThuVZtaoQ7OgMvMpF9k/ej7luNr7jfxATueCNkeVMpfHyxet1XSSUxBSzKYHEl5kBzPepdXg
-	m1A==
-X-Google-Smtp-Source: AGHT+IHSkI6Mn0oDpHpElbO32DnQkfEefLjjNmyGwYzoz4thjAq+r46reZVQvyh0CS2WtBzQW2wRRZTNpuA=
-X-Received: from pjbkl15.prod.google.com ([2002:a17:90b:498f:b0:2f9:c349:2f84])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90a:dfc5:b0:2fa:1a23:c01d
- with SMTP id 98e67ed59e1d1-3087bb6bcaamr27998226a91.21.1745423054216; Wed, 23
- Apr 2025 08:44:14 -0700 (PDT)
-Date: Wed, 23 Apr 2025 08:44:12 -0700
-In-Reply-To: <20250324130248.126036-5-manali.shukla@amd.com>
+        bh=RuF5aM5uvUzwQnspTEzQdS23ITC9dWctjltafpb1GqA=;
+        b=S15IegKoWt03o3GrnkAtPa5y2jLtrOAnhSaNDDZG36yrfXiQk+YEMzyQjw1OhyP92Q
+         7TQ7UeYqXiy5nhpK+54LLCgn3yBwYfy83SYoziueP+a8Essc27i/xAlb1xqb+QSSYm5K
+         80E6gVox90jlzcQH37caDT3SiUPn9V9u7qvkea0hezRIY6f1qpTJlCfPKnPeZOaCpWcO
+         maypJhb6N8w7nIPHRjMAFSxBFY1uk4ybsP2KHPeNZUfUe9vC+uz9oquzsoxOI+8eE7Qv
+         yxq0/ZJ7Q5fspnARDRnNovPFiAbJu80ut8hLkiqC/4hWAG3wu8k5XdiplgfDJMN9aZ3E
+         bT2A==
+X-Forwarded-Encrypted: i=1; AJvYcCUdyO3UZwy7ErNGHbS1g0odsE1pUWLeiwc/1PJ2eq9+fe0CwR5s2Mf4GEy6q/n8Rto5u6bgq/N3nQsFcRn+RYw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyVfbQfoA8R6z/UEUkQsh/wxj6+X6hJyEUlMRlNWOCc39NQwH4H
+	/MgCYUHs0SSNjnSjM1i7msS3plUner2H9BlccoSpKzd8VHnk1h7YisWoFvk+uKnUXB7lh8pPovD
+	CNA==
+X-Google-Smtp-Source: AGHT+IG3ZfaZuHuLl6tG9igc6TROAYnGCS+93+i2EnpH5jq21Q97uLnrdJpiHpiNCS7xZFVke3MttxhmyUA=
+X-Received: from pllb3.prod.google.com ([2002:a17:902:e943:b0:21f:14cc:68b0])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:e88f:b0:220:f151:b668
+ with SMTP id d9443c01a7336-22c535815admr231239285ad.20.1745422218189; Wed, 23
+ Apr 2025 08:30:18 -0700 (PDT)
+Date: Wed, 23 Apr 2025 08:30:16 -0700
+In-Reply-To: <5fb4f5f8-55d2-44a7-808e-76c8a452cd2f@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20250324130248.126036-1-manali.shukla@amd.com> <20250324130248.126036-5-manali.shukla@amd.com>
-Message-ID: <aAkKzEpNXDgC9_Vh@google.com>
+References: <20250324130248.126036-1-manali.shukla@amd.com>
+ <20250324130248.126036-5-manali.shukla@amd.com> <5fb4f5f8-55d2-44a7-808e-76c8a452cd2f@intel.com>
+Message-ID: <aAkHiL_N7QGND8Tj@google.com>
 Subject: Re: [PATCH v4 4/5] KVM: SVM: Add support for KVM_CAP_X86_BUS_LOCK_EXIT
  on SVM CPUs
 From: Sean Christopherson <seanjc@google.com>
-To: Manali Shukla <manali.shukla@amd.com>
-Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, pbonzini@redhat.com, 
-	nikunj@amd.com, thomas.lendacky@amd.com, bp@alien8.de
+To: Xiaoyao Li <xiaoyao.li@intel.com>
+Cc: Manali Shukla <manali.shukla@amd.com>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, pbonzini@redhat.com, nikunj@amd.com, 
+	thomas.lendacky@amd.com, bp@alien8.de
 Content-Type: text/plain; charset="us-ascii"
 
-On Mon, Mar 24, 2025, Manali Shukla wrote:
-> +	if (vmcb02->save.rip && (svm->nested.ctl.bus_lock_rip == vmcb02->save.rip)) {
-> +		vmcb02->control.bus_lock_counter = 1;
-> +		svm->bus_lock_rip = svm->nested.ctl.bus_lock_rip;
-> +	} else {
-> +		vmcb02->control.bus_lock_counter = 0;
-> +	}
-> +	svm->nested.ctl.bus_lock_rip = INVALID_GPA;
-> +
->  	/* Done at vmrun: asid.  */
->  
->  	/* Also overwritten later if necessary.  */
-> @@ -1039,6 +1069,18 @@ int nested_svm_vmexit(struct vcpu_svm *svm)
->  
->  	}
->  
-> +	/*
-> +	 * If bus_lock_counter is nonzero and the guest has not moved past the
-> +	 * guilty instruction, save bus_lock_rip in svm_nested_state. This will
-> +	 * help determine at nested VMRUN whether to stash vmcb02's counter or
-> +	 * reset it to '0'.
-> +	 */
-> +	if (vmcb02->control.bus_lock_counter &&
-> +	    svm->bus_lock_rip == vmcb02->save.rip)
-> +		svm->nested.ctl.bus_lock_rip = svm->bus_lock_rip;
-> +	else
-> +		svm->nested.ctl.bus_lock_rip = INVALID_GPA;
-> +
->  	nested_svm_copy_common_state(svm->nested.vmcb02.ptr, svm->vmcb01.ptr);
->  
->  	svm_switch_vmcb(svm, &svm->vmcb01);
+On Wed, Apr 16, 2025, Xiaoyao Li wrote:
+> On 3/24/2025 9:02 PM, Manali Shukla wrote:
+> > diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> > index 5fe84f2427b5..f7c925aa0c4f 100644
+> > --- a/Documentation/virt/kvm/api.rst
+> > +++ b/Documentation/virt/kvm/api.rst
+> > @@ -7909,6 +7909,25 @@ apply some other policy-based mitigation. When exiting to userspace, KVM sets
+> >   KVM_RUN_X86_BUS_LOCK in vcpu-run->flags, and conditionally sets the exit_reason
+> >   to KVM_EXIT_X86_BUS_LOCK.
+> > +Note! KVM_CAP_X86_BUS_LOCK_EXIT on AMD CPUs with the Bus Lock Threshold is close
+> > +enough  to INTEL's Bus Lock Detection VM-Exit to allow using
+> > +KVM_CAP_X86_BUS_LOCK_EXIT for AMD CPUs.
+> > +
+> > +The biggest difference between the two features is that Threshold (AMD CPUs) is
+> > +fault-like i.e. the bus lock exit to user space occurs with RIP pointing at the
+> > +offending instruction, whereas Detection (Intel CPUs) is trap-like i.e. the bus
+> > +lock exit to user space occurs with RIP pointing at the instruction right after
+> > +the guilty one.
+> > 
+> 
+> 
+> > +The bus lock threshold on AMD CPUs provides a per-VMCB counter which is
+> > +decremented every time a bus lock occurs, and a VM-Exit is triggered if and only
+> > +if the bus lock counter is '0'.
+> > +
+> > +To provide Detection-like semantics for AMD CPUs, the bus lock counter has been
+> > +initialized to '0', i.e. exit on every bus lock, and when re-executing the
+> > +guilty instruction, the bus lock counter has been set to '1' to effectively step
+> > +past the instruction.
+> 
+> From the perspective of API, I don't think the last two paragraphs matter
+> much to userspace.
+> 
+> It should describe what userspace can/should do. E.g., when exit to
+> userspace due to bus lock on AMD platform, the RIP points at the instruction
+> which causes the bus lock. Userspace can advance the RIP itself before
+> re-enter the guest to make progress. If userspace doesn't change the RIP,
+> KVM internal can handle it by making the re-execution of the instruction
+> doesn't trigger bus lock VM exit to allow progress.
 
-...
+Agreed.  It's not just the last two paragraphs, it's the entire doc update.
 
-> +static int bus_lock_exit(struct kvm_vcpu *vcpu)
-> +{
-> +	struct vcpu_svm *svm = to_svm(vcpu);
-> +
-> +	vcpu->run->exit_reason = KVM_EXIT_X86_BUS_LOCK;
-> +	vcpu->run->flags |= KVM_RUN_X86_BUS_LOCK;
-> +
-> +	vcpu->arch.cui_linear_rip = kvm_get_linear_rip(vcpu);
-> +	svm->bus_lock_rip = vcpu->arch.cui_linear_rip;
-> +	vcpu->arch.complete_userspace_io = complete_userspace_buslock;
-> +
-> +	return 0;
-> +}
+The existing documentation very carefully doesn't say anything about *how* the
+feature is implemented on Intel, so I don't see any reason to mention or compare
+Bus Lock Threshold vs. Bus Lock Detection.  As Xiaoyao said, simply state what
+is different.
 
-> @@ -327,6 +328,7 @@ struct vcpu_svm {
->  
->  	/* Guest GIF value, used when vGIF is not enabled */
->  	bool guest_gif;
-> +	u64 bus_lock_rip;
+And I would definitely not say anything about whether or not userspace can advance
+RIP, as doing so will likely crash/corrupt the guest.  KVM sets bus_lock_counter
+to allow forward progress, KVM does NOT skip RIP.
 
-I don't think this field is necessary.  Rather than unconditionally invalidate
-on nested VMRUN and then conditionally restore on nested #VMEXIT, just leave
-svm->nested.ctl.bus_lock_rip set on VMRUN and conditionally invalidate on #VMEXIT.
-And then in bus_lock_exit(), update the field if the exit occurred while L2 is
-active.
+All in all, I think the only that needs to be called out is that RIP will point
+to the next instruction on Intel, but the offending instruction on Intel.
 
-Completely untested:
+Unless I'm missing a detail, I think it's just this:
 
-diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-index a42ef7dd9143..98e065a93516 100644
---- a/arch/x86/kvm/svm/nested.c
-+++ b/arch/x86/kvm/svm/nested.c
-@@ -700,13 +700,10 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm,
-         * L1 re-enters L2, the same instruction will trigger a VM-Exit and the
-         * entire cycle start over.
-         */
--       if (vmcb02->save.rip && (svm->nested.ctl.bus_lock_rip == vmcb02->save.rip)) {
-+       if (vmcb02->save.rip && (svm->nested.ctl.bus_lock_rip == vmcb02->save.rip))
-                vmcb02->control.bus_lock_counter = 1;
--               svm->bus_lock_rip = svm->nested.ctl.bus_lock_rip;
--       } else {
-+       else
-                vmcb02->control.bus_lock_counter = 0;
--       }
--       svm->nested.ctl.bus_lock_rip = INVALID_GPA;
+diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+index 5fe84f2427b5..d9788f9152f1 100644
+--- a/Documentation/virt/kvm/api.rst
++++ b/Documentation/virt/kvm/api.rst
+@@ -7909,6 +7909,11 @@ apply some other policy-based mitigation. When exiting to userspace, KVM sets
+ KVM_RUN_X86_BUS_LOCK in vcpu-run->flags, and conditionally sets the exit_reason
+ to KVM_EXIT_X86_BUS_LOCK.
  
-        /* Done at vmrun: asid.  */
- 
-@@ -1070,15 +1067,10 @@ int nested_svm_vmexit(struct vcpu_svm *svm)
-        }
- 
-        /*
--        * If bus_lock_counter is nonzero and the guest has not moved past the
--        * guilty instruction, save bus_lock_rip in svm_nested_state. This will
--        * help determine at nested VMRUN whether to stash vmcb02's counter or
--        * reset it to '0'.
-+        * Invalidate bus_lock_rip unless kVM is still waiting for the guest
-+        * to make forward progress before re-enabling bus lock detection.
-         */
--       if (vmcb02->control.bus_lock_counter &&
--           svm->bus_lock_rip == vmcb02->save.rip)
--               svm->nested.ctl.bus_lock_rip = svm->bus_lock_rip;
--       else
-+       if (!vmcb02->control.bus_lock_counter)
-                svm->nested.ctl.bus_lock_rip = INVALID_GPA;
- 
-        nested_svm_copy_common_state(svm->nested.vmcb02.ptr, svm->vmcb01.ptr);
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index ea12e93ae983..11ce031323fd 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -3333,9 +3333,10 @@ static int bus_lock_exit(struct kvm_vcpu *vcpu)
-        vcpu->run->flags |= KVM_RUN_X86_BUS_LOCK;
- 
-        vcpu->arch.cui_linear_rip = kvm_get_linear_rip(vcpu);
--       svm->bus_lock_rip = vcpu->arch.cui_linear_rip;
-        vcpu->arch.complete_userspace_io = complete_userspace_buslock;
- 
-+       if (is_guest_mode(vcpu))
-+               svm->nested.ctl.bus_lock_rip = vcpu->arch.cui_linear_rip;
-        return 0;
- }
- 
-diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-index 7a4c5848c952..8667faccaedc 100644
---- a/arch/x86/kvm/svm/svm.h
-+++ b/arch/x86/kvm/svm/svm.h
-@@ -328,7 +328,6 @@ struct vcpu_svm {
- 
-        /* Guest GIF value, used when vGIF is not enabled */
-        bool guest_gif;
--       u64 bus_lock_rip;
- };
- 
- struct svm_cpu_data {
++Due to differences in the underlying hardware implementation, the vCPU's RIP at
++the time of exit diverges between Intel and AMD.  On Intel hosts, RIP points at
++the next instruction, i.e. the exit is trap-like.  On AMD hosts, RIP points at
++the offending instruction, i.e. the exit is fault-like.
++
+ Note! Detected bus locks may be coincident with other exits to userspace, i.e.
+ KVM_RUN_X86_BUS_LOCK should be checked regardless of the primary exit reason if
+ userspace wants to take action on all detected bus locks.
 
 
