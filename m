@@ -1,114 +1,173 @@
-Return-Path: <linux-kselftest+bounces-31445-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31446-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63AE1A99823
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 20:50:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5818EA9986E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 21:24:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A18E146783E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 18:50:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 94B454A1152
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 19:24:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 009A428B4F3;
-	Wed, 23 Apr 2025 18:50:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A22D828D823;
+	Wed, 23 Apr 2025 19:24:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="R05ie7IS"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="JyMP61V2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74387265CB9
-	for <linux-kselftest@vger.kernel.org>; Wed, 23 Apr 2025 18:50:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC6F22F32;
+	Wed, 23 Apr 2025 19:24:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745434213; cv=none; b=mqrtFD+1HgUDR79Md64XbndiYSTP3wECqH3ZKj5cTC98DTcKanBOlGdMQ68kKYiupEQh5hB42QTzptn1Vp58lyFJ+hrpVGii2f3ReU86v4XPTxQMzDh3CH+mOXfoMBn/RCDPHddCyp4WKSNXpzt+peB2bA/pJ3YtiEzKgm/Dn1M=
+	t=1745436282; cv=none; b=sudxMfw0imd13WvpIXiCZnIpQKIIOEmRQVt5oeZ3EsxR6nlGHx3uB86DaY3huY5CgfpQ4VC4BxYhMsEU+E3Iu9pfANHXUAqQMrHjhf2WTJm4u0HEsupq7bOlahoGOnCtXAPcLZdHT3pUWbuE8cAn8v6QkxforsvH29qKndp0+Ak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745434213; c=relaxed/simple;
-	bh=46YI0j6vLtCLaxnHlsMJBI+Z9TXQj79mXcDdZPes/Fo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DGQiLfOqK9PuU2DgFQoPP3Gjg22+2+WpxcMHKoVQP1BhQLeBoTiaKBPHtffCnozfBeh7YjMqtHzm+EsgIp3vEGF2QGtMK4JlI9U5AsowqJNOClV2fZnIX6Um+f3/52w/YVpJjxiMDd90mYvpZt0JfdI8N83xRa0TYftq+rLfN2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=R05ie7IS; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2242ac37caeso25605ad.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Apr 2025 11:50:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1745434212; x=1746039012; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=46YI0j6vLtCLaxnHlsMJBI+Z9TXQj79mXcDdZPes/Fo=;
-        b=R05ie7IS7KrtSMqRsawPTOIyER+HqGpT8JBOwHimX/pj4e2yKyMrYOrLnakSRMRpGe
-         CXxMvbnLo3uDd6zmWC9frilWcOlP5kSX1NpQRxP4bqdysVXAZ4Akuwvb+BnynxOZ4DGd
-         Xsqm6Z4u2QHBlf94k1nqEp/0J4zEkdvY9DtxWdA2NwLJMKEG1qBRf4ZRf5K9b/6Zpf59
-         KRTu8IxUOswNBKAPk4MqtegGzgLfcnAosqYbwX+8X2yJHDmb4UHcSR622j9z3el6TzTx
-         qCqAL79FJWXVSVzKv3Ql+ZOxdPylHDrJSB0XE5yoZRa8rW67N392oXKpZyrW2M9/pCi/
-         lTPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745434212; x=1746039012;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=46YI0j6vLtCLaxnHlsMJBI+Z9TXQj79mXcDdZPes/Fo=;
-        b=pYkJ1wDLcxoJXHZDelCiEAxWVY3CR9lpTv4pmH1h+h2k2W0fmc0ocesEbtEu67A1eB
-         n9Pq3IVDZmU18/2LRl9/2wvmhvKLlFAMhStU4Z1DJQjbLTNDiqyyMQw0BceJtBXWWivY
-         vi11MMFxWFIUUlYqOz6Fa+PnH8MbpEwyZyEfct9mEWRFnSTx5vV5nnANOa0r5Mi/R8y1
-         09jHI1mK4Es21fhF3KokdHkcW2lKyGhNS++LeyTpRN3hAWcGeZzVSfFe8zq58KCkwRR2
-         w1tUr7oELemTl+lamPJYO71neBHskAKyaosWJyefA4sbXJN9kqf+H2WMYvqEO1t4wrvs
-         2fzg==
-X-Forwarded-Encrypted: i=1; AJvYcCUYWwqXJS/wbztnyNIImm+nEAUauAqaT0j5WYLf3CHEZjkfj4ygosg1Jq4P3mf19/GKH25mDjryxRRS9fmJpQg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwpXBz2KVnt/k+Tfp7/18xZiQ8I/ALqi8nirzTs2TEoJVqkdTlc
-	QGoaFvEe7MamzrgKcetCqwe0OKw7uP+p3YGvJo8dCAC+wFWEcRVfLi9nM0L+mLBQBg8QLVbrzyj
-	bJ78Afn/LQUCFT3nxv/c8cY8J+J5NaCgUkJDI
-X-Gm-Gg: ASbGnctSEErIPSek+AmSsFBIQs4GtuodLtSbaUHb1fNXgmu4Wtw7ToPl/UGDuYDaD3m
-	Kv5JL5kPhUJdmdRbcAOqIETBoNQyNVvwjbaDoU+5QyCJmaDGFgVmJbFqF1MOGIc1ZAb+5llvF/H
-	CzRq6MAbI69qb9YhPxw9EyRoPpnr/dwpYxB42J70yyfUu4B8B0rrUv
-X-Google-Smtp-Source: AGHT+IGDdQr4gPC/57wQTS3NlPWMgh7VtzJjlRR+R1rpkZIj4VicuBwBY2NnnChIvMtHoNNYZlJ8koUe45NHhKsTg+0=
-X-Received: by 2002:a17:903:3d0b:b0:215:7152:36e4 with SMTP id
- d9443c01a7336-22db236f2a4mr299635ad.27.1745434211536; Wed, 23 Apr 2025
- 11:50:11 -0700 (PDT)
+	s=arc-20240116; t=1745436282; c=relaxed/simple;
+	bh=VuA5ArutcR/+rBv4LmxZZq5llGuXWDGBdcaQnWcGg3Y=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=ixCa3Y55QzE94dM1thx62xtq2dduLq5np5nXYf4UaXjzfCxVU9tvYMtHXrOwvTQDyKlQNCpZiWALJoacp1EDwft9Sh+dU9krjAZIQe8OJFjhOvRRiDvqCbB8b2NK+vW8zR5TQ8PYiEAjxpUga8HM1iv1qKC70gzXr+uVxAsL1qM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=JyMP61V2; arc=none smtp.client-ip=217.70.183.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 57DE443D43;
+	Wed, 23 Apr 2025 19:24:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1745436276;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=j2tDrkkBQe3JKRslIUmoWfOqe7k2mOTW95nGkd+giIA=;
+	b=JyMP61V2AwXdhFa/MfRsPknQuX+9zLoQUYtqvFgqLxqliWXnPJH34GipEY9qLDu8f7SOwF
+	L8jxLNkDlXpvpCTUahNBDq64T+h8dShffNbUpErWHn1x/hthcTZ5Vhfb+11gcMowNWfteN
+	lMtxy7eNihMWGR1cfiyeiBMHdFAh6/Qkp740gcZF/k3F/n5r2A+L97u2Wp7fBZWy0zuMo+
+	PYecer6KKZ/ZgNu1gqyVkTs47GKuuYwTdT3yWzZ9AXC833zqNXwOSMWk8F7fOivfSBFC1Q
+	gdPEfuqHmDoodf8h5KichaaTG/S7VwJ99WpomEnNl9DoF7NAvN0SmDDj5OvjeA==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250423153504.1085434-1-cratiu@nvidia.com> <20250423153504.1085434-2-cratiu@nvidia.com>
-In-Reply-To: <20250423153504.1085434-2-cratiu@nvidia.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Wed, 23 Apr 2025 11:49:59 -0700
-X-Gm-Features: ATxdqUFRoPAxj8O5gyFHvPrpXz0zS8j_z75QAgKXLVKEmLgp6XG2WdrYdvwRpIM
-Message-ID: <CAHS8izPSH9UXZwrETq2ze8_-gZRLmJ+nsKQeDp9EXm-PVUADjw@mail.gmail.com>
-Subject: Re: [PATCH net 2/2] tests/ncdevmem: Fix double-free of queue array
-To: Cosmin Ratiu <cratiu@nvidia.com>
-Cc: netdev@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>, 
-	Leon Romanovsky <leonro@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Saeed Mahameed <saeedm@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>, 
-	Dragos Tatulea <dtatulea@nvidia.com>, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 23 Apr 2025 21:24:34 +0200
+Message-Id: <D9E9IQQ3QKXM.3UJ17G9CBS1FH@bootlin.com>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: "Andrii Nakryiko" <andrii.nakryiko@gmail.com>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu"
+ <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "KP Singh"
+ <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>, "Hao Luo"
+ <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>, "Puranjay Mohan"
+ <puranjay@kernel.org>, "Xu Kuohai" <xukuohai@huaweicloud.com>, "Catalin
+ Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>,
+ "Mykola Lysenko" <mykolal@fb.com>, "Shuah Khan" <shuah@kernel.org>, "Maxime
+ Coquelin" <mcoquelin.stm32@gmail.com>, "Alexandre Torgue"
+ <alexandre.torgue@foss.st.com>, "Florent Revest" <revest@chromium.org>,
+ "Bastien Curutchet" <bastien.curutchet@bootlin.com>,
+ <ebpf@linuxfoundation.org>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+ <linux-kselftest@vger.kernel.org>,
+ <linux-stm32@st-md-mailman.stormreply.com>
+Subject: Re: [PATCH RFC bpf-next 1/4] bpf: add struct largest member size in
+ func model
+X-Mailer: aerc 0.20.1-0-g2ecb8770224a
+References: <20250411-many_args_arm64-v1-0-0a32fe72339e@bootlin.com>
+ <20250411-many_args_arm64-v1-1-0a32fe72339e@bootlin.com>
+ <CAEf4Bzbn6BdXTOb0dTcsQmOMZpp5=DzGS2hHHQ3+dwcja=gv+w@mail.gmail.com>
+ <D98Q8BRNUVS9.11J60C67L1ALR@bootlin.com>
+ <CAEf4BzZHMYyGDZ4c4eNXG7Fm=ecxCCbKhKbQTbCjvWmKtdwvBw@mail.gmail.com>
+In-Reply-To: <CAEf4BzZHMYyGDZ4c4eNXG7Fm=ecxCCbKhKbQTbCjvWmKtdwvBw@mail.gmail.com>
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvgeejgeefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpegggfgtfffkhffvvefuofhfjgesthhqredtredtjeenucfhrhhomheptehlvgigihhsucfnohhthhhorhoruceorghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeehveevkeelvdejhffhudfhtdevvddvfffgiedtveejiefgveeljeduveetuddtveenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdgsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemkeegvdekmehfleegtgemvgdttdemmehfkeehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeekgedvkeemfhelgegtmegvtddtmeemfhekhedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomheprghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeeftddprhgtphhtthhopegrnhgurhhiihdrnhgrkhhrhihikhhosehgmhgrihhlrdgtohhmpdhrtghpthhtoheprghstheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlsehiohhgvggrrhgsohigrdhnvghtpdhrtghpthhtohepjhhohhhnr
+ dhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdhrtghpthhtoheprghnughrihhisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmrghrthhinhdrlhgruheslhhinhhugidruggvvhdprhgtphhtthhopegvugguhiiikeejsehgmhgrihhlrdgtohhmpdhrtghpthhtohepshhonhhgsehkvghrnhgvlhdrohhrgh
+X-GND-Sasl: alexis.lothore@bootlin.com
 
-On Wed, Apr 23, 2025 at 9:00=E2=80=AFAM Cosmin Ratiu <cratiu@nvidia.com> wr=
-ote:
->
-> netdev_bind_rx takes ownership of the queue array passed as parameter
-> and frees it, so a queue array buffer cannot be reused across multiple
-> netdev_bind_rx calls.
->
-> This commit fixes that by always passing in a newly created queue array
-> to all netdev_bind_rx calls in ncdevmem.
->
-> Fixes: 85585b4bc8d8 ("selftests: add ncdevmem, netcat for devmem TCP")
-> Signed-off-by: Cosmin Ratiu <cratiu@nvidia.com>
+Hi Andrii,
 
-Thank you!
+On Wed Apr 23, 2025 at 7:15 PM CEST, Andrii Nakryiko wrote:
+> On Thu, Apr 17, 2025 at 12:14=E2=80=AFAM Alexis Lothor=C3=A9
+> <alexis.lothore@bootlin.com> wrote:
+>>
+>> Hi Andrii,
+>>
+>> On Wed Apr 16, 2025 at 11:24 PM CEST, Andrii Nakryiko wrote:
+>> > On Fri, Apr 11, 2025 at 1:32=E2=80=AFPM Alexis Lothor=C3=A9 (eBPF Foun=
+dation)
+>> > <alexis.lothore@bootlin.com> wrote:
 
-Reviewed-by: Mina Almasry <almasrymina@google.com>
+[...]
+
+>> Indeed I initially checked whether I could return directly some alignmen=
+t
+>> info from btf, but it then involves the alignment computation in the btf
+>> module. Since there could be minor differences between architectures abo=
+ut
+>> alignment requirements, I though it would be better to in fact keep alig=
+nment
+>> computation out of the btf module. For example, I see that 128 bits valu=
+es
+>> are aligned on 16 bytes on ARM64, while being aligned on 8 bytes on S390=
+.
+>>
+>> And since for ARM64, all needed alignments are somehow derived from size
+>> (it is either directly size for fundamental types, or alignment of the
+>> largest member for structs, which is then size of largest member),
+>> returning the size seems to be enough to allow the JIT side to compute
+>> alignments.
+>
+> If you mean the size of "primitive" field and/or array element
+> (applied recursively for all embedded structs/unions) then yes, that's
+> close enough. But saying just "largest struct member" is wrong,
+> because for
+>
+> struct blah {
+>     struct {
+>         int whatever[128];
+>     } heya;
+> };
+>
+>
+> blah.heya has a large size, but alignment is still just 4 bytes.
+
+Indeed, that's another case making my proposal fail :)
+
+> I'd suggest looking at btf__align_of() in libbpf (tools/lib/bpf/btf.c)
+> to see how we calculate alignment there. It seems to work decently
+> enough. It won't cover any arch-specific extra rules like double
+> needing 16-byte alignment (I vaguely remember something like that for
+> some architectures, but I might be misremembering), or anything
+> similar. It also won't detect (I don't think it's possible without
+> DWARF) artificially increased alignment with attribute((aligned(N))).
+
+Thanks for the pointer, I'll take a look at it. The more we discuss this
+series, the less member size sounds relevant for what I'm trying to achieve
+here.
+
+Following Xu's comments, I have been thinking about how I could detect the
+custom alignments and packing on structures, and I was wondering if I could
+somehow benefit from __attribute__ encoding in BTF info ([1]). But
+following your hint, I also see some btf_is_struct_packed() in
+tools/lib/bpf/btf_dump.c that could help. I'll dig this further and see if
+I can manage to make something work with all of this.
+
+Thanks,
+
+Alexis
+
+[1] https://lore.kernel.org/bpf/20250130201239.1429648-1-ihor.solodrai@linu=
+x.dev/
 
 --=20
-Thanks,
-Mina
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
 
