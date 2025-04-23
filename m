@@ -1,173 +1,179 @@
-Return-Path: <linux-kselftest+bounces-31446-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31447-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5818EA9986E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 21:24:47 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56F26A99946
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 22:15:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 94B454A1152
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 19:24:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AAB307B0814
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 20:14:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A22D828D823;
-	Wed, 23 Apr 2025 19:24:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A70F25B663;
+	Wed, 23 Apr 2025 20:15:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="JyMP61V2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iw4ul+Me"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC6F22F32;
-	Wed, 23 Apr 2025 19:24:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F6F7191F6D;
+	Wed, 23 Apr 2025 20:15:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745436282; cv=none; b=sudxMfw0imd13WvpIXiCZnIpQKIIOEmRQVt5oeZ3EsxR6nlGHx3uB86DaY3huY5CgfpQ4VC4BxYhMsEU+E3Iu9pfANHXUAqQMrHjhf2WTJm4u0HEsupq7bOlahoGOnCtXAPcLZdHT3pUWbuE8cAn8v6QkxforsvH29qKndp0+Ak=
+	t=1745439340; cv=none; b=IGkJ2H71ln7p6V3OaUsJgnVrgh0pCq/ms2RuAX2q7MI3tXQhalYpMdPNPoF7MFE7Dh48z/A1aDjn+arnCmjodfKPrPupZTC+KPXsBRfG66wSvcF92/9USkPnmzmzmAUPQi86puPAKpt3uwXUem/HS/kidOIU6Ef5hE4Bdj95CaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745436282; c=relaxed/simple;
-	bh=VuA5ArutcR/+rBv4LmxZZq5llGuXWDGBdcaQnWcGg3Y=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=ixCa3Y55QzE94dM1thx62xtq2dduLq5np5nXYf4UaXjzfCxVU9tvYMtHXrOwvTQDyKlQNCpZiWALJoacp1EDwft9Sh+dU9krjAZIQe8OJFjhOvRRiDvqCbB8b2NK+vW8zR5TQ8PYiEAjxpUga8HM1iv1qKC70gzXr+uVxAsL1qM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=JyMP61V2; arc=none smtp.client-ip=217.70.183.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 57DE443D43;
-	Wed, 23 Apr 2025 19:24:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1745436276;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=j2tDrkkBQe3JKRslIUmoWfOqe7k2mOTW95nGkd+giIA=;
-	b=JyMP61V2AwXdhFa/MfRsPknQuX+9zLoQUYtqvFgqLxqliWXnPJH34GipEY9qLDu8f7SOwF
-	L8jxLNkDlXpvpCTUahNBDq64T+h8dShffNbUpErWHn1x/hthcTZ5Vhfb+11gcMowNWfteN
-	lMtxy7eNihMWGR1cfiyeiBMHdFAh6/Qkp740gcZF/k3F/n5r2A+L97u2Wp7fBZWy0zuMo+
-	PYecer6KKZ/ZgNu1gqyVkTs47GKuuYwTdT3yWzZ9AXC833zqNXwOSMWk8F7fOivfSBFC1Q
-	gdPEfuqHmDoodf8h5KichaaTG/S7VwJ99WpomEnNl9DoF7NAvN0SmDDj5OvjeA==
+	s=arc-20240116; t=1745439340; c=relaxed/simple;
+	bh=O3kOtANHK+iQ+nKHvWF6BZLth8XdLSSUINgkM6b7LzY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=U6GmyMCDytqulhExXbs/fJgiUhKRNzTFg6Bd0UPW6WpmNHd7g6QPDM8eQV8Qm+13tnzef8MNRncWYXMBanEu0y4YfZRsPeqlARZPweyDdrsFaDgLF/7/x4e1G0JBBBVgdCK9GjK+HvFGdUZcHs06HGkfHjUPexBQmiCIZrvdhtg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iw4ul+Me; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-22c33ac23edso2600535ad.0;
+        Wed, 23 Apr 2025 13:15:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1745439338; x=1746044138; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=4pTi8BCmrYIvthcU9R/d2tjeubTglUkyusFrrbw0qHU=;
+        b=iw4ul+Mefzhil3ZebXWH6+W302U6lLWhNuEI1lvae8xu4zi7gfiyrf5J2pxnSztDFP
+         bUjVDAvimBLecWX47nVMwxJ9NhZRVVsRuTxHLPO93g5pAegnoN6EzRjqKw2v3KEaPpl4
+         SclsXib5INkiXhFa2SNhNkUGmCJWn02ye9avFgY2Uzxo1taRdFGJ3kKFwCWCBJGhV7Jr
+         TV49rC1P6MtCsQYgG1PBqiKa8NlERyryRjQVi4Zg2MJi+4s9+BfBVeaPaQVbOCQN9Dww
+         oTS23aY60Kq/83XgMi5Sk4iDTapbfDsJkoggGDz2PM//EP+45TAabE1dn26UvCwo70Bu
+         TEtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745439338; x=1746044138;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4pTi8BCmrYIvthcU9R/d2tjeubTglUkyusFrrbw0qHU=;
+        b=s+5RGqYDTvaRaeDq5t99nCdsaR3g0KsBvG3LxSXX4ewvySMjI6dD2yCWmxWNSdNkc+
+         Uyazi9wiky3Y+SYCelhNzCUbOepBiqlug/6sU+RlYu8eqMMnqCtkLPJRlT0p77TBZW0d
+         Sl10v+JIOKVmx6czflH5AZnBxwarCu3DT4H0qERu78sEnmnubUGL5vdzhEWwmYwiIcXR
+         H7CzSOwXmiLhrcnHmEPQFVQLCdCw1/5AqaWdmPUxy7I2+Sw6HvQ8Q9ueTkodI9tYkCbB
+         lbq9y9A/83qM1OAvgEsQXO2IHz1DRHvRnsoPAS0VGWxuNhKLyh24Txx6IXKveStznLfs
+         OIUA==
+X-Forwarded-Encrypted: i=1; AJvYcCXpouXO0T13B28xlb5yYaZZqtpNDXNmjhMftyepxBg0P/GQz8twfNjWQ+BcxlYKfdXvBFqSzocRmb5VOmEi1UM=@vger.kernel.org, AJvYcCXy0PhDbFXlsHQiQEmHiHVQtEYQVPY6j4UMwvEYzoHuczmvaIEhwxUrq/gA7W7MoA1rCcN7IusC@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMlRWjcU60yv/s8ku+mpQgGUhLSjSqqp0HnFe6JvF6JNPaseF/
+	2lfAkQHwl1kzswMJHAbMBjOdsQKjnbvl9Ar0MJ+XnvKjb8upYes=
+X-Gm-Gg: ASbGncvKphM244HG9wCLNGPaWR4HZlF6L1rkWthpYCNvhjYtSNeAYVnZEqJPwk/uFya
+	tUmk7ltHIOi71fB01vVblIUFCZkx9YbIHk+qNamvcXNrBoARU4ATWY1eWTDR4tcShH5AezdcGv7
+	2ilMWFgyBgWh3UwFpPQ/tvfHwN8fQGkYJrsep5ypZf3HP3l93vBdWqeo1N4TSthpLctlouOKjRf
+	gAgI0FV/YL0DFEAr1zpx/wNBCLCZTzfQi4AsrWrhoD8FNKGsFOPB0kLSz0a6SHQct4nWsLuFACq
+	GOHOzjWov4QkRjGD6XXJ+T4TlCxxjvGHx/hmPaJn
+X-Google-Smtp-Source: AGHT+IH7cgGcCGTRD3dWAKtuh47uuQ3gs/slgvMSP/4ucP4YR395JjMZ2VtlG8BY/ymMwO7Ojv48ZQ==
+X-Received: by 2002:a17:902:f611:b0:21f:85af:4bbf with SMTP id d9443c01a7336-22c5359e628mr244289285ad.20.1745439337773;
+        Wed, 23 Apr 2025 13:15:37 -0700 (PDT)
+Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
+        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-22c50eb4a46sm109153435ad.147.2025.04.23.13.15.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Apr 2025 13:15:37 -0700 (PDT)
+Date: Wed, 23 Apr 2025 13:15:36 -0700
+From: Stanislav Fomichev <stfomichev@gmail.com>
+To: Mina Almasry <almasrymina@google.com>
+Cc: Cosmin Ratiu <cratiu@nvidia.com>, netdev@vger.kernel.org,
+	Jason Gunthorpe <jgg@nvidia.com>,
+	Leon Romanovsky <leonro@nvidia.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Saeed Mahameed <saeedm@nvidia.com>,
+	Tariq Toukan <tariqt@nvidia.com>,
+	Dragos Tatulea <dtatulea@nvidia.com>,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net 1/2] net/devmem: Reject insufficiently large dmabuf
+ pools
+Message-ID: <aAlKaELj0xIbJ45c@mini-arch>
+References: <20250423153504.1085434-1-cratiu@nvidia.com>
+ <CAHS8izPxT_SB6+fc7dPcojv3mui3BjDZB5xmz3u6oYuA2805FA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 23 Apr 2025 21:24:34 +0200
-Message-Id: <D9E9IQQ3QKXM.3UJ17G9CBS1FH@bootlin.com>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: "Andrii Nakryiko" <andrii.nakryiko@gmail.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu"
- <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "KP Singh"
- <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>, "Hao Luo"
- <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>, "Puranjay Mohan"
- <puranjay@kernel.org>, "Xu Kuohai" <xukuohai@huaweicloud.com>, "Catalin
- Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>,
- "Mykola Lysenko" <mykolal@fb.com>, "Shuah Khan" <shuah@kernel.org>, "Maxime
- Coquelin" <mcoquelin.stm32@gmail.com>, "Alexandre Torgue"
- <alexandre.torgue@foss.st.com>, "Florent Revest" <revest@chromium.org>,
- "Bastien Curutchet" <bastien.curutchet@bootlin.com>,
- <ebpf@linuxfoundation.org>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
- <linux-kselftest@vger.kernel.org>,
- <linux-stm32@st-md-mailman.stormreply.com>
-Subject: Re: [PATCH RFC bpf-next 1/4] bpf: add struct largest member size in
- func model
-X-Mailer: aerc 0.20.1-0-g2ecb8770224a
-References: <20250411-many_args_arm64-v1-0-0a32fe72339e@bootlin.com>
- <20250411-many_args_arm64-v1-1-0a32fe72339e@bootlin.com>
- <CAEf4Bzbn6BdXTOb0dTcsQmOMZpp5=DzGS2hHHQ3+dwcja=gv+w@mail.gmail.com>
- <D98Q8BRNUVS9.11J60C67L1ALR@bootlin.com>
- <CAEf4BzZHMYyGDZ4c4eNXG7Fm=ecxCCbKhKbQTbCjvWmKtdwvBw@mail.gmail.com>
-In-Reply-To: <CAEf4BzZHMYyGDZ4c4eNXG7Fm=ecxCCbKhKbQTbCjvWmKtdwvBw@mail.gmail.com>
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvgeejgeefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpegggfgtfffkhffvvefuofhfjgesthhqredtredtjeenucfhrhhomheptehlvgigihhsucfnohhthhhorhoruceorghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeehveevkeelvdejhffhudfhtdevvddvfffgiedtveejiefgveeljeduveetuddtveenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdgsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemkeegvdekmehfleegtgemvgdttdemmehfkeehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeekgedvkeemfhelgegtmegvtddtmeemfhekhedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomheprghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeeftddprhgtphhtthhopegrnhgurhhiihdrnhgrkhhrhihikhhosehgmhgrihhlrdgtohhmpdhrtghpthhtoheprghstheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlsehiohhgvggrrhgsohigrdhnvghtpdhrtghpthhtohepjhhohhhnr
- dhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdhrtghpthhtoheprghnughrihhisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmrghrthhinhdrlhgruheslhhinhhugidruggvvhdprhgtphhtthhopegvugguhiiikeejsehgmhgrihhlrdgtohhmpdhrtghpthhtohepshhonhhgsehkvghrnhgvlhdrohhrgh
-X-GND-Sasl: alexis.lothore@bootlin.com
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHS8izPxT_SB6+fc7dPcojv3mui3BjDZB5xmz3u6oYuA2805FA@mail.gmail.com>
 
-Hi Andrii,
+On 04/23, Mina Almasry wrote:
+> On Wed, Apr 23, 2025 at 9:03 AM Cosmin Ratiu <cratiu@nvidia.com> wrote:
+> >
+> > Drivers that are told to allocate RX buffers from pools of DMA memory
+> > should have enough memory in the pool to satisfy projected allocation
+> > requests (a function of ring size, MTU & other parameters). If there's
+> > not enough memory, RX ring refill might fail later at inconvenient times
+> > (e.g. during NAPI poll).
+> >
+> 
+> My understanding is that if the RX ring refill fails, the driver will
+> post the buffers it was able to allocate data for, and will not post
+> other buffers. So it will run with a degraded performance but nothing
+> overly bad should happen. This should be the same behavior if the
+> machine is under memory pressure.
+> 
+> In general I don't know about this change. If the user wants to use
+> very small dmabufs, they should be able to, without going through
+> hoops reducing the number of rx ring slots the driver has (if it
+> supports configuring that).
+> 
+> I think maybe printing an error or warning that the dmabuf is too
+> small for the pool_size may be fine. But outright failing this
+> configuration? I don't think so.
+> 
+> > This commit adds a check at dmabuf pool init time that compares the
+> > amount of memory in the underlying chunk pool (configured by the user
+> > space application providing dmabuf memory) with the desired pool size
+> > (previously set by the driver) and fails with an error message if chunk
+> > memory isn't enough.
+> >
+> > Fixes: 0f9214046893 ("memory-provider: dmabuf devmem memory provider")
+> > Signed-off-by: Cosmin Ratiu <cratiu@nvidia.com>
+> > ---
+> >  net/core/devmem.c | 11 +++++++++++
+> >  1 file changed, 11 insertions(+)
+> >
+> > diff --git a/net/core/devmem.c b/net/core/devmem.c
+> > index 6e27a47d0493..651cd55ebb28 100644
+> > --- a/net/core/devmem.c
+> > +++ b/net/core/devmem.c
+> > @@ -299,6 +299,7 @@ net_devmem_bind_dmabuf(struct net_device *dev, unsigned int dmabuf_fd,
+> >  int mp_dmabuf_devmem_init(struct page_pool *pool)
+> >  {
+> >         struct net_devmem_dmabuf_binding *binding = pool->mp_priv;
+> > +       size_t size;
+> >
+> >         if (!binding)
+> >                 return -EINVAL;
+> > @@ -312,6 +313,16 @@ int mp_dmabuf_devmem_init(struct page_pool *pool)
+> >         if (pool->p.order != 0)
+> >                 return -E2BIG;
+> >
+> > +       /* Validate that the underlying dmabuf has enough memory to satisfy
+> > +        * requested pool size.
+> > +        */
+> > +       size = gen_pool_size(binding->chunk_pool) >> PAGE_SHIFT;
+> > +       if (size < pool->p.pool_size) {
+> 
+> pool_size seems to be the number of ptr_ring slots in the page_pool,
+> not some upper or lower bound on the amount of memory the page_pool
+> can provide. So this check seems useless? The page_pool can still not
+> provide this amount of memory with dmabuf (if the netmems aren't being
+> recycled fast enough) or with normal memory (under memory pressure).
 
-On Wed Apr 23, 2025 at 7:15 PM CEST, Andrii Nakryiko wrote:
-> On Thu, Apr 17, 2025 at 12:14=E2=80=AFAM Alexis Lothor=C3=A9
-> <alexis.lothore@bootlin.com> wrote:
->>
->> Hi Andrii,
->>
->> On Wed Apr 16, 2025 at 11:24 PM CEST, Andrii Nakryiko wrote:
->> > On Fri, Apr 11, 2025 at 1:32=E2=80=AFPM Alexis Lothor=C3=A9 (eBPF Foun=
-dation)
->> > <alexis.lothore@bootlin.com> wrote:
+I read this check more as "is there enough chunks in the binding to
+fully fill in the page pool". User controls the size of rx ring which
+controls the size of the page pool which somewhat dictates the minimal
+size of the binding (maybe). So it's more of a sanity check.
 
-[...]
-
->> Indeed I initially checked whether I could return directly some alignmen=
-t
->> info from btf, but it then involves the alignment computation in the btf
->> module. Since there could be minor differences between architectures abo=
-ut
->> alignment requirements, I though it would be better to in fact keep alig=
-nment
->> computation out of the btf module. For example, I see that 128 bits valu=
-es
->> are aligned on 16 bytes on ARM64, while being aligned on 8 bytes on S390=
-.
->>
->> And since for ARM64, all needed alignments are somehow derived from size
->> (it is either directly size for fundamental types, or alignment of the
->> largest member for structs, which is then size of largest member),
->> returning the size seems to be enough to allow the JIT side to compute
->> alignments.
->
-> If you mean the size of "primitive" field and/or array element
-> (applied recursively for all embedded structs/unions) then yes, that's
-> close enough. But saying just "largest struct member" is wrong,
-> because for
->
-> struct blah {
->     struct {
->         int whatever[128];
->     } heya;
-> };
->
->
-> blah.heya has a large size, but alignment is still just 4 bytes.
-
-Indeed, that's another case making my proposal fail :)
-
-> I'd suggest looking at btf__align_of() in libbpf (tools/lib/bpf/btf.c)
-> to see how we calculate alignment there. It seems to work decently
-> enough. It won't cover any arch-specific extra rules like double
-> needing 16-byte alignment (I vaguely remember something like that for
-> some architectures, but I might be misremembering), or anything
-> similar. It also won't detect (I don't think it's possible without
-> DWARF) artificially increased alignment with attribute((aligned(N))).
-
-Thanks for the pointer, I'll take a look at it. The more we discuss this
-series, the less member size sounds relevant for what I'm trying to achieve
-here.
-
-Following Xu's comments, I have been thinking about how I could detect the
-custom alignments and packing on structures, and I was wondering if I could
-somehow benefit from __attribute__ encoding in BTF info ([1]). But
-following your hint, I also see some btf_is_struct_packed() in
-tools/lib/bpf/btf_dump.c that could help. I'll dig this further and see if
-I can manage to make something work with all of this.
-
-Thanks,
-
-Alexis
-
-[1] https://lore.kernel.org/bpf/20250130201239.1429648-1-ihor.solodrai@linu=
-x.dev/
-
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+Maybe having better defaults in ncdevmem would've been a better option? It
+allocates (16000*4096) bytes (slightly less than 64MB, why? to fit into
+default /sys/module/udmabuf/parameters/size_limit_mb?) and on my setup
+PP wants to get 64MB at least..
 
