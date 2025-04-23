@@ -1,137 +1,164 @@
-Return-Path: <linux-kselftest+bounces-31457-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31458-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4902CA99B03
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 23:53:39 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7ED58A99B2D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Apr 2025 00:02:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E8F253BA1AE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 21:53:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BA0657A7B4D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 22:01:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF3921FCFE7;
-	Wed, 23 Apr 2025 21:53:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 518961EDA2F;
+	Wed, 23 Apr 2025 22:02:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="w+I0yi0r"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Y4UL2HtJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 159B91DE3AD
-	for <linux-kselftest@vger.kernel.org>; Wed, 23 Apr 2025 21:53:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE0921EA7CD
+	for <linux-kselftest@vger.kernel.org>; Wed, 23 Apr 2025 22:02:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745445215; cv=none; b=NHcmZ71BdbegKliaYEbP0TmUXlhM8P1+zzGd67axaDYakDVJglzLQThceLbzjvZ8akJWZ2hBgRB/RpVAG0eJRX4kK6jvEB6hTO71qZg7NTZK8cs9jsPBRS0WZo/RMzrZYyDJ9AFwD/ZT+7PdfbHUZsSMvUjRMMm4UPiivfjObao=
+	t=1745445727; cv=none; b=joIF/fo6QCajDkp/t8NVZ4ISFSTd6NC2L+ylNPCZysqHK0E/rTeNcajC7kc0TsqmUbSpT1HuGkUITUCmdOHYayl7VXC32xPOIIdWEgy1PJcpJEMeF8zjU2HA90lr83HXq/tQk+4GYsNJDIR6T4mt67vk/yw/340orr2keHRwKDY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745445215; c=relaxed/simple;
-	bh=1VENgflOh3MnWBXlewKcXCnf2iJGOO5S/6TsTkBKJjg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sAKiwBE8+5AJXYCkmWrNxSrOjIK9oZBO4tDwZ+HXwnyi27DttwvNWFwAVW0c4dp9L6MdKSYTvO9yYchtUKKQwAnjmV72JK2EdWf9ZW0KZ/W6Wpo+XdVR/hTbB734UTID6+PMHf/2oVUsKcKqe2BmsikyZLBVVjimQY6rSd0Lcio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=w+I0yi0r; arc=none smtp.client-ip=209.85.160.181
+	s=arc-20240116; t=1745445727; c=relaxed/simple;
+	bh=/kYvkbcWE+9uoIdgKSwT0wqIwZi66c9Fis9jhsJOymo=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=irzF7fIxpIczJY/cIya+Crsnyp0TJqzt2/sEsHcJnoSTuWVCo++Vp+kP1H1nWiLHFFDn6kvocZtuRTIxlZcW2twJKkA5c8tjGcmhyEXVAlHMNuZCKMs2Prf2IRGC5086jI2pCeJ4NKWyWczPCozFWsIgeqhFOO0jtwqn6B6vpN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Y4UL2HtJ; arc=none smtp.client-ip=209.85.215.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-47e9fea29easo43391cf.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Apr 2025 14:53:33 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-b0e0c573531so145832a12.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Apr 2025 15:02:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1745445213; x=1746050013; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+wxOEPg2lzGGAAEWxyMxHF7QDi50JL+cgIXLanH/rmg=;
-        b=w+I0yi0rZZufAMzk4tikYMnTXTZf++GbQxgW+IxjOi5cx4TQwMsstWg0p0bO7Mrlw+
-         mxitFGHMdZvDFJ668oSWaAqR3oCstXTO7c7qiiWrg7wIL0jSThMu31JybgLVOttLJllW
-         pthV4qTsN9eW7jF6CXDBlF+4XNjlXxDHjtTxNz2faxldy4W67NIO66rKa7v6NRMvxy8V
-         XsQ0pWldRNWHyrvP6kuFgsBhV4AMSZEt/tpepJQCbYx3ZiK99GX6ipj3sip0Q/6G6NZp
-         +hKn4VIqvVqzXQvJvu0ZH2X94qkbaqdjs/6zOL2j1hYX6qi//7lwXIfp2qTO24e9wlqh
-         fciQ==
+        d=google.com; s=20230601; t=1745445725; x=1746050525; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZshVHDiSVI1msI3W+ro+KzMPJMPZ2JcnJbSD4cGabVM=;
+        b=Y4UL2HtJZoyj77BivhexhY40IsHjEKRM507qbJBkBhlXUJB5yKC4L7X6WCqFPK4wdP
+         cwqf3xxOgOIlAV8sLcZqycUOI/YVz3n/WZ06IljU2Wu95oO0dwsJXBViT5Fajy3Yyyr3
+         ktW/8b+uRmCWxT/d4rmtw1f+2eOZdg3yWAnZ2V6BrxsJIK83OrAZPvIDmcYmWJhXiuHv
+         JHY891pK1FhMQJMy9GecNLzESLQ7qH4HsIntSKOPrpcUR0clmFj/eN2DfR1OwWCzcfL0
+         /XxBilLdSgpqyp/9uZOxg/yDe4LDUoGqocUHb+ayqbbRZ1ROqDsMeC08PPZXPgTT9aRh
+         wefw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745445213; x=1746050013;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+wxOEPg2lzGGAAEWxyMxHF7QDi50JL+cgIXLanH/rmg=;
-        b=oqSGt7xciY4SyutDCCD/jAEPok2SHIBBVOS39EJ3aG1rba1h1mcDBb1VsTyeZu50vj
-         6V3VGR+nNLxWNKXebpbdGX4tqOAKne8GNhv8PHgLeOweP7d0N2xYf/7xjcTNGDRWWJL2
-         +ulE5eI+P/wX4vo72QbzjyCB8zoMyOSdNC2pbVEXKMNvTkgvD6Fpyc8mxsHqmdUGNLls
-         bZ9Gj/4mfjXu4WN+f/dcHGwXGonm96SQpYdbcAQNcISnLyH/pJsX+FYoLwLpBJSNUjWc
-         19BcCeGKtaXc9buyW1OfAVTeRYuzFLpp97xyYvqKXJXfkSLeYuhjRdhFUETzJessyVZx
-         ZmkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXU+VmDVpxQ8pmxfuDO6k84DzhJEc+aqzwwzv8giFDRyuX7ylpPCqCYkASgdU8RsTz8PRi6sxCAY6R/4Y6Xb1A=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxs41jYHPv6ti63yVKoKzeTtde1M6hvtM4LsZ7qKvijRdW10up3
-	JteYQFgCKBDD3vZevmOCufVa84Ajb59cEQOA6D0MzD3XXk4FO3rFVVlTo6LRH7HJ393UfhReFNG
-	xga/fCrGzca2O7+7nWd0Kv9JJ2YBbDIJtfCwG
-X-Gm-Gg: ASbGncsuYPuPLIkyGlqgnoE+S85dqsgH6ydpLLbihT5AOkKASvDEMHX1eA9hxjUTryE
-	os3743sVnuuiHD+f4CUN2Wz9CtzTpAlToa616h19Y0y1YAA6WpQWjsJQIUpSV8Sfhl182kwRgZE
-	0lvaKSUVBcEC4WaOx7xcV42tYS6mKMYfRNZCCXnXoM2XGSl1yewqtJ
-X-Google-Smtp-Source: AGHT+IFxKf4JMsoiImdRCM9Gv2EFQUjIOz6bkJ3ODyiXPnj15zTxtQdogrWnY80WdKRS5ErJulohCQQ1CRC+j+mpd8k=
-X-Received: by 2002:a05:622a:1bab:b0:476:d668:fd1c with SMTP id
- d75a77b69052e-47e79cbfd5emr1736981cf.2.1745445212617; Wed, 23 Apr 2025
- 14:53:32 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1745445725; x=1746050525;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZshVHDiSVI1msI3W+ro+KzMPJMPZ2JcnJbSD4cGabVM=;
+        b=CXbZn9hHzau8luXH6k2Q5EUhZcD7wnHKefsao5MRiNGfkbtjMf/oF6Ak0bLtcjig7E
+         rdeJ9gCcqYQ7rRIL73YkhpYuvSnryFc61yhHnb7gM/paJMyZFAxW78wDmLF5JNBJ7/j7
+         zQvqKuarpYhElmSMVTHF6fH8Ns28pTQ9YComQKgxoi3OplGpg4RFA7GxVv9jvJG2tJoq
+         PfWPoPb6vQ2GnJG9A57d4tOyRnirsKYwyN4/2wZ6TqoO7NMYKEHWO5RqbXmBIQ2vFmHm
+         FA4cIT8NBLIByaiQWEoQkMSx53DBlsiGA9ZzJse71IOJ5uon3I97vNczkBdX/MH3TDCr
+         8Q8g==
+X-Forwarded-Encrypted: i=1; AJvYcCURQywEAhlFoj2m855xOArkqQGdoEH3mJLCdSaXPPvcQqNF4Sqc09SebKx8YB4bbFUyyN6rlqQYMlj6Rdiwyy4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBLrJLKw6jQnhc57ektdroRwI/MWCx9gNsKbzhAs4McWqpIW9O
+	6EcCwEpmSpC8prCEqY6AdV6QTnF/X59+aBgk3OtvcnlQc8ekFKlq96dmqsAgBgGQzBK3U8MtEZY
+	aq8jL4mIKbjim3dfhcZ+WrA==
+X-Google-Smtp-Source: AGHT+IG47bYyoQqSmgswCKOYeGTrnVac079gXJUVu/1TXbrM7dvGQWThFMm4vyGtqs9cP9ZCw5DfCSc3oxRjiC395w==
+X-Received: from plcx19.prod.google.com ([2002:a17:903:d3:b0:229:1de5:3212])
+ (user=ackerleytng job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:902:e551:b0:220:ea90:191e with SMTP id d9443c01a7336-22db3baf262mr2268985ad.4.1745445724608;
+ Wed, 23 Apr 2025 15:02:04 -0700 (PDT)
+Date: Wed, 23 Apr 2025 15:02:02 -0700
+In-Reply-To: <Z+6AGxEvBRFkN5mN@yzhao56-desk.sh.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250418174959.1431962-1-surenb@google.com> <20250418174959.1431962-9-surenb@google.com>
- <CAEf4BzabPLJTy1U=aBrGZqKpskNYvj5MYuhPHSh_=hjmVJMvrg@mail.gmail.com>
-In-Reply-To: <CAEf4BzabPLJTy1U=aBrGZqKpskNYvj5MYuhPHSh_=hjmVJMvrg@mail.gmail.com>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Wed, 23 Apr 2025 14:53:20 -0700
-X-Gm-Features: ATxdqUFczXuJ3MtAVzm6hOXwKgR46ihWvXXCSbcxhMDhIph3juTGEiPJwzlaPbY
-Message-ID: <CAJuCfpGQPO5AqiZxfb9JYUqd5suS2C+qWt-_acjU0zFf-g-eGA@mail.gmail.com>
-Subject: Re: [PATCH v3 8/8] mm/maps: execute PROCMAP_QUERY ioctl under RCU
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: akpm@linux-foundation.org, Liam.Howlett@oracle.com, 
-	lorenzo.stoakes@oracle.com, david@redhat.com, vbabka@suse.cz, 
-	peterx@redhat.com, jannh@google.com, hannes@cmpxchg.org, mhocko@kernel.org, 
-	paulmck@kernel.org, shuah@kernel.org, adobriyan@gmail.com, brauner@kernel.org, 
-	josef@toxicpanda.com, yebin10@huawei.com, linux@weissschuh.net, 
-	willy@infradead.org, osalvador@suse.de, andrii@kernel.org, 
-	ryan.roberts@arm.com, christophe.leroy@csgroup.eu, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Mime-Version: 1.0
+References: <cover.1726009989.git.ackerleytng@google.com> <38723c5d5e9b530e52f28b9f9f4a6d862ed69bcd.1726009989.git.ackerleytng@google.com>
+ <Z+6AGxEvBRFkN5mN@yzhao56-desk.sh.intel.com>
+Message-ID: <diqzh62ezgdh.fsf@ackerleytng-ctop.c.googlers.com>
+Subject: Re: [RFC PATCH 39/39] KVM: guest_memfd: Dynamically split/reconstruct
+ HugeTLB page
+From: Ackerley Tng <ackerleytng@google.com>
+To: Yan Zhao <yan.y.zhao@intel.com>
+Cc: tabba@google.com, quic_eberman@quicinc.com, roypat@amazon.co.uk, 
+	jgg@nvidia.com, peterx@redhat.com, david@redhat.com, rientjes@google.com, 
+	fvdl@google.com, jthoughton@google.com, seanjc@google.com, 
+	pbonzini@redhat.com, zhiquan1.li@intel.com, fan.du@intel.com, 
+	jun.miao@intel.com, isaku.yamahata@intel.com, muchun.song@linux.dev, 
+	erdemaktas@google.com, vannapurve@google.com, qperret@google.com, 
+	jhubbard@nvidia.com, willy@infradead.org, shuah@kernel.org, 
+	brauner@kernel.org, bfoster@redhat.com, kent.overstreet@linux.dev, 
+	pvorel@suse.cz, rppt@kernel.org, richard.weiyang@gmail.com, 
+	anup@brainfault.org, haibo1.xu@intel.com, ajones@ventanamicro.com, 
+	vkuznets@redhat.com, maciej.wieczor-retman@intel.com, pgonda@google.com, 
+	oliver.upton@linux.dev, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 22, 2025 at 3:54=E2=80=AFPM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Fri, Apr 18, 2025 at 10:50=E2=80=AFAM Suren Baghdasaryan <surenb@googl=
-e.com> wrote:
-> >
-> > Utilize speculative vma lookup to find and snapshot a vma without
-> > taking mmap_lock during PROCMAP_QUERY ioctl execution. Concurrent
-> > address space modifications are detected and the lookup is retried.
-> > While we take the mmap_lock for reading during such contention, we
-> > do that momentarily only to record new mm_wr_seq counter.
->
-> PROCMAP_QUERY is an even more obvious candidate for fully lockless
-> speculation, IMO (because it's more obvious that vma's use is
-> localized to do_procmap_query(), instead of being spread across
-> m_start/m_next and m_show as with seq_file approach). We do
-> rcu_read_lock(), mmap_lock_speculate_try_begin(), query for VMA (no
-> mmap_read_lock), use that VMA to produce (speculative) output, and
-> then validate that VMA or mm_struct didn't change with
-> mmap_lock_speculate_retry(). If it did - retry, if not - we are done.
-> No need for vma_copy and any gets/puts, no?
+Yan Zhao <yan.y.zhao@intel.com> writes:
 
-Yeah, since we can simply retry, this should indeed work without
-trying to stabilize the vma. I'll update the code to simplify this.
-Thanks!
+> On Tue, Sep 10, 2024 at 11:44:10PM +0000, Ackerley Tng wrote:
+>> +/*
+>> + * Allocates and then caches a folio in the filemap. Returns a folio with
+>> + * refcount of 2: 1 after allocation, and 1 taken by the filemap.
+>> + */
+>> +static struct folio *kvm_gmem_hugetlb_alloc_and_cache_folio(struct inode *inode,
+>> +							    pgoff_t index)
+>> +{
+>> +	struct kvm_gmem_hugetlb *hgmem;
+>> +	pgoff_t aligned_index;
+>> +	struct folio *folio;
+>> +	int nr_pages;
+>> +	int ret;
+>> +
+>> +	hgmem = kvm_gmem_hgmem(inode);
+>> +	folio = kvm_gmem_hugetlb_alloc_folio(hgmem->h, hgmem->spool);
+>> +	if (IS_ERR(folio))
+>> +		return folio;
+>> +
+>> +	nr_pages = 1UL << huge_page_order(hgmem->h);
+>> +	aligned_index = round_down(index, nr_pages);
+> Maybe a gap here.
+>
+> When a guest_memfd is bound to a slot where slot->base_gfn is not aligned to
+> 2M/1G and slot->gmem.pgoff is 0, even if an index is 2M/1G aligned, the
+> corresponding GFN is not 2M/1G aligned.
+
+Thanks for looking into this.
+
+In 1G page support for guest_memfd, the offset and size are always
+hugepage aligned to the hugepage size requested at guest_memfd creation
+time, and it is true that when binding to a memslot, slot->base_gfn and
+slot->npages may not be hugepage aligned.
 
 >
-> > This change is designed to reduce mmap_lock contention and prevent
-> > PROCMAP_QUERY ioctl calls (often a low priority task, such as
-> > monitoring/data collection services) from blocking address space
-> > updates.
-> >
-> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > ---
-> >  fs/proc/task_mmu.c | 63 ++++++++++++++++++++++++++++++++++++++++------
-> >  1 file changed, 55 insertions(+), 8 deletions(-)
-> >
+> However, TDX requires that private huge pages be 2M aligned in GFN.
 >
-> [...]
+
+IIUC other factors also contribute to determining the mapping level in
+the guest page tables, like lpage_info and .private_max_mapping_level()
+in kvm_x86_ops.
+
+If slot->base_gfn and slot->npages are not hugepage aligned, lpage_info
+will track that and not allow faulting into guest page tables at higher
+granularity.
+
+Hence I think it is okay to leave it to KVM to fault pages into the
+guest correctly. For guest_memfd will just maintain the invariant that
+offset and size are hugepage aligned, but not require that
+slot->base_gfn and slot->npages are hugepage aligned. This behavior will
+be consistent with other backing memory for guests like regular shmem or
+HugeTLB.
+
+>> +	ret = kvm_gmem_hugetlb_filemap_add_folio(inode->i_mapping, folio,
+>> +						 aligned_index,
+>> +						 htlb_alloc_mask(hgmem->h));
+>> +	WARN_ON(ret);
+>> +
+>>  	spin_lock(&inode->i_lock);
+>>  	inode->i_blocks += blocks_per_huge_page(hgmem->h);
+>>  	spin_unlock(&inode->i_lock);
+>>  
+>> -	return page_folio(requested_page);
+>> +	return folio;
+>> +}
 
