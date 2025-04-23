@@ -1,189 +1,169 @@
-Return-Path: <linux-kselftest+bounces-31441-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31442-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29D49A997DE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 20:26:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EFC92A997E3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 20:28:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 104547B0920
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 18:25:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D32FB1B858A6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 18:28:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BF1A28E5FD;
-	Wed, 23 Apr 2025 18:26:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8A8728E5EA;
+	Wed, 23 Apr 2025 18:28:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2gq+VKrr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m8jALydd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D02C428E5E5
-	for <linux-kselftest@vger.kernel.org>; Wed, 23 Apr 2025 18:26:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18704263F54;
+	Wed, 23 Apr 2025 18:28:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745432789; cv=none; b=HYLKz3Ys4JSNGPnCOzsfH6RFy9BfO9EkiN/LTgHKvc7Ajp2wBvZhwfkgSof2oBFdtdRp5G/9i+0NIOXesBZZRZ99Li8u3Y/5ARCePnra0VS8Z4BWQncNNSvWlj7zV1jIikSD5uGqG7zhHEKe4LZM0d/F5UFDLVHV5zOfUOXH2wc=
+	t=1745432886; cv=none; b=EYSSCvQgNlXwMKpxMHK1VA7QojPb6eLfQv2JmUFqhRbsEhxk012rLzrkhcoMJUJfr/F6KbilzcjM7+uE5gfAB2JTZGMkEKeFcuydPFPa5juKtSq/RJkr6nVDnMPJIKAk7JGUoUkditNlFnZ3LUGzdcwgaJnHKzjwukforbunXJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745432789; c=relaxed/simple;
-	bh=PH84kld/sKE+RhISrTjG1cjFnL0yLAXB9xK4PwFZaMY=;
+	s=arc-20240116; t=1745432886; c=relaxed/simple;
+	bh=i7eHnOq25ulKjA9Oo8JHto2f6z++0PCfbt9HfXtPDQU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=vGZUpQDyoNXseNo1IRmc+tDnZrsh6cIOa0pWGRCz4jXpGvbsW3ebjHyd528ql7+LeFSNQX9w6WQhkedBD8pWmSzMDUvTAUbONzm/XKFCi3cqLS65p04S4HVKWMNvxEiKmxqdYHKtzEldFUSPNuRuchHjdE3s9Ge150nokHKwneA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2gq+VKrr; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2263428c8baso21225ad.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Apr 2025 11:26:26 -0700 (PDT)
+	 To:Cc:Content-Type; b=BXFlkWjrKDmS59mbSlvc5OVgAT/20qDsXlLRCy4X9uul5deWh+Z+AVHC4BM4cv5cwRvfIw43QDXnxHoBDpA4oATuoFEuTwFfGxmENbq2+YS7C/rLsSatiqNjyDEB72c8KryQ2n4Lnmrh1Ru9ktPebuKCoC37a1ua94AwssM3tKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m8jALydd; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-736dd9c4b40so1194720b3a.0;
+        Wed, 23 Apr 2025 11:28:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1745432786; x=1746037586; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1745432884; x=1746037684; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=l0kIM1GyroCk3zmwGLYPwDaNY7xBbvOnwGmlKqF+IzQ=;
-        b=2gq+VKrrvYaucHZKTwwnsDTcguRUJEnVD9Vc+V+V+MMaMRFvued3L8zrmZcBRrQhmM
-         3AQIXkghMRWBlDpmF3Y442RrEa/yOvEGpOXH7jvF2ImyjOhm7ldwlQpVsBBVnrbMBR32
-         oxkxBsygVehWGacZv3UxJmwvCv8bQOs6VYYwjIT31stc15bCYMBoYmLXxFC4CJxX6ijX
-         un5EOHJeYtHksDBCZLviXLlVLbxF+jjTZIB70cLEkBjcWWDUtXCQHSne9rRrpLVlVfXm
-         TvbupkYn09GYXohrSzKoO8ejUQwj+0XW+4JQzbpUFtXTG2WA2y4toln7Vk5BwsR+pHxz
-         m5TQ==
+        bh=W2SR0uKGM0vhthncIe5Y/+JuVpZCEkOEOOgsDc6OPSY=;
+        b=m8jALyddW1jhfnYdSjjUYbWQf2cZu5lE2vEgHsKKovatzcuhqygcq05EvmVI1DIBVo
+         9ZvD0AzbZM8gTganA1+VibTkwlyrtanRyqRzeJ+QSQ9cS0LQpbAtNeqfOrqXAyXoaJ2D
+         AAZ674H0r7ECEbk9tKuxBIlueiQpyVXXJ7tqjw3qmWfRsjEHBVFokHEmBE11VE565IS8
+         6OL5tuMa/ZTbwEpC3c/Id745xs7YFRWTFfRH9RGCUyyM0OvWnFLhpCvFvn79bwCNXwWG
+         y3Fkcjf4CQCxrZoKJeSH9nMPZjlgsLsxHrxayI+KmIWWMjBy0xRSfHHx2uetJSnLBn/m
+         W6Cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745432786; x=1746037586;
+        d=1e100.net; s=20230601; t=1745432884; x=1746037684;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=l0kIM1GyroCk3zmwGLYPwDaNY7xBbvOnwGmlKqF+IzQ=;
-        b=n5V9SGDoYLAvETlBgbWhO5MkciMLaTOgUz74ameJSNUVjQsei26V1VAqeILYFX+ITA
-         gceVaqOzrUxCQfu5qVsYG1YFH0GMMbKlPUG6q/oegT1refeWTqeDkFY1tHASL7uKN01w
-         38CZ2PE8oJJ9M+xOKly/IUvgegiVn2EZLmtnlml7zZ/3OUSYAKpfUPcShGuu8koTx4YZ
-         CI8HxkvOOePq2JmBLcDiKjfLGuExlLXdIxxm8lMgq6MtR1pF1yJDegUqSB4CqAUy2n9G
-         oF1aCpDPGat65Bow8/8naPn2u968K7Nq9ED3jiSVqS21GNhz1Ua8U0AIoknvsyfvpc19
-         /zjg==
-X-Forwarded-Encrypted: i=1; AJvYcCXHhq7TZvzu2CB1uJ4dplh5j/SjWW6+OD5cTucn71v08BBhBFbUOSDICjA5I3bl7BZXcBbTpnSelosV3oDKtDU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxkXydK8I/fGX9q/UMwbj8TwEFFKLb0vcVTiDRPl+e13RkplgN6
-	MQIuDR46K85dLb1xjm7XCAL0fAwXMcXQG7o/++XwYRHw/GK+DxLdgWLOBIDLfiogUmA7oYPCAOI
-	kBvABdM6AnGEwYeA4fDsHcolnALZN7usCqo7W
-X-Gm-Gg: ASbGncsfBjRQkc3umq3joe/kNJfuTaqRdrDVfne36VJHwl6SfSg+Yl30+jEzACqkyJm
-	0GkBELWZz4INNeplSFj78xztTmZk3k12IYFCa4HqRseaDYDhaiqoO95kVuEg8eZYIcGpOp1Z25t
-	ACiejCZmxNjuhquqry61298LV+unAWAgNZZh/8kzQr+XGE3WVC4Dp0jzw=
-X-Google-Smtp-Source: AGHT+IFz1R1LxqWEGYRLYWO5W96XWnv2bqJz15jEINPSBmb87YsKZWzWOfr6fveduQ8KQij52ltnpYxHcWerkniTavs=
-X-Received: by 2002:a17:903:3bce:b0:215:8232:5596 with SMTP id
- d9443c01a7336-22db218a627mr293845ad.16.1745432785574; Wed, 23 Apr 2025
- 11:26:25 -0700 (PDT)
+        bh=W2SR0uKGM0vhthncIe5Y/+JuVpZCEkOEOOgsDc6OPSY=;
+        b=DWILsNyCGf9IkkIO3T9G6KImpwD7dnHrR/LiYr2VThcFMRMenlX+3LxYx33WMT4gZl
+         +RxunCFTEnoSFA8C7erSTnkiGRNDYJrwWp0AGF69F79R9KSQj8+uRYKmoFYKT+/kD7qR
+         i+DeLTOGt3jOmfHuHaxeIdhQYPEVKuFYeESKLeFUOHsEogg9wF5MGZ3lb0MSsa8qoY+C
+         0RAfAu+tnVmY+JCJ0fzRL8eJ0JneRhAVNu0VPCGGf3Ozm1v9aDHFM7HiaGR60OewpLgJ
+         je85AOVSDuVLmMraXSwSm7a0I28uZ1oy/M0PhoqS5QGcHjTS2Tq2NPSRdOhsxFEaji85
+         AnjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUHkW5l7Cgp7S44Q2WF9BfE6GzM+PFCO6rbEP39Tek20AQefzU7oqKnCJID5/6JNAc6JUGtVuHRY6zy/gCc@vger.kernel.org, AJvYcCVPYMZc2VTq6lCujUR8Uth/4D3Ajln+eIvNfkajgNO7J0IQbcq5YYalZ6sEcxwABTdb/hDidvYJ9lAYfThd520n@vger.kernel.org, AJvYcCVU/MKqLMtVpJT8W4uK8ds2bVBnlGamI6vYdvXOXcIFrj83nB5seVUV6K24M0+DDNF9pLfcmsvg@vger.kernel.org, AJvYcCVxmuvg0k3lZ8uCO9kCW6zFBJqanrfH/MGuaB/o6KY/Wk3xjREdoaVThsOX0IuptWNJSrQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxDBC7jhNPJQJ4A/06UFJjHilVlzzf2CDpwFoYVmiJiKfE5EWsW
+	Kx1jGSqLrwHUvhs6kijNvRXd53hNUnY1Qh6BYYgLdZzUpTA0/Ew3HRuHZf1L/YtvW+zuWW+kopS
+	26DrO7fgcQmdSpQuGJcGnv0iYY8w=
+X-Gm-Gg: ASbGncvjEujjIqs2/6S8pbEFvvIGY/+Im3vKbDjbpg3xg8+DVsipXFpxVfV1rNEYfsg
+	eZ1tICsHzt16VUyKxYRX+/NcyF0rwATacJhcOsKTtKK3BcOd6apZ/qO0hLiBQkK4JMwyUaAO/D/
+	7Jj/ilEQIuwkE+kLcB6VmUtbQswjPI1oYZvSYPwQ==
+X-Google-Smtp-Source: AGHT+IHjIZbdBZmeAwLPdKD6FDavuuiRxmwzDpsEsNPjz/QHrVA/etMXlAiTyFnC/5fOB2UDc4R555MT5LHsZ8I/s0A=
+X-Received: by 2002:a05:6a21:6d93:b0:1f3:3864:bbe0 with SMTP id
+ adf61e73a8af0-20442da897amr173428637.8.1745432884380; Wed, 23 Apr 2025
+ 11:28:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250423031117.907681-1-almasrymina@google.com> <20250423031117.907681-8-almasrymina@google.com>
-In-Reply-To: <20250423031117.907681-8-almasrymina@google.com>
-From: Harshitha Ramamurthy <hramamurthy@google.com>
-Date: Wed, 23 Apr 2025 11:26:14 -0700
-X-Gm-Features: ATxdqUHnKDzCBYG80n4IAQ6Tqlf6P8u3mDu-47naFBmrHiwPtX2MRzVq-LrB7oQ
-Message-ID: <CAEAWyHdYEzHLbW1Z=nS1yGdnbFA2HU7wb4nFZ1TmqGaUZoq9Tg@mail.gmail.com>
-Subject: Re: [PATCH net-next v10 7/9] gve: add netmem TX support to GVE
- DQO-RDA mode
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, io-uring@vger.kernel.org, 
-	virtualization@lists.linux.dev, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Donald Hunter <donald.hunter@gmail.com>, 
-	Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	Jeroen de Borst <jeroendb@google.com>, Kuniyuki Iwashima <kuniyu@amazon.com>, 
-	Willem de Bruijn <willemb@google.com>, Jens Axboe <axboe@kernel.dk>, 
-	Pavel Begunkov <asml.silence@gmail.com>, David Ahern <dsahern@kernel.org>, 
-	Neal Cardwell <ncardwell@google.com>, Stefan Hajnoczi <stefanha@redhat.com>, 
-	Stefano Garzarella <sgarzare@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, sdf@fomichev.me, dw@davidwei.uk, 
-	Jamal Hadi Salim <jhs@mojatatu.com>, Victor Nogueira <victor@mojatatu.com>, 
-	Pedro Tammela <pctammela@mojatatu.com>, Samiullah Khawaja <skhawaja@google.com>
+References: <20250423121329.3163461-1-mannkafai@gmail.com> <20250423121329.3163461-2-mannkafai@gmail.com>
+In-Reply-To: <20250423121329.3163461-2-mannkafai@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 23 Apr 2025 11:27:52 -0700
+X-Gm-Features: ATxdqUG1OQGWGxprkuBY8mLRZZsqeZGEzZTpl5Cqi_Yfb8QsDm03VOkq41zrZm8
+Message-ID: <CAEf4BzYn0xRf6SwKHLbbqsDTueC-r_UxYOAX3+o-jswq7=a8sA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 1/2] bpf: Allow access to const void pointer
+ arguments in tracing programs
+To: KaFai Wan <mannkafai@gmail.com>
+Cc: alexei.starovoitov@gmail.com, martin.lau@linux.dev, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, song@kernel.org, 
+	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
+	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, davem@davemloft.net, 
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
+	mykolal@fb.com, shuah@kernel.org, memxor@gmail.com, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, leon.hwang@linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 22, 2025 at 8:11=E2=80=AFPM Mina Almasry <almasrymina@google.co=
-m> wrote:
+On Wed, Apr 23, 2025 at 5:14=E2=80=AFAM KaFai Wan <mannkafai@gmail.com> wro=
+te:
 >
-> Use netmem_dma_*() helpers in gve_tx_dqo.c DQO-RDA paths to
-> enable netmem TX support in that mode.
+> Adding support to access arguments with const void pointer arguments
+> in tracing programs.
 >
-> Declare support for netmem TX in GVE DQO-RDA mode.
+> Currently we allow tracing programs to access void pointers. If we try to
+> access argument which is pointer to const void like 2nd argument in kfree=
+,
+> verifier will fail to load the program with;
 >
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
+> 0: R1=3Dctx() R10=3Dfp0
+> ; asm volatile ("r2 =3D *(u64 *)(r1 + 8); ");
+> 0: (79) r2 =3D *(u64 *)(r1 +8)
+> func 'kfree' arg1 type UNKNOWN is not a struct
 >
+> Changing the is_int_ptr to void and generic integer check and renaming
+> it to is_void_or_int_ptr.
+>
+> Cc: Leon Hwang <leon.hwang@linux.dev>
+> Signed-off-by: KaFai Wan <mannkafai@gmail.com>
+> Acked-by: Jiri Olsa <jolsa@kernel.org>
 > ---
+>  kernel/bpf/btf.c | 13 +++----------
+>  1 file changed, 3 insertions(+), 10 deletions(-)
 >
-> v10:
-> - Move setting dev->netmem_tx to right after priv is initialized
->   (Harshitha)
->
-> v4:
-> - New patch
-> ---
->  drivers/net/ethernet/google/gve/gve_main.c   | 4 ++++
->  drivers/net/ethernet/google/gve/gve_tx_dqo.c | 8 +++++---
->  2 files changed, 9 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/eth=
-ernet/google/gve/gve_main.c
-> index 8aaac91013777..b49c74620799e 100644
-> --- a/drivers/net/ethernet/google/gve/gve_main.c
-> +++ b/drivers/net/ethernet/google/gve/gve_main.c
-> @@ -2659,12 +2659,16 @@ static int gve_probe(struct pci_dev *pdev, const =
-struct pci_device_id *ent)
->         if (err)
->                 goto abort_with_wq;
->
-> +       if (!gve_is_gqi(priv) && !gve_is_qpl(priv))
-> +               dev->netmem_tx =3D true;
-> +
->         err =3D register_netdev(dev);
->         if (err)
->                 goto abort_with_gve_init;
->
->         dev_info(&pdev->dev, "GVE version %s\n", gve_version_str);
->         dev_info(&pdev->dev, "GVE queue format %d\n", (int)priv->queue_fo=
-rmat);
-> +
-nit: accidental extra empty line, but
-
-Acked-by: Harshitha Ramamurthy <hramamurthy@google.com>
-
->         gve_clear_probe_in_progress(priv);
->         queue_work(priv->gve_wq, &priv->service_task);
->         return 0;
-> diff --git a/drivers/net/ethernet/google/gve/gve_tx_dqo.c b/drivers/net/e=
-thernet/google/gve/gve_tx_dqo.c
-> index 2eba868d80370..a27f1574a7337 100644
-> --- a/drivers/net/ethernet/google/gve/gve_tx_dqo.c
-> +++ b/drivers/net/ethernet/google/gve/gve_tx_dqo.c
-> @@ -660,7 +660,8 @@ static int gve_tx_add_skb_no_copy_dqo(struct gve_tx_r=
-ing *tx,
->                         goto err;
->
->                 dma_unmap_len_set(pkt, len[pkt->num_bufs], len);
-> -               dma_unmap_addr_set(pkt, dma[pkt->num_bufs], addr);
-> +               netmem_dma_unmap_addr_set(skb_frag_netmem(frag), pkt,
-> +                                         dma[pkt->num_bufs], addr);
->                 ++pkt->num_bufs;
->
->                 gve_tx_fill_pkt_desc_dqo(tx, desc_idx, skb, len, addr,
-> @@ -1038,8 +1039,9 @@ static void gve_unmap_packet(struct device *dev,
->         dma_unmap_single(dev, dma_unmap_addr(pkt, dma[0]),
->                          dma_unmap_len(pkt, len[0]), DMA_TO_DEVICE);
->         for (i =3D 1; i < pkt->num_bufs; i++) {
-> -               dma_unmap_page(dev, dma_unmap_addr(pkt, dma[i]),
-> -                              dma_unmap_len(pkt, len[i]), DMA_TO_DEVICE)=
-;
-> +               netmem_dma_unmap_page_attrs(dev, dma_unmap_addr(pkt, dma[=
-i]),
-> +                                           dma_unmap_len(pkt, len[i]),
-> +                                           DMA_TO_DEVICE, 0);
->         }
->         pkt->num_bufs =3D 0;
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 16ba36f34dfa..14cdefc15f0e 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -6383,12 +6383,12 @@ struct btf *bpf_prog_get_target_btf(const struct =
+bpf_prog *prog)
+>                 return prog->aux->attach_btf;
 >  }
+>
+> -static bool is_int_ptr(struct btf *btf, const struct btf_type *t)
+> +static bool is_void_or_int_ptr(struct btf *btf, const struct btf_type *t=
+)
+>  {
+>         /* skip modifiers */
+>         t =3D btf_type_skip_modifiers(btf, t->type, NULL);
+>
+> -       return btf_type_is_int(t);
+> +       return btf_type_is_void(t) || btf_type_is_int(t);
+>  }
+>
+>  static u32 get_ctx_arg_idx(struct btf *btf, const struct btf_type *func_=
+proto,
+> @@ -6776,14 +6776,7 @@ bool btf_ctx_access(int off, int size, enum bpf_ac=
+cess_type type,
+>                 }
+>         }
+>
+> -       if (t->type =3D=3D 0)
+> -               /* This is a pointer to void.
+> -                * It is the same as scalar from the verifier safety pov.
+> -                * No further pointer walking is allowed.
+
+I preserved this comment (with slight rewording to make sense in a
+combined check context). Applied to bpf-next, thanks.
+
+> -                */
+> -               return true;
+> -
+> -       if (is_int_ptr(btf, t))
+> +       if (is_void_or_int_ptr(btf, t))
+>                 return true;
+>
+>         /* this is a pointer to another type */
 > --
-> 2.49.0.805.g082f7c87e0-goog
+> 2.43.0
 >
 
