@@ -1,187 +1,199 @@
-Return-Path: <linux-kselftest+bounces-31423-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31426-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1389BA992DD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 17:50:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39986A993D6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 18:04:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 230971672BC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 15:42:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B508B4A5A7E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 15:50:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3CBD2820D7;
-	Wed, 23 Apr 2025 15:29:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 278B728C5AF;
+	Wed, 23 Apr 2025 15:36:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="S7N59Ytr"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="cnBCOxgi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2062.outbound.protection.outlook.com [40.107.237.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A9BC2820AC
-	for <linux-kselftest@vger.kernel.org>; Wed, 23 Apr 2025 15:29:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745422168; cv=none; b=bxS8iXHrcuFuv24LYll3e6v0PHTjwZu+rTY3MWd5hxTHZU/grKVY2gHxr70vc4/WS+VofBQhb7/QGl/P6oENmY86D/zGLGGC5pf0j4g1fvS5ZkN42pzQEY3OvX7va9VeLDdB8i9BK9tKM7tgvpZIVlSRpj6uwLXqq3yX/xwJE0w=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745422168; c=relaxed/simple;
-	bh=7tyYd8/WWjtTTKFWw+oD7+lCXM1UFswEbQCLL4JpYK0=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=PDu5F22BqlDqxN44ShIYfv5lQuQzCi814Vy4o8It7/21e7JHlJDKvnnqgo3NGcZNW+UZezah+c7vwMDX7LWGRFF9+c/X6kVOxuDUXeiJVn0CLHKxlPmPYEdkTlNWRP11hfRn5SQ1k/UdS16/JbQtBg6r9CczYAdwjMM+aJQjAr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=S7N59Ytr; arc=none smtp.client-ip=209.85.210.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-73917303082so4610322b3a.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Apr 2025 08:29:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1745422166; x=1746026966; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=e/ciVbsL9E+/civAz5HmUVHufr3bRpQ65pGuVHW5bCE=;
-        b=S7N59YtrrV2feCtuOZmHnccLusxUXrTckzletlGn9Pw3RdnSKJ5+ss0zjnwj1cgn25
-         yYQmoc5tGP1Z/bATT8LIi1qnfGK3gq+Fqg8m2Wfz5Xk3wnmoD5zimXC9707ZbQytOR+7
-         o18G9mzJ+ExkHaXuwqsrOg+9vo9wWRlECdGOXDFqOtUdm3xNFZL5pwCHli/W3j297bOs
-         wAj7xAsR+bbOFRpVDEVCQRC0Z7kWduN89Fj3PgiKr+SN+BeC1ZO/JQ5lBBQkK/BuM7XF
-         b6J1vRKB9iCfRzP4Rlvh/PZbcGFLuyNszzXDL4xehpErXVfGnQQWyF11py1PzsVkHdEV
-         5jdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745422166; x=1746026966;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=e/ciVbsL9E+/civAz5HmUVHufr3bRpQ65pGuVHW5bCE=;
-        b=vFTOZfyyh6lJt7FKkvRCtcXySkV5tXJYQtwsJoPEcEox5MVaGTRBcdrzy9MqCSlr1/
-         3VLrnR5LMe7tUrNK/f3Mj2MvOyE/Gy7Zn3RjaTrtquq67No/B8eF3F6jiTGn1YZpCmbj
-         WXNqf07sKZDLsfSsR0h5TFRT5KWpBLy9+UuWArNo1mUh7I0qlBsrBvWdD8z7O4cjyUej
-         1LtI7g1hM3CqVAoSyob3zWToJt5pet4+mbto6uJ+Wd4MDuge+NXc4tt5fVtnm2ppkkFl
-         BlTcD2igKfqGYO3jxLh5r7WBkB6f/WjJyvsr9hdrhYV/htd+21IjifXtp79i8p7/DPsU
-         9jxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWlUmHElnro0gJeWhlvh5dg2U8JNIlo7zdKRHk1ssQZsNZqNKzJsnpS5u8kn3BxYTElPP1GRNswUZptdBZifW8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyLixURKylWgSK8zpM7KpBQG6PEGeT9NDFCw+oyctkIkdYU1WK5
-	7PbdQCBYFYhVleny+E5YUaBtVyEkgSpyljPx4ma6/J/bcX3bgA+5EHad5y7G2t4bBaMCTvujU7H
-	d/Q==
-X-Google-Smtp-Source: AGHT+IFvMyzHs0jMD7T18ZwTYJ9lm8AXPz2gW99+UB2nn3KAXaBAX+lpyE8o2K/04Z7bT0N2PiSTsZCjzB8=
-X-Received: from pfbem8.prod.google.com ([2002:a05:6a00:3748:b0:739:9e9:feea])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:3e28:b0:736:4bd3:ffab
- with SMTP id d2e1a72fcca58-73dc1591d84mr25297228b3a.17.1745422166356; Wed, 23
- Apr 2025 08:29:26 -0700 (PDT)
-Date: Wed, 23 Apr 2025 08:29:24 -0700
-In-Reply-To: <52276154-79b0-4029-8087-77ca499a12ce@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 819BE28BAAB;
+	Wed, 23 Apr 2025 15:36:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.62
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1745422580; cv=fail; b=hIWQpFM+ymRXBP02v+//hkpcjltEQa4LQ1tq2GC6kMw0ipil8ASE7PhUtHcwNOWrMExYwAkhsLPJIkt26vJhm+hgLJnAmJq6iQceviYElJR++XKgsVX7gU4ShNUdYJAOYb5RbfIhy786lLDB0LbYS8OE046Sn/RERYVeIOyBgV0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1745422580; c=relaxed/simple;
+	bh=u/CzDu27K8NZ9n9R6pgdmbP/T00gFlACGAqxKbHEwQ0=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=PEwkGsxFTROGdtkJlmJCtQ+eawKxuOtPgJhAxDEPPQ6OXiZgMd6ryZyUyy7Kw9IUrHnZFtlxqnsauMDxTNUW0EW5P+bTr3Kx0FPrkYDCrXLgpKXLlmXzHK637t9TOiwcNyM3tT9FI3l7olj5CFb4RJOSS1VzNcyMYmQggeeElZg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=cnBCOxgi; arc=fail smtp.client-ip=40.107.237.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=i4YNSarwN5IBKm4CXPqiXVdQqSvx7WfvQ4wl3CYUT2e6COgc1tJaNZ8ZeCEbw1MNT4RWyu+E2ZU6d/77KfPuj2BH8GOFGy6r+Ima2ClK6uZDSl55O8GvlGnxaCEyrE5i090Nw3j5uoAF1k8eEx1YhWrise6srVHGj8uekEbIxeg2U71Q/sriI0Pc7l78S9xJptj0jlg7Obd9AF7JmdL2yLCCE5Ny0AI1Lg12l/gOB2VdhEOOYhp6pibwx1Gu2xb+pkHpRZBFtfsmTcBggq0YokzDmx9gZfZ3i4Zj+rxW5LGSoI6lGwm5Iyp3vZvwtSSoVtwYY6CwsTNn4E9siUZSag==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tKw3gZbn7TVfO0XJezVPubckVzWsubYhHD4y8IWrh2g=;
+ b=RvVByUukoeuv56EJLep2/yWJvHfWDVyfm8l/Shqd2ndPL14fOwNTMQx9GS4Jwf4zyMjXcO9mZjqqT7mEGDaAkeHVX3sxw0jNSf6TFMS1uduLHuMw9ks0hIeiHuAT+83M+2hKO1eR+7xfbaAO3RpxDxhc679fg39wIEZQUksGB9hDm592YokjOJCjV9Qan8k4ZJ8jJAdpHf6KsLX06+9TNdmfM+2p0g3jMbUXSZnWJLHvfXxJAeoJBqejL9HLgD8E/VqcJIGKHAkredVGsD06lK0qtXAc+OvfOKRfRQTHSy3rh0pViQgoVD87auVG5J2Zgh+TYuiZtOll/XZoEykgwA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tKw3gZbn7TVfO0XJezVPubckVzWsubYhHD4y8IWrh2g=;
+ b=cnBCOxgipf4Cg0j5K72RZksgf3SDoqMLTyu1F/VEFNFbxhQi5Tc/H3FGbykvvtjlZSCdOghUoiWI4bAeYby77mRfPpCAHl33yHaERQ7L6dQ45S5n6hfgr7I87xydNzO95q/MX/5m6t1zPp/ZA2koDWiFSYtGdB0vxV5vxWt2UkQH8sJHYySF/HCoq5BtEzQyeCsy8Wkqwwvzvw+V5GX3kzD73MNPU7pWMyGejtvJIkpMN9cKq4RoE41R3uPASTyaVopy67gglb5o0mw4jKa9dAqcfkwzephjDibV5iloIzUdNjH3euT7nGff62pYN7IHME74W8eIfCXLgQqGJqe9HA==
+Received: from DSZP220CA0012.NAMP220.PROD.OUTLOOK.COM (2603:10b6:5:280::10) by
+ SN7PR12MB7980.namprd12.prod.outlook.com (2603:10b6:806:341::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8678.22; Wed, 23 Apr
+ 2025 15:36:13 +0000
+Received: from DS1PEPF0001709C.namprd05.prod.outlook.com
+ (2603:10b6:5:280:cafe::4e) by DSZP220CA0012.outlook.office365.com
+ (2603:10b6:5:280::10) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8655.38 via Frontend Transport; Wed,
+ 23 Apr 2025 15:36:13 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ DS1PEPF0001709C.mail.protection.outlook.com (10.167.18.106) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8655.12 via Frontend Transport; Wed, 23 Apr 2025 15:36:13 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 23 Apr
+ 2025 08:35:27 -0700
+Received: from c-237-113-240-247.mtl.labs.mlnx (10.126.230.35) by
+ rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14; Wed, 23 Apr 2025 08:35:24 -0700
+From: Cosmin Ratiu <cratiu@nvidia.com>
+To: <netdev@vger.kernel.org>, <cratiu@nvidia.com>
+CC: Jason Gunthorpe <jgg@nvidia.com>, Leon Romanovsky <leonro@nvidia.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>, "David S . Miller"
+	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+	<horms@kernel.org>, Saeed Mahameed <saeedm@nvidia.com>, Tariq Toukan
+	<tariqt@nvidia.com>, Dragos Tatulea <dtatulea@nvidia.com>,
+	<linux-kselftest@vger.kernel.org>
+Subject: [PATCH net 1/2] net/devmem: Reject insufficiently large dmabuf pools
+Date: Wed, 23 Apr 2025 18:35:02 +0300
+Message-ID: <20250423153504.1085434-1-cratiu@nvidia.com>
+X-Mailer: git-send-email 2.45.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250324130248.126036-1-manali.shukla@amd.com>
- <20250324130248.126036-4-manali.shukla@amd.com> <b03f3593-e56b-4a98-8ddd-e54fe7885c81@intel.com>
- <52276154-79b0-4029-8087-77ca499a12ce@amd.com>
-Message-ID: <aAkHVFTqybGc-mc8@google.com>
-Subject: Re: [PATCH v4 3/5] KVM: SVM: Enable Bus lock threshold exit
-From: Sean Christopherson <seanjc@google.com>
-To: Manali Shukla <manali.shukla@amd.com>
-Cc: Xiaoyao Li <xiaoyao.li@intel.com>, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, pbonzini@redhat.com, nikunj@amd.com, 
-	thomas.lendacky@amd.com, bp@alien8.de
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF0001709C:EE_|SN7PR12MB7980:EE_
+X-MS-Office365-Filtering-Correlation-Id: cb964571-ab42-415b-b989-08dd827c945d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|82310400026|36860700013|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?DE+zKWMkiolWqb0Iu948Z1Ju3fERbWSUHH7dyo/w9qyIMEmrZtGRF/LW7JpL?=
+ =?us-ascii?Q?UDZkEVF6oiQ59IzSXt8eg2Z+B1GqK3IgMX+hkXAz8WwP7RqnESXKiwwA5tif?=
+ =?us-ascii?Q?gnpczgfgte74I5N5x5ZNVXQLe4Grf6FvGOXIL2xDcUBV+LUBm69k3LpQwVH/?=
+ =?us-ascii?Q?Hemd9NZmyyHMijrvSxcx+VWnfPPKtd6pz1f/5wKY763UKkYpSumpXIrnQCtE?=
+ =?us-ascii?Q?Zn8BuqxHIAJ5/NoWAtjk1TA7qY0PcxzLhFscqQwo0UWdIcbUtKCdThguAofI?=
+ =?us-ascii?Q?HzX9hYvIJMzH43AOsTpu04BapOyt5RaOp0bj7mGvPanjyxuP7vBGYPsID+7p?=
+ =?us-ascii?Q?SqD++T1N57EHHkJvFZ+vQjlpt9bmNKO48Z65qdHBQMYsIsPAkYjVlHmaqd0W?=
+ =?us-ascii?Q?+qPo45I9UocvhKkx/w5hofnaR/5RpoQ3qF023rbgLxuQVyezbqDAlSR+2CqV?=
+ =?us-ascii?Q?V1bOIxKkR3jN6eoNMWeP2wzY5+GqQIFqJLjt9F4o5FUGj//PmQN2svTrVq5l?=
+ =?us-ascii?Q?NrWnDKUVQuM+k4qyhFDlDGDxqWaY8T3zpyqbZvP6iaBNr665gtZ+N3raOJ+U?=
+ =?us-ascii?Q?GyXC/p1dtuL0hwS45RYij9yMTjxaWl46fxADTcEKo3gJpiTN1a/b17AhuQYG?=
+ =?us-ascii?Q?psTkkwN/xz45z7rwnXt+0jCOqScO+wu2u4eHKMdr/hSx+fhcoKAjHBGdgBoG?=
+ =?us-ascii?Q?s4j4PTdyUbZVebemylWR+o3MdRrqUHd89sN0MxTpmjd2/60Qc0qYWEYqWcu2?=
+ =?us-ascii?Q?zDJ8ags20H3+JyE5Bg52FKYaSMKxJe15+kNRVkV5EJWdBczONiahyScd9rdl?=
+ =?us-ascii?Q?kAbJN+YQhd246sQr5eRhMEUUv8ErOn7joDYEwDPgTbhATzC+VzAlCRCwcd8e?=
+ =?us-ascii?Q?98o82IcTswyu0gf/bydRnLJa9om916KqfnKgg1VEQMLNRoaiuw3ZKQQFbtlN?=
+ =?us-ascii?Q?qhs6/NMssdf6vO3z9lOuTX1PRGhP8KxaLC8VK+1B8YkNj39NsKKUnmqTpCSy?=
+ =?us-ascii?Q?MrQm8SD1/LP/YCI4O3nzynmmIw8+XwcpyG93illbA+sf/YiWqbobHCp1bF3F?=
+ =?us-ascii?Q?PCXeROq/0qT/E++wQYCrTNduqd5FgCisJo42wMzTgjuDxVLu18xd2qmTGB9V?=
+ =?us-ascii?Q?1NUF4heCMdnO7QzqU8msSgHYpXw54j3Ar2YCrakUOaUL3Ezsjsgje12djE5k?=
+ =?us-ascii?Q?ceqBP7JcX4hEB+vj+Txn3RnJAjRYKyg8Ulvuz9LDXEVBOoar9lSYDjfo/3ju?=
+ =?us-ascii?Q?G5GFgn8rdP0I7OTB2oEZfNxa5vpYCsQe043M/JtCakSQLX+xmth7LFT7cR84?=
+ =?us-ascii?Q?d9MYVNllaFE1XOtswSZNlwmLM0x1+0EdF3aVc1RY/cIZyX/YybIYT7J0yv2P?=
+ =?us-ascii?Q?U46tvqHy7/95dgQlIPJdb+M6Pn9+zr+BUvyyKmgJYoJI6KDy/ivAnyxvSXou?=
+ =?us-ascii?Q?L2PcDlFicA4k8MmrqdeEqbIyEYSCMzUfB20SqkersfmfRJDRPzDHBxPbXBU0?=
+ =?us-ascii?Q?TazwieyL3fICpVoDzxkGS+4zDutPEPf4VMJI?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(82310400026)(36860700013)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Apr 2025 15:36:13.1798
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: cb964571-ab42-415b-b989-08dd827c945d
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DS1PEPF0001709C.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7980
 
-On Wed, Apr 23, 2025, Manali Shukla wrote:
-> On 4/16/2025 11:30 AM, Xiaoyao Li wrote:
-> >> =C2=A0 +=C2=A0=C2=A0=C2=A0 if (cpu_feature_enabled(X86_FEATURE_BUS_LOC=
-K_THRESHOLD)) {
-> >> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pr_info("Bus Lock Threshol=
-d supported\n");
-> >=20
-> > It will be printed every time kvm-amd.ko module gets loaded.
-> >=20
-> > I think it's for your development and debug purpose. Comparing to the
-> > existing features in svm_set_cpu_caps(), nothing makes it special for
-> > BUS_LOCK_THRESHOLD to require a kernel message. So I think we can just
-> > remove it.
->=20
-> I didn't add this for development and debug purpose. I added this pr_info=
-()
-> to make it easy to find whether BUS Lock threshold is supported or not fr=
-om
-> dmesg.  I can remove it if you think it is not required.
+Drivers that are told to allocate RX buffers from pools of DMA memory
+should have enough memory in the pool to satisfy projected allocation
+requests (a function of ring size, MTU & other parameters). If there's
+not enough memory, RX ring refill might fail later at inconvenient times
+(e.g. during NAPI poll).
 
-Please remove it.  The user typically doesn't care.
+This commit adds a check at dmabuf pool init time that compares the
+amount of memory in the underlying chunk pool (configured by the user
+space application providing dmabuf memory) with the desired pool size
+(previously set by the driver) and fails with an error message if chunk
+memory isn't enough.
 
-> >> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kvm_caps.has_bus_lock_exit=
- =3D true;
-> >=20
-> > Besides, this patch doesn't ensure the bisectability. It allows userspa=
-ce
-> > to enable KVM_BUS_LOCK_DETECTION_EXIT and set intercept of
-> > INTERCEPT_BUSLOCK but without providing the handler.
-> >=20
-> > So either move next patch before it or just merge them.
-> >=20
->=20
-> Oh.., my bad, I will move the next patch before this one in v5.
+Fixes: 0f9214046893 ("memory-provider: dmabuf devmem memory provider")
+Signed-off-by: Cosmin Ratiu <cratiu@nvidia.com>
+---
+ net/core/devmem.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-No, do exactly as I suggested in v3.
-
- : I vote to split this into two patches: one to add the architectural coll=
-ateral,
- : with the above as the changelog, and a second to actually implement supp=
-ort in
- : KVM.  Having the above background is useful, but it makes it quite hard =
-to find
- : information on the KVM design and implementation.
-
-I want this (and any other arch collateral I'm missing) in a separate patch=
- so
-that the background on what the hardware feature does is captured.  But I s=
-ee no
-reason to split KVM's implementation into multiple patches.
-
-diff --git a/arch/x86/include/asm/svm.h b/arch/x86/include/asm/svm.h
-index 2b59b9951c90..d1819c564b1c 100644
---- a/arch/x86/include/asm/svm.h
-+++ b/arch/x86/include/asm/svm.h
-@@ -116,6 +116,7 @@ enum {
-        INTERCEPT_INVPCID,
-        INTERCEPT_MCOMMIT,
-        INTERCEPT_TLBSYNC,
-+       INTERCEPT_BUSLOCK,
- };
-
-
-@@ -158,7 +159,9 @@ struct __attribute__ ((__packed__)) vmcb_control_area {
-        u64 avic_physical_id;   /* Offset 0xf8 */
-        u8 reserved_7[8];
-        u64 vmsa_pa;            /* Used for an SEV-ES guest */
--       u8 reserved_8[720];
-+       u8 reserved_8[16];
-+       u16 bus_lock_counter;   /* Offset 0x120 */
-+       u8 reserved_9[702];
-        /*
-         * Offset 0x3e0, 32 bytes reserved
-         * for use by hypervisor/software.
-diff --git a/arch/x86/include/uapi/asm/svm.h b/arch/x86/include/uapi/asm/sv=
-m.h
-index 1814b413fd57..abf6aed88cee 100644
---- a/arch/x86/include/uapi/asm/svm.h
-+++ b/arch/x86/include/uapi/asm/svm.h
-@@ -95,6 +95,7 @@
- #define SVM_EXIT_CR14_WRITE_TRAP               0x09e
- #define SVM_EXIT_CR15_WRITE_TRAP               0x09f
- #define SVM_EXIT_INVPCID       0x0a2
-+#define SVM_EXIT_BUS_LOCK                      0x0a5
- #define SVM_EXIT_NPF           0x400
- #define SVM_EXIT_AVIC_INCOMPLETE_IPI           0x401
- #define SVM_EXIT_AVIC_UNACCELERATED_ACCESS     0x402
-@@ -224,6 +225,7 @@
-        { SVM_EXIT_CR4_WRITE_TRAP,      "write_cr4_trap" }, \
-        { SVM_EXIT_CR8_WRITE_TRAP,      "write_cr8_trap" }, \
-        { SVM_EXIT_INVPCID,     "invpcid" }, \
-+       { SVM_EXIT_BUS_LOCK,     "buslock" }, \
-        { SVM_EXIT_NPF,         "npf" }, \
-        { SVM_EXIT_AVIC_INCOMPLETE_IPI,         "avic_incomplete_ipi" }, \
-        { SVM_EXIT_AVIC_UNACCELERATED_ACCESS,   "avic_unaccelerated_access"=
- }, \
+diff --git a/net/core/devmem.c b/net/core/devmem.c
+index 6e27a47d0493..651cd55ebb28 100644
+--- a/net/core/devmem.c
++++ b/net/core/devmem.c
+@@ -299,6 +299,7 @@ net_devmem_bind_dmabuf(struct net_device *dev, unsigned int dmabuf_fd,
+ int mp_dmabuf_devmem_init(struct page_pool *pool)
+ {
+ 	struct net_devmem_dmabuf_binding *binding = pool->mp_priv;
++	size_t size;
+ 
+ 	if (!binding)
+ 		return -EINVAL;
+@@ -312,6 +313,16 @@ int mp_dmabuf_devmem_init(struct page_pool *pool)
+ 	if (pool->p.order != 0)
+ 		return -E2BIG;
+ 
++	/* Validate that the underlying dmabuf has enough memory to satisfy
++	 * requested pool size.
++	 */
++	size = gen_pool_size(binding->chunk_pool) >> PAGE_SHIFT;
++	if (size < pool->p.pool_size) {
++		pr_warn("%s: Insufficient dmabuf memory (%zu pages) to satisfy pool_size (%u pages)\n",
++			__func__, size, pool->p.pool_size);
++		return -ENOMEM;
++	}
++
+ 	net_devmem_dmabuf_binding_get(binding);
+ 	return 0;
+ }
+-- 
+2.45.0
 
 
