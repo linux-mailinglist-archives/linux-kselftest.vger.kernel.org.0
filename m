@@ -1,113 +1,140 @@
-Return-Path: <linux-kselftest+bounces-31431-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31432-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B48FA995D3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 18:54:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CACECA995FD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 19:03:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6DC38188E515
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 16:55:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 758AD3AE324
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 17:03:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABB64288CB2;
-	Wed, 23 Apr 2025 16:54:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 110252798E3;
+	Wed, 23 Apr 2025 17:03:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IDeOKQh8"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cNIc9Q2I"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F59C208CA;
-	Wed, 23 Apr 2025 16:54:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 578F91799F
+	for <linux-kselftest@vger.kernel.org>; Wed, 23 Apr 2025 17:03:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745427293; cv=none; b=fmu7SvegSZGym2+ef9CGA5s8hh3Th3ejBO/PpQXAXjfY8DQx67fgtoeRFDgPW03TYh5HCQ+wT6cB+k6lQAGqT9E5JZtz9NdHWoF4yfdJoJ/qCtn1WTnv715On6xrpvL8gxraA7Zb4Kj0b2bt8/rJfcWaREMM7JlWHAK0VLwHXhk=
+	t=1745427818; cv=none; b=CsHYy+1WNZpqsGT7CmLPFv5wpYM05b6purN7LjFnRteZOUGaCRLfNkAujB88wZ//8YjfN1V5xLJxvtgZyLdwEKRUJi31zhuOJpl7t1FXGYu2XWuW8Dc9CkUxTYynsCXSBJnbNlyGHb0MGb8KRbY8EgM1hZbbUq+HS4yufIZicyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745427293; c=relaxed/simple;
-	bh=z2FR24bQ3nJuX8a6oht7xaQEZUBxaQGQZuecYUe1MNM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VIUCcLxYuVsdYC7iGczbu8+o1S6rwr1fiJuveE55cVosb82IvP2tttHgXnfMYYBM75zOZV8999EW8BCKyKcsIhTwqjixrz90SA7dN32PiPzBJd6OP+42d4Sylf/Qi5ISTuuEj4es2yjmArGBGId5rKDABhL1U2JdJ5roVmDFnso=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IDeOKQh8; arc=none smtp.client-ip=209.85.210.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-7376e311086so9510492b3a.3;
-        Wed, 23 Apr 2025 09:54:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745427291; x=1746032091; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gCLjH+TXgL/Od2a0SjgrrHJ2SawhjffMsNcsXcKJBIo=;
-        b=IDeOKQh8t6VIe3LD6A4ujVqiq7hBgXhUZyxcM5u6G65wxXWcsBJxjl8K+VBeaNGxMg
-         6/IoGEj1H6EDgjsFwzEeYk2KCJYzAI6Xs/UeFvcdOInwd3X0f8pmnxiIstcX29Dyfjf9
-         AoATnqK33Jxp729fkehsb0a8VYVWYBvNb3oXv1zDqleESkk4YiGB7KOoH7yCMgRFrF91
-         5/YCrlj75uIf2GrbMGFiZf05UYhdjrKhIGIpx/KPXSm9COCBzw4DBjV7KtE20lDlKxSl
-         ZXZtnthM//UyXOlgxAfUGDGR14Gsl+hKXJLV/FgPY1hlYSiAKMEU61GZ0RbxRquFZyHd
-         +mhQ==
+	s=arc-20240116; t=1745427818; c=relaxed/simple;
+	bh=0XVlTRBgn1AxRwlX5L5gSRRecvWpaBNYjygKefRRLLU=;
+	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=a8JhguUiq8fCC0+zSy1D7JGxqvu+CTo2JNWXfIHUM+FACLsTWiugGCPXTu4m/COYsr3PdVGXNucna5GEal50G271jOqZmnq0NsVVDVqqDtNXRmQFb8ECmQ7kwbL6GU4J69lgK2JtiUIO9QcTDlHvlXdUAIQqN1WQQVKF5QjmjCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cNIc9Q2I; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1745427815;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+3+7SBYIT0EMoPG6wTKgHOcC2ipTqOMHgJd9hrWDUp8=;
+	b=cNIc9Q2IKqCImx36/GS0GOQjwrOr5Wq4ELk+DNh4SqmDk5K5d0tMTZTHhqN5nB6kuYBUkf
+	o3oIz8Obk8uUI6n7c2J5GLGnn7OciXhT+I5DLBEm/zaJaWmFQsRF4HsAdkCeQtWi7IcQVG
+	OF+jLKkk7R88awGAtpUmJAUEZOTs71Q=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-617-n5hwRVmPNXqusKtKmgmGww-1; Wed, 23 Apr 2025 13:03:34 -0400
+X-MC-Unique: n5hwRVmPNXqusKtKmgmGww-1
+X-Mimecast-MFC-AGG-ID: n5hwRVmPNXqusKtKmgmGww_1745427813
+Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-6e91b1ddb51so1887136d6.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Apr 2025 10:03:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745427291; x=1746032091;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gCLjH+TXgL/Od2a0SjgrrHJ2SawhjffMsNcsXcKJBIo=;
-        b=BgQk8sLSQcJD+TTC8vNUo8N2sbD3zq64HBT5FLHmyT6BRGt/xklwBX2dFImXHYh8wc
-         EcTM8nfIawT/45Uui5NhfZCBIyyfqO39EU6JpPvMJAuLGjnrIu2h98CDx/tt8K8jEH90
-         Aidc2zJw4u+MCMb3SDzY+zOiQngJoAz6rDGEXM6niE6IADKRRzeJgGRv/I0Ou2yhLyS3
-         7mf6/+nDSMVoUq8lzMTmLN0cq8sBeVp1T8urAA7bWS3AnxNXXQYVlNulMv1DDEbPHR87
-         ri98OySkhlwa1eesuC8sFm8Ga6XmMY8uDyI7TbX8S2R6gsnSBfmG63sM/lxMB1Xo9QRj
-         f/cA==
-X-Forwarded-Encrypted: i=1; AJvYcCU9EhRShjTH21fvaX2uUuA4MU8gooeTCEHYIuZe7RVHQRomalv5H/k1WyDsjHttx618SLqBAO9NalJrygm7slg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YykSDeZ0EAUjr5qaWvcQjjDThhF78lZcOvnf90E+ZxfHQdOPjlN
-	24sZLxAcm+OyZ8vkKkw7uWZYROuv8MCrNqGeP4TUXDn6DZsCe5o=
-X-Gm-Gg: ASbGncu2ro8jLHmCbXudGMmxlGQ5Fb0mGAn/sJt2slDr7VeoVVI7PeUCqblI3x+HZ1E
-	mnNbR7XbDSiBrYAHNvwWPl2hPubuBtpfv4qkbL3a2kYbbzP+JinrvoIQvRlefz4kHLL4kpkVtZr
-	i3Ox9BAuzFqLr4407o1E5ZROr9x9xy/coLph8I5nngKx4mTB8SWizHNUu/wh9X+CGHBJ2bpXmnE
-	6T4+sgr8nzrr9OzuR1HJDVBW5B0T7JAdi3AiimfV3V96SdrRPK8aocwpMxJ06QIXwP1xVd6+lI9
-	zaOp+rmoXd7pZDzsNEuqu7TXJWHq2TblatDA9IiS
-X-Google-Smtp-Source: AGHT+IHIKHMZwGtLd6nehggdROpn94YiXt4+KIWvqvIwvImlRLLRRa+wIfu1RbZks3G8XSaVcmy5LQ==
-X-Received: by 2002:a05:6a00:2445:b0:737:678d:fb66 with SMTP id d2e1a72fcca58-73dc144d8f0mr24216813b3a.5.1745427291370;
-        Wed, 23 Apr 2025 09:54:51 -0700 (PDT)
-Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
-        by smtp.gmail.com with UTF8SMTPSA id d2e1a72fcca58-73dbfa5828esm10814348b3a.112.2025.04.23.09.54.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Apr 2025 09:54:50 -0700 (PDT)
-Date: Wed, 23 Apr 2025 09:54:50 -0700
-From: Stanislav Fomichev <stfomichev@gmail.com>
-To: Cosmin Ratiu <cratiu@nvidia.com>
-Cc: netdev@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>,
-	Leon Romanovsky <leonro@nvidia.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Saeed Mahameed <saeedm@nvidia.com>,
-	Tariq Toukan <tariqt@nvidia.com>,
-	Dragos Tatulea <dtatulea@nvidia.com>,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net 2/2] tests/ncdevmem: Fix double-free of queue array
-Message-ID: <aAkbWusk4Ay5uW37@mini-arch>
-References: <20250423153504.1085434-1-cratiu@nvidia.com>
- <20250423153504.1085434-2-cratiu@nvidia.com>
+        d=1e100.net; s=20230601; t=1745427813; x=1746032613;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:user-agent:mime-version:date:message-id:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+3+7SBYIT0EMoPG6wTKgHOcC2ipTqOMHgJd9hrWDUp8=;
+        b=eTNKzoo0j06hWD+wtVNJy/++J0+bdvIN2mYcfm5tW2SF9AdRtNhiXi2jHh5c3YRSwS
+         0LBTMKXZf6AL1sXutBuD4kstcTrt9qsq0j12ddhqKTO5S5qfTamETyB++TudPaAi8eEJ
+         0o7ZsDS8BxMnWo+1ifoV2pDdQZOHuEZCQycC+MB1rTAsrJ8z6B6780eMukYA36RQ/hIa
+         5ipDplTpHXcoJrhC6XF4LXkSdHhHp0YQwBrXGRJY1jZ40BGEdqtuX68R+V+IGhxNnucq
+         A/P+BK8Z169jqqpbDLRflMDHrbVICuoSSbUUQnVRLzVX5X0pHtLObGHNghVnQCvLW69b
+         Gg6w==
+X-Forwarded-Encrypted: i=1; AJvYcCWgQkIXPIhyCChv7F5V9xuo8B3vnDH28UiOQz+hiX07PXtuS2YOBuWzRSRy/h7v9dA2YchaA0MLMI+KPpfKyBI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywad9J+mq2V+LgPOVAmtnklMHwsMdN/WHsfoMnhVwht2t2Z4qwh
+	/7sj09RpSEqn9amfi8DIQGSRWIF+XChtxxeP18kF7bjPrFlF9y8Ww/2qGY8bW3ZoS1xkdJ/KeBw
+	Vv00RObZAbUvmCBjFrhuf9yHP6t1uAvuu9DF+K1hjXP6/8BYSIOnz4Z36tS+gshTqsg==
+X-Gm-Gg: ASbGncujzvq70NhcpqheRa488Tiyu+gm2LOUn32gvsSeqj4Pzf3ma7Kb/niBwomcpMs
+	YpT/VWKptbl2OBhcJ0C0qzNdgI0YI0A21x5G0oaJLkV+WCSuhN0NjjqZp9tnJQOEnqsheokh2Xf
+	y1R3NdlAk4gb+gNJMcAzeTcPjsVMGcgVQJD9YOz9+GMomhBV7w4uaounrwgPoDv8UJ5ME42zh6H
+	MQFzB9BfM0LOwK+upbK9tcYh37qmQd93FG4boYv1JZqkSLSQ7iPSdMUsGemtQ7Ho9Dngs9SXlKR
+	nmlkB4Xrnc3G8mXFRduQsCAUoRQmYNFVtFS7kt9/0niRQAwvmzaZbjcLFw==
+X-Received: by 2002:a05:6214:5292:b0:6e8:fbb7:6764 with SMTP id 6a1803df08f44-6f2c46992f3mr343421166d6.45.1745427813509;
+        Wed, 23 Apr 2025 10:03:33 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IE0Jady51wQ0Po3UBtRHbwZVYJnEaUhKMy5jHguua0DBLjtBhN5wZ/fJFmpmlLKNdXjaqxXqQ==
+X-Received: by 2002:a05:6214:5292:b0:6e8:fbb7:6764 with SMTP id 6a1803df08f44-6f2c46992f3mr343420656d6.45.1745427813160;
+        Wed, 23 Apr 2025 10:03:33 -0700 (PDT)
+Received: from ?IPV6:2601:408:c101:1d00:6621:a07c:fed4:cbba? ([2601:408:c101:1d00:6621:a07c:fed4:cbba])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6f2c2b33134sm72456966d6.54.2025.04.23.10.03.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Apr 2025 10:03:32 -0700 (PDT)
+From: Waiman Long <llong@redhat.com>
+X-Google-Original-From: Waiman Long <longman@redhat.com>
+Message-ID: <40e1ec0a-63a8-4c07-8b42-e31676453265@redhat.com>
+Date: Wed, 23 Apr 2025 13:03:31 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250423153504.1085434-2-cratiu@nvidia.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 1/2] selftests: memcg: Allow low event with no
+ memory.low and memory_recursiveprot on
+To: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ Waiman Long <llong@redhat.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>,
+ Andrew Morton <akpm@linux-foundation.org>, Tejun Heo <tj@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ cgroups@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+References: <20250415210415.13414-1-longman@redhat.com>
+ <20250415210415.13414-2-longman@redhat.com>
+ <psbduszek3llnvsykbm3qld22crppq4z24hyhsp66ax3r2jji5@xhklroqn2254>
+ <0033f39f-ff47-4645-9b1e-f19ff39233e7@redhat.com>
+ <h64z4wl6mw3qxfwmqsvlddsie62ehkoag47lm2in3nda7dhloq@rjxpkggawqem>
+ <d32c626d-1c93-47ec-8b01-1c085b4bf2fa@redhat.com>
+ <d36jhvahtoqqtuw4y2k4rjzmxnu4ejbffvimrnffvcu3raby6l@asjm6h6r7w3k>
+Content-Language: en-US
+In-Reply-To: <d36jhvahtoqqtuw4y2k4rjzmxnu4ejbffvimrnffvcu3raby6l@asjm6h6r7w3k>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 04/23, Cosmin Ratiu wrote:
-> netdev_bind_rx takes ownership of the queue array passed as parameter
-> and frees it, so a queue array buffer cannot be reused across multiple
-> netdev_bind_rx calls.
-> 
-> This commit fixes that by always passing in a newly created queue array
-> to all netdev_bind_rx calls in ncdevmem.
-> 
-> Fixes: 85585b4bc8d8 ("selftests: add ncdevmem, netcat for devmem TCP")
-> Signed-off-by: Cosmin Ratiu <cratiu@nvidia.com>
 
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+On 4/23/25 12:49 PM, Michal Koutný wrote:
+> On Tue, Apr 22, 2025 at 07:58:56PM -0400, Waiman Long <llong@redhat.com> wrote:
+>> Am I correct to assume that the purpose of 1d09069f5313f ("selftests:
+>> memcg: expect no low events in unprotected sibling") is to force a
+>> failure in the test_memcg_low test to force a change in the current
+>> behavior? Or was it the case that it didn't fail when you submit your
+>> patch?
+> Yes, the failure had been intended to mark unexpected mode of reclaim
+> (there's still a reproducer somewhere in the references). However, I
+> learnt that:
+>    a) it ain't easy to fix,
+>    b) the only occurence of the troublesome behavior was in the test and
+>       never reported by users in real life.
+>
+> I've started to prefer the variant where the particular check is
+> indefinite since that.
+
+OK, I will update the patch as you had suggested. I am fine doing that, 
+just that I did not understand why you wanted the result to be undefined 
+in the first place.
+
+Cheers,
+Longman
+
 
