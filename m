@@ -1,77 +1,77 @@
-Return-Path: <linux-kselftest+bounces-31397-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31398-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66FD2A98966
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 14:15:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A066A98970
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 14:16:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C79F41B66A3D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 12:15:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF0D95A550D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 12:15:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22F38216E24;
-	Wed, 23 Apr 2025 12:14:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21DC62741D4;
+	Wed, 23 Apr 2025 12:14:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hADPNT4v"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K+msE829"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9118FC8DC;
-	Wed, 23 Apr 2025 12:14:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83BDF2741C8;
+	Wed, 23 Apr 2025 12:14:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745410470; cv=none; b=InUi0AMcrgGAUU2u7rPfWqd9o3mQWkMY2zXWZvEMkG71EAxy1XJEu8iLGPuxS3OfywrAtvf6vJzFlbZpqN6PR0GHFZHizk0pUU3Xkolq05dn+R1aX8D8le4liYQ/bQXFUE8rYvTAmBWxRvZV7a23FPEwa/cz03wdAEpVx2Rvf10=
+	t=1745410478; cv=none; b=bTouzpJwukleO1D5qT/tVEYac+YQkzKTbAFgkwCC/wK7dE1sqUFhbbTdwsAhEhD6qkN8N55kBgM4UtQZX3lMtwphF+FNaw2p1Ud7SwIp3NVPyZlRKBNJoWtRNtU4HFve4fVL4wnHspWw5MtEgzLuxvwrLM+ClZ+ZuFI51nRsJA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745410470; c=relaxed/simple;
-	bh=xuhutYHLLIi1SPFjf7l0YQ8ICDo1tcppXxRsxZRGtuU=;
+	s=arc-20240116; t=1745410478; c=relaxed/simple;
+	bh=iI+zOFiPdKwPbL1x/XV2O6KQJB7HnqFPdwL8xUTkTGE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=muUzLJUtYqkhR5dZqKx2hAAANSwz/CvZfOm50y6qyM5B6UCAqdX1GLEzk0hO2LRVlF737J5tJvblzN8DeBp9P9Cc6w85ipsTlvD2MP//rr+N9txnh9XcaaGFqoxj2/U+0L4b7GzihCtmqD7KS992q4Igt86xFJAe1s0/76MPens=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hADPNT4v; arc=none smtp.client-ip=209.85.214.171
+	 MIME-Version; b=fKcoBWIXw9KKBb8vPQ20J6EgPdz9DtB+puccoPBrtNdUIdpNeQROTUYvJyw+y305ALW8jKdxMvOio7mHF5xZfSJDGPnUir3DuhJL0/kGTsLSVnU03lmVnTTcpKhqCeVm/7YKGeL+6SywiIRX9SfpZF79r3n/omeeSDAe76NP6oU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K+msE829; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-224171d6826so90044925ad.3;
-        Wed, 23 Apr 2025 05:14:28 -0700 (PDT)
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2295d78b433so74063275ad.2;
+        Wed, 23 Apr 2025 05:14:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745410468; x=1746015268; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1745410476; x=1746015276; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yxfWSBbcBV+w5mvjd3mF3cCYygynlfPhD+D65wEeaRM=;
-        b=hADPNT4vlJKUqy8xOzbX5m4EHMWpTKsCh6EMNIKhk8bKFVE/bpvXyer8X7ERSpplon
-         xzYfGGUNC1YNh9ffyFb+FcLw0sIcDpE9htejE10N4fIvUv0On//wwMrPfTR85f6d6GqP
-         T20tZ5BGiK+fKAH4tWuShzd8h9JIgVGoETcYSBr8ijTym+RrRtaQ52sqDphcEp7SjZOO
-         wcd/alNDjlwwUw8jt/p1GSvmfZgn0DnPjYLQcw9P4FIWErw53G5eX+prE/8+oqSA3tRf
-         gP79eBrJRDFQbr3FAeHHa9Wf15uSM0q3TVWkd1qW00UNcCh3xXPWINMhCYhatbLJi4Xz
-         WiGw==
+        bh=6G/y3HQErml1NMZQNrayd+/BsrgNwWrmomSiPVW0Nsc=;
+        b=K+msE829fzeroKjiXRKf9NS3zVzUUkKOoMMAF9p20Rq7zI3UpFWs/wjPbA1RNLVrOQ
+         vVfAdLWwA9vuVb6mCOospRpxAjWd/UZuJcED8twGKhxdCBd0yVg/D+VMs/TS14NDIvMO
+         lLRsgO6f6j7rOltvdgwFQ2a3ndNnP2+wUebwEjRiSUOMxkGc71ZPSLkhcx+26ivKpVbB
+         cv6CoJPRA8kaZI/fueIeiHRDBavWrKshCJ18Jfc0jQBpfx+RQo+iQtTraMX/MVPJupHf
+         +yJTCc4Ffcu6f1Ke19e/hxFVhMvYphTXdrrKZ+jtnNxc5cjjEd+oanDRajP0fLbMd+Dl
+         gDoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745410468; x=1746015268;
+        d=1e100.net; s=20230601; t=1745410476; x=1746015276;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yxfWSBbcBV+w5mvjd3mF3cCYygynlfPhD+D65wEeaRM=;
-        b=bQgqt0IpuTc+0bdzhU/c/+aUNyuvDyvTbebtGM42HfhATN3SH0ECPnIrXCB6y1BOlU
-         rRa1zVSNPkKHxn0PXMd9cR7PNfEClQCQn6zZNuZB9ttQcuFEc7UQHI/88DwUGk3v0mxG
-         qaw1yhlq6hhLmZSQmFeRMnnFEOqwuUkdXhPyc8AaS3XGY/eTKxcfD+tlwX/MuxXB0PiF
-         UKlwjbi0Lc8yiU/urTMECQ2Ju6a9BucoB/GOl2gnPXxJ2Pqb2L1qDlWxZT1wcqdNMA3T
-         xjMkA4nYo8cHQzHOtx5MaCNr1waFXN7NRslZGylUc0tEBWcBCA27exJybbPgBcRU+K4z
-         5kxw==
-X-Forwarded-Encrypted: i=1; AJvYcCWl54FmX0R8XnxSZlsqLo9ttwSVNeUZJDHwX8ltbGh4Cnyj+NCo3ctw1hKgOjwKlbTk4FXBFVtk9C5UFRFMl/fI@vger.kernel.org, AJvYcCXUqYUFNmLkeiFvMB79bU9jtmSQmoi10ppgQ9fxNUKrs+oooj3nlb/2gBv1pdaf5mSq44Jyyxcl@vger.kernel.org, AJvYcCXZtjKa6i36L+V8KYMpeNMOyoXnO92XWCGi2AaMfrMQ0ZF9qfWhNJ0MygqK/c5RvH9IYqgSY+PBgSt7kZw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy65+K+TPr5XWwQJ3M79xW+8sXaR4dbuAGKaOy1feVOEqu7TdEh
-	H69exsOy/QNQ/c6hnf15SozE+DYcSsn9Y7wgwDZ+8giQ6SvRHX1H
-X-Gm-Gg: ASbGncuGKBs9CGN4+m7BA6cSGs3BY3hIo7PnCElhqx0Ql74NEZ9oMylkRgxOhiXR36E
-	klx5NSGEvDtCLktLItEn5QVXojAeovnlJVmYjLzSIseB8J7im7hwGVEUmj7gnxjwx7zTB7x9Y2f
-	hOfDXPik3cIJEbIch7hDC/EQIEEiA32WxGk/jnqqTtcsem5XIZMBn+gF3EGF820D4kZ9Bxpm10I
-	frVj3bv/OKA6HE6mcoTHHHCNnT23r6pk3oBh9S8KVXFqpwxzUEqsPCbAWXvwQwtTsJf2r/7knzA
-	JXkaTbh8ZhvcQG6vHblV9NrycZnawnhjEUNTXU4xDT0=
-X-Google-Smtp-Source: AGHT+IG90gMxC1OuKnlwsNh2khtVE+pLM40Q9jlq/gmVdarjrJ5bEeT910gwd7Q27ZHisqccConaag==
-X-Received: by 2002:a17:902:db0f:b0:215:7421:262 with SMTP id d9443c01a7336-22c5357f020mr310942675ad.12.1745410467819;
-        Wed, 23 Apr 2025 05:14:27 -0700 (PDT)
+        bh=6G/y3HQErml1NMZQNrayd+/BsrgNwWrmomSiPVW0Nsc=;
+        b=nqMkNQeFPvYpqYfzKzqQSX5pRPRjcbZtNJLP1R+/NjAhORUT3jaiaJUsiX5xD1Jb0e
+         nztEZ6YqmMassfoAdfWaf7ki4TB7hAc5V42umgQbNZjoOdNCLry5geHpwmehqVY4GMhV
+         61lucRpRB5LdaNJZ5W4nYOl3TxXAVMTUKya7KUu0aQjcioWOQm+kRLDAxHo4QGbScOmY
+         29tU5X6aQHKzYlk3XkIuCukHAJOxSnhiFBxBs0NjONZJBCQCjl4QFNzGU5wH9KKEwo0z
+         Olu5Quyv0+SiGnVTRriQNHxf03P8I8esLIyI/kKqMR7PG2otKr3spLZVvb14Jj2BbdH7
+         yXaw==
+X-Forwarded-Encrypted: i=1; AJvYcCWBpbA0viVYCT5tmO/CL1M+aTLtyCOr5RepQQ0VvVFOgjYt/5CA/oK+sB9sYmIqUjOlHhMkq/+Tdds8kyw=@vger.kernel.org, AJvYcCWZvOQRiwMOvsXx9CMbAgBwAWx77WlIarNAgdSQTRx0G6RRgTax7fAD9HBGRy0wsVKojI+07+Bz@vger.kernel.org, AJvYcCX7OJgNXnk9u4GHlOkNgwPBuAwgNtGQvGzmie/HY3+LMip/bNEGdcaJWL8mFR04JTJ8FjOhes7JhLasnzzgAYdM@vger.kernel.org
+X-Gm-Message-State: AOJu0YylA7FJTMB22WvdqsUWjt+R9CIY/AVqLbnH2R9Hvo9M0X7nsWYf
+	7IoeRFgiFkGhYpwh0fArEZltD9C2wKRJc6ODmIq70kTWPAAuRkga
+X-Gm-Gg: ASbGnctFG7JQpjWXfL6Vha7WxW5jNi/G0GCz0+LQNWp5xTyF+oblHBXiDStYiBq8sqr
+	1BCCFTB2vM0k4Zsk8cq0ZAYLxvCnmej49bTgg/fHKJFH8ocmZDQR07yLzk0S5wyoJahegY+7vnO
+	UUBaQ/TjlMyXYhnn0KCS30rJ7N8rBh/+4HCOGyaIvnauPSdq1WvRt4CLvbuPgsEpHeLrarVImpg
+	9yXDS5jm//kJgaQORPBEInyLNz3DLOzOXVO+hlz0ZZ5mDVzzJ6Ekw/ouQ7p9sRIt1zWR+GOVyTb
+	9cn+QMNO/GD8dtDIae27jVd1PEsUSymkBXkZ2a4l/lI=
+X-Google-Smtp-Source: AGHT+IF+oB26vPds+B4kBrr2c9xPwwreiL7sTMFTRFvzhefCWoyDXGQln9OtTCMvRnNeQwmY27e4aw==
+X-Received: by 2002:a17:903:234e:b0:215:8d49:e2a7 with SMTP id d9443c01a7336-22c53620bb5mr256277845ad.50.1745410475779;
+        Wed, 23 Apr 2025 05:14:35 -0700 (PDT)
 Received: from ubuntu2404.. ([122.231.145.226])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22c50bf5528sm102647295ad.100.2025.04.23.05.14.19
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22c50bf5528sm102647295ad.100.2025.04.23.05.14.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Apr 2025 05:14:26 -0700 (PDT)
+        Wed, 23 Apr 2025 05:14:34 -0700 (PDT)
 From: KaFai Wan <mannkafai@gmail.com>
 To: alexei.starovoitov@gmail.com,
 	martin.lau@linux.dev,
@@ -100,9 +100,9 @@ Cc: bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	leon.hwang@linux.dev,
 	KaFai Wan <mannkafai@gmail.com>
-Subject: [PATCH bpf-next v4 1/2] bpf: Allow access to const void pointer arguments in tracing programs
-Date: Wed, 23 Apr 2025 20:13:28 +0800
-Message-ID: <20250423121329.3163461-2-mannkafai@gmail.com>
+Subject: [PATCH bpf-next v4 2/2] selftests/bpf: Add test to access const void pointer argument in tracing program
+Date: Wed, 23 Apr 2025 20:13:29 +0800
+Message-ID: <20250423121329.3163461-3-mannkafai@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250423121329.3163461-1-mannkafai@gmail.com>
 References: <20250423121329.3163461-1-mannkafai@gmail.com>
@@ -114,63 +114,66 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Adding support to access arguments with const void pointer arguments
-in tracing programs.
+Adding verifier test for accessing const void pointer argument in
+tracing programs.
 
-Currently we allow tracing programs to access void pointers. If we try to
-access argument which is pointer to const void like 2nd argument in kfree,
-verifier will fail to load the program with;
+The test program loads 1st argument of bpf_fentry_test10 function
+which is const void pointer and checks that verifier allows that.
 
-0: R1=ctx() R10=fp0
-; asm volatile ("r2 = *(u64 *)(r1 + 8); ");
-0: (79) r2 = *(u64 *)(r1 +8)
-func 'kfree' arg1 type UNKNOWN is not a struct
-
-Changing the is_int_ptr to void and generic integer check and renaming
-it to is_void_or_int_ptr.
-
-Cc: Leon Hwang <leon.hwang@linux.dev>
 Signed-off-by: KaFai Wan <mannkafai@gmail.com>
 Acked-by: Jiri Olsa <jolsa@kernel.org>
 ---
- kernel/bpf/btf.c | 13 +++----------
- 1 file changed, 3 insertions(+), 10 deletions(-)
+ net/bpf/test_run.c                                   |  8 +++++++-
+ .../selftests/bpf/progs/verifier_btf_ctx_access.c    | 12 ++++++++++++
+ 2 files changed, 19 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 16ba36f34dfa..14cdefc15f0e 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -6383,12 +6383,12 @@ struct btf *bpf_prog_get_target_btf(const struct bpf_prog *prog)
- 		return prog->aux->attach_btf;
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 7cb192cbd65f..aaf13a7d58ed 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -569,6 +569,11 @@ __bpf_kfunc u32 bpf_fentry_test9(u32 *a)
+ 	return *a;
  }
  
--static bool is_int_ptr(struct btf *btf, const struct btf_type *t)
-+static bool is_void_or_int_ptr(struct btf *btf, const struct btf_type *t)
++int noinline bpf_fentry_test10(const void *a)
++{
++	return (long)a;
++}
++
+ void noinline bpf_fentry_test_sinfo(struct skb_shared_info *sinfo)
  {
- 	/* skip modifiers */
- 	t = btf_type_skip_modifiers(btf, t->type, NULL);
- 
--	return btf_type_is_int(t);
-+	return btf_type_is_void(t) || btf_type_is_int(t);
+ }
+@@ -699,7 +704,8 @@ int bpf_prog_test_run_tracing(struct bpf_prog *prog,
+ 		    bpf_fentry_test6(16, (void *)17, 18, 19, (void *)20, 21) != 111 ||
+ 		    bpf_fentry_test7((struct bpf_fentry_test_t *)0) != 0 ||
+ 		    bpf_fentry_test8(&arg) != 0 ||
+-		    bpf_fentry_test9(&retval) != 0)
++		    bpf_fentry_test9(&retval) != 0 ||
++		    bpf_fentry_test10((void *)0) != 0)
+ 			goto out;
+ 		break;
+ 	case BPF_MODIFY_RETURN:
+diff --git a/tools/testing/selftests/bpf/progs/verifier_btf_ctx_access.c b/tools/testing/selftests/bpf/progs/verifier_btf_ctx_access.c
+index 28b939572cda..03942cec07e5 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_btf_ctx_access.c
++++ b/tools/testing/selftests/bpf/progs/verifier_btf_ctx_access.c
+@@ -65,4 +65,16 @@ __naked void ctx_access_u32_pointer_reject_8(void)
+ "	::: __clobber_all);
  }
  
- static u32 get_ctx_arg_idx(struct btf *btf, const struct btf_type *func_proto,
-@@ -6776,14 +6776,7 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
- 		}
- 	}
- 
--	if (t->type == 0)
--		/* This is a pointer to void.
--		 * It is the same as scalar from the verifier safety pov.
--		 * No further pointer walking is allowed.
--		 */
--		return true;
--
--	if (is_int_ptr(btf, t))
-+	if (is_void_or_int_ptr(btf, t))
- 		return true;
- 
- 	/* this is a pointer to another type */
++SEC("fentry/bpf_fentry_test10")
++__description("btf_ctx_access const void pointer accept")
++__success __retval(0)
++__naked void ctx_access_const_void_pointer_accept(void)
++{
++	asm volatile ("					\
++	r2 = *(u64 *)(r1 + 0);		/* load 1st argument value (const void pointer) */\
++	r0 = 0;						\
++	exit;						\
++"	::: __clobber_all);
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.43.0
 
