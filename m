@@ -1,126 +1,147 @@
-Return-Path: <linux-kselftest+bounces-31420-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31421-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 651AEA98FA5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 17:12:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 799B6A990C9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 17:23:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE3868E1FBA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 15:05:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AB6161B86E87
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 15:16:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7120828CF65;
-	Wed, 23 Apr 2025 15:01:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F38828CF65;
+	Wed, 23 Apr 2025 15:10:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="fF1wNh8n";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="wENAKAFU"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="BV467kOY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B13DE28B51A;
-	Wed, 23 Apr 2025 15:01:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBCF628CF51
+	for <linux-kselftest@vger.kernel.org>; Wed, 23 Apr 2025 15:10:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745420510; cv=none; b=Uz3Y3lXzUYZJPXP9L170pNqdoPldec5uKF90iMMkrT9vibXv/3XkRprPMKnawXCDk0Gxuzv6AxbbGgOq77DszwqwjMEc5Twf/qo/bs63jGuj1qBK2VWcqFFiOryDQUmIrIeHt59UuzdGYa2Vi1X9YOoGIOlagod8KnP48Y/VdTM=
+	t=1745421044; cv=none; b=mnAkvSbMom4ASasV0Oki3ljNSpKyfYNxs/Scg/aWmqAucMZAADVzolJs0+UThd0cFx66unwaPPcv0jU3G3gl/iL3LsydYGl/KGRLXiMcQCPpuFJFnxU/9Vylz/Yb4WN4qH2yOVRdLyKW343mQP3ncCcIWsK1T4xC+Kgyywnwn7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745420510; c=relaxed/simple;
-	bh=st5xfWnHhMqzFYyPpI3LZRF3yasUPhWHSGvOc/RLkFs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=STLyh23DqQkuM5rRDJiBMQFw9IB7oPtRnWdnJnXiml7YDZKCeNeUdJGLjoMLG7lvL6J1l9jnCxR4oNWdifUrV8PvkF/sGR6aucS4+6d0hgWX2CtSOTKjWC4y2oF//h7/b3XxdQiAiZBCMn1ocweHL9cKvrJNrPf1iIU3q/Rc0pw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=fF1wNh8n; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=wENAKAFU; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1745420507;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Qfk0SOkNJJSXcGWn4KkI774z2CZgjpLKyw1BvZF8y/I=;
-	b=fF1wNh8nHwvm4JTS30FiOp26wa6UlCv1ExCXGr88OGBN3gO3IXzuJ+L3pOcwepejWcVJc9
-	8qBuiAaz/kZbA7BDYKO+0aOPIGT4BGOF+CLlc33Bw2TV+UNweekSnng/Hyt78xhCgkyGRO
-	wpFw6nDixEfVFkUkJIJzJWdtHDlicmWL7iyQg3bZSBR+DTL6mwJ8cVsg6603r29hZmAxEi
-	34Idl9/NJfSkgQ+6bX9cmYfxV0oDwYQc2YoflcfNJKhYFuav/bz3ECAPuT56grAfugWqTA
-	joO1vNNtKeJZ8YVvsZZDlXBrfrKomcZzfgXaJkLxw+099Y2LFTIm559rK/JE3A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1745420507;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Qfk0SOkNJJSXcGWn4KkI774z2CZgjpLKyw1BvZF8y/I=;
-	b=wENAKAFUc0NKbwd/rcakPQOxOTCsmSxMpFoOM6BNQG7LB+KWDzg2DLA28bVBoFQdxhLG/w
-	1E5eSHdtQNfDPFAA==
-Date: Wed, 23 Apr 2025 17:01:45 +0200
-Subject: [PATCH 15/15] tools/nolibc: implement wait() in terms of waitpid()
+	s=arc-20240116; t=1745421044; c=relaxed/simple;
+	bh=uFV3fDxHeTVor0I1L/M53Jf1QkJJii9mgN/m4+mnqe0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YuA61bkbo3M5IiWQCccVoeHOlLl3OH7pd56Q2+AlYYCp1ug4Bg5qBy7CYySU5hYw5j2lgcEeXwl6oCMdxeouufIGDcOsphBahMhsEQHXEKKiGiAl52MUwcqtKWMKdjauGurFfAHTIlsXLB1JMiCdRA2mXScqotsx8ApvYO60uFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=BV467kOY; arc=none smtp.client-ip=209.85.128.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-70427fb838cso51736367b3.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Apr 2025 08:10:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1745421041; x=1746025841; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ppDTLRNI5D/DHlJ104+9klrOmugo96Z4EzkqmTSr+tw=;
+        b=BV467kOYvg9v1zan0/6j+x47F8k96sTz/PYM0TdS2w+WeWy7o3I1OK3YpPMw2RYbPn
+         YBo32qVaE2CpT/F0kqYkX6ESu30MQ5Zs4SVO6Ngktc83G8A9DZ52LypKy6vxTaZRnDXv
+         nCvVf9KcnMy3bFIrmJSvtCa5JU5K5bavjj3/uG/IgXj26dO++/pnJtPQzyTlTur5U5E4
+         M27BjyuJxCnK+1YTgD8oA2zvnQoEkgi2Yr8lPHPA/hYOeURaQ2HMRRPT45VNgrE6JOba
+         JVDZYlvx1cuiQ5EbAJTRGFyV9ytozEWODCcZLDQ6CJLlgX0C1fzENfaWaSI3Jc1TGnDg
+         AhnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745421041; x=1746025841;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ppDTLRNI5D/DHlJ104+9klrOmugo96Z4EzkqmTSr+tw=;
+        b=AgcikiOBUrHJCQJ24Z5hkhGt0GgVxuXHqfskWhv6+HgqPLItDhnp0rLgCUSeSgZw4C
+         7UvFmZhs1zhGnu0xz7qOyWlD2If57pzSXPTQEcGG7EMUxm8rEDoqf5JVc4rz+EyvWSAr
+         3I14rPACNYmz3vIM+7xPVK8YrctbLreA7IqLxY2s5V9wklTEuI4PnOvP+/92U5Ag16ZU
+         rhxn1ZM5mz1JyCm87bMNGA5auJyYw2AdoohcnBwpK9zu4J3hujiOU1HHuDkGyv1fGYK3
+         7XvxBDPiSwf0b8+/j7UQ0dMenoSbxF4vscTa2UP/Ha9lvYC6eSaCGlJHw+Ga+gEMVDe5
+         q6Zg==
+X-Forwarded-Encrypted: i=1; AJvYcCXHcb+EqVxBU9T69voGEnAjVxL3lj4XqRm5YxKOSQUFfr1Dfd7zddBeN7qq9Yhm9+ujd10XfUC3d3J/ESZr0Xk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzD8fzmptH28RJPRcVK1shSsh+7NgYe2KE4FXLomkYJ9e5ODBG/
+	D5qzwhGRIUV+zLGUyZ1p2XBJxvf4XhRbHAvz/E7mA8E/mwyG4tlxbj+xW5s12DRcvxdWeetPlCk
+	aiPp4ozJ3V0SoopI8hXVju79wzKM5IsVMtRnF
+X-Gm-Gg: ASbGncuPT8ANeQu48rzeJ3r/uuhdwwxyqI2vUHb14/vw8jKi7Aj0Mr/VzUeSbUMREr2
+	UPpP7Wz1Mppb+ns4OareARdcVUYD0BckKicFn53RJDYeBOS0MDvKw20DQrFxFs+MRa5RjqE2A+S
+	EOkTQcdT+IoyY+zyS2NrUiLVrRYC3cI5xt
+X-Google-Smtp-Source: AGHT+IHNlf00p8r3DHcmCpgY+IFBhYtAhRgyVsFb6FFk96MPIernB0HKWY5qgWQbLL58D4kTom9itSs/0uIOQcHE5fg=
+X-Received: by 2002:a05:690c:6801:b0:6fd:33a5:59a with SMTP id
+ 00721157ae682-706ccd1a5ccmr309843197b3.18.1745421040868; Wed, 23 Apr 2025
+ 08:10:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250423-nolibc-misc-v1-15-a925bf40297b@linutronix.de>
-References: <20250423-nolibc-misc-v1-0-a925bf40297b@linutronix.de>
-In-Reply-To: <20250423-nolibc-misc-v1-0-a925bf40297b@linutronix.de>
-To: Willy Tarreau <w@1wt.eu>, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
- Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1745420497; l=1274;
- i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=st5xfWnHhMqzFYyPpI3LZRF3yasUPhWHSGvOc/RLkFs=;
- b=jN8k7wucSHbEul0z0ct8HmdWRbjItqd9lvsQYOw1TgeSC136qeYbE0rLkoSc9JxwuI1hJ+Qny
- vnVmTMJQoqIBvazDrtj2OqjhU1yyDI/NNBt7qdzX7eQ1tZcl54gvPkv
-X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
- pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
+References: <20250404215527.1563146-1-bboscaccy@linux.microsoft.com>
+ <20250404215527.1563146-2-bboscaccy@linux.microsoft.com> <CAADnVQJyNRZVLPj_nzegCyo+BzM1-whbnajotCXu+GW+5-=P6w@mail.gmail.com>
+ <87semdjxcp.fsf@microsoft.com> <CAADnVQ+JGfwRgsoe2=EHkXdTyQ8ycn0D9nh1k49am++4oXUPHg@mail.gmail.com>
+ <87friajmd5.fsf@microsoft.com> <CAADnVQKb3gPBFz+n+GoudxaTrugVegwMb8=kUfxOea5r2NNfUA@mail.gmail.com>
+ <87a58hjune.fsf@microsoft.com> <CAADnVQ+LMAnyT4yV5iuJ=vswgtUu97cHKnvysipc6o7HZfEbUA@mail.gmail.com>
+ <87y0w0hv2x.fsf@microsoft.com> <CAADnVQKF+B_YYwOCFsPBbrTBGKe4b22WVJFb8C0PHGmRAjbusQ@mail.gmail.com>
+ <2bd95ca78e836db0775da8237792e8448b8eec62.camel@HansenPartnership.com>
+In-Reply-To: <2bd95ca78e836db0775da8237792e8448b8eec62.camel@HansenPartnership.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Wed, 23 Apr 2025 11:10:29 -0400
+X-Gm-Features: ATxdqUEil0O912atUTQeKlUUv4Sfsc4c76L7yegeINodkXYOkWCpNQ86Ynaeoaw
+Message-ID: <CAHC9VhTi6+CHD9OtWj5=pPDrtwF+S9yfBOKqghe=9wXmd7jrxA@mail.gmail.com>
+Subject: Re: [PATCH v2 security-next 1/4] security: Hornet LSM
+To: James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
+	Blaise Boscaccy <bboscaccy@linux.microsoft.com>, Jonathan Corbet <corbet@lwn.net>, 
+	David Howells <dhowells@redhat.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	"David S. Miller" <davem@davemloft.net>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Jarkko Sakkinen <jarkko@kernel.org>, 
+	Jan Stancek <jstancek@redhat.com>, Neal Gompa <neal@gompa.dev>, 
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	keyrings@vger.kernel.org, 
+	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, 
+	LSM List <linux-security-module@vger.kernel.org>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, nkapron@google.com, 
+	Matteo Croce <teknoraver@meta.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
+	Cong Wang <xiyou.wangcong@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Newer architectures like riscv 32-bit are missing sys_wait4().
-Make use of the fact that wait(&status) is defined to be equivalent to
-waitpid(-1, status, 0) to implment it on all architectures.
+On Wed, Apr 23, 2025 at 10:12=E2=80=AFAM James Bottomley
+<James.Bottomley@hansenpartnership.com> wrote:
+> On Mon, 2025-04-21 at 13:12 -0700, Alexei Starovoitov wrote:
+> [...]
+> > Calling bpf_map_get() and
+> > map->ops->map_lookup_elem() from a module is not ok either.
+>
+> I don't understand this objection.  The program just got passed in to
+> bpf_prog_load() as a set of attributes which, for a light skeleton,
+> directly contain the code as a blob and have the various BTF
+> relocations as a blob in a single element array map.  I think everyone
+> agrees that the integrity of the program would be compromised by
+> modifications to the relocations, so the security_bpf_prog_load() hook
+> can't make an integrity determination without examining both.  If the
+> hook can't use the bpf_maps.. APIs directly is there some other API it
+> should be using to get the relocations, or are you saying that the
+> security_bpf_prog_load() hook isn't fit for purpose and it should be
+> called after the bpf core has loaded the relocations so they can be
+> provided to the hook as an argument?
+>
+> The above, by the way, is independent of signing, because it applies to
+> any determination that might be made in the security_bpf_prog_load()
+> hook regardless of purpose.
 
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
----
- tools/include/nolibc/sys/wait.h | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+I've also been worrying that some of the unspoken motivation behind
+the objection is simply that Hornet is not BPF.  If/when we get to a
+point where Hornet is sent up to Linus and Alexei's objection to the
+Hornet LSM inspecting BPF maps stands, it seems as though *any* LSM,
+including BPF LSMs, would need to be prevented from accessing BPF
+maps.  I'm fairly certain no one wants to see it come to that.
 
-diff --git a/tools/include/nolibc/sys/wait.h b/tools/include/nolibc/sys/wait.h
-index 9a68e6a6b1df8f938225007eb0de0574257ccf00..9783632a80bc20e0175a8842e7a7aea27defeb27 100644
---- a/tools/include/nolibc/sys/wait.h
-+++ b/tools/include/nolibc/sys/wait.h
-@@ -28,12 +28,6 @@ pid_t sys_wait4(pid_t pid, int *status, int options, struct rusage *rusage)
- #endif
- }
- 
--static __attribute__((unused))
--pid_t wait(int *status)
--{
--	return __sysret(sys_wait4(-1, status, 0, NULL));
--}
--
- static __attribute__((unused))
- pid_t wait4(pid_t pid, int *status, int options, struct rusage *rusage)
- {
-@@ -110,6 +104,12 @@ pid_t waitpid(pid_t pid, int *status, int options)
- 	return info.si_pid;
- }
- 
-+static __attribute__((unused))
-+pid_t wait(int *status)
-+{
-+	return waitpid(-1, status, 0);
-+}
-+
- 
- /* make sure to include all global symbols */
- #include "../nolibc.h"
-
--- 
-2.49.0
-
+--=20
+paul-moore.com
 
