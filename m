@@ -1,124 +1,207 @@
-Return-Path: <linux-kselftest+bounces-31451-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31452-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59303A99974
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 22:29:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16EC3A999EB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 23:08:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A4855462581
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 20:29:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 29D681B81E3E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Apr 2025 21:08:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A49326B972;
-	Wed, 23 Apr 2025 20:29:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93A9F26FD85;
+	Wed, 23 Apr 2025 21:08:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kHjT7QE5"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PaWAQeun"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8422026B96A;
-	Wed, 23 Apr 2025 20:29:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7DE71F237A;
+	Wed, 23 Apr 2025 21:08:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745440144; cv=none; b=fwkty/9rB2SQuEcG1E60MXLHvJoCiE5adH/yYaX/BQ0wafGnf4MWxhght3VQqREC9WU4e8PxIeV68w9GFQEdd1iFk4QLonOa8btMhQxweV6lmWE+SGnyrxvZCCcOBKwjzhXgfDWFusBGdafszE2aZ0og4u45xhnmvOPdIUTfInQ=
+	t=1745442488; cv=none; b=K6PhZuRtO8K07241vYFEdfhejJZKutMajz7Pp2jZqGLjWZEQN8rpzh0Mh7oHXl+q3jRoZoskmC+PXy4qZZrZ5jeNjYxXfjbd2Se8esvzVcPiIV586umgXi6YUHiMu7xmxxbHBdfzmbCtP4BnA62ilnLEWNyIBw0uPbUtCqZIABA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745440144; c=relaxed/simple;
-	bh=a6J0YZiJf0wIUXDHn7eG6jDQuIrcZmzDIHYFQUg5hv0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gCK7/sua6HbFExtI9rJSFCIkJHbZJRPKaOAoqjfPE9owh4ZfKOtK0XjQWdxkDcndQDTAPpzKustPJvk5oWGrekl/e3ZURX12J44DyrRzajSzt3zXp86FJGhtmk6Epkjqk0/mLWgBgLnBgRGnbot0yKx4r6mLtKlBqzr3ZwBq0JU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kHjT7QE5; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2254e0b4b79so4387905ad.2;
-        Wed, 23 Apr 2025 13:29:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745440143; x=1746044943; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oyfXWteVf2Uw3jmWN9AEEs2P8ez5YpxAoieteSWvTT0=;
-        b=kHjT7QE534L6vbZRX5cmM/cEozAc1eBzFylEYjIW+RhVoMgybrQ22MJouyiq5MaNra
-         mXia+soSRdpEfU3WOKOU5r9UXoZox4fAvCovCQmRAkz/AERMAZF5T/YYgmL1a8QR65y+
-         gsJiKTo2/w4HatWhCTd1t43+LNgWYbsKVW6sLJ1GTf/vruITguDBRz95jT8dcdEpw49Q
-         Y+6V6mS8NV+wrvtseg1WJm2Sm5x5kyV3JXCo+mdkikpX11BI/Mb2kjYQLpP+zq+M0o26
-         Xu+bv/Eojnbosqm3N+5oLIVfZVVo6qtUdrHSoIQWqWygoulx1Uppji0CQh/qn2c7J2sd
-         el3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745440143; x=1746044943;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oyfXWteVf2Uw3jmWN9AEEs2P8ez5YpxAoieteSWvTT0=;
-        b=GHy0K7ZOhgh/mHShrTuSjBu5MpPUaVE9Xsl7FPdG0Jmab/a6ovS88HJd+mzapYc2Ku
-         /azm9A3cZUIyvVQun7TnLsy8M9bw6rOc63v2EqRDjLczB5AH1x0RAKCoIc4pG7eMfJJT
-         n4u6AEwFOKdspy/z8M+/AbXghqcZLLmkrxNVzYrEugZgSPsR0+MMJQfP46pILHRJBOtO
-         Dz2mMvXUo6ITXW4ZAVDOYM6f8eCQMHjprtTthKIMf5BvwMgJUn/5yp6N5waTLELw5EHT
-         fT8uvUVsu6qdPXDYtIS4V7gClSFQA5QJwxBGvTQDXRCrqPrqQ6jaxt3zSwwtSzeeC2jm
-         9gow==
-X-Forwarded-Encrypted: i=1; AJvYcCUE7ZJxAqofe/a7k/w57BNYG29jwZ7pQESrV/iUodBP29KcI3SEjiULP01KF77wi1WXVF0=@vger.kernel.org, AJvYcCUFOZSX/e1vAGiNankkrZYvAZBVJyMD+nTySpzkIX4tHyKth32uDjKbGblDXnWkaCS68oDGTKzk@vger.kernel.org, AJvYcCUs6jqfHGEPkgVK6L4EQh4STkpf2Vg7v2ABMLcjHu/PFRVg6vhfupk/cKu/ItrszEqmEZfOcyCOcjU/QWwZ07F6@vger.kernel.org
-X-Gm-Message-State: AOJu0YwdKXFLJn9BsNCI97gUVtS/CIt9YuT49dPF71O7kcQ9krg2wwNB
-	LNeTD3uL+M8JMXui5FvKJ1zn2NDBqHs+4SIj5z69J7jt3T61kRM=
-X-Gm-Gg: ASbGncvc/Uf3wtFcMTTQpCMS4uX2RDpLXJrnGP55Hc/teWnpk8nY6ZU5nP4LpLk8NCq
-	lkMYKKQtQybVtcLdncITxnpierl22PfJvuOAXNg5u059+V2pUO4uFOOnVJJ23NaC3LnBJfqwKsP
-	WfR+Vc11y0zOqKYpqoHnqjoSec/VWlZzQtAYfhGPTjL2UCJPzTpwiTCbq1FfplFe8T08UueXZ/k
-	X+VEFXrCvF3+fDVxStIcvcAbwsRaIOsWEgOsPvxJ0MXCEhCQIG5zgW+4dMabn5dflQgE29TupAo
-	oevHgEvrktqfHOQ7bDs9I/PZIsANwwuOptKmjfQL
-X-Google-Smtp-Source: AGHT+IG+I2gupbmugyEQpRKBsCZt2czrIlRva1wVly9xDSObaN4PrDuHgmHsG2fu7u6rVZ4ynoqgrA==
-X-Received: by 2002:a17:902:e54a:b0:223:5ace:eccf with SMTP id d9443c01a7336-22c535acd67mr324263045ad.25.1745440142742;
-        Wed, 23 Apr 2025 13:29:02 -0700 (PDT)
-Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
-        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-22c50eb4287sm108976045ad.130.2025.04.23.13.29.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Apr 2025 13:29:02 -0700 (PDT)
-Date: Wed, 23 Apr 2025 13:29:01 -0700
-From: Stanislav Fomichev <stfomichev@gmail.com>
-To: Lorenzo Bianconi <lorenzo@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2] bpf: Allow XDP dev-bound programs to perform
- XDP_REDIRECT into maps
-Message-ID: <aAlNjRGLbUuohQCN@mini-arch>
-References: <20250423-xdp-prog-bound-fix-v2-1-51742a5dfbce@kernel.org>
+	s=arc-20240116; t=1745442488; c=relaxed/simple;
+	bh=XxCvCSGFcEdexELGVW8mhB3qx8vE8Ea2qXrgRkY4gSs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tR7Jl9sMLqDPBSZJsOElbD5PXFJVs5QNqLAXgzd/FK9Dn+qNtRziSldIHpfGPLpsgeVmlWck5sWhzjG4MMsgGmYe5UyCgIcjCFWjvVZlZu6xPUE1qcr9nLPIVEyQN77G2wnCnq/vG1Ryf68fwqUr5bvO7zoufRzh9dtrNsR2d54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PaWAQeun; arc=none smtp.client-ip=95.215.58.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <057ad3a8-585f-402b-9150-b1b4b930376c@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1745442483;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Bjt0MCusdjN1plu9XqSKj6jgzlNQD91/w0/f0lrqbwY=;
+	b=PaWAQeunS4p8HrZBWiqQ0EnLqu3loTpbsdp0zjP+10NZfqGCzj3gJMP7VH5TrwtRwtVEKb
+	W5symTunh6PcXGuHpbMvKKY5mJUdo1KdX62hgYC8gs9VhQcSN2FCs8TfKgl74OcZVScheX
+	kSzUfG6oVt7k/G+XpUQWFNj5ZZFNQvk=
+Date: Wed, 23 Apr 2025 14:07:55 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250423-xdp-prog-bound-fix-v2-1-51742a5dfbce@kernel.org>
+Subject: Re: [PATCH bpf-next v1 1/2] bpf: Create cgroup storage if needed when
+ updating link
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: andrii@kernel.org, alexis.lothore@bootlin.com, mrpre@163.com,
+ syzbot+e6e8f6618a2d4b35e4e0@syzkaller.appspotmail.com,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+ Shuah Khan <shuah@kernel.org>, Alan Maguire <alan.maguire@oracle.com>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org
+References: <20250417044041.252874-1-jiayuan.chen@linux.dev>
+ <20250417044041.252874-2-jiayuan.chen@linux.dev>
+ <c6a9b230-f163-4c03-b834-ddcc71c47204@linux.dev>
+ <cbb82d78518c251000e8b52e3f3799b0df438210@linux.dev>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <cbb82d78518c251000e8b52e3f3799b0df438210@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On 04/23, Lorenzo Bianconi wrote:
-> In the current implementation if the program is dev-bound to a specific
-> device, it will not be possible to perform XDP_REDIRECT into a DEVMAP
-> or CPUMAP even if the program is running in the driver NAPI context and
-> it is not attached to any map entry. This seems in contrast with the
-> explanation available in bpf_prog_map_compatible routine.
-> Fix the issue introducing __bpf_prog_map_compatible utility routine in
-> order to avoid bpf_prog_is_dev_bound() check running bpf_check_tail_call()
-> at program load time (bpf_prog_select_runtime()).
-> Continue forbidding to attach a dev-bound program to XDP maps
-> (BPF_MAP_TYPE_PROG_ARRAY, BPF_MAP_TYPE_DEVMAP and BPF_MAP_TYPE_CPUMAP).
+On 4/22/25 7:21 PM, Jiayuan Chen wrote:
+> April 23, 2025 at 08:13, "Martin KaFai Lau" <martin.lau@linux.dev> wrote:
 > 
-> Fixes: 3d76a4d3d4e59 ("bpf: XDP metadata RX kfuncs")
-> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+>>
+>> On 4/16/25 9:40 PM, Jiayuan Chen wrote:
+>>
+>>>
+>>> when we attach a prog without cgroup_storage map being used,
+>>>
+>>>   cgroup_storage in struct bpf_prog_array_item is empty. Then, if we use
+>>>
+>>>   BPF_LINK_UPDATE to replace old prog with a new one that uses the
+>>>
+>>>   cgroup_storage map, we miss cgroup_storage being initiated.
+>>>
+>>>   This cause a painc when accessing stroage in bpf_get_local_storage.
+>>>
+>>>   Reported-by: syzbot+e6e8f6618a2d4b35e4e0@syzkaller.appspotmail.com
+>>>
+>>>   Closes: https://lore.kernel.org/all/67fc867e.050a0220.2970f9.03b8.GAE@google.com/T/
+>>>
+>>>   Fixes: 0c991ebc8c69 ("bpf: Implement bpf_prog replacement for an active bpf_cgroup_link")
+>>>
+>>>   Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+>>>
+>>>   ---
+>>>
+>>>   kernel/bpf/cgroup.c | 24 +++++++++++++++++++-----
+>>>
+>>>   1 file changed, 19 insertions(+), 5 deletions(-)
+>>>
+>>>   diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+>>>
+>>>   index 84f58f3d028a..cdf0211ddc79 100644
+>>>
+>>>   --- a/kernel/bpf/cgroup.c
+>>>
+>>>   +++ b/kernel/bpf/cgroup.c
+>>>
+>>>   @@ -770,12 +770,14 @@ static int cgroup_bpf_attach(struct cgroup *cgrp,
+>>>
+>>>   }
+>>>
+>>>   > /* Swap updated BPF program for given link in effective program arrays across
+>>>
+>>>   - * all descendant cgroups. This function is guaranteed to succeed.
+>>>
+>>>   + * all descendant cgroups.
+>>>
+>>>   */
+>>>
+>>>   -static void replace_effective_prog(struct cgroup *cgrp,
+>>>
+>>>   - enum cgroup_bpf_attach_type atype,
+>>>
+>>>   - struct bpf_cgroup_link *link)
+>>>
+>>>   +static int replace_effective_prog(struct cgroup *cgrp,
+>>>
+>>>   + enum cgroup_bpf_attach_type atype,
+>>>
+>>>   + struct bpf_cgroup_link *link)
+>>>
+>>>   {
+>>>
+>>>   + struct bpf_cgroup_storage *new_storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
+>>>
+>>>   + struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
+>>>
+>>>   struct bpf_prog_array_item *item;
+>>>
+>>>   struct cgroup_subsys_state *css;
+>>>
+>>>   struct bpf_prog_array *progs;
+>>>
+>>>   @@ -784,6 +786,10 @@ static void replace_effective_prog(struct cgroup *cgrp,
+>>>
+>>>   struct cgroup *cg;
+>>>
+>>>   int pos;
+>>>
+>>>   > + if (bpf_cgroup_storages_alloc(storage, new_storage, link->type,
+>>>
+>>>   + link->link.prog, cgrp))
+>>>
+>>>   + return -ENOMEM;
+>>>
+>>>   +
+>>>
+>>>   css_for_each_descendant_pre(css, &cgrp->self) {
+>>>
+>>>   struct cgroup *desc = container_of(css, struct cgroup, self);
+>>>
+>>>   > @@ -810,8 +816,11 @@ static void replace_effective_prog(struct cgroup *cgrp,
+>>>
+>>>   desc->bpf.effective[atype],
+>>>
+>>>   lockdep_is_held(&cgroup_mutex));
+>>>
+>>>   item = &progs->items[pos];
+>>>
+>>>   + bpf_cgroup_storages_assign(item->cgroup_storage, storage);
+>>>
+>>
+>> I am still recalling my memory on this older cgroup storage, so I think it will be faster to ask questions.
+>>
+>> What is in the pl->storage (still NULL?), and will the future compute_effective_progs() work?
+>>
+> 
+> For non-link path:
+> cgroup_bpf_attach
 
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+fwiw, I don't think this details matter here, but it is not only for non-link 
+path. cgroup_bpf_link_attach also calls cgroup_bpf_attach.
 
-Thank you!
+> 	bpf_cgroup_storages_assign(pl->storage, storage); // allocate and set
+> 	update_effective_progs
+> 		compute_effective_progs
+> 			bpf_cgroup_storages_assign(item->cgroup_storage, pl->storage);
+
+The pl, that the __cgroup_bpf_replace is xchg()-ing its pl->link->link.prog with 
+new_prog, still has a NULL in pl->storage. When another "different" bpf prog is 
+added and attached to the same cgroup "later", compute_effective_progs will be 
+called and it will have the same bug, no?
+
+> 
+> 
+> pl->storage is just as a temporary holder, never freed, and its value will
+> eventually be assigned to `item->cgroup_storage`.
 
