@@ -1,206 +1,116 @@
-Return-Path: <linux-kselftest+bounces-31594-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31595-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C452A9B5E9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Apr 2025 20:04:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 029ABA9B5FE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Apr 2025 20:10:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 776281BA727C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Apr 2025 18:04:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 15EA71BA0B9F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Apr 2025 18:10:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BC0528DF0A;
-	Thu, 24 Apr 2025 18:04:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5269728F509;
+	Thu, 24 Apr 2025 18:10:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="BrzPX+ns"
+	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="bKZu2i/+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D303620C46A
-	for <linux-kselftest@vger.kernel.org>; Thu, 24 Apr 2025 18:04:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ACD828DF19
+	for <linux-kselftest@vger.kernel.org>; Thu, 24 Apr 2025 18:10:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745517845; cv=none; b=h5QEsT0OV9l/oiCXPUGB4d7OTxKmoxgCNGhNWLS3tPbOF29YRewMCq1twN2x9A61PFipLEvsU8bjNJjKZhqTsLXzg+L1L3TFkncDjsusES1UYg+871LBtarAXAHylQajELMhJAzvdS7C/B1yWlIz6z9wlw6kV2j1lfvFOWHYe88=
+	t=1745518206; cv=none; b=USufXNiwnZAEcsBn0G5WwdChpXQ1yVDtwhSAxg44wbJ4Ppj2vRskLd6H2k9uCpi01KwVVqyjLWPbh3/EkUCY5EILoP2CpqjiWOqeFNY7LMoD7Kcgq4fkiF/gFLdNTW218SHl/BSqTM5if2L8PyiNONotq6vDH60+zHiXqKrUIsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745517845; c=relaxed/simple;
-	bh=uPn6plOz3AG5jrEfFpRZaDs6P0aP85UrPumlULvK+r8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KEZfw+HGaD6SK2ap55QVjPFqMQt5gC2q3iNb8N1olRFl1Fsl8ILz9uAydTMQnLvnJYJ39ZmmQaGhtLnCRD9v3aVGwC5GK/j7LeKWcFxzYhTKGwUFzKxgdb6wvHAoO0hQSpRgcfOIqsau2YnVQP8M8we7uiJ7Z54ouhY2FryUIyI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=BrzPX+ns; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-224191d92e4so15804685ad.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Apr 2025 11:04:03 -0700 (PDT)
+	s=arc-20240116; t=1745518206; c=relaxed/simple;
+	bh=Wr8Howp6YUBHFQ5IXcbrHAh69nUeNbi1WwiX/cJv9UA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bOT/0APN3FLUpc2IuILiOIWxXKZqb+ONCCmQjhk/MIUyvxSiO1Py+g9OstWEDpgDaJgp1qY/E7R6mRj7lUPL3lYdbsxQcyB6kW4AlOUs3w5vgddm2m9MrV5AIS0oubjxaFiQ+pf3g6mbyaYQwcUjZ5PZ/lw5grRAoiQ/pUy/XtM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=bKZu2i/+; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2241053582dso21074435ad.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Apr 2025 11:10:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1745517843; x=1746122643; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=R+2ifGTP7Zuk1f3PGxpKoh8D1eRLE/ZHAefBGZIpiLo=;
-        b=BrzPX+nsbBbhPpijNsceUyyDomfenzy/7GbMN64AroqKTxoylv2ovD6hn0CRWqBlxs
-         ulrrWRaiMYzHEdGqjtf/3RqjjwY6kRG5bEvpPsloj2x6unflxrvd7OZeFcolPB3CVKBE
-         eupWPZWQUEaGbsD7rKhdEueNm0qf1/qtRRW05uUzXnvTB3AKt5nuHzXOrHtTr5XnD6Ri
-         jXZraAzv+36aPvl7LB8SMNA+JU/JJaS+pw30Qwz7cznpfAC76YlfziI4Qwx4v8iXAy2a
-         O6FSsZL5LpnN3TihyjvB5S0s3dnYShOd4bWtKX7O65OT7pbg3b2/Gk0NB+qX7HIv4Jmr
-         bHKg==
+        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1745518203; x=1746123003; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+UKNt0lCLDr2VLT9kOvLTb2AuOQOpzIZeg4tCrvuwj0=;
+        b=bKZu2i/+MrIu2KWaD9cKAvnwOtvxeCXthuKHF+RSMnLrA28adNRkceF7FVKDQdVdOb
+         Nvq6c/Jj8r4Z19qC5Pwd3i793T8SUDrsgwkz5e/def9SNCHPVg8SYZ/nlELW5/MxEspu
+         3fkd6+cWdFheKMYW0CgmG5pGFUhTOq8OacB+G/Fubs4yQGoQoLNEiYqTUzGTeokFEQd5
+         o/G3Qe0xBpy2OFfQtwTjMjZfVpJgERu7ftw5jiMl+1hFlOiK+BFkFdUYxKr+kHfXTMN9
+         aP9osERILIZ6wsDW+OtIUr30RDevAJkzjjvHS0+p9M9XRYNWLF4ncQkUdhN2Pc/3Bius
+         9adQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745517843; x=1746122643;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20230601; t=1745518203; x=1746123003;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=R+2ifGTP7Zuk1f3PGxpKoh8D1eRLE/ZHAefBGZIpiLo=;
-        b=YLvfgxv0dcEey52xgxNh4u7cvitCmwB7mXKi8PwvJXwJvbZEC7IGmReNI2kkepvkBi
-         bYMr2m38pDzNONahK4SCUtUpyoZT/WGCajkIuRle+VpCJAppY8LS3pf/Kx/0M9FPcp0n
-         MlmPYAuiO4uAdHjI4MJfhE12uC+P4iRf/iapJAk5qIO8vzxyUed0gK/2u9YGEiUye/4I
-         nhUbfNMA1TdkzubBRA3MTJ/vtLWfupmr0X4PtV8SI3AWxR2h0k4DxRXSZRhkHCAM2D5V
-         vz+qXh0uWHBeojWZh5uroq7LfcgiWLNbBpL9jSs4pQekZV5IVPjqAWNbT7IrITNv+6z+
-         jEKg==
-X-Forwarded-Encrypted: i=1; AJvYcCXy1N6+Yb4pqVy0i5clIclIB+2NvtOqC2mEfCpG0yWjEnD/2KPzAf0b/1VDbUKESk03BQsvvxt53cc8GIZjl/w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJCAE64BDYTxAhvHDvdDuHfHeQMDTupZvxtoSgfNisPJmyKC2E
-	nIdzclME2tryEf627Gta8hn2H6Z2oTjDOhWNKDawCCDf0Irl2Oa/HJ0tOt7tAy8=
-X-Gm-Gg: ASbGnctkmISDEPCp8jgLxeAmX08ccdOMMA3Bc/L5aU+/AyIpbgQ/tH3Jsxdk27dxoHy
-	lXbWHstLPSMKSiSzfe8aKDBrTqmTrSR1pHo+fLro8M0kuex02V9u6IuoKHKyutdhgVNdD4NuZcl
-	pi/BoW5QL8SXyfZc/c0aCELG1bYK/j3PQPmmVGVFJDHfve9hawSJz6jkkUkfkurCeofzyYx+V/q
-	m8g7u6oZEVrcVzmNsPqyrh1c58zMbJzowwhz6EnWUlrJr2/81d99EXKrvybmmkdo4pwLHNxeq18
-	tG0MYDzx2s7fWbyQt3M+uI4w4KFf+aoOmCEWGxAxcHAPh2dM3TdUw7k9atbx4w==
-X-Google-Smtp-Source: AGHT+IEwApZFffChVQ3IgP8GwvBv+BNm7qJFv/s7tyP4mivow/7aAesEdu2H5hIh83xgouvcI3whKA==
-X-Received: by 2002:a17:902:cec8:b0:21f:4c8b:c514 with SMTP id d9443c01a7336-22dbd46edccmr5459035ad.45.1745517843026;
-        Thu, 24 Apr 2025 11:04:03 -0700 (PDT)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b15f7ec0bb2sm1513897a12.18.2025.04.24.11.04.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Apr 2025 11:04:02 -0700 (PDT)
-Date: Thu, 24 Apr 2025 11:03:59 -0700
-From: Deepak Gupta <debug@rivosinc.com>
-To: Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@ventanamicro.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Christian Brauner <brauner@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	alistair.francis@wdc.com, richard.henderson@linaro.org,
-	jim.shu@sifive.com, andybnac@gmail.com, kito.cheng@sifive.com,
-	charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com,
-	cleger@rivosinc.com, alexghiti@rivosinc.com,
-	samitolvanen@google.com, broonie@kernel.org,
-	rick.p.edgecombe@intel.com, Zong Li <zong.li@sifive.com>,
-	linux-riscv <linux-riscv-bounces@lists.infradead.org>
-Subject: Re: [PATCH v12 05/28] riscv: usercfi state for task and save/restore
- of CSR_SSP on trap entry/exit
-Message-ID: <aAp9D7txw8y9WL5m@debug.ba.rivosinc.com>
-References: <20250314-v5_user_cfi_series-v12-0-e51202b53138@rivosinc.com>
- <20250314-v5_user_cfi_series-v12-5-e51202b53138@rivosinc.com>
- <D92WQWAUQYY4.2ED8JAFBDHGRN@ventanamicro.com>
- <aAmEnK0vSgZZOORL@debug.ba.rivosinc.com>
- <D9EV1K8ZQQJR.20CRTYLQBN9UE@ventanamicro.com>
+        bh=+UKNt0lCLDr2VLT9kOvLTb2AuOQOpzIZeg4tCrvuwj0=;
+        b=w4WSFmP29ELAHZVkoXdEqvmFrWg+rxW/ElwrSn5xqLek1/SD4WLbsrK6CozcO/UEX+
+         7O7OcZffAnsFYoJVy6KP7tFs5SK3w47POyq5yWTIkDhhdOkgnxZKjiD+kGP5Na88NfFA
+         dJWrZ2w0VlJ1l5LS2Gz3477ocZne1bsTTLqCv2O7uKPn3P7PJZFx/V6J+yF/VQODTGmO
+         dGs46kWEexQVgAatLtCbS17vDyUtrWh5Oj2RyYIJp2m1FgGLTMDX74GYJQyqxbdcH+1R
+         Bg48piahtNgM9dQEUWiU0niJR3xNXyTHK44c9wtfL7tvOJ50xaiq0zgAbaQLsRBwWLqL
+         VEoQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWlwRAfvXdwjjbc6II8HxSVuUoNvMgZnhdxH8tCtGH91lmYwqehu42SEPCgdBG/pzVzRvgWQ/q53I0uoTktCwk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyDVqtuBE7I1HkFMsS+Ubt/Cq3WAMldyDqWioFqz/XsfckkCnzB
+	x7PDXXCtwQpMzgMHnfZz3EbCWRPuvsjxlyIf0iLmMdFhAhurV78lxv9th84ZcSU=
+X-Gm-Gg: ASbGnctIyHrTfkaII/yIrJvZ8gWbXXWh08cBYPMvI7uj+b0I44mJmQg/1oMvRvsIBae
+	u4IoJuL9kqViIkEHeTkbhwmMD3XiFY75klFK2LsPi3xYFV4yCahZhOGJcTmRnWZrN7s7DFvvhtc
+	vNYy0JpkdY/zVcgxAsW5bbOkO0yeNhAKCYhLufA0D/h9LjpUVjt1iBtvyibid1j9eb8sNAVt0pr
+	NXsWTARf2iNoPpc88EPod1sp7E+CC5ZeFT9qMfXT1TvbYUAEsci4a+9xaOcbusmo3s2PlrpvRKX
+	zM88VOjv7f0po38r9gmnnJ235CSZ29AiPQMqJqOlkG9WkqE2qFf89+C6Ycut/2leXzFBWG7JycJ
+	NqKIGAtadoT/n21RLyw0=
+X-Google-Smtp-Source: AGHT+IHnCaTt/PjXgficrL39pGhcE2L6yyJvkQieKK32vsywiH1L2LBk23RuW6NeWGc4L/G8Ur3ipA==
+X-Received: by 2002:a17:902:d50e:b0:22c:33b2:e420 with SMTP id d9443c01a7336-22dbd401ed7mr5490555ad.7.1745518202886;
+        Thu, 24 Apr 2025 11:10:02 -0700 (PDT)
+Received: from ?IPV6:2a03:83e0:1156:1:1cf1:8569:9916:d71f? ([2620:10d:c090:500::6:c802])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22db50e751dsm16782485ad.142.2025.04.24.11.10.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Apr 2025 11:10:02 -0700 (PDT)
+Message-ID: <6d9d6ad1-71cc-47f2-b7a8-d61f5ecdfa55@davidwei.uk>
+Date: Thu, 24 Apr 2025 11:09:59 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <D9EV1K8ZQQJR.20CRTYLQBN9UE@ventanamicro.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] selftests: iou-zcrx: Get the page size at runtime
+To: Simon Horman <horms@kernel.org>, Haiyue Wang <haiyuewa@163.com>
+Cc: io-uring@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+ "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>
+References: <20250419141044.10304-1-haiyuewa@163.com>
+ <20250424135559.GG3042781@horms.kernel.org>
+Content-Language: en-GB
+From: David Wei <dw@davidwei.uk>
+In-Reply-To: <20250424135559.GG3042781@horms.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Apr 24, 2025 at 02:16:32PM +0200, Radim Krčmář wrote:
->2025-04-23T17:23:56-07:00, Deepak Gupta <debug@rivosinc.com>:
->> On Thu, Apr 10, 2025 at 01:04:39PM +0200, Radim Krčmář wrote:
->>>2025-03-14T14:39:24-07:00, Deepak Gupta <debug@rivosinc.com>:
->>>> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
->>>> @@ -147,6 +147,20 @@ SYM_CODE_START(handle_exception)
->>>>
->>>>  	REG_L s0, TASK_TI_USER_SP(tp)
->>>>  	csrrc s1, CSR_STATUS, t0
->>>> +	/*
->>>> +	 * If previous mode was U, capture shadow stack pointer and save it away
->>>> +	 * Zero CSR_SSP at the same time for sanitization.
->>>> +	 */
->>>> +	ALTERNATIVE("nop; nop; nop; nop",
->>>> +				__stringify(			\
->>>> +				andi s2, s1, SR_SPP;	\
->>>> +				bnez s2, skip_ssp_save;	\
->>>> +				csrrw s2, CSR_SSP, x0;	\
->>>> +				REG_S s2, TASK_TI_USER_SSP(tp); \
->>>> +				skip_ssp_save:),
->>>> +				0,
->>>> +				RISCV_ISA_EXT_ZICFISS,
->>>> +				CONFIG_RISCV_USER_CFI)
->>>
->>>(I'd prefer this closer to the user_sp and kernel_sp swap, it's breaking
->>> the flow here.  We also already know if we've returned from userspace
->>> or not even without SR_SPP, but reusing the information might tangle
->>> the logic.)
+On 2025-04-24 06:55, Simon Horman wrote:
+> On Sat, Apr 19, 2025 at 10:10:15PM +0800, Haiyue Wang wrote:
+>> Use the API `sysconf()` to query page size at runtime, instead of using
+>> hard code number 4096.
 >>
->> If CSR_SCRATCH was 0, then we would be coming from kernel else flow goes
->> to `.Lsave_context`. If we were coming from kernel mode, then eventually
->> flow merges to `.Lsave_context`.
+>> And use `posix_memalign` to allocate the page size aligned momory.
 >>
->> So we will be saving CSR_SSP on all kernel -- > kernel trap handling. That
->> would be unnecessary. IIRC, this was one of the first review comments in
->> early RFC series of these patch series (to not touch CSR_SSP un-necessarily)
->>
->> We can avoid that by ensuring when we branch by determining if we are coming
->> from user to something like `.Lsave_ssp` which eventually merges into
->> ".Lsave_context". And if we were coming from kernel then we would branch to
->> `.Lsave_context` and thus skipping ssp save logic. But # of branches it
->> introduces in early exception handling is equivalent to what current patches
->> do. So I don't see any value in doing that.
->>
->> Let me know if I am missing something.
->
->Right, it's hard to avoid the extra branches.
->
->I think we could modify the entry point (STVEC), so we start at
->different paths based on kernel/userspace trap and only jump once to the
->common code, like:
->
->  SYM_CODE_START(handle_exception_kernel)
->    /* kernel setup magic */
->    j handle_exception_common
->  SYM_CODE_START(handle_exception_user)
->    /* userspace setup magic */
->  handle_exception_common:
+>> Signed-off-by: Haiyue Wang <haiyuewa@163.com>
+> 
+> Reviewed-by: Simon Horman <horms@kernel.org>
+> 
 
-Hmm... This can be done. But then it would require to constantly modify `stvec`
-When you're going back to user mode, you would have to write `stvec` with addr
-of `handle_exception_user`. But then you can easily get a NMI. It can become
-ugly. Needs much more thought and on first glance feels error prone.
-
-Only if we have an extension that allows different trap address depending on
-mode you're coming from (arm does that, right?, I think x86 FRED also does
-that)
->
->This is not a suggestion for this series.  I would be perfectly happy
->with just a cleaner code.
->
->Would it be possible to hide the ALTERNATIVE ugliness behind a macro and
->move it outside the code block that saves pt_regs?
-
-Sure, I'll do something about it.
-
->
->Thanks.
+Thanks Simon. I'll apply the patch and run the selftest to make sure it
+still works.
 
