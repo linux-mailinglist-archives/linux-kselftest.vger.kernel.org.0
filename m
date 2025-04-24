@@ -1,198 +1,171 @@
-Return-Path: <linux-kselftest+bounces-31567-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31568-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48B91A9B1FC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Apr 2025 17:21:00 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74B79A9B294
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Apr 2025 17:39:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 414631B82968
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Apr 2025 15:21:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A8DAA7AC2B2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Apr 2025 15:38:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C38161A08AB;
-	Thu, 24 Apr 2025 15:20:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6946214A91;
+	Thu, 24 Apr 2025 15:39:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VlnM7Wlz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="heD40srs"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1600A14F9EB
-	for <linux-kselftest@vger.kernel.org>; Thu, 24 Apr 2025 15:20:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6E9A1AA1E8;
+	Thu, 24 Apr 2025 15:39:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745508054; cv=none; b=YI2ZDhgBSAzR1h1FbjhW9ki67YqcUBLok5+LbD+2yf1YM9Wx59SScjp8wgTkjiYlb6YDekulGrllbqhYeYcoRze7vpSsS0Iwf+TU97aTCMZBPTdCBs3/zsnpqgiU8tdQJI4Hb2FlM5KKhn20dBHoMl3PBcuDoVDQpu0bJW1gayE=
+	t=1745509157; cv=none; b=hkKXMSaI8HeW6e+ez2patunV6TOqpxnWQcStGVcoyt92DPnYR+V/AIcDlXRCk3vPT2He3iBXJuCpyiFCPoPbXwIX5RM1GcbC7JpCf5hJl7V1ms7UPtqWvHI6X/zfRR0s7XvSqisDI5wW6iMctwicOxllEXFChjuZTEMu2YFvPeI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745508054; c=relaxed/simple;
-	bh=o6IK09c4Ywjv0/K5FM6lhQcUclr6B0LXuhh55N0ppXE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=I6q8yzhOXO0jBXP2zvRtjTrL4BNTA14SMHKsTynrG4LddO1CiQf3gOVT/eXP1kPXKD2sxXR11bIVAK98MZGORDuhDT03EJdzGbCvCtWYiQgKKuVyUk3LV539euetkRPMPETcXgYGzHomNq9Af/BqpPzzM+WPANEfvkvJcdLnloQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VlnM7Wlz; arc=none smtp.client-ip=209.85.160.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-47e9fea29easo376091cf.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Apr 2025 08:20:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1745508052; x=1746112852; darn=vger.kernel.org;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZNHK302YZFUT1cxr0jtljW49RgNj4+xwWJVeU3dUkCI=;
-        b=VlnM7WlzuWW4qvjbaNrRuVK75rEA8b0UXnZ6PRw8bgggKgBDSean2Gejtq64kzOoU8
-         sCPAzM/rUObxxnjb+X7TTH2Tp+woidWKZ3hgHBN9iUAszbwyZ/NDvbtPU1XqBhcIZ/bE
-         4Uqg1r5AHzEd0kgHqj4cPR9+vVnlfJdaf2wZCFBTNVFTfK0PZy+36y1lg8ewZhgnGdhN
-         NZt2ovlWMC544VgEX4FwUcwqtTq45E2bySv4k/HZJwf19Up2hIOemNDUsmdX+hlkiexa
-         62FqVS0WpFEoRnfJw6iQSbrp88Qv09W8jCGc+xT8m6TDNy+v5kRHR9Fdgi3xeMD9vSy0
-         DvfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745508052; x=1746112852;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZNHK302YZFUT1cxr0jtljW49RgNj4+xwWJVeU3dUkCI=;
-        b=cTyiz7MMFv0aBEFDPaYk7umnGcoOyQHL+EqfnkyZG5+bfIheOgi+/Qg4u9uM26Or2+
-         HwMZObNUfqM2IGMiyd1ZBgMPPfYeHETI1YMwZMBX8vw0XJj4h2l1jvWJWrjp29RQjEPg
-         96c3n9nkW/U9q8y/uIkcERh5UfNF9tHrMbdu5JV3N+URQ3kypiHiqPMkQBRzlfXCiye8
-         LwWSu4Ta+nV4OyG6jbz85rvRlZ+0NSht3EbA6DzrFIxv1sZ3NLjr9cNjGkmfvKUyn8S7
-         6Yd3DbVP1LS+I7PZOFb6xJHCy2aBXvWuwXGock5roaZ1He4QUQdmVTQPzg63lQ4jaOwO
-         gL2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVktJEPJcK3CvKmiv3EHm5rALUKpWZw1CHGMOU+fKU8k4vZ8Yt61xOqZsDeyUIpmavcmUxdLTG4dTDaB8wBxU0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzoWujswex/TVN25KSk60S5FNNV37cv+uKwgbHKkZJVlZojvEmF
-	Ln6Q6/NEvWFgcB188N/q7wzDqIqXXb5dKJ/D5ULoACkTs8DzjRmwAMlrP3ETGNW8gM8Y4UwqYNc
-	lR7uWOvWqnuHzbgQXm6XRBqf3n/dv1cJY+1x9
-X-Gm-Gg: ASbGncvo+Zco4KgNBA1JJZyQkpJkpqTekzrZa55QgA6hD/40K/a1Y/lMGifsRH7rl2V
-	b23m9xeFHbjicCz4pYrQH9bemyvBKYaMRpOx/jVo1Ga0SaWSkohJsDkMmt4rm+PoSAodha7F1SV
-	eIiNCZcKci+LH8Sz8haG7anuX5HwO3F7gXKq8ox4+tLSVCV4S7U5zL
-X-Google-Smtp-Source: AGHT+IEJ5MqCyYAZ5GwHFLcMlAiX+rZznU8L6WqiKzfk2t5zO6ifbX/QQVtO0BzE3KXJcP5VhQWuQTTPs/LiXap8uVE=
-X-Received: by 2002:a05:622a:5792:b0:476:f1a6:d8e8 with SMTP id
- d75a77b69052e-47ea474f9d3mr4291421cf.11.1745508051546; Thu, 24 Apr 2025
- 08:20:51 -0700 (PDT)
+	s=arc-20240116; t=1745509157; c=relaxed/simple;
+	bh=bG/8KkN6g08cy15bXp7SU/ACSW5hKRw9IHiEHmSO58w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YAlyjtTExOyvF/ocRuTvCEP57hI82s9B6Rojb6wglVUwOqPmw6g7BP7MINrytjBIi16MfKJ9FhrebUVj+Vy/6IkCc1yObl3iqfW5ftKbELCU6d7AOTPvHR8rTgMci2VJN0JK8szMxOtanfGf3elBvB+vsoHSmhuRF0OlbyCb2g8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=heD40srs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03722C4CEEC;
+	Thu, 24 Apr 2025 15:39:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745509157;
+	bh=bG/8KkN6g08cy15bXp7SU/ACSW5hKRw9IHiEHmSO58w=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=heD40srsNULa7S6ZUDtl7iM2UnAy9jC0BmBCAdtwpwi1GuLS0RMUOCjOGviqqkxvG
+	 Dz81/PJ0XPdH9IFjNF9Oobg2UlMPSfcvJcz7gGJadUx4unyVFeJC2aZvEbTifyPrvI
+	 Dc8tEjq+SlRvuekHUYJT4+JGEa+92Fz52mjnF3uvsDpyYhLupZqPuRkkNcKasCmZzi
+	 dr7Ye1TB49rULcVUdYKjypzUn1gkyikwGZw+n8y+tuz1dDBsgifvwLRvlKIiz4r74u
+	 QeJ1MaCtSjggBz73l7X82W0zdMjPRNPX5D7mBECj5bfeARxOQCiEpnVgF6chy97eHS
+	 GUJD11dpRlaMw==
+Message-ID: <783dacd8-6782-484a-8934-f4a5d20eeddb@kernel.org>
+Date: Thu, 24 Apr 2025 17:39:10 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250418174959.1431962-1-surenb@google.com> <20250418174959.1431962-8-surenb@google.com>
- <CAEf4BzYuA3ZRCwPsAxhQZDOOpjSTrphKEsgPAqgRP8Ly7+fTWw@mail.gmail.com>
- <CAJuCfpE_jJ0Xq5T0HcLpquRzO+NdvN3T3_JXEwSjt2NG9Ryy5g@mail.gmail.com>
- <CAEf4BzYctDuS4DRTzdRQyyhCYvFTggOz=wcbizXEYvC_z_SSng@mail.gmail.com> <6ay37xorr35nw4ljtptnfqchuaozu73ffvjpmwopat42n4t6vr@qnr6xvralx2o>
-In-Reply-To: <6ay37xorr35nw4ljtptnfqchuaozu73ffvjpmwopat42n4t6vr@qnr6xvralx2o>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Thu, 24 Apr 2025 08:20:40 -0700
-X-Gm-Features: ATxdqUFhUQugR6vvry0z8YMCa5qp4tuc1EH-U_8QzRi08SiVqS2WqPXZHYhgyGc
-Message-ID: <CAJuCfpGc-23xpEYZQQevkzx+iN3AAqXXzbyqJAQjd4TQP9j9Dg@mail.gmail.com>
-Subject: Re: [PATCH v3 7/8] mm/maps: read proc/pid/maps under RCU
-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>, Andrii Nakryiko <andrii.nakryiko@gmail.com>, 
-	Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org, lorenzo.stoakes@oracle.com, 
-	david@redhat.com, vbabka@suse.cz, peterx@redhat.com, jannh@google.com, 
-	hannes@cmpxchg.org, mhocko@kernel.org, paulmck@kernel.org, shuah@kernel.org, 
-	adobriyan@gmail.com, brauner@kernel.org, josef@toxicpanda.com, 
-	yebin10@huawei.com, linux@weissschuh.net, willy@infradead.org, 
-	osalvador@suse.de, andrii@kernel.org, ryan.roberts@arm.com, 
-	christophe.leroy@csgroup.eu, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2] bpf: Allow XDP dev-bound programs to perform
+ XDP_REDIRECT into maps
+To: Lorenzo Bianconi <lorenzo@kernel.org>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20250423-xdp-prog-bound-fix-v2-1-51742a5dfbce@kernel.org>
+Content-Language: en-US
+From: Jesper Dangaard Brouer <hawk@kernel.org>
+In-Reply-To: <20250423-xdp-prog-bound-fix-v2-1-51742a5dfbce@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Apr 23, 2025 at 5:24=E2=80=AFPM Liam R. Howlett <Liam.Howlett@oracl=
-e.com> wrote:
->
-> * Andrii Nakryiko <andrii.nakryiko@gmail.com> [250423 18:06]:
-> > On Wed, Apr 23, 2025 at 2:49=E2=80=AFPM Suren Baghdasaryan <surenb@goog=
-le.com> wrote:
-> > >
-> > > On Tue, Apr 22, 2025 at 3:49=E2=80=AFPM Andrii Nakryiko
-> > > <andrii.nakryiko@gmail.com> wrote:
-> > > >
-> > > > On Fri, Apr 18, 2025 at 10:50=E2=80=AFAM Suren Baghdasaryan <surenb=
-@google.com> wrote:
-> > > > >
-> > > > > With maple_tree supporting vma tree traversal under RCU and vma a=
-nd
-> > > > > its important members being RCU-safe, /proc/pid/maps can be read =
-under
-> > > > > RCU and without the need to read-lock mmap_lock. However vma cont=
-ent
-> > > > > can change from under us, therefore we make a copy of the vma and=
- we
-> > > > > pin pointer fields used when generating the output (currently onl=
-y
-> > > > > vm_file and anon_name). Afterwards we check for concurrent addres=
-s
-> > > > > space modifications, wait for them to end and retry. While we tak=
-e
-> > > > > the mmap_lock for reading during such contention, we do that mome=
-ntarily
-> > > > > only to record new mm_wr_seq counter. This change is designed to =
-reduce
-> > > >
-> > > > This is probably a stupid question, but why do we need to take a lo=
-ck
-> > > > just to record this counter? uprobes get away without taking mmap_l=
-ock
-> > > > even for reads, and still record this seq counter. And then detect
-> > > > whether there were any modifications in between. Why does this chan=
-ge
-> > > > need more heavy-weight mmap_read_lock to do speculative reads?
-> > >
-> > > Not a stupid question. mmap_read_lock() is used to wait for the write=
-r
-> > > to finish what it's doing and then we continue by recording a new
-> > > sequence counter value and call mmap_read_unlock. This is what
-> > > get_vma_snapshot() does. But your question made me realize that we ca=
-n
-> > > optimize m_start() further by not taking mmap_read_lock at all.
-> > > Instead of taking mmap_read_lock then doing drop_mmap_lock() we can
-> > > try mmap_lock_speculate_try_begin() and only if it fails do the same
-> > > dance we do in the get_vma_snapshot(). I think that should work.
-> >
-> > Ok, yeah, it would be great to avoid taking a lock in a common case!
->
-> We can check this counter once per 4k block and maintain the same
-> 'tearing' that exists today instead of per-vma.  Not that anyone said
-> they had an issue with changing it, but since we're on this road anyways
-> I'd thought I'd point out where we could end up.
 
-We would need to run that check on the last call to show_map() right
-before seq_file detects the overflow and flushes the page. On
-contention we will also be throwing away more prepared data (up to a
-page worth of records) vs only the last record. All in all I'm not
-convinced this is worth doing unless increased chances of data tearing
-is identified as a problem.
 
->
-> I am concerned about live locking in either scenario, but I haven't
-> looked too deep into this pattern.
->
-> I also don't love (as usual) the lack of ensured forward progress.
+On 23/04/2025 19.44, Lorenzo Bianconi wrote:
+> In the current implementation if the program is dev-bound to a specific
+> device, it will not be possible to perform XDP_REDIRECT into a DEVMAP
+> or CPUMAP even if the program is running in the driver NAPI context and
+> it is not attached to any map entry. This seems in contrast with the
+> explanation available in bpf_prog_map_compatible routine.
+> Fix the issue introducing __bpf_prog_map_compatible utility routine in
+> order to avoid bpf_prog_is_dev_bound() check running bpf_check_tail_call()
+> at program load time (bpf_prog_select_runtime()).
+> Continue forbidding to attach a dev-bound program to XDP maps
+> (BPF_MAP_TYPE_PROG_ARRAY, BPF_MAP_TYPE_DEVMAP and BPF_MAP_TYPE_CPUMAP).
+> 
+> Fixes: 3d76a4d3d4e59 ("bpf: XDP metadata RX kfuncs")
+> Signed-off-by: Lorenzo Bianconi<lorenzo@kernel.org>
+> ---
+> Changes in v2:
+> - Introduce __bpf_prog_map_compatible() utility routine in order to skip
+>    bpf_prog_is_dev_bound check in bpf_check_tail_call()
+> - Extend xdp_metadata selftest
+> - Link to v1:https://lore.kernel.org/r/20250422-xdp-prog-bound-fix-v1-1-0b581fa186fe@kernel.org
+> ---
+>   kernel/bpf/core.c                                  | 27 +++++++++++++---------
+>   .../selftests/bpf/prog_tests/xdp_metadata.c        | 22 +++++++++++++++++-
+>   tools/testing/selftests/bpf/progs/xdp_metadata.c   | 13 +++++++++++
+>   3 files changed, 50 insertions(+), 12 deletions(-)
+> 
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index ba6b6118cf504041278d05417c4212d57be6fca0..a3e571688421196c3ceaed62b3b59b62a0258a8c 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -2358,8 +2358,8 @@ static unsigned int __bpf_prog_ret0_warn(const void *ctx,
+>   	return 0;
+>   }
+>   
+> -bool bpf_prog_map_compatible(struct bpf_map *map,
+> -			     const struct bpf_prog *fp)
+> +static bool __bpf_prog_map_compatible(struct bpf_map *map,
+> +				      const struct bpf_prog *fp)
+>   {
+>   	enum bpf_prog_type prog_type = resolve_prog_type(fp);
+>   	bool ret;
+> @@ -2368,14 +2368,6 @@ bool bpf_prog_map_compatible(struct bpf_map *map,
+>   	if (fp->kprobe_override)
+>   		return false;
+>   
+> -	/* XDP programs inserted into maps are not guaranteed to run on
+> -	 * a particular netdev (and can run outside driver context entirely
+> -	 * in the case of devmap and cpumap). Until device checks
+> -	 * are implemented, prohibit adding dev-bound programs to program maps.
+> -	 */
+> -	if (bpf_prog_is_dev_bound(aux))
+> -		return false;
+> -
+>   	spin_lock(&map->owner.lock);
+>   	if (!map->owner.type) {
+>   		/* There's no owner yet where we could check for
+> @@ -2409,6 +2401,19 @@ bool bpf_prog_map_compatible(struct bpf_map *map,
+>   	return ret;
+>   }
+>   
+> +bool bpf_prog_map_compatible(struct bpf_map *map, const struct bpf_prog *fp)
+> +{
+> +	/* XDP programs inserted into maps are not guaranteed to run on
+> +	 * a particular netdev (and can run outside driver context entirely
+> +	 * in the case of devmap and cpumap). Until device checks
+> +	 * are implemented, prohibit adding dev-bound programs to program maps.
+> +	 */
+> +	if (bpf_prog_is_dev_bound(fp->aux))
+> +		return false;
+> +
+> +	return __bpf_prog_map_compatible(map, fp);
+> +}
+> +
+>   static int bpf_check_tail_call(const struct bpf_prog *fp)
+>   {
+>   	struct bpf_prog_aux *aux = fp->aux;
+> @@ -2421,7 +2426,7 @@ static int bpf_check_tail_call(const struct bpf_prog *fp)
+>   		if (!map_type_contains_progs(map))
+>   			continue;
+>   
+> -		if (!bpf_prog_map_compatible(map, fp)) {
+> +		if (!__bpf_prog_map_compatible(map, fp)) {
+>   			ret = -EINVAL;
+>   			goto out;
+>   		}
 
-Hmm. Maybe we should add a retry limit on
-mmap_lock_speculate_try_begin() and once the limit is hit we just take
-the mmap_read_lock and proceed with it? That would prevent a
-hyperactive writer from blocking the reader's forward progress
-indefinitely.
+Does this change allow us to have a dev_bound BPF-prog that have
+tail-call BPF-progs that are not dev_bound?
 
->
-> It seems like we have four cases for the vm area state now:
-> 1. we want to read a stable vma or set of vmas (per-vma locking)
-> 2. we want to read a stable mm state for reading (the very short named
-> mmap_lock_speculate_try_begin)
+The use-case is a dev_bound BPF-prog that reads e.g. HW vlan, store this 
+in data_meta (or a per CPU array), and then tail-calls another BPF-prog 
+that reads the data stored (from data_meta area). Maybe this is already 
+supported before?
 
-and we don't mind retrying on contention. This one should be done
-under RCU protection.
-
-> 3. we ensure a stable vma/mm state for reading (mmap read lock)
-> 4. we are writing - get out of my way (mmap write lock).
-
-I wouldn't call #2 a vma state. More of a usecase when we want to read
-vma under RCU (valid but can change from under us) and then retry if
-it might have been modified from under us.
-
->
-> Cheers,
-> Liam
->
+--Jesper
 
