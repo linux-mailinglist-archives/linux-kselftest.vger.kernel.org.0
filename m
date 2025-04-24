@@ -1,139 +1,174 @@
-Return-Path: <linux-kselftest+bounces-31616-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31617-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27FCCA9BB5D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Apr 2025 01:34:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE304A9BB6B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Apr 2025 01:42:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D00C4668CB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Apr 2025 23:34:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D3431921D92
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Apr 2025 23:41:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F9A828DF14;
-	Thu, 24 Apr 2025 23:34:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1F3628F53D;
+	Thu, 24 Apr 2025 23:41:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="VJQg784L"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YrZcRxo2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55F1928D850
-	for <linux-kselftest@vger.kernel.org>; Thu, 24 Apr 2025 23:34:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCBD228D850;
+	Thu, 24 Apr 2025 23:41:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745537645; cv=none; b=QMHmCTrqf/7tAXcsmeibWEK4McUomsFdqo96zHp0aKTdHl+9RAcEFuBFEdbHsrNKaXvEXOq6w4SkNvRkXPobYCRiNToqanjzP+/qJZu7RWgbsWNwWOWuz1fChW3Is9CVHPg8HJ1Oh+m4kaaPQELEJ4gPnhbQ+at/VCn6atjwsLw=
+	t=1745538117; cv=none; b=AoOuz8vgA1DIqgT5gjM/SFbI6cU79TQFOmYBopY43wqTCNBGVlcnVWLx5uQk47QwraVoaBtW83sBn5loZGgUsaShm1zinWutUdG+Lh3LwGd9jJCDDHTS1YlzuZeOjAlC6HmCmX5WuPmZsRudoziYD2Bp3pnDW8sFrKdhgS7vCvk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745537645; c=relaxed/simple;
-	bh=645Cr+11HOu7caSwajQ+fcQB6zjlFuO0uiN9ygi8GPk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=vBkdBtzNMF2Xs7AYtWwWqHDgK4oP9WYnWbDsZDxkBeS5MmgKnnUP9XFt2VipB1ARoOlechu1/nBqjuaCT4Z6MQoVWHRI0lx+/YkosI+nUmFyW+fzw6WxZ9UOgDh6GrbESaHoiy3FfBsFS7WxrQLGK1608Y0myav0w2f3sWWvRxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=VJQg784L; arc=none smtp.client-ip=209.85.166.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
-Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-3d91db4f0c3so8065655ab.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Apr 2025 16:34:02 -0700 (PDT)
+	s=arc-20240116; t=1745538117; c=relaxed/simple;
+	bh=RPTxBkbH9A8ifRnn+WjYkSgINVnGKcdTM3iQNtEfaRI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CtafjfOKS6jqbUfJxqHv0V1hSQSusdBI29N/JPmLw3rMF8FvaG/MMMlTFQ6/mMWyniIbRpflMx1rf7G2toWNeY8oBKbeQUIFXrzPYqn6ssaif8uFvarTOEpD/KwvEmHoF0YscRRL4XvxXRutyKRgz7BMUD4xt0ui7vJ1HyaHUA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YrZcRxo2; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-391342fc0b5so1267498f8f.3;
+        Thu, 24 Apr 2025 16:41:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1745537642; x=1746142442; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WLSPdguY12OklzlGtECMN7dzaPzmkE8I+rLCggfy6Pw=;
-        b=VJQg784LwPvzSfk4RcvtWjEXtz7PsyfeuKnNwEFjAANomevFvAip50wjfwzwV4T5BT
-         EY9Escy0m/vi6R+qtvJVLStwzNTyJwcGd3jsXJAnooA0ajSlxBJBPjYlmutbKdDKpVrs
-         91Cci7pTUpqo62C2lHvEU14tflDqRycAun4ic3e1AqU26Gl9IikGISAdfWO3yqDGh8EU
-         EFYQESwQhK1hmQ5zprujmS3iAWF97U1ap2JZ+JBfo2TKoB6U28O6jFMCbPUMfjqOYwjv
-         16cpU1MFsGNR1ZPelJjXaSBK/ueMS8wK9yJBOwoY4thCC/d57KWV+kIfyqT7Gq5GaIGD
-         GCuw==
+        d=gmail.com; s=20230601; t=1745538114; x=1746142914; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=++aXbzVblpKG8Wdpinq9Se3gJFCNKU+xCUDkz1Ba3PQ=;
+        b=YrZcRxo2yB5/e7W5vTJ4kJkDpC4kSD56+bgi2oGF1CGJf04Q6gsIRXLmj/29BiN02A
+         t8SbRu5MhAjhowvTIooH74ZPwqxGIqz94lCJo3aQUNLLazfqoqRcuoOIf/trSCmgmn8n
+         Q8eRVoP26qrnJAAvpjkOLLqNKexaRmbPkIPqhsLL8lpzynsQV1xFDj89snGZS/L773tb
+         rtBPTJ40PLRlP7GNMTodT9NrQgJv1OMIOjjzKjWdkOcVoUYjR7Mfy/sfj4VGV6GPua/S
+         c+9wO4BX96gcfVLXxdNEwQ54wBoFWZ7hlacsm0JhNh6v/3wpiv5RrrtAGcYKzxQslWSe
+         R6Ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745537642; x=1746142442;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WLSPdguY12OklzlGtECMN7dzaPzmkE8I+rLCggfy6Pw=;
-        b=smGMhdHhVTTfAE4NdNCzF3LTgAEqHLncj9Eqpjn+4SydHb/ibWu60utzvxH80+vk7h
-         MvLqSk063Sr0RL/hL8sSSgok5EtXn59HPMfDQPPeB4I1W9fvJ+6J86dT7sO6tCJIYKyb
-         uJv6QS2O5aETulG+AABfFUfr2R3TgiU1M7+5cX/mV+XS2If1S44QwO7pWuP3kef6VVSt
-         EEhdeYcXzNe0rO6b/qAODycyT4Gt5eFMjnF0THB4/JHjsx/ID6taQVYQb8+lxGLOzcRD
-         9tk9uhzNM5sySvXH0YpCY7mdTTkgMTXCWoYShJHvJZT/XMgy9OifAYQHRMRk1wajD4Sa
-         eBaQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWTeOWnpqghUjGuUmNMwYn9oOG5fhv3Z43hC7hE/UPcwKB7cB2OSA6STSPCpmNNpikHboonaIcPzvqUwVed4WU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YznBTdrH2Sr0e+JzkoCp+DjfrwgOdvv2+SbcBUrR6rdA5ZnNAxk
-	iZVZROGU+hj5ODTYVpi7iOgJYboI/ik6cJP2/XKoSa9UAijWa8kXh6lgOZixz7k=
-X-Gm-Gg: ASbGncuaTIRXWZL5v789Y+Wdv7xtr1q+CynuaNVW69kZYV+tAZRM00csHL39IN45sh+
-	XaioffXvrxbNWRabH4yw0ShK2XgzL5FRrhPPpxpuc1DAUilGjYcj71xXqALbNSvbLwW0j81XSTm
-	Lv2jtsmSioht2aPQ5BjNPMw7hcQr3Rb32mhNMuEdFyYQgZqMP7C1q+PzxXxoLBiWaYrpzH65s61
-	Lh0zc+9rETgYRro742XnIUaEqD8/XB/lFhUEexan4GwDZJnyzEUNGHsqW+DKYWDQnDECVLvkdTT
-	1habGgsiqBJyYVrLWLzolJktzgu6Smm+okkdfQ==
-X-Google-Smtp-Source: AGHT+IHaXi2Gk8r4y/6xRxbhajXXa7YziQlK1Lp6d2KP4QYQkmwMHqQavhWqFld8XuKb8/iluMFHUQ==
-X-Received: by 2002:a05:6e02:b24:b0:3d8:1a41:69a9 with SMTP id e9e14a558f8ab-3d93b453d9cmr2642865ab.12.1745537641971;
-        Thu, 24 Apr 2025 16:34:01 -0700 (PDT)
-Received: from [192.168.1.150] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f824a3ba4fsm495331173.38.2025.04.24.16.34.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Apr 2025 16:34:01 -0700 (PDT)
-Message-ID: <46deb974-5e60-477e-8f0c-9eb358369d73@kernel.dk>
-Date: Thu, 24 Apr 2025 17:34:00 -0600
+        d=1e100.net; s=20230601; t=1745538114; x=1746142914;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=++aXbzVblpKG8Wdpinq9Se3gJFCNKU+xCUDkz1Ba3PQ=;
+        b=C5lBZ8V2RKPFsI3lb2V9DJldA4smG+XUKuZsM6ZBl2Tcor4shNJXWwusPGgsz01Rx6
+         MOCOWKK/J3tqnkaRfA5gthhK1YvGN6YO3JIlJhVree8lv/iMFOsTM5heFlyp1cGAEx55
+         kxzYxOgjOWjELuwjG6Yj66ZMelIjopATCSi+hM9qu66lTdh/XlszikznXbbGTPGP+p7D
+         ajis4niqDSO3jqTVjhakYIgQWUYyEqzh+bIBccOgPqhchkVZ86GodPt9Y/5BShCK1e9a
+         6YwaO47c7Q/Z5t1hG5i67cvY2k6BDMgcN9Xyc/O2LONbiNXE96oNqCH0CsiJQi7GKn2/
+         dW2A==
+X-Forwarded-Encrypted: i=1; AJvYcCU+Tz+7zNB07sH9FYfR7BG+UdycbtPY3uF7cr9vJucFiZGTAysEJ/G8qTLBv7Dd+GAjfTX5phMLMzs=@vger.kernel.org, AJvYcCUa0RgGiWHfvFbd8rSO3PEG8+V/vp+eqkQ7ibyLTN2BNWXs1+Fgal/alU+0+57kGylzzQi1uV/cAE9NAR9rs1ODyibG/bBZ@vger.kernel.org, AJvYcCVCGRHsJ7CVUF7MpsJjKTjwbPLXrAQJe2xNUN4O+APhTJbMA8iILmb7vGVDtQMmD0acUGGjpnlxTXjzt1ex0IUM@vger.kernel.org, AJvYcCWOVBxX3Nf1KUs3okt7dVZ/2v1hU/2pS4k+YwxGHnbZDgE6g2yNPDcUrfcdvaYXXvyBRWy7EokDH6c7Y5LK@vger.kernel.org, AJvYcCWWTMoRuSnF6YfKNaUmAUSxHOaBvdtbAxTU0iPpSayc7fOutEmb3ZPGtlPyp25psg2wqX4toCGOJ4E2@vger.kernel.org, AJvYcCWbsmlHtxHPhBZv+FVeTaqEg5ZIeqxplt2trOCCchfm8CaKvHVKdm2ydyUMb0NmDN8IdlAReod1B0s5Wlpr@vger.kernel.org, AJvYcCXGsEeqyndDxwRFpNnal61pEMmIYqxw45/qre3XZ7NUa4JfNUf7OkAg8c6JWGQH41oO1HSAxRj05qytjlYh@vger.kernel.org, AJvYcCXQpqE5JF0tpwKwzh/ZlZ4wPfdIN6sNjhtl7GnGiocIlduBrfvLxgXERoHcETGHnzzBzy0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJyBseOM+umWg9i+xinAjWKctveBmwXuwZUc+i07KFZ2wWxQ3w
+	3HKewaQ3MUK6mgoznXd5iQo11hANZonhRbvCSj2USt0qf+AcnrjWtjv7bQhHv69lhFEk+M3ApIK
+	H/lGOAIkqmdVARYxi5ODUIWX4uSA=
+X-Gm-Gg: ASbGncs8Tiqp3xwB+CXxc/R1YbTrKeQJm16RRyqAktY5fDOwVdDbcBzpbVeupUBjoP0
+	0nPi+jXVoYX76y49Nj/gpWZSQS9ttJVOtExgFySFDa8xCCRI11iNIWU/O6m8b6mNhZjEdAanAl8
+	wfEJQg5ZtB320W5kaRkdwYS4f7qvXiaFCohvUrjV7SauVir3Ta
+X-Google-Smtp-Source: AGHT+IHKHTPUeCJbp/2K9OpvypUGo3fHAzmM52oJ/sIEmUDEupOSZOiZupc2hYCRKYbQoWZlx5V2SSGQrb0bFiUjwSA=
+X-Received: by 2002:a05:6000:402c:b0:39e:f51d:9cf9 with SMTP id
+ ffacd0b85a97d-3a074f42e7amr28887f8f.48.1745538113966; Thu, 24 Apr 2025
+ 16:41:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] selftests: iou-zcrx: Get the page size at runtime
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: io-uring@vger.kernel.org, Haiyue Wang <haiyuewa@163.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
- David Wei <dw@davidwei.uk>, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250419141044.10304-1-haiyuewa@163.com>
- <174553616879.1018402.4580438030053211278.b4-ty@kernel.dk>
- <20250424162923.3a0bdfc4@kernel.org>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20250424162923.3a0bdfc4@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20250404215527.1563146-1-bboscaccy@linux.microsoft.com>
+ <20250404215527.1563146-2-bboscaccy@linux.microsoft.com> <CAADnVQJyNRZVLPj_nzegCyo+BzM1-whbnajotCXu+GW+5-=P6w@mail.gmail.com>
+ <87semdjxcp.fsf@microsoft.com> <CAADnVQ+JGfwRgsoe2=EHkXdTyQ8ycn0D9nh1k49am++4oXUPHg@mail.gmail.com>
+ <87friajmd5.fsf@microsoft.com> <CAADnVQKb3gPBFz+n+GoudxaTrugVegwMb8=kUfxOea5r2NNfUA@mail.gmail.com>
+ <87a58hjune.fsf@microsoft.com> <CAADnVQ+LMAnyT4yV5iuJ=vswgtUu97cHKnvysipc6o7HZfEbUA@mail.gmail.com>
+ <87y0w0hv2x.fsf@microsoft.com> <CAADnVQKF+B_YYwOCFsPBbrTBGKe4b22WVJFb8C0PHGmRAjbusQ@mail.gmail.com>
+ <2bd95ca78e836db0775da8237792e8448b8eec62.camel@HansenPartnership.com>
+In-Reply-To: <2bd95ca78e836db0775da8237792e8448b8eec62.camel@HansenPartnership.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 24 Apr 2025 16:41:42 -0700
+X-Gm-Features: ATxdqUH6sfn1n7O-XtBH84L_ffinqPSTcAgsLr1DgVXlhHPwzgkdSH_nw0dH5ao
+Message-ID: <CAADnVQJ6SRePz7yc5x3BAz7q-e8DVYq=vRdahxCZ4XzpWtnYpQ@mail.gmail.com>
+Subject: Re: [PATCH v2 security-next 1/4] security: Hornet LSM
+To: James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc: Blaise Boscaccy <bboscaccy@linux.microsoft.com>, Jonathan Corbet <corbet@lwn.net>, 
+	David Howells <dhowells@redhat.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	"David S. Miller" <davem@davemloft.net>, Paul Moore <paul@paul-moore.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Jarkko Sakkinen <jarkko@kernel.org>, 
+	Jan Stancek <jstancek@redhat.com>, Neal Gompa <neal@gompa.dev>, 
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	keyrings@vger.kernel.org, 
+	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, 
+	LSM List <linux-security-module@vger.kernel.org>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, nkapron@google.com, 
+	Matteo Croce <teknoraver@meta.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
+	Cong Wang <xiyou.wangcong@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 4/24/25 5:29 PM, Jakub Kicinski wrote:
-> On Thu, 24 Apr 2025 17:09:28 -0600 Jens Axboe wrote:
->> On Sat, 19 Apr 2025 22:10:15 +0800, Haiyue Wang wrote:
->>> Use the API `sysconf()` to query page size at runtime, instead of using
->>> hard code number 4096.
->>>
->>> And use `posix_memalign` to allocate the page size aligned momory.
->>>
->>>   
->>
->> Applied, thanks!
->>
->> [1/1] selftests: iou-zcrx: Get the page size at runtime
->>       commit: 6f4cc653bf408ad0cc203c6ab3088b11f5da11df
-> 
-> Why are you applying this, Jens?
+On Wed, Apr 23, 2025 at 7:12=E2=80=AFAM James Bottomley
+<James.Bottomley@hansenpartnership.com> wrote:
+>
+> On Mon, 2025-04-21 at 13:12 -0700, Alexei Starovoitov wrote:
+> [...]
+> > Calling bpf_map_get() and
+> > map->ops->map_lookup_elem() from a module is not ok either.
+>
+> I don't understand this objection.
 
-Nobody else had picked it up so far, and I already did the equivalent
-one on the liburing side.
-> 
-> tools/testing/selftests/drivers/net/hw/iou-zcrx.c
->                         ^^^^^^^^^^^
-> 
-> This is a test which runs in netdev infra, and which we asked for.
-> It was incorrectly initially routed via io-uring trees and then
-> we had to deal with the breakage during the merge window because
-> net/lib has diverged.
+Consider an LSM that hooks into security_bprm_*(bprm),
+parses something in linux_binprm, then
+struct file *file =3D fd_file(fdget(some_random_file_descriptor_in_current)=
+);
+file->f_op->read(..);
 
-Come on, it was a one line conflict due to another added test, the
-simplest of all conflicts. If that's "breakage" worth mentioning,
-well...
+Would VFS maintainers approve such usage ?
 
-> Please revert.
+More so, your LSM does
+file =3D get_task_exe_file(current);
+kernel_read_file(file, ...);
 
-Sure, I can drop it. Doesn't matter to me, as long as gets merged.
+This is even worse.
+You've corrupted the ELF binary with extra garbage at the end.
+objdump/elfutils will choke on it and you're lucky that binfmt_elf
+still loads it.
+The whole approach is a non-starter.
 
--- 
-Jens Axboe
+> The program just got passed in to
+> bpf_prog_load() as a set of attributes which, for a light skeleton,
+> directly contain the code as a blob and have the various BTF
+> relocations as a blob in a single element array map.  I think everyone
+> agrees that the integrity of the program would be compromised by
+> modifications to the relocations, so the security_bpf_prog_load() hook
+> can't make an integrity determination without examining both.  If the
+> hook can't use the bpf_maps.. APIs directly is there some other API it
+> should be using to get the relocations, or are you saying that the
+> security_bpf_prog_load() hook isn't fit for purpose and it should be
+> called after the bpf core has loaded the relocations so they can be
+> provided to the hook as an argument?
+
+No. As I said twice already the only place to verify program
+signature is a bpf subsystem itself.
+Hacking into bpf internals from LSM, BPF-LSM program,
+or any other kernel subsystem is a no go.
+
+> The above, by the way, is independent of signing, because it applies to
+> any determination that might be made in the security_bpf_prog_load()
+> hook regardless of purpose.
+
+security_bpf_prog_load() should not access bpf internals.
+That LSM hook sees the following:
+security_bpf_prog_load(struct bpf_prog *prog, union bpf_attr *attr,
+                       struct bpf_token *token, bool kernel);
+
+LSM can look into uapi things there.
+Like prog->sleepable, prog->tag, prog->aux->name,
+but things like prog->aux->jit_data or prog->aux->used_maps
+are not ok to access.
+If in doubt, ask on the mailing list.
 
