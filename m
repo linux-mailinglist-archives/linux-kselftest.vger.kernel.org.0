@@ -1,298 +1,225 @@
-Return-Path: <linux-kselftest+bounces-31607-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31608-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AEEAA9BAC5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Apr 2025 00:26:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0486A9BAD9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Apr 2025 00:38:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 617C4467147
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Apr 2025 22:26:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6AA259A05EF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Apr 2025 22:37:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B45828A1CF;
-	Thu, 24 Apr 2025 22:26:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0484127F74E;
+	Thu, 24 Apr 2025 22:38:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ss/NJLNm"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="JY6P7qnM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2055.outbound.protection.outlook.com [40.107.20.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58FFA21FF4B
-	for <linux-kselftest@vger.kernel.org>; Thu, 24 Apr 2025 22:26:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745533601; cv=none; b=QKetPH5l7FbU6LCdBg6/qtZpzgKo5UgIANguDVPF8SZrKhCNUeBJ4xR3hyRFNu2Gqb1sLgTf7n3hIjsd030VPnWPdVgi/8iBSTAp5Q3yz1OJit5Lwm8y62+s2z9LDZqDi3XMkgl7RwRIkM42PYQZ1Qj37FMBiu0mqROWBEsrqd4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745533601; c=relaxed/simple;
-	bh=syuBhkNtH2bkZxZv5HVueABSFMLgwP82SiOCRlS1mAU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JwEPzvwwIEp1eOMkoAtePJGhjqBy78UfDKK5idBYYcdOPgg39ya4BuJ7ybZpy2hBBhSUMBd0lsvvOQKnBpA/fgzvP1mqKD86MjTi2gU/T+JUhs+q2u7RZFIet2icc+ruhnDfIo/vb0ZuRy+5zsO46n1wz0Adma6eg7opP0XSXI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ss/NJLNm; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2242ac37caeso21715ad.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Apr 2025 15:26:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1745533597; x=1746138397; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QP9VRLcmsVvp0rC3tf1y+aWZAq5OUegXkhZghCla8mI=;
-        b=Ss/NJLNmg0uA04kjRPUn2HRMNK4XEhtgLDNj7uolXe2iSmbUKNaTUFlGbhTuCch5zq
-         DnlPSO69eest/wBzJJ9sSxdl8D4PCLDRuxYWtcut1e5lJk1rddaVEjS5cCCo4xPy4F8i
-         TPkwDcBysms83f6BEMEKmZ586M4xL1HAPFQ86MNLlweKjgygRBmIIFEe7vY0dEoaOLku
-         nXe5PmUc/D7r2Q1eruUQc1R1N4bGs0zHkC5ylqSmPyfIaw4Sy6UlRyDNoNAEGocRijN9
-         y2VvKvSH3OWn5AVk5wcdeKSBlRAuHmpA4FvMq/Ha5dPNSEoTr8sMQDGmnhRE9rxD1aCP
-         Fo9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745533597; x=1746138397;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QP9VRLcmsVvp0rC3tf1y+aWZAq5OUegXkhZghCla8mI=;
-        b=JUYDLKncwPBI84/WmQcM6fN32+ZaKMVGSDidQfJPQRwJun7iy1BE+T94AbfDi1B69Y
-         zA1M7pxSX/nJEIllc2OrG0J8/Bw/O+vw1IPtIa7gOcQSDG//BIpdys6V4oGbqVqFVo9r
-         y50ZyfRyACJu45U21L78ks366aW3xM5opBBybXsjvAR5go7fP8q8NeSh0C4mp0bVtvl0
-         N4kYfxEb9/rD+DY8Dz/0ImyYmS+sK5e9kmF0XjZ+h3qTh51VVK1/3MVZi2CUPp/IZ+Mg
-         c5sU7WC9xzSLxaPmrWtUw2BYQayZuSjOTeGOfL/g7Y0Pblfb45R47flmxJP9MAStmABW
-         Sn8A==
-X-Forwarded-Encrypted: i=1; AJvYcCV2bcObplutk7SwE1KWaBMHNQXltLkM6rCKaNJzjhQhhv8/Pleuc36mD2kkvk0MkvUDLNJ3DvlfA+SL7TFyDtw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywr/cTXJOQ5VlJlzVCXUKvXQeHZiDtpWkU5878Rn1Dyn0zlQNwY
-	V9EXNuTArOmm36CdCWsQCWXCG/SyCeEYSHpAIbt7aw4LD6pYHNuZSRUNalumSYR9Ln2hNt4sT+J
-	mdjR9Ul5i7ZFQJg5zadeMUNUvLp8RT3ZFlmHv
-X-Gm-Gg: ASbGncu3zraJEq4O6ngFbmExvQbi0uz+Uva6AjMT00CXzIKfoxFusbVaxcFjwZ06SDP
-	zdqolJKID5kypOvGnRFmAKg5xvvUyh9ZjNmAfC9IwRBEUV2ROtK5vVaaiSYpIZa4fZMZUCTJ3A0
-	EPlYh3geuGzhE18t4kt20Logh+u8hdFq0v3ZWCC5wrwQ87++dxrfjRUReAa9IJeVY=
-X-Google-Smtp-Source: AGHT+IESfKEZFs1U16gzuiEGSvNXR2AD5y8vTGzCoLIAhsmf+LbE4GaBeQz6jKs7z8fHA2/f7YLqVKKHLWjS1I7S7EY=
-X-Received: by 2002:a17:903:8c5:b0:22c:33b4:c2ed with SMTP id
- d9443c01a7336-22dbda00905mr1090235ad.26.1745533597286; Thu, 24 Apr 2025
- 15:26:37 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1DE914E2E2;
+	Thu, 24 Apr 2025 22:37:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.20.55
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1745534279; cv=fail; b=SixRlsqixvxHHOop4QSzxgqUk0B12Fga0M/VWB6ex9uVUTJRgSD1zpuwm5dAzx5obRTPJUQRgmxfpAj7TXT5WuaZQ/amIhbhYUxB+gUh1t/iTel4vmNwUaTlt/LTh8ZSLqh6XBqJKM4WJdzuPu8QhmYxBCiMrKOzI8/6q3/ou6g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1745534279; c=relaxed/simple;
+	bh=WUHZRMNPoUpswt4ry5Ap1yYOuKDitF55F0hjaLWm2O8=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=e73h66b3nJ7U+2cLV6td1sBipNzhrF3mmJgDT9oj/v2HyoHgijTW7Pu7MPeq4R44I5hmmJlJKqw3Zo8E21lAnoZ8nNB/oCpz+nlyYr9+gZgvmhhU+GrZsHzSI+QokKFquyeytb8++4lJnvQqPhmJUOURgnbevHzmwYuDIqNJRCw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=JY6P7qnM; arc=fail smtp.client-ip=40.107.20.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=eHE18wMJQ+CdFgBIidFf1GC9742DMoZodiEZeQmMQHtN0DiXyyw8kHnpv/crACyy3+Vct65y4fZNgo4y9a9I1ODUxke61cH2fY6nAqtz+039MVJ+RWVfzG/EFqksa+VqOFjZOWsjJV6lDReRXGfbpCj/kFECTFeF6D4mlXJIwGeoxig7LW+DuPYIdcNjWV+X/n7JF+6IXBO7s+IWYv7MnX/ePj0R8OaDXgP2IDKdPwATZRnYWgiyHF86Wn4R8KPd1ZYASIAzaVxt9umNDTeLxlCloabmd3o/lOIBheHgJhid7nQdTmhhgzQkbSIW8MQYMvWAfMtEbPu9d9fOnWa9Mw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aXB5E+wAtFrZnGG4K4agy2r4zvl1HOdzLniBwtSH5VA=;
+ b=GtH44tzBkMyrNnief7nZyfwZ7IXq/8DNw4S2S4wR4Lx12OrhMF2SpSJ7PAX58KTTlsCo6wU1kpL5HCeGA49PF+NJCIe9T6+b3wli+YAGR0EPyNq2FrRH4L4uq0zqTbAWD5+kfKysU6Z38pqVpbMYWR4SbYA0sImshYsIycepOoMmOePGpTI0IIDBZ3smOFYWaxMZiOeY4PrDJigcvKgMo5yG+YSXEOC4rvBY/R6y2qdU9un03jjPs/zF/Lgss0KGgg6immEttYA0ytfZ5zBEWVDzTWgiQ0XD8Tzma3cg0l5FSphMXEutfIH4dfnXeWlmYWN5JPlm3VvIv/duif3/OQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aXB5E+wAtFrZnGG4K4agy2r4zvl1HOdzLniBwtSH5VA=;
+ b=JY6P7qnMACq9YhJXhFxf8POxSQ/N0v+EjCQu1lIyYyyYW28RdWL504gBk/zzbDkRVs7If8a9A4WJl/gDKRxNbjlnviQ7a96/GSzObhNzPdJ3dFNdRd2NZH0IVjPH9M6Fa0EC3luJIod9FysQhtZTrqDEOwSayvG6lckOP1X3PV5x86555esIfri8PbqLgZwB1ZzO4xLdpm9/3u/8kaQQ5hlT94mBTv6vJb2RrHKA9OOVOC7vlaeK7+TFNUccOc77jo/ShjFi8k01OedIWWH85LNvoni5Qg0poXGPYTCACSsRtZ+fcFZUh8w3Tm9MB3Ols8/sRXKVejN1AlPkpEWHiw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM8PR04MB7779.eurprd04.prod.outlook.com (2603:10a6:20b:24b::14)
+ by GV1PR04MB10396.eurprd04.prod.outlook.com (2603:10a6:150:1c5::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8655.34; Thu, 24 Apr
+ 2025 22:37:52 +0000
+Received: from AM8PR04MB7779.eurprd04.prod.outlook.com
+ ([fe80::7417:d17f:8d97:44d2]) by AM8PR04MB7779.eurprd04.prod.outlook.com
+ ([fe80::7417:d17f:8d97:44d2%4]) with mapi id 15.20.8678.025; Thu, 24 Apr 2025
+ 22:37:52 +0000
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
+To: netdev@vger.kernel.org
+Cc: Claudiu Manoil <claudiu.manoil@nxp.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	UNGLinuxDriver@microchip.com,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net 1/2] net: mscc: ocelot: delete PVID VLAN when readding it as non-PVID
+Date: Fri, 25 Apr 2025 01:37:33 +0300
+Message-ID: <20250424223734.3096202-1-vladimir.oltean@nxp.com>
+X-Mailer: git-send-email 2.43.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: VI1PR07CA0268.eurprd07.prod.outlook.com
+ (2603:10a6:803:b4::35) To AM8PR04MB7779.eurprd04.prod.outlook.com
+ (2603:10a6:20b:24b::14)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250423153504.1085434-1-cratiu@nvidia.com> <CAHS8izPxT_SB6+fc7dPcojv3mui3BjDZB5xmz3u6oYuA2805FA@mail.gmail.com>
- <aAlKaELj0xIbJ45c@mini-arch> <CAHS8izOm4QbHECZDB+imV2eVXs=KXRKzJsDw2gKGp_gx0ja7Ng@mail.gmail.com>
- <aAq2y_awPoGqhjdp@mini-arch>
-In-Reply-To: <aAq2y_awPoGqhjdp@mini-arch>
-From: Mina Almasry <almasrymina@google.com>
-Date: Thu, 24 Apr 2025 15:26:24 -0700
-X-Gm-Features: ATxdqUGtlFF7acNnnMcbJ0VKd5NGlgAB3nb5-8NBe1iaHF-xV5oSOLCGrYjVLbk
-Message-ID: <CAHS8izNAtzyjY94qPq1-2sPUUDaN14SCXrgM5XkwCNDz4SgbvQ@mail.gmail.com>
-Subject: Re: [PATCH net 1/2] net/devmem: Reject insufficiently large dmabuf pools
-To: Stanislav Fomichev <stfomichev@gmail.com>
-Cc: Cosmin Ratiu <cratiu@nvidia.com>, netdev@vger.kernel.org, 
-	Jason Gunthorpe <jgg@nvidia.com>, Leon Romanovsky <leonro@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Saeed Mahameed <saeedm@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>, 
-	Dragos Tatulea <dtatulea@nvidia.com>, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM8PR04MB7779:EE_|GV1PR04MB10396:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8053ff62-53f1-4838-c513-08dd8380a5d4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|52116014|1800799024|366016|7416014|376014|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?JHDIyfeqV4UPm5R7aAAZ25vaR7Wlpjg+c0YNhHCwcgP/5YfYINjpRelKbk6X?=
+ =?us-ascii?Q?2HHyTn0mcL5esdxuQDXyxxpmgXvBU8cH4k438Qg6zNyCRrOzCNlyc0OxXJxL?=
+ =?us-ascii?Q?VSA5lHn5gW6sSirAS1OOiSmlacsGKngYTNlIOzLk6avZiyVXCUKDmpXrCmqU?=
+ =?us-ascii?Q?7IZqVrvCj173KOGvEjfzlfoU0pRbGmVwAPB6qBTejWjRbtBKkp4DYBmedKov?=
+ =?us-ascii?Q?erjcZrgw4i+1TJkB9M+u3w9AXnelcV+u1Nua9t1uaiWxnE275mWJybRX8YUb?=
+ =?us-ascii?Q?rqrUpivpX7P4J9wTAYNzbcMh/5cX1OeqSGdrjc6021+xRICLlxr578BQ0er/?=
+ =?us-ascii?Q?bicdACr3IxrRLchwa6miz44O8GH5mFHRqRKcltTdN9sfzi8wIDCgteaVaRIP?=
+ =?us-ascii?Q?7YtFS3JdpcZm7AQXkgVYI/4OsbT0/UmzDxM2nebhxBCBu72PHQ+vwQop4yeL?=
+ =?us-ascii?Q?+BzP71qup3jzpGP6LUjjQhwx0MuxKWmDvvQ8mHCND7m9ij2T+uojPgTKDPgC?=
+ =?us-ascii?Q?NZ3LZlj9lSfugwnxpNxxzWiOWScrLqBvL7Abw5PoRKChEoj0cPTsRXjdzk5O?=
+ =?us-ascii?Q?C6JuIDyj8/Y5R76oSQ0bZjTtDNYXlKnTfyh0k+M4PLsAlUYVWRG3PzqwBzG+?=
+ =?us-ascii?Q?51u6phs0Kxn/odzF9M7D7bgJ+h0Z7IFt/3YqUO66kHKxnfDswObHB8bTzmaF?=
+ =?us-ascii?Q?QuZSIV/JVo6/F6ONsq/Idyt2ujvbYr9DlZQ7FqCfbg3/BDVm7fo9r3BwnTEn?=
+ =?us-ascii?Q?ryYViNdjgz8S8lDp+1B4EBCWRNIqujwnjzqNhJWf7ULFo31lyIs5pldE1e+2?=
+ =?us-ascii?Q?QSYDoz1el4nHNgwCubh55t6pHTpDc+rj/Wk06bbO6ekgUKXonblXsVRAnpKp?=
+ =?us-ascii?Q?ZYuYv9Cdf9dxRqZ1zshDtIYirW+z8JmN3gO93QVBpmeT8sD4443DyAswZagN?=
+ =?us-ascii?Q?GGOEm9cS0z6pTFlumEJqR9sg5UerAIhVN8DBQMdYg0NxCXSyk66iQM8g3heG?=
+ =?us-ascii?Q?N6dv0rZVdhuAvA2gV70ojAFCRU/46RYf0pRLPE9Z18YocOTpl0NCsJ7WQ16/?=
+ =?us-ascii?Q?eiJbeZUisUf3Fqh1WTlAUOANTOnA7JqsSvSA/Gan7mIjUJBZTlX83q8vJw/Q?=
+ =?us-ascii?Q?h7HBnPNGFPKs8yVAi5Ikf2kewUS9Qz0KJw5oGmZso40Sm2FJ76EFnac3g5NF?=
+ =?us-ascii?Q?wvdUFcRd34eQbgefWoOmEiNObtM8viGlXm3cescJumTjg4Ov5ZNUVrXgfl2K?=
+ =?us-ascii?Q?5QlRvOGQxI+i+WKGE2DhXjk77R2/sxSMEv1cNNPTwu37rqAigfI8c58DkAah?=
+ =?us-ascii?Q?OIZTXo6Vo3DlgrOqJWGah8qMpEwb+hedyIE0/6H3CiKYbr2hbVDARf2D+3UA?=
+ =?us-ascii?Q?+ylRYSWLCRkVBCCv7E7tT0PLL/VRt4A6TEEF4sNBDAGQt6ewlXnFdxpuW/1v?=
+ =?us-ascii?Q?fda2eDbh4W5IefoQfWX3pgd6DslfvFTG/UXq7j+1c93XVWFM/pvmLg=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM8PR04MB7779.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(1800799024)(366016)(7416014)(376014)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?qpuujjd6okwQJhi7UwTWYfYBKE0djJPyXE8eljNCEnDY7Bi4HYHrc3tTuiVQ?=
+ =?us-ascii?Q?obsndLx/ponfHnKWisocrvdyYkK4uF4DtB+d2/clYoK+ItlxUW6Gi5ha4mf6?=
+ =?us-ascii?Q?jiM3rvdZC6NO0p8DcIUc/+vPre9Gw1oBe+5gAYqabtU994rofHbynY0z1vvy?=
+ =?us-ascii?Q?PyHHKKI5Js8bbdnKSvSdpvWEI1yq+BxYPfrmSdnoLZCvWNidxcaHQFXR25gu?=
+ =?us-ascii?Q?Eh0HWYPx5tKnEGiAVyhSx5D9K45n0Zz989ZCHIYTHNlZFmfxzDApGE+i1N/b?=
+ =?us-ascii?Q?6Ad9L5HnDObh1FFEXuh8auj+GfBtCOMOKts9WDVY9qk+ZxXn6tndadIxM7ph?=
+ =?us-ascii?Q?F5l9PO8PGAyK4Iy5j5gVjCyWIHihOhUrUAowEBseqQCJBTdupX0CfZmm0Mx7?=
+ =?us-ascii?Q?l1JaC5V+mE215nPjLCx02YD9IFtZ02L114FNIcnKsx8hUKidaIh4XNiWUwaY?=
+ =?us-ascii?Q?/UDMO/aTh5F2OaqEetyt2K4hJbm4/d2DCDrVbbgiqJEp6mXznuSNd5u7ULeS?=
+ =?us-ascii?Q?F842f7m+9AMJJNGV3ZBDlCaqmrUiyrPTQqzcaxKeWl1XHdF7BiAK0AAUlfNJ?=
+ =?us-ascii?Q?LDtkPf4i8K55CPfvE/mzcy3PqwIgJzXbMVXLgu/OIOZKQRF6DfdgH8SoULT8?=
+ =?us-ascii?Q?hKxI1ZnLSl30dI/Ad7iSlDW0AdWnBwI4ZnJYermCwf4UAkIc+MEoBPkwtS5z?=
+ =?us-ascii?Q?EMCfqjcWfMb2h/nU7v8H4sqmnNoL/RWIdamDCPCpVuy1ntpULfDeWbTiqh3I?=
+ =?us-ascii?Q?Mkw5EzMPTfqJcjjxgzlfeeRJDZSOPka/+gAsIPb7wVri6P2rIa/9pqIu6DqD?=
+ =?us-ascii?Q?q21I9MHNdw7bkBQdo7YeWKz7ZBfXeVR69oiIhkkKqf+S0cQtyHzUtDpZ7f1O?=
+ =?us-ascii?Q?VKJNPR4IRGYMxHFPfJYGFB6XdHVIqtNKgc1s4DF4SHm/KcFwSDdyN8d3JfIs?=
+ =?us-ascii?Q?Ul2oaLgDfxMzi3ct/KWQSbLnM8SarIc7pU5CE011egNa0Cw/9by0hovXr7od?=
+ =?us-ascii?Q?Tml9CsVvqeHvRVjPOi0rL4oXVk9PFl57RpG4tpk3gVg30ZfIflxnbKn49eS/?=
+ =?us-ascii?Q?vxQJ3uRH+mBK5k8ARcFqkKe2O7n2Uu5Izsc/LMTE8Ca7U/l8Txh2P/iUcoS+?=
+ =?us-ascii?Q?oZj7/CvLGVqy5EMT4OFhr1I6EqrgojH+s4Gf6d6UyLyclmXwimVp4gd5D5Pg?=
+ =?us-ascii?Q?LlL7kaD53gLOElaHbkqw/sd8gxwFO+EGWC8ezQAdC/nEjD9NfV10VWx1Ss1K?=
+ =?us-ascii?Q?ywX+Dylwk2/HwuV4BNilkjvwqVXITPc9HsX3HeWrcTlboOgT3goYFMQUMFY2?=
+ =?us-ascii?Q?rJgEFDxudghVmaTZEDhdQdB9kv5PhRJjIWKIA4n5IMZdXgBvJt/s9Apsc9nm?=
+ =?us-ascii?Q?LstfxnaqVfZY/ZEyI9ftlqpVPeiSHvPmoQni3AOqZkdrXbXFATWZV9Ev3YK8?=
+ =?us-ascii?Q?TKuT9H//XRfZoYucEANeYzO0s5DEaGF1r64G6TaljgQfbrQt1ejp0a1V2Iiq?=
+ =?us-ascii?Q?B0gEtMq2LGF3qPkbYEj5u0a6RWmg0K3JnVMKQilBppcecjV+2rHldV5DLXen?=
+ =?us-ascii?Q?Keak2r4spHn7PzS60hOBbvOyRF/CISe2nwW724ZKwx6xX83H3mGLePuY3VuK?=
+ =?us-ascii?Q?hQ=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8053ff62-53f1-4838-c513-08dd8380a5d4
+X-MS-Exchange-CrossTenant-AuthSource: AM8PR04MB7779.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Apr 2025 22:37:52.0295
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: IegXvH/2IrsUtGaHjBbYyfkQWn3JRIPyBFNEw94aEOfodbszVd8KggqGwWWqiNVuuwfCKMjku4EfEvUlDev9iQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR04MB10396
 
-On Thu, Apr 24, 2025 at 3:10=E2=80=AFPM Stanislav Fomichev <stfomichev@gmai=
-l.com> wrote:
->
-> On 04/24, Mina Almasry wrote:
-> > On Wed, Apr 23, 2025 at 1:15=E2=80=AFPM Stanislav Fomichev <stfomichev@=
-gmail.com> wrote:
-> > >
-> > > On 04/23, Mina Almasry wrote:
-> > > > On Wed, Apr 23, 2025 at 9:03=E2=80=AFAM Cosmin Ratiu <cratiu@nvidia=
-.com> wrote:
-> > > > >
-> > > > > Drivers that are told to allocate RX buffers from pools of DMA me=
-mory
-> > > > > should have enough memory in the pool to satisfy projected alloca=
-tion
-> > > > > requests (a function of ring size, MTU & other parameters). If th=
-ere's
-> > > > > not enough memory, RX ring refill might fail later at inconvenien=
-t times
-> > > > > (e.g. during NAPI poll).
-> > > > >
-> > > >
-> > > > My understanding is that if the RX ring refill fails, the driver wi=
-ll
-> > > > post the buffers it was able to allocate data for, and will not pos=
-t
-> > > > other buffers. So it will run with a degraded performance but nothi=
-ng
-> > > > overly bad should happen. This should be the same behavior if the
-> > > > machine is under memory pressure.
-> > > >
-> > > > In general I don't know about this change. If the user wants to use
-> > > > very small dmabufs, they should be able to, without going through
-> > > > hoops reducing the number of rx ring slots the driver has (if it
-> > > > supports configuring that).
-> > > >
-> > > > I think maybe printing an error or warning that the dmabuf is too
-> > > > small for the pool_size may be fine. But outright failing this
-> > > > configuration? I don't think so.
-> > > >
-> > > > > This commit adds a check at dmabuf pool init time that compares t=
-he
-> > > > > amount of memory in the underlying chunk pool (configured by the =
-user
-> > > > > space application providing dmabuf memory) with the desired pool =
-size
-> > > > > (previously set by the driver) and fails with an error message if=
- chunk
-> > > > > memory isn't enough.
-> > > > >
-> > > > > Fixes: 0f9214046893 ("memory-provider: dmabuf devmem memory provi=
-der")
-> > > > > Signed-off-by: Cosmin Ratiu <cratiu@nvidia.com>
-> > > > > ---
-> > > > >  net/core/devmem.c | 11 +++++++++++
-> > > > >  1 file changed, 11 insertions(+)
-> > > > >
-> > > > > diff --git a/net/core/devmem.c b/net/core/devmem.c
-> > > > > index 6e27a47d0493..651cd55ebb28 100644
-> > > > > --- a/net/core/devmem.c
-> > > > > +++ b/net/core/devmem.c
-> > > > > @@ -299,6 +299,7 @@ net_devmem_bind_dmabuf(struct net_device *dev=
-, unsigned int dmabuf_fd,
-> > > > >  int mp_dmabuf_devmem_init(struct page_pool *pool)
-> > > > >  {
-> > > > >         struct net_devmem_dmabuf_binding *binding =3D pool->mp_pr=
-iv;
-> > > > > +       size_t size;
-> > > > >
-> > > > >         if (!binding)
-> > > > >                 return -EINVAL;
-> > > > > @@ -312,6 +313,16 @@ int mp_dmabuf_devmem_init(struct page_pool *=
-pool)
-> > > > >         if (pool->p.order !=3D 0)
-> > > > >                 return -E2BIG;
-> > > > >
-> > > > > +       /* Validate that the underlying dmabuf has enough memory =
-to satisfy
-> > > > > +        * requested pool size.
-> > > > > +        */
-> > > > > +       size =3D gen_pool_size(binding->chunk_pool) >> PAGE_SHIFT=
-;
-> > > > > +       if (size < pool->p.pool_size) {
-> > > >
-> > > > pool_size seems to be the number of ptr_ring slots in the page_pool=
-,
-> > > > not some upper or lower bound on the amount of memory the page_pool
-> > > > can provide. So this check seems useless? The page_pool can still n=
-ot
-> > > > provide this amount of memory with dmabuf (if the netmems aren't be=
-ing
-> > > > recycled fast enough) or with normal memory (under memory pressure)=
-.
-> > >
-> > > I read this check more as "is there enough chunks in the binding to
-> > > fully fill in the page pool". User controls the size of rx ring
-> >
-> > Only on drivers that support ethtool -G, and where it will let you
-> > configure -G to what you want.
->
-> gve is the minority here, any major nic (brcm/mlx/intel) supports resizin=
-g
-> the rings.
->
+The following set of commands:
 
-GVE supports resizing rings. Other drivers may not. Even on drivers
-that support resizing rings. Some users may have a use case for a
-dmabuf smaller than the minimum ring size their driver accepts.
+ip link add br0 type bridge vlan_filtering 1 # vlan_default_pvid 1 is implicit
+ip link set swp0 master br0
+bridge vlan add dev swp0 vid 1
 
-> > > which
-> > > controls the size of the page pool which somewhat dictates the minima=
-l
-> > > size of the binding (maybe).
-> >
-> > See the test I ran in the other thread. Seems at least GVE is fine
-> > with dmabuf size < ring size. I don't know what other drivers do, but
-> > generally speaking I think specific driver limitations should not
-> > limit what others can do with their drivers. Sure for the GPU mem
-> > applications you're probably looking at the dmabufs are huge and
-> > supporting small dmabufs is not a concern, but someone somewhere may
-> > want to run with 1 MB dmabuf for some use case and if their driver is
-> > fine with it, core should not prevent it, I think.
-> >
-> > > So it's more of a sanity check.
-> > >
-> > > Maybe having better defaults in ncdevmem would've been a better optio=
-n? It
-> > > allocates (16000*4096) bytes (slightly less than 64MB, why? to fit in=
-to
-> > > default /sys/module/udmabuf/parameters/size_limit_mb?) and on my setu=
-p
-> > > PP wants to get 64MB at least..
-> >
-> > Yeah, udmabuf has a limitation that it only supports 64MB max size
-> > last I looked.
->
-> We can use /sys/module/udmabuf/parameters/size_limit_mb to allocate
-> more than 64MB, ncdevmem can change it.
+should result in the dropping of untagged and 802.1p-tagged traffic, but
+we see that it continues to be accepted. Whereas, had we deleted VID 1
+instead, the aforementioned dropping would have worked
 
-The udmabuf limit is hardcoded, in udmabuf.c or configured on module
-load, and ncdevmem doesn't load udmabuf. I guess it could be changed
-to that, but currently ncdevmem works with CONFIG_UDMABUF=3Dy
+This is because the ANA_PORT_DROP_CFG update logic doesn't run, because
+ocelot_vlan_add() only calls ocelot_port_set_pvid() if the new VLAN has
+the BRIDGE_VLAN_INFO_PVID flag.
 
-> Or warn the user similar
-> to what kperf does: https://github.com/facebookexperimental/kperf/blob/ma=
-in/devmem.c#L308
->
-> So either having a kernel warn or tuning 63MB up to something sensible
-> (1G?) should prevent people from going through the pain..
->
+Similar to other drivers like mt7530_port_vlan_add() which handle this
+case correctly, we need to test whether the VLAN we're changing used to
+have the BRIDGE_VLAN_INFO_PVID flag, but lost it now. That amounts to a
+PVID deletion and should be treated as such.
 
-Agreed with both. Another option is updating the devmem.rst docs:
+Regarding blame attribution: this never worked properly since the
+introduction of bridge VLAN filtering in commit 7142529f1688 ("net:
+mscc: ocelot: add VLAN filtering"). However, there was a significant
+paradigm shift which aligned the ANA_PORT_DROP_CFG register with the
+PVID concept rather than with the native VLAN concept, and that change
+wasn't targeted for 'stable'. Realistically, that is as far as this fix
+needs to be propagated to.
 
-"Some drivers may struggle to run devmem TCP when the dmabuf size is
-too small, especially when it's smaller than the number of rx ring
-slots. Look for this warning in dmesg." etc.
+Fixes: be0576fed6d3 ("net: mscc: ocelot: move the logic to drop 802.1p traffic to the pvid deletion")
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+---
+ drivers/net/ethernet/mscc/ocelot.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-But I don't see the need to outright disable this "dmabuf size < ring
-size" use case for everyone to solve this.
+diff --git a/drivers/net/ethernet/mscc/ocelot.c b/drivers/net/ethernet/mscc/ocelot.c
+index ef93df520887..08bee56aea35 100644
+--- a/drivers/net/ethernet/mscc/ocelot.c
++++ b/drivers/net/ethernet/mscc/ocelot.c
+@@ -830,6 +830,7 @@ EXPORT_SYMBOL(ocelot_vlan_prepare);
+ int ocelot_vlan_add(struct ocelot *ocelot, int port, u16 vid, bool pvid,
+ 		    bool untagged)
+ {
++	struct ocelot_port *ocelot_port = ocelot->ports[port];
+ 	int err;
+ 
+ 	/* Ignore VID 0 added to our RX filter by the 8021q module, since
+@@ -849,6 +850,11 @@ int ocelot_vlan_add(struct ocelot *ocelot, int port, u16 vid, bool pvid,
+ 					   ocelot_bridge_vlan_find(ocelot, vid));
+ 		if (err)
+ 			return err;
++	} else if (ocelot_port->pvid_vlan &&
++		   ocelot_bridge_vlan_find(ocelot, vid) == ocelot_port->pvid_vlan) {
++		err = ocelot_port_set_pvid(ocelot, port, NULL);
++		if (err)
++			return err;
+ 	}
+ 
+ 	/* Untagged egress vlan clasification */
+-- 
+2.43.0
 
-> > I added devmem TCP support with udmabuf selftests to demonstrate that
-> > the feature is non-proprietary, not to advertise that devmem tcp +
-> > udmabuf is a great combination. udmabuf is actually terrible for
-> > devmem TCP. The 64MB limit is way too small for anyone to do anything
-> > performant on it and by dmaing into host memory you lose many of the
-> > benefits of devmem TCP (lower mem bw + pcie bw utilization).
->
-> It would still be nice to have a udmabuf as a properly supported option.
-> This can drive the UAPI performance conversions: for example, comparing
-> existing tcp rx zerocopy vs MSG_SOCK_DEVMEM.. So let's not completely
-> dismiss it. We've played internally with doing 2MB udmabuf huge-pages,
-> might post it at some point..
->
-> > If you're running real experiments with devmem TCP I suggest moving to
-> > real dmabufs as soon as possible, or at least hack udmabuf to give you
-> > large sizes. We've open sourced our production devmem TCP userspace:
-> >
-> > https://github.com/google/tcpgpudmarxd
-> > https://github.com/google/nccl-plugin-gpudirecttcpx
-> >
-> > Porting it to upstream APIs + your dmabuf provider will have you run
-> > much more interesting tests than anything you do with udmabuf I think,
-> > unless you hack the udmabuf size.
->
-> I found these a bit too late, so I reimplemented the plugin over
-> upstream APIs :-[
-
-Oh, where? Is it open source?
-
-> Plus, you yourself have acked [0], guess why
-> I sent this patch :-D Once the tx part is accepted, we'll upstream
-> kperf cuda support as well..
->
-
-Cool!
-
-> 0: https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/co=
-mmit/?id=3D8b9049af8066b4705d83bb7847ee3c960fc58d09
-
---=20
-Thanks,
-Mina
 
