@@ -1,227 +1,177 @@
-Return-Path: <linux-kselftest+bounces-31542-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31543-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BF6EA9AC7A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Apr 2025 13:52:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 92BC3A9ACB1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Apr 2025 14:01:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 927A61B61CB8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Apr 2025 11:53:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 237A71B66EA2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Apr 2025 12:01:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCC6222688C;
-	Thu, 24 Apr 2025 11:52:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="bxkmDyDA"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B34D522D798;
+	Thu, 24 Apr 2025 12:00:48 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C98B220C47A
-	for <linux-kselftest@vger.kernel.org>; Thu, 24 Apr 2025 11:52:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41B6822DFBB;
+	Thu, 24 Apr 2025 12:00:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745495567; cv=none; b=cXZ5MZmM8wdHKZ4aNS5Wym3QaxlUKQFYrgkRQN1F+TahS23B44ALIT6CeodZBO+NnzCVVRADrPleKmiM62Hjb9UR8oSSAPT55hdSxzAn23wlg+llaXSfnp/4LN8cJbzXAipOIAapge9eTpXDy/PF2v/02apafjoPTgd3cVdNnI8=
+	t=1745496048; cv=none; b=pW2ilFm1kh8n7dX87rITtIDHDNrZThaKWWp1PZa2CI8q4eXs6M8ZzkskG/szd+YskyGFTDJaYFnaurEF8z4G98vYOCoTv2IoT2x7jDkm6Z6yrJ8eF7+6a5wf+gMk5iMWzk3VCXqTBsPmS3PK2Ss0CSOuWEMaIAHa45iJIjzP1t4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745495567; c=relaxed/simple;
-	bh=DjB6yBsMl6lrqs3kS6J4Z5q3FIya7mHUZ9ybBLQq0UM=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=qXjdD5j1jc3CKZMod2BXSEDUJ44AeCZgQTUPmr0zygMP5uB+Zu6GnQ/ww1Xw/3Hd0aOtaMseqgYnPOAXYBplwzDbp/ThcMLZHTZBe65eB8WkChBwtG1UfJNc1T22l3maKzZRjzE0G2QphOLNLgMsD9Ien5E7BNxX8YcZo/JpxAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=bxkmDyDA; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-440668acbf3so1375525e9.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Apr 2025 04:52:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1745495564; x=1746100364; darn=vger.kernel.org;
-        h=in-reply-to:references:from:to:cc:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s+dd0LSkGUj1HE7Y4OEfSLazS5H3NN900Vi5gbnC580=;
-        b=bxkmDyDArMx0OqwBa+08lv4xzsGf09Af9eKmh54vpjoHPwLrnysj0ZYaflCREJRWts
-         AKiNtHz8cjrkSf0Lbb9NetGIph216zEBEWzP4tv3W681HV5wi6Pp5fu3AOMHWAxsuhky
-         MxMQgFjVqxRF0xd+zaK7mTBfYwRrP4UBVdRwSiirZT5trdIhjcLA6DBFRwemvpMjtxhV
-         0f/32r5EV8BffeBi7CqmwagilSyuDkE1jLzZxQNIIHhBudYRKIkuEuJyTaBt13eqcawp
-         jOABUZF8+8WhJiIA/bf0daBGvGLUfzHDtR59SpViLKNZNAEJI6hfWU7YLCcb4fS26KIL
-         Zj4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745495564; x=1746100364;
-        h=in-reply-to:references:from:to:cc:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=s+dd0LSkGUj1HE7Y4OEfSLazS5H3NN900Vi5gbnC580=;
-        b=BfOqwc8OMOUfuAEOTcsQw7UssVjzVYUMYRP2qIqMd7O5RTlwWB/ORGTT0+IARTVz1G
-         cP3wiPuggbRLmbmwweUi9ohrJ2lczeBrS4YcYGQUzGdtUVu2FQeCWyK9xQS7cNyMSC3U
-         RAxu0Y4dO8wSjxMTDkb8vV8g96iGxmeq6i7gOddY/jn6TgegukRpQTax7aG8Csu2zxWv
-         sJKYKjUXspYvjyDsL0mEOfOC9P1IoB3E6BIqrAoTLvY2IdWVsKRq6fHLtjdM1Gk6dxng
-         AT8XQ1wc1ZuU5kD20Kx637QUE5rI7eFAqcH2SyH7B+mTfSp27QUtHvHGKesXna7iNygK
-         Kglw==
-X-Forwarded-Encrypted: i=1; AJvYcCU4oKJtlC06u2mhntshffbsCJUsaLr+h2UREYJQ8mtbJI5F8QmXNLQUiZsM+V7uZ6LB+mpF5LqFhbJlo8UNja0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4q795psenU6I1TZdVCn25WhNt6ZmVeteqgAPY4uHXD8cRDESF
-	jEgX90K+JdekS7tJJSC09ymWFlYEZXk8KX6BQnfmnGSl3Z+4seVj9sKDPKnaeEI=
-X-Gm-Gg: ASbGncu3wv/g7s5mUsyL4px0zzsXNBiDYiFqgochZx0puBtq0Vl1v4/Jj1UL3RPiqEN
-	YFKn9WGlLiz8YWv/+5HKwFC3903jseG9t22hhyvEqGIMYYrwzesvU6VKd4OkyyB1rTsuEnfLPoO
-	AputtM3pNrJIrKnlz2/JAl0NhN9dBbxSSzOfUwgZr6cCM40zaOk8nMhxTNk0x80mW8f+EMOQxkn
-	KodXD+TIjvxohKVBMUv5Cafmle/FAyu3D1dRbbd7D32coTrKEsuhFNsErqzpJLMyrK+82wS6tlp
-	JMtpVOxKgVzlXoMNLRfy8hh/lC+aUxCwp8A8uPi+wkLGfh9s
-X-Google-Smtp-Source: AGHT+IF8wqwUphleYE2qKoazIUMOkR8h6x1rMfa0xrlvKXCx8csAkRx3P4JsSRpMyeAudqq5D+3jRA==
-X-Received: by 2002:a5d:6d8a:0:b0:3a0:678f:ddd8 with SMTP id ffacd0b85a97d-3a06cf5262cmr625001f8f.2.1745495563895;
-        Thu, 24 Apr 2025 04:52:43 -0700 (PDT)
-Received: from localhost ([2a02:8308:a00c:e200:b30c:ee4d:9e10:6a46])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a06d5323casm1860957f8f.75.2025.04.24.04.52.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Apr 2025 04:52:43 -0700 (PDT)
+	s=arc-20240116; t=1745496048; c=relaxed/simple;
+	bh=g6ZhCYqUsjw43UU7D94qUabJWGyv4hN727Jz1O4EMew=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JHnLBh/zNE/somawXAYL0EGWBRBArnYCz5yOSr3AGsTgqynY3cqA6aqbpxZzURvKiIgqSgpeKgj2rVxCXv7SxQM5e3k+yhVo5PcHhVEm8SGRR7TG9n2VtXGHbRxvR6LACgLa/20n32n5d7ObH64Wg/JBX1xskm7uJ9Q5h9CjqpA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Zjvg35YvJz4f3k5x;
+	Thu, 24 Apr 2025 20:00:15 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 6F12B1A18C2;
+	Thu, 24 Apr 2025 20:00:34 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+	by APP4 (Coremail) with SMTP id gCh0CgCnVlveJwpoXVW4KQ--.17342S2;
+	Thu, 24 Apr 2025 20:00:32 +0800 (CST)
+Message-ID: <6b6472c3-0718-4e60-9972-c166d51962a3@huaweicloud.com>
+Date: Thu, 24 Apr 2025 20:00:30 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 24 Apr 2025 13:52:43 +0200
-Message-Id: <D9EUJBQ5OHN0.2KUJHGXK262TR@ventanamicro.com>
-Subject: Re: [PATCH v12 05/28] riscv: usercfi state for task and
- save/restore of CSR_SSP on trap entry/exit
-Cc: "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar"
- <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
- <dave.hansen@linux.intel.com>, <x86@kernel.org>, "H. Peter Anvin"
- <hpa@zytor.com>, "Andrew Morton" <akpm@linux-foundation.org>, "Liam R.
- Howlett" <Liam.Howlett@oracle.com>, "Vlastimil Babka" <vbabka@suse.cz>,
- "Lorenzo Stoakes" <lorenzo.stoakes@oracle.com>, "Paul Walmsley"
- <paul.walmsley@sifive.com>, "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert
- Ou" <aou@eecs.berkeley.edu>, "Conor Dooley" <conor@kernel.org>, "Rob
- Herring" <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
- "Arnd Bergmann" <arnd@arndb.de>, "Christian Brauner" <brauner@kernel.org>,
- "Peter Zijlstra" <peterz@infradead.org>, "Oleg Nesterov" <oleg@redhat.com>,
- "Eric Biederman" <ebiederm@xmission.com>, "Kees Cook" <kees@kernel.org>,
- "Jonathan Corbet" <corbet@lwn.net>, "Shuah Khan" <shuah@kernel.org>, "Jann
- Horn" <jannh@google.com>, "Conor Dooley" <conor+dt@kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
- <linux-mm@kvack.org>, <linux-riscv@lists.infradead.org>,
- <devicetree@vger.kernel.org>, <linux-arch@vger.kernel.org>,
- <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <alistair.francis@wdc.com>, <richard.henderson@linaro.org>,
- <jim.shu@sifive.com>, <andybnac@gmail.com>, <kito.cheng@sifive.com>,
- <charlie@rivosinc.com>, <atishp@rivosinc.com>, <evan@rivosinc.com>,
- <cleger@rivosinc.com>, <broonie@kernel.org>, <rick.p.edgecombe@intel.com>,
- "Zong Li" <zong.li@sifive.com>, "linux-riscv"
- <linux-riscv-bounces@lists.infradead.org>
-To: "Deepak Gupta" <debug@rivosinc.com>
-From: =?utf-8?q?Radim_Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@ventanamicro.com>
-References: <20250314-v5_user_cfi_series-v12-0-e51202b53138@rivosinc.com>
- <20250314-v5_user_cfi_series-v12-5-e51202b53138@rivosinc.com>
- <D92WQWAUQYY4.2ED8JAFBDHGRN@ventanamicro.com>
- <aAl_HRk49lnseiio@debug.ba.rivosinc.com>
-In-Reply-To: <aAl_HRk49lnseiio@debug.ba.rivosinc.com>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC bpf-next 1/4] bpf: add struct largest member size in
+ func model
+Content-Language: en-US
+To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
+ Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Puranjay Mohan <puranjay@kernel.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Florent Revest <revest@chromium.org>,
+ Bastien Curutchet <bastien.curutchet@bootlin.com>, ebpf@linuxfoundation.org,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kselftest@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
+References: <20250411-many_args_arm64-v1-0-0a32fe72339e@bootlin.com>
+ <20250411-many_args_arm64-v1-1-0a32fe72339e@bootlin.com>
+ <CAEf4Bzbn6BdXTOb0dTcsQmOMZpp5=DzGS2hHHQ3+dwcja=gv+w@mail.gmail.com>
+ <D98Q8BRNUVS9.11J60C67L1ALR@bootlin.com>
+ <CAEf4BzZHMYyGDZ4c4eNXG7Fm=ecxCCbKhKbQTbCjvWmKtdwvBw@mail.gmail.com>
+ <D9E9IQQ3QKXM.3UJ17G9CBS1FH@bootlin.com>
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+In-Reply-To: <D9E9IQQ3QKXM.3UJ17G9CBS1FH@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgCnVlveJwpoXVW4KQ--.17342S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxAw4DtFy5WF18uFW8Wr4xXrb_yoW5CF4fpF
+	WFgF95KF4kGr18Za1vv3W0qrWav34fKry5JrWrtr1rZryDK3Z7JryjgF4Y9FWfCrn7Gw1j
+	vF42qayfur93ZFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
+	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
+	4xRDUUUUU==
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-2025-04-23T17:00:29-07:00, Deepak Gupta <debug@rivosinc.com>:
-> On Thu, Apr 10, 2025 at 01:04:39PM +0200, Radim Kr=C4=8Dm=C3=A1=C5=99 wro=
-te:
->>2025-03-14T14:39:24-07:00, Deepak Gupta <debug@rivosinc.com>:
->>> diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/=
-asm/thread_info.h
->>> @@ -62,6 +62,9 @@ struct thread_info {
->>>  	long			user_sp;	/* User stack pointer */
->>>  	int			cpu;
->>>  	unsigned long		syscall_work;	/* SYSCALL_WORK_ flags */
->>> +#ifdef CONFIG_RISCV_USER_CFI
->>> +	struct cfi_status	user_cfi_state;
->>> +#endif
+On 4/24/2025 3:24 AM, Alexis Lothoré wrote:
+> Hi Andrii,
+> 
+> On Wed Apr 23, 2025 at 7:15 PM CEST, Andrii Nakryiko wrote:
+>> On Thu, Apr 17, 2025 at 12:14 AM Alexis Lothoré
+>> <alexis.lothore@bootlin.com> wrote:
+>>>
+>>> Hi Andrii,
+>>>
+>>> On Wed Apr 16, 2025 at 11:24 PM CEST, Andrii Nakryiko wrote:
+>>>> On Fri, Apr 11, 2025 at 1:32 PM Alexis Lothoré (eBPF Foundation)
+>>>> <alexis.lothore@bootlin.com> wrote:
+> 
+> [...]
+> 
+>>> Indeed I initially checked whether I could return directly some alignment
+>>> info from btf, but it then involves the alignment computation in the btf
+>>> module. Since there could be minor differences between architectures about
+>>> alignment requirements, I though it would be better to in fact keep alignment
+>>> computation out of the btf module. For example, I see that 128 bits values
+>>> are aligned on 16 bytes on ARM64, while being aligned on 8 bytes on S390.
+>>>
+>>> And since for ARM64, all needed alignments are somehow derived from size
+>>> (it is either directly size for fundamental types, or alignment of the
+>>> largest member for structs, which is then size of largest member),
+>>> returning the size seems to be enough to allow the JIT side to compute
+>>> alignments.
 >>
->>I don't think it makes sense to put all the data in thread_info.
->>kernel_ssp and user_ssp is more than enough and the rest can comfortably
->>live elsewhere in task_struct.
+>> If you mean the size of "primitive" field and/or array element
+>> (applied recursively for all embedded structs/unions) then yes, that's
+>> close enough. But saying just "largest struct member" is wrong,
+>> because for
 >>
->>thread_info is supposed to be as small as possible -- just spanning
->>multiple cache-lines could be noticeable.
+>> struct blah {
+>>      struct {
+>>          int whatever[128];
+>>      } heya;
+>> };
+>>
+>>
+>> blah.heya has a large size, but alignment is still just 4 bytes.
+> 
+> Indeed, that's another case making my proposal fail :)
+> 
+>> I'd suggest looking at btf__align_of() in libbpf (tools/lib/bpf/btf.c)
+>> to see how we calculate alignment there. It seems to work decently
+>> enough. It won't cover any arch-specific extra rules like double
+>> needing 16-byte alignment (I vaguely remember something like that for
+>> some architectures, but I might be misremembering), or anything
+>> similar. It also won't detect (I don't think it's possible without
+>> DWARF) artificially increased alignment with attribute((aligned(N))).
+> 
+> Thanks for the pointer, I'll take a look at it. The more we discuss this
+> series, the less member size sounds relevant for what I'm trying to achieve
+> here.
+> 
+> Following Xu's comments, I have been thinking about how I could detect the
+> custom alignments and packing on structures, and I was wondering if I could
+> somehow benefit from __attribute__ encoding in BTF info ([1]). But
+> following your hint, I also see some btf_is_struct_packed() in
+> tools/lib/bpf/btf_dump.c that could help. I'll dig this further and see if
+> I can manage to make something work with all of this.
 >
-> I can change it to only include only `user_ssp`, base and size.
 
-No need for base and size either -- we don't touch that in the common
-exception code.
+With DWARF info, we might not need to detect the structure alignment anymore,
+since the DW_AT_location attribute tells us where the structure parameter is
+located on the stack, and DW_AT_byte_size gives us the size of the structure.
 
-> But before we go there, see below:
->
-> $ pahole -C thread_info kbuild/vmlinux
-> struct thread_info {
->          long unsigned int          flags;                /*     0     8 =
-*/
->          int                        preempt_count;        /*     8     4 =
-*/
->
->          /* XXX 4 bytes hole, try to pack */
->
->          long int                   kernel_sp;            /*    16     8 =
-*/
->          long int                   user_sp;              /*    24     8 =
-*/
->          int                        cpu;                  /*    32     4 =
-*/
->
->          /* XXX 4 bytes hole, try to pack */
->
->          long unsigned int          syscall_work;         /*    40     8 =
-*/
->          struct cfi_status          user_cfi_state;       /*    48    32 =
-*/
->          /* --- cacheline 1 boundary (64 bytes) was 16 bytes ago --- */
->          long unsigned int          a0;                   /*    80     8 =
-*/
->          long unsigned int          a1;                   /*    88     8 =
-*/
->          long unsigned int          a2;                   /*    96     8 =
-*/
->
->          /* size: 104, cachelines: 2, members: 10 */
->          /* sum members: 96, holes: 2, sum holes: 8 */
->          /* last cacheline: 40 bytes */
-> };
->
-> If we were to remove entire `cfi_status`, it would still be 72 bytes (88 =
-bytes
-> if shadow call stack were enabled) and already spans across two cacheline=
-s.
+> Thanks,
+> 
+> Alexis
+> 
+> [1] https://lore.kernel.org/bpf/20250130201239.1429648-1-ihor.solodrai@linux.dev/
+> 
 
-It has only 64 bytes of data without shadow call stack, but it wasted 8
-bytes on the holes.
-a2 is somewhat an outlier that is not used most exception paths and
-excluding it makes everything fit nicely even now.
-
-> if shadow call stack were enabled) and already spans across two cacheline=
-s. I
-> did see the comment above that it should fit inside a cacheline. Although=
- I
-> assumed its stale comment given that it already spans across cacheline an=
-d I
-> didn't see any special mention in commit messages of changes which grew t=
-his
-> structure above one cacheline. So I assumed this was a stale comment.
->
-> On the other hand, whenever enable/lock bits are checked, there is a high
-> likelyhood that user_ssp and other fields are going to be accessed and
-> thus it actually might be helpful to have it all in one cacheline during
-> runtime.
-
-Yes, although accessing enable/lock bits will be relatively rare.
-It seems better to have the overhead during thread setup, rather than on
-every trap.
-
-> So I am not sure if its helpful sticking to the comment which already is =
-stale.
-
-We could fix the holes and also use sp instead of a0 in the
-new_vmalloc_check, so everything would fit better.
-
-We are really close to fitting into a single cache-line, so I'd prefer
-if shadow stack only filled thread_info with data that is used very
-often in the exception handling code.
-
-I think we could do without user_sp in thread_info as well, so there are
-other packing options.
-
-Btw. could ssp be added to pt_regs?
-
-Thanks.
 
