@@ -1,88 +1,256 @@
-Return-Path: <linux-kselftest+bounces-31590-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31591-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6957A9B57D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Apr 2025 19:38:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BD649A9B588
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Apr 2025 19:39:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9F02C7B930D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Apr 2025 17:37:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9F3C57B958F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Apr 2025 17:38:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BB8E28E617;
-	Thu, 24 Apr 2025 17:36:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 704A328BAAB;
+	Thu, 24 Apr 2025 17:39:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E2gIiRDg"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pYnBL/zS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E072A28B50F;
-	Thu, 24 Apr 2025 17:36:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90B961AC43A
+	for <linux-kselftest@vger.kernel.org>; Thu, 24 Apr 2025 17:39:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745516173; cv=none; b=ZNkJJ0JKoh5eI8388j+HNv+LMfkjx9/9XhwQs+ZuM/MZaoxFrDu/FWj5/7tPj5tBPNri/NTowTA9MEphVzD72F4yEN9mrgMFZWMWbxH0h6tCHRo3jbk5vid5u3rVm7qKS8mOB6aw3MRa0JFYRL8kku1DUshur9SYBXHJ5P94PyU=
+	t=1745516345; cv=none; b=REZ7os7SKDUlnEzpf6t5Bzjy4tzVP0gpDZ43wUDyMyoysEe+rQ+P1ppJXdxpzDAFiLCKvB2oEdwK+E1HnEONZeuqE/EN4kR1vFQ6h999YUXrPugh/jdxCFvBZRwoim6uEYreEdMLX+UFEJsWQMgoVaJbMwOP8vKoWn7T0brLrOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745516173; c=relaxed/simple;
-	bh=LXwnnz906d1xYC1VPscfzjQaP1ILzKuqIOE7J7H2BE4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ebLK0Z/kgch6LKbuUVg0kyoaCoO9P5vPgUr0ZgREkvh/fMbiofmPBI+NHwo87cRa+N8Yf9eAC1U90VgzYWOqoM1zVGyr0vzggGWTD8DC2LU2ffdPf+NlyHnu5IWfwzIM8x+CuvoxaQx1jCAhUyEoBZQBNHaS5RED3CVZQ026hBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E2gIiRDg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A2A5C4CEE3;
-	Thu, 24 Apr 2025 17:36:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745516172;
-	bh=LXwnnz906d1xYC1VPscfzjQaP1ILzKuqIOE7J7H2BE4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=E2gIiRDg2CldVcrOjV9LGHtDUQ3be3aAfogJdjMryL4Z+kbzUckehRTBiw6cez4K1
-	 rK+VIPAxBsND7yVR9FGxRq4nCa2Xkm6NzvGLumQM/OR4hYKU+XaElpliX+NOUgPjuP
-	 CKUSh71eLXfrgUrEgPHt75u0a47t/vdP3w5td/v5oKqNLn23ZtEROMo917Gf4r47B+
-	 pEh1dmoV787l6TyYLOcshL8VX62Vf946AjFMnwsXzc3mqX3iizeXREpZRayvSlQfXB
-	 LrqA0rgcZlITPr4GREkLjv//LY4z9yBdR19rRtx+633DQIdKaE64Hyh5kxmAXP2AiR
-	 j3+w5OKgE06CQ==
-Date: Thu, 24 Apr 2025 18:36:05 +0100
-From: Simon Horman <horms@kernel.org>
-To: chia-yu.chang@nokia-bell-labs.com
-Cc: dsahern@kernel.org, kuniyu@amazon.com, bpf@vger.kernel.org,
-	netdev@vger.kernel.org, dave.taht@gmail.com, pabeni@redhat.com,
-	jhs@mojatatu.com, kuba@kernel.org, stephen@networkplumber.org,
-	xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net,
-	edumazet@google.com, andrew+netdev@lunn.ch, donald.hunter@gmail.com,
-	ast@fiberby.net, liuhangbin@gmail.com, shuah@kernel.org,
-	linux-kselftest@vger.kernel.org, ij@kernel.org,
-	ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com,
-	g.white@cablelabs.com, ingemar.s.johansson@ericsson.com,
-	mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at,
-	Jason_Livingood@comcast.com, vidhi_goel@apple.com
-Subject: Re: [PATCH v5 net-next 00/15] AccECN protocol patch series
-Message-ID: <20250424173605.GL3042781@horms.kernel.org>
-References: <20250422153602.54787-1-chia-yu.chang@nokia-bell-labs.com>
+	s=arc-20240116; t=1745516345; c=relaxed/simple;
+	bh=778C7L6jHkuS9sL9E7t1piWeaUfftWC+i44EveEJyWg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Content-Type; b=tyhknqg0uFY4luKc3tGjK2pk6AhvKG4y1ki0CH5MJ9/YsAMKLSTqG7AG+ESCK6SnCiYpy+oCI3L6DIE++eEixlsjd/JIYlz9czMQU6rfvqkw8zq4wVANf0S0t5hTcHiFqxWEDhNngs0hDj5+Ma9kHUk0GoGYJEKzqv6ky9QRZ7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pYnBL/zS; arc=none smtp.client-ip=209.85.160.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-47e9fea29easo21441cf.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Apr 2025 10:39:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1745516342; x=1746121142; darn=vger.kernel.org;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AQve8Z1vW/P2YOkExAreJok4GWtTgHefYj/Q8y+Ff4I=;
+        b=pYnBL/zSIYqy9Sse3HvCyIqFQ2uctO9G9wxJVgR+0lid9MuT6p0IntTRBYANzZIoIi
+         rjA8xdTXcqL7K2LSm+R4LW/1o305PZP0u9qvZ6moqQp4ML8XG8PDUhBSvO7WIe+d1B2p
+         PhlR7PQTt1WGnl7xV76tAjHxqGCwX76ZS6vaMoTqau4UqJJUrTaQaZR5ncqEcDUR2zCN
+         YJGFwO9y+NCzndYbTf0HA2PafUBaSp4CnKspAzSMMhC+PR0ZIU0ehDMGYTJgJ5RAAxRF
+         XRbXcNqhMm8mMBxe1EPYyPuvsOSI4B6OxRNar8iUKzwQqr4GQcEAkB/JX0X9bSG9AxPC
+         3yMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745516342; x=1746121142;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AQve8Z1vW/P2YOkExAreJok4GWtTgHefYj/Q8y+Ff4I=;
+        b=r3GG1139pYMdfFjeRjnopcLVaA2aj8T+nIfL3ZIRwhQgZgy4sHqVxi0OQoDGpCHJnh
+         kyhvU2lhhgA9FSCLg0IUE94+EWxbGbyNQ4mDNM1F7YFvrmBSLVRvBGi5Q66drbY590iQ
+         XqsaBjoWPi5hXsBRWywYLJ+o11bA6GrHOcZnJf/0oGb/Uw4MWZHF/UoKWRzkR+rSGM+u
+         yIVSMrrttkJnJNpBIrWwStBvXsc3ImDk0BXV2aIpq7Q4E6C3i/VPz1nY+dfRQD96ZwFW
+         mtb8eG0AHQSejNxvikyCVn6JzL5+iGYvCHV6xBEdKO0YlmgYyfybFCJ1NOMAiQkgoWKD
+         3U4A==
+X-Forwarded-Encrypted: i=1; AJvYcCX48kPmxP+OehdaQazMiF7EFQduLV/XwJjeUi/E08QaHGuDQiLYPvBeB9pp2zaxpg16rDCWNqwLL9yrRzw+f3Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzhiaOeICVHdkZ/0XB3TDjNrV3cvX5+3iHAky9nBHDxVMgdk368
+	dyJXUibf4+cahzo0Ago5d+j0yoOGCSQhlPPr8kohxCIChc06lKfsYPd+ncJVBVP6xAoC6AJY2Fo
+	5hStn2+m4RY2k1SFVg20ZLIXDeKe+iSfu2jzA
+X-Gm-Gg: ASbGncuA6AKSJcN8h7uTWlcPO7U+XFTtvUcywVEQQ/FuvPTaG30AjuTPGMiViDpRoHb
+	T07F9Gx5cv9rIRdMhMr1HTdR7IC/UVji086LMMAn+QXs39Jo+AkBvb3WOtYkUFGzZbossZpV3ji
+	+EAv5y1irMZrXDJs+g9B2LNdB0XZ0reSJphZ58OXx+dw8QNdNNeZT+
+X-Google-Smtp-Source: AGHT+IEaeLExckdIth/b7h0UkPH6TCrtID8z1DnhzMSXKNMJB5xFB7I7YwWnciAgMdM0WUca1IkmZJFJkD5T7GZBSZ8=
+X-Received: by 2002:a05:622a:5a95:b0:47d:cd93:5991 with SMTP id
+ d75a77b69052e-47ea4e482fcmr4499751cf.21.1745516342030; Thu, 24 Apr 2025
+ 10:39:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250422153602.54787-1-chia-yu.chang@nokia-bell-labs.com>
+References: <20250418174959.1431962-1-surenb@google.com> <20250418174959.1431962-8-surenb@google.com>
+ <CAEf4BzYuA3ZRCwPsAxhQZDOOpjSTrphKEsgPAqgRP8Ly7+fTWw@mail.gmail.com>
+ <CAJuCfpE_jJ0Xq5T0HcLpquRzO+NdvN3T3_JXEwSjt2NG9Ryy5g@mail.gmail.com>
+ <CAEf4BzYctDuS4DRTzdRQyyhCYvFTggOz=wcbizXEYvC_z_SSng@mail.gmail.com>
+ <6ay37xorr35nw4ljtptnfqchuaozu73ffvjpmwopat42n4t6vr@qnr6xvralx2o>
+ <CAJuCfpGc-23xpEYZQQevkzx+iN3AAqXXzbyqJAQjd4TQP9j9Dg@mail.gmail.com>
+ <CAEf4BzYBdG95Zhi0M0CDTHAU6V9sF+kGSLB+346dq0Aa4Timmg@mail.gmail.com> <by4pd6zomtvo64vjddthqu3ps2n7fqzaeqttinmy5nzttxjjd6@ch2uxmy2bgks>
+In-Reply-To: <by4pd6zomtvo64vjddthqu3ps2n7fqzaeqttinmy5nzttxjjd6@ch2uxmy2bgks>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Thu, 24 Apr 2025 10:38:50 -0700
+X-Gm-Features: ATxdqUHNYGXmEC72FqW87V5mUP50xMoSw_i6A76PXBjs9grB8Rv_KLgtJdCe72k
+Message-ID: <CAJuCfpEAJGwCTUcQx1wjKkE2PJTf_EtX=xAwxLSdVqWn-cQTGw@mail.gmail.com>
+Subject: Re: [PATCH v3 7/8] mm/maps: read proc/pid/maps under RCU
+To: "Liam R. Howlett" <Liam.Howlett@oracle.com>, Andrii Nakryiko <andrii.nakryiko@gmail.com>, 
+	Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org, lorenzo.stoakes@oracle.com, 
+	david@redhat.com, vbabka@suse.cz, peterx@redhat.com, jannh@google.com, 
+	hannes@cmpxchg.org, mhocko@kernel.org, paulmck@kernel.org, shuah@kernel.org, 
+	adobriyan@gmail.com, brauner@kernel.org, josef@toxicpanda.com, 
+	yebin10@huawei.com, linux@weissschuh.net, willy@infradead.org, 
+	osalvador@suse.de, andrii@kernel.org, ryan.roberts@arm.com, 
+	christophe.leroy@csgroup.eu, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 22, 2025 at 05:35:47PM +0200, chia-yu.chang@nokia-bell-labs.com wrote:
-> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-> 
-> Hello,
-> 
-> Plese find the v5:
-> 
-> v5 (22-Apr-2025)
-> - Further fix for 32-bit ARM alignment in tcp.c (Simon Horman <horms@kernel.org>)
-> 
-> v4 (18-Apr-2025)
-> - Fix 32-bit ARM assertion for alignment requirement (Simon Horman <horms@kernel.org>)
+On Thu, Apr 24, 2025 at 9:42=E2=80=AFAM Liam R. Howlett <Liam.Howlett@oracl=
+e.com> wrote:
+>
+> * Andrii Nakryiko <andrii.nakryiko@gmail.com> [250424 12:04]:
+> > On Thu, Apr 24, 2025 at 8:20=E2=80=AFAM Suren Baghdasaryan <surenb@goog=
+le.com> wrote:
+> > >
+> > > On Wed, Apr 23, 2025 at 5:24=E2=80=AFPM Liam R. Howlett <Liam.Howlett=
+@oracle.com> wrote:
+> > > >
+> > > > * Andrii Nakryiko <andrii.nakryiko@gmail.com> [250423 18:06]:
+> > > > > On Wed, Apr 23, 2025 at 2:49=E2=80=AFPM Suren Baghdasaryan <suren=
+b@google.com> wrote:
+> > > > > >
+> > > > > > On Tue, Apr 22, 2025 at 3:49=E2=80=AFPM Andrii Nakryiko
+> > > > > > <andrii.nakryiko@gmail.com> wrote:
+> > > > > > >
+> > > > > > > On Fri, Apr 18, 2025 at 10:50=E2=80=AFAM Suren Baghdasaryan <=
+surenb@google.com> wrote:
+> > > > > > > >
+> > > > > > > > With maple_tree supporting vma tree traversal under RCU and=
+ vma and
+> > > > > > > > its important members being RCU-safe, /proc/pid/maps can be=
+ read under
+> > > > > > > > RCU and without the need to read-lock mmap_lock. However vm=
+a content
+> > > > > > > > can change from under us, therefore we make a copy of the v=
+ma and we
+> > > > > > > > pin pointer fields used when generating the output (current=
+ly only
+> > > > > > > > vm_file and anon_name). Afterwards we check for concurrent =
+address
+> > > > > > > > space modifications, wait for them to end and retry. While =
+we take
+> > > > > > > > the mmap_lock for reading during such contention, we do tha=
+t momentarily
+> > > > > > > > only to record new mm_wr_seq counter. This change is design=
+ed to reduce
+> > > > > > >
+> > > > > > > This is probably a stupid question, but why do we need to tak=
+e a lock
+> > > > > > > just to record this counter? uprobes get away without taking =
+mmap_lock
+> > > > > > > even for reads, and still record this seq counter. And then d=
+etect
+> > > > > > > whether there were any modifications in between. Why does thi=
+s change
+> > > > > > > need more heavy-weight mmap_read_lock to do speculative reads=
+?
+> > > > > >
+> > > > > > Not a stupid question. mmap_read_lock() is used to wait for the=
+ writer
+> > > > > > to finish what it's doing and then we continue by recording a n=
+ew
+> > > > > > sequence counter value and call mmap_read_unlock. This is what
+> > > > > > get_vma_snapshot() does. But your question made me realize that=
+ we can
+> > > > > > optimize m_start() further by not taking mmap_read_lock at all.
+> > > > > > Instead of taking mmap_read_lock then doing drop_mmap_lock() we=
+ can
+> > > > > > try mmap_lock_speculate_try_begin() and only if it fails do the=
+ same
+> > > > > > dance we do in the get_vma_snapshot(). I think that should work=
+.
+> > > > >
+> > > > > Ok, yeah, it would be great to avoid taking a lock in a common ca=
+se!
+> > > >
+> > > > We can check this counter once per 4k block and maintain the same
+> > > > 'tearing' that exists today instead of per-vma.  Not that anyone sa=
+id
+> > > > they had an issue with changing it, but since we're on this road an=
+yways
+> > > > I'd thought I'd point out where we could end up.
+> > >
+> > > We would need to run that check on the last call to show_map() right
+> > > before seq_file detects the overflow and flushes the page. On
+> > > contention we will also be throwing away more prepared data (up to a
+> > > page worth of records) vs only the last record. All in all I'm not
+> > > convinced this is worth doing unless increased chances of data tearin=
+g
+> > > is identified as a problem.
+> > >
+> >
+> > Yep, I agree, with filling out 4K of data we run into much higher
+> > chances of conflict, IMO. Not worth it, I'd say.
+>
+> Sounds good.
+>
+> If this is an issue we do have a path forward still.  Although it's less
+> desirable.
+>
+> >
+> > > >
+> > > > I am concerned about live locking in either scenario, but I haven't
+> > > > looked too deep into this pattern.
+> > > >
+> > > > I also don't love (as usual) the lack of ensured forward progress.
+> > >
+> > > Hmm. Maybe we should add a retry limit on
+> > > mmap_lock_speculate_try_begin() and once the limit is hit we just tak=
+e
+> > > the mmap_read_lock and proceed with it? That would prevent a
+> > > hyperactive writer from blocking the reader's forward progress
+> > > indefinitely.
+> >
+> > Came here to say the same. I'd add a small number of retries (3-5?)
+> > and then fallback to the read-locked approach. The main challenge is
+> > to keep all this logic nicely isolated from the main VMA
+> > search/printing logic.
+> >
+> > For a similar pattern in uprobes, we don't even bother to rety, we
+> > just fallback to mmap_read_lock and proceed, under the assumption that
+> > this is going to be very rare and thus not important from the overall
+> > performance perspective.
+>
+> In this problem space we are dealing with a herd of readers caused by
+> writers delaying an ever-growing line of readers, right?
 
-Thanks, I confirm that v6 appears to be clear wrt these
-build checks for 32-bit ARM assertion for alignment requirements.
+I don't know if we have a herd of readers. The problem statement was
+for a low-priority reader (monitors) blocking a high-priority writer.
+Multiple readers are of course possible, so I think as long as we can
+guarantee forward progress we should be ok. Is that reasonable?
 
-...
+>
+> Assuming there is a backup caused by a writer, then I don't know if the
+> retry is going to do anything more than heat the data centre.
+>
+> The readers that take the read lock will get the data, while the others
+> who arrive during read locked time can try lockless, but will most
+> likely have a run time that extends beyond the readers holding the lock
+> and will probably be interrupted by the writer.
+>
+> We can predict the new readers will also not make it through in time
+> because the earlier ones failed.  The new readers will then take the
+> lock and grow the line of readers.
+>
+> Does that make sense?
+
+Yeah. I guess we could guarantee forward progress if the readers would
+take mmap_read_lock on contention and produce one page worth of output
+under that lock before dropping it and continuing with speculation
+again. If contention happens again it grabs the mma_read_lock and
+repeats the dance. IOW, we start with speculation, on contention we
+grab the lock to produce one page and go back to speculation. Repeat
+until all vmas are reported. OTOH I guess Paul's benchmark would show
+some regression though... Can't have everything :)
+
+>
+> Thanks,
+> Liam
+>
+>
 
