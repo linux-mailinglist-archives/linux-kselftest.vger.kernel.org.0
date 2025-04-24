@@ -1,77 +1,50 @@
-Return-Path: <linux-kselftest+bounces-31556-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31557-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B16AAA9AF2D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Apr 2025 15:37:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AE8DA9AF77
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Apr 2025 15:41:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3ED8E9A3F80
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Apr 2025 13:36:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D56C61B80BFC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Apr 2025 13:41:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 217E9178372;
-	Thu, 24 Apr 2025 13:37:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CE5227F73B;
+	Thu, 24 Apr 2025 13:38:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="STPhnhl3"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="gI9Qi8iA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2D541624E9
-	for <linux-kselftest@vger.kernel.org>; Thu, 24 Apr 2025 13:36:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A23D71A2381;
+	Thu, 24 Apr 2025 13:38:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745501820; cv=none; b=CfUZyInv5HSIkaRQ9QCtOjn5qeCgn4ay0pLsd0vnkrLv1OgxHuV2drmdubu5WRApwZdrIlrXfTiovstsx3Eb/tT7kvtkoLnispa785thi+ZHfadELA6+1SHW9tJGY9zD5puV7o3js9ET7aHVacZX232JWiTyeLiicmzRfJUkwtQ=
+	t=1745501929; cv=none; b=uNB7Iv45XPxbUi0tP2WPuSVsG4c0c5hDArU5VJtejSy93//XWmq0LBiQXKrxgQYuWc/+ZezISI0VUx8G+KDlrwGBiUUhDbvpFHfmvRsVHbApEcnBt//Q1q55xzpBYNFFJelr9sbnuWfgBUZ/BwQ1m8vkEq79CjGsVU3WOjNi/k4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745501820; c=relaxed/simple;
-	bh=mJgp6Mchv4iv2by+fPTrmWpvDmstqIj/vVuuTYwKWrc=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=SdOUKYmVsJAbV67s0IU6C5iKVuHQkkfelqBvx7hqsFYg3eHduGUstmynugHhlPEPrzvb5krrWUXT3xYM09yr4dDN4Vqw0+Epzb+cYFSdnxGQGWoN1VGXy6b04TUBVFbaJpRyCo7CyV23OT9GOhNVWOnTO6LXB+rblmP7hL9nzOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=STPhnhl3; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3912387cf48so38078f8f.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Apr 2025 06:36:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1745501816; x=1746106616; darn=vger.kernel.org;
-        h=in-reply-to:references:from:to:cc:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=u72nfMy9zYS5aW9xBcDq6LESieHcry02Dg/8XEt7OSw=;
-        b=STPhnhl3MTSastFv/OTSfSJnvslCvjVFt8jQhYjLvJcAvNTMw2P95yoTCq7JNMH3oB
-         ZiHZePSZTKb8HQPOF2FZj7lJcheeYAM9TZI4ywWPoJDKd+qnWzhYDa3b6brXchZ2gz1A
-         iOds1IBKHaBEtEMgAZHyp7VnSGreB1libYVDSk0VW24DaFN57lhhD4mNPToS/FGOySVe
-         OBCN8JXd+nYE3DmFRwi/qQAIjBWxS9rSeLtljz+7N0EWc5IgDelmDHVKWrdW+BDfo+fC
-         NEF2idC69hqasCOrs8POBpnilmFdiY2QJvnVbXouIESH4LHz2D50/QSNyQ8cimsa/YYW
-         tMmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745501816; x=1746106616;
-        h=in-reply-to:references:from:to:cc:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=u72nfMy9zYS5aW9xBcDq6LESieHcry02Dg/8XEt7OSw=;
-        b=JBmD1+G2SfJLF/UIbz+wWA+9mBjiFxHE4TvzarzqZxsM7fO/vAuQDlPzh3YTkQfoLm
-         h6sm3NLaU1T+yqfrtj+yZaw5K2lZFfkl2BEnp8SySW/pqxyyZUN20Bmjpfh8qp6Mam7T
-         fnC5itFRMMcCbKubk+rcZH3kZ6n2Xp8I7u8GdesqzKOvZ5wqMqi1txceKqgw9y28gF+z
-         KnDuIp5DF7ZJDmZ3tlXy3uvCsOcZMTA1J2E0Em1cuDXjqOyJo3uyqMgR+1+MqtZjgGTI
-         JtepSLVbVG1Y0uhZ6wPcB44dUVi6O8bXcyUTt0eWu5N9G4DK/w3vL6wScv0gucqPvfB3
-         pm4w==
-X-Forwarded-Encrypted: i=1; AJvYcCUE0Eg93RttJALt3NfHp/PGdbMRdWaccvnpo5WtgGiR9cgxYRrcrelUV+Vd+ewlTYuSuaevMvUQSgBDAGDLqns=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx8aFuWYNtqZIoJ55HuI6hdnatGHVua57sfiZyBqo67Acj1e5R2
-	WS4O7oU0B4GAIvMMykCqE8elZMicJeoUs9X4tur4IXmXSkQ3Csfh8q4K5NJbp+Q=
-X-Gm-Gg: ASbGnctjD6/E8rjBHpw52DEy2MRM3A7W+Zv4ZLY6hK1GnIEC9AA6o16O1NwFLQ/7jBz
-	wc+1G3K/Dq7RB9z4y8LGsCSB2E63pz7D8k9WbhCXakpJKiTDqvgre+Kott4sShjSPqCH09/3CRT
-	L6Lwjfa1AzQjFxlgYxG3IXNwqU/RusnobT1idMcuXAbY5G7esabbhknsHyh3CStT+baVDvMRXPo
-	NLneXevWPq8dGDTBPyvLpg0MtaNxIqlj+LJd5ePU0Nn14Al/9j3EeE18yTIrjUuuWI+BD0QpsLz
-	bWSV8xgBlqOxzd1OXJ+BjvQOeJY8F7cz9HDrRvyDTBZKCaXT
-X-Google-Smtp-Source: AGHT+IEvTiSK1Lb+RPBdQ/DuDmeOaJEszTrN5CFCiZtbJdEyNkpwKicv/xW9sGpiPTRfU1AmU+RxSg==
-X-Received: by 2002:a05:6000:2483:b0:3a0:65ab:89d5 with SMTP id ffacd0b85a97d-3a06cfaf02fmr812129f8f.15.1745501815962;
-        Thu, 24 Apr 2025 06:36:55 -0700 (PDT)
-Received: from localhost ([2a02:8308:a00c:e200:b30c:ee4d:9e10:6a46])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a06d4c30d7sm2135597f8f.44.2025.04.24.06.36.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Apr 2025 06:36:55 -0700 (PDT)
+	s=arc-20240116; t=1745501929; c=relaxed/simple;
+	bh=JT9l/+e3r1Y05jUzOsZqr8YD8XUbFvoCajdKIzKQ9jU=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=LVEy96ewaPV/JUlOihiskUl8xsnVeCAq8gFeFt9LeYq2vFmxePVbZ5hYbH1bYby6q25PSfpugM5MEC+U+1fj50mvWN3oGwPhP46YCMyNL9mh4NRWRrvaqWh7PV3uywxcT5ePDixWSZqGjp8/1WvIsD/o0MUZSzgOI1OTRAwG+fQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=gI9Qi8iA; arc=none smtp.client-ip=217.70.183.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DD20543A18;
+	Thu, 24 Apr 2025 13:38:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1745501918;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JT9l/+e3r1Y05jUzOsZqr8YD8XUbFvoCajdKIzKQ9jU=;
+	b=gI9Qi8iAoHo/gBxh9R+vG0T3VpMLo5YARKDaRzoVfMvD3Kkj1HD5Uvt33GjFv5WHHyIurg
+	ECYtVZKxvk99eb/wdY73MvgT6BzLddjF5SjDB51Tw5uNtdrI33XtLLs80gHarB744Bkjc8
+	DWrmSkphdd1Al/1SSUT7QCcJtagYi/1cUE7+PJ4EEaJDPM57AcgG2SDDwq8/AKzS/+FWLy
+	kwRznWKkWuxRt2VhPK65YLXmKWOid1ZPnDfDQYQF93h6yR1YeZIAcY73oWHtOV17t61Y2q
+	E2lW9ycVZgB6kUDduFAin8Sbas/RVeP+GBA5ls/GR2BGECqPv+IEs2bEhMpV2A==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -80,178 +53,98 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 24 Apr 2025 15:36:54 +0200
-Message-Id: <D9EWR3RQK0FD.3GF55KNS53YSR@ventanamicro.com>
-Subject: Re: [PATCH v12 12/28] riscv: Implements arch agnostic shadow stack
- prctls
-Cc: "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar"
- <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
- <dave.hansen@linux.intel.com>, <x86@kernel.org>, "H. Peter Anvin"
- <hpa@zytor.com>, "Andrew Morton" <akpm@linux-foundation.org>, "Liam R.
- Howlett" <Liam.Howlett@oracle.com>, "Vlastimil Babka" <vbabka@suse.cz>,
- "Lorenzo Stoakes" <lorenzo.stoakes@oracle.com>, "Paul Walmsley"
- <paul.walmsley@sifive.com>, "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert
- Ou" <aou@eecs.berkeley.edu>, "Conor Dooley" <conor@kernel.org>, "Rob
- Herring" <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
- "Arnd Bergmann" <arnd@arndb.de>, "Christian Brauner" <brauner@kernel.org>,
- "Peter Zijlstra" <peterz@infradead.org>, "Oleg Nesterov" <oleg@redhat.com>,
- "Eric Biederman" <ebiederm@xmission.com>, "Kees Cook" <kees@kernel.org>,
- "Jonathan Corbet" <corbet@lwn.net>, "Shuah Khan" <shuah@kernel.org>, "Jann
- Horn" <jannh@google.com>, "Conor Dooley" <conor+dt@kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
- <linux-mm@kvack.org>, <linux-riscv@lists.infradead.org>,
- <devicetree@vger.kernel.org>, <linux-arch@vger.kernel.org>,
- <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <alistair.francis@wdc.com>, <richard.henderson@linaro.org>,
- <jim.shu@sifive.com>, <andybnac@gmail.com>, <kito.cheng@sifive.com>,
- <charlie@rivosinc.com>, <atishp@rivosinc.com>, <evan@rivosinc.com>,
- <cleger@rivosinc.com>, <alexghiti@rivosinc.com>, <samitolvanen@google.com>,
- <broonie@kernel.org>, <rick.p.edgecombe@intel.com>, "linux-riscv"
- <linux-riscv-bounces@lists.infradead.org>
-To: "Deepak Gupta" <debug@rivosinc.com>
-From: =?utf-8?q?Radim_Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@ventanamicro.com>
-References: <20250314-v5_user_cfi_series-v12-0-e51202b53138@rivosinc.com>
- <20250314-v5_user_cfi_series-v12-12-e51202b53138@rivosinc.com>
- <D92V2NPNZYV0.136MJ2HOK48HE@ventanamicro.com>
- <aAnBmexbL4XmVxQk@debug.ba.rivosinc.com>
-In-Reply-To: <aAnBmexbL4XmVxQk@debug.ba.rivosinc.com>
+Date: Thu, 24 Apr 2025 15:38:35 +0200
+Message-Id: <D9EWSDXHDGFJ.FIDSHIR1OP80@bootlin.com>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu"
+ <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "KP Singh"
+ <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>, "Hao Luo"
+ <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>, "Puranjay Mohan"
+ <puranjay@kernel.org>, "Catalin Marinas" <catalin.marinas@arm.com>, "Will
+ Deacon" <will@kernel.org>, "Mykola Lysenko" <mykolal@fb.com>, "Shuah Khan"
+ <shuah@kernel.org>, "Maxime Coquelin" <mcoquelin.stm32@gmail.com>,
+ "Alexandre Torgue" <alexandre.torgue@foss.st.com>, "Florent Revest"
+ <revest@chromium.org>, "Bastien Curutchet" <bastien.curutchet@bootlin.com>,
+ <ebpf@linuxfoundation.org>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+ <linux-kselftest@vger.kernel.org>,
+ <linux-stm32@st-md-mailman.stormreply.com>
+Subject: Re: [PATCH RFC bpf-next 1/4] bpf: add struct largest member size in
+ func model
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: "Xu Kuohai" <xukuohai@huaweicloud.com>, "Andrii Nakryiko"
+ <andrii.nakryiko@gmail.com>
+X-Mailer: aerc 0.20.1-0-g2ecb8770224a
+References: <20250411-many_args_arm64-v1-0-0a32fe72339e@bootlin.com>
+ <20250411-many_args_arm64-v1-1-0a32fe72339e@bootlin.com>
+ <CAEf4Bzbn6BdXTOb0dTcsQmOMZpp5=DzGS2hHHQ3+dwcja=gv+w@mail.gmail.com>
+ <D98Q8BRNUVS9.11J60C67L1ALR@bootlin.com>
+ <CAEf4BzZHMYyGDZ4c4eNXG7Fm=ecxCCbKhKbQTbCjvWmKtdwvBw@mail.gmail.com>
+ <D9E9IQQ3QKXM.3UJ17G9CBS1FH@bootlin.com>
+ <6b6472c3-0718-4e60-9972-c166d51962a3@huaweicloud.com>
+In-Reply-To: <6b6472c3-0718-4e60-9972-c166d51962a3@huaweicloud.com>
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvgeelieduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpegggfgtfffkvefuhffvofhfjgesthhqredtredtjeenucfhrhhomheptehlvgigihhsucfnohhthhhorhoruceorghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeelkeehiefhfeehvefhtdegueelkeehffffffeuvdekkeekuddvueeguefgieeukeenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepledtrdekledrudeifedruddvjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeeltddrkeelrdduieefrdduvdejpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepfedtpdhrtghpthhtohepgihukhhuohhhrghisehhuhgrfigvihgtlhhouhgurdgtohhmpdhrtghpthhtoheprghnughrihhirdhnrghkrhihihhkohesghhmrghilhdrtghomhdprhgtphhtthhopegrshhtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprhgtphhtthhopehjohhhn
+ hdrfhgrshhtrggsvghnugesghhmrghilhdrtghomhdprhgtphhtthhopegrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdhrtghpthhtohepvgguugihiiekjeesghhmrghilhdrtghomh
+X-GND-Sasl: alexis.lothore@bootlin.com
 
-2025-04-23T21:44:09-07:00, Deepak Gupta <debug@rivosinc.com>:
-> On Thu, Apr 10, 2025 at 11:45:58AM +0200, Radim Kr=C4=8Dm=C3=A1=C5=99 wro=
-te:
->>2025-03-14T14:39:31-07:00, Deepak Gupta <debug@rivosinc.com>:
->>> diff --git a/arch/riscv/include/asm/usercfi.h b/arch/riscv/include/asm/=
-usercfi.h
->>> @@ -14,7 +15,8 @@ struct kernel_clone_args;
->>>  struct cfi_status {
->>>  	unsigned long ubcfi_en : 1; /* Enable for backward cfi. */
->>> -	unsigned long rsvd : ((sizeof(unsigned long) * 8) - 1);
->>> +	unsigned long ubcfi_locked : 1;
->>> +	unsigned long rsvd : ((sizeof(unsigned long) * 8) - 2);
+Hi Xu,
+
+On Thu Apr 24, 2025 at 2:00 PM CEST, Xu Kuohai wrote:
+> On 4/24/2025 3:24 AM, Alexis Lothor=C3=A9 wrote:
+>> Hi Andrii,
+>>=20
+>> On Wed Apr 23, 2025 at 7:15 PM CEST, Andrii Nakryiko wrote:
+>>> On Thu, Apr 17, 2025 at 12:14=E2=80=AFAM Alexis Lothor=C3=A9
+>>> <alexis.lothore@bootlin.com> wrote:
+>>>>
+>>>> Hi Andrii,
+>>>>
+>>>> On Wed Apr 16, 2025 at 11:24 PM CEST, Andrii Nakryiko wrote:
+>>>>> On Fri, Apr 11, 2025 at 1:32=E2=80=AFPM Alexis Lothor=C3=A9 (eBPF Fou=
+ndation)
+>>>>> <alexis.lothore@bootlin.com> wrote:
+
+[...]
+
+>> Thanks for the pointer, I'll take a look at it. The more we discuss this
+>> series, the less member size sounds relevant for what I'm trying to achi=
+eve
+>> here.
+>>=20
+>> Following Xu's comments, I have been thinking about how I could detect t=
+he
+>> custom alignments and packing on structures, and I was wondering if I co=
+uld
+>> somehow benefit from __attribute__ encoding in BTF info ([1]). But
+>> following your hint, I also see some btf_is_struct_packed() in
+>> tools/lib/bpf/btf_dump.c that could help. I'll dig this further and see =
+if
+>> I can manage to make something work with all of this.
 >>
->>The rsvd field shouldn't be necessary as the container for the bitfield
->>is 'unsigned long' sized.
->>
->>Why don't we use bools here, though?
->>It might produce a better binary and we're not hurting for struct size.
 >
-> If you remember one of the previous patch discussion, this goes into
-> `thread_info` Don't want to bloat it. Even if we end shoving into task_st=
-ruct,
-> don't want to bloat that either. I can just convert it into bitmask if
-> bitfields are an eyesore here.
+> With DWARF info, we might not need to detect the structure alignment anym=
+ore,
+> since the DW_AT_location attribute tells us where the structure parameter=
+ is
+> located on the stack, and DW_AT_byte_size gives us the size of the struct=
+ure.
 
-  "unsigned long rsvd : ((sizeof(unsigned long) * 8) - 2);"
+I am not sure to follow you here, because DWARF info is not accessible
+from kernel at runtime, right ? Or are you meaning that we could, at build
+time, enrich the BTF info embedded in the kernel thanks to DWARF info ?
 
-is an eyesore that defines exactly the same as the two lines alone
+Thanks,
 
-  unsigned long ubcfi_en : 1;
-  unsigned long ubcfi_locked : 1;
+Alexis
 
-That one should be removed.
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
-If we have only 4 bits in 4/8 bytes, then bitfields do generate worse
-code than 4 bools and a 0/4 byte hole.  The struct size stays the same.
-
-I don't care much about the switch to bools, though, because this code
-is not called often.
-
->>> @@ -262,3 +292,83 @@ void shstk_release(struct task_struct *tsk)
->>> +int arch_set_shadow_stack_status(struct task_struct *t, unsigned long =
-status)
->>> +{
->>> +	/* Request is to enable shadow stack and shadow stack is not enabled =
-already */
->>> +	if (enable_shstk && !is_shstk_enabled(t)) {
->>> +		/* shadow stack was allocated and enable request again
->>> +		 * no need to support such usecase and return EINVAL.
->>> +		 */
->>> +		if (is_shstk_allocated(t))
->>> +			return -EINVAL;
->>> +
->>> +		size =3D calc_shstk_size(0);
->>> +		addr =3D allocate_shadow_stack(0, size, 0, false);
->>
->>Why don't we use the userspace-allocated stack?
->>
->>I'm completely missing the design idea here...  Userspace has absolute
->>over the shadow stack pointer CSR, so we don't need to do much in Linux:
->>
->>1. interface to set up page tables with -W- PTE and
->>2. interface to control senvcfg.SSE.
->>
->>Userspace can do the rest.
->
-> Design is like following:
->
-> When a user task wants to enable shadow stack for itself, it has to issue
-> a syscall to kernel (like this prctl). Now it can be done independently b=
-y
-> user task by first issuing `map_shadow_stack`, then asking kernel to ligh=
-t
-> up envcfg bit and eventually when return to usermode happens, it can writ=
-e
-> to CSR. It is no different from doing all of the above together in single
-> `prctl` call. They are equivalent in that nature.
->
-> Background is that x86 followed this because x86 had workloads/binaries/
-> functions with (deep)recursive functions and thus by default were forced
-> to always allocate shadow stack to be of the same size as data stack. To
-> reduce burden on userspace for determining and then allocating same size
-> (size of data stack) shadow stack, prctl would do the job of calculating
-> default shadow stack size (and reduce programming error in usermode). arm=
-64
-> followed the suite. I don't want to find out what's the compatiblity issu=
-es
-> we will see and thus just following the suite (given that both approaches
-> are equivalent). Take a look at static `calc_shstk_size(unsigned long siz=
-e)`.
->
-> Coming back to your question of why not allowing userspace to manage its
-> own shadow stack. Answer is that it can manage its own shadow stack. If i=
-t
-> does, it just have to be aware of size its allocating for shadow stack.
-
-It's just that userspace cannot prevent allocation of the default stack
-when enabling it, which is the weird part to me.
-The allocate and enable syscalls could have been nicely composable.
-
-> There is already a patch series going on to manage this using clone3.
-> https://lore.kernel.org/all/20250408-clone3-shadow-stack-v15-4-3fa245c6e3=
-be@kernel.org/
-
-A new ioctl does seem to solve most of the practical issues, thanks.
-
-> I fully expect green thread implementations in rust/go or swapcontext
-> based thread management doing this on their own.
->
-> Current design is to ensure existing apps dont have to change a lot in
-> userspace and by default kernel gives compatibility. Anyone else wanting
-> to optimize the usage of shadow stack can do so with current design.
-
-Right, changing rlimit_stack around shadow stack allocation is not the
-most elegant way, but it does work.
-
->>> +int arch_lock_shadow_stack_status(struct task_struct *task,
->>> +				  unsigned long arg)
->>> +{
->>> +	/* If shtstk not supported or not enabled on task, nothing to lock he=
-re */
->>> +	if (!cpu_supports_shadow_stack() ||
->>> +	    !is_shstk_enabled(task) || arg !=3D 0)
->>> +		return -EINVAL;
->>
->>The task might want to prevent shadow stack from being enabled?
->
-> But Why would it want to do that? Task can simply not issue the prctl. Th=
-ere
-> are glibc tunables as well using which it can be disabled.
-
-The task might do it as some last resort to prevent a buggy code from
-enabling shadow stacks that would just crash.  Or whatever complicated
-reason userspace can think of.
-
-It's more the other way around.  I wonder why we're removing this option
-when we don't really care what userspace does to itself.
-I think it's complicating the kernel without an obvious gain.
 
