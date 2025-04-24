@@ -1,203 +1,187 @@
-Return-Path: <linux-kselftest+bounces-31572-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31573-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DD49A9B361
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Apr 2025 18:07:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DFC1FA9B456
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Apr 2025 18:42:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 88A8F7B4A82
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Apr 2025 16:06:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DDB4A7B1D4B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Apr 2025 16:40:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E7A727FD51;
-	Thu, 24 Apr 2025 16:07:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8576428A1CF;
+	Thu, 24 Apr 2025 16:41:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KmIzhue3"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="vt7T0uzd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEE7127F741;
-	Thu, 24 Apr 2025 16:07:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE96428934E
+	for <linux-kselftest@vger.kernel.org>; Thu, 24 Apr 2025 16:41:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745510830; cv=none; b=FIR5SGQyXyVKTXqksS+MhtPgdzjKNqF/cGoffnpYJvgKjUNpKBqPDy8nOpkwogt/xE9W7g87bKLKmqmgAduaZpOBNCCr1ZGC+016vRL0oTMniAJKXzqCwbcWUhFlTL2L2TAzoAgtTxCcsiOGnbFDhTG/Y6T8y1afpWnfhuxUUOQ=
+	t=1745512919; cv=none; b=bqAlDf/6V7qie85XonSScgOEuzhxM2y+j06c+LxukTXRMhRftgD1Iti1V8xROR4cuHkNo+ztPPEm4LTDwMcKjTr6IePK+HVCaEmCVzOlyVvB8Vo/SMdvzmz4OHDITLCsYR97LUwles1zISKQJqg5rIJLAuaeWVYHwF6f9VIL398=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745510830; c=relaxed/simple;
-	bh=Dvocved7LoWD4r5DAQ7IXH0mS+GeN7+ssaae+GrmBP4=;
+	s=arc-20240116; t=1745512919; c=relaxed/simple;
+	bh=vye0Q+xd1G2Olnf5Qkr8nib/GWDRlQm+UGeZYjZUyDA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=h2DgysERbMiXafXkavey953GqdZ6FIyWuuAOHbb55PTbRCWoM41aphQBxX11RORciOfx4C/uXbjhVOLwQBhxB6iU0HaSBm4hBW56/Ndc6LrvJfBUUHRUJgED0Q8BVZqWFjcXSUx1QIzpLMfhACFE+fVJpAwW1QMc7lM4LY6694o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KmIzhue3; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-224341bbc1dso15917475ad.3;
-        Thu, 24 Apr 2025 09:07:08 -0700 (PDT)
+	 Content-Type:Content-Disposition:In-Reply-To; b=WbPSmNtEh04Mrnc7Az/o7QMt5cPAfob1PYyz9pwE9uo3iXY2d3C6scVYF46b242FnmBzDwYgJaoVZ9kW/NFBtwvHBBYj273sEdJG7h4u+onpsRJl4dAgxwXxB72tKeoABUy0jGBc0gwAX6+EK/Navqve3I/A5Sf4AFrhrLLiowg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=vt7T0uzd; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-736c1cf75e4so1095704b3a.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Apr 2025 09:41:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745510828; x=1746115628; darn=vger.kernel.org;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1745512916; x=1746117716; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=b6Hg2Hn61cEifSZ7Yz6FWUl6aS6FdXU7iBAnedM8l0w=;
-        b=KmIzhue3VhoSAkp3Ha4P7G7OMDnBdLxdBzN3ki/VD/I5fJ4zfMxNdaFZfnWhm7UyCa
-         EbMGH8QgMmovq2bVrIuQjDPHyz+QD+qgeHfmK6OFu6VIrGdNbvuB4YDOTVUO0gWyMzs9
-         8zaSIhmBjwhCjeSUdqaPRKLmA4ECqztd8oAN3U04Gdj+bBaXiZzvvTCS7x6jkhkVdrE5
-         yeLa3qSVf9RDAvWJhj/PftkdbbAUiwMIEWrn6H+3AdlesygjczVGKJaOYhSCmUG/6bYJ
-         qH8/L55FI0MFLrFA7QMo7BrBaogbG6M6jh9veTGtctfBsuM2viQZjUKfNo81KoAbV8Fv
-         Ht3A==
+        bh=k6m4QSCkOjvBeG8/Kperh6wZuRGbtha7PIChY6FuIlM=;
+        b=vt7T0uzd3xCze3Zzyzjt6oEBKu5b2AaMF+bEL0x1WfJmo4ncPEEJHxQG9zfcis/Kwx
+         xahjvt8L0fz/GsUWvTYMadKC40Y3zgw5Vj/Bg/B+E9IfGRpYntx5JPA6qXHyXJywlCbw
+         biLB7vMtyYOyIxwfNlsW2xGWIxIU7Mq8SCI1F/1SnDyWqTzKzLDLl3U6wnksQ8jZfj77
+         3YYI4PhAenG/mAaDMYSsi4PkpMu/k1Hi7XbYXadK3K3CXlDrvFtQjLVaFQ/APbqalqcZ
+         uGCMIyBp0jytuhdm4FN+sbkfo2YPgMosChYFZjXIJ7F2OiHQNGi0YRlu1TUMK5rxwd2g
+         fGkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745510828; x=1746115628;
+        d=1e100.net; s=20230601; t=1745512916; x=1746117716;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b6Hg2Hn61cEifSZ7Yz6FWUl6aS6FdXU7iBAnedM8l0w=;
-        b=urdcHFo9i+iJXmv5X4/hc7av3kKiJAVgxnVYaOu5IRAGxdRVcJkL17ik5y247Orxte
-         sOKMgd0L3WmI6RjktD+f+aFs6tN8xsPnWd25DHEQqZh9NUal6Vq4z7sQic96xmPc4Sot
-         X6QGGqNK19BAas57veXUya0FKadFGfsQTv6rXhgvu/lSFYub4Ew2NLoTZGwRzijiX8Sh
-         +B6N/6N6hpoghDLnpQC3rL830PHMYGS+AHF5S9z9OmeinjsOpC1V36llTkuIitTXAcdk
-         6WM0O9exj5HUGR+h5jqtmn7JJRPZ7VDT3vP1G0E1wTNSj3FNEfHDmqK9q0p+t4lTiH/d
-         JQTw==
-X-Forwarded-Encrypted: i=1; AJvYcCU6acE59Xtv7FN+aZ+gL+LImLv7RkJT3Qy5J3wuOmHTbEC87DSFRluZ4Bt/D1vnSpd1UQk=@vger.kernel.org, AJvYcCXYENR+5SrVYNDhBGR9hjert7wVDBUce5n7rKzJOKJZpw2YEdHTm49MyNWP8UUzZhDFjX4stQEXcDZWIwFTut7d@vger.kernel.org, AJvYcCXy01f6mImwxzD9Uzgih+0LxXtJ8LPP6mHIG4ezOlC8/y2K0w9IPFsqSDrAYSWwpqMp2BoYJ8vV@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQFkrZy9vwlMtAFZbAJO54vEiqiLSt6WNX+wKeT6OrpqAK4Lyy
-	K6u8lgASqaZsdwhq+x4nof0mxaz81hA9esS+fpD0pRYA2DaY/Lvg/K/6
-X-Gm-Gg: ASbGncuHTn8pNF5MlB8fz+hVdHpsNizehoSSvRHuwYRay0B6ytEHnAkfZAmg3o4mbzL
-	2YHEUXtavBjzBOSOCAJE4RfaXeocO5xte8XAD6fYbS8nXT/A649y78iJU3f1NBasN8hHA5zfe8n
-	H6HKrSLtbazgraLeiY6vvgmCQ5j9G/hddvnX7xHw94jyPRDovkDo9wuyHR2cyfCluhA1SvuS+xV
-	kDk8X4ops+YPP3bve9VGFPsoqTwQazqZVYEX5S49A4EPxqCFns4qvbpgrgJuDtdLbBF1SSRSpfK
-	Ny9SgAYBTFE73wRgApTW+Kh9STIwkRhKDwLltl4z+zmRYvOXR/Y=
-X-Google-Smtp-Source: AGHT+IHzlejxmjoKnsnH13VbhFKwz7loLzzPczs4uJtSS2scb3BFipVtzCMBUVeGn0S+lmzKDTPAQA==
-X-Received: by 2002:a17:903:228f:b0:224:c46:d167 with SMTP id d9443c01a7336-22db3bdf7b9mr46689145ad.16.1745510827944;
-        Thu, 24 Apr 2025 09:07:07 -0700 (PDT)
-Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
-        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-22db4dbe5a2sm15287145ad.86.2025.04.24.09.07.07
+        bh=k6m4QSCkOjvBeG8/Kperh6wZuRGbtha7PIChY6FuIlM=;
+        b=leJqQO+5u1z8UfM7WKn2frMtxFTDV6a6VA0dNoVJHKu+cFUOpZpPGtCcscEOAoWp1e
+         BiaUC50qEur8ZaTCNwV0mlMZNNCCeTMJq9HHRj2yEBL1lCwixp532uc3iwD83FZBQr94
+         e4qQGCNHt9IhGzqNG/Duhfj2yANLHhf6Cpl8LA25upWyc6AmMvfzJJfYF17hUz5SrtsO
+         KA2thI99KEF2qE/xe8n7TTnvHiKNG9RQWxoP8cCZ0dfKddFA7fYK02KQeeKTtbCgcpkS
+         z91vd7Uxs7Q0nPybtK7VXjYzaAfYCYd6U+BIjc+1PJQOt9+roS9V7X4AlActorATyXrh
+         Jigw==
+X-Forwarded-Encrypted: i=1; AJvYcCVtlBQavmN8MgpGLtPHO3GBzLhw/OrUg7fRSzNPM/UoOyiGx2edxsD7dtfp/VK58wMoXJ+1wzX+OzqZxELya2w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzyxqViu+GKjUDtXFi10z+fhZz/fSLsgSb1yMYbpaKAQIs9Fce5
+	LgIzN5vznNzgswF76YD4yj0/MtmwocqF0UIV5PnDlGWb7E0YMmGGYTgshppXIAg=
+X-Gm-Gg: ASbGnctuINzRLCu9c0kj6GOJP4vWmCYuiYiQ8RwhamNTbnM1JvCLexSDTreV9lGw2OS
+	iR0Yr2VMGaFsnSMUZ66HJ3S84IdW1f7JeOu+CjIrOzXn6QgyqbQqrqcE4wMVvuTc7YXhLWQ2GdK
+	NshWF477Yl9Fn5i69ukx5k3bX3840DcKAeAf50GEGGmv/LtmXNbaDhyOP93lagJG5HTKVX0SdMN
+	AEQzEDduPP7xoLfteUsZWt3XcK3QPtTcCQOmD0HNyKkDe6pKaLbbkeN7u+AMynsvqx8W72kZrtf
+	81ctwiQAgCb/pzEjBffUCBUThF7a+CMpxOGJVXHBjp/H0OJN64I=
+X-Google-Smtp-Source: AGHT+IGxyp+KENwVEkLGrt7S8pn2vlKD8bBJVWEd1Iv8ULUIPojD/9R2kqNR1Mge6+txkrxVbJHCXA==
+X-Received: by 2002:a05:6a21:6d8e:b0:1f5:8072:d7f3 with SMTP id adf61e73a8af0-20444fc0e44mr4794400637.30.1745512916109;
+        Thu, 24 Apr 2025 09:41:56 -0700 (PDT)
+Received: from debug.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b15f76f48b2sm1462741a12.8.2025.04.24.09.41.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Apr 2025 09:07:07 -0700 (PDT)
-Date: Thu, 24 Apr 2025 09:07:06 -0700
-From: Stanislav Fomichev <stfomichev@gmail.com>
-To: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@kernel.org>
-Cc: Lorenzo Bianconi <lorenzo@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2] bpf: Allow XDP dev-bound programs to perform
- XDP_REDIRECT into maps
-Message-ID: <aAphqn-Lm0nn4FH0@mini-arch>
-References: <20250423-xdp-prog-bound-fix-v2-1-51742a5dfbce@kernel.org>
- <87wmb97uyt.fsf@toke.dk>
+        Thu, 24 Apr 2025 09:41:55 -0700 (PDT)
+Date: Thu, 24 Apr 2025 09:41:51 -0700
+From: Deepak Gupta <debug@rivosinc.com>
+To: Miquel =?iso-8859-1?Q?Sabat=E9_Sol=E0?= <mikisabate@gmail.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Christian Brauner <brauner@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+	devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	alistair.francis@wdc.com, richard.henderson@linaro.org,
+	jim.shu@sifive.com, andybnac@gmail.com, kito.cheng@sifive.com,
+	charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com,
+	cleger@rivosinc.com, alexghiti@rivosinc.com,
+	samitolvanen@google.com, broonie@kernel.org,
+	rick.p.edgecombe@intel.com, rust-for-linux@vger.kernel.org,
+	Zong Li <zong.li@sifive.com>
+Subject: Re: [PATCH v13 20/28] riscv/hwprobe: zicfilp / zicfiss enumeration
+ in hwprobe
+Message-ID: <aAppz5o2i4SQKU2z@debug.ba.rivosinc.com>
+References: <20250424-v5_user_cfi_series-v13-0-971437de586a@rivosinc.com>
+ <20250424-v5_user_cfi_series-v13-20-971437de586a@rivosinc.com>
+ <680a0cd4.050a0220.296475.3867@mx.google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <87wmb97uyt.fsf@toke.dk>
+In-Reply-To: <680a0cd4.050a0220.296475.3867@mx.google.com>
 
-On 04/24, Toke Høiland-Jørgensen wrote:
-> Lorenzo Bianconi <lorenzo@kernel.org> writes:
-> 
-> > In the current implementation if the program is dev-bound to a specific
-> > device, it will not be possible to perform XDP_REDIRECT into a DEVMAP
-> > or CPUMAP even if the program is running in the driver NAPI context and
-> > it is not attached to any map entry. This seems in contrast with the
-> > explanation available in bpf_prog_map_compatible routine.
-> > Fix the issue introducing __bpf_prog_map_compatible utility routine in
-> > order to avoid bpf_prog_is_dev_bound() check running bpf_check_tail_call()
-> > at program load time (bpf_prog_select_runtime()).
-> > Continue forbidding to attach a dev-bound program to XDP maps
-> > (BPF_MAP_TYPE_PROG_ARRAY, BPF_MAP_TYPE_DEVMAP and BPF_MAP_TYPE_CPUMAP).
-> >
-> > Fixes: 3d76a4d3d4e59 ("bpf: XDP metadata RX kfuncs")
-> > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-> > ---
-> > Changes in v2:
-> > - Introduce __bpf_prog_map_compatible() utility routine in order to skip
-> >   bpf_prog_is_dev_bound check in bpf_check_tail_call()
-> > - Extend xdp_metadata selftest
-> > - Link to v1: https://lore.kernel.org/r/20250422-xdp-prog-bound-fix-v1-1-0b581fa186fe@kernel.org
-> > ---
-> >  kernel/bpf/core.c                                  | 27 +++++++++++++---------
-> >  .../selftests/bpf/prog_tests/xdp_metadata.c        | 22 +++++++++++++++++-
-> >  tools/testing/selftests/bpf/progs/xdp_metadata.c   | 13 +++++++++++
-> >  3 files changed, 50 insertions(+), 12 deletions(-)
-> >
-> > diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> > index ba6b6118cf504041278d05417c4212d57be6fca0..a3e571688421196c3ceaed62b3b59b62a0258a8c 100644
-> > --- a/kernel/bpf/core.c
-> > +++ b/kernel/bpf/core.c
-> > @@ -2358,8 +2358,8 @@ static unsigned int __bpf_prog_ret0_warn(const void *ctx,
-> >  	return 0;
-> >  }
-> >  
-> > -bool bpf_prog_map_compatible(struct bpf_map *map,
-> > -			     const struct bpf_prog *fp)
-> > +static bool __bpf_prog_map_compatible(struct bpf_map *map,
-> > +				      const struct bpf_prog *fp)
-> >  {
-> >  	enum bpf_prog_type prog_type = resolve_prog_type(fp);
-> >  	bool ret;
-> > @@ -2368,14 +2368,6 @@ bool bpf_prog_map_compatible(struct bpf_map *map,
-> >  	if (fp->kprobe_override)
-> >  		return false;
-> >  
-> > -	/* XDP programs inserted into maps are not guaranteed to run on
-> > -	 * a particular netdev (and can run outside driver context entirely
-> > -	 * in the case of devmap and cpumap). Until device checks
-> > -	 * are implemented, prohibit adding dev-bound programs to program maps.
-> > -	 */
-> > -	if (bpf_prog_is_dev_bound(aux))
-> > -		return false;
-> > -
-> >  	spin_lock(&map->owner.lock);
-> >  	if (!map->owner.type) {
-> >  		/* There's no owner yet where we could check for
-> > @@ -2409,6 +2401,19 @@ bool bpf_prog_map_compatible(struct bpf_map *map,
-> >  	return ret;
-> >  }
-> >  
-> > +bool bpf_prog_map_compatible(struct bpf_map *map, const struct bpf_prog *fp)
-> > +{
-> > +	/* XDP programs inserted into maps are not guaranteed to run on
-> > +	 * a particular netdev (and can run outside driver context entirely
-> > +	 * in the case of devmap and cpumap). Until device checks
-> > +	 * are implemented, prohibit adding dev-bound programs to program maps.
-> > +	 */
-> > +	if (bpf_prog_is_dev_bound(fp->aux))
-> > +		return false;
-> > +
-> > +	return __bpf_prog_map_compatible(map, fp);
-> > +}
-> > +
-> >  static int bpf_check_tail_call(const struct bpf_prog *fp)
-> >  {
-> >  	struct bpf_prog_aux *aux = fp->aux;
-> > @@ -2421,7 +2426,7 @@ static int bpf_check_tail_call(const struct bpf_prog *fp)
-> >  		if (!map_type_contains_progs(map))
-> >  			continue;
-> >  
-> > -		if (!bpf_prog_map_compatible(map, fp)) {
-> > +		if (!__bpf_prog_map_compatible(map, fp)) {
-> 
-> Hmm, so this allows devbound programs in tail call maps, right? But
-> there's no guarantee that a tail call map will always be used for a
-> particular device, is there? For instance, it could be shared between
-> multiple XDP programs, bound to different devices, thus getting the
-> wrong kfunc.
+On Thu, Apr 24, 2025 at 12:05:04PM +0200, Miquel Sabaté Solà wrote:
+>On dj., d’abr. 24 2025, Deepak Gupta wrote:
+>
+>Hello,
+>
+>> Adding enumeration of zicfilp and zicfiss extensions in hwprobe syscall.
+>>
+>> Reviewed-by: Zong Li <zong.li@sifive.com>
+>> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+>> ---
+>>  arch/riscv/include/uapi/asm/hwprobe.h | 2 ++
+>>  arch/riscv/kernel/sys_hwprobe.c       | 2 ++
+>>  2 files changed, 4 insertions(+)
+>>
+>> diff --git a/arch/riscv/include/uapi/asm/hwprobe.h b/arch/riscv/include/uapi/asm/hwprobe.h
+>> index c3c1cc951cb9..c1b537b50158 100644
+>> --- a/arch/riscv/include/uapi/asm/hwprobe.h
+>> +++ b/arch/riscv/include/uapi/asm/hwprobe.h
+>> @@ -73,6 +73,8 @@ struct riscv_hwprobe {
+>>  #define		RISCV_HWPROBE_EXT_ZCMOP		(1ULL << 47)
+>>  #define		RISCV_HWPROBE_EXT_ZAWRS		(1ULL << 48)
+>>  #define		RISCV_HWPROBE_EXT_SUPM		(1ULL << 49)
+>> +#define		RISCV_HWPROBE_EXT_ZICFILP	(1ULL << 50)
+>> +#define		RISCV_HWPROBE_EXT_ZICFISS	(1ULL << 51)
+>
+>Notice that, as it stands in Linux v6.15-rc, this will conflict with the
+>values for Zicntr and Zihpm. See 4458b8f68dc7 ("riscv: hwprobe: export
+>Zicntr and Zihpm extensions"). I'd say that you should update these
+>values.
 
-Won't this (devbound progs in tail call maps) be still prohibited
-by a bpf_prog_map_compatible check in prog_fd_array_get_ptr?
+Got it. Noted for next version.
+
+>
+>>  #define RISCV_HWPROBE_KEY_CPUPERF_0	5
+>>  #define		RISCV_HWPROBE_MISALIGNED_UNKNOWN	(0 << 0)
+>>  #define		RISCV_HWPROBE_MISALIGNED_EMULATED	(1 << 0)
+>> diff --git a/arch/riscv/kernel/sys_hwprobe.c b/arch/riscv/kernel/sys_hwprobe.c
+>> index bcd3b816306c..d802ff707913 100644
+>> --- a/arch/riscv/kernel/sys_hwprobe.c
+>> +++ b/arch/riscv/kernel/sys_hwprobe.c
+>> @@ -108,6 +108,8 @@ static void hwprobe_isa_ext0(struct riscv_hwprobe *pair,
+>>  		EXT_KEY(ZCB);
+>>  		EXT_KEY(ZCMOP);
+>>  		EXT_KEY(ZICBOZ);
+>> +		EXT_KEY(ZICFILP);
+>> +		EXT_KEY(ZICFISS);
+>>  		EXT_KEY(ZICOND);
+>>  		EXT_KEY(ZIHINTNTL);
+>>  		EXT_KEY(ZIHINTPAUSE);
+>
+>Greetings,
+>Miquel
+
+
 
