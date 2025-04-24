@@ -1,55 +1,55 @@
-Return-Path: <linux-kselftest+bounces-31564-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31565-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEADFA9B10A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Apr 2025 16:34:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DBD3A9B1C9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Apr 2025 17:10:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D2DFC4A6CF5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Apr 2025 14:33:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3EF6A1B82AD1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Apr 2025 15:10:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 488C915533F;
-	Thu, 24 Apr 2025 14:33:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0AEB1B4227;
+	Thu, 24 Apr 2025 15:09:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="Mo0zD16k"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="SrypTBa6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-67.smtpout.orange.fr [193.252.22.67])
+Received: from out.smtpout.orange.fr (out-71.smtpout.orange.fr [193.252.22.71])
 	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10F432701DA;
-	Thu, 24 Apr 2025 14:33:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0B211B3956;
+	Thu, 24 Apr 2025 15:09:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745505218; cv=none; b=lHVe5pPKQRFtTBmIKRTudG8Tnw0seou2gHfEM0RwDQVtPTRfZOIC+lq/JGb81Kn/BAvx+AGgiAzRxMTI6R+MXBvG0COkA/Csz2aEiTVnixhH8cOw9ostp2Lpv2aHwqCYifC9zYtqJGT7MuQdh9pjoNwtV6GKhlD9otCOWiWFIvU=
+	t=1745507349; cv=none; b=SoueQVMtfYNUoU7bZLJl9OQAnUZSBYDzZrv8ew+Q8x5i/lNpL3Y0qMejwvqLKg5CM/lIbaE0wisnKFH1BSRZR0xjZQxAW3qpWafk645r+alMzGDDHUWeyccmuHbTuNcAVj4d62w+YNRvzr0quD0j1r+mxxQ66W6pDKWLQ1YILMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745505218; c=relaxed/simple;
-	bh=bdu4AdfU3rVBoxI7dS381WsNGFKefFYdMLFb+5Z2TMI=;
+	s=arc-20240116; t=1745507349; c=relaxed/simple;
+	bh=Lw33CZ8S79X/sR2PtH1q63uqsef97qH8S6qxtNaV+dU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hsnzu3FBpHIr5xsURRaJQ6eywc2fNo2KkcU11NxlcI8Nfw7fGkIRJKBiEIs+vqRRGP27b/OFoclMDt4kaD7rgR31GD8r/vopt5VXZo4VSIEOednu6y6arW1z1MJtoz4HZmXhKHw8but1sQGe7LMXKO3aeK1iFyN5AtHz6LyZBGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=Mo0zD16k; arc=none smtp.client-ip=193.252.22.67
+	 In-Reply-To:Content-Type; b=il0ALyWbDPrrUIYzsSIXxoZiZYGLG/VnD0+xBEADGgbu5MJAY116MhXE6xF04aVcVBPN689H9E2WYaloiQ+u5EW1uvTv9ecDWjP0zsLhZTb26kBgUDNlcEHVcuA9htNFsifZ7FYEWcesn7XE9JCFyZlqCw6asAn+CgB2ZaEMSIs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=SrypTBa6; arc=none smtp.client-ip=193.252.22.71
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
 Received: from [172.16.82.72] ([124.33.176.97])
 	by smtp.orange.fr with ESMTPA
-	id 7xUeu3cnoukJt7xUiuRXfG; Thu, 24 Apr 2025 16:24:09 +0200
+	id 7yC7ua2ZRwRVI7yCBuN2L4; Thu, 24 Apr 2025 17:09:04 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1745504649;
-	bh=K9cTD87TavWzyJKYV4zrWDK5k7WI86kJqfUPCYnBnpY=;
+	s=t20230301; t=1745507344;
+	bh=DAICTEEOZvKDrL2D579hybhlxPmVYQ2G5S8tYo/Bfag=;
 	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=Mo0zD16kfhROPb+1Ho5AGTv/skh9UvI9T+ybmvv0ZaPxLZk/mRql/25aIiG8QyLCe
-	 tvxfUJsuopjzSih0MEig6qCnAog+5SP+EMQwFehpp9jWfjQH3UbRHUiZEDxvxAXfad
-	 RNooe3PS1rVFnrCa6LKgdWKDncDCdIIdFz4n0db4lkkILWSELqJPYRLnDm3RYA43Bn
-	 oM5uxlXMQYjE6e9suw2j9QZkzwlBfcEstuxJDkMkuzkds4s1w/nhnBWYe8qP4GDtVl
-	 vuklKInx8Tvyi5Cahx1qUsKW6AE+SmJJfgm5+Lt52iwK2XwMrjobv6E2ulGXl00phY
-	 /rpMczZfmaSPA==
+	b=SrypTBa6g8VkOb5W2VfUGqRuZfRu68xAsgWvlAIEIGZxdzbdV3iDmnmNqZVw+U+Ri
+	 7Ejm/ApvntEuB+KKq8BHDAqyrj/DC0hml5CN04s2OOa53PmZhXK1WcKqpYpdzlxmAL
+	 sXN4qOLLORx/yQCD129wdg6TG80NHMcDbMVWdW+qKxLZUXQT7YZC3R2kONRIm10/X2
+	 bZcudWrBO6a9Sw5RMTaSTKk6Vfls1tY7NOzKPnIPmUvMPjddjz5WLHsD4ueQvTbIaM
+	 m3MjfVT5r2mNsh0FawAdLIfysmre+U8WHJlUIOoM3pryOKzxkPz4o03woFUP6UvMBv
+	 shT68c6Or7eow==
 X-ME-Helo: [172.16.82.72]
 X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 24 Apr 2025 16:24:09 +0200
+X-ME-Date: Thu, 24 Apr 2025 17:09:04 +0200
 X-ME-IP: 124.33.176.97
-Message-ID: <6c1980f7-9cdb-4443-830d-1d76dc8e2dd6@wanadoo.fr>
-Date: Thu, 24 Apr 2025 23:23:59 +0900
+Message-ID: <08cb8dd7-5685-4a41-b6a9-c8758a804ed1@wanadoo.fr>
+Date: Fri, 25 Apr 2025 00:08:54 +0900
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,7 +57,7 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] selftests: can: Import tst-filter from can-tests
+Subject: Re: [PATCH 4/4] selftests: can: Document test_raw_filter test cases
 To: Felix Maurer <fmaurer@redhat.com>
 Cc: socketcan@hartkopp.net, mkl@pengutronix.de, shuah@kernel.org,
  davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
@@ -65,9 +65,9 @@ Cc: socketcan@hartkopp.net, mkl@pengutronix.de, shuah@kernel.org,
  netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
  dcaratti@redhat.com, fstornio@redhat.com
 References: <cover.1745323279.git.fmaurer@redhat.com>
- <a4468403cc51ea6c0e8495d7d095befb37aa5aaf.1745323279.git.fmaurer@redhat.com>
- <CAMZ6RqKfdNRBKoH16=7JDC2QKB+XO68mahg2X7zKDcUAM+8bzw@mail.gmail.com>
- <96bd9677-c257-480b-be3c-7c4b9b79b238@redhat.com>
+ <710557cef8fb8472628862d9b65edcf7aeb32bb5.1745323279.git.fmaurer@redhat.com>
+ <CAMZ6RqKcp=JNcbZjX6xSGo9Hyw=1nXbpS9Nc36xuDkbGG+=wtA@mail.gmail.com>
+ <a28ff624-c73a-4e16-867a-66e423315c29@redhat.com>
 Content-Language: en-US
 From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
@@ -80,91 +80,127 @@ Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
  yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
  CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
  ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <96bd9677-c257-480b-be3c-7c4b9b79b238@redhat.com>
+In-Reply-To: <a28ff624-c73a-4e16-867a-66e423315c29@redhat.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
 On 24/04/2025 at 23:02, Felix Maurer wrote:
-> On 24.04.25 09:42, Vincent Mailhol wrote:
->> On Tue. 22 Apr. 2025 at 21:08, Felix Maurer <fmaurer@redhat.com> wrote:
+> On 24.04.25 09:44, Vincent Mailhol wrote:
+>> On Tue. 22 Apr. 2025 at 21:03, Felix Maurer <fmaurer@redhat.com> wrote:
 > [...]
->>> +ALL_TESTS="
->>> +       test_raw_filter
->>> +"
->>> +
->>> +net_dir=$(dirname $0)/..
->>> +source $net_dir/lib.sh
->>> +
->>> +VCANIF="vcan0"
+>>> diff --git a/tools/testing/selftests/net/can/test_raw_filter.c b/tools/testing/selftests/net/can/test_raw_filter.c
+>>> index 7fe11e020a1c..8d43053824d2 100644
+>>> --- a/tools/testing/selftests/net/can/test_raw_filter.c
+>>> +++ b/tools/testing/selftests/net/can/test_raw_filter.c
+>>> @@ -101,94 +101,113 @@ FIXTURE_VARIANT(can_filters) {
+>>>         int exp_num_rx;
+>>>         int exp_rxbits;
+>>>  };
+>>> +#define T_EFF (CAN_EFF_FLAG >> 28)
+>>> +#define T_RTR (CAN_RTR_FLAG >> 28)
 >>
->> Here, you are making the VCANIF variable configuration, but then, in
->> your test_raw_filter.c I see:
+>> I do not like this
 >>
->>   #define VCANIF "vcan0"
+>>   >> 28
 >>
->> This means that in order to modify the interface, one would have to
->> both modify the .sh script and the .c source. Wouldn't it be possible
->> to centralize this? For example by reading the environment variable in
->> the C file?
+>> shift. I understand that it is part of the original design, but for
+>> me, this is just obfuscation.
 >>
->> Or maybe there is a smarter way to pass values in the kernel selftests
->> framework which I am not aware of?
+>> Why just not using CAN_EFF_FLAG and CAN_RTR_FLAG as-is for the
+>> expected values? What benefit does this shift add?
 > 
-> Good point, I'll try to come up with something to avoid the duplication
-> (either from the selftest framework or just for the CAN tests). I'd
-> prefer an argument to the program though, as I find this the more usual
-> way to pass info if one ever wants to run the test directly.
+> I agree, that looks like magic numbers and the original design is not
+> very nice here. The main reason for the >>28 is that later on values are
+> shifted by T_EFF and/or T_RTR, so they shouldn't be too large (with the
+>>> 28, the shift value later is in the range 0-14). See below for a
+> slightly different idea.
+> 
+>>> +/* Ignore EFF flag in filter ID if not covered by filter mask */
+>>>  FIXTURE_VARIANT_ADD(can_filters, base_eff) {
+>>>         .testcase = 2,
+>>>         .id = ID | CAN_EFF_FLAG,
+>>>         .mask = CAN_SFF_MASK,
+>>>         .exp_num_rx = 4,
+>>> -       .exp_rxbits = 4369,
+>>> +       .exp_rxbits = (1 | 1 << (T_EFF) | 1 << (T_RTR) | 1 << (T_EFF | T_RTR)),
+>>                          ^
+>> What is the meaning of this 1?
+> 
+> The 1 means that a packet will be received with no flags set.
 
-Passing an argument would be the best. I am not sure how to do this with the
-selftests (but I did not investigate either).
+OK. Now I understand.
 
->>> +setup()
->>> +{
->>> +       ip link add name $VCANIF type vcan || exit $ksft_skip
->>> +       ip link set dev $VCANIF up
->>> +       pwd
->>> +}
+> The whole rxbit thing took me a while to understand and the result now
+> is not straightforward either. Let's see if we can come up with
+> something better.
+> 
+> The exp_rxbits is basically a bitfield that describes which flags should
+> be set on the received frames. Maybe this could be made more explicit
+> with something like this:
+> 
+> .exp_rxbits = FRAME_NOFLAGS | FRAME_EFF | FRAME_RTR | FRAME_EFFRTR,
 
-Speaking of which, if you allow the user to modify the interface, then you will
-one additional check here to see whether it is a virtual can interface or not
-(the ip link commands are not the same for the vcan and the physical can).
+This is better. But yet, how would this scale in the future if we introduce the
+CAN FD? For n flags, you have n combinations.
 
-Something like:
+> And in the receive loop something like this:
+> 
+> rxbits |= FRAME_RCVD(frame.can_id);
+> 
+> Of course, the definitions of these macros would still have the >>28,
+> but at a central point, with better explanation. Do you think that's
+> more understandable? Or do you have a different idea?
 
-  CANIF="${CANIF:-vcan}"
-  BITRATE="${BITRATE:-500000}"
+The
 
-  setup()
-  {
-  	if [ $CANIF == vcan* ]; then
-  		ip link add name $CANIF type vcan || exit $ksft_skip
-  	else
-  		ip link set dev $CANIF type can $BITRATE 500000
-  	fi
-  	ip link set dev $VCANIF up
-  	pwd
+  >> 28
+
+trick just allows to save a couple line but by doing so, adds a ton of
+complexity. What is wrong in writing this:
+
+
+  FIXTURE_VARIANT(can_filters) {
+  	int testcase;
+  	canid_t id;
+  	canid_t mask;
+  	int exp_num_rx;
+  	canid_t exp_flags[];
+  };
+
+  /* Receive all frames when filtering for the ID in standard frame format */
+  FIXTURE_VARIANT_ADD(can_filters, base) {
+  	.testcase = 1,
+  	.id = ID,
+  	.mask = CAN_SFF_MASK,
+  	.exp_num_rx = 4,
+  	.exp_flags = {
+  		0,
+  		CAN_EFF_FLAG,
+  		CAN_RTR_FLAG,
+  		CAN_EFF_FLAG | CAN_RTR_FLAG,
+  	},
+  };
+
+And then, in your TEST_F(), the do {} while loops becomes a:
+
+  for (int i = 0; i <= variant->exp_num_rx; i++) {
+  	/* FD logic here */
+  	ret = FD_ISSET(self->sock, &rdfs);
+	if (i == variant->exp_num_rx) {
+  		ASSERT_EQ(ret == 0);
+  	} else (i < variant->exp_num_rx)
+  		/* other relevant checks */
+  		ASSERT_EQ(frame.can_id & ~CAN_ERR_MASK ==
+  		          variant->exp_flags[i]);
+  	}
   }
 
->>> +cleanup()
->>> +{
->>> +       ip link delete $VCANIF
->>> +}
->>
->> I guess that this setup() and this cleanup() is something that you
->> will also need in the other can tests. Would it make sense to declare
->> these in a common.sh file and just do a
->>
->>   source common.sh
->>
->> here?
-> 
-> I usually try to avoid making changes in anticipation of the future. I'm
-> not sure if all the tests need a similar environment and would prefer to
-> split this when we encounter that they do. Are you okay with that?
+Here, you even check that the frames are received in order.
 
-Yes, this works. Keep this idea in back of your mind and if there is a need to
-reuse those in the future, then it will be a good timing to do the factorize the
-code.
+OK, the bitmap saved some memory, but here, we are speaking of selftests. The
+priority is readability. I will happily get rid of the bitmap and just simplify
+the logic.
+
 
 
 Yours sincerely,
