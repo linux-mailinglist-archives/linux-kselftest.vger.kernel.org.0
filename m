@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-31659-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31660-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9467DA9D361
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Apr 2025 22:50:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A77B1A9D368
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Apr 2025 22:51:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 12E9417C8C6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Apr 2025 20:50:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B92681C01586
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Apr 2025 20:50:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC2C8242D60;
-	Fri, 25 Apr 2025 20:47:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05CC6247296;
+	Fri, 25 Apr 2025 20:48:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LhYrl+eI"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2gVaEuHz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5416F22F178
-	for <linux-kselftest@vger.kernel.org>; Fri, 25 Apr 2025 20:47:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 144A8230BC7
+	for <linux-kselftest@vger.kernel.org>; Fri, 25 Apr 2025 20:47:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745614079; cv=none; b=kLfDZeAGhuYDZcFFyIK6j4PbbGbuuhOCFnQhRAT2ce+ONdf4Re8oZy3LGPi9UZpT2pvfcWggPUgD6mr6iV7SSbX+sbR0JVmb/GOTJ6gNCgg68f9+q6YP/69Ae6a1qSJJjgKXbex1ZKTAFDQ4MjkW7EEpq9aH0JbwJWTk8rR1gvg=
+	t=1745614079; cv=none; b=flBtrGSXW32t5yL0o5xT0rrg+gHQaePlIq+y9kSfyWEQZH7rwWR9/+lc2bf+u49Y8llwzYSdJPYOYFFZm+DY4XPIqigGSnUuaozM09Sij/jWy3KkBB0+HcZDkDUcIXd0asghys6pp5UbtcoAMpWIyPhoUTy+EGX6fjuqFwnGk/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1745614079; c=relaxed/simple;
-	bh=F/bPtq+pVVyiEggdV4KHJBP+VDUNNTFmeXaFMq6t9E8=;
+	bh=mi5jiJ5/GpWUtDhToM/mMx2eCstUJTwArBAjW0iLUTw=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=kH3uG/9BksVT5wq/BFIZLy6JSOMuLtPJclSfeJ6JRkcDyoWwYnFQHJL2MIyE+20igt7qDV/V64RggvJJNJxalFLt7RTQz9XCPktdR2HXgJLYdiTYwntQH/QDTu/EInis46sU32VSesb+4sxUZSYmFpjKU38EioD44oYtWoFOPcQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LhYrl+eI; arc=none smtp.client-ip=209.85.215.202
+	 To:Cc:Content-Type; b=LjUhfJtoZVc4WsX5j2Vg8GEFWPNrHbGFP4xP8cuAGuCYlNalBHI4cc3hd/KYeIi/i3bBKtTgrWhcx0Ju1YHkBakNNTNRZQqQ8KK8+19N9CipyAFh8EXBVkYn2nttlIapg+uBrFfWO4VTRs9RoURUnt7r912f/1keoLGes/yPRfQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2gVaEuHz; arc=none smtp.client-ip=209.85.210.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-b1442e039eeso1618642a12.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Apr 2025 13:47:55 -0700 (PDT)
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-7369b559169so1725303b3a.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Apr 2025 13:47:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1745614074; x=1746218874; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1745614076; x=1746218876; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pTCba6/p6BiAqDVwGBj9QEOZt1zUGZtyMOlXgqCwhZM=;
-        b=LhYrl+eIMLrC3A8AWhPyFBXxoPg9plG0xs0WafbB+mRaxk4rZLiv0M+erGmbNXJUUH
-         kxzmPU/HKPPUWfg+cDXgsJZEMfOJ4npXMcfkuAdKn/EbbzZTSlHQxyvH9m6f8fs+ALIw
-         vnYSgBnXe2K7e6D9AF7I1xvm0rrqgZ8rqGnlezjbGrbB4jfU/u6LNfQvS105YjR1eghN
-         f/bcJ4wAO4mHL2kjscqbdu+o6x5dA/sTSUhqrXMQsUvVyHB5CHLaY+EjkMSdoFg2iqq1
-         gI8nekeGklBo+6/9rye3jJ4SdYat51E8AIrb6LFXtV0dphR3nJlcrL68kj+11XffzwSc
-         GfWw==
+        bh=GF72qCZmNHB/M9wyhDuVX7J4MUP8Sfe1HWRQmktZ2BM=;
+        b=2gVaEuHzqV8i1A2SFHXBsPYNycADFZQs3QPjL96uKo62otiNRxf0jbRNt/EV0GLPuz
+         JSl5pOOYzEq7o+QHScVRC2MCh+98/AfLy2pDGrrEXkNzK4zvAIF5qbbW47dYJStOOp3z
+         8Ut59bpEQ2rb6cT8TbU2lycyx+34uFjN92Gbsyawne57skM/rlz1XBbKr3svhCvqsGuM
+         e2ToJaxbquByJBWfB6st8HHFeDK4e7cOjAD6z45gzto/L9yowkSA3pUK4F965DG5bUHK
+         BuGYSkpiKWzyfw27aav4i4pbZ5u/OU1/1F1BCPRqyvRqwcoXW656ekSaijaNvFqZcku5
+         QMyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745614074; x=1746218874;
+        d=1e100.net; s=20230601; t=1745614076; x=1746218876;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pTCba6/p6BiAqDVwGBj9QEOZt1zUGZtyMOlXgqCwhZM=;
-        b=NqoBnaUNWvuPjSpVVRJKJtk7RzifN69beuHu83C0+cRu9YbdDKmNhbZmN3IeOY5NSt
-         Coj/C6gYmbC0nD/rbDjx6rzwHFseUnc/c8fROVT3QCC4OvN5gqfK0cB77AdNUr+ziEic
-         fp4kz5sbcvFA/nH6mUqq1nLQZw7OuI40PPOA/DsMYEGpyaUNJ3H8FOr/bVhU5UlKE0Bd
-         MZG+EPO46gFzlQky+sI8brt5kxsiLt99QtTqX9OzMJ+M/n4GsuHzgFBoCiX5P1TkxSnY
-         sKE5Mo08MMb6sOgjBhs6kCBzTMMXODIci86YC33bBexhv9mfvY/rlTnTbN3eZdnvGvsr
-         /2Pg==
-X-Forwarded-Encrypted: i=1; AJvYcCW8Lc50xBlb9ZTcnaOxGcnRwFMO6fI+tx1iIqGddA1gWjOL+F5ihtvLQ0SzeSx59a03nfQO2/a9eo+B6Ba8obY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxAIDvgmLl5C++nfBNVu8Kb5lnl0htEc5acwz0Bu82I36bNsOmz
-	zDxCM8FefIgc/4vQurWOGFtzA8QPH0/5G8AQRmIzNxH9Wb02mY51gdH5WHEkWWe7aefJdgNIJxm
-	8cK/wGRlMOBUMX79E5qTldw==
-X-Google-Smtp-Source: AGHT+IEHasG/Qs/q2psDlDpWGJwTdweuzl57vO75XtoIlmDG1V7O/aF4RL9rCTb1yN0kEPY5v7xtyzJSKiqRDyeqEQ==
-X-Received: from pgac2.prod.google.com ([2002:a05:6a02:2942:b0:af3:30b9:99a4])
+        bh=GF72qCZmNHB/M9wyhDuVX7J4MUP8Sfe1HWRQmktZ2BM=;
+        b=lr8hudUgSo+olVDyaZbHtZNYhDCzFIw4d/aBryV91MJPmm0PwbTQ+X7wlDRqSSBSE2
+         eN27CITXYRpOfwVqZ25/DnTD6cMPw7RB7/SN03Cgw1kpKFAHRCqMa1d3thphTmd/UwUD
+         gd0MPyyDdhXflnVRxlkkXVuTcNYc47tMlU4zzS0Gqo/l/tNaOnHrRQB7/lMhoAUrLy+n
+         G55HRit9F7fYbbXuJJ5JybaJngk+jm6JJiBnY+TqvCyerAIyPSm+tsuLAPcq/CV0tbaN
+         7CV3X47jSF3fIlb0bbyepe+ZoHcrKVXG8V41K190TESsHKzXQkXYZUTH8uNcY7kIXKUC
+         VUqA==
+X-Forwarded-Encrypted: i=1; AJvYcCW6HEQkNyZM8thH+wRZMShSDv1r9YFUsUOwgrLgT0QdwbXaIq9w1AiefvhP0gSOzzUhxyB6a2z3/TMKrpd7GAQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxgld6ODzDCC8cMbN+ofMy3CZuifmcqPq/o0MWE2UDJxac1ySiv
+	9OtVig2uG3sqfmO+IugFHt/NcT5ZRokQWUXtT9EB/QyWN75zBR4Os3bMmklNBf6Hwhb+Y4NhSlA
+	mAJujIhNOwV0RANM5VoI15w==
+X-Google-Smtp-Source: AGHT+IGkejOC043bFHgSkVL9uHCJ44UdIDiSp1spb5spMEGriYvjBX2RAP/Qu3gEalSerk9D0cqCplHd5pfjPkO7UQ==
+X-Received: from pfbdh8.prod.google.com ([2002:a05:6a00:4788:b0:736:b2a2:5bfe])
  (user=almasrymina job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:902:dacc:b0:223:635d:3e2a with SMTP id d9443c01a7336-22dbf5f577cmr55458655ad.23.1745614074603;
- Fri, 25 Apr 2025 13:47:54 -0700 (PDT)
-Date: Fri, 25 Apr 2025 20:47:39 +0000
+ 2002:a05:6a00:3919:b0:736:a4ca:62e1 with SMTP id d2e1a72fcca58-73ff7294e69mr1114987b3a.6.1745614076331;
+ Fri, 25 Apr 2025 13:47:56 -0700 (PDT)
+Date: Fri, 25 Apr 2025 20:47:40 +0000
 In-Reply-To: <20250425204743.617260-1-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250425204743.617260-1-almasrymina@google.com>
 X-Mailer: git-send-email 2.49.0.850.g28803427d3-goog
-Message-ID: <20250425204743.617260-6-almasrymina@google.com>
-Subject: [PATCH net-next v12 5/9] net: add devmem TCP TX documentation
+Message-ID: <20250425204743.617260-7-almasrymina@google.com>
+Subject: [PATCH net-next v12 6/9] net: enable driver support for netmem TX
 From: Mina Almasry <almasrymina@google.com>
 To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-doc@vger.kernel.org, io-uring@vger.kernel.org, kvm@vger.kernel.org, 
@@ -95,200 +95,154 @@ Cc: Mina Almasry <almasrymina@google.com>, "David S. Miller" <davem@davemloft.ne
 	Pedro Tammela <pctammela@mojatatu.com>, Samiullah Khawaja <skhawaja@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Add documentation outlining the usage and details of the devmem TCP TX
-API.
+Drivers need to make sure not to pass netmem dma-addrs to the
+dma-mapping API in order to support netmem TX.
+
+Add helpers and netmem_dma_*() helpers that enables special handling of
+netmem dma-addrs that drivers can use.
+
+Document in netmem.rst what drivers need to do to support netmem TX.
 
 Signed-off-by: Mina Almasry <almasrymina@google.com>
 Acked-by: Stanislav Fomichev <sdf@fomichev.me>
 
 ---
 
+v8:
+- use spaces instead of tabs (Paolo)
+
 v5:
-- Address comments from Stan and Bagas
+- Fix netmet TX documentation (Stan).
 
 v4:
-- Mention SO_BINDTODEVICE is recommended (me/Pavel).
-
-v2:
-- Update documentation for iov_base is the dmabuf offset (Stan)
-
+- New patch
 ---
- Documentation/networking/devmem.rst | 150 +++++++++++++++++++++++++++-
- 1 file changed, 146 insertions(+), 4 deletions(-)
+ .../networking/net_cachelines/net_device.rst  |  1 +
+ Documentation/networking/netdev-features.rst  |  5 ++++
+ Documentation/networking/netmem.rst           | 23 +++++++++++++++++--
+ include/linux/netdevice.h                     |  2 ++
+ include/net/netmem.h                          | 20 ++++++++++++++++
+ 5 files changed, 49 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/networking/devmem.rst b/Documentation/networking/devmem.rst
-index eb678ca454968..a6cd7236bfbd2 100644
---- a/Documentation/networking/devmem.rst
-+++ b/Documentation/networking/devmem.rst
-@@ -62,15 +62,15 @@ More Info
-     https://lore.kernel.org/netdev/20240831004313.3713467-1-almasrymina@google.com/
+diff --git a/Documentation/networking/net_cachelines/net_device.rst b/Documentation/networking/net_cachelines/net_device.rst
+index ca8605eb82ffc..c69cc89c958e0 100644
+--- a/Documentation/networking/net_cachelines/net_device.rst
++++ b/Documentation/networking/net_cachelines/net_device.rst
+@@ -10,6 +10,7 @@ Type                                Name                        fastpath_tx_acce
+ =================================== =========================== =================== =================== ===================================================================================
+ unsigned_long:32                    priv_flags                  read_mostly                             __dev_queue_xmit(tx)
+ unsigned_long:1                     lltx                        read_mostly                             HARD_TX_LOCK,HARD_TX_TRYLOCK,HARD_TX_UNLOCK(tx)
++unsigned long:1                     netmem_tx:1;                read_mostly
+ char                                name[16]
+ struct netdev_name_node*            name_node
+ struct dev_ifalias*                 ifalias
+diff --git a/Documentation/networking/netdev-features.rst b/Documentation/networking/netdev-features.rst
+index 5014f7cc1398b..02bd7536fc0ca 100644
+--- a/Documentation/networking/netdev-features.rst
++++ b/Documentation/networking/netdev-features.rst
+@@ -188,3 +188,8 @@ Redundancy) frames from one port to another in hardware.
+ This should be set for devices which duplicate outgoing HSR (High-availability
+ Seamless Redundancy) or PRP (Parallel Redundancy Protocol) tags automatically
+ frames in hardware.
++
++* netmem-tx
++
++This should be set for devices which support netmem TX. See
++Documentation/networking/netmem.rst
+diff --git a/Documentation/networking/netmem.rst b/Documentation/networking/netmem.rst
+index 7de21ddb54129..b63aded463370 100644
+--- a/Documentation/networking/netmem.rst
++++ b/Documentation/networking/netmem.rst
+@@ -19,8 +19,8 @@ Benefits of Netmem :
+ * Simplified Development: Drivers interact with a consistent API,
+   regardless of the underlying memory implementation.
  
+-Driver Requirements
+-===================
++Driver RX Requirements
++======================
  
--Interface
--=========
-+RX Interface
-+============
+ 1. The driver must support page_pool.
  
+@@ -77,3 +77,22 @@ Driver Requirements
+    that purpose, but be mindful that some netmem types might have longer
+    circulation times, such as when userspace holds a reference in zerocopy
+    scenarios.
++
++Driver TX Requirements
++======================
++
++1. The Driver must not pass the netmem dma_addr to any of the dma-mapping APIs
++   directly. This is because netmem dma_addrs may come from a source like
++   dma-buf that is not compatible with the dma-mapping APIs.
++
++   Helpers like netmem_dma_unmap_page_attrs() & netmem_dma_unmap_addr_set()
++   should be used in lieu of dma_unmap_page[_attrs](), dma_unmap_addr_set().
++   The netmem variants will handle netmem dma_addrs correctly regardless of the
++   source, delegating to the dma-mapping APIs when appropriate.
++
++   Not all dma-mapping APIs have netmem equivalents at the moment. If your
++   driver relies on a missing netmem API, feel free to add and propose to
++   netdev@, or reach out to the maintainers and/or almasrymina@google.com for
++   help adding the netmem API.
++
++2. Driver should declare support by setting `netdev->netmem_tx = true`
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index 0321fd952f708..a661820a26c44 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -1772,6 +1772,7 @@ enum netdev_reg_state {
+  *	@lltx:		device supports lockless Tx. Deprecated for real HW
+  *			drivers. Mainly used by logical interfaces, such as
+  *			bonding and tunnels
++ *	@netmem_tx:	device support netmem_tx.
+  *
+  *	@name:	This is the first field of the "visible" part of this structure
+  *		(i.e. as seen by users in the "Space.c" file).  It is the name
+@@ -2087,6 +2088,7 @@ struct net_device {
+ 	struct_group(priv_flags_fast,
+ 		unsigned long		priv_flags:32;
+ 		unsigned long		lltx:1;
++		unsigned long		netmem_tx:1;
+ 	);
+ 	const struct net_device_ops *netdev_ops;
+ 	const struct header_ops *header_ops;
+diff --git a/include/net/netmem.h b/include/net/netmem.h
+index 1b047cfb9e4f7..8a9210e2868d3 100644
+--- a/include/net/netmem.h
++++ b/include/net/netmem.h
+@@ -8,6 +8,7 @@
+ #ifndef _NET_NETMEM_H
+ #define _NET_NETMEM_H
  
- Example
- -------
++#include <linux/dma-mapping.h>
+ #include <linux/mm.h>
+ #include <net/net_debug.h>
  
--tools/testing/selftests/net/ncdevmem.c:do_server shows an example of setting up
--the RX path of this API.
-+./tools/testing/selftests/drivers/net/hw/ncdevmem:do_server shows an example of
-+setting up the RX path of this API.
+@@ -276,4 +277,23 @@ static inline unsigned long netmem_get_dma_addr(netmem_ref netmem)
+ void get_netmem(netmem_ref netmem);
+ void put_netmem(netmem_ref netmem);
  
- 
- NIC Setup
-@@ -235,6 +235,148 @@ can be less than the tokens provided by the user in case of:
- (a) an internal kernel leak bug.
- (b) the user passed more than 1024 frags.
- 
-+TX Interface
-+============
++#define netmem_dma_unmap_addr_set(NETMEM, PTR, ADDR_NAME, VAL)   \
++	do {                                                     \
++		if (!netmem_is_net_iov(NETMEM))                  \
++			dma_unmap_addr_set(PTR, ADDR_NAME, VAL); \
++		else                                             \
++			dma_unmap_addr_set(PTR, ADDR_NAME, 0);   \
++	} while (0)
 +
++static inline void netmem_dma_unmap_page_attrs(struct device *dev,
++					       dma_addr_t addr, size_t size,
++					       enum dma_data_direction dir,
++					       unsigned long attrs)
++{
++	if (!addr)
++		return;
 +
-+Example
-+-------
++	dma_unmap_page_attrs(dev, addr, size, dir, attrs);
++}
 +
-+./tools/testing/selftests/drivers/net/hw/ncdevmem:do_client shows an example of
-+setting up the TX path of this API.
-+
-+
-+NIC Setup
-+---------
-+
-+The user must bind a TX dmabuf to a given NIC using the netlink API::
-+
-+        struct netdev_bind_tx_req *req = NULL;
-+        struct netdev_bind_tx_rsp *rsp = NULL;
-+        struct ynl_error yerr;
-+
-+        *ys = ynl_sock_create(&ynl_netdev_family, &yerr);
-+
-+        req = netdev_bind_tx_req_alloc();
-+        netdev_bind_tx_req_set_ifindex(req, ifindex);
-+        netdev_bind_tx_req_set_fd(req, dmabuf_fd);
-+
-+        rsp = netdev_bind_tx(*ys, req);
-+
-+        tx_dmabuf_id = rsp->id;
-+
-+
-+The netlink API returns a dmabuf_id: a unique ID that refers to this dmabuf
-+that has been bound.
-+
-+The user can unbind the dmabuf from the netdevice by closing the netlink socket
-+that established the binding. We do this so that the binding is automatically
-+unbound even if the userspace process crashes.
-+
-+Note that any reasonably well-behaved dmabuf from any exporter should work with
-+devmem TCP, even if the dmabuf is not actually backed by devmem. An example of
-+this is udmabuf, which wraps user memory (non-devmem) in a dmabuf.
-+
-+Socket Setup
-+------------
-+
-+The user application must use MSG_ZEROCOPY flag when sending devmem TCP. Devmem
-+cannot be copied by the kernel, so the semantics of the devmem TX are similar
-+to the semantics of MSG_ZEROCOPY::
-+
-+	setsockopt(socket_fd, SOL_SOCKET, SO_ZEROCOPY, &opt, sizeof(opt));
-+
-+It is also recommended that the user binds the TX socket to the same interface
-+the dma-buf has been bound to via SO_BINDTODEVICE::
-+
-+	setsockopt(socket_fd, SOL_SOCKET, SO_BINDTODEVICE, ifname, strlen(ifname) + 1);
-+
-+
-+Sending data
-+------------
-+
-+Devmem data is sent using the SCM_DEVMEM_DMABUF cmsg.
-+
-+The user should create a msghdr where,
-+
-+* iov_base is set to the offset into the dmabuf to start sending from
-+* iov_len is set to the number of bytes to be sent from the dmabuf
-+
-+The user passes the dma-buf id to send from via the dmabuf_tx_cmsg.dmabuf_id.
-+
-+The example below sends 1024 bytes from offset 100 into the dmabuf, and 2048
-+from offset 2000 into the dmabuf. The dmabuf to send from is tx_dmabuf_id::
-+
-+       char ctrl_data[CMSG_SPACE(sizeof(struct dmabuf_tx_cmsg))];
-+       struct dmabuf_tx_cmsg ddmabuf;
-+       struct msghdr msg = {};
-+       struct cmsghdr *cmsg;
-+       struct iovec iov[2];
-+
-+       iov[0].iov_base = (void*)100;
-+       iov[0].iov_len = 1024;
-+       iov[1].iov_base = (void*)2000;
-+       iov[1].iov_len = 2048;
-+
-+       msg.msg_iov = iov;
-+       msg.msg_iovlen = 2;
-+
-+       msg.msg_control = ctrl_data;
-+       msg.msg_controllen = sizeof(ctrl_data);
-+
-+       cmsg = CMSG_FIRSTHDR(&msg);
-+       cmsg->cmsg_level = SOL_SOCKET;
-+       cmsg->cmsg_type = SCM_DEVMEM_DMABUF;
-+       cmsg->cmsg_len = CMSG_LEN(sizeof(struct dmabuf_tx_cmsg));
-+
-+       ddmabuf.dmabuf_id = tx_dmabuf_id;
-+
-+       *((struct dmabuf_tx_cmsg *)CMSG_DATA(cmsg)) = ddmabuf;
-+
-+       sendmsg(socket_fd, &msg, MSG_ZEROCOPY);
-+
-+
-+Reusing TX dmabufs
-+------------------
-+
-+Similar to MSG_ZEROCOPY with regular memory, the user should not modify the
-+contents of the dma-buf while a send operation is in progress. This is because
-+the kernel does not keep a copy of the dmabuf contents. Instead, the kernel
-+will pin and send data from the buffer available to the userspace.
-+
-+Just as in MSG_ZEROCOPY, the kernel notifies the userspace of send completions
-+using MSG_ERRQUEUE::
-+
-+        int64_t tstop = gettimeofday_ms() + waittime_ms;
-+        char control[CMSG_SPACE(100)] = {};
-+        struct sock_extended_err *serr;
-+        struct msghdr msg = {};
-+        struct cmsghdr *cm;
-+        int retries = 10;
-+        __u32 hi, lo;
-+
-+        msg.msg_control = control;
-+        msg.msg_controllen = sizeof(control);
-+
-+        while (gettimeofday_ms() < tstop) {
-+                if (!do_poll(fd)) continue;
-+
-+                ret = recvmsg(fd, &msg, MSG_ERRQUEUE);
-+
-+                for (cm = CMSG_FIRSTHDR(&msg); cm; cm = CMSG_NXTHDR(&msg, cm)) {
-+                        serr = (void *)CMSG_DATA(cm);
-+
-+                        hi = serr->ee_data;
-+                        lo = serr->ee_info;
-+
-+                        fprintf(stdout, "tx complete [%d,%d]\n", lo, hi);
-+                }
-+        }
-+
-+After the associated sendmsg has been completed, the dmabuf can be reused by
-+the userspace.
-+
-+
- Implementation & Caveats
- ========================
- 
+ #endif /* _NET_NETMEM_H */
 -- 
 2.49.0.850.g28803427d3-goog
 
