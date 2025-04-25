@@ -1,219 +1,325 @@
-Return-Path: <linux-kselftest+bounces-31649-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31650-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A27EFA9CB13
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Apr 2025 16:06:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D583A9CB85
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Apr 2025 16:22:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B47581B692B8
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Apr 2025 14:06:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6BB071C011AD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Apr 2025 14:21:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C232252914;
-	Fri, 25 Apr 2025 14:06:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DDB1256C8D;
+	Fri, 25 Apr 2025 14:20:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="aueV1I4k"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="L5vNjREB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4CBE71747;
-	Fri, 25 Apr 2025 14:06:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.37.111.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AD6A2586CE
+	for <linux-kselftest@vger.kernel.org>; Fri, 25 Apr 2025 14:20:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745589977; cv=none; b=Nlw56Sy4vahi4KdcS3T76yD8agjjUBK2d31Gio7QH6eUe3orp2grWAHrTz+pD+QIM96ISlNYpP3qiMZ72k6T+0nn5oUD0VMFBsWTzyrIDZyFlSCqsIAi1aNBNZy7RWkEE8aQkQe4R0mQ/Fh2Thnq1rbnHIEYueDVTAxWLxO0qYE=
+	t=1745590812; cv=none; b=YD+K4i2ft3hAi2L2pFP023dbxSOKmM5Fw/HuEuoyog/bmGcYZ029SS7YE37cJzafrqgK/LoCB5L+odT+UIibXZO4BUe5NfA1/CqckRBWN+RKKH5Qf6dS5tynsekcB8moP/ktAo19v2rAi/Gg/rXpl8dfUT/S46MXRVCLBGjfrx8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745589977; c=relaxed/simple;
-	bh=JVXq101GNPFZTOl+rkQyon0U67GkQoTv02X7e7Uodus=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=eSdH7xY+8pUb4TrT8wqJB7cKNNTTA89knniZSB/SP98vNlL8Vqx/p+KoyKoesB0g5/g0ZCe7nlLuRFNqrQULc2tF2tn1C9BP4OdL2SBuNG1vyrnbbfnygxpCtPEI1M6xpmpVAc5zQ1ws1JNDkdbhUSi/LAg/uWjKaWcDTmy0dTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=aueV1I4k; arc=none smtp.client-ip=198.37.111.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1745589973;
-	bh=JVXq101GNPFZTOl+rkQyon0U67GkQoTv02X7e7Uodus=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=aueV1I4kFim9LQaM4KOqj4ntSzY7fy9dOjmTKJDHzhyJI3G5sCcOqQnzq9gd4emB0
-	 frqgJBzdWsYwOz7Z1r62KDbHzGcr2GW402bVYD7VS7adgVT/T4Oui0Qbo8m0LKCBfv
-	 SwxoqamWMpC9ECkX12cJffWoE2UV+WRR/I8txh7s=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id 6C7841C030C;
-	Fri, 25 Apr 2025 10:06:12 -0400 (EDT)
-Message-ID: <6e086e29d258839e42ef7a83b38571d1882eb77d.camel@HansenPartnership.com>
-Subject: Re: [PATCH v2 security-next 1/4] security: Hornet LSM
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Blaise Boscaccy <bboscaccy@linux.microsoft.com>, Jonathan Corbet
- <corbet@lwn.net>, David Howells <dhowells@redhat.com>, Herbert Xu
- <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>,
- Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, "Serge
- E. Hallyn" <serge@hallyn.com>, Masahiro Yamada <masahiroy@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>,
- Shuah Khan <shuah@kernel.org>, =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?=
- <mic@digikod.net>,  =?ISO-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,  Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Jarkko Sakkinen
- <jarkko@kernel.org>,  Jan Stancek <jstancek@redhat.com>, Neal Gompa
- <neal@gompa.dev>, "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
- LKML <linux-kernel@vger.kernel.org>,  keyrings@vger.kernel.org, Linux
- Crypto Mailing List <linux-crypto@vger.kernel.org>, LSM List
- <linux-security-module@vger.kernel.org>,  Linux Kbuild mailing list
- <linux-kbuild@vger.kernel.org>, "open list:KERNEL SELFTEST FRAMEWORK"
- <linux-kselftest@vger.kernel.org>,  bpf <bpf@vger.kernel.org>,
- clang-built-linux <llvm@lists.linux.dev>, nkapron@google.com,  Matteo Croce
- <teknoraver@meta.com>, Roberto Sassu <roberto.sassu@huawei.com>, Cong Wang
- <xiyou.wangcong@gmail.com>
-Date: Fri, 25 Apr 2025 10:06:11 -0400
-In-Reply-To: <CAADnVQJ6SRePz7yc5x3BAz7q-e8DVYq=vRdahxCZ4XzpWtnYpQ@mail.gmail.com>
-References: <20250404215527.1563146-1-bboscaccy@linux.microsoft.com>
-	 <20250404215527.1563146-2-bboscaccy@linux.microsoft.com>
-	 <CAADnVQJyNRZVLPj_nzegCyo+BzM1-whbnajotCXu+GW+5-=P6w@mail.gmail.com>
-	 <87semdjxcp.fsf@microsoft.com>
-	 <CAADnVQ+JGfwRgsoe2=EHkXdTyQ8ycn0D9nh1k49am++4oXUPHg@mail.gmail.com>
-	 <87friajmd5.fsf@microsoft.com>
-	 <CAADnVQKb3gPBFz+n+GoudxaTrugVegwMb8=kUfxOea5r2NNfUA@mail.gmail.com>
-	 <87a58hjune.fsf@microsoft.com>
-	 <CAADnVQ+LMAnyT4yV5iuJ=vswgtUu97cHKnvysipc6o7HZfEbUA@mail.gmail.com>
-	 <87y0w0hv2x.fsf@microsoft.com>
-	 <CAADnVQKF+B_YYwOCFsPBbrTBGKe4b22WVJFb8C0PHGmRAjbusQ@mail.gmail.com>
-	 <2bd95ca78e836db0775da8237792e8448b8eec62.camel@HansenPartnership.com>
-	 <CAADnVQJ6SRePz7yc5x3BAz7q-e8DVYq=vRdahxCZ4XzpWtnYpQ@mail.gmail.com>
-Autocrypt: addr=James.Bottomley@HansenPartnership.com;
- prefer-encrypt=mutual;
- keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 
+	s=arc-20240116; t=1745590812; c=relaxed/simple;
+	bh=K9FDg6mkXT+8bJP4wzORvmgE3i+qGooEdCt2vYUyTiE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XKEwRs97ABMBPYOiXuUb2dD6JRHWS1zEqk+nSfTBKoHocy2D5GDvAVmx/ImRsaSmTpT5VhXnFjBWcdhuJovfKW8qrlqexKEbZT4Cu3DslzWbJdZ4pIni5dsPHd/FN8eBsytf0DsoFQpWV/fmQOxvkOUmj2pZLgbVF840uqa7reo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=L5vNjREB; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-43ed8d32a95so20384905e9.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Apr 2025 07:20:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1745590808; x=1746195608; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=HzMPyDCfmZ5P+tmbLJqGtVcfwWooIgaMBHX7zeCawZE=;
+        b=L5vNjREBLdzL6NySFls1dlDd9KDFGR4oo6tpmQVTJLHO8gCNFPg4DqLMerrd/PGvEs
+         iFpUjj1xLnbRlDy/lUTkL2YrU+GiH8XhGHUaDd9ge2CnEJWrnHS7n20UUbtIEN8/pr64
+         c3zfjAzcdtdg8apbuTVf+5mYbIpvMBXwj1+tU3Ds+qps9KNl34n+xMifqM8MWK/p6LeQ
+         Mz21ajtRi0g2OpDxYq/E2zpSD/+HW+QeM+k089JxJ/OPi6ot+Xg65Nop/eI/UAYzOB4M
+         9tqZT0+bUtoTZIXaqxdJRrj8k6jO1n3ILkOlKPGWiYi3YMlEa4b7kNwF4Xtm/Np33+fc
+         famg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745590808; x=1746195608;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HzMPyDCfmZ5P+tmbLJqGtVcfwWooIgaMBHX7zeCawZE=;
+        b=Ta+HCc6HLnbmK4b1tl4gPoj7Vk7Z9qSvhzJ2f3SUmT06F/hMRjAiwVa3hm6AC/7Yq3
+         mDRPad2eNbR5B6Drn4+LPBA6gBWg5qWSuY5gM1vESdlffTBGqR9jUMu/vckSzpDyvAU+
+         pWUP/hSP4l2xb1h2P6sB83OnKqCOg1cIgOPLj2qbS6uAThUQ2uWlOR1ddHCPzDWxdZsa
+         6NvxIp/gmakq3IYL0zCb/ArChCuarsKMc6F+JSMkYWoaAzh1Po+XBbnIhxCYX3xkywb9
+         Qpwc/kTobs6xo5tPA9bE+I5WJlCunOli+fAOLl6pMaYivsKfKXqywKIQvWBc8FecRaAl
+         T4nQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVMtAX6nDFbXpkvq4ydqCrbvGP1q7X+hNDHqrIYI56gcDshrVnH5eZrhQuXYYUZsXRMuDMFadNxUxTvcG77pew=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzO1zCW2Sp8WuKe0EceuLh98hTFpfR/uFQ7wXOZ3/FnHgF0yXnm
+	oRVAUoyDED87c8E5bU1khl9vRCFawe4eZkcvLZ+F9qoLgrWiPxcBZEilq5mDRqI=
+X-Gm-Gg: ASbGncs1m5IPxmQn8kvudko2B6sEtOIvfnp9GC3ABVpt579vazQE+ZYP7/17HnILudy
+	APWXySHiIgUeAEMnC0vXDGffpZrW//OunmpSWsgAfJQU20iEHhlEnv75GeNboiynK33t0SvQYGS
+	1TyedjKlABAFjoz6Sm0hVJyci5UKZuySxgcGISy/0I61HGtxKCOXX0REt06hG3iX2vjKU85BrsN
+	DWMb48l2qWcJmXn5MssI+nVmZk+m62M4TD3hA5ryhxW8kcAhYFKn7lbiPFrEUK0UECVYRz9WVjI
+	TKY/86fH09cmGYjINERLvhrGw8m5JmGIkSUXjBE=
+X-Google-Smtp-Source: AGHT+IHJyNvS1zQ2yqE99jC6WN1IMb+zoFXeeKc94tYcW7I8Si86MaJJE5esTsQGeC56+CT3mVH95Q==
+X-Received: by 2002:a05:6000:1ac9:b0:39f:e3b:406b with SMTP id ffacd0b85a97d-3a074e10480mr2287112f8f.5.1745590808165;
+        Fri, 25 Apr 2025 07:20:08 -0700 (PDT)
+Received: from localhost ([2a02:8308:a00c:e200::f716])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4408d839711sm84525175e9.0.2025.04.25.07.20.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Apr 2025 07:20:07 -0700 (PDT)
+Date: Fri, 25 Apr 2025 16:20:06 +0200
+From: Andrew Jones <ajones@ventanamicro.com>
+To: Atish Patra <atishp@rivosinc.com>
+Cc: Anup Patel <anup@brainfault.org>, Atish Patra <atishp@atishpatra.org>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Alexandre Ghiti <alex@ghiti.fr>, kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] KVM: riscv: selftests: Add vector extension tests
+Message-ID: <20250425-a2a40c6296018326cdcf7d24@orel>
+References: <20250324-kvm_selftest_improve-v1-0-583620219d4f@rivosinc.com>
+ <20250324-kvm_selftest_improve-v1-3-583620219d4f@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250324-kvm_selftest_improve-v1-3-583620219d4f@rivosinc.com>
 
-On Thu, 2025-04-24 at 16:41 -0700, Alexei Starovoitov wrote:
-> On Wed, Apr 23, 2025 at 7:12=E2=80=AFAM James Bottomley
-> <James.Bottomley@hansenpartnership.com> wrote:
-> > On Mon, 2025-04-21 at 13:12 -0700, Alexei Starovoitov wrote:
-> > [...]
-> > > Calling bpf_map_get() and
-> > > map->ops->map_lookup_elem() from a module is not ok either.
-> >=20
-> > I don't understand this objection.
->=20
-> Consider an LSM that hooks into security_bprm_*(bprm),
-> parses something in linux_binprm, then
-> struct file *file =3D
-> fd_file(fdget(some_random_file_descriptor_in_current));
-> file->f_op->read(..);
->=20
-> Would VFS maintainers approve such usage ?
+On Mon, Mar 24, 2025 at 05:40:31PM -0700, Atish Patra wrote:
+> Add vector related tests with the ISA extension standard template.
+> However, the vector registers are bit tricky as the register length is
+> variable based on vlenb value of the system. That's why the macros are
+> defined with a default and overidden with actual value at runtime.
+> 
+> Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> ---
+>  tools/testing/selftests/kvm/riscv/get-reg-list.c | 111 ++++++++++++++++++++++-
+>  1 file changed, 110 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools/testing/selftests/kvm/riscv/get-reg-list.c
+> index 8515921dfdbf..576ab8eb7368 100644
+> --- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
+> +++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
+> @@ -145,7 +145,9 @@ void finalize_vcpu(struct kvm_vcpu *vcpu, struct vcpu_reg_list *c)
+>  {
+>  	unsigned long isa_ext_state[KVM_RISCV_ISA_EXT_MAX] = { 0 };
+>  	struct vcpu_reg_sublist *s;
+> -	uint64_t feature;
+> +	uint64_t feature = 0;
+> +	u64 reg, size;
+> +	unsigned long vlenb_reg;
+>  	int rc;
+>  
+>  	for (int i = 0; i < KVM_RISCV_ISA_EXT_MAX; i++)
+> @@ -173,6 +175,23 @@ void finalize_vcpu(struct kvm_vcpu *vcpu, struct vcpu_reg_list *c)
+>  		switch (s->feature_type) {
+>  		case VCPU_FEATURE_ISA_EXT:
+>  			feature = RISCV_ISA_EXT_REG(s->feature);
+> +			if (s->feature == KVM_RISCV_ISA_EXT_V) {
+> +				/* Enable V extension so that we can get the vlenb register */
+> +				__vcpu_set_reg(vcpu, feature, 1);
 
-This is a bit off topic from the request for clarification but:
+We probably want to bail here if __vcpu_set_reg returns an error.
 
-It's somewhat standard operating procedure for LSMs.  Some do make
-decisions entirely within the data provided by the hook, but some need
-to take external readings, like selinux or IMA consulting the policy in
-the xattr or apparmor the one in the tree etc.
+> +				/* Compute the correct vector register size */
+> +				rc = __vcpu_get_reg(vcpu, s->regs[4], &vlenb_reg);
 
-Incidentally, none of them directly does a file->f_op->read(); they all
-use the kernel_read_file() API which is exported from the vfs for that
-purpose.
+I see regs[4] is the encoding for vlenb, but I think we need a comment or
+a define or something in order to reduce head scratching.
 
-> More so, your LSM does
-> file =3D get_task_exe_file(current);
-> kernel_read_file(file, ...);
->=20
-> This is even worse.
-> You've corrupted the ELF binary with extra garbage at the end.
-> objdump/elfutils will choke on it and you're lucky that binfmt_elf
-> still loads it.
-> The whole approach is a non-starter.
+> +				if (rc < 0)
+> +				/* The vector test may fail if the default reg size doesn't match */
 
-It's the same approach we use to create kernel modules: ELF with an
-appended signature.  If you recall the kernel summit discussions about
-it, the reason that was chosen for modules is because it's easy and the
-ELF processor simply ignores any data in the file that's not described
-by the header (which means the ELF tools you refer to above are fine
-with this if you actually try them).
+I guess this comment should be below the break. We could probably use some
+blank lines in this code too. But, more importantly, what does this
+comment mean? That things may not work despite what we're doing here? Or,
+I think it means that we're doing this just in case the default size we
+already have set doesn't match. Can we reword it?
 
-But it you really want the signature to be part of the ELF,  then the
-patch set can do what David Howells first suggested for modules: it can
-simply put the appended signature into an unloaded ELF section.
+> +					break;
+> +				size = __builtin_ctzl(vlenb_reg);
+> +				size <<= KVM_REG_SIZE_SHIFT;
+> +				for (int i = 0; i < 32; i++) {
+> +					reg = KVM_REG_RISCV | KVM_REG_RISCV_VECTOR | size |
+> +					      KVM_REG_RISCV_VECTOR_REG(i);
+> +					s->regs[5 + i] = reg;
+> +				}
+> +				__vcpu_set_reg(vcpu, feature, 0);
 
-> > The program just got passed in to bpf_prog_load() as a set of
-> > attributes which, for a light skeleton, directly contain the code
-> > as a blob and have the various BTF relocations as a blob in a
-> > single element array map.=C2=A0 I think everyone agrees that the
-> > integrity of the program would be compromised by modifications to
-> > the relocations, so the security_bpf_prog_load() hook can't make an
-> > integrity determination without examining both.=C2=A0 If the hook can't
-> > use the bpf_maps.. APIs directly is there some other API it should
-> > be using to get the relocations, or are you saying that the
-> > security_bpf_prog_load() hook isn't fit for purpose and it should
-> > be called after the bpf core has loaded the relocations so they can
-> > be provided to the hook as an argument?
->=20
-> No. As I said twice already the only place to verify program
-> signature is a bpf subsystem itself.
+Switch this to vcpu_set_reg() since we want to assert it worked.
 
-The above argument is actually independent of signing.  However,
-although we have plenty of subsystems that verify their own signatures,
-it's perfectly valid for a LSM to do it as well: IMA is one of the
-oldest LSMs and it's been verifying signatures over binaries and text
-files since it was first created.
+> +			}
 
-> Hacking into bpf internals from LSM, BPF-LSM program,
-> or any other kernel subsystem is a no go.
+This if (s->feature == KVM_RISCV_ISA_EXT_V) block can go above the switch
+since it's not dependent on feature_type. I'd probably also create a
+function for it in order to keep finalize_vcpu() tidy and help with the
+indentation depth.
 
-All LSMs depend to some extent on the internals of the subsystem where
-the hook is ... the very structures passed into them are often internal
-to that subsystem.  The problem you didn't address was that some of the
-information necessary to determine the integrity properties in the bpf
-hook is in a map file descriptor.  Since the map merely wraps a single
-blob of data, that could easily be passed in to the hook instead of
-having the LSM extract it from the map.  How the hook gets the data is
-an internal implementation detail of the kernel that can be updated
-later.
+>  			break;
+>  		case VCPU_FEATURE_SBI_EXT:
+>  			feature = RISCV_SBI_EXT_REG(s->feature);
+> @@ -408,6 +427,35 @@ static const char *fp_d_id_to_str(const char *prefix, __u64 id)
+>  	return strdup_printf("%lld /* UNKNOWN */", reg_off);
+>  }
+>  
+> +static const char *vector_id_to_str(const char *prefix, __u64 id)
+> +{
+> +	/* reg_off is the offset into struct __riscv_v_ext_state */
+> +	__u64 reg_off = id & ~(REG_MASK | KVM_REG_RISCV_VECTOR);
+> +	int reg_index = 0;
+> +
+> +	assert((id & KVM_REG_RISCV_TYPE_MASK) == KVM_REG_RISCV_VECTOR);
+> +
+> +	if (reg_off >= KVM_REG_RISCV_VECTOR_REG(0))
+> +		reg_index = reg_off -  KVM_REG_RISCV_VECTOR_REG(0);
+> +	switch (reg_off) {
+> +	case KVM_REG_RISCV_VECTOR_REG(0) ...
+> +	     KVM_REG_RISCV_VECTOR_REG(31):
+> +		return strdup_printf("KVM_REG_RISCV_VECTOR_REG(%d)", reg_index);
+> +	case KVM_REG_RISCV_VECTOR_CSR_REG(vstart):
+> +		return "KVM_REG_RISCV_VECTOR_CSR_REG(vstart)";
+> +	case KVM_REG_RISCV_VECTOR_CSR_REG(vl):
+> +		return "KVM_REG_RISCV_VECTOR_CSR_REG(vl)";
+> +	case KVM_REG_RISCV_VECTOR_CSR_REG(vtype):
+> +		return "KVM_REG_RISCV_VECTOR_CSR_REG(vtype)";
+> +	case KVM_REG_RISCV_VECTOR_CSR_REG(vcsr):
+> +		return "KVM_RISCV_VCPU_VECTOR_CSR_REG(vcsr)";
+> +	case KVM_REG_RISCV_VECTOR_CSR_REG(vlenb):
+> +		return "KVM_REG_RISCV_VECTOR_CSR_REG(vlenb)";
+> +	}
+> +
+> +	return strdup_printf("%lld /* UNKNOWN */", reg_off);
+> +}
+> +
+>  #define KVM_ISA_EXT_ARR(ext)		\
+>  [KVM_RISCV_ISA_EXT_##ext] = "KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_" #ext
+>  
+> @@ -635,6 +683,9 @@ void print_reg(const char *prefix, __u64 id)
+>  	case KVM_REG_SIZE_U128:
+>  		reg_size = "KVM_REG_SIZE_U128";
+>  		break;
+> +	case KVM_REG_SIZE_U256:
+> +		reg_size = "KVM_REG_SIZE_U256";
+> +		break;
+>  	default:
+>  		printf("\tKVM_REG_RISCV | (%lld << KVM_REG_SIZE_SHIFT) | 0x%llx /* UNKNOWN */,\n",
+>  		       (id & KVM_REG_SIZE_MASK) >> KVM_REG_SIZE_SHIFT, id & ~REG_MASK);
+> @@ -666,6 +717,10 @@ void print_reg(const char *prefix, __u64 id)
+>  		printf("\tKVM_REG_RISCV | %s | KVM_REG_RISCV_FP_D | %s,\n",
+>  				reg_size, fp_d_id_to_str(prefix, id));
+>  		break;
+> +	case KVM_REG_RISCV_VECTOR:
+> +		printf("\tKVM_REG_RISCV | %s | KVM_REG_RISCV_VECTOR | %s,\n",
+> +		       reg_size, vector_id_to_str(prefix, id));
+> +		break;
+>  	case KVM_REG_RISCV_ISA_EXT:
+>  		printf("\tKVM_REG_RISCV | %s | KVM_REG_RISCV_ISA_EXT | %s,\n",
+>  				reg_size, isa_ext_id_to_str(prefix, id));
+> @@ -870,6 +925,54 @@ static __u64 fp_d_regs[] = {
+>  	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_D,
+>  };
+>  
+> +/* Define a default vector registers with length. This will be overwritten at runtime */
+> +static __u64 vector_regs[] = {
+> +	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_VECTOR |
+> +	KVM_REG_RISCV_VECTOR_CSR_REG(vstart),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_VECTOR |
+> +	KVM_REG_RISCV_VECTOR_CSR_REG(vl),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_VECTOR |
+> +	KVM_REG_RISCV_VECTOR_CSR_REG(vtype),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_VECTOR |
+> +	KVM_REG_RISCV_VECTOR_CSR_REG(vcsr),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_VECTOR |
+> +	KVM_REG_RISCV_VECTOR_CSR_REG(vlenb),
 
-> > The above, by the way, is independent of signing, because it
-> > applies to any determination that might be made in the
-> > security_bpf_prog_load() hook regardless of purpose.
->=20
-> security_bpf_prog_load() should not access bpf internals.
-> That LSM hook sees the following:
-> security_bpf_prog_load(struct bpf_prog *prog, union bpf_attr *attr,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct bpf_tok=
-en *token, bool kernel);
->=20
-> LSM can look into uapi things there.
+Let these lines stick out to be easier to read and ensure one register
+encoding per line (we don't care about line length at all in this file :-)
 
-Is that the misunderstanding? That's not how LSMs work: they are not
-bound by only the UAPI, they are in kernel and have full access to the
-kernel API so they can introspect stuff and make proper determinations.
+> +	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(0),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(1),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(2),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(3),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(4),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(5),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(6),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(7),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(8),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(9),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(10),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(11),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(12),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(13),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(14),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(15),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(16),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(17),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(18),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(19),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(20),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(21),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(22),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(23),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(24),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(25),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(26),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(27),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(28),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(29),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(30),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(31),
+> +	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE |
+> +	KVM_RISCV_ISA_EXT_V,
 
-> Like prog->sleepable, prog->tag, prog->aux->name,
-> but things like prog->aux->jit_data or prog->aux->used_maps
-> are not ok to access.
-> If in doubt, ask on the mailing list.
+should also stick out
 
-I am aren't I? At least the bpf is one of the lists cc'd on this.
+> +};
+> +
+>  #define SUBLIST_BASE \
+>  	{"base", .regs = base_regs, .regs_n = ARRAY_SIZE(base_regs), \
+>  	 .skips_set = base_skips_set, .skips_set_n = ARRAY_SIZE(base_skips_set),}
+> @@ -894,6 +997,10 @@ static __u64 fp_d_regs[] = {
+>  	{"fp_d", .feature = KVM_RISCV_ISA_EXT_D, .regs = fp_d_regs, \
+>  		.regs_n = ARRAY_SIZE(fp_d_regs),}
+>  
+> +#define SUBLIST_V \
+> +	{"v", .feature = KVM_RISCV_ISA_EXT_V, .regs = vector_regs, \
+> +		.regs_n = ARRAY_SIZE(vector_regs),}
 
-Regards,
+I'd also let this stick out since it won't even be 100 chars.
 
-James
+> +
+>  #define KVM_ISA_EXT_SIMPLE_CONFIG(ext, extu)			\
+>  static __u64 regs_##ext[] = {					\
+>  	KVM_REG_RISCV | KVM_REG_SIZE_ULONG |			\
+> @@ -962,6 +1069,7 @@ KVM_SBI_EXT_SIMPLE_CONFIG(susp, SUSP);
+>  KVM_ISA_EXT_SUBLIST_CONFIG(aia, AIA);
+>  KVM_ISA_EXT_SUBLIST_CONFIG(fp_f, FP_F);
+>  KVM_ISA_EXT_SUBLIST_CONFIG(fp_d, FP_D);
+> +KVM_ISA_EXT_SUBLIST_CONFIG(v, V);
+>  KVM_ISA_EXT_SIMPLE_CONFIG(h, H);
+>  KVM_ISA_EXT_SIMPLE_CONFIG(smnpm, SMNPM);
+>  KVM_ISA_EXT_SUBLIST_CONFIG(smstateen, SMSTATEEN);
+> @@ -1034,6 +1142,7 @@ struct vcpu_reg_list *vcpu_configs[] = {
+>  	&config_fp_f,
+>  	&config_fp_d,
+>  	&config_h,
+> +	&config_v,
+>  	&config_smnpm,
+>  	&config_smstateen,
+>  	&config_sscofpmf,
+> 
+> -- 
+> 2.43.0
+>
 
+Thanks,
+drew
 
