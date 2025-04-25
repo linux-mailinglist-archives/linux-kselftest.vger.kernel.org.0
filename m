@@ -1,137 +1,190 @@
-Return-Path: <linux-kselftest+bounces-31628-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31629-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48FE8A9C001
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Apr 2025 09:47:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6822EA9C013
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Apr 2025 09:49:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C72E75A2270
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Apr 2025 07:46:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3FDAC1B8677E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Apr 2025 07:49:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC22D232376;
-	Fri, 25 Apr 2025 07:46:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17D3E230BE1;
+	Fri, 25 Apr 2025 07:48:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="BONzwATD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tRm0GR6j"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD3AC22D7A7
-	for <linux-kselftest@vger.kernel.org>; Fri, 25 Apr 2025 07:46:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD97D21638A;
+	Fri, 25 Apr 2025 07:48:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745567189; cv=none; b=VOYhVdzjgn06a9xjiYC0nDGl/2CG6hVksH/W2Xim0zC5I0UncjUBRgMU7KGIwn+VDsMBJurnsr0v5gbTcZ48GkC0eNeBy7DgYv5G+UkMVolLnnEKLG76+gvYN7933xskbsh9wv0mqpCp13q7bUwp6QQ1XSUV044s1rDM0+mZ7yY=
+	t=1745567329; cv=none; b=Y1PSpH0yPQtI9vzvSLEJ2QxvIrHgigPIIrGXwWdxu5oEfJ9e1FL6LfDH/5xIs8cONpP8Yi9Hh1fU36dRVYqcNljsKC0404sNN2zYK8eGRWZZSZ/YlXtpT1v+FYEVpBofL1gCkfw3EP8sAD/RSmmyGzQp/QA1akzeDL5W+/tJ+bo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745567189; c=relaxed/simple;
-	bh=M2e5e0DbBcCkM53d/193BeEEWoXcJicJMcob4XfVxtg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=imYs6Xd+8kiQxTsyE2yxbm0AYQKLIfZBSzW55Pgsj1cm2TM1FrzmAn21P4z6mrg7NBnkwoZ0qXZM+wG7VKf0NFZeqQW4m78sjT2cpGjZ1JnChdq7Y02BXReBc3L0MIbvHhIAUgEnl8EqUsSTFXXkrJLDojxOdyG9Efboe+NfV/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=BONzwATD; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-43cf3192f3bso16880325e9.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Apr 2025 00:46:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1745567186; x=1746171986; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=yalr6Bu93K2GzLCvN0XHCxzUAzn2mCxagWptxLA843Q=;
-        b=BONzwATDn/a2Jbfl2U/CRNZi6nvEygafRicZHs3E01vwo9Vk0ZH7vrqo9dHe7NAp51
-         gS/di6U0SsI2y61hjPKlZN7hHtXGxxQCTYYAVie4dgOUhY+Q7N3WXWFsB8YN55Q9i2i2
-         JTzQUtB+zF67/ain39qAEr9FBYWqwsQRfg+iIHrIaZ3G2odO5yQCBtr0IUMml9EP1bDq
-         pZpxlieYZmifYhKjSmNVmUmK+dOcxlcC/l6OdbaAssA4ntsgHsMXAk+SWpAskvjBNyul
-         8HHDB+GtNKM9Hs8rpxZeaAHMHyn9jyBJF3Jq+0ww5ss/Yx9ZAH3k/OAESYnYn+todGiu
-         X7UQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745567186; x=1746171986;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yalr6Bu93K2GzLCvN0XHCxzUAzn2mCxagWptxLA843Q=;
-        b=X8kl7v2g993oCuhhJ4DKmvfDejUYnM5zbWd+2zzoPyTMHCsVkTbDhCjCRHU46viMj8
-         3HOJxSW5rFiAn20QDkGUM3PEvnPCEykjpvDJLyjq/ovxGyHBp5Ata/nLYAFmofUvYb//
-         TvgQo0BMTymssB4sFpQUH9TawxujGPuRy4pXLEQRLqw8eejth/ELjvPgjusqHfmyEgjE
-         aLdLEtK8Ws1S6lXcyu1hAC/OwwC7Hzq7BOguEqFEyjR9tIITmVRHFqeHnwwWpra+Rwp9
-         kDM16F1VS5Gm7u9WikzLeN/RQj5VukT5iM6h78vY3xlssRi7sTIUFXijTU0ktbeDwYH1
-         nw6w==
-X-Forwarded-Encrypted: i=1; AJvYcCWAY0ydm1SwaVS6UIj7PAknRQnEgOCcoaeNX7vaNnxinWPupCch8G8OI/YhvZr7TqJ9qrdFXtQ7qSkv7K0miYs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJrwLYYDBclFT96uK4GDjFmJuqGLz1LT6z677Cn3mlIu9xpMQa
-	euMc+IYGenTEMhxmHY34KEhyFg7z5QdtVXepmur90JLynlN727MdKZSRJZLaNC4=
-X-Gm-Gg: ASbGncsriceKlNRpz78FV335GnHE3HoFJXna5ViNfRRge4w3p3UjQTaDfathbzvPGgv
-	mi/iI3UyoeFtDP7tOoY72sjgQ9k17S3lxj/k4p4p32fqLDMBvrnPfH1LfuRapnKqSDEUD8cu2aN
-	PWTsnhrXJrPchIQrMUuVpq1tF+Ba9udyR4l1cTkzc4+VZDzPE/cB0o6UJXtOvq19Oc5KMLO2Lqg
-	lScZTZ7xNHawXVTkU7xsxI/0prs83L6WM6QuCkl6kJ3D8QgVmDJnh4sA446LYYlgGwGiJoaMtiO
-	BW3VAUkKDpCImAlYlzTDawo8E5Vz
-X-Google-Smtp-Source: AGHT+IGuKsjAp/bE7iMICTe5tl7fZLkgjjuJMOyAsBGa6hvpBqMsjN2EfsDi9JbPSKmGTEeYZJEdtA==
-X-Received: by 2002:a05:6000:4212:b0:38f:2ddd:a1bb with SMTP id ffacd0b85a97d-3a074e144a6mr901505f8f.8.1745567185228;
-        Fri, 25 Apr 2025 00:46:25 -0700 (PDT)
-Received: from localhost ([2a02:8308:a00c:e200::f716])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a073e46c23sm1496676f8f.75.2025.04.25.00.46.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Apr 2025 00:46:24 -0700 (PDT)
-Date: Fri, 25 Apr 2025 09:46:24 +0200
-From: Andrew Jones <ajones@ventanamicro.com>
-To: =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Anup Patel <anup@brainfault.org>, 
-	Atish Patra <atishp@atishpatra.org>, Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org, 
-	Samuel Holland <samuel.holland@sifive.com>, Deepak Gupta <debug@rivosinc.com>
-Subject: Re: [PATCH v6 02/14] riscv: sbi: remove useless parenthesis
-Message-ID: <20250425-00fafd9027c5b1be3dd1d78e@orel>
-References: <20250424173204.1948385-1-cleger@rivosinc.com>
- <20250424173204.1948385-3-cleger@rivosinc.com>
+	s=arc-20240116; t=1745567329; c=relaxed/simple;
+	bh=RZpzcYa7jVWnvEQOwF6i3444TmzEb7CsmbvzQ6FmMYU=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Lj+noQUbDFs8wVS1yhEJxVP9VvBvHkrMdn9L43lYhKXIRTw/nxSmyPx18wW+NjAKHEmRG2swO4yX7D2fouiuakxgcL8v6EysyJPIhjfLAOnEtSU/NnJLTWrfcjU+mDIxiSaeVEZdZPSilSRyrmDU9UNaRyddmfs3niTJcuYaP38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tRm0GR6j; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DB71C4CEE4;
+	Fri, 25 Apr 2025 07:48:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745567328;
+	bh=RZpzcYa7jVWnvEQOwF6i3444TmzEb7CsmbvzQ6FmMYU=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=tRm0GR6jtvq7jKYX6Dx2Bt7zDutbVSud9a08mU9bWkd8m0xeBzH5J0akmNuz9OgeQ
+	 p70KjDFT+oCP5TY3rRGHjssEtfc1IhARFUYy+JKuaf3fxwT1e2euy+l0LkFFf1HEjY
+	 gIAV22d7UJW+Fu4lhLnRgH1Xwk1aeiPrLn1x6krJG+ndOZuQlzcbNziUT8E+xxMWHT
+	 IWqgFHZQHdKBHX+hWqu3G06r+VX3ujUgOAX5xVgM5+U8Y+hI+OC2Gq4WB0THm2SNaO
+	 +6SaHlcaimeGoF4fID5SHimtzc/VkeXbOZiOb+WUeZkEKh8u7bnq423R0uELCtzR9V
+	 kxGNCmm+f0Stw==
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id 0F35A1A037D2; Fri, 25 Apr 2025 09:48:35 +0200 (CEST)
+From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@kernel.org>
+To: Stanislav Fomichev <stfomichev@gmail.com>
+Cc: Lorenzo Bianconi <lorenzo@kernel.org>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, John Fastabend
+ <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, Martin
+ KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP
+ Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, "David S. Miller"
+ <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard
+ Brouer <hawk@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan
+ <shuah@kernel.org>, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2] bpf: Allow XDP dev-bound programs to
+ perform XDP_REDIRECT into maps
+In-Reply-To: <aAphqn-Lm0nn4FH0@mini-arch>
+References: <20250423-xdp-prog-bound-fix-v2-1-51742a5dfbce@kernel.org>
+ <87wmb97uyt.fsf@toke.dk> <aAphqn-Lm0nn4FH0@mini-arch>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date: Fri, 25 Apr 2025 09:48:35 +0200
+Message-ID: <87ikms7kbw.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250424173204.1948385-3-cleger@rivosinc.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 24, 2025 at 07:31:49PM +0200, Clément Léger wrote:
-> A few parenthesis in check for SBI version/extension were useless,
-> remove them.
-> 
-> Signed-off-by: Clément Léger <cleger@rivosinc.com>
-> ---
->  arch/riscv/kernel/sbi.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
-> index 1989b8cade1b..1d44c35305a9 100644
-> --- a/arch/riscv/kernel/sbi.c
-> +++ b/arch/riscv/kernel/sbi.c
-> @@ -609,7 +609,7 @@ void __init sbi_init(void)
->  		} else {
->  			__sbi_rfence	= __sbi_rfence_v01;
->  		}
-> -		if ((sbi_spec_version >= sbi_mk_version(0, 3)) &&
-> +		if (sbi_spec_version >= sbi_mk_version(0, 3) &&
->  		    sbi_probe_extension(SBI_EXT_SRST)) {
->  			pr_info("SBI SRST extension detected\n");
->  			pm_power_off = sbi_srst_power_off;
-> @@ -617,8 +617,8 @@ void __init sbi_init(void)
->  			sbi_srst_reboot_nb.priority = 192;
->  			register_restart_handler(&sbi_srst_reboot_nb);
->  		}
-> -		if ((sbi_spec_version >= sbi_mk_version(2, 0)) &&
-> -		    (sbi_probe_extension(SBI_EXT_DBCN) > 0)) {
-> +		if (sbi_spec_version >= sbi_mk_version(2, 0) &&
-> +		    sbi_probe_extension(SBI_EXT_DBCN) > 0) {
->  			pr_info("SBI DBCN extension detected\n");
->  			sbi_debug_console_available = true;
->  		}
-> -- 
-> 2.49.0
+Stanislav Fomichev <stfomichev@gmail.com> writes:
+
+> On 04/24, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+>> Lorenzo Bianconi <lorenzo@kernel.org> writes:
+>>=20
+>> > In the current implementation if the program is dev-bound to a specific
+>> > device, it will not be possible to perform XDP_REDIRECT into a DEVMAP
+>> > or CPUMAP even if the program is running in the driver NAPI context and
+>> > it is not attached to any map entry. This seems in contrast with the
+>> > explanation available in bpf_prog_map_compatible routine.
+>> > Fix the issue introducing __bpf_prog_map_compatible utility routine in
+>> > order to avoid bpf_prog_is_dev_bound() check running bpf_check_tail_ca=
+ll()
+>> > at program load time (bpf_prog_select_runtime()).
+>> > Continue forbidding to attach a dev-bound program to XDP maps
+>> > (BPF_MAP_TYPE_PROG_ARRAY, BPF_MAP_TYPE_DEVMAP and BPF_MAP_TYPE_CPUMAP).
+>> >
+>> > Fixes: 3d76a4d3d4e59 ("bpf: XDP metadata RX kfuncs")
+>> > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+>> > ---
+>> > Changes in v2:
+>> > - Introduce __bpf_prog_map_compatible() utility routine in order to sk=
+ip
+>> >   bpf_prog_is_dev_bound check in bpf_check_tail_call()
+>> > - Extend xdp_metadata selftest
+>> > - Link to v1: https://lore.kernel.org/r/20250422-xdp-prog-bound-fix-v1=
+-1-0b581fa186fe@kernel.org
+>> > ---
+>> >  kernel/bpf/core.c                                  | 27 +++++++++++++=
+---------
+>> >  .../selftests/bpf/prog_tests/xdp_metadata.c        | 22 +++++++++++++=
+++++-
+>> >  tools/testing/selftests/bpf/progs/xdp_metadata.c   | 13 +++++++++++
+>> >  3 files changed, 50 insertions(+), 12 deletions(-)
+>> >
+>> > diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+>> > index ba6b6118cf504041278d05417c4212d57be6fca0..a3e571688421196c3ceaed=
+62b3b59b62a0258a8c 100644
+>> > --- a/kernel/bpf/core.c
+>> > +++ b/kernel/bpf/core.c
+>> > @@ -2358,8 +2358,8 @@ static unsigned int __bpf_prog_ret0_warn(const v=
+oid *ctx,
+>> >  	return 0;
+>> >  }
+>> >=20=20
+>> > -bool bpf_prog_map_compatible(struct bpf_map *map,
+>> > -			     const struct bpf_prog *fp)
+>> > +static bool __bpf_prog_map_compatible(struct bpf_map *map,
+>> > +				      const struct bpf_prog *fp)
+>> >  {
+>> >  	enum bpf_prog_type prog_type =3D resolve_prog_type(fp);
+>> >  	bool ret;
+>> > @@ -2368,14 +2368,6 @@ bool bpf_prog_map_compatible(struct bpf_map *ma=
+p,
+>> >  	if (fp->kprobe_override)
+>> >  		return false;
+>> >=20=20
+>> > -	/* XDP programs inserted into maps are not guaranteed to run on
+>> > -	 * a particular netdev (and can run outside driver context entirely
+>> > -	 * in the case of devmap and cpumap). Until device checks
+>> > -	 * are implemented, prohibit adding dev-bound programs to program ma=
+ps.
+>> > -	 */
+>> > -	if (bpf_prog_is_dev_bound(aux))
+>> > -		return false;
+>> > -
+>> >  	spin_lock(&map->owner.lock);
+>> >  	if (!map->owner.type) {
+>> >  		/* There's no owner yet where we could check for
+>> > @@ -2409,6 +2401,19 @@ bool bpf_prog_map_compatible(struct bpf_map *ma=
+p,
+>> >  	return ret;
+>> >  }
+>> >=20=20
+>> > +bool bpf_prog_map_compatible(struct bpf_map *map, const struct bpf_pr=
+og *fp)
+>> > +{
+>> > +	/* XDP programs inserted into maps are not guaranteed to run on
+>> > +	 * a particular netdev (and can run outside driver context entirely
+>> > +	 * in the case of devmap and cpumap). Until device checks
+>> > +	 * are implemented, prohibit adding dev-bound programs to program ma=
+ps.
+>> > +	 */
+>> > +	if (bpf_prog_is_dev_bound(fp->aux))
+>> > +		return false;
+>> > +
+>> > +	return __bpf_prog_map_compatible(map, fp);
+>> > +}
+>> > +
+>> >  static int bpf_check_tail_call(const struct bpf_prog *fp)
+>> >  {
+>> >  	struct bpf_prog_aux *aux =3D fp->aux;
+>> > @@ -2421,7 +2426,7 @@ static int bpf_check_tail_call(const struct bpf_=
+prog *fp)
+>> >  		if (!map_type_contains_progs(map))
+>> >  			continue;
+>> >=20=20
+>> > -		if (!bpf_prog_map_compatible(map, fp)) {
+>> > +		if (!__bpf_prog_map_compatible(map, fp)) {
+>>=20
+>> Hmm, so this allows devbound programs in tail call maps, right? But
+>> there's no guarantee that a tail call map will always be used for a
+>> particular device, is there? For instance, it could be shared between
+>> multiple XDP programs, bound to different devices, thus getting the
+>> wrong kfunc.
 >
+> Won't this (devbound progs in tail call maps) be still prohibited
+> by a bpf_prog_map_compatible check in prog_fd_array_get_ptr?
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+Yeah, you're right, I misremembered the check and somehow convinced
+myself that the check in bpf_check_tail_call() was the one that
+prevented dev-bound programs from being loaded into tail call maps...
+
+-Toke
 
