@@ -1,183 +1,157 @@
-Return-Path: <linux-kselftest+bounces-31630-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31631-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A10C2A9C01A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Apr 2025 09:50:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA358A9C1E1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Apr 2025 10:47:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5F5803B437A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Apr 2025 07:49:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8866B1702FC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Apr 2025 08:47:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CB9E230BF8;
-	Fri, 25 Apr 2025 07:50:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57ED81F3FC8;
+	Fri, 25 Apr 2025 08:47:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DCbRrNTi"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="XfnHkCqt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11A941DED49;
-	Fri, 25 Apr 2025 07:50:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7A441B6D11;
+	Fri, 25 Apr 2025 08:47:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745567403; cv=none; b=jq6d1AUGT0Ks3FPhT6V2DKc0ncg9fRQyyFrpzKUew32+aBS/3pV19dW5t3AY4l4NLqOiHTRcv9aaOMHh0k/M2ERbbkGNlNKTNkavuSEGMkotG9icmOvbIXuFYKDcOX1UAzPh6/Td732hS2lA2MLXHpxWSIq4RS6pzNfaIF3+eLM=
+	t=1745570848; cv=none; b=EGn9mf2wx/LxNPUnFgvirQG8oACvfOfsetUPhfn2yAo++0lMRH8BDoI2sq/eyee+5e+Stli+LpxOAl3hQerZDFCB6sHe7t417EsnhlwVCrGILIRpPqfoE+oOsV6vw1PzOxbGeXRwqakfBeZflqDIoOP6E7vAnyNETzXKgnA2czg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745567403; c=relaxed/simple;
-	bh=QHkZ2w2krqWg8kpw96Vq3sOxWvbIiIYjOXmgILg98Bg=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=MK0Wl1zonAzrDsbbm8F5Asex4t+x6zHc5jeXrDVjTZVpEygOaeaFGZEtozGBKFoT7ZOpwz13OaRCxUp/elGkmm+5CjyqCH2mYjuN7KyB2fr9t8Ih0QszSY72E/EPXlit0TH4y2IvjEnyRDRul4W0oBht5xaRBOpNh16KsjFe5Hk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DCbRrNTi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59C0BC4CEE4;
-	Fri, 25 Apr 2025 07:50:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745567402;
-	bh=QHkZ2w2krqWg8kpw96Vq3sOxWvbIiIYjOXmgILg98Bg=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=DCbRrNTihtuIYKfP2GPR2CxzfZPocrxdsrAV+3YYKmMmsPv7dU1D4wIrtbglsE8gp
-	 yrMsQCYkeJyYlDvBcH9fBhfucUmh3DxAr7Ifz29YuYTBSLQEy/IcccKdwtEKgCI6Oh
-	 1OuDTFcyg7emDLu3AeswxJ/aGGJwjbmWseyOO/YRDAy4YdAIPuAEd8RHn2uLcAhu16
-	 gjhAH7Ro852nke1poQ7MMF987WecfIXg0cSRN6xWJVrUye8C2F8agOrpk/hTw/6Z9M
-	 s4e2BwZ5Vp123iloCXrGvbhOw5YuKzpIWfQjYbJ3Y6gF2UXaOsRKqr059KixcHyFGH
-	 EALlvzHYVvmIg==
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id 8E83D1A037D4; Fri, 25 Apr 2025 09:49:49 +0200 (CEST)
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@kernel.org>
-To: Lorenzo Bianconi <lorenzo@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, Andrii
- Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong
- Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Stanislav
- Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>, Jakub
- Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>,
- Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
- bpf@vger.kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2] bpf: Allow XDP dev-bound programs to
- perform XDP_REDIRECT into maps
-In-Reply-To: <aAqjTz7O4HpuVspL@lore-rh-laptop>
-References: <20250423-xdp-prog-bound-fix-v2-1-51742a5dfbce@kernel.org>
- <87wmb97uyt.fsf@toke.dk> <aAqjTz7O4HpuVspL@lore-rh-laptop>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date: Fri, 25 Apr 2025 09:49:49 +0200
-Message-ID: <87frhw7k9u.fsf@toke.dk>
+	s=arc-20240116; t=1745570848; c=relaxed/simple;
+	bh=h26gMhMCs1xS5/I+YRXsVSuot5NCWQyBZrETzDmORVs=;
+	h=Content-Type:Date:Message-Id:From:To:Cc:Subject:Mime-Version:
+	 References:In-Reply-To; b=LQgRO6pkB7I8rgDnblEdADqdlUXhAwsapOgTV6UbYpaIuiBfnsYJATrr/ICAIo9neyAukzkSCn/fmlmBSfxPx0Jgzw3mWWyyxsLGDX0ak0otcqWXmNAnhj4+AO8XL7mpiANBWtKBflchmCS73Q0OVktkwPzGAq476oSQzkNXJKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=XfnHkCqt; arc=none smtp.client-ip=217.70.183.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5EBCD432E9;
+	Fri, 25 Apr 2025 08:47:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1745570837;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=F20bZhqAcFtAHBc8oMhq0YvImZee5ACc/cX8f7eyPuQ=;
+	b=XfnHkCqteD1vpSoUt3ytJgWvsKgXhBYCY/VDhoaYvcppi7dX9o7N3sJa/QEBclq2bvIvS2
+	8oGE2voC8liDallF7KWtiuCZpafMIKHtPveqUr200YcwxdIxaKUnyBy08CUCDvmQumUHcc
+	CbJWVkyDn16/vVWwVae39myfJRsgODUT7oziDllNHVJoAv2lqaCmj+GkRmNHrINV4OXf8Z
+	vwa9a87Oq0n5Vo79Wk4l45c7L20tIGyTYunrSm9vcX+JBDZe0j1ryGLZ2U4qloUAH6uo6l
+	4ZI8oRkKI94MsvFag4FC6XVg/yArVD+aQQcwN0mhCAm1X0/MZAmVhSjN++Bcww==
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 25 Apr 2025 10:47:15 +0200
+Message-Id: <D9FL7V8UX9GP.25220KL6CKOY7@bootlin.com>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+Cc: "Xu Kuohai" <xukuohai@huaweicloud.com>, "Andrii Nakryiko"
+ <andrii.nakryiko@gmail.com>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, "John Fastabend"
+ <john.fastabend@gmail.com>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Song Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>,
+ "KP Singh" <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>,
+ "Hao Luo" <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>, "Puranjay
+ Mohan" <puranjay@kernel.org>, "Catalin Marinas" <catalin.marinas@arm.com>,
+ "Will Deacon" <will@kernel.org>, "Mykola Lysenko" <mykolal@fb.com>, "Shuah
+ Khan" <shuah@kernel.org>, "Maxime Coquelin" <mcoquelin.stm32@gmail.com>,
+ "Alexandre Torgue" <alexandre.torgue@foss.st.com>, "Florent Revest"
+ <revest@chromium.org>, "Bastien Curutchet" <bastien.curutchet@bootlin.com>,
+ <ebpf@linuxfoundation.org>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "bpf" <bpf@vger.kernel.org>, "LKML"
+ <linux-kernel@vger.kernel.org>, "linux-arm-kernel"
+ <linux-arm-kernel@lists.infradead.org>, "open list:KERNEL SELFTEST
+ FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ <linux-stm32@st-md-mailman.stormreply.com>
+Subject: Re: [PATCH RFC bpf-next 1/4] bpf: add struct largest member size in
+ func model
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: aerc 0.20.1-0-g2ecb8770224a
+References: <20250411-many_args_arm64-v1-0-0a32fe72339e@bootlin.com>
+ <20250411-many_args_arm64-v1-1-0a32fe72339e@bootlin.com>
+ <CAEf4Bzbn6BdXTOb0dTcsQmOMZpp5=DzGS2hHHQ3+dwcja=gv+w@mail.gmail.com>
+ <D98Q8BRNUVS9.11J60C67L1ALR@bootlin.com>
+ <CAEf4BzZHMYyGDZ4c4eNXG7Fm=ecxCCbKhKbQTbCjvWmKtdwvBw@mail.gmail.com>
+ <D9E9IQQ3QKXM.3UJ17G9CBS1FH@bootlin.com>
+ <6b6472c3-0718-4e60-9972-c166d51962a3@huaweicloud.com>
+ <D9EWSDXHDGFJ.FIDSHIR1OP80@bootlin.com>
+ <CAADnVQJjQLdc_Chvz9v2-huCb9rmi048heK-eEX30AtW10H+-Q@mail.gmail.com>
+In-Reply-To: <CAADnVQJjQLdc_Chvz9v2-huCb9rmi048heK-eEX30AtW10H+-Q@mail.gmail.com>
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvheduledtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpegtfffkhffvvefuggfgofhfjgesthhqredtredtjeenucfhrhhomheptehlvgigihhsucfnohhthhhorhoruceorghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeigefgieffvddvvdduuefhvdeivdejtddvfedthefhgefggedtledtueehuddtieenucffohhmrghinheplhhinhhugigsrghsvgdrohhrghdpsghoohhtlhhinhdrtghomhenucfkphepledtrdekledrudeifedruddvjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeeltddrkeelrdduieefrdduvdejpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepfedupdhrtghpthhtoheprghlvgigvghirdhsthgrrhhovhhoihhtohhvsehgmhgrihhlrdgtohhmpdhrtghpthhtohepgihukhhuohhhrghisehhuhgrfigvihgtlhhouhgurdgtohhmpdhrtghpthhtoheprghnughrihhirdhnrghkrhihihhkohesghhmrghilhdrtghomhdprhgtphhtthhopegrshhts
+ ehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprhgtphhtthhopehjohhhnhdrfhgrshhtrggsvghnugesghhmrghilhdrtghomhdprhgtphhtthhopegrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghv
+X-GND-Sasl: alexis.lothore@bootlin.com
 
-Lorenzo Bianconi <lorenzo@kernel.org> writes:
+Hello Alexei,
 
->> Lorenzo Bianconi <lorenzo@kernel.org> writes:
->> 
->> > In the current implementation if the program is dev-bound to a specific
->> > device, it will not be possible to perform XDP_REDIRECT into a DEVMAP
->> > or CPUMAP even if the program is running in the driver NAPI context and
->> > it is not attached to any map entry. This seems in contrast with the
->> > explanation available in bpf_prog_map_compatible routine.
->> > Fix the issue introducing __bpf_prog_map_compatible utility routine in
->> > order to avoid bpf_prog_is_dev_bound() check running bpf_check_tail_call()
->> > at program load time (bpf_prog_select_runtime()).
->> > Continue forbidding to attach a dev-bound program to XDP maps
->> > (BPF_MAP_TYPE_PROG_ARRAY, BPF_MAP_TYPE_DEVMAP and BPF_MAP_TYPE_CPUMAP).
->> >
->> > Fixes: 3d76a4d3d4e59 ("bpf: XDP metadata RX kfuncs")
->> > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
->> > ---
->> > Changes in v2:
->> > - Introduce __bpf_prog_map_compatible() utility routine in order to skip
->> >   bpf_prog_is_dev_bound check in bpf_check_tail_call()
->> > - Extend xdp_metadata selftest
->> > - Link to v1: https://lore.kernel.org/r/20250422-xdp-prog-bound-fix-v1-1-0b581fa186fe@kernel.org
->> > ---
->> >  kernel/bpf/core.c                                  | 27 +++++++++++++---------
->> >  .../selftests/bpf/prog_tests/xdp_metadata.c        | 22 +++++++++++++++++-
->> >  tools/testing/selftests/bpf/progs/xdp_metadata.c   | 13 +++++++++++
->> >  3 files changed, 50 insertions(+), 12 deletions(-)
->> >
->> > diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
->> > index ba6b6118cf504041278d05417c4212d57be6fca0..a3e571688421196c3ceaed62b3b59b62a0258a8c 100644
->> > --- a/kernel/bpf/core.c
->> > +++ b/kernel/bpf/core.c
->> > @@ -2358,8 +2358,8 @@ static unsigned int __bpf_prog_ret0_warn(const void *ctx,
->> >  	return 0;
->> >  }
->> >  
->> > -bool bpf_prog_map_compatible(struct bpf_map *map,
->> > -			     const struct bpf_prog *fp)
->> > +static bool __bpf_prog_map_compatible(struct bpf_map *map,
->> > +				      const struct bpf_prog *fp)
->> >  {
->> >  	enum bpf_prog_type prog_type = resolve_prog_type(fp);
->> >  	bool ret;
->> > @@ -2368,14 +2368,6 @@ bool bpf_prog_map_compatible(struct bpf_map *map,
->> >  	if (fp->kprobe_override)
->> >  		return false;
->> >  
->> > -	/* XDP programs inserted into maps are not guaranteed to run on
->> > -	 * a particular netdev (and can run outside driver context entirely
->> > -	 * in the case of devmap and cpumap). Until device checks
->> > -	 * are implemented, prohibit adding dev-bound programs to program maps.
->> > -	 */
->> > -	if (bpf_prog_is_dev_bound(aux))
->> > -		return false;
->> > -
->> >  	spin_lock(&map->owner.lock);
->> >  	if (!map->owner.type) {
->> >  		/* There's no owner yet where we could check for
->> > @@ -2409,6 +2401,19 @@ bool bpf_prog_map_compatible(struct bpf_map *map,
->> >  	return ret;
->> >  }
->> >  
->> > +bool bpf_prog_map_compatible(struct bpf_map *map, const struct bpf_prog *fp)
->> > +{
->> > +	/* XDP programs inserted into maps are not guaranteed to run on
->> > +	 * a particular netdev (and can run outside driver context entirely
->> > +	 * in the case of devmap and cpumap). Until device checks
->> > +	 * are implemented, prohibit adding dev-bound programs to program maps.
->> > +	 */
->> > +	if (bpf_prog_is_dev_bound(fp->aux))
->> > +		return false;
->> > +
->> > +	return __bpf_prog_map_compatible(map, fp);
->> > +}
->> > +
->> >  static int bpf_check_tail_call(const struct bpf_prog *fp)
->> >  {
->> >  	struct bpf_prog_aux *aux = fp->aux;
->> > @@ -2421,7 +2426,7 @@ static int bpf_check_tail_call(const struct bpf_prog *fp)
->> >  		if (!map_type_contains_progs(map))
->> >  			continue;
->> >  
->> > -		if (!bpf_prog_map_compatible(map, fp)) {
->> > +		if (!__bpf_prog_map_compatible(map, fp)) {
->> 
->> Hmm, so this allows devbound programs in tail call maps, right? But
->> there's no guarantee that a tail call map will always be used for a
->> particular device, is there? For instance, it could be shared between
->> multiple XDP programs, bound to different devices, thus getting the
->> wrong kfunc.
->
-> According to my understanding the following path will be executed just for
-> dev-bound program that performs XDP_REDIRECT into a BPF_MAP_TYPE_PROG_ARRAY:
->
-> bpf_prog_select_runtime() -> bpf_check_tail_call() -> __bpf_prog_map_compatible()
->
-> while for XDP program inserted into BPF_MAP_TYPE_PROG_ARRAY we will continue
-> running bpf_prog_map_compatible() so we will forbid inserting ev-bound programs.
-> This is even tested into xdp_metadata selftest:
->
-> https://github.com/torvalds/linux/blob/master/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c#L416
->
-> It seems to me v2 is not more relaxed than v1. Am I missing something?
+On Fri Apr 25, 2025 at 1:14 AM CEST, Alexei Starovoitov wrote:
+> On Thu, Apr 24, 2025 at 6:38=E2=80=AFAM Alexis Lothor=C3=A9
+> <alexis.lothore@bootlin.com> wrote:
 
-No, you're right; see my reply to Stanislav - I misremembered the logic :)
+[...]
 
--Toke
+>> > With DWARF info, we might not need to detect the structure alignment a=
+nymore,
+>> > since the DW_AT_location attribute tells us where the structure parame=
+ter is
+>> > located on the stack, and DW_AT_byte_size gives us the size of the str=
+ucture.
+>>
+>> I am not sure to follow you here, because DWARF info is not accessible
+>> from kernel at runtime, right ? Or are you meaning that we could, at bui=
+ld
+>> time, enrich the BTF info embedded in the kernel thanks to DWARF info ?
+>
+> Sounds like arm64 has complicated rules for stack alignment and
+> stack offset computation for passing 9th+ argument.
+
+AFAICT, arm64 has some specificities for large types, but not that much
+compared to x86 for example. If I take a look at System V ABI ([1]), I see
+pretty much the same constraints:
+- p.18: "Arguments of type __int128 offer the same operations as INTEGERs,
+  [...] with the exception that arguments of type __int128 that are stored
+  in memory must be aligned on a 16-byte boundary"
+- p.13: "Structures and unions assume the alignment of their most strictly
+  aligned component"
+- the custom packing and alignments attributes will end up having the same
+  consequence on both architectures
+
+As I mentioned in my cover letter, the new tests covering those same
+alignment constraints for ARM64 break on x86, which makes me think other
+archs are also silently ignoring those cases.
+
+> Since your analysis shows:
+> "there are about 200 functions accept 9 to 12 arguments, so adding suppor=
+t
+> for up to 12 function arguments."
+> I say, let's keep the existing limitation:
+>         if (nregs > 8)
+>                 return -ENOTSUPP;
+>
+> If there is a simple and dumb way to detect that arg9+ are scalars
+> with simple stack passing rules, then, sure, let's support those too,
+> but fancy packed/align(x)/etc let's ignore.
+
+
+[1] https://refspecs.linuxbase.org/elf/x86_64-abi-0.99.pdf
+
+
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
 
