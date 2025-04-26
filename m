@@ -1,219 +1,151 @@
-Return-Path: <linux-kselftest+bounces-31710-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31711-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 084EBA9DBC6
-	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Apr 2025 17:15:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 581A7A9DBFF
+	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Apr 2025 18:00:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 06D271BA18F7
-	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Apr 2025 15:15:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 83AEE923C2E
+	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Apr 2025 16:00:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B2501DE3CE;
-	Sat, 26 Apr 2025 15:15:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE8031DED6F;
+	Sat, 26 Apr 2025 16:00:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b3vlyA/X"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QsVvjLcp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42CA4A31;
-	Sat, 26 Apr 2025 15:15:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48CFE8488;
+	Sat, 26 Apr 2025 16:00:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745680538; cv=none; b=ZDuWKBNFNMAuGttWeIvk11VopBgJF9t4vvn2CJcAfHNdg/U0ImYOCDvwod5gFQ5diLPizo7OQIVhXkn0J2D36v3HrbpgRzp6ijj7QDJyD68FZ1Kw6tOxgW4oG2oGtUiEIsHZCqlE5vbIpsxkA5/kM2MhYVsSazOrhtMfgvqyfW8=
+	t=1745683243; cv=none; b=kJAWN7IgX8haunInpDzJu53Us35ugvt6TsY3PUydlhUaCWNhkKo5YQpQFgAYhombefB44PsoXw8+9BKmyEJ+HgXkFkjLxpk8XxBTb193oDMaC/F5bJW3uNwuz7oEw+h4MxuXpD/h4XrbTDW/4EZHw0lxbq+r8Y/Rb7q7kdXDMag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745680538; c=relaxed/simple;
-	bh=1X7hzm4K83uSdhmHjqtjE/ay1lY32gCYd5tZNihSHxs=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=q8geAyazMB1wfy8rIaGxQ5LlkyKhPhlJ43i45NvImKXbQH2nKAQuzZrPYMUWrkZxJZ44AdaKwnYhogQq4AaWiijzfALO1MO8B8DQ36WXmm3RTrEcuMSp9XymWIDW88ONNGuPn5UFMTccoMXgWu0Kf6DlG2iZwHbmocgE6rXTPX0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b3vlyA/X; arc=none smtp.client-ip=209.85.219.45
+	s=arc-20240116; t=1745683243; c=relaxed/simple;
+	bh=wGwWAknTOCMxz0RPq8zv6IjjubENWlU5qOlxtfmR5t0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bw1e9dvfXaYxWDgUHk15J1Fk+q/mXNTrg+Veu0MUqwIti8ogsvhvbCF3fW5k5qxWoe64k7snOyn/1camGMMWhGZwbUSOx/KqQSIeKdDPC4CZYLka0ZZKQCpPcRohfDyVGU3GVL8J8awTBsdM2Rh1EzVDSaVYNWzUvQebncyha1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QsVvjLcp; arc=none smtp.client-ip=209.85.210.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-6f2c45ecaffso35921986d6.2;
-        Sat, 26 Apr 2025 08:15:35 -0700 (PDT)
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-7396f13b750so3723612b3a.1;
+        Sat, 26 Apr 2025 09:00:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745680535; x=1746285335; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Og1iE/90Bmt2hCkw8qaULnn0aSlkQYRPJno2tCvI7ZE=;
-        b=b3vlyA/XINjmGxxPJ4bfwfNIWlZWULdT/6vdxzVqO+LiKjR+uTDoBiSYZ5x2e80P/j
-         LSuKxOnlDSGCVFN+/8xc6E6ymUI42DUU4DlvhU5gVaBGrO/BmS+sq+Lz+iSyAIuqjeG4
-         wLazJt6aNq50OYhEdGUzwmAi2ejOxyA2Zia7fjTYkuYNk6Q6+A7sXxVLV5C9+0KblXlV
-         DavCnGRrUn0QhVIA9jOM5/h5J6DQfmLU1Pav9VkOuK6vr0Zc31koW4aFwFf9i5Pyulnv
-         JnQbTfnNPZkkwrSNSWaDWIfh7q5IX5q/3hfMDJKP+RLUmVDzz6HqdnNzR6diGAU8Fnwy
-         hyBg==
+        d=gmail.com; s=20230601; t=1745683241; x=1746288041; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=znOdau2L+/dcZkQ6O6k0/5CeHr55iQYi/h0B2Jyxhy8=;
+        b=QsVvjLcpUWuSmXDhdUa5Cg3pBT0j7m1Be3Ay0GK0Ry4rST89vNLbHjj0ix7WOSIx4B
+         opqQT3A/o5UzNK74vpfnC+g54Motqm+E24ZXmZVpf066Nel9s5a0KvxSQYc24QfJaXFk
+         ewaHWEs4leWsPCRew5PqozsWSjg6TMx9LM+GqHRVlhuZ3bMA8eZjvJahXUUJAmvseeiz
+         TX0dlOZ2CYlJDL4Xyl33jc3AwbaDYh7/x1Q19mLXWY2STy4nJwyPFsO3NMsPSQ/cKKVa
+         E/foO0auvQYkb5oUQS3TCGipkWCv/7C+aG4/aCSnt5Iw9Wz7U8y7iuKAjO8Y99Lh60Fk
+         gH7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745680535; x=1746285335;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Og1iE/90Bmt2hCkw8qaULnn0aSlkQYRPJno2tCvI7ZE=;
-        b=oSpOy881+Knw03iNYNDhj6SxEFISBu6c2NSCext16R+YpRryEr7F0Z4wH2A4VOlqaN
-         uPihSJUn7VOXUPdsEWW1QzMQ3gcr49H/SMG3O3V4HpRu7I0ftvRvDNy8ZjafeAS1VLS5
-         g0BG2QooAw8Br0H3I6sOgPX42dC+BLt9sogZo3+AeB6dGZ136IybJtz7Ne0ZflQzpSK8
-         pXEXD3ztxI1VzztScZEV2cysil1EyRVlUDq0KQ9DPSid1FFcGGzJ2vBKrMxnBpWWysNH
-         m2zXRwAkyGmqRSqkX+EqmKu8PGp5rY2Vby+CZUrv5gEcZFQ133n6+a9p7V4vR9hWqER6
-         twGQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVsTtrhUholeEu5J/v8TpPuwH3Jdxy1Z5u6YnGVLonnD/z4eBCEi6EyX//JGWgDXqeiyKtronwPQ8m1hCG97rA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwSKO2FSWB4mLEFVOx1dm632xGZn38fMpzdu8ZaQeU0DPsWGdU2
-	8DbLrIOyMuSaSnAj4p+Gjpc8vJZ4dGLc6Pjvx8jE7DGqMWH6pwRm
-X-Gm-Gg: ASbGncsft4cYq3prF1Wh/UirHjK5DHfCdzV78KknpbehXlH30kM7TkZe+q53tc4pzcH
-	f779HEamM6Kk6nFI04N+rtkwQYs1jNbsCMP9ocwjtFByex0pv1k8ANZcdeEhN/twMkHyTDN9baU
-	PCkohewNGZ9EeEl7bN1HB8aagm9541yWqMxVdyZ9Bb0Emrm3LFLLGN7KIjVPGkIgHxjRV0qiCLn
-	Xbyor0wxaNrnaQhprHmLVQTeuaeFvyTuWmQn7GSyX/Ih6Vw+PHp0ghvvpGIM82B8xd1tCSpJTAq
-	sAHPJxOZPlrowre6ikpHCG9MfEA0tDUk9sHVftpAb+jpQlCWolBp6CdfmDMMAhvBXxB1jLtT28H
-	bmGBrIGVb+pbmyvAlYN5R
-X-Google-Smtp-Source: AGHT+IEHzBf1ELtLwhB+iurfe7MRCTefGSOl4RLwBrag1Ax3fG2pNQMv7FU/rK2NslyIWnGHlvsj3A==
-X-Received: by 2002:a05:6214:483:b0:6e6:602f:ef68 with SMTP id 6a1803df08f44-6f4cb9cfc28mr111554176d6.10.1745680535059;
-        Sat, 26 Apr 2025 08:15:35 -0700 (PDT)
-Received: from localhost (141.139.145.34.bc.googleusercontent.com. [34.145.139.141])
-        by smtp.gmail.com with UTF8SMTPSA id 6a1803df08f44-6f4c09341edsm35525956d6.30.2025.04.26.08.15.34
+        d=1e100.net; s=20230601; t=1745683241; x=1746288041;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=znOdau2L+/dcZkQ6O6k0/5CeHr55iQYi/h0B2Jyxhy8=;
+        b=gRBbPx5PPyryQdRnqf8022gycSIjU4KvdG0CVJHAnM7hRA7hBcP0jSckgDEEJ3C8Y+
+         1ZRXsv81w55KwtEH2Z3V3jN4U2nHFzoBSdrfzxPFCC4Ge2KZ0/UHhmhFnFZdjnZ1TFgT
+         7OyVmpRE3L24Xq7h7BMOD3+wSoruWkyj82WinWiI+pDHw+lFMj16b/osVfbI61ONlfVM
+         inadJ5ZUbrnvrJgzGkpyrjg2XXOXcYxzhOkwdhy8Qidx/Td4WFeAbdtooUGJBVDXXM8W
+         NDOx6xNY9lTUxDu7AVogE6uhuz9WRDDS0XwkPo9UKJrD2l9PLCX2RG5GN8v4jUuYuRY5
+         worA==
+X-Forwarded-Encrypted: i=1; AJvYcCV1HigWYTBiSl2IsbjPMKlGm9KnKmiBaszJlwRkM/iKmBgt3ptokDCpnX+85b4K0l1O774=@vger.kernel.org, AJvYcCV9BP6HuAt8ToBI2+b8ENl5McLD0OhSA9mGdIhQQOGX29lu8y7FKmEQE8s4RWlB28QOzpUE6Aqv@vger.kernel.org, AJvYcCVrFMH4bMmoJ2CdFEx32xWNz4Paqktpk1OwB4CxsaWB4g5Dyg27MINW3QgPczaiJjCu4sUVB9tj64+CTSX5pQLQ@vger.kernel.org, AJvYcCX/+/IU54gc+EPU61Ljd9NzgSkN6Du9SmlBgP68BWbURITPvSWmAPgDSjG6kJ4MniUnq/jHeB2dqtKUdXd3NQkkVtLM@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxr5A0I3gS5xEAGV6GAUi1t3Em3FkNbkwuHrjLCVMDIxd6gtWot
+	xH/8I/kqPCBy93XFex5+92mJ6UR9qy28p2YDw4h8Tgjp3Q+tp7uo
+X-Gm-Gg: ASbGncvFIxs/k6CiZddY2f75cuL/0oLnSjUGYYUxq0ecypkpoOmzuPz8oEJiqXmNeaT
+	8BIgWFW6qd/GFFSgCqPeFU6VPZJiuabEaNX2/GgMbYf6uOE/8tcL3HL5go20blZwXpFmVEUEfrP
+	aMcU398Bkkx2ESsGv41xpnzy1DbzcukvnwbPS6UFNY5jnosVYa8d/cdFW9GLzF21MRLKlTXV0Ju
+	1VcDIFgPZ4TZL3tpi0Zrr9+qIPcF+GydA+sAEB+Ey7fVHzIjM+7SD7/8xwDn5CDcXndWZHgSenQ
+	RPP+DPFiucsIlWfX7CT2JJGWie00/nK1wpppDuYv6fI=
+X-Google-Smtp-Source: AGHT+IGcovqBau2DivQ0yh8b8PJpIgtx+uIrmZAQJE5XOKpzVaC3xkNekpOyApo9s2Jjcrh6mQst/g==
+X-Received: by 2002:a05:6a00:1742:b0:736:5822:74b4 with SMTP id d2e1a72fcca58-73fd8f4e0c7mr8710527b3a.21.1745683241340;
+        Sat, 26 Apr 2025 09:00:41 -0700 (PDT)
+Received: from ubuntu2404.. ([122.231.145.226])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73e25941cc1sm5174760b3a.60.2025.04.26.09.00.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Apr 2025 08:15:34 -0700 (PDT)
-Date: Sat, 26 Apr 2025 11:15:34 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>, 
- davem@davemloft.net
-Cc: netdev@vger.kernel.org, 
- edumazet@google.com, 
- pabeni@redhat.com, 
- andrew+netdev@lunn.ch, 
- horms@kernel.org, 
- Jakub Kicinski <kuba@kernel.org>, 
- petrm@nvidia.com, 
- willemb@google.com, 
- sdf@fomichev.me, 
- linux-kselftest@vger.kernel.org
-Message-ID: <680cf896280c4_193a06294a6@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20250425151757.1652517-1-kuba@kernel.org>
-References: <20250425151757.1652517-1-kuba@kernel.org>
-Subject: Re: [PATCH net-next] selftests: net: exit cleanly on SIGTERM /
- timeout
+        Sat, 26 Apr 2025 09:00:40 -0700 (PDT)
+From: KaFai Wan <mannkafai@gmail.com>
+To: song@kernel.org,
+	jolsa@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	mattbobrowski@google.com,
+	rostedt@goodmis.org,
+	mhiramat@kernel.org,
+	mathieu.desnoyers@efficios.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	mykolal@fb.com,
+	shuah@kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	leon.hwang@linux.dev,
+	mannkafai@gmail.com
+Subject: [PATCH bpf-next 0/4] bpf: Allow get_func_[arg|arg_cnt] helpers in raw tracepoint programs
+Date: Sun, 27 Apr 2025 00:00:23 +0800
+Message-ID: <20250426160027.177173-1-mannkafai@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Jakub Kicinski wrote:
-> ksft runner sends 2 SIGTERMs in a row if a test runs out of time.
-> Handle this in a similar way we handle SIGINT - cleanup and stop
-> running further tests.
-> 
-> Because we get 2 signals we need a bit of logic to ignore
-> the subsequent one, they come immediately one after the other
-> (due to commit 9616cb34b08e ("kselftest/runner.sh: Propagate SIGTERM
-> to runner child")).
-> 
-> This change makes sure we run cleanup (scheduled defer()s)
-> and also print a stack trace on SIGTERM, which doesn't happen
-> by default. Tests occasionally hang in NIPA and it's impossible
-> to tell what they are waiting from or doing.
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
-> CC: petrm@nvidia.com
-> CC: willemb@google.com
-> CC: sdf@fomichev.me
-> CC: linux-kselftest@vger.kernel.org
-> ---
->  tools/testing/selftests/net/lib/py/ksft.py | 27 +++++++++++++++++++++-
->  1 file changed, 26 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/net/lib/py/ksft.py b/tools/testing/selftests/net/lib/py/ksft.py
-> index 3cfad0fd4570..73710634d457 100644
-> --- a/tools/testing/selftests/net/lib/py/ksft.py
-> +++ b/tools/testing/selftests/net/lib/py/ksft.py
-> @@ -3,6 +3,7 @@
->  import builtins
->  import functools
->  import inspect
-> +import signal
->  import sys
->  import time
->  import traceback
-> @@ -26,6 +27,10 @@ KSFT_DISRUPTIVE = True
->      pass
->  
->  
-> +class KsftTerminate(KeyboardInterrupt):
-> +    pass
-> +
-> +
->  def ksft_pr(*objs, **kwargs):
->      print("#", *objs, **kwargs)
->  
-> @@ -193,6 +198,19 @@ KSFT_DISRUPTIVE = True
->      return env
->  
->  
-> +term_cnt = 0
-> +
+hi, 
 
-A bit ugly to initialize this here. Also, it already is initialized
-below.
+We can use get_func_[arg|arg_cnt] helpers in fentry/fexit/fmod_ret programs
+currently[1]. But they can't be used in raw_tp/tp_btf programs.
 
-> +def _ksft_intr(signum, frame):
-> +    # ksft runner.sh sends 2 SIGTERMs in a row on a timeout
-> +    # if we don't ignore the second one it will stop us from handling cleanup
-> +    global term_cnt
-> +    term_cnt += 1
-> +    if term_cnt == 1:
-> +        raise KsftTerminate()
-> +    else:
-> +        ksft_pr(f"Ignoring SIGTERM (cnt: {term_cnt}), already exiting...")
-> +
-> +
->  def ksft_run(cases=None, globs=None, case_pfx=None, args=()):
->      cases = cases or []
->  
-> @@ -205,6 +223,10 @@ KSFT_DISRUPTIVE = True
->                      cases.append(value)
->                      break
->  
-> +    global term_cnt
-> +    term_cnt = 0
-> +    prev_sigterm = signal.signal(signal.SIGTERM, _ksft_intr)
-> +
->      totals = {"pass": 0, "fail": 0, "skip": 0, "xfail": 0}
->  
->      print("TAP version 13")
-> @@ -229,11 +251,12 @@ KSFT_DISRUPTIVE = True
->              cnt_key = 'xfail'
->          except BaseException as e:
->              stop |= isinstance(e, KeyboardInterrupt)
-> +            stop |= isinstance(e, KsftTerminate)
->              tb = traceback.format_exc()
->              for line in tb.strip().split('\n'):
->                  ksft_pr("Exception|", line)
->              if stop:
-> -                ksft_pr("Stopping tests due to KeyboardInterrupt.")
-> +                ksft_pr(f"Stopping tests due to {type(e).__name__}.")
->              KSFT_RESULT = False
->              cnt_key = 'fail'
->  
-> @@ -248,6 +271,8 @@ KSFT_DISRUPTIVE = True
->          if stop:
->              break
->  
-> +    signal.signal(signal.SIGTERM, prev_sigterm)
-> +
+Adding support to use get_func_[arg|arg_cnt] helpers in raw_tp/tp_btf
+programs.
+Adding BPF_PROG_TEST_RUN for tp_btf.
+Add selftests to check them.
 
-Why is prev_sigterm saved and reassigned as handler here?
+Thanks,
+KaFai
 
->      print(
->          f"# Totals: pass:{totals['pass']} fail:{totals['fail']} xfail:{totals['xfail']} xpass:0 skip:{totals['skip']} error:0"
->      )
-> -- 
-> 2.49.0
-> 
+[1] https://lore.kernel.org/bpf/20211208193245.172141-1-jolsa@kernel.org/
+---
+KaFai Wan (4):
+  bpf: Allow get_func_[arg|arg_cnt] helpers in raw tracepoint programs
+  bpf: Enable BPF_PROG_TEST_RUN for tp_btf
+  selftests/bpf: Add raw_tp_test_run for tp_btf
+  selftests/bpf: Add tests for get_func_[arg|arg_cnt] helpers in raw
+    tracepoint programs
 
+ kernel/trace/bpf_trace.c                      | 17 +++++--
+ net/bpf/test_run.c                            | 16 +++----
+ .../bpf/prog_tests/raw_tp_get_func_args.c     | 48 +++++++++++++++++++
+ .../bpf/prog_tests/raw_tp_test_run.c          | 18 ++++++-
+ .../bpf/progs/test_raw_tp_get_func_args.c     | 47 ++++++++++++++++++
+ .../bpf/progs/test_raw_tp_test_run.c          | 16 +++++--
+ 6 files changed, 146 insertions(+), 16 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/raw_tp_get_func_args.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_raw_tp_get_func_args.c
+
+-- 
+2.43.0
 
 
