@@ -1,83 +1,83 @@
-Return-Path: <linux-kselftest+bounces-31682-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31683-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED3E0A9D7E5
-	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Apr 2025 08:01:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01114A9D7E4
+	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Apr 2025 08:01:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 085423A05D5
-	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Apr 2025 06:00:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 603B4174A28
+	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Apr 2025 06:01:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 037441FC114;
-	Sat, 26 Apr 2025 05:59:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A764F1FECBF;
+	Sat, 26 Apr 2025 05:59:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="hzseX7/Z"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Tk/OxJRN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2052.outbound.protection.outlook.com [40.107.243.52])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2069.outbound.protection.outlook.com [40.107.94.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E479A1F5825;
-	Sat, 26 Apr 2025 05:59:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BD811FBEA4;
+	Sat, 26 Apr 2025 05:59:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.69
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745647160; cv=fail; b=dCxY1mJmFpYnHSuk7rvYPNAmNKrNQCiakaK2ZvvPFWBP6Jpmknygua4fDRrD5HaRfK5yc5HBpOKSVjqDFAvlvYU8z209MF6LnaNPaM24VKPcNVFlPYYfjvBmNrQknZRh7qCYpYArxajFthEkb6q+CcWjuRtb75eZ+S4fVdF63n4=
+	t=1745647162; cv=fail; b=p5MbaOcP94mD23/LGz3HeJ1T4QiE1PfPcUpwqOsk0EM36dMhuizGF+xgDitI0UpLcQywA5mZ3KJR/yZzTtmgEKg6f9dOSYocI+hTQ0npEqvlR+Up8xEm8BV2IvJMF++EQzUE6eLTADPJNJMhYJzag1dag/5JnZhB6wLBbgt8ZYA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745647160; c=relaxed/simple;
-	bh=zUmFl0akw2TyrGxEA2oEZyKPSrBPqe+fKdfkWkFXqdE=;
+	s=arc-20240116; t=1745647162; c=relaxed/simple;
+	bh=9a9s0TmnltXpFaLvdjQ/teZD2WwNmTTIoYG2AhuISyE=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WZZ7wjmTC5ay582NGi0q9K9wgGmrJOCk/lpxPhcQI1cPokjj7p4j++ok9Hu461DcnkqRXT59BmagubEgwGPZSptcxmITkQjDwIy2YbNiGmdjZw06oAPP/BLVFu5nPEwXUmbGewl/5r+drYw06UWUZcfZVHYZjdkIKVtok3ACMlM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=hzseX7/Z; arc=fail smtp.client-ip=40.107.243.52
+	 MIME-Version:Content-Type; b=s69epJOnqTL6o3pM3WTPXl/woZ+iGGNLlVpdAPYAG1y02ipuPbRXGAG274oQK3cZ1iJyi0TJngQbXwKncb8nuwvMArlmGg8nlMKFfaQi9CNtEm74uzKF8UB2dnPyXGFaxO++1dfTJvs8f5Puu1pDav5GnNA05M8PJsaIoX+Mghg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Tk/OxJRN; arc=fail smtp.client-ip=40.107.94.69
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=tRtf7xmwRKlcW3Ksp6mEm29vx17woGRU1fqCDDbFQFteKte+nnI2P02wpPNnmAM139rgQZMIOul+3/HlMRv5W6hmAqY2gxlrrXGAfcbcHXsB8jn5wZH4Mpx4zgVAUbquwMo576J61xHZlL80UOK+SlfPK0sm8VFiMixp26mNnshpllHf9EeCSXWuoVBFvKjDJFt0zkh8gmyuAfCErxvB3+5T5fxgYAHpqQBsbpHK0plX/7LxXlUw5DnEn5oYBAskd4JxaKO3Xd8A0rFIvX3tzckx8ZrZ+0lW36W/3yqTHzNUOid6Hoob/bfVFAIyY68krzXCSZ4fBpMTPmqFN21XxA==
+ b=HyjCK+ncRRIkCJNK37IEeybELtig+z9PSHuXn1h37QM5phLabW+G5FO3BAZn/0Aw+O980x30Nlv0hx2jyboMb5/bd/KSX3hkzp2Djk5za6akDJy6MzVPGn73gEb0temQx5aPqCp7AnvLr3LjrmDSjpfrp1u5iLZQPC5SWBTvsmsOco0gd2yVuB/9LtNNnV/pwL9SBpwjNA9ZGOw37s3tIoPGZMBqVUSX644UETztJ3O7sDk1MG5xvkLEG6op1PFrEAQNjp6FcNPkjZeVw+ZN6cyOiyS8Vt9CqnDIondKdAGOzOeEqGImSRPt6CZsjlEXfDcOBIQX8fipQ15EgF4mFg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xqB7HSMGrsMuUPxEkqb3O54AQ7uPWiwDFj2bnlSL084=;
- b=lz4XAoCdwp8wN3zXD3xDoRfU981eEBltq6ozxxYPRykXw+0wFoX45WpyqZxdHSO8ESHuTpFfgzXatRHGW34NH6mIGwXmTFiS6ikOmE5PCWsbaqmUbCqIEHKJsqncF2LPbLa3MQiIfwY1y7pvlPYDhuXf7qR41ZYrPzhiXJz9S/DPNI45e/x0BB7dunesz06RlNQxphcmbav3ARouXjIFJ6LeMfsFzc4SB1zTiBLXVFd3dC25ICXqWLE8mceY5VfXE2h6bdga6ZK7rWDeGET0thIcHZoTkxr2aHhk3tn638LsOw2pAa44cTEGHLD+MEusFXX2P6+ncdvEYRauCZ2o8Q==
+ bh=ExNGKWLch23x8AVHhYe7HQuXaiL+u6muNtas+zt8/7o=;
+ b=vODJW7e6mdvnlYU7WY1ClnTAPN/dubJE5J3RHmne7VBVZfdBD0ipD4Rtxi8j8Ci7CWkHNFLoUVvH1i0bSYnRiGo7wuNH4OUViTVOjv1RtRbgpdUWd01fx4MDgovEexFYvsbQxRI19BigI5lIlRcn6t6yLg6pNF97wb9O8hzdZbeJUzVonab1MxIH4UTKQQbjd+P02m82iNetEedNCu0KQlQFYLSJv4/VY0fBTUCw+cGMmAFhKbHnXGmiaodTtlHUGY+dX0ag5JCsg6XEOuGcNbd7HsS2TsSNWJQhbuUDcjuFGRmgbi9tfUwSU/7C2uweiw3tRfPbeMsoaX68gnSV6w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=lists.linux.dev smtp.mailfrom=nvidia.com;
+ 216.228.117.161) smtp.rcpttodomain=lists.linux.dev smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xqB7HSMGrsMuUPxEkqb3O54AQ7uPWiwDFj2bnlSL084=;
- b=hzseX7/ZC8nXu8wrYnypE2KjPTIOaSFz9MNSHJ1mXpsrFX/e2bC+lyaxBdiEhUVnVbNUgAgcwNOqaxpDEmcknsb6P0imi+dDsOxBU4UScNn8NiNI9KRsNsrUu0o0OfeN2+5csMFu9fEDM60QbPkY7VI1VHn+YraDxhFHCzvSXnuiawPopF0DcBTGqordi3RfGENOWGpk1HGRnQWQxNr7i0PKEyDYBRV3bnE2M35QfY17Dw+/WUvVoao6sjPZ9LqnLlSMGSY7s7SSraJK9cj/ph9rh3H/LBzMgS6kQfUvTJ1Ft/9AgaRqjcKCkA8SbSlNNOG1pzL7dxgZSwrZNuweZA==
-Received: from DS7PR03CA0256.namprd03.prod.outlook.com (2603:10b6:5:3b3::21)
- by CH3PR12MB8282.namprd12.prod.outlook.com (2603:10b6:610:124::13) with
+ bh=ExNGKWLch23x8AVHhYe7HQuXaiL+u6muNtas+zt8/7o=;
+ b=Tk/OxJRNfycszY77Hq+RV/D885Jw2n0PwiOryEt4EzfyeyBooLGyq9u3Ht5gl669rkrBeqWcJZ7xYkiJVibIvdtb7RRQ6CDOVsQAwVaWL6gSj+Yn+aK1aAF4+H2vjjBO3P2Kjl7ryFHerDmUFHL0TPRcZKbFLBPjca0J2WwZJ0lnh5lgikmWZEatKjCVV5SbIhJma1qaLUyKPddX4XVvvVymsXDlg4AbEqW7dTVW9uv3WI/zk6ifQCbOPzB8rPrPpMbUXuEeJaVxb3CA2X2iyd5l59mHzx5xwK3ma4kESwSZv4apPcoXsx4EiWZ6i2F5185Ljv6jceFSZ3bDTdgSeA==
+Received: from SN6PR04CA0091.namprd04.prod.outlook.com (2603:10b6:805:f2::32)
+ by MW4PR12MB7263.namprd12.prod.outlook.com (2603:10b6:303:226::7) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8678.27; Sat, 26 Apr
- 2025 05:59:14 +0000
-Received: from CY4PEPF0000FCC4.namprd03.prod.outlook.com
- (2603:10b6:5:3b3:cafe::83) by DS7PR03CA0256.outlook.office365.com
- (2603:10b6:5:3b3::21) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8655.36 via Frontend Transport; Sat,
- 26 Apr 2025 05:59:14 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8678.26; Sat, 26 Apr
+ 2025 05:59:16 +0000
+Received: from SA2PEPF00001507.namprd04.prod.outlook.com
+ (2603:10b6:805:f2:cafe::d9) by SN6PR04CA0091.outlook.office365.com
+ (2603:10b6:805:f2::32) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8632.26 via Frontend Transport; Sat,
+ 26 Apr 2025 05:59:15 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CY4PEPF0000FCC4.mail.protection.outlook.com (10.167.242.106) with Microsoft
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ SA2PEPF00001507.mail.protection.outlook.com (10.167.242.39) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8655.12 via Frontend Transport; Sat, 26 Apr 2025 05:59:14 +0000
+ 15.20.8655.12 via Frontend Transport; Sat, 26 Apr 2025 05:59:15 +0000
 Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 25 Apr
- 2025 22:59:03 -0700
+ 2025 22:59:07 -0700
 Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail205.nvidia.com
  (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Fri, 25 Apr
- 2025 22:59:03 -0700
+ 2025 22:59:06 -0700
 Received: from Asurada-Nvidia.nvidia.com (10.127.8.12) by mail.nvidia.com
  (10.129.68.9) with Microsoft SMTP Server id 15.2.1544.14 via Frontend
- Transport; Fri, 25 Apr 2025 22:59:00 -0700
+ Transport; Fri, 25 Apr 2025 22:59:03 -0700
 From: Nicolin Chen <nicolinc@nvidia.com>
 To: <jgg@nvidia.com>, <kevin.tian@intel.com>, <corbet@lwn.net>,
 	<will@kernel.org>
@@ -90,9 +90,9 @@ CC: <bagasdotme@gmail.com>, <robin.murphy@arm.com>, <joro@8bytes.org>,
 	<linux-arm-kernel@lists.infradead.org>, <linux-tegra@vger.kernel.org>,
 	<linux-kselftest@vger.kernel.org>, <patches@lists.linux.dev>,
 	<mochs@nvidia.com>, <alok.a.tiwari@oracle.com>, <vasant.hegde@amd.com>
-Subject: [PATCH v2 10/22] iommufd/viommmu: Add IOMMUFD_CMD_VCMDQ_ALLOC ioctl
-Date: Fri, 25 Apr 2025 22:58:05 -0700
-Message-ID: <094992b874190ffdcf6012104b419c8649b5e4b4.1745646960.git.nicolinc@nvidia.com>
+Subject: [PATCH v2 11/22] iommufd: Add for-driver helpers iommufd_vcmdq_depend/undepend()
+Date: Fri, 25 Apr 2025 22:58:06 -0700
+Message-ID: <a25c9454c17663f9e79b37bc2908bf3a99856be6.1745646960.git.nicolinc@nvidia.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1745646960.git.nicolinc@nvidia.com>
 References: <cover.1745646960.git.nicolinc@nvidia.com>
@@ -107,267 +107,186 @@ Content-Type: text/plain
 X-NV-OnPremToCloud: AnonymousSubmission
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000FCC4:EE_|CH3PR12MB8282:EE_
-X-MS-Office365-Filtering-Correlation-Id: d1007fa1-61c5-411c-6eee-08dd84877919
+X-MS-TrafficTypeDiagnostic: SA2PEPF00001507:EE_|MW4PR12MB7263:EE_
+X-MS-Office365-Filtering-Correlation-Id: 08a30878-5ad2-4d34-6a52-08dd848779fa
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|82310400026|7416014|36860700013|1800799024;
+	BCL:0;ARA:13230040|1800799024|376014|82310400026|36860700013|7416014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?OEDQUZFi1kIWjtDPDrToRkN3/+Akr0PqDWisy0qsCs+d2wDvU+m6mL8kgZ6d?=
- =?us-ascii?Q?DtdI61BNGGQqdtRehDxnd3eHNLQVukc7PiuPy4JgmgkhEsYKukQ6+3B5kqOp?=
- =?us-ascii?Q?6D/5gotyCRBeFtQIVDTmMhG4UmE41UDADwd1I0/U0e7nFRhMEjHpA6Rba379?=
- =?us-ascii?Q?ksFaFVG6eBJT9m31DKT1W99NjQMzrxITDP0K4v4oKTUo4opzDq32VD/Oyfpz?=
- =?us-ascii?Q?XyJJE2RD6ilBgxjPlxm0w6VkbrUlalbWPxIig90/g+1ezbWXb7MsQdemPGSc?=
- =?us-ascii?Q?GDi8kGE1JAVhddwy/Nm3/6Dvu0a1eNFI+eC2SiJ4gJ3hQbnTb+Ym+Bkabe1s?=
- =?us-ascii?Q?s9VkNin664/PtD0/UENmUYsvmY/Uol0K+VHlzlHatv26T0bqvLJCr9tN+ohs?=
- =?us-ascii?Q?2odpLiCEJGbzg5IFRYK2Tj2I8UzjxEarH5V7fiGqsNEMoTCPZ5KT+/xqUaXP?=
- =?us-ascii?Q?fNSTqr2huu9nb91KXUMgmBjAJYHQhC9+HoIpFRdh8XDfc+tCyXYub3lqWLAF?=
- =?us-ascii?Q?+RNLMAZqqdE1/C70J7RUen9yxsLvR+cvXJS4Bbzd87KlMqeQPKiVKglD0uwl?=
- =?us-ascii?Q?0bVUQim5Y+alHTjZsLqy8qvsGAud1xWLw05qE031vf57wz0QkqwpHtWTsIjP?=
- =?us-ascii?Q?uwYzIvPis/lh6awVB1gyuaeu5YE81qNcC0VeLA9jdMdjOU+JLQYPvxEsSYK5?=
- =?us-ascii?Q?MH/oKDwlwcGnrCrzEP350Q3pvBuvy9dSW1Md97iuqhV+E5aX28Y/wlgI3/K4?=
- =?us-ascii?Q?ZvSgMNom3DbZqnq0S6fRD7FfkrIwm/AGu7cNbuVCXUlIJ+XG74WQn26Vgl3g?=
- =?us-ascii?Q?gt+8WCd1xTBc8VhQDkoqSJby/bjlFjZeAOjshRErxinxtHYUQ1Zx06HF+v3w?=
- =?us-ascii?Q?jZYiHZO/gqwLRCTHDs80S4GKlGrF/ZREX88DzM+S0zsOMX6R+C3f6AN/PiEl?=
- =?us-ascii?Q?4GyNDsKOFoGEy9HNlKqkSYyoBDmzLKypcoqoI1LTOzP5M7Fr73xppm8l/qxf?=
- =?us-ascii?Q?BIQ5aXCkhBJYvZ3jxXhhtYe0h4kaz9f04yKPEtv56hj1h/00NzmORgn/Z+Xq?=
- =?us-ascii?Q?D1EYIHYcdw1SvsL1FOU6ctF3YkBk5HzgYd4UF8dO14B0zzWGFDA61tETorYV?=
- =?us-ascii?Q?scjjIrxLMQrB8A360BuJKi+WJgviOMdIlZlZ/ovEe3VAeoJvUZa322FcrTyp?=
- =?us-ascii?Q?zSTRbYBCMv2dz1GBonsdUkbu3gWJUaK/zLgtKazU50vkblph0uT751t7X1q0?=
- =?us-ascii?Q?+ry6AYwL+DnrRE2j1kdW4MG2alovytLwGZXe/YYDyW7jmhNrGA/zm4UZgPDH?=
- =?us-ascii?Q?74vTyyP1fC6ZQU4XPRkNXGz+b63Y499ASZ2MwFhZKBil8KmxJPyCMHI+kHro?=
- =?us-ascii?Q?LARFQazcImI3yvzUERRSM1CqK37ZpX/qqjfhyUUmOfl+pr8b7A0OTZ93da5k?=
- =?us-ascii?Q?r5YLDIGCk/z3MK0d5bq13kcbEKaRFpXuu5b1nTD3808lZFozwFB9fufEwXF5?=
- =?us-ascii?Q?F3qsQL+jNKubRYvNpvewnI4tcAPXRdLt+6XG?=
+	=?us-ascii?Q?jiOh98bVubUBMLIUsSAr8amInNtkQ6SIcdh6jVOeXYjS/I+uqNBLkba1yt0w?=
+ =?us-ascii?Q?V5xK6v6YpnW2fnYB1lRZN+b8vaRRzo3e/rFFHbIezOfTLgbc3evhTtvsuAsy?=
+ =?us-ascii?Q?F9o2YAqiILwrmrANtQGmVil/pfS/voPlWoTFy90tLApMgDrb1Ys7M93eZDba?=
+ =?us-ascii?Q?7t+waognOtRBPwymoV8Ktf42ElswcjaNDH6axwt1vvlN7cWp/3C8UA20lriS?=
+ =?us-ascii?Q?xflbZrAe7d2FS6+ckJ5zQ/vjYo91wjF41m/tu/PanWo//q9EmEjHANMZOUfR?=
+ =?us-ascii?Q?nStibV5Fj+Z3Q6kn3uQ/wb34W4mDLSk1EbWms4lgPz+sZBwiuaGtWscbrjzN?=
+ =?us-ascii?Q?PQIBMv6Jb0BR5WJ2iIHkl7KF32nV+CkEGdb3ngi7WVjp45O8jMaqT1AkVCbx?=
+ =?us-ascii?Q?yV/eNEm61WqRqr10wUK/MNMEY0WKOYNvMp14ZmlpRdOZ75Z+L10i0uR7H4Yx?=
+ =?us-ascii?Q?PXDlXbTMVvIUfg7gHRSw4b2pMCvop2fpIGmF27RN4frxfpkx7xpDrNtiLZFL?=
+ =?us-ascii?Q?5484K1nhfBBFyBi4GXfEABJ6RCw/vM4z03R+L+fl/dEtV9QJs2AJVh2ANas+?=
+ =?us-ascii?Q?5Z22Aydswk1EDomt8Ri8yxp6LtVnnpS0DUT99qmF4kTJMHy5mYB/RkaDv/xA?=
+ =?us-ascii?Q?sgSwS74bOn1EH94FuG6mfQsvuHtnrLw9oKrzV/9yLF1WLVIVf2R7JioQ4P1E?=
+ =?us-ascii?Q?sKVX3cVMqUpl2laGI8qfEjoj5XGMmZH+F6beXEv8QgvOylhQo5TbdVnNR2vh?=
+ =?us-ascii?Q?AjAXweI9T3R2BsqfLQDire3KsQH6P/QVhCC8gfPWNIZaUjxK+e37A3rb0ZwF?=
+ =?us-ascii?Q?xdB/jIF38iI3MNmqp+2FBLkCEQixzrdLMZfwtXSS3ApC3sHfrQ6dKmQm9Zdl?=
+ =?us-ascii?Q?c4EItLDpPXJo6U/RXYzJth7uDR7Me0lrdVi87G7Evh9wIB5BJyoGzImQb6o3?=
+ =?us-ascii?Q?opFET/2YhgGn8RdfHelsywO4SwHfBKz6jLF/FTlVljg3Bin3V/tM0UXVemJQ?=
+ =?us-ascii?Q?7wGSCXs0im5YxWGxebgtRmCkEXKGPkcYASBXGaT5KgXHlgp2J2fhA2OyQWo/?=
+ =?us-ascii?Q?aPEXrqUYOMtDDJAXBm3Ry3/VUzD16WlXVcThGgW1IPHCReO6CyeQvLGAKIo7?=
+ =?us-ascii?Q?Ptu+BhGnzYADnrPM9Lsocv9lGWc8nwM0f40HTj6v+wdrQQQ96skwZby0rFUN?=
+ =?us-ascii?Q?kpDrxzZAhujXYThMdQjnxR8Q3TN6mh0tEv6X817TONS3kG8cG+pYi71J0I7a?=
+ =?us-ascii?Q?ead0ECKsVMH3Jjn68Y9vsTOal0AOGvLPVRzrSfzSpTlq/J9Kr25h8+CAqcEM?=
+ =?us-ascii?Q?AGcrrwBcYYHnMeSsepO6/bEf9uhkYVJmOHvg+zBM+rCcuh1cHnsrCm8LDDxp?=
+ =?us-ascii?Q?fctgww4B5ebm5NIrh5scYx7jKuH85nq0jqLn4PkGqxSV7JU7qIu07dPg1OTj?=
+ =?us-ascii?Q?/vPklMnzlFzH7pu8UzhpVDtE6Zd2imBQXp4VEYmd9uFPULrFrisk6LZuAJ3j?=
+ =?us-ascii?Q?+0n5jw/Kimu1/WrEtSH7k8+M8JvlHKFfNInh?=
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(82310400026)(7416014)(36860700013)(1800799024);DIR:OUT;SFP:1101;
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(376014)(82310400026)(36860700013)(7416014);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2025 05:59:14.2077
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2025 05:59:15.6977
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d1007fa1-61c5-411c-6eee-08dd84877919
+X-MS-Exchange-CrossTenant-Network-Message-Id: 08a30878-5ad2-4d34-6a52-08dd848779fa
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF0000FCC4.namprd03.prod.outlook.com
+	SA2PEPF00001507.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8282
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7263
 
-Introduce a new IOMMUFD_CMD_VCMDQ_ALLOC ioctl for user space to allocate
-a vCMDQ for a vIOMMU object. Simply increase the refcount of the vIOMMU.
+NVIDIA Virtual Command Queue is one of the iommufd users exposing vIOMMU
+features to user space VMs. Its hardware has a strict rule when mapping
+and unmapping multiple global CMDQVs to/from a VM-owned VINTF, requiring
+mappings in ascending order and unmappings in descending order.
+
+The tegra241-cmdqv driver can apply the rule for a mapping in the LVCMDQ
+allocation handler, however it can't do the same for an unmapping since
+the destroy op returns void.
+
+Add iommufd_vcmdq_depend/undepend() for-driver helpers, allowing LVCMDQ
+allocator to refcount_inc() a sibling LVCMDQ object and LVCMDQ destroyer
+to refcount_dec().
+
+This is a bit of compromise, because a driver might end up with abusing
+the API that deadlocks the objects. So restrict the API to a dependency
+between two driver-allocated objects of the same type, as iommufd would
+unlikely build any core-level dependency in this case.
 
 Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
 ---
- drivers/iommu/iommufd/iommufd_private.h |  2 +
- include/uapi/linux/iommufd.h            | 41 +++++++++++
- drivers/iommu/iommufd/main.c            |  6 ++
- drivers/iommu/iommufd/viommu.c          | 94 +++++++++++++++++++++++++
- 4 files changed, 143 insertions(+)
+ include/linux/iommufd.h        | 47 ++++++++++++++++++++++++++++++++++
+ drivers/iommu/iommufd/driver.c | 28 ++++++++++++++++++++
+ 2 files changed, 75 insertions(+)
 
-diff --git a/drivers/iommu/iommufd/iommufd_private.h b/drivers/iommu/iommufd/iommufd_private.h
-index 79160b039bc7..b974c207ae8a 100644
---- a/drivers/iommu/iommufd/iommufd_private.h
-+++ b/drivers/iommu/iommufd/iommufd_private.h
-@@ -611,6 +611,8 @@ int iommufd_viommu_alloc_ioctl(struct iommufd_ucmd *ucmd);
- void iommufd_viommu_destroy(struct iommufd_object *obj);
- int iommufd_vdevice_alloc_ioctl(struct iommufd_ucmd *ucmd);
- void iommufd_vdevice_destroy(struct iommufd_object *obj);
-+int iommufd_vcmdq_alloc_ioctl(struct iommufd_ucmd *ucmd);
-+void iommufd_vcmdq_destroy(struct iommufd_object *obj);
- 
- #ifdef CONFIG_IOMMUFD_TEST
- int iommufd_test(struct iommufd_ucmd *ucmd);
-diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
-index cc90299a08d9..06a763fda47f 100644
---- a/include/uapi/linux/iommufd.h
-+++ b/include/uapi/linux/iommufd.h
-@@ -56,6 +56,7 @@ enum {
- 	IOMMUFD_CMD_VDEVICE_ALLOC = 0x91,
- 	IOMMUFD_CMD_IOAS_CHANGE_PROCESS = 0x92,
- 	IOMMUFD_CMD_VEVENTQ_ALLOC = 0x93,
-+	IOMMUFD_CMD_VCMDQ_ALLOC = 0x94,
- };
- 
- /**
-@@ -1147,4 +1148,44 @@ struct iommu_veventq_alloc {
- 	__u32 __reserved;
- };
- #define IOMMU_VEVENTQ_ALLOC _IO(IOMMUFD_TYPE, IOMMUFD_CMD_VEVENTQ_ALLOC)
-+
-+/**
-+ * enum iommu_vcmdq_type - Virtual Command Queue Type
-+ * @IOMMU_VCMDQ_TYPE_DEFAULT: Reserved for future use
-+ */
-+enum iommu_vcmdq_type {
-+	IOMMU_VCMDQ_TYPE_DEFAULT = 0,
-+};
-+
-+/**
-+ * struct iommu_vcmdq_alloc - ioctl(IOMMU_VCMDQ_ALLOC)
-+ * @size: sizeof(struct iommu_vcmdq_alloc)
-+ * @flags: Must be 0
-+ * @viommu_id: Virtual IOMMU ID to associate the virtual command queue with
-+ * @type: One of enum iommu_vcmdq_type
-+ * @index: The logical index to the virtual command queue per virtual IOMMU, for
-+ *         a multi-queue model
-+ * @out_vcmdq_id: The ID of the new virtual command queue
-+ * @addr: Base address of the queue memory in the guest physical address space
-+ * @length: Length of the queue memory in the guest physical address space
-+ *
-+ * Allocate a virtual command queue object for a vIOMMU-specific HW-accelerated
-+ * feature that can access a guest queue memory described by @addr and @length.
-+ * It's suggested for VMM to back the queue memory using a single huge page with
-+ * a proper alignment for its contiguity in the host physical address space. The
-+ * call will fail, if the queue memory is not contiguous in the physical address
-+ * space. Upon success, its underlying physical pages will be pinned to prevent
-+ * VMM from unmapping them in the IOAS, until the virtual CMDQ gets destroyed.
-+ */
-+struct iommu_vcmdq_alloc {
-+	__u32 size;
-+	__u32 flags;
-+	__u32 viommu_id;
-+	__u32 type;
-+	__u32 index;
-+	__u32 out_vcmdq_id;
-+	__aligned_u64 addr;
-+	__aligned_u64 length;
-+};
-+#define IOMMU_VCMDQ_ALLOC _IO(IOMMUFD_TYPE, IOMMUFD_CMD_VCMDQ_ALLOC)
- #endif
-diff --git a/drivers/iommu/iommufd/main.c b/drivers/iommu/iommufd/main.c
-index 2b9ee9b4a424..ac51d5cfaa61 100644
---- a/drivers/iommu/iommufd/main.c
-+++ b/drivers/iommu/iommufd/main.c
-@@ -303,6 +303,7 @@ union ucmd_buffer {
- 	struct iommu_ioas_map map;
- 	struct iommu_ioas_unmap unmap;
- 	struct iommu_option option;
-+	struct iommu_vcmdq_alloc vcmdq;
- 	struct iommu_vdevice_alloc vdev;
- 	struct iommu_veventq_alloc veventq;
- 	struct iommu_vfio_ioas vfio_ioas;
-@@ -358,6 +359,8 @@ static const struct iommufd_ioctl_op iommufd_ioctl_ops[] = {
- 	IOCTL_OP(IOMMU_IOAS_UNMAP, iommufd_ioas_unmap, struct iommu_ioas_unmap,
- 		 length),
- 	IOCTL_OP(IOMMU_OPTION, iommufd_option, struct iommu_option, val64),
-+	IOCTL_OP(IOMMU_VCMDQ_ALLOC, iommufd_vcmdq_alloc_ioctl,
-+		 struct iommu_vcmdq_alloc, length),
- 	IOCTL_OP(IOMMU_VDEVICE_ALLOC, iommufd_vdevice_alloc_ioctl,
- 		 struct iommu_vdevice_alloc, virt_id),
- 	IOCTL_OP(IOMMU_VEVENTQ_ALLOC, iommufd_veventq_alloc,
-@@ -501,6 +504,9 @@ static const struct iommufd_object_ops iommufd_object_ops[] = {
- 	[IOMMUFD_OBJ_IOAS] = {
- 		.destroy = iommufd_ioas_destroy,
- 	},
-+	[IOMMUFD_OBJ_VCMDQ] = {
-+		.destroy = iommufd_vcmdq_destroy,
-+	},
- 	[IOMMUFD_OBJ_VDEVICE] = {
- 		.destroy = iommufd_vdevice_destroy,
- 	},
-diff --git a/drivers/iommu/iommufd/viommu.c b/drivers/iommu/iommufd/viommu.c
-index a65153458a26..02a111710ffe 100644
---- a/drivers/iommu/iommufd/viommu.c
-+++ b/drivers/iommu/iommufd/viommu.c
-@@ -170,3 +170,97 @@ int iommufd_vdevice_alloc_ioctl(struct iommufd_ucmd *ucmd)
- 	iommufd_put_object(ucmd->ictx, &viommu->obj);
- 	return rc;
+diff --git a/include/linux/iommufd.h b/include/linux/iommufd.h
+index e91381aaec5a..5dff154e8ce1 100644
+--- a/include/linux/iommufd.h
++++ b/include/linux/iommufd.h
+@@ -232,6 +232,10 @@ struct iommufd_object *_iommufd_object_alloc(struct iommufd_ctx *ictx,
+ 					     size_t size,
+ 					     enum iommufd_object_type type);
+ void iommufd_object_abort(struct iommufd_ctx *ictx, struct iommufd_object *obj);
++int iommufd_object_depend(struct iommufd_object *obj_dependent,
++			  struct iommufd_object *obj_depended);
++void iommufd_object_undepend(struct iommufd_object *obj_dependent,
++			     struct iommufd_object *obj_depended);
+ struct device *iommufd_viommu_find_dev(struct iommufd_viommu *viommu,
+ 				       unsigned long vdev_id);
+ int iommufd_viommu_get_vdev_id(struct iommufd_viommu *viommu,
+@@ -252,6 +256,17 @@ static inline void iommufd_object_abort(struct iommufd_ctx *ictx,
+ {
  }
-+
-+void iommufd_vcmdq_destroy(struct iommufd_object *obj)
+ 
++static inline int iommufd_object_depend(struct iommufd_object *obj_dependent,
++					struct iommufd_object *obj_depended)
 +{
-+	struct iommufd_vcmdq *vcmdq =
-+		container_of(obj, struct iommufd_vcmdq, obj);
-+	struct iommufd_viommu *viommu = vcmdq->viommu;
-+
-+	if (viommu->ops->vcmdq_destroy)
-+		viommu->ops->vcmdq_destroy(vcmdq);
-+	iopt_unpin_pages(&viommu->hwpt->ioas->iopt, vcmdq->addr, vcmdq->length);
-+	refcount_dec(&viommu->obj.users);
++	return -EOPNOTSUPP;
 +}
 +
-+int iommufd_vcmdq_alloc_ioctl(struct iommufd_ucmd *ucmd)
++static inline void iommufd_object_undepend(struct iommufd_object *obj_dependent,
++					   struct iommufd_object *obj_depended)
 +{
-+	struct iommu_vcmdq_alloc *cmd = ucmd->cmd;
-+	struct iommufd_viommu *viommu;
-+	struct iommufd_vcmdq *vcmdq;
-+	struct page **pages;
-+	int max_npages, i;
-+	dma_addr_t end;
-+	int rc;
++}
 +
-+	if (cmd->flags || cmd->type == IOMMU_VCMDQ_TYPE_DEFAULT)
-+		return -EOPNOTSUPP;
-+	if (!cmd->addr || !cmd->length)
+ static inline struct device *
+ iommufd_viommu_find_dev(struct iommufd_viommu *viommu, unsigned long vdev_id)
+ {
+@@ -329,4 +344,36 @@ static inline int iommufd_viommu_report_event(struct iommufd_viommu *viommu,
+ 		static_assert(offsetof(typeof(*drv_struct), member.obj) == 0); \
+ 		iommufd_object_abort(ictx, &drv_struct->member.obj);           \
+ 	})
++
++/*
++ * Helpers for IOMMU driver to build/destroy a dependency between two sibling
++ * structures created by one of the allocators above
++ */
++#define iommufd_vcmdq_depend(vcmdq_dependent, vcmdq_depended, member)          \
++	({                                                                     \
++		static_assert(__same_type(struct iommufd_object,               \
++					  vcmdq_dependent->member.obj));       \
++		static_assert(offsetof(typeof(*vcmdq_dependent),               \
++					      member.obj) == 0);               \
++		static_assert(__same_type(struct iommufd_object,               \
++					  vcmdq_depended->member.obj));        \
++		static_assert(offsetof(typeof(*vcmdq_depended),                \
++					      member.obj) == 0);               \
++		iommufd_object_depend(&vcmdq_dependent->member.obj,            \
++				      &vcmdq_depended->member.obj);            \
++	})
++
++#define iommufd_vcmdq_undepend(vcmdq_dependent, vcmdq_depended, member)        \
++	({                                                                     \
++		static_assert(__same_type(struct iommufd_object,               \
++					  vcmdq_dependent->member.obj));       \
++		static_assert(offsetof(typeof(*vcmdq_dependent),               \
++					      member.obj) == 0);               \
++		static_assert(__same_type(struct iommufd_object,               \
++					  vcmdq_depended->member.obj));        \
++		static_assert(offsetof(typeof(*vcmdq_depended),                \
++					      member.obj) == 0);               \
++		iommufd_object_undepend(&vcmdq_dependent->member.obj,          \
++					&vcmdq_depended->member.obj);          \
++	})
+ #endif
+diff --git a/drivers/iommu/iommufd/driver.c b/drivers/iommu/iommufd/driver.c
+index 7980a09761c2..fb7f8fe40f95 100644
+--- a/drivers/iommu/iommufd/driver.c
++++ b/drivers/iommu/iommufd/driver.c
+@@ -50,6 +50,34 @@ void iommufd_object_abort(struct iommufd_ctx *ictx, struct iommufd_object *obj)
+ }
+ EXPORT_SYMBOL_NS_GPL(iommufd_object_abort, "IOMMUFD");
+ 
++/* A per-structure helper is available in include/linux/iommufd.h */
++int iommufd_object_depend(struct iommufd_object *obj_dependent,
++			  struct iommufd_object *obj_depended)
++{
++	/* Reject self dependency that dead locks */
++	if (obj_dependent == obj_depended)
 +		return -EINVAL;
-+	if (check_add_overflow(cmd->addr, cmd->length - 1, &end))
-+		return -EOVERFLOW;
++	/* Only support dependency between two objects of the same type */
++	if (obj_dependent->type != obj_depended->type)
++		return -EINVAL;
 +
-+	max_npages = DIV_ROUND_UP(cmd->length, PAGE_SIZE);
-+	pages = kcalloc(max_npages, sizeof(*pages), GFP_KERNEL);
-+	if (!pages)
-+		return -ENOMEM;
-+
-+	viommu = iommufd_get_viommu(ucmd, cmd->viommu_id);
-+	if (IS_ERR(viommu)) {
-+		rc = PTR_ERR(viommu);
-+		goto out_free;
-+	}
-+
-+	if (!viommu->ops || !viommu->ops->vcmdq_alloc) {
-+		rc = -EOPNOTSUPP;
-+		goto out_put_viommu;
-+	}
-+
-+	/* Quick test on the base address */
-+	if (!iommu_iova_to_phys(viommu->hwpt->common.domain, cmd->addr)) {
-+		rc = -ENXIO;
-+		goto out_put_viommu;
-+	}
-+
-+	/* The underlying physical pages must be pinned in the IOAS */
-+	rc = iopt_pin_pages(&viommu->hwpt->ioas->iopt, cmd->addr, cmd->length,
-+			    pages, 0);
-+	if (rc)
-+		goto out_put_viommu;
-+
-+	/* Validate if the underlying physical pages are contiguous */
-+	for (i = 1; i < max_npages && pages[i]; i++) {
-+		if (page_to_pfn(pages[i]) == page_to_pfn(pages[i - 1]) + 1)
-+			continue;
-+		rc = -EFAULT;
-+		goto out_unpin;
-+	}
-+
-+	vcmdq = viommu->ops->vcmdq_alloc(viommu, cmd->type, cmd->index,
-+					 cmd->addr, cmd->length);
-+	if (IS_ERR(vcmdq)) {
-+		rc = PTR_ERR(vcmdq);
-+		goto out_unpin;
-+	}
-+
-+	vcmdq->viommu = viommu;
-+	refcount_inc(&viommu->obj.users);
-+	vcmdq->addr = cmd->addr;
-+	vcmdq->ictx = ucmd->ictx;
-+	vcmdq->length = cmd->length;
-+	cmd->out_vcmdq_id = vcmdq->obj.id;
-+	rc = iommufd_ucmd_respond(ucmd, sizeof(*cmd));
-+	if (rc)
-+		iommufd_object_abort_and_destroy(ucmd->ictx, &vcmdq->obj);
-+	else
-+		iommufd_object_finalize(ucmd->ictx, &vcmdq->obj);
-+	goto out_put_viommu;
-+
-+out_unpin:
-+	iopt_unpin_pages(&viommu->hwpt->ioas->iopt, cmd->addr, cmd->length);
-+out_put_viommu:
-+	iommufd_put_object(ucmd->ictx, &viommu->obj);
-+out_free:
-+	kfree(pages);
-+	return rc;
++	refcount_inc(&obj_depended->users);
++	return 0;
 +}
++EXPORT_SYMBOL_NS_GPL(iommufd_object_depend, "IOMMUFD");
++
++/* A per-structure helper is available in include/linux/iommufd.h */
++void iommufd_object_undepend(struct iommufd_object *obj_dependent,
++			     struct iommufd_object *obj_depended)
++{
++	if (WARN_ON_ONCE(obj_dependent == obj_depended ||
++			 obj_dependent->type != obj_depended->type))
++		return;
++
++	refcount_dec(&obj_depended->users);
++}
++EXPORT_SYMBOL_NS_GPL(iommufd_object_undepend, "IOMMUFD");
++
+ /* Caller should xa_lock(&viommu->vdevs) to protect the return value */
+ struct device *iommufd_viommu_find_dev(struct iommufd_viommu *viommu,
+ 				       unsigned long vdev_id)
 -- 
 2.43.0
 
