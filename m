@@ -1,167 +1,219 @@
-Return-Path: <linux-kselftest+bounces-31709-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31710-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98AA9A9DBC1
-	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Apr 2025 17:14:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 084EBA9DBC6
+	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Apr 2025 17:15:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB4001BA5E68
-	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Apr 2025 15:14:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 06D271BA18F7
+	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Apr 2025 15:15:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA87125CC7A;
-	Sat, 26 Apr 2025 15:14:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B2501DE3CE;
+	Sat, 26 Apr 2025 15:15:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="aqZKh2uL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b3vlyA/X"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-75.smtpout.orange.fr [80.12.242.75])
-	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF7DA13E41A;
-	Sat, 26 Apr 2025 15:14:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42CA4A31;
+	Sat, 26 Apr 2025 15:15:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745680463; cv=none; b=i5V+9Nwza6xZeBbF1R510eFFpiyhnMNZUX221CxBXprD6lUHyzlMyKkWRbuRaFT3K8YG8W1KsEZ/zd10I0dbXG6t9Xt+exll2zyQFcmEfcQ/ps91aUwQqunQt8KIBJDgXm0iqrVIqHVjIp6OtNzX5pnQGlEymiOzMMhN8/F+yV0=
+	t=1745680538; cv=none; b=ZDuWKBNFNMAuGttWeIvk11VopBgJF9t4vvn2CJcAfHNdg/U0ImYOCDvwod5gFQ5diLPizo7OQIVhXkn0J2D36v3HrbpgRzp6ijj7QDJyD68FZ1Kw6tOxgW4oG2oGtUiEIsHZCqlE5vbIpsxkA5/kM2MhYVsSazOrhtMfgvqyfW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745680463; c=relaxed/simple;
-	bh=IWfcmPKJHXBs8q7otC+Rd8qWS2HN1vQ1l6y9dmgLnGM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=n9hC+tzGnYI/FDHaCWYZgewLOjnsgkbRU8AxljBtO4ePlCqauRX2OzCxSIxGOsChcQsImtuAhcR8GayCfNpzlZuLi3IWbT4uB5tt3doN9bQ9/8Vh406CE607muDxnnBfDK3OTtQBmacN41IYKDmo9AQoBdivQrO+BacOK/6x6Dg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=aqZKh2uL; arc=none smtp.client-ip=80.12.242.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [192.168.1.37] ([90.11.132.44])
-	by smtp.orange.fr with ESMTPA
-	id 8hD8uuyJPSxyX8hDCuh2W3; Sat, 26 Apr 2025 17:13:09 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1745680389;
-	bh=lGpF8EKyLgMCkElYaAwd2ZnEJtgke/GdzymKjUrzlVM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=aqZKh2uL+y+b2Aub09013KtAOCdfvwHnCs1YOFRkOMpkOzHgfYygb59ix86fOed/Z
-	 0a9DevAK9H5NZ5PKOWVXnAiNJCdSZlyR66ghl6FEzVwwyFDDj5D8ScupQ0HH3lajcX
-	 yYfRZX4co8wOtYe/Bmfnlmrv96J5qgOVsUu+r/gOCzzcZVSgUXa9QkJI2oieEQve0J
-	 nVXxZUfiwRQjlDk73akeFu8pOJvwe88V3wuigzVPg3oCqdR8eA5w6/ni7O8tQF2F+h
-	 K3CqdJ5NnN5vWlHR252XUnBkOA7aCDr8fFukRCjcGziJPxi1UrpugV8858pvnMdPAj
-	 qiZQMm1CyWk2A==
-X-ME-Helo: [192.168.1.37]
-X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
-X-ME-Date: Sat, 26 Apr 2025 17:13:09 +0200
-X-ME-IP: 90.11.132.44
-Message-ID: <fceb6891-2749-496a-a6d5-db0748728e8a@wanadoo.fr>
-Date: Sat, 26 Apr 2025 17:12:58 +0200
+	s=arc-20240116; t=1745680538; c=relaxed/simple;
+	bh=1X7hzm4K83uSdhmHjqtjE/ay1lY32gCYd5tZNihSHxs=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=q8geAyazMB1wfy8rIaGxQ5LlkyKhPhlJ43i45NvImKXbQH2nKAQuzZrPYMUWrkZxJZ44AdaKwnYhogQq4AaWiijzfALO1MO8B8DQ36WXmm3RTrEcuMSp9XymWIDW88ONNGuPn5UFMTccoMXgWu0Kf6DlG2iZwHbmocgE6rXTPX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b3vlyA/X; arc=none smtp.client-ip=209.85.219.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-6f2c45ecaffso35921986d6.2;
+        Sat, 26 Apr 2025 08:15:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1745680535; x=1746285335; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Og1iE/90Bmt2hCkw8qaULnn0aSlkQYRPJno2tCvI7ZE=;
+        b=b3vlyA/XINjmGxxPJ4bfwfNIWlZWULdT/6vdxzVqO+LiKjR+uTDoBiSYZ5x2e80P/j
+         LSuKxOnlDSGCVFN+/8xc6E6ymUI42DUU4DlvhU5gVaBGrO/BmS+sq+Lz+iSyAIuqjeG4
+         wLazJt6aNq50OYhEdGUzwmAi2ejOxyA2Zia7fjTYkuYNk6Q6+A7sXxVLV5C9+0KblXlV
+         DavCnGRrUn0QhVIA9jOM5/h5J6DQfmLU1Pav9VkOuK6vr0Zc31koW4aFwFf9i5Pyulnv
+         JnQbTfnNPZkkwrSNSWaDWIfh7q5IX5q/3hfMDJKP+RLUmVDzz6HqdnNzR6diGAU8Fnwy
+         hyBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745680535; x=1746285335;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Og1iE/90Bmt2hCkw8qaULnn0aSlkQYRPJno2tCvI7ZE=;
+        b=oSpOy881+Knw03iNYNDhj6SxEFISBu6c2NSCext16R+YpRryEr7F0Z4wH2A4VOlqaN
+         uPihSJUn7VOXUPdsEWW1QzMQ3gcr49H/SMG3O3V4HpRu7I0ftvRvDNy8ZjafeAS1VLS5
+         g0BG2QooAw8Br0H3I6sOgPX42dC+BLt9sogZo3+AeB6dGZ136IybJtz7Ne0ZflQzpSK8
+         pXEXD3ztxI1VzztScZEV2cysil1EyRVlUDq0KQ9DPSid1FFcGGzJ2vBKrMxnBpWWysNH
+         m2zXRwAkyGmqRSqkX+EqmKu8PGp5rY2Vby+CZUrv5gEcZFQ133n6+a9p7V4vR9hWqER6
+         twGQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVsTtrhUholeEu5J/v8TpPuwH3Jdxy1Z5u6YnGVLonnD/z4eBCEi6EyX//JGWgDXqeiyKtronwPQ8m1hCG97rA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwSKO2FSWB4mLEFVOx1dm632xGZn38fMpzdu8ZaQeU0DPsWGdU2
+	8DbLrIOyMuSaSnAj4p+Gjpc8vJZ4dGLc6Pjvx8jE7DGqMWH6pwRm
+X-Gm-Gg: ASbGncsft4cYq3prF1Wh/UirHjK5DHfCdzV78KknpbehXlH30kM7TkZe+q53tc4pzcH
+	f779HEamM6Kk6nFI04N+rtkwQYs1jNbsCMP9ocwjtFByex0pv1k8ANZcdeEhN/twMkHyTDN9baU
+	PCkohewNGZ9EeEl7bN1HB8aagm9541yWqMxVdyZ9Bb0Emrm3LFLLGN7KIjVPGkIgHxjRV0qiCLn
+	Xbyor0wxaNrnaQhprHmLVQTeuaeFvyTuWmQn7GSyX/Ih6Vw+PHp0ghvvpGIM82B8xd1tCSpJTAq
+	sAHPJxOZPlrowre6ikpHCG9MfEA0tDUk9sHVftpAb+jpQlCWolBp6CdfmDMMAhvBXxB1jLtT28H
+	bmGBrIGVb+pbmyvAlYN5R
+X-Google-Smtp-Source: AGHT+IEHzBf1ELtLwhB+iurfe7MRCTefGSOl4RLwBrag1Ax3fG2pNQMv7FU/rK2NslyIWnGHlvsj3A==
+X-Received: by 2002:a05:6214:483:b0:6e6:602f:ef68 with SMTP id 6a1803df08f44-6f4cb9cfc28mr111554176d6.10.1745680535059;
+        Sat, 26 Apr 2025 08:15:35 -0700 (PDT)
+Received: from localhost (141.139.145.34.bc.googleusercontent.com. [34.145.139.141])
+        by smtp.gmail.com with UTF8SMTPSA id 6a1803df08f44-6f4c09341edsm35525956d6.30.2025.04.26.08.15.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Apr 2025 08:15:34 -0700 (PDT)
+Date: Sat, 26 Apr 2025 11:15:34 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>, 
+ davem@davemloft.net
+Cc: netdev@vger.kernel.org, 
+ edumazet@google.com, 
+ pabeni@redhat.com, 
+ andrew+netdev@lunn.ch, 
+ horms@kernel.org, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ petrm@nvidia.com, 
+ willemb@google.com, 
+ sdf@fomichev.me, 
+ linux-kselftest@vger.kernel.org
+Message-ID: <680cf896280c4_193a06294a6@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20250425151757.1652517-1-kuba@kernel.org>
+References: <20250425151757.1652517-1-kuba@kernel.org>
+Subject: Re: [PATCH net-next] selftests: net: exit cleanly on SIGTERM /
+ timeout
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v12 4/9] net: devmem: Implement TX path
-To: Mina Almasry <almasrymina@google.com>
-Cc: andrew+netdev@lunn.ch, asml.silence@gmail.com, axboe@kernel.dk,
- corbet@lwn.net, davem@davemloft.net, donald.hunter@gmail.com,
- dsahern@kernel.org, dw@davidwei.uk, edumazet@google.com,
- eperezma@redhat.com, horms@kernel.org, hramamurthy@google.com,
- io-uring@vger.kernel.org, jasowang@redhat.com, jeroendb@google.com,
- jhs@mojatatu.com, kaiyuanz@google.com, kuba@kernel.org, kuniyu@amazon.com,
- kvm@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- mst@redhat.com, ncardwell@google.com, netdev@vger.kernel.org,
- pabeni@redhat.com, pctammela@mojatatu.com, sdf@fomichev.me,
- sgarzare@redhat.com, shuah@kernel.org, skhawaja@google.com,
- stefanha@redhat.com, victor@mojatatu.com, virtualization@lists.linux.dev,
- willemb@google.com, xuanzhuo@linux.alibaba.com
-References: <20250425204743.617260-1-almasrymina@google.com>
- <20250425204743.617260-5-almasrymina@google.com>
-Content-Language: en-US, fr-FR
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20250425204743.617260-5-almasrymina@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-Le 25/04/2025 à 22:47, Mina Almasry a écrit :
-> Augment dmabuf binding to be able to handle TX. Additional to all the RX
-> binding, we also create tx_vec needed for the TX path.
+Jakub Kicinski wrote:
+> ksft runner sends 2 SIGTERMs in a row if a test runs out of time.
+> Handle this in a similar way we handle SIGINT - cleanup and stop
+> running further tests.
 > 
-> Provide API for sendmsg to be able to send dmabufs bound to this device:
+> Because we get 2 signals we need a bit of logic to ignore
+> the subsequent one, they come immediately one after the other
+> (due to commit 9616cb34b08e ("kselftest/runner.sh: Propagate SIGTERM
+> to runner child")).
 > 
-> - Provide a new dmabuf_tx_cmsg which includes the dmabuf to send from.
-> - MSG_ZEROCOPY with SCM_DEVMEM_DMABUF cmsg indicates send from dma-buf.
+> This change makes sure we run cleanup (scheduled defer()s)
+> and also print a stack trace on SIGTERM, which doesn't happen
+> by default. Tests occasionally hang in NIPA and it's impossible
+> to tell what they are waiting from or doing.
 > 
-> Devmem is uncopyable, so piggyback off the existing MSG_ZEROCOPY
-> implementation, while disabling instances where MSG_ZEROCOPY falls back
-> to copying.
-
-...
-
-> @@ -270,24 +284,34 @@ net_devmem_bind_dmabuf(struct net_device *dev, unsigned int dmabuf_fd,
->   			niov->owner = &owner->area;
->   			page_pool_set_dma_addr_netmem(net_iov_to_netmem(niov),
->   						      net_devmem_get_dma_addr(niov));
-> +			if (direction == DMA_TO_DEVICE)
-> +				binding->tx_vec[owner->area.base_virtual / PAGE_SIZE + i] = niov;
->   		}
->   
->   		virtual += len;
->   	}
->   
-> +	err = xa_alloc_cyclic(&net_devmem_dmabuf_bindings, &binding->id,
-> +			      binding, xa_limit_32b, &id_alloc_next,
-> +			      GFP_KERNEL);
-> +	if (err < 0)
-> +		goto err_free_id;
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+> CC: petrm@nvidia.com
+> CC: willemb@google.com
+> CC: sdf@fomichev.me
+> CC: linux-kselftest@vger.kernel.org
+> ---
+>  tools/testing/selftests/net/lib/py/ksft.py | 27 +++++++++++++++++++++-
+>  1 file changed, 26 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/net/lib/py/ksft.py b/tools/testing/selftests/net/lib/py/ksft.py
+> index 3cfad0fd4570..73710634d457 100644
+> --- a/tools/testing/selftests/net/lib/py/ksft.py
+> +++ b/tools/testing/selftests/net/lib/py/ksft.py
+> @@ -3,6 +3,7 @@
+>  import builtins
+>  import functools
+>  import inspect
+> +import signal
+>  import sys
+>  import time
+>  import traceback
+> @@ -26,6 +27,10 @@ KSFT_DISRUPTIVE = True
+>      pass
+>  
+>  
+> +class KsftTerminate(KeyboardInterrupt):
+> +    pass
 > +
->   	return binding;
->   
-> +err_free_id:
-> +	xa_erase(&net_devmem_dmabuf_bindings, binding->id);
-
-Not sure this is correct now that xa_alloc_cyclic() is the last function 
-which is called.
-I guess that that the last goto should be to err_free_chunks.
-
->   err_free_chunks:
->   	gen_pool_for_each_chunk(binding->chunk_pool,
->   				net_devmem_dmabuf_free_chunk_owner, NULL);
->   	gen_pool_destroy(binding->chunk_pool);
-> +err_tx_vec:
-> +	kvfree(binding->tx_vec);
->   err_unmap:
->   	dma_buf_unmap_attachment_unlocked(binding->attachment, binding->sgt,
->   					  DMA_FROM_DEVICE);
->   err_detach:
->   	dma_buf_detach(dmabuf, binding->attachment);
-> -err_free_id:
-> -	xa_erase(&net_devmem_dmabuf_bindings, binding->id);
->   err_free_binding:
->   	kfree(binding);
->   err_put_dmabuf:
-
-...
-
-> diff --git a/net/core/sock.c b/net/core/sock.c
-> index b64df2463300b..9dd2989040357 100644
-> --- a/net/core/sock.c
-> +++ b/net/core/sock.c
-> @@ -3017,6 +3017,12 @@ int __sock_cmsg_send(struct sock *sk, struct cmsghdr *cmsg,
->   		if (!sk_set_prio_allowed(sk, *(u32 *)CMSG_DATA(cmsg)))
->   			return -EPERM;
->   		sockc->priority = *(u32 *)CMSG_DATA(cmsg);
-> +		break;
-> +	case SCM_DEVMEM_DMABUF:
-> +		if (cmsg->cmsg_len != CMSG_LEN(sizeof(u32)))
-> +			return -EINVAL;
-> +		sockc->dmabuf_id = *(u32 *)CMSG_DATA(cmsg);
+> +
+>  def ksft_pr(*objs, **kwargs):
+>      print("#", *objs, **kwargs)
+>  
+> @@ -193,6 +198,19 @@ KSFT_DISRUPTIVE = True
+>      return env
+>  
+>  
+> +term_cnt = 0
 > +
 
-Nitpick: Unneeded newline, to be consistent with the surrounding code.
+A bit ugly to initialize this here. Also, it already is initialized
+below.
 
->   		break;
->   	default:
->   		return -EINVAL;
+> +def _ksft_intr(signum, frame):
+> +    # ksft runner.sh sends 2 SIGTERMs in a row on a timeout
+> +    # if we don't ignore the second one it will stop us from handling cleanup
+> +    global term_cnt
+> +    term_cnt += 1
+> +    if term_cnt == 1:
+> +        raise KsftTerminate()
+> +    else:
+> +        ksft_pr(f"Ignoring SIGTERM (cnt: {term_cnt}), already exiting...")
+> +
+> +
+>  def ksft_run(cases=None, globs=None, case_pfx=None, args=()):
+>      cases = cases or []
+>  
+> @@ -205,6 +223,10 @@ KSFT_DISRUPTIVE = True
+>                      cases.append(value)
+>                      break
+>  
+> +    global term_cnt
+> +    term_cnt = 0
+> +    prev_sigterm = signal.signal(signal.SIGTERM, _ksft_intr)
+> +
+>      totals = {"pass": 0, "fail": 0, "skip": 0, "xfail": 0}
+>  
+>      print("TAP version 13")
+> @@ -229,11 +251,12 @@ KSFT_DISRUPTIVE = True
+>              cnt_key = 'xfail'
+>          except BaseException as e:
+>              stop |= isinstance(e, KeyboardInterrupt)
+> +            stop |= isinstance(e, KsftTerminate)
+>              tb = traceback.format_exc()
+>              for line in tb.strip().split('\n'):
+>                  ksft_pr("Exception|", line)
+>              if stop:
+> -                ksft_pr("Stopping tests due to KeyboardInterrupt.")
+> +                ksft_pr(f"Stopping tests due to {type(e).__name__}.")
+>              KSFT_RESULT = False
+>              cnt_key = 'fail'
+>  
+> @@ -248,6 +271,8 @@ KSFT_DISRUPTIVE = True
+>          if stop:
+>              break
+>  
+> +    signal.signal(signal.SIGTERM, prev_sigterm)
+> +
 
-...
+Why is prev_sigterm saved and reassigned as handler here?
 
-CJ
+>      print(
+>          f"# Totals: pass:{totals['pass']} fail:{totals['fail']} xfail:{totals['xfail']} xpass:0 skip:{totals['skip']} error:0"
+>      )
+> -- 
+> 2.49.0
+> 
+
+
 
