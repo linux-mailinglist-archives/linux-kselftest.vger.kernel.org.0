@@ -1,118 +1,110 @@
-Return-Path: <linux-kselftest+bounces-31696-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31697-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5DE3A9D86B
-	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Apr 2025 08:31:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE758A9DA1B
+	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Apr 2025 12:32:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 021BD17FA86
-	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Apr 2025 06:31:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 73D055A7DDA
+	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Apr 2025 10:32:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42CC61CEAC2;
-	Sat, 26 Apr 2025 06:31:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="dO3h3FBk"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 881A8218592;
+	Sat, 26 Apr 2025 10:32:24 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-25.smtpout.orange.fr [80.12.242.25])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A097B192D97;
-	Sat, 26 Apr 2025 06:31:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.25
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34B854A11;
+	Sat, 26 Apr 2025 10:32:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=163.172.96.212
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745649091; cv=none; b=X/lYbOgHDBKVm5ZMJzFasz3insnbTnhJjSTdKrprxipELuAxNo++trwCOOhvxoT1O7YbwP3aashupciUI212uhVMqIb97wjmxCFnurDlFDEGxxAOTjRi/K2Nr7GYtTDbXCmjga81hBA7GRbF5vO7hC6NM6obPAjBvvjU/0ztNN0=
+	t=1745663544; cv=none; b=Bf8ZLdvRg3E09ti8/qw9AJRbKUyup0+YQjf+CUBEbJZZBI2P69uBKGbsGuNozP3gmoHAZa9OYrTO4pZh/mnV2mVBo2TgL0FuKuiQeaTEos8XGVgtsAqQCejy6uPZ6IH5TLhG3fjESh6o8U2Y9ntjCoI5njlJUt1n8hSXSGf2h5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745649091; c=relaxed/simple;
-	bh=LStxSYSMQWQfySUUYevBrjI7tk6cSXHz2Zsm/0azcgA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JLfAs2EHqFP1ORmFMw/ioAiLn3q2cWSZ/7dgAVrS9ovTaOARWzKKQHT0T8wPw2iXJqJJyp1wQYFhL0HGWSh9hylPueigmSPzfgcKl2o0P5FTEuUj5HkyFmdouL6XvbOOlZkvlfQlq6BODUZj7kxBochyKkh73J+K0i+BUxkH7NE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=dO3h3FBk; arc=none smtp.client-ip=80.12.242.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [192.168.1.37] ([90.11.132.44])
-	by smtp.orange.fr with ESMTPA
-	id 8Z4AudHRUAix78Z4DuSQ21; Sat, 26 Apr 2025 08:31:19 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1745649079;
-	bh=5noqtwG52h6FrrE55CMqaxj5XRYDTBNIEIbRi1Rpv78=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=dO3h3FBk53n0URP5sGWwvqGIIC7nb3y3Qme+QXyz0HxA0rlcgxtDXrebZJiX2CmDc
-	 tQLJT2yCS16OVuENKMNuYvjlbwrh+AutA7W3UtRL9GcOGf2z1Tdab2igjI+ARLQ0SA
-	 i7Y3q68HodHMA7Yn98R4+0eVQ52f3Eyksb5aJr0TgYAlm2wb443OmPmdluHVQGE1T/
-	 SrGw1yj0NdSyS7TnO0VbN/W1MjZ5YG7UkrIHiv8fahuHWp4pOuMcP9+VmKsXqFQWuK
-	 fhtmBSFWu7WWOHyFXLtIKOOHhcDFZOw+qtMXOfLdCelB7DoQirXCvB0j0CfazUJKGP
-	 lJwTTNeNMHZNg==
-X-ME-Helo: [192.168.1.37]
-X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
-X-ME-Date: Sat, 26 Apr 2025 08:31:19 +0200
-X-ME-IP: 90.11.132.44
-Message-ID: <a70511f2-70b2-4f48-94df-c55c179ce488@wanadoo.fr>
-Date: Sat, 26 Apr 2025 08:31:10 +0200
+	s=arc-20240116; t=1745663544; c=relaxed/simple;
+	bh=m31Z+0bhfG048O9BNHlvK19iEVGmN6dHVgGcgE4xlMU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=p5r+OkhSpZRwAy5px3V7T8F+3O4XaKKSppfntoBCPC8GoS/CiBC/1UZnczEs7lACzNjG7rly/vZ3B/0DhoLZVUFKDW1h56u78AGigUgTkupYshk0Qf4pJAfBWdDsfSzFVwFluVuf8mN2uSTKUhWmBbuwAdp7N6oftyOt5pQnFvo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; arc=none smtp.client-ip=163.172.96.212
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
+Received: (from willy@localhost)
+	by pcw.home.local (8.15.2/8.15.2/Submit) id 53QAVwTm018112;
+	Sat, 26 Apr 2025 12:31:58 +0200
+Date: Sat, 26 Apr 2025 12:31:58 +0200
+From: Willy Tarreau <w@1wt.eu>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 05/15] tools/nolibc: add getrandom()
+Message-ID: <20250426103158.GB17549@1wt.eu>
+References: <20250423-nolibc-misc-v1-0-a925bf40297b@linutronix.de>
+ <20250423-nolibc-misc-v1-5-a925bf40297b@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v12 1/9] netmem: add niov->type attribute to
- distinguish different net_iov types
-To: Mina Almasry <almasrymina@google.com>
-Cc: andrew+netdev@lunn.ch, asml.silence@gmail.com, axboe@kernel.dk,
- corbet@lwn.net, davem@davemloft.net, donald.hunter@gmail.com,
- dsahern@kernel.org, dw@davidwei.uk, edumazet@google.com,
- eperezma@redhat.com, horms@kernel.org, hramamurthy@google.com,
- io-uring@vger.kernel.org, jasowang@redhat.com, jeroendb@google.com,
- jhs@mojatatu.com, kuba@kernel.org, kuniyu@amazon.com, kvm@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, mst@redhat.com, ncardwell@google.com,
- netdev@vger.kernel.org, pabeni@redhat.com, pctammela@mojatatu.com,
- sdf@fomichev.me, sgarzare@redhat.com, shuah@kernel.org, skhawaja@google.com,
- stefanha@redhat.com, victor@mojatatu.com, virtualization@lists.linux.dev,
- willemb@google.com, xuanzhuo@linux.alibaba.com
-References: <20250425204743.617260-1-almasrymina@google.com>
- <20250425204743.617260-2-almasrymina@google.com>
-Content-Language: en-US, fr-FR
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20250425204743.617260-2-almasrymina@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250423-nolibc-misc-v1-5-a925bf40297b@linutronix.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi,
+Hi Thomas,
 
-below a few nitpicks in case of a v13.
-
-
-Le 25/04/2025 √† 22:47, Mina Almasry a √©crit¬†:
-> Later patches in the series adds TX net_iovs where there is no pp
-> associated, so we can't rely on niov->pp->mp_ops to tell what is the
-> type of the net_iov.
-> 
-> Add a type enum to the net_iov which tells us the net_iov type.
-> 
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
-> 
-> ---
-
-Nitpick: unneeded empty need line above ---?
-
-...
-
-> +enum net_iov_type {
-> +	NET_IOV_DMABUF,
-> +	NET_IOV_IOURING,
+On Wed, Apr 23, 2025 at 05:01:35PM +0200, Thomas Weiﬂschuh wrote:
+> --- /dev/null
+> +++ b/tools/include/nolibc/sys/random.h
+> @@ -0,0 +1,32 @@
+> +/* SPDX-License-Identifier: LGPL-2.1 OR MIT */
+> +/*
+> + * random definitions for NOLIBC
+> + * Copyright (C) 2025 Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
+> + */
 > +
-> +	/* Force size to unsigned long to make the NET_IOV_ASSERTS below pass.
-> +	 */
-> +	NET_IOV_MAX = ULONG_MAX,
 
-Nitpick: unneeded trailing , after such a terminator.
+Note: don't forget to add your nolibc include here from the other series.
 
-> +};
+> +#ifndef _NOLIBC_SYS_RANDOM_H
+> +#define _NOLIBC_SYS_RANDOM_H
+> +
+> +#include "../arch.h"
+> +#include "../sys.h"
+(...)
 
-...
+> diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+> index abe0ae794208762f6d91ad81e902fbf77253a1c1..95d08e9ccf5b3be924548100e9621cd47f39e8c2 100644
+> --- a/tools/testing/selftests/nolibc/nolibc-test.c
+> +++ b/tools/testing/selftests/nolibc/nolibc-test.c
+(...)
+> +int test_getrandom(void)
+> +{
+> +	uint64_t rng = 0;
+> +	ssize_t ret;
+> +
+> +	ret = getrandom(&rng, sizeof(rng), 0);
+> +	if (ret != sizeof(rng))
+> +		return ret;
+> +
+> +	if (!rng) {
+> +		errno = EINVAL;
+> +		return -1;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
 
-CJ
+Just a thought about this one: in a not-so-distant past, getrandom()
+could hang forever when lacking entropy (classical problem when booting
+a headless machine having no RNG), and since a recent kernel it turned
+to "only" multiple seconds. I'm not seeing any easy solution to this,
+but we need to keep an eye on this one, and in case of bad reports,
+maybe have this test as an opt-in or something like this. Anyway the
+best way to know is to have it right now and wait for reports to
+arrive.
+
+Willy
 
