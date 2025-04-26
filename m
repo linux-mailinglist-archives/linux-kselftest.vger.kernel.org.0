@@ -1,101 +1,99 @@
-Return-Path: <linux-kselftest+bounces-31670-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31671-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58E9DA9D71C
-	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Apr 2025 04:00:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A09D1A9D741
+	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Apr 2025 04:32:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE4119C2C4B
-	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Apr 2025 01:59:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EF1021BC4D99
+	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Apr 2025 02:33:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 836AA1FF7BC;
-	Sat, 26 Apr 2025 01:59:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6CD51FC0F0;
+	Sat, 26 Apr 2025 02:32:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PfaRXPM/"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="NV3HH5cT"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 538251FF603;
-	Sat, 26 Apr 2025 01:59:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B1D31E834D;
+	Sat, 26 Apr 2025 02:32:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745632799; cv=none; b=IiMvPzihYtww9uinrPlwdWru4ZNP5cuIA19kQKAmRgKivH1Y1ZivLaKJExVtwIYNEeQww2+Ikz1PuDazzeWHcAypZWh29SaBofZb5OkPQlYpYU+HFFuAx53Ce1cGSMTX8He90i5oep9UQ9B2TZ0pn+RMW8AGel0/wB1q5yPUp8Y=
+	t=1745634771; cv=none; b=fs4VH7kMmRna2oWrUGntihuvxHH0D8Yjb6zviOFuxRpCrqyhixi0qSwIbZVUHWFycbQT1iNTtSqpENnvxOOo2uBo7MbZVqGPmA8tjDOV6FOpYI7uhX9eqg97w9JQyIe/yOPtFTY9Htw3vkq9jrxuZcUDVeXtyUqmqG2hdqwMgUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745632799; c=relaxed/simple;
-	bh=DPB94Wgb909dzPRwsfkM9u3/GKWBHqD6K46P0E1VrZs=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=fmThbQXnj+FfGGtOauZqZN2/S+/RNWk3OpYAx0ideBfeaABA/ModutabloxFkhrbYWFgFwFe1nphsuxhjjxopLYAKEO91ultGUUPWpiFOuBKuBj05O298ZoIbnLdVb5f817g7v54zy30eRVHCYryRGyigvIiPm7FVckRPocYREM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PfaRXPM/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF3A8C4CEF1;
-	Sat, 26 Apr 2025 01:59:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745632798;
-	bh=DPB94Wgb909dzPRwsfkM9u3/GKWBHqD6K46P0E1VrZs=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=PfaRXPM/XVXEvUQ15D7MsFaSZTtHLq+iPjaRiOTmV4n5g3WkSlgKrel8bI/xIyRx3
-	 L6UjBoSZAJwmpQuqEWJlzTOcGxHvN4WxzbQ2QvPgoWuL8wyixiUXrzysv6rjy7ygAP
-	 PevqIARX+kEYgoE37DmGtZWWG0/G5Gbj5q015haBVKcDQSeyfoJcPFOWB2achSYEpG
-	 U3dZ5Qiw3K91ivmOijMCNi3rM4ECXMb90nrRPFfmrimQsYu46nemOW+AS2GU8l1Puh
-	 b9ihsKwhwYDSHyeYeNCn31VyRXfQmi5T0bSi4+ZU5OoSo3oBayXLxwaNTyC3wgISBw
-	 Fc+tb42B5r/aQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADF99380CFDC;
-	Sat, 26 Apr 2025 02:00:38 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1745634771; c=relaxed/simple;
+	bh=+RUTWIt3VFeUueyp+/LHBU7OQa1nslQTo03DjgGapQA=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=KZvxPmMh8fPvildNUB50dIGBJOh8LKZJLnVSTVKpTdJ4cOpiDP+pD103TAmRuZBcFzw4AwWYju6Crsa6XeJC5itsK89tIFjfPRodca2poR43PFjNS65orNctStefg8eziXAakNIwZIX5yO3R5uabW7cEg7AvuLah223sBHxSBsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=NV3HH5cT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B430EC4CEE4;
+	Sat, 26 Apr 2025 02:32:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1745634770;
+	bh=+RUTWIt3VFeUueyp+/LHBU7OQa1nslQTo03DjgGapQA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=NV3HH5cTytNLqUSnhZu/e/1hOQv76j3RXu91ccBhnAZKPShm2ywlHlwxEmP2NFyJ8
+	 9mJGv0SrHBCtXVkieOdFVL+aj36B86SkAmVo+3g7zY7zwp1CWMsmr/ZbWtOT8bEZyr
+	 8NA5f5WhQqLgsoDwMQL/xkJ+DI4oOl2RlkHukU3w=
+Date: Fri, 25 Apr 2025 19:32:49 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Alessandro Carminati <acarmina@redhat.com>
+Cc: linux-kselftest@vger.kernel.org, David Airlie <airlied@gmail.com>, Arnd
+ Bergmann <arnd@arndb.de>, =?ISO-8859-1?Q?Ma=EDra?= Canal
+ <mcanal@igalia.com>, Dan Carpenter <dan.carpenter@linaro.org>, Kees Cook
+ <keescook@chromium.org>, Daniel Diaz <daniel.diaz@linaro.org>, David Gow
+ <davidgow@google.com>, Arthur Grillo <arthurgrillo@riseup.net>, Brendan
+ Higgins <brendan.higgins@linux.dev>, Naresh Kamboju
+ <naresh.kamboju@linaro.org>, Maarten Lankhorst
+ <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
+ Ville =?ISO-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>, Daniel
+ Vetter <daniel@ffwll.ch>, Thomas Zimmermann <tzimmermann@suse.de>, Guenter
+ Roeck <linux@roeck-us.net>, Alessandro Carminati
+ <alessandro.carminati@gmail.com>, Jani Nikula <jani.nikula@intel.com>,
+ dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
+ linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+ linux-sh@vger.kernel.org, loongarch@lists.linux.dev, x86@kernel.org
+Subject: Re: [PATCH v4 00/14] Add support for suppressing warning backtraces
+Message-Id: <20250425193249.78b45d2589575c15f483c3d8@linux-foundation.org>
+In-Reply-To: <20250313114329.284104-1-acarmina@redhat.com>
+References: <20250313114329.284104-1-acarmina@redhat.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 1/2] net: mscc: ocelot: delete PVID VLAN when readding it
- as non-PVID
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <174563283725.3899759.11491606624304284418.git-patchwork-notify@kernel.org>
-Date: Sat, 26 Apr 2025 02:00:37 +0000
-References: <20250424223734.3096202-1-vladimir.oltean@nxp.com>
-In-Reply-To: <20250424223734.3096202-1-vladimir.oltean@nxp.com>
-To: Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc: netdev@vger.kernel.org, claudiu.manoil@nxp.com,
- alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
- idosch@nvidia.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello:
+On Thu, 13 Mar 2025 11:43:15 +0000 Alessandro Carminati <acarmina@redhat.com> wrote:
 
-This series was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+> Some unit tests intentionally trigger warning backtraces by passing bad
+> parameters to kernel API functions. Such unit tests typically check the
+> return value from such calls, not the existence of the warning backtrace.
 
-On Fri, 25 Apr 2025 01:37:33 +0300 you wrote:
-> The following set of commands:
-> 
-> ip link add br0 type bridge vlan_filtering 1 # vlan_default_pvid 1 is implicit
-> ip link set swp0 master br0
-> bridge vlan add dev swp0 vid 1
-> 
-> should result in the dropping of untagged and 802.1p-tagged traffic, but
-> we see that it continues to be accepted. Whereas, had we deleted VID 1
-> instead, the aforementioned dropping would have worked
-> 
-> [...]
+I've had this series in mm.git's mm-new branch for a while.  I didn't
+send it up for 6.15-rc1 due to what I believe to be unresolved review
+issues.
 
-Here is the summary with links:
-  - [net,1/2] net: mscc: ocelot: delete PVID VLAN when readding it as non-PVID
-    https://git.kernel.org/netdev/net/c/5ec6d7d737a4
-  - [net,2/2] selftests: net: bridge_vlan_aware: test untagged/8021p-tagged with and without PVID
-    https://git.kernel.org/netdev/net/c/bf9de1dcd0ee
+I'll drop this v4 series.  Please resend if/when suitable.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Some notes I have taken are:
 
+https://lkml.kernel.org/r/202504190918.JLNuRGVb-lkp@intel.com
+https://lkml.kernel.org/r/20250402074550.GQ5880@noisy.programming.kicks-ass.net
+#arm64-add-support-for-suppressing-warning-backtraces.patch: check review
 
+Some fixes I had merged which presumably should be carried forward are
+https://lore.kernel.org/all/20250330212934.3F898C4CEDD@smtp.kernel.org/T/
+https://lkml.kernel.org/r/20250330212739.85827C4CEDD@smtp.kernel.org
+
+Thanks.
 
