@@ -1,165 +1,111 @@
-Return-Path: <linux-kselftest+bounces-31734-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31735-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C3FBA9E008
-	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Apr 2025 08:46:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 599F9A9E019
+	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Apr 2025 09:00:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A0AA1764E2
-	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Apr 2025 06:46:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3027F3BBB22
+	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Apr 2025 06:59:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F810247299;
-	Sun, 27 Apr 2025 06:45:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C62E2417D4;
+	Sun, 27 Apr 2025 06:59:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IiuJCj6s"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 086212405FD;
-	Sun, 27 Apr 2025 06:45:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B8DD1CAA4;
+	Sun, 27 Apr 2025 06:59:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745736349; cv=none; b=Y8SKAv7gvm8gQoDpfu+tTjVNaUBmkysRoi0C6vtJ74YFPIiQHn/sONevx68unVX5Z1woTophToToMjKMpjaB14ULS0HhFTLQvISZTaScK5COIu3w7Ly52J39vzl20enOem+AH0TXaBt5bCCf3PaFWLjE88SQY/tIJGnFsCLor/8=
+	t=1745737199; cv=none; b=HQgNFqFVWobKKU1BYhjjEWkFIQC/6/z1RCIiPjLlnwx5jS5pHBWoEind7YNpPrybH14Z4JZYyhchTlRRdJSurnOw9nfVzvY34rMxhoo3WW+uyebVFlOcAHa+PL3sv5c0exl4VP2SKjECUunFm3foiIaPHJydHSJt+fL/F9p1rzQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745736349; c=relaxed/simple;
-	bh=xAFt1t5t91E2VR8t2Y/U9IX1xisZ2FOxC/g5KDYuvUo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=rp1+42lo9OlQjfZrJc/qAbNF5V3ceoNZM/nZcUu8O1InayTj+cvwby7jrt3f3/7UuMaYIGTktk8gD7TD7e5L9VQwRI2YgkeOt3kT5Yf2oeXvAuwAXrzFGnBRXfg0+iHEOlvktXFg3Aee4K7tyLJongBI5ahc9RZjAPpT6id7f5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [10.2.5.213])
-	by gateway (Coremail) with SMTP id _____8AxbeKZ0g1oAhzHAA--.29900S3;
-	Sun, 27 Apr 2025 14:45:45 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.2.5.213])
-	by front1 (Coremail) with SMTP id qMiowMDxu8SP0g1oAEKYAA--.52357S7;
-	Sun, 27 Apr 2025 14:45:44 +0800 (CST)
-From: Bibo Mao <maobibo@loongson.cn>
-To: Paolo Bonzini <pbonzini@redhat.com>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Sean Christopherson <seanjc@google.com>
-Cc: Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v11 5/5] KVM: selftests: Add test cases for LoongArch
-Date: Sun, 27 Apr 2025 14:45:35 +0800
-Message-Id: <20250427064535.242404-6-maobibo@loongson.cn>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <20250427064535.242404-1-maobibo@loongson.cn>
-References: <20250427064535.242404-1-maobibo@loongson.cn>
+	s=arc-20240116; t=1745737199; c=relaxed/simple;
+	bh=WPVNiPXysA+ZKbcBuVxOUqy7B0r28vdmFSIesJvE8b0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TLbKQrx67SoIDSBdOVlcGo0luYt3ruX+cC+y4eJtRKB02/hIJAtfTOAroC8mAT4SjI8XxLK6J5mkU4Bfb4Wd9idDhxkoCvvqMrJx4qE5SWryoAGH2GaO/zUYP+ZJHeLDHmUb0foZw4/gX/99k3ntSmKgfJA4w+uNKKGuV9GtObU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IiuJCj6s; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1745737197; x=1777273197;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=WPVNiPXysA+ZKbcBuVxOUqy7B0r28vdmFSIesJvE8b0=;
+  b=IiuJCj6sUEdUdqrXmghiZw5SNqOZF8xqpg5/DwJ89XH4mR42KWCOGlws
+   R9Z+4yF4mFTBsHvzQXDRtcxFXwNJ4lor9cSrswJyh6/np+zSLsao0wZNE
+   MgvvlAX8X4mKkLVafjFI5GGrQHLdydUF7mxGeR0pAomd/WlP7kSplt6j5
+   JPS8HoLT49IGjEVD9sO57qrQOWy4OSAL/TCASwtFYotlZkKUnvXcnpRrM
+   XhbJepYa26l7bW4X8sZqGklMqXuvv76U5oj9eefo5c4Gu3oCxPMZh8ot8
+   FH9gtV0+097gpSs7ayfjSeMVBsf/UJv7SoEFtFxKXE7m1QcC/lVPRbb4s
+   w==;
+X-CSE-ConnectionGUID: HkDl3RIyTlmjIwFnB7sf+g==
+X-CSE-MsgGUID: BFEFsiaZRwOxoqNxwc1Tjg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11415"; a="47230524"
+X-IronPort-AV: E=Sophos;i="6.15,243,1739865600"; 
+   d="scan'208";a="47230524"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2025 23:59:56 -0700
+X-CSE-ConnectionGUID: d1ZTnjH0RQyh27Uc3LKjrw==
+X-CSE-MsgGUID: v/r5yexURzibspAZ8Nkryw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,243,1739865600"; 
+   d="scan'208";a="138394240"
+Received: from allen-sbox.sh.intel.com (HELO [10.239.159.30]) ([10.239.159.30])
+  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2025 23:59:49 -0700
+Message-ID: <9737606f-d3af-4c20-b1ce-7c705a7c8590@linux.intel.com>
+Date: Sun, 27 Apr 2025 14:55:40 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowMDxu8SP0g1oAEKYAA--.52357S7
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-	ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
-	nUUI43ZEXa7xR_UUUUUUUUU==
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 05/22] iommufd: Add iommufd_struct_destroy to revert
+ iommufd_viommu_alloc
+To: Nicolin Chen <nicolinc@nvidia.com>, jgg@nvidia.com, kevin.tian@intel.com,
+ corbet@lwn.net, will@kernel.org
+Cc: bagasdotme@gmail.com, robin.murphy@arm.com, joro@8bytes.org,
+ thierry.reding@gmail.com, vdumpa@nvidia.com, jonathanh@nvidia.com,
+ shuah@kernel.org, jsnitsel@redhat.com, nathan@kernel.org,
+ peterz@infradead.org, yi.l.liu@intel.com, mshavit@google.com,
+ praan@google.com, zhangzekun11@huawei.com, iommu@lists.linux.dev,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, patches@lists.linux.dev, mochs@nvidia.com,
+ alok.a.tiwari@oracle.com, vasant.hegde@amd.com
+References: <cover.1745646960.git.nicolinc@nvidia.com>
+ <3d8c60fe9f1cdaecd59ce3e395eb6ca029ca8ded.1745646960.git.nicolinc@nvidia.com>
+Content-Language: en-US
+From: Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <3d8c60fe9f1cdaecd59ce3e395eb6ca029ca8ded.1745646960.git.nicolinc@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Some common KVM test cases are supported on LoongArch now as following:
-  coalesced_io_test
-  demand_paging_test
-  dirty_log_perf_test
-  dirty_log_test
-  guest_print_test
-  hardware_disable_test
-  kvm_binary_stats_test
-  kvm_create_max_vcpus
-  kvm_page_table_test
-  memslot_modification_stress_test
-  memslot_perf_test
-  set_memory_region_test
-And other test cases are not supported by LoongArch such as rseq_test,
-since it is not supported on LoongArch physical machine either.
+On 4/26/25 13:58, Nicolin Chen wrote:
+> An IOMMU driver that allocated a vIOMMU may want to revert the allocation,
+> if it encounters an internal error after the allocation. So, there needs a
+> destroy helper for drivers to use.
 
-Signed-off-by: Bibo Mao <maobibo@loongson.cn>
----
- MAINTAINERS                                    |  2 ++
- tools/testing/selftests/kvm/Makefile           |  2 +-
- tools/testing/selftests/kvm/Makefile.kvm       | 18 ++++++++++++++++++
- .../selftests/kvm/set_memory_region_test.c     |  2 +-
- 4 files changed, 22 insertions(+), 2 deletions(-)
+A brief explanation or a small code snippet illustrating a typical
+allocation and potential abort scenario would be helpful.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 3cbf9ac0d83f..20cb455e0821 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13043,6 +13043,8 @@ F:	Documentation/virt/kvm/loongarch/
- F:	arch/loongarch/include/asm/kvm*
- F:	arch/loongarch/include/uapi/asm/kvm*
- F:	arch/loongarch/kvm/
-+F:	tools/testing/selftests/kvm/*/loongarch/
-+F:	tools/testing/selftests/kvm/lib/loongarch/
- 
- KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)
- M:	Huacai Chen <chenhuacai@kernel.org>
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 20af35a91d6f..d9fffe06d3ea 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -3,7 +3,7 @@ top_srcdir = ../../../..
- include $(top_srcdir)/scripts/subarch.include
- ARCH            ?= $(SUBARCH)
- 
--ifeq ($(ARCH),$(filter $(ARCH),arm64 s390 riscv x86 x86_64))
-+ifeq ($(ARCH),$(filter $(ARCH),arm64 s390 riscv x86 x86_64 loongarch))
- # Top-level selftests allows ARCH=x86_64 :-(
- ifeq ($(ARCH),x86_64)
- 	ARCH := x86
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index f62b0a5aba35..7985bb42d2c1 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -47,6 +47,10 @@ LIBKVM_riscv += lib/riscv/handlers.S
- LIBKVM_riscv += lib/riscv/processor.c
- LIBKVM_riscv += lib/riscv/ucall.c
- 
-+LIBKVM_loongarch += lib/loongarch/processor.c
-+LIBKVM_loongarch += lib/loongarch/ucall.c
-+LIBKVM_loongarch += lib/loongarch/exception.S
-+
- # Non-compiled test targets
- TEST_PROGS_x86 += x86/nx_huge_pages_test.sh
- 
-@@ -190,6 +194,20 @@ TEST_GEN_PROGS_riscv += coalesced_io_test
- TEST_GEN_PROGS_riscv += get-reg-list
- TEST_GEN_PROGS_riscv += steal_time
- 
-+TEST_GEN_PROGS_loongarch += coalesced_io_test
-+TEST_GEN_PROGS_loongarch += demand_paging_test
-+TEST_GEN_PROGS_loongarch += dirty_log_perf_test
-+TEST_GEN_PROGS_loongarch += dirty_log_test
-+TEST_GEN_PROGS_loongarch += demand_paging_test
-+TEST_GEN_PROGS_loongarch += guest_print_test
-+TEST_GEN_PROGS_loongarch += hardware_disable_test
-+TEST_GEN_PROGS_loongarch += kvm_binary_stats_test
-+TEST_GEN_PROGS_loongarch += kvm_create_max_vcpus
-+TEST_GEN_PROGS_loongarch += kvm_page_table_test
-+TEST_GEN_PROGS_loongarch += memslot_modification_stress_test
-+TEST_GEN_PROGS_loongarch += memslot_perf_test
-+TEST_GEN_PROGS_loongarch += set_memory_region_test
-+
- SPLIT_TESTS += arch_timer
- SPLIT_TESTS += get-reg-list
- 
-diff --git a/tools/testing/selftests/kvm/set_memory_region_test.c b/tools/testing/selftests/kvm/set_memory_region_test.c
-index bc440d5aba57..ce3ac0fd6dfb 100644
---- a/tools/testing/selftests/kvm/set_memory_region_test.c
-+++ b/tools/testing/selftests/kvm/set_memory_region_test.c
-@@ -350,7 +350,7 @@ static void test_invalid_memory_region_flags(void)
- 	struct kvm_vm *vm;
- 	int r, i;
- 
--#if defined __aarch64__ || defined __riscv || defined __x86_64__
-+#if defined __aarch64__ || defined __riscv || defined __x86_64__ || defined __loongarch__
- 	supported_flags |= KVM_MEM_READONLY;
- #endif
- 
--- 
-2.39.3
+> Move iommufd_object_abort() to the driver.c file and the public header, to
+> introduce common iommufd_struct_destroy() helper that will abort all kinds
+> of driver structures, not confined to iommufd_viommu but also the new ones
+> being added in the future.
+> 
+> Reviewed-by: Jason Gunthorpe<jgg@nvidia.com>
+> Signed-off-by: Nicolin Chen<nicolinc@nvidia.com>
 
+Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
+
+Thanks,
+baolu
 
