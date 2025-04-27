@@ -1,125 +1,126 @@
-Return-Path: <linux-kselftest+bounces-31736-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31737-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCC8CA9E066
-	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Apr 2025 09:26:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B7942A9E20C
+	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Apr 2025 11:31:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3FE9117DA42
-	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Apr 2025 07:26:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 489E146667C
+	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Apr 2025 09:28:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BC822459D1;
-	Sun, 27 Apr 2025 07:26:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9144124EF85;
+	Sun, 27 Apr 2025 09:23:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ow5hOO3d"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gM16h1RP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B635B10E0;
-	Sun, 27 Apr 2025 07:26:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED80E24C098
+	for <linux-kselftest@vger.kernel.org>; Sun, 27 Apr 2025 09:23:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745738790; cv=none; b=JuknIHekORO42Qr5LTrrYTWUueHVuVH2y5lpZk7aYZrhbrYkZ5/LZIw4FDLSzw4KFf9K4CfXzdliV1/N2kwTlAk7vNan8fVHye46HSZ+sBlrmsmka41Mx4QmxUG4HwcE36vEk9gLi8ajG727Y+ufhEpKKdDYXY+1+jFj3D8csxQ=
+	t=1745745784; cv=none; b=D3fdORD0i0kpXtCNNmemXlfA5gTTZqO6lRV1guiyuP6/jJdG1/vhpuytHxV81tUk4GdcshVtpbOhKGRsEAZUMxZeqQpDkv/IUqG5R7su0a8vuH+1E+idXxCFlpOcF9v1TFWlsNB9fxpDtUyGytAX7mlSQ4S4c03asn4hE1KcqtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745738790; c=relaxed/simple;
-	bh=Jmn+u6fFBrsun9XakIeVgT39XGKP2ToxwISS/MEt76w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fZ16HpEF3FsPMKyaTKZuGPS1TWlTSW6/kH+eDlYpYi6lpcQ+eqI1IBL6+Yx+99KlaeMRZNGqHLdFGK/KSnnZ3DtPoYEzFkcThEnEbAlfse8NQqSl4uK9SuHBUCXI6M0rL0nXuBAzdhn2fd3ZxVt4rYB97QEJuUk1Oe9F6WNhNHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ow5hOO3d; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745738789; x=1777274789;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Jmn+u6fFBrsun9XakIeVgT39XGKP2ToxwISS/MEt76w=;
-  b=Ow5hOO3dYdPH0bm9AffH6yeAFD7CCB0RIYwBaD2sFblt8KuyX2XRiK8t
-   M63DFWJ2N1cU7Gi4dOBQyCdq+sBMmrrDtO6U24dE5FVSUY2C43vHTadZq
-   swYAasRJ6lecXN4KTQ+DdBmATuzBRoaLMirCjJK25DE1vU6ABw2IzHGht
-   3DQBnyc04vtGl3oD+Zr9Qgj+EwQPb3HTAx16dowlH3JbZIbAQwiQkV0hx
-   XWWpelvGb+iUpfckbXNdNS3AUV+SnnY3dh6QSCTodkglgTCvaeGIGFtF6
-   MOBrgenJz10QDSIo59+a4G7CiMqKNEVGy9rxtG/jIv4/a3mfkJP9B86S3
-   Q==;
-X-CSE-ConnectionGUID: SkYzLka3Rden+VeSTREfmQ==
-X-CSE-MsgGUID: EVpScRpuSgyfLGkk0neDug==
-X-IronPort-AV: E=McAfee;i="6700,10204,11415"; a="58710628"
-X-IronPort-AV: E=Sophos;i="6.15,243,1739865600"; 
-   d="scan'208";a="58710628"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2025 00:26:28 -0700
-X-CSE-ConnectionGUID: tjr0bvpUSgWfm/XawVYnrA==
-X-CSE-MsgGUID: OXjYL/GnT9ykpQQNpcmQ5A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,243,1739865600"; 
-   d="scan'208";a="164217471"
-Received: from allen-sbox.sh.intel.com (HELO [10.239.159.30]) ([10.239.159.30])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2025 00:26:22 -0700
-Message-ID: <376566b4-6c13-45ad-b1e5-8cfe2de437bc@linux.intel.com>
-Date: Sun, 27 Apr 2025 15:22:13 +0800
+	s=arc-20240116; t=1745745784; c=relaxed/simple;
+	bh=WZ/aViUI4SyDQrmZUo2zgeycetmsihbA8iFnIGRSmJM=;
+	h=Date:Mime-Version:Message-ID:Subject:From:Cc:Content-Type; b=Ne6EqeP1eHQaqWat7R3ZEL6VkQFxNdjonYJE9TYdjfe++QB+x8sTRIy1ea/Li6px4+eaC+iaSkvr/ofp6F4BPM2TP4wyFhRKrVSt2jilYzHlr8YZsMA6PgGOh6cJOL30AdLjwV3TIga51JpFds0OOR6Cw82uQWK2kfbd7UTXm6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--nkapron.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gM16h1RP; arc=none smtp.client-ip=209.85.210.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--nkapron.bounces.google.com
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-73917303082so2512126b3a.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 27 Apr 2025 02:23:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1745745782; x=1746350582; darn=vger.kernel.org;
+        h=cc:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=PvB0WFJ8LpaALOYW8Xx/CWM6owL785SHgzuXle7StY8=;
+        b=gM16h1RP3bFG/l55L4AsvWk9oPA86Z+GT0D0wXwiB+szdPDF0poQFNwDy+RO6w5bNF
+         OhTSfDgl0xwbTK2HIuNZFloAB/YmmFvaFuFm4fciIL1VF5dAMzxArfe5+DYTrUNo7u96
+         rsEbfEQ9s6+5T12/4yw9HKKP/QVJWSzMN+IrYY0OBvXCiTCq6vjOXimVstbxJYvqNeuT
+         jn4cYgZAoL1qdqYtYBU8lPs+XQAqZ2hAuflSaVjD3+Hbjhh0KX7Ek5q/M8W1ak37ZTWZ
+         tGjoIyOmkvv3xw4hoefLmuS0Ir+Z060aICrUaj/JNpLD+bZl2roECnWuCaz9vl+Krq4i
+         sKVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745745782; x=1746350582;
+        h=cc:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PvB0WFJ8LpaALOYW8Xx/CWM6owL785SHgzuXle7StY8=;
+        b=US7IaXX/7ZhJu2FrqwH9ZtrInZwz2Oj2qZYpkpt66Sr9kUmmC2fsRB/QKTeFJQPQzh
+         6OU1XyrkDbdaTkZyyEHHauGkyT5HveulPwxHziYKQLTgzf6+CJkF1fXQpg7H2UOWcN9Z
+         9gzwoHMsjPFdDiSsxddTCwUx6C4uNnaeQEmL/aotaORqqtXKfZQ2b1/bJQA0rgD/MR+1
+         Rl6ssetQahaDLAHN3ipCJajOqzdri/qHAIi5dvKhweDS8gAIgWYz4VQzsA6ev23xo32W
+         doag/k82HNmUYXWHKVZOp8KZPrmmqx7/Vi4zg3rBrybUiM0n+UPsakbm4Qkz9DD8V9+O
+         bCJA==
+X-Forwarded-Encrypted: i=1; AJvYcCUssaSPmVDpcLfXu95MzFkhKAW4i+Bn6oQiRXpTN/+Kj5EFRFULnna8wpBvQHfs7nsqLimez86nYzSofvlTuJ0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwLB+ZdpeTsTEg8LIandCLfsnby4Yhf1WVzcg+HmoWyjzE7xMC/
+	r0rAljQdmQ9ovLlXvp32kb6TmHh1HDiK7juqweIpFHObtYk0FKz8BZswdD3hLsDah732FcD2Oz4
+	G6yFZFA==
+X-Google-Smtp-Source: AGHT+IEC4fmk5RMrs7/B+YYVWJOa7hQpxIGr9ZZpihwteVlFumQgJhCsLJ6cnOjAFz222TCymBv/P8REh+hL
+X-Received: from pfbkr16.prod.google.com ([2002:a05:6a00:4b50:b0:73e:780:270e])
+ (user=nkapron job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:1490:b0:736:5dc6:a14b
+ with SMTP id d2e1a72fcca58-73ff72ce6c3mr6571771b3a.13.1745745782292; Sun, 27
+ Apr 2025 02:23:02 -0700 (PDT)
+Date: Sun, 27 Apr 2025 09:21:19 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 08/22] iommufd: Abstract iopt_pin_pages and
- iopt_unpin_pages helpers
-To: Nicolin Chen <nicolinc@nvidia.com>, jgg@nvidia.com, kevin.tian@intel.com,
- corbet@lwn.net, will@kernel.org
-Cc: bagasdotme@gmail.com, robin.murphy@arm.com, joro@8bytes.org,
- thierry.reding@gmail.com, vdumpa@nvidia.com, jonathanh@nvidia.com,
- shuah@kernel.org, jsnitsel@redhat.com, nathan@kernel.org,
- peterz@infradead.org, yi.l.liu@intel.com, mshavit@google.com,
- praan@google.com, zhangzekun11@huawei.com, iommu@lists.linux.dev,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
- linux-kselftest@vger.kernel.org, patches@lists.linux.dev, mochs@nvidia.com,
- alok.a.tiwari@oracle.com, vasant.hegde@amd.com
-References: <cover.1745646960.git.nicolinc@nvidia.com>
- <d44272c153e7596c3cef716044de3dc6c2a8254a.1745646960.git.nicolinc@nvidia.com>
-Content-Language: en-US
-From: Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <d44272c153e7596c3cef716044de3dc6c2a8254a.1745646960.git.nicolinc@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.49.0.850.g28803427d3-goog
+Message-ID: <20250427092134.3482407-1-nkapron@google.com>
+Subject: [PATCH] selftests/seccomp: fix syscall_restart test for arm compat
+From: FirstName LastName <nkapron@google.com>
+Cc: nkapron@google.com, Kees Cook <kees@kernel.org>, 
+	Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 4/26/25 13:58, Nicolin Chen wrote:
-> The new vCMDQ object will be added for HW to access the guest memory for a
-> HW-accelerated virtualization feature. It needs to ensure the guest memory
-> pages are pinned when HW accesses them and they are contiguous in physical
-> address space.
-> 
-> This is very like the existing iommufd_access_pin_pages() that outputs the
-> pinned page list for the caller to test its contiguity.
-> 
-> Move those code from iommufd_access_pin/unpin_pages() and related function
-> for a pair of iopt helpers that can be shared with the vCMDQ allocator. As
-> the vCMDQ allocator will be a user-space triggered ioctl function, WARN_ON
-> would not be a good fit in the new iopt_unpin_pages(), thus change them to
-> use WARN_ON_ONCE instead.
+From: Neill Kapron <nkapron@google.com>
 
-I'm uncertain, but perhaps pr_warn_ratelimited() would be a better
-alternative to WARN_ON() here? WARN_ON_ONCE() generates warning messages
-with kernel call traces in the kernel messages, which might lead users
-to believe that something serious has happened in the kernel.
+The inconsistencies in the systcall ABI between arm and arm-compat can
+can cause a failure in the syscall_restart test due to the logic
+attempting to work around the differences. The 'machine' field for an
+ARM64 device running in compat mode can report 'armv8l' or 'armv8b'
+which matches with the string 'arm' when only examining the first three
+characters of the string.
 
-> 
-> Rename check_area_prot() to align with the existing iopt_area helpers, and
-> inline it to the header since iommufd_access_rw() still uses it.
-> 
-> Signed-off-by: Nicolin Chen<nicolinc@nvidia.com>
-> ---
->   drivers/iommu/iommufd/io_pagetable.h    |   8 ++
->   drivers/iommu/iommufd/iommufd_private.h |   6 ++
->   drivers/iommu/iommufd/device.c          | 117 ++----------------------
->   drivers/iommu/iommufd/io_pagetable.c    |  95 +++++++++++++++++++
->   4 files changed, 117 insertions(+), 109 deletions(-)
+This change adds additional validation to the workaround logic to make
+sure we only take the arm path when running natively, not in arm-compat.
 
-Thanks,
-baolu
+Fixes: 256d0afb11d6 ("selftests/seccomp: build and pass on arm64")
+Signed-off-by: Neill Kapron <nkapron@google.com>
+---
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index b2f76a52215a..53bf6a9c801f 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -3166,12 +3166,15 @@ TEST(syscall_restart)
+ 	ret = get_syscall(_metadata, child_pid);
+ #if defined(__arm__)
+ 	/*
+-	 * FIXME:
+ 	 * - native ARM registers do NOT expose true syscall.
+ 	 * - compat ARM registers on ARM64 DO expose true syscall.
++	 * - values of utsbuf.machine include 'armv8l' or 'armb8b'
++	 *   for ARM64 running in compat mode.
+ 	 */
+ 	ASSERT_EQ(0, uname(&utsbuf));
+-	if (strncmp(utsbuf.machine, "arm", 3) == 0) {
++	if ((strncmp(utsbuf.machine, "arm", 3) == 0) &&
++	    (strncmp(utsbuf.machine, "armv8l", 6) != 0) &&
++	    (strncmp(utsbuf.machine, "armv8b", 6) != 0)) {
+ 		EXPECT_EQ(__NR_nanosleep, ret);
+ 	} else
+ #endif
+-- 
+2.49.0.850.g28803427d3-goog
+
 
