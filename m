@@ -1,130 +1,174 @@
-Return-Path: <linux-kselftest+bounces-31739-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31740-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7282EA9E276
-	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Apr 2025 12:27:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2C43A9E412
+	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Apr 2025 19:24:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BDFD41746A8
-	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Apr 2025 10:27:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D1875189BB2B
+	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Apr 2025 17:24:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFBF823FC66;
-	Sun, 27 Apr 2025 10:26:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67AD11DFDB9;
+	Sun, 27 Apr 2025 17:24:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DWTN4r51"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U7i3EM+9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f195.google.com (mail-pg1-f195.google.com [209.85.215.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52EF5189B9D;
-	Sun, 27 Apr 2025 10:26:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C71A8F6B;
+	Sun, 27 Apr 2025 17:24:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745749617; cv=none; b=Treri3j6Et+MNRwHXlyXBB4a4/625iUC5F/8JvGY4H66v6QFzLlI/ETkR075UaDNBsBFPRyaxdc5ZGrAiplDa9+z8I/YUsY1wh4fxge1fBoWiqUuqUA8R4JBl9HNQvJcOXj/0GBmhuDkMeJMyIiZnGynOGm6B2X9IQp7RsSmsZ0=
+	t=1745774654; cv=none; b=jczCPckmgp5rCU35wz0B44Pu2BAWwzDEHDwt/+1ZBN6hfTzec3UbLkh5VyQ38Nv2H+uUt1M10cnruJcs3xj4I4U86ZLFvff7PFYSWUOkJmaaGpNh+zzZL/9yTnWxMbgGz97V+8RZ0fJzMS04+wVbRTSriaOnn4BZhhL2RTKx3Qg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745749617; c=relaxed/simple;
-	bh=L/7d+0sCrBkkhNvjbYbI7sHyU7E2+1tFiqTht7ojsAk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XM07ApzHLm/1LFmDxHNoSpLgcHB8VtcHE9KIK83EHeQEpBRWyvys4gN5MGQtdw14c0Gzhe7AtNEewWoKoYzYUDDHHayfJYuTS8V4R6bKtDM6YyvLjVGSstiZtqoqejkutJ9dynkPK+NZOWz0Qr7utT0WBkCO/jfBmPPFgS8qMd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DWTN4r51; arc=none smtp.client-ip=209.85.215.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f195.google.com with SMTP id 41be03b00d2f7-af548cb1f83so3985412a12.3;
-        Sun, 27 Apr 2025 03:26:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745749615; x=1746354415; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rG4wi/dNPtItNd0KVOI4rRQ1RlH3zfmT05+Zcy25VSA=;
-        b=DWTN4r51yQSkmXrMvorjiweu3Yt2FuxyJ8cnYCTRxCe73Ole1pTGtoDeNZIZQM5o61
-         /sjOthSn69iLVF1AUmylX5QTIP414Vj7HBv/XaYvWIUNuBMt2ZbDsD8/0NGEPr5Xyv2k
-         TpsT0LsrN71/6ODsCkGC2oKWH9coPaSkn2n0QdheyG9W8Nvmh5lrRxZnDnhsBCr00OXQ
-         H3rDn3ABoB+xt5foUCbuVNJjQzQMNRfWvM1mDAnIqFc0rqvr6IfbzPAUlKrrTx1bUXpQ
-         UkXe0DIBNi1Vo1d8uzzuS4gnraEWv+cfMY1c8di79NQKXHcSdY+oxo1DePIqBxvVcSgb
-         lvuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745749615; x=1746354415;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rG4wi/dNPtItNd0KVOI4rRQ1RlH3zfmT05+Zcy25VSA=;
-        b=LPbB8EDc2A6PafptjRaX5T7eN74idT/NJqCNzKh4Jn9ivA+1Bbkor9qDfT8US8etWQ
-         GVc7dPMmJwgYAxSxPjRgfcl+piq64APsagOiaEW0jq1C8qviw7deAjNhXug8kaaR49of
-         lQbpDr5ZdLrXj85NygOU38bHCWdvzFHDF4ETKfnr/qtsn4E6TP7tRB4YQCBdfQqnmq5I
-         e58kaLuZLgm3PdeId2jwctQP/EQfIf5sgQBO291yudz3A1hySyKO90xynHe52sbJ5ZEC
-         RIC6NiyTkGCA9Y2QCQIZZFP7mVxdPZ9QarLOKNFyWu7RiBsPx+Lkv+qCWIQ3Xck4XCOz
-         Xq6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWVd/4pdvXmRRSRdee86Uj7eXjNJQXaUHmpETOUlfIGrujCRywoWu+Aiz8df41rzrbDIm1f8TSYSt1NnoecvXpq@vger.kernel.org, AJvYcCXozU3fK70AaOXjJPTmzDefhsXutv2CGP8gHMGGPYtSm2sbbCi4Dea9tEqj46vG7GGBGn3n2CD9aRqmBm8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzaVQZUgQhEGbQ5XqicVImA6MGigwGGyzzhPHH7BMcHoq4P4x09
-	rH4gAaQhI41W4zSDrM+0rA7cu1fKdAmXXpvxP8euTlGJ4VNd9wKt
-X-Gm-Gg: ASbGncuvYkXqXATxqvuBub/Kvzq22PX8hjEDA3f6Q0WAWVQDvXMEgUW1rGddE7FjFOF
-	7Lsb4qn5FQDq8Zimcl/BSw5CbB6mYz8wzK37ZwWgoWwu0NskRcjeK8cx8cG8eTmd+dJ/6pwQjsi
-	SNETH/+agslV5TVOcx40+d2jRu5GVIt1i9m1uRPvtfVfXSQ0ByjpxNr2ulvahUiTwQlvpq+wkUC
-	xALpY1vhXvfNS0h2je91Mlslq7/VTc3cf2aNBbgnuFu3ZjNnS2pQ+wN/o1bdt46DLCA+HqAwnE6
-	jL68TJhTxNEdQiptVM1sSFpLD+77yE0cl6QRHaLaIsTKey8PJHEo4wSlrHE=
-X-Google-Smtp-Source: AGHT+IGUa2Tx/EYX0ogpIqp9guU98wCtywVQo/NXZ5wFhd6QoXBDnQgp7Xjl56+ehyjTtG3Uj0Ld+Q==
-X-Received: by 2002:a17:903:3d0e:b0:229:1717:8812 with SMTP id d9443c01a7336-22dc6826e1dmr85333375ad.0.1745749615424;
-        Sun, 27 Apr 2025 03:26:55 -0700 (PDT)
-Received: from sid-Inspiron-15-3525.. ([106.222.229.88])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22db5221677sm61672545ad.248.2025.04.27.03.26.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Apr 2025 03:26:55 -0700 (PDT)
-From: Siddarth G <siddarthsgml@gmail.com>
-To: akpm@linux-foundation.org
-Cc: shuah@kernel.org,
-	linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1745774654; c=relaxed/simple;
+	bh=zlvI/OsYZS9TORbwigHYcZcf8vMrlAxBIJ912DxqI+s=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=cTImJn1YYcTLdAzkfq7tnD+2rtPXZVU5I7fzaCdA+JSpAmo4fi05gpvF2+nITohZao1sUvII/IsTzZAZSPjFPJBTI17wN1xu2sdiREmh8jPUtAcfljFzCYEJpM59I0lCc3q6cqpqrZ335cpzhpiXZ3Kc0zF6X8+dCh6BBLm/BHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U7i3EM+9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DE67C4CEE3;
+	Sun, 27 Apr 2025 17:24:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745774653;
+	bh=zlvI/OsYZS9TORbwigHYcZcf8vMrlAxBIJ912DxqI+s=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=U7i3EM+93tP91zykMn38I1S5J7RHxE9UAZKjLXNt0GKMtIeBPVqPoUS8NXLhRP+0c
+	 dUsZy32Re3q8yTJT2ilO+nWtEaPcmbWplPelWY9zToczEYe6SzBQrIRzyWRViywIVE
+	 dExFK5kg+qJYFeRlT4USTGViT/OnZLxcDCDSVXzXLeyPiPjzLlt8UXHv5SZnBA1YUx
+	 TbBLTdxTFKhb8kJuatMKobRdnwy2Rsir5+kh2P1BZwCVNqqRvwuah+b76aA7vHTyJy
+	 04JRKeIHNC3Lr76RDEc4NTccAMlPAQnug4wty70mBHv6NizQkCXDfGyqowqJsd1sS3
+	 MOIxgxxileqxw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1u95jf-009JnY-Df;
+	Sun, 27 Apr 2025 18:24:11 +0100
+Date: Sun, 27 Apr 2025 18:24:10 +0100
+Message-ID: <86bjshjz5x.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Ben Horgan <ben.horgan@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
 	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	Siddarth G <siddarthsgml@gmail.com>
-Subject: [PATCH] selftests/mm: use long for dwRegionSize
-Date: Sun, 27 Apr 2025 15:56:39 +0530
-Message-ID: <20250427102639.39978-1-siddarthsgml@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	oliver.upton@linux.dev,
+	joey.gouly@arm.com,
+	suzuki.poulose@arm.com,
+	yuzenghui@huawei.com,
+	shuah@kernel.org
+Subject: Re: [RFC PATCH 2/3] KVM: arm64: Make MTE_frac masking conditional on MTE capability
+In-Reply-To: <20250414124059.1938303-3-ben.horgan@arm.com>
+References: <20250414124059.1938303-1-ben.horgan@arm.com>
+	<20250414124059.1938303-3-ben.horgan@arm.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: ben.horgan@arm.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, shuah@kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-Change the type of 'dwRegionSize' in wp_init() and wp_free()
-from int to long to match callers that pass long or
-unsigned long long values.
+On Mon, 14 Apr 2025 13:40:58 +0100,
+Ben Horgan <ben.horgan@arm.com> wrote:
+> 
+> If MTE_frac is masked out unconditionally then the guest will always
+> see ID_AA64PFR1_EL1_MTE_frac as 0. However, a value of 0 when
+> ID_AA64PFR1_EL1_MTE is 2 indicates that MTE_ASYNC is supported. Hence, for
+> a host with ID_AA64PFR1_EL1_MTE==2 and ID_AA64PFR1_EL1_MTE_frac==0xf
+> (MTE_ASYNC unsupported) the guest would see MTE_ASYNC advertised as
+> supported whilst the host does not support it. Hence, expose the sanitised
+> value of MTE_frac to the guest and user-space.
+> 
+> As MTE_frac was previously hidden, always 0, and KVM must accept values
+> from KVM provided by user-space, when ID_AA64PFR1_EL1.MTE is 2 allow
+> user-space to set ID_AA64PFR1_EL1.MTE_frac to 0. However, ignore it to
+> avoid incorrectly claiming hardware support for MTE_ASYNC in the guest.
+> 
+> Note that linux does not check the value of ID_AA64PFR1_EL1_MTE_frac and
+> wrongly assumes that MTE async faults can be generated even on hardware
+> that does nto support them. This issue is not addressed here.
+> 
+> Signed-off-by: Ben Horgan <ben.horgan@arm.com>
+> ---
+>  arch/arm64/kvm/sys_regs.c | 26 ++++++++++++++++++++++++--
+>  1 file changed, 24 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
+> index 005ad28f7306..9ae647082684 100644
+> --- a/arch/arm64/kvm/sys_regs.c
+> +++ b/arch/arm64/kvm/sys_regs.c
+> @@ -1600,13 +1600,14 @@ static u64 __kvm_read_sanitised_id_reg(const struct kvm_vcpu *vcpu,
+>  		val = sanitise_id_aa64pfr0_el1(vcpu, val);
+>  		break;
+>  	case SYS_ID_AA64PFR1_EL1:
+> -		if (!kvm_has_mte(vcpu->kvm))
+> +		if (!kvm_has_mte(vcpu->kvm)) {
+>  			val &= ~ARM64_FEATURE_MASK(ID_AA64PFR1_EL1_MTE);
+> +			val &= ~ARM64_FEATURE_MASK(ID_AA64PFR1_EL1_MTE_frac);
+> +		}
+>
+>  		val &= ~ARM64_FEATURE_MASK(ID_AA64PFR1_EL1_SME);
+>  		val &= ~ARM64_FEATURE_MASK(ID_AA64PFR1_EL1_RNDR_trap);
+>  		val &= ~ARM64_FEATURE_MASK(ID_AA64PFR1_EL1_NMI);
+> -		val &= ~ARM64_FEATURE_MASK(ID_AA64PFR1_EL1_MTE_frac);
+>  		val &= ~ARM64_FEATURE_MASK(ID_AA64PFR1_EL1_GCS);
+>  		val &= ~ARM64_FEATURE_MASK(ID_AA64PFR1_EL1_THE);
+>  		val &= ~ARM64_FEATURE_MASK(ID_AA64PFR1_EL1_MTEX);
+> @@ -1953,11 +1954,32 @@ static int set_id_aa64pfr1_el1(struct kvm_vcpu *vcpu,
+>  {
+>  	u64 hw_val = read_sanitised_ftr_reg(SYS_ID_AA64PFR1_EL1);
+>  	u64 mpam_mask = ID_AA64PFR1_EL1_MPAM_frac_MASK;
+> +	u8 mte = SYS_FIELD_GET(ID_AA64PFR1_EL1, MTE, hw_val);
+> +	u8 user_mte_frac = SYS_FIELD_GET(ID_AA64PFR1_EL1, MTE_frac, user_val);
+>  
+>  	/* See set_id_aa64pfr0_el1 for comment about MPAM */
+>  	if ((hw_val & mpam_mask) == (user_val & mpam_mask))
+>  		user_val &= ~ID_AA64PFR1_EL1_MPAM_frac_MASK;
+>  
+> +	/*
+> +	 * Previously MTE_frac was hidden from guest. However, if the
+> +	 * hardware supports MTE2 but not MTE_ASYM_FAULT then a value
+> +	 * of 0 for this field indicates that the hardware supports
+> +	 * MTE_ASYNC. Whereas, 0xf indicates MTE_ASYNC is not supported.
+> +	 *
+> +	 * As KVM must accept values from KVM provided by user-space,
+> +	 * when ID_AA64PFR1_EL1.MTE is 2 allow user-space to set
+> +	 * ID_AA64PFR1_EL1.MTE_frac to 0. However, ignore it to avoid
+> +	 * incorrectly claiming hardware support for MTE_ASYNC in the
+> +	 * guest.
+> +	 */
+> +
+> +	if (mte == ID_AA64PFR1_EL1_MTE_MTE2 &&
 
-wp_addr_range function is left unchanged because it passes
-'dwRegionSize' parameter directly to pagemap_ioctl, which expects
-an int.
+The spec says that MTE_frac is valid if ID_AA64PFR1_EL1.MTE >= 0b0010.
+Not strictly equal to 0b0010 (which represents MTE2). Crucially, MTE3
+should receive the same treatment.
 
-Signed-off-by: Siddarth G <siddarthsgml@gmail.com>
----
- tools/testing/selftests/mm/pagemap_ioctl.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> +	    user_mte_frac == ID_AA64PFR1_EL1_MTE_frac_ASYNC) {
+> +		user_val &= ~ID_AA64PFR1_EL1_MTE_frac_MASK;
+> +		user_val |= hw_val & ID_AA64PFR1_EL1_MTE_frac_MASK;
 
-diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/testing/selftests/mm/pagemap_ioctl.c
-index 57b4bba2b45f..5773666f07ea 100644
---- a/tools/testing/selftests/mm/pagemap_ioctl.c
-+++ b/tools/testing/selftests/mm/pagemap_ioctl.c
-@@ -112,7 +112,7 @@ int init_uffd(void)
- 	return 0;
- }
- 
--int wp_init(void *lpBaseAddress, int dwRegionSize)
-+int wp_init(void *lpBaseAddress, long dwRegionSize)
- {
- 	struct uffdio_register uffdio_register;
- 	struct uffdio_writeprotect wp;
-@@ -136,7 +136,7 @@ int wp_init(void *lpBaseAddress, int dwRegionSize)
- 	return 0;
- }
- 
--int wp_free(void *lpBaseAddress, int dwRegionSize)
-+int wp_free(void *lpBaseAddress, long dwRegionSize)
- {
- 	struct uffdio_register uffdio_register;
- 
+This means you are unconditionally propagating what the HW supports,
+which feels dodgy, specially considering that we don't know how
+MTE_frac is going to evolve in the future.
+
+I think you should limit the fix to the exact case we're mitigating
+here, not blindly overwrite the guest's view with the HW's capability.
+
+Thanks,
+
+	M.
+
 -- 
-2.43.0
-
+Without deviation from the norm, progress is not possible.
 
