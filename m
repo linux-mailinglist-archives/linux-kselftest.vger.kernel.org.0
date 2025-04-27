@@ -1,92 +1,127 @@
-Return-Path: <linux-kselftest+bounces-31724-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31725-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6051A9DED6
-	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Apr 2025 05:43:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5AE4A9DF9C
+	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Apr 2025 08:31:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 81D087A3C53
-	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Apr 2025 03:42:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B8C15A65DD
+	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Apr 2025 06:30:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED6581E231E;
-	Sun, 27 Apr 2025 03:43:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D16B523FC66;
+	Sun, 27 Apr 2025 06:28:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cyVacN3W"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E62784A00;
-	Sun, 27 Apr 2025 03:43:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D417D23F412;
+	Sun, 27 Apr 2025 06:28:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745725409; cv=none; b=T0Fa1b6FxISkdnor1iDgsSI1KuqkHVeUAKDIwT3KMBysh8wSjmPFvBsBpWsLdmlqqikyt1aXQ5P+J6KwxB8NWXB1cp+yxwe8LK5TSAu4RRjKe0mPV9wgg/6B06rERX+SD5t1g5UIjaLTFlLcc7uwYrBLiEBm6dpp+0PcAmD5dWw=
+	t=1745735292; cv=none; b=f2hbAZE/Ze8P5QslN0VzkxdeihH+NKZ4tjhtojEJyY0+ylaq4A8Er/hnkNamNKU5uysieAI+nCC5LHKaUQU7f6PGsYd9Z9Zh+SnV0bI7s+YJk2ThsUHKf1Oe5KfL2seIna10bbIRuaitMxjhSluGAzAAiSYumRI1NCuNOcz4Yf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745725409; c=relaxed/simple;
-	bh=UM0I+UTBRS4HXc0oTrQwxl9z8J4KqabmORxfiB11FCg=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=Jz6wW7VrGqw40bzwT1Q7X0ObhKK7VMLYDOcQaD958TQEu+GPTjXuO2qpXbX5awN9t4v8V7ptNS1hGEo4vAAF2RCHWKRDsr8gM68ayU/Jt8Joadl8GSQbx6DlUL1nCF6zKm4tjetsXJdk4huZ0hv0M4Y3v4+cm04aoPm+SZnZvYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [10.20.42.62])
-	by gateway (Coremail) with SMTP id _____8CxieDapw1omA_HAA--.23845S3;
-	Sun, 27 Apr 2025 11:43:22 +0800 (CST)
-Received: from [10.20.42.62] (unknown [10.20.42.62])
-	by front1 (Coremail) with SMTP id qMiowMDx_MTXpw1oMvuXAA--.50512S3;
-	Sun, 27 Apr 2025 11:43:21 +0800 (CST)
-Subject: Re: [PATCH v10 2/5] KVM: selftests: Add KVM selftests header files
- for LoongArch
-To: Sean Christopherson <seanjc@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Huacai Chen <chenhuacai@kernel.org>,
- Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
- kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20250421073110.2259397-1-maobibo@loongson.cn>
- <20250421073110.2259397-3-maobibo@loongson.cn> <aAwqAM2JKxpsSWfu@google.com>
-From: bibo mao <maobibo@loongson.cn>
-Message-ID: <55135103-9bdf-6f22-9648-0664263ba00b@loongson.cn>
-Date: Sun, 27 Apr 2025 11:42:15 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1745735292; c=relaxed/simple;
+	bh=a2U2SlgQI1bryyjViVU51BvLU6tMztBGgxaJGgkhS3I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=THnFIOKKMUCVIkPbLYAARwenscE16A/Oj1Wdq43zJ4MwtFQOiry7v0q79EGk7iJ8F6ySPKuKCtWQSESfbDN327uhybo0cz+JBxkMj8I1n9TwY27fli2JfxAHHHjUjc9iHtnSUMHtSasGVcgaKYXNLWulHmzhb8FP4JV0cDAFKic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cyVacN3W; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1745735291; x=1777271291;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=a2U2SlgQI1bryyjViVU51BvLU6tMztBGgxaJGgkhS3I=;
+  b=cyVacN3WuntkTL4jEBmmhEzfMbOrtTyLWL9WMZy7lJEGPKyzCLIiyKxd
+   zg0yQ8OcXJBYW1CUBtGG6gn6HiguqB24oep8MIkhxOeI4rwHe7MAtXcE2
+   7q9l4O48IKWgJI1QckF8lhxZnGjVHyB2CvkpJ14j6tGisoubrQQmKZ9N9
+   hGdjXcjkXirY7K0TjRsdf4hbEm3qSWpkeTTt5EoWZZMh4tArgufR2mk4N
+   wI5tMWOMLgWStu/rfyqGf4ijoXLQkgTOQvFlocyeyHRIRT4G8+zkerwnk
+   9lqYkq1ZCESoXpZsY6+OUFsGLy815YdNCNfg9raBkP7MPLiN4j17zn5Fe
+   Q==;
+X-CSE-ConnectionGUID: lnzulz8XQ6C5dUF3IbLlsA==
+X-CSE-MsgGUID: Kg5ZuPhpRfCzi5f2ptt0xA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11415"; a="58326565"
+X-IronPort-AV: E=Sophos;i="6.15,243,1739865600"; 
+   d="scan'208";a="58326565"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2025 23:28:10 -0700
+X-CSE-ConnectionGUID: 9w3DTI3ARqWE4clFyzRfDg==
+X-CSE-MsgGUID: /2mg6I5GSyaCmMoT2ZQ9sQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,243,1739865600"; 
+   d="scan'208";a="138218331"
+Received: from allen-sbox.sh.intel.com (HELO [10.239.159.30]) ([10.239.159.30])
+  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2025 23:28:04 -0700
+Message-ID: <ee9d46f2-5953-4ca4-adac-c3e35c9001a3@linux.intel.com>
+Date: Sun, 27 Apr 2025 14:23:54 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <aAwqAM2JKxpsSWfu@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 01/22] iommufd/viommu: Add driver-allocated vDEVICE
+ support
+To: Nicolin Chen <nicolinc@nvidia.com>, jgg@nvidia.com, kevin.tian@intel.com,
+ corbet@lwn.net, will@kernel.org
+Cc: bagasdotme@gmail.com, robin.murphy@arm.com, joro@8bytes.org,
+ thierry.reding@gmail.com, vdumpa@nvidia.com, jonathanh@nvidia.com,
+ shuah@kernel.org, jsnitsel@redhat.com, nathan@kernel.org,
+ peterz@infradead.org, yi.l.liu@intel.com, mshavit@google.com,
+ praan@google.com, zhangzekun11@huawei.com, iommu@lists.linux.dev,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, patches@lists.linux.dev, mochs@nvidia.com,
+ alok.a.tiwari@oracle.com, vasant.hegde@amd.com
+References: <cover.1745646960.git.nicolinc@nvidia.com>
+ <14781558dbc291e515b5e249535e3c08290a6792.1745646960.git.nicolinc@nvidia.com>
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowMDx_MTXpw1oMvuXAA--.50512S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-	ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
-	BjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26c
-	xKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
-	j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxV
-	AFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x02
-	67AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-	ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E
-	87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
-	AS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s02
-	6c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF
-	0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvE
-	c7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14
-	v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x
-	07j1WlkUUUUU=
+From: Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <14781558dbc291e515b5e249535e3c08290a6792.1745646960.git.nicolinc@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+On 4/26/25 13:57, Nicolin Chen wrote:
+> @@ -120,6 +128,13 @@ struct iommufd_viommu {
+>    *                    array->entry_num to report the number of handled requests.
+>    *                    The data structure of the array entry must be defined in
+>    *                    include/uapi/linux/iommufd.h
+> + * @vdevice_alloc: Allocate a vDEVICE object and init its driver-level structure
+> + *                 or HW procedure. Note that the core-level structure is filled
+> + *                 by the iommufd core after calling this op. @virt_id carries a
+> + *                 per-vIOMMU virtual ID for the driver to initialize its HW.
 
+I'm wondering whether the 'per-vIOMMU virtual ID' is intended to be
+generic for other features that might require a vdevice. I'm also not
+sure where this virtual ID originates when I read it here. Could it
+potentially come from the KVM instance? If so, how about retrieving it
+directly from a struct kvm pointer? My understanding is that vIOMMU in
+IOMMUFD acts as a handle to KVM, so perhaps we should maintain a
+reference to the kvm pointer within the iommufd_viommu structure?
 
-On 2025/4/26 上午8:34, Sean Christopherson wrote:
-> On Mon, Apr 21, 2025, Bibo Mao wrote:
->> Add KVM selftests header files for LoongArch, including processor.h
->> and kvm_util_base.h.
-> 
-> Nit, kvm_util_arch.h, not kvm_util_base.h.  I only noticed because I still have
-> nightmares about kvm_util_base.h. :-)
-Nice catch, will refresh in next version.
-And thanks for your reviewing.
+> + * @vdevice_destroy: Clean up all driver-specific parts of an iommufd_vdevice.
+> + *                   The memory of the vDEVICE will be free-ed by iommufd core
+> + *                   after calling this op
+>    */
+>   struct iommufd_viommu_ops {
+>   	void (*destroy)(struct iommufd_viommu *viommu);
+> @@ -128,6 +143,10 @@ struct iommufd_viommu_ops {
+>   		const struct iommu_user_data *user_data);
+>   	int (*cache_invalidate)(struct iommufd_viommu *viommu,
+>   				struct iommu_user_data_array *array);
+> +	struct iommufd_vdevice *(*vdevice_alloc)(struct iommufd_viommu *viommu,
+> +						 struct device *dev,
+> +						 u64 virt_id);
+> +	void (*vdevice_destroy)(struct iommufd_vdevice *vdev);
+>   };
 
-Regards
-Bibo Mao
-
+Thanks,
+baolu
 
