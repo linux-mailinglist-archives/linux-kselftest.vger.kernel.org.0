@@ -1,37 +1,38 @@
-Return-Path: <linux-kselftest+bounces-31732-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31729-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F044A9E007
-	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Apr 2025 08:46:14 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DAC47A9E003
+	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Apr 2025 08:45:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CB8531A8342E
-	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Apr 2025 06:46:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 698B47A91B9
+	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Apr 2025 06:44:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DBC52459F9;
-	Sun, 27 Apr 2025 06:45:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EF85245006;
+	Sun, 27 Apr 2025 06:45:48 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC77B200138;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79C441DE3AC;
 	Sun, 27 Apr 2025 06:45:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745736349; cv=none; b=d9+S5ahQ2LyEcBaLm1HnuatLZaiK2d4EkJXU7/hfY5LgACMiLL0rCjjetvZkD9Qy2ji9am1fHf1XDKNkZsov8lwA9tp+NAnMMVZUAqDJAlAIG9ClErlREApsuKPHyFd6r4BmhmDIUrt/3u+lcRcajysDYQo14lYcVGeFZeYDWmk=
+	t=1745736348; cv=none; b=EA17Nkg5WG7czcBnbJQVg20ZEZ+dOUHqE1L4UX4HWTWfPXnkZ0bU4eXHTbQqR1Gn46NzkJB9ozeJKBP6A5CkOfn+yAoc/wSprjE8T9OVAU7CDx5ZPya0xUpQZMtK3a61tzY0aOSGICtt9VhkPOT1c/Uov4Wfqo2QHRAY8HP14eo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745736349; c=relaxed/simple;
-	bh=2UOdkKj3kW/gazi0HnsKyEqTEEf5o3O5/O/Db5DwnVw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=O3O/073qin4wOyP4TbEA5OAAlEjlsMrK5cnpWVGrC9kC/qWufwOozvYksY3ocOulDPl4itcXkcpngZgX/CNc/cZfFLbY/MkjALUG5yq+rrL2UfUGOXz/o5gVf28xJZvy1PFbw7Q3DSMmrlviJwWhZCApPuScXh11Gdesm/tieTQ=
+	s=arc-20240116; t=1745736348; c=relaxed/simple;
+	bh=Q4Fa58qNeNMb88PphhtZlaG+lZnhEipZ/Kcu1dhmQkg=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=K6tiRrvE/Iw47/6GyTXkAh7VfrIsjUcwK4TXsqsqXcp814FVfghnZHBYrGHK3UPf5sSuNW3QRgDNlV4QNUp7UvMTx2qnaQBjHkReYhHnBUT/VLZ/IJIFei+ZMDt43KT3i2OPciZBueC//HvMU39+yx+O4rqj51QIBWe/Wvvb61o=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
 Received: from loongson.cn (unknown [10.2.5.213])
-	by gateway (Coremail) with SMTP id _____8DxbKyS0g1o7hvHAA--.2650S3;
-	Sun, 27 Apr 2025 14:45:38 +0800 (CST)
+	by gateway (Coremail) with SMTP id _____8AxDGuV0g1o8hvHAA--.2015S3;
+	Sun, 27 Apr 2025 14:45:41 +0800 (CST)
 Received: from localhost.localdomain (unknown [10.2.5.213])
-	by front1 (Coremail) with SMTP id qMiowMDxu8SP0g1oAEKYAA--.52357S2;
-	Sun, 27 Apr 2025 14:45:36 +0800 (CST)
+	by front1 (Coremail) with SMTP id qMiowMDxu8SP0g1oAEKYAA--.52357S3;
+	Sun, 27 Apr 2025 14:45:38 +0800 (CST)
 From: Bibo Mao <maobibo@loongson.cn>
 To: Paolo Bonzini <pbonzini@redhat.com>,
 	Huacai Chen <chenhuacai@kernel.org>,
@@ -40,10 +41,12 @@ Cc: Shuah Khan <shuah@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	kvm@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v11 0/5] KVM: selftests: Add LoongArch support
-Date: Sun, 27 Apr 2025 14:45:30 +0800
-Message-Id: <20250427064535.242404-1-maobibo@loongson.cn>
+Subject: [PATCH v11 1/5] KVM: selftests: Add VM_MODE_P47V47_16K VM mode
+Date: Sun, 27 Apr 2025 14:45:31 +0800
+Message-Id: <20250427064535.242404-2-maobibo@loongson.cn>
 X-Mailer: git-send-email 2.39.3
+In-Reply-To: <20250427064535.242404-1-maobibo@loongson.cn>
+References: <20250427064535.242404-1-maobibo@loongson.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -51,121 +54,61 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowMDxu8SP0g1oAEKYAA--.52357S2
+X-CM-TRANSID:qMiowMDxu8SP0g1oAEKYAA--.52357S3
 X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
 X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
 	ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
 	nUUI43ZEXa7xR_UUUUUUUUU==
 
-This patchset adds KVM selftests for LoongArch system, currently only
-some common test cases are supported and pass to run. These test cases
-are listed as following:
-    coalesced_io_test
-    demand_paging_test
-    dirty_log_perf_test
-    dirty_log_test
-    guest_print_test
-    hardware_disable_test
-    kvm_binary_stats_test
-    kvm_create_max_vcpus
-    kvm_page_table_test
-    memslot_modification_stress_test
-    memslot_perf_test
-    set_memory_region_test
+On LoongArch system, 16K page is used in general and GVA width is 47 bit
+and GPA width is 47 bit also, here add new VM mode VM_MODE_P47V47_16K.
 
+Signed-off-by: Bibo Mao <maobibo@loongson.cn>
 ---
-Changes in v11:
-1. Fix a typo issue in notes of patch 2, it is kvm_util_arch.h rather than
-   kvm_util_base.h
+ tools/testing/selftests/kvm/include/kvm_util.h | 1 +
+ tools/testing/selftests/kvm/lib/kvm_util.c     | 3 +++
+ 2 files changed, 4 insertions(+)
 
-Changes in v10:
-1. Add PS_64K and remove PS_8K in file include/loongarch/processor.h
-2. Fix a typo issue in file lib/loongarch/processor.c
-3. Update file MAINTAINERS about LoongArch KVM selftests
-
-Changes in v9:
-1. Add vm mode VM_MODE_P47V47_16K, LoongArch VM uses this mode by
-   default, rather than VM_MODE_P36V47_16K.
-2. Refresh some spelling issues in changelog.
-
-Changes in v8:
-1. Porting patch based on the latest version.
-2. For macro PC_OFFSET_EXREGS, offsetof() method is used for C header file,
-   still hardcoded definition for assemble language.
-
-Changes in v7:
-1. Refine code to add LoongArch support in test case
-set_memory_region_test.
-
-Changes in v6:
-1. Refresh the patch based on latest kernel 6.8-rc1, add LoongArch
-support about testcase set_memory_region_test.
-2. Add hardware_disable_test test case.
-3. Drop modification about macro DEFAULT_GUEST_TEST_MEM, it is problem
-of LoongArch binutils, this issue is raised to LoongArch binutils owners.
-
-Changes in v5:
-1. In LoongArch kvm self tests, the DEFAULT_GUEST_TEST_MEM could be
-0x130000000, it is different from the default value in memstress.h.
-So we Move the definition of DEFAULT_GUEST_TEST_MEM into LoongArch
-ucall.h, and add 'ifndef' condition for DEFAULT_GUEST_TEST_MEM
-in memstress.h.
-
-Changes in v4:
-1. Remove the based-on flag, as the LoongArch KVM patch series
-have been accepted by Linux kernel, so this can be applied directly
-in kernel.
-
-Changes in v3:
-1. Improve implementation of LoongArch VM page walk.
-2. Add exception handler for LoongArch.
-3. Add dirty_log_test, dirty_log_perf_test, guest_print_test
-test cases for LoongArch.
-4. Add __ASSEMBLER__ macro to distinguish asm file and c file.
-5. Move ucall_arch_do_ucall to the header file and make it as
-static inline to avoid function calls.
-6. Change the DEFAULT_GUEST_TEST_MEM base addr for LoongArch.
-
-Changes in v2:
-1. We should use ".balign 4096" to align the assemble code with 4K in
-exception.S instead of "align 12".
-2. LoongArch only supports 3 or 4 levels page tables, so we remove the
-hanlders for 2-levels page table.
-3. Remove the DEFAULT_LOONGARCH_GUEST_STACK_VADDR_MIN and use the common
-DEFAULT_GUEST_STACK_VADDR_MIN to allocate stack memory in guest.
-4. Reorganize the test cases supported by LoongArch.
-5. Fix some code comments.
-6. Add kvm_binary_stats_test test case into LoongArch KVM selftests.
----
-Bibo Mao (5):
-  KVM: selftests: Add VM_MODE_P47V47_16K VM mode
-  KVM: selftests: Add KVM selftests header files for LoongArch
-  KVM: selftests: Add core KVM selftests support for LoongArch
-  KVM: selftests: Add ucall test support for LoongArch
-  KVM: selftests: Add test cases for LoongArch
-
- MAINTAINERS                                   |   2 +
- tools/testing/selftests/kvm/Makefile          |   2 +-
- tools/testing/selftests/kvm/Makefile.kvm      |  18 +
- .../testing/selftests/kvm/include/kvm_util.h  |   6 +
- .../kvm/include/loongarch/kvm_util_arch.h     |   7 +
- .../kvm/include/loongarch/processor.h         | 141 ++++++++
- .../selftests/kvm/include/loongarch/ucall.h   |  20 +
- tools/testing/selftests/kvm/lib/kvm_util.c    |   3 +
- .../selftests/kvm/lib/loongarch/exception.S   |  59 +++
- .../selftests/kvm/lib/loongarch/processor.c   | 342 ++++++++++++++++++
- .../selftests/kvm/lib/loongarch/ucall.c       |  38 ++
- .../selftests/kvm/set_memory_region_test.c    |   2 +-
- 12 files changed, 638 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/kvm/include/loongarch/kvm_util_arch.h
- create mode 100644 tools/testing/selftests/kvm/include/loongarch/processor.h
- create mode 100644 tools/testing/selftests/kvm/include/loongarch/ucall.h
- create mode 100644 tools/testing/selftests/kvm/lib/loongarch/exception.S
- create mode 100644 tools/testing/selftests/kvm/lib/loongarch/processor.c
- create mode 100644 tools/testing/selftests/kvm/lib/loongarch/ucall.c
-
-
-base-commit: 5bc1018675ec28a8a60d83b378d8c3991faa5a27
+diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
+index 373912464fb4..f8faed8c8024 100644
+--- a/tools/testing/selftests/kvm/include/kvm_util.h
++++ b/tools/testing/selftests/kvm/include/kvm_util.h
+@@ -177,6 +177,7 @@ enum vm_guest_mode {
+ 	VM_MODE_P36V48_4K,
+ 	VM_MODE_P36V48_16K,
+ 	VM_MODE_P36V48_64K,
++	VM_MODE_P47V47_16K,
+ 	VM_MODE_P36V47_16K,
+ 	NUM_VM_MODES,
+ };
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index 815bc45dd8dc..5649cf2f40e8 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -222,6 +222,7 @@ const char *vm_guest_mode_string(uint32_t i)
+ 		[VM_MODE_P36V48_4K]	= "PA-bits:36,  VA-bits:48,  4K pages",
+ 		[VM_MODE_P36V48_16K]	= "PA-bits:36,  VA-bits:48, 16K pages",
+ 		[VM_MODE_P36V48_64K]	= "PA-bits:36,  VA-bits:48, 64K pages",
++		[VM_MODE_P47V47_16K]	= "PA-bits:47,  VA-bits:47, 16K pages",
+ 		[VM_MODE_P36V47_16K]	= "PA-bits:36,  VA-bits:47, 16K pages",
+ 	};
+ 	_Static_assert(sizeof(strings)/sizeof(char *) == NUM_VM_MODES,
+@@ -248,6 +249,7 @@ const struct vm_guest_mode_params vm_guest_mode_params[] = {
+ 	[VM_MODE_P36V48_4K]	= { 36, 48,  0x1000, 12 },
+ 	[VM_MODE_P36V48_16K]	= { 36, 48,  0x4000, 14 },
+ 	[VM_MODE_P36V48_64K]	= { 36, 48, 0x10000, 16 },
++	[VM_MODE_P47V47_16K]	= { 47, 47,  0x4000, 14 },
+ 	[VM_MODE_P36V47_16K]	= { 36, 47,  0x4000, 14 },
+ };
+ _Static_assert(sizeof(vm_guest_mode_params)/sizeof(struct vm_guest_mode_params) == NUM_VM_MODES,
+@@ -319,6 +321,7 @@ struct kvm_vm *____vm_create(struct vm_shape shape)
+ 	case VM_MODE_P36V48_16K:
+ 		vm->pgtable_levels = 4;
+ 		break;
++	case VM_MODE_P47V47_16K:
+ 	case VM_MODE_P36V47_16K:
+ 		vm->pgtable_levels = 3;
+ 		break;
 -- 
 2.39.3
 
