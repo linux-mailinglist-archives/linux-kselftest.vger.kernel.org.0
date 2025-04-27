@@ -1,99 +1,172 @@
-Return-Path: <linux-kselftest+bounces-31728-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31732-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5AE3DA9E000
-	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Apr 2025 08:43:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F044A9E007
+	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Apr 2025 08:46:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F07DB7A47FB
-	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Apr 2025 06:42:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CB8531A8342E
+	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Apr 2025 06:46:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3634424111D;
-	Sun, 27 Apr 2025 06:43:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MtNBnlro"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DBC52459F9;
+	Sun, 27 Apr 2025 06:45:49 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 598731A8F89;
-	Sun, 27 Apr 2025 06:43:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC77B200138;
+	Sun, 27 Apr 2025 06:45:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745736223; cv=none; b=VQJ4kPJw4rBN37KdzQRfNN8B6sV1U5spnQOzDS22fglAlcJoMGypz+yNgJKqgRP6kniswXUfVJHKM3Tk52FYY53ly9AVbbfX2DCRNWLuyDtwEFDyyEWT1EGZz+/HDKuI5vHf3JFTIdfGWG6qq+GjiJEwEDtrcblotpsEoSvb8uk=
+	t=1745736349; cv=none; b=d9+S5ahQ2LyEcBaLm1HnuatLZaiK2d4EkJXU7/hfY5LgACMiLL0rCjjetvZkD9Qy2ji9am1fHf1XDKNkZsov8lwA9tp+NAnMMVZUAqDJAlAIG9ClErlREApsuKPHyFd6r4BmhmDIUrt/3u+lcRcajysDYQo14lYcVGeFZeYDWmk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745736223; c=relaxed/simple;
-	bh=Avkh+IHRFhmXquqMCTj0xnURVEaMs2AVp7RorDHEx4U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XOwfJd6ZSHkWbln7Bb+m+vX1NrRfGyeLHDPreBmm3NhB5gAgeYmBbB8w8XeXVeTsPUmJ7imDqBsBn9oalj9tWI9dmFMmL7TXRz9sfN6MFgba0ZvolqjgpeG9ggVhOwAWCOIyjW/0X9gafO+4d0o1zEI4AYzqdNnELSMGKlkJ2bY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MtNBnlro; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745736222; x=1777272222;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Avkh+IHRFhmXquqMCTj0xnURVEaMs2AVp7RorDHEx4U=;
-  b=MtNBnlrod1lCOiqBmmR4435x00jIG7QQVsbroKMOsieuErTCLfdFDC+7
-   h4XFAsUyzDiVzs24sK62lizR8Z4oVvXWwdjRFAxHgD2g89UzaaQSlC/1+
-   LiiW9cNphl/CSoWD0r7QYQq2oeQH470ONbE3DfOOj/ggHnU5MSecJPVpD
-   +5iGtexoCiuGObh0K2o5479Y/Wnp9c477IwbhgY7iFU3t+mUO001L9c//
-   GP2lAc+3r7L5IFwF4Yir6oOSJZw3n4poxsLtV+H7PNXupH3nBtkk7Alk7
-   twFqcXtXzQxTjpm1N6TVyQOR3EjCxs7s938Fqfx6is9RQEvtYlPJhWiPi
-   Q==;
-X-CSE-ConnectionGUID: keQoUg4vRzCN2IF4nBqGrg==
-X-CSE-MsgGUID: 09+AMdaWSfKouwlyBh1UxQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11415"; a="47430898"
-X-IronPort-AV: E=Sophos;i="6.15,243,1739865600"; 
-   d="scan'208";a="47430898"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2025 23:43:41 -0700
-X-CSE-ConnectionGUID: nlUKeu2LRMaehOEljfFcBQ==
-X-CSE-MsgGUID: RSaSroJwTzy9u9o2IB/EVg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,243,1739865600"; 
-   d="scan'208";a="133732043"
-Received: from allen-sbox.sh.intel.com (HELO [10.239.159.30]) ([10.239.159.30])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2025 23:43:35 -0700
-Message-ID: <6dc981fd-f093-48fc-a162-4e4e989c22f2@linux.intel.com>
-Date: Sun, 27 Apr 2025 14:39:26 +0800
+	s=arc-20240116; t=1745736349; c=relaxed/simple;
+	bh=2UOdkKj3kW/gazi0HnsKyEqTEEf5o3O5/O/Db5DwnVw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=O3O/073qin4wOyP4TbEA5OAAlEjlsMrK5cnpWVGrC9kC/qWufwOozvYksY3ocOulDPl4itcXkcpngZgX/CNc/cZfFLbY/MkjALUG5yq+rrL2UfUGOXz/o5gVf28xJZvy1PFbw7Q3DSMmrlviJwWhZCApPuScXh11Gdesm/tieTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.2.5.213])
+	by gateway (Coremail) with SMTP id _____8DxbKyS0g1o7hvHAA--.2650S3;
+	Sun, 27 Apr 2025 14:45:38 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.2.5.213])
+	by front1 (Coremail) with SMTP id qMiowMDxu8SP0g1oAEKYAA--.52357S2;
+	Sun, 27 Apr 2025 14:45:36 +0800 (CST)
+From: Bibo Mao <maobibo@loongson.cn>
+To: Paolo Bonzini <pbonzini@redhat.com>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Sean Christopherson <seanjc@google.com>
+Cc: Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v11 0/5] KVM: selftests: Add LoongArch support
+Date: Sun, 27 Apr 2025 14:45:30 +0800
+Message-Id: <20250427064535.242404-1-maobibo@loongson.cn>
+X-Mailer: git-send-email 2.39.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 04/22] iommu: Add iommu_copy_struct_to_user helper
-To: Nicolin Chen <nicolinc@nvidia.com>, jgg@nvidia.com, kevin.tian@intel.com,
- corbet@lwn.net, will@kernel.org
-Cc: bagasdotme@gmail.com, robin.murphy@arm.com, joro@8bytes.org,
- thierry.reding@gmail.com, vdumpa@nvidia.com, jonathanh@nvidia.com,
- shuah@kernel.org, jsnitsel@redhat.com, nathan@kernel.org,
- peterz@infradead.org, yi.l.liu@intel.com, mshavit@google.com,
- praan@google.com, zhangzekun11@huawei.com, iommu@lists.linux.dev,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
- linux-kselftest@vger.kernel.org, patches@lists.linux.dev, mochs@nvidia.com,
- alok.a.tiwari@oracle.com, vasant.hegde@amd.com
-References: <cover.1745646960.git.nicolinc@nvidia.com>
- <ca032e90c0241fe0653023fcb655185dba763f5f.1745646960.git.nicolinc@nvidia.com>
-Content-Language: en-US
-From: Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <ca032e90c0241fe0653023fcb655185dba763f5f.1745646960.git.nicolinc@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowMDxu8SP0g1oAEKYAA--.52357S2
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+	ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
+	nUUI43ZEXa7xR_UUUUUUUUU==
 
-On 4/26/25 13:57, Nicolin Chen wrote:
-> Similar to the iommu_copy_struct_from_user helper receiving data from the
-> user space, add an iommu_copy_struct_to_user helper to report output data
-> back to the user space data pointer.
-> 
-> Reviewed-by: Jason Gunthorpe<jgg@nvidia.com>
-> Signed-off-by: Nicolin Chen<nicolinc@nvidia.com>
+This patchset adds KVM selftests for LoongArch system, currently only
+some common test cases are supported and pass to run. These test cases
+are listed as following:
+    coalesced_io_test
+    demand_paging_test
+    dirty_log_perf_test
+    dirty_log_test
+    guest_print_test
+    hardware_disable_test
+    kvm_binary_stats_test
+    kvm_create_max_vcpus
+    kvm_page_table_test
+    memslot_modification_stress_test
+    memslot_perf_test
+    set_memory_region_test
 
-Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
+---
+Changes in v11:
+1. Fix a typo issue in notes of patch 2, it is kvm_util_arch.h rather than
+   kvm_util_base.h
+
+Changes in v10:
+1. Add PS_64K and remove PS_8K in file include/loongarch/processor.h
+2. Fix a typo issue in file lib/loongarch/processor.c
+3. Update file MAINTAINERS about LoongArch KVM selftests
+
+Changes in v9:
+1. Add vm mode VM_MODE_P47V47_16K, LoongArch VM uses this mode by
+   default, rather than VM_MODE_P36V47_16K.
+2. Refresh some spelling issues in changelog.
+
+Changes in v8:
+1. Porting patch based on the latest version.
+2. For macro PC_OFFSET_EXREGS, offsetof() method is used for C header file,
+   still hardcoded definition for assemble language.
+
+Changes in v7:
+1. Refine code to add LoongArch support in test case
+set_memory_region_test.
+
+Changes in v6:
+1. Refresh the patch based on latest kernel 6.8-rc1, add LoongArch
+support about testcase set_memory_region_test.
+2. Add hardware_disable_test test case.
+3. Drop modification about macro DEFAULT_GUEST_TEST_MEM, it is problem
+of LoongArch binutils, this issue is raised to LoongArch binutils owners.
+
+Changes in v5:
+1. In LoongArch kvm self tests, the DEFAULT_GUEST_TEST_MEM could be
+0x130000000, it is different from the default value in memstress.h.
+So we Move the definition of DEFAULT_GUEST_TEST_MEM into LoongArch
+ucall.h, and add 'ifndef' condition for DEFAULT_GUEST_TEST_MEM
+in memstress.h.
+
+Changes in v4:
+1. Remove the based-on flag, as the LoongArch KVM patch series
+have been accepted by Linux kernel, so this can be applied directly
+in kernel.
+
+Changes in v3:
+1. Improve implementation of LoongArch VM page walk.
+2. Add exception handler for LoongArch.
+3. Add dirty_log_test, dirty_log_perf_test, guest_print_test
+test cases for LoongArch.
+4. Add __ASSEMBLER__ macro to distinguish asm file and c file.
+5. Move ucall_arch_do_ucall to the header file and make it as
+static inline to avoid function calls.
+6. Change the DEFAULT_GUEST_TEST_MEM base addr for LoongArch.
+
+Changes in v2:
+1. We should use ".balign 4096" to align the assemble code with 4K in
+exception.S instead of "align 12".
+2. LoongArch only supports 3 or 4 levels page tables, so we remove the
+hanlders for 2-levels page table.
+3. Remove the DEFAULT_LOONGARCH_GUEST_STACK_VADDR_MIN and use the common
+DEFAULT_GUEST_STACK_VADDR_MIN to allocate stack memory in guest.
+4. Reorganize the test cases supported by LoongArch.
+5. Fix some code comments.
+6. Add kvm_binary_stats_test test case into LoongArch KVM selftests.
+---
+Bibo Mao (5):
+  KVM: selftests: Add VM_MODE_P47V47_16K VM mode
+  KVM: selftests: Add KVM selftests header files for LoongArch
+  KVM: selftests: Add core KVM selftests support for LoongArch
+  KVM: selftests: Add ucall test support for LoongArch
+  KVM: selftests: Add test cases for LoongArch
+
+ MAINTAINERS                                   |   2 +
+ tools/testing/selftests/kvm/Makefile          |   2 +-
+ tools/testing/selftests/kvm/Makefile.kvm      |  18 +
+ .../testing/selftests/kvm/include/kvm_util.h  |   6 +
+ .../kvm/include/loongarch/kvm_util_arch.h     |   7 +
+ .../kvm/include/loongarch/processor.h         | 141 ++++++++
+ .../selftests/kvm/include/loongarch/ucall.h   |  20 +
+ tools/testing/selftests/kvm/lib/kvm_util.c    |   3 +
+ .../selftests/kvm/lib/loongarch/exception.S   |  59 +++
+ .../selftests/kvm/lib/loongarch/processor.c   | 342 ++++++++++++++++++
+ .../selftests/kvm/lib/loongarch/ucall.c       |  38 ++
+ .../selftests/kvm/set_memory_region_test.c    |   2 +-
+ 12 files changed, 638 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/include/loongarch/kvm_util_arch.h
+ create mode 100644 tools/testing/selftests/kvm/include/loongarch/processor.h
+ create mode 100644 tools/testing/selftests/kvm/include/loongarch/ucall.h
+ create mode 100644 tools/testing/selftests/kvm/lib/loongarch/exception.S
+ create mode 100644 tools/testing/selftests/kvm/lib/loongarch/processor.c
+ create mode 100644 tools/testing/selftests/kvm/lib/loongarch/ucall.c
+
+
+base-commit: 5bc1018675ec28a8a60d83b378d8c3991faa5a27
+-- 
+2.39.3
+
 
