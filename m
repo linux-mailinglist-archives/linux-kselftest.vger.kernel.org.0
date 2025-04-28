@@ -1,156 +1,155 @@
-Return-Path: <linux-kselftest+bounces-31783-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31784-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55130A9F20D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 15:20:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC100A9F376
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 16:31:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A403716BCAF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 13:20:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CCC833BF1B5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 14:31:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10E97266B67;
-	Mon, 28 Apr 2025 13:20:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A52CA26FA4E;
+	Mon, 28 Apr 2025 14:31:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="OPPXYSvF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mqPswbcY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 682F0268698;
-	Mon, 28 Apr 2025 13:20:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33354207DEE;
+	Mon, 28 Apr 2025 14:31:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745846453; cv=none; b=MS6pGPnJT24u814vThGyg2FUUV3TEjave8HHENExcfdH+v7ZkVx1/gSb0n8IWgoM/UGl2l+F4ghLfrFISbH+HaqXH8vrK2x8g5aGNnm7J7H37rHS8FQIz+gof6hTgo20KKpYQX1SnQ3V2m2LAcUYs4T0Bge4drTtlcOfCNHN9s8=
+	t=1745850697; cv=none; b=UBf03MSHCaBX69Szi1Oi+CyrWV0W2OgunfJH2Th/MOiXfuW8yGMBHkg3hmeoz5vx+svEsquxIqESc/EfgGNXI3enQ166r7Gymq6jPIyw/+Ke/vKk4nlos/wwcWPxs6opIzcRulpGm+F1a31+j4QObgprPYratDXyJA5NciYk4hE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745846453; c=relaxed/simple;
-	bh=a1t7bCBBT1JqFXgoLpLPIzAFz5gO1F7ujmkJJ0Hkl5U=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Rc5TCcZaZXG5ZjMV+PfmLQ0f7pSirtkagWgjS18hKm4ARfMUvIG2jQRTpdfJ3G6/xYTOXId61VAYZkPwTxHWBy/sPuRPaM8RTHQxI/3ibL44fyMSAT78fkky+RKYlXnuaqJxQ00360OTVVaoDQXA/SGadtI6Ck49ZTsnIFzwqr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=OPPXYSvF; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53SAefKA022824;
-	Mon, 28 Apr 2025 13:20:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=seDaDRAvts/ybRbfT
-	6WMEYoOYh8mM6UN+9cj9JMviUI=; b=OPPXYSvFureZeDPfUYkpg2ZphpQJWYHIg
-	muUzzRUn+IS8ohSg0tgQKFf/GzwD3mld4INOqAdkmZ+CHj/uKCMLzYBCSl+qfElW
-	kuYmE57CemecZRTlBOtdDIB+2K6P1gs8Aci4ly2mJKObteksZYKITT1ySdbnxfhj
-	Lz47MnWfyhFcbVX6hM8qgz+hZBMai7j1CeD61AagMaFFEMxBUeplTPRo0nuamwei
-	OAA9Plo+hTMzfQTCWKI8E4a2gCZ4IvDaFAl60SFTxlxcxAvyLpzcUp1/8t5KBC6E
-	3XAVggsVW5aKSH+g7H9dEcSu5HMQz31p4gxY9f2gRWd/4FFYe9sBQ==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46a84s0qgr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 28 Apr 2025 13:20:24 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 53SBZD1F001799;
-	Mon, 28 Apr 2025 13:20:23 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 469bamegag-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 28 Apr 2025 13:20:23 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 53SDKJQY50397596
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 28 Apr 2025 13:20:19 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C0E8620040;
-	Mon, 28 Apr 2025 13:20:19 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D6F7D20043;
-	Mon, 28 Apr 2025 13:20:15 +0000 (GMT)
-Received: from li-80eaad4c-2afd-11b2-a85c-af8123d033e3.ibm.com (unknown [9.124.219.50])
-	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 28 Apr 2025 13:20:15 +0000 (GMT)
-From: "Nysal Jan K.A." <nysal@linux.ibm.com>
-To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
-Cc: Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        linuxppc-dev@lists.ozlabs.org, "Nysal Jan K.A." <nysal@linux.ibm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] selftests/mm: Fix a build failure on powerpc
-Date: Mon, 28 Apr 2025 18:49:35 +0530
-Message-ID: <20250428131937.641989-2-nysal@linux.ibm.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250428131937.641989-1-nysal@linux.ibm.com>
-References: <20250428131937.641989-1-nysal@linux.ibm.com>
+	s=arc-20240116; t=1745850697; c=relaxed/simple;
+	bh=NHhnqNyU+X9x0PgjbHhqdTx3NWTApQzLscPiWXWZPWU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MmarWhr87CMJX9l+aq2aHQjQmTWbQB0TkIwi7TKiuTPtbORX796jmOqtqgSyArxk0cj7k5eNGOJhTZFYsHCbOTO1YPQDdgVB1MLd23cYSEX3rKqmyXiEPWg97z+bDXFA7VP48kDuuTM9wPAw8du0w81Wsn2GbcztkOy81oloK5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mqPswbcY; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-736ad42dfd6so4136927b3a.3;
+        Mon, 28 Apr 2025 07:31:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1745850694; x=1746455494; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EGHvgmXuRyhO4FY9ie5ulcZe9dpbfqVfa/omQpTJU54=;
+        b=mqPswbcYGg8sVn/7UDHvK5aAU+GEZrHkNnDthCw2icPQ7KjEovPnUlDSSW26nIykjp
+         3xfkL6dqIbtgIHkv3WIKl52NB5LTN1qLOFKc1EmAYwXzmDA/mGQDSMLPgXk7v1F1tvDR
+         HLr27MY4PvU4GsYkB6iUS85k0d/0stQ9CgAIthmj7KJjtNysqvipGUMTHciBtE1aTn73
+         tdF64fplQ/eF1E1bhJdoPZLleKFYOI8F6eay7cL7p5BrZyBl29p5+rIFNZvCqiJpnM4s
+         K4LvYxS5F6kW8HXWg00Q0kiDCNCXqxjINBaEDYCAyiDAYaLm5WT4Dbuj1ALdCsu5ioR1
+         90Ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745850694; x=1746455494;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EGHvgmXuRyhO4FY9ie5ulcZe9dpbfqVfa/omQpTJU54=;
+        b=GAfwMC42Fwu1G88qhvBv1DnzDqz+06qqwmL8O9oLd85jrU5h92uWGSth07FEjmiLUD
+         LzdIkzvRNY4VTECkkXKVcuaFeyKmIF68EaibMgtTitwRLXBR54Ceu6UB74H4FWa1G1yU
+         wWIy+kvkrEUIrPSHlinQUvhSOWnBgnvBhwBPDRxMaGxNKb/sPqU/hv3LsYnlvwNhqM5d
+         J5EPtUmuzJGElIsVhRzm1rgHfcadtxY4eOTcSLnE74hvMYwu3rG9+xg5cKM5GEnDDwos
+         faK9v5Qi1mSUGYyz8MwooUZHuLXThZN23zZb+tX78x7lNXJqnewp5iwmHlTocMyDbPCa
+         +u9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWSYcI9SFBjsjQJd/F76kBSvCao3Rab7Ze5snKsYFcBNP1dra4LSRuDVJ3aa3lL8v2vRVESs4JOuavMLMDfJOal@vger.kernel.org, AJvYcCXAu8L0hFaFy6HkSgEea2Of2P2V5XCSTtA7ha+mAOzxbgS4/69pT78prIMgDN3EVjxNVMUDLmRJffhk2Lg=@vger.kernel.org, AJvYcCXFGlBNqBgulh51rhVEXpvjTEe3bN3y/6FeyT+kVrF84l1XqvKGIxIjZGJG4Ag8sdzHt2Se6ZrDJ73UY14U@vger.kernel.org, AJvYcCXwk4zrlVfhX+QFR9e1qoL1JRZUWJPn6ohd5lB4s8+BL9Ga6GXtMVY9ABMmIDs2kkhfeClyIV9BGJE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQRj8XSHfZFNsb1TeSY1/Q5S6quL+2J9VmpNHVzUtvZbNPTPeo
+	0AgPhtYhlnpMprmzy7obftqLOXbZZp3Bt78iIeHFwpI45RcSeM7D
+X-Gm-Gg: ASbGnct1HIBuunopt/7OCJSsv76rf5FyVKcjZVIMBlfRxQnOG6uvIp9ukYyWAoBEsVN
+	x1OdwNiE82L5AuAim3Lb3JCiTO8tIEKZHP5pOIoWqECDfFouWFDklB733PDm/3HVJmnLiswHcSw
+	afOmS1Iia8TyjGysmaG7LeTU8xOtpheviBJ2pqXTVgfc+amCYps3JlPF4jdq/DB4g6b8P49zOKq
+	sT2QBPOZfx9omaEDIOmyyfEoM5bzH3dUi/dKofjDvUm187/p36F+FbGC4Q0ED+gOiRyP71MmBmg
+	Jr7HdLGOaHqgDpfHfvFuoP1MDWV6d03eeeihhtNo
+X-Google-Smtp-Source: AGHT+IGZk7PlsdCZr/j/ecR8nUYCM0KRmxVw7bgRrpwVPA2oV8otwvEl5YVA/3glGzlDDrcVC80bqA==
+X-Received: by 2002:a05:6a00:114a:b0:736:a540:c9ad with SMTP id d2e1a72fcca58-73fd9047c3fmr18100251b3a.20.1745850694197;
+        Mon, 28 Apr 2025 07:31:34 -0700 (PDT)
+Received: from archie.me ([103.124.138.155])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73e25a6a995sm8016677b3a.112.2025.04.28.07.31.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Apr 2025 07:31:33 -0700 (PDT)
+Received: by archie.me (Postfix, from userid 1000)
+	id 6E52850790E2; Mon, 28 Apr 2025 21:31:31 +0700 (WIB)
+Date: Mon, 28 Apr 2025 21:31:31 +0700
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+To: Nicolin Chen <nicolinc@nvidia.com>, jgg@nvidia.com,
+	kevin.tian@intel.com, corbet@lwn.net, will@kernel.org
+Cc: robin.murphy@arm.com, joro@8bytes.org, thierry.reding@gmail.com,
+	vdumpa@nvidia.com, jonathanh@nvidia.com, shuah@kernel.org,
+	jsnitsel@redhat.com, nathan@kernel.org, peterz@infradead.org,
+	yi.l.liu@intel.com, mshavit@google.com, praan@google.com,
+	zhangzekun11@huawei.com, iommu@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, patches@lists.linux.dev,
+	mochs@nvidia.com, alok.a.tiwari@oracle.com, vasant.hegde@amd.com
+Subject: Re: [PATCH v2 15/22] Documentation: userspace-api: iommufd: Update
+ vCMDQ
+Message-ID: <aA-RQwyTS1m4CuPw@archie.me>
+References: <cover.1745646960.git.nicolinc@nvidia.com>
+ <820dfdee121292fe4cf891feb86f82ceea521e22.1745646960.git.nicolinc@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=Mchsu4/f c=1 sm=1 tr=0 ts=680f8098 cx=c_pps a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17 a=XR8D0OoHHMoA:10 a=VnNF1IyMAAAA:8 a=eIFaomMv7K_DaQaFpIwA:9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNDI4MDEwOCBTYWx0ZWRfX9cHEmT6RPkmt ULlIMp7J8N67EZZRn6YjvouXN1NecTs93kQx0CYtEpWO1ithBn6qlGoscJj85CSPjnpdjMdQFsX kso9E+w0Jv9BT+HjfjPDd6krV119bAWk8HMwcQQSYORuStzlXdepzd5v69qUr/hthr/9ivRWVit
- 4auy2DRbPhfP+876HGUlZxPBWayrwOvwo9bsah3IuW70JON/vy2woJTMEZTqIdUpzBT4O8Px/Z+ frq7QhdXfYGrYBS/KFRK2vJicHGuvgDjPQ/1z65CNanQ47NviMvQqGJvxyGQV7fw1zXXyHb8jU8 C0lImHInMPqt+P6kk1XHqsBoFOEsqq5FqmgrLlvJKb/oSI2f8ZZUMehCNjNwQqp+oaM767xIGF6
- WzLjuoQr4oGmlJQNCpRW0uRGGy5qpEPLbR3pyiJGUvdL/wmn4IhoQjvCChgP/tFXe3BHGorE
-X-Proofpoint-ORIG-GUID: NWPF_M0em3vCenetzMbNZhpYx1xdGHLc
-X-Proofpoint-GUID: NWPF_M0em3vCenetzMbNZhpYx1xdGHLc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-04-28_05,2025-04-24_02,2025-02-21_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
- lowpriorityscore=0 mlxlogscore=853 impostorscore=0 bulkscore=0
- malwarescore=0 spamscore=0 priorityscore=1501 adultscore=0 mlxscore=0
- suspectscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
- definitions=main-2504280108
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="vD4TXIxpca4CWbLZ"
+Content-Disposition: inline
+In-Reply-To: <820dfdee121292fe4cf891feb86f82ceea521e22.1745646960.git.nicolinc@nvidia.com>
 
-The compiler is unaware of the size of code generated by the ".rept"
-assembler directive. This results in the compiler emitting branch
-instructions where the offset to branch to exceeds the maximum allowed
-value, resulting in build failures like the following:
 
-  CC       protection_keys
-  /tmp/ccypKWAE.s: Assembler messages:
-  /tmp/ccypKWAE.s:2073: Error: operand out of range (0x0000000000020158
-  is not between 0xffffffffffff8000 and 0x0000000000007ffc)
-  /tmp/ccypKWAE.s:2509: Error: operand out of range (0x0000000000020130
-  is not between 0xffffffffffff8000 and 0x0000000000007ffc)
+--vD4TXIxpca4CWbLZ
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Fix the issue by manually adding nop instructions using the preprocessor.
+On Fri, Apr 25, 2025 at 10:58:10PM -0700, Nicolin Chen wrote:
+> +- IOMMUFD_OBJ_VCMDQ, representing a hardware queue as a subset of a vIOM=
+MU's
+> +  virtualization feature for a VM to directly execute guest-issued comma=
+nds to
+> +  invalidate HW cache entries holding the mappings or translations of a =
+guest-
+> +  owned stage-1 page table. Along with this queue object, iommufd provid=
+es the
+> +  user space an mmap interface for VMM to mmap a physical MMIO region fr=
+om the
+> +  host physical address space to a guest physical address space, to excl=
+usively
+> +  control the allocated vCMDQ HW. Thus, when allocating a vCMDQ, the VMM=
+ must
+> +  request a pair of VMA info (vm_pgoff/size) for a later mmap call. The =
+length
+> +  argument of an mmap call could be smaller than the given size for a pa=
+ritial
+> +  mmap, but the given vm_pgoff (as the addr argument of the mmap call) s=
+hould
+"... partial mmap, ..."
+> +  never be offsetted, which also implies that the mmap will always start=
+ from
+> +  the beginning of the physical MMIO region.
+> +
+=20
+Thanks.
 
-Fixes: 46036188ea1f5 ("selftests/mm: build with -O2")
-Reported-by: Madhavan Srinivasan <maddy@linux.ibm.com>
-Signed-off-by: Nysal Jan K.A. <nysal@linux.ibm.com>
----
- tools/testing/selftests/mm/pkey-powerpc.h | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+--=20
+An old man doll... just what I always wanted! - Clara
 
-diff --git a/tools/testing/selftests/mm/pkey-powerpc.h b/tools/testing/selftests/mm/pkey-powerpc.h
-index d8ec906b8120..17bf2d1b0192 100644
---- a/tools/testing/selftests/mm/pkey-powerpc.h
-+++ b/tools/testing/selftests/mm/pkey-powerpc.h
-@@ -104,8 +104,18 @@ static inline void expect_fault_on_read_execonly_key(void *p1, int pkey)
- 	return;
- }
- 
-+#define REPEAT_8(s) s s s s s s s s
-+#define REPEAT_64(s) REPEAT_8(s) REPEAT_8(s) REPEAT_8(s) REPEAT_8(s) \
-+		     REPEAT_8(s) REPEAT_8(s) REPEAT_8(s) REPEAT_8(s)
-+#define REPEAT_512(s) REPEAT_64(s) REPEAT_64(s) REPEAT_64(s) REPEAT_64(s) \
-+		      REPEAT_64(s) REPEAT_64(s) REPEAT_64(s) REPEAT_64(s)
-+#define REPEAT_4096(s) REPEAT_512(s) REPEAT_512(s) REPEAT_512(s) REPEAT_512(s) \
-+		       REPEAT_512(s) REPEAT_512(s) REPEAT_512(s) REPEAT_512(s)
-+#define REPEAT_16384(s) REPEAT_4096(s) REPEAT_4096(s) \
-+			REPEAT_4096(s) REPEAT_4096(s)
-+
- /* 4-byte instructions * 16384 = 64K page */
--#define __page_o_noops() asm(".rept 16384 ; nop; .endr")
-+#define __page_o_noops() asm(REPEAT_16384("nop\n"))
- 
- static inline void *malloc_pkey_with_mprotect_subpage(long size, int prot, u16 pkey)
- {
--- 
-2.47.0
+--vD4TXIxpca4CWbLZ
+Content-Type: application/pgp-signature; name=signature.asc
 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCaA+RQwAKCRD2uYlJVVFO
+o1eFAQCh6j1PsCslXzfPWuS46AzQ1o7ZR1WP481iUjIyZLhY3QEAixFoHFuftiEx
+UNcaIuEJ2lZEhZxTyJA7ccrRXFyIfQo=
+=VsW/
+-----END PGP SIGNATURE-----
+
+--vD4TXIxpca4CWbLZ--
 
