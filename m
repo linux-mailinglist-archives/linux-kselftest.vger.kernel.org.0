@@ -1,56 +1,56 @@
-Return-Path: <linux-kselftest+bounces-31825-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31826-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DD3DA9FD3E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 00:48:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A53EA9FD40
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 00:48:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A5C3B46736B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 22:48:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B0A10466F7B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 22:48:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 138BD213228;
-	Mon, 28 Apr 2025 22:48:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F1F7212D7C;
+	Mon, 28 Apr 2025 22:48:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gbk/utjp"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kr0+CrOq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9070C212D7C
-	for <linux-kselftest@vger.kernel.org>; Mon, 28 Apr 2025 22:48:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB94B20B7FD
+	for <linux-kselftest@vger.kernel.org>; Mon, 28 Apr 2025 22:48:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745880492; cv=none; b=FrbblviA2krTkT6y6m4H6fuuKPwrdUbnBaNufVwTBF7yEYUk7jkYdSBDhE1iSOhM7STY654EYmTtJXFdSEmYyS0p4Twe8lZwPsgSao7Yp46+FMmQjZ7QdLZP6j0s/tZbbHNcZl9FvPjysW3CSJ8SnnAporkQLIaS4Ila7Q0BabA=
+	t=1745880526; cv=none; b=gMmM0A/+U3htaUwDiTYHINueC7ACDyetqhHWYBwgRtmKiN7vJZqo9ckLKwLvFh5ADU45viNpnfM0yJsGx7RBHBNvROQG0L1/bZATmMq0RT3pXXrR51umtY5XVfyf/N/xhgYsb8IpcBl2wyItMw+9EjS8T3oScz2HV/q7jt4d51Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745880492; c=relaxed/simple;
-	bh=61hw2WjKWqr8vrs64icdWDbWk2Ur0bzT3WBhvqAtzOY=;
+	s=arc-20240116; t=1745880526; c=relaxed/simple;
+	bh=3KezIHks5DFTdggB/bwppiff9TnoCs9sC1waoLEwHjY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=K08IsB6cIYFctTzTfql1SwUi63xM92rHtumCRDalkS9cbQ7KtAqmmroMVfDC2LCSTQHOE3OyK5A81XPyZw4ghFBNMEoY55kp64IzdIDNLt54gX8nW4uWc9APi+tJJdud2jx6ojifwKouRb274TQnJDZPQXU3BBhxhVRuDQltNEs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gbk/utjp; arc=none smtp.client-ip=91.218.175.186
+	 In-Reply-To:Content-Type; b=WXOtNswDCbBNFQ0OPs8B3vRtvQGDrZMWuRk+PPS0brO6tjt2Lk+8/1aMjwtGq+8pCJt4x+w9uiESaELih3l+37dUnsqURdF6S+WsZZBQDGxeTHh4i1FGhldAYUHer6/mTlKOCBBUj5bHh9N+MIxAPn+WmFfFsLyT+7+MtkevkNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kr0+CrOq; arc=none smtp.client-ip=91.218.175.185
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <3b05d1a0-c873-4e61-b98c-b725d0dbb350@linux.dev>
+Message-ID: <7f84de30-80db-492a-adde-1f29d69da240@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1745880477;
+	t=1745880522;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=wcxC+Ay3y++e8Uv8HSaPaQbT8svhorPAd8NEoyT9pQI=;
-	b=gbk/utjp8SkhpN2UgzGCFAPMbnS1Kbgb7ZVz2I/t/rMrQETR+n3GqokpmvE7WiWgDWPYPX
-	/JeD4wVWLBC8aDNWmBSoea57Ec18zpj6W9h3E9HYcwQZvFizVSfbmwAyLRp+a26L8Ukoq9
-	YUvPHUR6+gr98+SWOqpUx33iB6ZR1/A=
-Date: Mon, 28 Apr 2025 15:47:47 -0700
+	bh=1Af90aGrC2fXAsIAg/iqopX2dqetTTJsU459B5Sz2Uc=;
+	b=kr0+CrOqqJGG1pjipZbprnsXdDL6NdYRS4iHHbqyrB3DYBuIR4qpd7CBo+UQPc6uVbun1L
+	yeY0lB/i17viQCICOibcVYCReswttjPAWNoVeBeAwek3wSgxYS2K1YyoCe3YdhU193OvNl
+	G4CW3yygzDw3rSvTjNNuvGHvVh6u0bY=
+Date: Mon, 28 Apr 2025 15:48:37 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 1/3] KVM: riscv: selftests: Add stval to exception
- handling
+Subject: Re: [PATCH 2/3] KVM: riscv: selftests: Decode stval to identify exact
+ exception type
 To: Andrew Jones <ajones@ventanamicro.com>
 Cc: Anup Patel <anup@brainfault.org>, Atish Patra <atishp@atishpatra.org>,
  Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
@@ -59,82 +59,92 @@ Cc: Anup Patel <anup@brainfault.org>, Atish Patra <atishp@atishpatra.org>,
  kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
  linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20250324-kvm_selftest_improve-v1-0-583620219d4f@rivosinc.com>
- <20250324-kvm_selftest_improve-v1-1-583620219d4f@rivosinc.com>
- <20250425-dc44cb547ab5e2f994c94e80@orel>
+ <20250324-kvm_selftest_improve-v1-2-583620219d4f@rivosinc.com>
+ <20250425-f458b9801a83cc35bda55c74@orel>
 Content-Language: en-US
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Atish Patra <atish.patra@linux.dev>
-In-Reply-To: <20250425-dc44cb547ab5e2f994c94e80@orel>
+In-Reply-To: <20250425-f458b9801a83cc35bda55c74@orel>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
 
-On 4/25/25 6:50 AM, Andrew Jones wrote:
-> On Mon, Mar 24, 2025 at 05:40:29PM -0700, Atish Patra wrote:
->> Save stval during exception handling so that it can be decoded to
->> figure out the details of exception type.
+On 4/25/25 6:33 AM, Andrew Jones wrote:
+> On Mon, Mar 24, 2025 at 05:40:30PM -0700, Atish Patra wrote:
+>> Currently, the sbi_pmu_test continues if the exception type is illegal
+>> instruction because access to hpmcounter will generate that. However, we
+>> may get illegal for other reasons as well which should result in test
+>> assertion.
+>>
+>> Use the stval to decode the exact type of instructions and which csrs are
+>> being accessed if it is csr access instructions. Assert in all cases
+>> except if it is a csr access instructions that access valid PMU related
+>> registers.
 >>
 >> Signed-off-by: Atish Patra <atishp@rivosinc.com>
 >> ---
->>   tools/testing/selftests/kvm/include/riscv/processor.h | 1 +
->>   tools/testing/selftests/kvm/lib/riscv/handlers.S      | 2 ++
->>   2 files changed, 3 insertions(+)
+>>   tools/testing/selftests/kvm/riscv/sbi_pmu_test.c | 32 ++++++++++++++++++++++++
+>>   1 file changed, 32 insertions(+)
 >>
->> diff --git a/tools/testing/selftests/kvm/include/riscv/processor.h b/tools/testing/selftests/kvm/include/riscv/processor.h
->> index 5f389166338c..f4a7d64fbe9a 100644
->> --- a/tools/testing/selftests/kvm/include/riscv/processor.h
->> +++ b/tools/testing/selftests/kvm/include/riscv/processor.h
->> @@ -95,6 +95,7 @@ struct ex_regs {
->>   	unsigned long epc;
->>   	unsigned long status;
->>   	unsigned long cause;
->> +	unsigned long stval;
->>   };
+>> diff --git a/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c b/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
+>> index 03406de4989d..11bde69b5238 100644
+>> --- a/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
+>> +++ b/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
+>> @@ -128,11 +128,43 @@ static void stop_counter(unsigned long counter, unsigned long stop_flags)
+>>   		       "Unable to stop counter %ld error %ld\n", counter, ret.error);
+>>   }
 >>   
->>   #define NR_VECTORS  2
->> diff --git a/tools/testing/selftests/kvm/lib/riscv/handlers.S b/tools/testing/selftests/kvm/lib/riscv/handlers.S
->> index aa0abd3f35bb..2884c1e8939b 100644
->> --- a/tools/testing/selftests/kvm/lib/riscv/handlers.S
->> +++ b/tools/testing/selftests/kvm/lib/riscv/handlers.S
->> @@ -45,9 +45,11 @@
->>   	csrr  s0, CSR_SEPC
->>   	csrr  s1, CSR_SSTATUS
->>   	csrr  s2, CSR_SCAUSE
->> +	csrr  s3, CSR_STVAL
->>   	sd    s0, 248(sp)
->>   	sd    s1, 256(sp)
->>   	sd    s2, 264(sp)
->> +	sd    s3, 272(sp)
-> We can't add stval without also changing how much stack we allocate at the
-> top of this macro, but since we need to keep sp 16-byte aligned in order
-> to call C code (route_exception()) we'll need to decrement -8*36, not
+>> +#define INSN_OPCODE_MASK	0x007c
+>> +#define INSN_OPCODE_SHIFT	2
+>> +#define INSN_OPCODE_SYSTEM	28
+>> +
+>> +#define INSN_MASK_FUNCT3	0x7000
+>> +#define INSN_SHIFT_FUNCT3	12
+>> +
+>> +#define INSN_CSR_MASK		0xfff00000
+>> +#define INSN_CSR_SHIFT		20
+>> +
+>> +#define GET_RM(insn)            (((insn) & INSN_MASK_FUNCT3) >> INSN_SHIFT_FUNCT3)
+>> +#define GET_CSR_NUM(insn)       (((insn) & INSN_CSR_MASK) >> INSN_CSR_SHIFT)
+> It'd be good to put these macros in include/riscv/processor.h or some new
+> include/riscv/ header to be shared with other tests that may want to
+> decode stval.
 
-Yes. Thanks for catching that.
-
-> -8*35. Or, we could just switch struct ex_regs to be the kernel's struct
-> pt_regs which has 36 unsigned longs. The 'badaddr' member is for stval and
-> the additional long is orig_a0.
-
-I think switching to pt_regs is better in terms of maintainability in 
-the future.
-I will do that.
-
->>   .endm
->>   
->>   .macro restore_context
-> I guess we should restore stval too.
-
-Do we ?  stval is written by hardware and doesn't contain any state of 
-the interrupted program.
-Once, the trap handler processes the trap using stval information, there 
-is no need to restore it.
-
-Am I missing something ?
+Sure. I will move it to include/riscv/processor.h
 
 > Thanks,
 > drew
 >
+>> +
+>>   static void guest_illegal_exception_handler(struct ex_regs *regs)
+>>   {
+>> +	unsigned long insn;
+>> +	int opcode, csr_num, funct3;
+>> +
+>>   	__GUEST_ASSERT(regs->cause == EXC_INST_ILLEGAL,
+>>   		       "Unexpected exception handler %lx\n", regs->cause);
+>>   
+>> +	insn = regs->stval;
+>> +	opcode = (insn & INSN_OPCODE_MASK) >> INSN_OPCODE_SHIFT;
+>> +	__GUEST_ASSERT(opcode == INSN_OPCODE_SYSTEM,
+>> +		       "Unexpected instruction with opcode 0x%x insn 0x%lx\n", opcode, insn);
+>> +
+>> +	csr_num = GET_CSR_NUM(insn);
+>> +	funct3 = GET_RM(insn);
+>> +	/* Validate if it is a CSR read/write operation */
+>> +	__GUEST_ASSERT(funct3 <= 7 && (funct3 != 0 || funct3 != 4),
+>> +		       "Unexpected system opcode with funct3 0x%x csr_num 0x%x\n",
+>> +		       funct3, csr_num);
+>> +
+>> +	/* Validate if it is a HPMCOUNTER CSR operation */
+>> +	__GUEST_ASSERT(csr_num == CSR_CYCLE || csr_num <= CSR_HPMCOUNTER31,
+>> +		       "Unexpected csr_num 0x%x\n", csr_num);
+>> +
+>>   	illegal_handler_invoked = true;
+>>   	/* skip the trapping instruction */
+>>   	regs->epc += 4;
+>>
 >> -- 
 >> 2.43.0
 >>
