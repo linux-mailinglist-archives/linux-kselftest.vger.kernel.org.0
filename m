@@ -1,62 +1,62 @@
-Return-Path: <linux-kselftest+bounces-31805-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31806-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4123A9F8A1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 20:31:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B799A9F89F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 20:31:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C452465669
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 18:30:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DCF435A6211
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 18:30:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C108B296D09;
-	Mon, 28 Apr 2025 18:29:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F4D52973A2;
+	Mon, 28 Apr 2025 18:29:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="StAkY4cY"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hM4lx8EF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED6A92957A0
-	for <linux-kselftest@vger.kernel.org>; Mon, 28 Apr 2025 18:29:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A40D296169
+	for <linux-kselftest@vger.kernel.org>; Mon, 28 Apr 2025 18:29:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745864978; cv=none; b=Omk5G6WO7roADd+2uLrS6E3COtXUiRp5PSFTv9cw++1rT8YhMF/F2jdrmPOlQro1Aq2LHml8fsr4Op6y/WRFxPqhnwFb5n2OZHW1WOtnLdZMoSvli5jmZLrPHWSW+LwKCzRtdZ0hDJ78qih5UrLXhUiWLHPA3eT9a0xZBlTHHCw=
+	t=1745864989; cv=none; b=BsFTL6FFjSSy4xsGGdD7iP6zprAnHlHdJwv9Qm0TmNZY7tfTX+wKAYYNUiTQuwHcoqv7+mzm8WeI0ZAF+nVH/9cf0M8iim3HHyOagkjabn7S3rTBQl4EM7a+OJpMIdQod8/WnFUr/aD+VoYKODY6vW5RtQ0V3toQ7ceevNU0gH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745864978; c=relaxed/simple;
-	bh=wEhF3fEZfnfX32kR/oOs7t3wI/qZgZyLIu9Xv+BUbyw=;
+	s=arc-20240116; t=1745864989; c=relaxed/simple;
+	bh=+xr+fuIyNPSpJN43VN627MLOFsmIffZpYV56fxUMsqw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uKqdtDqffogM5zzuNsGJqD6CCFOWEX1y0a5S+hGYwI3Kp7yKx4awrNsPUlN2ZeDSF8yp/ZK+14K6ZnDXzJNNrY20xqdb5XpIf+QnWkF0E/jXmocFIaHXkeom3afhoZtAsSRPl+7eXthVAT60A7VnMsAKRAbZnCIkqo0mreADG2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=StAkY4cY; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=iU3zvTOKRIJ/rqE66AAAJvHVuraYuA/2BmVJKcP5maySNc75qBJvyZyxlyFqQgOlRiy3SgkqgrCSWKmUKudUDc4MZYjHC1z7JOousA6btNbSNtridYaYqEvZnft3Q+cTUy8zWEUANp8xrUi9TIzs/zn9oxurZyBiayuOivmEnzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hM4lx8EF; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1745864975;
+	s=mimecast20190719; t=1745864986;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=2DhWHRRaJgbDyFTPn9k0AEwYfzaIuDC1P60JXAppeY4=;
-	b=StAkY4cYYJI1j5A6UJxhFjizy5u2mAxTcGjD8/Q4+GQJQuTwg9NYiFPiMCQkH0fjwR8kG7
-	n5DeSytrSQtmtQXn0o2WPpXSQcGArYb/VApxip75zgO0twceiwUWkTIcMhSajBMdVJbPJ8
-	rAmPDowa+Md+55afDKr7xRlGvQsYQLo=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+	bh=ovFRwgvlwXis4EwCqkxIu/n5Gq3sXR2708yWYhKVYWo=;
+	b=hM4lx8EF7XlG5NOX798dy3+TWo4B+YY/DDluD5DTLCoQgZptGCs6rJ6BBBY8cnppHXopsD
+	H/H/eAYScZJievYJAN8IPy4ITdpUQfNaEI1KBF74sgKvNIn8fiojliwH0NMBodZ5OW7nGQ
+	e8XXVphbWOhfeKqkfL3Cg0hPL2JvMzk=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-583-8vdzHhwAM2CltIM4hYMQ8A-1; Mon,
- 28 Apr 2025 14:29:34 -0400
-X-MC-Unique: 8vdzHhwAM2CltIM4hYMQ8A-1
-X-Mimecast-MFC-AGG-ID: 8vdzHhwAM2CltIM4hYMQ8A_1745864970
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-398-4fd561q6Pcyt64ib8BgG_w-1; Mon,
+ 28 Apr 2025 14:29:43 -0400
+X-MC-Unique: 4fd561q6Pcyt64ib8BgG_w-1
+X-Mimecast-MFC-AGG-ID: 4fd561q6Pcyt64ib8BgG_w_1745864979
 Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 50A521956094;
-	Mon, 28 Apr 2025 18:29:29 +0000 (UTC)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D9DCF1800261;
+	Mon, 28 Apr 2025 18:29:37 +0000 (UTC)
 Received: from h1.redhat.com (unknown [10.22.65.12])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id DCC0430001AB;
-	Mon, 28 Apr 2025 18:29:20 +0000 (UTC)
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9517530001A2;
+	Mon, 28 Apr 2025 18:29:29 +0000 (UTC)
 From: Nico Pache <npache@redhat.com>
 To: linux-mm@kvack.org,
 	linux-doc@vger.kernel.org,
@@ -100,10 +100,11 @@ Cc: akpm@linux-foundation.org,
 	hannes@cmpxchg.org,
 	rientjes@google.com,
 	mhocko@suse.com,
-	rdunlap@infradead.org
-Subject: [PATCH v5 1/4] mm: defer THP insertion to khugepaged
-Date: Mon, 28 Apr 2025 12:29:01 -0600
-Message-ID: <20250428182904.93989-2-npache@redhat.com>
+	rdunlap@infradead.org,
+	Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: [PATCH v5 2/4] mm: document (m)THP defer usage
+Date: Mon, 28 Apr 2025 12:29:02 -0600
+Message-ID: <20250428182904.93989-3-npache@redhat.com>
 In-Reply-To: <20250428182904.93989-1-npache@redhat.com>
 References: <20250428182904.93989-1-npache@redhat.com>
 Precedence: bulk
@@ -115,155 +116,100 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-setting /transparent_hugepages/enabled=always allows applications
-to benefit from THPs without having to madvise. However, the pf handler
-takes very few considerations to decide weather or not to actually use a
-THP. This can lead to a lot of wasted memory. khugepaged only operates
-on memory that was either allocated with enabled=always or MADV_HUGEPAGE.
+The new defer option for (m)THPs allows for a more conservative
+approach to (m)THPs. Document its usage in the transhuge admin-guide.
 
-Introduce the ability to set enabled=defer, which will prevent THPs from
-being allocated by the page fault handler unless madvise is set,
-leaving it up to khugepaged to decide which allocations will collapse to a
-THP. This should allow applications to benefits from THPs, while curbing
-some of the memory waste.
-
-Co-developed-by: Rafael Aquini <raquini@redhat.com>
-Signed-off-by: Rafael Aquini <raquini@redhat.com>
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
 Signed-off-by: Nico Pache <npache@redhat.com>
 ---
- include/linux/huge_mm.h | 15 +++++++++++++--
- mm/huge_memory.c        | 31 +++++++++++++++++++++++++++----
- 2 files changed, 40 insertions(+), 6 deletions(-)
+ Documentation/admin-guide/mm/transhuge.rst | 31 ++++++++++++++++------
+ 1 file changed, 23 insertions(+), 8 deletions(-)
 
-diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
-index e3d15c737008..57e6c962afb1 100644
---- a/include/linux/huge_mm.h
-+++ b/include/linux/huge_mm.h
-@@ -48,6 +48,7 @@ enum transparent_hugepage_flag {
- 	TRANSPARENT_HUGEPAGE_UNSUPPORTED,
- 	TRANSPARENT_HUGEPAGE_FLAG,
- 	TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG,
-+	TRANSPARENT_HUGEPAGE_DEFER_PF_INST_FLAG,
- 	TRANSPARENT_HUGEPAGE_DEFRAG_DIRECT_FLAG,
- 	TRANSPARENT_HUGEPAGE_DEFRAG_KSWAPD_FLAG,
- 	TRANSPARENT_HUGEPAGE_DEFRAG_KSWAPD_OR_MADV_FLAG,
-@@ -186,6 +187,7 @@ static inline bool hugepage_global_enabled(void)
- {
- 	return transparent_hugepage_flags &
- 			((1<<TRANSPARENT_HUGEPAGE_FLAG) |
-+			(1<<TRANSPARENT_HUGEPAGE_DEFER_PF_INST_FLAG) |
- 			(1<<TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG));
- }
+diff --git a/Documentation/admin-guide/mm/transhuge.rst b/Documentation/admin-guide/mm/transhuge.rst
+index 5c63fe51b3ad..c50253357793 100644
+--- a/Documentation/admin-guide/mm/transhuge.rst
++++ b/Documentation/admin-guide/mm/transhuge.rst
+@@ -88,8 +88,9 @@ In certain cases when hugepages are enabled system wide, application
+ may end up allocating more memory resources. An application may mmap a
+ large region but only touch 1 byte of it, in that case a 2M page might
+ be allocated instead of a 4k page for no good. This is why it's
+-possible to disable hugepages system-wide and to only have them inside
+-MADV_HUGEPAGE madvise regions.
++possible to disable hugepages system-wide, only have them inside
++MADV_HUGEPAGE madvise regions, or defer them away from the page fault
++handler to khugepaged.
  
-@@ -195,6 +197,12 @@ static inline bool hugepage_global_always(void)
- 			(1<<TRANSPARENT_HUGEPAGE_FLAG);
- }
+ Embedded systems should enable hugepages only inside madvise regions
+ to eliminate any risk of wasting any precious byte of memory and to
+@@ -99,6 +100,15 @@ Applications that gets a lot of benefit from hugepages and that don't
+ risk to lose memory by using hugepages, should use
+ madvise(MADV_HUGEPAGE) on their critical mmapped regions.
  
-+static inline bool hugepage_global_defer(void)
-+{
-+	return transparent_hugepage_flags &
-+			(1<<TRANSPARENT_HUGEPAGE_DEFER_PF_INST_FLAG);
-+}
++Applications that would like to benefit from THPs but would still like a
++more memory conservative approach can choose 'defer'. This avoids
++inserting THPs at the page fault handler unless they are MADV_HUGEPAGE.
++Khugepaged will then scan the mappings for potential collapses into (m)THP
++pages. Admins using this the 'defer' setting should consider
++tweaking khugepaged/max_ptes_none. The current default of 511 may
++aggressively collapse your PTEs into PMDs. Lower this value to conserve
++more memory (i.e., max_ptes_none=64).
 +
- static inline int highest_order(unsigned long orders)
- {
- 	return fls_long(orders) - 1;
-@@ -291,13 +299,16 @@ unsigned long thp_vma_allowable_orders(struct vm_area_struct *vma,
- 				       unsigned long tva_flags,
- 				       unsigned long orders)
- {
-+	if ((tva_flags & TVA_IN_PF) && hugepage_global_defer() &&
-+			!(vm_flags & VM_HUGEPAGE))
-+		return 0;
+ .. _thp_sysfs:
+ 
+ sysfs
+@@ -109,11 +119,14 @@ Global THP controls
+ 
+ Transparent Hugepage Support for anonymous memory can be entirely disabled
+ (mostly for debugging purposes) or only enabled inside MADV_HUGEPAGE
+-regions (to avoid the risk of consuming more memory resources) or enabled
+-system wide. This can be achieved per-supported-THP-size with one of::
++regions (to avoid the risk of consuming more memory resources), deferred to
++khugepaged, or enabled system wide.
 +
- 	/* Optimization to check if required orders are enabled early. */
- 	if ((tva_flags & TVA_ENFORCE_SYSFS) && vma_is_anonymous(vma)) {
- 		unsigned long mask = READ_ONCE(huge_anon_orders_always);
--
- 		if (vm_flags & VM_HUGEPAGE)
- 			mask |= READ_ONCE(huge_anon_orders_madvise);
--		if (hugepage_global_always() ||
-+		if (hugepage_global_always() || hugepage_global_defer() ||
- 		    ((vm_flags & VM_HUGEPAGE) && hugepage_global_enabled()))
- 			mask |= READ_ONCE(huge_anon_orders_inherit);
++This can be achieved per-supported-THP-size with one of::
  
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 8af5caa0d9bc..17b66adef029 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -297,12 +297,15 @@ static ssize_t enabled_show(struct kobject *kobj,
- 	const char *output;
+ 	echo always >/sys/kernel/mm/transparent_hugepage/hugepages-<size>kB/enabled
+ 	echo madvise >/sys/kernel/mm/transparent_hugepage/hugepages-<size>kB/enabled
++	echo defer >/sys/kernel/mm/transparent_hugepage/hugepages-<size>kB/enabled
+ 	echo never >/sys/kernel/mm/transparent_hugepage/hugepages-<size>kB/enabled
  
- 	if (test_bit(TRANSPARENT_HUGEPAGE_FLAG, &transparent_hugepage_flags))
--		output = "[always] madvise never";
-+		output = "[always] madvise defer never";
- 	else if (test_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG,
- 			  &transparent_hugepage_flags))
--		output = "always [madvise] never";
-+		output = "always [madvise] defer never";
-+	else if (test_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_INST_FLAG,
-+			  &transparent_hugepage_flags))
-+		output = "always madvise [defer] never";
- 	else
--		output = "always madvise [never]";
-+		output = "always madvise defer [never]";
+ where <size> is the hugepage size being addressed, the available sizes
+@@ -136,6 +149,7 @@ The top-level setting (for use with "inherit") can be set by issuing
+ one of the following commands::
  
- 	return sysfs_emit(buf, "%s\n", output);
- }
-@@ -315,13 +318,20 @@ static ssize_t enabled_store(struct kobject *kobj,
+ 	echo always >/sys/kernel/mm/transparent_hugepage/enabled
++	echo defer >/sys/kernel/mm/transparent_hugepage/enabled
+ 	echo madvise >/sys/kernel/mm/transparent_hugepage/enabled
+ 	echo never >/sys/kernel/mm/transparent_hugepage/enabled
  
- 	if (sysfs_streq(buf, "always")) {
- 		clear_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG, &transparent_hugepage_flags);
-+		clear_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_INST_FLAG, &transparent_hugepage_flags);
- 		set_bit(TRANSPARENT_HUGEPAGE_FLAG, &transparent_hugepage_flags);
-+	} else if (sysfs_streq(buf, "defer")) {
-+		clear_bit(TRANSPARENT_HUGEPAGE_FLAG, &transparent_hugepage_flags);
-+		clear_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG, &transparent_hugepage_flags);
-+		set_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_INST_FLAG, &transparent_hugepage_flags);
- 	} else if (sysfs_streq(buf, "madvise")) {
- 		clear_bit(TRANSPARENT_HUGEPAGE_FLAG, &transparent_hugepage_flags);
-+		clear_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_INST_FLAG, &transparent_hugepage_flags);
- 		set_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG, &transparent_hugepage_flags);
- 	} else if (sysfs_streq(buf, "never")) {
- 		clear_bit(TRANSPARENT_HUGEPAGE_FLAG, &transparent_hugepage_flags);
- 		clear_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG, &transparent_hugepage_flags);
-+		clear_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_INST_FLAG, &transparent_hugepage_flags);
- 	} else
- 		ret = -EINVAL;
+@@ -286,7 +300,8 @@ of small pages into one large page::
+ A higher value leads to use additional memory for programs.
+ A lower value leads to gain less thp performance. Value of
+ max_ptes_none can waste cpu time very little, you can
+-ignore it.
++ignore it. Consider lowering this value when using
++``transparent_hugepage=defer``
  
-@@ -954,18 +964,31 @@ static int __init setup_transparent_hugepage(char *str)
- 			&transparent_hugepage_flags);
- 		clear_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG,
- 			  &transparent_hugepage_flags);
-+		clear_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_INST_FLAG,
-+			  &transparent_hugepage_flags);
- 		ret = 1;
-+	} else if (!strcmp(str, "defer")) {
-+		clear_bit(TRANSPARENT_HUGEPAGE_FLAG,
-+			  &transparent_hugepage_flags);
-+		clear_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG,
-+			  &transparent_hugepage_flags);
-+		set_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_INST_FLAG,
-+			  &transparent_hugepage_flags);
- 	} else if (!strcmp(str, "madvise")) {
- 		clear_bit(TRANSPARENT_HUGEPAGE_FLAG,
- 			  &transparent_hugepage_flags);
-+		clear_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_INST_FLAG,
-+			  &transparent_hugepage_flags);
- 		set_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG,
--			&transparent_hugepage_flags);
-+			  &transparent_hugepage_flags);
- 		ret = 1;
- 	} else if (!strcmp(str, "never")) {
- 		clear_bit(TRANSPARENT_HUGEPAGE_FLAG,
- 			  &transparent_hugepage_flags);
- 		clear_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG,
- 			  &transparent_hugepage_flags);
-+		clear_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_INST_FLAG,
-+			  &transparent_hugepage_flags);
- 		ret = 1;
- 	}
- out:
+ ``max_ptes_swap`` specifies how many pages can be brought in from
+ swap when collapsing a group of pages into a transparent huge page::
+@@ -311,14 +326,14 @@ Boot parameters
+ 
+ You can change the sysfs boot time default for the top-level "enabled"
+ control by passing the parameter ``transparent_hugepage=always`` or
+-``transparent_hugepage=madvise`` or ``transparent_hugepage=never`` to the
+-kernel command line.
++``transparent_hugepage=madvise`` or ``transparent_hugepage=defer`` or
++``transparent_hugepage=never`` to the kernel command line.
+ 
+ Alternatively, each supported anonymous THP size can be controlled by
+ passing ``thp_anon=<size>[KMG],<size>[KMG]:<state>;<size>[KMG]-<size>[KMG]:<state>``,
+ where ``<size>`` is the THP size (must be a power of 2 of PAGE_SIZE and
+ supported anonymous THP)  and ``<state>`` is one of ``always``, ``madvise``,
+-``never`` or ``inherit``.
++``defer``, ``never`` or ``inherit``.
+ 
+ For example, the following will set 16K, 32K, 64K THP to ``always``,
+ set 128K, 512K to ``inherit``, set 256K to ``madvise`` and 1M, 2M
 -- 
 2.48.1
 
