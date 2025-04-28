@@ -1,156 +1,160 @@
-Return-Path: <linux-kselftest+bounces-31751-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31754-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8368DA9E851
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 08:34:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE545A9E8B3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 09:01:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E438189CA75
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 06:33:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 15B74179311
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 07:01:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 801971C878E;
-	Mon, 28 Apr 2025 06:33:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23CE11C84C4;
+	Mon, 28 Apr 2025 07:01:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ehZX5cPa"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F9CC1C84CD;
-	Mon, 28 Apr 2025 06:33:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C8B1BA34;
+	Mon, 28 Apr 2025 07:01:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745821995; cv=none; b=DfwS7BsmxmeJ0Di5pmC1oSqNexWLS5PZ3csKlNUsNumKZzzPymAnRiIUI/u4DR3uZMkZmTDnSmQl0ilAJhHNb0Z5h/ivtnEwxkG/7RckfBePpBkq65ICZtVcOMuG5ygmNpbd4/dRSrB1ROh++X0aUf/pKGXwpgb54zP7wzHOayw=
+	t=1745823671; cv=none; b=X4DnQUiYBHGZDIPR5Kze0dWtrJGnngOCz/EK7VWyqF+eF9VVeVXcDLC1H2JBDLLmKl+RR4MkFEyqhikM8HHp/Dq8DJZYCmk1DpYOc0uqKPYm3JeVdffEXVz3lEMTVXjrubqnCW/4DvFdaGtYEWF861wcEqYBXg+jH4Z9OezKMGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745821995; c=relaxed/simple;
-	bh=QF3nEfdc04fOKU8N14uxLnQDwusiLNZvwRwdlyEsFIA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JWShY8+NLJaOViqwIlxukqLj0DUF8kVV7EEh+h+heoK+r3TFQtF46Dq1/uA3AtUhproo63yIy3RBVkoNqdyQoqVIHEDGKRm0Y9prgeoNx27+MoPQaD9l7FZc7lMksgglRLcT184lJLsTF35EJQextsu/laAgyfH9TgUWS57MmNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8BxjawgIQ9okyDIAA--.36515S3;
-	Mon, 28 Apr 2025 14:33:04 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowMAxDcUdIQ9oTM6aAA--.59312S4;
-	Mon, 28 Apr 2025 14:33:03 +0800 (CST)
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-To: Christian Brauner <brauner@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] selftests: pid_namespace: Skip tests if not root
-Date: Mon, 28 Apr 2025 14:33:00 +0800
-Message-ID: <20250428063300.7137-3-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20250428063300.7137-1-yangtiezhu@loongson.cn>
-References: <20250428063300.7137-1-yangtiezhu@loongson.cn>
+	s=arc-20240116; t=1745823671; c=relaxed/simple;
+	bh=LxquXLKCLwZcPsxPnxkwIdYRyzBiKzetFpKc+QaqwC8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=dzD6WCZZapxGNtLEhUKlH33ez0FuE1en4s2VN9bYXH9p3R6Y8zjEuLNRM1V1CE58r33lLJ4APE+5jDfBaeayrFw8gvuyQ2fC1dtyadVSdStfZ8DnGvA7ijpQkNucx45wCsFfupi6IUA9g6Pl5TI6wYKjHbquLX8/tidGIQO4Fzo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ehZX5cPa; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-736ab1c43c4so4406857b3a.1;
+        Mon, 28 Apr 2025 00:01:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1745823668; x=1746428468; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=9yZmW0hn3MrvYOWlnfGa/3CtDPfOpCdnzl3M85GUApc=;
+        b=ehZX5cPa0imdfRHezLMbtXPSRvHhsG3VB/FLbyya0vRK+3aZG5qxFe7jL/lbrj3wEx
+         4ey/JhOtMy8cazQfPMAuMfGW2teao+PBhU+93A5aJ8AlnkBYQq5XUSJqJiGh2dQ622Va
+         vR0eRsSyeL1cBPvit/kPW7E6Dxjnc/BNTlWBIvniu3votmkQgK1HA93R4yAPbWVTgW9N
+         Ixf2CLC8AHqz5VSsZMp+/8eikyBAQFsSXRGv0Eo8a1/bgG2+madAD5RZpYzEQFEaEBQv
+         EwX+4mT/ATJWQ0+fdQG3L4Mxi+Rqa3zFPkQqSYU0FJOqopuT33q0uMXMxsAjPsp35vBd
+         Kaqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745823668; x=1746428468;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9yZmW0hn3MrvYOWlnfGa/3CtDPfOpCdnzl3M85GUApc=;
+        b=YUeR/RUGPHJrD0rCU54MmJXCur+iyk3c2WnchgqN9KmRux204nbPiGUx4cclF7qvni
+         CRsHWq+zW4FAa7MCth+L4QUA623t9MToqKU+pTM3exTwLeqYrBWZ/QjLwImQ/aA7LEqL
+         26eDYx3otyM9j56tPAxl0nUbBtPvAA0gIcIG3YumT1ETa1qmcWlAyC6AhOfWWolrG7wm
+         HN+j5V3m7esyz7LSZQ5ezsx6bDJpcJoPRxkAjteTJDdIsOzTM8a5T4iWjXIHBQptO7A4
+         Yn0ks2P/s1o5Sgf628LiKEfkXddF1Nmi4sgyspo49/Qe8KjzOdZ/3fojhGicNioOSCKV
+         7T0A==
+X-Forwarded-Encrypted: i=1; AJvYcCUAZ5i4M2BPsKZ6KtgrH6rlyalogUqkvGAxNG5hQCDypHNFlj0+qkFLZf897BIuTI0KqQfebzIEI5PtAhx37gTx@vger.kernel.org, AJvYcCVspNc/c+CWlx4pUP1j8lxOmbVeeEMWi9/kW0/WlYLXoQLEPgw0Aes4JN1rtAS6+WzC1URRN5yeK6MAKjC6@vger.kernel.org, AJvYcCX+Ia49FzJ+7EMSfRIGFAcHpskOjcJdCrcrJIqFRT1GrsuBr8iEJophuUn9pzHKpWDregE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxGBc11K6Zvi/ub3qxVPTuySwjNIOHqV6Q2AAeFgwBqQHTPZgCB
+	Tk1/L5Qlbo9KlAqagZnnwuWksPyO7d9OgkWnLvxUnca/gIoMgHAX
+X-Gm-Gg: ASbGncvlmmZiRHcEGB5hLh7Ro7vFgmbIgbnobpBHTkXQQRXuw8zr6XXUTsQUVCNF335
+	dMY2/4ALmZ4H1g2R7ZDd9HsMqbFusxO8ItdP7hDOqfFjZ7pXrvi7tRRindc9ovp0X7m2deNdHQL
+	RT3o9CEMZ0TD8waPkh8SSjohcuU4Ruv7o0J7/041ntg83F8+9BNn7/nPfObbfMAs/Qouar8ssIi
+	OA1XWZJh30rPNw7QBq1fOD4USLCWW5Wj1M9nruCtR2qR3+YwyWdIKofJF+Kaxex6queqmkFr5+q
+	ZN7IEZdDpJbqRCadDRPQm0JvtwKkyhcc2HDf
+X-Google-Smtp-Source: AGHT+IGP4IZjA+2oOl5Xp+BcG0TkWdBytzGu1mFgdq9c4ypqmC8f8TKCih+yUOSsexG/Sbbus31DKg==
+X-Received: by 2002:a05:6a00:2e14:b0:736:5664:53f3 with SMTP id d2e1a72fcca58-73ff73bcf1emr9419880b3a.15.1745823668236;
+        Mon, 28 Apr 2025 00:01:08 -0700 (PDT)
+Received: from [192.168.0.56] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73e25a9abf2sm7173316b3a.122.2025.04.28.00.01.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Apr 2025 00:01:07 -0700 (PDT)
+Message-ID: <3a16fae0346d4f733fb1a67ae6420d8bf935dbd8.camel@gmail.com>
+Subject: Re: [PATCH RFC bpf-next 3/4] bpf/selftests: add tests to validate
+ proper arguments alignment on ARM64
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Alexis =?ISO-8859-1?Q?Lothor=E9?= "(eBPF Foundation)"	
+ <alexis.lothore@bootlin.com>, Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko	 <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Song Liu	 <song@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>, KP Singh	 <kpsingh@kernel.org>, Stanislav
+ Fomichev <sdf@fomichev.me>, Hao Luo	 <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, Puranjay Mohan	 <puranjay@kernel.org>, Xu Kuohai
+ <xukuohai@huaweicloud.com>, Catalin Marinas	 <catalin.marinas@arm.com>,
+ Will Deacon <will@kernel.org>, Mykola Lysenko	 <mykolal@fb.com>, Shuah Khan
+ <shuah@kernel.org>, Maxime Coquelin	 <mcoquelin.stm32@gmail.com>, Alexandre
+ Torgue <alexandre.torgue@foss.st.com>,  Florent Revest <revest@chromium.org>
+Cc: Bastien Curutchet <bastien.curutchet@bootlin.com>, 
+	ebpf@linuxfoundation.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org, 
+	linux-stm32@st-md-mailman.stormreply.com
+Date: Mon, 28 Apr 2025 00:01:05 -0700
+In-Reply-To: <20250411-many_args_arm64-v1-3-0a32fe72339e@bootlin.com>
+References: <20250411-many_args_arm64-v1-0-0a32fe72339e@bootlin.com>
+	 <20250411-many_args_arm64-v1-3-0a32fe72339e@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowMAxDcUdIQ9oTM6aAA--.59312S4
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7ZrW3ZFW3CFyDtr4kWr1DCFX_yoW8Kw4kpa
-	4xZ39avF42yF47J3W3Xw4YgFyFg3Z5XF18Ar1ru3yUZ3WUCFZ7Jr43tF1fAFW5ZrZ5XrZx
-	ZF9Yka1UZw1UtFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
-	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAF
-	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7V
-	AKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCj
-	r7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6x
-	IIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAI
-	w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
-	0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU7MmhUUUUU
 
-CLONE_NEWPID or CLONE_NEWNS requires CAP_SYS_ADMIN, if the tests are not
-running as root, just skip tests rather than fail and also give a warning
-to the user.
+On Fri, 2025-04-11 at 22:32 +0200, Alexis Lothor=C3=A9 (eBPF Foundation) wr=
+ote:
+> When dealing with large types (>8 bytes), ARM64 trampolines need to take
+> extra care about the arguments alignment to respect the calling
+> convention set by AAPCS64.
+>=20
+> Add two tests ensuring that the BPF trampoline arranges arguments with
+> the relevant layout. The two new tests involve almost the same
+> arguments, except that the second one requires a more specific alignment
+> to be set by the trampoline when preparing arguments before calling the
+> the target function.
+>=20
+> Signed-off-by: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore@boot=
+lin.com>
+> ---
 
-Before:
+[...]
 
-  $ make -C tools/testing/selftests/pid_namespace
-  $ tools/testing/selftests/pid_namespace/pid_max
-  ...
-  #  RUN           global.pid_max_simple ...
-  # pid_max.c:337:pid_max_simple:Expected pid (-1) > 0 (0)
-  ...
-  #  RUN           global.pid_max_nested_limit ...
-  # pid_max.c:346:pid_max_nested_limit:Expected pid (-1) > 0 (0)
-  ...
-  #  RUN           global.pid_max_nested ...
-  # pid_max.c:355:pid_max_nested:Expected pid (-1) > 0 (0)
-  ...
-  # Totals: pass:0 fail:3 xfail:0 xpass:0 skip:0 error:0
+> +SEC("fentry/bpf_testmod_test_struct_arg_11")
+> +int BPF_PROG2(test_struct_many_args_9, struct bpf_testmod_struct_arg_5, =
+a,
+> +	      struct bpf_testmod_struct_arg_5, b,
+> +	      struct bpf_testmod_struct_arg_5, c,
+> +	      struct bpf_testmod_struct_arg_5, d, int, e,
+> +	      struct bpf_testmod_struct_arg_5, f)
 
-After:
+Hello Alexis,
 
-  $ make -C tools/testing/selftests/pid_namespace
-  $ tools/testing/selftests/pid_namespace/pid_max
-  ...
-  #  RUN           global.pid_max_simple ...
-  #      SKIP      Must be run as root
-  ...
-  #  RUN           global.pid_max_nested_limit ...
-  #      SKIP      Must be run as root
-  ...
-  #  RUN           global.pid_max_nested ...
-  #      SKIP      Must be run as root
-  ...
-  # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:3 error:0
+I'm trying to double check the error you've seen for x86.
+I see that tracing_struct/struct_many_args fails with assertion:
+"test_struct_many_args:FAIL:t11:f unexpected t11:f: actual 35 !=3D expected=
+ 43".
+Could you please help me understand this test?
+The function listened to is defined as accepting 'struct bpf_testmod_struct=
+_arg_7',
+at the same time this function uses 'struct bpf_testmod_struct_arg_5'.
+Nevertheless, the assertion persists even with correct types.
 
-While at it, remove the blank line in the TEST(pid_max_simple).
+> +{
+> +	t11_a =3D a.a;
+> +	t11_b =3D b.a;
+> +	t11_c =3D c.a;
+> +	t11_d =3D d.a;
+> +	t11_e =3D e;
+> +	t11_f =3D f.a;
+> +	return 0;
+> +}
 
-Fixes: 615ab43b838b ("tests/pid_namespace: add pid_max tests")
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- tools/testing/selftests/pid_namespace/pid_max.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/pid_namespace/pid_max.c b/tools/testing/selftests/pid_namespace/pid_max.c
-index 96f274f0582b..30937c5ee12b 100644
---- a/tools/testing/selftests/pid_namespace/pid_max.c
-+++ b/tools/testing/selftests/pid_namespace/pid_max.c
-@@ -332,8 +332,10 @@ TEST(pid_max_simple)
- {
- 	pid_t pid;
- 
--
- 	pid = do_clone(pid_max_cb, NULL, CLONE_NEWPID | CLONE_NEWNS);
-+	if (errno == EPERM)
-+		SKIP(return, "Must be run as root");
-+
- 	ASSERT_GT(pid, 0);
- 	ASSERT_EQ(0, wait_for_pid(pid));
- }
-@@ -343,6 +345,9 @@ TEST(pid_max_nested_limit)
- 	pid_t pid;
- 
- 	pid = do_clone(pid_max_nested_limit_outer, NULL, CLONE_NEWPID | CLONE_NEWNS);
-+	if (errno == EPERM)
-+		SKIP(return, "Must be run as root");
-+
- 	ASSERT_GT(pid, 0);
- 	ASSERT_EQ(0, wait_for_pid(pid));
- }
-@@ -352,6 +357,9 @@ TEST(pid_max_nested)
- 	pid_t pid;
- 
- 	pid = do_clone(pid_max_nested_outer, NULL, CLONE_NEWPID | CLONE_NEWNS);
-+	if (errno == EPERM)
-+		SKIP(return, "Must be run as root");
-+
- 	ASSERT_GT(pid, 0);
- 	ASSERT_EQ(0, wait_for_pid(pid));
- }
--- 
-2.42.0
+[...]
 
 
