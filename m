@@ -1,193 +1,211 @@
-Return-Path: <linux-kselftest+bounces-31803-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31804-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72A0EA9F863
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 20:22:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D00E6A9F89D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 20:31:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 80A087A28D0
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 18:21:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6B69B466208
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 18:30:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 902B0294A06;
-	Mon, 28 Apr 2025 18:22:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 540B629293A;
+	Mon, 28 Apr 2025 18:29:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="SkeCY8yw"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IHQuDnbd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2082.outbound.protection.outlook.com [40.107.223.82])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED3D81A072A;
-	Mon, 28 Apr 2025 18:22:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.82
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745864527; cv=fail; b=pamDDSesc4xbaNtWvaF9S8LN15eKkMzySrQ5GCOl23eeSFcKgMHuABAeM5ZLKGboFaxpN6rR+xGU9k36v2aPwmlXbqW+fwB63UlTqgueDNCJouzBairXpigWEn7kvE01trN30QCvUTmYrprK+txdxQY58kg9EEVJCqX3I81Xaiw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745864527; c=relaxed/simple;
-	bh=khbdf5gmdlVuYQnF7f89nzPuTyaRDvdk76dvmmD5vvg=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a117LGRdOY4SMVJh4cnmqVlxgwdC+RKf7OtUE8/1HLz4xxtusydoLs7bsUO67mlgQOB95pXXpGWdRDrJD1NNV062uT5jVauDmhfi95LkNpuAz48rdFJmyY1+cpSg8JuU6hjqcPjkC0SoSl30Fl82yCObjvtmqFQGyNUrxWxqbvg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=SkeCY8yw; arc=fail smtp.client-ip=40.107.223.82
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=k/0Zgklb7texH9BPnQiRPFudxC9KlhY+bXZcZ7XicM5+G0dyl+IBGmYzEgG3PbOysn5mTPDG/FVPvPnGzw3bbEIE7ukjQrWQ9EwfIFnadJAGlV+fmrhQYnWeTZ4KHaM+XB332hM+/fpdsmHLqTezHvC8YHcVHJvNqnSchqqZayKd7Ea54J2putlH6+TgZo6DlOVe6Q6poCbxlKXX+694UKZc6wVp8hvS+tPeoFnWIvqCxpbOUpnyMyBUnF+jOYndLhHZRxwUE1Wnvtqijq8TJiR+tDJqC7k2wyVK0HIypkr/H6K4tuwNlJt2b7iQUEe8+ugfqeAes2iWIDDp3ceybw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+Ow2JS5qmdHMtaRW1X7L+gY862oQC41/ZISthtO4Se4=;
- b=qSHR01Xt7jJVgO27ZM62Nd15BDomBTTcOycjKBOCt40JdQ7Qr0V2+vfy/VxtF+GjSvofwYMDTYA1r3ibV07BNNCSxGM9SDWlxklJjcYWQF3x9on4Mc6sXXJVrxpUZ0qQ1GXZtP43roVJcp/ND6dURDrms+EzMb64scBj2VRgpE/188UsbcQNb21cSc2XhnHQUX04R9l0t+xtyH+9q45wmccD9Omx60ZtcSjLxtTP3QRNGetJo/RWu+ZYEg+bS3D2z7B6b3B6/Gqaud+q8CbpBvc6DuMlzgIuuimp3dR7J3vsWgIlJPBLKUulTUxhb+2tIQ0xa9/bY6DaVAJhua9nsA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=google.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+Ow2JS5qmdHMtaRW1X7L+gY862oQC41/ZISthtO4Se4=;
- b=SkeCY8ywbMm2h1SSyUhaEVNTlC3UfveZ8m2xQGRrI7av+kacL+x58q2rFOsmwgMaOs7Kcq3VN/oELWXZ9KzrrsPewF6QKXXhGq9rXxjrYWD26BCuSYRBPOwEEVF8Ap3yM2/ZZq/KDanL9PllrGTX+pVcV5mSJF5ZJainLbHgdfao+kND76kO7cEXen9kvLNdO6l3Zy1DntucUPlDfPrBvrgDLxhv3w9EZknvYL1LOn9tKTedczWDZinWerXw8RXBp1OIUxuZZ0vnvvHd3PrQ5NM+5DfG+bOF8noyr/jLujYrKaItnopdgadaczXUsrAyCj4d+pTLNx1qsG39Qzk7+Q==
-Received: from PH8P220CA0019.NAMP220.PROD.OUTLOOK.COM (2603:10b6:510:345::10)
- by PH8PR12MB7352.namprd12.prod.outlook.com (2603:10b6:510:214::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8678.33; Mon, 28 Apr
- 2025 18:22:01 +0000
-Received: from CY4PEPF0000FCC5.namprd03.prod.outlook.com
- (2603:10b6:510:345:cafe::41) by PH8P220CA0019.outlook.office365.com
- (2603:10b6:510:345::10) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8655.37 via Frontend Transport; Mon,
- 28 Apr 2025 18:22:01 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- CY4PEPF0000FCC5.mail.protection.outlook.com (10.167.242.107) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8678.33 via Frontend Transport; Mon, 28 Apr 2025 18:22:00 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 28 Apr
- 2025 11:21:46 -0700
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.14; Mon, 28 Apr 2025 11:21:46 -0700
-Received: from Asurada-Nvidia (10.127.8.14) by mail.nvidia.com
- (10.126.190.182) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14 via Frontend
- Transport; Mon, 28 Apr 2025 11:21:44 -0700
-Date: Mon, 28 Apr 2025 11:21:43 -0700
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: Pranjal Shrivastava <praan@google.com>
-CC: <jgg@nvidia.com>, <kevin.tian@intel.com>, <corbet@lwn.net>,
-	<will@kernel.org>, <bagasdotme@gmail.com>, <robin.murphy@arm.com>,
-	<joro@8bytes.org>, <thierry.reding@gmail.com>, <vdumpa@nvidia.com>,
-	<jonathanh@nvidia.com>, <shuah@kernel.org>, <jsnitsel@redhat.com>,
-	<nathan@kernel.org>, <peterz@infradead.org>, <yi.l.liu@intel.com>,
-	<mshavit@google.com>, <zhangzekun11@huawei.com>, <iommu@lists.linux.dev>,
-	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-tegra@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <patches@lists.linux.dev>,
-	<mochs@nvidia.com>, <alok.a.tiwari@oracle.com>, <vasant.hegde@amd.com>
-Subject: Re: [PATCH v2 04/22] iommu: Add iommu_copy_struct_to_user helper
-Message-ID: <aA/HN2CV+0UQ4S9j@Asurada-Nvidia>
-References: <cover.1745646960.git.nicolinc@nvidia.com>
- <ca032e90c0241fe0653023fcb655185dba763f5f.1745646960.git.nicolinc@nvidia.com>
- <aA-_5FQK0uZPdGVA@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 847A5253F3A
+	for <linux-kselftest@vger.kernel.org>; Mon, 28 Apr 2025 18:29:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1745864972; cv=none; b=ao6I7KEOlAMge8kmgPFxOJtD1c7l1bwW7FSDbVPoPCY1L5foyjc5KzAiDtoAukHfdjMJg3UdDYpU71PkZcwyleh7UX2GUWcO3SlyXo989gCByVdxjsrkxlbqS0oHgfundPwcTcca5Xxc6gCll2mzj7YVlpWbzrZHu9+GkjQZXrM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1745864972; c=relaxed/simple;
+	bh=p13D1eVIQwiWavUWJs1JcoUqzsrV/zu2I5OyDrzN+DA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=U8iD7Rp+WKoSP50QevUG6ETMbqkCUpn/94AV0QJ/f7cGUZ02TSOl2E7ng9/ODM3SaXKGG2IJrxS0t9ejSHRuBm7qfbW2OSXB0OG8FlhIsFNDyCPlZ7CipMTuheXnn+WFN7AFlszuGaGcvM5DpGGBZfkT3PSp/TyzWxLllHRiWDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IHQuDnbd; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1745864969;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=vn6qN5R0W1vyV94Pxo62dc7PUSUH9kpksvjrmkO531Q=;
+	b=IHQuDnbdlL8pNreXcZ7emE1ag5jl5g9OoYJGiNSj6mm0gokQjuXIRzlXm/Nak9ry4V58+C
+	j3syju8pAkceWs26W8GzKlnc6qYvNIwPxfh1vlhOeGev2cyAfB+uGCAXDGnYhMzsR5LlNN
+	GnCso1AJ0EhR/fglu28GJ0uENcBkV2I=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-221-gKDvzwrDOpeQZ_TyPCDpuQ-1; Mon,
+ 28 Apr 2025 14:29:25 -0400
+X-MC-Unique: gKDvzwrDOpeQZ_TyPCDpuQ-1
+X-Mimecast-MFC-AGG-ID: gKDvzwrDOpeQZ_TyPCDpuQ_1745864961
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 708BE180036E;
+	Mon, 28 Apr 2025 18:29:20 +0000 (UTC)
+Received: from h1.redhat.com (unknown [10.22.65.12])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D2B9830001A2;
+	Mon, 28 Apr 2025 18:29:10 +0000 (UTC)
+From: Nico Pache <npache@redhat.com>
+To: linux-mm@kvack.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: akpm@linux-foundation.org,
+	corbet@lwn.net,
+	rostedt@goodmis.org,
+	mhiramat@kernel.org,
+	mathieu.desnoyers@efficios.com,
+	david@redhat.com,
+	baohua@kernel.org,
+	baolin.wang@linux.alibaba.com,
+	ryan.roberts@arm.com,
+	willy@infradead.org,
+	peterx@redhat.com,
+	shuah@kernel.org,
+	ziy@nvidia.com,
+	wangkefeng.wang@huawei.com,
+	usamaarif642@gmail.com,
+	sunnanyong@huawei.com,
+	vishal.moola@gmail.com,
+	thomas.hellstrom@linux.intel.com,
+	yang@os.amperecomputing.com,
+	kirill.shutemov@linux.intel.com,
+	aarcange@redhat.com,
+	raquini@redhat.com,
+	dev.jain@arm.com,
+	anshuman.khandual@arm.com,
+	catalin.marinas@arm.com,
+	tiwai@suse.de,
+	will@kernel.org,
+	dave.hansen@linux.intel.com,
+	jack@suse.cz,
+	cl@gentwo.org,
+	jglisse@google.com,
+	surenb@google.com,
+	zokeefe@google.com,
+	Liam.Howlett@oracle.com,
+	lorenzo.stoakes@oracle.com,
+	hannes@cmpxchg.org,
+	rientjes@google.com,
+	mhocko@suse.com,
+	rdunlap@infradead.org
+Subject: [PATCH v5 0/4] mm: introduce THP deferred setting
+Date: Mon, 28 Apr 2025 12:29:00 -0600
+Message-ID: <20250428182904.93989-1-npache@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <aA-_5FQK0uZPdGVA@google.com>
-X-NV-OnPremToCloud: AnonymousSubmission
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000FCC5:EE_|PH8PR12MB7352:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2ca85158-954f-454c-5ed7-08dd868191b8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|36860700013|7416014|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?zGckPn894esKrllVYbQRoph5A4lKgSPPT4rJUq8LjWYKIiCfAeVFWCLhytL4?=
- =?us-ascii?Q?hLhbbyTbhZ/cZ25qBkt+en14ZVkdb3g0M1nUTcy3+WpLAaBNDcQw8DXKK5Y1?=
- =?us-ascii?Q?s38jCe6/+wq0SokOOGxBiVIEZkL4XcgGAAy2QskX2ZbTukZyxqv7sysFl1yV?=
- =?us-ascii?Q?BkrTKmEFdV2CIUYjgL5YiPPbxoAdUC4olzJNG212wYqO8dXojQ0Mg0e8jL0k?=
- =?us-ascii?Q?D+JJm0vX/49qDV8deX5FvpaPXD35PKccyQfIpMiyluwF23evFDGL0j75uCAC?=
- =?us-ascii?Q?69z4i9DrtFmM9av3O4aGyCBmFbh9qqpY3W9dhLc6WN+oAoPnzP9LcR9VKNPx?=
- =?us-ascii?Q?QIM+XtAyoPnyJDxYMcdlRFrcSD191rIM01l08sxu6UNya8nXsWcXLB4+4+8B?=
- =?us-ascii?Q?6xzIL5p9bxoUEEMJe6Osj1nyBqvIvOzX82JCFTK74ZAEVw/yXGWULX2JDTHU?=
- =?us-ascii?Q?4AFjd48VlatZiJ7+pUfAmXPaCSUhW70kGfKWZNUxCPg2vp9zakpNlkonK1rM?=
- =?us-ascii?Q?YINhYGJ+PXSB5apk2lMlFhupK7+fBvF3gafTaKqseFzMuMoBHI4JLnUTyppN?=
- =?us-ascii?Q?6fBCW0INqPrKk5AH5OuTZR0epM8G/HlwhM22Np1gN6lCTI4ZaQs30TQYQdS3?=
- =?us-ascii?Q?gT6V8/YQ60dxPTnZli899VmnNqz5fdw/j+gxirbFeqmrxSjwnG/bm/Jnh1lR?=
- =?us-ascii?Q?d481A793l4RVicoLq6RIXGJvEZExw0N0/pokJaOjm54W4ucGYe6fOCbqn4cZ?=
- =?us-ascii?Q?b0XkQ/n9NUNu1mxPwDPvVxSp0rWc3qLd5rguRVzSGCVf6cckejla0ajrNpxT?=
- =?us-ascii?Q?jmYVVvssBtVFHP5RD7wE8RVTyX5LWENN8zTo94HIRA+b3Rv0EL5oTTjArvIs?=
- =?us-ascii?Q?OqTEos6HANCICNG4NXHYE300Us7YL8C0xleB7xxkZOFOyOmVOYpbos/WOcj2?=
- =?us-ascii?Q?Vs8hFVdQcp/B/sKJ4Gy117hRmlcnBG/dVkGo+a9hkH7nY0uwcwPlz3yS1vZv?=
- =?us-ascii?Q?caWGSz4PAKpIgsoEZ+p9EZig0iLWFnkMDSkZorrOk06XRXXgOgTzWTm2Ku7s?=
- =?us-ascii?Q?U/Tr4SWNzJ1Zdz5aHouOHkqNjH25hMMVEi6MBE+QuhsRvFsciKpQZa6v81l/?=
- =?us-ascii?Q?5GIfC12TDybiIjK7e+NG0qRbJ7Vi37r2VnvwPCTANncd3VRI+JJPYlR9cF6h?=
- =?us-ascii?Q?9mHNuMBK0lAXsWJb9S54DmfCcTYZfpeeweJGNAHaT+kzK7LfLnP7XqQndrSf?=
- =?us-ascii?Q?375zpSrHQGNXWIY3uL6I6h5LgnguKqc097ZXKF5U2aOk96OZY2jWzQmTUpZG?=
- =?us-ascii?Q?oKen2zxquWEB944yd1tARvICjBrqRaLlEbxv8i3Qic+Y8TO368o7IPmZ2rZl?=
- =?us-ascii?Q?A5nBvTTdwn0/CkDE0+KTJnCfJsFretZsNoQqvgj92c1KG3oNNk8f+oQlRhx4?=
- =?us-ascii?Q?eFV3hBAKr10lyPLyD5YAuoNicGcrE9BivvCUdBhrLLJDbqY2nFg5Wn2EvzON?=
- =?us-ascii?Q?LSNahICeFJzaMkH0mQFzQLmMShDA29CP7Bsi?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(36860700013)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2025 18:22:00.9172
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2ca85158-954f-454c-5ed7-08dd868191b8
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF0000FCC5.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7352
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On Mon, Apr 28, 2025 at 05:50:28PM +0000, Pranjal Shrivastava wrote:
-> On Fri, Apr 25, 2025 at 10:57:59PM -0700, Nicolin Chen wrote:
-> > Similar to the iommu_copy_struct_from_user helper receiving data from the
-> > user space, add an iommu_copy_struct_to_user helper to report output data
-> > back to the user space data pointer.
-> > 
-> > Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-> > Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-> > ---
-> >  include/linux/iommu.h | 40 ++++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 40 insertions(+)
-> > 
-> > diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-> > index ba7add27e9a0..634ff647888d 100644
-> > --- a/include/linux/iommu.h
-> > +++ b/include/linux/iommu.h
-> > @@ -562,6 +562,46 @@ iommu_copy_struct_from_full_user_array(void *kdst, size_t kdst_entry_size,
-> >  	return 0;
-> >  }
-> >  
-> > +/**
-> > + * __iommu_copy_struct_to_user - Report iommu driver specific user space data
-> > + * @dst_data: Pointer to a struct iommu_user_data for user space data location
-> > + * @src_data: Pointer to an iommu driver specific user data that is defined in
-> > + *            include/uapi/linux/iommufd.h
-> > + * @data_type: The data type of the @dst_data. Must match with @src_data.type
-> 								   ^
-> Nit: Must match with @dst_data type.
+This series is a follow-up to [1], which adds mTHP support to khugepaged.
+mTHP khugepaged support is a "loose" dependency for the sysfs/sysctl
+configs to make sense. Without it global="defer" and  mTHP="inherit" case
+is "undefined" behavior.
 
-Oh, that's a copy-n-paste mistake. It should be:
-  * @data_type: The data type of the @src_data. Must match with @dst_data.type
+We've seen cases were customers switching from RHEL7 to RHEL8 see a
+significant increase in the memory footprint for the same workloads.
 
-Thanks!
-Nicolin
+Through our investigations we found that a large contributing factor to
+the increase in RSS was an increase in THP usage.
+
+For workloads like MySQL, or when using allocators like jemalloc, it is
+often recommended to set /transparent_hugepages/enabled=never. This is
+in part due to performance degradations and increased memory waste.
+
+This series introduces enabled=defer, this setting acts as a middle
+ground between always and madvise. If the mapping is MADV_HUGEPAGE, the
+page fault handler will act normally, making a hugepage if possible. If
+the allocation is not MADV_HUGEPAGE, then the page fault handler will
+default to the base size allocation. The caveat is that khugepaged can
+still operate on pages that are not MADV_HUGEPAGE.
+
+This allows for three things... one, applications specifically designed to
+use hugepages will get them, and two, applications that don't use
+hugepages can still benefit from them without aggressively inserting
+THPs at every possible chance. This curbs the memory waste, and defers
+the use of hugepages to khugepaged. Khugepaged can then scan the memory
+for eligible collapsing. Lastly there is the added benefit for those who
+want THPs but experience higher latency PFs. Now you can get base page
+performance at the PF handler and Hugepage performance for those mappings
+after they collapse.
+
+Admins may want to lower max_ptes_none, if not, khugepaged may
+aggressively collapse single allocations into hugepages.
+
+TESTING:
+- Built for x86_64, aarch64, ppc64le, and s390x
+- selftests mm
+- In [1] I provided a script [2] that has multiple access patterns
+- lots of general use.
+- redis testing. This test was my original case for the defer mode. What I
+   was able to prove was that THP=always leads to increased max_latency
+   cases; hence why it is recommended to disable THPs for redis servers.
+   However with 'defer' we dont have the max_latency spikes and can still
+   get the system to utilize THPs. I further tested this with the mTHP
+   defer setting and found that redis (and probably other jmalloc users)
+   can utilize THPs via defer (+mTHP defer) without a large latency
+   penalty and some potential gains. I uploaded some mmtest results
+   here[3] which compares:
+       stock+thp=never
+       stock+(m)thp=always
+       khugepaged-mthp + defer (max_ptes_none=64)
+
+  The results show that (m)THPs can cause some throughput regression in
+  some cases, but also has gains in other cases. The mTHP+defer results
+  have more gains and less losses over the (m)THP=always case.
+
+V5 Changes:
+- rebased dependent series
+- added reviewed-by tag on 2/4
+
+V4 Changes:
+- Minor Documentation fixes
+- rebased the dependent series [1] onto mm-unstable
+    commit 0e68b850b1d3 ("vmalloc: use atomic_long_add_return_relaxed()")
+
+V3 Changes:
+- Combined the documentation commits into one, and moved a section to the
+  khugepaged mthp patchset
+
+V2 Changes:
+- base changes on mTHP khugepaged support
+- Fix selftests parsing issue
+- add mTHP defer option
+- add mTHP defer Documentation
+
+[1] - https://lore.kernel.org/lkml/20250428181218.85925-1-npache@redhat.com/
+[2] - https://gitlab.com/npache/khugepaged_mthp_test
+[3] - https://people.redhat.com/npache/mthp_khugepaged_defer/testoutput2/output.html
+
+Nico Pache (4):
+  mm: defer THP insertion to khugepaged
+  mm: document (m)THP defer usage
+  khugepaged: add defer option to mTHP options
+  selftests: mm: add defer to thp setting parser
+
+ Documentation/admin-guide/mm/transhuge.rst | 31 +++++++---
+ include/linux/huge_mm.h                    | 18 +++++-
+ mm/huge_memory.c                           | 69 +++++++++++++++++++---
+ mm/khugepaged.c                            |  8 +--
+ tools/testing/selftests/mm/thp_settings.c  |  1 +
+ tools/testing/selftests/mm/thp_settings.h  |  1 +
+ 6 files changed, 106 insertions(+), 22 deletions(-)
+
+-- 
+2.48.1
+
 
