@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-31785-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31786-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C72A1A9F4CF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 17:44:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E932A9F4D1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 17:44:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF5063A8C26
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 15:44:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 816EA1884E9E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 15:44:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB09426FA6A;
-	Mon, 28 Apr 2025 15:44:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0D3527A119;
+	Mon, 28 Apr 2025 15:44:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GxHyUZLd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KSgZ6nxw"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEFC114A62B;
-	Mon, 28 Apr 2025 15:44:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 971C414A62B;
+	Mon, 28 Apr 2025 15:44:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745855064; cv=none; b=otCrRfntqDHnpsoTPmBGvluTbQaqWXspOhmyahlgyYvBnbioTuAi6Q7euHZ0m0uyRL/w/u+gr9lLmAOfwkim2wSefFs6daK0ES5bBkffvZrTVMeBlUeFeDIX2bCvVpb1SKPm/c8dLiR1tH43DVLS3sikuGSaepkbd9X9/vviSYA=
+	t=1745855067; cv=none; b=ZLERi+9xL9zxAp/67+1ZLB7TO3T9De3M7Hc5iZVJEcr7JOi9LUd8edKIALc+g6GyJLqo2fiKJS9BSPizEbKOJFnJxj11sxldg33By8zjONkyoX2mbLOCOEddngsoXCIYduNWlYM2+X9Qcx9nZOtrnS38dHMvFWLwmvXX5nbGJDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745855064; c=relaxed/simple;
-	bh=iLG3fqqfp4/aP0KBXyfC3Ee/J6tueQqSLAA581tEjYM=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=XigpwktKDP6x2s5u6m5qal2994iOGfavhKJwomv+BwW7225UbyzOr3jAO6fOlymhhIsyVObs8aCa8aqZK3ZUt2GWUEr33Wu26IGcmDmxhIBceoZfd9FInw+4skPaWAfkcAWqtLUZR/CHwpYt95rDlnpFRBIUlKwXrPG5OTldLKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GxHyUZLd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4999C4CEEC;
-	Mon, 28 Apr 2025 15:44:23 +0000 (UTC)
+	s=arc-20240116; t=1745855067; c=relaxed/simple;
+	bh=G9IMNi4r7tAcEA5vcW/ZsLapU/zdX0f8qIdyiG9Xuwo=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=RrykGxZCd2E7Xp2qCp+orul91hGFdxIe0QWlOVPvnlLPbbRX+8Cq0IDLqHNVAJvV7zEYRNZinkP9BGjVi9UmKFsLvMa+jFMKSll4frzqh6u7VSsxJOErwwFI9M76M0PzQN8ij7uqz1VFrHQjp8ybDIQW2GmFgD1L+QlEfd0AV90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KSgZ6nxw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8DA4C4CEE4;
+	Mon, 28 Apr 2025 15:44:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745855064;
-	bh=iLG3fqqfp4/aP0KBXyfC3Ee/J6tueQqSLAA581tEjYM=;
-	h=From:Subject:Date:To:Cc:From;
-	b=GxHyUZLd1KRiBFyAtE17e6oqct6GQnIsCixsSaSqnyYdf4CMLxToETf9S7WSVVLDz
-	 82RuqYMo17sJKVtoDXlO7o+XYAUUvFR20dhP7y7Uua82d/d3LgGkGlH0gNCMhrAy+a
-	 LrR+Iu5xx2uUb1hETYk+KkjYwxgEWUbxaSQYh0UJtUR7KxL/SWJYQRZN85fesy99dJ
-	 +p6qKTzPCZC+lkKCdt7xr7TKSSChr7GhUImXnpZg7jxveuyZ31Dyi+P5XEB45GpfKk
-	 /TBdiTHyh0hwq6c5yOxWFs/rv3Gw/1aNSeCDNMXjvCNq0194OwnWQiuHmoAbEhNqkp
-	 dZEuWEZQIYsEw==
+	s=k20201202; t=1745855067;
+	bh=G9IMNi4r7tAcEA5vcW/ZsLapU/zdX0f8qIdyiG9Xuwo=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=KSgZ6nxwVFS7KM5LG9iLlTfNBSrrJ8q87JhUW7ExyMmOluFUYbZJOq7sBuFmbMJjg
+	 ei9TnsBfZjyZLfqkfSH6PaSuGWIOVb7SRuDSjO8D+S9Vu1sBPMrpKue10KqCQ14yfj
+	 hYPrboYII8WRfOV3sJ9sp1yJ6uEJncj2fFVXocg9SL5bVOJr13GBd6aCVLPHmgYf5m
+	 FIvXEvP0bPGMiUAMuZ9VwhWDKP1bSfjoo+KUnV1OJfaSF8X/XVm2kwQhh0/0WCTVcB
+	 /oQM0dk8IBjExNS0CtKrwLKpQ2g5O80mdbEfl6t5ZRtxLC2nmhzHukK0VhbRBfYraz
+	 2kPlFqJt+7Tzg==
 From: Lorenzo Bianconi <lorenzo@kernel.org>
-Subject: [PATCH bpf-next v3 0/2] bpf: Allow XDP_REDIRECT for XDP dev-bound
- programs
-Date: Mon, 28 Apr 2025 17:44:01 +0200
-Message-Id: <20250428-xdp-prog-bound-fix-v3-0-c9e9ba3300c7@kernel.org>
+Date: Mon, 28 Apr 2025 17:44:02 +0200
+Subject: [PATCH bpf-next v3 1/2] bpf: Allow XDP dev-bound programs to
+ perform XDP_REDIRECT into maps
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,11 +53,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAEGiD2gC/33NTQrCMBCG4atI1o7kp9HqynuIi7SZtEFJykRDp
- fTupl0piMv3g3lmYgnJY2KnzcQIs08+hhJqu2Ftb0KH4G1pJrnUvJISRjvAQLGDJj6DBedHODr
- FnUKhKmNYORwIy7yil2vp3qdHpNf6I4tl/ctlAQJ4o2vhjKj3Ds83pID3XaSOLV6Wn4b6achia
- HGopNHWNe23Mc/zG05VXiH5AAAA
-X-Change-ID: 20250422-xdp-prog-bound-fix-9f30f3e134aa
+Message-Id: <20250428-xdp-prog-bound-fix-v3-1-c9e9ba3300c7@kernel.org>
+References: <20250428-xdp-prog-bound-fix-v3-0-c9e9ba3300c7@kernel.org>
+In-Reply-To: <20250428-xdp-prog-bound-fix-v3-0-c9e9ba3300c7@kernel.org>
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, 
  John Fastabend <john.fastabend@gmail.com>, 
@@ -74,38 +72,84 @@ Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
 X-Mailer: b4 0.14.2
 
 In the current implementation if the program is dev-bound to a specific
-device, it will not be possible to perform XDP_REDIRECT into a DEVMAP or
-CPUMAP even if the program is running in the driver NAPI context.
+device, it will not be possible to perform XDP_REDIRECT into a DEVMAP
+or CPUMAP even if the program is running in the driver NAPI context and
+it is not attached to any map entry. This seems in contrast with the
+explanation available in bpf_prog_map_compatible routine.
 Fix the issue introducing __bpf_prog_map_compatible utility routine in
-order to avoid bpf_prog_is_dev_bound() during the XDP program load.
-Continue forbidding to attach a dev-bound program to XDP maps.
+order to avoid bpf_prog_is_dev_bound() check running bpf_check_tail_call()
+at program load time (bpf_prog_select_runtime()).
+Continue forbidding to attach a dev-bound program to XDP maps
+(BPF_MAP_TYPE_PROG_ARRAY, BPF_MAP_TYPE_DEVMAP and BPF_MAP_TYPE_CPUMAP).
 
+Fixes: 3d76a4d3d4e59 ("bpf: XDP metadata RX kfuncs")
+Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 ---
-Changes in v3:
-- move seltest changes in a dedicated patch
-- Link to v2: https://lore.kernel.org/r/20250423-xdp-prog-bound-fix-v2-1-51742a5dfbce@kernel.org
+ kernel/bpf/core.c | 27 ++++++++++++++++-----------
+ 1 file changed, 16 insertions(+), 11 deletions(-)
 
-Changes in v2:
-- Introduce __bpf_prog_map_compatible() utility routine in order to skip
-  bpf_prog_is_dev_bound check in bpf_check_tail_call()
-- Extend xdp_metadata selftest
-- Link to v1: https://lore.kernel.org/r/20250422-xdp-prog-bound-fix-v1-1-0b581fa186fe@kernel.org
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index ba6b6118cf504041278d05417c4212d57be6fca0..a3e571688421196c3ceaed62b3b59b62a0258a8c 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -2358,8 +2358,8 @@ static unsigned int __bpf_prog_ret0_warn(const void *ctx,
+ 	return 0;
+ }
+ 
+-bool bpf_prog_map_compatible(struct bpf_map *map,
+-			     const struct bpf_prog *fp)
++static bool __bpf_prog_map_compatible(struct bpf_map *map,
++				      const struct bpf_prog *fp)
+ {
+ 	enum bpf_prog_type prog_type = resolve_prog_type(fp);
+ 	bool ret;
+@@ -2368,14 +2368,6 @@ bool bpf_prog_map_compatible(struct bpf_map *map,
+ 	if (fp->kprobe_override)
+ 		return false;
+ 
+-	/* XDP programs inserted into maps are not guaranteed to run on
+-	 * a particular netdev (and can run outside driver context entirely
+-	 * in the case of devmap and cpumap). Until device checks
+-	 * are implemented, prohibit adding dev-bound programs to program maps.
+-	 */
+-	if (bpf_prog_is_dev_bound(aux))
+-		return false;
+-
+ 	spin_lock(&map->owner.lock);
+ 	if (!map->owner.type) {
+ 		/* There's no owner yet where we could check for
+@@ -2409,6 +2401,19 @@ bool bpf_prog_map_compatible(struct bpf_map *map,
+ 	return ret;
+ }
+ 
++bool bpf_prog_map_compatible(struct bpf_map *map, const struct bpf_prog *fp)
++{
++	/* XDP programs inserted into maps are not guaranteed to run on
++	 * a particular netdev (and can run outside driver context entirely
++	 * in the case of devmap and cpumap). Until device checks
++	 * are implemented, prohibit adding dev-bound programs to program maps.
++	 */
++	if (bpf_prog_is_dev_bound(fp->aux))
++		return false;
++
++	return __bpf_prog_map_compatible(map, fp);
++}
++
+ static int bpf_check_tail_call(const struct bpf_prog *fp)
+ {
+ 	struct bpf_prog_aux *aux = fp->aux;
+@@ -2421,7 +2426,7 @@ static int bpf_check_tail_call(const struct bpf_prog *fp)
+ 		if (!map_type_contains_progs(map))
+ 			continue;
+ 
+-		if (!bpf_prog_map_compatible(map, fp)) {
++		if (!__bpf_prog_map_compatible(map, fp)) {
+ 			ret = -EINVAL;
+ 			goto out;
+ 		}
 
----
-Lorenzo Bianconi (2):
-      bpf: Allow XDP dev-bound programs to perform XDP_REDIRECT into maps
-      selftests/bpf: xdp_metadata: check XDP_REDIRCT support for dev-bound progs
-
- kernel/bpf/core.c                                  | 27 +++++++++++++---------
- .../selftests/bpf/prog_tests/xdp_metadata.c        | 22 +++++++++++++++++-
- tools/testing/selftests/bpf/progs/xdp_metadata.c   | 13 +++++++++++
- 3 files changed, 50 insertions(+), 12 deletions(-)
----
-base-commit: 91dbac4076537b464639953c055c460d2bdfc7ea
-change-id: 20250422-xdp-prog-bound-fix-9f30f3e134aa
-
-Best regards,
 -- 
-Lorenzo Bianconi <lorenzo@kernel.org>
+2.49.0
 
 
