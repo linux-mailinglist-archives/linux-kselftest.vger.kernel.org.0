@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-31758-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31759-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B70EFA9EA88
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 10:19:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E9BBA9EA91
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 10:19:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 28A67189C802
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 08:19:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 792F7189D2EA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 08:19:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74F1125E83E;
-	Mon, 28 Apr 2025 08:18:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A81625E46B;
+	Mon, 28 Apr 2025 08:19:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BgXCvYfE"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mFJK0/iX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
+Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C7C625DD15
-	for <linux-kselftest@vger.kernel.org>; Mon, 28 Apr 2025 08:18:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DC7C25DCE9;
+	Mon, 28 Apr 2025 08:19:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745828328; cv=none; b=SXlxcVBukhx5aJQV8W372OogxR1pvBn78sI9iAJwk14GR2OE/lhpcvYWrUfD1QJes0FvBQ8RUlSYYAcQ4ZX3d8b4ocapi6HOOxxMNXU1cbpQdVrinxC/7eb/quLOUDv1qQxUYGYK5QbfaTjaJ4PE2BSnaD0ddAtFM4GS3GzFyX4=
+	t=1745828353; cv=none; b=jVBMrkiddNCLeXa9dVu9rON7K9Dif9viz2CJNssV1s70B4Eaz4JkDurzMIMSQLBwZbubcGwXSJ1h3Lmbpg28N91oGJr3l0f8v6obtbxIDqC6UGhVfHhPvj3MkLpT9IIYHm+5KBq5NStWqqJXZMwqLMnsMGj6RZcA7UFaAYiu2no=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745828328; c=relaxed/simple;
-	bh=shrVW23MJmXPTGr7Fi7hfalJrHhCvaQGn7EfPJfZHaM=;
+	s=arc-20240116; t=1745828353; c=relaxed/simple;
+	bh=0sGaXTtD20xzhNz4rmeWyme7BvH88i16MX9d4W1Y3CQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WDgfa1aga2yt+cuz0JnJ/hNgAl+hfjdFyga1NH8J+D0LzVx7dhgkQFiGBIy5cyD7vuNlg2lm4siOB+jSG4oclTlbPJ/1zZvX7Q4+P5f54NAgRGQnHfRtgVsXJGbLKfeLGfTVZyJqPV/LNhViZZTpq5yNbRbnl8hu99BLFymIAB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BgXCvYfE; arc=none smtp.client-ip=91.218.175.184
+	 MIME-Version; b=ekMglyPJrSpsGA4u1+snH1PBiO8DS7XRZTQCmWFsqtXlVcpcz0AYyAFnyUrDIqrMPAwP//x3wK+cjcyGdcQ45FW+sdK31pBwON4CV+ivIir/VJJtw+6f49qV7ni5p11adplSm2PlZMAq5u9nqcfMiqKhIvNsaPfKhY7duSQvQbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mFJK0/iX; arc=none smtp.client-ip=91.218.175.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1745828323;
+	t=1745828349;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=lDD4f3PJohVRbIgegKL4gSaxyAoWqWwnyjgGj9h1ygw=;
-	b=BgXCvYfEYOgYlLJ1CvN2ual2TU/chQyaWi5wpad8tR3nAaFu7FsOpzpDnCkM1r5iD1nYuz
-	DEfR8J8CpxP5bRA4HrjZeSA3QvIzZWgzZ7QGvQgyQYNJBZb733wqORpCqt/GeuuQ5r/AfA
-	DEUcrhF7AxAa0GiFgJDIMCP0TT/DpIw=
+	bh=Fg/btEvaUcqT4NM4dYYa4R9u9WjGLVmndHIgtbzlFXc=;
+	b=mFJK0/iXSOt5fj3xjadJLjSr81Jzb3GynBBFsr5KHqT0x5plfJlh+zMBgV6u+BWLX6J/on
+	Z1DQYEu83m7V578FTrWJZp3poMihriyfGZvrhL3orFlBxG7S2JNcZZI4eCKIVrvRQeXBfN
+	tQVSe3DLCCJKPkD/jCVFYI8t/3rq36M=
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: bpf@vger.kernel.org
 Cc: mrpre@163.com,
@@ -74,9 +74,9 @@ Cc: mrpre@163.com,
 	linux-kernel@vger.kernel.org,
 	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v1 2/3] bpf, sockmap: Affinitize workqueue to a specific CPU
-Date: Mon, 28 Apr 2025 16:16:53 +0800
-Message-ID: <20250428081744.52375-3-jiayuan.chen@linux.dev>
+Subject: [PATCH bpf-next v1 3/3] selftest/bpf/benchs: Add cpu-affinity for sockmap bench
+Date: Mon, 28 Apr 2025 16:16:54 +0800
+Message-ID: <20250428081744.52375-4-jiayuan.chen@linux.dev>
 In-Reply-To: <20250428081744.52375-1-jiayuan.chen@linux.dev>
 References: <20250428081744.52375-1-jiayuan.chen@linux.dev>
 Precedence: bulk
@@ -88,89 +88,161 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Introduce a sk_psock_schedule_delayed_work() wrapper function, which calls
-schedule_delayed_work_on() to specify the CPU for running the workqueue if
-the BPF program has set the redirect CPU using
-bpf_sk_skb_set_redirect_cpu(). Otherwise, it falls back to the original
-logic.
+Add cpu-affinity for sockmap bench. Also add no-verify args to avoid
+validating data for performance enhancements.
 
 Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
- include/linux/skmsg.h | 12 ++++++++++++
- net/core/skmsg.c      |  9 +++++----
- 2 files changed, 17 insertions(+), 4 deletions(-)
+ .../selftests/bpf/benchs/bench_sockmap.c      | 35 +++++++++++++++++--
+ tools/testing/selftests/bpf/bpf_kfuncs.h      |  6 ++++
+ .../selftests/bpf/progs/bench_sockmap_prog.c  |  7 ++++
+ 3 files changed, 45 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
-index b888481a845d..21c7dd47186f 100644
---- a/include/linux/skmsg.h
-+++ b/include/linux/skmsg.h
-@@ -396,6 +396,18 @@ static inline void sk_psock_report_error(struct sk_psock *psock, int err)
- 	sk_error_report(sk);
+diff --git a/tools/testing/selftests/bpf/benchs/bench_sockmap.c b/tools/testing/selftests/bpf/benchs/bench_sockmap.c
+index 8ebf563a67a2..e004a618822a 100644
+--- a/tools/testing/selftests/bpf/benchs/bench_sockmap.c
++++ b/tools/testing/selftests/bpf/benchs/bench_sockmap.c
+@@ -43,6 +43,8 @@ enum SOCKMAP_ARG_FLAG {
+ 	ARG_FW_TX_VERDICT_INGRESS,
+ 	ARG_FW_TX_VERDICT_EGRESS,
+ 	ARG_CTL_RX_STRP,
++	ARG_CTL_CPU_AFFINITY,
++	ARG_CTL_NO_VERIFY,
+ 	ARG_CONSUMER_DELAY_TIME,
+ 	ARG_PRODUCER_DURATION,
+ };
+@@ -109,6 +111,8 @@ static struct socmap_ctx {
+ 	int		delay_consumer;
+ 	int		prod_run_time;
+ 	int		strp_size;
++	int		cpu_affinity;
++	int		skip_verify;
+ } ctx = {
+ 	.prod_send	= 0,
+ 	.user_read	= 0,
+@@ -118,6 +122,8 @@ static struct socmap_ctx {
+ 	.delay_consumer = 0,
+ 	.prod_run_time	= 0,
+ 	.strp_size	= 0,
++	.cpu_affinity	= 0,
++	.skip_verify	= 0,
+ };
+ 
+ static void bench_sockmap_prog_destroy(void)
+@@ -235,11 +241,18 @@ static int create_sockets(void)
+ static void validate(void)
+ {
+ 	if (env.consumer_cnt != 2 || env.producer_cnt != 1 ||
+-	    !env.affinity)
++	    !env.affinity) {
++		fprintf(stderr, "argument '-c 2 -p 1 -a' is necessary\n");
+ 		goto err;
++	}
++
++	if (!ctx.cpu_affinity && env.nr_cpus < 4) {
++		fprintf(stderr, "4 CPU are needed to test cpu-affinity\n");
++		goto err;
++	}
++
+ 	return;
+ err:
+-	fprintf(stderr, "argument '-c 2 -p 1 -a' is necessary");
+ 	exit(1);
  }
  
-+static inline void sk_psock_schedule_delayed_work(struct sk_psock *psock,
-+						  int delay)
-+{
-+	s32 redir_cpu = psock->redir_cpu;
-+
-+	if (redir_cpu != BPF_SK_REDIR_CPU_UNSET)
-+		schedule_delayed_work_on(redir_cpu, &psock->work,
-+					 delay);
-+	else
-+		schedule_delayed_work(&psock->work, delay);
-+}
-+
- struct sk_psock *sk_psock_init(struct sock *sk, int node);
- void sk_psock_stop(struct sk_psock *psock);
- 
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index 292752c783b5..af00c09263a8 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -689,7 +689,7 @@ static void sk_psock_backlog(struct work_struct *work)
- 					 * other work that might be here.
- 					 */
- 					if (sk_psock_test_state(psock, SK_PSOCK_TX_ENABLED))
--						schedule_delayed_work(&psock->work, 1);
-+						sk_psock_schedule_delayed_work(psock, 1);
- 					goto end;
- 				}
- 				/* Hard errors break pipe and stop xmit. */
-@@ -940,6 +940,7 @@ static int sk_psock_skb_redirect(struct sk_psock *from, struct sk_buff *skb)
- 		sock_drop(from->sk, skb);
- 		return -EIO;
- 	}
-+	psock_other->redir_cpu = from->redir_cpu;
- 	spin_lock_bh(&psock_other->ingress_lock);
- 	if (!sk_psock_test_state(psock_other, SK_PSOCK_TX_ENABLED)) {
- 		spin_unlock_bh(&psock_other->ingress_lock);
-@@ -949,7 +950,7 @@ static int sk_psock_skb_redirect(struct sk_psock *from, struct sk_buff *skb)
+@@ -327,6 +340,9 @@ static void setup(void)
+ 		exit(1);
  	}
  
- 	skb_queue_tail(&psock_other->ingress_skb, skb);
--	schedule_delayed_work(&psock_other->work, 0);
-+	sk_psock_schedule_delayed_work(psock_other, 0);
- 	spin_unlock_bh(&psock_other->ingress_lock);
- 	return 0;
- }
-@@ -1027,7 +1028,7 @@ static int sk_psock_verdict_apply(struct sk_psock *psock, struct sk_buff *skb,
- 			spin_lock_bh(&psock->ingress_lock);
- 			if (sk_psock_test_state(psock, SK_PSOCK_TX_ENABLED)) {
- 				skb_queue_tail(&psock->ingress_skb, skb);
--				schedule_delayed_work(&psock->work, 0);
-+				sk_psock_schedule_delayed_work(psock, 0);
- 				err = 0;
- 			}
- 			spin_unlock_bh(&psock->ingress_lock);
-@@ -1059,7 +1060,7 @@ static void sk_psock_write_space(struct sock *sk)
- 	psock = sk_psock(sk);
- 	if (likely(psock)) {
- 		if (sk_psock_test_state(psock, SK_PSOCK_TX_ENABLED))
--			schedule_delayed_work(&psock->work, 0);
-+			sk_psock_schedule_delayed_work(psock, 0);
- 		write_space = psock->saved_write_space;
++	if (ctx.cpu_affinity)
++		ctx.skel->data->redir_cpu = 3;
++
+ 	if (create_sockets()) {
+ 		fprintf(stderr, "create_net_mode error\n");
+ 		goto err;
+@@ -367,9 +383,12 @@ static void measure(struct bench_res *res)
+ 
+ static void verify_data(int *check_pos, char *buf, int rcv)
+ {
++	if (ctx.skip_verify)
++		return;
++
+ 	for (int i = 0 ; i < rcv; i++) {
+ 		if (buf[i] != snd_data[(*check_pos) % DATA_REPEAT_SIZE]) {
+-			fprintf(stderr, "verify data fail");
++			fprintf(stderr, "verify data fail\n");
+ 			exit(1);
+ 		}
+ 		(*check_pos)++;
+@@ -553,6 +572,10 @@ static const struct argp_option opts[] = {
+ 		"delay consumer start"},
+ 	{ "producer-duration", ARG_PRODUCER_DURATION, "SEC", 0,
+ 		"producer duration"},
++	{ "cpu-affinity", ARG_CTL_CPU_AFFINITY, NULL, 0,
++		"set cpu-affinity for sockmap backlog thread"},
++	{ "no-verify", ARG_CTL_NO_VERIFY, NULL, 0,
++		"skip data validation for performance enhancements"},
+ 	{},
+ };
+ 
+@@ -571,6 +594,12 @@ static error_t parse_arg(int key, char *arg, struct argp_state *state)
+ 	case ARG_CTL_RX_STRP:
+ 		ctx.strp_size = strtol(arg, NULL, 10);
+ 		break;
++	case ARG_CTL_CPU_AFFINITY:
++		ctx.cpu_affinity = 1;
++		break;
++	case ARG_CTL_NO_VERIFY:
++		ctx.skip_verify = 1;
++		break;
+ 	default:
+ 		return ARGP_ERR_UNKNOWN;
  	}
- 	rcu_read_unlock();
+diff --git a/tools/testing/selftests/bpf/bpf_kfuncs.h b/tools/testing/selftests/bpf/bpf_kfuncs.h
+index 8215c9b3115e..173329c5d034 100644
+--- a/tools/testing/selftests/bpf/bpf_kfuncs.h
++++ b/tools/testing/selftests/bpf/bpf_kfuncs.h
+@@ -92,4 +92,10 @@ extern int bpf_set_dentry_xattr(struct dentry *dentry, const char *name__str,
+ 				const struct bpf_dynptr *value_p, int flags) __ksym __weak;
+ extern int bpf_remove_dentry_xattr(struct dentry *dentry, const char *name__str) __ksym __weak;
+ 
++/* Description
++ *  Set sockmap redir cpu
++ * Returns
++ *  Error code
++ */
++extern int bpf_sk_skb_set_redirect_cpu(struct __sk_buff *skb, int redir_cpu) __ksym;
+ #endif
+diff --git a/tools/testing/selftests/bpf/progs/bench_sockmap_prog.c b/tools/testing/selftests/bpf/progs/bench_sockmap_prog.c
+index 079bf3794b3a..dd1a11cb4f48 100644
+--- a/tools/testing/selftests/bpf/progs/bench_sockmap_prog.c
++++ b/tools/testing/selftests/bpf/progs/bench_sockmap_prog.c
+@@ -2,11 +2,15 @@
+ #include <linux/bpf.h>
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_endian.h>
++#include <stdbool.h>
++#include "bpf_kfuncs.h"
+ 
+ long process_byte = 0;
+ int  verdict_dir = 0;
+ int  dropped = 0;
+ int  pkt_size = 0;
++int  redir_cpu = -1;
++
+ struct {
+ 	__uint(type, BPF_MAP_TYPE_SOCKMAP);
+ 	__uint(max_entries, 20);
+@@ -33,6 +37,9 @@ int prog_skb_verdict(struct __sk_buff *skb)
+ 	int one = 1;
+ 	int ret =  bpf_sk_redirect_map(skb, &sock_map_rx, one, verdict_dir);
+ 
++	if (redir_cpu != -1)
++		bpf_sk_skb_set_redirect_cpu(skb, redir_cpu);
++
+ 	if (ret == SK_DROP)
+ 		dropped++;
+ 	__sync_fetch_and_add(&process_byte, skb->len);
 -- 
 2.47.1
 
