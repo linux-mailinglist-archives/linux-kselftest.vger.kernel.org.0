@@ -1,66 +1,46 @@
-Return-Path: <linux-kselftest+bounces-31750-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31753-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C068FA9E693
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 05:35:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D79BFA9E84F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 08:33:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DA0DE1774B2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 03:35:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F02F917A66D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 06:33:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 862E2149C7B;
-	Mon, 28 Apr 2025 03:35:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="D1gnxgpq"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F6471D63EF;
+	Mon, 28 Apr 2025 06:33:18 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35CF24431;
-	Mon, 28 Apr 2025 03:35:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F9611C5D46;
+	Mon, 28 Apr 2025 06:33:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745811348; cv=none; b=oyyWI34K0cS1rA0lOHUG1IEOxQvRptRZ2HqQi7W7I8zT+oftTYg46en4hu/vdo1uj3Bjn4emXW6QcgxmyeCeAE8vsXS2DCkPCjZn5L9gYCXQ6JJeAM+YUPYQ/9sTzXA2P4TjdZVOISJ84KrWW0kfPipAEoBoURKI84zqB+RMAnk=
+	t=1745821998; cv=none; b=oXcdlAcr57uELFO15IU+9ekjlj3nzRj4Sf0f01rXpDSygxvEUNFPCe1kk7M5Ug66xKNwobLVeK9g9BXiNAitFsDxp6v+IlIX/OgtFptcwYxfMLaINaethqrK4Cr45L82cpINkm3O68zdUAE3uoh5c+8GkYANgBkv3BPRuFx9BZs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745811348; c=relaxed/simple;
-	bh=Vl74lbaPxao4i+PKCKAVwlqXBb7lIiZC8DAbfSaqGA0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=mQJhVGFIR+6L5BiaeRzfkK4LE4oboBGof35unVSNrN3heLkCgwuWJxeEtxCGyusKjJXXhiGdNLI6ObXy8wkEzZMsMNAJyDFRwuKT+svJ5ph1b5GYh6QZH7zQo8+75M8upkp3laCX63uKGh+oYQUPvBtYwiAG5Kdb6bYUctpmpBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=D1gnxgpq; arc=none smtp.client-ip=220.197.31.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=xC0ns
-	2DS1YSWPkq7hRW07GpUN9EJ9rep06tDSrSrHRQ=; b=D1gnxgpq5LIoNHemUJeAd
-	bM6TKh9m2vCtmObDVHmkZ0rsmizvA88rnx7ZcWWq9SrKJW3Zq+rS61GcjMk5e+P3
-	WWB/r/T3HebG9ZnVuZ+aFoC+aLZDTe5kvuRIjhgj77RE3xzMEib21a3VmnGYD5fU
-	hcj0RhVIRFXjkmS7I8ViE4=
-Received: from localhost.localdomain (unknown [])
-	by gzsmtp4 (Coremail) with SMTP id PygvCgDX5pZV9w5oNYEeAQ--.47989S2;
-	Mon, 28 Apr 2025 11:34:48 +0800 (CST)
-From: Feng Yang <yangfeng59949@163.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	mykolal@fb.com,
-	shuah@kernel.org,
-	toke@redhat.com,
-	amery.hung@bytedance.com
-Cc: bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
+	s=arc-20240116; t=1745821998; c=relaxed/simple;
+	bh=o3qXcMq9W9bqc0A6DllhRLlFvOzRBCr9VypF08Ya9TY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LarnGItOHoOPmUIWeIOHcZBb34lasommpVLg+TUdz13RlLqGJpJR3dxDG2bYLViHLpTu/sQ/95te3cGqAuW+gTP5BQqEFrocC1Lgq4l8VjrZaXroNkeqPjOUvRu/kY9nKvtz0SBWDanaxux88u2CDBvgBnLEP4PgyutUzHDCLds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8Bx63EfIQ9ojSDIAA--.3857S3;
+	Mon, 28 Apr 2025 14:33:03 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowMAxDcUdIQ9oTM6aAA--.59312S2;
+	Mon, 28 Apr 2025 14:33:02 +0800 (CST)
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+To: Christian Brauner <brauner@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next] selftests/bpf: Fix compilation errors
-Date: Mon, 28 Apr 2025 11:34:45 +0800
-Message-Id: <20250428033445.58113-1-yangfeng59949@163.com>
-X-Mailer: git-send-email 2.25.1
+Subject: [PATCH 0/2] Fix compile-time and run-time issues for pid_namespace
+Date: Mon, 28 Apr 2025 14:32:58 +0800
+Message-ID: <20250428063300.7137-1-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -68,47 +48,31 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PygvCgDX5pZV9w5oNYEeAQ--.47989S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7ZrWxJFyrtr18Zr1xWw13XFb_yoW8Aw1fpa
-	4DZw1DCr1Fgr4UWry7trW5u3WI9ws5Wry7Ca1UJ34Ikrn8XaykXr1IgayxWa4agrWY9wsx
-	ZasF9a43Zr1kCFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jerWrUUUUU=
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/1tbiTQY8eGgN0ZzHBgABsn
+X-CM-TRANSID:qMiowMAxDcUdIQ9oTM6aAA--.59312S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+	ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
+	BjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26c
+	xKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
+	j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxV
+	AFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E
+	14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
+	0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280
+	aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28Icx
+	kI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2Iq
+	xVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42
+	IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY
+	6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aV
+	CY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU25EfUUUUU
 
-From: Feng Yang <yangfeng@kylinos.cn>
+Tiezhu Yang (2):
+  selftests: pid_namespace: Include sys/mount.h
+  selftests: pid_namespace: Skip tests if not root
 
-If the CONFIG_NET_SCH_BPF configuration is not enabled,
-the BPF test compilation will report the following error:
-In file included from progs/bpf_qdisc_fq.c:39:
-progs/bpf_qdisc_common.h:17:51: error: declaration of 'struct bpf_sk_buff_ptr' will not be visible outside of this function [-Werror,-Wvisibility]
-   17 | void bpf_qdisc_skb_drop(struct sk_buff *p, struct bpf_sk_buff_ptr *to_free) __ksym;
-      |                                                   ^
-progs/bpf_qdisc_fq.c:309:14: error: declaration of 'struct bpf_sk_buff_ptr' will not be visible outside of this function [-Werror,-Wvisibility]
-  309 |              struct bpf_sk_buff_ptr *to_free)
-      |                     ^
-progs/bpf_qdisc_fq.c:309:14: error: declaration of 'struct bpf_sk_buff_ptr' will not be visible outside of this function [-Werror,-Wvisibility]
-progs/bpf_qdisc_fq.c:308:5: error: conflicting types for '____bpf_fq_enqueue'
+ tools/testing/selftests/pid_namespace/pid_max.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-Fixes: 11c701639ba9 ("selftests/bpf: Add a basic fifo qdisc test")
-Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
----
- tools/testing/selftests/bpf/progs/bpf_qdisc_common.h | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/progs/bpf_qdisc_common.h b/tools/testing/selftests/bpf/progs/bpf_qdisc_common.h
-index 65a2c561c0bb..7e7f2fe04f22 100644
---- a/tools/testing/selftests/bpf/progs/bpf_qdisc_common.h
-+++ b/tools/testing/selftests/bpf/progs/bpf_qdisc_common.h
-@@ -12,6 +12,8 @@
- 
- #define private(name) SEC(".data." #name) __hidden __attribute__((aligned(8)))
- 
-+struct bpf_sk_buff_ptr;
-+
- u32 bpf_skb_get_hash(struct sk_buff *p) __ksym;
- void bpf_kfree_skb(struct sk_buff *p) __ksym;
- void bpf_qdisc_skb_drop(struct sk_buff *p, struct bpf_sk_buff_ptr *to_free) __ksym;
 -- 
-2.43.0
+2.42.0
 
 
