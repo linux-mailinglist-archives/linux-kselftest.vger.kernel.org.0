@@ -1,167 +1,267 @@
-Return-Path: <linux-kselftest+bounces-31787-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31788-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FCE0A9F4D6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 17:44:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9A6FA9F625
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 18:48:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 20E5517DEA7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 15:44:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1FBFA1890420
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 16:48:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABC7827A136;
-	Mon, 28 Apr 2025 15:44:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D1F327F747;
+	Mon, 28 Apr 2025 16:48:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U7lHAFJC"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="PtHukaKq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FACC14A62B;
-	Mon, 28 Apr 2025 15:44:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BB0F27C862;
+	Mon, 28 Apr 2025 16:48:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745855070; cv=none; b=T+SDAi0NNWOD/02FK45niWuoVz/xz7o70QR4cR6ecPEspaN9o08DN64F169LI5O4ogywNs4loCWl8uIzRluNgB6iUOnxK/zwkGrRhmeqiXlbpz1WZFRvuZQCLRypg+nlig+ARCD3KYBi2gsQ3XkaV5GiZzdzbW1KZINUIvq7L4c=
+	t=1745858892; cv=none; b=pOKRGJ6guvppZrrAGIQr6SJ1PFgwNTuEMBcxdWZKWqYsOs7qAaRXr2oyFuQ8mECf/lo+d/hSrp/3YSVsBprDa2yBzhQxGR/K5h0idbEDqHiJdE2LPFq/9rVxoR4D6Vq1/ULtI7msko6l0472Nf5Dc/fFRK8Gtf6rfde/uswTAXI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745855070; c=relaxed/simple;
-	bh=kQV9pCkeqJoWytEeFKMkDgD4tbL2ML85RN8n8JEdptg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=AuL8Yup1kBBUBjxcaq9ExZzrxkbbzC5cf1B0lNoQwq48VDr/qckao2Gl77KujkFg4mUe/sXmVCBF0T/ikJPku7n1K6gS4jd6dCAAl3SmXoTQL8Ep/qqzJjziYUAlyMtlnvHI0BWy0CUE+t2rjYIGuUA7RzFsMYdZV5rqwwAN5iY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U7lHAFJC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70363C4CEE4;
-	Mon, 28 Apr 2025 15:44:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745855070;
-	bh=kQV9pCkeqJoWytEeFKMkDgD4tbL2ML85RN8n8JEdptg=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=U7lHAFJCgCOpS3U4G0ebvWKla0FHOElBUtwXA0oTMYKVsWfxAPKGPh474TIZQKiGK
-	 taL6E7vrzLLP8yD8xMDTRenW9yZk4lvkKg/kxYYHFZUd36JIn+uuoEzkj5tmlTCDJX
-	 UT2WZhRuuZ9vtfhxjdz0e554B1DTgcVTbvMtJxyMo0GIohLz4xZcsOQydoQidJHIYP
-	 NoqjLPhxNofesbdg1OpqWWVpto5PMQO8FEwgp7oK89GQo/WR2kvF8oTpnPX6rW7Ohv
-	 DAK0VQwibOzY1s4x+2NiVtmgkt9FHwKhHriZvfGKlRayiMx3j81kFrEcGKPt+pK9X6
-	 6uTZpJtqgd3uw==
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-Date: Mon, 28 Apr 2025 17:44:03 +0200
-Subject: [PATCH bpf-next v3 2/2] selftests/bpf: xdp_metadata: check
- XDP_REDIRCT support for dev-bound progs
+	s=arc-20240116; t=1745858892; c=relaxed/simple;
+	bh=kZ52g4EMAhKMRVX+SCcoN5zaJjLL6F5WzhUcPXaNTAM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IMMYVEG2EGcuyrZZ36Cnlil1Dg/6BXmtXLroaEMsUQyr6FVe50HE8Y8AuJuR3sgU5KAKeTS7v07AaD72EiQyT4b8PIR9v3V2VGWC6lJ19E3BHzyUUIJ4KnmnlbBaLD7PBWX0B0D/Ko/SoGfHr8/RCU9djkPM/oe80/Oikl0967M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=PtHukaKq; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53SAFSlS006000;
+	Mon, 28 Apr 2025 16:47:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=IE11iF
+	Gkxt6+d8e7SYO/zW7y+SDZ0cXPl/ZiULcYduk=; b=PtHukaKqw4z3BRk+B46UNG
+	Ke+9X8l5eYf0aoPsBt+Uk9ACnVbnvn6m0lL1lGo44heDEScW3B9dRdT+pfECO3O0
+	d/HGKBgh0r3uktO4g9IqVW2SLy75rSNXPdZGj40V9O7RfKmXEfwT/N122AcNTKW/
+	NndMU5y0LfW5Z8JpTDrg33TKZjSGcCfY5zIsXlYXhwcsqWb8hxxKDU6kZp1SyZgL
+	ELU/f+cRBstkTBf+2aZdcxSAOhHo60tr1df0PfuKfF1JUwDhbyjS1WH2QOTK9m0H
+	6xaZqn2c6a8wZY3yhDHP3EmQ7AEZ+MeXEYglgymDDr446RbUEA61DrIdzdXv9SiA
+	==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 469vqvmbgr-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 28 Apr 2025 16:47:47 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 53SF55iB016122;
+	Mon, 28 Apr 2025 16:47:46 GMT
+Received: from smtprelay05.wdc07v.mail.ibm.com ([172.16.1.72])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 469a707fjn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 28 Apr 2025 16:47:46 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+	by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 53SGlj7u54722914
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 28 Apr 2025 16:47:45 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9E7FE58063;
+	Mon, 28 Apr 2025 16:47:45 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0593A58043;
+	Mon, 28 Apr 2025 16:47:42 +0000 (GMT)
+Received: from [9.61.244.200] (unknown [9.61.244.200])
+	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 28 Apr 2025 16:47:41 +0000 (GMT)
+Message-ID: <18c375a5-9d0c-49ca-995c-efaec95aa3a7@linux.ibm.com>
+Date: Mon, 28 Apr 2025 22:17:40 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250428-xdp-prog-bound-fix-v3-2-c9e9ba3300c7@kernel.org>
-References: <20250428-xdp-prog-bound-fix-v3-0-c9e9ba3300c7@kernel.org>
-In-Reply-To: <20250428-xdp-prog-bound-fix-v3-0-c9e9ba3300c7@kernel.org>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
- Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
- Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>
-X-Mailer: b4 0.14.2
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] selftests/mm: Fix build break when compiling
+ pkey_util.c
+To: "Nysal Jan K.A." <nysal@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc: Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        linuxppc-dev@lists.ozlabs.org, Kevin Brodsky <kevin.brodsky@arm.com>,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20250428131937.641989-1-nysal@linux.ibm.com>
+Content-Language: en-GB
+From: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+In-Reply-To: <20250428131937.641989-1-nysal@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNDI4MDEzNiBTYWx0ZWRfX6tEt5s6HzDTO RfUexhfTtbx+K1wfhc6nWOrEuEJ1oXns+O/kf43gZ/qNe2Gli8r7OUu2q8TSFDCbqdRyxYjpuzM BPHRjqXSpM24km4euNMRfKgVFwVjJT5CPrrfOyDpRE3lKIXnLcNhVoSg3B8FUvdJgjz2mYelT/T
+ M6UFXT2OpYbCAoUiMVQIzX/fcD0FFOADvouaftclRCLfmR4VoONP0X+MTZV0l4Hs3SWU0yKB+oG /SnZVR77Dqr30oH7hQofIByrZ1V+cxFy8j97Ngp6nsTAIZUgJx1LO//DJOLt/CqHRYCnFySSaRS qOmpqEkCNMB4Ka5gmJKQq/Pmm3CRcQ4t/2vaGGhXCwUNKZEFUsXcsBSuZuwV3CeL2gI4yRtQpXu
+ AsSdYxQxQr3IeFMSgcmlv+iXPjmDNbXtCn/rv3/AHSZuW+s1cMzFHcIycXvuHL/S+y7PbQvj
+X-Authority-Analysis: v=2.4 cv=AP4PelLR c=1 sm=1 tr=0 ts=680fb133 cx=c_pps a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=VnNF1IyMAAAA:8 a=yfRTT-X1xsbtue6_pAMA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: pIOnp1wWl2vCrNGN-I0LjbyS1booz0fH
+X-Proofpoint-GUID: pIOnp1wWl2vCrNGN-I0LjbyS1booz0fH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-04-28_06,2025-04-24_02,2025-02-21_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ clxscore=1011 malwarescore=0 mlxscore=0 mlxlogscore=999 phishscore=0
+ spamscore=0 impostorscore=0 suspectscore=0 priorityscore=1501 bulkscore=0
+ adultscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
+ definitions=main-2504280136
 
-Improve xdp_metadata bpf selftest in order to check it is possible for a
-XDP dev-bound program to perform XDP_REDIRECT into a DEVMAP but it is still
-not allowed to attach a XDP dev-bound program to a DEVMAP entry.
 
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
----
- .../selftests/bpf/prog_tests/xdp_metadata.c        | 22 +++++++++++++++++++++-
- tools/testing/selftests/bpf/progs/xdp_metadata.c   | 13 +++++++++++++
- 2 files changed, 34 insertions(+), 1 deletion(-)
+On 28/04/25 6:49 pm, Nysal Jan K.A. wrote:
+> From: Madhavan Srinivasan <maddy@linux.ibm.com>
+>
+> Commit 50910acd6f615 ("selftests/mm: use sys_pkey helpers consistently")
+> added a pkey_util.c to refactor some of the protection_keys functions accessible
+> by other tests. But this broken the build in powerpc in two ways,
+>
+> pkey-powerpc.h: In function ‘arch_is_powervm’:
+> pkey-powerpc.h:73:21: error: storage size of ‘buf’ isn’t known
+>     73 |         struct stat buf;
+>        |                     ^~~
+> pkey-powerpc.h:75:14: error: implicit declaration of function ‘stat’; did you mean ‘strcat’? [-Wimplicit-function-declaration]
+>     75 |         if ((stat("/sys/firmware/devicetree/base/ibm,partition-name", &buf) == 0) &&
+>        |              ^~~~
+>        |              strcat
+>
+> Since pkey_util.c includes pkeys-helper.h, which in turn includes pkeys-powerpc.h,
+> stat.h including is missing for "struct stat". This is fixed by adding "sys/stat.h"
+> in pkeys-powerpc.h
+>
+> Secondly,
+>
+> pkey-powerpc.h:55:18: warning: format ‘%llx’ expects argument of type ‘long long unsigned int’, but argument 3 has type ‘u64’ {aka ‘long unsigned int’} [-Wformat=]
+>     55 |         dprintf4("%s() changing %016llx to %016llx\n",
+>        |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>     56 |                          __func__, __read_pkey_reg(), pkey_reg);
+>        |                                    ~~~~~~~~~~~~~~~~~
+>        |                                    |
+>        |                                    u64 {aka long unsigned int}
+> pkey-helpers.h:63:32: note: in definition of macro ‘dprintf_level’
+>     63 |                 sigsafe_printf(args);           \
+>        |                                ^~~~
+>
+> These format specifier related warning are removed by adding
+> "__SANE_USERSPACE_TYPES__" to pkeys_utils.c.
+>
+> Fixes: 50910acd6f615 ("selftests/mm: use sys_pkey helpers consistently")
+> Signed-off-by: Madhavan Srinivasan <maddy@linux.ibm.com>
+> Signed-off-by: Nysal Jan K.A. <nysal@linux.ibm.com>
+> ---
+>   tools/testing/selftests/mm/pkey-powerpc.h | 2 ++
+>   tools/testing/selftests/mm/pkey_util.c    | 1 +
+>   2 files changed, 3 insertions(+)
+>
+> diff --git a/tools/testing/selftests/mm/pkey-powerpc.h b/tools/testing/selftests/mm/pkey-powerpc.h
+> index 1bad310d282a..d8ec906b8120 100644
+> --- a/tools/testing/selftests/mm/pkey-powerpc.h
+> +++ b/tools/testing/selftests/mm/pkey-powerpc.h
+> @@ -3,6 +3,8 @@
+>   #ifndef _PKEYS_POWERPC_H
+>   #define _PKEYS_POWERPC_H
+>   
+> +#include <sys/stat.h>
+> +
+>   #ifndef SYS_pkey_alloc
+>   # define SYS_pkey_alloc		384
+>   # define SYS_pkey_free		385
+> diff --git a/tools/testing/selftests/mm/pkey_util.c b/tools/testing/selftests/mm/pkey_util.c
+> index ca4ad0d44ab2..255b332f7a08 100644
+> --- a/tools/testing/selftests/mm/pkey_util.c
+> +++ b/tools/testing/selftests/mm/pkey_util.c
+> @@ -1,4 +1,5 @@
+>   // SPDX-License-Identifier: GPL-2.0-only
+> +#define __SANE_USERSPACE_TYPES__
+>   #include <sys/syscall.h>
+>   #include <unistd.h>
+>   
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
-index 3d47878ef6bfb55c236dc9df2c100fcc449f8de3..19f92affc2daa23fdd869554e7a0475b86350a4f 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
-@@ -351,9 +351,10 @@ void test_xdp_metadata(void)
- 	struct xdp_metadata2 *bpf_obj2 = NULL;
- 	struct xdp_metadata *bpf_obj = NULL;
- 	struct bpf_program *new_prog, *prog;
-+	struct bpf_devmap_val devmap_e = {};
-+	struct bpf_map *prog_arr, *devmap;
- 	struct nstoken *tok = NULL;
- 	__u32 queue_id = QUEUE_ID;
--	struct bpf_map *prog_arr;
- 	struct xsk tx_xsk = {};
- 	struct xsk rx_xsk = {};
- 	__u32 val, key = 0;
-@@ -409,6 +410,13 @@ void test_xdp_metadata(void)
- 	bpf_program__set_ifindex(prog, rx_ifindex);
- 	bpf_program__set_flags(prog, BPF_F_XDP_DEV_BOUND_ONLY);
- 
-+	/* Make sure we can load a dev-bound program that performs
-+	 * XDP_REDIRECT into a devmap.
-+	 */
-+	new_prog = bpf_object__find_program_by_name(bpf_obj->obj, "redirect");
-+	bpf_program__set_ifindex(new_prog, rx_ifindex);
-+	bpf_program__set_flags(new_prog, BPF_F_XDP_DEV_BOUND_ONLY);
-+
- 	if (!ASSERT_OK(xdp_metadata__load(bpf_obj), "load skeleton"))
- 		goto out;
- 
-@@ -423,6 +431,18 @@ void test_xdp_metadata(void)
- 			"update prog_arr"))
- 		goto out;
- 
-+	/* Make sure we can't add dev-bound programs to devmaps. */
-+	devmap = bpf_object__find_map_by_name(bpf_obj->obj, "dev_map");
-+	if (!ASSERT_OK_PTR(devmap, "no dev_map found"))
-+		goto out;
-+
-+	devmap_e.bpf_prog.fd = val;
-+	if (!ASSERT_ERR(bpf_map__update_elem(devmap, &key, sizeof(key),
-+					     &devmap_e, sizeof(devmap_e),
-+					     BPF_ANY),
-+			"update dev_map"))
-+		goto out;
-+
- 	/* Attach BPF program to RX interface. */
- 
- 	ret = bpf_xdp_attach(rx_ifindex,
-diff --git a/tools/testing/selftests/bpf/progs/xdp_metadata.c b/tools/testing/selftests/bpf/progs/xdp_metadata.c
-index 31ca229bb3c0f182483334a4ab0bd204acae20f3..09bb8a038d528cf26c5b314cc927915ac2796bf0 100644
---- a/tools/testing/selftests/bpf/progs/xdp_metadata.c
-+++ b/tools/testing/selftests/bpf/progs/xdp_metadata.c
-@@ -19,6 +19,13 @@ struct {
- 	__type(value, __u32);
- } prog_arr SEC(".maps");
- 
-+struct {
-+	__uint(type, BPF_MAP_TYPE_DEVMAP);
-+	__uint(key_size, sizeof(__u32));
-+	__uint(value_size, sizeof(struct bpf_devmap_val));
-+	__uint(max_entries, 1);
-+} dev_map SEC(".maps");
-+
- extern int bpf_xdp_metadata_rx_timestamp(const struct xdp_md *ctx,
- 					 __u64 *timestamp) __ksym;
- extern int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx, __u32 *hash,
-@@ -95,4 +102,10 @@ int rx(struct xdp_md *ctx)
- 	return bpf_redirect_map(&xsk, ctx->rx_queue_index, XDP_PASS);
- }
- 
-+SEC("xdp")
-+int redirect(struct xdp_md *ctx)
-+{
-+	return bpf_redirect_map(&dev_map, ctx->rx_queue_index, XDP_PASS);
-+}
-+
- char _license[] SEC("license") = "GPL";
+Tested this patch by applying on top of mainline kernel v6.15-rc4, and 
+it fixes the build issue. Hence,
 
--- 
-2.49.0
+
+Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+
+
+Without this Patch:
+
+
+pkey-powerpc.h: In function ‘arch_is_powervm’:
+pkey-powerpc.h:73:21: error: storage size of ‘buf’ isn’t known
+    73 |         struct stat buf;
+       |                     ^~~
+pkey-powerpc.h:75:14: warning: implicit declaration of function ‘stat’; 
+did you mean ‘strcat’? [-Wimplicit-function-declaration]
+    75 |         if 
+((stat("/sys/firmware/devicetree/base/ibm,partition-name", &buf) == 0) &&
+       |              ^~~~
+       |              strcat
+
+
+With this patch:
+
+
+make -j 33
+/bin/sh ./check_config.sh gcc
+   CC       cow
+   CC       compaction_test
+   CC       gup_longterm
+   CC       gup_test
+   CC       hmm-tests
+   CC       hugetlb-madvise
+   CC       hugetlb-read-hwpoison
+   CC       hugetlb-soft-offline
+   CC       hugepage-mmap
+   CC       hugepage-mremap
+   CC       hugepage-shm
+   CC       hugepage-vmemmap
+   CC       khugepaged
+   CC       madv_populate
+   CC       map_fixed_noreplace
+   CC       map_hugetlb
+   CC       map_populate
+   CC       migration
+   CC       mkdirty
+   CC       mlock-random-test
+   CC       mlock2-tests
+   CC       mrelease_test
+   CC       mremap_dontunmap
+   CC       mremap_test
+   CC       mseal_test
+   CC       on-fault-limit
+   CC       pagemap_ioctl
+   CC       thuge-gen
+   CC       transhuge-stress
+   CC       uffd-stress
+   CC       uffd-unit-tests
+   CC       uffd-wp-mremap
+   CC       split_huge_page_test
+   CC       ksm_tests
+   CC       ksm_functional_tests
+   CC       hugetlb_fault_after_madv
+   CC       hugetlb_madv_vs_map
+   CC       mdwe_test
+   CC       hugetlb_dio
+   CC       droppable
+   CC       guard-regions
+   CC       soft-dirty
+   CC       protection_keys
+   CC       va_high_addr_switch
+   CC       virtual_address_range
+   CC       write_to_hugetlbfs
+   CC [M]  page_frag_test.o
+   MODPOST Module.symvers
+   CC [M]  page_frag_test.mod.o
+   CC [M]  .module-common.o
+   LD [M]  page_frag_test.ko
+
+
+Regards,
+
+Venkat.
 
 
