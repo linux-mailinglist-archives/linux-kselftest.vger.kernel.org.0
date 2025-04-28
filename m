@@ -1,246 +1,257 @@
-Return-Path: <linux-kselftest+bounces-31789-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31790-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C521A9F62E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 18:49:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D512DA9F63F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 18:52:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BB01916FE35
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 16:49:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E5F9F3A73F7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Apr 2025 16:52:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28C8B27F4E5;
-	Mon, 28 Apr 2025 16:49:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC32A27A121;
+	Mon, 28 Apr 2025 16:52:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="MYeM9g6C"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ASREfJFa"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 600972CCC0;
-	Mon, 28 Apr 2025 16:49:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1768C440C;
+	Mon, 28 Apr 2025 16:52:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745858996; cv=none; b=LdGPO3I6Dg2lko5nYURrc8nk/8r+hGZZbSbx2+m5pMzS9gz4ZCrw4NJYVBHG8/N0A9ZsOC4456UdlKtah3MWpxNF/RrNOQJGRre6RY8OPOuW4INCQraclDndnstEgZLVOlCUp6+FWGVpNQKHNp7+VdO6Y/fp9aDFPeWp2hIKJZE=
+	t=1745859161; cv=none; b=aJZGp58z/6ReKVMJmTzIQkAZG6Q3Ximh1dS368RTRKOsGDyzB5GqeHM/zscI+YagCgqBzhQGlLBUDsXkjJENDEYr48jIXqM98gLzWdk/9dYP9+9PVvrFC6BKYr34PBVeL2VnKq9KNDxZrDS7sLQkBmMD9t9P5fnkvJnAjbtqEpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745858996; c=relaxed/simple;
-	bh=PNVESParaTXWsmP+JHkLHUMZWi4KYr64YnTUoIRoYSY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=K1Cu9mcqXBpZbwAwRYFg66Yk1m5urcfW39wZ5lcV0HIKQfzqE4hqK4mND3rK1JYtZG5XoKWaWwszo1fkd0Hnzd7uvEW7myIf2YIg7MP1j2CHCNeisOMwCrRj+sJObT60PzkX1tI/jXN+JxschYUOAWgvRUdvN64Xie+3ajZmi8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=MYeM9g6C; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53SAwLvB003967;
-	Mon, 28 Apr 2025 16:49:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=ygTqjY
-	J03RIKTAhwuPR9emo/CxF/ClTtTaFmG2r3wo0=; b=MYeM9g6C9vGxWHYGP93kb4
-	7Ti6MDDwnT6wM6bRr66yC6Z+6whMfJ6NrANS+XaD2DzNDtqPceMW/RgGtXm9pPXK
-	Y5jstlJpHpaC3VuIGl2FSBDsR5DYJnjjuCQRnCGhwXajerOtuwsN7z8jza3QRGua
-	AYyzgSHdSBrOM9Cb8dn7ONJcKYswG5GPV/0jLzJ9950dz8lctgQAXZ58W2H1e7R/
-	u2iMTzg0ygca1YuiOh6pOH5aPFJvtorGvvzMBwR9oQzF5v3EOAhLKSIr1ITPZ0bd
-	tDYKv23Q/3qxY1riQak5skENJ1VQwQAOUVZ2x7xs5uEiHm8Rb002iadDcPq0TPgA
-	==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 469xj0v2xs-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 28 Apr 2025 16:49:36 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 53SFakuI000678;
-	Mon, 28 Apr 2025 16:49:35 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 469atp7c41-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 28 Apr 2025 16:49:35 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 53SGnX5L22479518
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 28 Apr 2025 16:49:34 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CE38D58061;
-	Mon, 28 Apr 2025 16:49:33 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 43A5D58043;
-	Mon, 28 Apr 2025 16:49:30 +0000 (GMT)
-Received: from [9.61.244.200] (unknown [9.61.244.200])
-	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 28 Apr 2025 16:49:29 +0000 (GMT)
-Message-ID: <a1d2c51c-7959-4446-81b7-bfc48ced606e@linux.ibm.com>
-Date: Mon, 28 Apr 2025 22:19:28 +0530
+	s=arc-20240116; t=1745859161; c=relaxed/simple;
+	bh=VUF/o4RE1v1hk1nOAcb1fGdra/R4W25gdM3uBlpyVcs=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Xyoznu4tnYGvOKRhHwjgT8VY0v7P2IuOnNU9XaVNft9tHLG/DFv4kv21XTxWIOH36r7QpLhRdxBXMEZklRqhldJbpAJv68x2O3sAnXy9z4Ve+L6e08uxYINbP09s4CUluJgvhGxAA6mKPio3HpX8tPlNNezgSQWnG7/pUg802w4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ASREfJFa; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-223fb0f619dso57045055ad.1;
+        Mon, 28 Apr 2025 09:52:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1745859159; x=1746463959; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:user-agent:message-id:date
+         :references:in-reply-to:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IjvZYK2d2GAr0o6m4ARn5rvHXuqogyOYirhk7zcNjLo=;
+        b=ASREfJFaiE1Lce4P0fvnoDuCXJBQ3RX0CnAMthRqg6T/5wqC9SS+MTWK0xTpuLx0Gu
+         yMDHQqUzIlKybqYmvVFUOHTD/iR0BG25oUpASZtA+EziAzEOnpPK4ow8iDdlU/NhkDYg
+         JBl6rjJsdx9x9fhDby5/6xQ1cMNYzqDmJdq1h5UxlyldPFXQu3gD1HpnpJDJy9Y4IAOZ
+         aT18eSIMATCLcUL57n+YQNkWOBeEOyAhJyo1Md0V+ubvWIW9RQmnT9t1n3K1Bh533ZDy
+         O239MykPXvceLsnijGxiJ8OVz9rBGMjUdiF+K9hSZrrl1pVPjtwJnj70UzbZciOzX6qc
+         4fKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745859159; x=1746463959;
+        h=content-transfer-encoding:mime-version:user-agent:message-id:date
+         :references:in-reply-to:subject:cc:to:from:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=IjvZYK2d2GAr0o6m4ARn5rvHXuqogyOYirhk7zcNjLo=;
+        b=v3xA67P1TVsYlrZ4AxxWDltL0nlyBGzjg2d/M17jI+tcB3rCq+i0hdfQBakaxPmzuD
+         nLBAN1pwXYz2GArCkK5SNBun5FjmaHu9Ts02qq8hmkND8N7/22Txq4pDCRScMCE829K2
+         JepsIeT5WOCBu5OIn0vHEsgM3UzC1VVbAjtQ01/iJcniwxgx9nQwd+W9noJuCMvOPmpz
+         p8zvRwP9CHYj08ZA1wTz8SsenP8o6YxQAOaeoclk8DH/7qA3cMgAZRXPdYFJGKaMqQxk
+         jrV5odb+0yfFtqR27HTZf6bimq147VSkh/ZWBvAo5KFm0CzFQfutuGtMeADRMohHwSWg
+         MUjg==
+X-Forwarded-Encrypted: i=1; AJvYcCVTZLSQD6tg10hn5WvKcvLEpx9q+VxUH/DguJbkoA+1Rb3Axr57jxnhCnBzjZH237UKdG8=@vger.kernel.org, AJvYcCVrEXIg/sAreH4bqyTLdTxUTReufzr09HGJE9XVQ2ukvJaaGsFG4Qic0xCZhOsbVw/PnwCEIGb9izxRsaah@vger.kernel.org, AJvYcCWxqbrCqcjY6hqUeISiGPfWwaDFLOrPhw7yzugxyduU7ppqc8jUUOXHXVrb48W0gb7OUH7bgO0gIvhQzAWjyWR3@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx50f4uebkm3bscCqQeOUWAu7tWS9vM55tz6L9eYxlvRPfAusHj
+	c48+tdK1ffuub3qxT3lfnF4gcqmueUU7uP+qYjh/XiS8BOI44MjB
+X-Gm-Gg: ASbGnctwfVEl2yo1wspYw567ArKYOMFFd1pa4S8i6zbNoUHuEj+dvampA3yINK8FXsX
+	OYzILm71ZMBuH4UDFx8v/9ewSJs6VdX0PLpEgUggLKFQIh13YEOxr6ZW54YkW0TqAGdQ6hzBAaB
+	2GPm/WdGbcJeM/sXsD47F9LgQ6kfVTZaHikiUzRP0tecLa2QGEHm0s//yE2AidOsdYY1h+FRJIB
+	/1xMXhm/hkLwKwkGR1fXcgKjXS1Dncb8fdJti6cOq5ryqRG6iS6Xm9J05Hvw39x1WSfR4NzxO5R
+	rfkpIXAkIA2xTFBoKpt+UkQatLGQtb8hkSdvATEJRl+TrUXIbw==
+X-Google-Smtp-Source: AGHT+IGBCRKNAZsf7FtVymPsCdsoGJ/DJafrNa9HOoRlQsbwOsn8q7cEi76BNaSHeHA2zQC4abBnMA==
+X-Received: by 2002:a17:903:40cb:b0:224:1935:fb91 with SMTP id d9443c01a7336-22dbf5fd432mr161245665ad.27.1745859159109;
+        Mon, 28 Apr 2025 09:52:39 -0700 (PDT)
+Received: from ezingerman-mba ([2620:10d:c090:500::6:6628])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22dd86032dcsm25258755ad.181.2025.04.28.09.52.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Apr 2025 09:52:38 -0700 (PDT)
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Alexis =?utf-8?Q?Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Cc: "Alexei Starovoitov" <ast@kernel.org>,  "Daniel Borkmann"
+ <daniel@iogearbox.net>,  "John Fastabend" <john.fastabend@gmail.com>,
+  "Andrii Nakryiko" <andrii@kernel.org>,  "Martin KaFai Lau"
+ <martin.lau@linux.dev>,  "Song Liu" <song@kernel.org>,  "Yonghong Song"
+ <yonghong.song@linux.dev>,  "KP Singh" <kpsingh@kernel.org>,  "Stanislav
+ Fomichev" <sdf@fomichev.me>,  "Hao Luo" <haoluo@google.com>,  "Jiri Olsa"
+ <jolsa@kernel.org>,  "Puranjay Mohan" <puranjay@kernel.org>,  "Xu Kuohai"
+ <xukuohai@huaweicloud.com>,  "Catalin Marinas" <catalin.marinas@arm.com>,
+  "Will Deacon" <will@kernel.org>,  "Mykola Lysenko" <mykolal@fb.com>,
+  "Shuah Khan" <shuah@kernel.org>,  "Maxime Coquelin"
+ <mcoquelin.stm32@gmail.com>,  "Alexandre Torgue"
+ <alexandre.torgue@foss.st.com>,  "Florent Revest" <revest@chromium.org>,
+  "Bastien Curutchet" <bastien.curutchet@bootlin.com>,
+  <ebpf@linuxfoundation.org>,  "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>,  <bpf@vger.kernel.org>,
+  <linux-kernel@vger.kernel.org>,  <linux-arm-kernel@lists.infradead.org>,
+  <linux-kselftest@vger.kernel.org>,
+  <linux-stm32@st-md-mailman.stormreply.com>
+Subject: Re: [PATCH RFC bpf-next 3/4] bpf/selftests: add tests to validate
+ proper arguments alignment on ARM64
+In-Reply-To: <D9I6TQN2I6B1.QC4FFHEWAURZ@bootlin.com> ("Alexis =?utf-8?Q?Lo?=
+ =?utf-8?Q?thor=C3=A9=22's?=
+	message of "Mon, 28 Apr 2025 12:08:32 +0200")
+References: <20250411-many_args_arm64-v1-0-0a32fe72339e@bootlin.com>
+	<20250411-many_args_arm64-v1-3-0a32fe72339e@bootlin.com>
+	<3a16fae0346d4f733fb1a67ae6420d8bf935dbd8.camel@gmail.com>
+	<D9I6TQN2I6B1.QC4FFHEWAURZ@bootlin.com>
+Date: Mon, 28 Apr 2025 09:52:35 -0700
+Message-ID: <m21ptcmdnw.fsf@gmail.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] selftests/mm: Fix a build failure on powerpc
-Content-Language: en-GB
-To: "Nysal Jan K.A." <nysal@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc: Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        linuxppc-dev@lists.ozlabs.org, Kevin Brodsky <kevin.brodsky@arm.com>,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20250428131937.641989-1-nysal@linux.ibm.com>
- <20250428131937.641989-2-nysal@linux.ibm.com>
-From: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-In-Reply-To: <20250428131937.641989-2-nysal@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: J6ksxhAtcHshXhJfcAb6W-WApMO61Lob
-X-Authority-Analysis: v=2.4 cv=GJYIEvNK c=1 sm=1 tr=0 ts=680fb1a0 cx=c_pps a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=VnNF1IyMAAAA:8 a=NIXEo0iNHiUJsitbC-UA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNDI4MDEzNiBTYWx0ZWRfX7zvjH1N22yRZ MQHKqthnSgK9mU/PNzj6VgZGReWR/Mh/SzooAI3qWaUEeUAgrEk4cdGsICEzYCYzVPz8vsJU1Qj eH92pWxMPQuGMamil1p42avJWmKz1a0E6KrFL+CgTsCvaxRORJ7prLmtoiWo2mBV4aXrY+7CBL9
- 09NZvYcq17bCqcxqr48iner7oH6kE6kOU0cuD1bMYQmEFdt8xZOTsG/0MTwPmeDncrM+J/Y3zJR C9hpqo7jrc1TxGlwIEUVOab4ghq1HOkF7QYIsA6eE1qm5t22Smx03J+4oaXBPHWaBQUXDRaFaSS 0H9O9gR2y3V1CCl/yqkOFaDcOdtMqXoCXcY0TK7qauvypPQsb8fuTeVJ7vXLZgiIK3mULNthjIX
- sHb8ic+HuLvA9slHfV2pRDNVgHNtvK9Ot+OUKDhNAalJ2E9qhOH0cCdTmiVcI9jbC+ftJq32
-X-Proofpoint-ORIG-GUID: J6ksxhAtcHshXhJfcAb6W-WApMO61Lob
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-04-28_06,2025-04-24_02,2025-02-21_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
- mlxscore=0 phishscore=0 impostorscore=0 suspectscore=0 priorityscore=1501
- adultscore=0 clxscore=1015 bulkscore=0 lowpriorityscore=0 mlxlogscore=999
- classifier=spam authscore=0 authtc=n/a authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2504070000
- definitions=main-2504280136
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
+Alexis Lothor=C3=A9 <alexis.lothore@bootlin.com> writes:
 
-On 28/04/25 6:49 pm, Nysal Jan K.A. wrote:
-> The compiler is unaware of the size of code generated by the ".rept"
-> assembler directive. This results in the compiler emitting branch
-> instructions where the offset to branch to exceeds the maximum allowed
-> value, resulting in build failures like the following:
+[...]
+
+>> The function listened to is defined as accepting 'struct bpf_testmod_str=
+uct_arg_7',
+>> at the same time this function uses 'struct bpf_testmod_struct_arg_5'.
 >
->    CC       protection_keys
->    /tmp/ccypKWAE.s: Assembler messages:
->    /tmp/ccypKWAE.s:2073: Error: operand out of range (0x0000000000020158
->    is not between 0xffffffffffff8000 and 0x0000000000007ffc)
->    /tmp/ccypKWAE.s:2509: Error: operand out of range (0x0000000000020130
->    is not between 0xffffffffffff8000 and 0x0000000000007ffc)
+> That's not an accidental mistake, those are in fact the same definition.
+> bpf_testmod_struct_arg_7 is the kernel side definition in bpf_testmod.c:
 >
-> Fix the issue by manually adding nop instructions using the preprocessor.
+> struct bpf_testmod_struct_arg_7 {
+> 	__int128 a;
+> };
 >
-> Fixes: 46036188ea1f5 ("selftests/mm: build with -O2")
-> Reported-by: Madhavan Srinivasan <maddy@linux.ibm.com>
-> Signed-off-by: Nysal Jan K.A. <nysal@linux.ibm.com>
-> ---
->   tools/testing/selftests/mm/pkey-powerpc.h | 12 +++++++++++-
->   1 file changed, 11 insertions(+), 1 deletion(-)
+> and struct bpf_testmode_struct_arg_5 is the one defined in the bpf test
+> program:
 >
-> diff --git a/tools/testing/selftests/mm/pkey-powerpc.h b/tools/testing/selftests/mm/pkey-powerpc.h
-> index d8ec906b8120..17bf2d1b0192 100644
-> --- a/tools/testing/selftests/mm/pkey-powerpc.h
-> +++ b/tools/testing/selftests/mm/pkey-powerpc.h
-> @@ -104,8 +104,18 @@ static inline void expect_fault_on_read_execonly_key(void *p1, int pkey)
->   	return;
->   }
->   
-> +#define REPEAT_8(s) s s s s s s s s
-> +#define REPEAT_64(s) REPEAT_8(s) REPEAT_8(s) REPEAT_8(s) REPEAT_8(s) \
-> +		     REPEAT_8(s) REPEAT_8(s) REPEAT_8(s) REPEAT_8(s)
-> +#define REPEAT_512(s) REPEAT_64(s) REPEAT_64(s) REPEAT_64(s) REPEAT_64(s) \
-> +		      REPEAT_64(s) REPEAT_64(s) REPEAT_64(s) REPEAT_64(s)
-> +#define REPEAT_4096(s) REPEAT_512(s) REPEAT_512(s) REPEAT_512(s) REPEAT_512(s) \
-> +		       REPEAT_512(s) REPEAT_512(s) REPEAT_512(s) REPEAT_512(s)
-> +#define REPEAT_16384(s) REPEAT_4096(s) REPEAT_4096(s) \
-> +			REPEAT_4096(s) REPEAT_4096(s)
-> +
->   /* 4-byte instructions * 16384 = 64K page */
-> -#define __page_o_noops() asm(".rept 16384 ; nop; .endr")
-> +#define __page_o_noops() asm(REPEAT_16384("nop\n"))
->   
->   static inline void *malloc_pkey_with_mprotect_subpage(long size, int prot, u16 pkey)
->   {
+> struct bpf_testmod_struct_arg_5 {
+> 	__int128 a;
+> };
 
+Apologies, but I'm still confused:
+- I apply this series on top of:
+  224ee86639f5 ("Merge git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bp=
+f after rc4")
 
-Tested this patch by applying on top of mainline kernel v6.15-rc4, and 
-it fixes the build issue. Hence,
+- line 12 of tracing_struct_many_args.c has the following definition:
 
+  struct bpf_testmod_struct_arg_5 {
+         char a;
+         short b;
+         int c;
+         long d;
+  };
 
-Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+- line 135 of the same file has the following definition:
 
+   SEC("fentry/bpf_testmod_test_struct_arg_11")
+   int BPF_PROG2(test_struct_many_args_9, struct bpf_testmod_struct_arg_5, =
+a,
+                 struct bpf_testmod_struct_arg_5, b,
+                 struct bpf_testmod_struct_arg_5, c,
+                 struct bpf_testmod_struct_arg_5, d, int, e,
+                 struct bpf_testmod_struct_arg_5, f)
 
-Without this Patch:
+- line 70 of tools/testing/selftests/bpf/test_kmods/bpf_testmod.c:
 
+   struct bpf_testmod_struct_arg_7 {
+         __int128 a;
+   };
 
-  CC       protection_keys
-/tmp/ccG0zLKW.s: Assembler messages:
-/tmp/ccG0zLKW.s:1694: Error: operand out of range (0x0000000000020138 is 
-not between 0xffffffffffff8000 and 0x0000000000007ffc)
-/tmp/ccG0zLKW.s:2577: Error: operand out of range (0x0000000000020110 is 
-not between 0xffffffffffff8000 and 0x0000000000007ffc)
-In file included from pkey_util.c:5:
+- line 152 of the same file:
 
+  noinline int bpf_testmod_test_struct_arg_11(struct bpf_testmod_struct_arg=
+_7 a,
+                                              struct bpf_testmod_struct_arg=
+_7 b,
+                                              struct bpf_testmod_struct_arg=
+_7 c,
+                                              struct bpf_testmod_struct_arg=
+_7 d,
+                                              short e,
+                                              struct bpf_testmod_struct_arg=
+_7 f)
 
-With this patch:
+Do I use a wrong base to apply the series?
 
+[...]
 
-make -j 33
-/bin/sh ./check_config.sh gcc
-   CC       cow
-   CC       compaction_test
-   CC       gup_longterm
-   CC       gup_test
-   CC       hmm-tests
-   CC       hugetlb-madvise
-   CC       hugetlb-read-hwpoison
-   CC       hugetlb-soft-offline
-   CC       hugepage-mmap
-   CC       hugepage-mremap
-   CC       hugepage-shm
-   CC       hugepage-vmemmap
-   CC       khugepaged
-   CC       madv_populate
-   CC       map_fixed_noreplace
-   CC       map_hugetlb
-   CC       map_populate
-   CC       migration
-   CC       mkdirty
-   CC       mlock-random-test
-   CC       mlock2-tests
-   CC       mrelease_test
-   CC       mremap_dontunmap
-   CC       mremap_test
-   CC       mseal_test
-   CC       on-fault-limit
-   CC       pagemap_ioctl
-   CC       thuge-gen
-   CC       transhuge-stress
-   CC       uffd-stress
-   CC       uffd-unit-tests
-   CC       uffd-wp-mremap
-   CC       split_huge_page_test
-   CC       ksm_tests
-   CC       ksm_functional_tests
-   CC       hugetlb_fault_after_madv
-   CC       hugetlb_madv_vs_map
-   CC       mdwe_test
-   CC       hugetlb_dio
-   CC       droppable
-   CC       guard-regions
-   CC       soft-dirty
-   CC       protection_keys
-   CC       va_high_addr_switch
-   CC       virtual_address_range
-   CC       write_to_hugetlbfs
-   CC [M]  page_frag_test.o
-   MODPOST Module.symvers
-   CC [M]  page_frag_test.mod.o
-   CC [M]  .module-common.o
-   LD [M]  page_frag_test.ko
+>> Nevertheless, the assertion persists even with correct types.
+>
+> So I digged a bit further to better share my observations here. This is t=
+he
+> function stack when entering the trampoline after having triggered the
+> target function execution:
+>
+> (gdb) x/64b $rbp+0x18
+> 0xffffc9000015fd60:     41      0       0       0       0       0       0=
+       0
+> 0xffffc9000015fd68:     0       0       0       0       0       0       0=
+       0
+> 0xffffc9000015fd70:     42      0       0       0       0       0       0=
+       0
+> 0xffffc9000015fd78:     35      0       0       0       0       0       0=
+       0
+> 0xffffc9000015fd80:     43      0       0       0       0       0       0=
+       0
+> 0xffffc9000015fd88:     0       0       0       0       0       0       0=
+       0
+>
+> We see the arguments that did not fit in registers, so d, e and f.
+>
+> This is the ebpf context generated by the trampoline for the fentry
+> program, from the content of the stack above + the registers:
+>
+> (gdb) x/128b $rbp-60
+> 0xffffc9000015fce8:     38      0       0       0       0       0       0=
+       0
+> 0xffffc9000015fcf0:     0       0       0       0       0       0       0=
+       0
+> 0xffffc9000015fcf8:     39      0       0       0       0       0       0=
+       0
+> 0xffffc9000015fd00:     0       0       0       0       0       0       0=
+       0
+> 0xffffc9000015fd08:     40      0       0       0       0       0       0=
+       0
+> 0xffffc9000015fd10:     0       0       0       0       0       0       0=
+       0
+> 0xffffc9000015fd18:     41      0       0       0       0       0       0=
+       0
+> 0xffffc9000015fd20:     0       0       0       0       0       0       0=
+       0
+> 0xffffc9000015fd28:     42      0       0       0       0       0       0=
+       0
+> 0xffffc9000015fd30:     35      0       0       0       0       0       0=
+       0
+> 0xffffc9000015fd38:     43      0       0       0       0       0       0=
+       0
+> 0xffffc9000015fd40:     37      0       0       0       0       0       0=
+       0
+>
+> So IIUC, this is wrong because the "e" variable in the bpf program being
+> an int (and about to receive value 42), it occupies only 1 "tracing conte=
+xt
+> 8-byte slot", so the value 43 (representing the content for variable f),
+> should be right after it, at 0xffffc9000015fd30. What we have instead is a
+> hole, very likely because we copied silently the alignment from the
+> original function call (and I guess this 35 value is a remnant from the
+> previous test, which uses values from 27 to 37)
 
+Interesting, thank you for the print outs.
 
-Regards,
+> Regardless of this issue, based on discussion from last week, I think I'll
+> go for the implementation suggested by Alexei: handling the nominal cases,
+> and detecting and blocking the non trivial cases (eg: structs passed on
+> stack). It sounds reasonable as there seems to be no exisiting kernel
+> function currently able to trigger those very specific cases, so it could
+> be added later if this changes.
 
-Venkat.
-
-
-
+Yes, this makes sense.
 
