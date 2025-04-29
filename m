@@ -1,135 +1,190 @@
-Return-Path: <linux-kselftest+bounces-31906-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31907-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48741AA1110
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 17:57:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A19FBAA115E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 18:12:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 871933BDCC1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 15:56:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1622C840AFE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 16:11:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AE7D2417D4;
-	Tue, 29 Apr 2025 15:56:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8638D2441A0;
+	Tue, 29 Apr 2025 16:12:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="O/USvDw8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Mvk6iBAL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FE50241679
-	for <linux-kselftest@vger.kernel.org>; Tue, 29 Apr 2025 15:56:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BC2B24290C;
+	Tue, 29 Apr 2025 16:12:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745942199; cv=none; b=AXFDb3tuDQvUSapfMmnr8piFCAPgkhnocCsJqdfla3nWgKlkXEw2Kb63D2HW55eKTBkJRy0vl2KHD5Wop2lT+pVmR8zpE1o18zOr9EFifK4e7xBcHMDWJFMrBbdZehTE0lMKVmIJae3gnDmkLRwtC7/o7kWTm3KCq57CczGux9A=
+	t=1745943128; cv=none; b=FWkKn/Tx0n9HnB4KRWlORG3LV9EUrdq6XSrirp9W9oRMXuiEpQSuvoURSjnhZupivt/K0/wvnYmCGX5RFK2qN5xyme2HKgUCoGBxXZgLvpUQbbb36A/PCSh6FTBNTTdyVySESvmDWK9XR/A1nZzWxC0ei/1ZiZmrG5sxsvLOaj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745942199; c=relaxed/simple;
-	bh=PksiWfpMfxllb9cMtMeDE5xqZSJKQGuK3D2npFWtovY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=N39S6pP1ep/pC4fqFTjODihydJajbVLTusO6DLzHN1lWKm70Pd8d49bGcdV+4H/9aO8Oqecd6HPNkmkEv9pJ+dE53PA6dcYwDwYKbD8MBCAyXmx7MoZ5oo7ywbQf4V8pC6lCuMF9orQcud2B5V/ICnVP59JO5S4z8dvYWiBaHJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=O/USvDw8; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5f632bada3bso1994a12.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Apr 2025 08:56:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1745942196; x=1746546996; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PksiWfpMfxllb9cMtMeDE5xqZSJKQGuK3D2npFWtovY=;
-        b=O/USvDw8of1oGQ9GiuPDnsjhFb+4Hax6Oh5hkKMjDJozdj2o1GWvM+XqwdOhdzlgDf
-         4MCRPNyTVTo3rrOYBImstWzN7PdKlwN6zIO5QMaRqgv2g9kNUb2JmWZpSUnwzJPASmvw
-         ojVKVpD5HoBJhaAn+n/Cl/Cj/LX9+PJMApIeIuVN3TKi6mCNqC4NbDsZEeZLhS5amTcX
-         6NiH9H1rkZNn//7U6BdmGEa/o9x3f1LnBQNSkT3fW+qtBaiaq0idGJHLqIW9IpoGLsEC
-         j5RH6TXJ/0fHjj9zb+PGhwVvYTR7OYo0ka98XXaLGv9wgvilcm7osgx1dKjYeywpsLQ6
-         mLnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745942196; x=1746546996;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PksiWfpMfxllb9cMtMeDE5xqZSJKQGuK3D2npFWtovY=;
-        b=OsFhYX9kjNgeRWsK6P39tB1uUzds2Y4g2B7nnnoBSuU5pnuScieT4d2d7vLyW1qZ2F
-         iaerPqWTFYiJ77coF2S4TjGSoJOFhj2nyLTHprlH+Atr3KAmNFQmpBGES3P4jYH0EuBL
-         YEZD9fOdELakYrJHVc9QMzbyombh673eMX/F52t2SNRL4g/DDfZqgnCzt/yHhea/DzJH
-         ADweoxTr/wmgTeT4RCNH2Pw9g8A8Bwp1KXePXp9G2nwznTFqza0ID4F0MWecmHX7tsfE
-         iNLZUNpq3PnOAgv8BNY2dPjQVvMbQkZo2ujIbJKBEWagz4iqiYVBQGf4hn8YmlfaerfS
-         eOBQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVXqQxZQlTghZy8/qu55IfZ7owPfVdMRsFtsc6raNl2t7I81WAxSu+CbUtd68E606ExPNrkyg0QJeJJ8SWGSNQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YytHP4fbQJOQIOhE4FHszvRS8UYs5cO6AMNkYQUNqQ2wSst6KnW
-	7eLBsplTcbht20K+pD4IfxCoBxySmjE0lPzYdfS57ySE6nIfhRo7tQC1cunilY9cBd3ZGY5cdyX
-	129wQVc2IyjoGO0vPe3vVMwjl0nHIkd2SSNeS
-X-Gm-Gg: ASbGncu6udr4jINhjgn0okYPSfkVK6IRXo8iB3HlMkf8Ac0zJHYR0iPF/ZduP14zW43
-	c+8bEoGD9lWFRpEp6C9LqIw9iRhp0Suo7J3GaAsHo/vqHNZZPOAkkwL42Y8WVu0ttEeBrp6hBrx
-	GEhk8dnfRdLbNNlCZc5J1wqvBRd37gjgSU+ic4JnGfCE/hw3eaig==
-X-Google-Smtp-Source: AGHT+IGtxlZGWu2Je/bOBDJTv80S1Q80Y7hLVWaw/Dsh1sFOZ7mVM95j4NTnHLX0IbqUIKK8zCAe/YhlOZPXyx67i/w=
-X-Received: by 2002:a50:cd0f:0:b0:5e5:7c1:43bd with SMTP id
- 4fb4d7f45d1cf-5f83c1b5a74mr91868a12.1.1745942195429; Tue, 29 Apr 2025
- 08:56:35 -0700 (PDT)
+	s=arc-20240116; t=1745943128; c=relaxed/simple;
+	bh=/RPzRSwGYU/TqtNWAxnjSN65OBBFBuTwX8sdhARd81w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=k6bJrDJuaYTG+rMAVcT9uie9BSjz3QE7EwuzniKow1XpdFKsM1ZZuwEhPwb2jNxyeDy5B/LTFX7NYY4Olc4uo3nim8JGciiaUGWkb3brFid7j8fQa3yO7aX3c7BFrB3hDGWAbbzR684GW7sBhvxYQntLAPpTvg668vqAB70Pkgg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Mvk6iBAL; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1745943127; x=1777479127;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=/RPzRSwGYU/TqtNWAxnjSN65OBBFBuTwX8sdhARd81w=;
+  b=Mvk6iBALOLCZMosSJXieogMcnz9NHLIl+14RWfaCSZOIgGuJ+WCPKP7C
+   0wpEUVRn0GchdbJsWYGXz9hdPR32X+WM9K4yBu43Dw+gtMrHkt/Zby2k9
+   ohyLluqm2hZeXp9Yeoa/4fJTfwKSN3f//TUataX0eNNd4FefDHndunXjo
+   3GqIwhgrB7M1S8buFxCQ6CfK+/vivQrLIjcKH7z35bsX00ngqlaYJUh1E
+   sJhrptC46uH5sIFWCs5C7TIzmAcD4/wRl3RnR7DYmFQ/tpYW5rnKbedal
+   TwuJRQwx4QXCxObwXTq6bCFp/mQQi2vFlyAN5DOwxXEylE2MUCiY6qdzb
+   w==;
+X-CSE-ConnectionGUID: GM4nj81wQUSqlpCQh7Zx5A==
+X-CSE-MsgGUID: jIUOFBzgRu+PP0xpTB/5GQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11418"; a="51243422"
+X-IronPort-AV: E=Sophos;i="6.15,249,1739865600"; 
+   d="scan'208";a="51243422"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2025 09:12:06 -0700
+X-CSE-ConnectionGUID: b38aJ8qqSqC5eqNimrxdFQ==
+X-CSE-MsgGUID: 1d8Et1s7SmqzvGll9TJyYw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,249,1739865600"; 
+   d="scan'208";a="134856497"
+Received: from sramkris-mobl1.amr.corp.intel.com (HELO [10.124.223.107]) ([10.124.223.107])
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2025 09:12:00 -0700
+Message-ID: <fefcd1a6-f146-4f3c-b28b-f907e7346ddd@intel.com>
+Date: Tue, 29 Apr 2025 09:11:57 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250418174959.1431962-1-surenb@google.com> <20250418174959.1431962-9-surenb@google.com>
- <CAEf4BzabPLJTy1U=aBrGZqKpskNYvj5MYuhPHSh_=hjmVJMvrg@mail.gmail.com>
-In-Reply-To: <CAEf4BzabPLJTy1U=aBrGZqKpskNYvj5MYuhPHSh_=hjmVJMvrg@mail.gmail.com>
-From: Jann Horn <jannh@google.com>
-Date: Tue, 29 Apr 2025 17:55:59 +0200
-X-Gm-Features: ATxdqUFo7EtQYKmtjBK-XwiZ1ZSWDYl5j8WIiYqQOeXkDF7OdcxVClYh41AITzo
-Message-ID: <CAG48ez29frEbJG+ySVARX-bO_QWe8eUbZiV8Jq2sqYemfuqP_g@mail.gmail.com>
-Subject: Re: [PATCH v3 8/8] mm/maps: execute PROCMAP_QUERY ioctl under RCU
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org, Liam.Howlett@oracle.com, 
-	lorenzo.stoakes@oracle.com, david@redhat.com, vbabka@suse.cz, 
-	peterx@redhat.com, hannes@cmpxchg.org, mhocko@kernel.org, paulmck@kernel.org, 
-	shuah@kernel.org, adobriyan@gmail.com, brauner@kernel.org, 
-	josef@toxicpanda.com, yebin10@huawei.com, linux@weissschuh.net, 
-	willy@infradead.org, osalvador@suse.de, andrii@kernel.org, 
-	ryan.roberts@arm.com, christophe.leroy@csgroup.eu, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 00/25] context_tracking,x86: Defer some IPIs until a
+ user->kernel transition
+To: Valentin Schneider <vschneid@redhat.com>, linux-kernel@vger.kernel.org,
+ virtualization@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ loongarch@lists.linux.dev, linux-riscv@lists.infradead.org,
+ linux-perf-users@vger.kernel.org, kvm@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, rcu@vger.kernel.org,
+ linux-hardening@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org
+Cc: Juri Lelli <juri.lelli@redhat.com>, Marcelo Tosatti
+ <mtosatti@redhat.com>, Yair Podemsky <ypodemsk@redhat.com>,
+ Josh Poimboeuf <jpoimboe@kernel.org>, Daniel Wagner <dwagner@suse.de>,
+ Petr Tesarik <ptesarik@suse.com>, Nicolas Saenz Julienne
+ <nsaenz@amazon.com>, Frederic Weisbecker <frederic@kernel.org>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Sean Christopherson <seanjc@google.com>, Juergen Gross <jgross@suse.com>,
+ Ajay Kaher <ajay.kaher@broadcom.com>,
+ Alexey Makhalov <alexey.amakhalov@broadcom.com>,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, Russell King
+ <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>,
+ Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+ WANG Xuerui <kernel@xen0n.name>, Paul Walmsley <paul.walmsley@sifive.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Alexandre Ghiti <alex@ghiti.fr>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+ Adrian Hunter <adrian.hunter@intel.com>,
+ "Liang, Kan" <kan.liang@linux.intel.com>,
+ Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+ Paolo Bonzini <pbonzini@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
+ Jason Baron <jbaron@akamai.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Ard Biesheuvel <ardb@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
+ Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>,
+ Daniel Gomez <da.gomez@samsung.com>, Naveen N Rao <naveen@kernel.org>,
+ Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+ "David S. Miller" <davem@davemloft.net>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Joel Fernandes <joel@joelfernandes.org>,
+ Josh Triplett <josh@joshtriplett.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Uladzislau Rezki <urezki@gmail.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>, Ben Segall
+ <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+ Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Masahiro Yamada <masahiroy@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+ Miguel Ojeda <ojeda@kernel.org>, "Mike Rapoport (Microsoft)"
+ <rppt@kernel.org>, Rong Xu <xur@google.com>,
+ Rafael Aquini <aquini@redhat.com>, Song Liu <song@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Dan Carpenter
+ <dan.carpenter@linaro.org>, Brian Gerst <brgerst@gmail.com>,
+ "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+ Benjamin Berg <benjamin.berg@intel.com>,
+ Vishal Annapurve <vannapurve@google.com>,
+ Randy Dunlap <rdunlap@infradead.org>, John Stultz <jstultz@google.com>,
+ Tiezhu Yang <yangtiezhu@loongson.cn>
+References: <20250429113242.998312-1-vschneid@redhat.com>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <20250429113242.998312-1-vschneid@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Apr 23, 2025 at 12:54=E2=80=AFAM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
-> On Fri, Apr 18, 2025 at 10:50=E2=80=AFAM Suren Baghdasaryan <surenb@googl=
-e.com> wrote:
-> > Utilize speculative vma lookup to find and snapshot a vma without
-> > taking mmap_lock during PROCMAP_QUERY ioctl execution. Concurrent
-> > address space modifications are detected and the lookup is retried.
-> > While we take the mmap_lock for reading during such contention, we
-> > do that momentarily only to record new mm_wr_seq counter.
->
-> PROCMAP_QUERY is an even more obvious candidate for fully lockless
-> speculation, IMO (because it's more obvious that vma's use is
-> localized to do_procmap_query(), instead of being spread across
-> m_start/m_next and m_show as with seq_file approach). We do
-> rcu_read_lock(), mmap_lock_speculate_try_begin(), query for VMA (no
-> mmap_read_lock), use that VMA to produce (speculative) output, and
-> then validate that VMA or mm_struct didn't change with
-> mmap_lock_speculate_retry(). If it did - retry, if not - we are done.
-> No need for vma_copy and any gets/puts, no?
+I don't think we should do this series.
 
-I really strongly dislike this "fully lockless" approach because it
-means we get data races all over the place, and it gets hard to reason
-about what happens especially if we do anything other than reading
-plain data from the VMA. When reading the implementation of
-do_procmap_query(), at basically every memory read you'd have to think
-twice as hard to figure out which fields can be concurrently updated
-elsewhere and whether the subsequent sequence count recheck can
-recover from the resulting badness.
-
-Just as one example, I think get_vma_name() could (depending on
-compiler optimizations) crash with a NULL deref if the VMA's ->vm_ops
-pointer is concurrently changed to &vma_dummy_vm_ops by vma_close()
-between "if (vma->vm_ops && vma->vm_ops->name)" and
-"vma->vm_ops->name(vma)". And I think this illustrates how the "fully
-lockless" approach creates more implicit assumptions about the
-behavior of core MM code, which could be broken by future changes to
-MM code.
+If folks want this functionality, they should get a new CPU that can
+flush the TLB without IPIs.
 
