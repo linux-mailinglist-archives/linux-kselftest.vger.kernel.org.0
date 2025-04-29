@@ -1,77 +1,77 @@
-Return-Path: <linux-kselftest+bounces-31943-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31944-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1761AA398A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 23:36:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB4E9AA3A0C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 23:44:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D9BA173574
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 21:36:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 632E81BA78FD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 21:44:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDCB326A098;
-	Tue, 29 Apr 2025 21:36:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 360CC26C3B5;
+	Tue, 29 Apr 2025 21:44:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="h3WWJR3K"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Mp3I6NFv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C2F62222A2
-	for <linux-kselftest@vger.kernel.org>; Tue, 29 Apr 2025 21:36:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8240825E47D
+	for <linux-kselftest@vger.kernel.org>; Tue, 29 Apr 2025 21:44:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745962582; cv=none; b=Yphdn82959gCrSQibQ8jBiGpCe1DU9YPARHjPSE/Tk21UDQbtTqlW44ess26Cg3hD8ISs0Qjofu16CoBMfzdAae1wSmUQHh0Mwk//TlwTYF2KzL8F6KlaW/BGEN3kBFHxEhqAlmu4OMt6Wp7nEQPqnq3Yfp4miEtx73WKnWbbKg=
+	t=1745963054; cv=none; b=RxS3PqVqa1F8ILqO4NfPD/VQR5QA3gT0d8kiwuF006NLcG2u39UCYwvyBqf9LrugHm0uIEuRGBCfHeyTCJ84EYjCOWE3i9XvqQN0u9Gr/T+yskQkXGBIDXpwogGeCq69PwVz3HcJlMGR/0frk2iuITJHJlpTqethQssgK9VEhfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745962582; c=relaxed/simple;
-	bh=pjG0WRYPmuFXgp5l4sOIxBPQ0JCTtzB9fn/bSzP4aws=;
+	s=arc-20240116; t=1745963054; c=relaxed/simple;
+	bh=woal7ohbjfSc1j5RViMLKYP0aErf7+Ky5j5wTig+x8w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=phXdd4iT58CNkCGW3DcrM+3psP6Pk7KYcKE+YhRYlxbP6ZlA5iveLmJgSQxJXwOGrjhaO/tIRyFJAGCpdY7QvIiR1w2WKa1XmNb+yDuQbE+hOKenuaL21FSIZ86xCOOizHGlGNV0kjNR1Fk5+Yq6vQCJEqhoD/DEReo8BSWFzQQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=h3WWJR3K; arc=none smtp.client-ip=209.85.214.180
+	 Content-Type:Content-Disposition:In-Reply-To; b=d8unJi4kqnU1MbEo1BkmaOek+rzN2w4enY1GqL4ET7bDa/08VRBR7PJgu2A7BmhHOqf5D+OptUcmmo6bAXqXD9MNy7BLPjo3az0KB4N6tgQ5OjMuL/ukzT1aYrrJYSR7jMO3MD5l6qxDN8cOCeCZRpzoBZsGETNCRUUvqRMI9qA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Mp3I6NFv; arc=none smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2263428c8baso80855ad.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Apr 2025 14:36:20 -0700 (PDT)
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2240aad70f2so241955ad.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Apr 2025 14:44:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1745962580; x=1746567380; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1745963052; x=1746567852; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VFHhD4L18F4DbheB1ANr+oLMK0ky8CpJtw12v2WCTVo=;
-        b=h3WWJR3KHXoQt4F4HvEAoj3cZePfCxVWD/1YrVTrrUx/6XLQ9Mj7T3CWXVaterMCIj
-         o+f91xIgBixGEZC0C2r87PY8UA+jmJlZQW3xeRXM4TO5H96RLlP53C4ymC5tcnVJx/AK
-         Z0YLKoHsCSfPw9vVkrM4v6TAQJSZDfAFSVOdTCNJiHJh8DJhbsmVYktXfPSzQ8FJKXeq
-         tKglu6tzlyfieyouUrDXeUN5vwvw9kMuDkkesc4LD236DRTL2VF6s//yFAI5aWU69dj5
-         cV6eg5KvtCKcF2F0k0dsiYHjKNMCS94HgphR5j7jqp7SYEBtP34vX5T0QrO13H9lZ4Ja
-         6scQ==
+        bh=EjhyY3r971ECUhfqqbl7u+2Mh/jYqDkZEBXpIERaB8I=;
+        b=Mp3I6NFvj1GHlCke7taA7OWfe6YL1jqhT7E9XUCb5eir6DLzDf8PZrOaxqjg7rE3Q0
+         svka9BF4rw4Nh49BEBJhhsZkBLnhuJdtHAIOOC1sjVUs1QSg5dXEPrqEOPUxdMWAHbRS
+         mZDntwGDkTSa56yTLdbXXhGWezcjb/rTGXNyKfnKUiHX2aYf0AQ/xDng+Yrbwqs+Dhsh
+         I9/8OLfloqF2t6t4zLXW37PDG/DXYFEgrcZNGp3N4bEmUDfDCCN1fCB6xJ7U4f8ctoNC
+         3SUlDl8nMv78/kvGjQyIp+gOxkBeVxOBnWbyqWH2ghicdnXn2Xn88z+GFZCqxeSMPe5d
+         61Iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745962580; x=1746567380;
+        d=1e100.net; s=20230601; t=1745963052; x=1746567852;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VFHhD4L18F4DbheB1ANr+oLMK0ky8CpJtw12v2WCTVo=;
-        b=xHBeiCcYEqtUEagDJEX9QLcw9UZMPiZYzSrvl6sb3Ukpvj0ajIryh8G9iAhAeX2edn
-         fk1OfwsZgt2BCSUpVGHQOd88ZQmVk6E/+cQY5mWdxZbS9ABHHIql66SXMZc8p+RqHDHV
-         fFy2Wx9LNAucQwF5zwK554eCXSeIGmy+rAmQ79WynlI1Exnbafcf1rlEsSj1Bo7Zbj7J
-         l1NAEwHT49Z5B+PXb8n8bVT3DDPc2IXnAe7eYVfkJXpN3uC5FYqTCyiq0nMyqp7OQWnJ
-         iHLIJ7dThrOwv1wrBfnFns40Bf+nvzRNcBQQwX2CfDGBAOqru+NvZdzhD6cxAVi+C4kN
-         dvPQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUOHcgkkWvfk6TJF59Pm5GFJOzehfeDcv1hhNXF/45HwZnQYQHzUq3a9mvMPsTElm0blBXI7AYDqYwioxaBp4I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzT4Js5b7P/ZAPmgAl03BBm7wJAFDUuk+ChNYAHAcZiKYZXPFw4
-	0lzKP94bSyFkrp/rYwM9UPtaIySrQ4mHdD+1DyNDElnfm88f8aLxRmj8BG0G3Q==
-X-Gm-Gg: ASbGncuWBZg8mtwwZ+GdKHaCIA8gjkpcURlkhrJuBRTjDsGmsix8qxyproXxqrVxY84
-	daGktJOLPzFZkEHvn0F6OUjBzDT5SpfftlWfnKURvJniyhqUgbErqIK7nSYmiwM1m3mYLavYul4
-	obevDep2dybhE3KRrMTXGlNvdQ3g42Bi4h2o4HQiAbMaR2YZXZti6aaFzzjKWFX6e3cB3WK5gRo
-	l4xMXlyTw0Tz+W0AQxKzBW3eU/AxCNhJTwZUgudOXOmS5n5HIiyQ4ZKiA66wsKhvWzVibe3Yoz4
-	jqnE0z9ssnEc6J0DAWRv/Hg9ulLzyMRnttNheAFUFgt5y3GzN1Eafvm8Ee2wiI3vpgSche1M
-X-Google-Smtp-Source: AGHT+IHMqNgjircjCmAkmKl5VbBskPIbU47nTYxADS2hK6tD9L6Ge4YAR4USLtbPpDWqfiuVVAQ0lQ==
-X-Received: by 2002:a17:903:144f:b0:21f:3f5c:d24c with SMTP id d9443c01a7336-22df3dda537mr1044155ad.0.1745962580224;
-        Tue, 29 Apr 2025 14:36:20 -0700 (PDT)
+        bh=EjhyY3r971ECUhfqqbl7u+2Mh/jYqDkZEBXpIERaB8I=;
+        b=jXbSvLKNVSeqD3/jwU3EG1fIKm/GIvK9UDAX4NjyAe6k8FWfOjInu7OrH8AnJbflCn
+         iLhZMGEELLOzUnGHoYwLSSvasMAbtrbim0Pf+UbH2unEsonHa1iFXZyWoT6AOiRJ8U8X
+         Hba6DGEFjSpXC1qLNPxR13bE3tPnlCdeUTt+nt27DAgO18ACpnapwenhSH2r30gtMXVG
+         80Hmy0+3FR3CHBU2pFGYEyZWQ8+hHwCVd+kVQH5dmAfKW1GYomf9/vQCLFcQ32i7j3t4
+         HqLb13Ay1rbdaqO6yB8TA2qbfgteDX3/UiygUvWIKtqVF+S/vQg69WycQ+8VTc/wA+IS
+         YtJA==
+X-Forwarded-Encrypted: i=1; AJvYcCUDymDTVtwOskeiLpykUDdYfZdNUcQxR7xiVOs3/XL1BQ4SOTr8pxBaMMdpsErZO5QYtOMduMfhdRXCGxE48KM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzOkO738EsKt/f/aav/Tq2ylzpe2zjU2pAzZsR/unAmHw3OQYyb
+	DsqGoYVaM45ilG228PNR+Yul1MVlxqehxcdtLFMjOyKFVusSj03Ivmnl181QiA==
+X-Gm-Gg: ASbGncu1B4uGkNzfsQcqXDufbI2DINCHKSJbfu31ACf1hvPyFSYOn5xwu3cmYs20/cg
+	F9U2ZGk17yA5OXUE0XwlgBJJ21rTUqRnCfbJVV21/HQx+e9Dzu812SzLsGjYAVvTb+sXdJgyrhw
+	MNoFGiHyHaZw7fuiC/QQyJMh0DvxcwKOYw3woEMHDEu3W2sZncqEWUXbJspDnox88HM6aLeD56b
+	tTnJ8lVaSFsvNZWKegdxFQVMOV2gkQJzbueVTkQtuh7LE3CA202TMr85kApx84B6gnDErINVqOX
+	TwYFrtasvE3DFmNveH4NjbHv2p25uGuOkl/m68idSh9qW6YPCgFer8SqekAUkBxFXXVq20nw
+X-Google-Smtp-Source: AGHT+IGRVChNm/D/6XmLJRuqupUIJJIIhE6A6CeVKWfGeNxHpzqOmQegP9ON+cIaJRAsz/EcrzoqDw==
+X-Received: by 2002:a17:902:db12:b0:224:6c8:8d84 with SMTP id d9443c01a7336-22df3f77cffmr1031875ad.4.1745963051511;
+        Tue, 29 Apr 2025 14:44:11 -0700 (PDT)
 Received: from google.com (2.210.143.34.bc.googleusercontent.com. [34.143.210.2])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22db4d76d34sm108297185ad.39.2025.04.29.14.36.14
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-30a34a5f86esm25958a91.44.2025.04.29.14.44.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Apr 2025 14:36:19 -0700 (PDT)
-Date: Tue, 29 Apr 2025 21:36:09 +0000
+        Tue, 29 Apr 2025 14:44:11 -0700 (PDT)
+Date: Tue, 29 Apr 2025 21:44:00 +0000
 From: Pranjal Shrivastava <praan@google.com>
 To: Nicolin Chen <nicolinc@nvidia.com>
 Cc: jgg@nvidia.com, kevin.tian@intel.com, corbet@lwn.net, will@kernel.org,
@@ -84,11 +84,11 @@ Cc: jgg@nvidia.com, kevin.tian@intel.com, corbet@lwn.net, will@kernel.org,
 	linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
 	linux-kselftest@vger.kernel.org, patches@lists.linux.dev,
 	mochs@nvidia.com, alok.a.tiwari@oracle.com, vasant.hegde@amd.com
-Subject: Re: [PATCH v2 16/22] iommu/arm-smmu-v3-iommufd: Add vsmmu_alloc impl
- op
-Message-ID: <aBFGSRGcIsCDU1Zj@google.com>
+Subject: Re: [PATCH v2 17/22] iommu/arm-smmu-v3-iommufd: Support
+ implementation-defined hw_info
+Message-ID: <aBFIIJPmjIOecCMj@google.com>
 References: <cover.1745646960.git.nicolinc@nvidia.com>
- <73b1fc34b07f2ac42d542dd996c7119ae5f8939c.1745646960.git.nicolinc@nvidia.com>
+ <56f048cdc9cd8bf1569434633d709d07a78e9430.1745646960.git.nicolinc@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -97,82 +97,103 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <73b1fc34b07f2ac42d542dd996c7119ae5f8939c.1745646960.git.nicolinc@nvidia.com>
+In-Reply-To: <56f048cdc9cd8bf1569434633d709d07a78e9430.1745646960.git.nicolinc@nvidia.com>
 
-On Fri, Apr 25, 2025 at 10:58:11PM -0700, Nicolin Chen wrote:
-> An impl driver might support its own vIOMMU object, as tegra241-cmdqv will
-> add IOMMU_VIOMMU_TYPE_TEGRA241_CMDQV.
+On Fri, Apr 25, 2025 at 10:58:12PM -0700, Nicolin Chen wrote:
+> Repurpose the @__reserved field in the struct iommu_hw_info_arm_smmuv3,
+> to an HW implementation-defined field @impl.
 > 
-> Add a vsmmu_alloc op to give impl a try, upon failure fallback to standard
-> vsmmu allocation for IOMMU_VIOMMU_TYPE_ARM_SMMUV3.
+> This will be used by Tegra241 CMDQV implementation on top of a standard
+> ARM SMMUv3 IOMMU. The @impl will be only valid if @flags is set with an
+> implementation-defined flag.
+> 
+> Thus in the driver-level, add an hw_info impl op that will return such
+> a flag to use the impl field.
 > 
 > Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
 
-Reviewd-by: Pranjal Shrivastava <praan@google.com>
+Reviewed-by: Pranjal Shrivastava <praan@google.com>
 
 > ---
->  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h     |  6 ++++++
->  .../iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c | 17 +++++++++++------
->  2 files changed, 17 insertions(+), 6 deletions(-)
+>  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h      |  1 +
+>  include/uapi/linux/iommufd.h                     |  4 ++--
+>  .../iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c  | 16 +++++++++++++---
+>  3 files changed, 16 insertions(+), 5 deletions(-)
 > 
 > diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-> index 6b8f0d20dac3..a5835af72417 100644
+> index a5835af72417..bab7a9ce1283 100644
 > --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
 > +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-> @@ -16,6 +16,7 @@
->  #include <linux/sizes.h>
->  
->  struct arm_smmu_device;
-> +struct arm_smmu_domain;
->  
->  /* MMIO registers */
->  #define ARM_SMMU_IDR0			0x0
-> @@ -720,6 +721,11 @@ struct arm_smmu_impl_ops {
->  	int (*init_structures)(struct arm_smmu_device *smmu);
->  	struct arm_smmu_cmdq *(*get_secondary_cmdq)(
->  		struct arm_smmu_device *smmu, struct arm_smmu_cmdq_ent *ent);
-> +	struct arm_vsmmu *(*vsmmu_alloc)(
-> +		struct arm_smmu_device *smmu,
-> +		struct arm_smmu_domain *smmu_domain, struct iommufd_ctx *ictx,
-> +		unsigned int viommu_type,
-> +		const struct iommu_user_data *user_data);
+> @@ -726,6 +726,7 @@ struct arm_smmu_impl_ops {
+>  		struct arm_smmu_domain *smmu_domain, struct iommufd_ctx *ictx,
+>  		unsigned int viommu_type,
+>  		const struct iommu_user_data *user_data);
+> +	u32 (*hw_info)(struct arm_smmu_device *smmu, u32 *impl);
 >  };
 >  
 >  /* An SMMUv3 instance */
+> diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
+> index 06a763fda47f..b2614f0f1547 100644
+> --- a/include/uapi/linux/iommufd.h
+> +++ b/include/uapi/linux/iommufd.h
+> @@ -554,7 +554,7 @@ struct iommu_hw_info_vtd {
+>   *                                   (IOMMU_HW_INFO_TYPE_ARM_SMMUV3)
+>   *
+>   * @flags: Must be set to 0
+> - * @__reserved: Must be 0
+> + * @impl: Must be 0
+>   * @idr: Implemented features for ARM SMMU Non-secure programming interface
+>   * @iidr: Information about the implementation and implementer of ARM SMMU,
+>   *        and architecture version supported
+> @@ -585,7 +585,7 @@ struct iommu_hw_info_vtd {
+>   */
+>  struct iommu_hw_info_arm_smmuv3 {
+>  	__u32 flags;
+> -	__u32 __reserved;
+> +	__u32 impl;
+>  	__u32 idr[6];
+>  	__u32 iidr;
+>  	__u32 aidr;
 > diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c
-> index 66855cae775e..a8a78131702d 100644
+> index a8a78131702d..63861c60b615 100644
 > --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c
 > +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c
-> @@ -392,10 +392,7 @@ struct iommufd_viommu *arm_vsmmu_alloc(struct device *dev,
->  		iommu_get_iommu_dev(dev, struct arm_smmu_device, iommu);
+> @@ -10,7 +10,9 @@
+>  void *arm_smmu_hw_info(struct device *dev, u32 *length, u32 *type)
+>  {
 >  	struct arm_smmu_master *master = dev_iommu_priv_get(dev);
->  	struct arm_smmu_domain *s2_parent = to_smmu_domain(parent);
-> -	struct arm_vsmmu *vsmmu;
-> -
-> -	if (viommu_type != IOMMU_VIOMMU_TYPE_ARM_SMMUV3)
-> -		return ERR_PTR(-EOPNOTSUPP);
-> +	struct arm_vsmmu *vsmmu = ERR_PTR(-EOPNOTSUPP);
+> +	struct arm_smmu_device *smmu = master->smmu;
+>  	struct iommu_hw_info_arm_smmuv3 *info;
+> +	u32 flags = 0, impl = 0;
+>  	u32 __iomem *base_idr;
+>  	unsigned int i;
 >  
->  	if (!(smmu->features & ARM_SMMU_FEAT_NESTING))
->  		return ERR_PTR(-EOPNOTSUPP);
-> @@ -423,8 +420,16 @@ struct iommufd_viommu *arm_vsmmu_alloc(struct device *dev,
->  	    !(smmu->features & ARM_SMMU_FEAT_S2FWB))
->  		return ERR_PTR(-EOPNOTSUPP);
+> @@ -18,15 +20,23 @@ void *arm_smmu_hw_info(struct device *dev, u32 *length, u32 *type)
+>  	if (!info)
+>  		return ERR_PTR(-ENOMEM);
 >  
-> -	vsmmu = iommufd_viommu_alloc(ictx, struct arm_vsmmu, core,
-> -				     &arm_vsmmu_ops);
-> +	if (master->smmu->impl_ops && master->smmu->impl_ops->vsmmu_alloc)
-> +		vsmmu = master->smmu->impl_ops->vsmmu_alloc(
-> +			master->smmu, s2_parent, ictx, viommu_type, user_data);
-> +	if (PTR_ERR(vsmmu) == -EOPNOTSUPP) {
-> +		if (viommu_type != IOMMU_VIOMMU_TYPE_ARM_SMMUV3)
-> +			return ERR_PTR(-EOPNOTSUPP);
-> +		/* Fallback to standard SMMUv3 type if viommu_type matches */
-> +		vsmmu = iommufd_viommu_alloc(ictx, struct arm_vsmmu, core,
-> +					     &arm_vsmmu_ops);
+> -	base_idr = master->smmu->base + ARM_SMMU_IDR0;
+> +	base_idr = smmu->base + ARM_SMMU_IDR0;
+>  	for (i = 0; i <= 5; i++)
+>  		info->idr[i] = readl_relaxed(base_idr + i);
+> -	info->iidr = readl_relaxed(master->smmu->base + ARM_SMMU_IIDR);
+> -	info->aidr = readl_relaxed(master->smmu->base + ARM_SMMU_AIDR);
+> +	info->iidr = readl_relaxed(smmu->base + ARM_SMMU_IIDR);
+> +	info->aidr = readl_relaxed(smmu->base + ARM_SMMU_AIDR);
+>  
+>  	*length = sizeof(*info);
+>  	*type = IOMMU_HW_INFO_TYPE_ARM_SMMUV3;
+>  
+> +	if (smmu->impl_ops && smmu->impl_ops->hw_info) {
+> +		flags = smmu->impl_ops->hw_info(smmu, &impl);
+> +		if (flags) {
+> +			info->impl = impl;
+> +			info->flags |= flags;
+> +		}
 > +	}
->  	if (IS_ERR(vsmmu))
->  		return ERR_CAST(vsmmu);
+> +
+>  	return info;
+>  }
 >  
 > -- 
 > 2.43.0
