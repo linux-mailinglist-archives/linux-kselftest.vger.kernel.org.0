@@ -1,192 +1,139 @@
-Return-Path: <linux-kselftest+bounces-31840-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31841-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2095CA9FF08
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 03:27:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 977AAA9FF44
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 03:56:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 69F7246773E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 01:27:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7977046226E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 01:56:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62E3D1917F0;
-	Tue, 29 Apr 2025 01:27:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A744520CCD6;
+	Tue, 29 Apr 2025 01:56:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RvyiLO7y"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IY3D7215"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE81B433C4;
-	Tue, 29 Apr 2025 01:27:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC1D020C48F
+	for <linux-kselftest@vger.kernel.org>; Tue, 29 Apr 2025 01:56:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745890056; cv=none; b=WRFRREnHv24BsjfSQwekwjVyrVBd7x3t1mE05UzvbElBL6xFdN/qECS6GWomANe1/4ukx8InAoiOL6xKLx5GqCdUad/NsT5P64j+4inWiD05KIGRXPZEwIiVWha/K3+dXEIowpv8rm7I/m3liUsYqNiUSKWfnbwNrOO868yUgYM=
+	t=1745891769; cv=none; b=FsXYT/uY4p8g2poDDdo7/1T0vfe0XIm5qtxsoQldgPERPPWHPzJ8mt3gXUpszwV6SaEWpq7JRkS14c3pJvvYkgoZf7L1VLas5fuGXVjHE121JUOyzA1xfqdYyJUmt5xZPUXG4eRPyy9V4pBXQLjQ+o/XdMNdEGEWpp2WA/fJm34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745890056; c=relaxed/simple;
-	bh=DB2J9NyQh5bEG5N2eEO3SauXvRnwrNA9NgWr3zuafjY=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=UKxZCRM+rZFe87sU7A2Cwbb9Fxf/c0QDyaPrinw83KvhhEKDij6AwGaNciIWQuzjTMENg7iMHaGEOyN10IDeQljtzddxkeRBnS7B91Gr0bQ2lLP7Obc9Q1JMatmBudtMpjxGZorv+4sqHGuTC8kSIrCy9E+oNIEuGSsxLKU9+h0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RvyiLO7y; arc=none smtp.client-ip=209.85.222.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-7c7913bab2cso579930485a.0;
-        Mon, 28 Apr 2025 18:27:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745890053; x=1746494853; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KlntZd2HKxMdLBz7SWXJj9gL9VA8qG4kpiiSWL6iCyo=;
-        b=RvyiLO7yDrRVqmwbZPW5Gqjw9EGQJLrrEXCOqm6UgitQAal1E/Dt1TBu/nqZOVeIop
-         n18PW20HyMB9pfKPsza5hLKQzbgMefU8igSVlZHz6E5Kr102hzg4cW4FcggBjbhDx3PB
-         kpXFC+0gzHqLo14T8VUBajrmDwCTcbl5s/SZ4+/qk+/UNqMoLQ7h1eg2hqKPQ9f3XlP1
-         Eov1m20wFoPdLqgRD25Xm7/B1jF4TgdHpFzbSUn9flroPcIC3h4SSpNQgSLe8noY7yd+
-         J9U6YpiKYk4eDY/q8z/jiYK8UkpI8cbXsPkXzHtE3Kne/i9yzrcLnpNWRfGIr75TQDqr
-         3lBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745890053; x=1746494853;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=KlntZd2HKxMdLBz7SWXJj9gL9VA8qG4kpiiSWL6iCyo=;
-        b=rkzOYcB2RBsrLlIdw6Q675G4FIMP9tVFZM9bJeuZKJEIlkiYEDbj5s7m109BDYjTqT
-         9huPqDPdRYVreGtVbl4Lm4jS7QIFd+e3tD0nbfM7HlxITkBOD7gVyLjqxRworKMnemKm
-         GjKf34GFgOfODZGGFxR7laEg9hilIOF2g5KvIrx/q5MOOkvIjsI1BCxbb8R4muFu7S82
-         hpJME1oNtg8rj3KaH7B2s6hSEiY5FDwunavMBbwXoeqW86MIgGQ+0PYNqM3GMk/Bn7TL
-         uT9avlyzgA23bjJFFaV7r4+37PbQ6S/lITNnti33xSMTRKxKskUpMCM3KiBYfCCx9TmI
-         C3eA==
-X-Forwarded-Encrypted: i=1; AJvYcCVj0ncLn3hdbGIcQpDGXyYXebj/vL1/byYaLwoLkrtzov8Bub81vjrzMhU3mEuwozniQdH3TEDa@vger.kernel.org, AJvYcCVsTmQIx6dspvJpsojkLqfKrZ0H2wsa9gOxs6c0tAt2oHGBZqSsaVlch8o+uR6X14176uoDUCmxUCKAKdOL2Q8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YySVOA+hYOhUNSjUoeSaH117ZJs6K8cW52wFh7TehwbAg7raWKH
-	+M1Z9IYo7lUP/ah7ErJkDF7FLB2Tyv5G9E8WRBGdt4wcQdqg8lgC
-X-Gm-Gg: ASbGncv00VeJRmEFuWSWgiZidqy1GD++dxaF3ojUGlkbTsd1/JDVhQt4HtkwyS9ve4u
-	OaSCrIQU4342SdQYsL9ojHOZGlDoxG01uW19TRu5+NwXcED1ZN+sWaBRcZfOwKrXrKd1AhfmbYs
-	zsyU/utsQZOSULBdfMCVCyQKQZiknPZ3RDt1QS4ntalLaZSKmP2NJxLDbJL7HEa1/TmZNgsVM+h
-	KVgCEVrOEEeWOCeNy3O3pieT3P8Zhf7MpbZPsA3ipmdAHU6iTLJkMhxKJNLowpVZH/9pJwRV34v
-	Q2f/3UjpFW8Z0bG9Wu9dhEr/adJq+rh/AwcTF1/2UAR4U3kq/f+jLmRWA9cLjPjMuWxo2NrNFwq
-	clcznH0kE8SLv4OrJGmezLVvc8uyKb7U=
-X-Google-Smtp-Source: AGHT+IFxrN07Xi4RzdYiJI7PRn37DWy0riwdJhnZpj/wgZtI1XdlgrbYJyxyjP2vM8N+bfNwkymqeg==
-X-Received: by 2002:a05:620a:4248:b0:7c5:5d4b:e63c with SMTP id af79cd13be357-7c9668d4a26mr1688295085a.47.1745890053383;
-        Mon, 28 Apr 2025 18:27:33 -0700 (PDT)
-Received: from localhost (141.139.145.34.bc.googleusercontent.com. [34.145.139.141])
-        by smtp.gmail.com with UTF8SMTPSA id d75a77b69052e-47e9f7aade9sm75351281cf.40.2025.04.28.18.27.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Apr 2025 18:27:32 -0700 (PDT)
-Date: Mon, 28 Apr 2025 21:27:32 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: davem@davemloft.net, 
- netdev@vger.kernel.org, 
- edumazet@google.com, 
- pabeni@redhat.com, 
- andrew+netdev@lunn.ch, 
- horms@kernel.org, 
- petrm@nvidia.com, 
- willemb@google.com, 
- sdf@fomichev.me, 
- linux-kselftest@vger.kernel.org
-Message-ID: <68102b0477fcc_2609d429482@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20250428132425.318f2a51@kernel.org>
-References: <20250425151757.1652517-1-kuba@kernel.org>
- <680cf896280c4_193a06294a6@willemb.c.googlers.com.notmuch>
- <20250428132425.318f2a51@kernel.org>
-Subject: Re: [PATCH net-next] selftests: net: exit cleanly on SIGTERM /
- timeout
+	s=arc-20240116; t=1745891769; c=relaxed/simple;
+	bh=6Tu7WNCa4Qgna5rlBXusXoEpPxhH8rKaEChLAmKivzM=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=F0Aqy269+IA91dH1KHQb8EUfhdPKsllgLx3fS9TQukCCOCiWgfoYIePoIMEOg/2YhWxE8q4Ry4Q1ONNuaQ+05SGcibZxUGEM5XkyQx3ZEuJofbUN6wngU9xdsJHcu5ZeUP1N6yyklQKzsW2+9o+rXE7e/f8drc1D8n9MPM6EJiU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IY3D7215; arc=none smtp.client-ip=91.218.175.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1745891755;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=s891RcXunIyhE6HG0MbHyrZLTrEoNr5m9Jf8E67m/jg=;
+	b=IY3D7215uNFs8V8YUuxjhBJsRs6/S9CWYKdeZbdqzVG30390GQRfxU3n8+JdetU1gRPpMK
+	ODVAY8u5UdD+UF/4Fps/2NIoXQx7fP74czU8eLsOU4+0DB9YWDJXnBn5wyB0omN8tH9bfk
+	45zdzBuUNpUtCjo+sMzty6jcqicwAzg=
+Date: Tue, 29 Apr 2025 01:55:53 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
+Message-ID: <048b968d1993ca84e3442da936bc8e4be07d98f4@linux.dev>
+TLS-Required: No
+Subject: Re: [PATCH bpf-next v1 1/2] ktls, sockmap: Fix missing uncharge
+ operation
+To: "Cong Wang" <xiyou.wangcong@gmail.com>
+Cc: bpf@vger.kernel.org, mrpre@163.com, "Boris Pismenny" <borisp@nvidia.com>,
+ "John Fastabend" <john.fastabend@gmail.com>, "Jakub Kicinski"
+ <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, "Eric
+ Dumazet" <edumazet@google.com>, "Paolo Abeni" <pabeni@redhat.com>, "Simon
+ Horman" <horms@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong
+ Song" <yonghong.song@linux.dev>, "KP Singh" <kpsingh@kernel.org>,
+ "Stanislav Fomichev" <sdf@fomichev.me>, "Hao Luo" <haoluo@google.com>,
+ "Jiri Olsa" <jolsa@kernel.org>, "Mykola Lysenko" <mykolal@fb.com>, "Shuah
+ Khan" <shuah@kernel.org>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+In-Reply-To: <aBAZ/p0Yj2kFGHhg@pop-os.localdomain>
+References: <20250425060015.6968-1-jiayuan.chen@linux.dev>
+ <20250425060015.6968-2-jiayuan.chen@linux.dev>
+ <aBAZ/p0Yj2kFGHhg@pop-os.localdomain>
+X-Migadu-Flow: FLOW_OUT
 
-Reviewed-by: Willem de Bruijn <willemb@google.com>
+2025/4/29 08:14, "Cong Wang" <xiyou.wangcong@gmail.com> wrote:
 
-Jakub Kicinski wrote:
-> On Sat, 26 Apr 2025 11:15:34 -0400 Willem de Bruijn wrote:
-> > > @@ -193,6 +198,19 @@ KSFT_DISRUPTIVE = True
-> > >      return env
-> > >  
-> > >  
-> > > +term_cnt = 0
-> > > +  
-> > 
-> > A bit ugly to initialize this here. Also, it already is initialized
-> > below.
-> 
-> We need a global so that the signal handler can access it.
-> Python doesn't have syntax to define a variable without a value.
-> Or do you suggest term_cnt = None ?
+>=20
+>=20On Fri, Apr 25, 2025 at 01:59:57PM +0800, Jiayuan Chen wrote:
+>=20
+>=20>=20
+>=20> net/tls/tls_sw.c | 7 +++++++
+> >=20
+>=20>  1 file changed, 7 insertions(+)
+> >=20
+>=20>=20=20
+>=20>=20
+>=20>  diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+> >=20
+>=20>  index f3d7d19482da..fc88e34b7f33 100644
+> >=20
+>=20>  --- a/net/tls/tls_sw.c
+> >=20
+>=20>  +++ b/net/tls/tls_sw.c
+> >=20
+>=20>  @@ -908,6 +908,13 @@ static int bpf_exec_tx_verdict(struct sk_msg =
+*msg, struct sock *sk,
+> >=20
+>=20>  &msg_redir, send, flags);
+> >=20
+>=20>  lock_sock(sk);
+> >=20
+>=20>  if (err < 0) {
+> >=20
+>=20>  + /* Regardless of whether the data represented by
+> >=20
+>=20>  + * msg_redir is sent successfully, we have already
+> >=20
+>=20>  + * uncharged it via sk_msg_return_zero(). The
+> >=20
+>=20>  + * msg->sg.size represents the remaining unprocessed
+> >=20
+>=20>  + * data, which needs to be uncharged here.
+> >=20
+>=20>  + */
+> >=20
+>=20>  + sk_mem_uncharge(sk, msg->sg.size);
+> >=20
+>=20>  *copied -=3D sk_msg_free_nocharge(sk, &msg_redir);
+> >=20
+>=20
+> Equivalent to sk_msg_free() ?
+>=20
+>=20Thanks.
+>
 
-I meant that the "global term_cnt" in ksft_run below already creates
-the global var, and is guaranteed to do so before _ksft_intr, so no
-need to also define it outside a function.
+Before calling tcp_bpf_sendmsg_redir(), we have already uncharged some
+memory using sk_msg_return_zero(). If we perform sk_msg_free(msg_redir),
+it will cause the duplicate uncharge of this part of data. If we perform
+sk_msg_free(msg), since tcp_bpf_sendmsg_redir() may not have sent any dat=
+a
+and msg->sg.start no longer points to this part of data, it will lead to
+memoryleak.
 
-Obviously not very important, don't mean to ask for a respin. LGTM.
-
-> The whole term_cnt dance is super ugly, couldn't think of a cleaner way.
-> It's really annoying that ksft infra sends 2 terminating signals one
-> immediately after the other :|
-> 
-> > > +def _ksft_intr(signum, frame):
-> > > +    # ksft runner.sh sends 2 SIGTERMs in a row on a timeout
-> > > +    # if we don't ignore the second one it will stop us from handling cleanup
-> > > +    global term_cnt
-> > > +    term_cnt += 1
-> > > +    if term_cnt == 1:
-> > > +        raise KsftTerminate()
-> > > +    else:
-> > > +        ksft_pr(f"Ignoring SIGTERM (cnt: {term_cnt}), already exiting...")
-> > > +
-> > > +
-> > >  def ksft_run(cases=None, globs=None, case_pfx=None, args=()):
-> > >      cases = cases or []
-> > >  
-> > > @@ -205,6 +223,10 @@ KSFT_DISRUPTIVE = True
-> > >                      cases.append(value)
-> > >                      break
-> > >  
-> > > +    global term_cnt
-> > > +    term_cnt = 0
-> > > +    prev_sigterm = signal.signal(signal.SIGTERM, _ksft_intr)
-> > > +
-> > >      totals = {"pass": 0, "fail": 0, "skip": 0, "xfail": 0}
-> > >  
-> > >      print("TAP version 13")
-> > > @@ -229,11 +251,12 @@ KSFT_DISRUPTIVE = True
-> > >              cnt_key = 'xfail'
-> > >          except BaseException as e:
-> > >              stop |= isinstance(e, KeyboardInterrupt)
-> > > +            stop |= isinstance(e, KsftTerminate)
-> > >              tb = traceback.format_exc()
-> > >              for line in tb.strip().split('\n'):
-> > >                  ksft_pr("Exception|", line)
-> > >              if stop:
-> > > -                ksft_pr("Stopping tests due to KeyboardInterrupt.")
-> > > +                ksft_pr(f"Stopping tests due to {type(e).__name__}.")
-> > >              KSFT_RESULT = False
-> > >              cnt_key = 'fail'
-> > >  
-> > > @@ -248,6 +271,8 @@ KSFT_DISRUPTIVE = True
-> > >          if stop:
-> > >              break
-> > >  
-> > > +    signal.signal(signal.SIGTERM, prev_sigterm)
-> > > +  
-> > 
-> > Why is prev_sigterm saved and reassigned as handler here?
-> 
-> Because we ignore all signals when cnt > 2 I didn't want to keep our
-> handler installed. Just in case something after ksft_run() hangs.
-> It should be equivalent to
-> 
-> 	signal.signal(signal.SIGTERM, signal.SIG_DLF)
-> 
-> if the prev is of concern. Then again keeping prev doesn't change #LOC
-
-Oh I see. Ok.
+So, directly calling sk_msg_free is not a good idea.
 
