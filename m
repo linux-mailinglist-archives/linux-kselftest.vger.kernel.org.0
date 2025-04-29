@@ -1,144 +1,180 @@
-Return-Path: <linux-kselftest+bounces-31860-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31861-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F687AA05CD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 10:31:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D347AA0698
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 11:06:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C27647B2E27
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 08:30:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9AB7218830A4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 09:06:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D38927C150;
-	Tue, 29 Apr 2025 08:31:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11D9529AB11;
+	Tue, 29 Apr 2025 09:06:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oAodT9uA"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="M15X/Gvq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC4262144A1
-	for <linux-kselftest@vger.kernel.org>; Tue, 29 Apr 2025 08:31:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3587B27F74D
+	for <linux-kselftest@vger.kernel.org>; Tue, 29 Apr 2025 09:06:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745915483; cv=none; b=RTL7uoJms26jt9qn0sHRH4EGfUTu2ciP72vucMRMb4Wk5LrseXxVFyINURVahyO4jPNhzwDFcppQF9JgLhUUUWW8wJViMGS+qpO9OA43RxVEJasptdqu0/jRRIhmB9uqJN86PmLSCuLbrFi7mzJ00QMZPQELiiuzxbbEumf8tME=
+	t=1745917564; cv=none; b=bfplUAgYtiX0TXoQew7KdmjnZdtYq0LoSpker1q1LHGMu7i39aZclWX+gRp8tWnqrAjmVC2RAW3fPdJn8+jYZT2AvTznKqc3gD1fh1HJcNLW46FwyKW7Ey8AjngFTWY8e1ZI7kkrGME14oQWoaYt7rkWRU8hirwam50H1lJ9cuc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745915483; c=relaxed/simple;
-	bh=85qKaVraS+9MNdskLBxSjS9ktFkx0yQSDGXvIR/OvQI=;
+	s=arc-20240116; t=1745917564; c=relaxed/simple;
+	bh=M2PUNSlDRsRs/DFNkJvrrRwh6F5RSdQsCwiq8JtjP0g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KJ2kGIIiiESu7dlzIu7zgIk5NGZf/zZhwI1Venxd1uUyvbB/x5YVI1Owf3epMPbTE1U9yzgRkc6jHMcBIgOuyCEqXaGxKwxjtIRfu73azReXfQAGfKAT0Fht8VcJwo/akpBwV2de4bM2kPIWN5UvAN2ZMCVoD+DoRnH+0WY8+7A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=oAodT9uA; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2242ac37caeso52895ad.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Apr 2025 01:31:21 -0700 (PDT)
+	 Content-Type:Content-Disposition:In-Reply-To; b=MjoOEAhSobQomNooCdCbBKv9m1SasQVa2krZhOhIld8+k/Y1BKAE+xeMes0RnANbPldsE8TwlyclVQbIobgIZzghRlEbJFib1PMRaoJWcBTPdFU+k2UeLC8BBJd4OJI/eMHeGwn63Tf5Ogbc3iBTv7LWmNWMXYiIVc5i2gFUFWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=M15X/Gvq; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-39c1efc457bso4083151f8f.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Apr 2025 02:06:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1745915481; x=1746520281; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TNi2KjTVYx94VsJLpl+aLzT0MDWDcyauEZBdUwqWejg=;
-        b=oAodT9uAJPpRkgB3B/eY+TMN04Fr3Putxl7q1c9Y+evLoj9i/ms+hT5HWJDs1hTnOK
-         d7wuMLxYD/czi7XXAIs+5pmHtC0hnxx1y7ekzhsOrYHXspWK5JDSm8bujYtOQCQCtbkH
-         ap5kE5qJ4qsOjatA9vGFq+a6r52hqDc30+i8/EJ8Be3kEd4cDaQqDtFP8PszYpaOe6HZ
-         cLf3ZMz2D3E1t04HD8iyhPcOoCCUa/G926U42LrA5DQ7CJbB0PV4Vz9j5y6WvWwQ+4Bh
-         Xjs1lABiyE0wzToxARN4fCJLQ42WCqAwRTwVF31zt9jxP3EfB7LidjyQAmwW6wMQEpKD
-         ZQMA==
+        d=ventanamicro.com; s=google; t=1745917560; x=1746522360; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=KatqGhsrZH+ZioIyyPM0GHZkF6RidX+RSSACu/Ebkcw=;
+        b=M15X/GvqMo0dU6v3IhyX/0PWlPXLLI/oAcaQBj/gmuyvwjs5e+OEjVGcNwFkYvmyLG
+         d2tbAh1q/V7sM8bWnjyEI114pK8SpSDXRNjAtmZ9O7lNWXYs3A9n1kJ73j/sM3Fk+kyr
+         HE6eEDFfsOFY35PS+1SRPneogoR067UXTHjxeQGgqtKvAcJcdq9DLRbQxUyKgrxZrBRP
+         SXLGAfXyCVoLD/ZFutUfFULB0jW+MRjqriLM9/J80A1pkpE1vhLAB6faQuZSRa7+s6qH
+         ixCfTsyeJC6iif90PcmKRjGcZnrv+8Haov/MsjyqiN2qCIyGpRRnSdpmTORsLvngLjDj
+         zduA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745915481; x=1746520281;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TNi2KjTVYx94VsJLpl+aLzT0MDWDcyauEZBdUwqWejg=;
-        b=hLUEZPRBRYCRIEscpj+fWo+/RSh5qOgRTVeHgVk5vRPdEGcLisE27jWfeDXJYVq1t8
-         TT/fsWBYfHD29qRcBqjy/TSWGjxz6mn8pngQ3aP0b9urC6BmMwKWfKWSUlOh4XKKvWGp
-         q0Ex/9YWHwP+r7TIupMezPciCVlPlxm8Iu1NNWuHPUeZvsJr04dnr9UL8wWIErYt5Gd/
-         XQQKfxK670xZklAwAt5d3jX/W/LjoHliuBSIda4vVenkwKNkYTmOt9LF1OXui+EbIwmY
-         UkcMIoy2BLTOjgfMYukZ4Y00rJwlmf7RZi4On7DrMcrQlRqkTBiWU9b3G0mGgDwRoHvG
-         Zfug==
-X-Forwarded-Encrypted: i=1; AJvYcCVMwk15yFGf0oCw4nVU02vLpDuIKG1Fv2IJ2l8wEDF5Ql+fSpzXFycyC0EsUEdx4B5EC81LDgp8b3VMUqYCn78=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyjn4hxYCUX+gzCdHk291ZtiD/z11PVHXdzwsnQN17ghvpcdz2s
-	w799DAuug4IVzXUcCGSpreCRpzHDpfFxCDJ1hdvg2n28Aj+j9rSdMwUHSsP+8g==
-X-Gm-Gg: ASbGncupmdDVCQL8pAq7pPxAK9ppMg/05MM1h7dAvUS5RFrFXRiGBxPp0oFk5viW5bL
-	byZZBCj7anF4D36U2HrQR+MSOyqvz2t5vBG2Oim3uF4201y+gtdF+b3szCdLbHayrzpFmnwgY/q
-	Jk+X1a2Y6hWAZ1mUuxAn61Byvf4qf4DntPGZtiZmJsG89RJyMcWC2m6igaNyNy+ZRSg0ls4u4aV
-	9rKWHmeRF/1QWPflL+DqzL8uYfF2uEfZf+zNhLcFNIBwldk3UXnkbhHY+A/uUYtC8zRRiB/4Up+
-	8paE9PTC/VaRfS3V8fKHcAeAEnHu81IIAzJ/kcY3EGeyezMP9BOTTHrHp2ur2EnqoyuSRZKC
-X-Google-Smtp-Source: AGHT+IEuwEN6Vz0nl2aEx/jObUHE3H07L74jGS/5bsNXpJR+QacDK6nh9jI6VmQObGdH+OZv4saKuQ==
-X-Received: by 2002:a17:903:1cd:b0:21f:465d:c588 with SMTP id d9443c01a7336-22de6c52c70mr2586365ad.14.1745915480493;
-        Tue, 29 Apr 2025 01:31:20 -0700 (PDT)
-Received: from google.com (2.210.143.34.bc.googleusercontent.com. [34.143.210.2])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-309ef124ce9sm10440195a91.34.2025.04.29.01.31.14
+        d=1e100.net; s=20230601; t=1745917560; x=1746522360;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KatqGhsrZH+ZioIyyPM0GHZkF6RidX+RSSACu/Ebkcw=;
+        b=SFWXgXfR4nDVq1IFQAETfKCKiSZFjQyDhwxCSCGuzfe3Y+ouhWvcvBpdjPq0rcgzHg
+         e44a0Hmh7t4Ka948lrfaP6A/1+ztcZffKJGnJH3HjOOT3HyOlbiwa6WuQ9ked+QqvwTc
+         0E5Bjt7vtGengZFd+MmJk8sjogZup6mIsPqpoZ4xm4TdGTGb77k4aHH73tVyT//rB6gI
+         aMbEbhQGrDNHe9o3RClWPdOd62aE7KxjleyZboxbGSbDwbhLeRIGgJVAWGHrQz8nrwsA
+         zrlC2OwV7RV8OD5r/35ZBAJGj//AVUMnjiYk+Xji+HiQ3lXBhB4aQY4F/0WwwKT2gTD6
+         ChQg==
+X-Forwarded-Encrypted: i=1; AJvYcCUPJnDdtDzk9ApQECC2qDXUVqXGBu3w5pXc9cMEa0A8WSf4Ia48mivjB7IsXtt+d7EXYEtGpwSLOkSU5G7iLdc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw84WCCxyexNrhhExoV+EtegH+UCHg24mNO2gAF9TtyOJY7S+c6
+	4sLYgFNFOzupCbkcqBiu+hKIobeSnQjsdSUJT83t6VdNYWHIIuivhYGhS8UP1Sk=
+X-Gm-Gg: ASbGncubwZ9Cdt3j436Gc8olBVrhYbGFYp+gDBs0/t6VHUXYhnoS6YyKPkoraz2ni1g
+	+7ltV5KeVokxCWgZ0ESETIEvigSaFnGoO+17FevhXXJUUDxsuOI5PrrUyKksEPn3JXi694Biz0y
+	cP7Lu5d1V0CtYVIs8jdiiaZA6Yy/DAWIvCpnZx67/Ph1Ar2kzgdj/HO1b3fDuPtHalTrVLbeOuH
+	Tzbyh6vOsdGnIzJ5RdAAaXhg9WanYGESdQLhWgZB2XMBJABBBn5urcKcE3+S2F/8qCTNZ3Ukg6p
+	7vXz/WLOGeYYw6sJP4ZcfAZjxuAh
+X-Google-Smtp-Source: AGHT+IGkl5qjiabpogb2jkKx++DcNwNz6kC3SVaUoXxULD2fuawYRLha0X61n1NZ+hz8YxEyViubjg==
+X-Received: by 2002:a5d:6903:0:b0:390:eacd:7009 with SMTP id ffacd0b85a97d-3a07ab9be44mr6194393f8f.42.1745917560430;
+        Tue, 29 Apr 2025 02:06:00 -0700 (PDT)
+Received: from localhost ([2a02:8308:a00c:e200::f716])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a073e5da02sm13462185f8f.93.2025.04.29.02.05.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Apr 2025 01:31:19 -0700 (PDT)
-Date: Tue, 29 Apr 2025 08:31:08 +0000
-From: Pranjal Shrivastava <praan@google.com>
-To: Nicolin Chen <nicolinc@nvidia.com>
-Cc: jgg@nvidia.com, kevin.tian@intel.com, corbet@lwn.net, will@kernel.org,
-	bagasdotme@gmail.com, robin.murphy@arm.com, joro@8bytes.org,
-	thierry.reding@gmail.com, vdumpa@nvidia.com, jonathanh@nvidia.com,
-	shuah@kernel.org, jsnitsel@redhat.com, nathan@kernel.org,
-	peterz@infradead.org, yi.l.liu@intel.com, mshavit@google.com,
-	zhangzekun11@huawei.com, iommu@lists.linux.dev,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, patches@lists.linux.dev,
-	mochs@nvidia.com, alok.a.tiwari@oracle.com, vasant.hegde@amd.com
-Subject: Re: [PATCH v2 04/22] iommu: Add iommu_copy_struct_to_user helper
-Message-ID: <aBCOTDDC8--age-V@google.com>
-References: <cover.1745646960.git.nicolinc@nvidia.com>
- <ca032e90c0241fe0653023fcb655185dba763f5f.1745646960.git.nicolinc@nvidia.com>
- <aA-_5FQK0uZPdGVA@google.com>
- <aA/HN2CV+0UQ4S9j@Asurada-Nvidia>
+        Tue, 29 Apr 2025 02:06:00 -0700 (PDT)
+Date: Tue, 29 Apr 2025 11:05:59 +0200
+From: Andrew Jones <ajones@ventanamicro.com>
+To: Atish Patra <atish.patra@linux.dev>
+Cc: Anup Patel <anup@brainfault.org>, Atish Patra <atishp@atishpatra.org>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Alexandre Ghiti <alex@ghiti.fr>, kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] KVM: riscv: selftests: Add stval to exception
+ handling
+Message-ID: <20250429-683f10a791d9ec41b060ec4a@orel>
+References: <20250324-kvm_selftest_improve-v1-0-583620219d4f@rivosinc.com>
+ <20250324-kvm_selftest_improve-v1-1-583620219d4f@rivosinc.com>
+ <20250425-dc44cb547ab5e2f994c94e80@orel>
+ <3b05d1a0-c873-4e61-b98c-b725d0dbb350@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <aA/HN2CV+0UQ4S9j@Asurada-Nvidia>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3b05d1a0-c873-4e61-b98c-b725d0dbb350@linux.dev>
 
-On Mon, Apr 28, 2025 at 11:21:43AM -0700, Nicolin Chen wrote:
-> On Mon, Apr 28, 2025 at 05:50:28PM +0000, Pranjal Shrivastava wrote:
-> > On Fri, Apr 25, 2025 at 10:57:59PM -0700, Nicolin Chen wrote:
-> > > Similar to the iommu_copy_struct_from_user helper receiving data from the
-> > > user space, add an iommu_copy_struct_to_user helper to report output data
-> > > back to the user space data pointer.
+On Mon, Apr 28, 2025 at 03:47:47PM -0700, Atish Patra wrote:
+> 
+> On 4/25/25 6:50 AM, Andrew Jones wrote:
+> > On Mon, Mar 24, 2025 at 05:40:29PM -0700, Atish Patra wrote:
+> > > Save stval during exception handling so that it can be decoded to
+> > > figure out the details of exception type.
 > > > 
-> > > Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-> > > Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> > > Signed-off-by: Atish Patra <atishp@rivosinc.com>
 > > > ---
-> > >  include/linux/iommu.h | 40 ++++++++++++++++++++++++++++++++++++++++
-> > >  1 file changed, 40 insertions(+)
+> > >   tools/testing/selftests/kvm/include/riscv/processor.h | 1 +
+> > >   tools/testing/selftests/kvm/lib/riscv/handlers.S      | 2 ++
+> > >   2 files changed, 3 insertions(+)
 > > > 
-> > > diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-> > > index ba7add27e9a0..634ff647888d 100644
-> > > --- a/include/linux/iommu.h
-> > > +++ b/include/linux/iommu.h
-> > > @@ -562,6 +562,46 @@ iommu_copy_struct_from_full_user_array(void *kdst, size_t kdst_entry_size,
-> > >  	return 0;
-> > >  }
-> > >  
-> > > +/**
-> > > + * __iommu_copy_struct_to_user - Report iommu driver specific user space data
-> > > + * @dst_data: Pointer to a struct iommu_user_data for user space data location
-> > > + * @src_data: Pointer to an iommu driver specific user data that is defined in
-> > > + *            include/uapi/linux/iommufd.h
-> > > + * @data_type: The data type of the @dst_data. Must match with @src_data.type
-> > 								   ^
-> > Nit: Must match with @dst_data type.
+> > > diff --git a/tools/testing/selftests/kvm/include/riscv/processor.h b/tools/testing/selftests/kvm/include/riscv/processor.h
+> > > index 5f389166338c..f4a7d64fbe9a 100644
+> > > --- a/tools/testing/selftests/kvm/include/riscv/processor.h
+> > > +++ b/tools/testing/selftests/kvm/include/riscv/processor.h
+> > > @@ -95,6 +95,7 @@ struct ex_regs {
+> > >   	unsigned long epc;
+> > >   	unsigned long status;
+> > >   	unsigned long cause;
+> > > +	unsigned long stval;
+> > >   };
+> > >   #define NR_VECTORS  2
+> > > diff --git a/tools/testing/selftests/kvm/lib/riscv/handlers.S b/tools/testing/selftests/kvm/lib/riscv/handlers.S
+> > > index aa0abd3f35bb..2884c1e8939b 100644
+> > > --- a/tools/testing/selftests/kvm/lib/riscv/handlers.S
+> > > +++ b/tools/testing/selftests/kvm/lib/riscv/handlers.S
+> > > @@ -45,9 +45,11 @@
+> > >   	csrr  s0, CSR_SEPC
+> > >   	csrr  s1, CSR_SSTATUS
+> > >   	csrr  s2, CSR_SCAUSE
+> > > +	csrr  s3, CSR_STVAL
+> > >   	sd    s0, 248(sp)
+> > >   	sd    s1, 256(sp)
+> > >   	sd    s2, 264(sp)
+> > > +	sd    s3, 272(sp)
+> > We can't add stval without also changing how much stack we allocate at the
+> > top of this macro, but since we need to keep sp 16-byte aligned in order
+> > to call C code (route_exception()) we'll need to decrement -8*36, not
 > 
-> Oh, that's a copy-n-paste mistake. It should be:
->   * @data_type: The data type of the @src_data. Must match with @dst_data.type
-
-Ack, yes that's what I meant!
-
+> Yes. Thanks for catching that.
 > 
-> Thanks!
-> Nicolin
+> > -8*35. Or, we could just switch struct ex_regs to be the kernel's struct
+> > pt_regs which has 36 unsigned longs. The 'badaddr' member is for stval and
+> > the additional long is orig_a0.
+> 
+> I think switching to pt_regs is better in terms of maintainability in the
+> future.
+> I will do that.
+> 
+> > >   .endm
+> > >   .macro restore_context
+> > I guess we should restore stval too.
+> 
+> Do we ?  stval is written by hardware and doesn't contain any state of the
+> interrupted program.
+> Once, the trap handler processes the trap using stval information, there is
+> no need to restore it.
+
+True. It just felt unbalanced.
 
 Thanks,
-Praan
+drew
+
+> 
+> Am I missing something ?
+> 
+> > Thanks,
+> > drew
+> > 
+> > > -- 
+> > > 2.43.0
+> > > 
+> > > 
+> > > -- 
+> > > kvm-riscv mailing list
+> > > kvm-riscv@lists.infradead.org
+> > > http://lists.infradead.org/mailman/listinfo/kvm-riscv
 
