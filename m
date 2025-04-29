@@ -1,143 +1,116 @@
-Return-Path: <linux-kselftest+bounces-31900-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31901-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2B53AA0E78
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 16:15:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88997AA0F87
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 16:50:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4AD298460F3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 14:13:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A665920125
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 14:47:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15E762D3A74;
-	Tue, 29 Apr 2025 14:11:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74368219A9D;
+	Tue, 29 Apr 2025 14:47:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hVgSMPKM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hbR1oFYP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A2032D3A68
-	for <linux-kselftest@vger.kernel.org>; Tue, 29 Apr 2025 14:11:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48526219A89;
+	Tue, 29 Apr 2025 14:47:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745935910; cv=none; b=inUW82TIJhETZ8pnG0qXZb99ZbkpQ2KdCnWYHC9W2ajMWzFN21wLIMXlzRPzS/dkdLuqeR3BJWb/eahfEu2uDVIwSlbW5cRwyyceiAK2GUA0fAPQWLStTn5FDZsAkHj+5Hyv5wg40Kip3xsQpxTIur9s6SGjfBrM2GLWOyPwm9s=
+	t=1745938038; cv=none; b=VTksXo/nCwxr8T2iHEEj/x4TatNQPS5YTHNOWowMzf6StJw6rjRCkYF1xgkAy2mbyp+R/X8HkqBx03f0O0B/jeuEL2+H+Sd1/I8SYQYSbtY+99oQ2cNDPtBfgwcauVQvipXrxJvrkRXdaqYH5eoFjKfLRaJEk1YhtFmDX4H7UcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745935910; c=relaxed/simple;
-	bh=1mWbmMWiBxdmu0mNqZsShlyNxanUeS4D+aqJvaV0WbU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=k0/WFjF7BagLf6ArhuAztsNr1WZKMnRJOA0x6L8wI1sDyjBheIlV5kNnoyVlQ2PW1mSSNSz6UQqpLO+PaM/Ay5u9CicLipmuVieCNczo9S/oAsu/Nr+nOiMmzUwxKeEQluuFpa0kevfVvy/d1d4h6ycAp2EZO2UaHBtW48sVh0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hVgSMPKM; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1745935907;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qH12Etv0qHrCzY9jRgjcqc6FKy4BzsqSvbZIKh9RcZE=;
-	b=hVgSMPKMbOWrVXVgMIDXH29xsOJ4xnbiWuYdu6QpyMIkmlqQzFRjBnNIZK6tY+st+0gdSN
-	JRopU3ohjkGMrDayldGG1Z+X66sZh7UZW5lGdp3PGF1QV689XKmjNwDis/eL6kiicljh4C
-	i3sh2rn4PWR8KbaKlFP7H9bYYLBGTGQ=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-74-gd1crc_GONyeRzUqP7IQGA-1; Tue, 29 Apr 2025 10:11:45 -0400
-X-MC-Unique: gd1crc_GONyeRzUqP7IQGA-1
-X-Mimecast-MFC-AGG-ID: gd1crc_GONyeRzUqP7IQGA_1745935904
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-ace942ab877so286179866b.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Apr 2025 07:11:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745935904; x=1746540704;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qH12Etv0qHrCzY9jRgjcqc6FKy4BzsqSvbZIKh9RcZE=;
-        b=TIoEXHetoPXTggbBbyDfOXKPZVIy8tnMVgV1M4ZdBz9bMu1pnwmt8o9Cl7AFS/Xic9
-         /bJ4ze+hfMfrCGTGCdLP0YvUcIHc8w1m1IhyH5HcUz5rMO1+p/YtOcWLlFlC0CaAQyGG
-         8xAFG0qQpZcfx1/GZ/5mrwtdz5gyT6je2ag0HWNY1qIQrjGD5pKXfUWVymugbecTeodZ
-         E+iuOrRV7+7YZPYFdCcTbG5I8IG8nhcV1kgvRU6ejb+1JQvzhTKgkwC2TlyEKs/kxPD2
-         JqP4ZAFPHbsbuqK6yFzjMC0Xpu4Engs1xANmKJulvKhBb4wiSangQB2KgkyeFWpcgKzY
-         BQJg==
-X-Forwarded-Encrypted: i=1; AJvYcCUNBQc5KcgQQ+5/8uehDT6L02wq9RL6PaK6AxvZll8bLK9ZWnTRmOu5Sm2JnqjHeLkvq3oqyNtjnxA0VRaOfzE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyPl1StTex8oxMvbD7+TN+fd5+14FYntjZDjmh9EY5vsAmMdWey
-	D/HYL2YhBriTLCMyZTftgoU9aq17z7Qp3sIX5+ji+z3jjLxxvo5B+/5gCjToWEcolq7eYzmCI8o
-	yi3iwLm9EiPcLCvsOFSPOXbPs/+wa2CBWs7fno5zi8Ud/8u3GHjcNTLGWMb0eXZ7nXA==
-X-Gm-Gg: ASbGncs8MIdFVLV/jBczHNT8rcwJJO6Q653Nrywxu7X3YnRYwkgpu9zkLbObWir+eoH
-	c4WGY0QmGis/Fa+Ef+YS9XoiSXoyrdK4Q1OyYdXLqMaa8MrT0pOx3SFJ+FdH9ZkytNg8wF4ufDZ
-	tuinvxNcbpmWs+Gz7Yc1EFUfFs+2D3Br/C1E9JOCvgUM+OreJNWUsnKcxJjb/Xcphqbcau0zCyR
-	t8cBUBsN+KhkjFiGW3eTHua6hP5/dcHSdyRGPTArTQZt/xqIS2ANHvGD/ImtgCF8IwJ+vGh1mgK
-	jYxkZ9vv5Hzi+cEsSt0=
-X-Received: by 2002:a17:907:1c8d:b0:ac7:efed:3ab with SMTP id a640c23a62f3a-ace848f745dmr1220500166b.21.1745935904070;
-        Tue, 29 Apr 2025 07:11:44 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IElghu3EXtiRA0dcWZkvwVQYdf4WKlBfMmqxihycklfFgZq7KTn7jN4RnbqcDK4PsFiTrlCdA==
-X-Received: by 2002:a17:907:1c8d:b0:ac7:efed:3ab with SMTP id a640c23a62f3a-ace848f745dmr1220496366b.21.1745935903625;
-        Tue, 29 Apr 2025 07:11:43 -0700 (PDT)
-Received: from ?IPV6:2a0d:3344:2726:1910::f39? ([2a0d:3344:2726:1910::f39])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ace6e58673dsm776276566b.76.2025.04.29.07.11.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Apr 2025 07:11:43 -0700 (PDT)
-Message-ID: <298cfc4c-3818-4c6e-9348-4b1aff00e96c@redhat.com>
-Date: Tue, 29 Apr 2025 16:11:40 +0200
+	s=arc-20240116; t=1745938038; c=relaxed/simple;
+	bh=YrCTaP+tcbajXC6/b7SoFDFq5t/KwEus2QAmCVIBrgU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YQXBzOfoLe8rrRPJ298VQYEVYCjm4AFtP8l7ZquHMRpFJWe/6ZtFTxK8rda1iF+Borwxbvf3dI12bruMK7s+DU/KTLjji48x0dQoumW3g6mqoqaAG0hOUcYxgweX98ImwJf5DSWvXXdL5AI4iFtttWvLu4htymbUhj3Lk0S7ZoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hbR1oFYP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39EDDC4CEE3;
+	Tue, 29 Apr 2025 14:47:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745938037;
+	bh=YrCTaP+tcbajXC6/b7SoFDFq5t/KwEus2QAmCVIBrgU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hbR1oFYPepr21AnMku8sxgvGJfsYYvl+fDZNSEjow+OM+SmnawdmzUYE6W503cQt8
+	 XZjoDeTObvh5TG7hYoRM1I4oxZUxAxaTjfJA1NwXoiMeZJwrf/fC8leQincBNcved7
+	 yP3NDUoYMLwFAh5F3o0o/MmxYtdPTDBBlEL8y7zs5hklYuV8BGzfckSbcG6qogpMVa
+	 iHNbiGVS1X/EN75MQp6WlLOtNog52OasZ3jLYJwKOIQwiFOyOzy6I+tG5h5xKDRO4X
+	 McRfIe8Isa3OaUzcWQOArxt0gUukeKzFVYMnyDILtjyd401Es3kKvyAzdQPPtMEkqS
+	 cP6smDLj3VjUA==
+Date: Tue, 29 Apr 2025 15:47:10 +0100
+From: Will Deacon <will@kernel.org>
+To: Yicong Yang <yangyicong@huawei.com>
+Cc: catalin.marinas@arm.com, maz@kernel.org, oliver.upton@linux.dev,
+	corbet@lwn.net, linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org,
+	linux-doc@vger.kernel.org, joey.gouly@arm.com,
+	suzuki.poulose@arm.com, yuzenghui@huawei.com, shuah@kernel.org,
+	jonathan.cameron@huawei.com, shameerali.kolothum.thodi@huawei.com,
+	linuxarm@huawei.com, prime.zeng@hisilicon.com, xuwei5@huawei.com,
+	yangyicong@hisilicon.com, tangchengchang@huawei.com,
+	broonie@kernel.org
+Subject: Re: [PATCH v2 1/6] arm64: Provide basic EL2 setup for FEAT_{LS64,
+ LS64_V} usage at EL0/1
+Message-ID: <20250429144710.GA26174@willie-the-truck>
+References: <20250331094320.35226-1-yangyicong@huawei.com>
+ <20250331094320.35226-2-yangyicong@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 net-next 15/15] tcp: try to avoid safer when ACKs are
- thinned
-To: chia-yu.chang@nokia-bell-labs.com, horms@kernel.org, dsahern@kernel.org,
- kuniyu@amazon.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
- dave.taht@gmail.com, jhs@mojatatu.com, kuba@kernel.org,
- stephen@networkplumber.org, xiyou.wangcong@gmail.com, jiri@resnulli.us,
- davem@davemloft.net, edumazet@google.com, andrew+netdev@lunn.ch,
- donald.hunter@gmail.com, ast@fiberby.net, liuhangbin@gmail.com,
- shuah@kernel.org, linux-kselftest@vger.kernel.org, ij@kernel.org,
- ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com,
- g.white@cablelabs.com, ingemar.s.johansson@ericsson.com,
- mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at,
- Jason_Livingood@comcast.com, vidhi_goel@apple.com
-References: <20250422153602.54787-1-chia-yu.chang@nokia-bell-labs.com>
- <20250422153602.54787-16-chia-yu.chang@nokia-bell-labs.com>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20250422153602.54787-16-chia-yu.chang@nokia-bell-labs.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250331094320.35226-2-yangyicong@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On 4/22/25 5:36 PM, chia-yu.chang@nokia-bell-labs.com wrote:
-> From: Ilpo Järvinen <ij@kernel.org>
+On Mon, Mar 31, 2025 at 05:43:15PM +0800, Yicong Yang wrote:
+> From: Yicong Yang <yangyicong@hisilicon.com>
 > 
-> Add newly acked pkts EWMA. When ACK thinning occurs, select
-> between safer and unsafe cep delta in AccECN processing based
-> on it. If the packets ACKed per ACK tends to be large, don't
-> conservatively assume ACE field overflow.
+> Instructions introduced by FEAT_{LS64, LS64_V} is controlled by
+> HCRX_EL2.{EnALS, EnASR}. Configure all of these to allow usage
+> at EL0/1.
 > 
-> Signed-off-by: Ilpo Järvinen <ij@kernel.org>
-> Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+> This doesn't mean these instructions are always available in
+> EL0/1 if provided. The hypervisor still have the control at
+> runtime.
+> 
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
 > ---
->  include/linux/tcp.h  |  1 +
->  net/ipv4/tcp.c       |  4 +++-
->  net/ipv4/tcp_input.c | 20 +++++++++++++++++++-
->  3 files changed, 23 insertions(+), 2 deletions(-)
+>  arch/arm64/include/asm/el2_setup.h | 12 +++++++++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
 > 
-> diff --git a/include/linux/tcp.h b/include/linux/tcp.h
-> index b93bf1785008..99ca0b8435c8 100644
-> --- a/include/linux/tcp.h
-> +++ b/include/linux/tcp.h
-> @@ -315,6 +315,7 @@ struct tcp_sock {
->  		est_ecnfield:2;/* ECN field for AccECN delivered estimates */
->  	u32	app_limited;	/* limited until "delivered" reaches this val */
->  	u64	accecn_opt_tstamp;	/* Last AccECN option sent timestamp */
-> +	u16	pkts_acked_ewma;/* Pkts acked EWMA for AccECN cep heuristic */
+> diff --git a/arch/arm64/include/asm/el2_setup.h b/arch/arm64/include/asm/el2_setup.h
+> index ebceaae3c749..0259941602c4 100644
+> --- a/arch/arm64/include/asm/el2_setup.h
+> +++ b/arch/arm64/include/asm/el2_setup.h
+> @@ -57,9 +57,19 @@
+>          /* Enable GCS if supported */
+>  	mrs_s	x1, SYS_ID_AA64PFR1_EL1
+>  	ubfx	x1, x1, #ID_AA64PFR1_EL1_GCS_SHIFT, #4
+> -	cbz	x1, .Lset_hcrx_\@
+> +	cbz	x1, .Lskip_gcs_hcrx_\@
+>  	orr	x0, x0, #HCRX_EL2_GCSEn
+>  
+> +.Lskip_gcs_hcrx_\@:
+> +	/* Enable LS64, LS64_V if supported */
+> +	mrs_s	x1, SYS_ID_AA64ISAR1_EL1
+> +	ubfx	x1, x1, #ID_AA64ISAR1_EL1_LS64_SHIFT, #4
+> +	cbz	x1, .Lset_hcrx_\@
+> +	orr	x0, x0, #HCRX_EL2_EnALS
+> +	cmp	x1, #ID_AA64ISAR1_EL1_LS64_LS64_V
+> +	b.lt	.Lset_hcrx_\@
+> +	orr	x0, x0, #HCRX_EL2_EnASR
 
-It looks like this field is accessed only on the RX path and does not
-belong to this cacheline group.
+How do these HCRX settings survive a world-switch to and from a KVM
+guest? AFAICT, the trap deactivation path there restores HCRX_HOST_FLAGS
+when returning to the host. That would mean that the GCS code is broken
+too, unless I'm missing something :/
 
-/P
-
+Will
 
