@@ -1,239 +1,189 @@
-Return-Path: <linux-kselftest+bounces-31954-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31955-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A28FAA3B84
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 00:32:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57710AA3B95
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 00:37:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0ADBD7B749C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 22:31:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B53D3A4BF7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 22:37:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 680CD25E82A;
-	Tue, 29 Apr 2025 22:32:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C23A62750E6;
+	Tue, 29 Apr 2025 22:37:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rwWvexLT"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="F1wPcxDX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2077.outbound.protection.outlook.com [40.107.95.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C540254AE1
-	for <linux-kselftest@vger.kernel.org>; Tue, 29 Apr 2025 22:32:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745965953; cv=none; b=jDXSx2a3efXXTN2pEYH5F+LMNRU0Ey+9nwNnNphw/IQM5gICgtxJN1mevpnhPEjURQjTL+uDFpxBCkyb3pVvZKQ5uyJoq148jjcQV6kfjN+bN/ymAz6txPQugyVwxpoDXiPkPJKl7IN0xoq0G/p8Qsg24h0G0UrNQtNiaQrQ4Ro=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745965953; c=relaxed/simple;
-	bh=XyBy/9ECM3Ji4+OBncyGrKzNcU3QNO+8BOFD1+2XlAI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZYyDPmq4Ehy93c15e3OtH4r6nS1XY8oX5u0UfUUt2AnfrtNU599VtQ8E8EOZU4u29PMkjsSeCrMn0PO54/lKq+qYTyFWQupaxDRc40dSn8gdal5NX6W/iORHpYU4fBjoIhu4Y2VUvFv/q0QDzxH88e7o6AlKNrcadcKcN/BEt+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rwWvexLT; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2263428c8baso88105ad.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Apr 2025 15:32:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1745965951; x=1746570751; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AnNdE+HhwllnOl/nQBW5AcYsgv32dfnq2/SzhhfRlf8=;
-        b=rwWvexLTBdEWejSdxauOPCNpXzoZ9paZdJBwWQybvKf7xKXfHvi3y/7Io2hVYwmOrQ
-         wXFBCF1Ia3MSMqI3+szJNyc5GxkwJR5cGs5OChQ2FACg8mkDGxzuJzggVaC/rRjyyals
-         SfSt/4RSYtBxtFmzXJKkXrv+70QaQuLDi2wD7rwd2M0SeCSDJq7LdsuqWrY7p9rjX5sx
-         raMfYPyv69hsPVZnMA/2MwiaEMFzEO+UpRnATSq2t9I41l+5jRpnihcqWvcm1gVyjryX
-         +uNOYFSLtl67QgqBFZXzBpXi9nwFVNNgFf51MvskDcCNS+2Pq82HK37B/VnK+FJgjx9+
-         oysA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745965951; x=1746570751;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AnNdE+HhwllnOl/nQBW5AcYsgv32dfnq2/SzhhfRlf8=;
-        b=Oafg2/6FMZg/f+H8zmzmiu6xON4MUkko3oQUiCTEMOoO9+aPNap4vaJYTKf1zlMdmQ
-         LHUjlDL8AR4Jv85eKVYPWez3rW6ZI8LHXSY8ucpc/OY56DDxRl1kT788oU+lG+J14ZYE
-         12iLX3IlWbybFKVgpxjUVTZeLVFIRgrU/EvYFFn+iMXy7dSudRmUIPS5TE29m4B2fYIS
-         Wf/Ow8M2lfQ2M6urMy5VBGlFa6eIWEwWEOfPSmc52JVEwKjIfpVZJytPrg3lJmFEiQbF
-         lyj5Tykppyo8nrLlKZETzUo886ImpMk+Ul9i4DwtODusYpsZwTWUSt5Qp2BQzTcGVSWc
-         1GRg==
-X-Forwarded-Encrypted: i=1; AJvYcCVNiKoJD247SiSgVsgcklFFbeSdnLSmqvVek2mv2CA6VoZkATDIN6/GmfcrukbpWDfG16/fcZhO63iIgrGYut4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YynudLFMav74J4EN5VBkaWa+sZ2FDRPjAMi8zaP7nKQeSOcvklW
-	NIMhCrAy9R5+IxeftV3H4BEzyaNeQrqOAOxE4dM1/tS90oep8BhfTTq87E4SMQ==
-X-Gm-Gg: ASbGncvWSLlNxrFhuig1qvtx/sSv3cyD9aK2n5v65612SZSDsDbpfDLnM5HAORUs0Ft
-	XWylHjb5wmR16p6BsetenUVB5cbEO8zHiE62CLIPYfuUCwIDQmqeOA8BhpvNGOoH+7G72jMPzY9
-	odnWGnue/Ub4ddchPHEHTTC6OzZ9uTf6NUKpCX0IqudQSoqG48v+EPhyPvj8U+ovP9gCLD1452Q
-	YHZ9pesmAueewQbaEb15M4RNpdJLO8lcOxRwsFWVKZ/UDQyoIZlkNY2CEdqfVKYkpJjP+OLcIyW
-	xrgz3FdqgP5n1YFNPyjWqW4o3TYq2TD6VDPj5xkNsBszuCupNm1O8bf1uBE3muJZ/cJv2GZC
-X-Google-Smtp-Source: AGHT+IEjjGwm4LgyP1atx5l0JHqL9FPxuMAodaX4BR9dLcCBJPPs8xL/z9odFgYaKsV2MBnWB05wdw==
-X-Received: by 2002:a17:903:1a24:b0:223:4b4f:160c with SMTP id d9443c01a7336-22df5496af5mr477235ad.27.1745965950581;
-        Tue, 29 Apr 2025 15:32:30 -0700 (PDT)
-Received: from google.com (2.210.143.34.bc.googleusercontent.com. [34.143.210.2])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7403991f046sm236228b3a.41.2025.04.29.15.32.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Apr 2025 15:32:30 -0700 (PDT)
-Date: Tue, 29 Apr 2025 22:32:19 +0000
-From: Pranjal Shrivastava <praan@google.com>
-To: Nicolin Chen <nicolinc@nvidia.com>
-Cc: jgg@nvidia.com, kevin.tian@intel.com, corbet@lwn.net, will@kernel.org,
-	bagasdotme@gmail.com, robin.murphy@arm.com, joro@8bytes.org,
-	thierry.reding@gmail.com, vdumpa@nvidia.com, jonathanh@nvidia.com,
-	shuah@kernel.org, jsnitsel@redhat.com, nathan@kernel.org,
-	peterz@infradead.org, yi.l.liu@intel.com, mshavit@google.com,
-	zhangzekun11@huawei.com, iommu@lists.linux.dev,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, patches@lists.linux.dev,
-	mochs@nvidia.com, alok.a.tiwari@oracle.com, vasant.hegde@amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 057A36F073;
+	Tue, 29 Apr 2025 22:37:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.95.77
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1745966268; cv=fail; b=cBktnffFaOytqfuQh8VAWtI9qqdxrpBq3DB9yMOsEjQ/FjkfaQo6i5NlNBeVx8oC0TqRb9+ZTFBOGYXg0UFF65gD9mp3da21DGUKPSk3WrYB7puhHM1e9nvfkAvFU5VIhLf27xpV0e3yKZVWzKTB0lr0iKNzRam7KEkCAC6lWtE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1745966268; c=relaxed/simple;
+	bh=3FNGwP58EP5fRvmfbg+64yjwbwVo/lGT2hI2Cs1JCYo=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HYOctHbm95AH1CJvzwQTWxrSCkd25G9mAmdm31e+BdLOMDZlcW6y+MNeHnjT0p+SIOv4JqDF+J86wm1godMwU4MHU4pyQ7sFJlZtj7pP1JkvW6LqK+r98TXKGacI7mvKE1ADLiLrNAWDQtOAKoaNOBFwrbCPaoNCDnBDTa6E3fc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=F1wPcxDX; arc=fail smtp.client-ip=40.107.95.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=E7T9ozYgDy/RxeF72mlMH0kKq33mDi1PJjc3tXksf3qFvNmFLq/lBQZtszecE3ST3SAm9VnxoIsaHv8+4YbsaVezBD/frEFqRKJ7R4Cx/1/G0EZZ8bzvGu8vWWxI18I+XcWYIvUYHtEwStrZmHbee5c8J3TL/MmtpOqAuipnFFnH3pKrLmSrvLWRW1XJbbQUHmgGTwrszPEoCDj8q5Wm7TpsRbGnluFDa5rcV16WaII5F0rO/qt/qeCw/rqSabBXFeN/ZF8hqaqI1AujqF4LPIKF+md4dZkqdz6DfTScMIvZUxvyw3+b2diS6Y4a7faMC8c7RAtTEQqYBgrWCSkbag==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MO2zVd6uiuKR9fHteSEBTCaG2BHhQGEM/JyJPwKPb7Q=;
+ b=H59P6y2BN/5LROzTQ5NsJ8Ymo8OX0FSw8kG7fr3pRnG/Ymk0JAIeFCUp9E93pySmEHYseeSR6JUxnNM/UfLu050orzynkkUX5W71rvFzVnTb88d+rhikeArj3CGmcBosV5CesM64hwDRpWa421heJqZLozxvHEcTQ+aONveT7XpV1WhpwdpnnlIyE+VXaDQ3oNM1WBtnzcSeZi/vc5ld67HxTq+RrxCooGW/HAJpDw2LIZcPexBuhqqpd/VX7EF5Vw5ByQrCmaVx5EJVfc1md7k/YoDvx3CWjq2coQjJ7m2F6wkMs/6qh3gtEXpiTetIUvOHJbopI2+0Yeb5bb2x1Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=google.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MO2zVd6uiuKR9fHteSEBTCaG2BHhQGEM/JyJPwKPb7Q=;
+ b=F1wPcxDXgaUnDyiOA0+pvFLrCVOUcCUl8iNwBePzDw2hb6QQn2mw5iD1/uNxkmY4hByUuC1WLA99B0Vf1J9POEsqbxMS/a1Tdu9AjWVZ2ADQz73Ifc+kghkfstiv0L+JJIh10yR4xqdTSxjTuePT9b04F6+YR5fNv0wrlwf5wcAW0rlGun4mmTNpHyVmQUUUy6OTyA9HVM68PbKl5eLdZWZHGf6b21Y2niQb22c1c8syLAcj4WeaXJ2nnPDiNZgLL+RoY9Os2Hz6owwawang7hczQH3adp+5ykJB71fKjoPSfW+pBYRuFBPi+chAeDX39xE1fA9L/q12+sqcrg/OUA==
+Received: from CH0PR03CA0366.namprd03.prod.outlook.com (2603:10b6:610:119::12)
+ by SN7PR12MB7371.namprd12.prod.outlook.com (2603:10b6:806:29a::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8678.33; Tue, 29 Apr
+ 2025 22:37:43 +0000
+Received: from CH2PEPF00000140.namprd02.prod.outlook.com
+ (2603:10b6:610:119:cafe::6a) by CH0PR03CA0366.outlook.office365.com
+ (2603:10b6:610:119::12) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8655.36 via Frontend Transport; Tue,
+ 29 Apr 2025 22:37:42 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ CH2PEPF00000140.mail.protection.outlook.com (10.167.244.72) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8699.20 via Frontend Transport; Tue, 29 Apr 2025 22:37:42 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 29 Apr
+ 2025 15:37:33 -0700
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14; Tue, 29 Apr 2025 15:37:33 -0700
+Received: from Asurada-Nvidia (10.127.8.14) by mail.nvidia.com
+ (10.126.190.180) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14 via Frontend
+ Transport; Tue, 29 Apr 2025 15:37:31 -0700
+Date: Tue, 29 Apr 2025 15:37:29 -0700
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: Pranjal Shrivastava <praan@google.com>
+CC: <jgg@nvidia.com>, <kevin.tian@intel.com>, <corbet@lwn.net>,
+	<will@kernel.org>, <bagasdotme@gmail.com>, <robin.murphy@arm.com>,
+	<joro@8bytes.org>, <thierry.reding@gmail.com>, <vdumpa@nvidia.com>,
+	<jonathanh@nvidia.com>, <shuah@kernel.org>, <jsnitsel@redhat.com>,
+	<nathan@kernel.org>, <peterz@infradead.org>, <yi.l.liu@intel.com>,
+	<mshavit@google.com>, <zhangzekun11@huawei.com>, <iommu@lists.linux.dev>,
+	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-tegra@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <patches@lists.linux.dev>,
+	<mochs@nvidia.com>, <alok.a.tiwari@oracle.com>, <vasant.hegde@amd.com>
 Subject: Re: [PATCH v2 20/22] iommu/tegra241-cmdqv: Do not statically map
  LVCMDQs
-Message-ID: <aBFTc1Q1r_jrnJ63@google.com>
+Message-ID: <aBFUqR/UF+20A8s6@Asurada-Nvidia>
 References: <cover.1745646960.git.nicolinc@nvidia.com>
  <3981a819a4714b21d11d5c6de561a2d0c6411947.1745646960.git.nicolinc@nvidia.com>
+ <aBFTc1Q1r_jrnJ63@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <3981a819a4714b21d11d5c6de561a2d0c6411947.1745646960.git.nicolinc@nvidia.com>
+In-Reply-To: <aBFTc1Q1r_jrnJ63@google.com>
+X-NV-OnPremToCloud: AnonymousSubmission
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH2PEPF00000140:EE_|SN7PR12MB7371:EE_
+X-MS-Office365-Filtering-Correlation-Id: d67d7edd-ff0f-4a33-a4bb-08dd876e7477
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|7416014|36860700013|82310400026|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?+a/970f+uQUAg1QCAxLXtladuipsr3wlTBVC2DqHSg5FQYNDxN3v3neyVw9i?=
+ =?us-ascii?Q?4MloCLVC+texqoIv9c904ONnXfDPtnvovnGl6Ey6zAhWVUTCmwYRV3doB31m?=
+ =?us-ascii?Q?0iz/TvrHLv0+7lAkpznLYFCLZLstuujD+PXcWfyNbKSd2zkQstcqI6tQWhpZ?=
+ =?us-ascii?Q?fG3/1M8q9DObYgcJOq+ycOfL0EBdnRrXDLbh4EKlrufeqivKSNFcitiI4ZZs?=
+ =?us-ascii?Q?BlZCtfUSsmuy9osJJHgf83/47XEixfXs42pobcuUrTzCPQrXAfisoxLDenSN?=
+ =?us-ascii?Q?TtEW1wKP5Omt2Ii+I0aUXo0egeGkHZj2KJDojnPIXBzYhDkW7XY3Ixk+p74R?=
+ =?us-ascii?Q?TDbRsJQicD/UJc9QGKCds0Q+Pypbr+7fxilhk+QmX7/yLZvvW3Q/dgEvrdGK?=
+ =?us-ascii?Q?aoFXTNrFPH0vBJAcuEEjt7aWg9yv2HoQr/bRsvhuBEYuOfPiysXCWdz9MrpQ?=
+ =?us-ascii?Q?FW06ihYIzZWRKsUWM2BWoiNaqb5t8z03j7cmPKZFe8QPiCxjH9mV04T9Fof8?=
+ =?us-ascii?Q?aS5Kx6MldC4Z3BPzUjhQCjNRfMRzcLn2/cimt7FAyf5hD/5u0HOtyYJpXuwT?=
+ =?us-ascii?Q?MoNchnwMBC5oAkOdrK/u5dBfgv1RJdaqIBby34565PFm6jZQLJjwEhN7v/3a?=
+ =?us-ascii?Q?k9EldD5u02a/qeWRueCKd2ga17BR+CvunQwC6g0AbPzf1dAIf31maEj35lh/?=
+ =?us-ascii?Q?YDvCX6qKJTJkvZQR71D+KGhNPCEYn3hIp3IboVE4W2Bc9uRbh68MzQPVE8Xs?=
+ =?us-ascii?Q?hfmMRjBI3u2vk/nwbAiJE6jMsGAKHKy8uCK9+6nMjG3X8uiJmqkWig2Xx+uQ?=
+ =?us-ascii?Q?ysKVmKNyzmyjFMLQW0Yd5sHz5MMH/obOM9Fs7FaT2cCWUel+kR62+b09jOZe?=
+ =?us-ascii?Q?rqJdWI80Icx0q34Dr0sF4wfz0cXgzrgPjDQaos7psCg/C0cz5WTGTKCWGOox?=
+ =?us-ascii?Q?k78WXLtsrEHC8iBt8ikQc28hutfARwDQdiMTZZvR4MGuiIq2zNAkA/chRin4?=
+ =?us-ascii?Q?/MUxXYUWD0p2D/B3eVbNwuZlGeANaF5oUYItOGbOhizthIgDPNwuaHq4cKL0?=
+ =?us-ascii?Q?I5g1b0V2ZByAcsVrSujGV5h6cqGiOecA9GCWYYpx6AnPXLZPGIryLkHv9th8?=
+ =?us-ascii?Q?Gw63KFL+LMR0+BSzMjEj3mDLDECfKnrw1G5dkyR6mukW6SFRgn7aY3/Bwzq9?=
+ =?us-ascii?Q?/e6dSd6325WO07sfNieE6smJmh+e4308DXh+EHuBb70V6rr+go75iIH6/uE6?=
+ =?us-ascii?Q?Xcdm/CZgTxTtG5hrkc5vqUx/FkatR8vwswtOBS9Vj3zfApo2st7vgvQ75KvG?=
+ =?us-ascii?Q?n/GKu7lIlLptEjMC9wfj8ZFwBaFy0erqKOCz1Gy7Yyv6ITLcctucqrJcPMpc?=
+ =?us-ascii?Q?3DMEnuIlIu6JkFsG442vu45U0FpLU01S3rucww8K4T8lCB5+lcQFHPw4GVne?=
+ =?us-ascii?Q?0TNKZFMDX0Bn0ep6/XORrbd+Ib93PXq3Akx7S9WFJlA7PUNd2KlTx/KWFPUo?=
+ =?us-ascii?Q?jCMCktDIYFjE3cGLo8Cdt8KVc+bgPHS8qatD?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(36860700013)(82310400026)(376014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2025 22:37:42.5071
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d67d7edd-ff0f-4a33-a4bb-08dd876e7477
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CH2PEPF00000140.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7371
 
-On Fri, Apr 25, 2025 at 10:58:15PM -0700, Nicolin Chen wrote:
-> To simplify the mappings from global VCMDQs to VINTFs' LVCMDQs, the design
-> chose to do static allocations and mappings in the global reset function.
+On Tue, Apr 29, 2025 at 10:32:19PM +0000, Pranjal Shrivastava wrote:
+> On Fri, Apr 25, 2025 at 10:58:15PM -0700, Nicolin Chen wrote:
+> > To simplify the mappings from global VCMDQs to VINTFs' LVCMDQs, the design
+> > chose to do static allocations and mappings in the global reset function.
+> > 
+> > However, with the user-owned VINTF support, it exposes a security concern:
+> > if user space VM only wants one LVCMDQ for a VINTF, statically mapping two
+> > LVCMDQs creates a hidden VCMDQ that user space could DoS attack by writing
+> > ramdon stuff to overwhelm the kernel with unhandleable IRQs.
+> > 
 > 
-> However, with the user-owned VINTF support, it exposes a security concern:
-> if user space VM only wants one LVCMDQ for a VINTF, statically mapping two
-> LVCMDQs creates a hidden VCMDQ that user space could DoS attack by writing
-> ramdon stuff to overwhelm the kernel with unhandleable IRQs.
+> Nit: I think it's worth mentioning that the current HW only supports 2
+> LVCMDQs. Since it's not clear from the driver as it calculates this by:
 > 
+>         regval = readl_relaxed(REG_CMDQV(cmdqv, PARAM));
+>         cmdqv->num_vintfs = 1 << FIELD_GET(CMDQV_NUM_VINTF_LOG2,regval);
+>         cmdqv->num_vcmdqs = 1 << FIELD_GET(CMDQV_NUM_VCMDQ_LOG2, regval);
+> 	cmdqv->num_lvcmdqs_per_vintf = cmdqv->num_vcmdqs / cmdqv->num_vintfs;
 
-Nit: I think it's worth mentioning that the current HW only supports 2
-LVCMDQs. Since it's not clear from the driver as it calculates this by:
+This is a SW choice. HW supports more LVCMDQs than 2 per VINTF.
 
-        regval = readl_relaxed(REG_CMDQV(cmdqv, PARAM));
-        cmdqv->num_vintfs = 1 << FIELD_GET(CMDQV_NUM_VINTF_LOG2,regval);
-        cmdqv->num_vcmdqs = 1 << FIELD_GET(CMDQV_NUM_VCMDQ_LOG2, regval);
-	cmdqv->num_lvcmdqs_per_vintf = cmdqv->num_vcmdqs / cmdqv->num_vintfs;
+> Or maybe, re-word it to "if user space VM only wants one LVCMDQ for a
+> VINTF, the current driver statically maps num_lvcmdqs_per_vintf which
+> creates hidden vCMDQs [..]"
 
-Or maybe, re-word it to "if user space VM only wants one LVCMDQ for a
-VINTF, the current driver statically maps num_lvcmdqs_per_vintf which
-creates hidden vCMDQs [..]"
+But yea, this makes sense. Will change.
 
-> Thus, to support the user-owned VINTF feature, a LVCMDQ mapping has to be
-> done dynamically.
-> 
-> HW allows pre-assigning global VCMDQs in the CMDQ_ALLOC registers, without
-> finalizing the mappings by keeping CMDQV_CMDQ_ALLOCATED=0. So, add a pair
-> of map/unmap helper that simply sets/clears that bit.
-> 
-> Delay the LVCMDQ mappings to tegra241_vintf_hw_init(), and the unmappings
-> to tegra241_vintf_hw_deinit().
-> 
-> However, the dynamic LVCMDQ mapping/unmapping can complicate the timing of
-> calling tegra241_vcmdq_hw_init/deinit(), which write LVCMDQ address space,
-> i.e. requiring LVCMDQ to be mapped. Highlight that with a note to the top
-> of either of them.
-> 
-> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-> ---
->  .../iommu/arm/arm-smmu-v3/tegra241-cmdqv.c    | 37 +++++++++++++++++--
->  1 file changed, 33 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/iommu/arm/arm-smmu-v3/tegra241-cmdqv.c b/drivers/iommu/arm/arm-smmu-v3/tegra241-cmdqv.c
-> index 8d418c131b1b..869c90b660c1 100644
-> --- a/drivers/iommu/arm/arm-smmu-v3/tegra241-cmdqv.c
-> +++ b/drivers/iommu/arm/arm-smmu-v3/tegra241-cmdqv.c
-> @@ -351,6 +351,7 @@ tegra241_cmdqv_get_cmdq(struct arm_smmu_device *smmu,
->  
->  /* HW Reset Functions */
->  
-> +/* This function is for LVCMDQ, so @vcmdq must not be unmapped yet */
->  static void tegra241_vcmdq_hw_deinit(struct tegra241_vcmdq *vcmdq)
->  {
->  	char header[64], *h = lvcmdq_error_header(vcmdq, header, 64);
-> @@ -379,6 +380,7 @@ static void tegra241_vcmdq_hw_deinit(struct tegra241_vcmdq *vcmdq)
->  	dev_dbg(vcmdq->cmdqv->dev, "%sdeinited\n", h);
->  }
->  
-> +/* This function is for LVCMDQ, so @vcmdq must be mapped prior */
->  static int tegra241_vcmdq_hw_init(struct tegra241_vcmdq *vcmdq)
->  {
->  	char header[64], *h = lvcmdq_error_header(vcmdq, header, 64);
-> @@ -404,16 +406,42 @@ static int tegra241_vcmdq_hw_init(struct tegra241_vcmdq *vcmdq)
->  	return 0;
->  }
->  
-> +/* Unmap a global VCMDQ from the pre-assigned LVCMDQ */
-> +static void tegra241_vcmdq_unmap_lvcmdq(struct tegra241_vcmdq *vcmdq)
-> +{
-> +	u32 regval = readl(REG_CMDQV(vcmdq->cmdqv, CMDQ_ALLOC(vcmdq->idx)));
-> +	char header[64], *h = lvcmdq_error_header(vcmdq, header, 64);
-> +
-> +	writel(regval & ~CMDQV_CMDQ_ALLOCATED,
-> +	       REG_CMDQV(vcmdq->cmdqv, CMDQ_ALLOC(vcmdq->idx)));
-> +	dev_dbg(vcmdq->cmdqv->dev, "%sunmapped\n", h);
-> +}
-> +
->  static void tegra241_vintf_hw_deinit(struct tegra241_vintf *vintf)
->  {
-> -	u16 lidx;
-> +	u16 lidx = vintf->cmdqv->num_lvcmdqs_per_vintf;
->  
-> -	for (lidx = 0; lidx < vintf->cmdqv->num_lvcmdqs_per_vintf; lidx++)
-> -		if (vintf->lvcmdqs && vintf->lvcmdqs[lidx])
-> +	/* HW requires to unmap LVCMDQs in descending order */
-> +	while (lidx--) {
-> +		if (vintf->lvcmdqs && vintf->lvcmdqs[lidx]) {
->  			tegra241_vcmdq_hw_deinit(vintf->lvcmdqs[lidx]);
-> +			tegra241_vcmdq_unmap_lvcmdq(vintf->lvcmdqs[lidx]);
-> +		}
-> +	}
->  	vintf_write_config(vintf, 0);
->  }
->  
-> +/* Map a global VCMDQ to the pre-assigned LVCMDQ */
-> +static void tegra241_vcmdq_map_lvcmdq(struct tegra241_vcmdq *vcmdq)
-> +{
-> +	u32 regval = readl(REG_CMDQV(vcmdq->cmdqv, CMDQ_ALLOC(vcmdq->idx)));
-> +	char header[64], *h = lvcmdq_error_header(vcmdq, header, 64);
-> +
-> +	writel(regval | CMDQV_CMDQ_ALLOCATED,
-> +	       REG_CMDQV(vcmdq->cmdqv, CMDQ_ALLOC(vcmdq->idx)));
-> +	dev_dbg(vcmdq->cmdqv->dev, "%smapped\n", h);
-> +}
-> +
->  static int tegra241_vintf_hw_init(struct tegra241_vintf *vintf, bool hyp_own)
->  {
->  	u32 regval;
-> @@ -441,8 +469,10 @@ static int tegra241_vintf_hw_init(struct tegra241_vintf *vintf, bool hyp_own)
->  	 */
->  	vintf->hyp_own = !!(VINTF_HYP_OWN & readl(REG_VINTF(vintf, CONFIG)));
->  
-> +	/* HW requires to map LVCMDQs in ascending order */
->  	for (lidx = 0; lidx < vintf->cmdqv->num_lvcmdqs_per_vintf; lidx++) {
->  		if (vintf->lvcmdqs && vintf->lvcmdqs[lidx]) {
-> +			tegra241_vcmdq_map_lvcmdq(vintf->lvcmdqs[lidx]);
->  			ret = tegra241_vcmdq_hw_init(vintf->lvcmdqs[lidx]);
->  			if (ret) {
->  				tegra241_vintf_hw_deinit(vintf);
-> @@ -476,7 +506,6 @@ static int tegra241_cmdqv_hw_reset(struct arm_smmu_device *smmu)
->  		for (lidx = 0; lidx < cmdqv->num_lvcmdqs_per_vintf; lidx++) {
->  			regval  = FIELD_PREP(CMDQV_CMDQ_ALLOC_VINTF, idx);
->  			regval |= FIELD_PREP(CMDQV_CMDQ_ALLOC_LVCMDQ, lidx);
-> -			regval |= CMDQV_CMDQ_ALLOCATED;
->  			writel_relaxed(regval,
->  				       REG_CMDQV(cmdqv, CMDQ_ALLOC(qidx++)));
->  		}
-
-I can't confirm HW behaviour but the changes make sense to me.
-
-Acked-by: Pranjal Shrivastava <praan@google.com>
-
-Thanks!
-
-> -- 
-> 2.43.0
-> 
+Thanks
+Nicolin
 
