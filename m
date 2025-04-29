@@ -1,143 +1,371 @@
-Return-Path: <linux-kselftest+bounces-31913-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31914-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94AA6AA1490
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 19:17:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75E9EAA146F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 19:15:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8CE141659A4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 17:15:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 945407B66D3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 17:14:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB8922522A8;
-	Tue, 29 Apr 2025 17:15:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F1A32459EA;
+	Tue, 29 Apr 2025 17:15:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yvmqP7+3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FM3/RfEf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1FF7251793
-	for <linux-kselftest@vger.kernel.org>; Tue, 29 Apr 2025 17:15:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D607245007;
+	Tue, 29 Apr 2025 17:15:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745946907; cv=none; b=SpDzrVZxezrf2ptK1blLY/6toCcAgn7hsbFXvUXKQ0RDLaN0Q1JyIKs8qu/EcEIpa94lanxn6V805fcDQmb931xvKcAnb17Kquebr0WWWc05pxWcVfA7AWwysJq1jvqEN4tBgf1OaaI5cmrtSQ5GcSc8YfQgocADpXZX8n3H9Bw=
+	t=1745946917; cv=none; b=MP5Q0GX9Dkf1voozel+cdddO+gyO24Vi+NClUB32DsOZWUxwC10eGHzlljr+PnMRYRtSoSpFxikBPa4oZaLYiSNBlRjPjbeOGF7vj2f8NHohYO9KjKh/0TQsN9GQbBi3nzH2VbJRIyBzm/w7Gf64AKqtri0UpzJ07rFVFwk6zZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745946907; c=relaxed/simple;
-	bh=8N3PFLJdo2BL64kwpJnok05xXM6XlOssovMurdNnZcM=;
+	s=arc-20240116; t=1745946917; c=relaxed/simple;
+	bh=3mg4I7QyOW1gVwOz/6rYaIXF4k7NSz/cTj9ZXZq/4CA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NIT36XsUOI15UkmEX09AC6mzPgLUj9zjFoyrnOTgsnaWLNq0SBRYpR5CrNnSvuWISC5x8FB+uBFMSOpTG7CQJRhtt+GDIhHnINX83k8dFEdiZX6xkV61cZ33H4dwmRlK7YVYLWs1tQXl7u5Cf4WCqomgJagOnlZmBUr+QRpos6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yvmqP7+3; arc=none smtp.client-ip=209.85.160.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-47681dba807so49621cf.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Apr 2025 10:15:05 -0700 (PDT)
+	 To:Cc:Content-Type; b=IROGE1zGsbuxO/Nr5FnDZi8lkwU1ysE0M1tqpNG2vuCAR0I7HFJZXA7uim2tgbDYK6zrDxznmrFTm7Z48c7zNz0JnOg7KI16RWzfqu6pO5atJ+aCwx2ZHdMUAaSL55Us9KC6vXwiJLyUTGREsVeJZywMBRF4keRk57HhggPPkQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FM3/RfEf; arc=none smtp.client-ip=209.85.167.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-3f8d2f8d890so4087477b6e.0;
+        Tue, 29 Apr 2025 10:15:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1745946904; x=1746551704; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8N3PFLJdo2BL64kwpJnok05xXM6XlOssovMurdNnZcM=;
-        b=yvmqP7+3ya/94l2fLXHmzE6OXyONki4Xwo85mIw4cNtpqTl/qs8hAr2ABt+SaZ0QpA
-         MYGuvB4sAXZH6Ii29Hi8yjnPEriSGC569nRP4LCCSSPt3PlHxWeX2nbrJav22e5G/hqL
-         maAIK8mfK1UJL4cNT/E4VRzp7BNiPn+pbpEzT5PE9uQvCgDhXzMXvtg7hTfR9Eb0gEdK
-         Opl2qfaV3OMjpjpitYgTUd2z6gDLjVLWMNIuxsTc33v76DvuaImb93farIhfhf18apM9
-         TQGc7+fPjcKhRm86LJY1thr/z+K4jka+VRSsTiKOhBEYDvskkYvAnkeW7zwSb+EtaMFs
-         rpQQ==
+        d=gmail.com; s=20230601; t=1745946914; x=1746551714; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=FmofmemgoWFhRw05fKVJOk2vZV3Pg/3zezcHkaC2gPM=;
+        b=FM3/RfEfqxEA8rRIvUkJwI4wEwoQAlMPzJEAwmYlH0yPTy85NmvZnJVOqpOl/QbV9/
+         1PGOAcaJEjAj96vjADqyamoLk7DiiieQ7gs1uHWYF4LxU70lSGN/LN8oiFmBFhvSWv8q
+         1HjSUPXW8+Bjh/YMPezPrjEk95d8KjSVvJ6KwrAVvM8JC98PR3IpuyqBFqgBS0BhukDV
+         3iBcBv22IxFqNaSeUQQkKhz6QpMXEtCPvg4eV6OpEGzeoi3EGHYi2aQUOAKjA0SGHFre
+         B4DIpXNVJzfZ3QAKLJUGmZzY44TFsoEvFdlMqwXXJxWgvvsYEa5vCb6CEIJpAjcm99Oj
+         ZL9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745946904; x=1746551704;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8N3PFLJdo2BL64kwpJnok05xXM6XlOssovMurdNnZcM=;
-        b=S6eRThQXh43QSaG8WE0QlKRI0WJ7E7Q+DFbI/UKx1vJfGc321BmyzTljwlj+y055km
-         XfSpyx/nksQECDwR5Nub6FOe79ktlDJUYJ1DhC5i6dShhkQ6oj1TZUMAASDlaTSHFtMV
-         yMLjpLqNkfQfbMpFpNG0E/g/8kpUnl8DNKzAwVY7QR5TU4GKBrVMRLQKczzxjl9GnLMx
-         UH5bD7rkLy7zM9XgMmvKhEJYAJQkDln350t8NI1SQd9xgU8ZkFPjc2obrVy4U8Uuym1b
-         Wr9C4WMJWodTtPT37HNLnB3X5M8HMXaj47/2t+GE/rW3/qHat2bePCszdfZBaYJBhcEz
-         1KLg==
-X-Forwarded-Encrypted: i=1; AJvYcCWVZKTfXXnZudck1o88ftNrGNRmyNXt4KSn53cqqoy68EeP1xNlTwjbBpPQkqmIFBsTx0htwS3e0Vz3vvatFIc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9NiKoeGqOI1LzT7yWtZuzkOa5mF3mQXrt41TTrkHKSrvN9Z7P
-	5N42NS+Boj4ykJbqRnd1dvs5Fmxf7akPNpt438HoRuY5Bycq5mvg6RIwt+UZgzTikCPOFuS/jyz
-	TVd/6TLC+nf0LxWuR42TQPVdLVjqfw+GNwMeu
-X-Gm-Gg: ASbGncudFlye0YV1XFCOM0E73D8WIGbcYEL+vPUXkfugpre1gjd+KcMi0T/9KYcZxRC
-	1w86+qI+gtWncEHR6du6nIqMY2D+D+8ITE9AFe5BcjX6uUU6sALeI8E1+t3sxL6hvXEIAVKeAZs
-	bzqv+yUbEnOPoo0AIu+HK3KryhmN4GToGQXlzpQl4cnMgz5JBIUqrP
-X-Google-Smtp-Source: AGHT+IHc2d7Lags5IXA2jqjdd8Wrmu7oiMjs4V+SDYbkXeZnsbeXFEB5FbDmi3+9UCay73uMesmQXy8B2gOJYxFd2N0=
-X-Received: by 2002:a05:622a:1ba7:b0:47d:cdd2:8290 with SMTP id
- d75a77b69052e-488a5dee905mr4983031cf.9.1745946904330; Tue, 29 Apr 2025
- 10:15:04 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1745946914; x=1746551714;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FmofmemgoWFhRw05fKVJOk2vZV3Pg/3zezcHkaC2gPM=;
+        b=Rg7qr/EPeM08zBqHE0Bb0vunfHqn+Fq2NRUKxr1Dxg67sJ3Fj7R4fGnop39T+OJftU
+         1qp0tD/CdeBmVW6yDtV6vZGj2Q7TfBkL1/qPXw8fSA/6ZZse3KiBRoIwIQHYle0bSWfQ
+         UX/Rsiwn6ucDoVFSa8UUcVcQslUeHbEhIoODQRetkZw68xsGEuZsuqJlMtjZJYOP3+7y
+         wOzXWlB+ucyL9EL9v91LYufy+dkeitsjq6XzXMhs0tdO5eHMOo2LwwqK4l0TTfwMRO0i
+         HuJoemuzvRwUlELefnG+REN85dyv9gxvvL2mxYsnsj+WaqRYtL87palxk2dBeDzrsWyZ
+         IS9w==
+X-Forwarded-Encrypted: i=1; AJvYcCVMeJ/3faDT4SDkadpTlFjJFH5CbnbLEi/MVjj3o0wkD83gTrXZYRYjHTgEHlBUdj8CVyiIo0uq@vger.kernel.org, AJvYcCVhZN4/kiHCLMM6BGVPEgXOoqskmsXMpPwsZxG0dRaaLI1tqEuDmGJj1JxO+b7HHPHHCElhYY7VaeQg1FkFbF0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTG4F5pgMe0kIw0bUubp79wf8jZJ80MK+xiRvCw5su6W0rLN6a
+	dT24tn4JMlkd2ocIdQfyE0TMJVvlpKd32G94o9b+hFqgk5LVtj+PYSRJvF3+J/3efOu2R/in6aZ
+	xBPT8quVwdChPd3+GCHW5lQAmNRI=
+X-Gm-Gg: ASbGncuzGicjL3SpTtqtSylM4QZJfbZ6QRFngRvMuNaIgI7BuCxPgsZKQyDVJS+N/HW
+	/6aIL5c/jBsNvyXiNCh08XKh0oezxqCT9REhM71T93PkhjRhCoBJwNb8wzzONoTDwkhlggTNiMo
+	UkTfOVwtzB2eNuvrikrhYURnsA2GfGZmvM9feXNvkCQM+jYThr04dw70jdvknSQus=
+X-Google-Smtp-Source: AGHT+IGVvH53UuIhNspPIC2B/maPvHC2bXaEeIwWfgVsATYlEe7sf/gZkW4Qf1oFMcDZb68RVR0J4Pse5D35aI2S37g=
+X-Received: by 2002:a05:6808:3194:b0:3f8:91d1:d950 with SMTP id
+ 5614622812f47-4024399b8b3mr116588b6e.38.1745946914208; Tue, 29 Apr 2025
+ 10:15:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250418174959.1431962-1-surenb@google.com> <20250418174959.1431962-9-surenb@google.com>
- <CAEf4BzabPLJTy1U=aBrGZqKpskNYvj5MYuhPHSh_=hjmVJMvrg@mail.gmail.com> <CAG48ez29frEbJG+ySVARX-bO_QWe8eUbZiV8Jq2sqYemfuqP_g@mail.gmail.com>
-In-Reply-To: <CAG48ez29frEbJG+ySVARX-bO_QWe8eUbZiV8Jq2sqYemfuqP_g@mail.gmail.com>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Tue, 29 Apr 2025 10:14:52 -0700
-X-Gm-Features: ATxdqUGDGzBEh9QYdQgSp_gL9D3xJRJOqR7cGNBprwi1rNdXNpRqj3ts5tZZ_ww
-Message-ID: <CAJuCfpGxw7L67CvDnTiHN0kdVjFcPoZZ4ZsOHi0=wR7Y2umk0Q@mail.gmail.com>
-Subject: Re: [PATCH v3 8/8] mm/maps: execute PROCMAP_QUERY ioctl under RCU
-To: Jann Horn <jannh@google.com>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, akpm@linux-foundation.org, 
-	Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, david@redhat.com, 
-	vbabka@suse.cz, peterx@redhat.com, hannes@cmpxchg.org, mhocko@kernel.org, 
-	paulmck@kernel.org, shuah@kernel.org, adobriyan@gmail.com, brauner@kernel.org, 
-	josef@toxicpanda.com, yebin10@huawei.com, linux@weissschuh.net, 
-	willy@infradead.org, osalvador@suse.de, andrii@kernel.org, 
-	ryan.roberts@arm.com, christophe.leroy@csgroup.eu, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+References: <20250426172025.9459-1-chia-yu.chang@nokia-bell-labs.com> <20250426172025.9459-2-chia-yu.chang@nokia-bell-labs.com>
+In-Reply-To: <20250426172025.9459-2-chia-yu.chang@nokia-bell-labs.com>
+From: Donald Hunter <donald.hunter@gmail.com>
+Date: Tue, 29 Apr 2025 18:15:03 +0100
+X-Gm-Features: ATxdqUFemhdUNz5EampAyUMbPYK2LpYqGKPxoiCRao4tXy6UeqtfaouvhsvFTH0
+Message-ID: <CAD4GDZxPrgfMFLTG4Mc1VK0hM5ODP2tTFF771EhMzWnbC8BwaQ@mail.gmail.com>
+Subject: Re: [PATCH v13 net-next 1/5] Documentation: netlink: specs: tc: Add
+ DualPI2 specification
+To: chia-yu.chang@nokia-bell-labs.com
+Cc: xandfury@gmail.com, netdev@vger.kernel.org, dave.taht@gmail.com, 
+	pabeni@redhat.com, jhs@mojatatu.com, kuba@kernel.org, 
+	stephen@networkplumber.org, xiyou.wangcong@gmail.com, jiri@resnulli.us, 
+	davem@davemloft.net, edumazet@google.com, horms@kernel.org, 
+	andrew+netdev@lunn.ch, ast@fiberby.net, liuhangbin@gmail.com, 
+	shuah@kernel.org, linux-kselftest@vger.kernel.org, ij@kernel.org, 
+	ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com, 
+	g.white@cablelabs.com, ingemar.s.johansson@ericsson.com, 
+	mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at, 
+	Jason_Livingood@comcast.com, vidhi_goel@apple.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 29, 2025 at 8:56=E2=80=AFAM Jann Horn <jannh@google.com> wrote:
+On Sat, 26 Apr 2025 at 18:20, <chia-yu.chang@nokia-bell-labs.com> wrote:
 >
-> On Wed, Apr 23, 2025 at 12:54=E2=80=AFAM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> > On Fri, Apr 18, 2025 at 10:50=E2=80=AFAM Suren Baghdasaryan <surenb@goo=
-gle.com> wrote:
-> > > Utilize speculative vma lookup to find and snapshot a vma without
-> > > taking mmap_lock during PROCMAP_QUERY ioctl execution. Concurrent
-> > > address space modifications are detected and the lookup is retried.
-> > > While we take the mmap_lock for reading during such contention, we
-> > > do that momentarily only to record new mm_wr_seq counter.
-> >
-> > PROCMAP_QUERY is an even more obvious candidate for fully lockless
-> > speculation, IMO (because it's more obvious that vma's use is
-> > localized to do_procmap_query(), instead of being spread across
-> > m_start/m_next and m_show as with seq_file approach). We do
-> > rcu_read_lock(), mmap_lock_speculate_try_begin(), query for VMA (no
-> > mmap_read_lock), use that VMA to produce (speculative) output, and
-> > then validate that VMA or mm_struct didn't change with
-> > mmap_lock_speculate_retry(). If it did - retry, if not - we are done.
-> > No need for vma_copy and any gets/puts, no?
+> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 >
-> I really strongly dislike this "fully lockless" approach because it
-> means we get data races all over the place, and it gets hard to reason
-> about what happens especially if we do anything other than reading
-> plain data from the VMA. When reading the implementation of
-> do_procmap_query(), at basically every memory read you'd have to think
-> twice as hard to figure out which fields can be concurrently updated
-> elsewhere and whether the subsequent sequence count recheck can
-> recover from the resulting badness.
->
-> Just as one example, I think get_vma_name() could (depending on
-> compiler optimizations) crash with a NULL deref if the VMA's ->vm_ops
-> pointer is concurrently changed to &vma_dummy_vm_ops by vma_close()
-> between "if (vma->vm_ops && vma->vm_ops->name)" and
-> "vma->vm_ops->name(vma)". And I think this illustrates how the "fully
-> lockless" approach creates more implicit assumptions about the
-> behavior of core MM code, which could be broken by future changes to
-> MM code.
+> Introduce the specification of tc qdisc DualPI2 stats and attributes,
+> which is the reference implementation of IETF RFC9332 DualQ Coupled AQM
+> (https://datatracker.ietf.org/doc/html/rfc9332) providing two different
+> queues: low latency queue (L-queue) and classic queue (C-queue).
 
-Yeah, I'll need to re-evaluate such an approach after your review. I
-like having get_stable_vma() to obtain a completely stable version of
-the vma in a localized place and then stop worrying about possible
-races. If implemented correctly, would that be enough to address your
-concern, Jann?
+General comment is that this does not work. Please test it like this:
+
+sudo tc qdisc add dev eth0 handle 1: root dualpi2
+./tools/net/ynl/pyynl/cli.py \
+    --spec Documentation/netlink/specs/tc.yaml --dump getqdisc
+
+Consider moving this patch to the end of the series so that it can be
+tested against the implementation patches.
+
+> Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+> ---
+>  Documentation/netlink/specs/tc.yaml | 166 ++++++++++++++++++++++++++++
+>  1 file changed, 166 insertions(+)
+>
+> diff --git a/Documentation/netlink/specs/tc.yaml b/Documentation/netlink/specs/tc.yaml
+> index aacccea5dfe4..9eaab15cc216 100644
+> --- a/Documentation/netlink/specs/tc.yaml
+> +++ b/Documentation/netlink/specs/tc.yaml
+> @@ -51,6 +51,31 @@ definitions:
+>        - tundf
+>        - tunoam
+>        - tuncrit
+> +  -
+> +    name: tc-dualpi2-drop-overload-flags
+> +    type: flags
+> +    entries:
+> +      - drop
+> +      - overflow
+
+These enums need to be defined as part of the UAPI in pkt_sched.h and
+this file needs to be in sync with those definitions.
+
+This enum seems to contradict the comment in sch_dualpi2.c:
+
+bool drop_overload; /* Drop (1) on overload, or overflow (0) */
+
+> +  -
+> +    name: tc-dualpi2-drop-early-flags
+> +    type: flags
+> +    entries:
+> +      - drop-enqueue
+> +      - drop-dequeue
+
+Also contradicts comment in sch_dualpi2.c:
+
+bool drop_early; /* Drop at enqueue instead of dequeue if true */
+
+> +  -
+> +    name: tc-dualpi2-ecn-mask-flags
+> +    type: flags
+> +    entries:
+> +      - l4s-ect
+> +      - any-ect
+> +      - none
+> +  -
+> +    name: tc-dualpi2-credit-queue-flags
+> +    type: flags
+> +    entries:
+> +      - C-queue
+> +      - L-queue
+>    -
+>      name: tc-stats
+>      type: struct
+> @@ -816,6 +841,64 @@ definitions:
+>        -
+>          name: drop-overmemory
+>          type: u32
+> +  -
+> +    name: tc-dualpi2-xstats
+> +    type: struct
+> +    members:
+> +      -
+> +        name: prob
+> +        type: u32
+> +        doc: Current probability
+> +      -
+> +        name: delay-c
+> +        type: u32
+> +        doc: Current C-queue delay in microseconds
+> +      -
+> +        name: delay-l
+> +        type: u32
+> +        doc: Current L-queue delay in microseconds
+> +      -
+> +        name: pkts-in-c
+> +        type: u32
+> +        doc: Number of packets enqueued in the C-queue
+> +      -
+> +        name: pkts-in-l
+> +        type: u32
+> +        doc: Number of packets enqueued in the L-queue
+> +      -
+> +        name: maxq
+> +        type: u32
+> +        doc: Maximum number of packets seen by the DualPI2
+> +      -
+> +        name: ecn-mark
+> +        type: u32
+> +        doc: All packets marked with ecn
+> +      -
+> +        name: step-mark
+> +        type: u32
+> +        doc: Only packets marked with ecn due to L-queue step AQM
+> +      -
+> +        name: credit
+> +        type: s32
+> +        doc: Current credit value for WRR
+
+The credit member is declared in the wrong place here. The struct
+members must match those from struct tc_dualpi2_xstats, in exactly the
+same order.
+
+> +      -
+> +        name: credit-queue
+> +        type: u8
+> +        doc: Current credit queue
+> +        enum: tc-dualpi2-credit-queue-flags
+> +        enum-as-flags: true
+
+The credit-queue member does not exist in struct tc_dualpi2_xstats so
+should be removed from here.
+
+> +      -
+> +        name: memory-used
+> +        type: u32
+> +        doc: Memory used in bytes by the DualPI2
+> +      -
+> +        name: max-memory-used
+> +        type: u32
+> +        doc: Maximum memory used in bytes by the DualPI2
+> +      -
+> +        name: memory-limit
+> +        type: u32
+> +        doc: Memory limit in bytes
+>    -
+>      name: tc-fq-pie-xstats
+>      type: struct
+> @@ -2299,6 +2382,83 @@ attribute-sets:
+>        -
+>          name: quantum
+>          type: u32
+> +  -
+> +    name: tc-dualpi2-attrs
+> +    attributes:
+> +      -
+> +        name: limit
+> +        type: uint
+> +        doc: Limit of total number of packets in queue
+> +      -
+> +        name: memlimit
+
+The convention used in YNL specs is to use the same naming as the enum
+definition from the header, with the prefix stripped off. For this
+attribute that would be TCA_DUALPI2_MEMORY_LIMIT -> memory-limit
+
+> +        type: uint
+> +        doc: Memory limit of total number of packets in queue
+> +      -
+> +        name: target
+> +        type: uint
+> +        doc: Classic target delay in microseconds
+> +      -
+> +        name: tupdate
+> +        type: uint
+> +        doc: Drop probability update interval time in microseconds
+> +      -
+> +        name: alpha
+> +        type: uint
+> +        doc: Integral gain factor in Hz for PI controller
+> +      -
+> +        name: beta
+> +        type: uint
+> +        doc: Proportional gain factor in Hz for PI controller
+> +      -
+> +        name: step-thresh
+> +        type: uint
+> +        doc: L4S step marking threshold (see also step-packets)
+> +      -
+> +        name: step-packets
+> +        type: flag
+> +        doc: L4S Step marking threshold unit in packets (otherwise is in microseconds)
+> +      -
+> +        name: min-qlen-step
+> +        type: uint
+> +        doc: Packets enqueued to the L-queue can apply the step threshold when the queue length of L-queue is larger than this value. (0 is recommended)
+> +      -
+> +        name: coupling-factor
+
+The definition is TCA_DUALPI2_COUPLING so either this should be
+"coupling" or the enum name should be expanded.
+
+> +        type: uint
+> +        doc: Probability coupling factor between Classic and L4S (2 is recommended)
+> +      -
+> +        name: overload
+
+The definition is TCA_DUALPI2_DROP_OVERLOAD so this should be "drop-overload"
+
+> +        type: uint
+> +        doc: Control the overload strategy (drop to preserve latency or let the queue overflow)
+> +        enum: tc-dualpi2-drop-overload-flags
+> +        enum-as-flags: true
+> +      -
+> +        name: drop-early
+> +        type: uint
+> +        doc: Decide where the Classic packets are PI-based dropped or marked
+> +        enum: tc-dualpi2-drop-early-flags
+> +        enum-as-flags: true
+> +      -
+> +        name: classic-protection
+
+Also does not match the eum definition. Should the enum name be expanded?
+
+> +        type: uint
+> +        doc: Classic WRR weight in percentage (from 0 to 100)
+> +      -
+> +        name: ecn-mask
+> +        type: uint
+> +        doc: Configure the L-queue ECN classifier
+> +        enum: tc-dualpi2-ecn-mask-flags
+> +        enum-as-flags: true
+> +      -
+> +        name: split-gso
+> +        type: flag
+> +        doc: Split aggregated skb or not
+> +      -
+> +        name: max-rtt
+
+Does not exist in the DUALPI2 enum so should be removed.
+
+> +        type: uint
+> +        doc: The maximum expected RTT of the traffic that is controlled by DualPI2 in usec
+> +      -
+> +        name: typical-rtt
+
+Also does not exist in the DUALPI2 enum so should be removed.
+
+> +        type: uint
+> +        doc: The typical base RTT of the traffic that is controlled by DualPI2 in usec
+>    -
+>      name: tc-ematch-attrs
+>      attributes:
+> @@ -3679,6 +3839,9 @@ sub-messages:
+>        -
+>          value: drr
+>          attribute-set: tc-drr-attrs
+> +      -
+> +        value: dualpi2
+> +        attribute-set: tc-dualpi2-attrs
+>        -
+>          value: etf
+>          attribute-set: tc-etf-attrs
+> @@ -3846,6 +4009,9 @@ sub-messages:
+>        -
+>          value: codel
+>          fixed-header: tc-codel-xstats
+> +      -
+> +        value: dualpi2
+> +        fixed-header: tc-dualpi2-xstats
+>        -
+>          value: fq
+>          fixed-header: tc-fq-qd-stats
+> --
+> 2.34.1
+>
 
