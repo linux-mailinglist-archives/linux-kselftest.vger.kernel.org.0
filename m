@@ -1,86 +1,86 @@
-Return-Path: <linux-kselftest+bounces-31895-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31896-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A16FAAA0AE3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 13:56:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C9CFAA0B39
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 14:11:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 10C7E1B62567
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 11:56:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D05F63B1051
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 12:10:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92CFB270ED5;
-	Tue, 29 Apr 2025 11:56:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B64A62C17A8;
+	Tue, 29 Apr 2025 12:10:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KXzYmNRx"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Tretnmpq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1CFE21ABA0
-	for <linux-kselftest@vger.kernel.org>; Tue, 29 Apr 2025 11:56:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C5922BEC43
+	for <linux-kselftest@vger.kernel.org>; Tue, 29 Apr 2025 12:10:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745927780; cv=none; b=ApF2UdErdwhHpxsLaT7JfApqR71ZDKf13I26e7/Hi6Ey7XcqnzdLws1hLBo305ks9Na2giNiCsFAn/lYnFiTbdUaZaLTLUs2reiwyxkmXn6xtPgyhx4tsTDnZMetys/nIj6nfIWuu4xY1FqS2H6RMTHr2HwZEQrTUq1Z2pt3EQc=
+	t=1745928621; cv=none; b=BqP8smHaEqR2PjC8P/cZWn4SIb6nwHO7DKG3pJhiq8c0OP8S6mkLAcp+XeLnMhENv2RPwirvbiu7/jgyrXGdUXMm3rTap3stsAtwy15qLbHR1cpoANWoN6UYMmuRmEvAJhYFHdbs5CsK00dUiuHPsz+ri8Oxf2bYYSYxEBgXe1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745927780; c=relaxed/simple;
-	bh=A0zmw6w5Ln1uNFh7KT0bElow7mg3PZg/ObRtEdwM93E=;
+	s=arc-20240116; t=1745928621; c=relaxed/simple;
+	bh=mb17IOCgVVpSucIMd87jlf64vKog/jviBeBcDvP1YQc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=ibwcyKplNJut7bRa8LVh/7VN45G3xlNebvyFhp2w/BOJGDny1hhnn9I6+F+mjyk/vo1owExf2yTVn0hC9v/9YfSilj6kEBSknMzPpC2s8wuqnBrWLqei03ifnRawrv90/R+AhtpBjiOKxGZXJ4j+ghFhxmu7eme7/As/i3T51DM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KXzYmNRx; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:Content-Type; b=pWZv0M7oky8J1O3FTN+2hrahWjmYgkqlVtqM5Hg/+FyKuK5857bSoYMlgqPFbh4U+EqRFXthMA3RLq0XmY6u7k7b9LPXzqgIJJWpMY4Y5k+pBoyxC+5KRxTgZEjVP/MkZ8NtYg8p/AqJ2LXxi8InNvbNkHwC1meBAlwoKrkp+ag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Tretnmpq; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1745927777;
+	s=mimecast20190719; t=1745928615;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=HxpogNMJwjcGkLRpHZgajtQVqSJUQZRSCcKGwWOzQfo=;
-	b=KXzYmNRxm8bhugNoDShQJ9TOpKCgIz8mVu5czfiNqpeoSqZ2Essg6gyChfg8JcXMj5/C/D
-	/kiXnglw94MgyxoxoCYXRrypx9XVBy+tDtstfKCYEal22Ym/0j0USP5a3niqXhYpMKa5mk
-	2FdwVhwPdzniR31GOqZMZz86FtolLXs=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=TnFM2K3257UGzeSI3eOkJDuCGJ4N6zCW6N/z7ul8q7U=;
+	b=TretnmpqFq1XMF+BYxtVLWR25DOobVT2kG0SQhtYEg/gtHAfgCdnzP0tKXWhDpfvr9ff9l
+	RvOA5Po/KUTWXsmlr9eedP+UusgfqDv6HV9oGSTspLYWl/NK4+aY/SZgIpVtf8e7Qq4N9t
+	i/D/gE/sWki5eXWB0yFwFTPBPZXl8zE=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-122-azkZpzRQO02rLcWppdNC6w-1; Tue, 29 Apr 2025 07:56:16 -0400
-X-MC-Unique: azkZpzRQO02rLcWppdNC6w-1
-X-Mimecast-MFC-AGG-ID: azkZpzRQO02rLcWppdNC6w_1745927775
-Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-5f05d36993aso5458322a12.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Apr 2025 04:56:15 -0700 (PDT)
+ us-mta-531-223GZ7c2Nuq2qOaBA7QL4w-1; Tue, 29 Apr 2025 08:10:12 -0400
+X-MC-Unique: 223GZ7c2Nuq2qOaBA7QL4w-1
+X-Mimecast-MFC-AGG-ID: 223GZ7c2Nuq2qOaBA7QL4w_1745928611
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-acb66d17be4so442940466b.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Apr 2025 05:10:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745927775; x=1746532575;
+        d=1e100.net; s=20230601; t=1745928611; x=1746533411;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HxpogNMJwjcGkLRpHZgajtQVqSJUQZRSCcKGwWOzQfo=;
-        b=DNF54Tj1D4OU+L1Uek8D4O8ZBN3qJy7s49VoTWLhIGo4oy3MkTv0e9xADbFcfBPiWq
-         2kd5ygwha9NTPEBchdvHCCjYSD6cOO7J43JBTNQFddU/iicHKd5xcj4PoLkNL29pvo4J
-         7ZBSpL4JBUgZtQiJwRQyIBUpTDbnyi1DMISDP/ZqGHPg+Eu+aRLaXPoVeTdfND4etG0D
-         3XLB0AnK7ouczMg2WCf9Ob2y/VoqkPHx3kS3CfhjpQty3izdFkyTmdm83mITU3OgiM9S
-         OPOW3/iL+kmuUkCvjzwllzI6tO9zCaSQtU7oglO4C9h8tmCch82Xy3OVHSJvOESs7dPe
-         FO6g==
-X-Forwarded-Encrypted: i=1; AJvYcCX+sfj4xPoGAWuECcX3gvyjBJYvEBrB4praum0llO3EO5ZcB89i5Ge+MxFSTWwQ7IPQzoG/wbCmI8shXcVK7P8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxhQgMfBoZZaklcQX1Lg8cf94/YK37m1k0CXKH4/YKqkEI3IIsX
-	kg2YjNjNE5mOBF1hEuwozpKH5/mGnm+hUYOGrmYuI+IfWKjCBC5/k/fvL1CnCPCfCCl+QIvSjzS
-	X0A/zAmFyzpKzPr2GMtcBN0/kcfb46xrqatFIH+BGGun/uUFmcRPOpJvtQoEmuW3lsQ==
-X-Gm-Gg: ASbGncvF6stcsrUJCjCaYN789v3WKXXPPdEEikb3Jh8g4Yowsfj2h0wcl21IjisQoL/
-	P24q+HsX5kF62j39xYmXG5Q5b59Eo/xWw5rqMZVf0BOkm/UeCrSUsxrHIAqsvcP8b538/+y2LFl
-	l/oI3vj4n0pnlLaOgkyLIoLuMSj0nrWTIl+VHEMy0eC0mPiF0DUuc+cutkaGBhYAmcIoKviRWZD
-	btvHIFK3Zta5T8gc7ZJrk8XC8NCWGsJlSIFOB3z2ZeDGRl0ffoQtkdpb3D2OcUY6+n3ncIRrpvu
-	x31b9XD6XdWNIvJaRa7z6Oi/f+LXMrCzpNqoyymrz9GnaN0IDhKUkIVOSzM=
-X-Received: by 2002:a05:6402:354e:b0:5f8:664c:928a with SMTP id 4fb4d7f45d1cf-5f8664c952amr462047a12.9.1745927774825;
-        Tue, 29 Apr 2025 04:56:14 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IE7Q45LumRPr98BxK7ECFdtw18/jRYYz/jhVNPowK2uHwAgGVCwXMtRmZJ+OCuZrVKWbIDbow==
-X-Received: by 2002:a05:6402:354e:b0:5f8:664c:928a with SMTP id 4fb4d7f45d1cf-5f8664c952amr462006a12.9.1745927774387;
-        Tue, 29 Apr 2025 04:56:14 -0700 (PDT)
+        bh=TnFM2K3257UGzeSI3eOkJDuCGJ4N6zCW6N/z7ul8q7U=;
+        b=Z5nGqwrh2my1V++O92aqkTgDrnk/viHtxSLKSlDcByotuTfXsn8gJqHfgUbb1szKh+
+         bPZyUAizJaVRxlT9Mnq4nfUW9OrIbNkWnddkfvXcZ1oTEU+0hthHArrbPzUWQeOqkbe3
+         3U9zuRQ677FXv8M2ofAznl5rw4mK15pgTObNhkZ7SY45FVRX2UmXzy37O7ApEJlT/ZXE
+         O5sxICuAKF8+uj3WHg2L9wIQoQN1uvBKaMmgH8qS7mx5l9cmBBEeRnCuLRHbeNPQLwNv
+         3f3f/EUZCxDelq8RwuM/hM2DbqScHqTtlj3sBgbiCpPsV2X69zL+RPB1wViGBVvOu58F
+         G9Sg==
+X-Forwarded-Encrypted: i=1; AJvYcCV/3r1VHh5e6oVTS3cDxEN7P0kig7z3N5ZnzN5+kcxAj4ksWie7a8smsZi16kcbM74SXQOSHheza6/JziD7WDM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyq5t6H/t+R4Exxx1+8UiGEOwojKyCNm8SqdMXeXr1MrIKCmjPG
+	tmdfaibsT7foShaaPPLhmjSFIEH4oQKa36ZaDl9BTrRvbFMfGfdeLlI4qsJyvODiSunmq7OROlZ
+	sN5WozWlyXnj8GjJ1+ZTvG7r3szvZbAdCYiLKs5Ra4EuoFjDBNpm2381Opeaz+RElVQ==
+X-Gm-Gg: ASbGnctCzn8Ca3sPP1v9oHjKxl2Jj7ZifgexP24l4tRo8PZlqwuOO9NYZNHtfdwcyrx
+	o9CJWvAO2PCzDvbUN34PsY96J6zHXEHnu9C+9039fGrgV1qOMYNkIKT2NB5KdskXY8DT1zle1oh
+	X/wgKSjZw0L2dFGJioumikQeLaPoOn9V246P45Wji4qkeEfm1u0yA39NHAEQAm3nKSxdi95lKJV
+	rZW5ZqMZsSaNoUdTgeciyT4U3lH7KX0LOwCxG4Cxpxq6fE/Rb8dD/xzgHTQKk7dTTdg0wKf6197
+	BqZufu9hO9n+0Sb/odJnrHlyDWR0ljjK8p4sdMFUKhrkQNfQJVa6u2a215c=
+X-Received: by 2002:a17:907:3fa5:b0:ac3:3e40:e183 with SMTP id a640c23a62f3a-acec84b7f9amr291015266b.3.1745928611342;
+        Tue, 29 Apr 2025 05:10:11 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEhPtGWXOZLT3mFaQPhUAK8VlJ77Tme05C3lCQT5D5BXFTuMnjP5AuORU6+ROxdywsJiFjHLQ==
+X-Received: by 2002:a17:907:3fa5:b0:ac3:3e40:e183 with SMTP id a640c23a62f3a-acec84b7f9amr291008666b.3.1745928610750;
+        Tue, 29 Apr 2025 05:10:10 -0700 (PDT)
 Received: from ?IPV6:2a0d:3344:2726:1910:4ca0:1e29:d7a3:b897? ([2a0d:3344:2726:1910:4ca0:1e29:d7a3:b897])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5f7016f666fsm7483215a12.45.2025.04.29.04.56.12
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ace6e41c736sm787561366b.12.2025.04.29.05.10.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Apr 2025 04:56:13 -0700 (PDT)
-Message-ID: <d0969c3d-e33c-472e-815d-70b333990b39@redhat.com>
-Date: Tue, 29 Apr 2025 13:56:11 +0200
+        Tue, 29 Apr 2025 05:10:10 -0700 (PDT)
+Message-ID: <0a5c7897-ed95-4198-9896-ddae64335083@redhat.com>
+Date: Tue, 29 Apr 2025 14:10:08 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -88,7 +88,7 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 net-next 09/15] tcp: accecn: AccECN option
+Subject: Re: [PATCH v5 net-next 10/15] tcp: accecn: AccECN option send control
 To: chia-yu.chang@nokia-bell-labs.com, horms@kernel.org, dsahern@kernel.org,
  kuniyu@amazon.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
  dave.taht@gmail.com, jhs@mojatatu.com, kuba@kernel.org,
@@ -101,277 +101,135 @@ To: chia-yu.chang@nokia-bell-labs.com, horms@kernel.org, dsahern@kernel.org,
  mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at,
  Jason_Livingood@comcast.com, vidhi_goel@apple.com
 References: <20250422153602.54787-1-chia-yu.chang@nokia-bell-labs.com>
- <20250422153602.54787-10-chia-yu.chang@nokia-bell-labs.com>
+ <20250422153602.54787-11-chia-yu.chang@nokia-bell-labs.com>
 Content-Language: en-US
 From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20250422153602.54787-10-chia-yu.chang@nokia-bell-labs.com>
+In-Reply-To: <20250422153602.54787-11-chia-yu.chang@nokia-bell-labs.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
 On 4/22/25 5:35 PM, chia-yu.chang@nokia-bell-labs.com wrote:
-> @@ -302,10 +303,13 @@ struct tcp_sock {
->  	u32	snd_up;		/* Urgent pointer		*/
->  	u32	delivered;	/* Total data packets delivered incl. rexmits */
->  	u32	delivered_ce;	/* Like the above but only ECE marked packets */
-> +	u32	delivered_ecn_bytes[3];
+> From: Ilpo Järvinen <ij@kernel.org>
+> 
+> Instead of sending the option in every ACK, limit sending to
+> those ACKs where the option is necessary:
+> - Handshake
+> - "Change-triggered ACK" + the ACK following it. The
+>   2nd ACK is necessary to unambiguously indicate which
+>   of the ECN byte counters in increasing. The first
+>   ACK has two counters increasing due to the ecnfield
+>   edge.
+> - ACKs with CE to allow CEP delta validations to take
+>   advantage of the option.
+> - Force option to be sent every at least once per 2^22
+>   bytes. The check is done using the bit edges of the
+>   byte counters (avoids need for extra variables).
+> - AccECN option beacon to send a few times per RTT even if
+>   nothing in the ECN state requires that. The default is 3
+>   times per RTT, and its period can be set via
+>   sysctl_tcp_ecn_option_beacon.
+> 
+> Signed-off-by: Ilpo Järvinen <ij@kernel.org>
+> Co-developed-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+> Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+> ---
+>  include/linux/tcp.h        |  3 +++
+>  include/net/netns/ipv4.h   |  1 +
+>  include/net/tcp.h          |  1 +
+>  net/ipv4/sysctl_net_ipv4.c |  9 ++++++++
+>  net/ipv4/tcp.c             |  5 ++++-
+>  net/ipv4/tcp_input.c       | 36 +++++++++++++++++++++++++++++++-
+>  net/ipv4/tcp_ipv4.c        |  1 +
+>  net/ipv4/tcp_minisocks.c   |  2 ++
+>  net/ipv4/tcp_output.c      | 42 ++++++++++++++++++++++++++++++--------
+>  9 files changed, 90 insertions(+), 10 deletions(-)
+> 
+> diff --git a/include/linux/tcp.h b/include/linux/tcp.h
+> index 0e032d9631ac..acb0727855f8 100644
+> --- a/include/linux/tcp.h
+> +++ b/include/linux/tcp.h
+> @@ -309,8 +309,11 @@ struct tcp_sock {
+>  	u8	received_ce_pending:4, /* Not yet transmit cnt of received_ce */
+>  		unused2:4;
+>  	u8	accecn_minlen:2,/* Minimum length of AccECN option sent */
+> +		prev_ecnfield:2,/* ECN bits from the previous segment */
+> +		accecn_opt_demand:2,/* Demand AccECN option for n next ACKs */
+>  		est_ecnfield:2;/* ECN field for AccECN delivered estimates */
+>  	u32	app_limited;	/* limited until "delivered" reaches this val */
+> +	u64	accecn_opt_tstamp;	/* Last AccECN option sent timestamp */
 
-This new fields do not belong to this cacheline group. I'm unsure they
-belong to fast-path at all. Also u32 will wrap-around very soon.
+AFAICS this field is only access in the tx path, while this chunk belong
+to the tcp_sock_write_txrx group.
 
-[...]
-> diff --git a/include/uapi/linux/tcp.h b/include/uapi/linux/tcp.h
-> index dc8fdc80e16b..74ac8a5d2e00 100644
-> --- a/include/uapi/linux/tcp.h
-> +++ b/include/uapi/linux/tcp.h
-> @@ -298,6 +298,13 @@ struct tcp_info {
->  	__u32	tcpi_snd_wnd;	     /* peer's advertised receive window after
->  				      * scaling (bytes)
->  				      */
-> +	__u32	tcpi_received_ce;    /* # of CE marks received */
-> +	__u32	tcpi_delivered_e1_bytes;  /* Accurate ECN byte counters */
-> +	__u32	tcpi_delivered_e0_bytes;
-> +	__u32	tcpi_delivered_ce_bytes;
-> +	__u32	tcpi_received_e1_bytes;
-> +	__u32	tcpi_received_e0_bytes;
-> +	__u32	tcpi_received_ce_bytes;
+> @@ -740,6 +740,15 @@ static struct ctl_table ipv4_net_table[] = {
+>  		.extra1		= SYSCTL_ZERO,
+>  		.extra2		= SYSCTL_TWO,
+>  	},
+> +	{
+> +		.procname	= "tcp_ecn_option_beacon",
+> +		.data		= &init_net.ipv4.sysctl_tcp_ecn_option_beacon,
+> +		.maxlen		= sizeof(u8),
+> +		.mode		= 0644,
+> +		.proc_handler	= proc_dou8vec_minmax,
+> +		.extra1		= SYSCTL_ZERO,
+> +		.extra2		= SYSCTL_FOUR,
 
-This will break uAPI: new fields must be addded at the end, or must fill
-existing holes. Also u32 set in stone in uAPI for a byte counter looks
-way too small.
+The number of new sysctl is concerning high, and I don't see any
+documentation update yet.
 
-> @@ -5100,7 +5113,7 @@ static void __init tcp_struct_check(void)
->  	/* 32bit arches with 8byte alignment on u64 fields might need padding
->  	 * before tcp_clock_cache.
->  	 */
-> -	CACHELINE_ASSERT_GROUP_SIZE(struct tcp_sock, tcp_sock_write_txrx, 109 + 7);
-> +	CACHELINE_ASSERT_GROUP_SIZE(struct tcp_sock, tcp_sock_write_txrx, 122 + 6);
-
-The above means an additional cacheline in fast-path WRT the current
-status. IMHO should be avoided.
-
-> diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-> index 5bd7fc9bcf66..41e45b9aff3f 100644
-> --- a/net/ipv4/tcp_input.c
-> +++ b/net/ipv4/tcp_input.c
-> @@ -70,6 +70,7 @@
->  #include <linux/sysctl.h>
->  #include <linux/kernel.h>
->  #include <linux/prefetch.h>
-> +#include <linux/bitops.h>
->  #include <net/dst.h>
->  #include <net/tcp.h>
->  #include <net/proto_memory.h>
-> @@ -499,6 +500,144 @@ static bool tcp_ecn_rcv_ecn_echo(const struct tcp_sock *tp, const struct tcphdr
->  	return false;
->  }
+> @@ -6291,9 +6294,36 @@ void tcp_ecn_received_counters(struct sock *sk, const struct sk_buff *skb,
 >  
-> +/* Maps IP ECN field ECT/CE code point to AccECN option field number, given
-> + * we are sending fields with Accurate ECN Order 1: ECT(1), CE, ECT(0).
-> + */
-> +static u8 tcp_ecnfield_to_accecn_optfield(u8 ecnfield)
-> +{
-> +	switch (ecnfield) {
-> +	case INET_ECN_NOT_ECT:
-> +		return 0;	/* AccECN does not send counts of NOT_ECT */
-> +	case INET_ECN_ECT_1:
-> +		return 1;
-> +	case INET_ECN_CE:
-> +		return 2;
-> +	case INET_ECN_ECT_0:
-> +		return 3;
-> +	default:
-> +		WARN_ONCE(1, "bad ECN code point: %d\n", ecnfield);
+>  		if (payload_len > 0) {
+>  			u8 minlen = tcp_ecnfield_to_accecn_optfield(ecnfield);
+> +			u32 oldbytes = tp->received_ecn_bytes[ecnfield - 1];
+> +
+>  			tp->received_ecn_bytes[ecnfield - 1] += payload_len;
+>  			tp->accecn_minlen = max_t(u8, tp->accecn_minlen,
+>  						  minlen);
+> +
+> +			/* Demand AccECN option at least every 2^22 bytes to
+> +			 * avoid overflowing the ECN byte counters.
+> +			 */
+> +			if ((tp->received_ecn_bytes[ecnfield - 1] ^ oldbytes) &
+> +			    ~((1 << 22) - 1)) {
+> +				u8 opt_demand = max_t(u8, 1,
+> +						      tp->accecn_opt_demand);
+> +
+> +				tp->accecn_opt_demand = opt_demand;
+> +			}
 
-No WARN_ONCE() above please: either the 'ecnfield' data is masked vs
-INET_ECN_MASK and the WARN_ONCE should not be possible or a remote
-sender can deterministically trigger a WARN() which nowadays will in
-turn raise a CVE...
+I guess this explains the u32 values for such counters. Some comments in
+the previous patch could be useful.
 
-[...]
-> +static u32 tcp_accecn_field_init_offset(u8 ecnfield)
-> +{
-> +	switch (ecnfield) {
-> +	case INET_ECN_NOT_ECT:
-> +		return 0;	/* AccECN does not send counts of NOT_ECT */
-> +	case INET_ECN_ECT_1:
-> +		return TCP_ACCECN_E1B_INIT_OFFSET;
-> +	case INET_ECN_CE:
-> +		return TCP_ACCECN_CEB_INIT_OFFSET;
-> +	case INET_ECN_ECT_0:
-> +		return TCP_ACCECN_E0B_INIT_OFFSET;
-> +	default:
-> +		WARN_ONCE(1, "bad ECN code point: %d\n", ecnfield);
+> diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+> index 3f3e285fc973..2e95dad66fe3 100644
+> --- a/net/ipv4/tcp_ipv4.c
+> +++ b/net/ipv4/tcp_ipv4.c
+> @@ -3451,6 +3451,7 @@ static int __net_init tcp_sk_init(struct net *net)
+>  {
+>  	net->ipv4.sysctl_tcp_ecn = 2;
+>  	net->ipv4.sysctl_tcp_ecn_option = 2;
+> +	net->ipv4.sysctl_tcp_ecn_option_beacon = 3;
+>  	net->ipv4.sysctl_tcp_ecn_fallback = 1;
 
-Same as above.
+Human readable macros instead of magic numbers could help.
 
-> +	}
-> +	return 0;
-> +}
-> +
-> +/* Maps AccECN option field #nr to IP ECN field ECT/CE bits */
-> +static unsigned int tcp_accecn_optfield_to_ecnfield(unsigned int optfield,
-> +						    bool order)
-> +{
-> +	u8 tmp;
-> +
-> +	optfield = order ? 2 - optfield : optfield;
-> +	tmp = optfield + 2;
-> +
-> +	return (tmp + (tmp >> 2)) & INET_ECN_MASK;
-> +}
-> +
-> +/* Handles AccECN option ECT and CE 24-bit byte counters update into
-> + * the u32 value in tcp_sock. As we're processing TCP options, it is
-> + * safe to access from - 1.
-> + */
-> +static s32 tcp_update_ecn_bytes(u32 *cnt, const char *from, u32 init_offset)
-> +{
-> +	u32 truncated = (get_unaligned_be32(from - 1) - init_offset) &
-> +			0xFFFFFFU;
-> +	u32 delta = (truncated - *cnt) & 0xFFFFFFU;
-> +
-> +	/* If delta has the highest bit set (24th bit) indicating
-> +	 * negative, sign extend to correct an estimation using
-> +	 * sign_extend32(delta, 24 - 1)
-> +	 */
-> +	delta = sign_extend32(delta, 23);
-> +	*cnt += delta;
-> +	return (s32)delta;
-> +}
-> +
-> +/* Returns true if the byte counters can be used */
-> +static bool tcp_accecn_process_option(struct tcp_sock *tp,
-> +				      const struct sk_buff *skb,
-> +				      u32 delivered_bytes, int flag)
-> +{
-> +	u8 estimate_ecnfield = tp->est_ecnfield;
-> +	bool ambiguous_ecn_bytes_incr = false;
-> +	bool first_changed = false;
-> +	unsigned int optlen;
-> +	unsigned char *ptr;
-> +	bool order1, res;
-> +	unsigned int i;
-> +
-> +	if (!(flag & FLAG_SLOWPATH) || !tp->rx_opt.accecn) {
-> +		if (estimate_ecnfield) {
-> +			u8 ecnfield = estimate_ecnfield - 1;
-> +
-> +			tp->delivered_ecn_bytes[ecnfield] += delivered_bytes;
-> +			return true;
-> +		}
-> +		return false;
-> +	}
-> +
-> +	ptr = skb_transport_header(skb) + tp->rx_opt.accecn;
-> +	optlen = ptr[1] - 2;
-
-This assumes optlen is greater then 2, but I don't see the relevant
-check. Are tcp options present at all?
-
-> +	WARN_ON_ONCE(ptr[0] != TCPOPT_ACCECN0 && ptr[0] != TCPOPT_ACCECN1);
-
-Please, don't warn for arbitrary wrong data sent from the peer.
-
-> +	order1 = (ptr[0] == TCPOPT_ACCECN1);
-> +	ptr += 2;
-> +
-> +	res = !!estimate_ecnfield;
-> +	for (i = 0; i < 3; i++) {
-> +		if (optlen >= TCPOLEN_ACCECN_PERFIELD) {
-> +			u32 init_offset;
-> +			u8 ecnfield;
-> +			s32 delta;
-> +			u32 *cnt;
-> +
-> +			ecnfield = tcp_accecn_optfield_to_ecnfield(i, order1);
-> +			init_offset = tcp_accecn_field_init_offset(ecnfield);
-> +			cnt = &tp->delivered_ecn_bytes[ecnfield - 1];
-> +			delta = tcp_update_ecn_bytes(cnt, ptr, init_offset);
-> +			if (delta) {
-> +				if (delta < 0) {
-> +					res = false;
-> +					ambiguous_ecn_bytes_incr = true;
-> +				}
-> +				if (ecnfield != estimate_ecnfield) {
-> +					if (!first_changed) {
-> +						tp->est_ecnfield = ecnfield;
-> +						first_changed = true;
-> +					} else {
-> +						res = false;
-> +						ambiguous_ecn_bytes_incr = true;
-> +					}
-
-At least 2 indentation levels above the maximum readable.
-
-[...]
-> @@ -4378,6 +4524,7 @@ void tcp_parse_options(const struct net *net,
+> @@ -1237,13 +1253,18 @@ static unsigned int tcp_established_options(struct sock *sk, struct sk_buff *skb
 >  
->  	ptr = (const unsigned char *)(th + 1);
->  	opt_rx->saw_tstamp = 0;
-> +	opt_rx->accecn = 0;
->  	opt_rx->saw_unknown = 0;
+>  	if (tcp_ecn_mode_accecn(tp) &&
+>  	    sock_net(sk)->ipv4.sysctl_tcp_ecn_option) {
+> -		int saving = opts->num_sack_blocks > 0 ? 2 : 0;
+> -		int remaining = MAX_TCP_OPTION_SPACE - size;
+> -
+> -		opts->ecn_bytes = tp->received_ecn_bytes;
+> -		size += tcp_options_fit_accecn(opts, tp->accecn_minlen,
+> -					       remaining,
+> -					       saving);
+> +		if (sock_net(sk)->ipv4.sysctl_tcp_ecn_option >= 2 ||
+> +		    tp->accecn_opt_demand ||
+> +		    tcp_accecn_option_beacon_check(sk)) {
 
-It would be good to be able to zero both 'accecn' and 'saw_unknown' with
-a single statement.
-
-[...]
-> @@ -766,6 +769,47 @@ static void tcp_options_write(struct tcphdr *th, struct tcp_sock *tp,
->  		*ptr++ = htonl(opts->tsecr);
->  	}
->  
-> +	if (OPTION_ACCECN & options) {
-> +		const u8 ect0_idx = INET_ECN_ECT_0 - 1;
-> +		const u8 ect1_idx = INET_ECN_ECT_1 - 1;
-> +		const u8 ce_idx = INET_ECN_CE - 1;
-> +		u32 e0b;
-> +		u32 e1b;
-> +		u32 ceb;
-> +		u8 len;
-> +
-> +		e0b = opts->ecn_bytes[ect0_idx] + TCP_ACCECN_E0B_INIT_OFFSET;
-> +		e1b = opts->ecn_bytes[ect1_idx] + TCP_ACCECN_E1B_INIT_OFFSET;
-> +		ceb = opts->ecn_bytes[ce_idx] + TCP_ACCECN_CEB_INIT_OFFSET;
-> +		len = TCPOLEN_ACCECN_BASE +
-> +		      opts->num_accecn_fields * TCPOLEN_ACCECN_PERFIELD;
-> +
-> +		if (opts->num_accecn_fields == 2) {
-> +			*ptr++ = htonl((TCPOPT_ACCECN1 << 24) | (len << 16) |
-> +				       ((e1b >> 8) & 0xffff));
-> +			*ptr++ = htonl(((e1b & 0xff) << 24) |
-> +				       (ceb & 0xffffff));
-> +		} else if (opts->num_accecn_fields == 1) {
-> +			*ptr++ = htonl((TCPOPT_ACCECN1 << 24) | (len << 16) |
-> +				       ((e1b >> 8) & 0xffff));
-> +			leftover_bytes = ((e1b & 0xff) << 8) |
-> +					 TCPOPT_NOP;
-> +			leftover_size = 1;
-> +		} else if (opts->num_accecn_fields == 0) {
-> +			leftover_bytes = (TCPOPT_ACCECN1 << 8) | len;
-> +			leftover_size = 2;
-> +		} else if (opts->num_accecn_fields == 3) {
-> +			*ptr++ = htonl((TCPOPT_ACCECN1 << 24) | (len << 16) |
-> +				       ((e1b >> 8) & 0xffff));
-> +			*ptr++ = htonl(((e1b & 0xff) << 24) |
-> +				       (ceb & 0xffffff));
-> +			*ptr++ = htonl(((e0b & 0xffffff) << 8) |
-> +				       TCPOPT_NOP);
-
-The above chunck and the contents of patch 7 must be in the same patch.
-This split makes the review even harder.
-
-[...]
-> @@ -1117,6 +1235,17 @@ static unsigned int tcp_established_options(struct sock *sk, struct sk_buff *skb
->  		opts->num_sack_blocks = 0;
->  	}
->  
-> +	if (tcp_ecn_mode_accecn(tp) &&
-> +	    sock_net(sk)->ipv4.sysctl_tcp_ecn_option) {
-> +		int saving = opts->num_sack_blocks > 0 ? 2 : 0;
-> +		int remaining = MAX_TCP_OPTION_SPACE - size;
-
-AFACS the above means tcp_options_fit_accecn() must clear any already
-set options, but apparently it does not do so. Have you tested with
-something adding largish options like mptcp?
+Why a nested if here and just not expanding the existing one?
 
 /P
 
