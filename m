@@ -1,266 +1,280 @@
-Return-Path: <linux-kselftest+bounces-31904-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31905-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64827AA1079
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 17:28:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D6E8AA10A9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 17:40:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5CA9F7B4ACF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 15:26:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9637B1BA138E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 15:40:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EABB22171A;
-	Tue, 29 Apr 2025 15:27:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAD4D22A808;
+	Tue, 29 Apr 2025 15:40:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="igkPu5v2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 741E5221703;
-	Tue, 29 Apr 2025 15:27:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0A3D227E98
+	for <linux-kselftest@vger.kernel.org>; Tue, 29 Apr 2025 15:40:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745940457; cv=none; b=DD7hOps0zyvbJP6FmyXj6zfuraq+Sm+oSF5cdPivX0kktsSoqGyhVZ5EOYh/3opJ90QulqTSFfPS7K62whCOqiSelhuOoAobig7Nyq5YBTJcQABE5RAQpqE4HE1OQLmktyvUAaHPhZgszPOmWx38VVTiW+bjy5xLIKGc78e5kM4=
+	t=1745941206; cv=none; b=fvVZ9pVsksxQl0u4VtFcBr1/9ynKuBCxR6kHYCbT4eboLQZi5K0fxABDJETfCWGe7mpIou6iCGexZAeDfpT3QECa9ddarOknODNfU8+QB49LHd/IIL/dg1d6+H7MIjQzTQ96aEfeEAKjPQcYNmPKKQnevKKbM8tl0dbe9qRHTwk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745940457; c=relaxed/simple;
-	bh=tRzFMDqiQktHIzjzC5iKvHZSY49zCoD2GYhyyzs/XnE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HcrPpmyIjSLIoqFYIMyaYSIvHqepFJDJ6wZ5TXMgr4WShUuPpcnQyUR6MNO1jl4odtMpusgG30WLX1cEcwzif65YDFxtAhMcy7i8B5QybXfM37F/erUXMxMJOqTmcaGJEMazAQDYBE7rnHlMdfb8lEYVfvlEyAzkdb3ObpTJ/pg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D05CC1515;
-	Tue, 29 Apr 2025 08:27:27 -0700 (PDT)
-Received: from J2N7QTR9R3.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1ADB83F673;
-	Tue, 29 Apr 2025 08:27:32 -0700 (PDT)
-Date: Tue, 29 Apr 2025 16:27:27 +0100
-From: Mark Rutland <mark.rutland@arm.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Subject: Re: [PATCH] KVM: selftests: add test for SVE host corruption
-Message-ID: <aBDv39FD7eDYoplg@J2N7QTR9R3.cambridge.arm.com>
-References: <20250417-kvm-selftest-sve-signal-v1-1-6330c2f3da0c@kernel.org>
+	s=arc-20240116; t=1745941206; c=relaxed/simple;
+	bh=m4RIdnC33T+0DzN2pkMUmi2ZJdkLEyYSorF3bzhZmQI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LE9RmN/bdNzqXfXf6Ry03iVahXOkWyc9hMj6ASvlRft7c3cJZkTDkTLuxX5qVMIlYNhtYlK4o1z7j55fHEIGVuepoRwhCwLkbfzYvCLF6OJbHxdsfE3ffZf5FJHrfFfD2Ig99E4SqqgVyjLL85Xorig0YbL8t/bY2lgYEQQ5Nhk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=igkPu5v2; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5dbfc122b82so9146a12.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Apr 2025 08:40:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1745941202; x=1746546002; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nrLjz0SO4NLZaGlZgmJ5ANLBwSUMQ+H6anEYSpKzKcw=;
+        b=igkPu5v2E8TpJbmhkZaYMFhSI1L7Qtv4eKmpWL0Gina+4r8Qxihkactxa3ckTeS4it
+         klnhE32dMbujO+Y1KfmfAdI/redH2erF39k/0T2zCF7m3MkvGKuASkcokX3gsONoO68/
+         LydkD1sZwjDOA3Myo288fcZKl32BA7nsAQGdw849qvnwfoxKWl2XKBwf1ZEEMS+1rCEH
+         RQxTEkCwT10Rh2ceVGJ83RsiN8VL7N0yaJU0Z2JOERwHvrc+VmDTm6UlvuoZ5WyTyTgb
+         nxQstjnbhFD+H81RHNvsjTv55sCMOuTd+eSfh+LS7BQIlxa6CmKS9VqyBsL7/8285pz9
+         0Enw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745941202; x=1746546002;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nrLjz0SO4NLZaGlZgmJ5ANLBwSUMQ+H6anEYSpKzKcw=;
+        b=Y02QWeXSbQo8lrTLmpJ5mgiY5kHi8iFukao+/yslS/ow2QeQO0ZWQEdEq+Oxei0v4b
+         MCaPzoQIrHepGK4qhR4NFGVDQUUG4k0HbGxqeKkNgg0T11CGLG7zy7dm3vb8vVZQhIdo
+         QBt1w5I85dW3TBV0wNaeDkqgcJPFQC16ph9+qG63OHPvsysumKlbQ5HwT1HfMRJiZ6CT
+         WH8ai8gCRxckVn8mM2ADELqsNLISEUjqWVvkWtcJvkexUIJ5No+1iBUoSnw+BXfR0/Vc
+         GvdQgvGWB5N5CcVtaEln80TS6bPHnKceGCcs8wK5Q3i42vnidLMp7doZYi7l1IWdE4Ax
+         C5Kw==
+X-Forwarded-Encrypted: i=1; AJvYcCX6fZMt/pNMyUKpoKcOujCEN+dgOfaB0fFsJmb/HeGlat5In3EPSnRfYyWCMp2MV6cBzICwnVaMb5JCI/GAyCY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwhCBd/WRQkgPtRCeR7tStHlQnFFEFpVkTzkPkZZVk0j2es9xJR
+	q95vOvxMDVVlM7PIpP5x6OaSDdwhA0DyTDulkDirXT3igjgFcsXPK5xMWCcMMkW9TTlmCZU3CVN
+	4hYRZFOY3OfFtIoSPnwd+HqHghM9GaXhK2YJ7
+X-Gm-Gg: ASbGncsQ+Z7Vj+JytyZWY8vmDOVoT3H/dDaQWztP0roO8IXuSpJaaDMac71sm+8cvF+
+	34No3N/fjz4CCjSKskdIDkgYJzBwMmuSyrMyPVmGZkplS2zL8AA8dr03pxYlLHLhIk8qcOHTKtV
+	cw+XZbB4PNYZ20UJSNFTg8i5BYQGWmHDezcGmqpIpyjynSPHCbng==
+X-Google-Smtp-Source: AGHT+IGTmRrDj58386rjJZziDq63lizkFMzj1lu/PM65c5dMEelMGMumc3qFR5YFmPkjXr20u694i69kdm2X64XfN50=
+X-Received: by 2002:a50:8713:0:b0:5de:bcd9:4aa with SMTP id
+ 4fb4d7f45d1cf-5f83c1b5a2bmr96410a12.3.1745941201725; Tue, 29 Apr 2025
+ 08:40:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250417-kvm-selftest-sve-signal-v1-1-6330c2f3da0c@kernel.org>
+References: <20250418174959.1431962-1-surenb@google.com> <20250418174959.1431962-8-surenb@google.com>
+In-Reply-To: <20250418174959.1431962-8-surenb@google.com>
+From: Jann Horn <jannh@google.com>
+Date: Tue, 29 Apr 2025 17:39:25 +0200
+X-Gm-Features: ATxdqUE5eaCYmwGd2V3bpxMHfmJQqwTFsFKw7F4dJMhdfNXiMK8VuoXSkdfNDiE
+Message-ID: <CAG48ez3YLWh9hXQQdGVQ7hCsd=k_i2Z2NO6qzT6NaOYiRjy=nw@mail.gmail.com>
+Subject: Re: [PATCH v3 7/8] mm/maps: read proc/pid/maps under RCU
+To: Suren Baghdasaryan <surenb@google.com>, Al Viro <viro@zeniv.linux.org.uk>, brauner@kernel.org, 
+	linux-fsdevel@vger.kernel.org
+Cc: akpm@linux-foundation.org, Liam.Howlett@oracle.com, 
+	lorenzo.stoakes@oracle.com, david@redhat.com, vbabka@suse.cz, 
+	peterx@redhat.com, hannes@cmpxchg.org, mhocko@kernel.org, paulmck@kernel.org, 
+	shuah@kernel.org, adobriyan@gmail.com, josef@toxicpanda.com, 
+	yebin10@huawei.com, linux@weissschuh.net, willy@infradead.org, 
+	osalvador@suse.de, andrii@kernel.org, ryan.roberts@arm.com, 
+	christophe.leroy@csgroup.eu, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 17, 2025 at 12:32:49AM +0100, Mark Brown wrote:
-> This test program, originally written by Mark Rutland and lightly modified
-> by me for upstream,
-
-For context, I had originally pushed this as a WIP to:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?h=arm64/kvm/fpsimd-tests&id=a2f7319f5b13f5f5354e6186925b3bb8f2d2966e
-
-> verifies that we do not have the issues with host SVE
-> state being discarded which were fixed in
-> 
->    fbc7e61195e2 ("KVM: arm64: Unconditionally save+flush host FPSIMD/SVE/SME state")
-> 
-> by running a simple VM while checking the SVE register state for
-> corruption.
-
-Minor nit, but this doesn't verify the absence of the issue, as that can
-be masked by preemption. I would suggest:
-
-| Until recently, the kernel could unexpectedly discard SVE state for a
-| period after a KVM_RUN ioctl, when the guest did not execute any
-| FPSIMD/SVE/SME instructions. We fixed that issue in commit:
-|
-|   fbc7e61195e2 ("KVM: arm64: Unconditionally save+flush host FPSIMD/SVE/SME state")
-|
-| Add a test which tries to provoke that issue by manipulating SVE state
-| before/after running a guest which does not execute any FPSIMD/SVE/SME
-| instructions. The test executes a handful of iterations to miminize
-| the risk that the issue is masked by preemption.
-
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-
-Looks like my Signed-off-by got dropped by accident; it should be above
-yours here.
-
-Aside from that, and the initial feature test, this looks pretty much
-identical to my original WIP.
-
-I'm not sure if it's worth keeping all the printf() calls, which were
-only there to help me check the UDF trap was being handled correctly.
-
-Either way, with the commit message updated and SoB restored:
-
-Acked-by: Mark Rutland <mark.rutland@arm.com>
-
-Mark.
-
-> ---
->  tools/testing/selftests/kvm/Makefile.kvm     |   1 +
->  tools/testing/selftests/kvm/arm64/host_sve.c | 127 +++++++++++++++++++++++++++
->  2 files changed, 128 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-> index f62b0a5aba35..d37072054a3d 100644
-> --- a/tools/testing/selftests/kvm/Makefile.kvm
-> +++ b/tools/testing/selftests/kvm/Makefile.kvm
-> @@ -147,6 +147,7 @@ TEST_GEN_PROGS_arm64 = $(TEST_GEN_PROGS_COMMON)
->  TEST_GEN_PROGS_arm64 += arm64/aarch32_id_regs
->  TEST_GEN_PROGS_arm64 += arm64/arch_timer_edge_cases
->  TEST_GEN_PROGS_arm64 += arm64/debug-exceptions
-> +TEST_GEN_PROGS_arm64 += arm64/host_sve
->  TEST_GEN_PROGS_arm64 += arm64/hypercalls
->  TEST_GEN_PROGS_arm64 += arm64/mmio_abort
->  TEST_GEN_PROGS_arm64 += arm64/page_fault_test
-> diff --git a/tools/testing/selftests/kvm/arm64/host_sve.c b/tools/testing/selftests/kvm/arm64/host_sve.c
-> new file mode 100644
-> index 000000000000..3826772fd470
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/arm64/host_sve.c
-> @@ -0,0 +1,127 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +
+On Fri, Apr 18, 2025 at 7:50=E2=80=AFPM Suren Baghdasaryan <surenb@google.c=
+om> wrote:
+> With maple_tree supporting vma tree traversal under RCU and vma and
+> its important members being RCU-safe, /proc/pid/maps can be read under
+> RCU and without the need to read-lock mmap_lock. However vma content
+> can change from under us, therefore we make a copy of the vma and we
+> pin pointer fields used when generating the output (currently only
+> vm_file and anon_name). Afterwards we check for concurrent address
+> space modifications, wait for them to end and retry. While we take
+> the mmap_lock for reading during such contention, we do that momentarily
+> only to record new mm_wr_seq counter. This change is designed to reduce
+> mmap_lock contention and prevent a process reading /proc/pid/maps files
+> (often a low priority task, such as monitoring/data collection services)
+> from blocking address space updates.
+[...]
+> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> index b9e4fbbdf6e6..f9d50a61167c 100644
+> --- a/fs/proc/task_mmu.c
+> +++ b/fs/proc/task_mmu.c
+[...]
 > +/*
-> + * Host SVE: Check FPSIMD/SVE/SME save/restore over KVM_RUN ioctls.
-> + *
-> + * Copyright 2025 Arm, Ltd
+> + * Take VMA snapshot and pin vm_file and anon_name as they are used by
+> + * show_map_vma.
 > + */
-> +
-> +#include <errno.h>
-> +#include <signal.h>
-> +#include <sys/auxv.h>
-> +#include <asm/kvm.h>
-> +#include <kvm_util.h>
-> +
-> +#include "ucall_common.h"
-> +
-> +static void guest_code(void)
+> +static int get_vma_snapshot(struct proc_maps_private *priv, struct vm_ar=
+ea_struct *vma)
 > +{
-> +	for (int i = 0; i < 10; i++) {
-> +		GUEST_UCALL_NONE();
-> +	}
+> +       struct vm_area_struct *copy =3D &priv->vma_copy;
+> +       int ret =3D -EAGAIN;
 > +
-> +	GUEST_DONE();
+> +       memcpy(copy, vma, sizeof(*vma));
+> +       if (copy->vm_file && !get_file_rcu(&copy->vm_file))
+> +               goto out;
+
+I think this uses get_file_rcu() in a different way than intended.
+
+As I understand it, get_file_rcu() is supposed to be called on a
+pointer which always points to a file with a non-zero refcount (except
+when it is NULL). That's why it takes a file** instead of a file* - if
+it observes a zero refcount, it assumes that the pointer must have
+been updated in the meantime, and retries. Calling get_file_rcu() on a
+pointer that points to a file with zero refcount, which I think can
+happen with this patch, will cause an endless loop.
+(Just as background: For other usecases, get_file_rcu() is supposed to
+still behave nicely and not spuriously return NULL when the file* is
+concurrently updated to point to another file*; that's what that loop
+is for.)
+(If my understanding is correct, maybe we should document that more
+explicitly...)
+
+Also, I think you are introducing an implicit assumption that
+remove_vma() does not NULL out the ->vm_file pointer (because that
+could cause tearing and could theoretically lead to a torn pointer
+being accessed here).
+
+One alternative might be to change the paths that drop references to
+vma->vm_file (search for vma_close to find them) such that they first
+NULL out ->vm_file with a WRITE_ONCE() and do the fput() after that,
+maybe with a new helper like this:
+
+static void vma_fput(struct vm_area_struct *vma)
+{
+  struct file *file =3D vma->vm_file;
+
+  if (file) {
+    WRITE_ONCE(vma->vm_file, NULL);
+    fput(file);
+  }
+}
+
+Then on the lockless lookup path you could use get_file_rcu() on the
+->vm_file pointer _of the original VMA_, and store the returned file*
+into copy->vm_file.
+
+> +       if (!anon_vma_name_get_if_valid(copy))
+> +               goto put_file;
+> +
+> +       if (!mmap_lock_speculate_retry(priv->mm, priv->mm_wr_seq))
+> +               return 0;
+
+We only check for concurrent updates at this point, so up to here,
+anything we read from "copy" could contain torn pointers (both because
+memcpy() is not guaranteed to copy pointers atomically and because the
+updates to the original VMA are not done with WRITE_ONCE()).
+That probably means that something like the preceding
+anon_vma_name_get_if_valid() could crash on an access to a torn
+pointer.
+Please either do another mmap_lock_speculate_retry() check directly
+after the memcpy(), or ensure nothing before this point reads from
+"copy".
+
+> +       /* Address space got modified, vma might be stale. Re-lock and re=
+try. */
+> +       rcu_read_unlock();
+> +       ret =3D mmap_read_lock_killable(priv->mm);
+> +       if (!ret) {
+> +               /* mmap_lock_speculate_try_begin() succeeds when holding =
+mmap_read_lock */
+> +               mmap_lock_speculate_try_begin(priv->mm, &priv->mm_wr_seq)=
+;
+> +               mmap_read_unlock(priv->mm);
+> +               ret =3D -EAGAIN;
+> +       }
+> +
+> +       rcu_read_lock();
+> +
+> +       anon_vma_name_put_if_valid(copy);
+> +put_file:
+> +       if (copy->vm_file)
+> +               fput(copy->vm_file);
+> +out:
+> +       return ret;
 > +}
-> +
-> +void handle_sigill(int sig, siginfo_t *info, void *ctx)
-> +{
-> +	ucontext_t *uctx = ctx;
-> +
-> +	printf("  < host signal %d >\n", sig);
-> +
-> +	/*
-> +	 * Skip the UDF
-> +	 */
-> +	uctx->uc_mcontext.pc += 4;
-> +}
-> +
-> +void register_sigill_handler(void)
-> +{
-> +	struct sigaction sa = {
-> +		.sa_sigaction = handle_sigill,
-> +		.sa_flags = SA_SIGINFO,
-> +	};
-> +	sigaction(SIGILL, &sa, NULL);
-> +}
-> +
-> +static void do_sve_roundtrip(void)
-> +{
-> +	unsigned long before, after;
-> +
-> +	/*
-> +	 * Set all bits in a predicate register, force a save/restore via a
-> +	 * SIGILL (which handle_sigill() will recover from), then report
-> +	 * whether the value has changed.
-> +	 */
-> +	asm volatile(
-> +	"	.arch_extension sve\n"
-> +	"	ptrue	p0.B\n"
-> +	"	cntp	%[before], p0, p0.B\n"
-> +	"	udf #0\n"
-> +	"	cntp	%[after], p0, p0.B\n"
-> +	: [before] "=r" (before),
-> +	  [after] "=r" (after)
-> +	:
-> +	: "p0"
-> +	);
-> +
-> +	if (before != after) {
-> +		TEST_FAIL("Signal roundtrip discarded predicate bits (%ld => %ld)\n",
-> +			  before, after);
-> +	} else {
-> +		printf("Signal roundtrip preserved predicate bits (%ld => %ld)\n",
-> +		       before, after);
-> +	}
-> +}
-> +
-> +static void test_run(void)
-> +{
-> +	struct kvm_vcpu *vcpu;
-> +	struct kvm_vm *vm;
-> +	struct ucall uc;
-> +	bool guest_done = false;
-> +
-> +	register_sigill_handler();
-> +
-> +	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
-> +
-> +	do_sve_roundtrip();
-> +
-> +	while (!guest_done) {
-> +
-> +		printf("Running VCPU...\n");
-> +		vcpu_run(vcpu);
-> +
-> +		switch (get_ucall(vcpu, &uc)) {
-> +		case UCALL_NONE:
-> +			do_sve_roundtrip();
-> +			do_sve_roundtrip();
-> +			break;
-> +		case UCALL_DONE:
-> +			guest_done = true;
-> +			break;
-> +		case UCALL_ABORT:
-> +			REPORT_GUEST_ASSERT(uc);
-> +			break;
-> +		default:
-> +			TEST_FAIL("Unexpected guest exit");
-> +		}
-> +	}
-> +
-> +	kvm_vm_free(vm);
-> +}
-> +
-> +int main(void)
-> +{
-> +	/*
-> +	 * This is testing the host environment, we don't care about
-> +	 * guest SVE support.
-> +	 */
-> +	if (!(getauxval(AT_HWCAP) & HWCAP_SVE)) {
-> +		printf("SVE not supported\n");
-> +		return KSFT_SKIP;
-> +	}
-> +
-> +	test_run();
-> +	return 0;
-> +}
-> 
-> ---
-> base-commit: 8ffd015db85fea3e15a77027fda6c02ced4d2444
-> change-id: 20250226-kvm-selftest-sve-signal-1add0d9d716c
-> 
-> Best regards,
-> -- 
-> Mark Brown <broonie@kernel.org>
-> 
+[...]
+> @@ -266,39 +399,41 @@ static void get_vma_name(struct vm_area_struct *vma=
+,
+>                 } else {
+>                         *path =3D file_user_path(vma->vm_file);
+>                 }
+> -               return;
+> +               goto out;
+>         }
+>
+>         if (vma->vm_ops && vma->vm_ops->name) {
+>                 *name =3D vma->vm_ops->name(vma);
+
+This seems to me like a big, subtle change of semantics. After this
+change, vm_ops->name() will no longer receive a real VMA; and in
+particular, I think the .name implementation special_mapping_name used
+in special_mapping_vmops will have a UAF because it relies on
+vma->vm_private_data pointing to a live object.
+
+I think you'll need to fall back to using the mmap lock and the real
+VMA if you see a non-NULL vma->vm_ops->name pointer.
+
+>                 if (*name)
+> -                       return;
+> +                       goto out;
+>         }
+>
+>         *name =3D arch_vma_name(vma);
+>         if (*name)
+> -               return;
+> +               goto out;
+>
+>         if (!vma->vm_mm) {
+>                 *name =3D "[vdso]";
+> -               return;
+> +               goto out;
+>         }
+>
+>         if (vma_is_initial_heap(vma)) {
+>                 *name =3D "[heap]";
+> -               return;
+> +               goto out;
+>         }
+>
+>         if (vma_is_initial_stack(vma)) {
+>                 *name =3D "[stack]";
+> -               return;
+> +               goto out;
+>         }
+>
+>         if (anon_name) {
+>                 *name_fmt =3D "[anon:%s]";
+>                 *name =3D anon_name->name;
+> -               return;
+>         }
+> +out:
+> +       if (anon_name && !mmap_locked)
+> +               anon_vma_name_put(anon_name);
+
+Isn't this refcount drop too early, causing UAF read? We drop the
+reference on the anon_name here, but (on some paths) we're about to
+return anon_name->name to the caller through *name, and the caller
+will read from it.
+
+Ah, but I guess it's actually fine because the refcount increment was
+unnecessary in the first place, because the vma pointer actually
+points to a copy of the original VMA, and the copy has its own
+refcounted reference to the anon_name thanks to get_vma_snapshot()?
+It might be helpful to have some comments documenting which VMA
+pointers can point to copies.
 
