@@ -1,320 +1,188 @@
-Return-Path: <linux-kselftest+bounces-31910-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31911-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EC15AA1420
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 19:13:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE695AA1476
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 19:16:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3295D188FB67
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 17:09:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BEA02924B4D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 17:10:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B26EE2459E1;
-	Tue, 29 Apr 2025 17:09:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F64F2475CB;
+	Tue, 29 Apr 2025 17:10:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="p0Y1SOr0"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="sORLEGud"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2060.outbound.protection.outlook.com [40.107.237.60])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4BD5247298
-	for <linux-kselftest@vger.kernel.org>; Tue, 29 Apr 2025 17:09:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745946558; cv=none; b=mB6+jxoeif51XtYwcF9V22W3fnsE4OhbC3vzjXfDeskAEU+px3/IBkkF2r/IOkRvuraScSGEuDBrvYrV70yHkTaXemcwPy4SUDKb2tken7sZ2Jkfwq+bqUAbTL9dxee7rsZCdPG8YHT6QikoNKMaJ7T7xXCr4zp9wbTafiPdKmc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745946558; c=relaxed/simple;
-	bh=otdy+cHDnN0z4MKJuQ50lJc3kGS+4GqL7DVYHyt+3rE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XDKnCnWT9cSb8h+FHFjI2MOhArcETmUGjDJAaAaRUMPgTzkYHdoTct2MrggHuxgAtaDzPeUyGNp8oVGmqtoyiRnpbULojLLVU0iK3ovyLiUcdF/heeFr3nqx7ME2Uew1eVTrXBqfuxWzVewpSHWQP7M9uS37elEgltYu9daswmY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=p0Y1SOr0; arc=none smtp.client-ip=209.85.160.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-47666573242so357631cf.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Apr 2025 10:09:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1745946555; x=1746551355; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3wN1T3GMxNDHasA1P1pHfr57BfT4ryZUjRwhWQiFJ1U=;
-        b=p0Y1SOr0CUlCKP+s/+gwo4KXL7wHgqYLjL1M3mGNNtzo+9I6YcdWh2SkbRYTRbOmez
-         k9oqWBTwfwimfybknSFt9J9bIDfJTSGBcLe/3JyU7jLljxNQznPXsEOaFX5Chg3pxyik
-         ZcEhhnjF+29kbtBL3fF0Ss2a8ORcvF5vFi4jIJ6CVL9Ts8ayni6D53nth2MkEv03yHnX
-         s/4tjQlxCI+qaT2QYNfp8wf1vGaVxbrFBgNx0mQ16yNUpg7UKhLXKXGMmzjEeq2xd+RH
-         DqrUPxR7kQWJ5yxhYdMyWslLPd2ug/O2/OrLxydtL2jnQDeQRPUWU7cFblKIk75yWqRc
-         jvgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745946555; x=1746551355;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3wN1T3GMxNDHasA1P1pHfr57BfT4ryZUjRwhWQiFJ1U=;
-        b=biaNxM/CG3NmHU3Z2Gn4YaEa7whYL7a61kb3+Ka6x16LqqMKGJWdWa63ajRQKABRn5
-         KNJBLjFNZZbeJbvmQsgrgn5Caya/JoIiwNPQqSRfOlZa74UAtgpVaBLonaiLz7Nrr+gy
-         YnzwUA+LWn32uo5X9q+pTJTNWuKf1QCOC61hA1tgE3EdplVVTNueaPJDxvHFtBoqSmAh
-         rJJOYe6PXvR1Kb7xVQrtk04Rj7bNdOY7gt4Glb+ywyCZ5xXkTUgNONqe0r0ZoUmgNwV+
-         kMrIyEw55HaidQ32K5bBRSLOhLx1XYsgouZf78svddp9o23vCuu/nWKUoEOlm2PPAS72
-         hsFw==
-X-Forwarded-Encrypted: i=1; AJvYcCUVS97GEg5I2AJpe9YM9AA8dER6wk1T7lQlJ7FdfZo2MnnxXPFF+Une76L9bXjVu597/kAtprvhhWYw62c7pJs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy+xstqZ5VJ4HsNszZNXJUDUf/tg8WZqBWoHofp9Pu0UzUTpho2
-	8kwPgVJd2iEQlU/qW6WwufbCtKOcY+cXExaEWjqJaWTOuSNZ3ba9X/p8xndl4JjNfjF4e6rAuPl
-	pOIXVvu4ilc3Z/UiOeQpxsHIjFiFDJgppyLzT
-X-Gm-Gg: ASbGncvcDkon978kKGn3r+R9014j4UjUHIOEIMBWzBuHNRkmY3UY8NpPlOhdJd7/AmB
-	aOhf1LoPXCNxCVzon2b0ErT3r5MkufbXVhi+zwhOJ2g7c+/XvWuqXEJEW6q94DbDBnxWISp9SIP
-	X0pIKda0+TPgXPqtfSD+9irCIOewZQnku2fGOHk0x2kT9EH2iDMLI+U5j939M/JFM=
-X-Google-Smtp-Source: AGHT+IESKitBJO3sZv32xrVdF494ZNH19atUoJKC8GwVG1r2WedLX5sPmIE31lJgcwtfPpfMmDhKELfsvLaZi4LwOy0=
-X-Received: by 2002:ac8:7f4c:0:b0:47d:d252:4873 with SMTP id
- d75a77b69052e-488a5dedc42mr4952881cf.11.1745946555202; Tue, 29 Apr 2025
- 10:09:15 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E98D21DF73C;
+	Tue, 29 Apr 2025 17:10:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.60
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1745946656; cv=fail; b=ICCFu5PUYwL03QoBobIhujEFu9JH5zy4j8gOaIpatYqJXCxulCMc7/1CWAdeayFKKc6yPiWue7revTnG278FrjBPOOn+V9XtasF7tlTThMUF//K/jA6AxAiHnk2zPFDpdBoU+Wvhpt9DDVFFXqJeQ1tYq5YzXSeAIY7xpjp10sU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1745946656; c=relaxed/simple;
+	bh=3Qm5oojHNGMyDGQe3QFz7Hhhp5HTrhg7CIldgoM2mJE=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JR/39mil4t74/+loBWuVRM1EX7UU709MHXQcgYQHU+m9pVXo0lXCdEsfbUTX34dFJJfCf6FExGU/OPN1EuMNLyuVcdPOYDVIh3oeAt4leFSg/eEr09Qp8Eu6hfrcy2IeAsBy06mY8cDNbvlgvHZ1KWuigqtFYe57Vk++PV3IAeo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=sORLEGud; arc=fail smtp.client-ip=40.107.237.60
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=MAPtA37D2HG2n8Fv27VB33FpBdPsGVZ17giWDv1hb4G4QivTwLT2gpC1sGGBSQlUNxJ2otnUP2h2g/kSkvly51hs1rh+CQ3S9aIDWnXLkTdt6qoZlFfdRgJb9IIVh3iWeaLOsFg1blZlt1Y64Ga8Lzq9XumcEOcbD0/xX4E6jZgT/G5T7E/ephjY2bN093ludzVczYFLCUDOlZhshQqqcRFdklARsKILjcNN2dH4t9UQzAXfdT5/o9SRv7nwv379SZjsBCshKSw9P+p8kUqGHI7beFWLLjhjsaPeSVc8u1bbp2VTRHLLzJeDLG2sfX2uM/pKSxQCL7pJnc35Q5EfYQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xH//tbfB8ZvbQC2Z7CBZ43RpuiqFuQWtDv72Nrv6IMw=;
+ b=EaYapucddJRIgIXTcxdM3JeiaXFPRJBv4kGSU2tl6gc1ISMEEXAYe70Gok/mx4mP2vjwRUJMevNpNI7bvQwvQAQw+D4C7sgfuXxmgkxOhAjUmf2LFo/7BBXw1zE4G8HiXfCxjq0X7XZV89EpXduXzlNqiE144xIbNISw2U8A8lUqJ3Z6EO52oNBdje1Dn2aKDq0AhlfLrmyiTqXHirGsVgZJBLlpAS81yPYO28hrH7fIK6EvOpZCrXEV6K7xkbO4N04BpME91AmfXvkVd4H+Voh1GL9eOIRYjRk2P+CUPD54oSBzPWHKCmVztTZBwa+Fz6kjGBunDdFPugRFsonYXA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=google.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xH//tbfB8ZvbQC2Z7CBZ43RpuiqFuQWtDv72Nrv6IMw=;
+ b=sORLEGudqfCA/CG12jJj84M0WjpdJ8QxVKvaY8BSp7uMG7cirix2PVSb4NEQTc5Y1+xrVUBA3xaAsQGse8PfEv/d1W9aQh3/FNUBzjkck6+93U3y/0c1XI30fzFIWfS0Zcc6caXrj2NbOqRnBYvQd3I721cPPeTald2aDCH34NOXA72RJ5zFWUeI1PpFigqJW1M6KnBEF5qvMFFeWra1o3+WN3rtjlpD9H8r5O4W6tTL4ZQEI7lmv1uhHCuQ6s16MhrhV33DGCmPy83XHgihhL7v+ppRKHwZHK8I0mOfyUWQRDMMduMzd6pO3ssuTRJThT+UkdVnzEee6KEaUJG1uQ==
+Received: from BN0PR04CA0171.namprd04.prod.outlook.com (2603:10b6:408:eb::26)
+ by SJ2PR12MB9192.namprd12.prod.outlook.com (2603:10b6:a03:55d::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8678.30; Tue, 29 Apr
+ 2025 17:10:47 +0000
+Received: from BN3PEPF0000B06B.namprd21.prod.outlook.com
+ (2603:10b6:408:eb:cafe::7a) by BN0PR04CA0171.outlook.office365.com
+ (2603:10b6:408:eb::26) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8655.25 via Frontend Transport; Tue,
+ 29 Apr 2025 17:10:47 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ BN3PEPF0000B06B.mail.protection.outlook.com (10.167.243.70) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8722.2 via Frontend Transport; Tue, 29 Apr 2025 17:10:46 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 29 Apr
+ 2025 10:10:33 -0700
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14; Tue, 29 Apr 2025 10:10:32 -0700
+Received: from Asurada-Nvidia (10.127.8.14) by mail.nvidia.com
+ (10.126.190.182) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14 via Frontend
+ Transport; Tue, 29 Apr 2025 10:10:30 -0700
+Date: Tue, 29 Apr 2025 10:10:28 -0700
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: Pranjal Shrivastava <praan@google.com>
+CC: <jgg@nvidia.com>, <kevin.tian@intel.com>, <corbet@lwn.net>,
+	<will@kernel.org>, <bagasdotme@gmail.com>, <robin.murphy@arm.com>,
+	<joro@8bytes.org>, <thierry.reding@gmail.com>, <vdumpa@nvidia.com>,
+	<jonathanh@nvidia.com>, <shuah@kernel.org>, <jsnitsel@redhat.com>,
+	<nathan@kernel.org>, <peterz@infradead.org>, <yi.l.liu@intel.com>,
+	<mshavit@google.com>, <zhangzekun11@huawei.com>, <iommu@lists.linux.dev>,
+	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-tegra@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <patches@lists.linux.dev>,
+	<mochs@nvidia.com>, <alok.a.tiwari@oracle.com>, <vasant.hegde@amd.com>
+Subject: Re: [PATCH v2 11/22] iommufd: Add for-driver helpers
+ iommufd_vcmdq_depend/undepend()
+Message-ID: <aBEIBKdjuecVHgpU@Asurada-Nvidia>
+References: <cover.1745646960.git.nicolinc@nvidia.com>
+ <a25c9454c17663f9e79b37bc2908bf3a99856be6.1745646960.git.nicolinc@nvidia.com>
+ <aBDIpz7w8wxIn_AF@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250418174959.1431962-1-surenb@google.com> <20250418174959.1431962-8-surenb@google.com>
- <CAG48ez3YLWh9hXQQdGVQ7hCsd=k_i2Z2NO6qzT6NaOYiRjy=nw@mail.gmail.com>
-In-Reply-To: <CAG48ez3YLWh9hXQQdGVQ7hCsd=k_i2Z2NO6qzT6NaOYiRjy=nw@mail.gmail.com>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Tue, 29 Apr 2025 10:09:04 -0700
-X-Gm-Features: ATxdqUHykEeEaRUDfVFPrHYAFtv8-ek3ih5pTaKrNuCjWMlHoN1VLkz4YajbEFo
-Message-ID: <CAJuCfpGGiwTbMeGAeYNtQ5SsFenUw8up6ToLy=VstULM_TSoXA@mail.gmail.com>
-Subject: Re: [PATCH v3 7/8] mm/maps: read proc/pid/maps under RCU
-To: Jann Horn <jannh@google.com>
-Cc: Al Viro <viro@zeniv.linux.org.uk>, brauner@kernel.org, 
-	linux-fsdevel@vger.kernel.org, akpm@linux-foundation.org, 
-	Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, david@redhat.com, 
-	vbabka@suse.cz, peterx@redhat.com, hannes@cmpxchg.org, mhocko@kernel.org, 
-	paulmck@kernel.org, shuah@kernel.org, adobriyan@gmail.com, 
-	josef@toxicpanda.com, yebin10@huawei.com, linux@weissschuh.net, 
-	willy@infradead.org, osalvador@suse.de, andrii@kernel.org, 
-	ryan.roberts@arm.com, christophe.leroy@csgroup.eu, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <aBDIpz7w8wxIn_AF@google.com>
+X-NV-OnPremToCloud: AnonymousSubmission
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN3PEPF0000B06B:EE_|SJ2PR12MB9192:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4d970dde-838e-42d9-25f8-08dd8740c8a4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|36860700013|1800799024|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?cpJ6GwYTmxqcWzqVV9pMy+n9hLpHKru4eML91WqCZDwatEmIGSXcuFq+RMSK?=
+ =?us-ascii?Q?H2LGxbP+eklnY3udutrOAOW1fGKaaIiI1HQjBziKE+xvheHW4EyUJrf//qFC?=
+ =?us-ascii?Q?bV+KXYRemhSt24Mz/AvirCMi2k/ija9eks4iLAY6QwR2Mbyyo8chFNi/xQIG?=
+ =?us-ascii?Q?ChG/o6gn7zSCNHL+l/ahMuJhzv/Eupiz7QeDbNyHklYCCSC1Pw5dyi/dXXyz?=
+ =?us-ascii?Q?leaZH9M6C3KMfwWaaqS8DZBxJhQ9i8+D5OoBUhLnbI/jga5a+VR4CaUm4ABk?=
+ =?us-ascii?Q?/Y45vaeydC8hy6UU7ODSAwuCHWs3g8n/WC8rcGQA60lMU3DpdmK8X01rGD7u?=
+ =?us-ascii?Q?1mMbQr4eHmoWaYXi3zA0o8nVG1fMZCpfsIgujyPk15fP0qjckd+Yl1zAQ1nI?=
+ =?us-ascii?Q?0VhuJ66nknA7OmxwlpdCrG+MPKMJ65q7tbD2/+ZM/Y+lEdSQe9wolVNiQsNn?=
+ =?us-ascii?Q?dQT/pcWwFFVNYkRQozVjSSABy2P5MccS7U84UMOEPUgS4TdcAy/3661DqcQa?=
+ =?us-ascii?Q?btbRP4K6mgQnV7z1ZpDBr8evVvdkO6O6H0oTYuw7f4liQ/ZEBDWqVv20RMU2?=
+ =?us-ascii?Q?Z9XmZX0Yix7sz1MXxWDE29Zkt+FviFS6AlwXuQnFtDvUciLBwisHlwRw2l2i?=
+ =?us-ascii?Q?1W/kPVMOdwQDGY9+RxSaKzDB1hYM6TG6rEb7gnqgpNJ+N/PRQCMDspiw0h/1?=
+ =?us-ascii?Q?vF9Ii/c2udyO/dLxPHoc9cfE01YQR+kLM7jbZApLhJZnLKduqxvbhyxkjv4b?=
+ =?us-ascii?Q?bI1ebEGQIfuXHdear7lbmmB8zk5tBWMwd44RRfOYqi65SlzW/XvNyC8szceP?=
+ =?us-ascii?Q?x84cbacf6CnLx63Rhx2mgwhWYp9xLxQl/9nTsmSXv4Ee9gFnyXiQJsKW+9E0?=
+ =?us-ascii?Q?wj+d6pav6judJ4Hl7yJ0R8Y312X/mDR99ahPvrFplENLK+U8bMiZ/7vKI/Ng?=
+ =?us-ascii?Q?VFjQv19c/ySSpzopwTZFJXsMMxvQSLsBM4EkSlCyuFwDxvd59LtpPzlgvflB?=
+ =?us-ascii?Q?Uj+hvY3OGhS8BNOSpeiWAQNf2e/RDS7IK2WGus7UKkaNFiDV8wYsOQtT4KBH?=
+ =?us-ascii?Q?RenK+NxWD9ztzA+kbD6+KUIgfLXmm1CI1amxNpuTmmy/Fpc7gnBRJfv7G97Y?=
+ =?us-ascii?Q?FhBUk2vcqu+pvoYFh37dPk+kFQK4IXEZWg9Kp2M109MU4tNS+WG7MnQ4SrDS?=
+ =?us-ascii?Q?AmXlxKYcJPK8Au10oHRz+ib6FMz2EU0pmO1K55tMJoGfe+Sj1NDvDoNrRokb?=
+ =?us-ascii?Q?0/Bsb1ZHGuHa1Dfz4Zqf5nt175rysamu9XN4dslcI+pkjPE7smBHh/LIFcrV?=
+ =?us-ascii?Q?QRwmiGMlqCKF8ojF4jKWGnkgU8Jo0wmXsu1ND+lncw7L+6cX1IWXkkVNJC9A?=
+ =?us-ascii?Q?MXEUfD9mbEG2ZU9cMCf8ZmPwghOM3DsnDoIhexNPY8YvD8XbwIC6dV8zGPKJ?=
+ =?us-ascii?Q?NIIREMomObprfeKum4DcOr0DYZV+7JTOAsTBicQsQMcIHgasJHsGU8ZM8Yob?=
+ =?us-ascii?Q?Tl7+D1XNO9d+0cS2pnaTa4KTmAPyyzXw28rK?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(7416014)(36860700013)(1800799024)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2025 17:10:46.8461
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4d970dde-838e-42d9-25f8-08dd8740c8a4
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN3PEPF0000B06B.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB9192
 
-On Tue, Apr 29, 2025 at 8:40=E2=80=AFAM Jann Horn <jannh@google.com> wrote:
->
-> On Fri, Apr 18, 2025 at 7:50=E2=80=AFPM Suren Baghdasaryan <surenb@google=
-.com> wrote:
-> > With maple_tree supporting vma tree traversal under RCU and vma and
-> > its important members being RCU-safe, /proc/pid/maps can be read under
-> > RCU and without the need to read-lock mmap_lock. However vma content
-> > can change from under us, therefore we make a copy of the vma and we
-> > pin pointer fields used when generating the output (currently only
-> > vm_file and anon_name). Afterwards we check for concurrent address
-> > space modifications, wait for them to end and retry. While we take
-> > the mmap_lock for reading during such contention, we do that momentaril=
-y
-> > only to record new mm_wr_seq counter. This change is designed to reduce
-> > mmap_lock contention and prevent a process reading /proc/pid/maps files
-> > (often a low priority task, such as monitoring/data collection services=
-)
-> > from blocking address space updates.
-> [...]
-> > diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-> > index b9e4fbbdf6e6..f9d50a61167c 100644
-> > --- a/fs/proc/task_mmu.c
-> > +++ b/fs/proc/task_mmu.c
-> [...]
-> > +/*
-> > + * Take VMA snapshot and pin vm_file and anon_name as they are used by
-> > + * show_map_vma.
-> > + */
-> > +static int get_vma_snapshot(struct proc_maps_private *priv, struct vm_=
-area_struct *vma)
-> > +{
-> > +       struct vm_area_struct *copy =3D &priv->vma_copy;
-> > +       int ret =3D -EAGAIN;
-> > +
-> > +       memcpy(copy, vma, sizeof(*vma));
-> > +       if (copy->vm_file && !get_file_rcu(&copy->vm_file))
-> > +               goto out;
->
-> I think this uses get_file_rcu() in a different way than intended.
->
-> As I understand it, get_file_rcu() is supposed to be called on a
-> pointer which always points to a file with a non-zero refcount (except
-> when it is NULL). That's why it takes a file** instead of a file* - if
-> it observes a zero refcount, it assumes that the pointer must have
-> been updated in the meantime, and retries. Calling get_file_rcu() on a
-> pointer that points to a file with zero refcount, which I think can
-> happen with this patch, will cause an endless loop.
-> (Just as background: For other usecases, get_file_rcu() is supposed to
-> still behave nicely and not spuriously return NULL when the file* is
-> concurrently updated to point to another file*; that's what that loop
-> is for.)
+On Tue, Apr 29, 2025 at 12:40:07PM +0000, Pranjal Shrivastava wrote:
+> On Fri, Apr 25, 2025 at 10:58:06PM -0700, Nicolin Chen wrote:
+> >  /* Caller should xa_lock(&viommu->vdevs) to protect the return value */
+> >  struct device *iommufd_viommu_find_dev(struct iommufd_viommu *viommu,
+> >  				       unsigned long vdev_id)
+> 
+> If I'm getting this right, I think we are setting up dependencies like:
+> vcmdq[2] -> vcmdq[1] -> vcmdq[0] based on refcounts of each object,
+> which ensures that the unmaps happen in descending order..
 
-Ah, I see. I wasn't aware of this subtlety. I think this is fixable by
-checking the return value of get_file_rcu() and retrying speculation
-if it changed.
+Yes.
 
-> (If my understanding is correct, maybe we should document that more
-> explicitly...)
+> If that's right, Is it fair to have iommufd_vcmdq_depend/undepend in the
+> core code itself? Since it's a driver-level limitation, I think we
+> should just have iommufd_object_depend/undepend in the core code and the
+> iommufd_vcmdq_depend/undepend can move into the CMDQV driver?
 
-Good point. I'll add comments for get_file_rcu() as a separate patch.
+The moment we added iommufd_object_depend/undepend, we already had
+a blur boundary here since we had no choice to handle in the driver
+but to ask core for help.
 
->
-> Also, I think you are introducing an implicit assumption that
-> remove_vma() does not NULL out the ->vm_file pointer (because that
-> could cause tearing and could theoretically lead to a torn pointer
-> being accessed here).
->
-> One alternative might be to change the paths that drop references to
-> vma->vm_file (search for vma_close to find them) such that they first
-> NULL out ->vm_file with a WRITE_ONCE() and do the fput() after that,
-> maybe with a new helper like this:
->
-> static void vma_fput(struct vm_area_struct *vma)
-> {
->   struct file *file =3D vma->vm_file;
->
->   if (file) {
->     WRITE_ONCE(vma->vm_file, NULL);
->     fput(file);
->   }
-> }
->
-> Then on the lockless lookup path you could use get_file_rcu() on the
-> ->vm_file pointer _of the original VMA_, and store the returned file*
-> into copy->vm_file.
+The iommufd_vcmdq_depend/undepend is just a pair of macros to help
+validating the structure inputs that are core defined. It is quite
+fair to put next to the raw functions. I also had the notes on top
+of the raw functions suggesting callers to use the macros instead.
 
-Ack. Except for storing the return value of get_file_rcu(). I think
-once we detect that  get_file_rcu() returns a different file we should
-bail out and retry. The change in file is an indication that the vma
-got changed from under us, so whatever we have is stale.
-
->
-> > +       if (!anon_vma_name_get_if_valid(copy))
-> > +               goto put_file;
-> > +
-> > +       if (!mmap_lock_speculate_retry(priv->mm, priv->mm_wr_seq))
-> > +               return 0;
->
-> We only check for concurrent updates at this point, so up to here,
-> anything we read from "copy" could contain torn pointers (both because
-> memcpy() is not guaranteed to copy pointers atomically and because the
-> updates to the original VMA are not done with WRITE_ONCE()).
-> That probably means that something like the preceding
-> anon_vma_name_get_if_valid() could crash on an access to a torn
-> pointer.
-> Please either do another mmap_lock_speculate_retry() check directly
-> after the memcpy(), or ensure nothing before this point reads from
-> "copy".
-
-Ack. I'll add mmap_lock_speculate_retry() check right after memcpy().
-
->
-> > +       /* Address space got modified, vma might be stale. Re-lock and =
-retry. */
-> > +       rcu_read_unlock();
-> > +       ret =3D mmap_read_lock_killable(priv->mm);
-> > +       if (!ret) {
-> > +               /* mmap_lock_speculate_try_begin() succeeds when holdin=
-g mmap_read_lock */
-> > +               mmap_lock_speculate_try_begin(priv->mm, &priv->mm_wr_se=
-q);
-> > +               mmap_read_unlock(priv->mm);
-> > +               ret =3D -EAGAIN;
-> > +       }
-> > +
-> > +       rcu_read_lock();
-> > +
-> > +       anon_vma_name_put_if_valid(copy);
-> > +put_file:
-> > +       if (copy->vm_file)
-> > +               fput(copy->vm_file);
-> > +out:
-> > +       return ret;
-> > +}
-> [...]
-> > @@ -266,39 +399,41 @@ static void get_vma_name(struct vm_area_struct *v=
-ma,
-> >                 } else {
-> >                         *path =3D file_user_path(vma->vm_file);
-> >                 }
-> > -               return;
-> > +               goto out;
-> >         }
-> >
-> >         if (vma->vm_ops && vma->vm_ops->name) {
-> >                 *name =3D vma->vm_ops->name(vma);
->
-> This seems to me like a big, subtle change of semantics. After this
-> change, vm_ops->name() will no longer receive a real VMA; and in
-> particular, I think the .name implementation special_mapping_name used
-> in special_mapping_vmops will have a UAF because it relies on
-> vma->vm_private_data pointing to a live object.
-
-Ah, I see. IOW, vma->vm_private_data might change from under us and I
-don't detect that. Moreover this is just an example and .name() might
-depend on other things.
-
->
-> I think you'll need to fall back to using the mmap lock and the real
-> VMA if you see a non-NULL vma->vm_ops->name pointer.
-
-Yeah, either that or obtain the name and make a copy during
-get_vma_snapshot() using original vma. Will need to check which way is
-better.
-
->
-> >                 if (*name)
-> > -                       return;
-> > +                       goto out;
-> >         }
-> >
-> >         *name =3D arch_vma_name(vma);
-> >         if (*name)
-> > -               return;
-> > +               goto out;
-> >
-> >         if (!vma->vm_mm) {
-> >                 *name =3D "[vdso]";
-> > -               return;
-> > +               goto out;
-> >         }
-> >
-> >         if (vma_is_initial_heap(vma)) {
-> >                 *name =3D "[heap]";
-> > -               return;
-> > +               goto out;
-> >         }
-> >
-> >         if (vma_is_initial_stack(vma)) {
-> >                 *name =3D "[stack]";
-> > -               return;
-> > +               goto out;
-> >         }
-> >
-> >         if (anon_name) {
-> >                 *name_fmt =3D "[anon:%s]";
-> >                 *name =3D anon_name->name;
-> > -               return;
-> >         }
-> > +out:
-> > +       if (anon_name && !mmap_locked)
-> > +               anon_vma_name_put(anon_name);
->
-> Isn't this refcount drop too early, causing UAF read? We drop the
-> reference on the anon_name here, but (on some paths) we're about to
-> return anon_name->name to the caller through *name, and the caller
-> will read from it.
->
-> Ah, but I guess it's actually fine because the refcount increment was
-> unnecessary in the first place, because the vma pointer actually
-> points to a copy of the original VMA, and the copy has its own
-> refcounted reference to the anon_name thanks to get_vma_snapshot()?
-> It might be helpful to have some comments documenting which VMA
-> pointers can point to copies.
-
-If I follow Andrii's suggestion and avoid vma copying I'll need to
-implement careful handling of pointers and allow get_vma_name() to
-fail indicating that vma changed from under us. Let me see if this is
-still doable in the light of your findings.
-
-Thanks for the insightful review and welcome back!
+Thanks
+Nicolin
 
