@@ -1,140 +1,266 @@
-Return-Path: <linux-kselftest+bounces-31903-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-31904-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 621AEAA0F78
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 16:49:29 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64827AA1079
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 17:28:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6A21A1895A6B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 14:49:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5CA9F7B4ACF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Apr 2025 15:26:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D1EB21504F;
-	Tue, 29 Apr 2025 14:49:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dT5RlqXp"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EABB22171A;
+	Tue, 29 Apr 2025 15:27:37 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 773E417588
-	for <linux-kselftest@vger.kernel.org>; Tue, 29 Apr 2025 14:49:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 741E5221703;
+	Tue, 29 Apr 2025 15:27:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745938155; cv=none; b=WsfK1kYYt6RKuW5PgphZzfqUN29Wwlcxfx8qhCLQLd+k8s24nj5Livb8SSH30bcQOre0T3NeabJk4LJLlhDWC+CEqiCchzrHjlBJ9eHZBwdQN+Z/KZc3i4Xc2FMUwZWxbWhU0JwSLIeK9gPCuP2NSlnRBKPl5lpHdlnnk57Sag4=
+	t=1745940457; cv=none; b=DD7hOps0zyvbJP6FmyXj6zfuraq+Sm+oSF5cdPivX0kktsSoqGyhVZ5EOYh/3opJ90QulqTSFfPS7K62whCOqiSelhuOoAobig7Nyq5YBTJcQABE5RAQpqE4HE1OQLmktyvUAaHPhZgszPOmWx38VVTiW+bjy5xLIKGc78e5kM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745938155; c=relaxed/simple;
-	bh=GLzAW9i8G2S790fvJT54iIGjcBXQWF5+pxqBgUrcd5Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qHuAhsCogT7X9mDuWk8p2EEh936wf1Wb95DeGpV6zqwTKrclIGZ9uKwJ4kh2rPJt+pPmDbWSsW+KskrsOHFG2fFEmBEp2lVkVUuktMdmIbA7f86EBk8CZlsoy6QjQmXyTnfrt4aL9d/N3REGKQt0iHBOPhzQ8gYGgExnIhkn6nA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dT5RlqXp; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1745938152;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zRLeE5mXTuY3mhtQAJn1s429K2TNKhmag459CJyPsyA=;
-	b=dT5RlqXpyj5Up0R8mie1Su8PKQ4nQKGZZIGhwRNq1y4uBkIie7NA0iSUaxY7M1MaovPrw5
-	NUCaEaSSrYrJjdVaWQzecNh6ckmy42F6m06Lmanm5muEM1guyTfhQ62UNDVLojTYeT3Aze
-	WwEsInZv5c0aJM3/s/35SENggq2xbZw=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-353-9-ZDVXb8MTSsI34RL8ZIvA-1; Tue, 29 Apr 2025 10:49:10 -0400
-X-MC-Unique: 9-ZDVXb8MTSsI34RL8ZIvA-1
-X-Mimecast-MFC-AGG-ID: 9-ZDVXb8MTSsI34RL8ZIvA_1745938150
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-440a4e2bad7so17204735e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Apr 2025 07:49:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745938149; x=1746542949;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zRLeE5mXTuY3mhtQAJn1s429K2TNKhmag459CJyPsyA=;
-        b=iDpEOz50R5b8z+FXt2GMy8EOgKj2WIeUFudy0ppjxrnDQMoiiMo/l+BIgMDppzl1rV
-         zlGCcHZOCue8qtf5lCJmyep03bIwvUaAqofim/ao2jKDG/c1FQz/DSjAe8qLaPD94v3k
-         E2ruKGNGKbP9n1d1VpvQVnp6COJzrkoBn8z9HHNBW4N9MCcr4XKMcq+RZtSkuYiESN5V
-         WbWbUIGOsRHOUjEG1qMUH0ZCHPhy8+BvEIN2YW8/y6H7TWeJpktiUrIUi8wOci7TERNK
-         ffBiZh55/yFWT1HfPH/ghWB1QSKnccqJ7uVIj7DTz8IlT9koga9p6YnI9Ah6TIDn5crQ
-         uk/A==
-X-Forwarded-Encrypted: i=1; AJvYcCXrqTfDhoAsZ0glUHDc710/5V8aYXdtv9BxukwwnTN5w8Ju6lSoaShq5BG2pIwDVANZ/DkvorzhZUQYHR32ZRI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyDStEvjx8mm0rkVN0uwZN/feUSCwnAUI/ZNDgGy0tiXvAfZURe
-	EUMTm87kbvVR8efGIF3JBF3roAmkA4zLdCtV+OpPRrNs7KDQNRDkjoRFHdAKMFoglzBf/Llgm8a
-	OhQe8oa1BGDE52KeqNtkdeML77yFdIFg/S3TYtbkdyBZ0Rf293Y5bOdDrdzqAOK6DVg==
-X-Gm-Gg: ASbGncsOsudM5lJc/1UXodcdE4W6KWicShHA81NrVUK1ilPtFVl2I5XH6PUI6w9wmSS
-	cXVt87F7y6dCD2y/ceK56HjRc6JdtXkKHEhwgOUiEsLnjQAhVG1N/nn4rpSGXbRh31q/QzNVjF6
-	bEgKwfo8Q4AhwWmvbR+jZ5uz6FboSmf/mFNBEpie1iT6SOwj8Z31aJZ64XJPiW8dTDLIDb2UYKt
-	OKZZaUUeK1XPL589CFVno090GqQpCg5OEOHk+uxyi7VpAz1Vr8K4S0d79bfCOSVgxZKxy0bYTY3
-	fqSzuuzrCBMJP/jC178=
-X-Received: by 2002:a7b:cb88:0:b0:43b:baf7:76e4 with SMTP id 5b1f17b1804b1-441acaa8d6amr27372785e9.1.1745938149542;
-        Tue, 29 Apr 2025 07:49:09 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGAU/uIt3jIn6qteBdEJpE7YYQmT2sXmtYbeftFAijdpp1guCLQBM3tVBZM1Yl/ZYHze6lAag==
-X-Received: by 2002:a7b:cb88:0:b0:43b:baf7:76e4 with SMTP id 5b1f17b1804b1-441acaa8d6amr27372525e9.1.1745938149201;
-        Tue, 29 Apr 2025 07:49:09 -0700 (PDT)
-Received: from ?IPV6:2a0d:3344:2726:1910::f39? ([2a0d:3344:2726:1910::f39])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-440a5303c68sm158323505e9.12.2025.04.29.07.49.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Apr 2025 07:49:08 -0700 (PDT)
-Message-ID: <6f9d20d9-8037-438f-8281-7eac82289696@redhat.com>
-Date: Tue, 29 Apr 2025 16:49:07 +0200
+	s=arc-20240116; t=1745940457; c=relaxed/simple;
+	bh=tRzFMDqiQktHIzjzC5iKvHZSY49zCoD2GYhyyzs/XnE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HcrPpmyIjSLIoqFYIMyaYSIvHqepFJDJ6wZ5TXMgr4WShUuPpcnQyUR6MNO1jl4odtMpusgG30WLX1cEcwzif65YDFxtAhMcy7i8B5QybXfM37F/erUXMxMJOqTmcaGJEMazAQDYBE7rnHlMdfb8lEYVfvlEyAzkdb3ObpTJ/pg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D05CC1515;
+	Tue, 29 Apr 2025 08:27:27 -0700 (PDT)
+Received: from J2N7QTR9R3.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1ADB83F673;
+	Tue, 29 Apr 2025 08:27:32 -0700 (PDT)
+Date: Tue, 29 Apr 2025 16:27:27 +0100
+From: Mark Rutland <mark.rutland@arm.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
+Subject: Re: [PATCH] KVM: selftests: add test for SVE host corruption
+Message-ID: <aBDv39FD7eDYoplg@J2N7QTR9R3.cambridge.arm.com>
+References: <20250417-kvm-selftest-sve-signal-v1-1-6330c2f3da0c@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next] selftests: net: exit cleanly on SIGTERM /
- timeout
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- andrew+netdev@lunn.ch, horms@kernel.org, petrm@nvidia.com,
- willemb@google.com, sdf@fomichev.me, linux-kselftest@vger.kernel.org
-References: <20250425151757.1652517-1-kuba@kernel.org>
- <680cf896280c4_193a06294a6@willemb.c.googlers.com.notmuch>
- <20250428132425.318f2a51@kernel.org>
- <68102b0477fcc_2609d429482@willemb.c.googlers.com.notmuch>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <68102b0477fcc_2609d429482@willemb.c.googlers.com.notmuch>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250417-kvm-selftest-sve-signal-v1-1-6330c2f3da0c@kernel.org>
 
-On 4/29/25 3:27 AM, Willem de Bruijn wrote:
-> Reviewed-by: Willem de Bruijn <willemb@google.com>
+On Thu, Apr 17, 2025 at 12:32:49AM +0100, Mark Brown wrote:
+> This test program, originally written by Mark Rutland and lightly modified
+> by me for upstream,
+
+For context, I had originally pushed this as a WIP to:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?h=arm64/kvm/fpsimd-tests&id=a2f7319f5b13f5f5354e6186925b3bb8f2d2966e
+
+> verifies that we do not have the issues with host SVE
+> state being discarded which were fixed in
 > 
-> Jakub Kicinski wrote:
->> On Sat, 26 Apr 2025 11:15:34 -0400 Willem de Bruijn wrote:
->>>> @@ -193,6 +198,19 @@ KSFT_DISRUPTIVE = True
->>>>      return env
->>>>  
->>>>  
->>>> +term_cnt = 0
->>>> +  
->>>
->>> A bit ugly to initialize this here. Also, it already is initialized
->>> below.
->>
->> We need a global so that the signal handler can access it.
->> Python doesn't have syntax to define a variable without a value.
->> Or do you suggest term_cnt = None ?
+>    fbc7e61195e2 ("KVM: arm64: Unconditionally save+flush host FPSIMD/SVE/SME state")
 > 
-> I meant that the "global term_cnt" in ksft_run below already creates
-> the global var, and is guaranteed to do so before _ksft_intr, so no
-> need to also define it outside a function.
+> by running a simple VM while checking the SVE register state for
+> corruption.
+
+Minor nit, but this doesn't verify the absence of the issue, as that can
+be masked by preemption. I would suggest:
+
+| Until recently, the kernel could unexpectedly discard SVE state for a
+| period after a KVM_RUN ioctl, when the guest did not execute any
+| FPSIMD/SVE/SME instructions. We fixed that issue in commit:
+|
+|   fbc7e61195e2 ("KVM: arm64: Unconditionally save+flush host FPSIMD/SVE/SME state")
+|
+| Add a test which tries to provoke that issue by manipulating SVE state
+| before/after running a guest which does not execute any FPSIMD/SVE/SME
+| instructions. The test executes a handful of iterations to miminize
+| the risk that the issue is masked by preemption.
+
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+
+Looks like my Signed-off-by got dropped by accident; it should be above
+yours here.
+
+Aside from that, and the initial feature test, this looks pretty much
+identical to my original WIP.
+
+I'm not sure if it's worth keeping all the printf() calls, which were
+only there to help me check the UDF trap was being handled correctly.
+
+Either way, with the commit message updated and SoB restored:
+
+Acked-by: Mark Rutland <mark.rutland@arm.com>
+
+Mark.
+
+> ---
+>  tools/testing/selftests/kvm/Makefile.kvm     |   1 +
+>  tools/testing/selftests/kvm/arm64/host_sve.c | 127 +++++++++++++++++++++++++++
+>  2 files changed, 128 insertions(+)
 > 
-> Obviously not very important, don't mean to ask for a respin. LGTM.
-
-FWIW I think it's better to avoid the unneeded assignment in global
-scope, so I would suggest either follow-up or a v2, whatever is simpler.
-
-Thanks,
-
-Paolo
-
+> diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+> index f62b0a5aba35..d37072054a3d 100644
+> --- a/tools/testing/selftests/kvm/Makefile.kvm
+> +++ b/tools/testing/selftests/kvm/Makefile.kvm
+> @@ -147,6 +147,7 @@ TEST_GEN_PROGS_arm64 = $(TEST_GEN_PROGS_COMMON)
+>  TEST_GEN_PROGS_arm64 += arm64/aarch32_id_regs
+>  TEST_GEN_PROGS_arm64 += arm64/arch_timer_edge_cases
+>  TEST_GEN_PROGS_arm64 += arm64/debug-exceptions
+> +TEST_GEN_PROGS_arm64 += arm64/host_sve
+>  TEST_GEN_PROGS_arm64 += arm64/hypercalls
+>  TEST_GEN_PROGS_arm64 += arm64/mmio_abort
+>  TEST_GEN_PROGS_arm64 += arm64/page_fault_test
+> diff --git a/tools/testing/selftests/kvm/arm64/host_sve.c b/tools/testing/selftests/kvm/arm64/host_sve.c
+> new file mode 100644
+> index 000000000000..3826772fd470
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/arm64/host_sve.c
+> @@ -0,0 +1,127 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +
+> +/*
+> + * Host SVE: Check FPSIMD/SVE/SME save/restore over KVM_RUN ioctls.
+> + *
+> + * Copyright 2025 Arm, Ltd
+> + */
+> +
+> +#include <errno.h>
+> +#include <signal.h>
+> +#include <sys/auxv.h>
+> +#include <asm/kvm.h>
+> +#include <kvm_util.h>
+> +
+> +#include "ucall_common.h"
+> +
+> +static void guest_code(void)
+> +{
+> +	for (int i = 0; i < 10; i++) {
+> +		GUEST_UCALL_NONE();
+> +	}
+> +
+> +	GUEST_DONE();
+> +}
+> +
+> +void handle_sigill(int sig, siginfo_t *info, void *ctx)
+> +{
+> +	ucontext_t *uctx = ctx;
+> +
+> +	printf("  < host signal %d >\n", sig);
+> +
+> +	/*
+> +	 * Skip the UDF
+> +	 */
+> +	uctx->uc_mcontext.pc += 4;
+> +}
+> +
+> +void register_sigill_handler(void)
+> +{
+> +	struct sigaction sa = {
+> +		.sa_sigaction = handle_sigill,
+> +		.sa_flags = SA_SIGINFO,
+> +	};
+> +	sigaction(SIGILL, &sa, NULL);
+> +}
+> +
+> +static void do_sve_roundtrip(void)
+> +{
+> +	unsigned long before, after;
+> +
+> +	/*
+> +	 * Set all bits in a predicate register, force a save/restore via a
+> +	 * SIGILL (which handle_sigill() will recover from), then report
+> +	 * whether the value has changed.
+> +	 */
+> +	asm volatile(
+> +	"	.arch_extension sve\n"
+> +	"	ptrue	p0.B\n"
+> +	"	cntp	%[before], p0, p0.B\n"
+> +	"	udf #0\n"
+> +	"	cntp	%[after], p0, p0.B\n"
+> +	: [before] "=r" (before),
+> +	  [after] "=r" (after)
+> +	:
+> +	: "p0"
+> +	);
+> +
+> +	if (before != after) {
+> +		TEST_FAIL("Signal roundtrip discarded predicate bits (%ld => %ld)\n",
+> +			  before, after);
+> +	} else {
+> +		printf("Signal roundtrip preserved predicate bits (%ld => %ld)\n",
+> +		       before, after);
+> +	}
+> +}
+> +
+> +static void test_run(void)
+> +{
+> +	struct kvm_vcpu *vcpu;
+> +	struct kvm_vm *vm;
+> +	struct ucall uc;
+> +	bool guest_done = false;
+> +
+> +	register_sigill_handler();
+> +
+> +	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
+> +
+> +	do_sve_roundtrip();
+> +
+> +	while (!guest_done) {
+> +
+> +		printf("Running VCPU...\n");
+> +		vcpu_run(vcpu);
+> +
+> +		switch (get_ucall(vcpu, &uc)) {
+> +		case UCALL_NONE:
+> +			do_sve_roundtrip();
+> +			do_sve_roundtrip();
+> +			break;
+> +		case UCALL_DONE:
+> +			guest_done = true;
+> +			break;
+> +		case UCALL_ABORT:
+> +			REPORT_GUEST_ASSERT(uc);
+> +			break;
+> +		default:
+> +			TEST_FAIL("Unexpected guest exit");
+> +		}
+> +	}
+> +
+> +	kvm_vm_free(vm);
+> +}
+> +
+> +int main(void)
+> +{
+> +	/*
+> +	 * This is testing the host environment, we don't care about
+> +	 * guest SVE support.
+> +	 */
+> +	if (!(getauxval(AT_HWCAP) & HWCAP_SVE)) {
+> +		printf("SVE not supported\n");
+> +		return KSFT_SKIP;
+> +	}
+> +
+> +	test_run();
+> +	return 0;
+> +}
+> 
+> ---
+> base-commit: 8ffd015db85fea3e15a77027fda6c02ced4d2444
+> change-id: 20250226-kvm-selftest-sve-signal-1add0d9d716c
+> 
+> Best regards,
+> -- 
+> Mark Brown <broonie@kernel.org>
+> 
 
