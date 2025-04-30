@@ -1,197 +1,144 @@
-Return-Path: <linux-kselftest+bounces-32019-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32021-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1BC2AA44AF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 10:02:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10594AA44F5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 10:16:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E0A29173BCA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 08:02:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 257EB1BA107E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 08:17:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A1B620FAB4;
-	Wed, 30 Apr 2025 08:02:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F260D215F5F;
+	Wed, 30 Apr 2025 08:16:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="s30esJZJ"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="SoVdaUFp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2084.outbound.protection.outlook.com [40.107.94.84])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE7BB1E9B23;
-	Wed, 30 Apr 2025 08:02:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.84
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746000133; cv=fail; b=LS8J0cUmRdobUBKHQFX2IA/moMi1Ca/gZ8mOA1CSDGAWfJucETH1jdRQ3DWRGt8HFazsIkHgSQoSgCjbZgx/Uh0BwhrMBL6fokFoHZIt55aajr6Gi8cGGVEYwZLQdfaUbzNEIvE+nkXJUV7JRr8QoanhlTNdvt6p2PexUWz25Lk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746000133; c=relaxed/simple;
-	bh=41kqCo9OPsBLmqQCPvj1mwNqmDoXMu/7cLPuNBKkofk=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ndADeBafoiiunGRzyCOJNsl3vCqYfky1mnB/7ALzoRyEq80LuRPhSHM1tKdnB7Jr8Zc3Sp/K2K6VRj86pVldcoa+J6OSk8/G9DrpjUdWzloMuaQFGZWjVOWTK8pEnJ7PEkgoO2G4H1uDKU66Ts/XfHX4n7iinVvBtmzn5JMWc2M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=s30esJZJ; arc=fail smtp.client-ip=40.107.94.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=bj11sHfPUFsl+Bg1gpPPzO0gV9+vIsu313rghF8BNxw052E3jj3YyTRX/UeE3IdXW9j3wYx5mkGmvVtzHCFbgDMLaY96HwR3bjQzuP9QRVdjMeKJr+EKBNKjYtKsbe8wXkmZCD7y/vLl36RZ8hWBUCRXRNnukkJdCyl7xZNyAjCOcA9ofZanoqPsWx2CHQ0fw4p9NlC+SKD8aPMabs/S6EymFbYVrZ4d+Z+6oqxSY+zupu6cl0NL1Ryqs/oY2EtEfV05aEdlOuQv/TefXrIjiwhPIak4WX1cJSwMhkFvTULXLc/3s0rpjXeErYqNuyZ6624rGDIANIZAUYult1J1ng==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uAB7RlcS5TQd1fDlp4I/1yO5reiRgBbxBRTGiWpy/90=;
- b=BWzMaBjNFoolfBVuEXkC0qeQx+DdjeDYqKtKIjPWcjeE41OXGsPUvKy5p7+6ocqUPfHAns/ZhZzsbgrVUN4xqaTL1vhE2xw7oLMzY7kyBvJXKxVImtNBQabLMhMmAsTuTsOyu5mUrjNVSkjIBSAYCVX3VmCv70kO/vCMK6fZR25XdCDbV12fxXikxUXzPaNLp91VWfa7USSxjNHsmATIsFXCcrh3G0/dkBH+8KEL4BZgl4sfOVrQ/ZYnT6MLNrth1FTuSLdJbx/1sDUTKqLpp4pitrgKnCVCuV9bvKozZepJBRbP5zLIes29kTt/UkOWlMD90usLEb8O+MiGF1XMow==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.232) smtp.rcpttodomain=amd.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uAB7RlcS5TQd1fDlp4I/1yO5reiRgBbxBRTGiWpy/90=;
- b=s30esJZJBs+fWjE1oOH5uANMxiHgUXCWyePTmkX1+Dtph5RH5M11q6ahp4DX16bL935P4EPyRWCuw6dOLmyovpMF4VMLzAWSh4Gts5Z9No+fapzdIDVTKEjrG6vvG7suMdTQXfiYWBbcVWA0zzSHyWrtzU0dzVtVEY1K9AcBxzWq+LyGd+krxXsL1/I0HkVnhb0ScCohQSALa13B8fe1D0k6ANwhsow0AuhpHi2LVvz1ja3VCGXrR/h5ch6q2q6cydZrR96j6SGLgiM9piHgA9pZXJM8ftiJyoxnU8qBjQgYs3pMSYfvhos8vsagrPGbw+qf3w/BxoXG6EC98cyqng==
-Received: from BLAPR03CA0010.namprd03.prod.outlook.com (2603:10b6:208:32b::15)
- by DS5PPF482CFEB7D.namprd12.prod.outlook.com (2603:10b6:f:fc00::64a) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8655.33; Wed, 30 Apr
- 2025 08:02:09 +0000
-Received: from BL02EPF0001A106.namprd05.prod.outlook.com
- (2603:10b6:208:32b:cafe::a9) by BLAPR03CA0010.outlook.office365.com
- (2603:10b6:208:32b::15) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8655.37 via Frontend Transport; Wed,
- 30 Apr 2025 08:02:09 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.232) by
- BL02EPF0001A106.mail.protection.outlook.com (10.167.241.139) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8699.20 via Frontend Transport; Wed, 30 Apr 2025 08:02:09 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
- (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 30 Apr
- 2025 01:01:59 -0700
-Received: from drhqmail202.nvidia.com (10.126.190.181) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.14; Wed, 30 Apr 2025 01:01:59 -0700
-Received: from Asurada-Nvidia (10.127.8.14) by mail.nvidia.com
- (10.126.190.181) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14 via Frontend
- Transport; Wed, 30 Apr 2025 01:01:57 -0700
-Date: Wed, 30 Apr 2025 01:01:55 -0700
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: Vasant Hegde <vasant.hegde@amd.com>
-CC: <jgg@nvidia.com>, <kevin.tian@intel.com>, <corbet@lwn.net>,
-	<will@kernel.org>, <bagasdotme@gmail.com>, <robin.murphy@arm.com>,
-	<joro@8bytes.org>, <thierry.reding@gmail.com>, <vdumpa@nvidia.com>,
-	<jonathanh@nvidia.com>, <shuah@kernel.org>, <jsnitsel@redhat.com>,
-	<nathan@kernel.org>, <peterz@infradead.org>, <yi.l.liu@intel.com>,
-	<mshavit@google.com>, <praan@google.com>, <zhangzekun11@huawei.com>,
-	<iommu@lists.linux.dev>, <linux-doc@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-tegra@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<patches@lists.linux.dev>, <mochs@nvidia.com>, <alok.a.tiwari@oracle.com>,
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-Subject: Re: [PATCH v2 10/22] iommufd/viommmu: Add IOMMUFD_CMD_VCMDQ_ALLOC
- ioctl
-Message-ID: <aBHY8wOmpMOxelE/@Asurada-Nvidia>
-References: <cover.1745646960.git.nicolinc@nvidia.com>
- <094992b874190ffdcf6012104b419c8649b5e4b4.1745646960.git.nicolinc@nvidia.com>
- <b0d01609-bdda-49a3-af0c-ca828a9c4cea@amd.com>
- <aA/exylmYJhIhEVL@Asurada-Nvidia>
- <b8338b47-6fbf-44ac-9b99-3555997c9f36@amd.com>
- <aBB1gLfahnLmn0N1@Asurada-Nvidia>
- <a3860aed-5b6b-4e68-a8fd-1a6ee28ba022@amd.com>
- <aBEI+T7P+hV8Y6tU@Asurada-Nvidia>
- <7c813df6-e37d-47ae-9b5a-b8735c865626@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDF786AD3
+	for <linux-kselftest@vger.kernel.org>; Wed, 30 Apr 2025 08:16:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1746000997; cv=none; b=eSOTG56gi8P6h+xafzvBM6dyCMcM2RFm+XA74bycsAgVN5hSV2A0L2Pifcilh00pL6D1AMgSYi7ioVQZTwnRq71zcAuXzSw7A8jfNrTo2UG5ezo9gqlNVJv8rT8BCSxhJcitV+xv7YzHmccf4aLKhk9q9U5nSZh7lIaLZL1Lvlw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1746000997; c=relaxed/simple;
+	bh=Fp3GCul0xLHijr/kSvFB7BX5T/aXnL8fUJ9m9B3qidg=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=VAQxu1kTT3OGfHoL+b8tpuexO9PSJjXkwB00QJ+Hxe+wp35ONDPzc9tlwFPS3Ed4O3CR+g6TdaN6TC4krZQXv9inEXLuCgh8Yj+94IUbjzA557Ak9pufg09f0lvEWsc16qPZPm4zxuhO1UWJM81Nw0ohf6cjperqhpCkEmlHS14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=SoVdaUFp; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-736b0c68092so6060922b3a.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Apr 2025 01:16:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1746000994; x=1746605794; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qsXzG0OPFSj9Y/N7ILSDxyejpILMY8rt11Cw8ETnit0=;
+        b=SoVdaUFpU8Euu4kN22zzABwj7RTqH+sw67jyoOFXhmddQV4uQz1f5dS1E8+b75jc1Z
+         WNJarKsmS1lZxqDjl1S1JJVIdOfA5k+8YG/cqnzSCMzC6Uxd7qRYKFPbEdkdN3j9TFep
+         iCNSo2ViHZIAjptPBRhHo8GbTkOQR/jsO2i8edivf4rJ1wmZpymiZgIZm0Fz6fiCU+gQ
+         0551SjaQJ8inJXP33vC8y/C2AE8jFQqm0+fpvI+JfNv5ErARxsWaD+Y0WThclTTwodZJ
+         aYz7LM/nLhpVd+CXSBYsAQJVOEEoYCBR3CljnPnS6Dvy+T1RUzBpZgkQcqRokMCCrenY
+         UxgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746000994; x=1746605794;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qsXzG0OPFSj9Y/N7ILSDxyejpILMY8rt11Cw8ETnit0=;
+        b=pAJ7QXeGpWsgwjOYBNvpZipzJ0mmm0SHH1C/5gXJhCiIlQKjYEvK9aqzWOaK2Yjdj1
+         2KsDsO8CSVusFX2FvI91vLZAzQXlNGySRixWXAZhGOuqkecvJ875IfycRtdaSpGobUhh
+         BWF0cVi3PzeM26bxdeC3MQ6xZCOMvQ43gfyFC8r7xPlLHZPZnUGd9jduaWxdtkkO/dI/
+         Fpy5qbNY48CPbf+S9L3xXrlaEQX8y97ujXRz5+Mvqrvjlp0ajpGEfSku4Qli3C4Bi4gD
+         jwhwjhDHj0rrlgkZBJqqhVs0ACtx2c6QGdRYbjXjQTg/SP1eZ39m2nrpGsyauAqHbKWc
+         svqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW/HtOJ3bUgE9kSBFknuodbhJ/c0b7RgsVgMlGZ+JSRSgtRLjdpQqjXLzNWg06QdotIjFh3PrUTadkaRCgD5k0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4/+A830vZGD00FMpDH9wFUH1naNX8FMp9M539eR5zcAGSTs5Z
+	bvaKHKy2fvZohnwpbuYxUq7+sQ/H8RXlWVcpJgYV1EDPuaZeyTxfeDa+N4HQrEM=
+X-Gm-Gg: ASbGncvSz2do23AorKoPCXJet9IXQfyK7kaPgn/mMNQitMpqFEIpXhFGyI79XIhkK5X
+	AcMqSjJH+nsqhtmrPDy7JAlPTrr462ZcOsvdvPXSs9StF8NGKEURau7O9peZnvddcKlqlQ68lus
+	pdbflx4Gr9qw9OYwHSKf2xtps7OK5WJXn/UYTvgsG254H7nf1EzYGaU/lLuCmSzfXpKZttiW/n9
+	52lKDm+lXZJoajKprNJxmMqDp0kazTk5kilqNeU+EpWXG9Z6DfQJoNZ2mEs4L+nTwosrywUlbJ9
+	MEucdf/J3d5f5GPbAaNUJedqOhlQhyACi0oTdOi5BYdHn53D8eWHjA==
+X-Google-Smtp-Source: AGHT+IH6seQgwJqi/FP/vswGEFmbX1nzlJ/wu6PVrapojvhfM+Yipa5sWjHxHBJfv7qDYrJjbCoowA==
+X-Received: by 2002:a05:6a00:1146:b0:736:7270:4d18 with SMTP id d2e1a72fcca58-740389bbc36mr3347820b3a.14.1746000994070;
+        Wed, 30 Apr 2025 01:16:34 -0700 (PDT)
+Received: from atishp.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74039a309edsm1073084b3a.91.2025.04.30.01.16.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Apr 2025 01:16:33 -0700 (PDT)
+From: Atish Patra <atishp@rivosinc.com>
+Subject: [PATCH v3 0/3] RISC-V KVM selftests improvements
+Date: Wed, 30 Apr 2025 01:16:27 -0700
+Message-Id: <20250430-kvm_selftest_improve-v3-0-eea270ff080b@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <7c813df6-e37d-47ae-9b5a-b8735c865626@amd.com>
-X-NV-OnPremToCloud: AnonymousSubmission
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF0001A106:EE_|DS5PPF482CFEB7D:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9e8c3e13-45df-4f02-1e89-08dd87bd4ea7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|1800799024|36860700013|7416014|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?vwbV5/hLSv+in3riSOYPtwZJnrqhj+mhENDHkS8ij0XQYtWD49vuxC2Uu4jF?=
- =?us-ascii?Q?WBxQBTMzSMnh2SuCuDB41fThXJXpY7dwnBjLgLnvIFIMlcbEOrBdyo553wGY?=
- =?us-ascii?Q?Bw05+y15rbJTzx9004NkvYxPAio5vskAXQsmee7FhUB4w0FQbdS+6n99THON?=
- =?us-ascii?Q?6stYbnBUPfPSJjPBVBf9e1CmCwDGgNGEMAqsdWqqTEZ6KGJuiO1LdjXIC5TG?=
- =?us-ascii?Q?cQdAYr9gdcDUItKGbbB/oVqX0Oeky2aH2rsqUyl5A78qs9Of3qxpLgGaQI6d?=
- =?us-ascii?Q?X3thacDnLXi5DP7BAzbc5tDXcnLcMP2CwiRKDydY7Ns+c8tz01szvWiGIkkY?=
- =?us-ascii?Q?6+IC5rO7ZG+V8obSj9RnR1gkDnipDpfLMXD9MujPjNBwh8VX6FdApWvfPHnr?=
- =?us-ascii?Q?vx+nCasmlAHo3lc/GonuQFySqaSelPY1jjeMJFWd6zhVvYKUNgy23er/KkRU?=
- =?us-ascii?Q?Xn2IG0SgMyK5HY9rv8sTER2pS/CLLqEgIyAOKMqJQStTN14eggMf5jm026nT?=
- =?us-ascii?Q?r7WpYBA3LlD8SGmBiQh6/F8F6jfY4Kyi8JZdULJB4AeK986nHZ5vp/YRDiX0?=
- =?us-ascii?Q?IfJmPOG2EFuiesdsrH/+Inf7/UkJ2JGYkYQnlWCOjOsrZEDcF1eFxfjLQ3SP?=
- =?us-ascii?Q?YgzwTKWo9D5ut5zDrx1g8/nqYc4c842mAaNBs389mWFcVUbqs3vB9u8N8gY7?=
- =?us-ascii?Q?ckQFpOn29HJ/MwH6vqo3i037voGaacQwAzbRfEU6Urck13slI7pF5AY+KBM+?=
- =?us-ascii?Q?byfE+wV+aVAMm7MMWGipMRV8RCnypEv4iT+jQo4PfQvdfvhYqwdMsVGvBIiP?=
- =?us-ascii?Q?Hwq9jjiahc/LoZfWLO3CxfEwsz5rpFclAM+IOxSHVl1TMebTr71vqSUVxilv?=
- =?us-ascii?Q?joRrsQmi/4E9vhHY7xbnMN/M/udSt6+wl/+jGzMTjYht+StEz0szsdBC2d93?=
- =?us-ascii?Q?fABcxpsTQxAdAQLmwGVGoI9WWRYi5cAt2b+2SXocUC6Aj6aUKNLo6uhlRpz3?=
- =?us-ascii?Q?SIRax1VuMwyz1Jb8q9pN75wLn8MlH6Ja+s2ps3Hs5MbwYe4MbwwHeYTjW1Pv?=
- =?us-ascii?Q?3E9el12IepE1723VMbR6zYX869WKZcGtfBbX8SbHbVFi/5EnH7/vErPnbQON?=
- =?us-ascii?Q?ukEFc/tn3lv04BxTBea6pUtRFw14cIPsoxVUAAJ9FQt6ojyJEmdRVVm7N+2p?=
- =?us-ascii?Q?PTVEIshl6bb6eFDUKo4qUDK20oylm2TluoPO5U6vo3h5V9XoCBk6yIfurFYS?=
- =?us-ascii?Q?hCnhHq5RW4uWFaLbZmAncQl7kEufm/Lm67Y70Px5LopONhwLYcZT8HZSHCDi?=
- =?us-ascii?Q?O8D/gX6wzaDoh3eH4lMqqWvOZr3zDySSNHecoSjRxVEEoWEdcr3uuykksQUe?=
- =?us-ascii?Q?vBc5zWlAEx+qqX6Hmc8GthHXno8qUXGbbEzyPCQ8eEda9tuLQ3Th2sZ/10DP?=
- =?us-ascii?Q?hfpJTP57ltnVQxP7rKLt4Pj6Kh8RcwPCu68/Egzygf7+IWlZLMVF6+U+lRrB?=
- =?us-ascii?Q?0I/6g63BqI+FiZhLi4qlxnzwH30x1nxX5/Ek?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(36860700013)(7416014)(376014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Apr 2025 08:02:09.2794
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9e8c3e13-45df-4f02-1e89-08dd87bd4ea7
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL02EPF0001A106.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS5PPF482CFEB7D
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFvcEWgC/4XNSwrCMBCA4auUrI3k1WpceQ+R0jYTO2iakpSgl
+ N7dtBtBEJf/MPPNTCIEhEhOxUwCJIzohxxyV5Cub4YbUDS5iWCiZFIoek+ujvCwE8SpRjcGn4D
+ qFkyrLWsqI0k+HQNYfG7s5Zq7xzj58Nq+JL5O/4CJU0bLo6zyGtdG2XPA5CMO3b7zjqxmEh9HC
+ f3DEavDD1xazYGp5stZluUNvbqg9gMBAAA=
+X-Change-ID: 20250324-kvm_selftest_improve-9bedb9f0a6d3
+To: Anup Patel <anup@brainfault.org>, Atish Patra <atishp@atishpatra.org>, 
+ Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+ Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Alexandre Ghiti <alex@ghiti.fr>, 
+ Andrew Jones <ajones@ventanamicro.com>
+Cc: kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
+ linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Atish Patra <atishp@rivosinc.com>
+X-Mailer: b4 0.15-dev-42535
 
-On Wed, Apr 30, 2025 at 09:52:09AM +0530, Vasant Hegde wrote:
-> >>> Will the hardware replace the physical device ID in the event with
-> >>> the virtual device ID when injecting the event to a guest event/PPR
-> >>> queue? 
-> >>> If so, yea, I think you can define them separately using the> vCMDQ
-> >> infrastructures:
-> >>>  - IOMMU_VCMDQ_TYPE_AMD_VIOMMU_CMDBUF
-> >>>  - IOMMU_VCMDQ_TYPE_AMD_VIOMMU_EVENTLOG
-> >>>  - IOMMU_VCMDQ_TYPE_AMD_VIOMMU_PPRLOG
-> >>> (@Kevin @Jason Hmm, in this case we might want to revert the naming
-> >>>  "vCMDQ" back to "vQEUEUE", once Vasant confirms.)
-> > 
-> > I think I should rename IOMMUFD_OBJ_VCMDQ back to IOMMUFD_OBJ_VQUEUE
-> > since the same object fits three types of queue now in the AMD case.
-> 
-> Makes sense.
-> 
-> AMD architecture supports 5 buffers. In practice we have not implemented event
-> log  B / PPR Log B in Linux.
->   Command buffer
->   Event Log A / B
->   PPR Log A / B
+This series improves the following tests.
+1. Get-reg-list : Adds vector support
+2. SBI PMU test : Distinguish between different types of illegal exception
 
-I think those A/B should be dual buffers of the same type?
+The first patch is just helper patch that adds stval support during
+exception handling.
 
-Anyway, I have renamed all the core "vCMDQ" back to "vQUEUE" in my
-local branch. Will send v3 in the next days.
+Signed-off-by: Atish Patra <atishp@rivosinc.com>
+---
+Changes in v3:
+- Dropped the redundant macros and rv32 specific csr details. 
+- Changed to vcpu_get_reg from __vcpu_get_reg based on suggestion from Drew.
+- Added RB tags from Drew.
+- Link to v2: https://lore.kernel.org/r/20250429-kvm_selftest_improve-v2-0-51713f91e04a@rivosinc.com
 
-Thanks
-Nicolin
+Changes in v2:
+- Rebased on top of Linux 6.15-rc4
+- Changed from ex_regs to pt_regs based on Drew's suggestion. 
+- Dropped Anup's review on PATCH1 as it is significantly changed from last review.
+- Moved the instruction decoding macros to a common header file.
+- Improved the vector reg list test as per the feedback.
+- Link to v1: https://lore.kernel.org/r/20250324-kvm_selftest_improve-v1-0-583620219d4f@rivosinc.com
+
+---
+Atish Patra (3):
+      KVM: riscv: selftests: Align the trap information wiht pt_regs
+      KVM: riscv: selftests: Decode stval to identify exact exception type
+      KVM: riscv: selftests: Add vector extension tests
+
+ .../selftests/kvm/include/riscv/processor.h        |  23 +++-
+ tools/testing/selftests/kvm/lib/riscv/handlers.S   | 139 +++++++++++----------
+ tools/testing/selftests/kvm/lib/riscv/processor.c  |   2 +-
+ tools/testing/selftests/kvm/riscv/arch_timer.c     |   2 +-
+ tools/testing/selftests/kvm/riscv/ebreak_test.c    |   2 +-
+ tools/testing/selftests/kvm/riscv/get-reg-list.c   | 132 +++++++++++++++++++
+ tools/testing/selftests/kvm/riscv/sbi_pmu_test.c   |  24 +++-
+ 7 files changed, 247 insertions(+), 77 deletions(-)
+---
+base-commit: f15d97df5afae16f40ecef942031235d1c6ba14f
+change-id: 20250324-kvm_selftest_improve-9bedb9f0a6d3
+--
+Regards,
+Atish patra
+
 
