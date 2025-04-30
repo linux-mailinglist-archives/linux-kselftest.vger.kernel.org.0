@@ -1,77 +1,77 @@
-Return-Path: <linux-kselftest+bounces-32011-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32012-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D742AA4386
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 09:05:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FF2BAA439E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 09:10:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6F0461BC634D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 07:05:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D6629A1C19
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 07:09:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 906731EFF81;
-	Wed, 30 Apr 2025 07:05:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F20BB1EFFA3;
+	Wed, 30 Apr 2025 07:09:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="lYgjDgTP"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="IcbP13pi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E40F1EEA49
-	for <linux-kselftest@vger.kernel.org>; Wed, 30 Apr 2025 07:05:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00EC81EF388
+	for <linux-kselftest@vger.kernel.org>; Wed, 30 Apr 2025 07:09:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745996736; cv=none; b=q6oDyzM7uDw7wpEFXdYa/UbFKQHyZ82KFqxhrK5T/jEbCa+noienEYrQQEQO5m0wpQUIBD63LRykx6cVdAKnNp/MHgMkjQmhhwBxOrr6l0T4Z9gO1gSZAkdwswVfv2FjX8XeMk4FC9wTrMgZZWg16dfcEvg8i0JpZfC2amNt+HA=
+	t=1745996946; cv=none; b=D7jZfP0lwu1G3J51DWhd9x+L4Iu7400mm53bIKzN1HN2G+RGMNcjErin5qAgX1ZIXY3mlVtFYyKEi26P1beBvD05xg9buFYYREwuh3HuSTZWwwBGtiJ3WRtF5IywGxYsGEFIvd1gH/i6g+89UL7iUxt1a1RjpCgpho3cF0AJgFk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745996736; c=relaxed/simple;
-	bh=mXAUzo8UDCkMwKAGpVSG2c9D+0tPPhPL3/Z4Wd5YpEs=;
+	s=arc-20240116; t=1745996946; c=relaxed/simple;
+	bh=gpNXr1037Z1wEz+LS6JylmM3swnZl9G/5KuJww/pJlE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Hp1PnDbDuzVrvuFk/TOZCt3RwFperKMGM7LM+dfHxrfsHs3Z6I1yfRs4GgE6gU/vNU9JaGGmn1hhw2aZ8DQTnNk4Kr7R9KSlsS113bhPHLMBS801/J8vaB4sRP+oGBprDPC08WrrFUl3i1zHQY6anmkEKj/zcnYAr5ZxJHPXWMc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=lYgjDgTP; arc=none smtp.client-ip=209.85.128.49
+	 Content-Type:Content-Disposition:In-Reply-To; b=uKf+v8HcSVfHHbqdazUVYES5JVdoaf5gNkYAICdaYWg3vJ2SMKskdURW7af2a2UG2Q4wbJkNc3oSwLe9/IyEHzzaqucW8yf8frIIBiS6svFosA6ZtdI9IBLS+9bB2AM5CSF92tRvtzjKEKg+6eLpJQ9nyGbFzVFbQLrx9nQhbAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=IcbP13pi; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-43cf05f0c3eso43496755e9.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Apr 2025 00:05:32 -0700 (PDT)
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-43ed8d32a95so61835985e9.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Apr 2025 00:09:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1745996731; x=1746601531; darn=vger.kernel.org;
+        d=ventanamicro.com; s=google; t=1745996943; x=1746601743; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SVvfYimiPZS6cg4U084sfnLSo48so/ncOUQmetF/XDo=;
-        b=lYgjDgTPfXb6gCG8RSnO0U3k1JDBoO9vhtg1stGmi/tfVxlyx38T3Z0YBksOTlopDy
-         1wEfZUpi5Oc5uT1WkEM6L3aZNCpSs7fEjbhPt+ROz2SZKpahYLud9WXuuj9nmEjvoGbN
-         IRE3hMS8ezxgTi6Ogn7Hepv25bSctKCg78OMczSpfJ7JIv1ZlHjpxub3RbwMD1KMvkEX
-         tYvSFvpjo2XaYvaOZRSy3hUvJX1Rbj1kT4O+gtyyvFIyn9UTQH3juYqghg2RwNabFDuz
-         3XyUokQ7tpPRg65vpmoRQqzdKXy0g2YjmVQUQoegztEGr3bFo5gE7J7cHUDwj2UmcNWr
-         KloA==
+        bh=LSK4QD+3I+qmqDLjdFn3wb2kTRYhgTQ7voE34inPLKI=;
+        b=IcbP13pihTmV2dDZzE+UuqueCiLTpOFo7Oi9u6lwBcql978QOzWcTeWD8IJgCzN6PJ
+         36/e4tKrrOJVNZfYCZxZt02Zu1368VLXFqjXgT66w3CGimi0F0j247oU+QyYTlGS1mx5
+         uhBF0PLPr1VKNElAgT0iMdu06B4vOMtsmy8BJCDsvHRqFHPig7q4q+973kXzo4REkm8j
+         ghwhsUInBIg7LMvu8nQwutP9us9pLvBWk9HGFKYswU4JvUMg82lVYyzTa4+kQHfg9+kb
+         EZpjbMYA1uHHMOxwac3zvN7lK7kkg6WfmDHAknDMLMc3N5cMrv80nzZpB9z+7zZ7wi5P
+         byPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745996731; x=1746601531;
+        d=1e100.net; s=20230601; t=1745996943; x=1746601743;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SVvfYimiPZS6cg4U084sfnLSo48so/ncOUQmetF/XDo=;
-        b=TCZr5RBS0XtTzrCzbji3c87Z6g4kR0I6dUuo+jRwbp1yjQpoemjnMskI5ldMXn1qwW
-         Q1q1L2WZI7rA7OGjJLAUUkSFFFnoHbcELXoqpQ5GIPec5dAIaNkp/QogyYgxgHhKuGvb
-         aWksdUwaFC76yjPyiFwR4LLNAI+zljXljqbWwN0pufatc5LNj7byDWEgvTbJaD6xd+FJ
-         6kMr/1fHv+9q5ZSSYVs+J/8O6nOIAISN6aa4ODa9SJ0LgApzkALI7/UiHcVJ27fD2fo8
-         3I/o8ZbTzD0G+NCHHcql7ZEzCuTw1Xk3MdyZFLKQiEN+kzCAoxbQC+hYScxNwOxphbYC
-         Nxfg==
-X-Forwarded-Encrypted: i=1; AJvYcCWNeuFT2507bUs58x7kWgw5Z+Q79lRvaTiWAw6+2/wb8Gsv1vzuS4KVvNxQZsFnRuC8qBCTZX5r93cQCGWJLbQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw6iosILIO/QUar4vldbKYJBrHW9RHmPXaFkf7rPFCWm3Gqqa/7
-	Wk0nKYhc2ojN+FicbkWJYQIeHK0u40QDtJIfJNDft7oid6ANdWwAcf1yHV9E0jE=
-X-Gm-Gg: ASbGncuKqrfqxBbyXVMoqpv4OI6mCotEA6OPsV/DTwj16cwEjtC0EJN7QbJ9G5+XMZ+
-	6E0fKCrTy0PvX9c/DoST8OLGpBFQgLWea/WTvLIRtRLBoYlydeeiKVl1pX69NAc3MSF2YsqI7GO
-	G0BXmouAFwh7ZE5MAwn5qsnmW86PZer6521RJkbUmdtRJLKE1n0R3FhrLZggRsLMj4uE634FdHW
-	ZsGcfgVVPSBpMYwjpOPa8VrMUhEIJiKfg3UZGk35vn+m8oEvViaE5YIRdATrr0kyl6KIXAbGal1
-	sN2YiAWeAnzo5kl0idDQ8+xYfmAL
-X-Google-Smtp-Source: AGHT+IEdF7Ranbsc/bcaoboCh6IHK4P6VnQG9MxQM+0axTJmPOKs4W5R61X+N8DpwJd52q+rA2++PA==
-X-Received: by 2002:a05:600c:1d91:b0:43c:f44c:72b7 with SMTP id 5b1f17b1804b1-441b1f35e37mr18239195e9.14.1745996731411;
-        Wed, 30 Apr 2025 00:05:31 -0700 (PDT)
+        bh=LSK4QD+3I+qmqDLjdFn3wb2kTRYhgTQ7voE34inPLKI=;
+        b=N6tzODMDVbXeQUI/WjJNQuaAdkTxkANZALWGAZpbVxjkjwBBJyeKsHGkMFU37Hw1vl
+         BfE2xpMhHHG0SFV8VXrgSyG7g+GRhVWB5RtQIUwMcuat6WXm8tgvGf358JDWltLvJiuD
+         5tHzquh44Hz2RfIuA0zdzq90ME4e/61m6lpMnbkk5m8SibnAXnEN6najkgwgD8AHG1Kt
+         Ov1BugFSncNN95UQSk02PaGE6WOjyqh77VbU65y3NMEQWWgf9S+KRj+xFZYTYOwnqrtr
+         /FVQU6OiAi9pzcF/TBAiYjHiGlhPv9K7KuS/f5FfTRNA3RzeMJLQNaxrc/fl7TSwkebP
+         WECA==
+X-Forwarded-Encrypted: i=1; AJvYcCVLeI6Y5GUektj/RgF6khFBIhAnzHNENfpaV4x78Jub45BfGPm53TfxlJzmGTZcTgxpLAU8Jyz+6VWhVI5EzHk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwzMKpIwM+u7Q5Frxg7VTUFCDpKAjJQDAhH4yuujLfEvaPkA2rm
+	+dD3/gFuRs7bS3jrjGkrWp8V0PN/OeUOI7+8K0oFXpi/A7sq2V+ih7t+w7WEusA=
+X-Gm-Gg: ASbGncsiaShOFvpjWbKp1SlJI8CfywNvdGoCqPVm9H332jKg76RbXg/TAFE9jv7notJ
+	SYRuTjUQvWtMf0EL0uLPeS59Ah/Q1Z6/jSx4GYcmlxu+ZFbTrXf0/Ig5/R1OL37//ZkCrh+s7YA
+	L9S1rQluArxZZOyg8Ryby2dKFak/TV5Hu//PLT38do0Rm4LeFfqXzKjzm/cXYmTv/hqhz2upar0
+	Ts9I7EnbAWlkNBtaiXcMxDxIBM6PlbLuaUf2yg6exQkBcIx4wqJRlHZhRWhTWYxvjiKmaRbwTcW
+	a6UNKog8WAR8Z0clBF24HyqVDbAQ
+X-Google-Smtp-Source: AGHT+IHU6e+bAOcpIfCg/o6HSKaqmZqkWhnRBvwCbptPuIv7yzCHf3h+WWrp9vwHZZg1HMb2/urfEw==
+X-Received: by 2002:a05:600c:35d6:b0:43c:fe90:1282 with SMTP id 5b1f17b1804b1-441b1f306c6mr13349235e9.7.1745996943368;
+        Wed, 30 Apr 2025 00:09:03 -0700 (PDT)
 Received: from localhost ([2a02:8308:a00c:e200::f716])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-441b2bbc0a2sm13050305e9.30.2025.04.30.00.05.30
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-441b3ae0c19sm6357775e9.24.2025.04.30.00.09.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Apr 2025 00:05:30 -0700 (PDT)
-Date: Wed, 30 Apr 2025 09:05:30 +0200
+        Wed, 30 Apr 2025 00:09:02 -0700 (PDT)
+Date: Wed, 30 Apr 2025 09:09:00 +0200
 From: Andrew Jones <ajones@ventanamicro.com>
 To: Atish Patra <atishp@rivosinc.com>
 Cc: Anup Patel <anup@brainfault.org>, Atish Patra <atishp@atishpatra.org>, 
@@ -79,11 +79,11 @@ Cc: Anup Patel <anup@brainfault.org>, Atish Patra <atishp@atishpatra.org>,
 	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
 	Alexandre Ghiti <alex@ghiti.fr>, kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
 	linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] KVM: riscv: selftests: Align the trap information
- wiht pt_regs
-Message-ID: <20250430-92907020fba3f6ee328e821d@orel>
+Subject: Re: [PATCH v2 2/3] KVM: riscv: selftests: Decode stval to identify
+ exact exception type
+Message-ID: <20250430-b40cd14818cc9264506e61f2@orel>
 References: <20250429-kvm_selftest_improve-v2-0-51713f91e04a@rivosinc.com>
- <20250429-kvm_selftest_improve-v2-1-51713f91e04a@rivosinc.com>
+ <20250429-kvm_selftest_improve-v2-2-51713f91e04a@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -92,322 +92,94 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250429-kvm_selftest_improve-v2-1-51713f91e04a@rivosinc.com>
+In-Reply-To: <20250429-kvm_selftest_improve-v2-2-51713f91e04a@rivosinc.com>
 
-On Tue, Apr 29, 2025 at 05:18:45PM -0700, Atish Patra wrote:
-> The current exeception register structure in selftests are missing
-> few registers (e.g stval). Instead of adding it manually, change
-> the ex_regs to align with pt_regs to make it future proof.
+On Tue, Apr 29, 2025 at 05:18:46PM -0700, Atish Patra wrote:
+> Currently, the sbi_pmu_test continues if the exception type is illegal
+> instruction because access to hpmcounter will generate that. However
+> illegal instruction exception may occur due to the other reasons
+> which should result in test assertion.
 > 
-> Suggested-by: Andrew Jones <ajones@ventanamicro.com>
+> Use the stval to decode the exact type of instructions and which csrs are
+> being accessed if it is csr access instructions. Assert in all cases
+> except if it is a csr access instructions that access valid PMU related
+> registers.
+> 
+> Reviewed-by: Anup Patel <anup@brainfault.org>
 > Signed-off-by: Atish Patra <atishp@rivosinc.com>
 > ---
->  .../selftests/kvm/include/riscv/processor.h        |  10 +-
->  tools/testing/selftests/kvm/lib/riscv/handlers.S   | 164 ++++++++++++---------
->  tools/testing/selftests/kvm/lib/riscv/processor.c  |   2 +-
->  tools/testing/selftests/kvm/riscv/arch_timer.c     |   2 +-
->  tools/testing/selftests/kvm/riscv/ebreak_test.c    |   2 +-
->  tools/testing/selftests/kvm/riscv/sbi_pmu_test.c   |   4 +-
->  6 files changed, 104 insertions(+), 80 deletions(-)
+>  .../testing/selftests/kvm/include/riscv/processor.h  | 13 +++++++++++++
+>  tools/testing/selftests/kvm/riscv/sbi_pmu_test.c     | 20 ++++++++++++++++++++
+>  2 files changed, 33 insertions(+)
 > 
 > diff --git a/tools/testing/selftests/kvm/include/riscv/processor.h b/tools/testing/selftests/kvm/include/riscv/processor.h
-> index 5f389166338c..1b5aef87de0f 100644
+> index 1b5aef87de0f..162f303d9daa 100644
 > --- a/tools/testing/selftests/kvm/include/riscv/processor.h
 > +++ b/tools/testing/selftests/kvm/include/riscv/processor.h
-> @@ -60,7 +60,8 @@ static inline bool __vcpu_has_sbi_ext(struct kvm_vcpu *vcpu, uint64_t sbi_ext)
->  	return __vcpu_has_ext(vcpu, RISCV_SBI_EXT_REG(sbi_ext));
->  }
->  
-> -struct ex_regs {
-> +struct pt_regs {
-> +	unsigned long epc;
->  	unsigned long ra;
->  	unsigned long sp;
->  	unsigned long gp;
-> @@ -92,16 +93,19 @@ struct ex_regs {
->  	unsigned long t4;
->  	unsigned long t5;
->  	unsigned long t6;
-> -	unsigned long epc;
-> +	/* Supervisor/Machine CSRs */
->  	unsigned long status;
-> +	unsigned long badaddr;
->  	unsigned long cause;
-> +	/* a0 value before the syscall */
-> +	unsigned long orig_a0;
->  };
->  
->  #define NR_VECTORS  2
->  #define NR_EXCEPTIONS  32
->  #define EC_MASK  (NR_EXCEPTIONS - 1)
->  
-> -typedef void(*exception_handler_fn)(struct ex_regs *);
-> +typedef void(*exception_handler_fn)(struct pt_regs *);
->  
->  void vm_init_vector_tables(struct kvm_vm *vm);
->  void vcpu_init_vector_tables(struct kvm_vcpu *vcpu);
-> diff --git a/tools/testing/selftests/kvm/lib/riscv/handlers.S b/tools/testing/selftests/kvm/lib/riscv/handlers.S
-> index aa0abd3f35bb..9c99b258cae7 100644
-> --- a/tools/testing/selftests/kvm/lib/riscv/handlers.S
-> +++ b/tools/testing/selftests/kvm/lib/riscv/handlers.S
-> @@ -9,86 +9,106 @@
->  
+> @@ -11,6 +11,19 @@
 >  #include <asm/csr.h>
+>  #include "kvm_util.h"
 >  
-> +#ifdef __ASSEMBLY__
-> +#define __ASM_STR(x)	x
-> +#else
-> +#define __ASM_STR(x)	#x
-> +#endif
-
-We should always have __ASSEMBLY__ (or actually __ASSMEBLER__) defined
-when compiling this .S file.
-
+> +#define INSN_OPCODE_MASK	0x007c
+> +#define INSN_OPCODE_SHIFT	2
+> +#define INSN_OPCODE_SYSTEM	28
 > +
-> +#if __riscv_xlen == 64
-> +#define __REG_SEL(a, b)	__ASM_STR(a)
-> +#elif __riscv_xlen == 32
-> +#define __REG_SEL(a, b)	__ASM_STR(b)
-> +#else
-> +#error "Unexpected __riscv_xlen"
-> +#endif
+> +#define INSN_MASK_FUNCT3	0x7000
+> +#define INSN_SHIFT_FUNCT3	12
 > +
-> +#define REG_L		__REG_SEL(ld, lw)
-> +#define REG_S		__REG_SEL(sd, sw)
-
-We don't need these macros since we only support 64-bit. We always
-have -DCONFIG_64BIT appended to CFLAGS. But it doesn't hurt to
-have them either...
-
+> +#define INSN_CSR_MASK		0xfff00000
+> +#define INSN_CSR_SHIFT		20
 > +
->  .macro save_context
-> -	addi  sp, sp, (-8*34)
-> -	sd    x1, 0(sp)
-> -	sd    x2, 8(sp)
-> -	sd    x3, 16(sp)
-> -	sd    x4, 24(sp)
-> -	sd    x5, 32(sp)
-> -	sd    x6, 40(sp)
-> -	sd    x7, 48(sp)
-> -	sd    x8, 56(sp)
-> -	sd    x9, 64(sp)
-> -	sd    x10, 72(sp)
-> -	sd    x11, 80(sp)
-> -	sd    x12, 88(sp)
-> -	sd    x13, 96(sp)
-> -	sd    x14, 104(sp)
-> -	sd    x15, 112(sp)
-> -	sd    x16, 120(sp)
-> -	sd    x17, 128(sp)
-> -	sd    x18, 136(sp)
-> -	sd    x19, 144(sp)
-> -	sd    x20, 152(sp)
-> -	sd    x21, 160(sp)
-> -	sd    x22, 168(sp)
-> -	sd    x23, 176(sp)
-> -	sd    x24, 184(sp)
-> -	sd    x25, 192(sp)
-> -	sd    x26, 200(sp)
-> -	sd    x27, 208(sp)
-> -	sd    x28, 216(sp)
-> -	sd    x29, 224(sp)
-> -	sd    x30, 232(sp)
-> -	sd    x31, 240(sp)
-> +	addi  sp, sp, (-8*36)
-> +	REG_S    x1, 8(sp)
-> +	REG_S    x2, 16(sp)
-> +	REG_S    x3, 24(sp)
-> +	REG_S    x4, 32(sp)
-> +	REG_S    x5, 40(sp)
-> +	REG_S    x6, 48(sp)
-> +	REG_S    x7, 56(sp)
-> +	REG_S    x8, 64(sp)
-> +	REG_S    x9, 72(sp)
-> +	REG_S    x10, 80(sp)
-> +	REG_S    x11, 88(sp)
-> +	REG_S    x12, 96(sp)
-> +	REG_S    x13, 104(sp)
-> +	REG_S    x14, 112(sp)
-> +	REG_S    x15, 120(sp)
-> +	REG_S    x16, 128(sp)
-> +	REG_S    x17, 136(sp)
-> +	REG_S    x18, 144(sp)
-> +	REG_S    x19, 152(sp)
-> +	REG_S    x20, 160(sp)
-> +	REG_S    x21, 168(sp)
-> +	REG_S    x22, 176(sp)
-> +	REG_S    x23, 184(sp)
-> +	REG_S    x24, 192(sp)
-> +	REG_S    x25, 200(sp)
-> +	REG_S    x26, 208(sp)
-> +	REG_S    x27, 216(sp)
-> +	REG_S    x28, 224(sp)
-> +	REG_S    x29, 232(sp)
-> +	REG_S    x30, 240(sp)
-> +	REG_S    x31, 248(sp)
->  	csrr  s0, CSR_SEPC
->  	csrr  s1, CSR_SSTATUS
-> -	csrr  s2, CSR_SCAUSE
-> -	sd    s0, 248(sp)
-> -	sd    s1, 256(sp)
-> -	sd    s2, 264(sp)
-> +	csrr  s2, CSR_STVAL
-> +	csrr  s3, CSR_SCAUSE
-> +	REG_S    s0, 0(sp)
-> +	REG_S    s1, 256(sp)
-> +	REG_S    s2, 264(sp)
-> +	REG_S    s3, 272(sp)
->  .endm
->  
->  .macro restore_context
-> -	ld    s2, 264(sp)
-> -	ld    s1, 256(sp)
-> -	ld    s0, 248(sp)
-> -	csrw  CSR_SCAUSE, s2
-> +	REG_L    s3, 272(sp)
-> +	REG_L    s2, 264(sp)
-> +	REG_L    s1, 256(sp)
-> +	REG_L    s0, 0(sp)
-> +	csrw  CSR_SCAUSE, s3
->  	csrw  CSR_SSTATUS, s1
->  	csrw  CSR_SEPC, s0
-> -	ld    x31, 240(sp)
-> -	ld    x30, 232(sp)
-> -	ld    x29, 224(sp)
-> -	ld    x28, 216(sp)
-> -	ld    x27, 208(sp)
-> -	ld    x26, 200(sp)
-> -	ld    x25, 192(sp)
-> -	ld    x24, 184(sp)
-> -	ld    x23, 176(sp)
-> -	ld    x22, 168(sp)
-> -	ld    x21, 160(sp)
-> -	ld    x20, 152(sp)
-> -	ld    x19, 144(sp)
-> -	ld    x18, 136(sp)
-> -	ld    x17, 128(sp)
-> -	ld    x16, 120(sp)
-> -	ld    x15, 112(sp)
-> -	ld    x14, 104(sp)
-> -	ld    x13, 96(sp)
-> -	ld    x12, 88(sp)
-> -	ld    x11, 80(sp)
-> -	ld    x10, 72(sp)
-> -	ld    x9, 64(sp)
-> -	ld    x8, 56(sp)
-> -	ld    x7, 48(sp)
-> -	ld    x6, 40(sp)
-> -	ld    x5, 32(sp)
-> -	ld    x4, 24(sp)
-> -	ld    x3, 16(sp)
-> -	ld    x2, 8(sp)
-> -	ld    x1, 0(sp)
-> -	addi  sp, sp, (8*34)
-> +	REG_L    x31, 248(sp)
-> +	REG_L    x30, 240(sp)
-> +	REG_L    x29, 232(sp)
-> +	REG_L    x28, 224(sp)
-> +	REG_L    x27, 216(sp)
-> +	REG_L    x26, 208(sp)
-> +	REG_L    x25, 200(sp)
-> +	REG_L    x24, 192(sp)
-> +	REG_L    x23, 184(sp)
-> +	REG_L    x22, 176(sp)
-> +	REG_L    x21, 168(sp)
-> +	REG_L    x20, 160(sp)
-> +	REG_L    x19, 152(sp)
-> +	REG_L    x18, 144(sp)
-> +	REG_L    x17, 136(sp)
-> +	REG_L    x16, 128(sp)
-> +	REG_L    x15, 120(sp)
-> +	REG_L    x14, 112(sp)
-> +	REG_L    x13, 104(sp)
-> +	REG_L    x12, 96(sp)
-> +	REG_L    x11, 88(sp)
-> +	REG_L    x10, 80(sp)
-> +	REG_L    x9, 72(sp)
-> +	REG_L    x8, 64(sp)
-> +	REG_L    x7, 56(sp)
-> +	REG_L    x6, 48(sp)
-> +	REG_L    x5, 40(sp)
-> +	REG_L    x4, 32(sp)
-> +	REG_L    x3, 24(sp)
-> +	REG_L    x2, 16(sp)
-> +	REG_L    x1, 8(sp)
-> +	addi  sp, sp, (8*36)
->  .endm
->  
->  .balign 4
-> diff --git a/tools/testing/selftests/kvm/lib/riscv/processor.c b/tools/testing/selftests/kvm/lib/riscv/processor.c
-> index dd663bcf0cc0..2eac7d4b59e9 100644
-> --- a/tools/testing/selftests/kvm/lib/riscv/processor.c
-> +++ b/tools/testing/selftests/kvm/lib/riscv/processor.c
-> @@ -402,7 +402,7 @@ struct handlers {
->  	exception_handler_fn exception_handlers[NR_VECTORS][NR_EXCEPTIONS];
->  };
->  
-> -void route_exception(struct ex_regs *regs)
-> +void route_exception(struct pt_regs *regs)
+> +#define GET_RM(insn)            (((insn) & INSN_MASK_FUNCT3) >> INSN_SHIFT_FUNCT3)
+> +#define GET_CSR_NUM(insn)       (((insn) & INSN_CSR_MASK) >> INSN_CSR_SHIFT)
+> +
+>  static inline uint64_t __kvm_reg_id(uint64_t type, uint64_t subtype,
+>  				    uint64_t idx, uint64_t size)
 >  {
->  	struct handlers *handlers = (struct handlers *)exception_handlers;
->  	int vector = 0, ec;
-> diff --git a/tools/testing/selftests/kvm/riscv/arch_timer.c b/tools/testing/selftests/kvm/riscv/arch_timer.c
-> index 9e370800a6a2..f962fefc48fa 100644
-> --- a/tools/testing/selftests/kvm/riscv/arch_timer.c
-> +++ b/tools/testing/selftests/kvm/riscv/arch_timer.c
-> @@ -15,7 +15,7 @@
->  
->  static int timer_irq = IRQ_S_TIMER;
->  
-> -static void guest_irq_handler(struct ex_regs *regs)
-> +static void guest_irq_handler(struct pt_regs *regs)
->  {
->  	uint64_t xcnt, xcnt_diff_us, cmp;
->  	unsigned int intid = regs->cause & ~CAUSE_IRQ_FLAG;
-> diff --git a/tools/testing/selftests/kvm/riscv/ebreak_test.c b/tools/testing/selftests/kvm/riscv/ebreak_test.c
-> index cfed6c727bfc..739d17befb5a 100644
-> --- a/tools/testing/selftests/kvm/riscv/ebreak_test.c
-> +++ b/tools/testing/selftests/kvm/riscv/ebreak_test.c
-> @@ -27,7 +27,7 @@ static void guest_code(void)
->  	GUEST_DONE();
->  }
->  
-> -static void guest_breakpoint_handler(struct ex_regs *regs)
-> +static void guest_breakpoint_handler(struct pt_regs *regs)
->  {
->  	WRITE_ONCE(sw_bp_addr, regs->epc);
->  	regs->epc += 4;
 > diff --git a/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c b/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
-> index 03406de4989d..6e66833e5941 100644
+> index 6e66833e5941..3c47268df262 100644
 > --- a/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
 > +++ b/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
-> @@ -128,7 +128,7 @@ static void stop_counter(unsigned long counter, unsigned long stop_flags)
->  		       "Unable to stop counter %ld error %ld\n", counter, ret.error);
->  }
+> @@ -130,9 +130,29 @@ static void stop_counter(unsigned long counter, unsigned long stop_flags)
 >  
-> -static void guest_illegal_exception_handler(struct ex_regs *regs)
-> +static void guest_illegal_exception_handler(struct pt_regs *regs)
+>  static void guest_illegal_exception_handler(struct pt_regs *regs)
 >  {
+> +	unsigned long insn;
+> +	int opcode, csr_num, funct3;
+> +
 >  	__GUEST_ASSERT(regs->cause == EXC_INST_ILLEGAL,
 >  		       "Unexpected exception handler %lx\n", regs->cause);
-> @@ -138,7 +138,7 @@ static void guest_illegal_exception_handler(struct ex_regs *regs)
->  	regs->epc += 4;
->  }
 >  
-> -static void guest_irq_handler(struct ex_regs *regs)
-> +static void guest_irq_handler(struct pt_regs *regs)
->  {
->  	unsigned int irq_num = regs->cause & ~CAUSE_IRQ_FLAG;
->  	struct riscv_pmu_snapshot_data *snapshot_data = snapshot_gva;
+> +	insn = regs->badaddr;
+> +	opcode = (insn & INSN_OPCODE_MASK) >> INSN_OPCODE_SHIFT;
+> +	__GUEST_ASSERT(opcode == INSN_OPCODE_SYSTEM,
+> +		       "Unexpected instruction with opcode 0x%x insn 0x%lx\n", opcode, insn);
+> +
+> +	csr_num = GET_CSR_NUM(insn);
+> +	funct3 = GET_RM(insn);
+> +	/* Validate if it is a CSR read/write operation */
+> +	__GUEST_ASSERT(funct3 <= 7 && (funct3 != 0 && funct3 != 4),
+> +		       "Unexpected system opcode with funct3 0x%x csr_num 0x%x\n",
+> +		       funct3, csr_num);
+> +
+> +	/* Validate if it is a HPMCOUNTER CSR operation */
+> +	__GUEST_ASSERT((csr_num >= CSR_CYCLE && csr_num <= CSR_HPMCOUNTER31) ||
+> +		       (csr_num >= CSR_CYCLEH && csr_num <= CSR_HPMCOUNTER31H),
+
+We should never get csr accesses to the rv32 high registers since we only
+support 64-bit.
+
+> +		       "Unexpected csr_num 0x%x\n", csr_num);
+> +
+>  	illegal_handler_invoked = true;
+>  	/* skip the trapping instruction */
+>  	regs->epc += 4;
 > 
 > -- 
 > 2.43.0
 >
 
-Other than the macro comments,
+Otherwise,
 
 Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-
-Thanks,
-drew
 
