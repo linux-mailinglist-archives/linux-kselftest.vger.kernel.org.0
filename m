@@ -1,130 +1,202 @@
-Return-Path: <linux-kselftest+bounces-32036-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32037-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA861AA5182
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 18:21:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BF02AA521A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 18:53:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F1B634E7450
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 16:21:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 154629C1714
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 16:53:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66D27261370;
-	Wed, 30 Apr 2025 16:21:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AF54264608;
+	Wed, 30 Apr 2025 16:53:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SrE/kTXv"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j5+jhZFo"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B8402609FB
-	for <linux-kselftest@vger.kernel.org>; Wed, 30 Apr 2025 16:21:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0F171D7984;
+	Wed, 30 Apr 2025 16:53:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746030072; cv=none; b=hIWSLwrcdGJF9BaacDp9XV5EoEld1TuahBLiTbXIdP00BsuqglZb8816f3ihW20SVr2PG2QDhiam9PVCZh7mq/he1lHqotEHQlxkffNyrKd+Urgyp6cUvChE992ILhtQiTyCs5JI2WWhK6Z86i2Ue8KQjyiHU1oO7O5ywKLGOKg=
+	t=1746032010; cv=none; b=tCRrLQEPBVKG91S4IYbEPgr/DtBTTG/L2PiAciDWyeyBwZR5DZKqaD9gaeCgihfW4i0rc5Ocdogcstc+iaV+NQl2imOBY99mPXKjCLO6N4NMPG+1ermQbcVyZFEhg2BDzZJopQ7DDpjeL6gSRYtK7V1Nxg0FSqIkZ37mF1leiV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746030072; c=relaxed/simple;
-	bh=cWuwpID4ow0Nv5NvrwSre9qMIxbN0XB35u0L/1yPIiw=;
+	s=arc-20240116; t=1746032010; c=relaxed/simple;
+	bh=BBMsd/oizy20IUV96EPxJNmvZVs0GIKVqE5EGiMLivc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QhYwXWM0xUS+/Mew/sj8FjfSgscNuTfXzXv1A/wvAabI7R650QvT0tQgh6PJFn1eqzYDYhLnX5X2t4oUcSHgpovVvX9RIg/9uMlaRyTQJhZZfnD5GpkeDJdIbkoctXd2MBL6XgD1JPxFYgPmo+T/sdPz1nA5uGTkThkpc3E6jkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SrE/kTXv; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-43ef83a6bfaso2065e9.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Apr 2025 09:21:10 -0700 (PDT)
+	 To:Cc:Content-Type; b=dtTx7XYG9NLeeVFdcBjJh4SrW4kUngxg3fLrN+7YgmnN2t4JU3c8RY93tffQSFBb6o+F+vUQmtQzzTAoKLCkWNVpNLyBLJqqBYidUjeipRxSRcXlyD2EVTrTOfkmBp5aK2tncIc4IYr2LiMwImpXRQrsD+O/166jlWOPWMOy0Q4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j5+jhZFo; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-39c1ef4ae3aso67523f8f.1;
+        Wed, 30 Apr 2025 09:53:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746030069; x=1746634869; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1746032007; x=1746636807; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=N4t9Jwzp3tALmT5Y0kuqzt6lZQSaIPQ+RLi/Bjs6axI=;
-        b=SrE/kTXvp0uEFkkddRSYy72Q4RMPsmKVNQzUB7xLnspkLBILVXlv09bF3LlYMsbMog
-         YBsYiaNfLakmVSwn5yjXnxmdhQ7lxAVzwZg5EkjoXNkA5JLqq/Y7Q7cPdw8JIcTsJ8lg
-         bCIOOxHgpOpFIl3mIUicfEQ7nRDZp2v+tL9EpSuPmsLZdcR9KffFIHEKyMeL7xfTDbs7
-         CGfkBlwJfJSYO86vrjgVJfY6U1vrp76PtztL8XDsQ0ryYZD4VvcTgRiOAsqhlRIGrOB1
-         EjT6mMVzy95xMDYQwQvXejmuybtCTXL2qXIaoOP4VbIPPwGmv6yOOmRwneDsDvPWx/82
-         ePDQ==
+        bh=iyqoFwnx1rN119y/EQDLgAAtG+9Od9yyi7V0yRmYe1Y=;
+        b=j5+jhZFo1DiaCKv+6sWRLRfvn+bdSHbxC02gj9bjsob0pP/9GFhw8/33JlZGS/O/cx
+         3sLdfnkLHDX1D/kdvW2tUTYAufC14MELRGdGzxdGooMdR23PcNhd/7zDNL+GVNnhMx1Z
+         3/+5+BBnkzjMDnlPSJBHDbldm/IikqBdVqe86lqQha1Dnol71EpIqMshs+PCK2ItKKiE
+         HujqYIDHWypVsb7kHmCsiLbU/kqhXtZNt3T33Utt03JQP4Ln7giRCPCGl+F/CNkeDrH4
+         jOOGeSlD1U6nZh4rUY95PkIYFA5I6HGoItTCDXsSEY3GzbsWnKDV29nfEBpi5tIMEKR/
+         H6gQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746030069; x=1746634869;
+        d=1e100.net; s=20230601; t=1746032007; x=1746636807;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=N4t9Jwzp3tALmT5Y0kuqzt6lZQSaIPQ+RLi/Bjs6axI=;
-        b=K0SF7rgY8U+ftenfJ4b/MLJEJcBXloZ3OsCLlrT9zbtKTD+Msn0k4I7U9AC+iIGaZF
-         waPvZk3ythVnmXQtU0UoBDlvSeuYjpfE2T0wXhv9fGIDVk9L9QrW0FbdaiCWjygLYAsY
-         4amAN2j3kScX0hS4cAU/KSPIAM0DD3CQwYIPK7mhaEa2x7gEz1rqUV/zI+lJw6p3mjG0
-         k9EgTWNSK3BzV6rAfLxzg7A7q00dKQqzq0aYRHvyKTQVS6X4Ek7mJjPOkzkoDDeV9RGM
-         Tl37fA8xGrXfRqHV7UE5GFPifsQJlZhBI9GzpXy8T9zvngXh5/o0b9h6/NL7s554QUm5
-         Ps2g==
-X-Gm-Message-State: AOJu0YyMsR3df7DNN0AOpoBQQEMd4Ijq7zBnLz3LoqX3qkCaEHYZNSZa
-	QKRATQP2ec/DaecQfqqN9gdxaHw/cyrn2GX0RpoFP7XbCKWIRwoACmiiWVsCpKY1blvzX8tR3Jn
-	edMbcIf5LF46xh89i1rBj9ZttTxQhl/LUbf5m
-X-Gm-Gg: ASbGncuxp1lFDDs8Hq+8CLTj3vGMsRbVukLL7TLnvfqP3tgcZQMvi95Pe5wgAGwpikh
-	2aE8cVcU8Kv4GRqcEYDmDkuuNJzDd+KaGMxMyV3WhoRGqRDNIluZfkXNCAAIX07p/SJKx7QhmwZ
-	Slr4clT91XN3k+Jx3UwOuUzwuQq8j9fzCpYbc4qljpKKz/qrn1AA==
-X-Google-Smtp-Source: AGHT+IENM6Eh0EWW7XE/gaUWIsK+w8asvkWeu4drq5OeFhBehmM+fZ9cjvw4O9E8XZBXjlmRKTvMciERxI2/CJnKT/0=
-X-Received: by 2002:a05:600c:63cb:b0:439:8f59:2c56 with SMTP id
- 5b1f17b1804b1-441b20096cbmr1334855e9.2.1746030068758; Wed, 30 Apr 2025
- 09:21:08 -0700 (PDT)
+        bh=iyqoFwnx1rN119y/EQDLgAAtG+9Od9yyi7V0yRmYe1Y=;
+        b=FFHjlgCEqfU5cCPAEV39tUsTIa9KSWb1puzn+NaLTGPaq7MbDdl7JhLsRopjcJ3cBB
+         JdKfWk4AssMkqUACxoF3DH8Kv4n+mL8AcqR5pQWo7/xbWZXhcHgJw2GMW9qlTjv/XyKA
+         XvHJTtVgEZQ+3K4381aUDP0ciu0g/ElePqSkXBnZxikeUB/K2fXv23GnuzbK0TBvlzow
+         2fET6zyjoC99WMeBkfPXH3cvKivmLtVWNa3LubCcQTcz1x1Zlei9Ud+PsRTzgH+aKdxA
+         MkH9eb0ERcl52gAPHoZdjwWaaxJ6Vr7LMA5gXmSxANPxPXBh65vbPtL8xZH2f4DnkHfb
+         w/NQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU2rupEOH1+xPm8eyOReT7gGoBRPNIYhB+yV+qn9xgusjpkdMEQYv+HuYTuulGuupjTsfQ=@vger.kernel.org, AJvYcCUB7XXtMfRJdfw9tU5RXX9dGbXSAc8yHR/eQdCIayYgyWwd+RUFENrp7E1HPWtxIZidM8ONMzkucukuZqgN@vger.kernel.org, AJvYcCV+BwuKtHcygL4Ho7Uw059D6/SsqJfx2NOynYpSwkWgRsvp35zrHZ9U3SSFb9L1zGhC0XFww2Sw@vger.kernel.org, AJvYcCXSkOr64L3kHRgID4O0gloeVd5I53p5js1attL++W0XkU1DU5rdVZh0AM1vTDOBNoEAEH4AJt3g3+vEPhEhHU1fB45L@vger.kernel.org, AJvYcCXyOICrzdowK6K6UaGFFpfNQI6wZOvSolGvYG4Xx1qeD35HIW0necr/fA3VWsBuQcueh7XkLIJKpfoPI+I4MSi3@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/2TJax06/rkuF5WTzGloPodJ/RdpyGVkfWVyrRcWt41nFz8O/
+	r5UHjWUpKipofo9BJGa9vsRe+DCwO+sPsX934VhuDvHQiyMJsd3LH+KN9H5G8CDw0/zSkzl6C09
+	IqLQadg1j6FHs4KHTs4/5/J71TD0=
+X-Gm-Gg: ASbGnctlze7WOMKhjESb8wCcAj6rGAV5nQTbXzhPCl6Chs4KDbWJWGhVACHlAU/U8V4
+	Eu4dySs/cSX1q+fTHMJFdAZ8Kr+2ZNAYFDnzeFe4twV46BZRUf1xpaQ82gkolrgCYcCyPMY1TcH
+	caLrx+nyD2oMKIkm+nPIXvUuTi45E+c9pMyL8lPg==
+X-Google-Smtp-Source: AGHT+IGktp2atpBKpp4ur5fbFBTf4kR6IH2vBfdClEMDlfV8ktjOsDPmmtEvHUeJRGc4jX1Itzt6phHMVfWVJf1Cjrg=
+X-Received: by 2002:a05:6000:64a:b0:38d:ae1e:2f3c with SMTP id
+ ffacd0b85a97d-3a092d0230cmr179055f8f.25.1746032006951; Wed, 30 Apr 2025
+ 09:53:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250115105211.390370-1-ps.report@gmx.net> <20250115105211.390370-2-ps.report@gmx.net>
-In-Reply-To: <20250115105211.390370-2-ps.report@gmx.net>
-From: "T.J. Mercier" <tjmercier@google.com>
-Date: Wed, 30 Apr 2025 09:20:56 -0700
-X-Gm-Features: ATxdqUFcCdxSPFBmNim9qAAPca0KuXa7suNkaPFI4nBeNOT7XQmGzJgW0YUXsts
-Message-ID: <CABdmKX3zM8NodtvCDgRJXAYrXydxbKsu7UXL=iWNbO5RW6-Cng@mail.gmail.com>
-Subject: Re: [PATCH v1 2/3] selftests: pidfd: add missing sys/ioctl.h include
- in pidfd_setns_test.c
-To: Peter Seiderer <ps.report@gmx.net>
-Cc: linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
-	linux-kernel@vger.kernel.org, Christian Brauner <brauner@kernel.org>
+References: <20250426160027.177173-1-mannkafai@gmail.com> <20250426160027.177173-2-mannkafai@gmail.com>
+ <CAADnVQ+DF18nKEf9i1RKEQN+ybH+duu7U-91YZDaa_PiqUx17g@mail.gmail.com>
+ <CALqUS-6XtJ0Bb9jiykdC3jAY_OHjGuirj06Kzssjvo7eW_so2A@mail.gmail.com> <f951b81f-1b46-4219-82fd-0839e27ab3f3@linux.dev>
+In-Reply-To: <f951b81f-1b46-4219-82fd-0839e27ab3f3@linux.dev>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 30 Apr 2025 09:53:15 -0700
+X-Gm-Features: ATxdqUHCM_hgru1Pfc1BqXTKZ-VBkhd7Cw8k1b6R1YPnD0rN_9RdWCr9fvClEug
+Message-ID: <CAADnVQ+FANha0fO_BF+iHJ4iZSCPtDfoUkzR8mMFwOakw8+eCg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/4] bpf: Allow get_func_[arg|arg_cnt] helpers in
+ raw tracepoint programs
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: Kafai Wan <mannkafai@gmail.com>, Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Matt Bobrowski <mattbobrowski@google.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	bpf <bpf@vger.kernel.org>, 
+	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 15, 2025 at 2:53=E2=80=AFAM Peter Seiderer <ps.report@gmx.net> =
-wrote:
+On Wed, Apr 30, 2025 at 8:55=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
+rote:
 >
-> Fix compile on openSUSE Tumbleweed (gcc-14.2.1, glibc-2.40):
->   - add missing sys/ioctl.h include
 >
-> Fixes:
 >
->   pidfd_setns_test.c: In function =E2=80=98current_nsset_setup=E2=80=99:
->   pidfd_setns_test.c:172:54: error: implicit declaration of function =E2=
-=80=98ioctl=E2=80=99 [-Wimplicit-function-declaration]
->     172 |                 self->child_pidfd_derived_nsfds[i] =3D ioctl(se=
-lf->pidfd, info->pidfd_ioctl, 0);
->         |                                                      ^~~~~
+> On 2025/4/30 20:43, Kafai Wan wrote:
+> > On Wed, Apr 30, 2025 at 10:46=E2=80=AFAM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> >>
+> >> On Sat, Apr 26, 2025 at 9:00=E2=80=AFAM KaFai Wan <mannkafai@gmail.com=
+> wrote:
+> >>>
 >
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> [...]
+>
+> >>> @@ -2312,7 +2322,7 @@ void __bpf_trace_run(struct bpf_raw_tp_link *li=
+nk, u64 *args)
+> >>>  #define REPEAT(X, FN, DL, ...)         REPEAT_##X(FN, DL, __VA_ARGS_=
+_)
+> >>>
+> >>>  #define SARG(X)                u64 arg##X
+> >>> -#define COPY(X)                args[X] =3D arg##X
+> >>> +#define COPY(X)                args[X + 1] =3D arg##X
+> >>>
+> >>>  #define __DL_COM       (,)
+> >>>  #define __DL_SEM       (;)
+> >>> @@ -2323,9 +2333,10 @@ void __bpf_trace_run(struct bpf_raw_tp_link *l=
+ink, u64 *args)
+> >>>         void bpf_trace_run##x(struct bpf_raw_tp_link *link,          =
+   \
+> >>>                               REPEAT(x, SARG, __DL_COM, __SEQ_0_11)) =
+   \
+> >>>         {                                                            =
+   \
+> >>> -               u64 args[x];                                         =
+   \
+> >>> +               u64 args[x + 1];                                     =
+   \
+> >>> +               args[0] =3D x;                                       =
+     \
+> >>>                 REPEAT(x, COPY, __DL_SEM, __SEQ_0_11);               =
+   \
+> >>> -               __bpf_trace_run(link, args);                         =
+   \
+> >>> +               __bpf_trace_run(link, args + 1);                     =
+   \
+> >>
+> >> This is neat, but what is this for?
+> >> The program that attaches to a particular raw_tp knows what it is
+> >> attaching to and how many arguments are there,
+> >> so bpf_get_func_arg_cnt() is a 5th wheel.
+> >>
+> >> If the reason is "for completeness" then it's not a good reason
+> >> to penalize performance. Though it's just an extra 8 byte of stack
+> >> and a single store of a constant.
+> >>
+> > If we try to capture all arguments of a specific raw_tp in tracing prog=
+rams,
+> > We first obtain the arguments count from the format file in debugfs or =
+BTF
+> > and pass this count to the BPF program via .bss section or cookie (if
+> > available).
+> >
+> > If we store the count in ctx and get it via get_func_arg_cnt helper in
+> > the BPF program=EF=BC=8C
+> > a) It's easier and more efficient to get the arguments count in the BPF=
+ program.
+> > b) It could use a single BPF program to capture arguments for multiple =
+raw_tps,
+> > reduce the number of BPF programs when massive tracing.
+> >
+>
+>
+> bpf_get_func_arg() will be very helpful for bpfsnoop[1] when tracing tp_b=
+tf.
+>
+> In bpfsnoop, it can generate a small snippet of bpf instructions to use
+> bpf_get_func_arg() for retrieving and filtering arguments. For example,
+> with the netif_receive_skb tracepoint, bpfsnoop can use
+> bpf_get_func_arg() to filter the skb argument using pcap-filter(7)[2] or
+> a custom attribute-based filter. This will allow bpfsnoop to trace
+> multiple tracepoints using a single bpf program code.
 
-Reviewed-by: T.J. Mercier <tjmercier@google.com>
+I doubt you thought it through end to end.
+When tracepoint prog attaches we have this check:
+        /*
+         * check that program doesn't access arguments beyond what's
+         * available in this tracepoint
+         */
+        if (prog->aux->max_ctx_offset > btp->num_args * sizeof(u64))
+                return -EINVAL;
 
-
-> ---
->  tools/testing/selftests/pidfd/pidfd_setns_test.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/tools/testing/selftests/pidfd/pidfd_setns_test.c b/tools/tes=
-ting/selftests/pidfd/pidfd_setns_test.c
-> index 222f8131283b..4c8a0253a64f 100644
-> --- a/tools/testing/selftests/pidfd/pidfd_setns_test.c
-> +++ b/tools/testing/selftests/pidfd/pidfd_setns_test.c
-> @@ -17,6 +17,7 @@
->  #include <sys/socket.h>
->  #include <sys/stat.h>
->  #include <linux/ioctl.h>
-> +#include <sys/ioctl.h>
->
->  #include "pidfd.h"
->  #include "../kselftest_harness.h"
-> --
-> 2.47.1
->
+So you cannot have a single bpf prog attached to many tracepoints
+to read many arguments as-is.
+You can hack around that limit with probe_read,
+but the values won't be trusted and you won't be able to pass
+such untrusted pointers into skb and other helpers/kfuncs.
 
