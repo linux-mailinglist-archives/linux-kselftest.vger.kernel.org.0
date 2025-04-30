@@ -1,154 +1,130 @@
-Return-Path: <linux-kselftest+bounces-32034-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32035-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EF52AA50E2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 17:55:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7104CAA5181
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 18:21:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D81ED3A7CE9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 15:54:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 31E211C06CA6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 16:21:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2A0325D1F8;
-	Wed, 30 Apr 2025 15:55:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2E742641EE;
+	Wed, 30 Apr 2025 16:21:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jEUP/GLo"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AQAtIXGr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8B8917CA17
-	for <linux-kselftest@vger.kernel.org>; Wed, 30 Apr 2025 15:55:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14BB3263C7F
+	for <linux-kselftest@vger.kernel.org>; Wed, 30 Apr 2025 16:21:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746028510; cv=none; b=gqF6HB8oaQcap6AowpdxquX9s1XzVNhPMynJxi/pke6RztuEUenxPwAeaWXB4h6U95Md4/076AuSUOz6Ys6hadiTAf0KNVH0pyhTgwHNwOP7bbu1holg4ZwIFGjgvxhyZ6cHH+K0cdYCZyjq8uUAijlriWNeJ0UBqnaEpSqOf9I=
+	t=1746030064; cv=none; b=GwZnsDbqPF0NfeLSfCHUDLK9EqE3RddvDm3ZsJlJTvVbd4KNF5mkfhG/X+GboEBVDVcpwkJoNRONCx7esTMKc7HGhTIYUKj3K0fTUKfVuL6H1HeU0iA8f22BRi6LkUPpMOIAJFVz4MCnHmuttR7rkuNnXOA6/8FnRtl+j0SZ3D0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746028510; c=relaxed/simple;
-	bh=itiBlsf6zR4RTlm3hf+QfHFNY4vVsdzz2uVhJ45Z5FI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=J+Osyb9UfH45/jxekEE/S8x7Zp9M8amQBOfpdzqse1hJhxt5t6344M66+lcfK0L//7YpTiDX+9dtKIM7gGLMKcrLqSb8Ba30Xr3/KQSSa6UXUvCPxQoGRmS+JAhNVMBbWPoWaSQzF5QfUZnG6QSV4cO5slqXnvNBQ7i0YoXvN80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jEUP/GLo; arc=none smtp.client-ip=95.215.58.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <f951b81f-1b46-4219-82fd-0839e27ab3f3@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1746028504;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=x01/YentqQxiWV+z2dsRSAIeIX6UbbCKUGdMPakv0qE=;
-	b=jEUP/GLoxJGvhRlAHo8UUY72GYTKU2U7nYQiDnmfjuRerBfvwIZZMpmwdytWhh/xlnA4yk
-	jTrmdGlsY2YmIOSEJ+DH24bkZzjHXIG/QOIjHqjNAslgaJR3ZYdM4p74rpLyDEv/HqR/5U
-	MM7aIhHbnP3NPMi6VPkKCuFv9s+4YvM=
-Date: Wed, 30 Apr 2025 23:54:46 +0800
+	s=arc-20240116; t=1746030064; c=relaxed/simple;
+	bh=LpHRfhDvHGPF2hXjZlOMYKooffdzDnFTNYYSF2yPQ2s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LGaAnu0QTtIZUTau+iJXNd3ZgkbLvevgJl6vlZQNIcdbZoGw4UToIZxnpa6pFxAH8bwpAkD+79U36F2+FFa2EGH+Gwkfz2qrqAqrnxwqsVv9cG6CDzlh8zLBFBNlgEtXHYijpeuJQ1iGenxP4ysmY10rZDfnzOW+Sfe7e+UZA6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AQAtIXGr; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-43cfe808908so2895e9.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Apr 2025 09:21:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1746030061; x=1746634861; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ITlJTqCh7uuC+AGjnX/2OcnlbBzBhZafTVcOLvpVDYw=;
+        b=AQAtIXGrH/83WlGPZ9pIArgc+sDEazm1yA8+GHjaisXauRxkzCBYi0Gjtqd/KO1KYY
+         znKmWywnW5o5RtFubnmSz/wrMm3cXFRvHiZtcTTy9X0j2UN6x6yf9SIYVwgBvDGyNdL4
+         oApBSh8Rxjc/8X6rvsS8Aq3t1SikKmhjK6Is+Qkwy/9t8wItkeRHQ2QO6Vyfml1f5XnH
+         SW0TcvsSV8DLDuSxdk6E1Y2zmJG6rCz1QpjOcdEbJF/W023s08joyD+0MmZFc79xfyPZ
+         yKEkZNzrrtgH6fmWol9qE6YAFjauskSFmLyp6b/OINUqVb4/xmrZDfLXB+hNWw12qgtX
+         ujog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746030061; x=1746634861;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ITlJTqCh7uuC+AGjnX/2OcnlbBzBhZafTVcOLvpVDYw=;
+        b=felE2X7C6PV1EhH9xw9drQj76TMSJZZBw+whqnirDhCoEWhzlOutNmHQeuCGK79uHP
+         0CTA43C8YWr3ymGainkyyNfXi2DVJFKMU9ATndzJaMhe4xHY+TTttgvikjAlJg/GnV7E
+         LZmvwKcnax+GGtffo3WXiOmRtIjnyrtQLxS340zetavtvyjdJTgK6vqcTYjDQSjwEF1I
+         Ww4NUAV/RVsxSr3JYY3nB8kAESKoI3iwIL3R7dkCU/4FwfWjUmHkvnMZRMbFGsVFsGdy
+         cyr3MSkuqQlj2vFP/HU+CTi+4Ft4Pa4/UjCVpeHWd8X037bUCU4J3vX5YxbZuBVWkRtx
+         55IA==
+X-Gm-Message-State: AOJu0YzKOhbrv18FvHHziVFriRBDOuOXYyFdIUtteWdrjkmr7wgf/AeC
+	f0wdcwqpU7zsCUvfkoniCti0ym2EEiKPo6471Je6R+yqeGUo07UmOxj9tKPdqLM4+2w5tDSVTga
+	SiynBqBy33inr9bJupF1d+dAw38ElrqF3W6p6
+X-Gm-Gg: ASbGncuczOz7fOerYd3KANk8DcsL4Ho0EK5D7gvyMEi/vi7LOHg9diVWlnwuntAAcMX
+	uRUhxWFlE6h1vYfMUjb1W5yhKt8qXhdMKYkz/s/f2eRnyC2Iu9BT5krtA9VuQcaLtMthkeJnKH5
+	JC75wwbvs9AvMNa5V7E7iq0gKluPNdNcPCMWyerKbyItcHWaqOhQ==
+X-Google-Smtp-Source: AGHT+IGjq5UCWuOVohT4wTc98AFxoE5cC1RndlLUKdHvMQth3F5/w7t4WqoGSe6nSHUwNQ8iWR2HZkZH8kD/nBSW0+U=
+X-Received: by 2002:a05:600c:1d90:b0:439:9434:1b6c with SMTP id
+ 5b1f17b1804b1-441b4d7a6d1mr546205e9.3.1746030061267; Wed, 30 Apr 2025
+ 09:21:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 1/4] bpf: Allow get_func_[arg|arg_cnt] helpers in
- raw tracepoint programs
-To: Kafai Wan <mannkafai@gmail.com>,
- Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Matt Bobrowski <mattbobrowski@google.com>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
- Shuah Khan <shuah@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
- bpf <bpf@vger.kernel.org>,
- linux-trace-kernel <linux-trace-kernel@vger.kernel.org>,
- Network Development <netdev@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-References: <20250426160027.177173-1-mannkafai@gmail.com>
- <20250426160027.177173-2-mannkafai@gmail.com>
- <CAADnVQ+DF18nKEf9i1RKEQN+ybH+duu7U-91YZDaa_PiqUx17g@mail.gmail.com>
- <CALqUS-6XtJ0Bb9jiykdC3jAY_OHjGuirj06Kzssjvo7eW_so2A@mail.gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <CALqUS-6XtJ0Bb9jiykdC3jAY_OHjGuirj06Kzssjvo7eW_so2A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20250115105211.390370-1-ps.report@gmx.net>
+In-Reply-To: <20250115105211.390370-1-ps.report@gmx.net>
+From: "T.J. Mercier" <tjmercier@google.com>
+Date: Wed, 30 Apr 2025 09:20:47 -0700
+X-Gm-Features: ATxdqUGzlbj1JzYl8Y8d6xa0ko6OVa25QiRzQSU_kIdPLFfnUA-zNBFDvtwFXPk
+Message-ID: <CABdmKX2+nhw8L7HLZdaSvbX4VWhCEaxZt42G2QEvcfKxzpw3RA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/3] selftests: pidfd: add missing sys/mount.h include
+ in pidfd_fdinfo_test.c
+To: Peter Seiderer <ps.report@gmx.net>
+Cc: linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+	linux-kernel@vger.kernel.org, Christian Brauner <brauner@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Jan 15, 2025 at 2:52=E2=80=AFAM Peter Seiderer <ps.report@gmx.net> =
+wrote:
+>
+> Fix compile on openSUSE Tumbleweed (gcc-14.2.1, glibc-2.40):
+>   - add missing sys/mount.h include
+>
+> Fixes:
+>
+>   pidfd_fdinfo_test.c: In function =E2=80=98child_fdinfo_nspid_test=E2=80=
+=99:
+>   pidfd_fdinfo_test.c:230:13: error: implicit declaration of function =E2=
+=80=98mount=E2=80=99 [-Wimplicit-function-declaration]
+>     230 |         r =3D mount(NULL, "/", NULL, MS_REC | MS_PRIVATE, 0);
+>         |             ^~~~~
+>
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+
+Reviewed-by: T.J. Mercier <tjmercier@google.com>
 
 
-
-On 2025/4/30 20:43, Kafai Wan wrote:
-> On Wed, Apr 30, 2025 at 10:46 AM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
->>
->> On Sat, Apr 26, 2025 at 9:00 AM KaFai Wan <mannkafai@gmail.com> wrote:
->>>
-
-[...]
-
->>> @@ -2312,7 +2322,7 @@ void __bpf_trace_run(struct bpf_raw_tp_link *link, u64 *args)
->>>  #define REPEAT(X, FN, DL, ...)         REPEAT_##X(FN, DL, __VA_ARGS__)
->>>
->>>  #define SARG(X)                u64 arg##X
->>> -#define COPY(X)                args[X] = arg##X
->>> +#define COPY(X)                args[X + 1] = arg##X
->>>
->>>  #define __DL_COM       (,)
->>>  #define __DL_SEM       (;)
->>> @@ -2323,9 +2333,10 @@ void __bpf_trace_run(struct bpf_raw_tp_link *link, u64 *args)
->>>         void bpf_trace_run##x(struct bpf_raw_tp_link *link,             \
->>>                               REPEAT(x, SARG, __DL_COM, __SEQ_0_11))    \
->>>         {                                                               \
->>> -               u64 args[x];                                            \
->>> +               u64 args[x + 1];                                        \
->>> +               args[0] = x;                                            \
->>>                 REPEAT(x, COPY, __DL_SEM, __SEQ_0_11);                  \
->>> -               __bpf_trace_run(link, args);                            \
->>> +               __bpf_trace_run(link, args + 1);                        \
->>
->> This is neat, but what is this for?
->> The program that attaches to a particular raw_tp knows what it is
->> attaching to and how many arguments are there,
->> so bpf_get_func_arg_cnt() is a 5th wheel.
->>
->> If the reason is "for completeness" then it's not a good reason
->> to penalize performance. Though it's just an extra 8 byte of stack
->> and a single store of a constant.
->>
-> If we try to capture all arguments of a specific raw_tp in tracing programs,
-> We first obtain the arguments count from the format file in debugfs or BTF
-> and pass this count to the BPF program via .bss section or cookie (if
-> available).
-> 
-> If we store the count in ctx and get it via get_func_arg_cnt helper in
-> the BPF program，
-> a) It's easier and more efficient to get the arguments count in the BPF program.
-> b) It could use a single BPF program to capture arguments for multiple raw_tps,
-> reduce the number of BPF programs when massive tracing.
-> 
-
-
-bpf_get_func_arg() will be very helpful for bpfsnoop[1] when tracing tp_btf.
-
-In bpfsnoop, it can generate a small snippet of bpf instructions to use
-bpf_get_func_arg() for retrieving and filtering arguments. For example,
-with the netif_receive_skb tracepoint, bpfsnoop can use
-bpf_get_func_arg() to filter the skb argument using pcap-filter(7)[2] or
-a custom attribute-based filter. This will allow bpfsnoop to trace
-multiple tracepoints using a single bpf program code.
-
-[1] https://github.com/bpfsnoop/bpfsnoop
-[2] https://www.tcpdump.org/manpages/pcap-filter.7.html
-
-Thanks,
-Leon
-
+> ---
+>  tools/testing/selftests/pidfd/pidfd_fdinfo_test.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c b/tools/te=
+sting/selftests/pidfd/pidfd_fdinfo_test.c
+> index f062a986e382..f718aac75068 100644
+> --- a/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
+> +++ b/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
+> @@ -13,6 +13,7 @@
+>  #include <syscall.h>
+>  #include <sys/wait.h>
+>  #include <sys/mman.h>
+> +#include <sys/mount.h>
+>
+>  #include "pidfd.h"
+>  #include "../kselftest.h"
+> --
+> 2.47.1
+>
 
