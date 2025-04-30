@@ -1,79 +1,79 @@
-Return-Path: <linux-kselftest+bounces-32026-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32027-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 307BAAA499C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 13:15:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE262AA49AF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 13:19:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 012969A272B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 11:15:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 331271BC71D5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 11:19:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A1FB20C00C;
-	Wed, 30 Apr 2025 11:15:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3768E18BBBB;
+	Wed, 30 Apr 2025 11:19:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="2vqlCsoZ"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="A5D+7siF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2089.outbound.protection.outlook.com [40.107.93.89])
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2077.outbound.protection.outlook.com [40.107.101.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7374F211C;
-	Wed, 30 Apr 2025 11:15:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.89
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B6698615A;
+	Wed, 30 Apr 2025 11:19:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.101.77
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746011723; cv=fail; b=AlTQRVo0iN9/E3X9agEhhedX5J8w6ZAXMTZluCqiOIvwGsG/u2/ztGcUTU/sr7n9lEkOROkyie5YYdGG32ZDvG5Te0cTauhg+xduO+IzK2SrJ7X+rQWCrJ+cxUKEO5Bv+f8pKrdI7J0spZQCvIBKKE+hYmZHHiQavH+BfTKp9pY=
+	t=1746011949; cv=fail; b=HRdQjTOyuu+vV2j11OOjBFDDTV7bMswdVZHs7I/kTTbxduxqXAW1v6E4reEGixcc2SQTYAWOymD0qugw6yf58CcJz/L968NFmuE5mXB1HetfzUoudOfLKLb0AR75MF7F4J8ZNwVF5YVUv/hnu63xCbddMopeSjLoqvxDumcMz9s=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746011723; c=relaxed/simple;
-	bh=G2fTHNszRzUxF8Ih//uLQP0hazW+uz3eJygdpDj+bgA=;
+	s=arc-20240116; t=1746011949; c=relaxed/simple;
+	bh=8ffowvpKIW7rwGLUKe+JD2fzNvXCHAjmLJzElCK+RLY=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=EuSpH2SZ70J7j0JqUbkUcvtzyxB58pfigVECJk6QddVeWsLN4j1W7zLJk9O7W7yL9fMIyTosfUOoPbDkAycNndxR0OAPdbZtV2Mrg0Ev18CMl7AhvVkEiq6pe229v9IHjboPJXz3cqlLq/A7NdHfYxtESFxM+b9Dg7RYpis4EqY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=2vqlCsoZ; arc=fail smtp.client-ip=40.107.93.89
+	 Content-Type:MIME-Version; b=A3ZnrEOkd5QygfBILQL/JZRKcZ8v8c0CobQshs/YqanlNLTFFJV/aF74K36/RtIu7XOzsMtAosZIULP0e+Ijhde9BXefWGZcC3scVfZaN+rseONNCzE2hOGyqs/5IvK7TbSjpGg+yOW6JNhKMQwtyrk0MkBAPM6OUp0uRglOIBw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=A5D+7siF; arc=fail smtp.client-ip=40.107.101.77
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=v+XIfuXD81xCyEN1bsMvmHL8+lWJT8PMCDIQw3AlbM7J5YomGJFG2yptyfBbIsRhlpVwToO8l6KJvWLik4q/9d0G6FoEkqYs47eUBsdFEciEXjbLnzhG4GCkSAl2uaRkBLT1uvlJOHvEx01GvLCXoXxFWYyDBUqJwNiL6QagKBIH8gVzfa50gB4XnWTd9so7+SU1dcT3Eh5cIZ0dz8JUYnartNOl8984JtYhVeLc2M9egPNkFTw6yQ2Fi1QCBgfzm7leWfGwjOmtHOw1MPy22lV3/OET2IN9ZOeLwytadypuYsuuJZYJHVl0+NszLTKpbZJm/rIxg5EJq4bK3dACfQ==
+ b=Xbm0vhlKCcV/7+sU1pgEKNdOfULE6i9ZK6s9IiotmvU2+f8Rgda9QOKii5ZFROJ8jNM/dHIA+WldC6rU+IWHRTsaNGY8gjuilENdFSZE5uHcra8nEHELQrVzXJie4E7MPSVm/joiqMJhCmvDeM5ztHkMQiAEz0P3jWSfAWxS8AVqMGLYUs3iGSJ1grlmkffNoz1WlD4XgY2Y4cmr+LbraPBmsMQLWCETHuOkz/tZeq+tTkaBd+OnxLpOmiPsjNizbp1BifoK/11rcWYxuIxvsKlK4E4nYNNgKuZk/cymj7bNNlw+/w3tS8Q38Xqo5fuxFlDvCmp28dkzojhTwXLNmg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=acD1LY6KHci03d2PYWvVrIvPZItb78+MyEf1772KnNU=;
- b=B6ljVmW3mM11O93wTxs5bzU/zNENHiuq+rNQm+vv2BK7pbh6ylh56R80GWk+WAspuGw793yd7252bu1DrwvcjeyX4OZFBwvIxOX6fJjEY5ieF2KhyfAeydPQ4caC8w/Xf2tQI6xlAaqm38JDS3obD6IebxelwPsC4/SLqiTCUN/m5J3F6DqtxqcDoTd5VzoISd1r4biJEmF2uvIk9662/q2rSKsoXwwStzdp9etaxkhQq7TIpYiEdNOCAaXWfBM44gUMB/0MiCQ3B2dJnMC0+3sXRiPCy7cD0eZjIFEt+tbmSDZXv3NSsC0q0iqzmYpY/dpp4h2EXPwHoW6CgP7XVA==
+ bh=TdajLPvFSLFse2P9hrWkw73yVOhAUxvbBc9RYoFNmpU=;
+ b=KfNEFtfW1RTsHpBDpY2HYLRrvAFJp29R9kE3RKY680C2sMCoFEoEjNlve3HgDy3l6aPSk/aLt7GQ9Ijq7LdmJa5IDwdxvaxgLC1yvH9BSOdfFWrIjGc5fUO5IZ+9vLteUSM7OkyFMrvjugnaAwWEIc+HzmooyTgimGXmknxFHPrylD92X8+ovI270VkIAydIGNCOR0GYcKhgLSOVlW1uS3oIujcJzmbG+a6xnMQswUVn6nI58NR/AT6pZZ4KmITGSsS9myK2U9waESPMXBDCTfNbdEcyiMI3Q5OiXHDhAkfCDTSsGOMMw74JBzO57lSCAaTjSGN70pxe+Adv1kJ8EA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=acD1LY6KHci03d2PYWvVrIvPZItb78+MyEf1772KnNU=;
- b=2vqlCsoZHP4uPYSQINsBQt1ShdezMxCKqbjHE6XsMQuSHbuC0n7et1kVro+YRL4V4UUou+hpbLxND3ZpbNii+hOpp657r6d/a4bqsA8HNPAQctR0jKse+9rbi638hn8z/udm5d6dzeOK8wZHyKN/MmNMoRNptko3x+h2L14vpYI=
+ bh=TdajLPvFSLFse2P9hrWkw73yVOhAUxvbBc9RYoFNmpU=;
+ b=A5D+7siFx4MywnhPt1psUU+vqTKE+DKzeBxvaHAmcvk8EmE30wpS3JaJNAYpbLioNaayuwsltmEpsiA/iujHHGUCB8HTZcYOZY45+RbVEQ82rCZvXj5c/ydM/K2/eubODoWdB/g47PD3pR4jGLbUkZdQMXA7IUGfitWh64J8jnQ=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from DS7PR12MB6214.namprd12.prod.outlook.com (2603:10b6:8:96::13) by
- CY8PR12MB7194.namprd12.prod.outlook.com (2603:10b6:930:5a::19) with Microsoft
+ MN0PR12MB6128.namprd12.prod.outlook.com (2603:10b6:208:3c4::6) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8678.33; Wed, 30 Apr 2025 11:15:18 +0000
+ 15.20.8655.40; Wed, 30 Apr 2025 11:19:05 +0000
 Received: from DS7PR12MB6214.namprd12.prod.outlook.com
  ([fe80::17e6:16c7:6bc1:26fb]) by DS7PR12MB6214.namprd12.prod.outlook.com
  ([fe80::17e6:16c7:6bc1:26fb%3]) with mapi id 15.20.8678.028; Wed, 30 Apr 2025
- 11:15:18 +0000
-Message-ID: <61dc73ed-7dac-4ebf-a0ee-fa338c254082@amd.com>
-Date: Wed, 30 Apr 2025 16:45:12 +0530
+ 11:19:04 +0000
+Message-ID: <7adcea90-e730-46d4-9a6e-7377b1fd4557@amd.com>
+Date: Wed, 30 Apr 2025 16:48:58 +0530
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 3/5] KVM: SVM: Enable Bus lock threshold exit
-To: Sean Christopherson <seanjc@google.com>
-Cc: Xiaoyao Li <xiaoyao.li@intel.com>, kvm@vger.kernel.org,
- linux-kselftest@vger.kernel.org, pbonzini@redhat.com, nikunj@amd.com,
- thomas.lendacky@amd.com, bp@alien8.de
+Subject: Re: [PATCH v4 4/5] KVM: SVM: Add support for
+ KVM_CAP_X86_BUS_LOCK_EXIT on SVM CPUs
+To: Sean Christopherson <seanjc@google.com>, Xiaoyao Li <xiaoyao.li@intel.com>
+Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ pbonzini@redhat.com, nikunj@amd.com, thomas.lendacky@amd.com, bp@alien8.de
 References: <20250324130248.126036-1-manali.shukla@amd.com>
- <20250324130248.126036-4-manali.shukla@amd.com>
- <b03f3593-e56b-4a98-8ddd-e54fe7885c81@intel.com>
- <52276154-79b0-4029-8087-77ca499a12ce@amd.com> <aAkHVFTqybGc-mc8@google.com>
+ <20250324130248.126036-5-manali.shukla@amd.com>
+ <5fb4f5f8-55d2-44a7-808e-76c8a452cd2f@intel.com>
+ <aAkHiL_N7QGND8Tj@google.com>
 Content-Language: en-US
 From: Manali Shukla <manali.shukla@amd.com>
-In-Reply-To: <aAkHVFTqybGc-mc8@google.com>
+In-Reply-To: <aAkHiL_N7QGND8Tj@google.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: PN4PR01CA0091.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:2af::9) To DS7PR12MB6214.namprd12.prod.outlook.com
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN3PR01CA0141.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:bf::21) To DS7PR12MB6214.namprd12.prod.outlook.com
  (2603:10b6:8:96::13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -82,190 +82,177 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB6214:EE_|CY8PR12MB7194:EE_
-X-MS-Office365-Filtering-Correlation-Id: ea186df6-8927-4c37-a3dc-08dd87d849df
+X-MS-TrafficTypeDiagnostic: DS7PR12MB6214:EE_|MN0PR12MB6128:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5353c0da-039f-4f10-edf0-08dd87d8d0dc
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?R3FHdVVZQlRpMVI2MkxNc3ZTUjVDWnU2dGwwR3Z5NDkrYVZTSGhtTW1jUTlU?=
- =?utf-8?B?V1o4UmNHdklSc3BZcTQvYU9zK0Y4T3FaYWszQzd0anVsd0cxdDZkTFFNc1I2?=
- =?utf-8?B?WnNYdVorRkFPWHA1ekExbzlBQ3lEclFjMG9OejM0RnVreWNWUVRHREtyeGVr?=
- =?utf-8?B?QWV3NWY0Q01CclZBaWltclBsU2NMQkJrTFlNdG85TC9PU2wwYVJ2VlBzTnJ2?=
- =?utf-8?B?Y0NjUWdDUHMzSklQUXpJOXpxUFcwR0lrRUxJL0phV05waHlhQmdQYmdLdmhi?=
- =?utf-8?B?Nkd1TkhPME1FYldSSUN0dVBMTUt3czBpTi9hV3NlMUtCOWF2YlFqdjlBeEhL?=
- =?utf-8?B?OTg4d3FjeFJWTzdyNmpJTTY4TURWeXZDWkF1aXd4Y1grMVYyYkxrZWxJYmhZ?=
- =?utf-8?B?SXoyd1FUTEYwTzdvSkVWMmdPaHhqRy9ZaU1Sekp6dnluNFN1b0NOSlpWaVFY?=
- =?utf-8?B?VEtZRGQ1ZmFxVHR3U3B6NVlFV2xtdmVrNG15RWNaSWI1bnp2bURsbTA4SDVJ?=
- =?utf-8?B?Qm92elJaQVl3cEFaQVpJaE5nNERRZGZGZ3dmWC9uT3BXOG9YcGV6V0gxNERh?=
- =?utf-8?B?Z1dhVGRCcmgvbWNSZk1PczNvOUxuSUFIdUFwb29PRFNJYUhObytGVWp0c2Zy?=
- =?utf-8?B?Z09uVEJtTGdDWDdReFljdDBWMmZ3U2FoQS9zWUJYdTRFNEdPSEJxS0xFYmtp?=
- =?utf-8?B?TkkvS29BM1BmMjdZallxanYwdk9XVWFaaEhhT0MzR1JSaGxxYjJDZVpRcjBK?=
- =?utf-8?B?T3NaVWtlR1JPcnE5WHFZaUFWa1NqSUNlQVlRaHNLOHkxOFhYZE9VODJsU0sx?=
- =?utf-8?B?YW1LY3VsRU16SVVUa2pIclRWS1V3TXdwQ3o3dDVZZWdTR0xYL1g4dUVpMEFH?=
- =?utf-8?B?VXo0Z3d0d3Y2YXZQdzBuTzlqMDVPVys4d0lIV3YyR05RVFFDM0lLL3RSNGpB?=
- =?utf-8?B?SUxmMXFPbzZCamJHbStSUGVQR0ZuRVVDNVFHV1NWSUJwYURPWVRka3h5bita?=
- =?utf-8?B?UlJoRlI5dUd0dHJPT1Qzb1pWSk1Qd0x1dWM2NmM4YWg4RGFFQWhhMGEyYm9o?=
- =?utf-8?B?RGJTckZpK21MTkgzVFVMdVowZXRSMVNKUGNxK2t0U0ZRWlF4R2ZxekR1WFZi?=
- =?utf-8?B?VWFadlM0N2orNDFJa2dLMVZKZ3lRR2dyaDlkdFBYWDJCQjZ4NmF1T29nSW5v?=
- =?utf-8?B?L1o3aXpZakhRSkh0WFZjbDU1Y0hwQzUyZHlxWmhDYjk2d2NNSThDU21Ha2pC?=
- =?utf-8?B?QVlpaFEzMU5MdHdxblVCOHFMK2VzUk0vbjRXaTlISHpIc0pzVUw1OUhzdEps?=
- =?utf-8?B?V1JoVlhKVjAyak01azFZcXRVR0hyRHRnRlczeU1Hak5mT2pDTXZKejAyZmFn?=
- =?utf-8?B?VXdTd0o3WURDZTY3dzF0M1hjY2lHd1Nmam5OUWhmblRiSHozUlRRWkFYcFcy?=
- =?utf-8?B?YU9KNDVvVDA1bWhLZkxjd0VNRmZJcDdLRHlFUXZnUlBJNG9wRlAyZlZ2NE5T?=
- =?utf-8?B?QzJZR2FmQlRwYmswZDZXYTVBUm1VWWxzR2FCZTJzZEtFeEFwbkI4dGJzcXFs?=
- =?utf-8?B?RHFjTWJVSVlJYy9Ja0NNK3JuK1VnZWFuTG9PcnczcDRtbVFDYUxJVlhFVUhh?=
- =?utf-8?B?TEVWTWV6Y2lWOS9vaThiTDhlZDhMUDRvL0Fkc0tpMDRtU3RjWFgyckwxS0JD?=
- =?utf-8?B?elNpaFBJQVpYQmt4VHhrek92REVtSktPcytMZThUMWw4UERETzdEWU1ld1Rn?=
- =?utf-8?B?QitVT1hKUzBESFpsNUd3S2x3cHp2N1NWM0FSVnhWRVdCUzlDL1Y1UzdRNUMv?=
- =?utf-8?B?c2gvdTB6TEluZEdQYjV0YlZTNGx5Z1IvaXZHV0VSZXVUU0lJeGYvaUNkQWs1?=
- =?utf-8?B?UjIwNlpnbzludlg4R3FCZHo2a1BnS0xoS2luaThzR1RieUZFVkYzaTlEVTMr?=
- =?utf-8?Q?MwXJRPGDcNE=3D?=
+	=?utf-8?B?RG9iMGRWL1UreXpmTUNXbXoya2RRY0RpU2d3cFo3a0Fid0VjUTlxenpMK3ov?=
+ =?utf-8?B?NXJuVWxRQ1F4aS9kZDEvN0FCY3pJTHNVWUZhNVhDYmUrZHdIMC94QTVVeE0y?=
+ =?utf-8?B?RVYrdDBrcENrRGR5ZWNMakVZaDBxY2U4V0ZTZ2JQdWcvSVJHS1RJY3Nva2hX?=
+ =?utf-8?B?bW9vcTBXTDZFOFpLTG9JMjNkbzEzU0dsSG9iUGVZejEreXdyWjJDK0duMGF2?=
+ =?utf-8?B?NjkrcEFzSWZwOEFabmVkZjEyR0I4VFo3ekUwYUwrUDlyQzRsUVBBbTJ5QmYv?=
+ =?utf-8?B?TU4waFY1M3RqdWgzN05aUU1ldzlkQVVIT0hKdGMzM09icjlwcHJ5dlUyUWRU?=
+ =?utf-8?B?anNWU3REc2lQU1QydnV2YVMrQ2NHSEpidk5VL21Jc2ZjU0MxdlBxNUVLb2Y5?=
+ =?utf-8?B?UEpzRGdPSmw3eUozcmFGRGZOTzBoT2k5UEJqWmJ1clZPbEppcVRVMVB1bldC?=
+ =?utf-8?B?ZkFqcFFlWGJ5dEgwTG9obGMyTmdCNDhzS3B6SWQxaG56VW9BT2hKcUNwYzNT?=
+ =?utf-8?B?RzFRSUllZ01KTnd2RUZIeklJekFYZWhXdTVWSkV2RVdMT2JQWVl3VnE1a3A1?=
+ =?utf-8?B?UTJBcnpUVlVRVVhramxTQTFHQU94OFhWeVhwblB4T1lQWGdGN05wanpIY2wx?=
+ =?utf-8?B?R1pFazJCY05VQWZXVkl6bDUxdTVZUDcwMCs3bEVEa2h1MWo2TktMK0o0Y0R5?=
+ =?utf-8?B?ZU9udi9xRmNwRTF0VytQSkwrSDVlUm5zQks3RkhpdFFUcjRUdTh5Z0xCcmxa?=
+ =?utf-8?B?VjJvWlRZZFprOS9pcnM3WmxtMU1xU3A2MDBMNzV4aFprc1poditkOG10MHd3?=
+ =?utf-8?B?dEpMa3BKSmtjdURyYUs1M1dMZ2xFVEV0TXFUTVdLSis5cmdFcFZyM3VCU1hL?=
+ =?utf-8?B?dktjblM0bnVqZHNaTGRHOExickpBQWdRdmo2VjdsREg3ZWVVSmd0MDlvbVJK?=
+ =?utf-8?B?ekdHS1l3V3ZJWkRTY2pGWXZlRDF6cmZKT1p5NEpqTG01dGlBelNaQ3VTZzk1?=
+ =?utf-8?B?OTdyZUZRVmlBR2RVUFE0Sjk5SHkvRXNtczk1cjNYS01RT0xmTzB2S1B2YUgy?=
+ =?utf-8?B?WGFkL2hCbi9JQnZnYW1KYWlVVmRMczBTQUR5QUFBcnh0cmJGY2JDV1hEQWJp?=
+ =?utf-8?B?dHlmUWlUN2JSbTJwS1NTV0RMTTVHblowUDd3eWJYNjlLOEc5SW0wNHBQN0Js?=
+ =?utf-8?B?bStUVTd4WEZLVkZ2dVJhbkxuaG9renNqb2dlVVBGRnVmMys3bytvWndRRFAz?=
+ =?utf-8?B?R1FyMXl3a3NqWVdGY3grU3NVMFdxVGRtRFFQeGlMNmdRR1FMV2V6YzlZMHc4?=
+ =?utf-8?B?dmVlK3Q4NnFqMnIvZjBsRDVUeVU1K0FFemxaREd4ZmhuMmphK1IrcVNDS1Jq?=
+ =?utf-8?B?YVBmRTN0bVFyamJ1MmFkR0tlNnVETnZqOWZpWWVqbEN1M0x5RVkyTE5ob1VJ?=
+ =?utf-8?B?TzBYYktod0laOTBuQVlsamM1MlFtUjIvN1RYM3Z4RHo0ZmFUcmNlVW5VRTk5?=
+ =?utf-8?B?V0VudUVVelpRNldQZFkyVzBPMUVCVVFYc1hWeUowdzNyaFFxbEhPVjVHa1hY?=
+ =?utf-8?B?cE1mQlpyZzRjVHhlT3MxYU1FMUFJWWZrelFrSmJpWDI1N3FFZHRVSWh2Z1FP?=
+ =?utf-8?B?S1l1WUNlZG1MOXZkbVl5MGpUZHNINTMwUkJaSUFQSVRib1FadmtFZGEyS1pE?=
+ =?utf-8?B?cGJEOEFYSkk3NmFVMHR1QUVKOWtoSFFaNXE4Y3FDamF2RTdveVR1RTdtZkly?=
+ =?utf-8?B?R3ZOTGpUbzd6N2EzYm5hZkxqUksxcCtVWkp4eEZIdnR5VFJlbTVNNktGM2xy?=
+ =?utf-8?B?cHVnNFdmVlprbE53cytrRVZ6NDVaN1cxZDRqWGVnM3gvUlpDWlA1K0tGK2M4?=
+ =?utf-8?B?VUFpNUJWd0tpOE90OWk3K2ZwQkdiT1RRazNWa2VidkpiRkU2OUR0QWhLSHd0?=
+ =?utf-8?Q?mesfSgo6JF0=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6214.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6214.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?cENlNDRBUlp5cFNkbWs0K0o0eHNiZGt0Q2Z6QkRJKzBqbm5qck50UzJ6SDVy?=
- =?utf-8?B?dDByc0ZKcUN2a3Qva2tpSWxnd1c1NkkrbElQN3JzbFJMQ3BJSU1taW1rYnpL?=
- =?utf-8?B?ZllDSzBHb0d1MzMwZ0RmdHFEZWloS0FzNGl3bVhQT0hVSllTajgyclhwMnNT?=
- =?utf-8?B?OGx3d3NBaU5rS0YrSmVqcVBOWEZaMGJOVWpvWFlGZ0pnSEEyOTd0TVRwcHZn?=
- =?utf-8?B?MXkrY0o3VVduWUZ6SmREeHZuLzFFTFc0Q0NEaXR4N2FETVJJZ1hRbmxUYVFw?=
- =?utf-8?B?S3RuZXh4UzVsMFNQWEtNMVpMeGZkYUlpS3FFaElhNVlGUks3UlAyL0VOdlNy?=
- =?utf-8?B?ZmY1bEd3K3pSZzkwRTFQaVU5dDZGTjR3RmtGRFlxRGxIQTQwcWVuamhOVC9M?=
- =?utf-8?B?YjF4YzFuN3VMbjFjYnpQUzdsL216am5YNld1YmgweUhVZTVBM1AvZTByTWJQ?=
- =?utf-8?B?VThBVUM4RWtqU204UTlWMCsrc20ydVBlUTdIbVZ0aUtneXpDdjVqMmxIemxK?=
- =?utf-8?B?OXArQ3JmUnU1WW5Fa1N0dzRIcE5GamErcmdwblo1SlNIK3pYV25KbVJ6SlIv?=
- =?utf-8?B?SFVuS09tRWNoSGhYaWRoTDI3WWRBdUJoSmM1SEIrTlNPeWl1ckNCTUxDMVV1?=
- =?utf-8?B?SVNwM1VDSTZyTnhIaEJPMEM4YUhUMmdVQ1ZjY3JnM2J4MGhoOEdncERlajZi?=
- =?utf-8?B?eEFLNGhVOWFzUVFwNmdJTEtNb1NDOFUzdDQwaXRMNWFxWmQramoxbzVMR2FV?=
- =?utf-8?B?djQvZ21URmxwSG15Q2Njai9VeDVVTjI4WUs1OVRDQitZZnZEOHBjYUVqaU1F?=
- =?utf-8?B?cUhnb2hUcDhUTTd3dGVWL1E2K0xPcGh5UUJwMnhtSG5NZ1dYTnNFakpnUk1h?=
- =?utf-8?B?YklWRXpTTjZ2MWxLbTg2K3N3YjlmTTAzeklVdTVlM2pNbHYvbk9TZldiNzUy?=
- =?utf-8?B?eGFSVGlyZmozeG1CL1I3RVpFTVRHOVBhZUhZZzJBNFdnd3E4NTlnRjh4MTQz?=
- =?utf-8?B?QVhrN1FqMXZGaXNGL0dSaDZ4T2kvZHo3MWhNem5IQnFUWlU0d0kyVCtXT1Bi?=
- =?utf-8?B?MmxINncxWldxL0Q0eHA4YXdtUDQxeU5Pa3l0cUVuY1FzOWVDSEZ6ME9YejF2?=
- =?utf-8?B?Q3FHRlFBMzNUOCsvRnlUSnNmbkEzY3FaTlV3N2YycVBSQytjV3JWY3V5UGw1?=
- =?utf-8?B?TlZaMVljeVRPaDBKMVRhTmg0dzdHZW9YNmxXSE5LOFJ5Z3d2ZW8yaU4yMVY4?=
- =?utf-8?B?WU56THhBYTlqRzJRV2ZQUWsxVDkwd2VIOHBydVUxOWZkNWkzZjBFcFlsanU2?=
- =?utf-8?B?blBwckE2OEJvUTRacVFMMU9hTWxZeUlrODN5cm8xWlo1ZGo4TERKdHhVcy8v?=
- =?utf-8?B?RG1ocEFPWWMyaWpjSStCZ21nOERQandxWm1zc3VJbnZpcW9NSTJSK2RkZG5N?=
- =?utf-8?B?dWhrOEovNGlQbVVEbkRlUTJETW9Ud25iNjNxK1dJWHhzRER0c1FTcUNUL1pG?=
- =?utf-8?B?RGMwTjZOSWgzQjFlTUVUWHRaZU9XdE50WVNNWG1hdnJpeHV2dHQ0THRFeDNX?=
- =?utf-8?B?WGdGQ0xWSHo3UE9kWmtwUnJlbEt5Z0VSL1A1VkdQeSt2alJKeHNFT21oaDk4?=
- =?utf-8?B?TEtKcFFQbWV6aXVCZlhDZkNtczhjaGVZa2N5UmlhY2YwVDZZMlZkYVM5OGlD?=
- =?utf-8?B?MGswVVpMTTNnenFFay9QZnBZQW5PRFpCMjdwTFNocW9wVDhkSUtXdGdIN2Zz?=
- =?utf-8?B?OE5HNVpMVHhmZTVMR1V1eS9vVlMvZmlieUNuOXRkYjdUd0N5dXJaMmJWeExO?=
- =?utf-8?B?c3RSNllZdFRBUklEUXYvWGZEQnVFdTZkbWo5UDBlanhQL0VEcEdSOUU2NHJS?=
- =?utf-8?B?ZllmNGR0TzhoZUhWZnQyUnI2MTJqbnB4SklmckV0ZldtbEpoeXh3WXV4b3cv?=
- =?utf-8?B?L2NjakcvbHJ2MlB5MTRXdEpkcmdjRnk1eHVuVGJ1elc2T2lxOUF3djcrL2xa?=
- =?utf-8?B?OEhXaFZtekhNRnZUQ0ttemlzMW1oK3lDQ01HcHBhRzFCNEhUam5wcU5CdTRH?=
- =?utf-8?B?WllVT3c1NlV6SVJkRWhVNEJoOEJEVXFTMnVRWU96N0NKR3BpYW9BNWxVUS9l?=
- =?utf-8?Q?mVDSme32Z4sPgtHg+VuqrWpKH?=
+	=?utf-8?B?S0JVUnpEbVNzN2R2SHJSODVOdndFdEJLRkNKRThwN2JjTk43OGpyRHZrL2F2?=
+ =?utf-8?B?SjJYZTVCajlKNEZGcmltY3Zrc3BEZ3Y2QThQUUZDRFBiWENjVENQdWtDTDQ5?=
+ =?utf-8?B?TkJQaVVDSEMxVkcyREloRnRLbC8zOXpCa1o2QzFOZmMwM1dVY2o4bDlDUFo2?=
+ =?utf-8?B?NURHTE91dFVUMVk4Vy9wMmsvM0pyV0cxanhlMlI1MUlDYWVCVTBES1pjL3I0?=
+ =?utf-8?B?YVNmVGFGL1lqODg5UDZMck54RGdkdU9XdmRVQkQzRkYyQkgzdXVSN1htY1M5?=
+ =?utf-8?B?ODgveFNMazhMUlpuZzQ0b0ZXK1UxN0JGOEQ5SU9yYVU4dEVSN1Z0N2lROWdY?=
+ =?utf-8?B?amlIOWowNXF3YUdHZ25Nd2RNT1JWcjFJSG8zdDBOWEhBRTVSc1JVNmorUitY?=
+ =?utf-8?B?SkQ0UkRCbDFmRGlleUF2V1QxNzI4RStNRURuN0taK1BSVFlSTzZhZFU5Yjhy?=
+ =?utf-8?B?NTZUQnVIeWp6WXE0UHhiSUY5a1lWTW5hZldiQWUyUEppVC9QWUlYbFo5QkJR?=
+ =?utf-8?B?QnJIdXdwV1VWR2FESG1MTFp0ZnQ2d3h1MHBoQU9DbVIvNmVYSnIzWEdtanZS?=
+ =?utf-8?B?dEN3WkxMTjBwRjYxSk5YUHZKcU9DSU1WQ1o1K0ozaC9zZVFqcnR6K1ZOOEFO?=
+ =?utf-8?B?YUNTM1lvVkRTZU9qU0xJTEpqVFZ4S0Qvdmd6RFlHQzZBbkRjWE5paVhDQVNE?=
+ =?utf-8?B?YVVWSm4rS1BIL0czMXhCS0ZQWVJXMC9KYVZWQzl1SWRGaWdXcEFZTFB1bGll?=
+ =?utf-8?B?WFFYc3hjVE8vYWxETFdXay9ENlF1cUo4T3dSRVZvYndOZkRFVWF1RTlHNjZk?=
+ =?utf-8?B?WU1BZkdRVXpnaXdzRjRoczR5RTV3dDkxeVl6Uzk5Rk9YeTFYK25IT1c5RnZL?=
+ =?utf-8?B?TmwwOTdyVFh0VGVraTRRamR5TWVkQkdVZ21OVW5MYnYzSnpHQXdpK3JEcG1H?=
+ =?utf-8?B?WDhjWm5SZlVoVFRaTFIyTVFJcElnTTBtVHhKNXVhelRWNmljWmtvdTVyWEYz?=
+ =?utf-8?B?OWVTL2NDZENGMnVNSjJqOVlKcWhTNVBleHZwWE5ySnJ2bFpGcjEwY1FoZTdk?=
+ =?utf-8?B?SXlpSEpMTkd3WkxRQ3krbmxBT2x1b3NnNnBOUlRJYm80N083a292QnNGbE5V?=
+ =?utf-8?B?NkxvYkd4S2lRS1h5QlYvZGFBOTRMRE9UendQV0d0TFRtdnY2cmRxTTdUcGJ4?=
+ =?utf-8?B?MitndkJDYlNXSFVtZ2NVNnlPS2lYcmFlQ3pGZ0I5REV2emRlTitQRm5FSEJj?=
+ =?utf-8?B?TmtvWXgrbzFkcFErSkEyazh6QkkrOTNlR29RelduSWxHeHhzczJMTmREVXdT?=
+ =?utf-8?B?WnpYK0oydGtYMzMrTVZXVXovRzZBSzZHM2tKRDN2VDhyTzBneDFqdTZGLzl4?=
+ =?utf-8?B?L2FFR3BPV1dDV2syeEppMEpoZmppcUkyUVZhNmhpZExxRDloeURwK2NVSlIv?=
+ =?utf-8?B?VENQNW1YNmxWd3UvL0RDdHNJZlVESkJBczc3ekRJNmxWUWIyUXVGQUtrVmpF?=
+ =?utf-8?B?d0s1SzliMCtkMnlWeXdMVUh0b2JKQmRaWld1R0hTOWhOVkcwMUpzMmFWNXhs?=
+ =?utf-8?B?V0JUREpsbDRIbzlKeGZUK2NjcjQ3aU12eGJ3cTl6eGtUZGpQM2RWK2syTzB6?=
+ =?utf-8?B?Rmo1WkNhL21XMlgxSm1xcnh1TFFCU2RmalhpOWxhNEplby9xRDh3ZjViL1gy?=
+ =?utf-8?B?MUNRODBtYW1SYmNHVWtLdmxVM3NGZnJCbWJDY2dGLzJockM3dlduS0hLWUov?=
+ =?utf-8?B?bTQ5eFV1T2lCc3NiMjFaUk5KYkVKbUM5MFlOd3BhL1BtVjFjeFJyUEd3ckFs?=
+ =?utf-8?B?bXFxejZRV25NVjJMaU02aG5ObWtMekxUSnNYb2pLVXVjMnYwejk0OWV3VDZw?=
+ =?utf-8?B?dGxzbFF3TjVLdFdMT3UwTWZIREUwbkZGd0ROS3ZwNVJlbjBoNE1FeHlvRXpz?=
+ =?utf-8?B?ZzVMOUFKUUhJbUE3MHBQenUxWlQvaXVmVlBUbGtMeGE2dEpiYnJCY3NkRXlN?=
+ =?utf-8?B?elE1Tjg2LzhOWVJKTU5vMDB2VWdGSk9XUSs2ajErcmVNazJYbzROTmtWTEN5?=
+ =?utf-8?B?ellmTDJWZklCWDh3WUtTeStBMCtlQ1h0RStzQm9qYVFSUlA3TFFOZUJmbDdI?=
+ =?utf-8?Q?q1E/HHctMYVuumx+JaF9mJ9gq?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ea186df6-8927-4c37-a3dc-08dd87d849df
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5353c0da-039f-4f10-edf0-08dd87d8d0dc
 X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6214.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Apr 2025 11:15:18.3650
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Apr 2025 11:19:04.8466
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: IiMa4sMopJRcqP57km2995X7MqDQb4FZO50I4cDZy3jdR0GkHpDPAxlnQByi0q+9P/EPuapZdgPGzmZHIrJEAg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7194
+X-MS-Exchange-CrossTenant-UserPrincipalName: 70eqOggnci00v8O4SjMUD0gLQeUQbh0Z/p8cr3lezXaeFLRnJ15UfC/Tt4oIZJRG3+9k1x1E8kB83peTb+qMzg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6128
 
 Hi Sean,
 
 Thank you for reviewing my patches.
 
-On 4/23/2025 8:59 PM, Sean Christopherson wrote:
-> On Wed, Apr 23, 2025, Manali Shukla wrote:
->> On 4/16/2025 11:30 AM, Xiaoyao Li wrote:
->>>>   +    if (cpu_feature_enabled(X86_FEATURE_BUS_LOCK_THRESHOLD)) {
->>>> +        pr_info("Bus Lock Threshold supported\n");
->>>
->>> It will be printed every time kvm-amd.ko module gets loaded.
->>>
->>> I think it's for your development and debug purpose. Comparing to the
->>> existing features in svm_set_cpu_caps(), nothing makes it special for
->>> BUS_LOCK_THRESHOLD to require a kernel message. So I think we can just
->>> remove it.
->>
->> I didn't add this for development and debug purpose. I added this pr_info()
->> to make it easy to find whether BUS Lock threshold is supported or not from
->> dmesg.  I can remove it if you think it is not required.
-> 
-> Please remove it.  The user typically doesn't care.
-> 
->>>> +        kvm_caps.has_bus_lock_exit = true;
->>>
->>> Besides, this patch doesn't ensure the bisectability. It allows userspace
->>> to enable KVM_BUS_LOCK_DETECTION_EXIT and set intercept of
->>> INTERCEPT_BUSLOCK but without providing the handler.
->>>
->>> So either move next patch before it or just merge them.
+On 4/23/2025 9:00 PM, Sean Christopherson wrote:
+> On Wed, Apr 16, 2025, Xiaoyao Li wrote:
+>> On 3/24/2025 9:02 PM, Manali Shukla wrote:
+>>> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+>>> index 5fe84f2427b5..f7c925aa0c4f 100644
+>>> --- a/Documentation/virt/kvm/api.rst
+>>> +++ b/Documentation/virt/kvm/api.rst
+>>> @@ -7909,6 +7909,25 @@ apply some other policy-based mitigation. When exiting to userspace, KVM sets
+>>>   KVM_RUN_X86_BUS_LOCK in vcpu-run->flags, and conditionally sets the exit_reason
+>>>   to KVM_EXIT_X86_BUS_LOCK.
+>>> +Note! KVM_CAP_X86_BUS_LOCK_EXIT on AMD CPUs with the Bus Lock Threshold is close
+>>> +enough  to INTEL's Bus Lock Detection VM-Exit to allow using
+>>> +KVM_CAP_X86_BUS_LOCK_EXIT for AMD CPUs.
+>>> +
+>>> +The biggest difference between the two features is that Threshold (AMD CPUs) is
+>>> +fault-like i.e. the bus lock exit to user space occurs with RIP pointing at the
+>>> +offending instruction, whereas Detection (Intel CPUs) is trap-like i.e. the bus
+>>> +lock exit to user space occurs with RIP pointing at the instruction right after
+>>> +the guilty one.
 >>>
 >>
->> Oh.., my bad, I will move the next patch before this one in v5.
+>>
+>>> +The bus lock threshold on AMD CPUs provides a per-VMCB counter which is
+>>> +decremented every time a bus lock occurs, and a VM-Exit is triggered if and only
+>>> +if the bus lock counter is '0'.
+>>> +
+>>> +To provide Detection-like semantics for AMD CPUs, the bus lock counter has been
+>>> +initialized to '0', i.e. exit on every bus lock, and when re-executing the
+>>> +guilty instruction, the bus lock counter has been set to '1' to effectively step
+>>> +past the instruction.
+>>
+>> From the perspective of API, I don't think the last two paragraphs matter
+>> much to userspace.
+>>
+>> It should describe what userspace can/should do. E.g., when exit to
+>> userspace due to bus lock on AMD platform, the RIP points at the instruction
+>> which causes the bus lock. Userspace can advance the RIP itself before
+>> re-enter the guest to make progress. If userspace doesn't change the RIP,
+>> KVM internal can handle it by making the re-execution of the instruction
+>> doesn't trigger bus lock VM exit to allow progress.
 > 
-> No, do exactly as I suggested in v3.
+> Agreed.  It's not just the last two paragraphs, it's the entire doc update.
+> 
+> The existing documentation very carefully doesn't say anything about *how* the
+> feature is implemented on Intel, so I don't see any reason to mention or compare
+> Bus Lock Threshold vs. Bus Lock Detection.  As Xiaoyao said, simply state what
+> is different.
+> 
+> And I would definitely not say anything about whether or not userspace can advance
+> RIP, as doing so will likely crash/corrupt the guest.  KVM sets bus_lock_counter
+> to allow forward progress, KVM does NOT skip RIP.
+> 
+> All in all, I think the only that needs to be called out is that RIP will point
+> to the next instruction on Intel, but the offending instruction on Intel.
+> 
+> Unless I'm missing a detail, I think it's just this:
+> 
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index 5fe84f2427b5..d9788f9152f1 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -7909,6 +7909,11 @@ apply some other policy-based mitigation. When exiting to userspace, KVM sets
+>  KVM_RUN_X86_BUS_LOCK in vcpu-run->flags, and conditionally sets the exit_reason
+>  to KVM_EXIT_X86_BUS_LOCK.
+>  
+> +Due to differences in the underlying hardware implementation, the vCPU's RIP at
+> +the time of exit diverges between Intel and AMD.  On Intel hosts, RIP points at
+> +the next instruction, i.e. the exit is trap-like.  On AMD hosts, RIP points at
+> +the offending instruction, i.e. the exit is fault-like.
+> +
+>  Note! Detected bus locks may be coincident with other exits to userspace, i.e.
+>  KVM_RUN_X86_BUS_LOCK should be checked regardless of the primary exit reason if
+>  userspace wants to take action on all detected bus locks.
+> 
 
-Sure. I will remove it from v5.
-
-> 
->  : I vote to split this into two patches: one to add the architectural collateral,
->  : with the above as the changelog, and a second to actually implement support in
->  : KVM.  Having the above background is useful, but it makes it quite hard to find
->  : information on the KVM design and implementation.
-> 
-> I want this (and any other arch collateral I'm missing) in a separate patch so
-> that the background on what the hardware feature does is captured.  But I see no
-> reason to split KVM's implementation into multiple patches.
-> 
-> diff --git a/arch/x86/include/asm/svm.h b/arch/x86/include/asm/svm.h
-> index 2b59b9951c90..d1819c564b1c 100644
-> --- a/arch/x86/include/asm/svm.h
-> +++ b/arch/x86/include/asm/svm.h
-> @@ -116,6 +116,7 @@ enum {
->         INTERCEPT_INVPCID,
->         INTERCEPT_MCOMMIT,
->         INTERCEPT_TLBSYNC,
-> +       INTERCEPT_BUSLOCK,
->  };
-> 
-> 
-> @@ -158,7 +159,9 @@ struct __attribute__ ((__packed__)) vmcb_control_area {
->         u64 avic_physical_id;   /* Offset 0xf8 */
->         u8 reserved_7[8];
->         u64 vmsa_pa;            /* Used for an SEV-ES guest */
-> -       u8 reserved_8[720];
-> +       u8 reserved_8[16];
-> +       u16 bus_lock_counter;   /* Offset 0x120 */
-> +       u8 reserved_9[702];
->         /*
->          * Offset 0x3e0, 32 bytes reserved
->          * for use by hypervisor/software.
-> diff --git a/arch/x86/include/uapi/asm/svm.h b/arch/x86/include/uapi/asm/svm.h
-> index 1814b413fd57..abf6aed88cee 100644
-> --- a/arch/x86/include/uapi/asm/svm.h
-> +++ b/arch/x86/include/uapi/asm/svm.h
-> @@ -95,6 +95,7 @@
->  #define SVM_EXIT_CR14_WRITE_TRAP               0x09e
->  #define SVM_EXIT_CR15_WRITE_TRAP               0x09f
->  #define SVM_EXIT_INVPCID       0x0a2
-> +#define SVM_EXIT_BUS_LOCK                      0x0a5
->  #define SVM_EXIT_NPF           0x400
->  #define SVM_EXIT_AVIC_INCOMPLETE_IPI           0x401
->  #define SVM_EXIT_AVIC_UNACCELERATED_ACCESS     0x402
-> @@ -224,6 +225,7 @@
->         { SVM_EXIT_CR4_WRITE_TRAP,      "write_cr4_trap" }, \
->         { SVM_EXIT_CR8_WRITE_TRAP,      "write_cr8_trap" }, \
->         { SVM_EXIT_INVPCID,     "invpcid" }, \
-> +       { SVM_EXIT_BUS_LOCK,     "buslock" }, \
->         { SVM_EXIT_NPF,         "npf" }, \
->         { SVM_EXIT_AVIC_INCOMPLETE_IPI,         "avic_incomplete_ipi" }, \
->         { SVM_EXIT_AVIC_UNACCELERATED_ACCESS,   "avic_unaccelerated_access" }, \
-> 
-Ack.
+Will update in V5.
 
 -Manali
 
