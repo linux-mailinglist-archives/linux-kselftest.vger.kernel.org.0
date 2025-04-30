@@ -1,79 +1,77 @@
-Return-Path: <linux-kselftest+bounces-32027-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32028-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE262AA49AF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 13:19:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42ACBAA4A0D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 13:33:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 331271BC71D5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 11:19:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 245077A545D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 11:32:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3768E18BBBB;
-	Wed, 30 Apr 2025 11:19:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 847D525A328;
+	Wed, 30 Apr 2025 11:30:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="A5D+7siF"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="3P1Iwo+y"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2077.outbound.protection.outlook.com [40.107.101.77])
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2083.outbound.protection.outlook.com [40.107.212.83])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B6698615A;
-	Wed, 30 Apr 2025 11:19:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.101.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4E9A23C4F0;
+	Wed, 30 Apr 2025 11:30:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.212.83
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746011949; cv=fail; b=HRdQjTOyuu+vV2j11OOjBFDDTV7bMswdVZHs7I/kTTbxduxqXAW1v6E4reEGixcc2SQTYAWOymD0qugw6yf58CcJz/L968NFmuE5mXB1HetfzUoudOfLKLb0AR75MF7F4J8ZNwVF5YVUv/hnu63xCbddMopeSjLoqvxDumcMz9s=
+	t=1746012647; cv=fail; b=Q1Q1Y2rY/wxqzpe+CltPl4pi3jNQWmaDJ5snU2BrHtWxSusStAw6gfnVZZtWuVdeDKHUDwS6LqRIH3aHF/lUUNrsmfOSRQUfvd9n6b+fyjmERDsjpLkr+aJSNop8Nb6Ax1yaTWTFnll8rHZ0OGcdvNDEAmfH3DzbDZIfmIMpsi0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746011949; c=relaxed/simple;
-	bh=8ffowvpKIW7rwGLUKe+JD2fzNvXCHAjmLJzElCK+RLY=;
+	s=arc-20240116; t=1746012647; c=relaxed/simple;
+	bh=RkXtagEmKAcJ9iPoylHo/QhFcDEcDM91cez9Qq3tIyE=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=A3ZnrEOkd5QygfBILQL/JZRKcZ8v8c0CobQshs/YqanlNLTFFJV/aF74K36/RtIu7XOzsMtAosZIULP0e+Ijhde9BXefWGZcC3scVfZaN+rseONNCzE2hOGyqs/5IvK7TbSjpGg+yOW6JNhKMQwtyrk0MkBAPM6OUp0uRglOIBw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=A5D+7siF; arc=fail smtp.client-ip=40.107.101.77
+	 Content-Type:MIME-Version; b=An/zcQcQUzoarzLMHxZuLWIsyp4YU4rlAzdH1jd5KMfgWkj8tUo+SG15nnJPMNvlDqWPExAolaAfaq8/HcWLHmERJNWaNPPtyog7g9HDgDYRaYfQPaM5DNiCxuSjsj9wDvXBOgdF8/YUUdZbQj4XTLaY+Ljad+w1h4IPH22mUD0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=3P1Iwo+y; arc=fail smtp.client-ip=40.107.212.83
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Xbm0vhlKCcV/7+sU1pgEKNdOfULE6i9ZK6s9IiotmvU2+f8Rgda9QOKii5ZFROJ8jNM/dHIA+WldC6rU+IWHRTsaNGY8gjuilENdFSZE5uHcra8nEHELQrVzXJie4E7MPSVm/joiqMJhCmvDeM5ztHkMQiAEz0P3jWSfAWxS8AVqMGLYUs3iGSJ1grlmkffNoz1WlD4XgY2Y4cmr+LbraPBmsMQLWCETHuOkz/tZeq+tTkaBd+OnxLpOmiPsjNizbp1BifoK/11rcWYxuIxvsKlK4E4nYNNgKuZk/cymj7bNNlw+/w3tS8Q38Xqo5fuxFlDvCmp28dkzojhTwXLNmg==
+ b=iTyL+xl+gL4X9fzlp+m4rXvSq0XI9xvB1H05HjDU1me9ZZDea86xxYBAKCvCpQu1EKwrUx9Ul1/rKJI6Kct1P00L29xe/c7VoFGkmH6tNu0vXLFwcn+DAt6P8UFe0FELPgL99/fIgatLqQ+Bf/A8NAUR2KA96imqEFM+21vjbs1lV2Avom0ZU1Ej9KB0T/tfEeCa1TGXHrZu4/MOwpiqOSLSObfzaFUsJesc9DofXdzatNnidpjlY1ZkU1eJ+kyDZplb/u9PqId+CKnoS72wwmqrukmLFXnWwyn/+nRs4YN0ZwmtjUy1iPbvcx5gYOvyivYR1Uv8oMzLz+iCyN2CjQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TdajLPvFSLFse2P9hrWkw73yVOhAUxvbBc9RYoFNmpU=;
- b=KfNEFtfW1RTsHpBDpY2HYLRrvAFJp29R9kE3RKY680C2sMCoFEoEjNlve3HgDy3l6aPSk/aLt7GQ9Ijq7LdmJa5IDwdxvaxgLC1yvH9BSOdfFWrIjGc5fUO5IZ+9vLteUSM7OkyFMrvjugnaAwWEIc+HzmooyTgimGXmknxFHPrylD92X8+ovI270VkIAydIGNCOR0GYcKhgLSOVlW1uS3oIujcJzmbG+a6xnMQswUVn6nI58NR/AT6pZZ4KmITGSsS9myK2U9waESPMXBDCTfNbdEcyiMI3Q5OiXHDhAkfCDTSsGOMMw74JBzO57lSCAaTjSGN70pxe+Adv1kJ8EA==
+ bh=BTdvM3VDcuYr0opdotiC5viEffCyHXo/lUnn0R2CAFE=;
+ b=fkixYVAsxVzHMPMXAmIcjPZAr1R87TCsQKh8in7X7FfFYIfBnLAKpYPVmEyrubmnEhuV62Du5xpvQE6o/2I83oF3NLtrUAJ1taNazkl9OPlKmqXdwOTIr8qRh0gOaqgDzZZcJC1W7TC2LtkOf9Uu9VlxmlsYG8GILZsPg0j8c5GBWN6nF83YKGFDi14h+nhnrI+sEseWiMrGRe0YWu3FNMroioahqqhD2wNrePMy9gW3219aQGC1V21I4oov36UNn1msHYX3Mv57pa3kdsC4NTtpF+e0Sgd+GEppOzcM3WJoJ/WhDn6eSy4NotgtaujzrNDDy8m6bgPEX/DNWGed4Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TdajLPvFSLFse2P9hrWkw73yVOhAUxvbBc9RYoFNmpU=;
- b=A5D+7siFx4MywnhPt1psUU+vqTKE+DKzeBxvaHAmcvk8EmE30wpS3JaJNAYpbLioNaayuwsltmEpsiA/iujHHGUCB8HTZcYOZY45+RbVEQ82rCZvXj5c/ydM/K2/eubODoWdB/g47PD3pR4jGLbUkZdQMXA7IUGfitWh64J8jnQ=
+ bh=BTdvM3VDcuYr0opdotiC5viEffCyHXo/lUnn0R2CAFE=;
+ b=3P1Iwo+yITwgC1uzIHVo9KEdfuLUevh3w9tS2+BmH6Y/R1miDxKsv34XEu7WfDcU38gfxRBwiuC7EwfExvJOyG3Dhg0heexoTIMqAcjufvhKLR8nLpPIW5p2ypHr6M2/QH43idjOrlgZspBVgCXTzYKHQfIfcOTtVdUbavc2g+A=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from DS7PR12MB6214.namprd12.prod.outlook.com (2603:10b6:8:96::13) by
- MN0PR12MB6128.namprd12.prod.outlook.com (2603:10b6:208:3c4::6) with Microsoft
+ MW4PR12MB7237.namprd12.prod.outlook.com (2603:10b6:303:22a::6) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8655.40; Wed, 30 Apr 2025 11:19:05 +0000
+ 15.20.8678.33; Wed, 30 Apr 2025 11:30:40 +0000
 Received: from DS7PR12MB6214.namprd12.prod.outlook.com
  ([fe80::17e6:16c7:6bc1:26fb]) by DS7PR12MB6214.namprd12.prod.outlook.com
  ([fe80::17e6:16c7:6bc1:26fb%3]) with mapi id 15.20.8678.028; Wed, 30 Apr 2025
- 11:19:04 +0000
-Message-ID: <7adcea90-e730-46d4-9a6e-7377b1fd4557@amd.com>
-Date: Wed, 30 Apr 2025 16:48:58 +0530
+ 11:30:40 +0000
+Message-ID: <470cefce-dce2-475c-82ee-71489f32434a@amd.com>
+Date: Wed, 30 Apr 2025 17:00:34 +0530
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v4 4/5] KVM: SVM: Add support for
  KVM_CAP_X86_BUS_LOCK_EXIT on SVM CPUs
-To: Sean Christopherson <seanjc@google.com>, Xiaoyao Li <xiaoyao.li@intel.com>
+To: Sean Christopherson <seanjc@google.com>
 Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
  pbonzini@redhat.com, nikunj@amd.com, thomas.lendacky@amd.com, bp@alien8.de
 References: <20250324130248.126036-1-manali.shukla@amd.com>
- <20250324130248.126036-5-manali.shukla@amd.com>
- <5fb4f5f8-55d2-44a7-808e-76c8a452cd2f@intel.com>
- <aAkHiL_N7QGND8Tj@google.com>
+ <20250324130248.126036-5-manali.shukla@amd.com> <aAkKzEpNXDgC9_Vh@google.com>
 Content-Language: en-US
 From: Manali Shukla <manali.shukla@amd.com>
-In-Reply-To: <aAkHiL_N7QGND8Tj@google.com>
+In-Reply-To: <aAkKzEpNXDgC9_Vh@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0141.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:bf::21) To DS7PR12MB6214.namprd12.prod.outlook.com
+X-ClientProxiedBy: PN2PR01CA0211.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:ea::6) To DS7PR12MB6214.namprd12.prod.outlook.com
  (2603:10b6:8:96::13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -82,177 +80,235 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB6214:EE_|MN0PR12MB6128:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5353c0da-039f-4f10-edf0-08dd87d8d0dc
+X-MS-TrafficTypeDiagnostic: DS7PR12MB6214:EE_|MW4PR12MB7237:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0206e713-e511-41ce-a019-08dd87da6fb0
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?RG9iMGRWL1UreXpmTUNXbXoya2RRY0RpU2d3cFo3a0Fid0VjUTlxenpMK3ov?=
- =?utf-8?B?NXJuVWxRQ1F4aS9kZDEvN0FCY3pJTHNVWUZhNVhDYmUrZHdIMC94QTVVeE0y?=
- =?utf-8?B?RVYrdDBrcENrRGR5ZWNMakVZaDBxY2U4V0ZTZ2JQdWcvSVJHS1RJY3Nva2hX?=
- =?utf-8?B?bW9vcTBXTDZFOFpLTG9JMjNkbzEzU0dsSG9iUGVZejEreXdyWjJDK0duMGF2?=
- =?utf-8?B?NjkrcEFzSWZwOEFabmVkZjEyR0I4VFo3ekUwYUwrUDlyQzRsUVBBbTJ5QmYv?=
- =?utf-8?B?TU4waFY1M3RqdWgzN05aUU1ldzlkQVVIT0hKdGMzM09icjlwcHJ5dlUyUWRU?=
- =?utf-8?B?anNWU3REc2lQU1QydnV2YVMrQ2NHSEpidk5VL21Jc2ZjU0MxdlBxNUVLb2Y5?=
- =?utf-8?B?UEpzRGdPSmw3eUozcmFGRGZOTzBoT2k5UEJqWmJ1clZPbEppcVRVMVB1bldC?=
- =?utf-8?B?ZkFqcFFlWGJ5dEgwTG9obGMyTmdCNDhzS3B6SWQxaG56VW9BT2hKcUNwYzNT?=
- =?utf-8?B?RzFRSUllZ01KTnd2RUZIeklJekFYZWhXdTVWSkV2RVdMT2JQWVl3VnE1a3A1?=
- =?utf-8?B?UTJBcnpUVlVRVVhramxTQTFHQU94OFhWeVhwblB4T1lQWGdGN05wanpIY2wx?=
- =?utf-8?B?R1pFazJCY05VQWZXVkl6bDUxdTVZUDcwMCs3bEVEa2h1MWo2TktMK0o0Y0R5?=
- =?utf-8?B?ZU9udi9xRmNwRTF0VytQSkwrSDVlUm5zQks3RkhpdFFUcjRUdTh5Z0xCcmxa?=
- =?utf-8?B?VjJvWlRZZFprOS9pcnM3WmxtMU1xU3A2MDBMNzV4aFprc1poditkOG10MHd3?=
- =?utf-8?B?dEpMa3BKSmtjdURyYUs1M1dMZ2xFVEV0TXFUTVdLSis5cmdFcFZyM3VCU1hL?=
- =?utf-8?B?dktjblM0bnVqZHNaTGRHOExickpBQWdRdmo2VjdsREg3ZWVVSmd0MDlvbVJK?=
- =?utf-8?B?ekdHS1l3V3ZJWkRTY2pGWXZlRDF6cmZKT1p5NEpqTG01dGlBelNaQ3VTZzk1?=
- =?utf-8?B?OTdyZUZRVmlBR2RVUFE0Sjk5SHkvRXNtczk1cjNYS01RT0xmTzB2S1B2YUgy?=
- =?utf-8?B?WGFkL2hCbi9JQnZnYW1KYWlVVmRMczBTQUR5QUFBcnh0cmJGY2JDV1hEQWJp?=
- =?utf-8?B?dHlmUWlUN2JSbTJwS1NTV0RMTTVHblowUDd3eWJYNjlLOEc5SW0wNHBQN0Js?=
- =?utf-8?B?bStUVTd4WEZLVkZ2dVJhbkxuaG9renNqb2dlVVBGRnVmMys3bytvWndRRFAz?=
- =?utf-8?B?R1FyMXl3a3NqWVdGY3grU3NVMFdxVGRtRFFQeGlMNmdRR1FMV2V6YzlZMHc4?=
- =?utf-8?B?dmVlK3Q4NnFqMnIvZjBsRDVUeVU1K0FFemxaREd4ZmhuMmphK1IrcVNDS1Jq?=
- =?utf-8?B?YVBmRTN0bVFyamJ1MmFkR0tlNnVETnZqOWZpWWVqbEN1M0x5RVkyTE5ob1VJ?=
- =?utf-8?B?TzBYYktod0laOTBuQVlsamM1MlFtUjIvN1RYM3Z4RHo0ZmFUcmNlVW5VRTk5?=
- =?utf-8?B?V0VudUVVelpRNldQZFkyVzBPMUVCVVFYc1hWeUowdzNyaFFxbEhPVjVHa1hY?=
- =?utf-8?B?cE1mQlpyZzRjVHhlT3MxYU1FMUFJWWZrelFrSmJpWDI1N3FFZHRVSWh2Z1FP?=
- =?utf-8?B?S1l1WUNlZG1MOXZkbVl5MGpUZHNINTMwUkJaSUFQSVRib1FadmtFZGEyS1pE?=
- =?utf-8?B?cGJEOEFYSkk3NmFVMHR1QUVKOWtoSFFaNXE4Y3FDamF2RTdveVR1RTdtZkly?=
- =?utf-8?B?R3ZOTGpUbzd6N2EzYm5hZkxqUksxcCtVWkp4eEZIdnR5VFJlbTVNNktGM2xy?=
- =?utf-8?B?cHVnNFdmVlprbE53cytrRVZ6NDVaN1cxZDRqWGVnM3gvUlpDWlA1K0tGK2M4?=
- =?utf-8?B?VUFpNUJWd0tpOE90OWk3K2ZwQkdiT1RRazNWa2VidkpiRkU2OUR0QWhLSHd0?=
- =?utf-8?Q?mesfSgo6JF0=3D?=
+	=?utf-8?B?V0NSTThOcTJreHZGRks2M2VKOXJsTGJjSGQ5UlIwOTdrSmxnNFNHeW5ORHRu?=
+ =?utf-8?B?TEdjMDd0SDRKS09TSHI3QitIT3M2ZVVXU1RFNDA1elhJb29ZSWFQUFpwcjNC?=
+ =?utf-8?B?UFl2WTRYeFBvSDh3R24xbkpHQ3ZrbkZpQlpaLytOK1ZYYTBhTWI0V1p5Vm1Q?=
+ =?utf-8?B?ci9qU1AvYzBseEU5clV6NHYxVXo1dlE2VFJKUG1jMmFWS2tsVHRmWTV0OGx0?=
+ =?utf-8?B?WkI2UDBLRmo2ME1aamhVeUZ6TStmT2tvN1hDa3lKQXdBMDYwZjYzelpTc3pq?=
+ =?utf-8?B?VWVpTldPb3daMVlYWFlpVjZWUWlQK1dMdiswVjZVbkk1MDZZcFJmbTE5L1ZZ?=
+ =?utf-8?B?cWV0REUyNDNQamUvRUpyN3Z5ZmdsSkMzTnFqcVU3K1hVM3JYenQyQUNMaDlt?=
+ =?utf-8?B?N0pYN3pNN2RqS1UzOXh2cVJxN2xTWFljT1BYL2hQR0p3M0JVMGlrTCs2a1F4?=
+ =?utf-8?B?b0svbHpwV0Q1TzVmMHhUSWEwR0JYTHNNNldYczhVY1VMelQveHZ1d3ZGU0V2?=
+ =?utf-8?B?NStKVVdaUFFwdFJKd05hMUMrNTBMcFVxWjByaDNpdU5rbGFDenlDTG5ISE13?=
+ =?utf-8?B?U0J5U1orT2FSYjFJL29nZm54Y1d1Um1hT1VuL0RXS1lDcXVLVDBLUlkwMmk5?=
+ =?utf-8?B?ak1sYlRYN25CSFppNTI5aXpRc1hzM1Uxc2x4QjJTTmFEY0xtSVBPUXdNVWtO?=
+ =?utf-8?B?M1Btd3RzT25HbE1pVVhjcFR2bFc2MjZPeE5VTmtRUSs5SE1pVnJ4aUNmTWU2?=
+ =?utf-8?B?NVZBcE5xWS9kcDNJRldyUkFOdGNtT3pOZ1AvQittOE1HK3dxdkdqcUVWWjlz?=
+ =?utf-8?B?OVI3c2hBcldLTGl0L0NjRzExTTYxSFN2U2JFTjZKakZWS29qMWVFcGJhczJs?=
+ =?utf-8?B?Y1VEMXRvT3VlaUtnbVM1RWxBNzN5KzJFL0NIWi9jblpaaWx3UFcyc20xckI1?=
+ =?utf-8?B?Nys2Uzd4RHdiUE1nODYrb1gxeFhFNmVqZm41ZUQvOXIzdDdza3V4TTRsWkZw?=
+ =?utf-8?B?M2RWaUg1TExkaEVTMHJEL0VQU3VKK2srUndoRWJFckZCdE9jNzVHQkkvSTcy?=
+ =?utf-8?B?ZmlLckJ1L3F0dGpGNlkwQW5OcXJCMUcwbkUxMVBWNy9kNFQ3dml1c0loU1cz?=
+ =?utf-8?B?QjByWFBDMVVqL1F4Q3RDS016OVhNWjA4c0R5NzB0YW5lT2hOY0p4TWVKM3k1?=
+ =?utf-8?B?RGlZUWRqelVJVXd2dkdrOGRFd3M4Vm51WWRpQVFmOFZiMjkwelpscXFmc0NQ?=
+ =?utf-8?B?andOa0dpYzNFaXpibCt2Nlc3aFU5M3JDMm8zTmF6UVVnTitTZ2pDM2tuNVVu?=
+ =?utf-8?B?ZTNVNTdPcHh0bCsyUmI0YWZheFZnWGRzenFhS3Zma1R5V1JDaDFRS3dDZHBz?=
+ =?utf-8?B?Mll3bXVvbGhHeGd2RXErcnA4NW5DcThzS0lWUWtDZENyU004QXZFeCtiQWly?=
+ =?utf-8?B?YWdjTVpKUDRFMHFKWnB3M2lqOVF4UlNOalV0YjhhaGphQjhkQjBEc1dQb1dz?=
+ =?utf-8?B?WndYUi9xeHVBQzA3aE51dUdWKzJnMWYvYkI5elRzRmRPUElNeitRR1pqKzN0?=
+ =?utf-8?B?NmxxdVpZK3M1YzV2QWN3NjBya3NSdTZXS1dtbE5jU3pkcHpBT2FzWnFQUHNY?=
+ =?utf-8?B?TTZPaE42dm1pZHdKZnJzZVlhZnJ0dWJUZm5QVjZEbzRuZDlDYVpKall3OUo2?=
+ =?utf-8?B?OTlUUitrVGpCQVQzYWt3aWxNSXFkZmVnYm9yMnROdjBZOVArQ05YRzVsMm53?=
+ =?utf-8?B?TDR1dlpPZVQ3Q0RybmJobitNbi9EUmJoMHdkdVhxVFVGeWdrWmE4UTh1V2lR?=
+ =?utf-8?B?Y0I2emVBU0RFZXVtSVlxUVQwc0hhbE5MdUZ5UEFVekRzOG9XMlRtcG1OdUdG?=
+ =?utf-8?B?ekl2T2s1L2hoSWV5dmJnWm1yRDZEKytiNDJ0TjVGYlQzcWlXcTNCRTdQc3ph?=
+ =?utf-8?Q?WCbnsxhotxY=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6214.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6214.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?S0JVUnpEbVNzN2R2SHJSODVOdndFdEJLRkNKRThwN2JjTk43OGpyRHZrL2F2?=
- =?utf-8?B?SjJYZTVCajlKNEZGcmltY3Zrc3BEZ3Y2QThQUUZDRFBiWENjVENQdWtDTDQ5?=
- =?utf-8?B?TkJQaVVDSEMxVkcyREloRnRLbC8zOXpCa1o2QzFOZmMwM1dVY2o4bDlDUFo2?=
- =?utf-8?B?NURHTE91dFVUMVk4Vy9wMmsvM0pyV0cxanhlMlI1MUlDYWVCVTBES1pjL3I0?=
- =?utf-8?B?YVNmVGFGL1lqODg5UDZMck54RGdkdU9XdmRVQkQzRkYyQkgzdXVSN1htY1M5?=
- =?utf-8?B?ODgveFNMazhMUlpuZzQ0b0ZXK1UxN0JGOEQ5SU9yYVU4dEVSN1Z0N2lROWdY?=
- =?utf-8?B?amlIOWowNXF3YUdHZ25Nd2RNT1JWcjFJSG8zdDBOWEhBRTVSc1JVNmorUitY?=
- =?utf-8?B?SkQ0UkRCbDFmRGlleUF2V1QxNzI4RStNRURuN0taK1BSVFlSTzZhZFU5Yjhy?=
- =?utf-8?B?NTZUQnVIeWp6WXE0UHhiSUY5a1lWTW5hZldiQWUyUEppVC9QWUlYbFo5QkJR?=
- =?utf-8?B?QnJIdXdwV1VWR2FESG1MTFp0ZnQ2d3h1MHBoQU9DbVIvNmVYSnIzWEdtanZS?=
- =?utf-8?B?dEN3WkxMTjBwRjYxSk5YUHZKcU9DSU1WQ1o1K0ozaC9zZVFqcnR6K1ZOOEFO?=
- =?utf-8?B?YUNTM1lvVkRTZU9qU0xJTEpqVFZ4S0Qvdmd6RFlHQzZBbkRjWE5paVhDQVNE?=
- =?utf-8?B?YVVWSm4rS1BIL0czMXhCS0ZQWVJXMC9KYVZWQzl1SWRGaWdXcEFZTFB1bGll?=
- =?utf-8?B?WFFYc3hjVE8vYWxETFdXay9ENlF1cUo4T3dSRVZvYndOZkRFVWF1RTlHNjZk?=
- =?utf-8?B?WU1BZkdRVXpnaXdzRjRoczR5RTV3dDkxeVl6Uzk5Rk9YeTFYK25IT1c5RnZL?=
- =?utf-8?B?TmwwOTdyVFh0VGVraTRRamR5TWVkQkdVZ21OVW5MYnYzSnpHQXdpK3JEcG1H?=
- =?utf-8?B?WDhjWm5SZlVoVFRaTFIyTVFJcElnTTBtVHhKNXVhelRWNmljWmtvdTVyWEYz?=
- =?utf-8?B?OWVTL2NDZENGMnVNSjJqOVlKcWhTNVBleHZwWE5ySnJ2bFpGcjEwY1FoZTdk?=
- =?utf-8?B?SXlpSEpMTkd3WkxRQ3krbmxBT2x1b3NnNnBOUlRJYm80N083a292QnNGbE5V?=
- =?utf-8?B?NkxvYkd4S2lRS1h5QlYvZGFBOTRMRE9UendQV0d0TFRtdnY2cmRxTTdUcGJ4?=
- =?utf-8?B?MitndkJDYlNXSFVtZ2NVNnlPS2lYcmFlQ3pGZ0I5REV2emRlTitQRm5FSEJj?=
- =?utf-8?B?TmtvWXgrbzFkcFErSkEyazh6QkkrOTNlR29RelduSWxHeHhzczJMTmREVXdT?=
- =?utf-8?B?WnpYK0oydGtYMzMrTVZXVXovRzZBSzZHM2tKRDN2VDhyTzBneDFqdTZGLzl4?=
- =?utf-8?B?L2FFR3BPV1dDV2syeEppMEpoZmppcUkyUVZhNmhpZExxRDloeURwK2NVSlIv?=
- =?utf-8?B?VENQNW1YNmxWd3UvL0RDdHNJZlVESkJBczc3ekRJNmxWUWIyUXVGQUtrVmpF?=
- =?utf-8?B?d0s1SzliMCtkMnlWeXdMVUh0b2JKQmRaWld1R0hTOWhOVkcwMUpzMmFWNXhs?=
- =?utf-8?B?V0JUREpsbDRIbzlKeGZUK2NjcjQ3aU12eGJ3cTl6eGtUZGpQM2RWK2syTzB6?=
- =?utf-8?B?Rmo1WkNhL21XMlgxSm1xcnh1TFFCU2RmalhpOWxhNEplby9xRDh3ZjViL1gy?=
- =?utf-8?B?MUNRODBtYW1SYmNHVWtLdmxVM3NGZnJCbWJDY2dGLzJockM3dlduS0hLWUov?=
- =?utf-8?B?bTQ5eFV1T2lCc3NiMjFaUk5KYkVKbUM5MFlOd3BhL1BtVjFjeFJyUEd3ckFs?=
- =?utf-8?B?bXFxejZRV25NVjJMaU02aG5ObWtMekxUSnNYb2pLVXVjMnYwejk0OWV3VDZw?=
- =?utf-8?B?dGxzbFF3TjVLdFdMT3UwTWZIREUwbkZGd0ROS3ZwNVJlbjBoNE1FeHlvRXpz?=
- =?utf-8?B?ZzVMOUFKUUhJbUE3MHBQenUxWlQvaXVmVlBUbGtMeGE2dEpiYnJCY3NkRXlN?=
- =?utf-8?B?elE1Tjg2LzhOWVJKTU5vMDB2VWdGSk9XUSs2ajErcmVNazJYbzROTmtWTEN5?=
- =?utf-8?B?ellmTDJWZklCWDh3WUtTeStBMCtlQ1h0RStzQm9qYVFSUlA3TFFOZUJmbDdI?=
- =?utf-8?Q?q1E/HHctMYVuumx+JaF9mJ9gq?=
+	=?utf-8?B?dU1ZWkoxeC9Tdm1kTlRMUEtGV1dodW1oQWJnd0RTWEEvSHhLQnZVbjR5WkNR?=
+ =?utf-8?B?MnBZaVpHTUY4dExMKzFkOUVIN0l3dE0yZUVZekZNTUxNOU9lTlVQUVkxaWxV?=
+ =?utf-8?B?dnNSYWtONmdDeUtQVDlyckRHbW5DbThaemFWdXdWc1VEdHU1WVBiK0l4Q1Ax?=
+ =?utf-8?B?OFpwR243VEdEdC84eWlxNXlaWERnaTBFY01nRk4zdHZERkVMR0E3ajJRYkVo?=
+ =?utf-8?B?OS9BUDZuc2tKZ3F6T016ckVMbFFDcjdZNGJhdW5ZZnFhaGlJU3NhUkVvbVh3?=
+ =?utf-8?B?WGo5OUFiTEJiazlXTTlwUFRWVjBoSEQwTlVJb1B6WEFaOERGakJrR2FRMlhO?=
+ =?utf-8?B?c0hRdXdGdzFXUlhvNmhqVnV1VGJUcktRckxjRkFvY2hoditXRzhGWS9tY3VL?=
+ =?utf-8?B?aWpTNkFuTHR2eWZsL0lwdVdJVlRqVVVkWit1TE9DVTVUSTZXK0c5eWI5VW1D?=
+ =?utf-8?B?Y3MrRUp0YlFJSk5zT1lGc09kbFB3SzNFc05nRnVOb3FickQ0UmhsYVhVaHZQ?=
+ =?utf-8?B?YVJQKzZ1YkQvd0RrY1NpK001b2tLNjZNcEZabUZTcThOZDZoYVhvdS9SK1ZN?=
+ =?utf-8?B?U1JubTBYc3Z1S2RIZGpDZ0N2VmJnYXg5VE9NNlVvNEJ4aDYwYkFoSE93T2Fj?=
+ =?utf-8?B?WVpIU2FiellRYnczbHpIR3A3WS9rbjhBVjFCRFpiWkhTV1IrK2lqT0NtbEZX?=
+ =?utf-8?B?ZWZVcGdDRGJDTGVzVDNON1BjV0kzNUlUVzRHV0ExcHQ5ZXNQUmk5ZkJmaUtF?=
+ =?utf-8?B?aDRKNFJOQks5ZWh3bDZZd0xrZ0dtS0pNcStMTXVXWTlJZzNpYk5ERUVlcVFX?=
+ =?utf-8?B?S25uMkdPeXFIMHJXNXhYYW94WWtBcjJkcVh2UFRQV3UyRTNVTkJmWTh4Qm5N?=
+ =?utf-8?B?R0QvTENoTHlEZHNYUnpFNEx3bm9LeURrNWJwU3RSUkZFeG4vNWtmcThJRVBR?=
+ =?utf-8?B?UTVWdkI0WiticFFFeHg5TEtJaFJJTDFkaktXVWhHVGRFeHhRNU90UkRUTlVt?=
+ =?utf-8?B?RkdHblNpTm5hSTlYOVF6NUIyUUIwTktzRWtob1dPWjJDSWlBRkJkRzJMcmYz?=
+ =?utf-8?B?ZW5mOGhhQ2hIUVJDMjlOVXJDSUNER3BXUVhKWUlpWmRJWlJ3ejV5cHZqVFgr?=
+ =?utf-8?B?RVg3ZkVCRGJyNUpRcytRY2IxcFNKVmZSa0MrUXlzMmJYRDdsbWJxZUc3dFNM?=
+ =?utf-8?B?SkNoYk43L3R2S2dZd1dSYnBCZ0pyd3MwVUg4Mm1HRDZEbzczM05sVkRabU50?=
+ =?utf-8?B?Ry81OGpNb1NUelp0SXNoZ1FoS0gwQ1ovOXU4WjBPakZjeTR3aGp1bjNmT1Zj?=
+ =?utf-8?B?YU5vSEYrWTZDY0RvLzJvSUdoclNSenZuNFc2K0NUZmdJbWxUcjVBRDZFUy80?=
+ =?utf-8?B?MkxIeVoxV3B0NzhFdExuR21tQW9lSnpUUzdpbVhYaDBGSXp1cVFzODloRFpO?=
+ =?utf-8?B?bm10TmZVaTE4Y0Rpck5GL0ZCblNMY0tTVzRreGtXcTN3K1kzL0QvMXd4Wkpx?=
+ =?utf-8?B?cm1lNkoyZmZ5RkE1RHZxMkxiVVcxcTMrb3QxTndRSUE2OTNKUGM5K0diQytZ?=
+ =?utf-8?B?TEo1aVJFZ3FDWkcxckJ5SDZES3U5dDQ0OGR0TEpGNlV2bTliNnIyNzYrM2lw?=
+ =?utf-8?B?Z09qMjNJSlkyU1BxWmpxNTA2RjlLWkcxd1Z5QnR0VDhCZllDcElBSmdDbEtF?=
+ =?utf-8?B?N1JwWFdZdWlFbmIzM1diMWQyWTVGS2tHSHJqWndMb1NhV0JGRnZVb1gzSWQx?=
+ =?utf-8?B?YUZEU25ScW1SbTJobnUvYlhqZURKakQ0LytZRHF3OUNMb0s0YzhoQ2VEVVd1?=
+ =?utf-8?B?TFRRTFMzNW01U1creEpQZGNGb083Y0pNNm9uWjV2blRHRXA4alFlZW1VdjdB?=
+ =?utf-8?B?R3hXOGtSL09sNXFrR045Uk53QzBOQUtwcXhYazJ4TGtGVlY1SEVTZGxmNzVt?=
+ =?utf-8?B?bHFmOHNOWms0UHE5dStxMS82Y3VxVnFteFlqUCtySW9meXo4TWV6a29qTUh5?=
+ =?utf-8?B?U0M5TUU2YzNrWTY2dmNURjZaeWxCZzBvaitVc2tTaDh0d0k0NHVlQldrd3E3?=
+ =?utf-8?B?c1Rpb2ZZZUFnQ3B2Z3VQaS9tSnltZ1hrSFMwNEdQY1hWQ0hhMEZ0U3E0M2NP?=
+ =?utf-8?Q?1CZH5n5eo1X3u8AakwrV/2jkL?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5353c0da-039f-4f10-edf0-08dd87d8d0dc
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0206e713-e511-41ce-a019-08dd87da6fb0
 X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6214.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Apr 2025 11:19:04.8466
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Apr 2025 11:30:40.6798
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 70eqOggnci00v8O4SjMUD0gLQeUQbh0Z/p8cr3lezXaeFLRnJ15UfC/Tt4oIZJRG3+9k1x1E8kB83peTb+qMzg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6128
+X-MS-Exchange-CrossTenant-UserPrincipalName: irGnwJIPUQefRMA//77waZwMQE9znywqrMkkKGbUrF4HDzSFLY8PrFROt412DkLAYV5QWViX+kTP0L/XBplr/Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7237
 
 Hi Sean,
 
 Thank you for reviewing my patches.
 
-On 4/23/2025 9:00 PM, Sean Christopherson wrote:
-> On Wed, Apr 16, 2025, Xiaoyao Li wrote:
->> On 3/24/2025 9:02 PM, Manali Shukla wrote:
->>> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
->>> index 5fe84f2427b5..f7c925aa0c4f 100644
->>> --- a/Documentation/virt/kvm/api.rst
->>> +++ b/Documentation/virt/kvm/api.rst
->>> @@ -7909,6 +7909,25 @@ apply some other policy-based mitigation. When exiting to userspace, KVM sets
->>>   KVM_RUN_X86_BUS_LOCK in vcpu-run->flags, and conditionally sets the exit_reason
->>>   to KVM_EXIT_X86_BUS_LOCK.
->>> +Note! KVM_CAP_X86_BUS_LOCK_EXIT on AMD CPUs with the Bus Lock Threshold is close
->>> +enough  to INTEL's Bus Lock Detection VM-Exit to allow using
->>> +KVM_CAP_X86_BUS_LOCK_EXIT for AMD CPUs.
->>> +
->>> +The biggest difference between the two features is that Threshold (AMD CPUs) is
->>> +fault-like i.e. the bus lock exit to user space occurs with RIP pointing at the
->>> +offending instruction, whereas Detection (Intel CPUs) is trap-like i.e. the bus
->>> +lock exit to user space occurs with RIP pointing at the instruction right after
->>> +the guilty one.
->>>
->>
->>
->>> +The bus lock threshold on AMD CPUs provides a per-VMCB counter which is
->>> +decremented every time a bus lock occurs, and a VM-Exit is triggered if and only
->>> +if the bus lock counter is '0'.
->>> +
->>> +To provide Detection-like semantics for AMD CPUs, the bus lock counter has been
->>> +initialized to '0', i.e. exit on every bus lock, and when re-executing the
->>> +guilty instruction, the bus lock counter has been set to '1' to effectively step
->>> +past the instruction.
->>
->> From the perspective of API, I don't think the last two paragraphs matter
->> much to userspace.
->>
->> It should describe what userspace can/should do. E.g., when exit to
->> userspace due to bus lock on AMD platform, the RIP points at the instruction
->> which causes the bus lock. Userspace can advance the RIP itself before
->> re-enter the guest to make progress. If userspace doesn't change the RIP,
->> KVM internal can handle it by making the re-execution of the instruction
->> doesn't trigger bus lock VM exit to allow progress.
+On 4/23/2025 9:14 PM, Sean Christopherson wrote:
+> On Mon, Mar 24, 2025, Manali Shukla wrote:
+>> +	if (vmcb02->save.rip && (svm->nested.ctl.bus_lock_rip == vmcb02->save.rip)) {
+>> +		vmcb02->control.bus_lock_counter = 1;
+>> +		svm->bus_lock_rip = svm->nested.ctl.bus_lock_rip;
+>> +	} else {
+>> +		vmcb02->control.bus_lock_counter = 0;
+>> +	}
+>> +	svm->nested.ctl.bus_lock_rip = INVALID_GPA;
+>> +
+>>  	/* Done at vmrun: asid.  */
+>>  
+>>  	/* Also overwritten later if necessary.  */
+>> @@ -1039,6 +1069,18 @@ int nested_svm_vmexit(struct vcpu_svm *svm)
+>>  
+>>  	}
+>>  
+>> +	/*
+>> +	 * If bus_lock_counter is nonzero and the guest has not moved past the
+>> +	 * guilty instruction, save bus_lock_rip in svm_nested_state. This will
+>> +	 * help determine at nested VMRUN whether to stash vmcb02's counter or
+>> +	 * reset it to '0'.
+>> +	 */
+>> +	if (vmcb02->control.bus_lock_counter &&
+>> +	    svm->bus_lock_rip == vmcb02->save.rip)
+>> +		svm->nested.ctl.bus_lock_rip = svm->bus_lock_rip;
+>> +	else
+>> +		svm->nested.ctl.bus_lock_rip = INVALID_GPA;
+>> +
+>>  	nested_svm_copy_common_state(svm->nested.vmcb02.ptr, svm->vmcb01.ptr);
+>>  
+>>  	svm_switch_vmcb(svm, &svm->vmcb01);
 > 
-> Agreed.  It's not just the last two paragraphs, it's the entire doc update.
+> ...
 > 
-> The existing documentation very carefully doesn't say anything about *how* the
-> feature is implemented on Intel, so I don't see any reason to mention or compare
-> Bus Lock Threshold vs. Bus Lock Detection.  As Xiaoyao said, simply state what
-> is different.
+>> +static int bus_lock_exit(struct kvm_vcpu *vcpu)
+>> +{
+>> +	struct vcpu_svm *svm = to_svm(vcpu);
+>> +
+>> +	vcpu->run->exit_reason = KVM_EXIT_X86_BUS_LOCK;
+>> +	vcpu->run->flags |= KVM_RUN_X86_BUS_LOCK;
+>> +
+>> +	vcpu->arch.cui_linear_rip = kvm_get_linear_rip(vcpu);
+>> +	svm->bus_lock_rip = vcpu->arch.cui_linear_rip;
+>> +	vcpu->arch.complete_userspace_io = complete_userspace_buslock;
+>> +
+>> +	return 0;
+>> +}
 > 
-> And I would definitely not say anything about whether or not userspace can advance
-> RIP, as doing so will likely crash/corrupt the guest.  KVM sets bus_lock_counter
-> to allow forward progress, KVM does NOT skip RIP.
+>> @@ -327,6 +328,7 @@ struct vcpu_svm {
+>>  
+>>  	/* Guest GIF value, used when vGIF is not enabled */
+>>  	bool guest_gif;
+>> +	u64 bus_lock_rip;
 > 
-> All in all, I think the only that needs to be called out is that RIP will point
-> to the next instruction on Intel, but the offending instruction on Intel.
+> I don't think this field is necessary.  Rather than unconditionally invalidate
+> on nested VMRUN and then conditionally restore on nested #VMEXIT, just leave
+> svm->nested.ctl.bus_lock_rip set on VMRUN and conditionally invalidate on #VMEXIT.
+> And then in bus_lock_exit(), update the field if the exit occurred while L2 is
+> active.
 > 
-> Unless I'm missing a detail, I think it's just this:
+> Completely untested:
 > 
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index 5fe84f2427b5..d9788f9152f1 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -7909,6 +7909,11 @@ apply some other policy-based mitigation. When exiting to userspace, KVM sets
->  KVM_RUN_X86_BUS_LOCK in vcpu-run->flags, and conditionally sets the exit_reason
->  to KVM_EXIT_X86_BUS_LOCK.
+> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+> index a42ef7dd9143..98e065a93516 100644
+> --- a/arch/x86/kvm/svm/nested.c
+> +++ b/arch/x86/kvm/svm/nested.c
+> @@ -700,13 +700,10 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm,
+>          * L1 re-enters L2, the same instruction will trigger a VM-Exit and the
+>          * entire cycle start over.
+>          */
+> -       if (vmcb02->save.rip && (svm->nested.ctl.bus_lock_rip == vmcb02->save.rip)) {
+> +       if (vmcb02->save.rip && (svm->nested.ctl.bus_lock_rip == vmcb02->save.rip))
+>                 vmcb02->control.bus_lock_counter = 1;
+> -               svm->bus_lock_rip = svm->nested.ctl.bus_lock_rip;
+> -       } else {
+> +       else
+>                 vmcb02->control.bus_lock_counter = 0;
+> -       }
+> -       svm->nested.ctl.bus_lock_rip = INVALID_GPA;
 >  
-> +Due to differences in the underlying hardware implementation, the vCPU's RIP at
-> +the time of exit diverges between Intel and AMD.  On Intel hosts, RIP points at
-> +the next instruction, i.e. the exit is trap-like.  On AMD hosts, RIP points at
-> +the offending instruction, i.e. the exit is fault-like.
-> +
->  Note! Detected bus locks may be coincident with other exits to userspace, i.e.
->  KVM_RUN_X86_BUS_LOCK should be checked regardless of the primary exit reason if
->  userspace wants to take action on all detected bus locks.
+>         /* Done at vmrun: asid.  */
+>  
+> @@ -1070,15 +1067,10 @@ int nested_svm_vmexit(struct vcpu_svm *svm)
+>         }
+>  
+>         /*
+> -        * If bus_lock_counter is nonzero and the guest has not moved past the
+> -        * guilty instruction, save bus_lock_rip in svm_nested_state. This will
+> -        * help determine at nested VMRUN whether to stash vmcb02's counter or
+> -        * reset it to '0'.
+> +        * Invalidate bus_lock_rip unless kVM is still waiting for the guest
+> +        * to make forward progress before re-enabling bus lock detection.
+>          */
+> -       if (vmcb02->control.bus_lock_counter &&
+> -           svm->bus_lock_rip == vmcb02->save.rip)
+> -               svm->nested.ctl.bus_lock_rip = svm->bus_lock_rip;
+> -       else
+> +       if (!vmcb02->control.bus_lock_counter)
+>                 svm->nested.ctl.bus_lock_rip = INVALID_GPA;
+>  
+>         nested_svm_copy_common_state(svm->nested.vmcb02.ptr, svm->vmcb01.ptr);
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index ea12e93ae983..11ce031323fd 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -3333,9 +3333,10 @@ static int bus_lock_exit(struct kvm_vcpu *vcpu)
+>         vcpu->run->flags |= KVM_RUN_X86_BUS_LOCK;
+>  
+>         vcpu->arch.cui_linear_rip = kvm_get_linear_rip(vcpu);
+> -       svm->bus_lock_rip = vcpu->arch.cui_linear_rip;
+>         vcpu->arch.complete_userspace_io = complete_userspace_buslock;
+>  
+> +       if (is_guest_mode(vcpu))
+> +               svm->nested.ctl.bus_lock_rip = vcpu->arch.cui_linear_rip;
+>         return 0;
+>  }
+>  
+> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+> index 7a4c5848c952..8667faccaedc 100644
+> --- a/arch/x86/kvm/svm/svm.h
+> +++ b/arch/x86/kvm/svm/svm.h
+> @@ -328,7 +328,6 @@ struct vcpu_svm {
+>  
+>         /* Guest GIF value, used when vGIF is not enabled */
+>         bool guest_gif;
+> -       u64 bus_lock_rip;
+>  };
+>  
+>  struct svm_cpu_data {
 > 
 
-Will update in V5.
+I have added these changes and tested them. Everything looks good to me. I will include them in V5
+and send it soon.
 
 -Manali
 
