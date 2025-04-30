@@ -1,106 +1,106 @@
-Return-Path: <linux-kselftest+bounces-32035-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32036-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7104CAA5181
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 18:21:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA861AA5182
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 18:21:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 31E211C06CA6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 16:21:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F1B634E7450
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 16:21:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2E742641EE;
-	Wed, 30 Apr 2025 16:21:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66D27261370;
+	Wed, 30 Apr 2025 16:21:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AQAtIXGr"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SrE/kTXv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14BB3263C7F
-	for <linux-kselftest@vger.kernel.org>; Wed, 30 Apr 2025 16:21:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B8402609FB
+	for <linux-kselftest@vger.kernel.org>; Wed, 30 Apr 2025 16:21:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746030064; cv=none; b=GwZnsDbqPF0NfeLSfCHUDLK9EqE3RddvDm3ZsJlJTvVbd4KNF5mkfhG/X+GboEBVDVcpwkJoNRONCx7esTMKc7HGhTIYUKj3K0fTUKfVuL6H1HeU0iA8f22BRi6LkUPpMOIAJFVz4MCnHmuttR7rkuNnXOA6/8FnRtl+j0SZ3D0=
+	t=1746030072; cv=none; b=hIWSLwrcdGJF9BaacDp9XV5EoEld1TuahBLiTbXIdP00BsuqglZb8816f3ihW20SVr2PG2QDhiam9PVCZh7mq/he1lHqotEHQlxkffNyrKd+Urgyp6cUvChE992ILhtQiTyCs5JI2WWhK6Z86i2Ue8KQjyiHU1oO7O5ywKLGOKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746030064; c=relaxed/simple;
-	bh=LpHRfhDvHGPF2hXjZlOMYKooffdzDnFTNYYSF2yPQ2s=;
+	s=arc-20240116; t=1746030072; c=relaxed/simple;
+	bh=cWuwpID4ow0Nv5NvrwSre9qMIxbN0XB35u0L/1yPIiw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LGaAnu0QTtIZUTau+iJXNd3ZgkbLvevgJl6vlZQNIcdbZoGw4UToIZxnpa6pFxAH8bwpAkD+79U36F2+FFa2EGH+Gwkfz2qrqAqrnxwqsVv9cG6CDzlh8zLBFBNlgEtXHYijpeuJQ1iGenxP4ysmY10rZDfnzOW+Sfe7e+UZA6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AQAtIXGr; arc=none smtp.client-ip=209.85.128.47
+	 To:Cc:Content-Type; b=QhYwXWM0xUS+/Mew/sj8FjfSgscNuTfXzXv1A/wvAabI7R650QvT0tQgh6PJFn1eqzYDYhLnX5X2t4oUcSHgpovVvX9RIg/9uMlaRyTQJhZZfnD5GpkeDJdIbkoctXd2MBL6XgD1JPxFYgPmo+T/sdPz1nA5uGTkThkpc3E6jkU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SrE/kTXv; arc=none smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-43cfe808908so2895e9.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Apr 2025 09:21:02 -0700 (PDT)
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-43ef83a6bfaso2065e9.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Apr 2025 09:21:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746030061; x=1746634861; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1746030069; x=1746634869; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ITlJTqCh7uuC+AGjnX/2OcnlbBzBhZafTVcOLvpVDYw=;
-        b=AQAtIXGrH/83WlGPZ9pIArgc+sDEazm1yA8+GHjaisXauRxkzCBYi0Gjtqd/KO1KYY
-         znKmWywnW5o5RtFubnmSz/wrMm3cXFRvHiZtcTTy9X0j2UN6x6yf9SIYVwgBvDGyNdL4
-         oApBSh8Rxjc/8X6rvsS8Aq3t1SikKmhjK6Is+Qkwy/9t8wItkeRHQ2QO6Vyfml1f5XnH
-         SW0TcvsSV8DLDuSxdk6E1Y2zmJG6rCz1QpjOcdEbJF/W023s08joyD+0MmZFc79xfyPZ
-         yKEkZNzrrtgH6fmWol9qE6YAFjauskSFmLyp6b/OINUqVb4/xmrZDfLXB+hNWw12qgtX
-         ujog==
+        bh=N4t9Jwzp3tALmT5Y0kuqzt6lZQSaIPQ+RLi/Bjs6axI=;
+        b=SrE/kTXvp0uEFkkddRSYy72Q4RMPsmKVNQzUB7xLnspkLBILVXlv09bF3LlYMsbMog
+         YBsYiaNfLakmVSwn5yjXnxmdhQ7lxAVzwZg5EkjoXNkA5JLqq/Y7Q7cPdw8JIcTsJ8lg
+         bCIOOxHgpOpFIl3mIUicfEQ7nRDZp2v+tL9EpSuPmsLZdcR9KffFIHEKyMeL7xfTDbs7
+         CGfkBlwJfJSYO86vrjgVJfY6U1vrp76PtztL8XDsQ0ryYZD4VvcTgRiOAsqhlRIGrOB1
+         EjT6mMVzy95xMDYQwQvXejmuybtCTXL2qXIaoOP4VbIPPwGmv6yOOmRwneDsDvPWx/82
+         ePDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746030061; x=1746634861;
+        d=1e100.net; s=20230601; t=1746030069; x=1746634869;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ITlJTqCh7uuC+AGjnX/2OcnlbBzBhZafTVcOLvpVDYw=;
-        b=felE2X7C6PV1EhH9xw9drQj76TMSJZZBw+whqnirDhCoEWhzlOutNmHQeuCGK79uHP
-         0CTA43C8YWr3ymGainkyyNfXi2DVJFKMU9ATndzJaMhe4xHY+TTttgvikjAlJg/GnV7E
-         LZmvwKcnax+GGtffo3WXiOmRtIjnyrtQLxS340zetavtvyjdJTgK6vqcTYjDQSjwEF1I
-         Ww4NUAV/RVsxSr3JYY3nB8kAESKoI3iwIL3R7dkCU/4FwfWjUmHkvnMZRMbFGsVFsGdy
-         cyr3MSkuqQlj2vFP/HU+CTi+4Ft4Pa4/UjCVpeHWd8X037bUCU4J3vX5YxbZuBVWkRtx
-         55IA==
-X-Gm-Message-State: AOJu0YzKOhbrv18FvHHziVFriRBDOuOXYyFdIUtteWdrjkmr7wgf/AeC
-	f0wdcwqpU7zsCUvfkoniCti0ym2EEiKPo6471Je6R+yqeGUo07UmOxj9tKPdqLM4+2w5tDSVTga
-	SiynBqBy33inr9bJupF1d+dAw38ElrqF3W6p6
-X-Gm-Gg: ASbGncuczOz7fOerYd3KANk8DcsL4Ho0EK5D7gvyMEi/vi7LOHg9diVWlnwuntAAcMX
-	uRUhxWFlE6h1vYfMUjb1W5yhKt8qXhdMKYkz/s/f2eRnyC2Iu9BT5krtA9VuQcaLtMthkeJnKH5
-	JC75wwbvs9AvMNa5V7E7iq0gKluPNdNcPCMWyerKbyItcHWaqOhQ==
-X-Google-Smtp-Source: AGHT+IGjq5UCWuOVohT4wTc98AFxoE5cC1RndlLUKdHvMQth3F5/w7t4WqoGSe6nSHUwNQ8iWR2HZkZH8kD/nBSW0+U=
-X-Received: by 2002:a05:600c:1d90:b0:439:9434:1b6c with SMTP id
- 5b1f17b1804b1-441b4d7a6d1mr546205e9.3.1746030061267; Wed, 30 Apr 2025
- 09:21:01 -0700 (PDT)
+        bh=N4t9Jwzp3tALmT5Y0kuqzt6lZQSaIPQ+RLi/Bjs6axI=;
+        b=K0SF7rgY8U+ftenfJ4b/MLJEJcBXloZ3OsCLlrT9zbtKTD+Msn0k4I7U9AC+iIGaZF
+         waPvZk3ythVnmXQtU0UoBDlvSeuYjpfE2T0wXhv9fGIDVk9L9QrW0FbdaiCWjygLYAsY
+         4amAN2j3kScX0hS4cAU/KSPIAM0DD3CQwYIPK7mhaEa2x7gEz1rqUV/zI+lJw6p3mjG0
+         k9EgTWNSK3BzV6rAfLxzg7A7q00dKQqzq0aYRHvyKTQVS6X4Ek7mJjPOkzkoDDeV9RGM
+         Tl37fA8xGrXfRqHV7UE5GFPifsQJlZhBI9GzpXy8T9zvngXh5/o0b9h6/NL7s554QUm5
+         Ps2g==
+X-Gm-Message-State: AOJu0YyMsR3df7DNN0AOpoBQQEMd4Ijq7zBnLz3LoqX3qkCaEHYZNSZa
+	QKRATQP2ec/DaecQfqqN9gdxaHw/cyrn2GX0RpoFP7XbCKWIRwoACmiiWVsCpKY1blvzX8tR3Jn
+	edMbcIf5LF46xh89i1rBj9ZttTxQhl/LUbf5m
+X-Gm-Gg: ASbGncuxp1lFDDs8Hq+8CLTj3vGMsRbVukLL7TLnvfqP3tgcZQMvi95Pe5wgAGwpikh
+	2aE8cVcU8Kv4GRqcEYDmDkuuNJzDd+KaGMxMyV3WhoRGqRDNIluZfkXNCAAIX07p/SJKx7QhmwZ
+	Slr4clT91XN3k+Jx3UwOuUzwuQq8j9fzCpYbc4qljpKKz/qrn1AA==
+X-Google-Smtp-Source: AGHT+IENM6Eh0EWW7XE/gaUWIsK+w8asvkWeu4drq5OeFhBehmM+fZ9cjvw4O9E8XZBXjlmRKTvMciERxI2/CJnKT/0=
+X-Received: by 2002:a05:600c:63cb:b0:439:8f59:2c56 with SMTP id
+ 5b1f17b1804b1-441b20096cbmr1334855e9.2.1746030068758; Wed, 30 Apr 2025
+ 09:21:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250115105211.390370-1-ps.report@gmx.net>
-In-Reply-To: <20250115105211.390370-1-ps.report@gmx.net>
+References: <20250115105211.390370-1-ps.report@gmx.net> <20250115105211.390370-2-ps.report@gmx.net>
+In-Reply-To: <20250115105211.390370-2-ps.report@gmx.net>
 From: "T.J. Mercier" <tjmercier@google.com>
-Date: Wed, 30 Apr 2025 09:20:47 -0700
-X-Gm-Features: ATxdqUGzlbj1JzYl8Y8d6xa0ko6OVa25QiRzQSU_kIdPLFfnUA-zNBFDvtwFXPk
-Message-ID: <CABdmKX2+nhw8L7HLZdaSvbX4VWhCEaxZt42G2QEvcfKxzpw3RA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/3] selftests: pidfd: add missing sys/mount.h include
- in pidfd_fdinfo_test.c
+Date: Wed, 30 Apr 2025 09:20:56 -0700
+X-Gm-Features: ATxdqUFcCdxSPFBmNim9qAAPca0KuXa7suNkaPFI4nBeNOT7XQmGzJgW0YUXsts
+Message-ID: <CABdmKX3zM8NodtvCDgRJXAYrXydxbKsu7UXL=iWNbO5RW6-Cng@mail.gmail.com>
+Subject: Re: [PATCH v1 2/3] selftests: pidfd: add missing sys/ioctl.h include
+ in pidfd_setns_test.c
 To: Peter Seiderer <ps.report@gmx.net>
 Cc: linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
 	linux-kernel@vger.kernel.org, Christian Brauner <brauner@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 15, 2025 at 2:52=E2=80=AFAM Peter Seiderer <ps.report@gmx.net> =
+On Wed, Jan 15, 2025 at 2:53=E2=80=AFAM Peter Seiderer <ps.report@gmx.net> =
 wrote:
 >
 > Fix compile on openSUSE Tumbleweed (gcc-14.2.1, glibc-2.40):
->   - add missing sys/mount.h include
+>   - add missing sys/ioctl.h include
 >
 > Fixes:
 >
->   pidfd_fdinfo_test.c: In function =E2=80=98child_fdinfo_nspid_test=E2=80=
-=99:
->   pidfd_fdinfo_test.c:230:13: error: implicit declaration of function =E2=
-=80=98mount=E2=80=99 [-Wimplicit-function-declaration]
->     230 |         r =3D mount(NULL, "/", NULL, MS_REC | MS_PRIVATE, 0);
->         |             ^~~~~
+>   pidfd_setns_test.c: In function =E2=80=98current_nsset_setup=E2=80=99:
+>   pidfd_setns_test.c:172:54: error: implicit declaration of function =E2=
+=80=98ioctl=E2=80=99 [-Wimplicit-function-declaration]
+>     172 |                 self->child_pidfd_derived_nsfds[i] =3D ioctl(se=
+lf->pidfd, info->pidfd_ioctl, 0);
+>         |                                                      ^~~~~
 >
 > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
@@ -108,22 +108,22 @@ Reviewed-by: T.J. Mercier <tjmercier@google.com>
 
 
 > ---
->  tools/testing/selftests/pidfd/pidfd_fdinfo_test.c | 1 +
+>  tools/testing/selftests/pidfd/pidfd_setns_test.c | 1 +
 >  1 file changed, 1 insertion(+)
 >
-> diff --git a/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c b/tools/te=
-sting/selftests/pidfd/pidfd_fdinfo_test.c
-> index f062a986e382..f718aac75068 100644
-> --- a/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
-> +++ b/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
-> @@ -13,6 +13,7 @@
->  #include <syscall.h>
->  #include <sys/wait.h>
->  #include <sys/mman.h>
-> +#include <sys/mount.h>
+> diff --git a/tools/testing/selftests/pidfd/pidfd_setns_test.c b/tools/tes=
+ting/selftests/pidfd/pidfd_setns_test.c
+> index 222f8131283b..4c8a0253a64f 100644
+> --- a/tools/testing/selftests/pidfd/pidfd_setns_test.c
+> +++ b/tools/testing/selftests/pidfd/pidfd_setns_test.c
+> @@ -17,6 +17,7 @@
+>  #include <sys/socket.h>
+>  #include <sys/stat.h>
+>  #include <linux/ioctl.h>
+> +#include <sys/ioctl.h>
 >
 >  #include "pidfd.h"
->  #include "../kselftest.h"
+>  #include "../kselftest_harness.h"
 > --
 > 2.47.1
 >
