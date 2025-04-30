@@ -1,115 +1,201 @@
-Return-Path: <linux-kselftest+bounces-32005-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32006-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47F52AA3FCD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 02:50:37 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C07A1AA411F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 04:46:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AFDD13B7891
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 00:48:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C05C27B8C38
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 02:45:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0D43A41;
-	Wed, 30 Apr 2025 00:48:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A634A1CDFD4;
+	Wed, 30 Apr 2025 02:46:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NW+eklPw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mEePr3LU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8183D1854;
-	Wed, 30 Apr 2025 00:48:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE9222111;
+	Wed, 30 Apr 2025 02:46:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745974116; cv=none; b=YyfXGRj9prn42ZVYyZA9pLcTHxqJbAXFsq7+We66zAHkk2xk8Cbo2PLfAOnOVliCbywuOC2YrPWfksFPqBSZldP86UOJlPoPGEdKz2FPImb02ahZDifaobgqtXiuaAUiC7gNukAnd43WESh7bI6BCsFbPlsFY9CF/0WJd456Er4=
+	t=1745981181; cv=none; b=sjnDZX8icW86Tw4+Cv9v2/9QTVmeCKndGf4URaGBtUWJwdoC6Y33EXY1ow/uy+Dcm1GNqNgULNKhCVX5xv170J2nysD29TX19m1JAGjQyJYitn2ZAUUImMJjrKTJWvapDMzqLqXzxhn5KcytqjIooKYIptfNYbLaKXxIrXuOiek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745974116; c=relaxed/simple;
-	bh=VVFZTctHxV0J4BThDv/Rh1bu5X7V1E/RSG49b70KuFk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F3DtYWFeQKH4xNDwAOO0sRec0Bq/ashWMXNPZZOvz+hTmmxecTnAq/sB5+1onviG+PPCyf/WWXmazEX0TEotC34ev1U7JkVC9AAn6+iVMj/Ltj2KCByws719T5YZPLhOyqA4PA50TT8fuEFG0tvx1wM03/N4OP3EcE6SV5ubc9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NW+eklPw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CD11C4CEE3;
-	Wed, 30 Apr 2025 00:48:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745974115;
-	bh=VVFZTctHxV0J4BThDv/Rh1bu5X7V1E/RSG49b70KuFk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NW+eklPwrSa6qc0ANGDyz5ecCRQIwS8PesnSG7ZB0CPRIM67IQ+chPQENuKAi8zd0
-	 Zm0R4pyyTFAJ92d2wvYK8KPthnCFMB4BchhmNBtnzWe8xgtVMFWUGiyoWKvSGNE2Fw
-	 ENRTIbvu37efEZw9Qc9JXc3kQFVt9iN7UUm1kJrvcFFzdq6cNsGSE7nkA+c7mr4XpO
-	 1Lzs6pVxugKDBfktLfW4aEWSQIThcWbYpdZvOE+/EEUrwFtNI6r3Tq0J9zcYco04Ao
-	 uuPddb65DCIMCvzEIGz8vbggqDjU6uZxMsTS6t7v1flq7FdDn5fM4GFDvj9xs+TbRA
-	 /7/jj5o1gfZ/A==
-Date: Wed, 30 Apr 2025 09:48:31 +0900
-From: Mark Brown <broonie@kernel.org>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Subject: Re: [PATCH] KVM: selftests: add test for SVE host corruption
-Message-ID: <aBFzXw-ASk1bXQvx@finisterre.sirena.org.uk>
-References: <20250417-kvm-selftest-sve-signal-v1-1-6330c2f3da0c@kernel.org>
- <aBDv39FD7eDYoplg@J2N7QTR9R3.cambridge.arm.com>
+	s=arc-20240116; t=1745981181; c=relaxed/simple;
+	bh=tZj+fajqPvkq+73cH8tXJlYZvR+o5VeoP5VRKaX/kYA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MB+512tmcvm1Sx1W+CWuE5GUFMU/LwbY3TbX6nOPz0eO3GBQA6ml6JIVeSn6jameT+FQSRL6F2tg1Edh7kAzJdQRa8/uOb2LPcfz8P9krYe2l9VxkakdPbuu0KhPVBoI4YyBWxpWyroMLTSL+fjXgG7SLNQVarTcYfkDGXPyUWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mEePr3LU; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-39ee682e0ddso4613188f8f.1;
+        Tue, 29 Apr 2025 19:46:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1745981178; x=1746585978; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IRoA1hn+ILrnaL3QGiypq6EmGKcTVkU7YdYU9NCLYKU=;
+        b=mEePr3LU84EtC9YaEi9hNKvUJIOZmFmn/Eo0/UTHWk0urD0ylMheKy1GZ/sStSeRil
+         Wr/Ze2udmPdC2hkMCXgDzIhMbmbaAXYZZsMNy7w8wy+OBBeaxWt1Cr84DBR8ezusVBuU
+         ZLFCNo/1oc/1in46B0jp7vAJILjNTltmXIUu+GCq0ra2fBNb2V/uqddrpZlskeMhuGaL
+         v4FF/dJat/j3W5V3/kYT+cqBZrYyQGZA9tMAWKZmX3BNEBhfS6+kC87bcGLlPDGoemNB
+         AymalL4OzLyFD7OUnLHESJWQpxgcUW1+uP5wJY1uVGRIibjmj8AOFGr5rXJdZtHmx6NX
+         m7PA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745981178; x=1746585978;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IRoA1hn+ILrnaL3QGiypq6EmGKcTVkU7YdYU9NCLYKU=;
+        b=QIC0HTmi6Oek2SC8mdBKTZhgNvxHTX+myGHy1SAQyukzCYyJktwiFFKdSAyHzsDkac
+         NrnhrMJ5U17KybTaDzN/LQYQd4an2UPEhWnIuB7oeywWlVSfyI+K7AI/eEzKPtV4gi0s
+         yhplMj/HNIAxJYMijcgCVa9KXljez4W5CZ4zve4DY0ZAQgPRUjzG0Fwn06wQaR17C96M
+         KG7DBZAG6EGF4HtbjHaSMZg1REEpG/6L65BY2TQ16CEBepGlL84JHFi0DsxQchN94qR6
+         XTJ0SogE/KxDDdOQ9eAOrvLQ0ULNhvxaKKlcfYaqJ5PNjlH84qA/JLY6NQdoMhTWGcyo
+         HgBQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU9A7LrTxqmLjDqG6bV6iYt/uj3ILLdRLDnsPO50ICpmHUxY3LFPauW+vuQiaTbHxFh+9zjeKNeRSdOZG79@vger.kernel.org, AJvYcCUAMHfQJuGEZB7mxYOdu6Vadi0XK/B1eo+OjDOrf0V8ESkeBjLWSiZoMZbDwALLa3lpCXAk1JEMUnkvNgbbDzEt@vger.kernel.org, AJvYcCUZlK77ziAXzRrY+i/GbiNLWfsIpuagwpFO7xLLhz6Oy2ZGUvaiRHK+Bqghj6LpskFWE6A=@vger.kernel.org, AJvYcCXF5oPIrrV+N3qT/HwrL9y5mnLWFggv+1jh3YhQqllsaSSklTHfkt9M7mZvnU+pgALsaQ4lpKNvz29q+555ueDmK5lq@vger.kernel.org, AJvYcCXTJWr0BEnSX28DlijCVyDsy2dib4Xoen3+inZX5Vclb8NhjNHlAx7o7M/Txk9C7+0M2PvNSC9x@vger.kernel.org
+X-Gm-Message-State: AOJu0YyuIYUPW2sOZtRPKmGs3eB/L0EIVbQrEp6mDK/+4UGIatlqk+cm
+	of36ArkLnoQ/Ly8evwfjrcGBu8qyGE7Ns1oxSjo7Em57Wavq4QNmWM7De2v5D5RPDSruJMIkB4q
+	tLHizz1pDorQ3993cvB5Fx14f83E=
+X-Gm-Gg: ASbGnctKC3FZYpKCl81deylRNJQp/JcqBivd8fVsawLBmGqUGdEEAe9CxJPnBOnHgFG
+	skQBBStPbEkPCZLHEuuEpTbzs2rONk7QTS2WxGlj1291TD3z3lJ2w6n/r5aLbJYvAgd2fFD6vh1
+	PwofZyxQMsEBq0MYyTZESJWCfT14NjOVPt0DlNUw==
+X-Google-Smtp-Source: AGHT+IEseH2I0pUjM+B8W45c5JTdHLZ05e9zXlXFhwq6KjuhDIGYFugjVOnMpqk2DxAdfmZQOfc3MHYNAs8vZ5GnN6A=
+X-Received: by 2002:a5d:64e5:0:b0:391:4bfd:6d5 with SMTP id
+ ffacd0b85a97d-3a08ff5558emr512089f8f.52.1745981177742; Tue, 29 Apr 2025
+ 19:46:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="C+U9jvApfUFUi2KB"
-Content-Disposition: inline
-In-Reply-To: <aBDv39FD7eDYoplg@J2N7QTR9R3.cambridge.arm.com>
-X-Cookie: Well begun is half done.
+References: <20250426160027.177173-1-mannkafai@gmail.com> <20250426160027.177173-2-mannkafai@gmail.com>
+In-Reply-To: <20250426160027.177173-2-mannkafai@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 29 Apr 2025 19:46:05 -0700
+X-Gm-Features: ATxdqUFMquDKYdhGCyZiHIRKlu07tHBastoNqC0uT60dUlJw9_rSYO-AjZ2fBT4
+Message-ID: <CAADnVQ+DF18nKEf9i1RKEQN+ybH+duu7U-91YZDaa_PiqUx17g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/4] bpf: Allow get_func_[arg|arg_cnt] helpers in
+ raw tracepoint programs
+To: KaFai Wan <mannkafai@gmail.com>
+Cc: Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Matt Bobrowski <mattbobrowski@google.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	bpf <bpf@vger.kernel.org>, 
+	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Leon Hwang <leon.hwang@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Sat, Apr 26, 2025 at 9:00=E2=80=AFAM KaFai Wan <mannkafai@gmail.com> wro=
+te:
+>
+> Adding support to use get_func_[arg|arg_cnt] helpers in raw_tp/tp_btf
+> programs.
+>
+> We can use get_func_[arg|ret|arg_cnt] helpers in fentry/fexit/fmod_ret
+> programs currently. If we try to use get_func_[arg|arg_cnt] helpers in
+> raw_tp/tp_btf programs, verifier will fail to load the program with:
+>
+> ; __u64 cnt =3D bpf_get_func_arg_cnt(ctx);
+> 3: (85) call bpf_get_func_arg_cnt#185
+> unknown func bpf_get_func_arg_cnt#185
+>
+> Adding get_func_[arg|arg_cnt] helpers in raw_tp_prog_func_proto and
+> tracing_prog_func_proto for raw tracepoint.
+>
+> Adding 1 arg on ctx of raw tracepoint program and make it stores number o=
+f
+> arguments on ctx-8, so it's easy to verify argument index and find
+> argument's position.
+>
+> Signed-off-by: KaFai Wan <mannkafai@gmail.com>
+> ---
+>  kernel/trace/bpf_trace.c | 17 ++++++++++++++---
+>  net/bpf/test_run.c       | 13 +++++--------
+>  2 files changed, 19 insertions(+), 11 deletions(-)
+>
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 52c432a44aeb..eb4c56013493 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -1892,6 +1892,10 @@ raw_tp_prog_func_proto(enum bpf_func_id func_id, c=
+onst struct bpf_prog *prog)
+>                 return &bpf_get_stackid_proto_raw_tp;
+>         case BPF_FUNC_get_stack:
+>                 return &bpf_get_stack_proto_raw_tp;
+> +       case BPF_FUNC_get_func_arg:
+> +               return &bpf_get_func_arg_proto;
+> +       case BPF_FUNC_get_func_arg_cnt:
+> +               return &bpf_get_func_arg_cnt_proto;
+>         case BPF_FUNC_get_attach_cookie:
+>                 return &bpf_get_attach_cookie_proto_tracing;
+>         default:
+> @@ -1950,10 +1954,16 @@ tracing_prog_func_proto(enum bpf_func_id func_id,=
+ const struct bpf_prog *prog)
+>         case BPF_FUNC_d_path:
+>                 return &bpf_d_path_proto;
+>         case BPF_FUNC_get_func_arg:
+> +               if (prog->type =3D=3D BPF_PROG_TYPE_TRACING &&
+> +                   prog->expected_attach_type =3D=3D BPF_TRACE_RAW_TP)
+> +                       return &bpf_get_func_arg_proto;
+>                 return bpf_prog_has_trampoline(prog) ? &bpf_get_func_arg_=
+proto : NULL;
+>         case BPF_FUNC_get_func_ret:
+>                 return bpf_prog_has_trampoline(prog) ? &bpf_get_func_ret_=
+proto : NULL;
+>         case BPF_FUNC_get_func_arg_cnt:
+> +               if (prog->type =3D=3D BPF_PROG_TYPE_TRACING &&
+> +                   prog->expected_attach_type =3D=3D BPF_TRACE_RAW_TP)
+> +                       return &bpf_get_func_arg_cnt_proto;
+>                 return bpf_prog_has_trampoline(prog) ? &bpf_get_func_arg_=
+cnt_proto : NULL;
+>         case BPF_FUNC_get_attach_cookie:
+>                 if (prog->type =3D=3D BPF_PROG_TYPE_TRACING &&
+> @@ -2312,7 +2322,7 @@ void __bpf_trace_run(struct bpf_raw_tp_link *link, =
+u64 *args)
+>  #define REPEAT(X, FN, DL, ...)         REPEAT_##X(FN, DL, __VA_ARGS__)
+>
+>  #define SARG(X)                u64 arg##X
+> -#define COPY(X)                args[X] =3D arg##X
+> +#define COPY(X)                args[X + 1] =3D arg##X
+>
+>  #define __DL_COM       (,)
+>  #define __DL_SEM       (;)
+> @@ -2323,9 +2333,10 @@ void __bpf_trace_run(struct bpf_raw_tp_link *link,=
+ u64 *args)
+>         void bpf_trace_run##x(struct bpf_raw_tp_link *link,             \
+>                               REPEAT(x, SARG, __DL_COM, __SEQ_0_11))    \
+>         {                                                               \
+> -               u64 args[x];                                            \
+> +               u64 args[x + 1];                                        \
+> +               args[0] =3D x;                                           =
+ \
+>                 REPEAT(x, COPY, __DL_SEM, __SEQ_0_11);                  \
+> -               __bpf_trace_run(link, args);                            \
+> +               __bpf_trace_run(link, args + 1);                        \
 
---C+U9jvApfUFUi2KB
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This is neat, but what is this for?
+The program that attaches to a particular raw_tp knows what it is
+attaching to and how many arguments are there,
+so bpf_get_func_arg_cnt() is a 5th wheel.
 
-On Tue, Apr 29, 2025 at 04:27:27PM +0100, Mark Rutland wrote:
-> On Thu, Apr 17, 2025 at 12:32:49AM +0100, Mark Brown wrote:
+If the reason is "for completeness" then it's not a good reason
+to penalize performance. Though it's just an extra 8 byte of stack
+and a single store of a constant.
 
-> > Signed-off-by: Mark Brown <broonie@kernel.org>
-
-> Looks like my Signed-off-by got dropped by accident; it should be above
-> yours here.
-
-> Aside from that, and the initial feature test, this looks pretty much
-> identical to my original WIP.
-
-Sorry, for a while I had a version of the program that was a lot more
-modified (I was trying to make it work with a wider range of supervised
-programs) so it didn't feel right to carry your SoB forward, but those
-didn't actually go all the way to working enough to enable any of the
-additional programs I was looking at so I ended up unwinding them and
-didn't also unwind that change.
-
-> I'm not sure if it's worth keeping all the printf() calls, which were
-> only there to help me check the UDF trap was being handled correctly.
-
-I've found them handy when using it.
-
---C+U9jvApfUFUi2KB
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmgRc10ACgkQJNaLcl1U
-h9AtJAf+MbIe0znLqzLeaZE59FpZ7imkJVYN6BNayn6dR6KSH0ba5TR2bJ6BOB+F
-420HSoFS7860BB8M5gF1SYpt0BfhiwjXrCFEBjh/CI4n7XhIJKgWodPjFsSN4hIA
-scNzDwbQ8TSF6N2BV/Wqa1y6SX2qE6HcSEsS3kiIn8dcPFXWKwxMAypCXPJpVF6p
-SfQKTaqgkOkQBHW4TrPMbA20jdgLgGnYfGtB77/1VgTWfqaULkOc16bYSPVTYvu7
-DXXhpzMrMwzCLSPIS9t9c3IZDSQKyeyk5SM2O17y5moR2ymnTSBRtR9aA1IQh+AJ
-D/dD4tw21AQDTCp5d5zWoqSLzmIeyg==
-=V8X6
------END PGP SIGNATURE-----
-
---C+U9jvApfUFUi2KB--
+pw-bot: cr
 
