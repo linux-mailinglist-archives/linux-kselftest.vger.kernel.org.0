@@ -1,202 +1,193 @@
-Return-Path: <linux-kselftest+bounces-32037-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32038-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BF02AA521A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 18:53:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E459AA526C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 19:15:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 154629C1714
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 16:53:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5C8F89A18F1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 17:14:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AF54264608;
-	Wed, 30 Apr 2025 16:53:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C1F3264F9A;
+	Wed, 30 Apr 2025 17:15:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j5+jhZFo"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="5B7i+NFK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2076.outbound.protection.outlook.com [40.107.101.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0F171D7984;
-	Wed, 30 Apr 2025 16:53:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746032010; cv=none; b=tCRrLQEPBVKG91S4IYbEPgr/DtBTTG/L2PiAciDWyeyBwZR5DZKqaD9gaeCgihfW4i0rc5Ocdogcstc+iaV+NQl2imOBY99mPXKjCLO6N4NMPG+1ermQbcVyZFEhg2BDzZJopQ7DDpjeL6gSRYtK7V1Nxg0FSqIkZ37mF1leiV8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746032010; c=relaxed/simple;
-	bh=BBMsd/oizy20IUV96EPxJNmvZVs0GIKVqE5EGiMLivc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dtTx7XYG9NLeeVFdcBjJh4SrW4kUngxg3fLrN+7YgmnN2t4JU3c8RY93tffQSFBb6o+F+vUQmtQzzTAoKLCkWNVpNLyBLJqqBYidUjeipRxSRcXlyD2EVTrTOfkmBp5aK2tncIc4IYr2LiMwImpXRQrsD+O/166jlWOPWMOy0Q4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j5+jhZFo; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-39c1ef4ae3aso67523f8f.1;
-        Wed, 30 Apr 2025 09:53:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746032007; x=1746636807; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iyqoFwnx1rN119y/EQDLgAAtG+9Od9yyi7V0yRmYe1Y=;
-        b=j5+jhZFo1DiaCKv+6sWRLRfvn+bdSHbxC02gj9bjsob0pP/9GFhw8/33JlZGS/O/cx
-         3sLdfnkLHDX1D/kdvW2tUTYAufC14MELRGdGzxdGooMdR23PcNhd/7zDNL+GVNnhMx1Z
-         3/+5+BBnkzjMDnlPSJBHDbldm/IikqBdVqe86lqQha1Dnol71EpIqMshs+PCK2ItKKiE
-         HujqYIDHWypVsb7kHmCsiLbU/kqhXtZNt3T33Utt03JQP4Ln7giRCPCGl+F/CNkeDrH4
-         jOOGeSlD1U6nZh4rUY95PkIYFA5I6HGoItTCDXsSEY3GzbsWnKDV29nfEBpi5tIMEKR/
-         H6gQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746032007; x=1746636807;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iyqoFwnx1rN119y/EQDLgAAtG+9Od9yyi7V0yRmYe1Y=;
-        b=FFHjlgCEqfU5cCPAEV39tUsTIa9KSWb1puzn+NaLTGPaq7MbDdl7JhLsRopjcJ3cBB
-         JdKfWk4AssMkqUACxoF3DH8Kv4n+mL8AcqR5pQWo7/xbWZXhcHgJw2GMW9qlTjv/XyKA
-         XvHJTtVgEZQ+3K4381aUDP0ciu0g/ElePqSkXBnZxikeUB/K2fXv23GnuzbK0TBvlzow
-         2fET6zyjoC99WMeBkfPXH3cvKivmLtVWNa3LubCcQTcz1x1Zlei9Ud+PsRTzgH+aKdxA
-         MkH9eb0ERcl52gAPHoZdjwWaaxJ6Vr7LMA5gXmSxANPxPXBh65vbPtL8xZH2f4DnkHfb
-         w/NQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU2rupEOH1+xPm8eyOReT7gGoBRPNIYhB+yV+qn9xgusjpkdMEQYv+HuYTuulGuupjTsfQ=@vger.kernel.org, AJvYcCUB7XXtMfRJdfw9tU5RXX9dGbXSAc8yHR/eQdCIayYgyWwd+RUFENrp7E1HPWtxIZidM8ONMzkucukuZqgN@vger.kernel.org, AJvYcCV+BwuKtHcygL4Ho7Uw059D6/SsqJfx2NOynYpSwkWgRsvp35zrHZ9U3SSFb9L1zGhC0XFww2Sw@vger.kernel.org, AJvYcCXSkOr64L3kHRgID4O0gloeVd5I53p5js1attL++W0XkU1DU5rdVZh0AM1vTDOBNoEAEH4AJt3g3+vEPhEhHU1fB45L@vger.kernel.org, AJvYcCXyOICrzdowK6K6UaGFFpfNQI6wZOvSolGvYG4Xx1qeD35HIW0necr/fA3VWsBuQcueh7XkLIJKpfoPI+I4MSi3@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy/2TJax06/rkuF5WTzGloPodJ/RdpyGVkfWVyrRcWt41nFz8O/
-	r5UHjWUpKipofo9BJGa9vsRe+DCwO+sPsX934VhuDvHQiyMJsd3LH+KN9H5G8CDw0/zSkzl6C09
-	IqLQadg1j6FHs4KHTs4/5/J71TD0=
-X-Gm-Gg: ASbGnctlze7WOMKhjESb8wCcAj6rGAV5nQTbXzhPCl6Chs4KDbWJWGhVACHlAU/U8V4
-	Eu4dySs/cSX1q+fTHMJFdAZ8Kr+2ZNAYFDnzeFe4twV46BZRUf1xpaQ82gkolrgCYcCyPMY1TcH
-	caLrx+nyD2oMKIkm+nPIXvUuTi45E+c9pMyL8lPg==
-X-Google-Smtp-Source: AGHT+IGktp2atpBKpp4ur5fbFBTf4kR6IH2vBfdClEMDlfV8ktjOsDPmmtEvHUeJRGc4jX1Itzt6phHMVfWVJf1Cjrg=
-X-Received: by 2002:a05:6000:64a:b0:38d:ae1e:2f3c with SMTP id
- ffacd0b85a97d-3a092d0230cmr179055f8f.25.1746032006951; Wed, 30 Apr 2025
- 09:53:26 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CA492609D1;
+	Wed, 30 Apr 2025 17:15:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.101.76
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1746033303; cv=fail; b=Ue4w4/z8ywdkCGgNNVFCvQVUuOUKPDVTlSMcGs4HU82Henxd4LlX+CD/1xyCRnEsYLIl13XAELCyLo8H5h2k2yyWP3vGYcWz7OB1Y7C+TvfNyUC9k/0nnsfU4MSVRxrPyn0Ufs972fze85ZAxE7h9K1pEm7Ae5wxNNo0TS8Utd4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1746033303; c=relaxed/simple;
+	bh=CB264QTP0aXxIIRF/00d5JIm9ix7C7Tq6t9VuCPMLcg=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=r4H6HctRijxmNhz89Gs87sk5yfgjek+ydys2WU9O9hn1PfA9elrkfXBi8yUIzRDypVkys1lUWYOAPAqHiM2it4h4RV/XHy0OOFoGFk2tlBEbP3AnqhKMSAgwiesAr+r/PAXvmgCcX18Tu/XSlppRgkJ88LQnQii9DM9Mo0xsHtg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=5B7i+NFK; arc=fail smtp.client-ip=40.107.101.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=RORiuh6hIMs7Zo05XrgRtXFCaTWug4JoIZSNO6N1TC6dE3zkbv7akrfisZKvfi9q3RwQca42up06ipWHi7yZGVO0vAK7Wzo8nbkpM31ClL5P03s5OTbn3H4ywekZEnXLEkJqkNW7qoP9tIuKW8q5Qw3xsaBJphvnOoLAK4EKOebm4m2Ns8NZmBAiEE2D1QXi0VbomIs35s7YknRIj0X/osqTMkAt5mdcgVAuXFd5mcuXQbuX2Lx40WXlj23FRxUQiwVQyUIsWxLoGZi/Odk7kXi7eqbYrWfX7YG/HUfIrAdHPkKVIorkstSDP5W/IQbu6iw2cKYbUcpL7VhhAZES+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=05VS0uXcuMNGxVdUPrdCwaumCtMQE+MJBy4wJ3tTbRg=;
+ b=KiMnAN1rojcI1neniP4+vK1MMphpsVeFhsZSoE2KucjxFchXDsdkk6gPjI/485t+00bbCGzTZvPxyYGqERe2WhC7jfLZ/ki1IkQ3QdTa8Q8LNRtwF18zsPB2qEZhFu+Yy4R1sbSFqmH6k2H+wEcBpc/xkU6vTApUmTn7JZLEXqdnf00SwStDwhowLx/nzv/BdKKq+PabwoGqhPG+CB5LNmlZ93TJVfnvPUaP1qDE+B3RK4t4qJGCOupcQWiOHsFNFoMEJWI4iG2RDTujRmt6p+u8TmraEESSWabkH1uILhouZ47Qk3tpwKnLnky9RteFCMSlXZ3sC/nx8iEL0lt3DQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=05VS0uXcuMNGxVdUPrdCwaumCtMQE+MJBy4wJ3tTbRg=;
+ b=5B7i+NFK/Su4K+ilfrtvNw9FhGQtpdAKI7T4HKOc4Z4e5EmKRIZU/OeJ/56lSEvBH+W2HScItsE09ovhLtESJjTvpmARLujfrdTtBxxXxLLWAF+oRv3A+nPPBH4kuqX0VqIrUuAoHVa2tOBmOW77/QBO1ZbqeJ5QRPtaId/FRzs=
+Received: from BN9PR03CA0256.namprd03.prod.outlook.com (2603:10b6:408:ff::21)
+ by CH3PR12MB9218.namprd12.prod.outlook.com (2603:10b6:610:19f::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8678.34; Wed, 30 Apr
+ 2025 17:14:55 +0000
+Received: from BN1PEPF00004687.namprd05.prod.outlook.com
+ (2603:10b6:408:ff:cafe::f6) by BN9PR03CA0256.outlook.office365.com
+ (2603:10b6:408:ff::21) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8655.41 via Frontend Transport; Wed,
+ 30 Apr 2025 17:14:55 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN1PEPF00004687.mail.protection.outlook.com (10.167.243.132) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8699.20 via Frontend Transport; Wed, 30 Apr 2025 17:14:55 +0000
+Received: from tapi.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 30 Apr
+ 2025 12:14:51 -0500
+From: Swapnil Sapkal <swapnil.sapkal@amd.com>
+To: <rafael@kernel.org>, <viresh.kumar@linaro.org>, <shuah@kernel.org>
+CC: <gautham.shenoy@amd.com>, <narasimhan.v@amd.com>,
+	<linux-pm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, Swapnil Sapkal <swapnil.sapkal@amd.com>
+Subject: [PATCH] selftests/cpufreq: Fix cpufreq basic read and update testcases
+Date: Wed, 30 Apr 2025 17:14:33 +0000
+Message-ID: <20250430171433.10866-1-swapnil.sapkal@amd.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250426160027.177173-1-mannkafai@gmail.com> <20250426160027.177173-2-mannkafai@gmail.com>
- <CAADnVQ+DF18nKEf9i1RKEQN+ybH+duu7U-91YZDaa_PiqUx17g@mail.gmail.com>
- <CALqUS-6XtJ0Bb9jiykdC3jAY_OHjGuirj06Kzssjvo7eW_so2A@mail.gmail.com> <f951b81f-1b46-4219-82fd-0839e27ab3f3@linux.dev>
-In-Reply-To: <f951b81f-1b46-4219-82fd-0839e27ab3f3@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 30 Apr 2025 09:53:15 -0700
-X-Gm-Features: ATxdqUHCM_hgru1Pfc1BqXTKZ-VBkhd7Cw8k1b6R1YPnD0rN_9RdWCr9fvClEug
-Message-ID: <CAADnVQ+FANha0fO_BF+iHJ4iZSCPtDfoUkzR8mMFwOakw8+eCg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/4] bpf: Allow get_func_[arg|arg_cnt] helpers in
- raw tracepoint programs
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: Kafai Wan <mannkafai@gmail.com>, Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Matt Bobrowski <mattbobrowski@google.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	bpf <bpf@vger.kernel.org>, 
-	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN1PEPF00004687:EE_|CH3PR12MB9218:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3fcbdc78-8030-425f-fe52-08dd880a86f7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|82310400026|1800799024|36860700013;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?m3Td5Tvf0Ru0vLuCH4Sv03PtPRShDNjFVvWqe5euFuuBT+pxzul4sUJuunBl?=
+ =?us-ascii?Q?Xlk4XUOti8m6+dls0wKyhU8B2rgkNuZyWVIYmHhCZm3dVoRTGZhn22rT2gCB?=
+ =?us-ascii?Q?Fxu0+WcPwtnGocNQsuxGoQvFmc1xfpo/nluPTRlDGGzWXsS2RNica8NYF1H6?=
+ =?us-ascii?Q?w37PZA1qz+gUCh+XglSfHcEJpJQzJ/WhOACWLcOxXAi821fPKjHdlwLxFGGY?=
+ =?us-ascii?Q?W4JmIQYrW8u1L8ar2l47nb3kQKHecag17I/xRFbI/rNsuRrhlOpijky4GlpZ?=
+ =?us-ascii?Q?wfRGNQ1dY7jMONuXF4uRr+MNtPZSaQRagtaTSZrVYzgfiwM1bkrXqPMCQsYY?=
+ =?us-ascii?Q?sfMTsLkJoCZgArw9GYdUzI7qT4Rt86LL52bieARdwq9z9jvcVKCEAffKD1wA?=
+ =?us-ascii?Q?v+zpLXr+b5U6qseROh5KADw+VDb9hzh8B3Wbx0p4NY/yYtrwoiUEqy0aQ4kD?=
+ =?us-ascii?Q?Os3if4e+atCy4/HGtkWwO+vzZpFLb8QMuIVPJqp6jwfoaL0yhkqBsC1vjfgj?=
+ =?us-ascii?Q?7FroqlaTEfX6cqhHDCvQdrWHaUxEnSaNA7U/Wod58ieB7kIi1dBkUitXjvZz?=
+ =?us-ascii?Q?d1jqlxGqvU081G09uGj9AYcJ7zLU5TLWqnX2DzDFig1+WL7H+xhmN5DPFY7V?=
+ =?us-ascii?Q?fI5N3sWkBaLuORthHZudAkz8AzxCMXbSZ6jXCTEEzobQPH6Zx07c0u2qzY0f?=
+ =?us-ascii?Q?bKhznybGOmaTgF4iyYRN24ahFcXv8QA/DLHQOrUZ/ItPNmTaPU/mEJqDFOmT?=
+ =?us-ascii?Q?9hLPVlNCSGrm9wbK9u5dEgWCTqa0WnhEncCdNPdS7kyb3xhUZg3rqNJGrhwp?=
+ =?us-ascii?Q?5fUuRr26MvcR9swZhuMdx9aDT3mBRg0YxhJCBkLFTF4ddTdvHK6QngWGC5PH?=
+ =?us-ascii?Q?jQLzkOJqCqEdnRccftO9rcXS5RCyUPke7JEde40zZwo0B6knqwUL7kwry1vj?=
+ =?us-ascii?Q?rk1rKA+LB3KsGlmLXGLYXV4UWcntBRztfAiwSsBuytB3A18wvIC4driBYKQM?=
+ =?us-ascii?Q?qnGDsoI6k+Yz27rx6E/SyQmgxXBx7cjmLua8LGlMpVH8hbxro5kNh7y6Rfji?=
+ =?us-ascii?Q?UYfuwEQ/uFwYTHKCJcaJl4Z29RdlpdxA06pNCi3m6weVTECPzYMlcjLc8lbu?=
+ =?us-ascii?Q?lE71yHTAf9KQCWzZ3KxTOC18MSnb4ZjYT8ql/kckfY7u9jL+6FptYqcMAC50?=
+ =?us-ascii?Q?BPpPA97JctJWes4i3TMvtXWDzNZnr5jTpVInqM6uC+bUpFRy6gVaH1vh51RL?=
+ =?us-ascii?Q?mo/PGL4YLR2q/2kMkaewODMTJSxZdliNOj/mEYr3e2pIc/SL/ObTGfm11h9a?=
+ =?us-ascii?Q?6b19W9lvSkrf/Bxrq8wPgcyaAumiLIvdVam5wm53I4aJtw9Z8VmRFJTzmYtA?=
+ =?us-ascii?Q?y0S2qXLJXdFEznx9o16pEF5x21S8aBvSUjXQHuVDSiOaHjsNYbUplnQrVR0u?=
+ =?us-ascii?Q?uglDp3PeETkqwCmK7l/YRL86oX5mN3KS+iIZoenaer7adiT7fXsx3AIFlr63?=
+ =?us-ascii?Q?FfOx9yL76MbZs0z1vyU9iYvQPKEthKUjUHLu?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(82310400026)(1800799024)(36860700013);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Apr 2025 17:14:55.1506
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3fcbdc78-8030-425f-fe52-08dd880a86f7
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN1PEPF00004687.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB9218
 
-On Wed, Apr 30, 2025 at 8:55=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
-rote:
->
->
->
-> On 2025/4/30 20:43, Kafai Wan wrote:
-> > On Wed, Apr 30, 2025 at 10:46=E2=80=AFAM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> >>
-> >> On Sat, Apr 26, 2025 at 9:00=E2=80=AFAM KaFai Wan <mannkafai@gmail.com=
-> wrote:
-> >>>
->
-> [...]
->
-> >>> @@ -2312,7 +2322,7 @@ void __bpf_trace_run(struct bpf_raw_tp_link *li=
-nk, u64 *args)
-> >>>  #define REPEAT(X, FN, DL, ...)         REPEAT_##X(FN, DL, __VA_ARGS_=
-_)
-> >>>
-> >>>  #define SARG(X)                u64 arg##X
-> >>> -#define COPY(X)                args[X] =3D arg##X
-> >>> +#define COPY(X)                args[X + 1] =3D arg##X
-> >>>
-> >>>  #define __DL_COM       (,)
-> >>>  #define __DL_SEM       (;)
-> >>> @@ -2323,9 +2333,10 @@ void __bpf_trace_run(struct bpf_raw_tp_link *l=
-ink, u64 *args)
-> >>>         void bpf_trace_run##x(struct bpf_raw_tp_link *link,          =
-   \
-> >>>                               REPEAT(x, SARG, __DL_COM, __SEQ_0_11)) =
-   \
-> >>>         {                                                            =
-   \
-> >>> -               u64 args[x];                                         =
-   \
-> >>> +               u64 args[x + 1];                                     =
-   \
-> >>> +               args[0] =3D x;                                       =
-     \
-> >>>                 REPEAT(x, COPY, __DL_SEM, __SEQ_0_11);               =
-   \
-> >>> -               __bpf_trace_run(link, args);                         =
-   \
-> >>> +               __bpf_trace_run(link, args + 1);                     =
-   \
-> >>
-> >> This is neat, but what is this for?
-> >> The program that attaches to a particular raw_tp knows what it is
-> >> attaching to and how many arguments are there,
-> >> so bpf_get_func_arg_cnt() is a 5th wheel.
-> >>
-> >> If the reason is "for completeness" then it's not a good reason
-> >> to penalize performance. Though it's just an extra 8 byte of stack
-> >> and a single store of a constant.
-> >>
-> > If we try to capture all arguments of a specific raw_tp in tracing prog=
-rams,
-> > We first obtain the arguments count from the format file in debugfs or =
-BTF
-> > and pass this count to the BPF program via .bss section or cookie (if
-> > available).
-> >
-> > If we store the count in ctx and get it via get_func_arg_cnt helper in
-> > the BPF program=EF=BC=8C
-> > a) It's easier and more efficient to get the arguments count in the BPF=
- program.
-> > b) It could use a single BPF program to capture arguments for multiple =
-raw_tps,
-> > reduce the number of BPF programs when massive tracing.
-> >
->
->
-> bpf_get_func_arg() will be very helpful for bpfsnoop[1] when tracing tp_b=
-tf.
->
-> In bpfsnoop, it can generate a small snippet of bpf instructions to use
-> bpf_get_func_arg() for retrieving and filtering arguments. For example,
-> with the netif_receive_skb tracepoint, bpfsnoop can use
-> bpf_get_func_arg() to filter the skb argument using pcap-filter(7)[2] or
-> a custom attribute-based filter. This will allow bpfsnoop to trace
-> multiple tracepoints using a single bpf program code.
+In cpufreq basic selftests, one of the testcases is to read all cpufreq
+sysfs files and print the values. This testcase assumes all the cpufreq
+sysfs files have read permissions. However certain cpufreq sysfs files
+(eg. stats/reset) are write only files and this testcase errors out
+when it is not able to read the file.
+Similarily, there is one more testcase which reads the cpufreq sysfs
+file data and write it back to same file. This testcase also errors out
+for sysfs files without read permission.
+Fix these testcases by adding proper read permission checks.
 
-I doubt you thought it through end to end.
-When tracepoint prog attaches we have this check:
-        /*
-         * check that program doesn't access arguments beyond what's
-         * available in this tracepoint
-         */
-        if (prog->aux->max_ctx_offset > btp->num_args * sizeof(u64))
-                return -EINVAL;
+Reported-by: Narasimhan V <narasimhan.v@amd.com>
+Signed-off-by: Swapnil Sapkal <swapnil.sapkal@amd.com>
+---
+ tools/testing/selftests/cpufreq/cpufreq.sh | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-So you cannot have a single bpf prog attached to many tracepoints
-to read many arguments as-is.
-You can hack around that limit with probe_read,
-but the values won't be trusted and you won't be able to pass
-such untrusted pointers into skb and other helpers/kfuncs.
+diff --git a/tools/testing/selftests/cpufreq/cpufreq.sh b/tools/testing/selftests/cpufreq/cpufreq.sh
+index e350c521b467..3484fa34e8d8 100755
+--- a/tools/testing/selftests/cpufreq/cpufreq.sh
++++ b/tools/testing/selftests/cpufreq/cpufreq.sh
+@@ -52,7 +52,14 @@ read_cpufreq_files_in_dir()
+ 	for file in $files; do
+ 		if [ -f $1/$file ]; then
+ 			printf "$file:"
+-			cat $1/$file
++			#file is readable ?
++			local rfile=$(ls -l $1/$file | awk '$1 ~ /^.*r.*/ { print $NF; }')
++
++			if [ ! -z $rfile ]; then
++				cat $1/$file
++			else
++				printf "$file is not readable\n"
++			fi
+ 		else
+ 			printf "\n"
+ 			read_cpufreq_files_in_dir "$1/$file"
+@@ -83,10 +90,10 @@ update_cpufreq_files_in_dir()
+ 
+ 	for file in $files; do
+ 		if [ -f $1/$file ]; then
+-			# file is writable ?
+-			local wfile=$(ls -l $1/$file | awk '$1 ~ /^.*w.*/ { print $NF; }')
++			# file is readable and writable ?
++			local rwfile=$(ls -l $1/$file | awk '$1 ~ /^.*rw.*/ { print $NF; }')
+ 
+-			if [ ! -z $wfile ]; then
++			if [ ! -z $rwfile ]; then
+ 				# scaling_setspeed is a special file and we
+ 				# should skip updating it
+ 				if [ $file != "scaling_setspeed" ]; then
+-- 
+2.43.0
+
 
