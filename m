@@ -1,232 +1,232 @@
-Return-Path: <linux-kselftest+bounces-32024-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32025-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CB22AA4752
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 11:36:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 594EDAA482D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 12:21:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AD62B4A1AE0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 09:36:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A4420179C7A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Apr 2025 10:21:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75A9923185F;
-	Wed, 30 Apr 2025 09:36:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53B0623815D;
+	Wed, 30 Apr 2025 10:21:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PLcIL3rr"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="f9g8/DN5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2052.outbound.protection.outlook.com [40.107.223.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 760ED219A76
-	for <linux-kselftest@vger.kernel.org>; Wed, 30 Apr 2025 09:36:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746005803; cv=none; b=kkM+YgbPd5GXToS7lfNAlBLVJ4i93CjZi2UnU3bHIX2UBelgPehWJUMT2JyVcgDo6opxITn7eLdhKFIfb6T4f53XjGPIIGZlVKDTAqq5OBtYtSxuIYLqz+WgFj8kGESFlurrttW5HzzzgDiRBA/Zh63ZPs6quAk2pN/JtIyAvWw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746005803; c=relaxed/simple;
-	bh=LKbgVgvETQL2Z9FMH1hokLD+1a7kjWCTl8cKHjR38Zs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IuFOI6tWKxFlDkLwtIMkwbDedLLAu9dGhJtO5DLP52y4Mr1Q4ALuYMEezxMSKpLuCWQ3MOwdtYFmoaYOaTf0FL/1OlIhu+cft4sZX8hdtnwZ4l7t0RY2toOW7KkuCW2J92dvW047DaM53kPCmWXGkAAB39dWvzFhCnJrSemUqKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PLcIL3rr; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1746005800;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=MSPsTTFeEcnCdwW0Vym+XYLIte4DYBrgKfCXQ1hkyeQ=;
-	b=PLcIL3rrYc7xiiJ2U116/1UToLGEIXW86cA2We/Tsidg7+dh3y480y6Fa3rHIb3mFBa3hw
-	MAY6SCna3WsVDnfSaH+nyxqEO0kkXg1zAboHDG/mWTL8HGZl0CH0Zhog+4VhWIwVrXd6dA
-	/jfsB7J0b+c4ch+SwKuBSdpnnk6VcZQ=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-463-XjFk_jmiNr2e0jhtKuGx5Q-1; Wed, 30 Apr 2025 05:36:38 -0400
-X-MC-Unique: XjFk_jmiNr2e0jhtKuGx5Q-1
-X-Mimecast-MFC-AGG-ID: XjFk_jmiNr2e0jhtKuGx5Q_1746005797
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-39c2da64df9so3114124f8f.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Apr 2025 02:36:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746005797; x=1746610597;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MSPsTTFeEcnCdwW0Vym+XYLIte4DYBrgKfCXQ1hkyeQ=;
-        b=X5XaKkJ1Cf+xHSyNv9VmJ3v2rc/QB8MNMHoVc5RejOZIczTAu0FaAw6fzmFMtvD6WW
-         +MPMveUtsODapSMmFGQyliB+nFdBiKGUJMNhfCYg+JWj/cTHMIJ3YmPAC8llyewyDF3O
-         0GyZl0BuBFwHOuOONFbQoT+w56UKh1T7i4DhoC5b8xuDDdNZmWac06K9GOIZOEtqNeyL
-         VtXod6PQTPzN7ruZSQmJHrWn588/ylMCF60UHSsMzf0xXF71X/ftlGadH1vrxo8MKxba
-         VfYd4Y6xuXAgUFE1k826DicmN7RLflTi5Fp82AroZFaDvLprC4ExNnc1oxivt6AZUTpa
-         w+bQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXEllAl3y+WpPT8olmmr1scHJ0qlFzZRqrx1M135oJaW3xbf+LukISN94Ub135z99O6xTgOWm7D86WfxspaZVc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxjP9Nea/i6RwoNtrWH3Od9qCuW6PXXFcQYAflPvUa06B4LdakS
-	AM76Z7gHgaOFMl2EuzlanYrL83pUcPi3SKIQz4LavFLKk18ynppELi393V+oazkGzcCvpFO6KMs
-	A5XtezGZ9/t/NgnhSBFtczKL94yIKn4zOhe82GbMd2CrMdCasl4CpsAgQPL3vuyl23w==
-X-Gm-Gg: ASbGncsSc9jgKcN483XOOncltdIJayVYxcAUxN6ghpuSvywHdbFS22Tq7ZEYNcSTlqp
-	0YWiM5v/V1VTJcEk6M1lorzOx3l3JUV2IAnFLfRZGkXZ2vSStetbNtSYU+QsRvZUQeZCaj9wCVr
-	8M8SzIA/xUSUE23nprW8S8HA3FGaXjxa2refAbHUXiYc6rpam2NaynGr6yJ3kTYhiHVW9Ar2shX
-	OjRwWNDtfMjSibeCFBGOgal8ZzvqsMf/X5LOAp3cHM9iCzYvq00XgUAPyXSDV8nDyGZZ+FL+5Mr
-	/XS9xPDtIDf3zt25hJWFwNaJGbBWEZI6gvtmSGPNUN4O
-X-Received: by 2002:a5d:59a8:0:b0:391:3915:cffb with SMTP id ffacd0b85a97d-3a08ff465b4mr1716265f8f.43.1746005797563;
-        Wed, 30 Apr 2025 02:36:37 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGgdj7osQIlrwBtpolueyo0OCJRGNsPw7nP/YnjWorltc/OOlGv2Ls+W6kZFmWgAkKIRYm6lA==
-X-Received: by 2002:a5d:59a8:0:b0:391:3915:cffb with SMTP id ffacd0b85a97d-3a08ff465b4mr1716245f8f.43.1746005797110;
-        Wed, 30 Apr 2025 02:36:37 -0700 (PDT)
-Received: from [172.16.17.99] (pd9ed5a70.dip0.t-ipconnect.de. [217.237.90.112])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a073ca4e50sm16867435f8f.30.2025.04.30.02.36.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Apr 2025 02:36:36 -0700 (PDT)
-Message-ID: <69d35507-f4aa-484c-8e1f-f2a766b4ffd1@redhat.com>
-Date: Wed, 30 Apr 2025 11:36:35 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2AC3230BE2;
+	Wed, 30 Apr 2025 10:21:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1746008502; cv=fail; b=MRM5OAKBTkJjobq8jRCdXt73djXoJdddN9KQsv8EWci7PEARJ1Us0gufa+ZZC+7WNwD7G4ywrt3sm5mVE+BuSHT3yJtqmcI544AGbfXc4ZHgqu4mliItKvzIVagI0agXYrvjJwuHEOZxgEHZ74xTBMZI0LbREjIQAiKcG6DERMw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1746008502; c=relaxed/simple;
+	bh=4Yk56KgQVnnlhFek1f/1YVvlq69mR3iX7OjNV9JXcwY=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=KAlfGHJKWgf7xRbNoO1QigBkOVRLFDIjkqkxtONz/xFYyDjeUlo6rB0M3fRh19Vu9sblE7s1dagjZdKWmaI00fo4sQWHQdh2klNYpwr4s1H1IOxRvB0fU7q1CAgny8IklBP97WNFyPOzwRIdRo7AXzjbyRyr/oztOJ2OwiQq65I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=f9g8/DN5; arc=fail smtp.client-ip=40.107.223.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=AnJhqNxeGNX9bAGuazsIDLoXXVhcuy0I7x+iiavHK5K7+SQ8+pGkDR5YAdkrZUkOcCOIirdI5/pZbxB3oVjtx0U/3Ok0tRf8t+JyQFnkKh6OT5TCpMTTgpGbmNc3yVH4/yyxa5pgFbIszUjIcqsrJf7K4VA6kaaXy0jFyotCms0hWtIikpUf1zqRj41/MJ1a3aa8O8JKzpmhy5H81TJBTLe5VTsBS1lroDg9w6ccugMCeaUiFAOhdDNo7T4mKy/AOvsyVJikfEJSUS9AJGwutwD5HtYFcCujuqxJNruPT6gMzgny/DYMbhloudLMgl3Tnq2s3wXEq/L+ysDCaLivzQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mZHRKRQv42WFAxuLlKP7nxFLBp2cVWMhnA3LCgC8tN4=;
+ b=R1Yjh4O73Ayu3HpGBHfQuGrzvDGAG+i0nqNlVpYAYWSx9QicnDDGKBwmYvyXh5sDSsZJoZook2S+FSKiUaBPZcdI9X00lq4Ops3QPu5zcl6dGz0zhWl1pvailYQj5aI29jC6CZ+UG1CyezD6/FRQv2unikIGk6OqN4eq0oS0DYIIquhK0uqpHgc7Bb8X1V8mIP0mIiOTOJYymESVjsRwJ8etWFcCL00qHDgqWg2r3I1eOrT+YVSmuhoWNx9qUWn38yiL2nP/ldAqLBJfGeYDdr+ulRUwwD3gXQXwrlax2TSyhqLopZg+IIVKBFw6jB/Kz1PqMOpGH/rFc7V7Cw3N0Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mZHRKRQv42WFAxuLlKP7nxFLBp2cVWMhnA3LCgC8tN4=;
+ b=f9g8/DN5C6TtZvOlc5+NcmfbUtmjynuvkqwAzEjFU2LLFlV88Sok77PbPzNIdQAWCeG7M4so39NDm8l6cODreTdJZMwWWcMn+2Ekc0KvTWhQ1VG9tQtQE4get1kY+niVlZmE7ah4VL1WwWsy9fC7mwfAp9WQNeH8s6OPNf6Ayg4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DS7PR12MB6048.namprd12.prod.outlook.com (2603:10b6:8:9f::5) by
+ PH8PR12MB7277.namprd12.prod.outlook.com (2603:10b6:510:223::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8678.27; Wed, 30 Apr
+ 2025 10:21:37 +0000
+Received: from DS7PR12MB6048.namprd12.prod.outlook.com
+ ([fe80::6318:26e5:357a:74a5]) by DS7PR12MB6048.namprd12.prod.outlook.com
+ ([fe80::6318:26e5:357a:74a5%5]) with mapi id 15.20.8678.028; Wed, 30 Apr 2025
+ 10:21:37 +0000
+Message-ID: <91d1df7e-b136-4024-a1f2-20b1374ede40@amd.com>
+Date: Wed, 30 Apr 2025 15:51:25 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 10/22] iommufd/viommmu: Add IOMMUFD_CMD_VCMDQ_ALLOC
+ ioctl
+To: Nicolin Chen <nicolinc@nvidia.com>
+Cc: jgg@nvidia.com, kevin.tian@intel.com, corbet@lwn.net, will@kernel.org,
+ bagasdotme@gmail.com, robin.murphy@arm.com, joro@8bytes.org,
+ thierry.reding@gmail.com, vdumpa@nvidia.com, jonathanh@nvidia.com,
+ shuah@kernel.org, jsnitsel@redhat.com, nathan@kernel.org,
+ peterz@infradead.org, yi.l.liu@intel.com, mshavit@google.com,
+ praan@google.com, zhangzekun11@huawei.com, iommu@lists.linux.dev,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, patches@lists.linux.dev, mochs@nvidia.com,
+ alok.a.tiwari@oracle.com,
+ Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+References: <cover.1745646960.git.nicolinc@nvidia.com>
+ <094992b874190ffdcf6012104b419c8649b5e4b4.1745646960.git.nicolinc@nvidia.com>
+ <b0d01609-bdda-49a3-af0c-ca828a9c4cea@amd.com>
+ <aA/exylmYJhIhEVL@Asurada-Nvidia>
+ <b8338b47-6fbf-44ac-9b99-3555997c9f36@amd.com>
+ <aBB1gLfahnLmn0N1@Asurada-Nvidia>
+ <a3860aed-5b6b-4e68-a8fd-1a6ee28ba022@amd.com>
+ <aBEI+T7P+hV8Y6tU@Asurada-Nvidia>
+ <7c813df6-e37d-47ae-9b5a-b8735c865626@amd.com>
+ <aBHY8wOmpMOxelE/@Asurada-Nvidia>
+Content-Language: en-US
+From: Vasant Hegde <vasant.hegde@amd.com>
+In-Reply-To: <aBHY8wOmpMOxelE/@Asurada-Nvidia>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN2PR01CA0228.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:eb::16) To DS7PR12MB6048.namprd12.prod.outlook.com
+ (2603:10b6:8:9f::5)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/4] selftests: can: Document test_raw_filter test cases
-To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc: socketcan@hartkopp.net, mkl@pengutronix.de, shuah@kernel.org,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- dcaratti@redhat.com, fstornio@redhat.com
-References: <cover.1745323279.git.fmaurer@redhat.com>
- <710557cef8fb8472628862d9b65edcf7aeb32bb5.1745323279.git.fmaurer@redhat.com>
- <CAMZ6RqKcp=JNcbZjX6xSGo9Hyw=1nXbpS9Nc36xuDkbGG+=wtA@mail.gmail.com>
- <a28ff624-c73a-4e16-867a-66e423315c29@redhat.com>
- <08cb8dd7-5685-4a41-b6a9-c8758a804ed1@wanadoo.fr>
-Content-Language: en-US
-From: Felix Maurer <fmaurer@redhat.com>
-In-Reply-To: <08cb8dd7-5685-4a41-b6a9-c8758a804ed1@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB6048:EE_|PH8PR12MB7277:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1a002af8-39e3-44c5-f30a-08dd87d0ca39
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|7416014|376014|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?aHRDaHNSQ1RKc2dLaUI0Q01iNS9neERESGhWYXFNSU5VM20ydEZxU0JNcnh6?=
+ =?utf-8?B?c0hwUHZMSmZGQjVCR3BFa0IzRk51V0doRXVkU1h6UUpjdnIvQ3VCcjNwLzd3?=
+ =?utf-8?B?c3FmN0MrY3l2aXQ5a3UvMTNXY0NiVmtLSXJLUTNnU0RCSmRoc2hxT3VnSEo0?=
+ =?utf-8?B?OU1XV2R6amgwY3dmRW5JR1gwZXE0UERZVjlVN0ZxOW5BWXJhZ3ZjTEYzMjNn?=
+ =?utf-8?B?c0xLaS9iNEZhUVcvN3RneUV4ZmxkOER6OFdrRnVkUDgyaEFoU2VDcWZTRHV2?=
+ =?utf-8?B?dXdwSHRLdzd6WkVtS21uUFA1ZTl5WFF5bTV0ZmI5MktQRkZsd2QxanBHV0Iv?=
+ =?utf-8?B?VmJhdXNDdTA3ZEREcTlBYUlyYk1TdzdZSXo1UENzOERBbFByT2RlL1g1SEwy?=
+ =?utf-8?B?WDlXRE11T2tRUFdBRG8zbGZnaWdzRUhkYUp2RWswd3B4d2kveVpWVmxteXZL?=
+ =?utf-8?B?QkhWV1k4MGdRZmRpanVoS2NuNm5ETUlUTmRFOGFpc2ZRbSsvNzFKQm5jdFBp?=
+ =?utf-8?B?R0xnR29xSXdSNjdVdkhpcWlBM0h4Y1dmSFYwdzNwSkRPR1ExSGFzU28ramtz?=
+ =?utf-8?B?NUxvSG44Rll5LzZxclhRejNMbUVCR24xWm9EVFpVWlJpeWFhWkFObWxSMllm?=
+ =?utf-8?B?TXpETmM3Zm5lMTBuZmc0K2htY1A5dk40RWFuRmJ0U0F2N2FUUGRobm5tN3Rt?=
+ =?utf-8?B?ZWYrUHpjTE0rdm5nZCtKeEdLajR6d2hDR0NXOTEzcHdWcHdKb29CR1BVS2hq?=
+ =?utf-8?B?Znk4YUY0cms1SmZTUzgwKzNNODd2a3EwNzVjVEtVUzFVMUlVcjBmRHB5ODJT?=
+ =?utf-8?B?VUEvZWJpZU03U3V4MmJ1em8vN01RV0R6eXV3eC9JRHlHdGpoMUZNbnJhb0cw?=
+ =?utf-8?B?UjBEY0NlL2dGb3dEbm1FdE53NXozc3A1R0ltQ2JXNUdDWmNPcTNFajBQQTIv?=
+ =?utf-8?B?aXNwYXd0dm01MktPVm41QnBIVE5CVXl6aGxQMXFPVWNnVURZQVU4dVlVdjhR?=
+ =?utf-8?B?MkNGY3ZDeHltdGRVa1VKNGp6TnBldVEwMXNSVUtrUUNUQkhtb0QrOG5MS0VW?=
+ =?utf-8?B?WWUweTYrYUFMWUlxM2pEYVFYZEE3aDJTNzZYZ0N1WjB2TllQaU1NdFFCRDc4?=
+ =?utf-8?B?NUFMS21GTFZSYjgvRDhBQThLd2QrQWVPa3BuNjZ4MXFqMCtOSTQyQlhHUWlY?=
+ =?utf-8?B?ZHpDV3l6UXA4YVVERWRzOUVhNlBCVVl2NE5PM0FPUjZZdkwzZWk5LzBUd3Qr?=
+ =?utf-8?B?WTcxOUo2b0I1UFJYUHp5RXpTM0dkd1planBzTmJoZ3dVbFhQZEY3N282ZUpS?=
+ =?utf-8?B?U3RJcU9rU3RtbndNbW1VcFV3NkVSODhLdUt1VTVuekJRZy9BY1FhME1tQlZU?=
+ =?utf-8?B?amtzQmplcjVmRHF3Q1FaWHQxK3BqY3VnNXpmTmJUTW5tMng3eTBlM2FSRG1Y?=
+ =?utf-8?B?Q29tOXFjWVRoVVNLSWhiNmVwRTJibU5Na3lKYVhXNWp1REpDdVMvblB5Skh3?=
+ =?utf-8?B?RjVYaTRycDJCblVPVEk2K2o1aGpZRHNTOUxtUHdKWmtXS082Tkc0SmZPNS9r?=
+ =?utf-8?B?R0xYUUlsVUJZaDAyeWorR09WTjJGUENBcVZOV1Z0MGkzbDhnWDFodUR6WWJL?=
+ =?utf-8?B?d2lrVlNFMGhid011K3RZckc4VC9PSzNWdjhLUjVoV2t2QmZHMWN3TWhVblNR?=
+ =?utf-8?B?UTM5TUtybXQ0OUhqUW5tZ1ljRENlYWtjRXdUK1RRSHg2ZEFNcGZOZnFPdHND?=
+ =?utf-8?B?SEVQV004VW04R0RNZm9lRnNwbngzRFpmQUVPUW9yZ3dlUGdVVUZYU0xNL0hB?=
+ =?utf-8?B?bmpnamd0WGxjYi9Sc1FPUkZIcUdaemsrVysxTHJNZXIrVW5FcW1hdmxGZkR4?=
+ =?utf-8?B?SktDemt1ajYzb1ZGcVBqeGNJTFJkYXQ5MXFxMEtQTTU5anlzamVQdlk2WGJN?=
+ =?utf-8?Q?9OQnVvqfZHI=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6048.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?Tk5KZFozNjR3bURLL29odk8zTitFSFFBazF0RGVuYUJ6SXNuRGljU3ZsaDNU?=
+ =?utf-8?B?OUxKY1drbVlIVnBaWGczNEc4Q2d3RTZiaHo2U3FEQzlKaFBBQ3h5NS9qOFU2?=
+ =?utf-8?B?Uk9Zdmp0VmN5ZXhRUUR6N29wWXlURzNhRTFnSERQbWpTbElxYW0zRmxVVDRl?=
+ =?utf-8?B?VW91K2dtYmhBN3RTWUF4TVYvK3h0M2RjTXNWdXp2eUQ0MHF3R1dFQ1NIaTNP?=
+ =?utf-8?B?ZEVuTVk2cHQ2eG1BWWRKSVRPczZ4RHkxcCtuQ2p1WHJkdEsrYzYxWnp4RjBC?=
+ =?utf-8?B?K1kycmFwbVkydGhySnYyeGtXdGo5bERlZHBYWThjOVN0ZkNvd3FXa1YrTDVV?=
+ =?utf-8?B?YWdTbkJxbnZvZXJHZWljWWNuYm9kbUo1ZWxWK2lMc3BIc1AvUWJndHNNeEhY?=
+ =?utf-8?B?Qnp0NmtpQXhINGJIeXJJNkVVWXNySnpYRlhnSGt0aWhuZHFNbHVsNzJnVExG?=
+ =?utf-8?B?blJxb2lweFlrWGtyT3N1cDhIRVFQb2ovYk1WNURxdnpwbjg3WlZveDBRZkR4?=
+ =?utf-8?B?b1d4dEE3cnpSTFVFcFZ5ZGlsdTdiMUJUc3NsbEdMMWFDb2MvWlhmODBpOE5P?=
+ =?utf-8?B?QzlIZ3FuekVLNGN0UnByb1M3WHhSeGxDRHJhMEl2R25NdUo4bndUNGZOMndv?=
+ =?utf-8?B?NHZMQUt4cXJYRHpKSkUyREdGc3FOTUIyNEE3U0JlMEl2NDRLVEp0YXVQVEJq?=
+ =?utf-8?B?ZnZqM2h6b0JPTjMza3YxN2ZLeDRzOXlKK2tTbjlxaEQ0N1Rqa01LYlk4eWEz?=
+ =?utf-8?B?R2hNZWN2UDFaMThIUlllT3ArSG5FV2FSNERIVGM0RzVyZGljNnMzd2YwT3dT?=
+ =?utf-8?B?RzRoY3pGRTE0Tmx5WXk0VEVZS3FCbjN6ODdycUJnV2EyNzZ2N2RrM1F2b1Vo?=
+ =?utf-8?B?MGRHQ013NTVISlFaOUlvNkJ4K1lBN2xyMWxENlpZY01qSnpkWU5EWmF0RWZw?=
+ =?utf-8?B?dDNVNWt1dDFJQ2ZWcURmTi8zYmpETmVMNmRjd21FQVpZT2JTaGVwL2ZHUWpG?=
+ =?utf-8?B?V3B1M0tZZjhwa1RWVEkvSjBaY2taUFcwbHBVbWo2ME9SODJqNTdGcnl5VE5W?=
+ =?utf-8?B?TTI3L3IxaS93OHJMV2xvR1RnMUQya3VvRkNUOTBISjFJNUZlaUxpbTQxLzhD?=
+ =?utf-8?B?UEVlTW1CYUoyWExxWGN1MnF0b0VWcWdQTHcvM1BnUHFFdEJEbXNoTm82V29G?=
+ =?utf-8?B?cVFwWVU3V3BjcVhIZGo2dG9GelF0VkFYYnh2UjdYcVN3UXhDeU1CakcyK2hT?=
+ =?utf-8?B?YlBJZUZxTjdsWCtBczBkTEx1UmJEc2Q2eGFoOXFhekJtdTlsRDl6YUNqZEly?=
+ =?utf-8?B?VVFRRkpaS1o1Qk96Wkk3anR5anFaaDBpV1dKN0w2QzUzZFkyNzdKTFNZbmZi?=
+ =?utf-8?B?dC8wZzJuVXJrcS9CTFhRUGl3U2tkNWpYNVB6bUxYNGg2M0ppbUpDTStJYWty?=
+ =?utf-8?B?V0E0VXY0S29OZmRRQU1hbGdhVXA5dWI4MmpWRzcraGNJY3U0T01xQzBIZW12?=
+ =?utf-8?B?SjhwVzErSThGTXg5TlVDdE1TYlhvYWs4dG5FencxY3dFT2U1TVFhcnB5R0V2?=
+ =?utf-8?B?WWUwanpualNhVTI0aks2Z1FmdlBVWElaNTJJOS9PYWM5aWxxcEdRN3AyOXpL?=
+ =?utf-8?B?ak82aGNmeklyNmUzN3dLOWFpb3ZBS3QxN0RDeGpwSUN5akVBSUYyenZNQ3FZ?=
+ =?utf-8?B?VEJKdGp6SS9CUHZWSlBhRUVDLzg5aGJhcWlWREtWemhiK2ltY1pTeVpqMnhk?=
+ =?utf-8?B?WGtETllFaWZtQVJyekRJQ3VBY1JvSW1vWHZjSllFQys0M0Z5N2szcmpWdGs2?=
+ =?utf-8?B?bjNoN0tFVjYwZG0wMDBhbkJDRWF1MzUxK213eHp6K1pYVFphNGt0RzhHbnlV?=
+ =?utf-8?B?a1FwUVI1SGJNMWV2ek9GKzE0SzljMTY5NSswRHhRVFQ3U3dRQ2xNWXBZRGJG?=
+ =?utf-8?B?QTRBSlR3TDA2THBURlpWTE1hWU5ZNmgxcmZLc3ovTERZckl5eXJxMHRIY2dQ?=
+ =?utf-8?B?em1ZNS9aN3A4bnFWK3B2ZDNyZ1BISloyWktnRmtmalpmWHA2N3ZpTzFaL1dJ?=
+ =?utf-8?B?eWpvNVpOWFpKb1RvaHBRRTlIODloS3kwdHpiNTM2dnQ0T0pkcm9YajRoZnc1?=
+ =?utf-8?Q?752ONNIncED7tmUmldOCIN56s?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1a002af8-39e3-44c5-f30a-08dd87d0ca39
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6048.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Apr 2025 10:21:37.5702
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7CGghJgdYT0+JG+V097ft0mKSYqr589tg96ZrMGzsiTHLuklNaOjYAvjsT9ttuyF78pRtIVKhXLrfqCrVpZijw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7277
 
-On 24.04.25 17:08, Vincent Mailhol wrote:
-> On 24/04/2025 at 23:02, Felix Maurer wrote:
->> On 24.04.25 09:44, Vincent Mailhol wrote:
->>> On Tue. 22 Apr. 2025 at 21:03, Felix Maurer <fmaurer@redhat.com> wrote:
->> [...]
->>>> diff --git a/tools/testing/selftests/net/can/test_raw_filter.c b/tools/testing/selftests/net/can/test_raw_filter.c
->>>> index 7fe11e020a1c..8d43053824d2 100644
->>>> --- a/tools/testing/selftests/net/can/test_raw_filter.c
->>>> +++ b/tools/testing/selftests/net/can/test_raw_filter.c
->>>> @@ -101,94 +101,113 @@ FIXTURE_VARIANT(can_filters) {
->>>>         int exp_num_rx;
->>>>         int exp_rxbits;
->>>>  };
->>>> +#define T_EFF (CAN_EFF_FLAG >> 28)
->>>> +#define T_RTR (CAN_RTR_FLAG >> 28)
->>>
->>> I do not like this
->>>
->>>   >> 28
->>>
->>> shift. I understand that it is part of the original design, but for
->>> me, this is just obfuscation.
->>>
->>> Why just not using CAN_EFF_FLAG and CAN_RTR_FLAG as-is for the
->>> expected values? What benefit does this shift add?
->>
->> I agree, that looks like magic numbers and the original design is not
->> very nice here. The main reason for the >>28 is that later on values are
->> shifted by T_EFF and/or T_RTR, so they shouldn't be too large (with the
->>>> 28, the shift value later is in the range 0-14). See below for a
->> slightly different idea.
->>
->>>> +/* Ignore EFF flag in filter ID if not covered by filter mask */
->>>>  FIXTURE_VARIANT_ADD(can_filters, base_eff) {
->>>>         .testcase = 2,
->>>>         .id = ID | CAN_EFF_FLAG,
->>>>         .mask = CAN_SFF_MASK,
->>>>         .exp_num_rx = 4,
->>>> -       .exp_rxbits = 4369,
->>>> +       .exp_rxbits = (1 | 1 << (T_EFF) | 1 << (T_RTR) | 1 << (T_EFF | T_RTR)),
->>>                          ^
->>> What is the meaning of this 1?
->>
->> The 1 means that a packet will be received with no flags set.
-> 
-> OK. Now I understand.
-> 
->> The whole rxbit thing took me a while to understand and the result now
->> is not straightforward either. Let's see if we can come up with
->> something better.
->>
->> The exp_rxbits is basically a bitfield that describes which flags should
->> be set on the received frames. Maybe this could be made more explicit
->> with something like this:
->>
->> .exp_rxbits = FRAME_NOFLAGS | FRAME_EFF | FRAME_RTR | FRAME_EFFRTR,
-> 
-> This is better. But yet, how would this scale in the future if we introduce the
-> CAN FD? For n flags, you have n combinations.
-> 
->> And in the receive loop something like this:
->>
->> rxbits |= FRAME_RCVD(frame.can_id);
->>
->> Of course, the definitions of these macros would still have the >>28,
->> but at a central point, with better explanation. Do you think that's
->> more understandable? Or do you have a different idea?
-> 
-> The
-> 
->   >> 28
-> 
-> trick just allows to save a couple line but by doing so, adds a ton of
-> complexity. What is wrong in writing this:
 
-I don't see anything wrong with it, I like it :) I'll send an updated
-version of the patches soon (probably squashed as well).
 
->   FIXTURE_VARIANT(can_filters) {
->   	int testcase;
->   	canid_t id;
->   	canid_t mask;
->   	int exp_num_rx;
->   	canid_t exp_flags[];
->   };
+On 4/30/2025 1:31 PM, Nicolin Chen wrote:
+> On Wed, Apr 30, 2025 at 09:52:09AM +0530, Vasant Hegde wrote:
+>>>>> Will the hardware replace the physical device ID in the event with
+>>>>> the virtual device ID when injecting the event to a guest event/PPR
+>>>>> queue? 
+>>>>> If so, yea, I think you can define them separately using the> vCMDQ
+>>>> infrastructures:
+>>>>>  - IOMMU_VCMDQ_TYPE_AMD_VIOMMU_CMDBUF
+>>>>>  - IOMMU_VCMDQ_TYPE_AMD_VIOMMU_EVENTLOG
+>>>>>  - IOMMU_VCMDQ_TYPE_AMD_VIOMMU_PPRLOG
+>>>>> (@Kevin @Jason Hmm, in this case we might want to revert the naming
+>>>>>  "vCMDQ" back to "vQEUEUE", once Vasant confirms.)
+>>>
+>>> I think I should rename IOMMUFD_OBJ_VCMDQ back to IOMMUFD_OBJ_VQUEUE
+>>> since the same object fits three types of queue now in the AMD case.
+>>
+>> Makes sense.
+>>
+>> AMD architecture supports 5 buffers. In practice we have not implemented event
+>> log  B / PPR Log B in Linux.
+>>   Command buffer
+>>   Event Log A / B
+>>   PPR Log A / B
 > 
->   /* Receive all frames when filtering for the ID in standard frame format */
->   FIXTURE_VARIANT_ADD(can_filters, base) {
->   	.testcase = 1,
->   	.id = ID,
->   	.mask = CAN_SFF_MASK,
->   	.exp_num_rx = 4,
->   	.exp_flags = {
->   		0,
->   		CAN_EFF_FLAG,
->   		CAN_RTR_FLAG,
->   		CAN_EFF_FLAG | CAN_RTR_FLAG,
->   	},
->   };
-> 
-> And then, in your TEST_F(), the do {} while loops becomes a:
-> 
->   for (int i = 0; i <= variant->exp_num_rx; i++) {
->   	/* FD logic here */
->   	ret = FD_ISSET(self->sock, &rdfs);
-> 	if (i == variant->exp_num_rx) {
->   		ASSERT_EQ(ret == 0);
->   	} else (i < variant->exp_num_rx)
->   		/* other relevant checks */
->   		ASSERT_EQ(frame.can_id & ~CAN_ERR_MASK ==
->   		          variant->exp_flags[i]);
->   	}
->   }
-> 
-> Here, you even check that the frames are received in order.
-> 
-> OK, the bitmap saved some memory, but here, we are speaking of selftests. The
-> priority is readability. I will happily get rid of the bitmap and just simplify
-> the logic.
+> I think those A/B should be dual buffers of the same type?
 
-I fully agree, thank you!
-   Felix
+Yes.
+
+
+
+> 
+> Anyway, I have renamed all the core "vCMDQ" back to "vQUEUE" in my
+> local branch. Will send v3 in the next days.
+
+Sure thanks.
+
+-Vasant
 
 
