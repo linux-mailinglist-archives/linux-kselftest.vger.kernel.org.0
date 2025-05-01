@@ -1,158 +1,136 @@
-Return-Path: <linux-kselftest+bounces-32079-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32080-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E451BAA5EA3
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 May 2025 14:47:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58816AA5F42
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 May 2025 15:36:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 15DBF1BC2545
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 May 2025 12:47:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B8EA1BA48B6
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 May 2025 13:36:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 069D5282F0;
-	Thu,  1 May 2025 12:46:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AE381A316E;
+	Thu,  1 May 2025 13:36:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="j/ailoTZ"
+	dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b="Nmax+CAQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EA7418E3F;
-	Thu,  1 May 2025 12:46:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 213D619F101
+	for <linux-kselftest@vger.kernel.org>; Thu,  1 May 2025 13:36:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746103617; cv=none; b=kvhMJJ59WqLVbH1kbdWbxW04LqOMOhyUjILvLed/3hc/h7ddYcxbbohVkv1+81B2C2bhIhPtr5jaDlF4O3OKMpV8pgllevkkFtk0sGToIzHqTnIrUlsATmPzQaYzOQWWr7SJqbMIlSho/G2NwAVzIgybZIB/306r5qGIEhYqtPk=
+	t=1746106579; cv=none; b=eVJz7VHIcCOflmWkrfradcwhAXyIIFBMd6b5VuTozjgLGk1vWBliwn5z62q1QZKi92xEVFmYfMxmt78dP/zmrXwNb/JujdPmiE/WH1bpnh12+vwywxdnsffrr2veOXgtIUesC5PB1gd6L6OkusrbSIqzkx0g3y0ooXSodAITOHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746103617; c=relaxed/simple;
-	bh=gh4K3sr8A85nGmp3/KYor1kooge4eZ3XoQIIXCsKJmY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qdA5vBmFUveT4nLoYXFN3IcZLnEN7dHhqoK6IvAMP91YbcU/YBAoPF/KnVX0TzFdTYgjj/wb5UlRkoiBhzfl8Dnd+YWZRw2f5B+E/BZhGLLcmShjVCiRuM4RWpN9vjbv+LHRWDKAUEAl9fZI5b7/lAJuLp8/RADwTTBnUoOau34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=j/ailoTZ; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=MT3KCqHjly6/WkVzRYtUyUQ6kHv1G8+d/uDnpb9+Wlg=; b=j/ailoTZKXoaOPmmlFPl9MsAHX
-	5BfvpF7rqDdfdJugevO0RmalbtVN3LbzoZJDuMhHYIUL5GBPHa/45fnthYZ3G1iYo4Lp9g5Tll1QV
-	IZWjYKVgb2nJy11r156J1w4KMzxpbxS6teghHN/7aWMVFUAvyRaMWkXdpYqr8b7ibLi0sFbImszXQ
-	7npg6eL8VRnWIqGdqLPUz+o4vQ80fPV6Aw1DKk/gPW3VWB8g54fzKPrvft5cp+jO1I0o0Y4vPRUzY
-	bimGToFXaLY3sInkkKgAYGCRZLun+XgZoZ1/V6IzM7YOqBQnuI+m/uCmpz98Cz8V/j0HYTRKtaQSp
-	Hz22RDpA==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uATJP-00000000Euy-2n9s;
-	Thu, 01 May 2025 12:46:47 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id DBB8830035E; Thu,  1 May 2025 14:46:46 +0200 (CEST)
-Date: Thu, 1 May 2025 14:46:46 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: John Hubbard <jhubbard@nvidia.com>
-Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Christian Brauner <christian@brauner.io>,
-	Shuah Khan <shuah@kernel.org>,
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@suse.cz>, pedro.falcato@gmail.com,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-	linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Oliver Sang <oliver.sang@intel.com>,
-	seanjc@google.com
-Subject: Re: [PATCH v3 3/3] selftests: pidfd: add tests for PIDFD_SELF_*
-Message-ID: <20250501124646.GC4356@noisy.programming.kicks-ass.net>
-References: <cover.1729073310.git.lorenzo.stoakes@oracle.com>
- <c083817403f98ae45a70e01f3f1873ec1ba6c215.1729073310.git.lorenzo.stoakes@oracle.com>
- <a3778bea-0a1e-41b7-b41c-15b116bcbb32@linuxfoundation.org>
- <a6133831-3fc3-49aa-83c6-f9aeef3713c9@lucifer.local>
- <5b0b8e1e-6f50-4e18-bf46-39b00376c26e@nvidia.com>
- <20250501114235.GP4198@noisy.programming.kicks-ass.net>
+	s=arc-20240116; t=1746106579; c=relaxed/simple;
+	bh=fr8LlzXOX1DDJ3UKB4yXhV7JJkyml63H3YQLUXm/grs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GuqR1Yp9HwgD4aBePwCAbNNMH+OYPZp6cTCAPTMIvmiXeQZkW3fKKSRnHQaEoxXDI104SlsfjJ9iYNvNRUveYYT07B+MG3+Zl9hDFcs1h/4NkVLCbN6EfyF6+WIYexADIsolh6KWHKJsZ1xsKPOBbnaKNOeHNImv7GHQcW9o57g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b=Nmax+CAQ; arc=none smtp.client-ip=209.85.166.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brainfault.org
+Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-86192b64d0bso91446239f.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 01 May 2025 06:36:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20230601.gappssmtp.com; s=20230601; t=1746106577; x=1746711377; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R5HbFwwkJF2Y2R1Vbj0ljcnhgzUV/rgTcfz1KnrFhCo=;
+        b=Nmax+CAQD2omOzlkuMUvXJ2NitDOMGG+9XPZyvZjH+Gpb7NPmVKXLKJxjX6+UPumZK
+         4J+iWgyVq3u5F9dd31/B0kQDC3pADSWcSWr+eYdTYWiPg7Cjic0AfteEj1nAn61sy1qb
+         BDGUaiPPsgJduY/Mfe/iTJPbSavP3yj2JGiASCxO4G2te5ydNq5AOUDR3E3wZ+fLN4bv
+         g3olmQUMsn/QGEohWiTaYdb4qik6AWDQKUMBu2JuFh8Uma4AKt0phgbqO44+SL9Ll+28
+         YZS7DMqn8PrxqNDWrOo9aC9jkKpshaDSjF2+YlwpUtLXNA0vDhwMleyL1jrCXuiUznrX
+         joog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746106577; x=1746711377;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=R5HbFwwkJF2Y2R1Vbj0ljcnhgzUV/rgTcfz1KnrFhCo=;
+        b=stSp9CbboNu3yo60ctqaACsTP0eTFbIQNNqRWb1bft92L4zBEMp8+b4t9b1usqpzTK
+         rR+ItjV0dj35lz7LC2ZyRi2xd8lT4CMxuvY0hnlyEsiS9NGuLHvguo6GRzs9bvFinNJe
+         uY61hh31aIHLqgxSn6Of7mOHRmgHzbsCV7aEuz5mgk+sDEoI9nPyBFcNPqUrUS/34Fns
+         JPWXjW+cQvvIBdOgC+y+3WcXvGXUXCHExgvsxkRdS5a7doN/07ey+HT9FbdhBON+phUZ
+         m9A3ejDYj0P5tnVqcrHnKdiuosXOqhUxkoFvrhlIYtcmTIGUlXKaLuLxmuk+lpFHpO0k
+         v1WA==
+X-Forwarded-Encrypted: i=1; AJvYcCU9n3miOSfXzQHlqB+P1tvcpp8AZGEPvTelaTIcj+DMSuNINtM+T+0Cm7rBSueFOqA7FldraW168+IA0ss1mrw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywg0/n/Mj3abr0KZMKHsSDUyJIdMiSqX/53GYjOJWvySmUluCUY
+	Nx9S95zw9K56WEnVb13WVLVMOdKDQfMs0vT/oKcOPZ6rfdcnN6vGWqlXT/gOSfabwBFM5z672xc
+	DrofpYVKJ/QGpkFsI6Gspl4k+2ESpaW5De5SG2A==
+X-Gm-Gg: ASbGncsV/o6ryED6AvSc25mqE0HUnhSYDdAnMknyJVojbDm+2o1pAV25vHjMsynhfiY
+	mwH7iTalyy1LUN7FW2qaUCU5Qxk6kH6Cef8NlUQcqBsQvsn2HpWa9m99FmPdaGfJ+rZJjB/4nli
+	zeXXJ95MO7c5vViMglyb9U1A==
+X-Google-Smtp-Source: AGHT+IHY7gd5DfteiMffTuTR2BB5tAOFnK6ac9kV3ASNuI57T6S+/lfY0TuUH0M3Tjf2aq1tEUdaJ7qOsG8AOHYTWno=
+X-Received: by 2002:a05:6e02:1b0b:b0:3d5:eb14:9c85 with SMTP id
+ e9e14a558f8ab-3d9676c6669mr79049245ab.6.1746106577095; Thu, 01 May 2025
+ 06:36:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250501114235.GP4198@noisy.programming.kicks-ass.net>
+References: <20250430-kvm_selftest_improve-v3-0-eea270ff080b@rivosinc.com>
+In-Reply-To: <20250430-kvm_selftest_improve-v3-0-eea270ff080b@rivosinc.com>
+From: Anup Patel <anup@brainfault.org>
+Date: Thu, 1 May 2025 19:06:06 +0530
+X-Gm-Features: ATxdqUElPYmtqqRS47Feed2BMb796DJHZOR_NiIu4niYbEKvJ9Q_aHmmUyE0IV4
+Message-ID: <CAAhSdy0UAnmNHWNJBysuH93Mok5_AQB88uy0nHuiumpfGgiJfQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/3] RISC-V KVM selftests improvements
+To: Atish Patra <atishp@rivosinc.com>
+Cc: Atish Patra <atishp@atishpatra.org>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Alexandre Ghiti <alex@ghiti.fr>, 
+	Andrew Jones <ajones@ventanamicro.com>, kvm@vger.kernel.org, 
+	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 01, 2025 at 01:42:35PM +0200, Peter Zijlstra wrote:
-> On Wed, Oct 16, 2024 at 07:14:34PM -0700, John Hubbard wrote:
-> > On 10/16/24 3:06 PM, Lorenzo Stoakes wrote:
-> > > On Wed, Oct 16, 2024 at 02:00:27PM -0600, Shuah Khan wrote:
-> > > > On 10/16/24 04:20, Lorenzo Stoakes wrote:
-> > ...
-> > > > > diff --git a/tools/testing/selftests/pidfd/pidfd.h b/tools/testing/selftests/pidfd/pidfd.h
-> > > > > index 88d6830ee004..1640b711889b 100644
-> > > > > --- a/tools/testing/selftests/pidfd/pidfd.h
-> > > > > +++ b/tools/testing/selftests/pidfd/pidfd.h
-> > > > > @@ -50,6 +50,14 @@
-> > > > >    #define PIDFD_NONBLOCK O_NONBLOCK
-> > > > >    #endif
-> > > > > +/* System header file may not have this available. */
-> > > > > +#ifndef PIDFD_SELF_THREAD
-> > > > > +#define PIDFD_SELF_THREAD -100
-> > > > > +#endif
-> > > > > +#ifndef PIDFD_SELF_THREAD_GROUP
-> > > > > +#define PIDFD_SELF_THREAD_GROUP -200
-> > > > > +#endif
-> > > > > +
-> > > > 
-> > > > As mentioned in my response to v1 patch:
-> > > > 
-> > > > kselftest has dependency on "make headers" and tests include
-> > > > headers from linux/ directory
-> > > 
-> > > Right but that assumes you install the kernel headers on the build system,
-> > > which is quite a painful thing to have to do when you are quickly iterating
-> > > on a qemu setup.
-> > > 
-> > > This is a use case I use all the time so not at all theoretical.
-> > > 
-> > 
-> > This is turning out to be a fairly typical reaction from kernel
-> > developers, when presented with the "you must first run make headers"
-> > requirement for kselftests.
-> > 
-> > Peter Zijlstra's "NAK NAK NAK" response [1] last year was the most
-> > colorful, so I'll helpfully cite it here. :)
-> 
-> Let me re-try this.
-> 
-> This is driving me insane. I've spend the past _TWO_ days trying to
-> build KVM selftests and I'm still failing.
-> 
-> This is absolute atrocious crap and is costing me valuable time.
-> 
-> Please fix this fucking selftests shit to just build. This is unusable
-> garbage.
+On Wed, Apr 30, 2025 at 1:46=E2=80=AFPM Atish Patra <atishp@rivosinc.com> w=
+rote:
+>
+> This series improves the following tests.
+> 1. Get-reg-list : Adds vector support
+> 2. SBI PMU test : Distinguish between different types of illegal exceptio=
+n
+>
+> The first patch is just helper patch that adds stval support during
+> exception handling.
+>
+> Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> ---
+> Changes in v3:
+> - Dropped the redundant macros and rv32 specific csr details.
+> - Changed to vcpu_get_reg from __vcpu_get_reg based on suggestion from Dr=
+ew.
+> - Added RB tags from Drew.
+> - Link to v2: https://lore.kernel.org/r/20250429-kvm_selftest_improve-v2-=
+0-51713f91e04a@rivosinc.com
+>
+> Changes in v2:
+> - Rebased on top of Linux 6.15-rc4
+> - Changed from ex_regs to pt_regs based on Drew's suggestion.
+> - Dropped Anup's review on PATCH1 as it is significantly changed from las=
+t review.
+> - Moved the instruction decoding macros to a common header file.
+> - Improved the vector reg list test as per the feedback.
+> - Link to v1: https://lore.kernel.org/r/20250324-kvm_selftest_improve-v1-=
+0-583620219d4f@rivosinc.com
+>
+> ---
+> Atish Patra (3):
+>       KVM: riscv: selftests: Align the trap information wiht pt_regs
+>       KVM: riscv: selftests: Decode stval to identify exact exception typ=
+e
+>       KVM: riscv: selftests: Add vector extension tests
 
-So after spending more time trying to remember how to debug Makefiles (I
-hate my life), I found that not only do I need this headers shit, the
-kvm selftests Makefile is actively broken if you use: make O=foo
+Queued this series for Linux-6.16.
 
--INSTALL_HDR_PATH = $(top_srcdir)/usr
-+INSTALL_HDR_PATH = $(top_srcdir)/$(O)/usr
-
-
-And then finally, I can do:
-
-make O=foo headers_install
-make O=foo -C tools/testing/selftests/kvm/
-
-So yeah, thank you very much for wasting my time *AGAIN*.
-
-
-Seriously, I want to be able to do:
-
-  cd tools/testing/selftests/foo; make
-
-and have it just work. I would strongly suggest every subsystem to
-reclaim their selftests and make it so again.
-
-And on that, let me go merge the fixes I need to have x86 and futex
-build without this headers shit.
+Thanks,
+Anup
 
