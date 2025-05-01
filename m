@@ -1,74 +1,85 @@
-Return-Path: <linux-kselftest+bounces-32062-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32063-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 221BDAA5A5B
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 May 2025 06:43:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23712AA5AB7
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 May 2025 08:03:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C1D941C019CA
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 May 2025 04:44:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 68E03466236
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 May 2025 06:03:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25834231841;
-	Thu,  1 May 2025 04:43:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F03ED1E260A;
+	Thu,  1 May 2025 06:03:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="fDapGKHo"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GkL72EOG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-fw-9106.amazon.com (smtp-fw-9106.amazon.com [207.171.188.206])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 545FA230BFD;
-	Thu,  1 May 2025 04:43:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.171.188.206
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BF9D32C85;
+	Thu,  1 May 2025 06:03:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746074621; cv=none; b=A2NKFHtBdljy10BSXrvd0y7mVawdCpp5n+DDsviiJP/H8XN3CEga+BVGfaoPf70z+6OpyMEnDHQwpVGlrpG46IikfDK6jNbXiGVqtPGsWGEfEmpdPKHskPwdooBMkJbqLNSFQmkwrUb8hC1C9UafqKaVvK57ZLLklvSENzmb79A=
+	t=1746079422; cv=none; b=CqBUF4LBBJferKaLvFGL+2V5s19EQogXAz3cJzq7F2ujdGTrcgXW0yeTjn6E3cJXG7SdPL6c9OhYy2Qur42yNR2vfnMMcfpjVABhdhocm7x75q/MxeBIXVQjYcdRAw4BxQJARlyNfMVluHem2Xae5vCmKJjXEzy4IcU1ZRgm3BQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746074621; c=relaxed/simple;
-	bh=FJMIZAAlsRBCDZIUUWk6FiHiAllsWImKRgkb2mx31Tw=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mSG1hKfIhMKtKrQrsElP0QJCUXi8qeEr6fQaE0fF6rzcNxeMaXXRvf4hZQhsEJt89VgyqF31+x3iZ3+OnlanU2aNze/PgYAoPzpjqgay9xZSQdLWkhlh2DOv75ZLZJTIdhR4Z0PGyYjwRjjTLg1/gYCqe1q9L9Np70R/mYbBL0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=fDapGKHo; arc=none smtp.client-ip=207.171.188.206
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
+	s=arc-20240116; t=1746079422; c=relaxed/simple;
+	bh=QdEOV5Pvru1jHHk6ci8tH+dTcY2lMatZVsfSaT2A64g=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=thcXCMwxwXpAzSqOmoRrD8NCtbH6QIZM39U1iTOeZJLcs1Jiz3MqoR71/9MY/GQxxxSMgWMMaWzOPuMvhfW/Y2XUqSelRbZcIoeFJkad0b+xsmsi9mfC1dmtqZjQKm7BZkmYRafdrHgQEURHNY09QZS4PZKfXd7eC1dDshgb/F8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GkL72EOG; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-739b3fe7ce8so667236b3a.0;
+        Wed, 30 Apr 2025 23:03:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1746074620; x=1777610620;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=nmWVsEqVJv451jTaseIeYwxvxKSGxFUAPewNfehCRt4=;
-  b=fDapGKHoTVq3CO5WEwd5lB8lShsCdFglQ0/S7q/ksnOOn2zW5+0+MugO
-   1vLRBSOAbHcTiTfjqgNRRCriAne4hpP80KWvQQTPVq0Hfg8RWd4R1STXn
-   D74oq4Bmvo0kjZ6cVS1aYz5m53WIHLjYlqLYexQWGGujvKEQ4awv0pUvT
-   w=;
-X-IronPort-AV: E=Sophos;i="6.15,253,1739836800"; 
-   d="scan'208";a="820675791"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.210])
-  by smtp-border-fw-9106.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2025 04:43:34 +0000
-Received: from EX19MTAUWA002.ant.amazon.com [10.0.21.151:40716]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.21.68:2525] with esmtp (Farcaster)
- id f5294a6a-507c-4dca-b1cc-456173d24f3b; Thu, 1 May 2025 04:43:33 +0000 (UTC)
-X-Farcaster-Flow-ID: f5294a6a-507c-4dca-b1cc-456173d24f3b
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
- Thu, 1 May 2025 04:43:32 +0000
-Received: from 6c7e67bfbae3.amazon.com (10.187.171.60) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
- Thu, 1 May 2025 04:43:29 +0000
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
-To: <jiayuan.chen@linux.dev>
-CC: <davem@davemloft.net>, <dsahern@kernel.org>, <edumazet@google.com>,
-	<horms@kernel.org>, <kuba@kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
-	<pabeni@redhat.com>, <shuah@kernel.org>, <willemdebruijn.kernel@gmail.com>
-Subject: Re: [RFC net-next v1 1/2] udp: Introduce UDP_STOP_RCV option for UDP
-Date: Wed, 30 Apr 2025 21:42:24 -0700
-Message-ID: <20250501044321.83028-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250501035116.69391-1-jiayuan.chen@linux.dev>
-References: <20250501035116.69391-1-jiayuan.chen@linux.dev>
+        d=gmail.com; s=20230601; t=1746079420; x=1746684220; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cs9IXrE62ETOAPmRdDzYqt5zC7Fy7UCTTkkCjs/8jnY=;
+        b=GkL72EOGRPKuqKd9iHMwrHqe8fG317Fy16mS4CK1eyULQQH1vIF3B1tvAb/Js4spJJ
+         UsHeb5kp+RKPHQZ/WWJ/g+jeC1goZEcSXRx9ypAijM6Kqz/5EqdEwQ0S4IUhNNsZrqrT
+         4DcGkCbh4sgJgwDHAz1kdkrOHVzbxa6o3TzanDRxWh4/6BWEuurheg+gjtx72pHM/0oY
+         36tpi3WKKsINabJBnvruCmhgH2P8YDLu4emCfNZQM9HVsOc+kJu1Kbcr/aR+1uPzRD3C
+         eVJeO7VxkZwVNHA53fJLeuss/kml7YxUHXEyEFmce1H+biozdz/Jf2ymURYb0SN5UAjx
+         vvyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746079420; x=1746684220;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cs9IXrE62ETOAPmRdDzYqt5zC7Fy7UCTTkkCjs/8jnY=;
+        b=blOTfstJZ9qzvvUEnmYrt2tQRgQeIfccNBtGmR/MUXIIa0LzP18H6Cvk4USsrL8IMG
+         0sxibKXvWisyyuFlOG9VOgy7ANmjj85HoMoW7ngIATwDjjLwFGR1jsKwrMpCUqByOUSC
+         PmDfu57ULMYeCsPfHGemVe8ccxs2FHszLmJD59W1u8qEG4/9vEALxsVAJ/qgtrfWk8F6
+         2adrxMUhGJ0ivt1QfYMvs61GAHq3ttvRANSa4MoyIgK1NqEoyLSIjXnsgOnerkyPBlEp
+         DQueOSXApvcWJvEOrj49XpdJX3iw4426gVpezgIjQSisfAoEkUtsAB3YL0w49MoLdKMo
+         mKGw==
+X-Forwarded-Encrypted: i=1; AJvYcCVp+yT7btStOxTxPq2q2nm47sZNxrTmiNHQssZ+xA5gvt+ZfAjExDt/jfyx2CKso1Y9YubHsctDZ/edI1Yd4k0=@vger.kernel.org, AJvYcCWb/VTVUcEC31CshVAQnSts8eW2i58LAOKWRAJbpzNdmBtLBM4gsq5Hf4lc6gDXN/RmQEkCgeFp+i3HDGW9fho8@vger.kernel.org
+X-Gm-Message-State: AOJu0YyeVw2oL/un6Jd6CKqtU2/HbZEeb+EzXZFyxSN5sEVauPLQM+Up
+	Yq51mTqg4v4dJC56PiltPZJ01V+bdh9fJj385sfVd6b8X7IqsmpO
+X-Gm-Gg: ASbGncuT4YJQQ9QP3HVVyp89lrVJW4aXLIRhuhM05F4IGFIaI5T3Z2siIUSoIGfQTB1
+	b/2IERRH9yUFEx0a9UjyURdxiCQgFlQgNAPvERaA6N7r6g7IHbX3WYBXlJyuHYk2tTI8WoEgEF6
+	lSAitomy5Cta1iQY00C3eIp93VtIeFYCa/jAGx/Mu5RG8Ynt3+G7Hfak+uXaWrai9Wvl5v35EIz
+	5BGzl0NLXQYJlELKXc+qTgHtwvr3lIt1y6zhO0fVF58g6/4WNUcGd7PmsY2PslO9Fic7lPxcQpn
+	HbXLYbdFfbr5X0/8jMJ6jz8IZWX/s1XeZcth4lSfmOeiQwctQSfYrvwr6XQ=
+X-Google-Smtp-Source: AGHT+IF7I91yRefEnmOp0LueYRZIfStQCvLhkfwf08/5KNWA+VIgQkH5BIu/Y4c/cmm/+rrivYYIww==
+X-Received: by 2002:a05:6a21:8ccb:b0:1f5:591b:4f73 with SMTP id adf61e73a8af0-20a89325382mr9809228637.34.1746079419723;
+        Wed, 30 Apr 2025 23:03:39 -0700 (PDT)
+Received: from localhost.localdomain ([103.77.0.13])
+        by smtp.googlemail.com with ESMTPSA id d2e1a72fcca58-7404fa1f88bsm72337b3a.134.2025.04.30.23.03.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Apr 2025 23:03:39 -0700 (PDT)
+From: Ankit Chauhan <ankitchauhan2065@gmail.com>
+To: shuah@kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org,
+	Ankit Chauhan <ankitchauhan2065@gmail.com>
+Subject: [PATCH] [next] selftests/ptrace: Fix spelling mistake "multible" -> "multiple"
+Date: Thu,  1 May 2025 11:33:29 +0530
+Message-Id: <20250501060329.126117-1-ankitchauhan2065@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,54 +87,28 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D031UWC003.ant.amazon.com (10.13.139.252) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
 
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-Date: Thu,  1 May 2025 11:51:08 +0800
-> For some services we are using "established-over-unconnected" model.
-> 
-> '''
-> // create unconnected socket and 'listen()'
-> srv_fd = socket(AF_INET, SOCK_DGRAM)
-> setsockopt(srv_fd, SO_REUSEPORT)
-> bind(srv_fd, SERVER_ADDR, SERVER_PORT)
-> 
-> // 'accept()'
-> data, client_addr = recvmsg(srv_fd)
-> 
-> // create a connected socket for this request
-> cli_fd = socket(AF_INET, SOCK_DGRAM)
-> setsockopt(cli_fd, SO_REUSEPORT)
-> bind(cli_fd, SERVER_ADDR, SERVER_PORT)
-> connect(cli, client_addr)
-> ...
-> // do handshake with cli_fd
-> '''
-> 
-> This programming pattern simulates accept() using UDP, creating a new
-> socket for each client request. The server can then use separate sockets
-> to handle client requests, avoiding the need to use a single UDP socket
-> for I/O transmission.
-> 
-> But there is a race condition between the bind() and connect() of the
-> connected socket:
-> We might receive unexpected packets belonging to the unconnected socket
-> before connect() is executed, which is not what we need.
-> (Of course, before connect(), the unconnected socket will also receive
-> packets from the connected socket, which is easily resolved because
-> upper-layer protocols typically require explicit boundaries, and we
-> receive a complete packet before creating a connected socket.)
-> 
-> Before this patch, the connected socket had to filter requests at recvmsg
-> time, acting as a dispatcher to some extent. With this patch, we can
-> consider the bind and connect operations to be atomic.
+Fix the spelling error from "multible" to "multiple".
 
-SO_ATTACH_REUSEPORT_EBPF is what you want.
+Signed-off-by: Ankit Chauhan <ankitchauhan2065@gmail.com>
+---
+ tools/testing/selftests/ptrace/peeksiginfo.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The socket won't receive any packets until the socket is added to
-the BPF map.
+diff --git a/tools/testing/selftests/ptrace/peeksiginfo.c b/tools/testing/selftests/ptrace/peeksiginfo.c
+index a6884f66dc01..2f345d11e4b8 100644
+--- a/tools/testing/selftests/ptrace/peeksiginfo.c
++++ b/tools/testing/selftests/ptrace/peeksiginfo.c
+@@ -199,7 +199,7 @@ int main(int argc, char *argv[])
+ 
+ 	/*
+ 	 * Dump signal from the process-wide queue.
+-	 * The number of signals is not multible to the buffer size
++	 * The number of signals is not multiple to the buffer size
+ 	 */
+ 	if (check_direct_path(child, 1, 3))
+ 		goto out;
+-- 
+2.34.1
 
-No need to reinvent a subset of BPF functionalities.
 
