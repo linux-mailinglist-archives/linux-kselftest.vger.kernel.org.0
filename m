@@ -1,95 +1,95 @@
-Return-Path: <linux-kselftest+bounces-32107-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32108-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A418AA6614
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 00:15:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 362FDAA6644
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 00:31:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CCF231BC65EF
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 May 2025 22:15:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ED0123AB313
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 May 2025 22:31:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 521372620F1;
-	Thu,  1 May 2025 22:15:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22AFF2673BA;
+	Thu,  1 May 2025 22:30:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HILAeRP2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fcWCYIsD"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-ed1-f67.google.com (mail-ed1-f67.google.com [209.85.208.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E32E3D6A;
-	Thu,  1 May 2025 22:15:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4764B265CDE;
+	Thu,  1 May 2025 22:30:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746137723; cv=none; b=XAVY5IJIQmmNdpQ1Z0JvM69u5GpjKCY0WOqjXdYeHjEOVzWe9OLYMbuR/5ULevqcq0p4jfgjJyEqUqBaIZVBKNJUMtyRC/t+nfMpx3o2GK0En7Ue/SKbWyILSfdqMQrs7MgyXQiuTCBLm3Gdzn4d4ZECPwsVSekq0G/pqPaACC4=
+	t=1746138650; cv=none; b=RjETlwWxGeJRKRN0p/PwbUn7j/XoFPYr71DErju5xhvf86h0rkIprZ4thHSKz4iag1nFel8fivpWCVC3ySSgCvbW+/9WY+7H974oTTY4BFdF60xu0+DBi7HPOx1j/liI21ngj826YC+7JOqyJQDRGo658db2pk8DnsiFpFdeQQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746137723; c=relaxed/simple;
-	bh=hQTMxo2PdZs/kPdpXXgfvr8wVMIXmuEtB3ES2KzMuYs=;
+	s=arc-20240116; t=1746138650; c=relaxed/simple;
+	bh=+DIhbp2zBCUUrZHkv3NTANy3q1+8YPM4ngw/q64EdRc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nZ+HSnqyYSkntBALwxTT0QLRY3eC7BN/r+W495rp+ngpkJQWs1zdyE4wjxaT1/W+wvH5wbKHYzqP0TUnIM6G/hDojIjfrn2Qz4hUHtp5tjfQaYKg0G0R3FT3WmqAKYW0qpS8y2YudT5/EJ3rM1iZYeVLlq3E+wc2MjlzBPQUuQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HILAeRP2; arc=none smtp.client-ip=209.85.208.67
+	 To:Cc:Content-Type; b=om/HAfD3LbZyLtjulE7Oaptdq7PCqD7dA5MxW7hopk+wmlIAdmifBSobDvMeIixklueD3CT+yoMGadAgLV517CLsWCSTBkRFP7I8K0W8Y7+iA2tpO7DI5vvRQLw+eYz1KE0yJ9J0bMdaQjL8mMNJj1sPITs7Ar2RsasUQ9fU84w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fcWCYIsD; arc=none smtp.client-ip=209.85.208.67
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f67.google.com with SMTP id 4fb4d7f45d1cf-5f4d0da2d2cso2706092a12.3;
-        Thu, 01 May 2025 15:15:21 -0700 (PDT)
+Received: by mail-ed1-f67.google.com with SMTP id 4fb4d7f45d1cf-5f6222c6c4cso2113848a12.1;
+        Thu, 01 May 2025 15:30:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746137720; x=1746742520; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1746138646; x=1746743446; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/7Mfr+YCIEUC+WGMETL1yHxE2lGiThA8SMe4ul3SumM=;
-        b=HILAeRP2bwbSqteB6WEueK9oHL2WC8EEKlyv6T8Rcw4gjtgMeR4IqFrNbYGmn/Cqcl
-         A3+XRTMVURocV2XIradGDo62sKhGPkN/K7WVBrEVBQhb3fvq7GSNlInADagoTRUG9fza
-         J1Qu/3MTkhSTN72A4voU4zYSNlBYR4p+d3P1n+liY9xJMpMMyT6twhvy24BpUai1yXaG
-         EAVgG7UroOsfBw704oKLc1SO2SV50Y2nDU4sufiMoWp4NmfioKyhoJi41HIlSbANbTff
-         NBL2wr8ZeldnsPpc5liNM0k2CaffUw9me3SNwjQEHy1dZt89MSsmVW+64EGK8HLksBR5
-         ST3w==
+        bh=+DIhbp2zBCUUrZHkv3NTANy3q1+8YPM4ngw/q64EdRc=;
+        b=fcWCYIsDa9bwTzk1XIV7BvAWcJrZvEG423k6LTJYyyZ9mAFmKq6BukbVElzWJCIN8Q
+         3NGTUCNycLmo1CsAAZuLJIzqpDZKp42mdoYwm0B8QpluHhr9VuvqdRVJCHzacQVLN82j
+         Az0Vp2POhXi1Mi70dTw2BGQjtaLEALSSGB9lNZ1pJ2jGz3JuKTSNLp2r01q/ipBujj7P
+         O9nTINA57tco3p5R3m5AL6GuJpDpucSfZYxloZzUevMlCOHANCYsB0hWFUEle3d4drpI
+         9pX2sxiJnoj1YXHonBCFHaaRhYSpQzR1sFyD0sitTBTfF0FYFPH8zLMX1C60DjG6mi3H
+         I7hA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746137720; x=1746742520;
+        d=1e100.net; s=20230601; t=1746138646; x=1746743446;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/7Mfr+YCIEUC+WGMETL1yHxE2lGiThA8SMe4ul3SumM=;
-        b=ulQd/Y0l35jnOHfPYBVT2t+1SopBdr9Vp1+Cy7uWBkvywhZQkClJV7fwQDFy7iasj1
-         jmfwT1M9CpOO6FwXRNGYTk7a1jh7wnYivhq19SzJBRUgDun11lVuRh5xZV9+AYx34Ewl
-         0kW8GNuYZjVJ+ok5IPMZDQ6rP2+jtSCvEOd6XR2q48T/adkUsS4vxr63ZUBkTU1Alwpu
-         YDQh4zJEzKG4tR2P/l3VyMCICXdHa46AueSkIS82LQP5d14Wk5z6fkHOKgVHOBVoLxrF
-         zfukYjtiFTIuq752WLDItJuvTMn3f6FRK5VLSvFA1xIUrxLj4fFdrImWLbB3oK9nKBMa
-         1Ocg==
-X-Forwarded-Encrypted: i=1; AJvYcCVdQezp62E5x7TC91Y5VYAcGJqfqFOUR0bI0EgoLBJC1ylH2mKnlSDtKBcqI1fYwNz5cVDdqCVfV5ySidZdySe3@vger.kernel.org, AJvYcCWbHb0qPipsOhbtqr6JEQpV1SEv717T1bBHTlbfX5XLOKHemBz2RoiPjhj1OpJa0IJOrP7SKFYEuJfQHJsd@vger.kernel.org, AJvYcCX0g/C7RWs7vzY2EZbXmjAFoJpgiQPLl5aSTf3iiVByTpU2FuMRw2s+kd93fry1rsfgP2Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwUl7T7S3AlqKqT7j/Xy4APK4GXR7JUO1DMZr1ekJWxmsxYhja7
-	735YB6eKZAWPbXAiK2FytScGGO6qq/0wLyBJ1oS3k7A6GvqhhR1q3o8RWqlurOpMIQU+bTejAWA
-	1Vv5MsgjZuEuhSPdr52EM8uXwfTc=
-X-Gm-Gg: ASbGncsPwNUlXxcpjlYRh+lH073Jjx7c5ix8uRs6wqvNfAJK3Jc2QxqDMONNDFVinsq
-	7kzMNum3QzwawPVfNVBSoMkwLYBFaTBJQ3KQNcnqQ8hdyTsMYo1A496MCu/lUjpDPxlXJgKLRPM
-	HC661uMKuA8au9ecMjIbCUVzHOTUH7557R+g+H91QXlo4=
-X-Google-Smtp-Source: AGHT+IHxMI99F+IAtZWxOMYa1RyucSD8miaYHECSOpW4gS3Z55ThRLvG0fNtcGLqM04BGbFYK8mK+bgTTvgVJVDex7k=
-X-Received: by 2002:a05:6402:3591:b0:5f5:7c7e:40e1 with SMTP id
- 4fb4d7f45d1cf-5fa788a2855mr314784a12.24.1746137719499; Thu, 01 May 2025
- 15:15:19 -0700 (PDT)
+        bh=+DIhbp2zBCUUrZHkv3NTANy3q1+8YPM4ngw/q64EdRc=;
+        b=kCcEUUuN5I8tgOjZ2KHbkWmET6i69posPRCTzHs3jT1cqDehGy6mWadORErSy36biT
+         wM+qAxXtQTG4M9GqEuOtMruDFdtIYvgLJ6UGomyxzLWOAeift1n+zM2MSfkdheiSojTL
+         yXWYjaMllgLy+aoIi2Za8OJV0PFjWiqqzpAnVgTwLN/lfDmrhuEQHLCYKx0iI8KotORA
+         180vQBUpLRu8mU2abMTjtmoHqRw6I5+yeq+FpMzDpbYIMcGCm9REK3Dzo1f/S+dvSOyQ
+         V/z5zQao3CQ65ED3yjNAnYK17Jul623r5EYEksQEMyrBLb1pEmIAd81QHYAacc5Bb17H
+         L7XA==
+X-Forwarded-Encrypted: i=1; AJvYcCVgL9OgeE7EOBRPb+mtvGOk7usONL/wjHN0CyxO8+MXTNcHd7W0+GhyqdiYdBjTbx82Ky9Eya/swRqMiqC2@vger.kernel.org, AJvYcCWRywPUb+wVnEuQpxB5rrgiFjCQyrfG2NTCh0E/oE5us12aMQtiNDq03O8zb1htPPdRimTcPevlLsh9g5PPpLjc@vger.kernel.org, AJvYcCWTy7dRvHr72rNMG+cLnx6vN8eE6kqoYkc1OAnAOt18QXNbB1+xmi3Z8uuJrjf17d7YpOY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMTY61vudczwkiEGdnvyZQxvX7MH+Iqi3XZUGKgON4XpIs0JfI
+	IL0IuLXV6c1ZjaBOfF4+3aFSkxH2gD1xu0NUXT2KO5ycvLRb8u4RJ7kCFsm8B5OCjO41r82Ef/d
+	fbvGCdy+Sxx/t4YRc7NZGCdFuuFM=
+X-Gm-Gg: ASbGncsF0POxi1iwbJP/+hbB7NPjculur/OBHxtF/G0nMbOZxsTyLJOntoQbUweZTCX
+	CjXe5asBRNXshfTQ6yevmKaGi/Q4He2OGRps+QGDrcan76ZhcclaXX1E/nSmSTOMKGxezU/znsT
+	cb27pZREyeb7+zALpmSiwLIX3W29YFz72vlro7O0pq8eo=
+X-Google-Smtp-Source: AGHT+IG09f2b7Y4uH3A4LEbmPohoiBZ1TPbF2Kj8BdJpyHWDLhgzXkdGcWvLzUMh9kLAyJv+ATRCPXiPJsNUAWmKXHo=
+X-Received: by 2002:a05:6402:5192:b0:5f6:2758:149e with SMTP id
+ 4fb4d7f45d1cf-5fa78014527mr322827a12.11.1746138646330; Thu, 01 May 2025
+ 15:30:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250501073603.1402960-1-luis.gerhorst@fau.de> <20250501073603.1402960-6-luis.gerhorst@fau.de>
-In-Reply-To: <20250501073603.1402960-6-luis.gerhorst@fau.de>
+References: <20250501073603.1402960-1-luis.gerhorst@fau.de> <20250501073603.1402960-8-luis.gerhorst@fau.de>
+In-Reply-To: <20250501073603.1402960-8-luis.gerhorst@fau.de>
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Fri, 2 May 2025 00:14:43 +0200
-X-Gm-Features: ATxdqUHQc0v79awdKG4uwMc53xWSprS6fNByWA3pwGc9veJx_oqCH0vQZ7i8uF0
-Message-ID: <CAP01T77v0vdKiqQSOk3X3t2R3xG97x13fXWE8QKF=7zX-8c_PA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 05/11] bpf, arm64, powerpc: Add bpf_jit_bypass_spec_v1/v4()
-To: Luis Gerhorst <luis.gerhorst@fau.de>, Xu Kuohai <xukuohai@huaweicloud.com>, 
-	Puranjay Mohan <puranjay@kernel.org>, Hari Bathini <hbathini@linux.ibm.com>, 
-	Naveen N Rao <naveen@kernel.org>
+Date: Fri, 2 May 2025 00:30:09 +0200
+X-Gm-Features: ATxdqUHPJMzTDr7uGCd29q-hTjuCFiE_oOpFxHvXqTdvhmyQK0iMn3qq8We2LrU
+Message-ID: <CAP01T75RR_6mC5fvD-tg+pxR8TEUHpUfU4Lqo0p+EBrkY9BVnw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 07/11] bpf: Rename sanitize_stack_spill to nospec_result
+To: Luis Gerhorst <luis.gerhorst@fau.de>
 Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
 	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
 	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
 	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
 	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Jiri Olsa <jolsa@kernel.org>, Puranjay Mohan <puranjay@kernel.org>, 
+	Xu Kuohai <xukuohai@huaweicloud.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Hari Bathini <hbathini@linux.ibm.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
 	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
 	Nicholas Piggin <npiggin@gmail.com>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
 	Henriette Herzog <henriette.herzog@rub.de>, Saket Kumar Bhaskar <skb99@linux.ibm.com>, 
@@ -101,53 +101,11 @@ Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
 	Maximilian Ott <ott@cs.fau.de>, Milan Stephan <milan.stephan@fau.de>
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 1 May 2025 at 09:51, Luis Gerhorst <luis.gerhorst@fau.de> wrote:
+On Thu, 1 May 2025 at 10:02, Luis Gerhorst <luis.gerhorst@fau.de> wrote:
 >
-> JITs can set bpf_jit_bypass_spec_v1/v4() if they want the verifier to
-> skip analysis/patching for the respective vulnerability. For v4, this
-> will reduce the number of barriers the verifier inserts. For v1, it
-> allows more programs to be accepted.
->
-> The primary motivation for this is to not regress unpriv BPF's
-> performance on ARM64 in a future commit where BPF_NOSPEC is also used
-> against Spectre v1.
->
-> This has the user-visible change that v1-induced rejections on
-> non-vulnerable PowerPC CPUs are avoided.
->
-> For now, this does not change the semantics of BPF_NOSPEC. It is still a
-> v4-only barrier and must not be implemented if bypass_spec_v4 is always
-> true for the arch. Changing it to a v1 AND v4-barrier is done in a
-> future commit.
->
-> As an alternative to bypass_spec_v1/v4, one could introduce NOSPEC_V1
-> AND NOSPEC_V4 instructions and allow backends to skip their lowering as
-> suggested by commit f5e81d111750 ("bpf: Introduce BPF nospec instruction
-> for mitigating Spectre v4"). Adding bpf_jit_bypass_spec_v1/v4() was
-> found to be preferable for the following reason:
->
-> * bypass_spec_v1/v4 benefits non-vulnerable CPUs: Always performing the
->   same analysis (not taking into account whether the current CPU is
->   vulnerable), needlessly restricts users of CPUs that are not
->   vulnerable. The only use case for this would be portability-testing,
->   but this can later be added easily when needed by allowing users to
->   force bypass_spec_v1/v4 to false.
->
-> * Portability is still acceptable: Directly disabling the analysis
->   instead of skipping the lowering of BPF_NOSPEC(_V1/V4) might allow
->   programs on non-vulnerable CPUs to be accepted while the program will
->   be rejected on vulnerable CPUs. With the fallback to speculation
->   barriers for Spectre v1 implemented in a future commit, this will only
->   affect programs that do variable stack-accesses or are very complex.
->
-> For PowerPC, the SEC_FTR checking in bpf_jit_bypass_spec_v4() is based
-> on the check that was previously located in the BPF_NOSPEC case.
->
-> For LoongArch, it would likely be safe to set both
-> bpf_jit_bypass_spec_v1() and _v4() according to
-> commit a6f6a95f2580 ("LoongArch, bpf: Fix jit to skip speculation
-> barrier opcode"). This is omitted here as I am unable to do any testing
-> for LoongArch.
+> This is made to clarify that this flag will cause a nospec to be added
+> after this insn and can therefore be relied upon to reduce speculative
+> path analysis.
 >
 > Signed-off-by: Luis Gerhorst <luis.gerhorst@fau.de>
 > Cc: Henriette Herzog <henriette.herzog@rub.de>
@@ -155,5 +113,5 @@ On Thu, 1 May 2025 at 09:51, Luis Gerhorst <luis.gerhorst@fau.de> wrote:
 > Cc: Milan Stephan <milan.stephan@fau.de>
 > ---
 
-I think this and the next patch should have acks from arm and powerpc experts.
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
