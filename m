@@ -1,114 +1,185 @@
-Return-Path: <linux-kselftest+bounces-32063-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32064-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23712AA5AB7
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 May 2025 08:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E527AA5AC3
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 May 2025 08:22:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 68E03466236
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 May 2025 06:03:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1C8BF4668AE
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 May 2025 06:22:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F03ED1E260A;
-	Thu,  1 May 2025 06:03:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA5E7262FEA;
+	Thu,  1 May 2025 06:22:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GkL72EOG"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="F2enR2Ph"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BF9D32C85;
-	Thu,  1 May 2025 06:03:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D258C2309BD
+	for <linux-kselftest@vger.kernel.org>; Thu,  1 May 2025 06:22:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746079422; cv=none; b=CqBUF4LBBJferKaLvFGL+2V5s19EQogXAz3cJzq7F2ujdGTrcgXW0yeTjn6E3cJXG7SdPL6c9OhYy2Qur42yNR2vfnMMcfpjVABhdhocm7x75q/MxeBIXVQjYcdRAw4BxQJARlyNfMVluHem2Xae5vCmKJjXEzy4IcU1ZRgm3BQ=
+	t=1746080557; cv=none; b=g2EeBHJvmIxOxtqj85gQu0aCscvBEByj+t8C5lgYsCv9ywKUtQBF6tomgV2V/ucpml/D4GIWqaMz3AqDaKhPZihnP8bJIqzMYw0t5jqaHP0sIcBq3cE+fesLzgXzYUvkJ3F6EBsTcL6axof3IpIX78999GJftfUsycRJuZXx7Vs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746079422; c=relaxed/simple;
-	bh=QdEOV5Pvru1jHHk6ci8tH+dTcY2lMatZVsfSaT2A64g=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=thcXCMwxwXpAzSqOmoRrD8NCtbH6QIZM39U1iTOeZJLcs1Jiz3MqoR71/9MY/GQxxxSMgWMMaWzOPuMvhfW/Y2XUqSelRbZcIoeFJkad0b+xsmsi9mfC1dmtqZjQKm7BZkmYRafdrHgQEURHNY09QZS4PZKfXd7eC1dDshgb/F8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GkL72EOG; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-739b3fe7ce8so667236b3a.0;
-        Wed, 30 Apr 2025 23:03:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746079420; x=1746684220; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=cs9IXrE62ETOAPmRdDzYqt5zC7Fy7UCTTkkCjs/8jnY=;
-        b=GkL72EOGRPKuqKd9iHMwrHqe8fG317Fy16mS4CK1eyULQQH1vIF3B1tvAb/Js4spJJ
-         UsHeb5kp+RKPHQZ/WWJ/g+jeC1goZEcSXRx9ypAijM6Kqz/5EqdEwQ0S4IUhNNsZrqrT
-         4DcGkCbh4sgJgwDHAz1kdkrOHVzbxa6o3TzanDRxWh4/6BWEuurheg+gjtx72pHM/0oY
-         36tpi3WKKsINabJBnvruCmhgH2P8YDLu4emCfNZQM9HVsOc+kJu1Kbcr/aR+1uPzRD3C
-         eVJeO7VxkZwVNHA53fJLeuss/kml7YxUHXEyEFmce1H+biozdz/Jf2ymURYb0SN5UAjx
-         vvyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746079420; x=1746684220;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cs9IXrE62ETOAPmRdDzYqt5zC7Fy7UCTTkkCjs/8jnY=;
-        b=blOTfstJZ9qzvvUEnmYrt2tQRgQeIfccNBtGmR/MUXIIa0LzP18H6Cvk4USsrL8IMG
-         0sxibKXvWisyyuFlOG9VOgy7ANmjj85HoMoW7ngIATwDjjLwFGR1jsKwrMpCUqByOUSC
-         PmDfu57ULMYeCsPfHGemVe8ccxs2FHszLmJD59W1u8qEG4/9vEALxsVAJ/qgtrfWk8F6
-         2adrxMUhGJ0ivt1QfYMvs61GAHq3ttvRANSa4MoyIgK1NqEoyLSIjXnsgOnerkyPBlEp
-         DQueOSXApvcWJvEOrj49XpdJX3iw4426gVpezgIjQSisfAoEkUtsAB3YL0w49MoLdKMo
-         mKGw==
-X-Forwarded-Encrypted: i=1; AJvYcCVp+yT7btStOxTxPq2q2nm47sZNxrTmiNHQssZ+xA5gvt+ZfAjExDt/jfyx2CKso1Y9YubHsctDZ/edI1Yd4k0=@vger.kernel.org, AJvYcCWb/VTVUcEC31CshVAQnSts8eW2i58LAOKWRAJbpzNdmBtLBM4gsq5Hf4lc6gDXN/RmQEkCgeFp+i3HDGW9fho8@vger.kernel.org
-X-Gm-Message-State: AOJu0YyeVw2oL/un6Jd6CKqtU2/HbZEeb+EzXZFyxSN5sEVauPLQM+Up
-	Yq51mTqg4v4dJC56PiltPZJ01V+bdh9fJj385sfVd6b8X7IqsmpO
-X-Gm-Gg: ASbGncuT4YJQQ9QP3HVVyp89lrVJW4aXLIRhuhM05F4IGFIaI5T3Z2siIUSoIGfQTB1
-	b/2IERRH9yUFEx0a9UjyURdxiCQgFlQgNAPvERaA6N7r6g7IHbX3WYBXlJyuHYk2tTI8WoEgEF6
-	lSAitomy5Cta1iQY00C3eIp93VtIeFYCa/jAGx/Mu5RG8Ynt3+G7Hfak+uXaWrai9Wvl5v35EIz
-	5BGzl0NLXQYJlELKXc+qTgHtwvr3lIt1y6zhO0fVF58g6/4WNUcGd7PmsY2PslO9Fic7lPxcQpn
-	HbXLYbdFfbr5X0/8jMJ6jz8IZWX/s1XeZcth4lSfmOeiQwctQSfYrvwr6XQ=
-X-Google-Smtp-Source: AGHT+IF7I91yRefEnmOp0LueYRZIfStQCvLhkfwf08/5KNWA+VIgQkH5BIu/Y4c/cmm/+rrivYYIww==
-X-Received: by 2002:a05:6a21:8ccb:b0:1f5:591b:4f73 with SMTP id adf61e73a8af0-20a89325382mr9809228637.34.1746079419723;
-        Wed, 30 Apr 2025 23:03:39 -0700 (PDT)
-Received: from localhost.localdomain ([103.77.0.13])
-        by smtp.googlemail.com with ESMTPSA id d2e1a72fcca58-7404fa1f88bsm72337b3a.134.2025.04.30.23.03.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Apr 2025 23:03:39 -0700 (PDT)
-From: Ankit Chauhan <ankitchauhan2065@gmail.com>
-To: shuah@kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org,
-	Ankit Chauhan <ankitchauhan2065@gmail.com>
-Subject: [PATCH] [next] selftests/ptrace: Fix spelling mistake "multible" -> "multiple"
-Date: Thu,  1 May 2025 11:33:29 +0530
-Message-Id: <20250501060329.126117-1-ankitchauhan2065@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1746080557; c=relaxed/simple;
+	bh=D4LMMZVUvWgTthgOdYiEWmA7Ak8ZBcN3AHcfBQngo3A=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=GLAjY/2i0uyl7mLCyZLDtOk3Sd0wlDwmACkJRPyQPRICJ/mjs6vOsr4IKGmMhGHL+6xpqSpcmpnjp15oM9B6HqbsLfqze/AU2FhPy3d1RReSBH1Rlmx6GRE84N3ItzRSZMZOhhuM2mVtZa6+Kay9VzrV64QJTI0trI+J5d9sEjo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=F2enR2Ph; arc=none smtp.client-ip=95.215.58.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1746080543;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=yjChiQ9PgUc2a1/7cJEmrsrWFH7Apodvn16ltR0juPY=;
+	b=F2enR2Ph/xphEnIbT/WgtKidoT3a8MaDaJsGQGsuhwKH19ULsfSOZicpGsTIiN52Ton9O6
+	uTZyAs29HxDUmGNGeYAqDRGkJ/3bhkaoiYEbj7INOJmZGO/5Gyz2yZb8tnpLEhC7zy+PzD
+	T9TlFBYKT0i3u4tsSSVfyh5t1HcuoOw=
+Date: Thu, 01 May 2025 06:22:17 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
+Message-ID: <1f4d3fb4eed397e346efb3ef597e29204e5a2f4b@linux.dev>
+TLS-Required: No
+Subject: Re: [RFC net-next v1 1/2] udp: Introduce UDP_STOP_RCV option for UDP
+To: "Kuniyuki Iwashima" <kuniyu@amazon.com>
+Cc: davem@davemloft.net, dsahern@kernel.org, edumazet@google.com,
+ horms@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+ pabeni@redhat.com, shuah@kernel.org, willemdebruijn.kernel@gmail.com
+In-Reply-To: <20250501044321.83028-1-kuniyu@amazon.com>
+References: <20250501035116.69391-1-jiayuan.chen@linux.dev>
+ <20250501044321.83028-1-kuniyu@amazon.com>
+X-Migadu-Flow: FLOW_OUT
 
-Fix the spelling error from "multible" to "multiple".
+2025/5/1 12:42, "Kuniyuki Iwashima" <kuniyu@amazon.com> wrote:
 
-Signed-off-by: Ankit Chauhan <ankitchauhan2065@gmail.com>
----
- tools/testing/selftests/ptrace/peeksiginfo.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+>=20From: Jiayuan Chen <jiayuan.chen@linux.dev>
+>=20
+>=20Date: Thu, 1 May 2025 11:51:08 +0800
+>=20
+>=20>=20
+>=20> For some services we are using "established-over-unconnected" model=
+.
+> >=20
+>=20>=20=20
+>=20>=20
+>=20>  '''
+> >=20
+>=20>  // create unconnected socket and 'listen()'
+> >=20
+>=20>  srv_fd =3D socket(AF_INET, SOCK_DGRAM)
+> >=20
+>=20>  setsockopt(srv_fd, SO_REUSEPORT)
+> >=20
+>=20>  bind(srv_fd, SERVER_ADDR, SERVER_PORT)
+> >=20
+>=20>=20=20
+>=20>=20
+>=20>  // 'accept()'
+> >=20
+>=20>  data, client_addr =3D recvmsg(srv_fd)
+> >=20
+>=20>=20=20
+>=20>=20
+>=20>  // create a connected socket for this request
+> >=20
+>=20>  cli_fd =3D socket(AF_INET, SOCK_DGRAM)
+> >=20
+>=20>  setsockopt(cli_fd, SO_REUSEPORT)
+> >=20
+>=20>  bind(cli_fd, SERVER_ADDR, SERVER_PORT)
+> >=20
+>=20>  connect(cli, client_addr)
+> >=20
+>=20>  ...
+> >=20
+>=20>  // do handshake with cli_fd
+> >=20
+>=20>  '''
+> >=20
+>=20>=20=20
+>=20>=20
+>=20>  This programming pattern simulates accept() using UDP, creating a =
+new
+> >=20
+>=20>  socket for each client request. The server can then use separate s=
+ockets
+> >=20
+>=20>  to handle client requests, avoiding the need to use a single UDP s=
+ocket
+> >=20
+>=20>  for I/O transmission.
+> >=20
+>=20>=20=20
+>=20>=20
+>=20>  But there is a race condition between the bind() and connect() of =
+the
+> >=20
+>=20>  connected socket:
+> >=20
+>=20>  We might receive unexpected packets belonging to the unconnected s=
+ocket
+> >=20
+>=20>  before connect() is executed, which is not what we need.
+> >=20
+>=20>  (Of course, before connect(), the unconnected socket will also rec=
+eive
+> >=20
+>=20>  packets from the connected socket, which is easily resolved becaus=
+e
+> >=20
+>=20>  upper-layer protocols typically require explicit boundaries, and w=
+e
+> >=20
+>=20>  receive a complete packet before creating a connected socket.)
+> >=20
+>=20>=20=20
+>=20>=20
+>=20>  Before this patch, the connected socket had to filter requests at =
+recvmsg
+> >=20
+>=20>  time, acting as a dispatcher to some extent. With this patch, we c=
+an
+> >=20
+>=20>  consider the bind and connect operations to be atomic.
+> >=20
+>=20
+> SO_ATTACH_REUSEPORT_EBPF is what you want.
+>=20
+>=20The socket won't receive any packets until the socket is added to
+>=20
+>=20the BPF map.
+>=20
+>=20No need to reinvent a subset of BPF functionalities.
+>
 
-diff --git a/tools/testing/selftests/ptrace/peeksiginfo.c b/tools/testing/selftests/ptrace/peeksiginfo.c
-index a6884f66dc01..2f345d11e4b8 100644
---- a/tools/testing/selftests/ptrace/peeksiginfo.c
-+++ b/tools/testing/selftests/ptrace/peeksiginfo.c
-@@ -199,7 +199,7 @@ int main(int argc, char *argv[])
- 
- 	/*
- 	 * Dump signal from the process-wide queue.
--	 * The number of signals is not multible to the buffer size
-+	 * The number of signals is not multiple to the buffer size
- 	 */
- 	if (check_direct_path(child, 1, 3))
- 		goto out;
--- 
-2.34.1
+I think this feature is for selecting one socket, not filtering out certa=
+in
+sockets.
 
+Does this mean that I need to first capture all sockets bound to the same
+port, and then if the kernel selects a socket that I don't want to receiv=
+e
+packets on, I'll need to implement an algorithm in the BPF program to
+choose another socket from the ones I've captured, in order to avoid
+returning that socket?
+
+This looks like it completely bypasses the kernel's built-in scoring
+logic. Or is expanding BPF_PROG_TYPE_SK_REUSEPORT to have filtering
+capabilities also an acceptable solution?
 
