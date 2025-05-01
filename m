@@ -1,185 +1,204 @@
-Return-Path: <linux-kselftest+bounces-32064-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32065-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E527AA5AC3
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 May 2025 08:22:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEC11AA5B52
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 May 2025 09:13:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1C8BF4668AE
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 May 2025 06:22:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A8CE9C2570
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 May 2025 07:13:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA5E7262FEA;
-	Thu,  1 May 2025 06:22:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E807262813;
+	Thu,  1 May 2025 07:13:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="F2enR2Ph"
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="piT+hAhN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
+Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D258C2309BD
-	for <linux-kselftest@vger.kernel.org>; Thu,  1 May 2025 06:22:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 873CF213255;
+	Thu,  1 May 2025 07:13:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=99.78.197.217
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746080557; cv=none; b=g2EeBHJvmIxOxtqj85gQu0aCscvBEByj+t8C5lgYsCv9ywKUtQBF6tomgV2V/ucpml/D4GIWqaMz3AqDaKhPZihnP8bJIqzMYw0t5jqaHP0sIcBq3cE+fesLzgXzYUvkJ3F6EBsTcL6axof3IpIX78999GJftfUsycRJuZXx7Vs=
+	t=1746083604; cv=none; b=A/lw/V+0ezLpUY8kwo82RoSdMBP1sZGBoOhwW7qhYBFgvbIXEpl0YrT3mGCuA3imSFW4Ov/5ivWtncIr4X1v1FmQSFWL6vcZK+N+PQ5MV92MD8iTw01YchYnPGcnxY33FKtFtN4O6qaN8mI5WhHSoQF9+dPudLdAxhiWl5u3mTI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746080557; c=relaxed/simple;
-	bh=D4LMMZVUvWgTthgOdYiEWmA7Ak8ZBcN3AHcfBQngo3A=;
-	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
-	 In-Reply-To:References; b=GLAjY/2i0uyl7mLCyZLDtOk3Sd0wlDwmACkJRPyQPRICJ/mjs6vOsr4IKGmMhGHL+6xpqSpcmpnjp15oM9B6HqbsLfqze/AU2FhPy3d1RReSBH1Rlmx6GRE84N3ItzRSZMZOhhuM2mVtZa6+Kay9VzrV64QJTI0trI+J5d9sEjo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=F2enR2Ph; arc=none smtp.client-ip=95.215.58.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1746083604; c=relaxed/simple;
+	bh=zPYU6GYNdy0mMALSF3glm6SldvCR75nV5Wr/ewBREMQ=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=pdrA2KP4jVj42E+0wnZQtnDV2Izwpz7ilyJ1RKz8ZRazq1mOH/ZO6iNCpWtNjk1wDtRSntsmccvZ4sjHmjBD+ap26tgBHKsFy6N4/FULWvdp929bEyf4MZjHNpGtHzacDfXRjnrlRElCGff/4HTaQb19wR0oORPJP17tq4cYey0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=piT+hAhN; arc=none smtp.client-ip=99.78.197.217
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1746083602; x=1777619602;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=vx0+NHqu1wQYPq/J+n4ZB7E7XDRzuoqX7tjLl8vX3Gc=;
+  b=piT+hAhN1GgAsvekVq13STCGXudkscunKP8ilmMCcn8ARjKXG4In+XuP
+   Q4OxKry8KbQuxu+HVbFKGxD/Az14HBdty0UpyDkJjYdC6I8R56YqXvf7u
+   sMYFG9W8v+FBg9zlw9mEoQwiPRppLqKL3OakOxSw5Uf+xejkbxJp7qn8E
+   E=;
+X-IronPort-AV: E=Sophos;i="6.15,253,1739836800"; 
+   d="scan'208";a="45627745"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.214])
+  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2025 07:13:21 +0000
+Received: from EX19MTAUWA002.ant.amazon.com [10.0.21.151:1121]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.49.105:2525] with esmtp (Farcaster)
+ id cfb02766-30b7-414e-8a08-12f6538f65e7; Thu, 1 May 2025 07:13:20 +0000 (UTC)
+X-Farcaster-Flow-ID: cfb02766-30b7-414e-8a08-12f6538f65e7
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
+ Thu, 1 May 2025 07:13:20 +0000
+Received: from 6c7e67bfbae3.amazon.com (10.187.171.60) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
+ Thu, 1 May 2025 07:13:16 +0000
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
+To: <jiayuan.chen@linux.dev>
+CC: <davem@davemloft.net>, <dsahern@kernel.org>, <edumazet@google.com>,
+	<horms@kernel.org>, <kuba@kernel.org>, <kuniyu@amazon.com>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<netdev@vger.kernel.org>, <pabeni@redhat.com>, <shuah@kernel.org>,
+	<willemdebruijn.kernel@gmail.com>
+Subject: Re: [RFC net-next v1 1/2] udp: Introduce UDP_STOP_RCV option for UDP
+Date: Thu, 1 May 2025 00:12:08 -0700
+Message-ID: <20250501071308.1931-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <1f4d3fb4eed397e346efb3ef597e29204e5a2f4b@linux.dev>
+References: <1f4d3fb4eed397e346efb3ef597e29204e5a2f4b@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1746080543;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=yjChiQ9PgUc2a1/7cJEmrsrWFH7Apodvn16ltR0juPY=;
-	b=F2enR2Ph/xphEnIbT/WgtKidoT3a8MaDaJsGQGsuhwKH19ULsfSOZicpGsTIiN52Ton9O6
-	uTZyAs29HxDUmGNGeYAqDRGkJ/3bhkaoiYEbj7INOJmZGO/5Gyz2yZb8tnpLEhC7zy+PzD
-	T9TlFBYKT0i3u4tsSSVfyh5t1HcuoOw=
-Date: Thu, 01 May 2025 06:22:17 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EX19D044UWA002.ant.amazon.com (10.13.139.11) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+
 From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
-Message-ID: <1f4d3fb4eed397e346efb3ef597e29204e5a2f4b@linux.dev>
-TLS-Required: No
-Subject: Re: [RFC net-next v1 1/2] udp: Introduce UDP_STOP_RCV option for UDP
-To: "Kuniyuki Iwashima" <kuniyu@amazon.com>
-Cc: davem@davemloft.net, dsahern@kernel.org, edumazet@google.com,
- horms@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
- pabeni@redhat.com, shuah@kernel.org, willemdebruijn.kernel@gmail.com
-In-Reply-To: <20250501044321.83028-1-kuniyu@amazon.com>
-References: <20250501035116.69391-1-jiayuan.chen@linux.dev>
- <20250501044321.83028-1-kuniyu@amazon.com>
-X-Migadu-Flow: FLOW_OUT
+Date: Thu, 01 May 2025 06:22:17 +0000
+> 2025/5/1 12:42, "Kuniyuki Iwashima" <kuniyu@amazon.com> wrote:
+> 
+> > 
+> > From: Jiayuan Chen <jiayuan.chen@linux.dev>
+> > 
+> > Date: Thu, 1 May 2025 11:51:08 +0800
+> > 
+> > > 
+> > > For some services we are using "established-over-unconnected" model.
+> > > 
+> > >  
+> > > 
+> > >  '''
+> > > 
+> > >  // create unconnected socket and 'listen()'
+> > > 
+> > >  srv_fd = socket(AF_INET, SOCK_DGRAM)
+> > > 
+> > >  setsockopt(srv_fd, SO_REUSEPORT)
+> > > 
+> > >  bind(srv_fd, SERVER_ADDR, SERVER_PORT)
+> > > 
+> > >  
+> > > 
+> > >  // 'accept()'
+> > > 
+> > >  data, client_addr = recvmsg(srv_fd)
+> > > 
+> > >  
+> > > 
+> > >  // create a connected socket for this request
+> > > 
+> > >  cli_fd = socket(AF_INET, SOCK_DGRAM)
+> > > 
+> > >  setsockopt(cli_fd, SO_REUSEPORT)
+> > > 
+> > >  bind(cli_fd, SERVER_ADDR, SERVER_PORT)
+> > > 
+> > >  connect(cli, client_addr)
+> > > 
+> > >  ...
+> > > 
+> > >  // do handshake with cli_fd
+> > > 
+> > >  '''
+> > > 
+> > >  
+> > > 
+> > >  This programming pattern simulates accept() using UDP, creating a new
+> > > 
+> > >  socket for each client request. The server can then use separate sockets
+> > > 
+> > >  to handle client requests, avoiding the need to use a single UDP socket
+> > > 
+> > >  for I/O transmission.
+> > > 
+> > >  
+> > > 
+> > >  But there is a race condition between the bind() and connect() of the
+> > > 
+> > >  connected socket:
+> > > 
+> > >  We might receive unexpected packets belonging to the unconnected socket
+> > > 
+> > >  before connect() is executed, which is not what we need.
+> > > 
+> > >  (Of course, before connect(), the unconnected socket will also receive
+> > > 
+> > >  packets from the connected socket, which is easily resolved because
+> > > 
+> > >  upper-layer protocols typically require explicit boundaries, and we
+> > > 
+> > >  receive a complete packet before creating a connected socket.)
+> > > 
+> > >  
+> > > 
+> > >  Before this patch, the connected socket had to filter requests at recvmsg
+> > > 
+> > >  time, acting as a dispatcher to some extent. With this patch, we can
+> > > 
+> > >  consider the bind and connect operations to be atomic.
+> > > 
+> > 
+> > SO_ATTACH_REUSEPORT_EBPF is what you want.
+> > 
+> > The socket won't receive any packets until the socket is added to
+> > 
+> > the BPF map.
+> > 
+> > No need to reinvent a subset of BPF functionalities.
+> >
+> 
+> I think this feature is for selecting one socket, not filtering out certain
+> sockets.
+> 
+> Does this mean that I need to first capture all sockets bound to the same
+> port, and then if the kernel selects a socket that I don't want to receive
+> packets on, I'll need to implement an algorithm in the BPF program to
+> choose another socket from the ones I've captured, in order to avoid
+> returning that socket?
 
-2025/5/1 12:42, "Kuniyuki Iwashima" <kuniyu@amazon.com> wrote:
+Right.
 
->=20
->=20From: Jiayuan Chen <jiayuan.chen@linux.dev>
->=20
->=20Date: Thu, 1 May 2025 11:51:08 +0800
->=20
->=20>=20
->=20> For some services we are using "established-over-unconnected" model=
-.
-> >=20
->=20>=20=20
->=20>=20
->=20>  '''
-> >=20
->=20>  // create unconnected socket and 'listen()'
-> >=20
->=20>  srv_fd =3D socket(AF_INET, SOCK_DGRAM)
-> >=20
->=20>  setsockopt(srv_fd, SO_REUSEPORT)
-> >=20
->=20>  bind(srv_fd, SERVER_ADDR, SERVER_PORT)
-> >=20
->=20>=20=20
->=20>=20
->=20>  // 'accept()'
-> >=20
->=20>  data, client_addr =3D recvmsg(srv_fd)
-> >=20
->=20>=20=20
->=20>=20
->=20>  // create a connected socket for this request
-> >=20
->=20>  cli_fd =3D socket(AF_INET, SOCK_DGRAM)
-> >=20
->=20>  setsockopt(cli_fd, SO_REUSEPORT)
-> >=20
->=20>  bind(cli_fd, SERVER_ADDR, SERVER_PORT)
-> >=20
->=20>  connect(cli, client_addr)
-> >=20
->=20>  ...
-> >=20
->=20>  // do handshake with cli_fd
-> >=20
->=20>  '''
-> >=20
->=20>=20=20
->=20>=20
->=20>  This programming pattern simulates accept() using UDP, creating a =
-new
-> >=20
->=20>  socket for each client request. The server can then use separate s=
-ockets
-> >=20
->=20>  to handle client requests, avoiding the need to use a single UDP s=
-ocket
-> >=20
->=20>  for I/O transmission.
-> >=20
->=20>=20=20
->=20>=20
->=20>  But there is a race condition between the bind() and connect() of =
-the
-> >=20
->=20>  connected socket:
-> >=20
->=20>  We might receive unexpected packets belonging to the unconnected s=
-ocket
-> >=20
->=20>  before connect() is executed, which is not what we need.
-> >=20
->=20>  (Of course, before connect(), the unconnected socket will also rec=
-eive
-> >=20
->=20>  packets from the connected socket, which is easily resolved becaus=
-e
-> >=20
->=20>  upper-layer protocols typically require explicit boundaries, and w=
-e
-> >=20
->=20>  receive a complete packet before creating a connected socket.)
-> >=20
->=20>=20=20
->=20>=20
->=20>  Before this patch, the connected socket had to filter requests at =
-recvmsg
-> >=20
->=20>  time, acting as a dispatcher to some extent. With this patch, we c=
-an
-> >=20
->=20>  consider the bind and connect operations to be atomic.
-> >=20
->=20
-> SO_ATTACH_REUSEPORT_EBPF is what you want.
->=20
->=20The socket won't receive any packets until the socket is added to
->=20
->=20the BPF map.
->=20
->=20No need to reinvent a subset of BPF functionalities.
->
+If you want a set of sockets to listen on the port, you can implement
+as such with BPF; register the sockets to the BPF map, and if kernel pick
+up other sockets and triggers the BPF prog, just return one of the
+registerd sk.
 
-I think this feature is for selecting one socket, not filtering out certa=
-in
-sockets.
+Even when you have connect()ed sockets on the same port, kernel will
+fall back to the normal scoring to find the best one, and it's not a
+problem as the last 'result' is one selected by BPF or a connected sk,
+and the packet won't be routed to not-yet-registered unconnected sk.
 
-Does this mean that I need to first capture all sockets bound to the same
-port, and then if the kernel selects a socket that I don't want to receiv=
-e
-packets on, I'll need to implement an algorithm in the BPF program to
-choose another socket from the ones I've captured, in order to avoid
-returning that socket?
 
-This looks like it completely bypasses the kernel's built-in scoring
-logic. Or is expanding BPF_PROG_TYPE_SK_REUSEPORT to have filtering
-capabilities also an acceptable solution?
+> 
+> This looks like it completely bypasses the kernel's built-in scoring
+> logic. Or is expanding BPF_PROG_TYPE_SK_REUSEPORT to have filtering
+> capabilities also an acceptable solution?
 
