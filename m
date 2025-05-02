@@ -1,45 +1,45 @@
-Return-Path: <linux-kselftest+bounces-32215-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32216-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEF50AA7968
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 20:44:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C27AEAA7970
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 20:45:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 54FBD4C68AA
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 18:44:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A97479C59F2
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 18:44:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93E98376;
-	Fri,  2 May 2025 18:44:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8255726A087;
+	Fri,  2 May 2025 18:44:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="Ue9DudKJ"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="dN3BSNeu"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6582A2690CC;
-	Fri,  2 May 2025 18:44:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82801266581;
+	Fri,  2 May 2025 18:44:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746211478; cv=none; b=VQP0HHuNj1i2XXpngyqLbWh86+G+8i3KnN8iIq20vPD0p0LvGxYbuSX0fb0r9YruOxFQDDefatIBAgV2J20uVEIqR7nKuSRFEcwC949tH/zMj7YLmpxVvyEL7tHkhG9Q7iV0UBhLNHewDjzy/EhRNSb5nIYnfUy8njx/Kucz1y0=
+	t=1746211481; cv=none; b=B8mPQ+LjrAhubMmhQwoWMDgGACA2BCHS/yHszHHtQyqYjn0ca2JcPakOUcZTPgKXqi7nqnMIQCRCNadMxH8QQR7TqfO0PXfBhcTv0QRqB7OryxYKSbHxJIYgKKx8LWTMOYQNG23UyZtPXLKpeVFVixXUUmXqAAIlHrkOwvZPRBc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746211478; c=relaxed/simple;
-	bh=nkCV28LXQzLQtEu++P8pvfqqS8aXNw3nalYD7/6l3Fo=;
+	s=arc-20240116; t=1746211481; c=relaxed/simple;
+	bh=nq0znOFvre+bt6b4XGXsU/WoOE9QL/apvhH8fKxbmW8=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=C6/IyAOdYP5TF1IaSSuwO92nY9aLg9VbKKZwktqGU3e+eIcDLY+uOQM6KpNGv1CZw9jv5I1pHw7HXxgU/7qNansIQ0LYMcUZBwzrxoPlr/870E6/e4e5B1YYGRFQdre7u7IV1XGEoTZGYpV7wvWqqA06AZ/garMfi6YOs9WhYvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=Ue9DudKJ; arc=none smtp.client-ip=13.77.154.182
+	 MIME-Version:Content-Type; b=nPSgevhzjSrHTMbNwDUgcipHMp6N+fGuMsAH68Fx4Ub4wR7OnPhF3eC0XY00Ja9uk3+pIUtJV0xbzwVzpK5bTqdKvJi8PGh9sBmBmFcZTuGfu2PpbypUrGadPYpw2crdWxaiHDMH4cEwR1RTbv2OUNZrLK7sUYG2g7iWfMy+ShM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=dN3BSNeu; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from narnia.corp.microsoft.com (unknown [40.78.12.133])
-	by linux.microsoft.com (Postfix) with ESMTPSA id B5DD92111578;
-	Fri,  2 May 2025 11:44:32 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B5DD92111578
+	by linux.microsoft.com (Postfix) with ESMTPSA id 61DDE211157A;
+	Fri,  2 May 2025 11:44:36 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 61DDE211157A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1746211476;
-	bh=fFJ1FdtRizEVkIS0e1qVL8i0heboE+7QuoR5dD1IVlY=;
+	s=default; t=1746211479;
+	bh=B/E++yOI09XBJYUTXAsaTIw9zq/FHAmrpEetLkeTFls=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=Ue9DudKJq3tKmxZG7hqftwgTGV/jX2QiOqHcOgtKXmmuYYih38thWSocoaXSAVh3R
-	 1W1OjSsrNQW3fDWw6P6mLcru28SRFOD3+hd7U9rvWA/h6OgT7COTefGrtW+lOtDOnc
-	 1+aY6Jww4ZmOsrrXac9TZiEdZKgFf8Rw//suzIKw=
+	b=dN3BSNeuQsE8Rj8Og18BuxrNUeDt5uzZQWy12lsBPJJRKvzvJ7W0xomAmgvD5olEF
+	 s3zoIc+nWzPZcBCjeLorjcYbI9j2ZnRzugqShQ6ojAPl2n7dsrPmRAVIStWF5pOH/Q
+	 pxyq4jupABqgmO3kxi2D6mVlHj0mnUo93GK92SFQ=
 From: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
 To: Jonathan Corbet <corbet@lwn.net>,
 	David Howells <dhowells@redhat.com>,
@@ -76,9 +76,9 @@ To: Jonathan Corbet <corbet@lwn.net>,
 	xiyou.wangcong@gmail.com,
 	Tyler Hicks <code@tyhicks.com>,
 	James Bottomley <James.Bottomley@hansenpartnership.com>
-Subject: [PATCH v3 1/4] security: Hornet LSM
-Date: Fri,  2 May 2025 11:44:07 -0700
-Message-ID: <20250502184421.1424368-2-bboscaccy@linux.microsoft.com>
+Subject: [PATCH v3 2/4] hornet: Introduce sign-ebpf
+Date: Fri,  2 May 2025 11:44:08 -0700
+Message-ID: <20250502184421.1424368-3-bboscaccy@linux.microsoft.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250502184421.1424368-1-bboscaccy@linux.microsoft.com>
 References: <20250502184421.1424368-1-bboscaccy@linux.microsoft.com>
@@ -88,613 +88,468 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-This adds the Hornet Linux Security Module which provides signature
-verification of eBPF programs. This allows users to continue to
-maintain an invariant that all code running inside of the kernel has
-been signed.
+This introduces the sign-ebpf tool. It is very similar to the existing
+sign-file script, with one key difference, it will sign a file with
+with a signature computed off of arbitrary input data. This can used
+to sign an ebpf light skeleton loader program for verification via
+Hornet.
 
-The primary target for signature verification is light-skeleton based
-eBPF programs which was introduced here:
-https://lore.kernel.org/bpf/20220209054315.73833-1-alexei.starovoitov@gmail.com/
-
-eBPF programs, before loading, undergo a complex set of operations
-which transform pseudo-values within the immediate operands of
-instructions into concrete values based on the running
-system. Typically, this is done by libbpf in
-userspace. Light-skeletons were introduced in order to support
-preloading of bpf programs and user-mode-drivers by removing the
-dependency on libbpf and userspace-based operations.
-
-Userpace modifications, which may change every time a program gets
-loaded or runs on a slightly different kernel, break known signature
-verification algorithms. A method is needed for passing unadulterated
-binary buffers into the kernel in-order to use existing signature
-verification algorithms. Light-skeleton loaders with their support of
-only in-kernel relocations fit that constraint.
-
-Hornet employs a signature verification scheme similar to that of
-kernel modules. A signature is appended to the end of an
-executable file. During an invocation of the BPF_PROG_LOAD subcommand,
-a signature is extracted from the current task's executable file. That
-signature is used to verify the integrity of the bpf instructions and
-maps which were passed into the kernel. Additionally, Hornet
-implicitly trusts any programs which were loaded from inside kernel
-rather than userspace, which allows BPF_PRELOAD programs along with
-outputs for BPF_SYSCALL programs to run.
-
-The validation check consists of checking a PKCS#7 formatted signature
-against a data buffer containing the raw instructions of an eBPF
-program, followed by the initial values of any maps used by the
-program. Maps are verified to be frozen before signature verification
-checking to stop TOCTOU attacks.
+Typical usage is to provide a payload containing the light skeleton
+ebpf syscall program binary and it's associated maps, which can be
+extracted from the auto-generated skeleton header.
 
 Signed-off-by: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
 ---
- Documentation/admin-guide/LSM/Hornet.rst |  65 ++++++
- Documentation/admin-guide/LSM/index.rst  |   1 +
- MAINTAINERS                              |   9 +
- crypto/asymmetric_keys/pkcs7_verify.c    |  10 +
- include/linux/kernel_read_file.h         |   1 +
- include/linux/verification.h             |   1 +
- include/uapi/linux/lsm.h                 |   1 +
- security/Kconfig                         |   3 +-
- security/Makefile                        |   1 +
- security/hornet/Kconfig                  |  24 +++
- security/hornet/Makefile                 |   4 +
- security/hornet/hornet_lsm.c             | 250 +++++++++++++++++++++++
- security/selinux/hooks.c                 |  12 +-
- security/selinux/include/classmap.h      |   2 +-
- 14 files changed, 380 insertions(+), 4 deletions(-)
- create mode 100644 Documentation/admin-guide/LSM/Hornet.rst
- create mode 100644 security/hornet/Kconfig
- create mode 100644 security/hornet/Makefile
- create mode 100644 security/hornet/hornet_lsm.c
+ scripts/Makefile           |   1 +
+ scripts/hornet/Makefile    |   5 +
+ scripts/hornet/sign-ebpf.c | 411 +++++++++++++++++++++++++++++++++++++
+ 3 files changed, 417 insertions(+)
+ create mode 100644 scripts/hornet/Makefile
+ create mode 100644 scripts/hornet/sign-ebpf.c
 
-diff --git a/Documentation/admin-guide/LSM/Hornet.rst b/Documentation/admin-guide/LSM/Hornet.rst
+diff --git a/scripts/Makefile b/scripts/Makefile
+index 46f860529df5..a2cace05d734 100644
+--- a/scripts/Makefile
++++ b/scripts/Makefile
+@@ -57,6 +57,7 @@ subdir-$(CONFIG_GENKSYMS) += genksyms
+ subdir-$(CONFIG_GENDWARFKSYMS) += gendwarfksyms
+ subdir-$(CONFIG_SECURITY_SELINUX) += selinux
+ subdir-$(CONFIG_SECURITY_IPE) += ipe
++subdir-$(CONFIG_SECURITY_HORNET) += hornet
+ 
+ # Let clean descend into subdirs
+ subdir-	+= basic dtc gdb kconfig mod
+diff --git a/scripts/hornet/Makefile b/scripts/hornet/Makefile
 new file mode 100644
-index 000000000000..a8109c2a5fdf
+index 000000000000..ab71dbb8688e
 --- /dev/null
-+++ b/Documentation/admin-guide/LSM/Hornet.rst
-@@ -0,0 +1,65 @@
-+.. SPDX-License-Identifier: GPL-2.0
++++ b/scripts/hornet/Makefile
+@@ -0,0 +1,5 @@
++# SPDX-License-Identifier: GPL-2.0
++hostprogs-always-y	:= sign-ebpf
 +
-+======
-+Hornet
-+======
-+
-+Hornet is a Linux Security Module that provides signature verification
-+for eBPF programs. This is selectable at build-time with
-+``CONFIG_SECURITY_HORNET``.
-+
-+Overview
-+========
-+
-+Hornet provides signature verification for eBPF programs by utilizing
-+the existing PKCS#7 infrastructure that's used for module signature
-+verification. Hornet works by creating a buffer containing the eBPF
-+program instructions along with its associated maps and checking a
-+signature against that buffer. The signature is appended to the end of
-+the lskel executable file and is extracted at runtime via
-+get_task_exe_file. Hornet works by hooking into the
-+security_bpf_prog_load hook. Load invocations that originate from the
-+kernel (bpf preload, results of bpf_syscall programs, etc.) are
-+allowed to run unconditionally. Calls that originate from userspace
-+require signature verification. If signature verification fails, the
-+program will fail to load.  Maps are verified to be frozen before the
-+signature check to prevent TOCTOU exploits where a sufficiently
-+privileged user could rewrite map data between the calls to
-+BPF_PROG_LOAD and BPF_PROG_RUN.
-+
-+Instruction/Map Ordering
-+========================
-+
-+Hornet supports both sparse-array based maps via map discovery along
-+with the newly added fd_array_cnt API for continuous map arrays. The
-+buffer used for signature verification is assumed to be the
-+instructions followed by all maps used, ordered by their index in
-+fd_array.
-+
-+Configuration Options
-+=====================
-+
-+Hornet provides a kconfig knob
-+CONFIG_SECURITY_HORNET_WHITELIST_PID_ONE.  Enabling this will allow
-+bpf programs to be loaded from pid 1 without undergoing a signature
-+verification check. This option is not recommened for production
-+systems.
-+
-+Tooling
-+=======
-+
-+Some tooling is provided to aid with the development of signed eBPF
-+light-skeletons.
-+
-+extract-skel.sh
-+---------------
-+
-+This shell script extracts the instructions and map data used by the
-+light skeleton from the autogenerated header file created by bpftool.
-+
-+sign-ebpf
-+---------
-+
-+sign-ebpf works similarly to the sign-file script with one key
-+difference: it takes a separate input binary used for signature
-+verification and will append the signature to a different output file.
-diff --git a/Documentation/admin-guide/LSM/index.rst b/Documentation/admin-guide/LSM/index.rst
-index b44ef68f6e4d..57f6e9fbe5fd 100644
---- a/Documentation/admin-guide/LSM/index.rst
-+++ b/Documentation/admin-guide/LSM/index.rst
-@@ -49,3 +49,4 @@ subdirectories.
-    SafeSetID
-    ipe
-    landlock
-+   Hornet
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 3cbf9ac0d83f..f4123ed2fb1c 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10855,6 +10855,15 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/iio/pressure/honeywell,mprls0025pa.yaml
- F:	drivers/iio/pressure/mprls0025pa*
- 
-+HORNET SECURITY MODULE
-+M:	Blaise Boscaccy <bboscaccy@linux.microsoft.com>
-+L:	linux-security-module@vger.kernel.org
-+S:	Supported
-+T:	git https://github.com/blaiseboscaccy/hornet.git
-+F:	Documentation/admin-guide/LSM/Hornet.rst
-+F:	scripts/hornet/
-+F:	security/hornet/
-+
- HP BIOSCFG DRIVER
- M:	Jorge Lopez <jorge.lopez2@hp.com>
- L:	platform-driver-x86@vger.kernel.org
-diff --git a/crypto/asymmetric_keys/pkcs7_verify.c b/crypto/asymmetric_keys/pkcs7_verify.c
-index f0d4ff3c20a8..1a5fbb361218 100644
---- a/crypto/asymmetric_keys/pkcs7_verify.c
-+++ b/crypto/asymmetric_keys/pkcs7_verify.c
-@@ -428,6 +428,16 @@ int pkcs7_verify(struct pkcs7_message *pkcs7,
- 		}
- 		/* Authattr presence checked in parser */
- 		break;
-+	case VERIFYING_EBPF_SIGNATURE:
-+		if (pkcs7->data_type != OID_data) {
-+			pr_warn("Invalid ebpf sig (not pkcs7-data)\n");
-+			return -EKEYREJECTED;
-+		}
-+		if (pkcs7->have_authattrs) {
-+			pr_warn("Invalid ebpf sig (has authattrs)\n");
-+			return -EKEYREJECTED;
-+		}
-+		break;
- 	case VERIFYING_UNSPECIFIED_SIGNATURE:
- 		if (pkcs7->data_type != OID_data) {
- 			pr_warn("Invalid unspecified sig (not pkcs7-data)\n");
-diff --git a/include/linux/kernel_read_file.h b/include/linux/kernel_read_file.h
-index 90451e2e12bd..7ed9337be542 100644
---- a/include/linux/kernel_read_file.h
-+++ b/include/linux/kernel_read_file.h
-@@ -14,6 +14,7 @@
- 	id(KEXEC_INITRAMFS, kexec-initramfs)	\
- 	id(POLICY, security-policy)		\
- 	id(X509_CERTIFICATE, x509-certificate)	\
-+	id(EBPF, ebpf)				\
- 	id(MAX_ID, )
- 
- #define __fid_enumify(ENUM, dummy) READING_ ## ENUM,
-diff --git a/include/linux/verification.h b/include/linux/verification.h
-index 4f3022d081c3..812be8ad5f74 100644
---- a/include/linux/verification.h
-+++ b/include/linux/verification.h
-@@ -35,6 +35,7 @@ enum key_being_used_for {
- 	VERIFYING_KEXEC_PE_SIGNATURE,
- 	VERIFYING_KEY_SIGNATURE,
- 	VERIFYING_KEY_SELF_SIGNATURE,
-+	VERIFYING_EBPF_SIGNATURE,
- 	VERIFYING_UNSPECIFIED_SIGNATURE,
- 	NR__KEY_BEING_USED_FOR
- };
-diff --git a/include/uapi/linux/lsm.h b/include/uapi/linux/lsm.h
-index 938593dfd5da..2ff9bcdd551e 100644
---- a/include/uapi/linux/lsm.h
-+++ b/include/uapi/linux/lsm.h
-@@ -65,6 +65,7 @@ struct lsm_ctx {
- #define LSM_ID_IMA		111
- #define LSM_ID_EVM		112
- #define LSM_ID_IPE		113
-+#define LSM_ID_HORNET		114
- 
- /*
-  * LSM_ATTR_XXX definitions identify different LSM attributes
-diff --git a/security/Kconfig b/security/Kconfig
-index 4816fc74f81e..5cd47bbff765 100644
---- a/security/Kconfig
-+++ b/security/Kconfig
-@@ -230,6 +230,7 @@ source "security/safesetid/Kconfig"
- source "security/lockdown/Kconfig"
- source "security/landlock/Kconfig"
- source "security/ipe/Kconfig"
-+source "security/hornet/Kconfig"
- 
- source "security/integrity/Kconfig"
- 
-@@ -273,7 +274,7 @@ config LSM
- 	default "landlock,lockdown,yama,loadpin,safesetid,apparmor,selinux,smack,tomoyo,ipe,bpf" if DEFAULT_SECURITY_APPARMOR
- 	default "landlock,lockdown,yama,loadpin,safesetid,tomoyo,ipe,bpf" if DEFAULT_SECURITY_TOMOYO
- 	default "landlock,lockdown,yama,loadpin,safesetid,ipe,bpf" if DEFAULT_SECURITY_DAC
--	default "landlock,lockdown,yama,loadpin,safesetid,selinux,smack,tomoyo,apparmor,ipe,bpf"
-+	default "landlock,lockdown,yama,loadpin,safesetid,selinux,smack,tomoyo,apparmor,ipe,hornet,bpf"
- 	help
- 	  A comma-separated list of LSMs, in initialization order.
- 	  Any LSMs left off this list, except for those with order
-diff --git a/security/Makefile b/security/Makefile
-index 22ff4c8bd8ce..e24bccd951f8 100644
---- a/security/Makefile
-+++ b/security/Makefile
-@@ -26,6 +26,7 @@ obj-$(CONFIG_CGROUPS)			+= device_cgroup.o
- obj-$(CONFIG_BPF_LSM)			+= bpf/
- obj-$(CONFIG_SECURITY_LANDLOCK)		+= landlock/
- obj-$(CONFIG_SECURITY_IPE)		+= ipe/
-+obj-$(CONFIG_SECURITY_HORNET)		+= hornet/
- 
- # Object integrity file lists
- obj-$(CONFIG_INTEGRITY)			+= integrity/
-diff --git a/security/hornet/Kconfig b/security/hornet/Kconfig
++HOSTCFLAGS_sign-ebpf.o = $(shell $(HOSTPKG_CONFIG) --cflags libcrypto 2> /dev/null)
++HOSTLDLIBS_sign-ebpf = $(shell $(HOSTPKG_CONFIG) --libs libcrypto 2> /dev/null || echo -lcrypto)
+diff --git a/scripts/hornet/sign-ebpf.c b/scripts/hornet/sign-ebpf.c
 new file mode 100644
-index 000000000000..539503dafe94
+index 000000000000..e9d2cb6d5cfb
 --- /dev/null
-+++ b/security/hornet/Kconfig
-@@ -0,0 +1,24 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+config SECURITY_HORNET
-+	bool "Hornet support"
-+	depends on SECURITY
-+	default n
-+	help
-+	  This selects Hornet.
-+	  Further information can be found in
-+	  Documentation/admin-guide/LSM/Hornet.rst.
-+
-+	  If you are unsure how to answer this question, answer N.
-+
-+
-+config SECURITY_HORNET_WHITELIST_PID_ONE
-+	bool "Whiltelist unsigned eBPF programs from PID 1"
-+	depends on SECURITY_HORNET
-+	default n
-+	help
-+	  Selecting this will configure Hornet to allow eBPF loaded from pid 1
-+	  to load without a verification check.
-+	  Further information can be found in
-+	  Documentation/admin-guide/LSM/Hornet.rst.
-+
-+	  If you are unsure how to answer this question, answer N.
-diff --git a/security/hornet/Makefile b/security/hornet/Makefile
-new file mode 100644
-index 000000000000..79f4657b215f
---- /dev/null
-+++ b/security/hornet/Makefile
-@@ -0,0 +1,4 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+obj-$(CONFIG_SECURITY_HORNET) := hornet.o
-+
-+hornet-y := hornet_lsm.o
-diff --git a/security/hornet/hornet_lsm.c b/security/hornet/hornet_lsm.c
-new file mode 100644
-index 000000000000..012bb2dc45b2
---- /dev/null
-+++ b/security/hornet/hornet_lsm.c
-@@ -0,0 +1,250 @@
++++ b/scripts/hornet/sign-ebpf.c
+@@ -0,0 +1,411 @@
 +// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Hornet Linux Security Module
++/* Sign ebpf programs and skeletons using the given key.
 + *
-+ * Author: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
++ * This program is heavily based on the kernel's sign-file tool
++ * with some minor additions to support the signing of eBPF lskels.
 + *
-+ * Copyright (C) 2025 Microsoft Corporation
++ * Copyright © 2014-2016 Red Hat, Inc. All Rights Reserved.
++ * Copyright © 2015      Intel Corporation.
++ * Copyright © 2016      Hewlett Packard Enterprise Development LP
++ * Copyright © 2025      Microsoft Corporation.
 + */
-+
-+#include <linux/lsm_hooks.h>
-+#include <uapi/linux/lsm.h>
-+#include <linux/bpf.h>
-+#include <linux/verification.h>
-+#include <crypto/public_key.h>
-+#include <linux/module_signature.h>
-+#include <crypto/pkcs7.h>
-+#include <linux/sort.h>
-+
-+#define EBPF_SIG_STRING "~eBPF signature appended~\n"
-+#define MAX_USED_MAPS 64
-+
-+struct hornet_maps {
-+	u32 used_idx[MAX_USED_MAPS];
-+	u32 used_map_cnt;
-+	bpfptr_t fd_array;
-+};
-+
-+static int cmp_idx(const void *a, const void *b)
-+{
-+	return *(const u32 *)a - *(const u32 *)b;
-+}
-+
-+static int add_used_map(struct hornet_maps *maps, int idx)
-+{
-+	int i;
-+
-+	for (i = 0; i < maps->used_map_cnt; i++)
-+		if (maps->used_idx[i] == idx)
-+			return i;
-+
-+	if (maps->used_map_cnt >= MAX_USED_MAPS)
-+		return -E2BIG;
-+
-+	maps->used_idx[maps->used_map_cnt] = idx;
-+	return maps->used_map_cnt++;
-+}
-+
-+static int hornet_find_maps(struct bpf_prog *prog, struct hornet_maps *maps)
-+{
-+	struct bpf_insn *insn = prog->insnsi;
-+	int insn_cnt = prog->len;
-+	int i;
-+	int err;
-+
-+	for (i = 0; i < insn_cnt; i++, insn++) {
-+		if (insn[0].code == (BPF_LD | BPF_IMM | BPF_DW)) {
-+			switch (insn[0].src_reg) {
-+			case BPF_PSEUDO_MAP_IDX_VALUE:
-+			case BPF_PSEUDO_MAP_IDX:
-+				err = add_used_map(maps, insn[0].imm);
-+				if (err < 0)
-+					return err;
-+				break;
-+			default:
-+				break;
-+			}
-+		}
-+	}
-+	/* Sort the spare-array indices. This should match the map ordering used during
-+	 * signature generation
-+	 */
-+	sort(maps->used_idx, maps->used_map_cnt, sizeof(*maps->used_idx),
-+	     cmp_idx, NULL);
-+
-+	return 0;
-+}
-+
-+static int hornet_populate_fd_array(struct hornet_maps *maps, u32 fd_array_cnt)
-+{
-+	int i;
-+
-+	if (fd_array_cnt > MAX_USED_MAPS)
-+		return -E2BIG;
-+
-+	for (i = 0; i < fd_array_cnt; i++)
-+		maps->used_idx[i] = i;
-+
-+	maps->used_map_cnt = fd_array_cnt;
-+	return 0;
-+}
-+
-+static int hornet_verify_lskel(struct bpf_prog *prog, struct hornet_maps *maps,
-+			       void *sig, size_t sig_len)
-+{
-+	int map_fd;
-+	u32 i;
-+	void *buf;
-+	void *new;
-+	size_t buf_sz;
-+	struct bpf_map *map;
-+	int err = 0;
-+	int key = 0;
-+
-+	buf = kmalloc_array(prog->len, sizeof(struct bpf_insn), GFP_KERNEL);
-+	if (!buf)
-+		return -ENOMEM;
-+	buf_sz = prog->len * sizeof(struct bpf_insn);
-+	memcpy(buf, prog->insnsi, buf_sz);
-+
-+	for (i = 0; i < maps->used_map_cnt; i++) {
-+		err = copy_from_bpfptr_offset(&map_fd, maps->fd_array,
-+					      maps->used_idx[i] * sizeof(map_fd),
-+					      sizeof(map_fd));
-+		if (err < 0)
-+			continue;
-+
-+		CLASS(fd, f)(map_fd);
-+		if (fd_empty(f))
-+			continue;
-+		if (unlikely(fd_file(f)->f_op != &bpf_map_fops))
-+			continue;
-+		map = fd_file(f)->private_data;
-+
-+		if (!map->frozen) {
-+			err = -EINVAL;
-+			goto out;
-+		}
-+
-+		new = krealloc(buf, buf_sz + map->value_size, GFP_KERNEL);
-+		if (!new) {
-+			err = -ENOMEM;
-+			goto out;
-+		}
-+		buf = new;
-+		new = map->ops->map_lookup_elem(map, &key);
-+		if (!new) {
-+			err = -ENOENT;
-+			goto out;
-+		}
-+		memcpy(buf + buf_sz, new, map->value_size);
-+		buf_sz += map->value_size;
-+	}
-+
-+	err = verify_pkcs7_signature(buf, buf_sz, sig, sig_len,
-+				     VERIFY_USE_SECONDARY_KEYRING,
-+				     VERIFYING_EBPF_SIGNATURE,
-+				     NULL, NULL);
-+out:
-+	kfree(buf);
-+	return err;
-+}
-+
-+static int hornet_check_binary(struct bpf_prog *prog, union bpf_attr *attr,
-+			       struct hornet_maps *maps)
-+{
-+	struct file *file;
-+	const unsigned long markerlen = sizeof(EBPF_SIG_STRING) - 1;
-+	void *buf = NULL;
-+	size_t sz = 0, sig_len, prog_len, buf_sz;
-+	int err = 0;
-+	struct module_signature sig;
-+
-+	file = get_task_exe_file(current);
-+	if (!file)
-+		return -1;
-+
-+	buf_sz = kernel_read_file(file, 0, &buf, INT_MAX, &sz, READING_EBPF);
-+	fput(file);
-+	if (!buf_sz)
-+		return -1;
-+
-+	prog_len = buf_sz;
-+
-+	if (prog_len > markerlen &&
-+	    memcmp(buf + prog_len - markerlen, EBPF_SIG_STRING, markerlen) == 0) {
-+		/* We truncate the program to discard the signature */
-+		prog_len -= markerlen;
-+		if (prog_len < sizeof(sig)) {
-+			err = -EINVAL;
-+			goto out;
-+		}
-+
-+		memcpy(&sig, buf + (prog_len - sizeof(sig)), sizeof(sig));
-+		sig_len = be32_to_cpu(sig.sig_len);
-+		prog_len -= sig_len + sizeof(sig);
-+
-+		err = mod_check_sig(&sig, prog->len * sizeof(struct bpf_insn), "ebpf");
-+		if (err)
-+			goto out;
-+
-+		err = hornet_verify_lskel(prog, maps, buf + prog_len, sig_len);
-+	} else {
-+		err = -EINVAL;
-+	}
-+out:
-+	kvfree(buf);
-+	return err;
-+}
-+
-+static int hornet_check_signature(struct bpf_prog *prog, union bpf_attr *attr,
-+				  struct bpf_token *token)
-+{
-+	struct hornet_maps maps = {0};
-+	int err;
-+
-+	/* support both sparse arrays and explicit continuous arrays of map fds */
-+	if (attr->fd_array_cnt)
-+		err = hornet_populate_fd_array(&maps, attr->fd_array_cnt);
-+	else
-+		err = hornet_find_maps(prog, &maps);
-+
-+	if (err < 0)
-+		return err;
-+
-+	maps.fd_array = make_bpfptr(attr->fd_array, false);
-+	return hornet_check_binary(prog, attr, &maps);
-+}
-+
-+static int hornet_bpf_prog_load(struct bpf_prog *prog, union bpf_attr *attr,
-+				struct bpf_token *token, bool is_kernel)
-+{
-+	if (is_kernel)
-+		return 0;
-+#ifdef CONFIG_SECURITY_HORNET_WHITELIST_PID_ONE
-+	if (current->pid == 1)
-+		return 0;
++#define _GNU_SOURCE
++#include <stdio.h>
++#include <stdlib.h>
++#include <stdint.h>
++#include <stdbool.h>
++#include <string.h>
++#include <getopt.h>
++#include <err.h>
++#include <arpa/inet.h>
++#include <openssl/opensslv.h>
++#include <openssl/bio.h>
++#include <openssl/evp.h>
++#include <openssl/pem.h>
++#include <openssl/err.h>
++#if OPENSSL_VERSION_MAJOR >= 3
++# define USE_PKCS11_PROVIDER
++# include <openssl/provider.h>
++# include <openssl/store.h>
++#else
++# if !defined(OPENSSL_NO_ENGINE) && !defined(OPENSSL_NO_DEPRECATED_3_0)
++#  define USE_PKCS11_ENGINE
++#  include <openssl/engine.h>
++# endif
 +#endif
-+	return hornet_check_signature(prog, attr, token);
++#include "../ssl-common.h"
++
++/*
++ * Use CMS if we have openssl-1.0.0 or newer available - otherwise we have to
++ * assume that it's not available and its header file is missing and that we
++ * should use PKCS#7 instead.  Switching to the older PKCS#7 format restricts
++ * the options we have on specifying the X.509 certificate we want.
++ *
++ * Further, older versions of OpenSSL don't support manually adding signers to
++ * the PKCS#7 message so have to accept that we get a certificate included in
++ * the signature message.  Nor do such older versions of OpenSSL support
++ * signing with anything other than SHA1 - so we're stuck with that if such is
++ * the case.
++ */
++#if defined(LIBRESSL_VERSION_NUMBER) || \
++	OPENSSL_VERSION_NUMBER < 0x10000000L || \
++	defined(OPENSSL_NO_CMS)
++#define USE_PKCS7
++#endif
++#ifndef USE_PKCS7
++#include <openssl/cms.h>
++#else
++#include <openssl/pkcs7.h>
++#endif
++
++struct module_signature {
++	uint8_t		algo;		/* Public-key crypto algorithm [0] */
++	uint8_t		hash;		/* Digest algorithm [0] */
++	uint8_t		id_type;	/* Key identifier type [PKEY_ID_PKCS7] */
++	uint8_t		signer_len;	/* Length of signer's name [0] */
++	uint8_t		key_id_len;	/* Length of key identifier [0] */
++	uint8_t		__pad[3];
++	uint32_t	sig_len;	/* Length of signature data */
++};
++
++#define PKEY_ID_PKCS7 2
++
++static char magic_number[] = "~eBPF signature appended~\n";
++
++static __attribute__((noreturn))
++void format(void)
++{
++	fprintf(stderr,
++		"Usage: scripts/sign-ebpf [-dp] <hash algo> <key> <x509> <bin> <loader> [<dest>]\n");
++	exit(2);
 +}
 +
-+static struct security_hook_list hornet_hooks[] __ro_after_init = {
-+	LSM_HOOK_INIT(bpf_prog_load, hornet_bpf_prog_load),
-+};
++static const char *key_pass;
 +
-+static const struct lsm_id hornet_lsmid = {
-+	.name = "hornet",
-+	.id = LSM_ID_HORNET,
-+};
-+
-+static int __init hornet_init(void)
++static int pem_pw_cb(char *buf, int len, int w, void *v)
 +{
-+	pr_info("Hornet: eBPF signature verification enabled\n");
-+	security_add_hooks(hornet_hooks, ARRAY_SIZE(hornet_hooks), &hornet_lsmid);
++	int pwlen;
++
++	if (!key_pass)
++		return -1;
++
++	pwlen = strlen(key_pass);
++	if (pwlen >= len)
++		return -1;
++
++	strcpy(buf, key_pass);
++
++	/* If it's wrong, don't keep trying it. */
++	key_pass = NULL;
++
++	return pwlen;
++}
++
++static EVP_PKEY *read_private_key_pkcs11(const char *private_key_name)
++{
++	EVP_PKEY *private_key = NULL;
++#ifdef USE_PKCS11_PROVIDER
++	OSSL_STORE_CTX *store;
++
++	if (!OSSL_PROVIDER_try_load(NULL, "pkcs11", true))
++		ERR(1, "OSSL_PROVIDER_try_load(pkcs11)");
++	if (!OSSL_PROVIDER_try_load(NULL, "default", true))
++		ERR(1, "OSSL_PROVIDER_try_load(default)");
++
++	store = OSSL_STORE_open(private_key_name, NULL, NULL, NULL, NULL);
++	ERR(!store, "OSSL_STORE_open");
++
++	while (!OSSL_STORE_eof(store)) {
++		OSSL_STORE_INFO *info = OSSL_STORE_load(store);
++
++		if (!info) {
++			drain_openssl_errors(__LINE__, 0);
++			continue;
++		}
++		if (OSSL_STORE_INFO_get_type(info) == OSSL_STORE_INFO_PKEY) {
++			private_key = OSSL_STORE_INFO_get1_PKEY(info);
++			ERR(!private_key, "OSSL_STORE_INFO_get1_PKEY");
++		}
++		OSSL_STORE_INFO_free(info);
++		if (private_key)
++			break;
++	}
++	OSSL_STORE_close(store);
++#elif defined(USE_PKCS11_ENGINE)
++	ENGINE *e;
++
++	ENGINE_load_builtin_engines();
++	drain_openssl_errors(__LINE__, 1);
++	e = ENGINE_by_id("pkcs11");
++	ERR(!e, "Load PKCS#11 ENGINE");
++	if (ENGINE_init(e))
++		drain_openssl_errors(__LINE__, 1);
++	else
++		ERR(1, "ENGINE_init");
++	if (key_pass)
++		ERR(!ENGINE_ctrl_cmd_string(e, "PIN", key_pass, 0), "Set PKCS#11 PIN");
++	private_key = ENGINE_load_private_key(e, private_key_name, NULL, NULL);
++	ERR(!private_key, "%s", private_key_name);
++#else
++	fprintf(stderr, "no pkcs11 engine/provider available\n");
++	exit(1);
++#endif
++	return private_key;
++}
++
++static EVP_PKEY *read_private_key(const char *private_key_name)
++{
++	if (!strncmp(private_key_name, "pkcs11:", 7)) {
++		return read_private_key_pkcs11(private_key_name);
++	} else {
++		EVP_PKEY *private_key;
++		BIO *b;
++
++		b = BIO_new_file(private_key_name, "rb");
++		ERR(!b, "%s", private_key_name);
++		private_key = PEM_read_bio_PrivateKey(b, NULL, pem_pw_cb,
++						      NULL);
++		ERR(!private_key, "%s", private_key_name);
++		BIO_free(b);
++
++		return private_key;
++	}
++}
++
++static X509 *read_x509(const char *x509_name)
++{
++	unsigned char buf[2];
++	X509 *x509;
++	BIO *b;
++	int n;
++
++	b = BIO_new_file(x509_name, "rb");
++	ERR(!b, "%s", x509_name);
++
++	/* Look at the first two bytes of the file to determine the encoding */
++	n = BIO_read(b, buf, 2);
++	if (n != 2) {
++		if (BIO_should_retry(b)) {
++			fprintf(stderr, "%s: Read wanted retry\n", x509_name);
++			exit(1);
++		}
++		if (n >= 0) {
++			fprintf(stderr, "%s: Short read\n", x509_name);
++			exit(1);
++		}
++		ERR(1, "%s", x509_name);
++	}
++
++	ERR(BIO_reset(b) != 0, "%s", x509_name);
++
++	if (buf[0] == 0x30 && buf[1] >= 0x81 && buf[1] <= 0x84)
++		/* Assume raw DER encoded X.509 */
++		x509 = d2i_X509_bio(b, NULL);
++	else
++		/* Assume PEM encoded X.509 */
++		x509 = PEM_read_bio_X509(b, NULL, NULL, NULL);
++
++	BIO_free(b);
++	ERR(!x509, "%s", x509_name);
++
++	return x509;
++}
++
++int main(int argc, char **argv)
++{
++	struct module_signature sig_info = { .id_type = PKEY_ID_PKCS7 };
++	char *hash_algo = NULL;
++	char *private_key_name = NULL, *raw_sig_name = NULL;
++	char *x509_name, *bin_name, *loader_name, *dest_name;
++	bool save_sig = false, replace_orig;
++	bool sign_only = false;
++	bool raw_sig = false;
++	unsigned char buf[4096];
++	unsigned long loader_size, sig_size;
++	unsigned int use_signed_attrs;
++	const EVP_MD *digest_algo;
++	EVP_PKEY *private_key;
++#ifndef USE_PKCS7
++	CMS_ContentInfo *cms = NULL;
++	unsigned int use_keyid = 0;
++#else
++	PKCS7 *pkcs7 = NULL;
++#endif
++	X509 *x509;
++	BIO *bd, *bm, *bl;
++	int opt, n;
++	OpenSSL_add_all_algorithms();
++	ERR_load_crypto_strings();
++	ERR_clear_error();
++
++	key_pass = getenv("KBUILD_SIGN_PIN");
++
++#ifndef USE_PKCS7
++	use_signed_attrs = CMS_NOATTR;
++#else
++	use_signed_attrs = PKCS7_NOATTR;
++#endif
++
++	do {
++		opt = getopt(argc, argv, "sdpk");
++		switch (opt) {
++		case 's': raw_sig = true; break;
++		case 'p': save_sig = true; break;
++		case 'd': sign_only = true; save_sig = true; break;
++#ifndef USE_PKCS7
++		case 'k': use_keyid = CMS_USE_KEYID; break;
++#endif
++		case -1: break;
++		default: format();
++		}
++	} while (opt != -1);
++
++	argc -= optind;
++	argv += optind;
++	if (argc < 5 || argc > 6)
++		format();
++
++	if (raw_sig) {
++		raw_sig_name = argv[0];
++		hash_algo = argv[1];
++	} else {
++		hash_algo = argv[0];
++		private_key_name = argv[1];
++	}
++	x509_name = argv[2];
++	bin_name = argv[3];
++	loader_name = argv[4];
++	if (argc == 6 && strcmp(argv[4], argv[5]) != 0) {
++		dest_name = argv[5];
++		replace_orig = false;
++	} else {
++		ERR(asprintf(&dest_name, "%s.~signed~", loader_name) < 0,
++		    "asprintf");
++		replace_orig = true;
++	}
++
++#ifdef USE_PKCS7
++	if (strcmp(hash_algo, "sha1") != 0) {
++		fprintf(stderr, "sign-file: %s only supports SHA1 signing\n",
++			OPENSSL_VERSION_TEXT);
++		exit(3);
++	}
++#endif
++
++	/* Open the bin file */
++	bm = BIO_new_file(bin_name, "rb");
++	ERR(!bm, "%s", bin_name);
++
++	if (!raw_sig) {
++		/* Read the private key and the X.509 cert the PKCS#7 message
++		 * will point to.
++		 */
++		private_key = read_private_key(private_key_name);
++		x509 = read_x509(x509_name);
++
++		/* Digest the module data. */
++		OpenSSL_add_all_digests();
++		drain_openssl_errors(__LINE__, 0);
++		digest_algo = EVP_get_digestbyname(hash_algo);
++		ERR(!digest_algo, "EVP_get_digestbyname");
++
++#ifndef USE_PKCS7
++		/* Load the signature message from the digest buffer. */
++		cms = CMS_sign(NULL, NULL, NULL, NULL,
++			       CMS_NOCERTS | CMS_PARTIAL | CMS_BINARY |
++			       CMS_DETACHED | CMS_STREAM);
++		ERR(!cms, "CMS_sign");
++
++		ERR(!CMS_add1_signer(cms, x509, private_key, digest_algo,
++				     CMS_NOCERTS | CMS_BINARY |
++				     CMS_NOSMIMECAP | use_keyid |
++				     use_signed_attrs),
++		    "CMS_add1_signer");
++		ERR(CMS_final(cms, bm, NULL, CMS_NOCERTS | CMS_BINARY) != 1,
++		    "CMS_final");
++
++#else
++		pkcs7 = PKCS7_sign(x509, private_key, NULL, bm,
++				   PKCS7_NOCERTS | PKCS7_BINARY |
++				   PKCS7_DETACHED | use_signed_attrs);
++		ERR(!pkcs7, "PKCS7_sign");
++#endif
++
++		if (save_sig) {
++			char *sig_file_name;
++			BIO *b;
++
++			ERR(asprintf(&sig_file_name, "%s.p7s", bin_name) < 0,
++			    "asprintf");
++			b = BIO_new_file(sig_file_name, "wb");
++			ERR(!b, "%s", sig_file_name);
++#ifndef USE_PKCS7
++			ERR(i2d_CMS_bio_stream(b, cms, NULL, 0) != 1,
++			    "%s", sig_file_name);
++#else
++			ERR(i2d_PKCS7_bio(b, pkcs7) != 1,
++			    "%s", sig_file_name);
++#endif
++			BIO_free(b);
++		}
++
++		if (sign_only) {
++			BIO_free(bm);
++			return 0;
++		}
++	}
++
++	/* Open the destination file now so that we can shovel the loader data
++	 * across as we read it.
++	 */
++	bd = BIO_new_file(dest_name, "wb");
++	ERR(!bd, "%s", dest_name);
++
++	bl = BIO_new_file(loader_name, "rb");
++	ERR(!bl, "%s", loader_name);
++
++
++	/* Append the marker and the PKCS#7 message to the destination file */
++	ERR(BIO_reset(bm) < 0, "%s", bin_name);
++	ERR(BIO_reset(bl) < 0, "%s", loader_name);
++	while ((n = BIO_read(bl, buf, sizeof(buf))),
++	       n > 0) {
++		ERR(BIO_write(bd, buf, n) < 0, "%s", dest_name);
++	}
++	BIO_free(bl);
++	BIO_free(bm);
++	ERR(n < 0, "%s", loader_name);
++	loader_size = BIO_number_written(bd);
++
++	if (!raw_sig) {
++#ifndef USE_PKCS7
++		ERR(i2d_CMS_bio_stream(bd, cms, NULL, 0) != 1, "%s", dest_name);
++#else
++		ERR(i2d_PKCS7_bio(bd, pkcs7) != 1, "%s", dest_name);
++#endif
++	} else {
++		BIO *b;
++
++		/* Read the raw signature file and write the data to the
++		 * destination file
++		 */
++		b = BIO_new_file(raw_sig_name, "rb");
++		ERR(!b, "%s", raw_sig_name);
++		while ((n = BIO_read(b, buf, sizeof(buf))), n > 0)
++			ERR(BIO_write(bd, buf, n) < 0, "%s", dest_name);
++		BIO_free(b);
++	}
++
++	sig_size = BIO_number_written(bd) - loader_size;
++	sig_info.sig_len = htonl(sig_size);
++	ERR(BIO_write(bd, &sig_info, sizeof(sig_info)) < 0, "%s", dest_name);
++	ERR(BIO_write(bd, magic_number, sizeof(magic_number) - 1) < 0, "%s", dest_name);
++
++	ERR(BIO_free(bd) != 1, "%s", dest_name);
++
++	/* Finally, if we're signing in place, replace the original. */
++	if (replace_orig)
++		ERR(rename(dest_name, loader_name) < 0, "%s", dest_name);
++
 +	return 0;
 +}
-+
-+DEFINE_LSM(hornet) = {
-+	.name = "hornet",
-+	.init = hornet_init,
-+};
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index e7a7dcab81db..901fa6574083 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -4133,7 +4133,7 @@ static int selinux_kernel_read_file(struct file *file,
- {
- 	int rc = 0;
- 
--	BUILD_BUG_ON_MSG(READING_MAX_ID > 7,
-+	BUILD_BUG_ON_MSG(READING_MAX_ID > 8,
- 			 "New kernel_read_file_id introduced; update SELinux!");
- 
- 	switch (id) {
-@@ -4158,6 +4158,10 @@ static int selinux_kernel_read_file(struct file *file,
- 		rc = selinux_kernel_load_from_file(file,
- 						SYSTEM__X509_CERTIFICATE_LOAD);
- 		break;
-+	case READING_EBPF:
-+		rc = selinux_kernel_load_from_file(file,
-+						   SYSTEM__EBPF_LOAD);
-+		break;
- 	default:
- 		break;
- 	}
-@@ -4169,7 +4173,7 @@ static int selinux_kernel_load_data(enum kernel_load_data_id id, bool contents)
- {
- 	int rc = 0;
- 
--	BUILD_BUG_ON_MSG(LOADING_MAX_ID > 7,
-+	BUILD_BUG_ON_MSG(LOADING_MAX_ID > 8,
- 			 "New kernel_load_data_id introduced; update SELinux!");
- 
- 	switch (id) {
-@@ -4195,6 +4199,10 @@ static int selinux_kernel_load_data(enum kernel_load_data_id id, bool contents)
- 		rc = selinux_kernel_load_from_file(NULL,
- 						SYSTEM__X509_CERTIFICATE_LOAD);
- 		break;
-+	case LOADING_EBPF:
-+		rc = selinux_kernel_load_from_file(NULL,
-+						   SYSTEM__EBPF_LOAD);
-+		break;
- 	default:
- 		break;
- 	}
-diff --git a/security/selinux/include/classmap.h b/security/selinux/include/classmap.h
-index 04a9b480885e..671db23451df 100644
---- a/security/selinux/include/classmap.h
-+++ b/security/selinux/include/classmap.h
-@@ -65,7 +65,7 @@ const struct security_class_mapping secclass_map[] = {
- 	  { "ipc_info", "syslog_read", "syslog_mod", "syslog_console",
- 	    "module_request", "module_load", "firmware_load",
- 	    "kexec_image_load", "kexec_initramfs_load", "policy_load",
--	    "x509_certificate_load", NULL } },
-+	    "x509_certificate_load", "ebpf_load", NULL } },
- 	{ "capability", { COMMON_CAP_PERMS, NULL } },
- 	{ "filesystem",
- 	  { "mount", "remount", "unmount", "getattr", "relabelfrom",
 -- 
 2.48.1
 
