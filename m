@@ -1,67 +1,90 @@
-Return-Path: <linux-kselftest+bounces-32221-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32224-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FC4DAA79CF
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 21:02:23 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C347FAA79E7
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 21:02:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2F8CB7B9AC5
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 19:01:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2C2E77B9BCB
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 19:01:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 615C81F1538;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A06371F4C8C;
 	Fri,  2 May 2025 19:01:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XskH4lLH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jB1YOX/W"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 132961EFF9B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 133631EFFB9;
 	Fri,  2 May 2025 19:01:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746212493; cv=none; b=YNu3w5ibo4AOSV9L/7CMmmdR1LV74Ezvey0RuFZj0NNaim8cvTxlB4naP2t9MPNzKs17O8sb/QIbRav4w/V8mhT0VzxcJWoEZE1sWOnOAbHojNx4sAeQL5VStD/9X+PlD94KWe5OdAI44pRLPBg4W5/lqMFtIIfmM/fcXG6g5Gg=
+	t=1746212493; cv=none; b=GiPxur3aLVJ/cYld5z+k6uYPeYXpeN+PKUZy1OnHqMgzwHp8IoSdv0kTmy2tuREWFWGhOdOK1EQyn0HfVUk6FP4VOWob3hWf+Py3s6dPSitkUwCXC7RU+AlGOHi6OfUUwT9wx0TjOiQR7g/T2YM79X+/ifWCu/mLq399TKa1JO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1746212493; c=relaxed/simple;
-	bh=T23nG4j/t8R/0j3qoaqTnBegm1hE55sMCs8bEgkfkMg=;
+	bh=OArrhviC9XaQ7OlcTfKqQMGsnz4armduOY/WBMGcbsA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Uw25JsE1Dvref3FgWnr7YhY3+jmw2WoLGjXxuHOk6WclA8PEWv+FDRjFZwI8jHqkf2PFArMPWigwFdTswf1ci8vCCBYkQv0OmpDvkoU4EaucNA3tw9EqyV+pv79EA73+rv3ZHp4VsGBdRoiTi0uHSdtYIOUCZScS4VVdnEHWx78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XskH4lLH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96854C4CEE4;
+	 MIME-Version; b=OyK38LUdMSeADJotum82NgzCMrBGwTMw/Hpp2DN7U0Lbce6fJqRp0JJD/eRhaCUjn/xqulfWZsC9TrDfb/D8K1sxvPJ7N+gcI5vg5dB8rc361AjOH/vg5SS1jq5R6/xq4hDu0tvYmueZaJKXHSqDZNVCAS4nc6zmRklUS4vJ94k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jB1YOX/W; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FA19C4CEED;
 	Fri,  2 May 2025 19:01:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1746212492;
-	bh=T23nG4j/t8R/0j3qoaqTnBegm1hE55sMCs8bEgkfkMg=;
+	bh=OArrhviC9XaQ7OlcTfKqQMGsnz4armduOY/WBMGcbsA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=XskH4lLHR/gzKOVgrwkXVdJ9tcwrV/12iQf3HIL+1SIOVwWhpSoK5IkDlScihb5jg
-	 +5TYEkc/LXtc6o+3IqzIB4hXJZlcbRVIYJeDPjIFtoxrUhdNwjAdTPlTIOzNu3Q90n
-	 l1ZpBp38NH+0tr3XdUjWJARD7b7WBYOyjH4B+ByrXq1dCgv5aijBlm5ig0TAoaMikM
-	 19heALSMqLj29uAXit4LuKu1ACUlAEl4QPhsmRMPACGn1EsviLZaxkh6IDiwW/DqKE
-	 rOyrVedQsjjVb1i34MHK3dU5epc8q81JphAbNXdHTmQtZmotjRTJiKw6ABNUJJouxf
-	 S3OH7kFWVKVCg==
+	b=jB1YOX/WblarlM1ru+chkUcRI7n9ViNaZEATHHCcZU9HKHkXtQaiFa1ADnnNSHEfn
+	 pxV/EexqPW/iO2BUs8r2oHGwy/9Wh+oNp1A5atSmV+xAncgPjqT8RJGnFSSHtmQkzE
+	 UPmqFqbQ6KKii/W31CNxWg7FeU4snGvlYrWtTP21uUUHLpcqwPtQxofl5x4yxEQWCa
+	 HwLSZcaV963TrPrvt3cOAxbzFvO38HxPRoaEke92VS2avjAcALnb+UJqHMA74Tz/D8
+	 JUZIkKnmwrX/2Jemco5btqwU2P3ADx4coHH+136JT/FvbSfjWd+ts9cd4ecXPSUgg3
+	 HONZP1ma8mZfQ==
 From: Kees Cook <kees@kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>
 Cc: Kees Cook <kees@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
 	x86@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	sparclinux@vger.kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Marco Elver <elver@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Kai Huang <kai.huang@intel.com>,
+	Hou Wenlong <houwenlong.hwl@antgroup.com>,
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
 	linux-kbuild@vger.kernel.org,
+	kasan-dev@googlegroups.com,
 	linux-hardening@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-doc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
 	kvmarm@lists.linux.dev,
 	linux-riscv@lists.infradead.org,
 	linux-s390@vger.kernel.org,
 	linux-efi@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	kasan-dev@googlegroups.com,
+	sparclinux@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH RFC 3/4] stackleak: Split STACKLEAK_CFLAGS from GCC_PLUGINS_CFLAGS
-Date: Fri,  2 May 2025 12:01:26 -0700
-Message-Id: <20250502190129.246328-3-kees@kernel.org>
+Subject: [PATCH RFC 4/4] stackleak: Support Clang stack depth tracking
+Date: Fri,  2 May 2025 12:01:27 -0700
+Message-Id: <20250502190129.246328-4-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250502185834.work.560-kees@kernel.org>
 References: <20250502185834.work.560-kees@kernel.org>
@@ -71,126 +94,121 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5846; i=kees@kernel.org; h=from:subject; bh=T23nG4j/t8R/0j3qoaqTnBegm1hE55sMCs8bEgkfkMg=; b=owGbwMvMwCVmps19z/KJym7G02pJDBmiYm0985ZPL8tL9j7QeF5dfLXQKaEXKszinZxbNO7FG HvMXX2go5SFQYyLQVZMkSXIzj3OxeNte7j7XEWYOaxMIEMYuDgFYCJlfxkZ7p7ujPW8PMHYrmTJ QnPBjkyu7pIXX6edPv1JZqlzjQPTHYY/HIvF3iRMfnLp6ZKpIo5GKTorNCf0GBx9eGzjYm2T6Ua OnAA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4716; i=kees@kernel.org; h=from:subject; bh=OArrhviC9XaQ7OlcTfKqQMGsnz4armduOY/WBMGcbsA=; b=owGbwMvMwCVmps19z/KJym7G02pJDBmiYm0eHYd/KD+/YrfhHLPdHAslHi9Fd//IiqqD/4I25 j38J1nZUcrCIMbFICumyBJk5x7n4vG2Pdx9riLMHFYmkCEMXJwCMBGBJYwMGxO93eMPrlt+5Jzt Oot7p+4nLPDlKnhnYFtxdhXvk+VS/Ax/Bd/vvaSguOh3WEFqRfyd1+x1/pxfFHj2REh++SY+fVI 9DwA=
 X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
-In preparation for Clang stack depth tracking for stackleak, split the
-stackleak-specific cflags out of GCC_PLUGINS_CFLAGS into
-STACKLEAK_CFLAGS.
+Wire up stackleak to Clang's proposed[1] stack depth tracking callback
+option. While __noinstr already contained __no_sanitize_coverage, it was
+still needed for __init and __head section markings. This is needed to
+make sure the callback is not executed in unsupported contexts.
 
+Link: https://github.com/llvm/llvm-project/pull/138323 [1]
 Signed-off-by: Kees Cook <kees@kernel.org>
 ---
 Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
 Cc: <x86@kernel.org>
-Cc: <linux-arm-kernel@lists.infradead.org>
-Cc: <sparclinux@vger.kernel.org>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nicolas Schier <nicolas.schier@linux.dev>
+Cc: Marco Elver <elver@google.com>
+Cc: Andrey Konovalov <andreyknvl@gmail.com>
+Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: Paul Moore <paul@paul-moore.com>
+Cc: James Morris <jmorris@namei.org>
+Cc: "Serge E. Hallyn" <serge@hallyn.com>
+Cc: Kai Huang <kai.huang@intel.com>
+Cc: Hou Wenlong <houwenlong.hwl@antgroup.com>
+Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Cc: Sami Tolvanen <samitolvanen@google.com>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
 Cc: <linux-kbuild@vger.kernel.org>
+Cc: <kasan-dev@googlegroups.com>
 Cc: <linux-hardening@vger.kernel.org>
+Cc: <linux-security-module@vger.kernel.org>
 ---
- arch/arm/vdso/Makefile          |  2 +-
- arch/arm64/kernel/vdso/Makefile |  1 +
- arch/sparc/vdso/Makefile        |  3 ++-
- arch/x86/entry/vdso/Makefile    |  3 ++-
- scripts/Makefile.gcc-plugins    | 11 ++++++-----
- 5 files changed, 12 insertions(+), 8 deletions(-)
+ arch/x86/include/asm/init.h |  2 +-
+ include/linux/init.h        |  4 +++-
+ scripts/Makefile.ubsan      | 12 ++++++++++++
+ security/Kconfig.hardening  |  5 ++++-
+ 4 files changed, 20 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm/vdso/Makefile b/arch/arm/vdso/Makefile
-index cb044bfd145d..92748e341b7d 100644
---- a/arch/arm/vdso/Makefile
-+++ b/arch/arm/vdso/Makefile
-@@ -26,7 +26,7 @@ CPPFLAGS_vdso.lds += -P -C -U$(ARCH)
- CFLAGS_REMOVE_vdso.o = -pg
+diff --git a/arch/x86/include/asm/init.h b/arch/x86/include/asm/init.h
+index 8b1b1abcef15..6bfdaeddbae8 100644
+--- a/arch/x86/include/asm/init.h
++++ b/arch/x86/include/asm/init.h
+@@ -5,7 +5,7 @@
+ #if defined(CONFIG_CC_IS_CLANG) && CONFIG_CLANG_VERSION < 170000
+ #define __head	__section(".head.text") __no_sanitize_undefined __no_stack_protector
+ #else
+-#define __head	__section(".head.text") __no_sanitize_undefined
++#define __head	__section(".head.text") __no_sanitize_undefined __no_sanitize_coverage
+ #endif
  
- # Force -O2 to avoid libgcc dependencies
--CFLAGS_REMOVE_vgettimeofday.o = -pg -Os $(RANDSTRUCT_CFLAGS) $(GCC_PLUGINS_CFLAGS)
-+CFLAGS_REMOVE_vgettimeofday.o = -pg -Os $(RANDSTRUCT_CFLAGS) $(GCC_PLUGINS_CFLAGS) $(STACKLEAK_CFLAGS)
- ifeq ($(c-gettimeofday-y),)
- CFLAGS_vgettimeofday.o = -O2
- else
-diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/Makefile
-index 5e27e46aa496..fb17749b93cf 100644
---- a/arch/arm64/kernel/vdso/Makefile
-+++ b/arch/arm64/kernel/vdso/Makefile
-@@ -37,6 +37,7 @@ ccflags-y += -DDISABLE_BRANCH_PROFILING -DBUILD_VDSO
- # the CFLAGS to make possible to build the kernel with CONFIG_WERROR enabled.
- CC_FLAGS_REMOVE_VDSO := $(CC_FLAGS_FTRACE) -Os $(CC_FLAGS_SCS) \
- 			$(RANDSTRUCT_CFLAGS) $(GCC_PLUGINS_CFLAGS) \
-+			$(STACKLEAK_CFLAGS) \
- 			$(CC_FLAGS_LTO) $(CC_FLAGS_CFI) \
- 			-Wmissing-prototypes -Wmissing-declarations
+ struct x86_mapping_info {
+diff --git a/include/linux/init.h b/include/linux/init.h
+index ee1309473bc6..c65a050d52a7 100644
+--- a/include/linux/init.h
++++ b/include/linux/init.h
+@@ -49,7 +49,9 @@
  
-diff --git a/arch/sparc/vdso/Makefile b/arch/sparc/vdso/Makefile
-index fdc4a8f5a49c..162a0235f41f 100644
---- a/arch/sparc/vdso/Makefile
-+++ b/arch/sparc/vdso/Makefile
-@@ -48,7 +48,7 @@ CFL := $(PROFILING) -mcmodel=medlow -fPIC -O2 -fasynchronous-unwind-tables -m64
+ /* These are for everybody (although not all archs will actually
+    discard it in modules) */
+-#define __init		__section(".init.text") __cold  __latent_entropy __noinitretpoline
++#define __init		__section(".init.text") __cold __latent_entropy	\
++						__noinitretpoline	\
++						__no_sanitize_coverage
+ #define __initdata	__section(".init.data")
+ #define __initconst	__section(".init.rodata")
+ #define __exitdata	__section(".exit.data")
+diff --git a/scripts/Makefile.ubsan b/scripts/Makefile.ubsan
+index 9e35198edbf0..cfb3ecde07dd 100644
+--- a/scripts/Makefile.ubsan
++++ b/scripts/Makefile.ubsan
+@@ -22,3 +22,15 @@ ubsan-integer-wrap-cflags-$(CONFIG_UBSAN_INTEGER_WRAP)     +=	\
+ 	-fsanitize=implicit-unsigned-integer-truncation		\
+ 	-fsanitize-ignorelist=$(srctree)/scripts/integer-wrap-ignore.scl
+ export CFLAGS_UBSAN_INTEGER_WRAP := $(ubsan-integer-wrap-cflags-y)
++
++ifdef CONFIG_CC_IS_CLANG
++stackleak-cflags-$(CONFIG_STACKLEAK)	+=	\
++	-fsanitize-coverage=stack-depth		\
++	-fsanitize-coverage-stack-depth-callback-min=$(CONFIG_STACKLEAK_TRACK_MIN_SIZE)
++export STACKLEAK_CFLAGS := $(stackleak-cflags-y)
++ifdef CONFIG_STACKLEAK
++    DISABLE_STACKLEAK		:= -fno-sanitize-coverage=stack-depth
++endif
++export DISABLE_STACKLEAK
++KBUILD_CFLAGS += $(STACKLEAK_CFLAGS)
++endif
+diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
+index edcc489a6805..e86b61e44b33 100644
+--- a/security/Kconfig.hardening
++++ b/security/Kconfig.hardening
+@@ -158,10 +158,13 @@ config GCC_PLUGIN_STRUCTLEAK_VERBOSE
+ 	  initialized. Since not all existing initializers are detected
+ 	  by the plugin, this can produce false positive warnings.
  
- SPARC_REG_CFLAGS = -ffixed-g4 -ffixed-g5 $(call cc-option,-fcall-used-g5) $(call cc-option,-fcall-used-g7)
- 
--$(vobjs): KBUILD_CFLAGS := $(filter-out $(RANDSTRUCT_CFLAGS) $(GCC_PLUGINS_CFLAGS) $(SPARC_REG_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
-+$(vobjs): KBUILD_CFLAGS := $(filter-out $(RANDSTRUCT_CFLAGS) $(GCC_PLUGINS_CFLAGS) $(STACKLEAK_CFLAGS) $(SPARC_REG_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
- 
- #
- # vDSO code runs in userspace and -pg doesn't help with profiling anyway.
-@@ -80,6 +80,7 @@ KBUILD_CFLAGS_32 := $(filter-out -mcmodel=medlow,$(KBUILD_CFLAGS_32))
- KBUILD_CFLAGS_32 := $(filter-out -fno-pic,$(KBUILD_CFLAGS_32))
- KBUILD_CFLAGS_32 := $(filter-out $(RANDSTRUCT_CFLAGS),$(KBUILD_CFLAGS_32))
- KBUILD_CFLAGS_32 := $(filter-out $(GCC_PLUGINS_CFLAGS),$(KBUILD_CFLAGS_32))
-+KBUILD_CFLAGS_32 := $(filter-out $(STACKLEAK_CFLAGS),$(KBUILD_CFLAGS_32))
- KBUILD_CFLAGS_32 := $(filter-out $(SPARC_REG_CFLAGS),$(KBUILD_CFLAGS_32))
- KBUILD_CFLAGS_32 += -m32 -msoft-float -fpic
- KBUILD_CFLAGS_32 += -fno-stack-protector
-diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
-index 54d3e9774d62..cd5249b6ef84 100644
---- a/arch/x86/entry/vdso/Makefile
-+++ b/arch/x86/entry/vdso/Makefile
-@@ -62,7 +62,7 @@ ifneq ($(RETPOLINE_VDSO_CFLAGS),)
- endif
- endif
- 
--$(vobjs): KBUILD_CFLAGS := $(filter-out $(PADDING_CFLAGS) $(CC_FLAGS_LTO) $(CC_FLAGS_CFI) $(RANDSTRUCT_CFLAGS) $(GCC_PLUGINS_CFLAGS) $(RETPOLINE_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
-+$(vobjs): KBUILD_CFLAGS := $(filter-out $(PADDING_CFLAGS) $(CC_FLAGS_LTO) $(CC_FLAGS_CFI) $(RANDSTRUCT_CFLAGS) $(GCC_PLUGINS_CFLAGS) $(STACKLEAK_CFLAGS) $(RETPOLINE_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
- $(vobjs): KBUILD_AFLAGS += -DBUILD_VDSO
- 
- #
-@@ -124,6 +124,7 @@ KBUILD_CFLAGS_32 := $(filter-out -fno-pic,$(KBUILD_CFLAGS_32))
- KBUILD_CFLAGS_32 := $(filter-out -mfentry,$(KBUILD_CFLAGS_32))
- KBUILD_CFLAGS_32 := $(filter-out $(RANDSTRUCT_CFLAGS),$(KBUILD_CFLAGS_32))
- KBUILD_CFLAGS_32 := $(filter-out $(GCC_PLUGINS_CFLAGS),$(KBUILD_CFLAGS_32))
-+KBUILD_CFLAGS_32 := $(filter-out $(STACKLEAK_CFLAGS),$(KBUILD_CFLAGS_32))
- KBUILD_CFLAGS_32 := $(filter-out $(RETPOLINE_CFLAGS),$(KBUILD_CFLAGS_32))
- KBUILD_CFLAGS_32 := $(filter-out $(CC_FLAGS_LTO),$(KBUILD_CFLAGS_32))
- KBUILD_CFLAGS_32 := $(filter-out $(CC_FLAGS_CFI),$(KBUILD_CFLAGS_32))
-diff --git a/scripts/Makefile.gcc-plugins b/scripts/Makefile.gcc-plugins
-index e3ed92e20d16..398b70e2d270 100644
---- a/scripts/Makefile.gcc-plugins
-+++ b/scripts/Makefile.gcc-plugins
-@@ -23,18 +23,19 @@ gcc-plugin-cflags-$(CONFIG_GCC_PLUGIN_STRUCTLEAK)		\
- 		+= -DSTRUCTLEAK_PLUGIN
- 
- gcc-plugin-$(CONFIG_GCC_PLUGIN_STACKLEAK)	+= stackleak_plugin.so
--gcc-plugin-cflags-$(CONFIG_GCC_PLUGIN_STACKLEAK)		\
-+gcc-plugin-stackleak-cflags-$(CONFIG_GCC_PLUGIN_STACKLEAK)		\
- 		+= -DSTACKLEAK_PLUGIN
--gcc-plugin-cflags-$(CONFIG_GCC_PLUGIN_STACKLEAK)		\
-+gcc-plugin-stackleak-cflags-$(CONFIG_GCC_PLUGIN_STACKLEAK)		\
- 		+= -fplugin-arg-stackleak_plugin-track-min-size=$(CONFIG_STACKLEAK_TRACK_MIN_SIZE)
--gcc-plugin-cflags-$(CONFIG_GCC_PLUGIN_STACKLEAK)		\
-+gcc-plugin-stackleak-cflags-$(CONFIG_GCC_PLUGIN_STACKLEAK)		\
- 		+= -fplugin-arg-stackleak_plugin-arch=$(SRCARCH)
--gcc-plugin-cflags-$(CONFIG_GCC_PLUGIN_STACKLEAK_VERBOSE)	\
-+gcc-plugin-stackleak-cflags-$(CONFIG_GCC_PLUGIN_STACKLEAK_VERBOSE)	\
- 		+= -fplugin-arg-stackleak_plugin-verbose
- ifdef CONFIG_GCC_PLUGIN_STACKLEAK
-+    STACKLEAK_CFLAGS = $(gcc-plugin-stackleak-cflags-y)
-     DISABLE_STACKLEAK += -fplugin-arg-stackleak_plugin-disable
- endif
--export DISABLE_STACKLEAK
-+export STACKLEAK_CFLAGS DISABLE_STACKLEAK
- 
- gcc-plugin-$(CONFIG_GCC_PLUGIN_ARM_SSP_PER_TASK) += arm_ssp_per_task_plugin.so
- ifdef CONFIG_GCC_PLUGIN_ARM_SSP_PER_TASK
++config CC_HAS_SANCOV_STACK_DEPTH_CALLBACK
++	def_bool $(cc-option,-fsanitize-coverage-stack-depth-callback-min=1)
++
+ config STACKLEAK
+ 	bool "Poison kernel stack before returning from syscalls"
+ 	depends on HAVE_ARCH_STACKLEAK
+-	depends on GCC_PLUGINS
++	depends on GCC_PLUGINS || CC_HAS_SANCOV_STACK_DEPTH_CALLBACK
+ 	help
+ 	  This option makes the kernel erase the kernel stack before
+ 	  returning from system calls. This has the effect of leaving
 -- 
 2.34.1
 
