@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-32232-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32233-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42336AA7B9C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 23:53:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B022AA7BA0
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 23:53:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DFC961B63959
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 21:53:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC0344A8733
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 21:53:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE1DF221FD8;
-	Fri,  2 May 2025 21:52:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52FB6225A29;
+	Fri,  2 May 2025 21:52:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cYJxa0fO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cSw+oRn5"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C7A8221F21;
-	Fri,  2 May 2025 21:52:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21B70219E93;
+	Fri,  2 May 2025 21:52:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746222722; cv=none; b=ZurvBqxx+aBVP6qVKS9Xfe4d8zRz2o1jGqWavULApm32g9CmhlIlXn0+FKu9As5RZ8swTnW7dk9YcSBl85DnCtx9/ZeC4MPrCoiP8DNXXQVhXbDjaKAgzQhzid9P0Gv0fhjTmLSrzjSt/woIo5nlalYS359GoraDogYncvQA508=
+	t=1746222727; cv=none; b=HYHiD2ETPiTQTmPreIf2HyhmPWya/h213/8L7HXHbYRpQNfOyI44E6mt05/HRT++gv/dzJS3oF5lPLsdNSkTwsGJ6crr98kGcKQPXdDBxO2VHwe0JV4pjxOy3ZxOHu9h2BwZtJTxGThlNp2CTt78+VEHS4FjAvmiAkIyWuYiT9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746222722; c=relaxed/simple;
-	bh=Ywzns9kdzvgchDQq8gUskAhoVH1XxfCbNL7gC5kzNDM=;
+	s=arc-20240116; t=1746222727; c=relaxed/simple;
+	bh=YG1y6vcd/mwrVWGLSsGMxcKcSqp12PyuG/HK1WrSQL4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=T4g6JTjkca8dcivixdrb6yJzPfUGRSfTV7Eebvjn7ocvBKOuxo4hvQzFcQt5F12QA5eFIlZNuUYjLL87115tcrcdAManoe3hbcHGJJ/Q/tBc2ewvzua7LOy/grWX1UP6F1EDESskVUCsi8SymungQhAQTvWVSAusXPjdRPk6J38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cYJxa0fO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D19A2C4CEEB;
-	Fri,  2 May 2025 21:51:57 +0000 (UTC)
+	 MIME-Version; b=BiuN2Gi53y1DW/LlMScHGUfs8QWzK1uHTdF6jj7A/mzknji8Ioau8sT6LThSOkCiNLiaStwYONCMFL5uU9v2YAP0142YAjGGDbP5/nc99UC3ugDKbi0h22TY3A1k5wYxbM/2/Gqf6z5b8f/wwk3Q8CEoSCseuoYAQySfXTVaUc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cSw+oRn5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 798E6C4CEE4;
+	Fri,  2 May 2025 21:52:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746222722;
-	bh=Ywzns9kdzvgchDQq8gUskAhoVH1XxfCbNL7gC5kzNDM=;
+	s=k20201202; t=1746222726;
+	bh=YG1y6vcd/mwrVWGLSsGMxcKcSqp12PyuG/HK1WrSQL4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=cYJxa0fOKQNQqSN0tZ1fD5HfOhHC4111Fosluxj856LqCVvm1i0bw/BiMz2LGr1Cq
-	 dtCFMp+b+4N272rKP6CvTAWLgArXYlUCpxw74GwvqQMyAvh2ofbie1Dn2Bp1Zdd28c
-	 Lqzt0u3WyEPFJmv3Wig1dGARB0gwhirUFUimzNMcx3P9ugogPciIevNdC4WYrfA9fc
-	 EaVwygKjs3rpK1s4gvezw8Z9qic4K307JQTj2C2V2EBgGYx0odRCeFvOcWklajdt61
-	 OUQfDlAj2OIjTrqRCHYKb/NJOOvtYc+DTFZA3LTDWdnOymVpcpZi9B+0/NJL6ME++R
-	 WnFvWCd66PhXA==
+	b=cSw+oRn5Ywhz2iT8S9ASiK4VzgoAVpw+bnbGyLDaR7N2jRdI8iuMxfaQqOx3P1zj+
+	 YCEiRO5LUv90Ccd4VyPknQEW8YC897iSA35Amv0Xgv2bqDzKx7rjg5u1GuBPXo2tW8
+	 7GXRpncRHRme7HGbSGhw8aMQMwAn6j35FBqSuXdLLNo2xhrPdkr/Uv0SKHjNCeleU/
+	 nN98wg6/+3PZuZ0UBAeBZfAhhzWurcfiGH24kuDMXFwjac2cBssVa+V+cthr4UHWeG
+	 3fpxKm+RuQkhG4KbH8za53psCxPgK73vHqyxS3Urx6Uj8JNkvKMg5Is+iDB8pbwNeH
+	 M5HeJXaHgPNTQ==
 From: Miguel Ojeda <ojeda@kernel.org>
 To: Brendan Higgins <brendan.higgins@linux.dev>,
 	David Gow <davidgow@google.com>,
@@ -60,9 +60,9 @@ Cc: Rae Moar <rmoar@google.com>,
 	rust-for-linux@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	patches@lists.linux.dev
-Subject: [PATCH 3/7] rust: add `kunit_tests` to the prelude
-Date: Fri,  2 May 2025 23:51:28 +0200
-Message-ID: <20250502215133.1923676-4-ojeda@kernel.org>
+Subject: [PATCH 4/7] rust: str: convert `rusttest` tests into KUnit
+Date: Fri,  2 May 2025 23:51:29 +0200
+Message-ID: <20250502215133.1923676-5-ojeda@kernel.org>
 In-Reply-To: <20250502215133.1923676-1-ojeda@kernel.org>
 References: <20250502215133.1923676-1-ojeda@kernel.org>
 Precedence: bulk
@@ -73,67 +73,53 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-It is convenient to have certain things in the `kernel` prelude, and
-means kernel developers will find it even easier to start writing tests.
+In general, we should aim to test as much as possible within the actual
+kernel, and not in the build host.
 
-And, anyway, nobody should need to use this identifier for anything else.
-
-Thus add it to the prelude.
+Thus convert these `rusttest` tests into KUnit tests.
 
 Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 ---
- rust/kernel/kunit.rs   | 3 +--
- rust/kernel/prelude.rs | 2 +-
- rust/macros/lib.rs     | 2 +-
- 3 files changed, 3 insertions(+), 4 deletions(-)
+ rust/kernel/str.rs | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
-index f43e3ed460c2..053a7da147d5 100644
---- a/rust/kernel/kunit.rs
-+++ b/rust/kernel/kunit.rs
-@@ -6,6 +6,7 @@
- //!
- //! Reference: <https://docs.kernel.org/dev-tools/kunit/index.html>
+diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
+index 878111cb77bc..cf2caa2db168 100644
+--- a/rust/kernel/str.rs
++++ b/rust/kernel/str.rs
+@@ -6,7 +6,7 @@
+ use core::fmt::{self, Write};
+ use core::ops::{self, Deref, DerefMut, Index};
  
+-use crate::error::{code::*, Error};
 +use crate::prelude::*;
- use core::{ffi::c_void, fmt};
  
- /// Prints a KUnit error-level message.
-@@ -40,8 +41,6 @@ pub fn info(args: fmt::Arguments<'_>) {
-     }
+ /// Byte string without UTF-8 validity guarantee.
+ #[repr(transparent)]
+@@ -572,8 +572,7 @@ macro_rules! c_str {
+     }};
  }
  
--use macros::kunit_tests;
--
- /// Asserts that a boolean expression is `true` at runtime.
- ///
- /// Public but hidden since it should only be used from generated tests.
-diff --git a/rust/kernel/prelude.rs b/rust/kernel/prelude.rs
-index baa774a351ce..e5d61a83952f 100644
---- a/rust/kernel/prelude.rs
-+++ b/rust/kernel/prelude.rs
-@@ -17,7 +17,7 @@
- pub use crate::alloc::{flags::*, Box, KBox, KVBox, KVVec, KVec, VBox, VVec, Vec};
+-#[cfg(test)]
+-#[expect(clippy::items_after_test_module)]
++#[kunit_tests(rust_kernel_str)]
+ mod tests {
+     use super::*;
  
- #[doc(no_inline)]
--pub use macros::{export, module, vtable};
-+pub use macros::{export, kunit_tests, module, vtable};
+@@ -622,11 +621,10 @@ fn test_cstr_to_str() {
+     }
  
- pub use pin_init::{init, pin_data, pin_init, pinned_drop, InPlaceWrite, Init, PinInit, Zeroable};
+     #[test]
+-    #[should_panic]
+-    fn test_cstr_to_str_panic() {
++    fn test_cstr_to_str_invalid_utf8() {
+         let bad_bytes = b"\xc3\x28\0";
+         let checked_cstr = CStr::from_bytes_with_nul(bad_bytes).unwrap();
+-        checked_cstr.to_str().unwrap();
++        assert!(checked_cstr.to_str().is_err());
+     }
  
-diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
-index 8bd7906276be..8b8d46e759d4 100644
---- a/rust/macros/lib.rs
-+++ b/rust/macros/lib.rs
-@@ -406,7 +406,7 @@ pub fn paste(input: TokenStream) -> TokenStream {
- /// # Examples
- ///
- /// ```ignore
--/// # use macros::kunit_tests;
-+/// # use kernel::prelude::*;
- /// #[kunit_tests(kunit_test_suit_name)]
- /// mod tests {
- ///     #[test]
+     #[test]
 -- 
 2.49.0
 
