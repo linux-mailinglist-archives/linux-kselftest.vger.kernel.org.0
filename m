@@ -1,60 +1,61 @@
-Return-Path: <linux-kselftest+bounces-32149-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32150-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14E84AA6A00
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 07:05:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 904F8AA6A03
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 07:05:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DF4C07A996D
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 05:03:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 26CC37A99CD
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 05:04:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22CCC1A2389;
-	Fri,  2 May 2025 05:04:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0A9A1C5D59;
+	Fri,  2 May 2025 05:04:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="RoGqcxOp"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="apvOky7G"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2043.outbound.protection.outlook.com [40.107.237.43])
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2071.outbound.protection.outlook.com [40.107.243.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A8934C8E;
-	Fri,  2 May 2025 05:04:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83B521AA1DB;
+	Fri,  2 May 2025 05:04:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.71
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746162288; cv=fail; b=LtQyHWDPnLSIxM/pyCxStNS1DqGMdW0LUBToD1My04795Ag2yfMZU/Fo0eYCsgsJWk6D4WnnA/ZtADxybG6t2pq2phxIGtUrJTfYg/ojU5LMJRkGEVSF9iSQHoKUxsypzfzU6kxwTIGzo3w5pCPJfn0gmG3OlHcUZa1tgZFkcyo=
+	t=1746162298; cv=fail; b=ip6E76ICLKn1vsECKcWVk/3TH9EQ7lOLMnoZwhsNuso+nBx9zW9EBkzYi4rFpSCe+sGzukpXTX/tNjJpGMBONkBwLkD5VM8O85H5G+3rQ4jBF1F/A8QHW59N0EZZAEzWN1OWdTkMbkGS9FR2ZbythjEYpCIDQunh2VmGyhDISdQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746162288; c=relaxed/simple;
-	bh=kDuAmo48n0iggO15DroWMk48JW6sWj1GmXbVemG9uuU=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=FjG1AAVcQ61DFCdL4xgAu1bo4sn/O9Go/97QPlie+q5mLHlDMNaSUu3kb3SRA/PvRSg5+Pxjy+PVwqoLySMGLrwh0wKNiLdKtABUxW6uFMviQWusImNduHQDQkvm/g1dNSTaVtIEuxZydAMu8Lw8yKnFotZBCElIyrbQPa0F09Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=RoGqcxOp; arc=fail smtp.client-ip=40.107.237.43
+	s=arc-20240116; t=1746162298; c=relaxed/simple;
+	bh=bJN5/Zws8fi2JRwKAOeTQ0tm0I3Yw4NBeWBiHkAucQM=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tqa2MORLPrt2RLzEgkz1xaqxcTuJjL6PRWA8HsCxd7pAoFsQav6F+K73t3E8wDHx2yOWwoDZf2X5B1ZMgFMBHPTxvO1Ikhtdh947sZ5nH8hJwUqJD81Z1OJVRiPQMxyWkjYh67btT+rdzXxMcLYbbha1T2m+Vg+eRbcZOVbVXFc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=apvOky7G; arc=fail smtp.client-ip=40.107.243.71
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=y39cxhQhCJxEy+Y2PP4WPmeBdlQBMNKij8AqteLwzu14I+Q5DAscB7fU1JDrTZrUvYo6mbb5CKgqe0f4yKT7o8JyMq38KOaRhvQBFnMlKEBv27Dk7mpx+3R8TEgx92b3+kdcGYtaoRXbM3shNu0zhvFuEzgziy7FtAuxX8WAb7jB+esFNdIWiXj8jaALlcmwBd0v9YvF52KKjoE/1j+YBwTsXHRGtmSvlmfIvHqc1ZmkwnuRHe633wVyugz/ASNKE8TtnHt64F1WwZ2a7kiMX/xVicrYVd4zz8YmTqCJf5QxjHmmrYQMrbuX892EzJRk6Gm9nAjtIzcxQajbilNgeA==
+ b=om3lDyM4nkkD3mCzAl7xX4dmE4ke+q++9iDoDC1pGD/NC+SASiq4Ad86L31qZXSwArDZGMrgZG4AGSMDTA6AeEc7byt8dbncDk5kaOq/0OHhe2pFzA2Nekq5oIW8YXVVCfZLWJFIj5c9EDHVRIhfVUiPzyDxF8hTxyJYosYZHVacOTL7iAd9zlA8SB9jlqCHunfSBPKRpH98FFGf6MPheY4/EK4lXztXH/JqUhx/lke4/U1AZ5S6cco+dXo1DQfmtNdK6bXgAPe5iW3/koflFToD3v56Xc2EF0J0OU0uv5UQiFHm62w/JLdeWvDqm3SLdIZ+Cx/Yv+UEzxOMEusJig==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qK6G5Yy2Y2FYGmENZ29WU3HPEEUcS7ZkxscsZ78Aa4s=;
- b=SA/EGpJ07yFpXaRuVHSC4kqs30qhJmYgYxYZXsjj6Jsg73SJIi7gmaT2E3f6Qm+EcsaTWO+Ji32y0dq0kHYuvOZp2LLfidgwrT4IxW6x/mJ22lxgju+EFRgpiWX0CvdbCM2w/BXBh98fgPYGnNJ55SW0CTx/JUFAGyBcSwzB5Vm1jp2jjKuJ07CkMn0jEFIRPmK/tGmAzDT3QI9XaErSvC2w3A/59hZKpHV6CUjB6auW694NRF8zUB/ZpkLUm2Qy0oJ/y0E9Z/3QJDrrJ7OI34T44ejwTxCw/qjQqa7Denfji0AwrkcE8VrGcsnJdXX9d3+9EdSYKxTwTJzKZOim8g==
+ bh=+IPSlJPf8gTEyV8GJUuHTgapgbd285Xpys/9Qs+iy1s=;
+ b=uiEJbVB74B9z8TD9i9zrgDNuVwNvk+fwoRpYJUyzMG8Ejfn+dFknJ94JLo0DBmx7Of3AhIiAYgieFA0OXtHQw0QnjzVGHEQyBL7+t/Xe9B6PLb0PzQcaNb1WlXLQRD7mIt9mRYA3bVj/SPZ8Zf+ujaOd7Bu8SKj47XuIdFZGpBmx3XUdIfJLb4LBjgZUiYyp0psFo4qiKMxuCfS3ljkHYiRfMGJGYYH4Pb0VOUZefe2MW/ZSso6QxBWfa+uVawXWNlAOU3EfqQtulSQGS5gT7WpRXlxBZxjnluL8a8VceTpIiCX4730nuBdKOAwtc17PCbFeqF3qXn7qkm3FqoKNGQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qK6G5Yy2Y2FYGmENZ29WU3HPEEUcS7ZkxscsZ78Aa4s=;
- b=RoGqcxOprkXY8r/Lce9t7+b1fqI8/9ddX6gCQZRI7yvHcJgX+zcOhwLksCgHlVimuZFhPHhJUarZ0sptSiGYwX+wqjvL71ZHSTgGKqF0n7fdUYtyrMjNDpRzeY/dodwr4VP38/kvoj+w1g0chq8GunPr3yIOsibogHULt0GaOcg=
-Received: from BN0PR08CA0003.namprd08.prod.outlook.com (2603:10b6:408:142::19)
- by SN7PR12MB8060.namprd12.prod.outlook.com (2603:10b6:806:343::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8699.21; Fri, 2 May
- 2025 05:04:12 +0000
-Received: from BL02EPF0001A101.namprd05.prod.outlook.com
- (2603:10b6:408:142:cafe::b0) by BN0PR08CA0003.outlook.office365.com
- (2603:10b6:408:142::19) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8699.24 via Frontend Transport; Fri,
- 2 May 2025 05:04:12 +0000
+ bh=+IPSlJPf8gTEyV8GJUuHTgapgbd285Xpys/9Qs+iy1s=;
+ b=apvOky7GCAvFztLlzAvewf080bRmj5Y7LSc3uma/LTOWsNh3uE8pUq3bCrrJsC/AzN6SS9+2TuTjx1W+V39rcJA9YWhQY1MbqPwP8IAR0M48yOlOB10m8e/FDd/xDboFE2FgivdLOnL87We26iYxMP4DgO8h+2XgTtkkFp+G66o=
+Received: from BL6PEPF00013E0B.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:22e:400:0:1001:0:10) by DS0PR12MB8248.namprd12.prod.outlook.com
+ (2603:10b6:8:f3::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8699.19; Fri, 2 May
+ 2025 05:04:19 +0000
+Received: from BL02EPF0001A106.namprd05.prod.outlook.com
+ (2a01:111:f403:c922::3) by BL6PEPF00013E0B.outlook.office365.com
+ (2603:1036:903:4::4) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8655.35 via Frontend Transport; Fri,
+ 2 May 2025 05:04:19 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -62,21 +63,23 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BL02EPF0001A101.mail.protection.outlook.com (10.167.241.132) with Microsoft
+ BL02EPF0001A106.mail.protection.outlook.com (10.167.241.139) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8699.20 via Frontend Transport; Fri, 2 May 2025 05:04:12 +0000
+ 15.20.8699.20 via Frontend Transport; Fri, 2 May 2025 05:04:19 +0000
 Received: from brahmaputra.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 2 May
- 2025 00:04:02 -0500
+ 2025 00:04:09 -0500
 From: Manali Shukla <manali.shukla@amd.com>
 To: <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
 CC: <seanjc@google.com>, <pbonzini@redhat.com>, <nikunj@amd.com>,
 	<manali.shukla@amd.com>, <bp@alien8.de>
-Subject: [PATCH v5 0/5] Add support for the Bus Lock Threshold
-Date: Fri, 2 May 2025 05:03:41 +0000
-Message-ID: <20250502050346.14274-1-manali.shukla@amd.com>
+Subject: [PATCH v5 1/5] KVM: x86: Make kvm_pio_request.linear_rip a common field for user exits
+Date: Fri, 2 May 2025 05:03:42 +0000
+Message-ID: <20250502050346.14274-2-manali.shukla@amd.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250502050346.14274-1-manali.shukla@amd.com>
+References: <20250502050346.14274-1-manali.shukla@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -89,163 +92,127 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF0001A101:EE_|SN7PR12MB8060:EE_
-X-MS-Office365-Filtering-Correlation-Id: ee228768-5fb8-41dd-63cf-08dd8936c742
+X-MS-TrafficTypeDiagnostic: BL02EPF0001A106:EE_|DS0PR12MB8248:EE_
+X-MS-Office365-Filtering-Correlation-Id: 850a3bba-32d7-4e87-7e4e-08dd8936cbb1
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|1800799024|82310400026|36860700013|13003099007;
+	BCL:0;ARA:13230040|30052699003|376014|82310400026|36860700013|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?1++2kmj8WDE5f8/LuzvMc8e3oMNB6RKLX89GI+T0x+PAVLkUsP+uWFvE00ww?=
- =?us-ascii?Q?p3PQHLjitDbbIki35NOO+70cMfd56K83asyc4Ferl40MINBLKYBmPqPcSKZ+?=
- =?us-ascii?Q?V4IRzYo2o9dk0SRW2AtuP4z2v+KJA9HaMaA7TOOz5yYyYdCeP4ERlBjJLCui?=
- =?us-ascii?Q?9OUq8WFrjamdzRNBNPQFcoWPn8jMlQK6Jr7morkxBIdGB7XFVRz1C/L7b+4d?=
- =?us-ascii?Q?xZmt9zwRrxmjoxrhTx12JsUHvKPyHqKwtJGXeVIHndeNa5R+rej5RlJzaFEq?=
- =?us-ascii?Q?QFby1FTTzXlPmlPfPqZY/f1AL4CxxNMQjzMKhYsM005A2ryCJ/akICSQaUPe?=
- =?us-ascii?Q?Nq3UXoPC4S7OtJgydz2MgC8qug1LKyoCK8nPYqY7XmG8epyQ9z07OQeIAbCC?=
- =?us-ascii?Q?uYvd0HlEgdDxlP8amnFKL4RiD9HFEQu+jOobCNF2soxHCDpSEKX6QWs4ZUGl?=
- =?us-ascii?Q?QBTS0wQJjOOk0JjJH/aWqwZH+eD3dwi4pXNgqrZ4/n+sTCTtRgRNV2KaEgNQ?=
- =?us-ascii?Q?VOuTWCYffW+1lkj370pdNg97cAi0Kqe6Q7nrieJYpEMuVmnbBVD36cWFhmrz?=
- =?us-ascii?Q?gfcvwt7L8vrMbKVdH9WWcWJjV5LeSMEkgS0FStMWZWwR87U6v36v6p6HPTmU?=
- =?us-ascii?Q?x5ifwFMCjIR3ZoU+vibst2OAedlgACgSDNdInbaTaLO4eeXyRoX5xI8eZodN?=
- =?us-ascii?Q?Lx3L0KEHpAttGxzaoVc3Z8wo2d7I9zZYMlAEpUe4NHByOjC+pdO2OYu6ju0r?=
- =?us-ascii?Q?oaXqMHCChYweJVEI28W6EX9wLGsrHn6wAiR4NwYwKgOCiv2oyXKUT0W9XiLF?=
- =?us-ascii?Q?sdFLAeB8ljBtvs84dgu5Ci1OaPDdTJ2r5sf+fcfmTffUB/7OnhNJKG3btls+?=
- =?us-ascii?Q?qBRdrcSlyK63P7pfsofILK+/FZFjc+5a3NYQKZYM6r5U22NRCm7lvvI3yPBZ?=
- =?us-ascii?Q?yiOh5MHRANE4blf71hVZMYq1Zkxyi+ZBcNdNgrP7Y8uveOgxcBOM+M5cAU3K?=
- =?us-ascii?Q?40GX5m2HI3yyp8X7kJQvZanTws036vn0SNuuPCfJQ4DtKnu7o+079XshYDOn?=
- =?us-ascii?Q?aHQX3VhIzEtTcHgs6XdXoNwlrwy58tjuTuyA29U5QrHpimYD090G0K1acZLO?=
- =?us-ascii?Q?csMASHOT8GWo3Wn5n5UZhoN9w8RuQ7khmvpEd1HOc87Fu/vyPP98768RLqu7?=
- =?us-ascii?Q?cgZ0WE1oFlGZiHVha6fVLKuvQQZrVpwWWm+mvjd6D6IqNEKNkRe9343oQorb?=
- =?us-ascii?Q?6/6yD1sgsAzfXssVr7/FSKv/d7tqYJixEIGS8zWXPwqfkn6/bM0wRH8RVYzE?=
- =?us-ascii?Q?llMU6BNVyqfI+RSgZDGwMP3Q7Fk0pXQo1sRGIvGMSUjYrG42Cby4dcHUIHSU?=
- =?us-ascii?Q?zpcf2n6ehCwMQNHWAgesT+P7dOk5yO/aE4X88Jy4jGx/0Sx6wmshOrGn5HJu?=
- =?us-ascii?Q?85enHCfITpmAG+u7JNBXkOMPBY/cv5Az43k8dVXTQ05NKmcHhG2MQGy6F2Vc?=
- =?us-ascii?Q?CKOFRzXqB42jzlQfO9M7EsIUMix4MXUQL2pJC+AFm67/4jxr55VSYjvDtA?=
- =?us-ascii?Q?=3D=3D?=
+	=?us-ascii?Q?CIVhm718j79PP2FvpnZfLlBlhjUfC0iSinwxp+DuN+JNLZx/eDhaqzeNTQYv?=
+ =?us-ascii?Q?NWNvleqbagLnVuQflQEbciI0/iN4vJGnhMGWUHvgBH6y11kV8+Dd7Mc8iuDx?=
+ =?us-ascii?Q?fkzn1FXVEL7wjLZgymjmLql+4+Piy9iPvOyqA81UOb8rbxZZXElIJIMSAlcp?=
+ =?us-ascii?Q?D+aV0SnmfyiiOgAvEl2jZUdgF51JBJBlRdtFtDizxH2hD7uzzDVkkYyl76uJ?=
+ =?us-ascii?Q?NG56YFWV8SGk9DIm+tIlNjAA/Sy7Jk2R5s0ALCGSBuUBLV46JfAtKJNwxkk5?=
+ =?us-ascii?Q?5FjmDuv2odeM3pqNt3g+3gt0EY7LLcD3opEK0i46UPW20Z3c4rPphMqZXeim?=
+ =?us-ascii?Q?Ci2FBBloCs0NOaB0lFPFg1T0J7GjEeamup5lDqboUhJ+afLORVZ1Af/96783?=
+ =?us-ascii?Q?nEw34nAddwquQUO9255jyVZBu9/YnFtULWeVEjEDGI+48U1XDvpZcDI1i3aM?=
+ =?us-ascii?Q?RXBIA2Kvfv1unwSQ/zTmkPm8aRGsaq6XBnES3FEbeaoygT5aO4O4a8+KQMhy?=
+ =?us-ascii?Q?NUXlGVZzh4QhCmrx/mIfWsjbsn/uF3lBEaVc4DCmiF+x+28sqVbDZGxOOuYE?=
+ =?us-ascii?Q?1c/fwIP9Bz5XGNIvrz77xqili85gNYZpjt6QztbvzL2H1XK3/HpRShr2my32?=
+ =?us-ascii?Q?mcCA4RvlNtovoMgzo3mor/7Ubt0QugNmPuvDK/FRX+HUKvPoiYL8fT0vjyFf?=
+ =?us-ascii?Q?n4n9dYHrxGLHTvPMwm1FVsxMT6znZBi4hzf2rrs9G+UVAjeDAFQbNGNgURFd?=
+ =?us-ascii?Q?xX+b44NCOhmrBpqjmO4b5Z58k899yuzYWxDoBgjpZ4EfHl8wotb+M494a5yn?=
+ =?us-ascii?Q?3N1uWbyoJQmYx/vPuM/VHlgy3ezt8v46NjmC2OoUOdCU9yQbyKt+7V7OXfxH?=
+ =?us-ascii?Q?9QNucm0jWxymessB282P11XycRT2DV//Ds6vLJ8OfmxhaR6lzlQakCENtdYA?=
+ =?us-ascii?Q?NGt/2aGesI0fy2/GeBRxqv1sBBRxvcdVcrE78S0+KEo69EuEZGQp10x7K9lO?=
+ =?us-ascii?Q?irOk2FD2ryZSheIOTzHWHfoidKzK8ka5Xedo9S1rkqr/21DyQwvuDS9Tck9g?=
+ =?us-ascii?Q?J2RGEo5KK8vGyBGauVbND3J1x7L0DD+wWULXyv0Uv69dcuPRhD91xioG7us7?=
+ =?us-ascii?Q?U1vI9l6brRPvf1kNkThSsxVv4EWO4Jfh1+1xoAaYd+lkKnzaUbDPn+ja4WMS?=
+ =?us-ascii?Q?YgX4uZUTOakCpA8jvlENAo1eNdQZi8qO25rYT+DakLZ+1QgemtkE5JNRmpsT?=
+ =?us-ascii?Q?erikRU68EXTGVBNEpfr0LQmK6lrfhakMokV7KhsOvlLzYGRG+Phwu+JhWmzT?=
+ =?us-ascii?Q?t6lLjIFR5uuzOzv+agymXv+WtuH3XElMyPH8jwZQ3MHUusuOdkknbFPFFLc1?=
+ =?us-ascii?Q?WDdmz0awdlpKH1+QVMa8lr76YSN7Zp6OZf3hqnm7eeORQGu57tJYrX/88Vlp?=
+ =?us-ascii?Q?7C6zxNFDbJQfMyOZkpfGWVvaWT+CZCKXG4pKJjM3QmhUx9HPQvuWvOBcWt/M?=
+ =?us-ascii?Q?Rg+eEumx2auTRLoPT3Aa2XKnVwByGaD72NqF?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(1800799024)(82310400026)(36860700013)(13003099007);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(30052699003)(376014)(82310400026)(36860700013)(1800799024);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2025 05:04:12.0104
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2025 05:04:19.4480
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ee228768-5fb8-41dd-63cf-08dd8936c742
+X-MS-Exchange-CrossTenant-Network-Message-Id: 850a3bba-32d7-4e87-7e4e-08dd8936cbb1
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	BL02EPF0001A101.namprd05.prod.outlook.com
+	BL02EPF0001A106.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8060
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8248
 
-Misbehaving guests can cause bus locks to degrade the performance of
-a system. Non-WB (write-back) and misaligned locked RMW (read-modify-write)
-instructions are referred to as "bus locks" and require system wide
-synchronization among all processors to guarantee the atomicity. The bus
-locks can impose notable performance penalties for all processors within
-the system.
+Move and rename kvm_pio_request.linear_rip to
+kvm_vcpu_arch.cui_linear_rip so that the field can be used by other
+userspace exit completion flows that need to take action if and only
+if userspace has not modified RIP.
 
-Support for the Bus Lock Threshold is indicated by CPUID
-Fn8000_000A_EDX[29] BusLockThreshold=1, the VMCB provides a Bus Lock
-Threshold enable bit and an unsigned 16-bit Bus Lock Threshold count.
+No functional changes intended.
 
-VMCB intercept bit
-    VMCB Offset     Bits    Function
-    14h             5       Intercept bus lock operations
-
-Bus lock threshold count
-    VMCB Offset     Bits    Function
-    120h            15:0    Bus lock counter
-
-During VMRUN, the bus lock threshold count is fetched and stored in an
-internal count register.  Prior to executing a bus lock within the guest,
-the processor verifies the count in the bus lock register. If the count is
-greater than zero, the processor executes the bus lock, reducing the count.
-However, if the count is zero, the bus lock operation is not performed, and
-instead, a Bus Lock Threshold #VMEXIT is triggered to transfer control to
-the Virtual Machine Monitor (VMM).
-
-A Bus Lock Threshold #VMEXIT is reported to the VMM with VMEXIT code 0xA5h,
-VMEXIT_BUSLOCK. EXITINFO1 and EXITINFO2 are set to 0 on a VMEXIT_BUSLOCK.
-On a #VMEXIT, the processor writes the current value of the Bus Lock
-Threshold Counter to the VMCB.
-
-Note: Currently, virtualizing the Bus Lock Threshold feature for L1 guest
-is not supported.
-
-More details about the Bus Lock Threshold feature can be found in AMD APM
-[1].
-
-v4 -> v5
-- Incorporated review comments from Sean, Boris and Xiaoyao Li.
-- Massage commit messages and documentation based on review comments.
-- Removed bus_lock_rip from vcpu_svm and modified the implementation to
-  continue running bus_lock_counter across the nested traslations
-  accordingly.
-- Removed pr_info which says "Buslock Threshold is supported"
-
-v3 -> v4
-- Incorporated Sean's review comments
-  - Added a preparatory patch to move linear_rip out of kvm_pio_request, so
-    that it can be used by the bus lock threshold patches.
-  - Added complete_userspace_buslock() function to reload bus_lock_counter
-    to '1' only if the usespace has not changed the RIP.
-  - Added changes to continue running bus_lock_counter across the nested
-    transitions. 
-
-v2 -> v3
-- Drop parch to add virt tag in /proc/cpuinfo.
-- Incorporated Tom's review comments.
-
-v1 -> v2
-- Incorporated misc review comments from Sean.
-- Removed bus_lock_counter module parameter.
-- Set the value of bus_lock_counter to zero by default and reload the value
-  by 1 in bus lock exit handler.
-- Add documentation for the behavioral difference for KVM_EXIT_BUS_LOCK.
-- Improved selftest for buslock to work on SVM and VMX.
-- Rewrite the commit messages.
-
-Patches are prepared on kvm-next/svm (bb5081f4abf2).
-
-Testing done:
-- Tested the Bus Lock Threshold functionality on normal, SEV, SEV-ES and
-  SEV-SNP guests.
-- Tested the Bus Lock Threshold functionality on nested guests.
-
-[1]: AMD64 Architecture Programmer's Manual Pub. 24593, April 2024,
-     Vol 2, 15.14.5 Bus Lock Threshold.
-     https://bugzilla.kernel.org/attachment.cgi?id=306250
-
+Suggested-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Manali Shukla <manali.shukla@amd.com>
 ---
-v1: https://lore.kernel.org/kvm/20240709175145.9986-4-manali.shukla@amd.com/T/
-v2: https://lore.kernel.org/kvm/20241001063413.687787-4-manali.shukla@amd.com/T/
-v3: https://lore.kernel.org/kvm/20241004053341.5726-1-manali.shukla@amd.com/T/
-v4: https://lore.kernel.org/kvm/20250324130248.126036-1-manali.shukla@amd.com/
+ arch/x86/include/asm/kvm_host.h | 2 +-
+ arch/x86/kvm/x86.c              | 8 ++++----
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Manali Shukla (3):
-  KVM: x86: Make kvm_pio_request.linear_rip a common field for user
-    exits
-  x86/cpufeatures: Add CPUID feature bit for the Bus Lock Threshold
-  KVM: SVM: Add support for KVM_CAP_X86_BUS_LOCK_EXIT on SVM CPUs
-
-Nikunj A Dadhania (2):
-  KVM: SVM: Enable Bus lock threshold exit
-  KVM: selftests: Add bus lock exit test
-
- Documentation/virt/kvm/api.rst                |   5 +
- arch/x86/include/asm/cpufeatures.h            |   1 +
- arch/x86/include/asm/kvm_host.h               |   2 +-
- arch/x86/include/asm/svm.h                    |   7 +-
- arch/x86/include/uapi/asm/svm.h               |   2 +
- arch/x86/kvm/svm/nested.c                     |  35 +++++
- arch/x86/kvm/svm/svm.c                        |  38 +++++
- arch/x86/kvm/svm/svm.h                        |   1 +
- arch/x86/kvm/x86.c                            |   8 +-
- tools/testing/selftests/kvm/Makefile.kvm      |   1 +
- .../selftests/kvm/x86/kvm_buslock_test.c      | 135 ++++++++++++++++++
- 11 files changed, 228 insertions(+), 7 deletions(-)
- create mode 100644 tools/testing/selftests/kvm/x86/kvm_buslock_test.c
-
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index c5e80131626d..61d4809418cf 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -412,7 +412,6 @@ struct kvm_rmap_head {
+ };
+ 
+ struct kvm_pio_request {
+-	unsigned long linear_rip;
+ 	unsigned long count;
+ 	int in;
+ 	int port;
+@@ -918,6 +917,7 @@ struct kvm_vcpu_arch {
+ 	bool emulate_regs_need_sync_to_vcpu;
+ 	bool emulate_regs_need_sync_from_vcpu;
+ 	int (*complete_userspace_io)(struct kvm_vcpu *vcpu);
++	unsigned long cui_linear_rip;
+ 
+ 	gpa_t time;
+ 	s8  pvclock_tsc_shift;
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index f6ce044b090a..b41090a7faac 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -9359,7 +9359,7 @@ static int complete_fast_pio_out(struct kvm_vcpu *vcpu)
+ {
+ 	vcpu->arch.pio.count = 0;
+ 
+-	if (unlikely(!kvm_is_linear_rip(vcpu, vcpu->arch.pio.linear_rip)))
++	if (unlikely(!kvm_is_linear_rip(vcpu, vcpu->arch.cui_linear_rip)))
+ 		return 1;
+ 
+ 	return kvm_skip_emulated_instruction(vcpu);
+@@ -9384,7 +9384,7 @@ static int kvm_fast_pio_out(struct kvm_vcpu *vcpu, int size,
+ 			complete_fast_pio_out_port_0x7e;
+ 		kvm_skip_emulated_instruction(vcpu);
+ 	} else {
+-		vcpu->arch.pio.linear_rip = kvm_get_linear_rip(vcpu);
++		vcpu->arch.cui_linear_rip = kvm_get_linear_rip(vcpu);
+ 		vcpu->arch.complete_userspace_io = complete_fast_pio_out;
+ 	}
+ 	return 0;
+@@ -9397,7 +9397,7 @@ static int complete_fast_pio_in(struct kvm_vcpu *vcpu)
+ 	/* We should only ever be called with arch.pio.count equal to 1 */
+ 	BUG_ON(vcpu->arch.pio.count != 1);
+ 
+-	if (unlikely(!kvm_is_linear_rip(vcpu, vcpu->arch.pio.linear_rip))) {
++	if (unlikely(!kvm_is_linear_rip(vcpu, vcpu->arch.cui_linear_rip))) {
+ 		vcpu->arch.pio.count = 0;
+ 		return 1;
+ 	}
+@@ -9426,7 +9426,7 @@ static int kvm_fast_pio_in(struct kvm_vcpu *vcpu, int size,
+ 		return ret;
+ 	}
+ 
+-	vcpu->arch.pio.linear_rip = kvm_get_linear_rip(vcpu);
++	vcpu->arch.cui_linear_rip = kvm_get_linear_rip(vcpu);
+ 	vcpu->arch.complete_userspace_io = complete_fast_pio_in;
+ 
+ 	return 0;
 
 base-commit: 4e96f010afb2815e33c9b15a695e0e0b4cb3cea6
 prerequisite-patch-id: 78b9a9642a4cef70c14cc709516c90f117cecedf
