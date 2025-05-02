@@ -1,215 +1,293 @@
-Return-Path: <linux-kselftest+bounces-32224-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32225-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C347FAA79E7
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 21:02:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7830AA7A23
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 21:21:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2C2E77B9BCB
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 19:01:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 317BB176486
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 19:21:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A06371F4C8C;
-	Fri,  2 May 2025 19:01:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD1211F2BAD;
+	Fri,  2 May 2025 19:21:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jB1YOX/W"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YUiwqCcp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 133631EFFB9;
-	Fri,  2 May 2025 19:01:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E42D81EC01B
+	for <linux-kselftest@vger.kernel.org>; Fri,  2 May 2025 19:21:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746212493; cv=none; b=GiPxur3aLVJ/cYld5z+k6uYPeYXpeN+PKUZy1OnHqMgzwHp8IoSdv0kTmy2tuREWFWGhOdOK1EQyn0HfVUk6FP4VOWob3hWf+Py3s6dPSitkUwCXC7RU+AlGOHi6OfUUwT9wx0TjOiQR7g/T2YM79X+/ifWCu/mLq399TKa1JO8=
+	t=1746213678; cv=none; b=us14jfDFHNMXNYMAsemy1nGaU5mCLYl5/M8Xlri4XPVwqPM7EpMLAQvUZbeRYwV6x8BKXqzbFJDBCnAMUOirEAZq7lUbnrlINCpiJNBBm0vQTpYcJ3L5ujFmjzljkYgafaLxjPkM/xLlAN+L3yALqsp54pGoX3dQzNJbyPPFnmw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746212493; c=relaxed/simple;
-	bh=OArrhviC9XaQ7OlcTfKqQMGsnz4armduOY/WBMGcbsA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=OyK38LUdMSeADJotum82NgzCMrBGwTMw/Hpp2DN7U0Lbce6fJqRp0JJD/eRhaCUjn/xqulfWZsC9TrDfb/D8K1sxvPJ7N+gcI5vg5dB8rc361AjOH/vg5SS1jq5R6/xq4hDu0tvYmueZaJKXHSqDZNVCAS4nc6zmRklUS4vJ94k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jB1YOX/W; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FA19C4CEED;
-	Fri,  2 May 2025 19:01:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746212492;
-	bh=OArrhviC9XaQ7OlcTfKqQMGsnz4armduOY/WBMGcbsA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jB1YOX/WblarlM1ru+chkUcRI7n9ViNaZEATHHCcZU9HKHkXtQaiFa1ADnnNSHEfn
-	 pxV/EexqPW/iO2BUs8r2oHGwy/9Wh+oNp1A5atSmV+xAncgPjqT8RJGnFSSHtmQkzE
-	 UPmqFqbQ6KKii/W31CNxWg7FeU4snGvlYrWtTP21uUUHLpcqwPtQxofl5x4yxEQWCa
-	 HwLSZcaV963TrPrvt3cOAxbzFvO38HxPRoaEke92VS2avjAcALnb+UJqHMA74Tz/D8
-	 JUZIkKnmwrX/2Jemco5btqwU2P3ADx4coHH+136JT/FvbSfjWd+ts9cd4ecXPSUgg3
-	 HONZP1ma8mZfQ==
-From: Kees Cook <kees@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Kees Cook <kees@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Marco Elver <elver@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Kai Huang <kai.huang@intel.com>,
-	Hou Wenlong <houwenlong.hwl@antgroup.com>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	linux-kbuild@vger.kernel.org,
-	kasan-dev@googlegroups.com,
-	linux-hardening@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org,
-	linux-efi@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	sparclinux@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH RFC 4/4] stackleak: Support Clang stack depth tracking
-Date: Fri,  2 May 2025 12:01:27 -0700
-Message-Id: <20250502190129.246328-4-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250502185834.work.560-kees@kernel.org>
-References: <20250502185834.work.560-kees@kernel.org>
+	s=arc-20240116; t=1746213678; c=relaxed/simple;
+	bh=JpyIjvjS1cn2CJj81nbpYGq+okHd6d4dPd65iwowKhw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BN60HU2K+MUAgsnv2piXpgHzQsP9+7/6TEaU4wHsmOE5ZQK6vE6k2tCJN/DMRMGMzIW/poZlgi9g9vQYDhVEXcHaQWX293UTOd+tWVw97R0+Nr3qtBV0bk3DEet0ciaTymZv5Dt1aiEHCa4TDLcL1rdjTrfkcQaWKv0F3MWYRfI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YUiwqCcp; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2264c9d0295so31155ad.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 May 2025 12:21:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1746213676; x=1746818476; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=r96Eg/1Y8AFNbPbV0Ky1wYbeZa5VKyE7dnpUkfFRCh8=;
+        b=YUiwqCcp42fIvx0hXEG3ZdDVPwY6YQriFb4+pWFw48cxkygtG2tF1YyatJD32wC4Re
+         TOYkYC1vvnY4/WcyqzVI5pu1K/jnX6RUL4Qof3fIE/bbIFffklwyKaNYiaVsGl5v0bSv
+         Cq6Wrw1mz76OjVWs/1hU9dgl4Y/VBhaKisNg3T/pIYY2Okq9R1ZEGrZYGVczB76FskD7
+         vHSpgzgXU0IBgesuzXqNAHnxqCaN1pLxxYfOW8Hy5a2A329DHaLhDrVXNtqztASONzfk
+         qrpFWBxgJlvanZFZm1xvAq7IwwjZ4XDnDjo8LDGaocg0I7d24MD0YkicQ+GM1sCXuySL
+         GuaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746213676; x=1746818476;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=r96Eg/1Y8AFNbPbV0Ky1wYbeZa5VKyE7dnpUkfFRCh8=;
+        b=sbLB2VcJAR1gqvaxbmNv41FKceSwdbsDCq5sqaV9HyADnnwzIGxh0rzaWaPTw9c7hk
+         +X4TKIWDz3dHuBhtngQIujJ9mU44Ji1UwPstajcLeJ6Nqd3zsMTsMiJFx2kpNq68Rimx
+         WWoCy00OKirZWcXyhDKnCosY0YkO+ZrkY0Og0rLjjyCuZs4W6gTTqJgYMeszaPr0DTSb
+         KMgbfDOtaibvjudxnLPmwpNzTkRcxW4qCANweebD6I+D94cvnSUkdVop5QUEkXFzcUmQ
+         lvHd5aXfuB413kbkcKmECsWXXYLdebAWg42+jGKR/s42Cg02bD2Vkis8BrU+ShWV1QLz
+         XUfw==
+X-Forwarded-Encrypted: i=1; AJvYcCU5Ku8AoDvDmDYy5FYACfmWBwRHD2/RMY6jSn9dtK5eHHdSO1teJhtSwIGn6G/KkhjVJrP+1YN+4Yxdr9PIvrE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxwk/nohPoGFp6PVqsZ0D0mUokkGxp5z5Thq9gAyZBlJjVrLVmV
+	0VFWoQtVfJNGQjm2MHBhidn0C9TipeccfW0MKp/YrNMKU3ATSwLTsJurZZq+Y2CIZiPzZhgpkMN
+	dlXp58OBC6ZOlRzLw6M5DZZvSsga01mvWMnNU
+X-Gm-Gg: ASbGnctr7FBwZQXIXtkf9VfmOpXRXborgeMajWXgL7ZAy0mVrPh3uNFdOtOp2G5ffhJ
+	WAGc8II7MbosdqNHL7MFriVCl2vSgZWsCFNlb0NXYRn05CazePmcARSyOHEv7wcs7RTxzkAu0S8
+	rnxhicFJmRaE3a3IoZWmotN7Y=
+X-Google-Smtp-Source: AGHT+IHuBk7ykClXDaGo7QqylvIZQfO9tpRwiOHUQADkSCKVxiVlZuZmPaSSKezybUCfRFfNE2CLttc2KEnzLSTOJbw=
+X-Received: by 2002:a17:902:c40e:b0:21d:dba1:dd72 with SMTP id
+ d9443c01a7336-22e18ba5736mr325995ad.15.1746213675572; Fri, 02 May 2025
+ 12:21:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4716; i=kees@kernel.org; h=from:subject; bh=OArrhviC9XaQ7OlcTfKqQMGsnz4armduOY/WBMGcbsA=; b=owGbwMvMwCVmps19z/KJym7G02pJDBmiYm0eHYd/KD+/YrfhHLPdHAslHi9Fd//IiqqD/4I25 j38J1nZUcrCIMbFICumyBJk5x7n4vG2Pdx9riLMHFYmkCEMXJwCMBGBJYwMGxO93eMPrlt+5Jzt Oot7p+4nLPDlKnhnYFtxdhXvk+VS/Ax/Bd/vvaSguOh3WEFqRfyd1+x1/pxfFHj2REh++SY+fVI 9DwA=
-X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+References: <20250429032645.363766-1-almasrymina@google.com>
+ <20250429032645.363766-5-almasrymina@google.com> <53433089-7beb-46cf-ae8a-6c58cd909e31@redhat.com>
+In-Reply-To: <53433089-7beb-46cf-ae8a-6c58cd909e31@redhat.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Fri, 2 May 2025 12:20:59 -0700
+X-Gm-Features: ATxdqUHudlFmLidqUMJh8A79G--WfvmY635UeHyjV1LrmdBcJP8-JhtODX9YkNk
+Message-ID: <CAHS8izMefrkHf9WXerrOY4Wo8U2KmxSVkgY+4JB+6iDuoCZ3WQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v13 4/9] net: devmem: Implement TX path
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, io-uring@vger.kernel.org, 
+	virtualization@lists.linux.dev, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>, 
+	Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, Jeroen de Borst <jeroendb@google.com>, 
+	Harshitha Ramamurthy <hramamurthy@google.com>, Kuniyuki Iwashima <kuniyu@amazon.com>, 
+	Willem de Bruijn <willemb@google.com>, Jens Axboe <axboe@kernel.dk>, 
+	Pavel Begunkov <asml.silence@gmail.com>, David Ahern <dsahern@kernel.org>, 
+	Neal Cardwell <ncardwell@google.com>, "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
+	Stefan Hajnoczi <stefanha@redhat.com>, Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	sdf@fomichev.me, dw@davidwei.uk, Jamal Hadi Salim <jhs@mojatatu.com>, 
+	Victor Nogueira <victor@mojatatu.com>, Pedro Tammela <pctammela@mojatatu.com>, 
+	Samiullah Khawaja <skhawaja@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Wire up stackleak to Clang's proposed[1] stack depth tracking callback
-option. While __noinstr already contained __no_sanitize_coverage, it was
-still needed for __init and __head section markings. This is needed to
-make sure the callback is not executed in unsupported contexts.
+On Fri, May 2, 2025 at 4:47=E2=80=AFAM Paolo Abeni <pabeni@redhat.com> wrot=
+e:
+>
+> Hi,
+>
+> On 4/29/25 5:26 AM, Mina Almasry wrote:
+> > Augment dmabuf binding to be able to handle TX. Additional to all the R=
+X
+> > binding, we also create tx_vec needed for the TX path.
+> >
+> > Provide API for sendmsg to be able to send dmabufs bound to this device=
+:
+> >
+> > - Provide a new dmabuf_tx_cmsg which includes the dmabuf to send from.
+> > - MSG_ZEROCOPY with SCM_DEVMEM_DMABUF cmsg indicates send from dma-buf.
+> >
+> > Devmem is uncopyable, so piggyback off the existing MSG_ZEROCOPY
+> > implementation, while disabling instances where MSG_ZEROCOPY falls back
+> > to copying.
+> >
+> > We additionally pipe the binding down to the new
+> > zerocopy_fill_skb_from_devmem which fills a TX skb with net_iov netmems
+> > instead of the traditional page netmems.
+> >
+> > We also special case skb_frag_dma_map to return the dma-address of thes=
+e
+> > dmabuf net_iovs instead of attempting to map pages.
+> >
+> > The TX path may release the dmabuf in a context where we cannot wait.
+> > This happens when the user unbinds a TX dmabuf while there are still
+> > references to its netmems in the TX path. In that case, the netmems wil=
+l
+> > be put_netmem'd from a context where we can't unmap the dmabuf, Resolve
+> > this by making __net_devmem_dmabuf_binding_free schedule_work'd.
+> >
+> > Based on work by Stanislav Fomichev <sdf@fomichev.me>. A lot of the mea=
+t
+> > of the implementation came from devmem TCP RFC v1[1], which included th=
+e
+> > TX path, but Stan did all the rebasing on top of netmem/net_iov.
+> >
+> > Cc: Stanislav Fomichev <sdf@fomichev.me>
+> > Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
+> > Signed-off-by: Mina Almasry <almasrymina@google.com>
+> > Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+>
+> I'm sorry for the late feedback. A bunch of things I did not notice
+> before...
+>
+> > @@ -701,6 +743,8 @@ int __zerocopy_sg_from_iter(struct msghdr *msg, str=
+uct sock *sk,
+> >
+> >       if (msg && msg->msg_ubuf && msg->sg_from_iter)
+> >               ret =3D msg->sg_from_iter(skb, from, length);
+> > +     else if (unlikely(binding))
+>
+> I'm unsure if the unlikely() here (and in similar tests below) it's
+> worthy: depending on the actual workload this condition could be very
+> likely.
+>
 
-Link: https://github.com/llvm/llvm-project/pull/138323 [1]
-Signed-off-by: Kees Cook <kees@kernel.org>
----
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: <x86@kernel.org>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nicolas Schier <nicolas.schier@linux.dev>
-Cc: Marco Elver <elver@google.com>
-Cc: Andrey Konovalov <andreyknvl@gmail.com>
-Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: Paul Moore <paul@paul-moore.com>
-Cc: James Morris <jmorris@namei.org>
-Cc: "Serge E. Hallyn" <serge@hallyn.com>
-Cc: Kai Huang <kai.huang@intel.com>
-Cc: Hou Wenlong <houwenlong.hwl@antgroup.com>
-Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Cc: Sami Tolvanen <samitolvanen@google.com>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: <linux-kbuild@vger.kernel.org>
-Cc: <kasan-dev@googlegroups.com>
-Cc: <linux-hardening@vger.kernel.org>
-Cc: <linux-security-module@vger.kernel.org>
----
- arch/x86/include/asm/init.h |  2 +-
- include/linux/init.h        |  4 +++-
- scripts/Makefile.ubsan      | 12 ++++++++++++
- security/Kconfig.hardening  |  5 ++++-
- 4 files changed, 20 insertions(+), 3 deletions(-)
+Right, for now I'm guessing the MSG_ZEROCOPY use case in the else is
+more common workload, and putting the devmem use case in the unlikely
+path so I don't regress other use cases. We could revisit this in the
+future. In my tests, the devmem workload doesn't seem affected by this
+unlikely.
 
-diff --git a/arch/x86/include/asm/init.h b/arch/x86/include/asm/init.h
-index 8b1b1abcef15..6bfdaeddbae8 100644
---- a/arch/x86/include/asm/init.h
-+++ b/arch/x86/include/asm/init.h
-@@ -5,7 +5,7 @@
- #if defined(CONFIG_CC_IS_CLANG) && CONFIG_CLANG_VERSION < 170000
- #define __head	__section(".head.text") __no_sanitize_undefined __no_stack_protector
- #else
--#define __head	__section(".head.text") __no_sanitize_undefined
-+#define __head	__section(".head.text") __no_sanitize_undefined __no_sanitize_coverage
- #endif
- 
- struct x86_mapping_info {
-diff --git a/include/linux/init.h b/include/linux/init.h
-index ee1309473bc6..c65a050d52a7 100644
---- a/include/linux/init.h
-+++ b/include/linux/init.h
-@@ -49,7 +49,9 @@
- 
- /* These are for everybody (although not all archs will actually
-    discard it in modules) */
--#define __init		__section(".init.text") __cold  __latent_entropy __noinitretpoline
-+#define __init		__section(".init.text") __cold __latent_entropy	\
-+						__noinitretpoline	\
-+						__no_sanitize_coverage
- #define __initdata	__section(".init.data")
- #define __initconst	__section(".init.rodata")
- #define __exitdata	__section(".exit.data")
-diff --git a/scripts/Makefile.ubsan b/scripts/Makefile.ubsan
-index 9e35198edbf0..cfb3ecde07dd 100644
---- a/scripts/Makefile.ubsan
-+++ b/scripts/Makefile.ubsan
-@@ -22,3 +22,15 @@ ubsan-integer-wrap-cflags-$(CONFIG_UBSAN_INTEGER_WRAP)     +=	\
- 	-fsanitize=implicit-unsigned-integer-truncation		\
- 	-fsanitize-ignorelist=$(srctree)/scripts/integer-wrap-ignore.scl
- export CFLAGS_UBSAN_INTEGER_WRAP := $(ubsan-integer-wrap-cflags-y)
-+
-+ifdef CONFIG_CC_IS_CLANG
-+stackleak-cflags-$(CONFIG_STACKLEAK)	+=	\
-+	-fsanitize-coverage=stack-depth		\
-+	-fsanitize-coverage-stack-depth-callback-min=$(CONFIG_STACKLEAK_TRACK_MIN_SIZE)
-+export STACKLEAK_CFLAGS := $(stackleak-cflags-y)
-+ifdef CONFIG_STACKLEAK
-+    DISABLE_STACKLEAK		:= -fno-sanitize-coverage=stack-depth
-+endif
-+export DISABLE_STACKLEAK
-+KBUILD_CFLAGS += $(STACKLEAK_CFLAGS)
-+endif
-diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
-index edcc489a6805..e86b61e44b33 100644
---- a/security/Kconfig.hardening
-+++ b/security/Kconfig.hardening
-@@ -158,10 +158,13 @@ config GCC_PLUGIN_STRUCTLEAK_VERBOSE
- 	  initialized. Since not all existing initializers are detected
- 	  by the plugin, this can produce false positive warnings.
- 
-+config CC_HAS_SANCOV_STACK_DEPTH_CALLBACK
-+	def_bool $(cc-option,-fsanitize-coverage-stack-depth-callback-min=1)
-+
- config STACKLEAK
- 	bool "Poison kernel stack before returning from syscalls"
- 	depends on HAVE_ARCH_STACKLEAK
--	depends on GCC_PLUGINS
-+	depends on GCC_PLUGINS || CC_HAS_SANCOV_STACK_DEPTH_CALLBACK
- 	help
- 	  This option makes the kernel erase the kernel stack before
- 	  returning from system calls. This has the effect of leaving
--- 
-2.34.1
+> [...]
+> > @@ -1066,11 +1067,24 @@ int tcp_sendmsg_locked(struct sock *sk, struct =
+msghdr *msg, size_t size)
+> >       int flags, err, copied =3D 0;
+> >       int mss_now =3D 0, size_goal, copied_syn =3D 0;
+> >       int process_backlog =3D 0;
+> > +     bool sockc_valid =3D true;
+> >       int zc =3D 0;
+> >       long timeo;
+> >
+> >       flags =3D msg->msg_flags;
+> >
+> > +     sockc =3D (struct sockcm_cookie){ .tsflags =3D READ_ONCE(sk->sk_t=
+sflags),
+> > +                                     .dmabuf_id =3D 0 };
+>
+> the '.dmabuf_id =3D 0' part is not needed, and possibly the code is
+> clearer without it.
+>
+> > +     if (msg->msg_controllen) {
+> > +             err =3D sock_cmsg_send(sk, msg, &sockc);
+> > +             if (unlikely(err))
+> > +                     /* Don't return error until MSG_FASTOPEN has been
+> > +                      * processed; that may succeed even if the cmsg i=
+s
+> > +                      * invalid.
+> > +                      */
+> > +                     sockc_valid =3D false;
+> > +     }
+> > +
+> >       if ((flags & MSG_ZEROCOPY) && size) {
+> >               if (msg->msg_ubuf) {
+> >                       uarg =3D msg->msg_ubuf;
+> > @@ -1078,7 +1092,8 @@ int tcp_sendmsg_locked(struct sock *sk, struct ms=
+ghdr *msg, size_t size)
+> >                               zc =3D MSG_ZEROCOPY;
+> >               } else if (sock_flag(sk, SOCK_ZEROCOPY)) {
+> >                       skb =3D tcp_write_queue_tail(sk);
+> > -                     uarg =3D msg_zerocopy_realloc(sk, size, skb_zcopy=
+(skb));
+> > +                     uarg =3D msg_zerocopy_realloc(sk, size, skb_zcopy=
+(skb),
+> > +                                                 sockc_valid && !!sock=
+c.dmabuf_id);
+>
+> If sock_cmsg_send() failed and the user did not provide a dmabuf_id,
+> memory accounting will be incorrect.
+>
 
+Forgive me but I don't see it. sockc_valid will be false, so
+msg_zerocopy_realloc will do the normal MSG_ZEROCOPY accounting. Then
+below whech check sockc_valid in place of where we did the
+sock_cmsg_send before, and goto err. I assume the goto err should undo
+the memory accounting in the new code as in the old code. Can you
+elaborate on the bug you see?
+
+> >                       if (!uarg) {
+> >                               err =3D -ENOBUFS;
+> >                               goto out_err;
+> > @@ -1087,12 +1102,27 @@ int tcp_sendmsg_locked(struct sock *sk, struct =
+msghdr *msg, size_t size)
+> >                               zc =3D MSG_ZEROCOPY;
+> >                       else
+> >                               uarg_to_msgzc(uarg)->zerocopy =3D 0;
+> > +
+> > +                     if (sockc_valid && sockc.dmabuf_id) {
+> > +                             binding =3D net_devmem_get_binding(sk, so=
+ckc.dmabuf_id);
+> > +                             if (IS_ERR(binding)) {
+> > +                                     err =3D PTR_ERR(binding);
+> > +                                     binding =3D NULL;
+> > +                                     goto out_err;
+> > +                             }
+> > +                     }
+> >               }
+> >       } else if (unlikely(msg->msg_flags & MSG_SPLICE_PAGES) && size) {
+> >               if (sk->sk_route_caps & NETIF_F_SG)
+> >                       zc =3D MSG_SPLICE_PAGES;
+> >       }
+> >
+> > +     if (sockc_valid && sockc.dmabuf_id &&
+> > +         (!(flags & MSG_ZEROCOPY) || !sock_flag(sk, SOCK_ZEROCOPY))) {
+> > +             err =3D -EINVAL;
+> > +             goto out_err;
+> > +     }
+> > +
+> >       if (unlikely(flags & MSG_FASTOPEN ||
+> >                    inet_test_bit(DEFER_CONNECT, sk)) &&
+> >           !tp->repair) {
+> > @@ -1131,14 +1161,8 @@ int tcp_sendmsg_locked(struct sock *sk, struct m=
+sghdr *msg, size_t size)
+> >               /* 'common' sending to sendq */
+> >       }
+> >
+> > -     sockc =3D (struct sockcm_cookie) { .tsflags =3D READ_ONCE(sk->sk_=
+tsflags)};
+> > -     if (msg->msg_controllen) {
+> > -             err =3D sock_cmsg_send(sk, msg, &sockc);
+> > -             if (unlikely(err)) {
+> > -                     err =3D -EINVAL;
+> > -                     goto out_err;
+> > -             }
+> > -     }
+> > +     if (!sockc_valid)
+> > +             goto out_err;
+>
+> Here 'err' could have been zeroed by tcp_sendmsg_fastopen(), and out_err
+> could emit a wrong return value.
+>
+
+Good point indeed.
+
+> Possibly it's better to keep the 'dmabuf_id' initialization out of
+> sock_cmsg_send() in a separate helper could simplify the handling here?
+>
+
+This should be possible as well.
+
+--=20
+Thanks,
+Mina
 
