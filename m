@@ -1,58 +1,58 @@
-Return-Path: <linux-kselftest+bounces-32196-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32197-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35C5FAA741E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 15:47:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB274AA7425
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 15:48:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 24C109A863F
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 13:46:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B11461BC0BD4
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 13:48:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FA8824113D;
-	Fri,  2 May 2025 13:46:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 678AF225779;
+	Fri,  2 May 2025 13:48:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b="BOzJ76Fh"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b="fKKwh67T"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from sender3-pp-f112.zoho.com (sender3-pp-f112.zoho.com [136.143.184.112])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4CBD3D76;
-	Fri,  2 May 2025 13:46:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.184.112
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 956D01474DA;
+	Fri,  2 May 2025 13:48:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746193617; cv=pass; b=fxEZZcoAotCj8Vn+qITZtpQ7pfMuWMsNHKsY3HoNEXEobYKTmLfqPz2QMedMim29wOFSw7fEVflBLbblzCfgUyWwlvRkCTrXd6iAZHTakpLRruxlQNNk5mN8JINi0JZcGr/YUBoKbt7ff3jK1EoTBLExt40vdXbT3KvDX9kYJKs=
+	t=1746193704; cv=pass; b=DfoEJxX9+1mre5YSTJtaNEzmfgEc8GXh4z/AYJD+C/bUaVOjq7tJo8xlQJ2k+a4nwbzLqxRwnbHyXd569GNSjihY/A4UAsYC7giL7LnXe1W1diTdquiQ4Jw3B6YIIXEf7anLHFYDr4GZRbhMQHsvPBDKBAMmhxh+ttdAehPLkTU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746193617; c=relaxed/simple;
-	bh=ZnMfTNF1LOJE1cNcrs5EEWUTINYMByvqGCUyFpS8zWc=;
+	s=arc-20240116; t=1746193704; c=relaxed/simple;
+	bh=9Ov9bFT8WBiC1HOucRoC3NGXXZYwaxxlf4b0Le+wBtM=;
 	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=XJn/EIMqhh++Pdw5yCH2Pgedve9STd9uE6V3KJB7V0AbmgMB0bI1fIcC2qvNBT5UO47bAXwPrUVgiopGjoOHivbS0qyS76FyAvrR5TV4uTRSpK5J5XyAdnNQiBUhmaEZuG4b8WBAzGnv1Wpnkyl+vLYozk+Vg8kHYu5dAzuHUls=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b=BOzJ76Fh; arc=pass smtp.client-ip=136.143.184.112
+	 In-Reply-To:Content-Type; b=jqtO9yLf6AqkjHTLXgTILbX/EsdYaPnUc9fJl8g8nHZad1yB46f4iNwk4l8x3wNhPkCeQNoK79rwpzB3y3kRzxNGKIC/Q63fKJvhGcpMlOzd8dDYFH2Z7aQ6cB2yxQ9FuBWozTxFFrL34RksRGuNrD1u3y3iRvk7p7RX23tvvFY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b=fKKwh67T; arc=pass smtp.client-ip=136.143.188.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1746193596; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1746193691; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=aK7KPpHdhK2zkDOQ9e6Ob7PKYOxehQfcpzzivOoDCyKl0qFi83RG4OMDQzjks4eVNkY9zbk7od87gIYHMZYpGtIc5ZdooN2X8jjuzVdA0rmGV5T3BFQ2Ctf81Z8OYsnaGaxfr5bZ9a90JvhoCmcaUcfS/hKIS7me2VNFSNkBSWo=
+	b=WXFtziDNmYzvKr1OOO2vdXXJeXhOvQTjDETkGcnHp+isiV++suUDKXqBRfnzLzaN5uOUdDXv6f6LU4fsf5EejBCX9JDHhWewIMZ8cxuvLtsN7yJ3vydeMw1sfi8dVBGxH/F3R7R0Xty1yM3wEfGJF9LMTT+PU+SXeSgu1VO78t4=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1746193596; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=LLRgjMubAuzXAtYX6lwgNrby1MxnFRdxLDgTY5+1OdQ=; 
-	b=H8DQ3sF2odxazbytio8NRKS+VHiysqBjCfHH1MXBnQIKuaTo6xszkmLPyO5jiwbGjNOUdrIuKaONKKh1t7SVi33UOhJP6vQMI09ly5F9CWjyv3p4BvGVa5wKlSLjcmDhZFRYJaJXlsLxFzHZfMjpZ4ncKGYDj+yGiz9xgTBvLvg=
+	t=1746193691; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=+ghhvBMBj35cdnVypJnvXisCWHPKfiKGsf04CiNP4U0=; 
+	b=NX51ttl8wb3ZNmvE/sjtyL7dAhN4uB8gce+sXQE2WfOXKr83weBjCzpb0QUNPMMbbK+IweFYy6XTs+zq/EFC5v4an/QL4QyDqdnPniOkWOmQJVaVgqm/2NIAL4mDTe5pN9a4x6nJwvC8tWpbSCCLfcGe52A3cn5L7b6mdIEfE+M=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=usama.anjum@collabora.com;
 	dmarc=pass header.from=<usama.anjum@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1746193596;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1746193691;
 	s=zohomail; d=collabora.com; i=usama.anjum@collabora.com;
 	h=Message-ID:Date:Date:MIME-Version:Cc:Cc:Subject:Subject:To:To:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=LLRgjMubAuzXAtYX6lwgNrby1MxnFRdxLDgTY5+1OdQ=;
-	b=BOzJ76FhH16utcR4O0gE0FwxbjdgShAmqU20Ewdy7fD15IW3RVAVzW5c8X+9mfLK
-	NHkhCTod3o4ET1P/Yq54bK7RTGtAYp7DTo27PBy8Kpf/tC6p1rw/rI1vjSwaT5WHgwJ
-	PFcb1dFDco8g7S4x4yu84P2FTkWjMkFGyEuLIgwA=
-Received: by mx.zohomail.com with SMTPS id 1746193594720979.2250250120471;
-	Fri, 2 May 2025 06:46:34 -0700 (PDT)
-Message-ID: <a7365a45-6064-4ace-81da-ce46ea5a6c91@collabora.com>
-Date: Fri, 2 May 2025 18:46:28 +0500
+	bh=+ghhvBMBj35cdnVypJnvXisCWHPKfiKGsf04CiNP4U0=;
+	b=fKKwh67THd3qza/5qKFOqJobAMb8SDOyT2H4CR3ZvrxS340uA/ZFo6RL/EEs48Cq
+	6a9/QFu5ZiMASOcQpGWWJFxxjPTW6jyFl0MrAHJebZaC+M2d+wspCJISk4qQMVX/smk
+	BlKyMiKWoNE3sWZ+bqJZQvF3lj+6GP1Y7XrSNfOE=
+Received: by mx.zohomail.com with SMTPS id 1746193689115908.4390295289863;
+	Fri, 2 May 2025 06:48:09 -0700 (PDT)
+Message-ID: <36bb6e78-1db9-4dad-a2ef-7e860ead30e4@collabora.com>
+Date: Fri, 2 May 2025 18:48:03 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -62,62 +62,65 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Cc: usama.anjum@collabora.com, Shuah Khan <skhan@linuxfoundation.org>,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 5/7] selftests: vDSO: vdso_test_getrandom: Drop some dead
- code
+Subject: Re: [PATCH 6/7] selftests: vDSO: vdso_test_getrandom: Always print
+ TAP header
 To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
  Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
  Vincenzo Frascino <vincenzo.frascino@arm.com>, Shuah Khan
  <shuah@kernel.org>, "Jason A. Donenfeld" <Jason@zx2c4.com>
 References: <20250502-selftests-vdso-fixes-v1-0-fb5d640a4f78@linutronix.de>
- <20250502-selftests-vdso-fixes-v1-5-fb5d640a4f78@linutronix.de>
+ <20250502-selftests-vdso-fixes-v1-6-fb5d640a4f78@linutronix.de>
 Content-Language: en-US
 From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20250502-selftests-vdso-fixes-v1-5-fb5d640a4f78@linutronix.de>
+In-Reply-To: <20250502-selftests-vdso-fixes-v1-6-fb5d640a4f78@linutronix.de>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-ZohoMailClient: External
 
 On 5/2/25 5:40 PM, Thomas Weißschuh wrote:
-> vgetrandom_put_state() and the variable ret in kselftest() are never used.
+> The TAP specification requires that the output begins with a header line.
+> If vgetrandom_init() fails and skips the test, that header line is missing.
 > 
-> Drop the dead code.
+> Call vgetrandom_init() after ksft_print_header().
 > 
 > Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
 > ---
->  tools/testing/selftests/vDSO/vdso_test_getrandom.c | 11 +----------
->  1 file changed, 1 insertion(+), 10 deletions(-)
+>  tools/testing/selftests/vDSO/vdso_test_getrandom.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 > 
 > diff --git a/tools/testing/selftests/vDSO/vdso_test_getrandom.c b/tools/testing/selftests/vDSO/vdso_test_getrandom.c
-> index f36e50f372f935e6d4da3175c81e210653bdce1d..b0e0d664508a38d6dde9df0a61ec8198ee928a17 100644
+> index b0e0d664508a38d6dde9df0a61ec8198ee928a17..01892d8e65d754d0353f7df2b63910d5be8cd1bc 100644
 > --- a/tools/testing/selftests/vDSO/vdso_test_getrandom.c
 > +++ b/tools/testing/selftests/vDSO/vdso_test_getrandom.c
-> @@ -100,15 +100,6 @@ static void *vgetrandom_get_state(void)
->  	return state;
->  }
+> @@ -232,6 +232,7 @@ static void kselftest(void)
+>  	pid_t child;
 >  
-> -static void vgetrandom_put_state(void *state)
-> -{
-> -	if (!state)
-> -		return;
-> -	pthread_mutex_lock(&vgrnd.lock);
-> -	vgrnd.states[vgrnd.len++] = state;
-> -	pthread_mutex_unlock(&vgrnd.lock);
-> -}
-> -
->  static void vgetrandom_init(void)
+>  	ksft_print_header();
+> +	vgetrandom_init();
+>  	ksft_set_plan(2);
+>  
+>  	for (size_t i = 0; i < 1000; ++i) {
+> @@ -285,8 +286,6 @@ static void usage(const char *argv0)
+>  
+>  int main(int argc, char *argv[])
 >  {
->  	const char *version = versions[VDSO_VERSION];
-> @@ -264,7 +255,7 @@ static void kselftest(void)
+> -	vgetrandom_init();
+> -
+>  	if (argc == 1) {
+>  		kselftest();
+>  		return 0;
+> @@ -296,6 +295,9 @@ int main(int argc, char *argv[])
+>  		usage(argv[0]);
+>  		return 1;
 >  	}
->  	for (;;) {
->  		struct ptrace_syscall_info info = { 0 };
-> -		int status, ret;
-> +		int status;
->  		ksft_assert(waitpid(child, &status, 0) >= 0);
->  		if (WIFEXITED(status)) {
->  			ksft_assert(WEXITSTATUS(status) == 0);
+> +
+> +	vgetrandom_init();
+> +
+>  	if (!strcmp(argv[1], "bench-single"))
+>  		bench_single();
+>  	else if (!strcmp(argv[1], "bench-multi"))
 > 
 
 
