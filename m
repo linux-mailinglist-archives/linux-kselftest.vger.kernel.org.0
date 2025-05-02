@@ -1,49 +1,59 @@
-Return-Path: <linux-kselftest+bounces-32183-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32184-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86824AA71E3
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 14:31:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75EDCAA7246
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 14:40:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7FB521BC5260
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 12:31:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DFE614C3840
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 12:40:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF53C2566E1;
-	Fri,  2 May 2025 12:29:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A97C253949;
+	Fri,  2 May 2025 12:40:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A5Aq20Um"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="QGktqbLi";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="SO3Ht/BQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC37D2566D4;
-	Fri,  2 May 2025 12:29:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7419251782;
+	Fri,  2 May 2025 12:40:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746188996; cv=none; b=l/HY/LNeAVoNnYuUdXD3tio0+7m3fO9rA1qPrgMcrymPJfRsFslm1oKqfMp/R3btnE+2MGTGpPgbin5dErECcK5IILhXJBiFtiRYq9MqQI7GbJrZfa3lp7TmwjvC0UnqIce3icpX1Bf5Vs3CcIqBfHFN7ORO1J5RxFwV9tlkZwE=
+	t=1746189625; cv=none; b=cKI0vWWyEwqP2vxHxHOgdQeWsXxyEjJNiziRR8hI7xoWnzVt73CnY/5lHI1EA2zEumPYR74zEQPOgWj7OtutfitHMZwEgLzVOGC8YSCbLQFfO0FOkMQPrUygm0Jv8k7jXw29gnuNSXBXPr+//3D9xQ2KPLKD7a7sPOmuoSXVgJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746188996; c=relaxed/simple;
-	bh=DGcYu+3DqZNwUOU60M33ZGmzLjkivOhGbY2ClBN8f/4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=jphPvsfU8ZX9qR/bvHcCwtb4BLo+AsAyh4nUyaetN2AMuOOOGNManzlQ6KU54SDOXAWnlcahHrKNiTHLq+CIoqTHmsnxJlnI31yuZfZ3Zoz/+3uFxToOa9hVcA8BhArzubnYzTiUFuEDsGVJpXUguHYkaTyIDmXbs4SgtTImgjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A5Aq20Um; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5614C4CEEF;
-	Fri,  2 May 2025 12:29:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746188996;
-	bh=DGcYu+3DqZNwUOU60M33ZGmzLjkivOhGbY2ClBN8f/4=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=A5Aq20UmZw/n8JuSJthdNPcL2VufHRnX86P9N5/lDJDQ1Nl3rYcA59uYY/tHf7Eqy
-	 20yeBrxIabqqt93vElvDVvAyQqY2N8wWbX79hyCq3b9e4N4zjzMy3/byNpHlAL5yAh
-	 DQpMs3dacjTe84NqvpFxzc8NxHhycI5HaqJVDtMWKS1N/sy1JScmUWxCCZuxrBRpps
-	 DlT2947AWIfX/T6O1edUogJ4erzQ2TyPagA/1ITxwpg/XR/CsmxdK26jGoi/IozjK0
-	 1CpV15GX7WDp3Yu8vk9AHPsAH7cRgry4JOTIw+o07lj+rQeZY4PE+9Dyh9jSJuMae0
-	 3mYLlaeqq09VA==
-From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Fri, 02 May 2025 14:29:27 +0200
-Subject: [PATCH net-next 7/7] selftests: mptcp: add chk_sublfow in diag.sh
+	s=arc-20240116; t=1746189625; c=relaxed/simple;
+	bh=f6HuqdSvAKGVPOqVzQm172RnAOk9GhXCrG/e/TsGahU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=qwN4LCuilK7KLrbwlGORujENYmEzF/y/pDs5gCYxdjBZtcVmMY/7Jm+kMv2oT6usImNEcxl/OfJJf2Ka4mZGiNbW25NoPFZjeXb9GCcjc3hfWmCGg2AyLwBGAfI7xQ1vXOj1qaxA09AW2k+Lp+qM+qCYJBqKWi5262Srro02Ir4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=QGktqbLi; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=SO3Ht/BQ; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1746189622;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=pDznLHNB3dpQYFIiF9hhdtTNUe2lHroDW4Mp9Gw5PGg=;
+	b=QGktqbLiim9nJtm35O64haJj4hUt7LU59uJKsgN+3hQUfEQR9LHICrXRGPgmSwBDwSxsbe
+	O6ra1TXa3h8UaUsK2g0lmJEnSJFwfQF05NQRZLZpfwmIaJ9RsQdo8n05tFNr0rxPb+uZ2f
+	1lxBMcxmbyLUsRqsfzEiZ0PvWJHK3fBxB9gUZFZVpxOwguxX8xp3T8VfLNviLUkD11PjRU
+	uCBIfD9YsTQLVIjqqtjmFEIJSzwY7diONhElU42yeVpXeHaPbirZdv0ntuuHBgrHOh8Yfc
+	Q8TkiR5PNGVzMmYmVYDxuyLQNeffHIGb4saUv0iRuib9Y5zhV4JSXlCoeE0Sog==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1746189622;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=pDznLHNB3dpQYFIiF9hhdtTNUe2lHroDW4Mp9Gw5PGg=;
+	b=SO3Ht/BQxTTSEyYfehtEwnuO6YMFzOEO2Ts7H2kwKgsk9I2W2ZQtzJFIs/5m+ShAz+FtKb
+	4vB2GHjuUj1MKyBA==
+Subject: [PATCH 0/7] selftests: vDSO: Some cleanups and fixes
+Date: Fri, 02 May 2025 14:40:12 +0200
+Message-Id: <20250502-selftests-vdso-fixes-v1-0-fb5d640a4f78@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -51,96 +61,51 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250502-net-next-mptcp-sft-inc-cover-v1-7-68eec95898fb@kernel.org>
-References: <20250502-net-next-mptcp-sft-inc-cover-v1-0-68eec95898fb@kernel.org>
-In-Reply-To: <20250502-net-next-mptcp-sft-inc-cover-v1-0-68eec95898fb@kernel.org>
-To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
- Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- Gang Yan <yangang@kylinos.cn>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1984; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=JQOWlruNPp9QEkq2WeaRRQQFmYLUfEbcF8gyDviCmTk=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDJEdq2Naprr8HbH2oIpBw1DDmc9O66+ZMbL2eW/Sxarx
- gi4XdFO7ChlYRDjYpAVU2SRbovMn/m8irfEy88CZg4rE8gQBi5OAZjIknqGv2KBIuqsYbM0713X
- SJbXXm3n7VzL17fv+tTJn/mv3Yk9fYSR4X4Qg6TNhiwRyXtMXcYbb8xYXnR256/ZaZP4e3mEjWZ
- t4wEA
-X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIACy9FGgC/x3L0QpAQBBG4VfRXJti2cSryIXsv0wJ7UhK3t3k8
+ vR1HlIkgVKXPZRwicq+WZR5RtMybjNYgjW5wvmidhUr1nhCT+Ur6M5RbigHN6GpS3Pfkq1Hwg9
+ 29sP7fkGwvLtmAAAA
+X-Change-ID: 20250423-selftests-vdso-fixes-d2ce74142359
+To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+ Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+ Shuah Khan <shuah@kernel.org>, "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: Shuah Khan <skhan@linuxfoundation.org>, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ Muhammad Usama Anjum <usama.anjum@collabora.com>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1746189620; l=1230;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=f6HuqdSvAKGVPOqVzQm172RnAOk9GhXCrG/e/TsGahU=;
+ b=eqBpzSpZychCvlL1jyLuS1MmVqY+r/HQcSFY8U/3khmGZ+yulcZJieXAvrUmlt+IFLiGwamzT
+ EVdag3GP4FiB/gxKQhgRMkoR6/QBfszj81+bM7ORs+Mw9eO40rTNcSk
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-From: Gang Yan <yangang@kylinos.cn>
+Fixes and cleanups for various issues in the vDSO selftests.
 
-This patch aims to add chk_dump_subflow in diag.sh. The subflow's
-info can be obtained through "ss -tin", then use the 'mptcp_diag'
-to verify the token in subflow_info.
-
-Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/524
-Co-developed-by: Geliang Tang <geliang@kernel.org>
-Signed-off-by: Geliang Tang <geliang@kernel.org>
-Signed-off-by: Gang Yan <yangang@kylinos.cn>
-Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- tools/testing/selftests/net/mptcp/diag.sh | 32 +++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+Thomas Weißschuh (7):
+      selftests: vDSO: chacha: Correctly skip test if necessary
+      selftests: vDSO: clock_getres: Drop unused include of err.h
+      selftests: vDSO: vdso_test_correctness: Fix -Wold-style-definitions
+      selftests: vDSO: vdso_test_getrandom: Drop unused include of linux/compiler.h
+      selftests: vDSO: vdso_test_getrandom: Drop some dead code
+      selftests: vDSO: vdso_test_getrandom: Always print TAP header
+      selftests: vDSO: vdso_config: Avoid -Wunused-variables
 
-diff --git a/tools/testing/selftests/net/mptcp/diag.sh b/tools/testing/selftests/net/mptcp/diag.sh
-index e7a75341f0f32304ff4e58c9b2500d405124dc74..7a3cb4c09e450f0ae570015c4724ec268c6dc19f 100755
---- a/tools/testing/selftests/net/mptcp/diag.sh
-+++ b/tools/testing/selftests/net/mptcp/diag.sh
-@@ -225,6 +225,37 @@ chk_dump_one()
- 	fi
- }
- 
-+chk_dump_subflow()
-+{
-+	local inet_diag_token
-+	local subflow_line
-+	local ss_output
-+	local ss_token
-+	local msg
-+
-+	ss_output=$(ss -tniN $ns)
-+
-+	subflow_line=$(echo "$ss_output" | \
-+		       grep -m1 -Eo '[0-9.]+:[0-9].+ +[0-9.]+:[0-9.]+')
-+
-+	ss_token=$(echo "$ss_output" | grep -m1 -Eo 'token:[^ ]+')
-+
-+	inet_diag_token=$(ip netns exec $ns ./mptcp_diag -s "$subflow_line" | \
-+			  grep -Eo 'token:[^ ]+')
-+
-+	msg="....chk dump_subflow"
-+
-+	mptcp_lib_print_title "$msg"
-+	if [ -n "$ss_token" ] && [ "$ss_token" = "$inet_diag_token" ]; then
-+		mptcp_lib_pr_ok
-+		mptcp_lib_result_pass "${msg}"
-+	else
-+		mptcp_lib_pr_fail "expected $ss_token found $inet_diag_token"
-+		mptcp_lib_result_fail "${msg}"
-+		ret=${KSFT_FAIL}
-+	fi
-+}
-+
- msk_info_get_value()
- {
- 	local port="${1}"
-@@ -316,6 +347,7 @@ chk_msk_fallback_nr 0 "....chk no fallback"
- chk_msk_inuse 2
- chk_msk_cestab 2
- chk_dump_one
-+chk_dump_subflow
- flush_pids
- 
- chk_msk_inuse 0 "2->0"
+ tools/testing/selftests/vDSO/vdso_config.h            |  2 ++
+ tools/testing/selftests/vDSO/vdso_test_chacha.c       |  3 ++-
+ tools/testing/selftests/vDSO/vdso_test_clock_getres.c |  1 -
+ tools/testing/selftests/vDSO/vdso_test_correctness.c  |  2 +-
+ tools/testing/selftests/vDSO/vdso_test_getrandom.c    | 18 +++++-------------
+ 5 files changed, 10 insertions(+), 16 deletions(-)
+---
+base-commit: 0af2f6be1b4281385b618cb86ad946eded089ac8
+change-id: 20250423-selftests-vdso-fixes-d2ce74142359
 
+Best regards,
 -- 
-2.48.1
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 
 
