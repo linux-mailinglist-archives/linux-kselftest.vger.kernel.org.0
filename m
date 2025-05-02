@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-32231-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32232-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0450AA7B99
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 23:52:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42336AA7B9C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 23:53:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A1684A84C7
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 21:52:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DFC961B63959
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 May 2025 21:53:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10AD121FF21;
-	Fri,  2 May 2025 21:51:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE1DF221FD8;
+	Fri,  2 May 2025 21:52:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c1GsZP1X"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cYJxa0fO"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4C15210198;
-	Fri,  2 May 2025 21:51:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C7A8221F21;
+	Fri,  2 May 2025 21:52:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746222718; cv=none; b=Mj0fv7Ql6PlVOXnOvvHcbad2TsAZ2dAjMr+XFdzUZk23esTBkuMUIi+5o/hT3Wl16RShkYEbgiUrrhiRGJdH8XHCdc/cMkg7Yk/hkdobzMOIQf4vABIO44WQYo1nn7k03O2oyJYvK6COKuVL6iS53KjeB+GBDIVwez9vP4caGxU=
+	t=1746222722; cv=none; b=ZurvBqxx+aBVP6qVKS9Xfe4d8zRz2o1jGqWavULApm32g9CmhlIlXn0+FKu9As5RZ8swTnW7dk9YcSBl85DnCtx9/ZeC4MPrCoiP8DNXXQVhXbDjaKAgzQhzid9P0Gv0fhjTmLSrzjSt/woIo5nlalYS359GoraDogYncvQA508=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746222718; c=relaxed/simple;
-	bh=vvQNN9akNzYWDVQbfCy9pnQxfwa6gSBIzDY7UkgvpC8=;
+	s=arc-20240116; t=1746222722; c=relaxed/simple;
+	bh=Ywzns9kdzvgchDQq8gUskAhoVH1XxfCbNL7gC5kzNDM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EuZoKAEaAgDxEk00M+sZODwMj/Hvaj2GEfiDE4dAkXzO/ShWfGBT/vUpF9fJATv454iOPZeknxv2c6nU/+h+7UIEKJDwTvK0FVsq16Y2rdFOMR9D1U6DDzLP+XIIKym1Mzy8LvZ/IME/dYclKocp1A13aNzoTO17oHpk3C9xgb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c1GsZP1X; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B504C4CEE4;
-	Fri,  2 May 2025 21:51:53 +0000 (UTC)
+	 MIME-Version; b=T4g6JTjkca8dcivixdrb6yJzPfUGRSfTV7Eebvjn7ocvBKOuxo4hvQzFcQt5F12QA5eFIlZNuUYjLL87115tcrcdAManoe3hbcHGJJ/Q/tBc2ewvzua7LOy/grWX1UP6F1EDESskVUCsi8SymungQhAQTvWVSAusXPjdRPk6J38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cYJxa0fO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D19A2C4CEEB;
+	Fri,  2 May 2025 21:51:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746222717;
-	bh=vvQNN9akNzYWDVQbfCy9pnQxfwa6gSBIzDY7UkgvpC8=;
+	s=k20201202; t=1746222722;
+	bh=Ywzns9kdzvgchDQq8gUskAhoVH1XxfCbNL7gC5kzNDM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=c1GsZP1XDahePAMHJmlzCYgiV/CEt9OkY7hQCb51O3Cktn0WXN4oYqAzYERFILW1/
-	 Z5bQjtiwRxEAIhg/KsLtbMK2E3fmtDsrOrQW6bNARl7ouksHPUklV+qBx0wv+SOJYI
-	 uDq4pMTICw5bfGkWYs8UfYQo6m8DUSnVqfUyNNwuAtDQ7YhKK8fhPrYGkMEhM2NL47
-	 SIgZEMrkM9VjGbocsgrO06C72vJEWbsFUZHvOPBUYNjJ9Kg9fv7yU7pYtrs7nr22qN
-	 LzNRDiANge7gegfSuhGHhxZeX5Qau2+sce1rXrnyY1NSq5vx+ywkQ25HRqCmtWB2FJ
-	 zR0OQRn0yRIpQ==
+	b=cYJxa0fOKQNQqSN0tZ1fD5HfOhHC4111Fosluxj856LqCVvm1i0bw/BiMz2LGr1Cq
+	 dtCFMp+b+4N272rKP6CvTAWLgArXYlUCpxw74GwvqQMyAvh2ofbie1Dn2Bp1Zdd28c
+	 Lqzt0u3WyEPFJmv3Wig1dGARB0gwhirUFUimzNMcx3P9ugogPciIevNdC4WYrfA9fc
+	 EaVwygKjs3rpK1s4gvezw8Z9qic4K307JQTj2C2V2EBgGYx0odRCeFvOcWklajdt61
+	 OUQfDlAj2OIjTrqRCHYKb/NJOOvtYc+DTFZA3LTDWdnOymVpcpZi9B+0/NJL6ME++R
+	 WnFvWCd66PhXA==
 From: Miguel Ojeda <ojeda@kernel.org>
 To: Brendan Higgins <brendan.higgins@linux.dev>,
 	David Gow <davidgow@google.com>,
@@ -60,9 +60,9 @@ Cc: Rae Moar <rmoar@google.com>,
 	rust-for-linux@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	patches@lists.linux.dev
-Subject: [PATCH 2/7] rust: kunit: support checked `-> Result`s in KUnit `#[test]`s
-Date: Fri,  2 May 2025 23:51:27 +0200
-Message-ID: <20250502215133.1923676-3-ojeda@kernel.org>
+Subject: [PATCH 3/7] rust: add `kunit_tests` to the prelude
+Date: Fri,  2 May 2025 23:51:28 +0200
+Message-ID: <20250502215133.1923676-4-ojeda@kernel.org>
 In-Reply-To: <20250502215133.1923676-1-ojeda@kernel.org>
 References: <20250502215133.1923676-1-ojeda@kernel.org>
 Precedence: bulk
@@ -73,92 +73,67 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Currently, return values of KUnit `#[test]` functions are ignored.
+It is convenient to have certain things in the `kernel` prelude, and
+means kernel developers will find it even easier to start writing tests.
 
-Thus introduce support for `-> Result` functions by checking their
-returned values.
+And, anyway, nobody should need to use this identifier for anything else.
 
-At the same time, require that test functions return `()` or `Result<T,
-E>`, which should avoid mistakes, especially with non-`#[must_use]`
-types. Other types can be supported in the future if needed.
-
-With this, a failing test like:
-
-    #[test]
-    fn my_test() -> Result {
-        f()?;
-        Ok(())
-    }
-
-will output:
-
-    [    3.744214]     KTAP version 1
-    [    3.744287]     # Subtest: my_test_suite
-    [    3.744378]     # speed: normal
-    [    3.744399]     1..1
-    [    3.745817]     # my_test: ASSERTION FAILED at rust/kernel/lib.rs:321
-    [    3.745817]     Expected is_test_result_ok(my_test()) to be true, but is false
-    [    3.747152]     # my_test.speed: normal
-    [    3.747199]     not ok 1 my_test
-    [    3.747345] not ok 4 my_test_suite
+Thus add it to the prelude.
 
 Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 ---
- rust/kernel/kunit.rs | 25 +++++++++++++++++++++++++
- rust/macros/kunit.rs |  3 ++-
- 2 files changed, 27 insertions(+), 1 deletion(-)
+ rust/kernel/kunit.rs   | 3 +--
+ rust/kernel/prelude.rs | 2 +-
+ rust/macros/lib.rs     | 2 +-
+ 3 files changed, 3 insertions(+), 4 deletions(-)
 
 diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
-index 2659895d4c5d..f43e3ed460c2 100644
+index f43e3ed460c2..053a7da147d5 100644
 --- a/rust/kernel/kunit.rs
 +++ b/rust/kernel/kunit.rs
-@@ -164,6 +164,31 @@ macro_rules! kunit_assert_eq {
-     }};
+@@ -6,6 +6,7 @@
+ //!
+ //! Reference: <https://docs.kernel.org/dev-tools/kunit/index.html>
+ 
++use crate::prelude::*;
+ use core::{ffi::c_void, fmt};
+ 
+ /// Prints a KUnit error-level message.
+@@ -40,8 +41,6 @@ pub fn info(args: fmt::Arguments<'_>) {
+     }
  }
  
-+trait TestResult {
-+    fn is_test_result_ok(&self) -> bool;
-+}
-+
-+impl TestResult for () {
-+    fn is_test_result_ok(&self) -> bool {
-+        true
-+    }
-+}
-+
-+impl<T, E> TestResult for Result<T, E> {
-+    fn is_test_result_ok(&self) -> bool {
-+        self.is_ok()
-+    }
-+}
-+
-+/// Returns whether a test result is to be considered OK.
-+///
-+/// This will be `assert!`ed from the generated tests.
-+#[doc(hidden)]
-+#[expect(private_bounds)]
-+pub fn is_test_result_ok(t: impl TestResult) -> bool {
-+    t.is_test_result_ok()
-+}
-+
- /// Represents an individual test case.
+-use macros::kunit_tests;
+-
+ /// Asserts that a boolean expression is `true` at runtime.
  ///
- /// The [`kunit_unsafe_test_suite!`] macro expects a NULL-terminated list of valid test cases.
-diff --git a/rust/macros/kunit.rs b/rust/macros/kunit.rs
-index eb4f2afdbe43..9681775d160a 100644
---- a/rust/macros/kunit.rs
-+++ b/rust/macros/kunit.rs
-@@ -105,8 +105,9 @@ pub(crate) fn kunit_tests(attr: TokenStream, ts: TokenStream) -> TokenStream {
-     let path = crate::helpers::file();
-     for test in &tests {
-         let kunit_wrapper_fn_name = format!("kunit_rust_wrapper_{}", test);
-+        // An extra `use` is used here to reduce the length of the message.
-         let kunit_wrapper = format!(
--            "unsafe extern \"C\" fn {}(_test: *mut kernel::bindings::kunit) {{ {}(); }}",
-+            "unsafe extern \"C\" fn {}(_test: *mut kernel::bindings::kunit) {{ use kernel::kunit::is_test_result_ok; assert!(is_test_result_ok({}())); }}",
-             kunit_wrapper_fn_name, test
-         );
-         writeln!(kunit_macros, "{kunit_wrapper}").unwrap();
+ /// Public but hidden since it should only be used from generated tests.
+diff --git a/rust/kernel/prelude.rs b/rust/kernel/prelude.rs
+index baa774a351ce..e5d61a83952f 100644
+--- a/rust/kernel/prelude.rs
++++ b/rust/kernel/prelude.rs
+@@ -17,7 +17,7 @@
+ pub use crate::alloc::{flags::*, Box, KBox, KVBox, KVVec, KVec, VBox, VVec, Vec};
+ 
+ #[doc(no_inline)]
+-pub use macros::{export, module, vtable};
++pub use macros::{export, kunit_tests, module, vtable};
+ 
+ pub use pin_init::{init, pin_data, pin_init, pinned_drop, InPlaceWrite, Init, PinInit, Zeroable};
+ 
+diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
+index 8bd7906276be..8b8d46e759d4 100644
+--- a/rust/macros/lib.rs
++++ b/rust/macros/lib.rs
+@@ -406,7 +406,7 @@ pub fn paste(input: TokenStream) -> TokenStream {
+ /// # Examples
+ ///
+ /// ```ignore
+-/// # use macros::kunit_tests;
++/// # use kernel::prelude::*;
+ /// #[kunit_tests(kunit_test_suit_name)]
+ /// mod tests {
+ ///     #[test]
 -- 
 2.49.0
 
