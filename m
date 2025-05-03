@@ -1,105 +1,114 @@
-Return-Path: <linux-kselftest+bounces-32276-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32277-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72827AA81E6
-	for <lists+linux-kselftest@lfdr.de>; Sat,  3 May 2025 20:16:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03D52AA8286
+	for <lists+linux-kselftest@lfdr.de>; Sat,  3 May 2025 22:02:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D494E17C00D
-	for <lists+linux-kselftest@lfdr.de>; Sat,  3 May 2025 18:16:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9B1231B6101D
+	for <lists+linux-kselftest@lfdr.de>; Sat,  3 May 2025 20:02:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 555781DC998;
-	Sat,  3 May 2025 18:16:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 232CE27EC6A;
+	Sat,  3 May 2025 19:59:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TkFfOwxi"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BlaE5EW6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D216E27E7D0;
-	Sat,  3 May 2025 18:16:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B34F28150E;
+	Sat,  3 May 2025 19:59:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746296203; cv=none; b=NXxs2Wv4GY06b/90OkMQUTrglHJsc8tVrIUiBQV1XS1ml1kGnLV/o2ArbqyaHUBd1wvkoy6bTGIIr7xjm70e1b+tipOklJjR0V2eCKiqKHFb8KcF1VZb2b045bQSPAids8dlaV1u3sC5DlZcaqhRnLlQUy/bvdUSW9ArD08wpkw=
+	t=1746302394; cv=none; b=ENUh1l+fZB9FjhCliT5ERrGCHf/SCqHoNiUipf0hWZy4OKut5Vvsxq1PTLGJWCB2HShH2c1iKy3pmtatZ9cKsdRmHo8qbdS+yethcGE+ev+w9T6dR2jH3hc4085A5KT17yzUbXfV0ud5neWms/UgFhEiDcy+3nMnp1KvOhfev4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746296203; c=relaxed/simple;
-	bh=VtHQlaNPowPrjenRttkbRhF1+Y7CRiRxicklRpQMALM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WkcHLNrrj218bMAVtEs61FQAMbsa4RAD/DsPti+7WUleL8tDhCCZjGk3Xtm3LKQBRb3HSOqMrrFg/+6EjvzEb9B361Wk4wStDHlEpEQ9QlwSACoJ8fnnGZR8z1QVX0heJC/7DfUjoyU/WZu0bW7joy2IlUkvseaJsBZz1YY37jk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TkFfOwxi; arc=none smtp.client-ip=209.85.216.52
+	s=arc-20240116; t=1746302394; c=relaxed/simple;
+	bh=gU74hqXq8gUI3W0CQRs8UPvO2W64+odu6oE3qMydXNk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ieRUFJlpMWnWaAFOGlRKpXsvet8XJO/EwE9LP9iPmoZrOWezt2gYN33Pp87KjCEZjt7id+OKaXZ5VTJY7gGLx5XEDvCmcDV86/mkULeMlR2Nu3t9+CFssnXOnzdbGwt7WGOiH0FZuQm+pWlfjsX5zLW3ER9Nk08zHR3OUnyctEI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BlaE5EW6; arc=none smtp.client-ip=209.85.219.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2ff6e91cff5so3007503a91.2;
-        Sat, 03 May 2025 11:16:40 -0700 (PDT)
+Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-6e8f254b875so35064616d6.1;
+        Sat, 03 May 2025 12:59:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746296200; x=1746901000; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VtHQlaNPowPrjenRttkbRhF1+Y7CRiRxicklRpQMALM=;
-        b=TkFfOwxifsOobNnIt/CAu3HIe6COxdcA2SRgiJh1Scq3nGe5C/VcpfdYO2UFZYiJsf
-         LPeimwiaJQra0421rjUWZMKcZP6jkCN2/JZwGoJg2CXhCjZRyV2adzf2Z4H4IXYsuxbF
-         rvQz/kZK/uzZXxmWEfdfesaSfyxSupFdKGmf7o5dz4O2hE1N7E/xwK2ig/v0gyyXgzAo
-         ugXFTogIHuJPGuvgQwBfXN/2lKHQckytWI6CmCM3WpUWXf8dAV4gXsP7FzZsUN0i2hSW
-         sc5WosYdYWM26gNYDB4I1itrpLNbCFuW+P9VeljlVcZ+rE0FPoIPal886PAEj1pbIA8m
-         OeNg==
+        d=gmail.com; s=20230601; t=1746302391; x=1746907191; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=s1mbnIenwaAh9cJypd/Gpwl4cnjxkwwDmZM+HdWEs+o=;
+        b=BlaE5EW6vP4bghJ4kPIskJEblK3Y6NUcPyukaGs24D3f7rxNOmfCntYulieXAPWzZC
+         DAJVHq8HEZI7/6fYzmR8ol0LKToxweJ57oK7uCwedBrp0rl2/Lm5LSNeJITP76/QaiJa
+         sbfqcGLg8uGYXWNbhB4CwqTikDwxF4790DananL+V02hLuLzwsElkmyMmOpzcbwar/U7
+         lA+vW+bR+y8JUo7/vUQOeC3khT1LeLADQcgXBUyIb7QkrnnPWZkzl7766OEe9vlzthJk
+         MxSc7SlVGAWJfLrGgjOQvfBjSJPEJegsxVsESzYklZQBUFKYFvto8uns8rbHG13bFGAc
+         yitw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746296200; x=1746901000;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1746302391; x=1746907191;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=VtHQlaNPowPrjenRttkbRhF1+Y7CRiRxicklRpQMALM=;
-        b=ZoPQ7H/k2rtIi5+xebRh6wzKHEoQXlPhfriHmasQkjISusECyaqNiI5gUihV0HFqXO
-         zTOr3/MY3jI8YGHMo8LKJpgIRfhEzs+iS6M21yHfAbJcAZ8kP4nWhA5Yais/0LFUOCDT
-         LLLurcb+fYKX69j9hm8FzANnfhx5thjgMW5yA1n76DKdX4tg52snE3maSsDtn1ytqtTL
-         kZ0QqDoDKMr8az3J88UgzMsJD+zuQkGwjdfOvppGwd6V6M4qvDbWz5BGxFJXzgEW1mBQ
-         HZSU0Jfg0x4KgljisZ5r+iTWzl+Uid+8pqerZXMLM/ac2gW8zAbjzxV6FsjKtDiwsu9N
-         lElg==
-X-Forwarded-Encrypted: i=1; AJvYcCUZcB0LYeAD/4tbepfTNU4O/lUj5JdxZFcFhVWwOIXHPg6218HhmjGX2SbeN6mMjakgUQJVYRLa1o27v7xdC/Mu@vger.kernel.org, AJvYcCX4Zko5jQWyfn/R9lWdTkgzg9WIolkzHKY4S7EBUJ6J2X3L61q9DlUC67EgkPQMWz4/uM8kVjm7GddnG+s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzgXoD5P08GxP003qpxvuzoiVKo1HCWiR6/TT0xrzeS3RfxVPNM
-	+TykaK3e1Rzqy3z2uizjWFtIwYYSMMp4MF5C+nuwv0PKSloqzAfXqO2BruGNppErsZ7GGECJZcZ
-	Xr8lzIj07gwYRupTw48u6JSrMjw==
-X-Gm-Gg: ASbGnctJ7t639bsnAzqtqF+4v3M3lkvt+4Xiiw5B/RDs+kZ/ifEqya3o4IAk8vJc2H9
-	CfKF0RaqfbInzvDb2Tp44/emBysap3mWWpuMcIx+is5avvewx67rwWKWSqWLard3HYY7Eo7dHGb
-	8wF8E8WOp+1kn1hyppykj8hg==
-X-Google-Smtp-Source: AGHT+IHKsbCVi7HNnXXdlqdZjUr5DzRbIPrcHgFYMd4daXYxhrfynkAGlvyPIpnO+hHOAELtmlLVU9ygkbTMS+eyNcA=
-X-Received: by 2002:a17:90b:1f84:b0:2ff:62f8:9a12 with SMTP id
- 98e67ed59e1d1-30a61a2be01mr1983770a91.23.1746296199869; Sat, 03 May 2025
- 11:16:39 -0700 (PDT)
+        bh=s1mbnIenwaAh9cJypd/Gpwl4cnjxkwwDmZM+HdWEs+o=;
+        b=ppbPOCq7hUBFAphm/MeEwAzLJN+71BjvPCeFjVpyL4iTRvsaFfzRvaMuquSuvMRzXp
+         jNuN6TeWFYE/K5Ws7LKftgmOItuqDsq5o+0l9hiC/Oj13QZXib2MJ252y3DNIBHzpFDo
+         lKT/pV5usAAR8JdHQuoXArdWRt4Tdnfg75WiBdna3C7p0ISxdpfokVspxvxvlLvwGPHZ
+         qhbKDIBLIp0pLPlqcKGR4odhJGZ6eqPUoJaSpAfav+rnmlPX+/hbSH7pRn0QAtpYPaVw
+         x2Ri5oxHMFvRhDeI21G1RgYG2K38e5La1t4XxW5ZhmI4HW/Wj9GPHMWlFEHbgA3V3XBG
+         M5eA==
+X-Forwarded-Encrypted: i=1; AJvYcCVgQKZcCJy7SeMFjrAGHd7z2d7TAMLXALba3Si42ZqbKXpN7wxc7ELSl7V7pPu3uWVmXSNt5QXQUAw+awQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxS6Ckl4apP5xHmmI5OBX5Ro08Maf168Hbkg+7ltEGbwBusvyog
+	e7bED5HQ9DENe/D2XYUq/pePCATMErKHQi9uz6JVZ8DBk5cFcldi
+X-Gm-Gg: ASbGncuufeUFWSAK2InMLG8F/1VpL7WrPDfy9D1y6s1uEZPca4XyaOEXPWvLumAMuxG
+	wZ5Cc1Sc4svE58uTH78y4SHqj50aGF2BQ96pkQJdeiqvYH4o9vlpjpSeE0uopFAGD3zBf1ASBcD
+	FndzZhXBpSRdH5c7znxkGR+PzlcQI/WXTz/1a4Y8AmVFOfsikKV3OVW1w4a3oFJ4WuF4gla0v0p
+	fb8JUDJxhgsCf9LAmgC9QpW9v+XTC2DtigGfdvKfvKnRefEWWDw8ReI9PHi79pGuYO9kiNReNEV
+	537/p6zPJvzP2b12RM4PwlXvnZygx4oMq8o2csTBo5rz7ipkCDMxs1NtBCZC9hgxu/xnbkUx
+X-Google-Smtp-Source: AGHT+IEcjJdx+HiU3ArdgIRP5VndtHr6Bi6xFwtCX+gArCzOlQZ9wL3L1AhJJLgejhW51g3y+bWe0w==
+X-Received: by 2002:a05:6214:404:b0:6f4:c8c9:c4fb with SMTP id 6a1803df08f44-6f5237552e3mr47167386d6.11.1746302391081;
+        Sat, 03 May 2025 12:59:51 -0700 (PDT)
+Received: from c65201v1.fyre.ibm.com ([129.41.87.7])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6f50f3b03ddsm35310866d6.7.2025.05.03.12.59.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 May 2025 12:59:50 -0700 (PDT)
+From: Chelsy Ratnawat <chelsyratnawat2001@gmail.com>
+To: shuah@kernel.org,
+	brauner@kernel.org
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Chelsy Ratnawat <chelsyratnawat2001@gmail.com>
+Subject: [PATCH] selftests/filesystems: Fix typo in file_stressor.c
+Date: Sat,  3 May 2025 12:59:11 -0700
+Message-ID: <20250503195911.426158-1-chelsyratnawat2001@gmail.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250501163827.2598-1-ujwal.kundur@gmail.com> <20250501163827.2598-2-ujwal.kundur@gmail.com>
- <D9LO1QI65D6K.NLDZ4RK2835Y@google.com> <CA+i-1C1x2TenH-WxkUnkx3-5XpkXOMMmZQTCBV3sHDV8WWN=oA@mail.gmail.com>
-In-Reply-To: <CA+i-1C1x2TenH-WxkUnkx3-5XpkXOMMmZQTCBV3sHDV8WWN=oA@mail.gmail.com>
-From: Ujwal Kundur <ujwal.kundur@gmail.com>
-Date: Sat, 3 May 2025 23:46:26 +0530
-X-Gm-Features: ATxdqUEF5U0na-NaAHmxH75iMW2eHSbW97C7umQp2QWaCy32V1BUA1KDKLjKI0w
-Message-ID: <CALkFLLJ4CYRFuyR8sHi5Ah06QD_fDuF9v5eCyG7Xh+2kHPVzEg@mail.gmail.com>
-Subject: Re: [PATCH 1/4] selftests/mm/uffd: Refactor non-composite global vars
- into struct
-To: Brendan Jackman <jackmanb@google.com>
-Cc: akpm@linux-foundation.org, peterx@redhat.com, shuah@kernel.org, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Thanks for the review and testing!
+Change spelling from rougly to roughly.
 
-I'll push a V2 with the indentation fixes soon.
+Signed-off-by: Chelsy Ratnawat <chelsyratnawat2001@gmail.com>
+---
+ tools/testing/selftests/filesystems/file_stressor.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> this deletes the global vars before it deletes
-> the references to them. That's gonna be a real pain for bisections,
-> please can you restructure the series to prevent intervening build
-> failures?
-> (i.e. if I apply just 1/4, the selftests don't compile).
+diff --git a/tools/testing/selftests/filesystems/file_stressor.c b/tools/testing/selftests/filesystems/file_stressor.c
+index 1136f93a9977..01dd89f8e52f 100644
+--- a/tools/testing/selftests/filesystems/file_stressor.c
++++ b/tools/testing/selftests/filesystems/file_stressor.c
+@@ -156,7 +156,7 @@ TEST_F_TIMEOUT(file_stressor, slab_typesafe_by_rcu, 900 * 2)
+ 			ssize_t nr_read;
+ 
+ 			/*
+-			 * Concurrently read /proc/<pid>/fd/ which rougly does:
++			 * Concurrently read /proc/<pid>/fd/ which roughly does:
+ 			 *
+ 			 * f = fget_task_next(p, &fd);
+ 			 * if (!f)
+-- 
+2.43.5
 
-Could you help me understand this better? The selftests don't compile
-either way if both 1 and 2/3/4 aren't applied at the same time.
-
---- Ujwal.
 
