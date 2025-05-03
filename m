@@ -1,169 +1,135 @@
-Return-Path: <linux-kselftest+bounces-32270-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32271-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84280AA7DED
-	for <lists+linux-kselftest@lfdr.de>; Sat,  3 May 2025 03:35:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 914C0AA7E43
+	for <lists+linux-kselftest@lfdr.de>; Sat,  3 May 2025 05:24:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D74A01B65C08
-	for <lists+linux-kselftest@lfdr.de>; Sat,  3 May 2025 01:35:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6393C1BC3A45
+	for <lists+linux-kselftest@lfdr.de>; Sat,  3 May 2025 03:24:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B87570838;
-	Sat,  3 May 2025 01:35:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61CA51607A4;
+	Sat,  3 May 2025 03:24:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l0heVtPP"
+	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="jVUbotxL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69C48134AC;
-	Sat,  3 May 2025 01:35:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB12713DDBD
+	for <linux-kselftest@vger.kernel.org>; Sat,  3 May 2025 03:24:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746236139; cv=none; b=sQ74qzl/jYck/0DL3QH2+LJKs+xwhNN/euER8MLpgMhPT4m3ib8grlr51Qs/3XMut7UJtJdfZaOyFSobpHWeAWejDJ4abGyT4MZ6xKoPocdYgQ5Lzlk3TJN+U5eVlRBny3yqM3PwfUkIVVboe4hS4p0/rMPtlhHa8UMA687KKIE=
+	t=1746242672; cv=none; b=uqGH8qPSiKZbZxCD7QrRQGSF0i7A/bkOejxmhD0ngj4IvU+hmDlI3NiymusXjhjHPUJQtcDKCApSTjSHI4vTyCVPTt+oBDRiD9o114R5ABE387PMN4uiAm0y41gskRK8sJYLj0/lthzR49azRrPrBGodpBYFwmBTmhgq7uvrc7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746236139; c=relaxed/simple;
-	bh=K167g7fRemdb/WjUQxfGyL4vXoA+rt1mXfrmOgKxWGw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kxWeWoYs3hcUbFupJYWhud5tkSyAdcU0cpKysedbpom9t3a/eeb+onPKleR8uXOM3KbV8rr28Hgqk8HtwrY7ekY7ohZFfFdn9AtZBvdzTTFZrmod8wQjrMUFnYRNyY0/mIO5ZPxUA4KgZfDdfJTUK1CkUhszKc4anBvP7GW9ZSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l0heVtPP; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-39bf44be22fso1794439f8f.0;
-        Fri, 02 May 2025 18:35:37 -0700 (PDT)
+	s=arc-20240116; t=1746242672; c=relaxed/simple;
+	bh=yu/6Tg8ZTq+DttRgp7CeLbDw8imhFFEHXPhv+8viRAc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZyTkbqPluJZp8pPjw4rnLOgngcf1vq7yRiMNo0W9LJl5HOJ1wAc4VnzazFzliIBZ7KD4akUfgKFJWH8b4DhlEByFZD3O6n8exramGcdgjLl0h6ifj6A+O1Yd3WdW8+pvTmmGjrR52Te+/md6JXzP6LCTvIIfjXUuc7fM1ZChu+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=jVUbotxL; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-73712952e1cso2895979b3a.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 May 2025 20:24:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746236135; x=1746840935; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kj7Tv0PMAv5wN2mQctk8ok8E4ZG10HhCwkVt+fUKixg=;
-        b=l0heVtPPgQV+yxrQgCR6M8GYHW52pknDXz07m+XbkyV4OiK7UXLgKUbo57pUpHcuDJ
-         QIxJrp614+t5Hl/DaJsebaN65lA2Nyv3aZMZnqBT+jdy7dvX+08BoEzfVW2/+zMNJ1BJ
-         9qzHPrQn0jUL5MKUnA2aHpXe2mhhSRFb8kYtZIYIveb/A5/7niG/ryNYyS4tRM/4B7Zg
-         SK4tFG1Z1nzHcds+qQ5AqOxlvICpGLaQFBJ2WSbA0KskUKbAsZ/EQoUW+whGew5lguQ8
-         yA9jJdcfhZ+xPGhNNHki7cky9mf9tOEhqYNk8lYcQyFO7oxziAmeEMRdyLZ3x+jstw9H
-         YgXA==
+        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1746242670; x=1746847470; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=01S3EXrUvAFlfKl+vJu+6SWulW0bTDiNVSLWcw/lkYE=;
+        b=jVUbotxLQ1dYYHuno/x4fTS2wePS9KHd7cLAiG4zWi8KtjFWyK83h4oHG62QqY1Ab1
+         /Fdz87VC5CqmBRBo+LejCx7kH7PDiwPgmcwyc5TUqriy79hRwK6zXrH6y5x9Q3pN5AYf
+         tkhOGMdQMLH4FZsa7Lv6sfp8NYrFEJfdN0ORGbt9UgBfFaFC6sqZY/ZgPpUhgRgLxlUS
+         06pbLiTa81oV47swLcPKxMd7xgupHAQcyPLa3jqJzMe4dd1jTqKzHXwPUjvR5x0swMHn
+         0LXaIWMrJ+/4wbjQY0E2zamKBKxa8Tq+Do8bnurZxCu/RfAIykR1u2rh07iXN+PvWPb2
+         cDZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746236135; x=1746840935;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kj7Tv0PMAv5wN2mQctk8ok8E4ZG10HhCwkVt+fUKixg=;
-        b=Z8KtlzFeNdnLr63vRik9Y5N5xECHmzTY9J2afLhMH40SWig6XmxO8H7aoQqeontUpr
-         az3VOBXisM3xs5FIuaIe4vsy8swRzhYrdrINMkr4gl1tPpKSG6M7rrOnLEpQSEAuRNwl
-         kqhUwfCNg64skovxmO4P1GHPLhDKhP0/vOFuIFh0+jqrA5G7sJBoxVHxZRETfyvJdOEr
-         pAz2RHu6RoJ+qo5DbP4boN8ZAa1JwGZ8Jhhn8V+4BQqFZZnvvaR7K1V7Q0ZOab+3JsnU
-         BOpYRlrR6teo8hIfcMJR8mamfJF0d29sgROv+XPBcT6UaQOFLH455E5A9bLcUHbazpPe
-         yDgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW8Ps5TBqXBR1Y24GwrrG3ghPnJ1LmG59bOSXd3mfmMweUETua+5RffDVPQ38+xR5Gj8xkOOrXQHbKS2rcwyx0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMFw0Yn86CV7f8YKtBsprxzPFJeKaXkw3penbU6YPGuL60HmrI
-	0NBJtoI0f/oWFMsUoMIX02JUP91Y9QhJfHPQlnSN3QnKri/NgJtqwQakPoAY
-X-Gm-Gg: ASbGnct+7vmwm5dJ9VWVyXfwmZszkiAUVS8c4Y9OxZdtvEPMYqk39ZrS5+bolC/kdTK
-	76m3BK6ZQyG6D6uZIhTOM76A4h/DyS3OVbot2Wsh/lTcL6r2S9TOT3EbCLE5b7N6OCpnigztkdV
-	ijkIhjWhKWbDEndkFzGSg1FMrITaOEoIGDJ4o6ngWmBIiU4sItSO6O4t8fN2vO/ltdqhSp1gKTB
-	8r/x2+gI+7EtJuu6D043JhChnXYU2S9V3M0S2XVLi3kmEsmKLZmdX7d6BWeEp3z28CluNS4aCtb
-	wlY9dcylbfk/TNlzq0dw6QeIPp6vDGIki9ypw6AL05DIHo4g
-X-Google-Smtp-Source: AGHT+IH4gwCCZ6L77cFPD83z/oLaEFSZBiISpUZp1xuE+vCdGzJee8S0L9fpNB6GCgxypDTBHc7xzA==
-X-Received: by 2002:a05:6000:1cca:b0:3a0:7d82:d454 with SMTP id ffacd0b85a97d-3a09ceb0099mr697383f8f.20.1746236135348;
-        Fri, 02 May 2025 18:35:35 -0700 (PDT)
-Received: from localhost ([2a03:2880:31ff:8::])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a099b2449dsm3441410f8f.101.2025.05.02.18.35.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 May 2025 18:35:33 -0700 (PDT)
-From: Mohsin Bashir <mohsin.bashr@gmail.com>
-To: netdev@vger.kernel.org
-Cc: andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	ap420073@gmail.com,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net 3/3] selftests: drv: net: add version indicator
-Date: Fri,  2 May 2025 18:35:18 -0700
-Message-ID: <20250503013518.1722913-4-mohsin.bashr@gmail.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20250503013518.1722913-1-mohsin.bashr@gmail.com>
-References: <20250503013518.1722913-1-mohsin.bashr@gmail.com>
+        d=1e100.net; s=20230601; t=1746242670; x=1746847470;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=01S3EXrUvAFlfKl+vJu+6SWulW0bTDiNVSLWcw/lkYE=;
+        b=OzmbDPtaiDURr/7SWyQfcIsRHWCe7bQJXlApQtjDwW9wXdA8RaDmfIo+bukNwTIg5z
+         zVHdlXjYiRqKV951uYUFrX+19obIZ1sLfuwd4zRyih5l/wP+IuAo8EOEcPep1n2EraAG
+         Issv7QU0PLFjdgN67m5EjOUeYOkuC8NVJMHPOit1Xhwv4rc8WUTgupgN3qJFIpH2vzZN
+         9LZJA2KDQoEev8dMiANpu0FNnFs85EsLtFLCHO/pAywQUn3lmMgEaF9OV9f3R3eGzEBK
+         +Deh0a4ADgOJAFpRqp/glFdWNAAfFHqJ/vkoR0sATjKFlw0TfdzoQhXUJs6P2xrb1CbR
+         2dwg==
+X-Forwarded-Encrypted: i=1; AJvYcCWBRHWelDvqe93d/P7xRgccT4lOS9aicPfv/jkjzNtGdF9YqHemwjieC7aPnvrEFShSXed73eZEx1gxsHur0jk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx+BOS6bZhToD5Ok7XgVCP4nl9CaV3P6PkIUpXae+em3a35FYZJ
+	mVi4W4lrpN+ERNtep8Oyqk13plTc6QuJfWJt44ACrR1sR1Da7QZCR+V+ESoiB4E=
+X-Gm-Gg: ASbGnctYBhgCkrGYmHfJZu9LGqiIicW3kLckWjSon424dg6OPm4XA6afdUfKXgcp6OZ
+	wXM/aWuekWPviEM5M9XzRVcC+LLnJV4JDCTeImUmdx+R2i9mK1jL/AGSQRS+3Ok1yxxuzvTeNNt
+	PrI6gNwKYnj8mZSqAYMjJO4seSSFdxOZwaNne8bTcNR6JCK2CPUVfIbghPwieKVdU53g7EIolgz
+	91rWbSOgLMMc6O1VSzZ0FW4l9ifML5AgOKHJabtkmsRHddbqNBm8y9CEeTbAoT5iW7i1XbLEHn9
+	LqjUTR9rJ3dFyGuzKEeXDiaH74v/Us1gQz7wjFkpnXEbB8c=
+X-Google-Smtp-Source: AGHT+IGKyyY6b5IkmssEe4hWWkvxqqRx2LJ7Sz66T8MoGjg3QVXwsluSYcL6JIqsHdUYbBH02YKfRQ==
+X-Received: by 2002:a05:6a20:c90a:b0:201:2834:6c62 with SMTP id adf61e73a8af0-20cdef3e7d8mr8316564637.25.1746242670102;
+        Fri, 02 May 2025 20:24:30 -0700 (PDT)
+Received: from [192.168.1.21] ([97.126.136.10])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74058d7a397sm2414292b3a.28.2025.05.02.20.24.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 May 2025 20:24:29 -0700 (PDT)
+Message-ID: <12ecd375-441d-440d-bb63-d83651cbb049@davidwei.uk>
+Date: Fri, 2 May 2025 20:24:28 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v2] selftests: iou-zcrx: Clean up build warnings
+ for error format
+To: Haiyue Wang <haiyuewa@163.com>, netdev@vger.kernel.org
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+ Simon Horman <horms@kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>
+References: <20250502175136.1122-1-haiyuewa@163.com>
+Content-Language: en-US
+From: David Wei <dw@davidwei.uk>
+In-Reply-To: <20250502175136.1122-1-haiyuewa@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Currently, the test result does not differentiate between the cases when
-either one of the address families are configured or if both the address
-families are configured. Ideally, the result should report if a
-particular case was skipped.
+On 5/2/25 10:50, Haiyue Wang wrote:
+> Clean up two build warnings:
+> 
+> [1]
+> 
+> iou-zcrx.c: In function ‘process_recvzc’:
+> iou-zcrx.c:263:37: warning: too many arguments for format [-Wformat-extra-args]
+>    263 |                         error(1, 0, "payload mismatch at ", i);
+>        |                                     ^~~~~~~~~~~~~~~~~~~~~~
+> 
+> [2] Use "%zd" for ssize_t type as better
+> 
+> iou-zcrx.c: In function ‘run_client’:
+> iou-zcrx.c:357:47: warning: format ‘%d’ expects argument of type ‘int’, but argument 4 has type ‘ssize_t’ {aka ‘long int’} [-Wformat=]
+>    357 |                         error(1, 0, "send(): %d", sent);
+>        |                                              ~^   ~~~~
+>        |                                               |   |
+>        |                                               int ssize_t {aka long int}
+>        |                                              %ld
+> 
+> Signed-off-by: Haiyue Wang <haiyuewa@163.com>
 
-./drivers/net/ping.py
-TAP version 13
-1..7
-ok 1 ping.test_default_v4 # SKIP Test requires IPv4 connectivity
-ok 2 ping.test_default_v6
-ok 3 ping.test_xdp_generic_sb
-ok 4 ping.test_xdp_generic_mb
-ok 5 ping.test_xdp_native_sb
-ok 6 ping.test_xdp_native_mb
-ok 7 ping.test_xdp_offload # SKIP device does not support offloaded XDP
-Totals: pass:5 fail:0 xfail:0 xpass:0 skip:2 error:0
+> ---
+> v2:
+>    - Dont't wrap the build warning message to make scripts/checkpatch.pl happy,
+>      keep it as for readability.
+>    - Change the format for ssize_t from "%ld" to "%zd" as Simon suggested.
+>    - Change the target to net-next tree.
+> v1: https://lore.kernel.org/netdev/20250502042240.17371-1-haiyuewa@163.com/
 
-Fixes: 75cc19c8ff89 ("selftests: drv-net: add xdp cases for ping.py")
-Signed-off-by: Mohsin Bashir <mohsin.bashr@gmail.com>
----
- tools/testing/selftests/drivers/net/ping.py | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+Thanks for the cleanups. But next time please note that there is a 24h
+cooldown on respins in netdev.
 
-diff --git a/tools/testing/selftests/drivers/net/ping.py b/tools/testing/selftests/drivers/net/ping.py
-index 16b7d3ab0fc8..af8df2313a3b 100755
---- a/tools/testing/selftests/drivers/net/ping.py
-+++ b/tools/testing/selftests/drivers/net/ping.py
-@@ -136,13 +136,23 @@ def set_interface_init(cfg) -> None:
-     cmd(f"ip link set dev {cfg.ifname} xdpoffload off", shell=True)
-     cmd(f"ip link set dev {cfg.remote_ifname} mtu 1500", shell=True, host=cfg.remote)
- 
--def test_default(cfg, netnl) -> None:
-+def test_default_v4(cfg, netnl) -> None:
-+    cfg.require_ipver("4")
-+
-     _set_offload_checksum(cfg, netnl, "off")
-     _test_v4(cfg)
--    _test_v6(cfg)
-     _test_tcp(cfg)
-     _set_offload_checksum(cfg, netnl, "on")
-     _test_v4(cfg)
-+    _test_tcp(cfg)
-+
-+def test_default_v6(cfg, netnl) -> None:
-+    cfg.require_ipver("6")
-+
-+    _set_offload_checksum(cfg, netnl, "off")
-+    _test_v6(cfg)
-+    _test_tcp(cfg)
-+    _set_offload_checksum(cfg, netnl, "on")
-     _test_v6(cfg)
-     _test_tcp(cfg)
- 
-@@ -200,7 +210,8 @@ def main() -> None:
-     with NetDrvEpEnv(__file__) as cfg:
-         get_interface_info(cfg)
-         set_interface_init(cfg)
--        ksft_run([test_default,
-+        ksft_run([test_default_v4,
-+                  test_default_v6,
-                   test_xdp_generic_sb,
-                   test_xdp_generic_mb,
-                   test_xdp_native_sb,
--- 
-2.47.1
-
+Reviewed-by: David Wei <dw@davidwei.uk>
 
