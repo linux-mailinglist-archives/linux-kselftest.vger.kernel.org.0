@@ -1,87 +1,88 @@
-Return-Path: <linux-kselftest+bounces-32287-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32288-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5282AA88D8
-	for <lists+linux-kselftest@lfdr.de>; Sun,  4 May 2025 20:00:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 837CFAA88E8
+	for <lists+linux-kselftest@lfdr.de>; Sun,  4 May 2025 20:15:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AFE7F7A4D4C
-	for <lists+linux-kselftest@lfdr.de>; Sun,  4 May 2025 17:58:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AAA067A4F88
+	for <lists+linux-kselftest@lfdr.de>; Sun,  4 May 2025 18:14:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA5B62472B1;
-	Sun,  4 May 2025 18:00:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6196E17A31D;
+	Sun,  4 May 2025 18:15:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LzGHIERH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PyA04lpQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60375247294;
-	Sun,  4 May 2025 18:00:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0CBD6D17;
+	Sun,  4 May 2025 18:15:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746381604; cv=none; b=PwoB50CcO/IdN1KpvmSgrXEG28mXgJb6TBZI7QWVNY+RAkhUoqC1hxkcE3jZb5dpwScgRz/OjXyK7scxrWeOa1oh+Q3ajBkCXod8v+gpeT8+W8x/j6b2POxUIZw1GMLgxLXgVhBgrWye6FGlFj+yfP6VuAXHeFVcQzLzd0TYWjs=
+	t=1746382536; cv=none; b=QjiQoqjWYDlLL+ObfcEUeX8dLnzt6G20FbAw1NidV1c1YDRHjVG9eRi5eaQEWfPxKx8ka3+uIf9sQJT+7Th75Z6rcVWnyTCqiHdkWNLK+Kct6yhsf5VJIFUaryNAbaiuqi/mVMXc/WehENIU22sOJpeQBH9+b3mj/J18EgZ1PtE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746381604; c=relaxed/simple;
-	bh=gMmz0xrFGblYrts2MVNPbSYkOBP0t20o7T0mZB/6a+I=;
+	s=arc-20240116; t=1746382536; c=relaxed/simple;
+	bh=iHDK/mT+8VpYoXqj3KoxisbDMvRsGiCNPD9pvfdaYBo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FwvLozYtjpxHgGEtxr5jue5tzlEgObxDpFTDRMvzX42wjnzYlFD4IeJFo12+q2BhRUFiyt8emicBWAfEnFbYLW0YCou9u1wmUQvd2a+8OQBdDnd2hgZE/TkY6GDHJrsYpwG+r3vs+lkkJ+r5ExmGrWUV69pWvExN2ByLGu/Y+aE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LzGHIERH; arc=none smtp.client-ip=209.85.214.180
+	 To:Cc:Content-Type; b=hS0SynmmyAxeuf7CSma1EHSJBDD9J3pY8B0soRQ/KbZn0WecZuKAALl5v0tDikhXw0WKcTfoC+V6q0O7jipIhOzkOifWspKit8isDxHjndWB2SIrPeEcxeKVu+cFb9+zt+iDMlLlT9XYW5rGpW4eOHokEU1dSeOvIhFYSykBFxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PyA04lpQ; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2240b4de10eso8601775ad.1;
-        Sun, 04 May 2025 11:00:03 -0700 (PDT)
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2240ff0bd6eso8076665ad.0;
+        Sun, 04 May 2025 11:15:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746381602; x=1746986402; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1746382534; x=1746987334; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gMmz0xrFGblYrts2MVNPbSYkOBP0t20o7T0mZB/6a+I=;
-        b=LzGHIERHvxTUPEqr9cOS1GV66lxrw4fT0k1GgbGTgpOOhYIhA/M7mk96V2KdisJbpS
-         wYuUP8KY3FreWXCEGvYWJZBdHqHxl1JMOD9mBFJZ/xxeqs3uiF+FPKYfp6YuTXlg7eVx
-         3yWW5DdmmupBxrQKXoqhTwvS+2uHdC5VEjyHcqrKyAKy6RB5lIZl3FjZGRGenq9bYnV8
-         8aZYkD8bvagSbntyD91fwdOgLYAGM91Gp/H9elCLe84MEiqPeI5wC/oO2E50ydcVzvMa
-         50SRlol2Eo8uMxOCxpzBC5nyB10Frjl3lRra20nvh78lkeyYOmbHueqn8e6mLev5tYbR
-         HjMw==
+        bh=iHDK/mT+8VpYoXqj3KoxisbDMvRsGiCNPD9pvfdaYBo=;
+        b=PyA04lpQTd3JJH1Gdh+l+SmMjwyfR+rrJ+cau5+6G0x+mmR8Tzx0rRd/wIYxTWOVQX
+         qUTgzJu4TBTnGHagAemq9apU8D+1U5kp3me4RUWgywDc3VxyiQfEA0oV4OnKoCU94yGX
+         QUiAy/Rzd6WFQioV7xFZkWmmg9gAZ3N/yg1l5dkm7YkdbaoOiwszfPL5RksHch0/jHyh
+         6gc62vlt2mgpIzfeKgrd/fM+XU/vGrmwof8d33eXRFESIfEWcqaVDv7aN3eGHaLbIVUh
+         +ER9n0DtKYIddiazRG0pX21jia2MNd5rNTZsu7YepivbXeCBeCs5LIktRxL8jW4TeisX
+         OVxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746381602; x=1746986402;
+        d=1e100.net; s=20230601; t=1746382534; x=1746987334;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gMmz0xrFGblYrts2MVNPbSYkOBP0t20o7T0mZB/6a+I=;
-        b=YrOdBqh/khS3Zc8hxC3/jcIG8UeZyx9mCus0lo9D320yDrOxohmZCBFmm5yErnAdKe
-         klpOVxliCve+nHX7pH8OZT72Ev/+WHvxaucY25l0eWmFCB6XlaErgtOSxTf7Igqg3roM
-         Z+m8S4eboIQpwt2l84gqKRBwoGd0nXmR6iHJ/z+XjdeOEZaKmw00JSTgLdU9ytq/6j4p
-         XZKLB23I7r8GwyWgTY6BF84CJtaBzjt1IBKwRCYTQDxVDZMnbfEWVper8foAYocT0Zr/
-         9pUtWIYK2GlhTN1F0YUJaNEQhvcoC7R0opW2DVuRtZFRfK2leLQ4H+hisrjJevIfNsqC
-         daqw==
-X-Forwarded-Encrypted: i=1; AJvYcCUPZWScbgfCNmDTQFc2+dnVBEEUtbodtxleGK4qZuXV0KUSXEODHzyRFfU+GnauUu+SmFvbwmdhyWJnhvM42i8=@vger.kernel.org, AJvYcCVd+Yv/o0cexr/D0S6CFR34TplgF3GY2CRwco0P42595a751iNW4OIVXSCgbIO5LEELrOiCv9NbYSEmgO/aFS3y@vger.kernel.org, AJvYcCXuKbcKMv1asxdVSH1RHU8kGmjiOHtD23K+sTjg2G/pulo6aJ52LFU8POVXM7kXeq5izIY+eRI5LSZ++JM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCAb6Sa6p0B3ACTBV6G0OcWe6fN7TSINURKwUgSs6Zlgz/qfpq
-	QsNKUnEl99wnJYQjAuhMxcJXfr5nKVlEIqcRQZFC8xO3NSVbVEwjsfeUKGbjCqOHl67tdL/jhCg
-	cv4+dWJw2SW0kQtwQ8ZluMswUc6o=
-X-Gm-Gg: ASbGncv53TPcNx2YeGxu0ZVRAjKXdzqSL7Eg6i3oVNyHk8PM00P3I6vKdocEYoHkoOg
-	zM+y82TyrXkC8ND38fBTkVjtgeEUEmSQW8jYS04Sp08Se9Wo/BoliGUivknzoPf0PmF4AQsyLup
-	v9XId5xO80+2shIdcChWomlOFQQveNi10b
-X-Google-Smtp-Source: AGHT+IG10nTmSSofjOBje28dUf2+IMvpiGM28AIkNlFwzc+b2QjcTA+FDkybqQ1kasUk4HKenUIhjeB9Q2WKIKme63Y=
-X-Received: by 2002:a17:902:c947:b0:221:751f:dab9 with SMTP id
- d9443c01a7336-22e103958e7mr62623825ad.14.1746381602442; Sun, 04 May 2025
- 11:00:02 -0700 (PDT)
+        bh=iHDK/mT+8VpYoXqj3KoxisbDMvRsGiCNPD9pvfdaYBo=;
+        b=rcYqbk3wH8stoE+fCazlSoz248G4bprlzdZE/RVbWLcX7Tr1E4j9E7uu/wU382izRC
+         rgGiAXkFDnBdPzjIuKCjqd+QqJWY+DArGQM0Zp++0LCb9z7NxRKgkdafm/GORrXydVGc
+         g5yqeNuShynb8WMK/03tNj6wO3kg9OeGpLP9ta6j9V4s2NU1xtSfCqX7Njrw9x6+QJ8g
+         2Lx3uvNZUASg+q+RjJhEEjYz9pgwag4/iVnymps7CkPjFFhs8/b40WUAHUmrYmPhw1J/
+         ZCtwLmfl1p5iehZAue9oEI7ZTO5bNys+3Dwe4XLSdlwg8oyEjXoNYzBvPRtssymwUAi5
+         9Cmw==
+X-Forwarded-Encrypted: i=1; AJvYcCUGu6sqUEinZU+76kK/CmTP+g8tuKjdNy54Hnfs2CXsAyn8kVkXX0ijyn3hSYmbpLhk8Fvex7RyAfyVMRCCa/1x@vger.kernel.org, AJvYcCWVTnMOat377fyxcpENixheSkMHb5/6Lq/G9pW5FcNPj4GMKFBiQfLYTDvW1mdvrILoFblWtymL8OqLNa4=@vger.kernel.org, AJvYcCWlKzd9Y8bgOpwej0Vc5lnKt26BAOX+gSC/QbzAZ5Rr3wWaI5HL95ROlB7MW46VrEzLSXKbZ7s0wG8Nd0duP3U=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw412EqkWHkETSFfuFI4+4Q9zCOiinfiEo0CPGH1QREUfIceDxT
+	EPzTBPgHN2VmIiRZ3ZGplRNVmCOawg6Zf6QbqlJPSP2SJL8DwRRlqm8gyIg4CnjbG2g6v24mp8I
+	HFFxV87/8ooEChWYwD960P0HKlK/1gF6dwE8=
+X-Gm-Gg: ASbGncseokDSerRSUmY2CLx4v8YvoxX0qx2FP7UG9ahwV3ScbxyG4/vjryk21kDK2WZ
+	Loe1plY8HyC0wz1m0ixXxzsoK6G3PQjo2mLUhRv0Q94vOePN2gyuiqpQMTRTVbBLaBF0fVYS+n8
+	lEmb4V1Ymfk+/Sf+lgWOhMZg==
+X-Google-Smtp-Source: AGHT+IEemidPH6vW5/TRDN5e9+d9JcDfBVlErQobuzLmwdwFYyViq34WrxjvT1CZdT1gVv6+ZWIoXvKFcZ6rObHPb0g=
+X-Received: by 2002:a17:902:c945:b0:224:216e:38bd with SMTP id
+ d9443c01a7336-22e102cd13dmr54711965ad.5.1746382534079; Sun, 04 May 2025
+ 11:15:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250502215133.1923676-1-ojeda@kernel.org> <20250502215133.1923676-3-ojeda@kernel.org>
- <CAJ-ks9=v8E_bV+oJ-bdm3KZW2dfrFdiCmeVLs+bgK8oVu6BCUA@mail.gmail.com>
-In-Reply-To: <CAJ-ks9=v8E_bV+oJ-bdm3KZW2dfrFdiCmeVLs+bgK8oVu6BCUA@mail.gmail.com>
+References: <20250502215133.1923676-1-ojeda@kernel.org> <20250502215133.1923676-6-ojeda@kernel.org>
+ <CAJ-ks9n7u3WkYmJCVc18c_cKod6DaB7KrA7NXbOuD3E3TYbvpQ@mail.gmail.com>
+In-Reply-To: <CAJ-ks9n7u3WkYmJCVc18c_cKod6DaB7KrA7NXbOuD3E3TYbvpQ@mail.gmail.com>
 From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sun, 4 May 2025 19:59:50 +0200
-X-Gm-Features: ATxdqUFd9uspIO8JG7LjKJl3xaEnjAQIhi12ZtAgUBxbovS5zZvywxn5xVHJpf0
-Message-ID: <CANiq72=C1+2B221ecxM5Dy1rF8nEtR4ikgAA2nEh3M1=EkkXyg@mail.gmail.com>
-Subject: Re: [PATCH 2/7] rust: kunit: support checked `-> Result`s in KUnit `#[test]`s
+Date: Sun, 4 May 2025 20:15:21 +0200
+X-Gm-Features: ATxdqUHvCBKb0VeR7w6toc9zpMWghyfk5KguE4071p5IEpYEVUX2PY5b1ywME50
+Message-ID: <CANiq72nEHy5wvOyPzW4DLu9aE_MxTx1gq7AJ-f_Ny4E6bbOJ5g@mail.gmail.com>
+Subject: Re: [PATCH 5/7] rust: str: take advantage of the `-> Result` support
+ in KUnit `#[test]`'s
 To: Tamir Duberstein <tamird@gmail.com>
 Cc: Miguel Ojeda <ojeda@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
 	David Gow <davidgow@google.com>, Alex Gaynor <alex.gaynor@gmail.com>, Rae Moar <rmoar@google.com>, 
@@ -95,18 +96,32 @@ Cc: Miguel Ojeda <ojeda@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, May 4, 2025 at 7:34=E2=80=AFPM Tamir Duberstein <tamird@gmail.com> =
+On Sun, May 4, 2025 at 7:30=E2=80=AFPM Tamir Duberstein <tamird@gmail.com> =
 wrote:
 >
-> Why not restrict this to Result<(), E>?
+> Alice pointed this out in another thread but: one of the downsides of
+> returning Result is that in the event of failure the line number where
+> the error occurred is no longer contained in the test output. I'm =F0=9F=
+=91=8E
+> on this change for that reason.
 
-I guess it is an option -- not sure if there may be a use case.
+We could perhaps customize `?` to help here, e.g. printing a trace or
+panic, with the `Try` trait or similar.
 
-> Is it possible to include the error in the output?
+Related to this: I thought about saying in the guidelines that `?` in
+tests is intended for things that you would normally use `?` in
+similar kernel code, i.e. things that the test is not "testing",
+rather than things that you would want to assert explicitly. Thus the
+actual code under test should still have `assert!`s in the right
+places. I did that in the sample. That way, having `?` would still
+simplify a lot of test code and yet allow us to differentiate between
+code under test vs. other code failing.
 
-I thought about giving some more context somehow and perhaps printing
-it "manually" in the log, possibly in a KUnit `# ...`. David can
-probably suggest the "proper" way.
+> These changes don't depend on returning `Result` from the tests
+> AFAICT. Can they be in a separate patch?
+
+Not sure what you mean. The change below uses `?`, which is what
+allows this to be removed.
 
 Thanks!
 
