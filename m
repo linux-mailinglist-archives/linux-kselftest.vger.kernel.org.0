@@ -1,205 +1,240 @@
-Return-Path: <linux-kselftest+bounces-32284-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32285-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF73CAA88A3
-	for <lists+linux-kselftest@lfdr.de>; Sun,  4 May 2025 19:36:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 637EAAA88A9
+	for <lists+linux-kselftest@lfdr.de>; Sun,  4 May 2025 19:36:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2DC871899A87
-	for <lists+linux-kselftest@lfdr.de>; Sun,  4 May 2025 17:35:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4DADD7A48E3
+	for <lists+linux-kselftest@lfdr.de>; Sun,  4 May 2025 17:35:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49ECB221730;
-	Sun,  4 May 2025 17:34:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 597C421D3E7;
+	Sun,  4 May 2025 17:36:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nD1e+VpE"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="ORf2pr9z"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C1A221F08;
-	Sun,  4 May 2025 17:34:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0826D21CA07
+	for <linux-kselftest@vger.kernel.org>; Sun,  4 May 2025 17:36:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746380049; cv=none; b=gZMXgJpcdbd3w8ZATwhd2/7hS8oQfrHaaSUGHbkSt6Hzx54KWQXjACG0IxHZNi1KhKkTPYXcm/+1d5Ll2OVRLbyY78LN9+h5czMcRLx9UExgxveOIqQ+YXRArFrYmmV0yowm/aqIiOJrn/MRKM1opshJf3Hsmc4JleGfVGM510g=
+	t=1746380186; cv=none; b=kz/EAbkC6WQHcBxBMBJu9qUsWglKjn4er8l56BbR5j5w9R/s2L5bvz60wf5mWDgWG/sC8Bdmy/GdiSiHH619/hLsZQF77zp64CSacA1fHwBkXVlaeFjnCh3EDSVxiKrPKcPHUQIJOvncAL6pIuErRuuyhfigjX7K9ACqq0FPcU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746380049; c=relaxed/simple;
-	bh=TI+IAdyGi+IL8Xy71Y9qCmSdPrRxiWOpnXzL5ViZOC0=;
+	s=arc-20240116; t=1746380186; c=relaxed/simple;
+	bh=PKto6XWHPw3qkf98Cr2fpVFSXZupXtz55RQHLXKhy38=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IwEqRguAmqoKxMnxiCnrtd++X+qvdomPUVYcc7CSAZRIGT4eN/4tDfJ8IXpOGmNKkdOfxQ2v9Xn0cMDoIX93E95KvXifjBx1qq6vMWmQ4RcerGYCauIGEWsmP/ZVPQ05Qyhjc4G8tvCE6vdsQNFSbkB0XcrE2/yAUx0DvOZQ0OM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nD1e+VpE; arc=none smtp.client-ip=209.85.208.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-310447fe59aso38726441fa.0;
-        Sun, 04 May 2025 10:34:06 -0700 (PDT)
+	 To:Cc:Content-Type; b=g7fbdRmz1zlu3Ch3DNbFrdITpBMkvk9XpYuEbwX2+2GpP8oIW2T4rjPu/wpFdTnyqkD3f+ZbMscnCeat2bJ4FoaETlFAacSIhyWTKvf7dnbQH9/7NxF7d/Vd25rPVXEgEP4s9F76jJIYk9FqIwFgnlrCy5napFjmYC38rzdp5GE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=ORf2pr9z; arc=none smtp.client-ip=209.85.128.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-6ff1e375a47so33901027b3.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 04 May 2025 10:36:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746380045; x=1746984845; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1746380183; x=1746984983; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=N1fVaVItBBDC1ZD6iIEWvvKbSsgQoZnhQOhbzKdtWXs=;
-        b=nD1e+VpEZUzE0MrZm25UUIhHAJ3Ub2rtp6VxQpojZcZTpRYQTPL/EfsR6kdHEvrkcF
-         dK+0iFTjxxycl7RsDjE+rM3AXdbQWfpH/MFFPPjreF6p4GAkkqB6XIJdbK9+kFNsFlAd
-         1aXdf/kWLvIgHXuyDmpLyltTsa+i6X3X/rcyjzhAcTcvGTAiriRxdbqqBCspW5nIiGma
-         LSXJW5w89Wd0CNGkzwG78f+BHR315h1xmcV++t/LFB311fvxKQ7x4ee7AzXseWiwG5/B
-         e4b8akGl3FR7dWUxgzZdG99wQGdg19Ha34FGQA1RpjAGZwxYupfB7pxtWgEGpx6QhE43
-         4oBg==
+        bh=HXXRsHPoH/0YETZ7MLRenRDro5Q1bAftLTE63l4umNc=;
+        b=ORf2pr9z2IlpLqvfRPOJsECvEX72Cb2asbZtYacel0smJqsUf7LVbqb0rOaIJnAEml
+         XLpYDJx2ClultkAYkiZyZM7BzungNJ5o2IH2C4gN6WRDobrzW9ssL1HX3GKVHDBfx5Nk
+         pvl8cSyXY9B+P6/qVhmbQQQDv31Z7OTtXrFnKydyvWqMy8TlCi5mQ9RDE/8NuXWGLwnt
+         9YjUJ3aLjq7GoHAhIfCjySa5mkH6Qo6YcolDJiYhKu1oTkZp1Qe3IJVjXYEWavnhJpT6
+         TS6mdbUfkHtTVIgXQw5W/UwXSAF5glE7IJKYeC1iARhTj3rGQgbqYuBymaT7c7JqF/Rw
+         JxPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746380045; x=1746984845;
+        d=1e100.net; s=20230601; t=1746380183; x=1746984983;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=N1fVaVItBBDC1ZD6iIEWvvKbSsgQoZnhQOhbzKdtWXs=;
-        b=l3CGHQCho695tad4BgJz0wiuXUI3y0HfzLHatdnLIxJtYgdQruCZTkigviP8YfZZKg
-         wVUkDRPspQSEh6faQktRw33SF6ZNVrwDjmGtDsJPxa0edJuBVXCpTDuPVbJEgkjd6Pm0
-         gkixm7WaBjz/2bc060wY99jNz9wN4752vEbfRx+8sEAsqSmZ0U+ESbOsGJ5d9j9PW1f0
-         OUFuTYkJL25at7uya2mmH+XFMqx5DsrR+NqJCBAUQz1l9FQpwGVAr1E99f4l9NXCz1wV
-         qUX9DaFXm24N/0tnllJcNKkya14BmF4imrhk4Lp5gsBsMObaCfDRIi/0E9sc6TVmYzx9
-         y/GA==
-X-Forwarded-Encrypted: i=1; AJvYcCUTq0Fv2mhdSod8Oy8oQPTAZhiVEDuN/rl/m8tmz3Niv1scqEUfLNZGp7zilWwAFl2at+97d7D5gnk4wdAWkEE=@vger.kernel.org, AJvYcCUZEkJCzstNF1AW+4i+nwGgH9Nf5/kyTyCmvID14gjQ2ZrNMyhQwK0Ai2F93ayIcXiPrUueyIiUrG0V83M=@vger.kernel.org, AJvYcCWxF/gPtsyW7vlkaob/6ei1WgMcqkL0o9ny/TM6ofuZmndcvxeytmy/OnQ/9iY0LdiTo0HuSWyy7c8VYKa1djh7@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDPxYC27W9JhIrlNaH1L6NgGpAuel58d8A2HG6lJauy2240CZ9
-	oebtaMyPLBFk3Ih0JD3PjatuUIwxrBjPyCeVEK4GdApomsYWuqoAr+yB99tEDEuvhM+xahepuWT
-	Dk2TJYOfUetH3xuxTOKxf0LgQy/A=
-X-Gm-Gg: ASbGnctVWi+CKw4gqp/ERal4k0NbVdNZlxg1b59nkHnwO6B1MBwLmpjNoOk3wfLN0c5
-	bmvTakJ/BzluJHxVax69QgzdhA4QA7sZnLJpAPZdm4as/rxMghfe1ZtS20WzeuBgVkQnKhfQJRq
-	LBHotEmUuuLXdpRtLKpe5j245uUzn5rJcFDPW24pEWugTHxeZMbkDJkRg=
-X-Google-Smtp-Source: AGHT+IHjlg5r+GtZPby1N3y/lBB/JYkis+ONns+ydoYTgWyGUU7+7O4MuOnenH2xOKWDCtegS00Wd//KowDVF/l59is=
-X-Received: by 2002:a2e:be1b:0:b0:308:fbd5:9d2d with SMTP id
- 38308e7fff4ca-323525056damr11809611fa.37.1746380045047; Sun, 04 May 2025
- 10:34:05 -0700 (PDT)
+        bh=HXXRsHPoH/0YETZ7MLRenRDro5Q1bAftLTE63l4umNc=;
+        b=SNHdivQ0jBFX+Neodlr2uBA63dPVZSVLxEBvDW0342JxvAoqNYOsLHfpRMd14kJJN7
+         EmGwl/kWeBK7Foa5wvWRQiYsGbwIVnfozHrF3TCp8nUWO7M6pHd5qbsGGrpiNA/tC0B8
+         uYzNTpBA9B/XD2xo5/gkZxnfqmHS7ocOaE8EF7MN7Vh6lvCCHKpanluzSnDhM/xORbWh
+         Cwuz5JnIJthsNcdLogdAbbzjxiC68aYfph5erKC2WG7O9G1hmlLE5z4Q5y7jf9OW+Pz7
+         iJEe1avwNLr/tu2iP2V9U0oXyg5n1STkoFkIhLq700ghkjDdguPbrOgfFuZm8XY5qndo
+         Uz6A==
+X-Forwarded-Encrypted: i=1; AJvYcCVR7T87TDDaMcPJ2rcniQ97SpCwP4voa26ZfOmYv4LVltpOutnLpoSTBs8FsDMtn3jo1fbka0Bz4VCUIpGCIQU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/1HtQDIOPOV4IFfipK0Tpq1z0QJtnc9SkDRpoiepi0/bbCQRR
+	NMG9F84E+KA0Ao1pmmcsHRF5tDHtruL/eMLcgUoYQngKuOtfP+/tUUREDiGuFHToPsA/cl++qaK
+	ybE3AfgWq3/ppla5VS4wvR5y80QDr9pCbwZPf
+X-Gm-Gg: ASbGncu5jS3zmuV9Z407cumiyJvXrYNSC+UDUxSv+9QRvTGe7JyuM+gS/nIYC2oMyPf
+	K3nWNAJdJ7am5RDyZVLG/v+qfaWl6ZWTGRMdDQ8JFWiRDfFdSWov6vd+z+2CTkNp4mlNS9rZka/
+	d7QLW0Q0CrvjaWv3fR9Xyfjg==
+X-Google-Smtp-Source: AGHT+IGH4iM2kOBwjguhM2tjRQ5NOwlV2cMNEshm7rCu9worhB26SxpY/yE7dTp6irnVpWrLXhT6tFSernyBUKKlH2U=
+X-Received: by 2002:a05:690c:6385:b0:6ef:69b2:eac with SMTP id
+ 00721157ae682-708eaecbe4cmr56763087b3.4.1746380182785; Sun, 04 May 2025
+ 10:36:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250502215133.1923676-1-ojeda@kernel.org> <20250502215133.1923676-3-ojeda@kernel.org>
-In-Reply-To: <20250502215133.1923676-3-ojeda@kernel.org>
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Sun, 4 May 2025 13:33:28 -0400
-X-Gm-Features: ATxdqUGeVFcwO9nOZqJQZmUYd49yvR_Ewg1ZcZNRyKblGfpu9Gz2cSxTrocB1zc
-Message-ID: <CAJ-ks9=v8E_bV+oJ-bdm3KZW2dfrFdiCmeVLs+bgK8oVu6BCUA@mail.gmail.com>
-Subject: Re: [PATCH 2/7] rust: kunit: support checked `-> Result`s in KUnit `#[test]`s
-To: Miguel Ojeda <ojeda@kernel.org>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Rae Moar <rmoar@google.com>, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, patches@lists.linux.dev
+References: <20250502184421.1424368-1-bboscaccy@linux.microsoft.com> <20250502210034.284051-1-kpsingh@kernel.org>
+In-Reply-To: <20250502210034.284051-1-kpsingh@kernel.org>
+From: Paul Moore <paul@paul-moore.com>
+Date: Sun, 4 May 2025 13:36:12 -0400
+X-Gm-Features: ATxdqUG6G28ftr2F4dYbjsrK10lOxkoYxSdmHmsU_Sm_2J3in-8hzdqOgV_xvXY
+Message-ID: <CAHC9VhS5Vevcq90OxTmAp2=XtR1qOiDDe5sSXReX5oXzf+siVQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/4] Introducing Hornet LSM
+To: KP Singh <kpsingh@kernel.org>
+Cc: bboscaccy@linux.microsoft.com, James.Bottomley@hansenpartnership.com, 
+	bpf@vger.kernel.org, code@tyhicks.com, corbet@lwn.net, davem@davemloft.net, 
+	dhowells@redhat.com, gnoack@google.com, herbert@gondor.apana.org.au, 
+	jarkko@kernel.org, jmorris@namei.org, jstancek@redhat.com, 
+	justinstitt@google.com, keyrings@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	llvm@lists.linux.dev, masahiroy@kernel.org, mic@digikod.net, morbo@google.com, 
+	nathan@kernel.org, neal@gompa.dev, nick.desaulniers+lkml@gmail.com, 
+	nicolas@fjasle.eu, nkapron@google.com, roberto.sassu@huawei.com, 
+	serge@hallyn.com, shuah@kernel.org, teknoraver@meta.com, 
+	xiyou.wangcong@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 2, 2025 at 5:53=E2=80=AFPM Miguel Ojeda <ojeda@kernel.org> wrot=
-e:
+On Fri, May 2, 2025 at 5:00=E2=80=AFPM KP Singh <kpsingh@kernel.org> wrote:
 >
-> Currently, return values of KUnit `#[test]` functions are ignored.
+> > This patch series introduces the Hornet LSM. The goal of Hornet is to p=
+rovide
+> > a signature verification mechanism for eBPF programs.
+> >
 >
-> Thus introduce support for `-> Result` functions by checking their
-> returned values.
+> [...]
 >
-> At the same time, require that test functions return `()` or `Result<T,
-> E>`, which should avoid mistakes, especially with non-`#[must_use]`
-> types. Other types can be supported in the future if needed.
+> >
+> > References: [1]
+> > https://lore.kernel.org/bpf/20220209054315.73833-1-alexei.starovoitov@g=
+mail.com/
+> > [2]
+> > https://lore.kernel.org/bpf/CAADnVQ+wPK1KKZhCgb-Nnf0Xfjk8M1UpX5fnXC=3Dc=
+BzdEYbv_kg@mail.gmail.com/
+> >
+> > Change list: - v2 -> v3 - Remove any and all usage of proprietary bpf A=
+PIs
+>
+> BPF APIs are not proprietary, but you cannot implement BPF program signin=
+g
+> for BPF users without aligning with the BPF maintainers and the community=
+.
+> Signed programs are a UAPI and a key part of how developers experience BP=
+F
+> and this is not how we would like signing to be experienced by BPF users.
+>
+> Some more feedback (which should be pretty obvious) but explicitly:
+>
+> * Hacks like if (current->pid =3D=3D 1) return 0; also break your threat =
+model
+>   about root being untrusted.
 
-Why not restrict this to Result<(), E>?
+Speaking with Blaise off-list when that change was discussed, I
+believe the intent behind that Kconfig option was simply for
+development/transition purposes, and not for any long term usage.  My
+understanding is that this is why it was a separate build time
+configuration and not something that could be toggled at runtime, e.g.
+sysctl or similar.
 
+> * You also did not take the feedback into account:
 >
-> With this, a failing test like:
+>    new =3D map->ops->map_lookup_elem(map, &key);
 >
->     #[test]
->     fn my_test() -> Result {
->         f()?;
->         Ok(())
->     }
+>   This is not okay without having the BPF maintainers aligned, the same w=
+ay as
 >
-> will output:
+>   https://patchwork.kernel.org/project/netdevbpf/patch/20240629084331.380=
+7368-4-kpsingh@kernel.org/#25928981
 >
->     [    3.744214]     KTAP version 1
->     [    3.744287]     # Subtest: my_test_suite
->     [    3.744378]     # speed: normal
->     [    3.744399]     1..1
->     [    3.745817]     # my_test: ASSERTION FAILED at rust/kernel/lib.rs:=
-321
->     [    3.745817]     Expected is_test_result_ok(my_test()) to be true, =
-but is false
+>   was not okay. Let's not have double standards.
 
-Is it possible to include the error in the output?
+From my perspective these two patches are not the same.  Even on a
+quick inspection we notice two significant differences.  First, Hornet
+reads data (BPF maps) passed from userspace to determine if loading
+the associated BPF program should be allowed to load; whereas the
+patch you reference above had the BPF LSM directly modifying the very
+core of the LSM framework state, the LSM hook data.  Secondly, we can
+see multiple cases under net/ where map_lookup_elem() is either called
+or takes things a step further and provides an alternate
+implementation outside of the BPF subsystem, Hornet's use of
+map_lookup_elem() doesn't appear to be a significant shift in how the
+API is used; whereas the patch you reference attempted to do something
+no other LSM has ever been allowed to do as it could jeopardize other
+LSMs.  However, let us not forget perhaps the biggest difference
+between Hornet and patchset you mentioned; the LSM community worked
+with you and ultimately merged your static call patchset, I even had
+to argue *on*your*behalf* against Tetsuo Handa to get your patchset
+into Linus' tree.
 
->     [    3.747152]     # my_test.speed: normal
->     [    3.747199]     not ok 1 my_test
->     [    3.747345] not ok 4 my_test_suite
+I'm sorry you are upset that a portion of your original design for the
+static call patchset didn't make it into Linus' tree, but ultimately
+the vast majority of your original design *did* make it into Linus
+tree, and the process to get there involved the LSM community working
+with you in good faith, including arguing along side of you to support
+your patchset against a dissenting LSM.
+
+This might also be a good time to remind others who don't follow LSM
+development of a couple other things that we've done recently in LSM
+land to make things easier, or better, for BPF and/or the BPF LSM.
+Perhaps the most important was the work to resolve a number of issues
+with the LSM hook default values, solving some immediate issues and
+preventing similar problems from occurring in the future; this was a
+significant improvement and helped pave the way for greater
+flexibility around where the BPF LSM could be inserted into the LSM
+ordering.  There was also the work around inspecting and normalizing a
+number of LSM hooks to make it easier for the BPF verifier to verify
+BPF LSM callbacks; granted we were not able to normalize every single
+LSM hook, but we did improve on a number of them and the BPF verifier
+was able to take advantage of those improvements.
+
+From what I've seen in Blaise's efforts to implement BPF signature
+validation in the upstream kernel he has been working in good faith
+and has been trying to work with the greater BPF community at each
+step along the way.  He attempted to learn from previously rejected
+attempts with his first patchset, however, that too was rejected, but
+with feedback on how he might proceed.  Blaise took that feedback and
+implemented Hornet, traveling to LSFMMBPF to present his idea to the
+BPF community, as well as the usual mailing list postings.  When there
+was feedback that certain APIs would not be permitted, despite being
+EXPORT_SYMBOL'd, Blaise made some adjustments and came back to the
+lists with an updated version.  You are obviously free to object to
+portions of Hornet, but I don't believe you can claim Blaise isn't
+trying to work with the BPF community on this effort.
+
+> So for this approach, it's a:
 >
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-> ---
->  rust/kernel/kunit.rs | 25 +++++++++++++++++++++++++
->  rust/macros/kunit.rs |  3 ++-
->  2 files changed, 27 insertions(+), 1 deletion(-)
+> Nacked-by: KP Singh <kpsingh@kernel.org>
+
+Noted.
+
+> Now if you really care about the use-case and want to work with the maint=
+ainers
+> and implement signing for the community, here's how we think it should be=
+ done:
 >
-> diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
-> index 2659895d4c5d..f43e3ed460c2 100644
-> --- a/rust/kernel/kunit.rs
-> +++ b/rust/kernel/kunit.rs
-> @@ -164,6 +164,31 @@ macro_rules! kunit_assert_eq {
->      }};
->  }
+> * The core signing logic and the tooling stays in BPF, something that the=
+ users
+>   are already using. No new tooling.
+
+I think we need a more detailed explanation of this approach on-list.
+There has been a lot of vague guidance on BPF signature validation
+from the BPF community which I believe has partly led us into the
+situation we are in now.  If you are going to require yet another
+approach, I think we all need to see a few paragraphs on-list
+outlining the basic design.
+
+> * The policy decision on the effect of signing can be built into various
+>   existing LSMs. I don't think we need a new LSM for it.
+> * A simple UAPI (emphasis on UAPI!) change to union bpf_attr in uapi/bpf.=
+h in
+>   the BPF_PROG_LOAD command:
 >
-> +trait TestResult {
-> +    fn is_test_result_ok(&self) -> bool;
-> +}
-> +
-> +impl TestResult for () {
-> +    fn is_test_result_ok(&self) -> bool {
-> +        true
-> +    }
-> +}
-> +
-> +impl<T, E> TestResult for Result<T, E> {
-> +    fn is_test_result_ok(&self) -> bool {
-> +        self.is_ok()
-> +    }
-> +}
-> +
-> +/// Returns whether a test result is to be considered OK.
-> +///
-> +/// This will be `assert!`ed from the generated tests.
-> +#[doc(hidden)]
-> +#[expect(private_bounds)]
-> +pub fn is_test_result_ok(t: impl TestResult) -> bool {
-> +    t.is_test_result_ok()
-> +}
-> +
->  /// Represents an individual test case.
->  ///
->  /// The [`kunit_unsafe_test_suite!`] macro expects a NULL-terminated lis=
-t of valid test cases.
-> diff --git a/rust/macros/kunit.rs b/rust/macros/kunit.rs
-> index eb4f2afdbe43..9681775d160a 100644
-> --- a/rust/macros/kunit.rs
-> +++ b/rust/macros/kunit.rs
-> @@ -105,8 +105,9 @@ pub(crate) fn kunit_tests(attr: TokenStream, ts: Toke=
-nStream) -> TokenStream {
->      let path =3D crate::helpers::file();
->      for test in &tests {
->          let kunit_wrapper_fn_name =3D format!("kunit_rust_wrapper_{}", t=
-est);
-> +        // An extra `use` is used here to reduce the length of the messa=
-ge.
->          let kunit_wrapper =3D format!(
-> -            "unsafe extern \"C\" fn {}(_test: *mut kernel::bindings::kun=
-it) {{ {}(); }}",
-> +            "unsafe extern \"C\" fn {}(_test: *mut kernel::bindings::kun=
-it) {{ use kernel::kunit::is_test_result_ok; assert!(is_test_result_ok({}()=
-)); }}",
->              kunit_wrapper_fn_name, test
->          );
->          writeln!(kunit_macros, "{kunit_wrapper}").unwrap();
-> --
-> 2.49.0
->
->
+> __aligned_u64 signature;
+> __u32 signature_size;
+
+--=20
+paul-moore.com
 
