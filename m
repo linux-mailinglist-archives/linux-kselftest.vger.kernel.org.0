@@ -1,131 +1,142 @@
-Return-Path: <linux-kselftest+bounces-32293-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32294-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87503AA8938
-	for <lists+linux-kselftest@lfdr.de>; Sun,  4 May 2025 22:19:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11427AA8982
+	for <lists+linux-kselftest@lfdr.de>; Sun,  4 May 2025 23:54:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DCB833B0474
-	for <lists+linux-kselftest@lfdr.de>; Sun,  4 May 2025 20:19:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B4D2418946C4
+	for <lists+linux-kselftest@lfdr.de>; Sun,  4 May 2025 21:55:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3207924887A;
-	Sun,  4 May 2025 20:19:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B83521C6FF4;
+	Sun,  4 May 2025 21:54:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZLE6C/nu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m26nEYiP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A943F1DED42;
-	Sun,  4 May 2025 20:19:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34B0C12A177;
+	Sun,  4 May 2025 21:54:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746389961; cv=none; b=UmryOoTne5nw1jfdImfM4fW8hpDM/xgxJsQ2kOuj6HBe/OdJ+S6w8w/2V6rJL3QZtmxV9nF39isUtmTWqjsFBDrWsTlOgKACINlHD35sDH3qCHdUcAmTfoKv1fy9j1RtSnk/Ar6I62w80nn2Gdg2rAuON0hZgvSZgWaJ33gxcKU=
+	t=1746395688; cv=none; b=U5+jre9ipnMz63QeHCGOPiLk7zW6rDv3HgHxW2AqV3WGWOT++Dg2XXsGQGaHdkQzJzBKKfdLWjf1glCWFLhs7MwfbrovNI8CRml3oZ5HJtrnBQwG+moHPx6W27u+z3bIsSiXbdJN2ZC2wbi120Rvyda7C4rn9ep7aFhMM5f50W8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746389961; c=relaxed/simple;
-	bh=kWouH9PcHn1yDE6oVME8ha/Tnp5GTGTxgWeh4wVEHCM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VaUNUFxtCAN592y8MmxLPdTtUD6WoFKZXKCe0nO4BU9PUel5zKGwlKVFs22hXxilcu0a57TFBX35bdXhH1xTXeI5boVKr3jjiKCugcg/78kekX4Zqg4m+uilIGZNVTJn0wT5dQ9gRN4MRZRU/rOfXdlcTFW/Jp9K0OOnu61lpEI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZLE6C/nu; arc=none smtp.client-ip=209.85.210.180
+	s=arc-20240116; t=1746395688; c=relaxed/simple;
+	bh=/l+1MvI7GiT5veI5LytixczDbnMXe1+igUv8pI8VedY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lip7Dq6k7UzSoT4LKiSc2yeLspGthA3ase+6f2+dfjSTd+WF9AkfoVLX+c6+OTN3mKc8bDktzxhLCBRQ8FjCRNk8/MX5rAniPSDEg19UlbUxYBuc4LfDZGR3kAGjFQzSRieTGdwF/e00AXzyQ4vtXTsupNyI7fx25Pby6YDCGYM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m26nEYiP; arc=none smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-74068f95d9fso920667b3a.0;
-        Sun, 04 May 2025 13:19:19 -0700 (PDT)
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-22e17b7173bso3659845ad.3;
+        Sun, 04 May 2025 14:54:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746389959; x=1746994759; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2UvegomJiMh6nIQI/2J4Ao0uKJD2zSYoWW1qFQAs5Yg=;
-        b=ZLE6C/nuGxEesrvb+tRjV9caO4+r+wCxv25dmc9DJ6Syjtl8gnsFq7eXZXXwl6Yk8J
-         DA62ySssVw+UrIYHsTnqE2ezldav7Gi2bERRr4fLC4xNd+w0DuihmsR5fJmPtXmNMCgG
-         N6PrNoQbIe2Q2mhLHhYsxCo4hNvADQBzJlkdbcgF0ztpN8Gm49a5SYYLwA2sZs4RmooN
-         a7iL9AVK2uh064dgXy4VPPDuEGoPI52WPcGYsKZEc/fnroK6guuHyHlmbT/A9b/B6szh
-         qHjHm7qm+2ijrudBamNK1j15jzkmETPc1YUDqTYe/0V3xR7x9LGd8n+3AS83131Gyoso
-         De6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746389959; x=1746994759;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1746395686; x=1747000486; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2UvegomJiMh6nIQI/2J4Ao0uKJD2zSYoWW1qFQAs5Yg=;
-        b=RQk83kqtxPHmxzB/PZ9omCR0ohrkdPmGgunwyNnmv0omTHsyNrIswmfpiBiS5Qya5O
-         2G3D/VlTGsiZdz8Qj5ntQ6Qsx74gVV2S5DQj9m+gXCjBNcEHzL4M0+gWQOTfhmmZtjZ6
-         WfKkY6IIj9RXanVsqTWgLRsAJiuOAkG+vLaqcln5A0O0OF0A/DLOofGB0L4hjloD7KbE
-         //tx8+Y/rXkxGOo7ZzWAkkOFVBI7ZY1HDEm+fMiH8xQMEj8Dp5OrMy/xkB13xUHG6Uow
-         JbsM0NedvmktfKONaM73sYmo95uRvt0MSmFIPdoe/JSinVj4Am1gWL/KiGkjA2pNan4K
-         pVPg==
-X-Forwarded-Encrypted: i=1; AJvYcCWNUpTjp8ZftkwdSwLltaBVYU6GWxqCNmWEd/lry1QxpKg/JMGOS0+fxDLSEH7mFlO8apzwmcDV@vger.kernel.org, AJvYcCWsnYmFJyl6JC+Ap6uSH3WDXgzBI3M/thT1ggRX6pVYH9b3D6L84GP5UJLHxYYe2CIr4u1oitCg3RSD1fs=@vger.kernel.org, AJvYcCXQa5YaVvzmjBdvNJ8Pad+lolwy3AGZPrNoXd5klkgzNlSVavtmHJtcNNaeEOI3M76EFhB7ipkoTcxIU8aFZUnd@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw4u36kFSs2szty8uKH/P40iaqCyjW/2zRNn67FzxuPFTZt1MV9
-	utLLYhO/UOVnGBeUk4VJK8UtBdMgQ2pK2tOeBO7fvW112Hf7y69M
-X-Gm-Gg: ASbGncuWeyCfRxI8UfTRmV8RVP7dLDWfxG/ypIPVz1jb/Ze8sa0NNmRf0Vw+ZdYHE5r
-	l9CREvINfFSBdUplKl6lmjERmm2ua02RZlAuBHI1m3sHqsUf8GG/x1eFRZ0HPluYENoV1cqn0Sv
-	viwl7Je7KlpdaLkb+hXzEciOkyCQHHyO9yeWxaUb1znsDN+qYClqmsxVI+DFA9hLY+W63aBojS7
-	kAknxq+Y8O07h29DFHH1VDKZANsDb1ZJSAGWQZ/7QvFEQ4YfMMNQULF8PVkWDQcr1WVwtU9Fd8w
-	wmDs9tkSxpasIY4BiGZQusw+mCINCNMR6pvVdjNxSgc=
-X-Google-Smtp-Source: AGHT+IHjm56528yNjjRibNiMtXVYmxhFuk9RepbfihANhB0sy0XIXdsZY6QgN882IXegmTERmbZiTw==
-X-Received: by 2002:a05:6a00:ab0d:b0:73f:e8c:1aac with SMTP id d2e1a72fcca58-7406f08a579mr6611979b3a.2.1746389958935;
-        Sun, 04 May 2025 13:19:18 -0700 (PDT)
-Received: from localhost ([66.205.136.11])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74058d7a47esm5246607b3a.29.2025.05.04.13.19.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 May 2025 13:19:18 -0700 (PDT)
-Date: Sun, 4 May 2025 13:19:16 -0700
-From: Cong Wang <xiyou.wangcong@gmail.com>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org, mrpre@163.com, Boris Pismenny <borisp@nvidia.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v1 1/2] ktls, sockmap: Fix missing uncharge
- operation
-Message-ID: <aBfLxMus8jgK7JgU@pop-os.localdomain>
-References: <20250425060015.6968-1-jiayuan.chen@linux.dev>
- <20250425060015.6968-2-jiayuan.chen@linux.dev>
+        bh=DJZjw8+wVh7l3iylx7BP6JrAtv+cQBGrHFy+Umlf40Q=;
+        b=m26nEYiPKnNkPfBdEHsxvBNpflpK/sO5CSaD3gZHMbKfkyAtO/w5hMN7nm+agjDkgY
+         rLkT8W2rb1hIb+XuTJG5yMJ/nbgVgSe4nUjmvrtERKTMWMyh3BjruEMgCB1i2Nuhx8qL
+         8L0CRf5Try/1VuwClMdkqAKt7IB7prPSebdyZKRQroO5WWSkqzV4DrkWPglLD6aBueFV
+         3QHS97OJ5kTRHIk4qnOG3djyWlSzxvkoHx6X7rv/A0wcjs8ACZx165/D0YlO4ysTzqKC
+         WIybCrfcF73TXT7WWSPDZVXmhuntfQZzPiIE6WMspfnaUjAcGRLOOSLgxbLuY18hOizJ
+         FqLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746395686; x=1747000486;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DJZjw8+wVh7l3iylx7BP6JrAtv+cQBGrHFy+Umlf40Q=;
+        b=PRC8fT7Bp3ZO4aBMz2+4EVsxJgPGDt0glVQPrMflQpkZ32ZXpSoD1q4tLDi9J5bb9p
+         usgdqNGOaeXUXltwjWux3n7KbezUUrz2nIAEdWuASETt6YPMOUSBflQiCm6sWDASMrzs
+         Mrf6qt/9SIo6GxmgIj9IBu3jXHUaHooIRlKuhSjZ98khak+/5kFvuiTl+buH+1dXVTV4
+         QESUoFK82CMqlgDd0njpcMNM/DAmMrHq1VK7DlKmFWJIT2rkKMSd0ZXRW8xeELgt8E1F
+         AXLBvUF+ICQBEFafHEmw2CrigByJzFIp/vi+vlxwXneGvVBElE16gqu18utQ+H0Rxeud
+         1rFA==
+X-Forwarded-Encrypted: i=1; AJvYcCVBz9Mblz1mPwERqKEufmm5q+BsQMnv+x0nXNMm2AiQQH4oQR7HyEmwc/3Lw2+sCU8Jnb7TFaw9v35xR17e+K00@vger.kernel.org, AJvYcCWwloETWZk0cGlut/MTTr2+j5a6EW4hjDJxCSbagPy6vpyKcfHO7OxEcus+tzHxtMbEtl6Bh/WlZi1MA/k=@vger.kernel.org, AJvYcCXKRseIdVIIl3S+orSYQoqU4YQbiEsdsJ5guygHxiaxiQCO88YZg6uaWHqqdCmxDUw3BgpSeVVrFzZRZFbbF1s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzaKBaNedIbLknfBo+iDAILAQjrdLwWUIARdDqzC+vCA4AMAU55
+	lxU4d77s7+TjKRcJcsL4Gp+o+JNm5yUaJ6m546v+HEaDOBNZv8NpIOuIKd9QkYEe3V4JiuXrETW
+	EIfm2RkFfE8x0LPR+Z1UVEtNVeeY=
+X-Gm-Gg: ASbGnctcQQn83Uu5ythYjf2TCkS9f25P4BU9B50W4sLcDaCNa7/sTUPQQtREhczC4ET
+	7evX+ZcdHXnguH+TcIz1VfzUDGX4Zl5HMXL3Ln8Ipfg6g0K7yN5J+9vkIAbzW6aRABAC3fSt/9w
+	WohFmYhF8aCkQAI4JBPKpQqg==
+X-Google-Smtp-Source: AGHT+IGdRAz15W9ZI5e1vtLXdhvXxSEUGSGPLW8JUTr/B9AnQL9gWGgZkz1pkGpOe9LOvI/UmsARew+FCAFE5sAYpws=
+X-Received: by 2002:a17:90b:4c45:b0:2fe:b879:b68c with SMTP id
+ 98e67ed59e1d1-30a4e6c1a1cmr6287602a91.6.1746395686405; Sun, 04 May 2025
+ 14:54:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250425060015.6968-2-jiayuan.chen@linux.dev>
+References: <20250502215133.1923676-1-ojeda@kernel.org> <20250502215133.1923676-6-ojeda@kernel.org>
+ <CAJ-ks9n7u3WkYmJCVc18c_cKod6DaB7KrA7NXbOuD3E3TYbvpQ@mail.gmail.com>
+ <CANiq72nEHy5wvOyPzW4DLu9aE_MxTx1gq7AJ-f_Ny4E6bbOJ5g@mail.gmail.com> <CAJ-ks9krSxo_DWFJdccP+SYJhX4WF0hXdq-20Rtf3doMp_2zDw@mail.gmail.com>
+In-Reply-To: <CAJ-ks9krSxo_DWFJdccP+SYJhX4WF0hXdq-20Rtf3doMp_2zDw@mail.gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Sun, 4 May 2025 23:54:33 +0200
+X-Gm-Features: ATxdqUHzESE1JbgdxZ5Ox-DqWnyCuIUC7SNpfqlQ8QGc4FkMOFcuq4OR1DTOBFg
+Message-ID: <CANiq72kLz7nXOKR+f=pNCu=hEEs6XQV_oDr9-xB_sq7N+svQ3A@mail.gmail.com>
+Subject: Re: [PATCH 5/7] rust: str: take advantage of the `-> Result` support
+ in KUnit `#[test]`'s
+To: Tamir Duberstein <tamird@gmail.com>, David Gow <davidgow@google.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Rae Moar <rmoar@google.com>, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 25, 2025 at 01:59:57PM +0800, Jiayuan Chen wrote:
-> When we specify apply_bytes, we divide the msg into multiple segments,
-> each with a length of 'send', and every time we send this part of the data
-> using tcp_bpf_sendmsg_redir(), we use sk_msg_return_zero() to uncharge the
-> memory of the specified 'send' size.
-> 
-> However, if the first segment of data fails to send, for example, the
-> peer's buffer is full, we need to release all of the msg. When releasing
-> the msg, we haven't uncharged the memory of the subsequent segments.
-> 
-> This modification does not make significant logical changes, but only
-> fills in the missing uncharge places.
-> 
-> This issue has existed all along, until it was exposed after we added the
-> apply test in test_sockmap:
-> commit 3448ad23b34e ("selftests/bpf: Add apply_bytes test to test_txmsg_redir_wait_sndmem in test_sockmap")
-> 
-> Reported-by: Cong Wang <xiyou.wangcong@gmail.com>
+On Sun, May 4, 2025 at 8:23=E2=80=AFPM Tamir Duberstein <tamird@gmail.com> =
+wrote:
+>
+> I see. Up to you, obviously, but ISTM that this degree of freedom is
+> unnecessary, but perhaps there's a benefit I'm underappreciating?
 
-Reviewed-by: Cong Wang <xiyou.wangcong@gmail.com>
+Well, having this allows one to write code like the rest of the kernel
+code, instead of, say, `.unwrap()`ing or `assert!`ing everywhere.
 
-Thanks!
+So easier to read, easier to copy-paste from normal code, and people
+(especially those learning) wouldn't get accustomed to seeing
+`.unwrap()`s etc. everywhere.
+
+Having said that, C KUnit uses the macros for things that require
+stopping the test, even if "unrelated" to the actual test, and it does
+not look like normal code, of course. They do have `->init()` which
+can return a failure, but not the test cases themselves.
+
+David perhaps has some advice here. Perhaps test functions being
+fallible (like returning `int`) were considered (or asserts for
+"unrelated" things) for C at some point and discarded.
+
+The custom `?` is quite tempting, to get the best of both worlds,
+assuming we could make it work well.
+
+> Even without this change, couldn't you apply
+>
+>      macro_rules! format {
+>          ($($f:tt)*) =3D> ({
+> -            &*String::from_fmt(kernel::fmt!($($f)*))
+> +            CString::try_from_fmt(kernel::fmt!($($f)*)).unwrap().to_str(=
+).unwrap()
+>          })
+>      }
+>
+> and achieve roughly the same reduction in line count in the test module?
+
+Sure, the line would need to change again later, but that is fine too,
+we can do a separate commit.
+
+Cheers,
+Miguel
 
