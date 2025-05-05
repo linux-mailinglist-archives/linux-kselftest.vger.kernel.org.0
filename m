@@ -1,179 +1,121 @@
-Return-Path: <linux-kselftest+bounces-32315-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32317-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FDB2AA8D1F
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 09:37:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B53C5AA8F3E
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 11:19:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB7F81893C0F
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 07:38:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2F824168798
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 09:19:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 279331DE4CA;
-	Mon,  5 May 2025 07:37:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C6BF1F582E;
+	Mon,  5 May 2025 09:19:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RXS1gEJj"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="y3gyk0bn";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="K0nn7vf3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5921C1DDC00
-	for <linux-kselftest@vger.kernel.org>; Mon,  5 May 2025 07:37:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A66BB1F470E;
+	Mon,  5 May 2025 09:19:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746430666; cv=none; b=d5c/AXKCDkSt2wrA+kFqDfgFax50J+OW9qJlqzH+nPFePNT5uLeoTIf/sJ10Vr2GFpos/n9aTzxmUfVpF2iehXAL/PwXkuq33c7BfNn8VbNK01Hw0p8Fa2a/1uJf+Ge6iAVFckboSIwb6jk09sISHgLGiUOBuF65RTE4xOpUJr4=
+	t=1746436792; cv=none; b=rtd4T8tjwcA2MhVxLsVPtFUhOc8fi2ivykHU05+fWm6WDfVP/+l/aYEgtwKROqG5E3wPUO5FYxF2f7MCFplyQwZksd4m+A4HpcUiuMRqBdXzdEa+0+wl/pQYbMar6PYY9PgMYTrGgnxImlsum/RV4NXW6QFZFI6dvsIEkZnBtvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746430666; c=relaxed/simple;
-	bh=wA86OvXvQW2Wk0ySWN1S8dAXgWbBM9cP3A1cI9Z6u5U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=m72coO+j73HYXg00lXh0yCszN8OC1pRV+2h5uVk6S40mPDsfpG8Ls9msOwzhb2KQBB+mw60D3uqGbRqzZDE8zaby3tarjz3FLN5obuwsdBbxXNBYB79MG39V1fnzRzQT6P0tqYlfe4bk4OOCFa+f3ic5/IP/AirYmL1txKYz9AM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RXS1gEJj; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1746430663;
+	s=arc-20240116; t=1746436792; c=relaxed/simple;
+	bh=H0gdIlnmVpbmDjxj6FH9kQsdpTNlGrLsacYC1fdYZdc=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=BMYXiXJQIm0B+2G2tblpfrFOkLM7da6tf34J0Mea/EdpkVOFWjoYc+ftsfTyArnYdzZobs/31+7TfrrUd1IHqtaSiaAide942S3Ao+8o5NEYn6h7WBi3d273RahBphMK0fB+co7OYUP02kaS39fefoet9+ii9RdCeWPizRooWOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=y3gyk0bn; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=K0nn7vf3; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1746436788;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=EbQ8Ebd7T0AIaFrJMEa7u08GAGQmcdkDS4quExidCGE=;
-	b=RXS1gEJjdqJJjGzcdwYJC26o/62iUqfvjeNzD0P09hsGQ8xP1mAu1tHihp28JtdxUA7Wlq
-	AytQ41x0vbVX0KSMavJrspJ+P9wklVr7Ro4fRhKTl5Eees8KMC50r4Mklp5F1uo033RQTB
-	lH41B+4gTsbSMmd3cpGwRZUp27I86xk=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-596-wizYRzZDNfiABezCxDMlAw-1; Mon, 05 May 2025 03:37:42 -0400
-X-MC-Unique: wizYRzZDNfiABezCxDMlAw-1
-X-Mimecast-MFC-AGG-ID: wizYRzZDNfiABezCxDMlAw_1746430661
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-391315098b2so1151998f8f.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 05 May 2025 00:37:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746430661; x=1747035461;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EbQ8Ebd7T0AIaFrJMEa7u08GAGQmcdkDS4quExidCGE=;
-        b=seHm4PMu3xkjjuFUfnNcn58VI6zLBB1DwJ8NzXM04E/E32reDC6/FtSTwr0R3ZNhrX
-         CfPiXxwD7QY3EGrXY253x7E0C9A3M07LBvfMyJwlDIxeM21GC0HJCQI2qISKyenXsL/D
-         RLw0j3EJ7bDH7HbDqHwAI5xoqyRjyAKGgHdi2CFhHJRBXL/763eXmNe5UecChr2FB9NV
-         Ut71S7Q4AV13AEvKPWWZMtvVY1E20y3uQgBIwJhv66rNy/6p4xm+T01TvlVt34mEH3uW
-         lo/DxOKXLs6qW9mTdm24hNTNpMqUTcSaYLuASVWbWmOYshBtOxnPEyulFu8/MfJa28Gj
-         MiqA==
-X-Forwarded-Encrypted: i=1; AJvYcCX8WJHfrf3T5/KNQul8mQ5ZQp7MPj9z/mmfCEkJagSLYHD8LV6MQil3RolNTM/gY1iJtj//b0CGGb3Q7TDGREI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwKbDjPZYhSyqu4bxh89mrJygPMEwJ96Uod6z9zOmztmbhdJYHf
-	7cHEryjfWF4TrHN+eUheM2guaaaR9bLaGB6Za7F91ET4vM4EBDFZCemZAewvXJfKs9+aMWeKPCj
-	DBNyd38FKjj90HK3ZDlnez9f2zbr9LjfHRlMk2tsf87hF0lWn+MUmqhxA9aOrXA2tWA==
-X-Gm-Gg: ASbGnct7X59hUiQllpZ1MGnKOnsuSQeD98KSwvtQECbo813Gm60jDua7E0o7bCJ1EGs
-	SWVArHrjYYs0tKzNxRUyKLVUZDa/Dted0Q4FdAJ8+TFHMx1nf7o9IzOseEKxqJq1F58Ect9YIUX
-	Tqi9yFQ9PP+pQwUHV6h0ZITYoSkDpjMLgKBWK4Q6chOjPSmTlQlW1oCWhvJj7F0TK8EnuI2IjBZ
-	AP0lmJ9+Qi9k9EksSndXvDi6YKLKZCobWVqaRMM8lfI12RyXQye1tLwBUGiGPqx1vObFIlq06ca
-	NNcPeCeM3VIKvOWRwEfg0IptIiNZMoHuojligPcwX10uk/cHogAGHMuvXOA=
-X-Received: by 2002:a5d:6711:0:b0:3a0:a0f5:1b02 with SMTP id ffacd0b85a97d-3a0a0f51bcdmr2980353f8f.25.1746430661024;
-        Mon, 05 May 2025 00:37:41 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHXPgUBS6oLYKFEGfiQb4hNjm4EqETq0WQb6mbrzb4uGVHXyVmTL98k94ybGGle6pM8Sc5r1w==
-X-Received: by 2002:a5d:6711:0:b0:3a0:a0f5:1b02 with SMTP id ffacd0b85a97d-3a0a0f51bcdmr2980306f8f.25.1746430660573;
-        Mon, 05 May 2025 00:37:40 -0700 (PDT)
-Received: from ?IPV6:2a0d:3344:2706:e010:b099:aac6:4e70:6198? ([2a0d:3344:2706:e010:b099:aac6:4e70:6198])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a099b172a8sm9666263f8f.91.2025.05.05.00.37.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 May 2025 00:37:40 -0700 (PDT)
-Message-ID: <1710b0e0-ec7a-4d79-89ad-ad9d0cf58f5c@redhat.com>
-Date: Mon, 5 May 2025 09:37:37 +0200
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=YCd/2xWZ2L5+sqDVJsylRC+os0cxUIA02VRNftTL/os=;
+	b=y3gyk0bn/PfoPO7uG73tPTRXrfFzXr1MLzmmVYG8TPKGnHlEyq/h6uc5STI0HRBTzilTZi
+	ahWafrmSYVjhwYr2H3QWwnug2kVff4CabvzIFrRoIdv3h7dgPC6TdDfc7ma7e3CngF0/2z
+	K1yAA3h9y0X5n2tNr4UbWcIqwDjUPrJUMSVRNSwuQnCMl/8Pc8CnqPjraBGpH3tdo02XAK
+	Ochm/2277QePARfuYIrpXkhzm5D8viyfIEH4mRUOM8hmitNNgwiE8gEqYMoauBWxMs3HTK
+	Gt0yfOkYpoSvCGlIwkfFwfLJ8zDKQfe0WVnfLsh9sXAcag0yYFJVNQroGALh0A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1746436788;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=YCd/2xWZ2L5+sqDVJsylRC+os0cxUIA02VRNftTL/os=;
+	b=K0nn7vf3WFlXD6r95tvfpeFrJbYH/OMNC4pBERebj+Zr0Gw0zJByd2T6nX4bLsyjIWoT+v
+	w/FnzzRMI+DauLAg==
+Subject: [PATCH v2 0/8] selftests: vDSO: Some cleanups and (warning) fixes
+Date: Mon, 05 May 2025 11:19:34 +0200
+Message-Id: <20250505-selftests-vdso-fixes-v2-0-3bc86e42f242@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v13 4/9] net: devmem: Implement TX path
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, io-uring@vger.kernel.org,
- virtualization@lists.linux.dev, kvm@vger.kernel.org,
- linux-kselftest@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Simon Horman <horms@kernel.org>, Donald Hunter <donald.hunter@gmail.com>,
- Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
- Jeroen de Borst <jeroendb@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Kuniyuki Iwashima <kuniyu@amazon.com>, Willem de Bruijn
- <willemb@google.com>, Jens Axboe <axboe@kernel.dk>,
- Pavel Begunkov <asml.silence@gmail.com>, David Ahern <dsahern@kernel.org>,
- Neal Cardwell <ncardwell@google.com>, "Michael S. Tsirkin" <mst@redhat.com>,
- Jason Wang <jasowang@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
- =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>,
- Stefan Hajnoczi <stefanha@redhat.com>,
- Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>,
- sdf@fomichev.me, dw@davidwei.uk, Jamal Hadi Salim <jhs@mojatatu.com>,
- Victor Nogueira <victor@mojatatu.com>, Pedro Tammela
- <pctammela@mojatatu.com>, Samiullah Khawaja <skhawaja@google.com>,
- Kaiyuan Zhang <kaiyuanz@google.com>
-References: <20250429032645.363766-1-almasrymina@google.com>
- <20250429032645.363766-5-almasrymina@google.com>
- <53433089-7beb-46cf-ae8a-6c58cd909e31@redhat.com>
- <fd7f21d9-3f45-4f68-85cb-dd160a0a95ca@redhat.com>
- <CAHS8izPr_yt+PtG5Q++Ub=D4J=H7nP0S_7rOP9G7W=i2Zeau3g@mail.gmail.com>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <CAHS8izPr_yt+PtG5Q++Ub=D4J=H7nP0S_7rOP9G7W=i2Zeau3g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAKaCGGgC/22NwQ7CIBBEf6XZsxhAsOrJ/zA91LLYTRowLJKap
+ v8u1qvHN5M3swBjImS4NAskLMQUQwW9a2AY+/BAQa4yaKmtNPogGCefkTOL4jgKTzOycHrA1qj
+ a2zNU9ZlwK6p56yqPxDmm9/ZS1Df9DVqp/w8WJaTwd+uORvbGt6frROGVUww07x1Ct67rB72Oo
+ 2+8AAAA
+X-Change-ID: 20250423-selftests-vdso-fixes-d2ce74142359
+To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+ Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+ Shuah Khan <shuah@kernel.org>, "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: Shuah Khan <skhan@linuxfoundation.org>, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ Muhammad Usama Anjum <usama.anjum@collabora.com>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1746436782; l=1566;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=H0gdIlnmVpbmDjxj6FH9kQsdpTNlGrLsacYC1fdYZdc=;
+ b=0PtOp+HxkdGcOGqFA8cIASGwGNXqWx5NYwTZfXhv9KOlM0o4nW/3QQ0GdSBQ3YLa2zVgUWD9Y
+ T2eDtbG+42LCueR+r2fGDqkOAKTAXJFBsauAj+HCIhNkuMPK1vA94Ye
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-On 5/2/25 9:25 PM, Mina Almasry wrote:
-> On Fri, May 2, 2025 at 4:51 AM Paolo Abeni <pabeni@redhat.com> wrote:
->>
->> On 5/2/25 1:47 PM, Paolo Abeni wrote:
->>> On 4/29/25 5:26 AM, Mina Almasry wrote:
->>>> Augment dmabuf binding to be able to handle TX. Additional to all the RX
->>>> binding, we also create tx_vec needed for the TX path.
->>>>
->>>> Provide API for sendmsg to be able to send dmabufs bound to this device:
->>>>
->>>> - Provide a new dmabuf_tx_cmsg which includes the dmabuf to send from.
->>>> - MSG_ZEROCOPY with SCM_DEVMEM_DMABUF cmsg indicates send from dma-buf.
->>>>
->>>> Devmem is uncopyable, so piggyback off the existing MSG_ZEROCOPY
->>>> implementation, while disabling instances where MSG_ZEROCOPY falls back
->>>> to copying.
->>>>
->>>> We additionally pipe the binding down to the new
->>>> zerocopy_fill_skb_from_devmem which fills a TX skb with net_iov netmems
->>>> instead of the traditional page netmems.
->>>>
->>>> We also special case skb_frag_dma_map to return the dma-address of these
->>>> dmabuf net_iovs instead of attempting to map pages.
->>>>
->>>> The TX path may release the dmabuf in a context where we cannot wait.
->>>> This happens when the user unbinds a TX dmabuf while there are still
->>>> references to its netmems in the TX path. In that case, the netmems will
->>>> be put_netmem'd from a context where we can't unmap the dmabuf, Resolve
->>>> this by making __net_devmem_dmabuf_binding_free schedule_work'd.
->>>>
->>>> Based on work by Stanislav Fomichev <sdf@fomichev.me>. A lot of the meat
->>>> of the implementation came from devmem TCP RFC v1[1], which included the
->>>> TX path, but Stan did all the rebasing on top of netmem/net_iov.
->>>>
->>>> Cc: Stanislav Fomichev <sdf@fomichev.me>
->>>> Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
->>>> Signed-off-by: Mina Almasry <almasrymina@google.com>
->>>> Acked-by: Stanislav Fomichev <sdf@fomichev.me>
->>>
->>> I'm sorry for the late feedback. A bunch of things I did not notice
->>> before...
->>
->> The rest LGTM,
-> 
-> Does this imply I should attach your Reviewed-by or Acked-by on follow
-> up submissions if any? I'm happy either way, just checking.
+Fixes and cleanups for various issues in the vDSO selftests.
 
-Should any other revision be required, please add my acked-by tag to all
-the patch except 4/9.
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+Changes in v2:
+- Refer to -Wstrict-prototypes over -Wold-style-prototypes
+- Pick up Acks
+- Enable fixed warnings in Makefile
+- Link to v1: https://lore.kernel.org/r/20250502-selftests-vdso-fixes-v1-0-fb5d640a4f78@linutronix.de
 
-Thanks,
+---
+Thomas Weißschuh (8):
+      selftests: vDSO: chacha: Correctly skip test if necessary
+      selftests: vDSO: clock_getres: Drop unused include of err.h
+      selftests: vDSO: vdso_test_getrandom: Drop unused include of linux/compiler.h
+      selftests: vDSO: vdso_test_getrandom: Drop some dead code
+      selftests: vDSO: vdso_config: Avoid -Wunused-variables
+      selftests: vDSO: enable -Wall
+      selftests: vDSO: vdso_test_correctness: Fix -Wstrict-prototypes
+      selftests: vDSO: vdso_test_getrandom: Always print TAP header
 
-Paolo
+ tools/testing/selftests/vDSO/Makefile                 |  2 +-
+ tools/testing/selftests/vDSO/vdso_config.h            |  2 ++
+ tools/testing/selftests/vDSO/vdso_test_chacha.c       |  3 ++-
+ tools/testing/selftests/vDSO/vdso_test_clock_getres.c |  1 -
+ tools/testing/selftests/vDSO/vdso_test_correctness.c  |  2 +-
+ tools/testing/selftests/vDSO/vdso_test_getrandom.c    | 18 +++++-------------
+ 6 files changed, 11 insertions(+), 17 deletions(-)
+---
+base-commit: 0af2f6be1b4281385b618cb86ad946eded089ac8
+change-id: 20250423-selftests-vdso-fixes-d2ce74142359
+
+Best regards,
+-- 
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 
 
