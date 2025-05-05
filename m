@@ -1,111 +1,225 @@
-Return-Path: <linux-kselftest+bounces-32439-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32440-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4C5FAA9D42
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 22:34:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C684AA9D6A
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 22:41:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 017DA17D4B8
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 20:34:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8051A1763B6
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 20:41:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25BD91FFC50;
-	Mon,  5 May 2025 20:34:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A85D5270ED4;
+	Mon,  5 May 2025 20:41:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="RXfuiU2B"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Owhl5LDL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f98.google.com (mail-qv1-f98.google.com [209.85.219.98])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E4F81D63E6
-	for <linux-kselftest@vger.kernel.org>; Mon,  5 May 2025 20:34:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ECF5270EB9
+	for <linux-kselftest@vger.kernel.org>; Mon,  5 May 2025 20:41:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746477268; cv=none; b=fM6G1NsX76MydpReNYivbWdHtC6yyp9xE1hUAI6ulr6cB+9avZ/VMhteCl7SD83H9+Dgiwl0YtOQuRd7nbHRExWJPqlBBDswGEdzJH99jXWp/AnvBvqJThLdNjiGMeek5RhajZd40aCttuatIHDJKL/MVwUNdT/DFkJYfBY/PeA=
+	t=1746477677; cv=none; b=RMpAd34ioSjC2cuGNgritJmDOrO2jEBysDJLQVuP5VyUAX502GB8+7DfCVW9LdVxrLjvU96Zwv7UOCjtP3hk4wbzndLvg6JbSwv4V5of2SQH3ZlVARyZKABTR85gRxz+2+uj4zlnq3ODkXLniu4ZhYcofs7mg24byaIHv33Q81k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746477268; c=relaxed/simple;
-	bh=AQiFzZ+hioF3/4ec4StyGYUiDu4auMssToRPssmrwCs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o7BW2B7SfmAge43X4oOMw48o4wEQv3RrENqAh6hj/GF42yUj4db6xXW4CgzXJkMT1HiueQ+UGc+oAbT7bu+mgfC0T91TRZ9ldR0CRfKTSBFsnk03hUGHYf/nJUbeMCi8RdU8boRSpJIIjPA2mM3adeD6KgJ57OxC6K6DeBtdKvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=RXfuiU2B; arc=none smtp.client-ip=209.85.219.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
-Received: by mail-qv1-f98.google.com with SMTP id 6a1803df08f44-6f0ad744811so40090326d6.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 05 May 2025 13:34:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1746477265; x=1747082065; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sjt5SetEQVeK+FSr50cmz95zo5QuMyYcarl0Ii5W2m4=;
-        b=RXfuiU2BCnC37wgciCr7iHmhUKd6bP4+1IFDfwyTw66vCVCCqbZEao0yy1xaZwthmI
-         27v6GVqW7vj1EJ8hFCc7gai1I5tWu881PtmUD7UkE7R8gHFLRXnaMWLkQMYvL/t+RmZE
-         J+ikBAmPthXN87sVI5JouelGD9TrrZO3r1l88CcNMFJ3mXS8hK3lF4ZarGaXys1n5tgQ
-         0a+JTX6Uqq3oAdaJk5yHY4hUJImQ9d2JNGc2fi0YqGNshlnNHu2KvkSnPkyX2bMPCDEN
-         +ie59/N60uz9kSKpCY9wrJxV2ZTUaXlL78P6pTIszkGfXil7KRw8wSiuj0Ivb4B9ZXpa
-         1bXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746477265; x=1747082065;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sjt5SetEQVeK+FSr50cmz95zo5QuMyYcarl0Ii5W2m4=;
-        b=GXcPmE/2i5df+tTZWq113AONPW0+RwLCAZzcERz/FAmvMPFQCmlm2q62LyxQKAqDxC
-         NbTOP4UfgQtSz37iF24M68T2U5MuaVK/hzCHaH41KQLRj9oFEiZE5VQaLe5Zg6ZWlgh5
-         ZzFCk0yEmJuKnieZ0RPgZpqU66XHMXQj/K0wzfelCH1tDg+2Wqs73JQdSoPH5TRSImGI
-         480jQQb/SPfjILT4PcJQPTAhtlvrMJHEOIFqBb6aFYM3enBFLgA3XOrHxkdOuDsIZHjy
-         HBs7zw8X5bYJueeRLdn0BHYxeYjFIMIGvEFjh8NDoFgdSA5ZvbR7pgbqPehkHMPX3Gcx
-         qc0w==
-X-Forwarded-Encrypted: i=1; AJvYcCXqSGzg9UkbHr0ePpDKgNweOv5pIODzIf4TX5yaQMNm+EMUeix8Qg8tXnarwVuCKcM/PwmcqeSM7T/8JkV7KKE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyIwe+FnKTc5kBWQ70KimdDc1ugvasBQJsF3e0royafQkr8KEbC
-	LmRhAJtVmXFr1jg9YZlsg53kCBu1Nt+Ldj6OR5RpmAwxtvYMu9c0qHhr+2YpqUvtGUH7BY4DyFo
-	EvQtvwxiwnoEGbjw5GVIsWcWUOrztCUws
-X-Gm-Gg: ASbGncudnGr/3d5j/UKPgMxA0/Vahf+T9DSBN817LT3sl992ma3fDU6mXZ+jtAZzi5Z
-	DwuUELON5k7v1Nj1QER3y6d8iryYBbcrcsynIJR1dfZahIjqd1e6dsQ+TTOVMyOftA/xinVMo8H
-	Y26fKhbwL42Wsmi8EOP+p9CdhxgAojcyhe6Cq6ASnnAU2OO2AI/wjAnUwz3uI9apk8960Y4hwt2
-	3RyjpNchMJkEkToJx2UA0TaApnaXYJFbipCQGfZ0jx9r6dbeKdR3Eq9Ep7w03tb6+KqpKdRYRzv
-	Qufd4NZd9bYCvyYJT0a8UJI9YMUWKIqBcQzGtMt6q5ub4g==
-X-Google-Smtp-Source: AGHT+IHDhruxKjn2niV28wBPJpKZJOMbtoa+Ime0L962AGQ61i+87oKEyyTGXvRQxnnGlsuLIRHOP/l8m+Wf
-X-Received: by 2002:ad4:5c8a:0:b0:6f2:c81f:9ef9 with SMTP id 6a1803df08f44-6f528cf8e94mr138201146d6.33.1746477265123;
-        Mon, 05 May 2025 13:34:25 -0700 (PDT)
-Received: from c7-smtp-2023.dev.purestorage.com ([208.88.159.128])
-        by smtp-relay.gmail.com with ESMTPS id 6a1803df08f44-6f50f3c3363sm22898456d6.27.2025.05.05.13.34.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 May 2025 13:34:25 -0700 (PDT)
-X-Relaying-Domain: purestorage.com
-Received: from dev-ushankar.dev.purestorage.com (dev-ushankar.dev.purestorage.com [10.7.70.36])
-	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 5D95A3401B7;
-	Mon,  5 May 2025 14:34:24 -0600 (MDT)
-Received: by dev-ushankar.dev.purestorage.com (Postfix, from userid 1557716368)
-	id 52ACCE401BF; Mon,  5 May 2025 14:34:24 -0600 (MDT)
-Date: Mon, 5 May 2025 14:34:24 -0600
-From: Uday Shankar <ushankar@purestorage.com>
-To: Ming Lei <ming.lei@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Jens Axboe <axboe@kernel.dk>
-Cc: linux-block@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] selftests: ublk: more misc fixes
-Message-ID: <aBkg0LW5YO6Osdnw@dev-ushankar.dev.purestorage.com>
-References: <20250428-ublk_selftests-v1-0-5795f7b00cda@purestorage.com>
- <aBkgLOxWLp74TShe@dev-ushankar.dev.purestorage.com>
+	s=arc-20240116; t=1746477677; c=relaxed/simple;
+	bh=d8LfDvKjYkgCUCdFIUw90/ekiXyN5J8SQRenxzuFPN0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=e9mth9pJ0npqoXBr9GARc56RkNmDc1T3x+CWobI+sii59TGLyEJfbYSA/Kc+ALC3W4llAobDdmhnGOsiJ8NDIHi9ZZrWg4XWsQeglPItJaO5o1fL3i8dprVTee/+faR7IZJOcw1C3x1rZmOiex3wuFRS9pqlsDolUiuhAoqrc5g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Owhl5LDL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AA53C4CEFA
+	for <linux-kselftest@vger.kernel.org>; Mon,  5 May 2025 20:41:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746477677;
+	bh=d8LfDvKjYkgCUCdFIUw90/ekiXyN5J8SQRenxzuFPN0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Owhl5LDLXkQNX7x4a0Z1G/aYlPwj725dS3lGDTCV+pR8BnaB+NmYGY89SDeQF3QeH
+	 QMcVS3pTVG7yr2bHdU7lOtM3GpgOBxthge8YONACDjcAlhOe4HTfIekToeKwPz3N+F
+	 SCvS1XUDNBQ9JydjTGHjI6amf0i1/NdehRIliJtQfQsIDhOYJyq9LDTsKQRHtbU2Kp
+	 VJmnHLfuSDXWtz/sjL8WEX+OzJduJRaezfIl3m0tVpYtQRnTmvcqfk+BJYCfe69Lou
+	 ij+YIV+P9kP38iUmIsVH/8hUm/82tum1XfYpsYxGLZYH5aF361BOrdowd6cGN/CkIz
+	 DWjJWz4Jh2/JQ==
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5f7ec0e4978so4119515a12.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 05 May 2025 13:41:17 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUlJ5QT/asRkdb3g3JBV53UDAbptPEKx4KfMR6ojX669c/vOAaZH7YTWnhwv08u8dilKnnq1lXAKUPjsv1NuNA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJp7+pryOqrQ9gqnVIQp4Kmu8BuEA+bafs87gEJd5lUHhNMuR+
+	3lvWJoY7PrrJP1RByYT08tp3GlFX770nvEqOREs51HruZj8hIE0paxL7nAmFtgL1XDcm/6k+y0i
+	lnLWIYrrbvBfkkJ7C6eCAQMGhw+DWoBpDEGCA
+X-Google-Smtp-Source: AGHT+IFfJkERYqcbzT4YQQTS+Mj+93sXv0WPP/4xBqB2yT0tfFb61yLhT9GQEjqTDYpKCZHUl0y2flUvtx0O/XgDMu4=
+X-Received: by 2002:a05:6402:280d:b0:5f9:dbc6:d363 with SMTP id
+ 4fb4d7f45d1cf-5fb70d52af5mr319781a12.32.1746477675536; Mon, 05 May 2025
+ 13:41:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aBkgLOxWLp74TShe@dev-ushankar.dev.purestorage.com>
+References: <20250502184421.1424368-1-bboscaccy@linux.microsoft.com>
+ <20250502210034.284051-1-kpsingh@kernel.org> <87o6w7ge3o.fsf@microsoft.com>
+In-Reply-To: <87o6w7ge3o.fsf@microsoft.com>
+From: KP Singh <kpsingh@kernel.org>
+Date: Mon, 5 May 2025 22:41:04 +0200
+X-Gmail-Original-Message-ID: <CACYkzJ7Ur4kFaGZTDvcFJpn0ZwJ9V+=3ZefUURtkrQGfa68zLg@mail.gmail.com>
+X-Gm-Features: ATxdqUF8uthsI1M39wdVx3o5QcABchfWwSxBzLmXfLY2I-_y9VLmlQgWs2T9bB0
+Message-ID: <CACYkzJ7Ur4kFaGZTDvcFJpn0ZwJ9V+=3ZefUURtkrQGfa68zLg@mail.gmail.com>
+Subject: Re: [PATCH v3 0/4] Introducing Hornet LSM
+To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+Cc: James.Bottomley@hansenpartnership.com, bpf@vger.kernel.org, 
+	code@tyhicks.com, corbet@lwn.net, davem@davemloft.net, dhowells@redhat.com, 
+	gnoack@google.com, herbert@gondor.apana.org.au, jarkko@kernel.org, 
+	jmorris@namei.org, jstancek@redhat.com, justinstitt@google.com, 
+	keyrings@vger.kernel.org, linux-crypto@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, llvm@lists.linux.dev, 
+	masahiroy@kernel.org, mic@digikod.net, morbo@google.com, nathan@kernel.org, 
+	neal@gompa.dev, nick.desaulniers+lkml@gmail.com, nicolas@fjasle.eu, 
+	nkapron@google.com, paul@paul-moore.com, roberto.sassu@huawei.com, 
+	serge@hallyn.com, shuah@kernel.org, teknoraver@meta.com, 
+	xiyou.wangcong@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 05, 2025 at 02:31:40PM -0600, Uday Shankar wrote:
-> Hi Jens,
-> 
-> Can you take a look at Ming's comment on the first patch and merge the
-> set if things look good? I can rebase/repost it as needed.
+On Mon, May 5, 2025 at 7:30=E2=80=AFPM Blaise Boscaccy
+<bboscaccy@linux.microsoft.com> wrote:
+>
+> KP Singh <kpsingh@kernel.org> writes:
+>
+> [...]
+>
+> > Now if you really care about the use-case and want to work with the mai=
+ntainers
+> > and implement signing for the community, here's how we think it should =
+be done:
+> >
+> > * The core signing logic and the tooling stays in BPF, something that t=
+he users
+> >   are already using. No new tooling.
+> > * The policy decision on the effect of signing can be built into variou=
+s
+> >   existing LSMs. I don't think we need a new LSM for it.
+> > * A simple UAPI (emphasis on UAPI!) change to union bpf_attr in uapi/bp=
+f.h in
+> >   the BPF_PROG_LOAD command:
+> >
+> > __aligned_u64 signature;
+> > __u32 signature_size;
+>
+> I think having some actual details on the various parties' requirements
+> here would be helpful. KP, I do look forward to seeing your design;
+> however, having code signing proposals where the capabilities are
+> dictated from above and any dissent is dismissed as "you're doing it
+> wrong" isn't going to be helpful to anyone that needs to use this in
+> practice.
 
-Bleh, sorry, I meant to send this as a reply to v2:
+Please don't misrepresent the facts, you got feedback from Alexei in
+various threads, but you chose to argue on the points that were
+convenient for you (i.e. usage of BPF internal APIs) and yet you claim
+to "work with the BPF community and maintainers" by arguing instead of
+collaborating and paying attention to the feedback given to you.
 
-https://lore.kernel.org/linux-block/20250429-ublk_selftests-v2-0-e970b6d9e4f4@purestorage.com/
+1. https://lore.kernel.org/bpf/CAADnVQKF+B_YYwOCFsPBbrTBGKe4b22WVJFb8C0PHGm=
+RAjbusQ@mail.gmail.com/
 
+  Your solution to address the ELF loader specific issue was to just
+allow list systemd? You totally ignored the part about loaders in
+golang and Rust that do not use ELF. How is this    "directive from
+above?"
+
+2. Alexei suggested to you in
+https://lore.kernel.org/bpf/87plhhjwqy.fsf@microsoft.com/
+
+  "A signature for the map plus a signature for the prog
+  that is tied to a map might be a better option.
+  At map creation time the contents can be checked,
+  the map is frozen, and then the verifier can proceed
+  with prog's signature checking."
+
+You never replied to this.
+
+3. To signing the attachment points, you replied
+
+> That statement is quite questionable. Yes, IIRC you brought that up. And
+> again, runtime policy enforcement has nothing to do with proving code
+> provenance. They are completely independent concerns.
+
+The place where the BPF program is attached is a key part of the
+provenance of the BPF program and its security (and other) effects can
+vary greatly based on that. (e.g. imagine a reject all LSM program
+that is attached to the wrong LSM hook). This is why it's not the same
+as module loading.
+
+4. https://lore.kernel.org/bpf/CAADnVQKF+B_YYwOCFsPBbrTBGKe4b22WVJFb8C0PHGm=
+RAjbusQ@mail.gmail.com/
+
+Programs can still access maps, now if you combine the issue of
+ELF-less loaders and that maps are writeable from other programs as
+freezing only affects userspace (i.e. when a binary gets an FD to a
+map and tries to modify it with syscalls) your implementation fails.
+
+The reply there about trusted user-space still needs to come with
+better guarantees from the kernel, and the kernel can indeed give
+better guarantees, which we will share. The reason for this is that
+your trusted binary is not immune to attacks, and once an attacker
+gains code execution as this trusted binary, there is no containing
+the compromise.
+
+- KP
+
+>
+> Also, I don't think anyone actually cares, at least I don't, who calls
+> verify_pkcs7_signature or whatnot. Verifying signed binary blobs with a
+> private key is a solved problem and isn't really interesting.
+>
+> Our requirements for code signing are just an extension of secure boot
+> and module signing logic:
+>
+> * Prove all code running in ring zero has been signed
+> * Not trivially defeatable by root
+> * Ultimately, no trusted userspace components
+> * Secure from and not vulnerable to TOCTOU attacks
+> * Shouldn't be overly vulnerable to supply-chain attacks
+> * The signature checking logic and control paths should be human-readable
+> * Work easily and be backportable to stable kernels
+> * There should be a simple kconfig option to turn this on or off
+> * This solution needs to be in the mainline kernel
+>
+> Hornet was implemented to meet those requirements, living in the LSM
+> subsystem, written in C. As of today, one cannot accomplish those
+> requirements via BPF-LSM, which is why C was chosen.
+>
+> One can easily realize there is absolutely no way to have a single
+> one-size-fits-all signing solution for everything listed in
+> https://ebpf.io/applications/.
+>
+> If you want to go the UAPI route, I would wholeheartedly recommend
+> making it extensible and having this data be available to the policy
+> LSMs.
+>
+> enum bpf_signature_type {
+>   /* x509 signature check against program instructions only */
+>   BPF_SIGNATURE_PROG_ONLY =3D 0,
+>   /* x509 combined signature check against program instructions and used =
+maps */
+>   BPF_SIGNATURE_PROG_USED_MAPS =3D 1,
+>   /* more of these to be determined via usage */
+>   ...
+> };
+>
+> _aligned_u64 signature;
+> __u32 signature_size;
+> __u32 signature_type;
+>
+> The other option for solving this in the general is in-kernel
+> loaders. That's gotten pushback as well.
+>
+> -blaise
+>
+>
+>
+>
+>
 
