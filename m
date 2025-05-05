@@ -1,123 +1,156 @@
-Return-Path: <linux-kselftest+bounces-32341-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32342-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBB63AA93CB
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 14:58:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AFB8AA949C
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 15:35:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 383D33A6F27
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 12:58:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 945AA3B98FE
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 13:35:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9E87252283;
-	Mon,  5 May 2025 12:58:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A5C22517AB;
+	Mon,  5 May 2025 13:35:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="G531Kove"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qkF1cTFv"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F80E2517B1;
-	Mon,  5 May 2025 12:58:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60BED2040B6;
+	Mon,  5 May 2025 13:35:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746449902; cv=none; b=g/ahpeU06URXCWZA85ujX4lnm5/8sq+iK71gKZa+sfwsY6TLA7IOV8kOJ9quFggEtiFPK7nEX3xEP6U/UzC767RWJXCH7Vg4DRIsnCLk7LJspVjbGuTXIxCYZU81hxPtprDLzhL5lDtLAXQY3QkvarDtvETM1uxYEhZ1IXQOzdY=
+	t=1746452119; cv=none; b=GkdW+QDPMht/RcvlnQpjhltlURthfFCsiSbieehNI+4KIUJZEHAeu9hfG2N+fPUNw5SFWq+WTAQ6x7fn4YpqHDBvtKKhaNBqp6WoNnlAvrINlJqDSnoMguwLcE4ALWmHufUkFN2u2SDApSTq/G5SKUUWecHKz9a9GLKt5mF0n1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746449902; c=relaxed/simple;
-	bh=zUJfziWAGP2+Gb35t5MMHAlc3r4VppAN3Xf6keJyrXM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gEGqt9bTDjrvcT4Mwmqo7PCH6vlWedaX8Q+efXGk5psBSm5DMkiGNJWU4kb5fVhovEzfrClW3NfKrlQVH1240kNfDAkRuo7mJuEDovOgt2eKtuOWnIs8prDphEMPyzfMF+g3arBOIgMILVU7JTdhWSkK/RRk1PdhZgYYVX3BxDE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=G531Kove; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC196C4CEE4;
-	Mon,  5 May 2025 12:58:21 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="G531Kove"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-	t=1746449900;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=B1E2O4wlc3qZ5ZvfelMaj2liJE8Ndd4lVZIoL+xu/sQ=;
-	b=G531KovetTj6YEJp7dqR6JpiEvhYN9hsFAPbcXKFeJ6VoYXowTUCohtkd+9ddYIRw8METt
-	xwP0fY9iK+bqzBiUXRgo3Hnjbz/dRV4eI1IEg3QOj38WSCBwAdoNbtA0NjG+BL4xo+RSqx
-	YpqvYSAZyBCurtu2Z+LY1yu/FMWslVo=
-Received: 
-	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 796f16d6 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-	Mon, 5 May 2025 12:58:20 +0000 (UTC)
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-2d4f8c42f49so3044566fac.1;
-        Mon, 05 May 2025 05:58:19 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWIsw5T+qHOi7PpP6t5Uip1tGNLe4K46Wl1sgL4triwcKT4e1uhcHvCwQEUJNz8BLlzjn65iyCCMqmM4y8=@vger.kernel.org, AJvYcCXQ9bQbQbsFQTIMa81g3n2GLJhedIVilcSMcqn3nGJvzvDnOxK7HCI4QRs9dh8/dY9Iktst2U+UykKd4RrBnW/D@vger.kernel.org
-X-Gm-Message-State: AOJu0YyF+9m9sq5OkjrH9Nkk/35VmASanC6AluKIAGNtRYdr2zaLl4qq
-	96rxlVbrHoWFtVv8wifqEvp6U9nDsx3i7f6OZdVhoF/mLvqMXIomidr+xwYda4wBaHpNlSf6bTM
-	HiIKqEQ2BII2aEsjdLTGX3aI60uQ=
-X-Google-Smtp-Source: AGHT+IEdrqURA6nv3beJvV2jOQXW2GGmyAGQrNeF8oucxH1ZUimpuTLl8YKIlHxEGlHM5TMIx7/V0i0OUvDgadLOgk0=
-X-Received: by 2002:a05:6871:208b:b0:2d8:5015:1a8d with SMTP id
- 586e51a60fabf-2da93aaeb9emr9482003fac.11.1746449898844; Mon, 05 May 2025
- 05:58:18 -0700 (PDT)
+	s=arc-20240116; t=1746452119; c=relaxed/simple;
+	bh=lZYJj5+RvlpcB3C/3nThNIVF+4ts/zwD2yTL3wPkp6I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kuaOK6RC86zHlAzerYOF/Royd3zJyVZI7hNQkbToyOu9662p7Z8k/qZW8q90uesOxoT/LyIFWhTJlqZjFjNKBFjwTN6G873sR7o424MKWNExTaUdcpKniWkJe5ntmbxnSx9gwhMrxMK8aN+4yg3kIHz5vClh2vDmrsBtroBrXKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qkF1cTFv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4726BC4CEE4;
+	Mon,  5 May 2025 13:35:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746452118;
+	bh=lZYJj5+RvlpcB3C/3nThNIVF+4ts/zwD2yTL3wPkp6I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qkF1cTFvbhP4Ye7NeV9917c1PkBLXuYnLDbiOErKUKsUumdsSQbOSMNV+zqY18Rek
+	 iMgcsmDQnKKTGn+zuxvwpTgU95tKAC7axgb/oimBwIeWBH4Qdl//jsdS4phegc4QB6
+	 Od8s6UqytlBBSYBU6sYpgrW0+Xp5QP9sPiVwNULR2e9TANRtMUkmw+uXdjg01d79Ln
+	 oApceD/DookzKf4fYwsDQNTRHGg1JtviuRWBg02Cwd5WEcQ0XvCA/LXEG/YJP63KIn
+	 sUWf6i8bS2nrfk6KNE3ZE7xDcac83jrNRzGftJ/nnH7mqWNvilg2dKT7aNvbAlNFVZ
+	 3fsRCjlhW9PCw==
+Date: Mon, 5 May 2025 15:35:13 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: John Hubbard <jhubbard@nvidia.com>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Christian Brauner <christian@brauner.io>, Shuah Khan <shuah@kernel.org>, 
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>, Suren Baghdasaryan <surenb@google.com>, 
+	Vlastimil Babka <vbabka@suse.cz>, pedro.falcato@gmail.com, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Oliver Sang <oliver.sang@intel.com>, seanjc@google.com
+Subject: Re: [PATCH v3 3/3] selftests: pidfd: add tests for PIDFD_SELF_*
+Message-ID: <20250505-postablage-drinnen-ddaa539abc18@brauner>
+References: <cover.1729073310.git.lorenzo.stoakes@oracle.com>
+ <c083817403f98ae45a70e01f3f1873ec1ba6c215.1729073310.git.lorenzo.stoakes@oracle.com>
+ <a3778bea-0a1e-41b7-b41c-15b116bcbb32@linuxfoundation.org>
+ <a6133831-3fc3-49aa-83c6-f9aeef3713c9@lucifer.local>
+ <5b0b8e1e-6f50-4e18-bf46-39b00376c26e@nvidia.com>
+ <20250501114235.GP4198@noisy.programming.kicks-ass.net>
+ <20250501124646.GC4356@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250505-selftests-vdso-fixes-v2-0-3bc86e42f242@linutronix.de> <20250505-selftests-vdso-fixes-v2-4-3bc86e42f242@linutronix.de>
-In-Reply-To: <20250505-selftests-vdso-fixes-v2-4-3bc86e42f242@linutronix.de>
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date: Mon, 5 May 2025 14:58:06 +0200
-X-Gmail-Original-Message-ID: <CAHmME9ppP0mAh6HMaHDi+XTuU8E6be9wSPYTYO-GvX=vYJCYeg@mail.gmail.com>
-X-Gm-Features: ATxdqUHCIk4fN7_3pTZKn2m-GTOYNSlswNMtBkbYEcmnRNWz1C-sSyFjRBS4m_w
-Message-ID: <CAHmME9ppP0mAh6HMaHDi+XTuU8E6be9wSPYTYO-GvX=vYJCYeg@mail.gmail.com>
-Subject: Re: [PATCH v2 4/8] selftests: vDSO: vdso_test_getrandom: Drop some
- dead code
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Shuah Khan <shuah@kernel.org>, 
-	Shuah Khan <skhan@linuxfoundation.org>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, 
-	Muhammad Usama Anjum <usama.anjum@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250501124646.GC4356@noisy.programming.kicks-ass.net>
 
-Hi Thomas,
+On Thu, May 01, 2025 at 02:46:46PM +0200, Peter Zijlstra wrote:
+> On Thu, May 01, 2025 at 01:42:35PM +0200, Peter Zijlstra wrote:
+> > On Wed, Oct 16, 2024 at 07:14:34PM -0700, John Hubbard wrote:
+> > > On 10/16/24 3:06 PM, Lorenzo Stoakes wrote:
+> > > > On Wed, Oct 16, 2024 at 02:00:27PM -0600, Shuah Khan wrote:
+> > > > > On 10/16/24 04:20, Lorenzo Stoakes wrote:
+> > > ...
+> > > > > > diff --git a/tools/testing/selftests/pidfd/pidfd.h b/tools/testing/selftests/pidfd/pidfd.h
+> > > > > > index 88d6830ee004..1640b711889b 100644
+> > > > > > --- a/tools/testing/selftests/pidfd/pidfd.h
+> > > > > > +++ b/tools/testing/selftests/pidfd/pidfd.h
+> > > > > > @@ -50,6 +50,14 @@
+> > > > > >    #define PIDFD_NONBLOCK O_NONBLOCK
+> > > > > >    #endif
+> > > > > > +/* System header file may not have this available. */
+> > > > > > +#ifndef PIDFD_SELF_THREAD
+> > > > > > +#define PIDFD_SELF_THREAD -100
+> > > > > > +#endif
+> > > > > > +#ifndef PIDFD_SELF_THREAD_GROUP
+> > > > > > +#define PIDFD_SELF_THREAD_GROUP -200
+> > > > > > +#endif
+> > > > > > +
+> > > > > 
+> > > > > As mentioned in my response to v1 patch:
+> > > > > 
+> > > > > kselftest has dependency on "make headers" and tests include
+> > > > > headers from linux/ directory
+> > > > 
+> > > > Right but that assumes you install the kernel headers on the build system,
+> > > > which is quite a painful thing to have to do when you are quickly iterating
+> > > > on a qemu setup.
+> > > > 
+> > > > This is a use case I use all the time so not at all theoretical.
+> > > > 
+> > > 
+> > > This is turning out to be a fairly typical reaction from kernel
+> > > developers, when presented with the "you must first run make headers"
+> > > requirement for kselftests.
+> > > 
+> > > Peter Zijlstra's "NAK NAK NAK" response [1] last year was the most
+> > > colorful, so I'll helpfully cite it here. :)
+> > 
+> > Let me re-try this.
+> > 
+> > This is driving me insane. I've spend the past _TWO_ days trying to
+> > build KVM selftests and I'm still failing.
+> > 
+> > This is absolute atrocious crap and is costing me valuable time.
+> > 
+> > Please fix this fucking selftests shit to just build. This is unusable
+> > garbage.
+> 
+> So after spending more time trying to remember how to debug Makefiles (I
+> hate my life), I found that not only do I need this headers shit, the
+> kvm selftests Makefile is actively broken if you use: make O=foo
+> 
+> -INSTALL_HDR_PATH = $(top_srcdir)/usr
+> +INSTALL_HDR_PATH = $(top_srcdir)/$(O)/usr
+> 
+> 
+> And then finally, I can do:
+> 
+> make O=foo headers_install
+> make O=foo -C tools/testing/selftests/kvm/
+> 
+> So yeah, thank you very much for wasting my time *AGAIN*.
+> 
+> 
+> Seriously, I want to be able to do:
+> 
+>   cd tools/testing/selftests/foo; make
+> 
+> and have it just work. I would strongly suggest every subsystem to
+> reclaim their selftests and make it so again.
+> 
+> And on that, let me go merge the fixes I need to have x86 and futex
+> build without this headers shit.
 
-On Mon, May 5, 2025 at 11:19=E2=80=AFAM Thomas Wei=C3=9Fschuh
-<thomas.weissschuh@linutronix.de> wrote:
->
-> vgetrandom_put_state() and the variable ret in kselftest() are never used=
-.
->
-> Drop the dead code.
->
-> Signed-off-by: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
-> Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> ---
->  tools/testing/selftests/vDSO/vdso_test_getrandom.c | 11 +----------
->  1 file changed, 1 insertion(+), 10 deletions(-)
->
-> diff --git a/tools/testing/selftests/vDSO/vdso_test_getrandom.c b/tools/t=
-esting/selftests/vDSO/vdso_test_getrandom.c
-> index f36e50f372f935e6d4da3175c81e210653bdce1d..b0e0d664508a38d6dde9df0a6=
-1ec8198ee928a17 100644
-> --- a/tools/testing/selftests/vDSO/vdso_test_getrandom.c
-> +++ b/tools/testing/selftests/vDSO/vdso_test_getrandom.c
-> @@ -100,15 +100,6 @@ static void *vgetrandom_get_state(void)
->         return state;
->  }
->
-> -static void vgetrandom_put_state(void *state)
-> -{
-> -       if (!state)
-> -               return;
-> -       pthread_mutex_lock(&vgrnd.lock);
-> -       vgrnd.states[vgrnd.len++] =3D state;
-> -       pthread_mutex_unlock(&vgrnd.lock);
-> -}
+I'm completely lost as to what's happening here or whether the test here
+is somehow at fault for something.
 
-This sort of acts as example code / basic reference code for libcs and
-such. So I like having this function around. Could you just mark it as
-unused with an attribute but otherwise keep it?
-
-Jason
+The pidfd.h head explicitly has no dependency on the pidfd uapi header
+itself and I will NAK anything that makes it so. It's just a giant pain.
 
