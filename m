@@ -1,317 +1,313 @@
-Return-Path: <linux-kselftest+bounces-32401-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32402-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B9C0AA9935
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 18:37:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44CEFAA994A
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 18:40:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0BD6C1889F53
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 16:35:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D38083AB58B
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 16:38:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1403B267703;
-	Mon,  5 May 2025 16:34:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 686141A255C;
+	Mon,  5 May 2025 16:38:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Fjjqu5kx"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HAgz60rR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF1A2189916
-	for <linux-kselftest@vger.kernel.org>; Mon,  5 May 2025 16:34:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81860224D7
+	for <linux-kselftest@vger.kernel.org>; Mon,  5 May 2025 16:38:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746462845; cv=none; b=CDKEN0qq0I+Uiw1Iywg/oBTdqRK6CgF6YLODkVfoYAEPp6VNcnfyAdT29GmEZwPjAoaAGPvEd93ViD4DyWggjSCqkmK8P7RC+vV7HqOwe1ot7shNlaXrG+MW0JDKI4KD9rHWs5CLPx5P+MGWXk28RmJ2my/wpo+wlJsLdoPSQJo=
+	t=1746463122; cv=none; b=tFHmEMdlyP5fHu4hnj04k+Vv2MilPJwUezI8efg/FRPZtbMYjqRDTlq5R5WZatu7is9BIMyVZMdO053GJTn+HCqtudsx73fytWdU04d1LB7n3HSlquEgR7rE4P8pDBg8jzZlNfawp4kU/04nNaFw+OPSH8oWd/xlWr2WMd0mtrk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746462845; c=relaxed/simple;
-	bh=ZUdQ8e073ixU4cLB0bqOKNy/fnMe5Asq5Q6r+NH3CdI=;
+	s=arc-20240116; t=1746463122; c=relaxed/simple;
+	bh=GeoqyUZ96ZhiA4JfLEQL3jDROUwM0rclHT0XNphb5Gw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uqgn7L185Fy5/hrkSLKJST5TTkdVaulUsGyB+PIqMGzZ3Jnnui8BbwrgUsH6o2zwB+GWBebWkgdq/QJEuouy7vdIeAvMwH4Bfdy+MjACNnTJ4WcPN6MAFzAgIFvORdtqwDTL4+SvkdDXVq1wMHNEhjdhiQmQhQJ4BVFk9vexCQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Fjjqu5kx; arc=none smtp.client-ip=209.85.128.42
+	 To:Cc:Content-Type; b=gSOooyhFM+h1d+JA1PW9tUfzrxLXQOopju75VKdrqsgjFxOC8sGa6bTLimacgSk/03+siSGajCO51rcr/SIhrXLp8ZcCo3vklNCsCVv+M2cNrKF433hK3pYQxHJMQqGMj+xHsO+1wZDez2j7yFW1xkYHXpxr6yXGn/50H4BPmhc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HAgz60rR; arc=none smtp.client-ip=209.85.160.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-43cfe808908so116335e9.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 05 May 2025 09:34:02 -0700 (PDT)
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-48b7747f881so555351cf.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 05 May 2025 09:38:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746462841; x=1747067641; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1746463119; x=1747067919; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Cp9xG8IzZ6A+sCM3e//b/xF89Qt5DTbc6K0sQ70LgNM=;
-        b=Fjjqu5kxIDckj/65HS0mnj4PmCeuvUCrvF0cRmUVwiHHxOOfD4LC776bWU4ryYAJZ+
-         FP1hQkCGBa4A+yJgaKUr1YqEvbGYwu0P1cY7GQ7g1IDDNdgVPtznnMIZvgcIPiNnHlQR
-         IGTnSnmoPayqp7+zO3vzR+yp4V7ktqDPEUtiCw8TKnVQPa4OO7v60QMC9XkEsXYQdhFA
-         DcFDp7QmsJlGXPRhmmE4Hq2sniOamQIn2aICjZFtGcptcyMQ2NRQn84fnyNN2n2rOXHu
-         xYjb2prfU7LNup9idIy3crcsJuGniV9Yx16Ti25GWb8sse/qbWlyw2CcoWiMI/Fne+xj
-         iL2Q==
+        bh=e8cGfqMPxInbFVttVOXD20cN2ryppIoxJ2ihtNYujm8=;
+        b=HAgz60rReJj+O96uR9Ae/uyjdiYC30LHKP39xrUunt/f9pDJLZidsyI365/6dzYhnn
+         yRyDf5RGWMsiuwAhdh+OBZ96uWXrAwsLc/oen42vyWas8iRryJqyl1Vura4aO4cQP8Ax
+         9u+R2WioKr1LRa5fv5j6fRYSdsnrRcC4R3yv2JZA5fWETxrV3M0Zy72pn0S2Ml0OnjOv
+         f8c/7oFFGxu2z08AvnaMTvFSUru7mGeCDCLhHPIM8gfsns68Cpp8Lfz3Hy2ReiP+uXsQ
+         ON6Z+IXRP6vIOoNYUM4OMB5nrEeM1J5+blfH4XVTf3AjbZq7z7So/HTma/BvYQpR7flF
+         UAmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746462841; x=1747067641;
+        d=1e100.net; s=20230601; t=1746463119; x=1747067919;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Cp9xG8IzZ6A+sCM3e//b/xF89Qt5DTbc6K0sQ70LgNM=;
-        b=GymybR/+s097Cw4aZRLfJYJKFa+s1j0hMIQFVXpL0qoEunanzlA/+1qpCn6NW810Se
-         5YZQFLcPzg2jXjuhiUEP79JzpHVsQBwYsytfXsl2cwVJhlDqOpYKIgoM3PFrmrXW5N63
-         GXUt6qqeF5qYEwV3q7UMjBsULSl7lnEYUTwaexo+RamiGexeDjTLag3MMcVx7NjR5Xtf
-         Aj7WuPTloaqylCstGjzrHrTFGidcnQCY3zkQQ8UAAQmJQsmdrflomaNm2/Ke72LPGkuq
-         yrjkFwYFZmzPD2tMF7J6eRMalV5wSlk3sYeRKU2Jqg/5n66QetWS4eLmGgAidNL4bDVb
-         Xbeg==
-X-Forwarded-Encrypted: i=1; AJvYcCWTgpHGtsbaMdzFiS3c3wKSc+KdaOqJ0Ez8T22Ql/p82DeV9ImLTx/dUr9ZV5yea6Db9PntONpn+4fel1kfPYQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyyFbLs/Dn0eN3n1j+vP+zCoAlHN2A26ApEd6FLCV1Tvt5d2yGq
-	86Ey97dOmurY+ffnf7NTwvMQF4tDGG57oFr/8oBe1pEN8EUmlphv3z//pPjybanFzumh31JESyB
-	kpf0stFK4UrjI+MHYgi4pdBXM22VnoVBahiH9
-X-Gm-Gg: ASbGncuLSdha7UUPdi0tEnDEt0PUP7/FxcdkITZOtAlxruwLyVll8v741EcBGW/C/+Z
-	dA+Crxc9/W2YUoMkMy5MIpHRnhoXzwLlVaT1sMq/rJGAWTEqYvPSxjn+EHImx/rhEcZ52I1kmxO
-	HcgPbFO8vWgE7le45aiOrO
-X-Google-Smtp-Source: AGHT+IGQyGO5uVSmpnPnkE3FDZ4KT+CnyY7gWk8P1H5yWIU1LA4t6+ZiezZ9eO866m7rRnEE4b46YYgj28ToiihwpHE=
-X-Received: by 2002:a05:600c:3b82:b0:439:9434:1b6c with SMTP id
- 5b1f17b1804b1-441cf9b141dmr171795e9.3.1746462840937; Mon, 05 May 2025
- 09:34:00 -0700 (PDT)
+        bh=e8cGfqMPxInbFVttVOXD20cN2ryppIoxJ2ihtNYujm8=;
+        b=qAlng5gYEduaPG0+dWq+O97+4YFTMBry3FBONTPNPYVDk4Sv6qJY8C361sYytqpB7+
+         I+R8eovpox6mGhyha5kcLl9nQIEHyUMcon2sNTw6is6XdzB7DqP9QrmjHGqsPIwZFGmD
+         zzHm/rsHq17GVfooJcdF0Z+DrnJk/xtIlxXEGoPQWvisQPTWQ5oR6uHRQ8ITbMP1MoZg
+         fs/khBiLv0xCpdlsfQFbISzS22cYg6EKv5uk/6xhzNN2SWlEqkx+z3T7guqn8aqRQawN
+         2i3kL6/f024Rm/tjKqfbIfAYf/ZCO65JK2QRV18Ga4Toyd+QSNZt2BZESPQSAoDyYnBj
+         25pQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUbNLLDk51WM2rJcJALWZO91D2vJewNebHSW9I999God5wGdLLzHn2oMLW+2YsPY8jW0SN3vOWvGvqwkUOJGG4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz9iIHGNx9lRnSnALb6bpNq4//0X2CDdA69dCXQ6szqbesBIY+n
+	+l/ovOOJKVX+lXxpOBX8MF7bBFb++2ZeE+jNKm0w339lFBeitYfuVsbVwkBeR88IuFsv6iIvA5G
+	0Hihv/SrJyscfvAoh64DMopOcvBQn1LKT0CDv
+X-Gm-Gg: ASbGncuUIO6FEZapKGNQYQ8LHEnhp3BXJD74v0EozXm8jpPAzqNvDs78dlFrya3MU5J
+	g4dEAiX69/7xjjUQeBf5xbNCXec3w/RWE3kGC6cVOq+8686kfK3PcLH2PY/GLs6+cD4SJ8GafRo
+	a67kDFxP3hxIJaOda58K2j
+X-Google-Smtp-Source: AGHT+IFWiSPtprBCFhUiQJ87HBkeklAt1J+ZsCn+rVHWym0jK4XLeniq9xKP5/CRbfUkWSCmfruKW7KYmB/qC+RSHJY=
+X-Received: by 2002:a05:622a:15d1:b0:486:a185:3136 with SMTP id
+ d75a77b69052e-490cc658b8bmr651011cf.14.1746463118837; Mon, 05 May 2025
+ 09:38:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250504224149.1033867-1-tjmercier@google.com>
- <20250504224149.1033867-3-tjmercier@google.com> <26ca8ddf-0d78-462f-a47d-a1128b2e058f@amd.com>
-In-Reply-To: <26ca8ddf-0d78-462f-a47d-a1128b2e058f@amd.com>
-From: "T.J. Mercier" <tjmercier@google.com>
-Date: Mon, 5 May 2025 09:33:48 -0700
-X-Gm-Features: ATxdqUHRGgaUPb2TsqMguMaRajHe7gmAlhGQ8JWKvVw_IFJV369f1ssTaaa65I4
-Message-ID: <CABdmKX2iNk22h-KxUr4yvZO80yeRRjMfoC7yjiZ-aR_f1k402g@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] bpf: Add dmabuf iterator
-To: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc: sumit.semwal@linaro.org, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, martin.lau@linux.dev, skhan@linuxfoundation.org, 
-	song@kernel.org, alexei.starovoitov@gmail.com, linux-kernel@vger.kernel.org, 
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	linaro-mm-sig@lists.linaro.org, linux-doc@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, android-mm@google.com, 
-	simona@ffwll.ch, corbet@lwn.net, eddyz87@gmail.com, yonghong.song@linux.dev, 
-	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, 
-	jolsa@kernel.org, mykolal@fb.com
+References: <20250418174959.1431962-1-surenb@google.com> <20250418174959.1431962-8-surenb@google.com>
+ <CAG48ez3YLWh9hXQQdGVQ7hCsd=k_i2Z2NO6qzT6NaOYiRjy=nw@mail.gmail.com>
+ <CAJuCfpGGiwTbMeGAeYNtQ5SsFenUw8up6ToLy=VstULM_TSoXA@mail.gmail.com>
+ <CAG48ez15g5n9AoMJk1yPHsDCq2PGxCHc2WhCAzH8B2o6PgDwzQ@mail.gmail.com>
+ <CAJuCfpG+YjyVE-6TaAQEjwc0iixqN8Epf25jo2awtL=gqY=afA@mail.gmail.com>
+ <CAG48ez0ntTH_sOaPiqML715jyTCujwyh3Og1wBq9RNLbu55C5Q@mail.gmail.com> <20250505-wachen-konform-3fe08f1b3214@brauner>
+In-Reply-To: <20250505-wachen-konform-3fe08f1b3214@brauner>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Mon, 5 May 2025 09:38:27 -0700
+X-Gm-Features: ATxdqUExh_T1r-sy8rTeLU-t84R_-ihK_Dse0jJQ6kQZSv2WSV8VGLRmcYSeIkA
+Message-ID: <CAJuCfpHYYGa4R11xJwZACNeXDxVroh-gUxHepdc2FfmgP_qBaA@mail.gmail.com>
+Subject: Re: [PATCH v3 7/8] mm/maps: read proc/pid/maps under RCU
+To: Christian Brauner <brauner@kernel.org>
+Cc: Jann Horn <jannh@google.com>, Al Viro <viro@zeniv.linux.org.uk>, 
+	linux-fsdevel@vger.kernel.org, akpm@linux-foundation.org, 
+	Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, david@redhat.com, 
+	vbabka@suse.cz, peterx@redhat.com, hannes@cmpxchg.org, mhocko@kernel.org, 
+	paulmck@kernel.org, shuah@kernel.org, adobriyan@gmail.com, 
+	josef@toxicpanda.com, yebin10@huawei.com, linux@weissschuh.net, 
+	willy@infradead.org, osalvador@suse.de, andrii@kernel.org, 
+	ryan.roberts@arm.com, christophe.leroy@csgroup.eu, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 5, 2025 at 4:17=E2=80=AFAM Christian K=C3=B6nig <christian.koen=
-ig@amd.com> wrote:
+On Mon, May 5, 2025 at 6:50=E2=80=AFAM Christian Brauner <brauner@kernel.or=
+g> wrote:
 >
-> On 5/5/25 00:41, T.J. Mercier wrote:
-> > The dmabuf iterator traverses the list of all DMA buffers.
+> On Tue, Apr 29, 2025 at 08:54:58PM +0200, Jann Horn wrote:
+> > On Tue, Apr 29, 2025 at 8:04=E2=80=AFPM Suren Baghdasaryan <surenb@goog=
+le.com> wrote:
+> > > On Tue, Apr 29, 2025 at 10:21=E2=80=AFAM Jann Horn <jannh@google.com>=
+ wrote:
+> > > >
+> > > > Hi!
+> > > >
+> > > > (I just noticed that I incorrectly assumed that VMAs use kfree_rcu
+> > > > (not SLAB_TYPESAFE_BY_RCU) when I wrote my review of this, somehow =
+I
+> > > > forgot all about that...)
+> > >
+> > > Does this fact affect your previous comments? Just want to make sure
+> > > I'm not missing something...
 > >
-> > DMA buffers are refcounted through their associated struct file. A
-> > reference is taken on each buffer as the list is iterated to ensure eac=
-h
-> > buffer persists for the duration of the bpf program execution without
-> > holding the list mutex.
+> > When I suggested using "WRITE_ONCE(vma->vm_file, NULL)" when tearing
+> > down a VMA, and using get_file_rcu() for the lockless lookup, I did
+> > not realize that you could actually also race with all the other
+> > places that set ->vm_file, like __mmap_new_file_vma() and so on; and I
+> > did not think about whether any of those code paths might leave a VMA
+> > with a dangling ->vm_file pointer.
 > >
-> > Signed-off-by: T.J. Mercier <tjmercier@google.com>
-> > ---
-> >  kernel/bpf/Makefile      |   3 +
-> >  kernel/bpf/dmabuf_iter.c | 134 +++++++++++++++++++++++++++++++++++++++
-> >  2 files changed, 137 insertions(+)
-> >  create mode 100644 kernel/bpf/dmabuf_iter.c
+> > I guess maybe that means you really do need to do the lookup from the
+> > copied data, as you did in your patch; and that might require calling
+> > get_file_active() on the copied ->vm_file pointer (instead of
+> > get_file_rcu()), even though I think that is not really how
+> > get_file_active() is supposed to be used (it's supposed to be used
+> > when you know the original file hasn't been freed yet). Really what
+>
+> I think it's fine for get_file_active() to be used in this way. That
+> ->vm_file pointer usage should get a fat comment above it explaining how
+> what you're doing is safe.
+
+Got it. Will use it in my next version. Thanks!
+
+>
+> > you'd want for that is basically a raw __get_file_rcu(), but that is
+> > static and I think Christian wouldn't want to expose more of these
+> > internals outside VFS...
+>
+> Yeah, no. I don't want that to be usable outside of that file.
+>
+> > (In that case, all the stuff below about get_file_rcu() would be moot.)
 > >
-> > diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
-> > index 70502f038b92..3a335c50e6e3 100644
-> > --- a/kernel/bpf/Makefile
-> > +++ b/kernel/bpf/Makefile
-> > @@ -53,6 +53,9 @@ obj-$(CONFIG_BPF_SYSCALL) +=3D relo_core.o
-> >  obj-$(CONFIG_BPF_SYSCALL) +=3D btf_iter.o
-> >  obj-$(CONFIG_BPF_SYSCALL) +=3D btf_relocate.o
-> >  obj-$(CONFIG_BPF_SYSCALL) +=3D kmem_cache_iter.o
-> > +ifeq ($(CONFIG_DMA_SHARED_BUFFER),y)
-> > +obj-$(CONFIG_BPF_SYSCALL) +=3D dmabuf_iter.o
-> > +endif
+> > Or you could pepper WRITE_ONCE() over all the places that write
+> > ->vm_file, and ensure that ->vm_file is always NULLed before its
+> > reference is dropped... but that seems a bit more ugly to me.
 > >
-> >  CFLAGS_REMOVE_percpu_freelist.o =3D $(CC_FLAGS_FTRACE)
-> >  CFLAGS_REMOVE_bpf_lru_list.o =3D $(CC_FLAGS_FTRACE)
-> > diff --git a/kernel/bpf/dmabuf_iter.c b/kernel/bpf/dmabuf_iter.c
-> > new file mode 100644
-> > index 000000000000..968762e11f73
-> > --- /dev/null
-> > +++ b/kernel/bpf/dmabuf_iter.c
-> > @@ -0,0 +1,134 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/* Copyright (c) 2025 Google LLC */
-> > +#include <linux/bpf.h>
-> > +#include <linux/btf_ids.h>
-> > +#include <linux/dma-buf.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/seq_file.h>
-> > +
-> > +BTF_ID_LIST_SINGLE(bpf_dmabuf_btf_id, struct, dma_buf)
-> > +DEFINE_BPF_ITER_FUNC(dmabuf, struct bpf_iter_meta *meta, struct dma_bu=
-f *dmabuf)
-> > +
-> > +static struct dma_buf *get_next_dmabuf(struct dma_buf *dmabuf)
-> > +{
-> > +     struct dma_buf *ret =3D NULL;
-> > +
-> > +     /*
-> > +      * Look for the first/next buffer we can obtain a reference to.
-> > +      *
-> > +      * The list mutex does not protect a dmabuf's refcount, so it can=
- be
-> > +      * zeroed while we are iterating. We cannot call get_dma_buf() si=
-nce the
-> > +      * caller of this program may not already own a reference to the =
-buffer.
-> > +      */
-> > +     mutex_lock(&dmabuf_list_mutex);
-> > +     if (dmabuf) {
->
-> That looks like you try to mangle the start and next functionality in jus=
-t one function.
->
-> I would just inline that into the dmabuf_iter_seq_start() and dmabuf_iter=
-_seq_next() functions.
-
-Primarily this is to share between the open coded iterator (next
-patch) and this normal iterator since I didn't want to duplicate the
-same list traversal code across both of them.
->
->
-> > +             dma_buf_put(dmabuf);
-> > +             list_for_each_entry_continue(dmabuf, &dmabuf_list, list_n=
-ode) {
->
-> That you can put the DMA-buf and then still uses it in list_for_each_entr=
-y_continue() only works because the mutex is locked in the destroy path.
-
-Yup, this was deliberate.
->
->
-> I strongly suggest to just put those two functions into drivers/dma-buf/d=
-ma-buf.c right next to the __dma_buf_debugfs_list_add() and __dma_buf_debug=
-fs_list_del() functions.
-
-By two functions, you mean a get_first_dmabuf(void) and a
-get_next_dmabuf(struct dma_buf*)? To make the dma_buf_put() call a
-little less scary since all the mutex ops are right there?
->
->
-> Apart from those style suggestions looks good to me from the technical si=
-de, but I'm not an expert for the BPF stuff.
->
-> Regards,
-> Christian.
-
-Thanks for your comments and reviews!
-
-> > +                     if (file_ref_get(&dmabuf->file->f_ref)) {
-> > +                             ret =3D dmabuf;
-> > +                             break;
-> > +                     }
-> > +             }
-> > +     } else {
-> > +             list_for_each_entry(dmabuf, &dmabuf_list, list_node) {
-> > +                     if (file_ref_get(&dmabuf->file->f_ref)) {
-> > +                             ret =3D dmabuf;
-> > +                             break;
-> > +                     }
-> > +             }
-> > +     }
-> > +     mutex_unlock(&dmabuf_list_mutex);
-> > +     return ret;
-> > +}
-> > +
-> > +static void *dmabuf_iter_seq_start(struct seq_file *seq, loff_t *pos)
-> > +{
-> > +     if (*pos)
-> > +             return NULL;
-> > +
-> > +     return get_next_dmabuf(NULL);
-> > +}
-> > +
-> > +static void *dmabuf_iter_seq_next(struct seq_file *seq, void *v, loff_=
-t *pos)
-> > +{
-> > +     struct dma_buf *dmabuf =3D v;
-> > +
-> > +     ++*pos;
-> > +
-> > +     return get_next_dmabuf(dmabuf);
-> > +}
-> > +
-> > +struct bpf_iter__dmabuf {
-> > +     __bpf_md_ptr(struct bpf_iter_meta *, meta);
-> > +     __bpf_md_ptr(struct dma_buf *, dmabuf);
-> > +};
-> > +
-> > +static int __dmabuf_seq_show(struct seq_file *seq, void *v, bool in_st=
-op)
-> > +{
-> > +     struct bpf_iter_meta meta =3D {
-> > +             .seq =3D seq,
-> > +     };
-> > +     struct bpf_iter__dmabuf ctx =3D {
-> > +             .meta =3D &meta,
-> > +             .dmabuf =3D v,
-> > +     };
-> > +     struct bpf_prog *prog =3D bpf_iter_get_info(&meta, in_stop);
-> > +
-> > +     if (prog)
-> > +             return bpf_iter_run_prog(prog, &ctx);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int dmabuf_iter_seq_show(struct seq_file *seq, void *v)
-> > +{
-> > +     return __dmabuf_seq_show(seq, v, false);
-> > +}
-> > +
-> > +static void dmabuf_iter_seq_stop(struct seq_file *seq, void *v)
-> > +{
-> > +     struct dma_buf *dmabuf =3D v;
-> > +
-> > +     if (dmabuf)
-> > +             dma_buf_put(dmabuf);
-> > +}
-> > +
-> > +static const struct seq_operations dmabuf_iter_seq_ops =3D {
-> > +     .start  =3D dmabuf_iter_seq_start,
-> > +     .next   =3D dmabuf_iter_seq_next,
-> > +     .stop   =3D dmabuf_iter_seq_stop,
-> > +     .show   =3D dmabuf_iter_seq_show,
-> > +};
-> > +
-> > +static void bpf_iter_dmabuf_show_fdinfo(const struct bpf_iter_aux_info=
- *aux,
-> > +                                     struct seq_file *seq)
-> > +{
-> > +     seq_puts(seq, "dmabuf iter\n");
-> > +}
-> > +
-> > +static const struct bpf_iter_seq_info dmabuf_iter_seq_info =3D {
-> > +     .seq_ops                =3D &dmabuf_iter_seq_ops,
-> > +     .init_seq_private       =3D NULL,
-> > +     .fini_seq_private       =3D NULL,
-> > +     .seq_priv_size          =3D 0,
-> > +};
-> > +
-> > +static struct bpf_iter_reg bpf_dmabuf_reg_info =3D {
-> > +     .target                 =3D "dmabuf",
-> > +     .feature                =3D BPF_ITER_RESCHED,
-> > +     .show_fdinfo            =3D bpf_iter_dmabuf_show_fdinfo,
-> > +     .ctx_arg_info_size      =3D 1,
-> > +     .ctx_arg_info           =3D {
-> > +             { offsetof(struct bpf_iter__dmabuf, dmabuf),
-> > +               PTR_TO_BTF_ID_OR_NULL },
-> > +     },
-> > +     .seq_info               =3D &dmabuf_iter_seq_info,
-> > +};
-> > +
-> > +static int __init dmabuf_iter_init(void)
-> > +{
-> > +     bpf_dmabuf_reg_info.ctx_arg_info[0].btf_id =3D bpf_dmabuf_btf_id[=
-0];
-> > +     return bpf_iter_reg_target(&bpf_dmabuf_reg_info);
-> > +}
-> > +
-> > +late_initcall(dmabuf_iter_init);
->
+> > > > On Tue, Apr 29, 2025 at 7:09=E2=80=AFPM Suren Baghdasaryan <surenb@=
+google.com> wrote:
+> > > > > On Tue, Apr 29, 2025 at 8:40=E2=80=AFAM Jann Horn <jannh@google.c=
+om> wrote:
+> > > > > > On Fri, Apr 18, 2025 at 7:50=E2=80=AFPM Suren Baghdasaryan <sur=
+enb@google.com> wrote:
+> > > > > > > With maple_tree supporting vma tree traversal under RCU and v=
+ma and
+> > > > > > > its important members being RCU-safe, /proc/pid/maps can be r=
+ead under
+> > > > > > > RCU and without the need to read-lock mmap_lock. However vma =
+content
+> > > > > > > can change from under us, therefore we make a copy of the vma=
+ and we
+> > > > > > > pin pointer fields used when generating the output (currently=
+ only
+> > > > > > > vm_file and anon_name). Afterwards we check for concurrent ad=
+dress
+> > > > > > > space modifications, wait for them to end and retry. While we=
+ take
+> > > > > > > the mmap_lock for reading during such contention, we do that =
+momentarily
+> > > > > > > only to record new mm_wr_seq counter. This change is designed=
+ to reduce
+> > > > > > > mmap_lock contention and prevent a process reading /proc/pid/=
+maps files
+> > > > > > > (often a low priority task, such as monitoring/data collectio=
+n services)
+> > > > > > > from blocking address space updates.
+> > > > > > [...]
+> > > > > > > diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> > > > > > > index b9e4fbbdf6e6..f9d50a61167c 100644
+> > > > > > > --- a/fs/proc/task_mmu.c
+> > > > > > > +++ b/fs/proc/task_mmu.c
+> > > > > > [...]
+> > > > > > > +/*
+> > > > > > > + * Take VMA snapshot and pin vm_file and anon_name as they a=
+re used by
+> > > > > > > + * show_map_vma.
+> > > > > > > + */
+> > > > > > > +static int get_vma_snapshot(struct proc_maps_private *priv, =
+struct vm_area_struct *vma)
+> > > > > > > +{
+> > > > > > > +       struct vm_area_struct *copy =3D &priv->vma_copy;
+> > > > > > > +       int ret =3D -EAGAIN;
+> > > > > > > +
+> > > > > > > +       memcpy(copy, vma, sizeof(*vma));
+> > > > > > > +       if (copy->vm_file && !get_file_rcu(&copy->vm_file))
+> > > > > > > +               goto out;
+> > > > > >
+> > > > > > I think this uses get_file_rcu() in a different way than intend=
+ed.
+> > > > > >
+> > > > > > As I understand it, get_file_rcu() is supposed to be called on =
+a
+> > > > > > pointer which always points to a file with a non-zero refcount =
+(except
+> > > > > > when it is NULL). That's why it takes a file** instead of a fil=
+e* - if
+> > > > > > it observes a zero refcount, it assumes that the pointer must h=
+ave
+> > > > > > been updated in the meantime, and retries. Calling get_file_rcu=
+() on a
+> > > > > > pointer that points to a file with zero refcount, which I think=
+ can
+> > > > > > happen with this patch, will cause an endless loop.
+> > > > > > (Just as background: For other usecases, get_file_rcu() is supp=
+osed to
+> > > > > > still behave nicely and not spuriously return NULL when the fil=
+e* is
+> > > > > > concurrently updated to point to another file*; that's what tha=
+t loop
+> > > > > > is for.)
+> > > > >
+> > > > > Ah, I see. I wasn't aware of this subtlety. I think this is fixab=
+le by
+> > > > > checking the return value of get_file_rcu() and retrying speculat=
+ion
+> > > > > if it changed.
+> > > >
+> > > > I think you could probably still end up looping endlessly in get_fi=
+le_rcu().
+> >
+> > (Just to be clear: What I meant here is that get_file_rcu() loops
+> > *internally*; get_file_rcu() is not guaranteed to ever return if the
+> > pointed-to file has a zero refcount.)
+> >
+> > > By "retrying speculation" I meant it in the sense of
+> > > get_vma_snapshot() retry when it takes the mmap_read_lock and then
+> > > does mmap_lock_speculate_try_begin to restart speculation. I'm also
+> > > thinking about Liam's concern of guaranteeing forward progress for th=
+e
+> > > reader. Thinking maybe I should not drop mmap_read_lock immediately o=
+n
+> > > contention but generate some output (one vma or one page worth of
+> > > vmas) before dropping mmap_read_lock and proceeding with speculation.
+> >
+> > Hm, yeah, I guess you need that for forward progress...
+> >
+> > > > > > (If my understanding is correct, maybe we should document that =
+more
+> > > > > > explicitly...)
+> > > > >
+> > > > > Good point. I'll add comments for get_file_rcu() as a separate pa=
+tch.
+> > > > >
+> > > > > >
+> > > > > > Also, I think you are introducing an implicit assumption that
+> > > > > > remove_vma() does not NULL out the ->vm_file pointer (because t=
+hat
+> > > > > > could cause tearing and could theoretically lead to a torn poin=
+ter
+> > > > > > being accessed here).
+> > > > > >
+> > > > > > One alternative might be to change the paths that drop referenc=
+es to
+> > > > > > vma->vm_file (search for vma_close to find them) such that they=
+ first
+> > > > > > NULL out ->vm_file with a WRITE_ONCE() and do the fput() after =
+that,
+> > > > > > maybe with a new helper like this:
+> > > > > >
+> > > > > > static void vma_fput(struct vm_area_struct *vma)
+> > > > > > {
+> > > > > >   struct file *file =3D vma->vm_file;
+> > > > > >
+> > > > > >   if (file) {
+> > > > > >     WRITE_ONCE(vma->vm_file, NULL);
+> > > > > >     fput(file);
+> > > > > >   }
+> > > > > > }
+> > > > > >
+> > > > > > Then on the lockless lookup path you could use get_file_rcu() o=
+n the
+> > > > > > ->vm_file pointer _of the original VMA_, and store the returned=
+ file*
+> > > > > > into copy->vm_file.
+> > > > >
+> > > > > Ack. Except for storing the return value of get_file_rcu(). I thi=
+nk
+> > > > > once we detect that  get_file_rcu() returns a different file we s=
+hould
+> > > > > bail out and retry. The change in file is an indication that the =
+vma
+> > > > > got changed from under us, so whatever we have is stale.
+> > > >
+> > > > What does "different file" mean here - what file* would you compare
+> > > > the returned one against?
+> > >
+> > > Inside get_vma_snapshot() I would pass the original vma->vm_file to
+> > > get_file_rcu() and check if it returns the same value. If the value
+> > > got changed we jump to  /* Address space got modified, vma might be
+> > > stale. Re-lock and retry. */ section. That should work, right?
+> >
+> > Where do you get an "original vma->vm_file" from?
+> >
+> > To be clear, get_file_rcu(p) returns one of the values that *p had
+> > while get_file_rcu(p) is running.
 
