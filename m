@@ -1,180 +1,136 @@
-Return-Path: <linux-kselftest+bounces-32311-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32312-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E74D4AA8BFC
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 08:04:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EF92AA8BFF
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 08:04:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D76417A4A49
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 06:02:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC5AD3B4EE3
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 06:03:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E9791BE86E;
-	Mon,  5 May 2025 06:03:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BCC91B424A;
+	Mon,  5 May 2025 06:03:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IQqblvQJ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uPsU8I0M"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AC521D5ADC
-	for <linux-kselftest@vger.kernel.org>; Mon,  5 May 2025 06:03:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 939A11B4F0F
+	for <linux-kselftest@vger.kernel.org>; Mon,  5 May 2025 06:03:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746424986; cv=none; b=Y2Y9PV8FrCMVFp7h/j6yHrF/TtQim8DrNPpj3eNZREuxxuJ9INKFRcRp4qKkkWraLIGURVD7+nPB+rhSq0deocF3+zikkz0qR80+fLBEd8U1xxuPhNoe78cWn8d1LNrcHa34Z3rfbPczXr4RWKiytB22feo3cOUxhibYAnUx4LY=
+	t=1746424999; cv=none; b=akBNyvf2Lggqczli3K2zfwp9jEcJh/uO2xKHrZDQb5meq0eXrIkGZo+Sf+S63tdPWv4t0//TfyFusq1vxnKKc/YZukitZJzXuv6NuZGE18TLRPj/JPOJDwgxtRI2ZYHUfLlwjL3Nv4eA0g3jdH5LwTc/iRmtCkAwMTU2kl/Ojtg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746424986; c=relaxed/simple;
-	bh=aHjIPREGueZz6fEZpdNwiqzizj//96Z8xOgR7OoPBTc=;
+	s=arc-20240116; t=1746424999; c=relaxed/simple;
+	bh=PkK9Yx1Scpb8voezPQ//9Bd+volJ9Q4j3CtyXKPj5f4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=J/Gj7oaC5u6dklccrOqpVaCfy5z5HpEFIGlRfVd5FAgE1Gh+UE2DpH7COVI77qWpC3WjTFFUt4Xwcl7lYNWgOzxnpxl2pXimWgQkEF9rvknPkOQkSekKbLgaBlUKQKJ1iahXEfgiWgimu3x9vlKf3aC0qmNG5SPdYm2EEAt9SXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IQqblvQJ; arc=none smtp.client-ip=209.85.222.169
+	 To:Cc:Content-Type; b=sF5Q/A69iN55He6vc8R4jBUhcivymMwOG3B1sWcrJHREvt+jz5gZ5voqetYVLa49kbJkdxZPEaCekD/dSpDq+pHVGZ/3svpCGTvlEsgPfSowBggWZGkYfYxR3GbOZ+Tz4iYR8fmR6JHuVg9z9hIpYSD3jZhx70X8hy9V01NxAqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uPsU8I0M; arc=none smtp.client-ip=209.85.219.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-7c5b2472969so451279185a.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 04 May 2025 23:03:04 -0700 (PDT)
+Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-6f0c30a1cf8so63035066d6.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 04 May 2025 23:03:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746424983; x=1747029783; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1746424996; x=1747029796; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=h46+PgZvwyUUeTlJAxXagH3xvtCEmzqk/qSPck3wvwY=;
-        b=IQqblvQJ8LQIPFIQqWLavp27hdveBEVhmrbUbH897RaO5po+9fqUJulUXYXpGa51Mx
-         cg4eop/xDEiriUk/GZ9CDPw50F1TkedPl5FAGpVpudLi3A0Mx8A7DG9vrYXhFavd1eGn
-         tr2AEE8yJ/WgkCJsqOIUBbXBe2mYKbpjDxLEZajWYQ+sdq0ExCd/XqEP9jHFOkekE4sA
-         3Mg/X6vcGXlnUa5jC4+NKzk6g0wQyx3cD+dA9ZMEcss2ASE16Ylw4vRkfhrEwWdSS8M7
-         elzrtJuSr0Zo+uNJ97AK6/1JEK3h0odCMbrftG0O+7Ty9iOv4jsVE49nGBnfumWrw22W
-         BYPw==
+        bh=PkK9Yx1Scpb8voezPQ//9Bd+volJ9Q4j3CtyXKPj5f4=;
+        b=uPsU8I0M/mudOfjGa3E3Z5P6LShnmrhCKCrywUG0fgQ7eMsBKpJYzudKX+9N1aF8TH
+         XWdc7T7hAvUGRhB5hLysBr0muh3vprmPlxX95kPqMop5/obpFBPQUW+umdRvqXvIA1TY
+         0Qe/HDmd5Lk5U1iTvep7TiOizoHkebAMQl5CKMfCi+SIBSbOzIkDKnBPrSg2tcDGMhlj
+         yGIwMK+ab+u/9xiuw7b9TkrQR73sMbChfD7H3YGQvpxFJlYd+qbPIYBhqe3qUdcFSWb2
+         yT11H7JGSlTbU90W+J605Hv647NmEeBDtuDsXs/MErKXuXMqmeLhcirVzNo8jbMkfkA3
+         FZug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746424983; x=1747029783;
+        d=1e100.net; s=20230601; t=1746424996; x=1747029796;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=h46+PgZvwyUUeTlJAxXagH3xvtCEmzqk/qSPck3wvwY=;
-        b=AD43hsVPpWD4Erp8U0WNvY8p/tQOgKc/CZJM9oLlQB/ISkCsW747Dvj9/UDKoL/mfG
-         QIeag9Bqpepw8us1Sv0w2X+3G4bpI0a/zDFzMoDjE5F4C6APSCcMzwDfqNA0GrFTRoO1
-         BsnmjA7TUNmFbSjXK+cJRZ2fq92OY1+GS8riDyS9aMzywOH9HT44XVSUzZirPg9OK19s
-         nHTGXAXebbDAPbFe4yA2UEv+/C22sD8q297xVkXsGZuCSNnhlXMcE2s2UaI4/sOR4u7+
-         EIwh9PpoK4rayW73+trQb4g4HfKPOVq9uduWLOyaXBlhPHVqJlN6MWsga1ECcwO5YDjB
-         zfJg==
-X-Forwarded-Encrypted: i=1; AJvYcCV1P+o3v+xh53r5+zgmcnzQKVw/7Myu+2pMuCtv+imYBNq+KReHScZsXhDPzTWABny3ZB19gmghMDkiJzwJJQQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YznGIBnMEPVmkLWMyS0KfuYApNODP0cat5S9i5rK+yDjWlj3X/E
-	xWWs8onRPTcX6ZZSU2r7fMnBal9MWYTz9LyuMcyQfLmTVf99ndaoZcfF5icEihzT2jEQk+CnfVa
-	u6RUVExPqNrVWzIBFLx/Z4LxKP6Gt0u9yZ8qY
-X-Gm-Gg: ASbGnct5URplEVCyRF02tirB+TW1lHo0eD74w79bL9lEwfnqt73fl8of/53XM10PGEc
-	Rt7K5dDIY51W/wFHB+Prheo33PdHvxpLRKm0FMXoEaLvbl+CS1thL3IzigyLkq/r4IOU3FJjBkC
-	jEP1bcDaOO2PBNRD/BR5FS09w=
-X-Google-Smtp-Source: AGHT+IH8g7ImerDBSxOboHoBPQcGP9wlwdTQbMMeBILHYZ7QA9s7UXVKzKHRdL1v/6NO8hsad206wvuhez4QMz2l88s=
-X-Received: by 2002:a05:6214:2509:b0:6e6:591b:fa62 with SMTP id
- 6a1803df08f44-6f523725879mr136920846d6.5.1746424983121; Sun, 04 May 2025
- 23:03:03 -0700 (PDT)
+        bh=PkK9Yx1Scpb8voezPQ//9Bd+volJ9Q4j3CtyXKPj5f4=;
+        b=QuXRYBWN9jKMjRpV24adj3w0WbO5hXQnCZueyf02kVF3eU0AZLdYYIhQ3gGu2jWqfX
+         BFen+8xtqLz+gTVGrUTqS0rbM/Nzbwvuyu89n3d4QEbQSseBKSBkop2j19AqBZ0/obiJ
+         HJF1mLZn22HXAyE3xbzYJGF9fsR1oFQXBbBfKMHwVykuOL0WrSnZeQSjvG5tN/+Jrg1p
+         +JKL744JYFTO9TWp2WeNkZmLZ1aIVszOsdYM/bOyGe9oSJQ+JAALDmm+9jtMyLdflK4x
+         5b0ag31C9lzKS1RWOKP3DUIm4/kQEdvDatCUHPn7fADqLW5iQ7LJhdQcjKR485+tKeQJ
+         tUFw==
+X-Forwarded-Encrypted: i=1; AJvYcCVqdiHcGMWThu65iMApKa7UfbsuMVGLxGezJa8/aEylfOaVIJ6A9ThfQblqBszAB7A+wVdwaXxkOmDl0QsD/jE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwpyitLTPAuFc966ubUUqZovWk3LaePa6fncxrrL2e/siOOXwtq
+	3JgrPHRN8M6uFN3u/e41hLtvK2xv+5yMNtTodH2cAFMGO3IqLsRSYjwwUJ+iIc2jcy5h6pcM+jG
+	1EqptUIXWJfGMZXQhXXs2vFvBjFqFENQeNUBz
+X-Gm-Gg: ASbGncsCu70V2slUmnhKZMNAgZz9xuC1oenNdkYfx/qEw2seZYuC+P0e7lQeFgFdZxy
+	a1wxlmvN0Q4vlc5Cs8i3MxIQywubYir4S6zVJPeD9w9UKhYeSW3ZDMgEM7PCjU8s3tqSf9O/vZO
+	fCKQEzUK3tVBXE3Xw1xK1MvMc=
+X-Google-Smtp-Source: AGHT+IH7Slx7kJ7AZ/FxAFxFO6odwCFWPLFgHEvqb529XbOlpSDXyNLx3aONbBD534Ib0MrMoxedIIanXzeZUwFmPrM=
+X-Received: by 2002:a05:6214:e86:b0:6f2:b551:a63 with SMTP id
+ 6a1803df08f44-6f528c3eb86mr90670586d6.3.1746424996313; Sun, 04 May 2025
+ 23:03:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250502172459.14175-1-skhan@linuxfoundation.org>
-In-Reply-To: <20250502172459.14175-1-skhan@linuxfoundation.org>
+References: <20250502215133.1923676-1-ojeda@kernel.org> <20250502215133.1923676-3-ojeda@kernel.org>
+ <CAJ-ks9=v8E_bV+oJ-bdm3KZW2dfrFdiCmeVLs+bgK8oVu6BCUA@mail.gmail.com> <CANiq72=C1+2B221ecxM5Dy1rF8nEtR4ikgAA2nEh3M1=EkkXyg@mail.gmail.com>
+In-Reply-To: <CANiq72=C1+2B221ecxM5Dy1rF8nEtR4ikgAA2nEh3M1=EkkXyg@mail.gmail.com>
 From: David Gow <davidgow@google.com>
-Date: Mon, 5 May 2025 14:02:51 +0800
-X-Gm-Features: ATxdqUEOFbaKQ5-k-iDPtcXV4ssda5KgtLHNB_FKJVJq9iGd9UirXfm6UpmFVI0
-Message-ID: <CABVgOSkUEaGnsCY5g4EJnvJhJ1PkCjfC7dDs41HjWhT-WLdfyg@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: use ARCH from compile.h in unclean source tree msg
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: masahiroy@kernel.org, nathan@kernel.org, nicolas.schier@linux.dev, 
-	brendan.higgins@linux.dev, rmoar@google.com, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-kselftest@vger.kernel.org
+Date: Mon, 5 May 2025 14:03:03 +0800
+X-Gm-Features: ATxdqUEUtR-0tp7v5hFhJNEcqmp-vvXK44E9QJdJUtfmQEfbsdrEJ2pXimvwHj8
+Message-ID: <CABVgOSmTCXD1HnBZZOUBTPwANGUzxa+w3+xcFr=HDtWkot0NzQ@mail.gmail.com>
+Subject: Re: [PATCH 2/7] rust: kunit: support checked `-> Result`s in KUnit `#[test]`s
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Tamir Duberstein <tamird@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Rae Moar <rmoar@google.com>, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, patches@lists.linux.dev
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000c760ef06345d405b"
+	boundary="0000000000008fd06906345d41e2"
 
---000000000000c760ef06345d405b
+--0000000000008fd06906345d41e2
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, 3 May 2025 at 01:25, Shuah Khan <skhan@linuxfoundation.org> wrote:
+On Mon, 5 May 2025 at 02:00, Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
 >
-> When make finds the source tree unclean, it prints a message to run
-> "make ARCH=x86_64 mrproper" message using the ARCH from the command
-> line. The ARCH specified in the command line could be different from
-> the ARCH of the existing build in the source tree.
+> On Sun, May 4, 2025 at 7:34=E2=80=AFPM Tamir Duberstein <tamird@gmail.com=
+> wrote:
+> >
+> > Why not restrict this to Result<(), E>?
 >
-> This could cause problems in regular kernel build and kunit workflows.
+> I guess it is an option -- not sure if there may be a use case.
 >
-> Regular workflow:
+> > Is it possible to include the error in the output?
 >
-> - Build x86_64 kernel
->         $ make ARCH=x86_64
-> - Try building another arch kernel out of tree with O=
->         $ make ARCH=um O=/linux/build
-> - kbuild detects source tree is unclean
->
->   ***
->   *** The source tree is not clean, please run 'make ARCH=um mrproper'
->   *** in /linux/linux_srcdir
->   ***
->
-> - Clean source tree as suggested by kbuild
->         $ make ARCH=um mrproper
-> - Source clean appears to be clean, but it leaves behind generated header
->   files under arch/x86
->         arch/x86/realmode/rm/pasyms.h
->
-> A subsequent x86_64e build fails with
->   "undefined symbol sev_es_trampoline_start referenced ..."
->
-> kunit workflow runs into this issue:
->
-> - Build x86_64 kernel
-> - Run kunit tests:  it tries to build for user specified ARCH or uml
->   as default:
->         $ ./tools/testing/kunit/kunit.py run
->
-> - kbuild detects unclean source tree
->
->   ***
->   *** The source tree is not clean, please run 'make ARCH=um mrproper'
->   *** in /linux/linux_6.15
->   ***
->
-> - Clean source tree as suggested by kbuild
->         $ make ARCH=um mrproper
-> - Source clean appears to be clean, but it leaves behind generated header
->   files under arch/x86
->
-> The problem shows when user tries to run tests on ARCH=x86_64:
->
->         $ ./tools/testing/kunit/kunit.py run ARCH=x86_64
->
->         "undefined symbol sev_es_trampoline_start referenced ..."
->
-> Build trips on arch/x86/realmode/rm/pasyms.h left behind by a prior
-> x86_64 build.
->
-> Problems related to partially cleaned source tree are hard to debug.
-> Change Makefile to unclean source logic to use ARCH from compile.h
-> UTS_MACHINE string. With this change kbuild prints:
->
->         $ ./tools/testing/kunit/kunit.py run
->
->   ***
->   *** The source tree is not clean, please run 'make ARCH=x86_64 mrproper'
->   *** in /linux/linux_6.15
->   ***
->
-> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> ---
+> I thought about giving some more context somehow and perhaps printing
+> it "manually" in the log, possibly in a KUnit `# ...`. David can
+> probably suggest the "proper" way.
 
+Yeah, writing it to the log is fine: probably the best way of handling
+this would be to have a kunit assertion macro for "assert_is_ok!()",
+which prints the error nicely.
+We could just use the existing kernel::kunit::err() function (which
+could use some improvement, but is a good start), or even add a proper
+assertion formatter which handles rust types via %pA.
 
-Thanks very much! This is much better, and has given the right message
-on all of the architecture in-/out-of-tree build combinations I've
-thrown at it.
-
-Reviewed-by: David Gow <davidgow@google.com<
+That being said, there's no guarantee that the Err branch of a
+Result<> can be printed: so there'd need to be some magic to handle
+both the case where (e.g.) Err derives Debug, and the case where it
+doesn't (in which case, we're basically stuck with what we've got
+here: "expected is_ok()" or similar.
 
 Cheers,
 -- David
 
---000000000000c760ef06345d405b
+--0000000000008fd06906345d41e2
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -264,14 +220,14 @@ uFrCoYIRlx4rSVHpBIKgnsgdm0SFQK72MPmIkfhfq9Fh0h8AjhF73sLO7K5BfwWkx1gwMySyNY0e
 PCRYr6WEVOkUJS0a0fui693ymMPFLQAimmz8EpyFok4Ju066StkYO1dIgUIla4x61auxkWHwnzGC
 Al0wggJZAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
 BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAcDMKctW1GQKDKqEUSh4
-pjANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQg3X3HoZJb3UQrZ4tNJScQMKXLmJjG
-mjxZzzvQklR7xPIwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUw
-NTA1MDYwMzAzWjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+pjANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQgSO++0B9yXE91vmSK5QswdVHIoIzD
+ZswnqzNolsVPCOAwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUw
+NTA1MDYwMzE2WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
 YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcN
-AQEBBQAEggEAbP/vTr/ysmcXMdSLMw6J9D5uwgh//Tau0tx6k6oF9cAQ9U5vnqt/dwim/cKcUnVj
-M5SZyHgmC98dLj2cCKSDAAe4vPSEB1NbjnaRvW+fB2VCWcniQVEr39qCS+a4kKjmuJ9hL7eZJPnU
-bmUlfsP0j9WoJBWznbEcTH1xaHmeu1vZwEhEwxxjnMlU72FzY1Q/NbCwQnwvikQ6p/bWxhzvolrO
-BbViX4RkQre1oESHnvYZFp4AI7PCuQxrJMhIoBeBI+nKvdObZwPzJYJcNqa6GONmrZ7o0GNa9PiA
-WUTqvEDg9PJ/nNxoyJSOjIFbru/UfjNR71oeq2vAiV+COwjayw==
---000000000000c760ef06345d405b--
+AQEBBQAEggEAhZZeObKzKFSeo5W82X4i2eJdUgk/fV7YKdFnfd8AQ5+n+cJ1FfCAizReWJtzcUP+
+XCBcOoHfiypR02Qx3xyDRaOQpvazHQ+LzXnAkJ1RLnQnEm3GotNFSr4S2cciqucdjAo6jxIDVbC1
+i+0wB611p0fjc8mf5KNpJ38TDvwJPVZqIy40Bg21GO499/dGE/S+SXhJudfuJONDJ4JF+9ZYTfzJ
+zeUIjAM9fkSDzfRMJFFYpeJ2X71DAkNJbUsftqSwA2te7iHKl9KWn8SB35qErlYNL880TGk15+e8
+Om8GpkKipMLbx5yzIBrnCwk9msH1vDzz1ggwU2HfZSiLV4sekg==
+--0000000000008fd06906345d41e2--
 
