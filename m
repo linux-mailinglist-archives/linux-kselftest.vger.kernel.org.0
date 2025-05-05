@@ -1,93 +1,87 @@
-Return-Path: <linux-kselftest+bounces-32404-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32405-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF9F3AA99CD
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 18:56:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 173C7AA99D2
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 18:56:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AE90A7A8DCC
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 16:54:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E7FF7189029B
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 16:56:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F4A926A083;
-	Mon,  5 May 2025 16:56:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7198326A08A;
+	Mon,  5 May 2025 16:56:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="FqnaI67y"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="VOMPUeg1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2085.outbound.protection.outlook.com [40.107.220.85])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2058.outbound.protection.outlook.com [40.107.93.58])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13A1B1459F7;
-	Mon,  5 May 2025 16:55:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.85
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89CB418C322;
+	Mon,  5 May 2025 16:56:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.58
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746464160; cv=fail; b=GP5fA6BiPCRhlMtSq/kCI5ouHdcckJBWbYFTyjFRuOwv306YlNCZWOmaTw5R44txzHPQ89nnwTeVPQBigdPX0h7gqlaVQx9BE6cHCrEyo8LEwzjAIjTcPJG/E7WdS17WAfpX9ESHtoltgEZUJDO7CSWCFgjyZS49of388sPE1rs=
+	t=1746464192; cv=fail; b=kYw8b4dS4DStsBMd9SKgQge7ffvIEa8WlflhX2lta20q4L/3DB/ml8pfOXqK7uRncRb85fi+Bvgcfo9Cv6Hy5E8BRD4tM/GrOt9upIjAbJJeoOSre8/QeqJOZkfMGYq8UHacNIZngDBhxMPv/oAXLwTiBDSSkFCGOeUAYmXBXf4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746464160; c=relaxed/simple;
-	bh=q1ljH0dXPLjNFqUF13JzVVjiw4XXMuZaDPVGeESbQPY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=FgjHJvAXyOVr4fYOO/MpUXYmuz3z+PaI181SzHD0REE0CuA+t0iEi3+6VLy/FWYI5lYqJSOkJ/DpcVFGxReeAn/E9slrI2nkqNNOaoRrQ6RE5F2I0lKl4FtXd7Y6f7Io3DtUPDpTCZEI6iJWG64WaSox6q1YrMTefPSsbHiC5uE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=FqnaI67y; arc=fail smtp.client-ip=40.107.220.85
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	s=arc-20240116; t=1746464192; c=relaxed/simple;
+	bh=keyg/9v+aZushOnHnPvDYA7HyUcfd0knuJg/AEZp3IA=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=cQikDf4YBMS9xA1ODyt4wzj8yEZYhBmxwavy3IC/cGjcfcF6uxT55ch6rd/FZQYLQ3tNkYbQ0din8neKTpgzVkEas4N1uXhUFcu+X6fN/iEff4Ev6r9igWMABeqr+AsMety66EpcBSBvnRmwJY/GS6HhVHNCPKG1xC7giuWerlE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=VOMPUeg1; arc=fail smtp.client-ip=40.107.93.58
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=oALTc3Dr+Rv3cCuM6rukfEhYMxXLN0x/u/DOJ4GSvaJjGgty+pKxE8Vcy3szLWdxlO6KKfqFZhlNDGQRminqpx5PtyFFDuEdWFKsKkkkSe+Jof8OusIhUw0J0231I0OTvxUUm5gBw45Ah0qQm3fd/gSOTvyF/RWF0cvxzzJl7qbKeOKb1jGoDt1csGfJ5/js7O9P5IaZ5RD493PObw0cWhFKqlQspB2khO9mBmj9YHUOxZ+YtQ4Vi+6ivizZFs1CDpWPrYBx+Ve2sft0k8fpXSL9s39R4Kr1G498xj8m8oZ90OeS3iKHT3Q98gEdk4xIBCmE8hh7QzgShNrqbibB0w==
+ b=fzQFlGTHw49u9yfsCb8AerY//WBItMNIEGySpjYM9Ek6cQqDK9K3sQHT6K5GBuDOLAx06RouTJbhMNQipkn6Vxhuls957GVSkTb1GAXhXwpQdtM3MPR0CPvwGVndIx7YA0H27NlWv/Hq90O7xTOgJERY8zwM3J7AhjihE6we/+f0UTYoBS+L21nDfOlq28l5sfC4Pyi81cf/t6QXroA1STtbUYp7lpmbV3KBoDTG/hjtpGfqC+3U0uQGRBPt+cOXi7Mrr2TxJscurk0sbGkEuu9SnKrFB35NiCY9ylhpDNQMUSMBkwxyMjubNNT7Ru87eJ5dRkbyFMX/qmdaZDSU6A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7t/EqPEg/XF45bLN28X/lKk2jdbdTm8YYyLoA3KA4vY=;
- b=jY0gfIEY+FTGIkcK6vZo1yzyeaIz8eAr/CkS7ksOCSvv6UvElcOm1LQN5FHzYxIYMYBOLcJw3T94DUT/syUCR3JYoA98PDIC3fpSWVfhTkJjBVZLVi1VSy9PL0Wsfy73Z5CnSn6Y/ARYDwx+SpYmxa9pJWqaA0j5YOSacLYqRq4Ab/ecL+fdEHHTVWpt8mNQ6DEnpf90+IIGZmcGcicH2DYFpXA26xXBPOVKkVI14hHTfCd0uh7h3c0TH07Up+GsLG0sriiCWAmiCDsIi3wU8OCz8iGxCtVkHWKJ464tN/riqpFs2e96vVIylLAvvbG/33+74WL5qK1ANWuL+rZDOw==
+ bh=GjjoBsMpREQy5vE3GtrRfJjR68T+koDjMVZphYHHwLk=;
+ b=ulOo3fXPEYhqjzqlvCl745gYpBeawaFF4TUSbIljWPr/YABggUjIsrf82sb2F8C3DzIibVTgpIa7AOUeODGcD2yS8Z9RGWHbhfi6A+jy3IY0oUeKDwcGRCY+RecMdvG/NL6OPPzfIT/ThF2t2HddZwABW4b/uaQGodpTXKWQoIU0VHD4aCJXbNBHJc4paSX5YBYjYg78J7gZ054HitZ+PgepdQLxNS34gy96RXVBj9mi4Fd/VRLhgc0dBfoUYkyItMj6dwMna+T5CkH8aFKON1UuOKnmv953F7BSJsoBRIBplWQyoMD3vHfpChM8740QVz4+s+i4JdSnfos5LkTtNQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7t/EqPEg/XF45bLN28X/lKk2jdbdTm8YYyLoA3KA4vY=;
- b=FqnaI67y+JcvSeqejnthR2n/6qG9xgqY/3ycaKCavydMHJEI1jvDElf8DyAjQjNKe8eFnsOSL4MCIDoqoxxqeg3nxAPXlKzS6zHp6OCtb3uq03OQM/z2CeJCzE8EgOjZtQdgFHQGTs9v+p0h5vR/1Eruy7HjPo8Ja49mr1raGcHtJ5p31pkde7wyY9yTvFuni2r08L8mo7En7fWMGJcuker7l9lPRlEubvy0xEbdSGlik3Cl5dIgQv1JPbOzWbLL3VN2sW6AfnJuoUkWecEjjp5x8ciDDZijpnWTwf/X6+zZohFBXvfNDVINdg6mGTh1zWRMevc8pLY6Hy14Z+PJDg==
+ bh=GjjoBsMpREQy5vE3GtrRfJjR68T+koDjMVZphYHHwLk=;
+ b=VOMPUeg1BX5ayd0EpHcmOvPgJFRvFdsf03zFkRuEAbjJiRQkWdvtwHu5TPnLfn7UuYVg5KTWiDGgClAW5MfAlzDES4lDkOpaLEyvFmSkOxAcc60JClCnRXnni0Rd/PCHS+GNeoA9B0QTLsJpeBZzMjk6CIjn8vHhQFZ/bxm6a7Q=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
- by CH3PR12MB7740.namprd12.prod.outlook.com (2603:10b6:610:145::8) with
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB5685.namprd12.prod.outlook.com (2603:10b6:510:13c::22)
+ by IA0PR12MB7529.namprd12.prod.outlook.com (2603:10b6:208:431::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8699.24; Mon, 5 May
- 2025 16:55:53 +0000
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732%6]) with mapi id 15.20.8699.026; Mon, 5 May 2025
- 16:55:53 +0000
-Date: Mon, 5 May 2025 13:55:52 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Nicolin Chen <nicolinc@nvidia.com>
-Cc: Pranjal Shrivastava <praan@google.com>, kevin.tian@intel.com,
-	corbet@lwn.net, will@kernel.org, bagasdotme@gmail.com,
-	robin.murphy@arm.com, joro@8bytes.org, thierry.reding@gmail.com,
-	vdumpa@nvidia.com, jonathanh@nvidia.com, shuah@kernel.org,
-	jsnitsel@redhat.com, nathan@kernel.org, peterz@infradead.org,
-	yi.l.liu@intel.com, mshavit@google.com, zhangzekun11@huawei.com,
-	iommu@lists.linux.dev, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-tegra@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	patches@lists.linux.dev, mochs@nvidia.com, alok.a.tiwari@oracle.com,
-	vasant.hegde@amd.com
-Subject: Re: [PATCH v2 13/22] iommufd: Add mmap interface
-Message-ID: <20250505165552.GN2260709@nvidia.com>
-References: <cover.1745646960.git.nicolinc@nvidia.com>
- <7be26560c604b0cbc2fd218997b97a47e4ed11ff.1745646960.git.nicolinc@nvidia.com>
- <aBE1gUz9y415EuBQ@google.com>
- <aBE38GwvGBnpRNLc@google.com>
- <aBE47aySzDp2lsAz@Asurada-Nvidia>
- <aBE800DsAOOZ4ybv@google.com>
- <aBE/CD4Ilbydnmud@Asurada-Nvidia>
- <aBFGCxcTh54pecsk@google.com>
- <aBFIsYg+ITU8RvTT@Asurada-Nvidia>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aBFIsYg+ITU8RvTT@Asurada-Nvidia>
-X-ClientProxiedBy: BN0PR03CA0058.namprd03.prod.outlook.com
- (2603:10b6:408:e7::33) To CH3PR12MB8659.namprd12.prod.outlook.com
- (2603:10b6:610:17c::13)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8699.23; Mon, 5 May
+ 2025 16:56:27 +0000
+Received: from PH7PR12MB5685.namprd12.prod.outlook.com
+ ([fe80::46fb:96f2:7667:7ca5]) by PH7PR12MB5685.namprd12.prod.outlook.com
+ ([fe80::46fb:96f2:7667:7ca5%7]) with mapi id 15.20.8678.028; Mon, 5 May 2025
+ 16:56:27 +0000
+Message-ID: <ec43f447-095e-4baf-8610-8279b565f162@amd.com>
+Date: Mon, 5 May 2025 18:56:17 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/6] bpf: Add dmabuf iterator
+To: "T.J. Mercier" <tjmercier@google.com>
+Cc: sumit.semwal@linaro.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, skhan@linuxfoundation.org,
+ song@kernel.org, alexei.starovoitov@gmail.com, linux-kernel@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linaro-mm-sig@lists.linaro.org, linux-doc@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, android-mm@google.com,
+ simona@ffwll.ch, corbet@lwn.net, eddyz87@gmail.com, yonghong.song@linux.dev,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+ jolsa@kernel.org, mykolal@fb.com
+References: <20250504224149.1033867-1-tjmercier@google.com>
+ <20250504224149.1033867-3-tjmercier@google.com>
+ <26ca8ddf-0d78-462f-a47d-a1128b2e058f@amd.com>
+ <CABdmKX2iNk22h-KxUr4yvZO80yeRRjMfoC7yjiZ-aR_f1k402g@mail.gmail.com>
+Content-Language: en-US
+From: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+In-Reply-To: <CABdmKX2iNk22h-KxUr4yvZO80yeRRjMfoC7yjiZ-aR_f1k402g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MN2PR16CA0037.namprd16.prod.outlook.com
+ (2603:10b6:208:234::6) To PH7PR12MB5685.namprd12.prod.outlook.com
+ (2603:10b6:510:13c::22)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -95,131 +89,311 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|CH3PR12MB7740:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4c7802a2-847a-4b49-eb32-08dd8bf5b28c
+X-MS-TrafficTypeDiagnostic: PH7PR12MB5685:EE_|IA0PR12MB7529:EE_
+X-MS-Office365-Filtering-Correlation-Id: 060a0f8e-c03c-4418-bba4-08dd8bf5c69e
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014|7416014;
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|7416014|376014|7053199007;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?FZ3UFKWUXJurwJxN20qz/x22G3twc6J0jjxLATXXj9wT7CbuNtQIfEDch7uh?=
- =?us-ascii?Q?rJruZURUz3xhakfP6croxTsfggVLfUL2vVK64OxsT+Tee24bFvrYkML//Dd4?=
- =?us-ascii?Q?wqxeiTbZ+J0DAHvykm9HVDnC242lJbvBxYiPoJcmMhkhYovQsPzhMO+ak2nl?=
- =?us-ascii?Q?Ir5pQudDClTf6VoCgxGlD+e1yeOdFpQY9HkEw7YTQZ4TLlXwRt4ccGfpxB/7?=
- =?us-ascii?Q?50/mwz7JNTP2ypVktH/Zj4GrBPBzv1wemMF6x8QBSc+S+cuIWnRHBIOv9Odg?=
- =?us-ascii?Q?9mTeIDINjJzgQREjUMWeoinJPzjKjAhXDRVKeRrprKRMVQN+pE+5pP3GEKNe?=
- =?us-ascii?Q?JG3zFtglbmRBgFvFfSg/pLVBFutHRizhgqnfpnv71aCPeFAj5m2lmN4j8teT?=
- =?us-ascii?Q?0D/vQbTN3dIr02v1qN/K3rAu4NqQdJYap3UhE9bXnaDH86Sc4iwxnv5yU12l?=
- =?us-ascii?Q?m3RFh1yHxXpDeR5vdgs4kAV2vw+T5vSOJxGP65stciwFyuL1dH2qLLdYctck?=
- =?us-ascii?Q?Aoio2jhJXX43t/mgTCMRvtAJi/gNa3nJLXmiKl/YnycBHgvLcCMCa7Qg5H1G?=
- =?us-ascii?Q?HSANRLKd06oBfYQymjTZc/+r4D6WIMuNhzdOKrUy3s7f8HkHOUMHmSHO5Utl?=
- =?us-ascii?Q?SL694+D6SfoYiOdgUvnrOLWgg/d53ubxO5rBVXQCLoMBjMFUbzfWmlqv4Qa3?=
- =?us-ascii?Q?da+6Gxi2FcjUnACj9GknDTtLTTsyLmRcDnzYL956eCex9fsmCr0gHa5OyWzK?=
- =?us-ascii?Q?KyM5bow1dTMNb9mdAnmPJvzKmSdj7BmhPJJuhTj1PY7fiGntHy12mTYcjNAE?=
- =?us-ascii?Q?z4q8/oFUb05JryrE1n9uSSKuNoziBTcDeZFYgha2nuM4ycONSxRGCsRHaVxK?=
- =?us-ascii?Q?yy8laMCglk01baZ/dFqr32jSNv9AAilz1draJWnAlpSUpnxqVsmKK1G9sSfL?=
- =?us-ascii?Q?MXYMPpQX57aRJPR5oZAnvlszU2uFArOEhPYTXr3BCYgvuxZKhv2KO8JmhY36?=
- =?us-ascii?Q?1sFtlHf2fZZ+drj7fTaxu4Qj7utFoAP/k1gnp8Jn2dxpKT4oow0EO/1EgnPD?=
- =?us-ascii?Q?W3Ka0FYdj+foM5vjw4oQX3XsmRzicJ/Ez/zUQ6OFbA/KC/DdCuuIcwEdqPQY?=
- =?us-ascii?Q?nA3MV+L83Wl2lJ4x3G8YJxmmlji1agrsklc8jRiZsmjsKEBhRkLsxqyM6Wa5?=
- =?us-ascii?Q?PT6vznSnxRNoqoOIdsvliYAJUeXl6A8Ucv6kT9xZOdWdf3nB6+WgzOa0/kjU?=
- =?us-ascii?Q?sv+VP8jsGOrZaF/yGp2kRwzzOuVDFayzzHGQVgJthJB0qAa+ksEQJoWtm4fK?=
- =?us-ascii?Q?Go6tZJyIyaHfiFGeOnM42b4xmz2pGVF3b/4JvF40xaTpBtuAbluJE8Qr1GRC?=
- =?us-ascii?Q?y5lUc1Z0oL5YoLA+hErkjjjfRYU7bkWKL6bmELQXtG/WJnpB4CPJN2w77f1b?=
- =?us-ascii?Q?JaN6KWtOmjc=3D?=
+	=?utf-8?B?MmUvMkxKcldSdlpwVmRmNUZ6YWhDQ1JtVnV6bHlJZXFxR3lPVWppV3lPY3gr?=
+ =?utf-8?B?MEFUcER6YkJWMUNrSXViRnlLa2YwdEk0L3lrQ2xUUlB5MXZDM0hoUUZ5Z29l?=
+ =?utf-8?B?VVZvalo4Y1dCU2pjZXVxWk9OMjZZcXlSTGV6bFUzR0pVT3lSNm9FK3JWdW1p?=
+ =?utf-8?B?ZVdVRkxadzNvanBidWV5QXJSTHlaVjFHK2FpaDRwWUJCREcyaE1SV3Q2VEsy?=
+ =?utf-8?B?M0MxS1VBb0lhYUJQMmdtdFFndkVGaGJ1eU94dlpWdnFvaUQvTUtVWEZISEJC?=
+ =?utf-8?B?Ry91QzNlaFNoeTlKTUlQRTNlbktnNEUwS1hlanMyMzBVcUROR0d2RkFZTUZn?=
+ =?utf-8?B?Tk13TmFCNjZrUWVHdVcyOHp5citWZlBUWlZuRXRqNFJ4bk1uSmNYVzdMQWJs?=
+ =?utf-8?B?bkZyOHBBR3FJaitrcVIzQ2h4RVlNaVVsUVRkOHJiL3JhYXA5N0dhWHQ2V1Ru?=
+ =?utf-8?B?TFlDa1lGWUhsVTQwenZpU1ZIb2FtNjlRRmtSeEZyenVJc3I0Z0Erb05mSllL?=
+ =?utf-8?B?cnA4clQ5VTRlMEtCQWFReGNkV2pJSk1GVWVFcjVDbVNLSzREZVVzUTU2UkJS?=
+ =?utf-8?B?YkNQZStUSXV1a1V0azlnanpGTC84ZmRFM3JBQ0VGbzlNclFsWlhHS3VUdW51?=
+ =?utf-8?B?SXZVd1drREZ1eVNCV0JuU2M5WkFpeGY5akZqakFsdkRkUzM3MkI0cUpMMVVO?=
+ =?utf-8?B?bDVFTEpvbGdMM0RUd04zN3JrOUc2aUNmdFZvTFBXYWJuTG8zSlR6ajNSb2p5?=
+ =?utf-8?B?Q0ZlZWpXeWc3S2VXZzhWaDlzWmZLRlJtRVY3ak95ZWt1WGp0Y1ZOeDM1MEpU?=
+ =?utf-8?B?Q2RUUm9hSmd3YndkL2ZOdVRIS2RxVzl3SzZlQ1gxaEk0Vi9Yell2NHRlUlI1?=
+ =?utf-8?B?WGdDVWU2K0FXQytMT20yWDhyeFMxNHRCQ3JrN2I2aFZaaHhuTFc0SnZuM2ZP?=
+ =?utf-8?B?QjJYVjJCQXFhdzRmSFlwTDB3TzkzRStFZU0yZjZQWmx5VU5OV1laZGVNcUEz?=
+ =?utf-8?B?WWdBazFhWU8xNVBOYTBGY01wbFg3K01uR0lxUmpHNkFtZW8xWGpycEhGUUdx?=
+ =?utf-8?B?THJNZ3Y4di9FWnRrb2txVjZ6czZVQkU3Um9WMmJwK2wvU25yeThWRm1lZjBO?=
+ =?utf-8?B?allxR2F4Sld3bTZRTmRpaFE1cEdaL3FLNjRCQXBKbVljV2FNL05KdURrTEhE?=
+ =?utf-8?B?aXBWVHVYNENBamhubnE0ZkZVMDRVREFMbmRhTTdYNDI1UWoxOVYvZlNBUjVC?=
+ =?utf-8?B?MXpwNVBhTUhWdGZrUCthODYycm14WDVyOFpXRS8xOCtpejlQVVJlSTBXM0tG?=
+ =?utf-8?B?QnFaQzhlYkRFaHFkOUNFK0FEamRURnE2ZnBhUlZPWWRZeTFFbmduYTNUN1BW?=
+ =?utf-8?B?YlJVb2VzRlZNNzEwV0JDNW8zcVhNUGxKY3ZVa1A3ZVlYMlhUUVQzN0taTThI?=
+ =?utf-8?B?TmVaeEdpZWFZUXp2ZGZWZ1BYT2ZsdElKbEptc2poWkJFdWR5T2E4bStXc29j?=
+ =?utf-8?B?a25CRVVzUEdhY0JJWkdQeGNoRkRTamZXcnFIeTd0cGh6aXdFaFpsd1ptWlpn?=
+ =?utf-8?B?Y1YzU0RNV2R0M2lJRHYreDVFU0xwLzV3YjFic0xwb0hVdnRmSkkxa0NaTlNS?=
+ =?utf-8?B?dUVzWERIdWJyOXpyMHhLV0dVNEttZFhzc2N6UW1DRFU5MU9IdkdnbkZDVFFG?=
+ =?utf-8?B?dUlyTEE4ZUx2d2loNTF4bkhUK2Z0SVdFR2JVZjRHU2JPTjRTbnI1TlFTMjJ4?=
+ =?utf-8?B?dXFMbVZMSUdJUERodzdVOFVBbEJoQkRUUHBSTGFhM01HUVgzNWhYZzJacE9V?=
+ =?utf-8?B?VEU5S2tzMVQ4anErMlFtdGc2N3QvanU1SHVLb1lhdXNkNkxTYkV5QThXN0tz?=
+ =?utf-8?B?R1ZhaGZTdWduREZhV1diOXo4M0k5aGgwT25DdHZsWHlqY2xGTmlTYkF2aXVr?=
+ =?utf-8?Q?K6qp108A0fY=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(7053199007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?QkO3F8nNCDlDFAmyAgbi7F7uS9JYGGQ1n5+VelwwXD8Jv5iozrJuOOVUCV6i?=
- =?us-ascii?Q?gh7vvkpEKZX7WjgaAvvImJY9Ioxk7ULXcuRzE2flKb2EcF2J9hqVaLXMoZvP?=
- =?us-ascii?Q?CBP+XT3bWxsckUxxyU7RDJA6Q8jgV4aek7Zs/lGsCzQI8gyqklEjBB9GEOPs?=
- =?us-ascii?Q?uTvT3A85XF1qn4uUo94hicy2RrpBOABpvR1oOGmUROyITKBjVhZAoUlz5vit?=
- =?us-ascii?Q?Rt2NYPJ9AjXJYTfYOyqlPcIeZ5CeqVww27KKkv9gut/63hsHLcoONGTK0CEl?=
- =?us-ascii?Q?M9KMDqhfxARw4P2aLr9Dss/R58IW7SrFdQpLY/c2gM1ME2PeFdRDqliKeDsl?=
- =?us-ascii?Q?/YGa1NA/+7yrOFo1OpoLImAV8nLIGnrWMID/6Yh49FkA2CMY652AWpAIkJdq?=
- =?us-ascii?Q?occ/IKUJOlv+6Sy5gb8IRdLNbBEdzmmJSQZmun55w5ycZGYBRIHCQCBGJCgl?=
- =?us-ascii?Q?nhxgoLCKP85t4vLde8QUger7BQPjypBKRvF4KerqierLAM1BfPk8lqjjLG99?=
- =?us-ascii?Q?ZoxoPg+i3K+x8grjeZ2pwDhaa4ZrcXmrvtW3ZyEzfTTyTEOlzotT9YKixVrh?=
- =?us-ascii?Q?EZafQKXKpfAfq54TXhSDSBTSPj+rHgG2lZzIwvGQh29sxwv2GzAe9Y/ey5U2?=
- =?us-ascii?Q?Mu5p8uQ1BhbrsgnXMMMCb4ZQpUMZ3TTYdrGx7O684Y8waNFMsy4hpwY3546E?=
- =?us-ascii?Q?/+abP8FAkWh1vxnZSH/VXiK0RnmxWBqLdwji02W9HowCKTf+f6yDuG6Tpm7q?=
- =?us-ascii?Q?6HGVFNv5FoyhwDBNugLMKVk4vo+0vXsjgmr+Z/RAI6ow/hTv8hNhHUc/G9kN?=
- =?us-ascii?Q?mPp1wwmRDPSPsruzV1KLrMCSR1ORoa7Co/eiHMh9OHWZHClPA9ktvdP54mEq?=
- =?us-ascii?Q?rdqH7ON6kXo5CU8m9Y4MU9poanpzQcUMIsYsEy5wn1zL4EbJW+fTMMevvwly?=
- =?us-ascii?Q?3mShVCSbco5T/liAhLeCfcIiicLMZ0ZeUJjNmVau3EyfZJJBxXQeP728dLRN?=
- =?us-ascii?Q?nB/9StifJLiw7hpT/cpcpb9mbrUbOZydSS9euBAPSP0ZV6T3gOOcrZ12CC0+?=
- =?us-ascii?Q?x87i9CURxIY2qM3xQ1ImSuTfKq4AxAyMrlaW9SPUGaziiYgFqE84QfHiJOF1?=
- =?us-ascii?Q?5M2XUNbI53vQI1TXNdTpmeyorIm43vlz7EdJhQpVdhB6HtppNBy2g8QLi/3O?=
- =?us-ascii?Q?6YMIBrvkmd8C/BEbQklYxTmP0Th0TygKxPPID6bsS2GFJ3ZG3HJCI3SleTow?=
- =?us-ascii?Q?Zko/jbCneT1ywam5foWQu/J2nI7tOhvTqZjptyOWVJSJ3OZOW9OmmMOebhSK?=
- =?us-ascii?Q?hUTW0bvjycBV3eubmBNArVxW5LHdIc05MSCXeuuD1ucLHvGGqY+dVu0EOl/o?=
- =?us-ascii?Q?yD8YL+l9mafvnVir9kyLyuirpHlrPJ7ZyRZlmBz9g5/noXoWKFQ4cPd9pjF6?=
- =?us-ascii?Q?hj5xJduY0zYn9e5lLlx4IIHWJxLY5YNwEDAemgiyepvA1NJHOSSjHY1wtxMf?=
- =?us-ascii?Q?JJP9hsJPk2cQJ6Oh2ppk7TVi9qSom+3G98OPI/qyt8wD+RO51UWF5k2lreCS?=
- =?us-ascii?Q?UhxaEr+13n2S1m7xdg1Q37mshSKbnnSLzuCPUBF2?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4c7802a2-847a-4b49-eb32-08dd8bf5b28c
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
+	=?utf-8?B?Y0IxMlBVYnhlNkx5Tk5KQmJYMnNrbFBmZjBBUkowMEtLTWpmTjN5ZFF1d05T?=
+ =?utf-8?B?Y3kxYmR5UURTbUoxRk8zTnphVHZlODU3cFhqT1ZwSDE5a0N6MFhkU2dscWhr?=
+ =?utf-8?B?TzBEK0FPRCtWelAzVVhHcEVKSWJhNm1MaWhab2lKM0pacDBmR2EyZmw3ckJl?=
+ =?utf-8?B?ZjZPVEJYc0YwV1A4dEpyMElRZGZmS0c2OURXUE9kWFFVeDBIQytyb1Izck9s?=
+ =?utf-8?B?bVRjVlVxV3hjY3RyMkhxSE1LQURxdWUyQlIxQ29pT2N0ZHRBRFdkQ2ZweXRC?=
+ =?utf-8?B?UGxPOHlHSVZ2RkczSXJMU3ByMEVyS01ueDE4Y0pKZWRNZ05NdWlGU3FZWjJG?=
+ =?utf-8?B?bHcxb3hTZFl0Z2orU2VRSUo4TGJNNmd3aCtrNVZJeEdPc0diVnZxQktFU2lQ?=
+ =?utf-8?B?Tk1TcWhNbkxJVzZud3lxd0dlYWZWMUIwcTFJUFVuc0QweitrY2pwaWJoVWU2?=
+ =?utf-8?B?aGRjUUVtUkhpRyt3RW1hTmJsMlBtR2oxUlQ5bDcrVC9nRE5RODY5SDg5UzJn?=
+ =?utf-8?B?SEZCcmRPKzBHb0dxWUpIRG81aDVRaVk5OVlnZTE1OUF4OWhhdjNibS96eklF?=
+ =?utf-8?B?SkI1cDZQM3dEVXBiN3hvWDdRT0FUdjFPc0ZmM1Y0TzlERFZzWUttemtQSEFm?=
+ =?utf-8?B?VTJaSk9jSm5LS3pmdU5mZzdralpjMFBWZXZMYlZONTNCRnViaksraUlhU1Va?=
+ =?utf-8?B?cUtRZlluWC9kQkdnaFVQWTZKd04rLzI5ZVBhQW44VXhxdEY4MGVoSG43TGxl?=
+ =?utf-8?B?bURkcUVwalZJejJrTGtKS0dRb1VOekl3a3lhWHVYWVBKTGEyZDMyN09KMlF5?=
+ =?utf-8?B?Q2E3blRqVGZ1ZGIzNklkczA0ZFo3amhQbUxYcWtQS21uZkJ2cXZ3ZXVnenJD?=
+ =?utf-8?B?VzlNTUx3YVF5N1hDYy9sdGxaWDR1ZFNBQjl4aUZ6by9sSTgvTGl1VTBvbjkz?=
+ =?utf-8?B?b2lsY0tsakNPdDBPY2VKYUN3NjFpZC8zeXhhSXVhWGxTa1p0bkg2eW9MOWdo?=
+ =?utf-8?B?S09FdGx3bFhMYk8rMGJhOExqMDd5OFhZR0gySmhXL25vRFhNa05QNnBKYlJ1?=
+ =?utf-8?B?QUNObEJ1dTNwQzNCUGpYNXFqdjhaOFhCYkcyZ1RvdGxRYWhsUkp4VC9NMlp6?=
+ =?utf-8?B?RkhUQTNLSVY1RGdNN1F2c2Z2MlMwcEMyTmpYeFQxanM5ZDNhMnRzMWJYVVVk?=
+ =?utf-8?B?SzBjRUJSb2trVkJmMkFqbUZXOTFUK2VKczQ1TXY3MU1iQkxSWTB0d0s2UnE2?=
+ =?utf-8?B?aXBydHlHTVNqT09LL04vQmJTeC9TTUtwZllQNllGNlJzaFNOSDFzVFViQUl6?=
+ =?utf-8?B?VitEOXMrMXVLZDZUNzJaOHJaNVllN2RjakRGU1Rzb0wwWFRXR0ROL2VsNFg2?=
+ =?utf-8?B?b0RNOU5OV3dDM2NoVksyZzJVdXBNTXdLMkZYcmZGRWxwUnNMSytPK3NWK2pO?=
+ =?utf-8?B?VTJodFl3SE9GdkhJMjhQdkdHZVRCMkZuRTlVVGk2Rkc1SWxaZnpBRnE2VUNK?=
+ =?utf-8?B?UE1ZY2E3dUNBaStiZ1o2LzM3c2EvbkJFTk5odElCSFBxbkc3bUh6bEVlSHoz?=
+ =?utf-8?B?UmJaZ1VlUnBzaXVXQ1VJSnRSRk9jZHdJUDVDRVMrbGZxazlMRjdab1pGQWo4?=
+ =?utf-8?B?SjNnTXlqaDNlNHVrQWFnN3MyZkFuVFRWejM5bEJEQ2FTZ0dkdVNvSmVDUUlq?=
+ =?utf-8?B?c2pMRE1MeUF0U21iYXNtZGlKWlF3eVBRV2tDcUVidjFQUW9wdzhobUtibkNh?=
+ =?utf-8?B?T2ZqbnVpT0R6cjd6cjl1Mm9DbUJ2bTFqVDljczIyZ2VUV2UrNUpubXpKVm1B?=
+ =?utf-8?B?RlVrNVFkQXdDR2xqK2I3TFlmSDlvczlUTU9EaGhtbUw1K3h5YmtXM3V6UDFl?=
+ =?utf-8?B?VHBzNWNodUVGRFNYV3c4SlBWSm9qT3I5SStvU1RabXovUlNLRFJIdVdsckJm?=
+ =?utf-8?B?OFlTU1JwaFlGaDU3WUtWbnl0S0IwS2VSOUFTSnFkZ2ZNQm9LY3AvWHF4Wi9V?=
+ =?utf-8?B?TmFRVTN4WWRYNUdUM29ycy9oSFdHbDVoSWZVV3ZwVit6dS9nUklLYWhCcTBJ?=
+ =?utf-8?B?NWVhd0xLUnNkd0VrY3RDbWFFWmQ1ektRNThoTmQ5RmZ0YTBiSkc4eFFMbWcz?=
+ =?utf-8?Q?tyYjLUtShCUP+XmzxYHcwsv9M?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 060a0f8e-c03c-4418-bba4-08dd8bf5c69e
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5685.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2025 16:55:53.7512
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2025 16:56:27.4141
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3iQihJyXzoVVdO0Yid0Vw/dqeBmEv7mslfqplcGcLriEgV3V8UkJq3y5Xfzpo+eY
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7740
+X-MS-Exchange-CrossTenant-UserPrincipalName: PVN4VsBgAi70pPXkYHQopz5rO5uWot/4dQW2Xf16bfElYavR9pNchufmugj0KfjJ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB7529
 
-On Tue, Apr 29, 2025 at 02:46:25PM -0700, Nicolin Chen wrote:
-> > > > > > > > +	immap = kzalloc(sizeof(*immap), GFP_KERNEL);
-> > > > > > > > +	if (!immap)
-> > > > > > > > +		return -ENOMEM;
-> > > > > > > > +	immap->pfn_start = base >> PAGE_SHIFT;
-> > > > > > > > +	immap->pfn_end = immap->pfn_start + (size >> PAGE_SHIFT) - 1;
-> > > > > > > > +
-> > > > > > > > +	rc = mtree_alloc_range(&ictx->mt_mmap, immap_id, immap, sizeof(immap),
-> > > > > > > 
-> > > > > > > I believe this should be sizeof(*immap) ?
-> > > > > > 
-> > > > > > Ugh, Sorry, shouldn't this be size >> PAGE_SHIFT (num_indices to alloc) ?
-> > > > > 
-> > > > > mtree_load() returns a "struct iommufd_map *" pointer.
-> > > > 
-> > > > I'm not talking about mtree_load. I meant mtree_alloc_range takes in a
-> > > > "size" parameter, which is being passed as sizeof(imap) in this patch.
-> > > > IIUC, the mtree_alloc_range, via mas_empty_area, gets a range that is
-> > > > sufficient for the given "size". 
-> > > > 
-> > > > Now in this case, "size" would be the no. of pfns which are mmap-able.
-> > > > By passing sizeof(immap), we're simply reserving sizeof(ptr) i.e. 8 pfns
-> > > > for a 64-bit machine. Whereas we really, just want to reserve a range
-> > > > for size >> PAGE_SHIFT pfns.
-> > > 
-> > > But we are not storing pfns but the immap pointer..
-
-That doesn't seem right, the entire point of using a maple tree is to
-manage the pfn number space, ie the pgoff argument to mmap.
-
-So when calling mtree_alloc_range:
-
-int mtree_alloc_range(struct maple_tree *mt, unsigned long *startp,
-		void *entry, unsigned long size, unsigned long min,
-		unsigned long max, gfp_t gfp)
-
-size should be the number of PFNs this mmap is going to use, which is
-not sizeof() anything
-
-min should be 0 and max should be uh.. U32_MAX >> PAGE_SHIFT
-IIRC.. There is a different limit for pgof fon 32 bit mmap()
-
-> > Ohh... so we are storing the raw pointer in the mtree.. I got confused
-> > with the `LONG_MAX >> PAGE_SHIFT`.. Sorry about the confusion!
+On 5/5/25 18:33, T.J. Mercier wrote:
+> On Mon, May 5, 2025 at 4:17 AM Christian König <christian.koenig@amd.com> wrote:
+>>
+>> On 5/5/25 00:41, T.J. Mercier wrote:
+>>> The dmabuf iterator traverses the list of all DMA buffers.
+>>>
+>>> DMA buffers are refcounted through their associated struct file. A
+>>> reference is taken on each buffer as the list is iterated to ensure each
+>>> buffer persists for the duration of the bpf program execution without
+>>> holding the list mutex.
+>>>
+>>> Signed-off-by: T.J. Mercier <tjmercier@google.com>
+>>> ---
+>>>  kernel/bpf/Makefile      |   3 +
+>>>  kernel/bpf/dmabuf_iter.c | 134 +++++++++++++++++++++++++++++++++++++++
+>>>  2 files changed, 137 insertions(+)
+>>>  create mode 100644 kernel/bpf/dmabuf_iter.c
+>>>
+>>> diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
+>>> index 70502f038b92..3a335c50e6e3 100644
+>>> --- a/kernel/bpf/Makefile
+>>> +++ b/kernel/bpf/Makefile
+>>> @@ -53,6 +53,9 @@ obj-$(CONFIG_BPF_SYSCALL) += relo_core.o
+>>>  obj-$(CONFIG_BPF_SYSCALL) += btf_iter.o
+>>>  obj-$(CONFIG_BPF_SYSCALL) += btf_relocate.o
+>>>  obj-$(CONFIG_BPF_SYSCALL) += kmem_cache_iter.o
+>>> +ifeq ($(CONFIG_DMA_SHARED_BUFFER),y)
+>>> +obj-$(CONFIG_BPF_SYSCALL) += dmabuf_iter.o
+>>> +endif
+>>>
+>>>  CFLAGS_REMOVE_percpu_freelist.o = $(CC_FLAGS_FTRACE)
+>>>  CFLAGS_REMOVE_bpf_lru_list.o = $(CC_FLAGS_FTRACE)
+>>> diff --git a/kernel/bpf/dmabuf_iter.c b/kernel/bpf/dmabuf_iter.c
+>>> new file mode 100644
+>>> index 000000000000..968762e11f73
+>>> --- /dev/null
+>>> +++ b/kernel/bpf/dmabuf_iter.c
+>>> @@ -0,0 +1,134 @@
+>>> +// SPDX-License-Identifier: GPL-2.0-only
+>>> +/* Copyright (c) 2025 Google LLC */
+>>> +#include <linux/bpf.h>
+>>> +#include <linux/btf_ids.h>
+>>> +#include <linux/dma-buf.h>
+>>> +#include <linux/kernel.h>
+>>> +#include <linux/seq_file.h>
+>>> +
+>>> +BTF_ID_LIST_SINGLE(bpf_dmabuf_btf_id, struct, dma_buf)
+>>> +DEFINE_BPF_ITER_FUNC(dmabuf, struct bpf_iter_meta *meta, struct dma_buf *dmabuf)
+>>> +
+>>> +static struct dma_buf *get_next_dmabuf(struct dma_buf *dmabuf)
+>>> +{
+>>> +     struct dma_buf *ret = NULL;
+>>> +
+>>> +     /*
+>>> +      * Look for the first/next buffer we can obtain a reference to.
+>>> +      *
+>>> +      * The list mutex does not protect a dmabuf's refcount, so it can be
+>>> +      * zeroed while we are iterating. We cannot call get_dma_buf() since the
+>>> +      * caller of this program may not already own a reference to the buffer.
+>>> +      */
+>>> +     mutex_lock(&dmabuf_list_mutex);
+>>> +     if (dmabuf) {
+>>
+>> That looks like you try to mangle the start and next functionality in just one function.
+>>
+>> I would just inline that into the dmabuf_iter_seq_start() and dmabuf_iter_seq_next() functions.
 > 
-> Yes. We want the pointer at mtree_load(). The pfn range is for
-> validation after mtree_load(). And we are likely to stuff more
-> bits into the immap structure for other verifications.
+> Primarily this is to share between the open coded iterator (next
+> patch) and this normal iterator since I didn't want to duplicate the
+> same list traversal code across both of them.
 
-Validation is fine, but you still have to reserve the whole pfn number
-space to get sensible non-overlapping pgoffs out of the allocator.
+Ah, ok that makes a bit more sense. It would still be nicer if it's in two functions since the logic doesn't share anything common except for taking the lock as far as I can seee.
 
-Jason
+>>
+>>
+>>> +             dma_buf_put(dmabuf);
+>>> +             list_for_each_entry_continue(dmabuf, &dmabuf_list, list_node) {
+>>
+>> That you can put the DMA-buf and then still uses it in list_for_each_entry_continue() only works because the mutex is locked in the destroy path.
+> 
+> Yup, this was deliberate.
+>>
+>>
+>> I strongly suggest to just put those two functions into drivers/dma-buf/dma-buf.c right next to the __dma_buf_debugfs_list_add() and __dma_buf_debugfs_list_del() functions.
+> 
+> By two functions, you mean a get_first_dmabuf(void) and a
+> get_next_dmabuf(struct dma_buf*)? To make the dma_buf_put() call a
+> little less scary since all the mutex ops are right there?
+
+Yes, exactly that's the idea. The comment above is good to have as well, but it only works one way.
+
+If somebody changes the DMA-buf code without looking at this here we are busted.
+
+Regards,
+Christian.
+
+>>
+>>
+>> Apart from those style suggestions looks good to me from the technical side, but I'm not an expert for the BPF stuff.
+>>
+>> Regards,
+>> Christian.
+> 
+> Thanks for your comments and reviews!
+> 
+>>> +                     if (file_ref_get(&dmabuf->file->f_ref)) {
+>>> +                             ret = dmabuf;
+>>> +                             break;
+>>> +                     }
+>>> +             }
+>>> +     } else {
+>>> +             list_for_each_entry(dmabuf, &dmabuf_list, list_node) {
+>>> +                     if (file_ref_get(&dmabuf->file->f_ref)) {
+>>> +                             ret = dmabuf;
+>>> +                             break;
+>>> +                     }
+>>> +             }
+>>> +     }
+>>> +     mutex_unlock(&dmabuf_list_mutex);
+>>> +     return ret;
+>>> +}
+>>> +
+>>> +static void *dmabuf_iter_seq_start(struct seq_file *seq, loff_t *pos)
+>>> +{
+>>> +     if (*pos)
+>>> +             return NULL;
+>>> +
+>>> +     return get_next_dmabuf(NULL);
+>>> +}
+>>> +
+>>> +static void *dmabuf_iter_seq_next(struct seq_file *seq, void *v, loff_t *pos)
+>>> +{
+>>> +     struct dma_buf *dmabuf = v;
+>>> +
+>>> +     ++*pos;
+>>> +
+>>> +     return get_next_dmabuf(dmabuf);
+>>> +}
+>>> +
+>>> +struct bpf_iter__dmabuf {
+>>> +     __bpf_md_ptr(struct bpf_iter_meta *, meta);
+>>> +     __bpf_md_ptr(struct dma_buf *, dmabuf);
+>>> +};
+>>> +
+>>> +static int __dmabuf_seq_show(struct seq_file *seq, void *v, bool in_stop)
+>>> +{
+>>> +     struct bpf_iter_meta meta = {
+>>> +             .seq = seq,
+>>> +     };
+>>> +     struct bpf_iter__dmabuf ctx = {
+>>> +             .meta = &meta,
+>>> +             .dmabuf = v,
+>>> +     };
+>>> +     struct bpf_prog *prog = bpf_iter_get_info(&meta, in_stop);
+>>> +
+>>> +     if (prog)
+>>> +             return bpf_iter_run_prog(prog, &ctx);
+>>> +
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +static int dmabuf_iter_seq_show(struct seq_file *seq, void *v)
+>>> +{
+>>> +     return __dmabuf_seq_show(seq, v, false);
+>>> +}
+>>> +
+>>> +static void dmabuf_iter_seq_stop(struct seq_file *seq, void *v)
+>>> +{
+>>> +     struct dma_buf *dmabuf = v;
+>>> +
+>>> +     if (dmabuf)
+>>> +             dma_buf_put(dmabuf);
+>>> +}
+>>> +
+>>> +static const struct seq_operations dmabuf_iter_seq_ops = {
+>>> +     .start  = dmabuf_iter_seq_start,
+>>> +     .next   = dmabuf_iter_seq_next,
+>>> +     .stop   = dmabuf_iter_seq_stop,
+>>> +     .show   = dmabuf_iter_seq_show,
+>>> +};
+>>> +
+>>> +static void bpf_iter_dmabuf_show_fdinfo(const struct bpf_iter_aux_info *aux,
+>>> +                                     struct seq_file *seq)
+>>> +{
+>>> +     seq_puts(seq, "dmabuf iter\n");
+>>> +}
+>>> +
+>>> +static const struct bpf_iter_seq_info dmabuf_iter_seq_info = {
+>>> +     .seq_ops                = &dmabuf_iter_seq_ops,
+>>> +     .init_seq_private       = NULL,
+>>> +     .fini_seq_private       = NULL,
+>>> +     .seq_priv_size          = 0,
+>>> +};
+>>> +
+>>> +static struct bpf_iter_reg bpf_dmabuf_reg_info = {
+>>> +     .target                 = "dmabuf",
+>>> +     .feature                = BPF_ITER_RESCHED,
+>>> +     .show_fdinfo            = bpf_iter_dmabuf_show_fdinfo,
+>>> +     .ctx_arg_info_size      = 1,
+>>> +     .ctx_arg_info           = {
+>>> +             { offsetof(struct bpf_iter__dmabuf, dmabuf),
+>>> +               PTR_TO_BTF_ID_OR_NULL },
+>>> +     },
+>>> +     .seq_info               = &dmabuf_iter_seq_info,
+>>> +};
+>>> +
+>>> +static int __init dmabuf_iter_init(void)
+>>> +{
+>>> +     bpf_dmabuf_reg_info.ctx_arg_info[0].btf_id = bpf_dmabuf_btf_id[0];
+>>> +     return bpf_iter_reg_target(&bpf_dmabuf_reg_info);
+>>> +}
+>>> +
+>>> +late_initcall(dmabuf_iter_init);
+>>
+
 
