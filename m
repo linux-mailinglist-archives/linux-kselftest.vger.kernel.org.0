@@ -1,65 +1,66 @@
-Return-Path: <linux-kselftest+bounces-32342-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32343-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6AFB8AA949C
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 15:35:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40CFCAA94D3
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 15:50:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 945AA3B98FE
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 13:35:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9633917818E
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 13:50:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A5C22517AB;
-	Mon,  5 May 2025 13:35:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11F882517A4;
+	Mon,  5 May 2025 13:50:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qkF1cTFv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hTQlqip/"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60BED2040B6;
-	Mon,  5 May 2025 13:35:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7D1C2C859;
+	Mon,  5 May 2025 13:50:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746452119; cv=none; b=GkdW+QDPMht/RcvlnQpjhltlURthfFCsiSbieehNI+4KIUJZEHAeu9hfG2N+fPUNw5SFWq+WTAQ6x7fn4YpqHDBvtKKhaNBqp6WoNnlAvrINlJqDSnoMguwLcE4ALWmHufUkFN2u2SDApSTq/G5SKUUWecHKz9a9GLKt5mF0n1k=
+	t=1746453052; cv=none; b=JrB4a0ZxKVqz3/Yt9scEezyb48Fu/+JPy6PO1DAD5g1YCd3KrUNHe9OrzV6ryBN1YBGZoo0NQMSzAZU/nivv4g+iO8uhKQ0qoxEFwZh7wNhJSHZSr/AhDju6E5C6mbQSNvap4TDSplPkAOw1pqMiIFtKhqtgrS5/rZhnvwt5+O8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746452119; c=relaxed/simple;
-	bh=lZYJj5+RvlpcB3C/3nThNIVF+4ts/zwD2yTL3wPkp6I=;
+	s=arc-20240116; t=1746453052; c=relaxed/simple;
+	bh=Vqk0ZpZc2qCwVlVPa1gNgdMWQzO0ZUreacqfzsriyUM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kuaOK6RC86zHlAzerYOF/Royd3zJyVZI7hNQkbToyOu9662p7Z8k/qZW8q90uesOxoT/LyIFWhTJlqZjFjNKBFjwTN6G873sR7o424MKWNExTaUdcpKniWkJe5ntmbxnSx9gwhMrxMK8aN+4yg3kIHz5vClh2vDmrsBtroBrXKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qkF1cTFv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4726BC4CEE4;
-	Mon,  5 May 2025 13:35:15 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=oxxq4seAFvOCGpgpY/WZikIAE68zEbzB+6wQ9MkltnhvYzd7Yt9/3w8GgWvFWdkgqcGAewltpUdQiyHOgPLqPtr7UiF1pFEEIHqyzQTAkNHIGNQnSDI8PochzFyvDiVNh5FrjxR505B2CV0quP83Jvy4POEGRMWnbt/bgFhUQEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hTQlqip/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17FD5C4CEE4;
+	Mon,  5 May 2025 13:50:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746452118;
-	bh=lZYJj5+RvlpcB3C/3nThNIVF+4ts/zwD2yTL3wPkp6I=;
+	s=k20201202; t=1746453051;
+	bh=Vqk0ZpZc2qCwVlVPa1gNgdMWQzO0ZUreacqfzsriyUM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qkF1cTFvbhP4Ye7NeV9917c1PkBLXuYnLDbiOErKUKsUumdsSQbOSMNV+zqY18Rek
-	 iMgcsmDQnKKTGn+zuxvwpTgU95tKAC7axgb/oimBwIeWBH4Qdl//jsdS4phegc4QB6
-	 Od8s6UqytlBBSYBU6sYpgrW0+Xp5QP9sPiVwNULR2e9TANRtMUkmw+uXdjg01d79Ln
-	 oApceD/DookzKf4fYwsDQNTRHGg1JtviuRWBg02Cwd5WEcQ0XvCA/LXEG/YJP63KIn
-	 sUWf6i8bS2nrfk6KNE3ZE7xDcac83jrNRzGftJ/nnH7mqWNvilg2dKT7aNvbAlNFVZ
-	 3fsRCjlhW9PCw==
-Date: Mon, 5 May 2025 15:35:13 +0200
+	b=hTQlqip/9RtDq3faJnMsVwE+9Nde3Mnr3H4IzjZ81T1juQF7EOoMHDLstfmKej10J
+	 H5gITaG4z0iFzIuIUu5YI7joHG0oT4jg+r6UknQ66QsthJD0whwF68MulFkkvvx6et
+	 WST+LOzBuWuy5KdJQ27kmB+EfVrnyofS9Igy5t4TJA6uKGA0YIxV3KfJwtKhE0pqQt
+	 4t7Fv+aAPqZhR3s55I2uhb1r5gusiltCLG2pwI7myW53nhgqHhnin9Pc/ah2May61z
+	 7/WfFkRLcv9dcAN0AftB7MhohCeBd6cdZO5VhJRPo7G8KY1PzQPG8f2UkLMhs1fkaW
+	 5roincr1ws3Uw==
+Date: Mon, 5 May 2025 15:50:43 +0200
 From: Christian Brauner <brauner@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: John Hubbard <jhubbard@nvidia.com>, 
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Christian Brauner <christian@brauner.io>, Shuah Khan <shuah@kernel.org>, 
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>, Suren Baghdasaryan <surenb@google.com>, 
-	Vlastimil Babka <vbabka@suse.cz>, pedro.falcato@gmail.com, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Oliver Sang <oliver.sang@intel.com>, seanjc@google.com
-Subject: Re: [PATCH v3 3/3] selftests: pidfd: add tests for PIDFD_SELF_*
-Message-ID: <20250505-postablage-drinnen-ddaa539abc18@brauner>
-References: <cover.1729073310.git.lorenzo.stoakes@oracle.com>
- <c083817403f98ae45a70e01f3f1873ec1ba6c215.1729073310.git.lorenzo.stoakes@oracle.com>
- <a3778bea-0a1e-41b7-b41c-15b116bcbb32@linuxfoundation.org>
- <a6133831-3fc3-49aa-83c6-f9aeef3713c9@lucifer.local>
- <5b0b8e1e-6f50-4e18-bf46-39b00376c26e@nvidia.com>
- <20250501114235.GP4198@noisy.programming.kicks-ass.net>
- <20250501124646.GC4356@noisy.programming.kicks-ass.net>
+To: Jann Horn <jannh@google.com>
+Cc: Suren Baghdasaryan <surenb@google.com>, 
+	Al Viro <viro@zeniv.linux.org.uk>, linux-fsdevel@vger.kernel.org, akpm@linux-foundation.org, 
+	Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, david@redhat.com, vbabka@suse.cz, 
+	peterx@redhat.com, hannes@cmpxchg.org, mhocko@kernel.org, paulmck@kernel.org, 
+	shuah@kernel.org, adobriyan@gmail.com, josef@toxicpanda.com, yebin10@huawei.com, 
+	linux@weissschuh.net, willy@infradead.org, osalvador@suse.de, andrii@kernel.org, 
+	ryan.roberts@arm.com, christophe.leroy@csgroup.eu, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 7/8] mm/maps: read proc/pid/maps under RCU
+Message-ID: <20250505-wachen-konform-3fe08f1b3214@brauner>
+References: <20250418174959.1431962-1-surenb@google.com>
+ <20250418174959.1431962-8-surenb@google.com>
+ <CAG48ez3YLWh9hXQQdGVQ7hCsd=k_i2Z2NO6qzT6NaOYiRjy=nw@mail.gmail.com>
+ <CAJuCfpGGiwTbMeGAeYNtQ5SsFenUw8up6ToLy=VstULM_TSoXA@mail.gmail.com>
+ <CAG48ez15g5n9AoMJk1yPHsDCq2PGxCHc2WhCAzH8B2o6PgDwzQ@mail.gmail.com>
+ <CAJuCfpG+YjyVE-6TaAQEjwc0iixqN8Epf25jo2awtL=gqY=afA@mail.gmail.com>
+ <CAG48ez0ntTH_sOaPiqML715jyTCujwyh3Og1wBq9RNLbu55C5Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -68,89 +69,165 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250501124646.GC4356@noisy.programming.kicks-ass.net>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAG48ez0ntTH_sOaPiqML715jyTCujwyh3Og1wBq9RNLbu55C5Q@mail.gmail.com>
 
-On Thu, May 01, 2025 at 02:46:46PM +0200, Peter Zijlstra wrote:
-> On Thu, May 01, 2025 at 01:42:35PM +0200, Peter Zijlstra wrote:
-> > On Wed, Oct 16, 2024 at 07:14:34PM -0700, John Hubbard wrote:
-> > > On 10/16/24 3:06 PM, Lorenzo Stoakes wrote:
-> > > > On Wed, Oct 16, 2024 at 02:00:27PM -0600, Shuah Khan wrote:
-> > > > > On 10/16/24 04:20, Lorenzo Stoakes wrote:
-> > > ...
-> > > > > > diff --git a/tools/testing/selftests/pidfd/pidfd.h b/tools/testing/selftests/pidfd/pidfd.h
-> > > > > > index 88d6830ee004..1640b711889b 100644
-> > > > > > --- a/tools/testing/selftests/pidfd/pidfd.h
-> > > > > > +++ b/tools/testing/selftests/pidfd/pidfd.h
-> > > > > > @@ -50,6 +50,14 @@
-> > > > > >    #define PIDFD_NONBLOCK O_NONBLOCK
-> > > > > >    #endif
-> > > > > > +/* System header file may not have this available. */
-> > > > > > +#ifndef PIDFD_SELF_THREAD
-> > > > > > +#define PIDFD_SELF_THREAD -100
-> > > > > > +#endif
-> > > > > > +#ifndef PIDFD_SELF_THREAD_GROUP
-> > > > > > +#define PIDFD_SELF_THREAD_GROUP -200
-> > > > > > +#endif
+On Tue, Apr 29, 2025 at 08:54:58PM +0200, Jann Horn wrote:
+> On Tue, Apr 29, 2025 at 8:04 PM Suren Baghdasaryan <surenb@google.com> wrote:
+> > On Tue, Apr 29, 2025 at 10:21 AM Jann Horn <jannh@google.com> wrote:
+> > >
+> > > Hi!
+> > >
+> > > (I just noticed that I incorrectly assumed that VMAs use kfree_rcu
+> > > (not SLAB_TYPESAFE_BY_RCU) when I wrote my review of this, somehow I
+> > > forgot all about that...)
+> >
+> > Does this fact affect your previous comments? Just want to make sure
+> > I'm not missing something...
+> 
+> When I suggested using "WRITE_ONCE(vma->vm_file, NULL)" when tearing
+> down a VMA, and using get_file_rcu() for the lockless lookup, I did
+> not realize that you could actually also race with all the other
+> places that set ->vm_file, like __mmap_new_file_vma() and so on; and I
+> did not think about whether any of those code paths might leave a VMA
+> with a dangling ->vm_file pointer.
+> 
+> I guess maybe that means you really do need to do the lookup from the
+> copied data, as you did in your patch; and that might require calling
+> get_file_active() on the copied ->vm_file pointer (instead of
+> get_file_rcu()), even though I think that is not really how
+> get_file_active() is supposed to be used (it's supposed to be used
+> when you know the original file hasn't been freed yet). Really what
+
+I think it's fine for get_file_active() to be used in this way. That
+->vm_file pointer usage should get a fat comment above it explaining how
+what you're doing is safe.
+
+> you'd want for that is basically a raw __get_file_rcu(), but that is
+> static and I think Christian wouldn't want to expose more of these
+> internals outside VFS...
+
+Yeah, no. I don't want that to be usable outside of that file.
+
+> (In that case, all the stuff below about get_file_rcu() would be moot.)
+> 
+> Or you could pepper WRITE_ONCE() over all the places that write
+> ->vm_file, and ensure that ->vm_file is always NULLed before its
+> reference is dropped... but that seems a bit more ugly to me.
+> 
+> > > On Tue, Apr 29, 2025 at 7:09 PM Suren Baghdasaryan <surenb@google.com> wrote:
+> > > > On Tue, Apr 29, 2025 at 8:40 AM Jann Horn <jannh@google.com> wrote:
+> > > > > On Fri, Apr 18, 2025 at 7:50 PM Suren Baghdasaryan <surenb@google.com> wrote:
+> > > > > > With maple_tree supporting vma tree traversal under RCU and vma and
+> > > > > > its important members being RCU-safe, /proc/pid/maps can be read under
+> > > > > > RCU and without the need to read-lock mmap_lock. However vma content
+> > > > > > can change from under us, therefore we make a copy of the vma and we
+> > > > > > pin pointer fields used when generating the output (currently only
+> > > > > > vm_file and anon_name). Afterwards we check for concurrent address
+> > > > > > space modifications, wait for them to end and retry. While we take
+> > > > > > the mmap_lock for reading during such contention, we do that momentarily
+> > > > > > only to record new mm_wr_seq counter. This change is designed to reduce
+> > > > > > mmap_lock contention and prevent a process reading /proc/pid/maps files
+> > > > > > (often a low priority task, such as monitoring/data collection services)
+> > > > > > from blocking address space updates.
+> > > > > [...]
+> > > > > > diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> > > > > > index b9e4fbbdf6e6..f9d50a61167c 100644
+> > > > > > --- a/fs/proc/task_mmu.c
+> > > > > > +++ b/fs/proc/task_mmu.c
+> > > > > [...]
+> > > > > > +/*
+> > > > > > + * Take VMA snapshot and pin vm_file and anon_name as they are used by
+> > > > > > + * show_map_vma.
+> > > > > > + */
+> > > > > > +static int get_vma_snapshot(struct proc_maps_private *priv, struct vm_area_struct *vma)
+> > > > > > +{
+> > > > > > +       struct vm_area_struct *copy = &priv->vma_copy;
+> > > > > > +       int ret = -EAGAIN;
 > > > > > > +
-> > > > > 
-> > > > > As mentioned in my response to v1 patch:
-> > > > > 
-> > > > > kselftest has dependency on "make headers" and tests include
-> > > > > headers from linux/ directory
-> > > > 
-> > > > Right but that assumes you install the kernel headers on the build system,
-> > > > which is quite a painful thing to have to do when you are quickly iterating
-> > > > on a qemu setup.
-> > > > 
-> > > > This is a use case I use all the time so not at all theoretical.
-> > > > 
-> > > 
-> > > This is turning out to be a fairly typical reaction from kernel
-> > > developers, when presented with the "you must first run make headers"
-> > > requirement for kselftests.
-> > > 
-> > > Peter Zijlstra's "NAK NAK NAK" response [1] last year was the most
-> > > colorful, so I'll helpfully cite it here. :)
-> > 
-> > Let me re-try this.
-> > 
-> > This is driving me insane. I've spend the past _TWO_ days trying to
-> > build KVM selftests and I'm still failing.
-> > 
-> > This is absolute atrocious crap and is costing me valuable time.
-> > 
-> > Please fix this fucking selftests shit to just build. This is unusable
-> > garbage.
+> > > > > > +       memcpy(copy, vma, sizeof(*vma));
+> > > > > > +       if (copy->vm_file && !get_file_rcu(&copy->vm_file))
+> > > > > > +               goto out;
+> > > > >
+> > > > > I think this uses get_file_rcu() in a different way than intended.
+> > > > >
+> > > > > As I understand it, get_file_rcu() is supposed to be called on a
+> > > > > pointer which always points to a file with a non-zero refcount (except
+> > > > > when it is NULL). That's why it takes a file** instead of a file* - if
+> > > > > it observes a zero refcount, it assumes that the pointer must have
+> > > > > been updated in the meantime, and retries. Calling get_file_rcu() on a
+> > > > > pointer that points to a file with zero refcount, which I think can
+> > > > > happen with this patch, will cause an endless loop.
+> > > > > (Just as background: For other usecases, get_file_rcu() is supposed to
+> > > > > still behave nicely and not spuriously return NULL when the file* is
+> > > > > concurrently updated to point to another file*; that's what that loop
+> > > > > is for.)
+> > > >
+> > > > Ah, I see. I wasn't aware of this subtlety. I think this is fixable by
+> > > > checking the return value of get_file_rcu() and retrying speculation
+> > > > if it changed.
+> > >
+> > > I think you could probably still end up looping endlessly in get_file_rcu().
 > 
-> So after spending more time trying to remember how to debug Makefiles (I
-> hate my life), I found that not only do I need this headers shit, the
-> kvm selftests Makefile is actively broken if you use: make O=foo
+> (Just to be clear: What I meant here is that get_file_rcu() loops
+> *internally*; get_file_rcu() is not guaranteed to ever return if the
+> pointed-to file has a zero refcount.)
 > 
-> -INSTALL_HDR_PATH = $(top_srcdir)/usr
-> +INSTALL_HDR_PATH = $(top_srcdir)/$(O)/usr
+> > By "retrying speculation" I meant it in the sense of
+> > get_vma_snapshot() retry when it takes the mmap_read_lock and then
+> > does mmap_lock_speculate_try_begin to restart speculation. I'm also
+> > thinking about Liam's concern of guaranteeing forward progress for the
+> > reader. Thinking maybe I should not drop mmap_read_lock immediately on
+> > contention but generate some output (one vma or one page worth of
+> > vmas) before dropping mmap_read_lock and proceeding with speculation.
 > 
+> Hm, yeah, I guess you need that for forward progress...
 > 
-> And then finally, I can do:
+> > > > > (If my understanding is correct, maybe we should document that more
+> > > > > explicitly...)
+> > > >
+> > > > Good point. I'll add comments for get_file_rcu() as a separate patch.
+> > > >
+> > > > >
+> > > > > Also, I think you are introducing an implicit assumption that
+> > > > > remove_vma() does not NULL out the ->vm_file pointer (because that
+> > > > > could cause tearing and could theoretically lead to a torn pointer
+> > > > > being accessed here).
+> > > > >
+> > > > > One alternative might be to change the paths that drop references to
+> > > > > vma->vm_file (search for vma_close to find them) such that they first
+> > > > > NULL out ->vm_file with a WRITE_ONCE() and do the fput() after that,
+> > > > > maybe with a new helper like this:
+> > > > >
+> > > > > static void vma_fput(struct vm_area_struct *vma)
+> > > > > {
+> > > > >   struct file *file = vma->vm_file;
+> > > > >
+> > > > >   if (file) {
+> > > > >     WRITE_ONCE(vma->vm_file, NULL);
+> > > > >     fput(file);
+> > > > >   }
+> > > > > }
+> > > > >
+> > > > > Then on the lockless lookup path you could use get_file_rcu() on the
+> > > > > ->vm_file pointer _of the original VMA_, and store the returned file*
+> > > > > into copy->vm_file.
+> > > >
+> > > > Ack. Except for storing the return value of get_file_rcu(). I think
+> > > > once we detect that  get_file_rcu() returns a different file we should
+> > > > bail out and retry. The change in file is an indication that the vma
+> > > > got changed from under us, so whatever we have is stale.
+> > >
+> > > What does "different file" mean here - what file* would you compare
+> > > the returned one against?
+> >
+> > Inside get_vma_snapshot() I would pass the original vma->vm_file to
+> > get_file_rcu() and check if it returns the same value. If the value
+> > got changed we jump to  /* Address space got modified, vma might be
+> > stale. Re-lock and retry. */ section. That should work, right?
 > 
-> make O=foo headers_install
-> make O=foo -C tools/testing/selftests/kvm/
+> Where do you get an "original vma->vm_file" from?
 > 
-> So yeah, thank you very much for wasting my time *AGAIN*.
-> 
-> 
-> Seriously, I want to be able to do:
-> 
->   cd tools/testing/selftests/foo; make
-> 
-> and have it just work. I would strongly suggest every subsystem to
-> reclaim their selftests and make it so again.
-> 
-> And on that, let me go merge the fixes I need to have x86 and futex
-> build without this headers shit.
-
-I'm completely lost as to what's happening here or whether the test here
-is somehow at fault for something.
-
-The pidfd.h head explicitly has no dependency on the pidfd uapi header
-itself and I will NAK anything that makes it so. It's just a giant pain.
+> To be clear, get_file_rcu(p) returns one of the values that *p had
+> while get_file_rcu(p) is running.
 
