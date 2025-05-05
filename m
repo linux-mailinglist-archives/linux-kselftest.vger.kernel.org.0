@@ -1,80 +1,65 @@
-Return-Path: <linux-kselftest+bounces-32451-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32452-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29B74AAA819
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 May 2025 02:47:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9391AAAE53
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 May 2025 04:54:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1BABE166E63
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 May 2025 00:46:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 758A11892EFB
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 May 2025 02:51:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 939AB2957C5;
-	Mon,  5 May 2025 22:38:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 738802D9969;
+	Mon,  5 May 2025 22:57:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q18L7MQP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QalquyuA"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6446E346EDD;
-	Mon,  5 May 2025 22:38:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BE412D2CC9;
+	Mon,  5 May 2025 22:46:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746484736; cv=none; b=bpVIVhdsG2CX0j8d6fWCfsE89IYV8SVsY7oqrJYX0o9X6WoDiX6NSv5+C2HddvGTd5WQx0i31yyA4STP11bR6YxgTxp1Pwhljfpd/GHrl00fAMGZVAfaA1TU7WtawuSoQisAdllpW7HVF14xdNUr7tPEN/Kah4d8011CHLLCP/Y=
+	t=1746485206; cv=none; b=pA76rv9dkYPsizr51AtO5EZPSaSJE1M5RBwe9eCupFusJ2WAfCEMEudFbEzFgZaCfSotKTEnl9BVec1Lohu4JGBj2KjCljw35uOZEwkpDKhHHN05eoWQlgDrkJRBYShRQxFnIY9hxcSWPkj1rev9MjM802Osm1jFiiKGnh2Edxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746484736; c=relaxed/simple;
-	bh=yxTp1hbWcIW4Y/4ofp0F2+6IyH4y5vCuYEGvIkjWR+A=;
+	s=arc-20240116; t=1746485206; c=relaxed/simple;
+	bh=A0ECZnMUiWeftCsE+nQ185HOPp6CNE6a+R7ANaPy6sU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=hPuaosLCNZBc2W7nytZFLZWBTYudgKY5oFSNQe23ahO8Ku+woiTI+sTcXSWFLVRHRNupXWOS2YpVwKcTP+j9aqTvqk45Ije8keuUhafCzXhLLiO9CNftiok72QS6VgoEidPkFy7jxFdzxgaH17gNW7EhgOb/v8ZBxwQONho5nrk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q18L7MQP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AC3CC4CEEE;
-	Mon,  5 May 2025 22:38:53 +0000 (UTC)
+	 MIME-Version; b=BEvSExaxxG1n8UreNb4mj+d2oPfyoaAzmmdF9OhU0GNhw2mwdjdvNwy++Bh7OgThgjnHdE6gUhwmEgLsHvHZxMHRLfVlUpHhTf69fybqSG2d33TWb3SmSCPYdH4tYeDcjvNEXvIrrx6RTXz5+T6ddcZn+0Z2Pepoyaij9G89W4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QalquyuA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B4B2C4CEE4;
+	Mon,  5 May 2025 22:46:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746484735;
-	bh=yxTp1hbWcIW4Y/4ofp0F2+6IyH4y5vCuYEGvIkjWR+A=;
+	s=k20201202; t=1746485205;
+	bh=A0ECZnMUiWeftCsE+nQ185HOPp6CNE6a+R7ANaPy6sU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Q18L7MQP8pc+xyAMb0rLrKl80ESl5Ce8Rc6Gj6z6TyHYsPI8Z/P7kaiF9GKw103jN
-	 WcZUipS9DWssp4zku+yLbXxTh3jUFvlS+WMpfnvcej9akHPN2436R+yCdr2sFghEhf
-	 1996Vl2qrKt2asbz4+RCH9GdnQviSy6lZ4aAO4fH8VTJFmXe9vYwtVL/Cg2fBgT3jT
-	 VPI4IUzP+P4bqkYMST6kv7J8sxoTzsgbggmLaOmezlQ8nkvIJMeVC4uCNosKaeXUtD
-	 WtccUqDHQzbccW2bOGWkKVXwq+xGxGePZsIPcjr5g6EvdwsoWqbzRARchUk1zEATzD
-	 TCAqziRiwZ53g==
+	b=QalquyuABOySdnx91yUpYAV6m2Ul8hiZ9qjxuEHr1uvY2C9l121LEHj00g/cdDOkn
+	 A7E/JRdQb2iGgv0YTcVNGZXxYu6L003olNmu6VGVoGSlfxZHO4cMQeH44VHugkYN/5
+	 YHsGIdA06eIAtaGxcxG08BzrbjKgTl7ARPOxiGJzqqRwEN2mvhHYxFpVdQfVfrFvU5
+	 jzSrjkG3vZcmXdtTKKwTgv6U/7V9k9dOk1/Yy4mkmPlA+xTuzFPqkl6QGNXFuTfWTX
+	 yWiPNa8xn4RZnYYMGTDUd9tuc3rJJaKgYtdcfcuKB3rESPxgK8LbU3b1GmVM/2nLfo
+	 DAz+XhysCFoRw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Tejun Heo <tj@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Cc: Yi Liu <yi.l.liu@intel.com>,
+	Lu Baolu <baolu.lu@linux.intel.com>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Jason Gunthorpe <jgg@nvidia.com>,
 	Sasha Levin <sashal@kernel.org>,
-	reinette.chatre@intel.com,
-	tglx@linutronix.de,
-	mingo@redhat.com,
-	bp@alien8.de,
-	dave.hansen@linux.intel.com,
-	x86@kernel.org,
-	rafael@kernel.org,
-	dakr@kernel.org,
-	hannes@cmpxchg.org,
-	mkoutny@suse.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
+	joro@8bytes.org,
+	will@kernel.org,
 	shuah@kernel.org,
-	alan.maguire@oracle.com,
-	jolsa@kernel.org,
-	cgroups@vger.kernel.org,
-	bpf@vger.kernel.org,
+	iommu@lists.linux.dev,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.14 633/642] kernfs: Use RCU to access kernfs_node::parent.
-Date: Mon,  5 May 2025 18:14:09 -0400
-Message-Id: <20250505221419.2672473-633-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.12 210/486] iommufd: Disallow allocating nested parent domain with fault ID
+Date: Mon,  5 May 2025 18:34:46 -0400
+Message-Id: <20250505223922.2682012-210-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250505221419.2672473-1-sashal@kernel.org>
-References: <20250505221419.2672473-1-sashal@kernel.org>
+In-Reply-To: <20250505223922.2682012-1-sashal@kernel.org>
+References: <20250505223922.2682012-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,990 +68,64 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.14.5
+X-stable-base: Linux 6.12.26
 Content-Transfer-Encoding: 8bit
 
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+From: Yi Liu <yi.l.liu@intel.com>
 
-[ Upstream commit 633488947ef66b194377411322dc9e12aab79b65 ]
+[ Upstream commit 1062d81086156e42878d701b816d2f368b53a77c ]
 
-kernfs_rename_lock is used to obtain stable kernfs_node::{name|parent}
-pointer. This is a preparation to access kernfs_node::parent under RCU
-and ensure that the pointer remains stable under the RCU lifetime
-guarantees.
+Allocating a domain with a fault ID indicates that the domain is faultable.
+However, there is a gap for the nested parent domain to support PRI. Some
+hardware lacks the capability to distinguish whether PRI occurs at stage 1
+or stage 2. This limitation may require software-based page table walking
+to resolve. Since no in-tree IOMMU driver currently supports this
+functionality, it is disallowed. For more details, refer to the related
+discussion at [1].
 
-For a complete path, as it is done in kernfs_path_from_node(), the
-kernfs_rename_lock is still required in order to obtain a stable parent
-relationship while computing the relevant node depth. This must not
-change while the nodes are inspected in order to build the path.
-If the kernfs user never moves the nodes (changes the parent) then the
-kernfs_rename_lock is not required and the RCU guarantees are
-sufficient. This "restriction" can be set with
-KERNFS_ROOT_INVARIANT_PARENT. Otherwise the lock is required.
+[1] https://lore.kernel.org/linux-iommu/bd1655c6-8b2f-4cfa-adb1-badc00d01811@intel.com/
 
-Rename kernfs_node::parent to kernfs_node::__parent to denote the RCU
-access and use RCU accessor while accessing the node.
-Make cgroup use KERNFS_ROOT_INVARIANT_PARENT since the parent here can
-not change.
-
-Acked-by: Tejun Heo <tj@kernel.org>
-Cc: Yonghong Song <yonghong.song@linux.dev>
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Link: https://lore.kernel.org/r/20250213145023.2820193-6-bigeasy@linutronix.de
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Stable-dep-of: 6ef5b6fae304 ("kernfs: Drop kernfs_rwsem while invoking lookup_positive_unlocked().")
+Link: https://patch.msgid.link/r/20250226104012.82079-1-yi.l.liu@intel.com
+Suggested-by: Lu Baolu <baolu.lu@linux.intel.com>
+Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kernel/cpu/resctrl/rdtgroup.c        | 65 +++++++++----
- fs/kernfs/dir.c                               | 96 ++++++++++++-------
- fs/kernfs/kernfs-internal.h                   | 32 ++++++-
- fs/kernfs/mount.c                             | 10 +-
- fs/kernfs/symlink.c                           | 23 ++---
- fs/sysfs/file.c                               | 24 +++--
- include/linux/kernfs.h                        | 10 +-
- kernel/cgroup/cgroup-v1.c                     |  2 +-
- kernel/cgroup/cgroup.c                        | 24 ++++-
- .../selftests/bpf/progs/profiler.inc.h        |  2 +-
- 10 files changed, 195 insertions(+), 93 deletions(-)
+ drivers/iommu/iommufd/hw_pagetable.c    | 3 +++
+ tools/testing/selftests/iommu/iommufd.c | 4 ++++
+ 2 files changed, 7 insertions(+)
 
-diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-index 04b653d613e88..3d2a850ea737d 100644
---- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-+++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-@@ -957,10 +957,20 @@ static int rdt_last_cmd_status_show(struct kernfs_open_file *of,
- 	return 0;
- }
- 
-+static void *rdt_kn_parent_priv(struct kernfs_node *kn)
-+{
-+	/*
-+	 * The parent pointer is only valid within RCU section since it can be
-+	 * replaced.
-+	 */
-+	guard(rcu)();
-+	return rcu_dereference(kn->__parent)->priv;
-+}
-+
- static int rdt_num_closids_show(struct kernfs_open_file *of,
- 				struct seq_file *seq, void *v)
- {
--	struct resctrl_schema *s = of->kn->parent->priv;
-+	struct resctrl_schema *s = rdt_kn_parent_priv(of->kn);
- 
- 	seq_printf(seq, "%u\n", s->num_closid);
- 	return 0;
-@@ -969,7 +979,7 @@ static int rdt_num_closids_show(struct kernfs_open_file *of,
- static int rdt_default_ctrl_show(struct kernfs_open_file *of,
- 			     struct seq_file *seq, void *v)
- {
--	struct resctrl_schema *s = of->kn->parent->priv;
-+	struct resctrl_schema *s = rdt_kn_parent_priv(of->kn);
- 	struct rdt_resource *r = s->res;
- 
- 	seq_printf(seq, "%x\n", r->default_ctrl);
-@@ -979,7 +989,7 @@ static int rdt_default_ctrl_show(struct kernfs_open_file *of,
- static int rdt_min_cbm_bits_show(struct kernfs_open_file *of,
- 			     struct seq_file *seq, void *v)
- {
--	struct resctrl_schema *s = of->kn->parent->priv;
-+	struct resctrl_schema *s = rdt_kn_parent_priv(of->kn);
- 	struct rdt_resource *r = s->res;
- 
- 	seq_printf(seq, "%u\n", r->cache.min_cbm_bits);
-@@ -989,7 +999,7 @@ static int rdt_min_cbm_bits_show(struct kernfs_open_file *of,
- static int rdt_shareable_bits_show(struct kernfs_open_file *of,
- 				   struct seq_file *seq, void *v)
- {
--	struct resctrl_schema *s = of->kn->parent->priv;
-+	struct resctrl_schema *s = rdt_kn_parent_priv(of->kn);
- 	struct rdt_resource *r = s->res;
- 
- 	seq_printf(seq, "%x\n", r->cache.shareable_bits);
-@@ -1013,7 +1023,7 @@ static int rdt_shareable_bits_show(struct kernfs_open_file *of,
- static int rdt_bit_usage_show(struct kernfs_open_file *of,
- 			      struct seq_file *seq, void *v)
- {
--	struct resctrl_schema *s = of->kn->parent->priv;
-+	struct resctrl_schema *s = rdt_kn_parent_priv(of->kn);
- 	/*
- 	 * Use unsigned long even though only 32 bits are used to ensure
- 	 * test_bit() is used safely.
-@@ -1095,7 +1105,7 @@ static int rdt_bit_usage_show(struct kernfs_open_file *of,
- static int rdt_min_bw_show(struct kernfs_open_file *of,
- 			     struct seq_file *seq, void *v)
- {
--	struct resctrl_schema *s = of->kn->parent->priv;
-+	struct resctrl_schema *s = rdt_kn_parent_priv(of->kn);
- 	struct rdt_resource *r = s->res;
- 
- 	seq_printf(seq, "%u\n", r->membw.min_bw);
-@@ -1105,7 +1115,7 @@ static int rdt_min_bw_show(struct kernfs_open_file *of,
- static int rdt_num_rmids_show(struct kernfs_open_file *of,
- 			      struct seq_file *seq, void *v)
- {
--	struct rdt_resource *r = of->kn->parent->priv;
-+	struct rdt_resource *r = rdt_kn_parent_priv(of->kn);
- 
- 	seq_printf(seq, "%d\n", r->num_rmid);
- 
-@@ -1115,7 +1125,7 @@ static int rdt_num_rmids_show(struct kernfs_open_file *of,
- static int rdt_mon_features_show(struct kernfs_open_file *of,
- 				 struct seq_file *seq, void *v)
- {
--	struct rdt_resource *r = of->kn->parent->priv;
-+	struct rdt_resource *r = rdt_kn_parent_priv(of->kn);
- 	struct mon_evt *mevt;
- 
- 	list_for_each_entry(mevt, &r->evt_list, list) {
-@@ -1130,7 +1140,7 @@ static int rdt_mon_features_show(struct kernfs_open_file *of,
- static int rdt_bw_gran_show(struct kernfs_open_file *of,
- 			     struct seq_file *seq, void *v)
- {
--	struct resctrl_schema *s = of->kn->parent->priv;
-+	struct resctrl_schema *s = rdt_kn_parent_priv(of->kn);
- 	struct rdt_resource *r = s->res;
- 
- 	seq_printf(seq, "%u\n", r->membw.bw_gran);
-@@ -1140,7 +1150,7 @@ static int rdt_bw_gran_show(struct kernfs_open_file *of,
- static int rdt_delay_linear_show(struct kernfs_open_file *of,
- 			     struct seq_file *seq, void *v)
- {
--	struct resctrl_schema *s = of->kn->parent->priv;
-+	struct resctrl_schema *s = rdt_kn_parent_priv(of->kn);
- 	struct rdt_resource *r = s->res;
- 
- 	seq_printf(seq, "%u\n", r->membw.delay_linear);
-@@ -1158,7 +1168,7 @@ static int max_threshold_occ_show(struct kernfs_open_file *of,
- static int rdt_thread_throttle_mode_show(struct kernfs_open_file *of,
- 					 struct seq_file *seq, void *v)
- {
--	struct resctrl_schema *s = of->kn->parent->priv;
-+	struct resctrl_schema *s = rdt_kn_parent_priv(of->kn);
- 	struct rdt_resource *r = s->res;
- 
- 	if (r->membw.throttle_mode == THREAD_THROTTLE_PER_THREAD)
-@@ -1223,7 +1233,7 @@ static enum resctrl_conf_type resctrl_peer_type(enum resctrl_conf_type my_type)
- static int rdt_has_sparse_bitmasks_show(struct kernfs_open_file *of,
- 					struct seq_file *seq, void *v)
- {
--	struct resctrl_schema *s = of->kn->parent->priv;
-+	struct resctrl_schema *s = rdt_kn_parent_priv(of->kn);
- 	struct rdt_resource *r = s->res;
- 
- 	seq_printf(seq, "%u\n", r->cache.arch_has_sparse_bitmasks);
-@@ -1635,7 +1645,7 @@ static int mbm_config_show(struct seq_file *s, struct rdt_resource *r, u32 evtid
- static int mbm_total_bytes_config_show(struct kernfs_open_file *of,
- 				       struct seq_file *seq, void *v)
- {
--	struct rdt_resource *r = of->kn->parent->priv;
-+	struct rdt_resource *r = rdt_kn_parent_priv(of->kn);
- 
- 	mbm_config_show(seq, r, QOS_L3_MBM_TOTAL_EVENT_ID);
- 
-@@ -1645,7 +1655,7 @@ static int mbm_total_bytes_config_show(struct kernfs_open_file *of,
- static int mbm_local_bytes_config_show(struct kernfs_open_file *of,
- 				       struct seq_file *seq, void *v)
- {
--	struct rdt_resource *r = of->kn->parent->priv;
-+	struct rdt_resource *r = rdt_kn_parent_priv(of->kn);
- 
- 	mbm_config_show(seq, r, QOS_L3_MBM_LOCAL_EVENT_ID);
- 
-@@ -1751,7 +1761,7 @@ static ssize_t mbm_total_bytes_config_write(struct kernfs_open_file *of,
- 					    char *buf, size_t nbytes,
- 					    loff_t off)
- {
--	struct rdt_resource *r = of->kn->parent->priv;
-+	struct rdt_resource *r = rdt_kn_parent_priv(of->kn);
- 	int ret;
- 
- 	/* Valid input requires a trailing newline */
-@@ -1777,7 +1787,7 @@ static ssize_t mbm_local_bytes_config_write(struct kernfs_open_file *of,
- 					    char *buf, size_t nbytes,
- 					    loff_t off)
- {
--	struct rdt_resource *r = of->kn->parent->priv;
-+	struct rdt_resource *r = rdt_kn_parent_priv(of->kn);
- 	int ret;
- 
- 	/* Valid input requires a trailing newline */
-@@ -2441,12 +2451,13 @@ static struct rdtgroup *kernfs_to_rdtgroup(struct kernfs_node *kn)
- 		 * resource. "info" and its subdirectories don't
- 		 * have rdtgroup structures, so return NULL here.
- 		 */
--		if (kn == kn_info || kn->parent == kn_info)
-+		if (kn == kn_info ||
-+		    rcu_access_pointer(kn->__parent) == kn_info)
- 			return NULL;
- 		else
- 			return kn->priv;
- 	} else {
--		return kn->parent->priv;
-+		return rdt_kn_parent_priv(kn);
- 	}
- }
- 
-@@ -3772,9 +3783,18 @@ static int rdtgroup_rmdir_ctrl(struct rdtgroup *rdtgrp, cpumask_var_t tmpmask)
- 	return 0;
- }
- 
-+static struct kernfs_node *rdt_kn_parent(struct kernfs_node *kn)
-+{
-+	/*
-+	 * Valid within the RCU section it was obtained or while rdtgroup_mutex
-+	 * is held.
-+	 */
-+	return rcu_dereference_check(kn->__parent, lockdep_is_held(&rdtgroup_mutex));
-+}
-+
- static int rdtgroup_rmdir(struct kernfs_node *kn)
- {
--	struct kernfs_node *parent_kn = kn->parent;
-+	struct kernfs_node *parent_kn;
- 	struct rdtgroup *rdtgrp;
- 	cpumask_var_t tmpmask;
- 	int ret = 0;
-@@ -3787,6 +3807,7 @@ static int rdtgroup_rmdir(struct kernfs_node *kn)
- 		ret = -EPERM;
- 		goto out;
- 	}
-+	parent_kn = rdt_kn_parent(kn);
- 
- 	/*
- 	 * If the rdtgroup is a ctrl_mon group and parent directory
-@@ -3855,6 +3876,7 @@ static void mongrp_reparent(struct rdtgroup *rdtgrp,
- static int rdtgroup_rename(struct kernfs_node *kn,
- 			   struct kernfs_node *new_parent, const char *new_name)
- {
-+	struct kernfs_node *kn_parent;
- 	struct rdtgroup *new_prdtgrp;
- 	struct rdtgroup *rdtgrp;
- 	cpumask_var_t tmpmask;
-@@ -3889,8 +3911,9 @@ static int rdtgroup_rename(struct kernfs_node *kn,
- 		goto out;
- 	}
- 
--	if (rdtgrp->type != RDTMON_GROUP || !kn->parent ||
--	    !is_mon_groups(kn->parent, kn->name)) {
-+	kn_parent = rdt_kn_parent(kn);
-+	if (rdtgrp->type != RDTMON_GROUP || !kn_parent ||
-+	    !is_mon_groups(kn_parent, kn->name)) {
- 		rdt_last_cmd_puts("Source must be a MON group\n");
- 		ret = -EPERM;
- 		goto out;
-diff --git a/fs/kernfs/dir.c b/fs/kernfs/dir.c
-index 43fbada678381..1d370c497e8a3 100644
---- a/fs/kernfs/dir.c
-+++ b/fs/kernfs/dir.c
-@@ -17,7 +17,7 @@
- 
- #include "kernfs-internal.h"
- 
--static DEFINE_RWLOCK(kernfs_rename_lock);	/* kn->parent and ->name */
-+DEFINE_RWLOCK(kernfs_rename_lock);	/* kn->parent and ->name */
- /*
-  * Don't use rename_lock to piggy back on pr_cont_buf. We don't want to
-  * call pr_cont() while holding rename_lock. Because sometimes pr_cont()
-@@ -56,7 +56,7 @@ static int kernfs_name_locked(struct kernfs_node *kn, char *buf, size_t buflen)
- 	if (!kn)
- 		return strscpy(buf, "(null)", buflen);
- 
--	return strscpy(buf, kn->parent ? kn->name : "/", buflen);
-+	return strscpy(buf, rcu_access_pointer(kn->__parent) ? kn->name : "/", buflen);
- }
- 
- /* kernfs_node_depth - compute depth from @from to @to */
-@@ -64,9 +64,9 @@ static size_t kernfs_depth(struct kernfs_node *from, struct kernfs_node *to)
- {
- 	size_t depth = 0;
- 
--	while (to->parent && to != from) {
-+	while (rcu_dereference(to->__parent) && to != from) {
- 		depth++;
--		to = to->parent;
-+		to = rcu_dereference(to->__parent);
- 	}
- 	return depth;
- }
-@@ -84,18 +84,18 @@ static struct kernfs_node *kernfs_common_ancestor(struct kernfs_node *a,
- 	db = kernfs_depth(rb->kn, b);
- 
- 	while (da > db) {
--		a = a->parent;
-+		a = rcu_dereference(a->__parent);
- 		da--;
- 	}
- 	while (db > da) {
--		b = b->parent;
-+		b = rcu_dereference(b->__parent);
- 		db--;
- 	}
- 
- 	/* worst case b and a will be the same at root */
- 	while (b != a) {
--		b = b->parent;
--		a = a->parent;
-+		b = rcu_dereference(b->__parent);
-+		a = rcu_dereference(a->__parent);
- 	}
- 
- 	return a;
-@@ -168,8 +168,9 @@ static int kernfs_path_from_node_locked(struct kernfs_node *kn_to,
- 
- 	/* Calculate how many bytes we need for the rest */
- 	for (i = depth_to - 1; i >= 0; i--) {
-+
- 		for (kn = kn_to, j = 0; j < i; j++)
--			kn = kn->parent;
-+			kn = rcu_dereference(kn->__parent);
- 
- 		len += scnprintf(buf + len, buflen - len, "/%s", kn->name);
- 	}
-@@ -226,6 +227,7 @@ int kernfs_path_from_node(struct kernfs_node *to, struct kernfs_node *from,
- 	unsigned long flags;
- 	int ret;
- 
-+	guard(rcu)();
- 	read_lock_irqsave(&kernfs_rename_lock, flags);
- 	ret = kernfs_path_from_node_locked(to, from, buf, buflen);
- 	read_unlock_irqrestore(&kernfs_rename_lock, flags);
-@@ -295,7 +297,7 @@ struct kernfs_node *kernfs_get_parent(struct kernfs_node *kn)
- 	unsigned long flags;
- 
- 	read_lock_irqsave(&kernfs_rename_lock, flags);
--	parent = kn->parent;
-+	parent = kernfs_parent(kn);
- 	kernfs_get(parent);
- 	read_unlock_irqrestore(&kernfs_rename_lock, flags);
- 
-@@ -360,8 +362,12 @@ static int kernfs_sd_compare(const struct kernfs_node *left,
-  */
- static int kernfs_link_sibling(struct kernfs_node *kn)
- {
--	struct rb_node **node = &kn->parent->dir.children.rb_node;
- 	struct rb_node *parent = NULL;
-+	struct kernfs_node *kn_parent;
-+	struct rb_node **node;
-+
-+	kn_parent = kernfs_parent(kn);
-+	node = &kn_parent->dir.children.rb_node;
- 
- 	while (*node) {
- 		struct kernfs_node *pos;
-@@ -380,13 +386,13 @@ static int kernfs_link_sibling(struct kernfs_node *kn)
- 
- 	/* add new node and rebalance the tree */
- 	rb_link_node(&kn->rb, parent, node);
--	rb_insert_color(&kn->rb, &kn->parent->dir.children);
-+	rb_insert_color(&kn->rb, &kn_parent->dir.children);
- 
- 	/* successfully added, account subdir number */
- 	down_write(&kernfs_root(kn)->kernfs_iattr_rwsem);
- 	if (kernfs_type(kn) == KERNFS_DIR)
--		kn->parent->dir.subdirs++;
--	kernfs_inc_rev(kn->parent);
-+		kn_parent->dir.subdirs++;
-+	kernfs_inc_rev(kn_parent);
- 	up_write(&kernfs_root(kn)->kernfs_iattr_rwsem);
- 
- 	return 0;
-@@ -407,16 +413,19 @@ static int kernfs_link_sibling(struct kernfs_node *kn)
-  */
- static bool kernfs_unlink_sibling(struct kernfs_node *kn)
- {
-+	struct kernfs_node *kn_parent;
-+
- 	if (RB_EMPTY_NODE(&kn->rb))
- 		return false;
- 
-+	kn_parent = kernfs_parent(kn);
- 	down_write(&kernfs_root(kn)->kernfs_iattr_rwsem);
- 	if (kernfs_type(kn) == KERNFS_DIR)
--		kn->parent->dir.subdirs--;
--	kernfs_inc_rev(kn->parent);
-+		kn_parent->dir.subdirs--;
-+	kernfs_inc_rev(kn_parent);
- 	up_write(&kernfs_root(kn)->kernfs_iattr_rwsem);
- 
--	rb_erase(&kn->rb, &kn->parent->dir.children);
-+	rb_erase(&kn->rb, &kn_parent->dir.children);
- 	RB_CLEAR_NODE(&kn->rb);
- 	return true;
- }
-@@ -562,7 +571,7 @@ void kernfs_put(struct kernfs_node *kn)
- 	 * Moving/renaming is always done while holding reference.
- 	 * kn->parent won't change beneath us.
- 	 */
--	parent = kn->parent;
-+	parent = kernfs_parent(kn);
- 
- 	WARN_ONCE(atomic_read(&kn->active) != KN_DEACTIVATED_BIAS,
- 		  "kernfs_put: %s/%s: released with incorrect active_ref %d\n",
-@@ -701,7 +710,7 @@ struct kernfs_node *kernfs_new_node(struct kernfs_node *parent,
- 			       name, mode, uid, gid, flags);
- 	if (kn) {
- 		kernfs_get(parent);
--		kn->parent = parent;
-+		rcu_assign_pointer(kn->__parent, parent);
- 	}
- 	return kn;
- }
-@@ -769,13 +778,14 @@ struct kernfs_node *kernfs_find_and_get_node_by_id(struct kernfs_root *root,
-  */
- int kernfs_add_one(struct kernfs_node *kn)
- {
--	struct kernfs_node *parent = kn->parent;
--	struct kernfs_root *root = kernfs_root(parent);
-+	struct kernfs_root *root = kernfs_root(kn);
- 	struct kernfs_iattrs *ps_iattr;
-+	struct kernfs_node *parent;
- 	bool has_ns;
- 	int ret;
- 
- 	down_write(&root->kernfs_rwsem);
-+	parent = kernfs_parent(kn);
- 
- 	ret = -EINVAL;
- 	has_ns = kernfs_ns_enabled(parent);
-@@ -949,6 +959,11 @@ struct kernfs_node *kernfs_walk_and_get_ns(struct kernfs_node *parent,
- 	return kn;
- }
- 
-+unsigned int kernfs_root_flags(struct kernfs_node *kn)
-+{
-+	return kernfs_root(kn)->flags;
-+}
-+
- /**
-  * kernfs_create_root - create a new kernfs hierarchy
-  * @scops: optional syscall operations for the hierarchy
-@@ -1112,7 +1127,7 @@ struct kernfs_node *kernfs_create_empty_dir(struct kernfs_node *parent,
- static int kernfs_dop_revalidate(struct inode *dir, const struct qstr *name,
- 				 struct dentry *dentry, unsigned int flags)
- {
--	struct kernfs_node *kn;
-+	struct kernfs_node *kn, *parent;
- 	struct kernfs_root *root;
- 
- 	if (flags & LOOKUP_RCU)
-@@ -1163,8 +1178,9 @@ static int kernfs_dop_revalidate(struct inode *dir, const struct qstr *name,
- 	if (!kernfs_active(kn))
- 		goto out_bad;
- 
-+	parent = kernfs_parent(kn);
- 	/* The kernfs node has been moved? */
--	if (kernfs_dentry_node(dentry->d_parent) != kn->parent)
-+	if (kernfs_dentry_node(dentry->d_parent) != parent)
- 		goto out_bad;
- 
- 	/* The kernfs node has been renamed */
-@@ -1172,7 +1188,7 @@ static int kernfs_dop_revalidate(struct inode *dir, const struct qstr *name,
- 		goto out_bad;
- 
- 	/* The kernfs node has been moved to a different namespace */
--	if (kn->parent && kernfs_ns_enabled(kn->parent) &&
-+	if (parent && kernfs_ns_enabled(parent) &&
- 	    kernfs_info(dentry->d_sb)->ns != kn->ns)
- 		goto out_bad;
- 
-@@ -1365,7 +1381,7 @@ static struct kernfs_node *kernfs_next_descendant_post(struct kernfs_node *pos,
- 		return kernfs_leftmost_descendant(rb_to_kn(rbn));
- 
- 	/* no sibling left, visit parent */
--	return pos->parent;
-+	return kernfs_parent(pos);
- }
- 
- static void kernfs_activate_one(struct kernfs_node *kn)
-@@ -1377,7 +1393,7 @@ static void kernfs_activate_one(struct kernfs_node *kn)
- 	if (kernfs_active(kn) || (kn->flags & (KERNFS_HIDDEN | KERNFS_REMOVING)))
- 		return;
- 
--	WARN_ON_ONCE(kn->parent && RB_EMPTY_NODE(&kn->rb));
-+	WARN_ON_ONCE(rcu_access_pointer(kn->__parent) && RB_EMPTY_NODE(&kn->rb));
- 	WARN_ON_ONCE(atomic_read(&kn->active) != KN_DEACTIVATED_BIAS);
- 
- 	atomic_sub(KN_DEACTIVATED_BIAS, &kn->active);
-@@ -1447,7 +1463,7 @@ void kernfs_show(struct kernfs_node *kn, bool show)
- 
- static void __kernfs_remove(struct kernfs_node *kn)
- {
--	struct kernfs_node *pos;
-+	struct kernfs_node *pos, *parent;
- 
- 	/* Short-circuit if non-root @kn has already finished removal. */
- 	if (!kn)
-@@ -1459,7 +1475,7 @@ static void __kernfs_remove(struct kernfs_node *kn)
- 	 * This is for kernfs_remove_self() which plays with active ref
- 	 * after removal.
- 	 */
--	if (kn->parent && RB_EMPTY_NODE(&kn->rb))
-+	if (kernfs_parent(kn) && RB_EMPTY_NODE(&kn->rb))
- 		return;
- 
- 	pr_debug("kernfs %s: removing\n", kn->name);
-@@ -1485,14 +1501,14 @@ static void __kernfs_remove(struct kernfs_node *kn)
- 		kernfs_get(pos);
- 
- 		kernfs_drain(pos);
--
-+		parent = kernfs_parent(pos);
- 		/*
- 		 * kernfs_unlink_sibling() succeeds once per node.  Use it
- 		 * to decide who's responsible for cleanups.
- 		 */
--		if (!pos->parent || kernfs_unlink_sibling(pos)) {
-+		if (!parent || kernfs_unlink_sibling(pos)) {
- 			struct kernfs_iattrs *ps_iattr =
--				pos->parent ? pos->parent->iattr : NULL;
-+				parent ? parent->iattr : NULL;
- 
- 			/* update timestamps on the parent */
- 			down_write(&kernfs_root(kn)->kernfs_iattr_rwsem);
-@@ -1722,7 +1738,7 @@ int kernfs_rename_ns(struct kernfs_node *kn, struct kernfs_node *new_parent,
- 	int error;
- 
- 	/* can't move or rename root */
--	if (!kn->parent)
-+	if (!rcu_access_pointer(kn->__parent))
- 		return -EINVAL;
- 
- 	root = kernfs_root(kn);
-@@ -1733,8 +1749,15 @@ int kernfs_rename_ns(struct kernfs_node *kn, struct kernfs_node *new_parent,
- 	    (new_parent->flags & KERNFS_EMPTY_DIR))
- 		goto out;
- 
-+	old_parent = kernfs_parent(kn);
-+	if (root->flags & KERNFS_ROOT_INVARIANT_PARENT) {
-+		error = -EINVAL;
-+		if (WARN_ON_ONCE(old_parent != new_parent))
-+			goto out;
-+	}
-+
- 	error = 0;
--	if ((kn->parent == new_parent) && (kn->ns == new_ns) &&
-+	if ((old_parent == new_parent) && (kn->ns == new_ns) &&
- 	    (strcmp(kn->name, new_name) == 0))
- 		goto out;	/* nothing to rename */
- 
-@@ -1761,8 +1784,8 @@ int kernfs_rename_ns(struct kernfs_node *kn, struct kernfs_node *new_parent,
- 	/* rename_lock protects ->parent and ->name accessors */
- 	write_lock_irq(&kernfs_rename_lock);
- 
--	old_parent = kn->parent;
--	kn->parent = new_parent;
-+	old_parent = kernfs_parent(kn);
-+	rcu_assign_pointer(kn->__parent, new_parent);
- 
- 	kn->ns = new_ns;
- 	if (new_name) {
-@@ -1795,7 +1818,8 @@ static struct kernfs_node *kernfs_dir_pos(const void *ns,
- {
- 	if (pos) {
- 		int valid = kernfs_active(pos) &&
--			pos->parent == parent && hash == pos->hash;
-+			rcu_access_pointer(pos->__parent) == parent &&
-+			hash == pos->hash;
- 		kernfs_put(pos);
- 		if (!valid)
- 			pos = NULL;
-diff --git a/fs/kernfs/kernfs-internal.h b/fs/kernfs/kernfs-internal.h
-index b42ee6547cdc1..c43bee18b79f7 100644
---- a/fs/kernfs/kernfs-internal.h
-+++ b/fs/kernfs/kernfs-internal.h
-@@ -19,6 +19,8 @@
- #include <linux/kernfs.h>
- #include <linux/fs_context.h>
- 
-+extern rwlock_t kernfs_rename_lock;
-+
- struct kernfs_iattrs {
- 	kuid_t			ia_uid;
- 	kgid_t			ia_gid;
-@@ -64,11 +66,14 @@ struct kernfs_root {
-  *
-  * Return: the kernfs_root @kn belongs to.
-  */
--static inline struct kernfs_root *kernfs_root(struct kernfs_node *kn)
-+static inline struct kernfs_root *kernfs_root(const struct kernfs_node *kn)
- {
-+	const struct kernfs_node *knp;
- 	/* if parent exists, it's always a dir; otherwise, @sd is a dir */
--	if (kn->parent)
--		kn = kn->parent;
-+	guard(rcu)();
-+	knp = rcu_dereference(kn->__parent);
-+	if (knp)
-+		kn = knp;
- 	return kn->dir.root;
- }
- 
-@@ -97,6 +102,27 @@ struct kernfs_super_info {
- };
- #define kernfs_info(SB) ((struct kernfs_super_info *)(SB->s_fs_info))
- 
-+static inline bool kernfs_root_is_locked(const struct kernfs_node *kn)
-+{
-+	return lockdep_is_held(&kernfs_root(kn)->kernfs_rwsem);
-+}
-+
-+static inline struct kernfs_node *kernfs_parent(const struct kernfs_node *kn)
-+{
-+	/*
-+	 * The kernfs_node::__parent remains valid within a RCU section. The kn
-+	 * can be reparented (and renamed) which changes the entry. This can be
-+	 * avoided by locking kernfs_root::kernfs_rwsem or kernfs_rename_lock.
-+	 * Both locks can be used to obtain a reference on __parent. Once the
-+	 * reference count reaches 0 then the node is about to be freed
-+	 * and can not be renamed (or become a different parent) anymore.
-+	 */
-+	return rcu_dereference_check(kn->__parent,
-+				     kernfs_root_is_locked(kn) ||
-+				     lockdep_is_held(&kernfs_rename_lock) ||
-+				     !atomic_read(&kn->count));
-+}
-+
- static inline struct kernfs_node *kernfs_dentry_node(struct dentry *dentry)
- {
- 	if (d_really_is_negative(dentry))
-diff --git a/fs/kernfs/mount.c b/fs/kernfs/mount.c
-index 4a0ff08d589ca..2252b16e6ef0b 100644
---- a/fs/kernfs/mount.c
-+++ b/fs/kernfs/mount.c
-@@ -148,7 +148,7 @@ static struct dentry *kernfs_get_parent_dentry(struct dentry *child)
- 	struct kernfs_root *root = kernfs_root(kn);
- 
- 	guard(rwsem_read)(&root->kernfs_rwsem);
--	return d_obtain_alias(kernfs_get_inode(child->d_sb, kn->parent));
-+	return d_obtain_alias(kernfs_get_inode(child->d_sb, kernfs_parent(kn)));
- }
- 
- static const struct export_operations kernfs_export_ops = {
-@@ -188,10 +188,10 @@ static struct kernfs_node *find_next_ancestor(struct kernfs_node *child,
- 		return NULL;
- 	}
- 
--	while (child->parent != parent) {
--		if (!child->parent)
-+	while (kernfs_parent(child) != parent) {
-+		child = kernfs_parent(child);
-+		if (!child)
- 			return NULL;
--		child = child->parent;
- 	}
- 
- 	return child;
-@@ -216,7 +216,7 @@ struct dentry *kernfs_node_dentry(struct kernfs_node *kn,
- 	dentry = dget(sb->s_root);
- 
- 	/* Check if this is the root kernfs_node */
--	if (!kn->parent)
-+	if (!rcu_access_pointer(kn->__parent))
- 		return dentry;
- 
- 	root = kernfs_root(kn);
-diff --git a/fs/kernfs/symlink.c b/fs/kernfs/symlink.c
-index 45371a70caa71..05c62ca93c53d 100644
---- a/fs/kernfs/symlink.c
-+++ b/fs/kernfs/symlink.c
-@@ -62,10 +62,10 @@ static int kernfs_get_target_path(struct kernfs_node *parent,
- 
- 	/* go up to the root, stop at the base */
- 	base = parent;
--	while (base->parent) {
--		kn = target->parent;
--		while (kn->parent && base != kn)
--			kn = kn->parent;
-+	while (kernfs_parent(base)) {
-+		kn = kernfs_parent(target);
-+		while (kernfs_parent(kn) && base != kn)
-+			kn = kernfs_parent(kn);
- 
- 		if (base == kn)
- 			break;
-@@ -75,14 +75,14 @@ static int kernfs_get_target_path(struct kernfs_node *parent,
- 
- 		strcpy(s, "../");
- 		s += 3;
--		base = base->parent;
-+		base = kernfs_parent(base);
- 	}
- 
- 	/* determine end of target string for reverse fillup */
- 	kn = target;
--	while (kn->parent && kn != base) {
-+	while (kernfs_parent(kn) && kn != base) {
- 		len += strlen(kn->name) + 1;
--		kn = kn->parent;
-+		kn = kernfs_parent(kn);
- 	}
- 
- 	/* check limits */
-@@ -94,7 +94,7 @@ static int kernfs_get_target_path(struct kernfs_node *parent,
- 
- 	/* reverse fillup of target string from target to base */
- 	kn = target;
--	while (kn->parent && kn != base) {
-+	while (kernfs_parent(kn) && kn != base) {
- 		int slen = strlen(kn->name);
- 
- 		len -= slen;
-@@ -102,7 +102,7 @@ static int kernfs_get_target_path(struct kernfs_node *parent,
- 		if (len)
- 			s[--len] = '/';
- 
--		kn = kn->parent;
-+		kn = kernfs_parent(kn);
- 	}
- 
- 	return 0;
-@@ -111,12 +111,13 @@ static int kernfs_get_target_path(struct kernfs_node *parent,
- static int kernfs_getlink(struct inode *inode, char *path)
- {
- 	struct kernfs_node *kn = inode->i_private;
--	struct kernfs_node *parent = kn->parent;
-+	struct kernfs_node *parent;
- 	struct kernfs_node *target = kn->symlink.target_kn;
--	struct kernfs_root *root = kernfs_root(parent);
-+	struct kernfs_root *root = kernfs_root(kn);
- 	int error;
- 
- 	down_read(&root->kernfs_rwsem);
-+	parent = kernfs_parent(kn);
- 	error = kernfs_get_target_path(parent, target, path);
- 	up_read(&root->kernfs_rwsem);
- 
-diff --git a/fs/sysfs/file.c b/fs/sysfs/file.c
-index 6931308876c4a..c3d3b079aedde 100644
---- a/fs/sysfs/file.c
-+++ b/fs/sysfs/file.c
-@@ -19,13 +19,19 @@
- 
- #include "sysfs.h"
- 
-+static struct kobject *sysfs_file_kobj(struct kernfs_node *kn)
-+{
-+	guard(rcu)();
-+	return rcu_dereference(kn->__parent)->priv;
-+}
-+
- /*
-  * Determine ktype->sysfs_ops for the given kernfs_node.  This function
-  * must be called while holding an active reference.
-  */
- static const struct sysfs_ops *sysfs_file_ops(struct kernfs_node *kn)
- {
--	struct kobject *kobj = kn->parent->priv;
-+	struct kobject *kobj = sysfs_file_kobj(kn);
- 
- 	if (kn->flags & KERNFS_LOCKDEP)
- 		lockdep_assert_held(kn);
-@@ -40,7 +46,7 @@ static const struct sysfs_ops *sysfs_file_ops(struct kernfs_node *kn)
- static int sysfs_kf_seq_show(struct seq_file *sf, void *v)
- {
- 	struct kernfs_open_file *of = sf->private;
--	struct kobject *kobj = of->kn->parent->priv;
-+	struct kobject *kobj = sysfs_file_kobj(of->kn);
- 	const struct sysfs_ops *ops = sysfs_file_ops(of->kn);
- 	ssize_t count;
- 	char *buf;
-@@ -78,7 +84,7 @@ static ssize_t sysfs_kf_bin_read(struct kernfs_open_file *of, char *buf,
- 				 size_t count, loff_t pos)
- {
- 	struct bin_attribute *battr = of->kn->priv;
--	struct kobject *kobj = of->kn->parent->priv;
-+	struct kobject *kobj = sysfs_file_kobj(of->kn);
- 	loff_t size = file_inode(of->file)->i_size;
- 
- 	if (!count)
-@@ -105,7 +111,7 @@ static ssize_t sysfs_kf_read(struct kernfs_open_file *of, char *buf,
- 			     size_t count, loff_t pos)
- {
- 	const struct sysfs_ops *ops = sysfs_file_ops(of->kn);
--	struct kobject *kobj = of->kn->parent->priv;
-+	struct kobject *kobj = sysfs_file_kobj(of->kn);
- 	ssize_t len;
- 
- 	/*
-@@ -131,7 +137,7 @@ static ssize_t sysfs_kf_write(struct kernfs_open_file *of, char *buf,
- 			      size_t count, loff_t pos)
- {
- 	const struct sysfs_ops *ops = sysfs_file_ops(of->kn);
--	struct kobject *kobj = of->kn->parent->priv;
-+	struct kobject *kobj = sysfs_file_kobj(of->kn);
- 
- 	if (!count)
- 		return 0;
-@@ -144,7 +150,7 @@ static ssize_t sysfs_kf_bin_write(struct kernfs_open_file *of, char *buf,
- 				  size_t count, loff_t pos)
- {
- 	struct bin_attribute *battr = of->kn->priv;
--	struct kobject *kobj = of->kn->parent->priv;
-+	struct kobject *kobj = sysfs_file_kobj(of->kn);
- 	loff_t size = file_inode(of->file)->i_size;
- 
- 	if (size) {
-@@ -168,7 +174,7 @@ static int sysfs_kf_bin_mmap(struct kernfs_open_file *of,
- 			     struct vm_area_struct *vma)
- {
- 	struct bin_attribute *battr = of->kn->priv;
--	struct kobject *kobj = of->kn->parent->priv;
-+	struct kobject *kobj = sysfs_file_kobj(of->kn);
- 
- 	return battr->mmap(of->file, kobj, battr, vma);
- }
-@@ -177,7 +183,7 @@ static loff_t sysfs_kf_bin_llseek(struct kernfs_open_file *of, loff_t offset,
- 				  int whence)
- {
- 	struct bin_attribute *battr = of->kn->priv;
--	struct kobject *kobj = of->kn->parent->priv;
-+	struct kobject *kobj = sysfs_file_kobj(of->kn);
- 
- 	if (battr->llseek)
- 		return battr->llseek(of->file, kobj, battr, offset, whence);
-@@ -494,7 +500,7 @@ EXPORT_SYMBOL_GPL(sysfs_break_active_protection);
-  */
- void sysfs_unbreak_active_protection(struct kernfs_node *kn)
- {
--	struct kobject *kobj = kn->parent->priv;
-+	struct kobject *kobj = sysfs_file_kobj(kn);
- 
- 	kernfs_unbreak_active_protection(kn);
- 	kernfs_put(kn);
-diff --git a/include/linux/kernfs.h b/include/linux/kernfs.h
-index 87c79d076d6d7..5dda9a268e44c 100644
---- a/include/linux/kernfs.h
-+++ b/include/linux/kernfs.h
-@@ -147,6 +147,11 @@ enum kernfs_root_flag {
- 	 * Support user xattrs to be written to nodes rooted at this root.
- 	 */
- 	KERNFS_ROOT_SUPPORT_USER_XATTR		= 0x0008,
-+
-+	/*
-+	 * Renames must not change the parent node.
-+	 */
-+	KERNFS_ROOT_INVARIANT_PARENT		= 0x0010,
- };
- 
- /* type-specific structures for kernfs_node union members */
-@@ -199,8 +204,8 @@ struct kernfs_node {
- 	 * never moved to a different parent, it is safe to access the
- 	 * parent directly.
- 	 */
--	struct kernfs_node	*parent;
- 	const char		*name;
-+	struct kernfs_node	__rcu *__parent;
- 
- 	struct rb_node		rb;
- 
-@@ -416,6 +421,7 @@ struct dentry *kernfs_node_dentry(struct kernfs_node *kn,
- struct kernfs_root *kernfs_create_root(struct kernfs_syscall_ops *scops,
- 				       unsigned int flags, void *priv);
- void kernfs_destroy_root(struct kernfs_root *root);
-+unsigned int kernfs_root_flags(struct kernfs_node *kn);
- 
- struct kernfs_node *kernfs_create_dir_ns(struct kernfs_node *parent,
- 					 const char *name, umode_t mode,
-@@ -514,6 +520,8 @@ kernfs_create_root(struct kernfs_syscall_ops *scops, unsigned int flags,
- { return ERR_PTR(-ENOSYS); }
- 
- static inline void kernfs_destroy_root(struct kernfs_root *root) { }
-+static inline unsigned int kernfs_root_flags(struct kernfs_node *kn)
-+{ return 0; }
- 
- static inline struct kernfs_node *
- kernfs_create_dir_ns(struct kernfs_node *parent, const char *name,
-diff --git a/kernel/cgroup/cgroup-v1.c b/kernel/cgroup/cgroup-v1.c
-index e28d5f0d20ed0..c9752eb607ec9 100644
---- a/kernel/cgroup/cgroup-v1.c
-+++ b/kernel/cgroup/cgroup-v1.c
-@@ -844,7 +844,7 @@ static int cgroup1_rename(struct kernfs_node *kn, struct kernfs_node *new_parent
- 
- 	if (kernfs_type(kn) != KERNFS_DIR)
- 		return -ENOTDIR;
--	if (kn->parent != new_parent)
-+	if (rcu_access_pointer(kn->__parent) != new_parent)
- 		return -EIO;
- 
- 	/*
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index 68d58753c75c3..ddaaeddf1afa8 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -633,9 +633,22 @@ int cgroup_task_count(const struct cgroup *cgrp)
- 	return count;
- }
- 
-+static struct cgroup *kn_priv(struct kernfs_node *kn)
-+{
-+	struct kernfs_node *parent;
-+	/*
-+	 * The parent can not be replaced due to KERNFS_ROOT_INVARIANT_PARENT.
-+	 * Therefore it is always safe to dereference this pointer outside of a
-+	 * RCU section.
-+	 */
-+	parent = rcu_dereference_check(kn->__parent,
-+				       kernfs_root_flags(kn) & KERNFS_ROOT_INVARIANT_PARENT);
-+	return parent->priv;
-+}
-+
- struct cgroup_subsys_state *of_css(struct kernfs_open_file *of)
- {
--	struct cgroup *cgrp = of->kn->parent->priv;
-+	struct cgroup *cgrp = kn_priv(of->kn);
- 	struct cftype *cft = of_cft(of);
- 
- 	/*
-@@ -1612,7 +1625,7 @@ void cgroup_kn_unlock(struct kernfs_node *kn)
- 	if (kernfs_type(kn) == KERNFS_DIR)
- 		cgrp = kn->priv;
- 	else
--		cgrp = kn->parent->priv;
-+		cgrp = kn_priv(kn);
- 
- 	cgroup_unlock();
- 
-@@ -1644,7 +1657,7 @@ struct cgroup *cgroup_kn_lock_live(struct kernfs_node *kn, bool drain_offline)
- 	if (kernfs_type(kn) == KERNFS_DIR)
- 		cgrp = kn->priv;
- 	else
--		cgrp = kn->parent->priv;
-+		cgrp = kn_priv(kn);
- 
- 	/*
- 	 * We're gonna grab cgroup_mutex which nests outside kernfs
-@@ -2118,7 +2131,8 @@ int cgroup_setup_root(struct cgroup_root *root, u16 ss_mask)
- 	root->kf_root = kernfs_create_root(kf_sops,
- 					   KERNFS_ROOT_CREATE_DEACTIVATED |
- 					   KERNFS_ROOT_SUPPORT_EXPORTOP |
--					   KERNFS_ROOT_SUPPORT_USER_XATTR,
-+					   KERNFS_ROOT_SUPPORT_USER_XATTR |
-+					   KERNFS_ROOT_INVARIANT_PARENT,
- 					   root_cgrp);
- 	if (IS_ERR(root->kf_root)) {
- 		ret = PTR_ERR(root->kf_root);
-@@ -4144,7 +4158,7 @@ static ssize_t cgroup_file_write(struct kernfs_open_file *of, char *buf,
- 				 size_t nbytes, loff_t off)
- {
- 	struct cgroup_file_ctx *ctx = of->priv;
--	struct cgroup *cgrp = of->kn->parent->priv;
-+	struct cgroup *cgrp = kn_priv(of->kn);
- 	struct cftype *cft = of_cft(of);
- 	struct cgroup_subsys_state *css;
- 	int ret;
-diff --git a/tools/testing/selftests/bpf/progs/profiler.inc.h b/tools/testing/selftests/bpf/progs/profiler.inc.h
-index 8bd1ebd7d6afd..813143b4985dc 100644
---- a/tools/testing/selftests/bpf/progs/profiler.inc.h
-+++ b/tools/testing/selftests/bpf/progs/profiler.inc.h
-@@ -223,7 +223,7 @@ static INLINE void* read_full_cgroup_path(struct kernfs_node* cgroup_node,
- 		if (bpf_cmp_likely(filepart_length, <=, MAX_PATH)) {
- 			payload += filepart_length;
- 		}
--		cgroup_node = BPF_CORE_READ(cgroup_node, parent);
-+		cgroup_node = BPF_CORE_READ(cgroup_node, __parent);
- 	}
- 	return payload;
- }
+diff --git a/drivers/iommu/iommufd/hw_pagetable.c b/drivers/iommu/iommufd/hw_pagetable.c
+index d06bf6e6c19fd..2454627a8b61b 100644
+--- a/drivers/iommu/iommufd/hw_pagetable.c
++++ b/drivers/iommu/iommufd/hw_pagetable.c
+@@ -122,6 +122,9 @@ iommufd_hwpt_paging_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
+ 	if ((flags & IOMMU_HWPT_ALLOC_DIRTY_TRACKING) &&
+ 	    !device_iommu_capable(idev->dev, IOMMU_CAP_DIRTY_TRACKING))
+ 		return ERR_PTR(-EOPNOTSUPP);
++	if ((flags & IOMMU_HWPT_FAULT_ID_VALID) &&
++	    (flags & IOMMU_HWPT_ALLOC_NEST_PARENT))
++		return ERR_PTR(-EOPNOTSUPP);
+ 
+ 	hwpt_paging = __iommufd_object_alloc(
+ 		ictx, hwpt_paging, IOMMUFD_OBJ_HWPT_PAGING, common.obj);
+diff --git a/tools/testing/selftests/iommu/iommufd.c b/tools/testing/selftests/iommu/iommufd.c
+index 4927b9add5add..06f252733660a 100644
+--- a/tools/testing/selftests/iommu/iommufd.c
++++ b/tools/testing/selftests/iommu/iommufd.c
+@@ -289,6 +289,10 @@ TEST_F(iommufd_ioas, alloc_hwpt_nested)
+ 				    &test_hwpt_id);
+ 		test_err_hwpt_alloc(EINVAL, self->device_id, self->device_id, 0,
+ 				    &test_hwpt_id);
++		test_err_hwpt_alloc(EOPNOTSUPP, self->device_id, self->ioas_id,
++				    IOMMU_HWPT_ALLOC_NEST_PARENT |
++						IOMMU_HWPT_FAULT_ID_VALID,
++				    &test_hwpt_id);
+ 
+ 		test_cmd_hwpt_alloc(self->device_id, self->ioas_id,
+ 				    IOMMU_HWPT_ALLOC_NEST_PARENT,
 -- 
 2.39.5
 
