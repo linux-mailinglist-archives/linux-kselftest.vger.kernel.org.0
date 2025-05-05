@@ -1,66 +1,72 @@
-Return-Path: <linux-kselftest+bounces-32343-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32344-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40CFCAA94D3
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 15:50:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F18A1AA9512
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 16:08:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9633917818E
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 13:50:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6ABE11791C6
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 14:08:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11F882517A4;
-	Mon,  5 May 2025 13:50:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32C9125A2BF;
+	Mon,  5 May 2025 14:07:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hTQlqip/"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="xux8umCH";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="0HtB6vEo"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7D1C2C859;
-	Mon,  5 May 2025 13:50:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92FB9191F95;
+	Mon,  5 May 2025 14:07:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746453052; cv=none; b=JrB4a0ZxKVqz3/Yt9scEezyb48Fu/+JPy6PO1DAD5g1YCd3KrUNHe9OrzV6ryBN1YBGZoo0NQMSzAZU/nivv4g+iO8uhKQ0qoxEFwZh7wNhJSHZSr/AhDju6E5C6mbQSNvap4TDSplPkAOw1pqMiIFtKhqtgrS5/rZhnvwt5+O8=
+	t=1746454077; cv=none; b=MLkwpu935LsjnOcI7DtvGxm5oOot3ACo4Wn1hmsvUaG8BQlQJUMKl4ab16ChZpd5OTkNvPBhfRHgf156ZF7pEqjUmJenBP0HfSjBZxCKhfsCLdIrr648jnNux1uh0Q0vVbhSIsC1Qwu3qrV2YL7wt/orcNBsTuMeLx+CxA/P09Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746453052; c=relaxed/simple;
-	bh=Vqk0ZpZc2qCwVlVPa1gNgdMWQzO0ZUreacqfzsriyUM=;
+	s=arc-20240116; t=1746454077; c=relaxed/simple;
+	bh=dBHOdSlk8wyfl9FGEHxh3KIZk4ZO6ZyyP8CPkgF7dZw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oxxq4seAFvOCGpgpY/WZikIAE68zEbzB+6wQ9MkltnhvYzd7Yt9/3w8GgWvFWdkgqcGAewltpUdQiyHOgPLqPtr7UiF1pFEEIHqyzQTAkNHIGNQnSDI8PochzFyvDiVNh5FrjxR505B2CV0quP83Jvy4POEGRMWnbt/bgFhUQEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hTQlqip/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17FD5C4CEE4;
-	Mon,  5 May 2025 13:50:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746453051;
-	bh=Vqk0ZpZc2qCwVlVPa1gNgdMWQzO0ZUreacqfzsriyUM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hTQlqip/9RtDq3faJnMsVwE+9Nde3Mnr3H4IzjZ81T1juQF7EOoMHDLstfmKej10J
-	 H5gITaG4z0iFzIuIUu5YI7joHG0oT4jg+r6UknQ66QsthJD0whwF68MulFkkvvx6et
-	 WST+LOzBuWuy5KdJQ27kmB+EfVrnyofS9Igy5t4TJA6uKGA0YIxV3KfJwtKhE0pqQt
-	 4t7Fv+aAPqZhR3s55I2uhb1r5gusiltCLG2pwI7myW53nhgqHhnin9Pc/ah2May61z
-	 7/WfFkRLcv9dcAN0AftB7MhohCeBd6cdZO5VhJRPo7G8KY1PzQPG8f2UkLMhs1fkaW
-	 5roincr1ws3Uw==
-Date: Mon, 5 May 2025 15:50:43 +0200
-From: Christian Brauner <brauner@kernel.org>
-To: Jann Horn <jannh@google.com>
-Cc: Suren Baghdasaryan <surenb@google.com>, 
-	Al Viro <viro@zeniv.linux.org.uk>, linux-fsdevel@vger.kernel.org, akpm@linux-foundation.org, 
-	Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, david@redhat.com, vbabka@suse.cz, 
-	peterx@redhat.com, hannes@cmpxchg.org, mhocko@kernel.org, paulmck@kernel.org, 
-	shuah@kernel.org, adobriyan@gmail.com, josef@toxicpanda.com, yebin10@huawei.com, 
-	linux@weissschuh.net, willy@infradead.org, osalvador@suse.de, andrii@kernel.org, 
-	ryan.roberts@arm.com, christophe.leroy@csgroup.eu, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 7/8] mm/maps: read proc/pid/maps under RCU
-Message-ID: <20250505-wachen-konform-3fe08f1b3214@brauner>
-References: <20250418174959.1431962-1-surenb@google.com>
- <20250418174959.1431962-8-surenb@google.com>
- <CAG48ez3YLWh9hXQQdGVQ7hCsd=k_i2Z2NO6qzT6NaOYiRjy=nw@mail.gmail.com>
- <CAJuCfpGGiwTbMeGAeYNtQ5SsFenUw8up6ToLy=VstULM_TSoXA@mail.gmail.com>
- <CAG48ez15g5n9AoMJk1yPHsDCq2PGxCHc2WhCAzH8B2o6PgDwzQ@mail.gmail.com>
- <CAJuCfpG+YjyVE-6TaAQEjwc0iixqN8Epf25jo2awtL=gqY=afA@mail.gmail.com>
- <CAG48ez0ntTH_sOaPiqML715jyTCujwyh3Og1wBq9RNLbu55C5Q@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=EwN7y5DPO0mzYDIs/XRNbWDK9ktxHib9lhFN4kmWjypbcMZH60886+k0uDnZBMlif2ek2352ExNZn2gXq4xqTL2ABtiOp3UR95RnyyNgmJ4cNGcjwUkcI6C2pmlWaNSd5L82gJikzarVxxfJpKhPK4EPjeCmpySJ8LhIRQkEnFc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=xux8umCH; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=0HtB6vEo; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Mon, 5 May 2025 16:07:53 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1746454073;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=sfCgR2i3xQWyZtj2OVFWv7zFTAvlYA/MlxgvIP/UMus=;
+	b=xux8umCHuhw89QYs9Q9K9AvrO5pOJmnb5+Rl/q95FoWrrZkqRKCJsawTKTEp9hlOkPGm0T
+	FbzKYTXLE8EQ/CNsLyGeUM3Mww/bTTPP7zOCOtZ/iOw8SseNu6ahg/3BqExFQod8kIeMVD
+	WmmIgKPcbLHkK6eO+lqzCi2Tj+Zvk9haX6d5aj5lJOvpBfTICIlbrOcOui8dbUpNBYLPMH
+	72UostovynQTtUygJ7Kx+v3CVNZmIFKk8s+gzYL5xuSYbUKopwgglZwj7Ol54WHwaxfmjc
+	vXhaQCbHTH84BWXcsVrBcKdvgIMNscf4qIXybdaWHYab8TeDhLURa0hmOzaVbg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1746454073;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=sfCgR2i3xQWyZtj2OVFWv7zFTAvlYA/MlxgvIP/UMus=;
+	b=0HtB6vEozKdHOywIgQO0tH7RpGKDvQNEs0cKKeuxOpOuoajNSXH6g63vDko5loRTal4XaN
+	E2OSCLL0zYwjz8BA==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: Mark Brown <broonie@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Willy Tarreau <w@1wt.eu>, Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+	Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>, 
+	Will Drewry <wad@chromium.org>, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Aishwarya.TCV@arm.com
+Subject: Re: [PATCH v3 12/32] selftests: harness: Stop using
+ setjmp()/longjmp()
+Message-ID: <20250505160703-431086d8-76bd-4195-b2f6-06141e1cb6de@linutronix.de>
+References: <20250411-nolibc-kselftest-harness-v3-0-4d9c0295893f@linutronix.de>
+ <20250411-nolibc-kselftest-harness-v3-12-4d9c0295893f@linutronix.de>
+ <aBiX9zbR7ehAxQjS@finisterre.sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,164 +76,56 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAG48ez0ntTH_sOaPiqML715jyTCujwyh3Og1wBq9RNLbu55C5Q@mail.gmail.com>
+In-Reply-To: <aBiX9zbR7ehAxQjS@finisterre.sirena.org.uk>
 
-On Tue, Apr 29, 2025 at 08:54:58PM +0200, Jann Horn wrote:
-> On Tue, Apr 29, 2025 at 8:04 PM Suren Baghdasaryan <surenb@google.com> wrote:
-> > On Tue, Apr 29, 2025 at 10:21 AM Jann Horn <jannh@google.com> wrote:
-> > >
-> > > Hi!
-> > >
-> > > (I just noticed that I incorrectly assumed that VMAs use kfree_rcu
-> > > (not SLAB_TYPESAFE_BY_RCU) when I wrote my review of this, somehow I
-> > > forgot all about that...)
-> >
-> > Does this fact affect your previous comments? Just want to make sure
-> > I'm not missing something...
-> 
-> When I suggested using "WRITE_ONCE(vma->vm_file, NULL)" when tearing
-> down a VMA, and using get_file_rcu() for the lockless lookup, I did
-> not realize that you could actually also race with all the other
-> places that set ->vm_file, like __mmap_new_file_vma() and so on; and I
-> did not think about whether any of those code paths might leave a VMA
-> with a dangling ->vm_file pointer.
-> 
-> I guess maybe that means you really do need to do the lookup from the
-> copied data, as you did in your patch; and that might require calling
-> get_file_active() on the copied ->vm_file pointer (instead of
-> get_file_rcu()), even though I think that is not really how
-> get_file_active() is supposed to be used (it's supposed to be used
-> when you know the original file hasn't been freed yet). Really what
+Hi Mark,
 
-I think it's fine for get_file_active() to be used in this way. That
-->vm_file pointer usage should get a fat comment above it explaining how
-what you're doing is safe.
+On Mon, May 05, 2025 at 07:50:31PM +0900, Mark Brown wrote:
+> On Fri, Apr 11, 2025 at 11:00:36AM +0200, Thomas Weißschuh wrote:
+> > Usage of longjmp() was added to ensure that teardown is always run in
+> > commit 63e6b2a42342 ("selftests/harness: Run TEARDOWN for ASSERT failures")
+> > However instead of calling longjmp() to the teardown handler it is easier to
+> > just call the teardown handler directly from __bail().
+> > Any potential duplicate teardown invocations are harmless as the actual
+> > handler will only ever be executed once since
+> > commit fff37bd32c76 ("selftests/harness: Fix fixture teardown").
+> 
+> I didn't fully verify (I'm on holiday right now) but it looks like this,
+> which is in -next as 8a37733a874f:
+> 
+> > @@ -757,7 +749,7 @@
+> >   */
+> >  #define OPTIONAL_HANDLER(_assert) \
+> >  	for (; _metadata->trigger; _metadata->trigger = \
+> > -			__bail(_assert, _metadata))
+> > +			__bail(_assert, _metadata, self, variant))
+> >  
+> >  #define is_signed_type(var)       (!!(((__typeof__(var))(-1)) < (__typeof__(var))1))
+> >  
+> 
+> breaks the build of several selftests when building for arm64:
 
-> you'd want for that is basically a raw __get_file_rcu(), but that is
-> static and I think Christian wouldn't want to expose more of these
-> internals outside VFS...
+Thanks for the report. These tests are doing funny things with the harness
+internals. I'll drop these patches from -next.
 
-Yeah, no. I don't want that to be usable outside of that file.
+> In file included from seccomp_bpf.c:56:
+> seccomp_bpf.c: In function ‘kill_thread_or_group’:
+> ../kselftest_harness.h:755:52: error: ‘self’ undeclared (first use in this function)
+>   755 |                         __bail(_assert, _metadata, self, variant))
+>       |                                                    ^~~~
+> ../kselftest_harness.h:803:14: note: in expansion of macro ‘OPTIONAL_HANDLER’
+>   803 | } while (0); OPTIONAL_HANDLER(_assert)
+>       |              ^~~~~~~~~~~~~~~~
+> ../kselftest_harness.h:516:9: note: in expansion of macro ‘__EXPECT’
+>   516 |         __EXPECT(expected, #expected, seen, #seen, ==, 1)
+>       |         ^~~~~~~~
+> seccomp_bpf.c:844:9: note: in expansion of macro ‘ASSERT_EQ’
+>   844 |         ASSERT_EQ(0, prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0)) {
+>       |         ^~~~~~~~~
+> 
+> Full build log at:
+> 
+>     https://builds.sirena.org.uk/407f60a151df3c44397e5afc0111eb9b026c38d3/arm64/defconfig/build.log
 
-> (In that case, all the stuff below about get_file_rcu() would be moot.)
-> 
-> Or you could pepper WRITE_ONCE() over all the places that write
-> ->vm_file, and ensure that ->vm_file is always NULLed before its
-> reference is dropped... but that seems a bit more ugly to me.
-> 
-> > > On Tue, Apr 29, 2025 at 7:09 PM Suren Baghdasaryan <surenb@google.com> wrote:
-> > > > On Tue, Apr 29, 2025 at 8:40 AM Jann Horn <jannh@google.com> wrote:
-> > > > > On Fri, Apr 18, 2025 at 7:50 PM Suren Baghdasaryan <surenb@google.com> wrote:
-> > > > > > With maple_tree supporting vma tree traversal under RCU and vma and
-> > > > > > its important members being RCU-safe, /proc/pid/maps can be read under
-> > > > > > RCU and without the need to read-lock mmap_lock. However vma content
-> > > > > > can change from under us, therefore we make a copy of the vma and we
-> > > > > > pin pointer fields used when generating the output (currently only
-> > > > > > vm_file and anon_name). Afterwards we check for concurrent address
-> > > > > > space modifications, wait for them to end and retry. While we take
-> > > > > > the mmap_lock for reading during such contention, we do that momentarily
-> > > > > > only to record new mm_wr_seq counter. This change is designed to reduce
-> > > > > > mmap_lock contention and prevent a process reading /proc/pid/maps files
-> > > > > > (often a low priority task, such as monitoring/data collection services)
-> > > > > > from blocking address space updates.
-> > > > > [...]
-> > > > > > diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-> > > > > > index b9e4fbbdf6e6..f9d50a61167c 100644
-> > > > > > --- a/fs/proc/task_mmu.c
-> > > > > > +++ b/fs/proc/task_mmu.c
-> > > > > [...]
-> > > > > > +/*
-> > > > > > + * Take VMA snapshot and pin vm_file and anon_name as they are used by
-> > > > > > + * show_map_vma.
-> > > > > > + */
-> > > > > > +static int get_vma_snapshot(struct proc_maps_private *priv, struct vm_area_struct *vma)
-> > > > > > +{
-> > > > > > +       struct vm_area_struct *copy = &priv->vma_copy;
-> > > > > > +       int ret = -EAGAIN;
-> > > > > > +
-> > > > > > +       memcpy(copy, vma, sizeof(*vma));
-> > > > > > +       if (copy->vm_file && !get_file_rcu(&copy->vm_file))
-> > > > > > +               goto out;
-> > > > >
-> > > > > I think this uses get_file_rcu() in a different way than intended.
-> > > > >
-> > > > > As I understand it, get_file_rcu() is supposed to be called on a
-> > > > > pointer which always points to a file with a non-zero refcount (except
-> > > > > when it is NULL). That's why it takes a file** instead of a file* - if
-> > > > > it observes a zero refcount, it assumes that the pointer must have
-> > > > > been updated in the meantime, and retries. Calling get_file_rcu() on a
-> > > > > pointer that points to a file with zero refcount, which I think can
-> > > > > happen with this patch, will cause an endless loop.
-> > > > > (Just as background: For other usecases, get_file_rcu() is supposed to
-> > > > > still behave nicely and not spuriously return NULL when the file* is
-> > > > > concurrently updated to point to another file*; that's what that loop
-> > > > > is for.)
-> > > >
-> > > > Ah, I see. I wasn't aware of this subtlety. I think this is fixable by
-> > > > checking the return value of get_file_rcu() and retrying speculation
-> > > > if it changed.
-> > >
-> > > I think you could probably still end up looping endlessly in get_file_rcu().
-> 
-> (Just to be clear: What I meant here is that get_file_rcu() loops
-> *internally*; get_file_rcu() is not guaranteed to ever return if the
-> pointed-to file has a zero refcount.)
-> 
-> > By "retrying speculation" I meant it in the sense of
-> > get_vma_snapshot() retry when it takes the mmap_read_lock and then
-> > does mmap_lock_speculate_try_begin to restart speculation. I'm also
-> > thinking about Liam's concern of guaranteeing forward progress for the
-> > reader. Thinking maybe I should not drop mmap_read_lock immediately on
-> > contention but generate some output (one vma or one page worth of
-> > vmas) before dropping mmap_read_lock and proceeding with speculation.
-> 
-> Hm, yeah, I guess you need that for forward progress...
-> 
-> > > > > (If my understanding is correct, maybe we should document that more
-> > > > > explicitly...)
-> > > >
-> > > > Good point. I'll add comments for get_file_rcu() as a separate patch.
-> > > >
-> > > > >
-> > > > > Also, I think you are introducing an implicit assumption that
-> > > > > remove_vma() does not NULL out the ->vm_file pointer (because that
-> > > > > could cause tearing and could theoretically lead to a torn pointer
-> > > > > being accessed here).
-> > > > >
-> > > > > One alternative might be to change the paths that drop references to
-> > > > > vma->vm_file (search for vma_close to find them) such that they first
-> > > > > NULL out ->vm_file with a WRITE_ONCE() and do the fput() after that,
-> > > > > maybe with a new helper like this:
-> > > > >
-> > > > > static void vma_fput(struct vm_area_struct *vma)
-> > > > > {
-> > > > >   struct file *file = vma->vm_file;
-> > > > >
-> > > > >   if (file) {
-> > > > >     WRITE_ONCE(vma->vm_file, NULL);
-> > > > >     fput(file);
-> > > > >   }
-> > > > > }
-> > > > >
-> > > > > Then on the lockless lookup path you could use get_file_rcu() on the
-> > > > > ->vm_file pointer _of the original VMA_, and store the returned file*
-> > > > > into copy->vm_file.
-> > > >
-> > > > Ack. Except for storing the return value of get_file_rcu(). I think
-> > > > once we detect that  get_file_rcu() returns a different file we should
-> > > > bail out and retry. The change in file is an indication that the vma
-> > > > got changed from under us, so whatever we have is stale.
-> > >
-> > > What does "different file" mean here - what file* would you compare
-> > > the returned one against?
-> >
-> > Inside get_vma_snapshot() I would pass the original vma->vm_file to
-> > get_file_rcu() and check if it returns the same value. If the value
-> > got changed we jump to  /* Address space got modified, vma might be
-> > stale. Re-lock and retry. */ section. That should work, right?
-> 
-> Where do you get an "original vma->vm_file" from?
-> 
-> To be clear, get_file_rcu(p) returns one of the values that *p had
-> while get_file_rcu(p) is running.
+
 
