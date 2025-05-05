@@ -1,313 +1,208 @@
-Return-Path: <linux-kselftest+bounces-32402-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32403-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44CEFAA994A
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 18:40:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28A0FAA99B0
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 18:50:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D38083AB58B
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 16:38:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7B291166494
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 16:50:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 686141A255C;
-	Mon,  5 May 2025 16:38:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E8ED268682;
+	Mon,  5 May 2025 16:50:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HAgz60rR"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="p0Sc24cV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2041.outbound.protection.outlook.com [40.107.243.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81860224D7
-	for <linux-kselftest@vger.kernel.org>; Mon,  5 May 2025 16:38:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746463122; cv=none; b=tFHmEMdlyP5fHu4hnj04k+Vv2MilPJwUezI8efg/FRPZtbMYjqRDTlq5R5WZatu7is9BIMyVZMdO053GJTn+HCqtudsx73fytWdU04d1LB7n3HSlquEgR7rE4P8pDBg8jzZlNfawp4kU/04nNaFw+OPSH8oWd/xlWr2WMd0mtrk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746463122; c=relaxed/simple;
-	bh=GeoqyUZ96ZhiA4JfLEQL3jDROUwM0rclHT0XNphb5Gw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gSOooyhFM+h1d+JA1PW9tUfzrxLXQOopju75VKdrqsgjFxOC8sGa6bTLimacgSk/03+siSGajCO51rcr/SIhrXLp8ZcCo3vklNCsCVv+M2cNrKF433hK3pYQxHJMQqGMj+xHsO+1wZDez2j7yFW1xkYHXpxr6yXGn/50H4BPmhc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HAgz60rR; arc=none smtp.client-ip=209.85.160.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-48b7747f881so555351cf.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 05 May 2025 09:38:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746463119; x=1747067919; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e8cGfqMPxInbFVttVOXD20cN2ryppIoxJ2ihtNYujm8=;
-        b=HAgz60rReJj+O96uR9Ae/uyjdiYC30LHKP39xrUunt/f9pDJLZidsyI365/6dzYhnn
-         yRyDf5RGWMsiuwAhdh+OBZ96uWXrAwsLc/oen42vyWas8iRryJqyl1Vura4aO4cQP8Ax
-         9u+R2WioKr1LRa5fv5j6fRYSdsnrRcC4R3yv2JZA5fWETxrV3M0Zy72pn0S2Ml0OnjOv
-         f8c/7oFFGxu2z08AvnaMTvFSUru7mGeCDCLhHPIM8gfsns68Cpp8Lfz3Hy2ReiP+uXsQ
-         ON6Z+IXRP6vIOoNYUM4OMB5nrEeM1J5+blfH4XVTf3AjbZq7z7So/HTma/BvYQpR7flF
-         UAmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746463119; x=1747067919;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e8cGfqMPxInbFVttVOXD20cN2ryppIoxJ2ihtNYujm8=;
-        b=qAlng5gYEduaPG0+dWq+O97+4YFTMBry3FBONTPNPYVDk4Sv6qJY8C361sYytqpB7+
-         I+R8eovpox6mGhyha5kcLl9nQIEHyUMcon2sNTw6is6XdzB7DqP9QrmjHGqsPIwZFGmD
-         zzHm/rsHq17GVfooJcdF0Z+DrnJk/xtIlxXEGoPQWvisQPTWQ5oR6uHRQ8ITbMP1MoZg
-         fs/khBiLv0xCpdlsfQFbISzS22cYg6EKv5uk/6xhzNN2SWlEqkx+z3T7guqn8aqRQawN
-         2i3kL6/f024Rm/tjKqfbIfAYf/ZCO65JK2QRV18Ga4Toyd+QSNZt2BZESPQSAoDyYnBj
-         25pQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUbNLLDk51WM2rJcJALWZO91D2vJewNebHSW9I999God5wGdLLzHn2oMLW+2YsPY8jW0SN3vOWvGvqwkUOJGG4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9iIHGNx9lRnSnALb6bpNq4//0X2CDdA69dCXQ6szqbesBIY+n
-	+l/ovOOJKVX+lXxpOBX8MF7bBFb++2ZeE+jNKm0w339lFBeitYfuVsbVwkBeR88IuFsv6iIvA5G
-	0Hihv/SrJyscfvAoh64DMopOcvBQn1LKT0CDv
-X-Gm-Gg: ASbGncuUIO6FEZapKGNQYQ8LHEnhp3BXJD74v0EozXm8jpPAzqNvDs78dlFrya3MU5J
-	g4dEAiX69/7xjjUQeBf5xbNCXec3w/RWE3kGC6cVOq+8686kfK3PcLH2PY/GLs6+cD4SJ8GafRo
-	a67kDFxP3hxIJaOda58K2j
-X-Google-Smtp-Source: AGHT+IFWiSPtprBCFhUiQJ87HBkeklAt1J+ZsCn+rVHWym0jK4XLeniq9xKP5/CRbfUkWSCmfruKW7KYmB/qC+RSHJY=
-X-Received: by 2002:a05:622a:15d1:b0:486:a185:3136 with SMTP id
- d75a77b69052e-490cc658b8bmr651011cf.14.1746463118837; Mon, 05 May 2025
- 09:38:38 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B479B1A255C;
+	Mon,  5 May 2025 16:50:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1746463827; cv=fail; b=CYLQPQksb1P+5S31aBoKsCZMio96gK/T2b9LftAgWy0OPskhY9MIwdjA8UZWhbshDfw3BsQyqmTlo3pbBG8vJktIh+VWVzZqlSIdogB1NyPLZz5wvJUln3C3hzGBo9G//Pd8/AEmqhZ5wz+rOnt4Gd/g+I7TVSujYaluDE/2Vbw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1746463827; c=relaxed/simple;
+	bh=fcjGJE+1Uv4pAHCZmMXinKbUEt5JmgLebj+PYBl+3C4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=fnU96cq7WU63+jQtniUGMOEcPrnjAUBh664+gRvCIw/J4oVNOVmHcnuWwjn++sF3ar9TG0R6qbr0bcUzayIUNRyo0RGg7DFuHWDoN9E3YJUdaBhCUKhVyIv3F20FA4MDKhjFJdOzIYa4cKgRoSjNk00EdJet9SI6r4CJ5REm0GI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=p0Sc24cV; arc=fail smtp.client-ip=40.107.243.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ZRd6Z0GZOJ4Nyw7sAwWwbEaEWgptAGJNP2tzmNdR9fr2GyKYkqU9wjDUv9nE3Bq1waXoFZg4Q+N1RCc5EhpU+xhXErNf4Ad1rIIfEK2brJFSeIwbWbOgseWYOtntsB4ZzcXetB5Q6QFArfdb3aeWskegMqnrJ1QuYcAXIQ0NLn2ZqdyPMCE2woJGi+tD6PHjMUmJEZU7aTQoFlNwd4JF5rF26bxFMcXeDAF9IDO8PtA3pToEmfezgI0a7CaYQki8U01yFdfFtYA7+aNF0DSYrACoMed4JPrRa5uh2ZvQ2eAxGnfOURkKFBV9WeE8aDoLJm9CBfGrZW//a9/8GiktJA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Z0n7Tspj8ibG8yEA3X3plcQ+ki3JQkq0ljbXWOv2hSc=;
+ b=IE3V/Ghft0LvpIIaqhkRxTxNscbThuEnztFcfMTr+VAoxXiifBGavkX3sPqNXeRPjDO80kycjpcSUdhb8dGG5JF/xmcnJgQgDsXg0fYNPIFlBqjV+2XZOXf0g+aLu5tVlL6G2Ik9Fl79NY7f51vp/Y8F27YYmErDj7eRU+oogC02Cpe2uF4Qf0/1ASCuGAy7fwWhJzaVZRuwYpUK90PDd5EULx0N0nJzd9GwRu2NyoX5IJXOu7RNilWMUGWfw3VxLl4XJLm2soo/jcVH0kr7/h/vQCjTVZFPJP6i9Xl0Q/qqjwctnmtzkZcvP3XUOkKGym2hLqg7oAU/ehTOn6WN2g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Z0n7Tspj8ibG8yEA3X3plcQ+ki3JQkq0ljbXWOv2hSc=;
+ b=p0Sc24cVoJVdofwY+i7ONbbSv7RD0uSqI5e6nWZwHo6niAsJwMmOwM95+fdz8RCewfPU3pHBDivLqwdEdDe/9NC9L5BbTlVCPMRiBX6QYHPLoljgCMOuWZdh4Ghnfiau013bOTTfZevJoRa66fKCCv+YPyN18BIbhdcQNPTxphWEwUt+EpU4CKOxCjHgBsZVLFiv248OJ1/f8eI9PCgt9VZWA9nhH+X8NP/CRZv1RSpUA/Z5uyFpFPfhF2Np2t3SSGLKunhLem+oabmVcN8VOwTffOLT2GWmw9b4SxpDKxPMEgywHLuylxfkIiXtzYHSqk9Q6qY+LGW7qE8Xeo8KGA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
+ by CH3PR12MB7740.namprd12.prod.outlook.com (2603:10b6:610:145::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8699.24; Mon, 5 May
+ 2025 16:50:20 +0000
+Received: from CH3PR12MB8659.namprd12.prod.outlook.com
+ ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
+ ([fe80::6eb6:7d37:7b4b:1732%6]) with mapi id 15.20.8699.026; Mon, 5 May 2025
+ 16:50:20 +0000
+Date: Mon, 5 May 2025 13:50:19 -0300
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Baolu Lu <baolu.lu@linux.intel.com>
+Cc: Nicolin Chen <nicolinc@nvidia.com>, kevin.tian@intel.com,
+	corbet@lwn.net, will@kernel.org, bagasdotme@gmail.com,
+	robin.murphy@arm.com, joro@8bytes.org, thierry.reding@gmail.com,
+	vdumpa@nvidia.com, jonathanh@nvidia.com, shuah@kernel.org,
+	jsnitsel@redhat.com, nathan@kernel.org, peterz@infradead.org,
+	yi.l.liu@intel.com, mshavit@google.com, praan@google.com,
+	zhangzekun11@huawei.com, iommu@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, patches@lists.linux.dev,
+	mochs@nvidia.com, alok.a.tiwari@oracle.com, vasant.hegde@amd.com
+Subject: Re: [PATCH v2 13/22] iommufd: Add mmap interface
+Message-ID: <20250505165019.GM2260709@nvidia.com>
+References: <cover.1745646960.git.nicolinc@nvidia.com>
+ <7be26560c604b0cbc2fd218997b97a47e4ed11ff.1745646960.git.nicolinc@nvidia.com>
+ <c4d03b52-422e-41ab-845b-1d2eda7ca9e2@linux.intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c4d03b52-422e-41ab-845b-1d2eda7ca9e2@linux.intel.com>
+X-ClientProxiedBy: BN8PR04CA0031.namprd04.prod.outlook.com
+ (2603:10b6:408:70::44) To CH3PR12MB8659.namprd12.prod.outlook.com
+ (2603:10b6:610:17c::13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250418174959.1431962-1-surenb@google.com> <20250418174959.1431962-8-surenb@google.com>
- <CAG48ez3YLWh9hXQQdGVQ7hCsd=k_i2Z2NO6qzT6NaOYiRjy=nw@mail.gmail.com>
- <CAJuCfpGGiwTbMeGAeYNtQ5SsFenUw8up6ToLy=VstULM_TSoXA@mail.gmail.com>
- <CAG48ez15g5n9AoMJk1yPHsDCq2PGxCHc2WhCAzH8B2o6PgDwzQ@mail.gmail.com>
- <CAJuCfpG+YjyVE-6TaAQEjwc0iixqN8Epf25jo2awtL=gqY=afA@mail.gmail.com>
- <CAG48ez0ntTH_sOaPiqML715jyTCujwyh3Og1wBq9RNLbu55C5Q@mail.gmail.com> <20250505-wachen-konform-3fe08f1b3214@brauner>
-In-Reply-To: <20250505-wachen-konform-3fe08f1b3214@brauner>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Mon, 5 May 2025 09:38:27 -0700
-X-Gm-Features: ATxdqUExh_T1r-sy8rTeLU-t84R_-ihK_Dse0jJQ6kQZSv2WSV8VGLRmcYSeIkA
-Message-ID: <CAJuCfpHYYGa4R11xJwZACNeXDxVroh-gUxHepdc2FfmgP_qBaA@mail.gmail.com>
-Subject: Re: [PATCH v3 7/8] mm/maps: read proc/pid/maps under RCU
-To: Christian Brauner <brauner@kernel.org>
-Cc: Jann Horn <jannh@google.com>, Al Viro <viro@zeniv.linux.org.uk>, 
-	linux-fsdevel@vger.kernel.org, akpm@linux-foundation.org, 
-	Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, david@redhat.com, 
-	vbabka@suse.cz, peterx@redhat.com, hannes@cmpxchg.org, mhocko@kernel.org, 
-	paulmck@kernel.org, shuah@kernel.org, adobriyan@gmail.com, 
-	josef@toxicpanda.com, yebin10@huawei.com, linux@weissschuh.net, 
-	willy@infradead.org, osalvador@suse.de, andrii@kernel.org, 
-	ryan.roberts@arm.com, christophe.leroy@csgroup.eu, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|CH3PR12MB7740:EE_
+X-MS-Office365-Filtering-Correlation-Id: f1edbe3d-cb35-47fc-53bb-08dd8bf4ebd8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014|7416014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?btgUnlYba+pFJN6VNLlMHquA9nwx8vICp52kiymDtNN46WggwE+dQ9WSvRPN?=
+ =?us-ascii?Q?kCH/RHVP2sYbXrVmotA/5uqGkdRliDbfWqMDU99PbpBrtYzBUL700NHLDogc?=
+ =?us-ascii?Q?y1zJDtTk6RbK7Nddksk+w2FKEOC5HwyYZB+5BfGXYMl3M0fGnMjdiMArfvEF?=
+ =?us-ascii?Q?GXP261dQYfp+9y9Oddz2snwe+UdIxGUDG4dm/xwyX2tl6R4792fBo+qKPZrp?=
+ =?us-ascii?Q?hXezxg7O260sds+c69YAD6GNUv0iRigp1Gh/iTORyQBoh8+uD9kfQW85UA4q?=
+ =?us-ascii?Q?XJzIDEEPTnhYXqSl5d6SqYJWxFw2adEJQKmJm+wUbvMMPU7BolUOE8ZmJfph?=
+ =?us-ascii?Q?SkGGzYQIv+7P52XTWQj96Mc9TqVQ3M8IUdavTlMqOi4CzbkRjo5TWiVyMQAc?=
+ =?us-ascii?Q?Y+DVAms3kbWi6cU1eG3uDea7IyYEq6h+kce8L3GuFdwXj30YdZybP2p6GVRi?=
+ =?us-ascii?Q?jkmM7cpEDuq6oh2cusLIDqaMiJeCu3dHB9DsVdu0GnINWtmEbyjCAMLxamGG?=
+ =?us-ascii?Q?5KmeFCSrzqcUIK+8ikQ1HJKcGcGAmWhBqxgXvX7tdnRtg5X+Wq40PCAKglWq?=
+ =?us-ascii?Q?7VdsKdTd7ghBoJB4iWPheOe9xcsTyERFdoheJu7MPHFLOUs6ruuOqG7b7z5d?=
+ =?us-ascii?Q?n8vzowmQUMFfbdC1mUiyS/2aZYYfKnHh30KnSw9blKQL6gP9FbLV8ekRl6uX?=
+ =?us-ascii?Q?87CTNkLw+EJsRrRNrfhxNoDSETtDmiWkC3VW4N0ge/e+ZtYReYPv+URkz6BS?=
+ =?us-ascii?Q?/WomqT7B/JcfjfUBWgjT/TRE+p0ojcdcPwNd8QvjmoCPbSyzNTwvbdv1VqYd?=
+ =?us-ascii?Q?pM7j6ltowJKCOt3gIxmbV/4jK2oKTNiKOg6BKN8o6/hnUK/GbsqD3l0BZGzo?=
+ =?us-ascii?Q?b3XA+0IhTF4s9Ka0sQQLr2U/DZTqHpCVtDvNuQo72DXyL+K+Oz/pHfjeX+PG?=
+ =?us-ascii?Q?oUVHrpUe2t1Rac+Ad5Pk7fRlAzMipIT6ITUNcLrKu25jzaSXzPCiduD1YqVd?=
+ =?us-ascii?Q?83574FJwlJhoshn9qYt+MctxHuAxbGxSlWPu97uS+UoQ/ISE6JV/h1csMJW1?=
+ =?us-ascii?Q?RfOko7dnvNfgo7bH7R3nIDUvtBB3MVL+AUybOAEU1llFHlsuz1iksfwJj5Hu?=
+ =?us-ascii?Q?9oXIhuwvT19HhWwzN5tisXaKtBz5hEUrOEz52M+RMzZr8loaCq114s1OTou8?=
+ =?us-ascii?Q?uYRnaGFpQyFl6J9+fSunsAPfx+D7INd6JZbgThvcPJKWic2MpPuxuHA9mDP4?=
+ =?us-ascii?Q?7LfkGRBDJ2WQ3LGk3W2z4HF4gIWVnv53hO+egROxn6Sy6rrgneP1vw1ltKzk?=
+ =?us-ascii?Q?u+Oz/5f0qk829Pv4m/lKA1a3naMKfH0JTxK6Ojj2rZxXkTcCTsWkjsu2wNkl?=
+ =?us-ascii?Q?l+y2BnPiIUvU61zgL7ejNxZc+XewkuiL4V/sDvLnIxQNVOEwkImVe8M3zO6U?=
+ =?us-ascii?Q?p7fM78F9taM=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?a8N5+VaGFOL7ZVYDMlcq4FuGhYKEyf1adxVzVMhAKqDqlRV7J433plBR6DU0?=
+ =?us-ascii?Q?ninBp0m/u6EKa5S+amT3U9D2XF2nwzhN6uNMn5EYCwF6rtCbatQSXP8Y5KOV?=
+ =?us-ascii?Q?ovWQQQgyNi2MnxjFQs7sEnc8jT2rzL5ki+Uy6mQT20P1avMXmHKkdGW1fX2x?=
+ =?us-ascii?Q?eOjJ9ak31f6slpll0MZjOysENNFcBBANrJ+DTevQ4q2A2CzBYo4XrzO8pu/V?=
+ =?us-ascii?Q?stgEvLRh4UVGVU4I2MSa0IxhVC1bKhA5+dtcEiaMVT/a76owD1n34tHtdDAS?=
+ =?us-ascii?Q?ti4+SWSnloRnYaDbP9UXu8vRr/3ux4RQXBdPK812HvJ4lOJdPwDr23hvDAn7?=
+ =?us-ascii?Q?Akn6Hn8g6nlkoyYkjMkXUQRteNCwCh27bXmsmmVbokQUpsvPX8s+HWN6Xbi9?=
+ =?us-ascii?Q?3+YfMaGx/++s7qOQK2CGajDRs21cLn4tVFr36prhwmGhf7mob3UeZKEXEAko?=
+ =?us-ascii?Q?Caf+YOo75nbgXImABF7DkQNeZDO2S6Gxths1l1lA6Xf0yOqTWxIQKJhMNUdu?=
+ =?us-ascii?Q?nZlCNlROt+Q5jAb31FBxI4Q3P5wbDobCnXU12LBYWEuwiBiThqVREqoh1bi4?=
+ =?us-ascii?Q?w+K/qYlxqN6YrjlnV5ujJ1XRmyoKFmbpUt6P6OAVroYNdCgcsCnHSC1np3gx?=
+ =?us-ascii?Q?XaOblVENPTpT2bDoDSK443fk64pdXvKgMkXlSsZaJyJnE8QbLaaJwT/BHI+e?=
+ =?us-ascii?Q?y/MfzM75La0slwTaiC+8L+OcNoxTxtfSRFCk6FV0qTt7TbJutSigIGVT8IbN?=
+ =?us-ascii?Q?Otw8S15nSvvOlmjoxsU+Vsh43moQuuAkmgXxHPr3D7jBUqZ2IBDFaQx7Bs11?=
+ =?us-ascii?Q?2/K3KSlG/wZ3XZ+sggZdnHX++ElSV9q6SoZ1+UPb/M4woJwbgNyumMZw6Qnf?=
+ =?us-ascii?Q?a324VpV/XNFj+h02Hdn05fblW1D2uOYDUtegHIuxJY9ecJP2YPrpCJlNBIu1?=
+ =?us-ascii?Q?DTwHeCKXuHZUkK7lUS3e5awMONF20VK5VExbZBhIGWQ+J6Gg6nAvjnLrchJ4?=
+ =?us-ascii?Q?izdNmQEu/Hkag/fC7GrVUXHvBqBnt5WNZDwLXYVJzEQY/0IYRmP0ywQ6ikcY?=
+ =?us-ascii?Q?qblYEmUGnHItE0olktBKlAqmDRQXPcXl5BSEiCp8s7nSLEUbTmjg2cmLtlUC?=
+ =?us-ascii?Q?szdGnlzxdstzqLw+bYNLvQBAbziJ9Tgjg73WOdeJqDVi4Mtcj39yOk74QC4H?=
+ =?us-ascii?Q?AQ0PUznf7OXR7PYdV/pdAE2gg5WfG4zZmfd798+0xaX5QwXQcXJ333A3bfMa?=
+ =?us-ascii?Q?nhydRZxUMrNZW79q+aCps4yak6De3xPKS7c6PnvMUeSFgDx1bM+AuqXoE35D?=
+ =?us-ascii?Q?v6ulKqOp791tWbN6zd8ujeYGXP5W/2z0RNeUmipdH3UXnhrLK6IBP40V6YCk?=
+ =?us-ascii?Q?2+YmrTqO4MQC/gO4SeyUV7oJ9m4gA4wdpMA6XWpvL/s2MpjtlRSKOIyT5oIk?=
+ =?us-ascii?Q?o4/vpK71fNu66l7QvOQ0RPf1O6sg82NkTT2T7TwnjDOUgOqfRd5JDn2GhC4b?=
+ =?us-ascii?Q?/Ri9ONBqlXrbNU9l8yMBMamess1cRTk6vdWoWyhV1YAi6V/Xy8ErnwM05jcy?=
+ =?us-ascii?Q?Se/fC+Zf7uEPbLqjPJYpiUu0k8ZwlFfAeGhB1bxJ?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f1edbe3d-cb35-47fc-53bb-08dd8bf4ebd8
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2025 16:50:20.5227
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nGuZn0E9fw+nWb+8Es/XBoWUjgh9tdSr6sIY7P6QfxIF1vM126Kkx2rOy9x3rhnx
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7740
 
-On Mon, May 5, 2025 at 6:50=E2=80=AFAM Christian Brauner <brauner@kernel.or=
-g> wrote:
->
-> On Tue, Apr 29, 2025 at 08:54:58PM +0200, Jann Horn wrote:
-> > On Tue, Apr 29, 2025 at 8:04=E2=80=AFPM Suren Baghdasaryan <surenb@goog=
-le.com> wrote:
-> > > On Tue, Apr 29, 2025 at 10:21=E2=80=AFAM Jann Horn <jannh@google.com>=
- wrote:
-> > > >
-> > > > Hi!
-> > > >
-> > > > (I just noticed that I incorrectly assumed that VMAs use kfree_rcu
-> > > > (not SLAB_TYPESAFE_BY_RCU) when I wrote my review of this, somehow =
-I
-> > > > forgot all about that...)
-> > >
-> > > Does this fact affect your previous comments? Just want to make sure
-> > > I'm not missing something...
-> >
-> > When I suggested using "WRITE_ONCE(vma->vm_file, NULL)" when tearing
-> > down a VMA, and using get_file_rcu() for the lockless lookup, I did
-> > not realize that you could actually also race with all the other
-> > places that set ->vm_file, like __mmap_new_file_vma() and so on; and I
-> > did not think about whether any of those code paths might leave a VMA
-> > with a dangling ->vm_file pointer.
-> >
-> > I guess maybe that means you really do need to do the lookup from the
-> > copied data, as you did in your patch; and that might require calling
-> > get_file_active() on the copied ->vm_file pointer (instead of
-> > get_file_rcu()), even though I think that is not really how
-> > get_file_active() is supposed to be used (it's supposed to be used
-> > when you know the original file hasn't been freed yet). Really what
->
-> I think it's fine for get_file_active() to be used in this way. That
-> ->vm_file pointer usage should get a fat comment above it explaining how
-> what you're doing is safe.
+On Mon, Apr 28, 2025 at 10:50:32AM +0800, Baolu Lu wrote:
+> On 4/26/25 13:58, Nicolin Chen wrote:
+> > For vIOMMU passing through HW resources to user space (VMs), add an mmap
+> > infrastructure to map a region of hardware MMIO pages.
+> > 
+> > Maintain an mt_mmap per ictx for validations. To allow IOMMU drivers to
+> > add and delete mmappable regions to/from the mt_mmap, add a pair of new
+> > helpers: iommufd_ctx_alloc_mmap() and iommufd_ctx_free_mmap().
+> 
+> I am wondering why the dma_buf mechanism isn't used here, considering
+> that this also involves an export and import pattern.
 
-Got it. Will use it in my next version. Thanks!
+The provider will be a memfd or something, that isn't where we want to
+put dmabuf..
 
->
-> > you'd want for that is basically a raw __get_file_rcu(), but that is
-> > static and I think Christian wouldn't want to expose more of these
-> > internals outside VFS...
->
-> Yeah, no. I don't want that to be usable outside of that file.
->
-> > (In that case, all the stuff below about get_file_rcu() would be moot.)
-> >
-> > Or you could pepper WRITE_ONCE() over all the places that write
-> > ->vm_file, and ensure that ->vm_file is always NULLed before its
-> > reference is dropped... but that seems a bit more ugly to me.
-> >
-> > > > On Tue, Apr 29, 2025 at 7:09=E2=80=AFPM Suren Baghdasaryan <surenb@=
-google.com> wrote:
-> > > > > On Tue, Apr 29, 2025 at 8:40=E2=80=AFAM Jann Horn <jannh@google.c=
-om> wrote:
-> > > > > > On Fri, Apr 18, 2025 at 7:50=E2=80=AFPM Suren Baghdasaryan <sur=
-enb@google.com> wrote:
-> > > > > > > With maple_tree supporting vma tree traversal under RCU and v=
-ma and
-> > > > > > > its important members being RCU-safe, /proc/pid/maps can be r=
-ead under
-> > > > > > > RCU and without the need to read-lock mmap_lock. However vma =
-content
-> > > > > > > can change from under us, therefore we make a copy of the vma=
- and we
-> > > > > > > pin pointer fields used when generating the output (currently=
- only
-> > > > > > > vm_file and anon_name). Afterwards we check for concurrent ad=
-dress
-> > > > > > > space modifications, wait for them to end and retry. While we=
- take
-> > > > > > > the mmap_lock for reading during such contention, we do that =
-momentarily
-> > > > > > > only to record new mm_wr_seq counter. This change is designed=
- to reduce
-> > > > > > > mmap_lock contention and prevent a process reading /proc/pid/=
-maps files
-> > > > > > > (often a low priority task, such as monitoring/data collectio=
-n services)
-> > > > > > > from blocking address space updates.
-> > > > > > [...]
-> > > > > > > diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-> > > > > > > index b9e4fbbdf6e6..f9d50a61167c 100644
-> > > > > > > --- a/fs/proc/task_mmu.c
-> > > > > > > +++ b/fs/proc/task_mmu.c
-> > > > > > [...]
-> > > > > > > +/*
-> > > > > > > + * Take VMA snapshot and pin vm_file and anon_name as they a=
-re used by
-> > > > > > > + * show_map_vma.
-> > > > > > > + */
-> > > > > > > +static int get_vma_snapshot(struct proc_maps_private *priv, =
-struct vm_area_struct *vma)
-> > > > > > > +{
-> > > > > > > +       struct vm_area_struct *copy =3D &priv->vma_copy;
-> > > > > > > +       int ret =3D -EAGAIN;
-> > > > > > > +
-> > > > > > > +       memcpy(copy, vma, sizeof(*vma));
-> > > > > > > +       if (copy->vm_file && !get_file_rcu(&copy->vm_file))
-> > > > > > > +               goto out;
-> > > > > >
-> > > > > > I think this uses get_file_rcu() in a different way than intend=
-ed.
-> > > > > >
-> > > > > > As I understand it, get_file_rcu() is supposed to be called on =
-a
-> > > > > > pointer which always points to a file with a non-zero refcount =
-(except
-> > > > > > when it is NULL). That's why it takes a file** instead of a fil=
-e* - if
-> > > > > > it observes a zero refcount, it assumes that the pointer must h=
-ave
-> > > > > > been updated in the meantime, and retries. Calling get_file_rcu=
-() on a
-> > > > > > pointer that points to a file with zero refcount, which I think=
- can
-> > > > > > happen with this patch, will cause an endless loop.
-> > > > > > (Just as background: For other usecases, get_file_rcu() is supp=
-osed to
-> > > > > > still behave nicely and not spuriously return NULL when the fil=
-e* is
-> > > > > > concurrently updated to point to another file*; that's what tha=
-t loop
-> > > > > > is for.)
-> > > > >
-> > > > > Ah, I see. I wasn't aware of this subtlety. I think this is fixab=
-le by
-> > > > > checking the return value of get_file_rcu() and retrying speculat=
-ion
-> > > > > if it changed.
-> > > >
-> > > > I think you could probably still end up looping endlessly in get_fi=
-le_rcu().
-> >
-> > (Just to be clear: What I meant here is that get_file_rcu() loops
-> > *internally*; get_file_rcu() is not guaranteed to ever return if the
-> > pointed-to file has a zero refcount.)
-> >
-> > > By "retrying speculation" I meant it in the sense of
-> > > get_vma_snapshot() retry when it takes the mmap_read_lock and then
-> > > does mmap_lock_speculate_try_begin to restart speculation. I'm also
-> > > thinking about Liam's concern of guaranteeing forward progress for th=
-e
-> > > reader. Thinking maybe I should not drop mmap_read_lock immediately o=
-n
-> > > contention but generate some output (one vma or one page worth of
-> > > vmas) before dropping mmap_read_lock and proceeding with speculation.
-> >
-> > Hm, yeah, I guess you need that for forward progress...
-> >
-> > > > > > (If my understanding is correct, maybe we should document that =
-more
-> > > > > > explicitly...)
-> > > > >
-> > > > > Good point. I'll add comments for get_file_rcu() as a separate pa=
-tch.
-> > > > >
-> > > > > >
-> > > > > > Also, I think you are introducing an implicit assumption that
-> > > > > > remove_vma() does not NULL out the ->vm_file pointer (because t=
-hat
-> > > > > > could cause tearing and could theoretically lead to a torn poin=
-ter
-> > > > > > being accessed here).
-> > > > > >
-> > > > > > One alternative might be to change the paths that drop referenc=
-es to
-> > > > > > vma->vm_file (search for vma_close to find them) such that they=
- first
-> > > > > > NULL out ->vm_file with a WRITE_ONCE() and do the fput() after =
-that,
-> > > > > > maybe with a new helper like this:
-> > > > > >
-> > > > > > static void vma_fput(struct vm_area_struct *vma)
-> > > > > > {
-> > > > > >   struct file *file =3D vma->vm_file;
-> > > > > >
-> > > > > >   if (file) {
-> > > > > >     WRITE_ONCE(vma->vm_file, NULL);
-> > > > > >     fput(file);
-> > > > > >   }
-> > > > > > }
-> > > > > >
-> > > > > > Then on the lockless lookup path you could use get_file_rcu() o=
-n the
-> > > > > > ->vm_file pointer _of the original VMA_, and store the returned=
- file*
-> > > > > > into copy->vm_file.
-> > > > >
-> > > > > Ack. Except for storing the return value of get_file_rcu(). I thi=
-nk
-> > > > > once we detect that  get_file_rcu() returns a different file we s=
-hould
-> > > > > bail out and retry. The change in file is an indication that the =
-vma
-> > > > > got changed from under us, so whatever we have is stale.
-> > > >
-> > > > What does "different file" mean here - what file* would you compare
-> > > > the returned one against?
-> > >
-> > > Inside get_vma_snapshot() I would pass the original vma->vm_file to
-> > > get_file_rcu() and check if it returns the same value. If the value
-> > > got changed we jump to  /* Address space got modified, vma might be
-> > > stale. Re-lock and retry. */ section. That should work, right?
-> >
-> > Where do you get an "original vma->vm_file" from?
-> >
-> > To be clear, get_file_rcu(p) returns one of the values that *p had
-> > while get_file_rcu(p) is running.
+> > +/* Entry for iommufd_ctx::mt_mmap */
+> > +struct iommufd_mmap {
+> > +	unsigned long pfn_start;
+> > +	unsigned long pfn_end;
+> > +};
+> 
+> This structure is introduced to represent a mappable/mapped region,
+> right? It would be better to add comments specifying whether the start
+> and end are inclusive or exclusive.
+
+start/end are supposed to be non-inclusive range in iommufd
+land. start/last for inclusive.
+
+This should be a u64 too
+
+> > +void iommufd_ctx_free_mmap(struct iommufd_ctx *ictx, unsigned long immap_id)
+> > +{
+> > +	kfree(mtree_erase(&ictx->mt_mmap, immap_id >> PAGE_SHIFT));
+> 
+> MMIO lifecycle question: what happens if a region is removed from the
+> maple tree (and is therefore no longer mappable), but is still mapped
+> and in use by userspace?
+
+I think we should probably zap it and make any existing VMAs
+SIGBUS... Otherwise it is hard to reason about from the kernel side
+
+Jason
 
