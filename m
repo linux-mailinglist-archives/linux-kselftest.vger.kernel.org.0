@@ -1,173 +1,144 @@
-Return-Path: <linux-kselftest+bounces-32362-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32363-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0167EAA95D5
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 16:28:11 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03C32AA95FF
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 16:37:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8246E178805
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 14:28:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 308E07A61EE
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 May 2025 14:36:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0640925A349;
-	Mon,  5 May 2025 14:28:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B21A25C70B;
+	Mon,  5 May 2025 14:37:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="FAEmofIC"
+	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="SwbIR0eu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AB6B2522B1
-	for <linux-kselftest@vger.kernel.org>; Mon,  5 May 2025 14:27:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DA8924E4AA
+	for <linux-kselftest@vger.kernel.org>; Mon,  5 May 2025 14:37:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746455282; cv=none; b=pnF4Wkvu1b0E8e66zd4jWxeY+/FMVzT6ezaRvj1Uml7iNlPFT6s/sq7+r4VUURru8Hv+iIsaVDTv0BGjpp+SrCJJ9+HuqC4L9bcOpGBPxksfjrV9hv1Fyq1EovtUhQV2GVkC626F2XhnYviRHH4MKf1vWxSw/dR6wjQauIvQTqI=
+	t=1746455835; cv=none; b=fMPEC6a2btMhWzuIxUmhvMv1f14LgZxBu8RgjpQCwMRWBthcYLHNFaI8Uz2MjUIEv+iskE10a6lwurRuEEx5dwqb5Yawm4XqBc8a9txfgmuoreMTNQdS8pLCAXGBNHaGuqQxU26nPcXBeZmfsv0RI0aJLkKskzoOhKAZ99sFqEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746455282; c=relaxed/simple;
-	bh=8bG+q9cvIxNRKMt+IdST9BOBQGsJ4SSG4cIoMmhVp70=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UhMlJacUF852ywzAE032KTizsiSa0s+/xNWnSXUfKwm3NkH5+COgEE8hu7gksYKrSw09oU464dF4GyEeRKm4LCGiyAJ+iaWwbAbUqy3BhFG+gFdMtz0bOGnwpW9nJSdrHcaIIPI2sVjrgTlCNw8QVFwxyRT3KsNw49FTXHCVt1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=FAEmofIC; arc=none smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5faaddb09feso3634743a12.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 05 May 2025 07:27:59 -0700 (PDT)
+	s=arc-20240116; t=1746455835; c=relaxed/simple;
+	bh=JmucSS8yHIGvXEbtSfgsHVr9r5nyIh34DSUF08JyRTI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MXPuYxmFKa8qnBraty+js2bPKbLyuLLCW2x1qFx9JH8Ctlah8oZLAAlhXaq37cD9pKVgigrmOf1kvCPKsEtW/CsX1sQ1uvJPqwewLT4unUNtZnncE3OFNE1aW29MPLLsEgXzmwt6b92fn3ciHV/eVbPlOtnqovLz5bhMCgMD0AE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=SwbIR0eu; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3a064a3e143so1980576f8f.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 05 May 2025 07:37:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1746455278; x=1747060078; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VBzMpH2jBdczGJAGi07riCizg5SErgbDrt1biXSYE6I=;
-        b=FAEmofIC0oMM+HqGX1QdwjAskqxFoWHqsDymqlRLBS/KhXeZxE+mwWfJq29JUleahh
-         vKT2odpe77T24da5PV0EMgZ19hC2eRe4ZrMkJVRQRz0eIKE20NtNaupb7t2dlnTladb6
-         4mHbjKw5IN4P2WzraDyaCPW1q3P+ecfzDwBrl6jMs7w3fpy/jYI+5rBEE66Agxn9GF77
-         g4Y8NWq5b6bnb9NlFU8Pc/my94E230XqMhM79g5fUvX3TSlwsiVK2ibWES8kafcBxZG4
-         tnLTBER/EMzZktt84zMYVCpiHMTBHreMBiFItt1ZWyOn+8aGousocxWBWePautMA2OGz
-         bc2Q==
+        d=isovalent.com; s=google; t=1746455832; x=1747060632; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5IlruZqZzq0+fswkpFmPD6JiolgWVetZjDH4ysB+h9A=;
+        b=SwbIR0eugaKz+3A1KOLmvmgO179zctaCTI5qb4gHCL+WYiXHTVjEB9R0DBgixqPSn7
+         0SqG91H9Thil0rDawmRmFx1GyLesRZ+aLS+TB9Xrhc+9rwWDpT6dotUrMC2/3qMdBmJr
+         rZj9OKHYoJDsNgn85h5ZBkf+cJAUL2HUIEHrVrxHVtLc/lWLIZPh30rwxM5TuZdFJ+MR
+         SKWnKyhTW4hdkOJslRzh0BG0Pc7KnE2vszNApv45nKiS5NdwxBY3XW9lPipjLmz0OCNv
+         8OD70zOb8BTeyHKaRDnQGnNYa6wFTx5YTBFcdvHeHqUp/g2mNcfMgC79l94giqtVxiUI
+         0Ppg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746455278; x=1747060078;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VBzMpH2jBdczGJAGi07riCizg5SErgbDrt1biXSYE6I=;
-        b=f/MkdbQjVKv5v0nx4mK0UAbC1+qpj1S0fLX52Vq8emAoapc4rrPmL/NxV/cXR4SSJs
-         keLGAIokN+qY0OUPvcwr6+JTWYjYGzU+7ejEd9lEEuM4TFLV8/9W3Xg61x6gUaIxjDRN
-         XpSwSw4XWNotVbVMY1OQlQohLNcdJ5kBabIfaDouT9/gx3t89wfYLuksqt3FPFh0fD5w
-         bxPAqEpP8wZ/ugMOPgQhFcryZ7S+QSduMGR+XdzFmFwenvc1B/szdrycAFUqe2jFqdz0
-         hJfc1Ih93pFeX0OVaCA442hgx9EB2i0a7Xk5JFkt3e2OTpI9tX+PVcjyq5tDw0CUMwdp
-         q9iQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXXkdCAdv/iQkmRKHMJ2yRhwgGZXA8G+ZKuEeVu/Ynof4e1Z/a+ehjwYTGIoSKM28dKq+VDN1Pe/81JupBDs3c=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzr7WvU52T6axA5PY1rNbhLrNrA60GIFyMJuJBRMQ6q4gLnQ99D
-	qOp7/1IVIDysuaqja2a6Yodge4yc+OQFf62G1vtP7I5rxsZPhM7fnaEntSpsrU0=
-X-Gm-Gg: ASbGncvNxQRgf9CoWJjcqyXExEzMaUjXN5Zd1IEWqoOrluBqr701IZIlbRqV6UMf9qW
-	swcJacyhtEisoOkRnQ4T41FTwSpq7RUHNODggXYZOdPAITqr5Yw1lLrPgI360S+HAHQLoPlj/UK
-	QAiyTJ0UfMIElJN2YK5lGkBgl/2R/TuipgGU5Xdui8prHwGs1Lz72XPqN8+l0XLeeALPxi2AQ1v
-	Zb/iZ8DZA/SKUxEImGHXCX48yJSVaWYZ41QU3t5x9jnUZpog5ZoU0HkxT0TBrPvPh610U2EQLFM
-	0Ng/Jw96wPkBt+8Dfgo7dz42pGUgDJ0aCv6wNwR3bzdu+PJBZTW5WA==
-X-Google-Smtp-Source: AGHT+IExfE0hcX78gw0nn1iPLAnLmMN0HdxWQnnSN8VNB89rL2yQ8NHWy4t+WCuJ1B8DNVSnVHuwAg==
-X-Received: by 2002:a17:906:c115:b0:ad0:c6ae:c0c9 with SMTP id a640c23a62f3a-ad1a4ab7f0dmr731420066b.40.1746455277537;
-        Mon, 05 May 2025 07:27:57 -0700 (PDT)
-Received: from [10.100.51.48] ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad1891a1f2dsm498974566b.40.2025.05.05.07.27.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 May 2025 07:27:57 -0700 (PDT)
-Message-ID: <68e762ec-d320-4077-b321-63eefefe6d7d@suse.com>
-Date: Mon, 5 May 2025 16:27:54 +0200
+        d=1e100.net; s=20230601; t=1746455832; x=1747060632;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5IlruZqZzq0+fswkpFmPD6JiolgWVetZjDH4ysB+h9A=;
+        b=gPDwNxolgo4EcSAIbbCEtI8UM0d0pSyA9ZOZTd/zMn2ovZQzj4+ZsU80kWUS1Gqs3q
+         Jig6RgmAF9cy+Zqcw5jaOtEvfJTp3MAQSFLdsfU4CuC1jGA3ZsoSRtu1MNw3orLMP+jl
+         /l4hWwggmNyUfFE0asURNA6iwEIXikWotbXWXOP3ATrTsOZJZnTe6+OQ5bcCL5sYgdw2
+         WJNI4KKaP0D95p1epbva7SHTdsoDfeVnMld+28dS69+xhgutNXQ/Ks1aZ9vAoIwcCXQH
+         HSsKgaoy3NfCVkXQJ5vBM6FzFRuQzSvT/750rWKvyNIG0jZd5s7HtZW+FyzFLfLudKuW
+         S7xQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWt4V9pKN84k0mxhy/x8BlE2Y3tIy53+Dam4fWIDbMpV54IZRIrV2GI9bg7sAmQNFMp45wxANKR+cxKLg6GpyE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/UHMSKO23CngoU6ko+yQ8bfr4HobNnumyzkKyOZI4qUThZcs+
+	o4CEdAaSdhKMSAvzQTWknScwEwtaHDmNTCCG1GwkkmppFupJ8+IgIaNk6DYYULGrXITrZ0USWmq
+	WFRXuwCXv8sgtBYhfvnArKZHUBJhLzRSIVx85bA==
+X-Gm-Gg: ASbGnctGTQIPiCkW7e63CffJlP5rI0Udnc+rTlHcDgFD4JBCuuBomcEW9kK2CIzJvs4
+	VXIlIzMYLwxd/9v3sOhsiY7gnRgg+moNKywagzIXCyhCrNxOuJm+qq6i73e9vCVk+oINgvYD1Ls
+	tyXZhXUEYpDkdAcLpe8ELOISS6FNSy4oFWoBSQALDp2w/FiA==
+X-Google-Smtp-Source: AGHT+IGRryQZey4md2gCZKMAPgpPKfd6jIR1elEkmSqIVQ7Rm5RNzJwqA82lZIzpIZ7of6EckvnAb00PhWCAFAg43Lo=
+X-Received: by 2002:a05:6000:2284:b0:39c:1257:dbaa with SMTP id
+ ffacd0b85a97d-3a09fdde004mr5248186f8f.58.1746455831960; Mon, 05 May 2025
+ 07:37:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 22/25] module: Remove outdated comment about text_size
-To: Valentin Schneider <vschneid@redhat.com>
-Cc: linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
- linux-riscv@lists.infradead.org, linux-perf-users@vger.kernel.org,
- kvm@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- rcu@vger.kernel.org, linux-hardening@vger.kernel.org,
- linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
- Juri Lelli <juri.lelli@redhat.com>, Marcelo Tosatti <mtosatti@redhat.com>,
- Yair Podemsky <ypodemsk@redhat.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
- Daniel Wagner <dwagner@suse.de>, Petr Tesarik <ptesarik@suse.com>,
- Nicolas Saenz Julienne <nsaenz@amazon.com>,
- Frederic Weisbecker <frederic@kernel.org>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- Sean Christopherson <seanjc@google.com>, Juergen Gross <jgross@suse.com>,
- Ajay Kaher <ajay.kaher@broadcom.com>,
- Alexey Makhalov <alexey.amakhalov@broadcom.com>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>, Russell King
- <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>,
- Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
- WANG Xuerui <kernel@xen0n.name>, Paul Walmsley <paul.walmsley@sifive.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Alexandre Ghiti <alex@ghiti.fr>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- Peter Zijlstra <peterz@infradead.org>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>,
- "Liang, Kan" <kan.liang@linux.intel.com>,
- Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
- Paolo Bonzini <pbonzini@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
- Jason Baron <jbaron@akamai.com>, Steven Rostedt <rostedt@goodmis.org>,
- Ard Biesheuvel <ardb@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
- Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>,
- Daniel Gomez <da.gomez@samsung.com>, Naveen N Rao <naveen@kernel.org>,
- Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
- "David S. Miller" <davem@davemloft.net>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
- Joel Fernandes <joel@joelfernandes.org>,
- Josh Triplett <josh@joshtriplett.org>, Boqun Feng <boqun.feng@gmail.com>,
- Uladzislau Rezki <urezki@gmail.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>, Ben Segall
- <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
- Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Masahiro Yamada <masahiroy@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
- Miguel Ojeda <ojeda@kernel.org>, "Mike Rapoport (Microsoft)"
- <rppt@kernel.org>, Rong Xu <xur@google.com>,
- Rafael Aquini <aquini@redhat.com>, Song Liu <song@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Dan Carpenter
- <dan.carpenter@linaro.org>, Brian Gerst <brgerst@gmail.com>,
- "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
- Benjamin Berg <benjamin.berg@intel.com>,
- Vishal Annapurve <vannapurve@google.com>,
- Randy Dunlap <rdunlap@infradead.org>, John Stultz <jstultz@google.com>,
- Tiezhu Yang <yangtiezhu@loongson.cn>
-References: <20250429113242.998312-1-vschneid@redhat.com>
- <20250429113242.998312-23-vschneid@redhat.com>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20250429113242.998312-23-vschneid@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20250502-vmlinux-mmap-v2-0-95c271434519@isovalent.com>
+ <20250502-vmlinux-mmap-v2-1-95c271434519@isovalent.com> <CAADnVQ+dMwAFPO-ASojjYPxODpCKf_9FCLjUvn2HeHigL53JdQ@mail.gmail.com>
+In-Reply-To: <CAADnVQ+dMwAFPO-ASojjYPxODpCKf_9FCLjUvn2HeHigL53JdQ@mail.gmail.com>
+From: Lorenz Bauer <lmb@isovalent.com>
+Date: Mon, 5 May 2025 15:37:00 +0100
+X-Gm-Features: ATxdqUFASGpQMncGff41_zyVmbKXRgRyXvQdozB20vSAY52iy8F4VaheL5-kBFM
+Message-ID: <CAN+4W8jLdcJbVvQ_YaPVqP0EB6reFgt8S0AZh_w3K80tsJvX5Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/3] btf: allow mmap of vmlinux btf
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	linux-arch <linux-arch@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 4/29/25 13:32, Valentin Schneider wrote:
-> The text_size bit referred to by the comment has been removed as of commit
-> 
->   ac3b43283923 ("module: replace module_layout with module_memory")
-> 
-> and is thus no longer relevant. Remove it and comment about the contents of
-> the masks array instead.
-> 
-> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+On Fri, May 2, 2025 at 6:15=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+> remap_pfn_range() should be avoided.
+> See big comment in kernel/events/core.c in map_range().
+>
+> The following seems to work:
 
-This comment cleanup is independent of the rest of the series. I've
-picked it separately on modules-next.
+Thanks, this helped a lot.
 
--- 
-Thanks,
-Petr
+> but this part is puzzling:
+>         trailing =3D page_size - (btf_size % page_size) % page_size;
+
+The intention is to calculate how many bytes of trailing zeroes to
+expect while accounting for the case where btf_size % page_size =3D=3D 0.
+I could replace this with a check
+
+    end =3D btf_size + (page_size - 1) / page_size * page_size;
+    for (i =3D btf_size; i < end; i++) ...
+
+Better?
+
+In the meantime I've looked at allowing mmap of kmods. I'm not sure
+it's worth the effort:
+
+1. Allocations of btf->data in btf_parse_module() would have to use
+vmalloc_user() so that allocations are page aligned and zeroed
+appropriately. This will be a bit more expensive on systems with large
+pages and / or many small kmod BTFs. We could only allow mmap of BTF
+>=3D PAGE_SIZE, at additional complexity.
+
+2. We need to hold a refcount on struct btf for each mmapped kernel
+module, so that btf->data doesn't get freed. Taking the refcount can
+happen in the sysfs mmap handler, but dropping it is tricky. kernfs /
+sysfs doesn't allow using vm_ops->close (see kernfs_fop_mmap). It
+seems possible to use struct kernfs_ops->release(), but I don't
+understand at all how that deals with multiple mmaps of the same file
+in a single process. Also makes me wonder what happens when a process
+mmaps the kmod BTF, the module is unloaded and then the process
+attempts to access the mmap. My cursory understanding is that this
+would raise a fault, which isn't great at all.
+
+If nobody objects / has solutions I'll send a v3 of my original patch
+with reviews addressed but without being able to mmap kmods.
+
+Thanks
+Lorenz
 
