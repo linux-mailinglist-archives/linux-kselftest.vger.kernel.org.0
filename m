@@ -1,143 +1,297 @@
-Return-Path: <linux-kselftest+bounces-32520-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32521-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB3ABAACC5C
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 May 2025 19:40:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A2C2AACC5E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 May 2025 19:40:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2CB2C4E4E81
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 May 2025 17:40:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DB2784E7A0E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 May 2025 17:40:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E66B280CCE;
-	Tue,  6 May 2025 17:40:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D7AD2853F1;
+	Tue,  6 May 2025 17:40:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CQHntQEu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tBdbT4Cn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2B94253B56;
-	Tue,  6 May 2025 17:40:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E47972820CE;
+	Tue,  6 May 2025 17:40:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746553233; cv=none; b=OW+daCQ1gZ2lL6axp8pXLR+hN9E6R4v2iEbZQYCGeXLdAwLJOLmKNf3UmE9g/k2+GE/SPt5FrG3DSoedNGc3Lkysuf7aVICKb9AGq4eo3eT5OYUhZvt/Kagv+FepOtLqAwOobsRou3/45XabIPxc0C0+Hch0nouKQdtqewvziJc=
+	t=1746553237; cv=none; b=qtmf43Bis0GhwhhlUGeSacrsY25Dwlm0CQ+5bkMX90ZVg8lN83wflNSCSbAMWOLFu2zET9n2NDC10lVcjKyBSon0Mk1WO+ksTcAyXQYKVZ/xeus7eEJm/NZIua0uR/UKZQBF6JK5QZVJaKpujRr+awmqkC/xax0LXVBlGpzrC7U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746553233; c=relaxed/simple;
-	bh=4kdAXXZi12VF44Cb1DC4z4hso776BAYh+rbTOPp1zk0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tmuowxqy4z9RO9KzqBATh683DrknR+96dwTSorfM2bOYGes8VXIQVmfgX8wUWhxLtfF01i6F0eLBmrFTOBVvweJ79AgK4706pd4Kl8TLm5b/F298K7lNrnPhI/15TleOqK6NYqmmdb3NmFzNztjevQUDZOlXt71AwgV22mfF3C4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CQHntQEu; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-22435603572so77714415ad.1;
-        Tue, 06 May 2025 10:40:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746553231; x=1747158031; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wjVVfpFT4yP7gJ50hizx3+DZkQqFzjP0uQK38pV2Azs=;
-        b=CQHntQEuFEKhqMf1mEeGnK8KyIGbbdBH8ekluZ21ItoS4QMTlDaA93d0JA9tKfDncY
-         hSo79oTt+A1PEUtbLt8jYSfdUtzfibRlzPcvTEZu4/lB4Z1JmQ6dwm7r8i7VclYbwuSI
-         uXcuOQ0qgMx1Em1XtT2PGYe5UiA5FK0AR4L5/6L3/QUky8HrBJJcLf/XuPx1E1YxBpb4
-         cF6DA1JpZcpLfOUHdpY6F54XNcvLo0H4CgW2tyofjGj5dW8LPBzUZR2MRMDorYEDbaUC
-         HuO72vKY5QMBHs5VB76FJBV5aIVpTE5BvSXtoAy92bLC29h9vV1yzWViSyyZbMlw9/CS
-         afAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746553231; x=1747158031;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wjVVfpFT4yP7gJ50hizx3+DZkQqFzjP0uQK38pV2Azs=;
-        b=b8omHYDP/66IXdWcml9kOmBqMv3SVb1DA3xBDNLgzTOqgBEQdPCWUFo4W9YkL7d40K
-         5aajpHsliDiz9Q9bND0VkpkWwe5Ved5bEtDxgiWOwKcbqQ1jReVMYudyy9p2maiHcGZA
-         wAq0+lukx8s9cx1Hg7HA4xrwhJZw+5t6s1FwbXsXQ3+k0JGzMToULxatOS/zLLUBm9EU
-         7fXj9L0FGN2qC38DMDeNR2XhU2S0SVbn7piOkGZTRTdwwdihVzo3TpDnE3RdEUDSwh0s
-         9VqhpWpDor+WyPSK28mE8p3vFicXHJuW/Pi50g6AM/wgHEQQ0U2sHjESoSE42vBPChVY
-         4xPQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVAedvFtOaTcqzdUxZdkvioe3C07SLIcY6bmz2t6ntQOAqG63F6cqj0VEnfXE8KFunZHfUxLk49bLIJbWWZeGY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxaBj6ZvaHOWYEwcwSfXz37A2a6H2jdRwzWzDerEjvWZq4hscxE
-	DsVwz12Lmwx8Y2dQ2FTtRV12Pv1OtwpCAbX+QwKKtmDvLizf1Vw=
-X-Gm-Gg: ASbGnct2mt8if5zUg5rBfYQNWBl0XPwTIQ5c8mQhDx+qe7ITrHpRv51Gc+6CVMtvAXx
-	9phNBrK3Dz9newnYg8ht+rmS8jFxHeXwFtRAe3FR4B6s6ZENjt1iykxQfs7n+NN0r+9qcmsmZvv
-	AFMvN7krNaHg9dJvzR0cuSjvEOT0vy28FvZ4hR4rGXTT56R0jo1zq60vCNPIDaJdZhRqePRY0jw
-	u4um4uRbek/RUHRRK+SR/cuafv70YXRzeZlywW+pPA/evm5MDqkhw8t+VgeFacllVadQom44f6O
-	uGwu+7eoBBoIo1xF3o98QTrLmt+VfOlGjffIfBwUjzcl2Jam37woHJ6sp2FXI+f86uPclPM3Ftc
-	=
-X-Google-Smtp-Source: AGHT+IH4KHIBz+2/zNk30aR1k3TNmHE0g432qntdCeusCbGFDtSR7Etf+B2XebP9KGC7atfLW+VWmA==
-X-Received: by 2002:a17:902:e5cc:b0:21f:988d:5758 with SMTP id d9443c01a7336-22e5eccb4d9mr1578385ad.35.1746553231122;
-        Tue, 06 May 2025 10:40:31 -0700 (PDT)
-Received: from localhost (c-73-170-40-124.hsd1.ca.comcast.net. [73.170.40.124])
-        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-22e1521fc49sm76361545ad.134.2025.05.06.10.40.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 May 2025 10:40:30 -0700 (PDT)
-Date: Tue, 6 May 2025 10:40:27 -0700
-From: Stanislav Fomichev <stfomichev@gmail.com>
-To: Cosmin Ratiu <cratiu@nvidia.com>
-Cc: netdev@vger.kernel.org, Stanislav Fomichev <sdf@fomichev.me>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	"jiri @ resnulli . us" <jiri@resnulli.us>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Dragos Tatulea <dtatulea@nvidia.com>,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net] net: Lock lower level devices when updating features
-Message-ID: <aBpJi3t0RhUj5HPE@mini-arch>
-References: <20250506142117.1883598-1-cratiu@nvidia.com>
- <aBpC9_SgUaAA2P0f@mini-arch>
+	s=arc-20240116; t=1746553237; c=relaxed/simple;
+	bh=wDGoJrItvz9Guz2NwKT+3LqsqxJYbeX52NMfs5S5dkU=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=VHR8c++Bf6BxJDcxXTHEmSXNnSoot7L+W4tJO+sZOYjGxHVOFguK5IWQS1sLfyUCOnaYyXcpzJVavaUabutUMH+ilKS+sgjSpr9YoShtwpFkGGCY+o+9Tn3Eyps3HUwVA+/1/QkAo4o3CKZblPmum7MCCpCbgFcWjiOu4431zcc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tBdbT4Cn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFFF1C4CEE4;
+	Tue,  6 May 2025 17:40:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746553236;
+	bh=wDGoJrItvz9Guz2NwKT+3LqsqxJYbeX52NMfs5S5dkU=;
+	h=From:Date:To:cc:Subject:In-Reply-To:References:From;
+	b=tBdbT4Cn7poyAwiHItVxi+zCprTY0iLukWKRpbIh13P967MIdSX286LCXQVNTyeXs
+	 1zZJcQjp+pZe1fvbQy6Vyudphzldau6eWNcbyHIU9rc315w0/gePNzlqXSqD1rJZIX
+	 zBHyrhcx9Wb4xMMXHoRF7fxamj+NcniGtJg3ZC1kLwD7k6Bx9SJ3woMUu0zDKkB3w/
+	 I9zquv3lUdD170b0xFWlXZsWYOD3fb+cXyGx0oxmfzV9Z8TfwKQuQyNLFjjdxV3v/S
+	 FUnWa6NpVW3y8j6cL2F7qaah+T9mFfq488T0CDnOS9Sv6PkBo7cBsbmiIvxb1B9iTC
+	 cibUDj//P3xkg==
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ij@kernel.org>
+Date: Tue, 6 May 2025 20:40:30 +0300 (EEST)
+To: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>
+cc: Paolo Abeni <pabeni@redhat.com>, "horms@kernel.org" <horms@kernel.org>, 
+    "dsahern@kernel.org" <dsahern@kernel.org>, 
+    "kuniyu@amazon.com" <kuniyu@amazon.com>, 
+    "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
+    "netdev@vger.kernel.org" <netdev@vger.kernel.org>, 
+    "dave.taht@gmail.com" <dave.taht@gmail.com>, 
+    "jhs@mojatatu.com" <jhs@mojatatu.com>, "kuba@kernel.org" <kuba@kernel.org>, 
+    "stephen@networkplumber.org" <stephen@networkplumber.org>, 
+    "xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>, 
+    "jiri@resnulli.us" <jiri@resnulli.us>, 
+    "davem@davemloft.net" <davem@davemloft.net>, 
+    "edumazet@google.com" <edumazet@google.com>, 
+    "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>, 
+    "donald.hunter@gmail.com" <donald.hunter@gmail.com>, 
+    "ast@fiberby.net" <ast@fiberby.net>, 
+    "liuhangbin@gmail.com" <liuhangbin@gmail.com>, 
+    "shuah@kernel.org" <shuah@kernel.org>, 
+    "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, 
+    "ncardwell@google.com" <ncardwell@google.com>, 
+    "Koen De Schepper (Nokia)" <koen.de_schepper@nokia-bell-labs.com>, 
+    "g.white" <g.white@cablelabs.com>, 
+    "ingemar.s.johansson@ericsson.com" <ingemar.s.johansson@ericsson.com>, 
+    "mirja.kuehlewind@ericsson.com" <mirja.kuehlewind@ericsson.com>, 
+    "cheshire@apple.com" <cheshire@apple.com>, 
+    "rs.ietf@gmx.at" <rs.ietf@gmx.at>, 
+    "Jason_Livingood@comcast.com" <Jason_Livingood@comcast.com>, 
+    vidhi_goel <vidhi_goel@apple.com>
+Subject: RE: [PATCH v5 net-next 09/15] tcp: accecn: AccECN option
+In-Reply-To:  <PAXPR07MB79841A27EC04E89136330942A3892@PAXPR07MB7984.eurprd07.prod.outlook.com>
+Message-ID: <1564983d-5bbc-c28c-351e-fc6ab8d4d4eb@kernel.org>
+References: <20250422153602.54787-1-chia-yu.chang@nokia-bell-labs.com> <20250422153602.54787-10-chia-yu.chang@nokia-bell-labs.com> <d0969c3d-e33c-472e-815d-70b333990b39@redhat.com> <412724ed-f5a0-9749-8c50-4dd76afd4140@kernel.org> 
+ <PAXPR07MB79841A27EC04E89136330942A3892@PAXPR07MB7984.eurprd07.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <aBpC9_SgUaAA2P0f@mini-arch>
+Content-Type: multipart/mixed; boundary="8323328-994551896-1746553230=:1002"
 
-On 05/06, Stanislav Fomichev wrote:
-> On 05/06, Cosmin Ratiu wrote:
-> > __netdev_update_features() expects the netdevice to be ops-locked, but
-> > it gets called recursively on the lower level netdevices to sync their
-> > features, and nothing locks those.
-> > 
-> > This commit fixes that, with the assumption that it shouldn't be possible
-> > for both higher-level and lover-level netdevices to require the instance
-> > lock, because that would lead to lock dependency warnings.
-> > 
-> > Without this, playing with higher level (e.g. vxlan) netdevices on top
-> > of netdevices with instance locking enabled can run into issues:
-> 
-> Mentioning vxlan is a bit confusing here; it shouldn't let you flip lro (I
-> think). Which upper are you testing against?
-> 
-> Trying to understand if we can cover this case in the selftests.
-> netdevsim also doesn't expose F_LRO feature... (yet?)
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Ok, yeah, I can see it with the teaming on top of netdevsim and the following
-patch applied. Might try to send a testcase to cover this and the promisc part
-that I missed.
+--8323328-994551896-1746553230=:1002
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+On Tue, 6 May 2025, Chia-Yu Chang (Nokia) wrote:
 
-diff --git a/drivers/net/netdevsim/netdev.c b/drivers/net/netdevsim/netdev.c
-index 2aa999345fe1..af545d42961c 100644
---- a/drivers/net/netdevsim/netdev.c
-+++ b/drivers/net/netdevsim/netdev.c
-@@ -881,11 +881,13 @@ static void nsim_setup(struct net_device *dev)
- 			 NETIF_F_SG |
- 			 NETIF_F_FRAGLIST |
- 			 NETIF_F_HW_CSUM |
-+			 NETIF_F_LRO |
- 			 NETIF_F_TSO;
- 	dev->hw_features |= NETIF_F_HW_TC |
- 			    NETIF_F_SG |
- 			    NETIF_F_FRAGLIST |
- 			    NETIF_F_HW_CSUM |
-+			    NETIF_F_LRO |
- 			    NETIF_F_TSO;
- 	dev->max_mtu = ETH_MAX_MTU;
- 	dev->xdp_features = NETDEV_XDP_ACT_HW_OFFLOAD;
+> > -----Original Message-----
+> > From: Ilpo J=E4rvinen <ij@kernel.org>=20
+> > Sent: Tuesday, May 6, 2025 12:54 AM
+> > To: Paolo Abeni <pabeni@redhat.com>
+> > Cc: Chia-Yu Chang (Nokia) <chia-yu.chang@nokia-bell-labs.com>; horms@ke=
+rnel.org; dsahern@kernel.org; kuniyu@amazon.com; bpf@vger.kernel.org; netde=
+v@vger.kernel.org; dave.taht@gmail.com; jhs@mojatatu.com; kuba@kernel.org; =
+stephen@networkplumber.org; xiyou.wangcong@gmail.com; jiri@resnulli.us; dav=
+em@davemloft.net; edumazet@google.com; andrew+netdev@lunn.ch; donald.hunter=
+@gmail.com; ast@fiberby.net; liuhangbin@gmail.com; shuah@kernel.org; linux-=
+kselftest@vger.kernel.org; ncardwell@google.com; Koen De Schepper (Nokia) <=
+koen.de_schepper@nokia-bell-labs.com>; g.white <g.white@cablelabs.com>; ing=
+emar.s.johansson@ericsson.com; mirja.kuehlewind@ericsson.com; cheshire@appl=
+e.com; rs.ietf@gmx.at; Jason_Livingood@comcast.com; vidhi_goel <vidhi_goel@=
+apple.com>
+> > Subject: Re: [PATCH v5 net-next 09/15] tcp: accecn: AccECN option
+> >=20
+> >=20
+> > CAUTION: This is an external email. Please be very careful when clickin=
+g links or opening attachments. See the URL nok.it/ext for additional infor=
+mation.
+> >=20
+> >=20
+> >=20
+> > On Tue, 29 Apr 2025, Paolo Abeni wrote:
+> >=20
+> > > On 4/22/25 5:35 PM, chia-yu.chang@nokia-bell-labs.com wrote:
+> > > > @@ -302,10 +303,13 @@ struct tcp_sock {
+> > > >     u32     snd_up;         /* Urgent pointer               */
+> > > >     u32     delivered;      /* Total data packets delivered incl. r=
+exmits */
+> > > >     u32     delivered_ce;   /* Like the above but only ECE marked p=
+ackets */
+> > > > +   u32     delivered_ecn_bytes[3];
+> > >
+> > > This new fields do not belong to this cacheline group. I'm unsure the=
+y=20
+> > > belong to fast-path at all. Also u32 will wrap-around very soon.
+> > >
+> > > [...]
+> > > > diff --git a/include/uapi/linux/tcp.h b/include/uapi/linux/tcp.h=20
+> > > > index dc8fdc80e16b..74ac8a5d2e00 100644
+> > > > --- a/include/uapi/linux/tcp.h
+> > > > +++ b/include/uapi/linux/tcp.h
+> > > > @@ -298,6 +298,13 @@ struct tcp_info {
+> > > >     __u32   tcpi_snd_wnd;        /* peer's advertised receive windo=
+w after
+> > > >                                   * scaling (bytes)
+> > > >                                   */
+> > > > +   __u32   tcpi_received_ce;    /* # of CE marks received */
+> > > > +   __u32   tcpi_delivered_e1_bytes;  /* Accurate ECN byte counters=
+ */
+> > > > +   __u32   tcpi_delivered_e0_bytes;
+> > > > +   __u32   tcpi_delivered_ce_bytes;
+> > > > +   __u32   tcpi_received_e1_bytes;
+> > > > +   __u32   tcpi_received_e0_bytes;
+> > > > +   __u32   tcpi_received_ce_bytes;
+> > >
+> > > This will break uAPI: new fields must be addded at the end, or must=
+=20
+> > > fill existing holes. Also u32 set in stone in uAPI for a byte counter=
+=20
+> > > looks way too small.
+> > >
+> > > > @@ -5100,7 +5113,7 @@ static void __init tcp_struct_check(void)
+> > > >     /* 32bit arches with 8byte alignment on u64 fields might need p=
+adding
+> > > >      * before tcp_clock_cache.
+> > > >      */
+> > > > -   CACHELINE_ASSERT_GROUP_SIZE(struct tcp_sock, tcp_sock_write_txr=
+x, 109 + 7);
+> > > > +   CACHELINE_ASSERT_GROUP_SIZE(struct tcp_sock,=20
+> > > > + tcp_sock_write_txrx, 122 + 6);
+> > >
+> > > The above means an additional cacheline in fast-path WRT the current=
+=20
+> > > status. IMHO should be avoided.
+> > >
+> > > > diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c index=20
+> > > > 5bd7fc9bcf66..41e45b9aff3f 100644
+> > > > --- a/net/ipv4/tcp_input.c
+> > > > +++ b/net/ipv4/tcp_input.c
+> > > > @@ -70,6 +70,7 @@
+> > > >  #include <linux/sysctl.h>
+> > > >  #include <linux/kernel.h>
+> > > >  #include <linux/prefetch.h>
+> > > > +#include <linux/bitops.h>
+> > > >  #include <net/dst.h>
+> > > >  #include <net/tcp.h>
+> > > >  #include <net/proto_memory.h>
+> > > > @@ -499,6 +500,144 @@ static bool tcp_ecn_rcv_ecn_echo(const struct=
+ tcp_sock *tp, const struct tcphdr
+> > > >     return false;
+> > > >  }
+> > > >
+> > > > +/* Maps IP ECN field ECT/CE code point to AccECN option field=20
+> > > > +number, given
+> > > > + * we are sending fields with Accurate ECN Order 1: ECT(1), CE, EC=
+T(0).
+> > > > + */
+> > > > +static u8 tcp_ecnfield_to_accecn_optfield(u8 ecnfield) {
+> > > > +   switch (ecnfield) {
+> > > > +   case INET_ECN_NOT_ECT:
+> > > > +           return 0;       /* AccECN does not send counts of NOT_E=
+CT */
+> > > > +   case INET_ECN_ECT_1:
+> > > > +           return 1;
+> > > > +   case INET_ECN_CE:
+> > > > +           return 2;
+> > > > +   case INET_ECN_ECT_0:
+> > > > +           return 3;
+> > > > +   default:
+> > > > +           WARN_ONCE(1, "bad ECN code point: %d\n", ecnfield);
+> > >
+> > > No WARN_ONCE() above please: either the 'ecnfield' data is masked vs=
+=20
+> > > INET_ECN_MASK and the WARN_ONCE should not be possible or a remote=20
+> > > sender can deterministically trigger a WARN() which nowadays will in=
+=20
+> > > turn raise a CVE...
+> > >
+> > > [...]
+> > > > +static u32 tcp_accecn_field_init_offset(u8 ecnfield) {
+> > > > +   switch (ecnfield) {
+> > > > +   case INET_ECN_NOT_ECT:
+> > > > +           return 0;       /* AccECN does not send counts of NOT_E=
+CT */
+> > > > +   case INET_ECN_ECT_1:
+> > > > +           return TCP_ACCECN_E1B_INIT_OFFSET;
+> > > > +   case INET_ECN_CE:
+> > > > +           return TCP_ACCECN_CEB_INIT_OFFSET;
+> > > > +   case INET_ECN_ECT_0:
+> > > > +           return TCP_ACCECN_E0B_INIT_OFFSET;
+> > > > +   default:
+> > > > +           WARN_ONCE(1, "bad ECN code point: %d\n", ecnfield);
+> > >
+> > > Same as above.
+> > >
+> > > > +   }
+> > > > +   return 0;
+> > > > +}
+> > > > +
+> > > > +/* Maps AccECN option field #nr to IP ECN field ECT/CE bits */=20
+> > > > +static unsigned int tcp_accecn_optfield_to_ecnfield(unsigned int o=
+ptfield,
+> > > > +                                               bool order) {
+> > > > +   u8 tmp;
+> > > > +
+> > > > +   optfield =3D order ? 2 - optfield : optfield;
+> > > > +   tmp =3D optfield + 2;
+> > > > +
+> > > > +   return (tmp + (tmp >> 2)) & INET_ECN_MASK; }
+> > > > +
+> > > > +/* Handles AccECN option ECT and CE 24-bit byte counters update=20
+> > > > +into
+> > > > + * the u32 value in tcp_sock. As we're processing TCP options, it=
+=20
+> > > > +is
+> > > > + * safe to access from - 1.
+> > > > + */
+> > > > +static s32 tcp_update_ecn_bytes(u32 *cnt, const char *from, u32=20
+> > > > +init_offset) {
+> > > > +   u32 truncated =3D (get_unaligned_be32(from - 1) - init_offset) =
+&
+> > > > +                   0xFFFFFFU;
+> > > > +   u32 delta =3D (truncated - *cnt) & 0xFFFFFFU;
+> > > > +
+> > > > +   /* If delta has the highest bit set (24th bit) indicating
+> > > > +    * negative, sign extend to correct an estimation using
+> > > > +    * sign_extend32(delta, 24 - 1)
+> > > > +    */
+> > > > +   delta =3D sign_extend32(delta, 23);
+> > > > +   *cnt +=3D delta;
+> > > > +   return (s32)delta;
+> > > > +}
+> > > > +
+> > > > +/* Returns true if the byte counters can be used */ static bool=20
+> > > > +tcp_accecn_process_option(struct tcp_sock *tp,
+> > > > +                                 const struct sk_buff *skb,
+> > > > +                                 u32 delivered_bytes, int flag) {
+> > > > +   u8 estimate_ecnfield =3D tp->est_ecnfield;
+> > > > +   bool ambiguous_ecn_bytes_incr =3D false;
+> > > > +   bool first_changed =3D false;
+> > > > +   unsigned int optlen;
+> > > > +   unsigned char *ptr;
+> >=20
+> > u8 would we more appropriate type for binary data.
+>=20
+> Hi Ilpo,
+>=20
+> Not sure I understand your point, could you elaborate which binary data=
+=20
+> you think shall use u8?
+
+The header/option is binary data so u8 seems the right type for it. So:
+
+u8 *ptr;
+
+--
+ i.
+--8323328-994551896-1746553230=:1002--
 
