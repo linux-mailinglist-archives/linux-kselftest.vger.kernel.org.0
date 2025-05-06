@@ -1,106 +1,108 @@
-Return-Path: <linux-kselftest+bounces-32471-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32473-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C0E5AAB51C
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 May 2025 07:22:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B12AAAB843
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 May 2025 08:30:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31F4D3A4B2D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 May 2025 05:17:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6253E3AF16D
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 May 2025 06:23:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5926D488CD4;
-	Tue,  6 May 2025 00:44:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0199513C816;
+	Tue,  6 May 2025 01:22:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="izIiDLHG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nRHDhXNd"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BF4E2F4F60;
-	Mon,  5 May 2025 23:16:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73D7E7260A;
+	Tue,  6 May 2025 00:00:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746486966; cv=none; b=UA5nrlkQzx8gssfTzJe7zY5OyuGcS5SHHfAvfqNydYTOFP/SPTQ6z1pXtNuYAX0kMB54ZTH6WAKsWF6L+U2p4C3TbXskOW7MQwwyiNxsi4lecjQAbl1pDxDz8tVJo/JhG0dcPKZGkrbzZ8KiXe5cg8YWBeMq5+z7QunnR7uv+QA=
+	t=1746489652; cv=none; b=FkJJ7gXB5Xs7G93Kn+XI4ANLMnOO2915iJ79d7Lp6ziIzeugdvHitRIq0qu6367L4dCB++raaLUvlqDF1crtZzXuo6AIuWR7DXTX3l5fDIR6l3LV0Ig7PMB25qFpu9dtcD5S2f2A+tXOZRRjoO1/RL7ZjUJvsd95xngXEfKemSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746486966; c=relaxed/simple;
-	bh=6nilLHw0VgDiTs0EsmbNUNsBYV4knhCYP34x5LqIndU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=A1Izu8cTaiGHdgQ0aLCcSdfFs2vM9eXlUtD4bpbp/SRA2qMw6mehzo7P3jhviHTmxIMXakAMlLG/K+kbXInmQfNURttwDZKE+iCbKIa2JisnW2mHBzsjVxu+57Rq5bEZygq6UgLK/H7LX/fAARCkm7kzg3eQlG8nF6rW1A/+cxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=izIiDLHG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12741C4CEED;
-	Mon,  5 May 2025 23:16:03 +0000 (UTC)
+	s=arc-20240116; t=1746489652; c=relaxed/simple;
+	bh=CaP6yASIRa//2KTQtwqAOTv5UeCAUs9+VGcQFdJ3f+A=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=Ga0GG+ML2LTpM9vNAl5uS4ie/jdgJSHjsvYRK5GJMc2afoPWdr43IJgrSV8xsHSqRmgzPKYVjSciAlyUM7SU+ht2owSWju+Jatao3J1N8MhSdSAyvGGCLd2EtOE3VXQeX6A/nnMHVvjrNUV/9hIxecktqUSs0wqIK3XqhrJA844=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nRHDhXNd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECCE6C4CEE4;
+	Tue,  6 May 2025 00:00:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746486965;
-	bh=6nilLHw0VgDiTs0EsmbNUNsBYV4knhCYP34x5LqIndU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=izIiDLHGviDlBYRW+Ami/Cd9qglwz1YPjR1p6Y16uftkSSkh/EvgGTO/BwakmXDHl
-	 s+JnxhPJ3F5LS5uRtiXqVXqXASi4+xmmWG8noVp0ikpizJpnkXvGlwDySnjrWSPSWV
-	 FUZcYKfR14RSBLjrtWAzAiXcK0WO8ID3sU4yQ5Ty/Vo5FmE+blzHqxjtvdY+2NmYzm
-	 qrBSRfDh+luhPDesCPNP9p0TqFA29t7fpqwBgceWwACPq5Xdc0wx21QxxY0hrWxbiJ
-	 uGp1ReuoYcC0atrk1x9ZWg1JnsVwA5sljB2Laa7hWLz9uvpKhd05mpy4AdfmUuHscS
-	 lL2Bn+M3XKzHw==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Kevin Krakauer <krakauer@google.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	davem@davemloft.net,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 083/153] selftests/net: have `gro.sh -t` return a correct exit code
-Date: Mon,  5 May 2025 19:12:10 -0400
-Message-Id: <20250505231320.2695319-83-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250505231320.2695319-1-sashal@kernel.org>
-References: <20250505231320.2695319-1-sashal@kernel.org>
+	s=k20201202; t=1746489652;
+	bh=CaP6yASIRa//2KTQtwqAOTv5UeCAUs9+VGcQFdJ3f+A=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=nRHDhXNdcRxyHurkyHxRMR3KnCbTW/1o509RQoPlrMn/J4tv/mxLzMoJXKPBBAmy+
+	 4U2lkQxlpmXJ1tAGIOfYK8mgeZgNF5j9l/dqLLpH7xMmrFqtbiAvP4B/xYF/qewCzU
+	 Nro5WhI/gg/F1X1FGftPc4ZqKp/BNAd2LCrADgICsGrdtS1f3iOzp9KqO4V5dWL1qm
+	 N7z7SWNj7xS/6Lx98gGheNqzd0Sb2BpRljUoqw2G2gSa2LU5pqWR6S2f6XlhRJskry
+	 hmfWaTAQm6qzWfsVk+OZmi6tmQzEl65J2YxqiXC4hSXlYk2pE8532cEOfMNZXou5JL
+	 YArV76efxD8Mw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70BEA380CFD9;
+	Tue,  6 May 2025 00:01:32 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.181
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 0/7] selftests: mptcp: increase code coverage
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <174648969104.970984.3012582895759124945.git-patchwork-notify@kernel.org>
+Date: Tue, 06 May 2025 00:01:31 +0000
+References: <20250502-net-next-mptcp-sft-inc-cover-v1-0-68eec95898fb@kernel.org>
+In-Reply-To: <20250502-net-next-mptcp-sft-inc-cover-v1-0-68eec95898fb@kernel.org>
+To: Matthieu Baerts <matttbe@kernel.org>
+Cc: mptcp@lists.linux.dev, martineau@kernel.org, geliang@kernel.org,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ horms@kernel.org, shuah@kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ yangang@kylinos.cn
 
-From: Kevin Krakauer <krakauer@google.com>
+Hello:
 
-[ Upstream commit 784e6abd99f24024a8998b5916795f0bec9d2fd9 ]
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Modify gro.sh to return a useful exit code when the -t flag is used. It
-formerly returned 0 no matter what.
+On Fri, 02 May 2025 14:29:20 +0200 you wrote:
+> Here are various patches slightly improving MPTCP code coverage:
+> 
+> - Patch 1: avoid a harmless 'grep: write error' warning.
+> 
+> - Patch 2: use getaddrinfo() with IPPROTO_MPTCP in more places.
+> 
+> - Patch 3-6: prepare and add support to get info for a specific subflow
+>   when giving the 5-tuple.
+> 
+> [...]
 
-Tested: Ran `gro.sh -t large` and verified that test failures return 1.
-Signed-off-by: Kevin Krakauer <krakauer@google.com>
-Reviewed-by: Willem de Bruijn <willemb@google.com>
-Link: https://patch.msgid.link/20250226192725.621969-2-krakauer@google.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/net/gro.sh | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Here is the summary with links:
+  - [net-next,1/7] selftests: mptcp: info: hide 'grep: write error' warnings
+    https://git.kernel.org/netdev/net-next/c/6d0eb15c6501
+  - [net-next,2/7] selftests: mptcp: sockopt: use IPPROTO_MPTCP for getaddrinfo
+    https://git.kernel.org/netdev/net-next/c/dd367e81b79a
+  - [net-next,3/7] selftests: mptcp: add struct params in mptcp_diag
+    https://git.kernel.org/netdev/net-next/c/cd732d5110a2
+  - [net-next,4/7] selftests: mptcp: refactor send_query parameters for code clarity
+    https://git.kernel.org/netdev/net-next/c/3fea468dca4f
+  - [net-next,5/7] selftests: mptcp: refactor NLMSG handling with 'proto'
+    https://git.kernel.org/netdev/net-next/c/caa6811ccaed
+  - [net-next,6/7] selftests: mptcp: add helpers to get subflow_info
+    https://git.kernel.org/netdev/net-next/c/c7ac7452df70
+  - [net-next,7/7] selftests: mptcp: add chk_sublfow in diag.sh
+    https://git.kernel.org/netdev/net-next/c/110f8f77fd8d
 
-diff --git a/tools/testing/selftests/net/gro.sh b/tools/testing/selftests/net/gro.sh
-index 342ad27f631b1..e771f5f7faa26 100755
---- a/tools/testing/selftests/net/gro.sh
-+++ b/tools/testing/selftests/net/gro.sh
-@@ -95,5 +95,6 @@ trap cleanup EXIT
- if [[ "${test}" == "all" ]]; then
-   run_all_tests
- else
--  run_test "${proto}" "${test}"
-+  exit_code=$(run_test "${proto}" "${test}")
-+  exit $exit_code
- fi;
+You are awesome, thank you!
 -- 
-2.39.5
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
