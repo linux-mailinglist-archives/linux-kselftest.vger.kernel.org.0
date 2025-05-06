@@ -1,262 +1,280 @@
-Return-Path: <linux-kselftest+bounces-32515-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32516-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D000CAACA6B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 May 2025 18:05:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 376B0AACAF9
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 May 2025 18:29:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 25C297B5043
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 May 2025 16:04:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2AE1C1BA1B0A
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 May 2025 16:28:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1579A283FF5;
-	Tue,  6 May 2025 16:05:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0617284B4E;
+	Tue,  6 May 2025 16:27:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nGmdfCnz"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XbOWMO8V"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FA152836B9
-	for <linux-kselftest@vger.kernel.org>; Tue,  6 May 2025 16:05:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4E06284B35;
+	Tue,  6 May 2025 16:27:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746547519; cv=none; b=OAcEc7FfTZbCL0qozS3BtTdtYGzGSpgd/rXasuwVx0TErVp9VjyAXEN0CYVggLog6rt7XvQ0knNZC9Qxh+nWrkSwIH8mnOd5OdKd4yCpsLZXc9GP1ffGehnPT0ieCRIoP126+NbXLT9isIzug1dBhNfAN1VH6s2qz6t+/x45fU0=
+	t=1746548859; cv=none; b=Ege1KSeJAfFVdmpuWnLqhp9eLayh5uT8HITf/1nDMyO0l4rhd10ZsgNVZWZFG9WFo01vb05XqhGipcbVQ6nU35p/vVZYzx7sfC1K3Y5IZrZq2fbIc0HyhWV5Ni7QJi447fP2tXd6xIhuR5ndDxQ2j/dzwP8CBdySASma+nu29XU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746547519; c=relaxed/simple;
-	bh=kRp4IxyzyS/awOzFbebOHY+i3kmMtE/y4muUCSNf6Qs=;
-	h=Date:In-Reply-To:Mime-Version:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=qS6Ri/FXlXd1Yx+eX0RWfgTrqg5vgrFzY2sLh6nrGOLOJ0SCSRHIuLfKCEb4iQGosiYrPNmWCHgd7F6fWU++AujGLwCoozrKmmSnpgkeSoNq+MYAO0vacn73NsNXHvYNkDs9b0xMu2fciP0GQphNveoTPNnQqkZ7xGLDYw0hWOs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nGmdfCnz; arc=none smtp.client-ip=209.85.214.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-22e5a558bfaso2929615ad.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 06 May 2025 09:05:17 -0700 (PDT)
+	s=arc-20240116; t=1746548859; c=relaxed/simple;
+	bh=t77JjOWF983S2yo+S8BpF99d6mDZ6QTQoysmlKYRh1I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gQ1jcoZZQ/ylZDYQwkPKqEt4xb3HANm6JFytt5u3ScSPeuBRvqNAOyNg6snSU14nOoKuJ0he/TkexDM70y2qRz5v4rjOHuAgDfWHtVK+7txC8g+a0Dy/OlyQvcIki5lqoSZFGejwKdaTN72jqNPqlt3ZqhMQsUwDMKSfxMqo2gM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XbOWMO8V; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-73bf5aa95e7so5649445b3a.1;
+        Tue, 06 May 2025 09:27:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746547516; x=1747152316; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=i1mo/Wo+ejg//AUbVLPWXwjlsnYrBMoTR6luF4u3TZs=;
-        b=nGmdfCnz+COlgoDiCBZ4UxH91Q+YuEodJGv9wtVqdpiIvLNSlDfUTRAs8HuSuKPjhd
-         gw9Vm1n+EAihd951/Ry+258AVq7nZCBBZTSpb7IJZzWWLhKw9pQvq/pxYeCRKzkFutCT
-         p1aMwSmrxFo0koMwu3Sg7vHEVuqtFeCFZy4CWBYdmtKRG6apxCkwnlKOJJHM99diSmPP
-         IcGXSMr0gV1cjBy7RiPArUqKCMQR1DzBFOtMRKPzVzbQwLlToJPLDNGthiR0RPiJW57R
-         ga9N+SWSYc3O8h/Mqg5ZIi0MiGKlZuFY9whPeOAtCxLi+witiFBW4EFs0q90ea1L2Zud
-         S5Jg==
+        d=gmail.com; s=20230601; t=1746548857; x=1747153657; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=W4+aHBG7Ux1e18DCnuuxjWF5KTqADzL62NiKzmfieec=;
+        b=XbOWMO8VqRtOD37SeSyOOgzbA39v8U1OvzQYjzK2htxOoPnObeP2VfzfWEs7IgNLor
+         Uj4v8CQTDyh5ZeBDq6w2UNAUaTLrDdO/xyrOGdjd0B+S4xP2WFbe6hpeMvAAmnfMxcql
+         VufPMR5QAsZ93qwNCSVl8SZ8zwUr6nB5gmOk+g7qI+E3C/XB2z81J0ZUCWPuTnB2GFbh
+         4Mw6X1QIc0clYPk1/9VdgMdFtl9Vw1RT0qRWwnf2zq+Mxw9ZtJ0RCXrrgvDA0rhlX/4Z
+         dTrYV3Eoso0JExe0N3pswZ55Ov6mOU46A+MRZp6TjGQn6GZJ1DQERrRBuPOuE6nOjrra
+         Z7nA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746547516; x=1747152316;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=i1mo/Wo+ejg//AUbVLPWXwjlsnYrBMoTR6luF4u3TZs=;
-        b=r4iBe5znJgCPLWJBQpYptihmQ0IWaRL8YVLjKPz9GlI/Mkc7ehuB05thj2vT63OL0n
-         n/0vKfDZP+7MTBGY/V9T+b6DTOoVDgNsy7u7XoKZTGKucVabjX4m2msi8/iwjscNeGWA
-         SqvzH10yiraZV7W5KDmqKNlZdJP4JR8k8yKXXYRfF+Sy6jNwswks49dYUoTiPAEROpG4
-         J5OfSeO1gwVkYPMrPvu8mVnnpmPapwfh4QUumm0JOA//2Q++eCW551pFiCRmwSWYHsa1
-         GsbwjxuOSsaS/sHQrD8p7Yq9mHH3HaaArSL8B0xvRq4hHf2MY64qA3RTj1nIhiir+Rq+
-         tJxw==
-X-Forwarded-Encrypted: i=1; AJvYcCWyrPuNBoiXhJopuxI1fptzIOax6w8eTJLXU3KcWuL79D1sa6Q8t83cZXJ/wXy0AuJwUKP/mTrKIGPSBkb1+28=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxUmz5Y7qa9qAvPVgasoAAEr4Lom5TLT9Um9ncm1U3iBN42d31J
-	bRjgNt7Bsa1Gkt8zANNzIJcfQgp55i2zA9z9zpGtjcX02zlAsxsrepPg+RXH1oOamLcHhVmolZi
-	pPXtlsk0XjhVVxu8QKFIo8A==
-X-Google-Smtp-Source: AGHT+IH5eiqM+GukGy4eHAEU6Tq2FHVB00BdiyUDeaIE6OKI+9mYaTJy4CBBv+vaOD5LVB3g3ewfS67gEdx2/54B0w==
-X-Received: from pfbid12.prod.google.com ([2002:a05:6a00:8a8c:b0:73b:bbec:17e9])
- (user=ackerleytng job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:903:2408:b0:223:37ec:63d5 with SMTP id d9443c01a7336-22e32ba8292mr60504445ad.28.1746547516646;
- Tue, 06 May 2025 09:05:16 -0700 (PDT)
-Date: Tue, 06 May 2025 09:05:15 -0700
-In-Reply-To: <ZN/81KNAWofRCaQK@google.com> (message from Sean Christopherson
- on Fri, 18 Aug 2023 16:20:52 -0700)
+        d=1e100.net; s=20230601; t=1746548857; x=1747153657;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W4+aHBG7Ux1e18DCnuuxjWF5KTqADzL62NiKzmfieec=;
+        b=iRwXx92iOpWr/u9GkF5pOttwSFRVs4r2AOtdd7twtI60fYq6B9+m+1HfBbweQFUTpk
+         e7hYlwgVwxPwL+1BIfhdzjxcjSuAF7SgF4FvPnMqacwIR4iYQnwzNHt3G8dfPnQ4Z13j
+         UeLeP3VlRhhOmJqYi4M4KQLaNciDE9Zj2AA265HI28I5yYTWcgpxYGweugAQ9LCjVlv2
+         Yz2oQ/8ScqsWxOh4cU6vnFP5nu8BvzhQQJLeBirIUgEck7bcdehJPHlutG48RYWiqIX6
+         h1FglMMmwNi9+Xm2a0f0y8sc4Bjgt5MOzXiWeClAsaHZ2N6tT/3MBdHJsKZh+YK/WBXt
+         NCLw==
+X-Forwarded-Encrypted: i=1; AJvYcCU42cGTgdNToaqJOB2o2+FMGdoAC6ue6rhy9qqIYiEB2PorBnLnX0H013HhKXc8RgzBXOEKQW52AbgA8+Cvqqn9@vger.kernel.org, AJvYcCUJECdANx2+tkmUz4Js0ImmVOBmCyzmi34v6ESKxHMnyJ4Y3uqV/HOFNLhYmAK+UvmJ4tSVsPBNRHSUvY9o@vger.kernel.org, AJvYcCXSkhDtqA7TmiZS6EqTIhdBNAryDjIBpbC0hf1RspVYrBlcpJZBbLHCnAlu3v0u3kIqXPXqURHN@vger.kernel.org, AJvYcCXhpAEfrnkAo/G1mAoJOQcxz739I0u07MRzqzvcRND3Ah46N8FcYH/izL2kRdJ3EinYz4c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzXKEqxyVCzhXv3cIK86ENNApnecUax9jCSjVUGfevQ3puUbhiT
+	8dSvEdJaqMZeLYGZYcW32yYbab7H/Ae4FyhrfmBvFKe49lVmg5yp
+X-Gm-Gg: ASbGnctmK/QwFUtfkXU1dPEM2XMhu06iQLdX+u51HN+9t3XC+vaDae0MPkgWe9w5EIo
+	OWPqhFBxpWHMs5p/ycKV0NpXHueWDtFzwaVn0YEVpbTKvVS9uTVK3ktw1Fp7OekWfnyw9l1ZM3T
+	fyDpMGyJ8hzOFXeGkLEbSyfZctvVHNBXvauG4w3x50gilUx8L+dpYXBppIJdpazS14tQCweXPmP
+	xDuEyujAB2v487Prs5s7/VEfdgvJwypJXBU942mBPbkJe1A3TPWimWHMTQzc9jXo8XKa96PdPxC
+	rNFZophd1Fb5OY3YTPSDeNTtpyfk8UDllPFI17phYUMebwby8GcQG2JiNKJ7
+X-Google-Smtp-Source: AGHT+IEzs0bjLB5zkw9j/S1/ceDqOSJy2CsPvvNJ4wRJWTHVZg0AVYcMnjXylpOZE8J6qEnvZtIuyQ==
+X-Received: by 2002:a05:6a00:4c0e:b0:736:2a73:675b with SMTP id d2e1a72fcca58-7406f17a282mr16246702b3a.19.1746548856927;
+        Tue, 06 May 2025 09:27:36 -0700 (PDT)
+Received: from devbig793.prn5.facebook.com ([2a03:2880:ff:c::])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7405905d16asm9083656b3a.127.2025.05.06.09.27.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 May 2025 09:27:36 -0700 (PDT)
+Date: Tue, 6 May 2025 09:27:34 -0700
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: Stefano Garzarella <sgarzare@redhat.com>,
+	Stefan Hajnoczi <stefanha@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>,
+	linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v3] selftests/vsock: add initial vmtest.sh for
+ vsock
+Message-ID: <aBo4dievUeVxP7dk@devbig793.prn5.facebook.com>
+References: <20250428-vsock-vmtest-v3-1-181af6163f3e@gmail.com>
+ <3e3eea6b-10a6-4a32-aa12-ef6fdf2eeeb8@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Message-ID: <diqzbjs5k9ms.fsf@ackerleytng-ctop.c.googlers.com>
-Subject: Re: [RFC PATCH 02/11] KVM: guest_mem: Add ioctl KVM_LINK_GUEST_MEMFD
-From: Ackerley Tng <ackerleytng@google.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: pbonzini@redhat.com, tglx@linutronix.de, x86@kernel.org, 
-	kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, mingo@redhat.com, bp@alien8.de, 
-	dave.hansen@linux.intel.com, hpa@zytor.com, shuah@kernel.org, 
-	andrew.jones@linux.dev, ricarkol@google.com, chao.p.peng@linux.intel.com, 
-	tabba@google.com, jarkko@kernel.org, yu.c.zhang@linux.intel.com, 
-	vannapurve@google.com, erdemaktas@google.com, mail@maciej.szmigiero.name, 
-	vbabka@suse.cz, david@redhat.com, qperret@google.com, michael.roth@amd.com, 
-	wei.w.wang@intel.com, liam.merwick@oracle.com, isaku.yamahata@gmail.com, 
-	kirill.shutemov@linux.intel.com, Ryan Afranji <afranji@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3e3eea6b-10a6-4a32-aa12-ef6fdf2eeeb8@redhat.com>
 
-Sean Christopherson <seanjc@google.com> writes:
+On Fri, May 02, 2025 at 12:22:46PM +0200, Paolo Abeni wrote:
+> On 4/29/25 1:48 AM, Bobby Eshleman wrote:
+> > This commit introduces a new vmtest.sh runner for vsock.
+> > 
+> > It uses virtme-ng/qemu to run tests in a VM. The tests validate G2H,
+> > H2G, and loopback. The testing tools from tools/testing/vsock/ are
+> > reused. Currently, only vsock_test is used.
+> > 
+> > VMCI and hyperv support is automatically built, though not used.
+> > 
+> > Only tested on x86.
+> > 
+> > To run:
+> > 
+> >   $ tools/testing/selftests/vsock/vmtest.sh
+> > 
+> > or
+> > 
+> >   $ make -C tools/testing/selftests TARGETS=vsock run_tests
+> > 
+> > Results:
+> > 	# linux/tools/testing/selftests/vsock/vmtest.log
+> > 	setup:  Building kernel and tests
+> > 	setup:  Booting up VM
+> > 	setup:  VM booted up
+> > 	test:vm_server_host_client:guest:       Control socket listening on 0.0.0.0:51000
+> > 	test:vm_server_host_client:guest:       Control socket connection accepted...
+> > 	[...]
+> > 	test:vm_loopback:guest: 30 - SOCK_STREAM retry failed connect()...ok
+> > 	test:vm_loopback:guest: 31 - SOCK_STREAM SO_LINGER null-ptr-deref...ok
+> > 	test:vm_loopback:guest: 31 - SOCK_STREAM SO_LINGER null-ptr-deref...ok
+> > 
+> > Future work can include vsock_diag_test.
+> > 
+> > vmtest.sh is loosely based off of tools/testing/selftests/net/pmtu.sh,
+> > which was picked out of the bag of tests I knew to work with NIPA.
+> > 
+> > Because vsock requires a VM to test anything other than loopback, this
+> > patch adds vmtest.sh as a kselftest itself. This is different than other
+> > systems that have a "vmtest.sh", where it is used as a utility script to
+> > spin up a VM to run the selftests as a guest (but isn't hooked into
+> > kselftest). This aspect is worth review, as I'm not aware of all of the
+> > enviroments where this would run.
+> 
+> I think this approach is interesting, but I think it will need some
+> additional more work, see below...
+> 
+> [...]
+> 
+> > diff --git a/tools/testing/selftests/vsock/settings b/tools/testing/selftests/vsock/settings
+> > new file mode 100644
+> > index 0000000000000000000000000000000000000000..e7b9417537fbc4626153b72e8f295ab4594c844b
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/vsock/settings
+> > @@ -0,0 +1 @@
+> > +timeout=0
+> 
+> We need a reasonable, bounded runtime for nipa integration.
+> 
+> > diff --git a/tools/testing/selftests/vsock/vmtest.sh b/tools/testing/selftests/vsock/vmtest.sh
+> > new file mode 100755
+> > index 0000000000000000000000000000000000000000..d70b9446e531d6d20beb24ddeda2cf0a9f7e9a39
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/vsock/vmtest.sh
+> > @@ -0,0 +1,354 @@
+> > +#!/bin/bash
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +#
+> > +# Copyright (c) 2025 Meta Platforms, Inc. and affiliates
+> > +#
+> > +# Dependencies:
+> > +#		* virtme-ng
+> > +#		* busybox-static (used by virtme-ng)
+> > +#		* qemu	(used by virtme-ng)
+> 
+> You should probably check for such tools presence and bail out with skip
+> otherwise.
+> 
+> > +
+> > +SCRIPT_DIR="$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+> > +KERNEL_CHECKOUT=$(realpath ${SCRIPT_DIR}/../../../..)
+> 
+> This is not going to work if/when the self-tests are installed in their
+> own directory via `make install` in the tools/testing/selftests/
+> directory, and that use case is supposed to work.
+> 
+> At very least you should check for the expected layout and skip otherwise.
+> 
+> > +QEMU=$(command -v qemu-system-$(uname -m))
+> > +VERBOSE=0
+> > +SKIP_BUILD=0
+> > +VSOCK_TEST=${KERNEL_CHECKOUT}/tools/testing/vsock/vsock_test
+> > +
+> > +TEST_GUEST_PORT=51000
+> > +TEST_HOST_PORT=50000
+> > +TEST_HOST_PORT_LISTENER=50001
+> > +SSH_GUEST_PORT=22
+> > +SSH_HOST_PORT=2222
+> > +VSOCK_CID=1234
+> > +WAIT_PERIOD=3
+> > +WAIT_PERIOD_MAX=20
+> > +
+> > +QEMU_PIDFILE=/tmp/qemu.pid
+> > +
+> > +# virtme-ng offers a netdev for ssh when using "--ssh", but we also need a
+> > +# control port forwarded for vsock_test.  Because virtme-ng doesn't support
+> > +# adding an additional port to forward to the device created from "--ssh" and
+> > +# virtme-init mistakenly sets identical IPs to the ssh device and additional
+> > +# devices, we instead opt out of using --ssh, add the device manually, and also
+> > +# add the kernel cmdline options that virtme-init uses to setup the interface.
+> > +QEMU_OPTS=""
+> > +QEMU_OPTS="${QEMU_OPTS} -netdev user,id=n0,hostfwd=tcp::${TEST_HOST_PORT}-:${TEST_GUEST_PORT}"
+> > +QEMU_OPTS="${QEMU_OPTS},hostfwd=tcp::${SSH_HOST_PORT}-:${SSH_GUEST_PORT}"
+> > +QEMU_OPTS="${QEMU_OPTS} -device virtio-net-pci,netdev=n0"
+> > +QEMU_OPTS="${QEMU_OPTS} -device vhost-vsock-pci,guest-cid=${VSOCK_CID}"
+> > +QEMU_OPTS="${QEMU_OPTS} --pidfile ${QEMU_PIDFILE}"
+> > +KERNEL_CMDLINE="virtme.dhcp net.ifnames=0 biosdevname=0 virtme.ssh virtme_ssh_user=$USER"
+> > +
+> > +LOG=${SCRIPT_DIR}/vmtest.log
+> > +
+> > +#		Name				Description
+> > +avail_tests="
+> > +	vm_server_host_client	Run vsock_test in server mode on the VM and in client mode on the host.	
+> > +	vm_client_host_server	Run vsock_test in client mode on the VM and in server mode on the host.	
+> > +	vm_loopback		Run vsock_test using the loopback transport in the VM.	
+> > +"
+> > +
+> > +usage() {
+> > +	echo
+> > +	echo "$0 [OPTIONS] [TEST]..."
+> > +	echo "If no TEST argument is given, all tests will be run."
+> > +	echo
+> > +	echo "Options"
+> > +	echo "  -v: verbose output"
+> > +	echo "  -s: skip build"
+> > +	echo
+> > +	echo "Available tests${avail_tests}"
+> > +	exit 1
+> > +}
+> > +
+> > +die() {
+> > +	echo "$*" >&2
+> > +	exit 1
+> > +}
+> > +
+> > +vm_ssh() {
+> > +	ssh -q -o UserKnownHostsFile=/dev/null -p 2222 localhost $*
+> > +	return $?
+> > +}
+> > +
+> > +cleanup() {
+> > +	if [[ -f "${QEMU_PIDFILE}" ]]; then
+> > +		pkill -SIGTERM -F ${QEMU_PIDFILE} 2>&1 >/dev/null
+> > +	fi
+> > +}
+> > +
+> > +build() {
+> > +	log_setup "Building kernel and tests"
+> > +
+> > +	pushd ${KERNEL_CHECKOUT} >/dev/null
+> > +	vng \
+> > +		--kconfig \
+> > +		--config ${KERNEL_CHECKOUT}/tools/testing/selftests/vsock/config.vsock
+> > +	make -j$(nproc)
+> > +	make -C ${KERNEL_CHECKOUT}/tools/testing/vsock
+> > +	popd >/dev/null
+> 
+> I think it would be better to avoid the kernel rebuild. A possible
+> alternative could be including in 'config' the needed knobs for vng's
+> sake and re-use the running kernel.
+> 
+> Cheers,
+> 
+> Paolo
+> 
 
-> On Mon, Aug 07, 2023, Ackerley Tng wrote:
->> KVM_LINK_GUEST_MEMFD will link a gmem fd's underlying inode to a new
->> file (and fd).
->>
->> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
->> ---
->>  include/uapi/linux/kvm.h |  8 +++++
->>  virt/kvm/guest_mem.c     | 73 ++++++++++++++++++++++++++++++++++++++++
->>  virt/kvm/kvm_main.c      | 10 ++++++
->>  virt/kvm/kvm_mm.h        |  7 ++++
->>  4 files changed, 98 insertions(+)
->>
->> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
->> index eb900344a054..d0e2a2ce0df2 100644
->> --- a/include/uapi/linux/kvm.h
->> +++ b/include/uapi/linux/kvm.h
->> @@ -2299,4 +2299,12 @@ struct kvm_create_guest_memfd {
->>  	__u64 reserved[6];
->>  };
->>
->> +#define KVM_LINK_GUEST_MEMFD	_IOWR(KVMIO,  0xd5, struct kvm_link_guest_memfd)
->> +
->> +struct kvm_link_guest_memfd {
->> +	__u64 fd;
->> +	__u64 flags;
->> +	__u64 reserved[6];
->> +};
->> +
->>  #endif /* __LINUX_KVM_H */
->> diff --git a/virt/kvm/guest_mem.c b/virt/kvm/guest_mem.c
->> index 30d0ab8745ee..1b3df273f785 100644
->> --- a/virt/kvm/guest_mem.c
->> +++ b/virt/kvm/guest_mem.c
->> @@ -477,6 +477,79 @@ int kvm_gmem_create(struct kvm *kvm, struct kvm_create_guest_memfd *args)
->>  	return __kvm_gmem_create(kvm, size, flags, kvm_gmem_mnt);
->>  }
->>
->> +static inline void __kvm_gmem_do_link(struct inode *inode)
->> +{
->> +	/* Refer to simple_link() */
->> +
->> +	inode->i_ctime = current_time(inode);
->> +	inc_nlink(inode);
->> +
->> +	/*
->> +	 * ihold() to add additional reference to inode for reference in dentry,
->> +	 * created in kvm_gmem_alloc_file() -> alloc_file_pseudo(). This is not
->> +	 * necessary when creating a new file because alloc_inode() creates
->> +	 * inodes with i_count = 1, which is the refcount for the dentry in the
->> +	 * file.
->> +	 */
->> +	ihold(inode);
->> +
->> +	/*
->> +	 * dget() and d_instantiate() complete the setup of a dentry, but those
->> +	 * have already been done in kvm_gmem_alloc_file() ->
->> +	 * alloc_file_pseudo()
->> +	 */
->> +}
+Thanks Paolo, I'll incorporate your feedback in the next rev!
 
-Thanks Sean, we're just circling back to this series, working on a next
-revision.
-
->
-> Does this have to be done before the fd is exposed to userspace, or can it be
-> done after?
-
-Does "exposed to userspace" mean the call to get_unused_fd_flags(),
-where an fd is reserved?
-
-Do you mean to make this reservation as late as possible?
-
-> If it can be done after, I'd prefer to have the allocation helper
-> also install the fd, and also rename it to something that better conveys that
-> it's allocating more than just the file, e.g. that it allocates and initialize
-> kvm_gmem too.
->
-> Completely untested, but this is what I'm thinkin/hoping.
->
-> static int kvm_gmem_alloc_view(struct kvm *kvm, struct inode *inode,
-> 			       struct vfsmount *mnt)
-
-Will rename this kvm_gmem_alloc_view(), that naming totally makes
-sense, and attaches a meaning to the struct file as a view into the
-memory.
-
-> {
-> 	struct file *file;
-> 	struct kvm_gmem *gmem;
->
-> 	gmem = kzalloc(sizeof(*gmem), GFP_KERNEL);
-> 	if (!gmem)
-> 		return -ENOMEM;
->
-> 	fd = get_unused_fd_flags(0);
-> 	if (fd < 0) {
-> 		r = fd;
-> 		goto err_fd;
-> 	}
-
-Do you see the fd as part of the view? I thought the fd is just a handle
-to the view (struct file).
-
->
-> 	file = alloc_file_pseudo(inode, mnt, "kvm-gmem", O_RDWR, &kvm_gmem_fops);
-> 	if (IS_ERR(file)) {
-> 		r = PTR_ERR(file);
-> 		goto err_file;
-> 	}
->
-> 	file->f_flags |= O_LARGEFILE;
-> 	file->f_mapping = inode->i_mapping;
->
-> 	kvm_get_kvm(kvm);
-> 	gmem->kvm = kvm;
-> 	xa_init(&gmem->bindings);
->
-> 	file->private_data = gmem;
->
-> 	list_add(&gmem->entry, &inode->i_mapping->private_list);
->
-> 	fd_install(fd, file);
->
-> 	return 0;
-> err:
-> 	put_unused_fd(fd);
-> err_fd:
-> 	kfree(gmem);
-> 	return r;
-> }
->
-> static int __kvm_gmem_create(struct kvm *kvm, loff_t size, u64 flags,
-> 			     struct vfsmount *mnt)
-> {
-> 	const char *anon_name = "[kvm-gmem]";
-> 	const struct qstr qname = QSTR_INIT(anon_name, strlen(anon_name));
-> 	struct inode *inode;
-> 	struct file *file;
-> 	int fd, err;
->
-> 	inode = alloc_anon_inode(mnt->mnt_sb);
-> 	if (IS_ERR(inode))
-> 		return PTR_ERR(inode);
->
-> 	err = security_inode_init_security_anon(inode, &qname, NULL);
-> 	if (err)
-> 		goto err;
->
-> 	inode->i_private = (void *)(unsigned long)flags;
-> 	inode->i_op = &kvm_gmem_iops;
-> 	inode->i_mapping->a_ops = &kvm_gmem_aops;
-> 	inode->i_mode |= S_IFREG;
-> 	inode->i_size = size;
-> 	mapping_set_gfp_mask(inode->i_mapping, GFP_HIGHUSER);
-> 	mapping_set_large_folios(inode->i_mapping);
-> 	mapping_set_unevictable(inode->i_mapping);
-> 	mapping_set_unmovable(inode->i_mapping);
->
-> 	fd = kvm_gmem_alloc_view(kvm, inode, mnt);
-> 	if (fd < 0) {
-> 		err = fd;
-> 		goto err;
-> 	}
-> 	return fd;
-> err:
-> 	iput(inode);
-> 	return err;
-> }
+Best,
+Bobby
 
