@@ -1,224 +1,315 @@
-Return-Path: <linux-kselftest+bounces-32531-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32532-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4915AACF09
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 May 2025 22:54:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86F69AACF23
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 May 2025 23:01:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9B913B93C0
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 May 2025 20:54:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F13A417456B
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 May 2025 21:01:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6928317AE11;
-	Tue,  6 May 2025 20:54:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2407D19AA63;
+	Tue,  6 May 2025 21:01:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="q/ZZUAQb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nQvNfVwE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2041.outbound.protection.outlook.com [40.107.93.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B61FA4B1E6B;
-	Tue,  6 May 2025 20:54:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746564890; cv=fail; b=Dh6xGPyRnhQeKXbuo/ObWeSpaQEZdLedB0nxjrQ/sIEH4Gr68Eaa303DPFcZ9gty+YlFRSioTaDd1t9W//N1dfelrANwdYj6MEVYNy5JwxU3P5z4CXLu9JW6WcHTWYNCr6oN/0kE84etPg52Z5s7mrlS+S0OR8r2mRt9JPwiYeI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746564890; c=relaxed/simple;
-	bh=v4Qt57WjsMe2afTbeoia8dGmOg3TtvF6zCOleSDP7fQ=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qi7kHzFnYHiq8YUP+h44qogKHKVlNgjsP4NBQNBw2WRAciHnYLAm89OvZ/U5+ZVS3pF+u3bjrIe0rykwmawb08qNDS1CW11iKod3LqDHO35/I2o6lyd3mMSTb5+F9yGtFCInIk1YeafB0vWithEKjwnvKTrCoQZblDGErjyPRCw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=q/ZZUAQb; arc=fail smtp.client-ip=40.107.93.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=OPJuI+sza9P9pVYcViNPekhUcXd8MpQDX6sRrklQgr3kqNtTJD+5twcsYep23QZFQYgSAgBEyUIIJlWahQp81EAbHdwEsNBNS/8o91qsODzaoYIACCOnLwJOTn6/aaFKdZgTqQdlbgR8zcpf9pNp/pofGa4wqqJD8Y9sPj+FytUUP2sk4gVUqZIXcVo41ylfJ6NH3j/R3u/TpRqy67OcfdQmEVWOgo8+13eAGIL2+jyh0cp5PFhcOg3owo/+AIJqXB5jDf3lyvqkH3tpv6p0XCb85y6P1XpESCWoNQ7nlq/hnH1FZE9K7Z7InD4L9ZsN0b3z2P8vvCBffaWBkh0vkg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=g8OlaPzTgQwLF58wrbklL63f42htsLU0DiUMvyxJBpA=;
- b=JoXNJWZABxcvyaWg3nL5NorH3BtwcL9aBe1MJwQEv74vYqEKgE2tbzjbE5RE1jEd4Je2lwh2yw768JeQmjHYzELcRFIK8A6r9KJbrbnrpwfK3OUN57xYEWjlDwfr+SZZso87jaXd59FnDdR5sGU9xZIaGDC3ZxeWu57OOqa2TuLANdqwTS3GTFbmFwddlTgQm6qmPQD6+72+vqGZJQWZZcYkVblWaaO3G2fyKpgZGM9RovOYfCtJ2DBN+Jp4uIz9IGQZ+8InX7tfnfFYX1mpX1kQwaaDxFGCB5ZAHnhV1s7j/gzn1kIUbJGq+jcsc47xXR/Ks0Sk5HUlNF6lmJxxrg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=lists.linux.dev smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=g8OlaPzTgQwLF58wrbklL63f42htsLU0DiUMvyxJBpA=;
- b=q/ZZUAQbLWWkBQJstAadPJJn1nrqjMcMy0BDPgJl0u/m6oa0KxIR+/BDEcRTS25rutVpD7PUG4ygkVDfE3/F8aNZqp3NIW0eREI32AhPTSNjK3UDDzXlEada5Skdax7l4S6FrarCGXljEgr5LQismmswbXiMI12cW8kqIxBjyEPMJKg4DSE7/nmisNNQP2aWYa9YPOCQcICqCrz/lETrSuQ9bfQVJnCzfGPqXteh16VvaLuuJGepT35ysSg/v08DZ3QroEyvapQytX1F6k6AW2uuonZNewQumIkG+gXZuO8CtSo53ZOfwTtz9SQgT6G2TP+zgKX4/bQOlxgAFuNQkg==
-Received: from SA1P222CA0081.NAMP222.PROD.OUTLOOK.COM (2603:10b6:806:35e::7)
- by DS0PR12MB9423.namprd12.prod.outlook.com (2603:10b6:8:192::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8699.26; Tue, 6 May
- 2025 20:54:38 +0000
-Received: from SN1PEPF000252A4.namprd05.prod.outlook.com
- (2603:10b6:806:35e:cafe::91) by SA1P222CA0081.outlook.office365.com
- (2603:10b6:806:35e::7) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8699.31 via Frontend Transport; Tue,
- 6 May 2025 20:54:37 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- SN1PEPF000252A4.mail.protection.outlook.com (10.167.242.11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8722.18 via Frontend Transport; Tue, 6 May 2025 20:54:37 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 6 May 2025
- 13:54:26 -0700
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Tue, 6 May
- 2025 13:54:18 -0700
-Received: from nvidia.com (10.127.8.14) by mail.nvidia.com (10.129.68.8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14 via Frontend
- Transport; Tue, 6 May 2025 13:54:13 -0700
-Date: Tue, 6 May 2025 13:54:10 -0700
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-CC: Baolu Lu <baolu.lu@linux.intel.com>, <kevin.tian@intel.com>,
-	<corbet@lwn.net>, <will@kernel.org>, <bagasdotme@gmail.com>,
-	<robin.murphy@arm.com>, <joro@8bytes.org>, <thierry.reding@gmail.com>,
-	<vdumpa@nvidia.com>, <jonathanh@nvidia.com>, <shuah@kernel.org>,
-	<jsnitsel@redhat.com>, <nathan@kernel.org>, <peterz@infradead.org>,
-	<yi.l.liu@intel.com>, <mshavit@google.com>, <praan@google.com>,
-	<zhangzekun11@huawei.com>, <iommu@lists.linux.dev>,
-	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-tegra@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <patches@lists.linux.dev>,
-	<mochs@nvidia.com>, <alok.a.tiwari@oracle.com>, <vasant.hegde@amd.com>
-Subject: Re: [PATCH v2 13/22] iommufd: Add mmap interface
-Message-ID: <aBp28sjZpPfDUfYr@nvidia.com>
-References: <cover.1745646960.git.nicolinc@nvidia.com>
- <7be26560c604b0cbc2fd218997b97a47e4ed11ff.1745646960.git.nicolinc@nvidia.com>
- <c4d03b52-422e-41ab-845b-1d2eda7ca9e2@linux.intel.com>
- <20250505165019.GM2260709@nvidia.com>
- <aBjzf9PrYnwF5uZN@nvidia.com>
- <20250505172813.GS2260709@nvidia.com>
- <aBkahmXQGxFC0Fdw@nvidia.com>
- <20250506125425.GX2260709@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58F3F4B1E69;
+	Tue,  6 May 2025 21:01:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1746565282; cv=none; b=Hr7JnLs1RWKLR9voj09z3/EhbN06/WYvU7bs6D/7x+u0MDy+xQn89IQcrwQxVUOxtAPNXH1+AjMEbF/qnTnN2WgteLGpJJo+HutWA6oMkh2DmcbtwhrY3fm8HIWdt2GBUXHkQp13E9VwqRqEosiuzmITXJbLWIVJ5NhM1l7KcE0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1746565282; c=relaxed/simple;
+	bh=IZ8gS0GxIwUMAAKTiujecI6rI4dddYCLKZaC9yCele0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SKr4EcTzf7kBEpmI+pmuog1tvV2kgSd6Dh8ZW5RtKyHOtGn1XkBEp2CLK63Qpi5JeWER11c2Pw/lsHQx80fmXgoQffG0xb+hRm/66DlLOpfmvY9Twk/DxU0GWjqdfEHfgRBHoy1E+41Oj//TV3ZyZvH2cIdETV+IThpjR4YOUf0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nQvNfVwE; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3081f72c271so6139757a91.0;
+        Tue, 06 May 2025 14:01:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746565279; x=1747170079; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MGpCXrvVakHiYqEKJnZ4rQZ11p4odiFi497LdndPBz0=;
+        b=nQvNfVwE0guKsL3HPBehovUfP6HjV+LcnHi8KFJ3komjp0cFXufR09VMQod3D3Stpl
+         lK1U/H7Kn3Zb6KJgJOlBZtjtn19zY7Bs6Yrw82RykzjhgTHMshIta7o2jh1RKrnJGJTl
+         wMYqZravkbyLdvzbIkcfE0vxbtfcyQrgUownN93g3utG4Lh1XQWpA9NcRVjxQ+Bs2hIa
+         +xGbfytkb/ZzeBJ94FX4DhWJxPZLydtPFgpXUMNiepTI0YAfzGHnxrafwq6horW1nWMP
+         PzFm5umjsh20flXPxX/ygxn6RTNMgWa0a5H7K9q5ZhuflCDolnY8aNfGgEvOIfdyGQKh
+         JjwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746565279; x=1747170079;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MGpCXrvVakHiYqEKJnZ4rQZ11p4odiFi497LdndPBz0=;
+        b=nVfKGU/CKN2iT/f0BgvCLnAjuMOu5XdfUGn/WoL9ZHku+apLBafj9/DRghB6zDPk3T
+         xeEG3kAwndS0puNtnNCQiebmmB+WCjvyEVD079DyKjGYdEBDquUNUzxbHAwgQlsriuYP
+         PasBE7DxDI2R1FHZ/hYXNbNQJJGxysrQy326kcjvBgXIMEAUSr4HXSglfqQQ15gzfEe2
+         fntWBuOEZcn/fbmjA+fDXCt2VAjcjOUEnfNVYEUfxzTNK5RKrZoIEo6JVCDRIwm1J+HC
+         11oHpYTXZD8ago5XQoLsSHmJwz1fsUqlEceNl8jHzlT94fjJb9Z9ho4BIrHFIF495o6o
+         utMw==
+X-Forwarded-Encrypted: i=1; AJvYcCUK6Un7yYXsVNeFzlULlNJNwt7YzRwaIT8RNtKXzrhmwaMi2zE46ns5/+oW+1OZ4+tXSABRHpOdD4xs3VOwiK4/qiBc@vger.kernel.org, AJvYcCUdiie15BAfUGXSgBwmtqMwwmE/57FuCKxMLECQ7kkV9iEKRFpARFS+p9K/ldjITTU+uNxS1RLNpz1MI5AR@vger.kernel.org, AJvYcCVRmPZ4tDtEKZhw53ma8Ru6TYCoFqv1dNZu7E9FoiMWtYXWQf31RVT4ju6JrwCpEOPNQsLITN7fLD72QisNvTWB@vger.kernel.org, AJvYcCXRkwAE8MJCTZLoSnpXRgAfqiybaekTBYKIU2lOPKpADn/ed7o41r9GRvPs38oAocsiG+5YfWkV@vger.kernel.org, AJvYcCXX0rypdUHYnZTT7Tb2tlFpja98+qica4/f+ABV/7s+2kiUr42Q6ZzTdig5D77ChN/7Bz8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwkwCbgeyr58bSEe3n1KkKfJUes4XnQbS7DJPHvHhh97un9qs+t
+	XGCPCkyapgpfDWr1xybZ9Mr4dL/Pndt36tqp8f8z9rlb3vzLGpuWD8O26MtvpOqr+mZCApQ1gPe
+	ptrTRfROjrwOC5oBhbo35Zj3NyD5OvXwF
+X-Gm-Gg: ASbGncvpHKbFDWPFNzfIL3P5uxRO+E42BfMOBnw7SibXR72Bg/ixXN2T9w7kXwAAYpV
+	GL80ehnXU6pz2UzPt+ZbBl0wtmFzBeNQpsvoMqot7aq4Zd/UIpetmWJzDYFWEjjdagWCu9sljkL
+	KJweWYYQoU0F0DoOwOBiZdhfkSRtvRLHvnNuYhbGfL9ER5a2J9
+X-Google-Smtp-Source: AGHT+IFMcyh4aXFPcfQujordcZVIHNjq/wxigDu2SLJkT2sBX0naL1Q0JPVAhGhhuKjF3m/Sxj0NE1i3H1F25gqXN1Y=
+X-Received: by 2002:a17:90b:2d06:b0:2ee:e113:815d with SMTP id
+ 98e67ed59e1d1-30aac19b522mr1382746a91.8.1746565279421; Tue, 06 May 2025
+ 14:01:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20250506125425.GX2260709@nvidia.com>
-X-NV-OnPremToCloud: AnonymousSubmission
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1PEPF000252A4:EE_|DS0PR12MB9423:EE_
-X-MS-Office365-Filtering-Correlation-Id: bb339c00-ab95-4991-0735-08dd8ce036c5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|7416014|82310400026|376014|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?UqtWU8WjBfdN9DNjIisTxCvXESjBqbEc7d1fViBguHWZQ1KmuXL/0oAZ6Ct9?=
- =?us-ascii?Q?cDG0Q0lThyJBaC+M21hv28Wnq7KAKVu8/rTcIURQr/KWg6VOkt2VNx5aJr8s?=
- =?us-ascii?Q?Ie9eYpIWutRiYXea0yttoBp0PKWBr/ToFIrnRogeVOySlDvdCCqSFD7X6mJO?=
- =?us-ascii?Q?hBrEIRTgPjvIyF4i6KXgSNuB9mibF9M0oRnfjRsqjyIDV5opP63Gp1I7YPw6?=
- =?us-ascii?Q?3hfKEF6XDNK9C1QjutYWybAiYGgOdvzEq7HVSFE4zIt9lKnYMgDY4B4VdD1x?=
- =?us-ascii?Q?z4kugNZZVOh/74+n3djvNZx8oJ4NmgkjNnbUsXpuBF3ucADmslNaRjW5EJz/?=
- =?us-ascii?Q?sB4XoSviQOWM0FG3Lc1CJ6VCnObvlZ09+lcH7cu2AmD+BbrRc97MBMiz2Vfv?=
- =?us-ascii?Q?ARbTGjkZ4SydTuf8EVc8bmKZ/vhss7qVH4k51SfyI37cQ5Z9Lfo2IX+0f4eT?=
- =?us-ascii?Q?tm3VyPL5dGR2GhJbmD4+0BsXwr51klYBv6/21ACBE5WXnAJ3SzjFjl9ZSKIs?=
- =?us-ascii?Q?WCdWV9OzZD9j5VVoT4/ilKvUHdKS/F3NHixTZLyKV8RzvjFI2gPd3XvE+gQj?=
- =?us-ascii?Q?bgLOdz4VZH7KS6NMhBbSv+D2MxRUeEqXObK6UHLb489ZxuW+OytSNSsSdOoD?=
- =?us-ascii?Q?J29YdWMroBRfVZQXzrjxJROwpNfJNf2wXqfSKfSo0KFJlOxBES5EM8IUkZaL?=
- =?us-ascii?Q?caL2UHWCfkkOEZP4lgtDLNotqDokzp6J61zRRn9s2PGCUIEMFqnFXbIr/p/7?=
- =?us-ascii?Q?8cIqMDEVsXe9XgowqH949XuOBhyU51349/9v0cCyxJ2vbAgsotFPUgDWmqnT?=
- =?us-ascii?Q?ZxZjAwffQtbQzqXLFQjIog2UXu2FtYyOjoNuPrucYQHq66ilOq1IBZQ6aZGI?=
- =?us-ascii?Q?dk54zkEzpk2qwESSj+VCQwmIkM7mLyUfPFMgKp+EgTytS+e6y/Nth9alHCfp?=
- =?us-ascii?Q?nAszOOg1UjvTmzlGhCE9z7bkRP0jQcQuR9dPLX7VqtnbMU9OyMZgJIlBPc5d?=
- =?us-ascii?Q?IJthQDc8ArFLU6UoBgAwdfVG3rCkUVus9ATMs+xvtn/yLUmuBo7bghfgpNbI?=
- =?us-ascii?Q?nMpSEcHvmrwgfISPlQNHVj/fxl4cC9COST+7sN2YIhrQUQ50kGKMD2NpDeau?=
- =?us-ascii?Q?cvyR8SR+FzwU+iZUWE0jSUMQ+auPo4dXBqZhaFXrkpkFrVHXLQomttt4svfj?=
- =?us-ascii?Q?x3jJG17p+/myKVzvpv9cpGhLFXrVlmoyBoONpVY+CUIVaSITnbU9pBGafcHe?=
- =?us-ascii?Q?yoYINOKjQwuI1TlWeUKNKMXFSiZu0lLDcW8nsYCGmKwW1Xo3srxFTL/bzaQ7?=
- =?us-ascii?Q?hir+Q2bOJrh5E31d8NWjYEot0pEEGiUxYZMshV+qEAIVDJ420klwNZo+onp6?=
- =?us-ascii?Q?ycvTrGcvco3bStx3L4qa/g5PHYO3bKEhZ9f4CBXeUnYBz3qZZvVu7XFpzf3C?=
- =?us-ascii?Q?uTlIyzoX4/XP/O1iUuEzp0D3f4oXLqi/Zq/8YD07yiwni0ngxEqYDPEkVLy7?=
- =?us-ascii?Q?eH0BqWOZbw6B4E6/xsIzj2HkSrbjF1dt8XjT?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(82310400026)(376014)(36860700013);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2025 20:54:37.4551
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: bb339c00-ab95-4991-0735-08dd8ce036c5
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SN1PEPF000252A4.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB9423
+References: <20250426160027.177173-1-mannkafai@gmail.com> <20250426160027.177173-2-mannkafai@gmail.com>
+ <CAADnVQ+DF18nKEf9i1RKEQN+ybH+duu7U-91YZDaa_PiqUx17g@mail.gmail.com>
+ <CALqUS-6XtJ0Bb9jiykdC3jAY_OHjGuirj06Kzssjvo7eW_so2A@mail.gmail.com>
+ <f951b81f-1b46-4219-82fd-0839e27ab3f3@linux.dev> <CAADnVQ+FANha0fO_BF+iHJ4iZSCPtDfoUkzR8mMFwOakw8+eCg@mail.gmail.com>
+ <f1f23c1a-f4a8-4807-8028-87e247775ec8@linux.dev>
+In-Reply-To: <f1f23c1a-f4a8-4807-8028-87e247775ec8@linux.dev>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 6 May 2025 14:01:07 -0700
+X-Gm-Features: ATxdqUF8ebtWDuYIV69M8X_0fqB0M8DpSL5JRmslRryRsSdSpdPkgSOf-2FIwi8
+Message-ID: <CAEf4BzZcuCrK4UVv2qpp7LAL=uXg+YqFopNW3EzCCpUBNPq-ag@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/4] bpf: Allow get_func_[arg|arg_cnt] helpers in
+ raw tracepoint programs
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Kafai Wan <mannkafai@gmail.com>, 
+	Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Matt Bobrowski <mattbobrowski@google.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	bpf <bpf@vger.kernel.org>, 
+	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 06, 2025 at 09:54:25AM -0300, Jason Gunthorpe wrote:
-> On Mon, May 05, 2025 at 01:07:34PM -0700, Nicolin Chen wrote:
-> > On Mon, May 05, 2025 at 02:28:13PM -0300, Jason Gunthorpe wrote:
-> > > On Mon, May 05, 2025 at 10:21:03AM -0700, Nicolin Chen wrote:
-> > > > > > > +void iommufd_ctx_free_mmap(struct iommufd_ctx *ictx, unsigned long immap_id)
-> > > > > > > +{
-> > > > > > > +	kfree(mtree_erase(&ictx->mt_mmap, immap_id >> PAGE_SHIFT));
-> > > > > > 
-> > > > > > MMIO lifecycle question: what happens if a region is removed from the
-> > > > > > maple tree (and is therefore no longer mappable), but is still mapped
-> > > > > > and in use by userspace?
-> > > > > 
-> > > > > I think we should probably zap it and make any existing VMAs
-> > > > > SIGBUS... Otherwise it is hard to reason about from the kernel side
-> > > > 
-> > > > I added in v3 a pair of open/close op that would refcount the
-> > > > vIOMMU object (owner of the mmap region). This would EBUSY the
-> > > > vIOMMU destroy ioctl that would call this function.
-> > > 
-> > > That's no good, we can't have VMAs prevent cleaning up iommufd
-> > 
-> > Hmm, would you please elaborate why?
-> 
-> It would create weird dependencies in the kernel that become hard to
-> manage. If we really need to unplug the PFNs behind the VMA for some
-> reason then we should always allow that to progress. Requiring the VMA
-> to be unmapped first is not great.
+On Fri, May 2, 2025 at 7:26=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> wr=
+ote:
+>
+>
+>
+> On 2025/5/1 00:53, Alexei Starovoitov wrote:
+> > On Wed, Apr 30, 2025 at 8:55=E2=80=AFAM Leon Hwang <leon.hwang@linux.de=
+v> wrote:
+> >>
+> >>
+> >>
+> >> On 2025/4/30 20:43, Kafai Wan wrote:
+> >>> On Wed, Apr 30, 2025 at 10:46=E2=80=AFAM Alexei Starovoitov
+> >>> <alexei.starovoitov@gmail.com> wrote:
+> >>>>
+> >>>> On Sat, Apr 26, 2025 at 9:00=E2=80=AFAM KaFai Wan <mannkafai@gmail.c=
+om> wrote:
+> >>>>>
+> >>
+>
+> [...]
+>
+> >>
+> >>
+> >> bpf_get_func_arg() will be very helpful for bpfsnoop[1] when tracing t=
+p_btf.
+> >>
+> >> In bpfsnoop, it can generate a small snippet of bpf instructions to us=
+e
+> >> bpf_get_func_arg() for retrieving and filtering arguments. For example=
+,
+> >> with the netif_receive_skb tracepoint, bpfsnoop can use
+> >> bpf_get_func_arg() to filter the skb argument using pcap-filter(7)[2] =
+or
+> >> a custom attribute-based filter. This will allow bpfsnoop to trace
+> >> multiple tracepoints using a single bpf program code.
+> >
+> > I doubt you thought it through end to end.
+> > When tracepoint prog attaches we have this check:
+> >         /*
+> >          * check that program doesn't access arguments beyond what's
+> >          * available in this tracepoint
+> >          */
+> >         if (prog->aux->max_ctx_offset > btp->num_args * sizeof(u64))
+> >                 return -EINVAL;
+> >
+> > So you cannot have a single bpf prog attached to many tracepoints
+> > to read many arguments as-is.
+> > You can hack around that limit with probe_read,
+> > but the values won't be trusted and you won't be able to pass
+> > such untrusted pointers into skb and other helpers/kfuncs.
+>
+> I understand that a single bpf program cannot be attached to multiple
+> tracepoints using tp_btf. However, the same bpf code can be reused to
+> create multiple bpf programs, each attached to a different tracepoint.
+>
+> For example:
+>
+> SEC("fentry")
+> int BPF_PROG(fentry_fn)
+> {
+>         /* ... */
+>         return BPF_OK;
+> }
+>
+> The above fentry code can be compiled into multiple bpf programs to
+> trace different kernel functions. Each program can then use the
+> bpf_get_func_arg() helper to access the arguments of the traced function.
+>
+> With this patch, tp_btf will gain similar flexibility. For example:
+>
+> SEC("tp_btf")
+> int BPF_PROG(tp_btf_fn)
+> {
+>         /* ... */
+>         return BPF_OK;
+> }
+>
+> Here, bpf_get_func_arg() can be used to access tracepoint arguments.
+>
+> Currently, due to the lack of bpf_get_func_arg() support in tp_btf,
+> bpfsnoop[1] uses bpf_probe_read_kernel() to read tracepoint arguments.
+> This is also used when filtering specific argument attributes.
+>
+> For instance, to filter the skb argument of the netif_receive_skb
+> tracepoint by 'skb->dev->ifindex =3D=3D 2', the translated bpf instructio=
+ns
+> with bpf_probe_read_kernel() would look like this:
+>
+> bool filter_arg(__u64 * args):
+> ; filter_arg(__u64 *args)
+>  209: (79) r1 =3D *(u64 *)(r1 +0) /* all tracepoint's argument has been
+> read into args using bpf_probe_read_kernel() */
+>  210: (bf) r3 =3D r1
+>  211: (07) r3 +=3D 16
+>  212: (b7) r2 =3D 8
+>  213: (bf) r1 =3D r10
+>  214: (07) r1 +=3D -8
+>  215: (85) call bpf_probe_read_kernel#-125280
+>  216: (79) r3 =3D *(u64 *)(r10 -8)
+>  217: (15) if r3 =3D=3D 0x0 goto pc+10
+>  218: (07) r3 +=3D 224
+>  219: (b7) r2 =3D 8
+>  220: (bf) r1 =3D r10
+>  221: (07) r1 +=3D -8
+>  222: (85) call bpf_probe_read_kernel#-125280
+>  223: (79) r3 =3D *(u64 *)(r10 -8)
+>  224: (67) r3 <<=3D 32
+>  225: (77) r3 >>=3D 32
+>  226: (b7) r0 =3D 1
+>  227: (15) if r3 =3D=3D 0x2 goto pc+1
+>  228: (af) r0 ^=3D r0
+>  229: (95) exit
+>
+> If bpf_get_func_arg() is supported in tp_btf, the bpf program will
+> instead look like:
+>
+> static __noinline bool
+> filter_skb(void *ctx)
+> {
+>     struct sk_buff *skb;
+>
+>     (void) bpf_get_func_arg(ctx, 0, (__u64 *) &skb);
+>     return skb->dev->ifindex =3D=3D 2;
+> }
+>
+> This will simplify the generated code and eliminate the need for
+> bpf_probe_read_kernel() calls. However, in my tests (on kernel
+> 6.8.0-35-generic, Ubuntu 24.04 LTS), the pointer returned by
+> bpf_get_func_arg() is marked as a scalar rather than a trusted pointer:
+>
+>         0: R1=3Dctx() R10=3Dfp0
+>         ; if (!filter_skb(ctx))
+>         0: (85) call pc+3
+>         caller:
+>          R10=3Dfp0
+>         callee:
+>          frame1: R1=3Dctx() R10=3Dfp0
+>         4: frame1: R1=3Dctx() R10=3Dfp0
+>         ; filter_skb(void *ctx)
+>         4: (bf) r3 =3D r10                      ; frame1: R3_w=3Dfp0 R10=
+=3Dfp0
+>         ;
+>         5: (07) r3 +=3D -8                      ; frame1: R3_w=3Dfp-8
+>         ; (void) bpf_get_func_arg(ctx, 0, (__u64 *) &skb);
+>         6: (b7) r2 =3D 0                        ; frame1: R2_w=3D0
+>         7: (85) call bpf_get_func_arg#183     ; frame1: R0_w=3Dscalar()
+>         ; return skb->dev->ifindex =3D=3D 2;
+>         8: (79) r1 =3D *(u64 *)(r10 -8)         ; frame1: R1_w=3Dscalar()=
+ R10=3Dfp0
+> fp-8=3Dmmmmmmmm
+>         ; return skb->dev->ifindex =3D=3D 2;
+>         9: (79) r1 =3D *(u64 *)(r1 +16)
+>         R1 invalid mem access 'scalar'
+>         processed 7 insns (limit 1000000) max_states_per_insn 0 total_sta=
+tes 0
+> peak_states 0 mark_read 0
+>
+> If the returned skb is a trusted pointer, the verifier will accept
+> something like:
+>
+> static __noinline bool
+> filter_skb(struct sk_buff *skb)
+> {
+>     return skb->dev->ifindex =3D=3D 2;
+> }
+>
+> Which will compile into much simpler and more efficient instructions:
+>
+> bool filter_skb(struct sk_buff * skb):
+> ; return skb->dev->ifindex =3D=3D 2;
+>   92: (79) r1 =3D *(u64 *)(r1 +16)
+> ; return skb->dev->ifindex =3D=3D 2;
+>   93: (61) r1 =3D *(u32 *)(r1 +224)
+>   94: (b7) r0 =3D 1
+> ; return skb->dev->ifindex =3D=3D 2;
+>   95: (15) if r1 =3D=3D 0x2 goto pc+1
+>   96: (b7) r0 =3D 0
+> ; return skb->dev->ifindex =3D=3D 2;
+>   97: (95) exit
+>
+> In conclusion:
+>
+> 1. It will be better if the pointer returned by bpf_get_func_arg() is
+> trusted, only when the argument index is a known constant.
 
-OK.
+bpf_get_func_arg() was never meant to return trusted arguments, so
+this, IMO, is pushing it too far.
 
-Now I start to think about the FD situation: either a fault queue or
-an eventq returns an FD and holds a refcount on the event object. So
-the event object can't be destroyed unless the FD is released first.
-Are we doing it incorrectly here?
+> 2. Adding bpf_get_func_arg() support to tp_btf will significantly
+> simplify and improve tools like bpfsnoop.
 
-> > > objects, the right thing is to zap it with invalidate_mapping_range()
-> > 
-> > Also, I can't find much info about invalidate_mapping_range(). Is
-> > it a user space call?
-> 
-> unmap_mapping_range(), see how VFIO uses it.
+"Significantly simplify and improve" is a bit of an exaggeration,
+given BPF cookies can be used for getting number of arguments of
+tp_btf, as for the getting rid of bpf_probe_read_kernel(), tbh, more
+generally useful addition would be an untyped counterpart to
+bpf_core_cast(), which wouldn't need BTF type information, but will
+treat all accessed memory as raw bytes (but will still install
+exception handler just like with bpf_core_cast()).
 
-I see! It just needs to call that function when we remove the mmap
-for a vIOMMU destroy().
-
-> > I do see a few drivers defining a fault op in vm_operations_struct,
-> > where VM_FAULT_SIGBUS is returned when there is page backing up the
-> > VMAs. Is it what we need here?
-> 
-> Probably as well
-
-Once the vma is unmapped, any further access would trigger a fault,
-right? That's how it works.
-
-I see do_fault() report a VM_FAULT_SIGBUS, when !vma->vm_ops->fault.
-So, perhaps we don't need an iommufd fault op at this moment.
-
-Thanks
-Nicolin
+>
+> [1] https://github.com/bpfsnoop/bpfsnoop
+>
+> Thanks,
+> Leon
+>
+>
 
