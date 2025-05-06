@@ -1,119 +1,262 @@
-Return-Path: <linux-kselftest+bounces-32514-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32515-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A8AAAAC9C3
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 May 2025 17:44:29 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D000CAACA6B
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 May 2025 18:05:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9E6597AEC8F
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 May 2025 15:43:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 25C297B5043
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 May 2025 16:04:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36E0F283C9F;
-	Tue,  6 May 2025 15:44:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1579A283FF5;
+	Tue,  6 May 2025 16:05:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N+GyyHUV"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nGmdfCnz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7FB3C8FE;
-	Tue,  6 May 2025 15:44:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FA152836B9
+	for <linux-kselftest@vger.kernel.org>; Tue,  6 May 2025 16:05:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746546262; cv=none; b=hg1DEpEiL6yeZzHRZr4vES+zpwkb5/t4Zc/8CQWTQyFp4nNj4egoEi6Pfh26Ezcm7NOk+wfVTrn4I59ahvQ7sm1+GYctDM++3x5k+UbRtYVKqIRLycq6Or1kfPOof8G0tUeD75+OMBsWywQih2F0auApQT0ivqYZj7jJu8g/E6Y=
+	t=1746547519; cv=none; b=OAcEc7FfTZbCL0qozS3BtTdtYGzGSpgd/rXasuwVx0TErVp9VjyAXEN0CYVggLog6rt7XvQ0knNZC9Qxh+nWrkSwIH8mnOd5OdKd4yCpsLZXc9GP1ffGehnPT0ieCRIoP126+NbXLT9isIzug1dBhNfAN1VH6s2qz6t+/x45fU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746546262; c=relaxed/simple;
-	bh=tPzB4Cr5GgKl89ad8RCRlDRGcX8EwjgQuP1Ms+e8B4w=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hmb2YoCtk+/ge/r4U1fqyONGEktWPqg/aAW6pKuk5z5PXgWNiSOElTLX9nOSFRKvmLEaLhllLQiSc2Tro+i9bVgyGljamWjyaOq5V4aHnWrStW/SenymRs2BTphHh3OvuxZ/Af2D4AgbRH5hS2YJm9KFY2qe92x2/9VSkrZ4j+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N+GyyHUV; arc=none smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-73c17c770a7so8267426b3a.2;
-        Tue, 06 May 2025 08:44:20 -0700 (PDT)
+	s=arc-20240116; t=1746547519; c=relaxed/simple;
+	bh=kRp4IxyzyS/awOzFbebOHY+i3kmMtE/y4muUCSNf6Qs=;
+	h=Date:In-Reply-To:Mime-Version:Message-ID:Subject:From:To:Cc:
+	 Content-Type; b=qS6Ri/FXlXd1Yx+eX0RWfgTrqg5vgrFzY2sLh6nrGOLOJ0SCSRHIuLfKCEb4iQGosiYrPNmWCHgd7F6fWU++AujGLwCoozrKmmSnpgkeSoNq+MYAO0vacn73NsNXHvYNkDs9b0xMu2fciP0GQphNveoTPNnQqkZ7xGLDYw0hWOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nGmdfCnz; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-22e5a558bfaso2929615ad.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 06 May 2025 09:05:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746546260; x=1747151060; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=W92479e3GDwcVekSJ+6iNPM/4aDW6S7waFt19f/PGiQ=;
-        b=N+GyyHUVO2560hGgcmNz5VHdkYMhvtfa06NhlpqqdQ9eywilBDPmcyquIIcQI5fQy6
-         kXiFq6q7hdrgSRFBvYwUhYAL+jbe/jaJNvi/d+Yg3j6zOZEOMz4VchNFsgWcfzqtzRyI
-         N9C9QgWo8T+3NdwhKIJRisx8DznvJSWsjG6adQc2zHQcV0ddL8cOWBrhlaRJ9RmEXeO3
-         1BX8zqk0p6mkd4ieBQm/8aF1T8redf5lalHzywf7dhVI/rCGgamBLeQB9ldi9Ac6i+y2
-         9b2Nh7GyI7VsjOc57kt+CBg0Y2AfvY5B2+yevUpVX25a9dVy8AVZQj0PYmrL1Q5GJOri
-         btjQ==
+        d=google.com; s=20230601; t=1746547516; x=1747152316; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=i1mo/Wo+ejg//AUbVLPWXwjlsnYrBMoTR6luF4u3TZs=;
+        b=nGmdfCnz+COlgoDiCBZ4UxH91Q+YuEodJGv9wtVqdpiIvLNSlDfUTRAs8HuSuKPjhd
+         gw9Vm1n+EAihd951/Ry+258AVq7nZCBBZTSpb7IJZzWWLhKw9pQvq/pxYeCRKzkFutCT
+         p1aMwSmrxFo0koMwu3Sg7vHEVuqtFeCFZy4CWBYdmtKRG6apxCkwnlKOJJHM99diSmPP
+         IcGXSMr0gV1cjBy7RiPArUqKCMQR1DzBFOtMRKPzVzbQwLlToJPLDNGthiR0RPiJW57R
+         ga9N+SWSYc3O8h/Mqg5ZIi0MiGKlZuFY9whPeOAtCxLi+witiFBW4EFs0q90ea1L2Zud
+         S5Jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746546260; x=1747151060;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=W92479e3GDwcVekSJ+6iNPM/4aDW6S7waFt19f/PGiQ=;
-        b=Wb7kMitTHcmhyDiuf8Lvv/DhDMltIY/zNwWnZ8Us0yGeCJCWT224BwFfEkhZKQLT8W
-         +N4ZSOgdEkAw5OK3JH7SumcKhDITDqn0u1zz9vF8M67fe+w3k7BWtxPnQsnwwuChJLwd
-         Vj+hCdM2zqzPQyYx+QE3EXrQISUOqEKlxpWnzMx1g1KD2vc7nyIXbDAN1tQ2NgANEqSN
-         nNRb0fw69/RoxrQ93sFfJL4B9f8/0R9TzVkHW13zIeulZu/gzP7HcqNrN21MzAoQatWW
-         8MdQ4tCjFWHpamUFTyd0YDPFWc6yg3Lu1n8Xmn2KsUKF4P9UmflFQtLtQc7ZDDVOFoZn
-         cC1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCX4QFir/LuWOflxV9rqcBVz2ZTuSaMO4TfW6M+FqRDQHSWGNgS6OT5n8EYrggzd9HHH5VCF9WguLJfbwjtn564=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwGLqN2Jq6/VS8YrH7p3eWHoFDGHGd51BkxQirAbBVpUTLfiudb
-	IAx0p6FAYnS8M2ryWDXyh28AHAyho5MY4leDBZGmydhPzp24M+KFytMmkAMq
-X-Gm-Gg: ASbGncszd8CJK5d/syC30aIAvHjyXtykmxYcecDZUiN7W3/24Th4PWuGWr3vh1S3Lx9
-	QsDd/bajtEcM1u8qqSwtgts5K2SgbcrrFQpN8gzlU5PnIIfBNsaL4we1c5M8j/yyJo25EMsB6I3
-	EGfBs/1AaeyPRQyH73VZ6wxqXkmIa86QqyDWwWQaXO55mgYuGVJiUd2dlj/46Vf7khbjex0kHR2
-	/+nNU4mq+uJmM2PlraWUsrs5UdFdsGoQ7UaBgsoA4jduSLjGRbCTx045po+raNs+AXarXEeRjUu
-	KMy2RFkM8paPyokSVw0kN9aG7lvDTiD4cuqJW8Z4hPjnvOtqI0TgLftRkcKcRbdxtaZEiyX8VEv
-	FslO/wwHUUvp1HxocRqn/Czj6idMCFGP1ipg=
-X-Google-Smtp-Source: AGHT+IHVsHgCGhiIOVqITpHBM3uC93n8OV65My3h+37NXsLGcvJQsk08vps7/EQokyGbCmT/2HP9dA==
-X-Received: by 2002:a05:6a21:9102:b0:1f5:931d:ca6d with SMTP id adf61e73a8af0-20e962058fdmr17563250637.1.1746546259972;
-        Tue, 06 May 2025 08:44:19 -0700 (PDT)
-Received: from server-kernel.moonheelee.internal (d173-180-147-14.bchsia.telus.net. [173.180.147.14])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b1fb391fff6sm7715747a12.6.2025.05.06.08.44.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 May 2025 08:44:19 -0700 (PDT)
-From: Moon Hee Lee <moonhee.lee.ca@gmail.com>
-To: brauner@kernel.org,
-	shuah@kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	skhan@linuxfoundation.org,
-	linux-kernel-mentees@lists.linux.dev,
-	Moon Hee Lee <moonhee.lee.ca@gmail.com>
-Subject: [PATCH] selftests: pid_namespace: Fix missing mount headers in pid_max.c
-Date: Tue,  6 May 2025 08:44:16 -0700
-Message-ID: <20250506154416.3102-1-moonhee.lee.ca@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20230601; t=1746547516; x=1747152316;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=i1mo/Wo+ejg//AUbVLPWXwjlsnYrBMoTR6luF4u3TZs=;
+        b=r4iBe5znJgCPLWJBQpYptihmQ0IWaRL8YVLjKPz9GlI/Mkc7ehuB05thj2vT63OL0n
+         n/0vKfDZP+7MTBGY/V9T+b6DTOoVDgNsy7u7XoKZTGKucVabjX4m2msi8/iwjscNeGWA
+         SqvzH10yiraZV7W5KDmqKNlZdJP4JR8k8yKXXYRfF+Sy6jNwswks49dYUoTiPAEROpG4
+         J5OfSeO1gwVkYPMrPvu8mVnnpmPapwfh4QUumm0JOA//2Q++eCW551pFiCRmwSWYHsa1
+         GsbwjxuOSsaS/sHQrD8p7Yq9mHH3HaaArSL8B0xvRq4hHf2MY64qA3RTj1nIhiir+Rq+
+         tJxw==
+X-Forwarded-Encrypted: i=1; AJvYcCWyrPuNBoiXhJopuxI1fptzIOax6w8eTJLXU3KcWuL79D1sa6Q8t83cZXJ/wXy0AuJwUKP/mTrKIGPSBkb1+28=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxUmz5Y7qa9qAvPVgasoAAEr4Lom5TLT9Um9ncm1U3iBN42d31J
+	bRjgNt7Bsa1Gkt8zANNzIJcfQgp55i2zA9z9zpGtjcX02zlAsxsrepPg+RXH1oOamLcHhVmolZi
+	pPXtlsk0XjhVVxu8QKFIo8A==
+X-Google-Smtp-Source: AGHT+IH5eiqM+GukGy4eHAEU6Tq2FHVB00BdiyUDeaIE6OKI+9mYaTJy4CBBv+vaOD5LVB3g3ewfS67gEdx2/54B0w==
+X-Received: from pfbid12.prod.google.com ([2002:a05:6a00:8a8c:b0:73b:bbec:17e9])
+ (user=ackerleytng job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:903:2408:b0:223:37ec:63d5 with SMTP id d9443c01a7336-22e32ba8292mr60504445ad.28.1746547516646;
+ Tue, 06 May 2025 09:05:16 -0700 (PDT)
+Date: Tue, 06 May 2025 09:05:15 -0700
+In-Reply-To: <ZN/81KNAWofRCaQK@google.com> (message from Sean Christopherson
+ on Fri, 18 Aug 2023 16:20:52 -0700)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Message-ID: <diqzbjs5k9ms.fsf@ackerleytng-ctop.c.googlers.com>
+Subject: Re: [RFC PATCH 02/11] KVM: guest_mem: Add ioctl KVM_LINK_GUEST_MEMFD
+From: Ackerley Tng <ackerleytng@google.com>
+To: Sean Christopherson <seanjc@google.com>
+Cc: pbonzini@redhat.com, tglx@linutronix.de, x86@kernel.org, 
+	kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, mingo@redhat.com, bp@alien8.de, 
+	dave.hansen@linux.intel.com, hpa@zytor.com, shuah@kernel.org, 
+	andrew.jones@linux.dev, ricarkol@google.com, chao.p.peng@linux.intel.com, 
+	tabba@google.com, jarkko@kernel.org, yu.c.zhang@linux.intel.com, 
+	vannapurve@google.com, erdemaktas@google.com, mail@maciej.szmigiero.name, 
+	vbabka@suse.cz, david@redhat.com, qperret@google.com, michael.roth@amd.com, 
+	wei.w.wang@intel.com, liam.merwick@oracle.com, isaku.yamahata@gmail.com, 
+	kirill.shutemov@linux.intel.com, Ryan Afranji <afranji@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Fix compilation error in pid_max.c by including <sys/mount.h> to define
-mount(), umount2(), MS_PRIVATE, MS_REC, and MNT_DETACH.
+Sean Christopherson <seanjc@google.com> writes:
 
-The test now builds successfully.
+> On Mon, Aug 07, 2023, Ackerley Tng wrote:
+>> KVM_LINK_GUEST_MEMFD will link a gmem fd's underlying inode to a new
+>> file (and fd).
+>>
+>> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+>> ---
+>>  include/uapi/linux/kvm.h |  8 +++++
+>>  virt/kvm/guest_mem.c     | 73 ++++++++++++++++++++++++++++++++++++++++
+>>  virt/kvm/kvm_main.c      | 10 ++++++
+>>  virt/kvm/kvm_mm.h        |  7 ++++
+>>  4 files changed, 98 insertions(+)
+>>
+>> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+>> index eb900344a054..d0e2a2ce0df2 100644
+>> --- a/include/uapi/linux/kvm.h
+>> +++ b/include/uapi/linux/kvm.h
+>> @@ -2299,4 +2299,12 @@ struct kvm_create_guest_memfd {
+>>  	__u64 reserved[6];
+>>  };
+>>
+>> +#define KVM_LINK_GUEST_MEMFD	_IOWR(KVMIO,  0xd5, struct kvm_link_guest_memfd)
+>> +
+>> +struct kvm_link_guest_memfd {
+>> +	__u64 fd;
+>> +	__u64 flags;
+>> +	__u64 reserved[6];
+>> +};
+>> +
+>>  #endif /* __LINUX_KVM_H */
+>> diff --git a/virt/kvm/guest_mem.c b/virt/kvm/guest_mem.c
+>> index 30d0ab8745ee..1b3df273f785 100644
+>> --- a/virt/kvm/guest_mem.c
+>> +++ b/virt/kvm/guest_mem.c
+>> @@ -477,6 +477,79 @@ int kvm_gmem_create(struct kvm *kvm, struct kvm_create_guest_memfd *args)
+>>  	return __kvm_gmem_create(kvm, size, flags, kvm_gmem_mnt);
+>>  }
+>>
+>> +static inline void __kvm_gmem_do_link(struct inode *inode)
+>> +{
+>> +	/* Refer to simple_link() */
+>> +
+>> +	inode->i_ctime = current_time(inode);
+>> +	inc_nlink(inode);
+>> +
+>> +	/*
+>> +	 * ihold() to add additional reference to inode for reference in dentry,
+>> +	 * created in kvm_gmem_alloc_file() -> alloc_file_pseudo(). This is not
+>> +	 * necessary when creating a new file because alloc_inode() creates
+>> +	 * inodes with i_count = 1, which is the refcount for the dentry in the
+>> +	 * file.
+>> +	 */
+>> +	ihold(inode);
+>> +
+>> +	/*
+>> +	 * dget() and d_instantiate() complete the setup of a dentry, but those
+>> +	 * have already been done in kvm_gmem_alloc_file() ->
+>> +	 * alloc_file_pseudo()
+>> +	 */
+>> +}
 
-Signed-off-by: Moon Hee Lee <moonhee.lee.ca@gmail.com>
----
- tools/testing/selftests/pid_namespace/pid_max.c | 1 +
- 1 file changed, 1 insertion(+)
+Thanks Sean, we're just circling back to this series, working on a next
+revision.
 
-diff --git a/tools/testing/selftests/pid_namespace/pid_max.c b/tools/testing/selftests/pid_namespace/pid_max.c
-index 51c414faabb0..972bedc475f1 100644
---- a/tools/testing/selftests/pid_namespace/pid_max.c
-+++ b/tools/testing/selftests/pid_namespace/pid_max.c
-@@ -11,6 +11,7 @@
- #include <string.h>
- #include <syscall.h>
- #include <sys/wait.h>
-+#include <sys/mount.h>
- 
- #include "../kselftest_harness.h"
- #include "../pidfd/pidfd.h"
--- 
-2.43.0
+>
+> Does this have to be done before the fd is exposed to userspace, or can it be
+> done after?
 
+Does "exposed to userspace" mean the call to get_unused_fd_flags(),
+where an fd is reserved?
+
+Do you mean to make this reservation as late as possible?
+
+> If it can be done after, I'd prefer to have the allocation helper
+> also install the fd, and also rename it to something that better conveys that
+> it's allocating more than just the file, e.g. that it allocates and initialize
+> kvm_gmem too.
+>
+> Completely untested, but this is what I'm thinkin/hoping.
+>
+> static int kvm_gmem_alloc_view(struct kvm *kvm, struct inode *inode,
+> 			       struct vfsmount *mnt)
+
+Will rename this kvm_gmem_alloc_view(), that naming totally makes
+sense, and attaches a meaning to the struct file as a view into the
+memory.
+
+> {
+> 	struct file *file;
+> 	struct kvm_gmem *gmem;
+>
+> 	gmem = kzalloc(sizeof(*gmem), GFP_KERNEL);
+> 	if (!gmem)
+> 		return -ENOMEM;
+>
+> 	fd = get_unused_fd_flags(0);
+> 	if (fd < 0) {
+> 		r = fd;
+> 		goto err_fd;
+> 	}
+
+Do you see the fd as part of the view? I thought the fd is just a handle
+to the view (struct file).
+
+>
+> 	file = alloc_file_pseudo(inode, mnt, "kvm-gmem", O_RDWR, &kvm_gmem_fops);
+> 	if (IS_ERR(file)) {
+> 		r = PTR_ERR(file);
+> 		goto err_file;
+> 	}
+>
+> 	file->f_flags |= O_LARGEFILE;
+> 	file->f_mapping = inode->i_mapping;
+>
+> 	kvm_get_kvm(kvm);
+> 	gmem->kvm = kvm;
+> 	xa_init(&gmem->bindings);
+>
+> 	file->private_data = gmem;
+>
+> 	list_add(&gmem->entry, &inode->i_mapping->private_list);
+>
+> 	fd_install(fd, file);
+>
+> 	return 0;
+> err:
+> 	put_unused_fd(fd);
+> err_fd:
+> 	kfree(gmem);
+> 	return r;
+> }
+>
+> static int __kvm_gmem_create(struct kvm *kvm, loff_t size, u64 flags,
+> 			     struct vfsmount *mnt)
+> {
+> 	const char *anon_name = "[kvm-gmem]";
+> 	const struct qstr qname = QSTR_INIT(anon_name, strlen(anon_name));
+> 	struct inode *inode;
+> 	struct file *file;
+> 	int fd, err;
+>
+> 	inode = alloc_anon_inode(mnt->mnt_sb);
+> 	if (IS_ERR(inode))
+> 		return PTR_ERR(inode);
+>
+> 	err = security_inode_init_security_anon(inode, &qname, NULL);
+> 	if (err)
+> 		goto err;
+>
+> 	inode->i_private = (void *)(unsigned long)flags;
+> 	inode->i_op = &kvm_gmem_iops;
+> 	inode->i_mapping->a_ops = &kvm_gmem_aops;
+> 	inode->i_mode |= S_IFREG;
+> 	inode->i_size = size;
+> 	mapping_set_gfp_mask(inode->i_mapping, GFP_HIGHUSER);
+> 	mapping_set_large_folios(inode->i_mapping);
+> 	mapping_set_unevictable(inode->i_mapping);
+> 	mapping_set_unmovable(inode->i_mapping);
+>
+> 	fd = kvm_gmem_alloc_view(kvm, inode, mnt);
+> 	if (fd < 0) {
+> 		err = fd;
+> 		goto err;
+> 	}
+> 	return fd;
+> err:
+> 	iput(inode);
+> 	return err;
+> }
 
