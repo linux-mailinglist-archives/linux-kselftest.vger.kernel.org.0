@@ -1,240 +1,142 @@
-Return-Path: <linux-kselftest+bounces-32625-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32626-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7E40AAEF06
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 May 2025 01:09:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07FDDAAEF3D
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 May 2025 01:22:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E95B9C07B3
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 May 2025 23:09:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 51EA31BC6C88
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 May 2025 23:22:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37BB429186F;
-	Wed,  7 May 2025 23:09:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2005B291868;
+	Wed,  7 May 2025 23:21:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="EOfFAo1F"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Dufagjjm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03DEF1ACEC8;
-	Wed,  7 May 2025 23:09:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC3FB1CAA65
+	for <linux-kselftest@vger.kernel.org>; Wed,  7 May 2025 23:21:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746659365; cv=none; b=Ra+8FwTB8Tfbw7TUj4E7Ze6wEzLzEailBzF5RO3FA5sdpUyhKNOP3PdpROenn2NOBxzVThxK3aIO+t09DUQijAsQUq3O6lzg5NXoeOw1jQrqxDLDV3WJyGCpBAg5r4dnxfDJbYfjtxIUkrDxhupaAVWg5v8iD4j6XxdS84QUBgU=
+	t=1746660113; cv=none; b=I7ftCWEM8QR/L+JbpmdaIgVFkNCHzLLNeoJHPUpo4DAnollLK2HhtSvxICI5DgFu7ibeu6dQykyMsykPexX+1BZDtmYnZqv0BYhRYAW9ST99azxHfsbX6t1upJB1OdKJ+Vghc1u9J6Hq0cpO5V1lPX4G27xGGDGd7TZjVTqBG6U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746659365; c=relaxed/simple;
-	bh=KMFzgmh2r5Df+u8KVgowuji0vPzSkWx80se/kz0YMRQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PeKjyk1gSbueEx3Lz4pduur9uBGaVv49REKx6IFHgaKTbPkVns2eSKyR3Y+eyC+eavq/a9JO5TTew4meDlYIwo8hk4NSj87L18LliHdFeQ6lszF4hdt81TmQHs63v6kEIEhEHso5IxrJgv1CltitLLiJxV4c9O1zf3IwuyV0uf0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=EOfFAo1F; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-	:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=o0wgH0daWTZzvybrzGF8aoTDHaUJ4f2HlkJDU/65xBw=; b=EOfFAo1F4lXkUxfsluF8fC+AA5
-	qLkeCPpxopOz0WVewlU4Z0nxujmKcDDCa7s+lE0PYWEnslk4YxuF+cQEEUU6bOyfSCvHOvWs8FwuS
-	V5kxqwjFG2dZDt90AmxcpZMYckkCCMQXkMjbCygesJuXSE1av3H5WNIJbPq3dxdJpuZsfJaOeIM8h
-	J5VLIhZCJKjFUq4EO9JMHQAO/nRhWlBEY4FpWzQd/rr/OHPm8FzFdBLl8l/in4CzuYAbiR7BQZoFj
-	z9JGAib7VU6U+mG/t/GrlIx+eqakJwTNxCkdYQv503xLnsv9iNJ4yPloXw02ilKpn0I9xRWsjy4e2
-	9H63hs6g==;
-Received: from [50.39.124.201] (helo=[192.168.254.17])
-	by desiato.infradead.org with esmtpsa (Exim 4.98.1 #2 (Red Hat Linux))
-	id 1uCnsj-0000000FwIO-3tGf;
-	Wed, 07 May 2025 23:09:18 +0000
-Message-ID: <e454bcf1-ae3c-41bd-b376-6560ea534925@infradead.org>
-Date: Wed, 7 May 2025 16:08:49 -0700
+	s=arc-20240116; t=1746660113; c=relaxed/simple;
+	bh=bamgXzYV0UnQ2r1ph7sXoh7QCDp4e7MSXHZ/X1OQN2s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=H38bor59ANlCuHDcjN83pBoZATrIwPmSraxpcsJvFWcsLyMGN7lgSuKb3iFXstYN8tknmLbtiiNDMng4KCYv/QkysXUJemN7TPTtpPvzomIgYUxZ++12fxaHHgwrb0WzkBxSrR1LIc+QSbZhKvSGf6NQ6hVyCa5B4r+F01sHmSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Dufagjjm; arc=none smtp.client-ip=209.85.128.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-70842dc27easo4448727b3.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 07 May 2025 16:21:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1746660110; x=1747264910; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eiS55CU6GCzTdVaqv+v/fNQZYBIDDl972AoagHBKWUg=;
+        b=DufagjjmqAeKn6K4RZUlzNzx51kuZ50HrbTQHDXajJrHVRHUeR6fKn3zTLYLi/UCPR
+         mE6b2CZ9rsolEuvCNLhwPsyAh00f3244hhKbawmkrGiapbDzhPZYmI4ykn/ofb7pG6Av
+         oaUGSKpVNTN7Mpfa28SP0p1z6EvxK5tOtX8LTG9nHHdVHUfLa3wAUfzxqDtJ2jJEVgpc
+         gahKKHrGXYhkc+mTeMCqEBG7Bo+n0eRwzpTM4Lh211Qg1micZp+mCnzBzIZAjrIvlynn
+         IItkJ4fD350/B2CnYbJJRm7CWugTKWOEcj5iPL3JNZhYDu66nxRkx56+PD0qAHW/1jZ3
+         jjvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746660110; x=1747264910;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eiS55CU6GCzTdVaqv+v/fNQZYBIDDl972AoagHBKWUg=;
+        b=ihDhsoby869sSfiDWKxERQS7mrEU64nGcZaFMZn5XKo2nf4qHhWZgDj52P32ifJWG6
+         L+EeHRVmTGic4DALy1le74o+8cj33Ra+goIAuNwDfcOP5QBTEX8Or9Cirayy8ot6LjvE
+         dm60cot07jpBbb7pjT8UROLHJDn5THzCVKsQdpomm0oPxO8Kif+uGVEV1miuCg/uacd4
+         VPcGCoMil2DH/euqfap3GBR6ViRjDnWRfi9TI4v5B5yDYT/1+jq0fvFF7tY5IL84Xr0N
+         eicpRmPPd9ttTmOHicBNBA7OcOBprZpvqWpfNR1rwnGg4gBz6FqHihYVJs7xCfFl2myn
+         h/kw==
+X-Forwarded-Encrypted: i=1; AJvYcCWRxyaKgDGhq7iHIsbfdJTX72yRPOfsdTyeFRHt/+I+CT29bUOVUoL2wKfq6VEZcoZBhA2wS44y+BHQqV2wjgE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwULjpQQ3R8bGntjxInHYjHUo3DCYJsXDh15bc3Je6ddw6pIW8I
+	RpDbK6F0VfFz4DGJYQowqFfDR6/ubj4+tNn5DQQAFkxSH5kf7/Ab6XI+O6MK+8kcAZfpsRMJSff
+	XJcOTK9bc+kT/36XYzE6rQavikxuR/LGzxUCr
+X-Gm-Gg: ASbGncs1LPw6MEUuK6dwO3ObibLId5z4m+KSQmaVdN7VkG3QJpVhBT4VI+P/AEptAkD
+	lfGDwEsZWmD4EuPbyuZTn5QDhCjLc3RZ/g2/HA57TM9ye3Ui2JQ1zIf5UxkMJWHiMV932S53CvR
+	5Z+4UiIIRC/qs0VclKz1jKNaVMP6ps+bdF
+X-Google-Smtp-Source: AGHT+IEdiurNMDjEEGPDbl4FsASjSKl1b0yzZP+/scZr6xyvlLkYWyw7qnY1iU3gzpVhfzU/6D0/RDhTUKWUSun/1+U=
+X-Received: by 2002:a05:690c:6f11:b0:708:a778:b447 with SMTP id
+ 00721157ae682-70a1da3a702mr73951417b3.20.1746660109690; Wed, 07 May 2025
+ 16:21:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 8/8] Documentation: ublk: document UBLK_F_RR_TAGS
-To: Uday Shankar <ushankar@purestorage.com>, Ming Lei <ming.lei@redhat.com>,
- Jens Axboe <axboe@kernel.dk>, Caleb Sander Mateos <csander@purestorage.com>,
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>
-Cc: linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20250507-ublk_task_per_io-v6-0-a2a298783c01@purestorage.com>
- <20250507-ublk_task_per_io-v6-8-a2a298783c01@purestorage.com>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20250507-ublk_task_per_io-v6-8-a2a298783c01@purestorage.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20250502184421.1424368-1-bboscaccy@linux.microsoft.com>
+ <20250502210034.284051-1-kpsingh@kernel.org> <87o6w7ge3o.fsf@microsoft.com>
+ <CACYkzJ7Ur4kFaGZTDvcFJpn0ZwJ9V+=3ZefUURtkrQGfa68zLg@mail.gmail.com> <5dbc2a55a655f57a30be3ff7c6faa1d272e9b579.camel@HansenPartnership.com>
+In-Reply-To: <5dbc2a55a655f57a30be3ff7c6faa1d272e9b579.camel@HansenPartnership.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Wed, 7 May 2025 19:21:38 -0400
+X-Gm-Features: ATxdqUHVijVfp4d_bipTBtoKTZV9oFot2QZoyM5v54DevQVu2k9jVQgfjdqjmrE
+Message-ID: <CAHC9VhSPLsi+GBtjJsQ8LUqPQW4aHtOL6gOqr9jfpR0i1izVZA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/4] Introducing Hornet LSM
+To: KP Singh <kpsingh@kernel.org>, 
+	James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc: Blaise Boscaccy <bboscaccy@linux.microsoft.com>, bpf@vger.kernel.org, code@tyhicks.com, 
+	corbet@lwn.net, davem@davemloft.net, dhowells@redhat.com, gnoack@google.com, 
+	herbert@gondor.apana.org.au, jarkko@kernel.org, jmorris@namei.org, 
+	jstancek@redhat.com, justinstitt@google.com, keyrings@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	llvm@lists.linux.dev, masahiroy@kernel.org, mic@digikod.net, morbo@google.com, 
+	nathan@kernel.org, neal@gompa.dev, nick.desaulniers+lkml@gmail.com, 
+	nicolas@fjasle.eu, nkapron@google.com, roberto.sassu@huawei.com, 
+	serge@hallyn.com, shuah@kernel.org, teknoraver@meta.com, 
+	xiyou.wangcong@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Wed, May 7, 2025 at 1:48=E2=80=AFPM James Bottomley
+<James.Bottomley@hansenpartnership.com> wrote:
+>
+> I'm with Paul on this: if you could share your design ideas more fully
+> than you have above that would help make this debate way more
+> technical.
 
-On 5/7/25 2:49 PM, Uday Shankar wrote:
-> Document the new flag UBLK_F_RR_TAGS along with its intended use case.
-> Also describe the new restrictions on threading model imposed by
-> ublk_drv (one (qid,tag) pair is can be served by only one thread), and
-> remove references to ubq_daemon/per-queue threads, since such a concept
-> no longer exists.
-> 
-> Signed-off-by: Uday Shankar <ushankar@purestorage.com>
-> ---
->  Documentation/block/ublk.rst | 83 ++++++++++++++++++++++++++++++++++++++------
->  1 file changed, 72 insertions(+), 11 deletions(-)
-> 
-> diff --git a/Documentation/block/ublk.rst b/Documentation/block/ublk.rst
-> index 854f823b46c2add01d0b65ba36aecd26c45bb65d..e9cbabdd69c5539a02463780ba5e51de0416c3f6 100644
-> --- a/Documentation/block/ublk.rst
-> +++ b/Documentation/block/ublk.rst
-> @@ -115,15 +115,15 @@ managing and controlling ublk devices with help of several control commands:
->  
->  - ``UBLK_CMD_START_DEV``
->  
-> -  After the server prepares userspace resources (such as creating per-queue
-> -  pthread & io_uring for handling ublk IO), this command is sent to the
-> +  After the server prepares userspace resources (such as creating I/O handler
-> +  threads & io_uring for handling ublk IO), this command is sent to the
->    driver for allocating & exposing ``/dev/ublkb*``. Parameters set via
->    ``UBLK_CMD_SET_PARAMS`` are applied for creating the device.
->  
->  - ``UBLK_CMD_STOP_DEV``
->  
->    Halt IO on ``/dev/ublkb*`` and remove the device. When this command returns,
-> -  ublk server will release resources (such as destroying per-queue pthread &
-> +  ublk server will release resources (such as destroying I/O handler threads &
->    io_uring).
->  
->  - ``UBLK_CMD_DEL_DEV``
-> @@ -208,15 +208,15 @@ managing and controlling ublk devices with help of several control commands:
->    modify how I/O is handled while the ublk server is dying/dead (this is called
->    the ``nosrv`` case in the driver code).
->  
-> -  With just ``UBLK_F_USER_RECOVERY`` set, after one ubq_daemon(ublk server's io
-> -  handler) is dying, ublk does not delete ``/dev/ublkb*`` during the whole
-> +  With just ``UBLK_F_USER_RECOVERY`` set, after the ublk server exits,
-> +  ublk does not delete ``/dev/ublkb*`` during the whole
->    recovery stage and ublk device ID is kept. It is ublk server's
->    responsibility to recover the device context by its own knowledge.
->    Requests which have not been issued to userspace are requeued. Requests
->    which have been issued to userspace are aborted.
->  
-> -  With ``UBLK_F_USER_RECOVERY_REISSUE`` additionally set, after one ubq_daemon
-> -  (ublk server's io handler) is dying, contrary to ``UBLK_F_USER_RECOVERY``,
-> +  With ``UBLK_F_USER_RECOVERY_REISSUE`` additionally set, after the ublk server
-> +  exits, contrary to ``UBLK_F_USER_RECOVERY``,
->    requests which have been issued to userspace are requeued and will be
->    re-issued to the new process after handling ``UBLK_CMD_END_USER_RECOVERY``.
->    ``UBLK_F_USER_RECOVERY_REISSUE`` is designed for backends who tolerate
-> @@ -241,10 +241,11 @@ can be controlled/accessed just inside this container.
->  Data plane
->  ----------
->  
-> -ublk server needs to create per-queue IO pthread & io_uring for handling IO
-> -commands via io_uring passthrough. The per-queue IO pthread
-> -focuses on IO handling and shouldn't handle any control & management
-> -tasks.
-> +The ublk server should create dedicated threads for handling I/O. Each
-> +thread should have its own io_uring through which it is notified of new
-> +I/O, and through which it can complete I/O. These dedicated threads
-> +should focus on IO handling and shouldn't handle any control &
-> +management tasks.
->  
->  The's IO is assigned by a unique tag, which is 1:1 mapping with IO
+I think it would also help some of us, at the very least me, put your
+objections into context.  I believe the more durable solutions that
+end up in Linus' tree are combinations of designs created out of
+compromise, and right now we are missing the context and detail of
+your ideal solution to be able to do that compromise and get to a
+design and implementation we can all begrudgingly accept.  In the
+absence of a detailed alternate design, and considering that BPF
+signature validation efforts have sputtered along for years without
+any real success, we'll continue to push forward on-list with
+refinements to the current proposal in an effort to drive this to some
+form of resolution.
 
-   ???
+> I also get the impression that there might be a disagreement over
+> scope: what seems to be coming out of BPF is that every signing problem
+> and scenario must be solved before signing can be considered
+> acceptable; however, I think it's not unreasonable to attempt to cover
+> a portion of the use cases and allow for future additions of things
+> like policy so we can get some forward motion to allow others to play
+> with it and produce patches based on their use cases.
 
->  request of ``/dev/ublkb*``.
-> @@ -265,6 +266,13 @@ with specified IO tag in the command data:
->    destined to ``/dev/ublkb*``. This command is sent only once from the server
->    IO pthread for ublk driver to setup IO forward environment.
->  
-> +  Once a thread issues this command against a given (qid,tag) pair, the thread
-> +  registers itself as that I/O's daemon. In the future, only that I/O's daemon
-> +  is allowed to issue commands against the I/O. If any other thread attempts
-> +  to issue a command against a (qid,tag) pair for which the thread is not the
-> +  daemon, the command will fail. Daemons can be reset only be going through
-> +  recovery.
-> +
->  - ``UBLK_IO_COMMIT_AND_FETCH_REQ``
->  
->    When an IO request is destined to ``/dev/ublkb*``, the driver stores
-> @@ -309,6 +317,59 @@ with specified IO tag in the command data:
->    ``UBLK_IO_COMMIT_AND_FETCH_REQ`` to the server, ublkdrv needs to copy
->    the server buffer (pages) read to the IO request pages.
->  
-> +Load balancing
-> +--------------
-> +
-> +A simple approach to designing a ublk server might involve selecting a
-> +number of I/O handler threads N, creating devices with N queues, and
-> +pairing up I/O handler threads with queues, so that each thread gets a
-> +unique qid, and it issues ``FETCH_REQ``s against all tags for that qid.
-> +Indeed, before the introduction of the ``UBLK_F_RR_TAGS`` feature, this
-> +was essentially the only option (*)
+Beyond any potential future updates to Hornet, I just wanted to make
+it clear that the Hornet LSM approach, like any LSM, can be disabled
+both at compile time for those users who build their own kernels, as
+well as at kernel boot time using the "lsm=3D" command line option for
+those who are limited to pre-built kernels, e.g. distro kernels.
+Users can always disable Hornet and replace it with another LSM,
+either a BPF LSM or a native/C LSM, of their choosing; the LSM
+framework is intentionally flexible to allow for this substitution and
+replacement, with plenty of existing examples already.
 
-Add ending period (full stop), please.
-
-> +
-> +This approach can run into performance issues under imbalanced load.
-> +This architecture taken together with the `blk-mq architecture
-> +<https://docs.kernel.org/block/blk-mq.html>`_ implies that there is a
-> +fixed mapping from I/O submission CPU to the ublk server thread that
-> +handles it. If the workload is CPU-bottlenecked, only allowing one ublk
-> +server thread to handle all the I/O generated from a single CPU can
-> +limit peak bandwidth.
-> +
-> +To address this issue, two changes were made:
-> +
-> +- ublk servers can now pair up threads with I/Os (i.e. (qid,tag) pairs)
-> +  arbitrarily. In particular, the preexisting restriction that all I/Os
-> +  in one queue must be served by the same thread is lifted.
-> +- ublk servers can now specify ``UBLK_F_RR_TAGS`` when creating a ublk
-> +  device to get round-robin tag allocation on each queue
-
-Add ending period (full stop), please.
-
-> +
-> +The ublk server can check for the presence of these changes by testing
-> +for the ``UBLK_F_RR_TAGS`` feature.
-> +
-> +With these changes, a ublk server can balance load as follows:
-> +
-> +- create the device with ``UBLK_F_RR_TAGS`` set in
-> +  ``ublksrv_ctrl_dev_info::flags`` when issuing the ``ADD_DEV`` command
-> +- issue ``FETCH_REQ``s from ublk server threads to (qid,tag) pairs in
-> +  a round-robin manner. For example, for a device configured with
-> +  ``nr_hw_queues=2`` and ``queue_depth=4``, and a ublk server having 4
-> +  I/O handling threads, ``FETCH_REQ``s could be issued as follows, where
-> +  each entry in the table is the pair (``ublksrv_io_cmd::q_id``,
-> +  ``ublksrv_io_cmd::tag``) in the payload of the ``FETCH_REQ``.
-> +
-> +  ======== ======== ======== ========
-> +  thread 0 thread 1 thread 2 thread 3
-> +  ======== ======== ======== ========
-> +  (0, 0)   (0, 1)   (0, 2)   (0, 3)
-> +  (1, 3)   (1, 0)   (1, 1)   (1, 2)
-> +
-> +With this setup, I/O submitted on a CPU which maps to queue 0 will be
-> +balanced across all threads instead of all landing on the same thread.
-> +Thus, a potential bottleneck is avoided.
-> +
-> +(*) technically, one I/O handling thread could service multiple queues
-
-       Technically,
-
-> +if it wanted to, but that doesn't help with imbalanced load
-
-Add ending period (full stop), please.
-
-
-> +
->  Zero copy
->  ---------
->  
-> 
-
--- 
-~Randy
-
+--=20
+paul-moore.com
 
