@@ -1,49 +1,53 @@
-Return-Path: <linux-kselftest+bounces-32589-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32595-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3D28AAE8B6
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 May 2025 20:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CB57AAE8D5
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 May 2025 20:19:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BDEC7176A4D
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 May 2025 18:16:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 66D614A4392
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 May 2025 18:17:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3331228DF59;
-	Wed,  7 May 2025 18:16:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 224CC28ECDE;
+	Wed,  7 May 2025 18:16:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u1u0pSpD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A4eqnIX0"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D91621E7C05;
-	Wed,  7 May 2025 18:16:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8F8528EA69;
+	Wed,  7 May 2025 18:16:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746641779; cv=none; b=tZfKGP7s2aXdhah5aYbv7CKy1ctca/TSigjdDOk26Ed4MqAJZ5KfGvkPD2LVXX9asRYHY1QUmPNKQm24knDmrKTuJswg+9tq55fzI2yGs3rnIpCfaF8y2nJVMLw/dk2XaphUeK64GqGF0TBIybJpABUABu1EIzAFSAG2zPK2bKA=
+	t=1746641781; cv=none; b=d3UmbsH3spG8+KWu/lVQSgJyc4bZ/ZyVqW7qnDcA7ZyWuVgeZqVy5G1ueOLC/sKEq0c6sGTSuNFBpIjHLj2n/vQHTkRen/sSXUqV56oLCU+H4TOBGhgMlkxy24bIaQWNq67rOfhiMA+ovihPYGJMWrrqEsKfCj1OSxxuoR3ovtM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746641779; c=relaxed/simple;
-	bh=6Q9uh62q6SkNNJk0VXiSTm2HMDshuMHoXOhVSBim3Js=;
+	s=arc-20240116; t=1746641781; c=relaxed/simple;
+	bh=xnX44A875J5pRQUvuRYdVrdaj7yDpDUw7/gsLr5gEV0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=GrFNMSS29xWTo5QiNOmdS+db0yE7WsQ6PgZb0PWwgWu/DWmqTDW1nQ/J4wIpThLPXZnER94SBLXBRxyOre0PPd5M1DqmzvWSAFaNFQlcLYge3XwPNepXCJACbcyhKEXqDVGJaRrBj/Ovf/rIzbeCrWc7iFYiw+XeQv1gkEf7OYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u1u0pSpD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C685C4CEE9;
-	Wed,  7 May 2025 18:16:18 +0000 (UTC)
+	 MIME-Version; b=EHtXzMtzmCTMjnfW7DvBw0sX4dH2CvIf8TKah2QRPzr8Qg5XPugONCi+nhKjh3BvK6u1z9Y8YfdpGTkunlH/J6CZShRdQ+WI2Z6BaRk0/JuhRmSitNAH2kfxbL0Hlufk9tuR0kRtlxt7O+spEh7I2djmWw6d2PYYRMXYpqQE9jQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A4eqnIX0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ED36C4CEE9;
+	Wed,  7 May 2025 18:16:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746641778;
-	bh=6Q9uh62q6SkNNJk0VXiSTm2HMDshuMHoXOhVSBim3Js=;
+	s=k20201202; t=1746641781;
+	bh=xnX44A875J5pRQUvuRYdVrdaj7yDpDUw7/gsLr5gEV0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=u1u0pSpD+WsbK3ZVOw5BJBowU1AI3hOtGYCUezAch+IxZ2IHV87f9P3UbBtNVEw6W
-	 j+3xPYErXvab8lyHGGm1sEnaAE9hjBLFQj4LOx/vS90sxfOyuYrdCKf36TEpjGDQHg
-	 q8ukXKr4V+ZWTVQ7ViryWiL06XHu9rh64OWjQnHThKsZaXugToGKr3hQducP91k675
-	 c/yr7bbd617iNEdTQ60lh76LZzx7CcWVkVyv3QULjJENB/zyR95zXhS4EBYvpcLoJ1
-	 mMKBzjligZ45rFYRl3gN4Rga+6WJUhrTJ6uoO3dZ471a4kHVTN+QX+7qW9jHor1/rW
-	 bPGZ3BRsR+WNg==
+	b=A4eqnIX0WcGjfLO8f+lyrjegUMgvsmMLqhO4ll1KzzZYKRzMmi7+eEVKV/+8tvPM5
+	 hxrrNbPRWhrJ775N6k+nhWQOPm5h+LlXbfIPGrVGAiii2JAzRq8418udB3prr5lZw+
+	 ULHj5lOFTNukYXAeeYvCpd7m1SM7sVvSpEiC6WN4Es69BLf3kK6rKwIBo5UzyB6KjW
+	 JpTUcvbeIfzLJ9MFn8nT7ECpHic6sTc3gfp7uCN1GHgA9GsqMPYbft9nTB5BfoxUuz
+	 kdFfHxHXiVN6l1iNoodNM/mXFbf6UXVMzigHyw8dFzw3664h/c9kcLohtjOZet7ZQ1
+	 L3KyWZ1trbCGg==
 From: Kees Cook <kees@kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>
 Cc: Kees Cook <kees@kernel.org>,
+	x86@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	sparclinux@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
 	linux-hardening@vger.kernel.org,
 	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
 	Christoph Hellwig <hch@lst.de>,
@@ -58,22 +62,18 @@ Cc: Kees Cook <kees@kernel.org>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
 	linux-kernel@vger.kernel.org,
-	x86@kernel.org,
 	kasan-dev@googlegroups.com,
 	linux-doc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
 	kvmarm@lists.linux.dev,
 	linux-riscv@lists.infradead.org,
 	linux-s390@vger.kernel.org,
 	linux-efi@vger.kernel.org,
-	linux-kbuild@vger.kernel.org,
 	linux-security-module@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	sparclinux@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH 4/8] stackleak: Rename stackleak_track_stack to __sanitizer_cov_stack_depth
-Date: Wed,  7 May 2025 11:16:10 -0700
-Message-Id: <20250507181615.1947159-4-kees@kernel.org>
+Subject: [PATCH 5/8] stackleak: Split STACKLEAK_CFLAGS from GCC_PLUGINS_CFLAGS
+Date: Wed,  7 May 2025 11:16:11 -0700
+Message-Id: <20250507181615.1947159-5-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250507180852.work.231-kees@kernel.org>
 References: <20250507180852.work.231-kees@kernel.org>
@@ -83,264 +83,199 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=11429; i=kees@kernel.org; h=from:subject; bh=6Q9uh62q6SkNNJk0VXiSTm2HMDshuMHoXOhVSBim3Js=; b=owGbwMvMwCVmps19z/KJym7G02pJDBnSi3MENts7tXm5z7rDvWBm5prEstc7xQ49040UXbNwl 2Pm5mvBHaUsDGJcDLJiiixBdu5xLh5v28Pd5yrCzGFlAhnCwMUpABP52szIcHHStinFM79Mm9M/ O+x3cEx83y/m5hy3xIfPryo1blgofZeR4UxS5zpfB9dppxRKuC1yXzQsFys7vj1mYbnhujfpDUf 2cQIA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8800; i=kees@kernel.org; h=from:subject; bh=xnX44A875J5pRQUvuRYdVrdaj7yDpDUw7/gsLr5gEV0=; b=owGbwMvMwCVmps19z/KJym7G02pJDBnSi3P6lfhV/RXS7W7EXssK1NBnXdB5Ysnr/mVB/17fl nyiPW9uRykLgxgXg6yYIkuQnXuci8fb9nD3uYowc1iZQIYwcHEKwEQyLjMydM67eeZ867qfzziX yUjOl4pne5p24PVarrW6CwO/xaRWMDIyvKpsa9K/d9l+e0Fs3d97Xkl7JGyWBRS8mL1yzr8DbL3 FfAA=
 X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
-The Clang stack depth tracking implementation has a fixed name for the
-stack depth tracking callback, "__sanitizer_cov_stack_depth", so rename
-the GCC plugin function to match since it has no external dependencies.
+In preparation for Clang stack depth tracking for stackleak, split the
+stackleak-specific cflags out of GCC_PLUGINS_CFLAGS into
+STACKLEAK_CFLAGS.
 
 Signed-off-by: Kees Cook <kees@kernel.org>
 ---
 Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: <x86@kernel.org>
+Cc: <linux-arm-kernel@lists.infradead.org>
+Cc: <sparclinux@vger.kernel.org>
+Cc: <linux-kbuild@vger.kernel.org>
 Cc: <linux-hardening@vger.kernel.org>
 ---
- security/Kconfig.hardening             |  4 +-
- scripts/gcc-plugins/stackleak_plugin.c | 52 +++++++++++++-------------
- include/linux/stackleak.h              |  2 +-
- kernel/stackleak.c                     |  4 +-
- tools/objtool/check.c                  |  2 +-
- 5 files changed, 32 insertions(+), 32 deletions(-)
+ Makefile                        |  1 +
+ arch/arm/vdso/Makefile          |  2 +-
+ arch/arm64/kernel/vdso/Makefile |  3 ++-
+ arch/sparc/vdso/Makefile        |  3 ++-
+ arch/x86/entry/vdso/Makefile    |  3 ++-
+ scripts/Makefile.gcc-plugins    | 16 ++--------------
+ scripts/Makefile.stackleak      | 15 +++++++++++++++
+ MAINTAINERS                     |  6 ++++--
+ 8 files changed, 29 insertions(+), 20 deletions(-)
+ create mode 100644 scripts/Makefile.stackleak
 
-diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
-index 2d5852676991..2be6aed71c92 100644
---- a/security/Kconfig.hardening
-+++ b/security/Kconfig.hardening
-@@ -205,8 +205,8 @@ config STACKLEAK_TRACK_MIN_SIZE
- 	help
- 	  The STACKLEAK options instruments the kernel code for tracking
- 	  the lowest border of the kernel stack (and for some other purposes).
--	  It inserts the stackleak_track_stack() call for the functions with
--	  a stack frame size greater than or equal to this parameter.
-+	  It inserts the __sanitizer_cov_stack_depth() call for the functions
-+	  with a stack frame size greater than or equal to this parameter.
- 	  If unsure, leave the default value 100.
+diff --git a/Makefile b/Makefile
+index 5aa9ee52a765..1af8dfbcf0af 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1089,6 +1089,7 @@ include-$(CONFIG_KMSAN)		+= scripts/Makefile.kmsan
+ include-$(CONFIG_UBSAN)		+= scripts/Makefile.ubsan
+ include-$(CONFIG_KCOV)		+= scripts/Makefile.kcov
+ include-$(CONFIG_RANDSTRUCT)	+= scripts/Makefile.randstruct
++include-$(CONFIG_STACKLEAK)	+= scripts/Makefile.stackleak
+ include-$(CONFIG_AUTOFDO_CLANG)	+= scripts/Makefile.autofdo
+ include-$(CONFIG_PROPELLER_CLANG)	+= scripts/Makefile.propeller
+ include-$(CONFIG_GCC_PLUGINS)	+= scripts/Makefile.gcc-plugins
+diff --git a/arch/arm/vdso/Makefile b/arch/arm/vdso/Makefile
+index cb044bfd145d..f05a27909a76 100644
+--- a/arch/arm/vdso/Makefile
++++ b/arch/arm/vdso/Makefile
+@@ -26,7 +26,7 @@ CPPFLAGS_vdso.lds += -P -C -U$(ARCH)
+ CFLAGS_REMOVE_vdso.o = -pg
  
- config STACKLEAK_METRICS
-diff --git a/scripts/gcc-plugins/stackleak_plugin.c b/scripts/gcc-plugins/stackleak_plugin.c
-index d20c47d21ad8..e486488c867d 100644
---- a/scripts/gcc-plugins/stackleak_plugin.c
-+++ b/scripts/gcc-plugins/stackleak_plugin.c
-@@ -9,7 +9,7 @@
-  * any of the gcc libraries
-  *
-  * This gcc plugin is needed for tracking the lowest border of the kernel stack.
-- * It instruments the kernel code inserting stackleak_track_stack() calls:
-+ * It instruments the kernel code inserting __sanitizer_cov_stack_depth() calls:
-  *  - after alloca();
-  *  - for the functions with a stack frame size greater than or equal
-  *     to the "track-min-size" plugin parameter.
-@@ -33,7 +33,7 @@ __visible int plugin_is_GPL_compatible;
+ # Force -O2 to avoid libgcc dependencies
+-CFLAGS_REMOVE_vgettimeofday.o = -pg -Os $(RANDSTRUCT_CFLAGS) $(GCC_PLUGINS_CFLAGS)
++CFLAGS_REMOVE_vgettimeofday.o = -pg -Os $(RANDSTRUCT_CFLAGS) $(STACKLEAK_CFLAGS) $(GCC_PLUGINS_CFLAGS)
+ ifeq ($(c-gettimeofday-y),)
+ CFLAGS_vgettimeofday.o = -O2
+ else
+diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/Makefile
+index 5e27e46aa496..d4f60027f910 100644
+--- a/arch/arm64/kernel/vdso/Makefile
++++ b/arch/arm64/kernel/vdso/Makefile
+@@ -36,7 +36,8 @@ ccflags-y += -DDISABLE_BRANCH_PROFILING -DBUILD_VDSO
+ # -Wmissing-prototypes and -Wmissing-declarations are removed from
+ # the CFLAGS to make possible to build the kernel with CONFIG_WERROR enabled.
+ CC_FLAGS_REMOVE_VDSO := $(CC_FLAGS_FTRACE) -Os $(CC_FLAGS_SCS) \
+-			$(RANDSTRUCT_CFLAGS) $(GCC_PLUGINS_CFLAGS) \
++			$(RANDSTRUCT_CFLAGS) $(STACKLEAK_CFLAGS) \
++			$(GCC_PLUGINS_CFLAGS) \
+ 			$(CC_FLAGS_LTO) $(CC_FLAGS_CFI) \
+ 			-Wmissing-prototypes -Wmissing-declarations
  
- static int track_frame_size = -1;
- static bool build_for_x86 = false;
--static const char track_function[] = "stackleak_track_stack";
-+static const char track_function[] = "__sanitizer_cov_stack_depth";
- static bool disable = false;
- static bool verbose = false;
+diff --git a/arch/sparc/vdso/Makefile b/arch/sparc/vdso/Makefile
+index fdc4a8f5a49c..d0cfaa2f508a 100644
+--- a/arch/sparc/vdso/Makefile
++++ b/arch/sparc/vdso/Makefile
+@@ -48,7 +48,7 @@ CFL := $(PROFILING) -mcmodel=medlow -fPIC -O2 -fasynchronous-unwind-tables -m64
  
-@@ -58,7 +58,7 @@ static void add_stack_tracking_gcall(gimple_stmt_iterator *gsi, bool after)
- 	cgraph_node_ptr node;
- 	basic_block bb;
+ SPARC_REG_CFLAGS = -ffixed-g4 -ffixed-g5 $(call cc-option,-fcall-used-g5) $(call cc-option,-fcall-used-g7)
  
--	/* Insert calling stackleak_track_stack() */
-+	/* Insert calling __sanitizer_cov_stack_depth() */
- 	stmt = gimple_build_call(track_function_decl, 0);
- 	gimple_call = as_a_gcall(stmt);
- 	if (after)
-@@ -120,12 +120,12 @@ static void add_stack_tracking_gasm(gimple_stmt_iterator *gsi, bool after)
- 	gcc_assert(build_for_x86);
+-$(vobjs): KBUILD_CFLAGS := $(filter-out $(RANDSTRUCT_CFLAGS) $(GCC_PLUGINS_CFLAGS) $(SPARC_REG_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
++$(vobjs): KBUILD_CFLAGS := $(filter-out $(RANDSTRUCT_CFLAGS) $(STACKLEAK_CFLAGS) $(GCC_PLUGINS_CFLAGS) $(SPARC_REG_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
  
- 	/*
--	 * Insert calling stackleak_track_stack() in asm:
--	 *   asm volatile("call stackleak_track_stack"
-+	 * Insert calling __sanitizer_cov_stack_depth() in asm:
-+	 *   asm volatile("call __sanitizer_cov_stack_depth"
- 	 *		  :: "r" (current_stack_pointer))
- 	 * Use ASM_CALL_CONSTRAINT trick from arch/x86/include/asm/asm.h.
- 	 * This constraint is taken into account during gcc shrink-wrapping
--	 * optimization. It is needed to be sure that stackleak_track_stack()
-+	 * optimization. It is needed to be sure that __sanitizer_cov_stack_depth()
- 	 * call is inserted after the prologue of the containing function,
- 	 * when the stack frame is prepared.
- 	 */
-@@ -137,7 +137,7 @@ static void add_stack_tracking_gasm(gimple_stmt_iterator *gsi, bool after)
- 	input = build_tree_list(NULL_TREE, build_const_char_string(2, "r"));
- 	input = chainon(NULL_TREE, build_tree_list(input, sp_decl));
- 	vec_safe_push(inputs, input);
--	asm_call = gimple_build_asm_vec("call stackleak_track_stack",
-+	asm_call = gimple_build_asm_vec("call __sanitizer_cov_stack_depth",
- 					inputs, NULL, NULL, NULL);
- 	gimple_asm_set_volatile(asm_call, true);
- 	if (after)
-@@ -151,11 +151,11 @@ static void add_stack_tracking(gimple_stmt_iterator *gsi, bool after)
- {
- 	/*
- 	 * The 'no_caller_saved_registers' attribute is used for
--	 * stackleak_track_stack(). If the compiler supports this attribute for
--	 * the target arch, we can add calling stackleak_track_stack() in asm.
-+	 * __sanitizer_cov_stack_depth(). If the compiler supports this attribute for
-+	 * the target arch, we can add calling __sanitizer_cov_stack_depth() in asm.
- 	 * That improves performance: we avoid useless operations with the
- 	 * caller-saved registers in the functions from which we will remove
--	 * stackleak_track_stack() call during the stackleak_cleanup pass.
-+	 * __sanitizer_cov_stack_depth() call during the stackleak_cleanup pass.
- 	 */
- 	if (lookup_attribute_spec(get_identifier("no_caller_saved_registers")))
- 		add_stack_tracking_gasm(gsi, after);
-@@ -165,7 +165,7 @@ static void add_stack_tracking(gimple_stmt_iterator *gsi, bool after)
+ #
+ # vDSO code runs in userspace and -pg doesn't help with profiling anyway.
+@@ -79,6 +79,7 @@ KBUILD_CFLAGS_32 := $(filter-out -m64,$(KBUILD_CFLAGS))
+ KBUILD_CFLAGS_32 := $(filter-out -mcmodel=medlow,$(KBUILD_CFLAGS_32))
+ KBUILD_CFLAGS_32 := $(filter-out -fno-pic,$(KBUILD_CFLAGS_32))
+ KBUILD_CFLAGS_32 := $(filter-out $(RANDSTRUCT_CFLAGS),$(KBUILD_CFLAGS_32))
++KBUILD_CFLAGS_32 := $(filter-out $(STACKLEAK_CFLAGS),$(KBUILD_CFLAGS_32))
+ KBUILD_CFLAGS_32 := $(filter-out $(GCC_PLUGINS_CFLAGS),$(KBUILD_CFLAGS_32))
+ KBUILD_CFLAGS_32 := $(filter-out $(SPARC_REG_CFLAGS),$(KBUILD_CFLAGS_32))
+ KBUILD_CFLAGS_32 += -m32 -msoft-float -fpic
+diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
+index 54d3e9774d62..9e912b6a889c 100644
+--- a/arch/x86/entry/vdso/Makefile
++++ b/arch/x86/entry/vdso/Makefile
+@@ -62,7 +62,7 @@ ifneq ($(RETPOLINE_VDSO_CFLAGS),)
+ endif
+ endif
  
- /*
-  * Work with the GIMPLE representation of the code. Insert the
-- * stackleak_track_stack() call after alloca() and into the beginning
-+ * __sanitizer_cov_stack_depth() call after alloca() and into the beginning
-  * of the function if it is not instrumented.
-  */
- static unsigned int stackleak_instrument_execute(void)
-@@ -205,7 +205,7 @@ static unsigned int stackleak_instrument_execute(void)
- 					DECL_NAME_POINTER(current_function_decl));
- 			}
+-$(vobjs): KBUILD_CFLAGS := $(filter-out $(PADDING_CFLAGS) $(CC_FLAGS_LTO) $(CC_FLAGS_CFI) $(RANDSTRUCT_CFLAGS) $(GCC_PLUGINS_CFLAGS) $(RETPOLINE_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
++$(vobjs): KBUILD_CFLAGS := $(filter-out $(PADDING_CFLAGS) $(CC_FLAGS_LTO) $(CC_FLAGS_CFI) $(RANDSTRUCT_CFLAGS) $(STACKLEAK_CFLAGS) $(GCC_PLUGINS_CFLAGS) $(RETPOLINE_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
+ $(vobjs): KBUILD_AFLAGS += -DBUILD_VDSO
  
--			/* Insert stackleak_track_stack() call after alloca() */
-+			/* Insert __sanitizer_cov_stack_depth() call after alloca() */
- 			add_stack_tracking(&gsi, true);
- 			if (bb == entry_bb)
- 				prologue_instrumented = true;
-@@ -241,7 +241,7 @@ static unsigned int stackleak_instrument_execute(void)
- 		return 0;
- 	}
+ #
+@@ -123,6 +123,7 @@ KBUILD_CFLAGS_32 := $(filter-out -mcmodel=kernel,$(KBUILD_CFLAGS_32))
+ KBUILD_CFLAGS_32 := $(filter-out -fno-pic,$(KBUILD_CFLAGS_32))
+ KBUILD_CFLAGS_32 := $(filter-out -mfentry,$(KBUILD_CFLAGS_32))
+ KBUILD_CFLAGS_32 := $(filter-out $(RANDSTRUCT_CFLAGS),$(KBUILD_CFLAGS_32))
++KBUILD_CFLAGS_32 := $(filter-out $(STACKLEAK_CFLAGS),$(KBUILD_CFLAGS_32))
+ KBUILD_CFLAGS_32 := $(filter-out $(GCC_PLUGINS_CFLAGS),$(KBUILD_CFLAGS_32))
+ KBUILD_CFLAGS_32 := $(filter-out $(RETPOLINE_CFLAGS),$(KBUILD_CFLAGS_32))
+ KBUILD_CFLAGS_32 := $(filter-out $(CC_FLAGS_LTO),$(KBUILD_CFLAGS_32))
+diff --git a/scripts/Makefile.gcc-plugins b/scripts/Makefile.gcc-plugins
+index 33ddf5bfda34..e27ffe8e7c75 100644
+--- a/scripts/Makefile.gcc-plugins
++++ b/scripts/Makefile.gcc-plugins
+@@ -22,20 +22,6 @@ export DISABLE_STRUCTLEAK_PLUGIN
+ gcc-plugin-cflags-$(CONFIG_GCC_PLUGIN_STRUCTLEAK)		\
+ 		+= -DSTRUCTLEAK_PLUGIN
  
--	/* Insert stackleak_track_stack() call at the function beginning */
-+	/* Insert __sanitizer_cov_stack_depth() call at the function beginning */
- 	bb = entry_bb;
- 	if (!single_pred_p(bb)) {
- 		/* gcc_assert(bb_loop_depth(bb) ||
-@@ -270,15 +270,15 @@ static void remove_stack_tracking_gcall(void)
- 	rtx_insn *insn, *next;
+-gcc-plugin-$(CONFIG_GCC_PLUGIN_STACKLEAK)	+= stackleak_plugin.so
+-gcc-plugin-cflags-$(CONFIG_GCC_PLUGIN_STACKLEAK)		\
+-		+= -DSTACKLEAK_PLUGIN
+-gcc-plugin-cflags-$(CONFIG_GCC_PLUGIN_STACKLEAK)		\
+-		+= -fplugin-arg-stackleak_plugin-track-min-size=$(CONFIG_STACKLEAK_TRACK_MIN_SIZE)
+-gcc-plugin-cflags-$(CONFIG_GCC_PLUGIN_STACKLEAK)		\
+-		+= -fplugin-arg-stackleak_plugin-arch=$(SRCARCH)
+-gcc-plugin-cflags-$(CONFIG_GCC_PLUGIN_STACKLEAK_VERBOSE)	\
+-		+= -fplugin-arg-stackleak_plugin-verbose
+-ifdef CONFIG_GCC_PLUGIN_STACKLEAK
+-    DISABLE_STACKLEAK += -fplugin-arg-stackleak_plugin-disable
+-endif
+-export DISABLE_STACKLEAK
+-
+ # All the plugin CFLAGS are collected here in case a build target needs to
+ # filter them out of the KBUILD_CFLAGS.
+ GCC_PLUGINS_CFLAGS := $(strip $(addprefix -fplugin=$(objtree)/scripts/gcc-plugins/, $(gcc-plugin-y)) $(gcc-plugin-cflags-y)) -DGCC_PLUGINS
+@@ -50,6 +36,8 @@ gcc-plugin-external-$(CONFIG_GCC_PLUGIN_SANCOV)			\
+ 	+= sancov_plugin.so
+ gcc-plugin-external-$(CONFIG_GCC_PLUGIN_RANDSTRUCT)		\
+ 	+= randomize_layout_plugin.so
++gcc-plugin-external-$(CONFIG_GCC_PLUGIN_STACKLEAK)		\
++	+= stackleak_plugin.so
  
- 	/*
--	 * Find stackleak_track_stack() calls. Loop through the chain of insns,
-+	 * Find __sanitizer_cov_stack_depth() calls. Loop through the chain of insns,
- 	 * which is an RTL representation of the code for a function.
- 	 *
- 	 * The example of a matching insn:
--	 *  (call_insn 8 4 10 2 (call (mem (symbol_ref ("stackleak_track_stack")
--	 *  [flags 0x41] <function_decl 0x7f7cd3302a80 stackleak_track_stack>)
--	 *  [0 stackleak_track_stack S1 A8]) (0)) 675 {*call} (expr_list
--	 *  (symbol_ref ("stackleak_track_stack") [flags 0x41] <function_decl
--	 *  0x7f7cd3302a80 stackleak_track_stack>) (expr_list (0) (nil))) (nil))
-+	 *  (call_insn 8 4 10 2 (call (mem (symbol_ref ("__sanitizer_cov_stack_depth")
-+	 *  [flags 0x41] <function_decl 0x7f7cd3302a80 __sanitizer_cov_stack_depth>)
-+	 *  [0 __sanitizer_cov_stack_depth S1 A8]) (0)) 675 {*call} (expr_list
-+	 *  (symbol_ref ("__sanitizer_cov_stack_depth") [flags 0x41] <function_decl
-+	 *  0x7f7cd3302a80 __sanitizer_cov_stack_depth>) (expr_list (0) (nil))) (nil))
- 	 */
- 	for (insn = get_insns(); insn; insn = next) {
- 		rtx body;
-@@ -318,7 +318,7 @@ static void remove_stack_tracking_gcall(void)
- 		if (SYMBOL_REF_DECL(body) != track_function_decl)
- 			continue;
+ # All enabled GCC plugins are collected here for building in
+ # scripts/gcc-scripts/Makefile.
+diff --git a/scripts/Makefile.stackleak b/scripts/Makefile.stackleak
+new file mode 100644
+index 000000000000..1db0835b29d4
+--- /dev/null
++++ b/scripts/Makefile.stackleak
+@@ -0,0 +1,15 @@
++# SPDX-License-Identifier: GPL-2.0
++
++ifdef CONFIG_GCC_PLUGIN_STACKLEAK
++stackleak-cflags-y += -fplugin=$(objtree)/scripts/gcc-plugins/stackleak_plugin.so
++stackleak-cflags-y += -fplugin-arg-stackleak_plugin-track-min-size=$(CONFIG_STACKLEAK_TRACK_MIN_SIZE)
++stackleak-cflags-y += -fplugin-arg-stackleak_plugin-arch=$(SRCARCH)
++stackleak-cflags-$(CONFIG_GCC_PLUGIN_STACKLEAK_VERBOSE) += -fplugin-arg-stackleak_plugin-verbose
++DISABLE_STACKLEAK  := -fplugin-arg-stackleak_plugin-disable
++endif
++
++STACKLEAK_CFLAGS   := $(stackleak-cflags-y)
++
++export STACKLEAK_CFLAGS DISABLE_STACKLEAK
++
++KBUILD_CFLAGS += $(STACKLEAK_CFLAGS)
+diff --git a/MAINTAINERS b/MAINTAINERS
+index dc535c67a745..9a2be2dd96c9 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -9827,8 +9827,6 @@ L:	linux-hardening@vger.kernel.org
+ S:	Maintained
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
+ F:	Documentation/kbuild/gcc-plugins.rst
+-F:	include/linux/stackleak.h
+-F:	kernel/stackleak.c
+ F:	scripts/Makefile.gcc-plugins
+ F:	scripts/gcc-plugins/
  
--		/* Delete the stackleak_track_stack() call */
-+		/* Delete the __sanitizer_cov_stack_depth() call */
- 		delete_insn_and_edges(insn);
- #if BUILDING_GCC_VERSION < 8000
- 		if (GET_CODE(next) == NOTE &&
-@@ -340,12 +340,12 @@ static bool remove_stack_tracking_gasm(void)
- 	gcc_assert(build_for_x86);
- 
- 	/*
--	 * Find stackleak_track_stack() asm calls. Loop through the chain of
-+	 * Find __sanitizer_cov_stack_depth() asm calls. Loop through the chain of
- 	 * insns, which is an RTL representation of the code for a function.
- 	 *
- 	 * The example of a matching insn:
- 	 *  (insn 11 5 12 2 (parallel [ (asm_operands/v
--	 *  ("call stackleak_track_stack") ("") 0
-+	 *  ("call __sanitizer_cov_stack_depth") ("") 0
- 	 *  [ (reg/v:DI 7 sp [ current_stack_pointer ]) ]
- 	 *  [ (asm_input:DI ("r")) ] [])
- 	 *  (clobber (reg:CC 17 flags)) ]) -1 (nil))
-@@ -375,7 +375,7 @@ static bool remove_stack_tracking_gasm(void)
- 			continue;
- 
- 		if (strcmp(ASM_OPERANDS_TEMPLATE(body),
--						"call stackleak_track_stack")) {
-+						"call __sanitizer_cov_stack_depth")) {
- 			continue;
- 		}
- 
-@@ -389,7 +389,7 @@ static bool remove_stack_tracking_gasm(void)
- 
- /*
-  * Work with the RTL representation of the code.
-- * Remove the unneeded stackleak_track_stack() calls from the functions
-+ * Remove the unneeded __sanitizer_cov_stack_depth() calls from the functions
-  * which don't call alloca() and don't have a large enough stack frame size.
-  */
- static unsigned int stackleak_cleanup_execute(void)
-@@ -474,13 +474,13 @@ static bool stackleak_gate(void)
- 	return track_frame_size >= 0;
- }
- 
--/* Build the function declaration for stackleak_track_stack() */
-+/* Build the function declaration for __sanitizer_cov_stack_depth() */
- static void stackleak_start_unit(void *gcc_data __unused,
- 				 void *user_data __unused)
- {
- 	tree fntype;
- 
--	/* void stackleak_track_stack(void) */
-+	/* void __sanitizer_cov_stack_depth(void) */
- 	fntype = build_function_type_list(void_type_node, NULL_TREE);
- 	track_function_decl = build_fn_decl(track_function, fntype);
- 	DECL_ASSEMBLER_NAME(track_function_decl); /* for LTO */
-diff --git a/include/linux/stackleak.h b/include/linux/stackleak.h
-index 71e8242fd8f2..a669574a3562 100644
---- a/include/linux/stackleak.h
-+++ b/include/linux/stackleak.h
-@@ -80,7 +80,7 @@ static inline void stackleak_task_init(struct task_struct *t)
- asmlinkage void noinstr stackleak_erase(void);
- asmlinkage void noinstr stackleak_erase_on_task_stack(void);
- asmlinkage void noinstr stackleak_erase_off_task_stack(void);
--void __no_caller_saved_registers noinstr stackleak_track_stack(void);
-+void __no_caller_saved_registers noinstr __sanitizer_cov_stack_depth(void);
- 
- #else /* !CONFIG_STACKLEAK */
- static inline void stackleak_task_init(struct task_struct *t) { }
-diff --git a/kernel/stackleak.c b/kernel/stackleak.c
-index bb65321761b4..5158468968e2 100644
---- a/kernel/stackleak.c
-+++ b/kernel/stackleak.c
-@@ -156,7 +156,7 @@ asmlinkage void noinstr stackleak_erase_off_task_stack(void)
- 	__stackleak_erase(false);
- }
- 
--void __used __no_caller_saved_registers noinstr stackleak_track_stack(void)
-+void __used __no_caller_saved_registers noinstr __sanitizer_cov_stack_depth(void)
- {
- 	unsigned long sp = current_stack_pointer;
- 
-@@ -174,4 +174,4 @@ void __used __no_caller_saved_registers noinstr stackleak_track_stack(void)
- 		current->lowest_stack = sp;
- 	}
- }
--EXPORT_SYMBOL(stackleak_track_stack);
-+EXPORT_SYMBOL(__sanitizer_cov_stack_depth);
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 3a411064fa34..05d0095c1384 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -1191,7 +1191,7 @@ static const char *uaccess_safe_builtin[] = {
- 	"__ubsan_handle_shift_out_of_bounds",
- 	"__ubsan_handle_load_invalid_value",
- 	/* STACKLEAK */
--	"stackleak_track_stack",
-+	"__sanitizer_cov_stack_depth",
- 	/* TRACE_BRANCH_PROFILING */
- 	"ftrace_likely_update",
- 	/* STACKPROTECTOR */
+@@ -12890,11 +12888,15 @@ F:	Documentation/ABI/testing/sysfs-kernel-warn_count
+ F:	arch/*/configs/hardening.config
+ F:	include/linux/overflow.h
+ F:	include/linux/randomize_kstack.h
++F:	include/linux/stackleak.h
+ F:	include/linux/ucopysize.h
+ F:	kernel/configs/hardening.config
++F:	kernel/stackleak.c
+ F:	lib/tests/randstruct_kunit.c
+ F:	lib/tests/usercopy_kunit.c
+ F:	mm/usercopy.c
++F:	scripts/Makefile.randstruct
++F:	scripts/Makefile.stackleak
+ F:	security/Kconfig.hardening
+ K:	\b(add|choose)_random_kstack_offset\b
+ K:	\b__check_(object_size|heap_object)\b
 -- 
 2.34.1
 
