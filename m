@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-32596-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32594-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E894AAE8C8
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 May 2025 20:18:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74A03AAE8B5
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 May 2025 20:17:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 489C51893E53
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 May 2025 18:17:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 461519E09E2
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 May 2025 18:17:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B29928ECE3;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1934F28ECD8;
 	Wed,  7 May 2025 18:16:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Galm7MFz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F7UcDZXd"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8FFC28EA6A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8EA728EA67;
 	Wed,  7 May 2025 18:16:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746641781; cv=none; b=stURnS3XjualfrlOAg9pyeiv2rfO0zYSsCij0s01hTZvi+p/GMWmenyy24P/O2r0BbpPUQ1+o7Krrq9JPtrE8DOOk8oLy87CMd/6fmTEjXoPsBksXQ6pdy3X4tOrcZhCBAjvmdoyQz0us7mi460J68WSQOBXqzt9CrmDIorTyQY=
+	t=1746641781; cv=none; b=jVfbP6shB6V7NU47m7AmYI/Fzmf0BJJT+lWwKs9m7FmYAtFHO9vHrfiaImI/DxlBl94jT6jz4/FcTHjMzxmFtS3YPX2sjgvpU3YbQ+i5Gfr0ky1HKxGPIqH1NUIKRYvZLwPnWhw6fwIjii67K88Bc8a9N4NzEr1l0a1AvEBXtJI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1746641781; c=relaxed/simple;
-	bh=voDf6H+5x8ZJ+QNvLaKxp1ngBKm9HW1NaIJiF5gitL0=;
+	bh=JBC57/AJ4s9wnqVrwmV7BOpA+2zHUnfcHWTkMgWl8NU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ZFkY9HIWh3VTCI6kgf+2me7FoonsSnRm5LyJlYOK3V9hlRr7UFGWmtzuRxSRxcNRDhVZ99roVsvPisSJws4Gpu6gfvwlVEmaDsbwWDdN1eRX7jMe3E/JcnfMKxGcFjY8caLOXUpz3SSv3H3fc5lHoKeBlxEMmYZ9KiUl2NyFyOQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Galm7MFz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40B73C4AF09;
+	 MIME-Version; b=cMLQaUh6HZR6PpwPPpeR0Ohfra6/Ue1MWAamPikBBPFSpYHKmlQ60SUOtnE9GsF9gHiwA8iDL0i9VLUkfWKJuE5V5GjNhUcZFBwPSL/J64QtRy9P2nJj0/qASzfKRnbt5mToWMtAOKGKenK2KyBZm6tqDz21VcndrYLw4c+M5hE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F7UcDZXd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EB66C4CEE2;
 	Wed,  7 May 2025 18:16:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1746641781;
-	bh=voDf6H+5x8ZJ+QNvLaKxp1ngBKm9HW1NaIJiF5gitL0=;
+	bh=JBC57/AJ4s9wnqVrwmV7BOpA+2zHUnfcHWTkMgWl8NU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Galm7MFzgJLnAO40Xck5MAyECjLHydu6iGER9PypizD509zMeOB/4tfpj2XjlmQbB
-	 4sJSSWPSoYH2FAb4h4V4vRe/L+lulz2GTN4v/Qam2C9/DeU1Bc8Uzld3CWYqu8eTHE
-	 ir4Pl2cYuXKEoHsR2jmnso75ptgZHUGanjNsz9duDft9vH/aJOHXDvqz/1SMQ0iyPU
-	 VZ9BQLpS2AN4I80976dcubo05dYAgXIT3H4E5hXAHvFZ//fta2lERW7Te6m4xgSwyy
-	 s1ccWzl/5WcaoZIMRaGu2tuqeIfrQ9EmgUOzjHXkyfA7J+ftgXLoofKE0fbhmo7/Np
-	 xSnh6mmNFLhLw==
+	b=F7UcDZXdXjx3KZ0l3mLTB+csre7VN6l1usVAnFYpDApDPAm06prvBdEhlADnkW6qA
+	 6Ct662+QPW0P+8F0Oa58tF6i9aT/9MCvBj/FBr6/uU/vhZiR6R4zBCfysEenLCqUrE
+	 6tHqabUzR/N/LG6jfquCv4eWd3RJ/h4rXkS1TFORy7r97wCz0ABguF/eGnXxW8zxIz
+	 ljfxv6OYRJ3vkc045YYhxP1/yI3w0ca03pTUHUMVgH8UIKM6xE/RhL/CRvTjpi4qn3
+	 JyQH3je+lX/JEdGO+Fm75JCf/UdhCxfXNlzSyJ5TaUdz+qFXxrtWxAwoV/tmvZGTYw
+	 KMyTgtIMShNuw==
 From: Kees Cook <kees@kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>
 Cc: Kees Cook <kees@kernel.org>,
@@ -71,9 +71,9 @@ Cc: Kees Cook <kees@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	sparclinux@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH 7/8] configs/hardening: Enable CONFIG_STACKLEAK
-Date: Wed,  7 May 2025 11:16:13 -0700
-Message-Id: <20250507181615.1947159-7-kees@kernel.org>
+Subject: [PATCH 8/8] configs/hardening: Enable CONFIG_INIT_ON_FREE_DEFAULT_ON
+Date: Wed,  7 May 2025 11:16:14 -0700
+Message-Id: <20250507181615.1947159-8-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250507180852.work.231-kees@kernel.org>
 References: <20250507180852.work.231-kees@kernel.org>
@@ -83,12 +83,13 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1035; i=kees@kernel.org; h=from:subject; bh=voDf6H+5x8ZJ+QNvLaKxp1ngBKm9HW1NaIJiF5gitL0=; b=owGbwMvMwCVmps19z/KJym7G02pJDBnSi3NndCfFZfNKLYsNrJ26vcOTL89ba72XzNPJVjs9u S6YOVh0lLIwiHExyIopsgTZuce5eLxtD3efqwgzh5UJZAgDF6cATKTsBiNDx94c+e3PfryMY4kJ m5dxOLHrbdTcm/xLJ6UelLZ+09L/heG/q46Tus+VBTWHLX+eee7NGPv0yjELoStvXEK7Fl3oXvG DBQA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=961; i=kees@kernel.org; h=from:subject; bh=JBC57/AJ4s9wnqVrwmV7BOpA+2zHUnfcHWTkMgWl8NU=; b=owGbwMvMwCVmps19z/KJym7G02pJDBnSi3OdD7t0n7oULsejGJ/+9MQm/geGMg9cz00Vqajg/ sTnY3e9o5SFQYyLQVZMkSXIzj3OxeNte7j7XEWYOaxMIEMYuDgFYCJToxkZNsxfvyhx39Nzpiyy k1d9mfdaZ2I4d4Fed23ppfk+FmvT+Bn+V65ZP6cwRVHDaFl+g9uJIPvmT50TbXLDqlrmpn0pTfX nBAA=
 X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
-Since we can wipe the stack with both Clang and GCC plugins, enable this
-for the "hardening.config" for wider testing.
+To reduce stale data lifetimes, enable CONFIG_INIT_ON_FREE_DEFAULT_ON as
+well. This matches the addition of CONFIG_STACKLEAK=y, which is doing
+similar for stack memory.
 
 Signed-off-by: Kees Cook <kees@kernel.org>
 ---
@@ -99,19 +100,19 @@ Cc: <linux-hardening@vger.kernel.org>
  1 file changed, 3 insertions(+)
 
 diff --git a/kernel/configs/hardening.config b/kernel/configs/hardening.config
-index dd7c32fb5ac1..3da00926b4eb 100644
+index 3da00926b4eb..7d92a740e490 100644
 --- a/kernel/configs/hardening.config
 +++ b/kernel/configs/hardening.config
-@@ -63,6 +63,9 @@ CONFIG_INIT_ON_ALLOC_DEFAULT_ON=y
+@@ -60,6 +60,9 @@ CONFIG_LIST_HARDENED=y
+ # Initialize all heap variables to zero on allocation.
+ CONFIG_INIT_ON_ALLOC_DEFAULT_ON=y
+ 
++# Initialize all heap variables to zero on free to reduce stale data lifetime.
++CONFIG_INIT_ON_FREE_DEFAULT_ON=y
++
  # Initialize all stack variables to zero on function entry.
  CONFIG_INIT_STACK_ALL_ZERO=y
  
-+# Wipe kernel stack after syscall completion to reduce stale data lifetime.
-+CONFIG_STACKLEAK=y
-+
- # Wipe RAM at reboot via EFI. For more details, see:
- # https://trustedcomputinggroup.org/resource/pc-client-work-group-platform-reset-attack-mitigation-specification/
- # https://bugzilla.redhat.com/show_bug.cgi?id=1532058
 -- 
 2.34.1
 
