@@ -1,204 +1,252 @@
-Return-Path: <linux-kselftest+bounces-32610-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32611-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09E0BAAED9C
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 May 2025 23:10:07 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C88F3AAEDD5
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 May 2025 23:20:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 048BD3A9B2E
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 May 2025 21:09:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C54417A981F
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 May 2025 21:19:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEE4D28FFC6;
-	Wed,  7 May 2025 21:10:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2CE121858E;
+	Wed,  7 May 2025 21:20:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="eTb80V4p"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ffqNtdQS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2056.outbound.protection.outlook.com [40.107.223.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 133DB1D6DB9;
-	Wed,  7 May 2025 21:10:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.56
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746652202; cv=fail; b=rqlY14fYHdjrdIVKavNPr1sT4aDnY5C1rixz8bySkxH2czebk8Kez77RfwnbD5ay0h0AMe1jcTJ3V+Lv4YvX4D+r2Nyih1IlMT1Bxc+q3Naf1smD2hK+mZkEmPKXOZNYa8FXkNPIO+XOYav1HT+AV8fRMKj7I9qQnxfhtAnZ4vQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746652202; c=relaxed/simple;
-	bh=JwoDFIdvUd2ZOQCAt6CnL3L3oDch0bFAqOJgjTjaVfE=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s4cGeoF3MkMhc5sBqyNawv6MpEf1Qpq9r4osUtO3ZdkNO8l13Nr3VmigwGFLKNgnu31QMITclHzOacPSBsb+hUOilFJy3bk872TFgRJclrqwX8s6HZDC/1/+HNiJreUQ1+HsJZQdTXLoqg0bra6rHWxQYpWNE5vmbY09WKz+euU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=eTb80V4p; arc=fail smtp.client-ip=40.107.223.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=JJBOrBh3LGzReMTjUQqbJ+Zx7a0rMtOwR/zaSbGRR6Wjm5cTVvvvDWnwPgEQtrMq1hs/tAU4DtcxwXvG7hlJow9fJaWaMUH1undsSYHJrbglDJjxJe8bdarUQFPDatj2TGJi194dBeo8Yz8g/JHhyfo3RQoC5QghB3NLGsDftiZ/uCLJkRNqsP4bHHM0TojcHauEYDBUOjbdOhvCd1tTaM7gubuGZzQsfUJ8t9Z9PxvuafdXZNa1Kvm4qCJdOiW1KaXnRzLdAZ+V6t2rPP9GvQsulNnSGMPfwmatSxIepvDPVL3r9ZR4Xbsk10fCzTI34EwCYfmPV7FtYwEYXw1FLA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OIrmmYrV+AC9wM82x4BjH9q/r+1ItWuMKgWIaVHFD28=;
- b=wZ2PPzgA6ymQ75pJc9pGDjU+Pbs1VYGI8nxT925ArUmOwOCJcqZTP0xeYt2eImPvDnpB95U4JdPW+XDd2Uj5h8CxdVL4scTbI7vjbVtQJMYM7J0R8MPf1mCkiW5jNNAC/rOkJlpYpKTdBqjPW4JWIYpvaAeqsb6ISwd7AUdhGjYONQ6WsGkCWO6h8bEottZUdD0pfu2bWwdGpxDoksqWOgScuetvklgMhXR+ek/CQqoDNcGXG86wQOiIswImKGWNB8OtBWmtVpRvd8E2vWhdg9VdPntGXfj5uNE1qvKl1Ve32c8p4mGvA/CnMl/SeVXUi8Lq9pNmz1qbW4cdp7NFPQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=lists.linux.dev smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OIrmmYrV+AC9wM82x4BjH9q/r+1ItWuMKgWIaVHFD28=;
- b=eTb80V4p1OC1z/yxrAlRBO39EXfxhehuQiDS9TSg2GaMUlYsTDG/AMdge8Q9iiEClOr0G0gDfOc0Kbx2tABKafdnxym+Gg1T+zwCGjL+x0PmdAs7DQSizRhhjK4a1io8AhQ765JiNPmZQKo1bSTIH7y5R6Q7WXDF/D+dBMSsNvRTr/w5ChcC5++7kGcHKvyBSvFaiJPXopOraSf/J7TgQUuqEAM1voYncZqFat1uza+GcSgkLldsprHIJc6Ob1Nt7nGUVt0Sj/i/yL+mgel21yEa0+kxlYDFvQPvum6a7ZeB+cwnnNMFux5wF+z4JVBCujSHbZlr+gVgHvakHvCidg==
-Received: from MN2PR15CA0043.namprd15.prod.outlook.com (2603:10b6:208:237::12)
- by MW4PR12MB5644.namprd12.prod.outlook.com (2603:10b6:303:189::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8699.23; Wed, 7 May
- 2025 21:09:53 +0000
-Received: from MN1PEPF0000ECD5.namprd02.prod.outlook.com
- (2603:10b6:208:237:cafe::48) by MN2PR15CA0043.outlook.office365.com
- (2603:10b6:208:237::12) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8699.33 via Frontend Transport; Wed,
- 7 May 2025 21:09:52 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- MN1PEPF0000ECD5.mail.protection.outlook.com (10.167.242.133) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8722.18 via Frontend Transport; Wed, 7 May 2025 21:09:52 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 7 May 2025
- 14:09:47 -0700
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Wed, 7 May
- 2025 14:09:38 -0700
-Received: from nvidia.com (10.127.8.14) by mail.nvidia.com (10.129.68.6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14 via Frontend
- Transport; Wed, 7 May 2025 14:09:33 -0700
-Date: Wed, 7 May 2025 14:09:31 -0700
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-CC: Pranjal Shrivastava <praan@google.com>, <kevin.tian@intel.com>,
-	<corbet@lwn.net>, <will@kernel.org>, <bagasdotme@gmail.com>,
-	<robin.murphy@arm.com>, <joro@8bytes.org>, <thierry.reding@gmail.com>,
-	<vdumpa@nvidia.com>, <jonathanh@nvidia.com>, <shuah@kernel.org>,
-	<jsnitsel@redhat.com>, <nathan@kernel.org>, <peterz@infradead.org>,
-	<yi.l.liu@intel.com>, <mshavit@google.com>, <zhangzekun11@huawei.com>,
-	<iommu@lists.linux.dev>, <linux-doc@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-tegra@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<patches@lists.linux.dev>, <mochs@nvidia.com>, <alok.a.tiwari@oracle.com>,
-	<vasant.hegde@amd.com>
-Subject: Re: [PATCH v2 13/22] iommufd: Add mmap interface
-Message-ID: <aBvMC7dnYghoX5Aq@nvidia.com>
-References: <aBE/CD4Ilbydnmud@Asurada-Nvidia>
- <aBFGCxcTh54pecsk@google.com>
- <aBFIsYg+ITU8RvTT@Asurada-Nvidia>
- <20250505165552.GN2260709@nvidia.com>
- <aBj1Av6Xaj8flMN+@nvidia.com>
- <20250505173101.GT2260709@nvidia.com>
- <aBkWoH23VysYake3@nvidia.com>
- <20250506125222.GW2260709@nvidia.com>
- <aBpjbtRgR1nK/LIm@nvidia.com>
- <20250507123901.GF90261@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08E341D9346;
+	Wed,  7 May 2025 21:20:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1746652842; cv=none; b=OHddzS2UIX+NCtxdzGCMeZ2yD5ROBTthTfd8MLD0gh4OkCORg59h8WINlASzjGqkD8shdeJuNhkLS6sTN3T9hgZZgC4K9XGielGuxgMDgkgksKPMZ/P/6l8d52kFjJmMwnMFBQti31OftSF6osh/WpDIATxkNG1rlSpKa1/yPBE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1746652842; c=relaxed/simple;
+	bh=pl3MhDj3OHjmE6n8Xpl2XuC5PFeS1csBfzJOb3qHXAc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o8zx7ekq4iGz5twTk3wjMZoNMNQ7/9N66mHK73Y2mMe2GUSWaM/ejTVCekpdI+1GWoGC0k1fFHu+5lvogjt7cWWYGUn860VHH65qPEIjeDqexNKUDgMwigPtodQmsnCXneVWs8yTie9B+6MjYYx5+vyTGXvqvEPeNRDGNnsIOLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ffqNtdQS; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-22e4d235811so4974085ad.2;
+        Wed, 07 May 2025 14:20:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746652840; x=1747257640; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=VigyVZP4lkdGrZuV0kp0BiC/mx3a2CpN2znwVTb1ujg=;
+        b=ffqNtdQSa6mS4o4PVoig94i8DdLcgnjQcHDBcQJ3/Py7lK4CSOtc9/5pLQp5Yi4KSL
+         WzJTurmQRDqTDGrfC7ZhlXYXPPu0aztNXNZjXwY5gwXLR+VjXDiHCMdfvdl6lT4HEqCs
+         7fxls7XdkxYv0MU1TrEvEJss3nfbl2lijCfDZV4axPrRKPp/7Ov3a6Fm13AZWLVj0ZoH
+         rpmilcYiVEN4FcmazVNQ70RnQ3aXiXuNWYr+2f/GGOIP5OhsriVK/tRvwkKJheP5jZIj
+         ijsXaovhOeBn6SFAoovMbfqTXClQdYv2dHGS6u0OL1BBcNCKh16Eax3689rPCxu7g24u
+         Bz3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746652840; x=1747257640;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VigyVZP4lkdGrZuV0kp0BiC/mx3a2CpN2znwVTb1ujg=;
+        b=OpPr8XQDdPSBONObIlunxi4f2weF+I5AqbK9sUUkuEDzXuyzY1iVw/sbhFWzQatmCw
+         NvvFqZVjVkr7tAKYpfS8iiWWUQkDRPM+fnhE0/VVcq9zT0dZj0FAS0wyRWdkXGCe48u5
+         qFNv5w85+zzkRqY2rjZD5FfFr4I4iT+KK+n8ngsf0jc4T/vuPC6tbOfAhg7yVEALsDSn
+         qCP5wHS9OJxsP28NOhBoVmhiI1vDzhcS7RfeDFmt2zPW5nW+FzCM5MRIYtb7034qkkXn
+         suNU0Hmh66SVxVDWsh6wAxBJLESLzbQ/eFw/B0Jk/trKEaqmxyi4VQn4vH4oyAsaexnX
+         Vc4w==
+X-Forwarded-Encrypted: i=1; AJvYcCWEeQ15OaXYakt1M+lZNxDx08hZHVHFRcSiDr3oS8otROEaWgWjPPIuuckVaOiA0d2dXWGPAPGK4tm4S86r77Q=@vger.kernel.org, AJvYcCWetY+gsy3g2tRgVDCz6tcKYKx8uRBA6LP1ZRmNan7wzptuNXaY7gXZXtW6y8MVpx6boeYDd8WA@vger.kernel.org
+X-Gm-Message-State: AOJu0YyM0u8la1bDQifnhqMIJn64mkvKQaSq+z6uyizT3D7m9q7djFX1
+	l6JhBe1pDfGFfuRRdgkO1vDk37NeTclyV5DWMXPR8pYaSZPgYe8=
+X-Gm-Gg: ASbGncs8yDf1DNop51jSJwnP9EphQMTfwvW4JNDP9xUUwig9Va4yHmy05bmhjhlUh7k
+	cDKA5lccfDB/VsqD7f6N8jO/q1IEcgAUgktYU7slXT89Wgp4o86JSh4/12o5m6dS809cwjG0j/H
+	Vfc3VvwfbdTV3wz2FS9Pu9nHRhlaRh9o07b6cNZddlAdjU5YkbOM/gEKgFgXT0jfgD9LqSmQf4B
+	GSyaNqD+F8/P3B/9ECGl7parQKyvQ+WAkodStAPfO+S53M71V1iyUcgseWwoKnSPKncaVUq4yq7
+	kLd1hmfs5rZOVFvrCkaDQDwU+ZfA1g33NQBtwNfuonWe1zyghQn0pB75/UFWigD4y0roo0DG6Rj
+	1zQ==
+X-Google-Smtp-Source: AGHT+IG+E9wY7nUFoR81FURJDcF/5q/rQ44P5wwCB+JMVb1MI2egUoE12rJ+NR7HZanNOL7+dV0VUA==
+X-Received: by 2002:a17:902:f60e:b0:22e:3c2:d477 with SMTP id d9443c01a7336-22e864ee673mr11730585ad.25.1746652840122;
+        Wed, 07 May 2025 14:20:40 -0700 (PDT)
+Received: from localhost (c-73-158-218-242.hsd1.ca.comcast.net. [73.158.218.242])
+        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-22e53ec6fd9sm30592055ad.203.2025.05.07.14.20.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 May 2025 14:20:39 -0700 (PDT)
+Date: Wed, 7 May 2025 14:20:38 -0700
+From: Stanislav Fomichev <stfomichev@gmail.com>
+To: Cosmin Ratiu <cratiu@nvidia.com>
+Cc: "davem@davemloft.net" <davem@davemloft.net>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	Dragos Tatulea <dtatulea@nvidia.com>,
+	"sdf@fomichev.me" <sdf@fomichev.me>,
+	"pabeni@redhat.com" <pabeni@redhat.com>,
+	"jiri@resnulli.us" <jiri@resnulli.us>,
+	"edumazet@google.com" <edumazet@google.com>,
+	"kuba@kernel.org" <kuba@kernel.org>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Re: [PATCH net] net: Lock lower level devices when updating features
+Message-ID: <aBvOpkIoxcr9PfDg@mini-arch>
+References: <20250506142117.1883598-1-cratiu@nvidia.com>
+ <aBpC9_SgUaAA2P0f@mini-arch>
+ <8f700330f22b741ad72b398ff30a4468c2cb67e9.camel@nvidia.com>
+ <aBpRX_afG5X_rT_J@mini-arch>
+ <411b4f945c89548ba79efbe7a95cafbf5bd53abe.camel@nvidia.com>
+ <6c0a6b462200847d87221dcd7655b6a746012061.camel@nvidia.com>
+ <e886c3511fbe9cf7e66b0a142183a5375a42978a.camel@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250507123901.GF90261@nvidia.com>
-X-NV-OnPremToCloud: AnonymousSubmission
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN1PEPF0000ECD5:EE_|MW4PR12MB5644:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7614b3e0-f743-4f43-ee17-08dd8dab82b2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|1800799024|36860700013|7416014|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?uhBi/NrWFo1UbsIt1ttcylzSbiVD0K8gP5k9wYM7T6CoF2x7O8BdVycFMs9E?=
- =?us-ascii?Q?2mwpLnoj49NBED74o+KslBseX1xQOhmycRqkoCTEdI22Fw7qaa4mRYlkROxf?=
- =?us-ascii?Q?VSfPxTomA4lr8QvXIL4IRh3kKVns0+F7PiTlHFdIiNUz/u0HSxaLh47aK13n?=
- =?us-ascii?Q?813yj8FZVDK6PJ51hWbXbNfTK0Zc0FjmGqLS4N7p2nQ4KD+cfaBKe9WNsR2g?=
- =?us-ascii?Q?yc1jNBUjDoE8pAOm4Vl7jrp3tb4KHR55gSmR/cWtDYV612f7EGROt58fTfX+?=
- =?us-ascii?Q?zLM7e+B9lk0bAxnOW0EwslOZ/4dEBg7v9qzV4jkEr+EnluCeQoEYYx7K55DO?=
- =?us-ascii?Q?SQv9YQzeKcwQPkj62blW8PJYBR8Hgu3AG8KYjg7jK1yY6qaaI2VTSYpTOcCX?=
- =?us-ascii?Q?lDiuPMUvYABr0t2jq8zh6f9Iqm6SDRAs5aQuGQeYTrN4aZXIs53/78D92e0M?=
- =?us-ascii?Q?+qXNWtpXJRu7BUW9Yn02+AKcFh3S9SPmRFLdgvrR1PbXiKNFa36Nt1675rMI?=
- =?us-ascii?Q?zHXinXtaPCVCoI0oQQkBQTs5b8r2fLPfBUjpBP9edpgnWEAldP0QobZiHPie?=
- =?us-ascii?Q?PdKI5nTGCHpig3Q6p6eb8dGEdi2C2UO/bs/F1YViujPYV9Pi3/BPW8BG1jdV?=
- =?us-ascii?Q?ARPA9BaBTDh3aw0uMS1Er4Sk2xOP0FkE7lKuroL+gfVZ/dOve+nLba1F6kUe?=
- =?us-ascii?Q?6hh+IOIH+cZA+zVq2WEwQztWwzSJ7NmbOozmq7ZgVY4OPoKqojDkNkW0K2cS?=
- =?us-ascii?Q?8UztU0mMa6YGzejSlvjid96aWlfj+OL/GimmXNQNJ6eGbqAq7Sqsk7gMCCYa?=
- =?us-ascii?Q?fl40OAcR7gvcGS+IHglYNoSGARZ/8Lsc6xp5+zHyrNKCVSU/qPJsWcwhN+AH?=
- =?us-ascii?Q?J1vNI+1cjz4DIcuu1R4CiWg7+4Ft8sfLCG0K996Tj5b5uvO2gTn/J09v5dKa?=
- =?us-ascii?Q?muxYECJg7V2ueeNisB6KLDKlVjsKWGVrP61E1tKNBjX/TeKzZQZG+O7d3zYW?=
- =?us-ascii?Q?rRdnnznJZ7FoKSRiDBj1cX++RVu05xsbFLtfIi+v+NQ5A2aHFZH7g2oBSo6I?=
- =?us-ascii?Q?pMVJ7SENStscC2gkPCB5l9nGN4JoDy0IwWmZLY7SrHngpszvdJzaOVKFQrcB?=
- =?us-ascii?Q?miomGqEtSznaVsoE8tKiCiESbuOogmDm1GA56MAnRAKEIINzSNtwLabQaYMV?=
- =?us-ascii?Q?v4NLWR/EGj2+B7NpQIyyoL5w2T1kIDR6pNZuzkxcvo8zav7L7FiI1G5vaSEk?=
- =?us-ascii?Q?BLDCOA5PQc/ruGpCkRP2EJrRWfWr/oE4fH9FcpRswWPx3vfqkmSKJ8LfCthL?=
- =?us-ascii?Q?CNA+DvVgyIvsT94sXG3wlih5IsIIaGaxPmCS1nwT6H2p5hNFqG/YSX1/aE0i?=
- =?us-ascii?Q?2BvzfSQGfn759ZUP0JhJHPTYEyTvqFptP9oJE1IEM2ZoTBaaXrAmYCNuMDlQ?=
- =?us-ascii?Q?o6mjC5WrkYb8w30TJk6HgpVh/DDadPRsi8Pz2KdfJEfSSgXovhFC+S5kdwix?=
- =?us-ascii?Q?eScAk6gXTfpnA6i7rCchUVHDYD7N84cCrDjN?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(36860700013)(7416014)(376014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 May 2025 21:09:52.6195
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7614b3e0-f743-4f43-ee17-08dd8dab82b2
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	MN1PEPF0000ECD5.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB5644
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e886c3511fbe9cf7e66b0a142183a5375a42978a.camel@nvidia.com>
 
-On Wed, May 07, 2025 at 09:39:01AM -0300, Jason Gunthorpe wrote:
-> On Tue, May 06, 2025 at 12:30:54PM -0700, Nicolin Chen wrote:
+On 05/07, Cosmin Ratiu wrote:
+> On Wed, 2025-05-07 at 15:13 +0000, Cosmin Ratiu wrote:
+> > > In any case, please hold off with picking this patch up, it seems
+> > > there's a possibility of a real deadlock. Here's the scenario:
+> > > 
+> > > ============================================
+> > > WARNING: possible recursive locking detected
+> > > --------------------------------------------
+> > > ethtool/44150 is trying to acquire lock:
+> > > ffff8881364e8c80 (&dev_instance_lock_key#7){+.+.}-{4:4}, at:
+> > > __netdev_update_features+0x31e/0xe20
+> > > 
+> > > but task is already holding lock:
+> > > ffff8881364e8c80 (&dev_instance_lock_key#7){+.+.}-{4:4}, at:
+> > > ethnl_set_features+0xbc/0x4b0
+> > > and the lock comparison function returns 0:
+> > > 
+> > > other info that might help us debug this:
+> > >  Possible unsafe locking scenario:
+> > > 
+> > >        CPU0
+> > >        ----
+> > >   lock(&dev_instance_lock_key#7);
+> > >   lock(&dev_instance_lock_key#7);
+> > > 
+> > >  *** DEADLOCK ***
+> > > 
+> > >  May be due to missing lock nesting notation
+> > > 
+> > > 3 locks held by ethtool/44150:
+> > >  #0: ffffffff830e5a50 (cb_lock){++++}-{4:4}, at: genl_rcv+0x15/0x40
+> > >  #1: ffffffff830cf708 (rtnl_mutex){+.+.}-{4:4}, at:
+> > > ethnl_set_features+0x88/0x4b0
+> > >  #2: ffff8881364e8c80 (&dev_instance_lock_key#7){+.+.}-{4:4}, at:
+> > > ethnl_set_features+0xbc/0x4b0
+> > > 
+> > > stack backtrace:
+> > > Call Trace:
+> > >  <TASK>
+> > >  dump_stack_lvl+0x69/0xa0
+> > >  print_deadlock_bug.cold+0xbd/0xca
+> > >  __lock_acquire+0x163c/0x2f00
+> > >  lock_acquire+0xd3/0x2e0
+> > >  __mutex_lock+0x98/0xf10
+> > >  __netdev_update_features+0x31e/0xe20
+> > >  netdev_update_features+0x1f/0x60
+> > >  vlan_device_event+0x57d/0x930 [8021q]
+> > >  notifier_call_chain+0x3d/0x100
+> > >  netdev_features_change+0x32/0x50
+> > >  ethnl_set_features+0x17e/0x4b0
+> > >  genl_family_rcv_msg_doit+0xe0/0x130
+> > >  genl_rcv_msg+0x188/0x290
+> > > [...]
+> > > 
+> > > I'm not sure how to solve this yet...
+> > > Cosmin.
+> > 
+> > If it's not clear, the problem is that:
+> > 1. the lower device is already ops locked
+> > 2. netdev_feature_change gets called.
+> > 3. __netdev_update_features gets called for the vlan (upper) dev.
+> > 4. It tries to acquire the same lock instance as 1 (this patch).
+> > 5. Deadlock.
+> > 
+> > One solution I can think of would be to run device notifiers for
+> > changing features outside the lock, it doesn't seem like the netdev
+> > lock has anything to do with what other devices might do with this
+> > information.
+> > 
+> > This can be triggered from many scenarios, I have another similar
+> > stack
+> > involving bonding.
+> > 
+> > What do you think?
 > 
-> > So, if I understand it correctly, what we want to achieve is to
-> > have maple tree to manage all PFN ranges. And each range holds
-> > the same entry, a structure that we can use to verify the sanity
-> > of an mmap? Let's say for PFNs A->B, the tree should store the
-> > structure between index A and index B (inclusive)?
+> All I could think of was to drop the lock during the
+> netdev_features_changed notifier calls, like in the following hunk.
+> I'm running this through regressions, let's see if it's a good idea or
+> not.
 > 
-> And tell you what has been mmap'd.
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index 1be7cb73a602..817fd5bc21b1 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -1514,7 +1514,12 @@ int dev_get_alias(const struct net_device *dev,
+> char *name, size_t len)
+>   */
+>  void netdev_features_change(struct net_device *dev)
+>  {
+> +	/* Drop the lock to avoid potential deadlocks from e.g. upper
+> dev
+> +	 * notifiers altering features of 'dev' and acquiring dev lock
+> again.
+> +	 */
+> +	netdev_unlock_ops(dev);
+>  	call_netdevice_notifiers(NETDEV_FEAT_CHANGE, dev);
+> +	netdev_lock_ops(dev);
+>  }
+>  EXPORT_SYMBOL(netdev_features_change);
 > 
-> > If this is correct, mtree_alloc_range() that is given a range of
-> > [0, ULONG_MAX] would allocate the PFN range from the lowest index
-> > (i.e. 0) instead of PFN A?
-> 
-> mtree_alloc_range() returns a new range of PFNs that does not overlap
-> with any existing range. It should always be called on O->U32_MAX (for
-> 32bit uapi compat) and it should always pick the range to use.
 
-Ah, so it's like an address translation table. mtree_alloc_range()
-just gives us a virtual address range (i.e the cookie) for mmap()
-to translate back to the real PFN range.
+Hmm, are you sure you're calling __netdev_update_features on the upper?
+I don't see how the lower would be locked in that case. From my POW,
+this is what happens:
 
-I have another question: while I don't think my code is handling
-this well either, how should we validate the input address is an
-allowed one?
+1. your dev (lower) has a vlan on it (upper)
+2. you call lro=off on the _lower_
+3. this triggers FEAT_CHANGE notifier and vlan_device_event catches it
+4. since the lower has a vlan device (dev->vlan_info != NULL), it goes
+   over every other vlan in the group and triggers netdev_update_features
+   for the upper (netdev_update_features vlandev)
+5. the upper tries to sync the features into the lower (including the
+   one that triggered FEAT_CHANGE) and that's where the deadlock happens
 
-Because mmap() is per ictx, i.e. it's a global translation table.
-So, the following might happen: let's say we have two vIOMMUs in
-the same ictx. Either vIOMMU has reported a cookie to index the
-mtree for the real PFN range: call them PFN_RANGE0 (for vIOMMU0)
-and PFN_RANGE1 (for vIOMMU1). What if a buggy VMM inverted these
-cookies between the two vIOMMUs, so it would end up with vIOMMU0
-accessing PFN_RANGE1?
+But I think (5) should be largely a no-op for the device triggering the
+notification, because the features have been already applied in ethnl_set_features.
+I'd move the lock into netdev_sync_lower_features, and only after checking
+the features (and making sure that we are going to change them). The feature
+check might be racy, but I think it should still work?
 
-Thanks
-Nicolin
+Can you also share the bonding stacktrace as well to confirm it's the
+same issue?
+
+diff --git a/net/core/dev.c b/net/core/dev.c
+index bcb266ab2912..b5fc8a740e8b 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -10312,6 +10312,7 @@ static void netdev_sync_lower_features(struct net_device *upper,
+        for_each_netdev_feature(upper_disables, feature_bit) {
+                feature = __NETIF_F_BIT(feature_bit);
+                if (!(features & feature) && (lower->features & feature)) {
++                       netdev_lock_ops(lower);
+                        netdev_dbg(upper, "Disabling feature %pNF on lower dev %s.\n",
+                                   &feature, lower->name);
+                        lower->wanted_features &= ~feature;
+@@ -10322,6 +10323,7 @@ static void netdev_sync_lower_features(struct net_device *upper,
+                                            &feature, lower->name);
+                        else
+                                netdev_features_change(lower);
++                       netdev_unlock_ops(lower);
+                }
+        }
+ }
 
