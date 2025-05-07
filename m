@@ -1,133 +1,123 @@
-Return-Path: <linux-kselftest+bounces-32579-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32580-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80A01AAE291
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 May 2025 16:22:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF06BAAE2BC
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 May 2025 16:25:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 71891189DE15
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 May 2025 14:20:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8DE6D17D4B4
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 May 2025 14:20:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44E2F28A1C7;
-	Wed,  7 May 2025 14:13:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CED0628BABD;
+	Wed,  7 May 2025 14:14:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RWkp9OAP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FG/sp2PJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E30B28980B;
-	Wed,  7 May 2025 14:13:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C64E28BA93;
+	Wed,  7 May 2025 14:14:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746627237; cv=none; b=Pae2pFS27xADAhT4Ek+QJVjp0MlXdcSa0ogyNPNfr3wZOfW4nPIUwTTUdqEL4ObWsl8ECH2IKj6kS/wgrACof+e2rol6VKraUhCJkAxmMsMQOpuRKRhfpzawyGSVgeDXttsk5kYzBmhG0dD4yO/D+sDFyBbhA+b7jtNiDkDKltY=
+	t=1746627257; cv=none; b=PkF8hAiOUs7VntUA4YAlG4uiEocfw0rjgn0evyYgMsEFjghJZhV6Hf2qnEIpvPmj9vf8hfhc1zG92kyJ9zzLhqUF8AmE6FbbV6vlkQSzkrsWwCIuqjJLSHleh40vVTP3tbBCD4FrvC0qQMtVOcCLj6yWJpfpeXc2+JG3lyrZAPw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746627237; c=relaxed/simple;
-	bh=3TI6ZtTmhNfmS18yyCZHU4n2CxVy0mVy/3zbEhvzdIQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=l0Sln1B6oyx6n5sod4sG+tFSwgB0vMb7/sMch19L47ccXhiY9Cns83clT5utXpIC8lAI4FRo3zLJnDQgGyUZ8x9N3p5OSMFiPpgjrHjM7h39fetaA8roDxas4E3ppXiUnLEutbNqWqXcBi2a/+IekpBfNldi8bIiCNPTaXDhsys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RWkp9OAP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A4F8C4CEE2;
-	Wed,  7 May 2025 14:13:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746627236;
-	bh=3TI6ZtTmhNfmS18yyCZHU4n2CxVy0mVy/3zbEhvzdIQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RWkp9OAPQEKEd0Zm0/C9BZkGHdfmg9LCbZYdDbblvVLZpzTeyt0wICrJFFeCpF7L7
-	 w+7e7PBCjh732NsCCTurStQjuRPMjbmU6j6jK1kWHdbGHbHg15XJtQ0+gVVUWVOdB1
-	 Q5stFqcq6WcXiWMqGQTULcwHzTz3pzP96FJ1+HMXPeAVFeaGiPQZQOnfLGpADD36F4
-	 i7W2M6oU6CYWi1gm9hK3OgtwZiHEpT4tlfPWzyhg6MjJKqPDJL/mRRsGRvw0FlelF1
-	 8kdo4CTdn0nbwMqPXV/k0RGrCi3GSTYnfYMNwPibCc/GfT/hN8/XspDelsgdcWPhUi
-	 zffU8U80VMdbg==
-Message-ID: <d111a832-7924-47fb-a3b3-4d856569942f@kernel.org>
-Date: Wed, 7 May 2025 16:13:48 +0200
+	s=arc-20240116; t=1746627257; c=relaxed/simple;
+	bh=ZNnZUmX34eCntIlv80BWyc/0QNlOJepYSEHreCjNtrU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=q9jZFPCiNs7L/IrGw/PP8T+6is8eOMwKHxRk4EKQ/cFhEvjDK9hKXIBlHwZnIahGC0DOhh4z7IwQHa8CFw1Hoim2XuicHjnu47n8gqPzLpBrHcYJpNiv/XKcL1d6/RnJxkButZjoxIkFLL0Hzdt6jqsrscM5jatLzEI+5OQNlhw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FG/sp2PJ; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-39c0e0bc733so6786458f8f.1;
+        Wed, 07 May 2025 07:14:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746627254; x=1747232054; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZNnZUmX34eCntIlv80BWyc/0QNlOJepYSEHreCjNtrU=;
+        b=FG/sp2PJKmRZIE3jDKdJnF+OhDAj3kFR8+icDYRsMoiTuApbVJENLr3+g+12mtKaFF
+         jRWm0SvGYio+pjDG1C4rfc0AcIDC6OUNBTNH/uUD7NI2b51wYZ+uz1uwvV4+N2yyc5h9
+         xteBat+YlploY+Qxfs7RTDeWbEwMRttWaIryW7tQtyfXpTz9Ag2d5kY2Ak38NFyghKYp
+         5LUascj8UwOjez6KYPvzPsY3ZzcRfQqpRSNELiaseYzZv5bgeg7r4BxnoFzE0F3MA1CS
+         cciUqJzORVUITBSoN5ONK9Sa+oH3+qHiaE9TKq2K7VW2ZFB3ASVOyWEMYWSFQ6QfaT/c
+         caAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746627254; x=1747232054;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZNnZUmX34eCntIlv80BWyc/0QNlOJepYSEHreCjNtrU=;
+        b=kn+JzILZ6yguBHuBjgboml8+rN2txtu/7k/mvf+2TR715QKSa7UNdRvKKwAHOEVG6Y
+         LScpjAbWRloVwFKKShlJ+Ijskl1kVJ6aawA5ElwFUmo4qmBZa/TsqIAMvMDeL0Ikm9fq
+         9ETac3ZURTEZ4/kHyQTREDuwC8R0tysRFrmLJZvSulcvdviUkmkPcbua9MFIlBbO+asT
+         oh0yvJpbKpew8KRfYKTJa2c243E6TlGcOwRGOVX85oEQV0iQ976zbxIft7PNKNCbdnBz
+         khJJwLSwUODEDLdd3OCZMrKRbPo/SoPEzVsqHNLwjCb6MQiGzP/Xd0OVhHFwJXRaWVpJ
+         U8Zw==
+X-Forwarded-Encrypted: i=1; AJvYcCVDvM9usQ/Jg77W6aUrvtb3LshBB/U/Df2M1UuvOv6lg2eKHCAj6adpiy5Dto3FgkPNOZs=@vger.kernel.org, AJvYcCVZBUacmi55xz1dBSgWsNBODzERoNhGTSQzT8T430sa6E3sVA0l9NAMfd2QLzushvYAyEgVzYCR4Ht/1UDO@vger.kernel.org, AJvYcCWZ4ZljUME2jHCGycIa56FDItL+JQJhNrkDRHCu7fgeNH59MdDJyjPCv0TwYMwPzF39LhA7IwNbtIp3qLBoPqg9@vger.kernel.org, AJvYcCX8k17e6R13IScK9B8tdytVHJVBrh1EkRZgI5Y67yBZTXOgfIHdxq+Xp7pCLUbw5Z7pseUaUAo/kFlH86I=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx6OtIT6Tny/xttTrRGPp8rMW+0Nmz+omWEZovJGKmSR8eCTuY7
+	kjB74wAyLLZ20w+p2WQmNk1ZZI43F8TeOAugZZEdNwcj9mSXlJ1DagBwxRDg9DwIpWMEVarbe5o
+	IeT0JIRLR6NWRN4l+DoJwspUycb8=
+X-Gm-Gg: ASbGncveOfKklAErD0Rg001m3nWSO9B+WiaKdqL8pbuLK5QFmlgdWAtGpCG0McQANDR
+	DU2iaQBWwpjf3h1fVgkruOZVPlTxJ9SdLfh2A+xRbHEbvBMDnx46T58sYfLrxiJuFZQdT2a9eOw
+	CS8XqXdVi3C34/ylacj9aIXF0lGkGRYi5fopnPuJr79vkD34cg/vPPWFZsAlW8
+X-Google-Smtp-Source: AGHT+IE7YwupMe0PY2KfsKAdsd0JUDs8JdlQnJurFBmdXtxSRg25+HLcgrkwMi498eBlgYRhQzzHmmHYGwbzShYGjPA=
+X-Received: by 2002:a05:6000:220d:b0:3a0:b940:d479 with SMTP id
+ ffacd0b85a97d-3a0b940d807mr45656f8f.53.1746627254068; Wed, 07 May 2025
+ 07:14:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net-next 6/6] selftests: mptcp: remove rp_filter
- configuration
-Content-Language: en-GB, fr-BE
-To: Hangbin Liu <liuhangbin@gmail.com>, netdev@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Mat Martineau <martineau@kernel.org>,
- Geliang Tang <geliang@kernel.org>, Pablo Neira Ayuso <pablo@netfilter.org>,
- Jozsef Kadlecsik <kadlec@netfilter.org>,
- Andrea Mayer <andrea.mayer@uniroma2.it>,
- Paolo Lungaroni <paolo.lungaroni@uniroma2.it>,
- linux-kselftest@vger.kernel.org, mptcp@lists.linux.dev,
- netfilter-devel@vger.kernel.org, coreteam@netfilter.org
-References: <20250507131856.78393-1-liuhangbin@gmail.com>
- <20250507131856.78393-7-liuhangbin@gmail.com>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20250507131856.78393-7-liuhangbin@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20250507001036.2278781-1-tjmercier@google.com> <20250507001036.2278781-3-tjmercier@google.com>
+In-Reply-To: <20250507001036.2278781-3-tjmercier@google.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 7 May 2025 07:14:03 -0700
+X-Gm-Features: ATxdqUEf5_19Jno_4-zzyhqzCAe0qZhQRxDd8zooZHFiVvDpL9j0mU5OqeyoxoQ
+Message-ID: <CAADnVQL2i87Q4NEX-4rXDBa_xpTWnh=VY-sMCJzK+nY0qogeqw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 2/5] bpf: Add dmabuf iterator
+To: "T.J. Mercier" <tjmercier@google.com>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Song Liu <song@kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
+	bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, android-mm@google.com, simona@ffwll.ch, 
+	Eduard <eddyz87@gmail.com>, Yonghong Song <yonghong.song@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Hangbin,
+On Tue, May 6, 2025 at 5:10=E2=80=AFPM T.J. Mercier <tjmercier@google.com> =
+wrote:
+>
+> +/**
+> + * get_first_dmabuf - begin iteration through global list of DMA-bufs
+> + *
+> + * Returns the first buffer in the global list of DMA-bufs that's not in=
+ the
+> + * process of being destroyed. Increments that buffer's reference count =
+to
+> + * prevent buffer destruction. Callers must release the reference, eithe=
+r by
+> + * continuing iteration with get_next_dmabuf(), or with dma_buf_put().
+> + *
+> + * Returns NULL If no active buffers are present.
+> + */
 
-On 07/05/2025 15:18, Hangbin Liu wrote:
-> Remove the manual rp_filter configuration from MPTCP tests, as it is now
-> handled by setup_ns.
+kdoc wants to see 'Return:'.
 
-Thanks!
+See errors in BPF CI.
 
-Acked-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+And patch 5 shouldn't be using /** for plain comments.
 
-Cheers,
-Matt
--- 
-Sponsored by the NGI0 Core fund.
-
+pw-bot: cr
 
