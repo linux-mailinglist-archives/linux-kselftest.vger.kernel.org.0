@@ -1,147 +1,92 @@
-Return-Path: <linux-kselftest+bounces-32676-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32677-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C6CFAB02D3
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 May 2025 20:32:33 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C06ECAB02DE
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 May 2025 20:33:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A9E4189CC6B
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 May 2025 18:32:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 288D17A681E
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 May 2025 18:31:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B5B92874FD;
-	Thu,  8 May 2025 18:31:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ED27286D50;
+	Thu,  8 May 2025 18:32:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="pA+g1rAD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t7NB/AL1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7FBD286895
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 May 2025 18:31:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16C444B1E7D;
+	Thu,  8 May 2025 18:32:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746729093; cv=none; b=ouXx5YzCHNv0V+EP4inY+wVSqWZKKWE3K8RC71sSuckkDJzeZN9IjcqTQBLemXcDsPbHAvEhwhd/dEkjYMXatcmI8Sw9PQ9B2nPK/y2zBt5CP+zPmadBl3uSg6HyBqE2RxuOf2T/q+lw1HTIL+omf5jRGDi5RH3Krdx/IsCLVTM=
+	t=1746729173; cv=none; b=dPtKKKlVCEZ5G7Bljp8cc/DLuQb8HuZzrrg+NnaHtSMMYVTCyLYO3mh1rrs/9aMulfnfYJN15a3/cf0tkSP3CisOVkCBQl4RmjSF0ACAo2PReX1PT9Bc/izDvyxQYgsQluM5Ze0ZINfJtNN5F4Wf0skx8HBR46WgbCagBBXgCG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746729093; c=relaxed/simple;
-	bh=9aAHHtYzORaC+b7x0nzKZADXZfswUgLFHg/izHYSkOY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=as717r6pZMKKULUbBD38DHOQ7IUPvTnD1qiPDTLAKS6MkszHBV3+ZAgB3WVu2F/HxZUbryPsF+tEsQC7utIzNHrb9WUUdiIouGpqdPM67vJtDryr6wrwPjzwDS4ng3DyJXPNzdJJtxPO6K6r4ibYWsam3m2/P/HK7HnANQU6MwE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=pA+g1rAD; arc=none smtp.client-ip=209.85.215.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-b170c99aa49so896135a12.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 May 2025 11:31:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastly.com; s=google; t=1746729090; x=1747333890; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Vg04tVeUUBS5dXi06eM7vrV0jQzAk+ogiAGdK7KKQLo=;
-        b=pA+g1rAD9vpQxfJtquC4e86IVpe4VgW4mom+sS4m7I0SIwwn2GoOp3zadgAnk1iT6E
-         Phs/DaYO3mPfE9T9s3YhMMNcdDLQJG9/GzRVo92P6pNAt5i6eok3bRe37w24QzIBCS+Z
-         wCLI1SYZB05+/MzLFMRASLLtFFeb85uNPcIG0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746729090; x=1747333890;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vg04tVeUUBS5dXi06eM7vrV0jQzAk+ogiAGdK7KKQLo=;
-        b=p+GGjigFLmENzV1i308X+Ln/XBWIu6r3pXzUgK8nS5zRR8XJB5fs96m8cYO0IGw5Zx
-         2UizDQ6H9Xoe4kwHHYed/82AjPQFm947aw/0LCNi2HZFh2Bd5Psa+3EKfuXtYo4aAdG2
-         AEG7q5X2kq07imt5QdkkHkcBcz3WF24ZREOUAGlPMEwi01ZJQNswLq98C7jZK5AkSIlO
-         /rheFnpEQC+3vwf+ef0qJN/j0QTlckU5dwgmZNnjMmxIDJRtPdRf3fGrAHf2FQTU2CtG
-         zR7qy3/ucXF28RyCVnt/nC2eB4KJjoU5S9xZW1f1SYJ9OEaTq+dZ0ibXvk0e1TMgclc9
-         aLAw==
-X-Forwarded-Encrypted: i=1; AJvYcCXYAcXJxio8603Vt1c8Xegdp9kO2UwlE8a0vhGEGRLH55+GQkdJst9FNxb89lAbjE+cwXnOcdUeNYzojxQnqZI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxmzOdQPePwAyQo4B1GF5Y5op9lXl67jMbtB3EPtUf9q3t0x84o
-	gGTrr+bh8VdNeBf2zpVRLLB6OQ4Jq5MNzY0gyfOc/TRmVcTqIddgVSl5zTiT0L0=
-X-Gm-Gg: ASbGncvdt4iXBQfEXST4B6FZapgxPsACNowJKQIjTlSWR5M4NK5z9Zzh9F+cZ854GQL
-	MEh7BhX4af6/I8jmiv8x4ubdXtIdY0s3s/T3B+B3XU0bsDNLL9KkxtJW6eGK0lDI6W1TCC1YheY
-	LT7N3l/eQ97/Dp+4NYFvfQMCG/ynx+CPopaHiycgJM2rlEDCXDkb8/jht22IsUm9bzmW2k3WuJe
-	ecG1jtJOjAsCro3x8Si9bOY9RFxtMC+dtd3+xRBUAhEqbC7pDn34aW/TdHJFZn0L9mG+Al2X7Bo
-	sbRXcM83AFOvO0M3LUbSbQC+WZA6PwPetiFTM6pwQv3LHyUSESwLMh+VnuqxRw3K+WcKDK+E+WI
-	d4xgjEh4=
-X-Google-Smtp-Source: AGHT+IH4KefNLXixBMhOc9uRK7GEz3GSp15CgKgObE9cY7IuFNks+EWNpWqPQxY3Ad8TaWjV7YiRlw==
-X-Received: by 2002:a17:902:ebc8:b0:223:3bf6:7e6a with SMTP id d9443c01a7336-22fc8b4f01cmr6696755ad.12.1746729089851;
-        Thu, 08 May 2025 11:31:29 -0700 (PDT)
-Received: from LQ3V64L9R2 (c-24-6-151-244.hsd1.ca.comcast.net. [24.6.151.244])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22fc77414cbsm2712865ad.61.2025.05.08.11.31.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 May 2025 11:31:29 -0700 (PDT)
-Date: Thu, 8 May 2025 11:31:26 -0700
-From: Joe Damato <jdamato@fastly.com>
-To: Cosmin Ratiu <cratiu@nvidia.com>
-Cc: netdev@vger.kernel.org, "David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Mina Almasry <almasrymina@google.com>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Tariq Toukan <tariqt@nvidia.com>,
-	Dragos Tatulea <dtatulea@nvidia.com>,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net v2] tests/ncdevmem: Fix double-free of queue array
-Message-ID: <aBz4fjK8bPKG3KLM@LQ3V64L9R2>
-Mail-Followup-To: Joe Damato <jdamato@fastly.com>,
-	Cosmin Ratiu <cratiu@nvidia.com>, netdev@vger.kernel.org,
-	"David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Mina Almasry <almasrymina@google.com>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Tariq Toukan <tariqt@nvidia.com>,
-	Dragos Tatulea <dtatulea@nvidia.com>,
-	linux-kselftest@vger.kernel.org
-References: <20250508084434.1933069-1-cratiu@nvidia.com>
+	s=arc-20240116; t=1746729173; c=relaxed/simple;
+	bh=dI9PYz2NiVcz9XB8oLCo4yQGCH+anaoEe3DTOVFETh0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kVWW7aPabsTxzFyncLe9i/L2bkfr+3lehARSt9Xrau7GuEuHV2sE0xLMXBQvnes5k0xn85p4H9J4ZZSLd0EYxeoZ5D/zxOf6ZfLqG/pIyawdfwxVLHJMdVnqaUAmWdj+YaYsCMBOd+i6hbwsQ+3hvF1A7oWGaS+BvLxeVww9eIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t7NB/AL1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87FDCC4CEF3;
+	Thu,  8 May 2025 18:32:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746729172;
+	bh=dI9PYz2NiVcz9XB8oLCo4yQGCH+anaoEe3DTOVFETh0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=t7NB/AL1fy/mTrbiHY/MCL2wqDOxfSJ5ZaouwvyNeFyhSvHVzRHcapexCm80sRaiE
+	 qN8bkVF2Wluimr+pQyWA3JqyyvItf+KYo1kdpcVw11nq4aeYiZGjmha/CJDJ0naK8u
+	 qmlmHGbqa0T9ikWCJPAgCzIFrmOQdtmnrWa3Hjamo4RXGxrVg/M/eAX9oYz56/jHbY
+	 2d8t+yRuqWPz7TCMvBmBxtT9aPzZJDKSyXA4wZ8jOQI4s9WpNHjRSgSFnBIiqd2UYW
+	 dr19azTjkz5GVGlRbnHMQCe83yZZvPQdTTFfqyQEUdrs8nAh70VlkbcrLUe+4vyu1X
+	 c8Sjjw9ybXmXA==
+Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-6f54e27405dso5370416d6.3;
+        Thu, 08 May 2025 11:32:52 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUGNqfMlaRrMH3FQEuGYLmw3vmWAtcLVaAOfA6gcVVB/rbaP0550H0zf1htprU98eA0R1nUB+t6fb/XVqAJ@vger.kernel.org, AJvYcCUsfKjJDuRHikpRYAdu3GVEVZJbzLnm8ybzhUG04CNHua+d6H1k67rCoXbup0PhxI8nk3/emgGObs6YezM=@vger.kernel.org, AJvYcCW2+Zc0ZUXa+bM49P/kzOiObjXEdWVlwo409Fi+B7QLfosvHRYT0BCST98Q3SWdesFxXnglE9mORhbF/KtWvWw/@vger.kernel.org, AJvYcCWxfzdKaxXu0YtUqSQnulunKUobDikQCHsQeIwb4gvGD4cN8rFAAS6l8ZPWgR85asD4DM4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyE+AL0OGnubg5PdDcIup/MSqziaDy3AVhucjJFmLArhjKSwT/y
+	TgrOxxXaDdIl1cPUYhjKtMaGQDxq/SFBrTBT8qAnQ58a8T59O7PUWaGtJFvskgrp6lFDA6RrqTq
+	w8DZfpM9W3fRmy84T0xXnqNXCDas=
+X-Google-Smtp-Source: AGHT+IFGy1cRgySSEQi/MG5bIU6lid7JLUbcXDq643AD1ZUr6eRMCZ7Yix8NvK6uHTAvzj7j2m5rR44CYrq6wg9RldQ=
+X-Received: by 2002:ad4:5dcf:0:b0:6f5:46b0:7d11 with SMTP id
+ 6a1803df08f44-6f6e48100a9mr5001936d6.36.1746729171544; Thu, 08 May 2025
+ 11:32:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250508084434.1933069-1-cratiu@nvidia.com>
+References: <20250508182025.2961555-1-tjmercier@google.com> <20250508182025.2961555-2-tjmercier@google.com>
+In-Reply-To: <20250508182025.2961555-2-tjmercier@google.com>
+From: Song Liu <song@kernel.org>
+Date: Thu, 8 May 2025 11:32:39 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW7aGCof7=4kcPC0qFr9R1CD-L8aXFV6viBBK43UJZB1KQ@mail.gmail.com>
+X-Gm-Features: ATxdqUF9-QhsdlBFsjsiwpLDumtKQSWnSrDHS1EoJZlTkU8ysEENxH7Dxn847kM
+Message-ID: <CAPhsuW7aGCof7=4kcPC0qFr9R1CD-L8aXFV6viBBK43UJZB1KQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 1/5] dma-buf: Rename debugfs symbols
+To: "T.J. Mercier" <tjmercier@google.com>
+Cc: sumit.semwal@linaro.org, christian.koenig@amd.com, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
+	skhan@linuxfoundation.org, alexei.starovoitov@gmail.com, 
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, android-mm@google.com, 
+	simona@ffwll.ch, eddyz87@gmail.com, yonghong.song@linux.dev, 
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, 
+	jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 08, 2025 at 11:44:34AM +0300, Cosmin Ratiu wrote:
-> netdev_bind_rx takes ownership of the queue array passed as parameter
-> and frees it, so a queue array buffer cannot be reused across multiple
-> netdev_bind_rx calls.
-> 
-> This commit fixes that by always passing in a newly created queue array
-> to all netdev_bind_rx calls in ncdevmem.
-> 
-> Fixes: 85585b4bc8d8 ("selftests: add ncdevmem, netcat for devmem TCP")
-> Signed-off-by: Cosmin Ratiu <cratiu@nvidia.com>
-> ---
->  .../selftests/drivers/net/hw/ncdevmem.c       | 55 ++++++++-----------
->  1 file changed, 22 insertions(+), 33 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/drivers/net/hw/ncdevmem.c b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
-> index 2bf14ac2b8c6..9d48004ff1a1 100644
-> --- a/tools/testing/selftests/drivers/net/hw/ncdevmem.c
-> +++ b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
-> @@ -431,6 +431,22 @@ static int parse_address(const char *str, int port, struct sockaddr_in6 *sin6)
+On Thu, May 8, 2025 at 11:20=E2=80=AFAM T.J. Mercier <tjmercier@google.com>=
+ wrote:
+>
+> Rename the debugfs list and mutex so it's clear they are now usable
+> without the need for CONFIG_DEBUG_FS. The list will always be populated
+> to support the creation of a BPF iterator for dmabufs.
+>
+> Signed-off-by: T.J. Mercier <tjmercier@google.com>
+> Reviewed-by: Christian K=C3=B6nig <christian.koenig@amd.com>
 
-> +	queues = calloc(num_queues, sizeof(*queues));
-
-> -	queues = malloc(sizeof(*queues) * num_queues);
-
-> +	if (!bind_rx_queue(ifindex, mem->fd,
-> +			   calloc(num_queues, sizeof(struct netdev_queue_id)),
-
-Nit: it looks like in the original we didn't care about malloc
-potentially failing. Do we care about checking for that now with
-this cleanup?
-
-Otherwise:
-
-Reviewed-by: Joe Damato <jdamato@fastly.com>
+Acked-by: Song Liu <song@kernel.org>
 
