@@ -1,455 +1,281 @@
-Return-Path: <linux-kselftest+bounces-32652-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32653-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26B2BAAF595
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 May 2025 10:24:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99FE9AAF5F2
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 May 2025 10:45:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ACF3F9C5F14
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 May 2025 08:23:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0446A464FC2
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 May 2025 08:45:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFA4622A4D1;
-	Thu,  8 May 2025 08:22:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FCD720F089;
+	Thu,  8 May 2025 08:45:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="dL5hfY48"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="p0+k2Suq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2041.outbound.protection.outlook.com [40.107.243.41])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2064.outbound.protection.outlook.com [40.107.94.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81F8D221F37;
-	Thu,  8 May 2025 08:22:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65E471CB31D;
+	Thu,  8 May 2025 08:45:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.64
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746692563; cv=fail; b=P78hJ7qX9liP/5z89UrtPQJhjxp+FQZ6Etql6q6qRAXo+ySnLmKDN1Ejkn+1aUjQ9Che7ckxVYuzEBWfE2w+FrOTkeh7C+cbi49IjOJrdH60bjLuqTso9n5/q1Fe3Ycxx6mdfS9XUyisr3iSTBIwKLyoQZrWQvB0P9lhZcYsThU=
+	t=1746693924; cv=fail; b=YlX4++WpNMxLwH+1UksTbG3xSofOzciJZzX7qVYpv4zNr4VK2RUsOHJynYoKvNbGkVPOzKrpWlJZf7kY9YbOd2EHboBUPJgjzDnRCWpet45ZoMkwD2yu/adQExgAI283PetkMYP2oDpjmN/KgPBjR1juzRPb73B4fAuxnY9aq+o=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746692563; c=relaxed/simple;
-	bh=yoZBBXwg4eHNOOj4leRdXS/J/tuAgoUYXYmZYgGz0wU=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=WH0cspVmst/UnvgbEpB7h2x5QQzG/bp3GtkmzSrDN/d1+33TEuLSXBl1grepvT2wjNKaJflwxX72U2dtJG1CjkOK2AB6WhGXpShbxmjNzHuWMW+BQe1G5SsD75n//aI19yaJf/cjVTbeqm893PA0qIb+IJBP+ACNxGlbqgXpnjs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=dL5hfY48; arc=fail smtp.client-ip=40.107.243.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	s=arc-20240116; t=1746693924; c=relaxed/simple;
+	bh=OafJ7131loMDRin2T4IAtVJBzggHZAvc0Nh9qKoF7fE=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=u/0PvAJOtDBBsM7dzM3vNRG8w4J2D2vtuo0AXMCixsXM8XeSIHUR3BJTeIXjlO7y0d36PKz3rVcFvrGnPAuvxDLCNxEQt+EyM04D1xU2bKr1NcynMGsXDWsUNMBffIG3UeAt/N/1Vb05KI25b9gOdTnIaoHafad3ORFYaqSBsnI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=p0+k2Suq; arc=fail smtp.client-ip=40.107.94.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=LcDs4iCVMHjBApJNoFQlNWAXpqb2opbHtseNhkRJ5q8Lk3qNSzpKwv4r++JwKzWyJ9dGjPf5+31tZ1sy9axqHUFo3J5tW1bSTZfHxiRS0DbemLfXLaiiRTSd9Z8+0a9XLI/Pphjq2yo7+k4X/eJywxgOaT/1/y/i20R88uynndOlcXHZFVzeHoiQiGixj2AQn4W9jgYq6mP9fw12RgfcjgEglVOCO99CrZhhqbQm8IiMXgRtVN9a3p82BUvQK17QcHLbne9IQk1SN6XMnZ9ukt8YjdJELjcp6MIznQ0Tv/qljFuV89/zN1KEJotvcuxXw0Dz3XGMIuQrwwxkO2VHgg==
+ b=J49opGJs0IOWNhKtPhC76MChcrqpO2+qNMfjlkCn5tGi/bpHItLKiypvcxHOuKSZDkc3TYUS8cRcKmqCNWh+01p2UG+dyvkE9mHgn3B7NymtbUFYOm7rD2qVM57MpvwTC/nL1oO4r9vufBbh1ROGzKBOccxRoZKv/ws4oa2TFQ0M++20WBxBJEmMl5w2MEUSPs1p+wQabfP9tVlOQshijJyc5it4lijTm7rfeVH0lg+A2Wg0Ne9hKqfW+REZSs1QOcRoKWJltwcqzdpNgy1JRet67XjjYDD7uApzymWapGw6tI4t8LxUpvXtsz97H6/J21WeaUhALN9Y+bB3n7A9MQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WdH32izubHCSuysJ9dsU7+XehuSur2VcOjgE4iM6+34=;
- b=oGLZs2iQp9RdXdSnp1eMVEkANNtdkKiRqtjbI53MXpZE92WoT0Y9Y4oiEUR9nYG/hxn452+d1xJz2fSSdVoc9AITyfBg+KaJ8WsqlWykDErtuqe+osTp5l2VTaeSdeAkMC4G9yw07+HwzTku+FH1qmW8rrHr9jlp6tjBuZrQ+Vl1+Wys0gAoFJ7Olm11M1jFkYQMHO0kCqvwVY8oGE9oPnte2YC9IzyaxmosQ1lUnIJIanlYwzOtOMuFsijetWh+wmZHDdhFJNsY2kq3er0LLXl56KkafAQi3y1uT7Ee6zA5gFMUqF2TmSt7e1DcCTYAAeFxJk1DX8LdTbRgDQv0ew==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ bh=4Uoa4J4Q26Vv2zK2ZuNwGAnSlcPd9GoYwOlYzdm+KM4=;
+ b=Lrd3GQnjCB4TAFdn7DttM992BeyMuqfICe8f9Ehji05IX8GqNuJDU/H+vLdQ308tRRuzBBgWE5+GxNV093njK8zPZDBDCwM6OShculvDrEovfbFdu/+6f45hMhxRDJGr05gxHCW4YKshiK/9qFfp/3IXDGyRje0QAsjhQw1qY/+nuWmlBNAC4ZKuligz86Aua2DGfHRTpnF24lRYF6SvzQ0Ip6B7qf7ktqbftLVgV4Rq7QmrcQiXqp3uWoXfHkcT7lGjJO1u3ET3OMuPPtcm7Srqikx89CMsW/wnrdj+qV3/nKQayevHDOJWHRDUIkEK/7To6Ojlfgf0V6ol+/DjRw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WdH32izubHCSuysJ9dsU7+XehuSur2VcOjgE4iM6+34=;
- b=dL5hfY48Jf8zZO1+2xUM0p019K3YqMZpxtHcXQqB0MMmu28UVWdDx/vjrgn9ZqQH/JMGSO3xSM6E4ThHBZTqpQSxEJPhE615EOglZenFKq8HDJTUiWwlaFsijub7W6xF5Dq1nMIGX1hMGoqK4VqjeyQ8aXykOU/UFFnueZ7pCTM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB5685.namprd12.prod.outlook.com (2603:10b6:510:13c::22)
- by SA1PR12MB9469.namprd12.prod.outlook.com (2603:10b6:806:45a::14) with
+ bh=4Uoa4J4Q26Vv2zK2ZuNwGAnSlcPd9GoYwOlYzdm+KM4=;
+ b=p0+k2SuqS7M3vuKUD3IFoN+uQ7lZeapUMaokVzJN79yMkmUTPm/XuMqdSteHK0VOONFtXYGH38A8ccnrHTZd8SegV9GVYyh+gbxaI2mCUmmcemrQ9QAi0J8PKG2Ugl3M5xO2RGqlIiVxRpTMtAaEZ8XY0Gbo15zZhKKgmnTXdj7P/kYbOR7xpns+naTsSWXxEgtYLViwJkuh7AIUxmEkpvm9tiEzYkDT/j2nBV1hJFir2urOSFyysU9a8o57Y4jKsoVvwrYnomfNwyTD5xe054EP6TGOG3dKMFo4p+0uiB7dUkIQ1SG7fC7NFG4Lo7B5bBoPaZ6WxI3NbEfocflAvQ==
+Received: from MN2PR08CA0015.namprd08.prod.outlook.com (2603:10b6:208:239::20)
+ by SA0PR12MB7074.namprd12.prod.outlook.com (2603:10b6:806:2d5::6) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8722.20; Thu, 8 May
- 2025 08:22:38 +0000
-Received: from PH7PR12MB5685.namprd12.prod.outlook.com
- ([fe80::46fb:96f2:7667:7ca5]) by PH7PR12MB5685.namprd12.prod.outlook.com
- ([fe80::46fb:96f2:7667:7ca5%7]) with mapi id 15.20.8678.028; Thu, 8 May 2025
- 08:22:38 +0000
-Message-ID: <dc21ab2d-071d-4596-a339-5abcfd01eca6@amd.com>
-Date: Thu, 8 May 2025 10:22:32 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 2/5] bpf: Add dmabuf iterator
-To: "T.J. Mercier" <tjmercier@google.com>
-Cc: sumit.semwal@linaro.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, martin.lau@linux.dev, skhan@linuxfoundation.org,
- alexei.starovoitov@gmail.com, song@kernel.org, linux-kernel@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linaro-mm-sig@lists.linaro.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, android-mm@google.com, simona@ffwll.ch,
- eddyz87@gmail.com, yonghong.song@linux.dev, john.fastabend@gmail.com,
- kpsingh@kernel.org, sdf@fomichev.me, jolsa@kernel.org, mykolal@fb.com
-References: <20250507001036.2278781-1-tjmercier@google.com>
- <20250507001036.2278781-3-tjmercier@google.com>
- <01e0e545-f297-466c-a973-e479fcbd934f@amd.com>
- <CABdmKX3ZjeZmT=Fj_TYfpXouM6AGigcQPH7ygf3puFQip0DQ_g@mail.gmail.com>
-Content-Language: en-US
-From: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-In-Reply-To: <CABdmKX3ZjeZmT=Fj_TYfpXouM6AGigcQPH7ygf3puFQip0DQ_g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR4P281CA0310.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:f6::15) To PH7PR12MB5685.namprd12.prod.outlook.com
- (2603:10b6:510:13c::22)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8678.31; Thu, 8 May
+ 2025 08:45:18 +0000
+Received: from MN1PEPF0000ECD4.namprd02.prod.outlook.com
+ (2603:10b6:208:239:cafe::87) by MN2PR08CA0015.outlook.office365.com
+ (2603:10b6:208:239::20) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8722.21 via Frontend Transport; Thu,
+ 8 May 2025 08:45:18 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ MN1PEPF0000ECD4.mail.protection.outlook.com (10.167.242.132) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8722.18 via Frontend Transport; Thu, 8 May 2025 08:45:17 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 8 May 2025
+ 01:45:00 -0700
+Received: from c-237-113-240-247.mtl.labs.mlnx (10.126.230.35) by
+ rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14; Thu, 8 May 2025 01:44:56 -0700
+From: Cosmin Ratiu <cratiu@nvidia.com>
+To: <netdev@vger.kernel.org>, <cratiu@nvidia.com>
+CC: "David S . Miller" <davem@davemloft.net>, Jakub Kicinski
+	<kuba@kernel.org>, Eric Dumazet <edumazet@google.com>, Andrew Lunn
+	<andrew+netdev@lunn.ch>, Paolo Abeni <pabeni@redhat.com>, Joe Damato
+	<jdamato@fastly.com>, Shuah Khan <shuah@kernel.org>, Stanislav Fomichev
+	<sdf@fomichev.me>, Mina Almasry <almasrymina@google.com>, Saeed Mahameed
+	<saeedm@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>, Dragos Tatulea
+	<dtatulea@nvidia.com>, <linux-kselftest@vger.kernel.org>
+Subject: [PATCH net v2] tests/ncdevmem: Fix double-free of queue array
+Date: Thu, 8 May 2025 11:44:34 +0300
+Message-ID: <20250508084434.1933069-1-cratiu@nvidia.com>
+X-Mailer: git-send-email 2.45.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB5685:EE_|SA1PR12MB9469:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2a3fa549-0c4f-47dc-478e-08dd8e097e82
+X-MS-TrafficTypeDiagnostic: MN1PEPF0000ECD4:EE_|SA0PR12MB7074:EE_
+X-MS-Office365-Filtering-Correlation-Id: 14dad2dd-179a-4422-eb6a-08dd8e0ca8ef
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|376014|7416014|1800799024|7053199007;
+	BCL:0;ARA:13230040|7416014|376014|82310400026|36860700013|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?dzlHNDFXSjFhWHFVaFBPdldEWUdOV2xaci9kdWFDMGh2UHlzRG1jWVdDRkxi?=
- =?utf-8?B?Y2l6Qk0vcVkrYUNZZ3AxQVNrR09mSzVDMUVHZFJRZEtoU1VYVFNWSUVvWG1q?=
- =?utf-8?B?N29hRmJGbU5lV1czdzVybnlUNnZqcEFZSjBHVGJrRWdQTVVkUXJOTlVoWkla?=
- =?utf-8?B?Q3pEL2dqS3B1eVpTUHFheHk2eGZrOWtOam4vbmVrYkdoWFVjREZZYitWRXp6?=
- =?utf-8?B?YVpUMlFDbkpKaTNJRDluOVdaVnRSYUMzUm9BRk5aY1BiK1B1YnhIWkRtK28x?=
- =?utf-8?B?cmNoU3VSelgyNTM3T3JYSm1sc0ppOWgrU0xMZ0dPSWNaZ3BwTTBZVnVsSGp6?=
- =?utf-8?B?M0I5WUthZ2NVS0p5RExPL2JXZ3FmSHZVS2FFczRtSS9KR0VyRCtyWDdmd1VB?=
- =?utf-8?B?SUZYenduQ1pjZGhpYWdrek8xSHNHV1JBUktEc0ZETk9QL004R3hlWnRabDhk?=
- =?utf-8?B?dkRVVjdTN2kwc3ZOYXp5UFVOQm9BOXJ5QnB0dm5XamRqOVBuR203cHZDQ0Zi?=
- =?utf-8?B?elFmTFI3Zi9ZaW56SXFwOUJjbFBFaXhTSFpEblp3OFdlTWtxdUFTV3BHVG9R?=
- =?utf-8?B?ZysvTW1lSmtsVnliSldkWllZRDFmZDJDMGdvRjAxZ2R3aUw0bG9nUnJncVc2?=
- =?utf-8?B?aUlFa25OcVJvSDdSYzZzTHJsWHRDRmUramVmZnFDTG5saXNaWllJVDFJWG9S?=
- =?utf-8?B?VjNxUGpJOFY4K0V3aE00QXhvOFpDWjZYOG9yYWUwcFY0TkdPVFhlY3g4bWNY?=
- =?utf-8?B?WjZqV3JTMzdTZXVubXlnZ2ZBV2xUSndya255S2dXc0R4Q3ljL2dMVWVXYVd6?=
- =?utf-8?B?MVFEeGFHWUxOcnczQ2t5N0xIcjZNS3NzUGtkWHdiZ1Z6OVFmVmRPNkNZL3NO?=
- =?utf-8?B?VFZCYVhuWTFqUlcrMmFEaEcrdnRKKzQyd01ZTk5BUXkwSUJZZlZuRkMxVkEx?=
- =?utf-8?B?czhhMHVjU09GbG9TbThRSkxnVUVMM2FjYmd6YzZyV3ZRbzBRTEQwdXM1MnBD?=
- =?utf-8?B?cm13SHpRMlB2WkFRRDBxcHZaQmpkclcrNFZ1a1N6M2Uxalp4NDBVZExHOVV5?=
- =?utf-8?B?S3pNcCtZOHBGWWx6eTJVcWNhYXV5MXZEc0ttNTh3WCtsQVNHRHo4SlZxcXVN?=
- =?utf-8?B?Tjh4aTY1ZlBNYnVjSU0vY1FNM01iOExFczJpWWd3TWY4bU93eDZGU2VtRDkv?=
- =?utf-8?B?T3NUbE5XQUJiU2dRVTRzajA1eHJUeGpXZjlFaWlZcDJ3aVJxWlI2SVJUbmtp?=
- =?utf-8?B?VUhUWHNoUytYM0NmMFF4VDNDdDJCcmtjTEt0UXZvc2hZZjF2WlBFN1hOU2Vi?=
- =?utf-8?B?b2JadE1JaXA0U0ROL0plMnJUUkloa2FSMUhlTTRaeVN6N3AzMWFUdURzdXVO?=
- =?utf-8?B?bUxxZklMT01UdkttMTBIM2tMZ215T2hmQnlYcVVaMnY2Zi9WTzkraEM0RE91?=
- =?utf-8?B?elc3MUhscWtKSTFrallIdG5ESkhwSzJBcDk4NUpRVGM3OUJSRFMzZERzMEhh?=
- =?utf-8?B?UFNYZUZNbENJZ2ZGV1BXMDNrZmxKSW5vQkRFUWxKSkR2NFlJWldGRkFvVy9p?=
- =?utf-8?B?dXNxZkc0bVN4UXU1NFFLKzNITnhlU1M1S3dyOHZmYU83ZEx0SXlYaDhiZVdm?=
- =?utf-8?B?ZE4zWGVjR3hMcUQ3YkxXb1FiSDlzS2FsakM5MFFvakZlUkRHWThLZVpZL0F6?=
- =?utf-8?B?c01LOCtpVGJBKy9sSjJvZWhRcXgzQ2wzRmZxcFowM2tEZ09URFNTOEVxR2pt?=
- =?utf-8?B?Tng1bW1PTjBnRW54UzhvM1dxbkNNeFM5QTM0TlQwN0REU3VJNWJYR0YrOEZn?=
- =?utf-8?B?bkNwaWVzVm5VNU1EdjdJMVRuc21kUnBnc2tvVVZJQ3g2ejk4WWpqN1J4VHpt?=
- =?utf-8?B?L3ZZNHhQa284enBNQ2hEaVpKejNYOXdaNWYrbm9FclBuZXJUVzI3YlozUU4r?=
- =?utf-8?Q?5h4+v2T5Flg=3D?=
+	=?us-ascii?Q?kl41C6Vkz4EirBYxR86lFUdukPptzxYRryGTns7NuYn9bH8MTgpbMJJqwnoa?=
+ =?us-ascii?Q?7pn+FSBvw7rXX1rzzyeXMG0jsk3IaqvGObTUiLkqx5+1DnBEWGXJ+zld0SlV?=
+ =?us-ascii?Q?R8d36n3b1GQByH3eCTHwOMraq9LcskvurHiBL8IbRmV/GEMPQuuDSYSj1G54?=
+ =?us-ascii?Q?l12oek1VZVjTpNzUQuBP+M7CFV7RTl0OC9RcKmJfGf9WWD/EDmwFD2sIKdxj?=
+ =?us-ascii?Q?AKyfJZX12lgvc0w+LEJbjET4CaEU9q1bOeNGzn2hCem6d6Woa9Eu8fWgYQyK?=
+ =?us-ascii?Q?OaiVmPMYiH2pTNyHBdlWYcnea03WDQAcBaePlJCOSN9V5dbXzL6dSWPXfa5h?=
+ =?us-ascii?Q?AHSwUqbzfNV39o6akDclvR1BMgjOSh6RTTjLsZaO6UkBXZGSDUrpqPpl744f?=
+ =?us-ascii?Q?u1vnWN083nELcp0cc9E22bJ/DZi6SHOL16q0ZDbDh41cXqa0RVJQu4qKDP1q?=
+ =?us-ascii?Q?Alw17Eba/bNlHwYM+n2RAujI6hwWAcGf7HoVp6OB9coiiIVsswzi+Hwvc8za?=
+ =?us-ascii?Q?p7v2W8yTjaFkJyZ8Vv7FlNvuXl6xP/kXXtcGaFneHswc3z7LIANkplu7+xzR?=
+ =?us-ascii?Q?HPoHDMt5nJmcAo28j6qjbxfUngH+TmHfnGgNtP7LmHECN+F8X0rjiF4N078O?=
+ =?us-ascii?Q?ihubUoBwFYbAoBADXLm2oj9sQ98JHTrSxpMqVrd3lDid7CLyRaltyQYm5KnN?=
+ =?us-ascii?Q?P8ck9WUZozUFOFkFKQqmk5gkkrGvf430J+frKTOUpWFDhvJOv+FnL/93lqtV?=
+ =?us-ascii?Q?Pg85MeN0ZoDfLwzZlrKJvPuRKuIAHEj1RkT5vbWpXKYabCIHPfqc81KUml68?=
+ =?us-ascii?Q?TSB8jX8VfNDMozrLJjuRgciILASfAtC1HRSPC+szcn1VjAKLQjwMiHOrgMI6?=
+ =?us-ascii?Q?OsQ+MBMcj4ZduIrKmE79yrLw6DsMiZajUr9ynJEWKHqf0IwtYPkbdCjAlrol?=
+ =?us-ascii?Q?5koWeocyoaWTggjtnHibllARl33yDOc7+l/SKiBVmZI6RbJaLCrXJ3qEjQ7i?=
+ =?us-ascii?Q?8L7ysvv1tt7vg7O7dvTHquEeADRi3wmeuK73uTVQNs8mpgs9OP7uvtHQOH4D?=
+ =?us-ascii?Q?saUmcRXJPd2vT4HIXvtzrXt3IDMLIKM8Upnc9CvqqVsA8NCjM9JcDN5KrsKz?=
+ =?us-ascii?Q?p+SZHzKu7ZtNRYqON72NI08Nv1NFJFA+YAkCyzEiQWeZWCVOcv7h5vZifjgW?=
+ =?us-ascii?Q?bYp2XRhS/nwzQQmSfX386NRbO4mumvvFYlwVQFCBSNg4e1g0aZYlVdqdROcU?=
+ =?us-ascii?Q?5gg7ySIxIfrww0L3PSaO9BrCBzwbTB2uESGqtUo9wdsX0AyjXdQmtdNe5yTe?=
+ =?us-ascii?Q?aOMA0IR3kaykEEjhgt4TLVtsZYfwJ+NJEwYcCvIBoYMOyuzXW5mQum8hsPhD?=
+ =?us-ascii?Q?nH5vepyCiYvy/iN4HptZPC1mTeQsUjIHGlK49ME5JrJwlm/g63o9uSYu+S3I?=
+ =?us-ascii?Q?IJ4d9+ZuB1LqLUDvODXo0GuSHlYzWJRw95Zlrx5xn2lLxX/CA661uZqWUChc?=
+ =?us-ascii?Q?Iywafb5pwNRJLvlY9Y5dhl4X4XEsp48mgd2r?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?VzRZOFhFUUp6RXBnL0VKWndWKzltUFhUUDlZWXVmL1I4eGVaNzA3b0tTdFlo?=
- =?utf-8?B?TlNoZ083d0lHdWFCdXdkMG1TbUZxcXdLUjlvSXJERmhsN2dQUXVtUU9GQWhy?=
- =?utf-8?B?MjJOM0Rad2pnYlJFbnR0Tk55Y0VQVE93WlpPUmpjYkRPdlRvUWVzWVRpTjlu?=
- =?utf-8?B?OWw0UkhYUU9ldEZDc1JCaXFoZnJzdFVKVVpCWUQ1SGsxaTBISmNYTU1weEVJ?=
- =?utf-8?B?ZVNsUlA1dFhwS0NPMkNHbTFDVHpBdjh5R2ZhK0JmK01oaUFNK2E5T0g3M0J2?=
- =?utf-8?B?c0VJbHhmZXpYQmhsM1MrN010SlhvcThGT3E1bldlU1lkcUpTOFh4b3Y5bnhK?=
- =?utf-8?B?cWx0djIyZ3M4U1BFcEwxTGRpbFZnU1BPUFJsbXQrcUlQT2ozcFpZd0hpWmds?=
- =?utf-8?B?U2FTSEpnWFAwTG1yUUNSQnRITytzZ2dVbWdTZExObEQvVXB2Y2t0Vm9Cd2I5?=
- =?utf-8?B?cnU1OU5DaEZHRk53RXBiYk56VzBiY0pKZkhWdVJDQm1jeXEvc3JxMDFvdHVs?=
- =?utf-8?B?V3NYZElGZUx5YkViZ1h2b0ptTnNFdHFpdUJ0R01Oa1BKQVlHUmhuZDBzY3Zr?=
- =?utf-8?B?YytRYnJieVNSV1FyZ0dPVVBWNTIraHRUb25XQUhYWjYrS01QR0prRFcvL0xY?=
- =?utf-8?B?RjNzSnE0WkJtSkJVL0xGK3g0QWwxd1YyOUV2eWZZeXdTVURxMmlTK29hdEhX?=
- =?utf-8?B?enVmWHA3c1dTVFh4UWVObHlOWktleXZRbGJMM3FRODNSR2tXZS9vTUx1ZStj?=
- =?utf-8?B?dkc4S2k4blRWMU90eFc3WmhpcDhDWUkya2hZOWdXSmFXNno0aWtiVWZ6UEgw?=
- =?utf-8?B?QzZNL25ISTBRRlhZa1k3cy9mQTB2enFFekx0RVAzKzc1aERWOGhvNm1PVHE3?=
- =?utf-8?B?VGdVdWI4K213emVpQmh6ZlBUcDl1dUlYeE95cE9GNW5iTUUxVk0rbGxaYlRC?=
- =?utf-8?B?K1ZEYXVhQk5kNXV3T2JpanlQcnZxYmYraGRjRUNITjV0UjYwbWx0OHlFMnpN?=
- =?utf-8?B?a0R3TEZmVFR1OTZUR0h1bDRFOVBXM1c3dmZuSkRVNW1UM3dPNXFyTmVLWmtn?=
- =?utf-8?B?NGVYMVJQcmdyRUFGdFI0MEdNUisyNDdlWG1waFdHZXh1UmNFaU9jQTR1TEw2?=
- =?utf-8?B?NlhEOVd3bkdocys0aHd0UHFFcml0N2ZXN3dMOUNvVjZTcXhGNmpHNmo4Y3hj?=
- =?utf-8?B?d1p1dk9pejJEVjhvSWFKSGw4dmsvTFVrbVJuSkJ2RllTSmdaYmdlUTdPSnd2?=
- =?utf-8?B?UW9Db1ZWMjNDdWs3ekpUZUd3ejRvTWRFY2Z3TVcrZ3JTQjVWWHpqM21Dd0Rk?=
- =?utf-8?B?QjhQcG5rWUZHY3R2WFk2bXIvZDJkeVhPVkQyYTEzTEpDeWdYT2IrTGN4SkZP?=
- =?utf-8?B?RTdLWnJSV2xvL2F0TlQxaWxFSUUyK1lDQ09SRUNpWmhyRFBUTHNWdmV2Zlh1?=
- =?utf-8?B?aHpFU0dGcVdQUFRZUVpYNXh6MTg3TWtyMTk5OGVuRjQwT2dhSjVJRHBwK1Ur?=
- =?utf-8?B?MElCcDhiMU1Rc1FuSWVGeERvRWY3S202dFVleXBtRnJ2R0pQOHZJVzJteHVt?=
- =?utf-8?B?S0diUHJPRG45aERyak83d1oxRndMWWVaTEptaGo3STI5emlCVEMrT3BqSlBO?=
- =?utf-8?B?M3VxTmowMUtQNGRPc3FBOW8wK01hRitqMnArcWJLd254dVJZMWVQbWtMbEpU?=
- =?utf-8?B?K3ZhckNmeWxab1doWThydU1KMHVld3Q4bHpYTU9VYlllWnFTbEpKOWhqbjhT?=
- =?utf-8?B?VlVzbndTNFUydXN2ZWRxVTdmVHMyWWxFelJlZmdmWHVVeXZLZHhDR3FKNkpI?=
- =?utf-8?B?NzZsTlNOWEQ5UUxURkh1VUpHdG5MSGFQT29XU0JOaWRrN0VrOGFUdmYxQ2tX?=
- =?utf-8?B?RnB5aC9EU2s0cHFEZTlWc21CRDNNcXljRlhJdzZGOFNLMDZ5MlllUWpnZ2sw?=
- =?utf-8?B?bUpuSUM2c0tGN3k0ZDRjMjE1MTNoQVhoZ05NMXNKbEtiR3pna2ZpaVdnVGF1?=
- =?utf-8?B?Q2Z3MlJVOGxENk1kQ2dzWFQwd2tUYTZNaFFHaFRvRlNzWXc1djlCZ09iZlY2?=
- =?utf-8?B?bGVsQzFZTENHZVkzTFgrODliakYwTGJ3aTVVSURVRzhYcnBxUWZOV20rR1hp?=
- =?utf-8?Q?RxxI=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2a3fa549-0c4f-47dc-478e-08dd8e097e82
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5685.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2025 08:22:38.7941
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(7416014)(376014)(82310400026)(36860700013)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2025 08:45:17.9474
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wEhS6JuPdYigGvUiLAXOSNWlL105GSuG3gnkujeUYAHY9R9iMUmht2BwTnlGQpXS
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB9469
+X-MS-Exchange-CrossTenant-Network-Message-Id: 14dad2dd-179a-4422-eb6a-08dd8e0ca8ef
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	MN1PEPF0000ECD4.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB7074
 
-On 5/7/25 19:36, T.J. Mercier wrote:
-> On Wed, May 7, 2025 at 1:15 AM Christian König <christian.koenig@amd.com> wrote:
->>
->> On 5/7/25 02:10, T.J. Mercier wrote:
->>> The dmabuf iterator traverses the list of all DMA buffers.
->>>
->>> DMA buffers are refcounted through their associated struct file. A
->>> reference is taken on each buffer as the list is iterated to ensure each
->>> buffer persists for the duration of the bpf program execution without
->>> holding the list mutex.
->>>
->>> Signed-off-by: T.J. Mercier <tjmercier@google.com>
->>> ---
->>>  drivers/dma-buf/dma-buf.c |  64 ++++++++++++++++++++++++
->>>  include/linux/dma-buf.h   |   3 ++
->>>  kernel/bpf/Makefile       |   3 ++
->>>  kernel/bpf/dmabuf_iter.c  | 102 ++++++++++++++++++++++++++++++++++++++
->>>  4 files changed, 172 insertions(+)
->>>  create mode 100644 kernel/bpf/dmabuf_iter.c
->>>
->>> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
->>> index 8d151784e302..9fee2788924e 100644
->>> --- a/drivers/dma-buf/dma-buf.c
->>> +++ b/drivers/dma-buf/dma-buf.c
->>> @@ -19,7 +19,9 @@
->>>  #include <linux/anon_inodes.h>
->>>  #include <linux/export.h>
->>>  #include <linux/debugfs.h>
->>> +#include <linux/list.h>
->>>  #include <linux/module.h>
->>> +#include <linux/mutex.h>
->>>  #include <linux/seq_file.h>
->>>  #include <linux/sync_file.h>
->>>  #include <linux/poll.h>
->>> @@ -55,6 +57,68 @@ static void __dma_buf_list_del(struct dma_buf *dmabuf)
->>>       mutex_unlock(&dmabuf_list_mutex);
->>>  }
->>>
->>> +/**
->>> + * get_first_dmabuf - begin iteration through global list of DMA-bufs
->>
->> As far as I can see that looks really good.
->>
->> The only thing I'm questioning a little bit is that the name get_first_dmabuf() just doesn't sound so well to me.
->>
->> I'm a fan of keeping the object you work with first in the naming and it should somehow express that this iters over the global list of all buffers. Maybe something like dmabuf_get_first_globally or dmabuf_get_first_instance.
->>
->> Feel free to add my rb if any of those suggestions are used, but I'm completely open other ideas as well.
->>
->> Regards,
->> Christian.
->>
-> Yeah you're right. "first" is actually a little misleading too, since
-> the most recently exported buffer will be at the list head, not the
-> oldest buffer. But buffer age or ordering doesn't really matter here
-> as long as we get through all of them.
-> 
-> So I'm thinking dma_buf_iter_begin() and dma_buf_iter_next() would be
-> better names. Similar to seq_start / seq_next or bpf's iter_<type>_new
-> / iter_<type>_next.
+netdev_bind_rx takes ownership of the queue array passed as parameter
+and frees it, so a queue array buffer cannot be reused across multiple
+netdev_bind_rx calls.
 
+This commit fixes that by always passing in a newly created queue array
+to all netdev_bind_rx calls in ncdevmem.
 
-Yeah, dma_buf_iter_begin/next works for me as well.
+Fixes: 85585b4bc8d8 ("selftests: add ncdevmem, netcat for devmem TCP")
+Signed-off-by: Cosmin Ratiu <cratiu@nvidia.com>
+---
+ .../selftests/drivers/net/hw/ncdevmem.c       | 55 ++++++++-----------
+ 1 file changed, 22 insertions(+), 33 deletions(-)
 
-Feel free to add my rb when you use those names.
-
-Regards,
-Christian.
-
-
-> 
->>> + *
->>> + * Returns the first buffer in the global list of DMA-bufs that's not in the
->>> + * process of being destroyed. Increments that buffer's reference count to
->>> + * prevent buffer destruction. Callers must release the reference, either by
->>> + * continuing iteration with get_next_dmabuf(), or with dma_buf_put().
->>> + *
->>> + * Returns NULL If no active buffers are present.
->>> + */
->>> +struct dma_buf *get_first_dmabuf(void)
->>> +{
->>> +     struct dma_buf *ret = NULL, *dmabuf;
->>> +
->>> +     /*
->>> +      * The list mutex does not protect a dmabuf's refcount, so it can be
->>> +      * zeroed while we are iterating. We cannot call get_dma_buf() since the
->>> +      * caller may not already own a reference to the buffer.
->>> +      */
->>> +     mutex_lock(&dmabuf_list_mutex);
->>> +     list_for_each_entry(dmabuf, &dmabuf_list, list_node) {
->>> +             if (file_ref_get(&dmabuf->file->f_ref)) {
->>> +                     ret = dmabuf;
->>> +                     break;
->>> +             }
->>> +     }
->>> +     mutex_unlock(&dmabuf_list_mutex);
->>> +     return ret;
->>> +}
->>> +
->>> +/**
->>> + * get_next_dmabuf - continue iteration through global list of DMA-bufs
->>> + * @dmabuf:  [in]    pointer to dma_buf
->>> + *
->>> + * Decrements the reference count on the provided buffer. Returns the next
->>> + * buffer from the remainder of the global list of DMA-bufs with its reference
->>> + * count incremented. Callers must release the reference, either by continuing
->>> + * iteration with get_next_dmabuf(), or with dma_buf_put().
->>> + *
->>> + * Returns NULL If no additional active buffers are present.
->>> + */
->>> +struct dma_buf *get_next_dmabuf(struct dma_buf *dmabuf)
->>> +{
->>> +     struct dma_buf *ret = NULL;
->>> +
->>> +     /*
->>> +      * The list mutex does not protect a dmabuf's refcount, so it can be
->>> +      * zeroed while we are iterating. We cannot call get_dma_buf() since the
->>> +      * caller may not already own a reference to the buffer.
->>> +      */
->>> +     mutex_lock(&dmabuf_list_mutex);
->>> +     dma_buf_put(dmabuf);
->>> +     list_for_each_entry_continue(dmabuf, &dmabuf_list, list_node) {
->>> +             if (file_ref_get(&dmabuf->file->f_ref)) {
->>> +                     ret = dmabuf;
->>> +                     break;
->>> +             }
->>> +     }
->>> +     mutex_unlock(&dmabuf_list_mutex);
->>> +     return ret;
->>> +}
->>> +
->>>  static char *dmabuffs_dname(struct dentry *dentry, char *buffer, int buflen)
->>>  {
->>>       struct dma_buf *dmabuf;
->>> diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
->>> index 8ff4add71f88..1820f6db6e58 100644
->>> --- a/include/linux/dma-buf.h
->>> +++ b/include/linux/dma-buf.h
->>> @@ -568,6 +568,9 @@ static inline void get_dma_buf(struct dma_buf *dmabuf)
->>>       get_file(dmabuf->file);
->>>  }
->>>
->>> +struct dma_buf *get_first_dmabuf(void);
->>> +struct dma_buf *get_next_dmabuf(struct dma_buf *dmbuf);
->>> +
->>>  /**
->>>   * dma_buf_is_dynamic - check if a DMA-buf uses dynamic mappings.
->>>   * @dmabuf: the DMA-buf to check
->>> diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
->>> index 70502f038b92..3a335c50e6e3 100644
->>> --- a/kernel/bpf/Makefile
->>> +++ b/kernel/bpf/Makefile
->>> @@ -53,6 +53,9 @@ obj-$(CONFIG_BPF_SYSCALL) += relo_core.o
->>>  obj-$(CONFIG_BPF_SYSCALL) += btf_iter.o
->>>  obj-$(CONFIG_BPF_SYSCALL) += btf_relocate.o
->>>  obj-$(CONFIG_BPF_SYSCALL) += kmem_cache_iter.o
->>> +ifeq ($(CONFIG_DMA_SHARED_BUFFER),y)
->>> +obj-$(CONFIG_BPF_SYSCALL) += dmabuf_iter.o
->>> +endif
->>>
->>>  CFLAGS_REMOVE_percpu_freelist.o = $(CC_FLAGS_FTRACE)
->>>  CFLAGS_REMOVE_bpf_lru_list.o = $(CC_FLAGS_FTRACE)
->>> diff --git a/kernel/bpf/dmabuf_iter.c b/kernel/bpf/dmabuf_iter.c
->>> new file mode 100644
->>> index 000000000000..80bca8239c6d
->>> --- /dev/null
->>> +++ b/kernel/bpf/dmabuf_iter.c
->>> @@ -0,0 +1,102 @@
->>> +// SPDX-License-Identifier: GPL-2.0-only
->>> +/* Copyright (c) 2025 Google LLC */
->>> +#include <linux/bpf.h>
->>> +#include <linux/btf_ids.h>
->>> +#include <linux/dma-buf.h>
->>> +#include <linux/kernel.h>
->>> +#include <linux/seq_file.h>
->>> +
->>> +BTF_ID_LIST_SINGLE(bpf_dmabuf_btf_id, struct, dma_buf)
->>> +DEFINE_BPF_ITER_FUNC(dmabuf, struct bpf_iter_meta *meta, struct dma_buf *dmabuf)
->>> +
->>> +static void *dmabuf_iter_seq_start(struct seq_file *seq, loff_t *pos)
->>> +{
->>> +     if (*pos)
->>> +             return NULL;
->>> +
->>> +     return get_first_dmabuf();
->>> +}
->>> +
->>> +static void *dmabuf_iter_seq_next(struct seq_file *seq, void *v, loff_t *pos)
->>> +{
->>> +     struct dma_buf *dmabuf = v;
->>> +
->>> +     ++*pos;
->>> +
->>> +     return get_next_dmabuf(dmabuf);
->>> +}
->>> +
->>> +struct bpf_iter__dmabuf {
->>> +     __bpf_md_ptr(struct bpf_iter_meta *, meta);
->>> +     __bpf_md_ptr(struct dma_buf *, dmabuf);
->>> +};
->>> +
->>> +static int __dmabuf_seq_show(struct seq_file *seq, void *v, bool in_stop)
->>> +{
->>> +     struct bpf_iter_meta meta = {
->>> +             .seq = seq,
->>> +     };
->>> +     struct bpf_iter__dmabuf ctx = {
->>> +             .meta = &meta,
->>> +             .dmabuf = v,
->>> +     };
->>> +     struct bpf_prog *prog = bpf_iter_get_info(&meta, in_stop);
->>> +
->>> +     if (prog)
->>> +             return bpf_iter_run_prog(prog, &ctx);
->>> +
->>> +     return 0;
->>> +}
->>> +
->>> +static int dmabuf_iter_seq_show(struct seq_file *seq, void *v)
->>> +{
->>> +     return __dmabuf_seq_show(seq, v, false);
->>> +}
->>> +
->>> +static void dmabuf_iter_seq_stop(struct seq_file *seq, void *v)
->>> +{
->>> +     struct dma_buf *dmabuf = v;
->>> +
->>> +     if (dmabuf)
->>> +             dma_buf_put(dmabuf);
->>> +}
->>> +
->>> +static const struct seq_operations dmabuf_iter_seq_ops = {
->>> +     .start  = dmabuf_iter_seq_start,
->>> +     .next   = dmabuf_iter_seq_next,
->>> +     .stop   = dmabuf_iter_seq_stop,
->>> +     .show   = dmabuf_iter_seq_show,
->>> +};
->>> +
->>> +static void bpf_iter_dmabuf_show_fdinfo(const struct bpf_iter_aux_info *aux,
->>> +                                     struct seq_file *seq)
->>> +{
->>> +     seq_puts(seq, "dmabuf iter\n");
->>> +}
->>> +
->>> +static const struct bpf_iter_seq_info dmabuf_iter_seq_info = {
->>> +     .seq_ops                = &dmabuf_iter_seq_ops,
->>> +     .init_seq_private       = NULL,
->>> +     .fini_seq_private       = NULL,
->>> +     .seq_priv_size          = 0,
->>> +};
->>> +
->>> +static struct bpf_iter_reg bpf_dmabuf_reg_info = {
->>> +     .target                 = "dmabuf",
->>> +     .feature                = BPF_ITER_RESCHED,
->>> +     .show_fdinfo            = bpf_iter_dmabuf_show_fdinfo,
->>> +     .ctx_arg_info_size      = 1,
->>> +     .ctx_arg_info           = {
->>> +             { offsetof(struct bpf_iter__dmabuf, dmabuf),
->>> +               PTR_TO_BTF_ID_OR_NULL },
->>> +     },
->>> +     .seq_info               = &dmabuf_iter_seq_info,
->>> +};
->>> +
->>> +static int __init dmabuf_iter_init(void)
->>> +{
->>> +     bpf_dmabuf_reg_info.ctx_arg_info[0].btf_id = bpf_dmabuf_btf_id[0];
->>> +     return bpf_iter_reg_target(&bpf_dmabuf_reg_info);
->>> +}
->>> +
->>> +late_initcall(dmabuf_iter_init);
->>
+diff --git a/tools/testing/selftests/drivers/net/hw/ncdevmem.c b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
+index 2bf14ac2b8c6..9d48004ff1a1 100644
+--- a/tools/testing/selftests/drivers/net/hw/ncdevmem.c
++++ b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
+@@ -431,6 +431,22 @@ static int parse_address(const char *str, int port, struct sockaddr_in6 *sin6)
+ 	return 0;
+ }
+ 
++static struct netdev_queue_id *create_queues(void)
++{
++	struct netdev_queue_id *queues;
++	size_t i = 0;
++
++	queues = calloc(num_queues, sizeof(*queues));
++	for (i = 0; i < num_queues; i++) {
++		queues[i]._present.type = 1;
++		queues[i]._present.id = 1;
++		queues[i].type = NETDEV_QUEUE_TYPE_RX;
++		queues[i].id = start_queue + i;
++	}
++
++	return queues;
++}
++
+ int do_server(struct memory_buffer *mem)
+ {
+ 	char ctrl_data[sizeof(int) * 20000];
+@@ -448,7 +464,6 @@ int do_server(struct memory_buffer *mem)
+ 	char buffer[256];
+ 	int socket_fd;
+ 	int client_fd;
+-	size_t i = 0;
+ 	int ret;
+ 
+ 	ret = parse_address(server_ip, atoi(port), &server_sin);
+@@ -471,16 +486,7 @@ int do_server(struct memory_buffer *mem)
+ 
+ 	sleep(1);
+ 
+-	queues = malloc(sizeof(*queues) * num_queues);
+-
+-	for (i = 0; i < num_queues; i++) {
+-		queues[i]._present.type = 1;
+-		queues[i]._present.id = 1;
+-		queues[i].type = NETDEV_QUEUE_TYPE_RX;
+-		queues[i].id = start_queue + i;
+-	}
+-
+-	if (bind_rx_queue(ifindex, mem->fd, queues, num_queues, &ys))
++	if (bind_rx_queue(ifindex, mem->fd, create_queues(), num_queues, &ys))
+ 		error(1, 0, "Failed to bind\n");
+ 
+ 	tmp_mem = malloc(mem->size);
+@@ -545,7 +551,6 @@ int do_server(struct memory_buffer *mem)
+ 			goto cleanup;
+ 		}
+ 
+-		i++;
+ 		for (cm = CMSG_FIRSTHDR(&msg); cm; cm = CMSG_NXTHDR(&msg, cm)) {
+ 			if (cm->cmsg_level != SOL_SOCKET ||
+ 			    (cm->cmsg_type != SCM_DEVMEM_DMABUF &&
+@@ -630,10 +635,8 @@ int do_server(struct memory_buffer *mem)
+ 
+ void run_devmem_tests(void)
+ {
+-	struct netdev_queue_id *queues;
+ 	struct memory_buffer *mem;
+ 	struct ynl_sock *ys;
+-	size_t i = 0;
+ 
+ 	mem = provider->alloc(getpagesize() * NUM_PAGES);
+ 
+@@ -641,38 +644,24 @@ void run_devmem_tests(void)
+ 	if (configure_rss())
+ 		error(1, 0, "rss error\n");
+ 
+-	queues = calloc(num_queues, sizeof(*queues));
+-
+ 	if (configure_headersplit(1))
+ 		error(1, 0, "Failed to configure header split\n");
+ 
+-	if (!bind_rx_queue(ifindex, mem->fd, queues, num_queues, &ys))
++	if (!bind_rx_queue(ifindex, mem->fd,
++			   calloc(num_queues, sizeof(struct netdev_queue_id)),
++			   num_queues, &ys))
+ 		error(1, 0, "Binding empty queues array should have failed\n");
+ 
+-	for (i = 0; i < num_queues; i++) {
+-		queues[i]._present.type = 1;
+-		queues[i]._present.id = 1;
+-		queues[i].type = NETDEV_QUEUE_TYPE_RX;
+-		queues[i].id = start_queue + i;
+-	}
+-
+ 	if (configure_headersplit(0))
+ 		error(1, 0, "Failed to configure header split\n");
+ 
+-	if (!bind_rx_queue(ifindex, mem->fd, queues, num_queues, &ys))
++	if (!bind_rx_queue(ifindex, mem->fd, create_queues(), num_queues, &ys))
+ 		error(1, 0, "Configure dmabuf with header split off should have failed\n");
+ 
+ 	if (configure_headersplit(1))
+ 		error(1, 0, "Failed to configure header split\n");
+ 
+-	for (i = 0; i < num_queues; i++) {
+-		queues[i]._present.type = 1;
+-		queues[i]._present.id = 1;
+-		queues[i].type = NETDEV_QUEUE_TYPE_RX;
+-		queues[i].id = start_queue + i;
+-	}
+-
+-	if (bind_rx_queue(ifindex, mem->fd, queues, num_queues, &ys))
++	if (bind_rx_queue(ifindex, mem->fd, create_queues(), num_queues, &ys))
+ 		error(1, 0, "Failed to bind\n");
+ 
+ 	/* Deactivating a bound queue should not be legal */
+-- 
+2.45.0
 
 
