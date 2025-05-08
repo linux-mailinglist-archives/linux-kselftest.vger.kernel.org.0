@@ -1,196 +1,186 @@
-Return-Path: <linux-kselftest+bounces-32669-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32670-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B3C1AB01B4
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 May 2025 19:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 22FCCAB0281
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 May 2025 20:20:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D530C5020C4
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 May 2025 17:47:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9AF654A57F5
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 May 2025 18:20:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E95E8278E62;
-	Thu,  8 May 2025 17:47:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EB462857FD;
+	Thu,  8 May 2025 18:20:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=boeing.com header.i=@boeing.com header.b="PLpN3u8r";
-	dkim=pass (1024-bit key) header.d=boeing.onmicrosoft.com header.i=@boeing.onmicrosoft.com header.b="CEqYj55V"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GH6P/gdQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from ewa-mbsout-02.mbs.boeing.net (ewa-mbsout-02.mbs.boeing.net [130.76.20.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 513B220D4E2
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 May 2025 17:46:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=130.76.20.195
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746726420; cv=fail; b=BVaFKlTNBb35OnDfs4/z+ZiHMyk/KBItMvgL9tXE7PUy4tQfthWliiyyH46xjd63fX6o/wTp1YjFPuz2KrBFlZYUhVqHvmQyUgigjel9LP5ixG9x6irqZtb0diZ9IHuI0kuIU4P9eVhNZLo42GWny1fUmUdXGOQbCga7HRKaGtI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746726420; c=relaxed/simple;
-	bh=bpglIud6RKwSB+7zdoBww8Tocx4GlnR2+NcaRBlFQAc=;
-	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=mJVeeVvAsccDIGjeRTnszv6eM4IZ98NUNElGlnR228EDkO78zJTAnzsDHiJne7VM1NHGh7ePgIS2zvcLBf77Ovx5pg6OE7A2N5afzrAnV/y2ulRFXIk6eoETecSnnWnHcu9tGiClYJiNPJAbhrFlNC1rHDPteAlXdp0In0RvICM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=boeing.com; spf=pass smtp.mailfrom=boeing.com; dkim=pass (2048-bit key) header.d=boeing.com header.i=@boeing.com header.b=PLpN3u8r; dkim=pass (1024-bit key) header.d=boeing.onmicrosoft.com header.i=@boeing.onmicrosoft.com header.b=CEqYj55V; arc=fail smtp.client-ip=130.76.20.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=boeing.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=boeing.com
-Received: from localhost (localhost [127.0.0.1])
-	by ewa-mbsout-02.mbs.boeing.net (8.15.2/8.15.2/DOWNSTREAM_MBSOUT) with SMTP id 548Hklda064940;
-	Thu, 8 May 2025 10:46:48 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=boeing.com;
-	s=boeing-s1912; t=1746726408;
-	bh=KrzNTtNELCLohOf5KCdsi6PjhlKk+Ar03cK9MzYRaeE=;
-	h=From:To:CC:Subject:Date:From;
-	b=PLpN3u8rMzm2m6gf7XNhkaWV2HkuTC08jF6OtA7HqUt6yNzpc3cnRdLRhjek0x7fU
-	 CfBVGl70oLrTTNzSpKjfYWzPl37o7s6dAP8XYF/ZY3FRQ6JXENulr45x/LLndLxxQY
-	 iYbXMdv5XhuJpoweXS0zb8CfxCoUrI+G7OdQXwEQ2QOsxaPtwwYgSXdHrP1Bz9O1Q7
-	 l2/FSjzrRt/z2mwZqKLPv30Mo6yWwIvbLbWDt0QmuR5aSIs5/1ct0BtXimITfMg50Q
-	 ys3Z5x0pqTUOd3GZuquinnDxadMT2MLNJSd4qYOxAlBU6AiAembtl6cVPHeqXV0T4o
-	 2+913/PFqbUeA==
-Received: from XCH16-08-05.nos.boeing.com (xch16-08-05.nos.boeing.com [137.137.111.44])
-	by ewa-mbsout-02.mbs.boeing.net (8.15.2/8.15.2/8.15.2/UPSTREAM_MBSOUT) with ESMTPS id 548HkhYu064886
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO)
-	for <linux-kselftest@vger.kernel.org>; Thu, 8 May 2025 10:46:44 -0700
-Received: from XCH16-07-02.nos.boeing.com (137.137.111.35) by
- XCH16-08-05.nos.boeing.com (137.137.111.44) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.44; Thu, 8 May 2025 10:46:42 -0700
-Received: from XCH19-EDGE-Q01.nos.boeing.com (130.76.23.13) by
- XCH16-07-02.nos.boeing.com (137.137.111.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.44 via Frontend Transport; Thu, 8 May 2025 10:46:42 -0700
-Received: from USG02-CY1-obe.outbound.protection.office365.us (23.103.199.180)
- by boeing.com (130.76.23.13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 8 May
- 2025 10:46:22 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector5401; d=microsoft.com; cv=none;
- b=xr6uer92UtwSdd9QBVLwRwWJtxeS9MjfxNy4a821uoPTtVd+IEMXuQaLcFPzOlUnE1QTelBmQNPZ30tB7yd8thMi5sK8kYBEF4GnsW3yvt/9P3sPM6LP5qIjRGzzlRtBV7XJo5OjgWPuCK6WkxdgDwpjHS55quRN7e2XPD1noxaxIhwSbC6Vpr1yd7rUw/02vGrKh0goRrw8EUOqw2g+wWsSMmMPrhYri2EYxQOzalVNjDkIV/crdzDzX4oSUEBGBq/LQh9BAB68d96X/p6YjeV0qqOeAq6khCTgs0HRj6fpRrYMK6xcMGXpDi5ep2sukVY1g+/M5Sbjwdc5hyC3KA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector5401;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KrzNTtNELCLohOf5KCdsi6PjhlKk+Ar03cK9MzYRaeE=;
- b=HJyuLB+rsUpEWrRXSWZoI9BgJmvromSZ9PHfpm+CJyquUQCdrTDgaAiAxKrijwwm2UrY+65YWHwmciwK0APv53gqCc7/KuovRlcmZ3ChsEVKWlgGwRyqf4NZ54BUmkw+Nh8tfkj67cFo/auPYRYb4+Vv6c/4yGtHfatNCWLDytKq37L8QznnVnJFtw3syjy3BaJZ/Hg++bpfYW1ACT3nY8i+o6TwYyb5iXWOPlsWH/y6vWn2iAE/npBSEejSyHPpW64G3ElHDgBMtUfn+3lLYMV+SrA356/ueeKqfQThrZqv0JgRKmLV1tLsqkaTko7RKR3MyjOmqGRIF5kx4ug3ZA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=boeing.com; dmarc=pass action=none header.from=boeing.com;
- dkim=pass header.d=boeing.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FFC91C3306
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 May 2025 18:20:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1746728441; cv=none; b=ndR2QjPnBC3yg+GPZhE9DWPIjtecezRltjj2l6klIpQ7GsBfwCTcrZbCceqGl2bc2jPz7jy32Yz5LeiJexV+Jr+laK9/mkxc88e7u9nIesnwaV5WF9GnDoVBxp+5+Wy12h+fBk70AKT4XNiLasSfgY2SEO+XYPyBQiPed47YXOY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1746728441; c=relaxed/simple;
+	bh=AFojxG9aPrDK+YfWSqvqEl4BPFnRhOZEHrJHlhsV/As=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=iS2jkcLNwn9fAEVoWlLh4OhrXbf0BBajSWKnALk/BKspWWEnTZRxcMlCaW0zHnvMi9akSi1Dj25djvN8t94RbJ6jn1+IyHhJaLnVAcsuBgnO4QgFBJXc14ZaZL+V/nUf4jD6+6/41izhPfrX/fSuhzYECo+cm1N3Esok8xcZymY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GH6P/gdQ; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-306b51e30ffso1252621a91.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 May 2025 11:20:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=boeing.onmicrosoft.com; s=selector1-boeing-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KrzNTtNELCLohOf5KCdsi6PjhlKk+Ar03cK9MzYRaeE=;
- b=CEqYj55VefQBCKkmEGmQNJ8CXF5g7ZCvWleBmWAIKjjBTNqdoIMQ48+ybWW/pvPx8d9kBcxqH5XikySuddoiIYwoNIqQIEcS3xng25jr4B3UKjklw4jnYBCZxBR1yioNqwgciHE9KHrUcQKTDYMdCeZutg4xjoNl/F/PoT55CS4=
-Received: from BN0P110MB2067.NAMP110.PROD.OUTLOOK.COM (2001:489a:200:19c::7)
- by PH3P110MB1812.NAMP110.PROD.OUTLOOK.COM (2001:489a:200:1b5::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8699.36; Thu, 8 May
- 2025 17:46:06 +0000
-Received: from BN0P110MB2067.NAMP110.PROD.OUTLOOK.COM
- ([fe80::34e0:4442:7be9:6519]) by BN0P110MB2067.NAMP110.PROD.OUTLOOK.COM
- ([fe80::34e0:4442:7be9:6519%4]) with mapi id 15.20.8699.035; Thu, 8 May 2025
- 17:46:06 +0000
-From: "Weber (US), Matthew L" <matthew.l.weber3@boeing.com>
-To: "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-CC: "Oppelt (US), Andrew J" <andrew.j.oppelt@boeing.com>,
-        "Whitehead (US),
- Matthew A" <matthew.a.whitehead@boeing.com>
-Subject: KUnit for Userspace
-Thread-Topic: KUnit for Userspace
-Thread-Index: AdvAPxDnGX8n94G6RSC9EXGCWFwYNw==
-Date: Thu, 8 May 2025 17:46:06 +0000
-Message-ID: <BN0P110MB2067B35A6EEC0BD0C567E0D0F38BA@BN0P110MB2067.NAMP110.PROD.OUTLOOK.COM>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=boeing.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN0P110MB2067:EE_|PH3P110MB1812:EE_
-x-ms-office365-filtering-correlation-id: b77a7939-11cf-4f26-8af0-08dd8e58359a
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|366016|38070700018;
-x-microsoft-antispam-message-info: =?us-ascii?Q?xQmVkEo389NbRcMilL+33gWg+CMdeLjoK7pnOCI0qX4iT7nJjV7P5D/+RPcQ?=
- =?us-ascii?Q?C8bk7HZ8LXZ4/+qxWu5kn6EWdZsX9ndOFxI+Bk99++JO+eMWJFdH0siSZBEl?=
- =?us-ascii?Q?0gFv+bkP9nH7MMJDmPKpH+vKCSBavxcxI6RvZeAhE/wElOrLYCi2PDx4MdIC?=
- =?us-ascii?Q?K8/L3plNV7E5R0jjchQuDxvCucrud/wTJvOAqxoDK5o904JunSCgOpNyWUL0?=
- =?us-ascii?Q?QjoZp4cSbNnPIKpenlPsiW+hlZCVSLQYF/EB3FWXxDF80rD2gXdFQYwkVjxx?=
- =?us-ascii?Q?m8ID/g5XWejRCglv7akbxZDZf7S25NBv/emC3JrDpQF8uOGv8pLRylArRGwV?=
- =?us-ascii?Q?cQTnO7DZe2XN43fkdsj6t1rgjXizP4qhwFidJJZ1JAmwxACgr15tL9NUI55L?=
- =?us-ascii?Q?5EhXb8VRqdYMUDdkNcTFWhEzETT3y2p0inZ+STxT3yu2DvbszO748O6fF0LF?=
- =?us-ascii?Q?6PEwX4Vkdz8Mfx5tq80KA+BZ/jniq3rGeNFHO2vyr/aO0vCCuYgDjztnwKK7?=
- =?us-ascii?Q?wu2WjyCM6Qc6L2uYkSplTN86w7QRktp8x41qD7Tvbp80iOWCF/pj7pg1qRYP?=
- =?us-ascii?Q?bqWbxcd4n77rOejw2hPRa1E1WTpWhPktjVCf194hpbv3d58mOskBkjldBzb+?=
- =?us-ascii?Q?Y5E2i3X0dvVU5xAIMvhdZFvhG4duoUeLTAJhOeZFT601nmUf5d5uRAHMf32Q?=
- =?us-ascii?Q?RnHG04uEcMpvnd/zISjYtPgOCn7Cb46pLmNIugbpNkpF4oYMdWFGUSRBkw3f?=
- =?us-ascii?Q?BJMXJOu9ozXApb6YbU/hCcuyyTF4zzfPKvm2sBLTdGti7F4ffoVj2MoTFghj?=
- =?us-ascii?Q?U2NCDJuEhCjNgpGUSZQ+on4sNf4xxbGTo1agJux3h6/K6YGW2bfJlVYLbFhL?=
- =?us-ascii?Q?E/5R4zsjt/rqimH5RtqeQ2iqrtUA+/mHn+nTJPsaT781YmXshGMt2xkUM3/B?=
- =?us-ascii?Q?VSsFFl2qeZkwi2WJousTsrfEooEoWSyD9rInSfVrvARhGLibNtZQJGqFq8E8?=
- =?us-ascii?Q?4mJhgmuqYQNCojGaa+KzACaquVRzCnRXLd7T1MK8CmPHrB3o9TylkbScVbUb?=
- =?us-ascii?Q?ROOlIGDFbNdAUG1rZiIy92urNHaJ16xRZzETEETIC2g1/6zKmZoaeJCEjrxi?=
- =?us-ascii?Q?/2PDVPeD3RaEOG1s2h4pWJPnE/4QxzQXHq2fXMLGMyK5j0UfKoYuIygydnGM?=
- =?us-ascii?Q?FFHiZhJBsje+DVj+W4+9Fr7N4Ue7aHbB9kmKROxLRVIvgR6cnLskiZM/pcSk?=
- =?us-ascii?Q?h2dev1jOd2fx3tpopSn5Hl5RxWkLcvwiF1+wQl9cbUZpVwGVhbj3/mraGMe9?=
- =?us-ascii?Q?oO+AB81Ea8oZueZtKJd1neuQQaFYMGorTV2HxozaPO2yfNsXOR5FDB9uxDwp?=
- =?us-ascii?Q?xzbzh5oGoPuOwKTgfKBBPhHrHk9XJx2LlZguPI0cb1QVtCpPXwpz5q0boV7q?=
- =?us-ascii?Q?WwEPPjpYxVU=3D?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0P110MB2067.NAMP110.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?E6u3k+4sH0yYuvWLBv5sJ0ZjxKY8oB8XE/CbmQzDtrGmVpN2zKt4En8glDLe?=
- =?us-ascii?Q?QfTyy7/yQYD8hNKIk7R5XbZA/gLFr6E1XGHm4+t0wyUb3/4bRlZZ7B5VFB/1?=
- =?us-ascii?Q?ppncZgnKXFncUg5F3MTOjEHkm6idFfDf9gJ/i/iKfpYWtr/hmF0ZHV4B6HsH?=
- =?us-ascii?Q?x2e1HXCw30uYCz6D55AemYACtf+oN9jUzrHyur9KRIs0mlo528L43phuOQAd?=
- =?us-ascii?Q?RTCLalsWXnx4AqdQ/VYm/nwa2f44zV4oQ4L2yz1pRNMMj4lKI0AvEmzoVFiS?=
- =?us-ascii?Q?+vDKqMfdoe/tCnfQCI8EKTqUSvjJw3V2WYgieBHTrkepjYdOxmrk+mVbeZRQ?=
- =?us-ascii?Q?MPhQClpAPLDDz76hMkf4DhAWPQY4HQfEF69DlmZ0TCNCx5YnYrTbqbCa6PUS?=
- =?us-ascii?Q?yx36xyN/VIdGFHhg9KuMK/HZeCwMK2DblzXzHyWck/15grXEdVGicyiTLxCU?=
- =?us-ascii?Q?bv0AWDBbcAumhyFcw8rm9D4Rzn1gnJ2c/J9uw2l1YxMkUXSZ3Gn/iTp+0309?=
- =?us-ascii?Q?G2TKgigl1kFDHmCSXSgRkRl41BSXlJAJC+gy7oRqXKSxmDULKH/ZyXOq96g7?=
- =?us-ascii?Q?FouFEC9mEM6WwkAEcCNXg7IsP3EP0t/RFHxmiDYLPRWmR7loQHSpLT1HHqhw?=
- =?us-ascii?Q?9M/sA0M1GAVCiYO3Kw3y6XnuqEiN0Gm5JYQFxeLHsNkvYlHEXxFM6NYls8Xi?=
- =?us-ascii?Q?B3uIf8CBc6ximWJp/PostltxqIdPXMh90/Kc4b2f211DkhTs8LfwRBCD5wat?=
- =?us-ascii?Q?7c8l4sEgNU2iCTztneQcyBnlXGGGnvx5jJpwpRe0cDG4SZewpymxYbQySmNg?=
- =?us-ascii?Q?YZvdPGPzZ1NoPHWWR4cfZ4OUtG5mTDsWLZVhnC0QgDi/0ENx1EgeadH0778P?=
- =?us-ascii?Q?OgnlqSzc957q5co62zy7x6LHRZiy6R/SMVxDVC80rr3ZhzOe28gBOcz8zfN3?=
- =?us-ascii?Q?F46q+hQmizYxReTHPXI6LlgEzECe0KE9ul2YjMT0F7gaR7ZcUjiKTGBZF0NP?=
- =?us-ascii?Q?eX0Tuhl5tNtT3+90QOozWuPmLGO+IqvABYnJJ/G6rvdnCbkwDshOFSIugJoa?=
- =?us-ascii?Q?7xoeit+SATO05jwTToW553+wjxT91imzeUqCecxP0PUjLES6kv9X4ezgf6w5?=
- =?us-ascii?Q?n+agux/SKRsBXbuNQbRzHG04+TrGEvJ6grX32q1SB/eStnEeWfNCawC5bBmU?=
- =?us-ascii?Q?kZjw0dk+q2J5mMV8eax8Svs+0i8sXH6Lfia9IKH6XjnbXXUlV2lkXAvBgMI5?=
- =?us-ascii?Q?j/psNUKXEuiUMFM/xjGi9nCujdB/8L9eCUklTBwdQr0xmUKddti2eSChb8BP?=
- =?us-ascii?Q?Ferep4r58TRtwQrfy0auWprVAk5dqQKPdBRtj1doQCk1gx+3hIwPNndB0i/L?=
- =?us-ascii?Q?qAntFkSKPO1wMUpG/xTPxJBmgl+qMupmGw5pc5IAB6Rxo2gxw/pkFHOo0AV0?=
- =?us-ascii?Q?9yGFHzzrWBRFdZ7ylZIcTDngN3gsVxnlnaGWQ2fGW+KDiKbC0C1TBJAAwRu4?=
- =?us-ascii?Q?bqISjUHNbLqu9xgDjZG4jd8XH/oFbQ2/LiO5?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        d=google.com; s=20230601; t=1746728438; x=1747333238; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=P9TcbK/nWa/YXXDAxnZVOVArGjAtkdTEqGETT2oQJ+Q=;
+        b=GH6P/gdQbCfyiNTZTvQY/Q1sXpBQiShC91YBtntu0G6FBjsKcfLYry2gIDK5NhwfIx
+         H6tdhflGOiVY4s6HhEG73a/vzQbr1AMo9Is7rik6unTbMtoQ7pxDdYibA9+5VesIoIjq
+         DyBwbyKOgAPVAVIIl+l0dQbTPR2QS+Qqzt14Tf+cjlW/2kNYqv4GVdr28Is5YemtGplV
+         ALCbSc3FRijAd0igRqPpgAyvXKbNqWOvsHMMtgOwKIVdhViic5oss50JOlGqVACLRiHX
+         KBExDt2iVVKQIXMNYD+5E92dh1qqcCghFRaANVxhd87a2RjOzuzHccRbjLlAumMk26Mi
+         Gn/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746728438; x=1747333238;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=P9TcbK/nWa/YXXDAxnZVOVArGjAtkdTEqGETT2oQJ+Q=;
+        b=gYEaWc9EGDmpC3/FVB6rhYDRdww3fLvHoK+OyKhLwbaleRXron7/2oZTJ7cWhuo28M
+         /UfNU7Sx4nNkXK62RhTD1D79jR/ZMqvvqbuCjGIP4o18z0WbXSRUdn88iOwkIlOAzia4
+         ygN3AlOczD1HKqhKgq9IODc7DQqwKNCq1xPe/k5kdDtpS5GolMhaPr0qqR4HpjJh99Qj
+         /gmbkbaQi2L2D9Uyymb5zXST6Z4MgUfM2gbld2z2NmNTCzx7cH5OiLx2bvDErdCz/y7W
+         cwATMOa02s5BZquic4WZyc9H8M12JXn7zl9v8qO6tgDwAJEIE7Rwf8C7nxVw0Tfzv9gp
+         FCGg==
+X-Forwarded-Encrypted: i=1; AJvYcCU+pj5f6nx5aI0yUsJ1Useb71VvM5LRI1XcQDixaeybtDlg4UaFFLptp6gD4ilDcV0Ud7MSaCWBEpiAH/GzlXk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxKjsSYJVmk7y+PlNOkmh3PbglH/h9pPA5VXU+Ygcwvs8CvlAh9
+	3tjeliniKIpBMlj6xWfgTKa/P0rCkJNJJweFtpaFeTtullK/eU4QpiOcyfUHy6U2nKjdxrTMHuk
+	Ydv6m59eTGBaykA==
+X-Google-Smtp-Source: AGHT+IFhx3d+8kkrdtF5uHVOpa/4HuyLlmn9NJKawhhnSvvJ/pAtFwroXUkydqUIaRt0a+bCKTAGt+Mq8FzXwso=
+X-Received: from pjtd8.prod.google.com ([2002:a17:90b:48:b0:2ee:4a90:3d06])
+ (user=tjmercier job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:90b:268a:b0:2fe:8282:cb9d with SMTP id 98e67ed59e1d1-30c3d6467cbmr760151a91.28.1746728437874;
+ Thu, 08 May 2025 11:20:37 -0700 (PDT)
+Date: Thu,  8 May 2025 18:20:19 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN0P110MB2067.NAMP110.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: b77a7939-11cf-4f26-8af0-08dd8e58359a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 May 2025 17:46:06.3603
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: bcf48bba-4d6f-4dee-a0d2-7df59cc36629
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH3P110MB1812
-X-OriginatorOrg: boeing.com
-X-TM-AS-GCONF: 00
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.49.0.1015.ga840276032-goog
+Message-ID: <20250508182025.2961555-1-tjmercier@google.com>
+Subject: [PATCH bpf-next v4 0/5] Replace CONFIG_DMABUF_SYSFS_STATS with BPF
+From: "T.J. Mercier" <tjmercier@google.com>
+To: sumit.semwal@linaro.org, christian.koenig@amd.com, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
+	skhan@linuxfoundation.org, alexei.starovoitov@gmail.com
+Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, android-mm@google.com, 
+	simona@ffwll.ch, eddyz87@gmail.com, yonghong.song@linux.dev, 
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, 
+	jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org, song@kernel.org, 
+	"T.J. Mercier" <tjmercier@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Greetings,
+Until CONFIG_DMABUF_SYSFS_STATS was added [1] it was only possible to
+perform per-buffer accounting with debugfs which is not suitable for
+production environments. Eventually we discovered the overhead with
+per-buffer sysfs file creation/removal was significantly impacting
+allocation and free times, and exacerbated kernfs lock contention. [2]
+dma_buf_stats_setup() is responsible for 39% of single-page buffer
+creation duration, or 74% of single-page dma_buf_export() duration when
+stressing dmabuf allocations and frees.
 
-We're looking to start doing test development for portions of kernel code "=
-standalone" mocked out and would like to do it in userspace.  Are there any=
- existing patch sets we could review or help extend to define this concept?=
-  We have checked out David Gow's LPC talk [1] from last year that did poin=
-t out a few patch series that hinted at userspace kunit.
+I prototyped a change from per-buffer to per-exporter statistics with a
+RCU protected list of exporter allocations that accommodates most (but
+not all) of our use-cases and avoids almost all of the sysfs overhead.
+While that adds less overhead than per-buffer sysfs, and less even than
+the maintenance of the dmabuf debugfs_list, it's still *additional*
+overhead on top of the debugfs_list and doesn't give us per-buffer info.
+
+This series uses the existing dmabuf debugfs_list to implement a BPF
+dmabuf iterator, which adds no overhead to buffer allocation/free and
+provides per-buffer info. The list has been moved outside of
+CONFIG_DEBUG_FS scope so that it is always populated. The BPF program
+loaded by userspace that extracts per-buffer information gets to define
+its own interface which avoids the lack of ABI stability with debugfs.
+
+This will allow us to replace our use of CONFIG_DMABUF_SYSFS_STATS, and
+the plan is to remove it from the kernel after the next longterm stable
+release.
+
+[1] https://lore.kernel.org/linux-media/20201210044400.1080308-1-hridya@goo=
+gle.com
+[2] https://lore.kernel.org/all/20220516171315.2400578-1-tjmercier@google.c=
+om
+
+v1: https://lore.kernel.org/all/20250414225227.3642618-1-tjmercier@google.c=
+om
+v1 -> v2:
+Make the DMA buffer list independent of CONFIG_DEBUG_FS per Christian K=C3=
+=B6nig
+Add CONFIG_DMA_SHARED_BUFFER check to kernel/bpf/Makefile per kernel test r=
+obot
+Use BTF_ID_LIST_SINGLE instead of BTF_ID_LIST_GLOBAL_SINGLE per Song Liu
+Fixup comment style, mixing code/declarations, and use ASSERT_OK_FD in self=
+test per Song Liu
+Add BPF_ITER_RESCHED feature to bpf_dmabuf_reg_info per Alexei Starovoitov
+Add open-coded iterator and selftest per Alexei Starovoitov
+Add a second test buffer from the system dmabuf heap to selftests
+Use the BPF program we'll use in production for selftest per Alexei Starovo=
+itov
+  https://r.android.com/c/platform/system/bpfprogs/+/3616123/2/dmabufIter.c
+  https://r.android.com/c/platform/system/memory/libmeminfo/+/3614259/1/lib=
+dmabufinfo/dmabuf_bpf_stats.cpp
+v2: https://lore.kernel.org/all/20250504224149.1033867-1-tjmercier@google.c=
+om
+v2 -> v3:
+Rebase onto bpf-next/master
+Move get_next_dmabuf() into drivers/dma-buf/dma-buf.c, along with the
+  new get_first_dmabuf(). This avoids having to expose the dmabuf list
+  and mutex to the rest of the kernel, and keeps the dmabuf mutex
+  operations near each other in the same file. (Christian K=C3=B6nig)
+Add Christian's RB to dma-buf: Rename debugfs symbols
+Drop RFC: dma-buf: Remove DMA-BUF statistics
+v3: https://lore.kernel.org/all/20250507001036.2278781-1-tjmercier@google.c=
+om
+v3 -> v4:
+Fix selftest BPF program comment style (not kdoc) per Alexei Starovoitov
+Fix dma-buf.c kdoc comment style per Alexei Starovoitov
+Rename get_first_dmabuf / get_next_dmabuf to dma_buf_iter_begin /
+  dma_buf_iter_next per Christian K=C3=B6nig
+Add Christian's RB to bpf: Add dmabuf iterator
+
+T.J. Mercier (5):
+  dma-buf: Rename debugfs symbols
+  bpf: Add dmabuf iterator
+  bpf: Add open coded dmabuf iterator
+  selftests/bpf: Add test for dmabuf_iter
+  selftests/bpf: Add test for open coded dmabuf_iter
+
+ drivers/dma-buf/dma-buf.c                     |  98 +++++--
+ include/linux/dma-buf.h                       |   4 +-
+ kernel/bpf/Makefile                           |   3 +
+ kernel/bpf/dmabuf_iter.c                      | 149 ++++++++++
+ kernel/bpf/helpers.c                          |   5 +
+ .../testing/selftests/bpf/bpf_experimental.h  |   5 +
+ tools/testing/selftests/bpf/config            |   3 +
+ .../selftests/bpf/prog_tests/dmabuf_iter.c    | 258 ++++++++++++++++++
+ .../testing/selftests/bpf/progs/dmabuf_iter.c |  91 ++++++
+ 9 files changed, 594 insertions(+), 22 deletions(-)
+ create mode 100644 kernel/bpf/dmabuf_iter.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c
+ create mode 100644 tools/testing/selftests/bpf/progs/dmabuf_iter.c
 
 
-Regards,
-Matt
+base-commit: 43745d11bfd9683abdf08ad7a5cc403d6a9ffd15
+--=20
+2.49.0.1015.ga840276032-goog
 
-[1] https://lpc.events/event/18/contributions/1790/attachments/1400/3007/LP=
-C2024_%20KUnit%20for%20Userspace.pdf#:~:text=3DA%20Unit%20Testing%20framewo=
-rk%20for%20the%20Linux,mode%2C%20and%20can%20call%20arbitrary%20kernel%20fu=
-nctions
 
