@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-32674-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32675-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 686C8AB029B
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 May 2025 20:22:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 645DAAB0298
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 May 2025 20:22:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F70B3BB2DE
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 May 2025 18:21:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CED4F4A789B
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 May 2025 18:22:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC0A0288529;
-	Thu,  8 May 2025 18:20:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A5FE288C17;
+	Thu,  8 May 2025 18:21:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RbQhQLfm"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UYVgPpRE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2960428851F
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 May 2025 18:20:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53B95288532
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 May 2025 18:20:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746728458; cv=none; b=Ja8G2hw5+xebINiQvvEQsJGK4GrSBVfcEu8ZI0mZ07cAJZGSpTAsT+q+gNpadVOpJ2jT0aBh06bJRVVzwi6El8UKhkH72yjISAtrNOxU6aqOIO2ngWYCvrSZxWhzYBcnnxGdR/ci2T242hREc+osT6zYVX/nt6qyNpYSmqnhWcU=
+	t=1746728460; cv=none; b=ip8OlmYT6b/XPoNEnPwODBGUpJ4dV5e2HwmhZjuqo/t/jw2CJ5EN2F6wMVP84n3q4TOkknMTE/190AswCO7fxres97SZAECRlfVQBmpH8kSoRsru1BBqdy99RibXnyuPt/o+Rty3LR6QJliowjO3o5cxkGRz3wa8YAf1M94uXzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746728458; c=relaxed/simple;
-	bh=Fy6u5654lDeSoLlQCc4vig40Ts7ezvC5mwgTxEPqeAQ=;
+	s=arc-20240116; t=1746728460; c=relaxed/simple;
+	bh=sbI4h/f9x/llo5E+x2+7s/k7ALuWrVVduehlNoKaXq4=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=QLE1zragAEvlmcBeSCbyb6jZP0wlpjpDVvOkMFe6C7nli3E6A8OK8AMfQH4K47BUlAERg4i00uRbcBnAHGkaCMmU+ElxYG/KDps74Q/zbDNRyfqF4SoflKwJN3R6n8BZ7QHZBjib/+LU1i5U+ruxHEqsM827awh8dJJkg3l0/hE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RbQhQLfm; arc=none smtp.client-ip=209.85.214.202
+	 To:Cc:Content-Type; b=S1dW7WTVqarV+7PKfHHPdb/XmuAGl0HG57u3gAgMd4ks/vskLIURnonegpGinfQgbZdaVdIFlHkNnlOPfAQ0FoCmcuyUhr8CIV3RFGvbjk+pDKOVvPP4K2+d8usyvQAag6zI+1lqn/6Gx7W5X4bVsql6GJfXZdUtWtkljD2hP24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UYVgPpRE; arc=none smtp.client-ip=209.85.215.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-22fc89a08d0so959725ad.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 May 2025 11:20:56 -0700 (PDT)
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-b0e0c573531so852262a12.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 May 2025 11:20:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746728456; x=1747333256; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1746728459; x=1747333259; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KivdiQ2d8zbtT8/YKRtAYwqqgTkcUlhStaSdB0XYdCY=;
-        b=RbQhQLfm25GdL8N5kX/GTDCbo2AK2PPMPqUt4pRP/XAvalihwFhBcwzg8NH/B/xiTp
-         bJrbEUSfABMq6warVxx210GAUDyuZet5PDQWMvXrrP1ul6+E0eQk2BZ12zQxaTlZfxsx
-         /GkYitZ1ZqD/5VzyV6Ks7RU8+xbGnVff4n8JnSYJ9W6dnKpMv9jN0/Namn6XYnkj9O5J
-         7Qqu3fplOo9pUVXAxIOVg+dAr9geM880vTBEkNGOA9UjDDPNHcQ0UnWFs4bWFMwUg5Vy
-         q2qoHKY+GWiyl3/cfHsaBAH6rDvbirCU6HHvHRwRNIL9nl/URdTsRsKLZEL7v/PAIjWX
-         08tg==
+        bh=xwIypK5vgpXyk6FLaHSI0wGc7MjNUvnJWQjPoxqkKIA=;
+        b=UYVgPpRE7B3tCbphnZU+MflG/kAO9k4H377uE6v0jwMe6MkGSQArPe5P9W4MrLL/AX
+         c/TiGiuqMse2AV4GT8hwdbcmURv+fy34AmAgQHU+jTz4F2V4Yrk/14MUKozK0s0MnjHl
+         aZnVNT/y4LI/SxOOmsUkAazdN5pzkS2hAaQtX5wKZZ6JpejCRuKRJ6rdyfKlMcrrnaLZ
+         TEYPbaZceJ1z8PrAijt5oZYxcIF1gqPx45OgLWkL9Mk6Yfe1aoDuoceTCrooj5loc8dh
+         Wsas2VScSWaoGGQJmWMITCkldjE22hJrjBkbrJD4Dds8jQC1ERtmpOWilh4Ob951Xdho
+         SLkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746728456; x=1747333256;
+        d=1e100.net; s=20230601; t=1746728459; x=1747333259;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KivdiQ2d8zbtT8/YKRtAYwqqgTkcUlhStaSdB0XYdCY=;
-        b=p2V/hRKE8KTqReeAQXc0iS0DQsGkhuf48hgUCrxxIvVk4JPdvEmRXGEk3deRCVMBkN
-         Te3uQ6ZEedXbG+8/k8VhF+dge3iP0fA512NT6pXPBoLC/wk6cT5KN3fcCM8UW15KKUMU
-         s/kfZ7PZZiKy5rpSH4jTDFnG8BSbzc3T5tyZBrhNV1ykEtxhh9r34W1GRsYG1J38C1rU
-         240dyTHDM4T6bhtNOltG1IWnfQVtp0MNat7t1CXU9pGcWmdrh6SI7apm2GTOGxE5+zsD
-         sTD64RBFcEh+jDAr3dF7LIG6TKtJkq+ZdFt+jogohTVDxLKnKgGXWpO/DdHHFx7lHxBY
-         Mqsg==
-X-Forwarded-Encrypted: i=1; AJvYcCWbJWghKRpL0WtoHbaF6m4uhEmajsiKn8arzXpU8DucB/SbKB/lT02X4vNMsHEY9ZKq5MJM7t9nmoo0lhGLxjs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzc2wn4QMIFNn5/JJ7uJbE2vbdpBfZIN76H6sLdJs2QHKlNu41U
-	AbK5Iv4pgH4G2QXDGM0iTBg8T9TpVorS/6SS6UxsMAfIe+Sp6juCYR/uV3c8DfX/OcYrVGyBk12
-	pSxOkI0y+CSYihA==
-X-Google-Smtp-Source: AGHT+IHttXYHrXFlTqJhHMNofRPWypOSkIyR+kqzwJBxLC6qdQMbGsp172zy6EbAV0fxS+S/eHB6baASmNjsEag=
-X-Received: from pglt25.prod.google.com ([2002:a63:5359:0:b0:b1f:de0f:4c0b])
+        bh=xwIypK5vgpXyk6FLaHSI0wGc7MjNUvnJWQjPoxqkKIA=;
+        b=UjSBf+642rWVuh95IqnhuiBsRsrHj+gcWLCf71S9B7bkATNVcrx/JzT67vI4SYqU5G
+         Lw8uZm63CROEW0hSogc5ln0KvVXk3UoRYOvGFuAgIOW/tdCWHUhxMSco2W7w8WMXQ/t8
+         PERLMqYFQB8gaK+A5bOJGVKHwajHGwbHQaOZb2rP/PB16/DiKW6MdG8bfk2OKc3n1pww
+         RgvTcvEipKRKfJ9bVM+9FHzGowEpbXLzD/KGASbBYKFj0HclMeLdruoOijeiyjQfzdPW
+         itdbR0xgVN3/2qInzvpvHNiKw9WckZXHUAI7G/jPuOnKGMSl3FWi4bhtx3P0WBVy2rQu
+         fv4g==
+X-Forwarded-Encrypted: i=1; AJvYcCUIPtCPHBkubuKuHKBte2gDHS/WM9AU8XTYCR84LVr3byCY8AOi1qtaRoJrMvEKUW4UtrA2bgwrV6/L4Ntu4aw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyhCHnPdfJtj0TfyW1vEIjfT1gl3bVNPm65mw2ej0QDDZztcjw2
+	LcNYlGNJgn23n0qeOp1sR3Tn1FMjaZ65bVXotthoujtKr4InkRayI4IfeQXWdiexDJ3lBHtHvjq
+	XJLqX//YMsT1s8A==
+X-Google-Smtp-Source: AGHT+IGvJN4Vf2zfwtQtEd6XAvfzgu0CadIvXXytUhhkeOpqjgTD22SYjtYy4WpZC8iuj5HW0VjxdaEkwL11DBo=
+X-Received: from pjf8.prod.google.com ([2002:a17:90b:3f08:b0:30a:8830:9f6b])
  (user=tjmercier job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:902:e545:b0:224:1943:c5c with SMTP id d9443c01a7336-22fc8b4109amr6032435ad.15.1746728456459;
- Thu, 08 May 2025 11:20:56 -0700 (PDT)
-Date: Thu,  8 May 2025 18:20:23 +0000
+ 2002:a17:90b:2d06:b0:2ee:edae:780 with SMTP id 98e67ed59e1d1-30c3d2e2e67mr883580a91.15.1746728458769;
+ Thu, 08 May 2025 11:20:58 -0700 (PDT)
+Date: Thu,  8 May 2025 18:20:24 +0000
 In-Reply-To: <20250508182025.2961555-1-tjmercier@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250508182025.2961555-1-tjmercier@google.com>
 X-Mailer: git-send-email 2.49.0.1015.ga840276032-goog
-Message-ID: <20250508182025.2961555-5-tjmercier@google.com>
-Subject: [PATCH bpf-next v4 4/5] selftests/bpf: Add test for dmabuf_iter
+Message-ID: <20250508182025.2961555-6-tjmercier@google.com>
+Subject: [PATCH bpf-next v4 5/5] selftests/bpf: Add test for open coded dmabuf_iter
 From: "T.J. Mercier" <tjmercier@google.com>
 To: sumit.semwal@linaro.org, christian.koenig@amd.com, ast@kernel.org, 
 	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
@@ -89,327 +89,206 @@ Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
 	"T.J. Mercier" <tjmercier@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-This test creates a udmabuf, and a dmabuf from the system dmabuf heap,
-and uses a BPF program that prints dmabuf metadata with the new
-dmabuf_iter to verify they can be found.
+Use the same test buffers as the traditional iterator and a new BPF map
+to verify the test buffers can be found with the open coded dmabuf
+iterator.
 
 Signed-off-by: T.J. Mercier <tjmercier@google.com>
 ---
- tools/testing/selftests/bpf/config            |   3 +
- .../selftests/bpf/prog_tests/dmabuf_iter.c    | 224 ++++++++++++++++++
- .../testing/selftests/bpf/progs/dmabuf_iter.c |  53 +++++
- 3 files changed, 280 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c
- create mode 100644 tools/testing/selftests/bpf/progs/dmabuf_iter.c
+ .../testing/selftests/bpf/bpf_experimental.h  |  5 ++
+ .../selftests/bpf/prog_tests/dmabuf_iter.c    | 52 +++++++++++++++----
+ .../testing/selftests/bpf/progs/dmabuf_iter.c | 38 ++++++++++++++
+ 3 files changed, 86 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index c378d5d07e02..2bdff2f3285f 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -22,6 +22,8 @@ CONFIG_CRYPTO_AES=y
- CONFIG_DEBUG_INFO=y
- CONFIG_DEBUG_INFO_BTF=y
- CONFIG_DEBUG_INFO_DWARF4=y
-+CONFIG_DMABUF_HEAPS=y
-+CONFIG_DMABUF_HEAPS_SYSTEM=y
- CONFIG_DUMMY=y
- CONFIG_DYNAMIC_FTRACE=y
- CONFIG_FPROBE=y
-@@ -106,6 +108,7 @@ CONFIG_SECURITY=y
- CONFIG_SECURITYFS=y
- CONFIG_SYN_COOKIES=y
- CONFIG_TEST_BPF=m
-+CONFIG_UDMABUF=y
- CONFIG_USERFAULTFD=y
- CONFIG_VSOCKETS=y
- CONFIG_VXLAN=y
+diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
+index 6535c8ae3c46..5e512a1d09d1 100644
+--- a/tools/testing/selftests/bpf/bpf_experimental.h
++++ b/tools/testing/selftests/bpf/bpf_experimental.h
+@@ -591,4 +591,9 @@ extern int bpf_iter_kmem_cache_new(struct bpf_iter_kmem_cache *it) __weak __ksym
+ extern struct kmem_cache *bpf_iter_kmem_cache_next(struct bpf_iter_kmem_cache *it) __weak __ksym;
+ extern void bpf_iter_kmem_cache_destroy(struct bpf_iter_kmem_cache *it) __weak __ksym;
+ 
++struct bpf_iter_dmabuf;
++extern int bpf_iter_dmabuf_new(struct bpf_iter_dmabuf *it) __weak __ksym;
++extern struct dma_buf *bpf_iter_dmabuf_next(struct bpf_iter_dmabuf *it) __weak __ksym;
++extern void bpf_iter_dmabuf_destroy(struct bpf_iter_dmabuf *it) __weak __ksym;
++
+ #endif
 diff --git a/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c b/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c
-new file mode 100644
-index 000000000000..35745f4ce0f8
---- /dev/null
+index 35745f4ce0f8..c8230a080ef3 100644
+--- a/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c
 +++ b/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c
-@@ -0,0 +1,224 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2025 Google */
-+
-+#include <test_progs.h>
-+#include <bpf/libbpf.h>
-+#include <bpf/btf.h>
-+#include "dmabuf_iter.skel.h"
-+
-+#include <fcntl.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/ioctl.h>
-+#include <sys/mman.h>
-+#include <unistd.h>
-+
-+#include <linux/dma-buf.h>
-+#include <linux/dma-heap.h>
-+#include <linux/udmabuf.h>
-+
-+static int memfd, udmabuf;
-+static const char udmabuf_test_buffer_name[DMA_BUF_NAME_LEN] = "udmabuf_test_buffer_for_iter";
-+static size_t udmabuf_test_buffer_size;
-+static int sysheap_dmabuf;
-+static const char sysheap_test_buffer_name[DMA_BUF_NAME_LEN] = "sysheap_test_buffer_for_iter";
-+static size_t sysheap_test_buffer_size;
-+
-+static int create_udmabuf(void)
+@@ -26,10 +26,11 @@ static int sysheap_dmabuf;
+ static const char sysheap_test_buffer_name[DMA_BUF_NAME_LEN] = "sysheap_test_buffer_for_iter";
+ static size_t sysheap_test_buffer_size;
+ 
+-static int create_udmabuf(void)
++static int create_udmabuf(int map_fd)
+ {
+ 	struct udmabuf_create create;
+ 	int dev_udmabuf;
++	bool f = false;
+ 
+ 	udmabuf_test_buffer_size = 10 * getpagesize();
+ 
+@@ -63,10 +64,10 @@ static int create_udmabuf(void)
+ 	if (!ASSERT_OK(ioctl(udmabuf, DMA_BUF_SET_NAME_B, udmabuf_test_buffer_name), "name"))
+ 		return 1;
+ 
+-	return 0;
++	return bpf_map_update_elem(map_fd, udmabuf_test_buffer_name, &f, BPF_ANY);
+ }
+ 
+-static int create_sys_heap_dmabuf(void)
++static int create_sys_heap_dmabuf(int map_fd)
+ {
+ 	sysheap_test_buffer_size = 20 * getpagesize();
+ 
+@@ -77,6 +78,7 @@ static int create_sys_heap_dmabuf(void)
+ 		.heap_flags = 0,
+ 	};
+ 	int heap_fd, ret;
++	bool f = false;
+ 
+ 	if (!ASSERT_LE(sizeof(sysheap_test_buffer_name), DMA_BUF_NAME_LEN, "NAMETOOLONG"))
+ 		return 1;
+@@ -95,18 +97,18 @@ static int create_sys_heap_dmabuf(void)
+ 	if (!ASSERT_OK(ioctl(sysheap_dmabuf, DMA_BUF_SET_NAME_B, sysheap_test_buffer_name), "name"))
+ 		return 1;
+ 
+-	return 0;
++	return bpf_map_update_elem(map_fd, sysheap_test_buffer_name, &f, BPF_ANY);
+ }
+ 
+-static int create_test_buffers(void)
++static int create_test_buffers(int map_fd)
+ {
+ 	int ret;
+ 
+-	ret = create_udmabuf();
++	ret = create_udmabuf(map_fd);
+ 	if (ret)
+ 		return ret;
+ 
+-	return create_sys_heap_dmabuf();
++	return create_sys_heap_dmabuf(map_fd);
+ }
+ 
+ static void destroy_test_buffers(void)
+@@ -187,17 +189,46 @@ static void subtest_dmabuf_iter_check_default_iter(struct dmabuf_iter *skel)
+ 	close(iter_fd);
+ }
+ 
++static void subtest_dmabuf_iter_check_open_coded(struct dmabuf_iter *skel, int map_fd)
 +{
-+	struct udmabuf_create create;
-+	int dev_udmabuf;
++	LIBBPF_OPTS(bpf_test_run_opts, topts);
++	char key[DMA_BUF_NAME_LEN];
++	int err, fd;
++	bool found;
 +
-+	udmabuf_test_buffer_size = 10 * getpagesize();
++	/* No need to attach it, just run it directly */
++	fd = bpf_program__fd(skel->progs.iter_dmabuf_for_each);
 +
-+	if (!ASSERT_LE(sizeof(udmabuf_test_buffer_name), DMA_BUF_NAME_LEN, "NAMETOOLONG"))
-+		return 1;
-+
-+	memfd = memfd_create("memfd_test", MFD_ALLOW_SEALING);
-+	if (!ASSERT_OK_FD(memfd, "memfd_create"))
-+		return 1;
-+
-+	if (!ASSERT_OK(ftruncate(memfd, udmabuf_test_buffer_size), "ftruncate"))
-+		return 1;
-+
-+	if (!ASSERT_OK(fcntl(memfd, F_ADD_SEALS, F_SEAL_SHRINK), "seal"))
-+		return 1;
-+
-+	dev_udmabuf = open("/dev/udmabuf", O_RDONLY);
-+	if (!ASSERT_OK_FD(dev_udmabuf, "open udmabuf"))
-+		return 1;
-+
-+	create.memfd = memfd;
-+	create.flags = UDMABUF_FLAGS_CLOEXEC;
-+	create.offset = 0;
-+	create.size = udmabuf_test_buffer_size;
-+
-+	udmabuf = ioctl(dev_udmabuf, UDMABUF_CREATE, &create);
-+	close(dev_udmabuf);
-+	if (!ASSERT_OK_FD(udmabuf, "udmabuf_create"))
-+		return 1;
-+
-+	if (!ASSERT_OK(ioctl(udmabuf, DMA_BUF_SET_NAME_B, udmabuf_test_buffer_name), "name"))
-+		return 1;
-+
-+	return 0;
-+}
-+
-+static int create_sys_heap_dmabuf(void)
-+{
-+	sysheap_test_buffer_size = 20 * getpagesize();
-+
-+	struct dma_heap_allocation_data data = {
-+		.len = sysheap_test_buffer_size,
-+		.fd = 0,
-+		.fd_flags = O_RDWR | O_CLOEXEC,
-+		.heap_flags = 0,
-+	};
-+	int heap_fd, ret;
-+
-+	if (!ASSERT_LE(sizeof(sysheap_test_buffer_name), DMA_BUF_NAME_LEN, "NAMETOOLONG"))
-+		return 1;
-+
-+	heap_fd = open("/dev/dma_heap/system", O_RDONLY);
-+	if (!ASSERT_OK_FD(heap_fd, "open dma heap"))
-+		return 1;
-+
-+	ret = ioctl(heap_fd, DMA_HEAP_IOCTL_ALLOC, &data);
-+	close(heap_fd);
-+	if (!ASSERT_OK(ret, "syheap alloc"))
-+		return 1;
-+
-+	sysheap_dmabuf = data.fd;
-+
-+	if (!ASSERT_OK(ioctl(sysheap_dmabuf, DMA_BUF_SET_NAME_B, sysheap_test_buffer_name), "name"))
-+		return 1;
-+
-+	return 0;
-+}
-+
-+static int create_test_buffers(void)
-+{
-+	int ret;
-+
-+	ret = create_udmabuf();
-+	if (ret)
-+		return ret;
-+
-+	return create_sys_heap_dmabuf();
-+}
-+
-+static void destroy_test_buffers(void)
-+{
-+	close(udmabuf);
-+	close(memfd);
-+	close(sysheap_dmabuf);
-+}
-+
-+enum Fields { INODE, SIZE, NAME, EXPORTER, FIELD_COUNT };
-+struct DmabufInfo {
-+	unsigned long inode;
-+	unsigned long size;
-+	char name[DMA_BUF_NAME_LEN];
-+	char exporter[32];
-+};
-+
-+static bool check_dmabuf_info(const struct DmabufInfo *bufinfo,
-+			      unsigned long size,
-+			      const char *name, const char *exporter)
-+{
-+	return size == bufinfo->size &&
-+	       !strcmp(name, bufinfo->name) &&
-+	       !strcmp(exporter, bufinfo->exporter);
-+}
-+
-+static void subtest_dmabuf_iter_check_default_iter(struct dmabuf_iter *skel)
-+{
-+	bool found_test_sysheap_dmabuf = false;
-+	bool found_test_udmabuf = false;
-+	struct DmabufInfo bufinfo;
-+	size_t linesize = 0;
-+	char *line = NULL;
-+	FILE *iter_file;
-+	int iter_fd, f = INODE;
-+
-+	iter_fd = bpf_iter_create(bpf_link__fd(skel->links.dmabuf_collector));
-+	ASSERT_OK_FD(iter_fd, "iter_create");
-+
-+	iter_file = fdopen(iter_fd, "r");
-+	ASSERT_OK_PTR(iter_file, "fdopen");
-+
-+	while (getline(&line, &linesize, iter_file) != -1) {
-+		if (f % FIELD_COUNT == INODE) {
-+			ASSERT_EQ(sscanf(line, "%ld", &bufinfo.inode), 1,
-+				  "read inode");
-+		} else if (f % FIELD_COUNT == SIZE) {
-+			ASSERT_EQ(sscanf(line, "%ld", &bufinfo.size), 1,
-+				  "read size");
-+		} else if (f % FIELD_COUNT == NAME) {
-+			ASSERT_EQ(sscanf(line, "%s", bufinfo.name), 1,
-+				  "read name");
-+		} else if (f % FIELD_COUNT == EXPORTER) {
-+			ASSERT_EQ(sscanf(line, "%31s", bufinfo.exporter), 1,
-+				  "read exporter");
-+
-+			if (check_dmabuf_info(&bufinfo,
-+					      sysheap_test_buffer_size,
-+					      sysheap_test_buffer_name,
-+					      "system"))
-+				found_test_sysheap_dmabuf = true;
-+			else if (check_dmabuf_info(&bufinfo,
-+						   udmabuf_test_buffer_size,
-+						   udmabuf_test_buffer_name,
-+						   "udmabuf"))
-+				found_test_udmabuf = true;
-+		}
-+		++f;
-+	}
-+
-+	ASSERT_EQ(f % FIELD_COUNT, INODE, "number of fields");
-+
-+	ASSERT_TRUE(found_test_sysheap_dmabuf, "found_test_sysheap_dmabuf");
-+	ASSERT_TRUE(found_test_udmabuf, "found_test_udmabuf");
-+
-+	free(line);
-+	fclose(iter_file);
-+	close(iter_fd);
-+}
-+
-+void test_dmabuf_iter(void)
-+{
-+	struct dmabuf_iter *skel = NULL;
-+	char buf[256];
-+	int iter_fd;
-+
-+	skel = dmabuf_iter__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "dmabuf_iter__open_and_load"))
++	err = bpf_prog_test_run_opts(fd, &topts);
++	if (!ASSERT_OK(err, "test_run_opts err"))
++		return;
++	if (!ASSERT_OK(topts.retval, "test_run_opts retval"))
 +		return;
 +
-+	if (!ASSERT_OK(create_test_buffers(), "create_buffers"))
-+		goto destroy;
++	if (!ASSERT_OK(bpf_map_get_next_key(map_fd, NULL, key), "get next key"))
++		return;
 +
-+	if (!ASSERT_OK(dmabuf_iter__attach(skel), "skel_attach"))
-+		goto destroy;
-+
-+	iter_fd = bpf_iter_create(bpf_link__fd(skel->links.dmabuf_collector));
-+	if (!ASSERT_OK_FD(iter_fd, "iter_create"))
-+		goto destroy;
-+
-+	while (read(iter_fd, buf, sizeof(buf)) > 0)
-+		; /* Read out all contents */
-+
-+	/* Next reads should return 0 */
-+	ASSERT_EQ(read(iter_fd, buf, sizeof(buf)), 0, "read");
-+
-+	if (test__start_subtest("default_iter"))
-+		subtest_dmabuf_iter_check_default_iter(skel);
-+
-+	close(iter_fd);
-+
-+destroy:
-+	destroy_test_buffers();
-+	dmabuf_iter__destroy(skel);
++	do {
++		ASSERT_OK(bpf_map_lookup_elem(map_fd, key, &found), "lookup");
++		ASSERT_TRUE(found, "found test buffer");
++	} while (bpf_map_get_next_key(map_fd, key, key));
 +}
++
+ void test_dmabuf_iter(void)
+ {
+ 	struct dmabuf_iter *skel = NULL;
++	int iter_fd, map_fd;
+ 	char buf[256];
+-	int iter_fd;
+ 
+ 	skel = dmabuf_iter__open_and_load();
+ 	if (!ASSERT_OK_PTR(skel, "dmabuf_iter__open_and_load"))
+ 		return;
+ 
+-	if (!ASSERT_OK(create_test_buffers(), "create_buffers"))
++	map_fd = bpf_map__fd(skel->maps.testbuf_hash);
++	if (!ASSERT_OK_FD(map_fd, "map_fd"))
++		goto destroy_skel;
++
++	if (!ASSERT_OK(create_test_buffers(map_fd), "create_buffers"))
+ 		goto destroy;
+ 
+ 	if (!ASSERT_OK(dmabuf_iter__attach(skel), "skel_attach"))
+@@ -215,10 +246,13 @@ void test_dmabuf_iter(void)
+ 
+ 	if (test__start_subtest("default_iter"))
+ 		subtest_dmabuf_iter_check_default_iter(skel);
++	if (test__start_subtest("open_coded"))
++		subtest_dmabuf_iter_check_open_coded(skel, map_fd);
+ 
+ 	close(iter_fd);
+ 
+ destroy:
+ 	destroy_test_buffers();
++destroy_skel:
+ 	dmabuf_iter__destroy(skel);
+ }
 diff --git a/tools/testing/selftests/bpf/progs/dmabuf_iter.c b/tools/testing/selftests/bpf/progs/dmabuf_iter.c
-new file mode 100644
-index 000000000000..d654b4f64cfa
---- /dev/null
+index d654b4f64cfa..cfdcf4b1c636 100644
+--- a/tools/testing/selftests/bpf/progs/dmabuf_iter.c
 +++ b/tools/testing/selftests/bpf/progs/dmabuf_iter.c
-@@ -0,0 +1,53 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2025 Google LLC */
-+#include <vmlinux.h>
-+#include <bpf/bpf_core_read.h>
-+#include <bpf/bpf_helpers.h>
+@@ -9,6 +9,13 @@
+ 
+ char _license[] SEC("license") = "GPL";
+ 
++struct {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__uint(key_size, DMA_BUF_NAME_LEN);
++	__type(value, bool);
++	__uint(max_entries, 5);
++} testbuf_hash SEC(".maps");
 +
-+/* From uapi/linux/dma-buf.h */
-+#define DMA_BUF_NAME_LEN 32
+ /*
+  * Fields output by this iterator are delimited by newlines. Convert any
+  * newlines in user-provided printed strings to spaces.
+@@ -51,3 +58,34 @@ int dmabuf_collector(struct bpf_iter__dmabuf *ctx)
+ 	BPF_SEQ_PRINTF(seq, "%lu\n%llu\n%s\n%s\n", inode, size, name, exporter);
+ 	return 0;
+ }
 +
-+char _license[] SEC("license") = "GPL";
-+
-+/*
-+ * Fields output by this iterator are delimited by newlines. Convert any
-+ * newlines in user-provided printed strings to spaces.
-+ */
-+static void sanitize_string(char *src, size_t size)
++SEC("syscall")
++int iter_dmabuf_for_each(const void *ctx)
 +{
-+	for (char *c = src; c && (size_t)(c-src) < size; ++c)
-+		if (*c == '\n')
-+			*c = ' ';
-+}
++	struct dma_buf *d;
 +
-+SEC("iter/dmabuf")
-+int dmabuf_collector(struct bpf_iter__dmabuf *ctx)
-+{
-+	const struct dma_buf *dmabuf = ctx->dmabuf;
-+	struct seq_file *seq = ctx->meta->seq;
-+	unsigned long inode = 0;
-+	size_t size;
-+	const char *pname, *exporter;
-+	char name[DMA_BUF_NAME_LEN] = {'\0'};
++	bpf_for_each(dmabuf, d) {
++		char name[DMA_BUF_NAME_LEN];
++		const char *pname;
++		bool *found;
 +
-+	if (!dmabuf)
-+		return 0;
++		if (bpf_core_read(&pname, sizeof(pname), &d->name))
++			return 1;
 +
-+	if (BPF_CORE_READ_INTO(&inode, dmabuf, file, f_inode, i_ino) ||
-+	    bpf_core_read(&size, sizeof(size), &dmabuf->size) ||
-+	    bpf_core_read(&pname, sizeof(pname), &dmabuf->name) ||
-+	    bpf_core_read(&exporter, sizeof(exporter), &dmabuf->exp_name))
-+		return 1;
++		/* Buffers are not required to be named */
++		if (!pname)
++			continue;
 +
-+	/* Buffers are not required to be named */
-+	if (pname) {
 +		if (bpf_probe_read_kernel(name, sizeof(name), pname))
 +			return 1;
 +
-+		/* Name strings can be provided by userspace */
-+		sanitize_string(name, sizeof(name));
++		found = bpf_map_lookup_elem(&testbuf_hash, name);
++		if (found) {
++			bool t = true;
++
++			bpf_map_update_elem(&testbuf_hash, name, &t, BPF_EXIST);
++		}
 +	}
 +
-+	BPF_SEQ_PRINTF(seq, "%lu\n%llu\n%s\n%s\n", inode, size, name, exporter);
 +	return 0;
 +}
 -- 
