@@ -1,55 +1,55 @@
-Return-Path: <linux-kselftest+bounces-32680-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32681-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4ADC2AB046F
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 May 2025 22:18:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9CD4AB0475
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 May 2025 22:19:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2FE691BA64AA
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 May 2025 20:18:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 676C67A8516
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 May 2025 20:18:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E90F528BA91;
-	Thu,  8 May 2025 20:18:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12C3B28C027;
+	Thu,  8 May 2025 20:19:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xZWoJtMG"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="U4gXf7Lu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D146628B4EE
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 May 2025 20:18:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE2DF28B7DA
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 May 2025 20:19:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746735495; cv=none; b=Vt2zq+/2ujHjpSg4SR1M+ntBrSzMJAybf9+dFTfbcpvOXGuyDH+7eBYXJIELfjYw5MST358dY6ZkQVwF6poKsjMvpAXvw7RkqJ/+mq9Kb5n1XnQG/CLgzNMIdiAxtsgWTGsekpCSA7yBguQW0urmPawPAPAeukFP8qqYxyr8nDI=
+	t=1746735546; cv=none; b=p2upTetbFlrO3bJ8j5Pp0QOOhkW4HvzfPEcXv3CBxZp6IgmzKCvbDqOIIxrNjX/1pbXU5tovyRieJuKY2cuyHDjzuGWfoA5W7E0XhBTt0FQveUQQ6JWiwB1oNcgv5iv2PQfRy1P21RIKmUhjV+qYFEfq4tTJWDGtQ5RxWInQTEQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746735495; c=relaxed/simple;
-	bh=UojBaLSnI5K18WhmwXexF1bLjMn9YNs1CQZUt/Yl9eY=;
+	s=arc-20240116; t=1746735546; c=relaxed/simple;
+	bh=x0TNRpz53QFAXapinD45Ke2DQpGv3VcwVjqoltUeo6o=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Jn/NkUV31/6ofmJ6BwiWsd+fvBDy8SKbx3ozKoCb/GFUm7thXIR18QYFheXtjIaVLN+jw90ea70DhcH6envTCmNNI2jB6Gi3YPkKMOwUK4VbGgAfsrHmL3ImZ5gqmQy9qWtDhAUWaFfLYOkt4BZxU5qOJur7U6KZ2ZQmOvs/nAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xZWoJtMG; arc=none smtp.client-ip=91.218.175.177
+	 In-Reply-To:Content-Type; b=AP4aCsJPuOWLwTciBt55qu9ZgBAbltKleJ2vjlhyg4orPJDgddSV1Jr/GtOBuItraaJq4h++bJGsKAS269/8wHPKxxk7o8qj4vF/5/YZsKKjdbx1rwKUIa+4Qm1Eb6efJNnaEkCdZFdZ2GbMRhTS5vH3yKoQ5wVAeaqbnT4Sm9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=U4gXf7Lu; arc=none smtp.client-ip=91.218.175.186
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <eab937fc-6d9f-46b4-9c45-e8defa31f038@linux.dev>
+Message-ID: <edd8751d-dd5e-48f9-8c08-853d89c90130@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1746735490;
+	t=1746735540;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=qCMU+yBPYWIBqtx4wjHgX8QEBpwX3EBt77ds4u9eyfA=;
-	b=xZWoJtMGJ++IS2qmyND2yhJRoBrczbjEo2hlwL/TGR0NLs3NA+1wjTsb6ZNV39r57Kep0f
-	WK/pqk/zOpQNeIUS/pr0Q3jfn53kCi2Xq8zdnPb2Sf+yQK3L9/klTRciIsSpxH8Mb0yP6n
-	92cBRHwE1HIrrJTuMlEikZ6N96AmwwQ=
-Date: Thu, 8 May 2025 13:18:05 -0700
+	bh=Z8ZPULVhkBmOhXVI9D50gyESuyxY/qERnIvpj+8HrdQ=;
+	b=U4gXf7Luz4uxvOHjIGxizGSXyq5/BbkbqhZlxMzHw7xLH6MKTN21LM14oIanbJ3iuryHJ2
+	gQUupmCPVGHvaNnUYCxN617JcFqj0wb4bA/VR6YLF1kfwJE8mjMfyvB90Y5+AZaZXYRUFT
+	KOjZqKc/7Vf7S/rabeeTXe1Ja5Q9o34=
+Date: Thu, 8 May 2025 13:18:55 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v6 02/14] riscv: sbi: remove useless parenthesis
+Subject: Re: [PATCH v6 03/14] riscv: sbi: add new SBI error mappings
 To: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>,
  Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
  <palmer@dabbelt.com>, Anup Patel <anup@brainfault.org>,
@@ -61,48 +61,51 @@ To: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>,
 Cc: Samuel Holland <samuel.holland@sifive.com>,
  Andrew Jones <ajones@ventanamicro.com>, Deepak Gupta <debug@rivosinc.com>
 References: <20250424173204.1948385-1-cleger@rivosinc.com>
- <20250424173204.1948385-3-cleger@rivosinc.com>
+ <20250424173204.1948385-4-cleger@rivosinc.com>
 Content-Language: en-US
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Atish Patra <atish.patra@linux.dev>
-In-Reply-To: <20250424173204.1948385-3-cleger@rivosinc.com>
+In-Reply-To: <20250424173204.1948385-4-cleger@rivosinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
 On 4/24/25 10:31 AM, ClÃ©ment LÃ©ger wrote:
-> A few parenthesis in check for SBI version/extension were useless,
-> remove them.
+> A few new errors have been added with SBI V3.0, maps them as close as
+> possible to errno values.
 > 
 > Signed-off-by: Clément Léger <cleger@rivosinc.com>
+> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 > ---
->   arch/riscv/kernel/sbi.c | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
+>   arch/riscv/include/asm/sbi.h | 10 ++++++++++
+>   1 file changed, 10 insertions(+)
 > 
-> diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
-> index 1989b8cade1b..1d44c35305a9 100644
-> --- a/arch/riscv/kernel/sbi.c
-> +++ b/arch/riscv/kernel/sbi.c
-> @@ -609,7 +609,7 @@ void __init sbi_init(void)
->   		} else {
->   			__sbi_rfence	= __sbi_rfence_v01;
->   		}
-> -		if ((sbi_spec_version >= sbi_mk_version(0, 3)) &&
-> +		if (sbi_spec_version >= sbi_mk_version(0, 3) &&
->   		    sbi_probe_extension(SBI_EXT_SRST)) {
->   			pr_info("SBI SRST extension detected\n");
->   			pm_power_off = sbi_srst_power_off;
-> @@ -617,8 +617,8 @@ void __init sbi_init(void)
->   			sbi_srst_reboot_nb.priority = 192;
->   			register_restart_handler(&sbi_srst_reboot_nb);
->   		}
-> -		if ((sbi_spec_version >= sbi_mk_version(2, 0)) &&
-> -		    (sbi_probe_extension(SBI_EXT_DBCN) > 0)) {
-> +		if (sbi_spec_version >= sbi_mk_version(2, 0) &&
-> +		    sbi_probe_extension(SBI_EXT_DBCN) > 0) {
->   			pr_info("SBI DBCN extension detected\n");
->   			sbi_debug_console_available = true;
->   		}
+> diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
+> index bb077d0c912f..7ec249fea880 100644
+> --- a/arch/riscv/include/asm/sbi.h
+> +++ b/arch/riscv/include/asm/sbi.h
+> @@ -536,11 +536,21 @@ static inline int sbi_err_map_linux_errno(int err)
+>   	case SBI_SUCCESS:
+>   		return 0;
+>   	case SBI_ERR_DENIED:
+> +	case SBI_ERR_DENIED_LOCKED:
+>   		return -EPERM;
+>   	case SBI_ERR_INVALID_PARAM:
+> +	case SBI_ERR_INVALID_STATE:
+>   		return -EINVAL;
+> +	case SBI_ERR_BAD_RANGE:
+> +		return -ERANGE;
+>   	case SBI_ERR_INVALID_ADDRESS:
+>   		return -EFAULT;
+> +	case SBI_ERR_NO_SHMEM:
+> +		return -ENOMEM;
+> +	case SBI_ERR_TIMEOUT:
+> +		return -ETIME;
+> +	case SBI_ERR_IO:
+> +		return -EIO;
+>   	case SBI_ERR_NOT_SUPPORTED:
+>   	case SBI_ERR_FAILURE:
+>   	default:
 
 Reviewed-by: Atish Patra <atishp@rivosinc.com>
 
