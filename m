@@ -1,192 +1,109 @@
-Return-Path: <linux-kselftest+bounces-32659-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32660-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35263AAF9D1
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 May 2025 14:25:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24455AAFC55
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 May 2025 16:04:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9A9757B2D12
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 May 2025 12:24:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C99829E08C9
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 May 2025 14:04:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7993F2253F3;
-	Thu,  8 May 2025 12:25:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC65C242D65;
+	Thu,  8 May 2025 14:04:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ONaTa7mk"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eXgSkB2N"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEE55199931
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 May 2025 12:25:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38D3E226D19
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 May 2025 14:04:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746707130; cv=none; b=IyzlUkw2vguDLoK+ucIrKtcIE91MwrLArBKEKNdayStJvu11iZs2TqCe2Es/QVTvAkS145fGC/saI1ASlnc3HT4qCT3Zh3gmbxD7Nbh5NssV58styxxL/CXlu1TFoEQM/7Rg0K3xplMIcfPNENIaPYug9yRuFJ6cbzYCNCT8lfs=
+	t=1746713067; cv=none; b=JC/3kPy1+EsnPsAaI8Dqbr2i5VRnBdiN4/ZzlsTCH0KdKYSUkEcy1V+uwWEQJFF3R3mDl+CB5sK5l/Qq9Us11FBwiWYc/l0uEMuz915T0KokHGwLrsbYvYtWuQxWxi24E9IERt2pmEa/pmi370zu/MDsGdx6JVZ5hFRtc4Bfdk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746707130; c=relaxed/simple;
-	bh=GSPlMkE9xl1CKG6+aR4Lnpqmp6kkUaBOsXBjm7FdCs8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Xtqi3woBKbMqmFlcwjGsLJjMXp/NLdG7emAF1YOy/2k3j9ugWQ4Extlbs1LYC8wlYMbt5HzimNha9WYfrCNDbCDEKkCzzk7wNmEpu5r6rkhADR498JRulf7a/ZnLFH8nFOeHGa9wlQS7z/FYvG7WNhWOs5OYyaiWwSgkXcmTUbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ONaTa7mk; arc=none smtp.client-ip=209.85.167.46
+	s=arc-20240116; t=1746713067; c=relaxed/simple;
+	bh=RbK/9v+ee2pYpO2N9wpE0C8ABX7e2vw/PINumgYZ1XE=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=J5EJwb6vMSoFIxdUx9+cInW8dDiCZM8qQZQkn73PMsVKrQZXmDQFkF/u/XTJORfN78KWnpD7AS3XIAZdg3PYofyLMtFM0ps9W6ZvFjxU3Duq6FN/FXEEWGZiArKrrwt8g2DiVSbsb/OCOJMbVUs7lClhqWVbz+F2LG+vjdJyo4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eXgSkB2N; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-549967c72bcso999798e87.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 May 2025 05:25:27 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-30ad9303655so1716773a91.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 May 2025 07:04:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746707126; x=1747311926; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=SGXUIdTFQac7mJFRH+e+84EpMzV6neC01o/VEUKascg=;
-        b=ONaTa7mkd9jVBDhTxOiNjDB9oo7ZjFFzBT97onAVuG9S+UwGeCqO4hXZK/nqbJUC5t
-         2yJo4mux/6GIOUCviWK0mKOKdELAH4WroXckzdLgoeA5rmJ9Vq3E7TZrudMSm4/XLMSU
-         We0MQ/50Ns1jLNJ1iFHhLDLCobMR3pRT7CER365RgfcCCqK8pTxwLAVzHwOrcAfmrnQ3
-         p55KROtV+WfTFr2ua2Su1IXybLXufIrUacbo2ZwHgI97BYK6FDd2/vSDIXqjm9ApLE/e
-         zGp0bwKQ9lPRKEKvymtb7m/acWfQ8mZ/3YlUcbNuGnYsvDhvWBDj/BS03V+9LKduDxhs
-         jkNA==
+        d=google.com; s=20230601; t=1746713065; x=1747317865; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=V2tf3xEZy1dGL+3t3eFy4J00XNnFfVlwiE6sUM4MGp4=;
+        b=eXgSkB2N7iJ0p3fztNgeCYvb2nWZq+W0DWu9tB3u8Wxo8sDcEzXdq4rtYbFa4D47hK
+         XjYPu/ikWw4fyudax7CLUQ8gf5KYeeSpmTIZu3Dg26xAFQQVLi8eWzSfIeWQIcKCK2Qf
+         8d6pjTy7z1DgldpI6ZEQ1udKyAEpHP8/qitsnM2nZajHG/KrEWg034fLheTnpQqrO/Uh
+         aFvThM6gY7UQbuht/FJjHG+Nvuz2c9R68XkCihVCWoCI/mq63GYiBHhvaZLf+5ccX1mV
+         h1n+9WLIfbdoeCwntY0r7sOevEuD1oKnlswD/NKebnlidHYmJWW29NDQfIr48nPf0pGO
+         SblQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746707126; x=1747311926;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SGXUIdTFQac7mJFRH+e+84EpMzV6neC01o/VEUKascg=;
-        b=XfFNkVkEUR4Ub+aP9fwyM6Yfy5DeUaWrtyRLs/PXLjfdp3ZcEEvJVwi6wksI6cbIGk
-         SJ0z1pD9oBsEgJQySCxZWE2F7SkcTgpiJS1PKXBPsZ6FGOhmhX6XQzAXRPKGD5TkSo6b
-         yAghQRtV9ZnPAUHDhpEpfpmgylyD8llrkfgbC3jc2ThxWBCdP960Htct7hni9nWTAYVs
-         tCuSQxZybhm5zykBjzsEwpP3NxzZqKKDriKQaxtH8yUpDuMmiaPtacclqy+S8nBcuOhz
-         UCs7vSq4jJMwIFZLnWoootlZwaXo3ytb69NdACLN3ouwJkeNECyuZHbpw9fNwMLXUg8x
-         b4aw==
-X-Forwarded-Encrypted: i=1; AJvYcCUMLhVgQN7SOq3mDG6aqusHGB9TXG3htp/Ddgf1tBfJ32PS3gZ2LsrRELYRWNRMK/k7UDpahNM86d6RQIMJa0M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyEeHrtUYYwobbV1e29HoILn3qsw7//Hj7a/TETuJnOAecNfKRH
-	tKpyN7lph8uXYWajLuR7yFP3iXb0BQbC3CSIqfbHYeWQwMdm6Oy0xNRQK1jJOz1M+PC96rQWOn9
-	qkwiuijzlbXXYoIytx+JNL/wUZ1Lqz1UmFZU5
-X-Gm-Gg: ASbGncsnoLbXWfkTsEp/X50XgAmklNlhdgstnNpWKuqND44VE/q+DBFSdApSKU0KyVj
-	Qkl00/gkwTd3TR11B2olmExnrArEW8Q6fNh37pWlnnDcbwtfmPwmtVEMTAKDm3l8KXkUBpM73t+
-	fYCsf5GOttGGRmky6xK9fmVb3cNTJA8Eo/VeA1NqEn7eXZVej/cawh
-X-Google-Smtp-Source: AGHT+IHELJP6PjDmjgnoQ+DcewZezMvkPDTBk3DlAEgOIW2HtUu14uSoRBVrm2tBSd/cEMjU36ADUjG1Ap9y8UFRrr8=
-X-Received: by 2002:a05:651c:b11:b0:30b:f006:3f5 with SMTP id
- 38308e7fff4ca-326b87dacdfmr7793251fa.15.1746707125568; Thu, 08 May 2025
- 05:25:25 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1746713065; x=1747317865;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=V2tf3xEZy1dGL+3t3eFy4J00XNnFfVlwiE6sUM4MGp4=;
+        b=CjQ1opl0KHqpzMck7GY6LurgjKXNpF2oRXZ7MoTwT/h5VnOLH4GLaEB/1zALuV44dc
+         oihaJK8aAeONo3c+jZ3Kw33C+d0M+D/cvuEXDt+rLdZJPScNCCBZ2qY2//g96svMiev/
+         /xzKEYHR4o/PBgVndm9lFmm5vTPisy4w3UNlL+owoYizt2RMmcB4Si1PWMqTjSwkZZmr
+         TXG6ol4kbu8L443UP7UaHkTj+7EPHbUFgdH1joyJRaQCt4/i4xoDVvjOV3AGe/6R3Gln
+         QOihfOlsijYkjjoUGHCMuaVqZblSHNtwav1qvv8DJRu0AIhghwUpcrh4EcVcaJQjWZD1
+         LpSQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWXmnN60+rQzfQ53ERqb0/FSGUyXF9Bib2tNSrZGDoA5tV5MYXF1gr4LEbAyb7GeJe08xa9HYgogNr/MUKYNE8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwCw0TarStNGUySq/xtv5K6Wo6R9Jz12yL5tQXyBNeepGt64J6m
+	GkTLesOonfsuXvpVKMTJ9hYtq7iqui12Tw9JVO8D166o4gvZKMPp5Ro/r3F+B7HKWxkpFoyemxh
+	3mQ==
+X-Google-Smtp-Source: AGHT+IHihdEq9WLfghzMNio7YGXsAlKJr+fbU3ATJJQrX+sg9sIwzP998JJJm0pKRjkHt2JyM4XtawG+d/Q=
+X-Received: from pjbpb5.prod.google.com ([2002:a17:90b:3c05:b0:30a:8ffa:9154])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:1e08:b0:2fe:a515:4a98
+ with SMTP id 98e67ed59e1d1-30aac2bb314mr10385069a91.31.1746713065404; Thu, 08
+ May 2025 07:04:25 -0700 (PDT)
+Date: Thu, 8 May 2025 07:04:23 -0700
+In-Reply-To: <e87bbc68-0403-4d67-ae2d-64065e36a011@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250507180852.work.231-kees@kernel.org> <20250507181615.1947159-2-kees@kernel.org>
- <CANpmjNPcYPvnQzMT3p+Vc2=EiEbR1WnykUEjuYc0bH2HOFi6HQ@mail.gmail.com>
-In-Reply-To: <CANpmjNPcYPvnQzMT3p+Vc2=EiEbR1WnykUEjuYc0bH2HOFi6HQ@mail.gmail.com>
-From: Dmitry Vyukov <dvyukov@google.com>
-Date: Thu, 8 May 2025 14:25:13 +0200
-X-Gm-Features: ATxdqUEOMWVMkXbvXQaHqruZq4t8-pmXFLrRyvMg5ohXOpGrzDC1z300bwlcEE0
-Message-ID: <CACT4Y+betRmieWEHBdEf=gOLhWiNVRH5CSDeN6ykBtoP1GrzLA@mail.gmail.com>
-Subject: Re: [PATCH 2/8] init.h: Disable sanitizer coverage for __init and __head
-To: Marco Elver <elver@google.com>
-Cc: Kees Cook <kees@kernel.org>, Alexander Potapenko <glider@google.com>, 
-	Aleksandr Nogikh <nogikh@google.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Andrey Konovalov <andreyknvl@gmail.com>, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>, 
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, Hou Wenlong <houwenlong.hwl@antgroup.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Masahiro Yamada <masahiroy@kernel.org>, 
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	kasan-dev@googlegroups.com, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
-	Christoph Hellwig <hch@lst.de>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nicolas.schier@linux.dev>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev, linux-riscv@lists.infradead.org, 
-	linux-s390@vger.kernel.org, linux-efi@vger.kernel.org, 
-	linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	sparclinux@vger.kernel.org, llvm@lists.linux.dev, 
-	syzkaller <syzkaller@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+References: <cover.1729073310.git.lorenzo.stoakes@oracle.com>
+ <c083817403f98ae45a70e01f3f1873ec1ba6c215.1729073310.git.lorenzo.stoakes@oracle.com>
+ <a3778bea-0a1e-41b7-b41c-15b116bcbb32@linuxfoundation.org>
+ <6dd57f0e-34b4-4456-854b-a8abdba9163b@nvidia.com> <e0b9d4ad-0d47-499a-9ec8-7307b67cae5c@linuxfoundation.org>
+ <3687348f-7ee0-4fe1-a953-d5a2edd02ce8@nvidia.com> <e87bbc68-0403-4d67-ae2d-64065e36a011@linuxfoundation.org>
+Message-ID: <aBy5503w_GuNTu9B@google.com>
+Subject: Re: The "make headers" requirement, revisited: [PATCH v3 3/3]
+ selftests: pidfd: add tests for PIDFD_SELF_*
+From: Sean Christopherson <seanjc@google.com>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: John Hubbard <jhubbard@nvidia.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Shuah Khan <shuah@kernel.org>, "Liam R . Howlett" <Liam.Howlett@oracle.com>, 
+	Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@suse.cz>, pedro.falcato@gmail.com, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Oliver Sang <oliver.sang@intel.com>, 
+	Christian Brauner <christian@brauner.io>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Content-Type: text/plain; charset="us-ascii"
 
-On Thu, 8 May 2025 at 14:23, Marco Elver <elver@google.com> wrote:
->
-> +Cc KCOV maintainers
->
-> On Wed, 7 May 2025 at 20:16, Kees Cook <kees@kernel.org> wrote:
-> >
-> > While __noinstr already contained __no_sanitize_coverage, it needs to
-> > be added to __init and __head section markings to support the Clang
-> > implementation of CONFIG_STACKLEAK. This is to make sure the stack depth
-> > tracking callback is not executed in unsupported contexts.
-> >
-> > The other sanitizer coverage options (trace-pc and trace-cmp) aren't
-> > needed in __head nor __init either ("We are interested in code coverage
-> > as a function of a syscall inputs"[1]), so this appears safe to disable
-> > for them as well.
->
-> @ Dmitry, Aleksandr - Will this produce some unwanted side-effects for
-> syzbot? I also think it's safe, but just double checking.
+On Wed, May 07, 2025, Shuah Khan wrote:
+> The issues Peter is seeing regarding KHDR_INCLUDES in the following
+> tests can be easily fixed by simply changing the test Makefile. These
+> aren't framework related.
+> 
+> kvm/Makefile.kvm:    -I ../rseq -I.. $(EXTRA_CFLAGS) $(KHDR_INCLUDES)
 
-I do not see any problems with this.
+...
 
-> > Link: https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/kcov.c?h=v6.14#n179 [1]
-> > Signed-off-by: Kees Cook <kees@kernel.org>
->
-> Acked-by: Marco Elver <elver@google.com>
->
-> > ---
-> > Cc: Marco Elver <elver@google.com>
-> > Cc: Andrey Konovalov <andreyknvl@gmail.com>
-> > Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > Cc: Ingo Molnar <mingo@redhat.com>
-> > Cc: Borislav Petkov <bp@alien8.de>
-> > Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> > Cc: <x86@kernel.org>
-> > Cc: "H. Peter Anvin" <hpa@zytor.com>
-> > Cc: Ard Biesheuvel <ardb@kernel.org>
-> > Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-> > Cc: Hou Wenlong <houwenlong.hwl@antgroup.com>
-> > Cc: Andrew Morton <akpm@linux-foundation.org>
-> > Cc: Masahiro Yamada <masahiroy@kernel.org>
-> > Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>
-> > Cc: Luis Chamberlain <mcgrof@kernel.org>
-> > Cc: Sami Tolvanen <samitolvanen@google.com>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-> > Cc: <kasan-dev@googlegroups.com>
-> > ---
-> >  arch/x86/include/asm/init.h | 2 +-
-> >  include/linux/init.h        | 4 +++-
-> >  2 files changed, 4 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/x86/include/asm/init.h b/arch/x86/include/asm/init.h
-> > index 8b1b1abcef15..6bfdaeddbae8 100644
-> > --- a/arch/x86/include/asm/init.h
-> > +++ b/arch/x86/include/asm/init.h
-> > @@ -5,7 +5,7 @@
-> >  #if defined(CONFIG_CC_IS_CLANG) && CONFIG_CLANG_VERSION < 170000
-> >  #define __head __section(".head.text") __no_sanitize_undefined __no_stack_protector
-> >  #else
-> > -#define __head __section(".head.text") __no_sanitize_undefined
-> > +#define __head __section(".head.text") __no_sanitize_undefined __no_sanitize_coverage
-> >  #endif
-> >
-> >  struct x86_mapping_info {
-> > diff --git a/include/linux/init.h b/include/linux/init.h
-> > index ee1309473bc6..c65a050d52a7 100644
-> > --- a/include/linux/init.h
-> > +++ b/include/linux/init.h
-> > @@ -49,7 +49,9 @@
-> >
-> >  /* These are for everybody (although not all archs will actually
-> >     discard it in modules) */
-> > -#define __init         __section(".init.text") __cold  __latent_entropy __noinitretpoline
-> > +#define __init         __section(".init.text") __cold __latent_entropy \
-> > +                                               __noinitretpoline       \
-> > +                                               __no_sanitize_coverage
-> >  #define __initdata     __section(".init.data")
-> >  #define __initconst    __section(".init.rodata")
-> >  #define __exitdata     __section(".exit.data")
-> > --
-> > 2.34.1
-> >
+> You can make the change to remove the reference to KHDR_INCLUDES.
+> If don't have the time/bandwidth to do it, I will take care of it.
+
+Please don't remove the KHDR_INCLUDES usage in KVM's selftests, KVM routinely
+adds tests for new uAPI.  Having to manually install headers is annoying, but
+IMO it's the least awful solution we have.
 
