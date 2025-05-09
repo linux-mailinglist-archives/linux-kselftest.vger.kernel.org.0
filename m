@@ -1,319 +1,329 @@
-Return-Path: <linux-kselftest+bounces-32795-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32796-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF9B6AB1EFE
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 May 2025 23:21:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38BD3AB1F36
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 May 2025 23:43:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5BF571C2873C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 May 2025 21:20:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2CE051C4509C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 May 2025 21:43:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B7CA265616;
-	Fri,  9 May 2025 21:19:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9C15261399;
+	Fri,  9 May 2025 21:43:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="pM9ZljZP"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UE0E/qKC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013048.outbound.protection.outlook.com [40.107.162.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13395264FAF;
-	Fri,  9 May 2025 21:19:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746825551; cv=fail; b=A46Q1M0Yeeaniq4m8G+3uHNQumkTI1zoek7bRzDdoQzJhKJdvdEk7e6QNaerMRxoA40RvA47ECuGyLjdq/33ZLTJ9gGeHPEOhkwNauGBhpB9TThga0CSHOtvsko0Em6cgtH/btkJlZvNQ37G4CnV4MkCHDOdx+37kNpCV9sGWvg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746825551; c=relaxed/simple;
-	bh=WgImRcwEmgJNcRO3Jth7KR+wi04rTAsl3V3je1EMJTM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mTv5EBngH6b0C90Ca+F+KXBsjqA1wOM/aM4L7s1Wt/iCVl3EQvpkXSS84HkXUYyRaE3yqeSa+v8jiwLxokU5qqHJC21mBTleX2RvP8gpuK6WBBmRVOOhTdnfx0nmq8EvOZEuYBEbekVyJ3+/WxgE7D6uj9j6rIPVkQveEcBV8f4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=pM9ZljZP; arc=fail smtp.client-ip=40.107.162.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=fbDQsB4sigE9wWqsmvUjY63nWQJB8MCB3QgAlbpXj7n5LS89Nbe7lqp66rJBDNaTD9N4d7baDeWd38n2p03yyTpbOTT1K93uUN9Po4sPl0hMOt8Rkmg1zRO1FTTslrrd2UT5T+9qON8LXcfTmmVI4I4qCSDrrBXKyoaSwPiaUEoH4V6QSp5MSiY5A9izqyA2vwvp1Rpy1cX82Dv0nZ46RkdhT3k8jiNDaEMXqjLqnjU0sB4PX3hSRy5vU4H75WjFOfqvHOVsNoEIYs0Xnr/Z0CBYWWb3cEQpGFkKQ0FPAX37zpGIZbCMJ4+zRxdbXI54HhFClUycL4EUqcgYxg5c6Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8tVcbjETXI4+GBlxa0WPHA/navtEph2cG13IGH2oEE0=;
- b=yeDfpwWI0Taqi2YFieQ0wQfgUhVJusIXsIRNaCAJkVbfDXBqn0/nTRGYoPCpTwB+5dE9DdaI/q5Aj2wCfzpVaiJfMWwe6S9OPOrW3iuQxw6xy8oOoGUDBNft7M3MRthLiJc5IFTbDppS6rCYrcK9IBVFU5oUre9ZzOe5+GbPdvyky9JiiyvTX1rDFv+q1xgUjEZDR2GAfe3mrzEq6hW96IRGBW5j+sY+Ts6o91ClBoZTKSMQw4Lyn+raeE6aPCB3tKVeiWKQ5TukUJqQyPAeyfY7mETj5D0pMLTApeQqHwi5KV4MA2TZpGIblI/8Mz30jIQ6bl4MRPI9Wvy8ebuLkg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 131.228.2.240) smtp.rcpttodomain=amazon.com
- smtp.mailfrom=nokia-bell-labs.com; dmarc=pass (p=reject sp=reject pct=100)
- action=none header.from=nokia-bell-labs.com; dkim=none (message not signed);
- arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8tVcbjETXI4+GBlxa0WPHA/navtEph2cG13IGH2oEE0=;
- b=pM9ZljZPXLrKSZum1euW7/xBSHHwFENoIMtDr5BLRWI8+1kle8We5Z3rlb/dqpWUwpiw1G94MEjhBhYA2heVMON2EmbRqrnhr3TOY+UIM2ANfleZwrSToHdW0r6AhzxPy+agSkQ293upyjFmQEX27kwQXgU8oiJ/YXIzFPgLpBX/XrrqFHcNShVr5JuiOFbdIm/D2FpkCY0IZ9zXeLxYO+iAZdQk3z5nnFU6cFPZnKKosikFBWG0IXVovI26BDMBaE1g7Cce0GA3z2ANkSEsDJkigvBs6NynMkt9aupUeea8uVuqwIT1HZo2CquGI5Bhrc8tZ01KzUkCi9tTOnpSkA==
-Received: from DU2P250CA0024.EURP250.PROD.OUTLOOK.COM (2603:10a6:10:231::29)
- by GV1PR07MB9047.eurprd07.prod.outlook.com (2603:10a6:150:a5::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8699.26; Fri, 9 May
- 2025 21:19:05 +0000
-Received: from DU6PEPF0000B61E.eurprd02.prod.outlook.com
- (2603:10a6:10:231:cafe::ce) by DU2P250CA0024.outlook.office365.com
- (2603:10a6:10:231::29) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8722.23 via Frontend Transport; Fri,
- 9 May 2025 21:19:04 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.2.240)
- smtp.mailfrom=nokia-bell-labs.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nokia-bell-labs.com;
-Received-SPF: Pass (protection.outlook.com: domain of nokia-bell-labs.com
- designates 131.228.2.240 as permitted sender)
- receiver=protection.outlook.com; client-ip=131.228.2.240;
- helo=fihe3nok0735.emea.nsn-net.net; pr=C
-Received: from fihe3nok0735.emea.nsn-net.net (131.228.2.240) by
- DU6PEPF0000B61E.mail.protection.outlook.com (10.167.8.133) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.8722.18
- via Frontend Transport; Fri, 9 May 2025 21:19:04 +0000
-Received: from sarah.nbl.nsn-rdnet.net (sarah.nbl.nsn-rdnet.net [10.0.73.150])
-	by fihe3nok0735.emea.nsn-net.net (Postfix) with ESMTP id 50231200A3;
-	Sat, 10 May 2025 00:19:03 +0300 (EEST)
-From: chia-yu.chang@nokia-bell-labs.com
-To: horms@kernel.org,
-	dsahern@kernel.org,
-	kuniyu@amazon.com,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	dave.taht@gmail.com,
-	pabeni@redhat.com,
-	jhs@mojatatu.com,
-	kuba@kernel.org,
-	stephen@networkplumber.org,
-	xiyou.wangcong@gmail.com,
-	jiri@resnulli.us,
-	davem@davemloft.net,
-	edumazet@google.com,
-	andrew+netdev@lunn.ch,
-	donald.hunter@gmail.com,
-	ast@fiberby.net,
-	liuhangbin@gmail.com,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	ij@kernel.org,
-	ncardwell@google.com,
-	koen.de_schepper@nokia-bell-labs.com,
-	g.white@cablelabs.com,
-	ingemar.s.johansson@ericsson.com,
-	mirja.kuehlewind@ericsson.com,
-	cheshire@apple.com,
-	rs.ietf@gmx.at,
-	Jason_Livingood@comcast.com,
-	vidhi_goel@apple.com
-Cc: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-Subject: [PATCH v6 net-next 15/15] tcp: try to avoid safer when ACKs are thinned
-Date: Fri,  9 May 2025 23:18:20 +0200
-Message-Id: <20250509211820.36880-16-chia-yu.chang@nokia-bell-labs.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250509211820.36880-1-chia-yu.chang@nokia-bell-labs.com>
-References: <20250509211820.36880-1-chia-yu.chang@nokia-bell-labs.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 706122609D6
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 May 2025 21:43:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1746827007; cv=none; b=reAyCR8M3kah4b8LJn+ikRSe6sgdFnWwRU+zVoW2WzDH5Z5nZGULwNWOb0QZneFOBPu0p0ud6hVOqpcyPNtsayol81SJlB08ks6mm80LW30M7RbzugEjHxmt3SxsWoRNImpCftro3LDWgSm46mBtNcTdJzu8sV1ZfYGS1YAcWvk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1746827007; c=relaxed/simple;
+	bh=d+W04rz5R6BtxFOPPwdUXW9CdbhpNWKgPp4Gf6m8JPk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DqbqhAUi2aTZDL4G16ZApAphl1D+6udnRs9/LAg6kJ8qfeuMmCK2NJtVXXgt6K0zNeyOmuvIODiNhJQCb9CwpylQYyOFiETNXW+KfbbOeagWPuPd9ZFVTGyfCjwym7tjWHACcZnOpxFTfJhvjdySZc+d1TVeGqQv+2489LfhTtc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UE0E/qKC; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-43cfe808908so19795e9.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 09 May 2025 14:43:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1746827002; x=1747431802; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fZfju7WUz5Yl04mbuyXvvdOSNmKPyLT8Rq8aUyjFmsM=;
+        b=UE0E/qKC2d1CbG4lC0lb/YZTt3/K2oEwieIBCnjwzpeNHiYBX4yowJ6W+nd0RaFCCk
+         GzinV0O66x2EICVt1D4esfk95yLyl3lHwE+4BozaqCD4gJ6KAkD1hcArn4SCGVSBt9HP
+         6MEcQuHrkJXTtejStHOGJyvgnPzWDhap6Vjz+5ju6cGtRrv6TrEdOCSmNezN9+dd0LBD
+         RNACVY68NkJ2qiLUt07pBEQsypRC7Knzgbyhnse/oy2gBiUYiWQ6WvuvkA5MtcyZVnaY
+         STNichk+o4hvjKsMtBwNj06yFZgEzCk4JkD2huJRrm2a1DwQK5X7Yod0QFirDKppIVAC
+         JggQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746827002; x=1747431802;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fZfju7WUz5Yl04mbuyXvvdOSNmKPyLT8Rq8aUyjFmsM=;
+        b=mIHLzKNOK1qeexXibHfv4wivXPv9uxUljikf+KZ+avUm7UXZH3ySu8DfmR8x3I0lEW
+         ac8PWV012qYvSQMFtUwU/3lAWFbqJBXmK9LI3H8rnwANDKWnOroN8Elm8iCdyp7SJeMg
+         Kj98xY6SgkQJhQQHxr8wnIdWkH1o2f3KqQUSIsRucAU6kA6xYiQIxkXcbWfIDAxVcPUz
+         mCJGPX+Oxz/+OcUBbo/chQ0y8FhADe1yHo4yJiZwWe0h2ZM0n35oozRMjeyaEFymaOTw
+         UmPfiSaXlv6oRHwsAp4SLA+Az0fApCs/zhHqcjQrBYxDkcnNVRGSXoiy9QeuUfXp600m
+         Sa0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVd4DQWoqlebLySvYjAr2OE5og3uj3szOwWRLmrDOwIMmJoVkjrKWY0BWePp3V7KrLBPMNICRB08VGtLQEOvsk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJC0kwLiE5YJx9quaK4igWnSrWEIL6zO9IOYilq2VBQHsxoB7S
+	Up1Qb/vIgmgvAhmO6d5FnfehZGgdyW0E/kHsbTmt21Yi5QlrAbXaTxQai07D/Q97pd3R7Ty8QG8
+	VgGe0aqI+B5CNm5OoUid0blqojjx592BJwlt0
+X-Gm-Gg: ASbGncuInsNuQw9lEOuKYL+esyl4WJ7/hseISL31bqs/ugWdgmtWI/VNbBsljBDmGvg
+	lVafZ23gdy7maYnnvI+DwUirIpnqR2iKiLQ1dy7hKQg63ieGLjXD2dw40KmtRELysx0nmSE9qLo
+	oapfQdp4Yxz7H/wDR56FF5vvRTk8F31Y4=
+X-Google-Smtp-Source: AGHT+IEsv5HI2i1ZZ/585hqiXPrI+miXZcW/PcnQi9f4aA5/TPapqTvWiJ8fo1Pxmugr4vWjKMzxQzqUzh4HLjZ9xoE=
+X-Received: by 2002:a05:600c:6058:b0:441:d438:1c1f with SMTP id
+ 5b1f17b1804b1-442e03adbdemr15755e9.7.1746827001461; Fri, 09 May 2025 14:43:21
+ -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU6PEPF0000B61E:EE_|GV1PR07MB9047:EE_
-X-MS-Office365-Filtering-Correlation-Id: 99532316-1804-4750-7b2b-08dd8f3f2087
-X-LD-Processed: 5d471751-9675-428d-917b-70f44f9630b0,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
- BCL:0;ARA:13230040|82310400026|7416014|376014|1800799024|36860700013|921020;
-X-Microsoft-Antispam-Message-Info:
- =?utf-8?B?NHUvK2NjemEzeFhpMlBmVmduZVJXSC9RRFVqV3NIRXFsemdURzlaVVFab0I1?=
- =?utf-8?B?eFk1QzhFaWdBZ1kyQjdvQ2lmYXNyK0tFVVJwZERMY1NENjJVN0NISUxjcnhY?=
- =?utf-8?B?K2FkOEsxd0l2MnYwMkFNVThNc2NkOGhsbTZBTmNOdEpmS2hua29RVzAvbEdy?=
- =?utf-8?B?N1RUa0Z3WUkwT01MNmtITGdHd21QYjM3czhRNCtCbHNTZmlPalBOSDBoUVJi?=
- =?utf-8?B?cGZ3SlpoemRTUTBRZXBVOU9ITkZnODFpV3VDeEpudUluNGpZRG9CQXpma3pl?=
- =?utf-8?B?cEJFMXN2UzZBMDlSeldQU3p5ZTdWa0p2UXJuOG9WYy9IQXNsWC9LaVV0Yndn?=
- =?utf-8?B?clZLaFViQTBSUDZubDUrdzE4Q0RERitaM002SlVBOEVIVkdVSlRTSE1DV2xi?=
- =?utf-8?B?cDJYajRPTklidWZxVzhkSFVHWEhhUlpYUG51VU1CdmJTOWcrcmNyNVNJaVh6?=
- =?utf-8?B?THJ1OW1qM3RWc2Q1bGg1dWxDSktSbm1kM2VLYVZpL1AxUElFWkxEZndHVkg2?=
- =?utf-8?B?eEtpTmhwL0FCSGRUanlaU2ZpK0JJUEFXYjlvV21aRkczZGR2WmdWR3JmaHlD?=
- =?utf-8?B?Vy9BOXFneGJRZ2gzZTVGSElKMDFmc04ySnl0MVRWS3l4QkZwUmFlZkU2SmND?=
- =?utf-8?B?dnNmK3h1S1ZOa1FoMW1Pb21uck1kS01VQyttSjNqY0RrRGtPb2R4V3hPa25a?=
- =?utf-8?B?SUtOQVR3M1J3STJzcWhSTWNvOFhrcmgzTXZjTVdFTXVseG9OYjJRUld3eGdY?=
- =?utf-8?B?UFpYQ2pldlVLdDNPMkt6VlRsZDRZZkVuRTF2UzlCcXNZbm5hNWduM3kwM2hV?=
- =?utf-8?B?M0xwWk9mU09zOWlMN2VKalBJYzhka0tsd1diT3FrWE1Oc1BqN0ZmL1NQK1dz?=
- =?utf-8?B?RzZkMHVWd1JIRG13eWVaUmhVckg2SzRQVG4wVW1kb3FsUFFiVFJQTER3bVhH?=
- =?utf-8?B?NUhnYlFLZ3BWMGVrTWt1cTJCaUhNRkptak1IKys3dmtEYVdJT0FIMGc5d2h2?=
- =?utf-8?B?Y09XMVFZTVU3N1Uvc2g3a3o3Tmd1YWNUejZYWGpLSVhUMkp6czEwcU9iSGFB?=
- =?utf-8?B?T1owMnJuSUc3UHc4dXVHM3JVT3FrZEJLM1dLM2llbTJFLzFjYmdWbUROWkJw?=
- =?utf-8?B?U3FHZGo5SVUwbmpOK2ZCa1hZVW5mRkdxekxCTnR4dXloK2pzYkJBYW9ya3BB?=
- =?utf-8?B?SzFyTTA4VHo5Wm5xTXBvVUF5QmJEMHU2WEVneHNNc0VWeHNwK0I3ZThwbXZU?=
- =?utf-8?B?MTRIbnFMN25uaHpnODFrN0FSV05XSmpJL3RLcHZmQ1IrMGxaVUZJU2VjVU8z?=
- =?utf-8?B?dmRkSThucHp2SjFNMWFMZjFZTUxvUWlaWW5pTXNUMEczTjlzWllSVEZURzdM?=
- =?utf-8?B?MWN2ZXM3SStCKzY5Q0VwTEM3V1FqeXAvOUlJUHduR0ROb0JaNEZBc1RiWHR6?=
- =?utf-8?B?eEhyaHkwMzJhK1FENk90THIybXB3VXF0UGFQV3pDVmJ2eEl4bVI0Q1N2WGND?=
- =?utf-8?B?cDdGays4UnFjZHBCZGE1TlcwWWFueFRBK0tpOFhxQlg5dzZTNzBiRE43R1hX?=
- =?utf-8?B?U3ZwUUp1bnlpaWpiOGF3RTU5TndVUDdRblNpYkhaL1JtSXBZNXJMeHZvS0Fs?=
- =?utf-8?B?YUgyVU51a3RLK0dzK1FUY3pLTGdJb2NJcGd6UitaNTZqQzhHZS9nZEZsNkxN?=
- =?utf-8?B?R2tUYTRFR1hIWGpkdmRjQlhvY3ZJdGV6UHliWWNDbno3Z000b3QwSkZId2h2?=
- =?utf-8?B?WHE1aXFXd1QyVGYwU2g1ZU9TQ3NuTWhJbkV0YitUVmZtSWNKeWZXekZrSnJu?=
- =?utf-8?B?QmxwWmkyYVA1K2ljZDhTYjJieUsxTmxDN1N2aUVwQ3djRUczdFdJM3B0bVJO?=
- =?utf-8?B?Tys3TTJBT0tOWUZOeEt2VHVjdFhhalIxMXRmQTFScjJ0ZmY0RjRwQW04Wmht?=
- =?utf-8?B?ekxtVGt5bVZMN1NrblNaVForQzZ4cXc0VTV3Z2J5ZjQyUlEyeUtXWW9RTE4y?=
- =?utf-8?B?QnF0eTlZZzFQMTVYNFVlTFRWSWpDTWJNeW1FQnZWRFZUancrV1lySWp4dWFM?=
- =?utf-8?B?MjliK0kwZFkxdm5YNFB6dUlnM3hPUXBUM1JoZz09?=
-X-Forefront-Antispam-Report:
- CIP:131.228.2.240;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fihe3nok0735.emea.nsn-net.net;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(7416014)(376014)(1800799024)(36860700013)(921020);DIR:OUT;SFP:1101;
-X-OriginatorOrg: nokia-bell-labs.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2025 21:19:04.7496
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 99532316-1804-4750-7b2b-08dd8f3f2087
-X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.2.240];Helo=[fihe3nok0735.emea.nsn-net.net]
-X-MS-Exchange-CrossTenant-AuthSource: DU6PEPF0000B61E.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR07MB9047
+References: <20250508182025.2961555-1-tjmercier@google.com>
+ <20250508182025.2961555-6-tjmercier@google.com> <CAPhsuW5WOmyfPqBc_Hn7ApGWP_2uz_cJwyaDWF_VwiHJu9s_1A@mail.gmail.com>
+In-Reply-To: <CAPhsuW5WOmyfPqBc_Hn7ApGWP_2uz_cJwyaDWF_VwiHJu9s_1A@mail.gmail.com>
+From: "T.J. Mercier" <tjmercier@google.com>
+Date: Fri, 9 May 2025 14:43:09 -0700
+X-Gm-Features: AX0GCFvkQQHihmvnaG3BMibV3EQ_CyOSSZ1huizs69M9NO065M7pYtXEQ0sH-Zc
+Message-ID: <CABdmKX2h5cGjNbJshGkQ+2XJ7eOnM+VfbmVr5Pj5c0qfxQA-qg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 5/5] selftests/bpf: Add test for open coded dmabuf_iter
+To: Song Liu <song@kernel.org>
+Cc: sumit.semwal@linaro.org, christian.koenig@amd.com, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
+	skhan@linuxfoundation.org, alexei.starovoitov@gmail.com, 
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, android-mm@google.com, 
+	simona@ffwll.ch, eddyz87@gmail.com, yonghong.song@linux.dev, 
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, 
+	jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Ilpo Järvinen <ij@kernel.org>
+On Fri, May 9, 2025 at 11:46=E2=80=AFAM Song Liu <song@kernel.org> wrote:
+>
+> On Thu, May 8, 2025 at 11:21=E2=80=AFAM T.J. Mercier <tjmercier@google.co=
+m> wrote:
+> >
+> > Use the same test buffers as the traditional iterator and a new BPF map
+> > to verify the test buffers can be found with the open coded dmabuf
+> > iterator.
+>
+> The way we split 4/5 and 5/5 makes the code tricker to follow. I guess
+> the motivation is to back port default iter along to older kernels. But I
+> think we can still make the code cleaner.
+>
+> >
+> > Signed-off-by: T.J. Mercier <tjmercier@google.com>
+> > ---
+> [...]
+>
+> >
+> > -static int create_udmabuf(void)
+> > +static int create_udmabuf(int map_fd)
+> >  {
+> >         struct udmabuf_create create;
+> >         int dev_udmabuf;
+> > +       bool f =3D false;
+> >
+> >         udmabuf_test_buffer_size =3D 10 * getpagesize();
+> >
+> > @@ -63,10 +64,10 @@ static int create_udmabuf(void)
+> >         if (!ASSERT_OK(ioctl(udmabuf, DMA_BUF_SET_NAME_B, udmabuf_test_=
+buffer_name), "name"))
+> >                 return 1;
+> >
+> > -       return 0;
+> > +       return bpf_map_update_elem(map_fd, udmabuf_test_buffer_name, &f=
+, BPF_ANY);
+>
+> We don't really need this bpf_map_update_elem() inside
+> create_udmabuf(), right?
+>
+> >  }
+> >
+> > -static int create_sys_heap_dmabuf(void)
+> > +static int create_sys_heap_dmabuf(int map_fd)
+> >  {
+> >         sysheap_test_buffer_size =3D 20 * getpagesize();
+> >
+> > @@ -77,6 +78,7 @@ static int create_sys_heap_dmabuf(void)
+> >                 .heap_flags =3D 0,
+> >         };
+> >         int heap_fd, ret;
+> > +       bool f =3D false;
+> >
+> >         if (!ASSERT_LE(sizeof(sysheap_test_buffer_name), DMA_BUF_NAME_L=
+EN, "NAMETOOLONG"))
+> >                 return 1;
+> > @@ -95,18 +97,18 @@ static int create_sys_heap_dmabuf(void)
+> >         if (!ASSERT_OK(ioctl(sysheap_dmabuf, DMA_BUF_SET_NAME_B, syshea=
+p_test_buffer_name), "name"))
+> >                 return 1;
+> >
+> > -       return 0;
+> > +       return bpf_map_update_elem(map_fd, sysheap_test_buffer_name, &f=
+, BPF_ANY);
+>
+> Same for this bpf_map_update_elem(), we can call this directly from
+> create_test_buffers().
+>
+> >  }
+> >
+> > -static int create_test_buffers(void)
+> > +static int create_test_buffers(int map_fd)
+> >  {
+> >         int ret;
+> >
+> > -       ret =3D create_udmabuf();
+> > +       ret =3D create_udmabuf(map_fd);
+> >         if (ret)
+> >                 return ret;
+> >
+> > -       return create_sys_heap_dmabuf();
+> > +       return create_sys_heap_dmabuf(map_fd);
+>
+> Personally, I would prefer we just merge all the logic of
+> create_udmabuf() and create_sys_heap_dmabuf()
+> into create_test_buffers().
 
-Add newly acked pkts EWMA. When ACK thinning occurs, select
-between safer and unsafe cep delta in AccECN processing based
-on it. If the packets ACKed per ACK tends to be large, don't
-conservatively assume ACE field overflow.
+That's a lot of different stuff to put in one place. How about
+returning file descriptors from the buffer create functions while
+having them clean up after themselves:
 
-This patch uses the existing 2-byte holes in the rx group for new
-u16 variables withtout creating more holes. Below are the pahole
-outcomes before and after this patch:
+-static int memfd, udmabuf;
++static int udmabuf;
+ static const char udmabuf_test_buffer_name[DMA_BUF_NAME_LEN] =3D
+"udmabuf_test_buffer_for_iter";
+ static size_t udmabuf_test_buffer_size;
+ static int sysheap_dmabuf;
+ static const char sysheap_test_buffer_name[DMA_BUF_NAME_LEN] =3D
+"sysheap_test_buffer_for_iter";
+ static size_t sysheap_test_buffer_size;
 
-[BEFORE THIS PATCH]
-struct tcp_sock {
-    [...]
-    u32                        delivered_ecn_bytes[3]; /*  2744    12 */
-    /* XXX 4 bytes hole, try to pack */
+-static int create_udmabuf(int map_fd)
++static int create_udmabuf(void)
+ {
+        struct udmabuf_create create;
+-       int dev_udmabuf;
+-       bool f =3D false;
++       int dev_udmabuf, memfd, udmabuf;
 
-    [...]
-    __cacheline_group_end__tcp_sock_write_rx[0];       /*  2816     0 */
+        udmabuf_test_buffer_size =3D 10 * getpagesize();
 
-    [...]
-    /* size: 3264, cachelines: 51, members: 177 */
-}
+        if (!ASSERT_LE(sizeof(udmabuf_test_buffer_name),
+DMA_BUF_NAME_LEN, "NAMETOOLONG"))
+-               return 1;
++               return -1;
 
-[AFTER THIS PATCH]
-struct tcp_sock {
-    [...]
-    u32                        delivered_ecn_bytes[3]; /*  2744    12 */
-    u16                        pkts_acked_ewma;        /*  2756     2 */
-    /* XXX 2 bytes hole, try to pack */
+        memfd =3D memfd_create("memfd_test", MFD_ALLOW_SEALING);
+        if (!ASSERT_OK_FD(memfd, "memfd_create"))
+-               return 1;
++               return -1;
 
-    [...]
-    __cacheline_group_end__tcp_sock_write_rx[0];       /*  2816     0 */
+        if (!ASSERT_OK(ftruncate(memfd, udmabuf_test_buffer_size), "ftrunca=
+te"))
+-               return 1;
++               goto close_memfd;
 
-    [...]
-    /* size: 3264, cachelines: 51, members: 178 */
-}
+        if (!ASSERT_OK(fcntl(memfd, F_ADD_SEALS, F_SEAL_SHRINK), "seal"))
+-               return 1;
++               goto close_memfd;
 
-Signed-off-by: Ilpo Järvinen <ij@kernel.org>
-Co-developed-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
----
- .../networking/net_cachelines/tcp_sock.rst    |  1 +
- include/linux/tcp.h                           |  1 +
- net/ipv4/tcp.c                                |  2 ++
- net/ipv4/tcp_input.c                          | 20 ++++++++++++++++++-
- 4 files changed, 23 insertions(+), 1 deletion(-)
+        dev_udmabuf =3D open("/dev/udmabuf", O_RDONLY);
+        if (!ASSERT_OK_FD(dev_udmabuf, "open udmabuf"))
+-               return 1;
++               goto close_memfd;
 
-diff --git a/Documentation/networking/net_cachelines/tcp_sock.rst b/Documentation/networking/net_cachelines/tcp_sock.rst
-index af76d4f9b33a..2e6ef8290aff 100644
---- a/Documentation/networking/net_cachelines/tcp_sock.rst
-+++ b/Documentation/networking/net_cachelines/tcp_sock.rst
-@@ -105,6 +105,7 @@ u32                           received_ce             read_mostly         read_w
- u32[3]                        received_ecn_bytes      read_mostly         read_write
- u8:4                          received_ce_pending     read_mostly         read_write
- u32[3]                        delivered_ecn_bytes                         read_write
-+u16                           pkts_acked_ewma                             read_write
- u8:2                          syn_ect_snt             write_mostly        read_write
- u8:2                          syn_ect_rcv             read_mostly         read_write
- u8:1                          wait_third_ack                              read_write
-diff --git a/include/linux/tcp.h b/include/linux/tcp.h
-index b5066eef8782..b22914a4f3cb 100644
---- a/include/linux/tcp.h
-+++ b/include/linux/tcp.h
-@@ -346,6 +346,7 @@ struct tcp_sock {
- 	u32	rate_interval_us;  /* saved rate sample: time elapsed */
- 	u32	rcv_rtt_last_tsecr;
- 	u32	delivered_ecn_bytes[3];
-+	u16	pkts_acked_ewma;/* Pkts acked EWMA for AccECN cep heuristic */
- 	u64	first_tx_mstamp;  /* start of window send phase */
- 	u64	delivered_mstamp; /* time we reached "delivered" */
- 	u64	bytes_acked;	/* RFC4898 tcpEStatsAppHCThruOctetsAcked
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 8e7446346a65..e9a834418227 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -3371,6 +3371,7 @@ int tcp_disconnect(struct sock *sk, int flags)
- 	tcp_accecn_init_counters(tp);
- 	tp->prev_ecnfield = 0;
- 	tp->accecn_opt_tstamp = 0;
-+	tp->pkts_acked_ewma = 0;
- 	if (icsk->icsk_ca_initialized && icsk->icsk_ca_ops->release)
- 		icsk->icsk_ca_ops->release(sk);
- 	memset(icsk->icsk_ca_priv, 0, sizeof(icsk->icsk_ca_priv));
-@@ -5132,6 +5133,7 @@ static void __init tcp_struct_check(void)
- 	CACHELINE_ASSERT_GROUP_MEMBER(struct tcp_sock, tcp_sock_write_rx, rate_interval_us);
- 	CACHELINE_ASSERT_GROUP_MEMBER(struct tcp_sock, tcp_sock_write_rx, rcv_rtt_last_tsecr);
- 	CACHELINE_ASSERT_GROUP_MEMBER(struct tcp_sock, tcp_sock_write_rx, delivered_ecn_bytes);
-+	CACHELINE_ASSERT_GROUP_MEMBER(struct tcp_sock, tcp_sock_write_rx, pkts_acked_ewma);
- 	CACHELINE_ASSERT_GROUP_MEMBER(struct tcp_sock, tcp_sock_write_rx, first_tx_mstamp);
- 	CACHELINE_ASSERT_GROUP_MEMBER(struct tcp_sock, tcp_sock_write_rx, delivered_mstamp);
- 	CACHELINE_ASSERT_GROUP_MEMBER(struct tcp_sock, tcp_sock_write_rx, bytes_acked);
-diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-index deced87f31f8..7535de493d43 100644
---- a/net/ipv4/tcp_input.c
-+++ b/net/ipv4/tcp_input.c
-@@ -704,6 +704,10 @@ static void tcp_count_delivered(struct tcp_sock *tp, u32 delivered,
- 		tcp_count_delivered_ce(tp, delivered);
+        create.memfd =3D memfd;
+        create.flags =3D UDMABUF_FLAGS_CLOEXEC;
+@@ -59,15 +58,21 @@ static int create_udmabuf(int map_fd)
+        udmabuf =3D ioctl(dev_udmabuf, UDMABUF_CREATE, &create);
+        close(dev_udmabuf);
+        if (!ASSERT_OK_FD(udmabuf, "udmabuf_create"))
+-               return 1;
++               goto close_memfd;
+
+        if (!ASSERT_OK(ioctl(udmabuf, DMA_BUF_SET_NAME_B,
+udmabuf_test_buffer_name), "name"))
+-               return 1;
++               goto close_udmabuf;
++
++       return udmabuf;
+
+-       return bpf_map_update_elem(map_fd, udmabuf_test_buffer_name,
+&f, BPF_ANY);
++close_udmabuf:
++       close(udmabuf);
++close_memfd:
++       close(memfd);
++       return -1;
  }
- 
-+#define PKTS_ACKED_WEIGHT	6
-+#define PKTS_ACKED_PREC		6
-+#define ACK_COMP_THRESH		4
-+
- /* Returns the ECN CE delta */
- static u32 __tcp_accecn_process(struct sock *sk, const struct sk_buff *skb,
- 				u32 delivered_pkts, u32 delivered_bytes,
-@@ -723,6 +727,19 @@ static u32 __tcp_accecn_process(struct sock *sk, const struct sk_buff *skb,
- 	opt_deltas_valid = tcp_accecn_process_option(tp, skb,
- 						     delivered_bytes, flag);
- 
-+	if (delivered_pkts) {
-+		if (!tp->pkts_acked_ewma) {
-+			tp->pkts_acked_ewma = delivered_pkts << PKTS_ACKED_PREC;
-+		} else {
-+			u32 ewma = tp->pkts_acked_ewma;
-+
-+			ewma = (((ewma << PKTS_ACKED_WEIGHT) - ewma) +
-+				(delivered_pkts << PKTS_ACKED_PREC)) >>
-+				PKTS_ACKED_WEIGHT;
-+			tp->pkts_acked_ewma = min_t(u32, ewma, 0xFFFFU);
-+		}
-+	}
-+
- 	if (!(flag & FLAG_SLOWPATH)) {
- 		/* AccECN counter might overflow on large ACKs */
- 		if (delivered_pkts <= TCP_ACCECN_CEP_ACE_MASK)
-@@ -771,7 +788,8 @@ static u32 __tcp_accecn_process(struct sock *sk, const struct sk_buff *skb,
- 		if (d_ceb <
- 		    safe_delta * tp->mss_cache >> TCP_ACCECN_SAFETY_SHIFT)
- 			return delta;
--	}
-+	} else if (tp->pkts_acked_ewma > (ACK_COMP_THRESH << PKTS_ACKED_PREC))
-+		return delta;
- 
- 	return safe_delta;
- }
--- 
-2.34.1
 
+-static int create_sys_heap_dmabuf(int map_fd)
++static int create_sys_heap_dmabuf(void)
+ {
+        sysheap_test_buffer_size =3D 20 * getpagesize();
+
+@@ -78,43 +83,46 @@ static int create_sys_heap_dmabuf(int map_fd)
+                .heap_flags =3D 0,
+        };
+        int heap_fd, ret;
+-       bool f =3D false;
+
+        if (!ASSERT_LE(sizeof(sysheap_test_buffer_name),
+DMA_BUF_NAME_LEN, "NAMETOOLONG"))
+-               return 1;
++               return -1;
+
+        heap_fd =3D open("/dev/dma_heap/system", O_RDONLY);
+        if (!ASSERT_OK_FD(heap_fd, "open dma heap"))
+-               return 1;
++               return -1;
+
+        ret =3D ioctl(heap_fd, DMA_HEAP_IOCTL_ALLOC, &data);
+        close(heap_fd);
+        if (!ASSERT_OK(ret, "syheap alloc"))
+-               return 1;
++               return -1;
+
+-       sysheap_dmabuf =3D data.fd;
++       if (!ASSERT_OK(ioctl(data.fd, DMA_BUF_SET_NAME_B,
+sysheap_test_buffer_name), "name"))
++               goto close_sysheap_dmabuf;
+
+-       if (!ASSERT_OK(ioctl(sysheap_dmabuf, DMA_BUF_SET_NAME_B,
+sysheap_test_buffer_name), "name"))
+-               return 1;
++       return data.fd;
+
+-       return bpf_map_update_elem(map_fd, sysheap_test_buffer_name,
+&f, BPF_ANY);
++close_sysheap_dmabuf:
++       close(data.fd);
++       return -1;
+ }
+
+ static int create_test_buffers(int map_fd)
+ {
+-       int ret;
++       bool f =3D false;
++
++       udmabuf =3D create_udmabuf();
++       sysheap_dmabuf =3D create_sys_heap_dmabuf();
+
+-       ret =3D create_udmabuf(map_fd);
+-       if (ret)
+-               return ret;
++       if (udmabuf < 0 || sysheap_dmabuf < 0)
++               return -1;
+
+-       return create_sys_heap_dmabuf(map_fd);
++       return bpf_map_update_elem(map_fd, udmabuf_test_buffer_name,
+&f, BPF_ANY) ||
++              bpf_map_update_elem(map_fd, sysheap_test_buffer_name,
+&f, BPF_ANY);
+ }
+
+ static void destroy_test_buffers(void)
+ {
+        close(udmabuf);
+-       close(memfd);
+        close(sysheap_dmabuf);
+ }
 
