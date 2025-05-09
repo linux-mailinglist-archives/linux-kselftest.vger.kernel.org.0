@@ -1,641 +1,219 @@
-Return-Path: <linux-kselftest+bounces-32754-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32755-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB769AB17F7
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 May 2025 17:07:18 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E55C8AB184C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 May 2025 17:22:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B0FBB3B7F99
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 May 2025 15:06:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 21BB4B2599B
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 May 2025 15:20:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CD8523504A;
-	Fri,  9 May 2025 15:06:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7957522CBF3;
+	Fri,  9 May 2025 15:21:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OvpFIFy/"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BB1pss0M"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E009E233736
-	for <linux-kselftest@vger.kernel.org>; Fri,  9 May 2025 15:06:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 882FE212B3E
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 May 2025 15:21:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746803194; cv=none; b=Nwk6wTSh1apgyeGomiOw62g0Jr8PTaCRKV4TV0Fkr7qktq+UQxf7Gs86nWcQh02kq7HnCEtAihG1ipg2UcrtIKjwglk0RJHVXpvcS4cCaq5if4ttDavyzqtKh4dD0cbCv3/xh2ONiasDS3UKML8z+7nyVjqnU/ogpwkcncu+jOg=
+	t=1746804112; cv=none; b=EMAx/HurtN7vsMmb67oZe+ikn8eVPP8EYuozVeg6/Je6xMcwFfOi5+D4cOESnX0rXHRTxwSLhNxHOyuJo8/CQeKJZQlaylmfer5P1oaV9EEhN1/GYqF27T5YZEEHwMCw5jg3fobz+rlZUu1KD8O98tEpxe+dSQzuVYYf+4RU45Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746803194; c=relaxed/simple;
-	bh=8UlxgaMozipdLQyMDOrmjxfUNRn9I6YA5L7dLg97Y1Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AMGJi60AhyT7K4TuPzSbIeKkqdYvfWqIDIgHoL84lRfDu6xzkkqDADpCxNqSnJB29hMrMZ4CClOVgpHzVA0RzCbdZP7B7NFBDjYngWIjDuRhNFeR4xHbDbFqwbNFI7+KGGGxQ3kjSOnimmMmhFsqHzc7vPqvKh0AM4NHuutzLNU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OvpFIFy/; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1746803189;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=CGCLptpIZrZQIGNK6FOyTHYHs2ZgMnq84bkeU4R9aNo=;
-	b=OvpFIFy/7mQU0YMVyjzf/bfnx+zxysi5G7nDSUsn9u5Pfp6VD+0+X8y7V3Ou+6A20ym16i
-	clLt2w+uKeGgUqjskZfUsggnnB4PDr1eQp1/QExUZWf6wrPprPRT0eZfUGtDDPAK9pwEA5
-	lBEAVmqlpZirke5HBjZ0PYPBdWD+SQ4=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-371-0DgsP6liNGen1WzABM7Lgw-1; Fri,
- 09 May 2025 11:06:27 -0400
-X-MC-Unique: 0DgsP6liNGen1WzABM7Lgw-1
-X-Mimecast-MFC-AGG-ID: 0DgsP6liNGen1WzABM7Lgw_1746803185
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 801C0180035C;
-	Fri,  9 May 2025 15:06:24 +0000 (UTC)
-Received: from thinkpad.redhat.com (unknown [10.44.33.37])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id CF2423000221;
-	Fri,  9 May 2025 15:06:19 +0000 (UTC)
-From: Felix Maurer <fmaurer@redhat.com>
-To: socketcan@hartkopp.net,
-	mkl@pengutronix.de
-Cc: shuah@kernel.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	linux-can@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	dcaratti@redhat.com,
-	fstornio@redhat.com,
-	mailhol.vincent@wanadoo.fr
-Subject: [PATCH v2] selftests: can: Import tst-filter from can-tests
-Date: Fri,  9 May 2025 17:06:02 +0200
-Message-ID: <dac10156eb550871c267bdfe199943e12610730b.1746801747.git.fmaurer@redhat.com>
+	s=arc-20240116; t=1746804112; c=relaxed/simple;
+	bh=u1B1Sb8RLksBy1NXjA72zmYH17yMY9egg/knUIWH66o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KoCiLfk1/X6AueS1P6hV0JRMVdP+ApDePniTxpHHz5Orm22XulLvTQIgbeSxfKWZeGvLXoLV0+MNvxpq0WSqvaW2cpFbqBa2jhKKEEqAmvSPf1BkvPpiafbaxzja30GhKpFJErctKi2wbQ9Bt4GnTKrIdJxJsErLnVC0BbrMkJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BB1pss0M; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-43cf3192d8bso53525e9.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 09 May 2025 08:21:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1746804108; x=1747408908; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PODw7ulR9PB7arm5tdpwF+f90XRe1aMGGhaLajPSDEc=;
+        b=BB1pss0MZjio6nl12aXfNmWdhf9aq6TlTwsf4xLUS0FfDlF33VH5+Tza1lEziJAfZ8
+         DwoqmEAGOAuxOzvjTzZ1JBCqd0kvQVvzkSNvEcghMxY9CrS03MSRp3wFP8Ekv18Baq4S
+         L9fUpNhTKSXJXEHnU6tJRBaa548oEl7bwXH8OLtP36DXLDx3f4SB2rk4c27Rh43+5dli
+         38tX5sdjTfqouUAIvkdNfbM5etF5OuwpY35s58Jz46XxOaPAAAEFdzHIkqgCT5FW0P0x
+         fU/YODdCzWPfIPK+O38zoT3Tv0hSzSMpVHakfh5YEJtgPaVNHvCcZogi1OcNXGbF2C43
+         E4Vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746804108; x=1747408908;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PODw7ulR9PB7arm5tdpwF+f90XRe1aMGGhaLajPSDEc=;
+        b=sqKM+3zz3wxArIHc8uDINkwGQpnXgrCQHTm28hh3kbUsX2lDggyjPbiKmtWQ3iHJez
+         Kv6NeNP3nGhrsJj05rm0qLPDBYbQbBgnydO3pACm860n9xSvRZUAv3IAPU95t0022dkw
+         70w1k9llYeD4skw8dHiv5kWwBbeDg4whPVIg7tqIvdGYchTQLU5bkTSUusT5WfsG2C8g
+         5lPERD+lNTEmzGmDzoAyC0lT8ZQtsceCkw1sRfiX3I573M6EI+JjGlvvaagDP48AT8EY
+         DMCtHT2/morMoKbxrBAnwbimITsQWxN9BsWliSqQUpOfl2k/jv+T8NDqvJ8XeOoLrmVv
+         AxnQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWRLNsXJWUo58Wg2jD5Q0edSS+G/MBVv9l7YvRcGy1Flm7co68Sb0jYiD/gf+EaraM0L1sAago8ozlQ4BVVlyo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YziYr/IG1lXU58F1RVbNSG17zcYP2rWxtBN+70/7ufOCmKLhMQD
+	mHtkVerCHYcwEgxa1R9wp02nih34n15eNCYnVOXLLB1BTdY+6tu8VZvB6p/FAGatUg/PkWKnPN1
+	749bMiS18S/R6JY9WnqiTSc1U16jIK9gcGfMt
+X-Gm-Gg: ASbGncsBr+wfJ9XAgeelr7Tu9bt93p/DCS3sUTW8y571DqDHkZ3mdCft4SfvEtiCudM
+	Yg2U0NpPIMGoWkXZvONYcY5mhtk1HwrpRYv6kHcsAY4ZNwqHC4C0468Ogc8aw+ym3gx7ikDqnZ8
+	p5nLlOCEPbHXjuqmZUnrTc
+X-Google-Smtp-Source: AGHT+IFxWr7UYH5UXN0HFUB2iPnwNf7bB78kgOChbtof0mjoiWXBuO/ayaFDhJMwRvTwWokPxNYOF8Jo1WiZoneiOiw=
+X-Received: by 2002:a05:600c:4394:b0:43d:5b3a:18cc with SMTP id
+ 5b1f17b1804b1-442d6ed7d6amr1049915e9.2.1746804107643; Fri, 09 May 2025
+ 08:21:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+References: <20250508182025.2961555-1-tjmercier@google.com> <b1e53d0b-04ba-4ad7-abdf-2406283a9cfb@amd.com>
+In-Reply-To: <b1e53d0b-04ba-4ad7-abdf-2406283a9cfb@amd.com>
+From: "T.J. Mercier" <tjmercier@google.com>
+Date: Fri, 9 May 2025 08:21:35 -0700
+X-Gm-Features: AX0GCFvggZ1wxI53q8jeqfq4ZRzo6BIGXGFyIIxksh_oUSEqZ6C2et9zbwejpqA
+Message-ID: <CABdmKX0FSPtF08sjr5dKTZXTPs9SqbHfXYKVGJ7sPk5vsRctDw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 0/5] Replace CONFIG_DMABUF_SYSFS_STATS with BPF
+To: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc: sumit.semwal@linaro.org, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, martin.lau@linux.dev, skhan@linuxfoundation.org, 
+	alexei.starovoitov@gmail.com, linux-kernel@vger.kernel.org, 
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	linaro-mm-sig@lists.linaro.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, android-mm@google.com, simona@ffwll.ch, 
+	eddyz87@gmail.com, yonghong.song@linux.dev, john.fastabend@gmail.com, 
+	kpsingh@kernel.org, sdf@fomichev.me, jolsa@kernel.org, mykolal@fb.com, 
+	shuah@kernel.org, song@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Tests for the can subsystem have been in the can-tests repository[1] so
-far. Start moving the tests to kernel selftests by importing the current
-tst-filter test. The test is now named test_raw_filter and is substantially
-updated to be more aligned with the kernel selftests, follow the coding
-style, and simplify the validation of received CAN frames. We also include
-documentation of the test design. The test verifies that the single filters
-on raw CAN sockets work as expected.
+On Thu, May 8, 2025 at 11:04=E2=80=AFPM Christian K=C3=B6nig
+<christian.koenig@amd.com> wrote:
+>
+> Feel free to add my Acked-by to the patches which don't have my rb yet.
+>
+> And ping me when I should upstream this through drm-misc-next, but if you=
+ want to upstream this through some other branch then that is fine with me =
+as well.
 
-We intend to import more tests from can-tests and add additional test cases
-in the future. The goal of moving the CAN selftests into the tree is to
-align the tests more closely with the kernel, improve testing of CAN in
-general, and to simplify running the tests automatically in the various
-kernel CI systems.
+Thanks Christian. Alexei mentioned he was willing to take the series
+through bpf-next here:
+https://lore.kernel.org/all/CAADnVQLqv-ZpoQEhk2UwvSZorSLcjgF7qLD76oHguH5-Gc=
+SXxA@mail.gmail.com/
 
-[1]: https://github.com/linux-can/can-tests
+I think it makes sense to send the CONFIG_DMABUF_SYSFS_STATS removal
+through drm-misc-next though, so I'll resend that as a standalone
+patch whenever I hear about the next longterm stable release.
 
-Signed-off-by: Felix Maurer <fmaurer@redhat.com>
----
-
-Notes:
-    I keep netdev and its reviewers and maintainers in CC because of the
-    changes to their paths in MAINTAINERS, even though Jakub acked them on
-    v1. The change should be merged through linux-can-next and subsequent
-    changes will not go to netdev anymore.
-    
-    I have removed the long form of the licenses in the beginning of the
-    file during the import, as that is covered by the SPDX line anyways. The
-    copyright is left as it was originally.
-    
-    Changes to v1:
-    - link: https://lore.kernel.org/linux-can/cover.1745323279.git.fmaurer@redhat.com/
-    - Squashed import and rewrite into a single commit
-    - Simplified checking of the received flags
-    - Pass the interface name through env (easier with the selftest
-      framework than adding an argument)
-    
-    I have not updated test_raw_filter.sh to work with physical CAN
-    interfaces so far because I don't have one to test this right now and
-    don't think it's a priority for selftests for now.
-
- MAINTAINERS                                   |   2 +
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/net/can/.gitignore    |   2 +
- tools/testing/selftests/net/can/Makefile      |  11 +
- .../selftests/net/can/test_raw_filter.c       | 395 ++++++++++++++++++
- .../selftests/net/can/test_raw_filter.sh      |  37 ++
- 6 files changed, 448 insertions(+)
- create mode 100644 tools/testing/selftests/net/can/.gitignore
- create mode 100644 tools/testing/selftests/net/can/Makefile
- create mode 100644 tools/testing/selftests/net/can/test_raw_filter.c
- create mode 100755 tools/testing/selftests/net/can/test_raw_filter.sh
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 241ca9e260a2..55749b492ebb 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5155,6 +5155,7 @@ F:	include/uapi/linux/can/isotp.h
- F:	include/uapi/linux/can/raw.h
- F:	net/can/
- F:	net/sched/em_canid.c
-+F:	tools/testing/selftests/net/can/
- 
- CAN-J1939 NETWORK LAYER
- M:	Robin van der Gracht <robin@protonic.nl>
-@@ -16577,6 +16578,7 @@ X:	net/ceph/
- X:	net/mac80211/
- X:	net/rfkill/
- X:	net/wireless/
-+X:	tools/testing/selftests/net/can/
- 
- NETWORKING [IPSEC]
- M:	Steffen Klassert <steffen.klassert@secunet.com>
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 8daac70c2f9d..e5c9ecd52b73 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -64,6 +64,7 @@ TARGETS += mqueue
- TARGETS += nci
- TARGETS += net
- TARGETS += net/af_unix
-+TARGETS += net/can
- TARGETS += net/forwarding
- TARGETS += net/hsr
- TARGETS += net/mptcp
-diff --git a/tools/testing/selftests/net/can/.gitignore b/tools/testing/selftests/net/can/.gitignore
-new file mode 100644
-index 000000000000..764a53fc837f
---- /dev/null
-+++ b/tools/testing/selftests/net/can/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+test_raw_filter
-diff --git a/tools/testing/selftests/net/can/Makefile b/tools/testing/selftests/net/can/Makefile
-new file mode 100644
-index 000000000000..5b82e60a03e7
---- /dev/null
-+++ b/tools/testing/selftests/net/can/Makefile
-@@ -0,0 +1,11 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+top_srcdir = ../../../../..
-+
-+CFLAGS += -Wall -Wl,--no-as-needed -O2 -g -I$(top_srcdir)/usr/include $(KHDR_INCLUDES)
-+
-+TEST_PROGS := test_raw_filter.sh
-+
-+TEST_GEN_FILES := test_raw_filter
-+
-+include ../../lib.mk
-diff --git a/tools/testing/selftests/net/can/test_raw_filter.c b/tools/testing/selftests/net/can/test_raw_filter.c
-new file mode 100644
-index 000000000000..3c0e43cab1e8
---- /dev/null
-+++ b/tools/testing/selftests/net/can/test_raw_filter.c
-@@ -0,0 +1,395 @@
-+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
-+/*
-+ * Copyright (c) 2011 Volkswagen Group Electronic Research
-+ * All rights reserved.
-+ */
-+
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <string.h>
-+
-+#include <sys/types.h>
-+#include <sys/socket.h>
-+#include <sys/ioctl.h>
-+#include <sys/time.h>
-+#include <net/if.h>
-+#include <linux/if.h>
-+
-+#include <linux/can.h>
-+#include <linux/can/raw.h>
-+
-+#include "../../kselftest_harness.h"
-+
-+#define ID 0x123
-+
-+char VCANIF[IFNAMSIZ];
-+
-+static int send_can_frames(int sock, int testcase)
-+{
-+	struct can_frame frame;
-+
-+	frame.can_dlc = 1;
-+	frame.data[0] = testcase;
-+
-+	frame.can_id = ID;
-+	if (write(sock, &frame, sizeof(frame)) < 0)
-+		goto write_err;
-+
-+	frame.can_id = (ID | CAN_RTR_FLAG);
-+	if (write(sock, &frame, sizeof(frame)) < 0)
-+		goto write_err;
-+
-+	frame.can_id = (ID | CAN_EFF_FLAG);
-+	if (write(sock, &frame, sizeof(frame)) < 0)
-+		goto write_err;
-+
-+	frame.can_id = (ID | CAN_EFF_FLAG | CAN_RTR_FLAG);
-+	if (write(sock, &frame, sizeof(frame)) < 0)
-+		goto write_err;
-+
-+	return 0;
-+
-+write_err:
-+	perror("write");
-+	return 1;
-+
-+}
-+
-+FIXTURE(can_filters) {
-+	int sock;
-+};
-+
-+FIXTURE_SETUP(can_filters)
-+{
-+	struct sockaddr_can addr;
-+	struct ifreq ifr;
-+	int recv_own_msgs = 1;
-+	int s, ret;
-+
-+	s = socket(PF_CAN, SOCK_RAW, CAN_RAW);
-+	ASSERT_LT(0, s)
-+		TH_LOG("failed to create CAN_RAW socket: %d", errno);
-+
-+	strncpy(ifr.ifr_name, VCANIF, sizeof(ifr.ifr_name));
-+	ret = ioctl(s, SIOCGIFINDEX, &ifr);
-+	ASSERT_LE(0, ret)
-+		TH_LOG("failed SIOCGIFINDEX: %d", errno);
-+
-+	addr.can_family = AF_CAN;
-+	addr.can_ifindex = ifr.ifr_ifindex;
-+
-+	setsockopt(s, SOL_CAN_RAW, CAN_RAW_RECV_OWN_MSGS,
-+		   &recv_own_msgs, sizeof(recv_own_msgs));
-+
-+	ret = bind(s, (struct sockaddr *)&addr, sizeof(addr));
-+	ASSERT_EQ(0, ret)
-+		TH_LOG("failed bind socket: %d", errno);
-+
-+	self->sock = s;
-+}
-+
-+FIXTURE_TEARDOWN(can_filters)
-+{
-+	close(self->sock);
-+}
-+
-+FIXTURE_VARIANT(can_filters) {
-+	int testcase;
-+	canid_t id;
-+	canid_t mask;
-+	int exp_num_rx;
-+	canid_t exp_flags[];
-+};
-+#define T_EFF (CAN_EFF_FLAG >> 28)
-+#define T_RTR (CAN_RTR_FLAG >> 28)
-+
-+/* Receive all frames when filtering for the ID in standard frame format */
-+FIXTURE_VARIANT_ADD(can_filters, base) {
-+	.testcase = 1,
-+	.id = ID,
-+	.mask = CAN_SFF_MASK,
-+	.exp_num_rx = 4,
-+	.exp_flags = {
-+		0,
-+		CAN_RTR_FLAG,
-+		CAN_EFF_FLAG,
-+		CAN_EFF_FLAG | CAN_RTR_FLAG,
-+	},
-+};
-+/* Ignore EFF flag in filter ID if not covered by filter mask */
-+FIXTURE_VARIANT_ADD(can_filters, base_eff) {
-+	.testcase = 2,
-+	.id = ID | CAN_EFF_FLAG,
-+	.mask = CAN_SFF_MASK,
-+	.exp_num_rx = 4,
-+	.exp_flags = {
-+		0,
-+		CAN_RTR_FLAG,
-+		CAN_EFF_FLAG,
-+		CAN_EFF_FLAG | CAN_RTR_FLAG,
-+	},
-+};
-+/* Ignore RTR flag in filter ID if not covered by filter mask */
-+FIXTURE_VARIANT_ADD(can_filters, base_rtr) {
-+	.testcase = 3,
-+	.id = ID | CAN_RTR_FLAG,
-+	.mask = CAN_SFF_MASK,
-+	.exp_num_rx = 4,
-+	.exp_flags = {
-+		0,
-+		CAN_RTR_FLAG,
-+		CAN_EFF_FLAG,
-+		CAN_EFF_FLAG | CAN_RTR_FLAG,
-+	},
-+};
-+/* Ignore EFF and RTR flags in filter ID if not covered by filter mask */
-+FIXTURE_VARIANT_ADD(can_filters, base_effrtr) {
-+	.testcase = 4,
-+	.id = ID | CAN_EFF_FLAG | CAN_RTR_FLAG,
-+	.mask = CAN_SFF_MASK,
-+	.exp_num_rx = 4,
-+	.exp_flags = {
-+		0,
-+		CAN_RTR_FLAG,
-+		CAN_EFF_FLAG,
-+		CAN_EFF_FLAG | CAN_RTR_FLAG,
-+	},
-+};
-+
-+/* Receive only SFF frames when expecting no EFF flag */
-+FIXTURE_VARIANT_ADD(can_filters, filter_eff) {
-+	.testcase = 5,
-+	.id = ID,
-+	.mask = CAN_SFF_MASK | CAN_EFF_FLAG,
-+	.exp_num_rx = 2,
-+	.exp_flags = {
-+		0,
-+		CAN_RTR_FLAG,
-+	},
-+};
-+/* Receive only EFF frames when filter id and filter mask include EFF flag */
-+FIXTURE_VARIANT_ADD(can_filters, filter_eff_eff) {
-+	.testcase = 6,
-+	.id = ID | CAN_EFF_FLAG,
-+	.mask = CAN_SFF_MASK | CAN_EFF_FLAG,
-+	.exp_num_rx = 2,
-+	.exp_flags = {
-+		CAN_EFF_FLAG,
-+		CAN_EFF_FLAG | CAN_RTR_FLAG,
-+	},
-+};
-+/* Receive only SFF frames when expecting no EFF flag, ignoring RTR flag */
-+FIXTURE_VARIANT_ADD(can_filters, filter_eff_rtr) {
-+	.testcase = 7,
-+	.id = ID | CAN_RTR_FLAG,
-+	.mask = CAN_SFF_MASK | CAN_EFF_FLAG,
-+	.exp_num_rx = 2,
-+	.exp_flags = {
-+		0,
-+		CAN_RTR_FLAG,
-+	},
-+};
-+/* Receive only EFF frames when filter id and filter mask include EFF flag,
-+ * ignoring RTR flag
-+ */
-+FIXTURE_VARIANT_ADD(can_filters, filter_eff_effrtr) {
-+	.testcase = 8,
-+	.id = ID | CAN_EFF_FLAG | CAN_RTR_FLAG,
-+	.mask = CAN_SFF_MASK | CAN_EFF_FLAG,
-+	.exp_num_rx = 2,
-+	.exp_flags = {
-+		CAN_EFF_FLAG,
-+		CAN_EFF_FLAG | CAN_RTR_FLAG,
-+	},
-+};
-+
-+/* Receive no remote frames when filtering for no RTR flag */
-+FIXTURE_VARIANT_ADD(can_filters, filter_rtr) {
-+	.testcase = 9,
-+	.id = ID,
-+	.mask = CAN_SFF_MASK | CAN_RTR_FLAG,
-+	.exp_num_rx = 2,
-+	.exp_flags = {
-+		0,
-+		CAN_EFF_FLAG,
-+	},
-+};
-+/* Receive no remote frames when filtering for no RTR flag, ignoring EFF flag */
-+FIXTURE_VARIANT_ADD(can_filters, filter_rtr_eff) {
-+	.testcase = 10,
-+	.id = ID | CAN_EFF_FLAG,
-+	.mask = CAN_SFF_MASK | CAN_RTR_FLAG,
-+	.exp_num_rx = 2,
-+	.exp_flags = {
-+		0,
-+		CAN_EFF_FLAG,
-+	},
-+};
-+/* Receive only remote frames when filter includes RTR flag */
-+FIXTURE_VARIANT_ADD(can_filters, filter_rtr_rtr) {
-+	.testcase = 11,
-+	.id = ID | CAN_RTR_FLAG,
-+	.mask = CAN_SFF_MASK | CAN_RTR_FLAG,
-+	.exp_num_rx = 2,
-+	.exp_flags = {
-+		CAN_RTR_FLAG,
-+		CAN_EFF_FLAG | CAN_RTR_FLAG,
-+	},
-+};
-+/* Receive only remote frames when filter includes RTR flag, ignoring EFF
-+ * flag
-+ */
-+FIXTURE_VARIANT_ADD(can_filters, filter_rtr_effrtr) {
-+	.testcase = 12,
-+	.id = ID | CAN_EFF_FLAG | CAN_RTR_FLAG,
-+	.mask = CAN_SFF_MASK | CAN_RTR_FLAG,
-+	.exp_num_rx = 2,
-+	.exp_flags = {
-+		CAN_RTR_FLAG,
-+		CAN_EFF_FLAG | CAN_RTR_FLAG,
-+	},
-+};
-+
-+/* Receive only SFF data frame when filtering for no flags */
-+FIXTURE_VARIANT_ADD(can_filters, filter_effrtr) {
-+	.testcase = 13,
-+	.id = ID,
-+	.mask = CAN_SFF_MASK | CAN_EFF_FLAG | CAN_RTR_FLAG,
-+	.exp_num_rx = 1,
-+	.exp_flags = {
-+		0,
-+	},
-+};
-+/* Receive only EFF data frame when filtering for EFF but no RTR flag */
-+FIXTURE_VARIANT_ADD(can_filters, filter_effrtr_eff) {
-+	.testcase = 14,
-+	.id = ID | CAN_EFF_FLAG,
-+	.mask = CAN_SFF_MASK | CAN_EFF_FLAG | CAN_RTR_FLAG,
-+	.exp_num_rx = 1,
-+	.exp_flags = {
-+		CAN_EFF_FLAG,
-+	},
-+};
-+/* Receive only SFF remote frame when filtering for RTR but no EFF flag */
-+FIXTURE_VARIANT_ADD(can_filters, filter_effrtr_rtr) {
-+	.testcase = 15,
-+	.id = ID | CAN_RTR_FLAG,
-+	.mask = CAN_SFF_MASK | CAN_EFF_FLAG | CAN_RTR_FLAG,
-+	.exp_num_rx = 1,
-+	.exp_flags = {
-+		CAN_RTR_FLAG,
-+	},
-+};
-+/* Receive only EFF remote frame when filtering for EFF and RTR flag */
-+FIXTURE_VARIANT_ADD(can_filters, filter_effrtr_effrtr) {
-+	.testcase = 16,
-+	.id = ID | CAN_EFF_FLAG | CAN_RTR_FLAG,
-+	.mask = CAN_SFF_MASK | CAN_EFF_FLAG | CAN_RTR_FLAG,
-+	.exp_num_rx = 1,
-+	.exp_flags = {
-+		CAN_EFF_FLAG | CAN_RTR_FLAG,
-+	},
-+};
-+
-+/* Receive only SFF data frame when filtering for no EFF flag and no RTR flag
-+ * but based on EFF mask
-+ */
-+FIXTURE_VARIANT_ADD(can_filters, eff) {
-+	.testcase = 17,
-+	.id = ID,
-+	.mask = CAN_EFF_MASK | CAN_EFF_FLAG | CAN_RTR_FLAG,
-+	.exp_num_rx = 1,
-+	.exp_flags = {
-+		0,
-+	},
-+};
-+/* Receive only EFF data frame when filtering for EFF flag and no RTR flag but
-+ * based on EFF mask
-+ */
-+FIXTURE_VARIANT_ADD(can_filters, eff_eff) {
-+	.testcase = 18,
-+	.id = ID | CAN_EFF_FLAG,
-+	.mask = CAN_EFF_MASK | CAN_EFF_FLAG | CAN_RTR_FLAG,
-+	.exp_num_rx = 1,
-+	.exp_flags = {
-+		CAN_EFF_FLAG,
-+	},
-+};
-+
-+/* This test verifies that the raw CAN filters work, by checking if only frames
-+ * with the expected set of flags are received. For each test case, the given
-+ * filter (id and mask) is added and four CAN frames are sent with every
-+ * combination of set/unset EFF/RTR flags.
-+ */
-+TEST_F(can_filters, test_filter)
-+{
-+	struct can_filter rfilter;
-+	int ret;
-+
-+	rfilter.can_id = variant->id;
-+	rfilter.can_mask = variant->mask;
-+	setsockopt(self->sock, SOL_CAN_RAW, CAN_RAW_FILTER,
-+		   &rfilter, sizeof(rfilter));
-+
-+	TH_LOG("filters: can_id = 0x%08X can_mask = 0x%08X",
-+		rfilter.can_id, rfilter.can_mask);
-+
-+	ret = send_can_frames(self->sock, variant->testcase);
-+	ASSERT_EQ(0, ret)
-+		TH_LOG("failed to send CAN frames");
-+
-+	for (int i = 0; i <= variant->exp_num_rx; i++) {
-+		struct can_frame frame;
-+		struct timeval tv;
-+		fd_set rdfs;
-+
-+		FD_ZERO(&rdfs);
-+		FD_SET(self->sock, &rdfs);
-+		tv.tv_sec = 0;
-+		tv.tv_usec = 50000; /* 50ms timeout */
-+
-+		ret = select(self->sock + 1, &rdfs, NULL, NULL, &tv);
-+		ASSERT_LE(0, ret)
-+			TH_LOG("failed select for frame %d, err: %d)", i, errno);
-+
-+		ret = FD_ISSET(self->sock, &rdfs);
-+		if (i == variant->exp_num_rx) {
-+			ASSERT_EQ(0, ret)
-+				TH_LOG("too many frames received");
-+		} else {
-+			ASSERT_NE(0, ret)
-+				TH_LOG("too few frames received");
-+
-+			ret = read(self->sock, &frame, sizeof(frame));
-+			ASSERT_LE(0, ret)
-+				TH_LOG("failed to read frame %d, err: %d", i, errno);
-+
-+			TH_LOG("rx: can_id = 0x%08X rx = %d", frame.can_id, i);
-+
-+			ASSERT_EQ(ID, frame.can_id & CAN_SFF_MASK)
-+				TH_LOG("received wrong can_id");
-+			ASSERT_EQ(variant->testcase, frame.data[0])
-+				TH_LOG("received wrong test case");
-+
-+			ASSERT_EQ(frame.can_id & ~CAN_ERR_MASK,
-+				  variant->exp_flags[i])
-+				TH_LOG("received unexpected flags");
-+
-+		}
-+	}
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	char *ifname = getenv("VCANIF");
-+
-+	if (ifname) {
-+		strncpy(VCANIF, ifname, sizeof(VCANIF) - 1);
-+	} else {
-+		printf("VCANIF environment variable must contain the test interface\n");
-+		return KSFT_FAIL;
-+	}
-+
-+	return test_harness_run(argc, argv);
-+}
-diff --git a/tools/testing/selftests/net/can/test_raw_filter.sh b/tools/testing/selftests/net/can/test_raw_filter.sh
-new file mode 100755
-index 000000000000..95f45c3c824b
---- /dev/null
-+++ b/tools/testing/selftests/net/can/test_raw_filter.sh
-@@ -0,0 +1,37 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+ALL_TESTS="
-+	test_raw_filter
-+"
-+
-+net_dir=$(dirname $0)/..
-+source $net_dir/lib.sh
-+
-+export VCANIF="vcan0"
-+
-+setup()
-+{
-+	ip link add name $VCANIF type vcan || exit $ksft_skip
-+	ip link set dev $VCANIF up
-+	pwd
-+}
-+
-+cleanup()
-+{
-+	ip link delete $VCANIF
-+}
-+
-+test_raw_filter()
-+{
-+	./test_raw_filter
-+	check_err $?
-+	log_test "test_raw_filter"
-+}
-+
-+trap cleanup EXIT
-+setup
-+
-+tests_run
-+
-+exit $EXIT_STATUS
--- 
-2.49.0
-
+>
+> Regards,
+> Christian.
+>
+> On 5/8/25 20:20, T.J. Mercier wrote:
+> > Until CONFIG_DMABUF_SYSFS_STATS was added [1] it was only possible to
+> > perform per-buffer accounting with debugfs which is not suitable for
+> > production environments. Eventually we discovered the overhead with
+> > per-buffer sysfs file creation/removal was significantly impacting
+> > allocation and free times, and exacerbated kernfs lock contention. [2]
+> > dma_buf_stats_setup() is responsible for 39% of single-page buffer
+> > creation duration, or 74% of single-page dma_buf_export() duration when
+> > stressing dmabuf allocations and frees.
+> >
+> > I prototyped a change from per-buffer to per-exporter statistics with a
+> > RCU protected list of exporter allocations that accommodates most (but
+> > not all) of our use-cases and avoids almost all of the sysfs overhead.
+> > While that adds less overhead than per-buffer sysfs, and less even than
+> > the maintenance of the dmabuf debugfs_list, it's still *additional*
+> > overhead on top of the debugfs_list and doesn't give us per-buffer info=
+.
+> >
+> > This series uses the existing dmabuf debugfs_list to implement a BPF
+> > dmabuf iterator, which adds no overhead to buffer allocation/free and
+> > provides per-buffer info. The list has been moved outside of
+> > CONFIG_DEBUG_FS scope so that it is always populated. The BPF program
+> > loaded by userspace that extracts per-buffer information gets to define
+> > its own interface which avoids the lack of ABI stability with debugfs.
+> >
+> > This will allow us to replace our use of CONFIG_DMABUF_SYSFS_STATS, and
+> > the plan is to remove it from the kernel after the next longterm stable
+> > release.
+> >
+> > [1] https://lore.kernel.org/linux-media/20201210044400.1080308-1-hridya=
+@google.com
+> > [2] https://lore.kernel.org/all/20220516171315.2400578-1-tjmercier@goog=
+le.com
+> >
+> > v1: https://lore.kernel.org/all/20250414225227.3642618-1-tjmercier@goog=
+le.com
+> > v1 -> v2:
+> > Make the DMA buffer list independent of CONFIG_DEBUG_FS per Christian K=
+=C3=B6nig
+> > Add CONFIG_DMA_SHARED_BUFFER check to kernel/bpf/Makefile per kernel te=
+st robot
+> > Use BTF_ID_LIST_SINGLE instead of BTF_ID_LIST_GLOBAL_SINGLE per Song Li=
+u
+> > Fixup comment style, mixing code/declarations, and use ASSERT_OK_FD in =
+selftest per Song Liu
+> > Add BPF_ITER_RESCHED feature to bpf_dmabuf_reg_info per Alexei Starovoi=
+tov
+> > Add open-coded iterator and selftest per Alexei Starovoitov
+> > Add a second test buffer from the system dmabuf heap to selftests
+> > Use the BPF program we'll use in production for selftest per Alexei Sta=
+rovoitov
+> >   https://r.android.com/c/platform/system/bpfprogs/+/3616123/2/dmabufIt=
+er.c
+> >   https://r.android.com/c/platform/system/memory/libmeminfo/+/3614259/1=
+/libdmabufinfo/dmabuf_bpf_stats.cpp
+> > v2: https://lore.kernel.org/all/20250504224149.1033867-1-tjmercier@goog=
+le.com
+> > v2 -> v3:
+> > Rebase onto bpf-next/master
+> > Move get_next_dmabuf() into drivers/dma-buf/dma-buf.c, along with the
+> >   new get_first_dmabuf(). This avoids having to expose the dmabuf list
+> >   and mutex to the rest of the kernel, and keeps the dmabuf mutex
+> >   operations near each other in the same file. (Christian K=C3=B6nig)
+> > Add Christian's RB to dma-buf: Rename debugfs symbols
+> > Drop RFC: dma-buf: Remove DMA-BUF statistics
+> > v3: https://lore.kernel.org/all/20250507001036.2278781-1-tjmercier@goog=
+le.com
+> > v3 -> v4:
+> > Fix selftest BPF program comment style (not kdoc) per Alexei Starovoito=
+v
+> > Fix dma-buf.c kdoc comment style per Alexei Starovoitov
+> > Rename get_first_dmabuf / get_next_dmabuf to dma_buf_iter_begin /
+> >   dma_buf_iter_next per Christian K=C3=B6nig
+> > Add Christian's RB to bpf: Add dmabuf iterator
+> >
+> > T.J. Mercier (5):
+> >   dma-buf: Rename debugfs symbols
+> >   bpf: Add dmabuf iterator
+> >   bpf: Add open coded dmabuf iterator
+> >   selftests/bpf: Add test for dmabuf_iter
+> >   selftests/bpf: Add test for open coded dmabuf_iter
+> >
+> >  drivers/dma-buf/dma-buf.c                     |  98 +++++--
+> >  include/linux/dma-buf.h                       |   4 +-
+> >  kernel/bpf/Makefile                           |   3 +
+> >  kernel/bpf/dmabuf_iter.c                      | 149 ++++++++++
+> >  kernel/bpf/helpers.c                          |   5 +
+> >  .../testing/selftests/bpf/bpf_experimental.h  |   5 +
+> >  tools/testing/selftests/bpf/config            |   3 +
+> >  .../selftests/bpf/prog_tests/dmabuf_iter.c    | 258 ++++++++++++++++++
+> >  .../testing/selftests/bpf/progs/dmabuf_iter.c |  91 ++++++
+> >  9 files changed, 594 insertions(+), 22 deletions(-)
+> >  create mode 100644 kernel/bpf/dmabuf_iter.c
+> >  create mode 100644 tools/testing/selftests/bpf/prog_tests/dmabuf_iter.=
+c
+> >  create mode 100644 tools/testing/selftests/bpf/progs/dmabuf_iter.c
+> >
+> >
+> > base-commit: 43745d11bfd9683abdf08ad7a5cc403d6a9ffd15
+>
 
