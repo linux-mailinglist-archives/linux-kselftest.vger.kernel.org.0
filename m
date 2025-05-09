@@ -1,132 +1,140 @@
-Return-Path: <linux-kselftest+bounces-32726-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32727-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8615AB08FF
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 May 2025 05:52:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A2E9AB090D
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 May 2025 06:10:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 276029E2AB3
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 May 2025 03:52:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5EA921B6366A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 May 2025 04:10:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A9B323D290;
-	Fri,  9 May 2025 03:52:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67B8F238C36;
+	Fri,  9 May 2025 04:10:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HYWwd3OH"
+	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="H78EiTAG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D06323A9BD
-	for <linux-kselftest@vger.kernel.org>; Fri,  9 May 2025 03:52:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFF502192F3
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 May 2025 04:10:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746762738; cv=none; b=ceuA6GAZExFPpsEKPwUJyAD8l09LzOjczWTX8/CYQCH/tiQoqzizUiZBqjylRki3ZS3a8u3UFeUjihMNT56GAgU0Fg2bfLodgucj3NG1Eu1Z3z2PV0I57jjeSluEdeL0fz5YTxeM2M/2TNs4VBEFvy53S3SgWU+H/djLo8Kqr/A=
+	t=1746763816; cv=none; b=lsqQKKGuSB6soVuzRQGfcsBmls5VB9nI0hOWc2SJjEpByDMGI1z+kyurZW5f32vDHcPApMY2i/Q19K8G0e5mjue1bI2M/XL/gZBIHvAYE7/wQ5Loc7BCcVV1chogoVZusuVxiiaXoY2aBbUi0Hlkk6pYVzBVGDsB7arhaQdvq5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746762738; c=relaxed/simple;
-	bh=QiDElLEnEredBXBl1qAqKruXjIhOxE3F/GTDW5A86CQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qoBbyWBTfY3D/Y5V9qPn5xa8Yrh+L1se//sR0Szw3A97QV89xpFQpyGtAhO+ZZeWJD6pNPAIeP+S/6MlCD94HHSavtfrPzSRyASoY9xVfy5AhXPByUBHkBLBBXD/mGs/rBTYZEstTiRl9bYBCf2s7vYVErXXjQhIvoWHsmo8qA0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HYWwd3OH; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1746762735;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xEjeqhiXcnCiNR51BnaqIffP/HKFb9eZ0GW1Mld0utM=;
-	b=HYWwd3OHyNibcciyHK0hApQD9HoqoF169qZikKUJtwUTGcVYqWisZZF5Klpbp/apzZHw9k
-	VvZ13XVn+yAHy93LYuoDJ5a79pdg9FDZ5+juVVR8F1gI0Nvr1Fgzkt7weijBbEyREjY4fd
-	ipsA0Vz9G2So4wV7oEyY6bbQjA/eq4Q=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-627-RPTp4l4mMFOp3ecQKv5Omg-1; Thu,
- 08 May 2025 23:52:12 -0400
-X-MC-Unique: RPTp4l4mMFOp3ecQKv5Omg-1
-X-Mimecast-MFC-AGG-ID: RPTp4l4mMFOp3ecQKv5Omg_1746762730
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 21858180048E;
-	Fri,  9 May 2025 03:52:10 +0000 (UTC)
-Received: from fedora (unknown [10.72.116.120])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 449CF1956058;
-	Fri,  9 May 2025 03:52:03 +0000 (UTC)
-Date: Fri, 9 May 2025 11:51:58 +0800
-From: Ming Lei <ming.lei@redhat.com>
-To: Uday Shankar <ushankar@purestorage.com>
-Cc: Jens Axboe <axboe@kernel.dk>,
-	Caleb Sander Mateos <csander@purestorage.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v6 2/8] sbitmap: fix off-by-one when wrapping hint
-Message-ID: <aB173vMuGb_Sq2vx@fedora>
-References: <20250507-ublk_task_per_io-v6-0-a2a298783c01@purestorage.com>
- <20250507-ublk_task_per_io-v6-2-a2a298783c01@purestorage.com>
+	s=arc-20240116; t=1746763816; c=relaxed/simple;
+	bh=qn0j00Q4lWXNjM61TVOR73jQu4hSjMBc//b4ByjjlDQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qcIsQEACqXxHHGUc7McpjPE71fP4EIEkj5jNqDWTpM8VqBoMfjZ/CMrw58oHJe2KLQrNCaIW5DrINNTi/SjoH2knYCemdI9SuIe1s4IOPNERvyDInJBjuoak4e4gpBp72JvONPYQudz8piWknLQNzgJwgdOEyWe8ULGBSFlufYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=H78EiTAG; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-227b828de00so17481555ad.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 May 2025 21:10:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1746763814; x=1747368614; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gOPt985lsryufrF2f8Rp/LqwNq9TFhhzPNpr6WI7mLk=;
+        b=H78EiTAGBP/eSZtpKU4O7AkmbB7c0NwV4GOoLa6j98Z8i5LuY846ffMW9OvosBR57E
+         7pTiLxd5Rcpj7vhvmMtlZsQjGkYA3mpJknQThjvk64fpQQq/MA6wOE4xs1smA37QalR4
+         t0YLmgoGt6DYQSrleEY14yvZ9E3tW3CS8JFtThPBb4HvE/c6yd8W33X40gDztNwmHbgz
+         KBY8dGLlJQEEmfrAPTkQLC2TRl7bwgL7QONB7DsHu7L/RF2N85KiAdiprebR9Wvc2X5+
+         +CUfqo9bFSWXa0Z7xyRrKlSHP5KjjYVyvDsGTCfEtyueRVSBPiAHaKerJ1LIBWIKdLa9
+         MrDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746763814; x=1747368614;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gOPt985lsryufrF2f8Rp/LqwNq9TFhhzPNpr6WI7mLk=;
+        b=cnJIh3pjqJ+v99X/FZNFdtTiu7408QgM1Ulpkdad0SB+50QIHV6uO6aTMKH/jQpP7J
+         gvycPathom0RfOZ7iZYfA3G5sYvBAbFaSFk903R+uZDoKyFuP1wwOiC+ZZMbRSNTRoc+
+         U0ZZxMGuyCZg6yF8Mv2ENJmeWUIqMu7TOPa15+LsIB+MQVYgwPx3qCdRSgwk7AczCkI+
+         nL5unF+ZHWfK1FzlHbOxgJ4wvOBTezpGbx9mDEjTWpSRUHcOJch82kRTcd42Ay8MRpIY
+         NqHMdbT8Bk8w0msxWRYFMpjcTlqRxs4bj2EwTHtWnBjFVVq7uBjQAeZwiCXGph8CCJj0
+         j/wQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVntEe/EsXmAK6R4L0yQlrjdIpljCt/SSlDLz86G2CY76agbnoSlHbdcOZyNMbELFbXmG6p1Zl6MT7kWcCriSc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyrugMsSPPfNn8J21PpEemi441Egd5WnJvkihVyYXiJD8DHnN1S
+	f+m4F2hJDeh8jkU2+y4xM2CJhpJ54sGVmRjkAOUqOni9AuRGhPyCuclQXjRTk+Y=
+X-Gm-Gg: ASbGncv9paloJ443ok5ZKNrmC98b1FaSlYTblAyRb0FmxGx8k/SM3vDSOKSKStQ6I2Y
+	hUAaW8+XNXIj+lqxB4att34PX2k1iCFO3mmKUy4w186JcmgHTqBnuctsY2QqBb8iAeRTx1Eevxx
+	7IGNz7HIfip2i9bdYFu+i6cLIdKV9LLEB8AzY2wdEXoHmO5rx+OMtR3Vl0K65hVMFQIqICUec4R
+	aWh7uobasY+8qGx/vwtPWPkEyEWOnNRrGUJM6276aHiSfNEybcz5erEAaQRNXa7ufoT5e4vOBQR
+	W0m9AUfKxpcoXTnLFJ/1yPxZRBSnoLO6eCXYG12hvyRvhqs=
+X-Google-Smtp-Source: AGHT+IGld+rlMK8n8nhzZTd9tL87p1xppP25t3sLIo0ygGvlHlV56UBGyyKEeAa17jr3ahMyKHEBTw==
+X-Received: by 2002:a17:902:ea0c:b0:22e:17ac:9dd8 with SMTP id d9443c01a7336-22fc8c7d71emr24684365ad.29.1746763814065;
+        Thu, 08 May 2025 21:10:14 -0700 (PDT)
+Received: from [192.168.1.21] ([97.126.136.10])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22fc773ee47sm8139185ad.63.2025.05.08.21.10.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 May 2025 21:10:13 -0700 (PDT)
+Message-ID: <d8693a9b-697a-49d7-a064-fc7349ec2d63@davidwei.uk>
+Date: Thu, 8 May 2025 21:10:13 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250507-ublk_task_per_io-v6-2-a2a298783c01@purestorage.com>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next] selftests: drv-net: ping: make sure the ping
+ test restores checksum offload
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org
+References: <20250508214005.1518013-1-kuba@kernel.org>
+ <e339c382-c0f5-40dd-994e-34b388c68181@davidwei.uk>
+ <20250508183736.74707daf@kernel.org>
+Content-Language: en-US
+From: David Wei <dw@davidwei.uk>
+In-Reply-To: <20250508183736.74707daf@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, May 07, 2025 at 03:49:36PM -0600, Uday Shankar wrote:
-> In update_alloc_hint_after_get, we wrap the new hint back to 0 one bit
-> too early. This breaks round robin tag allocation (BLK_MQ_F_TAG_RR) -
-> some tags get skipped, so we don't get round robin tags even in the
-> simple case of single-threaded load on a single hctx. Fix the off-by-one
-> in the wrapping condition so that round robin tag allocation works
-> properly.
+On 5/8/25 18:37, Jakub Kicinski wrote:
+> On Thu, 8 May 2025 14:59:12 -0700 David Wei wrote:
+>>> +def _schedule_checksum_reset(cfg, netnl) -> None:
+>>> +    features = ethtool(f"-k {cfg.ifname}", json=True)
+>>> +    setting = ""
+>>> +    for side in ["tx", "rx"]:
+>>> +        f = features[0][side + "-checksumming"]
+>>> +        if not f["fixed"]:
+>>
+>> I checked and found that "fixed" is a ternary:
+>>
+>>           "rx-checksumming": {
+>>               "active": true,
+>>               "fixed": false,
+>>               "requested": true
+>>           },
+>>           "tx-checksumming": {
+>>               "active": true,
+>>               "fixed": null,
+>>               "requested": null
+>>           },
+>>
+>> Python loads this JSON as False and None types respectively, and `not
+>> f["fixed"]` is true for both False and None. Maybe this doesn't matter
+>> but flagging it.
 > 
-> The same pattern occurs in __sbitmap_get_word, so fix it there too.
+> I think so, yes.
 > 
-> Signed-off-by: Uday Shankar <ushankar@purestorage.com>
-> ---
->  lib/sbitmap.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>>> +            setting += " " + side
+>>> +            setting += " " + ("on" if f["requested"] or f["active"] else "off")
+>>> +    defer(ethtool, f" -K {cfg.ifname} " + setting)
+>>
+>> This does rx/tx-gro too even if not explicitly requested. I assume that
+>> is okay?
 > 
-> diff --git a/lib/sbitmap.c b/lib/sbitmap.c
-> index d3412984170c03dc6600bbe53f130404b765ac5a..aa1cec78b9649f1f3e8ef2d617dd7ee724391a8c 100644
-> --- a/lib/sbitmap.c
-> +++ b/lib/sbitmap.c
-> @@ -51,7 +51,7 @@ static inline void update_alloc_hint_after_get(struct sbitmap *sb,
->  	} else if (nr == hint || unlikely(sb->round_robin)) {
->  		/* Only update the hint if we used it. */
->  		hint = nr + 1;
-> -		if (hint >= depth - 1)
-> +		if (hint >= depth)
->  			hint = 0;
->  		this_cpu_write(*sb->alloc_hint, hint);
+> You mean because those are automatically updated when we change
+> checksumming? If so then yes.
 
-This may help for round robin.
+Thanks for responding.
 
->  	}
-> @@ -182,7 +182,7 @@ static int __sbitmap_get_word(unsigned long *word, unsigned long depth,
->  			break;
->  
->  		hint = nr + 1;
-> -		if (hint >= depth - 1)
-> +		if (hint >= depth)
->  			hint = 0;
-
-I guess round robin may need to return -1 if 'hint >= depth'.
-
-Also the existing behavior starts from adding sbitmap, maybe Jens
-has idea why hint is checked against 'depth -1' instead of 'depth'.
-
-
-
-Thanks,
-Ming
-
+Reviewed-by: David Wei <dw@davidwei.uk>
 
