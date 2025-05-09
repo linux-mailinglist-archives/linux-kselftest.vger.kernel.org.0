@@ -1,128 +1,140 @@
-Return-Path: <linux-kselftest+bounces-32773-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32774-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE45EAB1CA9
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 May 2025 20:50:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA4BBAB1CB4
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 May 2025 20:53:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3ABA85052CF
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 May 2025 18:50:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1CE041BC6B6B
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 May 2025 18:53:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C9E723FC74;
-	Fri,  9 May 2025 18:50:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54DED2405EC;
+	Fri,  9 May 2025 18:53:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gFPghcQ+"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="DAmP0kA7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 176CA23F409;
-	Fri,  9 May 2025 18:50:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80FF023FC5F
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 May 2025 18:53:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746816613; cv=none; b=N8iHJPx5WqHatfXjqPMoj19biT9I4x6JzhWmZ0JNoYzDrQjZJB8TGrhOAb6qCrnEBOc736p46AryykLU7oVL6yKkfsGaNLwwWDo44UhfwVLR/x2JzSymKpfj90wFDf6O/gUxJkr/sFYYnzFb+oZqvmVU7iYvPFwohODfFQPo5pA=
+	t=1746816808; cv=none; b=i46qiukOVtjblczAGuW88jtfgTF7r2zO/uydL4KiyzxovXXgArg0SiYvBSyOzlju5bnmw/TlLOAJKWGY/niNgQjObi/74N/X+9EZgl5mQHwBc/ahnc8/12hZs7RLaEt7we4di5SJcbv6AQSLuwCiTWElGuotYz6FwwhIIFtGrv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746816613; c=relaxed/simple;
-	bh=Nw2icyS2gV5tHa1D9rYpJZ+wGXpk3ib7WkwKezocKec=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uqxkZ2313RyhT7AQXnGbopU1MX4Rvq3aIW6S2C5ylHyyHfrVYwQ1kLl2IHVpO6RzjDvKbyddIxxmaAkKeoIKqW660WBENefatDeoX2YsgtdaYsfqgMCBL0l/XaKjfvewBD5B4dtAeDaiDTDHyCLHasV4PWKopSgSv3Yqtoc4nj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gFPghcQ+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80696C4CEF1;
-	Fri,  9 May 2025 18:50:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746816612;
-	bh=Nw2icyS2gV5tHa1D9rYpJZ+wGXpk3ib7WkwKezocKec=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=gFPghcQ+g6Ow9fN25q0c90JbQo/nGkzH0y81T4XLX5PFSG16F/6zq6b+vvU92VHAD
-	 IulxDi9xgjPdU/ADecB1w0UTu4nKkIl9rc4KuCVMf3O9J4wKzGkKfV2f1LgmP32Fjd
-	 NVrUcsxXd0PArNhlEZ8CaJf01HIcfiYutctkQ/rjVeKxeyJXrgDbppkfX8iIyTwQ5P
-	 mgUzWoohx3oNk9tHWdTETFqoI0YQnGcN8GxGZ1PlIMRV/4RGcHyELPXGqtxYf5iQKK
-	 QX27STt8I7pQlx8PDeNJzWhOI6f+ARYeLTQ/c1MGZXcqbegmwBqO+jOOx7W2XUQSK7
-	 HC4bpoTekdA4A==
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-6f2c45ecaffso25172806d6.2;
-        Fri, 09 May 2025 11:50:12 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUhBEDAheXM/dKrd34T9/a1p/N3/6CrhKj5dZGK5CFS/4oGerTOCxiZVgViiIvNW2c4sJw=@vger.kernel.org, AJvYcCWGQdiqIfQ0BN44LkFKJY2X6HyriwnjQ6h4SxPWQpDXblG1v0u8n2k8SSarl5bhOpfjwEWcuBHAkOKoJ8rU@vger.kernel.org, AJvYcCXddGjPF1sHUcPIP5R/kHORBPmE5fFsjcbOx97jrFeDN+5nGDH5MMarkuKzQlBXGxVsHMtA4NybIxgHmhwvG0Y8@vger.kernel.org, AJvYcCXu8pab8ZZaMbCoTMPXN2mhSRPA4dWJy5PbFwhtHmus5VrM658JKo3zpPcYIfejCB8/a46fdXmiHmgW7lY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyc9kDX+Z9NxuQxMsd+hJu7GBJZ5xV9PqP8cSp/Nf3QcASUdsHR
-	/zGxiiZKLBJIK0yG98g7q0K7cqeo56uUJjYPJsxvi4zLccJxwcFeibvFU28cZQfbD5WdMyhXnnW
-	Z3yn/UfGs5Qo3N3WvsGrbm1VfGfA=
-X-Google-Smtp-Source: AGHT+IGViwOqDoSNMIOEXeB3GdIvGbjcaeo4byd7FglN0JuWKHxLNlzbt1DVCaT9CHq9HWOw/2go8UY9Rkg8LznMS0k=
-X-Received: by 2002:a05:6214:c48:b0:6f4:b8eb:4815 with SMTP id
- 6a1803df08f44-6f6e470e2b8mr69583436d6.0.1746816611621; Fri, 09 May 2025
- 11:50:11 -0700 (PDT)
+	s=arc-20240116; t=1746816808; c=relaxed/simple;
+	bh=pPb2yux8ncMb3CZqonAlRHIcg/L3bixa1GCZYae4d+g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FCJP07nv6opLImnP8JCySsTriMhA6mbYQK4aatJZGrlDrAKf8eactHPxJTec3aLljDyVtixi8XNyCF/3l6H8jkAkGVicT8OoM9gk4CSil/6+mpuIgLgWIuVryo+cOx/s7g6QjxgDLS/d/jhzY9N/SawI3VZNk5uOOvJnNDd6SWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=DAmP0kA7; arc=none smtp.client-ip=209.85.166.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f48.google.com with SMTP id ca18e2360f4ac-864a22fcdf2so81233039f.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 09 May 2025 11:53:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1746816805; x=1747421605; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=F9M5vO0rVZ27fsI0jmDeqg70dl9WZ31TiFo3VqdX2ds=;
+        b=DAmP0kA7GIo329pdFtQvTnWtJHnwcJ9l/Tpt32EIt0yZs8Y4xTakUAGecRzG1PfesD
+         hqS+ni8gMQ5MPI6nfMxywtnb/SYMNX5apMFMBWw0ACb5N/6x/bBaBM3lCtuOPXP1+mg3
+         fcStlhQz/H4cwEoEzYsijQ4pTofrep/oTQEyY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746816805; x=1747421605;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=F9M5vO0rVZ27fsI0jmDeqg70dl9WZ31TiFo3VqdX2ds=;
+        b=dcjEwx+Kyvu58zKIbdTwq+OHuGn1r0ffkRJO73J/tvThiSqx1NEMQiRRKNiVl543rk
+         73kyQS3BSNo0jVjoP3ZItuPB8ENQaPIfSkF+aN8Dp87IGJZx32dwvStlqVTSNk6MDBgJ
+         qpyLy53M50phYILUfvd5AkzWsIUiIy/wnq4FW9wYQkTtuAtRppLjdSIPtNlTq1B2tita
+         DRGQkC7y3yDh7wN0fjCu+cjfNSvxLZFN+7lPhuxysxFx+R7xlooBqMUqJZJc+WxNyKxG
+         mkeh9D3AAZgBB41vP32c439FLUVU/N8KgoNwhM5Cf+8gd6l96jVGS8peg8ifhMy39O/Z
+         jK0g==
+X-Forwarded-Encrypted: i=1; AJvYcCVT2CuzfSPebP8xHPukFTDSke1xKAsvQpsbXfAAr83dkY0I+KOpxhB/cN7c+eGk2PwfTaA/DqtccRBVP3CGqrE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzgRHQRdNUBHqqLmwxEya7oUuGkOtijnghdnKmbaRODBNf2W3tR
+	f7RSCmGeytWuybYtJA00EWMkF+QGrZe+9jjXwCW3eMJmySaYOTyWbcZov5p0geU=
+X-Gm-Gg: ASbGncsWPuFHlXHtGH8fYYrn9CuPm/2mkYqbCzeefIaVuJKD5Lt6T99GB8EbmnlMB9K
+	r/DDkedKmqZw/bSURKO8Xxq8T6N0jYNmbKEi3aOG2DVHk3HoCZCrXJuJ8yPNVkQuRTvpJANiRcs
+	DOjodOvh2mRhPKV9NaTDrW84BT1CiNt/705R9DptQPaU23oFytirgA8N4zaIbB+rGH2n5fdg4FE
+	4d77APszwWFAfn6bpxojO7mBPQCvJ/iau+jTJ+qpTeJlo831JrNXj58Tl9Fl50DBZRUNKJ8ESVH
+	TVapLsrP9FpS+oS7OgEY/KRiPlxo+pyXK2nj5hRDifbsnzocgXw95zauBEUiBw==
+X-Google-Smtp-Source: AGHT+IHHhcCytqFUPDF35/kPT3/0/t4Ci198j+E83P+7wD1v00FjQaT1VCEeKAJMNE9MeCGbrOF93A==
+X-Received: by 2002:a05:6602:2594:b0:85b:5c9a:a9ce with SMTP id ca18e2360f4ac-867550aa561mr972489639f.6.1746816805533;
+        Fri, 09 May 2025 11:53:25 -0700 (PDT)
+Received: from [192.168.1.14] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4fa2268628dsm514749173.144.2025.05.09.11.53.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 May 2025 11:53:25 -0700 (PDT)
+Message-ID: <a8bf3665-1c3c-4742-a435-a0ef6914dfd4@linuxfoundation.org>
+Date: Fri, 9 May 2025 12:53:24 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250508182025.2961555-1-tjmercier@google.com> <20250508182025.2961555-5-tjmercier@google.com>
-In-Reply-To: <20250508182025.2961555-5-tjmercier@google.com>
-From: Song Liu <song@kernel.org>
-Date: Fri, 9 May 2025 11:50:00 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW7vkmr_SMgzOwhgVCW4GOzJR3thuCQhZFOT5_17jy74_Q@mail.gmail.com>
-X-Gm-Features: ATxdqUHqE3dBs_GqqtsEkebsXlPIJjQ8mIfly-oCmcZbVTRJUoQ4p6wXYOBC9U4
-Message-ID: <CAPhsuW7vkmr_SMgzOwhgVCW4GOzJR3thuCQhZFOT5_17jy74_Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 4/5] selftests/bpf: Add test for dmabuf_iter
-To: "T.J. Mercier" <tjmercier@google.com>
-Cc: sumit.semwal@linaro.org, christian.koenig@amd.com, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
-	skhan@linuxfoundation.org, alexei.starovoitov@gmail.com, 
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, android-mm@google.com, 
-	simona@ffwll.ch, eddyz87@gmail.com, yonghong.song@linux.dev, 
-	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, 
-	jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] selftests/timens: Print TAP headers
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Shuah Khan <shuah@kernel.org>, "Bird, Timothy" <Tim.Bird@sony.com>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Kees Cook <kees@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>
+References: <20250502-selftests-timens-fixes-v1-0-fb517c76f04d@linutronix.de>
+ <20250502-selftests-timens-fixes-v1-1-fb517c76f04d@linutronix.de>
+ <5609c6de-e5cf-4f6d-8412-71149fae2580@linuxfoundation.org>
+ <20250509172639-61bade20-67f9-4815-8316-1bb16749f8d9@linutronix.de>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20250509172639-61bade20-67f9-4815-8316-1bb16749f8d9@linutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, May 8, 2025 at 11:20=E2=80=AFAM T.J. Mercier <tjmercier@google.com>=
- wrote:
-[...]
+On 5/9/25 09:41, Thomas Weißschuh wrote:
+> +Cc Kees
+> 
+> On Wed, May 07, 2025 at 03:06:16PM -0600, Shuah Khan wrote:
+>> On 5/2/25 06:03, Thomas Weißschuh wrote:
+>>> The TAP specification requires that the output begins with a header line.
+>>> These headers lines are missing in the timens tests.
+>>>
+>>> Print such a line.
+>>
+>> There is no cover letter for this - so I will respond to the first
+>> patch.
+> 
+> Hm, I sent one and can also see it on lore.
+> 
+>> The TAP information is added by the kselftest wrapper if
+>> you were to run the test using ksefltest.
+>>
+>> The following will add the TAP header or if you use make kselftest
+>> command from the main Makefile.
+>>
+>> make -C timens run_tests
+>>
+>> cd timens; make run_tests (will also add TAP header)
+>>
+>> The only time you won't see the TAP headers is when you run the test
+>> from the test directory just as a command. Is this what you need
+>> to do? I would rather not see TAP headers added to invidual tests
+>> unless there is a good reason for it.
+> 
+> Yes, I am running each test on its own, as part of kunit based on [0].
+> I also looked at the vDSO selftests and those all print the TAP headers on
+> their own. The same for all of the x86 selftests I looked at.
 
-> +
-> +void test_dmabuf_iter(void)
-> +{
-> +       struct dmabuf_iter *skel =3D NULL;
-> +       char buf[256];
-> +       int iter_fd;
-> +
-> +       skel =3D dmabuf_iter__open_and_load();
-> +       if (!ASSERT_OK_PTR(skel, "dmabuf_iter__open_and_load"))
-> +               return;
-> +
-> +       if (!ASSERT_OK(create_test_buffers(), "create_buffers"))
-> +               goto destroy;
-> +
-> +       if (!ASSERT_OK(dmabuf_iter__attach(skel), "skel_attach"))
-> +               goto destroy;
+We have been a bit inconsistent with adding TAP headers to individual
+tests. We added them to some and then when we found out the nesting
+TAP headers issue, we stopped and never really cleaned up.
 
-From here...
+Since we have this kunit use-case, I am going to take this series
+and see who complains. I don't think parsers are in the mix at least
+for majority of ksefltest runs.
 
-> +       iter_fd =3D bpf_iter_create(bpf_link__fd(skel->links.dmabuf_colle=
-ctor));
-> +       if (!ASSERT_OK_FD(iter_fd, "iter_create"))
-> +               goto destroy;
-> +
-> +       while (read(iter_fd, buf, sizeof(buf)) > 0)
-> +               ; /* Read out all contents */
-> +
-> +       /* Next reads should return 0 */
-> +       ASSERT_EQ(read(iter_fd, buf, sizeof(buf)), 0, "read");
-
-to here, can be a separate subtest. Then iter_fd can be moved to
-that subtest.
-
-> +
-> +       if (test__start_subtest("default_iter"))
-> +               subtest_dmabuf_iter_check_default_iter(skel);
-> +
-> +       close(iter_fd);
-> +
-> +destroy:
-> +       destroy_test_buffers();
-> +       dmabuf_iter__destroy(skel);
-[...]
+thanks,
+-- Shuah
 
