@@ -1,205 +1,423 @@
-Return-Path: <linux-kselftest+bounces-32771-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32772-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99175AB1C99
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 May 2025 20:47:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39709AB1CA6
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 May 2025 20:49:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 480E53BB75B
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 May 2025 18:46:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 714AA5079E3
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 May 2025 18:49:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E54A523FC74;
-	Fri,  9 May 2025 18:46:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E353523FC74;
+	Fri,  9 May 2025 18:49:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q7oxhMVB"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uLqyyUS4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1A5823F403;
-	Fri,  9 May 2025 18:46:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63E0923F409
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 May 2025 18:49:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746816410; cv=none; b=iMLskjbk0vWiXqyeKOssbXmqbCGYaka+Zk4BB8y4qGDdLu0QhhVbcfSCDaFML7MsvGeMfLGMEIoUGYF8V6j43/Asu+ZGvTWU8Q/fqR1i97sbj1rdH1/MnZOR4/jvkc95ZRl7kctvpzSSFRPy13HKJODWNrk6z/9z9njAxUuAim0=
+	t=1746816588; cv=none; b=Z23Xa/nsA5wghOgxEAbJDeR/NqT1bDDtdo10lzDjAtPUbQls9CJ0H8L80Mw3+hc3PliRBIoB53huSvLIG93CFdvhqq7cN5gqpAFUi3uFvDRG/8reCl+twJs/wWN9iNum3yjfGztzlarYEJzTQqIWuTrrcXxRGGcvUdGU6XNq/ho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746816410; c=relaxed/simple;
-	bh=F/srgboolEoNxf0xX1d6ZqQ2GWgFKW9K2bjlRHJGoYE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FHFgXgDkm4dY9G9LCf8onTytjmYV8dQliwJSVglQgRRVDXM7TJWF8hH0e27zvrjEaPq8c7QozQgVKtiNSd8BFjRRMFGcNOc4CVTsTJ3QO249k5zcEc/SUl32jM3vo47mH59bLKxTHXhkTODi6GXJTYgM61qPe3d8Y5ntSTRZLa8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q7oxhMVB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13154C4AF09;
-	Fri,  9 May 2025 18:46:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746816410;
-	bh=F/srgboolEoNxf0xX1d6ZqQ2GWgFKW9K2bjlRHJGoYE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Q7oxhMVBiWbVUZReFjjltopRsrRmnIRmtM9f5C64yLOfNPa5ej2/yyNi4OXLzH0UR
-	 5YlcwF8GqVyGsoFU3PBADdbqNnwI0x7j19myjhiW5kLL61jm40em37MDBhr4jRFYOn
-	 W3vcNmhn9zOr2YRFiKsmxswHlUffMGb0nAEtWv09tMkt0a6uHgKfGJfzrL5rBumfHU
-	 L8RQYZI3AWSdzdPei7ElUTSeaCQ9gNpWpft1lm3us1JlvSC77an4cPKc2dhi6RMBAO
-	 Dz68Ti/fuSbLfLG0RfPsAWreRML5LQXVsB+J9XFgXKzNvCHWliXI+/enMGGIQGb/3t
-	 XHC/9ltW3jKJw==
-Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-6f54e4f2989so39636526d6.1;
-        Fri, 09 May 2025 11:46:50 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU4RlwWHglrFvoxL8AclvmzZ0jLYvf6cCEIoYvDpnhvruJHlIITBQPNB+cW4IZ9oWaXkh/VbfiGnURP2UM=@vger.kernel.org, AJvYcCUSZYe5p4fF/p2tcZC4p7/ARY3i7ENaPIJiVBmRJXgnHuxWOhrpv/cXiHHWbKvUTsgwln4h8YL3as5FW32S4SI7@vger.kernel.org, AJvYcCWjlC1fbjWoc73Zl+Uy7tIOVmsxzjYUjXK78vGrfOUtCZKcp3C/AX6UjOG7HRROIGzGm3tqtuM5WUjYmku8@vger.kernel.org, AJvYcCXl7pZgzunl+K2HYVjW0pXRDfbbAngdRqFyXJqC/AelBoCtEjdxOSrfavFzLLpfuQjeHMI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzRqopq004tPTcdoDt8jiKF+eNSas656w8bLr6+Gkse9GXqLY1j
-	1prE8vbYeDsnRsHFY7h0MXOSTLnNDs3crFsAiguHkjnGeOTv7nF1tB6ZvK9/Kwph8Xqla9RlD6A
-	1Upj6sqMNPHRI0cSzbGWB/SUeoq8=
-X-Google-Smtp-Source: AGHT+IHzegnveWO7yNyyJPV9oHHJDYKhi+KVMw2HxLK2dVU9AjengIKx1B1T4go18EbwEKwlkm3pkByd5qNjbxz1TBA=
-X-Received: by 2002:a05:6214:528f:b0:6e8:9021:9090 with SMTP id
- 6a1803df08f44-6f6e47fb43dmr64135446d6.26.1746816409199; Fri, 09 May 2025
- 11:46:49 -0700 (PDT)
+	s=arc-20240116; t=1746816588; c=relaxed/simple;
+	bh=qffBJkvqeUNO/und6Qh2RkE/6kc4df+T6b36gSTk63Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CkfyrbA30AsNUi4oRg+DYef/sEvO/c8Hko8ZslbuPhbPfhR/8jp1oZLMDbJnMLNZdL8aDX1UiM+JIUOXFNZ1d8OBVdP+7qfI4G6q4CC9QzR/kJ5gS/B8ieXUvf5s4dr7Dy4cmA4nYm5zsOG/LvEwfqlAs6jaGokvWHsgJcrx94U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uLqyyUS4; arc=none smtp.client-ip=91.218.175.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <1f24ee7d-df01-4386-b0c2-f68463519940@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1746816574;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=I+xTVNz/AWuQaww+Av/gvPGG3Ux3gd4hrwHisXmdbVY=;
+	b=uLqyyUS4mIQdPlYV7BSaILMetdyUkWxvIzHUMEOjSkHuGCm8a+Fy92UlKRYZaI5kWt5UQv
+	mx/LC1tQC1sGXBA+pYOVjeP48ZSFr3n6iJpJkJ32cHD0sYy8qI7TmLvtrA6M6VMTydMeev
+	wBorqTZBxwlM+8HVuZqqoSfXhImvhLc=
+Date: Fri, 9 May 2025 11:49:17 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250508182025.2961555-1-tjmercier@google.com> <20250508182025.2961555-6-tjmercier@google.com>
-In-Reply-To: <20250508182025.2961555-6-tjmercier@google.com>
-From: Song Liu <song@kernel.org>
-Date: Fri, 9 May 2025 11:46:37 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW5WOmyfPqBc_Hn7ApGWP_2uz_cJwyaDWF_VwiHJu9s_1A@mail.gmail.com>
-X-Gm-Features: ATxdqUGGw_RTmwKfe1Qy3K0z0SH6aVXz07rdhh_MxtVslad1T1IwByDPS78WyqM
-Message-ID: <CAPhsuW5WOmyfPqBc_Hn7ApGWP_2uz_cJwyaDWF_VwiHJu9s_1A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 5/5] selftests/bpf: Add test for open coded dmabuf_iter
-To: "T.J. Mercier" <tjmercier@google.com>
-Cc: sumit.semwal@linaro.org, christian.koenig@amd.com, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
-	skhan@linuxfoundation.org, alexei.starovoitov@gmail.com, 
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, android-mm@google.com, 
-	simona@ffwll.ch, eddyz87@gmail.com, yonghong.song@linux.dev, 
-	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, 
-	jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v6 13/14] RISC-V: KVM: add support for FWFT SBI extension
+To: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Anup Patel <anup@brainfault.org>,
+ Atish Patra <atishp@atishpatra.org>, Shuah Khan <shuah@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
+ linux-kselftest@vger.kernel.org
+Cc: Samuel Holland <samuel.holland@sifive.com>,
+ Andrew Jones <ajones@ventanamicro.com>, Deepak Gupta <debug@rivosinc.com>
+References: <20250424173204.1948385-1-cleger@rivosinc.com>
+ <20250424173204.1948385-14-cleger@rivosinc.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Atish Patra <atish.patra@linux.dev>
+In-Reply-To: <20250424173204.1948385-14-cleger@rivosinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, May 8, 2025 at 11:21=E2=80=AFAM T.J. Mercier <tjmercier@google.com>=
- wrote:
->
-> Use the same test buffers as the traditional iterator and a new BPF map
-> to verify the test buffers can be found with the open coded dmabuf
-> iterator.
-
-The way we split 4/5 and 5/5 makes the code tricker to follow. I guess
-the motivation is to back port default iter along to older kernels. But I
-think we can still make the code cleaner.
-
->
-> Signed-off-by: T.J. Mercier <tjmercier@google.com>
+On 4/24/25 10:32 AM, ClÃ©ment LÃ©ger wrote:
+> Add basic infrastructure to support the FWFT extension in KVM.
+> 
+> Signed-off-by: Clément Léger <cleger@rivosinc.com>
+> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 > ---
-[...]
-
->
-> -static int create_udmabuf(void)
-> +static int create_udmabuf(int map_fd)
->  {
->         struct udmabuf_create create;
->         int dev_udmabuf;
-> +       bool f =3D false;
->
->         udmabuf_test_buffer_size =3D 10 * getpagesize();
->
-> @@ -63,10 +64,10 @@ static int create_udmabuf(void)
->         if (!ASSERT_OK(ioctl(udmabuf, DMA_BUF_SET_NAME_B, udmabuf_test_bu=
-ffer_name), "name"))
->                 return 1;
->
-> -       return 0;
-> +       return bpf_map_update_elem(map_fd, udmabuf_test_buffer_name, &f, =
-BPF_ANY);
-
-We don't really need this bpf_map_update_elem() inside
-create_udmabuf(), right?
-
->  }
->
-> -static int create_sys_heap_dmabuf(void)
-> +static int create_sys_heap_dmabuf(int map_fd)
->  {
->         sysheap_test_buffer_size =3D 20 * getpagesize();
->
-> @@ -77,6 +78,7 @@ static int create_sys_heap_dmabuf(void)
->                 .heap_flags =3D 0,
->         };
->         int heap_fd, ret;
-> +       bool f =3D false;
->
->         if (!ASSERT_LE(sizeof(sysheap_test_buffer_name), DMA_BUF_NAME_LEN=
-, "NAMETOOLONG"))
->                 return 1;
-> @@ -95,18 +97,18 @@ static int create_sys_heap_dmabuf(void)
->         if (!ASSERT_OK(ioctl(sysheap_dmabuf, DMA_BUF_SET_NAME_B, sysheap_=
-test_buffer_name), "name"))
->                 return 1;
->
-> -       return 0;
-> +       return bpf_map_update_elem(map_fd, sysheap_test_buffer_name, &f, =
-BPF_ANY);
-
-Same for this bpf_map_update_elem(), we can call this directly from
-create_test_buffers().
-
->  }
->
-> -static int create_test_buffers(void)
-> +static int create_test_buffers(int map_fd)
->  {
->         int ret;
->
-> -       ret =3D create_udmabuf();
-> +       ret =3D create_udmabuf(map_fd);
->         if (ret)
->                 return ret;
->
-> -       return create_sys_heap_dmabuf();
-> +       return create_sys_heap_dmabuf(map_fd);
-
-Personally, I would prefer we just merge all the logic of
-create_udmabuf() and create_sys_heap_dmabuf()
-into create_test_buffers().
-
->  }
->
-[...]
+>   arch/riscv/include/asm/kvm_host.h          |   4 +
+>   arch/riscv/include/asm/kvm_vcpu_sbi.h      |   1 +
+>   arch/riscv/include/asm/kvm_vcpu_sbi_fwft.h |  29 +++
+>   arch/riscv/include/uapi/asm/kvm.h          |   1 +
+>   arch/riscv/kvm/Makefile                    |   1 +
+>   arch/riscv/kvm/vcpu_sbi.c                  |   4 +
+>   arch/riscv/kvm/vcpu_sbi_fwft.c             | 216 +++++++++++++++++++++
+>   7 files changed, 256 insertions(+)
+>   create mode 100644 arch/riscv/include/asm/kvm_vcpu_sbi_fwft.h
+>   create mode 100644 arch/riscv/kvm/vcpu_sbi_fwft.c
+> 
+> diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/kvm_host.h
+> index 4fa02e082142..c3f880763b9a 100644
+> --- a/arch/riscv/include/asm/kvm_host.h
+> +++ b/arch/riscv/include/asm/kvm_host.h
+> @@ -19,6 +19,7 @@
+>   #include <asm/kvm_vcpu_fp.h>
+>   #include <asm/kvm_vcpu_insn.h>
+>   #include <asm/kvm_vcpu_sbi.h>
+> +#include <asm/kvm_vcpu_sbi_fwft.h>
+>   #include <asm/kvm_vcpu_timer.h>
+>   #include <asm/kvm_vcpu_pmu.h>
+>   
+> @@ -281,6 +282,9 @@ struct kvm_vcpu_arch {
+>   	/* Performance monitoring context */
+>   	struct kvm_pmu pmu_context;
+>   
+> +	/* Firmware feature SBI extension context */
+> +	struct kvm_sbi_fwft fwft_context;
 > +
->  void test_dmabuf_iter(void)
->  {
->         struct dmabuf_iter *skel =3D NULL;
-> +       int iter_fd, map_fd;
->         char buf[256];
-> -       int iter_fd;
->
->         skel =3D dmabuf_iter__open_and_load();
->         if (!ASSERT_OK_PTR(skel, "dmabuf_iter__open_and_load"))
->                 return;
->
-> -       if (!ASSERT_OK(create_test_buffers(), "create_buffers"))
-> +       map_fd =3D bpf_map__fd(skel->maps.testbuf_hash);
-> +       if (!ASSERT_OK_FD(map_fd, "map_fd"))
-> +               goto destroy_skel;
+>   	/* 'static' configurations which are set only once */
+>   	struct kvm_vcpu_config cfg;
+>   
+> diff --git a/arch/riscv/include/asm/kvm_vcpu_sbi.h b/arch/riscv/include/asm/kvm_vcpu_sbi.h
+> index cb68b3a57c8f..ffd03fed0c06 100644
+> --- a/arch/riscv/include/asm/kvm_vcpu_sbi.h
+> +++ b/arch/riscv/include/asm/kvm_vcpu_sbi.h
+> @@ -98,6 +98,7 @@ extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_hsm;
+>   extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_dbcn;
+>   extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_susp;
+>   extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_sta;
+> +extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_fwft;
+>   extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_experimental;
+>   extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_vendor;
+>   
+> diff --git a/arch/riscv/include/asm/kvm_vcpu_sbi_fwft.h b/arch/riscv/include/asm/kvm_vcpu_sbi_fwft.h
+> new file mode 100644
+> index 000000000000..9ba841355758
+> --- /dev/null
+> +++ b/arch/riscv/include/asm/kvm_vcpu_sbi_fwft.h
+> @@ -0,0 +1,29 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (c) 2025 Rivos Inc.
+> + *
+> + * Authors:
+> + *     Clément Léger <cleger@rivosinc.com>
+> + */
 > +
-> +       if (!ASSERT_OK(create_test_buffers(map_fd), "create_buffers"))
->                 goto destroy;
->
->         if (!ASSERT_OK(dmabuf_iter__attach(skel), "skel_attach"))
-> @@ -215,10 +246,13 @@ void test_dmabuf_iter(void)
->
->         if (test__start_subtest("default_iter"))
->                 subtest_dmabuf_iter_check_default_iter(skel);
-> +       if (test__start_subtest("open_coded"))
-> +               subtest_dmabuf_iter_check_open_coded(skel, map_fd);
->
->         close(iter_fd);
->
->  destroy:
->         destroy_test_buffers();
-> +destroy_skel:
->         dmabuf_iter__destroy(skel);
->  }
-[...]
+> +#ifndef __KVM_VCPU_RISCV_FWFT_H
+> +#define __KVM_VCPU_RISCV_FWFT_H
+> +
+> +#include <asm/sbi.h>
+> +
+> +struct kvm_sbi_fwft_feature;
+> +
+> +struct kvm_sbi_fwft_config {
+> +	const struct kvm_sbi_fwft_feature *feature;
+> +	bool supported;
+> +	unsigned long flags;
+> +};
+> +
+> +/* FWFT data structure per vcpu */
+> +struct kvm_sbi_fwft {
+> +	struct kvm_sbi_fwft_config *configs;
+> +};
+> +
+> +#define vcpu_to_fwft(vcpu) (&(vcpu)->arch.fwft_context)
+> +
+> +#endif /* !__KVM_VCPU_RISCV_FWFT_H */
+> diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/asm/kvm.h
+> index 5f59fd226cc5..5ba77a3d9f6e 100644
+> --- a/arch/riscv/include/uapi/asm/kvm.h
+> +++ b/arch/riscv/include/uapi/asm/kvm.h
+> @@ -204,6 +204,7 @@ enum KVM_RISCV_SBI_EXT_ID {
+>   	KVM_RISCV_SBI_EXT_DBCN,
+>   	KVM_RISCV_SBI_EXT_STA,
+>   	KVM_RISCV_SBI_EXT_SUSP,
+> +	KVM_RISCV_SBI_EXT_FWFT,
+>   	KVM_RISCV_SBI_EXT_MAX,
+>   };
+>   
+> diff --git a/arch/riscv/kvm/Makefile b/arch/riscv/kvm/Makefile
+> index 4e0bba91d284..06e2d52a9b88 100644
+> --- a/arch/riscv/kvm/Makefile
+> +++ b/arch/riscv/kvm/Makefile
+> @@ -26,6 +26,7 @@ kvm-y += vcpu_onereg.o
+>   kvm-$(CONFIG_RISCV_PMU_SBI) += vcpu_pmu.o
+>   kvm-y += vcpu_sbi.o
+>   kvm-y += vcpu_sbi_base.o
+> +kvm-y += vcpu_sbi_fwft.o
+>   kvm-y += vcpu_sbi_hsm.o
+>   kvm-$(CONFIG_RISCV_PMU_SBI) += vcpu_sbi_pmu.o
+>   kvm-y += vcpu_sbi_replace.o
+> diff --git a/arch/riscv/kvm/vcpu_sbi.c b/arch/riscv/kvm/vcpu_sbi.c
+> index 50be079b5528..0748810c0252 100644
+> --- a/arch/riscv/kvm/vcpu_sbi.c
+> +++ b/arch/riscv/kvm/vcpu_sbi.c
+> @@ -78,6 +78,10 @@ static const struct kvm_riscv_sbi_extension_entry sbi_ext[] = {
+>   		.ext_idx = KVM_RISCV_SBI_EXT_STA,
+>   		.ext_ptr = &vcpu_sbi_ext_sta,
+>   	},
+> +	{
+> +		.ext_idx = KVM_RISCV_SBI_EXT_FWFT,
+> +		.ext_ptr = &vcpu_sbi_ext_fwft,
+> +	},
+>   	{
+>   		.ext_idx = KVM_RISCV_SBI_EXT_EXPERIMENTAL,
+>   		.ext_ptr = &vcpu_sbi_ext_experimental,
+> diff --git a/arch/riscv/kvm/vcpu_sbi_fwft.c b/arch/riscv/kvm/vcpu_sbi_fwft.c
+> new file mode 100644
+> index 000000000000..b0f66c7bf010
+> --- /dev/null
+> +++ b/arch/riscv/kvm/vcpu_sbi_fwft.c
+> @@ -0,0 +1,216 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2025 Rivos Inc.
+> + *
+> + * Authors:
+> + *     Clément Léger <cleger@rivosinc.com>
+> + */
+> +
+> +#include <linux/errno.h>
+> +#include <linux/err.h>
+> +#include <linux/kvm_host.h>
+> +#include <asm/cpufeature.h>
+> +#include <asm/sbi.h>
+> +#include <asm/kvm_vcpu_sbi.h>
+> +#include <asm/kvm_vcpu_sbi_fwft.h>
+> +
+> +struct kvm_sbi_fwft_feature {
+> +	/**
+> +	 * @id: Feature ID
+> +	 */
+> +	enum sbi_fwft_feature_t id;
+> +
+> +	/**
+> +	 * @supported: Check if the feature is supported on the vcpu
+> +	 *
+> +	 * This callback is optional, if not provided the feature is assumed to
+> +	 * be supported
+> +	 */
+> +	bool (*supported)(struct kvm_vcpu *vcpu);
+> +
+> +	/**
+> +	 * @set: Set the feature value
+> +	 *
+> +	 * Return SBI_SUCCESS on success or an SBI error (SBI_ERR_*)
+> +	 *
+> +	 * This callback is mandatory
+> +	 */
+> +	long (*set)(struct kvm_vcpu *vcpu, struct kvm_sbi_fwft_config *conf, unsigned long value);
+> +
+> +	/**
+> +	 * @get: Get the feature current value
+> +	 *
+> +	 * Return SBI_SUCCESS on success or an SBI error (SBI_ERR_*)
+> +	 *
+> +	 * This callback is mandatory
+> +	 */
+> +	long (*get)(struct kvm_vcpu *vcpu, struct kvm_sbi_fwft_config *conf, unsigned long *value);
+> +};
+> +
+> +static const enum sbi_fwft_feature_t kvm_fwft_defined_features[] = {
+> +	SBI_FWFT_MISALIGNED_EXC_DELEG,
+> +	SBI_FWFT_LANDING_PAD,
+> +	SBI_FWFT_SHADOW_STACK,
+> +	SBI_FWFT_DOUBLE_TRAP,
+> +	SBI_FWFT_PTE_AD_HW_UPDATING,
+> +	SBI_FWFT_POINTER_MASKING_PMLEN,
+> +};
+> +
+> +static bool kvm_fwft_is_defined_feature(enum sbi_fwft_feature_t feature)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(kvm_fwft_defined_features); i++) {
+> +		if (kvm_fwft_defined_features[i] == feature)
+> +			return true;
+> +	}
+> +
+> +	return false;
+> +}
+> +
+> +static const struct kvm_sbi_fwft_feature features[] = {
+> +};
+> +
+> +static struct kvm_sbi_fwft_config *
+> +kvm_sbi_fwft_get_config(struct kvm_vcpu *vcpu, enum sbi_fwft_feature_t feature)
+> +{
+> +	int i;
+> +	struct kvm_sbi_fwft *fwft = vcpu_to_fwft(vcpu);
+> +
+> +	for (i = 0; i < ARRAY_SIZE(features); i++) {
+> +		if (fwft->configs[i].feature->id == feature)
+> +			return &fwft->configs[i];
+> +	}
+> +
+> +	return NULL;
+> +}
+> +
+> +static int kvm_fwft_get_feature(struct kvm_vcpu *vcpu, u32 feature,
+> +				struct kvm_sbi_fwft_config **conf)
+> +{
+> +	struct kvm_sbi_fwft_config *tconf;
+> +
+> +	tconf = kvm_sbi_fwft_get_config(vcpu, feature);
+> +	if (!tconf) {
+> +		if (kvm_fwft_is_defined_feature(feature))
+> +			return SBI_ERR_NOT_SUPPORTED;
+> +
+> +		return SBI_ERR_DENIED;
+> +	}
+> +
+> +	if (!tconf->supported)
+> +		return SBI_ERR_NOT_SUPPORTED;
+> +
+> +	*conf = tconf;
+> +
+> +	return SBI_SUCCESS;
+> +}
+> +
+> +static int kvm_sbi_fwft_set(struct kvm_vcpu *vcpu, u32 feature,
+> +			    unsigned long value, unsigned long flags)
+> +{
+> +	int ret;
+> +	struct kvm_sbi_fwft_config *conf;
+> +
+> +	ret = kvm_fwft_get_feature(vcpu, feature, &conf);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if ((flags & ~SBI_FWFT_SET_FLAG_LOCK) != 0)
+> +		return SBI_ERR_INVALID_PARAM;
+> +
+> +	if (conf->flags & SBI_FWFT_SET_FLAG_LOCK)
+> +		return SBI_ERR_DENIED_LOCKED;
+> +
+> +	conf->flags = flags;
+> +
+> +	return conf->feature->set(vcpu, conf, value);
+> +}
+> +
+> +static int kvm_sbi_fwft_get(struct kvm_vcpu *vcpu, unsigned long feature,
+> +			    unsigned long *value)
+> +{
+> +	int ret;
+> +	struct kvm_sbi_fwft_config *conf;
+> +
+> +	ret = kvm_fwft_get_feature(vcpu, feature, &conf);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return conf->feature->get(vcpu, conf, value);
+> +}
+> +
+> +static int kvm_sbi_ext_fwft_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
+> +				    struct kvm_vcpu_sbi_return *retdata)
+> +{
+> +	int ret;
+> +	struct kvm_cpu_context *cp = &vcpu->arch.guest_context;
+> +	unsigned long funcid = cp->a6;
+> +
+> +	switch (funcid) {
+> +	case SBI_EXT_FWFT_SET:
+> +		ret = kvm_sbi_fwft_set(vcpu, cp->a0, cp->a1, cp->a2);
+> +		break;
+> +	case SBI_EXT_FWFT_GET:
+> +		ret = kvm_sbi_fwft_get(vcpu, cp->a0, &retdata->out_val);
+> +		break;
+> +	default:
+> +		ret = SBI_ERR_NOT_SUPPORTED;
+> +		break;
+> +	}
+> +
+> +	retdata->err_val = ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static int kvm_sbi_ext_fwft_init(struct kvm_vcpu *vcpu)
+> +{
+> +	struct kvm_sbi_fwft *fwft = vcpu_to_fwft(vcpu);
+> +	const struct kvm_sbi_fwft_feature *feature;
+> +	struct kvm_sbi_fwft_config *conf;
+> +	int i;
+> +
+> +	fwft->configs = kcalloc(ARRAY_SIZE(features), sizeof(struct kvm_sbi_fwft_config),
+> +				GFP_KERNEL);
+> +	if (!fwft->configs)
+> +		return -ENOMEM;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(features); i++) {
+> +		feature = &features[i];
+> +		conf = &fwft->configs[i];
+> +		if (feature->supported)
+> +			conf->supported = feature->supported(vcpu);
+> +		else
+> +			conf->supported = true;
+> +
+> +		conf->feature = feature;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static void kvm_sbi_ext_fwft_deinit(struct kvm_vcpu *vcpu)
+> +{
+> +	struct kvm_sbi_fwft *fwft = vcpu_to_fwft(vcpu);
+> +
+> +	kfree(fwft->configs);
+> +}
+> +
+> +static void kvm_sbi_ext_fwft_reset(struct kvm_vcpu *vcpu)
+> +{
+> +	int i;
+> +	struct kvm_sbi_fwft *fwft = vcpu_to_fwft(vcpu);
+> +
+> +	for (i = 0; i < ARRAY_SIZE(features); i++)
+> +		fwft->configs[i].flags = 0;
+> +}
+> +
+> +const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_fwft = {
+> +	.extid_start = SBI_EXT_FWFT,
+> +	.extid_end = SBI_EXT_FWFT,
+> +	.handler = kvm_sbi_ext_fwft_handler,
+> +	.init = kvm_sbi_ext_fwft_init,
+> +	.deinit = kvm_sbi_ext_fwft_deinit,
+> +	.reset = kvm_sbi_ext_fwft_reset,
+> +};
+
+LGTM.
+Reviewed-by: Atish Patra <atishp@rivosinc.com>
 
