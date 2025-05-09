@@ -1,88 +1,88 @@
-Return-Path: <linux-kselftest+bounces-32741-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32742-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 372CFAB1060
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 May 2025 12:19:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4156DAB10F6
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 May 2025 12:44:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CE8511887A3D
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 May 2025 10:19:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A1960162B96
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 May 2025 10:44:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2F3B274FEA;
-	Fri,  9 May 2025 10:19:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA9FD28E57C;
+	Fri,  9 May 2025 10:43:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fdjjne7d"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NNT/Ij/U"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89C9021C9E9
-	for <linux-kselftest@vger.kernel.org>; Fri,  9 May 2025 10:19:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04F0617BCE
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 May 2025 10:43:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746785944; cv=none; b=iyv3DyWbmFNhVjxGINEjqVRoExbFnwDV3EoEsaVskW/krcKscG1m4SyNn9+QZHYYXLKbdqaL1d0Jkuox1hQrW6xH//qJvmwKs2P3bQXzpeMFacNGt8cZecis43+/S/PZkXPKLVO3YBoRiGNhdfcOOX/WAPmjdLlXNE6LeDp/M9w=
+	t=1746787436; cv=none; b=cDgk+Wh+tPo5lyiFNP+2G6yYZFQvlAnIS1YFcA13XPDEtMNEltKOeGGwAejTw6h2mWpoPeylSJxcgBAW0KQb217ZKLyKOa3xg9V6dWYOqS5nq1oZd37v69rs2oDejXk1hOxmCtOlMPky+fOghA4aMqajPIBhC9btyi8vMw8xl2E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746785944; c=relaxed/simple;
-	bh=jqxYVU6GJTi9RMs4b+s1yk10X+ILJvKnfqth/cu5hZw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EMsKgitEZdMlIPwbBBdYXE4UoQ0vCiUiYZDHz/eEIQn5lZ7Fp8oxZlFukmxInWZhH+8tuwNEWkYRCoqdloUlqemufmAIJA06NMlRB+7XuuH5mir3A+4Bc+ExE0gmy5r48SXNJVK3sbQmb9ZFtHQuWllSxwneg36owj4pY2oKqxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fdjjne7d; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1746787436; c=relaxed/simple;
+	bh=JV+tHenNIB4LDTqRqk4lSX6uey2Np7nRunFx+ydfJsA=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=md65DKDOSXVczrukD1+yGhrkBR0o4lLvDjPwbpyK+9PFrLm6tOC5bjolKHSvCrt3fuxnwcA0XEV2sf+xJi7OKf1y6CyZVQrjkE2ImjsTPZZLt18SBagcKdAyoolCIhCSz6ryQJLThI3t2Ew16tRZYri/YZnM9er0wXOR4Xkmm9o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NNT/Ij/U; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1746785941;
+	s=mimecast20190719; t=1746787434;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=XftaH5FzyM09S5RzjEe09GkGUeEVV3zeck5+IqSohtk=;
-	b=fdjjne7domI21b0BQgyemZ078OusqIilD+fjB2hp74Q4vbnGURogkQ9IkKV2DGuWvS0AeO
-	4cd/+kYxx0VBvcGsQrTL23RyM59JGEtSmvAMle+8PVOvXV4XcJkytztglRzMttLOgV2Heo
-	PUK81M9d2lfVHaOIA3BAsL1HdP4zMoo=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=t0YuuKqPOefner0ewCou2iYZdkYY4bwjKexcRJon0/k=;
+	b=NNT/Ij/UZ6QZkVjqQFBq+QTAKHWWJiwURiwSSH8kz6jM+ljNfOyNaVo0+jHbGQSBEAniU/
+	loFEe6J54hMAAxraZbJs8LvxtUxA5yDkJLT5oSxYDfE518z+BjOufTAs8yvwK1Vi+ch4wa
+	uMCCELTUzVkqUf6VCQf/XVFSzERs92k=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-265-gUAYdiPzNnSY-9BGi9z3tg-1; Fri, 09 May 2025 06:18:54 -0400
-X-MC-Unique: gUAYdiPzNnSY-9BGi9z3tg-1
-X-Mimecast-MFC-AGG-ID: gUAYdiPzNnSY-9BGi9z3tg_1746785933
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-43e9b0fd00cso10051715e9.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 09 May 2025 03:18:54 -0700 (PDT)
+ us-mta-452-ndU-mNAXMHO8HQEFVgD-Tw-1; Fri, 09 May 2025 06:43:52 -0400
+X-MC-Unique: ndU-mNAXMHO8HQEFVgD-Tw-1
+X-Mimecast-MFC-AGG-ID: ndU-mNAXMHO8HQEFVgD-Tw_1746787432
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-43d0830c3f7so13122595e9.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 09 May 2025 03:43:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746785933; x=1747390733;
+        d=1e100.net; s=20230601; t=1746787431; x=1747392231;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:user-agent
+         :content-language:references:cc:to:from:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=XftaH5FzyM09S5RzjEe09GkGUeEVV3zeck5+IqSohtk=;
-        b=RMk0D3VAK/PFliiW+206F0Iko4Dn6w1u/N+ynrotH48QhSk6KieAXSzhehL2KLuJ1K
-         u0Q9TR914kYgpqoFOuONWPxyWkkBltl0m8M+rw15ZsCKhFpTJic6dg6pTF8AgLWk1q9C
-         STuoGz8sVG/OYe/bGiWL1eMHrE6nSaYziMX63vbJLdkuftXrLNE76kYNfXEPllHjaN7T
-         1SorB6O55tjtnDX9E3TIAHZ9qB6RtJOD2GBJnL3pbyBQK1vGQMUjQhDdaAZXSnML+HHf
-         F5VKRju3Elq8+Ffr2uApWyz9n1704p9u0eNKHSZgkmtKGwzb7+kU63L1epi5bVvewmBQ
-         2YfQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXAyfwF218SWRGDikuU6nA6+SeXnSpm80qRLaXuy0o9K6Z91PWwvBI8Yy83h6jHhsj8Y5C5sYD0TzJoM/AoL6w=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7TNCS7VrrGnGYoSslBNKcg42Ij3VoTmfFOeh+bWbeOaPj9/IR
-	Ft1XCfvDifen2sOZzx6eydfSBRTPQh2YkBSMvzA+RAoQ6RSEyg3hhneLFviUJtW/7XyERJNfk6I
-	DzKy5n0lrhvvH4/ylWvobo06ol8gWjk2N8p3U8kZAdju1UIOBTvu2xFOO936/eCVvVg==
-X-Gm-Gg: ASbGnctP3wPhC6IFZOhg0vg85NDwUDKgxmyfQxjrghic0LNCUTYvF5aINPsuHIdSJgL
-	T6uStk2/OPsbrPQqAYEE19QDgJezM9+Wf/jf9WBruEBav8fpPuFEa1/KiHYX8KTJlBu+uG8ah5h
-	qwcDOIkPUbImBNjgfn5wJAF6ixYPuQpEzViiznQ7pQu4WsaHv7NMMCkNiryruKe6FHZMesQacs/
-	30Zk7SnDwaeXuLGM/hziqpr2THgYrSjugQHEBVJIqqepJ5FW/sXcINGvXLOIcRkI9NZd1WuYQn1
-	Lm9/7aGAYRNVmgBK03ZB/Ce02vfBGRU5ngRd2EzWSpG2O+fWxU56PIGBpUR3Dc1VUgJSOjl8rLP
-	+LWymdQYS+SeS+initE8bDbZm8unqe+Bu9Cf2lLs=
-X-Received: by 2002:a05:600c:5344:b0:43c:f3e1:a729 with SMTP id 5b1f17b1804b1-442d0312e08mr49366245e9.12.1746785933139;
-        Fri, 09 May 2025 03:18:53 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEqSJEKsdFSiAMvPUrkU1iyZ1YBftQM/bXhK6JeyEYDfVJdYz7LYXx6vbUhXVTAL2+Dc5eQTQ==
-X-Received: by 2002:a05:600c:5344:b0:43c:f3e1:a729 with SMTP id 5b1f17b1804b1-442d0312e08mr49365945e9.12.1746785932599;
-        Fri, 09 May 2025 03:18:52 -0700 (PDT)
+        bh=t0YuuKqPOefner0ewCou2iYZdkYY4bwjKexcRJon0/k=;
+        b=SjijYtaO3oPtldNiZCWhcoFc0RL3TEjLuzBtzB9WhpcJ+dZQf+N42AX+YKHBk9hVCK
+         P4uMVYTKm5MXBurW7pjSFWhS7+buSqPFMvba5ioyBGt6VsiLmWd0zVc4ui6omP5C9lma
+         O7MiQZ29lH2z0vuKXb/9mBiGePX1U2DVVKhIgyCH852eboOLXL5fvcu0RcP69vNQqWc9
+         3JyfWGcEsAmcbXR+j4LFgC/dCa7sr568aSV6i02GBE0knyKVeYACKbY9bRc8Sv8RcOEl
+         nM63wyOqMc2+S/jfocMoLO076eXYTqvC2UprQBnNJmnLfwroQEjNhBjoULhirrGNlNze
+         NFPA==
+X-Forwarded-Encrypted: i=1; AJvYcCV4xqsuEUsur/61uAsWNrPV/qYZfjPR8EVpRXjQTQ1GbpbOnsoFLbNmE5nHM1vfnJWWg8b+WVz6P2FIKJDlxoo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxoJ7FyK56jMwWc8RvGGKJvbQCobpq2BOGHSSXzKe6Cuf47mzP3
+	8suP6bNccuRIdV5Kghq4mFaTAiiLItPR05t189FJilDkonnCjSFLexrwJkdOhUQhAAjY4QJexeJ
+	G6p3vtD3II34YvQpYDPU7uCucpex0wc5T15RvzX02JUBAwH35Vo3RqOMZsk1od8/xCA==
+X-Gm-Gg: ASbGnctEV8uTQGzlhgRmHV+XrJHRj4q+rn6ZpyzK0OrHvimeCIZuZudSoect+MDf5Tm
+	doy7VVudp48vyfytqD50vBD4gmWFZbz2BJFqzB+TeulwN0YzXMDz0iWu3+/BpU2GOimBtvCGCsn
+	nwZLAviooW8EvDaOUJs2gAUlfWmSv4DW6HdTYR6JxMkJXcmQQQLraibtwluBmykTUU0xfGnRgGW
+	w/jRkJ7rMN5sPYVmGhtQ1TQBFJkEpTCQBGjJyxduyFF3tZh+zzuPl0C8Q1YKWSY04uS0s8MHJKV
+	f/ZrEr0+9AW+VucS/5S8dB5hUrMpUYVVwnZu8PqVDp3gierkhpv6EKnr04yjOKJlYCG7mz3MGRP
+	NMoGNA0qYl7dhX38Y7iN5TpaxT+3cFO3790Lm6us=
+X-Received: by 2002:a05:600c:4e09:b0:43c:f64c:447f with SMTP id 5b1f17b1804b1-442d6dde9c9mr23192245e9.29.1746787431624;
+        Fri, 09 May 2025 03:43:51 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IG7HNyHl+655gN1OiyqWhRPdGXDj2iazbitjAhPfi4NoY848N16dn1QqOdDtVonibTlkHtSPQ==
+X-Received: by 2002:a05:600c:4e09:b0:43c:f64c:447f with SMTP id 5b1f17b1804b1-442d6dde9c9mr23192085e9.29.1746787431293;
+        Fri, 09 May 2025 03:43:51 -0700 (PDT)
 Received: from ?IPV6:2003:d8:2f45:5500:8267:647f:4209:dedd? (p200300d82f4555008267647f4209dedd.dip0.t-ipconnect.de. [2003:d8:2f45:5500:8267:647f:4209:dedd])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442d67ee33bsm24482785e9.20.2025.05.09.03.18.51
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442d7806a73sm9450265e9.3.2025.05.09.03.43.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 May 2025 03:18:52 -0700 (PDT)
-Message-ID: <4efa9948-a523-4597-baa4-c36d18a658b0@redhat.com>
-Date: Fri, 9 May 2025 12:18:51 +0200
+        Fri, 09 May 2025 03:43:50 -0700 (PDT)
+Message-ID: <a0a54f02-bee3-41b8-8c4f-9cfd7ea524ed@redhat.com>
+Date: Fri, 9 May 2025 12:43:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -92,6 +92,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v1] selftests/mm: add simple VM_PFNMAP tests based on
  mmap'ing /dev/mem
+From: David Hildenbrand <david@redhat.com>
 To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
 Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org,
  linux-kselftest@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
@@ -99,7 +100,7 @@ Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org,
  Peter Xu <peterx@redhat.com>
 References: <20250508222041.1647645-1-david@redhat.com>
  <8c94faf4-9af9-4d43-a597-6b06dd21be95@lucifer.local>
-From: David Hildenbrand <david@redhat.com>
+ <4efa9948-a523-4597-baa4-c36d18a658b0@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
  xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
@@ -146,364 +147,24 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <8c94faf4-9af9-4d43-a597-6b06dd21be95@lucifer.local>
+In-Reply-To: <4efa9948-a523-4597-baa4-c36d18a658b0@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 09.05.25 11:49, Lorenzo Stoakes wrote:
-> On Fri, May 09, 2025 at 12:20:41AM +0200, David Hildenbrand wrote:
->> Let's test some basic functionality using /dev/mem. These tests will
->> implicitly cover some PAT (Page Attribute Handling) handling on x86.
+>> Is this not pretty much equivalent to a volatile read where you're forcing
+>> the compiler to not optimise this unused thing away? In guard-regions I set:
+>>
+>> #define FORCE_READ(x) (*(volatile typeof(x) *)x)
+>>
+>> For this purpose, which would make this:
+>>
+>> FORCE_READ(addr);
+>> FORCE_READ(&addr[pagesize]);
 > 
-> Ah this is really nice thanks for this!
+> Hmmm, a compiler might be allowed to optimize out a volatile read.
 
-Thanks for your review!
-
-> 
->> 	ok 14 mprotect(PROT_NONE)
->> 	ok 15 SIGSEGV expected
->> 	ok 16 mprotect(PROT_READ)
->> 	ok 17 SIGSEGV not expected
->> 	ok 18 fork()
->> 	ok 19 SIGSEGV in child not expected
->> 	# Totals: pass:19 fail:0 xfail:0 xpass:0 skip:0 error:0
-> 
-> It'd be good to assert that merging doesn't work for VM_PFNMAP, though hm
-> one could argue that's not hugely useful as it's trivially implemented.
-> 
-> But I guess anything like that should live in merge.c.
-
-I assume we'd need is_range_mapped() from mremap_tests.c.
-
-Something for another day :)
-
-[...]
-
->> +static void signal_handler(int sig)
->> +{
->> +	if (sig == SIGSEGV)
->> +		siglongjmp(env, 1);
->> +	siglongjmp(env, 2);
->> +}
-> 
-> Hm, wouldn't it be better to only catch these only if you specifically
-> meant to catch a signal?
-
-I had that, but got tired about the repeated register + unregister, 
-after all I really don't want to spend a lot more time on this.
-
-> You can see what I did in guard-regions.c for an example (sorry, I'm sure
-> you know exactly how the thing works, just I mean for an easy reminder :P)
-> 
-
-Again, time is the limit. But let me see if I can get something done in 
-a reasonable timeframe.
-
->> +
->> +static void sense_support(void)
->> +{
-> 
-> See below comment about the kselftest_harness, but with that you can
-> literally declare fixture setups/teardowns very nicely :) You can also
-> mmap() these 2 pages and munmap() them afterwards straightforwardly.
-> 
->> +	char *addr, tmp;
->> +	int ret;
->> +
->> +	dev_mem_fd = open("/dev/mem", O_RDONLY);
->> +	if (dev_mem_fd < 0)
->> +		ksft_exit_skip("Cannot open '/dev/mem': %s\n", strerror(errno));
-> 
-> Hm skip, or failure? Skip implies it's expected right? I suppose it's
-> possible a system might be setup without this...
-
-Try as non-root or on a lockdowned system :)
-
-> 
->> +
->> +	/* We'll require the first two pages throughout our tests ... */
->> +	addr = mmap(0, pagesize * 2, PROT_READ, MAP_SHARED, dev_mem_fd, 0);
->> +	if (addr == MAP_FAILED)
->> +		ksft_exit_skip("Cannot mmap '/dev/mem'");
->> +
->> +	/* ... and want to be able to read from them. */
->> +	ret = sigsetjmp(env, 1);
->> +	if (!ret) {
->> +		tmp = *addr + *(addr + pagesize);
->> +		asm volatile("" : "+r" (tmp));
-> 
-> Is this not pretty much equivalent to a volatile read where you're forcing
-> the compiler to not optimise this unused thing away? In guard-regions I set:
-> 
-> #define FORCE_READ(x) (*(volatile typeof(x) *)x)
-> 
-> For this purpose, which would make this:
-> 
-> FORCE_READ(addr);
-> FORCE_READ(&addr[pagesize]);
-
-Hmmm, a compiler might be allowed to optimize out a volatile read.
-
-> 
->> +	}
->> +	if (ret)
->> +		ksft_exit_skip("Cannot read-access mmap'ed '/dev/mem'");
-> 
-> Why are we returning 1 or 2 if we don't differentiate it here?
-
-Copy-and-paste. As we are not registering for SIGBUS, we can just return 1.
-
-> 
->> +
->> +	munmap(addr, pagesize * 2);
->> +}
->> +
->> +static void test_madvise(void)
->> +{
->> +#define INIT_ADVICE(nr) { nr, #nr}
->> +	const struct {
->> +		int nr;
->> +		const char *name;
->> +	} advices[] = {
->> +		INIT_ADVICE(MADV_DONTNEED),
->> +		INIT_ADVICE(MADV_DONTNEED_LOCKED),
->> +		INIT_ADVICE(MADV_FREE),
->> +		INIT_ADVICE(MADV_WIPEONFORK),
->> +		INIT_ADVICE(MADV_COLD),
->> +		INIT_ADVICE(MADV_PAGEOUT),
->> +		INIT_ADVICE(MADV_POPULATE_READ),
->> +		INIT_ADVICE(MADV_POPULATE_WRITE),
->> +	};
->> +	char *addr;
->> +	int ret, i;
->> +
->> +	addr = mmap(0, pagesize, PROT_READ, MAP_SHARED, dev_mem_fd, 0);
-> 
-> Nit (same for all mmap() calls) shouldn't this first parameter be NULL, by
-> convention? I mean not a big deal obviously :)
-
-Yes.
-
-> 
->> +	if (addr == MAP_FAILED)
->> +		ksft_exit_fail_msg("mmap() failed: %s\n", strerror(errno));
->> +
->> +	/* All these advices must be rejected. */
->> +	for (i = 0; i < ARRAY_SIZE(advices); i++) {
->> +		ret = madvise(addr, pagesize, advices[i].nr);
->> +		ksft_test_result(ret && errno == EINVAL,
->> +				 "madvise(%s) should be disallowed\n",
->> +				 advices[i].name);
->> +	}
->> +
->> +	munmap(addr, pagesize);
->> +}
->> +
->> +static void test_munmap_splitting(void)
->> +{
->> +	char *addr1, *addr2;
->> +	int ret;
->> +
->> +	addr1 = mmap(0, pagesize * 2, PROT_READ, MAP_SHARED, dev_mem_fd, 0);
->> +	if (addr1 == MAP_FAILED)
->> +		ksft_exit_fail_msg("mmap() failed: %s\n", strerror(errno));
->> +
->> +	/* Unmap the first pages. */
-> 
-> NIT: pages -> page.
-
-Ack.
-
-> 
->> +	ret = munmap(addr1, pagesize);
->> +	ksft_test_result(!ret, "munmap() splitting\n");
->> +
->> +	/* Remap the first page while the second page is still mapped. */
->> +	addr2 = mmap(0, pagesize, PROT_READ, MAP_SHARED, dev_mem_fd, 0);
->> +	ksft_test_result(addr2 != MAP_FAILED, "mmap() after splitting\n");
-> 
-> Hm not sure what the assertion is here per se, that we can munmap() partial
-> bits of the VMA? It'd be pretty weird if we couldn't though?
- > > If it's that we don't get a merge when we remap, we're not really 
-checking
-> that, but you actually can, as I added an API to vm_util for this using
-> PROCMAP_QUERY (very handy tool actually - binary version of /proc/smaps).
-
-I don't care about merging tests (I'll leave that to you :P ).
-
-This is a PAT test for upcoming changes where partial unmap can leave 
-the original region reserved. Making sure that re-mapping with the 
-pending reservation still works.
-
->> +
->> +	if (addr2 != MAP_FAILED)
->> +		munmap(addr2, pagesize);
->> +	if (!ret)
->> +		munmap(addr1 + pagesize, pagesize);
->> +	else
->> +		munmap(addr1, pagesize * 2);
-> 
-> There's no need for this dance, you can just munmap() away, it tolerates
-> gaps and multiple VMAs.
-
-Yeah, I know. I was not sure if the ksft_test_result() in between might 
-allocate memory and consume that area.
-
-> 
->> +}
->> +
->> +static void test_mremap_fixed(void)
->> +{
->> +	char *addr, *new_addr, *ret;
->> +
->> +	addr = mmap(0, pagesize * 2, PROT_READ, MAP_SHARED, dev_mem_fd, 0);
->> +	if (addr == MAP_FAILED)
->> +		ksft_exit_fail_msg("mmap() failed: %s\n", strerror(errno));
->> +
->> +	/* Reserve a destination area. */
->> +	new_addr = mmap(0, pagesize * 2, PROT_READ, MAP_ANON | MAP_PRIVATE, -1, 0);
->> +	if (new_addr == MAP_FAILED)
->> +		ksft_exit_fail_msg("mmap() failed: %s\n", strerror(errno));
->> +
->> +	/* mremap() over our destination. */
->> +	ret = mremap(addr, pagesize * 2, pagesize * 2,
->> +		     MREMAP_FIXED | MREMAP_MAYMOVE, new_addr);
->> +	ksft_test_result(ret == new_addr, "mremap(MREMAP_FIXED)\n");
->> +	if (ret != new_addr)
->> +		munmap(new_addr, pagesize * 2);
-> 
-> This could only be an error code, and this will fail right?
-> 
-> MREMAP_FIXED is 'do or die' at the new address, not hinting. If there's
-> anything already mapped there it goes a bye bye.
-> 
-> So again, we could just have a standard munmap(), and this lends itself
-> well to a FIXTURE_SETUP()/FIXTURE_TEARDOWN() :P
-
-I'm afraid I cannot spend much more time on these tests :P But let me 
-try for a couple of minutes.
-
-> 
->> +	munmap(addr, pagesize * 2);
->> +}
->> +
->> +static void test_mremap_shrinking(void)
->> +{
->> +	char *addr, *ret;
->> +
->> +	addr = mmap(0, pagesize * 2, PROT_READ, MAP_SHARED, dev_mem_fd, 0);
->> +	if (addr == MAP_FAILED)
->> +		ksft_exit_fail_msg("mmap() failed: %s\n", strerror(errno));
->> +
->> +	/* Shrinking is expected to work. */
->> +	ret = mremap(addr, pagesize * 2, pagesize, 0);
->> +	ksft_test_result(ret == addr, "mremap() shrinking\n");
->> +	if (ret != addr)
->> +		munmap(addr, pagesize * 2);
->> +	else
->> +		munmap(addr, pagesize);
-> 
-> I think we're safe to just munmap() as usual here :) (it's nitty but I'm
-> trying to make the case for teardown again of course :P)
-
-Same reasoning as above regarding ksft_test_result().
-
-> 
->> +}
->> +
->> +static void test_mremap_growing(void)
->> +{
->> +	char *addr, *ret;
->> +
->> +	addr = mmap(0, pagesize, PROT_READ, MAP_SHARED, dev_mem_fd, 0);
->> +	if (addr == MAP_FAILED)
->> +		ksft_exit_fail_msg("mmap() failed: %s\n", strerror(errno));
->> +
->> +	/* Growing is not expected to work. */
-> 
-> God imagine if we did allow it... what hell would it be to figure out how
-> to do this correctly in all cases :P
-
-:)
-
-> 
->> +	ret = mremap(addr, pagesize, pagesize * 2, MREMAP_MAYMOVE);
->> +	ksft_test_result(ret == MAP_FAILED,
->> +			 "mremap() growing should be disallowed\n");
->> +	if (ret == MAP_FAILED)
->> +		munmap(addr, pagesize);
->> +	else
->> +		munmap(ret, pagesize * 2);
-> 
-> This is a bit cautious, for a world where we do lose our minds and allow
-> this? :)
-
-Yeah, went back and forth with this error cleanup shit.
-
-> 
->> +}
->> +
->> +static void test_mprotect(void)
->> +{
->> +	char *addr, tmp;
->> +	int ret;
->> +
->> +	addr = mmap(0, pagesize, PROT_READ, MAP_SHARED, dev_mem_fd, 0);
->> +	if (addr == MAP_FAILED)
->> +		ksft_exit_fail_msg("mmap() failed: %s\n", strerror(errno));
->> +
->> +	/* With PROT_NONE, read access must result in SIGSEGV. */
->> +	ret = mprotect(addr, pagesize, PROT_NONE);
->> +	ksft_test_result(!ret, "mprotect(PROT_NONE)\n");
->> +
->> +	ret = sigsetjmp(env, 1);
->> +	if (!ret) {
->> +		tmp = *addr;
->> +		asm volatile("" : "+r" (tmp));
->> +	}
-> 
-> This code is duplicated, we definitely want to abstract it.
-
-Probably yes.
-
-> 
->> +	ksft_test_result(ret == 1, "SIGSEGV expected\n");
-> 
-> Hmm, what exactly are we testing here though? I mean PROT_NONE will be a
-> failed access for _any_ kind of memory? Is this really worthwhile? Maybe
-> better to mprotect() as PROT_NONE to start then mprotect() to PROT_READ.
- > > But I'm not sure what that really tests? Is it a PAT-specific thing? It
-> seems if this is broken then the mapping code is more generally broken
-> beyond just VM_PFNMAP mappings right?
-
-Rationale was to test the !vm_normal_folio() code paths that are not 
-covered by "ordinary" mprotect (except the shared zeropage). But there 
-should indeed only be such a check on the prot_numa code path, so I can 
-just drop this test.
-
-[...]
-
->> +int main(int argc, char **argv)
->> +{
->> +	int err;
->> +
->> +	ksft_print_header();
->> +	ksft_set_plan(19);
-> 
-> I know it's kind of nitpicky, but I really hate this sort of magic number
-> and so on. You don't actually need any of this, the kselftest_harness.h is
-> _really_ powerful, and makes for much much more readable and standardised
-> test code.
-> 
-> You can look at guard-regions.c in the test code (though there's some
-> complexity there because I use 'variants') or the merge.c test code
-> (simpler) for straight-forward examples.
-> 
-> I won't block this change on this however, I don't want to be a pain and
-> you're adding very important tests here, but it'd be really nice if you did
-> use that :>)
-
-Yeah, let me explore that real quick, thanks!
+Looking into this, the compiler should not be allowed to do that. So 
+FORCE_READ() should work!
 
 -- 
 Cheers,
