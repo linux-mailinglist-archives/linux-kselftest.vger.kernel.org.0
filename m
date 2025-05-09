@@ -1,773 +1,383 @@
-Return-Path: <linux-kselftest+bounces-32737-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32738-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35177AB0D09
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 May 2025 10:22:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 47F9FAB0D25
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 May 2025 10:32:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 96824504062
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 May 2025 08:22:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A491F502FF3
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 May 2025 08:32:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2B9D2741BE;
-	Fri,  9 May 2025 08:22:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 505922741C2;
+	Fri,  9 May 2025 08:31:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Y54H9TvO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C483622A4FD;
-	Fri,  9 May 2025 08:22:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43587269AE3
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 May 2025 08:31:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746778943; cv=none; b=bIL5uusaPJ1vZfOEvPjkZSKRtgolkE81tc2X5sxQSJ4I6UdhYS5T65qwQRUJwoiHpSJrziFp7aeht0OKEiXAbVICOKhB8CmS3sKO5WwgwK9Z3xmMSlpfH/Zqi1hNmzQ7vf7vfxebGQGW0JnqfmMB3tC3nykaN/f+Q3af49Jlteg=
+	t=1746779517; cv=none; b=aVvI2HBNyXnl1pDlm7579S3UwC26wzafAqPNm7D2oqeuQHEODLq8Zfbc1CnUpeJVoxYwftV0kQgtH+pqMkc1smz2+waXvUm+qZ6o9dAYDZ//3GqUVWuXx3kIdRClthuHHMbeObqDFn41kVPIFdn3OOSI7Jy4bdcCW6bS8zDqfa0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746778943; c=relaxed/simple;
-	bh=LAKDs1Ebf8fsjZwxNzg8Z5v0fBho9WYnJeKznTopoZA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=buXh/ZXj6qno4O8TmEJ2f6zdZgkXzgt8TVS1w0NJon7gVRSEeW9jK9HPEn9TcG4KUUB/zE5eO+DPtb6LyAe+V9e5F7K5XcyoEXLa5bmT4+ZoTNMKsCwDGt/2HRQsJo01ho+c5KdRNl7v73u6B2NtWsbfclV9lmJRf94yZ8Bt+ws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.183.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ghiti.fr
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 21DC5433EC;
-	Fri,  9 May 2025 08:22:03 +0000 (UTC)
-Message-ID: <80edd225-046e-4ef4-9e71-7059aa523e3a@ghiti.fr>
-Date: Fri, 9 May 2025 10:22:03 +0200
+	s=arc-20240116; t=1746779517; c=relaxed/simple;
+	bh=9lQZozOT//ZQ/czf66UkcCEnEqMNT17DHsbR/6BKiCc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=STxgcxW0HRSU9/6Ssj0H1MwmXrcdIUZ54BsjoD/13PISv3KR7gjxLSbTydDuc4JYzhifpcqtzG6FMJXrEvwJNTFj9WC/77XN+kWqIeczS4gMKhQ8/zCBCAKmTPnlh83LdNcajQH5Vms8d4iFkcbZ6+W3fmyXhioiH/z6WBqq8Ag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Y54H9TvO; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1746779513;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mxQK0cexvFnlqB7R/upvH/pd3k+8Oz9YpLbSOHmnD6g=;
+	b=Y54H9TvOmadXmvOTg+dYHe91+ozZUfAvwUsPsy4yduglyeQShZu7WcACZP27VTwbdBF0p6
+	IYsTVarjjvVDoKOEDtxIx6xBR+CKkRP6pxKvcc0XemgdDGfnQ4qNvijLSw1ilm4dLjHj5N
+	aqo+/kn9KiPl2cocH/xhZFV2SEZO3z8=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-302-OxVlxgQBMmyiGSCjS0-IVw-1; Fri,
+ 09 May 2025 04:31:49 -0400
+X-MC-Unique: OxVlxgQBMmyiGSCjS0-IVw-1
+X-Mimecast-MFC-AGG-ID: OxVlxgQBMmyiGSCjS0-IVw_1746779508
+Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D115C1800446;
+	Fri,  9 May 2025 08:31:47 +0000 (UTC)
+Received: from fedora (unknown [10.72.116.140])
+	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B33EC1953B85;
+	Fri,  9 May 2025 08:31:41 +0000 (UTC)
+Date: Fri, 9 May 2025 16:31:31 +0800
+From: Ming Lei <ming.lei@redhat.com>
+To: Uday Shankar <ushankar@purestorage.com>
+Cc: Jens Axboe <axboe@kernel.dk>,
+	Caleb Sander Mateos <csander@purestorage.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v6 7/8] selftests: ublk: kublk: decouple ublk_queues from
+ ublk server threads
+Message-ID: <aB29Y6OTjESOPVlc@fedora>
+References: <20250507-ublk_task_per_io-v6-0-a2a298783c01@purestorage.com>
+ <20250507-ublk_task_per_io-v6-7-a2a298783c01@purestorage.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 5/5] selftests: riscv: add misaligned access testing
-Content-Language: en-US
-To: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>,
- "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>,
- "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>, Paul Walmsley
- <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Shuah Khan <shuah@kernel.org>,
- Andrew Jones <ajones@ventanamicro.com>,
- Samuel Holland <samuel.holland@sifive.com>
-References: <20250422162324.956065-1-cleger@rivosinc.com>
- <20250422162324.956065-6-cleger@rivosinc.com>
-From: Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <20250422162324.956065-6-cleger@rivosinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvledvuddvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfesthekredttddvjeenucfhrhhomheptehlvgigrghnughrvgcuifhhihhtihcuoegrlhgvgiesghhhihhtihdrfhhrqeenucggtffrrghtthgvrhhnpeetheevfeffgfetkeevleegudelveefleefiedvueffuefgfeejgeegkeejleetgeenucffohhmrghinheptghomhhmohhnrdhssgdpfhhpuhdrshgsnecukfhppedujeeirddugeejrddugeehrdeggeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedujeeirddugeejrddugeehrdeggedphhgvlhhopegludelvddrudeikedruddrudefjegnpdhmrghilhhfrhhomheprghlvgigsehghhhithhirdhfrhdpnhgspghrtghpthhtohepuddvpdhrtghpthhtoheptghlvghgvghrsehrihhvohhsihhntgdrtghomhdprhgtphhtthhopehlihhnuhigqdguohgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrhhishgtvheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdprhgtp
- hhtthhopehlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheptghorhgsvghtsehlfihnrdhnvghtpdhrtghpthhtohepphgruhhlrdifrghlmhhslhgvhiesshhifhhivhgvrdgtohhmpdhrtghpthhtohepphgrlhhmvghrsegurggssggvlhhtrdgtohhm
-X-GND-Sasl: alex@ghiti.fr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250507-ublk_task_per_io-v6-7-a2a298783c01@purestorage.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
 
-Hi Clément,
-
-On 22/04/2025 18:23, Clément Léger wrote:
-> This selftest tests (almost) all the currently emulated instruction
-> (except for the RV32 compressed ones which are left as a future
-> exercise for a RV32 user). For the FPU instructions, all the FPU
-> registers are tested.
->
-> Signed-off-by: Clément Léger <cleger@rivosinc.com>
+On Wed, May 07, 2025 at 03:49:41PM -0600, Uday Shankar wrote:
+> Add support in kublk for decoupled ublk_queues and ublk server threads.
+> kublk now has two modes of operation:
+> 
+> - (preexisting mode) threads and queues are paired 1:1, and each thread
+>   services all the I/Os of one queue
+> - (new mode) thread and queue counts are independently configurable.
+>   threads service I/Os in a way that balances load across threads even
+>   if load is not balanced over queues. requires passing --round_robin
+> 
+> The new mode of operation is exercised by the new test_generic_08, which
+> issues I/O against a single queue and verifies that each of the 8 ublk
+> server threads handles exactly 1/8 of the total I/O count. Under the old
+> mode of operation (i.e. without --round_robin), all I/O goes to one ublk
+> server thread, and the test fails.
+> 
+> Signed-off-by: Uday Shankar <ushankar@purestorage.com>
 > ---
->   .../selftests/riscv/misaligned/.gitignore     |   1 +
->   .../selftests/riscv/misaligned/Makefile       |  12 +
->   .../selftests/riscv/misaligned/common.S       |  33 +++
->   .../testing/selftests/riscv/misaligned/fpu.S  | 180 +++++++++++++
->   tools/testing/selftests/riscv/misaligned/gp.S | 103 +++++++
->   .../selftests/riscv/misaligned/misaligned.c   | 254 ++++++++++++++++++
->   6 files changed, 583 insertions(+)
->   create mode 100644 tools/testing/selftests/riscv/misaligned/.gitignore
->   create mode 100644 tools/testing/selftests/riscv/misaligned/Makefile
->   create mode 100644 tools/testing/selftests/riscv/misaligned/common.S
->   create mode 100644 tools/testing/selftests/riscv/misaligned/fpu.S
->   create mode 100644 tools/testing/selftests/riscv/misaligned/gp.S
->   create mode 100644 tools/testing/selftests/riscv/misaligned/misaligned.c
->
-> diff --git a/tools/testing/selftests/riscv/misaligned/.gitignore b/tools/testing/selftests/riscv/misaligned/.gitignore
-> new file mode 100644
-> index 000000000000..5eff15a1f981
-> --- /dev/null
-> +++ b/tools/testing/selftests/riscv/misaligned/.gitignore
-> @@ -0,0 +1 @@
-> +misaligned
-> diff --git a/tools/testing/selftests/riscv/misaligned/Makefile b/tools/testing/selftests/riscv/misaligned/Makefile
-> new file mode 100644
-> index 000000000000..1aa40110c50d
-> --- /dev/null
-> +++ b/tools/testing/selftests/riscv/misaligned/Makefile
-> @@ -0,0 +1,12 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +# Copyright (C) 2021 ARM Limited
-> +# Originally tools/testing/arm64/abi/Makefile
-> +
-> +CFLAGS += -I$(top_srcdir)/tools/include
-> +
-> +TEST_GEN_PROGS := misaligned
-> +
-> +include ../../lib.mk
-> +
-> +$(OUTPUT)/misaligned: misaligned.c fpu.S gp.S
-> +	$(CC) -g3 -static -o$@ -march=rv64imafdc $(CFLAGS) $(LDFLAGS) $^
-> diff --git a/tools/testing/selftests/riscv/misaligned/common.S b/tools/testing/selftests/riscv/misaligned/common.S
-> new file mode 100644
-> index 000000000000..8fa00035bd5d
-> --- /dev/null
-> +++ b/tools/testing/selftests/riscv/misaligned/common.S
-> @@ -0,0 +1,33 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (c) 2025 Rivos Inc.
-> + *
-> + * Authors:
-> + *     Clément Léger <cleger@rivosinc.com>
-> + */
-> +
-> +.macro lb_sb temp, offset, src, dst
-> +	lb \temp, \offset(\src)
-> +	sb \temp, \offset(\dst)
-> +.endm
-> +
-> +.macro copy_long_to temp, src, dst
-> +	lb_sb \temp, 0, \src, \dst,
-> +	lb_sb \temp, 1, \src, \dst,
-> +	lb_sb \temp, 2, \src, \dst,
-> +	lb_sb \temp, 3, \src, \dst,
-> +	lb_sb \temp, 4, \src, \dst,
-> +	lb_sb \temp, 5, \src, \dst,
-> +	lb_sb \temp, 6, \src, \dst,
-> +	lb_sb \temp, 7, \src, \dst,
-> +.endm
-> +
-> +.macro sp_stack_prologue offset
-> +	addi sp, sp, -8
-> +	sub sp, sp, \offset
-> +.endm
-> +
-> +.macro sp_stack_epilogue offset
-> +	add sp, sp, \offset
-> +	addi sp, sp, 8
-> +.endm
-> diff --git a/tools/testing/selftests/riscv/misaligned/fpu.S b/tools/testing/selftests/riscv/misaligned/fpu.S
-> new file mode 100644
-> index 000000000000..d008bff58310
-> --- /dev/null
-> +++ b/tools/testing/selftests/riscv/misaligned/fpu.S
-> @@ -0,0 +1,180 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (c) 2025 Rivos Inc.
-> + *
-> + * Authors:
-> + *     Clément Léger <cleger@rivosinc.com>
-> + */
-> +
-> +#include "common.S"
-> +
-> +#define CASE_ALIGN		4
-> +
-> +.macro fpu_load_inst fpreg, inst, precision, load_reg
-> +.align CASE_ALIGN
-> +	\inst \fpreg, 0(\load_reg)
-> +	fmv.\precision fa0, \fpreg
-> +	j 2f
-> +.endm
-> +
-> +#define flw(__fpreg) fpu_load_inst __fpreg, flw, s, s1
-> +#define fld(__fpreg) fpu_load_inst __fpreg, fld, d, s1
-> +#define c_flw(__fpreg) fpu_load_inst __fpreg, c.flw, s, s1
-> +#define c_fld(__fpreg) fpu_load_inst __fpreg, c.fld, d, s1
-> +#define c_fldsp(__fpreg) fpu_load_inst __fpreg, c.fldsp, d, sp
-> +
-> +.macro fpu_store_inst fpreg, inst, precision, store_reg
-> +.align CASE_ALIGN
-> +	fmv.\precision \fpreg, fa0
-> +	\inst \fpreg, 0(\store_reg)
-> +	j 2f
-> +.endm
-> +
-> +#define fsw(__fpreg) fpu_store_inst __fpreg, fsw, s, s1
-> +#define fsd(__fpreg) fpu_store_inst __fpreg, fsd, d, s1
-> +#define c_fsw(__fpreg) fpu_store_inst __fpreg, c.fsw, s, s1
-> +#define c_fsd(__fpreg) fpu_store_inst __fpreg, c.fsd, d, s1
-> +#define c_fsdsp(__fpreg) fpu_store_inst __fpreg, c.fsdsp, d, sp
-> +
-> +.macro fp_test_prologue
-> +	move s1, a1
-> +	/*
-> +	 * Compute jump offset to store the correct FP register since we don't
-> +	 * have indirect FP register access (or at least we don't use this
-> +	 * extension so that works on all archs)
-> +	 */
-> +	sll t0, a0, CASE_ALIGN
-> +	la t2, 1f
-> +	add t0, t0, t2
-> +	jr t0
-> +.align	CASE_ALIGN
-> +1:
-> +.endm
-> +
-> +.macro fp_test_prologue_compressed
-> +	/* FP registers for compressed instructions starts from 8 to 16 */
-> +	addi a0, a0, -8
-> +	fp_test_prologue
-> +.endm
-> +
-> +#define fp_test_body_compressed(__inst_func) \
-> +	__inst_func(f8); \
-> +	__inst_func(f9); \
-> +	__inst_func(f10); \
-> +	__inst_func(f11); \
-> +	__inst_func(f12); \
-> +	__inst_func(f13); \
-> +	__inst_func(f14); \
-> +	__inst_func(f15); \
-> +2:
-> +
-> +#define fp_test_body(__inst_func) \
-> +	__inst_func(f0); \
-> +	__inst_func(f1); \
-> +	__inst_func(f2); \
-> +	__inst_func(f3); \
-> +	__inst_func(f4); \
-> +	__inst_func(f5); \
-> +	__inst_func(f6); \
-> +	__inst_func(f7); \
-> +	__inst_func(f8); \
-> +	__inst_func(f9); \
-> +	__inst_func(f10); \
-> +	__inst_func(f11); \
-> +	__inst_func(f12); \
-> +	__inst_func(f13); \
-> +	__inst_func(f14); \
-> +	__inst_func(f15); \
-> +	__inst_func(f16); \
-> +	__inst_func(f17); \
-> +	__inst_func(f18); \
-> +	__inst_func(f19); \
-> +	__inst_func(f20); \
-> +	__inst_func(f21); \
-> +	__inst_func(f22); \
-> +	__inst_func(f23); \
-> +	__inst_func(f24); \
-> +	__inst_func(f25); \
-> +	__inst_func(f26); \
-> +	__inst_func(f27); \
-> +	__inst_func(f28); \
-> +	__inst_func(f29); \
-> +	__inst_func(f30); \
-> +	__inst_func(f31); \
-> +2:
-> +.text
-> +
-> +#define __gen_test_inst(__inst, __suffix) \
-> +.global test_ ## __inst; \
-> +test_ ## __inst:; \
-> +	fp_test_prologue ## __suffix; \
-> +	fp_test_body ## __suffix(__inst); \
-> +	ret
-> +
-> +#define gen_test_inst_compressed(__inst) \
-> +	.option arch,+c; \
-> +	__gen_test_inst(c_ ## __inst, _compressed)
-> +
-> +#define gen_test_inst(__inst) \
-> +	.balign 16; \
-> +	.option push; \
-> +	.option arch,-c; \
-> +	__gen_test_inst(__inst, ); \
-> +	.option pop
-> +
-> +.macro fp_test_prologue_load_compressed_sp
-> +	copy_long_to t0, a1, sp
-> +.endm
-> +
-> +.macro fp_test_epilogue_load_compressed_sp
-> +.endm
-> +
-> +.macro fp_test_prologue_store_compressed_sp
-> +.endm
-> +
-> +.macro fp_test_epilogue_store_compressed_sp
-> +	copy_long_to t0, sp, a1
-> +.endm
-> +
-> +#define gen_inst_compressed_sp(__inst, __type) \
-> +	.global test_c_ ## __inst ## sp; \
-> +	test_c_ ## __inst ## sp:; \
-> +		sp_stack_prologue a2; \
-> +		fp_test_prologue_## __type ## _compressed_sp; \
-> +		fp_test_prologue_compressed; \
-> +		fp_test_body_compressed(c_ ## __inst ## sp); \
-> +		fp_test_epilogue_## __type ## _compressed_sp; \
-> +		sp_stack_epilogue a2; \
-> +		ret
-> +
-> +#define gen_test_load_compressed_sp(__inst) gen_inst_compressed_sp(__inst, load)
-> +#define gen_test_store_compressed_sp(__inst) gen_inst_compressed_sp(__inst, store)
-> +
-> +/*
-> + * float_fsw_reg - Set a FP register from a register containing the value
-> + * a0 = FP register index to be set
-> + * a1 = addr where to store register value
-> + * a2 = address offset
-> + * a3 = value to be store
-> + */
-> +gen_test_inst(fsw)
-> +
-> +/*
-> + * float_flw_reg - Get a FP register value and return it
-> + * a0 = FP register index to be retrieved
-> + * a1 = addr to load register from
-> + * a2 = address offset
-> + */
-> +gen_test_inst(flw)
-> +
-> +gen_test_inst(fsd)
-> +#ifdef __riscv_compressed
-> +gen_test_inst_compressed(fsd)
-> +gen_test_store_compressed_sp(fsd)
-> +#endif
-> +
-> +gen_test_inst(fld)
-> +#ifdef __riscv_compressed
-> +gen_test_inst_compressed(fld)
-> +gen_test_load_compressed_sp(fld)
-> +#endif
-> diff --git a/tools/testing/selftests/riscv/misaligned/gp.S b/tools/testing/selftests/riscv/misaligned/gp.S
-> new file mode 100644
-> index 000000000000..f53f4c6d81dd
-> --- /dev/null
-> +++ b/tools/testing/selftests/riscv/misaligned/gp.S
-> @@ -0,0 +1,103 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (c) 2025 Rivos Inc.
-> + *
-> + * Authors:
-> + *     Clément Léger <cleger@rivosinc.com>
-> + */
-> +
-> +#include "common.S"
-> +
-> +.text
-> +
-> +.macro __gen_test_inst inst, src_reg
-> +	\inst a2, 0(\src_reg)
-> +	move a0, a2
-> +.endm
-> +
-> +.macro gen_func_header func_name, rvc
-> +	.option arch,\rvc
-> +	.global test_\func_name
-> +	test_\func_name:
-> +.endm
-> +
-> +.macro gen_test_inst inst
-> +	.option push
-> +	gen_func_header \inst, -c
-> +	__gen_test_inst \inst, a0
-> +	.option pop
-> +	ret
-> +.endm
-> +
-> +.macro __gen_test_inst_c name, src_reg
-> +	.option push
-> +	gen_func_header c_\name, +c
-> +	 __gen_test_inst c.\name, \src_reg
-> +	.option pop
-> +	ret
-> +.endm
-> +
-> +.macro gen_test_inst_c name
-> + 	__gen_test_inst_c \name, a0
-> +.endm
-> +
-> +
-> +.macro gen_test_inst_load_c_sp name
-> +	.option push
-> +	gen_func_header c_\name\()sp, +c
-> +	sp_stack_prologue a1
-> +	copy_long_to t0, a0, sp
-> +	c.ldsp a0, 0(sp)
-> +	sp_stack_epilogue a1
-> +	.option pop
-> +	ret
-> +.endm
-> +
-> +.macro lb_sp_sb_a0 reg, offset
-> +	lb_sb \reg, \offset, sp, a0
-> +.endm
-> +
-> +.macro gen_test_inst_store_c_sp inst_name
-> +	.option push
-> +	gen_func_header c_\inst_name\()sp, +c
-> +	/* Misalign stack pointer */
-> +	sp_stack_prologue a1
-> +	/* Misalign access */
-> +	c.sdsp a2, 0(sp)
-> +	copy_long_to t0, sp, a0
-> +	sp_stack_epilogue a1
-> +	.option pop
-> +	ret
-> +.endm
-> +
-> +
-> + /*
-> + * a0 = addr to load from
-> + * a1 = address offset
-> + * a2 = value to be loaded
-> + */
-> +gen_test_inst lh
-> +gen_test_inst lhu
-> +gen_test_inst lw
-> +gen_test_inst lwu
-> +gen_test_inst ld
-> +#ifdef __riscv_compressed
-> +gen_test_inst_c lw
-> +gen_test_inst_c ld
-> +gen_test_inst_load_c_sp ld
-> +#endif
-> +
-> +/*
-> + * a0 = addr where to store value
-> + * a1 = address offset
-> + * a2 = value to be stored
-> + */
-> +gen_test_inst sh
-> +gen_test_inst sw
-> +gen_test_inst sd
-> +#ifdef __riscv_compressed
-> +gen_test_inst_c sw
-> +gen_test_inst_c sd
-> +gen_test_inst_store_c_sp sd
-> +#endif
-> +
-> diff --git a/tools/testing/selftests/riscv/misaligned/misaligned.c b/tools/testing/selftests/riscv/misaligned/misaligned.c
-> new file mode 100644
-> index 000000000000..c66aa87ec03e
-> --- /dev/null
-> +++ b/tools/testing/selftests/riscv/misaligned/misaligned.c
-> @@ -0,0 +1,254 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2025 Rivos Inc.
-> + *
-> + * Authors:
-> + *     Clément Léger <cleger@rivosinc.com>
-> + */
-> +#include <signal.h>
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <linux/ptrace.h>
-> +#include "../../kselftest_harness.h"
-> +
-> +#include <stdlib.h>
-> +#include <stdio.h>
-> +#include <stdint.h>
-> +#include <float.h>
-> +#include <errno.h>
-> +#include <math.h>
-> +#include <string.h>
-> +#include <signal.h>
-> +#include <stdbool.h>
-> +#include <unistd.h>
-> +#include <inttypes.h>
-> +#include <ucontext.h>
-> +
-> +#include <sys/prctl.h>
-> +
-> +#define stringify(s) __stringify(s)
-> +#define __stringify(s) #s
-> +
-> +#define VAL16	0x1234
-> +#define VAL32	0xDEADBEEF
-> +#define VAL64	0x45674321D00DF789
-> +
-> +#define VAL_float	78951.234375
-> +#define VAL_double	567890.512396965789589290
-> +
-> +static bool float_equal(float a, float b)
-> +{
-> +	float scaled_epsilon;
-> +	float difference = fabsf(a - b);
-> +
-> +	// Scale to the largest value.
-> +	a = fabsf(a);
-> +	b = fabsf(b);
-> +	if (a > b)
-> +		scaled_epsilon = FLT_EPSILON * a;
-> +	else
-> +		scaled_epsilon = FLT_EPSILON * b;
-> +
-> +	return difference <= scaled_epsilon;
-> +}
-> +
-> +static bool double_equal(double a, double b)
-> +{
-> +	double scaled_epsilon;
-> +	double difference = fabsf(a - b);
-> +
-> +	// Scale to the largest value.
-> +	a = fabs(a);
-> +	b = fabs(b);
-> +	if (a > b)
-> +		scaled_epsilon = DBL_EPSILON * a;
-> +	else
-> +		scaled_epsilon = DBL_EPSILON * b;
-> +
-> +	return difference <= scaled_epsilon;
-> +}
-> +
-> +#define fpu_load_proto(__inst, __type) \
-> +extern __type test_ ## __inst(unsigned long fp_reg, void *addr, unsigned long offset, __type value)
-> +
-> +fpu_load_proto(flw, float);
-> +fpu_load_proto(fld, double);
-> +fpu_load_proto(c_flw, float);
-> +fpu_load_proto(c_fld, double);
-> +fpu_load_proto(c_fldsp, double);
-> +
-> +#define fpu_store_proto(__inst, __type) \
-> +extern void test_ ## __inst(unsigned long fp_reg, void *addr, unsigned long offset, __type value)
-> +
-> +fpu_store_proto(fsw, float);
-> +fpu_store_proto(fsd, double);
-> +fpu_store_proto(c_fsw, float);
-> +fpu_store_proto(c_fsd, double);
-> +fpu_store_proto(c_fsdsp, double);
-> +
-> +#define gp_load_proto(__inst, __type) \
-> +extern __type test_ ## __inst(void *addr, unsigned long offset, __type value)
-> +
-> +gp_load_proto(lh, uint16_t);
-> +gp_load_proto(lhu, uint16_t);
-> +gp_load_proto(lw, uint32_t);
-> +gp_load_proto(lwu, uint32_t);
-> +gp_load_proto(ld, uint64_t);
-> +gp_load_proto(c_lw, uint32_t);
-> +gp_load_proto(c_ld, uint64_t);
-> +gp_load_proto(c_ldsp, uint64_t);
-> +
-> +#define gp_store_proto(__inst, __type) \
-> +extern void test_ ## __inst(void *addr, unsigned long offset, __type value)
-> +
-> +gp_store_proto(sh, uint16_t);
-> +gp_store_proto(sw, uint32_t);
-> +gp_store_proto(sd, uint64_t);
-> +gp_store_proto(c_sw, uint32_t);
-> +gp_store_proto(c_sd, uint64_t);
-> +gp_store_proto(c_sdsp, uint64_t);
-> +
-> +#define TEST_GP_LOAD(__inst, __type_size)					\
-> +TEST(gp_load_ ## __inst)							\
-> +{										\
-> +	int offset, ret;							\
-> +	uint8_t buf[16] __attribute__((aligned(16)));				\
-> +										\
-> +	ret = prctl(PR_SET_UNALIGN, PR_UNALIGN_NOPRINT);			\
-> +	ASSERT_EQ(ret, 0);							\
-> +										\
-> +	for (offset = 1; offset < __type_size / 8; offset++) {			\
-> +		uint ## __type_size ## _t val = VAL ## __type_size;		\
-> +		uint ## __type_size ## _t *ptr = (uint ## __type_size ## _t *) (buf + offset); \
-> +		memcpy(ptr, &val, sizeof(val));					\
-> +		val = test_ ## __inst(ptr, offset, val);			\
-> +		EXPECT_EQ(VAL ## __type_size, val);				\
-> +	}									\
-> +}
-> +
-> +TEST_GP_LOAD(lh, 16);
-> +TEST_GP_LOAD(lhu, 16);
-> +TEST_GP_LOAD(lw, 32);
-> +TEST_GP_LOAD(lwu, 32);
-> +TEST_GP_LOAD(ld, 64);
-> +#ifdef __riscv_compressed
-> +TEST_GP_LOAD(c_lw, 32);
-> +TEST_GP_LOAD(c_ld, 64);
-> +TEST_GP_LOAD(c_ldsp, 64);
-> +#endif
-> +
-> +#define TEST_GP_STORE(__inst, __type_size)					\
-> +TEST(gp_load_ ## __inst)							\
-> +{										\
-> +	int offset, ret;							\
-> +	uint8_t buf[16] __attribute__((aligned(16)));				\
-> +										\
-> +	ret = prctl(PR_SET_UNALIGN, PR_UNALIGN_NOPRINT);			\
-> +	ASSERT_EQ(ret, 0);							\
-> +										\
-> +	for (offset = 1; offset < __type_size / 8; offset++) {			\
-> +		uint ## __type_size ## _t val = VAL ## __type_size;		\
-> +		uint ## __type_size ## _t *ptr = (uint ## __type_size ## _t *) (buf + offset); \
-> +		memset(ptr, 0, sizeof(val));					\
-> +		test_ ## __inst(ptr, offset, val);				\
-> +		memcpy(&val, ptr, sizeof(val));					\
-> +		EXPECT_EQ(VAL ## __type_size, val);				\
-> +	}									\
-> +}
-> +TEST_GP_STORE(sh, 16);
-> +TEST_GP_STORE(sw, 32);
-> +TEST_GP_STORE(sd, 64);
-> +#ifdef __riscv_compressed
-> +TEST_GP_STORE(c_sw, 32);
-> +TEST_GP_STORE(c_sd, 64);
-> +TEST_GP_STORE(c_sdsp, 64);
-> +#endif
-> +
-> +#define __TEST_FPU_LOAD(__type, __inst, __reg_start, __reg_end)			\
-> +TEST(fpu_load_ ## __inst)							\
-> +{										\
-> +	int i, ret, offset, fp_reg;						\
-> +	uint8_t buf[16] __attribute__((aligned(16)));				\
-> +										\
-> +	ret = prctl(PR_SET_UNALIGN, PR_UNALIGN_NOPRINT);			\
-> +	ASSERT_EQ(ret, 0);							\
-> +										\
-> +	for (fp_reg = __reg_start; fp_reg < __reg_end; fp_reg++) {		\
-> +		for (offset = 1; offset < 4; offset++) {			\
-> +			void *load_addr = (buf + offset);			\
-> +			__type val = VAL_ ## __type ;				\
-> +										\
-> +			memcpy(load_addr, &val, sizeof(val));			\
-> +			val = test_ ## __inst(fp_reg, load_addr, offset, val);	\
-> +			EXPECT_TRUE(__type ##_equal(val, VAL_## __type));	\
-> +		}								\
-> +	}									\
-> +}
-> +#define TEST_FPU_LOAD(__type, __inst) \
-> +	__TEST_FPU_LOAD(__type, __inst, 0, 32)
-> +#define TEST_FPU_LOAD_COMPRESSED(__type, __inst) \
-> +	__TEST_FPU_LOAD(__type, __inst, 8, 16)
-> +
-> +TEST_FPU_LOAD(float, flw)
-> +TEST_FPU_LOAD(double, fld)
-> +#ifdef __riscv_compressed
-> +TEST_FPU_LOAD_COMPRESSED(double, c_fld)
-> +TEST_FPU_LOAD_COMPRESSED(double, c_fldsp)
-> +#endif
-> +
-> +#define __TEST_FPU_STORE(__type, __inst, __reg_start, __reg_end)		\
-> +TEST(fpu_store_ ## __inst)							\
-> +{										\
-> +	int i, ret, offset, fp_reg;						\
-> +	uint8_t buf[16] __attribute__((aligned(16)));				\
-> +										\
-> +	ret = prctl(PR_SET_UNALIGN, PR_UNALIGN_NOPRINT);			\
-> +	ASSERT_EQ(ret, 0);							\
-> +										\
-> +	for (fp_reg = __reg_start; fp_reg < __reg_end; fp_reg++) {		\
-> +		for (offset = 1; offset < 4; offset++) {			\
-> +										\
-> +			void *store_addr = (buf + offset);			\
-> +			__type val = VAL_ ## __type ;				\
-> +										\
-> +			test_ ## __inst(fp_reg, store_addr, offset, val);	\
-> +			memcpy(&val, store_addr, sizeof(val));			\
-> +			EXPECT_TRUE(__type ## _equal(val, VAL_## __type));	\
-> +		}								\
-> +	}									\
-> +}
-> +#define TEST_FPU_STORE(__type, __inst) \
-> +	__TEST_FPU_STORE(__type, __inst, 0, 32)
-> +#define TEST_FPU_STORE_COMPRESSED(__type, __inst) \
-> +	__TEST_FPU_STORE(__type, __inst, 8, 16)
-> +
-> +TEST_FPU_STORE(float, fsw)
-> +TEST_FPU_STORE(double, fsd)
-> +#ifdef __riscv_compressed
-> +TEST_FPU_STORE_COMPRESSED(double, c_fsd)
-> +TEST_FPU_STORE_COMPRESSED(double, c_fsdsp)
-> +#endif
-> +
-> +TEST_SIGNAL(gen_sigbus, SIGBUS)
-> +{
-> +	uint32_t *ptr;
-> +	uint8_t buf[16] __attribute__((aligned(16)));
-> +	int ret;
-> +
-> +	ret = prctl(PR_SET_UNALIGN, PR_UNALIGN_SIGBUS);
-> +	ASSERT_EQ(ret, 0);
-> +
-> +	ptr = (uint32_t *)(buf + 1);
-> +	*ptr = 0xDEADBEEFULL;
-> +}
-> +
-> +int main(int argc, char **argv)
-> +{
-> +	int ret, val;
-> +
-> +	ret = prctl(PR_GET_UNALIGN, &val);
-> +	if (ret == -1 && errno == EINVAL)
-> +		ksft_exit_skip("SKIP GET_UNALIGN_CTL not supported\n");
-> +
-> +	exit(test_harness_run(argc, argv));
-> +}
+>  tools/testing/selftests/ublk/Makefile              |  1 +
+>  tools/testing/selftests/ublk/file_backed.c         |  4 +-
+>  tools/testing/selftests/ublk/kublk.c               | 96 ++++++++++++++++++----
+>  tools/testing/selftests/ublk/kublk.h               |  3 +
+>  tools/testing/selftests/ublk/null.c                |  4 +-
+>  tools/testing/selftests/ublk/stripe.c              |  4 +-
+>  tools/testing/selftests/ublk/test_generic_08.sh    | 61 ++++++++++++++
+>  .../selftests/ublk/trace/count_ios_per_tid.bt      |  9 ++
+>  8 files changed, 160 insertions(+), 22 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/ublk/Makefile b/tools/testing/selftests/ublk/Makefile
+> index e2e7b1e52a06252f626df5606221d17e3106d0d3..f8579019f0d1f9185df098440611c3b75087073b 100644
+> --- a/tools/testing/selftests/ublk/Makefile
+> +++ b/tools/testing/selftests/ublk/Makefile
+> @@ -14,6 +14,7 @@ TEST_PROGS += test_generic_04.sh
+>  TEST_PROGS += test_generic_05.sh
+>  TEST_PROGS += test_generic_06.sh
+>  TEST_PROGS += test_generic_07.sh
+> +TEST_PROGS += test_generic_08.sh
+>  
+>  TEST_PROGS += test_null_01.sh
+>  TEST_PROGS += test_null_02.sh
+> diff --git a/tools/testing/selftests/ublk/file_backed.c b/tools/testing/selftests/ublk/file_backed.c
+> index 563f11a21604bbf5b9531f69f806d09cdd785960..72e22f54f7fe60d26096ace4eb4001987fbe7b15 100644
+> --- a/tools/testing/selftests/ublk/file_backed.c
+> +++ b/tools/testing/selftests/ublk/file_backed.c
+> @@ -50,7 +50,7 @@ static int loop_queue_tgt_rw_io(struct ublk_queue *q, const struct ublksrv_io_de
+>  
+>  	ublk_io_alloc_sqes(ublk_get_io(q, tag), sqe, 3);
+>  
+> -	io_uring_prep_buf_register(sqe[0], 0, tag, q->q_id, tag);
+> +	io_uring_prep_buf_register(sqe[0], 0, tag, q->q_id, ublk_get_io(q, tag)->buf_index);
+
+->buf_index can be calculated runtime by adding helper of ublk_io_buf_idx(io), so
+the extra field can be avoided, CPU is fast than memory.
+
+>  	sqe[0]->flags |= IOSQE_CQE_SKIP_SUCCESS | IOSQE_IO_HARDLINK;
+>  	sqe[0]->user_data = build_user_data(tag,
+>  			ublk_cmd_op_nr(sqe[0]->cmd_op), 0, q->q_id, 1);
+> @@ -62,7 +62,7 @@ static int loop_queue_tgt_rw_io(struct ublk_queue *q, const struct ublksrv_io_de
+>  	sqe[1]->flags |= IOSQE_FIXED_FILE | IOSQE_IO_HARDLINK;
+>  	sqe[1]->user_data = build_user_data(tag, ublk_op, 0, q->q_id, 1);
+>  
+> -	io_uring_prep_buf_unregister(sqe[2], 0, tag, q->q_id, tag);
+> +	io_uring_prep_buf_unregister(sqe[2], 0, tag, q->q_id, ublk_get_io(q, tag)->buf_index);
+>  	sqe[2]->user_data = build_user_data(tag, ublk_cmd_op_nr(sqe[2]->cmd_op), 0, q->q_id, 1);
+>  
+>  	return 2;
+> diff --git a/tools/testing/selftests/ublk/kublk.c b/tools/testing/selftests/ublk/kublk.c
+> index 313689f94cd6361a9a0f4b9257085b2a62bc8b8c..27046bb6a13b99879ad164ff8eaabeba57e17387 100644
+> --- a/tools/testing/selftests/ublk/kublk.c
+> +++ b/tools/testing/selftests/ublk/kublk.c
+> @@ -478,8 +478,11 @@ static int ublk_thread_init(struct ublk_thread *t)
+>  	}
+>  
+>  	if (dev->dev_info.flags & UBLK_F_SUPPORT_ZERO_COPY) {
+> +		unsigned nr_ios = dev->dev_info.queue_depth * dev->dev_info.nr_hw_queues;
+> +		unsigned max_nr_ios_per_thread = nr_ios / dev->nthreads;
+> +		max_nr_ios_per_thread += !!(nr_ios % dev->nthreads);
+>  		ret = io_uring_register_buffers_sparse(
+> -			&t->ring, dev->dev_info.queue_depth);
+> +			&t->ring, max_nr_ios_per_thread);
+>  		if (ret) {
+>  			ublk_err("ublk dev %d thread %d register spare buffers failed %d",
+>  					dev->dev_info.dev_id, t->idx, ret);
+> @@ -612,18 +615,42 @@ int ublk_queue_io_cmd(struct ublk_io *io)
+>  
+>  static void ublk_submit_fetch_commands(struct ublk_thread *t)
+>  {
+> -	/*
+> -	 * Service exclusively the queue whose q_id matches our thread
+> -	 * index. This may change in the future.
+> -	 */
+> -	struct ublk_queue *q = &t->dev->q[t->idx];
+> +	struct ublk_queue *q;
+>  	struct ublk_io *io;
+> -	int i = 0;
+> +	int i = 0, j = 0;
+>  
+> -	for (i = 0; i < q->q_depth; i++) {
+> -		io = &q->ios[i];
+> -		io->t = t;
+> -		ublk_queue_io_cmd(io);
+> +	if (t->dev->dev_info.flags & UBLK_F_RR_TAGS) {
+
+You shouldn't depend on the generic feature of UBLK_F_RR_TAGS, which can be
+used for non-io-task too.
+
+Here you need one helper of ublk_use_io_task(), or sort of flags.
+
+> +		/*
+> +		 * Lexicographically order all the (qid,tag) pairs, with
+> +		 * qid taking priority, and give this thread every Nth
+> +		 * entry, where N is the total number of threads. The
+> +		 * offset is controlled by the thread index. This takes
+> +		 * load which may be imbalanced across the queues and
+> +		 * balances it across the threads.
+> +		 */
+> +		const struct ublksrv_ctrl_dev_info *dinfo = &t->dev->dev_info;
+> +		int nr_ios = dinfo->nr_hw_queues * dinfo->queue_depth;
+> +		for (i = t->idx; i < nr_ios; i += t->dev->nthreads, j++) {
+> +			int q_id = i / dinfo->queue_depth;
+> +			int tag = i % dinfo->queue_depth;
+
+I understand UBLK_F_RR_TAGS means that IO with adjacent tag should be
+handled locally, but the above actually does the opposite, only IOs with
+non-adjacent tags are handled in same pthread, can you explain a bit
+why UBLK_F_RR_TAGS helps for this way?
+
+> +			q = &t->dev->q[q_id];
+> +			io = &q->ios[tag];
+> +			io->t = t;
+> +			io->buf_index = j;
+> +			ublk_queue_io_cmd(io);
+> +		}
+> +	} else {
+> +		/*
+> +		 * Service exclusively the queue whose q_id matches our
+> +		 * thread index.
+> +		 */
+> +		struct ublk_queue *q = &t->dev->q[t->idx];
+> +		for (i = 0; i < q->q_depth; i++) {
+> +			io = &q->ios[i];
+> +			io->t = t;
+> +			io->buf_index = i;
+> +			ublk_queue_io_cmd(io);
+> +		}
+>  	}
+>  }
+>  
+> @@ -778,7 +805,8 @@ static void *ublk_io_handler_fn(void *data)
+>  		return NULL;
+>  	}
+>  	/* IO perf is sensitive with queue pthread affinity on NUMA machine*/
+> -	ublk_thread_set_sched_affinity(t, info->affinity);
+> +	if (info->affinity)
+> +		ublk_thread_set_sched_affinity(t, info->affinity);
+>  	sem_post(info->ready);
+>  
+>  	ublk_dbg(UBLK_DBG_THREAD, "tid %d: ublk dev %d thread %u started\n",
+> @@ -844,7 +872,7 @@ static int ublk_start_daemon(const struct dev_ctx *ctx, struct ublk_dev *dev)
+>  
+>  	ublk_dbg(UBLK_DBG_DEV, "%s enter\n", __func__);
+>  
+> -	tinfo = calloc(sizeof(struct ublk_thread_info), dinfo->nr_hw_queues);
+> +	tinfo = calloc(sizeof(struct ublk_thread_info), dev->nthreads);
+>  	if (!tinfo)
+>  		return -ENOMEM;
+>  
+> @@ -867,17 +895,24 @@ static int ublk_start_daemon(const struct dev_ctx *ctx, struct ublk_dev *dev)
+>  				 dinfo->dev_id, i);
+>  			goto fail;
+>  		}
+> +	}
+>  
+> +	for (i = 0; i < dev->nthreads; i++) {
+>  		tinfo[i].dev = dev;
+>  		tinfo[i].idx = i;
+>  		tinfo[i].ready = &ready;
+> -		tinfo[i].affinity = &affinity_buf[i];
+> +		/*
+> +		 * If threads are not tied to queues, setting thread
+> +		 * affinity based on queue affinity makes no sense.
+> +		 */
+> +		if (!(dinfo->flags & UBLK_F_RR_TAGS))
+> +			tinfo[i].affinity = &affinity_buf[i];
+>  		pthread_create(&dev->threads[i].thread, NULL,
+>  				ublk_io_handler_fn,
+>  				&tinfo[i]);
+>  	}
+>  
+> -	for (i = 0; i < dinfo->nr_hw_queues; i++)
+> +	for (i = 0; i < dev->nthreads; i++)
+>  		sem_wait(&ready);
+>  	free(tinfo);
+>  	free(affinity_buf);
+> @@ -901,7 +936,7 @@ static int ublk_start_daemon(const struct dev_ctx *ctx, struct ublk_dev *dev)
+>  		ublk_send_dev_event(ctx, dev, dev->dev_info.dev_id);
+>  
+>  	/* wait until we are terminated */
+> -	for (i = 0; i < dinfo->nr_hw_queues; i++)
+> +	for (i = 0; i < dev->nthreads; i++)
+>  		pthread_join(dev->threads[i].thread, &thread_ret);
+>   fail:
+>  	for (i = 0; i < dinfo->nr_hw_queues; i++)
+> @@ -1011,6 +1046,7 @@ static int ublk_stop_io_daemon(const struct ublk_dev *dev)
+>  
+>  static int __cmd_dev_add(const struct dev_ctx *ctx)
+>  {
+> +	unsigned nthreads = ctx->nthreads;
+>  	unsigned nr_queues = ctx->nr_hw_queues;
+>  	const char *tgt_type = ctx->tgt_type;
+>  	unsigned depth = ctx->queue_depth;
+> @@ -1034,6 +1070,23 @@ static int __cmd_dev_add(const struct dev_ctx *ctx)
+>  		return -EINVAL;
+>  	}
+>  
+> +	/* default to 1:1 threads:queues if nthreads is unspecified */
+> +	if (nthreads == -1)
+> +		nthreads = nr_queues;
+
+Maybe we can start 1:1 for nrthreads == 0, which looks more readable,
+and you needn't to set -1 default.
+
+> +
+> +	if (nthreads > UBLK_MAX_THREADS) {
+> +		ublk_err("%s: %u is too many threads (max %u)\n",
+> +				__func__, nthreads, UBLK_MAX_THREADS);
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (nthreads != nr_queues && !(ctx->flags & UBLK_F_RR_TAGS)) {
+> +		ublk_err("%s: threads %u must be same as queues %u if "
+> +			"not using round robin\n",
+> +			__func__, nthreads, nr_queues);
+> +		return -EINVAL;
+> +	}
+> +
+>  	dev = ublk_ctrl_init();
+>  	if (!dev) {
+>  		ublk_err("%s: can't alloc dev id %d, type %s\n",
+> @@ -1054,6 +1107,7 @@ static int __cmd_dev_add(const struct dev_ctx *ctx)
+>  	info->nr_hw_queues = nr_queues;
+>  	info->queue_depth = depth;
+>  	info->flags = ctx->flags;
+> +	dev->nthreads = nthreads;
+>  	dev->tgt.ops = ops;
+>  	dev->tgt.sq_depth = depth;
+>  	dev->tgt.cq_depth = depth;
+> @@ -1249,6 +1303,7 @@ static int cmd_dev_get_features(void)
+>  		[const_ilog2(UBLK_F_USER_COPY)] = "USER_COPY",
+>  		[const_ilog2(UBLK_F_ZONED)] = "ZONED",
+>  		[const_ilog2(UBLK_F_USER_RECOVERY_FAIL_IO)] = "RECOVERY_FAIL_IO",
+> +		[const_ilog2(UBLK_F_RR_TAGS)] = "RR_TAGS",
+>  	};
+>  	struct ublk_dev *dev;
+>  	__u64 features = 0;
+> @@ -1290,8 +1345,10 @@ static void __cmd_create_help(char *exe, bool recovery)
+>  			exe, recovery ? "recover" : "add");
+>  	printf("\t[--foreground] [--quiet] [-z] [--debug_mask mask] [-r 0|1 ] [-g]\n");
+>  	printf("\t[-e 0|1 ] [-i 0|1]\n");
+> +	printf("\t[--nthreads threads] [--round_robin]\n");
+>  	printf("\t[target options] [backfile1] [backfile2] ...\n");
+>  	printf("\tdefault: nr_queues=2(max 32), depth=128(max 1024), dev_id=-1(auto allocation)\n");
+> +	printf("\tdefault: nthreads=nr_queues");
+>  
+>  	for (i = 0; i < sizeof(tgt_ops_list) / sizeof(tgt_ops_list[0]); i++) {
+>  		const struct ublk_tgt_ops *ops = tgt_ops_list[i];
+> @@ -1343,6 +1400,8 @@ int main(int argc, char *argv[])
+>  		{ "recovery_fail_io",	1,	NULL, 'e'},
+>  		{ "recovery_reissue",	1,	NULL, 'i'},
+>  		{ "get_data",		1,	NULL, 'g'},
+> +		{ "nthreads",		1,	NULL,  0 },
+> +		{ "round_robin",	0,	NULL,  0 },
+>  		{ 0, 0, 0, 0 }
+>  	};
+>  	const struct ublk_tgt_ops *ops = NULL;
+> @@ -1351,6 +1410,7 @@ int main(int argc, char *argv[])
+>  	struct dev_ctx ctx = {
+>  		.queue_depth	=	128,
+>  		.nr_hw_queues	=	2,
+> +		.nthreads	=	-1,
+>  		.dev_id		=	-1,
+>  		.tgt_type	=	"unknown",
+>  	};
+> @@ -1411,6 +1471,10 @@ int main(int argc, char *argv[])
+>  				ublk_dbg_mask = 0;
+>  			if (!strcmp(longopts[option_idx].name, "foreground"))
+>  				ctx.fg = 1;
+> +			if (!strcmp(longopts[option_idx].name, "nthreads"))
+> +				ctx.nthreads = strtol(optarg, NULL, 10);
+> +			if (!strcmp(longopts[option_idx].name, "round_robin"))
+> +				ctx.flags |= UBLK_F_RR_TAGS;
+
+maybe `--io_task` is more readable, and you can always enable UBLK_F_RR_TAGS
+for this '--io_task' ublk server feature.
 
 
-So I had to add the following to actually compile this selftest along 
-with other riscv tests and fix some warnings:
-
-diff --git a/tools/testing/selftests/riscv/Makefile 
-b/tools/testing/selftests/riscv/Makefile
-index 099b8c1f46f89..95a98ceeb3b3a 100644
---- a/tools/testing/selftests/riscv/Makefile
-+++ b/tools/testing/selftests/riscv/Makefile
-@@ -5,7 +5,7 @@
-  ARCH ?= $(shell uname -m 2>/dev/null || echo not)
-
-  ifneq (,$(filter $(ARCH),riscv))
--RISCV_SUBTARGETS ?= abi hwprobe mm sigreturn vector
-+RISCV_SUBTARGETS ?= abi hwprobe mm sigreturn vector misaligned
-  else
-  RISCV_SUBTARGETS :=
-  endif
-diff --git a/tools/testing/selftests/riscv/misaligned/misaligned.c 
-b/tools/testing/selftests/riscv/misaligned/misaligned.c
-index c66aa87ec03ec..8fa5ad1a93d17 100644
---- a/tools/testing/selftests/riscv/misaligned/misaligned.c
-+++ b/tools/testing/selftests/riscv/misaligned/misaligned.c
-@@ -167,7 +167,7 @@ TEST_GP_STORE(c_sdsp, 64);
-  #define __TEST_FPU_LOAD(__type, __inst, __reg_start, 
-__reg_end)                             \
-  TEST(fpu_load_ ## 
-__inst)                                                      \
-  { \
--       int i, ret, offset, 
-fp_reg;                                             \
-+       int ret, offset, 
-fp_reg;                                                \
-         uint8_t buf[16] 
-__attribute__((aligned(16)));                           \
-\
-         ret = prctl(PR_SET_UNALIGN, 
-PR_UNALIGN_NOPRINT);                        \
-@@ -199,7 +199,7 @@ TEST_FPU_LOAD_COMPRESSED(double, c_fldsp)
-  #define __TEST_FPU_STORE(__type, __inst, __reg_start, 
-__reg_end)               \
-  TEST(fpu_store_ ## 
-__inst)                                                     \
-  { \
--       int i, ret, offset, 
-fp_reg;                                             \
-+       int ret, offset, 
-fp_reg;                                                \
-         uint8_t buf[16] 
-__attribute__((aligned(16)));                           \
-\
-         ret = prctl(PR_SET_UNALIGN, PR_UNALIGN_NOPRINT);
-
-
-I already merged the first 3 commits of this patchset in fixes, so can 
-you resend only the last 2 patches with the fixes above?
-
-Thanks,
-
-Alex
-
+Thanks, 
+Ming
 
 
