@@ -1,158 +1,153 @@
-Return-Path: <linux-kselftest+bounces-32813-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32814-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BD9AAB22BD
-	for <lists+linux-kselftest@lfdr.de>; Sat, 10 May 2025 11:03:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 586C4AB23C3
+	for <lists+linux-kselftest@lfdr.de>; Sat, 10 May 2025 14:35:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B46D04C41AD
-	for <lists+linux-kselftest@lfdr.de>; Sat, 10 May 2025 09:03:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E75E4A05E60
+	for <lists+linux-kselftest@lfdr.de>; Sat, 10 May 2025 12:34:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85C701E5202;
-	Sat, 10 May 2025 09:03:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E227D25745F;
+	Sat, 10 May 2025 12:35:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m0Pj8se0"
+	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="UPNfGyDJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59686610D;
-	Sat, 10 May 2025 09:03:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22BB8221DA6
+	for <linux-kselftest@vger.kernel.org>; Sat, 10 May 2025 12:35:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746867796; cv=none; b=bzzBKsXraOjEMKRIu93unglA+bZvj+5NaQPxPq2w5GKs0veCDgKdGDo7k5xhyXp3iDrZ3vA4Dz7WgsokG0eTy2Z2pablPh44aYxBM1rMhGqX46q/VhogKzAEY3a7dCoIMzJnKGWpMEy0nood7ORfFCNsL9sumeX9enwM0J0FU9g=
+	t=1746880513; cv=none; b=I6iCrPR8uD0e63f+EG2FGcxxkgKo4jxQyzqB7fLkdUaJfZi3GRh6BMdXusYOQB/WECrxXsQ374zbGGMw2jxw34FLd66WnayM4PbfQPXTqszkL00VUxnZjLNBJEQUw8gFPf98xUqn8oNpkYpRj431Q/rU+IukcCD62F44egth04M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746867796; c=relaxed/simple;
-	bh=gKArUPq/LOsmWZFtbSjRAerxf4ZgQ0kJBSBsD9tlBuY=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cL6788+2Mdp6a+Yws4hUfjdrzq+GuCmTX84WwgudstKMr0h/PkeU1wJwJwEiKFLZRBeb3bW/cN/DsB3E9c42VNdd+a9MS+t2Xdgg+wIi7s6bbz6+g1iR9QCUb4kIS8ttsROeI5vucfBLnNIuqHbg/k1hm7u1WMnNsbrKzJcZrYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m0Pj8se0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9ABDC4CEEB;
-	Sat, 10 May 2025 09:03:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746867795;
-	bh=gKArUPq/LOsmWZFtbSjRAerxf4ZgQ0kJBSBsD9tlBuY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=m0Pj8se0Xs9Y/tCzp8Yw9GXyysM7WmBxuWI8x4y3qe+7btAl3Ym3gGxG6jigQAKcw
-	 BgYItJGvA5paKzlGMOcC3lEKctSaQUw3osChhdrrKi6+oEP3S6t8ewOFYCCfe2ScO6
-	 TB69GHyVFtvPad0hXwZwQWU8adjd+t9xtIUgKDKd1askI+PewXlOiutRQQTfmTbRC9
-	 6dxR3ffqHoYIrtkTjDzB3jqId4bDFZ2hj7FYNUjqGKbLqwmzKdo3hPN12XobiH3IiV
-	 6zfZGh76SFs+MxZPjJo90MS5RKeQo8kHFYp7urBTxO+y7INcxGzix6QN6bp+HX73sw
-	 xFQRzucMJ8B4g==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=lobster-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1uDg6z-00DdfH-Cc;
-	Sat, 10 May 2025 10:03:13 +0100
-Date: Sat, 10 May 2025 10:03:10 +0100
-Message-ID: <87jz6o6do1.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Sebastian Ott <sebott@redhat.com>
-Cc: Oliver Upton <oliver.upton@linux.dev>,
-	Colton Lewis <coltonlewis@google.com>,
-	Ricardo Koller <ricarkol@google.com>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 3/3] KVM: arm64: selftests: arch_timer_edge_cases - workaround for AC03_CPU_14
-In-Reply-To: <20250509143312.34224-4-sebott@redhat.com>
-References: <20250509143312.34224-1-sebott@redhat.com>
-	<20250509143312.34224-4-sebott@redhat.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=arc-20240116; t=1746880513; c=relaxed/simple;
+	bh=/ckQmMjYXPc0qzguSPFnO/DSHuOJdODbmEv9P7rc2OY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=X3JWgbkIbDqSl9vyK///GQuCzTHaUliXoUqvPFbLhvn7xRP6obklzq+4oMReWXV8JTnE7T9R3pUZF11lKjyrB0RI2Z6pnKEbhjo101ceZFMa+5OGOPFyY/TXJFftS/HSpVBUvpS0CF4xnDo1wqI7Yk3WzOqokSHUZozlbE/YUlc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=UPNfGyDJ; arc=none smtp.client-ip=209.85.219.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6ecfbf8fa76so43214976d6.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 10 May 2025 05:35:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent.com; s=google; t=1746880511; x=1747485311; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZvudCl1s3CkH612+A5JcVTVNc6EQKQEW50vE6gNIcf0=;
+        b=UPNfGyDJZum5T92EIlTtyK+OdXkq+lcbL0uJ/YF0UyVkf2s7vu/LMEzaFFhy+0TooD
+         KYnxt1q0/uP+0y8mg4uvdu67/cPavgnUbUoqBwSn6syNmHbOoBgqg0xL6AN61Kcuzw0F
+         sd56vPtgBrDWz1ghv+DCCi5Db1XI2s4Vr82LnOVzsRv3fancz0JpgZ3s3X2za0GGg6hi
+         UxNZH9cTO1mS4A7rVvXVO9HFtRRktjJB2hSloOq3mQC1b639d83OMy2e6YEAHh6nWgwH
+         Pp6Rf/AtP0jjoLOsis1P4VKs4F7vmtr+4W4ZkwtwHj7XHXhTcfGu6czdJOJXy3aAWvFT
+         w1Sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746880511; x=1747485311;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZvudCl1s3CkH612+A5JcVTVNc6EQKQEW50vE6gNIcf0=;
+        b=N8afzbHquQdJ694UV3TF38Fpn6BjyKnZEdPCLPyT/LTT+0aFJk39cjPr7FEibS8FD0
+         UDb9awP4Nv4Jj95NxZsYx88d1DfnjKlrGNPCQaFsiu8E6jcQcLSowhXLD3gCs2xn3+Ht
+         FkSAUA+QhgOyewbzZxezZ+W/qpLXdphTM5imuAVPKYXVPlCb7znNS/g3PXcoLmq3Ecfc
+         ky4WaBjmf59b+LGmGSem7L6wbMMd6WFT0i78Bzqwa0M8dpQarNFuCNt5epWn3RBYoWxQ
+         T7hej5ZlHWWsLiRk5Q+kVC74CN0EksvlN60msWdm95c8F35zzdPkmyp9xu1OzdQ/3dkE
+         Sliw==
+X-Forwarded-Encrypted: i=1; AJvYcCXE+DNlEWwjWXWxPyejka/3y090mq09SLBKjV54zm1zT4JpAa7+BvjW6VpJoWkHZr9Fcs1dduQCRI1mGYliJpI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzxyDDybh4Eb6yQMmDCzjJbMlkAyhXF6I9pDJhjFWd1Z8MbpKv2
+	cz4qUDezjMVAnO3MGaaxi0AtkhyMBMwKHliaATHoaQzBl9ADxy1jESjoMLR2YWI=
+X-Gm-Gg: ASbGncva93O6dqhQsZBDAQLaXVbmRTHES07DzJ/9sYnE77udL+FWZTM0YoUFsYpSRdK
+	cX2UKBJwjmZtL6uyH37k6oFrFIRWNd9UnHdLe4iWQ+ssdFsne2cWO6q2yeM5zJaUZbU+9YkrZp9
+	212zZlzzhf7w49ZnVfxx2odndBgRtC9sDw7j5XqOxG8e2cYTA9Tq8sH6WC6Zb6T/tSX7liaXpO9
+	oeJdLa93RZe+QL1DvdTDVAofI2ljM408JpR7MhX+0itnuF84A9T/gzm3DsvgvcO8f6ysiN93o0k
+	dt9Fxm+ZTNG6x7aOzw+XmtVImYeSzy2FG471LE2r9eTfHaXqRmdH1poWmHaSScx+Tz5YPCHCELT
+	X8IgJNNs=
+X-Google-Smtp-Source: AGHT+IGV3CkDLoaVZ5BDOeHt3RqBddq11DlW+JHa+EzdYifXCxWkWda7wfe6HMzsvO+ohUEdlIZpIA==
+X-Received: by 2002:a05:6214:c64:b0:6ea:d033:2855 with SMTP id 6a1803df08f44-6f6e47cb39fmr99649916d6.26.1746880510957;
+        Sat, 10 May 2025 05:35:10 -0700 (PDT)
+Received: from [192.168.1.45] (ool-182edad1.dyn.optonline.net. [24.46.218.209])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6f6e39f588asm25725556d6.49.2025.05.10.05.35.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 May 2025 05:35:10 -0700 (PDT)
+From: Lorenz Bauer <lmb@isovalent.com>
+Subject: [PATCH bpf-next v4 0/3] Allow mmap of /sys/kernel/btf/vmlinux
+Date: Sat, 10 May 2025 08:34:53 -0400
+Message-Id: <20250510-vmlinux-mmap-v4-0-69e424b2a672@isovalent.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: sebott@redhat.com, oliver.upton@linux.dev, coltonlewis@google.com, ricarkol@google.com, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAO1HH2gC/23OQQ6CMBAF0KuYrq1ppwyIK+9hXNQySBNoCcUGQ
+ 7i7DSuCLH9+5v2ZWaDBUmC308wGijZY71LIzidmGu3exG2VMgMBKFBIHrvWus/Eu073HMgg5so
+ oqiVLJ/1AtZ1W7sFefc0dTSN7pqaxYfTDd92Jcu2PySi54FpDARkWgOX1boOPuiU3XozvVizCF
+ oAdAAko0UAhM5WhLI8AtQVwB6gEYIVK11rkgv4+WJblB/OdXWE4AQAA
+X-Change-ID: 20250501-vmlinux-mmap-2ec5563c3ef1
+To: Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Lorenz Bauer <lmb@isovalent.com>
+X-Mailer: b4 0.14.2
 
-On Fri, 09 May 2025 15:33:12 +0100,
-Sebastian Ott <sebott@redhat.com> wrote:
-> 
-> arch_timer_edge_cases currently fails on ampere-one machines with
-> the following assertion failure:
-> 
-> ==== Test Assertion Failure ====
->   arm64/arch_timer_edge_cases.c:169: timer_condition == istatus
->   pid=11236 tid=11236 errno=4 - Interrupted system call
->      1  0x0000000000404ce7: test_run at arch_timer_edge_cases.c:938
->      2  0x0000000000401ebb: main at arch_timer_edge_cases.c:1053
->      3  0x0000ffff9fa8625b: ?? ??:0
->      4  0x0000ffff9fa8633b: ?? ??:0
->      5  0x0000000000401fef: _start at ??:?
->   0x1 != 0x0 (timer_condition != istatus)
-> 
-> Meaning that the timer condition was met and an interrupt
-> was presented but the timer status bit in the control register
-> was not set.
-> 
-> This happens due to AC03_CPU_14 "Timer CVAL programming of a delta
-> greater than 2^63 will result in incorrect behavior."
-> 
-> Work around this issue by reducing the value that is used to reset
-> the counter and thus reduce the delta.
-> 
-> Link: https://lore.kernel.org/kvmarm/ac1de1d2-ef2b-d439-dc48-8615e121b07b@redhat.com
-> Link: https://amperecomputing.com/assets/AmpereOne_Developer_ER_v0_80_20240823_28945022f4.pdf
-> Signed-off-by: Sebastian Ott <sebott@redhat.com>
-> ---
->  tools/testing/selftests/kvm/arm64/arch_timer_edge_cases.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/arm64/arch_timer_edge_cases.c b/tools/testing/selftests/kvm/arm64/arch_timer_edge_cases.c
-> index a813b4c6c817..2f0397df0aa6 100644
-> --- a/tools/testing/selftests/kvm/arm64/arch_timer_edge_cases.c
-> +++ b/tools/testing/selftests/kvm/arm64/arch_timer_edge_cases.c
-> @@ -31,7 +31,7 @@ static const int32_t TVAL_MIN = INT32_MIN;
->  static const uint32_t TIMEOUT_NO_IRQ_US = 50000;
->  
->  /* A nice counter value to use as the starting one for most tests. */
-> -static const uint64_t DEF_CNT = (CVAL_MAX / 2);
-> +static const uint64_t DEF_CNT = (CVAL_MAX / 4);
+I'd like to cut down the memory usage of parsing vmlinux BTF in ebpf-go.
+With some upcoming changes the library is sitting at 5MiB for a parse.
+Most of that memory is simply copying the BTF blob into user space.
+By allowing vmlinux BTF to be mmapped read-only into user space I can
+cut memory usage by about 75%.
 
-This is rather arbitrary, and only sidestep the issue: the core
-problem is that CVAL_MAX is defined as ~0, and that we have no idea
-what the *effective* counter width is.
+Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
+---
+Changes in v4:
+- Go back to remap_pfn_range for aarch64 compat
+- Dropped btf_new_no_copy (Andrii)
+- Fixed nits in selftests (Andrii)
+- Clearer error handling in the mmap handler (Andrii)
+- Fixed build on s390
+- Link to v3: https://lore.kernel.org/r/20250505-vmlinux-mmap-v3-0-5d53afa060e8@isovalent.com
 
-So while this happen to sidestep the particular Ampere erratum (and
-avoid failures on X1E), this is only papering over the problem. Which
-is why I always had some reservations on this particular test -- it is
-remarkably broken.
+Changes in v3:
+- Remove slightly confusing calculation of trailing (Alexei)
+- Use vm_insert_page (Alexei)
+- Simplified libbpf code
+- Link to v2: https://lore.kernel.org/r/20250502-vmlinux-mmap-v2-0-95c271434519@isovalent.com
 
-If anything, we should compute the expected width of the counter based
-on the frequency and the architectural guarantees ("Roll-over time of
-not less than 40 years."), just like the kernel driver does (see
-arch_counter_get_width()).
+Changes in v2:
+- Use btf__new in selftest
+- Avoid vm_iomap_memory in btf_vmlinux_mmap
+- Add VM_DONTDUMP
+- Add support to libbpf
+- Link to v1: https://lore.kernel.org/r/20250501-vmlinux-mmap-v1-0-aa2724572598@isovalent.com
 
-I'm also not keen on hiding a HW bug by altering the test. What of
-other guests that would fall into the same issue? If we think the
-problem exposed by this test is serious enough, then we need to fully
-trap and emulate the timers, X1E style. Performance would definitely
-suffer, but that would be the correct thing to do.
+---
+Lorenz Bauer (3):
+      btf: allow mmap of vmlinux btf
+      selftests: bpf: add a test for mmapable vmlinux BTF
+      libbpf: Use mmap to parse vmlinux BTF from sysfs
 
-So my proposal is to fix the test to be compliant with the intent of
-the architecture instead of making bets and using semi-random values.
-If that's good enough to make that test pass on A1, great.
+ include/asm-generic/vmlinux.lds.h                  |  3 +-
+ kernel/bpf/sysfs_btf.c                             | 32 ++++++++
+ tools/lib/bpf/btf.c                                | 85 ++++++++++++++++++----
+ tools/testing/selftests/bpf/prog_tests/btf_sysfs.c | 81 +++++++++++++++++++++
+ 4 files changed, 184 insertions(+), 17 deletions(-)
+---
+base-commit: 7220eabff8cb4af3b93cd021aa853b9f5df2923f
+change-id: 20250501-vmlinux-mmap-2ec5563c3ef1
 
-Thanks,
-
-	M.
-
+Best regards,
 -- 
-Jazz isn't dead. It just smells funny.
+Lorenz Bauer <lmb@isovalent.com>
+
 
