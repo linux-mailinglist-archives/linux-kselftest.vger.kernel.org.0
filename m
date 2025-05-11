@@ -1,121 +1,139 @@
-Return-Path: <linux-kselftest+bounces-32826-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32827-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71B6FAB262D
-	for <lists+linux-kselftest@lfdr.de>; Sun, 11 May 2025 04:14:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DD83AAB2753
+	for <lists+linux-kselftest@lfdr.de>; Sun, 11 May 2025 10:25:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0FE833B0A6A
-	for <lists+linux-kselftest@lfdr.de>; Sun, 11 May 2025 02:14:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 598273A64CB
+	for <lists+linux-kselftest@lfdr.de>; Sun, 11 May 2025 08:24:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F970145B25;
-	Sun, 11 May 2025 02:14:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8E2F1A5B95;
+	Sun, 11 May 2025 08:25:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D1IW0YD1"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FRAnEud2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D968FC8DC
-	for <linux-kselftest@vger.kernel.org>; Sun, 11 May 2025 02:14:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9B4719ABDE
+	for <linux-kselftest@vger.kernel.org>; Sun, 11 May 2025 08:25:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746929672; cv=none; b=e9cr9c03LzAEH0epbif2bOmRSvBYpt8kMzS2ciHBxcPVQcXYe3dHxtjTCCK4wsT9oFeeqe0I1CNu+qVpnXLAircRjv5vlpmud09lm6jWlDYx/d2bWOR80lyqHhGN3myypr0E2/PBET5TXcFR7OrmMAZWpespxXbG2orDrfISu9s=
+	t=1746951907; cv=none; b=RD8qFcU2lokz6e/D9usawnldbv9gMi2wL4NJuUKVWthZkuf3A5irz3dH20y5lFkj3iAtsKOgTpDO0oIIkUYX95Cn1brQqP//9goe1cfDgORu+UgjDAbHrQW2d+Sl1l1pJj+lQ8WKHgg0yRrXvnl8bIyxMBNmwhLpcWOmWtHTkAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746929672; c=relaxed/simple;
-	bh=ErdE1KVMfWPkKsMxBdbzTAnSvWDLWI4LLjWjznFIFAE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Is7yoIyGvarogT+mTOfdpZArla+MG67YeTwrF/P01nhTfzGCSOadJLT9QaocM9jzPEGuLB1OXOxTb91x73zEpaZgl68XUyyFvmhmvTir802doOD7laxmTQuZpBf07sTUIU3EEghkwfJVNe96iAjLc9HyfRi/8TIppnrEgu6ulEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D1IW0YD1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EA9BC4CEF9
-	for <linux-kselftest@vger.kernel.org>; Sun, 11 May 2025 02:14:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746929672;
-	bh=ErdE1KVMfWPkKsMxBdbzTAnSvWDLWI4LLjWjznFIFAE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=D1IW0YD1PWiJE7OexRFET8O5OoDdN/n+H+arvcGWRYzDPMBLnLwS7wBDNnB5yAxhL
-	 ylfsP9uxJzMd0NTxXPAeXHqq1kycZyDThZpY7qV0bJNBtaByGa3Gi+w6CUcx4TvJ7Q
-	 DN5kneaArqhcJFZ9EFuoR9zWEkxh2laX1LhLrZ5PTtbMKgWbdR5vO4pvI4rU0Cljeh
-	 SoL6hb+EFl+I94+/CrjFVOzvQPhkXkl5ucRcMwjXldZ4a8UuCqNzktPwx7j3xeUKyl
-	 96YqxHULEPy323MNYOsLGWDN0jh2e+XwlPuC93HfCvn4PTjDwQeLQ9yMvJcVAulu+4
-	 7bUct8jdLE4fQ==
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5fcab0243b5so2887210a12.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 10 May 2025 19:14:32 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVWd1sHvwp9bQbDyPiMQmLbFnz5eKZ4TIXwVHO6VKz21dKlf8LtrB033+PhnPlnin8zz72mbvM+aVOzdUKLcXM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxPRBUcc2YIg3MG7+PrjLts3iiGZxPz+06/RkO7Ea9YO9EESsI6
-	04WCTBlHyiRnMOYbgU74yk6kjLIvvnMwU156LsbahalChGf6LmqbbZrwN2T5aNif+6NOjGtEhuK
-	wG1AshnKplTWg+BuIICKRYnytPdau4xg4mVD7
-X-Google-Smtp-Source: AGHT+IExXmbIf+BhGVnj7doD3WnX7s+dvlTY3FdrciBuDVwzwOxxJvaT9GkVsNX9nEvSMBd0KFEz7jYxBN5tsLhkF2M=
-X-Received: by 2002:a05:6402:2396:b0:5fc:a51a:9c03 with SMTP id
- 4fb4d7f45d1cf-5fca51a9f9fmr4891240a12.0.1746929670732; Sat, 10 May 2025
- 19:14:30 -0700 (PDT)
+	s=arc-20240116; t=1746951907; c=relaxed/simple;
+	bh=axlzh8wdBSnRAj1XihJUWHBLhaR7tOyyavylk1fO3Uw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CqvlZulV7W1LRS9Dgg3HZ00jShS0Ojjgp5wfbxRr9CRxMcv0yxxUwIX+n0CPH0nQCXAuwRuckefhuZ183yl0Qgjwiv46gSrQZ/b+ZUeEUOJO4UxnPv4Eqrf9qdHlTVRfsAdmJGIy5dthlkUcWZatXMfjqMu7DtZZrCIStJjvPmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=FRAnEud2; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-43ce70f9afbso37705595e9.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 11 May 2025 01:25:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1746951903; x=1747556703; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=JGDVeACw/jp0C4k4Wd6moCgif1Pfm842wvA1qG0yCD4=;
+        b=FRAnEud2utrkUbirh9TSp5wX3z0gZ/03sP+PQwaYgJHnjzK6tJfkNH43xZwUN7xNuH
+         6bukQ1Lw+crhXlZQcqRDzhR+1WoPv2gD9SF61oZMCkmELmwLQWGCR2qYz+C+GUzaT86i
+         MBCRVTINCjFZwY5ZSNUAmZpUScykS0NsAKbpMQuYojUubW6n0vTZJkWi0Fc8PiYVd2Yw
+         LDoa+eEWW8ujaXGfChYfLipTCDEeKG7MlNakw9doySGJVljmSJW+wHo3IFv0LacWnoXK
+         PE22Tcc/wywX+znBEpiTuZjrvvaK0V9JADc83R2HgswqLr8OAaITRFeln5g9WRFJWbX/
+         aVmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746951903; x=1747556703;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JGDVeACw/jp0C4k4Wd6moCgif1Pfm842wvA1qG0yCD4=;
+        b=mWklAUJ4RlfBky3jM/3F4GASxl3HhGTsiwHhPI8QrfqoUSt9ypDKuvazs2LmVvTK+a
+         yme6Zz/CC1C0f+3ok2vYKolomazoAawsWbXcvNniWdmFODdpxTxn9G4RYMD5KsJkGv9p
+         t0AfeK0sYyz270NMHyssayDlkN0NoBByT4Zzka3KZd8GGxIbgCKf6oU1deoh6pKriMCH
+         tteoIhFoD/FBwjSGWQFbJDHKjCnda+ZGrl7MxR8b3xw1L0v6IDbEwEK0z2UuOxVHpxtB
+         6auGmy62Ab4k8/XRX5gXNk2isvmCpuSYTM8d0JRcRJEA8+580Ggb6+v9NGUzr7gAW9oV
+         fJew==
+X-Forwarded-Encrypted: i=1; AJvYcCW41/yNqGGjvx8voOBFraPdPL1u0Mp/o8au6MXfGyKjdwsuwr4CNKBC9vBBwQHrYtnz9T8UIYIowCkkMKblUEA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw49O5J7q70LQ+lY7xkutn07n8Mto7tdjz3FUTLDgcA57/ZIrkL
+	WUWTcwE5latd6WZUGS1stc8D8qV2hmJ3/rz5ahJ1bDuuAPYItG0kvxjnuaZ1wA==
+X-Gm-Gg: ASbGncsMFPEVe4HUWR9akMayYPXvjfNq8r8GqCqkJPk/CoG8N1YFUbV2AbQK40PnUoD
+	7lu2aX12fC3q6mOohOedSGlrKrJPmE6dmxKu65wLHUytqH2pFzRrszWV48mblWbR6lqDVuBcgFD
+	J7kq4DIKvL9g0JW1K2HdFUQEI+a1r2zYmeGIi3SIVFmy1hjFJqq72ma5bnbWhPjhM9dow9RTtWi
+	w/bnKLwuG4yy+BhKTPLNwKkZ3YQze0wC8H4OfMAKWbfoiWZibY3rUnwLUXv8yQZoVl8yDIch1J+
+	K3MGiVlIIjllVjU9o/9UKCHgsF+PHcxRLULYbc8nDl3WEdDFqmvhBuiuqHvgGhM=
+X-Google-Smtp-Source: AGHT+IGIgwTqFwghplknMmhn0PhrkMbkYatLkYI+iiXeqPEmbShj2REeefkdrAzhOMUJoVnfgrJgUQ==
+X-Received: by 2002:a05:6000:2902:b0:390:ee01:68fa with SMTP id ffacd0b85a97d-3a1f6444a44mr7489435f8f.24.1746951903183;
+        Sun, 11 May 2025 01:25:03 -0700 (PDT)
+Received: from thinkpad ([130.93.163.156])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a1f58ec912sm8487327f8f.23.2025.05.11.01.25.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 11 May 2025 01:25:01 -0700 (PDT)
+Date: Sun, 11 May 2025 13:54:59 +0530
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: Frank Li <Frank.Li@nxp.com>, 
+	Kishon Vijay Abraham I <kishon@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Anup Patel <apatel@ventanamicro.com>, Marc Zyngier <maz@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>, 
+	Richard Zhu <hongxing.zhu@nxp.com>, Lucas Stach <l.stach@pengutronix.de>, 
+	Lorenzo Pieralisi <lpieralisi@kernel.org>, Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Niklas Cassel <cassel@kernel.org>, dlemoal@kernel.org, 
+	jdmason@kudzu.us, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	imx@lists.linux.dev, devicetree@vger.kernel.org
+Subject: Re: [PATCH v18 00/15] PCI: EP: Add RC-to-EP doorbell with platform
+ MSI controller
+Message-ID: <4oyhjtoedh66sdyhebltwskskksy5ask4avvuekoxbckibdxmb@bqwe72b5q4en>
+References: <20250414-ep-msi-v18-0-f69b49917464@nxp.com>
+ <87y0v7ko8o.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250502184421.1424368-1-bboscaccy@linux.microsoft.com>
- <20250502210034.284051-1-kpsingh@kernel.org> <87o6w7ge3o.fsf@microsoft.com>
- <CACYkzJ7Ur4kFaGZTDvcFJpn0ZwJ9V+=3ZefUURtkrQGfa68zLg@mail.gmail.com>
- <5dbc2a55a655f57a30be3ff7c6faa1d272e9b579.camel@HansenPartnership.com>
- <CAHC9VhSPLsi+GBtjJsQ8LUqPQW4aHtOL6gOqr9jfpR0i1izVZA@mail.gmail.com>
- <CAADnVQ+C2KNR1ryRtBGOZTNk961pF+30FnU9n3dt3QjaQu_N6Q@mail.gmail.com> <CAHC9VhRjKV4AbSgqb4J_-xhkWAp_VAcKDfLJ4GwhBNPOr+cvpg@mail.gmail.com>
-In-Reply-To: <CAHC9VhRjKV4AbSgqb4J_-xhkWAp_VAcKDfLJ4GwhBNPOr+cvpg@mail.gmail.com>
-From: KP Singh <kpsingh@kernel.org>
-Date: Sun, 11 May 2025 04:14:20 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ528JBKbhiw1HNfv1kDBYv_C76cFB8a_Wa6DSqZp5_XuA@mail.gmail.com>
-X-Gm-Features: AX0GCFtRm2U2Z08Q-5iN5TPSVkChFMpfYbeWxPh5iWXOgSo5pdg9_y4ozgwfcPs
-Message-ID: <CACYkzJ528JBKbhiw1HNfv1kDBYv_C76cFB8a_Wa6DSqZp5_XuA@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] Introducing Hornet LSM
-To: Paul Moore <paul@paul-moore.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, 
-	James Bottomley <James.Bottomley@hansenpartnership.com>, 
-	Blaise Boscaccy <bboscaccy@linux.microsoft.com>, bpf <bpf@vger.kernel.org>, code@tyhicks.com, 
-	Jonathan Corbet <corbet@lwn.net>, "David S. Miller" <davem@davemloft.net>, 
-	David Howells <dhowells@redhat.com>, =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, Jarkko Sakkinen <jarkko@kernel.org>, 
-	James Morris <jmorris@namei.org>, Jan Stancek <jstancek@redhat.com>, 
-	Justin Stitt <justinstitt@google.com>, keyrings@vger.kernel.org, 
-	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, 
-	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, 
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
-	LSM List <linux-security-module@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, Masahiro Yamada <masahiroy@kernel.org>, 
-	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	Bill Wendling <morbo@google.com>, Nathan Chancellor <nathan@kernel.org>, Neal Gompa <neal@gompa.dev>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Nicolas Schier <nicolas@fjasle.eu>, nkapron@google.com, 
-	Roberto Sassu <roberto.sassu@huawei.com>, "Serge E . Hallyn" <serge@hallyn.com>, 
-	Shuah Khan <shuah@kernel.org>, Matteo Croce <teknoraver@meta.com>, 
-	Cong Wang <xiyou.wangcong@gmail.com>, kysrinivasan@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87y0v7ko8o.ffs@tglx>
 
-[...]
+On Thu, May 08, 2025 at 07:26:31PM +0200, Thomas Gleixner wrote:
+> On Mon, Apr 14 2025 at 14:30, Frank Li wrote:
+> > This patches add new API to pci-epf-core, so any EP driver can use it.
+> >       platform-msi: Add msi_remove_device_irq_domain() in platform_device_msi_free_irqs_all()
+> >       irqdomain: Add IRQ_DOMAIN_FLAG_MSI_IMMUTABLE and irq_domain_is_msi_immutable()
+> >       irqchip/gic-v3-its: Set IRQ_DOMAIN_FLAG_MSI_IMMUTABLE for ITS
+> >       dt-bindings: PCI: pci-ep: Add support for iommu-map and msi-map
+> >       irqchip/gic-v3-its: Add support for device tree msi-map and msi-mask
+> 
+> I applied the interrupt related changes in the tip tree. They are on a
+> seperate rc1 based branch and contain no other changes so that they can
+> be pulled into the PCI tree as prerequisite for the actual endpoint
+> changes. This can be pulled from the following tag:
+> 
+>    git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq-platform-msi-05-08-25
+> 
 
-> Blaise started this most recent effort by attempting to address the
-> concerns brought up in previous efforts, you and others rejected this
-> first attempt and directed Blaise towards a light skeleton and LSM
-> based approach, which is where he is at with Hornet.  Once again, you
-> reject this approach with minimal guidance on what would be
-> acceptable, and our response is to ask for clarification on your
-> preferred design.  We're not asking for a full working solution,
-> simply a couple of paragraphs outlining the design with enough detail
-> to put forward a working solution that isn't immediately NACK'd.
-> We've made this request multiple times in the past, most recently this
-> past weekend, where KP replied that he would be "happy" to share
+Thanks! I'd like to have a closer look at the endpoint patches and want to try
+them out on some hardware before merging. Unfortunately, this cannot happen for
+the next two weeks as I'll be on vacation.
 
-Here's the proposed design:
+So please take the interrupt changes for the upcoming cycle and we will deal
+with endpoint patches after 6.16-rc1. The major blocker for this series has been
+the interrupt related changes. I'm so glad that it got resolved finally.
 
-https://lore.kernel.org/bpf/CACYkzJ6VQUExfyt0=-FmXz46GHJh3d=FXh5j4KfexcEFbHV-vg@mail.gmail.com/#t
+Frank, thanks for your persistence!
 
+- Mani
 
-> designs/code.  Unfortunately, since then all we've received from
-> either you or KP since then has been effectively just a list of your
-> objections on repeat; surely typing out a couple of paragraphs
-> outlining a design would have been quicker, easier, and more
-> constructive then your latest reply?
+-- 
+மணிவண்ணன் சதாசிவம்
 
