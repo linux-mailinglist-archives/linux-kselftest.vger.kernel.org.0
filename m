@@ -1,42 +1,43 @@
-Return-Path: <linux-kselftest+bounces-32844-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32845-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AB91AB355B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 May 2025 12:57:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 481C5AB3556
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 May 2025 12:57:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 317DB1677F3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 May 2025 10:55:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CCCDD8620AA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 May 2025 10:55:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C938268FF2;
-	Mon, 12 May 2025 10:53:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD57E26980C;
+	Mon, 12 May 2025 10:53:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b="KussWAF6"
+	dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b="A4/TC4dU"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from CY4PR02CU008.outbound.protection.outlook.com (mail-westcentralusazon11021077.outbound.protection.outlook.com [40.93.199.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A53FA268C70;
-	Mon, 12 May 2025 10:53:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0D8D268FF1;
+	Mon, 12 May 2025 10:53:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.199.77
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747047201; cv=fail; b=CCwEsbBDi9nQTZyTgAaz+rJGvKQ67Fy975kVljtK23sryONevLqp0Zic1Nu2EK+L9OZLB2cpjA7jlRqhMM/ymlo87vgy9L87NCFDmUxYg1kxuRbYdNf/NYsNsEkap+LyJhvuSNOVITTaIuIirwDWxLDfbYhLKmPinNXIuBJb1Q0=
+	t=1747047203; cv=fail; b=k0sVjGbr5BMBLegHc5ReHS/KFDGxiRGgfI5msZdIkASPP87iDkn8hyDPFairBcRc7p7Ejtnrua1eXHfRbOrnnqESYuJiNszt7pPPOJRwaQqj2K49noiTxRqMHVMVnvMzwdPzQflI4+EC7s0fhz0BKM8zgKgngPJnh08U1TXAqzQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747047201; c=relaxed/simple;
-	bh=ak4pQ2efvB6Q8XA0nFHTf2irVmHcJIz3aWVhaSkSYnQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=WIDmzHtKGlm2i3juc2n1eqHZrCMSIHVqwsq51k6qYjhMdJw4pXAiQMfXxeNGs4GyIdtZnqV7vUMdFWN6pvEEIDBxGwIUhE2i07VzGm9XXIhPorllj4zSYasC1Egg6ddsvRiaxPwTcn+mlmrJXcVxo61aJC8c9QEbaJ/AsyrGmos=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com; spf=pass smtp.mailfrom=os.amperecomputing.com; dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b=KussWAF6; arc=fail smtp.client-ip=40.93.199.77
+	s=arc-20240116; t=1747047203; c=relaxed/simple;
+	bh=44/beeK+cAMEd0TdL3j3RbuMftwoy5PchCGZAJO9dm0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Tf4pO0L7SSJLMaLtKqwr7/SgHDqUzlQMhETADxr/C1A09Q8xZ1eLBng9lw0rHoYtbldJesC5np/6wFz/rSGkQmzkSu9XF+eI/IpVAU9bmvzhiynAhdP+2gOjyjEgpABQh0HhwDxaAfwzAE2Ru6xTMW3wpK4wXWuLOmZ9Y3HCYl4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com; spf=pass smtp.mailfrom=os.amperecomputing.com; dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b=A4/TC4dU; arc=fail smtp.client-ip=40.93.199.77
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=os.amperecomputing.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=hqoOsH008Wpt5M0Q6k1kVS9O52sSZBx/BVSco3dU0avCt05vMohz2DOAY7VyWB5p26vv6UuHD7mc3WfVQLnbPCfkdhC0Qvknn4OkyCaX+NHx341CSVZGxdWWNCX2gf7XNs91JmN5+Ez9Bo8zJokOKlB2I9pxEcyVQuUu1lZaTetXjundO6TVchpWiYBgkugW2SKoKbNhXLohP2hKn1yKQGuKHvtNCU58cVg/ZypajK/hAwURZYnXNR44+QZmWe7zQUzTyS7Xp8PxSzdzdsj3G59bsYDx2Pu5Vpy98bNtjmgPp17s92aDl7I59GpvzLxAnfHmV4FtCCXy4bKWhHrAiA==
+ b=L2g1OuF9jFyEK4wGfE+mb4S2WwdsqcHOHwkZp2FjihksAqNNJQ7p1w30qf+fZqf+L9DqiNdcWPXSYYnnys9aUqXU6JcMYJ69dS4kIFnKfGMD3q7e+INCgq5zsh6r3cZI9dwg0IZtDAAHjWUczKzUE6X8fJcATr0Ikm+9AgFF8zTebSmov6WJD5TI82Jo5r4RyX1ChbkGcA4PwSVRTI1XQN7i/A2oowhDR6K7b5AxoAuXADofD9nzFD5PE/Pz9J7LZXnQHXNPKzn5Kc8jpuDS5y3YRS3p/YLYFFmt1geXefLvmjc/6pYxuKZlycvT+b3nP/lAQHibhgycfo86cEzw/Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Uvv66Gz3RndWUOxsrwl3vrmaGbPK5cp/grmZxuiUips=;
- b=qw15Hremt28SQwQBDgS/IaaSBXS8NMD4kEQcR019WHFvw9ye8XlE3K05Apbps4wOYSEphoBqE2fEhw9Gbdktl+ru04gKu2Q3IEeQs6Lm0xiYz7YY0cvJi1ZHQw0QOmioAMBbhvIQDBZzfVo4da5548t9w2hCTlhAOOOQn+G6MUAB6oC96Y+ssH9uSP9KWAzXLiaIuaXIpG5hgBGfqiGXgz5qgtTh9kUfoT9A8yIxABx4Nu/56N4zyW4RZe5LBoYfMtL3WSdjD7Aj3upcbaVQD14CpYLZk2a2t9fO54ViXphZ+UpRG4VF9ugI7DCtQXQgfTFzJl98SWJC4FhC1ksPvQ==
+ bh=7cA+TyiNhqZOY1xxKE1PB6wcfsc0wR6rTmxNZEOwG04=;
+ b=OV48M0s1N9/gSVHJ/EX8tgN4l0CjmJkDKY18/ZrD2RXZMmpDztay+ijrJuhcJK9dxofAk5tz2QUUVXGOD40IeaGo6vlqxsEmFXaYMM70nKVuoM6My1GjsAlJXCuKkh+MzxwS9UumIS9panI0iFT0Ey2+IlXcZntqCvBnGa/Zth9Bh3QQkLRRvzcYekO+FiaPXJrvlQYft26gOi8yNJRlGlIZBxiXah9MZ8aLtOpX8mRcsPjSPJoLtYSHl9CXrGqdy0vzV0sUWFEuxb+Uld2bq1SdGAL29FVHNYl/BmpNv/yaDlk9YhIyhNQmKYNtdBzJWKiFAmtVr1UnKFBs12WYKg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
  header.from=os.amperecomputing.com; dkim=pass
@@ -44,18 +45,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=os.amperecomputing.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Uvv66Gz3RndWUOxsrwl3vrmaGbPK5cp/grmZxuiUips=;
- b=KussWAF6Aj5bj1mNG7r9OEjNyHb6KbE9uWlbgM9u+zrUWFezN1qkseJBxULi6WeoFJhupnvequiyEUxDOUDU+DEQ7++x7lR7Wz21Ubh1Sxo4MovSG+/KjyH6jBsqxj4dlkDUcxmtcwcz8ii6k5CXyHKMIHCKxPMZRL9uX2khce4=
+ bh=7cA+TyiNhqZOY1xxKE1PB6wcfsc0wR6rTmxNZEOwG04=;
+ b=A4/TC4dUZZWiH3r2a0v+jw70w7m9+AT9QmVlrQfnF3GH0Bl1IgIgYQlNN4AGa0vkFEN/EcdsViFbtUMe9Spuj9zJNLhe+sAvyK2dBeKdf875TEcXD+ivetTGAA28Rmqngl5KewuglWigFKyE6HXKU+58mqCCizz/dmqsctB51k8=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
 Received: from SJ2PR01MB8101.prod.exchangelabs.com (2603:10b6:a03:4f6::10) by
  CH0PR01MB6907.prod.exchangelabs.com (2603:10b6:610:104::15) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8722.28; Mon, 12 May 2025 10:53:13 +0000
+ 15.20.8722.28; Mon, 12 May 2025 10:53:14 +0000
 Received: from SJ2PR01MB8101.prod.exchangelabs.com
  ([fe80::292:6d9c:eb9a:95c9]) by SJ2PR01MB8101.prod.exchangelabs.com
  ([fe80::292:6d9c:eb9a:95c9%6]) with mapi id 15.20.8722.027; Mon, 12 May 2025
- 10:53:13 +0000
+ 10:53:14 +0000
 From: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
 To: linux-arm-kernel@lists.infradead.org,
 	kvmarm@lists.linux.dev,
@@ -69,10 +70,12 @@ Cc: maz@kernel.org,
 	seanjc@google.com,
 	darren@os.amperecomputing.com,
 	gankulkarni@os.amperecomputing.com
-Subject: [RFC PATCH v2 0/9] KVM: Enable Nested Virt selftests
-Date: Mon, 12 May 2025 03:52:42 -0700
-Message-ID: <20250512105251.577874-1-gankulkarni@os.amperecomputing.com>
+Subject: [RFC PATCH v2 1/9] KVM: arm64: nv: selftests: Add support to run guest code in vEL2.
+Date: Mon, 12 May 2025 03:52:43 -0700
+Message-ID: <20250512105251.577874-2-gankulkarni@os.amperecomputing.com>
 X-Mailer: git-send-email 2.48.1
+In-Reply-To: <20250512105251.577874-1-gankulkarni@os.amperecomputing.com>
+References: <20250512105251.577874-1-gankulkarni@os.amperecomputing.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: CY8PR19CA0043.namprd19.prod.outlook.com
@@ -86,133 +89,394 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: SJ2PR01MB8101:EE_|CH0PR01MB6907:EE_
-X-MS-Office365-Filtering-Correlation-Id: 560e3827-7d42-4194-a090-08dd91433117
+X-MS-Office365-Filtering-Correlation-Id: 7b770f6a-ff6f-4814-16b7-08dd914331c1
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|376014|52116014|7416014|366016|1800799024|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?RfdETPYqIhr4Wcuozx7O9dReU8GArMgR645Iq/0hFxS8H8mAXggCOurxkLQv?=
- =?us-ascii?Q?w8mGUek+Ok4ikmDjTXCd9VvlrZU2HEepMJnz6eDgS1THjwhs7Z6T8GWIq581?=
- =?us-ascii?Q?jCzEmqHBFcok15HMyOortKmXTgc9pxpJoPpzmQZmqD97EL2PLZ4QwX8gnweI?=
- =?us-ascii?Q?wKDN5B9SVW65KhoeyQbhI3NdjOsLfvyW+Mi0dXtJTarAGVehBlcVabnTo3Rb?=
- =?us-ascii?Q?RxEjAefSDZEmYpKh/FyW3PZO90AJUa/HGMcb+3KHTo/P+kjzNvFDVkzE5iiY?=
- =?us-ascii?Q?ss0AEz6ixiZ4rtnPAlD4D7epJPv4Qvq7B2RlYIGqcu0Gq2ojazv3CsSJMw6Y?=
- =?us-ascii?Q?tR40qnX/6yV1aJcmR+TESmz4cWadUfApP3nrRfJc9SYVg7c4Ot3kXAl6Jeie?=
- =?us-ascii?Q?9t6KN2zxW52zA1mR2ZihcI7A74W7leJo9ENgxr9j5154AGCv07fpAFbicX1o?=
- =?us-ascii?Q?yrb1DXFn7sTE9kZ2joGGLFCSOIwki3IgHu1MuEIXuuHdlYW1T2G2tW6pe1KD?=
- =?us-ascii?Q?QvgSBplXVcW7z3R0oGLKJAOAzoCSfCHdh5puQfsI1XUQsznvnWUNo323t2Vg?=
- =?us-ascii?Q?iZPxLMQFsqUSZxuZGcJf06kZcO9F10/C6X/iEK4gQsDUL1/FkPq3JcjYwDLx?=
- =?us-ascii?Q?/X5FqQ7QhnlpLuq/RCDhmzmItOMohtew/Aet3Fnd3TT2sz1IHXy1Gx90C6uT?=
- =?us-ascii?Q?1tsFT0dlAMnCUKL9S4EwPPVj+64MHZqaK2cHZcRvyifQZpRmt1bF7b8Swnei?=
- =?us-ascii?Q?vnCxPxMEB3frux8fVw19jmKvunAXNvdqK6VhASnWZWlVBZaHp9VJNmW5VxGq?=
- =?us-ascii?Q?6aiwMHl3HrIIDsj+XUlI8+e0Qy60lj+QChkqM50qONUwKqa3uaqp0KdXS7kh?=
- =?us-ascii?Q?1vRzI2Zuw+r+bWFBCThXl5Z7ZOH3vl61tRvxupYxi9eeuor1H3pTXU9ajrmO?=
- =?us-ascii?Q?bi1zbZPbgdzqITQKIUV0qAKhTqzxiUEjX7Ww6WPRNeVbz3BFTQLu6pAVM8Le?=
- =?us-ascii?Q?Ip4L46YFc9zjS49l1lL/lmF5CDK32bBXSqz+47MWlDZ8ckD6giPsz5XWWbp7?=
- =?us-ascii?Q?Dzpdt/4q2F5q4DaiKoZ2OkRKYZ29byH3fH3RXPCEUGQw6RpRfx0Kt8eaeKjK?=
- =?us-ascii?Q?IA175IUi9x7dpzODDvH2ca5pVzgdz8KBHSNL8zjEg0afQY7iRs5tI+sq8emo?=
- =?us-ascii?Q?nMepsPJfnaqWWlzRHdPWjqOX26I6J6+Fhbl0IKnPY9WDSakf+/NXoVWeP9P0?=
- =?us-ascii?Q?9LbJhCCiNcJjkxt9VTV1qAuizSo4GSDFDBxBqZZhNA/I3jKrns4biZ/PHEgi?=
- =?us-ascii?Q?BW13Lc232vKqLvohdvb6c0Q1XtQlJLodXrEi0+4nvPStGtc4gIfxrnwJOkt4?=
- =?us-ascii?Q?9+vcCHERKw8ZZSFB+sAAE0FCIDjogKtB2g4BJueAoZhh0GmJA0kWe7ozBvmw?=
- =?us-ascii?Q?S+kGyi8ztxcWsaJWH2Or/l3NzGYwSpGUCxHpU1F9hK97IPhR+90+gz/9ChEm?=
- =?us-ascii?Q?3fUn1yymrlTj+GU=3D?=
+	=?us-ascii?Q?lfKAySUHSCzX/M7u/H0KpeNty9lO0ssbhIdWwPfa9OtSYJg/BOXmKIe3KZIc?=
+ =?us-ascii?Q?AhHCyjcUSC+0CYLDqRWZBiSGcDM4nrr3RitJLncs36tAvezUUMIlQu5Web26?=
+ =?us-ascii?Q?QdF3ddoTyGtUeqolwmaB+tXQoJfY9UP7vlgVaax3T01ylD8c8CuoKvchGrCv?=
+ =?us-ascii?Q?zMQJ6L9mI7N0EbYADsTjCVpYwEvxk8YqoU7xNq1bU1+BryUFw9yCwDdUeLXR?=
+ =?us-ascii?Q?mqB2VbqZw6Dh4PoNIcGqF24PD1U44nrNbKwPVzUIFXw2RN+oVTgJzui46ctk?=
+ =?us-ascii?Q?Sv30motC6ukismakYEDbwEeBfAUB0LD4lp4JZUsWco2cUS4kdJKI9/WytCgZ?=
+ =?us-ascii?Q?4Kco7uBz3yc6zZLdj4AB24eM7DQxZTVGabwBNKMMK86VRHcI3EzcX7elmkzx?=
+ =?us-ascii?Q?7YrxaMXes7C38XFP8kG+9fiGaonDv8fzXTnvIXD0HwwrPJxTBTTffjt/pESK?=
+ =?us-ascii?Q?yATU5nOYrkqzc5AjgeCrfl+f1HVYplJhFKKXAa1WzpVltyfghwtyl8tZBFcb?=
+ =?us-ascii?Q?+ohVxu3EREKftCgi1fpeu9XCV0Gf4x0Df+HVKxJHI/a6xx6mQrOaBXMymK15?=
+ =?us-ascii?Q?3/zbY9LWM6Ob1pJELLrkrOthQxMjuMNruu0QFYGuGsR/iJ2pVwNc5ZJbm9O7?=
+ =?us-ascii?Q?GsrfWEZ3xVSKBTIajngZj22uZGGvnR7zyTGnhqhvD83jrcMummp2i2kXvPfi?=
+ =?us-ascii?Q?z1q14PKczsIifzazUzUwJqKp9DGcAyc2WrABBwqmR+ZRTm7BXCSAUGRS5jlk?=
+ =?us-ascii?Q?WMLPuQTP/Zi8q8jl+OGTnAw8tsAnlYAYoXWX/yPW+YKgWxMmVo4GfsMbfITf?=
+ =?us-ascii?Q?XIptid9/I0usXg8FU3tIrjutLxc8kZOpbgL6/S1wHSmsIdSWy5RKcDql9tAv?=
+ =?us-ascii?Q?ejXVqRlhz8/pL0IMMt4enJbeLqEGyI8AHcYr+R+kRd8XC7Rl+N9Vyg8WJZfl?=
+ =?us-ascii?Q?BI73T0fBOt737Etp36tHT0xxAPQeMVCUydU00hjOVgQ7aNstUVxElthNIMBm?=
+ =?us-ascii?Q?TI/H51fk1gJfkAFmBWFOXBUntrovCs7e5mRZDZZ4mtuuTVfLI0Roxf2DZPPZ?=
+ =?us-ascii?Q?2vPR/vhmBYWVPVsLfr/nlFX8kEncgkSxMF9mKiiTUBdckXNOIofthjNUTXni?=
+ =?us-ascii?Q?0EL9GGtEbRl+TMVCUZe3epw1N/U7JsPuKtbKg9oBYDt2cLTbg2oM4uO5brKh?=
+ =?us-ascii?Q?LzA0gQ16TAb2zJpmVojsqvJvRsWc3zJFXhOHooQgQupx5RHP84NHcAb8Q1NO?=
+ =?us-ascii?Q?sxdNvRm7br4U+W5X8rZIzbAoiq4/vjIAGZZXWQPafiWypKgvQ1mp64r91zml?=
+ =?us-ascii?Q?Wkfne5fTKyC96tADzhif7FenDgia7VR3zlKW6PoQjaJ5gPF/HQUcz0HaXO5/?=
+ =?us-ascii?Q?euajJZEhLAJmaBf024S+uZi463Ae/Jxu0Hci5/npbaVvGSzlI9LOuZWbAi32?=
+ =?us-ascii?Q?jh9M4iL0it10ECwAPzJQcXKfNtZxnmGqctPQpsEdUWEGw4WI6AdfPw=3D=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR01MB8101.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(52116014)(7416014)(366016)(1800799024)(38350700014);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Ljg+9ubfuWr1azr9fJ/3F6+PpssuMQoAXJU/Y+h3X/BjnCN9s77JFMli5smo?=
- =?us-ascii?Q?bVcK9ZkVITcjsyPLhxIm72DqDz1vBHKV6xp2y9eAz7cEKXZiSpE/jPt16Hdp?=
- =?us-ascii?Q?2T9IGPRmOpGuqcABjtQITcX/dThGkoIUefvHLVbCuhCDzWxiunohax4rTLiK?=
- =?us-ascii?Q?yA/OPxN8+Mi/1R5xNERny0vD2zK3gdw3WU87etWku/+eSMlrnCIagglrIaAb?=
- =?us-ascii?Q?3lRESknH0IagtxZ2CUjXj9XX63bqudG6nwIwBC2xRf6MkiVWs0/xbFH6+JSv?=
- =?us-ascii?Q?Fl65EVR18pRPzStRZMG1oJhrtzFXaujbR6qRmtMWcfSsw0xoyyvn+ogOt1Fs?=
- =?us-ascii?Q?NyfwGJ4hTQ3RSi1irivcdWuMebqaVshAFGHHlUFvbY9XM0i+faGC2ZTQvE+4?=
- =?us-ascii?Q?VWh85sjhrtZs6bWibKDHxFd1uxNBAcjg5pqTdHT/UHGt4SqIYkI+yhCwYexw?=
- =?us-ascii?Q?ORzhv9dy9P7xdZ/lVrY+OUOLpB2U00yIzaGLSaeeJUmWVsF3AGDpE+QsgEVM?=
- =?us-ascii?Q?L1D2zjOqcflKrTSZW2gtyt9A9zsrMqdaSvi7ggqhFD0Lixb3RFrZ4umxa+N+?=
- =?us-ascii?Q?tSF18san0hXTN6Kjjy4CYM8K4OroPaKP0bG52P3YiU9VR4JwRVdyl+j3HZdr?=
- =?us-ascii?Q?UCRufZXog6vYicTMaQDwERdQxslcvHoS/+1tCMPLdCt6ZadM2w+m1sU3ny0n?=
- =?us-ascii?Q?zVjXE9FQWg6kakazN05YiW01DeBCaIA4Awq5BtSSFsd05Z8cJw3DZR8BHJOL?=
- =?us-ascii?Q?h5d/cdPKPrEbn0kZNbNcVKNICYdGbL51khEBwsMPA4lA3ioQu1pyN0JgciEN?=
- =?us-ascii?Q?9ZCwanh097yf4CrvkLLUJwbg2VYXef13CoyMiHgj4Bg8Yo7tGoD4/IDMCnUv?=
- =?us-ascii?Q?JduuU7aH4lLao9/IOKeBfQOkR03L/CaMaCK6sszke3S2XzGQX3DYxVIwxOBw?=
- =?us-ascii?Q?OxfOPv0WZyjwDkaIBFjUikAOMRWUELhbOqmZsJzVqEHIxlTpDTbTP7t3VTRJ?=
- =?us-ascii?Q?TC23zR8Gah3pniCP7aVaZ9IbVvsdcVfegvJdkDuIJexD5cKJAM4BfM1DoyQN?=
- =?us-ascii?Q?E6hN6YR9kaVY69Y9DyDHhSn5pbZREaHTYthG0cyQiPaM5An19bwVH6eSQ5l6?=
- =?us-ascii?Q?bTBKlxfGvXXy617wRyYT9VXjgcD0+jDQ38J7ecDF8fzC7m2FGYygP0XN6E0x?=
- =?us-ascii?Q?MGgwygluF00sXj48eZF77IjZLkwd8FhVChe1HM7OdjoQh4+PWh3tBdknP+kL?=
- =?us-ascii?Q?XNLP5ZzDHljJwVYHI6lWbDxJNF1zX+gntflusf2NVl9YAhuc80xtfxTH+phq?=
- =?us-ascii?Q?e3J/ZTW3Bkgw/c8C0//eUqf6b20kCox505aIznYadDIY4A9gYt5daAVcHQ7N?=
- =?us-ascii?Q?+tRW369J5Em2a1e0Cl4/BuN6aH0du7Y3FeMsF+xE0RxfajhtZ6WRNfPlE4qI?=
- =?us-ascii?Q?z0IFyIMcrJWcp0D9mxM/5YcC0CnU5blu3m+msirn0siVIcp6QYX76v7m49DC?=
- =?us-ascii?Q?ShwVPhghpK5Nrk6unKD5YY4MRPotnDCxSYbsgbNjVnk/+zswGq4SpDG8ZHln?=
- =?us-ascii?Q?V/qMk6f9z88QreByIIUkjCe8HMUrxP7VMsNaJaNgkDhbO/73/4V/x/8w2hU9?=
- =?us-ascii?Q?jYEgvLqrq6hb6Qvnx3tXLnEPDBYgJ52UPbqJyLoGPV74?=
+	=?us-ascii?Q?6GcJfN5hBNtD/M5wKIi338vf5IopdqInogsFKOwz0LANgngqsF5lOOvU/yPs?=
+ =?us-ascii?Q?soWFczG7r9nhIazupF2nXCDxF7261aEDx82UpYnFKO3GbDgPVik7Qa6ZWWTz?=
+ =?us-ascii?Q?onqE6rJoH3+RhtzZ5jlCKjrB/Es45PuCllVCTHtdc2tcEBLJCl8boGtHyLuK?=
+ =?us-ascii?Q?ZLU+JJaPFZ1rYGzY8MR/NSb0kTTk5vZOUaXL/dSHOI0Q/BuFnaXnDvu5xuAk?=
+ =?us-ascii?Q?SAjWh91andRPJ1oUgnZRarc0T/033KGx5RRi9mBsWujKAxMGh9zNW6q9ZD9E?=
+ =?us-ascii?Q?3co0iZn43AB74hg9Q/lKmSh3bg0rVId4uCOyYtlHzp7iMrB0Pgvb/4nVJhFQ?=
+ =?us-ascii?Q?d1sQwo+0zHMarnZgO3Osuq/YisaKINCGM4GuE79WipLF6lnztq0MyfgOkb4V?=
+ =?us-ascii?Q?naIVoB3OGguqMe/T+HTX+jKF1pTf7fsPhm6xfm8Zsknx1+qCZlpno066UtuU?=
+ =?us-ascii?Q?qGnfKwllunn5sG7NXWvVlmHiwDS6wJABSbIHoX0Vsvwyz4czZvDOm5//JnCp?=
+ =?us-ascii?Q?wnDU4EXHlsuVZZX9qc+Zsf/XdYD9gwECeU+rcGbkg4mpugGJnhVnZVX8k9/J?=
+ =?us-ascii?Q?vQbLZGHO4LYtlT3O2oPLr+0mzrlJ0JiYJPZVa7BV7suE+UNjff5HA84y3iof?=
+ =?us-ascii?Q?WrEiRrCFSydu3D4BnVkS4LCcJp+P2Iacvn+b9CgwcnRfI3XIK2+L5NYqVjuB?=
+ =?us-ascii?Q?dSMeTDLty1H/Trtgr+rHmYZpm4l6Gu2uY7VPZ0XdU5zcIdOESss5T/qLHBFR?=
+ =?us-ascii?Q?OUqzJ2nEXA/vgrz4gM1TxSx/yZPbYOqj5YN7Wc2ji0UZ6KtWUBbfdn/t8e+U?=
+ =?us-ascii?Q?j2Wg27zmpA6z3TpLzoPd99pYr1d5y3IteV32lCMqbGgmH/QnVpWM6W3dABqh?=
+ =?us-ascii?Q?t0Bv6ViSKOiTCXjxWVRVVgcMbHcqZyJFDDGmGBoSJgV5hWng+K2ItoSzJ5Fo?=
+ =?us-ascii?Q?tI6Qww4psudyr6wZaVYNKlefYu9R0650xLtNHj48Njl8bO0vgzj7V1ZPIeJv?=
+ =?us-ascii?Q?q79mraIqFnTDFq549rFIINXvBvieLFvlgGrMIiDhJW6t/ybUBVaOABuN4v7K?=
+ =?us-ascii?Q?sCWi/XR+tEarrr+HYcPs67/GAtQlKkx4HBuxztzkzqYCqgNk7FViY/CB5mK6?=
+ =?us-ascii?Q?Nt62j0J/RQ90v6tyuUnnxkIGLFgXzQ5vSWxhmjinI0OIOwJoPktdx1X9W3NI?=
+ =?us-ascii?Q?VEV1h5NS+AFRm2PNv2xq+8aA4mjeztHquDFmpMmcXi9KniMgnTzYO5miakyA?=
+ =?us-ascii?Q?pCZmD/Rei20IthXz8Dn6VbZSxV0BJW3ydn88rHII1rFMDwmG+FOysG51Wo24?=
+ =?us-ascii?Q?sKfYwLc7CYdFUxi9M+n17y3c63CPOZOf9DJgVvNOynOdNZOwPxvBVDcZGkXe?=
+ =?us-ascii?Q?jFSf9VsoMlRX8Mz3oFirrTQNCjppNwdJ0nnU0HvY3ghHa6snztz52b21biiI?=
+ =?us-ascii?Q?lZGE13Yw3JcziFA4khCdjjt7Bd6Jv/cuyo/d73UhUMAkvK967PdNX5jU87a6?=
+ =?us-ascii?Q?tmGTy+dswKu919uADVrKS/04Fy6Z0wBtqLN5oSYj91llQos/cvdKzIEkiWHT?=
+ =?us-ascii?Q?ik0pxG/g6Gimdchi5bZU7uf76ApEmFsyZOR3Hgp+oMslrw8EdcSF+L9WEXKk?=
+ =?us-ascii?Q?UrB4g5l7IkswYztClXyXVMeRKily3aqcLO2qJjVbhF9L?=
 X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 560e3827-7d42-4194-a090-08dd91433117
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7b770f6a-ff6f-4814-16b7-08dd914331c1
 X-MS-Exchange-CrossTenant-AuthSource: SJ2PR01MB8101.prod.exchangelabs.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2025 10:53:13.0500
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2025 10:53:14.1166
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: oSWJvx5U82rQbBapXlqyhRiu2QrErTw6k39xUPtYl4Rul1zTzhuwZ+DAQN+0Mv1sMmmFNRb+kZs6PThe7lRmvADn8sY+nK4WsamK7Cvw/fZ5yhVGbV51K4B7vSYsw9Jt
+X-MS-Exchange-CrossTenant-UserPrincipalName: Y//xWy0uG3OAfJziDIu0OAmeNdw5CadarKEZodkqRygmZ8OpO49O2KNmYPDhAKihhboIUprQkCDvJfFUZ6JRT4ehG5j9692DUKOOxizd97gR8sX2kLGGw8wYX871jhrE
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR01MB6907
 
-This patch series makes the selftest work with NV enabled. The guest code
-is run in vEL2 instead of EL1. We add a command line option to enable
-testing of NV. The NV tests are disabled by default.
+This patch adds required changes to vcpu init to run a guest code
+in vEL2 context and also adds NV specific helper functions.
 
-Modified around 12 selftests in this series.
-
-Changes since v1:
-	- Updated NV helper functions as per comments [1].
-	- Modified existing testscases to run guest code in vEL2.
-
-[1] https://lkml.iu.edu/hypermail/linux/kernel/2502.0/07001.html 
-
-Ganapatrao Kulkarni (9):
-  KVM: arm64: nv: selftests: Add support to run guest code in vEL2.
-  KVM: arm64: nv: selftests: Add simple test to run guest code in vEL2
-  KVM: arm64: nv: selftests: Enable hypervisor timer tests to run in
-    vEL2
-  KVM: arm64: nv: selftests: enable aarch32_id_regs test to run in vEL2
-  KVM: arm64: nv: selftests: Enable vgic tests to run in vEL2
-  KVM: arm64: nv: selftests: Enable set_id_regs test to run in vEL2
-  KVM: arm64: nv: selftests: Enable test to run in vEL2
-  KVM: selftests: arm64: Extend kvm_page_table_test to run guest code in
-    vEL2
-  KVM: arm64: nv: selftests: Enable page_fault_test test to run in vEL2
-
- tools/testing/selftests/kvm/Makefile.kvm      |   2 +
- tools/testing/selftests/kvm/arch_timer.c      |   8 +-
- .../selftests/kvm/arm64/aarch32_id_regs.c     |  34 ++++-
- .../testing/selftests/kvm/arm64/arch_timer.c  | 118 +++++++++++++++---
- .../selftests/kvm/arm64/nv_guest_hypervisor.c |  68 ++++++++++
- .../selftests/kvm/arm64/page_fault_test.c     |  35 +++++-
- .../testing/selftests/kvm/arm64/set_id_regs.c |  57 ++++++++-
- tools/testing/selftests/kvm/arm64/vgic_init.c |  54 +++++++-
- tools/testing/selftests/kvm/arm64/vgic_irq.c  |  27 ++--
- .../selftests/kvm/arm64/vgic_lpi_stress.c     |  19 ++-
- .../testing/selftests/kvm/guest_print_test.c  |  32 +++++
- .../selftests/kvm/include/arm64/arch_timer.h  |  16 +++
- .../kvm/include/arm64/kvm_util_arch.h         |   3 +
- .../selftests/kvm/include/arm64/nv_util.h     |  45 +++++++
- .../selftests/kvm/include/arm64/vgic.h        |   1 +
- .../testing/selftests/kvm/include/kvm_util.h  |   3 +
- .../selftests/kvm/include/timer_test.h        |   1 +
- .../selftests/kvm/kvm_page_table_test.c       |  30 ++++-
- tools/testing/selftests/kvm/lib/arm64/nv.c    |  46 +++++++
- .../selftests/kvm/lib/arm64/processor.c       |  61 ++++++---
- tools/testing/selftests/kvm/lib/arm64/vgic.c  |   8 ++
- 21 files changed, 604 insertions(+), 64 deletions(-)
- create mode 100644 tools/testing/selftests/kvm/arm64/nv_guest_hypervisor.c
+Signed-off-by: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
+---
+ tools/testing/selftests/kvm/Makefile.kvm      |  2 +
+ .../kvm/include/arm64/kvm_util_arch.h         |  3 +
+ .../selftests/kvm/include/arm64/nv_util.h     | 45 ++++++++++++++
+ .../selftests/kvm/include/arm64/vgic.h        |  1 +
+ .../testing/selftests/kvm/include/kvm_util.h  |  3 +
+ tools/testing/selftests/kvm/lib/arm64/nv.c    | 46 ++++++++++++++
+ .../selftests/kvm/lib/arm64/processor.c       | 61 ++++++++++++++-----
+ tools/testing/selftests/kvm/lib/arm64/vgic.c  |  8 +++
+ 8 files changed, 155 insertions(+), 14 deletions(-)
  create mode 100644 tools/testing/selftests/kvm/include/arm64/nv_util.h
  create mode 100644 tools/testing/selftests/kvm/lib/arm64/nv.c
 
+diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+index f773f8f99249..3348f729d3b2 100644
+--- a/tools/testing/selftests/kvm/Makefile.kvm
++++ b/tools/testing/selftests/kvm/Makefile.kvm
+@@ -37,6 +37,7 @@ LIBKVM_arm64 += lib/arm64/processor.c
+ LIBKVM_arm64 += lib/arm64/spinlock.c
+ LIBKVM_arm64 += lib/arm64/ucall.c
+ LIBKVM_arm64 += lib/arm64/vgic.c
++LIBKVM_arm64 += lib/arm64/nv.c
+ 
+ LIBKVM_s390 += lib/s390/diag318_test_handler.c
+ LIBKVM_s390 += lib/s390/processor.c
+@@ -155,6 +156,7 @@ TEST_GEN_PROGS_arm64 += arm64/vgic_irq
+ TEST_GEN_PROGS_arm64 += arm64/vgic_lpi_stress
+ TEST_GEN_PROGS_arm64 += arm64/vpmu_counter_access
+ TEST_GEN_PROGS_arm64 += arm64/no-vgic-v3
++TEST_GEN_PROGS_arm64 += arm64/nv_guest_hypervisor
+ TEST_GEN_PROGS_arm64 += access_tracking_perf_test
+ TEST_GEN_PROGS_arm64 += arch_timer
+ TEST_GEN_PROGS_arm64 += coalesced_io_test
+diff --git a/tools/testing/selftests/kvm/include/arm64/kvm_util_arch.h b/tools/testing/selftests/kvm/include/arm64/kvm_util_arch.h
+index e43a57d99b56..ab5279c24413 100644
+--- a/tools/testing/selftests/kvm/include/arm64/kvm_util_arch.h
++++ b/tools/testing/selftests/kvm/include/arm64/kvm_util_arch.h
+@@ -2,6 +2,9 @@
+ #ifndef SELFTEST_KVM_UTIL_ARCH_H
+ #define SELFTEST_KVM_UTIL_ARCH_H
+ 
++#define CurrentEL_EL1		(1 << 2)
++#define CurrentEL_EL2		(2 << 2)
++
+ struct kvm_vm_arch {};
+ 
+ #endif  // SELFTEST_KVM_UTIL_ARCH_H
+diff --git a/tools/testing/selftests/kvm/include/arm64/nv_util.h b/tools/testing/selftests/kvm/include/arm64/nv_util.h
+new file mode 100644
+index 000000000000..622a17c9d142
+--- /dev/null
++++ b/tools/testing/selftests/kvm/include/arm64/nv_util.h
+@@ -0,0 +1,45 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (c) 2025 Ampere Computing
++ */
++#ifndef SELFTEST_NV_UTIL_H
++#define SELFTEST_NV_UTIL_H
++
++#include <linux/bitmap.h>
++#include <vgic.h>
++
++#define HCR_NV2		(UL(1) << 45)
++#define HCR_AT		(UL(1) << 44)
++#define HCR_NV		(UL(1) << 42)
++#define HCR_E2H		(UL(1) << 34)
++#define HCR_TTLB        (UL(1) << 25)
++
++/* Enable NV2 and guest in VHE mode */
++#define HCR_EL2_NV_EANBLE (HCR_E2H | HCR_NV | HCR_NV2 | HCR_AT | HCR_TTLB)
++
++struct kvm_vm *nv_vm_create_with_vcpus_gic(uint32_t nr_vcpus,
++		struct kvm_vcpu **vcpus, int *gic_fd, void *guest_code);
++
++struct kvm_vm *__nv_vm_create_with_vcpus_gic(struct vm_shape shape,
++		uint32_t nr_vcpus, struct kvm_vcpu **vcpus,
++		uint64_t extra_mem_pages, int *gic_fd, void *guest_code);
++
++/* NV helpers */
++static inline void init_vcpu_nested(struct kvm_vcpu_init *init)
++{
++	init->features[0] |= (1 << KVM_ARM_VCPU_HAS_EL2);
++}
++
++static inline bool kvm_arm_vcpu_has_el2(struct kvm_vcpu_init *init)
++{
++	unsigned long features = init->features[0];
++
++	return test_bit(KVM_ARM_VCPU_HAS_EL2, &features);
++}
++
++static inline bool is_vcpu_nested(struct kvm_vcpu *vcpu)
++{
++	return vcpu->nested;
++}
++
++#endif /* SELFTEST_NV_UTIL_H */
+diff --git a/tools/testing/selftests/kvm/include/arm64/vgic.h b/tools/testing/selftests/kvm/include/arm64/vgic.h
+index c481d0c00a5d..46142fa36199 100644
+--- a/tools/testing/selftests/kvm/include/arm64/vgic.h
++++ b/tools/testing/selftests/kvm/include/arm64/vgic.h
+@@ -17,6 +17,7 @@
+ 	index)
+ 
+ int vgic_v3_setup(struct kvm_vm *vm, unsigned int nr_vcpus, uint32_t nr_irqs);
++void vgic_v3_close(int gic_fd);
+ 
+ #define VGIC_MAX_RESERVED	1023
+ 
+diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
+index 373912464fb4..9b26b9124dc3 100644
+--- a/tools/testing/selftests/kvm/include/kvm_util.h
++++ b/tools/testing/selftests/kvm/include/kvm_util.h
+@@ -65,6 +65,9 @@ struct kvm_vcpu {
+ 	struct kvm_dirty_gfn *dirty_gfns;
+ 	uint32_t fetch_index;
+ 	uint32_t dirty_gfns_count;
++#ifdef __aarch64__
++	bool nested;
++#endif
+ };
+ 
+ struct userspace_mem_regions {
+diff --git a/tools/testing/selftests/kvm/lib/arm64/nv.c b/tools/testing/selftests/kvm/lib/arm64/nv.c
+new file mode 100644
+index 000000000000..e930808a7ed4
+--- /dev/null
++++ b/tools/testing/selftests/kvm/lib/arm64/nv.c
+@@ -0,0 +1,46 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2025 Ampere Computing LLC
++ */
++
++#include <linux/compiler.h>
++#include <assert.h>
++
++#include "guest_modes.h"
++#include "kvm_util.h"
++#include "nv_util.h"
++#include "processor.h"
++
++struct kvm_vm *__nv_vm_create_with_vcpus_gic(struct vm_shape shape, uint32_t nr_vcpus,
++		struct kvm_vcpu **vcpus, uint64_t extra_mem_pages, int *gic_fd, void *guest_code)
++{
++	struct kvm_vcpu_init init;
++	struct kvm_vm *vm;
++	int i;
++
++	TEST_REQUIRE(kvm_has_cap(KVM_CAP_ARM_EL2));
++
++	vm = __vm_create(shape, nr_vcpus, extra_mem_pages);
++	vm_ioctl(vm, KVM_ARM_PREFERRED_TARGET, &init);
++	init_vcpu_nested(&init);
++
++	for (i = 0; i < nr_vcpus; ++i) {
++		vcpus[i] = aarch64_vcpu_add(vm, i, &init, guest_code);
++		__TEST_REQUIRE(is_vcpu_nested(vcpus[i]), "Failed to Enable NV");
++	}
++
++	/* vgic is not created, If gic_fd argument is NULL */
++	if (gic_fd) {
++		*gic_fd = vgic_v3_setup(vm, nr_vcpus, 64);
++		__TEST_REQUIRE(*gic_fd >= 0, "Failed to create vgic-v3");
++	}
++
++	return vm;
++}
++
++struct kvm_vm *nv_vm_create_with_vcpus_gic(uint32_t nr_vcpus,
++		struct kvm_vcpu **vcpus, int *gic_fd, void *guest_code)
++{
++	return __nv_vm_create_with_vcpus_gic(VM_SHAPE_DEFAULT,
++				nr_vcpus, vcpus, 0, gic_fd, guest_code);
++}
+diff --git a/tools/testing/selftests/kvm/lib/arm64/processor.c b/tools/testing/selftests/kvm/lib/arm64/processor.c
+index 7ba3aa3755f3..6e759981bf9e 100644
+--- a/tools/testing/selftests/kvm/lib/arm64/processor.c
++++ b/tools/testing/selftests/kvm/lib/arm64/processor.c
+@@ -10,6 +10,7 @@
+ 
+ #include "guest_modes.h"
+ #include "kvm_util.h"
++#include "nv_util.h"
+ #include "processor.h"
+ #include "ucall_common.h"
+ 
+@@ -258,14 +259,49 @@ void virt_arch_dump(FILE *stream, struct kvm_vm *vm, uint8_t indent)
+ 	}
+ }
+ 
++static void aarch64_vcpu_set_reg(struct kvm_vcpu *vcpu, uint64_t sctlr_el1,
++			uint64_t tcr_el1, uint64_t ttbr0_el1)
++{
++	uint64_t fpen;
++
++	/*
++	 * Enable FP/ASIMD to avoid trapping when accessing Q0-Q15
++	 * registers, which the variable argument list macros do.
++	 */
++	fpen = 3 << 20;
++
++	if (is_vcpu_nested(vcpu)) {
++		vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_CPTR_EL2), fpen);
++		vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_SCTLR_EL2), sctlr_el1);
++		vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TCR_EL2), tcr_el1);
++		vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_MAIR_EL2), DEFAULT_MAIR_EL1);
++		vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TTBR0_EL2), ttbr0_el1);
++		vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_HCR_EL2), HCR_EL2_NV_EANBLE);
++	} else {
++		vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_CPACR_EL1), fpen);
++		vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_SCTLR_EL1), sctlr_el1);
++		vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TCR_EL1), tcr_el1);
++		vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_MAIR_EL1), DEFAULT_MAIR_EL1);
++		vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TTBR0_EL1), ttbr0_el1);
++
++	}
++
++	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TPIDR_EL1), vcpu->id);
++}
++
+ void aarch64_vcpu_setup(struct kvm_vcpu *vcpu, struct kvm_vcpu_init *init)
+ {
+ 	struct kvm_vcpu_init default_init = { .target = -1, };
+ 	struct kvm_vm *vm = vcpu->vm;
+ 	uint64_t sctlr_el1, tcr_el1, ttbr0_el1;
+ 
+-	if (!init)
++	if (!init) {
+ 		init = &default_init;
++	} else {
++		/* Is this vcpu a Guest-Hypersior */
++		if (kvm_arm_vcpu_has_el2(init))
++			vcpu->nested = true;
++	}
+ 
+ 	if (init->target == -1) {
+ 		struct kvm_vcpu_init preferred;
+@@ -275,12 +311,6 @@ void aarch64_vcpu_setup(struct kvm_vcpu *vcpu, struct kvm_vcpu_init *init)
+ 
+ 	vcpu_ioctl(vcpu, KVM_ARM_VCPU_INIT, init);
+ 
+-	/*
+-	 * Enable FP/ASIMD to avoid trapping when accessing Q0-Q15
+-	 * registers, which the variable argument list macros do.
+-	 */
+-	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_CPACR_EL1), 3 << 20);
+-
+ 	sctlr_el1 = vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_SCTLR_EL1));
+ 	tcr_el1 = vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TCR_EL1));
+ 
+@@ -349,11 +379,7 @@ void aarch64_vcpu_setup(struct kvm_vcpu *vcpu, struct kvm_vcpu_init *init)
+ 	if (use_lpa2_pte_format(vm))
+ 		tcr_el1 |= (1ul << 59) /* DS */;
+ 
+-	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_SCTLR_EL1), sctlr_el1);
+-	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TCR_EL1), tcr_el1);
+-	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_MAIR_EL1), DEFAULT_MAIR_EL1);
+-	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TTBR0_EL1), ttbr0_el1);
+-	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TPIDR_EL1), vcpu->id);
++	aarch64_vcpu_set_reg(vcpu, sctlr_el1, tcr_el1, ttbr0_el1);
+ }
+ 
+ void vcpu_arch_dump(FILE *stream, struct kvm_vcpu *vcpu, uint8_t indent)
+@@ -387,7 +413,11 @@ static struct kvm_vcpu *__aarch64_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id,
+ 
+ 	aarch64_vcpu_setup(vcpu, init);
+ 
+-	vcpu_set_reg(vcpu, ARM64_CORE_REG(sp_el1), stack_vaddr + stack_size);
++	if (is_vcpu_nested(vcpu))
++		vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_SP_EL2), stack_vaddr + stack_size);
++	else
++		vcpu_set_reg(vcpu, ARM64_CORE_REG(sp_el1), stack_vaddr + stack_size);
++
+ 	return vcpu;
+ }
+ 
+@@ -457,7 +487,10 @@ void vcpu_init_descriptor_tables(struct kvm_vcpu *vcpu)
+ {
+ 	extern char vectors;
+ 
+-	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_VBAR_EL1), (uint64_t)&vectors);
++	if (is_vcpu_nested(vcpu))
++		vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_VBAR_EL2), (uint64_t)&vectors);
++	else
++		vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_VBAR_EL1), (uint64_t)&vectors);
+ }
+ 
+ void route_exception(struct ex_regs *regs, int vector)
+diff --git a/tools/testing/selftests/kvm/lib/arm64/vgic.c b/tools/testing/selftests/kvm/lib/arm64/vgic.c
+index 4427f43f73ea..67822b803d0f 100644
+--- a/tools/testing/selftests/kvm/lib/arm64/vgic.c
++++ b/tools/testing/selftests/kvm/lib/arm64/vgic.c
+@@ -79,6 +79,14 @@ int vgic_v3_setup(struct kvm_vm *vm, unsigned int nr_vcpus, uint32_t nr_irqs)
+ 	return gic_fd;
+ }
+ 
++void  vgic_v3_close(int gic_fd)
++{
++	if (gic_fd < 0)
++		return;
++
++	close(gic_fd);
++}
++
+ /* should only work for level sensitive interrupts */
+ int _kvm_irq_set_level_info(int gic_fd, uint32_t intid, int level)
+ {
 -- 
 2.48.1
 
