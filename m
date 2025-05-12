@@ -1,76 +1,76 @@
-Return-Path: <linux-kselftest+bounces-32878-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32879-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A676EAB4684
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 May 2025 23:37:04 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA4B8AB4687
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 May 2025 23:37:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3C2EB463D83
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 May 2025 21:37:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 180FE7AF0B3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 May 2025 21:36:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03C6529ACF9;
-	Mon, 12 May 2025 21:32:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 849FE29A324;
+	Mon, 12 May 2025 21:34:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="QMSMi6OV"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="HiVNNJ1K"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69AFE29B224
-	for <linux-kselftest@vger.kernel.org>; Mon, 12 May 2025 21:32:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D203299A8A
+	for <linux-kselftest@vger.kernel.org>; Mon, 12 May 2025 21:34:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747085565; cv=none; b=HJpGKiS3B0zTBeCJBOagBVuuaQUIfXdlux3ev4wD/zO+9I7W5cIPLY9iaO9Nun/MNmgoxZAh5irTVsGNAeHYcPAog3bGbjtHHhUsRNgngP/E2Hl09Kjz5wkq0+lvhXmO1eQwGpV8SdiRuvDozG2c6diyFA8yWkYxsCcp0Fwi5e8=
+	t=1747085671; cv=none; b=SNBO8OVR5x+yHdfKd/Xo2PHrguc9MWVmOdHr+IuD+cCkQQKtpAiUUagZNAsw+yV60ba7Lwr7/IGy2EceEOXHFyRHw2PHTv3XLfTG9kzIyKu/cKkqMJeNQhgvk/wPnVZC9Ln6Z12OYl6qwBIvqKEu0icFTBofiDfo1++z2yJY4Og=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747085565; c=relaxed/simple;
-	bh=f2MCs4lM3l4FrlvQEABriuyhhX5RlGGLRAtIDhd82lY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gCuZZKJxq4VPdC+TztF4bSEW1HL9WCkvp8tqR9mrdUj97ZDZC9LuJSlD6f+FsNL4RDd1Ojlg0IZOZp3cYWwkFzmxJOimHDNClcmPBfFzo3S7RHrlT14vdq0a+9gXa+cHet9Z9tH7/blYnBE76H0oJSbPK+qL9sF9q0ZYtZ6C0dI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=QMSMi6OV; arc=none smtp.client-ip=209.85.166.48
+	s=arc-20240116; t=1747085671; c=relaxed/simple;
+	bh=XWbRWAfSjT6T7AP2vd7sAouaZT2usp0wDVFO1ZYvYzI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=suVtO56JoaevnTqG1Ygt5OgxyQ66CoOTJVxjrDi5Eh1328FvSdvElx4M8raMRC9A8/YIStMoRqi4gW8b9DlYJ8lKufptpZaSxBAMRJxJZkC0dle2S5JhjuMFLd0N18TQ1A70biScJC6aJNpaywQ8jziAe2W5ttAD/cIIFfL5Dbk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=HiVNNJ1K; arc=none smtp.client-ip=209.85.166.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f48.google.com with SMTP id ca18e2360f4ac-85b41281b50so151489539f.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 May 2025 14:32:43 -0700 (PDT)
+Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-86135d11760so413409539f.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 May 2025 14:34:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1747085562; x=1747690362; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1747085668; x=1747690468; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aVC8CIn+kAUJC5QRXx6Je5lGhZlJWHJlDC4Z0lsVmlk=;
-        b=QMSMi6OVn9ARSr1nASQvdrzUNOqd4paa0IYSoqzEBBNDWjFaqMkYmUtzAMVSCpBCq9
-         rFZzefecxsgovMxhsXpozyE2z1KUtwslwwFX4slOvbKNbAZOeT78qXZ4yllObnb6D15d
-         IYnDImt8w3tuPbLuu5sFp0+E3cQfZQEPMjlrQ=
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=fwEftXQQ0riQzCQOUW7IszRmWh3bwsINot973jWAOMM=;
+        b=HiVNNJ1KnCsA+S8jNVec8c7XSmdovDtBjZE5kK1wKUlfAZUN4yxTTHNPMY4/j1Sn9K
+         K5H8FXeULDGC71+aYv32CsGRL6rCtHeu0wpiB4bzDTtD5msviNpBuf3VFMTFbpjLPIao
+         t9Iz7q4eiW0UKgoTMpk1GUSxaGzJ/0fAkaz54=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747085562; x=1747690362;
+        d=1e100.net; s=20230601; t=1747085668; x=1747690468;
         h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :references:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aVC8CIn+kAUJC5QRXx6Je5lGhZlJWHJlDC4Z0lsVmlk=;
-        b=kFvejwzwUnODUkaw8clGrQojPuOmGyemedFWkU9PC0UXUxJ8A2/W+fCyVUym1EJuZ3
-         s1m0dmdq1+U5T5xfXiiUSprHU8wha0TpeZKTWFe276wRa3IKcnjXZsSScHHbnUkc/LMb
-         G1SW1pbn+W8VhdiW364gzjuSeAFK0vEgPvYtAAmlgjx7ApwqwKHBenowLboPSk/HZhqb
-         3yMqF6HxRpB7AUDoTmI+VkrOnqqNywkTFbvjkwozPMCUh4OFfPRmbPb5YWcLK0wYYvp4
-         loJjBUUzb8NzgZkHXqA5/xVv1igZhkh6JXaUrLpocjZPZiRhzIXBzRKOiQWin3VUaAKu
-         DePw==
-X-Forwarded-Encrypted: i=1; AJvYcCVzEMKyPr8m/OQoIZa6CL/5zKLdlfqkKG4vJuiAM/GWM9PWpaDXRuAd9XobwhycTUnEqQFJJTevZ3t7VjP2+P8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyesvr39kFOwi4tq0m2pFsHFnlcPfGoVIDgzb143c5Fviuygnrg
-	67gaVo2kcYnku/m1iRZGvpY4zUwLSUlzXakDPb6is0HoR5Y86SQOScfp8D9x4ak=
-X-Gm-Gg: ASbGncvXVUEj1BXPhHlsKmyOqeD2+mvpDe+OCPjr1/W/s75nwvIkwjMq57fBRI4AY9p
-	oS56piS9gdfa5TILdfr5j+dcZS9niPKODPVp2x9ERZR/YgFkLjgIo3J39ycGs0e5k7Ddg85S/BV
-	C+zYaSNepPv6bmuZb8aIvbP55sw6+Sxz0u+RTbcgH0SVulkEN05Wh3rJwNUPk9BtHHXr5DCua5l
-	B36UV5XDWKCbEidhIAVH8+BLKu9U/H/U4nKk5X2tfPAC5jv+xIU4KhUMTvHNmQ5fGDpI11HUBxd
-	CIy1UHt89GhRL3g3u5DHYNoc6RXE+hUOQxMk7WfFVbZwphKmQ/LTXcffOn1OkQ==
-X-Google-Smtp-Source: AGHT+IFUmfEbqs2iqJ2yUBrpmIaYJEyYGMrVR1JpfUOwjb3bm//xzfZQbCP9wt/2h1O8OE8V+0AWaQ==
-X-Received: by 2002:a05:6602:13c4:b0:85b:4ad1:70e with SMTP id ca18e2360f4ac-86763575d30mr1787891339f.6.1747085562361;
-        Mon, 12 May 2025 14:32:42 -0700 (PDT)
+        bh=fwEftXQQ0riQzCQOUW7IszRmWh3bwsINot973jWAOMM=;
+        b=LWT908052dZcSXYDH8Z19kGojLWlN7L1CJzcoGSVj2Nr0guecAVmtzQ0K2AuuOv3fT
+         +wbQpd/GWAuqemot9/OtlC2Zu5856inhUfQLWQAAGhNPDKQSHQbc91akuzD9/gL2Qkxj
+         vfe8J4kHSnQ3OX9eF02I8v67T+lknXeO2W2BlKN5P/vq6nAjAo+lOJk84Nurra80VfFY
+         1qeoxQtPpv5y4PVVAjXvWKvIfJn5ZU5SKZaiH+lANj1olx2P3Fk9UDPE8ik4+hOkCHc4
+         dBYbgRlQ7NUHCzagaL7nl/n/RK2NeyCFCnRltEDYDMy/xhyDXpQ1VhMsTtkkRaVNNQkN
+         7zgQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXnOo7AfnDyve9R1d5/H/dqVEJftTMGiVucdS5GVgjQpByGH6Zfp6npKfXdsgEYN/HUdcIaSFlKVgaZm80klPY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwjklJ2WCrvMGezTQEHiTBk2vqwqBm/MYnYO5wpZkiVQowqp/za
+	YfRPd/gzuqueerH1qJHMu9kU4bnaGGAv2OA4EAxr+wERnN7jazGxcnnE+j492Jg=
+X-Gm-Gg: ASbGncupkQ/ni46cadaGJETaruUv2PSE6PUE6R5iEy4RMGbWJwnIEXC1QKEiMcPYRz3
+	cXM+4CgEpzWoQR8DkVg1zW8pieuVDYN9qVaU9+mBFyn46bbR0AI5WWqcIlFgGU1IxF2hTnbOUh9
+	OYKM67ah7n9a5ipF8LnGd+SqvLXiQmCHw5Ylm7RM/GN8IduEr4bAMwLpvJlO7xLHM385LGepwvL
+	T7cG065Kft1lWDSlxnqvOgMTUiQ2aNTOovi7UtLcqoVB7O0J6N9U5cmaWpEjUu7wjIuklvbU9dr
+	+nC4WBSLchEbRUSCWGzNijmlr9Myjf7Ec6Ez3/ef+qSX0B3F5q4T4PpY7mOkoQ==
+X-Google-Smtp-Source: AGHT+IEHyqp+j78FiPlpYu8QXXhftXVkHHdohVhRwaHEJbDyozbMpben1NGU5P7qE0M1KNDNJVl+hQ==
+X-Received: by 2002:a05:6602:1602:b0:864:4aa2:d796 with SMTP id ca18e2360f4ac-867635f4ca2mr1706295939f.8.1747085668450;
+        Mon, 12 May 2025 14:34:28 -0700 (PDT)
 Received: from [192.168.1.14] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4fa2ec25bccsm1521170173.90.2025.05.12.14.32.41
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-867636de74fsm199633439f.31.2025.05.12.14.34.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 May 2025 14:32:41 -0700 (PDT)
-Message-ID: <a699b6d0-f028-43d1-93c9-250b6c8c4a6b@linuxfoundation.org>
-Date: Mon, 12 May 2025 15:32:40 -0600
+        Mon, 12 May 2025 14:34:27 -0700 (PDT)
+Message-ID: <9d9981ce-7258-4454-9d28-9716b368e47a@linuxfoundation.org>
+Date: Mon, 12 May 2025 15:34:26 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -78,49 +78,44 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 00/14] kselftest harness and nolibc compatibility
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Shuah Khan <shuah@kernel.org>, Kees Cook <kees@kernel.org>
-Cc: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
- Willy Tarreau <w@1wt.eu>, Andy Lutomirski <luto@amacapital.net>,
- Will Drewry <wad@chromium.org>, Mark Brown <broonie@kernel.org>,
- Muhammad Usama Anjum <usama.anjum@collabora.com>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20250505-nolibc-kselftest-harness-v4-0-ee4dd5257135@linutronix.de>
- <d8d36e51-9456-49a3-88c4-44cffdcc5c0a@t-8ch.de>
+Subject: Re: [PATCH] selftests/mincore: Added comment for minicore test
+To: Suresh <suresh.k.chandrappa@gmail.com>, linux-kselftest@vger.kernel.org
+References: <20250510082925.11663-1-suresh.k.chandrappa@gmail.com>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <d8d36e51-9456-49a3-88c4-44cffdcc5c0a@t-8ch.de>
+In-Reply-To: <20250510082925.11663-1-suresh.k.chandrappa@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 5/10/25 00:54, Thomas Weißschuh wrote:
-> Hi Shuah and Kees,
-> 
-> On 2025-05-05 17:15:18+0200, Thomas Weißschuh wrote:
->> Nolibc is useful for selftests as the test programs can be very small,
->> and compiled with just a kernel crosscompiler, without userspace support.
->> Currently nolibc is only usable with kselftest.h, not the more
->> convenient to use kselftest_harness.h
->> This series provides this compatibility by removing the usage of problematic
->> libc features from the harness.
-> 
-> I'd like to get this series into the next merge window.
-> For that I'd like to expose it to linux-next through the nolibc tree.
-> If you don't have the time for a review or issues crop up, I will drop
-> the patches again.
-> 
-> Are you fine with that?
+On 5/10/25 02:29, Suresh wrote:
 
-Didn't I respond to v13 saying you can include in your nolibc PR?
-If I didn't here is my Reviewed-by.
+No change log
 
+> Signed-off-by: Suresh <suresh.k.chandrappa@gmail.com>
+> ---
+>   tools/testing/selftests/mincore/mincore_selftest.c | 5 +++++
+>   1 file changed, 5 insertions(+)
 > 
-> The issues reported by Mark have been fixed and tests have been written
-> for them.
+> diff --git a/tools/testing/selftests/mincore/mincore_selftest.c b/tools/testing/selftests/mincore/mincore_selftest.c
+> index 17ed3e9917ca..c4f0d21f7678 100644
+> --- a/tools/testing/selftests/mincore/mincore_selftest.c
+> +++ b/tools/testing/selftests/mincore/mincore_selftest.c
+> @@ -146,6 +146,11 @@ TEST(check_huge_pages)
+>   	page_size = sysconf(_SC_PAGESIZE);
+>   
+>   	errno = 0;
+> +	/*
+> +         * Attempt to map a huge page
+> +         * MAP_HUGETLB flag requests a huge page allocation
+> +         * Size is normal page_size, but kernel uses huge page backing
+> +         */
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+Explain why this comment is needed in the change log.
+
+>   	addr = mmap(NULL, page_size, PROT_READ | PROT_WRITE,
+>   		MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB,
+>   		-1, 0);
+
 
 thanks,
 -- Shuah
