@@ -1,278 +1,323 @@
-Return-Path: <linux-kselftest+bounces-32853-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32854-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2F5BAB356E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 May 2025 13:00:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A51F2AB35AF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 May 2025 13:13:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 20FC13B0AF6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 May 2025 10:56:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 48F791891924
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 May 2025 11:13:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83DEF26FDA6;
-	Mon, 12 May 2025 10:53:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7030F2882CA;
+	Mon, 12 May 2025 11:12:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b="fm6UxiBH"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Mf7H3Ufq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from CY4PR02CU008.outbound.protection.outlook.com (mail-westcentralusazon11021077.outbound.protection.outlook.com [40.93.199.77])
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6544126C3B5;
-	Mon, 12 May 2025 10:53:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.199.77
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747047212; cv=fail; b=m0gdZCeXAix7zR8VrMyxxEUqLSrXKsoa5PyRP5NDQSvmp+uAD98y5dC46PbYcGrNVUmFwc+9018UsWerkUyzmIuyHOcZe9U1nrkPdRAJuul+1icpPaZ8iKZfTUY6rUZu54GFtalDUZblv0SYhjSoPQ3jQXVCy7Me1xF6Vcbqoqc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747047212; c=relaxed/simple;
-	bh=jh/f0pqggVcvzgdvQHFd7xHG9FTfF9S1mmbcIW6Dcsw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=pnirXWX4q5u6z0RHnThkF8PlnCBZh7Wivg1aB5ZxQviqMEIWKWmEgcURgjqvyYfFKRJnbOfEIqlE3TPv4BmWlsVpoGMw7DJsqRrgf3iNW4yvvSU5DxVFhaSWotkYdGSh9Q7E6OSNM5bcM9lVbj/KCunHQWrddL6yZUCRdfEyRpU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com; spf=pass smtp.mailfrom=os.amperecomputing.com; dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b=fm6UxiBH; arc=fail smtp.client-ip=40.93.199.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=os.amperecomputing.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=FUNBI6QQptOTfPkBSUtvSZYoDFi21SIluHOBXMcMHDU4rB/WkcEepoqBBxqCaDcZOnvAK/hwKvL42nwj3RdT8ei7TNFaCMnneAzPz/VErsQoytkca2VJHqsntMcEAv98tEGlJV5yaPLHDDsndjv6als3/QaQTYm5S0uGGkRN7ewUFCy7OTAl/nEa9+iJPAeQwHgTXPIy+41KiRMYuJVuVvDEaFSDMLQZJP4BXBaMT8RGSrPACa6LE3gfU/gEzZHsOmA/ZFVZPPCUlgRLMktc3iqdBhqG6btqZjKFmaWMBKYVXCwrj/vxNXWL9/+jh8+P+tjPdtfPdxiI5BpuVJANhA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1HDIk1ETvLD0KpSPCCnfbrZz2cnO8BCYDGkUVPam3Zo=;
- b=CTm5fU0aK+D0Uk4hkWuQ1+9TVydX7Ge5nGMvDJrU3qrVzqf1TdZWb68TMWoPvxZOLpX+ymSP4ngLF56ZCQNOIkmgzOcCEe1pGqi1XE4ULQubYZLAk5WsDsgN2NGQyVGCyWm06D5kHhZbzfs0VltiVwnM5RlbLAmp1eLjFq7LfeEA/Chv3HvBIpYAamrkfr4JGlHtZQHUDO73JuocsfGZ1sQIkQ+SMv/5tbIHlNfE//eAcRavSYaUygQbZVI09wce29d+FWTiqDdE+ZUcv3nzKsD5PHDqcaBDkFryDfEyA6fh86AvRKgHUsIcueYjCNgVzxEB0Zck0fmCF7t2gkJXYg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1HDIk1ETvLD0KpSPCCnfbrZz2cnO8BCYDGkUVPam3Zo=;
- b=fm6UxiBHQFyEs8pJwrHmnaWvTZfZtrfFrEuliCG7/rbi7EjTbjzdceoRvl8jYkZyWgnUbDnfmxpPunblKIt09qD9IJ0WgMum8opvNAt7FnN2PRgn16tRenz5MZXtd0miNZfktrzVpChUCGuwZaJpmpKzm8jsD3i/ekGCtpDGBuw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from SJ2PR01MB8101.prod.exchangelabs.com (2603:10b6:a03:4f6::10) by
- CH0PR01MB6907.prod.exchangelabs.com (2603:10b6:610:104::15) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8722.28; Mon, 12 May 2025 10:53:22 +0000
-Received: from SJ2PR01MB8101.prod.exchangelabs.com
- ([fe80::292:6d9c:eb9a:95c9]) by SJ2PR01MB8101.prod.exchangelabs.com
- ([fe80::292:6d9c:eb9a:95c9%6]) with mapi id 15.20.8722.027; Mon, 12 May 2025
- 10:53:22 +0000
-From: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
-To: linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: maz@kernel.org,
-	oliver.upton@linux.dev,
-	joey.gouly@arm.com,
-	suzuki.poulose@arm.com,
-	yuzenghui@huawei.com,
-	seanjc@google.com,
-	darren@os.amperecomputing.com,
-	gankulkarni@os.amperecomputing.com
-Subject: [RFC PATCH v2 9/9] KVM: arm64: nv: selftests: Enable page_fault_test test to run in vEL2
-Date: Mon, 12 May 2025 03:52:51 -0700
-Message-ID: <20250512105251.577874-10-gankulkarni@os.amperecomputing.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250512105251.577874-1-gankulkarni@os.amperecomputing.com>
-References: <20250512105251.577874-1-gankulkarni@os.amperecomputing.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: CY8PR19CA0043.namprd19.prod.outlook.com
- (2603:10b6:930:6::14) To SJ2PR01MB8101.prod.exchangelabs.com
- (2603:10b6:a03:4f6::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1774026D4C6
+	for <linux-kselftest@vger.kernel.org>; Mon, 12 May 2025 11:12:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1747048344; cv=none; b=o4DJbnPZAfI0WqnRI/cNxB1QhwlVzC/40kq32YSpgo/iQtdwJiS2B/716mBYDNjoC4krPuyoV0NYH3DeeHGHBn7165+wcdC05OwUqsGEus7yW5oJNPEs2e0IqcZPfeZnuJYQzKCPWVWKUgtkZZZr71maqD1KaCvNBmGCKdZCEaM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1747048344; c=relaxed/simple;
+	bh=ko7Q9qbhYNYPvYA7LVk3TXue899YIv1qyRy0EJufnh8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QUv29C1Ub0Q1OlfKkzoNVRb1EJFUGmQ3Fb26ZZoefaNgZxPSFQtl98R43tQlfBbKZnfIawUCxJ2NN0ZzYMFFwvsMzoyjA9jDyJ92m1vdgO7JZhJRWfpK7gfR6wwfgFMrTXIyQbuzIuLV5ShjMQQOrvlLKyhVifHUn5qWFeepMG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Mf7H3Ufq; arc=none smtp.client-ip=91.218.175.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <16eafae1-5014-42a9-b6c4-8be40b26cf31@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1747048339;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=77hYgmLIC7yLFMAWuJ8WWRqfKmeQfFFtha5TvnJkXHE=;
+	b=Mf7H3UfqXNL+8ByS9N/IjYMBcjOfeZyyG2JVX60LIiCuwnp0SKaZwgs0WFbVaiSvprVNXS
+	EnotFEhb+U5mp/CjW+iGtzDGzsZE3NtKj6IxG8BgSRxTgwbJAsGusplrUbY1cWf6FAVpcf
+	QmoKyw604efUa0L7qFeuHzNoDZjV/IQ=
+Date: Mon, 12 May 2025 19:12:07 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR01MB8101:EE_|CH0PR01MB6907:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6069b83f-e10c-43a5-7b15-08dd914336e0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|52116014|7416014|366016|1800799024|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?I8vC6caMhyCZTu5fn7rjwxQnNp+8xMeEGe2qiW79pjc1mZCCE9yeUGINJ9NH?=
- =?us-ascii?Q?0H4SFoz6yveSK+SN7fQmZSYJeloJhqYi7SmUs8w2M5/8G9pi06TJRx7t0oio?=
- =?us-ascii?Q?MD8F6zfE1KFmSl1a3CsjxvrppDIiJzkMeS/94G0imUU5J1EV0F4fvjnMGi7X?=
- =?us-ascii?Q?eF4vHwuSxCJWBOsst81ULHn9w9Ubzbhq4FfZ4f/Gl9JVZiWOIyjX/DkzUOwk?=
- =?us-ascii?Q?ZlhDTh1hvAQ357Pnlc5VTWQGqQoatlf86jTZHUlSfychwZC7OJDA0srvPcr4?=
- =?us-ascii?Q?LyO2QBLwtqqGQEXlDF2RpBzXEQe4IARqIM7GTMByGfizs2k2KwbkfJm+CuLy?=
- =?us-ascii?Q?Srwq4jcL2tSFyaEWkgjp82CWfXkqql1wnopMdWoJx4qbj4XU4fds5+TAV64X?=
- =?us-ascii?Q?aDrh0dQgxxnqlHEL0ehlz5+5CEtW52cnoNXMM1OXqfe05VNq1LjB/MoX72lk?=
- =?us-ascii?Q?rMwK/2IiWO6XoImrSQYkKv9xW/6f/nfunQsGU71fS3wBNaKoV6mnE16tHQBR?=
- =?us-ascii?Q?GcbCN2AJx6XppKWbiSUJpuThNxGYaTBXFfTaWCOuTIwZ3zXvg2sVW8aLX9Pv?=
- =?us-ascii?Q?AqCDq9yljWjCUmDdF1p9FsUvdU0gDXkg46A2OrqxK0GifHYk7xCBgHe544qG?=
- =?us-ascii?Q?oFnG8FJAylUXoWMYG6Kn9v2OqeJYC0p9QxliigmaaKAV1QRnXErQYKc7MOKP?=
- =?us-ascii?Q?d7J1L8zr30ny+f9bYTwtSFnZHN+bTsfFZ/iIa824oSOTR7FzxcR0LS8RVAHn?=
- =?us-ascii?Q?HG6BKvLDnPe2c33JsUZOrmBT2Jqgg548sC5yszT90+YVZ8qNCP8T6GdGPuBM?=
- =?us-ascii?Q?Cc6c6lB6EVI4cEjzyXTcr23OrSMaqUhwooqzY0E2kxoW0jLT03uaNS1oSEfV?=
- =?us-ascii?Q?wRRjlbeZsa2LLfsqHvjoiv7/p/g2Ba0/60UOf4jwwLNn4zDMt4WOeov2Ig9R?=
- =?us-ascii?Q?2gju65iRGm1EBOMNtwii2pzGLD6Q4VQQURRmhf6uHDTzgIgvoUPbBzgr+eQ7?=
- =?us-ascii?Q?V1gxSGxNFoZb6UlXelCadIGqzymetNPIFl1ZVK3xtxpeYkiR7Yc0nk9h8pEy?=
- =?us-ascii?Q?Kp+qf7ZbsHv4uBnui3eg3DREYsLMgLT0do3nQ4f4eKhiHyokDj5svh91NdaU?=
- =?us-ascii?Q?L3Hf8+KjX2q3Pf/eHgLff008o+I7dlrDh3NFIge8L9HVh83siKQWWVLPULmD?=
- =?us-ascii?Q?cIBPQjKbPyMeA/3raCKFjxhpPijXlBIQyNkxeJh2tF48X6FtS91oVOvfEOuY?=
- =?us-ascii?Q?LZeFIEzFE0lV5PkiRcqXE8R2/nAbzETOelZd49jO4nKKsrHqfaj+Mly26kOA?=
- =?us-ascii?Q?mwWEcWTHY8J1u1omhmbUEooZAWxBSLTqz/53uDRPJ84mEIoWR95W2d7EA/xs?=
- =?us-ascii?Q?PAgX1JAKH0VF9E8lx4iRd+qxZxoQ8rQMAfk7lAGQ8WPBWGjvwfmiK0SNpjuL?=
- =?us-ascii?Q?b9U36CkFJ0VtvwavrRQUGsuxdgS2Ph/3nriNxtaSwDn56WuDioebkQ=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR01MB8101.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(52116014)(7416014)(366016)(1800799024)(38350700014);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?B1MFLfbgt+io5ILSQVmv3yII1IRafFtmZs6k0wSJrZZMRPqmSiYIwDiNnQ5d?=
- =?us-ascii?Q?4YMS0jjALWdkazbjzoV6oloW8lhcx7X4M6a4cmIiSy9KvuFj/8mJqlepfjU7?=
- =?us-ascii?Q?xbQCqV7ZcZ56X7wjYXRU7vQdgDNjHivmh36zdhTWJ/f8yFi/rgjD9as2KKVg?=
- =?us-ascii?Q?4nCVDVT1/xidygEfQlwW4W8WFVPeL9nhEE27U5hztKz4/MweGgbfSYZBzfbb?=
- =?us-ascii?Q?EZoEQRVwmdSquVyvnJWugFXkSBS61zia8ob16fz4gT8UTzXHNzfaWeg0js0m?=
- =?us-ascii?Q?0qIbDFx8admqHwRrh1tmwCEjKgq4PTtWNZQ99a1qhOox46k3ztClQzrkPTup?=
- =?us-ascii?Q?VyfakTF9CQd7RHHa03NglT8IoAKkC+rSn2LHYwZsw6flEdaUvuY+uWkmXBW+?=
- =?us-ascii?Q?i/ESyoKq44n5Czam8gs66WZqW6yUbZkDse6Q7SKxH9CoRf1HJTG/+cw2isSk?=
- =?us-ascii?Q?5/vK9EgyBZPzFR/rgZEni7Wp4lkqydkuv/Xq1N5SOd03QrTXMxaBQudNCjC4?=
- =?us-ascii?Q?Z3whKGdxGX5OMLb06oXn17aA5Mx4lGc8soEMPWsW/XpC++AdXfprzAH0VHU8?=
- =?us-ascii?Q?g7T6G/uWXA0YSbgEWGFSlRRAxKEhQpFjt1AExp/1EduLNj1aScN+h5ohn76n?=
- =?us-ascii?Q?Uj0Rne66SpxQ7J1nRe/DtkrffNvcfZdB2oa5w5Ksub97xZuqUrlGWURhJ5DL?=
- =?us-ascii?Q?vSJ+TbFiP0lktBgHhYNepZxkqjuzr+y0mOfvB5BZ0478bV1CHWC1V89t8luk?=
- =?us-ascii?Q?6YKSKoL9utbExau6VE59X02BqnqXuWdytWDH7+ENl+zJLKR8obIosTY9C2tI?=
- =?us-ascii?Q?prputDJW8NPnnjIY0voMJ0SQRtjLcyfM/WINIxKWi5E5zUt2XptYmSqmcOuO?=
- =?us-ascii?Q?JsKhhy/5YTsU1U9boFghS05VTshnzOAy+Y6HIg+PllRBhaGM0Hnjdjbzztti?=
- =?us-ascii?Q?lSnECcMgQZOggQfiQ7teJskJ0RkW2Lmx/P8TTrsJNcAcR3gsgDn6Nn14YfZH?=
- =?us-ascii?Q?3ROlBNRArf2LR4Yu7fZBs2gbyUKFr2dD1ZQRx0Yiya+9pONnW2ElCWRNiho7?=
- =?us-ascii?Q?KvbjscgqiG28g7XCTYSJKyJ+m+0cGmQJSCvb4vQSFdlo7ra88vAqadWbRnie?=
- =?us-ascii?Q?30gxTi6GPN6LUgoMqbxFm+1kj9G1ovACcuz47EW/TJudyvZAHgiYl6tuYSJv?=
- =?us-ascii?Q?kMXDeIZGrFHlWb701dTrspfDL2Zc42n1J4l443/rS7QZnr37armkD+JoRL1k?=
- =?us-ascii?Q?QmcW6jN5++deWvDb8Pg51b76ZKI0JDsI38NJ/H0+pVG6YyjSs1ly5EeT3JXh?=
- =?us-ascii?Q?OGkSEHnSr51eU2sQf51dQ+lJyUwOqBUyShCMbvby4DOnE1dVmj+fCgGZ8QwE?=
- =?us-ascii?Q?XLldn6Vi6uGTrgQ6K8zdsoTefk3R8Efm8VOU/bGuehpx1CGKcknMib0+RyAO?=
- =?us-ascii?Q?php2z340Vgs4T9X+I3bHhK818HKJStfdTWZ6Kq8OEvq4Gz1nuSjkKIdCwxXy?=
- =?us-ascii?Q?ZIx/fp2sG3fwtSatro5wJ3ZiX0ZOczSZAoCA5Y+kkhUx1Fr+33RqSH3u0B7r?=
- =?us-ascii?Q?DoMdhvjfG75Xt04kMrDTa4WrDwhr0VXkAJPQ5sCHTho0dtOY5WN8I3Fqbh97?=
- =?us-ascii?Q?Y9ZUkWky9SeBaj954IYjdQU9Q1JmpKD3GyeCEoFIeDO+?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6069b83f-e10c-43a5-7b15-08dd914336e0
-X-MS-Exchange-CrossTenant-AuthSource: SJ2PR01MB8101.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2025 10:53:22.7177
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: nQ9YmeBYobgzL8rPU3Op1G75cyygYlrTx62c+5/RwUpdfjsJXgcgSybcOuTF1RGh6kE//R0TRk60ZhGEgCY54UoH6uB2IlDg+gisY/4yKst5ihzsd3u7q2tP9wxKSuSt
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR01MB6907
+Subject: Re: [PATCH bpf-next 1/4] bpf: Allow get_func_[arg|arg_cnt] helpers in
+ raw tracepoint programs
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Kafai Wan <mannkafai@gmail.com>, Song Liu <song@kernel.org>,
+ Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Matt Bobrowski <mattbobrowski@google.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+ Shuah Khan <shuah@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+ bpf <bpf@vger.kernel.org>,
+ linux-trace-kernel <linux-trace-kernel@vger.kernel.org>,
+ Network Development <netdev@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+References: <20250426160027.177173-1-mannkafai@gmail.com>
+ <20250426160027.177173-2-mannkafai@gmail.com>
+ <CAADnVQ+DF18nKEf9i1RKEQN+ybH+duu7U-91YZDaa_PiqUx17g@mail.gmail.com>
+ <CALqUS-6XtJ0Bb9jiykdC3jAY_OHjGuirj06Kzssjvo7eW_so2A@mail.gmail.com>
+ <f951b81f-1b46-4219-82fd-0839e27ab3f3@linux.dev>
+ <CAADnVQ+FANha0fO_BF+iHJ4iZSCPtDfoUkzR8mMFwOakw8+eCg@mail.gmail.com>
+ <f1f23c1a-f4a8-4807-8028-87e247775ec8@linux.dev>
+ <CAEf4BzZcuCrK4UVv2qpp7LAL=uXg+YqFopNW3EzCCpUBNPq-ag@mail.gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <CAEf4BzZcuCrK4UVv2qpp7LAL=uXg+YqFopNW3EzCCpUBNPq-ag@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Extend page_fault_test to run guest code with NV enabled.
-NV is enabled using command line argument and it is disabled by default.
 
-Signed-off-by: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
----
- .../selftests/kvm/arm64/page_fault_test.c     | 35 ++++++++++++++++---
- 1 file changed, 30 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/arm64/page_fault_test.c b/tools/testing/selftests/kvm/arm64/page_fault_test.c
-index ec33a8f9c908..e3d91cb68a71 100644
---- a/tools/testing/selftests/kvm/arm64/page_fault_test.c
-+++ b/tools/testing/selftests/kvm/arm64/page_fault_test.c
-@@ -11,6 +11,7 @@
- #include <fcntl.h>
- #include <test_util.h>
- #include <kvm_util.h>
-+#include <nv_util.h>
- #include <processor.h>
- #include <asm/sysreg.h>
- #include <linux/bitfield.h>
-@@ -70,6 +71,8 @@ struct test_params {
- 	struct test_desc *test_desc;
- };
- 
-+static bool is_nested;
-+
- static inline void flush_tlb_page(uint64_t vaddr)
- {
- 	uint64_t page = vaddr >> 12;
-@@ -701,14 +704,27 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 	struct kvm_vm *vm;
- 	struct kvm_vcpu *vcpu;
- 	struct uffd_desc *pt_uffd, *data_uffd;
-+	int gic_fd = -1;
- 
- 	print_test_banner(mode, p);
- 
--	vm = ____vm_create(VM_SHAPE(mode));
--	setup_memslots(vm, p);
-+	if (is_nested) {
-+		struct kvm_vcpu_init init;
-+
-+		vm = ____vm_create(VM_SHAPE(mode));
-+		setup_memslots(vm, p);
-+		vm_ioctl(vm, KVM_ARM_PREFERRED_TARGET, &init);
-+		init_vcpu_nested(&init);
-+		vcpu = aarch64_vcpu_add(vm, 0, &init, guest_code);
-+		gic_fd = vgic_v3_setup(vm, 1, 64);
-+	} else {
-+		vm = ____vm_create(VM_SHAPE(mode));
-+		setup_memslots(vm, p);
-+		vcpu = vm_vcpu_add(vm, 0, guest_code);
-+	}
-+
- 	kvm_vm_elf_load(vm, program_invocation_name);
- 	setup_ucall(vm);
--	vcpu = vm_vcpu_add(vm, 0, guest_code);
- 
- 	setup_gva_maps(vm);
- 
-@@ -728,6 +744,9 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 
- 	vcpu_run_loop(vm, vcpu, test);
- 
-+	if (is_nested)
-+		close(gic_fd);
-+
- 	kvm_vm_free(vm);
- 	free_uffd(test, pt_uffd, data_uffd);
- 
-@@ -742,7 +761,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- static void help(char *name)
- {
- 	puts("");
--	printf("usage: %s [-h] [-s mem-type]\n", name);
-+	printf("usage: %s [-h] [-s mem-type] [-g nested]\n", name);
- 	puts("");
- 	guest_modes_help();
- 	backing_src_help("-s");
-@@ -1115,7 +1134,7 @@ int main(int argc, char *argv[])
- 
- 	src_type = DEFAULT_VM_MEM_SRC;
- 
--	while ((opt = getopt(argc, argv, "hm:s:")) != -1) {
-+	while ((opt = getopt(argc, argv, "hm:s:g:")) != -1) {
- 		switch (opt) {
- 		case 'm':
- 			guest_modes_cmdline(optarg);
-@@ -1123,6 +1142,9 @@ int main(int argc, char *argv[])
- 		case 's':
- 			src_type = parse_backing_src_type(optarg);
- 			break;
-+		case 'g':
-+			is_nested = atoi_non_negative("Is Nested", optarg);
-+			break;
- 		case 'h':
- 		default:
- 			help(argv[0]);
-@@ -1130,6 +1152,9 @@ int main(int argc, char *argv[])
- 		}
- 	}
- 
-+	if (is_nested)
-+		TEST_REQUIRE(kvm_has_cap(KVM_CAP_ARM_EL2));
-+
- 	for_each_test_and_guest_mode(src_type);
- 	return 0;
- }
--- 
-2.48.1
+On 2025/5/7 05:01, Andrii Nakryiko wrote:
+> On Fri, May 2, 2025 at 7:26 AM Leon Hwang <leon.hwang@linux.dev> wrote:
+>>
+>>
+>>
+>> On 2025/5/1 00:53, Alexei Starovoitov wrote:
+>>> On Wed, Apr 30, 2025 at 8:55 AM Leon Hwang <leon.hwang@linux.dev> wrote:
+>>>>
+>>>>
+>>>>
+>>>> On 2025/4/30 20:43, Kafai Wan wrote:
+>>>>> On Wed, Apr 30, 2025 at 10:46 AM Alexei Starovoitov
+>>>>> <alexei.starovoitov@gmail.com> wrote:
+>>>>>>
+>>>>>> On Sat, Apr 26, 2025 at 9:00 AM KaFai Wan <mannkafai@gmail.com> wrote:
+>>>>>>>
+>>>>
+>>
+>> [...]
+>>
+>>>>
+>>>>
+>>>> bpf_get_func_arg() will be very helpful for bpfsnoop[1] when tracing tp_btf.
+>>>>
+>>>> In bpfsnoop, it can generate a small snippet of bpf instructions to use
+>>>> bpf_get_func_arg() for retrieving and filtering arguments. For example,
+>>>> with the netif_receive_skb tracepoint, bpfsnoop can use
+>>>> bpf_get_func_arg() to filter the skb argument using pcap-filter(7)[2] or
+>>>> a custom attribute-based filter. This will allow bpfsnoop to trace
+>>>> multiple tracepoints using a single bpf program code.
+>>>
+>>> I doubt you thought it through end to end.
+>>> When tracepoint prog attaches we have this check:
+>>>         /*
+>>>          * check that program doesn't access arguments beyond what's
+>>>          * available in this tracepoint
+>>>          */
+>>>         if (prog->aux->max_ctx_offset > btp->num_args * sizeof(u64))
+>>>                 return -EINVAL;
+>>>
+>>> So you cannot have a single bpf prog attached to many tracepoints
+>>> to read many arguments as-is.
+>>> You can hack around that limit with probe_read,
+>>> but the values won't be trusted and you won't be able to pass
+>>> such untrusted pointers into skb and other helpers/kfuncs.
+>>
+>> I understand that a single bpf program cannot be attached to multiple
+>> tracepoints using tp_btf. However, the same bpf code can be reused to
+>> create multiple bpf programs, each attached to a different tracepoint.
+>>
+>> For example:
+>>
+>> SEC("fentry")
+>> int BPF_PROG(fentry_fn)
+>> {
+>>         /* ... */
+>>         return BPF_OK;
+>> }
+>>
+>> The above fentry code can be compiled into multiple bpf programs to
+>> trace different kernel functions. Each program can then use the
+>> bpf_get_func_arg() helper to access the arguments of the traced function.
+>>
+>> With this patch, tp_btf will gain similar flexibility. For example:
+>>
+>> SEC("tp_btf")
+>> int BPF_PROG(tp_btf_fn)
+>> {
+>>         /* ... */
+>>         return BPF_OK;
+>> }
+>>
+>> Here, bpf_get_func_arg() can be used to access tracepoint arguments.
+>>
+>> Currently, due to the lack of bpf_get_func_arg() support in tp_btf,
+>> bpfsnoop[1] uses bpf_probe_read_kernel() to read tracepoint arguments.
+>> This is also used when filtering specific argument attributes.
+>>
+>> For instance, to filter the skb argument of the netif_receive_skb
+>> tracepoint by 'skb->dev->ifindex == 2', the translated bpf instructions
+>> with bpf_probe_read_kernel() would look like this:
+>>
+>> bool filter_arg(__u64 * args):
+>> ; filter_arg(__u64 *args)
+>>  209: (79) r1 = *(u64 *)(r1 +0) /* all tracepoint's argument has been
+>> read into args using bpf_probe_read_kernel() */
+>>  210: (bf) r3 = r1
+>>  211: (07) r3 += 16
+>>  212: (b7) r2 = 8
+>>  213: (bf) r1 = r10
+>>  214: (07) r1 += -8
+>>  215: (85) call bpf_probe_read_kernel#-125280
+>>  216: (79) r3 = *(u64 *)(r10 -8)
+>>  217: (15) if r3 == 0x0 goto pc+10
+>>  218: (07) r3 += 224
+>>  219: (b7) r2 = 8
+>>  220: (bf) r1 = r10
+>>  221: (07) r1 += -8
+>>  222: (85) call bpf_probe_read_kernel#-125280
+>>  223: (79) r3 = *(u64 *)(r10 -8)
+>>  224: (67) r3 <<= 32
+>>  225: (77) r3 >>= 32
+>>  226: (b7) r0 = 1
+>>  227: (15) if r3 == 0x2 goto pc+1
+>>  228: (af) r0 ^= r0
+>>  229: (95) exit
+>>
+>> If bpf_get_func_arg() is supported in tp_btf, the bpf program will
+>> instead look like:
+>>
+>> static __noinline bool
+>> filter_skb(void *ctx)
+>> {
+>>     struct sk_buff *skb;
+>>
+>>     (void) bpf_get_func_arg(ctx, 0, (__u64 *) &skb);
+>>     return skb->dev->ifindex == 2;
+>> }
+>>
+>> This will simplify the generated code and eliminate the need for
+>> bpf_probe_read_kernel() calls. However, in my tests (on kernel
+>> 6.8.0-35-generic, Ubuntu 24.04 LTS), the pointer returned by
+>> bpf_get_func_arg() is marked as a scalar rather than a trusted pointer:
+>>
+>>         0: R1=ctx() R10=fp0
+>>         ; if (!filter_skb(ctx))
+>>         0: (85) call pc+3
+>>         caller:
+>>          R10=fp0
+>>         callee:
+>>          frame1: R1=ctx() R10=fp0
+>>         4: frame1: R1=ctx() R10=fp0
+>>         ; filter_skb(void *ctx)
+>>         4: (bf) r3 = r10                      ; frame1: R3_w=fp0 R10=fp0
+>>         ;
+>>         5: (07) r3 += -8                      ; frame1: R3_w=fp-8
+>>         ; (void) bpf_get_func_arg(ctx, 0, (__u64 *) &skb);
+>>         6: (b7) r2 = 0                        ; frame1: R2_w=0
+>>         7: (85) call bpf_get_func_arg#183     ; frame1: R0_w=scalar()
+>>         ; return skb->dev->ifindex == 2;
+>>         8: (79) r1 = *(u64 *)(r10 -8)         ; frame1: R1_w=scalar() R10=fp0
+>> fp-8=mmmmmmmm
+>>         ; return skb->dev->ifindex == 2;
+>>         9: (79) r1 = *(u64 *)(r1 +16)
+>>         R1 invalid mem access 'scalar'
+>>         processed 7 insns (limit 1000000) max_states_per_insn 0 total_states 0
+>> peak_states 0 mark_read 0
+>>
+>> If the returned skb is a trusted pointer, the verifier will accept
+>> something like:
+>>
+>> static __noinline bool
+>> filter_skb(struct sk_buff *skb)
+>> {
+>>     return skb->dev->ifindex == 2;
+>> }
+>>
+>> Which will compile into much simpler and more efficient instructions:
+>>
+>> bool filter_skb(struct sk_buff * skb):
+>> ; return skb->dev->ifindex == 2;
+>>   92: (79) r1 = *(u64 *)(r1 +16)
+>> ; return skb->dev->ifindex == 2;
+>>   93: (61) r1 = *(u32 *)(r1 +224)
+>>   94: (b7) r0 = 1
+>> ; return skb->dev->ifindex == 2;
+>>   95: (15) if r1 == 0x2 goto pc+1
+>>   96: (b7) r0 = 0
+>> ; return skb->dev->ifindex == 2;
+>>   97: (95) exit
+>>
+>> In conclusion:
+>>
+>> 1. It will be better if the pointer returned by bpf_get_func_arg() is
+>> trusted, only when the argument index is a known constant.
+> 
+> bpf_get_func_arg() was never meant to return trusted arguments, so
+> this, IMO, is pushing it too far.
+> 
+>> 2. Adding bpf_get_func_arg() support to tp_btf will significantly
+>> simplify and improve tools like bpfsnoop.
+> 
+> "Significantly simplify and improve" is a bit of an exaggeration,
+> given BPF cookies can be used for getting number of arguments of
+> tp_btf, as for the getting rid of bpf_probe_read_kernel(), tbh, more
+> generally useful addition would be an untyped counterpart to
+> bpf_core_cast(), which wouldn't need BTF type information, but will
+> treat all accessed memory as raw bytes (but will still install
+> exception handler just like with bpf_core_cast()).
+> 
+
+Cool! The bpf_rdonly_cast() kfunc used by the bpf_core_cast() macro
+works well in bpfsnoop.
+
+The expression 'skb->dev->ifindex == 2' is translated into:
+
+bool filter_arg(__u64 * args):
+; filter_arg(__u64 *args)
+ 209: (bf) r9 = r1
+ 210: (79) r8 = *(u64 *)(r9 +0)
+ 211: (bf) r1 = r8
+ 212: (b7) r2 = 6973
+ 213: (bf) r0 = r1
+ 214: (79) r1 = *(u64 *)(r0 +16)
+ 215: (15) if r1 == 0x0 goto pc+12
+ 216: (07) r1 += 224
+ 217: (bf) r3 = r1
+ 218: (b7) r2 = 8
+ 219: (bf) r1 = r10
+ 220: (07) r1 += -8
+ 221: (85) call bpf_probe_read_kernel#-125280
+ 222: (79) r8 = *(u64 *)(r10 -8)
+ 223: (67) r8 <<= 32
+ 224: (77) r8 >>= 32
+ 225: (55) if r8 != 0x2 goto pc+2
+ 226: (b7) r8 = 1
+ 227: (05) goto pc+1
+ 228: (af) r8 ^= r8
+ 229: (bf) r0 = r8
+ 230: (95) exit
+
+However, since bpf_rdonly_cast() is a kfunc, it causes registers r1–r5
+to be considered volatile.
+
+If the verifier could trust the pointer fetched by bpf_get_func_arg(),
+this extra cost from bpf_rdonly_cast() could be avoided.
+
+Thanks,
+Leon
+
 
 
