@@ -1,43 +1,43 @@
-Return-Path: <linux-kselftest+bounces-32851-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32852-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0D8BAB3553
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 May 2025 12:56:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23E21AB3567
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 May 2025 12:59:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 433657AE945
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 May 2025 10:55:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF12617AFA7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 May 2025 10:56:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5936F26C3B3;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C50C226D4F2;
 	Mon, 12 May 2025 10:53:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b="HB27KsQS"
+	dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b="JcZJ0Mwx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from CY4PR02CU008.outbound.protection.outlook.com (mail-westcentralusazon11021077.outbound.protection.outlook.com [40.93.199.77])
+Received: from CY3PR05CU001.outbound.protection.outlook.com (mail-westcentralusazon11023112.outbound.protection.outlook.com [40.93.201.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C62126A1B6;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DFBB26A1D4;
 	Mon, 12 May 2025 10:53:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.199.77
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.201.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747047210; cv=fail; b=dNWH5r/RFb/qB/Ke+NA7yhe48dGkmLzpnKytDhpOBaYsPwlmQNboev/EsLJut9tvZHMgIMfYMSDLK7ZonYDN3vvWqN2vdvWvyg/XvqxXWRdqK6wkuxcEIFOKLUPub1SXrh+UM0u+Foy/nzPjGxsiNmOw1FxnnrDIY0DMstcs7ow=
+	t=1747047210; cv=fail; b=QPHbS/nPvXHPYlSyR2eAkPBOQjuF5g6lxJGt8/uG0Re+429rSSjihYIbDpTalx2tfvJmlzxCfI7VCp1xexced4xCXq+UT7YKU3oQuhimAUJtLmvmRzNm9sn/SdOgaHOOci6xSYk6XK5171h7A/h1uF5Zasu8Biw5vkQgNjGlG5c=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1747047210; c=relaxed/simple;
-	bh=11GDX0nDrAnc2tEsgfJ0h4PzAyNRZXTBvRNzOxnLVOw=;
+	bh=+fGVL/BdEdvb8GdZySLhGSp0MqeDSEETfOa2F/a8Wzw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=cBiwx5052t056L4xim0nMVGjHcjxRump3XJhSIu4qRnBs2cnLSi3jf/d65HRCsjstccICVoALCtVxPZVDRy8WGhW5UTXBPW7oZ5H5ZHnGI5MIK1kc5XHiVLOFhOYPA8fg3bUXGEyfvC4h13IrLyKMzvo95JgftwgiSZdry+rbP4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com; spf=pass smtp.mailfrom=os.amperecomputing.com; dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b=HB27KsQS; arc=fail smtp.client-ip=40.93.199.77
+	 Content-Type:MIME-Version; b=juZnN+GfVngoyF/o8PM2i5wI2AT1IzhGbwVPTEEMRhNbFDHlOy3NJ0nKBLr0PtbST3J04ki4/mTnnKrAGpjdbK52/MKTvu3kyrfJdDmbWMmliiJEO4vgQOnweh48r3wjqB3GrfgZJXlFtB/6FNiuRwCMejfMc1MkChN7OzceSVs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com; spf=pass smtp.mailfrom=os.amperecomputing.com; dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b=JcZJ0Mwx; arc=fail smtp.client-ip=40.93.201.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=os.amperecomputing.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=LR6xcEDjb/Ce5zvPC+APDyPCZspUz1j04dRVJsgKuVBj/HPLDomWS0iuHTkCFIFv6FbnnRoLdS6KdPbQvYF+X64j1zvWFSNXUahJDugF9kBgy3tRAdlV2BIQLCge0xQsaww2Jvj4mS6JD5n/7RsRGYGnt1v7eG/UbrfGalTpxGpOJ99dUI8f31qC/MLqICI98BUjNTolg01tNnUzOHWiQ2jese0PXcgXDXXTAsjBbJivxx3Ab13ZYZC58wEQ25Wa2YWelhdW3SSjvk/DZ64HPXJoN/+9ufGiVAUh9gjd1g+79Uu0Wm3yjhmjJhsIUyH3t6/v8wJo1WPBC/abryKDCQ==
+ b=D5MZ+EdYFPG6ezfTyxa0iH4pLGRSiJE/dPY1G4wqxFP6oYkpunIYrX0cUTpuaF+Lqha8qQ21AFJVsfGpTe7Dwq1MM7Em8lkCEQAQPi0fUYH/6wMrJE0SFVnqmhKxK4s2uSkUoLa90Ou0XCn64Jq0LpOTwffLElOivAZT6clHwjz9bEgbAt7Gs+830bCs3065Eaa9cdlM3DneZB8+DN3NfE3TnGFR85DfyekqCupEWXHIyQwuvXRESADfy7XBk/1/UVHPdhXbwZLEfzDPewRB1rWSWyhICApK2h+LTG7gtvdIv3PSwSeqDCCeDhRUtrlcELeb5Gi83wlBQpxW+iD46w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JDBX9n25VVUabv326JYeYWyI4bJZJ5yE0NmcXzLeeVo=;
- b=IHsfHS/hkt3N7J3YtzX+HC33/Q4CXUAOW3I3Y8NHwF5g0n+gB3W995Ix036KZ69pjxRCrheQVJc1FH1C5DjlReYbr14b4+QlfRJazk9NwvMfgV6/CiOc3WEjfoAH7qenAjcVRlgNUlVkyvwg7AZrjDh+rLPoMA7IXLCtKU1ZjRAz1FhShHXtBhyshl9GHI9XcEe6UiSum/cE9buKdsitjeBAnYD4z2YPsEGlckdKVzNaUv+TkQPmQRMNq5Kb6RJplWmdanSHpcB1/27bYRALkYpomQQbDRirQsEfkALAWz6salzjx+kQqOPVwAA11j8a7Weh7nX5OQLwq+86d+jG/w==
+ bh=D4mqazdQp3Ca3QY+fJoZxFYxPhqwESH/NEf3Pivj5EQ=;
+ b=a72CXQbL4gkfYYruXtf8wfI1oEH6TSZ2/TIflfdcleOYNKeqvKl7ri96MaBaGaONDt7T0aSAm1yHHjHCHWuV+eNevBVu6QLtWKslAC2jefynSVdDS45z/MZ6e6C8PviStFnUrf7IoXVSzVuAC8Cht9tnr2UVN16bSc2Pt2SJpc7Od5dxsKl9f9D8KtgJ8oUlQLkXGA+s8IOpHEZxQ2NxGeXlL8pPXzztsJqv7exo/QRcZvWYhua509erlc8nGRZrOA02zQmwBppKDJoCzFUTcmKKmpXVJbps5IDN/BdJo7FKMXvq75ED+7taJPmalUQtPoj/oVb0k/l5CTUyAU68Zw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
  header.from=os.amperecomputing.com; dkim=pass
@@ -45,18 +45,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=os.amperecomputing.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JDBX9n25VVUabv326JYeYWyI4bJZJ5yE0NmcXzLeeVo=;
- b=HB27KsQS4GnDc/ZbffrY1Tdqc0+x7MgCYEhYOA7O8GcSXh3vSbl0Ksikdmu/etXzuWqidKi+G1PkQDS9+XIir81PlEqp7S6UCMeTWEupIPFeEkWqtkxUCcwSbroTGzbs7/yNO2SxjNrsq8tLficVDvrm6dd+V+sQrK3sLxGjKko=
+ bh=D4mqazdQp3Ca3QY+fJoZxFYxPhqwESH/NEf3Pivj5EQ=;
+ b=JcZJ0MwxuxYBnknhQZpYBjiSgWyzFQhbFZg3d1OaLuLLMZfCjxLl87MD1u7VVvLYB9SdIFwNEpFbAPRhKir39cF9Y4Cdhbrjl1lJBOsbNCil5anGfEUax3txYqCL2VCby2BhI3ovSobwISrtCCd9pfYG9N/L3EyPd6LA4dmx4So=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
 Received: from SJ2PR01MB8101.prod.exchangelabs.com (2603:10b6:a03:4f6::10) by
  CH0PR01MB6907.prod.exchangelabs.com (2603:10b6:610:104::15) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8722.28; Mon, 12 May 2025 10:53:20 +0000
+ 15.20.8722.28; Mon, 12 May 2025 10:53:21 +0000
 Received: from SJ2PR01MB8101.prod.exchangelabs.com
  ([fe80::292:6d9c:eb9a:95c9]) by SJ2PR01MB8101.prod.exchangelabs.com
  ([fe80::292:6d9c:eb9a:95c9%6]) with mapi id 15.20.8722.027; Mon, 12 May 2025
- 10:53:20 +0000
+ 10:53:21 +0000
 From: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
 To: linux-arm-kernel@lists.infradead.org,
 	kvmarm@lists.linux.dev,
@@ -70,9 +70,9 @@ Cc: maz@kernel.org,
 	seanjc@google.com,
 	darren@os.amperecomputing.com,
 	gankulkarni@os.amperecomputing.com
-Subject: [RFC PATCH v2 7/9] KVM: arm64: nv: selftests: Enable test to run in vEL2
-Date: Mon, 12 May 2025 03:52:49 -0700
-Message-ID: <20250512105251.577874-8-gankulkarni@os.amperecomputing.com>
+Subject: [RFC PATCH v2 8/9] KVM: selftests: arm64: Extend kvm_page_table_test to run guest code in vEL2
+Date: Mon, 12 May 2025 03:52:50 -0700
+Message-ID: <20250512105251.577874-9-gankulkarni@os.amperecomputing.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250512105251.577874-1-gankulkarni@os.amperecomputing.com>
 References: <20250512105251.577874-1-gankulkarni@os.amperecomputing.com>
@@ -89,142 +89,196 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: SJ2PR01MB8101:EE_|CH0PR01MB6907:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6dfe8a55-9709-4cb8-41a0-08dd91433540
+X-MS-Office365-Filtering-Correlation-Id: 1dff5cb5-8961-4483-f14d-08dd91433608
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|376014|52116014|7416014|366016|1800799024|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?BXhkrYVGm4noZWxcAqwlF+9KhBqa0ZkHGsUzLDhjsB+XVY+ZkCc7GAZL3sw7?=
- =?us-ascii?Q?YRe+cpHcdx9vkUdC4Tyf/OoT2sikfE74FcJFMeedwVxdAI3r2kAtaBHm05vf?=
- =?us-ascii?Q?EeMsY5MdDRqhVMnE+qAwqoViTeA1K58wAPhLnfDXDnOi/IeWg8SvXgakkB3s?=
- =?us-ascii?Q?jPA3jmcZ12rYXa63ftiCBbsY7Drf7DJdHgcEqLoyvVkePPU31K/BO7eM3oBf?=
- =?us-ascii?Q?IPwBDqRqLZBsxvHlQo69D6Dh1Ksnmwa4eiEORafRNX+/PARqnL4mzVBDQ36o?=
- =?us-ascii?Q?MmMK2Gs6flj0cW3jFtjMZo6RZuMPCXC5HnSZFmxx6GdacNd2hEzmePKbLpky?=
- =?us-ascii?Q?Vd5Kdz0NWid1OA78g6c3EL/GzmyZPEFhzAOA+VltIQO5I3BoNcRmBoT6+PQ6?=
- =?us-ascii?Q?bPSCpnmmI+kskE5ZBFeVzcnwRa/QY/8P0vau8JXeDrBYp5WrWSe/W+fF9kZw?=
- =?us-ascii?Q?R+wWddo61vKUmt68LVlTSfMKpPqbd3aDBGkp40FHTdWdd7h9rw1BQ9JAFDKE?=
- =?us-ascii?Q?hjgRhgcWr+ykYUv8nzj9lDE7YD4es1adUxIR1B2sYDkYyVIVfr00xchm2dF8?=
- =?us-ascii?Q?dKWtuVgL1cQ0wfArAM17bkmz1nI4cOK5LLe0eHuByf93O0/fRfXDgu+OI6lb?=
- =?us-ascii?Q?YQl4rED1XtDnGLW20U+WHlf3WsmU0+aq+oOsXRkBFDBAWK+9bprFBfZlBzzM?=
- =?us-ascii?Q?/9NZnjuwl5qQtq2mFUiGVbBUGvkKbSc0n7RDa5QJQWof7t97z1IIWeWQyrwj?=
- =?us-ascii?Q?rL8PXmQ5kFhhSzJouS+tYwblz5BAf3ymhyYcfq0CMrw7LFkxFtqKbUh5d1Ee?=
- =?us-ascii?Q?Ht3GXS80w8pxrqXlBUf36hMdjwoWKjzqeLrvo2UDQrhY4Yf0m1ti2UcQqBjd?=
- =?us-ascii?Q?V7kynGOdalgO8GWLtlDg34c2eck9HEv/9H/rjKPdwzoADNJtdMN3/LunYgoL?=
- =?us-ascii?Q?52YuIQT84sVFVljyVpFVfUgrcTdaUS/oa+PWi2rBnohiP1dT97ftn4yZClkQ?=
- =?us-ascii?Q?FG3Jq1cJsETNkfU8gMijJ8zdraSqb4aN5qW33vsst1YVbVl7yhFB2jKxUd+k?=
- =?us-ascii?Q?01sOHcuOkOpFDBrgR0jIxqp6wf+oqhf/vDoWhWDzi5bPndVWVT0vn9bpqcaS?=
- =?us-ascii?Q?c8pauJHulurwgt5XPFZawgXAP1Hxp9SLp5+xdKnmqNJGiinZ5WxQcUEneA2x?=
- =?us-ascii?Q?DAj1EUO5xrDPz+YHV2hUcUZhacJvbIvnpzsCPHOul6qLXOWlI+sBVuEHEFO1?=
- =?us-ascii?Q?OUDzep+Z3lsNLlVuDPMUeg0xSqLNSf2Bro67y8ky/dsfZ6efTWf7qOb/kcLG?=
- =?us-ascii?Q?IpJuCFlu0ZKvfpP+iJt0kV1SVqafwVHhlV9GW2cQekQ9T8FkHaIZIWKpH7o4?=
- =?us-ascii?Q?XZ3RvDrLF29BObdGb7rJuPonRuLakKUobOT+Q026Ajf8I0Fqbp45vStJ0kG3?=
- =?us-ascii?Q?MJN3pG1sToz8jvRfW6rS7hGHU03L1yp9GcXFESAWXLPrka118frrug=3D=3D?=
+	=?us-ascii?Q?1Y1fqH5l5I4VXJCC1GeoMu9JmzUtYY2MtmCZ3hY/s9NetUhcAEoW9g1+Zr0a?=
+ =?us-ascii?Q?WyAJ4oV1JtevSHbThVAo6Rb8yDqSgH67lnJ5NCkncouJQPlUizvGxfCC1V6u?=
+ =?us-ascii?Q?u+mz77C/tglLGrhDXZR7IJ7X2D1BUqR1ai0G5I4ZwNuDlA5i5Y9okmexbzjT?=
+ =?us-ascii?Q?AsnAIDu73VZfGMuAT9Szn0FDl2xTfN9uQgZVKyuOxrdd7SbP0lz9jLVTbVTy?=
+ =?us-ascii?Q?v/p+QbbkIZYTCunmTWUGpCpMrfsKA071glwM833of/AvA0ibUl83GayEnmCO?=
+ =?us-ascii?Q?WEtpPfu5mTbqRxEx7usS2JA45pIUGLtBK/SKRGPIbgw+Vl/mxraIQP1q+zcU?=
+ =?us-ascii?Q?Av9c8VULQSwGgXTUhn10ROE625WRmIxR0YpPXwiV1ZVboPbUup9mFjRQwwKA?=
+ =?us-ascii?Q?o0Obf2+z+ryLrzTfvV9NgEiNr8gdvVg1Kk+fSbun9F00aIDTzdSXHab/PXIu?=
+ =?us-ascii?Q?QPbPlH3Sis9wyNEC+0tFMhQy29AWcAOZWjBmxJDJ3bPei7kdmnYtRtt3/gMr?=
+ =?us-ascii?Q?GizAxM3Jyzg7546WZKvt00HDzG4MfhdxQjRYS+hdz4FTAyyoNtyq9/ogp4VS?=
+ =?us-ascii?Q?EDGdymsfseqJTO9oDRzyHqyjAguZIITKy94Rx7UlRX/n2rDEdIdUQrDb8Ygl?=
+ =?us-ascii?Q?yACPMgjRsyhxBiLdMyn7wMG6+or3DYR7GGMZ3vbWZ8QVyxQaQ3gtWIN/TCno?=
+ =?us-ascii?Q?IQF4otSCXRNs5ObSHOxmh69VOiE4LRnDo2TgV6jp0cCaOSec7RXP4bf9HkPV?=
+ =?us-ascii?Q?3F7x/d+B3NacpYC2VRAryTeYE252843rj7K1OtJ15fYeYxSxzxEPJNpbvtcM?=
+ =?us-ascii?Q?2pLRVs2s0MaRmM7oCv7jATIVGToBZhoYI9uCMBoYoZUyFcfh3sxSEr4h5ITV?=
+ =?us-ascii?Q?2WjRWSU0pvVf2cSorkq8UOIyAn0mnsO/8mKqC1hHI8rjbSasp+OqA8CeWU4k?=
+ =?us-ascii?Q?4a6nz8zni7+ITlHKozDKzsBhTW5REvnPx+wobGWXVaEF9f889nLFMFA+gJcc?=
+ =?us-ascii?Q?zMSbO/Jqhl9Z0J1weBkhVExAyA/IoOeX7Tq0cJsHKOLgxks5dUqD23Si4ymf?=
+ =?us-ascii?Q?dlltH2/wdKFMBfKL8Tvm6wb7U/TMqCifI9NepEdjaK5asQ74aYU5uBuGM9f3?=
+ =?us-ascii?Q?hK1I59bMIZ3g5oIujrPp7NVXlBlwGV1e4q6TyXQwzV5gibDp7PSQS93FZgck?=
+ =?us-ascii?Q?S4ag8kt3ePzBQKtso7nk79CUMU+rEGUKZ9uTHvGUyQqlqUF0xBOOJBA9ytdK?=
+ =?us-ascii?Q?I50gKBZPyBxVcEr0YW6QMJKJD8I4EseTYwFPJtU6cvq1301najn0bo2+f/gK?=
+ =?us-ascii?Q?c/1c2e3AZv8cokPktyUvkmZ1mg5ui4ScuSO4zjvLHybqDMw2BhsLU2L3AQIt?=
+ =?us-ascii?Q?qulrntSaHAy1JjqoezmqSDaQxgw8S63g4L6KokjwT8qp2ZuZmWYEQN9TZso/?=
+ =?us-ascii?Q?kj4KWlNQ6Lp8s/SxFZVDyqD2F9kaAGvPKA9te3dg6Ctto+rgOAHuEw=3D=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR01MB8101.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(52116014)(7416014)(366016)(1800799024)(38350700014);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?BiCgktqSep2wLYCZ90+OEt3FlGNWbf2i+jt2IXWzuU1k8+58rJkCouIGwyxW?=
- =?us-ascii?Q?+Sl5jIS5Hg/jtqAoZpv5/StSf+iEefGa2R3iKEoeMyW0O0TVITG1iI2+EIg8?=
- =?us-ascii?Q?GVNc0ORpZLltC0QKuZ6KyTcMn0NI7M+s0ZMCSBCmFNFiZQb9hk9lptLK84ZQ?=
- =?us-ascii?Q?WGRG82dnETNczSpUakSAjYiMpx3809XEAiFiBnUuupppHwOugRTPq7YwFWd6?=
- =?us-ascii?Q?GYminRWt41H+LdAd3CHt5IAmkgmrkPVHwhzhe2/mToZ6tKy9veg9fA5XBOn1?=
- =?us-ascii?Q?SWuZEJR6cA7yUH8V98llTGzplNkQJwtAzzycx+4v5uPnmMYlcexG2PQicPWw?=
- =?us-ascii?Q?jQ7Nney/BT76gWbYBH2mPfBE+0ZWPlRv6OKXFN8g67CfbB1M5mpCd8ZdvNKm?=
- =?us-ascii?Q?NVUzWksPtl5M8EROoIX5JvF6wBapO66zBOIxTZpF/vE6qHqSNWE3vzSCKWJr?=
- =?us-ascii?Q?H5/d7WkOTv8OBYK8KO6sZp0WdSN3zvhiBUUO5VVL2CCmv03fwMs733HGuyFS?=
- =?us-ascii?Q?jlAMULvb/LXGFuA1gPqOMm4/vPLk3Xa/L3KIw1OYr6zFvmI9REIGFemzQH3/?=
- =?us-ascii?Q?FB0Ou67S0MNuGSIoDYTY1p8jdqY6292Q8H7e+cCC+ITl+N5hufl5cFuOtout?=
- =?us-ascii?Q?V5zqdXB35cXztTuKPjWlxNR3uRwinyHLzS0SGRhnQRpjwcByLJX472oebhiE?=
- =?us-ascii?Q?nL/xijRQgGOvSaFjpAgLWqpS/vzHlUSIFPyC4ABXx+uhyzRxvi65LbVreyZf?=
- =?us-ascii?Q?+w5vQ9gixVihc76zAbJX2Vx/xRok5muv4WdsI6RirR1G8/L6/BCZ46RzAHce?=
- =?us-ascii?Q?MmyJitqe6ODgAmptpsIAxAgIqivDkWL84FGpeTfiJUS/YWt1m6Txi4LgrWHx?=
- =?us-ascii?Q?clNA4CTDt5quKgZgYgmIcbmQnejsWfpMdLSs8jm5nAY9Y7ZVw303eokUtxoP?=
- =?us-ascii?Q?CcrsLrifnXoOKJn0H31GzpSf9ReKUWhdbKr3hmYSDDN2KqHkl80XgCxzomTE?=
- =?us-ascii?Q?nX348KBtaFz7fSEFvJ5t7bZtJV0IKvbIOC0A2p5k/7+g0GmfVeP4+E3W1sN/?=
- =?us-ascii?Q?RxXnRmgx1hflI8eWvvhn8mYloUvkkxbBRQekEDdpKLl7HHQ2NllwsKBfafCD?=
- =?us-ascii?Q?lRUBVmejtp5txGejfpSm3mfeO999T9RcEUivjXitUrI80u2rHT9IwyKnVKXx?=
- =?us-ascii?Q?/wjfbgMmDJoxMZL8Bnif75nGeBoQPhFas/5WTHr3n8blKLLlcabI18zKtII6?=
- =?us-ascii?Q?xUM3aHFk5paqLqHNCU0yQkjkhyDB917T8krGaq7hxKhtxauht3eClpomxYGK?=
- =?us-ascii?Q?a3rnG/2MTyWFzISGg4e91SUQa8PQtVPp9cI/DHz4Bba14fGQyoRVyk0ddD0a?=
- =?us-ascii?Q?HJcfrort2cC3aizJDXbdUNtUbVhn9MCNx5PP+Yueh/2jpBMU3FO2nUijMBfs?=
- =?us-ascii?Q?/c39NC56Oy942mShMak5bfD1xx2YbD/L9tbBbLWCKLSaWYfZpmmJTYr1exli?=
- =?us-ascii?Q?swHodWBN/kJ03kYmJZzORI/aLeytoFG97kvTWhdXcIkRiT9bbsJKyvIpa5cG?=
- =?us-ascii?Q?zf8ncYevpKn83Cahjzybq5rdfZka9LBTFkgrVZIlfXdp+hdY7KVEdmu0G0/l?=
- =?us-ascii?Q?Y+Py1KPX14tnKjznoJnwRIpPCRPa+lSfyw0Yg8+LaUi2?=
+	=?us-ascii?Q?l2Yy6hmGSm/Uh6MYlhGtFCGnOo+bZPHcIrNU8PhNp7sRx5Pl3l3nLzE0wgBo?=
+ =?us-ascii?Q?qdN39jKqS9rV81NzWxeFv7UjYl5nWtvT06TJRNxQ4KNJrdIl2YkeJbLhAgvT?=
+ =?us-ascii?Q?Tm7/VACBf83uHULcsOkQ0LZhGja27A2p8Z0I4QP6kb8OeWuC0CJRsf8sk7l7?=
+ =?us-ascii?Q?vbfVaqcQNK4zFb7I6nLe37V1SZG9DMsPqoSX5RLCoDrjMYLrzSJBzb7NN0mK?=
+ =?us-ascii?Q?YlTjMhQ4hscOY+DO/VV+b0um1agzdCKxG5nCOFnIpUGYlUvTd4Qspr6flDkE?=
+ =?us-ascii?Q?RXykMyxN3rgmtfAsW+q+dDxKLiIoJf6Jf0U8C3NjimlATI84oPhlKT+AbF06?=
+ =?us-ascii?Q?9kqKEvvplWDWMGjzMrJDvZ46SRRf0WA6Ra27qcNmqpES6a47bD0YpPXpXoex?=
+ =?us-ascii?Q?ax/5aOyMfiFDbtmh4ldmfD4gr06n6roqq9z5TxhKHwSDyiDLCEtFqjqfMSCC?=
+ =?us-ascii?Q?Hc/43vcyTOktQYQH2VEg91B4Xut2mdpJv0gi418lnwY9oVxgFc8dYw96HCkO?=
+ =?us-ascii?Q?Iwd4/vA5OSFC283dWvEE32dYdoH30jLuH+QThFB3jZFgOkwL28N+yzF5MgNw?=
+ =?us-ascii?Q?dD0oe1gpHDKvT4/dEwGZDGH2zRh7vMn5y5jbTVBomOc8jFJcrwZ8pEItlhzB?=
+ =?us-ascii?Q?URxK/6SFQZ3uS1bzJbdhslnJJCZui5CQ+QnorIaTihKrOEYdDY9yUo7QQKLg?=
+ =?us-ascii?Q?+CystVo718JlGcfPNgrCo2Z04lCreE75WDguZiI3Bgt7Vz4dYqCGywQQJmY2?=
+ =?us-ascii?Q?ZNYX+O38YBu6Pk0ppGVzbKPk0vWm+po19onMFjVd1qPB1Ox5MeSasCoZ/G0c?=
+ =?us-ascii?Q?U6RzYZK3PxdQjMpF9pYOAb85al1t6FnMqTcKrGLfyrX3NxPSbcx4sWsZ+1h2?=
+ =?us-ascii?Q?Lc8SuLbUtQ6CPJBxGEmf+8sn7GFDzvMqtcP7v3RuCpzkdBALwJWrrseWWJd+?=
+ =?us-ascii?Q?uWcThUoPqRn1bAm31keVBkqsAuaDiNOGFSiAo14y7oJ+gioO0LaoUgfWrfVf?=
+ =?us-ascii?Q?G54UnFEmR3BjxpvI97h4Y8fAJFpZnENgB3egDLMM8re04UkHeA63N1aRGSPw?=
+ =?us-ascii?Q?74m8S81Ql3PKKXt2nzA8JVRvfzrGLFcOfL/vgoOGwoaoEH+bnXxIcWqiZ8dQ?=
+ =?us-ascii?Q?TV07GzXxPHwYZoIIDdBrBMGv1gwOe2EeI/7sq+p/mHnVr7fXcVNdLezJMh5N?=
+ =?us-ascii?Q?34V4sOXoruYxdDwcT8i9anGUl1oOeQ6xJCAXmiiuYqpN0kAXBZKr0kdUdM9M?=
+ =?us-ascii?Q?aUT3RBixiyggAl0/90Hovt4L6wHxXld5JeEc3l+tgSGYfNJQ105qT6kWqqNg?=
+ =?us-ascii?Q?3YILYTPzgfq6mUtCRGMPVNKb9rcaZn6TMDZANuFocnSJNmZcJXAiseNa7zWb?=
+ =?us-ascii?Q?Ovew48uu86y8tYzhu08EunEIBLPfTis4ZMiqfJLeZ4P00Afl69NVC48X7Loe?=
+ =?us-ascii?Q?9bQrW0AyZJiY9bgdMWSjbuo9QpZXqk/VVOUZaL89CDx56yWPaqQt3dPv9BWp?=
+ =?us-ascii?Q?ju+bMs3rCyJZhOBDJktrmwxq4UIOfbdg8c2iSiqg76oPxSq7gr54ERVfi6H7?=
+ =?us-ascii?Q?cGKNUuBzoVyHUYYvr04UF7md1bnVBnhhyx/LbTR344BnfDHOKNUYJPhGE2JH?=
+ =?us-ascii?Q?Ai+bMFcFG1XH31U9vR85Nu+mBtTUY44FESg03J4OQ+tZ?=
 X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6dfe8a55-9709-4cb8-41a0-08dd91433540
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1dff5cb5-8961-4483-f14d-08dd91433608
 X-MS-Exchange-CrossTenant-AuthSource: SJ2PR01MB8101.prod.exchangelabs.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2025 10:53:20.0092
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2025 10:53:21.3583
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hcNYSqWofyZMhnBuN/W7VlsTKSHKgps/eF0W4fLMmXTTIzQJVbZTRL7uhF5rrY0VdgyPeAoYSVo4O7mFl8Qw0x3TrZRkyO0wzlPBmxDyen6yzh+Th0GsZyVa3PEnp4Ue
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0q0jyIk8qJsggJaJ42bd3sYvYIq83J1cb+9E7Chh9geionAHcovK/JEIbWc51gG7zRxSKEVosU688DQao643QZPWE/de9Diumppq9ShfAPcr5sjf1MW9FL3SqN7f8L94
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR01MB6907
 
-Modify the test to run the guest code with NV enabled.
-Added code is only applicable to ARM64.
-
+Adding code to run guest_code in vEL2.
 NV is enabled using command line argument and it is disabled by default.
+
+NV is only enabled on ARM64, for other architectures the test will exit
+with an ASSERT, if tried to run with NV enabled.
 
 Signed-off-by: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
 ---
- .../testing/selftests/kvm/guest_print_test.c  | 32 +++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ .../selftests/kvm/kvm_page_table_test.c       | 30 +++++++++++++++++--
+ 1 file changed, 27 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/guest_print_test.c b/tools/testing/selftests/kvm/guest_print_test.c
-index bcf582852db9..4f786b88fdbe 100644
---- a/tools/testing/selftests/kvm/guest_print_test.c
-+++ b/tools/testing/selftests/kvm/guest_print_test.c
-@@ -15,6 +15,15 @@
- #include "processor.h"
+diff --git a/tools/testing/selftests/kvm/kvm_page_table_test.c b/tools/testing/selftests/kvm/kvm_page_table_test.c
+index dd8b12f626d3..383f9d134ecb 100644
+--- a/tools/testing/selftests/kvm/kvm_page_table_test.c
++++ b/tools/testing/selftests/kvm/kvm_page_table_test.c
+@@ -20,6 +20,10 @@
+ #include "guest_modes.h"
  #include "ucall_common.h"
  
 +#ifdef __aarch64__
-+#include "nv_util.h"
-+static void pr_usage(const char *name)
-+{
-+	pr_info("%s [-g nv] -h\n", name);
-+	pr_info("  -g:\tEnable Nested Virtualization, run guest code as guest hypervisor (default: Disabled)\n");
-+}
++#include <nv_util.h>
 +#endif
 +
- struct guest_vals {
- 	uint64_t a;
- 	uint64_t b;
-@@ -192,7 +201,30 @@ int main(int argc, char *argv[])
- 	struct kvm_vcpu *vcpu;
- 	struct kvm_vm *vm;
+ #define TEST_MEM_SLOT_INDEX             1
  
+ /* Default size(1GB) of the memory for testing */
+@@ -229,7 +233,9 @@ static void *vcpu_worker(void *data)
+ struct test_params {
+ 	uint64_t phys_offset;
+ 	uint64_t test_mem_size;
++	bool is_nested;
+ 	enum vm_mem_backing_src_type src_type;
++	int fd;
+ };
+ 
+ static struct kvm_vm *pre_init_before_test(enum vm_guest_mode mode, void *arg)
+@@ -252,8 +258,17 @@ static struct kvm_vm *pre_init_before_test(enum vm_guest_mode mode, void *arg)
+ 
+ 	/* Create a VM with enough guest pages */
+ 	guest_num_pages = test_mem_size / guest_page_size;
+-	vm = __vm_create_with_vcpus(VM_SHAPE(mode), nr_vcpus, guest_num_pages,
++	if (p->is_nested) {
 +#ifdef __aarch64__
-+	int opt;
-+	bool is_nested = false;
-+	int gic_fd;
-+
-+	while ((opt = getopt(argc, argv, "g:")) != -1) {
-+		switch (opt) {
-+		case 'g':
-+			is_nested = atoi_non_negative("Is Nested", optarg);
-+			break;
-+		case 'h':
-+		default:
-+			pr_usage(argv[0]);
-+			return 1;
-+		}
-+	}
-+
-+	if (is_nested)
-+		vm = nv_vm_create_with_vcpus_gic(1, &vcpu, &gic_fd, guest_code);
-+	else
-+		vm = vm_create_with_one_vcpu(&vcpu, guest_code);
++		vm = __nv_vm_create_with_vcpus_gic(VM_SHAPE(mode), nr_vcpus,
++				test_args.vcpus, guest_num_pages, &p->fd, guest_code);
 +#else
- 	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
++		TEST_FAIL("Nested Not Supported");
 +#endif
++	} else {
++		vm = __vm_create_with_vcpus(VM_SHAPE(mode), nr_vcpus, guest_num_pages,
+ 				    guest_code, test_args.vcpus);
++	}
  
- 	test_type_i64(vcpu, -1, -1);
- 	test_type_i64(vcpu, -1,  1);
+ 	/* Align down GPA of the testing memslot */
+ 	if (!p->phys_offset)
+@@ -345,6 +360,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 	struct timespec start;
+ 	struct timespec ts_diff;
+ 	int ret, i;
++	struct test_params *p =  (struct test_params *)arg;
+ 
+ 	/* Create VM with vCPUs and make some pre-initialization */
+ 	vm = pre_init_before_test(mode, arg);
+@@ -414,6 +430,8 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 	TEST_ASSERT(ret == 0, "Error in sem_destroy");
+ 
+ 	free(vcpu_threads);
++	if (p->is_nested)
++		close(p->fd);
+ 	kvm_vm_free(vm);
+ }
+ 
+@@ -421,7 +439,7 @@ static void help(char *name)
+ {
+ 	puts("");
+ 	printf("usage: %s [-h] [-p offset] [-m mode] "
+-	       "[-b mem-size] [-v vcpus] [-s mem-type]\n", name);
++	       "[-b mem-size] [-v vcpus] [-s mem-type] [-g nv]\n", name);
+ 	puts("");
+ 	printf(" -p: specify guest physical test memory offset\n"
+ 	       "     Warning: a low offset can conflict with the loaded test code.\n");
+@@ -430,6 +448,8 @@ static void help(char *name)
+ 	       "     (default: 1G)\n");
+ 	printf(" -v: specify the number of vCPUs to run\n"
+ 	       "     (default: 1)\n");
++	printf(" -g: Enable Nested Virtualization, run guest code as guest hypervisor.\n"
++	       "     (default: Disabled)\n");
+ 	backing_src_help("-s");
+ 	puts("");
+ }
+@@ -440,12 +460,13 @@ int main(int argc, char *argv[])
+ 	struct test_params p = {
+ 		.test_mem_size = DEFAULT_TEST_MEM_SIZE,
+ 		.src_type = DEFAULT_VM_MEM_SRC,
++		.is_nested = false,
+ 	};
+ 	int opt;
+ 
+ 	guest_modes_append_default();
+ 
+-	while ((opt = getopt(argc, argv, "hp:m:b:v:s:")) != -1) {
++	while ((opt = getopt(argc, argv, "hp:m:b:v:s:g:")) != -1) {
+ 		switch (opt) {
+ 		case 'p':
+ 			p.phys_offset = strtoull(optarg, NULL, 0);
+@@ -464,6 +485,9 @@ int main(int argc, char *argv[])
+ 		case 's':
+ 			p.src_type = parse_backing_src_type(optarg);
+ 			break;
++		case 'g':
++			p.is_nested = atoi_non_negative("Is Nested", optarg);
++			break;
+ 		case 'h':
+ 		default:
+ 			help(argv[0]);
 -- 
 2.48.1
 
