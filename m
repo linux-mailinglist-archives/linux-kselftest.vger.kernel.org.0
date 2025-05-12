@@ -1,273 +1,203 @@
-Return-Path: <linux-kselftest+bounces-32871-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32872-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7BDCAB3F74
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 May 2025 19:43:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D05F4AB4102
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 May 2025 20:00:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C19307AF739
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 May 2025 17:41:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F11F466C04
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 May 2025 18:00:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A9D3297B6D;
-	Mon, 12 May 2025 17:41:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2593296D23;
+	Mon, 12 May 2025 18:00:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fvaPt+ux"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hGlf2DxK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D233F297B61
-	for <linux-kselftest@vger.kernel.org>; Mon, 12 May 2025 17:41:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 114BB1EE03B;
+	Mon, 12 May 2025 18:00:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747071666; cv=none; b=UTuIMxDL8JrnkU/+pUbhTekTahugbKhcC9zrfxErsNP18g/uTxdPqQzgJ4jytWPa8VmiD4YgOyseIT0uPREtR8qVQxlrFSxCPtT8dauM2vZZVp19Y9f7+yZvXNVKxdm/jrMGEl+pdqyslkPvze6UjPinIprYy3nmMq/V2b0Stjw=
+	t=1747072842; cv=none; b=T4zfIvV5vgnN9xduoVolfkYrIkoS6hJ+cbySUOB7ppSI756jBAOkvFLVkNyui1h/xvI6yRcgIqzXhw3lW2BbH+nJDAjGmSW4ShQJaLZfCjSoDWsL1ZrN3ySBCDa8uni9GZiFBXjecXSHvaWdNh0lFM3SbrCCRT8YVY9cvXKp8uo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747071666; c=relaxed/simple;
-	bh=Sr4ehi8UyKgOInexUUDXX33RjZQR1+mTrCzUsTP3Xjg=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=h2ceE+/7m97/+RhRBbkLgC/m90d8HzJnLLf++YBG/aqzFWRNgrejG1YRaN8+LTp96sfz/21ZuCcpjOW9LriZfNTf0QDdLw20Q21CxyberpsEx4DmZNdUJ3n457Fe4itMvr3SIjf2ojde/dN0KtvHtw/TMFXFxHRZGWOqiw6gpsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fvaPt+ux; arc=none smtp.client-ip=209.85.210.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-74235ee893fso5332655b3a.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 May 2025 10:41:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1747071664; x=1747676464; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sCGxx2XfGsewNgZCW3IbIozmrin1Wu5z7ijIKVfw2+I=;
-        b=fvaPt+uxM3zgUeQ5F35YzPtSQtcWC68E/CI8Xig2rtYBIJTZPaHx9RuZeqfLttqdZo
-         D/7Rx/0txwTcMtv+hmeO8xAadmpL61qiKZeYlC2VsHmqBmIjpi9MTJ0P02apn2ig8Z82
-         vMd8ZNInKBaMM4D/QYH1GAYZzCqFBMt7KAaN8QQGUK8mkj28f3B65ji9fmmnXXaKQiKY
-         9/RwM427jZkJOaVq6DP4WGTUJYLquCLRD6RDy00JP5hBiIZdF0CTLsOy7JqQEy3x9VcI
-         vT4jJaXXz/lfs/TvnQy4y40vGX5viQ9HfP1nNyGCG1ha3wbccfJ1ln9QVqYU295fYwk5
-         WsfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747071664; x=1747676464;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=sCGxx2XfGsewNgZCW3IbIozmrin1Wu5z7ijIKVfw2+I=;
-        b=kUGMlTypBGKVXoSYBORXtOjokHUlspwcY23/dChUoLCXdga5+w5xEnfY/3M7IQuZXb
-         zH5iZ4loo5GUgZVsodHGM3T9nqSmeLUWxL0gVlH4KX92l3HuanveD/N9RFAwwXh8j5fd
-         pfJmTeSa2CGQ6yyXfrEzSBDPs0Fgf3eF4ZoDzEil6hg17cuDBoJIbOg+qAtmWjVec9Pd
-         afqkFG9LUWJFPwm80K47FywGvvtI2r1JdkyAsBX90Ogv9Q9R9UDk9xaTqfpeegFJNh9j
-         wvtAtvAHV1o39yusxHr98XyvsEXmaKWiJfCpLSY+uFhmpvoSkoc6OB+ZQhQ750TepO2p
-         Ss6A==
-X-Forwarded-Encrypted: i=1; AJvYcCWHsAt8rw8Xu/W5rCSTRFzl535+DOqm4tHMOYC7Rwh0KSNUDmfStz/GjuCyXEn4SGOHlXSzwyFzBL3MrqISueo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxsx27DMs5cEg8n1iAuHZLOboidsTG/3FhLbU8ApmPZW/V+Uzlw
-	zVHZryGHZT4xxZwF3Jy9lB8A4LCtNwe4JCEo8CeHYnXte0rl256Q9gZQ/Jm42XMCNUOPo+FAd8+
-	disI0R5vLcpZEjA==
-X-Google-Smtp-Source: AGHT+IFLBGzKFZmsktbIeW8pxhnG9+8Euh8hihVcHszDWEwnIoCPLdtI1rxSOPsP9ipwfFfbMW9NefHkQ4HZoLE=
-X-Received: from pfoo10.prod.google.com ([2002:a05:6a00:1a0a:b0:732:20df:303c])
- (user=tjmercier job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a00:2313:b0:736:692e:129 with SMTP id d2e1a72fcca58-7423c0421e7mr21330789b3a.24.1747071664262;
- Mon, 12 May 2025 10:41:04 -0700 (PDT)
-Date: Mon, 12 May 2025 17:40:36 +0000
-In-Reply-To: <20250512174036.266796-1-tjmercier@google.com>
+	s=arc-20240116; t=1747072842; c=relaxed/simple;
+	bh=fGBDzm38SHotQ4ArsU6HmeU+3zz7XAVrMhlyZFy3IZs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NdtO0QeLJpAvMGQqE5i1DnjVF926LbVVmvQuVv2QkwMb9oK+X1ksh3gy4PPCjYp9TjoHEjFJLTrdkBfCNNnNABz3yqogBvkIDcfQWLlStHk7DGMh/JjWmCzpzQz1G1dZN/6aYfNIdcZVouJE9OtEm6C6HPL7C9Cs41u0U3wO3XY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hGlf2DxK; arc=none smtp.client-ip=91.218.175.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <f27b0506-4841-4650-a0ee-0fe1643fdf37@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1747072827;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ma5n1WWRt3IZMb/J5uvgHDAZKLn3T38CaI/Jo/Q76W4=;
+	b=hGlf2DxK/ll+4zVXxruxyenHniDCnXz8vzRbFapb8hUS/itdZEy/TPz0teFHV4TatUnnP5
+	BZv20ibsOKJy8hV5P8G/DZG5leGxmgDJH5uq+u9fW1PbSJFjurDRqz8BLE1IErge+GiHcI
+	Rumre5V3Jb6JPbLB6RELqbbucJ4f7ug=
+Date: Mon, 12 May 2025 11:00:21 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250512174036.266796-1-tjmercier@google.com>
-X-Mailer: git-send-email 2.49.0.1045.g170613ef41-goog
-Message-ID: <20250512174036.266796-6-tjmercier@google.com>
-Subject: [PATCH bpf-next v5 5/5] selftests/bpf: Add test for open coded dmabuf_iter
-From: "T.J. Mercier" <tjmercier@google.com>
-To: sumit.semwal@linaro.org, christian.koenig@amd.com, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
-	skhan@linuxfoundation.org, alexei.starovoitov@gmail.com
-Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, android-mm@google.com, 
-	simona@ffwll.ch, eddyz87@gmail.com, yonghong.song@linux.dev, 
-	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, 
-	jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org, song@kernel.org, 
-	"T.J. Mercier" <tjmercier@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Subject: Re: [PATCH v6 04/14] riscv: sbi: add FWFT extension interface
+To: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Anup Patel <anup@brainfault.org>,
+ Atish Patra <atishp@atishpatra.org>, Shuah Khan <shuah@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
+ linux-kselftest@vger.kernel.org
+Cc: Samuel Holland <samuel.holland@sifive.com>,
+ Andrew Jones <ajones@ventanamicro.com>, Deepak Gupta <debug@rivosinc.com>
+References: <20250424173204.1948385-1-cleger@rivosinc.com>
+ <20250424173204.1948385-5-cleger@rivosinc.com>
+ <1c385a47-0a01-4be4-a34b-51a2f168e62d@linux.dev>
+ <fe9d801b-007d-476d-97fe-96d0f3d218cd@rivosinc.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Atish Patra <atish.patra@linux.dev>
+In-Reply-To: <fe9d801b-007d-476d-97fe-96d0f3d218cd@rivosinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Use the same test buffers as the traditional iterator and a new BPF map
-to verify the test buffers can be found with the open coded dmabuf
-iterator.
 
-Signed-off-by: T.J. Mercier <tjmercier@google.com>
-Acked-by: Christian K=C3=B6nig <christian.koenig@amd.com>
----
- .../testing/selftests/bpf/bpf_experimental.h  |  5 +++
- .../selftests/bpf/prog_tests/dmabuf_iter.c    | 42 +++++++++++++++++--
- .../testing/selftests/bpf/progs/dmabuf_iter.c | 38 +++++++++++++++++
- 3 files changed, 82 insertions(+), 3 deletions(-)
+On 5/12/25 1:14 AM, Clément Léger wrote:
+>
+> On 09/05/2025 02:18, Atish Patra wrote:
+>> On 4/24/25 10:31 AM, ClÃ©ment LÃ©ger wrote:
+>>> This SBI extensions enables supervisor mode to control feature that are
+>>> under M-mode control (For instance, Svadu menvcfg ADUE bit, Ssdbltrp
+>>> DTE, etc). Add an interface to set local features for a specific cpu
+>>> mask as well as for the online cpu mask.
+>>>
+>>> Signed-off-by: Clément Léger <cleger@rivosinc.com>
+>>> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+>>> ---
+>>>    arch/riscv/include/asm/sbi.h | 17 +++++++++++
+>>>    arch/riscv/kernel/sbi.c      | 57 ++++++++++++++++++++++++++++++++++++
+>>>    2 files changed, 74 insertions(+)
+>>>
+>>> diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
+>>> index 7ec249fea880..3bbef56bcefc 100644
+>>> --- a/arch/riscv/include/asm/sbi.h
+>>> +++ b/arch/riscv/include/asm/sbi.h
+>>> @@ -503,6 +503,23 @@ int sbi_remote_hfence_vvma_asid(const struct
+>>> cpumask *cpu_mask,
+>>>                    unsigned long asid);
+>>>    long sbi_probe_extension(int ext);
+>>>    +int sbi_fwft_set(u32 feature, unsigned long value, unsigned long
+>>> flags);
+>>> +int sbi_fwft_set_cpumask(const cpumask_t *mask, u32 feature,
+>>> +             unsigned long value, unsigned long flags);
+>>> +/**
+>>> + * sbi_fwft_set_online_cpus() - Set a feature on all online cpus
+>>> + * @feature: The feature to be set
+>>> + * @value: The feature value to be set
+>>> + * @flags: FWFT feature set flags
+>>> + *
+>>> + * Return: 0 on success, appropriate linux error code otherwise.
+>>> + */
+>>> +static inline int sbi_fwft_set_online_cpus(u32 feature, unsigned long
+>>> value,
+>>> +                       unsigned long flags)
+>>> +{
+>>> +    return sbi_fwft_set_cpumask(cpu_online_mask, feature, value, flags);
+>>> +}
+>>> +
+>>>    /* Check if current SBI specification version is 0.1 or not */
+>>>    static inline int sbi_spec_is_0_1(void)
+>>>    {
+>>> diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
+>>> index 1d44c35305a9..d57e4dae7dac 100644
+>>> --- a/arch/riscv/kernel/sbi.c
+>>> +++ b/arch/riscv/kernel/sbi.c
+>>> @@ -299,6 +299,63 @@ static int __sbi_rfence_v02(int fid, const struct
+>>> cpumask *cpu_mask,
+>>>        return 0;
+>>>    }
+>>>    +/**
+>>> + * sbi_fwft_set() - Set a feature on the local hart
+>>> + * @feature: The feature ID to be set
+>>> + * @value: The feature value to be set
+>>> + * @flags: FWFT feature set flags
+>>> + *
+>>> + * Return: 0 on success, appropriate linux error code otherwise.
+>>> + */
+>>> +int sbi_fwft_set(u32 feature, unsigned long value, unsigned long flags)
+>>> +{
+>>> +    return -EOPNOTSUPP;
+>>> +}
+>>> +
+>>> +struct fwft_set_req {
+>>> +    u32 feature;
+>>> +    unsigned long value;
+>>> +    unsigned long flags;
+>>> +    atomic_t error;
+>>> +};
+>>> +
+>>> +static void cpu_sbi_fwft_set(void *arg)
+>>> +{
+>>> +    struct fwft_set_req *req = arg;
+>>> +    int ret;
+>>> +
+>>> +    ret = sbi_fwft_set(req->feature, req->value, req->flags);
+>>> +    if (ret)
+>>> +        atomic_set(&req->error, ret);
+>> What happens when cpuX executed first reported an error but cpuY
+>> executed this function later and report success.
+>>
+>> The error will be masked in that case.
+> We actually only set the bit if an error happened (consider it as a
+> sticky error bit). So if CPUy reports success, it won't clear the bit.
 
-diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing=
-/selftests/bpf/bpf_experimental.h
-index 6535c8ae3c46..5e512a1d09d1 100644
---- a/tools/testing/selftests/bpf/bpf_experimental.h
-+++ b/tools/testing/selftests/bpf/bpf_experimental.h
-@@ -591,4 +591,9 @@ extern int bpf_iter_kmem_cache_new(struct bpf_iter_kmem=
-_cache *it) __weak __ksym
- extern struct kmem_cache *bpf_iter_kmem_cache_next(struct bpf_iter_kmem_ca=
-che *it) __weak __ksym;
- extern void bpf_iter_kmem_cache_destroy(struct bpf_iter_kmem_cache *it) __=
-weak __ksym;
-=20
-+struct bpf_iter_dmabuf;
-+extern int bpf_iter_dmabuf_new(struct bpf_iter_dmabuf *it) __weak __ksym;
-+extern struct dma_buf *bpf_iter_dmabuf_next(struct bpf_iter_dmabuf *it) __=
-weak __ksym;
-+extern void bpf_iter_dmabuf_destroy(struct bpf_iter_dmabuf *it) __weak __k=
-sym;
-+
- #endif
-diff --git a/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c b/tools/t=
-esting/selftests/bpf/prog_tests/dmabuf_iter.c
-index 8ae18e4d7238..d9606f3361b9 100644
---- a/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c
-+++ b/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c
-@@ -106,15 +106,18 @@ static int create_sys_heap_dmabuf(void)
- 	return -1;
- }
-=20
--static int create_test_buffers(void)
-+static int create_test_buffers(int map_fd)
- {
-+	bool f =3D false;
-+
- 	udmabuf =3D create_udmabuf();
- 	sysheap_dmabuf =3D create_sys_heap_dmabuf();
-=20
- 	if (udmabuf < 0 || sysheap_dmabuf < 0)
- 		return -1;
-=20
--	return 0;
-+	return bpf_map_update_elem(map_fd, udmabuf_test_buffer_name, &f, BPF_ANY)=
- ||
-+	       bpf_map_update_elem(map_fd, sysheap_test_buffer_name, &f, BPF_ANY)=
-;
- }
-=20
- static void destroy_test_buffers(void)
-@@ -215,15 +218,45 @@ static void subtest_dmabuf_iter_check_default_iter(st=
-ruct dmabuf_iter *skel)
- 	close(iter_fd);
- }
-=20
-+static void subtest_dmabuf_iter_check_open_coded(struct dmabuf_iter *skel,=
- int map_fd)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+	char key[DMA_BUF_NAME_LEN];
-+	int err, fd;
-+	bool found;
-+
-+	/* No need to attach it, just run it directly */
-+	fd =3D bpf_program__fd(skel->progs.iter_dmabuf_for_each);
-+
-+	err =3D bpf_prog_test_run_opts(fd, &topts);
-+	if (!ASSERT_OK(err, "test_run_opts err"))
-+		return;
-+	if (!ASSERT_OK(topts.retval, "test_run_opts retval"))
-+		return;
-+
-+	if (!ASSERT_OK(bpf_map_get_next_key(map_fd, NULL, key), "get next key"))
-+		return;
-+
-+	do {
-+		ASSERT_OK(bpf_map_lookup_elem(map_fd, key, &found), "lookup");
-+		ASSERT_TRUE(found, "found test buffer");
-+	} while (bpf_map_get_next_key(map_fd, key, key));
-+}
-+
- void test_dmabuf_iter(void)
- {
- 	struct dmabuf_iter *skel =3D NULL;
-+	int map_fd;
-=20
- 	skel =3D dmabuf_iter__open_and_load();
- 	if (!ASSERT_OK_PTR(skel, "dmabuf_iter__open_and_load"))
- 		return;
-=20
--	if (!ASSERT_OK(create_test_buffers(), "create_test_buffers"))
-+	map_fd =3D bpf_map__fd(skel->maps.testbuf_hash);
-+	if (!ASSERT_OK_FD(map_fd, "map_fd"))
-+		goto destroy_skel;
-+
-+	if (!ASSERT_OK(create_test_buffers(map_fd), "create_test_buffers"))
- 		goto destroy;
-=20
- 	if (!ASSERT_OK(dmabuf_iter__attach(skel), "skel_attach"))
-@@ -233,8 +266,11 @@ void test_dmabuf_iter(void)
- 		subtest_dmabuf_iter_check_no_infinite_reads(skel);
- 	if (test__start_subtest("default_iter"))
- 		subtest_dmabuf_iter_check_default_iter(skel);
-+	if (test__start_subtest("open_coded"))
-+		subtest_dmabuf_iter_check_open_coded(skel, map_fd);
-=20
- destroy:
- 	destroy_test_buffers();
-+destroy_skel:
- 	dmabuf_iter__destroy(skel);
- }
-diff --git a/tools/testing/selftests/bpf/progs/dmabuf_iter.c b/tools/testin=
-g/selftests/bpf/progs/dmabuf_iter.c
-index 900a730a05f6..5f2cc4f3de96 100644
---- a/tools/testing/selftests/bpf/progs/dmabuf_iter.c
-+++ b/tools/testing/selftests/bpf/progs/dmabuf_iter.c
-@@ -9,6 +9,13 @@
-=20
- char _license[] SEC("license") =3D "GPL";
-=20
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(key_size, DMA_BUF_NAME_LEN);
-+	__type(value, bool);
-+	__uint(max_entries, 5);
-+} testbuf_hash SEC(".maps");
-+
- /*
-  * Fields output by this iterator are delimited by newlines. Convert any
-  * newlines in user-provided printed strings to spaces.
-@@ -51,3 +58,34 @@ int dmabuf_collector(struct bpf_iter__dmabuf *ctx)
- 	BPF_SEQ_PRINTF(seq, "%lu\n%llu\n%s\n%s\n", inode, size, name, exporter);
- 	return 0;
- }
-+
-+SEC("syscall")
-+int iter_dmabuf_for_each(const void *ctx)
-+{
-+	struct dma_buf *d;
-+
-+	bpf_for_each(dmabuf, d) {
-+		char name[DMA_BUF_NAME_LEN];
-+		const char *pname;
-+		bool *found;
-+
-+		if (bpf_core_read(&pname, sizeof(pname), &d->name))
-+			return 1;
-+
-+		/* Buffers are not required to be named */
-+		if (!pname)
-+			continue;
-+
-+		if (bpf_probe_read_kernel(name, sizeof(name), pname))
-+			return 1;
-+
-+		found =3D bpf_map_lookup_elem(&testbuf_hash, name);
-+		if (found) {
-+			bool t =3D true;
-+
-+			bpf_map_update_elem(&testbuf_hash, name, &t, BPF_EXIST);
-+		}
-+	}
-+
-+	return 0;
-+}
---=20
-2.49.0.1045.g170613ef41-goog
+Ahh yes. I missed that.
 
+> Thanks,
+>
+> Clément
+>
+>>> +}
+>>> +
+>>> +/**
+>>> + * sbi_fwft_set_cpumask() - Set a feature for the specified cpumask
+>>> + * @mask: CPU mask of cpus that need the feature to be set
+>>> + * @feature: The feature ID to be set
+>>> + * @value: The feature value to be set
+>>> + * @flags: FWFT feature set flags
+>>> + *
+>>> + * Return: 0 on success, appropriate linux error code otherwise.
+>>> + */
+>>> +int sbi_fwft_set_cpumask(const cpumask_t *mask, u32 feature,
+>>> +                   unsigned long value, unsigned long flags)
+>>> +{
+>>> +    struct fwft_set_req req = {
+>>> +        .feature = feature,
+>>> +        .value = value,
+>>> +        .flags = flags,
+>>> +        .error = ATOMIC_INIT(0),
+>>> +    };
+>>> +
+>>> +    if (feature & SBI_FWFT_GLOBAL_FEATURE_BIT)
+>>> +        return -EINVAL;
+>>> +
+>>> +    on_each_cpu_mask(mask, cpu_sbi_fwft_set, &req, 1);
+>>> +
+>>> +    return atomic_read(&req.error);
+>>> +}
+>>> +
+>>>    /**
+>>>     * sbi_set_timer() - Program the timer for next timer event.
+>>>     * @stime_value: The value after which next timer event should fire.
 
