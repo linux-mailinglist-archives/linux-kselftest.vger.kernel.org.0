@@ -1,71 +1,70 @@
-Return-Path: <linux-kselftest+bounces-32833-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32834-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BD77AB3018
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 May 2025 08:54:22 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6755AB301C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 May 2025 08:54:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C99093A45A2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 May 2025 06:54:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 71E6B7A3D06
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 May 2025 06:53:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA8A5255E4E;
-	Mon, 12 May 2025 06:54:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C0D025525C;
+	Mon, 12 May 2025 06:54:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I0ESdRQg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V4iqbgLs"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A71424BC04;
-	Mon, 12 May 2025 06:54:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1333254B11;
+	Mon, 12 May 2025 06:54:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747032851; cv=none; b=RkQ+50+dT5OixNTHvrPJbBQ8KA0pyEnJzj9JPN9iH9Rc0CN9YySWcmYKWKT3q583aPVkDMfmKZ4GQMNmlT8sUXnJInZkJ9WUVFhObwb5GoDVlCQgVviF05ehzGukpQXsmXKbNlcM9WXw6EBwMelGywrp86Rwzl7emShV0+Ynxow=
+	t=1747032872; cv=none; b=Grp5YCZqLlb0liJ2oCJ84+8WxHaUNPHpgJOpOHYcKU6UjM/a2JZ6/KdM2LLK+B66x6k+QCVX9Xu7FjoPgXban+A7sDBv9loW5rwNjrc4CckQo61SHY3lmo6S9uLYTvXwoaxNyTna3l1NKeggPgp1JRvwDQUoWyyO4UHjTxcY4m0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747032851; c=relaxed/simple;
-	bh=NEPWALBmpGq4vDlyc7ctgHtVTGRPfRU0vE4Xz+IdHh4=;
+	s=arc-20240116; t=1747032872; c=relaxed/simple;
+	bh=UzyEJvf8UIvCMjIRcLORGRYJMFtP5tILmnPRiEBiat0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eBFg9DPhsGLt1CkvOTIsWdpoc3qmbvqdI3DtlreNGhQD1CQZIKNhAiPzLXNxg8sqgMongJa08KklbaY3pPtMAybDacempCgGnMPvwulWOmNYkue0+kdoBDiDUlznE0WUlttEs+WH63iYvzitg1ssf54r5E4AspIoTbz5OEx6cOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I0ESdRQg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8A98C4AF0B;
-	Mon, 12 May 2025 06:54:09 +0000 (UTC)
+	 To:Cc:Content-Type; b=rXGbuAXBBS8D/PLkPV6e0yvzlbK0nUgK4+X2dkgRtqT2CxeU3UUux34hzElYbnUg+cQZwuslml6KtKz0ASnveqwcVJFpCAPKnvIY4vJUCcpZtCngxWfYAYcIioQujlj9HJwbBot4unJgWYzgnCOD3la5DnnWpG4VyQzF3VO+sgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V4iqbgLs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45F65C4CEF0;
+	Mon, 12 May 2025 06:54:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747032849;
-	bh=NEPWALBmpGq4vDlyc7ctgHtVTGRPfRU0vE4Xz+IdHh4=;
+	s=k20201202; t=1747032872;
+	bh=UzyEJvf8UIvCMjIRcLORGRYJMFtP5tILmnPRiEBiat0=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=I0ESdRQgeTjBZd128L4sebNTdeNr9U4eeQwsnvVUc3PXaFa3H4E/zNBpMgRmccouS
-	 ElJCwlfZjezoYWyxQURVdKEEpUVAKKTgKQZ5EAQNKtrmR6FU9ivdYWjug8H6qOkO04
-	 GZ68fc5/89ks6KDjzGBINBdPafyIddi/AVs/NpRfBk0yXj6qSjjO8qdZ62wvHNx4+f
-	 BNuv7qFE64RkPQBl/z/mLB8eFO1OhocViJ0ujrVdb8K5Bd7SEkqFxJxKMc2DW/cVoG
-	 bQX1dLtPl6yPWaCaTznlKq8lP9b7Xz8LtgeO83P3X0gmc4ikLwEWb/unpIAVK6mLZo
-	 xGhNEXhjTVVZQ==
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5fcaff7274bso4521986a12.2;
-        Sun, 11 May 2025 23:54:09 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUzEqoM4jQHN6u+iJ6tiN0c4XFWT27nwUcF7dK6itfM+iG2Kf5pykuVEwFM/28PmkDM+jSytnrY+ZgzAX1SsVTl@vger.kernel.org, AJvYcCVFGUt0rhDcalT2eMJ+EeQMuANYuDRbK6XiFQC2LNk2bDRCwACqpY9RuKmizOdJG36dUKBHR0YsRjKq2kYe@vger.kernel.org, AJvYcCVOLC4/D/JY926tDjuUuaSAhsuhgRj8X70BK29qJ60aMa3EACYpt9IThCDn/inziIFzieM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywn4U6ZyRnTgEhC3UqQJR2/1b3aIZQDFpz7zSZwYR1AQklCIU4h
-	iJ32uzzDFoBJSs7WiMwixVYz56VD/+fRZLwNBk/AFmj8cDpacf9v5jwHUS70jwx6ASYzRQNoY6t
-	QQI0OG7VT/AGpwQ+ZvTlXcZjYcBs=
-X-Google-Smtp-Source: AGHT+IGg8n49RlcBc+Z9Wq+h618OMcCm+9VuvwpUSl/3fWMJua1ajr2Z4TazBrs8gfckuY1+oIcrRc3PYvbyU8pwcqU=
-X-Received: by 2002:a05:6402:2711:b0:5fd:1971:6d85 with SMTP id
- 4fb4d7f45d1cf-5fd19716d88mr4507668a12.5.1747032848292; Sun, 11 May 2025
- 23:54:08 -0700 (PDT)
+	b=V4iqbgLsOub54hoUrXAi6Npd3rIZcXZpXN6k1b2hLv3wR/tCAmdwOohvATOxxfdCy
+	 OFEkTFftL4i70t7QFmxJu79Wnt17MP+BH2LWci1BvLdV7Kc8PttI8tCMpv3ajG/slL
+	 EwpoUKDh5ZtP9PfTtzv5n4e5dxyUm2k6jiB+lqmHF430Y3aD2JZLvSikAZPoQmPoAS
+	 iYSfQMuuM8Q2GsFTGBMHj4IHVTZ3R8O+l74e6XHbKJExc6f7F+bUf0XZ/HQJ2DMJvX
+	 Uw4TylArMUx2CgUbo0MGZ2L2RzBdJClf1zGdcATiJnZdPgFVNoXwqiWQ8qQ3PG0Gvl
+	 gl2iWs4EO5zjA==
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-ad238c68b35so337380266b.1;
+        Sun, 11 May 2025 23:54:32 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVrTc5uuwhh32TxWPHpfEHkkdNQgpOnFgra0/zC728JsfiJXJUZYg8cpI/MUP2mMSvjzPM=@vger.kernel.org, AJvYcCWZYveOofdsP3Z/vO+aO4GTjYkmBor6YC09hF/PBlP502XzZDLes162ULRYS6JNp9xYUql4pDvOzhMgQEJl@vger.kernel.org, AJvYcCXRTrVHSuhlwix8V8xYegHL56Ke7HVUIbXufS/5FtUfLzrjz/e8WSuY1HnWauw9X3UyUzjXoZ642zZ1dkH386aB@vger.kernel.org
+X-Gm-Message-State: AOJu0YxTm/kstjLUtzTTZ4iOP5VdrNjxA7pqv2pBR+MJBk7BEDIgGobp
+	JypYDstmZUow+PP5XTcH7RjKFAUA1Mo4114DZ9xUzgJ0pZ3jE1TJMQt3wvdRgTdTJqpiwIhgptR
+	tM8haDGPp8NBqPFvD9wJugyorxHU=
+X-Google-Smtp-Source: AGHT+IFxFWMNvgOxu8zRhvVKyXxVHRL6cDDVhBy0i7qh8Xalv67bNmfVN2BYwKEk4C5/eCMRlmSaBUD1DiQOzCvq3DM=
+X-Received: by 2002:a17:907:7e8b:b0:ad2:4f80:a79a with SMTP id
+ a640c23a62f3a-ad24f80a96fmr370746466b.46.1747032870867; Sun, 11 May 2025
+ 23:54:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250427064535.242404-1-maobibo@loongson.cn> <20250427064535.242404-4-maobibo@loongson.cn>
-In-Reply-To: <20250427064535.242404-4-maobibo@loongson.cn>
+References: <20250427064535.242404-1-maobibo@loongson.cn> <20250427064535.242404-6-maobibo@loongson.cn>
+In-Reply-To: <20250427064535.242404-6-maobibo@loongson.cn>
 From: Huacai Chen <chenhuacai@kernel.org>
-Date: Mon, 12 May 2025 14:53:58 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4w6P6ex1_fNqDNkkpY3mEjB0cPN9SWHfbBf-S5EJwD9Q@mail.gmail.com>
-X-Gm-Features: AX0GCFt2O9270bwVoaqVUGjaysLtbJqh2mEMOV3aX1CJh6ut_-x_BV02y_OTu0w
-Message-ID: <CAAhV-H4w6P6ex1_fNqDNkkpY3mEjB0cPN9SWHfbBf-S5EJwD9Q@mail.gmail.com>
-Subject: Re: [PATCH v11 3/5] KVM: selftests: Add core KVM selftests support
- for LoongArch
+Date: Mon, 12 May 2025 14:54:06 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5Es=TwK+2uPWwBdJ4uEiro5H4mg-fRYdqneebWWf0H4Q@mail.gmail.com>
+X-Gm-Features: AX0GCFu9KNAdZfVJev6aerIkTBkCRrioJYlTWqzxkU51wZJTdyNJRkoGE0rbyII
+Message-ID: <CAAhV-H5Es=TwK+2uPWwBdJ4uEiro5H4mg-fRYdqneebWWf0H4Q@mail.gmail.com>
+Subject: Re: [PATCH v11 5/5] KVM: selftests: Add test cases for LoongArch
 To: Bibo Mao <maobibo@loongson.cn>
 Cc: Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, 
 	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
@@ -78,470 +77,114 @@ Hi, Bibo,
 On Sun, Apr 27, 2025 at 2:45=E2=80=AFPM Bibo Mao <maobibo@loongson.cn> wrot=
 e:
 >
-> Add core KVM selftests support for LoongArch, it includes exception
-> handler, mmu page table setup and vCPU startup entry support.
+> Some common KVM test cases are supported on LoongArch now as following:
+>   coalesced_io_test
+>   demand_paging_test
+>   dirty_log_perf_test
+>   dirty_log_test
+>   guest_print_test
+>   hardware_disable_test
+>   kvm_binary_stats_test
+>   kvm_create_max_vcpus
+>   kvm_page_table_test
+>   memslot_modification_stress_test
+>   memslot_perf_test
+>   set_memory_region_test
+> And other test cases are not supported by LoongArch such as rseq_test,
+> since it is not supported on LoongArch physical machine either.
 >
 > Signed-off-by: Bibo Mao <maobibo@loongson.cn>
 > ---
->  .../selftests/kvm/lib/loongarch/exception.S   |  59 +++
->  .../selftests/kvm/lib/loongarch/processor.c   | 342 ++++++++++++++++++
->  2 files changed, 401 insertions(+)
->  create mode 100644 tools/testing/selftests/kvm/lib/loongarch/exception.S
->  create mode 100644 tools/testing/selftests/kvm/lib/loongarch/processor.c
+>  MAINTAINERS                                    |  2 ++
+>  tools/testing/selftests/kvm/Makefile           |  2 +-
+>  tools/testing/selftests/kvm/Makefile.kvm       | 18 ++++++++++++++++++
+>  .../selftests/kvm/set_memory_region_test.c     |  2 +-
+>  4 files changed, 22 insertions(+), 2 deletions(-)
 >
-> diff --git a/tools/testing/selftests/kvm/lib/loongarch/exception.S b/tool=
-s/testing/selftests/kvm/lib/loongarch/exception.S
-> new file mode 100644
-> index 000000000000..88bfa505c6f5
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/lib/loongarch/exception.S
-> @@ -0,0 +1,59 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 3cbf9ac0d83f..20cb455e0821 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -13043,6 +13043,8 @@ F:      Documentation/virt/kvm/loongarch/
+>  F:     arch/loongarch/include/asm/kvm*
+>  F:     arch/loongarch/include/uapi/asm/kvm*
+>  F:     arch/loongarch/kvm/
+> +F:     tools/testing/selftests/kvm/*/loongarch/
+> +F:     tools/testing/selftests/kvm/lib/loongarch/
+>
+>  KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)
+>  M:     Huacai Chen <chenhuacai@kernel.org>
+> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftes=
+ts/kvm/Makefile
+> index 20af35a91d6f..d9fffe06d3ea 100644
+> --- a/tools/testing/selftests/kvm/Makefile
+> +++ b/tools/testing/selftests/kvm/Makefile
+> @@ -3,7 +3,7 @@ top_srcdir =3D ../../../..
+>  include $(top_srcdir)/scripts/subarch.include
+>  ARCH            ?=3D $(SUBARCH)
+>
+> -ifeq ($(ARCH),$(filter $(ARCH),arm64 s390 riscv x86 x86_64))
+> +ifeq ($(ARCH),$(filter $(ARCH),arm64 s390 riscv x86 x86_64 loongarch))
+>  # Top-level selftests allows ARCH=3Dx86_64 :-(
+>  ifeq ($(ARCH),x86_64)
+>         ARCH :=3D x86
+> diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/sel=
+ftests/kvm/Makefile.kvm
+> index f62b0a5aba35..7985bb42d2c1 100644
+> --- a/tools/testing/selftests/kvm/Makefile.kvm
+> +++ b/tools/testing/selftests/kvm/Makefile.kvm
+> @@ -47,6 +47,10 @@ LIBKVM_riscv +=3D lib/riscv/handlers.S
+>  LIBKVM_riscv +=3D lib/riscv/processor.c
+>  LIBKVM_riscv +=3D lib/riscv/ucall.c
+>
+> +LIBKVM_loongarch +=3D lib/loongarch/processor.c
+> +LIBKVM_loongarch +=3D lib/loongarch/ucall.c
+> +LIBKVM_loongarch +=3D lib/loongarch/exception.S
 > +
-> +#include "processor.h"
-> +
-> +/* address of refill exception should be 4K aligned */
-> +.balign        4096
-> +.global handle_tlb_refill
-> +handle_tlb_refill:
-> +       csrwr   t0, LOONGARCH_CSR_TLBRSAVE
-> +       csrrd   t0, LOONGARCH_CSR_PGD
-> +       lddir   t0, t0, 3
-> +       lddir   t0, t0, 1
-> +       ldpte   t0, 0
-> +       ldpte   t0, 1
-> +       tlbfill
-> +       csrrd   t0, LOONGARCH_CSR_TLBRSAVE
-> +       ertn
-> +
-> +       /*
-> +        * save and restore all gprs except base register,
-> +        * and default value of base register is sp ($r3).
-> +        */
-> +.macro save_gprs base
-> +       .irp n,1,2,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,=
-24,25,26,27,28,29,30,31
-> +       st.d    $r\n, \base, 8 * \n
-> +       .endr
-> +.endm
-> +
-> +.macro restore_gprs base
-> +       .irp n,1,2,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,=
-24,25,26,27,28,29,30,31
-> +       ld.d    $r\n, \base, 8 * \n
-> +       .endr
-> +.endm
-> +
-> +/* address of general exception should be 4K aligned */
-> +.balign        4096
-> +.global handle_exception
-> +handle_exception:
-> +       csrwr  sp, LOONGARCH_CSR_KS0
-> +       csrrd  sp, LOONGARCH_CSR_KS1
-> +       addi.d sp, sp, -EXREGS_SIZE
-> +
-> +       save_gprs sp
-> +       /* save sp register to stack */
-> +       csrrd  t0, LOONGARCH_CSR_KS0
-> +       st.d   t0, sp, 3 * 8
-> +
-> +       csrrd  t0, LOONGARCH_CSR_ERA
-> +       st.d   t0, sp, PC_OFFSET_EXREGS
-> +       csrrd  t0, LOONGARCH_CSR_ESTAT
-> +       st.d   t0, sp, ESTAT_OFFSET_EXREGS
-> +       csrrd  t0, LOONGARCH_CSR_BADV
-> +       st.d   t0, sp, BADV_OFFSET_EXREGS
-> +
-> +       or     a0, sp, zero
-> +       bl route_exception
-> +       restore_gprs sp
-> +       csrrd  sp, LOONGARCH_CSR_KS0
-> +       ertn
-> diff --git a/tools/testing/selftests/kvm/lib/loongarch/processor.c b/tool=
-s/testing/selftests/kvm/lib/loongarch/processor.c
-> new file mode 100644
-> index 000000000000..82d3f041f57a
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/lib/loongarch/processor.c
-> @@ -0,0 +1,342 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <assert.h>
-> +#include <linux/compiler.h>
-> +
-> +#include "kvm_util.h"
-> +#include "processor.h"
-> +#include "ucall_common.h"
-> +
-> +#define LOONGARCH_GUEST_STACK_VADDR_MIN                0x200000
-> +#define LOONGARCH_PAGE_TABLE_PHYS_MIN          0x200000
-> +
-> +static vm_paddr_t invalid_pgtable[4];
-> +static uint64_t virt_pte_index(struct kvm_vm *vm, vm_vaddr_t gva, int le=
-vel)
-> +{
-> +       unsigned int shift;
-> +       uint64_t mask;
-> +
-> +       shift =3D level * (vm->page_shift - 3) + vm->page_shift;
-> +       mask =3D (1UL << (vm->page_shift - 3)) - 1;
-> +       return (gva >> shift) & mask;
-> +}
-> +
-> +static uint64_t pte_addr(struct kvm_vm *vm, uint64_t entry)
-> +{
-> +       return entry &  ~((0x1UL << vm->page_shift) - 1);
-> +}
-> +
-> +static uint64_t ptrs_per_pte(struct kvm_vm *vm)
-> +{
-> +       return 1 << (vm->page_shift - 3);
-> +}
-> +
-> +static void virt_set_pgtable(struct kvm_vm *vm, vm_paddr_t table, vm_pad=
-dr_t child)
-> +{
-> +       uint64_t *ptep;
-> +       int i, ptrs_per_pte;
-> +
-> +       ptep =3D addr_gpa2hva(vm, table);
-> +       ptrs_per_pte =3D 1 << (vm->page_shift - 3);
-> +       for (i =3D 0; i < ptrs_per_pte; i++)
-> +               WRITE_ONCE(*(ptep + i), child);
-> +}
-> +
-> +void virt_arch_pgd_alloc(struct kvm_vm *vm)
-> +{
-> +       int i;
-> +       vm_paddr_t child, table;
-> +
-> +       if (vm->pgd_created)
-> +               return;
-> +       child =3D table =3D 0;
-> +       for (i =3D 0; i < vm->pgtable_levels; i++) {
-> +               invalid_pgtable[i] =3D child;
-> +               table =3D vm_phy_page_alloc(vm, LOONGARCH_PAGE_TABLE_PHYS=
-_MIN,
-> +                               vm->memslots[MEM_REGION_PT]);
-> +               TEST_ASSERT(table, "Fail to allocate page tale at level %=
-d\n", i);
-> +               virt_set_pgtable(vm, table, child);
-> +               child =3D table;
-> +       }
-> +       vm->pgd =3D table;
-> +       vm->pgd_created =3D true;
-> +}
-> +
-> +static int virt_pte_none(uint64_t *ptep, int level)
-> +{
-> +       return *ptep =3D=3D invalid_pgtable[level];
-> +}
-> +
-> +static uint64_t *virt_populate_pte(struct kvm_vm *vm, vm_vaddr_t gva, in=
-t alloc)
-> +{
-> +       uint64_t *ptep;
-> +       vm_paddr_t child;
-> +       int level;
-> +
-> +       if (!vm->pgd_created)
-> +               goto unmapped_gva;
-> +
-> +       level =3D vm->pgtable_levels - 1;
-> +       child =3D vm->pgd;
-> +       while (level > 0) {
-> +               ptep =3D addr_gpa2hva(vm, child) + virt_pte_index(vm, gva=
-, level) * 8;
-> +               if (virt_pte_none(ptep, level)) {
-> +                       if (alloc) {
-> +                               child =3D vm_alloc_page_table(vm);
-> +                               virt_set_pgtable(vm, child, invalid_pgtab=
-le[level - 1]);
-> +                               WRITE_ONCE(*ptep, child);
-> +                       } else
-> +                               goto unmapped_gva;
-> +
-> +               } else
-> +                       child =3D pte_addr(vm, *ptep);
-> +               level--;
-> +       }
-> +
-> +       ptep =3D addr_gpa2hva(vm, child) + virt_pte_index(vm, gva, level)=
- * 8;
-> +       return ptep;
-> +
-> +unmapped_gva:
-> +       TEST_FAIL("No mapping for vm virtual address, gva: 0x%lx", gva);
-> +       exit(EXIT_FAILURE);
-> +}
-> +
-> +vm_paddr_t addr_arch_gva2gpa(struct kvm_vm *vm, vm_vaddr_t gva)
-> +{
-> +       uint64_t *ptep;
-> +
-> +       ptep =3D virt_populate_pte(vm, gva, 0);
-> +       TEST_ASSERT(*ptep !=3D 0, "Virtual address vaddr: 0x%lx not mappe=
-d\n", gva);
-> +
-> +       return pte_addr(vm, *ptep) + (gva & (vm->page_size - 1));
-> +}
-> +
-> +void virt_arch_pg_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr)
-> +{
-> +       uint32_t prot_bits;
-> +       uint64_t *ptep;
-> +
-> +       TEST_ASSERT((vaddr % vm->page_size) =3D=3D 0,
-> +                       "Virtual address not on page boundary,\n"
-> +                       "vaddr: 0x%lx vm->page_size: 0x%x", vaddr, vm->pa=
-ge_size);
-> +       TEST_ASSERT(sparsebit_is_set(vm->vpages_valid,
-> +                       (vaddr >> vm->page_shift)),
-> +                       "Invalid virtual address, vaddr: 0x%lx", vaddr);
-> +       TEST_ASSERT((paddr % vm->page_size) =3D=3D 0,
-> +                       "Physical address not on page boundary,\n"
-> +                       "paddr: 0x%lx vm->page_size: 0x%x", paddr, vm->pa=
-ge_size);
-> +       TEST_ASSERT((paddr >> vm->page_shift) <=3D vm->max_gfn,
-> +                       "Physical address beyond maximum supported,\n"
-> +                       "paddr: 0x%lx vm->max_gfn: 0x%lx vm->page_size: 0=
-x%x",
-> +                       paddr, vm->max_gfn, vm->page_size);
-> +
-> +       ptep =3D virt_populate_pte(vm, vaddr, 1);
-> +       prot_bits =3D _PAGE_PRESENT | __READABLE | __WRITEABLE | _CACHE_C=
-C;
-> +       prot_bits |=3D _PAGE_USER;
-We can calculate prot_bits in one statement.
-
-> +       WRITE_ONCE(*ptep, paddr | prot_bits);
-> +}
-> +
-> +static void pte_dump(FILE *stream, struct kvm_vm *vm, uint8_t indent, ui=
-nt64_t page, int level)
-> +{
-> +       static const char * const type[] =3D { "pte", "pmd", "pud", "pgd"=
-};
-> +       uint64_t pte, *ptep;
-> +
-> +       if (level < 0)
-> +               return;
-> +
-> +       for (pte =3D page; pte < page + ptrs_per_pte(vm) * 8; pte +=3D 8)=
- {
-> +               ptep =3D addr_gpa2hva(vm, pte);
-> +               if (virt_pte_none(ptep, level))
-> +                       continue;
-> +               fprintf(stream, "%*s%s: %lx: %lx at %p\n",
-> +                               indent, "", type[level], pte, *ptep, ptep=
-);
-> +               pte_dump(stream, vm, indent + 1, pte_addr(vm, *ptep), lev=
-el--);
-> +       }
-> +}
-> +
-> +void virt_arch_dump(FILE *stream, struct kvm_vm *vm, uint8_t indent)
-> +{
-> +       int level;
-> +
-> +       if (!vm->pgd_created)
-> +               return;
-> +
-> +       level =3D vm->pgtable_levels - 1;
-> +       pte_dump(stream, vm, indent, vm->pgd, level);
-> +}
-> +
-> +void vcpu_arch_dump(FILE *stream, struct kvm_vcpu *vcpu, uint8_t indent)
-> +{
-> +}
-> +
-> +void assert_on_unhandled_exception(struct kvm_vcpu *vcpu)
-> +{
-> +       struct ucall uc;
-> +
-> +       if (get_ucall(vcpu, &uc) !=3D UCALL_UNHANDLED)
-> +               return;
-> +
-> +       TEST_FAIL("Unexpected exception (pc:0x%lx, estat:0x%lx, badv:0x%l=
-x)",
-> +                       uc.args[0], uc.args[1], uc.args[2]);
-> +}
-> +
-> +void route_exception(struct ex_regs *regs)
-> +{
-> +       unsigned long pc, estat, badv;
-> +
-> +       pc =3D regs->pc;
-> +       estat =3D regs->estat;
-> +       badv  =3D regs->badv;
-> +       ucall(UCALL_UNHANDLED, 3, pc, estat, badv);
-> +       while (1)
-> +               ;
-> +}
-> +
-> +void vcpu_args_set(struct kvm_vcpu *vcpu, unsigned int num, ...)
-> +{
-> +       va_list ap;
-> +       struct kvm_regs regs;
-> +       int i;
-> +
-> +       TEST_ASSERT(num >=3D 1 && num <=3D 8, "Unsupported number of args=
-,\n"
-> +                   "num: %u\n", num);
-> +
-> +       vcpu_regs_get(vcpu, &regs);
-> +       va_start(ap, num);
-> +       for (i =3D 0; i < num; i++)
-> +               regs.gpr[i + 4] =3D va_arg(ap, uint64_t);
-> +       va_end(ap);
-> +       vcpu_regs_set(vcpu, &regs);
-> +}
-> +
-> +static void loongarch_get_csr(struct kvm_vcpu *vcpu, uint64_t id, void *=
-addr)
-> +{
-> +       uint64_t csrid;
-> +
-> +       csrid =3D KVM_REG_LOONGARCH_CSR | KVM_REG_SIZE_U64 | 8 * id;
-> +       __vcpu_get_reg(vcpu, csrid, addr);
-> +}
-> +
-> +static void loongarch_set_csr(struct kvm_vcpu *vcpu, uint64_t id, uint64=
-_t val)
-> +{
-> +       uint64_t csrid;
-> +
-> +       csrid =3D KVM_REG_LOONGARCH_CSR | KVM_REG_SIZE_U64 | 8 * id;
-> +       vcpu_set_reg(vcpu, csrid, val);
-For symmetry with loongarch_get_csr(), maybe we can replace
-vcpu_set_reg() with __vcpu_set_reg() here.
+>  # Non-compiled test targets
+>  TEST_PROGS_x86 +=3D x86/nx_huge_pages_test.sh
+>
+> @@ -190,6 +194,20 @@ TEST_GEN_PROGS_riscv +=3D coalesced_io_test
+>  TEST_GEN_PROGS_riscv +=3D get-reg-list
+>  TEST_GEN_PROGS_riscv +=3D steal_time
+>
+> +TEST_GEN_PROGS_loongarch +=3D coalesced_io_test
+> +TEST_GEN_PROGS_loongarch +=3D demand_paging_test
+> +TEST_GEN_PROGS_loongarch +=3D dirty_log_perf_test
+> +TEST_GEN_PROGS_loongarch +=3D dirty_log_test
+> +TEST_GEN_PROGS_loongarch +=3D demand_paging_test
+This line is duplicated.
 
 
 Huacai
 
-> +}
+> +TEST_GEN_PROGS_loongarch +=3D guest_print_test
+> +TEST_GEN_PROGS_loongarch +=3D hardware_disable_test
+> +TEST_GEN_PROGS_loongarch +=3D kvm_binary_stats_test
+> +TEST_GEN_PROGS_loongarch +=3D kvm_create_max_vcpus
+> +TEST_GEN_PROGS_loongarch +=3D kvm_page_table_test
+> +TEST_GEN_PROGS_loongarch +=3D memslot_modification_stress_test
+> +TEST_GEN_PROGS_loongarch +=3D memslot_perf_test
+> +TEST_GEN_PROGS_loongarch +=3D set_memory_region_test
 > +
-> +static void loongarch_vcpu_setup(struct kvm_vcpu *vcpu)
-> +{
-> +       unsigned long val;
-> +       int width;
-> +       struct kvm_vm *vm =3D vcpu->vm;
-> +
-> +       switch (vm->mode) {
-> +       case VM_MODE_P36V47_16K:
-> +       case VM_MODE_P47V47_16K:
-> +               break;
-> +
-> +       default:
-> +               TEST_FAIL("Unknown guest mode, mode: 0x%x", vm->mode);
-> +       }
-> +
-> +       /* user mode and page enable mode */
-> +       val =3D PLV_USER | CSR_CRMD_PG;
-> +       loongarch_set_csr(vcpu, LOONGARCH_CSR_CRMD, val);
-> +       loongarch_set_csr(vcpu, LOONGARCH_CSR_PRMD, val);
-> +       loongarch_set_csr(vcpu, LOONGARCH_CSR_EUEN, 1);
-> +       loongarch_set_csr(vcpu, LOONGARCH_CSR_ECFG, 0);
-> +       loongarch_set_csr(vcpu, LOONGARCH_CSR_TCFG, 0);
-> +       loongarch_set_csr(vcpu, LOONGARCH_CSR_ASID, 1);
-> +
-> +       width =3D vm->page_shift - 3;
-> +       val =3D 0;
-> +       switch (vm->pgtable_levels) {
-> +       case 4:
-> +               /* pud page shift and width */
-> +               val =3D (vm->page_shift + width * 2) << 20 | (width << 25=
-);
-> +               /* fall throuth */
-> +       case 3:
-> +               /* pmd page shift and width */
-> +               val |=3D (vm->page_shift + width) << 10 | (width << 15);
-> +               /* pte page shift and width */
-> +               val |=3D vm->page_shift | width << 5;
-> +               break;
-> +       default:
-> +               TEST_FAIL("Got %u page table levels, expected 3 or 4", vm=
-->pgtable_levels);
-> +       }
-> +       loongarch_set_csr(vcpu, LOONGARCH_CSR_PWCTL0, val);
-> +
-> +       /* PGD page shift and width */
-> +       val =3D (vm->page_shift + width * (vm->pgtable_levels - 1)) | wid=
-th << 6;
-> +       loongarch_set_csr(vcpu, LOONGARCH_CSR_PWCTL1, val);
-> +       loongarch_set_csr(vcpu, LOONGARCH_CSR_PGDL, vm->pgd);
-> +
-> +       /*
-> +        * Refill exception runs on real mode
-> +        * Entry address should be physical address
-> +        */
-> +       val =3D addr_gva2gpa(vm, (unsigned long)handle_tlb_refill);
-> +       loongarch_set_csr(vcpu, LOONGARCH_CSR_TLBRENTRY, val);
-> +
-> +       /*
-> +        * General exception runs on page-enabled mode
-> +        * Entry address should be virtual address
-> +        */
-> +       val =3D (unsigned long)handle_exception;
-> +       loongarch_set_csr(vcpu, LOONGARCH_CSR_EENTRY, val);
-> +
-> +       loongarch_get_csr(vcpu, LOONGARCH_CSR_TLBIDX, &val);
-> +       val &=3D ~CSR_TLBIDX_SIZEM;
-> +       val |=3D PS_DEFAULT_SIZE << CSR_TLBIDX_SIZE;
-> +       loongarch_set_csr(vcpu, LOONGARCH_CSR_TLBIDX, val);
-> +
-> +       loongarch_set_csr(vcpu, LOONGARCH_CSR_STLBPGSIZE, PS_DEFAULT_SIZE=
-);
-> +
-> +       /* LOONGARCH_CSR_KS1 is used for exception stack */
-> +       val =3D __vm_vaddr_alloc(vm, vm->page_size,
-> +                       LOONGARCH_GUEST_STACK_VADDR_MIN, MEM_REGION_DATA)=
-;
-> +       TEST_ASSERT(val !=3D 0,  "No memory for exception stack");
-> +       val =3D val + vm->page_size;
-> +       loongarch_set_csr(vcpu, LOONGARCH_CSR_KS1, val);
-> +
-> +       loongarch_get_csr(vcpu, LOONGARCH_CSR_TLBREHI, &val);
-> +       val &=3D ~CSR_TLBREHI_PS;
-> +       val |=3D PS_DEFAULT_SIZE << CSR_TLBREHI_PS_SHIFT;
-> +       loongarch_set_csr(vcpu, LOONGARCH_CSR_TLBREHI, val);
-> +
-> +       loongarch_set_csr(vcpu, LOONGARCH_CSR_CPUID, vcpu->id);
-> +       loongarch_set_csr(vcpu, LOONGARCH_CSR_TMID,  vcpu->id);
-> +}
-> +
-> +struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id)
-> +{
-> +       size_t stack_size;
-> +       uint64_t stack_vaddr;
-> +       struct kvm_regs regs;
-> +       struct kvm_vcpu *vcpu;
-> +
-> +       vcpu =3D __vm_vcpu_add(vm, vcpu_id);
-> +       stack_size =3D vm->page_size;
-> +       stack_vaddr =3D __vm_vaddr_alloc(vm, stack_size,
-> +                       LOONGARCH_GUEST_STACK_VADDR_MIN, MEM_REGION_DATA)=
-;
-> +       TEST_ASSERT(stack_vaddr !=3D 0,  "No memory for vm stack");
-> +
-> +       loongarch_vcpu_setup(vcpu);
-> +       /* Setup guest general purpose registers */
-> +       vcpu_regs_get(vcpu, &regs);
-> +       regs.gpr[3] =3D stack_vaddr + stack_size;
-> +       vcpu_regs_set(vcpu, &regs);
-> +
-> +       return vcpu;
-> +}
-> +
-> +void vcpu_arch_set_entry_point(struct kvm_vcpu *vcpu, void *guest_code)
-> +{
-> +       struct kvm_regs regs;
-> +
-> +       /* Setup guest PC register */
-> +       vcpu_regs_get(vcpu, &regs);
-> +       regs.pc =3D (uint64_t)guest_code;
-> +       vcpu_regs_set(vcpu, &regs);
-> +}
+>  SPLIT_TESTS +=3D arch_timer
+>  SPLIT_TESTS +=3D get-reg-list
+>
+> diff --git a/tools/testing/selftests/kvm/set_memory_region_test.c b/tools=
+/testing/selftests/kvm/set_memory_region_test.c
+> index bc440d5aba57..ce3ac0fd6dfb 100644
+> --- a/tools/testing/selftests/kvm/set_memory_region_test.c
+> +++ b/tools/testing/selftests/kvm/set_memory_region_test.c
+> @@ -350,7 +350,7 @@ static void test_invalid_memory_region_flags(void)
+>         struct kvm_vm *vm;
+>         int r, i;
+>
+> -#if defined __aarch64__ || defined __riscv || defined __x86_64__
+> +#if defined __aarch64__ || defined __riscv || defined __x86_64__ || defi=
+ned __loongarch__
+>         supported_flags |=3D KVM_MEM_READONLY;
+>  #endif
+>
 > --
 > 2.39.3
 >
