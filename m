@@ -1,43 +1,43 @@
-Return-Path: <linux-kselftest+bounces-32849-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32850-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B62EFAB3552
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 May 2025 12:56:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A145AB3562
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 May 2025 12:58:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7C94F7AE7A0
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 May 2025 10:55:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6128C171411
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 May 2025 10:56:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06A1026A1B1;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DD1226A1CC;
 	Mon, 12 May 2025 10:53:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b="mbjZLemN"
+	dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b="eFZHO4MD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from CY4PR02CU008.outbound.protection.outlook.com (mail-westcentralusazon11021077.outbound.protection.outlook.com [40.93.199.77])
+Received: from CY3PR05CU001.outbound.protection.outlook.com (mail-westcentralusazon11023112.outbound.protection.outlook.com [40.93.201.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD91E269CE4;
-	Mon, 12 May 2025 10:53:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.199.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48FFE269D0B;
+	Mon, 12 May 2025 10:53:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.201.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747047207; cv=fail; b=NxGeMIRxgGH/JIm4sbgDesujriBlcba98tpOihkh6qdHTJDo/fZs4uPvoyqZ9sifWPO4t06tp0etsHCk76TSxTXC7bCM+ekkxJPHrS1LS3rLPYPhSYxC8HzHr7a+wAkR1orv+YYppaDXjy4qmEvuDuNgELuJH2+1u184uWUMo7g=
+	t=1747047208; cv=fail; b=ACOBYTCN/2jIg7MI2lNSouK0Zq3H8ssk8RNCRiHfYyI8oDkxdT7pj2TOl0PAaVygW3+7pk76Kh1GqouWhzYt026Dj+nnRWP8ny9scjLGqL5QZejYcNwT2paY36zRzd8UrpXUFSzYRqoE8NsJGnPulkXzdL1TjA0xtTVVZd+F8Aw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747047207; c=relaxed/simple;
-	bh=LA22jueyCOOUtnysIxG2Nx5UMfm2f5ICarzIidgAvz4=;
+	s=arc-20240116; t=1747047208; c=relaxed/simple;
+	bh=usMn2HF2AeGmf3NBW+E8qwHqQhdNWMk+JQMAFdmqO6A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=bji/W5yETwf4bygFXsmaZwizpcTQM1TzZKrE0k2iJg6G6VKtAzpxXyoHVExFXSYuu+jyXN3U3mvjxrbbcIr1zlXxEXCs3hxDQIVFQ1LN7fAM1YQ6Ce90Uy+tlHvTt08s4wHmTYJUyY+fU01WUrPTp3qkoJwNkOd0NrnpOQQFOCQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com; spf=pass smtp.mailfrom=os.amperecomputing.com; dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b=mbjZLemN; arc=fail smtp.client-ip=40.93.199.77
+	 Content-Type:MIME-Version; b=oOp9IDQlXb8kjwj5jcnFcyt7f8u/dZhHVL6kH7vqs/vstrB2CIQD64lO1JYMLwkql11zPuaCf4kzUR80ej78/qcjHzpTciZnHGTy/WCV2Ph3rD6DMgleTVwptwWzvwk4thB+1C9DgFNxyGxfQP1JT1ahGY4uQI1UIIWU8MzDzQY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com; spf=pass smtp.mailfrom=os.amperecomputing.com; dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b=eFZHO4MD; arc=fail smtp.client-ip=40.93.201.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=os.amperecomputing.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=s+fOikKkZpWqPkAgCeMFNg71gXqsJIUoPwgLMaP0x5lXHB5tbrhvbZgYA2qTKbu3SD1MKN3tVOl4tEGSQCfV7cpVq7wT5HlmQbzmy04tbLFXwyrIh6RpzLkw5G7Ym/Hi//uoRoRat1044lqfH37k/hNIUJXbEAucqsnRFLMV9HqKHCegs8Ccp5xzT0pP9rwc+rJqMatWf3cngfC8Gq3RcIJ0OQdoS9cai2ZF9++Rla3WSaT5y7aT/uvITINmvxEP7Ppb8jPRnYLE6N9IxKWOfvHm31D98v6msJCv+L1VNcaGxLmeRZOKjk+bGf+9X3s5JR+VyuNyokRTukt3vCSLnQ==
+ b=aTGGBqTKh5rM9lVjl+udQ/dBkFm/3yxFciI1v/BabAY2YT/eqtWsfhVSnu9DrV2GeADHzmsNz2tiV/YhpDX1IoQS9kkgML3+RrgL9+M0OYNzL+ct00LdulBprOrc6qSWjo/bWMvfQX7IfO5ITFRZcHGJKkK0y0WGVhrnkM072KvEdWBLlHM2ux+C021uwZRCg4brIHbKRBmdbj3wABUu3RR12tV+/52n8NHYDXsW+2VOK0/EI4kksm3GeL6SvQtx6cszgs3TTyIZewNLikyO6YndBhMyspOE1klwCvu2S/OOYIDKFGgQU/CqWLhQWNQRD0+4b6+j+GSdrutSheNQqg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=U53OQ2ViFDKLIeFGVQDN/pm8Ynh2gt8FPvIs9yGts1I=;
- b=H6hGUm+27lDubj/r/l41XSk+JTwoSH36RbWXFjPOJKHw7ZbsQJnqAdQtDnPHM8+w9poDoTlmMW/UR9AhaiIK2B/F5KoL8yjyXXO0yW2B/R++3L4/HHF3gsEBAXcNO7RxTL/ToMPqRyU/SRKPORXw5gmw84l+QSmyH/bRLCQxZnvGhoI5maQu4E8owdbq80tM5X1iu4rOmrp4RbAvpRgzyMQWpydhC9w9uinUYrY5fxH3r220MZc0lEG0UwoneF7KzY1UWMrwy5qEUKgUKwuYCYnmkmh+qviBJY9bP8mTbWbcM8LcG0+7DdMpmbRkigypfnvjypXbbPnV0uIWz3RNGg==
+ bh=gEJxGtc3ivgqZDYaVz69qZ4p8YBGRxcKWxGlHVI1ElM=;
+ b=dxkc7zozFiDKCjdrSEGKTXw1xjdhmbl/W2ymK8f2ZIPQzPJn+2Ye8mfZgNvfXCJv/x3y0J1MvQwvh6EzjdWwBZKzwDXKAK8iZFffu8snMVIqdkOkPLo2s4OnM36UNKP+Ms7n1ReaS89wYUW/LQ6EPyULOx9YMZqNNuLhpYZ6Tnqv5GFaVclN/ANNXrAcsJ/Qc4JmwPH/zjtsS6BEHXs627XJrxB1v3QapIIOFf/Pn/1TrAXugijnHjHATBmsAoZ76qjz9XR6SqIfbEcclweHNop7W3Z8YF6NDgxNF3IZOLhG+jGG3Ec2UsxvquDn+guq1NBZBoCarr3flFXupUM61Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
  header.from=os.amperecomputing.com; dkim=pass
@@ -45,18 +45,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=os.amperecomputing.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=U53OQ2ViFDKLIeFGVQDN/pm8Ynh2gt8FPvIs9yGts1I=;
- b=mbjZLemN+cYziMtuIZm4Nj7Oi4rLOLeFaVRlQNouiva1tWvLgVVk0bz3lzV3zQKA24iA1ivWe2EayNF49JaHjz6jw6OfTVgwc6BkapgKkQRxvQgv66lL0yw0J4DIAnLT36O4LWuUsTjk6Q6C6h4WTFSCPDyaNJ33Jdea8JvPDxE=
+ bh=gEJxGtc3ivgqZDYaVz69qZ4p8YBGRxcKWxGlHVI1ElM=;
+ b=eFZHO4MDHE+KPrE7sgpMmAlZKhmiBfOeSgcqwuyAvBs7eAwot7dyI9lBCpr117Jk5TCMZrd8gBS3sf6z6YgM8ZzCqZI5UsCCOGJ4IadLh3WtViGxr/VhYeGJEFrx3YKOK4JeXp/KrpLhcEi4DqW3PDWf4xwdTIHnG5V1CEH69p0=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
 Received: from SJ2PR01MB8101.prod.exchangelabs.com (2603:10b6:a03:4f6::10) by
  CH0PR01MB6907.prod.exchangelabs.com (2603:10b6:610:104::15) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8722.28; Mon, 12 May 2025 10:53:18 +0000
+ 15.20.8722.28; Mon, 12 May 2025 10:53:19 +0000
 Received: from SJ2PR01MB8101.prod.exchangelabs.com
  ([fe80::292:6d9c:eb9a:95c9]) by SJ2PR01MB8101.prod.exchangelabs.com
  ([fe80::292:6d9c:eb9a:95c9%6]) with mapi id 15.20.8722.027; Mon, 12 May 2025
- 10:53:18 +0000
+ 10:53:19 +0000
 From: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
 To: linux-arm-kernel@lists.infradead.org,
 	kvmarm@lists.linux.dev,
@@ -70,9 +70,9 @@ Cc: maz@kernel.org,
 	seanjc@google.com,
 	darren@os.amperecomputing.com,
 	gankulkarni@os.amperecomputing.com
-Subject: [RFC PATCH v2 5/9] KVM: arm64: nv: selftests: Enable vgic tests to run in vEL2
-Date: Mon, 12 May 2025 03:52:47 -0700
-Message-ID: <20250512105251.577874-6-gankulkarni@os.amperecomputing.com>
+Subject: [RFC PATCH v2 6/9] KVM: arm64: nv: selftests: Enable set_id_regs test to run in vEL2
+Date: Mon, 12 May 2025 03:52:48 -0700
+Message-ID: <20250512105251.577874-7-gankulkarni@os.amperecomputing.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250512105251.577874-1-gankulkarni@os.amperecomputing.com>
 References: <20250512105251.577874-1-gankulkarni@os.amperecomputing.com>
@@ -89,182 +89,152 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: SJ2PR01MB8101:EE_|CH0PR01MB6907:EE_
-X-MS-Office365-Filtering-Correlation-Id: 45640861-d418-4efc-cbb7-08dd91433418
+X-MS-Office365-Filtering-Correlation-Id: 0b54b829-3abb-49c5-d71e-08dd914334ae
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|376014|52116014|7416014|366016|1800799024|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?2vonA/bDIVxYialnSuopx+hlQKfacsxseyWvbwZD0y9h+qWOe3mZI0VpwZlg?=
- =?us-ascii?Q?W37dP/F7k5L9O+fe86f5eQCI+NQr+hd6pvSehtNGUkaDG682qxHhB4UU/0CN?=
- =?us-ascii?Q?/yatMkdG3rPamkIoB//VshEj+wvdf00CKYqHbbIbQ3AQ4zfNE4FO0kEhTNtn?=
- =?us-ascii?Q?l5Vaz4xZBzUHMKWoPwlRllau1qUg1FQP9m2XqM0hZChmJC+2iii0pt1s01xe?=
- =?us-ascii?Q?GhXKA8cQ9CbR+Q60ubiFZ6vqqgpO6FgLkLmFy1X+7ZOd269ud02yc18KMwGn?=
- =?us-ascii?Q?sK/BlJPRsx+68Q8eejaczJepI2b5CpbY8tw4S/7yUouvt9K6UAL8/oLUDl2S?=
- =?us-ascii?Q?jWEyS3VSWttMw7IBMIiKY+cKj9jQUDrcyF1JFfItx5dO00YUBC5s1IH8d1JH?=
- =?us-ascii?Q?3JUR5lhkTEYyctwBhJXwezxgtHrnFt6F3IVpNfTaV0nijGyiPNWwg32Lns17?=
- =?us-ascii?Q?9l53RO1Wp9Is86aUE8VpDkrkoglZsPafkHywub5NnJLLoibrhtnfUJcEABYe?=
- =?us-ascii?Q?wrVUwy34JEz6G13rPG3Nr1b2nIlJ3XflEx2dXznbvNOXAD0v1BJTs2MIhIjN?=
- =?us-ascii?Q?aQ1D+sXA/y7ejI4HkRtkeO9FS3wYjN58PZ/KmW2M6r7dfs/jmsQvtujzHNxB?=
- =?us-ascii?Q?dRN9M74RTgTgD/oP+4TL9pMC2ioh0Xq07mP5snhjrLXAnj+ZBrCjYm0bBJDs?=
- =?us-ascii?Q?zYcJeZKbpej8kFm8eH+7T/cIDqfRXNBQmImphUO8biTk7kTkdLrSKkCQgzBA?=
- =?us-ascii?Q?daepWsXN1WdvdLSNnqYVjp8TXuBlbj8WhCOWEE2R/oBUdA7PyUj5dMttBCRo?=
- =?us-ascii?Q?CAAp2oE2MY2b6zicr7gXsFVyEp+tjOnKlmTfROWgeS0hlPMkle3vXXWH52w0?=
- =?us-ascii?Q?z4fSjWCg+i7+f7h3u83SD9Gu7zPQERyRPxK7SCvAmeBucpTNTLqbshfVxLZ1?=
- =?us-ascii?Q?R33bbbMX4eoZEW+VbPBNH3E+u6I6QCDkUmjZh0tKdUwe+GII6y3fiAEQTu8H?=
- =?us-ascii?Q?0HvLMuqazt9zORO9sg9jJrk8lNVSiJcKwWYM/7r+Z6qYrbLakyh7rESfMXVd?=
- =?us-ascii?Q?ZkHrE3zYs8lYo89fOXbknAUQrMIlEx0vZYv6x9W6QV2tqOw1QPtOm8c5XvKr?=
- =?us-ascii?Q?RMS8PxZ3+vFecKwbRsUw1/q+HCPzDqMa1zgLNk1ncwAMyv3f05BN3Q0Q6DQW?=
- =?us-ascii?Q?25d7j55W+lJVcfWcyCTb7phGyTeJ1+X+/mQLU2ywoEJJckAnAu1Y+PeWYJfz?=
- =?us-ascii?Q?82JmlgR9npY5F8+9EqIRy2iCUH9mGBWLr1wzFAAaMURR0XWad6XUCGQjkFTF?=
- =?us-ascii?Q?JgoCwGNHyEKSbBt402XdiUykJ3NOkt9js0W8eUdKYgK/PljlEx7UwqXRiEwV?=
- =?us-ascii?Q?o/Zvc/c21J8//uuNCalmmshICBsOZ3go4F9fxyA8w2J+llDtc295NzReDzvY?=
- =?us-ascii?Q?g3mkUslSc1WGS6/dhglegldmZiT/YJnZc656KMLgbJ9g7es2GNgAGA=3D=3D?=
+	=?us-ascii?Q?YIoyC6m81f4N8vwa8g+zsqNpDb0Sl9xeWWJuv+dF0cCOknjeP3FII13sPltn?=
+ =?us-ascii?Q?J+HM34MWr89BICbw1sh1+KymmXYgxw4UyIUXpz5NKJnKy2YJAdNtT2RH64Pv?=
+ =?us-ascii?Q?k2TzWpeeU/q89yjDPzjuSDhuEjUJcbIqW/DUOstgdT/kjThHtRP/HmtTRqO9?=
+ =?us-ascii?Q?TT4mqDr5Z+p2a15+Lx33EYbGVYLAqnq9fcgKN/cHVKoJgQICH+A0Ma7yEZ8a?=
+ =?us-ascii?Q?/hPSpXCBEB1HHPy/0OKRxFb1OO1XY5qWthNQvT26HmsIz+RrvZ1L4/YCSryq?=
+ =?us-ascii?Q?wQHUrAUivYOE4X1ZmNmz1BQnqxDYSDL92UfZGw8kmJUTWqWhoADGOuRJ+c7i?=
+ =?us-ascii?Q?1XKQj38Y6pK3s6VW34iUuzGd+pWsJ0UW7XzlA1q+meBe1d9I6wJmEmGq48HE?=
+ =?us-ascii?Q?q11tyAmyrb6zywgCviqrvNX9WRCxQ986UU10bbG6ppdeEXO7ieI9iyg+svOx?=
+ =?us-ascii?Q?BfQvkVd2rVaFSd0ThePGfaU1JE+7FgRUtyCo0gW/Ig9djngb/xGjMhyPamxl?=
+ =?us-ascii?Q?aO7ZGwbNApNqaAKXgK+AIWQdGNq3A+JCrkycNuvUSmFs/l4Br757AFwrKf4l?=
+ =?us-ascii?Q?nVtVl//0BGXg9yK+DJi73+3JU1/JmrD9GSejmST90uPieQplTxaERf+nnLq2?=
+ =?us-ascii?Q?ePco7uJV/S9pipZTEGWiBdHo3C8lWl0rPUR7Gup5US0JMNwJlYXexvpwd1zs?=
+ =?us-ascii?Q?iaYop+SAJXyYs6LJ7KlASkB+j4LFGuzEqYEcI797z98F2qtpLiDLnURAxgL4?=
+ =?us-ascii?Q?V1qFESD90eCL2TV7mGSHkDM6Uu7VqSiZ3EHWi6Ympq8XzRp4tN6/V8NWC+l4?=
+ =?us-ascii?Q?i4IYVOut5OIjZJrW2icYS0hfqq7N4qvBvS3Dz1LgLL3GLOA0jEAuCQNrFNtq?=
+ =?us-ascii?Q?e4AT2CsBz7ziSgpt6tEplzQzS/QSsY5/OC6VeivaskIaSiAXZ7SJ1y+efWXe?=
+ =?us-ascii?Q?SYtSjVD5qPiFFnSTAOOh+/81mb7o7Jjwv1R7FHl2IZL5ji0KX7xG6S5eWGbM?=
+ =?us-ascii?Q?Z+Nu/JS1MfJkg+VfUPYxrqyRuOIByEElrJ4OAb829H8Xy8zk0OdMS7SqYkey?=
+ =?us-ascii?Q?Q/dWcvt93cjXofEwUbg/XcW4RQmxr3MxNlBe3Vb/jSN1iPaJ04zgPfZ6Brci?=
+ =?us-ascii?Q?X1KgMzJMKhjOyCKztRwwsANgLoEBdJflUnqUNcSR8gRbD/SUFJMT22iT7pQ8?=
+ =?us-ascii?Q?+kvPPCRIOCkN2II+D3kIHo1J4gloOdYL4ScAQd1D9AFtWc5VnVA6dxRCMKwY?=
+ =?us-ascii?Q?F0Y3p/pM3v14/6+UbuDcIW5+GzjPIQ1LZ3n2/Iftel+yFdSsiwUSIFFpTPCp?=
+ =?us-ascii?Q?9pJIl91HMbPqLJ0+M/een4u3sQK2p40hJD/sbfyklt19adbdWLJHsUQneT03?=
+ =?us-ascii?Q?m1BRNUxkc5vXSoBR/fKe3jnBNszK3KqG776c9NRkZPntAdTfq4b6k5GkWS4l?=
+ =?us-ascii?Q?kdWuGBA/fBt5ftX4rlKo/JM+EodjSV9SWzXuMs0yrHH9zoRuExdLpQ=3D=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR01MB8101.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(52116014)(7416014)(366016)(1800799024)(38350700014);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?oPm12ROWuNfKTeLRlbdi/HDXXglY41L0L5VyJYSUbbqJfIb2zyL5Sy+kHzLh?=
- =?us-ascii?Q?WVtRLGhyivM2VcAZ9cL3+UETdO/PwFrMYLNsnRWbU0Roe2mVryAjtOcZEMEZ?=
- =?us-ascii?Q?pt4JvHNjY+bOPOxhyPcWughxZ1YXBDEqvLFk4mYOnWBx50za0RxAOxT2dKl0?=
- =?us-ascii?Q?on+OlRHhaGfV9mgI3N4J+Bzc5tLmGnadR60ghuPdnCZu/MH5shg+FHWUh9qM?=
- =?us-ascii?Q?JXVJVG6c+NMpJoalE55YrDp6wUlxgtNcKzfWEUQ+KHFS2cqX7EiPXoS9fuqq?=
- =?us-ascii?Q?qjv90lyzEUb3ldlz84ltJjxYCd3fSKwoPBMgThMvn+36vQZPduOE9MuVBIFo?=
- =?us-ascii?Q?0kG0b3Gv46UmvnhzmTh9uiy3Kj5Lg3JXJf5XtRRpMBFobqBlZUeJCx9YkAI7?=
- =?us-ascii?Q?z4IiQvmHmBxEe/OOam9AcBE0qreuVs4rMyqVFEKMeVEvVWw6HPw9jrquQzf+?=
- =?us-ascii?Q?G7ngAkVERNT0LEcdttYNUORfAGZ9P8DNw4UkOlHKK6pdcOeSCfEAQfA8+yJo?=
- =?us-ascii?Q?kjIG4XNtvoNQkz3NQG1uD/bVNJV6ncq7kSy+2OD+vQ1pVkl0ysSxHmMHxLgN?=
- =?us-ascii?Q?jVuSrvoLV7MjQKXKMMeYt+OSrR9JCuPA1Ibwi+eciSkJ6+wD/pGKqvxWaJr3?=
- =?us-ascii?Q?v3kUw5IohSG4sIdb+Fx8CD1+63g85wXDH5EAUMpZHo0LH0c2g4JuYzbFx4OR?=
- =?us-ascii?Q?3xj+y3ZqLF+I77COkmj/tRlUh2HOx1lROHTL1C5Jxyj1iU8otvnbSNf1Llt0?=
- =?us-ascii?Q?EUU6g4/4lj3WoikddpWFBcuY6M3ApjkyaLBO5HzcaMt2evBACIT2xlVt9NL2?=
- =?us-ascii?Q?eA8anS4qJssIBAZFes5fjIVajNolQWnDWvFKDafPENJoQPmp1+SOAZEtygqm?=
- =?us-ascii?Q?LWIrjvEZysiWo1n4I7FRujJch5ymibC76TWLPBtVpRt27gxOQt2rS71yZupy?=
- =?us-ascii?Q?FuL261kHXiV11xixRUAA7gtd/z8tIat5aLimcWM3RpsXXQQF8vrQID6WXI2+?=
- =?us-ascii?Q?d000SWsgc3/QalRh6x4p3MO/VFieGCPPlpHwNH+w33B+oPNi72mlvuw7a6ut?=
- =?us-ascii?Q?lcpA2NkjjCaUSOsO8SpPlNbnF4IfiGpHIRVWoDYPJHYQliQUphsUoZCaEj9Y?=
- =?us-ascii?Q?B9li780II63XPeOc5HnqEnkT0hlQOESQkbJMDBpa0S3eUGHMJmkJSubB0gYM?=
- =?us-ascii?Q?zAEcUJBjIJQ/S2rGnGJYSEtVXYAeTwqetDDn2dmFHDEypVpX562b1f1pypqA?=
- =?us-ascii?Q?M8J63NI5yTttMcBrYqd0akSK3oCMtD4u4V0EbL+wY+GmUvDcXIDibWuzd7YR?=
- =?us-ascii?Q?7Y7IgQYOb7E7k2InbDsjR8j+i8PaQcT1oi9V9IQLsPLZ12ApN7feNmWsBZf9?=
- =?us-ascii?Q?iENGbddMwHvBGnopvqvqudmBGG1XqrI/KP0qYxGGcvzgzRwRNLSagfLsStYD?=
- =?us-ascii?Q?a7w5e7ALIcIoYhwLMRCYxX0GVJyFucAfzQ2JgiGDDZAXkgYG2N1xk+ezBTM4?=
- =?us-ascii?Q?V92WJIkohOnSHq0Wj9zO4QcYJFWiS/9B0MGk2flPyhwZZeI3tc8PR8m8zEge?=
- =?us-ascii?Q?JRGQeWUMWX6s0hRbtXdwP0kOHXU7sIGM5SgPNBw8FNKDMiMZsB+Szm97GljW?=
- =?us-ascii?Q?rAVN0eNETMML3/GJYvMx+tSSd9/LFBICBcZi/5zdDbLs?=
+	=?us-ascii?Q?kcIHaPYG5+1yYnvf8iWeMBVkkqtdZj6INBoNRUtmhSp2HtbH1HDmSJgeJ5Ym?=
+ =?us-ascii?Q?a0c92fWpEfh0ZREynFnL8f62462TJlmAACMrbzO8GJMzxpng2VZYR17XvHO2?=
+ =?us-ascii?Q?0Xnr20MS6vfY9SkKDmG3FrdDhV2V1amCt8zwmdXFJORT2gKbcCF8TX1O6Bwn?=
+ =?us-ascii?Q?mhmZKd6FizHrRcXG910/UuUTWiNF0l5+bl87J6vnQlsglkA4jEnR+9oqd9Io?=
+ =?us-ascii?Q?Kb7fk5YTLzdss3WR1dJoCGGOAHrRG9tiZvTxbdrqFingMWN8CSPPEgNyjsaK?=
+ =?us-ascii?Q?nLUu4/hNYBdqmfSdwsRcXVBSXiHcc2P13RvzxHe3+4YRnGvopIHawXApPVFH?=
+ =?us-ascii?Q?P3YBUO8jDfSitKnZGtr65gPIYa6EDnqe2X8akeHeFAPPypoO/0H+EYAP3yDm?=
+ =?us-ascii?Q?fgJ2ylqNlYgEtOlbJA/+0YhAC2KVfg638gAnDMObmHO5Wbw2aCGY12tPMwEf?=
+ =?us-ascii?Q?5V/0Zqg6QiDVHY9Q7MIQPhpFswvqvGks8U9IKm7kBAEF9FHXiDWY3zWw2LGB?=
+ =?us-ascii?Q?r5rLe5ehuO9X+suYGldMnfj3rf/6cuvMNo3+XYfqR++bTAkaW8JIcnGWk0kl?=
+ =?us-ascii?Q?cUQfpa5uI1ijBrNHLto2iaj6MhXiy+klocbB6FFQnkForIcws9df6EoL6x3s?=
+ =?us-ascii?Q?DBeBlnR1aID/C9pLyV5CBqbVIjE/TAltWBysTS83XYN12N+sM4V1iXAqVjUj?=
+ =?us-ascii?Q?sgGvSHO14xFKK7ULTbndfQM9nm/l9bz4kViZI5R1oXGlExdh7pvuxEjlCCNp?=
+ =?us-ascii?Q?l1MvcavK8qq/zxTmEiPCgrKDnFE41qY3D+/Hg2mdHZwU79llZCDjIqiHN5PF?=
+ =?us-ascii?Q?lewIoHw33fZXeyYyB+PVHhD+bHcpDF6JAVx0vEuWdplyaKCabM/nqRFzqws6?=
+ =?us-ascii?Q?ENOkeh4MWonfAeSDpV4yAn5BJ3RRuHiJevn8ldlYXXSzCDZLGhvn8qAeG/g9?=
+ =?us-ascii?Q?yZ9AGztEYHPSzbJui+BCHrogi9zyRdgxQuh6nSIZ8+LHy0fCKModCWuo86zf?=
+ =?us-ascii?Q?zfPMc0OsDqK2il0Qdto59weLQhPq8w+mF3IYocFlHoO8WbP2l7nTO4WdGlGG?=
+ =?us-ascii?Q?9ZCRi9fRwxaOpRVsMYT9gSk2HV/c2vDFURstNXG/SDmsmfetx4H9j1I8g5QD?=
+ =?us-ascii?Q?V8fZepf7RYGwdQ8t/Q9UxI6aqhB9z49c4i5apj6B2uSOgak3KLj4indLkKSI?=
+ =?us-ascii?Q?I/D+ijJdIPtYf5Mc3ijLn261bYV1JAzJLpzFJQ0jRtAwiGrNMED+CeEhP+/P?=
+ =?us-ascii?Q?6Al7jnM05UUWOfNsBI/46cPSlTaM8SzvKmQ/mwhyqoPOC7sGY0HcB/7bg1OF?=
+ =?us-ascii?Q?YskfRv2viWp7zA9QdPji+CbkQAae5dYK3r6lp6i6pmjagQvY13m9B46w1UX1?=
+ =?us-ascii?Q?bynUbsL4UX1P/ThahpDYWGpZ/Rqal7AaMzcmLF3hqa2pusD4StBcF5e9YZe4?=
+ =?us-ascii?Q?RGbE9nMPq43h3TntxAzWCzviaRhWoZ+H6ldZdS91pNts/30vzAlwZzbn0z4s?=
+ =?us-ascii?Q?z4rcRKttJ0v2mIyXw+/zN6yrjudVLGCH7C1hTcyuaYDfJyZcvWrYeLTfxAYQ?=
+ =?us-ascii?Q?uMUW2Pek1gi/ZgGkKOkK6KWoFA8h3usGanaEfuNi7mQpHquize439CQ2es3k?=
+ =?us-ascii?Q?NfZ4BM+Nuip5CANAerxqTo2sKgplGNZiou6SiA90YfPy?=
 X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 45640861-d418-4efc-cbb7-08dd91433418
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0b54b829-3abb-49c5-d71e-08dd914334ae
 X-MS-Exchange-CrossTenant-AuthSource: SJ2PR01MB8101.prod.exchangelabs.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2025 10:53:18.0767
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2025 10:53:19.0068
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GZ8kZNNcSO9hubBX9LJFGhpdmpTAUuLHWarwLjw4OZYSHhBsotWla5iGFYHvZ3nuPFdQtP0n1vSmpYBKCGLUj02wQgILIn1Wz3OY+XAi1B708N7EbyX4I8WcXbbtmuhd
+X-MS-Exchange-CrossTenant-UserPrincipalName: qafSoejMIhR0rqojpymIrCo7w4wUFrKIOuNLyoqv7UqKLYokxzazMUfwGHdoaBs766rNIg5vYRndeOBFYYA1yFsNQg3GzdWIHgY9vdQZnKABe0xbCM5GUXIRJiVjprLo
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR01MB6907
 
-Extend the vgic_init, vgic_irq and vgic_lpi_stress to run with NV
-enabled(vEL2). NV enabled using command line argument and it is
-disabled by default. The NV mode is applicable to GICv3 tests only.
+Extend set_id_regs test to run guest code wth NV eanbled. Also added a
+check to avoid the writes to TGRAN*_2 fields when NV is enabled.
+
+NV is enabled using command line argument and it is disabled by default.
 
 Signed-off-by: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
 ---
- tools/testing/selftests/kvm/arm64/vgic_init.c | 54 +++++++++++++++++--
- tools/testing/selftests/kvm/arm64/vgic_irq.c  | 27 ++++++----
- .../selftests/kvm/arm64/vgic_lpi_stress.c     | 19 +++++--
- 3 files changed, 83 insertions(+), 17 deletions(-)
+ .../testing/selftests/kvm/arm64/set_id_regs.c | 57 ++++++++++++++++++-
+ 1 file changed, 54 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/arm64/vgic_init.c b/tools/testing/selftests/kvm/arm64/vgic_init.c
-index b3b5fb0ff0a9..174350291c96 100644
---- a/tools/testing/selftests/kvm/arm64/vgic_init.c
-+++ b/tools/testing/selftests/kvm/arm64/vgic_init.c
+diff --git a/tools/testing/selftests/kvm/arm64/set_id_regs.c b/tools/testing/selftests/kvm/arm64/set_id_regs.c
+index 322b9d3b0125..86f69ec7ac0f 100644
+--- a/tools/testing/selftests/kvm/arm64/set_id_regs.c
++++ b/tools/testing/selftests/kvm/arm64/set_id_regs.c
 @@ -13,6 +13,7 @@
  #include "kvm_util.h"
  #include "processor.h"
- #include "vgic.h"
+ #include "test_util.h"
 +#include "nv_util.h"
+ #include <linux/bitfield.h>
  
- #define NR_VCPUS		4
- 
-@@ -29,6 +30,7 @@ struct vm_gic {
- 	uint32_t gic_dev_type;
- };
+ enum ftr_type {
+@@ -67,6 +68,9 @@ struct test_feature_reg {
+ 		.type = FTR_END,			\
+ 	}
  
 +static bool is_nested;
- static uint64_t max_phys_size;
- 
- /*
-@@ -75,9 +77,19 @@ static struct vm_gic vm_gic_create_with_vcpus(uint32_t gic_dev_type,
- 					      struct kvm_vcpu *vcpus[])
- {
- 	struct vm_gic v;
-+	struct kvm_vcpu_init init;
-+	int i;
- 
- 	v.gic_dev_type = gic_dev_type;
--	v.vm = vm_create_with_vcpus(nr_vcpus, guest_code, vcpus);
++struct kvm_vcpu_init init;
 +
-+	v.vm = vm_create(nr_vcpus);
-+	vm_ioctl(v.vm, KVM_ARM_PREFERRED_TARGET, &init);
-+	if (is_nested)
-+		init_vcpu_nested(&init);
+ static const struct reg_ftr_bits ftr_id_aa64dfr0_el1[] = {
+ 	S_REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64DFR0_EL1, DoubleLock, 0),
+ 	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64DFR0_EL1, WRPs, 0),
+@@ -435,6 +439,24 @@ static void test_vm_ftr_id_regs(struct kvm_vcpu *vcpu, bool aarch64_only)
+ 				continue;
+ 			}
+ 
++			if (is_nested) {
++				/* For NV, ID_AA64MMFR0_EL1.TGran4/16/64_2
++				 * are not allowed to write.
++				 */
++				if (reg_id == sys_reg(3, 0, 0, 7, 0)) {
++					switch (ftr_bits[j].shift) {
++					case 40:
++					case 36:
++					case 32:
++						ksft_test_result_skip("%s For NV guests\n",
++								ftr_bits[j].name);
++						continue;
++					default:
++						break;
++					}
++				}
++			}
 +
-+	for (i = 0; i < nr_vcpus; i++)
-+		vcpus[i] = aarch64_vcpu_add(v.vm, i, &init, guest_code);
-+
- 	v.gic_fd = kvm_create_device(v.vm, gic_dev_type);
+ 			/* Make sure the feature field is writable */
+ 			TEST_ASSERT_EQ(masks[idx] & ftr_bits[j].mask, ftr_bits[j].mask);
  
- 	return v;
-@@ -336,14 +348,19 @@ static void test_vgic_then_vcpus(uint32_t gic_dev_type)
- 	struct kvm_vcpu *vcpus[NR_VCPUS];
- 	struct vm_gic v;
- 	int ret, i;
-+	struct kvm_vcpu_init init;
+@@ -658,7 +680,7 @@ static void test_reset_preserves_id_regs(struct kvm_vcpu *vcpu)
+ 	 * Calls KVM_ARM_VCPU_INIT behind the scenes, which will do an
+ 	 * architectural reset of the vCPU.
+ 	 */
+-	aarch64_vcpu_setup(vcpu, NULL);
++	aarch64_vcpu_setup(vcpu, &init);
  
- 	v = vm_gic_create_with_vcpus(gic_dev_type, 1, vcpus);
- 
- 	subtest_dist_rdist(&v);
- 
- 	/* Add the rest of the VCPUs */
-+	vm_ioctl(v.vm, KVM_ARM_PREFERRED_TARGET, &init);
-+	if (is_nested)
-+		init_vcpu_nested(&init);
-+
- 	for (i = 1; i < NR_VCPUS; ++i)
--		vcpus[i] = vm_vcpu_add(v.vm, i, guest_code);
-+		vcpus[i] = aarch64_vcpu_add(v.vm, i, &init, guest_code);
- 
- 	ret = run_vcpu(vcpus[3]);
- 	TEST_ASSERT(ret == -EINVAL, "dist/rdist overlap detected on 1st vcpu run");
-@@ -606,6 +623,7 @@ static void test_v3_redist_ipa_range_check_at_vcpu_run(void)
- 	struct vm_gic v;
- 	int ret, i;
- 	uint64_t addr;
-+	struct kvm_vcpu_init init;
- 
- 	v = vm_gic_create_with_vcpus(KVM_DEV_TYPE_ARM_VGIC_V3, 1, vcpus);
- 
-@@ -619,8 +637,12 @@ static void test_v3_redist_ipa_range_check_at_vcpu_run(void)
- 			    KVM_VGIC_V3_ADDR_TYPE_DIST, &addr);
- 
- 	/* Add the rest of the VCPUs */
--	for (i = 1; i < NR_VCPUS; ++i)
--		vcpus[i] = vm_vcpu_add(v.vm, i, guest_code);
-+	vm_ioctl(v.vm, KVM_ARM_PREFERRED_TARGET, &init);
-+	if (is_nested)
-+		init_vcpu_nested(&init);
-+
-+	for (i = 1; i < NR_VCPUS; i++)
-+		vcpus[i] = aarch64_vcpu_add(v.vm, i, &init, guest_code);
- 
- 	kvm_device_attr_set(v.gic_fd, KVM_DEV_ARM_VGIC_GRP_CTRL,
- 			    KVM_DEV_ARM_VGIC_CTRL_INIT, NULL);
-@@ -733,11 +755,33 @@ void run_tests(uint32_t gic_dev_type)
- 	}
+ 	for (int i = 0; i < ARRAY_SIZE(test_regs); i++)
+ 		test_assert_id_reg_unchanged(vcpu, test_regs[i].reg);
+@@ -673,20 +695,47 @@ static void test_reset_preserves_id_regs(struct kvm_vcpu *vcpu)
+ 	ksft_test_result_pass("%s\n", __func__);
  }
  
--int main(int ac, char **av)
+-int main(void)
 +static void pr_usage(const char *name)
 +{
 +	pr_info("%s [-g nv] -h\n", name);
@@ -273,10 +243,12 @@ index b3b5fb0ff0a9..174350291c96 100644
 +
 +int main(int argc, char **argv)
  {
- 	int ret;
- 	int pa_bits;
- 	int cnt_impl = 0;
-+	int opt;
+ 	struct kvm_vcpu *vcpu;
+ 	struct kvm_vm *vm;
+ 	bool aarch64_only;
+ 	uint64_t val, el0;
+ 	int test_cnt;
++	int opt, gic_fd;
 +
 +	while ((opt = getopt(argc, argv, "g:")) != -1) {
 +		switch (opt) {
@@ -289,169 +261,34 @@ index b3b5fb0ff0a9..174350291c96 100644
 +			return 1;
 +		}
 +	}
-+
+ 
+ 	TEST_REQUIRE(kvm_has_cap(KVM_CAP_ARM_SUPPORTED_REG_MASK_RANGES));
+ 	TEST_REQUIRE(kvm_has_cap(KVM_CAP_ARM_WRITABLE_IMP_ID_REGS));
 +	if (is_nested)
 +		TEST_REQUIRE(kvm_has_cap(KVM_CAP_ARM_EL2));
  
- 	pa_bits = vm_guest_mode_params[VM_MODE_DEFAULT].pa_bits;
- 	max_phys_size = 1ULL << pa_bits;
-diff --git a/tools/testing/selftests/kvm/arm64/vgic_irq.c b/tools/testing/selftests/kvm/arm64/vgic_irq.c
-index f4ac28d53747..e4319f91f7cd 100644
---- a/tools/testing/selftests/kvm/arm64/vgic_irq.c
-+++ b/tools/testing/selftests/kvm/arm64/vgic_irq.c
-@@ -15,6 +15,7 @@
- #include "processor.h"
- #include "test_util.h"
- #include "kvm_util.h"
-+#include "nv_util.h"
- #include "gic.h"
- #include "gic_v3.h"
- #include "vgic.h"
-@@ -728,7 +729,7 @@ static void print_args(struct test_args *args)
- 			args->eoi_split);
- }
- 
--static void test_vgic(uint32_t nr_irqs, bool level_sensitive, bool eoi_split)
-+static void test_vgic(uint32_t nr_irqs, bool level_sensitive, bool eoi_split, bool is_nested)
- {
- 	struct ucall uc;
- 	int gic_fd;
-@@ -747,7 +748,10 @@ static void test_vgic(uint32_t nr_irqs, bool level_sensitive, bool eoi_split)
- 
- 	print_args(&args);
- 
--	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
-+	if (is_nested)
-+		vm = nv_vm_create_with_vcpus_gic(1, &vcpu, NULL, guest_code);
-+	else
-+		vm = vm_create_with_one_vcpu(&vcpu, guest_code);
- 
- 	vm_init_descriptor_tables(vm);
- 	vcpu_init_descriptor_tables(vcpu);
-@@ -795,7 +799,8 @@ static void help(const char *name)
- 		"It has to be a multiple of 32 and between 64 and 1024.\n");
- 	printf(" -e: if 1 then EOI is split into a write to DIR on top "
- 		"of writing EOI.\n");
--	printf(" -l: specify whether the IRQs are level-sensitive (1) or not (0).");
-+	printf(" -l: specify whether the IRQs are level-sensitive (1) or not (0).\n");
-+	printf(" -g: Enable Nested Virtualization, run guest code as guest hypervisor (default: Disabled)\n");
- 	puts("");
- 	exit(1);
- }
-@@ -807,8 +812,9 @@ int main(int argc, char **argv)
- 	bool level_sensitive = false;
- 	int opt;
- 	bool eoi_split = false;
-+	bool is_nested = false;
- 
--	while ((opt = getopt(argc, argv, "hn:e:l:")) != -1) {
-+	while ((opt = getopt(argc, argv, "hn:e:l:g:")) != -1) {
- 		switch (opt) {
- 		case 'n':
- 			nr_irqs = atoi_non_negative("Number of IRQs", optarg);
-@@ -823,6 +829,9 @@ int main(int argc, char **argv)
- 			level_sensitive = (bool)atoi_paranoid(optarg);
- 			default_args = false;
- 			break;
-+		case 'g':
-+			is_nested = atoi_non_negative("Is Nested", optarg);
-+			break;
- 		case 'h':
- 		default:
- 			help(argv[0]);
-@@ -835,12 +844,12 @@ int main(int argc, char **argv)
- 	 * combinations.
- 	 */
- 	if (default_args) {
--		test_vgic(nr_irqs, false /* level */, false /* eoi_split */);
--		test_vgic(nr_irqs, false /* level */, true /* eoi_split */);
--		test_vgic(nr_irqs, true /* level */, false /* eoi_split */);
--		test_vgic(nr_irqs, true /* level */, true /* eoi_split */);
-+		test_vgic(nr_irqs, false /* level */, false /* eoi_split */, is_nested);
-+		test_vgic(nr_irqs, false /* level */, true /* eoi_split */, is_nested);
-+		test_vgic(nr_irqs, true /* level */, false /* eoi_split */, is_nested);
-+		test_vgic(nr_irqs, true /* level */, true /* eoi_split */, is_nested);
- 	} else {
--		test_vgic(nr_irqs, level_sensitive, eoi_split);
-+		test_vgic(nr_irqs, level_sensitive, eoi_split, is_nested);
- 	}
- 
- 	return 0;
-diff --git a/tools/testing/selftests/kvm/arm64/vgic_lpi_stress.c b/tools/testing/selftests/kvm/arm64/vgic_lpi_stress.c
-index fc4fe52fb6f8..63de3903b2c8 100644
---- a/tools/testing/selftests/kvm/arm64/vgic_lpi_stress.c
-+++ b/tools/testing/selftests/kvm/arm64/vgic_lpi_stress.c
-@@ -11,6 +11,7 @@
- #include <sys/sysinfo.h>
- 
- #include "kvm_util.h"
-+#include "nv_util.h"
- #include "gic.h"
- #include "gic_v3.h"
- #include "gic_v3_its.h"
-@@ -43,10 +44,12 @@ static struct test_data {
- 
- 	vm_paddr_t	lpi_prop_table;
- 	vm_paddr_t	lpi_pend_tables;
-+	bool		is_nested;
- } test_data =  {
- 	.nr_cpus	= 1,
- 	.nr_devices	= 1,
- 	.nr_event_ids	= 16,
-+	.is_nested      = false,
- };
- 
- static void guest_irq_handler(struct ex_regs *regs)
-@@ -333,14 +336,20 @@ static void run_test(void)
- static void setup_vm(void)
- {
- 	int i;
-+	bool is_nested = test_data.is_nested;
-+	u32 nr_cpus = test_data.nr_cpus;
- 
- 	vcpus = malloc(test_data.nr_cpus * sizeof(struct kvm_vcpu));
- 	TEST_ASSERT(vcpus, "Failed to allocate vCPU array");
- 
--	vm = vm_create_with_vcpus(test_data.nr_cpus, guest_code, vcpus);
+ 	vm = vm_create(1);
++	vm_ioctl(vm, KVM_ARM_PREFERRED_TARGET, &init);
+ 	vm_enable_cap(vm, KVM_CAP_ARM_WRITABLE_IMP_ID_REGS, 0);
+-	vcpu = vm_vcpu_add(vm, 0, guest_code);
 +
 +	if (is_nested)
-+		vm = nv_vm_create_with_vcpus_gic(nr_cpus, vcpus, NULL, guest_code);
-+	else
-+		vm = vm_create_with_vcpus(nr_cpus, guest_code, vcpus);
++		init_vcpu_nested(&init);
++
++	vcpu = aarch64_vcpu_add(vm, 0, &init, guest_code);
++	gic_fd = vgic_v3_setup(vm, 1, 64);
  
- 	vm_init_descriptor_tables(vm);
--	for (i = 0; i < test_data.nr_cpus; i++)
-+	for (i = 0; i < nr_cpus; i++)
- 		vcpu_init_descriptor_tables(vcpus[i]);
+ 	/* Check for AARCH64 only system */
+ 	val = vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_ID_AA64PFR0_EL1));
+@@ -714,6 +763,8 @@ int main(void)
  
- 	vm_install_exception_handler(vm, VECTOR_IRQ_CURRENT, guest_irq_handler);
-@@ -367,6 +376,7 @@ static void pr_usage(const char *name)
- 	pr_info("  -d:\tnumber of devices (default: %u)\n", test_data.nr_devices);
- 	pr_info("  -e:\tnumber of event IDs per device (default: %u)\n", test_data.nr_event_ids);
- 	pr_info("  -i:\tnumber of iterations (default: %lu)\n", nr_iterations);
-+	pr_info("  -g:\tEnable Nested Virtualization, run guest code as guest hypervisor (default: Disabled)\n");
- }
+ 	test_reset_preserves_id_regs(vcpu);
  
- int main(int argc, char **argv)
-@@ -374,7 +384,7 @@ int main(int argc, char **argv)
- 	u32 nr_threads;
- 	int c;
++	if (is_nested)
++		close(gic_fd);
+ 	kvm_vm_free(vm);
  
--	while ((c = getopt(argc, argv, "hv:d:e:i:")) != -1) {
-+	while ((c = getopt(argc, argv, "hv:d:e:i:g:")) != -1) {
- 		switch (c) {
- 		case 'v':
- 			test_data.nr_cpus = atoi(optarg);
-@@ -388,6 +398,9 @@ int main(int argc, char **argv)
- 		case 'i':
- 			nr_iterations = strtoul(optarg, NULL, 0);
- 			break;
-+		case 'g':
-+			test_data.is_nested = atoi_non_negative("Is Nested", optarg);
-+			break;
- 		case 'h':
- 		default:
- 			pr_usage(argv[0]);
+ 	ksft_finished();
 -- 
 2.48.1
 
