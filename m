@@ -1,60 +1,58 @@
-Return-Path: <linux-kselftest+bounces-32886-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32887-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5115AB486C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 May 2025 02:28:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 260C2AB486E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 May 2025 02:28:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C241A7B09DA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 May 2025 00:26:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E3AF8C2FAE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 May 2025 00:28:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FA6615A85A;
-	Tue, 13 May 2025 00:27:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F48F17B506;
+	Tue, 13 May 2025 00:27:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TFUI/QYe"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="keqNycxn"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13D98155A59;
-	Tue, 13 May 2025 00:27:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FC7A17A2FB;
+	Tue, 13 May 2025 00:27:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747096046; cv=none; b=Z6ZG84lsCGxrMIF/LuLqWi+EHxxWaMWlaIr0aUjXHsBqE68FyqmkWxEwVHm1iu1dMGr+PsEi+w33jTD+0azVUv+ZYdSuQJ/W8+ndQ7FJePc0qcro79A77FVxx34vdIrQGeYVGMn8BLRQeNNCLu9mESQ8mOZGwhEk1oMC7TBYnGQ=
+	t=1747096047; cv=none; b=WQN8rUksWiozFXz+A2LJzdAoIg4gD9twsTciTmNJwnAoLrFHCt0I9NSE2sA62wtGV6cc7cqA+p9HLoWo9F6RRFWNfUZxJX85TCiT1TjMuQkCndGW9WKjSw8qqXd8r8DagdzyL01dAgpPxKE9NaNdUlYcIxsznV7NzfG/lQbeF0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747096046; c=relaxed/simple;
-	bh=M92/gov+YRjIS6VM2BRObVBgAlR9lw1xuX3y69/FgHQ=;
+	s=arc-20240116; t=1747096047; c=relaxed/simple;
+	bh=Kq774euQahjIko8eUiFaGLC1QQneONlcs60NmxkuDqE=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=XR/r5f/1Rw359lEUk54ecS5kJ7ssvlC3WeYarL760NE20eKiBT4frx9Qr3ug1UAkl4SJsA5jd+hRJPAkFjQr3VxvNCtaYAQReu4pU5gSPH1Bgw3Co/ccnsq7K8vUqaQE7/BKtTr8O2UymdVdsoSWnF/DStDbhoJLsyGWXMMxUYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TFUI/QYe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EA7EC4CEEE;
-	Tue, 13 May 2025 00:27:25 +0000 (UTC)
+	 MIME-Version; b=cWzBOVJ0y9n2jayX/LDWkRkNYRAnlDwUvkefr4y9qBVHwYt8O5/Eq2TL+TG+hSBRKipzlDlSdq8nBZWFkiwag4mGwRXehGzt3qRTlvqyLPYSvmCHL5mkyZ7d/v6Yq6UJe84EyeavfARbBX6/5k54d11Z3sRzcpq0Y9ZPL5MeW2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=keqNycxn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87761C4CEEE;
+	Tue, 13 May 2025 00:27:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747096045;
-	bh=M92/gov+YRjIS6VM2BRObVBgAlR9lw1xuX3y69/FgHQ=;
+	s=k20201202; t=1747096046;
+	bh=Kq774euQahjIko8eUiFaGLC1QQneONlcs60NmxkuDqE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=TFUI/QYeXvnLV1j1ziIYgAjnNmTfT37e+HvuxaYLy3iKGlkp70GFZglavMkpdwr7N
-	 ofWw+Sze4MkTYLXAzI+i955ustgk2/vvqCE7OIlrcP7rfJu790BgE/YgrlFjpExHG4
-	 vhEkXlWt0Fr4rx09/Segf6ZE2FdQE+/6rBsDKwRyNWjcCt+j7XAQXMDiQmzbK0Pf+q
-	 CtHHoSNXqE77P+jTRI3/BMzxYJkHjow7HAsyXjnH0jWVMwZTzTvg/GSl3Cu73Ej5O0
-	 gX7kSvQwG5aLugFO7NTc/o4631ilxefS9Y/qJKqBzURm9DQmF5XInOzraGRB4HeCfA
-	 ux1tAg94iO1rQ==
+	b=keqNycxnz/pem+JSEuoq1rUfCCvG0qe8O55lYRRFzUAOz0a6Lzx4u/uxGEv/FGvm8
+	 C3G7j+QzhDxCG/asMT6qQ9Bc7v1msNnNNWDrU3R5fFeNpGCkuo3fGWMYFYGnp3Lgws
+	 vWDOEq2oLEM7Z4bPrkfwCw20KWQS+zDxfpLt2JzuBevPGu5uZZWkDzaVb1rigg8sjv
+	 vzcv86UR1bowxSO4vKvcC6fpYaQSG2eHUv1fwWHwuLWIJk2vgMCX6G4/LiATQlHPdD
+	 CQrt8abZBF+4/pcf0QcnemREPQ4OT9U3ovy3n63DHCAjvGlyqC7YR4EqowcKOJMMgg
+	 M47Xa0H2pV4Cg==
 From: SeongJae Park <sj@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: SeongJae Park <sj@kernel.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>,
+	Shuah Khan <shuah@kernel.org>,
 	damon@lists.linux.dev,
 	kernel-team@meta.com,
-	kunit-dev@googlegroups.com,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH 4/6] mm/damon/tests/core-kunit: add a test for damos_set_filters_default_reject()
-Date: Mon, 12 May 2025 17:27:13 -0700
-Message-Id: <20250513002715.40126-5-sj@kernel.org>
+Subject: [PATCH 5/6] selftests/damon/_damon_sysfs: read tried regions directories in order
+Date: Mon, 12 May 2025 17:27:14 -0700
+Message-Id: <20250513002715.40126-6-sj@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250513002715.40126-1-sj@kernel.org>
 References: <20250513002715.40126-1-sj@kernel.org>
@@ -66,105 +64,37 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-DAMOS filters' default reject behavior is not very simple.  Actually
-there was a mistake[1] during the development.  Add a kunit test for
-validating the behavior.
-
-[1] https://lore.kernel.org/20250227002913.19359-1-sj@kernel.org
+Kdamond.update_schemes_tried_regions() reads and stores tried regions
+information out of address order.  It makes debugging a test failure
+difficult.  Change the behavior to do the reading and writing in the
+address order.
 
 Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
- mm/damon/tests/core-kunit.h | 70 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 70 insertions(+)
+ tools/testing/selftests/damon/_damon_sysfs.py | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/mm/damon/tests/core-kunit.h b/mm/damon/tests/core-kunit.h
-index be0fea9ee5fc..298c67557fae 100644
---- a/mm/damon/tests/core-kunit.h
-+++ b/mm/damon/tests/core-kunit.h
-@@ -510,6 +510,75 @@ static void damon_test_feed_loop_next_input(struct kunit *test)
- 			damon_feed_loop_next_input(last_input, 2000));
- }
- 
-+static void damon_test_set_filters_default_reject(struct kunit *test)
-+{
-+	struct damos scheme;
-+	struct damos_filter *target_filter, *anon_filter;
-+
-+	INIT_LIST_HEAD(&scheme.filters);
-+	INIT_LIST_HEAD(&scheme.ops_filters);
-+
-+	damos_set_filters_default_reject(&scheme);
-+	/*
-+	 * No filter is installed.  Allow by default on both core and ops layer
-+	 * filtering stages, since there are no filters at all.
-+	 */
-+	KUNIT_EXPECT_EQ(test, scheme.core_filters_default_reject, false);
-+	KUNIT_EXPECT_EQ(test, scheme.ops_filters_default_reject, false);
-+
-+	target_filter = damos_new_filter(DAMOS_FILTER_TYPE_TARGET, true, true);
-+	damos_add_filter(&scheme, target_filter);
-+	damos_set_filters_default_reject(&scheme);
-+	/*
-+	 * A core-handled allow-filter is installed.
-+	 * Rejct by default on core layer filtering stage due to the last
-+	 * core-layer-filter's behavior.
-+	 * Allow by default on ops layer filtering stage due to the absence of
-+	 * ops layer filters.
-+	 */
-+	KUNIT_EXPECT_EQ(test, scheme.core_filters_default_reject, true);
-+	KUNIT_EXPECT_EQ(test, scheme.ops_filters_default_reject, false);
-+
-+	target_filter->allow = false;
-+	damos_set_filters_default_reject(&scheme);
-+	/*
-+	 * A core-handled reject-filter is installed.
-+	 * Allow by default on core layer filtering stage due to the last
-+	 * core-layer-filter's behavior.
-+	 * Allow by default on ops layer filtering stage due to the absence of
-+	 * ops layer filters.
-+	 */
-+	KUNIT_EXPECT_EQ(test, scheme.core_filters_default_reject, false);
-+	KUNIT_EXPECT_EQ(test, scheme.ops_filters_default_reject, false);
-+
-+	anon_filter = damos_new_filter(DAMOS_FILTER_TYPE_ANON, true, true);
-+	damos_add_filter(&scheme, anon_filter);
-+
-+	damos_set_filters_default_reject(&scheme);
-+	/*
-+	 * A core-handled reject-filter and ops-handled allow-filter are installed.
-+	 * Allow by default on core layer filtering stage due to the existence
-+	 * of the ops-handled filter.
-+	 * Reject by default on ops layer filtering stage due to the last
-+	 * ops-layer-filter's behavior.
-+	 */
-+	KUNIT_EXPECT_EQ(test, scheme.core_filters_default_reject, false);
-+	KUNIT_EXPECT_EQ(test, scheme.ops_filters_default_reject, true);
-+
-+	target_filter->allow = true;
-+	damos_set_filters_default_reject(&scheme);
-+	/*
-+	 * A core-handled allow-filter and ops-handled allow-filter are
-+	 * installed.
-+	 * Allow by default on core layer filtering stage due to the existence
-+	 * of the ops-handled filter.
-+	 * Reject by default on ops layer filtering stage due to the last
-+	 * ops-layer-filter's behavior.
-+	 */
-+	KUNIT_EXPECT_EQ(test, scheme.core_filters_default_reject, false);
-+	KUNIT_EXPECT_EQ(test, scheme.ops_filters_default_reject, true);
-+}
-+
- static struct kunit_case damon_test_cases[] = {
- 	KUNIT_CASE(damon_test_target),
- 	KUNIT_CASE(damon_test_regions),
-@@ -527,6 +596,7 @@ static struct kunit_case damon_test_cases[] = {
- 	KUNIT_CASE(damos_test_new_filter),
- 	KUNIT_CASE(damos_test_filter_out),
- 	KUNIT_CASE(damon_test_feed_loop_next_input),
-+	KUNIT_CASE(damon_test_set_filters_default_reject),
- 	{},
- };
- 
+diff --git a/tools/testing/selftests/damon/_damon_sysfs.py b/tools/testing/selftests/damon/_damon_sysfs.py
+index 6e136dc3df19..1e587e0b1a39 100644
+--- a/tools/testing/selftests/damon/_damon_sysfs.py
++++ b/tools/testing/selftests/damon/_damon_sysfs.py
+@@ -420,11 +420,16 @@ class Kdamond:
+                 tried_regions = []
+                 tried_regions_dir = os.path.join(
+                         scheme.sysfs_dir(), 'tried_regions')
++                region_indices = []
+                 for filename in os.listdir(
+                         os.path.join(scheme.sysfs_dir(), 'tried_regions')):
+                     tried_region_dir = os.path.join(tried_regions_dir, filename)
+                     if not os.path.isdir(tried_region_dir):
+                         continue
++                    region_indices.append(int(filename))
++                for region_idx in sorted(region_indices):
++                    tried_region_dir = os.path.join(tried_regions_dir,
++                                                    '%d' % region_idx)
+                     region_values = []
+                     for f in ['start', 'end', 'nr_accesses', 'age']:
+                         content, err = read_file(
 -- 
 2.39.5
 
