@@ -1,738 +1,230 @@
-Return-Path: <linux-kselftest+bounces-32900-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32901-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24EF5AB5414
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 May 2025 13:44:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D675BAB5436
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 May 2025 14:00:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E7881B4587E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 May 2025 11:44:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6E37716E6DA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 May 2025 12:00:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FF4823F424;
-	Tue, 13 May 2025 11:44:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1761123F424;
+	Tue, 13 May 2025 12:00:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="p+1VWjy8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2072.outbound.protection.outlook.com [40.107.94.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA4B92AF1C;
-	Tue, 13 May 2025 11:44:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747136675; cv=none; b=u4UvM6dzpu1MW5tvcMS+FXTnrT5GE2VFE5D6ZLSyeOGBDVgeo2nwrdIzjAw2w1aPDl/I7v5kIuxiCI7gC1HHqGai5mlHF5WqxK2YfqiIfKAi2yxCXKzsGvMoDisu0+2JXt4FRsnEEs3EOEPwCS15HqnBcM2qMFkDIciO9vdDRoQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747136675; c=relaxed/simple;
-	bh=qZWAKY2toC+KtZMMEb/RCN/W/JgxQaF9kuegy8qz8G4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TvRBOqrEGF6BEMrPRs0OPoLyaH5+f6YaDIms10aZ14zBP81knH2/hNCW7pkGgrIoqpJTA5Kdf/zgLA4+PLLluVxi4zRUx+UWNTo1R3Wfcpf74xXb20HoJsowHuBeAee7Qwbn6XBG/8owZYqx5QXCGt2Q20FI0/aiR4dX2Zf4xb0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.183.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ghiti.fr
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A604143AD2;
-	Tue, 13 May 2025 11:44:29 +0000 (UTC)
-Message-ID: <9e89bd41-db3c-46e8-86bd-4cca5d798a56@ghiti.fr>
-Date: Tue, 13 May 2025 13:44:27 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6541C18A6A9;
+	Tue, 13 May 2025 12:00:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.72
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1747137626; cv=fail; b=aFLyI2j4WxpjtPPoe47teSHP9/o9/ycMWgjIiydJOa30++yPLCM1C5om0boqfWkmUa4iw8EQTvZJMCWW78zBxrJzALcVk5cY049KinSaJK1FwcpQja39PMVyXQMPmmQnGGhg/+OHI1aOXosGo/oTUjZDv28th9OTIG5vom+lrdA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1747137626; c=relaxed/simple;
+	bh=SKyegXloEMotXSmLWKtKCB7B+y8FHSw1JxlXc/aG6bk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=eV9dba62sTnJHT9LB1KbuGjthnNqgb1OUK8j6bdBW/YUd8UrcaeFEEOqgnL0QgghNvxGHiN6BZnCq+RbAzwjOsQ97QXSDAM7WU4eCO7mdmXOemaWg/99XFLAPKQGaO0whoAGpdqGcE2RPsO+i1IUS72yLeTmJNKLQellNkKIXkY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=p+1VWjy8; arc=fail smtp.client-ip=40.107.94.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=SLfaCmRxL3Jd3HYKu34Sk/Wox2j/tlEIOYFDVAPetupI8qHBcL4byz9Uo2R1db4ckjSqiu9yzUMjbDh4a9CkIu0n/Bvxc4jd8Xc5WhesZpxKJznoHi6IYAy0bZzICZD5L9au2DfEGaUZTgwxuFjyG0BmxDRvCcsGTGk/nQY27pydLUMsQPbCjQjqlQ0sYuHDHjmsvZZuPqwYG9QJ2VB2i4TdO/7Prf71NpqEW9R3tQb1oodf+cmgD7LCO2kbD4P+UqrzMledTRbkH0SHMOH9C+s1jluqvy8LgjvFEo5Q9+ZNI18vzAIIbXc5FrdNtrCsjtCecvZk15452nKEFpoNOg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yxCjoOVq2mCB2SptGpTkY3uiG2xA9hjH8MiiynpKrWU=;
+ b=S6wLf0N+c+dS200qOwMKIX55EgHyx47ntWvxf5p8NtO0nC/4YboUL6p0qtUuCKea8VLzXqUMu+hoeD4NGR6+VbA38oT6imd8jmkn9XJX/OCJ6e9LR2oQuFzFgMifAbFZc4fe9jvzlXnnH8SFq4fgyBH1TucEsgsbQMAbjGL8TmjPXYYtsURaLCg6tJ5OVcDhbfIt3/9HjARc+p11htrif6gFog0zr5ZasFPiqY1YG4ToMl/HhBfpiVLVyq+Q7OGKPsfJ2ot5LPrWWOuc6Pyt0XLJoab0S6Fr9GyJP7OhZQvth40kVx5iOnfoKV/2x8zWbW+DC71BXV/0HeGBQENMmA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yxCjoOVq2mCB2SptGpTkY3uiG2xA9hjH8MiiynpKrWU=;
+ b=p+1VWjy8vjtaB3xBuqRTgKDCfY6b51zERmsGSyzqO3LEGR4LSkdY+errAGCu8uUyJ5gljtCssg/gOEKhwwb4+keTjf51W0iyUV5SdkJ9Fuyx57OZqJHuh0ZeXztK/6aZW0P2YT2Jeo2VG2H1MPkV4DM3xRMbtuhW50XMUftexvKdMG63qsdN4cpSH6HfSPtcpuyxF9EzABW0LvHFI4c/3u3nASHjGbOwcTkKe6onCkeisOba9FvE/sqTWRddpSB3+mLjZVVwTKCfcL452seJ36tvHK4Nr0QxHRyxd+G1C50IPZCXNzIWMJJRRtnaFHNIj840t97ZM8AsULCZCUcJmA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MW6PR12MB8663.namprd12.prod.outlook.com (2603:10b6:303:240::9)
+ by PH7PR12MB5903.namprd12.prod.outlook.com (2603:10b6:510:1d7::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8699.21; Tue, 13 May
+ 2025 12:00:19 +0000
+Received: from MW6PR12MB8663.namprd12.prod.outlook.com
+ ([fe80::594:5be3:34d:77f]) by MW6PR12MB8663.namprd12.prod.outlook.com
+ ([fe80::594:5be3:34d:77f%6]) with mapi id 15.20.8722.027; Tue, 13 May 2025
+ 12:00:19 +0000
+Date: Tue, 13 May 2025 09:00:17 -0300
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Ankit Soni <Ankit.Soni@amd.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, iommu@lists.linux.dev,
+	Joerg Roedel <joro@8bytes.org>,
+	Justin Stitt <justinstitt@google.com>,
+	Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+	Bill Wendling <morbo@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Will Deacon <will@kernel.org>, Alexey Kardashevskiy <aik@amd.com>,
+	Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+	James Gowans <jgowans@amazon.com>,
+	Michael Roth <michael.roth@amd.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>, patches@lists.linux.dev
+Subject: Re: [PATCH v2 07/15] iommupt: Add map_pages op
+Message-ID: <20250513120017.GC286987@nvidia.com>
+References: <0-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
+ <7-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
+ <br26mvt7nlq6gpgkzomargxegaxsdelnwjn7rhhh3n5u3vd46e@l5cokjjdjx6a>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <br26mvt7nlq6gpgkzomargxegaxsdelnwjn7rhhh3n5u3vd46e@l5cokjjdjx6a>
+X-ClientProxiedBy: BL1PR13CA0323.namprd13.prod.outlook.com
+ (2603:10b6:208:2c1::28) To MW6PR12MB8663.namprd12.prod.outlook.com
+ (2603:10b6:303:240::9)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: riscv: add misaligned access testing
-Content-Language: en-US
-To: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-riscv@lists.infradead.org
-Cc: Palmer Dabbelt <palmer@dabbelt.com>,
- Paul Walmsley <paul.walmsley@sifive.com>, Shuah Khan <shuah@kernel.org>
-References: <20250512084650.985894-1-cleger@rivosinc.com>
-From: Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <20250512084650.985894-1-cleger@rivosinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdeftdegtddvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfesthekredttddvjeenucfhrhhomheptehlvgigrghnughrvgcuifhhihhtihcuoegrlhgvgiesghhhihhtihdrfhhrqeenucggtffrrghtthgvrhhnpeekkefftdeuhfdugeffgffhueduuedttdekkeffueekfedvjefhleeigeehieeijeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdgtohhmmhhonhdrshgspdhfphhurdhssgenucfkphepvddttddumeekiedumeeffeekvdemvghfledtmegttddvgeemvgefgeeimeefjeekudemrgejieehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddttddumeekiedumeeffeekvdemvghfledtmegttddvgeemvgefgeeimeefjeekudemrgejieehpdhhvghloheplgfkrfggieemvddttddumeekiedumeeffeekvdemvghfledtmegttddvgeemvgefgeeimeefjeekudemrgejieehngdpmhgrihhlfhhrohhmpegrlhgvgiesghhhihhtihdrfhhrpdhnsggprhgtphhtthhopeejpdhrtghpthhtoheptghlvghgvghrsehrihhvohhsihhntgdrtghomhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgv
- ghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrhhishgtvheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehprghlmhgvrhesuggrsggsvghlthdrtghomhdprhgtphhtthhopehprghulhdrfigrlhhmshhlvgihsehsihhfihhvvgdrtghomhdprhgtphhtthhopehshhhurghhsehkvghrnhgvlhdrohhrgh
-X-GND-Sasl: alex@ghiti.fr
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MW6PR12MB8663:EE_|PH7PR12MB5903:EE_
+X-MS-Office365-Filtering-Correlation-Id: 85b100a5-60d3-4d4a-11f8-08dd9215bafd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?GYdHCMWhAoD5WE0zsHawOMwfhFKecf+Qbw7e47fZOUJaD857qPaqlzoBLWAy?=
+ =?us-ascii?Q?/+U9vD4T4LZ7MVCVZTQLC6WtGqI9Lm+66ks+ebGz9Ufz0OBZT/X036y/CDXg?=
+ =?us-ascii?Q?Ymdw7KpLihqLnJgh3e3IdeXgLjC26m3YY0JGDcf9LZbGBO9eua7z5g9X4tCt?=
+ =?us-ascii?Q?cOjZoNwUJyyNB/2AQsQXKbI1FFpsuKM0Sd89BIIZJJyeLHh/3wb/rHFuZ+4g?=
+ =?us-ascii?Q?h8GlkXEQfBMYAENajG6rrkv2BegBGs7vv/bNDR3/IgEMrxc0XfyHPeHo/6q/?=
+ =?us-ascii?Q?uNEq3pu0+G2kn6Pe1X60r3T+M2JXjnwiFKjcfIPHKNWbUFCSyHrQFN5xujka?=
+ =?us-ascii?Q?c+xkNer+Bc2dAgnbk5oUUSVnPxOBdgzvKRo90gZOVGJBSB6a70saNqXrXtoP?=
+ =?us-ascii?Q?2EwZJl8X1yHUA4W/F1bnXkVaOsfpdmZPeg1lXJUa2AtyJEfH7i/kGdCOTGK2?=
+ =?us-ascii?Q?6ecg0M3S+HYv8up4DRaLN4aXjoFsmR4tA3ph1NIeNFAH5O0/9Ov7q4FTMXmd?=
+ =?us-ascii?Q?3fIGXA5/67KR6HLQU4KWpwmL0Sqq4iQRibnfTVBwuPac0g6TLdDHifI85jZ7?=
+ =?us-ascii?Q?6t8N3rR+6kZtnmGXFd+ZGlR4XCg5EL547lGT8KKSFfeypu066L6QxZFePmzS?=
+ =?us-ascii?Q?XidYXcPgib/wviBh5A2b4Dlnp7Lnxse9z4chnWhaopo5O+dGrOsNrJYR9d0r?=
+ =?us-ascii?Q?y4+ABA/gRlGFW6XlXSZnxa4VYMxbf8WTwtWIRRjDBkxpRyQyZnk1hxQsjxe/?=
+ =?us-ascii?Q?Am2GnQDou7wwSocTkUBQmMnmHbN6QkRZtLkCIFNBzHeIqSZwpNaoevD3H4bx?=
+ =?us-ascii?Q?OPs+z6atM9/I34CW114YAnouJ51sEMOkLD/VH0qF5wdFQt876L488uFCTZo+?=
+ =?us-ascii?Q?01XJyQSgBBsbFGpSoXNm3i1SNZF1EHrU7j3CiDDO4mhqa6rn2pKZIIpEtygs?=
+ =?us-ascii?Q?HTPHbaG9genOoXyHIeMjd3T8wtopBi5MfJEuQhUtDK+rGwsqeSRvnuVfCp5c?=
+ =?us-ascii?Q?kxs5lKE1KrFi2B1TgBRZcFqhbR4T3QsxXzMgoC4Juv04BtEXykl6QVEgZkJH?=
+ =?us-ascii?Q?n6Gwl9STlzjZr+8TastUU52fMi9trV9Y/5RrYuMHtS0j93rnlCo2xfRC+UJb?=
+ =?us-ascii?Q?63MeYh7gzp1OA5NmmdRFN3WaqFfyrTQAa60n5yUxNJqIGTQiBuIHcz4lUzES?=
+ =?us-ascii?Q?ULOpPoYUrlP6/Nma1dhIShW91OXlm0nJcYyKnruHi6jYEL7Z/g0uTCyOnBsN?=
+ =?us-ascii?Q?zCq6oQxb1PjhFwp3uQ9L6FFsMG5I5XE08ZJgslIOsJ+zOgVXsBVf8qygLovi?=
+ =?us-ascii?Q?7gTpSEB68SfEPvwE5tz70E08zjPz4wOcdKCGfa4XkZpAVjJsPMwcdtP8rgKy?=
+ =?us-ascii?Q?zoDmQdY8eViPiGvCLhoV2WtF7Ms/TNy2A93WtEMLf0GOSeJHZEEw8EGSH0uf?=
+ =?us-ascii?Q?xaKA+b0TCe0=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW6PR12MB8663.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?SYMmKZUcZWelkoRnu/j39nIQKZzhmjauP1TTJqLk+fXXZuJiJl+d2ClkY8Ei?=
+ =?us-ascii?Q?HGTdRRywsgwWvMNnGg1pKc1FgwqKv/rvPHI0W3zyg+LYpjs+uLuK71rzotk/?=
+ =?us-ascii?Q?BrZaqm9Ks+R47GAZXznLPBvBb/EcnoXb5Vpw2/jsnzklOtN5XSF2KBsewVOI?=
+ =?us-ascii?Q?qafHCP1jonS3vbJYmbX9+KwuwfOc/tL2MEhLUW9Yah5kLd6TE5i+VjXpJ7rT?=
+ =?us-ascii?Q?bRsn054sXnYK61nnUxfLkyIx3eGVuV5lcMl2Omq5IgScp5XAdGoH5EW1xwFd?=
+ =?us-ascii?Q?WciSskH8AkIWpDeRwGPimthbKvPaAzK3kBoaGTphxgztAbobsB9N/bX9n5Uc?=
+ =?us-ascii?Q?kRUO1ECOYylBSkmTtbu62KEUkxdArKWyB46gCxX6qLUzUP80i9c4GEKRlgqt?=
+ =?us-ascii?Q?bAooxU5rvJwmydvSDNDxovuqmTPA00n0cvRlTSzPXUOu1M3aviaFw08ShhkJ?=
+ =?us-ascii?Q?sn9OYKTDgOAFdiV2/JPAll5jzXWpaetFblbPwXVtoEhGlfMCAwF2G0ljZU1j?=
+ =?us-ascii?Q?H9jIhWsFKO3du0R6N92lGMYQWOmtrF7HlCbZVmrayUTKnDwXsQ+RN5ggRLTE?=
+ =?us-ascii?Q?UEfuQoCXE9UuSsMYUv4tIj1jHQYuWjSxggCaReZ4COwIdrDTaOF5NXXWtVES?=
+ =?us-ascii?Q?BrwCQmidI23Pd77ZS3GwEcfsquooOwOSiDQ8RYZi9x7119YT1QqJbMjOJy5o?=
+ =?us-ascii?Q?Cs+oYed9jKIzzK4XOvOvLJszmwpc8mlHKkmrxsAqlSr3wlNN3w4nKXWLx6T/?=
+ =?us-ascii?Q?18zQaAmYJQIEKIjkn6ZMIxzn2i2Mmhj2zh84g7g2PQp3gZLQcc7Zu9X2bwAp?=
+ =?us-ascii?Q?Sc0cHHuTt6iXnAu/27NcbEOpluRuqI2k49XZ2W3idY1sRg5P78VLqoss0I/1?=
+ =?us-ascii?Q?XBJV8m6epi13DTS6BtjYY4PkQOQpSCpRYRvNp8wllb808jtVgnl2/ZmxvZV5?=
+ =?us-ascii?Q?jck0tAmUJ26HRbvH0rcyfFuAw8sMAsYDFmzMe5NU0BmxrTUc9QdA+SqM4SlO?=
+ =?us-ascii?Q?b9Qe+tIEp3AJdDllb4r+o3pyvD39R+gJ42G/IOX5+rULXiVisA36Zqpio6Ir?=
+ =?us-ascii?Q?507zyfSNZlubL63ZEv9W7qXKhQd+nby3fB65demfNwszW2ldoi33qkOgzBYD?=
+ =?us-ascii?Q?yHoNVbF6Y7bBYozd3lSNbNs3Y9p89P3BIGBYjvomT6fLlsUX2sIkMFx1WqvV?=
+ =?us-ascii?Q?zVVG7I4GR1gf/2gX9U2RKTH2+vOhI7Vt2rr5xDpkcH8PWikgl/+HPpPfs7sR?=
+ =?us-ascii?Q?WtpZEykI8UZsm5AqdR13fOh9O4ZCLlunOLrctFy8BJ6CEaYLirYAMVSISR9E?=
+ =?us-ascii?Q?tEGF8XF6c2UDumpvENKemKFcOsAo4ESQAwCrrpyAssUZd0UJkFa77ZLBE4ii?=
+ =?us-ascii?Q?Nn/fBoMjkHARRW1C7GLECdVL3n+We4Nyj9HtRRmACFeX411DOgvkbHDywxKy?=
+ =?us-ascii?Q?ZcETL4nyipOdoP9faMgf911TE0o2btz2x+r8KlMXCqmDWqXTBA8zWUhVKsLV?=
+ =?us-ascii?Q?CVVpHdaDYK9snJbPdxKKKX6yvfrRYEEbOZDscMPlGMv287ZD59et6LAVRdzL?=
+ =?us-ascii?Q?i6E3E5EcoMoIIsnwFn8B+sF2ad/shJj5RDT45uxb?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 85b100a5-60d3-4d4a-11f8-08dd9215bafd
+X-MS-Exchange-CrossTenant-AuthSource: MW6PR12MB8663.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 May 2025 12:00:19.3631
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: X8TP8POvpRCh+guwV358oAznnsLgH9e9biGDBVrwA1C2mgOexl6pgjo5qNyzOqfc
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5903
 
-Hi Clément,
+On Tue, May 13, 2025 at 05:15:50AM +0000, Ankit Soni wrote:
+> > +static int increase_top(struct pt_iommu *iommu_table, struct pt_range *range,
+> > +			struct pt_iommu_map_args *map)
+> > +{
+> > +	struct iommu_pages_list free_list = IOMMU_PAGES_LIST_INIT(free_list);
+> > +	struct pt_common *common = common_from_iommu(iommu_table);
+> > +	uintptr_t top_of_table = READ_ONCE(common->top_of_table);
+> > +	uintptr_t new_top_of_table = top_of_table;
+> > +	struct pt_table_p *table_mem;
+> > +	unsigned int new_level;
+> > +	spinlock_t *domain_lock;
+> > +	unsigned long flags;
+> > +	int ret;
+> > +
+> > +	while (true) {
+> > +		struct pt_range top_range =
+> > +			_pt_top_range(common, new_top_of_table);
+> > +		struct pt_state pts = pt_init_top(&top_range);
+> > +
+> > +		top_range.va = range->va;
+> > +		top_range.last_va = range->last_va;
+> > +
+> > +		if (!pt_check_range(&top_range) && map->leaf_level <= pts.level)
+> > +			break;
+> > +
+> > +		pts.level++;
+> > +		if (pts.level > PT_MAX_TOP_LEVEL ||
+> > +		    pt_table_item_lg2sz(&pts) >= common->max_vasz_lg2) {
+> > +			ret = -ERANGE;
+> > +			goto err_free;
+> > +		}
+> > +
+> > +		new_level = pts.level;
+> > +		table_mem = table_alloc_top(
+> > +			common, _pt_top_set(NULL, pts.level), map->attrs.gfp);
+> > +		if (IS_ERR(table_mem))
+> > +			return PTR_ERR(table_mem);
+> 
+> For subsequent calls for while, it should necessitate invoking goto, correct?
 
-On 12/05/2025 10:46, Clément Léger wrote:
-> This selftest tests all the currently emulated instruction (except for
-> the RV32 compressed ones which are left as a future exercise for a RV32
-> user). For the FPU instructions, all the FPU registers are tested.
-> This commit can be tested using
+I don't understand this remark?
 
+There are two loops here, no goto. The loop above is generating all
+the required page table levels to reach the required level. Think of
+them as being built in a linked list, but not installed into the main
+table.
 
-I guess something went wrong here. And the documentation patch 
-disappeared too. Can you add a changelog to the next version please?
+> > +	domain_lock = iommu_table->hw_flush_ops->get_top_lock(iommu_table);
+> > +	spin_lock_irqsave(domain_lock, flags);
+> > +	if (common->top_of_table != top_of_table) {
+> > +		spin_unlock_irqrestore(domain_lock, flags);
+> > +		ret = -EAGAIN;
+> > +		goto err_free;
+> > +	}
 
-Thanks,
+The second loop is here, where -EAGAIN makes the caller run the whole
+function again.
 
-Alex
-
-
-> Signed-off-by: Clément Léger <cleger@rivosinc.com>
->
-> ---
->
-> Note: this test can be executed with the FWFT series [1] or using an SBI
-> firmware that delegates misaligned traps by default. If using QEMU,
-> you will need the patches mentionned at [2] so that misaligned accesses
-> will generate a trap.
->
-> Link: https://lore.kernel.org/all/20250424173204.1948385-1-cleger@rivosinc.com/ [1]
-> Link: https://lore.kernel.org/all/20241211211933.198792-1-fkonrad@amd.com/ [2]
->
->
->   tools/testing/selftests/riscv/Makefile        |   2 +-
->   .../selftests/riscv/misaligned/.gitignore     |   1 +
->   .../selftests/riscv/misaligned/Makefile       |  12 +
->   .../selftests/riscv/misaligned/common.S       |  33 +++
->   .../testing/selftests/riscv/misaligned/fpu.S  | 180 +++++++++++++
->   tools/testing/selftests/riscv/misaligned/gp.S | 103 +++++++
->   .../selftests/riscv/misaligned/misaligned.c   | 254 ++++++++++++++++++
->   7 files changed, 584 insertions(+), 1 deletion(-)
->   create mode 100644 tools/testing/selftests/riscv/misaligned/.gitignore
->   create mode 100644 tools/testing/selftests/riscv/misaligned/Makefile
->   create mode 100644 tools/testing/selftests/riscv/misaligned/common.S
->   create mode 100644 tools/testing/selftests/riscv/misaligned/fpu.S
->   create mode 100644 tools/testing/selftests/riscv/misaligned/gp.S
->   create mode 100644 tools/testing/selftests/riscv/misaligned/misaligned.c
->
-> diff --git a/tools/testing/selftests/riscv/Makefile b/tools/testing/selftests/riscv/Makefile
-> index 099b8c1f46f8..95a98ceeb3b3 100644
-> --- a/tools/testing/selftests/riscv/Makefile
-> +++ b/tools/testing/selftests/riscv/Makefile
-> @@ -5,7 +5,7 @@
->   ARCH ?= $(shell uname -m 2>/dev/null || echo not)
->   
->   ifneq (,$(filter $(ARCH),riscv))
-> -RISCV_SUBTARGETS ?= abi hwprobe mm sigreturn vector
-> +RISCV_SUBTARGETS ?= abi hwprobe mm sigreturn vector misaligned
->   else
->   RISCV_SUBTARGETS :=
->   endif
-> diff --git a/tools/testing/selftests/riscv/misaligned/.gitignore b/tools/testing/selftests/riscv/misaligned/.gitignore
-> new file mode 100644
-> index 000000000000..5eff15a1f981
-> --- /dev/null
-> +++ b/tools/testing/selftests/riscv/misaligned/.gitignore
-> @@ -0,0 +1 @@
-> +misaligned
-> diff --git a/tools/testing/selftests/riscv/misaligned/Makefile b/tools/testing/selftests/riscv/misaligned/Makefile
-> new file mode 100644
-> index 000000000000..1aa40110c50d
-> --- /dev/null
-> +++ b/tools/testing/selftests/riscv/misaligned/Makefile
-> @@ -0,0 +1,12 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +# Copyright (C) 2021 ARM Limited
-> +# Originally tools/testing/arm64/abi/Makefile
-> +
-> +CFLAGS += -I$(top_srcdir)/tools/include
-> +
-> +TEST_GEN_PROGS := misaligned
-> +
-> +include ../../lib.mk
-> +
-> +$(OUTPUT)/misaligned: misaligned.c fpu.S gp.S
-> +	$(CC) -g3 -static -o$@ -march=rv64imafdc $(CFLAGS) $(LDFLAGS) $^
-> diff --git a/tools/testing/selftests/riscv/misaligned/common.S b/tools/testing/selftests/riscv/misaligned/common.S
-> new file mode 100644
-> index 000000000000..8fa00035bd5d
-> --- /dev/null
-> +++ b/tools/testing/selftests/riscv/misaligned/common.S
-> @@ -0,0 +1,33 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (c) 2025 Rivos Inc.
-> + *
-> + * Authors:
-> + *     Clément Léger <cleger@rivosinc.com>
-> + */
-> +
-> +.macro lb_sb temp, offset, src, dst
-> +	lb \temp, \offset(\src)
-> +	sb \temp, \offset(\dst)
-> +.endm
-> +
-> +.macro copy_long_to temp, src, dst
-> +	lb_sb \temp, 0, \src, \dst,
-> +	lb_sb \temp, 1, \src, \dst,
-> +	lb_sb \temp, 2, \src, \dst,
-> +	lb_sb \temp, 3, \src, \dst,
-> +	lb_sb \temp, 4, \src, \dst,
-> +	lb_sb \temp, 5, \src, \dst,
-> +	lb_sb \temp, 6, \src, \dst,
-> +	lb_sb \temp, 7, \src, \dst,
-> +.endm
-> +
-> +.macro sp_stack_prologue offset
-> +	addi sp, sp, -8
-> +	sub sp, sp, \offset
-> +.endm
-> +
-> +.macro sp_stack_epilogue offset
-> +	add sp, sp, \offset
-> +	addi sp, sp, 8
-> +.endm
-> diff --git a/tools/testing/selftests/riscv/misaligned/fpu.S b/tools/testing/selftests/riscv/misaligned/fpu.S
-> new file mode 100644
-> index 000000000000..d008bff58310
-> --- /dev/null
-> +++ b/tools/testing/selftests/riscv/misaligned/fpu.S
-> @@ -0,0 +1,180 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (c) 2025 Rivos Inc.
-> + *
-> + * Authors:
-> + *     Clément Léger <cleger@rivosinc.com>
-> + */
-> +
-> +#include "common.S"
-> +
-> +#define CASE_ALIGN		4
-> +
-> +.macro fpu_load_inst fpreg, inst, precision, load_reg
-> +.align CASE_ALIGN
-> +	\inst \fpreg, 0(\load_reg)
-> +	fmv.\precision fa0, \fpreg
-> +	j 2f
-> +.endm
-> +
-> +#define flw(__fpreg) fpu_load_inst __fpreg, flw, s, s1
-> +#define fld(__fpreg) fpu_load_inst __fpreg, fld, d, s1
-> +#define c_flw(__fpreg) fpu_load_inst __fpreg, c.flw, s, s1
-> +#define c_fld(__fpreg) fpu_load_inst __fpreg, c.fld, d, s1
-> +#define c_fldsp(__fpreg) fpu_load_inst __fpreg, c.fldsp, d, sp
-> +
-> +.macro fpu_store_inst fpreg, inst, precision, store_reg
-> +.align CASE_ALIGN
-> +	fmv.\precision \fpreg, fa0
-> +	\inst \fpreg, 0(\store_reg)
-> +	j 2f
-> +.endm
-> +
-> +#define fsw(__fpreg) fpu_store_inst __fpreg, fsw, s, s1
-> +#define fsd(__fpreg) fpu_store_inst __fpreg, fsd, d, s1
-> +#define c_fsw(__fpreg) fpu_store_inst __fpreg, c.fsw, s, s1
-> +#define c_fsd(__fpreg) fpu_store_inst __fpreg, c.fsd, d, s1
-> +#define c_fsdsp(__fpreg) fpu_store_inst __fpreg, c.fsdsp, d, sp
-> +
-> +.macro fp_test_prologue
-> +	move s1, a1
-> +	/*
-> +	 * Compute jump offset to store the correct FP register since we don't
-> +	 * have indirect FP register access (or at least we don't use this
-> +	 * extension so that works on all archs)
-> +	 */
-> +	sll t0, a0, CASE_ALIGN
-> +	la t2, 1f
-> +	add t0, t0, t2
-> +	jr t0
-> +.align	CASE_ALIGN
-> +1:
-> +.endm
-> +
-> +.macro fp_test_prologue_compressed
-> +	/* FP registers for compressed instructions starts from 8 to 16 */
-> +	addi a0, a0, -8
-> +	fp_test_prologue
-> +.endm
-> +
-> +#define fp_test_body_compressed(__inst_func) \
-> +	__inst_func(f8); \
-> +	__inst_func(f9); \
-> +	__inst_func(f10); \
-> +	__inst_func(f11); \
-> +	__inst_func(f12); \
-> +	__inst_func(f13); \
-> +	__inst_func(f14); \
-> +	__inst_func(f15); \
-> +2:
-> +
-> +#define fp_test_body(__inst_func) \
-> +	__inst_func(f0); \
-> +	__inst_func(f1); \
-> +	__inst_func(f2); \
-> +	__inst_func(f3); \
-> +	__inst_func(f4); \
-> +	__inst_func(f5); \
-> +	__inst_func(f6); \
-> +	__inst_func(f7); \
-> +	__inst_func(f8); \
-> +	__inst_func(f9); \
-> +	__inst_func(f10); \
-> +	__inst_func(f11); \
-> +	__inst_func(f12); \
-> +	__inst_func(f13); \
-> +	__inst_func(f14); \
-> +	__inst_func(f15); \
-> +	__inst_func(f16); \
-> +	__inst_func(f17); \
-> +	__inst_func(f18); \
-> +	__inst_func(f19); \
-> +	__inst_func(f20); \
-> +	__inst_func(f21); \
-> +	__inst_func(f22); \
-> +	__inst_func(f23); \
-> +	__inst_func(f24); \
-> +	__inst_func(f25); \
-> +	__inst_func(f26); \
-> +	__inst_func(f27); \
-> +	__inst_func(f28); \
-> +	__inst_func(f29); \
-> +	__inst_func(f30); \
-> +	__inst_func(f31); \
-> +2:
-> +.text
-> +
-> +#define __gen_test_inst(__inst, __suffix) \
-> +.global test_ ## __inst; \
-> +test_ ## __inst:; \
-> +	fp_test_prologue ## __suffix; \
-> +	fp_test_body ## __suffix(__inst); \
-> +	ret
-> +
-> +#define gen_test_inst_compressed(__inst) \
-> +	.option arch,+c; \
-> +	__gen_test_inst(c_ ## __inst, _compressed)
-> +
-> +#define gen_test_inst(__inst) \
-> +	.balign 16; \
-> +	.option push; \
-> +	.option arch,-c; \
-> +	__gen_test_inst(__inst, ); \
-> +	.option pop
-> +
-> +.macro fp_test_prologue_load_compressed_sp
-> +	copy_long_to t0, a1, sp
-> +.endm
-> +
-> +.macro fp_test_epilogue_load_compressed_sp
-> +.endm
-> +
-> +.macro fp_test_prologue_store_compressed_sp
-> +.endm
-> +
-> +.macro fp_test_epilogue_store_compressed_sp
-> +	copy_long_to t0, sp, a1
-> +.endm
-> +
-> +#define gen_inst_compressed_sp(__inst, __type) \
-> +	.global test_c_ ## __inst ## sp; \
-> +	test_c_ ## __inst ## sp:; \
-> +		sp_stack_prologue a2; \
-> +		fp_test_prologue_## __type ## _compressed_sp; \
-> +		fp_test_prologue_compressed; \
-> +		fp_test_body_compressed(c_ ## __inst ## sp); \
-> +		fp_test_epilogue_## __type ## _compressed_sp; \
-> +		sp_stack_epilogue a2; \
-> +		ret
-> +
-> +#define gen_test_load_compressed_sp(__inst) gen_inst_compressed_sp(__inst, load)
-> +#define gen_test_store_compressed_sp(__inst) gen_inst_compressed_sp(__inst, store)
-> +
-> +/*
-> + * float_fsw_reg - Set a FP register from a register containing the value
-> + * a0 = FP register index to be set
-> + * a1 = addr where to store register value
-> + * a2 = address offset
-> + * a3 = value to be store
-> + */
-> +gen_test_inst(fsw)
-> +
-> +/*
-> + * float_flw_reg - Get a FP register value and return it
-> + * a0 = FP register index to be retrieved
-> + * a1 = addr to load register from
-> + * a2 = address offset
-> + */
-> +gen_test_inst(flw)
-> +
-> +gen_test_inst(fsd)
-> +#ifdef __riscv_compressed
-> +gen_test_inst_compressed(fsd)
-> +gen_test_store_compressed_sp(fsd)
-> +#endif
-> +
-> +gen_test_inst(fld)
-> +#ifdef __riscv_compressed
-> +gen_test_inst_compressed(fld)
-> +gen_test_load_compressed_sp(fld)
-> +#endif
-> diff --git a/tools/testing/selftests/riscv/misaligned/gp.S b/tools/testing/selftests/riscv/misaligned/gp.S
-> new file mode 100644
-> index 000000000000..f53f4c6d81dd
-> --- /dev/null
-> +++ b/tools/testing/selftests/riscv/misaligned/gp.S
-> @@ -0,0 +1,103 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (c) 2025 Rivos Inc.
-> + *
-> + * Authors:
-> + *     Clément Léger <cleger@rivosinc.com>
-> + */
-> +
-> +#include "common.S"
-> +
-> +.text
-> +
-> +.macro __gen_test_inst inst, src_reg
-> +	\inst a2, 0(\src_reg)
-> +	move a0, a2
-> +.endm
-> +
-> +.macro gen_func_header func_name, rvc
-> +	.option arch,\rvc
-> +	.global test_\func_name
-> +	test_\func_name:
-> +.endm
-> +
-> +.macro gen_test_inst inst
-> +	.option push
-> +	gen_func_header \inst, -c
-> +	__gen_test_inst \inst, a0
-> +	.option pop
-> +	ret
-> +.endm
-> +
-> +.macro __gen_test_inst_c name, src_reg
-> +	.option push
-> +	gen_func_header c_\name, +c
-> +	 __gen_test_inst c.\name, \src_reg
-> +	.option pop
-> +	ret
-> +.endm
-> +
-> +.macro gen_test_inst_c name
-> + 	__gen_test_inst_c \name, a0
-> +.endm
-> +
-> +
-> +.macro gen_test_inst_load_c_sp name
-> +	.option push
-> +	gen_func_header c_\name\()sp, +c
-> +	sp_stack_prologue a1
-> +	copy_long_to t0, a0, sp
-> +	c.ldsp a0, 0(sp)
-> +	sp_stack_epilogue a1
-> +	.option pop
-> +	ret
-> +.endm
-> +
-> +.macro lb_sp_sb_a0 reg, offset
-> +	lb_sb \reg, \offset, sp, a0
-> +.endm
-> +
-> +.macro gen_test_inst_store_c_sp inst_name
-> +	.option push
-> +	gen_func_header c_\inst_name\()sp, +c
-> +	/* Misalign stack pointer */
-> +	sp_stack_prologue a1
-> +	/* Misalign access */
-> +	c.sdsp a2, 0(sp)
-> +	copy_long_to t0, sp, a0
-> +	sp_stack_epilogue a1
-> +	.option pop
-> +	ret
-> +.endm
-> +
-> +
-> + /*
-> + * a0 = addr to load from
-> + * a1 = address offset
-> + * a2 = value to be loaded
-> + */
-> +gen_test_inst lh
-> +gen_test_inst lhu
-> +gen_test_inst lw
-> +gen_test_inst lwu
-> +gen_test_inst ld
-> +#ifdef __riscv_compressed
-> +gen_test_inst_c lw
-> +gen_test_inst_c ld
-> +gen_test_inst_load_c_sp ld
-> +#endif
-> +
-> +/*
-> + * a0 = addr where to store value
-> + * a1 = address offset
-> + * a2 = value to be stored
-> + */
-> +gen_test_inst sh
-> +gen_test_inst sw
-> +gen_test_inst sd
-> +#ifdef __riscv_compressed
-> +gen_test_inst_c sw
-> +gen_test_inst_c sd
-> +gen_test_inst_store_c_sp sd
-> +#endif
-> +
-> diff --git a/tools/testing/selftests/riscv/misaligned/misaligned.c b/tools/testing/selftests/riscv/misaligned/misaligned.c
-> new file mode 100644
-> index 000000000000..8fa5ad1a93d1
-> --- /dev/null
-> +++ b/tools/testing/selftests/riscv/misaligned/misaligned.c
-> @@ -0,0 +1,254 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2025 Rivos Inc.
-> + *
-> + * Authors:
-> + *     Clément Léger <cleger@rivosinc.com>
-> + */
-> +#include <signal.h>
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <linux/ptrace.h>
-> +#include "../../kselftest_harness.h"
-> +
-> +#include <stdlib.h>
-> +#include <stdio.h>
-> +#include <stdint.h>
-> +#include <float.h>
-> +#include <errno.h>
-> +#include <math.h>
-> +#include <string.h>
-> +#include <signal.h>
-> +#include <stdbool.h>
-> +#include <unistd.h>
-> +#include <inttypes.h>
-> +#include <ucontext.h>
-> +
-> +#include <sys/prctl.h>
-> +
-> +#define stringify(s) __stringify(s)
-> +#define __stringify(s) #s
-> +
-> +#define VAL16	0x1234
-> +#define VAL32	0xDEADBEEF
-> +#define VAL64	0x45674321D00DF789
-> +
-> +#define VAL_float	78951.234375
-> +#define VAL_double	567890.512396965789589290
-> +
-> +static bool float_equal(float a, float b)
-> +{
-> +	float scaled_epsilon;
-> +	float difference = fabsf(a - b);
-> +
-> +	// Scale to the largest value.
-> +	a = fabsf(a);
-> +	b = fabsf(b);
-> +	if (a > b)
-> +		scaled_epsilon = FLT_EPSILON * a;
-> +	else
-> +		scaled_epsilon = FLT_EPSILON * b;
-> +
-> +	return difference <= scaled_epsilon;
-> +}
-> +
-> +static bool double_equal(double a, double b)
-> +{
-> +	double scaled_epsilon;
-> +	double difference = fabsf(a - b);
-> +
-> +	// Scale to the largest value.
-> +	a = fabs(a);
-> +	b = fabs(b);
-> +	if (a > b)
-> +		scaled_epsilon = DBL_EPSILON * a;
-> +	else
-> +		scaled_epsilon = DBL_EPSILON * b;
-> +
-> +	return difference <= scaled_epsilon;
-> +}
-> +
-> +#define fpu_load_proto(__inst, __type) \
-> +extern __type test_ ## __inst(unsigned long fp_reg, void *addr, unsigned long offset, __type value)
-> +
-> +fpu_load_proto(flw, float);
-> +fpu_load_proto(fld, double);
-> +fpu_load_proto(c_flw, float);
-> +fpu_load_proto(c_fld, double);
-> +fpu_load_proto(c_fldsp, double);
-> +
-> +#define fpu_store_proto(__inst, __type) \
-> +extern void test_ ## __inst(unsigned long fp_reg, void *addr, unsigned long offset, __type value)
-> +
-> +fpu_store_proto(fsw, float);
-> +fpu_store_proto(fsd, double);
-> +fpu_store_proto(c_fsw, float);
-> +fpu_store_proto(c_fsd, double);
-> +fpu_store_proto(c_fsdsp, double);
-> +
-> +#define gp_load_proto(__inst, __type) \
-> +extern __type test_ ## __inst(void *addr, unsigned long offset, __type value)
-> +
-> +gp_load_proto(lh, uint16_t);
-> +gp_load_proto(lhu, uint16_t);
-> +gp_load_proto(lw, uint32_t);
-> +gp_load_proto(lwu, uint32_t);
-> +gp_load_proto(ld, uint64_t);
-> +gp_load_proto(c_lw, uint32_t);
-> +gp_load_proto(c_ld, uint64_t);
-> +gp_load_proto(c_ldsp, uint64_t);
-> +
-> +#define gp_store_proto(__inst, __type) \
-> +extern void test_ ## __inst(void *addr, unsigned long offset, __type value)
-> +
-> +gp_store_proto(sh, uint16_t);
-> +gp_store_proto(sw, uint32_t);
-> +gp_store_proto(sd, uint64_t);
-> +gp_store_proto(c_sw, uint32_t);
-> +gp_store_proto(c_sd, uint64_t);
-> +gp_store_proto(c_sdsp, uint64_t);
-> +
-> +#define TEST_GP_LOAD(__inst, __type_size)					\
-> +TEST(gp_load_ ## __inst)							\
-> +{										\
-> +	int offset, ret;							\
-> +	uint8_t buf[16] __attribute__((aligned(16)));				\
-> +										\
-> +	ret = prctl(PR_SET_UNALIGN, PR_UNALIGN_NOPRINT);			\
-> +	ASSERT_EQ(ret, 0);							\
-> +										\
-> +	for (offset = 1; offset < __type_size / 8; offset++) {			\
-> +		uint ## __type_size ## _t val = VAL ## __type_size;		\
-> +		uint ## __type_size ## _t *ptr = (uint ## __type_size ## _t *) (buf + offset); \
-> +		memcpy(ptr, &val, sizeof(val));					\
-> +		val = test_ ## __inst(ptr, offset, val);			\
-> +		EXPECT_EQ(VAL ## __type_size, val);				\
-> +	}									\
-> +}
-> +
-> +TEST_GP_LOAD(lh, 16);
-> +TEST_GP_LOAD(lhu, 16);
-> +TEST_GP_LOAD(lw, 32);
-> +TEST_GP_LOAD(lwu, 32);
-> +TEST_GP_LOAD(ld, 64);
-> +#ifdef __riscv_compressed
-> +TEST_GP_LOAD(c_lw, 32);
-> +TEST_GP_LOAD(c_ld, 64);
-> +TEST_GP_LOAD(c_ldsp, 64);
-> +#endif
-> +
-> +#define TEST_GP_STORE(__inst, __type_size)					\
-> +TEST(gp_load_ ## __inst)							\
-> +{										\
-> +	int offset, ret;							\
-> +	uint8_t buf[16] __attribute__((aligned(16)));				\
-> +										\
-> +	ret = prctl(PR_SET_UNALIGN, PR_UNALIGN_NOPRINT);			\
-> +	ASSERT_EQ(ret, 0);							\
-> +										\
-> +	for (offset = 1; offset < __type_size / 8; offset++) {			\
-> +		uint ## __type_size ## _t val = VAL ## __type_size;		\
-> +		uint ## __type_size ## _t *ptr = (uint ## __type_size ## _t *) (buf + offset); \
-> +		memset(ptr, 0, sizeof(val));					\
-> +		test_ ## __inst(ptr, offset, val);				\
-> +		memcpy(&val, ptr, sizeof(val));					\
-> +		EXPECT_EQ(VAL ## __type_size, val);				\
-> +	}									\
-> +}
-> +TEST_GP_STORE(sh, 16);
-> +TEST_GP_STORE(sw, 32);
-> +TEST_GP_STORE(sd, 64);
-> +#ifdef __riscv_compressed
-> +TEST_GP_STORE(c_sw, 32);
-> +TEST_GP_STORE(c_sd, 64);
-> +TEST_GP_STORE(c_sdsp, 64);
-> +#endif
-> +
-> +#define __TEST_FPU_LOAD(__type, __inst, __reg_start, __reg_end)			\
-> +TEST(fpu_load_ ## __inst)							\
-> +{										\
-> +	int ret, offset, fp_reg;						\
-> +	uint8_t buf[16] __attribute__((aligned(16)));				\
-> +										\
-> +	ret = prctl(PR_SET_UNALIGN, PR_UNALIGN_NOPRINT);			\
-> +	ASSERT_EQ(ret, 0);							\
-> +										\
-> +	for (fp_reg = __reg_start; fp_reg < __reg_end; fp_reg++) {		\
-> +		for (offset = 1; offset < 4; offset++) {			\
-> +			void *load_addr = (buf + offset);			\
-> +			__type val = VAL_ ## __type ;				\
-> +										\
-> +			memcpy(load_addr, &val, sizeof(val));			\
-> +			val = test_ ## __inst(fp_reg, load_addr, offset, val);	\
-> +			EXPECT_TRUE(__type ##_equal(val, VAL_## __type));	\
-> +		}								\
-> +	}									\
-> +}
-> +#define TEST_FPU_LOAD(__type, __inst) \
-> +	__TEST_FPU_LOAD(__type, __inst, 0, 32)
-> +#define TEST_FPU_LOAD_COMPRESSED(__type, __inst) \
-> +	__TEST_FPU_LOAD(__type, __inst, 8, 16)
-> +
-> +TEST_FPU_LOAD(float, flw)
-> +TEST_FPU_LOAD(double, fld)
-> +#ifdef __riscv_compressed
-> +TEST_FPU_LOAD_COMPRESSED(double, c_fld)
-> +TEST_FPU_LOAD_COMPRESSED(double, c_fldsp)
-> +#endif
-> +
-> +#define __TEST_FPU_STORE(__type, __inst, __reg_start, __reg_end)		\
-> +TEST(fpu_store_ ## __inst)							\
-> +{										\
-> +	int ret, offset, fp_reg;						\
-> +	uint8_t buf[16] __attribute__((aligned(16)));				\
-> +										\
-> +	ret = prctl(PR_SET_UNALIGN, PR_UNALIGN_NOPRINT);			\
-> +	ASSERT_EQ(ret, 0);							\
-> +										\
-> +	for (fp_reg = __reg_start; fp_reg < __reg_end; fp_reg++) {		\
-> +		for (offset = 1; offset < 4; offset++) {			\
-> +										\
-> +			void *store_addr = (buf + offset);			\
-> +			__type val = VAL_ ## __type ;				\
-> +										\
-> +			test_ ## __inst(fp_reg, store_addr, offset, val);	\
-> +			memcpy(&val, store_addr, sizeof(val));			\
-> +			EXPECT_TRUE(__type ## _equal(val, VAL_## __type));	\
-> +		}								\
-> +	}									\
-> +}
-> +#define TEST_FPU_STORE(__type, __inst) \
-> +	__TEST_FPU_STORE(__type, __inst, 0, 32)
-> +#define TEST_FPU_STORE_COMPRESSED(__type, __inst) \
-> +	__TEST_FPU_STORE(__type, __inst, 8, 16)
-> +
-> +TEST_FPU_STORE(float, fsw)
-> +TEST_FPU_STORE(double, fsd)
-> +#ifdef __riscv_compressed
-> +TEST_FPU_STORE_COMPRESSED(double, c_fsd)
-> +TEST_FPU_STORE_COMPRESSED(double, c_fsdsp)
-> +#endif
-> +
-> +TEST_SIGNAL(gen_sigbus, SIGBUS)
-> +{
-> +	uint32_t *ptr;
-> +	uint8_t buf[16] __attribute__((aligned(16)));
-> +	int ret;
-> +
-> +	ret = prctl(PR_SET_UNALIGN, PR_UNALIGN_SIGBUS);
-> +	ASSERT_EQ(ret, 0);
-> +
-> +	ptr = (uint32_t *)(buf + 1);
-> +	*ptr = 0xDEADBEEFULL;
-> +}
-> +
-> +int main(int argc, char **argv)
-> +{
-> +	int ret, val;
-> +
-> +	ret = prctl(PR_GET_UNALIGN, &val);
-> +	if (ret == -1 && errno == EINVAL)
-> +		ksft_exit_skip("SKIP GET_UNALIGN_CTL not supported\n");
-> +
-> +	exit(test_harness_run(argc, argv));
-> +}
+Jason
 
