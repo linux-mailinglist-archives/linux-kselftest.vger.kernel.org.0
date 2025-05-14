@@ -1,186 +1,200 @@
-Return-Path: <linux-kselftest+bounces-32950-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32951-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B971AB700D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 May 2025 17:39:33 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2011AB7084
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 May 2025 17:57:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC1B917D81F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 May 2025 15:39:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A151E7ACC81
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 May 2025 15:56:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A0DE1C8606;
-	Wed, 14 May 2025 15:39:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C3C827CCF8;
+	Wed, 14 May 2025 15:54:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="gBCeFm00"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="oEEh/KVW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2061.outbound.protection.outlook.com [40.107.101.61])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 858A1192D9D;
-	Wed, 14 May 2025 15:39:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.37.111.173
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747237162; cv=none; b=Yw4yAsS5VI2+fdINvKSbJyL9b+HyXIGs7JSX7PdQZUsnLX2A12QsOsSkrzy2/6qqRixsCodiKaalMJEkyO/ERIr4KRD1NOM0A8zUt7CGytJ+827ImG6NdjkoJMIR4d6+Dmp7yiY+gT/N7TWXbl6CqzA3APt2jRkUHNsr5QBKmx4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747237162; c=relaxed/simple;
-	bh=JUOSKtnUN0gnWPl353Uf8TwFP9vfyGEblmsdw9x2SvE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=CyEFOAlkrYMwFvCz+WEB7MEqrCoD1tdMHXNPxn9IOOSS5dIXXHJEnsvkAX/jJ/0QX2D4R3eSlQirqODmB4nBuwJueC1y1x2ToHmX0P1fP01Nc5LwLfo/x94NhxTKfmL6mI0yfl3Hogw3PJpuBnsjNyM8j+7pFd5RftNLKOoB27Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=gBCeFm00; arc=none smtp.client-ip=198.37.111.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1747237158;
-	bh=JUOSKtnUN0gnWPl353Uf8TwFP9vfyGEblmsdw9x2SvE=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=gBCeFm00zkwsOFoHEXJmbB4HzQmZmcx8utbbIhJXB9uDBqgCHxQQAX+I5J7nVbgjn
-	 nIeerY7GhdgOaLKQArxCAv1pFxNAq/gCQb7/IgW3OJqF1ngeVin152HmfXHYSRgmG4
-	 3L1C85Pk0j5AEvOUL6JVeWRBEcL9a1qCgHD0MfG4=
-Received: from [IPv6:2601:5c4:4302:c21::a774] (unknown [IPv6:2601:5c4:4302:c21::a774])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id 33FAE1C00DC;
-	Wed, 14 May 2025 11:39:17 -0400 (EDT)
-Message-ID: <beaa81748cf1325df67930bf74ea87e6cdcb3e46.camel@HansenPartnership.com>
-Subject: Re: [PATCH v3 0/4] Introducing Hornet LSM
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: KP Singh <kpsingh@kernel.org>, Paul Moore <paul@paul-moore.com>
-Cc: bboscaccy@linux.microsoft.com, bpf@vger.kernel.org, code@tyhicks.com, 
- corbet@lwn.net, davem@davemloft.net, dhowells@redhat.com,
- gnoack@google.com,  herbert@gondor.apana.org.au, jarkko@kernel.org,
- jmorris@namei.org,  jstancek@redhat.com, justinstitt@google.com,
- keyrings@vger.kernel.org,  linux-crypto@vger.kernel.org,
- linux-doc@vger.kernel.org,  linux-kbuild@vger.kernel.org,
- linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org,
- linux-security-module@vger.kernel.org,  llvm@lists.linux.dev,
- masahiroy@kernel.org, mic@digikod.net, morbo@google.com, 
- nathan@kernel.org, neal@gompa.dev, nick.desaulniers+lkml@gmail.com, 
- nicolas@fjasle.eu, nkapron@google.com, roberto.sassu@huawei.com,
- serge@hallyn.com,  shuah@kernel.org, teknoraver@meta.com,
- xiyou.wangcong@gmail.com,  kysrinivasan@gmail.com
-Date: Wed, 14 May 2025 11:39:16 -0400
-In-Reply-To: <CACYkzJ6VQUExfyt0=-FmXz46GHJh3d=FXh5j4KfexcEFbHV-vg@mail.gmail.com>
-References: <20250502184421.1424368-1-bboscaccy@linux.microsoft.com>
-	 <20250502210034.284051-1-kpsingh@kernel.org>
-	 <CAHC9VhS5Vevcq90OxTmAp2=XtR1qOiDDe5sSXReX5oXzf+siVQ@mail.gmail.com>
-	 <CACYkzJ5jsWFiXMRDwoGib5t+Xje6STTuJGRZM9Vg2dFz7uPa-g@mail.gmail.com>
-	 <CACYkzJ6VQUExfyt0=-FmXz46GHJh3d=FXh5j4KfexcEFbHV-vg@mail.gmail.com>
-Autocrypt: addr=James.Bottomley@HansenPartnership.com;
- prefer-encrypt=mutual;
- keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B857E27C152;
+	Wed, 14 May 2025 15:54:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.101.61
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1747238057; cv=fail; b=LU54+CHDD096pFdezkoo03D78eyWCc+aVXWOnKIboKlkU0aV9HXfnumFGMT1C5kAQLRxpGt7BdbEi6O2jPcISyBczyokX1JCY59eQpNxzouRMoaXvsdakiqZFjFgj6356n2kFPAR0duLSQWlmGdx0ToWkG0fUQe1HWLlRhRu6g0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1747238057; c=relaxed/simple;
+	bh=TwTrN7StOSaPu8ENxLm0MUmv4haTPa1YuLIxPUxZFg0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=rETMiykJzSjyKXh4PIx2ttC4Sk9iA4dIRca8Xn4cl0Wlqv9xgDy9LYEP5rVdwmRR9iGwRwqVTXPJGhkoL6VH2B/fMb++VHri4qVhydx2ScCv8CUVAYio26nEBOjqQKdr3xMiZEPdMSxGg8L4CUzGBjbcYRSpbK8tAmZTVlgu7zs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=oEEh/KVW; arc=fail smtp.client-ip=40.107.101.61
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=krgsLZYb0QF4IQ2ijB1v3ZV1X41Fx+F8Row9lnLqKZcgqm701qMCjYBSkSy5LEUv9saXHYikq3S7VVKQ3i4oHz71vWwL1sbYwDLo8LOhVyNIR+L7nnciP8HzMjhsR77T4D/hIeo1mRnidOb2ucI/JJUXX57eSl1MtH7UmsZPtzhBGiV1NJVSWhlBzXPZNFrR+27YgVmrnZk3lNUaaRtNvYWV6mkRIMIX/mPvFD3X4sWEsKqYWLc2xcvuY5pRd0y2moCl5yLa4tZEXdcoGc6oCrg6Y5VjBYPqqUCbsUKGLKOJL0oH63WCQBWDR1b3R/CYFd1kKOx02eGLrluksVh0hQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ER2cBH9odtKWOaJ0hmZiCIx5uFRs7Fl1mRkmOm8CM0g=;
+ b=GBeTPBkP0T9tUEI2o+liD5FDw9UxfgUzm2quVy5ZRfYNepoM5NGt91djXOvsAKMSPkyoxhf9fJNKX+QQ10RAy+iGw9KRmWaC0slNCJzsjmn/qcfspWJeeWTu7wYg4Yoo9EtAGxVq/AyipLarsWz2QjzH5Ghn9XqJPTM0c7hHAMuOzOxb8rCdPTTcvXCyNUt2iYeiCBybvIjF2Q+kqRFNOn3UZyJe6Fe6WP+19IrFxkk6kMOlcfa1jCKMo4AEUSUaroe0pj7nhn3U3uFK747HZliGTT7UeWbd46+t+MTePAS+RoCBxOmm9waocIGX8jV1grL5GmHGUAHxJpHYwEYJEQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ER2cBH9odtKWOaJ0hmZiCIx5uFRs7Fl1mRkmOm8CM0g=;
+ b=oEEh/KVWotmAXh9yqZtOLl5ZrW+TA81Zj0K6G8LO0Sg/T11VCmSZyGNMv850chKhBBB6JB+nmuWe30l+XXIu8T2cdsFMqjF/ux31gQ/4x7422k9ETP/jqC6E2SKmmvfy2i0j6RBIUdCHA8Oe5TxfqqBGdpTmKyj50cCui+jFejWOKZKFIv9MLaJX2CkYyDxMBTQ7sUeq5t99Y4GUDVKcBPXO3bAnjZHIH4mXx+dXbGPBQK0J9Hac/crTXldBgOKQc0f7b9zisC8/ejeEXgr4U4YcGtfwXHDDNExzyjDauzeEbnXkik75VGK16MleJZM2ogWk6TyKETgb6e/6YxtTyg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
+ by MN2PR12MB4240.namprd12.prod.outlook.com (2603:10b6:208:1d3::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8722.30; Wed, 14 May
+ 2025 15:54:12 +0000
+Received: from CH3PR12MB8659.namprd12.prod.outlook.com
+ ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
+ ([fe80::6eb6:7d37:7b4b:1732%7]) with mapi id 15.20.8722.027; Wed, 14 May 2025
+ 15:54:12 +0000
+Date: Wed, 14 May 2025 12:54:11 -0300
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Ankit Soni <Ankit.Soni@amd.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, iommu@lists.linux.dev,
+	Joerg Roedel <joro@8bytes.org>,
+	Justin Stitt <justinstitt@google.com>,
+	Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+	Bill Wendling <morbo@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Will Deacon <will@kernel.org>, Alexey Kardashevskiy <aik@amd.com>,
+	Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+	James Gowans <jgowans@amazon.com>,
+	Michael Roth <michael.roth@amd.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>, patches@lists.linux.dev
+Subject: Re: [PATCH v2 03/15] iommupt: Add the basic structure of the iommu
+ implementation
+Message-ID: <20250514155411.GC382960@nvidia.com>
+References: <0-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
+ <3-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
+ <pntkuh63y26rygrkxegbzncvc3shtplucrnzkkz2dimpkfyn75@uekvyuz5kred>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <pntkuh63y26rygrkxegbzncvc3shtplucrnzkkz2dimpkfyn75@uekvyuz5kred>
+X-ClientProxiedBy: BN9PR03CA0487.namprd03.prod.outlook.com
+ (2603:10b6:408:130::12) To CH3PR12MB8659.namprd12.prod.outlook.com
+ (2603:10b6:610:17c::13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|MN2PR12MB4240:EE_
+X-MS-Office365-Filtering-Correlation-Id: ad557d06-17e3-43bb-e592-08dd92ff9209
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|7416014|376014|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?BFqW8NKi/nqSbFDqiHfRrKc+ItV6Hm3hZ4qrtJ9IlWQ/Ruk753ojSw4Dl4Hq?=
+ =?us-ascii?Q?vM0cfWFkSib2K7khmJQb3MgKn/zCz5cufMeeIQkighSWkg2dPmv7TJj6hTt0?=
+ =?us-ascii?Q?FqWf68oM4Cqe700s7VJTOjWpAZxepSumOCMyihXRrdezTBCmOJs39mFkvGUJ?=
+ =?us-ascii?Q?lOgMZ/UHd7cKVRGoCeir/7moAKan2ZGRPGJw6zimRyUMj6JqCVHnakFXIvjI?=
+ =?us-ascii?Q?ZDXQRumqg3K6qtxX+RSDzbCJ1WIwXGmKzpA3YGVWEBJeZH6Gs+BVvovHPam/?=
+ =?us-ascii?Q?22R72QrQ0gW7BoqFO+rQ6ALo6Rg2xcTIVPw5alCXqqpkhZDlHyk6CTg1SfB1?=
+ =?us-ascii?Q?U6SbJXiBSH7oBNsl2f3ovejQBJDtmxXcb3mhPWmUAASFuqvdKximrEvdW2Og?=
+ =?us-ascii?Q?DvV0ppWkPfkVDd2OROBIJBJJvhgXpwZfIikexfdnqWSWFF7eILRhREtgJxJR?=
+ =?us-ascii?Q?4U7qNX9bv98qQOju0ZZEHNcPQaS81yQqz++VrW2l+8/iOL7R3VA0e2fdFJjG?=
+ =?us-ascii?Q?JEfTbiepKzAZP6wgqL/ECxPdzUvhXYLOW8ECi1u7ga2u/R3fMP9hl51leofO?=
+ =?us-ascii?Q?UBgRrFUm4Y6iEWIE/fLt6oFO60izVTmDiodE8eU2pvx40D/lV+1pd2vKDV99?=
+ =?us-ascii?Q?GwUtI5lZ5E8poHDxOSvi+QwS3CuEbkgzsgo7sVeeeiL5hF5r9TF0v/e7KHfi?=
+ =?us-ascii?Q?9v/BDKjkhltOLm8+d5oQ5zgQZw+A9LHKdWeWqzyJUSyV/x/0ORZhAl5nsWhF?=
+ =?us-ascii?Q?4qpF0PsQkT8k7Lmk4o2xPXJ6reqnsAbMzpNCKJRvF0DQjoBaXGxGXA3rFvwu?=
+ =?us-ascii?Q?bliSQ0yBNbsxE3XKUbrTYUHsOyp0Rfs2s2LeKGVXRNDsmSUzwVj4hh+5uz2T?=
+ =?us-ascii?Q?cLHaw437YTgrrljhRMtSugnyZIhHB1/gYL2+TlZKTfeiFAwZnnU65jaJfQSP?=
+ =?us-ascii?Q?6sUqVRhgG52OLd648RnEeQPB56er5jkGxfX+MHethkJEibey2Km85NkMoxct?=
+ =?us-ascii?Q?j2UwHDw00lJMMpUzYsF+tyCpd4dsgG2vMvnSjiZDwB02aPkrUAK+Gkh3Kug3?=
+ =?us-ascii?Q?wRT6CftUS//XP3Ubl/s1DbtYNf0WZsZDgfP1iVEzZ/rGgvhd7ddxmc6zrb4C?=
+ =?us-ascii?Q?fX2qvPrZh/T09qaIN6wm4IqXzXhcfRA2ut9n6WQEeuPd4m8F7P0w+CjZZKLJ?=
+ =?us-ascii?Q?nQhfRcCL+etuZ1TCdWyP356ZYdVdYQxvMCqNHFFU4Nqd42dU7eBWXm4ByVyS?=
+ =?us-ascii?Q?XxV29gaSIqZv9wmLouBZU4sl+KIfVf8FNvmeor/w6QEbGzQQca8qdZQ3OORu?=
+ =?us-ascii?Q?yRb/B/IbLH3741LxEEwrx5FpP6tjk76qcZtNpe67pkZb0J4sm0eo2nVwQmU1?=
+ =?us-ascii?Q?ndsPMbjKNCgNgNGxSG9e+aEKqDxAKlJcwUQGkXmR6DogTeoR+5jU4kkgx59/?=
+ =?us-ascii?Q?RqKtTW9Ge0o=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?ycft477swNTmW9PnNK2S5HXdQEillFevF1azFVNqzDOnx8fom5ZDdP6aLrhO?=
+ =?us-ascii?Q?isxkDxc4dX+tODH+9JEoJZBAyBsyuWuv+GcQY5c8XrKKnarD/4lgxZZxQN06?=
+ =?us-ascii?Q?CrNroyXkBHWqA2/JfgqFIkvm0H4taM7tRo0B3kdt2L3vl0LQO3Z35gxqfXnj?=
+ =?us-ascii?Q?EphcssSEol19Cl+uS4kg3sngOD/tzrhvDaZpzHvYfJRYNwLyzAJfEBIDQbXQ?=
+ =?us-ascii?Q?ZlLMf7cqsJA6khIO3Tq8qrpo5AK5IFOhwPYcyqidA/Wu/KPhXg+jH+7sXBnM?=
+ =?us-ascii?Q?Bkn2qvdVaD1q5GRg9BTZQ1mRNl/AzbZs+fGkm5/zDRVXjpXz96c7F8sIgurJ?=
+ =?us-ascii?Q?VQnwHZND+joM/j3N4xM79+/naeViEv1WHB7+gYDauMfZUVHE+owFfXhl+kUA?=
+ =?us-ascii?Q?RWcofkpvP+F4WAkBNbNOaviQ0SeQTp4d2fi58K6fnWVh0n4EqsT/cJxfw7ux?=
+ =?us-ascii?Q?0yq9Z0VhMX6czRt7eExMXyoz8Hzh6pBTKm0TdDNHwAccyg709RSG2XP47Sdi?=
+ =?us-ascii?Q?hTVyrwPLoyo+CYB0UyM+WBNu/eoG0lozZOsLbQ+rhmoN1XCjONGU4SR1ft8u?=
+ =?us-ascii?Q?6GMzYUpZRH+sU2aZOGEd3+ddZZQ+ibbU490b6naF+iw1FybwbeLY61RMVmyd?=
+ =?us-ascii?Q?aoC0mi9Zu1r50LGIK3vgsY3Igfjc5YPndFgfT0TYG6mlN4FH7fbrpE+rzLup?=
+ =?us-ascii?Q?gWnuv6sqJ1t/0CHJtnZcOiF9Tb36/uTFOiDhuttB0EepVOFYQi3RnlZxZdtL?=
+ =?us-ascii?Q?1dcpBTh3Q9HaZYHgxQMDAWgis3I+1EWEcWCdymc5m6UjT6ih9mVBU3QIc8am?=
+ =?us-ascii?Q?BGTPLwYvrTdEicbE15WSTNIneOVkDO3amh+O1HX3oZKtqBl9GvYEYp9KhGCV?=
+ =?us-ascii?Q?87A5BX+9nLiWClMEgRrDnKqDPTkMLYATTEQvogpE+k6cOy1imzbHo9QfCvQ7?=
+ =?us-ascii?Q?sW1n93QuElR7SrcJROMW+w87cmPrdlFdKSNo5TdMZrypeHjvJoj40zHsQ6Jj?=
+ =?us-ascii?Q?jADJpCZ8pkhH1rjR8UjYwOTjkRxqg5phl3qXcYSALTAtB4YT4w9UdcTiZ+QV?=
+ =?us-ascii?Q?JBexYXXyEnV8JW3dM0TuhwMd7b1boePAKf7QoiGvr6+QpnwGFKD39+MHKy1F?=
+ =?us-ascii?Q?hN5viXuylcS8zRxdLEHGuKxJg8Ezsax1mnPhRFvrcACjqe4Nu7FqcTnZOrIQ?=
+ =?us-ascii?Q?GUlJ3OG5Jl7S4HJCXEXjf8AH9v8pBe9DREcEUD7kqJLVHRumZOCmTHRoATkQ?=
+ =?us-ascii?Q?c3S8cfj/DlfDaIlxWHYAJdZWDWR5PABb5H2sID9lWvTTxz2u2wmthm9/jEHJ?=
+ =?us-ascii?Q?+s42WCaM2MaEQlc+x3VWr/nK5u4Zev1/AkeiOJVBwyY8uFAAOb92HMuSp06T?=
+ =?us-ascii?Q?RjbjBbEx3g1tHjkAfBCPi/LEFHdPIqfpLeHY2Ca6v0hgBU6BovFG8iF1tg9D?=
+ =?us-ascii?Q?n2JkBs5lkUachhwOBUyq+IvKZJHJoUKA639Xrw5x57K08S+3Rb6b88Ty7B/R?=
+ =?us-ascii?Q?4G9fxbuz1U7EVa6Md4A8vr/YlhIWGJDgow/LFOgVC8kHxH8goGdY4shGU4Gk?=
+ =?us-ascii?Q?uFrE1eYddVsur9HDwzYINgRn1VSulmqpmSH78hrB?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ad557d06-17e3-43bb-e592-08dd92ff9209
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 May 2025 15:54:12.3942
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DQDfWtlq80uFTiBTFPVputE8XejXyW0/J5zqDkrxb+lKQptxKsch84ey4lmIDIOV
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4240
 
-On Sun, 2025-05-11 at 04:01 +0200, KP Singh wrote:
-[...]
-> >=20
-> For this specific BPF case, we will directly sign a composite of the
-> first message and the hash of the second. Let H_meta =3D H(M_metadata).
-> The block to be signed is effectively:
->=20
-> =C2=A0=C2=A0=C2=A0 B_signed =3D I_loader || H_meta
->=20
-> The signature generated is Sig(B_signed).
->=20
-> The process then follows a similar pattern to the Alice and Bob
-> model,
-> where the kernel (Bob) verifies I_loader and H_meta using the
-> signature. Then, the trusted I_loader is responsible for verifying
-> M_metadata against the trusted H_meta.
->=20
-> From an implementation standpoint:
->=20
-> # Build
->=20
-> bpftool (or some other tool in the user's build environment) knows
-> about the metadata (M_metadata) and the loader program (I_loader). It
-> first calculates H_meta =3D H(M_metadata). Then it constructs the
-> object
-> to be signed and computes the signature:
->=20
-> =C2=A0=C2=A0=C2=A0 Sig(I_loader || H_meta)
->=20
-> # Loader
->=20
-> bpftool generates the loader program. The initial instructions of
-> this loader program are designed to verify the SHA256 hash of the
-> metadata (M_metadata) that will be passed in a map. These
-> instructions effectively embed the precomputed H_meta as immediate
-> values.
->=20
-> =C2=A0=C2=A0=C2=A0 ld_imm64 r1, const_ptr_to_map // insn[0].src_reg =3D=
-=3D
-> BPF_PSEUDO_MAP_IDX
-> =C2=A0=C2=A0=C2=A0 r2 =3D *(u64 *)(r1 + 0);
-> =C2=A0=C2=A0=C2=A0 ld_imm64 r3, sha256_of_map_part1 // constant precomput=
-ed by
-> bpftool (part of H_meta)
-> =C2=A0=C2=A0=C2=A0 if r2 !=3D r3 goto out;
->=20
-> =C2=A0=C2=A0=C2=A0 r2 =3D *(u64 *)(r1 + 8);
-> =C2=A0=C2=A0=C2=A0 ld_imm64 r3, sha256_of_map_part2 // (part of H_meta)
-> =C2=A0=C2=A0=C2=A0 if r2 !=3D r3 goto out;
->=20
-> =C2=A0=C2=A0=C2=A0 r2 =3D *(u64 *)(r1 + 16);
-> =C2=A0=C2=A0=C2=A0 ld_imm64 r3, sha256_of_map_part3 // (part of H_meta)
-> =C2=A0=C2=A0=C2=A0 if r2 !=3D r3 goto out;
->=20
-> =C2=A0=C2=A0=C2=A0 r2 =3D *(u64 *)(r1 + 24);
-> =C2=A0=C2=A0=C2=A0 ld_imm64 r3, sha256_of_map_part4 // (part of H_meta)
-> =C2=A0=C2=A0=C2=A0 if r2 !=3D r3 goto out;
-> =C2=A0=C2=A0=C2=A0 ...
->=20
-> This implicitly makes the payload equivalent to the signed block
-> (B_signed)
->=20
-> =C2=A0=C2=A0=C2=A0 I_loader || H_meta
->=20
-> bpftool then generates the signature of this I_loader payload (which
-> now contains the expected H_meta) using a key (system or user) with
-> new flags that work in combination with bpftool -L
+On Wed, May 14, 2025 at 09:23:49AM +0000, Ankit Soni wrote:
+> I am experiencing a system hang with a 5-level v2 page table mode, on boot.
+> The NVMe boot drive is not initializing.
+> Below are the relevant dmesg logs with some prints i had added:
+> 
+> [    6.386439] AMD-Vi v2 domain init
+> [    6.390132] AMD-Vi v2 pt init
+> [    6.390133] AMD-Vi aperture end last va ffffffffffffff
+> ...
+> [   10.315372] AMD-Vi gen pt MAP PAGES iova ffffffffffffe000 paddr 19351b000
+> ...
+> [   72.171930] nvme nvme0: I/O tag 0 (0000) QID 0 timeout, disable controller
+> [   72.179618] nvme nvme1: I/O tag 24 (0018) QID 0 timeout, disable controller
+> [   72.197176] nvme nvme0: Identify Controller failed (-4)
+> [   72.203063] nvme nvme1: Identify Controller failed (-4)
+> [   72.209237] nvme 0000:05:00.0: probe with driver nvme failed with error -5
+> [   72.209336] nvme 0000:44:00.0: probe with driver nvme failed with error -5
+> ...
+> Timed out waiting for the udev queue to be empty.
+> 
+> According to the dmesg logs above, the IOVA for the v2 page table appears 
+> incorrect and is not aligned with domain->geometry.aperture_end. Which
+> requires domain->geometry.force_aperture = true; to be added at the
+> appropriate location. Proabably here!
 
-Could I just push back a bit on this.  The theory of hash chains (which
-I've cut to shorten) is about pure data structures.  The reason for
-that is that the entire hash chain is supposed to be easily
-independently verifiable in any environment because anything can
-compute the hashes of the blocks and links.  This independent
-verification of the chain is key to formally proving hash chains to be
-correct.  In your proposal we lose the easy verifiability because the
-link hash is embedded in the ebpf loader program which has to be
-disassembled to do the extraction of the hash and verify the loader is
-actually checking it.
+Yes! It got lost, thanks alot!
 
-I was looking at ways we could use a pure hash chain (i.e. signature
-over loader and real map hash) and it does strike me that the above
-ebpf hash verification code is pretty invariant and easy to construct,
-so it could run as a separate BPF fragment that then jumps to the real
-loader.  In that case, it could be constructed on the fly in a trusted
-environment, like the kernel, from the link hash in the signature and
-the signature could just be Sig(loader || map hash) which can then be
-easily verified without having to disassemble ebpf code.  So we get the
-formal provability benefits of using a real hash chain while still
-keeping your verification in BPF.=20
-
-Regards,
-
-James
-
-
+Jason
 
