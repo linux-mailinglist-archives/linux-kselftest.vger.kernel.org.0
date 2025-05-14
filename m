@@ -1,61 +1,61 @@
-Return-Path: <linux-kselftest+bounces-32974-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32981-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC003AB78E9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 00:16:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EFA4AB792F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 00:49:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0F6AE7AA5D5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 May 2025 22:15:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E17E61B63207
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 May 2025 22:49:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E302224223;
-	Wed, 14 May 2025 22:16:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77533223DD3;
+	Wed, 14 May 2025 22:49:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="cht9WUif"
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="KzjTNltq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 996F91EB189;
-	Wed, 14 May 2025 22:16:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA8B821C163;
+	Wed, 14 May 2025 22:49:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747260988; cv=none; b=P+rrA5a1di7w9vD1n9mrKdP9sB9JZdwvFHq5UlVb6wWxjBhsoyU4dAD+JJ5ME6NkVxPlw6ZDLNzg8Vdd05xXkvv/OY9z3wTLDDe9nNoBG7e/urdw0lOVDWdf5tKaTKgjt63m+Q2bbKyAZkrpKfUZxO5+cJJlbUtclTsceRx99pk=
+	t=1747262970; cv=none; b=WsLSVNnlfIQJ+epTZzTIN24tT0fSad7BPHpygeJeoEu/r+8yCtTIlMQbWBDUysFVTjkE9b99vR2WtKCcvTg0ALzAX4smfhQbw5ESJeCGIY/9Vhr5Qka55hk1HACTrbJqDeUj9FLi8uSZWpM6vLtL0hYwUwh89UObNmuUkBXesCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747260988; c=relaxed/simple;
-	bh=AWk9Ca73id5F9YQWEPEIhc+mFJs28UXN1ReaPw4guow=;
+	s=arc-20240116; t=1747262970; c=relaxed/simple;
+	bh=om+oj5DMuweFUdn1sZpsa2+co3dX5mWFSmC5IoMnNwg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=lDkxWJLVNA/QaZiObJubUED2QRxSd2jIfRChdP8yBOAbU7Kz1CSBtpBA9rZX5KGyKiEfNfhdkI667r2/jZLGpveXWBENleifVl4Amse8NSl0aCO2U0rvqeHYcGYnz2n/Rgm2pfjpEcKgUZbBgDId2WbKkJFlSRLlpiuWQeujqQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=cht9WUif; arc=none smtp.client-ip=185.226.149.38
+	 In-Reply-To:To:Cc; b=Su3jgImn3x21K5dJ9DFJ2tJrPWIgKBJwt84ULcu4+9Sf9EjkENOhT6/AOClAnTW17J3i9iB+EiZAy27JbVrGbQPDyWD1hmtu1uoXgftuvavH1qP9T/Aia/oQzN65N7ytfiXj/LqATu7KStKvUqgWnADh2KBmOXMfmwrJSYwh07U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=KzjTNltq; arc=none smtp.client-ip=185.226.149.37
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
-Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
-	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <mhal@rbox.co>)
-	id 1uFKOk-001k8n-6z; Thu, 15 May 2025 00:16:22 +0200
+	id 1uFKOa-001vcr-20; Thu, 15 May 2025 00:16:12 +0200
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
 	s=selector2; h=Cc:To:In-Reply-To:References:Message-Id:
 	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
-	bh=UbCVgwxpRFnpFZpXah8Lt7X+QYdpyqNgSqr+wPpYtPk=; b=cht9WUifGa0X8aAJ6An+SP07zu
-	DUPWUug0oVB9ikoJn8A6bqspOAtUkB+Y0VuycJzgnla9gyavB6yVm6TPme+SJcDpbwySTIkAMrS2I
-	vetY2jFnsmlTk42EWZRvIWN+CB8hZlh7xSGJK1Y3MIMLncdvoHIPWDvo3dZksC6TwgkrkwOJn0F0z
-	IDPO/fn7Nv48EZvbSCKk85iCrQ4LbLziYbOYiOJ5h8iXp0hHMrvUL2TfVZb91RqHtnjVRQjXI5m6k
-	A6wfQSyYwRA3/kqoFUPub4s9JoaoXlk1yqkeWLVRSsYmazAIh+C5Tj3L+UTcCExj6+oXh2FNAwU/B
-	9hzFOTJA==;
+	bh=eHOPNB5KzJTPokBVk3yNIFG8Uv3KZKoWMfgZAxWLcvQ=; b=KzjTNltqS3z29CzmogHbU9pM/J
+	YGZPNCCTIAW5tUeVLqLsXlaDm2TqGTECAbC+ktzkGv9kfD7Aq4RmGViATnV7rXhWUFg0FuaFeDBlZ
+	fZoFkm04cUYgzVSiJnmPNlsUvKSjsyav/lDJwwXnGYBIpHe7vLl6aYrbsFSjGqfYOseXC++9gZM8w
+	ArPPQdVxQ7wNKYhwDO1IlPVuZUbkWydEszqa19rki1Wyd/9O0CZKHj844esbVB9iEwjDJwjZ+vquy
+	Aq9F3K2uqzJ37U7/3ZjPfqLTmKBg94A6Hh78gFNWjMW1dTJFRhno6ky7tZKJN4Vu5IiIpWT/81VI6
+	TGRC6Hcw==;
 Received: from [10.9.9.73] (helo=submission02.runbox)
-	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <mhal@rbox.co>)
-	id 1uFKOj-0008AM-S3; Thu, 15 May 2025 00:16:22 +0200
+	id 1uFKOZ-0004J8-OZ; Thu, 15 May 2025 00:16:11 +0200
 Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.93)
-	id 1uFKOM-005bJ3-Kf; Thu, 15 May 2025 00:15:58 +0200
+	id 1uFKON-005bJ3-Gf; Thu, 15 May 2025 00:15:59 +0200
 From: Michal Luczaj <mhal@rbox.co>
-Date: Thu, 15 May 2025 00:15:27 +0200
-Subject: [PATCH bpf-next v3 4/8] selftests/bpf: Introduce verdict programs
- for sockmap_redir
+Date: Thu, 15 May 2025 00:15:28 +0200
+Subject: [PATCH bpf-next v3 5/8] selftests/bpf: Add selftest for
+ sockmap/hashmap redirection
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -63,8 +63,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250515-selftests-sockmap-redir-v3-4-a1ea723f7e7e@rbox.co>
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250515-selftests-sockmap-redir-v3-5-a1ea723f7e7e@rbox.co>
 References: <20250515-selftests-sockmap-redir-v3-0-a1ea723f7e7e@rbox.co>
 In-Reply-To: <20250515-selftests-sockmap-redir-v3-0-a1ea723f7e7e@rbox.co>
 To: Andrii Nakryiko <andrii@kernel.org>, 
@@ -77,93 +77,507 @@ To: Andrii Nakryiko <andrii@kernel.org>,
  Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
 Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Jakub Sitnicki <jakub@cloudflare.com>, 
- Michal Luczaj <mhal@rbox.co>, Jiayuan Chen <mrpre@163.com>
+ Michal Luczaj <mhal@rbox.co>
 X-Mailer: b4 0.14.2
 
-Instead of piggybacking on test_sockmap_listen, introduce
-test_sockmap_redir especially for sockmap redirection tests.
+Test redirection logic. All supported and unsupported redirect combinations
+are tested for success and failure respectively.
 
-Suggested-by: Jiayuan Chen <mrpre@163.com>
+BPF_MAP_TYPE_SOCKMAP
+BPF_MAP_TYPE_SOCKHASH
+	x
+sk_msg-to-egress
+sk_msg-to-ingress
+sk_skb-to-egress
+sk_skb-to-ingress
+	x
+AF_INET, SOCK_STREAM
+AF_INET6, SOCK_STREAM
+AF_INET, SOCK_DGRAM
+AF_INET6, SOCK_DGRAM
+AF_UNIX, SOCK_STREAM
+AF_UNIX, SOCK_DGRAM
+AF_VSOCK, SOCK_STREAM
+AF_VSOCK, SOCK_SEQPACKET
+
+Suggested-by: Jakub Sitnicki <jakub@cloudflare.com>
 Acked-by: John Fastabend <john.fastabend@gmail.com>
 Signed-off-by: Michal Luczaj <mhal@rbox.co>
 ---
- .../selftests/bpf/progs/test_sockmap_redir.c       | 68 ++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
+ .../selftests/bpf/prog_tests/sockmap_redir.c       | 465 +++++++++++++++++++++
+ 1 file changed, 465 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_redir.c b/tools/testing/selftests/bpf/progs/test_sockmap_redir.c
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_redir.c b/tools/testing/selftests/bpf/prog_tests/sockmap_redir.c
 new file mode 100644
-index 0000000000000000000000000000000000000000..34d9f4f2f0a2e638c6e05cfa9f19971bd36c11ea
+index 0000000000000000000000000000000000000000..9c461d93113db20de65ac353f92dfdbe32ffbd3b
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_redir.c
-@@ -0,0 +1,68 @@
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_redir.c
+@@ -0,0 +1,465 @@
 +// SPDX-License-Identifier: GPL-2.0
++/*
++ * Test for sockmap/sockhash redirection.
++ *
++ * BPF_MAP_TYPE_SOCKMAP
++ * BPF_MAP_TYPE_SOCKHASH
++ *	x
++ * sk_msg-to-egress
++ * sk_msg-to-ingress
++ * sk_skb-to-egress
++ * sk_skb-to-ingress
++ *	x
++ * AF_INET, SOCK_STREAM
++ * AF_INET6, SOCK_STREAM
++ * AF_INET, SOCK_DGRAM
++ * AF_INET6, SOCK_DGRAM
++ * AF_UNIX, SOCK_STREAM
++ * AF_UNIX, SOCK_DGRAM
++ * AF_VSOCK, SOCK_STREAM
++ * AF_VSOCK, SOCK_SEQPACKET
++ */
 +
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
++#include <errno.h>
++#include <error.h>
++#include <sched.h>
++#include <stdio.h>
++#include <unistd.h>
 +
-+SEC(".maps") struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKMAP);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} nop_map, sock_map;
++#include <netinet/in.h>
++#include <sys/socket.h>
++#include <sys/types.h>
++#include <sys/un.h>
++#include <linux/string.h>
++#include <linux/vm_sockets.h>
 +
-+SEC(".maps") struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKHASH);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} nop_hash, sock_hash;
++#include <bpf/bpf.h>
++#include <bpf/libbpf.h>
 +
-+SEC(".maps") struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 2);
-+	__type(key, int);
-+	__type(value, unsigned int);
-+} verdict_map;
++#include "linux/const.h"
++#include "test_progs.h"
++#include "sockmap_helpers.h"
++#include "test_sockmap_redir.skel.h"
 +
-+/* Set by user space */
-+int redirect_type;
-+int redirect_flags;
++/* The meaning of SUPPORTED is "will redirect packet as expected".
++ */
++#define SUPPORTED		_BITUL(0)
 +
-+#define redirect_map(__data)                                                   \
-+	_Generic((__data),                                                     \
-+		 struct __sk_buff * : bpf_sk_redirect_map,                     \
-+		 struct sk_msg_md * : bpf_msg_redirect_map                     \
-+	)((__data), &sock_map, (__u32){0}, redirect_flags)
++/* Note on sk_skb-to-ingress ->af_vsock:
++ *
++ * Peer socket may receive the packet some time after the return from sendmsg().
++ * In a typical usage scenario, recvmsg() will block until the redirected packet
++ * appears in the destination queue, or timeout if the packet was dropped. By
++ * that point, the verdict map has already been updated to reflect what has
++ * happened.
++ *
++ * But sk_skb-to-ingress/af_vsock is an unsupported combination, so no recvmsg()
++ * takes place. Which means we may race the execution of the verdict logic and
++ * read map_verd before it has been updated, i.e. we might observe
++ * map_verd[SK_DROP]=0 instead of map_verd[SK_DROP]=1.
++ *
++ * This confuses the selftest logic: if there was no packet dropped, where's the
++ * packet? So here's a heuristic: on map_verd[SK_DROP]=map_verd[SK_PASS]=0
++ * (which implies the verdict program has not been ran) just re-read the verdict
++ * map again.
++ */
++#define UNSUPPORTED_RACY_VERD	_BITUL(1)
 +
-+#define redirect_hash(__data)                                                  \
-+	_Generic((__data),                                                     \
-+		 struct __sk_buff * : bpf_sk_redirect_hash,                    \
-+		 struct sk_msg_md * : bpf_msg_redirect_hash                    \
-+	)((__data), &sock_hash, &(__u32){0}, redirect_flags)
++enum prog_type {
++	SK_MSG_EGRESS,
++	SK_MSG_INGRESS,
++	SK_SKB_EGRESS,
++	SK_SKB_INGRESS,
++};
 +
-+#define DEFINE_PROG(__type, __param)                                           \
-+SEC("sk_" XSTR(__type))                                                        \
-+int prog_ ## __type ## _verdict(__param data)                                  \
-+{                                                                              \
-+	unsigned int *count;                                                   \
-+	int verdict;                                                           \
-+									       \
-+	if (redirect_type == BPF_MAP_TYPE_SOCKMAP)                             \
-+		verdict = redirect_map(data);                                  \
-+	else if (redirect_type == BPF_MAP_TYPE_SOCKHASH)                       \
-+		verdict = redirect_hash(data);                                 \
-+	else                                                                   \
-+		verdict = redirect_type - __MAX_BPF_MAP_TYPE;                  \
-+									       \
-+	count = bpf_map_lookup_elem(&verdict_map, &verdict);                   \
-+	if (count)                                                             \
-+		(*count)++;                                                    \
-+									       \
-+	return verdict;                                                        \
++enum {
++	SEND_INNER = 0,
++	SEND_OUTER,
++};
++
++enum {
++	RECV_INNER = 0,
++	RECV_OUTER,
++};
++
++struct maps {
++	int in;
++	int out;
++	int verd;
++};
++
++struct combo_spec {
++	enum prog_type prog_type;
++	const char *in, *out;
++};
++
++struct redir_spec {
++	const char *name;
++	int idx_send;
++	int idx_recv;
++	enum prog_type prog_type;
++};
++
++struct socket_spec {
++	int family;
++	int sotype;
++	int send_flags;
++	int in[2];
++	int out[2];
++};
++
++static int socket_spec_pairs(struct socket_spec *s)
++{
++	return create_socket_pairs(s->family, s->sotype,
++				   &s->in[0], &s->out[0],
++				   &s->in[1], &s->out[1]);
 +}
 +
-+DEFINE_PROG(skb, struct __sk_buff *);
-+DEFINE_PROG(msg, struct sk_msg_md *);
++static void socket_spec_close(struct socket_spec *s)
++{
++	xclose(s->in[0]);
++	xclose(s->in[1]);
++	xclose(s->out[0]);
++	xclose(s->out[1]);
++}
 +
-+char _license[] SEC("license") = "GPL";
++static void get_redir_params(struct redir_spec *redir,
++			     struct test_sockmap_redir *skel, int *prog_fd,
++			     enum bpf_attach_type *attach_type,
++			     int *redirect_flags)
++{
++	enum prog_type type = redir->prog_type;
++	struct bpf_program *prog;
++	bool sk_msg;
++
++	sk_msg = type == SK_MSG_INGRESS || type == SK_MSG_EGRESS;
++	prog = sk_msg ? skel->progs.prog_msg_verdict : skel->progs.prog_skb_verdict;
++
++	*prog_fd = bpf_program__fd(prog);
++	*attach_type = sk_msg ? BPF_SK_MSG_VERDICT : BPF_SK_SKB_VERDICT;
++
++	if (type == SK_MSG_INGRESS || type == SK_SKB_INGRESS)
++		*redirect_flags = BPF_F_INGRESS;
++	else
++		*redirect_flags = 0;
++}
++
++static void try_recv(const char *prefix, int fd, int flags, bool expect_success)
++{
++	ssize_t n;
++	char buf;
++
++	errno = 0;
++	n = recv(fd, &buf, 1, flags);
++	if (n < 0 && expect_success)
++		FAIL_ERRNO("%s: unexpected failure: retval=%zd", prefix, n);
++	if (!n && !expect_success)
++		FAIL("%s: expected failure: retval=%zd", prefix, n);
++}
++
++static void handle_unsupported(int sd_send, int sd_peer, int sd_in, int sd_out,
++			       int sd_recv, int map_verd, int status)
++{
++	unsigned int drop, pass;
++	char recv_buf;
++	ssize_t n;
++
++get_verdict:
++	if (xbpf_map_lookup_elem(map_verd, &u32(SK_DROP), &drop) ||
++	    xbpf_map_lookup_elem(map_verd, &u32(SK_PASS), &pass))
++		return;
++
++	if (pass == 0 && drop == 0 && (status & UNSUPPORTED_RACY_VERD)) {
++		sched_yield();
++		goto get_verdict;
++	}
++
++	if (pass != 0) {
++		FAIL("unsupported: wanted verdict pass 0, have %u", pass);
++		return;
++	}
++
++	/* If nothing was dropped, packet should have reached the peer */
++	if (drop == 0) {
++		errno = 0;
++		n = recv_timeout(sd_peer, &recv_buf, 1, 0, IO_TIMEOUT_SEC);
++		if (n != 1)
++			FAIL_ERRNO("unsupported: packet missing, retval=%zd", n);
++	}
++
++	/* Ensure queues are empty */
++	try_recv("bpf.recv(sd_send)", sd_send, MSG_DONTWAIT, false);
++	if (sd_in != sd_send)
++		try_recv("bpf.recv(sd_in)", sd_in, MSG_DONTWAIT, false);
++
++	try_recv("bpf.recv(sd_out)", sd_out, MSG_DONTWAIT, false);
++	if (sd_recv != sd_out)
++		try_recv("bpf.recv(sd_recv)", sd_recv, MSG_DONTWAIT, false);
++}
++
++static void test_send_redir_recv(int sd_send, int send_flags, int sd_peer,
++				 int sd_in, int sd_out, int sd_recv,
++				 struct maps *maps, int status)
++{
++	unsigned int drop, pass;
++	char *send_buf = "ab";
++	char recv_buf = '\0';
++	ssize_t n, len = 1;
++
++	/* Zero out the verdict map */
++	if (xbpf_map_update_elem(maps->verd, &u32(SK_DROP), &u32(0), BPF_ANY) ||
++	    xbpf_map_update_elem(maps->verd, &u32(SK_PASS), &u32(0), BPF_ANY))
++		return;
++
++	if (xbpf_map_update_elem(maps->in, &u32(0), &u64(sd_in), BPF_NOEXIST))
++		return;
++
++	if (xbpf_map_update_elem(maps->out, &u32(0), &u64(sd_out), BPF_NOEXIST))
++		goto del_in;
++
++	/* Last byte is OOB data when send_flags has MSG_OOB bit set */
++	if (send_flags & MSG_OOB)
++		len++;
++	n = send(sd_send, send_buf, len, send_flags);
++	if (n >= 0 && n < len)
++		FAIL("incomplete send");
++	if (n < 0) {
++		/* sk_msg redirect combo not supported? */
++		if (status & SUPPORTED || errno != EACCES)
++			FAIL_ERRNO("send");
++		goto out;
++	}
++
++	if (!(status & SUPPORTED)) {
++		handle_unsupported(sd_send, sd_peer, sd_in, sd_out, sd_recv,
++				   maps->verd, status);
++		goto out;
++	}
++
++	errno = 0;
++	n = recv_timeout(sd_recv, &recv_buf, 1, 0, IO_TIMEOUT_SEC);
++	if (n != 1) {
++		FAIL_ERRNO("recv_timeout()");
++		goto out;
++	}
++
++	/* Check verdict _after_ recv(); af_vsock may need time to catch up */
++	if (xbpf_map_lookup_elem(maps->verd, &u32(SK_DROP), &drop) ||
++	    xbpf_map_lookup_elem(maps->verd, &u32(SK_PASS), &pass))
++		goto out;
++
++	if (drop != 0 || pass != 1)
++		FAIL("unexpected verdict drop/pass: wanted 0/1, have %u/%u",
++		     drop, pass);
++
++	if (recv_buf != send_buf[0])
++		FAIL("recv(): payload check, %02x != %02x", recv_buf, send_buf[0]);
++
++	if (send_flags & MSG_OOB) {
++		/* Fail reading OOB while in sockmap */
++		try_recv("bpf.recv(sd_out, MSG_OOB)", sd_out,
++			 MSG_OOB | MSG_DONTWAIT, false);
++
++		/* Remove sd_out from sockmap */
++		xbpf_map_delete_elem(maps->out, &u32(0));
++
++		/* Check that OOB was dropped on redirect */
++		try_recv("recv(sd_out, MSG_OOB)", sd_out,
++			 MSG_OOB | MSG_DONTWAIT, false);
++
++		goto del_in;
++	}
++out:
++	xbpf_map_delete_elem(maps->out, &u32(0));
++del_in:
++	xbpf_map_delete_elem(maps->in, &u32(0));
++}
++
++static int is_redir_supported(enum prog_type type, const char *in,
++			      const char *out)
++{
++	/* Matching based on strings returned by socket_kind_to_str():
++	 * tcp4, udp4, tcp6, udp6, u_str, u_dgr, v_str, v_seq
++	 * Plus a wildcard: any
++	 * Not in use: u_seq, v_dgr
++	 */
++	struct combo_spec *c, combos[] = {
++		/* Send to local: TCP -> any, but vsock */
++		{ SK_MSG_INGRESS,	"tcp",	"tcp"	},
++		{ SK_MSG_INGRESS,	"tcp",	"udp"	},
++		{ SK_MSG_INGRESS,	"tcp",	"u_str"	},
++		{ SK_MSG_INGRESS,	"tcp",	"u_dgr"	},
++
++		/* Send to egress: TCP -> TCP */
++		{ SK_MSG_EGRESS,	"tcp",	"tcp"	},
++
++		/* Ingress to egress: any -> any */
++		{ SK_SKB_EGRESS,	"any",	"any"	},
++
++		/* Ingress to local: any -> any, but vsock */
++		{ SK_SKB_INGRESS,	"any",	"tcp"	},
++		{ SK_SKB_INGRESS,	"any",	"udp"	},
++		{ SK_SKB_INGRESS,	"any",	"u_str"	},
++		{ SK_SKB_INGRESS,	"any",	"u_dgr"	},
++	};
++
++	for (c = combos; c < combos + ARRAY_SIZE(combos); c++) {
++		if (c->prog_type == type &&
++		    (!strcmp(c->in, "any") || strstarts(in, c->in)) &&
++		    (!strcmp(c->out, "any") || strstarts(out, c->out)))
++			return SUPPORTED;
++	}
++
++	return 0;
++}
++
++static int get_support_status(enum prog_type type, const char *in,
++			      const char *out)
++{
++	int status = is_redir_supported(type, in, out);
++
++	if (type == SK_SKB_INGRESS && strstarts(out, "v_"))
++		status |= UNSUPPORTED_RACY_VERD;
++
++	return status;
++}
++
++static void test_socket(enum bpf_map_type type, struct redir_spec *redir,
++			struct maps *maps, struct socket_spec *s_in,
++			struct socket_spec *s_out)
++{
++	int fd_in, fd_out, fd_send, fd_peer, fd_recv, flags, status;
++	const char *in_str, *out_str;
++	char s[MAX_TEST_NAME];
++
++	fd_in = s_in->in[0];
++	fd_out = s_out->out[0];
++	fd_send = s_in->in[redir->idx_send];
++	fd_peer = s_in->in[redir->idx_send ^ 1];
++	fd_recv = s_out->out[redir->idx_recv];
++	flags = s_in->send_flags;
++
++	in_str = socket_kind_to_str(fd_in);
++	out_str = socket_kind_to_str(fd_out);
++	status = get_support_status(redir->prog_type, in_str, out_str);
++
++	snprintf(s, sizeof(s),
++		 "%-4s %-17s %-5s %s %-5s%6s",
++		 /* hash sk_skb-to-ingress u_str → v_str (OOB) */
++		 type == BPF_MAP_TYPE_SOCKMAP ? "map" : "hash",
++		 redir->name,
++		 in_str,
++		 status & SUPPORTED ? "→" : " ",
++		 out_str,
++		 (flags & MSG_OOB) ? "(OOB)" : "");
++
++	if (!test__start_subtest(s))
++		return;
++
++	test_send_redir_recv(fd_send, flags, fd_peer, fd_in, fd_out, fd_recv,
++			     maps, status);
++}
++
++static void test_redir(enum bpf_map_type type, struct redir_spec *redir,
++		       struct maps *maps)
++{
++	struct socket_spec *s, sockets[] = {
++		{ AF_INET, SOCK_STREAM },
++		// { AF_INET, SOCK_STREAM, MSG_OOB }, /* Known to be broken */
++		{ AF_INET6, SOCK_STREAM },
++		{ AF_INET, SOCK_DGRAM },
++		{ AF_INET6, SOCK_DGRAM },
++		{ AF_UNIX, SOCK_STREAM },
++		{ AF_UNIX, SOCK_STREAM, MSG_OOB },
++		{ AF_UNIX, SOCK_DGRAM },
++		// { AF_UNIX, SOCK_SEQPACKET},	/* Unsupported BPF_MAP_UPDATE_ELEM */
++		{ AF_VSOCK, SOCK_STREAM },
++		// { AF_VSOCK, SOCK_DGRAM },	/* Unsupported socket() */
++		{ AF_VSOCK, SOCK_SEQPACKET },
++	};
++
++	for (s = sockets; s < sockets + ARRAY_SIZE(sockets); s++)
++		if (socket_spec_pairs(s))
++			goto out;
++
++	/* Intra-proto */
++	for (s = sockets; s < sockets + ARRAY_SIZE(sockets); s++)
++		test_socket(type, redir, maps, s, s);
++
++	/* Cross-proto */
++	for (int i = 0; i < ARRAY_SIZE(sockets); i++) {
++		for (int j = 0; j < ARRAY_SIZE(sockets); j++) {
++			struct socket_spec *out = &sockets[j];
++			struct socket_spec *in = &sockets[i];
++
++			/* Skip intra-proto and between variants */
++			if (out->send_flags ||
++			    (in->family == out->family &&
++			     in->sotype == out->sotype))
++				continue;
++
++			test_socket(type, redir, maps, in, out);
++		}
++	}
++out:
++	while (--s >= sockets)
++		socket_spec_close(s);
++}
++
++static void test_map(enum bpf_map_type type)
++{
++	struct redir_spec *r, redirs[] = {
++		{ "sk_msg-to-ingress", SEND_INNER, RECV_INNER, SK_MSG_INGRESS },
++		{ "sk_msg-to-egress", SEND_INNER, RECV_OUTER, SK_MSG_EGRESS },
++		{ "sk_skb-to-egress", SEND_OUTER, RECV_OUTER, SK_SKB_EGRESS },
++		{ "sk_skb-to-ingress", SEND_OUTER, RECV_INNER, SK_SKB_INGRESS },
++	};
++
++	for (r = redirs; r < redirs + ARRAY_SIZE(redirs); r++) {
++		enum bpf_attach_type attach_type;
++		struct test_sockmap_redir *skel;
++		struct maps maps;
++		int prog_fd;
++
++		skel = test_sockmap_redir__open_and_load();
++		if (!skel) {
++			FAIL("open_and_load");
++			return;
++		}
++
++		switch (type) {
++		case BPF_MAP_TYPE_SOCKMAP:
++			maps.in = bpf_map__fd(skel->maps.nop_map);
++			maps.out = bpf_map__fd(skel->maps.sock_map);
++			break;
++		case BPF_MAP_TYPE_SOCKHASH:
++			maps.in = bpf_map__fd(skel->maps.nop_hash);
++			maps.out = bpf_map__fd(skel->maps.sock_hash);
++			break;
++		default:
++			FAIL("Unsupported bpf_map_type");
++			return;
++		}
++
++		skel->bss->redirect_type = type;
++		maps.verd = bpf_map__fd(skel->maps.verdict_map);
++		get_redir_params(r, skel, &prog_fd, &attach_type,
++				 &skel->bss->redirect_flags);
++
++		if (xbpf_prog_attach(prog_fd, maps.in, attach_type, 0))
++			return;
++
++		test_redir(type, r, &maps);
++
++		if (xbpf_prog_detach2(prog_fd, maps.in, attach_type))
++			return;
++
++		test_sockmap_redir__destroy(skel);
++	}
++}
++
++void serial_test_sockmap_redir(void)
++{
++	test_map(BPF_MAP_TYPE_SOCKMAP);
++	test_map(BPF_MAP_TYPE_SOCKHASH);
++}
 
 -- 
 2.49.0
