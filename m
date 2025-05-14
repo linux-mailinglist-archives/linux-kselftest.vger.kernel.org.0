@@ -1,216 +1,167 @@
-Return-Path: <linux-kselftest+bounces-32972-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32976-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DD60AB785D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 May 2025 23:59:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58264AB78EF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 00:17:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 600B87A7781
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 May 2025 21:58:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0F1B48C5184
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 May 2025 22:16:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A434C2248B9;
-	Wed, 14 May 2025 21:59:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84FD022577D;
+	Wed, 14 May 2025 22:16:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="J47KQUz/"
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="dfYlPxmi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 433EE223DC1
-	for <linux-kselftest@vger.kernel.org>; Wed, 14 May 2025 21:59:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4BD0224231;
+	Wed, 14 May 2025 22:16:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747259978; cv=none; b=iHcF054OwYCrScoXR1tEbTQSJfJJKopkl7OBl159Y/sQbJxMFwjCUpOnG84k8ez/wIDLp5dRxtRMP5zwn+cu+H2W5f79cVkImBNJ2QS5OaV/+w8rkPDrXs7f2tOuV98NESmC3PSVG3rcS9fsfd/DgFMxnCFCkHjCJWYOO2mSdKo=
+	t=1747260990; cv=none; b=eXnOljnfRGUSosO5f5smd5/mJZf8m94ih6VLRnWZTZhwkg5n3rYqAeYi5fUnEF37xBQ+ErM2DEfxdoNlrPzwCM4Vf+xWJhmV2L/yoUyNuGJDdbWRK4fB4K8Y7zktNp1cVaHxo11iMt6YFYeusJNi/6rE+MgGspUwnr2QlIUfJxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747259978; c=relaxed/simple;
-	bh=SJjJynQia8GvK0U0lmMdZeH3vMiN4uYyFlk9oMLngdM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=amlgFDarRlN7nf6PVvC0pLxgbklJm2RXI1OE/whM1Gs4sqwfe2nvDF6tPWw6VS7qIfOpoUJ1jju7hu9abdp787qXhcavQuFTJIV4f96gIE0fClNqdZLK6a9gVsKdU+mnhcQaSDTpAPOJKDiUPa0undBajRL92ZaJX4cwFI72sn4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=J47KQUz/; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-43cf3192d8bso8635e9.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 May 2025 14:59:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1747259973; x=1747864773; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RlmeeTfLkq8aEMSuw0FxNnLKvZlTgNOBO6GA5zAYi+M=;
-        b=J47KQUz/JvbYxv3LgKEtPrh8N4HcWVpDiARUurLr522K31x/skQ82M4jJxp4XYgJvx
-         Fn/KvTX7c7H1+x9c1LHfPKncDC5/D9nmTGOs/Q/K+O/NK1b6XqU+EY9GS0FYGHn74c/0
-         84BQquTQ7nCnJ2b+yiuE2GQxOZ9YxQ95osqz6qIopH3U3Hr0vgcHOaW/IsiHTVS7ByNX
-         9nqrEsHdZ3G0FwNRQtHJjvMDp/lkpUedwaTmH3FN/l9P3FvJ7U+kp5JH0aoSQ4E30aMK
-         0F4kkz9D+NIFBjWwBZpwHt6aX4xV5rtFrpR5T/cPWfE/ces0NJ61WqOoQgoh103ogc8O
-         NIkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747259973; x=1747864773;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RlmeeTfLkq8aEMSuw0FxNnLKvZlTgNOBO6GA5zAYi+M=;
-        b=A+Z3gf2S3k3klXy/jKRnojtoqDK3KgsSdKYheGdhgwT0MBDvkOFdYgsccz3nFxhKbt
-         2FJEZ0Zk5gvoBUESWVSe0/UPzDuDRQy57/vV5rsMFZgPOtZ+8lw20jMbJiKlnfOU276g
-         1Gv7aw7M93hWCon/kSCOgTvEK8FOmQg5MJALcpzNcbp60xj+N8K3C3lkzpkRlX47DwtG
-         irFC5YIxxdUShjQczbXCVRYm6oZnNAVkRoe/BCJSSr74IuwNAZs9+DeQsf/GMXdbUoOV
-         i6Hk/qwjolm1ASGk1VMlYn34nl9j9iVSsfKpyuGpcD8b3qfl/2Ye4KKM7Tl0sHU7P1eb
-         9rJg==
-X-Forwarded-Encrypted: i=1; AJvYcCW7CyFfTXWLWZLF9JZBID9OlltMrN5uEPvVUh1hOGuBg/D62ht4E6NMj66iGDBbhiYtaQRI3eC97eUvifi2/UM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yya1Gt9s34B1xnH52PzPou2Pm2M1tqOMxWr+tZd8X1kvixqr+wf
-	6GrNVyD69bAZagtE+Rg8An7bDPlq58V1lHrrNa91eCPdzipzOnYtqpWoa29JZaVDN12PdDP3FYe
-	03nHYAKqltZKmvp9Do2F6f0z6jIFw3jRrLrAI6sEU
-X-Gm-Gg: ASbGncu9TFdZvkzysQUajMXLQ2nhHD3PlFnwxwgE/vfxa23skHVEP3Ac6voULsKIAHy
-	sW33DSr1MgPaw0Rnv1OUCt2oBX9ot1B1fS1Tb8PO17pEMsODKlYCRzyYR9BUNVs5w003+y4edhJ
-	DHYVPT90Ys1NWzLSccbU5x/KHXK8tCXT+ibAoGYsZsG3NJwYwPx3LUbmKxo33c5+0=
-X-Google-Smtp-Source: AGHT+IGZFtWR6kaa3m5TftPx8Xk4j/uPH4VRUM2tBcUfEbplvxpzfZrRREM/wd4w9XuTIGx4myNdq/Z7Y6ry3xbYHkg=
-X-Received: by 2002:a05:600c:4f43:b0:439:8d84:32ff with SMTP id
- 5b1f17b1804b1-442f94eb5a7mr91875e9.3.1747259973405; Wed, 14 May 2025 14:59:33
- -0700 (PDT)
+	s=arc-20240116; t=1747260990; c=relaxed/simple;
+	bh=TyUF2kTK0OoRdemoV9iugzMT6gxNZ1RBr8BqGdfVDs4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=qnjdY/wwiGDygQvBQs7+Y7yeDkj6Jz0HX6LlD5uhoyuJRYLPPqolVxywl94hJ3M8EeVk8cA4MK7WKgbUNbShZOFf492X+UlLZSiVcPpwGZaAJK8+Ff82MjVn/hEmMgczJ/WMNDLLEMkDN+WdT7Rz5/sidIUn+TVIeIllAKtfZGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=dfYlPxmi; arc=none smtp.client-ip=185.226.149.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1uFKOb-001vd4-C3; Thu, 15 May 2025 00:16:13 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector2; h=Cc:To:Content-Transfer-Encoding:Content-Type:MIME-Version:
+	Message-Id:Date:Subject:From; bh=V7SKvYYBvjhYi6RVJ20G8GWJE+okl8tEUeDj6Z81Fso=
+	; b=dfYlPxmiHEkrn9TTFrrSoOgiFPjtKeQrWbl3Ly6p5zvFVgirZHIEA0Pz51cYe/TCFnjl/Zbe+
+	9bbe4yCLzq24W6T9tlV9cQcMvricHfKBkrtLQhh+WAO8zQsfCSSwyqLwIM+85CFBLiFEUwQepa2e8
+	l/C0DN/CfwdoPnqF3qoGCRy1pP9XBpFWFxE9EK+9D4/o3wFOYOWdlQ4dvfRejqTRhtLd1MGoaAnGo
+	3rRBIYNOK2JaeOZCI+i6ij+gTRtjauvpJFYdUrCmTP0Od+PfKGs6ri/+++FwydTmPjsKzRTK/uUBW
+	PrG9Uf+DOUO2jANeV7I+zOg7IVYjs3jiGL58uQ==;
+Received: from [10.9.9.73] (helo=submission02.runbox)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1uFKOa-0004JJ-R9; Thu, 15 May 2025 00:16:12 +0200
+Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1uFKOJ-005bJ3-1U; Thu, 15 May 2025 00:15:55 +0200
+From: Michal Luczaj <mhal@rbox.co>
+Subject: [PATCH bpf-next v3 0/8] selftests/bpf: Test sockmap/sockhash
+ redirection
+Date: Thu, 15 May 2025 00:15:23 +0200
+Message-Id: <20250515-selftests-sockmap-redir-v3-0-a1ea723f7e7e@rbox.co>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250513163601.812317-1-tjmercier@google.com> <20250513163601.812317-6-tjmercier@google.com>
- <CAPhsuW50mA3hhirHBiZ2miBeC0uAN=KxyYKBJ_hHgmFx-cvaNw@mail.gmail.com>
-In-Reply-To: <CAPhsuW50mA3hhirHBiZ2miBeC0uAN=KxyYKBJ_hHgmFx-cvaNw@mail.gmail.com>
-From: "T.J. Mercier" <tjmercier@google.com>
-Date: Wed, 14 May 2025 14:59:21 -0700
-X-Gm-Features: AX0GCFuiegK4tHyclG5bzgCNPpj8LN37JRrILy438Zw7YZxZPwu1YJY1Fclo4i0
-Message-ID: <CABdmKX1nxw6=JVfT8wEgsJB692LbaYWrpL-CN=KPQi7K_cKPSA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 5/5] selftests/bpf: Add test for open coded dmabuf_iter
-To: Song Liu <song@kernel.org>
-Cc: sumit.semwal@linaro.org, christian.koenig@amd.com, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
-	skhan@linuxfoundation.org, alexei.starovoitov@gmail.com, 
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, android-mm@google.com, 
-	simona@ffwll.ch, eddyz87@gmail.com, yonghong.song@linux.dev, 
-	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, 
-	jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPsVJWgC/3WNQQ6CMBBFr0Jm7ZhSKFBX3sOwgHYqjUpJpyEYw
+ t1t2Lt8efnv78AUPTHcih0irZ59mDNUlwLMNMxPQm8zgxSyFlpKZHq7RJwYOZjXZ1gwkvURle0
+ qXenGtIogr5dIzm9n+QHj4nCmLUGfzeQ5hfg9L1d5+lxXoi7Lv/VVokDl9CjKzjatqO9xDNvVB
+ OiP4/gBJvua+cYAAAA=
+X-Change-ID: 20240922-selftests-sockmap-redir-5d839396c75e
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Jakub Sitnicki <jakub@cloudflare.com>, 
+ Michal Luczaj <mhal@rbox.co>, Jiayuan Chen <mrpre@163.com>
+X-Mailer: b4 0.14.2
 
-On Wed, May 14, 2025 at 2:00=E2=80=AFPM Song Liu <song@kernel.org> wrote:
->
-> On Tue, May 13, 2025 at 9:36=E2=80=AFAM T.J. Mercier <tjmercier@google.co=
-m> wrote:
-> >
-> > Use the same test buffers as the traditional iterator and a new BPF map
-> > to verify the test buffers can be found with the open coded dmabuf
-> > iterator.
-> >
-> > Signed-off-by: T.J. Mercier <tjmercier@google.com>
-> > Acked-by: Christian K=C3=B6nig <christian.koenig@amd.com>
-> > Acked-by: Song Liu <song@kernel.org>
-> > ---
-> >  .../testing/selftests/bpf/bpf_experimental.h  |  5 +++
-> >  .../selftests/bpf/prog_tests/dmabuf_iter.c    | 41 +++++++++++++++++++
-> >  .../testing/selftests/bpf/progs/dmabuf_iter.c | 38 +++++++++++++++++
-> >  3 files changed, 84 insertions(+)
-> >
-> > diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/tes=
-ting/selftests/bpf/bpf_experimental.h
-> > index 6535c8ae3c46..5e512a1d09d1 100644
-> > --- a/tools/testing/selftests/bpf/bpf_experimental.h
-> > +++ b/tools/testing/selftests/bpf/bpf_experimental.h
-> > @@ -591,4 +591,9 @@ extern int bpf_iter_kmem_cache_new(struct bpf_iter_=
-kmem_cache *it) __weak __ksym
-> >  extern struct kmem_cache *bpf_iter_kmem_cache_next(struct bpf_iter_kme=
-m_cache *it) __weak __ksym;
-> >  extern void bpf_iter_kmem_cache_destroy(struct bpf_iter_kmem_cache *it=
-) __weak __ksym;
-> >
-> > +struct bpf_iter_dmabuf;
-> > +extern int bpf_iter_dmabuf_new(struct bpf_iter_dmabuf *it) __weak __ks=
-ym;
-> > +extern struct dma_buf *bpf_iter_dmabuf_next(struct bpf_iter_dmabuf *it=
-) __weak __ksym;
-> > +extern void bpf_iter_dmabuf_destroy(struct bpf_iter_dmabuf *it) __weak=
- __ksym;
-> > +
-> >  #endif
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c b/too=
-ls/testing/selftests/bpf/prog_tests/dmabuf_iter.c
-> > index dc740bd0e2bd..6c2b0c3dbcd8 100644
-> > --- a/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c
-> > +++ b/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c
-> > @@ -219,14 +219,52 @@ static void subtest_dmabuf_iter_check_default_ite=
-r(struct dmabuf_iter *skel)
-> >         close(iter_fd);
-> >  }
-> >
-> > +static void subtest_dmabuf_iter_check_open_coded(struct dmabuf_iter *s=
-kel, int map_fd)
-> > +{
-> > +       LIBBPF_OPTS(bpf_test_run_opts, topts);
-> > +       char key[DMA_BUF_NAME_LEN];
-> > +       int err, fd;
-> > +       bool found;
-> > +
-> > +       /* No need to attach it, just run it directly */
-> > +       fd =3D bpf_program__fd(skel->progs.iter_dmabuf_for_each);
-> > +
-> > +       err =3D bpf_prog_test_run_opts(fd, &topts);
-> > +       if (!ASSERT_OK(err, "test_run_opts err"))
-> > +               return;
-> > +       if (!ASSERT_OK(topts.retval, "test_run_opts retval"))
-> > +               return;
-> > +
-> > +       if (!ASSERT_OK(bpf_map_get_next_key(map_fd, NULL, key), "get ne=
-xt key"))
-> > +               return;
-> > +
-> > +       do {
-> > +               ASSERT_OK(bpf_map_lookup_elem(map_fd, key, &found), "lo=
-okup");
-> > +               ASSERT_TRUE(found, "found test buffer");
->
-> This check failed once in the CI, on s390:
->
-> Error: #89/3 dmabuf_iter/open_coded
-> 9309 subtest_dmabuf_iter_check_open_coded:PASS:test_run_opts err 0 nsec
-> 9310 subtest_dmabuf_iter_check_open_coded:PASS:test_run_opts retval 0 nse=
-c
-> 9311 subtest_dmabuf_iter_check_open_coded:PASS:get next key 0 nsec
-> 9312 subtest_dmabuf_iter_check_open_coded:PASS:lookup 0 nsec
-> 9313 subtest_dmabuf_iter_check_open_coded:FAIL:found test buffer
-> unexpected found test buffer: got FALSE
->
-> But it passed in the rerun. It is probably a bit flakey. Maybe we need so=
-me
-> barrier somewhere.
->
-> Here is the failure:
->
-> https://github.com/kernel-patches/bpf/actions/runs/15002058808/job/422348=
-64754
->
-> To see the log, you need to log in GitHub.
->
-> Thanks,
-> Song
+John, this revision introduces one more patch: "selftests/bpf: Introduce
+verdict programs for sockmap_redir". I've kept you cross-series Acked-by. I
+hope it's ok.
 
-Thanks, yeah I have been trying to run this locally today but still
-working on setting up an environment for it. Daniel Xu thoughtfully
-suggested I use a github PR to trigger CI, but I tried that last week
-without success: https://github.com/kernel-patches/bpf/pull/8910
+Jiayuan, I haven't heard back from you regarding [*], so I've kept things
+unchanged for now. Please let me know what you think.
 
-I'm not sure if this is the cause (doesn't show up on the runs that
-pass) but I have no idea why that would be intermittently failing:
-libbpf: Error in bpf_create_map_xattr(testbuf_hash): -EINVAL. Retrying
-without BTF.
+[*] https://lore.kernel.org/bpf/66bf942f-dfdb-4ce9-bd95-8b734e7afa53@rbox.co/
 
+--
 
+The idea behind this series is to comprehensively test the BPF redirection:
 
+BPF_MAP_TYPE_SOCKMAP,
+BPF_MAP_TYPE_SOCKHASH
+	x
+sk_msg-to-egress,
+sk_msg-to-ingress,
+sk_skb-to-egress,
+sk_skb-to-ingress
+	x
+AF_INET, SOCK_STREAM,
+AF_INET6, SOCK_STREAM,
+AF_INET, SOCK_DGRAM,
+AF_INET6, SOCK_DGRAM,
+AF_UNIX, SOCK_STREAM,
+AF_UNIX, SOCK_DGRAM,
+AF_VSOCK, SOCK_STREAM,
+AF_VSOCK, SOCK_SEQPACKET
 
+New module is introduced, sockmap_redir: all supported and unsupported
+redirect combinations are tested for success and failure respectively. Code
+is pretty much stolen/adapted from Jakub Sitnicki's sockmap_redir_matrix.c
+[1].
 
-> > +       } while (bpf_map_get_next_key(map_fd, key, key));
-> > +}
->
-> [...]
+Usage:
+$ cd tools/testing/selftests/bpf
+$ make
+$ sudo ./test_progs -t sockmap_redir
+...
+Summary: 1/576 PASSED, 0 SKIPPED, 0 FAILED
+
+[1]: https://github.com/jsitnicki/sockmap-redir-matrix/blob/main/sockmap_redir_matrix.c
+
+Changes in v3:
+- Drop unrelated changes; sockmap_listen, test_sockmap_listen, doc
+- Collect tags [Jakub, John]
+- Introduce BPF verdict programs especially for sockmap_redir [Jiayuan]
+- Link to v2: https://lore.kernel.org/r/20250411-selftests-sockmap-redir-v2-0-5f9b018d6704@rbox.co
+
+Changes in v2:
+- Verify that the unsupported redirect combos do fail [Jakub]
+- Dedup tests in sockmap_listen
+- Cosmetic changes and code reordering
+- Link to v1: https://lore.kernel.org/bpf/42939687-20f9-4a45-b7c2-342a0e11a014@rbox.co/
+
+Suggested-by: Jakub Sitnicki <jakub@cloudflare.com>
+Signed-off-by: Michal Luczaj <mhal@rbox.co>
+---
+Michal Luczaj (8):
+      selftests/bpf: Support af_unix SOCK_DGRAM socket pair creation
+      selftests/bpf: Add socket_kind_to_str() to socket_helpers
+      selftests/bpf: Add u32()/u64() to sockmap_helpers
+      selftests/bpf: Introduce verdict programs for sockmap_redir
+      selftests/bpf: Add selftest for sockmap/hashmap redirection
+      selftests/bpf: sockmap_listen cleanup: Drop af_vsock redir tests
+      selftests/bpf: sockmap_listen cleanup: Drop af_unix redir tests
+      selftests/bpf: sockmap_listen cleanup: Drop af_inet SOCK_DGRAM redir tests
+
+ .../selftests/bpf/prog_tests/socket_helpers.h      |  84 +++-
+ .../selftests/bpf/prog_tests/sockmap_helpers.h     |  25 +-
+ .../selftests/bpf/prog_tests/sockmap_listen.c      | 457 --------------------
+ .../selftests/bpf/prog_tests/sockmap_redir.c       | 465 +++++++++++++++++++++
+ .../selftests/bpf/progs/test_sockmap_redir.c       |  68 +++
+ 5 files changed, 623 insertions(+), 476 deletions(-)
+---
+base-commit: d0445d7dd3fd9b15af7564c38d7aa3cbc29778ee
+change-id: 20240922-selftests-sockmap-redir-5d839396c75e
+
+Best regards,
+-- 
+Michal Luczaj <mhal@rbox.co>
+
 
