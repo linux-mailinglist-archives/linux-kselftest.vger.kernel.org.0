@@ -1,246 +1,155 @@
-Return-Path: <linux-kselftest+bounces-32979-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32978-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3595AB792A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 00:46:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D769FAB78FA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 00:21:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DF2867B29B2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 May 2025 22:44:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A9A4E7B084C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 May 2025 22:20:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32123199FAB;
-	Wed, 14 May 2025 22:46:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 812C81F0E20;
+	Wed, 14 May 2025 22:21:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="RCE7JJPa"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LYinFPHV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B62EEDDC1;
-	Wed, 14 May 2025 22:46:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED13A19CC39;
+	Wed, 14 May 2025 22:21:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747262767; cv=none; b=gV3thTjlF9Y585nu1kY/4o8zqVuWXQvqGOH2t82bIIU0DuUmXKefRXAFx37lDlYrGAxUlCkOtA+qoLmbTn3RX2Ye/l5S1ZXSNSTP7sqzHwRaWbTYiSir8lL06pNJ3ocZmg3KKSKILcNTM4RcqzXLd7UCnuINsZxdQ0GeB0woAXs=
+	t=1747261306; cv=none; b=TnPMFOD2axlnsBR/NqNiVHoBAGqYoOdmoM9kuqMrskrZtR+XtKe23UqKbhht0NDlGUqPrB0qEqPF7u3gJ9tzBaBoU2L47OFtIm8IiQ6wxv4IUylA3g9pUKw3trRH/zWAF6AjRIFaIxs4K4WP+EA91I1Tu08GGmo7xCnqOjZVrQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747262767; c=relaxed/simple;
-	bh=ZsyvH9DIWeaFMfPnZooNrPBXpUdpw8lz+3vNzKJrMOw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hlPurwuaRj1E4k9xyEwNYcHm6OIL8Zm0CuycSZ7lJoJ0bW9tKBpkJwgmlPdEeLFhODeozuZaiydTY78L1CMZlR/EtiWm+y821lixB6oGMOC9cKHI39tBLiypz6HGRbvSYTd1Jx5hGLc+hNJoldHiPQ7CckoDLpf3647DYzSRkTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=RCE7JJPa; arc=none smtp.client-ip=185.226.149.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1uFKOg-001veu-Eq; Thu, 15 May 2025 00:16:18 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector2; h=Cc:To:In-Reply-To:References:Message-Id:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
-	bh=HY7Xi8OzdrnVquA1jOAiIn6f3FOUOBUfyJUv25gTw1Q=; b=RCE7JJPatJsjcKYqWo0PpekN6x
-	Bj9XutplDaWgLFSbpRfBBSf8AYdWZzh7YVQbjaq+Sar5PY5ceggHWGdD8pyGmOE92/MKNbyiRz6nE
-	DnfVy2Y1AovkaoA8qrDe7WEGf6ReyXQX0x1eS8fTUVdQsR1Rz2FvhzlFhmQC+DNayyWuH0ev+Bf1/
-	saGu37sRMdbvLaF95IdRwH/7N/KJ3PzXazomliPZXhaUAt4l4z4x9zOxdL9WcZPqw9PQzasCZ6Xq5
-	h4bVKI71vRe5xCB39OIsZ5+6ET0dbKmCoqcjn2HCPobmx+kXwTvC4NybcvOBVO6wv8W6JLIh+SLlQ
-	bdSdQ3iw==;
-Received: from [10.9.9.73] (helo=submission02.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1uFKOg-0004JU-4x; Thu, 15 May 2025 00:16:18 +0200
-Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1uFKOQ-005bJ3-A1; Thu, 15 May 2025 00:16:02 +0200
-From: Michal Luczaj <mhal@rbox.co>
-Date: Thu, 15 May 2025 00:15:31 +0200
-Subject: [PATCH bpf-next v3 8/8] selftests/bpf: sockmap_listen cleanup:
- Drop af_inet SOCK_DGRAM redir tests
+	s=arc-20240116; t=1747261306; c=relaxed/simple;
+	bh=3j2GE9l3wGOmBQOG6S4c822rAlthmoDqPjq3LP9n+Os=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iGDq5C0rBYvN8O/nzatVcV1CkefhPapSxFtDbRaStkzSaEkAHFTeOyKEYIOnPpYilks3nexyPIR9rDJK0KGn1Lf7OM664HEeGdS/LgCLxmamimt9y59uAH59hHozynh6rJMeV8A8FwQYDoopdScg/bboRVhja3lgQRjGqxSqI98=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LYinFPHV; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-22fa48f7cb2so3331655ad.1;
+        Wed, 14 May 2025 15:21:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1747261304; x=1747866104; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oHfsdh270VAzzwWx6ys6xW+UP8Uvsw1TOQddVAOSGTA=;
+        b=LYinFPHVyv7vO4TG02vFyWVg2AF1mdrhvILYi98AM/FXOAxCh61NwCd32MQPOr0N3Y
+         nAVA17iYWdC1J/D1IJ722NcNKWzmqJ+vEp2Vk3A+v9iV7nkNtphntCxdFPUmejqDpkG8
+         aOjjSgLsoI+aLbq86wsEGMbBJwzMDmgZkclKF+93EwoSx47xQrLu1RxgLQMciaSu8gO3
+         9Y0gIGhiX4aNSBDP7SkdTtlh5UYU7XnZPWMrdyu1NjxaiZ0o+qC0ORIODN70BVIrwHdr
+         p6MYLPv28HFck/eLPhHRT/VqKc4fdmEjEfLoT8JyEqvaHUivIDjbl2aBUs1UuoCxFLmN
+         qqow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747261304; x=1747866104;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oHfsdh270VAzzwWx6ys6xW+UP8Uvsw1TOQddVAOSGTA=;
+        b=CDlLIII81kvWzuwKR5scGU5JxHgQxhwrmehctERbol4j6PttDpxHTEA7OB/j9fL4PF
+         NoqHExs99tNLsBWPYZiwYpVTAODERSu3uFLNNy4eIgwXtb3FXF0LJxa1UYjpkNavzA/T
+         uQvXsPt4i8dwCcCkv2RHeq0TEHuwVsWxJk1Xj9TDJ5TcOkhSE/S4QwZ6mMpyqLnVzFMu
+         g3H+lJfktHlgzWzKUVzJywN/ybb9GLT/6aB5ODn+S6ik7rRPhhsYbl61zb3rWfQb0+nm
+         sbm9eEE2KdwSQA+Rgn1eCj6JsI2DpcfW6IAPVYnbZXfbctqxWziBMzer6aPSu0nC4kjV
+         YySA==
+X-Forwarded-Encrypted: i=1; AJvYcCXdjCilhpOPSSgYKNEXPAL1tcmWGSXOlzOfg63JmRixZVf84jk+2dmuq7EAs2THBZe9/g+k71oiJ4DNRIk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzxBCmg3/TSCAt22udIZazu1oA1XOQvUPwakq55YWTm9LWS0Acd
+	o0xVyPbziP3qEPt8I87eY1H2pkauzf9MdTRTPRmFcPUqowyUY15xCy6eZpLcwfOTyg==
+X-Gm-Gg: ASbGncvBzv2cfx9VGMdV7tNCSygsm2mE1bq8WEwspBWFL6UAE9hqc9UvP138BwFN/P3
+	r3FoNgmsGyntqq8G3/5dsajqS/yaFHRgpAfnZjW50d6KaqR6uqUSTqqBNrsRI2tMW6z0tIuWjE4
+	qdbAg7YDV0/aChHUM5ifiEiMpm33B/r0900xxMeKiESJePVRLN09Pj0UpDRqHPGgFREjArucyUL
+	ADxgtsILiOtqqIZJZa786dQuwBaOFcRTbqbk/Qb8T4Xj+ejkBSqiW61Jd3xNum+32QFLVo+v03Q
+	bFncDJ1ZPS+OcsBeUA6PXp7M7xX428zeDoPAh6Z24IStGZDYYUq7HUwgzYJyRryVKMy7dqTN3KN
+	x
+X-Google-Smtp-Source: AGHT+IFttTpWsrfV8CTbyFUfOClZsN4VaZgrm7diOQZyUoMIOzoXxLxvFc2uEuwrls7nKlhcN5t+2w==
+X-Received: by 2002:a17:903:b0e:b0:224:76f:9e4a with SMTP id d9443c01a7336-23198119c40mr70961585ad.14.1747261304097;
+        Wed, 14 May 2025 15:21:44 -0700 (PDT)
+Received: from rahul-mintos.ban-spse ([165.204.156.251])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22fc828ffbdsm103836525ad.196.2025.05.14.15.21.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 May 2025 15:21:43 -0700 (PDT)
+From: Rahul Kumar <rk0006818@gmail.com>
+To: skhan@linuxfoundation.org
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kernel-mentees@lists.linux.dev,
+	rk0006818@gmail.com
+Subject: [PATCH] selftests: timers: Fix grammar and clarify comments in nanosleep.c
+Date: Thu, 15 May 2025 03:51:12 +0530
+Message-ID: <20250514222112.396705-1-rk0006818@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250515-selftests-sockmap-redir-v3-8-a1ea723f7e7e@rbox.co>
-References: <20250515-selftests-sockmap-redir-v3-0-a1ea723f7e7e@rbox.co>
-In-Reply-To: <20250515-selftests-sockmap-redir-v3-0-a1ea723f7e7e@rbox.co>
-To: Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Jakub Sitnicki <jakub@cloudflare.com>, 
- Michal Luczaj <mhal@rbox.co>
-X-Mailer: b4 0.14.2
+Content-Transfer-Encoding: 8bit
 
-Remove tests covered by sockmap_redir.
+Improved the clarity and grammar in the header comment of nanosleep.c
+for better readability and consistency with kernel documentation style.
 
-Acked-by: John Fastabend <john.fastabend@gmail.com>
-Signed-off-by: Michal Luczaj <mhal@rbox.co>
+Signed-off-by: Rahul Kumar <rk0006818@gmail.com>
 ---
- .../selftests/bpf/prog_tests/sockmap_listen.c      | 126 ---------------------
- 1 file changed, 126 deletions(-)
+ tools/testing/selftests/timers/nanosleep.c | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-index 4f38dd7d23daf3aee83793be49748916d26d93b7..1d98eee7a2c3a711950ade30959e3bbf8c78e13d 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-@@ -1366,69 +1366,6 @@ static void test_redir(struct test_sockmap_listen *skel, struct bpf_map *map,
- 	}
+diff --git a/tools/testing/selftests/timers/nanosleep.c b/tools/testing/selftests/timers/nanosleep.c
+index 252c6308c569..84adf8a4ab5d 100644
+--- a/tools/testing/selftests/timers/nanosleep.c
++++ b/tools/testing/selftests/timers/nanosleep.c
+@@ -1,12 +1,12 @@
+-/* Make sure timers don't return early
+- *              by: john stultz (johnstul@us.ibm.com)
+- *		    John Stultz (john.stultz@linaro.org)
+- *              (C) Copyright IBM 2012
+- *              (C) Copyright Linaro 2013 2015
+- *              Licensed under the GPLv2
++ /*
++ * Ensure timers do not return early.
++ * Author: John Stultz (john.stultz@linaro.org)
++ * Copyright (C) IBM 2012
++ * Copyright (C) Linaro 2013, 2015
++ * Licensed under the GPLv2
+  *
+- *  To build:
+- *	$ gcc nanosleep.c -o nanosleep -lrt
++ * To build:
++ *     $ gcc nanosleep.c -o nanosleep -lrt
+  *
+  *   This program is free software: you can redistribute it and/or modify
+  *   it under the terms of the GNU General Public License as published by
+@@ -61,7 +61,7 @@ char *clockstring(int clockid)
+ 	case CLOCK_TAI:
+ 		return "CLOCK_TAI";
+ 	};
+-	return "UNKNOWN_CLOCKID";
++	return "UNKNOWN_CLOCKID"; // Could not identify clockid
  }
  
--static void pairs_redir_to_connected(int cli0, int peer0, int cli1, int peer1,
--				     int sock_mapfd, int nop_mapfd,
--				     int verd_mapfd, enum redir_mode mode,
--				     int send_flags)
--{
--	const char *log_prefix = redir_mode_str(mode);
--	unsigned int pass;
--	int err, n;
--	u32 key;
--	char b;
--
--	zero_verdict_count(verd_mapfd);
--
--	err = add_to_sockmap(sock_mapfd, peer0, peer1);
--	if (err)
--		return;
--
--	if (nop_mapfd >= 0) {
--		err = add_to_sockmap(nop_mapfd, cli0, cli1);
--		if (err)
--			return;
--	}
--
--	/* Last byte is OOB data when send_flags has MSG_OOB bit set */
--	n = xsend(cli1, "ab", 2, send_flags);
--	if (n >= 0 && n < 2)
--		FAIL("%s: incomplete send", log_prefix);
--	if (n < 2)
--		return;
--
--	key = SK_PASS;
--	err = xbpf_map_lookup_elem(verd_mapfd, &key, &pass);
--	if (err)
--		return;
--	if (pass != 1)
--		FAIL("%s: want pass count 1, have %d", log_prefix, pass);
--
--	n = recv_timeout(mode == REDIR_INGRESS ? peer0 : cli0, &b, 1, 0, IO_TIMEOUT_SEC);
--	if (n < 0)
--		FAIL_ERRNO("%s: recv_timeout", log_prefix);
--	if (n == 0)
--		FAIL("%s: incomplete recv", log_prefix);
--
--	if (send_flags & MSG_OOB) {
--		/* Check that we can't read OOB while in sockmap */
--		errno = 0;
--		n = recv(peer1, &b, 1, MSG_OOB | MSG_DONTWAIT);
--		if (n != -1 || errno != EOPNOTSUPP)
--			FAIL("%s: recv(MSG_OOB): expected EOPNOTSUPP: retval=%d errno=%d",
--			     log_prefix, n, errno);
--
--		/* Remove peer1 from sockmap */
--		xbpf_map_delete_elem(sock_mapfd, &(int){ 1 });
--
--		/* Check that OOB was dropped on redirect */
--		errno = 0;
--		n = recv(peer1, &b, 1, MSG_OOB | MSG_DONTWAIT);
--		if (n != -1 || errno != EINVAL)
--			FAIL("%s: recv(MSG_OOB): expected EINVAL: retval=%d errno=%d",
--			     log_prefix, n, errno);
--	}
--}
--
- static void test_reuseport(struct test_sockmap_listen *skel,
- 			   struct bpf_map *map, int family, int sotype)
+ /* returns 1 if a <= b, 0 otherwise */
+@@ -90,7 +90,7 @@ int nanosleep_test(int clockid, long long ns)
  {
-@@ -1469,68 +1406,6 @@ static void test_reuseport(struct test_sockmap_listen *skel,
- 	}
- }
+ 	struct timespec now, target, rel;
  
--static int inet_socketpair(int family, int type, int *s, int *c)
--{
--	return create_pair(family, type | SOCK_NONBLOCK, s, c);
--}
--
--static void udp_redir_to_connected(int family, int sock_mapfd, int verd_mapfd,
--				   enum redir_mode mode)
--{
--	int c0, c1, p0, p1;
--	int err;
--
--	err = inet_socketpair(family, SOCK_DGRAM, &p0, &c0);
--	if (err)
--		return;
--	err = inet_socketpair(family, SOCK_DGRAM, &p1, &c1);
--	if (err)
--		goto close_cli0;
--
--	pairs_redir_to_connected(c0, p0, c1, p1, sock_mapfd, -1, verd_mapfd,
--				 mode, NO_FLAGS);
--
--	xclose(c1);
--	xclose(p1);
--close_cli0:
--	xclose(c0);
--	xclose(p0);
--}
--
--static void udp_skb_redir_to_connected(struct test_sockmap_listen *skel,
--				       struct bpf_map *inner_map, int family)
--{
--	int verdict = bpf_program__fd(skel->progs.prog_skb_verdict);
--	int verdict_map = bpf_map__fd(skel->maps.verdict_map);
--	int sock_map = bpf_map__fd(inner_map);
--	int err;
--
--	err = xbpf_prog_attach(verdict, sock_map, BPF_SK_SKB_VERDICT, 0);
--	if (err)
--		return;
--
--	skel->bss->test_ingress = false;
--	udp_redir_to_connected(family, sock_map, verdict_map, REDIR_EGRESS);
--	skel->bss->test_ingress = true;
--	udp_redir_to_connected(family, sock_map, verdict_map, REDIR_INGRESS);
--
--	xbpf_prog_detach2(verdict, sock_map, BPF_SK_SKB_VERDICT);
--}
--
--static void test_udp_redir(struct test_sockmap_listen *skel, struct bpf_map *map,
--			   int family)
--{
--	const char *family_name, *map_name;
--	char s[MAX_TEST_NAME];
--
--	family_name = family_str(family);
--	map_name = map_type_str(map);
--	snprintf(s, sizeof(s), "%s %s %s", map_name, family_name, __func__);
--	if (!test__start_subtest(s))
--		return;
--	udp_skb_redir_to_connected(skel, map, family);
--}
--
- static void run_tests(struct test_sockmap_listen *skel, struct bpf_map *map,
- 		      int family)
- {
-@@ -1539,7 +1414,6 @@ static void run_tests(struct test_sockmap_listen *skel, struct bpf_map *map,
- 	test_redir(skel, map, family, SOCK_STREAM);
- 	test_reuseport(skel, map, family, SOCK_STREAM);
- 	test_reuseport(skel, map, family, SOCK_DGRAM);
--	test_udp_redir(skel, map, family);
- }
+-	/* First check abs time */
++	/* First, check absolute time using clock_nanosleep with TIMER_ABSTIME */
+ 	if (clock_gettime(clockid, &now))
+ 		return UNSUPPORTED;
+ 	target = timespec_add(now, ns);
+@@ -102,7 +102,7 @@ int nanosleep_test(int clockid, long long ns)
+ 	if (!in_order(target, now))
+ 		return -1;
  
- void serial_test_sockmap_listen(void)
-
+-	/* Second check reltime */
++	/* Then, test relative time sleep */
+ 	clock_gettime(clockid, &now);
+ 	rel.tv_sec = 0;
+ 	rel.tv_nsec = 0;
 -- 
-2.49.0
+2.43.0
 
 
