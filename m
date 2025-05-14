@@ -1,168 +1,321 @@
-Return-Path: <linux-kselftest+bounces-32956-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32957-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53E3AAB7326
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 May 2025 19:45:46 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7886DAB7458
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 May 2025 20:26:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5F1BE1BA5049
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 May 2025 17:45:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 55B577A7223
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 May 2025 18:24:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 750022820B7;
-	Wed, 14 May 2025 17:45:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 107032820D0;
+	Wed, 14 May 2025 18:26:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="ipTVMwPr"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Xr9UuwF+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2068.outbound.protection.outlook.com [40.107.237.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 492F5280A5B;
-	Wed, 14 May 2025 17:45:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.37.111.173
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747244715; cv=none; b=csw9IB4SQCm4AonPlN3UJEGO8IQwCTupOXeolCc2qoq7YAdfHbMOLyZT5+MkhWfuERhHYLR2EGlpI3EpsBgPLQ3iRwFtD6ZpauXb+vrK5ecTqmBQ3yhtdr5QqLT0U4HwA2EdHgajgTgSSlM8qZMv25mAofl7okPP+5AYb6hyHnM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747244715; c=relaxed/simple;
-	bh=YyGpl+1JAwga7bL89FCIocEXNFC49J6jOZJ18Lhrkls=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=KxNAX2gna3P1EVCE/aqJSS/sqyF3fesNP7DUhsVLo99khI4OdzhjnJaqJlO+pLjP9oibJaJ/JybNFcZlPC4K4zkRR2lzU1kaNPliXsHucuvOMWxbm6PgHRx94+IOyfjdltlht++p8AhIlnMkc/V11RIjv5YItPQ5Qp1fQ/0GjO0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=ipTVMwPr; arc=none smtp.client-ip=198.37.111.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1747244712;
-	bh=YyGpl+1JAwga7bL89FCIocEXNFC49J6jOZJ18Lhrkls=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=ipTVMwPrqQR9rV+qX8xgGgKQIvGgYG4xUfszVq7FEWczZMkdkG3nUpttnFiUt1I6p
-	 WtPjn5NmYie3uQeoq4k6htYCGS3QrWH2+k9aFr/3jBkW4ZhT1nEH5AaTmLQFplKGKX
-	 i8pFJkTDQ0IhNNBKkP/qaB9eZIj+LDz25XVmoQ6A=
-Received: from [IPv6:2601:5c4:4302:c21::a774] (unknown [IPv6:2601:5c4:4302:c21::a774])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id 106291C01B5;
-	Wed, 14 May 2025 13:45:10 -0400 (EDT)
-Message-ID: <4f92fcfaeffd179ff6ae265822dc79856310d6a3.camel@HansenPartnership.com>
-Subject: Re: [PATCH v3 0/4] Introducing Hornet LSM
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: KP Singh <kpsingh@kernel.org>
-Cc: Paul Moore <paul@paul-moore.com>, bboscaccy@linux.microsoft.com, 
- bpf@vger.kernel.org, code@tyhicks.com, corbet@lwn.net, davem@davemloft.net,
-  dhowells@redhat.com, gnoack@google.com, herbert@gondor.apana.org.au, 
- jarkko@kernel.org, jmorris@namei.org, jstancek@redhat.com,
- justinstitt@google.com,  keyrings@vger.kernel.org,
- linux-crypto@vger.kernel.org,  linux-doc@vger.kernel.org,
- linux-kbuild@vger.kernel.org,  linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org,  linux-security-module@vger.kernel.org,
- llvm@lists.linux.dev,  masahiroy@kernel.org, mic@digikod.net,
- morbo@google.com, nathan@kernel.org,  neal@gompa.dev,
- nick.desaulniers+lkml@gmail.com, nicolas@fjasle.eu,  nkapron@google.com,
- roberto.sassu@huawei.com, serge@hallyn.com, shuah@kernel.org, 
- teknoraver@meta.com, xiyou.wangcong@gmail.com, kysrinivasan@gmail.com,
- Linus Torvalds <torvalds@linux-foundation.org>
-Date: Wed, 14 May 2025 13:45:09 -0400
-In-Reply-To: <CACYkzJ5XJOj08+hKheWDcqbPrFAwa+fFvOw+4QPAHBz1u2HgAg@mail.gmail.com>
-References: <20250502184421.1424368-1-bboscaccy@linux.microsoft.com>
-	 <20250502210034.284051-1-kpsingh@kernel.org>
-	 <CAHC9VhS5Vevcq90OxTmAp2=XtR1qOiDDe5sSXReX5oXzf+siVQ@mail.gmail.com>
-	 <CACYkzJ5jsWFiXMRDwoGib5t+Xje6STTuJGRZM9Vg2dFz7uPa-g@mail.gmail.com>
-	 <CACYkzJ6VQUExfyt0=-FmXz46GHJh3d=FXh5j4KfexcEFbHV-vg@mail.gmail.com>
-	 <beaa81748cf1325df67930bf74ea87e6cdcb3e46.camel@HansenPartnership.com>
-	 <CACYkzJ5XJOj08+hKheWDcqbPrFAwa+fFvOw+4QPAHBz1u2HgAg@mail.gmail.com>
-Autocrypt: addr=James.Bottomley@HansenPartnership.com;
- prefer-encrypt=mutual;
- keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03DA31A00ED;
+	Wed, 14 May 2025 18:26:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.68
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1747247167; cv=fail; b=HXHmMBLpV6CpDrNJX38oVBAGS6/NQtCrZIUlXprdsrEdp9UTVaUc0DeeV0nOR0cq1z1rfmpxeLEYnYy5DGJwPD3e7vFH3QrmBPL67JrNNWgw/1cPZo+uy7woYb59MQXlRmi8AnEetWeU4D56p/B6HOZ9xKHtLQN4aFAfyd1Bjbo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1747247167; c=relaxed/simple;
+	bh=0K1p5r+2WyWM7O/Mgm6oAGrC/kTH7kwomXDs3QCtdUc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=dquOcT3hDR/tjRLg0xmhYsviBY7hCTpEebKJXsXzzcyZvQ2GVuwsAbXZ5zSz1lYYzv0tQSyB/z010ZFziSMEl4+q6/TMZ6DPTZ61zFACEkZf2yS6hXCiqouaR8vSMJcmntL2YgiFpq+SjkR6gOdINu46d3RIfYNOTB7H++Cn9s0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Xr9UuwF+; arc=fail smtp.client-ip=40.107.237.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=tUfOtMMt9SXKqRPIOOzJc48T+yrVfjUrSZzTYqe9//HZSlVCHiF80714TVhRGd0vq7RtSrQ8JL2dt2LUlJ0RlEKoZoM1MLY6qBr1IWKrPK3827kWkqoG2l1K/h8X0eIQfjp6abN44ND4naKtj7kre8LUixT6/Un0cNzvKp3DABAUucQ5LX3MJqNMLXLYltoe187GPlmzd+0pMYAFLatC7sPnLhwICCo/32daYfv2gEOUKExH01ipXbYkiIU+bE0gpo8pko0pLX3AIlAyKm78hAHiZY9WAoSqZcAVpMMV/eCHc9902SZlrNXmHceIikLTPmyExWBc9X95e6TGiRLyKw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Eu8bFObBj+haMxNUguP+f/nkoiU54kn7JFVy4YKbt2Y=;
+ b=FS/+Eu+kaOovVd6S/uilQHxEe50szd+mEm/+yqgNKMgLiuNsSlNvVGq2lPdkmKQFGhGW83hJR3Y9H0hIeMxmdGuNF0xOkc+eYJDknkXaqLd8bndd1eMkoX4ioEJTuoB4xkRwfCEctNBU7hLLvmuHgA3OfTi5xQT+gc2Kkb5CBQ+BHC+qrCajaErfDVjQnUcGgmmK8dZUKIuKhoU0X1amUx1bxUwyZ0p3sL7uGHroEeLDt5OWa5VDY3pISeJye5Hr/zlLjdJJu4914bs5HIYraFS9VDTBwBIteOe/acd7IQTao78BTSljCjLl+sRrZ0unDjvylRTofft9+9S415wMfA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Eu8bFObBj+haMxNUguP+f/nkoiU54kn7JFVy4YKbt2Y=;
+ b=Xr9UuwF+H09Evikkq/1f9M1lV+4sigz7vSWjrB0eNKxZNYw6GUB3irmOmHh8KKZGlLZapCe6SbISJ8aA9FvpE8pt9UNea4q8TgmLo/1mGPvRnLkbSyGU33ibs1yHqepwgFweAJQTbsquYaXu/P2AOrfE2tcWlbsd3aUndTtyDFsxMmRZHxuCSYuEMCXloJyjzgvqsIsodL9wKT+U3BYQLiSuhX4QcUt/n4JVC3OeKnloWEaBsGN3la8m8NtRkTsgqtEpHoC+5AAWEs+WZ8YyBzqoFgvhQsOROre61UgHNjnGOcKRbn8FXA6ysOjwIWfI9BVToLY9TU4Ry4dGMKdsiQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
+ by CY5PR12MB6033.namprd12.prod.outlook.com (2603:10b6:930:2f::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8699.23; Wed, 14 May
+ 2025 18:26:02 +0000
+Received: from CH3PR12MB8659.namprd12.prod.outlook.com
+ ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
+ ([fe80::6eb6:7d37:7b4b:1732%7]) with mapi id 15.20.8722.027; Wed, 14 May 2025
+ 18:26:02 +0000
+Date: Wed, 14 May 2025 15:26:00 -0300
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Nicolin Chen <nicolinc@nvidia.com>
+Cc: kevin.tian@intel.com, corbet@lwn.net, will@kernel.org,
+	bagasdotme@gmail.com, robin.murphy@arm.com, joro@8bytes.org,
+	thierry.reding@gmail.com, vdumpa@nvidia.com, jonathanh@nvidia.com,
+	shuah@kernel.org, jsnitsel@redhat.com, nathan@kernel.org,
+	peterz@infradead.org, yi.l.liu@intel.com, mshavit@google.com,
+	praan@google.com, zhangzekun11@huawei.com, iommu@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, patches@lists.linux.dev,
+	mochs@nvidia.com, alok.a.tiwari@oracle.com, vasant.hegde@amd.com
+Subject: Re: [PATCH v4 06/23] iommufd/driver: Add iommufd_struct_destroy to
+ revert iommufd_viommu_alloc
+Message-ID: <20250514182600.GF382960@nvidia.com>
+References: <cover.1746757630.git.nicolinc@nvidia.com>
+ <fd387a4e4efda1905e270d28986e4563dfee52d5.1746757630.git.nicolinc@nvidia.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fd387a4e4efda1905e270d28986e4563dfee52d5.1746757630.git.nicolinc@nvidia.com>
+X-ClientProxiedBy: BL1PR13CA0068.namprd13.prod.outlook.com
+ (2603:10b6:208:2b8::13) To CH3PR12MB8659.namprd12.prod.outlook.com
+ (2603:10b6:610:17c::13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|CY5PR12MB6033:EE_
+X-MS-Office365-Filtering-Correlation-Id: c12ef82a-395c-404c-fc65-08dd9314c7db
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|366016|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?B+QXQZhI1zgI8cv+QkQVtHIFyQmTxvg1748KPMD5vPttv7FDJKrI9zGZQffO?=
+ =?us-ascii?Q?uUKQlqBja9jUo54HnuBXwYVRL9GqOFEShcbVEviztyOUVBUdkYFg7f3VVrD8?=
+ =?us-ascii?Q?X+AUqTZMi6CxOCID3/91KX9llWuf3IKVEbDhu152U6TkCXRIneEsRgm7rSli?=
+ =?us-ascii?Q?gpwwsP7lvmYRI9nR9TakhUfbOQEiIeCdoolarFgZu/U6JjidR8k6IcSOPXiJ?=
+ =?us-ascii?Q?BlSyMsOZ189csn1IV+HP+HaPGPy9RmiJ2prYNsEOO5rfyH/2GAghGO5hXDYz?=
+ =?us-ascii?Q?ZJ4IkILbEPRuP1BS8hrc1zBLaGN5ghuvBTnaIxN2qSVnljOHL2tfv0w4ctw2?=
+ =?us-ascii?Q?8u0rQuPS+MWDJoAPVeK6YzSp0fhOJQns3oigFY4bPGAgeMEQ0xQ41nryvg7o?=
+ =?us-ascii?Q?NEdboDXp+oXN9SSQEYH9Qp3IWG9dJpkLDOg0DUgSW6hy5LFwWmYmCmtNQ48P?=
+ =?us-ascii?Q?KXvNvRxEZFPzkDJEbhtpRtenpy2gJfDXSTjHIE4/gF5Y4V0BuaItRE5DTQ5q?=
+ =?us-ascii?Q?0W4ee8mY8G7+TKhbtuNTkd/UBdSgFXTFCOK8+Zqxv0MR+h3LAYT0wnBZlIYx?=
+ =?us-ascii?Q?QLgVP66vFgFI46T1PpyiIVpm+nSE3WWoVkJGGfpWo+25Y/I0qFEWWLWb1pv5?=
+ =?us-ascii?Q?Kvv86FDjk1lQHPvTDE1VzgMql4Ntmm9blwhTMMD3s/626LRCPFhoFG8n6wJd?=
+ =?us-ascii?Q?nO3VvkOnndRsZ9ezo2KPt8J49FndHzrW/4S3ji2UDxpUSEwWl8ZPCcxkqERC?=
+ =?us-ascii?Q?lgHx7+qoaah0p9LanZqCfPk+E++pkWcUX7A012BEnT7SZNMQ1xIyH+9OPKlh?=
+ =?us-ascii?Q?+s76eKeaI0Te+t/UV0nrVAypR5DFvJNlM3zZdTm2UX/XDZNnoU/sT0p9ZQYs?=
+ =?us-ascii?Q?Of9TG92IiRq1NaX2yqO9zvyLMzebdnMbBnTup0fqoMU6OJsl+YYZlh9xDtIb?=
+ =?us-ascii?Q?PJQa5SPMvjkf8c0qkBS+9bnCX6vOqQJdGL42SyE7yTI+f9p/7TIBjCcQ5sYw?=
+ =?us-ascii?Q?B5w2cV9CJr/c/wAg39WSarcbKSbyeO2sT+CkDY7lAGD+BHbpKnVwOvIIm2Aa?=
+ =?us-ascii?Q?WuWxxDgpZFq6huAA0rO7/ddSgUNvkZ68YYaCBPF2Vyg7q69+jcz2nSgOmjro?=
+ =?us-ascii?Q?njvLWxbxv4PrvhJLmtqGKyV/JSdkwlinEbBs+BarL/NKuwSG9Tj8AyxzIoCe?=
+ =?us-ascii?Q?0xyejMfWFYJaPHrzFKllPGrcNNRQOKPDOOp45w+9D47LPdHp7zmjydi5D2gn?=
+ =?us-ascii?Q?B1k+0vprVkcxKoUWWFPBj0z/F2G38BMUHpcZ04+q1AkRRgJBLZsog5pg+RKh?=
+ =?us-ascii?Q?X4Uzy8jt9Fdzgei37lf7oOarot7Wa5PDE+SF/fgm8mWfRcIgY0XimHbXgk1l?=
+ =?us-ascii?Q?RMIx7mzS8CKP52s6hhP8tIceVPOMbLGhSfF6kMNrCn9ufVV0aw=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?cd7e/Cr8MQ3Cxe1bLYlKMBFoe2er16xufz6V/QRlCxLM8iRudm5nDLT/8szw?=
+ =?us-ascii?Q?zTUaV7oA4bi73IfALrzzNQnZ60pOyuvBTw2u6icKT71cCOvpAVMwVf1UVWBw?=
+ =?us-ascii?Q?RRKWLkhuy3n2xTU4VoFFFkNmHFd6hQX8Go4RK60Zh6Q44EXbGEQi+Tn9EGhG?=
+ =?us-ascii?Q?s0b5bKQ5R4SbbsVJ8defzenld1SaNHKwdSZn7r7HPGg192W9HP9o1m0bvVSR?=
+ =?us-ascii?Q?D3WecEXVz3ITM67PN22iNsb+rkFTYx8FIuyC2jjAGy8FZyhNUPV8Jy5wS2p7?=
+ =?us-ascii?Q?V6zX+cxW9hnWPyxFfKmcOudTZ62SPOddxlAGepSRCNZBse2cSlu4iPe4Lxkl?=
+ =?us-ascii?Q?WKBxosF4m5W2xCjotIaw9lmH1Cmfj5WZyT6y3ilXgSzYw3dalu2Q6cfPAH8G?=
+ =?us-ascii?Q?gi1ocwHJjFwi8KE9gdtXFuSPG8Tw382B1VT5xHU7iUcT9bwi4WE1OJZDLiSE?=
+ =?us-ascii?Q?geBJbqcpipACnud0IdoBQrBG9yfFH5Dg/d7tkUG///HFProQwZTTJ7KSTl0v?=
+ =?us-ascii?Q?guHFmdzOA9B3KASmZQkGv4mluILxkL7NBfdd0o9O9l6RD3REJowo/jSqF8qA?=
+ =?us-ascii?Q?dMIR5rXSovfbX0Qs78VYjr1Y+qiA1hJXG1RDkmboBOJQh58mDTzMZY0uPXVz?=
+ =?us-ascii?Q?IHhrZgz+94SNktfhvY7Z1/YbNlABZZRwZJ1q0myziWtbxAt2UD2FxKw6jN8h?=
+ =?us-ascii?Q?FVer9e966KhPHEokEkbJjYR0mb0jQ/AP6rjtk+RHXTAAyZ8Kw6jP6VBfIN93?=
+ =?us-ascii?Q?umJJ/pQ0tOzjMJXprLbKFODjlL5NAvSfq6IEhR9K4nDtNnmDVxXEAUVTd3tS?=
+ =?us-ascii?Q?xB3p9NiE6uGOi/yymFzq17T0YCf0xjRn3o14OJ7dI5N73RbqTklHjpy18FYO?=
+ =?us-ascii?Q?9GgQvxhpas0it9KtTAkAqHxv07huOsEreVyYgxX0jcoLcG0nrtL5krSh2DjP?=
+ =?us-ascii?Q?D2+QwKmMtRlsPMYMRoFp/nAdfY8T7X5SfaO99S7ggHwd8CN6+7Hlpa+9frxw?=
+ =?us-ascii?Q?JCEPxzVTrIN8nDHJ82ZG9/uh8X5M5d/lhsb4FqOi+4wHWf3K/e6XOO02gwOs?=
+ =?us-ascii?Q?W8VNgyOMlzDBvAiHT0eJeUi8sTEa+0bEmKzSiM7DNLDEfRJ81Z5A3OzVoIxR?=
+ =?us-ascii?Q?y7RkSaeFBg04hHLyldRW8X4Nup1wZ8JCRLtSjygDicvDT+k3ICfJ6Q9QDOVE?=
+ =?us-ascii?Q?TE2nUuH4f6w38qgU4ZHuYyD/Yehyy/YBigKIJYfMHUFD6Yuz02GCSVKEW7C7?=
+ =?us-ascii?Q?15f6ax2ijTcK9l673aZv9HkgBE8fVPWY9VUV+uoYy8sViZQCFvxvjtym0x69?=
+ =?us-ascii?Q?VFTKlkOgpQatBiXPCJNm+C+yiWV3zwDjeXyIWqWIPQTRGZs/WbB18Oud02pa?=
+ =?us-ascii?Q?ZIAQR2OGR7djgbvxnAuhFNFaT8imjjGGSxwVL7gDmUwJ//XHn3jvqJ5E88AJ?=
+ =?us-ascii?Q?SDZy+1qhUCnRgdpsfe8B4GrCKGbrmwpkyffhGkpCdL8E6fTqwl2Cfh1mJALB?=
+ =?us-ascii?Q?Df+/fTEAR+F6KnCM6pYrqTS83q6gEirmbCHUUcBb06e6o7ZoFwzNupClW44O?=
+ =?us-ascii?Q?z/Zi2SmUUtVQQWj94NxdjBgrJtje43f5dXZlQnv0?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c12ef82a-395c-404c-fc65-08dd9314c7db
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 May 2025 18:26:02.1112
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kyXjWbZufhTyed3RULG5xk6WIxKTuURFkIRnVhcz8rK/g3wRAjLdrzpFOG76Lr9Z
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6033
 
-On Wed, 2025-05-14 at 19:17 +0200, KP Singh wrote:
-> On Wed, May 14, 2025 at 5:39=E2=80=AFPM James Bottomley
-> <James.Bottomley@hansenpartnership.com> wrote:
-> > On Sun, 2025-05-11 at 04:01 +0200, KP Singh wrote:
-[...]
-> > > This implicitly makes the payload equivalent to the signed block
-> > > (B_signed)
-> > >=20
-> > > =C2=A0=C2=A0=C2=A0 I_loader || H_meta
-> > >=20
-> > > bpftool then generates the signature of this I_loader payload
-> > > (which now contains the expected H_meta) using a key (system or
-> > > user) with new flags that work in combination with bpftool -L
-> >=20
-> > Could I just push back a bit on this.=C2=A0 The theory of hash chains
-> > (which I've cut to shorten) is about pure data structures.=C2=A0 The
-> > reason for that is that the entire hash chain is supposed to be
-> > easily independently verifiable in any environment because anything
-> > can compute the hashes of the blocks and links.=C2=A0 This independent
-> > verification of the chain is key to formally proving hash chains to
-> > be correct.=C2=A0 In your proposal we lose the easy verifiability
-> > because the link hash is embedded in the ebpf loader program which
-> > has to be disassembled to do the extraction of the hash and verify
-> > the loader is actually checking it.
->=20
-> I am not sure I understand your concern. This is something that can
-> easily be built into tooling / annotations.
->=20
-> =C2=A0=C2=A0=C2=A0 bpftool -S -v <verification_key> <loader> <metadata>
->=20
-> Could you explain what's the use-case for "easy verifiability".
+On Thu, May 08, 2025 at 08:02:27PM -0700, Nicolin Chen wrote:
+> An IOMMU driver that allocated a vIOMMU may want to revert the allocation,
+> if it encounters an internal error after the allocation. So, there needs a
+> destroy helper for drivers to use. For instance:
+> 
+> static my_viommu_alloc()
+> {
+> 	...
+> 	my_viommu = iommufd_viommu_alloc(viomm, struct my_viommu, core);
+> 	...
+> 	ret = init_my_viommu();
+> 	if (ret) {
+> 		/* Need to destroy the my_viommu->core */
+> 		return ERR_PTR(ret);
+> 	}
+> 	return &my_viommu->core;
+> }
+> 
+> Move iommufd_object_abort() to the driver.c file and the public header, to
+> introduce common iommufd_struct_destroy() helper that will abort all kinds
+> of driver structures, not confined to iommufd_viommu but also the new ones
+> being added in the future.
+> 
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
+> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> ---
+>  drivers/iommu/iommufd/iommufd_private.h |  1 -
+>  include/linux/iommufd.h                 | 16 ++++++++++++++++
+>  drivers/iommu/iommufd/driver.c          | 14 ++++++++++++++
+>  drivers/iommu/iommufd/main.c            | 13 -------------
+>  4 files changed, 30 insertions(+), 14 deletions(-)
 
-I mean verifiability of the hash chain link.  Given a signed program,
-(i.e. a .h file which is generated by bpftool) which is a signature
-over the loader only how would one use simple cryptographic operations
-to verify it?
+One idea that struck me when I was looking at this was to copy the
+technique from rdma.
 
+When an object is allocated we keep track of it in the struct
+iommufd_ucmd.
 
->=20
-> > I was looking at ways we could use a pure hash chain (i.e.
-> > signature over loader and real map hash) and it does strike me that
-> > the above ebpf hash verification code is pretty invariant and easy
-> > to construct, so it could run as a separate BPF fragment that then
-> > jumps to the real loader.=C2=A0 In that case, it could be constructed o=
-n
-> > the fly in a trusted environment, like the kernel, from the link
-> > hash in the signature and the signature could just be Sig(loader ||
-> > map hash) which can then be
->=20
-> The design I proposed does the same thing:
->=20
-> =C2=A0=C2=A0=C2=A0 Sig(loader || H_metadata)
->=20
-> metadata is actually the data (programs, context etc) that's passed
-> in the map. The verification just happens in the loader program and
-> the loader || H_metadata is implemented elegantly to avoid any
-> separate payloads.
+Then when the command is over the core code either aborts or finalizes
+the objects in the iommufd_ucmd. This way you don't have to expose
+abort and related to drivers.
 
-OK, so I think this is the crux of the problem:  In formal methods
-proving the validity of a data based hash link is an easy set of
-cryptographic operations.  You can assert that's equivalent to a
-signature over a program that verifies the hash, but formally proving
-it requires a formal analysis of the program to show that 1) it
-contains the correct hash and 2) it correctly checks the hash against
-the map.  That makes the task of someone receiving the .h file
-containing the signed skeleton way harder: it's easy to prove the
-signature matches the loader instructions, but they still have to prove
-the instructions contain and verify the correct map hash.
+Something like this:
 
-Regards,
-
-James
-
-
+diff --git a/drivers/iommu/iommufd/driver.c b/drivers/iommu/iommufd/driver.c
+index 2d2695e2562d02..289dd19eec90f1 100644
+--- a/drivers/iommu/iommufd/driver.c
++++ b/drivers/iommu/iommufd/driver.c
+@@ -36,6 +36,16 @@ struct iommufd_object *_iommufd_object_alloc(struct iommufd_ctx *ictx,
+ }
+ EXPORT_SYMBOL_NS_GPL(_iommufd_object_alloc, "IOMMUFD");
+ 
++struct iommufd_object *_iommufd_object_alloc_ucmd(struct iommufd_ucmd *ucmd,
++						  size_t size,
++						  enum iommufd_object_type type)
++{
++	if (ucmd->alloced_obj)
++		return ERR_PTR(-EBUSY);
++	ucmd->alloced_obj = _iommufd_object_alloc(ucmd->ictx, size, type);
++	return ucmd->alloced_obj;
++}
++
+ /* Undo _iommufd_object_alloc() if iommufd_object_finalize() was not called */
+ void iommufd_object_abort(struct iommufd_ctx *ictx, struct iommufd_object *obj)
+ {
+diff --git a/drivers/iommu/iommufd/eventq.c b/drivers/iommu/iommufd/eventq.c
+index f39cf079734769..f109948a81ac8c 100644
+--- a/drivers/iommu/iommufd/eventq.c
++++ b/drivers/iommu/iommufd/eventq.c
+@@ -473,7 +473,7 @@ int iommufd_fault_alloc(struct iommufd_ucmd *ucmd)
+ 	if (cmd->flags)
+ 		return -EOPNOTSUPP;
+ 
+-	fault = __iommufd_object_alloc(ucmd->ictx, fault, IOMMUFD_OBJ_FAULT,
++	fault = __iommufd_object_alloc_ucmd(ucmd, fault, IOMMUFD_OBJ_FAULT,
+ 				       common.obj);
+ 	if (IS_ERR(fault))
+ 		return PTR_ERR(fault);
+@@ -483,10 +483,8 @@ int iommufd_fault_alloc(struct iommufd_ucmd *ucmd)
+ 
+ 	fdno = iommufd_eventq_init(&fault->common, "[iommufd-pgfault]",
+ 				   ucmd->ictx, &iommufd_fault_fops);
+-	if (fdno < 0) {
+-		rc = fdno;
+-		goto out_abort;
+-	}
++	if (fdno < 0)
++		return fdno;
+ 
+ 	cmd->out_fault_id = fault->common.obj.id;
+ 	cmd->out_fault_fd = fdno;
+@@ -494,7 +492,6 @@ int iommufd_fault_alloc(struct iommufd_ucmd *ucmd)
+ 	rc = iommufd_ucmd_respond(ucmd, sizeof(*cmd));
+ 	if (rc)
+ 		goto out_put_fdno;
+-	iommufd_object_finalize(ucmd->ictx, &fault->common.obj);
+ 
+ 	fd_install(fdno, fault->common.filep);
+ 
+@@ -502,9 +499,6 @@ int iommufd_fault_alloc(struct iommufd_ucmd *ucmd)
+ out_put_fdno:
+ 	put_unused_fd(fdno);
+ 	fput(fault->common.filep);
+-out_abort:
+-	iommufd_object_abort_and_destroy(ucmd->ictx, &fault->common.obj);
+-
+ 	return rc;
+ }
+ 
+diff --git a/drivers/iommu/iommufd/iommufd_private.h b/drivers/iommu/iommufd/iommufd_private.h
+index c87326d7ecfccb..94cafae86d271c 100644
+--- a/drivers/iommu/iommufd/iommufd_private.h
++++ b/drivers/iommu/iommufd/iommufd_private.h
+@@ -152,6 +152,7 @@ struct iommufd_ucmd {
+ 	void __user *ubuffer;
+ 	u32 user_size;
+ 	void *cmd;
++	struct iommufd_object *alloced_obj;
+ };
+ 
+ int iommufd_vfio_ioctl(struct iommufd_ctx *ictx, unsigned int cmd,
+@@ -258,6 +259,15 @@ iommufd_object_put_and_try_destroy(struct iommufd_ctx *ictx,
+ #define iommufd_object_alloc(ictx, ptr, type) \
+ 	__iommufd_object_alloc(ictx, ptr, type, obj)
+ 
++#define __iommufd_object_alloc_uctx(uctx, ptr, type, obj)                      \
++	container_of(_iommufd_object_alloc_ucmd(                               \
++			     uctx,                                             \
++			     sizeof(*(ptr)) + BUILD_BUG_ON_ZERO(               \
++						      offsetof(typeof(*(ptr)), \
++							       obj) != 0),     \
++			     type),                                            \
++		     typeof(*(ptr)), obj)
++
+ /*
+  * The IO Address Space (IOAS) pagetable is a virtual page table backed by the
+  * io_pagetable object. It is a user controlled mapping of IOVA -> PFNs. The
+diff --git a/drivers/iommu/iommufd/main.c b/drivers/iommu/iommufd/main.c
+index 1d7f3584aea0f7..0bc9c02f6bfc4f 100644
+--- a/drivers/iommu/iommufd/main.c
++++ b/drivers/iommu/iommufd/main.c
+@@ -408,6 +408,14 @@ static long iommufd_fops_ioctl(struct file *filp, unsigned int cmd,
+ 	if (ret)
+ 		return ret;
+ 	ret = op->execute(&ucmd);
++
++	if (ucmd.alloced_obj) {
++		if (ret)
++			iommufd_object_abort_and_destroy(ictx,
++							 ucmd.alloced_obj);
++		else
++			iommufd_object_finalize(ictx, ucmd.alloced_obj);
++	}
+ 	return ret;
+ }
+ 
 
