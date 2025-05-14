@@ -1,80 +1,80 @@
-Return-Path: <linux-kselftest+bounces-32980-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32982-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E07C9AB792C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 00:48:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49987AB7935
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 00:52:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A110B1B6342C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 May 2025 22:48:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 107DE1B6607C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 May 2025 22:52:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 524BD2248AE;
-	Wed, 14 May 2025 22:48:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29541224AFE;
+	Wed, 14 May 2025 22:51:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JT9NQioB"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zHwJj5sP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE8602222C3
-	for <linux-kselftest@vger.kernel.org>; Wed, 14 May 2025 22:48:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5EEA2236EE
+	for <linux-kselftest@vger.kernel.org>; Wed, 14 May 2025 22:51:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747262913; cv=none; b=h2fGCsyvQqPgpf7lpDRYhao0zQMP/QNgRptbGcux+zsmTzo0Ztx0zn1D7vAX5ps4HVw+eLpzrnje2hQA8AqBodDaqBK1cJQOde8zmJQNdZhmBWdgVcxx9TYRQ6M+INh0iu36qB9BxP24/7dSZoLw0jyWeaAtlbLcaRIvrTXFWTs=
+	t=1747263115; cv=none; b=qltx2I8G4W22pAgif1609AzIFwEBLfH+jtXaHrIexLklA5xKXpYIovxlbkD2A6V8WAuUYqA0lBiS8tiuAu98gxlPmvzVmnGadlGfwxXQLdrsnMLWKspUnAUpz4EArdoksFAUPuPOY1yeiaBropgyEhFHKhC6+zFLrpI7bm2FVs4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747262913; c=relaxed/simple;
-	bh=fw4ASR0dC84nfQEf3FUe/wm41N26f7aWrG3iJtseeR0=;
+	s=arc-20240116; t=1747263115; c=relaxed/simple;
+	bh=Yx+Zjd8gx710Elu7lbxjIezJyJKnaGlVtZTgTBUAk5U=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=eveXQBrfXX5he78flGz7jICgGoUT1+Yrlsm7azQ3nFuQn5m0ByOihI1kHvA7L2ZPSGmO8bdLjhdkBJIJQXTe1JM/vwC61j1+57iwMbit4ILAMgN9HU+HuNGzKk6IV11a0eY9DkySGA3ItN/TxVhzyiUQgDdIku1y5mcvosmg/5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JT9NQioB; arc=none smtp.client-ip=209.85.216.73
+	 To:Cc:Content-Type; b=YtG5GM+ocsnU4+dlBEyGln7m4tBlqDg7xodUSuVuLRrICdkKGaRaZZyxEOmZR3si8CbZjg1YGnO5FHjP5ucpphx5kvWvWspLSNKWf+wpmq7GB6ciXqDjxn6oBuR3JsjRL1qV+7qOq06VAUfCJcw6wlQ5eFINohWKXzSuP8Q9LkE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zHwJj5sP; arc=none smtp.client-ip=209.85.215.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-30ab4d56096so350576a91.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 May 2025 15:48:31 -0700 (PDT)
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-b23d12e14bdso225984a12.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 May 2025 15:51:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1747262911; x=1747867711; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1747263113; x=1747867913; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UgYJ+Uk5kzzZuLLJjG5/CvuJkRdqBhrdQNgIB/qPRsA=;
-        b=JT9NQioBd/xWwaOrtayCcz3BLySw6ZeAsts9BDUOwtyBSpKcCgveom/0LKwo4KlSsy
-         GRGnmRxx8OrnRUxaYDsBB6kiEqvngGZsyt3WkmFlQx25bTavzKSdQ+z8gponfkQ4E1JI
-         sk9ZG6zi3cJZ/atzqw9KA0ISIpduqFSaUYrECKLLuleJx8hSitSzJX/fTihtk0grgvlm
-         sPhx0PaWhghKeZarEQp6bdgzYghc2uZHnBHHC3u80M7kkNu+8LLBhqpx1vDbBELR18eE
-         GjO9H2v/R8L271+ghupAqx6ddC3pVt30NcOuJblzZQv0Bc3I9SSaRIXoKJ2PPmVELYlz
-         QVnw==
+        bh=B0WOTyEDxpBiCPv/Xdx7yM3kU9rNcMVnr1WH3Yxgiaw=;
+        b=zHwJj5sPB+wVJnHx8XBE0J9CpK8+pIwdmKYZ6JwznOTr2IZ4LF1tbmCeWUeak481by
+         ndoJBkUgYaO7V0PmAXrmPl9u51iydjwjvXxiGb/l6qwgsBI2oc3I3xep9fO3jpTgrTzV
+         xuXF8uzuVGeQnAfY11SC3fuf3wrHVIXC4e0i1B7vUJIz1iT9/oPxua98vZUdUiShtqFL
+         c1EZ+2isAW6s/YXRjMbxQGXeTR2JkcbNqPTYHNjxchQIsw3h0VLVUm5El9ESPuadKuff
+         8xUSpeVH9xuI/TjWtEhnq52f0vJ5azqjVR5R90kiuyAeZCdy9LaxKshWAiGgln9mwtYc
+         wbjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747262911; x=1747867711;
+        d=1e100.net; s=20230601; t=1747263113; x=1747867913;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UgYJ+Uk5kzzZuLLJjG5/CvuJkRdqBhrdQNgIB/qPRsA=;
-        b=Vh2svwJkGqlpP/gOuQptdZWZH/d3An14DLH5pzhSTqurRKy4uCbnXOlR0AP4z9d5w8
-         mTXxtdO23iN34QUgsP2l5K1XdZWE8axEO75VkOD8l36PODjSmM4wKczKEe82++WwgHBD
-         OMolUOU+6a09aZEsXMzT7rWYjS2tmIWu7m7SsOtrogIi6fYKrnxTQuD8S3EbhfyAo1re
-         2WmRnHyJLwEstySpNwgwPbENgqTA+FUSTujV5pGzfNIusp8QNIkd9kdA3+oDxp+XNC7j
-         o/RWvrsdfQX1OxwgTrAvl+PM8XlOkRyYQWaLW7YVz2Q7zcCIFgY7z/EstjQkDw0f6Ehd
-         Rn9A==
-X-Forwarded-Encrypted: i=1; AJvYcCUWVMsOmUx+XE1gDMUx+c1WqI3oI5iQp9N1iK37HotHpFAUdicUa5NxOPon2jkx36a5cJE8DENInKtNm+Sltfc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy6oHmpftKv14ADRNZE6oNMYJKZaKSjHT0ivUJ725DqJ/DZGTBr
-	tHFOHvNlOYmZGtk4onpAu5dr3LVQ/KWWrp5fg7eXAG1xiNwBm/A8EvEfir9bySpH6f6wKr5fTrE
-	Zww==
-X-Google-Smtp-Source: AGHT+IG10+Iq5L5Cda3ijuQh+2a54en45CtzZHeDe6mY71MnV/tUAELSpjY7VbeAe1Lg4OZmV0PYigFgkQQ=
-X-Received: from pjbsh11.prod.google.com ([2002:a17:90b:524b:b0:2fa:1803:2f9f])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3b43:b0:2f6:d266:f462
- with SMTP id 98e67ed59e1d1-30e2e68a300mr7400689a91.35.1747262911047; Wed, 14
- May 2025 15:48:31 -0700 (PDT)
-Date: Wed, 14 May 2025 15:48:29 -0700
-In-Reply-To: <20250324173121.1275209-2-mizhang@google.com>
+        bh=B0WOTyEDxpBiCPv/Xdx7yM3kU9rNcMVnr1WH3Yxgiaw=;
+        b=SkNiXme0KfBclkr1FMbT5rb75NSicePLDGYTEIElhhyaDpuHB0UV56HO2MsznxBk0L
+         EUDwbhe2n1WFatcRTC5a1bVhPSxSU+aAugh3D5cZMQmwH5dihKeRGeib7NXvi4VTiXjQ
+         Q7OaPSb9GpGaRWEVFGr2x32LaYkfthVZufo37v+4SDfdXlPgxVRNzegoUSf440rv8Tja
+         GWWxEVRpWmgxxBY68zz5hmUzUnP8lA8rrzXmzNKKlXkz/Yhv2lXYMGHsEE4Q7bZ+9c80
+         QruMDolwJSv5GdUdfi3G5uQ0wIFEMjmMuQtcWRDaRBSi678ka7LRNJyGqt3kQoqGGhfz
+         L1Eg==
+X-Forwarded-Encrypted: i=1; AJvYcCWTkSEpoI9Jp5C/eMKBAe/kOQ3+qQXWHgo8Ywo03wS1NmPTHujpmX7yT17J964oTyEJzayclA+YG38GQcKCGEY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzBvqrudurAY/Hmr+VYvTcNIawzO7TdudqHN/Pri+r3xPJVAcfa
+	XxhXsmpKR/KSrQ8/gbcZzVoKiob6gO6lzrTPu1x3bSFb5Wv6ZsdL0XXEfptyEUq2662Vxi3dPFa
+	j1w==
+X-Google-Smtp-Source: AGHT+IFm68kMFpJ/kQ76jO9savH4B9EySo+tG8YG2y7wJxByjQiqkMjXPWcqCUmtRI40yW50UEhrsS4l6KE=
+X-Received: from pjbqc8.prod.google.com ([2002:a17:90b:2888:b0:2fc:2ee0:d38a])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:5403:b0:309:e351:2e3d
+ with SMTP id 98e67ed59e1d1-30e2e5bb679mr9123064a91.12.1747263112755; Wed, 14
+ May 2025 15:51:52 -0700 (PDT)
+Date: Wed, 14 May 2025 15:51:51 -0700
+In-Reply-To: <20250324173121.1275209-5-mizhang@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20250324173121.1275209-1-mizhang@google.com> <20250324173121.1275209-2-mizhang@google.com>
-Message-ID: <aCUdvaM4xkLzRF8J@google.com>
-Subject: Re: [PATCH v4 01/38] perf: Support get/put mediated PMU interfaces
+References: <20250324173121.1275209-1-mizhang@google.com> <20250324173121.1275209-5-mizhang@google.com>
+Message-ID: <aCUeh6KxgjLxd-MK@google.com>
+Subject: Re: [PATCH v4 04/38] perf: Add a EVENT_GUEST flag
 From: Sean Christopherson <seanjc@google.com>
 To: Mingwei Zhang <mizhang@google.com>
 Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -93,41 +93,25 @@ Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 Content-Type: text/plain; charset="us-ascii"
 
 On Mon, Mar 24, 2025, Mingwei Zhang wrote:
-> +/*
-> + * Currently invoked at VM creation to
-> + * - Check whether there are existing !exclude_guest events of PMU with
-> + *   PERF_PMU_CAP_MEDIATED_VPMU
-> + * - Set nr_mediated_pmu_vms to prevent !exclude_guest event creation on
-> + *   PMUs with PERF_PMU_CAP_MEDIATED_VPMU
-> + *
-> + * No impact for the PMU without PERF_PMU_CAP_MEDIATED_VPMU. The perf
-> + * still owns all the PMU resources.
-> + */
-> +int perf_get_mediated_pmu(void)
 > +{
-> +	guard(mutex)(&perf_mediated_pmu_mutex);
-> +	if (atomic_inc_not_zero(&nr_mediated_pmu_vms))
-> +		return 0;
+> +	if (event->attr.exclude_guest && __this_cpu_read(perf_in_guest)) {
+
+My vote is for s/perf_in_guest/guest_ctx_loaded, because "perf in guest" doesn't
+accurately describe just the mediated PMU case.  E.g. perf itself is running in
+KVM guests when using an emulated vPMU, or no vPMU at all.
+
+And with a Kconfig to guard the mediated PMU, this check (and others) can be
+elided at compile time for architectures that don't support a mediated PMU (or
+if KVM is disabled).
+
+> +		/*
+> +		 * (now + times[total].offset) - (now + times[guest].offset) :=
+> +		 * times[total].offset - times[guest].offset
+> +		 */
+> +		return READ_ONCE(times[T_TOTAL].offset) - READ_ONCE(times[T_GUEST].offset);
+> +	}
 > +
-> +	if (atomic_read(&nr_include_guest_events))
-> +		return -EBUSY;
-> +
-> +	atomic_inc(&nr_mediated_pmu_vms);
-> +	return 0;
+> +	return now + READ_ONCE(times[T_TOTAL].offset);
 > +}
-> +EXPORT_SYMBOL_GPL(perf_get_mediated_pmu);
-
-IMO, all of the mediated PMU logic should be guarded with a Kconfig.  I strongly
-suspect KVM x86 will be the only user for the foreseeable, e.g. arm64 is trending
-toward a partioned PMU approach, and subjecting other architectures to the (minor)
-overhead associated with e.g. nr_mediated_pmu_vms seems pointless.  The other
-nicety is that it helps encapsulate the mediated PMU code, which for those of us
-that haven't been living and breathing this for the last few months, is immensely
-helpful.
-
-> +void perf_put_mediated_pmu(void)
-
-To avoid confusion with perf_put_guest_context() in future patches, I think it
-makes sense to go with something like perf_{create,release}_mediated_pmu().  I
-actually like the get/put terminology in isolation, but they look weird side-by-side.
+> +
 
