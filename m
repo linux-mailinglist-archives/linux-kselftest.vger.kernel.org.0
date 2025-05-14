@@ -1,81 +1,81 @@
-Return-Path: <linux-kselftest+bounces-32986-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32987-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91326AB7967
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 01:21:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF6F4AB796A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 01:24:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 289F04A5DA8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 May 2025 23:21:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C045F3A2B0F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 May 2025 23:23:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE6952253A8;
-	Wed, 14 May 2025 23:21:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D110224882;
+	Wed, 14 May 2025 23:24:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xd7F1Oye"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CNNCtkJm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CE8D22371F
-	for <linux-kselftest@vger.kernel.org>; Wed, 14 May 2025 23:21:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB00320C014
+	for <linux-kselftest@vger.kernel.org>; Wed, 14 May 2025 23:24:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747264880; cv=none; b=KVjPFvgUTtrC3bPfTQ7Kx4RMQcGYo3M2g5/Sj5xCxml2DvHKUTPZDDIvbz7GCCYUwroeEeaSJLm2OaCLL5e3WqCGgD1QCQliCHjo8Cdh3QZV/amAclbCnoyyzWLypuDXJfT5wNDK95pCz7rj03U+PCUg513Ep4CyL8zvsoklnGo=
+	t=1747265052; cv=none; b=uf5Spsp++FUFU/KqKL9xNtXv4a/UcgBtWpbCxkwOl+NGeZlJPtF8MDAcSxuE41q+FluRmCUy0zTKZr/5hhyVClMVnZce1TWz7H6o9z7KzPuwDmvvccx0AWcyQVUc+57bTvu6058dEvCUkFh9esXwsg/ke3br7uCVaRwRbaahG/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747264880; c=relaxed/simple;
-	bh=YEKXLYRf3Z91CVsnsWfdQ9wfCYW5gqK6f8e442q5Hiw=;
+	s=arc-20240116; t=1747265052; c=relaxed/simple;
+	bh=Nmp9kwZTSuh5uyM03fYV50SB5KKk+Itz81IL9dk1N44=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=dzJO3RWK9NUbQE6e3icys8cxAYeOvs6qfbKrx4so3sJ+B1w9Q8YWf0uqvim2q0csndRYDdC1o1UuaAV8V5QmHxoJhSovIdHlTyn/VIX3pgAeNSH0T5Rxd42XHnk4nOkpoCquWjAXexJrwfonjF5TjUEMQCI21NtPDd0UTqDXzq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xd7F1Oye; arc=none smtp.client-ip=209.85.215.202
+	 To:Cc:Content-Type; b=J9LzX9hxrt6MiOhZCf5RtRsEiLm9er/SqX1IVLJDY21IiV9kEea2bITtRpQ7JlRHYiZQxcZiq4mokVmdcfIOeT9NWBzLshUerO26Qm+Ed9wTe3BjuIVbjp5RCz+kD6HkVJ9jnqYumiRHo+Zg4Ajs0r5fc2ltkNzSnnpTHeNugz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CNNCtkJm; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-af9564001cbso153144a12.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 May 2025 16:21:18 -0700 (PDT)
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-30a96aca21eso387655a91.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 May 2025 16:24:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1747264878; x=1747869678; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1747265050; x=1747869850; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0W5oRAU5Tx1bBNWhYqi9a+fsUdga8B/qghEhaqvlHzU=;
-        b=xd7F1OyehJBJvB2ccUvc1pKbtQVY5d09+V8IxScIfm8ZLwDX9UjVOD56BcsIxCzNzn
-         rOyIJsHArhieQweztEahZnvtMw/USUgm+zMrAaFzNUbNARnmgoiSfn0FNt3M7WU8WyUj
-         m2itZn6ay/9gZwfo5OTyWFLWgI1rGPzRndG2NK8orSxQCGnavft5U0RgLQTOMRn64+8e
-         LYmDrkJNfgyeIi42TES2rhHKsPnDzsVosuz/GhQ7KPWfa0UcSz/cXSB2LlL+z6Ua4/EZ
-         KxiBo+q+aCJKIBGZkpU8dtKGBEl0Eetv3/wIEvqA85lixJW4B3dD6oNqCCNm7iVoupP8
-         O+Zg==
+        bh=zJfnwMvDMyYbKEUav/eMFbw+CnQxNcQAe0tdAXtp/6s=;
+        b=CNNCtkJmdUPTKbYOgJTvgXIRMaDPveFFXo21OrZuLlATM30XT6d3o6AgTpA14LZaoF
+         RK7+sl1xc5biU9gfbAUTACQ3Wbhlh4pOR5uSmC7dZGKH+XVAOaT0r3osiJrLEfYkyoAg
+         9fSyJVOyUfdWLxBmF7xU7NpuTmsS9JBoyuFDNFCBL1aziqyenYbsCWiBxUk4/H2YBMGM
+         f4PxG0X3JVqqZH0LyYAaSVX7EK7VcEk14ueeYg6vRZoGf+wsmmnysPMlSdbOO+Cdi8lQ
+         iRdqnJPB+WLfakEdczmdgUlSlFeQ9+XBPaBzXYw1T2VdrpmJU89+SVa54rZWDFmN+GEU
+         hW5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747264878; x=1747869678;
+        d=1e100.net; s=20230601; t=1747265050; x=1747869850;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0W5oRAU5Tx1bBNWhYqi9a+fsUdga8B/qghEhaqvlHzU=;
-        b=anRNcMeuQrAhKlsYuRT/aYYUpvnuGquceOH7NTNdILr1s+hrbycBxWTRa0z0KZAFog
-         3alzHEF8rMp4FBD+4cU8yVfQ6dh8+TsCUtMuMP/dAcbE45OBaI7c9T9ga6mh1OYNjMjE
-         b5hKlaQBZzYBSVjASAEnghM9x6Bnb3EKldN1+J/vWSdkWMKineNQ4SzRwWNCUV8ZWdDB
-         73g4sPaHqQT+uYEP2LpaxUrxz/TsvmdB34m7p4TIEqZmZb7di2tBGd6W2oqwU9iwe2ee
-         axERY3HalBkr807sB5mAFEAzYL8jxHNeSBiz75P8LFUeUwry+0jfHG7kTknI4IvYi3jX
-         7mdA==
-X-Forwarded-Encrypted: i=1; AJvYcCW8CvgedGlDAoyUmmh/FOJzzrpo/JJ5Ct5ppU6tV5kxh4tkFc3AQv/Rw5jFhLYWHQYkibJCkDCadyn9DTtvwus=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyRoQIsvvmGAFqgTGRwFq6xE5bqCOlUu4wBG0czH//KtLLwkcJK
-	iUYkzX+/XJY6pX0U5a2Jx2i7yhWIL4AQwhzE18S221bE2Y5IeVq4TCoIEvn6lO36WhMKL8/pi1B
-	noA==
-X-Google-Smtp-Source: AGHT+IGTO73AIKyjnTSCUICJ5vVeiHlgCc/yVjvzHrQyDqfhwzwnQP3wljVXsvhihVqXHqt1ySm+522Vois=
-X-Received: from pjuj4.prod.google.com ([2002:a17:90a:d004:b0:2ff:852c:ceb8])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:564d:b0:2ef:31a9:95c6
- with SMTP id 98e67ed59e1d1-30e2e5c3177mr9009619a91.14.1747264878446; Wed, 14
- May 2025 16:21:18 -0700 (PDT)
-Date: Wed, 14 May 2025 16:21:16 -0700
-In-Reply-To: <20250324173121.1275209-7-mizhang@google.com>
+        bh=zJfnwMvDMyYbKEUav/eMFbw+CnQxNcQAe0tdAXtp/6s=;
+        b=j8YuOXiZFUH6bLJIYSxaHr5LTvRx1cjUrCEAWHQj2JGL0XzJl1j5+Z/kZGKB6z+C7r
+         BFfPErJq9kabgzlAacyYp5mFhDtaj28WGzfhjdykqTfugrtFxsyo9KIPxAzFkP5jx5TH
+         4vTbYmku2tU/oGQldxulPYhqKu0hy7+p0cjdpy5YkHnmbenLCE497wlYXSBm7SBhJSFn
+         RdyoRv5uWzhNdNxS1YKh0oCZGjYF3uFAa9GPszSdEMpvpg5u7k9xdOOqazd75c4oNaBZ
+         ZtMU+gsvi91SyF1CTFgihh+FdkHWm7BwAfhU2PU9+FUdKye2pWfVHQiqk7FbgVknm9J1
+         GLSg==
+X-Forwarded-Encrypted: i=1; AJvYcCXi8gpUAHl9ObqqvvmzDYf6815Tp0QyLisb+NFJ0kSzvZjo1UOE8HmJQ6Lw9b4+glnctH3TS4R+VxQmf9Fde7c=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy19KrseujUgKIFYeZeVVJ5QdgylvmuRqYqwDuDB9Av0pIW80HH
+	S/O4GNxbDOKpHVNYeTcEVOzUJlYSroCg1tWS1eUvzKK3kg1cOj0P6VMQhVB+kOM7O5f8ShpZrkP
+	94g==
+X-Google-Smtp-Source: AGHT+IFwSrO5NhBZmvoRVsyrPRAz/VlvVDh4aecdu/eb1bYHiTkHDlLm1inaF+lX2qdyGijklr9h4dTHe9Y=
+X-Received: from pjzz6.prod.google.com ([2002:a17:90b:58e6:b0:2ea:448a:8cd1])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2d4b:b0:2fe:e0a9:49d4
+ with SMTP id 98e67ed59e1d1-30e2e5818bcmr8614984a91.2.1747265050136; Wed, 14
+ May 2025 16:24:10 -0700 (PDT)
+Date: Wed, 14 May 2025 16:24:08 -0700
+In-Reply-To: <20250324173121.1275209-8-mizhang@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20250324173121.1275209-1-mizhang@google.com> <20250324173121.1275209-7-mizhang@google.com>
-Message-ID: <aCUlbDNoxQ-65mc0@google.com>
-Subject: Re: [PATCH v4 06/38] x86/irq: Factor out common code for installing
- kvm irq handler
+References: <20250324173121.1275209-1-mizhang@google.com> <20250324173121.1275209-8-mizhang@google.com>
+Message-ID: <aCUmGC45Pg6qC6FR@google.com>
+Subject: Re: [PATCH v4 07/38] perf: core/x86: Register a new vector for KVM
+ GUEST PMI
 From: Sean Christopherson <seanjc@google.com>
 To: Mingwei Zhang <mizhang@google.com>
 Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -94,37 +94,51 @@ Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 Content-Type: text/plain; charset="us-ascii"
 
 On Mon, Mar 24, 2025, Mingwei Zhang wrote:
-> diff --git a/arch/x86/kernel/irq.c b/arch/x86/kernel/irq.c
-> index 385e3a5fc304..18cd418fe106 100644
-> --- a/arch/x86/kernel/irq.c
-> +++ b/arch/x86/kernel/irq.c
-> @@ -312,16 +312,22 @@ DEFINE_IDTENTRY_SYSVEC(sysvec_x86_platform_ipi)
->  static void dummy_handler(void) {}
->  static void (*kvm_posted_intr_wakeup_handler)(void) = dummy_handler;
+> diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
+> index ad5c68f0509d..b0cb3220e1bb 100644
+> --- a/arch/x86/include/asm/idtentry.h
+> +++ b/arch/x86/include/asm/idtentry.h
+> @@ -745,6 +745,7 @@ DECLARE_IDTENTRY_SYSVEC(IRQ_WORK_VECTOR,		sysvec_irq_work);
+>  DECLARE_IDTENTRY_SYSVEC(POSTED_INTR_VECTOR,		sysvec_kvm_posted_intr_ipi);
+>  DECLARE_IDTENTRY_SYSVEC(POSTED_INTR_WAKEUP_VECTOR,	sysvec_kvm_posted_intr_wakeup_ipi);
+>  DECLARE_IDTENTRY_SYSVEC(POSTED_INTR_NESTED_VECTOR,	sysvec_kvm_posted_intr_nested_ipi);
+> +DECLARE_IDTENTRY_SYSVEC(KVM_GUEST_PMI_VECTOR,	        sysvec_kvm_guest_pmi_handler);
+
+I would prefer to keep KVM out of the name, and as mentioned in the previous patch,
+route this through perf.
+
+>  #else
+>  # define fred_sysvec_kvm_posted_intr_ipi		NULL
+>  # define fred_sysvec_kvm_posted_intr_wakeup_ipi		NULL
+
+Y'all forgot to wire up the FRED handling.  I.e. the mediated PMI IRQs would get
+treated as spurious when running with FRED.
+
+> diff --git a/arch/x86/include/asm/irq_vectors.h b/arch/x86/include/asm/irq_vectors.h
+> index 47051871b436..250cdab11306 100644
+> --- a/arch/x86/include/asm/irq_vectors.h
+> +++ b/arch/x86/include/asm/irq_vectors.h
+> @@ -77,7 +77,10 @@
+>   */
+>  #define IRQ_WORK_VECTOR			0xf6
 >  
-> -void kvm_set_posted_intr_wakeup_handler(void (*handler)(void))
-> +void x86_set_kvm_irq_handler(u8 vector, void (*handler)(void))
->  {
-> -	if (handler)
-> +	if (!handler)
-> +		handler = dummy_handler;
-> +
-> +	if (vector == POSTED_INTR_WAKEUP_VECTOR &&
-> +	    (handler == dummy_handler ||
-> +	     kvm_posted_intr_wakeup_handler == dummy_handler))
->  		kvm_posted_intr_wakeup_handler = handler;
-> -	else {
-> -		kvm_posted_intr_wakeup_handler = dummy_handler;
-> +	else
-> +		WARN_ON_ONCE(1);
-> +
-> +	if (handler == dummy_handler)
+> -/* 0xf5 - unused, was UV_BAU_MESSAGE */
+> +#if IS_ENABLED(CONFIG_KVM)
+> +#define KVM_GUEST_PMI_VECTOR		0xf5
+> +#endif
 
-Eww.  Aside from the fact that the dummy_handler implementation is pointless
-overhead, I don't think KVM should own the IRQ vector.  Given that perf owns the
-LVTPC, i.e. responsible for switching between NMI and the medited PMI IRQ, I
-think perf should also own the vector.  KVM can then use the existing perf guest
-callbacks to wire up its PMI handler.
+Conditionally defining the vector sounds good on paper, but its problematic, e.g.
+for connecting the handler to FRED's array, and doesn't really add much value.
 
-And with that, this patch can be dropped.
+>  #define DEFERRED_ERROR_VECTOR		0xf4
+>  
+>  /* Vector on which hypervisor callbacks will be delivered */
+> diff --git a/arch/x86/kernel/idt.c b/arch/x86/kernel/idt.c
+> index f445bec516a0..0bec4c7e2308 100644
+> --- a/arch/x86/kernel/idt.c
+> +++ b/arch/x86/kernel/idt.c
+> @@ -157,6 +157,7 @@ static const __initconst struct idt_data apic_idts[] = {
+>  	INTG(POSTED_INTR_VECTOR,		asm_sysvec_kvm_posted_intr_ipi),
+>  	INTG(POSTED_INTR_WAKEUP_VECTOR,		asm_sysvec_kvm_posted_intr_wakeup_ipi),
+>  	INTG(POSTED_INTR_NESTED_VECTOR,		asm_sysvec_kvm_posted_intr_nested_ipi),
 
