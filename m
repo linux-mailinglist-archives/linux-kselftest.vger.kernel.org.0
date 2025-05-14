@@ -1,716 +1,254 @@
-Return-Path: <linux-kselftest+bounces-32932-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32933-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B08E2AB67F0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 May 2025 11:49:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE343AB6D6A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 May 2025 15:55:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 425931884C33
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 May 2025 09:49:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 085211693C7
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 May 2025 13:54:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F277925D532;
-	Wed, 14 May 2025 09:49:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F97527A905;
+	Wed, 14 May 2025 13:53:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="OwuZWZ5l"
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="dKYQg/qf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-70.smtpout.orange.fr [193.252.22.70])
-	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR03-VI1-obe.outbound.protection.outlook.com (mail-vi1eur03on2057.outbound.protection.outlook.com [40.107.103.57])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED6C9225401;
-	Wed, 14 May 2025 09:49:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.70
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747216158; cv=none; b=m6I/Y+nAvjPIfTyo7IVWLXnW+OG8UQKC3gc7XI9HRAYc63LRA7c6pJ4NJmzffQOUnpEUNladzOWylzNd6LRO2cc0V9v5iioCofaRshEDke+M/YgYdMFodq2ktd/U0+TmgUEkIqKDWSeH14jEfzuvuoEd18Ajq2vYY84Bbxd3fMU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747216158; c=relaxed/simple;
-	bh=I/xfkx4oS+CO+iJTCXpNZil3HZkdHTcfmmZldcmLEWM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hUceLduvs8SJM2nAzFH6Pq304fXvzryOJYTCGR+EfNXFjAdXPb15D5npANGXQzWy/TCTV9U6gcKDde1QxbhJ8BH9YVWpsGTB2XW9PjIYnD4+5Q6KB0NbnxUtJTfaaE4uCRnjGb4faKvPwlCuAOIl8FDmuteF+d8b3BcdLnOrAf8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=OwuZWZ5l; arc=none smtp.client-ip=193.252.22.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from mail-ed1-f54.google.com ([209.85.208.54])
-	by smtp.orange.fr with ESMTPA
-	id F8iWurrLLKbq8F8iWu0KP2; Wed, 14 May 2025 11:48:00 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1747216080;
-	bh=ZBP0uJzd56VrQnu3aZWTVRlZkiQI89jFmo2wAt9/3+E=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To;
-	b=OwuZWZ5l5ZvbLhLhXTJIeUDInOBSzd8Unb+dQ3Xv/Pa7fRJImL1iRsGkIZ4pKW+4D
-	 tyR/T9Cil2TGm0fiEE5Iz5DeDCGFcFMkQgGUVeodAe91yHP3Ccx1oer8sofduRFtNU
-	 7uVUwukCyy/n+B/JUzwkvcshPqq3ce+LJ/paG+3vvUPTr/1Ccfao03ynJEFwjOapM8
-	 hbbKXsQPC0P6NpZ1gSh7fj0JFZ8RqxIiTZwNNUlJCt5y3UdjRZIWzYMkWhAXFtey/W
-	 lBPDO7MJKUjHVtRnrbaOM6llbDsLr584Tg5g7+cQRALJeNd94a2P94ytc9xWCSp6TD
-	 w5BUrLZ4xI/2A==
-X-ME-Helo: mail-ed1-f54.google.com
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 14 May 2025 11:48:00 +0200
-X-ME-IP: 209.85.208.54
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5fbee322ddaso12046472a12.0;
-        Wed, 14 May 2025 02:48:00 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWzxGkiMpqvEC/ia41Yv71nQ5aPVqn2uiAzn5gXjcuTLDZ+k7/FKnWtyLWEpF5wbrckiKzfu84vZBI=@vger.kernel.org, AJvYcCXMujoQi8UtAF4BL1M+FsWyXgn78ps2jQiGuZT7luNcxq8QI0eU4ffnoyFerXLgohsV0bSEuL9i@vger.kernel.org, AJvYcCXdYLLdkkXiBbPIc4Jw774UQVQmvC4xgbZYfq7fQ/+vT+D08zhJ17pnXW9hW06s+1toA2TUexvkb/MSU/mSjRzh@vger.kernel.org
-X-Gm-Message-State: AOJu0YyKrvmSYZZMo/KrvwGQ3ZT1ejLEUC1pk0vfyq6W4mwqbq6sk8Oh
-	EG4tM+pCzJL6wurRH7F6A4OeBsO3A2YS8vOWxLJOteAk4hAN0B3SU0NT07NZnibyDs69l19uowp
-	4aJ+JUsMiLXRy656HKB8AJt8Zmoo=
-X-Google-Smtp-Source: AGHT+IHdkZu6iv4c3J/aBkRakfFe6fqX/yAz3rS/y9MPMO55DTmmrQSki2I21b4UB82YVuKr4bxtbUgPHKfMJsyjfxA=
-X-Received: by 2002:a17:907:8947:b0:ad2:59c4:9d with SMTP id
- a640c23a62f3a-ad4f7292ce5mr232669466b.38.1747216080094; Wed, 14 May 2025
- 02:48:00 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABFF0191F98;
+	Wed, 14 May 2025 13:53:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.103.57
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1747230811; cv=fail; b=mIMzHFOohD3WWOdCs8YShkWLqra/W4Pe7xktKxv3PBGsC5yNEVKseKrbrBIxwYWFJ9FOErsoDTYP4XEpcwTNmK6gjuaBx1KKcXPLzPVpRvL1SRyHfAI+tt7bPSgui7/XxRNT9BJH9NL2r0dUHwUhVXzfAKej6l9yraL6fsMaNMk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1747230811; c=relaxed/simple;
+	bh=VTm0A3pbBpZF9aun0HD9B+T44gI9RyxEiooTsl8r0EE=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=P9kj9JfQNG16PRiKpHhJi+5B7RKbu92BUqfvgzDHQmXRnm2eZIso4FE470tCpK83A2OzZyaCNb5xRnrc6tnj1xUI5KYLifEHJCDzVqYEg00bsL27yvu421bdOm75+18RfxEzl9rmCAR42zMC6t5QEuWLAnQHMkTMhCurURdDRFU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=dKYQg/qf; arc=fail smtp.client-ip=40.107.103.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Ri75fyfMWYuH+LRDoxry0UBIIARb3Tyy9booIU0X50rgGaP+q89j5iKAmAHoa2PQkPyGdqKXLf9ezBgvBowm7VH25lKT/Hi1xh98qI7pchdCT8ZJc6bOCyZVJVjafS7FNlyMyKP98Y1OGaM8r6zOIG3V3LwMZPsE6HiSWyVj8C+DErpTcc2Wn4jv+TWUl6B0tkSxC6XTYXw61+MBkno5jBfWf7lkJPPne7o74O06Opn+ad7V3iFZLJ00UX1dq5SDwtwpJZzpOz7xTn4rMGhWzH46J6ZIQTAjOBd5QxUaK9TDzhC0NFXvpIS3QsuqBat/kLRAy9AwuBQrKYvUX4VP8g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VTm0A3pbBpZF9aun0HD9B+T44gI9RyxEiooTsl8r0EE=;
+ b=rT9R0i/UWIZ9ma7yroqnjU0vq98YXcu36Q8GFTBvZKIOS8phGvpU7Q/6TTgCD2bCHoknobCly1G1Yvug8umfXbW6Gz41ZZjg4jJQ1yf4Gcb9547wzasMiGinbVeRAtSxYVUmuYSzDTO5D4yd30ZeNG5axGbG5E9ekVfO1A6t6HK6Qwvqhr+FvbJsKvAB29nJEAc37yDhkefnBRFC9bZduNKyxro9VcAn7rxb4GrkntcfTfDw/cC3vYD/qmYH4hDZxS/tU1tGdbmOsQexXk65nBFSJIs21dDWvLG5rVJHfA33OWYnXIaQ30c52CySkB1Z2I22QH6BCZOs2FRiTr1fjQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nokia-bell-labs.com; dmarc=pass action=none
+ header.from=nokia-bell-labs.com; dkim=pass header.d=nokia-bell-labs.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VTm0A3pbBpZF9aun0HD9B+T44gI9RyxEiooTsl8r0EE=;
+ b=dKYQg/qfCGrzs4gVvXRORa1RLy+5XjSZYCK+Uc8YqLzhpXnh0hP/ejpXLPkWYhK/mqX2BCVBTz3b+7mpmJiKJOfcbk8uXeTLIR7qG7DZVtU0sycUFh4Fmt+0oWPneUPvbgzr+EUbt+39tuoLrJtMvy4sFH7CQXlVgGax2luQ6QRnkfYsSUMS3m3wK6x0QGcEnfuOEm68d98TZJJGyWeqoK7lmMui5YTTVXFfMTcd7yQJt1K3Ye+yohZN21OihfWAP2JtKMhUp/AxMcV2iW1MZW+2QoWxGMX636TxZ1eP52/AgsVCKsjMcyk+bs7BDV9ZCqAofV1JgsrjnZdmvzLmCQ==
+Received: from PAXPR07MB7984.eurprd07.prod.outlook.com (2603:10a6:102:133::12)
+ by DB9PR07MB9127.eurprd07.prod.outlook.com (2603:10a6:10:3d5::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8722.29; Wed, 14 May
+ 2025 13:53:24 +0000
+Received: from PAXPR07MB7984.eurprd07.prod.outlook.com
+ ([fe80::b7f8:dc0a:7e8d:56]) by PAXPR07MB7984.eurprd07.prod.outlook.com
+ ([fe80::b7f8:dc0a:7e8d:56%2]) with mapi id 15.20.8699.022; Wed, 14 May 2025
+ 13:53:24 +0000
+From: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>
+To: Paolo Abeni <pabeni@redhat.com>, "horms@kernel.org" <horms@kernel.org>,
+	"dsahern@kernel.org" <dsahern@kernel.org>, "kuniyu@amazon.com"
+	<kuniyu@amazon.com>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>, "dave.taht@gmail.com"
+	<dave.taht@gmail.com>, "jhs@mojatatu.com" <jhs@mojatatu.com>,
+	"kuba@kernel.org" <kuba@kernel.org>, "stephen@networkplumber.org"
+	<stephen@networkplumber.org>, "xiyou.wangcong@gmail.com"
+	<xiyou.wangcong@gmail.com>, "jiri@resnulli.us" <jiri@resnulli.us>,
+	"davem@davemloft.net" <davem@davemloft.net>, "edumazet@google.com"
+	<edumazet@google.com>, "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
+	"donald.hunter@gmail.com" <donald.hunter@gmail.com>, "ast@fiberby.net"
+	<ast@fiberby.net>, "liuhangbin@gmail.com" <liuhangbin@gmail.com>,
+	"shuah@kernel.org" <shuah@kernel.org>, "linux-kselftest@vger.kernel.org"
+	<linux-kselftest@vger.kernel.org>, "ij@kernel.org" <ij@kernel.org>,
+	"ncardwell@google.com" <ncardwell@google.com>, "Koen De Schepper (Nokia)"
+	<koen.de_schepper@nokia-bell-labs.com>, g.white <g.white@cablelabs.com>,
+	"ingemar.s.johansson@ericsson.com" <ingemar.s.johansson@ericsson.com>,
+	"mirja.kuehlewind@ericsson.com" <mirja.kuehlewind@ericsson.com>,
+	"cheshire@apple.com" <cheshire@apple.com>, "rs.ietf@gmx.at" <rs.ietf@gmx.at>,
+	"Jason_Livingood@comcast.com" <Jason_Livingood@comcast.com>, vidhi_goel
+	<vidhi_goel@apple.com>
+CC: "Olivier Tilmans (Nokia)" <olivier.tilmans@nokia.com>
+Subject: RE: [PATCH v6 net-next 04/15] tcp: AccECN core
+Thread-Topic: [PATCH v6 net-next 04/15] tcp: AccECN core
+Thread-Index: AQHbwSfzSQ7n1pzvbkip+fVATyp5NbPQmv0AgAGEbAA=
+Date: Wed, 14 May 2025 13:53:23 +0000
+Message-ID:
+ <PAXPR07MB7984C02A5B910446670F056AA391A@PAXPR07MB7984.eurprd07.prod.outlook.com>
+References: <20250509211820.36880-1-chia-yu.chang@nokia-bell-labs.com>
+ <20250509211820.36880-5-chia-yu.chang@nokia-bell-labs.com>
+ <39e06f51-621a-4d17-a4dd-17287e260e18@redhat.com>
+In-Reply-To: <39e06f51-621a-4d17-a4dd-17287e260e18@redhat.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nokia-bell-labs.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PAXPR07MB7984:EE_|DB9PR07MB9127:EE_
+x-ms-office365-filtering-correlation-id: 6dcd35bf-4e70-4185-bbd7-08dd92eeb1d1
+x-ld-processed: 5d471751-9675-428d-917b-70f44f9630b0,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|1800799024|366016|7416014|376014|38070700018|921020;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?Yk5GMXJEZ2RWMnVrY0pNbTFTL2JDVmxkMXhZRnp1RkUzWEhVMTVaMTU3MG1K?=
+ =?utf-8?B?N3I4aHo4VE5hbmhKSFNESStINjBWNUsvdlNTM1FhY2NRc2pYUlZYS2J6aU5N?=
+ =?utf-8?B?dlVpVE9FaU1MZ2RVS015aTUyQXVFUW9BcGNsY0FzVkFUOVUxWFNaOFN6T2Fk?=
+ =?utf-8?B?U05KT1FHbUtKcmxKMEJPRjhLcmhyTDdiVjVqc0QvT3B6am42bjJ3QmNSZmtn?=
+ =?utf-8?B?ckh6NHZ3YisyWGN1cnZNQVJybDNxU0puTGZKSnVQbDZmL09mWUpoUGE1WllS?=
+ =?utf-8?B?S0lIQ2F2Y0xlYmQyZ2FlVnVYNzVJTzV1Umdza2JBVjZaTE5FZUxrVDdlWWJM?=
+ =?utf-8?B?ZHgrOEVvTXBiMzh5T2RsZUpoRlI1WUlZdGdZaGZGZHFGYTRWQ0d2KzR6UnVx?=
+ =?utf-8?B?enAzTjdKYTRja2N1WUhNVlcvZ1FZMDRwUUxiNGlvNzBQNEozQlZqVTd4ekVC?=
+ =?utf-8?B?aXhUdkc2MkYrTFp4UVN5UWNxcWNoWHFKM2ttNHdWK0tGejlGRVJXTEpQRXMx?=
+ =?utf-8?B?dklQZHBER3ZjZ2gvdSs1Z25WQVFyMGVCR3BOOGpBeWhUSVlXbHdvcmNPV3lN?=
+ =?utf-8?B?SGtiNmZYSXlRNGE4Yjk4L2FTSGcxTUE1WFc5R3hJS1FtVFlOSDVtT01Zb1dj?=
+ =?utf-8?B?cUsrSEhZd2liWXdmUXVTWTh1S0ZHSVhQUFVBSzRFZkpLMjFtK3VVS2xkcllB?=
+ =?utf-8?B?RzdMTDhQVmRxRE5jVFl5Zlo1YU1YSk9IS2NWeHQ0MGJMazdGcEZCV0pGU2Qx?=
+ =?utf-8?B?RjJSNDd5UE9TbC9BdWJKNmhObW5qNk5NU1BnMjBoRGFMNStwcFA2c3VEaDRx?=
+ =?utf-8?B?bGgwZjJhWTRpL2VFU2hkK3J4VFpqekNralRMSlFzcm85WlN5a1ZiNnppSVpQ?=
+ =?utf-8?B?dDMxU3VMZ1VHWU0zTkk1M0x1bVVyd3dlbkVyU2NHU3UyS3M3dmZBL3EvMjJ0?=
+ =?utf-8?B?UFplNFJyY1N3SkRzRE05TTE2UjhESmFFMnd0QUs0ZGROclpiY0tBM2FQdURH?=
+ =?utf-8?B?dVkvUk9qOUphL21SSjgrM0l4ZGxQYlB2U3ZuYVN0ZU41L1l6WkQ4YjRLZ29Y?=
+ =?utf-8?B?Kzd2aGJXcmxpSDgyYzZoMDNXN1dlOXB3Y0RRVHVxci9ISEJuRDg1NVlHQ0Zl?=
+ =?utf-8?B?ZTk3bzhvYXJ3MTkrMGMyNXl4b1o3a2dlZEswRUhSOHJLTW1QWjVLVE8wbS9H?=
+ =?utf-8?B?eE5MekIyNmhsUi9vTmNUaEovNElaRHVTZW8yakVIMDhqS1lQRHJhbWNlTXB2?=
+ =?utf-8?B?cHlSSllnRnJXREI3OHRPeGQ0QWhYRVhsZFo4UHBNR0Z3RzlFNFIzS1NmMktv?=
+ =?utf-8?B?WEJUVFNoRnBaS1RQekNPSVdSR0c1VTZUbzdjUTRGZkZSOWpxQXl2aWVvdyt2?=
+ =?utf-8?B?MDl6OUtYdm5MQXRtc3ExTG9WLy90Mm50ZFgvSGgvdnBjNks3UWFZeDA2NEZK?=
+ =?utf-8?B?MHNOcVptOWRJUUZDeHltTUtjcmtQM1JIUDZRL2plc3QxNzNPRlphWlppa0ow?=
+ =?utf-8?B?Y3lCUURSU05kYklQTmJ2ZVZ0aEdSTm9wRTlTN2tmK1YySVlBMXFSYnluQ1U1?=
+ =?utf-8?B?NEt0c05Tek12b1NrZXZSSkt0WDErclMyM3oyS3BFbGZRbXdGeDdZMGIyTkZS?=
+ =?utf-8?B?TnJxd0pINzE3RU1RK1dremlDQmNNMUJBNHp0cEt4eHJXVjFBUE82RzF5MFBh?=
+ =?utf-8?B?SG9walVKSmNHQk5MUG5FbGZ0b1NvNlNxT2dLVDJRUWhFVS9hR1BZL2JMbVg4?=
+ =?utf-8?B?NUVrcDdDeVpLVE5XNXg2d2IxM0k3TGI0MlBFRFQvdnhSZDNLQ1pJUU05SG9M?=
+ =?utf-8?B?MmJzOUtwakExa0t5dHpOelFzY1hxYVArZWpNcmZMczlpUDUyTmJITkd2NzZ5?=
+ =?utf-8?B?ZFplV294b2owR2d5OWhLNFFrNVJPMUo3eWN3Wm1LQ3N0ejVTZkljRkEwY05l?=
+ =?utf-8?Q?JUozeHrvIoP0tIzzWfY0MOhcgfIWFpIU?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR07MB7984.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(38070700018)(921020);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?cFdOOUFRKzd0ZmtFL0M2dXVMejZJK0Vuc05remhHWWRmSWNaZ05YL0NxNkZN?=
+ =?utf-8?B?UkxNWjU4ZngweUFoRktJYWwyVklpYWZmQXJpMVlyUUF2eUEyN3Y3QkRQcUNk?=
+ =?utf-8?B?ajN4SEhVZEMxTjlCcjhwbkRYaitHRC9vbmg5YXVpZTltNUhVaTdHS1dCY3hi?=
+ =?utf-8?B?Zmtnc2FEbDQvbG5ZNzM5R2dZcWhKazR0dWgwQ1BFY0YrSjcyQ0N3OEJLV1E3?=
+ =?utf-8?B?cE9kckh0b0pzbkpMNVZ5VDVrZlVFcW1KdG8xRnVmZzl6eHp6aHJLeC9iSlQ3?=
+ =?utf-8?B?ZW4xczNueHRYc1A5aGlXaFBmQ2tYNVJ1d2trdjVUdHJsM3ZaSTZwb3M1aTFY?=
+ =?utf-8?B?QXFsNEZiaklERjR4YkRuU0F5YWg4ZVprMzNrNWVIcjh2endlcDFQRjdtVFhi?=
+ =?utf-8?B?M3diQTkreEh4QnA4aUh1TFM3WGJKV0hVRHJnYWh0ajZEVDJNQWgrRVBCYUxv?=
+ =?utf-8?B?aUVuTlZ0cnBVajRTYm9qbDM4aStLcHJCZTIwQXhPU0JFZXZIM3dmb0U2OEhX?=
+ =?utf-8?B?NTBCaUtzckdvTnk4bnpnUXpzK0JkQndKUjdyUURtbGxGWlNLTnkrVzZiM2FH?=
+ =?utf-8?B?Z0x4UWZ0dHRidE1Kb3AybmFQUVgxbW84QXBzVUdkVzk0QWJXbkJCUDN1TDJ5?=
+ =?utf-8?B?MTJ0NkllbDcrUFY5c0Y1ckppMnVPekc0UGdOa1c0THNJVG9zMUJNVTFBNHIx?=
+ =?utf-8?B?aGNHa3dLNm9TeDdpRzdBblJXc2JYL0k2OHVpMnI4MU01RUxwYzRUU1RJSHBK?=
+ =?utf-8?B?UUZCWDErK09mbVdqMWNNWWUxU2ZDSEVBb0ZxSVpyS0hzeG9sZ1lQQ3hNUytV?=
+ =?utf-8?B?V1h3Zko0QmFRbUtrZG1BMmxFM0puUUZFVlNFcUFXWXI5LzdZajliUzNxcFFx?=
+ =?utf-8?B?YTZHcGlrT1hFYjRyR3M5NlNvRHRMKzhrVTBUdTZEYlh3VXVQa241dG5mdWJR?=
+ =?utf-8?B?c1AwZWNscm1NZDc4SXBrdnIwWFJTOTljbWcyemswS1EvM012Mmp0ckJDUXRH?=
+ =?utf-8?B?eVlobEhVTXMvYUtaSzQwWXdkRmhwNHlGMmRPV3Vqb1phVk5MRnJ0VjJHb3FM?=
+ =?utf-8?B?WXNuakN5VzZidm84KzNUak5rYnpvZDUyVkJrOVFQM3lnRHNscmtEZDgva2h3?=
+ =?utf-8?B?Y3ZCRGsyOCtmSHRTYnZmR1puNUYrY1VOb216N2phdDdBY09IZ2VJWGFNeWlu?=
+ =?utf-8?B?M1FrQXQ0eW5BanlhYUFFbjJLV0RCT2k0djErenVSWFJoYk01UkFSb21ydUxa?=
+ =?utf-8?B?eWpCOFJXNFdydkdkTFdlUk9jbktQVk5xbHR6dFUrblFNbmlUMHpRRDVlVG8y?=
+ =?utf-8?B?MEtMZ2VzRndrNUpRVUtrc3EwOFJFbkNQbGdKZEFFaWppSjZDczJaWHRMdndl?=
+ =?utf-8?B?aklnRjI2SHVlL004U282Wmo4VGxqQ1FEVWlza2lraWVZYWs4M2JzZ25UV1NQ?=
+ =?utf-8?B?S1N3SWxEcHMvdU03ajJZMHRYUCtjRzdib0M3VENHSkRXT1RRczBKNUY0eDJ4?=
+ =?utf-8?B?c0sra1R6L01KOGJuazZDS3dhOEJvZzUxSG9mM0lwQXJNRkFpQVhuRDFBZmp3?=
+ =?utf-8?B?cUFkSy9ncVFCQmowRjVYRDRoNTlockhhZnhjZTZzbktMUzRUTk1ybWN1Z3J5?=
+ =?utf-8?B?MTFSMTUveWN6RTdBM0ZWb3FkUDgyRU9DYkNSY3FJWnNpN0Q0aWlmYkNZbXRy?=
+ =?utf-8?B?MFJ1eERLbkZia3E2RHFvMEk5TnFmVUlBVkpTbVlOWnJDaldScS9yNVg0WFNN?=
+ =?utf-8?B?eGxESzZlLzZER1lRS214aDZ6SUFhRWROSjJQNnVoNlNzekhvOUNoMXdoWGxW?=
+ =?utf-8?B?dzdjY3I1Q1ovd2lLNWhkZ0ZMc3pFMU0zSmpubDZkRUduei95cktYeVFhbUQ4?=
+ =?utf-8?B?c3BpeFZkLzQ2QWY4VXZoa0J3TzBBYWpFVUUvZmI4dHkvN2hRSkU4YVRpL0Zl?=
+ =?utf-8?B?aXdjSFhmWkl3YUE0MGwrWnZYOU9BTzZFcm5Ya1BGMlNuek9ONUhIR2JDM0hO?=
+ =?utf-8?B?NWxra3UxRkorNnVjN2g4R1B5QUt4YXpkMlRESG9hZEZoU3c2bHVMcCsraWF0?=
+ =?utf-8?B?SVRFbnArbE9Ld1hwc2RQbUlYQXE4Z2crSC9WSWhZblBsWGJVMnAxVmUvYTBY?=
+ =?utf-8?B?N29pdlFtSXo1WUFjQzZhV25QZmFVcUVrMTJ2c3hoNzkzUnpneGZpakprVkVn?=
+ =?utf-8?B?L1E9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <dac10156eb550871c267bdfe199943e12610730b.1746801747.git.fmaurer@redhat.com>
-In-Reply-To: <dac10156eb550871c267bdfe199943e12610730b.1746801747.git.fmaurer@redhat.com>
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Date: Wed, 14 May 2025 18:47:47 +0900
-X-Gmail-Original-Message-ID: <CAMZ6RqKmPD+BZkVC1C-vn7hcAVdQr8Qhd6PW8bASZiQkD6MV-A@mail.gmail.com>
-X-Gm-Features: AX0GCFvcj_f1A4VN1Q0El4CYnrgR6FNHTCln1tNBvjoBedgb8hFH2spjQ1FwhA8
-Message-ID: <CAMZ6RqKmPD+BZkVC1C-vn7hcAVdQr8Qhd6PW8bASZiQkD6MV-A@mail.gmail.com>
-Subject: Re: [PATCH v2] selftests: can: Import tst-filter from can-tests
-To: Felix Maurer <fmaurer@redhat.com>
-Cc: socketcan@hartkopp.net, mkl@pengutronix.de, shuah@kernel.org, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	horms@kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, dcaratti@redhat.com, fstornio@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: nokia-bell-labs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR07MB7984.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6dcd35bf-4e70-4185-bbd7-08dd92eeb1d1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 May 2025 13:53:23.9035
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ANBp02ZvJc1zExpFxA3P/8n0bHnYJpCfK7hoYzwOo0xbKHedXYHAOEokDrnoodOMvLsKKf1rXcmYDD5Wl2EDsS/3h6xIF/5pAd4Tbq83y+qjPLl0O64qYW5Ntm5GUBXx
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR07MB9127
 
-Hi Felix,
-
-On Sat. 10 May 2025 at 00:07, Felix Maurer <fmaurer@redhat.com> wrote:
-> Tests for the can subsystem have been in the can-tests repository[1] so
-> far. Start moving the tests to kernel selftests by importing the current
-> tst-filter test. The test is now named test_raw_filter and is substantially
-> updated to be more aligned with the kernel selftests, follow the coding
-> style, and simplify the validation of received CAN frames. We also include
-> documentation of the test design. The test verifies that the single filters
-> on raw CAN sockets work as expected.
->
-> We intend to import more tests from can-tests and add additional test cases
-> in the future. The goal of moving the CAN selftests into the tree is to
-> align the tests more closely with the kernel, improve testing of CAN in
-> general, and to simplify running the tests automatically in the various
-> kernel CI systems.
->
-> [1]: https://github.com/linux-can/can-tests
->
-> Signed-off-by: Felix Maurer <fmaurer@redhat.com>
-
-Thanks again.
-
-I left a set of nitpicks, I expect to give my reviewed-by tag on the
-next version.
-
-> ---
->
-> Notes:
->     I keep netdev and its reviewers and maintainers in CC because of the
->     changes to their paths in MAINTAINERS, even though Jakub acked them on
->     v1. The change should be merged through linux-can-next and subsequent
->     changes will not go to netdev anymore.
->
->     I have removed the long form of the licenses in the beginning of the
->     file during the import, as that is covered by the SPDX line anyways. The
->     copyright is left as it was originally.
-
-Ack.
-
->     Changes to v1:
->     - link: https://lore.kernel.org/linux-can/cover.1745323279.git.fmaurer@redhat.com/
->     - Squashed import and rewrite into a single commit
->     - Simplified checking of the received flags
->     - Pass the interface name through env (easier with the selftest
->       framework than adding an argument)
->
->     I have not updated test_raw_filter.sh to work with physical CAN
->     interfaces so far because I don't have one to test this right now and
->     don't think it's a priority for selftests for now.
-
-OK but can you just:
-
-  s/VCANIF/CANIF/g
-
-in the .sh and in the .c files? This way, when the test gets updated
-to also support the physical interfaces, the patch diff will be
-smaller.
-
-I have the hardware, so it is something I can easily contribute.
-
->  MAINTAINERS                                   |   2 +
->  tools/testing/selftests/Makefile              |   1 +
->  tools/testing/selftests/net/can/.gitignore    |   2 +
->  tools/testing/selftests/net/can/Makefile      |  11 +
->  .../selftests/net/can/test_raw_filter.c       | 395 ++++++++++++++++++
->  .../selftests/net/can/test_raw_filter.sh      |  37 ++
->  6 files changed, 448 insertions(+)
->  create mode 100644 tools/testing/selftests/net/can/.gitignore
->  create mode 100644 tools/testing/selftests/net/can/Makefile
->  create mode 100644 tools/testing/selftests/net/can/test_raw_filter.c
->  create mode 100755 tools/testing/selftests/net/can/test_raw_filter.sh
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 241ca9e260a2..55749b492ebb 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -5155,6 +5155,7 @@ F:        include/uapi/linux/can/isotp.h
->  F:     include/uapi/linux/can/raw.h
->  F:     net/can/
->  F:     net/sched/em_canid.c
-> +F:     tools/testing/selftests/net/can/
->
->  CAN-J1939 NETWORK LAYER
->  M:     Robin van der Gracht <robin@protonic.nl>
-> @@ -16577,6 +16578,7 @@ X:      net/ceph/
->  X:     net/mac80211/
->  X:     net/rfkill/
->  X:     net/wireless/
-> +X:     tools/testing/selftests/net/can/
->
->  NETWORKING [IPSEC]
->  M:     Steffen Klassert <steffen.klassert@secunet.com>
-> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> index 8daac70c2f9d..e5c9ecd52b73 100644
-> --- a/tools/testing/selftests/Makefile
-> +++ b/tools/testing/selftests/Makefile
-> @@ -64,6 +64,7 @@ TARGETS += mqueue
->  TARGETS += nci
->  TARGETS += net
->  TARGETS += net/af_unix
-> +TARGETS += net/can
->  TARGETS += net/forwarding
->  TARGETS += net/hsr
->  TARGETS += net/mptcp
-> diff --git a/tools/testing/selftests/net/can/.gitignore b/tools/testing/selftests/net/can/.gitignore
-> new file mode 100644
-> index 000000000000..764a53fc837f
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/can/.gitignore
-> @@ -0,0 +1,2 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +test_raw_filter
-> diff --git a/tools/testing/selftests/net/can/Makefile b/tools/testing/selftests/net/can/Makefile
-> new file mode 100644
-> index 000000000000..5b82e60a03e7
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/can/Makefile
-> @@ -0,0 +1,11 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +top_srcdir = ../../../../..
-> +
-> +CFLAGS += -Wall -Wl,--no-as-needed -O2 -g -I$(top_srcdir)/usr/include $(KHDR_INCLUDES)
-> +
-> +TEST_PROGS := test_raw_filter.sh
-> +
-> +TEST_GEN_FILES := test_raw_filter
-> +
-> +include ../../lib.mk
-> diff --git a/tools/testing/selftests/net/can/test_raw_filter.c b/tools/testing/selftests/net/can/test_raw_filter.c
-> new file mode 100644
-> index 000000000000..3c0e43cab1e8
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/can/test_raw_filter.c
-> @@ -0,0 +1,395 @@
-> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
-> +/*
-> + * Copyright (c) 2011 Volkswagen Group Electronic Research
-> + * All rights reserved.
-> + */
-> +
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <unistd.h>
-> +#include <string.h>
-> +
-> +#include <sys/types.h>
-> +#include <sys/socket.h>
-> +#include <sys/ioctl.h>
-> +#include <sys/time.h>
-> +#include <net/if.h>
-> +#include <linux/if.h>
-> +
-> +#include <linux/can.h>
-> +#include <linux/can/raw.h>
-> +
-> +#include "../../kselftest_harness.h"
-> +
-> +#define ID 0x123
-> +
-> +char VCANIF[IFNAMSIZ];
-> +
-> +static int send_can_frames(int sock, int testcase)
-> +{
-> +       struct can_frame frame;
-> +
-> +       frame.can_dlc = 1;
-> +       frame.data[0] = testcase;
-> +
-> +       frame.can_id = ID;
-> +       if (write(sock, &frame, sizeof(frame)) < 0)
-> +               goto write_err;
-> +
-> +       frame.can_id = (ID | CAN_RTR_FLAG);
-> +       if (write(sock, &frame, sizeof(frame)) < 0)
-> +               goto write_err;
-> +
-> +       frame.can_id = (ID | CAN_EFF_FLAG);
-> +       if (write(sock, &frame, sizeof(frame)) < 0)
-> +               goto write_err;
-> +
-> +       frame.can_id = (ID | CAN_EFF_FLAG | CAN_RTR_FLAG);
-> +       if (write(sock, &frame, sizeof(frame)) < 0)
-> +               goto write_err;
-> +
-> +       return 0;
-> +
-> +write_err:
-> +       perror("write");
-> +       return 1;
-> +
-
-Nitpick: remove the empty line.
-
-> +}
-> +
-> +FIXTURE(can_filters) {
-> +       int sock;
-> +};
-> +
-> +FIXTURE_SETUP(can_filters)
-> +{
-> +       struct sockaddr_can addr;
-> +       struct ifreq ifr;
-> +       int recv_own_msgs = 1;
-> +       int s, ret;
-> +
-> +       s = socket(PF_CAN, SOCK_RAW, CAN_RAW);
-> +       ASSERT_LT(0, s)
-
-0 is a valid fd (OK it is used for the stout, so your code will work,
-but the comparison still looks unnatural).
-
-What about:
-
-  ASSERT_NE(s, -1)
-
-or:
-
-  ASSERT_GE(s, 0)
-
-?
-
-(same comment for the other ASSERT_LE)
-
-> +               TH_LOG("failed to create CAN_RAW socket: %d", errno);
-> +
-> +       strncpy(ifr.ifr_name, VCANIF, sizeof(ifr.ifr_name));
-> +       ret = ioctl(s, SIOCGIFINDEX, &ifr);
-> +       ASSERT_LE(0, ret)
-> +               TH_LOG("failed SIOCGIFINDEX: %d", errno);
-> +
-> +       addr.can_family = AF_CAN;
-> +       addr.can_ifindex = ifr.ifr_ifindex;
-> +
-> +       setsockopt(s, SOL_CAN_RAW, CAN_RAW_RECV_OWN_MSGS,
-> +                  &recv_own_msgs, sizeof(recv_own_msgs));
-> +
-> +       ret = bind(s, (struct sockaddr *)&addr, sizeof(addr));
-> +       ASSERT_EQ(0, ret)
-> +               TH_LOG("failed bind socket: %d", errno);
-> +
-> +       self->sock = s;
-> +}
-> +
-> +FIXTURE_TEARDOWN(can_filters)
-> +{
-> +       close(self->sock);
-> +}
-> +
-> +FIXTURE_VARIANT(can_filters) {
-> +       int testcase;
-> +       canid_t id;
-> +       canid_t mask;
-> +       int exp_num_rx;
-> +       canid_t exp_flags[];
-> +};
-> +#define T_EFF (CAN_EFF_FLAG >> 28)
-> +#define T_RTR (CAN_RTR_FLAG >> 28)
-
-These two macros are not needed anymore and can be removed.
-
-> +/* Receive all frames when filtering for the ID in standard frame format */
-> +FIXTURE_VARIANT_ADD(can_filters, base) {
-> +       .testcase = 1,
-> +       .id = ID,
-> +       .mask = CAN_SFF_MASK,
-> +       .exp_num_rx = 4,
-> +       .exp_flags = {
-> +               0,
-> +               CAN_RTR_FLAG,
-> +               CAN_EFF_FLAG,
-> +               CAN_EFF_FLAG | CAN_RTR_FLAG,
-> +       },
-> +};
-> +/* Ignore EFF flag in filter ID if not covered by filter mask */
-> +FIXTURE_VARIANT_ADD(can_filters, base_eff) {
-> +       .testcase = 2,
-> +       .id = ID | CAN_EFF_FLAG,
-> +       .mask = CAN_SFF_MASK,
-> +       .exp_num_rx = 4,
-> +       .exp_flags = {
-> +               0,
-> +               CAN_RTR_FLAG,
-> +               CAN_EFF_FLAG,
-> +               CAN_EFF_FLAG | CAN_RTR_FLAG,
-> +       },
-> +};
-> +/* Ignore RTR flag in filter ID if not covered by filter mask */
-> +FIXTURE_VARIANT_ADD(can_filters, base_rtr) {
-> +       .testcase = 3,
-> +       .id = ID | CAN_RTR_FLAG,
-> +       .mask = CAN_SFF_MASK,
-> +       .exp_num_rx = 4,
-> +       .exp_flags = {
-> +               0,
-> +               CAN_RTR_FLAG,
-> +               CAN_EFF_FLAG,
-> +               CAN_EFF_FLAG | CAN_RTR_FLAG,
-> +       },
-> +};
-> +/* Ignore EFF and RTR flags in filter ID if not covered by filter mask */
-> +FIXTURE_VARIANT_ADD(can_filters, base_effrtr) {
-> +       .testcase = 4,
-> +       .id = ID | CAN_EFF_FLAG | CAN_RTR_FLAG,
-> +       .mask = CAN_SFF_MASK,
-> +       .exp_num_rx = 4,
-> +       .exp_flags = {
-> +               0,
-> +               CAN_RTR_FLAG,
-> +               CAN_EFF_FLAG,
-> +               CAN_EFF_FLAG | CAN_RTR_FLAG,
-> +       },
-> +};
-> +
-> +/* Receive only SFF frames when expecting no EFF flag */
-> +FIXTURE_VARIANT_ADD(can_filters, filter_eff) {
-> +       .testcase = 5,
-> +       .id = ID,
-> +       .mask = CAN_SFF_MASK | CAN_EFF_FLAG,
-> +       .exp_num_rx = 2,
-> +       .exp_flags = {
-> +               0,
-> +               CAN_RTR_FLAG,
-> +       },
-> +};
-> +/* Receive only EFF frames when filter id and filter mask include EFF flag */
-> +FIXTURE_VARIANT_ADD(can_filters, filter_eff_eff) {
-> +       .testcase = 6,
-> +       .id = ID | CAN_EFF_FLAG,
-> +       .mask = CAN_SFF_MASK | CAN_EFF_FLAG,
-> +       .exp_num_rx = 2,
-> +       .exp_flags = {
-> +               CAN_EFF_FLAG,
-> +               CAN_EFF_FLAG | CAN_RTR_FLAG,
-> +       },
-> +};
-> +/* Receive only SFF frames when expecting no EFF flag, ignoring RTR flag */
-> +FIXTURE_VARIANT_ADD(can_filters, filter_eff_rtr) {
-> +       .testcase = 7,
-> +       .id = ID | CAN_RTR_FLAG,
-> +       .mask = CAN_SFF_MASK | CAN_EFF_FLAG,
-> +       .exp_num_rx = 2,
-> +       .exp_flags = {
-> +               0,
-> +               CAN_RTR_FLAG,
-> +       },
-> +};
-> +/* Receive only EFF frames when filter id and filter mask include EFF flag,
-> + * ignoring RTR flag
-> + */
-> +FIXTURE_VARIANT_ADD(can_filters, filter_eff_effrtr) {
-> +       .testcase = 8,
-> +       .id = ID | CAN_EFF_FLAG | CAN_RTR_FLAG,
-> +       .mask = CAN_SFF_MASK | CAN_EFF_FLAG,
-> +       .exp_num_rx = 2,
-> +       .exp_flags = {
-> +               CAN_EFF_FLAG,
-> +               CAN_EFF_FLAG | CAN_RTR_FLAG,
-> +       },
-> +};
-> +
-> +/* Receive no remote frames when filtering for no RTR flag */
-> +FIXTURE_VARIANT_ADD(can_filters, filter_rtr) {
-> +       .testcase = 9,
-> +       .id = ID,
-> +       .mask = CAN_SFF_MASK | CAN_RTR_FLAG,
-> +       .exp_num_rx = 2,
-> +       .exp_flags = {
-> +               0,
-> +               CAN_EFF_FLAG,
-> +       },
-> +};
-
-Nitpick: sometimes you have an empty line between the fixtures,
-sometimes you don't. Can you rationalize this and always have an empty
-new line between the fixtures?
-
-> +/* Receive no remote frames when filtering for no RTR flag, ignoring EFF flag */
-> +FIXTURE_VARIANT_ADD(can_filters, filter_rtr_eff) {
-> +       .testcase = 10,
-> +       .id = ID | CAN_EFF_FLAG,
-> +       .mask = CAN_SFF_MASK | CAN_RTR_FLAG,
-> +       .exp_num_rx = 2,
-> +       .exp_flags = {
-> +               0,
-> +               CAN_EFF_FLAG,
-> +       },
-> +};
-> +/* Receive only remote frames when filter includes RTR flag */
-> +FIXTURE_VARIANT_ADD(can_filters, filter_rtr_rtr) {
-> +       .testcase = 11,
-> +       .id = ID | CAN_RTR_FLAG,
-> +       .mask = CAN_SFF_MASK | CAN_RTR_FLAG,
-> +       .exp_num_rx = 2,
-> +       .exp_flags = {
-> +               CAN_RTR_FLAG,
-> +               CAN_EFF_FLAG | CAN_RTR_FLAG,
-> +       },
-> +};
-> +/* Receive only remote frames when filter includes RTR flag, ignoring EFF
-> + * flag
-> + */
-> +FIXTURE_VARIANT_ADD(can_filters, filter_rtr_effrtr) {
-> +       .testcase = 12,
-> +       .id = ID | CAN_EFF_FLAG | CAN_RTR_FLAG,
-> +       .mask = CAN_SFF_MASK | CAN_RTR_FLAG,
-> +       .exp_num_rx = 2,
-> +       .exp_flags = {
-> +               CAN_RTR_FLAG,
-> +               CAN_EFF_FLAG | CAN_RTR_FLAG,
-> +       },
-> +};
-> +
-> +/* Receive only SFF data frame when filtering for no flags */
-> +FIXTURE_VARIANT_ADD(can_filters, filter_effrtr) {
-> +       .testcase = 13,
-> +       .id = ID,
-> +       .mask = CAN_SFF_MASK | CAN_EFF_FLAG | CAN_RTR_FLAG,
-> +       .exp_num_rx = 1,
-> +       .exp_flags = {
-> +               0,
-> +       },
-> +};
-> +/* Receive only EFF data frame when filtering for EFF but no RTR flag */
-> +FIXTURE_VARIANT_ADD(can_filters, filter_effrtr_eff) {
-> +       .testcase = 14,
-> +       .id = ID | CAN_EFF_FLAG,
-> +       .mask = CAN_SFF_MASK | CAN_EFF_FLAG | CAN_RTR_FLAG,
-> +       .exp_num_rx = 1,
-> +       .exp_flags = {
-> +               CAN_EFF_FLAG,
-> +       },
-> +};
-> +/* Receive only SFF remote frame when filtering for RTR but no EFF flag */
-> +FIXTURE_VARIANT_ADD(can_filters, filter_effrtr_rtr) {
-> +       .testcase = 15,
-> +       .id = ID | CAN_RTR_FLAG,
-> +       .mask = CAN_SFF_MASK | CAN_EFF_FLAG | CAN_RTR_FLAG,
-> +       .exp_num_rx = 1,
-> +       .exp_flags = {
-> +               CAN_RTR_FLAG,
-> +       },
-> +};
-> +/* Receive only EFF remote frame when filtering for EFF and RTR flag */
-> +FIXTURE_VARIANT_ADD(can_filters, filter_effrtr_effrtr) {
-> +       .testcase = 16,
-> +       .id = ID | CAN_EFF_FLAG | CAN_RTR_FLAG,
-> +       .mask = CAN_SFF_MASK | CAN_EFF_FLAG | CAN_RTR_FLAG,
-> +       .exp_num_rx = 1,
-> +       .exp_flags = {
-> +               CAN_EFF_FLAG | CAN_RTR_FLAG,
-> +       },
-> +};
-> +
-> +/* Receive only SFF data frame when filtering for no EFF flag and no RTR flag
-> + * but based on EFF mask
-> + */
-> +FIXTURE_VARIANT_ADD(can_filters, eff) {
-> +       .testcase = 17,
-> +       .id = ID,
-> +       .mask = CAN_EFF_MASK | CAN_EFF_FLAG | CAN_RTR_FLAG,
-> +       .exp_num_rx = 1,
-> +       .exp_flags = {
-> +               0,
-> +       },
-> +};
-> +/* Receive only EFF data frame when filtering for EFF flag and no RTR flag but
-> + * based on EFF mask
-> + */
-> +FIXTURE_VARIANT_ADD(can_filters, eff_eff) {
-> +       .testcase = 18,
-> +       .id = ID | CAN_EFF_FLAG,
-> +       .mask = CAN_EFF_MASK | CAN_EFF_FLAG | CAN_RTR_FLAG,
-> +       .exp_num_rx = 1,
-> +       .exp_flags = {
-> +               CAN_EFF_FLAG,
-> +       },
-> +};
-> +
-> +/* This test verifies that the raw CAN filters work, by checking if only frames
-> + * with the expected set of flags are received. For each test case, the given
-> + * filter (id and mask) is added and four CAN frames are sent with every
-> + * combination of set/unset EFF/RTR flags.
-> + */
-> +TEST_F(can_filters, test_filter)
-> +{
-> +       struct can_filter rfilter;
-> +       int ret;
-> +
-> +       rfilter.can_id = variant->id;
-> +       rfilter.can_mask = variant->mask;
-> +       setsockopt(self->sock, SOL_CAN_RAW, CAN_RAW_FILTER,
-> +                  &rfilter, sizeof(rfilter));
-> +
-> +       TH_LOG("filters: can_id = 0x%08X can_mask = 0x%08X",
-> +               rfilter.can_id, rfilter.can_mask);
-> +
-> +       ret = send_can_frames(self->sock, variant->testcase);
-> +       ASSERT_EQ(0, ret)
-> +               TH_LOG("failed to send CAN frames");
-> +
-> +       for (int i = 0; i <= variant->exp_num_rx; i++) {
-> +               struct can_frame frame;
-> +               struct timeval tv;
-
-Nitpick: you can directly initialize this variable:
-
-        struct timeval tv = {
-                .tv_sec = 0,
-                .tv_usec = 50000, /* 50ms timeout */
-        };
-
-> +               fd_set rdfs;
-> +
-> +               FD_ZERO(&rdfs);
-> +               FD_SET(self->sock, &rdfs);
-> +               tv.tv_sec = 0;
-> +               tv.tv_usec = 50000; /* 50ms timeout */
-> +
-> +               ret = select(self->sock + 1, &rdfs, NULL, NULL, &tv);
-> +               ASSERT_LE(0, ret)
-> +                       TH_LOG("failed select for frame %d, err: %d)", i, errno);
-> +
-> +               ret = FD_ISSET(self->sock, &rdfs);
-> +               if (i == variant->exp_num_rx) {
-> +                       ASSERT_EQ(0, ret)
-> +                               TH_LOG("too many frames received");
-> +               } else {
-> +                       ASSERT_NE(0, ret)
-> +                               TH_LOG("too few frames received");
-> +
-> +                       ret = read(self->sock, &frame, sizeof(frame));
-> +                       ASSERT_LE(0, ret)
-> +                               TH_LOG("failed to read frame %d, err: %d", i, errno);
-> +
-> +                       TH_LOG("rx: can_id = 0x%08X rx = %d", frame.can_id, i);
-> +
-> +                       ASSERT_EQ(ID, frame.can_id & CAN_SFF_MASK)
-> +                               TH_LOG("received wrong can_id");
-> +                       ASSERT_EQ(variant->testcase, frame.data[0])
-> +                               TH_LOG("received wrong test case");
-> +
-> +                       ASSERT_EQ(frame.can_id & ~CAN_ERR_MASK,
-> +                                 variant->exp_flags[i])
-> +                               TH_LOG("received unexpected flags");
-> +
-
-Remove this empty line.
-
-> +               }
-> +       }
-> +}
-> +
-> +int main(int argc, char **argv)
-> +{
-> +       char *ifname = getenv("VCANIF");
-> +
-> +       if (ifname) {
-> +               strncpy(VCANIF, ifname, sizeof(VCANIF) - 1);
-> +       } else {
-> +               printf("VCANIF environment variable must contain the test interface\n");
-> +               return KSFT_FAIL;
-> +       }
-
-Nitpick: test the error condition first:
-
-        if (!ifname) {
-                printf("VCANIF environment variable must contain the
-test interface\n");
-                return KSFT_FAIL;
-        }
-
-        strncpy(VCANIF, ifname, sizeof(VCANIF) - 1);
-
-> +       return test_harness_run(argc, argv);
-> +}
-> diff --git a/tools/testing/selftests/net/can/test_raw_filter.sh b/tools/testing/selftests/net/can/test_raw_filter.sh
-> new file mode 100755
-> index 000000000000..95f45c3c824b
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/can/test_raw_filter.sh
-> @@ -0,0 +1,37 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +ALL_TESTS="
-> +       test_raw_filter
-> +"
-> +
-> +net_dir=$(dirname $0)/..
-> +source $net_dir/lib.sh
-> +
-> +export VCANIF="vcan0"
-
-Could you make it so that if the environment variable is already set,
-you do not override it?
-
-  : ${CANIF:=vcan0}
-  export CANIF
-
-This way, users can easily test other interfaces without having to
-edit the script.
-
-> +setup()
-> +{
-> +       ip link add name $VCANIF type vcan || exit $ksft_skip
-> +       ip link set dev $VCANIF up
-> +       pwd
-> +}
-> +
-> +cleanup()
-> +{
-> +       ip link delete $VCANIF
-> +}
-> +
-> +test_raw_filter()
-> +{
-> +       ./test_raw_filter
-> +       check_err $?
-> +       log_test "test_raw_filter"
-> +}
-> +
-> +trap cleanup EXIT
-> +setup
-> +
-> +tests_run
-> +
-> +exit $EXIT_STATUS
-> --
-> 2.49.0
->
->
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBQYW9sbyBBYmVuaSA8cGFiZW5p
+QHJlZGhhdC5jb20+IA0KPiBTZW50OiBUdWVzZGF5LCBNYXkgMTMsIDIwMjUgMzo1NSBQTQ0KPiBU
+bzogQ2hpYS1ZdSBDaGFuZyAoTm9raWEpIDxjaGlhLXl1LmNoYW5nQG5va2lhLWJlbGwtbGFicy5j
+b20+OyBob3Jtc0BrZXJuZWwub3JnOyBkc2FoZXJuQGtlcm5lbC5vcmc7IGt1bml5dUBhbWF6b24u
+Y29tOyBicGZAdmdlci5rZXJuZWwub3JnOyBuZXRkZXZAdmdlci5rZXJuZWwub3JnOyBkYXZlLnRh
+aHRAZ21haWwuY29tOyBqaHNAbW9qYXRhdHUuY29tOyBrdWJhQGtlcm5lbC5vcmc7IHN0ZXBoZW5A
+bmV0d29ya3BsdW1iZXIub3JnOyB4aXlvdS53YW5nY29uZ0BnbWFpbC5jb207IGppcmlAcmVzbnVs
+bGkudXM7IGRhdmVtQGRhdmVtbG9mdC5uZXQ7IGVkdW1hemV0QGdvb2dsZS5jb207IGFuZHJldytu
+ZXRkZXZAbHVubi5jaDsgZG9uYWxkLmh1bnRlckBnbWFpbC5jb207IGFzdEBmaWJlcmJ5Lm5ldDsg
+bGl1aGFuZ2JpbkBnbWFpbC5jb207IHNodWFoQGtlcm5lbC5vcmc7IGxpbnV4LWtzZWxmdGVzdEB2
+Z2VyLmtlcm5lbC5vcmc7IGlqQGtlcm5lbC5vcmc7IG5jYXJkd2VsbEBnb29nbGUuY29tOyBLb2Vu
+IERlIFNjaGVwcGVyIChOb2tpYSkgPGtvZW4uZGVfc2NoZXBwZXJAbm9raWEtYmVsbC1sYWJzLmNv
+bT47IGcud2hpdGUgPGcud2hpdGVAY2FibGVsYWJzLmNvbT47IGluZ2VtYXIucy5qb2hhbnNzb25A
+ZXJpY3Nzb24uY29tOyBtaXJqYS5rdWVobGV3aW5kQGVyaWNzc29uLmNvbTsgY2hlc2hpcmVAYXBw
+bGUuY29tOyBycy5pZXRmQGdteC5hdDsgSmFzb25fTGl2aW5nb29kQGNvbWNhc3QuY29tOyB2aWRo
+aV9nb2VsIDx2aWRoaV9nb2VsQGFwcGxlLmNvbT4NCj4gQ2M6IE9saXZpZXIgVGlsbWFucyAoTm9r
+aWEpIDxvbGl2aWVyLnRpbG1hbnNAbm9raWEuY29tPg0KPiBTdWJqZWN0OiBSZTogW1BBVENIIHY2
+IG5ldC1uZXh0IDA0LzE1XSB0Y3A6IEFjY0VDTiBjb3JlDQo+IA0KPiANCj4gQ0FVVElPTjogVGhp
+cyBpcyBhbiBleHRlcm5hbCBlbWFpbC4gUGxlYXNlIGJlIHZlcnkgY2FyZWZ1bCB3aGVuIGNsaWNr
+aW5nIGxpbmtzIG9yIG9wZW5pbmcgYXR0YWNobWVudHMuIFNlZSB0aGUgVVJMIG5vay5pdC9leHQg
+Zm9yIGFkZGl0aW9uYWwgaW5mb3JtYXRpb24uDQo+IA0KPiANCj4gDQo+IE9uIDUvOS8yNSAxMTox
+OCBQTSwgY2hpYS15dS5jaGFuZ0Bub2tpYS1iZWxsLWxhYnMuY29tIHdyb3RlOg0KPiA+IEBAIC01
+MDk4LDcgKzUxMDAsOCBAQCBzdGF0aWMgdm9pZCBfX2luaXQgdGNwX3N0cnVjdF9jaGVjayh2b2lk
+KQ0KPiA+ICAgICAgIC8qIDMyYml0IGFyY2hlcyB3aXRoIDhieXRlIGFsaWdubWVudCBvbiB1NjQg
+ZmllbGRzIG1pZ2h0IG5lZWQgcGFkZGluZw0KPiA+ICAgICAgICAqIGJlZm9yZSB0Y3BfY2xvY2tf
+Y2FjaGUuDQo+ID4gICAgICAgICovDQo+ID4gLSAgICAgQ0FDSEVMSU5FX0FTU0VSVF9HUk9VUF9T
+SVpFKHN0cnVjdCB0Y3Bfc29jaywgdGNwX3NvY2tfd3JpdGVfdHhyeCwgOTIgKyA0KTsNCj4gPiAr
+ICAgICBDQUNIRUxJTkVfQVNTRVJUX0dST1VQX1NJWkUoc3RydWN0IHRjcF9zb2NrLCANCj4gPiAr
+IHRjcF9zb2NrX3dyaXRlX3R4cngsIDk2ICsgNCk7DQo+IA0KPiBUaGlzIGxvb2tzIGluY29uc2lz
+dGVudCB3aXRoIHRoZSBwYWhvbGUgb3V0cHV0IGluIHRoZSBjb21taXQgbWVzc2FnZSAodGhlIGdy
+b3VwcyBsb29rcyA5NSBieXRlcyB3aWRlLCBjb21wcmlzaW5nIHRoZSBob2xlcykNCg0KSGkgUGFv
+bG8sDQoNClRoYW5rcyBmb3IgdGhlIGZlZWRiYWNrLg0KSW5kZWVkLCB0aGUgZ3JvdXAgc2l6ZSBz
+aGFsbCBiZSB1cGRhdGVkIGJlZm9yZSBhZGRpbmcgQWNjRUNOIGNoYW5nZXMgYmFzZWQgb24gcGFo
+b2xlIHJlc3VsdHMuDQpBbmQgSSB3aWxsIGZpeCBpbiAjMywgIzQsICM2IGZvciB0Y3Bfc29ja193
+cml0ZV90eHJ4LCAjMyBmb3IgdGNwX3NvY2tfd3JpdGVfdHgsIGFuZCAjMTAgZm9yIHRjcF9zb2Nr
+X3dyaXRlX3J4Lg0KIA0KPiBbLi4uXQ0KPiA+IEBAIC0zODIsMTEgKzM5MywxNyBAQCBzdGF0aWMg
+dm9pZCB0Y3BfZWNuX3NlbmQoc3RydWN0IHNvY2sgKnNrLCBzdHJ1Y3QgDQo+ID4gc2tfYnVmZiAq
+c2tiLCAgew0KPiA+ICAgICAgIHN0cnVjdCB0Y3Bfc29jayAqdHAgPSB0Y3Bfc2soc2spOw0KPiA+
+DQo+ID4gLSAgICAgaWYgKHRjcF9lY25fbW9kZV9yZmMzMTY4KHRwKSkgew0KPiA+ICsgICAgIGlm
+ICghdGNwX2Vjbl9tb2RlX2FueSh0cCkpDQo+ID4gKyAgICAgICAgICAgICByZXR1cm47DQo+ID4g
+Kw0KPiA+ICsgICAgIElORVRfRUNOX3htaXQoc2spOw0KPiA+ICsgICAgIGlmICh0Y3BfZWNuX21v
+ZGVfYWNjZWNuKHRwKSkgew0KPiA+ICsgICAgICAgICAgICAgdGNwX2FjY2Vjbl9zZXRfYWNlKHRo
+LCB0cCk7DQo+ID4gKyAgICAgICAgICAgICBza2Jfc2hpbmZvKHNrYiktPmdzb190eXBlIHw9IFNL
+Ql9HU09fVENQX0FDQ0VDTjsNCj4gPiArICAgICB9IGVsc2Ugew0KPiA+ICAgICAgICAgICAgICAg
+LyogTm90LXJldHJhbnNtaXR0ZWQgZGF0YSBzZWdtZW50OiBzZXQgRUNUIGFuZCBpbmplY3QgQ1dS
+LiAqLw0KPiA+ICAgICAgICAgICAgICAgaWYgKHNrYi0+bGVuICE9IHRjcF9oZWFkZXJfbGVuICYm
+DQo+ID4gICAgICAgICAgICAgICAgICAgIWJlZm9yZShUQ1BfU0tCX0NCKHNrYiktPnNlcSwgdHAt
+PnNuZF9ueHQpKSB7DQo+ID4gLSAgICAgICAgICAgICAgICAgICAgIElORVRfRUNOX3htaXQoc2sp
+Ow0KPiANCj4gVGhlIGFib3ZlIGNodW5rIGFwcGFyZW50bHkgY2hhbmdlcyB0aGUgY3VycmVudCBi
+ZWhhdmlvdXIgZm9yICF0Y3BfZWNuX21vZGVfYWNjZWNuKCksIHVuY29uZGl0aW9uYWxseSBzZXR0
+aW5nIEVDTiwgd2hpbGUgYmVmb3JlIEVDTiB3YXMgc2V0IG9ubHkgZm9yIG5vbiByZXRyYW5zIHNl
+Z21lbnRzLg0KPiANCj4gL1ANCg0KVGhpcyB3aWxsIGJlIGZpeGVkIGluIHRoZSBuZXh0IHZlcnNp
+b24uDQoNCkNoaWEtWXUNCg==
 
