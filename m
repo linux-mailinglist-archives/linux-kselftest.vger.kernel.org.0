@@ -1,77 +1,77 @@
-Return-Path: <linux-kselftest+bounces-33049-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33050-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4515AB806C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 10:25:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 849ECAB8065
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 10:25:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F1C867AAB37
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 08:23:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D6461BA7ABB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 08:25:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E08D528C001;
-	Thu, 15 May 2025 08:23:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A54C28C840;
+	Thu, 15 May 2025 08:23:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="L4DzZy5P"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="CkTwN0U+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CE9C28A708
-	for <linux-kselftest@vger.kernel.org>; Thu, 15 May 2025 08:23:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1729A28AB12
+	for <linux-kselftest@vger.kernel.org>; Thu, 15 May 2025 08:23:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747297429; cv=none; b=I8RCbNjBi+pqMAKQnnkZ/CuCLSsELo0qd5iKwdqfJsOoRBRs3sp3/i3mdLcDIc2PEercTwyPVer1FjjWk9xQ5er/O84aG9geMp1K9YPWVEXZww5+zE1zrz+jbq0BAZZ08ivGiO4pmMILztTtdEH+JIdj5rR3O0my12VlzF/AT/0=
+	t=1747297430; cv=none; b=uE4GgN5t6EirutYf1VeACZV2yzhhKKhckWqc5otRMm1F6VD1BHVQeKs+6jA8KRzBLUDwekZStmk6SpkrKjAzTrhOVqZbP2VODgBoUnVe9kbZ1Ft45dK4gaGqp67cRg8dsdGmuGuW1LVJPSejZXXshsXcTr5eanB8pPak90VCk2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747297429; c=relaxed/simple;
-	bh=oe9YzhrIkRFjcEpmOMMHuXd74hPefU7Jr+/Rq21d1Ts=;
+	s=arc-20240116; t=1747297430; c=relaxed/simple;
+	bh=wAx2RrhJgfovv+Ew3KxgsAkzj9v4q4meKm9RpW51ts8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EsYkNps/5AfFSmFZP33al2O5YC1XdEpx8Tc3Tr/noHNFJQo075LkZPys8c6r9C5YozSaRzI1beKNEdh8A/dMnwevMa50lLJ7FvFlcQ3kH0L7U/p4qlP6VCVe4cZqNxiBXaAJD1MjBNjmtiAswic6e+Wf24o97/msI4tot1X6/m8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=L4DzZy5P; arc=none smtp.client-ip=209.85.128.46
+	 MIME-Version:Content-Type; b=OH7mDZVBX44i+oxSKilaJ/sr/dlTv0x9n6FWuW43xdjf6QTsKlSGWYL2mcMLwFV/03GeuWllaqH42rjaawhQaAQbDQi9zsEs/m4C88Oc+DgzCnN4b9gQsFpuVc7cthtqXn4Kr68pCjzvmUgvIiItnaQWLb2a6YNZBSRDeeZcpXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=CkTwN0U+; arc=none smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-442f4a3a4d6so4148345e9.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 May 2025 01:23:47 -0700 (PDT)
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-43cfa7e7f54so4636815e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 May 2025 01:23:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1747297426; x=1747902226; darn=vger.kernel.org;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1747297427; x=1747902227; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=aVRcVKoxl0DwUNG2KUS/gJuyrRdppt9iuLXI01MGzME=;
-        b=L4DzZy5P3aJ/GC7hRBJ1TP4uF6OYa3kLCeBAw/zW9Fud20wIND5tl9CKvsQUPgffMG
-         Y3Rihi//bqlyR+VS5poYmvhcOyJkrq0giKQWhoXRHkfPPEmGwQcW+H4Dfk9WdvOKgFeC
-         mN2wk9r2oZVJTd+zUk2KESl3DiBimxZX4mFC6esD+p5I1OTtv+hYCn1Nmj3ndamfo8mT
-         uAYMjn9oD/YxOcBvf3gsCy2NCpFGrLfbP1T9lznaEjiDGtwysiGJ+KBa5nrKRygLv50m
-         3YehJhYnkW4oU/O6yO/FMtLZwMGRHR0+Lvc+IOb9dXBKXybBeEpnwYMHEDWzcspJhCbd
-         Mh1A==
+        bh=z13A9Xmh4hlNXDYVsXBjasLvO/5IjxZE5WiJJRlkS1s=;
+        b=CkTwN0U+wXFIJP36JouWLff3HSYTCenGXDrB8sdRCoW2HMGRfA/xk2WKMSkaEXfhjZ
+         agxuaLcwiDOsCX+V8iKW38ZOPFBY7sqYk4kBxkuVwestpDMHV5hwAoiYL6AjK+CskL8S
+         5/4lr9k+NYHyOwClgtRZbS+CUUw0UAsK4CsiTo4TYRjSN/Ike9pJ3Svrbp3xWZ+fReak
+         XcAjtwvavcxJ2fBo0504LTtxAZckRQqtJdMVi6EyggqCEU2vKOzFNx1b6qLI/Q7EXf8W
+         vof0r8GhvLc/3j+ps12B81PUzTmqL+7eklowf2szelKr93uGFomLwZScdnpP46zGxVdg
+         89Fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747297426; x=1747902226;
+        d=1e100.net; s=20230601; t=1747297427; x=1747902227;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=aVRcVKoxl0DwUNG2KUS/gJuyrRdppt9iuLXI01MGzME=;
-        b=ubmp7alNpaaLq+WElbiavDFwuA0gVlhC3QBeYgIFf8Q9tOduFj92JkZpaKVhaSp80Z
-         QNCWtMzXdWW0q12DDlMg9D0WXH4xJpo3T1mc0qH/UUyjvIw+MX5n511XaRHNO2iaAV/1
-         2dNAkrSqWuAA+MXNegcb/D7jb68VAvSGUELqTOOeSWQyuS08Ex64eV/d2P/pQbvHLeyq
-         fc9JbgXLoYJ0p5dmvnfftzchSv7OrkbtC2iAnbWfkNGUkk6yt9yE50fU+XGULECCAHpY
-         27wrivCAXPLGo0tgQTjs1BQjFhConpbfxF/cQ6AAj+h8NfWZNC25xTGl/2TJJzTcyjwV
-         mFsA==
-X-Forwarded-Encrypted: i=1; AJvYcCV0cHn/BHrMb90P+QyqdJ3aVF0EMsmfFCZCfuQxq1XuQd60kwqBSLdYUfy1j0sTs9z4WD/IApAe4cgORKUE81M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzS6IlaXMeYvsGLP5EIDIcUHFxvDfxRU5RsGdEyCX80ty0TKrLz
-	VH7KNS8ii2TDlbFrW5C6VXe3hcU5oN/T6H+ceSYfqRQszWhmJS7ve21+WG2cjezCXko=
-X-Gm-Gg: ASbGncuylAB+7b4YDXLvOFbVLSqR+r9JQxDfQycS4UYQ50cQzuYThmwbDAaQ45cMhnP
-	yBR01zaFEE7lo9DmGtnOHJcktAlNH/aW0C2JZp0MBVBVfUjGjLnIkzKO6bilXgM/RqF0R3CiK4X
-	uj50b+DOhXH7Jpdp9+Bcb7Zl5mSDCKUHE1LeCZ0zF/Yg+FLcZLSHl0WunKUqwQJ2o7wObaw1NaI
-	lLGz5K96cFL7zUtB+G4hMa0qPEv9fK1AKPwrFRWR81n+K89wnJeFjicCRzVC9ZZgurNoxB7JckF
-	rO1GMp3sWNmDiG0RgkCHte+3Lt0Vo338MCwTcZrtCpftHJXJgspGuH8EynNIbA==
-X-Google-Smtp-Source: AGHT+IEf/m3FG8FRM27DD2c+gtkesEWRNvfkiivPTHatSmLHF+9dpAc024hgwxzmnfOdGRF2n1iTFw==
-X-Received: by 2002:a05:600c:46c9:b0:442:f8f6:48e5 with SMTP id 5b1f17b1804b1-442f8f6494fmr16827155e9.8.1747297425789;
-        Thu, 15 May 2025 01:23:45 -0700 (PDT)
+        bh=z13A9Xmh4hlNXDYVsXBjasLvO/5IjxZE5WiJJRlkS1s=;
+        b=TQeD4Y/ZAcC+3gjkZGSCygqfG+gERpRVXtKMCmnsPcCaeQzT9b+XX9EKDTfZvG7NHP
+         4LlqNVMOT25Q2QIR+cBxPIkM3oE9b6PDRp8SmtrkjwL1RfOhUkUdpB6RdCdZtlMj2kyF
+         i4nU0X3LwVagR4a9OEURyHPxgDLsnTHEdcT6vL9HoEo7Fu7/TtSAsWRG+zu28JzdBp9c
+         sdhYffNIQjeg5d8lXj4lDQWtxl5xHzFjGGIY32KDm6l6BVRCwPVTHRyGEfTXkiIc+zIH
+         qAuHZlPwk7xQW3cnZeiW6z9rZ1tS9IHJUe46yAJV1/UZ5prXxUBS1FxSrSU4XmMBLGUR
+         tzVQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXRswLjsPPI1pFclVZiB1gD0K99FPc9Gg/mxzB3uuB2Uj4ke0hm1V804AI6wPw3vQ05ZpLFnlN0Fgf3YEVxkyU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwCQS2tT0oWwJBvp3V6bFKWglLlect90xAGX4B3eNhCNVtyPI9E
+	TRRA8OjZ1W8HuL4Z5EJLaEI5wC33uAPBYlcnxIAG9HqlzKEBjy9TRzGInMxHh5k=
+X-Gm-Gg: ASbGnctBzUvygEL4YNMaFS39YOFcJ8MO8yXbohXNhAnLkNZn00b0/dVJ3caXkfAxiUd
+	XzGRj5vspGOyawv+h4LqNivk8LNy+fLUccWn6d5t6ftrG+rcCY6/fWtVLqVBF5rZo7sqJZGOMtj
+	N1XZ/OZSJIbZH9HZ5ub6oQJB9s93d02cMSphuLhLMsyt+vnGxZLpTfi+g7Hd4gon3MryY79Y8Vn
+	YYc0jiMBfept7n9c9x7zOK2anWGSN9iepggol0dd6Swo4sQKNLDqf2NIWwvSYTGoa8K9IuXdCnQ
+	0Bft2RgrOFObkulxxYio2fH9iy5McIeXTTJv1AKbhJZHMZKW2ug=
+X-Google-Smtp-Source: AGHT+IHkZNQbpAw1wphnseKXwk4yMRcZGss2iiWcC12RxGFa4TAsYttDPas1NVsjc2nqofvNADAfDw==
+X-Received: by 2002:a05:600c:828e:b0:442:f4a3:a2c0 with SMTP id 5b1f17b1804b1-442f850c4f5mr24840985e9.13.1747297427334;
+        Thu, 15 May 2025 01:23:47 -0700 (PDT)
 Received: from carbon-x1.. ([91.197.138.148])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442f395166fsm59310785e9.18.2025.05.15.01.23.44
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442f395166fsm59310785e9.18.2025.05.15.01.23.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 May 2025 01:23:45 -0700 (PDT)
+        Thu, 15 May 2025 01:23:46 -0700 (PDT)
 From: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>
 To: Paul Walmsley <paul.walmsley@sifive.com>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
@@ -90,9 +90,9 @@ Cc: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>,
 	Andrew Jones <ajones@ventanamicro.com>,
 	Deepak Gupta <debug@rivosinc.com>,
 	Atish Patra <atishp@rivosinc.com>
-Subject: [PATCH v7 02/14] riscv: sbi: remove useless parenthesis
-Date: Thu, 15 May 2025 10:22:03 +0200
-Message-ID: <20250515082217.433227-3-cleger@rivosinc.com>
+Subject: [PATCH v7 03/14] riscv: sbi: add new SBI error mappings
+Date: Thu, 15 May 2025 10:22:04 +0200
+Message-ID: <20250515082217.433227-4-cleger@rivosinc.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250515082217.433227-1-cleger@rivosinc.com>
 References: <20250515082217.433227-1-cleger@rivosinc.com>
@@ -105,40 +105,42 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-A few parenthesis in check for SBI version/extension were useless,
-remove them.
+A few new errors have been added with SBI V3.0, maps them as close as
+possible to errno values.
 
 Signed-off-by: Clément Léger <cleger@rivosinc.com>
 Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 Reviewed-by: Atish Patra <atishp@rivosinc.com>
 ---
- arch/riscv/kernel/sbi.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/riscv/include/asm/sbi.h | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
-index 1989b8cade1b..1d44c35305a9 100644
---- a/arch/riscv/kernel/sbi.c
-+++ b/arch/riscv/kernel/sbi.c
-@@ -609,7 +609,7 @@ void __init sbi_init(void)
- 		} else {
- 			__sbi_rfence	= __sbi_rfence_v01;
- 		}
--		if ((sbi_spec_version >= sbi_mk_version(0, 3)) &&
-+		if (sbi_spec_version >= sbi_mk_version(0, 3) &&
- 		    sbi_probe_extension(SBI_EXT_SRST)) {
- 			pr_info("SBI SRST extension detected\n");
- 			pm_power_off = sbi_srst_power_off;
-@@ -617,8 +617,8 @@ void __init sbi_init(void)
- 			sbi_srst_reboot_nb.priority = 192;
- 			register_restart_handler(&sbi_srst_reboot_nb);
- 		}
--		if ((sbi_spec_version >= sbi_mk_version(2, 0)) &&
--		    (sbi_probe_extension(SBI_EXT_DBCN) > 0)) {
-+		if (sbi_spec_version >= sbi_mk_version(2, 0) &&
-+		    sbi_probe_extension(SBI_EXT_DBCN) > 0) {
- 			pr_info("SBI DBCN extension detected\n");
- 			sbi_debug_console_available = true;
- 		}
+diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
+index bb077d0c912f..0938f2a8d01b 100644
+--- a/arch/riscv/include/asm/sbi.h
++++ b/arch/riscv/include/asm/sbi.h
+@@ -536,11 +536,21 @@ static inline int sbi_err_map_linux_errno(int err)
+ 	case SBI_SUCCESS:
+ 		return 0;
+ 	case SBI_ERR_DENIED:
++	case SBI_ERR_DENIED_LOCKED:
+ 		return -EPERM;
+ 	case SBI_ERR_INVALID_PARAM:
++	case SBI_ERR_INVALID_STATE:
+ 		return -EINVAL;
++	case SBI_ERR_BAD_RANGE:
++		return -ERANGE;
+ 	case SBI_ERR_INVALID_ADDRESS:
+ 		return -EFAULT;
++	case SBI_ERR_NO_SHMEM:
++		return -ENOMEM;
++	case SBI_ERR_TIMEOUT:
++		return -ETIMEDOUT;
++	case SBI_ERR_IO:
++		return -EIO;
+ 	case SBI_ERR_NOT_SUPPORTED:
+ 	case SBI_ERR_FAILURE:
+ 	default:
 -- 
 2.49.0
 
