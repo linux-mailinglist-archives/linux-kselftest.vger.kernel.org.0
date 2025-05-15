@@ -1,163 +1,143 @@
-Return-Path: <linux-kselftest+bounces-32999-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33000-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84751AB7AB7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 02:49:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF6DFAB7AF6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 03:31:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 077A01756EE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 00:49:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B75023A1138
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 01:30:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 107A372606;
-	Thu, 15 May 2025 00:49:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B663226161;
+	Thu, 15 May 2025 01:31:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="obcs8GVN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bUUEGTIr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C06633C0C
-	for <linux-kselftest@vger.kernel.org>; Thu, 15 May 2025 00:49:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ECC7F9D6;
+	Thu, 15 May 2025 01:31:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747270166; cv=none; b=n4V67dHkZnI6yfxuCtcUs3IeT68XYw6FWI2sZF01780lUH2twhBEwO0+OOHKGIuAV6IzgGi4ir+2EzGEbA5zOJ2R87bLBo6QvyYlAo0XGmItT+pcmwVQEVX6kXUfHVQCxpyktutgtqCNxaH5p24cfj9d/cfeal3Pkdhm/tOVwnM=
+	t=1747272673; cv=none; b=OtshoInVJ/wPy29vApTLEaQBcZkcVsOQD8ekNgjlXIZsw8K9X6mEAU1J4JNEFq+7T1cO0IFAMtNjQDwp9AwdZiXVVFZvKOpdxbH3hR0gcFmALqZcYmmzgo9XK/HLNZoV7NrxZMaiv8XEX4/OjRkutOqrBwBNSaVibcpNxQ7M3i0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747270166; c=relaxed/simple;
-	bh=jPnzg6PNsN6lUzHoKMbxdMvPtIe0LNuhdxU8f6d8XHM=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Vglqjl7WabD5RH84WU8zQOovSXMOlJI5qwtsGYMMaeKSegyAaneL0MEwPoYouQIMShbwgOc1pPHTHdeTW2ti6GrPSkBF3BcqJRpXJggpBy2JC6z3QM5dK5b01elAJNP4dR3zRAGxHHUzyEsGkbF7fYw17Nph9luiFpb4UMjw86Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=obcs8GVN; arc=none smtp.client-ip=209.85.216.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-30e0e8ba948so381462a91.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 May 2025 17:49:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1747270164; x=1747874964; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hMfietv3cfwdDUfJJ6Vu0q3GZ0OBruwHSCB3xq9gft0=;
-        b=obcs8GVNe6j8T8Ck0DEPBVHuNs5kfkVvmPdQjAX/POma6uMLdaKQDNhIPdTaBz4E5R
-         pHNut+1MSlI4muJ9zQFato4ySFqBU8/c7AbxiOGuSO5/nEhlh3eKXBGCO2IxtQnO2hec
-         J3/97txx7W1+gfWHWXOtj3CPIdra4mT9sFOoOv9lZvtYvvKz88Y7jfpbdB6eHebuLZrS
-         g1yIra/n6G1r7reDrpvFL2NLqaSKksHxP9W0vPtbKaRl0vIQtGLZOlAfcODktPCKCFaj
-         1m0euXS8SXN/wbpZA25gvjktpgwoKxjLM3UNhadZqqzOLbaZaxmH4pMcFDQWYX44cIUp
-         2SWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747270164; x=1747874964;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hMfietv3cfwdDUfJJ6Vu0q3GZ0OBruwHSCB3xq9gft0=;
-        b=tH6DXqDIlxDvwqhZGOxwQceDa769KW0g8+PMZfQCDkDOfEokD2Za0gI49O4aVLpoRw
-         vhV3O5WTCseVzGrf4dSGGvDKx6xlmmeM87pjiRkcDeeM8Plozx89ExlxgsEz+nP7moNQ
-         5OdIxg78cnGNC29Sxt8BfWPfMVquOSYHvA+5fBkWCDCfCG6Jrx0Xu291MxGPkwR2NxsM
-         gDeghgHCJw0CVjvkRkZa/wYpIHVp3GHy/OraFgxmPifUEqxkdj0NXNw1XE9aQt8FQXN9
-         NDsbK942jOgN8izLe3GSWfD1e4GVWolZLFo9/eEHa6spHCYLksdHo+08ICWvJFYprNvG
-         9N5A==
-X-Forwarded-Encrypted: i=1; AJvYcCX7pyRW3u+BNNUoEBC837LgzDL2RYnHhQnMgR44xkruGiN3XC+UwrGSQn4pusYicoPpCZ+DTlvJzk/PrZeWDCc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZ1WbYgMjn+ALfjK06YM19HKdmWI7dX80jjo9/EW5lmMYiCSfC
-	hsK2NMac1r/dS47rc0kTHJA4tvV5m/4RyGTIZnBhpgVQ4k7moCdyvyE8D2Mez+7Xug/yu7GOGUw
-	IUw==
-X-Google-Smtp-Source: AGHT+IEkFXVGxtOuqdcAPO0vpFEVYeUwvYJWz2kVDDpTt9pJsdBPXKA7ndT83tbNuCGk6UN2X+RRAvKJR+4=
-X-Received: from pjc14.prod.google.com ([2002:a17:90b:2f4e:b0:2fc:1356:bcc3])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:38c8:b0:2ff:5a9d:937f
- with SMTP id 98e67ed59e1d1-30e2e65affamr8466341a91.24.1747270163943; Wed, 14
- May 2025 17:49:23 -0700 (PDT)
-Date: Wed, 14 May 2025 17:49:22 -0700
-In-Reply-To: <20250324173121.1275209-1-mizhang@google.com>
+	s=arc-20240116; t=1747272673; c=relaxed/simple;
+	bh=NCeIslnruzRitSm7BSgkBHpLCL5CTK0c5HqsqD1ej3U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XpkyBv144dsZprxxes6/tyb5i5q+8DzHPv2XBaj6KHdpKPFhpt2iB/5zyQ953edQBFs+DmGV4qavz8Vc8hppsVFV9ZNyei/0ru9nireMQEZ7/YBH4TKKju+btl7xMdkSkdqg2W2mr5kNKs/89T4BVzah810lFD91tOqhiLcFs8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bUUEGTIr; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747272672; x=1778808672;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=NCeIslnruzRitSm7BSgkBHpLCL5CTK0c5HqsqD1ej3U=;
+  b=bUUEGTIrhKMl5CrE0XxFnp1jzrlpoP6CrlNFZIuxBqGYcCf/+eN2r3jQ
+   D+Nzo6z6UGMSD6OOJEATmv5pQmM5dY6nynbm04284ScMysOuQcXDpbJHS
+   TrXdV4NJK0fQas1x6HXqGzDt6n/bUZMOrcb/Hn4EcVFPZS0pAI0naT2so
+   YmziCVQCut2/ughJpjYa6fGU6ie1cUM7swSKJCAj9rIzQf+nJVQkxN6QT
+   XrQLlFFCk22s62b3127b1CXQHiHWUJI6RhM2GNnrSPEn81DzyfZWGJJ13
+   OmjzU22EmNNKgFsu7GW6NYfTJdRCgcrYExlQ+xEjangr3MVl8owmdl2mL
+   A==;
+X-CSE-ConnectionGUID: BEXEKepuQYypwcRr3Bv8EA==
+X-CSE-MsgGUID: Au76MdiIQl69/YFEwM0/Kw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11433"; a="60203284"
+X-IronPort-AV: E=Sophos;i="6.15,289,1739865600"; 
+   d="scan'208";a="60203284"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2025 18:31:10 -0700
+X-CSE-ConnectionGUID: mAW4HLuBTZCVGylJMSMRRg==
+X-CSE-MsgGUID: HWTGOs0DQrekd2cBL6qCoA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,289,1739865600"; 
+   d="scan'208";a="142973694"
+Received: from dapengmi-mobl1.ccr.corp.intel.com (HELO [10.124.245.128]) ([10.124.245.128])
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2025 18:31:04 -0700
+Message-ID: <60ca046d-b706-47ff-bbdb-9e6646af5250@linux.intel.com>
+Date: Thu, 15 May 2025 09:31:01 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 01/38] perf: Support get/put mediated PMU interfaces
+To: Sean Christopherson <seanjc@google.com>,
+ Mingwei Zhang <mizhang@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+ Adrian Hunter <adrian.hunter@intel.com>, Liang@google.com,
+ Kan <kan.liang@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
+ linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+ kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Yongwei Ma <yongwei.ma@intel.com>,
+ Xiong Zhang <xiong.y.zhang@linux.intel.com>,
+ Jim Mattson <jmattson@google.com>, Sandipan Das <sandipan.das@amd.com>,
+ Zide Chen <zide.chen@intel.com>, Eranian Stephane <eranian@google.com>,
+ Shukla Manali <Manali.Shukla@amd.com>,
+ Nikunj Dadhania <nikunj.dadhania@amd.com>
 References: <20250324173121.1275209-1-mizhang@google.com>
-Message-ID: <aCU6EjbXzPct9v7B@google.com>
-Subject: Re: [PATCH v4 00/38] Mediated vPMU 4.0 for x86
-From: Sean Christopherson <seanjc@google.com>
-To: Mingwei Zhang <mizhang@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, Liang@google.com, 
-	Kan <kan.liang@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Yongwei Ma <yongwei.ma@intel.com>, Xiong Zhang <xiong.y.zhang@linux.intel.com>, 
-	Dapeng Mi <dapeng1.mi@linux.intel.com>, Jim Mattson <jmattson@google.com>, 
-	Sandipan Das <sandipan.das@amd.com>, Zide Chen <zide.chen@intel.com>, 
-	Eranian Stephane <eranian@google.com>, Shukla Manali <Manali.Shukla@amd.com>, 
-	Nikunj Dadhania <nikunj.dadhania@amd.com>
-Content-Type: text/plain; charset="us-ascii"
+ <20250324173121.1275209-2-mizhang@google.com> <aCUdvaM4xkLzRF8J@google.com>
+Content-Language: en-US
+From: "Mi, Dapeng" <dapeng1.mi@linux.intel.com>
+In-Reply-To: <aCUdvaM4xkLzRF8J@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Mar 24, 2025, Mingwei Zhang wrote:
-> Dapeng Mi (18):
->   KVM: x86/pmu: Introduce enable_mediated_pmu global parameter
->   KVM: x86/pmu: Check PMU cpuid configuration from user space
->   KVM: x86: Rename vmx_vmentry/vmexit_ctrl() helpers
->   KVM: x86/pmu: Add perf_capabilities field in struct kvm_host_values{}
->   KVM: x86/pmu: Move PMU_CAP_{FW_WRITES,LBR_FMT} into msr-index.h header
->   KVM: VMX: Add macros to wrap around
->     {secondary,tertiary}_exec_controls_changebit()
->   KVM: x86/pmu: Check if mediated vPMU can intercept rdpmc
->   KVM: x86/pmu/vmx: Save/load guest IA32_PERF_GLOBAL_CTRL with
->     vm_exit/entry_ctrl
->   KVM: x86/pmu: Optimize intel/amd_pmu_refresh() helpers
->   KVM: x86/pmu: Setup PMU MSRs' interception mode
->   KVM: x86/pmu: Handle PMU MSRs interception and event filtering
->   KVM: x86/pmu: Switch host/guest PMU context at vm-exit/vm-entry
->   KVM: x86/pmu: Handle emulated instruction for mediated vPMU
->   KVM: nVMX: Add macros to simplify nested MSR interception setting
->   KVM: selftests: Add mediated vPMU supported for pmu tests
->   KVM: Selftests: Support mediated vPMU for vmx_pmu_caps_test
->   KVM: Selftests: Fix pmu_counters_test error for mediated vPMU
->   KVM: x86/pmu: Expose enable_mediated_pmu parameter to user space
-> 
-> Kan Liang (8):
->   perf: Support get/put mediated PMU interfaces
->   perf: Skip pmu_ctx based on event_type
->   perf: Clean up perf ctx time
->   perf: Add a EVENT_GUEST flag
->   perf: Add generic exclude_guest support
->   perf: Add switch_guest_ctx() interface
->   perf/x86: Support switch_guest_ctx interface
->   perf/x86/intel: Support PERF_PMU_CAP_MEDIATED_VPMU
-> 
-> Mingwei Zhang (5):
->   perf/x86: Forbid PMI handler when guest own PMU
->   perf/x86/core: Plumb mediated PMU capability from x86_pmu to
->     x86_pmu_cap
->   KVM: x86/pmu: Exclude PMU MSRs in vmx_get_passthrough_msr_slot()
->   KVM: x86/pmu: introduce eventsel_hw to prepare for pmu event filtering
->   KVM: nVMX: Add nested virtualization support for mediated PMU
-> 
-> Sandipan Das (4):
->   perf/x86/core: Do not set bit width for unavailable counters
->   KVM: x86/pmu: Add AMD PMU registers to direct access list
->   KVM: x86/pmu/svm: Set GuestOnly bit and clear HostOnly bit when guest
->     write to event selectors
->   perf/x86/amd: Support PERF_PMU_CAP_MEDIATED_VPMU for AMD host
-> 
-> Xiong Zhang (3):
->   x86/irq: Factor out common code for installing kvm irq handler
->   perf: core/x86: Register a new vector for KVM GUEST PMI
->   KVM: x86/pmu: Register KVM_GUEST_PMI_VECTOR handler
 
-I ran out of time today and didn't get emails send for all patches.  I'm planning
-on getting that done tomorrow.
+On 5/15/2025 6:48 AM, Sean Christopherson wrote:
+> On Mon, Mar 24, 2025, Mingwei Zhang wrote:
+>> +/*
+>> + * Currently invoked at VM creation to
+>> + * - Check whether there are existing !exclude_guest events of PMU with
+>> + *   PERF_PMU_CAP_MEDIATED_VPMU
+>> + * - Set nr_mediated_pmu_vms to prevent !exclude_guest event creation on
+>> + *   PMUs with PERF_PMU_CAP_MEDIATED_VPMU
+>> + *
+>> + * No impact for the PMU without PERF_PMU_CAP_MEDIATED_VPMU. The perf
+>> + * still owns all the PMU resources.
+>> + */
+>> +int perf_get_mediated_pmu(void)
+>> +{
+>> +	guard(mutex)(&perf_mediated_pmu_mutex);
+>> +	if (atomic_inc_not_zero(&nr_mediated_pmu_vms))
+>> +		return 0;
+>> +
+>> +	if (atomic_read(&nr_include_guest_events))
+>> +		return -EBUSY;
+>> +
+>> +	atomic_inc(&nr_mediated_pmu_vms);
+>> +	return 0;
+>> +}
+>> +EXPORT_SYMBOL_GPL(perf_get_mediated_pmu);
+> IMO, all of the mediated PMU logic should be guarded with a Kconfig.  I strongly
+> suspect KVM x86 will be the only user for the foreseeable, e.g. arm64 is trending
+> toward a partioned PMU approach, and subjecting other architectures to the (minor)
+> overhead associated with e.g. nr_mediated_pmu_vms seems pointless.  The other
+> nicety is that it helps encapsulate the mediated PMU code, which for those of us
+> that haven't been living and breathing this for the last few months, is immensely
+> helpful.
 
-I already have most of the proposed changes implemented:
+I'm fine with this.
 
-  https://github.com/sean-jc/linux.git x86/mediated_pmu
 
-It compiles and doesn't explode, but it's not fully functional (PMU tests fail).
-I'll poke at it over the next few days, but if someone is itching to figure out
-what I broke, then by all means.
+>
+>> +void perf_put_mediated_pmu(void)
+> To avoid confusion with perf_put_guest_context() in future patches, I think it
+> makes sense to go with something like perf_{create,release}_mediated_pmu().  I
+> actually like the get/put terminology in isolation, but they look weird side-by-side.
 
-Given that I've already made many modifications (I have a hard time reviewing a
-series this big without editing as I go), unless someone objects, I'll post v5
-(and v6+ as needed), though that'll like be days/weeks as I need to get it working,
-and want to do more passes over the code, shortlogs, and changelogs. 
+Agree.
+
+
 
