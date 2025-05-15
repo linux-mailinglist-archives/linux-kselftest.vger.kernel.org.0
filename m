@@ -1,106 +1,109 @@
-Return-Path: <linux-kselftest+bounces-33019-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33020-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FD76AB7CE7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 07:19:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB873AB7D04
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 07:35:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A762317B21C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 05:19:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CAA888C43CA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 05:34:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC76518A6B0;
-	Thu, 15 May 2025 05:19:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B26EC2222AC;
+	Thu, 15 May 2025 05:34:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jPlCQykV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73D4E191;
-	Thu, 15 May 2025 05:18:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05F254B1E71;
+	Thu, 15 May 2025 05:34:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747286343; cv=none; b=Uvp7ZxqQm96E8DUvzv+O48r7jiTPcxMXXAvlFsb4nEUAE/EfV0patcpGSw4CBbPIjfu3bpjbuCBlvUGqj/gCDqixfOEtkcHCa+sjIFbbDHjTTtx9d/gwZRt36eHyNCvoDDxpnQ8QWXXcz2ORNEC8xe+XgfycVw14R2IJjrHgzKk=
+	t=1747287298; cv=none; b=La9rJLhftcPcmkBdo8w52ZAR2nxyX6ms4hT2XsJ6sw5otFHBIZvVmrK+qdnSF0OkRK4QrQDOFu8O9DUbLxQBw2JDPb7MuTkp8ib1GFO7QspuHllpc10ZSO3vkAuBbOwbf84GHmZCw58RdkB2UykG/jTg93xAusImAZIbygDoRTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747286343; c=relaxed/simple;
-	bh=erT2m2RCe594SyWJieK4gDZ7RUm81EIuXqR66BWQTUk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=i7DmbkRM65O23UYp+gSqoKe/421QxP7GDeYqRqLvURqTepJS1ZAQiQL0ySCkBxftU6DLONllT08O2B6C+GPfl5r1Qcr3HuNBZe8TWBtZy8KKPrK6vcVKfINzTG/kYWhwAiUqm99lGdzcBXrLsIht50L8n1PLgElPeiZhgD1nMrA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 17f4e4cc314c11f0b29709d653e92f7d-20250515
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:534e0269-6ed7-48c9-b996-40d776c005f9,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6493067,CLOUDID:b3f768056e03a57390a9c96ad151fc53,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0|50,EDM:-3,IP:nil,UR
-	L:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,S
-	PR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 17f4e4cc314c11f0b29709d653e92f7d-20250515
-Received: from node4.com.cn [(10.44.16.170)] by mailgw.kylinos.cn
-	(envelope-from <tanze@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 641998143; Thu, 15 May 2025 13:18:53 +0800
-Received: from node4.com.cn (localhost [127.0.0.1])
-	by node4.com.cn (NSMail) with SMTP id 91A3E16003841;
-	Thu, 15 May 2025 13:18:53 +0800 (CST)
-X-ns-mid: postfix-6825793D-31509332
-Received: from localhost.localdomain (unknown [10.42.12.96])
-	by node4.com.cn (NSMail) with ESMTPA id E7A3416003840;
-	Thu, 15 May 2025 05:18:52 +0000 (UTC)
-From: tanze <tanze@kylinos.cn>
-To: catalin.marinas@arm.com,
-	will@kernel.org,
-	shuah@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	tanze <tanze@kylinos.cn>
-Subject: [PATCH] kselftest/arm64: Set default OUTPUT path when undefined
-Date: Thu, 15 May 2025 13:18:39 +0800
-Message-Id: <20250515051839.3409658-1-tanze@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1747287298; c=relaxed/simple;
+	bh=M2vgp7I9jexpSjOmNO3GYj+dqtyAy1KjTL1WYYh/TrM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EgdYq5JdURUSaHbs+LztASCHi//EMjl50RZiHsdrJbAUt2/swjXvyPkCIR93GKejDyye5RjI8L9NBgJRx96SOM+FU2NKuwWI2VaMI/5h18lgc20UAfF7X6JtRoSnPnSAYgnw+L5d1ZQuAmdXUZyOpbei08FpYidjEpljdrir9ow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jPlCQykV; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747287297; x=1778823297;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=M2vgp7I9jexpSjOmNO3GYj+dqtyAy1KjTL1WYYh/TrM=;
+  b=jPlCQykV4rTz1llImClqqquAZ9cC061Fhe9D/yptDohnBEELgKTuKA2v
+   1t+gXMDNa7BPVzI6exNUrjX1zV35fDTGIddXFwZYV7pk07kFEOvTydu/v
+   wFWpgBHKGzhnB+cH9R9sFLU2JfihPoiOzQmSWxh67GXk4cUpjc2A3rG0i
+   SOoMhTCR2cFZ3fx4+qLiRO6y3AQUUONYcs/mVYBotDkT7Ln244cDdnbz8
+   hvFWMTPs9/vIH/Ooesd4Vb6VoIK2pnn2k2pJtfj9ChOLlidTnHZbt3uEq
+   D9mAEknXgj4qDlKvSdw2BNARRFFpqlYBhSRSpYUo45XmKkpFhE+LtVllO
+   A==;
+X-CSE-ConnectionGUID: H06P1TaQQ6OgfyfO4Zfzag==
+X-CSE-MsgGUID: OZtw9Q1YTDaTtyB1pmh+IA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11433"; a="49143175"
+X-IronPort-AV: E=Sophos;i="6.15,290,1739865600"; 
+   d="scan'208";a="49143175"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2025 22:34:56 -0700
+X-CSE-ConnectionGUID: XAh8ozvOR2yqwm3TeljeRQ==
+X-CSE-MsgGUID: jHSqDxIjSdSCc5T68V0NKw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,290,1739865600"; 
+   d="scan'208";a="138761559"
+Received: from dapengmi-mobl1.ccr.corp.intel.com (HELO [10.124.245.128]) ([10.124.245.128])
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2025 22:34:50 -0700
+Message-ID: <1f35b6b4-58b6-4c7e-b788-3edbb2f807f3@linux.intel.com>
+Date: Thu, 15 May 2025 13:34:48 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 26/38] KVM: x86/pmu: Introduce eventsel_hw to prepare
+ for pmu event filtering
+To: Sean Christopherson <seanjc@google.com>,
+ Mingwei Zhang <mizhang@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+ Adrian Hunter <adrian.hunter@intel.com>, Liang@google.com,
+ Kan <kan.liang@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
+ linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+ kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Yongwei Ma <yongwei.ma@intel.com>,
+ Xiong Zhang <xiong.y.zhang@linux.intel.com>,
+ Jim Mattson <jmattson@google.com>, Sandipan Das <sandipan.das@amd.com>,
+ Zide Chen <zide.chen@intel.com>, Eranian Stephane <eranian@google.com>,
+ Shukla Manali <Manali.Shukla@amd.com>,
+ Nikunj Dadhania <nikunj.dadhania@amd.com>
+References: <20250324173121.1275209-1-mizhang@google.com>
+ <20250324173121.1275209-27-mizhang@google.com> <aCU4cHtvjwDordxW@google.com>
+Content-Language: en-US
+From: "Mi, Dapeng" <dapeng1.mi@linux.intel.com>
+In-Reply-To: <aCU4cHtvjwDordxW@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-When running 'make' in tools/testing/selftests/arm64/ without explicitly
-setting the OUTPUT variable, the build system will creates test
-directories (e.g., /bti) in the root filesystem due to OUTPUT defaulting
-to an empty string. This causes unintended pollution of the root director=
-y.
 
-This patch adds proper handling for the OUTPUT variable: Sets OUTPUT
-to the current directory (.) if not specified
+On 5/15/2025 8:42 AM, Sean Christopherson wrote:
+> On Mon, Mar 24, 2025, Mingwei Zhang wrote:
+>> -	pmu->fixed_ctr_ctrl = pmu->global_ctrl = pmu->global_status = 0;
+>> +	pmu->fixed_ctr_ctrl = pmu->fixed_ctr_ctrl_hw = 0;
+>> +	pmu->global_ctrl = pmu->global_status = 0;
+> VMCS needs to be updated.
 
-Signed-off-by: tanze <tanze@kylinos.cn>
----
- tools/testing/selftests/arm64/Makefile | 2 ++
- 1 file changed, 2 insertions(+)
+Yes. Thanks.
 
-diff --git a/tools/testing/selftests/arm64/Makefile b/tools/testing/selft=
-ests/arm64/Makefile
-index 22029e60eff3..c4c72ee2ef55 100644
---- a/tools/testing/selftests/arm64/Makefile
-+++ b/tools/testing/selftests/arm64/Makefile
-@@ -21,6 +21,8 @@ CFLAGS +=3D $(KHDR_INCLUDES)
-=20
- CFLAGS +=3D -I$(top_srcdir)/tools/include
-=20
-+OUTPUT ?=3D $(CURDIR)
-+
- export CFLAGS
- export top_srcdir
-=20
---=20
-2.25.1
 
 
