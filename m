@@ -1,141 +1,419 @@
-Return-Path: <linux-kselftest+bounces-33065-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33067-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97332AB8189
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 10:55:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86290AB81CA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 11:01:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1FE403BB4E3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 08:51:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 91E57177902
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 08:59:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4F692918FF;
-	Thu, 15 May 2025 08:51:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B44C9298995;
+	Thu, 15 May 2025 08:58:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XcMCj7gs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kw1RJr0R"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2F9428D8D7
-	for <linux-kselftest@vger.kernel.org>; Thu, 15 May 2025 08:51:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B81E298990;
+	Thu, 15 May 2025 08:58:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747299089; cv=none; b=ayjrNx1Pc6zoW8Otg6/Vyf9Axf+o3gG7pTkSd5OSTfxbsc9XUSRyer2dWBIXv5aM6jBeM4Mhr5BmPHP45BHYRiBcQFIV2HqNgT9ZFIBBCKhUZlNXiScGVM+C9n84OrJ5xOsxUbfzshZOXHKlNLf4OG++YYlI/RV3AklPgXji+E8=
+	t=1747299483; cv=none; b=aFOINlGm9oK9fjsX0bU7RzJKKaStZsPrccbQ1BfFIru0HQzl3sskg7gu8aJvef9hmCxuCRYIeK/CO1pgOZEG0FwLSOtVlIzlTRasCML8onOnyLGAVjlwnif0qS5ZsTr9i5Q8qRm/g/CkRUD7LJYOMNBYZW+QruN0QD4LeJN5pEQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747299089; c=relaxed/simple;
-	bh=cRaLKFS/ocOSt0LrfepYH/n4LjEiQxhtD/kKJKa7j+0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=IOGZyYUQR7zUu7GbrmUgkc6qJQBmn25SI9dcW/AyN4/c8xuYu5EcNMnQNZhaQ30sqZnY3+sVI6ajPI67eDqDtBuXw4oLHFSRaKL6mh4KChJl4qD97CmYrQG3BbsROWs7U4Hdp4a93BaNbdu7piZ39Ymmumss6Y+uv32y7iDg6r4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XcMCj7gs; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1747299086;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KOj3E0hi0DP4y3uOIqOU1f5cPS83JsYc9D6Xvq8dj04=;
-	b=XcMCj7gsPvT4Q9y4ysmP+tcwkIWgeiwhTZ1gHJs3vyAYywDhgHJ7JnYml3Su3RITstpjWD
-	+qEO92ckbJZsKjkpyGaVti5BGolpq52vU5Bo7sj/YPbdIH37KR3HdtQuO9uMjwyNWotZtN
-	wspJAe7G+xBzKa1WCJxqP6YBHXcGO2o=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-592-laG2MXgZMG6n3598m_BUkQ-1; Thu, 15 May 2025 04:51:25 -0400
-X-MC-Unique: laG2MXgZMG6n3598m_BUkQ-1
-X-Mimecast-MFC-AGG-ID: laG2MXgZMG6n3598m_BUkQ_1747299083
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-43cec217977so4053245e9.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 May 2025 01:51:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747299083; x=1747903883;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KOj3E0hi0DP4y3uOIqOU1f5cPS83JsYc9D6Xvq8dj04=;
-        b=r2emrfUqbd78gLrsXt60Q5UYTSOMmPxtQXxwmFQjPWgE/0zkATMhfghIMzBwgsnXuB
-         j3CGBeq+rpzX+XHjsLOtnrQYBCeEECWMIGQi2ZpVnS902WjxCklBAXZdoR3FhLUeuax8
-         pprXt+Cck0WNuaPGBuuVy0/h+/C+jTQmDnP3Hx27rl3x+qs+lev0XEgPTHFSkCYvGU71
-         I7STlK02ti+WkVU85PKHNPl3c7cVKNzJxauJBobpsxO1TW8iXbg6O1rFSIBv6jcEc8dA
-         00lR9Z9Au/Z47vFsWK32uXlI9j42wKpPrwhn+835B2i2D8IysIa43iOi4c3urDaSrg3u
-         bevA==
-X-Forwarded-Encrypted: i=1; AJvYcCUe4qa+BbZBrI/CDY9CMbmunzhfvDSQZJtiaa21Pej2UBsoNF8A9JI9L1rzsJDhQoDvohpYO9D1thU0S5nVITA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHwQtzeTE9iuwCDZgdYPNg28ehEV3W5+zt6KKS2xxYiEnl6YUk
-	DCEFxFRNV5eW3498KytBBvkzxpqBPWUuh4imv98preHH/aWQyKnYDsL9fCoWghqwQp95wfAqyjx
-	6ll2nBVMBWUgNJ325ZX2H2A0ukokRpNuTkhTFb+GlJ2y7K9qjVfifrRyahBvK6+VYJw==
-X-Gm-Gg: ASbGncuGyg36gIO0jwUt6g7Dc/PMJapn6mrVgleP3hrbVOygHZSW/qPVvlYhwGmt+rr
-	tO9kgxcZ9NbUcSefVuuzlab1d/p7iCR5DiABbiLeQxrYwlMq/EdLesMv9jLsyIu0MI+rP0f7oDc
-	iwNe2/2tp8sLU3pafGJUs7bnBLNLrNLRisUjhnSr0YpME8+HhKjhhu4P/qCYfzKOmkRKiIP+fUM
-	ocsk3v9d8i5AVbu+9glkrdkBPR/AnhPL1HbClzxZcc/GuA0mryJwpiRXftdlEPQnJdrdCb+HvaI
-	MhECuKu8fv/0ZOSrHdYIPRmRHjzqzZ+edFi7y8E5Am3MaXNQILe0XcEVcmk=
-X-Received: by 2002:a05:600c:4ed3:b0:43c:e7a7:1e76 with SMTP id 5b1f17b1804b1-442f96e6f53mr12410605e9.1.1747299083426;
-        Thu, 15 May 2025 01:51:23 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFK1IDiAKMJgGPDA6+WopmhoDhZGpoHt2rO7LudOPFoe7c++mdWYWTOkVWXB6G/HeyCcgPa9w==
-X-Received: by 2002:a05:600c:4ed3:b0:43c:e7a7:1e76 with SMTP id 5b1f17b1804b1-442f96e6f53mr12410285e9.1.1747299083028;
-        Thu, 15 May 2025 01:51:23 -0700 (PDT)
-Received: from ?IPV6:2a0d:3344:2440:8010:8dec:ae04:7daa:497f? ([2a0d:3344:2440:8010:8dec:ae04:7daa:497f])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442ebd47d39sm59873815e9.1.2025.05.15.01.51.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 May 2025 01:51:22 -0700 (PDT)
-Message-ID: <44cd376a-8fee-4d82-a465-a0e80e67135c@redhat.com>
-Date: Thu, 15 May 2025 10:51:20 +0200
+	s=arc-20240116; t=1747299483; c=relaxed/simple;
+	bh=NEV/vgjb1O/PPVkq9/gsk0ry6YJMMin78MpzVr9F6jE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=O7vNeR4NNcdyhrjMJIxdrgKTxD8OFnwHthKTQjIGQ96ONT5rXmTZw4YsDBh2UbRQPIamFZd28S081TQMJslibdRtrb6Wf9PbiVq0a1Uge6N+6DzjoVopR9Xg7aW6skinEEXeBRgXCZpFxvyGiRxxJ1mdfRQgM3PCdR6jz1/gMRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kw1RJr0R; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE405C4CEED;
+	Thu, 15 May 2025 08:58:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747299483;
+	bh=NEV/vgjb1O/PPVkq9/gsk0ry6YJMMin78MpzVr9F6jE=;
+	h=From:Date:Subject:To:Cc:From;
+	b=kw1RJr0RO/a8+KiqP4uGF/0iyDF019soPfxFudneNTz+AoHZ65xM1G9tTZc7BXLb7
+	 VZFU9OQlMAEbuwdIUeraQllqBZZiRKVFrZAnGkQAa9X0dDsZT91s/e2eVmti05AE3X
+	 8jwf2H94jECberw/VbcRgAYOlgtF7VsxRLV51dJw1feqk5VH5NY8N5AjF3UpknaoBY
+	 oy2gyr3HMpHN3SWd1TXifE78O/Rp3E4XbPFiTZ2pOW2x1mfCBjziC+hDeBse1+Gn5Q
+	 6nkI6IdBfiAIpzP9gLYXRowipH9v+NZMWqm3DxvZO3YTooKtp6pUtvqZC7pPbL6Fhs
+	 /pET26bYjrLkg==
+From: Mark Brown <broonie@kernel.org>
+Date: Thu, 15 May 2025 10:57:43 +0200
+Subject: [PATCH] selftests/mm: Fix test result reporting in gup_longterm
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v15 net-next 1/5] sched: Struct definition and parsing of
- dualpi2 qdisc
-To: chia-yu.chang@nokia-bell-labs.com, horms@kernel.org,
- donald.hunter@gmail.com, xandfury@gmail.com, netdev@vger.kernel.org,
- dave.taht@gmail.com, jhs@mojatatu.com, kuba@kernel.org,
- stephen@networkplumber.org, xiyou.wangcong@gmail.com, jiri@resnulli.us,
- davem@davemloft.net, edumazet@google.com, andrew+netdev@lunn.ch,
- ast@fiberby.net, liuhangbin@gmail.com, shuah@kernel.org,
- linux-kselftest@vger.kernel.org, ij@kernel.org, ncardwell@google.com,
- koen.de_schepper@nokia-bell-labs.com, g.white@cablelabs.com,
- ingemar.s.johansson@ericsson.com, mirja.kuehlewind@ericsson.com,
- cheshire@apple.com, rs.ietf@gmx.at, Jason_Livingood@comcast.com,
- vidhi_goel@apple.com
-References: <20250509214801.37306-1-chia-yu.chang@nokia-bell-labs.com>
- <20250509214801.37306-2-chia-yu.chang@nokia-bell-labs.com>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20250509214801.37306-2-chia-yu.chang@nokia-bell-labs.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20250515-selftests-mm-gup-longterm-dups-v1-1-05f8f731cf63@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAIasJWgC/x3NQQrDIBBG4auEWXfAhKRIr1K6EPNrB6IRx5RCy
+ N0rXX6b905SVIHSYzip4iMqe+4YbwP5t8sRLGs3TWZazDLOrNhCgzbllDgehbc9x4aaeD2K8t0
+ 6N8ME762lHikVQb7/wfN1XT8s1rlDcAAAAA==
+X-Change-ID: 20250514-selftests-mm-gup-longterm-dups-68aa4e0fcc88
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.15-dev-c25d1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10522; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=NEV/vgjb1O/PPVkq9/gsk0ry6YJMMin78MpzVr9F6jE=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBoJayXuu5E064SKrebHXiJNB4DB5TQnQRm9TYHX
+ 8hCCTCb/F6JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaCWslwAKCRAk1otyXVSH
+ 0DBhB/0Qtlq8iuwdvSiCW2Zc1PK1cV1yKz0/abE4XfAcO0QCzDdUgaM6FTJO2GEVppn8XvTQPL1
+ JX2GNonWUt7Lm9l7o5UjiJTRY2baR1nwhEyyT2fuIBVLVZ7EiZPfC+cFttnG86nfsVjQyrjVAON
+ 2pFId0Tgsndp1ebHJMe5LY8pdwDlWBpbkhpx1xqYu0ZLjpHCLOyk/CTCeov4FO1AvlYW0ECGPws
+ z8BcbV8TBcBS9re54BeuTkV2mTQqRKl1gN6KcGxiFG+LHRYWb71VakjqKND/KDP/YrOmPlaWEIC
+ XF3BNQOsUeCWE7X3I8rgTZATA8jBZ5obVtY7f6PJqvDmohVv
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-On 5/9/25 11:47 PM, chia-yu.chang@nokia-bell-labs.com wrote:
-> +struct dualpi2_sched_data {
-> +	struct Qdisc *l_queue;	/* The L4S Low latency queue (L-queue) */
-> +	struct Qdisc *sch;	/* The Classic queue (C-queue) */
-> +
-> +	/* Registered tc filters */
-> +	struct tcf_proto __rcu *tcf_filters;
-> +	struct tcf_block *tcf_block;
-> +
-> +	/* PI2 parameters */
-> +	u64	pi2_target;	/* Target delay in nanoseconds */
-> +	u32	pi2_tupdate;	/* Timer frequency in nanoseconds */
+The kselftest framework uses the string logged when a test result is
+reported as the unique identifier for a test, using it to track test
+results between runs. The gup_longterm test completely fails to follow
+this pattern, it runs a single test function repeatedly with various
+parameters but each result report is a string logging an error message
+which is fixed between runs.
 
-AFAICS this can be written from user-space, without any upper bound,
-causing an integer overflow after converting the frequency from seconds
-to nsec.
+Since the code already logs each test uniquely before it starts refactor
+to also print this to a buffer, then use that name as the test result.
+This isn't especially pretty, really this test could use a more
+substantial cleanup.
 
-> +static enum hrtimer_restart dualpi2_timer(struct hrtimer *timer)
-> +{
-> +	struct dualpi2_sched_data *q = from_timer(q, timer, pi2_timer);
-> +
-> +	WRITE_ONCE(q->pi2_prob, calculate_probability(q->sch));
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/mm/gup_longterm.c | 163 ++++++++++++++++++++----------
+ 1 file changed, 107 insertions(+), 56 deletions(-)
 
-This runs without acquiring the qdisc_lock(). The state accessed by
-calculate_probability() could be inconsistent. You likely need to
-acquire the qdisc_lock here.
+diff --git a/tools/testing/selftests/mm/gup_longterm.c b/tools/testing/selftests/mm/gup_longterm.c
+index 21595b20bbc3..a849537f9372 100644
+--- a/tools/testing/selftests/mm/gup_longterm.c
++++ b/tools/testing/selftests/mm/gup_longterm.c
+@@ -35,6 +35,8 @@ static int nr_hugetlbsizes;
+ static size_t hugetlbsizes[10];
+ static int gup_fd;
+ 
++static char test_name[1024];
++
+ static __fsword_t get_fs_type(int fd)
+ {
+ 	struct statfs fs;
+@@ -93,33 +95,48 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
+ 	__fsword_t fs_type = get_fs_type(fd);
+ 	bool should_work;
+ 	char *mem;
++	int result = KSFT_PASS;
+ 	int ret;
+ 
++	if (fd < 0) {
++		result = KSFT_FAIL;
++		goto report;
++	}
++
+ 	if (ftruncate(fd, size)) {
+ 		if (errno == ENOENT) {
+ 			skip_test_dodgy_fs("ftruncate()");
+ 		} else {
+-			ksft_test_result_fail("ftruncate() failed (%s)\n", strerror(errno));
++			ksft_print_msg("ftruncate() failed (%s)\n",
++				       strerror(errno));
++			result = KSFT_FAIL;
++			goto report;
+ 		}
+ 		return;
+ 	}
+ 
+ 	if (fallocate(fd, 0, 0, size)) {
+-		if (size == pagesize)
+-			ksft_test_result_fail("fallocate() failed (%s)\n", strerror(errno));
+-		else
+-			ksft_test_result_skip("need more free huge pages\n");
+-		return;
++		if (size == pagesize) {
++			ksft_print_msg("fallocate() failed (%s)\n", strerror(errno));
++			result = KSFT_FAIL;
++		} else {
++			ksft_print_msg("need more free huge pages\n");
++			result = KSFT_SKIP;
++		}
++		goto report;
+ 	}
+ 
+ 	mem = mmap(NULL, size, PROT_READ | PROT_WRITE,
+ 		   shared ? MAP_SHARED : MAP_PRIVATE, fd, 0);
+ 	if (mem == MAP_FAILED) {
+-		if (size == pagesize || shared)
+-			ksft_test_result_fail("mmap() failed (%s)\n", strerror(errno));
+-		else
+-			ksft_test_result_skip("need more free huge pages\n");
+-		return;
++		if (size == pagesize || shared) {
++			ksft_print_msg("mmap() failed (%s)\n", strerror(errno));
++			result = KSFT_FAIL;
++		} else {
++			ksft_print_msg("need more free huge pages\n");
++			result = KSFT_SKIP;
++		}
++		goto report;
+ 	}
+ 
+ 	/* Fault in the page such that GUP-fast can pin it directly. */
+@@ -134,7 +151,8 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
+ 		 */
+ 		ret = mprotect(mem, size, PROT_READ);
+ 		if (ret) {
+-			ksft_test_result_fail("mprotect() failed (%s)\n", strerror(errno));
++			ksft_print_msg("mprotect() failed (%s)\n", strerror(errno));
++			result = KSFT_FAIL;
+ 			goto munmap;
+ 		}
+ 		/* FALLTHROUGH */
+@@ -147,12 +165,14 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
+ 				type == TEST_TYPE_RW_FAST;
+ 
+ 		if (gup_fd < 0) {
+-			ksft_test_result_skip("gup_test not available\n");
++			ksft_print_msg("gup_test not available\n");
++			result = KSFT_SKIP;
+ 			break;
+ 		}
+ 
+ 		if (rw && shared && fs_is_unknown(fs_type)) {
+-			ksft_test_result_skip("Unknown filesystem\n");
++			ksft_print_msg("Unknown filesystem\n");
++			result = KSFT_SKIP;
+ 			return;
+ 		}
+ 		/*
+@@ -169,14 +189,19 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
+ 		args.flags |= rw ? PIN_LONGTERM_TEST_FLAG_USE_WRITE : 0;
+ 		ret = ioctl(gup_fd, PIN_LONGTERM_TEST_START, &args);
+ 		if (ret && errno == EINVAL) {
+-			ksft_test_result_skip("PIN_LONGTERM_TEST_START failed (EINVAL)n");
++			ksft_print_msg("PIN_LONGTERM_TEST_START failed (EINVAL)n");
++			result = KSFT_SKIP;
+ 			break;
+ 		} else if (ret && errno == EFAULT) {
+-			ksft_test_result(!should_work, "Should have failed\n");
++			if (should_work)
++				result = KSFT_FAIL;
++			else
++				result = KSFT_PASS;
+ 			break;
+ 		} else if (ret) {
+-			ksft_test_result_fail("PIN_LONGTERM_TEST_START failed (%s)\n",
+-					      strerror(errno));
++			ksft_print_msg("PIN_LONGTERM_TEST_START failed (%s)\n",
++				       strerror(errno));
++			result = KSFT_FAIL;
+ 			break;
+ 		}
+ 
+@@ -189,7 +214,10 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
+ 		 * some previously unsupported filesystems, we might want to
+ 		 * perform some additional tests for possible data corruptions.
+ 		 */
+-		ksft_test_result(should_work, "Should have worked\n");
++		if (should_work)
++			result = KSFT_PASS;
++		else
++			result = KSFT_FAIL;
+ 		break;
+ 	}
+ #ifdef LOCAL_CONFIG_HAVE_LIBURING
+@@ -199,8 +227,9 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
+ 
+ 		/* io_uring always pins pages writable. */
+ 		if (shared && fs_is_unknown(fs_type)) {
+-			ksft_test_result_skip("Unknown filesystem\n");
+-			return;
++			ksft_print_msg("Unknown filesystem\n");
++			result = KSFT_SKIP;
++			goto report;
+ 		}
+ 		should_work = !shared ||
+ 			      fs_supports_writable_longterm_pinning(fs_type);
+@@ -208,8 +237,9 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
+ 		/* Skip on errors, as we might just lack kernel support. */
+ 		ret = io_uring_queue_init(1, &ring, 0);
+ 		if (ret < 0) {
+-			ksft_test_result_skip("io_uring_queue_init() failed (%s)\n",
+-					      strerror(-ret));
++			ksft_print_msg("io_uring_queue_init() failed (%s)\n",
++				       strerror(-ret));
++			result = KSFT_SKIP;
+ 			break;
+ 		}
+ 		/*
+@@ -222,17 +252,28 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
+ 		/* Only new kernels return EFAULT. */
+ 		if (ret && (errno == ENOSPC || errno == EOPNOTSUPP ||
+ 			    errno == EFAULT)) {
+-			ksft_test_result(!should_work, "Should have failed (%s)\n",
+-					 strerror(errno));
++			if (should_work) {
++				ksft_print_msg("Should have failed (%s)\n",
++					       strerror(errno));
++				result = KSFT_FAIL;
++			} else {
++				result = KSFT_PASS;
++			}
+ 		} else if (ret) {
+ 			/*
+ 			 * We might just lack support or have insufficient
+ 			 * MEMLOCK limits.
+ 			 */
+-			ksft_test_result_skip("io_uring_register_buffers() failed (%s)\n",
+-					      strerror(-ret));
++			ksft_print_msg("io_uring_register_buffers() failed (%s)\n",
++				       strerror(-ret));
++			result = KSFT_SKIP;
+ 		} else {
+-			ksft_test_result(should_work, "Should have worked\n");
++			if (should_work) {
++				result = KSFT_PASS;
++			} else {
++				ksft_print_msg("Should have worked\n");
++				result = KSFT_FAIL;
++			}
+ 			io_uring_unregister_buffers(&ring);
+ 		}
+ 
+@@ -246,21 +287,32 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
+ 
+ munmap:
+ 	munmap(mem, size);
++report:
++	ksft_test_result(result, "%s\n", test_name);
+ }
+ 
+ typedef void (*test_fn)(int fd, size_t size);
+ 
++static void log_test_start(const char *name, ...)
++{
++	va_list args;
++	va_start(args, name);
++
++	vsnprintf(test_name, sizeof(test_name), name, args);
++	ksft_print_msg("[RUN] %s\n", test_name);
++
++	va_end(args);
++}
++
+ static void run_with_memfd(test_fn fn, const char *desc)
+ {
+ 	int fd;
+ 
+-	ksft_print_msg("[RUN] %s ... with memfd\n", desc);
++	log_test_start("%s ... with memfd", desc);
+ 
+ 	fd = memfd_create("test", 0);
+-	if (fd < 0) {
+-		ksft_test_result_fail("memfd_create() failed (%s)\n", strerror(errno));
+-		return;
+-	}
++	if (fd < 0)
++		ksft_print_msg("memfd_create() failed (%s)\n", strerror(errno));
+ 
+ 	fn(fd, pagesize);
+ 	close(fd);
+@@ -271,23 +323,23 @@ static void run_with_tmpfile(test_fn fn, const char *desc)
+ 	FILE *file;
+ 	int fd;
+ 
+-	ksft_print_msg("[RUN] %s ... with tmpfile\n", desc);
++	log_test_start("%s ... with tmpfile", desc);
+ 
+ 	file = tmpfile();
+ 	if (!file) {
+-		ksft_test_result_fail("tmpfile() failed (%s)\n", strerror(errno));
+-		return;
+-	}
+-
+-	fd = fileno(file);
+-	if (fd < 0) {
+-		ksft_test_result_fail("fileno() failed (%s)\n", strerror(errno));
+-		goto close;
++		ksft_print_msg("tmpfile() failed (%s)\n", strerror(errno));
++		fd = -1;
++	} else {
++		fd = fileno(file);
++		if (fd < 0) {
++			ksft_print_msg("fileno() failed (%s)\n", strerror(errno));
++		}
+ 	}
+ 
+ 	fn(fd, pagesize);
+-close:
+-	fclose(file);
++
++	if (file)
++		fclose(file);
+ }
+ 
+ static void run_with_local_tmpfile(test_fn fn, const char *desc)
+@@ -295,22 +347,22 @@ static void run_with_local_tmpfile(test_fn fn, const char *desc)
+ 	char filename[] = __FILE__"_tmpfile_XXXXXX";
+ 	int fd;
+ 
+-	ksft_print_msg("[RUN] %s ... with local tmpfile\n", desc);
++	log_test_start("%s ... with local tmpfile", desc);
+ 
+ 	fd = mkstemp(filename);
+-	if (fd < 0) {
+-		ksft_test_result_fail("mkstemp() failed (%s)\n", strerror(errno));
+-		return;
+-	}
++	if (fd < 0)
++		ksft_print_msg("mkstemp() failed (%s)\n", strerror(errno));
+ 
+ 	if (unlink(filename)) {
+-		ksft_test_result_fail("unlink() failed (%s)\n", strerror(errno));
+-		goto close;
++		ksft_print_msg("unlink() failed (%s)\n", strerror(errno));
++		close(fd);
++		fd = -1;
+ 	}
+ 
+ 	fn(fd, pagesize);
+-close:
+-	close(fd);
++
++	if (fd >= 0)
++		close(fd);
+ }
+ 
+ static void run_with_memfd_hugetlb(test_fn fn, const char *desc,
+@@ -319,15 +371,14 @@ static void run_with_memfd_hugetlb(test_fn fn, const char *desc,
+ 	int flags = MFD_HUGETLB;
+ 	int fd;
+ 
+-	ksft_print_msg("[RUN] %s ... with memfd hugetlb (%zu kB)\n", desc,
++	log_test_start("%s ... with memfd hugetlb (%zu kB)", desc,
+ 		       hugetlbsize / 1024);
+ 
+ 	flags |= __builtin_ctzll(hugetlbsize) << MFD_HUGE_SHIFT;
+ 
+ 	fd = memfd_create("test", flags);
+ 	if (fd < 0) {
+-		ksft_test_result_skip("memfd_create() failed (%s)\n", strerror(errno));
+-		return;
++		ksft_print_msg("memfd_create() failed (%s)\n", strerror(errno));
+ 	}
+ 
+ 	fn(fd, hugetlbsize);
 
-/P
+---
+base-commit: 82f2b0b97b36ee3fcddf0f0780a9a0825d52fec3
+change-id: 20250514-selftests-mm-gup-longterm-dups-68aa4e0fcc88
+
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
 
 
