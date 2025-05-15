@@ -1,196 +1,202 @@
-Return-Path: <linux-kselftest+bounces-33138-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33139-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8CC8AB90B7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 22:18:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9126CAB90D1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 22:33:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 881FA7A2114
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 20:17:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 64FD41BC2075
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 20:33:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC967299933;
-	Thu, 15 May 2025 20:18:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38A1727A461;
+	Thu, 15 May 2025 20:33:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AoH0tVYJ"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="TRFK9ws+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2045.outbound.protection.outlook.com [40.107.102.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E944620E01E;
-	Thu, 15 May 2025 20:18:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747340327; cv=none; b=JJc0drdqIG/CriEtw01ylytQjDibsXrmrneohuX8lVEjGyuJ5NTXvjnaUJqvtCQX/B9glYLu74Zg3aFVenHvssY8K+Dtn1fDtdQ4QD7joaFv7iq9U2T6BF1BI/DdCJUAWbg7LRJkNqjAqSPlME1hWYDQWQoSGHo+1ownueR04Hk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747340327; c=relaxed/simple;
-	bh=e8VPoJkwXD3AP4H3TxTUB4GInywCmwAIcDUvwqYyTfQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FW8iwn1aEFpfHe17bzPbG429DbcBdapAjmyYXeAG/icD7eUhVpvrYwK6u2gsxpYWSoQkySPnEvCrFFdwMon89QxQKp3jfmKlIVXsa+I3zzYlJ61nxnohiExhJMPiurBEaFHmVEdknnz6kuZrBxkrOOoxf6XPRC60Oe5fsSuOFk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AoH0tVYJ; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747340326; x=1778876326;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=e8VPoJkwXD3AP4H3TxTUB4GInywCmwAIcDUvwqYyTfQ=;
-  b=AoH0tVYJ1mXZIJNBtv9F3zv+LadqiNrJlSuAfnfXZYlJKut570CyqFJ5
-   oaAIv/bR0RcSFd+d6pjZRlrOZwXRgbTKMKWCM8WEMsrLgvpmIy3xGC7t+
-   AMGO+yDLfhLHWMoZJikgds9oNCFcgknD3BxuW/CsWgczusiNkCi+BgPOz
-   bbk44ysXdDZUlk36rGQqWLObqmHCL9swPVsaMdVoptdo5AzJSG0TMPwnU
-   v0J9WO4rCEijmI69iLJ2SKRoxrK4C03ZOd3w2Y3yqi+qU6fQlPBnHnWgR
-   bZvMhu1fKjBlKojKoING/BTDvx7t1yCi59mLqJhmvd+bOdjn9fSABJ3v8
-   w==;
-X-CSE-ConnectionGUID: 37K0IjaQQJukvHI78Xc5pg==
-X-CSE-MsgGUID: 6OvfaBV7Ti2lgCDIMigzEQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11434"; a="49436556"
-X-IronPort-AV: E=Sophos;i="6.15,292,1739865600"; 
-   d="scan'208";a="49436556"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2025 13:18:45 -0700
-X-CSE-ConnectionGUID: p8mOqcKMRYi6r7cTUhwM8w==
-X-CSE-MsgGUID: X5QS9obXTdO+br/+BUZi0Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,292,1739865600"; 
-   d="scan'208";a="169553526"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmviesa001.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2025 13:18:44 -0700
-Received: from [10.246.136.52] (kliang2-mobl1.ccr.corp.intel.com [10.246.136.52])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by linux.intel.com (Postfix) with ESMTPS id 8E33720B5736;
-	Thu, 15 May 2025 13:18:41 -0700 (PDT)
-Message-ID: <dcfdde37-dd39-4151-84f9-c389b897d2fa@linux.intel.com>
-Date: Thu, 15 May 2025 16:18:40 -0400
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84E49185B67;
+	Thu, 15 May 2025 20:33:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.102.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1747341187; cv=fail; b=Yzt6S/GcEuxE4Q6Ue4lBoXsXwqAoP+RJ/52aZfaucm2I8Z7h/vhza3RxRDWHygk+4ykCvbxulqrNU2fDu5gAvU+D0qwEYbYkOLQmIESMPI0VC9J/VEXc7I6Oe3nm0DNnq+0S4BpNAt1nxjPE0B06Kmn49wcaeHh+dd8tBiH5+5w=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1747341187; c=relaxed/simple;
+	bh=UdDsSnxx+rs0DdB1rEoUH6yMCVZT8ASs5ITpSXxi+kA=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d18vg2En6ZCwQOv2DUkY6dlcSze/PyjtQUIlOK+sGi5pAZJDNSWYtkfltwdDWptKTbykJaQ3Wy0nFTn5X/yy46fK6ZHotxcbVYQQENdD63tMWyCi/mi21vP1evkQeUIks81rlkajj/5lUJkRKy5C919XU2uj3FRyX1DhSUFqv8o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=TRFK9ws+; arc=fail smtp.client-ip=40.107.102.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=K7wTK346m3GqD/WjcKQZd84Al+YWVnoewJKhl7BMD9YNf7oCsDoI3e8064eASpjtGgE8OxiwI9EZJo+sAZzgsTBY2BBCHS/9TMNfk40cUV0ZNA83fON0BPRYe7TlYGvT+tDmHEKP3gi+ruvoTIQedakKdV8swjqCPVmvNzjHhNWgEnlwbLCEFY+B4XMkTruD09jQM0AWf5ihq/KGRv0HgZdxeWElHsSoNAXUlFD0dEPGxO6cGStxbWJHNcDuXRjWca2/9IkcngnYce6miHpVQtLPvICLjrRYWqbXyRr94ciLTgU0iRdnEp2GCmZ7HCaDziIAI1SS74pBgvWlA6UVmg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=v5HlsZLk1Tiwl9MDE5QGy9/di6T/TzXjQ/J5OxXsb3o=;
+ b=jkB7SFM2DV1bTpSx0PcYF3ZEuA5OLKpKZSRUGjByNWNLA1s2lqvkGM1GryZDN4C9yLzjsWKsGZyArFeL+p249xgOe0h4R75DYkfmDpjtnD2bmTr502z+4QBTu2m+c6BrQyZW7DJVTheRmB/rzq6YL/qCBNTYdi2dy8xT5bFLKheMVbIe//rQrFAP0K0x3yZJv3sfk28IvNX8um3M5np+jh1Ne6/4vN6EtSqH90g2y1dBSF7N8JH9LxAZ52qywNNBwkBjW0d47QuzDcHW3EHZHMM/xYEppVnM19w3IFBGH7VDqztvlpwWQWghGOgHlVRexHzYQLcrYu0X0SMTwO03iw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=lists.linux.dev smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=v5HlsZLk1Tiwl9MDE5QGy9/di6T/TzXjQ/J5OxXsb3o=;
+ b=TRFK9ws+GyGc0oYCxaYCd4oLDr5wZQX1dmoWWGxGnxaBuwFiFKrxPOh9mLzqhPqnEuLFWzVKCU6Hmh/wDfYz9oM20aOS+bvARDPi7ymo+LYFc+FcVlW0N2RIfHSKRE39O0j+wPH1N7Cw6CioFQkHQom8Wzvq5vcVe+j8iXDoP9BJe6Cwv4HIWwLBfHt3feb2XiH5d832gxg0DNuvIOCn3OAUdNSWOqL+wInh+F13sRD+eXbhoy/RrwOfAw5bA+Ok909xUYYvpzfZTojVyLRepaeH2jRaa2N5HhX25MvK6+QO8/mdVWDyIuRKozDef78WRxgtqDjhBBVxlIKQbZefuQ==
+Received: from PH7PR17CA0056.namprd17.prod.outlook.com (2603:10b6:510:325::17)
+ by SJ5PPF4C62B9E70.namprd12.prod.outlook.com (2603:10b6:a0f:fc02::991) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8678.31; Thu, 15 May
+ 2025 20:33:02 +0000
+Received: from SN1PEPF00036F3D.namprd05.prod.outlook.com
+ (2603:10b6:510:325:cafe::2a) by PH7PR17CA0056.outlook.office365.com
+ (2603:10b6:510:325::17) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8746.16 via Frontend Transport; Thu,
+ 15 May 2025 20:33:01 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ SN1PEPF00036F3D.mail.protection.outlook.com (10.167.248.21) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8722.18 via Frontend Transport; Thu, 15 May 2025 20:33:01 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 15 May
+ 2025 13:32:51 -0700
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14; Thu, 15 May 2025 13:32:50 -0700
+Received: from Asurada-Nvidia (10.127.8.11) by mail.nvidia.com
+ (10.126.190.182) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14 via Frontend
+ Transport; Thu, 15 May 2025 13:32:49 -0700
+Date: Thu, 15 May 2025 13:32:48 -0700
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+CC: <kevin.tian@intel.com>, <corbet@lwn.net>, <will@kernel.org>,
+	<bagasdotme@gmail.com>, <robin.murphy@arm.com>, <joro@8bytes.org>,
+	<thierry.reding@gmail.com>, <vdumpa@nvidia.com>, <jonathanh@nvidia.com>,
+	<shuah@kernel.org>, <jsnitsel@redhat.com>, <nathan@kernel.org>,
+	<peterz@infradead.org>, <yi.l.liu@intel.com>, <mshavit@google.com>,
+	<praan@google.com>, <zhangzekun11@huawei.com>, <iommu@lists.linux.dev>,
+	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-tegra@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <patches@lists.linux.dev>,
+	<mochs@nvidia.com>, <alok.a.tiwari@oracle.com>, <vasant.hegde@amd.com>
+Subject: Re: [PATCH v4 11/23] iommufd/viommu: Add IOMMUFD_CMD_HW_QUEUE_ALLOC
+ ioctl
+Message-ID: <aCZPcH+GiZKUjzWn@Asurada-Nvidia>
+References: <cover.1746757630.git.nicolinc@nvidia.com>
+ <f52937c027e2fd25d76bc47f4965ba46f82c77c0.1746757630.git.nicolinc@nvidia.com>
+ <20250515160620.GJ382960@nvidia.com>
+ <aCYvjeZW+7NmUtoE@Asurada-Nvidia>
+ <20250515185938.GT382960@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 05/38] perf: Add generic exclude_guest support
-To: Sean Christopherson <seanjc@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Mingwei Zhang
- <mizhang@google.com>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
- Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>, Liang@google.com,
- "H. Peter Anvin" <hpa@zytor.com>, linux-perf-users@vger.kernel.org,
- linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Yongwei Ma <yongwei.ma@intel.com>,
- Xiong Zhang <xiong.y.zhang@linux.intel.com>,
- Dapeng Mi <dapeng1.mi@linux.intel.com>, Jim Mattson <jmattson@google.com>,
- Sandipan Das <sandipan.das@amd.com>, Zide Chen <zide.chen@intel.com>,
- Eranian Stephane <eranian@google.com>, Shukla Manali
- <Manali.Shukla@amd.com>, Nikunj Dadhania <nikunj.dadhania@amd.com>
-References: <20250324173121.1275209-1-mizhang@google.com>
- <20250324173121.1275209-6-mizhang@google.com>
- <20250425111352.GF1166@noisy.programming.kicks-ass.net>
- <aCUlCApeDM9Uy4a0@google.com>
- <4aaf67ab-aa5c-41e6-bced-3cb000172c52@linux.intel.com>
- <aCY_tkjzxknAbEgq@google.com>
-Content-Language: en-US
-From: "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <aCY_tkjzxknAbEgq@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20250515185938.GT382960@nvidia.com>
+X-NV-OnPremToCloud: AnonymousSubmission
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN1PEPF00036F3D:EE_|SJ5PPF4C62B9E70:EE_
+X-MS-Office365-Filtering-Correlation-Id: 657e53f2-0f3e-49c3-8b2b-08dd93efb015
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|1800799024|376014|7416014|36860700013;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?9MgOS03szYgiRVtPFcfgqGXhkUajnTm422UtNCgDAkfaoU+I1kAQQkuk/ChU?=
+ =?us-ascii?Q?ev8IH8sQHB/mGzhJ3d8ZZ7qOgBKIsIgvvoS7WawRYadrtptGxc53oGrS9x2x?=
+ =?us-ascii?Q?xTMLdHUo8S14x3zsQLhn5s21fZyXBbfNbDSVg+WCO/U5P9AFhiiVeyKBB26L?=
+ =?us-ascii?Q?UZNLMXNwLTN9V8YuJW6YE9KVyyP4Zi7Vr9tVbQ40x/WeUfIba29SoA/WhZIk?=
+ =?us-ascii?Q?6qc2sx+3K2U57iRIZgYyYg5cflRbd6WdeI7kWQHlImGZ7IjFdaZjhKKK4/d3?=
+ =?us-ascii?Q?c0SEE6hShKA3POYO0+Tsi536w6P0pvgOLcQR1weKz75+565PLh8p0r3kZ4wa?=
+ =?us-ascii?Q?ttsHyB/nExf36Bg9SjRgk3OJHLUSy+Esur2gKf5xisAl/jU671Jg3GGZzJEX?=
+ =?us-ascii?Q?P5ussSjxIORCzrKF7rRtvEh31RY8BbkliGcDTCXOX54zNBjBpYgDJiZQrsfl?=
+ =?us-ascii?Q?oqZbUVScBMeMwp3qdz5K4bK9PQ2t454R5Sr76n5oZ0apAS75eelsoAa9P12I?=
+ =?us-ascii?Q?MOcan+4z0lWvUw7MlYisA9wGdogJoD1mp2xQMe4G75vb2VugbVakJ8j0yns4?=
+ =?us-ascii?Q?lpYACI7TGQzZD7Adbrveri1PlXCcxdjuIqvrf1Bm3mZ8jP8IoC6Ra877dSFD?=
+ =?us-ascii?Q?nZbsrERTNM73kkTVfAFnTYSDWISxkNHsL6TGljwYTvWLQjLg+n0Y6zblw2sl?=
+ =?us-ascii?Q?77nmFTz3UW8NDEKDIeH5v2a5FXvtwopkFb+HACkhiFW0QqDKFEiwhl3S0AZM?=
+ =?us-ascii?Q?gnFPzMXdbUlXQKP1crZFSrFR8mfGtoYRnPFrLvv21hs3Z50EnYjiVmYrK1QC?=
+ =?us-ascii?Q?LCbLHbJVB2zfuuCa6l+2WV4J0KiujfhcDQV/LMDTC7GMSYW+SIN1JMtkBJFk?=
+ =?us-ascii?Q?NKxcL2uoKvVBPz4xS+gxkYow967QynH5ZzzytpvClA1OSRg2kCFaNw1uoJX8?=
+ =?us-ascii?Q?QmioAsRWImeR1mjCx4YYfID3qTNMgh+hfC90TQh0yip9yhdy1dfShICOEBVl?=
+ =?us-ascii?Q?6VgMEMeS7ZCCEgn+0q4aKfFinKwb/QspzW4nHjkLKLqyXGl8fU+FuI9u6nAR?=
+ =?us-ascii?Q?ODyEFDCAxsf5zqr7Jtmdbb0OIyKOIaCLqyNdqYgs3RMfSbbmioQMVAdzNwxh?=
+ =?us-ascii?Q?cM36Yt1x7Sur9gOMdqQY+p0Vy1f7W2FQiVLfYBNk0yydTXLk0hlWnreUsoXa?=
+ =?us-ascii?Q?6aHsqN3xbyoevud9A5n4nytv7czErx0RLJe3fDkjMUt2I8fg0vk7IMfxZ9DE?=
+ =?us-ascii?Q?op+eyMi2bZl2BIxYhte95ulFs1F96mzLplURDHNegHQWqQABjXkgd5QqHWVF?=
+ =?us-ascii?Q?E4j3Rq03bgdjbyNiaJo+/AKCq81Bz8BtPM/i5dHhBPFaYpEoFnPAS0nkl5Cq?=
+ =?us-ascii?Q?DhUI6ZfWHuh+vk3ew2hiSIu0QCR5a5MBoICpZ6Lb0hGMcLfE9xXPv+NApAiy?=
+ =?us-ascii?Q?hpgcwEmOs+Un07DtUYMmUvKU3483sDzfTpzBmbv6ZX9DZEdpzLeE1IE4tz0J?=
+ =?us-ascii?Q?Uwrk5e9yHxDzOlHSUxuFinM3x0GI6GQeicky?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(376014)(7416014)(36860700013);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2025 20:33:01.6083
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 657e53f2-0f3e-49c3-8b2b-08dd93efb015
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SN1PEPF00036F3D.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ5PPF4C62B9E70
 
-
-
-On 2025-05-15 3:25 p.m., Sean Christopherson wrote:
-> On Thu, May 15, 2025, Kan Liang wrote:
->> On 2025-05-14 7:19 p.m., Sean Christopherson wrote:
->>>> This naming is confusing on purpose? Pick either guest/host and stick
->>>> with it.
->>>
->>> +1.  I also think the inner perf_host_{enter,exit}() helpers are superflous.
->>> These flows
->>>
->>> After a bit of hacking, and with a few spoilers, this is what I ended up with
->>> (not anywhere near fully tested).  I like following KVM's kvm_xxx_{load,put}()
->>> nomenclature to tie everything together, so I went with "guest" instead of "host"
->>> even though the majority of work being down is to shedule out/in host context.
->>>
->>> /* When loading a guest's mediated PMU, schedule out all exclude_guest events. */
->>> void perf_load_guest_context(unsigned long data)
->>> {
->>> 	struct perf_cpu_context *cpuctx = this_cpu_ptr(&perf_cpu_context);
->>>
->>> 	lockdep_assert_irqs_disabled();
->>>
->>> 	perf_ctx_lock(cpuctx, cpuctx->task_ctx);
->>>
->>> 	if (WARN_ON_ONCE(__this_cpu_read(guest_ctx_loaded)))
->>> 		goto unlock;
->>>
->>> 	perf_ctx_disable(&cpuctx->ctx, EVENT_GUEST);
->>> 	ctx_sched_out(&cpuctx->ctx, NULL, EVENT_GUEST);
->>> 	perf_ctx_enable(&cpuctx->ctx, EVENT_GUEST);
->>> 	if (cpuctx->task_ctx) {
->>> 		perf_ctx_disable(cpuctx->task_ctx, EVENT_GUEST);
->>> 		task_ctx_sched_out(cpuctx->task_ctx, NULL, EVENT_GUEST);
->>> 		perf_ctx_enable(cpuctx->task_ctx, EVENT_GUEST);
->>> 	}
->>>
->>> 	arch_perf_load_guest_context(data);
->>>
->>> 	__this_cpu_write(guest_ctx_loaded, true);
->>>
->>> unlock:
->>> 	perf_ctx_unlock(cpuctx, cpuctx->task_ctx);
->>> }
->>> EXPORT_SYMBOL_GPL(perf_load_guest_context);
->>>
->>> void perf_put_guest_context(void)
->>> {
->>> 	struct perf_cpu_context *cpuctx = this_cpu_ptr(&perf_cpu_context);
->>>
->>> 	lockdep_assert_irqs_disabled();
->>>
->>> 	perf_ctx_lock(cpuctx, cpuctx->task_ctx);
->>>
->>> 	if (WARN_ON_ONCE(!__this_cpu_read(guest_ctx_loaded)))
->>> 		goto unlock;
->>>
->>> 	arch_perf_put_guest_context();
->>
->> It will set the guest_ctx_loaded to false.
->> The update_context_time() invoked in the perf_event_sched_in() will not
->> get a chance to update the guest time.
+On Thu, May 15, 2025 at 03:59:38PM -0300, Jason Gunthorpe wrote:
+> On Thu, May 15, 2025 at 11:16:45AM -0700, Nicolin Chen wrote:
+> > > I don't think this actually works like this without an unmap
+> > > callback. unmap will break:
+> > > 
+> > > 			iommufd_access_notify_unmap(iopt, area_first, length);
+> > > 			/* Something is not responding to unmap requests. */
+> > > 			tries++;
+> > > 			if (WARN_ON(tries > 100))
+> > > 				return -EDEADLOCK;
+> > > 
+> > > If it can't shoot down the pinning.
+> > 
+> > Hmm, I thought we want the unmap to fail until VMM releases the HW
+> > QUEUE first? In what case, does VMM wants to unmap while holding
+> > the queue pages?
 > 
-> The guest_ctx_loaded in arch/x86/events/core.c is a different variable, it just
-> happens to have the same name.
->
+> Well, if that is what we want to do then this needs to be revised
+> somehow..
 
-Ah, I thought it was the same variable. Then there should be no issue
-with the guest time.
+Yea, unless we have a strong reason to allow unmap while holding
+the HW queue.
 
-But the same variable name may bring confusions. Maybe add a x86_pmu/x86
-prefix to the variable in x86 code.
-> It's completely gross, but exposing guest_ctx_loaded outside of kernel/events/core.c
-> didn't seem like a great alternative.  If we wanted to use a single variable,
-> then the writes in arch_perf_{load,put}_guest_context() can simply go away.
-> 
-Either two variables or a single variable is fine with me, as long as
-they can be easily distinguished.
+I think we could set a new flag:
 
-But I think we should put arch_perf_{load,put}_guest_context() and
-guest_ctx_loaded between the perf_ctx_disable/enable() pair.
-Perf should only update the state when PMU is completely disabled.
-It matches the way the rest of the perf code does.
-It could also avoid some potential issues, e.g., the state is not
-updated completely, but the counter has already been fired.
+ enum {
+ 	IOMMUFD_ACCESS_RW_READ = 0,
+ 	IOMMUFD_ACCESS_RW_WRITE = 1 << 0,
+ 	/* Set if the caller is in a kthread then rw will use kthread_use_mm() */
+ 	IOMMUFD_ACCESS_RW_KTHREAD = 1 << 1,
++	IOMMUFD_ACCESS_NO_UNMAP = 1 << 3,
+ 
+ 	/* Only for use by selftest */
+ 	__IOMMUFD_ACCESS_RW_SLOW_PATH = 1 << 2,
+ };
 
-Thanks,
-Kan
+and reject iopt_unmap_iova_range().
 
-
+Thanks
+Nicolin
 
