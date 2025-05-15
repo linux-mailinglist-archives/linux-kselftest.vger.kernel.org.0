@@ -1,65 +1,65 @@
-Return-Path: <linux-kselftest+bounces-33009-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33010-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA5FFAB7BFD
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 05:04:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5A7AAB7C30
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 05:23:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 82BF71BA7B3D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 03:05:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BFF563B89BD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 03:23:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 614BC2920A5;
-	Thu, 15 May 2025 03:04:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF5DB258CF6;
+	Thu, 15 May 2025 03:23:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DAv8BWta"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mCzpWIjn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71F6E296713;
-	Thu, 15 May 2025 03:04:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA2EB1C3C1F;
+	Thu, 15 May 2025 03:23:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747278268; cv=none; b=INMfgKXFb3FiC4MYiO8JqIdNwenNw+Nw3JN4VwSEFb4TxphFe4tspPDE3DvmPzvrp7whbCte4J3rj00fxI0d4fi4AzhG208Qitce2LLsYgMXL5h3Zh+Hx4hZ2K30QCeOQWrbriCGs584Y7XHHtFUtDAke/RFoxuNTr+V0FGQsNM=
+	t=1747279399; cv=none; b=pF/jNSvZxU9KgEV2mSzTdYutJWuPMGUqUKYGR3PKQzSVPkTaVTYTp93mSqJpNJHK2EaRb7I+hqcTEdGi3z9hnx7ecgUU2uKhn3cinl7qNn6hOgEO72o3Qeir6EBH/KfCasP4Qki3TXEzBSFodtKo4V4WiKxrAmD42gURnMt+p8w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747278268; c=relaxed/simple;
-	bh=8P2jZb2CWXydChMb3W1NmTVmRyeqjqJTPkqq5Cz6u4M=;
+	s=arc-20240116; t=1747279399; c=relaxed/simple;
+	bh=FFkIck5WEpe1ylHiy43DrIUF2d/UVZz1agmgdg0BBjo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=u46hnZ9/nRGnUz393rnp0ZzPLtxK9h3w/szsDix18A89wPNZ8OnkkugjmWEjgUjLzd+2c1cONf03Pot8/LkDJxBnzNZgcRPcj3cF9BthtA4CbFa2av9EBKLsBwRdnQRxW9NrUsc4bAm4oKB3thzOjezWVnD3mbt73MymOEfXANQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DAv8BWta; arc=none smtp.client-ip=198.175.65.18
+	 In-Reply-To:Content-Type; b=XFPG4XQ3RaObBAPkYgOvCMECJtTFPI5lijch/57kRd5Ewf+2Yi0J072jp4XCBXCseB60067kFVK69ikMHRFOmVcrvZnKCC6ri9GOGehfc/2NVx9Ur3mQ5amJsvGqWJqrM9B9iAc0jKAxEApbe61DFpzCF+dN4ArW9vdcqFSJm2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mCzpWIjn; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747278267; x=1778814267;
+  t=1747279398; x=1778815398;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=8P2jZb2CWXydChMb3W1NmTVmRyeqjqJTPkqq5Cz6u4M=;
-  b=DAv8BWtaA+t1rqd+bOcZ2Q2/N1VZq/S74VH55aNHWUZvJKwVta6p0ioe
-   a1zHBSJHnA9fIi+drn9+W7EuIVbJJa/z5P1qhFHcsuhplCrphlpGEVXE2
-   ckd+7kgIuVkgHjigDOqr3nM2l5Wv2LgAfPRJGneFocF4Tqnyvfij1wZvO
-   UWJ16KMX6WuoDKidzq2U2Px4q0sGmzr3PxesKb9KgAAmnRD9jb6a+SEgl
-   791wA6HLbEmHxhfF87D6wrwsvhNiYtCLQUElsgIvRJnqIJ04CXsWuF0/x
-   OiWl6pY23c7hXgTqrdkLoxDC80EDQ73hG+dByHMEa6ikedbcVuYS1+Cth
-   g==;
-X-CSE-ConnectionGUID: oOM+4TMIRWWv0p8t8b+Tiw==
-X-CSE-MsgGUID: qivU6XoeQKafrbnXwSpmCw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11433"; a="49363122"
+  bh=FFkIck5WEpe1ylHiy43DrIUF2d/UVZz1agmgdg0BBjo=;
+  b=mCzpWIjn+sGTyE4jvmQpYA92zZQvxiwt1EhiU1QVgrBZ9s1nWGzPfd9Q
+   myghzRJbbvz95ZQUCMaDv2hgkAIVISaEW5aFOxjyCOKR2yp8bGGq9S7BW
+   MFrnC1GFa09+q5FcGITWAN5no6gPLb33g7mGmPrfGF756jWv5zb/NnIoF
+   u2He29CxDNGK+q6/P5B+fzkf/zarf5arWlxC1Wxgu0XXFTrc7fhWzOYCM
+   2tHV45DwRcJo7QUF6Ka7C+PrXweVCaz55R8T6/YnyCCqA8MhaNJedOUH+
+   FduLo8f03EHKI6/LJ/4x0vXiYD8zKwAD6AzXHzvY1OOb3CyBk9LiDJnhC
+   w==;
+X-CSE-ConnectionGUID: 7yXXPwb/T9uhC7EIgMpUXA==
+X-CSE-MsgGUID: MPPL0EZ1RK+dP3G2p/Tdvg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11433"; a="48885906"
 X-IronPort-AV: E=Sophos;i="6.15,290,1739865600"; 
-   d="scan'208";a="49363122"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2025 20:04:26 -0700
-X-CSE-ConnectionGUID: Xvyt4aJ6SJ2a+ZdqKs61IA==
-X-CSE-MsgGUID: EQqKXdXYSWybfeMZ8HCHFQ==
+   d="scan'208";a="48885906"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2025 20:23:17 -0700
+X-CSE-ConnectionGUID: mKURwDSwSpqWc510vqdJ4g==
+X-CSE-MsgGUID: VuxJwbW7TaekJTuW2qVWmA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,290,1739865600"; 
-   d="scan'208";a="142990091"
+   d="scan'208";a="139132687"
 Received: from dapengmi-mobl1.ccr.corp.intel.com (HELO [10.124.245.128]) ([10.124.245.128])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2025 20:04:19 -0700
-Message-ID: <e0974937-c4b8-4fbd-935d-335f7472a235@linux.intel.com>
-Date: Thu, 15 May 2025 11:04:17 +0800
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2025 20:23:11 -0700
+Message-ID: <27ad4a47-d39f-4210-898c-b55a3e28de67@linux.intel.com>
+Date: Thu, 15 May 2025 11:23:07 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,8 +67,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 17/38] KVM: x86/pmu: Add perf_capabilities field in
- struct kvm_host_values{}
+Subject: Re: [PATCH v4 20/38] KVM: x86/pmu: Check if mediated vPMU can
+ intercept rdpmc
 To: Sean Christopherson <seanjc@google.com>,
  Mingwei Zhang <mizhang@google.com>
 Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
@@ -88,27 +88,106 @@ Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
  Shukla Manali <Manali.Shukla@amd.com>,
  Nikunj Dadhania <nikunj.dadhania@amd.com>
 References: <20250324173121.1275209-1-mizhang@google.com>
- <20250324173121.1275209-18-mizhang@google.com> <aCUxc3c6Tt6yVmqi@google.com>
+ <20250324173121.1275209-21-mizhang@google.com> <aCUzKp1uhMsn-g_u@google.com>
 Content-Language: en-US
 From: "Mi, Dapeng" <dapeng1.mi@linux.intel.com>
-In-Reply-To: <aCUxc3c6Tt6yVmqi@google.com>
+In-Reply-To: <aCUzKp1uhMsn-g_u@google.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
 
-On 5/15/2025 8:12 AM, Sean Christopherson wrote:
-> On Mon, Mar 24, 2025, Mingwei Zhang wrote:
->> From: Dapeng Mi <dapeng1.mi@linux.intel.com>
->>
->> Add perf_capabilities in kvm_host_values{} structure to record host perf
->> capabilities. KVM needs to know if host supports some PMU capabilities
->> and then decide if passthrough or intercept some PMU MSRs or instruction
->> like rdpmc, e.g. If host supports PERF_METRICES, but guest is configured
->> not to support it, then rdpmc instruction needs to be intercepted.
-> This is wrong (spoiler alert).  This patch can be dropped.
+On 5/15/2025 8:19 AM, Sean Christopherson wrote:
+> The shortlog is wildly inaccurate.  KVM is not simply checking, KVM is actively
+> disabling RDPMC interception.  *That* needs to be the focus of the shortlog and
+> changelog.
 
-Sean, why? I don't get your point here. Could you please give more
-information? Thanks.
+Sure.
+
+
+>
+>> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+>> index 92c742ead663..6ad71752be4b 100644
+>> --- a/arch/x86/kvm/pmu.c
+>> +++ b/arch/x86/kvm/pmu.c
+>> @@ -604,6 +604,40 @@ int kvm_pmu_rdpmc(struct kvm_vcpu *vcpu, unsigned idx, u64 *data)
+>>  	return 0;
+>>  }
+>>  
+>> +inline bool kvm_rdpmc_in_guest(struct kvm_vcpu *vcpu)
+> Strongly prefer kvm_need_rdpmc_intercept(), e.g. to follow vmx_need_pf_intercept(),
+> and because it makes the users more obviously correct.  The "in_guest" terminology
+> from kvm_{hlt,mwait,pause,cstate}_in_guest() isn't great, but at least in those
+> flows it's not awful because they are very direct reflections of knobs that control
+> interception, whereas this helper is making a variety of runtime checks.
+
+Sure.
+
+
+>
+>> +{
+>> +	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+>> +
+>> +	if (!kvm_mediated_pmu_enabled(vcpu))
+>> +		return false;
+>> +
+>> +	/*
+>> +	 * VMware allows access to these Pseduo-PMCs even when read via RDPMC
+>> +	 * in Ring3 when CR4.PCE=0.
+>> +	 */
+>> +	if (enable_vmware_backdoor)
+>> +		return false;
+>> +
+>> +	/*
+>> +	 * FIXME: In theory, perf metrics is always combined with fixed
+>> +	 *	  counter 3. it's fair enough to compare the guest and host
+>> +	 *	  fixed counter number and don't need to check perf metrics
+>> +	 *	  explicitly. However kvm_pmu_cap.num_counters_fixed is limited
+>> +	 *	  KVM_MAX_NR_FIXED_COUNTERS (3) as fixed counter 3 is not
+>> +	 *	  supported now. perf metrics is still needed to be checked
+>> +	 *	  explicitly here. Once fixed counter 3 is supported, the perf
+>> +	 *	  metrics checking can be removed.
+>> +	 */
+> And then what happens when hardware supported fixed counter #4?  KVM has the same
+> problem, and we can't check for features that KVM doesn't know about.
+>
+> The entire problem is that this code is checking for *KVM* support, but what the
+> guest can see and access needs to be checked against *hardware* support.  Handling
+> that is simple, just take a snapshot of the host PMU capabilities before KVM
+> generates kvm_pmu_cap, and use the unadulterated snapshot here (and everywhere
+> else with similar checks).
+
+Yes. That's correct. Whether disabling intercept should check against  HW 
+instead of KVM PMU capability since host perf subsystem may hide some PMU
+features.
+
+
+>
+>> +	return pmu->nr_arch_gp_counters == kvm_pmu_cap.num_counters_gp &&
+>> +	       pmu->nr_arch_fixed_counters == kvm_pmu_cap.num_counters_fixed &&
+>> +	       vcpu_has_perf_metrics(vcpu) == kvm_host_has_perf_metrics() &&
+>> +	       pmu->counter_bitmask[KVM_PMC_GP] ==
+>> +				(BIT_ULL(kvm_pmu_cap.bit_width_gp) - 1) &&
+>> +	       pmu->counter_bitmask[KVM_PMC_FIXED] ==
+>> +				(BIT_ULL(kvm_pmu_cap.bit_width_fixed) - 1);
+>> +}
+>> @@ -212,6 +212,18 @@ static void amd_pmu_refresh(struct kvm_vcpu *vcpu)
+>>  	bitmap_set(pmu->all_valid_pmc_idx, 0, pmu->nr_arch_gp_counters);
+>>  }
+>>  
+>> +static void amd_pmu_refresh(struct kvm_vcpu *vcpu)
+>> +{
+>> +	struct vcpu_svm *svm = to_svm(vcpu);
+>> +
+>> +	__amd_pmu_refresh(vcpu);
+> To better communicate the roles of the two paths to refresh():
+>
+> 	amd_pmu_refresh_capabilities(vcpu);
+>
+> 	amd_pmu_refresh_controls(vcpu);
+>
+> Ditto for Intel.
+
+Sure.
 
 
 
