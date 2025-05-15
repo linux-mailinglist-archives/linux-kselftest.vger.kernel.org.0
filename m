@@ -1,65 +1,65 @@
-Return-Path: <linux-kselftest+bounces-33008-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33009-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C5C1AB7BDE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 05:00:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA5FFAB7BFD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 05:04:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EB0254A7138
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 03:00:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 82BF71BA7B3D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 May 2025 03:05:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B87C27A476;
-	Thu, 15 May 2025 03:00:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 614BC2920A5;
+	Thu, 15 May 2025 03:04:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gfxKF8eE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DAv8BWta"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A539C25B1CE;
-	Thu, 15 May 2025 03:00:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71F6E296713;
+	Thu, 15 May 2025 03:04:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747278037; cv=none; b=CKw+zJVBI64svjbf6WI/Ti7TqWihOYsNbxFjSINns3H7Z0SSN7TrcnoJbvFGzosm2bjlklgR9kxs8hugdyuEsI/FU/icVWnS96ZzuIyhj3p6gvNfDzilqhXVBpe6ZOuP8bbW361adge6QHKHO6GFlIH/J1lJEaZvNr79hnq9DLs=
+	t=1747278268; cv=none; b=INMfgKXFb3FiC4MYiO8JqIdNwenNw+Nw3JN4VwSEFb4TxphFe4tspPDE3DvmPzvrp7whbCte4J3rj00fxI0d4fi4AzhG208Qitce2LLsYgMXL5h3Zh+Hx4hZ2K30QCeOQWrbriCGs584Y7XHHtFUtDAke/RFoxuNTr+V0FGQsNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747278037; c=relaxed/simple;
-	bh=MX4LNaKBrDVEZrUWYZWvWYqe2KgUgHh6Z3+4zis1hDA=;
+	s=arc-20240116; t=1747278268; c=relaxed/simple;
+	bh=8P2jZb2CWXydChMb3W1NmTVmRyeqjqJTPkqq5Cz6u4M=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dqaSuNnIe2VYgHRuFfJS9yA31JuMWpiceGlCusrR5x7I5+KipU8goseGu+13DtnZDwWvwZvM9OAl5KyzBcpdL4ZkNp6ho3GPzSeWOHzYR8f5EhoiwfZ5KT6Z4Msk7bzuunM1pSVNzWNV5eaFni7txrySazwReIEUinjndSnQ0h4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gfxKF8eE; arc=none smtp.client-ip=192.198.163.7
+	 In-Reply-To:Content-Type; b=u46hnZ9/nRGnUz393rnp0ZzPLtxK9h3w/szsDix18A89wPNZ8OnkkugjmWEjgUjLzd+2c1cONf03Pot8/LkDJxBnzNZgcRPcj3cF9BthtA4CbFa2av9EBKLsBwRdnQRxW9NrUsc4bAm4oKB3thzOjezWVnD3mbt73MymOEfXANQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DAv8BWta; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747278036; x=1778814036;
+  t=1747278267; x=1778814267;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=MX4LNaKBrDVEZrUWYZWvWYqe2KgUgHh6Z3+4zis1hDA=;
-  b=gfxKF8eESD20QffFxtoU9TxNHBdJUIVA0tD/dkhNkeUhSvlZTUiS5X1k
-   D15g3pqXoeQbYAg7JkVZwGnmLSamUEdBDRoxYdvlPRg62G79BAFcU19kV
-   q1pwuESuA3rElO6uRN7WaqAIgj5idHTo5eAsBIKtZbwDFdv5989d6O8u9
-   xz0CJJ3KypoWrU2RaCuMVUE/rFfQCv6Egh2oTQk5868IhYBGT1GXow52m
-   Qhig7DuzA+DqBfkj5b2PdSwqCNBpw4ZukHsw+MbODqrk+RuQ0aXWPe/gW
-   RbCSnxN5YCmbTPIzSpH2AdFbBVAM42W8MvYYbsLTCfOGqCPmjlUTHgtLK
-   Q==;
-X-CSE-ConnectionGUID: nDFmRNNBRoyUdvOEuoKnYg==
-X-CSE-MsgGUID: VURWxAVOQ/+f4XbK5ktUqw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11433"; a="74599230"
-X-IronPort-AV: E=Sophos;i="6.15,289,1739865600"; 
-   d="scan'208";a="74599230"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2025 20:00:31 -0700
-X-CSE-ConnectionGUID: 7HvFv9suQwiX+fgYU+tW8A==
-X-CSE-MsgGUID: X03XOVC2TAK4/mNQzvjD3w==
+  bh=8P2jZb2CWXydChMb3W1NmTVmRyeqjqJTPkqq5Cz6u4M=;
+  b=DAv8BWtaA+t1rqd+bOcZ2Q2/N1VZq/S74VH55aNHWUZvJKwVta6p0ioe
+   a1zHBSJHnA9fIi+drn9+W7EuIVbJJa/z5P1qhFHcsuhplCrphlpGEVXE2
+   ckd+7kgIuVkgHjigDOqr3nM2l5Wv2LgAfPRJGneFocF4Tqnyvfij1wZvO
+   UWJ16KMX6WuoDKidzq2U2Px4q0sGmzr3PxesKb9KgAAmnRD9jb6a+SEgl
+   791wA6HLbEmHxhfF87D6wrwsvhNiYtCLQUElsgIvRJnqIJ04CXsWuF0/x
+   OiWl6pY23c7hXgTqrdkLoxDC80EDQ73hG+dByHMEa6ikedbcVuYS1+Cth
+   g==;
+X-CSE-ConnectionGUID: oOM+4TMIRWWv0p8t8b+Tiw==
+X-CSE-MsgGUID: qivU6XoeQKafrbnXwSpmCw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11433"; a="49363122"
+X-IronPort-AV: E=Sophos;i="6.15,290,1739865600"; 
+   d="scan'208";a="49363122"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2025 20:04:26 -0700
+X-CSE-ConnectionGUID: Xvyt4aJ6SJ2a+ZdqKs61IA==
+X-CSE-MsgGUID: EQqKXdXYSWybfeMZ8HCHFQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,289,1739865600"; 
-   d="scan'208";a="138753225"
+X-IronPort-AV: E=Sophos;i="6.15,290,1739865600"; 
+   d="scan'208";a="142990091"
 Received: from dapengmi-mobl1.ccr.corp.intel.com (HELO [10.124.245.128]) ([10.124.245.128])
-  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2025 20:00:19 -0700
-Message-ID: <d54e8654-d761-47aa-b9f7-10d8c44a07ec@linux.intel.com>
-Date: Thu, 15 May 2025 11:00:16 +0800
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2025 20:04:19 -0700
+Message-ID: <e0974937-c4b8-4fbd-935d-335f7472a235@linux.intel.com>
+Date: Thu, 15 May 2025 11:04:17 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,8 +67,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 15/38] KVM: x86/pmu: Check PMU cpuid configuration from
- user space
+Subject: Re: [PATCH v4 17/38] KVM: x86/pmu: Add perf_capabilities field in
+ struct kvm_host_values{}
 To: Sean Christopherson <seanjc@google.com>,
  Mingwei Zhang <mizhang@google.com>
 Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
@@ -88,10 +88,10 @@ Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
  Shukla Manali <Manali.Shukla@amd.com>,
  Nikunj Dadhania <nikunj.dadhania@amd.com>
 References: <20250324173121.1275209-1-mizhang@google.com>
- <20250324173121.1275209-16-mizhang@google.com> <aCUxWDaNKezTzJTV@google.com>
+ <20250324173121.1275209-18-mizhang@google.com> <aCUxc3c6Tt6yVmqi@google.com>
 Content-Language: en-US
 From: "Mi, Dapeng" <dapeng1.mi@linux.intel.com>
-In-Reply-To: <aCUxWDaNKezTzJTV@google.com>
+In-Reply-To: <aCUxc3c6Tt6yVmqi@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
@@ -100,80 +100,15 @@ On 5/15/2025 8:12 AM, Sean Christopherson wrote:
 > On Mon, Mar 24, 2025, Mingwei Zhang wrote:
 >> From: Dapeng Mi <dapeng1.mi@linux.intel.com>
 >>
->> Check user space's PMU cpuid configuration and filter the invalid
->> configuration.
->>
->> Either legacy perf-based vPMU or mediated vPMU needs kernel to support
->> local APIC, otherwise PMI has no way to be injected into guest. If
->> kernel doesn't support local APIC, reject user space to enable PMU
->> cpuid.
->>
->> User space configured PMU version must be no larger than KVM supported
->> maximum pmu version for mediated vPMU, otherwise guest may manipulate
->> some unsupported or unallowed PMU MSRs, this is dangerous and harmful.
->>
->> If the pmu version is larger than 1 but smaller than 5, CPUID.AH.ECX
->> must be 0 as well which is required by SDM.
->>
->> Suggested-by: Zide Chen <zide.chen@intel.com>
->> Signed-off-by: Dapeng Mi <dapeng1.mi@linux.intel.com>
->> Signed-off-by: Mingwei Zhang <mizhang@google.com>
->> ---
->>  arch/x86/kvm/cpuid.c | 15 +++++++++++++++
->>  arch/x86/kvm/pmu.c   |  7 +++++--
->>  arch/x86/kvm/pmu.h   |  1 +
->>  3 files changed, 21 insertions(+), 2 deletions(-)
->>
->> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
->> index 8eb3a88707f2..f849ced9deba 100644
->> --- a/arch/x86/kvm/cpuid.c
->> +++ b/arch/x86/kvm/cpuid.c
->> @@ -179,6 +179,21 @@ static int kvm_check_cpuid(struct kvm_vcpu *vcpu)
->>  			return -EINVAL;
->>  	}
->>  
->> +	best = kvm_find_cpuid_entry(vcpu, 0xa);
->> +	if (vcpu->kvm->arch.enable_pmu && best) {
->> +		union cpuid10_eax eax;
->> +
->> +		eax.full = best->eax;
->> +		if (enable_mediated_pmu &&
->> +		    eax.split.version_id > kvm_pmu_cap.version)
->> +			return -EINVAL;
->> +		if (eax.split.version_id > 0 && !vcpu_pmu_can_enable(vcpu))
->> +			return -EINVAL;
->> +		if (eax.split.version_id > 1 && eax.split.version_id < 5 &&
->> +		    best->ecx != 0)
->> +			return -EINVAL;
-> NAK, unless there is a really, *really* strong need for this.  I do not want to
-> get in the business of vetting the vCPU model presented to the guest.  If KVM
-> needs to constrain things for its own safety, then by all means, but AFAICT these
-> are nothing more than sanity checks on userspace.
+>> Add perf_capabilities in kvm_host_values{} structure to record host perf
+>> capabilities. KVM needs to know if host supports some PMU capabilities
+>> and then decide if passthrough or intercept some PMU MSRs or instruction
+>> like rdpmc, e.g. If host supports PERF_METRICES, but guest is configured
+>> not to support it, then rdpmc instruction needs to be intercepted.
+> This is wrong (spoiler alert).  This patch can be dropped.
 
-Ok.
-
-
->
->> +	}
->> +
->>  	/*
->>  	 * Exposing dynamic xfeatures to the guest requires additional
->>  	 * enabling in the FPU, e.g. to expand the guest XSAVE state size.
->> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
->> index 4f455afe4009..92c742ead663 100644
->> --- a/arch/x86/kvm/pmu.c
->> +++ b/arch/x86/kvm/pmu.c
->> @@ -743,6 +743,10 @@ static void kvm_pmu_reset(struct kvm_vcpu *vcpu)
->>  	kvm_pmu_call(reset)(vcpu);
->>  }
->>  
->> +inline bool vcpu_pmu_can_enable(struct kvm_vcpu *vcpu)
->> +{
->> +	return vcpu->kvm->arch.enable_pmu && lapic_in_kernel(vcpu);
-> Again, the APIC check belongs in the VM enablement path, not here.  Hmm, that
-> may require more thought with respect to enabling the PMU by default.
-
-Sure.
+Sean, why? I don't get your point here. Could you please give more
+information? Thanks.
 
 
 
