@@ -1,277 +1,178 @@
-Return-Path: <linux-kselftest+bounces-33233-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33234-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0790AABA688
-	for <lists+linux-kselftest@lfdr.de>; Sat, 17 May 2025 01:22:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEEADABA6B6
+	for <lists+linux-kselftest@lfdr.de>; Sat, 17 May 2025 01:49:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B5742A25044
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 May 2025 23:22:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B2DFB1BC7253
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 May 2025 23:49:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAD48280320;
-	Fri, 16 May 2025 23:22:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F277228033A;
+	Fri, 16 May 2025 23:49:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OEHv7Z1P"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MiUXrZZB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 079BF27FD71;
-	Fri, 16 May 2025 23:22:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CC5D27874B;
+	Fri, 16 May 2025 23:49:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747437729; cv=none; b=WvRa29D/uCJzKRRpNu4QZXxRIcJeQml/kP2SpDe68BrgY+uC/mmM7aBleQ/RvdOJLrm39ZemA+RKjgMDSfkarEiT+zpklxhQ05bs4gggAuJnOPRhSmZH+jXORk4ROG5k5j7EyiYPmSZvwOfp95Abvh8+qZygVTmfZeAQxCzTqWg=
+	t=1747439364; cv=none; b=k7mBJZKNDgluvA3YnMSPlFC/imeSTy/3HevIKgZEzQXfHQdjad6/eRzqch19terMdZuNFHhFFVN5MHu7BU4RwWR0brnjOU1iSzB8vCZz6a/7rgDtbvKAIsf/UNBDCOhoRI9/J6LjwLjh5jI/QIunyeh1qT/sIgjg8Gb7DQ31r8g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747437729; c=relaxed/simple;
-	bh=omyiBN9CVpzxRF+YaRFnHa1UxZdu58NwQocHXX6hruQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MsfN4B10fnyN5ugBVF1d0h4jywQpgtOmktyYe10FHFrR+j0TeHfQbVj7GpWXCa0KLtWdqYg9As+wgacHKSTN9Vi1IqxuJPOxDB7pmZul4h/SsN//BuV8a6wTejNm+tXBEMXSNGzVzjm0X1/vzgsp30QW/1xePdMa/MfQ1jOvJMg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OEHv7Z1P; arc=none smtp.client-ip=209.85.210.179
+	s=arc-20240116; t=1747439364; c=relaxed/simple;
+	bh=JynXQczZCmV7Hl5daVJbPr86DC3r593cY6JyojI2h9E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bejp73J3Ow1F22pPpN08eUE2dpK9c8c/yszJn+/nCoANrPoyAjpjIhnPnSrpfVlOgWvKQvarQRgXwTlkFsuibFZPYc2NOPhvyH9zUS3s+2RB+g7/6LfidJ6pgOPgqLmb1Ujfg06eC34LWyOJBYvOJaIpr3DW/D13Nzc9U36j86g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MiUXrZZB; arc=none smtp.client-ip=209.85.221.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-72d3b48d2ffso2824717b3a.2;
-        Fri, 16 May 2025 16:22:07 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-3a0b9e2d640so2253046f8f.2;
+        Fri, 16 May 2025 16:49:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747437726; x=1748042526; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2RBRW+BDhhR5QWYvsH1webo+qjc0apKgnSK3fhSjcVE=;
-        b=OEHv7Z1PVKqY2N2BvVABjlKKGPnmtN8E7GuKG+3HlhQQsTIVDpANWsPk8H/5/b0EDv
-         NZiejrgD13NRQZjS1d31LRn9Bf4RC62aGPk+4O8hVODtqM9ZWGkZUMidPZ6d45fkzOe/
-         5yqJDNMyy6i4JdGYEQCnEPscMNXOw3f+jrDrp+Hng3x/YXw0g2ILEpdCNwxKvUgX47NS
-         DjvNq9zTBDwuEkIJpLPVEzuGIWd10rbV5Uh4X2094YT2M+XTuaIfVHOlBIEEI4IgWQmy
-         /9oX+7bBkXOEMimh2dMXamsSKUMrozaap78cwC8bc5YTUw9+lDclhOMFFj8jXLaX1RHx
-         Yd9A==
+        d=gmail.com; s=20230601; t=1747439361; x=1748044161; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yLNmQk56WXrXrbrs+Rd+UwZYq2EuCmP2+ysJch2Gqcc=;
+        b=MiUXrZZBrUd9CJ/R3/+8Euo7FHdltR9apr1qojwyPposhAXDMtluhx6Ma77U3/fQ/9
+         WstozBnkwfFxrQnOtNkB0/TEqj+1GGSCJPiqQaCj8Bghob3bWTg+AHqt1p5wQm01bRRA
+         wRjV56XG3VayKgCkE+Av88VFUQcLkS45oKu3BmYfnXf0f+BhVeZPgornLkNEiOiwwpnz
+         05r1vWQxuRl1qnQlJRM/6vCTCJdzcKyVvAiwbvLxlQHhGkQZXGMf+9MBDGs/8mmABiJG
+         SbnMLS9EHdPuScZ4Lc1EXZN7vISEmhV49GwM8t+QMKqvSC2vsPdBP68Xgh2ZApyRJOQI
+         Fs3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747437726; x=1748042526;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2RBRW+BDhhR5QWYvsH1webo+qjc0apKgnSK3fhSjcVE=;
-        b=fqvwOYT/r6RSCsOpyGxiJWUOHhXDn6lBdYio9WiUbMb5f9nMMBJzOkd7FKqpulmZ+L
-         bFYp4E0G2kwF6FV6Tdt2YOChOYSg9wrwpm62IIQKhmLUELjLPmgMC1p4tUzGoGcWJuyX
-         x1OqiqZfwHXV8j1cRPtzNolagCsRSus5eWkCPRR9EtjVQE3cihPgqXxSIsrvgHgd+ges
-         WpqIsBTbj6MgcMjvjYLeq3QP2cKmq3ay5AZqOuHvOXWhy25T4VFUyTlETfG3TJUPOukb
-         B/GR2E7eQUoQn8H2thjbCIPIMG9sqco86L7fxgM7cB74NT1iJPS4fAYyXbyoj4Pj88/D
-         gI+A==
-X-Forwarded-Encrypted: i=1; AJvYcCUfxEKa4kI/jL+rlra2V23blWEVKZpDbmCDCzniRtulIxlpo0R5fJYJl2NzMAFzr3QkMYpSw5f2HRm7+kILAZle@vger.kernel.org, AJvYcCXooH2JP/J61XTONnyx4n5mKIcNJBuLW59C2ZRdhHppk1FkFddsgA/fr1uxQ5cLTyFRLzct2K3ECXvBtn8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyd5L7pwd3Ffq4PpmKlUlBavWplgdW1FLpX4/lRaNM8tM4ZHRcK
-	BnWZDR+WhiCdyuZH6MwCVfGSfFgiijn5PYHAmNA9oq5CJ8FSxk44SYWl8jp/hQU=
-X-Gm-Gg: ASbGncvaQtFhIgSR1RKJBfntmqfyNpIe+2SgTmed0GH1uXpjZT3pBspC5R9vlatKJPo
-	6fly2KFA4kFLkHFZQNLx2MgDquV0Ulne6f1fwzthMYjYRR/N3Kz+h53G6jR0d73xxdN9/kWIuDr
-	gMM6mbQPjBh6RoFhTXHdoASeBDyvt09gvdHuruEIzppeaI3MGXra5D1849BIyNWwU665o6w3Lm1
-	pW0UhwrDMuBbY1EzZgPvK0zVQDSjqz1Ah0Wrf1aXOHMfYtOPQSdifbB9lAnmEamrqzgUFqdvw13
-	xGounyL50+OYw0KtM2c5rGb6doLxWSW7axaTUnaToD8k4ek85veELlhEjs1PCRYPjHeFsyyh37A
-	Mw35agdA8jKHY9fm6ivfOqks=
-X-Google-Smtp-Source: AGHT+IHO//0EqEc7AdSy3HOjDEMiPF4k0UYR10/bdF7j6q/cjrIDSgjLD6NXd4/l6YDSJO91wQyowQ==
-X-Received: by 2002:a05:6a21:710a:b0:201:8a13:f392 with SMTP id adf61e73a8af0-2170ccb38e2mr6079231637.20.1747437726407;
-        Fri, 16 May 2025 16:22:06 -0700 (PDT)
-Received: from localhost (c-73-158-218-242.hsd1.ca.comcast.net. [73.158.218.242])
-        by smtp.gmail.com with UTF8SMTPSA id 41be03b00d2f7-b26eaf6dc3csm2097088a12.24.2025.05.16.16.22.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 May 2025 16:22:05 -0700 (PDT)
-From: Stanislav Fomichev <stfomichev@gmail.com>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	jiri@resnulli.us,
-	shuah@kernel.org,
-	stfomichev@gmail.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net v2] selftests: net: validate team flags propagation
-Date: Fri, 16 May 2025 16:22:05 -0700
-Message-ID: <20250516232205.539266-1-stfomichev@gmail.com>
-X-Mailer: git-send-email 2.49.0
+        d=1e100.net; s=20230601; t=1747439361; x=1748044161;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yLNmQk56WXrXrbrs+Rd+UwZYq2EuCmP2+ysJch2Gqcc=;
+        b=o/QNgtJ6cCiFwd5nxwiDZFYghh74azp6qfn6FMB8ARPtuiS7I/G11BdJ9a1oOacVj5
+         7zfc/QuaNX9+k7vcJooYi6SK/5FOT7OsafRnhcT9iz7vRrsbqr4JPnguh+wj7qdf7GHc
+         SL4nYhPKhNI/dHqvDRjF5I6C3b8pUc0La433k4jqHh+C73IjkrCJT8UvZC/wALjGFG4e
+         ouL9JDfx+JN4UblcJDZO/RvaeLxPdvAKZWX6mJQEDXAcUxxbnxXh7BacA1TS6nzTJWu0
+         mUKXjg9l6FaakTZNrOsLwP+nob9IsIIig+1GSRtpKexn1dbKlBO/IqmTeh19XXxs9J9Z
+         xaXQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU5FeF7kkF2U5AYT6VdEIV8WLV8/pX1e4GJPfLulSzL2uKwJf/KKVpRUAIJhivnd7tVg0cSysnW8KI6BehfwDji@vger.kernel.org, AJvYcCUhZPY9yN5APNO51UZI+BTgxeBx880FxFPx+kPLwC0rdzGH11dg9lWbeTBLmOm/a1+5Qb4tOjey03XBd7KE@vger.kernel.org, AJvYcCVErITNKojpOXoE6sP1wXgeAouQ0pJKDPED3IVs5qoTpF4FxfT9Y2on3+FFcAF1UrOkaDU=@vger.kernel.org, AJvYcCWER5uU43BWVTqAJ6frriEbeu7d2P8SqFmyzSqrxRdZTUv6UgD1Ww2Lfsql+Qyrx1y23x/dh5nozf4zwm9YWxLrFXuPCf0F@vger.kernel.org, AJvYcCX0Ioi/NFBaoTDRy67CfC0VTsJBNvUEChe9DgUwHCMELZX2uQQAdNwjTzOJDiOZXo0rmBaGRFz09qm9@vger.kernel.org, AJvYcCX2xaznOQAGBUWdMR0kADGSVmGnLAcoYsbS2ibo/p9v/q2i3xSO1G1LIGzvwR5qKU/M0NYfTa5Yddo=@vger.kernel.org, AJvYcCX7lGViFscXfQtN794DogQ68CFV8lf0BQA1io5kxIRE2uJvioSduGN68Xw0X+5fL4jY3lurtktzDAUyj9lW@vger.kernel.org, AJvYcCXFqa5AyQLfFxBMbKKlVZLPoNidpivOQrHLz90AgrcrdeO38mF3CXNUtV/ACvaDycnlO6H0d85TTq5pRNnQ@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw2v6MDp0LEt1fbawEwKKbyRzC0g37Lse4hVedzDwagB04GIbDZ
+	O8JbYM8Ea3UnV+DV9Nz8hhN2r8Dk6gdzXattPfMhLSe7XR09ujfIn+qrBLjQkU7+n+kEGh1XjiI
+	GIjDDlPM1IrKATVcVy0ZtfyqaDThmPyw=
+X-Gm-Gg: ASbGncsfaSO6/sS6H4j/xjd7yiJtLU1TFNooiTI+7gCwctt9VxB1Puemqia81mPWg8x
+	kaJSPOjF/o3w+7PtJEsj7FMjMxHL9SdYjrys52A7Ti5f6X4UndA5FtSZ+ie0J2dOj6GHCr2Qo88
+	S8pNaplmlOftmdIi99LrwRqk9HBnihoIWwcUgNiT0uGnLQKYG0JeNL8k445Ip1G85qOGqamHYo
+X-Google-Smtp-Source: AGHT+IEt13ebOwzpc+kY0WsGrWXwVoXKnKPvRfcOK4btMC7AsUlFZwn4kwFfwxO5xffregucUV2pzpgY8z4kdU24ZPU=
+X-Received: by 2002:adf:f50b:0:b0:3a3:5c97:d756 with SMTP id
+ ffacd0b85a97d-3a35c97d8aamr4266342f8f.17.1747439361049; Fri, 16 May 2025
+ 16:49:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250502184421.1424368-1-bboscaccy@linux.microsoft.com>
+ <20250502210034.284051-1-kpsingh@kernel.org> <CAHC9VhS5Vevcq90OxTmAp2=XtR1qOiDDe5sSXReX5oXzf+siVQ@mail.gmail.com>
+ <CACYkzJ5jsWFiXMRDwoGib5t+Xje6STTuJGRZM9Vg2dFz7uPa-g@mail.gmail.com>
+ <CACYkzJ6VQUExfyt0=-FmXz46GHJh3d=FXh5j4KfexcEFbHV-vg@mail.gmail.com>
+ <CAHC9VhQL_FkUH8F1fvFZmC-8UwZh3zkwjomCo1PiWNW0EGYUPw@mail.gmail.com>
+ <CACYkzJ4+=3owK+ELD9Nw7Rrm-UajxXEw8kVtOTJJ+SNAXpsOpw@mail.gmail.com> <CAHC9VhTeFBhdagvw4cT3EvA72EYCfAn6ToptpE9PWipG9YLrFw@mail.gmail.com>
+In-Reply-To: <CAHC9VhTeFBhdagvw4cT3EvA72EYCfAn6ToptpE9PWipG9YLrFw@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 16 May 2025 16:49:09 -0700
+X-Gm-Features: AX0GCFuvvvJ18JnaOTj0Zx7VVAejABXpQG7xGivhE2V41LonoDOtxmhIAAR39TA
+Message-ID: <CAADnVQJ4GDKvLSWuAMdwajA0V2DEw5m-O228QknW8Eo9jxhyig@mail.gmail.com>
+Subject: Re: [PATCH v3 0/4] Introducing Hornet LSM
+To: Paul Moore <paul@paul-moore.com>
+Cc: KP Singh <kpsingh@kernel.org>, Blaise Boscaccy <bboscaccy@linux.microsoft.com>, 
+	James Bottomley <James.Bottomley@hansenpartnership.com>, bpf <bpf@vger.kernel.org>, 
+	code@tyhicks.com, Jonathan Corbet <corbet@lwn.net>, "David S. Miller" <davem@davemloft.net>, 
+	David Howells <dhowells@redhat.com>, =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, Jarkko Sakkinen <jarkko@kernel.org>, 
+	James Morris <jmorris@namei.org>, Jan Stancek <jstancek@redhat.com>, 
+	Justin Stitt <justinstitt@google.com>, keyrings@vger.kernel.org, 
+	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, 
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
+	LSM List <linux-security-module@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, Masahiro Yamada <masahiroy@kernel.org>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	Bill Wendling <morbo@google.com>, Nathan Chancellor <nathan@kernel.org>, Neal Gompa <neal@gompa.dev>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Nicolas Schier <nicolas@fjasle.eu>, nkapron@google.com, 
+	Roberto Sassu <roberto.sassu@huawei.com>, "Serge E . Hallyn" <serge@hallyn.com>, 
+	Shuah Khan <shuah@kernel.org>, Matteo Croce <teknoraver@meta.com>, 
+	Cong Wang <xiyou.wangcong@gmail.com>, kysrinivasan@gmail.com, 
+	Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Cover three recent cases:
-1. missing ops locking for the lowers during netdev_sync_lower_features
-2. missing locking for dev_set_promiscuity (plus netdev_ops_assert_locked
-   with a comment on why/when it's needed)
-3. rcu lock during team_change_rx_flags
+On Fri, May 16, 2025 at 12:49=E2=80=AFPM Paul Moore <paul@paul-moore.com> w=
+rote:
+>
+> On Wed, May 14, 2025 at 2:48=E2=80=AFPM KP Singh <kpsingh@kernel.org> wro=
+te:
+> > On Wed, May 14, 2025 at 5:06=E2=80=AFAM Paul Moore <paul@paul-moore.com=
+> wrote:
+> > > On Sat, May 10, 2025 at 10:01=E2=80=AFPM KP Singh <kpsingh@kernel.org=
+> wrote:
+> > > >
+> > >
+> > > ...
+> > >
+> > > > The signature check in the verifier (during BPF_PROG_LOAD):
+> > > >
+> > > >     verify_pkcs7_signature(prog->aux->sha, sizeof(prog->aux->sha),
+> > > > sig_from_bpf_attr, =E2=80=A6);
+> > >
+> > > I think we still need to clarify the authorization aspect of your
+> > > proposed design.
+> > >
+> > > Working under the assumption that the core BPF kernel code doesn't
+> > > want to enforce any restrictions, or at least as few as possible ...
+> >
+> > The assumption is not true, I should have clarified it in the original
+> > design. With the UAPI / bpf_attr the bpf syscall is simply denied if
+> > the signature does not verify, so we don't need any LSM logic for
+> > this. There is really no point in continuing as signature verification
+> > is a part of the API contract when the user passes the sig, keyring in
+> > the bpf syscall.
+>
+> I think we need some clarification on a few of these details, it would
+> be good if you could answer the questions below about the
+> authorization aspects of your design?
+>
+> * Is the signature validation code in the BPF verifier *always* going
+> to be enforced when a signature is passed in from userspace?  In other
+> words, in your design is there going to be either a kernel build time
+> or runtime configuration knob that could selectively enable (or
+> disable) signature verification in the BPF verifier?
 
-Verified that each one triggers when the respective fix is reverted.
-Not sure about the placement, but since it all relies on teaming,
-added to the teaming directory.
+If there is a signature in union bpf_attr and it's incorrect
+the prog_load command will be rejected.
+No point in adding a knob to control that.
 
-One ugly bit is that I add NETIF_F_LRO to netdevsim; there is no way
-to trigger netdev_sync_lower_features without it.
+> * In the case where the signature validation code in the BPF verifier
+> is active, what happens when a signature is *not* passed in from
+> userspace?  Will the BPF verifier allow the program load to take
+> place?  Will the load operation be blocked?  Will the load operation
+> be subject to a more granular policy, and if so, how do you plan to
+> incorporate that policy decision into the BPF program load path?
 
-Signed-off-by: Stanislav Fomichev <stfomichev@gmail.com>
----
-v2: fix cleanup and wrong exit code (Jakub)
----
- drivers/net/netdevsim/netdev.c                |  2 +
- net/core/dev.c                                | 10 ++-
- .../selftests/drivers/net/team/Makefile       |  2 +-
- .../testing/selftests/drivers/net/team/config |  1 +
- .../selftests/drivers/net/team/propagation.sh | 80 +++++++++++++++++++
- 5 files changed, 93 insertions(+), 2 deletions(-)
- create mode 100755 tools/testing/selftests/drivers/net/team/propagation.sh
+If there is no signature the existing loading semantics will remain intact.
+We can discuss whether to add a sysctl or cgroup knob to disallow
+loading when signature is not present, but it probably should be
+a job of trivial LSM:
+if (prog_attr doesn't have signature &&
+   (task =3D=3D .. || task is under certain cgroup || whatever))
+  disallow.
 
-diff --git a/drivers/net/netdevsim/netdev.c b/drivers/net/netdevsim/netdev.c
-index 0e0321a7ddd7..3bd1f8cffee8 100644
---- a/drivers/net/netdevsim/netdev.c
-+++ b/drivers/net/netdevsim/netdev.c
-@@ -879,11 +879,13 @@ static void nsim_setup(struct net_device *dev)
- 			 NETIF_F_SG |
- 			 NETIF_F_FRAGLIST |
- 			 NETIF_F_HW_CSUM |
-+			 NETIF_F_LRO |
- 			 NETIF_F_TSO;
- 	dev->hw_features |= NETIF_F_HW_TC |
- 			    NETIF_F_SG |
- 			    NETIF_F_FRAGLIST |
- 			    NETIF_F_HW_CSUM |
-+			    NETIF_F_LRO |
- 			    NETIF_F_TSO;
- 	dev->max_mtu = ETH_MAX_MTU;
- 	dev->xdp_features = NETDEV_XDP_ACT_HW_OFFLOAD;
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 0d891634c692..4debd4b8e0f5 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -9188,8 +9188,16 @@ static int __dev_set_promiscuity(struct net_device *dev, int inc, bool notify)
- 
- 		dev_change_rx_flags(dev, IFF_PROMISC);
- 	}
--	if (notify)
-+	if (notify) {
-+		/* The ops lock is only required to ensure consistent locking
-+		 * for `NETDEV_CHANGE` notifiers. This function is sometimes
-+		 * called without the lock, even for devices that are ops
-+		 * locked, such as in `dev_uc_sync_multiple` when using
-+		 * bonding or teaming.
-+		 */
-+		netdev_ops_assert_locked(dev);
- 		__dev_notify_flags(dev, old_flags, IFF_PROMISC, 0, NULL);
-+	}
- 	return 0;
- }
- 
-diff --git a/tools/testing/selftests/drivers/net/team/Makefile b/tools/testing/selftests/drivers/net/team/Makefile
-index 2d5a76d99181..eaf6938f100e 100644
---- a/tools/testing/selftests/drivers/net/team/Makefile
-+++ b/tools/testing/selftests/drivers/net/team/Makefile
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- # Makefile for net selftests
- 
--TEST_PROGS := dev_addr_lists.sh
-+TEST_PROGS := dev_addr_lists.sh propagation.sh
- 
- TEST_INCLUDES := \
- 	../bonding/lag_lib.sh \
-diff --git a/tools/testing/selftests/drivers/net/team/config b/tools/testing/selftests/drivers/net/team/config
-index b5e3a3aad4bf..636b3525b679 100644
---- a/tools/testing/selftests/drivers/net/team/config
-+++ b/tools/testing/selftests/drivers/net/team/config
-@@ -1,5 +1,6 @@
- CONFIG_DUMMY=y
- CONFIG_IPV6=y
- CONFIG_MACVLAN=y
-+CONFIG_NETDEVSIM=m
- CONFIG_NET_TEAM=y
- CONFIG_NET_TEAM_MODE_LOADBALANCE=y
-diff --git a/tools/testing/selftests/drivers/net/team/propagation.sh b/tools/testing/selftests/drivers/net/team/propagation.sh
-new file mode 100755
-index 000000000000..4bea75b79878
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/team/propagation.sh
-@@ -0,0 +1,80 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+set -e
-+
-+NSIM_LRO_ID=$((256 + RANDOM % 256))
-+NSIM_LRO_SYS=/sys/bus/netdevsim/devices/netdevsim$NSIM_LRO_ID
-+
-+NSIM_DEV_SYS_NEW=/sys/bus/netdevsim/new_device
-+NSIM_DEV_SYS_DEL=/sys/bus/netdevsim/del_device
-+
-+cleanup()
-+{
-+	set +e
-+	ip link del dummyteam &>/dev/null
-+	ip link del team0 &>/dev/null
-+	echo $NSIM_LRO_ID > $NSIM_DEV_SYS_DEL
-+	modprobe -r netdevsim
-+}
-+
-+# Trigger LRO propagation to the lower.
-+# https://lore.kernel.org/netdev/aBvOpkIoxcr9PfDg@mini-arch/
-+team_lro()
-+{
-+	# using netdevsim because it supports NETIF_F_LRO
-+	NSIM_LRO_NAME=$(find $NSIM_LRO_SYS/net -maxdepth 1 -type d ! \
-+		-path $NSIM_LRO_SYS/net -exec basename {} \;)
-+
-+	ip link add name team0 type team
-+	ip link set $NSIM_LRO_NAME down
-+	ip link set dev $NSIM_LRO_NAME master team0
-+	ip link set team0 up
-+	ethtool -K team0 large-receive-offload off
-+
-+	ip link del team0
-+}
-+
-+# Trigger promisc propagation to the lower during IFLA_MASTER.
-+# https://lore.kernel.org/netdev/20250506032328.3003050-1-sdf@fomichev.me/
-+team_promisc()
-+{
-+	ip link add name dummyteam type dummy
-+	ip link add name team0 type team
-+	ip link set dummyteam down
-+	ip link set team0 promisc on
-+	ip link set dev dummyteam master team0
-+	ip link set team0 up
-+
-+	ip link del team0
-+	ip link del dummyteam
-+}
-+
-+# Trigger promisc propagation to the lower via netif_change_flags (aka
-+# ndo_change_rx_flags).
-+# https://lore.kernel.org/netdev/20250514220319.3505158-1-stfomichev@gmail.com/
-+team_change_flags()
-+{
-+	ip link add name dummyteam type dummy
-+	ip link add name team0 type team
-+	ip link set dummyteam down
-+	ip link set dev dummyteam master team0
-+	ip link set team0 up
-+	ip link set team0 promisc on
-+
-+	# Make sure we can add more L2 addresses without any issues.
-+	ip link add link team0 address 00:00:00:00:00:01 team0.1 type macvlan
-+	ip link set team0.1 up
-+
-+	ip link del team0.1
-+	ip link del team0
-+	ip link del dummyteam
-+}
-+
-+trap cleanup EXIT
-+modprobe netdevsim || :
-+echo $NSIM_LRO_ID > $NSIM_DEV_SYS_NEW
-+udevadm settle
-+team_lro
-+team_promisc
-+team_change_flags
--- 
-2.49.0
 
+Note that the prog verification itself is independent of the signature.
+If prog fails to pass safety checks it will still be rejected
+even if signature is ok.
+We're not going to do a verifier bypass.
 
