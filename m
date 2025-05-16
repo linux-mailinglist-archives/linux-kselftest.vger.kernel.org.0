@@ -1,117 +1,141 @@
-Return-Path: <linux-kselftest+bounces-33205-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33206-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2EC3ABA233
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 May 2025 19:51:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6511ABA27A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 May 2025 20:08:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 34D9C4E332E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 May 2025 17:51:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D41147A6BC4
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 May 2025 18:06:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 870F8220F50;
-	Fri, 16 May 2025 17:51:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4818027CB02;
+	Fri, 16 May 2025 18:07:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bq7SPd2r"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nsiu26Qy"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B5E016A395;
-	Fri, 16 May 2025 17:51:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E85027AC5C;
+	Fri, 16 May 2025 18:07:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747417881; cv=none; b=ZAN6F0O/bLSy8N/4lvIw+qtE1dqMkodCvA2uTd/qF8hcSpWco1MVWdko3c+gKpa8mCcD4OW4v8UFsznGP92MVjxw2n0fs3mN6EkZuWJGMa7gtRZfeFpCAUmQvPaL3u6OH0XgbhjOVPZn7OWb6lFtheH0d7LKmN40wHK25f2NXq0=
+	t=1747418870; cv=none; b=B9pF3AQBZ11MoxOhTSVMc2IsYon3T1/jiOQDiSk3Xa9lC0JTHFO1Z2tBDJJ/n9aVoq1UdK7fSzuVHGZHvk6T/9Osjl+9uEUddEXdQD7NRk/9cyAn2KxZW+bj8UUkCrG+aN5mnowcRmhq1A4DdKDEIqro4BpFb5cnPp0mg0VuK7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747417881; c=relaxed/simple;
-	bh=zHXB0XLXOtSEBsz0AAmv751cXGjmMRuUq3Cv9rGTUg8=;
+	s=arc-20240116; t=1747418870; c=relaxed/simple;
+	bh=NDQ3oIAK81gY0XPqiwX0d/dvGcwzYLnE7nxbmPCbTY8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T4Gne4S18Ykno7lDPdEqBFydazModi2Wn96ZuiewstJufkXkEzKhGZrNiKGc1atrCg+H9npY1BwodJCB/I1GOvREC6h/YQOjJ0/vQ7yYjxb3+E8lVObV/BuFA8LzBibx171TOFLe+wjGdGcproxxRdP42sxcmWLlI+Vd8RBVWYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bq7SPd2r; arc=none smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-7423df563d6so2729886b3a.0;
-        Fri, 16 May 2025 10:51:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747417879; x=1748022679; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XfHx99oh3Dk6Ga6XPceoIpKeilGYWFm/nk4SDrQsRmE=;
-        b=bq7SPd2rtm14bqxzbqp3gxqQc/N3XkH2WJlBpknGfNGHsYrjSbUvH7itcdSExaLfEK
-         O7UGEPGsNR/3Z1Ih6zTbWW9/or7kzgxhI4rNhcocvulYeLpgJZecIP2BYEDKFkrryRVR
-         T4OIpqwoeq0grK9H2DBkJwabgBEKwm+y7kSl54TaPCfuID1zmsYlAGPYUes6Ahe8yTuX
-         tuXVwLTqoOLZ+eWmRFvlJehVKpBmWr0nIu6EOZObSwguVZOk+EhOlmIh7Z/uJnd4MKgO
-         l0SArNMkNiL4gyDTgKgTUq8EmHNx5EpSvdd3T9yF5vJBQVIDFPiUZtkuhuCs5g8Rk2b4
-         cHpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747417879; x=1748022679;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XfHx99oh3Dk6Ga6XPceoIpKeilGYWFm/nk4SDrQsRmE=;
-        b=LnAC2uY8ftTz+QIg+JAoWUl/tDeNsZO6dZYHta3ii0WztIg/ugdH0CuAflp5aBtO7S
-         WRDOkD+O7PataNasI8a0UMhT523M5K+/QDVU+FmYv5a0sfEAfhNEUztEOC8csC1FotAn
-         RULGtkrJ4Ty+N3lVCkKv3H0s532S/i4Vt5BwGMv4djM09V2IhCwzg40dE/xaB4pdZRYJ
-         OO12zFRxJo2/t9hU5ictTxnkmlYZTBJ01onal/4koTC6ObCiBJawv+kNl0liVQmYjka7
-         9rpH+cxTSo1rRP4huuL9BNKjf3S66ybSpNInncIrtrhRWZ+HKx0No20xZLVBqCaypMTy
-         Yglw==
-X-Forwarded-Encrypted: i=1; AJvYcCUivAWwpiWyH1U366iOeDoFuljGFXwAGrKyTj03tIyCr7g5Bo+qZ8FZQjLi1nnkwI7PIEx7Rck3sEqznbg=@vger.kernel.org, AJvYcCVtRNZB1go/zEOW/d1Fus0P5zCH/4Jyac2A+DO6aOBrE3X8hbt9c8x8+aoGjw6qd8E63iM4W0NqoH6e6Y67l6Lh@vger.kernel.org
-X-Gm-Message-State: AOJu0YybZk5Mu+DnJhhG74+nxnFTYi46nYPrPEWifmI3/0M7L7DlB01H
-	W3selwCKM3cy1RY2/kxXL8TLagvBW+wc1BnFh0OwuYvJoF9vUBhacCE=
-X-Gm-Gg: ASbGncsGoncPzjov5lmrWlU9Sj3xDQOtATfEdjiKRcil5m3rYAkUgfzR6GkpAxKbbkr
-	NiUZSNf+E0xjx05HSXbaFvaH/hG+JTM8ZtrBfkK/spfbdDJ0dymRuXIrW7kVrbq7MbUVvYBQM5S
-	r6XLMzqgbMJrD6Di+srMjCKwJMRkyWB943ETBNTAeHNOWTX29UYrEQQE+8Q+D/a/uIADvmqleAL
-	o00SMDzsM1cqGVfdn9RaKQXnli3YD8kLnMgGTw0szCB0Jlt/mZ2aAVFX7TgE8t9zeACCLdFumN8
-	he1AnVO95H2IL+pn6XPlMvx97d0xXxsAk3JHAguftGdnHJpOt1b0dlSR0xaI7ikGj8EnozoDKNC
-	uKQjWCP452wwy
-X-Google-Smtp-Source: AGHT+IEh/PdHyupWeb9mFydEjbKSIQ8igSnJ8RAKkuDZvB//ovVqKm+nr+xy+x3+11EOX037an7rdw==
-X-Received: by 2002:a05:6a21:8cc1:b0:216:1ea0:a516 with SMTP id adf61e73a8af0-21621a0a546mr6727031637.41.1747417879217;
-        Fri, 16 May 2025 10:51:19 -0700 (PDT)
-Received: from localhost (c-73-158-218-242.hsd1.ca.comcast.net. [73.158.218.242])
-        by smtp.gmail.com with UTF8SMTPSA id 98e67ed59e1d1-30e3340187dsm5472356a91.5.2025.05.16.10.51.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 May 2025 10:51:18 -0700 (PDT)
-Date: Fri, 16 May 2025 10:51:18 -0700
-From: Stanislav Fomichev <stfomichev@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
-	jiri@resnulli.us, shuah@kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net] selftests: net: validate team flags propagation
-Message-ID: <aCd7Fj9kr_pbhQaO@mini-arch>
-References: <20250515231332.4120071-1-stfomichev@gmail.com>
- <20250516073556.5983d1d0@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=UfgVNoSmdyslng6qvN/zuWJm2m/Dv+tV+1s+D0L0x+4+Nuhxbcj0PrnNmneLdN4UPz0/8DqprhRRvUVlN/vUqMu6cG5OkUhiZVhR/OreqHF0mL/z8GQoz3IHQnz7dCfxeiaj1e+O1IJVy8OzCMUdOZiqgEMhnyGttnF0qmo6+Uo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nsiu26Qy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F24ECC4CEE4;
+	Fri, 16 May 2025 18:07:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747418869;
+	bh=NDQ3oIAK81gY0XPqiwX0d/dvGcwzYLnE7nxbmPCbTY8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Nsiu26QyPbRgf5TPznJIJOzpQVrbSTQCNVVmXUO2pDu4VVs+n/+Qe22sAVXpTMy6j
+	 WBMLzciw4Te+AsPPcBApI/0IKX7LT3BffjFhTegMYG6W6AlL8+3ZjUe+ibjBOqNPfj
+	 zQfqZh1/a6j2rIvQr3SToofPTZ8Oq7KA9b6qhiFWpdFLBldDPF0rUw43Qo1xwvaTeQ
+	 PUZ8ZV5AFX1kHeYP1IoZ5OHtMQURg4oKW04Vspj0SdcD0XBSPaMNlOaHS4wZMr71B9
+	 stVbSD0z+TfaWA0Vv/UJHgyC9tvIiHdFbJPZbxCRZgmZxxWdxdU0FLcKuAJOHZPq0J
+	 MWaCTb7kHwbCQ==
+Date: Fri, 16 May 2025 19:07:46 +0100
+From: Mark Brown <broonie@kernel.org>
+To: David Hildenbrand <david@redhat.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/mm: Fix test result reporting in gup_longterm
+Message-ID: <aCd-8kEyDm2f2w0z@finisterre.sirena.org.uk>
+References: <20250515-selftests-mm-gup-longterm-dups-v1-1-05f8f731cf63@kernel.org>
+ <f924f789-5269-4046-99a4-2991f9a3ab3c@redhat.com>
+ <aCcvxaFc6DE_Mhr1@finisterre.sirena.org.uk>
+ <58dbef73-6e37-46de-9092-365456306b27@redhat.com>
+ <aCc5E-wB4nBwrKEP@finisterre.sirena.org.uk>
+ <46d151d7-c04b-4538-9725-dc4f46ac8ac1@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="F0Ea/dgySH8XhVmb"
 Content-Disposition: inline
-In-Reply-To: <20250516073556.5983d1d0@kernel.org>
+In-Reply-To: <46d151d7-c04b-4538-9725-dc4f46ac8ac1@redhat.com>
+X-Cookie: Well begun is half done.
 
-On 05/16, Jakub Kicinski wrote:
-> On Thu, 15 May 2025 16:13:32 -0700 Stanislav Fomichev wrote:
-> > Cover three recent cases:
-> > 1. missing ops locking for the lowers during netdev_sync_lower_features
-> > 2. missing locking for dev_set_promiscuity (plus netdev_ops_assert_locked
-> >    with a comment on why/when it's needed)
-> > 3. rcu lock during team_change_rx_flags
-> > 
-> > Verified that each one triggers when the respective fix is reverted.
-> > Not sure about the placement, but since it all relies on teaming,
-> > added to the teaming directory.
-> > 
-> > One ugly bit is that I add NETIF_F_LRO to netdevsim; there is no way
-> > to trigger netdev_sync_lower_features without it.
-> 
-> Seems to consistently fail in NIPA :(
-> -- 
-> pw-bot: cr
 
-Cleanup is a bit messy. Will add set +e and retest locally with vng,
-thanks!
+--F0Ea/dgySH8XhVmb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, May 16, 2025 at 04:12:08PM +0200, David Hildenbrand wrote:
+> On 16.05.25 15:09, Mark Brown wrote:
+
+> > > I'm afraid we have other such tests that report duplicate conditions.=
+ cow.c
+> > > is likely another candidate (written by me ;) ).
+
+> > That one's not come up for me (this was one of four different patches
+> > for mm selftests I sent the other day cleaning up duplicate test names).
+
+> $ sudo ./cow
+
+=2E..
+
+> 1..778
+> # [INFO] Anonymous memory tests in private mappings
+> # [RUN] Basic COW after fork() ... with base page
+> ok 1 No leak from parent into child
+> # [RUN] Basic COW after fork() ... with swapped out base page
+> ok 2 No leak from parent into child
+
+> Aren't the duplicate "No leak from parent into child" the problematic bit=
+s?
+> But maybe I am getting it wrong, what needs to be "unique" :)
+
+Ah, yes - that's got the same issue.  I'm not running that program one
+way or another, it's not immediately clear to me why not - I can't see
+any sign of it being invoked by the runner script but I also can't see
+anything that I'd expect to stop that happening.  I'll have to have a
+poke at it, thanks for flagging that.
+
+[Converting to kselftet_harness]
+> > That'd certainly work, though doing that is more surgery on the test
+> > than I personally have the time/enthusiasm for right now.
+
+> Same over here.
+
+> But probably if we touch it, we should just clean it up right away. Well,
+> if we decide that that is the right cleanup. (you mention something like =
+that
+> in your patch description :)=20
+
+OTOH there's something to be said for just making incremental
+improvements in the tests where we can, they tend not to get huge
+amounts of love in general which means perfect can very much be the
+enemy of good.  If there's some immediate prospect of someone doing a
+bigger refactoring then that'd be amazing, but if not then it seems
+useful to make things play better with the automation for now.
+
+--F0Ea/dgySH8XhVmb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmgnfuwACgkQJNaLcl1U
+h9C+1Qf/RpnzjkDNIVJbiN4XdRsp/uDYe3/nV7RLlL/fbTisY3dHyhvFom59dhod
+1Ii/9OxAP4NDn5QeNPrvPN+mS4G1qhwz9EMIkqGKZVT+LhZnHoIWOv2XrpK0nzSV
+EavRh5bwqqkANX4d1ArzLTbNaF9Y7jehxFp9AkxKUfR20NgIC7fSZUVBtOCteOoK
+J0plCu8UuZECzL79JZ9PB3FMlm81yNFCczCMQP2XjFs+ECFuFYZef+Jv06lI2M7m
+FY1Q5l7ILhEprXZJXrL4MKbgWZxRpe8s9uv/JQ3NRDeiXORWV8AyFMXZYSNTurwK
+xhdCIS1qJRYcDjecpJE5vGMlk3xi4A==
+=67hP
+-----END PGP SIGNATURE-----
+
+--F0Ea/dgySH8XhVmb--
 
