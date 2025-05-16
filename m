@@ -1,233 +1,153 @@
-Return-Path: <linux-kselftest+bounces-33224-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33225-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D2A0ABA3C5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 May 2025 21:28:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FB80ABA456
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 May 2025 21:49:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B3EA168271
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 May 2025 19:28:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C9FEA50384C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 May 2025 19:49:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7559226D00;
-	Fri, 16 May 2025 19:28:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0BFF27FB08;
+	Fri, 16 May 2025 19:49:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VelvmmjH"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="GHEga/nS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46854225787
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 May 2025 19:28:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 594FA23504E
+	for <linux-kselftest@vger.kernel.org>; Fri, 16 May 2025 19:49:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747423709; cv=none; b=HgbCfwZqusDltCcVPyFRaX0AKB6L8aNlpiB+LtirhFNS0BrP5iSITMdba5JPO+FzkbdOEosaSnDOgkO9cLJTvlXtgSeuOOBh5a7LVUz0KhO5NsCbHCi+DOf/hOY364FzGfLzUE20tHfnASsE2nuGTCfN9aa9oyR13067To1hTiE=
+	t=1747424970; cv=none; b=uH1u2+hgoGOEQTnIDNifcFpvH3ToFnoqQ4ybG5/yJKoo4fjoaebBz5frmuHSREeYXuJQS9NCyYoSav1vzew4RBjTMLXTEWjG1vM17wTD08ovB1tvaP5HLWB+YjC07pUeiieuZJii8yOw1RLurRHs1jsOZjQRh+E9vAbXrA76zbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747423709; c=relaxed/simple;
-	bh=TJ3c9l4pdDm97mcloPavrFSmJivYWHpes/mnfR0ofnU=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=nhvZVyjsQ3MT/lPgqzR1IW4K5TfACK9LCXmISZCcj4nNPoQEJu8Ymk6/NeKionWO/ZOYll+XZet04QoRvpk44rO96fAOW6/2K0DmMN/5CcNDTfY0gesCDYlveBclvRJ2sOIpTXUzb0mi4t3zE/nKBAJajvkP2hGKFz5abe0kvl8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VelvmmjH; arc=none smtp.client-ip=209.85.210.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-74299055c3dso3170455b3a.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 May 2025 12:28:27 -0700 (PDT)
+	s=arc-20240116; t=1747424970; c=relaxed/simple;
+	bh=nLoaIDD6+TJAz0bOPeqNCjl0kdmqqVG70rJ0R5xo6R0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HSFeu3BGtql98xpfYzgGTUz9fI+lDuuuekGJeWv9JVZHa8Nn+SS8cuUy9FYLzkaccuoe8mbkIlMLUwwdGBd/z7o+TkNYH6U5gEeydYKezNmJ1NoXrN6Vi8604BZbjgB0p7TlTDHnG7D6Zez0xQkcwq00+j9Xp9mSz1LKhVtl06Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=GHEga/nS; arc=none smtp.client-ip=209.85.219.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-e7ab544d798so2058275276.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 May 2025 12:49:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1747423707; x=1748028507; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4SuDgnPpkaah3slF5YunYH8RTWaJ6H4jJOeD+ScylJY=;
-        b=VelvmmjHy01Y0SepF+9uG2jqfqO2EiRq6QuqGkvQp3NMpetwbkoc0eRhntgZdP+yVz
-         oAAgVfyCGyfm49fjQWs0N1nGsEI1qYeAxa7CDa0dn9yAeiCs9VUyHVHFDVweqildWXKa
-         G8y8oU5awbp3LF1FfHpzLPkWWcEZCAyPgweP4mKSdOYZVuKwChh1NRZE6QNfpW2s4LCQ
-         hOUvfuAHoxHaLX2HODNag1mEdBLB8PMH/ckTnXOPidtlyrQhdHbGity1d50fa5bUH4vW
-         ey6zVk8bgbkHBJzIJna/or4nv07hyvwrWj9XD9tefSb6VGntNdJerEHKCJ+POjb4e7mx
-         wCeg==
+        d=paul-moore.com; s=google; t=1747424967; x=1748029767; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8l/0xKrDAl3wR6FwPFmxGX5JGMTUvNTKlZKVf0AUdss=;
+        b=GHEga/nSbOA1NOTKKNMj+qfMQhYeZT0tyuw7OU0zuP/+aWac8YeezxVc7HhqfEtlIP
+         bG7NmcWMmodUR2VHQ0XpWCUVmqit3mmgody+RR0se8Uuk7p+WddTL4RLFGmSMycy+M4H
+         GypumqnW/xWJ9xFtD5LxFhKlJ8buDs/w8eH8UahaHPBAULZkA815EZTwqqy2bGipbm+F
+         5uDygxoduGWw3IGF8qMWKxyms+GBJ3JjeYQHkOULd20GmIttOP5FqoP8yKmNPAvZgNGT
+         G4XrA47ELF7PtP3/OQ411gCDdLt4jLgX30U2i2SdP9GtIz0J0OLRv7gVvLpYNMVPWH6a
+         pYtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747423707; x=1748028507;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4SuDgnPpkaah3slF5YunYH8RTWaJ6H4jJOeD+ScylJY=;
-        b=m7ALAV2x7KCUTaUARpZZ+IaG3LYD3hEvc0gnd0RQVuRqFodwHw8gnP34XZuRGGTfCc
-         uKHWp2tVrvEupNcNfqC2ND1xV4/k45R3PmpJnwnnaqtXi97UHwSV5OBSIgR0J+JZDRpv
-         A+hBFGxxtbooA3sWJqkgOH2dWPvVX6Kq2nH2vTg8bwsYeeJS6SHbTtJLgoj1vN6R+joc
-         A5M1igwyD0sTj4Yod4UV4GBdafpIORTo+P/+whdxjm3iYW9VbRZJiMlXZeqsB+fWLw9h
-         3kjtLEEcWl9Vnv9Ce7zqgIKVQUgjX3A2Ggfu//Nc9VVs6YA1fybpN731N7QAkSe+XDl0
-         /DHw==
-X-Forwarded-Encrypted: i=1; AJvYcCU0N0o3EiNVr+LxoMXr1ICv3kmOQ4Kibf529HpRSmwETRsAB8HkOo/3QOGZO116oXkZfHPEHaNrXX0yovn4goY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/gVFRYBMG87KPTCFZ0Shh+tFNLWJrKJpxmEcyqPQDWUUES0lQ
-	5nM5OeNqKQUbksze7jnGWozGlwRyrDtL2ZXEBk57jxnV9Q9BBULLi1NxUMWA2Lwv2m4lKm0KtLs
-	5T0wdeA==
-X-Google-Smtp-Source: AGHT+IHXzW2hkrzTBIe3eiFxBkJs41fk/sX0hV5YrOzJFA+YwLSyxJbf5aJqKWTCqRwGNGNz0qnN8aD/Wps=
-X-Received: from pfbei22.prod.google.com ([2002:a05:6a00:80d6:b0:736:415f:3d45])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:a06:b0:72d:9cbc:730d
- with SMTP id d2e1a72fcca58-742a97d4650mr5732591b3a.11.1747423707415; Fri, 16
- May 2025 12:28:27 -0700 (PDT)
-Date: Fri, 16 May 2025 12:28:25 -0700
-In-Reply-To: <20250502050346.14274-6-manali.shukla@amd.com>
+        d=1e100.net; s=20230601; t=1747424967; x=1748029767;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8l/0xKrDAl3wR6FwPFmxGX5JGMTUvNTKlZKVf0AUdss=;
+        b=xO94hjggRugoxxH7EIv0xmWRqIU4oWOU4M4yEjIkyB2P49WXawile6pgkGPnyjWkTL
+         +ML6ZM+i9PFhKGqT/WyTduzI90FBai/mHHTHhS3b81S4D1WtfiQyEvwIdQkJV7Y8FKem
+         oPAWVXeS1LuZSLbJigDyAB3T0dyPMmtTXlW63T62n96SXjH9R6RMRMC7uHOUiEYvy4tr
+         rFCf2OPrqMTsW+2IE9uXO1p3+BOBk03tkd6xyYT9s3e3eIRpd058BsjOZXt9phPoFxYU
+         btgc2JJ86+wn6VLnPC/IQ5GFa/60/lOLLDITrn9ePBiDm9jPx9PaAvWcqmuP2VaYRk+t
+         Jubg==
+X-Forwarded-Encrypted: i=1; AJvYcCVrHkGA/FnwcBfgFt2MS30hkcnxYy1J6dt9nOriQqbCCRXzys3aJqsKvLxlU/i5l8tNU9xGYjQ+LkPMgLZHWpU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxTpHS9OOsQUTJpz5Xq6h+qvsL71hlyxKcYrwxZ2naOTplRsSbb
+	7uE2OSc8Lit8eV/kKRUPHCKqTEP8Irmq78Lz6lMtoJ4ZF3Iho4JAjWo/NbO4Rb1b2Oez8qloHDz
+	fzuSqmKy0KnZqWX+gz6VnQmuBSnlgGunbFCbP9HmS
+X-Gm-Gg: ASbGncumsGkbNxtX0zibd0Ga29qIpvlQmd6niRENrpuT9aOLiOoGwOy4nBtj6QaawJ/
+	7hVu09uM4IsGCydeJpHcRO/vVr74LwMyoHrKgb6A6E880u/JmK2w81dolQOzXtotRZ8bcfTnC6W
+	1q+M1VFa/7kDXu5sx6OYvWrtZIRw5/yxVU
+X-Google-Smtp-Source: AGHT+IEQIkzEpi0E3fz8WZlSmcfqapgq69lMRohpEoCb3vyZJS8ONyTw2i0/vIHmtC9UeMyPfp6xvEAOklEV9x0FCwo=
+X-Received: by 2002:a05:6902:1b09:b0:e79:7ba6:f8d with SMTP id
+ 3f1490d57ef6-e7b6d3bb248mr5339420276.7.1747424967244; Fri, 16 May 2025
+ 12:49:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250502050346.14274-1-manali.shukla@amd.com> <20250502050346.14274-6-manali.shukla@amd.com>
-Message-ID: <aCeR2TjPzC_OYBfG@google.com>
-Subject: Re: [PATCH v5 5/5] KVM: selftests: Add bus lock exit test
-From: Sean Christopherson <seanjc@google.com>
-To: Manali Shukla <manali.shukla@amd.com>
-Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, pbonzini@redhat.com, 
-	nikunj@amd.com, bp@alien8.de
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+References: <20250502184421.1424368-1-bboscaccy@linux.microsoft.com>
+ <20250502210034.284051-1-kpsingh@kernel.org> <CAHC9VhS5Vevcq90OxTmAp2=XtR1qOiDDe5sSXReX5oXzf+siVQ@mail.gmail.com>
+ <CACYkzJ5jsWFiXMRDwoGib5t+Xje6STTuJGRZM9Vg2dFz7uPa-g@mail.gmail.com>
+ <CACYkzJ6VQUExfyt0=-FmXz46GHJh3d=FXh5j4KfexcEFbHV-vg@mail.gmail.com>
+ <CAHC9VhQL_FkUH8F1fvFZmC-8UwZh3zkwjomCo1PiWNW0EGYUPw@mail.gmail.com> <CACYkzJ4+=3owK+ELD9Nw7Rrm-UajxXEw8kVtOTJJ+SNAXpsOpw@mail.gmail.com>
+In-Reply-To: <CACYkzJ4+=3owK+ELD9Nw7Rrm-UajxXEw8kVtOTJJ+SNAXpsOpw@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Fri, 16 May 2025 15:49:16 -0400
+X-Gm-Features: AX0GCFuBXEBi1NnN_9kfsOxw-5nGHtwLhBNF6-R1ixmmmxe2op_6asanhCRDNXU
+Message-ID: <CAHC9VhTeFBhdagvw4cT3EvA72EYCfAn6ToptpE9PWipG9YLrFw@mail.gmail.com>
+Subject: Re: [PATCH v3 0/4] Introducing Hornet LSM
+To: KP Singh <kpsingh@kernel.org>
+Cc: bboscaccy@linux.microsoft.com, James.Bottomley@hansenpartnership.com, 
+	bpf@vger.kernel.org, code@tyhicks.com, corbet@lwn.net, davem@davemloft.net, 
+	dhowells@redhat.com, gnoack@google.com, herbert@gondor.apana.org.au, 
+	jarkko@kernel.org, jmorris@namei.org, jstancek@redhat.com, 
+	justinstitt@google.com, keyrings@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	llvm@lists.linux.dev, masahiroy@kernel.org, mic@digikod.net, morbo@google.com, 
+	nathan@kernel.org, neal@gompa.dev, nick.desaulniers+lkml@gmail.com, 
+	nicolas@fjasle.eu, nkapron@google.com, roberto.sassu@huawei.com, 
+	serge@hallyn.com, shuah@kernel.org, teknoraver@meta.com, 
+	xiyou.wangcong@gmail.com, kysrinivasan@gmail.com, 
+	Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 02, 2025, Manali Shukla wrote:
-> diff --git a/tools/testing/selftests/kvm/x86/kvm_buslock_test.c b/tools/testing/selftests/kvm/x86/kvm_buslock_test.c
-> new file mode 100644
-> index 000000000000..9c081525ac2a
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/x86/kvm_buslock_test.c
-> @@ -0,0 +1,135 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (C) 2024 Advanced Micro Devices, Inc.
-> + */
-> +
-> +#include "test_util.h"
-> +#include "kvm_util.h"
-> +#include "processor.h"
-> +#include "svm_util.h"
-> +#include "vmx.h"
-> +
-> +#define NR_ITERATIONS 100
-> +#define L2_GUEST_STACK_SIZE 64
-> +
-> +#pragma GCC diagnostic push
-> +#pragma GCC diagnostic ignored "-Waddress-of-packed-member"
+On Wed, May 14, 2025 at 2:48=E2=80=AFPM KP Singh <kpsingh@kernel.org> wrote=
+:
+> On Wed, May 14, 2025 at 5:06=E2=80=AFAM Paul Moore <paul@paul-moore.com> =
+wrote:
+> > On Sat, May 10, 2025 at 10:01=E2=80=AFPM KP Singh <kpsingh@kernel.org> =
+wrote:
+> > >
+> >
+> > ...
+> >
+> > > The signature check in the verifier (during BPF_PROG_LOAD):
+> > >
+> > >     verify_pkcs7_signature(prog->aux->sha, sizeof(prog->aux->sha),
+> > > sig_from_bpf_attr, =E2=80=A6);
+> >
+> > I think we still need to clarify the authorization aspect of your
+> > proposed design.
+> >
+> > Working under the assumption that the core BPF kernel code doesn't
+> > want to enforce any restrictions, or at least as few as possible ...
+>
+> The assumption is not true, I should have clarified it in the original
+> design. With the UAPI / bpf_attr the bpf syscall is simply denied if
+> the signature does not verify, so we don't need any LSM logic for
+> this. There is really no point in continuing as signature verification
+> is a part of the API contract when the user passes the sig, keyring in
+> the bpf syscall.
 
-Eww.
+I think we need some clarification on a few of these details, it would
+be good if you could answer the questions below about the
+authorization aspects of your design?
 
-> +
-> +struct buslock_test {
-> +	unsigned char pad[PAGE_SIZE - 2];
-> +	atomic_long_t val;
-> +} __packed;
+* Is the signature validation code in the BPF verifier *always* going
+to be enforced when a signature is passed in from userspace?  In other
+words, in your design is there going to be either a kernel build time
+or runtime configuration knob that could selectively enable (or
+disable) signature verification in the BPF verifier?
 
-You don't need an entire page to generate a bus lock, two cache lines will do
-nicely.  And there's certain no need for __packed.
+* In the case where the signature validation code in the BPF verifier
+is active, what happens when a signature is *not* passed in from
+userspace?  Will the BPF verifier allow the program load to take
+place?  Will the load operation be blocked?  Will the load operation
+be subject to a more granular policy, and if so, how do you plan to
+incorporate that policy decision into the BPF program load path?
 
-> +struct buslock_test test __aligned(PAGE_SIZE);
-> +
-> +static __always_inline void buslock_atomic_add(int i, atomic_long_t *v)
-> +{
-> +	asm volatile(LOCK_PREFIX "addl %1,%0"
-> +		     : "+m" (v->counter)
-> +		     : "ir" (i) : "memory");
-> +}
-
-If only there were utilities for atomics...
-
-> +static void buslock_add(void)
-
-guest_generate_buslocks()
-
-> +{
-> +	/*
-> +	 * Increment a page unaligned variable atomically.
-> +	 * This should generate a bus lock exit.
-
-Not should, will.
-
-> +	 */
-> +	for (int i = 0; i < NR_ITERATIONS; i++)
-> +		buslock_atomic_add(2, &test.val);
-
-Don't do weird and completely arbitrary things like adding '2' instead of '1',
-it makes readers look for intent and purpose that doesn't exist.
-
-> +}
-
-...
-
-> +int main(int argc, char *argv[])
-> +{
-> +	struct kvm_vcpu *vcpu;
-> +	struct kvm_run *run;
-> +	struct kvm_vm *vm;
-> +	vm_vaddr_t nested_test_data_gva;
-> +
-> +	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_SVM) || kvm_cpu_has(X86_FEATURE_VMX));
-
-There's no reason to make nested support a hard dependency, it's just as easy to
-make it conditional.
-
-> +	TEST_REQUIRE(kvm_has_cap(KVM_CAP_X86_BUS_LOCK_EXIT));
-> +
-> +	vm = vm_create(1);
-> +	vm_enable_cap(vm, KVM_CAP_X86_BUS_LOCK_EXIT, KVM_BUS_LOCK_DETECTION_EXIT);
-> +	vcpu = vm_vcpu_add(vm, 0, guest_code);
-> +
-> +	if (kvm_cpu_has(X86_FEATURE_SVM))
-> +		vcpu_alloc_svm(vm, &nested_test_data_gva);
-> +	else
-> +		vcpu_alloc_vmx(vm, &nested_test_data_gva);
-> +
-> +	vcpu_args_set(vcpu, 1, nested_test_data_gva);
-> +
-> +	run = vcpu->run;
-> +
-> +	for (;;) {
-> +		struct ucall uc;
-> +
-> +		vcpu_run(vcpu);
-> +
-> +		if (run->exit_reason == KVM_EXIT_IO) {
-> +			switch (get_ucall(vcpu, &uc)) {
-> +			case UCALL_ABORT:
-> +				REPORT_GUEST_ASSERT(uc);
-> +				/* NOT REACHED */
-> +			case UCALL_SYNC:
-> +				continue;
-> +			case UCALL_DONE:
-> +				goto done;
-> +			default:
-> +				TEST_FAIL("Unknown ucall 0x%lx.", uc.cmd);
-> +			}
-> +		}
-> +
-> +		TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_X86_BUS_LOCK);
-> +	}
-
-*sigh*
-
-This doesn't actually ****VERIFY**** that the expected number of bus lock exits
-were generated.  KVM could literally do nothing and the test will pass.  E.g. the
-test passes if I do this:
-
-diff --git a/tools/testing/selftests/kvm/x86/kvm_buslock_test.c b/tools/testing/selftests/kvm/x86/kvm_buslock_test.c
-index 9c081525ac2a..aa65d6be0f13 100644
---- a/tools/testing/selftests/kvm/x86/kvm_buslock_test.c
-+++ b/tools/testing/selftests/kvm/x86/kvm_buslock_test.c
-@@ -93,10 +93,10 @@ int main(int argc, char *argv[])
-        vm_vaddr_t nested_test_data_gva;
- 
-        TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_SVM) || kvm_cpu_has(X86_FEATURE_VMX));
--       TEST_REQUIRE(kvm_has_cap(KVM_CAP_X86_BUS_LOCK_EXIT));
-+//     TEST_REQUIRE(kvm_has_cap(KVM_CAP_X86_BUS_LOCK_EXIT));
- 
-        vm = vm_create(1);
--       vm_enable_cap(vm, KVM_CAP_X86_BUS_LOCK_EXIT, KVM_BUS_LOCK_DETECTION_EXIT);
-+//     vm_enable_cap(vm, KVM_CAP_X86_BUS_LOCK_EXIT, KVM_BUS_LOCK_DETECTION_EXIT);
-        vcpu = vm_vcpu_add(vm, 0, guest_code);
- 
-        if (kvm_cpu_has(X86_FEATURE_SVM))
---
-
-The test would also fail to detect if KVM completely skipped the instruction.
-
-This is not rocket science.  If you can't make your test fail by introducing bugs
-in what you're testing, then your test is worthless.
-
-No need for a v6, I'm going to do surgery when I apply, this series has dragged
-on for far too long.
+--=20
+paul-moore.com
 
