@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-33191-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33192-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78652AB9DFD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 May 2025 15:52:22 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BD91AB9DC6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 May 2025 15:45:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7E0F44A3120
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 May 2025 13:51:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4075C7B00A3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 May 2025 13:43:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4980B1C84D7;
-	Fri, 16 May 2025 13:41:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3CB7202C44;
+	Fri, 16 May 2025 13:41:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="peJ7ZTY3"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oCBS1o02"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+Received: from mail-wr1-f74.google.com (mail-wr1-f74.google.com [209.85.221.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 081891C2DB2
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 May 2025 13:40:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6B2A200110
+	for <linux-kselftest@vger.kernel.org>; Fri, 16 May 2025 13:41:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747402860; cv=none; b=hsFAJZiiVB3nBaWdFZwEcdDmqnZYaMb0BJUBfYz7E7llA4kdlIaxMQ8JqffA7OUXAkrAof/fV0P/7L2HVS9DTpiBSl6mtPsPkBQtfOrLkBrDmMr33Y8e6qYN+k+fCgKV36nblCWeHkl4ntJ+ZJoyS6UU2DyFlGorH47hiqFeBY8=
+	t=1747402883; cv=none; b=HFuhId7n0kywZdr0XjfwYjLde32ZtnZ55QaGggSSiAjWYkPFkPBObvmJhaKm/wLgxPAfUb8s+UjqwDvjM52o62FNg7KS2vKS0CXGgQumegYh28WpgC9NnK8VMW2qR2fOJNHa4RbRTHeqPP3b574zoS2CpiapB1O/wbdtDw2UcBM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747402860; c=relaxed/simple;
-	bh=Fwkn+gjRe2IDMix6WHpztpzGfIIeITSxHnb1qlyJqMU=;
+	s=arc-20240116; t=1747402883; c=relaxed/simple;
+	bh=uJWI89wvuu58ssW9qPj7mRyoSGLNQzk4PZd/GC7Hv54=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=CvXXf8XxSNNmVpkNCQHcf8e+qNNPY3sZc9ukKazA8+oikAw5wf7XClkmBWoARpfEwicoj6UQOTCLr/uoe5tQqKT4syqRORl2o/14KaofnE6q3OpN7uC/Bdk1BVXV6xLHqCU1mbIcEnllD1MgL/vCXIFO6ieCNjD6JIqZyu4hi08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--vdonnefort.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=peJ7ZTY3; arc=none smtp.client-ip=209.85.128.74
+	 To:Cc:Content-Type; b=cLSt4qccHR9MKc6S3LOq7PYwY52ygxoQn15yEjEbkrMGQo7N2ZSIfepkwV+EaUdolCXVDWqAHydXql5gLrHp39gVdeupzfLXhGoq+T/9fkvDFRarsFsIwzD7nprbr0uXv09hkG04rNxLtFcE5TOGvFhQ3Vul8mFhR/MNdXvE1qU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--vdonnefort.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=oCBS1o02; arc=none smtp.client-ip=209.85.221.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--vdonnefort.bounces.google.com
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-43cec217977so12545055e9.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 May 2025 06:40:57 -0700 (PDT)
+Received: by mail-wr1-f74.google.com with SMTP id ffacd0b85a97d-3a35c86b338so764354f8f.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 May 2025 06:41:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1747402856; x=1748007656; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1747402880; x=1748007680; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=joY3WU6FvsElAU9xhbYWKbDJgBT+rIdP+8QwV95CGWo=;
-        b=peJ7ZTY3iOcd7VAjCo/gdTbK0E9Vf+fN7ias6McLKeNeDpLoZxpYhQOjULZ7uVDMtd
-         p1GR5mtn10dIIw18Na+UkCaOqUhcxD8qR+tanymyjLk1KP/vZyNHPDNt3SlA9oj/bnnR
-         mS7dBlXw+nW5To93pjiiQlrwRGdMlvQUx9k6eYAz2YIPd6lAaoRq9fppUXUdIs15/vta
-         Wzf2hJKls/tJlCZPiMjbdTk3jql1JkvV+b6hzElaQYTz+br4P9vlxtjTfS0zNP7g/mAh
-         sQbY7uMBMZUCvmiIbmQUxZQKV6dWbflRuEou/wCagOwmBcI9MiiZFHlEyA5QFeX1dX+F
-         yRiA==
+        bh=P7GVxU0/r+w5zLWT8gZSbiy4WliZZRj39MPigOv2RvQ=;
+        b=oCBS1o02JWuLlxLVHuSLTSRdLb9z6FcUCDF20hjE0sPvvRVQG/uhXCSyEBmQ/ajAHj
+         LE2sZ3c37fnIYC4QlU5uwKWxhZhVM/70wOXou+jf/Q57L5kvDSlOutPhI/alMVvWV5yH
+         VfWn+SUEfmzBqjf5NGcImMhcoB6s5UjKpGkFGTubZnFIgs3nXDbCIY84Jj/iq+k1qt1X
+         q1tHDCJHV5c80wdceKmrZvyIK3HjTLg6QCVYNlQBnSqpllkI2ZGT0YuoiQtqQzd458ZY
+         MP0l3pz9vH2nzY9gKGlU8LZ/siM4f6AgqC1/yST+s0WUnHwbrMgdM5Cp0jKDQHla9epj
+         oOcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747402856; x=1748007656;
+        d=1e100.net; s=20230601; t=1747402880; x=1748007680;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=joY3WU6FvsElAU9xhbYWKbDJgBT+rIdP+8QwV95CGWo=;
-        b=restmDv4FQA4n9TMF1scTeocd+pjTp+GQdNH3TilRW+JizNGdSVcBXsX4M3g2JAdPI
-         M/tYEc3aZqPl42b86AOyk/5HlnN/FAhWQ+fku5RATY6104mYQCFiLQDzK9MQ2S0d5D1N
-         GgJFgctHWtQTBrV9Cu1z9Bk3Q/WuOpiiOsNJ7TUK7GEp6gjkQ8LE1/3p8T36IvlijkfG
-         HI+5cj3oX5ed25JZFxj3PUn5oAARO+UeIoZDm98V0wfkf7xYOs/H0QlCLuRxQ8WBMTi3
-         fJP2QdsZJR9j4TcszYQFtxRq8+8xu3MumRRUCl1CIOHOhpZfMxIoY3QMqd8xKDmw6Iem
-         fOtA==
-X-Forwarded-Encrypted: i=1; AJvYcCVVusmbgXo7zJBr41IdS1DqCHb/6BeBmIeH+nhHlsphKF65BOJewtd87vE3V1DEzquMKmEqUU2kHfrmAq4qnEU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhJN2nhLWPAOkUvH/bpWvkerq+9uYbFYveyjLRRs2NQs3EmtGb
-	IoSRP7hxoy4DG7SRL/k8XZ8YxMx4140GqtAqKZ7LZwKUufTLIE/mJL+3pgtfE+teSqDJ6HckgUx
-	btw8AQwy1iKcqtA7qGWQm4w==
-X-Google-Smtp-Source: AGHT+IEP0L6waN1pYx413ZB1qsW+CdqJA3LvdQcIjwsBUP+soy2O83sqCMXyJfok6tygJ4jxVmXyO6ZQM4hHCpL7
-X-Received: from wmrm14.prod.google.com ([2002:a05:600c:37ce:b0:43c:f7c3:c16e])
+        bh=P7GVxU0/r+w5zLWT8gZSbiy4WliZZRj39MPigOv2RvQ=;
+        b=OLJ8PVhBXe9O2BFCE0ToUr4TZTLNZp9pQykebKycYavOqYNih2OLp8S1tf6GuJQQif
+         Xp0xyho0Y8tQ3W3vBZlEbnrQbQft04Pj2Ef/tJtEsLfQNREW3cbe+msnMymfUc3JHBw1
+         6TJA9ri59PTbZCxyT2iGXJvN4Uabd2WJWNzNy+gRg2xMBSALtmNVMoK7Xutghw4Z9kXu
+         M8BmwZ6K8dH4G3gQ2tpvJ1i87WN3qq9gcwpsg/f4VZpgcoyFjqbzgvvnABAP0N0WX4+F
+         7bR+s2zCAfTVyFcXSAeqD2yoUaNt4XeL8lCjsOxxYt/KBgNe05PS/9fnbqctGc4p+iTg
+         +tsw==
+X-Forwarded-Encrypted: i=1; AJvYcCWtICdmFfJ37fxZIWblOZCndxRUzPIREqpQRjfVRJjicbqFC2WSCkMlazahs5oDAHQ0fujk/tsC1KsQR60WZDs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzNwORnGMTfYk2aFa0O3ehnn/2ujarTdFItQ91+N8dmY+u/o3sW
+	bRADr6zOiN2+3u/t3K0DP5aPrGtvK+CbRweq3ayrcenQxBrZqrNnBrnugtqoL3RsxHFGlTAJxAf
+	0o/Xn1As+bFfxqXAjGc7yYA==
+X-Google-Smtp-Source: AGHT+IF5jgzJGfaBS/UHJ3X8WaZX+60Zli0llPdcw+b0LDQXYJrpjyQFz+/w5KLRHR1Rt2m4D1p45WOPNgP2H7ul
+X-Received: from wmbhg17.prod.google.com ([2002:a05:600c:5391:b0:43d:58c9:bb51])
  (user=vdonnefort job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:528b:b0:43d:4e9:27f3 with SMTP id 5b1f17b1804b1-442fefee1b8mr27105865e9.9.1747402856521;
- Fri, 16 May 2025 06:40:56 -0700 (PDT)
-Date: Fri, 16 May 2025 14:40:18 +0100
+ 2002:a05:6000:2289:b0:3a0:bcb1:fc02 with SMTP id ffacd0b85a97d-3a35c84ae4dmr3449099f8f.54.1747402880322;
+ Fri, 16 May 2025 06:41:20 -0700 (PDT)
+Date: Fri, 16 May 2025 14:40:31 +0100
 In-Reply-To: <20250516134031.661124-1-vdonnefort@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250516134031.661124-1-vdonnefort@google.com>
 X-Mailer: git-send-email 2.49.0.1101.gccaa498523-goog
-Message-ID: <20250516134031.661124-13-vdonnefort@google.com>
-Subject: [PATCH v5 12/25] tracing: selftests: Add trace remote tests
+Message-ID: <20250516134031.661124-26-vdonnefort@google.com>
+Subject: [PATCH v5 25/25] tracing: selftests: Add pKVM trace remote tests
 From: Vincent Donnefort <vdonnefort@google.com>
 To: rostedt@goodmis.org, mhiramat@kernel.org, mathieu.desnoyers@efficios.com, 
 	linux-trace-kernel@vger.kernel.org, maz@kernel.org, oliver.upton@linux.dev, 
@@ -87,307 +87,76 @@ Cc: kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
 	linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Exercise the tracefs interface for trace remote with a set of tests to
-check:
-
-  * loading/unloading (unloading.tc)
-  * reset (reset.tc)
-  * size changes (buffer_size.tc)
-  * event integrity (trace_pipe)
+Run the trace remote selftests with the pKVM trace remote "hypervisor".
 
 Cc: Shuah Khan <skhan@linuxfoundation.org>
 Cc: linux-kselftest@vger.kernel.org
 Signed-off-by: Vincent Donnefort <vdonnefort@google.com>
 
-diff --git a/tools/testing/selftests/ftrace/test.d/remotes/buffer_size.tc b/tools/testing/selftests/ftrace/test.d/remotes/buffer_size.tc
+diff --git a/tools/testing/selftests/ftrace/test.d/remotes/pkvm/buffer_size.tc b/tools/testing/selftests/ftrace/test.d/remotes/pkvm/buffer_size.tc
 new file mode 100644
-index 000000000000..60bf431ccc91
+index 000000000000..383ef7a84274
 --- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/remotes/buffer_size.tc
-@@ -0,0 +1,24 @@
++++ b/tools/testing/selftests/ftrace/test.d/remotes/pkvm/buffer_size.tc
+@@ -0,0 +1,10 @@
 +#!/bin/sh
 +# SPDX-License-Identifier: GPL-2.0
-+# description: Test trace remote buffer size
++# description: Test pkvm hypervisor tracing buffer size
 +
-+. $TEST_DIR/remotes/functions
++SOURCE_REMOTE_TEST=1
++. $TEST_DIR/remotes/buffer_size.tc
 +
-+test_buffer_size()
-+{
-+    echo 0 > tracing_on
-+    assert_unloaded
-+
-+    echo 4096 > buffer_size_kb
-+    echo 1 > tracing_on
-+    assert_loaded
-+
-+    echo 0 > tracing_on
-+    echo 7 > buffer_size_kb
-+}
-+
-+if [ -z "$SOURCE_REMOTE_TEST" ]; then
-+    set -e
-+    setup_remote_test
-+    test_buffer_size
-+fi
-diff --git a/tools/testing/selftests/ftrace/test.d/remotes/functions b/tools/testing/selftests/ftrace/test.d/remotes/functions
++set -e
++setup_remote "hypervisor"
++test_buffer_size
+diff --git a/tools/testing/selftests/ftrace/test.d/remotes/pkvm/reset.tc b/tools/testing/selftests/ftrace/test.d/remotes/pkvm/reset.tc
 new file mode 100644
-index 000000000000..504a495b3b1b
+index 000000000000..679e31257d0b
 --- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/remotes/functions
-@@ -0,0 +1,33 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+setup_remote()
-+{
-+	local name=$1
-+
-+	[ -e $TRACING_DIR/remotes/$name/write_event ] || exit_unresolved
-+
-+	cd remotes/$name/
-+	echo 0 > tracing_on
-+	clear_trace
-+	echo 7 > buffer_size_kb
-+	echo 0 > events/enable
-+	echo 1 > events/$name/selftest/enable
-+	echo 1 > tracing_on
-+}
-+
-+setup_remote_test()
-+{
-+	[ -d $TRACING_DIR/remotes/test/ ] || modprobe remote_test || exit_unresolved
-+
-+	setup_remote "test"
-+}
-+
-+assert_loaded()
-+{
-+	grep -q "(loaded)" buffer_size_kb
-+}
-+
-+assert_unloaded()
-+{
-+	grep -q "(unloaded)" buffer_size_kb
-+}
-diff --git a/tools/testing/selftests/ftrace/test.d/remotes/reset.tc b/tools/testing/selftests/ftrace/test.d/remotes/reset.tc
-new file mode 100644
-index 000000000000..93d6eb2a807f
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/remotes/reset.tc
-@@ -0,0 +1,105 @@
++++ b/tools/testing/selftests/ftrace/test.d/remotes/pkvm/reset.tc
+@@ -0,0 +1,10 @@
 +#!/bin/sh
 +# SPDX-License-Identifier: GPL-2.0
-+# description: Test trace remote reset
++# description: Test pkvm hypervisor tracing reset
 +
-+. $TEST_DIR/remotes/functions
++SOURCE_REMOTE_TEST=1
++. $TEST_DIR/remotes/reset.tc
 +
-+get_cpu_ids()
-+{
-+    sed -n 's/^processor\s*:\s*\([0-9]\+\).*/\1/p' /proc/cpuinfo
-+}
-+
-+dump_trace()
-+{
-+    output=$(mktemp /tmp/remote_test.XXXXXX)
-+    cat trace_pipe > $output &
-+    pid=$!
-+    sleep 1
-+    kill -1 $pid
-+
-+    echo $output
-+}
-+
-+check_reset()
-+{
-+    write_event_path="write_event"
-+    taskset=""
-+
-+    clear_trace
-+
-+    # Is the buffer empty?
-+    output=$(dump_trace)
-+    test $(wc -l $output | cut -d ' ' -f1) -eq 0
-+
-+    if $(echo $(pwd) | grep -q "per_cpu/cpu"); then
-+        write_event_path="../../write_event"
-+        cpu_id=$(echo $(pwd) | sed -e 's/.*per_cpu\/cpu//')
-+        taskset="taskset -c $cpu_id"
-+    fi
-+    rm $output
-+
-+    # Can we properly write a new event?
-+    $taskset echo 7890 > $write_event_path
-+    output=$(dump_trace)
-+    test $(wc -l $output | cut -d ' ' -f1) -eq 1
-+    grep -q "id=7890" $output
-+    rm $output
-+}
-+
-+test_global_interface()
-+{
-+    output=$(mktemp /tmp/remote_test.XXXXXX)
-+
-+    # Confidence check
-+    echo 123456 > write_event
-+    output=$(dump_trace)
-+    grep -q "id=123456" $output
-+    rm $output
-+
-+    # Reset single event
-+    echo 1 > write_event
-+    check_reset
-+
-+    # Reset lost events
-+    for i in $(seq 1 10000); do
-+        echo 1 > write_event
-+    done
-+    check_reset
-+}
-+
-+test_percpu_interface()
-+{
-+    [ "$(get_cpu_ids | wc -l)" -ge 2 ] || return 0
-+
-+    for cpu in $(get_cpu_ids); do
-+        taskset -c $cpu echo 1 > write_event
-+    done
-+
-+    check_non_empty=0
-+    for cpu in $(get_cpu_ids); do
-+        cd per_cpu/cpu$cpu/
-+
-+        if [ $check_non_empty -eq 0 ]; then
-+            check_reset
-+            check_non_empty=1
-+        else
-+            # Check we have only reset 1 CPU
-+            output=$(dump_trace)
-+            test $(wc -l $output | cut -d ' ' -f1) -eq 1
-+            rm $output
-+        fi
-+        cd -
-+    done
-+}
-+
-+test_reset()
-+{
-+    test_global_interface
-+    test_percpu_interface
-+}
-+
-+if [ -z "$SOURCE_REMOTE_TEST" ]; then
-+    set -e
-+    setup_remote_test
-+    test_reset
-+fi
-diff --git a/tools/testing/selftests/ftrace/test.d/remotes/trace_pipe.tc b/tools/testing/selftests/ftrace/test.d/remotes/trace_pipe.tc
++set -e
++setup_remote "hypervisor"
++test_reset
+diff --git a/tools/testing/selftests/ftrace/test.d/remotes/pkvm/trace_pipe.tc b/tools/testing/selftests/ftrace/test.d/remotes/pkvm/trace_pipe.tc
 new file mode 100644
-index 000000000000..f4bd2b3655e0
+index 000000000000..4c77431e884f
 --- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/remotes/trace_pipe.tc
-@@ -0,0 +1,57 @@
++++ b/tools/testing/selftests/ftrace/test.d/remotes/pkvm/trace_pipe.tc
+@@ -0,0 +1,10 @@
 +#!/bin/sh
 +# SPDX-License-Identifier: GPL-2.0
-+# description: Test trace remote trace_pipe
++# description: Test pkvm hypervisor tracing pipe
 +
-+. $TEST_DIR/remotes/functions
++SOURCE_REMOTE_TEST=1
++. $TEST_DIR/remotes/trace_pipe.tc
 +
-+test_trace_pipe()
-+{
-+    echo 0 > tracing_on
-+    assert_unloaded
-+
-+    echo 1024 > buffer_size_kb
-+    echo 1 > tracing_on
-+    assert_loaded
-+
-+    output=$(mktemp /tmp/remote_test.XXXXXX)
-+
-+    cat trace_pipe > $output &
-+    pid=$!
-+
-+    for i in $(seq 1 1000); do
-+        echo $i > write_event
-+    done
-+
-+    echo 0 > tracing_on
-+    sleep 1
-+    kill $pid
-+
-+    prev_ts=0 # TODO: Init with proper clock value
-+    prev_id=0
-+
-+    # Only keep <timestamp> <id>
-+    sed -i -e 's/\[[0-9]*\]\s*\([0-9]*.[0-9]*\): [a-z]* id=\([0-9]*\)/\1 \2/' $output
-+
-+    IFS=$'\n'
-+    for line in $(cat $output); do
-+        ts=$(echo $line | cut -d ' ' -f 1)
-+        id=$(echo $line | cut -d ' ' -f 2)
-+
-+        test $(echo "$ts>$prev_ts" | bc) -eq 1
-+        test $id -eq $((prev_id + 1))
-+
-+        prev_ts=$ts
-+        prev_id=$id
-+    done
-+
-+    test $prev_id -eq 1000
-+
-+    rm $output
-+}
-+
-+if [ -z "$SOURCE_REMOTE_TEST" ]; then
-+    set -e
-+
-+    setup_remote_test
-+    test_trace_pipe
-+fi
-diff --git a/tools/testing/selftests/ftrace/test.d/remotes/unloading.tc b/tools/testing/selftests/ftrace/test.d/remotes/unloading.tc
++set -e
++setup_remote "hypervisor"
++test_trace_pipe
+diff --git a/tools/testing/selftests/ftrace/test.d/remotes/pkvm/unloading.tc b/tools/testing/selftests/ftrace/test.d/remotes/pkvm/unloading.tc
 new file mode 100644
-index 000000000000..99f97e100fde
+index 000000000000..059c7ad1c008
 --- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/remotes/unloading.tc
-@@ -0,0 +1,40 @@
++++ b/tools/testing/selftests/ftrace/test.d/remotes/pkvm/unloading.tc
+@@ -0,0 +1,10 @@
 +#!/bin/sh
 +# SPDX-License-Identifier: GPL-2.0
-+# description: Test trace remote unloading
++# description: Test pkvm hypervisor tracing buffer unloading
 +
-+. $TEST_DIR/remotes/functions
++SOURCE_REMOTE_TEST=1
++. $TEST_DIR/remotes/unloading.tc
 +
-+test_unloading()
-+{
-+    # No reader, writing
-+    assert_loaded
-+
-+    # No reader, no writing
-+    echo 0 > tracing_on
-+    assert_unloaded
-+
-+    # 1 reader, no writing
-+    cat trace_pipe &
-+    pid=$!
-+    sleep 1
-+    assert_loaded
-+    kill $pid
-+    assert_unloaded
-+
-+    # No reader, no writing, events
-+    echo 1 > tracing_on
-+    echo 1 > write_event
-+    echo 0 > tracing_on
-+    assert_loaded
-+
-+    # Test reset
-+    clear_trace
-+    assert_unloaded
-+}
-+
-+if [ -z "$SOURCE_REMOTE_TEST" ]; then
-+    set -e
-+
-+    setup_remote_test
-+    test_unloading
-+fi
++set -e
++setup_remote "hypervisor"
++test_unloading
 -- 
 2.49.0.1101.gccaa498523-goog
 
