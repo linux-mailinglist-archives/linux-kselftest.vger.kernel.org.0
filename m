@@ -1,161 +1,144 @@
-Return-Path: <linux-kselftest+bounces-33148-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33149-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA0FEAB9363
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 May 2025 03:04:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA915AB937F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 May 2025 03:10:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E8261701EC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 May 2025 01:04:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D88823BA280
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 May 2025 01:10:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B23E214217;
-	Fri, 16 May 2025 01:04:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7901214A7A;
+	Fri, 16 May 2025 01:10:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G2/wySll"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HgZBkbvX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EDFA1D5ACE;
-	Fri, 16 May 2025 01:04:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 729BF214A66
+	for <linux-kselftest@vger.kernel.org>; Fri, 16 May 2025 01:10:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747357449; cv=none; b=kExtQpMzS6emNGq7MjANjKGsuDgdn1gyloUd9Dcjk5brpI72v1j1XjYhiNQ0g8trC4EYtW3EBl62mryhRQr3jFIEflhEFQEsrCUfZBb/CagNR4dO/kNdKg5qAYiErJp1ecYApJbiHj0yNezidL/pUpoCJOE/lfDfpsmGWdggE10=
+	t=1747357820; cv=none; b=hJGgQeKjzSsoMH8FwUQGzzr0FDGewwOdfXfWw5D1lVfYcd1eQ8FZUG/6RCi8vd8jam01U4vyL7Xl0JCrbpKHozRYkiDCNnIfUIjcZN7tfOUnTQLbHmNMIAFvRc8MKoH2oIAuyxLau3ho/naa+dRYjwlyg26EUl8TRgcsEecWqt0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747357449; c=relaxed/simple;
-	bh=ZuBYgHalJA7vgVtaMnY0GX4nolPhUZ/aynlvRMgWhTA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eqR2s6l6xHTTmYLJ/bRqyUlcJboiEZIZtMP89/fRWISM44qPPu0OQh3hiH/CehKOapplzcK8rzeS0jobFyq1acld7jFvkvrE4MO6gnWOr1jMw5J1Iv4T8Acoeu7XCiAAh/ajhQ272GVsdxjxQ84Ef1bCMcMP+de/X0UTBS3KGHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G2/wySll; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747357447; x=1778893447;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ZuBYgHalJA7vgVtaMnY0GX4nolPhUZ/aynlvRMgWhTA=;
-  b=G2/wySll1qp2iyZWB+Fzn+J6eiIL2A6e9uvHwmNgeOHR6ZyA2ugdu19C
-   /ztgDYi9Zp7q7CEJ02nHkETOjNOpiErEASQelogcvq7psjzdvqsA56t40
-   yqOYmYSaf80WcoFO2xa+GicLologjC0WrNmkKJjwFarIfHPgX0+4EYE36
-   HrV9S43oavra905Ucqgi0HYNgJPcVX+l6xT6Le3mkLCYLrBLdFv5O1bjz
-   Of+oqj5EcG1kYIWdTgniD6uj5pztZVV1kbGRbX4HvGNo2ZxPvKPXdBVOx
-   pG49Zm2MnzwvklFbIf9SjexyYPyPLSH18rNJZA+Qrp4jKMTZveYyEAcV0
-   g==;
-X-CSE-ConnectionGUID: eKst717PTIqPItaduyGeWA==
-X-CSE-MsgGUID: pQi5Cs4wSeqVGjKEbIpRKg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11434"; a="49248658"
-X-IronPort-AV: E=Sophos;i="6.15,292,1739865600"; 
-   d="scan'208";a="49248658"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2025 18:04:06 -0700
-X-CSE-ConnectionGUID: PmszdaHmRoKfhyYPLEmDgQ==
-X-CSE-MsgGUID: QmRwKshtTQ6Dk4yiBAfg5g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,292,1739865600"; 
-   d="scan'208";a="138933023"
-Received: from dapengmi-mobl1.ccr.corp.intel.com (HELO [10.124.245.128]) ([10.124.245.128])
-  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2025 18:04:00 -0700
-Message-ID: <474892bc-8c70-4b3d-8835-473f2323496c@linux.intel.com>
-Date: Fri, 16 May 2025 09:03:57 +0800
+	s=arc-20240116; t=1747357820; c=relaxed/simple;
+	bh=4OvX/SlIoZzCJCssk73J7YDq+IVGREhHUKEp5bnG8Fg=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=bVdh9H6QX2bJmGyWviFFe9hAjASpcDI0Pa0tmcKC1yvg+KSFq2axa7JmdAU0BCbrFFRX9iL+x5tIlnUqg3EVfviXNe0V/I4UUtgjH3cea8mBXYyYyACT6b5f+N9WN8jBIso0FRQ5SRZumv92q2mdrmRMyKeLO4+3Es3TQmdr0Gw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HgZBkbvX; arc=none smtp.client-ip=209.85.210.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-742a969a4d0so310726b3a.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 May 2025 18:10:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1747357818; x=1747962618; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BfYmymD4WqB6RcT+A7NSAJ3/ssCfFT/DbabI8Oq16WQ=;
+        b=HgZBkbvXJBPZluMOUSlmAFz96Q7nBfMxQvCen6quVQ/3J7BJhWnm1toiw1CauxFFTU
+         GQWihV2/GoUfsBszNsw+JxDrb9axKkX+eSN3CeH7P9l5Q2n0ypjbRWLPEPpP/MpQU889
+         qtnCejcZaVOXJQjoZ4CXZQitVsNBQYHkdGv4ccMHwjaa4bWxvNG/rn9BakXXhRRPxIRV
+         0zXw2oMYCLNFO+tHcAGdk5etFcouSglCCRK4VMjgiC2tZeZedOzDuNj9ie3vtboWm5FR
+         Kv8C1QWccpkOveapivAg0kdO03mrVdkj5/TULUpv1ZPYqW8UCXIrme3VTO27VcCphcRC
+         //Sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747357818; x=1747962618;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BfYmymD4WqB6RcT+A7NSAJ3/ssCfFT/DbabI8Oq16WQ=;
+        b=BbjbGNAqWyV0dqb/ob/SuKxi6/fV8BkTCWpSv0Rr0TDKAoSWidfZZaHrvewzCXgm4B
+         YA4adipRu1yuKpBGu7U+yWF90IQBkYi6k9F6llDgOeZKZ5N5MbkjcQOvsfg+uPo27weg
+         6Paih1BKmMZCXSglMXfCFlFBAbDhdmRW1IZaXjH6gXoTDdxoxiloFzPgX9zgmDRzLrHe
+         CRnuPt22iyvXcLgbD15Y6ptqds9ASK2xO7L+9I36HZZ5L96wtmHBtpRIZNpqoHl9uCAT
+         WKiOreD2MdY+rTnd6FMDWfyeI7d969QpwpyD0Fa6pHe1u1urp37GY0QxG2afzaHeW2oO
+         bXlg==
+X-Forwarded-Encrypted: i=1; AJvYcCUUDpFI5paWfgrADKfp4/p3mOqDubqRzJqR1x+5cGaIALcEia4gshgf8eJ0/P1uvtAgiCACUhwKm4PliRFD5vc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1TPQV3DlqUKlZZ6fTsOFN3W9PAKi4x47ReCh2dUAFqZsgRMs7
+	8F6Wx5S65IUUsout2LDMcHLW1xG1gcTsYzB4kuw6vTqyTQCZrAhIJQuQ+V5oGQ8x8KS4yTpKPvs
+	65Z70Sg==
+X-Google-Smtp-Source: AGHT+IFN6q5EEUT8mtkOVvJbhI1LPbC36AWs5ckYgMuXXlLBYgP2Ku77QbL5NxcjQXJ1Z0V89/x/Blxa6lU=
+X-Received: from pfblr19.prod.google.com ([2002:a05:6a00:7393:b0:742:9ac3:9e04])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:e89:b0:215:d4be:b0b2
+ with SMTP id adf61e73a8af0-21621a02357mr2171784637.34.1747357818528; Thu, 15
+ May 2025 18:10:18 -0700 (PDT)
+Date: Thu, 15 May 2025 18:10:17 -0700
+In-Reply-To: <20250324173121.1275209-31-mizhang@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 22/38] KVM: x86/pmu: Optimize intel/amd_pmu_refresh()
- helpers
-To: Sean Christopherson <seanjc@google.com>
-Cc: Mingwei Zhang <mizhang@google.com>, Peter Zijlstra
- <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
- Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>, Liang@google.com,
- Kan <kan.liang@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
- linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
- kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Yongwei Ma <yongwei.ma@intel.com>,
- Xiong Zhang <xiong.y.zhang@linux.intel.com>,
- Jim Mattson <jmattson@google.com>, Sandipan Das <sandipan.das@amd.com>,
- Zide Chen <zide.chen@intel.com>, Eranian Stephane <eranian@google.com>,
- Shukla Manali <Manali.Shukla@amd.com>,
- Nikunj Dadhania <nikunj.dadhania@amd.com>
-References: <20250324173121.1275209-1-mizhang@google.com>
- <20250324173121.1275209-23-mizhang@google.com> <aCU3Ri0iz0aDBDup@google.com>
- <41821a66-8db1-42f1-85d6-fde67a8c072e@linux.intel.com>
- <aCY--A8SY7GQuq4F@google.com>
-Content-Language: en-US
-From: "Mi, Dapeng" <dapeng1.mi@linux.intel.com>
-In-Reply-To: <aCY--A8SY7GQuq4F@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20250324173121.1275209-1-mizhang@google.com> <20250324173121.1275209-31-mizhang@google.com>
+Message-ID: <aCaQedEhZwj9BsVK@google.com>
+Subject: Re: [PATCH v4 30/38] KVM: x86/pmu: Handle emulated instruction for
+ mediated vPMU
+From: Sean Christopherson <seanjc@google.com>
+To: Mingwei Zhang <mizhang@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, Liang@google.com, 
+	Kan <kan.liang@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Yongwei Ma <yongwei.ma@intel.com>, Xiong Zhang <xiong.y.zhang@linux.intel.com>, 
+	Dapeng Mi <dapeng1.mi@linux.intel.com>, Jim Mattson <jmattson@google.com>, 
+	Sandipan Das <sandipan.das@amd.com>, Zide Chen <zide.chen@intel.com>, 
+	Eranian Stephane <eranian@google.com>, Shukla Manali <Manali.Shukla@amd.com>, 
+	Nikunj Dadhania <nikunj.dadhania@amd.com>
+Content-Type: text/plain; charset="us-ascii"
 
+On Mon, Mar 24, 2025, Mingwei Zhang wrote:
+>  static void kvm_pmu_incr_counter(struct kvm_pmc *pmc)
+>  {
+> -	pmc->emulated_counter++;
+> -	kvm_pmu_request_counter_reprogram(pmc);
+> +	struct kvm_vcpu *vcpu = pmc->vcpu;
+> +
+> +	/*
+> +	 * For perf-based PMUs, accumulate software-emulated events separately
+> +	 * from pmc->counter, as pmc->counter is offset by the count of the
+> +	 * associated perf event. Request reprogramming, which will consult
+> +	 * both emulated and hardware-generated events to detect overflow.
+> +	 */
+> +	if (!kvm_mediated_pmu_enabled(vcpu)) {
+> +		pmc->emulated_counter++;
+> +		kvm_pmu_request_counter_reprogram(pmc);
+> +		return;
+> +	}
+> +
+> +	/*
+> +	 * For mediated PMUs, pmc->counter is updated when the vCPU's PMU is
+> +	 * put, and will be loaded into hardware when the PMU is loaded. Simply
+> +	 * increment the counter and signal overflow if it wraps to zero.
+> +	 */
+> +	pmc->counter = (pmc->counter + 1) & pmc_bitmask(pmc);
+> +	if (!pmc->counter) {
 
-On 5/16/2025 3:22 AM, Sean Christopherson wrote:
-> On Thu, May 15, 2025, Dapeng Mi wrote:
->> On 5/15/2025 8:37 AM, Sean Christopherson wrote:
->>>> diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
->>>> index 153972e944eb..eba086ef5eca 100644
->>>> --- a/arch/x86/kvm/svm/pmu.c
->>>> +++ b/arch/x86/kvm/svm/pmu.c
->>>> @@ -198,12 +198,20 @@ static void __amd_pmu_refresh(struct kvm_vcpu *vcpu)
->>>>  	pmu->nr_arch_gp_counters = min_t(unsigned int, pmu->nr_arch_gp_counters,
->>>>  					 kvm_pmu_cap.num_counters_gp);
->>>>  
->>>> -	if (pmu->version > 1) {
->>>> -		pmu->global_ctrl_rsvd = ~((1ull << pmu->nr_arch_gp_counters) - 1);
->>>> +	if (kvm_pmu_cap.version > 1) {
-> ARGH!!!!!  I saw the pmu->version => kvm_pmu_cap.version change when going through
-> this patch, but assumed it was simply a refactoring bug and ignored it.
->
-> Nope, 100% intentional, as I discovered after spending the better part of an hour
-> debugging.  Stuffing pmu->global_ctrl when it doesn't exist is necessary when the
-> mediated PMU is enabled, because pmu->global_ctrl will always be loaded in hardware.
-> And so loading '0' means the PMU is effectively disabled, because KVM disallows the
-> guest from writing the MSR.
->
-> _That_ is the type of thing that absolutely needs a comment and a lengthy explanation
-> in the changelog.
+Ugh, this is broken for the fastpath.  If kvm_skip_emulated_instruction() is
+invoked by handle_fastpath_set_msr_irqoff() or handle_fastpath_hlt(), KVM may
+consume stale information (GLOBAL_CTRL, GLOBAL_STATUS and PMCs), and even if KVM
+gets lucky and those are all fresh, the PMC and GLOBAL_STATUS changes won't be
+propagated back to hardware.
 
-Yes, this change is intended.  As long as HW supports Global_CTRL MSR, KVM
-should write available value into it at vm-entry regardless of if guest PMU
-has GLOBAL_CTRL (pmu version < 2), otherwise guest counters won't be really
-enabled on HW.
+The best idea I have is to track whether or not the guest may be counting branches
+and/or instruction based on eventsels, and then bail from fastpaths that need to
+skip instructions.  That flag would also be useful to further optimize
+kvm_pmu_trigger_event().
 
-yeah, it's indeed easily confused and should put a comment here. My fault ...
-
-
->
-> Intel also needs the same treatment for PMU v1.  And since there's no hackery that
-> I can see, that suggests PMU v1 guests haven't been tested with the mediated PMU
-> on Intel.
->
-> I guess congratulations are in order, because this patch just became my new goto
-> example of why I'm so strict about on the "one thing per patch" rule.
-
-Embarrassing ....
-
-
->
->>> It's not just global_ctrl.  PEBS and the fixed counters also depend on v2+ (the
->>> SDM contradicts itself; KVM's ABI is that they're v2+).
->>>
->>>> +		/*
->>>> +		 * At RESET, AMD CPUs set all enable bits for general purpose counters in
->>>> +		 * IA32_PERF_GLOBAL_CTRL (so that software that was written for v1 PMUs
->>>> +		 * don't unknowingly leave GP counters disabled in the global controls).
->>>> +		 * Emulate that behavior when refreshing the PMU so that userspace doesn't
->>>> +		 * need to manually set PERF_GLOBAL_CTRL.
->>>> +		 */
->>>> +		pmu->global_ctrl = BIT_ULL(pmu->nr_arch_gp_counters) - 1;
->>>> +		pmu->global_ctrl_rsvd = ~pmu->global_ctrl;
->>>>  		pmu->global_status_rsvd = pmu->global_ctrl_rsvd;
->>>>  	}
+> +		pmc_to_pmu(pmc)->global_status |= BIT_ULL(pmc->idx);
+> +		if (pmc_pmi_enabled(pmc))
+> +			kvm_make_request(KVM_REQ_PMI, vcpu);
+> +	}
+>  }
+>  
+>  static inline bool cpl_is_matched(struct kvm_pmc *pmc)
+> -- 
+> 2.49.0.395.g12beb8f557-goog
+> 
 
