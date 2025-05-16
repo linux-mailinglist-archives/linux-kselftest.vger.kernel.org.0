@@ -1,110 +1,129 @@
-Return-Path: <linux-kselftest+bounces-33172-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33173-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1E95AB9B99
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 May 2025 14:04:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D892AB9C0B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 May 2025 14:30:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7661216626B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 May 2025 12:04:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9D05D501749
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 May 2025 12:30:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED7B0236430;
-	Fri, 16 May 2025 12:04:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 744E723C51C;
+	Fri, 16 May 2025 12:30:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UD8PqnZA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TQS/7nvA"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDBD71361;
-	Fri, 16 May 2025 12:04:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BF83235063;
+	Fri, 16 May 2025 12:29:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747397056; cv=none; b=FmQnFs0vw1TInS5woiCjQvNCpjYJN8Qkid8zoMOJW2M3u4/2pRp/SuPnKSPfvXpV6YvZiHffJK1oVmT6uNwknQ5GT5wKZBpP0A6OZbzWtU+jOAOpkchBOOHNCiMF88Z9+C1xrvLlnED0mjJaGxeA4INcTybkF/qjSyrfOAgU67A=
+	t=1747398600; cv=none; b=id/ZjriLt1PjnMBagsh2yrtN0AUZW9NEFAK2iP7hzvT6BTsvpChF5ySCuoMJAR/deYCxdc4m0coopotPLGJJHHhQ5DDJIxKQQRFtA3ZnQ7WlL7+P5bBLloZ+opim79jUmAh5/aQEW8xOaxUtwup1l+ZqaZk1oUgsnB23m1gqNEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747397056; c=relaxed/simple;
-	bh=KCwjgKTMuHSCGCH8zsLHrN2hAJYJKLa4Jq5iL6Vf2cE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=k1x4zlPLMe7FMVHlxuXJPDTDYnsJ4EIH4UklWNowENJ3fFFGZgN3XE2J9TVoJ1O20h6K0f8ysgGus3RHA4zIy94cBN57yuLLkxNT6FLjsgtAeLXmq6I4EEGMW2JeHI2tm8Wvmim/Isrqc+jcTTuEY5WuJdXfP4mNOQIUOtNAfeA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UD8PqnZA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C165C4CEE4;
-	Fri, 16 May 2025 12:04:16 +0000 (UTC)
+	s=arc-20240116; t=1747398600; c=relaxed/simple;
+	bh=v60gkmBBs9thffCH+KRcGOvOSb27plbXUWEj4N9vc9Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lE+bF1XmP/ZRP2Xml8cO0ROAHTr4NJABNXeu7dxfxpWu0C79Sn3AQmJ6MCmPuMCVt6U8sE/5Hw2Wa1FRlSrDD5wdQs6cqDChGQ9+SkpTmRNBVsBezPhd2svRNNpRoX3Av3P5q49P6XZ4v4N7VQwz6lkLIAoJ1+ztQigJv4hovIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TQS/7nvA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77DF2C4CEE4;
+	Fri, 16 May 2025 12:29:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747397056;
-	bh=KCwjgKTMuHSCGCH8zsLHrN2hAJYJKLa4Jq5iL6Vf2cE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=UD8PqnZALDd4Vfg+SoKbbdSuOiBznKSTYi986eO3GsWGWrlohNVWeVQYbZSu0zwas
-	 7uIrS2h2nU/BQpyTP+12jXMyejDcEiuxp+Awn+wz5QxbUR8VvYuVg5zYKf964BxE8A
-	 rx9SJ4iUTUBwoUBFumOmCf+7LNwkeubLDw2hEJW8586xxaUhR77JFLkMI7CUKSbTgH
-	 ZD19WjtT9RdEQeAjUtCKMARt5BVhIubtmG/+ta7my/fig0CZQ4QhAX0sNw8HmwAiSE
-	 yJeL4nOtG0H0rU1fSYpsYSb8fThjGZCWtHIyYRwN02sGVsReahHMKvB/9xncQK/NnA
-	 7FNmF9nlKApxg==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=valley-girl.lan)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1uFtnR-00FXoM-Rm;
-	Fri, 16 May 2025 13:04:13 +0100
-From: Marc Zyngier <maz@kernel.org>
-To: catalin.marinas@arm.com,
-	will@kernel.org,
-	oliver.upton@linux.dev,
-	joey.gouly@arm.com,
-	suzuki.poulose@arm.com,
-	yuzenghui@huawei.com,
-	pbonzini@redhat.com,
-	shuah@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Ben Horgan <ben.horgan@arm.com>
-Cc: james.morse@arm.com
-Subject: Re: [RFC PATCH v2 0/3] KVM: arm64: Don't claim MTE_ASYNC if not supported
-Date: Fri, 16 May 2025 13:04:10 +0100
-Message-Id: <174739704125.2524774.18416359728104050072.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20250512114112.359087-1-ben.horgan@arm.com>
-References: <20250512114112.359087-1-ben.horgan@arm.com>
+	s=k20201202; t=1747398599;
+	bh=v60gkmBBs9thffCH+KRcGOvOSb27plbXUWEj4N9vc9Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TQS/7nvAYZH5uI9JzECirMI3mQVI54ZX42fKXb7ca0ktFWDVPErTwR2nCXq1dGXs5
+	 oPkLLcVa7crcsKSYuY7nuLx9KrNbQS8eNCqxUIZwkvd9l2Qfv9tnxDQ4BnUpSZmjJ3
+	 WdLzM/EISz3OXP6zRfhUjUlnLPpimkmoEaJaboNEAARasn2H4P8JgqZ9WXbNBqmWrC
+	 PyuOgkjq8WMFO10qUDYicyK4yVtQbKKQxgoyK6HsexlHqewLb2uWkmEYPaJNOAXL/4
+	 nIhoRBJtoTHh6axJ1K6gGGibFJ4xb4W4S7vNqvBMXP3rQ9SFLsdkZlpxxL4yg11cYr
+	 XpN3fFkTf6+QQ==
+Date: Fri, 16 May 2025 14:29:57 +0200
+From: Mark Brown <broonie@kernel.org>
+To: David Hildenbrand <david@redhat.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/mm: Fix test result reporting in gup_longterm
+Message-ID: <aCcvxaFc6DE_Mhr1@finisterre.sirena.org.uk>
+References: <20250515-selftests-mm-gup-longterm-dups-v1-1-05f8f731cf63@kernel.org>
+ <f924f789-5269-4046-99a4-2991f9a3ab3c@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, pbonzini@redhat.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, ben.horgan@arm.com, james.morse@arm.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-
-On Mon, 12 May 2025 12:41:09 +0100, Ben Horgan wrote:
-> The ID_AA64PFR1_EL1.MTE_frac field is currently hidden from KVM.
-> However, when ID_AA64PFR1_EL1.MTE==2, ID_AA64PFR1_EL1.MTE_frac==0
-> indicates that MTE_ASYNC is supported. On a host with
-> ID_AA64PFR1_EL1.MTE==2 but without MTE_ASYNC support a guest with the
-> MTE capability enabled will incorrectly see MTE_ASYNC advertised as
-> supported. This series fixes that.
-> 
-> [...]
-
-Applied to next, thanks!
-
-[1/3] arm64/sysreg: Expose MTE_frac so that it is visible to KVM
-      commit: 5799a2983fea4f22f6aaa291aee3b704db81d29f
-[2/3] KVM: arm64: Make MTE_frac masking conditional on MTE capability
-      commit: fe21ff5d4b46c06c4e43a310fdb781d1e6b5173e
-[3/3] KVM: selftests: Confirm exposing MTE_frac does not break migration
-      commit: 69018866d2baa014413e340744bfb342ec0cdbcd
-
-Cheers,
-
-	M.
--- 
-Without deviation from the norm, progress is not possible.
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="+lLg9Zve3xwFMbDn"
+Content-Disposition: inline
+In-Reply-To: <f924f789-5269-4046-99a4-2991f9a3ab3c@redhat.com>
+X-Cookie: Well begun is half done.
 
 
+--+lLg9Zve3xwFMbDn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Fri, May 16, 2025 at 10:02:16AM +0200, David Hildenbrand wrote:
+> On 15.05.25 10:57, Mark Brown wrote:
+
+> > The kselftest framework uses the string logged when a test result is
+> > reported as the unique identifier for a test, using it to track test
+> > results between runs. The gup_longterm test completely fails to follow
+> > this pattern, it runs a single test function repeatedly with various
+> > parameters but each result report is a string logging an error message
+> > which is fixed between runs.
+
+> As the person who wrote that test (that you apparently didn't CC for some
+
+I just CCed whoever get_maintainers told me to CC for the patch.
+
+> reason), what exactly is the problem with that?
+
+> We run tests. If all pass, we're happy, if one fails, we investigate.
+
+None of the tooling is able to either distinguish between the multiple
+tests that are being run in gup_longterm, nor compare the results of
+multiple runs effectively.  If all the tests run they report themselves
+as being duplicates of the same test name, if one of them starts failing
+the effect is that one of the duplicates disappears and we get an
+entirely new test that's never passed reported.  If multiple tests fail
+it's even worse.  This means that UIs displaying test results end up
+reporting things unclearly (Was there a regression or was a new test
+that never worked added?  What was the test?).  Since it's difficult
+to track the tests between runs tooling that does reporting of things
+like "This last worked in X" in the UI doesn't work properly, and tool
+driven bisection of issues similarly struggles since it can't tell
+what's going on with any of the tests between runs.
+
+Basically, the output is garbled and vastly less useful for people
+running this as a matter of routine or as part of a broader kselftest
+run.  For example with my own automation I probably won't notice that a
+previously working test failed unless every single test fails, and newly
+added tests that never worked are a much lower priority to the point
+where I may never look at them depending on where they are.
+
+If a selftest is reporting multiple tests it should report them with
+names that are stable and unique.
+
+--+lLg9Zve3xwFMbDn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmgnL74ACgkQJNaLcl1U
+h9CSJQf/fXhm7O5lg8Qrz14Y3i/j8Av9aIR/LUBLxRkJ/v19xwDexB6y0bQQVmCF
+j6QFkQ9Ifxz08T3R00Ravg5WUQRjeSmhDlksSli170TW3QPRJUWmXuLuG2RBo8s9
+TmunvK5zQyOIqYCoApXIygewwr1ITKIa1sg5sYnIpDp71Lk2jr77pZG89tQ3AJcu
+Yd4HyhtuyA8CIfYO56eZFWyDI5xUQNrBNw3HS3YqQVw1SkU8LOqjjTcxADfovi6J
+ddcFWTUCNhJ0fUzyY1QlUCXkocczidPmBLhYSeBXWU/oPnELAFm4OR6rxRLOOQq5
+GQ7BFmSkcer8MMNiQRHM7MGpIpUKZw==
+=/Hzi
+-----END PGP SIGNATURE-----
+
+--+lLg9Zve3xwFMbDn--
 
