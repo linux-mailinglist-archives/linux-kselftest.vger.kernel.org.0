@@ -1,190 +1,165 @@
-Return-Path: <linux-kselftest+bounces-33244-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33245-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8070DABA921
-	for <lists+linux-kselftest@lfdr.de>; Sat, 17 May 2025 11:33:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CEDEABA92B
+	for <lists+linux-kselftest@lfdr.de>; Sat, 17 May 2025 11:42:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 588B39E50C4
-	for <lists+linux-kselftest@lfdr.de>; Sat, 17 May 2025 09:32:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 26E001BA1E83
+	for <lists+linux-kselftest@lfdr.de>; Sat, 17 May 2025 09:42:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A84371DF97F;
-	Sat, 17 May 2025 09:32:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDF481E25E3;
+	Sat, 17 May 2025 09:42:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Bp1a56H1"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QunvvY5M"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED3851A83F5
-	for <linux-kselftest@vger.kernel.org>; Sat, 17 May 2025 09:32:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D99241DFDB8
+	for <linux-kselftest@vger.kernel.org>; Sat, 17 May 2025 09:42:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747474379; cv=none; b=s8O9gVVYWGsuarGNZ8wDxCbRMVBQmH/2TSvYm5tl+W72hK7C7HlN2V898+/GHLb6aK75IGDkXaJ9Mm3iN4gFW54V+i9vOv04rbzFnUBAQXwFv+zUBFxlIHPIHqmMv1qmB8oPpAtw8Qx2ExhBEi8IC3yHLzUnqYl6Xi5/RmxHJC4=
+	t=1747474940; cv=none; b=YVeZtPnL3gqmOOUEJOmDsEU1zW0j+VFULP5PkuqRWnW4nSptxon675qkGjYEk3J+4k6w9zRyYAumvOcKmrCbc9ROGDINVeUxg+A9bjuisPyykM5JGNbaqVRl0HL1McDbUc2k9VKQse7b5gkIGW9vxW2Fia61fHutqA1vP9ovkaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747474379; c=relaxed/simple;
-	bh=DZ5Wze+UcQTPe5dv7U4f0kELD93F5Zfb7nM4dkLfmQo=;
+	s=arc-20240116; t=1747474940; c=relaxed/simple;
+	bh=j8JHH4hS9h31pwop3q1AhYHukwosET52SFQ1vZ+x3q8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bu2+j4CfbpDb0dBR5PBQWliUlIddi3OK2ZiSjmHjUTpSm+OJ6I40xYvOH1nBo4+X5KXF4DXEapw5EGZEKp9ebdE+Jk/sGoliPsONfahki2U1NmbI6QA+7OLk3rdvcQL1scxW19pEIRKAFJtihalwUxpYcoJzI/BpNbXTWOfsVJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Bp1a56H1; arc=none smtp.client-ip=209.85.219.49
+	 To:Cc:Content-Type; b=I246gloDdDRPmDr06NA2d0cJDe91sNOC1gap9OdE+Cn56IUMv57i8LTvvQnLuBmKnj9efiBVe96R63A52Oc4/iM3eQjzZ8B7MFHDGLZ9ae3jM6v+9x8Dz1se+w2xn6UvWtEjIO5u7mMEjv515lYChs0aBDgtUyyHiAhySc5g1Ko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QunvvY5M; arc=none smtp.client-ip=209.85.219.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-6f8c0c8da93so15294906d6.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 17 May 2025 02:32:57 -0700 (PDT)
+Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-6f0ad74483fso30513686d6.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 17 May 2025 02:42:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1747474377; x=1748079177; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1747474936; x=1748079736; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pvS6ulxjab0ZaxU/7WsXSLcN/1jbvyvAGzGKtO1R4xg=;
-        b=Bp1a56H1sK6boQMJ4reK+V1MDtMzrTZvTLBSGVnp7yBgQIW+DLbJVJCOZS0Jj8DdgM
-         UN3AqnTH5b4p3nUHtDjDEMsV1r5SD4uI9ZjVppJ1XWc+JxITsBIRcvR2Ta/Qwn+tqQ1d
-         Cf41YLDmRvJLOcMneg24Ugr7VrTmvBmdwrYfWwkBQI8xJJK9r9jV7ZZWgudAgCrjn3wD
-         Mqwez221Pu2C+ra1clH945Ra6x2ubN4sbD9+UlbJOLjNYijdAEUdsaitr9yqDsas3acE
-         ZGaftrSfbJSGf7eqOZY+8sEQTSHDC3TX3RXJhwcvVVrA33Ss8mC7UW60eHRYA5N8Gphg
-         hj5A==
+        bh=3+GYV7wlXl3tsOIP/3Sbr/2ngWUOqMl+DvLfS8nLEMo=;
+        b=QunvvY5MDHG/9Ynw+0E0cXR9+XoeQZbaCrJODwqnDWhKQXKTxAY9Kky6JCCLz2xb6B
+         B1wZnD8L5HuTq1qpORfNOQQJGia3Edmtd/O/QmV33ah5iY0rXUB1zjuBV0j21UIo9BPo
+         tkTW5yZx1qoh77/KdS7j42CFRfqyVn9yi3pMN1JZR/5xLWqCIPHTtjvzkCNiWVyVizMl
+         tOXqHxttYhA+LWWwBv5r9MdRYPHk+KaDNbBjjJ0+5782dlAKj3c0dDsgeglwM73nbL3u
+         Xq3JoYQKRnXhbs/NO1+vnY4w7/RSCgilb3NuTZy7QR/MkxeOKgwq+S5MGy1CGPDT0SFD
+         g1Mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747474377; x=1748079177;
+        d=1e100.net; s=20230601; t=1747474936; x=1748079736;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pvS6ulxjab0ZaxU/7WsXSLcN/1jbvyvAGzGKtO1R4xg=;
-        b=wcCjuU20NJV8VHqhXpgJi6for7ISj8rXcwP83tQiFfRc78Zgph+32fEXxuBW59gRFS
-         h4DpIe8dVTFSS7GSV8H0T4xMQupGp2RNYXOSC2QryE1XF1qeEH8BdSzBZh/baCtumcei
-         iz91V00IKxA+7y1qN8hNGbbJyK51NdDrQOA1lOptmiaQtzo0MFCwgn053SSwBrsRbkCq
-         T/odWaShTLZfcMMeMKZzhKWWTOht3Yc9+zEOGEAU4v1BIuhcxDdeedWNeCTUHO1FnLrf
-         Z19WrV+DjIfiTN5dMu22ijM6C0GzdSzWgvHhnnFHtGR1+WltWbjqeqgCuf1XSfJSwF0v
-         U2Pg==
-X-Forwarded-Encrypted: i=1; AJvYcCW2CmaAtuNm1eZygO+pctLsAj0OwboZwF2SICqWbTmEZLhtzIjzie7/sPIxZg5Hruzre3vgg6m4jV6rLo8VrDM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwvjGPUwDv7KPrj/FTHh61F4wCmk86IpvUym+8c33ir1Vieq5JB
-	dTS/cWMBqbagR0cHYYIlIcG1k6GPIx9GonpFgL9i8AGW4pKMAydKn5ryHEoKe5D5tGj94yoXnAb
-	nLYnpgYSacbdQ4PuBNsePEB3LrkuYc5/VQ0+MkQME
-X-Gm-Gg: ASbGncuscwW1KUrNcfh9Cp6DgwRQF4DY4Uh7btmIWPWIgEjkspmZqqkS6GC8rkeH6CR
-	+rBnYuhvpSTuRQ2CX7x34zCIYwhDOeJw/KVcCWjRwOoUYnwsP5YV/rJ0E55SXXoQFKZdYWMexJc
-	u+/Bbvq3l4m7xvYzeq0/zckt0gKR6WhJyzFQ==
-X-Google-Smtp-Source: AGHT+IGKEH0qbP0pqItWHnoLxpFRdre+rzDAc2hGtprvrPc2rCt/sYGW1bRV9AA8f/OJxj63588tUIw+BujWHL/MACU=
-X-Received: by 2002:ad4:5941:0:b0:6e6:646e:a0f0 with SMTP id
- 6a1803df08f44-6f8b07f3177mr92768776d6.12.1747474376584; Sat, 17 May 2025
- 02:32:56 -0700 (PDT)
+        bh=3+GYV7wlXl3tsOIP/3Sbr/2ngWUOqMl+DvLfS8nLEMo=;
+        b=aBcm7wcE08g4hxcvQ2rj79PpjBoK+LHV8UuOwvxrEXZbsrtQftm8Xp3VCzd8uSlD3z
+         QKK246e9uaNUUqyATJeQeXmjxmYnOJTpsT182zNp/s1/cuMbSX8L9zqdZlS5d3qOHkpg
+         5Mq4dsryM7M/qMfmkYUUHWPHnB7sm9ulB6n+Ft4soqiFjnXQzUgq0/r8gILp085zsG1L
+         dEicsjWrve09F6et4zjpTV4wdrTfP5P/NqyMWUvvjB4SKWZs7dZrdCT6OJAReCw5EPt4
+         09p5jyQyHo4BAHRKgXbbXiiRRiDYbbYfgq9v3GSSriip2FBu2Hym4/CsqIdGgFIzJmOM
+         FS/g==
+X-Forwarded-Encrypted: i=1; AJvYcCVlJ2dSzsBkIjhoAPgDmdUTO3XddrHq02gj/c0ut0r1ciLMv9AU4CA3x1jRDlF1tLRZdDpSjXfna/3lJApU9fw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywv+Hi7Sb6m2LvH6fJOKwbwQf95p03hknyBT3qStG/QtIcnsWBE
+	hIELD2B1Z6dfqfRU+17MKFuAGATuIAwM9bgwSRqz0yqDf9tRaMvYefpaEBTHIFcow1A2oDXPaqb
+	vi/UNSVaeYEwbewY199NdNYeqzcLbhU84Vf00tIkR
+X-Gm-Gg: ASbGncsi5sX3gKIpSTAjcGJ2WSIHd36FSQhEW7TaBNw/4+jHGcYb6ZzvFMJIwJfkU5Q
+	eOJXrDlzgWSl25VgSXsM4frRLPipwiwR/XxnN4UQnldyD+3FIFtTHQoJwmw/1l6ZESHsUuaeTcK
+	F4RI/5RoEfYGpKBmjaUBz+7l9AaY36sCwD/Q==
+X-Google-Smtp-Source: AGHT+IGptkbq2Cat0/G+nXayMrRAR95WUxnfTSBaeQENkod2hQrj1q6n/ospfd/2XZEwzgObUZ5ngHoDN98WmfEbUA8=
+X-Received: by 2002:ad4:4ea6:0:b0:6e8:9866:7398 with SMTP id
+ 6a1803df08f44-6f8b0827d98mr108121706d6.22.1747474935543; Sat, 17 May 2025
+ 02:42:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250516190631.1214081-1-rmoar@google.com>
-In-Reply-To: <20250516190631.1214081-1-rmoar@google.com>
+References: <20250516201615.1237037-1-rmoar@google.com>
+In-Reply-To: <20250516201615.1237037-1-rmoar@google.com>
 From: David Gow <davidgow@google.com>
-Date: Sat, 17 May 2025 17:32:42 +0800
-X-Gm-Features: AX0GCFvcQPxSpA-Log_OfA3_WtgU6RmyiSaFNEhUIKbtXuY16QbAyvTiCFcB3XU
-Message-ID: <CABVgOSnFhWaFmWF19pX4nWng-P3+urYu1OZwnng5z8sdX1rHQw@mail.gmail.com>
-Subject: Re: [PATCH] Documentation: kunit: improve example on testing static functions
+Date: Sat, 17 May 2025 17:42:00 +0800
+X-Gm-Features: AX0GCFsfeep3gxGmUcnBe95Wcxi_DIU0Y4aPbvZN2VWnneJZvGkRE6Dt9nil18I
+Message-ID: <CABVgOSkNofHFvq2QxrT5tKV+9Z13AnYu+xvRr0f0Ae_hg6i4_w@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: add test counts to JSON output
 To: Rae Moar <rmoar@google.com>
 Cc: brendan.higgins@linux.dev, skhan@linuxfoundation.org, dlatypov@google.com, 
 	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
 	linux-kselftest@vger.kernel.org
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="00000000000080768206355195dc"
+	boundary="000000000000d0f946063551b692"
 
---00000000000080768206355195dc
+--000000000000d0f946063551b692
 Content-Type: text/plain; charset="UTF-8"
 
-On Sat, 17 May 2025 at 03:06, Rae Moar <rmoar@google.com> wrote:
+On Sat, 17 May 2025 at 04:17, Rae Moar <rmoar@google.com> wrote:
 >
-> The documentation on testing static functions using the KUnit macros
-> VISIBLE_IF_KUNIT and EXPORT_SYMBOL_IF_KUNIT is lacking clarity and
-> missing key steps in the example. This has caused bugs and confusion
-> among developers.
+> Add the test counts to the JSON output from kunit.py. For example:
 >
-> Improve wording of description and add missing steps to the example.
-> This entails adding the "#include <kunit/visibility.h>" line and the
-> "MODULE_IMPORT_NS(EXPORTED_FOR_KUNIT_TESTING);" line. Both of which were
-> missing from the original example and key to exposing static functions.
+> ...
+> "git_branch": "kselftest",
+> "misc":
+> {
+>     "tests": 2,
+>     "passed": 1.
+>     "failed": 1,
+>     "crashed": 0,
+>     "skipped": 0,
+>     "errors": 0,
+> }
+> ...
+>
+> To output the JSON using the following command:
+> ./tools/testing/kunit/kunit.py run example --json
+>
+> This has been requested by KUnit users. The counts are in a "misc"
+> field because the JSON output needs to be compliant with the KCIDB
+> submission guide. There are no counts fields but there is a "misc" field
+> in the guide.
 >
 > Signed-off-by: Rae Moar <rmoar@google.com>
 > ---
 
-It's always great to have better documentation!
+Thanks! It's very nice to see `"failed": 0`!
 
 Reviewed-by: David Gow <davidgow@google.com>
 
-Thanks,
+Cheers,
 -- David
 
->  Documentation/dev-tools/kunit/usage.rst | 38 +++++++++++++++++++------
->  1 file changed, 30 insertions(+), 8 deletions(-)
+>  tools/testing/kunit/kunit_json.py | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 >
-> diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-> index 22955d56b379..038f480074fd 100644
-> --- a/Documentation/dev-tools/kunit/usage.rst
-> +++ b/Documentation/dev-tools/kunit/usage.rst
-> @@ -670,28 +670,50 @@ with ``kunit_remove_action``.
->  Testing Static Functions
->  ------------------------
+> diff --git a/tools/testing/kunit/kunit_json.py b/tools/testing/kunit/kunit_json.py
+> index 10ff65689dd8..80fa4e354a17 100644
+> --- a/tools/testing/kunit/kunit_json.py
+> +++ b/tools/testing/kunit/kunit_json.py
+> @@ -39,10 +39,20 @@ def _get_group_json(test: Test, common_fields: JsonObj) -> JsonObj:
+>                 status = _status_map.get(subtest.status, "FAIL")
+>                 test_cases.append({"name": subtest.name, "status": status})
 >
-> -If we do not want to expose functions or variables for testing, one option is to
-> -conditionally export the used symbol. For example:
-> +If you want to test static functions without exposing those functions outside of
-> +testing, one option is conditionally export the symbol. When KUnit is enabled,
-> +the symbol is exposed but remains static otherwise. To use this method, follow
-> +the template below.
->
->  .. code-block:: c
->
-> -       /* In my_file.c */
-> +       /* In the file containing functions to test "my_file.c" */
->
-> -       VISIBLE_IF_KUNIT int do_interesting_thing();
-> +       #include <kunit/visibility.h>
-> +       #include <my_file.h>
-> +       ...
-> +       VISIBLE_IF_KUNIT int do_interesting_thing()
-> +       {
-> +       ...
+> +       test_counts = test.counts
+> +       counts_json = {
+> +               "tests": test_counts.total(),
+> +               "passed": test_counts.passed,
+> +               "failed": test_counts.failed,
+> +               "crashed": test_counts.crashed,
+> +               "skipped": test_counts.skipped,
+> +               "errors": test_counts.errors,
 > +       }
->         EXPORT_SYMBOL_IF_KUNIT(do_interesting_thing);
->
-> -       /* In my_file.h */
-> +       /* In the header file "my_file.h" */
->
->         #if IS_ENABLED(CONFIG_KUNIT)
->                 int do_interesting_thing(void);
->         #endif
->
-> -Alternatively, you could conditionally ``#include`` the test file at the end of
-> -your .c file. For example:
-> +       /* In the KUnit test file "my_file_test.c" */
-> +
-> +       #include <kunit/visibility.h>
-> +       #include <my_file.h>
-> +       ...
-> +       MODULE_IMPORT_NS(EXPORTED_FOR_KUNIT_TESTING);
-> +       ...
-> +       // Use do_interesting_thing() in tests
-> +
-> +For a full example, see this `patch <https://lore.kernel.org/all/20221207014024.340230-3-rmoar@google.com/>`_
-> +where a test is modified to conditionally expose static functions for testing
-> +using the macros above.
-> +
-> +As an **alternative** to the method above, you could conditionally ``#include``
-> +the test file at the end of your .c file. This is not recommended but works
-> +if needed. For example:
->
->  .. code-block:: c
->
-> -       /* In my_file.c */
-> +       /* In "my_file.c" */
->
->         static int do_interesting_thing();
->
+>         test_group = {
+>                 "name": test.name,
+>                 "sub_groups": sub_groups,
+>                 "test_cases": test_cases,
+> +               "misc": counts_json
+>         }
+>         test_group.update(common_fields)
+>         return test_group
 >
 > base-commit: c2493384e8110d5a4792fff4b9d46e47b78ea10a
 > --
 > 2.49.0.1101.gccaa498523-goog
 >
 
---00000000000080768206355195dc
+--000000000000d0f946063551b692
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -274,14 +249,14 @@ uFrCoYIRlx4rSVHpBIKgnsgdm0SFQK72MPmIkfhfq9Fh0h8AjhF73sLO7K5BfwWkx1gwMySyNY0e
 PCRYr6WEVOkUJS0a0fui693ymMPFLQAimmz8EpyFok4Ju066StkYO1dIgUIla4x61auxkWHwnzGC
 Al0wggJZAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
 BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAcDMKctW1GQKDKqEUSh4
-pjANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQgqpW4CBuOqcu4+H1EHHNAut5gEOdw
-3xcfgV0+MAZjaoQwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUw
-NTE3MDkzMjU3WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+pjANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQgLugZ7sj1rGG7uB/ahFEy00jKQCNO
+PVDl51h+XnTJKgwwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUw
+NTE3MDk0MjE2WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
 YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcN
-AQEBBQAEggEATNei9ImqELP+s9pWtj7EJwPR4Ds46W44b5v200hssGTLMKMc8dYjT+cgT6d0nakd
-7T9pHvevmkY8z15qr6eql2LfQsTDuvW0bs4K3qFyfFR8wt7vPQ/fBU381Q5O2JfSSkpQsmOMoPkI
-mAVhJXwJN5RgXYbiMsRTmyZBa5CQEO7aRetzSJVRiyU4BGH/FodNRuC5Wamji2TcStUFRRrvHPUg
-LWYkkS6/fUW6vQ+Nwx03sGA1UURvQWAhc2Y3eIPjuPqfe5VwTlhNbR4skR/ljVcYxsqKhZyHTRcP
-Uk2KBD46kYb7ibgFNH8N3rVvb0Cv2yaygSvi5WXdc3OJCyVweg==
---00000000000080768206355195dc--
+AQEBBQAEggEAAqOo+dX+FLWnROLDIMkwhRZ/0Or0UIl1OVGgoL6yegNrvdz5SkPi5f9DkYvRmSJl
+eZMNhwQvGmF5G6/DdsTtTksdMUsqZQkxJTlfEk9IGOpyLmwVd3s0GU32CzFJKBWYZ1CmjrFCfkiR
+8Bl8cBSG4GUEot/1UO8jtk9T7EqAiTPR1bxRTA659yTsEEnIPwI1p9zFA2GU52jSqZeBqqx2+jyy
+ytCII1pdCK2LppcfbPHq0DH4ZXv3zX5Mk39TlQZnGmJtjsYibhKwoRaRt1BoylgPNEEmHtu300J5
+7eejhfPQEPOhd+vLRfdc5PskUrN8zS6CZt21LIkH/K5pWmVIZQ==
+--000000000000d0f946063551b692--
 
