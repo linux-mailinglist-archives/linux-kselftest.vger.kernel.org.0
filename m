@@ -1,101 +1,116 @@
-Return-Path: <linux-kselftest+bounces-33253-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33254-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF493ABABB1
-	for <lists+linux-kselftest@lfdr.de>; Sat, 17 May 2025 19:36:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7AE80ABABDF
+	for <lists+linux-kselftest@lfdr.de>; Sat, 17 May 2025 20:39:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 760A91690BF
-	for <lists+linux-kselftest@lfdr.de>; Sat, 17 May 2025 17:36:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E0EE23AE14E
+	for <lists+linux-kselftest@lfdr.de>; Sat, 17 May 2025 18:39:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8B1220AF62;
-	Sat, 17 May 2025 17:36:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD27D1E008B;
+	Sat, 17 May 2025 18:39:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="FJFB4mdS";
-	dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="g38uGlfI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hHtkvoLe"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.uniroma2.it (smtp.uniroma2.it [160.80.4.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 013831E9B1A;
-	Sat, 17 May 2025 17:36:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=160.80.4.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F03FB170826;
+	Sat, 17 May 2025 18:39:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747503412; cv=none; b=jE3Nr7WdpJVkPmPYlNaqBqvbeY4PkLhJYGeBCDRxQ/0NLJXoDRFqyhOVWRQsTtJoIaOZPSgywcnCQFehTXbPwaSGvsJMD1hbzziSQnf991SwOyVInDaj7GcX/4jSLHYpXQN6S3IuUvz2pYsf220VXhKFQF/omkTTPVkppWnBkw0=
+	t=1747507170; cv=none; b=NmEUI6gDdgiAMg9GyQS8TsA6IMcxhMB1VgqOC0Wq2QzSll8U/+E2El9bzQB0Qmc43+u+93avbVLcYNsnwV0oEKY8MXg4PooJZ2ALn6YO932n8bIP/HigOP5F06VCu46Gh7DDSPxM5wlQNFngDZlHziPE03au9npx950XyD9EHNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747503412; c=relaxed/simple;
-	bh=U4N0PRIlljAgiI2xZ1aESmjVplcg4CugebQZZJt2ji8=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=i2AcMgb30DKznCIzQwhY7Ioxejq9M0jLpvCBC/nmvRSKfMpq8A2G5rxsJUD+WbpMOxiwJteCl56a34uyXh1KTTKQx4V11gBTX7rwJoZMSOJwm4c1g7KS7f2UkGEaYIv/cdLUoRAD0LtqIjv8ww4DH0AVb82yqmGYPmsdnnhYE5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it; spf=pass smtp.mailfrom=uniroma2.it; dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b=FJFB4mdS; dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b=g38uGlfI; arc=none smtp.client-ip=160.80.4.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniroma2.it
-Received: from smtpauth-2019-1.uniroma2.it (smtpauth-2019-1.uniroma2.it [160.80.5.46])
-	by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 54HHaCsU017523;
-	Sat, 17 May 2025 19:36:17 +0200
-Received: from lubuntu-18.04 (unknown [160.80.103.126])
-	by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id EDCA112055B;
-	Sat, 17 May 2025 19:36:06 +0200 (CEST)
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
-	s=ed201904; t=1747503367; h=from:from:sender:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KeIN7v3fjK5KQSpzz48J9uF1ajS37F4/hr5DQzTVUA4=;
-	b=FJFB4mdS3UuPUUeupz6rn88391U//qtfOHyHSoz7FoiqqBS3+C5fh76SfZxS3ub4WAdU6S
-	4UhfI1ddSgdLb6Dg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
-	t=1747503367; h=from:from:sender:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KeIN7v3fjK5KQSpzz48J9uF1ajS37F4/hr5DQzTVUA4=;
-	b=g38uGlfI1U4J6ErDLK8XGMwk8X5cXJHWAzVzOVvNCrGtPLH2gbZrx6euj+w0x85mvgh6Uz
-	JDpRYj+7WPI5hQR+r4ZDSHOaLu0eWqzdd6fS05FUpXvj9rZcE1OwVzVSrGnaZFFVGKMA9D
-	7KLI4VX4jCrR2ALn+U7vkdEdnblNLLBQ7SO9/aMNBacZMewiOZdqsLPI5dplxDFJ/c7/Zg
-	mDV059tkPMF0EvD0hOJVTJ7svAfKmeLrdP9nSS9OIkRM0x5UVvhOjs8iPauZTmYGhxumDX
-	fBf0/0z04Yy4bmS1XR0djzYc0y29r37g6YiW6ajIW3Iaq7QlibNVIvT1qez90A==
-Date: Sat, 17 May 2025 19:36:06 +0200
-From: Andrea Mayer <andrea.mayer@uniroma2.it>
-To: Sumanth Gavini <sumanth.gavini@yahoo.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: Re: [PATCH] selftests: net: Fix spellings
-Message-Id: <20250517193606.b678c3efc3ca4fa8d478f285@uniroma2.it>
-In-Reply-To: <20250517032535.1176351-1-sumanth.gavini@yahoo.com>
-References: <20250517032535.1176351-1-sumanth.gavini.ref@yahoo.com>
-	<20250517032535.1176351-1-sumanth.gavini@yahoo.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1747507170; c=relaxed/simple;
+	bh=6n6vtPPpy1jIatp/0sOElN1VzMiWlrrits4IaDsbbLQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hi43i8snltCdSS01LyMo6z6Z87eKDl5oZ6YrhGjP8u1gIXbB2lNof0gfzx4fqkPsNq+/N+j02X16xmAKPqh3WPHPLtHILO6/aXGUUK8t0kBFm8v6/3GV+83K6p2X585BUYc+MQV04mm3fNCoEHMgBAq7JcQnC6SSZkUbpERVC8M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hHtkvoLe; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-442fda876a6so16053175e9.0;
+        Sat, 17 May 2025 11:39:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1747507167; x=1748111967; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8rLp3fAoKmMhFEj543FiT4J/bez6Qh2zBbDpq1aPZoc=;
+        b=hHtkvoLeAMIq2BI7zrNuQ1usSup0FR6KHZNfCMCfWB3Ik2YTJbsrwvZPYq11M5Oqo7
+         va1JiK0kVgooe/gXJla/6wUgO7M84v8I9xufkwFAnyaJhNl8syhDmnWEhtyobIkVN+7i
+         c2DtMmF2wvK2IPMjI7IIuDkJDAy/bqWYeBZoPHDiCcRFwKOjhO5EIw3a8Nb5ap86bMdD
+         niJIRIkg7m8paGA4qnCrTzayOfJLM4UbcWuovA4Pe6g0CJ7jWSq4uSL+5ZEpurTjR3rU
+         2qkaYStKHhGonxqsiqP8vzkuvH0sfmvjrne/88l0z3DY6UsZVgulqLLjMIGaANqM1f0V
+         ktqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747507167; x=1748111967;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8rLp3fAoKmMhFEj543FiT4J/bez6Qh2zBbDpq1aPZoc=;
+        b=xT7yVrDWc2xdbYFrgtMcDdUgBMlCJ0LD0oKdIUqEW3Rsz18FAkkjpULro5WZxl3a4J
+         DAwuNYT22kOfxqkKwTvurULc5bfRRWIL5nTeTRT0RyMiCVp54jAV+h/AmrFMAUpBwOFI
+         dI5vRIkEhirv3h13evf8/QdrGn+Xhbv2QExlqCEx0OJCuAZApUn5VRjx4dDkmganfwff
+         m2h78Sh6IUVH3jF2cmsNbuvtuq/mIjz4P7HHdZf5KQwNMeasdEO/7rAtrBZBu+L4dIvM
+         sU+ZLhVZHRgUKyU68H4jvgyR2jpklqQzuT5XmInK6D1t7lOikdDGcwfSiJUnJb+mfUpN
+         epEw==
+X-Forwarded-Encrypted: i=1; AJvYcCU9Pv4dRLMMpVuiX2IH5ZsqPhkJLRlIh+k83ePEQrBnGoan/CyjTHUTm+a4N49TuVHnQbj9lAcZ9gYW1qE2bdri@vger.kernel.org, AJvYcCUvVW2FevP2k6x6J7ybcrHSxgdKMnRbxt6Lft3UVlIpuJTMXu8uc23WkZLfEqhzHRitZ0eY4rfHrn7N+1U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQzFSdDoB4nOyH+uztm5SsrQbNWx/XJBeg1Gps25WDdmb6Bhgh
+	661qVTSApYhFQeu2jO4pPNUMe/6VkxJlB7SqleL5Ky4bx6CVTMRUd9js
+X-Gm-Gg: ASbGnctUbG1Pn6Af2Bl8niE03TZieS3w0N3fEZUkcw1DbXeXgPsYJXEjeIPGS1XY1dN
+	/l0yEC+7oqlXNwH+ac4t75lxt0H9PIsTjl5M1Bat6GPw+jVy15o38JB5LjgXI45mye6xbLQnslL
+	pr09+mMaHkexvhRs10L0reBNQZmZxR66oYdWlV7kTXbS8UgtU6msrt2vNLR6wYgimINs0tjbRmv
+	lgBBIla+yq/60hIiQ5DzwhFnRV5HabhnucEe54P/OjLkwhRSVm511g1eblfmF6AzSdGa8gNr46o
+	CB8AXRo1q/6uoDmzreDvVDgM7nitWafyWfj175SZmk9W
+X-Google-Smtp-Source: AGHT+IHRlAl4uzkKtXrPtksBU7hfyP7MmBY3rnU4nmSgOwh1hGxpcP8yZXd+fx3IAqyEOwuUhNIGzg==
+X-Received: by 2002:a05:600c:3d11:b0:442:cab1:e092 with SMTP id 5b1f17b1804b1-442fd618f88mr74762825e9.11.1747507166849;
+        Sat, 17 May 2025 11:39:26 -0700 (PDT)
+Received: from hsukr3.. ([141.70.82.122])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a35ca8caaasm6908922f8f.83.2025.05.17.11.39.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 17 May 2025 11:39:26 -0700 (PDT)
+From: Sukrut Heroorkar <hsukrut3@gmail.com>
+To: chenxiang66@hisilicon.com,
+	zhujun2@cmss.chinamobile.com,
+	iommu@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	skhan@linuxfoundation.org
+Cc: Sukrut Heroorkar <hsukrut3@gmail.com>
+Subject: [PATCH] kselftest: dma - fix typo "mininum" -> "minimum" in comment
+Date: Sat, 17 May 2025 20:39:01 +0200
+Message-ID: <20250517183901.165631-1-hsukrut3@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
-X-Virus-Status: Clean
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri, 16 May 2025 20:25:33 -0700
-Sumanth Gavini <sumanth.gavini@yahoo.com> wrote:
+Fixes a small typo in a comment; helping to improve clarity in code comment. 
 
-> Fix "withouth" to "without"
-> Fix "instaces" to "instances"
-> 
-> Signed-off-by: Sumanth Gavini <sumanth.gavini@yahoo.com>
-> ---
->  tools/testing/selftests/net/srv6_end_flavors_test.sh | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Sukrut Heroorkar <hsukrut3@gmail.com>
+---
+ tools/testing/selftests/dma/dma_map_benchmark.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thank you for fixing the spelling mistakes,
-Andrea
+diff --git a/tools/testing/selftests/dma/dma_map_benchmark.c b/tools/testing/selftests/dma/dma_map_benchmark.c
+index b12f1f9babf8..ed5522061dd6 100644
+--- a/tools/testing/selftests/dma/dma_map_benchmark.c
++++ b/tools/testing/selftests/dma/dma_map_benchmark.c
+@@ -80,7 +80,7 @@ int main(int argc, char **argv)
+ 		exit(1);
+ 	}
+ 
+-	/* suppose the mininum DMA zone is 1MB in the world */
++	/* suppose the minimum DMA zone is 1MB in the world */
+ 	if (bits < 20 || bits > 64) {
+ 		fprintf(stderr, "invalid dma mask bit, must be in 20-64\n");
+ 		exit(1);
+-- 
+2.43.0
 
-Reviewed-by: Andrea Mayer <andrea.mayer@uniroma2.it>
 
