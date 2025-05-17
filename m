@@ -1,82 +1,88 @@
-Return-Path: <linux-kselftest+bounces-33248-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33249-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8BA8ABA9FE
-	for <lists+linux-kselftest@lfdr.de>; Sat, 17 May 2025 14:15:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E350ABAA0E
+	for <lists+linux-kselftest@lfdr.de>; Sat, 17 May 2025 14:28:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DDF8A1B625EE
-	for <lists+linux-kselftest@lfdr.de>; Sat, 17 May 2025 12:16:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 594153AEAB1
+	for <lists+linux-kselftest@lfdr.de>; Sat, 17 May 2025 12:27:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73E1915B135;
-	Sat, 17 May 2025 12:15:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 149A91EE017;
+	Sat, 17 May 2025 12:28:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CJT3wMEA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ab8dRkii"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2DE82B2DA
-	for <linux-kselftest@vger.kernel.org>; Sat, 17 May 2025 12:15:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A001B4B1E7F;
+	Sat, 17 May 2025 12:28:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747484145; cv=none; b=I7GoTHNkPnfXIDl1nLWErVML1uF23h9r4ch5FHUbAsMIE68fsTH0QufD54sdPmO5QoG8bJqw3kARjfNOcfMeQzP33JnGn8SK9hh+NZLPeSdIPl03b9VyA+U6WIYLKxcsFjN9BRjMpKlrFJiI2zt+ddwHuwnP0kSRNBEWlhAubJM=
+	t=1747484889; cv=none; b=ni3igsCLj1dYqvlVKq7uEvYYTwZPpjwDgyqMN4ntnjbt7UtXx4p6bhqCD4ZqXT+fCqr2yruV2mSSH+vaYO+Bkwsc8hK0GQiqa6c7jep4mSSBT0fobWdargBmXbcV/PktWL4kGnHFBbHkRV3hijt5DV2WCda5AMTNHVzsWAKsyGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747484145; c=relaxed/simple;
-	bh=v6aJtGI/gJei4sR4l9jO3KUUlQfqrTfTxF3qFKafwQo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Purwyt10VPC5+l+d1mIW+OjOTve7SjVv5XlMkw9T2+XqMDmpxThYXlSx68gtIcbU1VHEZDLn8M4d8gI9w/9vCYQWe5I3NR4QihHBSTSCqIw9B5rUPiUhtNnpM5/5HV+Hvf9RLXFeKAHwHDH3rJApk9Q235yJnGXM/waUX0ynLLg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CJT3wMEA; arc=none smtp.client-ip=209.85.216.49
+	s=arc-20240116; t=1747484889; c=relaxed/simple;
+	bh=RoB5ejzT39dJyqDA/LHnS6c5cSx+S+1vl0bptQDv+Sk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TGyI1uUW9Z1xC5iPg1pEgJlb8Y8bThWV7uTfuTPeM5oClmkm95NPhnExY44Q2uKhhEgU/HIhgF0qMOa++wtvHTzJzkYD3zw/o2F3hBtTDhxkIjzThXdUwZGxjtdVFcUOS6hWIGw+18Hhn1W11p9XC5wT3GW6Bu0uc/2KJLlgtNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ab8dRkii; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-30572effb26so2742636a91.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 17 May 2025 05:15:43 -0700 (PDT)
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-22fa47d6578so26660025ad.2;
+        Sat, 17 May 2025 05:28:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747484143; x=1748088943; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1747484887; x=1748089687; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=L3PURKzMmySLXa163LLM7D3/spF36tXOR9uSznKHgjI=;
-        b=CJT3wMEAUrQhzULqbr3EdmsM/c0dpMCTr8fMYO8GVaKcKFKVE/fZA4ogpHtIRyg3M/
-         nKVkm0/uB41r83unGkJvw2oj4fffYTUlyc8Fbu4B8d15ifppwC8sQTb1BiPDcew1ieKK
-         pMfTU/RYx4ikDn8HX22qyBN2t65Y7SttoE6sGri9VZtO8qW1Kj1n35Niddi/FxZiXIKt
-         IC4IRhXlF+JO4FE50VM9JFTTUIhZ6czmo8Cob/bb3RlG9Q822KE4fYIMYgVGDSXeFxTM
-         JoYWl7ckkCPx2DcGYect5O3k7Ec8N8O+Q+V7d5NG+t8La+QfIGQpcELRCPP7xScDrks4
-         huHw==
+        bh=6akfme5Vv/pIFUI0IHvo07yJJuYolE7NanFLpkcN5cU=;
+        b=Ab8dRkii34ajpe13/kvSn8yRdqYwxJzlzmVFLKilCElNzYZx4idrNqAiU1GM2p6lB9
+         MoRIp8VIXpBaggstMvG0LdJaKcQuYgSM7cT8YxN6P41CKu5MmdATrcmJtSPHWs9us8OK
+         iJZwBhQ4WCa2C+/6EJMUuA4Vj8PAKTuZ5OeTr9bhgv/KI2Asj1HuSgDs8Va5sYWrSDKc
+         KtTdH/2+T5KOyoxa812DfOZZ2SE3I0n6ib+FSFAgEITDtf/20RQEUDLmned+yMSv+IOF
+         7kiVR/CNZ1gwjlHV7xORWSIHalyClCopzfy/8qEKLVr8CPHIgSid9fhtFpVC93cb8952
+         ViuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747484143; x=1748088943;
+        d=1e100.net; s=20230601; t=1747484887; x=1748089687;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=L3PURKzMmySLXa163LLM7D3/spF36tXOR9uSznKHgjI=;
-        b=qUAmrKWdJP9RbH5poXyQg2rHuUBk/CJEnD1sCfs+7xZmQDPi8r7xmpwbVjIqTkWG6D
-         ZqUPESfRPwyr+D9KmYNg8gYKHsTGMydF1jyXddllItcXr+MmnFsX6OdSPz46UZn5LnHx
-         lbkuwUrBi065zHtYDRzsv7hi+UKkKQNHXdKHuXc3s3ZfiVsG1lrr4FJxVEuSwpJAnv3f
-         2ScKrd422zczoZINELpTZQsQaMLbGKVn6i428+EMSF89iVfHL3upwZTs7cejEdCiGsTs
-         spc/dzdY2E6OpzIqTEBLlzjhKTSxbEa0dSGu5/00wJU3VVT8ghKtpw3DiroKh/Ey9iJw
-         +JHw==
-X-Gm-Message-State: AOJu0YyGh5UqBpW5x8mYEDMHgGMehqkosDhAs/PHU+C+3gmUVxpwWAzh
-	o2OUnx/4Jw9+Gw+B4hph+qQkcC6GVs2bHD8n3JNWHLoOecnHotJ+vei2DfJ9kQ==
-X-Gm-Gg: ASbGncsNXQ0M6eWkMDHg5a8NFLaf170mLzEysUcbZkXPmSqm/YTn1n6QJMIN8hd294a
-	SxE2bH268SvjL0WvyZ8j1Xj1Nfa66eYF6pmbgaOfU7/ZVYSQinC/iMM6LjkqEoZGPVONj3mlQOx
-	EXSldavNv6Y8+PuBBicpOd34FQa6CzvXB0Qe8ulXCy331vubKVFLdqW3DBZ0sPJEa6W422f4GWN
-	v5+TgEVghDJoBaBVIWkjkOmQZfUFTaIKUF/Dq5wnf0bs9NviqkLTa6amzRKsAfzL/mWYM3NoPiH
-	u4AmGd/o4KtPSSlOtkbSkzKeuneeKpKS0aT0US1iUqv9YNKOeYaF
-X-Google-Smtp-Source: AGHT+IG2fmJGaxDpwDg+aXtINmaHAno98TKGFPX9963kSvbf5YDP/01HSx7IeD6qlLYNQOQ12PY5pg==
-X-Received: by 2002:a17:90b:5603:b0:2fa:228d:5af2 with SMTP id 98e67ed59e1d1-30e7d53fa9cmr9432312a91.15.1747484142680;
-        Sat, 17 May 2025 05:15:42 -0700 (PDT)
-Received: from skc-Dell-Pro-16-Plus-PB16250.. ([139.167.223.130])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-30e334016e7sm6907081a91.9.2025.05.17.05.15.40
+        bh=6akfme5Vv/pIFUI0IHvo07yJJuYolE7NanFLpkcN5cU=;
+        b=P0C8MYvdcr0jUj5D5VpEnihtDVm7TNfmF3L9a7nNmpyGCG2rZwWZRUNvJbAlS2kkVy
+         FITILGFKCzBRQ6n54dsHmucROQ/kOfC3trbgemvpVAQU73AjqduLd+nvb7aSCe3DKb8x
+         R2HsbZqn8J9iCYrOQxrKEgNzsnLP9d1MF1rhmYvAcmQhbDfQTOetrygTCYKETgq+RKs6
+         HpMM3liOq7O/1lXBvEGgn/WZQr8TXKvcR50oPP4p+B5d4mDawKTbBmLXXu/lESARRa7v
+         F7A0TepMOpzxv+JXK1MDi+AE0obIMUwH7smDBIEFDk3PSb2tpPfq1eBcZwlhyRKsuAje
+         NGoA==
+X-Forwarded-Encrypted: i=1; AJvYcCWu4vXsmBDFJ0yWQMRjsbp0j3XUhkcd8Ta1RE/OYFGJMBdKRkjrGBumuQ/Qb7J4RQSPxgW2yibr2vw2F6U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwHXwYNIIe/0rGM61ONgvfW7oKT7m7BHQ8c0g9OYVrOHpkaSpNb
+	kScYrBdeFuPbsGXv1ibpxy5vrKAsY1mH1z2iX4Uv9vZsDTpi5KBHSm0=
+X-Gm-Gg: ASbGncsJYdrziROfpP8SaxUG9c5OLPRwRnvfCsuXT1Qk8YXXRiTPvkU6AdUaE3nhjfE
+	ixRFD+rGvf6DNNs8+KrskC4w/aNeM6GLmm5miLDIsE46kkzgCtmI8zO15Npfj9SQ46Ty18FolNP
+	4gEInPGBY/DuP/w6yl2nE4lunYDtpsXlMD5N/lRCZR26lINcpcBtc8a3Lt3tvmvL95ghMnYnTGq
+	LJf4WN9eyHx7p0IxvCOejHAewDeKo9ZMhkqQt5tvxu0n6CGjKw5Fk5KcxAYKZkOdu3N5D02F9b8
+	7DunaES7OLgSoHg9faPR4ObYLtTH69ST9QPCqbaGiWkQpx8nPvWvtT7XabFOBjENBSFKQRLkvU1
+	cLvZemiKenXE=
+X-Google-Smtp-Source: AGHT+IHLOGoDESwOuLswcndnDgr70wl1Ia0pGTRKmV8q3PttojQ3xY1z5pJKY4Azg59AkBlEtEoYUQ==
+X-Received: by 2002:a17:903:1b6d:b0:231:cec7:34fe with SMTP id d9443c01a7336-231d454ebb5mr98126925ad.46.1747484886750;
+        Sat, 17 May 2025 05:28:06 -0700 (PDT)
+Received: from samee-VMware-Virtual-Platform.. ([103.211.112.186])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-231d4e97ec3sm29609165ad.107.2025.05.17.05.28.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 May 2025 05:15:42 -0700 (PDT)
-From: Suresh K C <suresh.k.chandrappa@gmail.com>
-X-Google-Original-From: Suresh K C
-To: linux-kselftest@vger.kernel.org
-Cc: skhan@linuxfoundation.org,
-	suresh.k.chandrappa@gmail.com
-Subject: [PATCH] docs: msm: fix grammar and spelling in crash dump format
-Date: Sat, 17 May 2025 17:45:09 +0530
-Message-ID: <20250517121509.104933-1-suresh.k.chandrappa@gmail.com>
+        Sat, 17 May 2025 05:28:06 -0700 (PDT)
+From: Sameeksha Sankpal <sameekshasankpal@gmail.com>
+To: skhan@linuxfoundation.org,
+	kees@kernel.org,
+	luto@amacapital.net,
+	wad@chromium.org,
+	shuah@kernel.org
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Sameeksha Sankpal <sameekshasankpal@gmail.com>
+Subject: [PATCH] selftests/seccomp: report errno and add hints on failure
+Date: Sat, 17 May 2025 17:57:40 +0530
+Message-ID: <20250517122740.35043-1-sameekshasankpal@gmail.com>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -86,42 +92,44 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Suresh K C <suresh.k.chandrappa@gmail.com>
-
-Fixes minor grammar and spelling issues in the MSM crash dump documentation:
-
-- Corrected "uinque" to "unique"
-- Changed "Set of registers values" to "Set of register values"
-
-These changes improve clarity and maintain consistency with kernel documentation standards.
-
-Signed-off-by: Suresh K C <suresh.k.chandrappa@gmail.com>
+Signed-off-by: Sameeksha Sankpal <sameekshasankpal@gmail.com>
 ---
- Documentation/gpu/msm-crash-dump.rst | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/gpu/msm-crash-dump.rst b/Documentation/gpu/msm-crash-dump.rst
-index 9509cc4224f4..6a7a947044ee 100644
---- a/Documentation/gpu/msm-crash-dump.rst
-+++ b/Documentation/gpu/msm-crash-dump.rst
-@@ -70,7 +70,7 @@ ringbuffer
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 14ba51b52095..d6a85d7b26da 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -4508,7 +4508,11 @@ static char get_proc_stat(struct __test_metadata *_metadata, pid_t pid)
  
- bo
- 	List of buffers from the hanging submission if available.
--	Each buffer object will have a uinque iova.
-+	Each buffer object will have a unique iova.
+ 	snprintf(proc_path, sizeof(proc_path), "/proc/%d/stat", pid);
+ 	ASSERT_EQ(get_nth(_metadata, proc_path, 3, &line), 1);
+-
++	int rc = get_nth(_metadata, proc_path, 3, &line);
++    	if (rc != 1) {
++        	printf("[ERROR] user_notification_fifo: failed to read stat for PID %d (rc=%d)\n", pid, rc);
++    	}
++    	ASSERT_EQ(rc, 1);
+ 	status = *line;
+ 	free(line);
  
- 	iova
- 		GPU address of the buffer object.
-@@ -83,7 +83,7 @@ bo
- 		Trailing zeros at the end of the buffer will be skipped.
+@@ -4518,6 +4522,7 @@ static char get_proc_stat(struct __test_metadata *_metadata, pid_t pid)
+ TEST(user_notification_fifo)
+ {
+ 	struct seccomp_notif_resp resp = {};
++	ksft_print_msg("[INFO] Starting FIFO notification test\n");
+ 	struct seccomp_notif req = {};
+ 	int i, status, listener;
+ 	pid_t pid, pids[3];
+@@ -4535,6 +4540,7 @@ TEST(user_notification_fifo)
+ 	listener = user_notif_syscall(__NR_getppid,
+ 				      SECCOMP_FILTER_FLAG_NEW_LISTENER);
+ 	ASSERT_GE(listener, 0);
++	ksft_print_msg("[INFO] user_notification_fifo: listener PID is %d\n", listener);
  
- registers
--	Set of registers values. Each entry is on its own line enclosed
-+	Set of register values. Each entry is on its own line enclosed
- 	by brackets { }.
- 
- 	offset
+ 	pid = fork();
+ 	ASSERT_GE(pid, 0);
 -- 
 2.43.0
 
