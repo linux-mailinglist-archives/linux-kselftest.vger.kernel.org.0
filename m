@@ -1,449 +1,255 @@
-Return-Path: <linux-kselftest+bounces-33237-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33239-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92C56ABA78B
-	for <lists+linux-kselftest@lfdr.de>; Sat, 17 May 2025 03:27:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 061CBABA7B8
+	for <lists+linux-kselftest@lfdr.de>; Sat, 17 May 2025 04:02:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 727133BA68D
-	for <lists+linux-kselftest@lfdr.de>; Sat, 17 May 2025 01:26:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 90A5B4A7E8B
+	for <lists+linux-kselftest@lfdr.de>; Sat, 17 May 2025 02:02:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65DF17E792;
-	Sat, 17 May 2025 01:27:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEEC813BC3F;
+	Sat, 17 May 2025 02:00:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ox.ac.uk header.i=@ox.ac.uk header.b="csUSsKvA";
+	dkim=pass (2048-bit key) header.d=UniOxfordNexus.onmicrosoft.com header.i=@UniOxfordNexus.onmicrosoft.com header.b="QF1V+cXH"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay18.mail.ox.ac.uk (relay18.mail.ox.ac.uk [163.1.2.165])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 307792CA8;
-	Sat, 17 May 2025 01:27:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747445223; cv=none; b=d01r0fjyC4Ssgyy5XrY4uTkk0RI1U9iaaHwl4GLR4C/kFHkcLvHV9OBEvYvz1IxwOeaifp1xLX5+NkUA3jynzL98/afLN7COIHnv6PIr/DW/bQrddQZfxYAC9X8HahM0/qnSFcPmDVuMNaWr1hwblbIzXRIiZL3VyNKGQVcpKLI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747445223; c=relaxed/simple;
-	bh=+v9noRsWRXZVr1lGd8+wfUEZpOSFPTsR0HueRtd7ZN4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WEmLQsRUSTeNH/tYBsd1r6/CiETXsjvdNHMjlyvNOsKPLSaarXkJVq0UbLJdJ5HHdhjPG/zGWbdfVCKeNYmTfn+yD3SGmKcSS1DnhMux3h582xilqysOA2flX/SYZTD/H3gOCVCpsKagvxd2WafqugFPLSoMoEEXib9wui5rxGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-6f8b2682d61so13525446d6.0;
-        Fri, 16 May 2025 18:27:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747445220; x=1748050020;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HSaQ0h48+oI+lI7LawDJGa6+0qQQUpD9OvN4IPPR+Ms=;
-        b=IaX78qpvSvmGYPb8zwvJWe9z184tjCLB4sGzrF4uyiEPvhQn/2EgJCzBOTONCRI61B
-         LJ8RimRZD21beBageObY3AYAQcd5MH7KaXyBAtuXZnyOz55Y6pT67gl/SH/f430XKj2z
-         6BEbQ3HfQixsiezPl1PRreDEPJRmsf1ATa0hwBt7WaRHlhH3539LuSkZBEs3tFLuXGiq
-         1zjXvpQJPP15Z+NWzrEz0rq7K62Fy5huvqxMQkhaFJafB2efysnbFK85Y0HPoCyJZAYy
-         zpMcpPFbqggIiktdjTb6a2qek2f4T2tVm2L85HLaqCZ/y6iWIsB8mU3hjUL4C3gm9JHI
-         ApeQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWNogw2QlrcgTHe30Bn7EO8ofScnHjuSM1p0DXZJvQkW5yWWl5YFbXi8ymr26XbXTYUc0c6a8nDPOLwsaHAcNti@vger.kernel.org, AJvYcCWjR3JubUupLTfiRMunlLfviVXUm4ec1JsGRf5sik+BxXuUYgsFm1Sw7HOleT3xZNr282/1cyRN+kVJy6B3@vger.kernel.org, AJvYcCXifsXs/ZB3rPsbmuh4qEOww1vq0ON9sAUOPG4Xw+IG6HD6xPwJISEvxu/K6N8GQLyIT/DOSea3RH++QPv8@vger.kernel.org
-X-Gm-Message-State: AOJu0YxgFWBTsifsEdBFsZKsAOcX0yf76G32wLvnQk8swJsWKmLHpo3H
-	/ypiRTzETLzQvLYUL353E7KMn3EXq5fv3bZh3RAYhD9nPEfzKwWkw42B
-X-Gm-Gg: ASbGncv5KZuYVvf8gzsdR1x0Ls1OxTMxpr6wnpaPYINxL3xEvFY1MkEz0I2vKLmvJQA
-	dzR9nYtxa5002MOuj7/05Nm0IfQgKnpzPq7N8QEucCp21dT6Bf1QjJ1a5vf4jwNYfkcJU0VBD1/
-	KkpUz/etcFwyE2j/GRNzPHJYjpgG2O5nuJblQkuVL/si/A5UI3e9jtsCw88R2UaJZCihFlYxYdn
-	uDDIGoArajVjAnmkaMbApC+b9WmReSaDaJBAElI4ihJCdMGF2M0KwniMtkOcaPTTqxDRIABH5Uc
-	i5p7/em+GU2GNtKmcmKIyMesMXuurtlkejrCasq/8frZ4KzxizwVZtC2YK5Kz+R82hKQf2d1dZF
-	0x8ry+8VWRit24AQioNobOw==
-X-Google-Smtp-Source: AGHT+IFwqfAXd2EoFKpIarYkKfQ4xBIsc1tEGohr0yxoIwLLVxnV0VgKGMcDjaxRmtfEw5Z/6M8ElA==
-X-Received: by 2002:a05:6214:20ab:b0:6f4:f157:40ad with SMTP id 6a1803df08f44-6f8b123bf2dmr83190256d6.2.1747445219772;
-        Fri, 16 May 2025 18:26:59 -0700 (PDT)
-Received: from localhost.localdomain (ip170.ip-51-81-44.us. [51.81.44.170])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6f8b0979851sm18837216d6.97.2025.05.16.18.26.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 May 2025 18:26:59 -0700 (PDT)
-From: Chen Linxuan <chenlinxuan@uniontech.com>
-To: Shuah Khan <shuah@kernel.org>,
-	Miklos Szeredi <miklos@szeredi.hu>
-Cc: zhanjun@uniontech.com,
-	niecheng1@uniontech.com,
-	wentao@uniontech.com,
-	Chen Linxuan <chenlinxuan@uniontech.com>,
-	Amir Goldstein <amir73il@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org
-Subject: [PATCH v2] selftests: Add functional test for the abort file in fusectl
-Date: Sat, 17 May 2025 09:23:47 +0800
-Message-ID: <20250517012350.10317-2-chenlinxuan@uniontech.com>
-X-Mailer: git-send-email 2.43.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF72415A86B;
+	Sat, 17 May 2025 02:00:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=163.1.2.165
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1747447228; cv=fail; b=Y8yy3/i4HRKA8IotsTxfGyxwh+onWq2vsGMA5kMs/M6oaMpgbUhQbOvKEUMiz1Fg+CsnxNyrC7yLOZlcRmRJqASfBXzh3ZwdbMJRKix6mw08f+mXHm7pYmlEy1Eg9wNNBJLOgiwlf8MXERW4kyWoBwZYm07HdGS7LZjUQYmZmqY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1747447228; c=relaxed/simple;
+	bh=UYY4BsaRBHtAH3fsbs532dt1S8R6DX0yZgOha9eXU1M=;
+	h=From:To:CC:Subject:Date:Message-Id:Content-Type:MIME-Version; b=u0i8j2Q8AGbB2MK84BHud68vwmYguR+oP9j6MLg42WwFyRKgTBxlwfeew3WunhW7RAYFwybKv31IQOcz8kU8Ypm34eeSqq0bmLoOtXto1ALmeppAwQESqhxgrmkWM5LQcZsVBzZzp+8juNGgMQOEsU3qcqUeVYQ8ppco3EbWeE8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=magd.ox.ac.uk; spf=pass smtp.mailfrom=magd.ox.ac.uk; dkim=pass (2048-bit key) header.d=ox.ac.uk header.i=@ox.ac.uk header.b=csUSsKvA; dkim=pass (2048-bit key) header.d=UniOxfordNexus.onmicrosoft.com header.i=@UniOxfordNexus.onmicrosoft.com header.b=QF1V+cXH; arc=fail smtp.client-ip=163.1.2.165
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=magd.ox.ac.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=magd.ox.ac.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=ox.ac.uk;
+	 s=flood; h=MIME-Version:Content-Type:Message-Id:Date:Subject:CC:To:From:
+	reply-to; bh=MDoj/XCROTt2dZBKeVF+QoqeprIcpfe8Yl5Sd7TdN9Q=; t=1747447224;
+	x=1748311224; b=csUSsKvAOOMJia0dVRR8g4UOzZ3iBflGour352c70n+oTp/8qJ9jRc/PbEueQ
+	4OLuIx6aE9D2Fnpyon8Lr2WxfhIJOjzysAkXtHmqTjQajKZFAMH+xXw3+Py3y7sZXejfIaZuQ6PGG
+	y6vak2e+YJvrV51xw7m1HkiLIY6LPGeifNXD4t8LaBXksujGHIkVxj5QLDL7iSYDAocMJJ5eeyzNe
+	t4o4LihkJjx/5BgzHgovT+yc8BGN/4t8nVZBcuFBGEDGU6PFuZY24Axb9MhSLnPF6VJg2Oj4RJDnP
+	FZzWvnIGLbE7zzHXG5ukwzfEx3Wl7CyofLOY4fMuERO1h53xXg==;
+Received: from ex02.nexus.ox.ac.uk ([163.1.154.242] helo=EX02.ad.oak.ox.ac.uk)
+	by relay18.mail.ox.ac.uk with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+	(Exim 4.92)
+	(envelope-from <praveen.balakrishnan@magd.ox.ac.uk>)
+	id 1uG6qX-0008ZI-8F; Sat, 17 May 2025 03:00:17 +0100
+Received: from EX02.ad.oak.ox.ac.uk (163.1.154.242) by EX02.ad.oak.ox.ac.uk
+ (163.1.154.242) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Sat, 17 May
+ 2025 03:00:17 +0100
+Received: from LO3P265CU004.outbound.protection.outlook.com (40.93.67.2) by
+ EX02.ad.oak.ox.ac.uk (163.1.154.242) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.37 via Frontend Transport; Sat, 17 May 2025 03:00:17 +0100
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=HC0SOyn1+TdtIFvbU+4SoCPXZQPduw5grLVPtZq5/1dIEJ0z5DpXQFv8XNzxHEFLUg87ZmFIbL6TwplTYlCpt5Sbv+S3af6l5ouGJeWLd16q7ABw59UObYoNV3ftoJx8F9IWCcCdIz67DOypTZygN3Xs7vzLGsaCXUGx/OVpaBaT5yG3i1Uj9sEw7zai1bIkYDpnuUYKaVE9GUwuT+MiqNinP3OVYxG0NDSWR1mie39S7x4zQjB5o4eW9HW2YE+oSqsGiI8YrDb1cZeX7SPqwMqFZAj3Ywff2HSB7xyUC88BnwrMfGSDbmB/0b7Lna9ny5Vep3DX9lXNlX7drRT2wQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MDoj/XCROTt2dZBKeVF+QoqeprIcpfe8Yl5Sd7TdN9Q=;
+ b=Kzzcgug04bjGtNEWoXlylq8JhRR2rU3G9/JVGBQgF9eR97+ELF1RURaTNtksHxtpSbKYT9WoTCBSRGU3A0HD6MTqef5D8V0MaFBbUROgTFXA4satUHVInGkGbdDxiMkidOUQSwQv3jchITTi9wSwuBfTx304HXQ1klzfCIHGuJgvcouQarN9rT/XehDdP95lOA69WoqDMtYJaB5uFujDrA2YbsFt+2LJ8Sm1kbzaqM7y2kyiNU6Y3F4vdj9yYGXfs7lbjdip1sb+xAMUnEa2zmyY4KjK8CTdeQrHfCmKMxQWW55gqGWOD/B4KTk2lgS0vKRzRlq2V+pPLvnameRCtg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=magd.ox.ac.uk; dmarc=pass action=none
+ header.from=magd.ox.ac.uk; dkim=pass header.d=magd.ox.ac.uk; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=UniOxfordNexus.onmicrosoft.com; s=selector2-UniOxfordNexus-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MDoj/XCROTt2dZBKeVF+QoqeprIcpfe8Yl5Sd7TdN9Q=;
+ b=QF1V+cXH3I42DcZ3+ogFTqVIj86cCIrHrC+ySmZxnffqVQVURdD8AfSUoCJlmVte7G3PaUwsQuNGhJdU7/FNBgY0EwgLRJkvW56o8o/xYYkZG2EkgQG7MEynstpMpjMqLYtXpyZX3xqbpHCY6YIhRZZ5crq7uslGSxYGzfxYjT1lyZAO7KZE8eUV83o8KvJPN2GgIlQzAaxBobTRadbv8QwKwTJo8yDC9gu0keo/B6FFecig21ouF2Q1sn7OkpZmAAyUKf5DxXREZfWaGx4eLFCiBdDkLhQqdLDthk4i4UE7Dah6AvBFyr5lBzCNrq1Ue2trLdXSOtzh7jO2XOXBsw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=magd.ox.ac.uk;
+Received: from LO6P265MB6985.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:323::12)
+ by LO0P265MB2874.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:175::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8722.33; Sat, 17 May
+ 2025 02:00:16 +0000
+Received: from LO6P265MB6985.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::639f:86e3:3b7c:f6dd]) by LO6P265MB6985.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::639f:86e3:3b7c:f6dd%5]) with mapi id 15.20.8722.031; Sat, 17 May 2025
+ 02:00:16 +0000
+From: Praveen Balakrishnan <praveen.balakrishnan@magd.ox.ac.uk>
+To: <shuah@kernel.org>
+CC: Praveen Balakrishnan <praveen.balakrishnan@magd.ox.ac.uk>,
+	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<skhan@linuxfoundation.org>, <linux-kernel-mentees@lists.linux.dev>
+Subject: [PATCH] selftests: net: fix spelling and grammar mistakes
+Date: Sat, 17 May 2025 02:59:12 +0100
+Message-Id: <20250517015912.131187-1-praveen.balakrishnan@magd.ox.ac.uk>
+X-Mailer: git-send-email 2.39.5
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: LO2P265CA0063.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:60::27) To LO6P265MB6985.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:323::12)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LO6P265MB6985:EE_|LO0P265MB2874:EE_
+X-MS-Office365-Filtering-Correlation-Id: 130df9f6-2517-4bd2-ca32-08dd94e6914e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|41320700013|366016|376014|1800799024;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?rjBFNodhf+fSEVyF7agvGYwd1CoJmiRr4vHCo95A617vAdvkzNHqqXQkLAp5?=
+ =?us-ascii?Q?1nbeu9WdqYVprFeeJzdFeIOhbugoA35cRoUvJ2KVG50UA5Tg8nWXKH5qu92L?=
+ =?us-ascii?Q?W0VhpdieeOkQaONNAyilj9QYLQXYYejcoETPGbTyy/1h0qxjhS86NUl4/KmI?=
+ =?us-ascii?Q?ko6KrC9uBWJcbYCvlEW4fQRoVIemqxfONSXLX+8a3xGgpE/aoUhKlMziszEn?=
+ =?us-ascii?Q?goThHXiE/wl22+p0P+U5bkyWBYjd9AkdhBcU/Y22ee6mRacSS71a0+J7CBur?=
+ =?us-ascii?Q?ROWpWwgw3gs1Ew553Lau8wn6OtybRDRW3TvMCXWIT1mLcwuzo4RHD4NBqxH8?=
+ =?us-ascii?Q?GXiIGr/85QpiEt9McN01YGRtht3j4LNlWE2SFmH/6v3Ybx9lwVS6WOAUf/Zz?=
+ =?us-ascii?Q?goEaHLjjyehY/KX9CUZcrVxOysAoxq0m8Y/z87i+Vz73WNIsOyOjvjh5f1PQ?=
+ =?us-ascii?Q?9aI2a2/74N5HRwW5JhrawF0XbNpl8xhuY5vKAgNNGboXv07nXPnk4MvQNqDK?=
+ =?us-ascii?Q?m1BB8sZgNJOZjGYZgUrZT9Y8Gdcr4QQupXFdfCZVGc2whtcyhrAbCYxg7a9h?=
+ =?us-ascii?Q?JcRayDIVI8XFoPDw7eZ/bcyUh1jzje0uirKF+NXsv2wCHqMgX25+7vadWE9X?=
+ =?us-ascii?Q?LL0TJqAWqN/VtfYEBCZdBQvqWyrHksZfYgW3zCQZzB/RUky9U+JXScBBSC/D?=
+ =?us-ascii?Q?LyJUzBHCW+dkGw30IRCDlWOY1pQBu9RVNsVj8KOHJA1bXVFZD6x2d1enjG7A?=
+ =?us-ascii?Q?SXOkLolPXiSXe85bJdwlGkZwYz7ocHSoiajVyQWBlFWZ7MEoAdRI5I4PVOLz?=
+ =?us-ascii?Q?YJ5PV/PgvrRdDJb0Y3tU6kc5wrRYUrBsc1cwniAFu2dXJhDWhdumpZDfYG3h?=
+ =?us-ascii?Q?ggQSeBHvrI8oY5ril9e31D0mswllrk/Y1nVUwKYPIVNgocaDX9wELLCJabab?=
+ =?us-ascii?Q?YGMBFHJ4qezRttTsjsVH0BwOdDtULzdTIvs60J0xwxVAGEL+q1/LcbwSKWeK?=
+ =?us-ascii?Q?wlEoDfH5UoeCPb1onb+6S3iqpqLdUFNXKhnehlAT2qEa87k8ayDzLpaskE/8?=
+ =?us-ascii?Q?TZa/XdaqaZ8nFIWA5URdr/fhtruMocxr5Gky/2Tx4P7L3zmm803fugff3i0S?=
+ =?us-ascii?Q?y/wNhtOgP8/jVtWAYg5frC9lD/XjI+bhbnyefMLImPb73Z+mK+ttgX3nuafl?=
+ =?us-ascii?Q?x5SJY53KF4ivqGYQYANS4ZWAmtujVBx8ToDxKMXuvj+TuX54XrKiwD2+6/Eb?=
+ =?us-ascii?Q?EdC9R2SE6ZHQP75g2Ie2sMUebbUOS+5GQuoXtajzvX3KVmrufrIMgtDQEZ6J?=
+ =?us-ascii?Q?Il3WQI5gf8wyr7AUY+Qhv0eCuu0kGDO/gsbW8fEjM/0UWjzKXV9Qpy5fAXEv?=
+ =?us-ascii?Q?+VTbdBe41mQ/PSUzSH6/28qxWYq+tOJYGnd9HQNRKBfs/w7NSOebdfYS5Vww?=
+ =?us-ascii?Q?Z6X+SsaxlNI=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO6P265MB6985.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(41320700013)(366016)(376014)(1800799024);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mClkrCJEiJRNfjhs3gevsgfZ+t4yDqnCmT5R3/KN06LSHOGAFhB24ZUj+2Ib?=
+ =?us-ascii?Q?w2QGnxAG9FaCu1yWacvQmSdkH3BUAn9ACSX0syOC+YwQWKTIxi55ckG22S72?=
+ =?us-ascii?Q?tZvBEiilqZMtA9ucri13mdBzisPtpeUd8QdQeXqzEo6MrOIos3gyfUnls8sJ?=
+ =?us-ascii?Q?5JZqCW9Py0gfwTIfwPirLHR3Qg+6J8ixNntTnyYoKo9KLDjRakdxHNFITjwL?=
+ =?us-ascii?Q?WJGc1rl7Q1faYK0dBKwveZmYGhn54yI2nEZCjT9RHe8/BpUtVU313/YDYZJI?=
+ =?us-ascii?Q?J2zZXEY4qpg+/B/lIk0Ux7I8gSnaMClw56J95FDNRL/SMfw75UE2UPiKwB0h?=
+ =?us-ascii?Q?TW3IUAY2+GRUtrYadLYp4muLiRc9plLOVn3svnxyNCGMbB0KjRG1Gbjw7ZF3?=
+ =?us-ascii?Q?l85pQt2lhcwK9nitE3CYVTyfHt0c2b8Ht4DdwxPWnbPkqnFOpUFjHcdcTwG1?=
+ =?us-ascii?Q?tCAFQ3QvivffdN5DS7m3QyGuCYvm9SxsWJPri7kKB8x6Z700yHd3VKcVOdXZ?=
+ =?us-ascii?Q?1T4Z2VrJ/lErBsfM/ezjuzvl46eGdYo8Db1Bc+uKQ0My7a9U9gEy08l+sYLp?=
+ =?us-ascii?Q?GKEZNqXI4X9T0q+sNIfinJsFin9XMMOF7eZpWBqtz/3He8vJ57sl7xCXVKlL?=
+ =?us-ascii?Q?6lysopgOSHFE24Hc1XK0jfcSxO5mZ3MPo5xSJ9esrcmIdk697EecC6pRwA0F?=
+ =?us-ascii?Q?KL6WbgwnpQrWaFV5vqRimNFVrPbWC7FNAutPjLbV8K9FlZ7VKQmPewZG6cie?=
+ =?us-ascii?Q?tQVqdLXYUWJk5MQYtyTtd7ZPfPDV1PmtqGLo+KoRI9zb+CkchhGI8FWvsbQJ?=
+ =?us-ascii?Q?c8EHzs8y6fukDvR/nu9BK7yzN1I+zP1bKmW8j4GDlZjYdzyGuBn/eh2FtRbD?=
+ =?us-ascii?Q?bgOYKeXafkSutnCVc7J/b5i2v18fVnn3HjEkW71tbPyAMg6KpiDdIhLJ1DkG?=
+ =?us-ascii?Q?7ueO4DmAvt5D5R5H1NbBd5bKAW+nFD2hMbbd7wuHq8B+KTmKHxi1z1OXDRhS?=
+ =?us-ascii?Q?S6C74/4Sju4MtxUEPJ8UAGvODgIj40TNc29kmQkqluPHShmKxUKymVt4fVl4?=
+ =?us-ascii?Q?RPtN0fbpxJWodRGoasnuuP8/gBPZ7EuvaWpA10wm/CU7Zc4ulZ2EhNH7AkAH?=
+ =?us-ascii?Q?khhTKQHxuI8Ld1AUiwEfLtX4SmvUybfxyxmBThaStK+dQZDDVA7ifgtc3hKg?=
+ =?us-ascii?Q?Caoui8irDVWgxiHSpv4Kn73FcQUZbp9Mcw+SNh0f4IXcukCPTvBu9YeyB4HT?=
+ =?us-ascii?Q?nOuaOPv4ukat/ewZcQvm5EaE6tJBnhz3aA2iOEFLCb1FdpwlbRW93jxvbzLW?=
+ =?us-ascii?Q?+Hf9i3MIgQ9uBIjcoWySmWBItGM2w09M0fOzf8loj/atk5hisbGqM3m4dwlN?=
+ =?us-ascii?Q?pnEljpfwTdOO0F3OvGu5yrfw/u8qltgfS0ZQNtM/9OrR9SdqDVvaZtqjC4V1?=
+ =?us-ascii?Q?5vdE6axpJ80rGok2GIoMK2+Mk/wq1X/4gyB7g13tcpZyTox6c3lv+hQ2ahE4?=
+ =?us-ascii?Q?HKKWYFkbM2pM4IQJi0Ya7VfgGa9tLBb+H45TTx0C82PfGb8siYRkjfjz1fwi?=
+ =?us-ascii?Q?Vkb3wBXi5XB05Z4o8tRdfR+ZaIiEotihIGigRAhD?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 130df9f6-2517-4bd2-ca32-08dd94e6914e
+X-MS-Exchange-CrossTenant-AuthSource: LO6P265MB6985.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2025 02:00:15.9389
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: cc95de1b-97f5-4f93-b4ba-fe68b852cf91
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qN1mC0j0dDMKcAZEh1u60OVhu6dxJwbzUaz2/qF4X58Q2XvjhEWPFlz0Z0FwsdqVUqeJpzbv81kKCp+eTaa9Ug==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P265MB2874
+X-OriginatorOrg: magd.ox.ac.uk
+X-NTG-DKIM-verify: pass 
 
-This patch add a simple functional test for the "abort" file
-in fusectlfs (/sys/fs/fuse/connections/ID/about).
+Fix several spelling and grammatical mistakes in output messages from
+the net selftests to improve readability.
 
-A simple fuse daemon is added for testing.
+Only the message strings for the test output have been modified. No
+changes to the functional logic of the tests have been made.
 
-Related discussion can be found in the link below.
-
-Link: https://lore.kernel.org/all/CAOQ4uxjKFXOKQxPpxtS6G_nR0tpw95w0GiO68UcWg_OBhmSY=Q@mail.gmail.com/
-Cc: Amir Goldstein <amir73il@gmail.com>
-Signed-off-by: Chen Linxuan <chenlinxuan@uniontech.com>
+Signed-off-by: Praveen Balakrishnan <praveen.balakrishnan@magd.ox.ac.uk>
 ---
-Changes in v2:
-- Apply changes suggested by Amir Goldstein
-  - Check errno 
-- Link to v1: https://lore.kernel.org/all/20250515073449.346774-2-chenlinxuan@uniontech.com/
----
- MAINTAINERS                                   |   1 +
- tools/testing/selftests/Makefile              |   1 +
- .../selftests/filesystems/fusectl/.gitignore  |   3 +
- .../selftests/filesystems/fusectl/Makefile    |  21 +++
- .../selftests/filesystems/fusectl/fuse_mnt.c  | 146 ++++++++++++++++++
- .../filesystems/fusectl/fusectl_test.c        | 116 ++++++++++++++
- 6 files changed, 288 insertions(+)
- create mode 100644 tools/testing/selftests/filesystems/fusectl/.gitignore
- create mode 100644 tools/testing/selftests/filesystems/fusectl/Makefile
- create mode 100644 tools/testing/selftests/filesystems/fusectl/fuse_mnt.c
- create mode 100644 tools/testing/selftests/filesystems/fusectl/fusectl_test.c
+ .../testing/selftests/net/netfilter/conntrack_vrf.sh |  4 ++--
+ tools/testing/selftests/net/openvswitch/ovs-dpctl.py |  2 +-
+ tools/testing/selftests/net/rps_default_mask.sh      | 12 ++++++------
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 3563492e4eba4..bee6f7d787a33 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9740,6 +9740,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mszeredi/fuse.git
- F:	Documentation/filesystems/fuse.rst
- F:	fs/fuse/
- F:	include/uapi/linux/fuse.h
-+F:	tools/testing/selftests/filesystems/fusectl
+diff --git a/tools/testing/selftests/net/netfilter/conntrack_vrf.sh b/tools/testing/selftests/net/netfilter/conntrack_vrf.sh
+index e95ecb37c2b1..806d2bfbd6e7 100755
+--- a/tools/testing/selftests/net/netfilter/conntrack_vrf.sh
++++ b/tools/testing/selftests/net/netfilter/conntrack_vrf.sh
+@@ -236,9 +236,9 @@ EOF
+ 	ip netns exec "$ns1" ping -q -w 1 -c 1 "$DUMMYNET".2 > /dev/null
  
- FUTEX SUBSYSTEM
- M:	Thomas Gleixner <tglx@linutronix.de>
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 80fb84fa3cfcb..a9bfefa961889 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -36,6 +36,7 @@ TARGETS += filesystems/fat
- TARGETS += filesystems/overlayfs
- TARGETS += filesystems/statmount
- TARGETS += filesystems/mount-notify
-+TARGETS += filesystems/fusectl
- TARGETS += firmware
- TARGETS += fpu
- TARGETS += ftrace
-diff --git a/tools/testing/selftests/filesystems/fusectl/.gitignore b/tools/testing/selftests/filesystems/fusectl/.gitignore
-new file mode 100644
-index 0000000000000..3e72e742d08e8
---- /dev/null
-+++ b/tools/testing/selftests/filesystems/fusectl/.gitignore
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+fuse_mnt
-+fusectl_test
-diff --git a/tools/testing/selftests/filesystems/fusectl/Makefile b/tools/testing/selftests/filesystems/fusectl/Makefile
-new file mode 100644
-index 0000000000000..612aad69a93aa
---- /dev/null
-+++ b/tools/testing/selftests/filesystems/fusectl/Makefile
-@@ -0,0 +1,21 @@
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+
-+CFLAGS += -Wall -O2 -g $(KHDR_INCLUDES)
-+
-+TEST_GEN_PROGS := fusectl_test
-+TEST_GEN_FILES := fuse_mnt
-+
-+include ../../lib.mk
-+
-+VAR_CFLAGS := $(shell pkg-config fuse --cflags 2>/dev/null)
-+ifeq ($(VAR_CFLAGS),)
-+VAR_CFLAGS := -D_FILE_OFFSET_BITS=64 -I/usr/include/fuse
-+endif
-+
-+VAR_LDLIBS := $(shell pkg-config fuse --libs 2>/dev/null)
-+ifeq ($(VAR_LDLIBS),)
-+VAR_LDLIBS := -lfuse -pthread
-+endif
-+
-+$(OUTPUT)/fuse_mnt: CFLAGS += $(VAR_CFLAGS)
-+$(OUTPUT)/fuse_mnt: LDLIBS += $(VAR_LDLIBS)
-diff --git a/tools/testing/selftests/filesystems/fusectl/fuse_mnt.c b/tools/testing/selftests/filesystems/fusectl/fuse_mnt.c
-new file mode 100644
-index 0000000000000..d12b17f30fadc
---- /dev/null
-+++ b/tools/testing/selftests/filesystems/fusectl/fuse_mnt.c
-@@ -0,0 +1,146 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * fusectl test file-system
-+ * Creates a simple FUSE filesystem with a single read-write file (/test)
-+ */
-+
-+#define FUSE_USE_VERSION 26
-+
-+#include <fuse.h>
-+#include <stdio.h>
-+#include <string.h>
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+
-+#define MAX(a, b) ((a) > (b) ? (a) : (b))
-+
-+static char *content;
-+static size_t content_size = 0;
-+static const char test_path[] = "/test";
-+
-+static int test_getattr(const char *path, struct stat *st)
-+{
-+	memset(st, 0, sizeof(*st));
-+
-+	if (!strcmp(path, "/")) {
-+		st->st_mode = S_IFDIR | 0755;
-+		st->st_nlink = 2;
-+		return 0;
-+	}
-+
-+	if (!strcmp(path, test_path)) {
-+		st->st_mode = S_IFREG | 0664;
-+		st->st_nlink = 1;
-+		st->st_size = content_size;
-+		return 0;
-+	}
-+
-+	return -ENOENT;
-+}
-+
-+static int test_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
-+			off_t offset, struct fuse_file_info *fi)
-+{
-+	if (strcmp(path, "/"))
-+		return -ENOENT;
-+
-+	filler(buf, ".", NULL, 0);
-+	filler(buf, "..", NULL, 0);
-+	filler(buf, test_path + 1, NULL, 0);
-+
-+	return 0;
-+}
-+
-+static int test_open(const char *path, struct fuse_file_info *fi)
-+{
-+	if (strcmp(path, test_path))
-+		return -ENOENT;
-+
-+	return 0;
-+}
-+
-+static int test_read(const char *path, char *buf, size_t size, off_t offset,
-+		     struct fuse_file_info *fi)
-+{
-+	if (strcmp(path, test_path) != 0)
-+		return -ENOENT;
-+
-+	if (!content || content_size == 0)
-+		return 0;
-+
-+	if (offset >= content_size)
-+		return 0;
-+
-+	if (offset + size > content_size)
-+		size = content_size - offset;
-+
-+	memcpy(buf, content + offset, size);
-+
-+	return size;
-+}
-+
-+static int test_write(const char *path, const char *buf, size_t size,
-+		      off_t offset, struct fuse_file_info *fi)
-+{
-+	size_t new_size;
-+
-+	if (strcmp(path, test_path) != 0)
-+		return -ENOENT;
-+
-+	if(offset > content_size)
-+		return -EINVAL;
-+
-+	new_size = MAX(offset + size, content_size);
-+
-+	if (new_size > content_size)
-+		content = realloc(content, new_size);
-+
-+	content_size = new_size;
-+
-+	if (!content)
-+		return -ENOMEM;
-+
-+	memcpy(content + offset, buf, size);
-+
-+	return size;
-+}
-+
-+static int test_truncate(const char *path, off_t size)
-+{
-+	if (strcmp(path, test_path) != 0)
-+		return -ENOENT;
-+
-+	if (size == 0) {
-+		free(content);
-+		content = NULL;
-+		content_size = 0;
-+		return 0;
-+	}
-+
-+	content = realloc(content, size);
-+
-+	if (!content)
-+		return -ENOMEM;
-+
-+	if (size > content_size)
-+		memset(content + content_size, 0, size - content_size);
-+
-+	content_size = size;
-+	return 0;
-+}
-+
-+static struct fuse_operations memfd_ops = {
-+	.getattr = test_getattr,
-+	.readdir = test_readdir,
-+	.open = test_open,
-+	.read = test_read,
-+	.write = test_write,
-+	.truncate = test_truncate,
-+};
-+
-+int main(int argc, char *argv[])
-+{
-+	return fuse_main(argc, argv, &memfd_ops, NULL);
-+}
-diff --git a/tools/testing/selftests/filesystems/fusectl/fusectl_test.c b/tools/testing/selftests/filesystems/fusectl/fusectl_test.c
-new file mode 100644
-index 0000000000000..7050fbe0970e7
---- /dev/null
-+++ b/tools/testing/selftests/filesystems/fusectl/fusectl_test.c
-@@ -0,0 +1,116 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+// Copyright (c) 2025 Chen Linxuan <chenlinxuan@uniontech.com>
-+
-+#define _GNU_SOURCE
-+
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/mount.h>
-+#include <sys/stat.h>
-+#include <sys/types.h>
-+#include <sys/wait.h>
-+#include <unistd.h>
-+#include <dirent.h>
-+#include <linux/limits.h>
-+
-+#include "../../kselftest_harness.h"
-+
-+#define FUSECTL_MOUNTPOINT "/sys/fs/fuse/connections"
-+#define FUSE_MOUNTPOINT "/tmp/fuse_mnt_XXXXXX"
-+#define FUSE_DEVICE "/dev/fuse"
-+#define FUSECTL_TEST_VALUE "1"
-+
-+FIXTURE(fusectl){
-+	char fuse_mountpoint[sizeof(FUSE_MOUNTPOINT)];
-+	int connection;
-+};
-+
-+FIXTURE_SETUP(fusectl)
-+{
-+	const char *fuse_mnt_prog = "./fuse_mnt";
-+	int status, pid;
-+	struct stat statbuf;
-+
-+	strcpy(self->fuse_mountpoint, FUSE_MOUNTPOINT);
-+
-+	if (!mkdtemp(self->fuse_mountpoint))
-+		SKIP(return,
-+		     "Failed to create FUSE mountpoint %s",
-+		     strerror(errno));
-+
-+	if (access(FUSECTL_MOUNTPOINT, F_OK))
-+		SKIP(return,
-+		     "FUSE control filesystem not mounted");
-+
-+	pid = fork();
-+	if (pid < 0)
-+		SKIP(return,
-+		     "Failed to fork FUSE daemon process: %s",
-+		     strerror(errno));
-+
-+	if (pid == 0) {
-+		execlp(fuse_mnt_prog, fuse_mnt_prog, self->fuse_mountpoint, NULL);
-+		exit(errno);
-+	}
-+
-+	waitpid(pid, &status, 0);
-+	if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) {
-+		SKIP(return,
-+		     "Failed to start FUSE daemon %s",
-+		     strerror(WEXITSTATUS(status)));
-+	}
-+
-+	if (stat(self->fuse_mountpoint, &statbuf))
-+		SKIP(return,
-+		     "Failed to stat FUSE mountpoint %s",
-+		     strerror(errno));
-+
-+	self->connection = statbuf.st_dev;
-+}
-+
-+FIXTURE_TEARDOWN(fusectl)
-+{
-+	umount(self->fuse_mountpoint);
-+	rmdir(self->fuse_mountpoint);
-+}
-+
-+TEST_F(fusectl, abort)
-+{
-+	char path_buf[PATH_MAX];
-+	int abort_fd, test_fd, ret;
-+
-+	sprintf(path_buf, "/sys/fs/fuse/connections/%d/abort", self->connection);
-+
-+	ASSERT_EQ(0, access(path_buf, F_OK));
-+
-+	abort_fd = open(path_buf, O_WRONLY);
-+	ASSERT_GE(abort_fd, 0);
-+
-+	sprintf(path_buf, "%s/test", self->fuse_mountpoint);
-+
-+	test_fd = open(path_buf, O_RDWR);
-+	ASSERT_GE(test_fd, 0);
-+
-+	ret = read(test_fd, path_buf, sizeof(path_buf));
-+	ASSERT_EQ(ret, 0);
-+
-+	ret = write(test_fd, "test", sizeof("test"));
-+	ASSERT_EQ(ret, sizeof("test"));
-+
-+	ret = lseek(test_fd, 0, SEEK_SET);
-+	ASSERT_GE(ret, 0);
-+
-+	ret = write(abort_fd, FUSECTL_TEST_VALUE, sizeof(FUSECTL_TEST_VALUE));
-+	ASSERT_GT(ret, 0);
-+
-+	close(abort_fd);
-+
-+	ret = read(test_fd, path_buf, sizeof(path_buf));
-+	ASSERT_EQ(ret, -1);
-+	ASSERT_EQ(errno, ENOTCONN);
-+}
-+
-+TEST_HARNESS_MAIN
+ 	if ip netns exec "$ns0" nft list counter t fibcount | grep -q "packets 1"; then
+-		echo "PASS: fib lookup returned exepected output interface"
++		echo "PASS: fib lookup returned expected output interface"
+ 	else
+-		echo "FAIL: fib lookup did not return exepected output interface"
++		echo "FAIL: fib lookup did not return expected output interface"
+ 		ret=1
+ 		return
+ 	fi
+diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+index 8a0396bfaf99..b521e0dea506 100644
+--- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
++++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+@@ -1877,7 +1877,7 @@ class OvsPacket(GenericNetlinkSocket):
+                     elif msg["cmd"] == OvsPacket.OVS_PACKET_CMD_EXECUTE:
+                         up.execute(msg)
+                     else:
+-                        print("Unkonwn cmd: %d" % msg["cmd"])
++                        print("Unknown cmd: %d" % msg["cmd"])
+             except NetlinkError as ne:
+                 raise ne
+ 
+diff --git a/tools/testing/selftests/net/rps_default_mask.sh b/tools/testing/selftests/net/rps_default_mask.sh
+index 4287a8529890..b200019b3c80 100755
+--- a/tools/testing/selftests/net/rps_default_mask.sh
++++ b/tools/testing/selftests/net/rps_default_mask.sh
+@@ -54,16 +54,16 @@ cleanup
+ 
+ echo 1 > /proc/sys/net/core/rps_default_mask
+ setup
+-chk_rps "changing rps_default_mask dont affect existing devices" "" lo $INITIAL_RPS_DEFAULT_MASK
++chk_rps "changing rps_default_mask doesn't affect existing devices" "" lo $INITIAL_RPS_DEFAULT_MASK
+ 
+ echo 3 > /proc/sys/net/core/rps_default_mask
+-chk_rps "changing rps_default_mask dont affect existing netns" $NETNS lo 0
++chk_rps "changing rps_default_mask doesn't affect existing netns" $NETNS lo 0
+ 
+ ip link add name $VETH type veth peer netns $NETNS name $VETH
+ ip link set dev $VETH up
+ ip -n $NETNS link set dev $VETH up
+-chk_rps "changing rps_default_mask affect newly created devices" "" $VETH 3
+-chk_rps "changing rps_default_mask don't affect newly child netns[II]" $NETNS $VETH 0
++chk_rps "changing rps_default_mask affects newly created devices" "" $VETH 3
++chk_rps "changing rps_default_mask doesn't affect newly child netns[II]" $NETNS $VETH 0
+ ip link del dev $VETH
+ ip netns del $NETNS
+ 
+@@ -72,8 +72,8 @@ chk_rps "rps_default_mask is 0 by default in child netns" "$NETNS" lo 0
+ 
+ ip netns exec $NETNS sysctl -qw net.core.rps_default_mask=1
+ ip link add name $VETH type veth peer netns $NETNS name $VETH
+-chk_rps "changing rps_default_mask in child ns don't affect the main one" "" lo $INITIAL_RPS_DEFAULT_MASK
++chk_rps "changing rps_default_mask in child ns doesn't affect the main one" "" lo $INITIAL_RPS_DEFAULT_MASK
+ chk_rps "changing rps_default_mask in child ns affects new childns devices" $NETNS $VETH 1
+-chk_rps "changing rps_default_mask in child ns don't affect existing devices" $NETNS lo 0
++chk_rps "changing rps_default_mask in child ns doesn't affect existing devices" $NETNS lo 0
+ 
+ exit $ret
 -- 
-2.43.0
+2.39.5
 
 
