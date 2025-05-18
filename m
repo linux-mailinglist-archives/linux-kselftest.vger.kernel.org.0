@@ -1,82 +1,82 @@
-Return-Path: <linux-kselftest+bounces-33287-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33288-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3D25ABAF56
-	for <lists+linux-kselftest@lfdr.de>; Sun, 18 May 2025 12:40:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDA7EABAF5C
+	for <lists+linux-kselftest@lfdr.de>; Sun, 18 May 2025 12:43:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 689B8178F2B
-	for <lists+linux-kselftest@lfdr.de>; Sun, 18 May 2025 10:40:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 86FBD3AA1BC
+	for <lists+linux-kselftest@lfdr.de>; Sun, 18 May 2025 10:42:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0207215040;
-	Sun, 18 May 2025 10:40:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10654216399;
+	Sun, 18 May 2025 10:42:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="GnlrYf/b"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="h1ypzLgn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81AAB1C6FE2;
-	Sun, 18 May 2025 10:40:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13927215F7F;
+	Sun, 18 May 2025 10:42:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747564812; cv=none; b=TyTYtsuY7yJguDptuy/FQMvlxl5va7wdByAgMPWtD/TKrl7RsAZOXsTIMGs0XAcIK+NjlvnihAjxSl3Zd2nS1KO2DzTBRFDD7bVl/NwvCoCoHxGNBDdWWYRapQp8M2u8iEwhYF5oXR8xIh/DAh188nKhSBAYXmv3aB17CPIk03k=
+	t=1747564977; cv=none; b=gJPJxc8pTBXMTz1xlDQ+oRSFLr5gE+oULqFeF3atT217ga9Ri7LWaEJknQXckiR/hbXe7rLRoBlUaxNM0LBRVlGIJDXemXAet1G8dwui0ZHgSW5YARqOoDmk2XEuSNkvmXYMwP0KQPisSqBgZKCooB8Cwfh8d3pzC6LxKUch5d4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747564812; c=relaxed/simple;
-	bh=4MMf0isE/u2ZflvK/FTsv0kklkEQvlodOFYQFj9m/bA=;
+	s=arc-20240116; t=1747564977; c=relaxed/simple;
+	bh=n9eTJbU91BEV8Rgv1o7VL/pis9KHAw7HHdOrzGsfwKs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DEOqipnOVPPKuGSmZ8rfNKA2NKpyKvXF/WFRseV12r8F4o5oS07k/qea4myRw+WZKBw4XH8MSKURTQl4bHNKKm1gOfZ78vGivjHMly/IiMZrXW+Q/mgPudutq7jmDh/6n+8IKtbUS43yheaIAxk9GM7j1dMBw5R1tg51KJ6/CaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=GnlrYf/b; arc=none smtp.client-ip=148.163.158.5
+	 In-Reply-To:Content-Type; b=T+eakiDoZUbBmdUktohoCwY1xJ9PDFdn3AXlzPRZbsg0g8qvD+Je+JN7g+gEXmXoOubGf7pyBrlLyLaFi2hSaiq/TlXxP/TbAk8TaXDnnJ12wEQpTsrDhBiwTE2CpYRdBFV0sJT0OQEPA3ZuSEjFBqZZLtmsFmlSQql/8a0fIO0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=h1ypzLgn; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54I30DcD010129;
-	Sun, 18 May 2025 10:38:48 GMT
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54I6Iima003730;
+	Sun, 18 May 2025 10:41:28 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=FAVrjy
-	1LBV6r8dXd+SHBdcRzoBuXW5h14lGv0i65eOg=; b=GnlrYf/bBdEUlPPlbwklkx
-	k0Q+w9wF6HluwgaZAGgVq7LweJFGs2eanQUk8yBB40uZR0hUo1WH4m8010QrDcVf
-	coirKtxKJkiH63vFNb9TNRQJa9Vg4dbc4PJM2a4xeOvTqKt6nq/eIG1rGxEgulNc
-	jpIX43U2tIgP43Z//2XPrx2zwSISxuWplRbDpJ6U0SJL2CId6LeMMw3cGYPDTlhz
-	gSfcu6f/22l8kNdztPLmsZEinZtJbTNVveBfUQUcUEfwq/chq2Zo1fejY+ZemExh
-	eIUCGYzOseoP+3iFDM42hoiYolD6YMACQzB5gkKbrP30yawfK4Yy1J8Kph7qWZmA
+	:message-id:mime-version:references:subject:to; s=pp1; bh=heuLHY
+	aaHMFynaFvPRzJR2yEb63hbYZtGMxVNVbbAFA=; b=h1ypzLgn2jPHE7ZNdyt/cI
+	NJiE4AYh8yNaa68QTh+P1dhYyIMQpuHVwOwoKNMQbRXHSvtaGABo7rj2KlfY5TtL
+	miJItmHIpFho2SLoTJ3WNpIlbAtUjm6XpAKdpXyjCb1vmmSCQKgO8q9Lu1zfwvtp
+	1uBWeUBs/w4N2ARo/riPv6G9a8BXZaSEbhb6/KCRTRL3TlBgoyuTxmVgXuCP9ikf
+	JT60obY1I8JaNf8a7Lh9UuWmiatrrjxR9XDS5tPc08Tntr8svSvfgcKr5sliPsPq
+	F1tPTAve8WjU5pPd7oQbyaQ3FP00PdtFVpaihZOrDodEvbOkXGn3wWIUT/oPBwoA
 	==
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46q056a5tp-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46qa5srkmq-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 18 May 2025 10:38:48 +0000 (GMT)
-Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 54IAcljG003315;
-	Sun, 18 May 2025 10:38:47 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46q056a5tn-1
+	Sun, 18 May 2025 10:41:27 +0000 (GMT)
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 54IAfRjr001684;
+	Sun, 18 May 2025 10:41:27 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46qa5srkmm-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 18 May 2025 10:38:47 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 54I7ugZE007338;
-	Sun, 18 May 2025 10:38:46 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 46q70k1c1w-1
+	Sun, 18 May 2025 10:41:27 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 54I5qFxw028878;
+	Sun, 18 May 2025 10:41:25 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 46q55yhrb2-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 18 May 2025 10:38:46 +0000
+	Sun, 18 May 2025 10:41:25 +0000
 Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 54IAchrE48300410
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 54IAfMdj44630526
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sun, 18 May 2025 10:38:43 GMT
+	Sun, 18 May 2025 10:41:22 GMT
 Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E752220114;
-	Sun, 18 May 2025 10:38:42 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 352EB20076;
+	Sun, 18 May 2025 10:41:22 +0000 (GMT)
 Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C0A1E20113;
-	Sun, 18 May 2025 10:38:35 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 7F2DC2004F;
+	Sun, 18 May 2025 10:41:04 +0000 (GMT)
 Received: from [9.43.41.62] (unknown [9.43.41.62])
 	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Sun, 18 May 2025 10:38:35 +0000 (GMT)
-Message-ID: <e07a6fd9-9810-4288-97ce-33c97f4ac30e@linux.ibm.com>
-Date: Sun, 18 May 2025 16:08:34 +0530
+	Sun, 18 May 2025 10:41:04 +0000 (GMT)
+Message-ID: <d351c0ba-04fa-4764-a3a2-c4a8727aa582@linux.ibm.com>
+Date: Sun, 18 May 2025 16:11:03 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -84,8 +84,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 05/11] bpf, arm64, powerpc: Add
- bpf_jit_bypass_spec_v1/v4()
+Subject: Re: [PATCH bpf-next v2 06/11] bpf, arm64, powerpc: Change nospec to
+ include v1 barrier
 To: Luis Gerhorst <luis.gerhorst@fau.de>, Alexei Starovoitov
  <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -117,231 +117,289 @@ To: Luis Gerhorst <luis.gerhorst@fau.de>, Alexei Starovoitov
         linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-kselftest@vger.kernel.org
 Cc: Maximilian Ott <ott@cs.fau.de>, Milan Stephan <milan.stephan@fau.de>
-References: <20250501073603.1402960-1-luis.gerhorst@fau.de>
- <20250501073603.1402960-6-luis.gerhorst@fau.de>
+References: <20250421091802.3234859-1-luis.gerhorst@fau.de>
+ <20250421091802.3234859-7-luis.gerhorst@fau.de>
 Content-Language: en-US
 From: Hari Bathini <hbathini@linux.ibm.com>
-In-Reply-To: <20250501073603.1402960-6-luis.gerhorst@fau.de>
+In-Reply-To: <20250421091802.3234859-7-luis.gerhorst@fau.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTE4MDEwMCBTYWx0ZWRfX0oTAgd69TtH8 GdmXyHtNqw3iUln/YOdlEFfm9aAogUY7MSX4Pf860Y6GWtCM6F57SSU2gfIQ8Ytrykeg+ApAa9x 3/o23Bzr8vnwGSnC0VDI0MP60RsE8rZtOv9j4DC1yOQ4tj6sDTfqWZPES98cF/hTMzJ4vibXwf6
- jHtERKhTZcZbUJNBuSW+Q4a+OQUnHEaPTmKDk+nndESveMJkJubb+cdTRDgjMRW7TAs+9qSH2Xq rRKVyR39IBIQVOcYopmw5xjv7ZGT8+81MPyRWiw5rlCdeq0H+1CHOwIHIiSW4tiQ7g7ckGDwfXy 7TN+eHFrXGmKdH6eQvZAuRcy0ZB0b7XaCXiWejTWDGgzbmwD+/XU95L86LIh9DsPgUC1v+UcBWP
- waO56QJI9uyNf3X99nTRRm4JZE9dm58Ug8UpZMLpgbzbpe5YlYtPpndUU57XziwETjbryW2x
-X-Authority-Analysis: v=2.4 cv=H5vbw/Yi c=1 sm=1 tr=0 ts=6829b8b8 cx=c_pps a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=VnNF1IyMAAAA:8 a=mFe75aD0Q6rLs-ne4sYA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: kcHnYx0Yg8HMRdm5KtX2b3uA24X_g6I5
-X-Proofpoint-ORIG-GUID: twxZW800zCAvCaXjU8KduWmD8cO-KK8t
+X-Authority-Analysis: v=2.4 cv=f8FIBPyM c=1 sm=1 tr=0 ts=6829b958 cx=c_pps a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=mDV3o1hIAAAA:8 a=NEAV23lmAAAA:8 a=VnNF1IyMAAAA:8 a=FMlO6nWJ9hO8ORJyGsUA:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: zB_5p2bcrH0UuQ76ZswqSWM9r0wRWxoV
+X-Proofpoint-ORIG-GUID: 36MgEHlDP0aJI_G5yj_BzF4LKeTqnmf9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTE4MDEwMCBTYWx0ZWRfX5SRtsWH1kxHV yrieVj7XYZpYaGdoIYIts9JxBzj4CDNSi4cDQAf4RRMtMWJ3hj1XDqhuiqS0Kns4MnvCxKmxKaN oLlPaMjzEZXT2XTQNewF6RDxX+5xidk1LFrUGaDubEaEfw2UXBS3oqPceCa0ci/lPCCglExkkVQ
+ B4YUc1Dk029IQCRTkplaztQ2z3b5RWhW57MhmaM/UUONkGdqbgH0mZxKwyrocmmZ0uHmVCQNE03 QRzbl10UzBY7MMV5g9AKPLhUR8QtRWiPUNukmyN4+BcLZFrl0Mux789FCkBuwbtsUnokPqcOmPg ktuX63FK/J5Z9Po+SXPnZv2yhooigY97bZBJY9KV2Ewhb3fUaCm6o0wSje4pJPfuvj8fv5pJ3Fv
+ huRPWVPPv4HphL3ICdA1ZFMnrMkRPUGbyv8rOUQ1+3agb55ynoB74RLKiwk+gxWLR3qrsbUe
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
  definitions=2025-05-18_05,2025-05-16_03,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
- suspectscore=0 adultscore=0 clxscore=1011 mlxlogscore=999 phishscore=0
- mlxscore=0 malwarescore=0 priorityscore=1501 lowpriorityscore=0
- spamscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.19.0-2505070000
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
+ bulkscore=0 phishscore=0 suspectscore=0 lowpriorityscore=0 mlxlogscore=999
+ clxscore=1011 malwarescore=0 adultscore=0 impostorscore=0
+ priorityscore=1501 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505070000
  definitions=main-2505180100
 
 
 
-On 01/05/25 1:05 pm, Luis Gerhorst wrote:
-> JITs can set bpf_jit_bypass_spec_v1/v4() if they want the verifier to
-> skip analysis/patching for the respective vulnerability. For v4, this
-> will reduce the number of barriers the verifier inserts. For v1, it
-> allows more programs to be accepted.
+On 21/04/25 2:47 pm, Luis Gerhorst wrote:
+> This changes the semantics of BPF_NOSPEC (previously a v4-only barrier)
+> to always emit a speculation barrier that works against both Spectre v1
+> AND v4. If mitigation is not needed on an architecture, the backend
+> should set bpf_jit_bypass_spec_v4/v1().
 > 
-> The primary motivation for this is to not regress unpriv BPF's
-> performance on ARM64 in a future commit where BPF_NOSPEC is also used
-> against Spectre v1.
+> As of now, this commit only has the user-visible implication that unpriv
+> BPF's performance on PowerPC is reduced. This is the case because we
+> have to emit additional v1 barrier instructions for BPF_NOSPEC now.
 > 
-> This has the user-visible change that v1-induced rejections on
-> non-vulnerable PowerPC CPUs are avoided.
+> This commit is required for a future commit to allow us to rely on
+> BPF_NOSPEC for Spectre v1 mitigation. As of this commit, the feature
+> that nospec acts as a v1 barrier is unused.
 > 
-> For now, this does not change the semantics of BPF_NOSPEC. It is still a
-> v4-only barrier and must not be implemented if bypass_spec_v4 is always
-> true for the arch. Changing it to a v1 AND v4-barrier is done in a
-> future commit.
+> Commit f5e81d111750 ("bpf: Introduce BPF nospec instruction for
+> mitigating Spectre v4") noted that mitigation instructions for v1 and v4
+> might be different on some archs. While this would potentially offer
+> improved performance on PowerPC, it was dismissed after the following
+> considerations:
 > 
-> As an alternative to bypass_spec_v1/v4, one could introduce NOSPEC_V1
-> AND NOSPEC_V4 instructions and allow backends to skip their lowering as
-> suggested by commit f5e81d111750 ("bpf: Introduce BPF nospec instruction
-> for mitigating Spectre v4"). Adding bpf_jit_bypass_spec_v1/v4() was
-> found to be preferable for the following reason:
+> * Only having one barrier simplifies the verifier and allows us to
+>    easily rely on v4-induced barriers for reducing the complexity of
+>    v1-induced speculative path verification.
+
+Fair enough.
+
 > 
-> * bypass_spec_v1/v4 benefits non-vulnerable CPUs: Always performing the
->    same analysis (not taking into account whether the current CPU is
->    vulnerable), needlessly restricts users of CPUs that are not
->    vulnerable. The only use case for this would be portability-testing,
->    but this can later be added easily when needed by allowing users to
->    force bypass_spec_v1/v4 to false.
+> * For the architectures that implemented BPF_NOSPEC, only PowerPC has
+>    distinct instructions for v1 and v4. Even there, some insns may be
+>    shared between the barriers for v1 and v4 (e.g., 'ori 31,31,0' and
+>    'sync'). If this is still found to impact performance in an
+>    unacceptable way, BPF_NOSPEC can be split into BPF_NOSPEC_V1 and
+>    BPF_NOSPEC_V4 later. As an optimization, we can already skip v1/v4
+>    insns from being emitted for PowerPC with this setup if
+>    bypass_spec_v1/v4 is set.
 > 
-> * Portability is still acceptable: Directly disabling the analysis
->    instead of skipping the lowering of BPF_NOSPEC(_V1/V4) might allow
->    programs on non-vulnerable CPUs to be accepted while the program will
->    be rejected on vulnerable CPUs. With the fallback to speculation
->    barriers for Spectre v1 implemented in a future commit, this will only
->    affect programs that do variable stack-accesses or are very complex.
+
+Agreed.
+
+Acked-by: Hari Bathini <hbathini@linux.ibm.com>
+
+> Vulnerability-status for BPF_NOSPEC-based Spectre mitigations (v4 as of
+> this commit, v1 in the future) is therefore:
 > 
-> For PowerPC, the SEC_FTR checking in bpf_jit_bypass_spec_v4() is based
-> on the check that was previously located in the BPF_NOSPEC case.
+> * x86 (32-bit and 64-bit), ARM64, and PowerPC (64-bit): Mitigated - This
+>    patch implements BPF_NOSPEC for these architectures. The previous
+>    v4-only version was supported since commit f5e81d111750 ("bpf:
+>    Introduce BPF nospec instruction for mitigating Spectre v4") and
+>    commit b7540d625094 ("powerpc/bpf: Emit stf barrier instruction
+>    sequences for BPF_NOSPEC").
 > 
-> For LoongArch, it would likely be safe to set both
-> bpf_jit_bypass_spec_v1() and _v4() according to
-> commit a6f6a95f2580 ("LoongArch, bpf: Fix jit to skip speculation
-> barrier opcode"). This is omitted here as I am unable to do any testing
-> for LoongArch.
+> * LoongArch: Not Vulnerable - Commit a6f6a95f2580 ("LoongArch, bpf: Fix
+>    jit to skip speculation barrier opcode") is the only other past commit
+>    related to BPF_NOSPEC and indicates that the insn is not required
+>    there.
+> 
+> * MIPS: Vulnerable (if unprivileged BPF is enabled) -
+>    Commit a6f6a95f2580 ("LoongArch, bpf: Fix jit to skip speculation
+>    barrier opcode") indicates that it is not vulnerable but this
+>    contradicts the kernel and Debian documentation. Therefore I assume
+>    that there exist vulnerable MIPS CPUs (but maybe not from Loongson?).
+>    In the future, BPF_NOSPEC could be implemented for MIPS based on the
+>    GCC speculation_barrier [1]. For now, we rely on unprivileged BPF
+>    being disabled by default.
+> 
+> * Other: Unknown - To the best of my knowledge there is no definitive
+>    information available that indicates that any other arch is
+>    vulnerable. They are therefore left untouched (BPF_NOSPEC is not
+>    implemented, but bypass_spec_v1/v4 is also not set).
+> 
+> I did the following testing to ensure the insn encoding is correct:
+> 
+> * ARM64:
+>    * 'dsb nsh; isb' was successfully tested with the BPF CI in [2]
+>    * 'sb' locally using QEMU v7.2.15 -cpu max (emitted sb insn is
+>      executed for example with './test_progs -t verifier_array_access')
+> 
+> * PowerPC: The following configs were tested locally with ppc64le QEMU
+>    v8.2 '-machine pseries -cpu POWER9':
+>    * STF_BARRIER_EIEIO + CONFIG_PPC_BOOK32_64
+>    * STF_BARRIER_SYNC_ORI (forced on) + CONFIG_PPC_BOOK32_64
+>    * STF_BARRIER_FALLBACK (forced on) + CONFIG_PPC_BOOK32_64
+>    * CONFIG_PPC_E500 (forced on) + STF_BARRIER_EIEIO
+>    * CONFIG_PPC_E500 (forced on) + STF_BARRIER_SYNC_ORI (forced on)
+>    * CONFIG_PPC_E500 (forced on) + STF_BARRIER_FALLBACK (forced on)
+>    * CONFIG_PPC_E500 (forced on) + STF_BARRIER_NONE (forced on)
+>    Most of those cobinations should not occur in practice, but I was not
+>    able to get an PPC e6500 rootfs (for testing PPC_E500 without forcing
+>    it on). In any case, this should ensure that there are no unexpected
+>    conflicts between the insns when combined like this. Individual v1/v4
+>    barriers were already emitted elsewhere.
+> 
+> [1] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=29b74545531f6afbee9fc38c267524326dbfbedf
+>      ("MIPS: Add speculation_barrier support")
+> [2] https://github.com/kernel-patches/bpf/pull/8576
 > 
 > Signed-off-by: Luis Gerhorst <luis.gerhorst@fau.de>
 > Cc: Henriette Herzog <henriette.herzog@rub.de>
 > Cc: Maximilian Ott <ott@cs.fau.de>
 > Cc: Milan Stephan <milan.stephan@fau.de>
-
-for the powerpc part..
-
-Acked-by: Hari Bathini <hbathini@linux.ibm.com>
-
 > ---
->   arch/arm64/net/bpf_jit_comp.c     | 21 ++++++++++++---------
->   arch/powerpc/net/bpf_jit_comp64.c | 21 +++++++++++++++++----
->   include/linux/bpf.h               | 11 +++++++++--
->   kernel/bpf/core.c                 | 15 +++++++++++++++
->   4 files changed, 53 insertions(+), 15 deletions(-)
+>   arch/arm64/net/bpf_jit.h          |  5 +++
+>   arch/arm64/net/bpf_jit_comp.c     |  9 +++--
+>   arch/powerpc/net/bpf_jit_comp64.c | 58 ++++++++++++++++++++++---------
+>   include/linux/filter.h            |  2 +-
+>   kernel/bpf/core.c                 | 17 ++++-----
+>   5 files changed, 64 insertions(+), 27 deletions(-)
 > 
+> diff --git a/arch/arm64/net/bpf_jit.h b/arch/arm64/net/bpf_jit.h
+> index a3b0e693a125..bbea4f36f9f2 100644
+> --- a/arch/arm64/net/bpf_jit.h
+> +++ b/arch/arm64/net/bpf_jit.h
+> @@ -325,4 +325,9 @@
+>   #define A64_MRS_SP_EL0(Rt) \
+>   	aarch64_insn_gen_mrs(Rt, AARCH64_INSN_SYSREG_SP_EL0)
+>   
+> +/* Barriers */
+> +#define A64_SB aarch64_insn_get_sb_value()
+> +#define A64_DSB_NSH (aarch64_insn_get_dsb_base_value() | 0x7 << 8)
+> +#define A64_ISB aarch64_insn_get_isb_value()
+> +
+>   #endif /* _BPF_JIT_H */
 > diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-> index 70d7c89d3ac9..0f617b55866e 100644
+> index 0f617b55866e..ccd6a2f31e35 100644
 > --- a/arch/arm64/net/bpf_jit_comp.c
 > +++ b/arch/arm64/net/bpf_jit_comp.c
-> @@ -1583,15 +1583,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+> @@ -1581,9 +1581,14 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+>   			return ret;
+>   		break;
 >   
->   	/* speculation barrier */
+> -	/* speculation barrier */
+> +	/* speculation barrier against v1 and v4 */
 >   	case BPF_ST | BPF_NOSPEC:
-> -		/*
-> -		 * Nothing required here.
-> -		 *
-> -		 * In case of arm64, we rely on the firmware mitigation of
-> -		 * Speculative Store Bypass as controlled via the ssbd kernel
-> -		 * parameter. Whenever the mitigation is enabled, it works
-> -		 * for all of the kernel code with no need to provide any
-> -		 * additional instructions.
-> -		 */
-> +		/* See bpf_jit_bypass_spec_v4() */
+> -		/* See bpf_jit_bypass_spec_v4() */
+> +		if (alternative_has_cap_likely(ARM64_HAS_SB)) {
+> +			emit(A64_SB, ctx);
+> +		} else {
+> +			emit(A64_DSB_NSH, ctx);
+> +			emit(A64_ISB, ctx);
+> +		}
 >   		break;
 >   
 >   	/* ST: *(size *)(dst + off) = imm */
-> @@ -2762,6 +2754,17 @@ bool bpf_jit_supports_percpu_insn(void)
->   	return true;
->   }
->   
-> +bool bpf_jit_bypass_spec_v4(void)
-> +{
-> +	/* In case of arm64, we rely on the firmware mitigation of Speculative
-> +	 * Store Bypass as controlled via the ssbd kernel parameter. Whenever
-> +	 * the mitigation is enabled, it works for all of the kernel code with
-> +	 * no need to provide any additional instructions. Therefore, skip
-> +	 * inserting nospec insns against Spectre v4.
-> +	 */
-> +	return true;
-> +}
-> +
->   bool bpf_jit_inlines_helper_call(s32 imm)
->   {
->   	switch (imm) {
 > diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
-> index 233703b06d7c..b5339c541283 100644
+> index b5339c541283..c00951e2a50e 100644
 > --- a/arch/powerpc/net/bpf_jit_comp64.c
 > +++ b/arch/powerpc/net/bpf_jit_comp64.c
-> @@ -363,6 +363,23 @@ static int bpf_jit_emit_tail_call(u32 *image, struct codegen_context *ctx, u32 o
->   	return 0;
->   }
+> @@ -800,26 +800,52 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
 >   
-> +bool bpf_jit_bypass_spec_v1(void)
-> +{
-> +#if defined(CONFIG_PPC_E500) || defined(CONFIG_PPC_BOOK3S_64)
-> +	return !(security_ftr_enabled(SEC_FTR_FAVOUR_SECURITY) &&
-> +		 security_ftr_enabled(SEC_FTR_BNDS_CHK_SPEC_BAR));
-> +#else
-> +	return true;
-> +#endif
-> +}
-> +
-> +bool bpf_jit_bypass_spec_v4(void)
-> +{
-> +	return !(security_ftr_enabled(SEC_FTR_FAVOUR_SECURITY) &&
-> +		 security_ftr_enabled(SEC_FTR_STF_BARRIER) &&
-> +		 stf_barrier_type_get() != STF_BARRIER_NONE);
-> +}
-> +
->   /*
->    * We spill into the redzone always, even if the bpf program has its own stackframe.
->    * Offsets hardcoded based on BPF_PPC_STACK_SAVE -- see bpf_jit_stack_local()
-> @@ -785,10 +802,6 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
+>   		/*
 >   		 * BPF_ST NOSPEC (speculation barrier)
+> +		 *
+> +		 * The following must act as a barrier against both Spectre v1
+> +		 * and v4 if we requested both mitigations. Therefore, also emit
+> +		 * 'isync; sync' on E500 or 'ori31' on BOOK3S_64 in addition to
+> +		 * the insns needed for a Spectre v4 barrier.
+> +		 *
+> +		 * If we requested only !bypass_spec_v1 OR only !bypass_spec_v4,
+> +		 * we can skip the respective other barrier type as an
+> +		 * optimization.
 >   		 */
 >   		case BPF_ST | BPF_NOSPEC:
-> -			if (!security_ftr_enabled(SEC_FTR_FAVOUR_SECURITY) ||
-> -					!security_ftr_enabled(SEC_FTR_STF_BARRIER))
+> -			switch (stf_barrier) {
+> -			case STF_BARRIER_EIEIO:
+> -				EMIT(PPC_RAW_EIEIO() | 0x02000000);
 > -				break;
-> -
->   			switch (stf_barrier) {
->   			case STF_BARRIER_EIEIO:
->   				EMIT(PPC_RAW_EIEIO() | 0x02000000);
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 3f0cc89c0622..6f5e54c680db 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -2268,6 +2268,9 @@ bpf_prog_run_array_uprobe(const struct bpf_prog_array *array,
->   	return ret;
->   }
+> -			case STF_BARRIER_SYNC_ORI:
+> +			bool sync_emitted = false;
+> +			bool ori31_emitted = false;
+> +#ifdef CONFIG_PPC_E500
+> +			if (!bpf_jit_bypass_spec_v1()) {
+> +				EMIT(PPC_RAW_ISYNC());
+>   				EMIT(PPC_RAW_SYNC());
+> -				EMIT(PPC_RAW_LD(tmp1_reg, _R13, 0));
+> -				EMIT(PPC_RAW_ORI(_R31, _R31, 0));
+> -				break;
+> -			case STF_BARRIER_FALLBACK:
+> -				ctx->seen |= SEEN_FUNC;
+> -				PPC_LI64(_R12, dereference_kernel_function_descriptor(bpf_stf_barrier));
+> -				EMIT(PPC_RAW_MTCTR(_R12));
+> -				EMIT(PPC_RAW_BCTRL());
+> -				break;
+> -			case STF_BARRIER_NONE:
+> -				break;
+> +				sync_emitted = true;
+> +			}
+> +#endif
+> +			if (!bpf_jit_bypass_spec_v4()) {
+> +				switch (stf_barrier) {
+> +				case STF_BARRIER_EIEIO:
+> +					EMIT(PPC_RAW_EIEIO() | 0x02000000);
+> +					break;
+> +				case STF_BARRIER_SYNC_ORI:
+> +					if (!sync_emitted)
+> +						EMIT(PPC_RAW_SYNC());
+> +					EMIT(PPC_RAW_LD(tmp1_reg, _R13, 0));
+> +					EMIT(PPC_RAW_ORI(_R31, _R31, 0));
+> +					ori31_emitted = true;
+> +					break;
+> +				case STF_BARRIER_FALLBACK:
+> +					ctx->seen |= SEEN_FUNC;
+> +					PPC_LI64(_R12, dereference_kernel_function_descriptor(bpf_stf_barrier));
+> +					EMIT(PPC_RAW_MTCTR(_R12));
+> +					EMIT(PPC_RAW_BCTRL());
+> +					break;
+> +				case STF_BARRIER_NONE:
+> +					break;
+> +				}
+>   			}
+> +#ifdef CONFIG_PPC_BOOK3S_64
+> +			if (!bpf_jit_bypass_spec_v1() && !ori31_emitted)
+> +				EMIT(PPC_RAW_ORI(_R31, _R31, 0));
+> +#endif
+>   			break;
 >   
-> +bool bpf_jit_bypass_spec_v1(void);
-> +bool bpf_jit_bypass_spec_v4(void);
-> +
->   #ifdef CONFIG_BPF_SYSCALL
->   DECLARE_PER_CPU(int, bpf_prog_active);
->   extern struct mutex bpf_stats_enabled_mutex;
-> @@ -2455,12 +2458,16 @@ static inline bool bpf_allow_uninit_stack(const struct bpf_token *token)
+>   		/*
+> diff --git a/include/linux/filter.h b/include/linux/filter.h
+> index f5cf4d35d83e..eca229752cbe 100644
+> --- a/include/linux/filter.h
+> +++ b/include/linux/filter.h
+> @@ -82,7 +82,7 @@ struct ctl_table_header;
+>   #define BPF_CALL_ARGS	0xe0
 >   
->   static inline bool bpf_bypass_spec_v1(const struct bpf_token *token)
->   {
-> -	return cpu_mitigations_off() || bpf_token_capable(token, CAP_PERFMON);
-> +	return bpf_jit_bypass_spec_v1() ||
-> +		cpu_mitigations_off() ||
-> +		bpf_token_capable(token, CAP_PERFMON);
->   }
+>   /* unused opcode to mark speculation barrier for mitigating
+> - * Speculative Store Bypass
+> + * Spectre v1 and v4
+>    */
+>   #define BPF_NOSPEC	0xc0
 >   
->   static inline bool bpf_bypass_spec_v4(const struct bpf_token *token)
->   {
-> -	return cpu_mitigations_off() || bpf_token_capable(token, CAP_PERFMON);
-> +	return bpf_jit_bypass_spec_v4() ||
-> +		cpu_mitigations_off() ||
-> +		bpf_token_capable(token, CAP_PERFMON);
->   }
->   
->   int bpf_map_new_fd(struct bpf_map *map, int flags);
 > diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index ba6b6118cf50..804f1e52bfa3 100644
+> index 804f1e52bfa3..fe16be379bf4 100644
 > --- a/kernel/bpf/core.c
 > +++ b/kernel/bpf/core.c
-> @@ -3029,6 +3029,21 @@ bool __weak bpf_jit_needs_zext(void)
->   	return false;
->   }
->   
-> +/* By default, enable the verifier's mitigations against Spectre v1 and v4 for
-> + * all archs. The value returned must not change at runtime as there is
-> + * currently no support for reloading programs that were loaded without
-> + * mitigations.
-> + */
-> +bool __weak bpf_jit_bypass_spec_v1(void)
-> +{
-> +	return false;
-> +}
-> +
-> +bool __weak bpf_jit_bypass_spec_v4(void)
-> +{
-> +	return false;
-> +}
-> +
->   /* Return true if the JIT inlines the call to the helper corresponding to
->    * the imm.
->    *
+> @@ -2102,14 +2102,15 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
+>   #undef COND_JMP
+>   	/* ST, STX and LDX*/
+>   	ST_NOSPEC:
+> -		/* Speculation barrier for mitigating Speculative Store Bypass.
+> -		 * In case of arm64, we rely on the firmware mitigation as
+> -		 * controlled via the ssbd kernel parameter. Whenever the
+> -		 * mitigation is enabled, it works for all of the kernel code
+> -		 * with no need to provide any additional instructions here.
+> -		 * In case of x86, we use 'lfence' insn for mitigation. We
+> -		 * reuse preexisting logic from Spectre v1 mitigation that
+> -		 * happens to produce the required code on x86 for v4 as well.
+> +		/* Speculation barrier for mitigating Speculative Store Bypass,
+> +		 * Bounds-Check Bypass and Type Confusion. In case of arm64, we
+> +		 * rely on the firmware mitigation as controlled via the ssbd
+> +		 * kernel parameter. Whenever the mitigation is enabled, it
+> +		 * works for all of the kernel code with no need to provide any
+> +		 * additional instructions here. In case of x86, we use 'lfence'
+> +		 * insn for mitigation. We reuse preexisting logic from Spectre
+> +		 * v1 mitigation that happens to produce the required code on
+> +		 * x86 for v4 as well.
+>   		 */
+>   		barrier_nospec();
+>   		CONT;
 
 
