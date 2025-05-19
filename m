@@ -1,331 +1,202 @@
-Return-Path: <linux-kselftest+bounces-33322-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33323-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5D91ABBCE2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 May 2025 13:45:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F197ABBE13
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 May 2025 14:39:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6AC4C1659FE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 May 2025 11:45:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C2A4716A3F6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 May 2025 12:39:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4098F20FAAB;
-	Mon, 19 May 2025 11:45:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1887279324;
+	Mon, 19 May 2025 12:39:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="3L6zwXiN"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="c0asuxeh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2062.outbound.protection.outlook.com [40.107.243.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7FDD1C700D;
-	Mon, 19 May 2025 11:45:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.62
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747655135; cv=fail; b=hi34PaVeKpWiRzM0JcWMezzQFVUwsUFDSUA9umNdoC3SbgPG2vbmamozE5/+bnFq3St/oVWu8FkZ3qOF+E11R+a3Pm7K1oEcSgGyhDNU8Dad2Io4V5xXuKJwq8AX3IyJPYw5YMfcHizh/cgHrG7nmlmwC5uFRCL81tECp00t/Lk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747655135; c=relaxed/simple;
-	bh=a2GAXJTWteEJGYHMvWN2ZUmPwVYCBFXlPgt/sLBEecU=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=Z++HOrDtlkfwzSgD9xhGYhynpeQZg4CP9nje43jiz1hlIKv2LXqwg4VPF2bxrGfAy2GTp/KnWfZ8N2K4j41ZBD8SDaf2g0i8ulDghsUrd75yDs2aPfpFxJKE0098pYuhWMhkPXM7RQKjsHbnakdO38GpWp1+0+6hvCtnaUnLVHI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=3L6zwXiN; arc=fail smtp.client-ip=40.107.243.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Id1ryFkFdc+HHUzA8C/zwShgQncj6nKW0czGxE8eh0eQtUbDV1y5414TAx5XcaHoxS1GGtYVgmuxViVs2h4cZKgLr8qG8Imw9b24U9vVywhlErbPUEl3md2z8kE61LE35xNPit9I4yn2TAI4M6TQbzuSEDr4FvDSPffBm3Rf1QVKVjyzfitXwuj+rrS4lDWsPp9VuAddC2OQ7uF0uuMCdgW3cw3ekVpjWzyW5Osegbd2AegAYVYmLOHMNwaDhR9nLzYC7zrr0Ek2vCi31j/bL6pftqPe2FcS8vGEfd8hhsHCWqY4KSKnQ8U346T9Dfx2q89HX3OusndsYIrNGlOYeg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=V2Db8k5oQapz7gSsrZVxFU3+caJylwGvG1VvO/gFpmo=;
- b=GQtbCZ9m/GTyACh38tCI8QM6MA+I9eYjdyVNfpvwMUs1Ml1T33yH6XuFWzMpuRD7p3SfgpszsRy4hjDp+IcKul03W9W9Tzvnm+QzEUdAFkIFiMp9jq5FzHR6+iT/FXkMEB4ySbGpuTBsbbKeTGVxSex3T6A9OpELOsjXTaOt9Y+mSkFA4lD67WutmrZSxL2xE+V9YRnshllyQ7UAqHH4RXRDjHaUvDIWnWWZwBB2eg16JV/56M6WLTv+55AB8IdUB8qg7CtiiIfkumC2W/8cIX0laSrYXQFYxkE13sNaUTHVHIjK1H8WnG6HTTeqMT+QkzNweiTt9/rB0nXsbhM0BQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=V2Db8k5oQapz7gSsrZVxFU3+caJylwGvG1VvO/gFpmo=;
- b=3L6zwXiNAquvdkZJ5JzhSgVjyKx1CYeOh1c9kzp9OXInzpaM5zDCBbtoVBZ/eW9eXCmi/qfPc08MMzXrRwRleHuXancufiBrvQPS1DzOedSn7B3QADI0zPI+HbreulzLA3EexG4sE0NplqCAPCQ0oS50gvKXnl1/0A1UPd0+ETM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DS7PR12MB6214.namprd12.prod.outlook.com (2603:10b6:8:96::13) by
- DM6PR12MB4385.namprd12.prod.outlook.com (2603:10b6:5:2a6::14) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8722.33; Mon, 19 May 2025 11:45:30 +0000
-Received: from DS7PR12MB6214.namprd12.prod.outlook.com
- ([fe80::17e6:16c7:6bc1:26fb]) by DS7PR12MB6214.namprd12.prod.outlook.com
- ([fe80::17e6:16c7:6bc1:26fb%3]) with mapi id 15.20.8746.030; Mon, 19 May 2025
- 11:45:30 +0000
-Message-ID: <e77951e3-8606-4935-a05f-88b092d5771d@amd.com>
-Date: Mon, 19 May 2025 17:15:24 +0530
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 5/5] KVM: selftests: Add bus lock exit test
-To: Sean Christopherson <seanjc@google.com>
-Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
- pbonzini@redhat.com, nikunj@amd.com, bp@alien8.de
-References: <20250502050346.14274-1-manali.shukla@amd.com>
- <20250502050346.14274-6-manali.shukla@amd.com> <aCeR2TjPzC_OYBfG@google.com>
-Content-Language: en-US
-From: Manali Shukla <manali.shukla@amd.com>
-In-Reply-To: <aCeR2TjPzC_OYBfG@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: PN4PR01CA0035.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:273::16) To DS7PR12MB6214.namprd12.prod.outlook.com
- (2603:10b6:8:96::13)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94F8826AA93
+	for <linux-kselftest@vger.kernel.org>; Mon, 19 May 2025 12:39:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1747658353; cv=none; b=ZvGNLh0wg3JK/i6iPG13PmR2kVm3YD//KIUSSWHfoi/DAcrRXHy86TFqKnJkRIqLX9Nh8SgkR0c+Vxwou5vzO4ECHhbS0BIAHQKOP8uMONjFNRqxZ9cSjl4hSWMuqpdCvgmCq8GB+Pcbe9cdOO0Ck5U3HcTm2ZapbyiSeWXX5gI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1747658353; c=relaxed/simple;
+	bh=wAgE1d1Nn9Gs3icpp4n2PghbKllsJSUIZKEeigydyr0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
+	 References:In-Reply-To; b=bRklg4CJ8c+juI9HlUOYxBfD5/+fnM6CRO6/6IsfLIZT7v2W1MbBuuzCcSlubSdSj5ITxvn87RL6W+UEX1DmlDo33o87tfEO/3AN/josG//8eLcAG/XhYgHvAQYTsg1rwGyIalvbkDY6Y+xjSo+J0heXE7rOgufc3p25QmccE30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=c0asuxeh; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-43cfe99f2a7so4354085e9.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 May 2025 05:39:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1747658350; x=1748263150; darn=vger.kernel.org;
+        h=in-reply-to:references:to:cc:subject:from:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8TID/8Or9YAzKWADzCmDKYmYbQ3PtBl4rxavpksxXcw=;
+        b=c0asuxeh9zKDI4BFM+0+N/0QABL/hv9jgthEHTsCykJZ49PXAo5NS4AbsKwWngXmAP
+         XUSqAurvr+cBeuW9/QQotGhmFmgPGhn+d6Ja/1dA8PBwkUcBy8CC2B6VeGNshgTdK6Pw
+         tcaZU8hVqAxZaK4Ca5Nih6cf3qFBrNvw0fSbId0IPZZxi//uKN5+xqRuG2TtIfzxzYun
+         F2Pv86q84JNAlfLHK2+scX0atyD/IwnGhwqe9AlZlqwfGNiW3jScfqEuzgkvlPIvlu9s
+         LafrHDMlIQymbeapTyTmKUweUd38786lwxgaaJWyenB/0Z+5jDAYxkMK3BAs9NMI+z21
+         2hfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747658350; x=1748263150;
+        h=in-reply-to:references:to:cc:subject:from:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=8TID/8Or9YAzKWADzCmDKYmYbQ3PtBl4rxavpksxXcw=;
+        b=H2idiAKU84EVjzFUe1UeaKJG92mg7ocBgSBT83UP+cF5qzT/L/aLofhiWcZANG3hkE
+         kN3Py6x1+HE7NyC4r8toh0oaR2SoONVX6tQHeZo5vLP1i1lLBLBZFfGtT4OrdFkb7gL6
+         +HHt2ZEHO0mWh4u2xUfTVI1/5sR1jrZ1VA6E8m0fTNVvfxrjoOc2nM30vNgAZdwTuq0u
+         AMDWA5ldpPML9hHYMHJC17cAwzPILev8A+lbHq/McTsjoTr+NTTg483rl0Q6CwbDGzFC
+         8WiVz0NQ+j04cf/4gvj1fvj4gHClHSax0HlZ0nXBOfa1VexF0VP2t/BhAGr3WF0wO4o6
+         LycA==
+X-Forwarded-Encrypted: i=1; AJvYcCX6fK1BI7i1FKNwxQ2zFnKOAa1ehTVZmd4EHY600ZGwDx7KGkSIjVeFKrTd7Emluqk2RrSgk5bx6ValzqlZisU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyvpL/4k1AaD+UNuXao+0FVTwd4I5SOV0yE6fN2Xem9qn2Ev+z2
+	nkPbWj2DuDC1F6TaZaANtO6zhhvwHUkked/JRWzgb2dwmoGFbNa96OGntSO7fA/DNLE=
+X-Gm-Gg: ASbGnculBwYaF1l2jtpuOD9Yx9C6zYuZgIoF2I+Nr1S6bOl7W8nPodj3gPVTPuO6MIV
+	yAVkQ76n/htnh1i/7dyzAKIbP1n53e4aJB5talLi5pawv1OHJ9uqizp4mI2nbzUKs2/hBdSg00q
+	3CAtkNtxcH5U9oD94i3qak0A+TvnbTRSZX72h1C9CjgqYbX283OPs6VQWvQg4sV7EPNUJnr7Dhh
+	I35IX3nb/WewWXi077IUg50RQwic3i7UIaKo3V9Xmz2yUN+SIFUTGUObLusyDGdAXjV5NOABso3
+	QcKb3J6xZCScmQDLfybVZkLJgsMWHRA3ZWbz25Hr85QoQV1OlpVhPYC0s+E=
+X-Google-Smtp-Source: AGHT+IFfWi9oi0Jcra9sXbpqrxyg3hOkHnBuCeesfYKMaPVxn3iQR7mctJDpcqzl/F4hYBE/NRWxrg==
+X-Received: by 2002:a05:600d:108:10b0:43b:c0fa:f9bf with SMTP id 5b1f17b1804b1-442fd7165b7mr23100365e9.3.1747658349729;
+        Mon, 19 May 2025 05:39:09 -0700 (PDT)
+Received: from localhost ([2a02:8308:a00c:e200:29b7:4911:a29c:2135])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442fd583f20sm136362615e9.28.2025.05.19.05.39.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 May 2025 05:39:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB6214:EE_|DM6PR12MB4385:EE_
-X-MS-Office365-Filtering-Correlation-Id: 266377fc-a00e-44fb-08ae-08dd96caa7e8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?YWZqM2RNWGhpd2JDd01UTjdTUmFnQ1YxK3o5Q0hKRUdKK1hZRDh4cFpnQWh3?=
- =?utf-8?B?T3h5VU1jelQzZjBSREE3WXVlbktvb3lobzR4VmwzUlp4VHNCb0x3V3M0QVVZ?=
- =?utf-8?B?U3FXWVJiUDdHWWtCaFZpUERYNFFrSTlndnFRdWxBVjJJSk53eFc5eHlabTRQ?=
- =?utf-8?B?VzRWRkFDK3kxUC9iTWRqRHI3MmgzZDhSenNQdXc5U2ZoWlRHYkJUZDhNUEhh?=
- =?utf-8?B?LzJCVnA1WE95OXk3aFJ2K2pXcUgxSzNZRzJoc04zMUIrMWQrY0VLZ3I0TGZ5?=
- =?utf-8?B?UzZpTnFCK09BbU5QajJsdDhmQkpDdWtDWHd0OUh3ZlRNVVpCMVZLbWxWSzBz?=
- =?utf-8?B?TS9rNk9wdkRmclR2a29IbzA0U2tiTmQyWmpKRjZXYXhCdGI2SGJHNkdrYlY2?=
- =?utf-8?B?alZKTFBZWGRmeXZocmhYY0pESmdvU1VsVUtleHpjZ1NxdjZTMFAvYnVQRStt?=
- =?utf-8?B?SGdiY2psWWFZZDhLNk1sYWRQRnRsYzFEeUs0T1llNEZmcmp0OVdodTN2Z1hi?=
- =?utf-8?B?dUdqOWRmbXBaMFk4NnNwa1pmcHB3dEN0Mmozais5UVp1dnVmK0FRUnprYjdm?=
- =?utf-8?B?ckV5bGd5ZGFtcmwreUNiNTYvQXdyWTJwQ3dUdmxheVM3V1Y5U1NWTGdTdFZC?=
- =?utf-8?B?a1ZEY0lSYTd1MWg1N3Uybk5UbXhycFNDSUM2M3ovZTlITXczWGUxbzJQcWtL?=
- =?utf-8?B?TGczSU1xdGVTSTd2Rk9aZitJRS9xZlFaeFhkVXZKdDA1cURUb2hDcmN5c1Fl?=
- =?utf-8?B?S09ualg1akQvR05oc1JPUjlRd3QyVm0yTTB6REQ1WFh5Z3BOanJpN0Z4cUxw?=
- =?utf-8?B?c29mRFNWaE5BbmxvZVNSRXI3UHZiSmZJMkhhSHJUVG5NSU9yQlgxdWI3b3Nz?=
- =?utf-8?B?cklXWEkwVWJWL0ZHRUVnMjFUUmlWM0U4d251NFZGQTZhVEQyRlBLR0V0bHNR?=
- =?utf-8?B?T1czZ2drTkhjQllsVytGeW5MNnM1dHpzUW5uWkc3aVl5L3hWQ0NpL3crOGpO?=
- =?utf-8?B?K0lRNHZndU9mWUY5NCtsNUFpVVNqVmZMbXdsWW9Ea1h3QXIzQ1llT0pSRDlN?=
- =?utf-8?B?TWYwdE9xVTdmVWhyTjJGZXRpNytlTUVkZExWSXZFUERHQ1BiR0JmTTg5bGxU?=
- =?utf-8?B?OEhHTTdOTzNEdHZ1SmpUd3RyZzVWYktUdVFtbXV3eUZ6RDVFekVtaDVOQndq?=
- =?utf-8?B?WGVyMEd1YUpyWThCdm00YnN5UGV1Y1c0dkZFWTFPOTVqQk5GTzE2Wkl6bXFm?=
- =?utf-8?B?OFE2VVdycC9HUE5kMkhMaDRUUDYyVzV5b2x4bVU5WExIV0lKVUdueDVMWTd1?=
- =?utf-8?B?bk1ZY1N3OHdXdDA4N0szV3g1bEovTHM5WFZNeGxGMTVodXNBbmdnYWxVTjRx?=
- =?utf-8?B?UnRsTm5WSkVhV3NmVjc4a0dUSmpmcnU5a2lSREVlNW0wRWo5dzlMYmxvTW9j?=
- =?utf-8?B?MmFVTEpyaktPekkyRlBxZEFBWGZIWEZvNDJvSnI1K3ppeHRBUGd4bmFteFBE?=
- =?utf-8?B?Q3kvRVJoZ2pZVmxwZi92V0JoK25hVTlWL2doMjRMSGg5RFBjakFuNHJMaWFY?=
- =?utf-8?B?Z093V3RxYXNwWlF4UytSc0tIeVNSLy95YTRpSllPVUx3N1piQzl1NS9XWXB6?=
- =?utf-8?B?Tms0UzZmUEt2TWgzYi9DOVFlU1BIcGdMdEo3Q0ltMmE5V3c5bXJmM2svZ21m?=
- =?utf-8?B?R2p0VDFtYi9Qd3VzdWc0a2Z2WnlYY3JKd3pzNmF3NDVkVFRqSXFWdStGYjBr?=
- =?utf-8?B?WllxYXdaN2U1b1l1VE1XVDZCaUdxMjFuc1o1SFNlR2JIa1dxRkd0eVNIbTFs?=
- =?utf-8?B?VG15TFZ6QWVDQWRkNUpZdWs3MjdEVTBSb3pqNysreXdNRDU1MzlkUGh6bmt4?=
- =?utf-8?B?N1dKaG1ydFFIdDhHdHBoUlhUTU9McGgxVm01ZEViMlJrL0E9PQ==?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6214.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?R1VscFVsYll0eStyQUhiUnZTVloveHU3UEdXQ0xpdmVWdWxBWnBpQ1RoR2NM?=
- =?utf-8?B?MEFpME9QT2YvRVE0TXRJbzAzSDdCZFR3VnVVRWIraVNiTVFPRm1lN3JrSVNV?=
- =?utf-8?B?UDRzNGZ2NldaNGZWMXlZVkkwMHpWMnhyVnRWZkU0RU1mSHJQbDQ2d3RnbElv?=
- =?utf-8?B?bUdhV0RiMTdxSFFranRhdWxjUmtwRlB4T0FpZlVWYTVGeXM1NW4yZ3ZWK1c0?=
- =?utf-8?B?YWF4MmtaRUtWSGMrTUhwSHZsamRJUUsyY1kvOGN0SmR3Y2MyUHZUcGFlSU9E?=
- =?utf-8?B?MitiZnhvVHpwd0Uxb2VjcUpkRjVNZjRHQlNEMW1nOVR3a0ZHemQxalczeU5I?=
- =?utf-8?B?OTdVNXZROUtmV1hvVldUdngvTVpsdVlFQ3RHZTJHeHVYN1BpVXl2NHY3djB5?=
- =?utf-8?B?U1RpOTVLdVZWSHZweUZhZEs1dmNyaGVOdUVKcW1VS0FLZjhBZklqYzBPUDdC?=
- =?utf-8?B?cXY0RFNNeVFMYlZqbmIvQmVnM1ZZMXgwWjVoMWV6TkRqL0g0WUhCTVY2ekN3?=
- =?utf-8?B?RzAxTEcyUmR1ZHM4bkNQWmlWOTlHS001WUFjWWFuWE1PbFRiaUJKSVdJcEp1?=
- =?utf-8?B?UW9ndWlzMUhicWhZK2h6dWkvZ0ZzdHdZcDhOdndrejNraHVoRGtJaktxZ3NG?=
- =?utf-8?B?TGNwcE9IaEFMbkxlWWFOeEwvKzVuM1RzK1lCejFzSmNOZG90TGJKb2JKOGZh?=
- =?utf-8?B?NkhqdWxYVDJlYk5ZYTh4dUpuUHpjY0JZZDhqcDdWeERXTG9RcWF4V3lWa1N1?=
- =?utf-8?B?bGZvbWRFSXg0UndVLzVKNzkzK1Y2Qmd4QjdmVHNmeGIza1ZnMXc4bjdtM3JQ?=
- =?utf-8?B?Slo1ZDlyTTFoOXNhT0Q1dkxmaG1PRy9Ca1hVVkpBdDV1SHFub1JXaEhLa1hG?=
- =?utf-8?B?S3k5VTBjK3EyNjFlN3Nld3VzNTI3WTVlYlFYSkpDZjFWWXRoSldxTWo2VUNq?=
- =?utf-8?B?eG9PbllmQi9iNVhSTHd0ZjN1c2hIVzNTN2EwY3VVUEJnUThlcTgzVFU4Z3Rz?=
- =?utf-8?B?cFpLVDh5YzZ3K25UWXA2TVRTYVVTQ0pDUk9raFBjYUZqNTJRY1A5bTNtOURj?=
- =?utf-8?B?NkxLY05nUGpHd0lvTHBaUUh4b2U0MHhnTnBERHBUT29mUjR4YVBKTStmQTV6?=
- =?utf-8?B?cUZnZXRrRm8wb1hsTnhIVFlrc3RSWWhiNWFtSHlVV2VXU01rT2tRMnVCaFFJ?=
- =?utf-8?B?RTNuRkR2VTBWL0I0NHFVaW4zejMzOEsyVDAzeTdhTlZUMjZmT0xNTTMyMC9G?=
- =?utf-8?B?dUFsYW9JOHR6emJHZWtHNjBwQ0VSM3NySlRKUHEyWTdjWC8xcnloTTNNTi9G?=
- =?utf-8?B?WTdtSnlTTVcrMEl4ZmdFdVovaUFwSHhVSSsrdWEvSG16bmFkMU9VMnhYYjRU?=
- =?utf-8?B?aVBDZXlIL3lOaWRpVitGeXkvYkVUaktwaGlPU3ArZkluaGliV2VHbHgxWkx5?=
- =?utf-8?B?TDRua2FuQlZIRGhqdThGRzJXQ1BtUHMwamtNRFZDZlRHK1pYOGlXL1FXQkhm?=
- =?utf-8?B?djNnNHA0YVNRTDMwYWF4VEpuZnFyeTFJQlVhVm9YODdhS2FOcDh4cDBleUJm?=
- =?utf-8?B?UXJKRnhRSFd6VlJKY2RNRUNEcHFScGZlYkRSTEM1T29qdU1xS0c4TE1pbklC?=
- =?utf-8?B?dW1vc1RDMWtGVGtweEdIZWxkT1JrMjU3R0ZqZ2ZVaHE1UVhmZTl5VzNvZ1R3?=
- =?utf-8?B?aUpvL1gwMDdNNlNnOVFrbVBuYUR0SlFkZFUzOUlHMCtkemU5Nks4MlU2OVR4?=
- =?utf-8?B?REdiV1k4SFUxbE9ZUUNLMkhrcUZnRnJ5em91cFp4RDkyNlV5NEQ3ZnpEaFZG?=
- =?utf-8?B?UHpiMTZZdnRDME0yLzZ3UVliL0ZIbjRCMzBCeUF6Z2t2QmpVOHVVeTk4aFMv?=
- =?utf-8?B?cHpSRzVpWjIxYVhaRnluaUk1OGdtSnEvWTUzVEdnYWNGVnVaR2FkZkt3ek1D?=
- =?utf-8?B?dGRxck1pbURPWEVPQXRYYm9RYTcvd1VSY2tiVWtpUkpraWRhRS9tYlJmbXJs?=
- =?utf-8?B?aWJIbHBXcGdIdW5yRS9saEJpN1o0M3UxVGdRS245U3o3VEtzZllHd2xtYnlI?=
- =?utf-8?B?ejNnWS9wb25DRmlIRkltbU43SVozK2ZKR2c3dm5CdGJWR3VYRXF5Qi9BZDNi?=
- =?utf-8?Q?wNN8yRI4U68Dlyvsahig81AIQ?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 266377fc-a00e-44fb-08ae-08dd96caa7e8
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6214.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2025 11:45:30.5327
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ce7a7YV73QH26fNTrQtOmNUaQk6cicOzIKY+F7KGF09ExWAQI9/yZ76K26GiHc8dDS7wYxfw2WAaEQVb5Yj2Vg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4385
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 19 May 2025 14:39:08 +0200
+Message-Id: <DA056HQ5G6S6.2B1OITOT8LLWS@ventanamicro.com>
+From: =?utf-8?q?Radim_Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@ventanamicro.com>
+Subject: Re: [PATCH v15 05/27] riscv: usercfi state for task and
+ save/restore of CSR_SSP on trap entry/exit
+Cc: "Alexandre Ghiti" <alex@ghiti.fr>, "Thomas Gleixner"
+ <tglx@linutronix.de>, "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov"
+ <bp@alien8.de>, "Dave Hansen" <dave.hansen@linux.intel.com>,
+ <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, "Andrew Morton"
+ <akpm@linux-foundation.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ "Vlastimil Babka" <vbabka@suse.cz>, "Lorenzo Stoakes"
+ <lorenzo.stoakes@oracle.com>, "Paul Walmsley" <paul.walmsley@sifive.com>,
+ "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert Ou" <aou@eecs.berkeley.edu>,
+ "Conor Dooley" <conor@kernel.org>, "Rob Herring" <robh@kernel.org>,
+ "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Arnd Bergmann"
+ <arnd@arndb.de>, "Christian Brauner" <brauner@kernel.org>, "Peter Zijlstra"
+ <peterz@infradead.org>, "Oleg Nesterov" <oleg@redhat.com>, "Eric Biederman"
+ <ebiederm@xmission.com>, "Kees Cook" <kees@kernel.org>, "Jonathan Corbet"
+ <corbet@lwn.net>, "Shuah Khan" <shuah@kernel.org>, "Jann Horn"
+ <jannh@google.com>, "Conor Dooley" <conor+dt@kernel.org>, "Miguel Ojeda"
+ <ojeda@kernel.org>, "Alex Gaynor" <alex.gaynor@gmail.com>, "Boqun Feng"
+ <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Benno Lossin"
+ <benno.lossin@proton.me>, "Andreas Hindborg" <a.hindborg@kernel.org>,
+ "Alice Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>,
+ <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+ <linux-mm@kvack.org>, <linux-riscv@lists.infradead.org>,
+ <devicetree@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+ <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <alistair.francis@wdc.com>, <richard.henderson@linaro.org>,
+ <jim.shu@sifive.com>, <andybnac@gmail.com>, <kito.cheng@sifive.com>,
+ <charlie@rivosinc.com>, <atishp@rivosinc.com>, <evan@rivosinc.com>,
+ <cleger@rivosinc.com>, <alexghiti@rivosinc.com>, <samitolvanen@google.com>,
+ <broonie@kernel.org>, <rick.p.edgecombe@intel.com>,
+ <rust-for-linux@vger.kernel.org>, "Zong Li" <zong.li@sifive.com>,
+ "linux-riscv" <linux-riscv-bounces@lists.infradead.org>
+To: "Deepak Gupta" <debug@rivosinc.com>
+References: <20250502-v5_user_cfi_series-v15-0-914966471885@rivosinc.com>
+ <20250502-v5_user_cfi_series-v15-5-914966471885@rivosinc.com>
+ <D9OZVNOGLU4T.2XOUPX27HN0W8@ventanamicro.com>
+ <122fc6cd-2e21-4fca-979d-bcf558107b81@ghiti.fr>
+ <D9WLRSAB63M5.3DZD4ND3WVZ6F@ventanamicro.com>
+ <aCdbASlCyqhid82c@debug.ba.rivosinc.com>
+In-Reply-To: <aCdbASlCyqhid82c@debug.ba.rivosinc.com>
 
-On 5/17/2025 12:58 AM, Sean Christopherson wrote:
-> On Fri, May 02, 2025, Manali Shukla wrote:
->> diff --git a/tools/testing/selftests/kvm/x86/kvm_buslock_test.c b/tools/testing/selftests/kvm/x86/kvm_buslock_test.c
->> new file mode 100644
->> index 000000000000..9c081525ac2a
->> --- /dev/null
->> +++ b/tools/testing/selftests/kvm/x86/kvm_buslock_test.c
->> @@ -0,0 +1,135 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Copyright (C) 2024 Advanced Micro Devices, Inc.
->> + */
->> +
->> +#include "test_util.h"
->> +#include "kvm_util.h"
->> +#include "processor.h"
->> +#include "svm_util.h"
->> +#include "vmx.h"
->> +
->> +#define NR_ITERATIONS 100
->> +#define L2_GUEST_STACK_SIZE 64
->> +
->> +#pragma GCC diagnostic push
->> +#pragma GCC diagnostic ignored "-Waddress-of-packed-member"
-> 
-> Eww.
-> 
->> +
->> +struct buslock_test {
->> +	unsigned char pad[PAGE_SIZE - 2];
->> +	atomic_long_t val;
->> +} __packed;
-> 
-> You don't need an entire page to generate a bus lock, two cache lines will do
-> nicely.  And there's certain no need for __packed.
-> 
->> +struct buslock_test test __aligned(PAGE_SIZE);
->> +
->> +static __always_inline void buslock_atomic_add(int i, atomic_long_t *v)
->> +{
->> +	asm volatile(LOCK_PREFIX "addl %1,%0"
->> +		     : "+m" (v->counter)
->> +		     : "ir" (i) : "memory");
->> +}
-> 
-> If only there were utilities for atomics...
-> 
->> +static void buslock_add(void)
-> 
-> guest_generate_buslocks()
-> 
->> +{
->> +	/*
->> +	 * Increment a page unaligned variable atomically.
->> +	 * This should generate a bus lock exit.
-> 
-> Not should, will.
-> 
->> +	 */
->> +	for (int i = 0; i < NR_ITERATIONS; i++)
->> +		buslock_atomic_add(2, &test.val);
-> 
-> Don't do weird and completely arbitrary things like adding '2' instead of '1',
-> it makes readers look for intent and purpose that doesn't exist.
-> 
+2025-05-16T08:34:25-07:00, Deepak Gupta <debug@rivosinc.com>:
+> On Thu, May 15, 2025 at 10:48:35AM +0200, Radim Kr=C4=8Dm=C3=A1=C5=99 wro=
+te:
+>>2025-05-15T09:28:25+02:00, Alexandre Ghiti <alex@ghiti.fr>:
+>>> On 06/05/2025 12:10, Radim Kr=C4=8Dm=C3=A1=C5=99 wrote:
+>>>> 2025-05-02T16:30:36-07:00, Deepak Gupta <debug@rivosinc.com>:
+>>>>> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+>>>>> @@ -91,6 +91,32 @@
+>>>>> +.macro restore_userssp tmp
+>>>>> +	ALTERNATIVE("nops(2)",
+>>>>> +		__stringify(				\
+>>>>> +		REG_L \tmp, TASK_TI_USER_SSP(tp);	\
+>>>>> +		csrw CSR_SSP, \tmp),
+>>>>> +		0,
+>>>>> +		RISCV_ISA_EXT_ZICFISS,
+>>>>> +		CONFIG_RISCV_USER_CFI)
+>>>>> +.endm
+>>>> Do we need to emit the nops when CONFIG_RISCV_USER_CFI isn't selected?
+>>>>
+>>>> (Why not put #ifdef CONFIG_RISCV_USER_CFI around the ALTERNATIVES?)
+>>>
+>>> The alternatives are used to create a generic kernel that contains the
+>>> code for a large number of extensions and only enable it at runtime
+>>> depending on the platform capabilities. This way distros can ship a
+>>> single kernel that works on all platforms.
+>>
+>>Yup, and if a kernel is compiled without CONFIG_RISCV_USER_CFI, the nops
+>>will only enlarge the binary and potentially slow down execution.
+>>In other words, why we don't do something like this
+>>
+>> (!CONFIG_RISCV_USER_CFI ? "" :
+>>   (RISCV_ISA_EXT_ZICFISS ? __stringify(...) : "nops(x)"))
+>>
+>>instead of the current
+>>
+>> (CONFIG_RISCV_USER_CFI &&
+>>    RISCV_ISA_EXT_ZICFISS ? __stringify(...) : "nops(x)")
+>>
+>>It could be a new preprocessor macro in case we wanted to make it nice,
+>>but it's probably not a common case, so an ifdef could work as well.
+>>
+>>Do we just generally not care about such minor optimizations?
+>
+> On its own just for this series, I am not sure if I would call it even a
+> minor optimization.
 
-Got it. Thanks for the feedback.
+This patch uses ifdef in thread_info, but not here.
 
->> +}
-> 
-> ...
-> 
->> +int main(int argc, char *argv[])
->> +{
->> +	struct kvm_vcpu *vcpu;
->> +	struct kvm_run *run;
->> +	struct kvm_vm *vm;
->> +	vm_vaddr_t nested_test_data_gva;
->> +
->> +	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_SVM) || kvm_cpu_has(X86_FEATURE_VMX));
-> 
-> There's no reason to make nested support a hard dependency, it's just as easy to
-> make it conditional.
-> 
->> +	TEST_REQUIRE(kvm_has_cap(KVM_CAP_X86_BUS_LOCK_EXIT));
->> +
->> +	vm = vm_create(1);
->> +	vm_enable_cap(vm, KVM_CAP_X86_BUS_LOCK_EXIT, KVM_BUS_LOCK_DETECTION_EXIT);
->> +	vcpu = vm_vcpu_add(vm, 0, guest_code);
->> +
->> +	if (kvm_cpu_has(X86_FEATURE_SVM))
->> +		vcpu_alloc_svm(vm, &nested_test_data_gva);
->> +	else
->> +		vcpu_alloc_vmx(vm, &nested_test_data_gva);
->> +
->> +	vcpu_args_set(vcpu, 1, nested_test_data_gva);
->> +
->> +	run = vcpu->run;
->> +
->> +	for (;;) {
->> +		struct ucall uc;
->> +
->> +		vcpu_run(vcpu);
->> +
->> +		if (run->exit_reason == KVM_EXIT_IO) {
->> +			switch (get_ucall(vcpu, &uc)) {
->> +			case UCALL_ABORT:
->> +				REPORT_GUEST_ASSERT(uc);
->> +				/* NOT REACHED */
->> +			case UCALL_SYNC:
->> +				continue;
->> +			case UCALL_DONE:
->> +				goto done;
->> +			default:
->> +				TEST_FAIL("Unknown ucall 0x%lx.", uc.cmd);
->> +			}
->> +		}
->> +
->> +		TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_X86_BUS_LOCK);
->> +	}
-> 
-> *sigh*
-> 
-> This doesn't actually ****VERIFY**** that the expected number of bus lock exits
-> were generated.  KVM could literally do nothing and the test will pass.  E.g. the
-> test passes if I do this:
-> 
-> diff --git a/tools/testing/selftests/kvm/x86/kvm_buslock_test.c b/tools/testing/selftests/kvm/x86/kvm_buslock_test.c
-> index 9c081525ac2a..aa65d6be0f13 100644
-> --- a/tools/testing/selftests/kvm/x86/kvm_buslock_test.c
-> +++ b/tools/testing/selftests/kvm/x86/kvm_buslock_test.c
-> @@ -93,10 +93,10 @@ int main(int argc, char *argv[])
->         vm_vaddr_t nested_test_data_gva;
->  
->         TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_SVM) || kvm_cpu_has(X86_FEATURE_VMX));
-> -       TEST_REQUIRE(kvm_has_cap(KVM_CAP_X86_BUS_LOCK_EXIT));
-> +//     TEST_REQUIRE(kvm_has_cap(KVM_CAP_X86_BUS_LOCK_EXIT));
->  
->         vm = vm_create(1);
-> -       vm_enable_cap(vm, KVM_CAP_X86_BUS_LOCK_EXIT, KVM_BUS_LOCK_DETECTION_EXIT);
-> +//     vm_enable_cap(vm, KVM_CAP_X86_BUS_LOCK_EXIT, KVM_BUS_LOCK_DETECTION_EXIT);
->         vcpu = vm_vcpu_add(vm, 0, guest_code);
->  
->         if (kvm_cpu_has(X86_FEATURE_SVM))
-> --
-> 
-> The test would also fail to detect if KVM completely skipped the instruction.
-> 
-> This is not rocket science.  If you can't make your test fail by introducing bugs
-> in what you're testing, then your test is worthless.
-> 
-> No need for a v6, I'm going to do surgery when I apply, this series has dragged
-> on for far too long.
+Both places minimize the runtime impact on kernels that don't have
+CONFIG_RISCV_USER_CFI, so I would like to understand the reasoning
+behind the decision to include one and not the other.
 
-Understood. I agree the test should catch such failures — I’ll take that into account in future work.
-Thanks for the review and for pushing this forward.
+> But sure, it may (or may not) have noticeable effect if someone were
+> to go around and muck with ALTERNATIVES macro and emit `old_c` only
+> if config were selected. That should be a patch set on its own with
+> data providing benefits from it.
 
--Manali
+The difference is small and each build and implementation can behave
+differently, so code analysis seems the most appropriate tool here.
+We must still do a lot of subjective guesswork, because it is hard to
+predict the future development.
 
+We should be moving on the pareto front and there are 3 roughly
+optimization parameters in this case: the C code, the binary code, and
+the work done by the programmer.
+The current patch is forgoing the binary quality (nops are strictly
+worse).
+The ifdef and the macro solutions prefer binary quality, and then differ
+if they consider work minimization (ifdef) or nice C (macro).
+
+Does the current patch represent the ideal compromise?
+(I can just recalibrate my values for future reviews...)
+
+Thanks.
 
