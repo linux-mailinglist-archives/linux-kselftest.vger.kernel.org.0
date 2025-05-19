@@ -1,213 +1,131 @@
-Return-Path: <linux-kselftest+bounces-33308-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33309-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDB7AABB473
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 May 2025 07:25:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48E51ABB486
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 May 2025 07:58:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B2023B5485
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 May 2025 05:24:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E7964171633
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 May 2025 05:58:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C77FC1F130A;
-	Mon, 19 May 2025 05:24:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 389D61FBEA2;
+	Mon, 19 May 2025 05:58:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GyxVJOxv"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="iaQAU/ef"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtpbgsg2.qq.com (smtpbgsg2.qq.com [54.254.200.128])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5AFA1CF96;
-	Mon, 19 May 2025 05:24:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE72A1E8322;
+	Mon, 19 May 2025 05:58:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.128
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747632295; cv=none; b=MgLh7fxFwwFhXPBY/UCacsIuYvUvEeDVvQR4ylOYGh3N7si65EAA2qCvVqlzN4D94Ci6AUQkfHq1gJTT66s7Kv978S3wWAAXmIvnd7OqM/2z6oqzznjhUodr6Wit6sWaXdlfNcwFmkeIoUQeZNje+zqMrZ+i4U91PgctWbAmQf8=
+	t=1747634308; cv=none; b=Bg4it2fc5rcUtfDV5FXdSJY5jzzoXVNrnBTBn82SKWbqA+w4klFEqtqPip3foQqf/43QjZNHD5l6M7w0Vdt3dc/mlSwGU1nj5cJqOpBGAUK4AbSs+tG1SdMvgcpP0nKTlOXvdZHroAWN4L65U2K741SlIQjRzsb3p/U/QqkMEOs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747632295; c=relaxed/simple;
-	bh=jiTVEkMPDck3ZXVnwfcCr1G6DDOSxv+4n2R0CgzFG7M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tqDggu6raG0w51khZYKV6dWyslAZIhZ1Gu80PKA15+37Fx6gOknQKb618YgHf6CtSvjPxn6ML8POR8gdvrtO0ErZZ9x1Gmg6/UnngwJ+ybactnpo53kZODlu7NtIG7sPEKlv9ITzf90G+HDmTxzjUOtcMaJXft2WvYau703xFJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GyxVJOxv; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747632294; x=1779168294;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=jiTVEkMPDck3ZXVnwfcCr1G6DDOSxv+4n2R0CgzFG7M=;
-  b=GyxVJOxv9iOh2oor3fJVSpYrO+dgnRXvgXxBN4GMUF2/7Ma/jnjBwYSa
-   AayFsIkYebiwGGAOogpNfJqesfA+Om3ZnXH1gi6cAlGL1U37eL2VRRyKm
-   uwm10aerDPR0Cig6XAlJH2BS3uVr5l1KTE1IUEy6DxTNLc4sFULRlvwRT
-   22Be1Lk55fKkkuNnvV6Vw+fByOyDD1GBLfdh9oi8URek/nu6Lqtg/d6P6
-   JK28k/TEy+MhWZRTlYdf+TUGYirFgyAKGZwKh3LBbdGA2+iVmzjxBePvD
-   IYRM6P6Jo/Www2sxPfrWXBI2TOUdwoNMoPNxDzBbg3XRKES2b+n7C9VcH
-   g==;
-X-CSE-ConnectionGUID: tm2rfTftSAeKg6anY0CnzQ==
-X-CSE-MsgGUID: HBrNMWhYSgyhMDNTBHc5bg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11437"; a="49621779"
-X-IronPort-AV: E=Sophos;i="6.15,300,1739865600"; 
-   d="scan'208";a="49621779"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2025 22:24:53 -0700
-X-CSE-ConnectionGUID: CgDmWs88TUuHrhD9vQA8Jw==
-X-CSE-MsgGUID: x1kdZNoCTfCrgNlU9bvxEg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,300,1739865600"; 
-   d="scan'208";a="162556027"
-Received: from dapengmi-mobl1.ccr.corp.intel.com (HELO [10.124.245.128]) ([10.124.245.128])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2025 22:24:45 -0700
-Message-ID: <71123914-ba9b-4ab0-b9c0-fa32fb53dfe2@linux.intel.com>
-Date: Mon, 19 May 2025 13:24:43 +0800
+	s=arc-20240116; t=1747634308; c=relaxed/simple;
+	bh=6CcJLoiNBie8gIMenSv7I45HQX4gsy7svoa1ApM84V4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FFvBacTIN+h3D5RaUAoJ/1Js5cFjZ9lou0zpzoynecfemZ7Ix721/OKPZBRR/MsdvPXxWXNVbu55J4le8QeYecCLYQ6JYpulEMtBnFUY4og0dR7lp+3Ay1PiS9e04ymDafzwpABWPlJ2ZK1RYMelhNlFUOLVtIN2mah9dC6IbEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=iaQAU/ef; arc=none smtp.client-ip=54.254.200.128
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1747634290;
+	bh=QbhOvH42YA0CW+6CFUcthXVUKo1LRCaG/L7a3rPi0uo=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To;
+	b=iaQAU/efS5amPIavReKNChk6h4oGmVS7tTKMoU7ihs1GTOZtvWbI1oO3V9//KBna1
+	 VtltQd1UlGyddoWAdLtk5VBvUGmUqdBAyP9vps4gDmfI2bqRkd03PGVGcKa2gnmVRn
+	 J8BlcniExCu0I3co4U6b6edjEvaMLID0tYZrAO6s=
+X-QQ-mid: zesmtpgz9t1747634288tc84d8360
+X-QQ-Originating-IP: GglaMseZBGUc4WdCZ6/ysBBpSmdfmH2PDlL81GL2hTg=
+Received: from mail-yw1-f182.google.com ( [209.85.128.182])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Mon, 19 May 2025 13:58:06 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 4176657921267320070
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-70cb1e8263bso17387327b3.0;
+        Sun, 18 May 2025 22:58:07 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWcaFkX/ynFmpA3bzRT/6/Hs4hkepJcxiy+pmX+YxpUnCx4ujWWOxI1ybsWTR999Ou93Lye5MbP65Zsgord6vhN@vger.kernel.org, AJvYcCX3k7eP000//SDDmyJASmyNbPTIHeM2Fk0toegE0gmKlY45nIRjMrjlrB+9Q3MIlZfbNfJpx+qj6A7DeGic@vger.kernel.org, AJvYcCXqx6H/h6RTKfcLQ/PhsBCduW/FUCuzJlTI3vy7jKFaB8Mx4Y4HEW/4kyPbE3Zrr6W3mCfmwBGswBI4rRFO@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywq9gMI5WRtixwfMmPv4CiUNE7KlXkh5+WH3gSotuHWi6R8naWW
+	cCDtwDtmKGu0tGxZsuJ/p6dWSVmQ5GbEwraytxF1NV6FGXLQtZV7xYAHyrYKXnlNTgbW45be7IQ
+	UWoM2AvjdW/CTMBVc+vD3WQMAEDMPBHQ=
+X-Google-Smtp-Source: AGHT+IEKI1LyAmmWVFV0YxqBG6TDs6apO21h12HhCbqhVWRE/6mxH2FfFUF2tilAhlqEkTmSbJQ93kqYYE2y5dgkpV8=
+X-Received: by 2002:a05:690c:7409:b0:6fb:b2c0:71da with SMTP id
+ 00721157ae682-70cab0e9404mr139629637b3.36.1747634285526; Sun, 18 May 2025
+ 22:58:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 32/38] KVM: nVMX: Add nested virtualization support for
- mediated PMU
-To: Sean Christopherson <seanjc@google.com>,
- Mingwei Zhang <mizhang@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
- Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>, Liang@google.com,
- Kan <kan.liang@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
- linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
- kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Yongwei Ma <yongwei.ma@intel.com>,
- Xiong Zhang <xiong.y.zhang@linux.intel.com>,
- Jim Mattson <jmattson@google.com>, Sandipan Das <sandipan.das@amd.com>,
- Zide Chen <zide.chen@intel.com>, Eranian Stephane <eranian@google.com>,
- Shukla Manali <Manali.Shukla@amd.com>,
- Nikunj Dadhania <nikunj.dadhania@amd.com>
-References: <20250324173121.1275209-1-mizhang@google.com>
- <20250324173121.1275209-33-mizhang@google.com> <aCc-q_udsn8o1vBT@google.com>
-Content-Language: en-US
-From: "Mi, Dapeng" <dapeng1.mi@linux.intel.com>
-In-Reply-To: <aCc-q_udsn8o1vBT@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20250515073449.346774-2-chenlinxuan@uniontech.com> <CAOQ4uxja322ZuOaHm2rLU1mPsqHsuSbAe=0g5Rc_oh=DmBcn0Q@mail.gmail.com>
+In-Reply-To: <CAOQ4uxja322ZuOaHm2rLU1mPsqHsuSbAe=0g5Rc_oh=DmBcn0Q@mail.gmail.com>
+From: Chen Linxuan <chenlinxuan@uniontech.com>
+Date: Mon, 19 May 2025 13:57:54 +0800
+X-Gmail-Original-Message-ID: <65FB323E429AEE4D+CAC1kPDOyYyvvkJr3yX=j4JE3q-jQwUN7tdkOG55HFjy6wE+DeA@mail.gmail.com>
+X-Gm-Features: AX0GCFtX2YiTPTZOUdCLIIDiOzwoVPNZIqwxtNWDa4biFVS0eEgE20nXEdY6Cmk
+Message-ID: <CAC1kPDOyYyvvkJr3yX=j4JE3q-jQwUN7tdkOG55HFjy6wE+DeA@mail.gmail.com>
+Subject: Re: [PATCH] selftests: Add functional test for the abort file in fusectl
+To: Amir Goldstein <amir73il@gmail.com>
+Cc: Chen Linxuan <chenlinxuan@uniontech.com>, Shuah Khan <shuah@kernel.org>, 
+	Miklos Szeredi <miklos@szeredi.hu>, zhanjun@uniontech.com, niecheng1@uniontech.com, 
+	wentao@uniontech.com, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpgz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-QQ-XMAILINFO: MkbhhZQIFFmG+dELmFObRLimNzc/3CqxCFotx6t6e/ZRwrozwOJQyHjH
+	5IjPxFC2hyWzuvj9HSa9CZ+4sOgWPwKLRF3dTezfPpueflKKTDG+Vo7gvIEaHz6xYUhQn5t
+	Zp6iFKhjzbUSSLRvkJC8IKqdYos6EbmhBB3QMwmVClRDQy2U+a314WmOw+Zb29qCjH7p/RV
+	r3+HcI1UZ3rOithGz3CuwyN3CWITLz9Ry2QY56s6hPEkkn2gJKXC6xDO5n60PmaUQ/1chUl
+	GxbsGjOZeV0oceHd7+5UfqNCM2Ogy+cAc4YgmkBC9W9hr/yYoYquRI+AX+bwW3SYDcA6zZ4
+	WDWP/AT9F3mCMJXtM16a7oFGnCQINVY9xFgSjXVzZ869AgCQhwCR8PR6sQ4YzTVRdhxl8S0
+	My3Wck36M1fCRhmmJkbYnX6Dt14mju13TydsxYG4h5T3DbmTUA+4btR9bPLVflHaG4O0d9Z
+	2bkkO0n2ScQlclF8etTfSFshyv7rWiahNbk3GEzLS0TSBHo0HelIfS7NSbUIPGTWoqR0pL/
+	DL5jhQEpYobsoRo9jlHKuh4fJysg0zHfNSwmY7Vz+SayYQxyCCOs9wGhs5mrPCMsPhbVkoe
+	kYzXGfvAJ2xNmmH/LjgQ5UtR4JiA0ronhFIS72/jkFEqOBaWX4K0oiElHyr/hwAjs0XotXW
+	SmSNM+34CuEot5Nf00QEQBID7Me7JtYbpvcYh3fHd6464jWhAdIa5+vdycFnCGju9a6ILF8
+	fBksCaE1Cci5cAiC42hjznR69lwsoitoJ2G3v1M1mDs0FzX302XuNzUpO0a08K7jwrIAT5M
+	tsRa63QEZKbiI8ZdKmEbum0z2XfeTRUHcGZUUkmNS1ldfOE4GSW++j+TXVAnuPklAAkqplm
+	4Nn7KBEAgHj9LXR9mN19luZv2zPuYy/8z5UjB3+6FRWdL+SziK9/LUWUMy1LRvnf6Eit5Hy
+	C9jAeufuiQTnNKX+UAkOn4Bgm7KDt2fYj7duHudaeKme84iNz6CVlkSmPRM4AzpYeBLNMeC
+	Sqc9S913OFavTXImPeSFaq9BL4H9z3hrqgBZsfxAtb3ClJihQdD9325yDWOzk33eZHHTh1N
+	TQFyPj8MEbg
+X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
+X-QQ-RECHKSPAM: 0
 
-
-On 5/16/2025 9:33 PM, Sean Christopherson wrote:
-> This shortlog is unnecessarily confusing.  It reads as if supported for running
-> L2 in a vCPU with a mediated PMU is somehow lacking.
+On Thu, May 15, 2025 at 6:27=E2=80=AFPM Amir Goldstein <amir73il@gmail.com>=
+ wrote:
 >
-> On Mon, Mar 24, 2025, Mingwei Zhang wrote:
->> Add nested virtualization support for mediated PMU by combining the MSR
->> interception bitmaps of vmcs01 and vmcs12.
-> Do not phrase changelogs related to nested virtualization in terms of enabling a
-> _KVM_ feature.  KVM has no control over what hypervisor runs in L1.  It's a-ok to
-> provide example use cases, but they need to be just that, examples.
+> On Thu, May 15, 2025 at 9:35=E2=80=AFAM Chen Linxuan <chenlinxuan@unionte=
+ch.com> wrote:
+> >
+> > +       ret =3D read(test_fd, path_buf, sizeof(path_buf));
+> > +       ASSERT_LT(ret, 0);
 >
->> Readers may argue even without this patch, nested virtualization works for
->> mediated PMU because L1 will see Perfmon v2 and will have to use legacy vPMU
->> implementation if it is Linux. However, any assumption made on L1 may be
->> invalid, e.g., L1 may not even be Linux.
->>
->> If both L0 and L1 pass through PMU MSRs, the correct behavior is to allow
->> MSR access from L2 directly touch HW MSRs, since both L0 and L1 passthrough
->> the access.
->>
->> However, in current implementation, if without adding anything for nested,
->> KVM always set MSR interception bits in vmcs02. This leads to the fact that
->> L0 will emulate all MSR read/writes for L2, leading to errors, since the
->> current mediated vPMU never implements set_msr() and get_msr() for any
->> counter access except counter accesses from the VMM side.
->>
->> So fix the issue by setting up the correct MSR interception for PMU MSRs.
-> This is not a fix.  
->
->     KVM: nVMX: Disable PMU MSR interception as appropriate while running L2
->     
->     Merge KVM's PMU MSR interception bitmaps with those of L1, i.e. merge the
->     bitmaps of vmcs01 and vmcs12, e.g. so that KVM doesn't interpose on MSR
->     accesses unnecessarily if L1 exposes a mediated PMU (or equivalent) to L2.
+> Nice!
+> I guess you could also verify errno =3D=3D ENOTCONN or whatever it is
+> in this case.
 
-Sure. Thanks.
+I am currently facing two issues:
 
+1. I am not sure about the exact functions of max_background and
+congestion_threshold. I have prepared a patch that adds documentation
+for these two fields, which can be found here:
+https://lore.kernel.org/all/20250514061703.483505-2-chenlinxuan@uniontech.c=
+om/
 
->
->> Signed-off-by: Mingwei Zhang <mizhang@google.com>
->> Co-developed-by: Dapeng Mi <dapeng1.mi@linux.intel.com>
->> Signed-off-by: Dapeng Mi <dapeng1.mi@linux.intel.com>
->> ---
->>  arch/x86/kvm/vmx/nested.c | 32 ++++++++++++++++++++++++++++++++
->>  1 file changed, 32 insertions(+)
->>
->> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
->> index cf557acf91f8..dbec40cb55bc 100644
->> --- a/arch/x86/kvm/vmx/nested.c
->> +++ b/arch/x86/kvm/vmx/nested.c
->> @@ -626,6 +626,36 @@ static inline void nested_vmx_set_intercept_for_msr(struct vcpu_vmx *vmx,
->>  #define nested_vmx_merge_msr_bitmaps_rw(msr) \
->>  	nested_vmx_merge_msr_bitmaps(msr, MSR_TYPE_RW)
->>  
->> +/*
->> + * Disable PMU MSRs interception for nested VM if L0 and L1 are
->> + * both mediated vPMU.
->> + */
-> Again, KVM has no idea what is running in L1.  Drop this.
+2. How should I test the "waiting" file? My current idea is to have my
+FUSE daemon stay in a state where it does not respond to requests, and
+then use some form of inter-process communication (maybe a Unix
+socket?) to make it resume working. I am not sure if there is a better
+approach.
 
-Yes. thanks.
-
-
->
->> +static void nested_vmx_merge_pmu_msr_bitmaps(struct kvm_vcpu *vcpu,
->> +					     unsigned long *msr_bitmap_l1,
->> +					     unsigned long *msr_bitmap_l0)
->> +{
->> +	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
->> +	struct vcpu_vmx *vmx = to_vmx(vcpu);
->> +	int i;
->> +
->> +	if (!kvm_mediated_pmu_enabled(vcpu))
-> This is a worthwhile check, but a comment would be helpful:
->
-> 	/*
-> 	 * Skip the merges if the vCPU doesn't have a mediated PMU MSR, i.e. if
-> 	 * none of the MSRs can possibly be passed through to L1.
-> 	 */
-> 	if (!kvm_vcpu_has_mediated_pmu(vcpu))
-> 		return;
-
-Sure. thanks.
-
-
->
->> +		return;
->> +
->> +	for (i = 0; i < pmu->nr_arch_gp_counters; i++) {
->> +		nested_vmx_merge_msr_bitmaps_rw(MSR_ARCH_PERFMON_EVENTSEL0 + i);
-> This is unnecessary, KVM always intercepts event selectors.
-
-Yes.
-
-
->
->> +		nested_vmx_merge_msr_bitmaps_rw(MSR_IA32_PERFCTR0 + i);
->> +		nested_vmx_merge_msr_bitmaps_rw(MSR_IA32_PMC0 + i);
->> +	}
->> +
->> +	for (i = 0; i < pmu->nr_arch_fixed_counters; i++)
->> +		nested_vmx_merge_msr_bitmaps_rw(MSR_CORE_PERF_FIXED_CTR0 + i);
->> +
->> +	nested_vmx_merge_msr_bitmaps_rw(MSR_CORE_PERF_FIXED_CTR_CTRL);
-> Same thing here.
-
-Yes.
-
-
->
->> +	nested_vmx_merge_msr_bitmaps_rw(MSR_CORE_PERF_GLOBAL_CTRL);
->> +	nested_vmx_merge_msr_bitmaps_read(MSR_CORE_PERF_GLOBAL_STATUS);
->> +	nested_vmx_merge_msr_bitmaps_write(MSR_CORE_PERF_GLOBAL_OVF_CTRL);
->> +}
+Thanks,
+Chen Linxuan.
 
