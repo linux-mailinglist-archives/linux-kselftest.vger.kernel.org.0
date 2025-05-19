@@ -1,56 +1,73 @@
-Return-Path: <linux-kselftest+bounces-33350-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33351-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95CC4ABCAC4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 May 2025 00:20:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8488ABCB2F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 May 2025 00:59:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7BF6E1B61324
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 May 2025 22:20:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31B8E3A99A8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 May 2025 22:58:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFA6821CA0A;
-	Mon, 19 May 2025 22:20:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD4EB21FF20;
+	Mon, 19 May 2025 22:59:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FNvPmYB/"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="fkFXWMWP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A91521C9E3
-	for <linux-kselftest@vger.kernel.org>; Mon, 19 May 2025 22:20:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFC561C9DC6
+	for <linux-kselftest@vger.kernel.org>; Mon, 19 May 2025 22:59:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747693225; cv=none; b=tAMOMJUqjLZZwZCR28e/NK+f5UZnXwTXg0d8eTuXprblVrJ4brr//cgFt7JNnP75rB6LgtK71akG/Ubsu1FQKh3+m/+gsvSv+A9mhsHLEBmbNMHa/xLutnw2nd5gcTCAwomdlAC+YP9+hyR0b4NZFSUUUKu6gAgPA695kmYjDfo=
+	t=1747695547; cv=none; b=FDip1MGCn4ld3EUEPXaMZ8Tr2vS3M7HOQFHj9lHFkZ3epQJ4xyJZuGldH4H9/ybnR+9qulYHCSIwAQwgFHUGJFVjG5Ddd1xNurITq7t5JtZVa930Wp2Pln/kRc6ajMZBhfvXj+lYLgQktg/AExPX3jIncq9IWCRxWCiWeaMolXo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747693225; c=relaxed/simple;
-	bh=uZ8XlymW+4rF1CnsOePthFc1cGC0345sXJLUZ4Dhuzo=;
+	s=arc-20240116; t=1747695547; c=relaxed/simple;
+	bh=kjwn2ds7cCMY6u8Wc4J5VzC7zaszlbkpn9nqAdYGxDc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=b4XCLJYjQkm1I1JmQsdD6JZSTVi4r75Kx9EOWWeIalHvNPaelpEuOkJuBmySaAXJSjQC+vDI00p7v0tW1yEK0BPNCFOhAYtb8684r3vpT4dn8awKjceCuQ4bb6hiscDmVBLQsOXqWxfmIeV1ik48WZy0iTxNksLzFNm49f+f2go=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FNvPmYB/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DD96C4CEFE
-	for <linux-kselftest@vger.kernel.org>; Mon, 19 May 2025 22:20:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747693225;
-	bh=uZ8XlymW+4rF1CnsOePthFc1cGC0345sXJLUZ4Dhuzo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=FNvPmYB/BWE9H4pFifR9X4JmFNEKfwcxgDeIguIj5zAZKVk7BKI0J+2xg1E9KOLg5
-	 7rXzPwj/YIhKUjsjgTPMxVgO1+LfTr/uJeV48TOWrOtDgjUnHT473ZgihBJIyUalqd
-	 LQrpmeF10pD6ZFTGdg86YK6y4WgAFc74hg1wKhocZyIANc0AnGJGagJgpmJozYK2jN
-	 +ELzpKsjWQJyxv/z5cGc+7xoul9LFqVo4np6BVa2cITCASyfIJvLDowtHPLcCcZJFW
-	 Fl+TVqlb6VZiIxO4iCIbUx3qFFJiL0b4PORwjEduJnZQ3SpI4KFXCfsXXQ6l1kYpCc
-	 Y5U59y7sAH+VA==
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6f2c45ecaffso46552156d6.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 May 2025 15:20:25 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUJMH83Hz1epL3rrrSbvbgbyqSO8lz4gMgD9IPA8naEimWW+66vahCet9TUkqog0dUKp2cXFk1I2dUk1IS1lVU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyidnge47NPnlKvtvj8VivIKCRLNUZoAsWJV9zvOIVHLUHZvtUC
-	X8SQRapcZSKFeXWOvS1gxt7ijqv2cdNaKHC/qAKafHeyPtmMpmDuoi1QkYjVRi4s3pu1gO0SfMA
-	NzefY407Uf+K4NUBUpjoRLapmNzpKffsMOsZY/QkH
-X-Google-Smtp-Source: AGHT+IHFHdg5xMZ80kod/4sph2VycUtK9qNlkm2FnJGRZxVkUq3RbTcJ3jP0aO1H2L1OVI6jAzpln5vFVLpAvKyKmlI=
-X-Received: by 2002:a05:6214:d4a:b0:6e8:9086:261 with SMTP id
- 6a1803df08f44-6f8b084b144mr244282176d6.3.1747693224025; Mon, 19 May 2025
- 15:20:24 -0700 (PDT)
+	 To:Cc:Content-Type; b=XLi6Ui4Dubtz3FfIicQJicTdB2wdrNWWLamDYrDV1oAotUGuh5QI3bTTzQr0vLUnseJFniwfwitzxhIAvr4NcFGlfp068HGdVqV1DTQjDeQiMjqlG/mRvSH0O1h47BQxoIxBtZ35vkzN+cDET1yw3a7E5MLDjSjFTyUEMIOfFr8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=fkFXWMWP; arc=none smtp.client-ip=209.85.128.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-70ca772985fso27882677b3.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 May 2025 15:59:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1747695544; x=1748300344; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p/RrrGUvS6xBKIaPYnBpsLPZNCZLvh9OPRpykB0Ulvk=;
+        b=fkFXWMWP+yIpMcz3/yLRTMSF7KTizTvEe/1IMUwI59Galoy+CCGn3uSpuTHianl9pO
+         I/qgZV5I35wpxgHkphUEYeObqMQnvBP++kkzVnYZOe9+lpgr1nrLt9TmqX/BT6EU8CfL
+         NbrHe5U3+tJdb6yV4rmXX1YO4FBeHYpS+2NuiUZxyHKcOgC1ZrzkkeRrFmvVDmSy7Hkw
+         OTgq8l49gun3sDfiqu0wWmwQtP9N+hDnFf+F9fyFgdKZQhtfUVMFUzrd2TeJHpECNber
+         1eVc8FF6HZZADKUTU5AbB9rhzvskwxDGXDgoDqz9QSepKUJEXP9WDkU8M5BBBHvHcGxh
+         tFKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747695544; x=1748300344;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=p/RrrGUvS6xBKIaPYnBpsLPZNCZLvh9OPRpykB0Ulvk=;
+        b=JpS1ECEF6klGipXViPshnuB9HYHslSsdcVn6C/YbwVcDNTb7/9ksfp7OnDPb4Ck8Ab
+         1lBWSf1Oub3lv8Edd2Gbnwr0BnowWjGIQftKPiGYZFaN9estZM0jtNUZU4zpv/1AjXdy
+         N68sKQNrL0YpLFwx7NXbOJtmxy0MkDevuJycOwmOhkKHDkpkStyGhXnHO/d3B54MOfNu
+         Afr3VNmwByOCOT1wM7nlFC3g0Ch6VP+ELF8G8A6iDEiVZVywEvVi/4sOk8jEbodX0w10
+         nnAhjZLOEo+awXmdYEi62ub6ohJqNMLKvllS2fhnjGJViLcT5JFu+yBTgxxe1ogsCpo5
+         Yn8w==
+X-Forwarded-Encrypted: i=1; AJvYcCWOabpe+0My2O9Tt4DkMHgX4lCCK5ONFPQUe6WifY8VIjkMMt/FL0fAW/YcxNViwEc7O39SvIP1Ri0P8RgVVro=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwBrcf4IB+YVOSRl+BnAOq9dHggfogUilzOq1puIXO9qbTu12H
+	jcmT05b9oJVueolJ0WEQKoHC1DVIbuJufOUktil7764UadKS9DW1+zCrxykB0z72NO9Y5EYHScD
+	E6EBseelWYJV5b8OkKjwS9WyCHO1HDAv91eZOOLTl
+X-Gm-Gg: ASbGnct2hC3d6b2eUpR1iVyQfdUJ0WThQkprC2eVKmh61qKVL7aRvFTfMinvzpi4g6z
+	r+8uFxtEWznf7ULiBq69cRlVnZOz3gJGtvJ2FXUhAzD+GWyUb+OAuF/LThJNEScOAD4+Q7s7BOG
+	E9OFwInlX71P9IcN0z4NjjoqF+VjRzRgOB
+X-Google-Smtp-Source: AGHT+IFgdXMx0++rCnS34CKw8hZgyEs80zXpEEvuAIv/c65tdIdqmkcl1gyVl8f56p6dX5jzkRw5EVPCF2N2N1x3l0g=
+X-Received: by 2002:a05:690c:4910:b0:70c:cbef:df27 with SMTP id
+ 00721157ae682-70ccbefe1f2mr105461797b3.14.1747695544492; Mon, 19 May 2025
+ 15:59:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -68,15 +85,15 @@ References: <20250502184421.1424368-1-bboscaccy@linux.microsoft.com>
  <CAHC9VhTJcV1mqBpxVUtpLhrN4Y9W_BGgB_La5QCqObGheK28Ug@mail.gmail.com>
  <CAADnVQ+wE5cGhy6tgmWgUwkNutueEsrhh6UR8N2fzrZjt-vb4g@mail.gmail.com>
  <196e1f03128.28a7.85c95baa4474aabc7814e68940a78392@paul-moore.com>
- <CAADnVQ+=2PnYHui2L0g0brNc+NqV8MtaRaU-XXpoXfJoghXpww@mail.gmail.com> <CAHC9VhRKZdEia0XUMs2+hRVC7oDzkBfkk5FPMD+Fq5V7mAk=Vg@mail.gmail.com>
-In-Reply-To: <CAHC9VhRKZdEia0XUMs2+hRVC7oDzkBfkk5FPMD+Fq5V7mAk=Vg@mail.gmail.com>
-From: KP Singh <kpsingh@kernel.org>
-Date: Tue, 20 May 2025 00:20:12 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ7oxFA3u9eKDpKgCsZsYsBojVJPHVeHZnVaYQ5e9DavmQ@mail.gmail.com>
-X-Gm-Features: AX0GCFtuAbaLmBw9yy0173D8s7LpAOVbxR9TeXNkvABXPMZF511wGOkzeZtojxE
-Message-ID: <CACYkzJ7oxFA3u9eKDpKgCsZsYsBojVJPHVeHZnVaYQ5e9DavmQ@mail.gmail.com>
+ <CAADnVQ+=2PnYHui2L0g0brNc+NqV8MtaRaU-XXpoXfJoghXpww@mail.gmail.com>
+ <CAHC9VhRKZdEia0XUMs2+hRVC7oDzkBfkk5FPMD+Fq5V7mAk=Vg@mail.gmail.com> <CACYkzJ7oxFA3u9eKDpKgCsZsYsBojVJPHVeHZnVaYQ5e9DavmQ@mail.gmail.com>
+In-Reply-To: <CACYkzJ7oxFA3u9eKDpKgCsZsYsBojVJPHVeHZnVaYQ5e9DavmQ@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Mon, 19 May 2025 18:58:53 -0400
+X-Gm-Features: AX0GCFuNK2GlgjCzp9NuXPlW8VAedGQJmwklDdgcpEoZxd4pfb2_T3t5Jc58lno
+Message-ID: <CAHC9VhQ7Rr1jJm=HY2ixUWpsRuwCxjOq5OTMfn5k5hRzxTCz-Q@mail.gmail.com>
 Subject: Re: [PATCH v3 0/4] Introducing Hornet LSM
-To: Paul Moore <paul@paul-moore.com>
+To: KP Singh <kpsingh@kernel.org>
 Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
 	Blaise Boscaccy <bboscaccy@linux.microsoft.com>, 
 	James Bottomley <James.Bottomley@hansenpartnership.com>, bpf <bpf@vger.kernel.org>, 
@@ -101,115 +118,138 @@ Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, May 18, 2025 at 11:34=E2=80=AFPM Paul Moore <paul@paul-moore.com> w=
-rote:
->
-> On Sun, May 18, 2025 at 11:52=E2=80=AFAM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> > On Sat, May 17, 2025 at 10:49=E2=80=AFPM Paul Moore <paul@paul-moore.co=
-m> wrote:
-> > > On May 17, 2025 12:13:50 PM Alexei Starovoitov
-> > > <alexei.starovoitov@gmail.com> wrote:
-> > > > On Sat, May 17, 2025 at 8:03=E2=80=AFAM Paul Moore <paul@paul-moore=
-.com> wrote:
-> > > >> On Fri, May 16, 2025 at 7:49=E2=80=AFPM Alexei Starovoitov
-> > > >> <alexei.starovoitov@gmail.com> wrote:
-> > > >>> On Fri, May 16, 2025 at 12:49=E2=80=AFPM Paul Moore <paul@paul-mo=
-ore.com> wrote:
-> > > >>>>
-> > > >>>> I think we need some clarification on a few of these details, it=
- would
-> > > >>>> be good if you could answer the questions below about the
-> > > >>>> authorization aspects of your design?
-> > > >>>>
-> > > >>>> * Is the signature validation code in the BPF verifier *always* =
-going
-> > > >>>> to be enforced when a signature is passed in from userspace?  In=
- other
-> > > >>>> words, in your design is there going to be either a kernel build=
- time
-> > > >>>> or runtime configuration knob that could selectively enable (or
-> > > >>>> disable) signature verification in the BPF verifier?
-> > > >>>
-> > > >>> If there is a signature in union bpf_attr and it's incorrect
-> > > >>> the prog_load command will be rejected.
-> > > >>> No point in adding a knob to control that.
-> > > >>
-> > > >> I agree that when a signature is provided and that signature check
-> > > >> fails, the BPF load should be rejected.  I'm simply trying to
-> > > >> understand how you envision your design handling all of the cases,=
- not
-> > > >> just this one, as well as what build and runtime options you expec=
+On Mon, May 19, 2025 at 6:20=E2=80=AFPM KP Singh <kpsingh@kernel.org> wrote=
+:
+> On Sun, May 18, 2025 at 11:34=E2=80=AFPM Paul Moore <paul@paul-moore.com>=
+ wrote:
+> > On Sun, May 18, 2025 at 11:52=E2=80=AFAM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> > > On Sat, May 17, 2025 at 10:49=E2=80=AFPM Paul Moore <paul@paul-moore.=
+com> wrote:
+> > > > On May 17, 2025 12:13:50 PM Alexei Starovoitov
+> > > > <alexei.starovoitov@gmail.com> wrote:
+> > > > > On Sat, May 17, 2025 at 8:03=E2=80=AFAM Paul Moore <paul@paul-moo=
+re.com> wrote:
+> > > > >> On Fri, May 16, 2025 at 7:49=E2=80=AFPM Alexei Starovoitov
+> > > > >> <alexei.starovoitov@gmail.com> wrote:
+> > > > >>> On Fri, May 16, 2025 at 12:49=E2=80=AFPM Paul Moore <paul@paul-=
+moore.com> wrote:
+> > > > >>>>
+> > > > >>>> I think we need some clarification on a few of these details, =
+it would
+> > > > >>>> be good if you could answer the questions below about the
+> > > > >>>> authorization aspects of your design?
+> > > > >>>>
+> > > > >>>> * Is the signature validation code in the BPF verifier *always=
+* going
+> > > > >>>> to be enforced when a signature is passed in from userspace?  =
+In other
+> > > > >>>> words, in your design is there going to be either a kernel bui=
+ld time
+> > > > >>>> or runtime configuration knob that could selectively enable (o=
+r
+> > > > >>>> disable) signature verification in the BPF verifier?
+> > > > >>>
+> > > > >>> If there is a signature in union bpf_attr and it's incorrect
+> > > > >>> the prog_load command will be rejected.
+> > > > >>> No point in adding a knob to control that.
+> > > > >>
+> > > > >> I agree that when a signature is provided and that signature che=
+ck
+> > > > >> fails, the BPF load should be rejected.  I'm simply trying to
+> > > > >> understand how you envision your design handling all of the case=
+s, not
+> > > > >> just this one, as well as what build and runtime options you exp=
+ect
+> > > > >> for controlling various aspects of this behavior.
+> > > > >>
+> > > > >>>> * In the case where the signature validation code in the BPF v=
+erifier
+> > > > >>>> is active, what happens when a signature is *not* passed in fr=
+om
+> > > > >>>> userspace?  Will the BPF verifier allow the program load to ta=
+ke
+> > > > >>>> place?  Will the load operation be blocked?  Will the load ope=
+ration
+> > > > >>>> be subject to a more granular policy, and if so, how do you pl=
+an to
+> > > > >>>> incorporate that policy decision into the BPF program load pat=
+h?
+> > > > >>>
+> > > > >>> If there is no signature the existing loading semantics will re=
+main intact.
+> > > > >>> We can discuss whether to add a sysctl or cgroup knob to disall=
+ow
+> > > > >>> loading when signature is not present ...
+> > > > >>
+> > > > >> As mentioned earlier this week, if the BPF verifier is performin=
+g the
+> > > > >> signature verification as KP described, we will need a LSM hook =
+after
+> > > > >> the verifier to serve as an access control point.  Of course tha=
 t
-> > > >> for controlling various aspects of this behavior.
-> > > >>
-> > > >>>> * In the case where the signature validation code in the BPF ver=
-ifier
-> > > >>>> is active, what happens when a signature is *not* passed in from
-> > > >>>> userspace?  Will the BPF verifier allow the program load to take
-> > > >>>> place?  Will the load operation be blocked?  Will the load opera=
-tion
-> > > >>>> be subject to a more granular policy, and if so, how do you plan=
- to
-> > > >>>> incorporate that policy decision into the BPF program load path?
-> > > >>>
-> > > >>> If there is no signature the existing loading semantics will rema=
-in intact.
-> > > >>> We can discuss whether to add a sysctl or cgroup knob to disallow
-> > > >>> loading when signature is not present ...
-> > > >>
-> > > >> As mentioned earlier this week, if the BPF verifier is performing =
-the
-> > > >> signature verification as KP described, we will need a LSM hook af=
-ter
-> > > >> the verifier to serve as an access control point.  Of course that
-> > > >> doesn't preclude the addition of some type of sysctl/cgroup/whatev=
-er
-> > > >> based access control, but the LSM hook would be needed regardless.
+> > > > >> doesn't preclude the addition of some type of sysctl/cgroup/what=
+ever
+> > > > >> based access control, but the LSM hook would be needed regardles=
+s.
+> > > > >
+> > > > > No. New hook is not needed.
 > > > >
-> > > > No. New hook is not needed.
+> > > > It would be good for you to explain how the existing LSM hook is su=
+fficient
+> > > > to authorize the loading of a BPF program using the signature valid=
+ation
+> > > > state determined in the BPF verifier.
 > > >
-> > > It would be good for you to explain how the existing LSM hook is suff=
-icient
-> > > to authorize the loading of a BPF program using the signature validat=
-ion
-> > > state determined in the BPF verifier.
+> > > I already explained:
+> > > .. a job of trivial LSM:
+> > > if (prog_attr doesn't have signature &&
+> > >    (task =3D=3D .. || task is under certain cgroup || whatever))
+> > >   disallow.
 > >
-> > I already explained:
-> > .. a job of trivial LSM:
-> > if (prog_attr doesn't have signature &&
-> >    (task =3D=3D .. || task is under certain cgroup || whatever))
-> >   disallow.
+> > I read that earlier reply as an example that covers a sample use case,
+> > I didn't realize you were asserting that was the only approach you
+> > were considering.  Perhaps that was the source of confusion earlier,
+> > we may disagree, but I don't intentionally "twist" words; not only is
+> > that rude, it's just stupid in public, archived discussions.
+> >
+> > As I mentioned previously, we really need to see an explicit yes/no
+> > flag from the BPF verifier to indicate that the signature on the BPF
+> > program has been validated.  It really should be as simple as adding a
+> > bool to bpf_prog_aux which the BPF verifier sets to true upon
+> > successful signature validation, and then an LSM can use this flag as
+> > input to an access control decision in a hook placed after the
+> > verifier.  Are you objecting to the addition of a flag in the
+> > bpf_prog_aux struct (or some other struct tightly coupled to the BPF
+> > program), the LSM hook after the verifier, or both?  It would also be
+> > helpful if you can elaborate on the technical reasons behind these
+> > objections.
 >
-> I read that earlier reply as an example that covers a sample use case,
-> I didn't realize you were asserting that was the only approach you
-> were considering.  Perhaps that was the source of confusion earlier,
-> we may disagree, but I don't intentionally "twist" words; not only is
-> that rude, it's just stupid in public, archived discussions.
+> Neither the aux field, nor the hook are required because:
 >
-> As I mentioned previously, we really need to see an explicit yes/no
-> flag from the BPF verifier to indicate that the signature on the BPF
-> program has been validated.  It really should be as simple as adding a
-> bool to bpf_prog_aux which the BPF verifier sets to true upon
-> successful signature validation, and then an LSM can use this flag as
-> input to an access control decision in a hook placed after the
-> verifier.  Are you objecting to the addition of a flag in the
-> bpf_prog_aux struct (or some other struct tightly coupled to the BPF
-> program), the LSM hook after the verifier, or both?  It would also be
-> helpful if you can elaborate on the technical reasons behind these
-> objections.
+> * If the signature is passed, it will be enforced, there are no
+> "runtime aspects" that need to be configurable here.
+> * What the LSM can specify a policy for is when a signature is not
+> passed, for this, it does not need an aux field or a signature or the
+> new hook, existing hooks are sufficient.
 
-Neither the aux field, nor the hook are required because:
+When the kernel performs a security relevant operation, such as
+verifying the signature on a BPF program, where the result of the
+operation serves as input to a policy decision, system measurement,
+audit event, etc. the LSM hook needs to be located after the security
+relevant operation takes place so that the hook is able to properly
+take into account the state of the event/system and record the actual
+result as opposed to an implied result (this is critical for auditing,
+measurement, attestation, etc.).
 
-* If the signature is passed, it will be enforced, there are no
-"runtime aspects" that need to be configurable here.
-* What the LSM can specify a policy for is when a signature is not
-passed, for this, it does not need an aux field or a signature or the
-new hook, existing hooks are sufficient.
+You explained why you believe the field/hook is not required, but I'm
+asking for your *technical*objections*.  I understand that you believe
+these changes are not required, but as described above, I happen to
+disagree and therefore it would be helpful to understand the technical
+reasons why you can't accept the field/hook changes.  Is there a
+technical reason which would prevent such changes, or is it simply a
+rejection of the use case and requirements above?
 
-- KP
-
->
-> --
-> paul-moore.com
+--=20
+paul-moore.com
 
