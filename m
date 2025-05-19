@@ -1,140 +1,114 @@
-Return-Path: <linux-kselftest+bounces-33316-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33317-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8ADBAABB6A6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 May 2025 09:59:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47173ABB7B1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 May 2025 10:46:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF203189596E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 May 2025 07:59:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A9363BA99C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 May 2025 08:43:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 060DF26981F;
-	Mon, 19 May 2025 07:59:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E65A26E15A;
+	Mon, 19 May 2025 08:39:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pjqEAHZP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dgrA1TEq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DC641C700D
-	for <linux-kselftest@vger.kernel.org>; Mon, 19 May 2025 07:58:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91D4326D4FC;
+	Mon, 19 May 2025 08:39:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747641539; cv=none; b=UEOMOLMxuazlGMDXTMw9GlpjLZiAD4AySzDDOMhh1Lkx5rdh0gtpVIMOf7snXjRMbvzlo5bBkHCkSfE5jxAu1Ayr3avkkT536nNVtOnIG6h3voiROO18DLcMqgP/lrBBGkzs/XC8WJ037WR4ROwkvDujne/6SsIIu0JhrJqmSl8=
+	t=1747643977; cv=none; b=ECnS3sLnwhB6Sgn6umOEaxBedOBrvuAdxb8UiU3stDHQjRVPmTJw+DmnO1BD+5Ab25fhyhZFL2QE9+KjOnjahENXQVewo9fpncZ4MCCqhXIRTmdTLT2ngY5pHhyVDEtoNywxYuOUbfCktSMQ0DPehxDJEEs5iqGtDdqUf+/S6LQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747641539; c=relaxed/simple;
-	bh=EbuXgYNC3YkFJf7lalZRaDMyCovxN1m7vKdcLXMkKvs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HXUMYnGqRD3i7i/YD6qg+VDvME0Azs5fEVKjZgFMpAiMqYFD/vLatdZqw62PXVX2gmhfW19GrgX5GL4Fgh7znyeInj6MJLGAt4wxpx9ElkhTVD6fMZ38JXgSZeIV9iY8s1G73xkoFBqDRIt0z84lEHVbp4U4JZxaQZ+H6jWMKYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=pjqEAHZP; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-30e93977f7cso2401536a91.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 May 2025 00:58:58 -0700 (PDT)
+	s=arc-20240116; t=1747643977; c=relaxed/simple;
+	bh=gkL4c0N8EQCQ/TM+Xgmyl4Xxmq9xWn4IgHVEm5KSkQc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=C1IVt3yxXnzBdFetWhJBpH/cUibXKpm0VQmDzTrG61+5h5HoPIpekYVw78g9bFmA649cxngaGy8tVx/fvCVkay3PmGEOrRDRqL0KffUn4nv/oQp9eF5m2l5bqQKPcaQ5+tq8TXO9Z+owYCIe+DbymI7cMEWefOdnQt3LqcNWeeo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dgrA1TEq; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-7390d21bb1cso3588658b3a.2;
+        Mon, 19 May 2025 01:39:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1747641537; x=1748246337; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RpvLkghwnQ67hxohbUA8tW0bPeYjdTkXfUPxTmszPjA=;
-        b=pjqEAHZPFWVHNAdv6FMGmafDTy0xGenR1ALVWIGz3hfVOX4XNHdR5eyUahQXHvd5g4
-         58S+U/8/OBBelhoagMieZkTN11U+0m50AVttxp6BIUkKmM2U+fuxsFYsLCr0cS9kP8yA
-         R0TT7y1HobZvWqhGbA/nunq+uhD2FU9rt6VEP/KK5RI/Rewu37kykoY/mFU8FqT593z9
-         PspSiXr7m7gyCjkjfu8dhVJH8GSKZ4TpBvu+zbDPzoTsgy/8QSwjehDszDik0qz6biYG
-         k8JGdleMV5+nmS38Ya48/Y3Jug/S4vQFM7nDCToHleRQas3ejDgraHFwxKkH+t4dWGcn
-         ZW6w==
+        d=gmail.com; s=20230601; t=1747643975; x=1748248775; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kENFOvYuWcx0UUtOBeD2O9KLGAkfolJVCKtEv6YXZCE=;
+        b=dgrA1TEq6Jny9s4ElzNcqfZusxqesrfd2cACSeLxmMF6R3nWw6KDgx+7DYFhHntJUq
+         gGs7lCkCr3TY3uJrWyCPtcAniXpDaCMFoP+Q11NsXYAJQLrzKWjqQH3NJ0si44NhNZdE
+         FvOSLS8vBRJDzhI1OA1lWLpQCn6LGKEJbz0CgAStZrqsXXnkUerwHcNSRt9dB/m4/9CG
+         YKyBTW+r7OvcLIqQ5UAP0+orfkk9eQTQpFAL+6bMPp1SghEbK+eR/C42zENeZsBvgZ3w
+         AOKUw+B198CbjxlFN8v7fjOUHBEOA03dnG7FytsI1e2hQHoLF09mVf9Hvy95BWfydofM
+         PX1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747641537; x=1748246337;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RpvLkghwnQ67hxohbUA8tW0bPeYjdTkXfUPxTmszPjA=;
-        b=uVSizg19XvI//2/cBrx0TZKQEJrThuM6bW8z0uRwaVa5hNMJN5D3i3mS+yQz5u3nbc
-         k155opvX74/M5v9fFgw4Et1fFw99gw5eZ2lvnuZlJRpWbgJi2TApcfPAogKXnVmnh+aD
-         OeR92ejjyCfWdBEXmF1nJ80K5xrZNcwnWoS3CTpJjC+j6jSV2Qqav70diUjb/+lpCr9L
-         AxDEz1S9ggUDvcbGFiERzjFpbe39uBtYVlHtFA+gTgRtOMvICwvVqWc1KloSkIAo7fI/
-         t2V51vhK2z9SnWm1beTkpLHe1oijPWNVY8XjBxD5o4wWjUZAVPPGeJvE91s9pnixaxJF
-         J28g==
-X-Forwarded-Encrypted: i=1; AJvYcCXNn8xZJgS7f0Co1NGkn84EAEa/Nx5EK1PrD+f6+XGOhLXx5BhbgRXt2AP8Si5qs4lE191/d+cg/WyRgoN6CgI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzNw0e5xVz7KZKv0uhPcZeXoP62fBJQu0itYmYRtg7Tzkm3wOSR
-	omm5r9c1UD6c2YATTWKLVmUxjQo5kLkkBjdmUP9EP36pT5Wq/t12DwhPPmPsf1dU0kY=
-X-Gm-Gg: ASbGncsinrXHGMROJwntwMjlMwh7eA29MkJbkBhEuL4xQh5vXjl+cH05wQgmCU1Iroa
-	C2NzdLxJM/RmgI3Wu8C4jj+TNPrY2m5vR3TBeC5akiMO1zEbqT43a7BuRcW6qe2CU/F8SPtc7M3
-	RjhsfPqfG8u3Eavisi5wupgQlM3rtbJVfEXa7+rUG2+P6FoJWlCtEoq/fpG3FNMSGa/UcOJluUm
-	i7ofok12ZCHfkxXHNoYlmNGkO014xxThZZC/OlIH8QyfPw3H8W1YJjkLHjAfAUq+nzan4JyWF3i
-	nKmv/+uF9iMiQGHTQzjDMlZCJZJTnNxmoSlJrZpVmaozd74QZ6jg
-X-Google-Smtp-Source: AGHT+IEZ6YoOJYJfcEn2EhDcAyO09w38EVkyVoz32suEBq8tkoBJ0tXmq87v02CJgG3P6opbs6/Fyw==
-X-Received: by 2002:a17:90b:4c08:b0:30e:ee6:6745 with SMTP id 98e67ed59e1d1-30e7d51f9f0mr20343707a91.10.1747641537491;
-        Mon, 19 May 2025 00:58:57 -0700 (PDT)
-Received: from localhost ([122.172.81.72])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-30e33451984sm9685833a91.23.2025.05.19.00.58.56
+        d=1e100.net; s=20230601; t=1747643975; x=1748248775;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kENFOvYuWcx0UUtOBeD2O9KLGAkfolJVCKtEv6YXZCE=;
+        b=EHUw6FEPM/j4dVM9FwKHTakfxPc1HeBfPMbW7dfSDd5c7V+HUr8gj9+2pC9pv055Jk
+         Vn5rx18B5eVhZanz/+7mhldujQvvUsGcRpV0IsOfrJIMuw9zxo8wrRvJeY0bqq0VGbQ0
+         A+ePW6Rx3Kk1kXrhs+BKUrviCYrEbj7ND+Z2zHpNeoDpNGLYKs+491vj8gQHdXFEzzMo
+         JG4WcDODJ94LqHBa6e7nHF7+3woqlUTUie+LcYLuxONFYEk+Y3mARGIhD7pJjmf0KsNG
+         qhOt46DGSYyYDYHDjqiUy3JVOCTJTdLCxAXg+i6bSRQ8LAuKv+E+zYX9SJf7bLRacNzo
+         0hxw==
+X-Forwarded-Encrypted: i=1; AJvYcCW43LgrjQJbDhNdi2JbpVIEwO87Pj2fSg6PWkYUa4JOe+gtVO79UPd07W5+MexmeDDdWTlvOqj8q7REUmPX3InU@vger.kernel.org, AJvYcCX7NVtmt4mIvg64dgsqzruMXd/B4ze6/FHSt8RZ6mHWvTtyHv+cr5PYymYhOJppgTFnDaZMRFJdIGWVmbo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwcT2l8xWrhKUmuhtorFVZWCFbblcxIyO9BylNbWXlT4QqVDKL
+	ayBV3ZQePCJ7EFTcyP51KnA9h3Wov1zBjvAT9shIQ1blCxSnW77NESY8
+X-Gm-Gg: ASbGncvOnSrMBa1TZga7iX/sieKQjNjexHPcRlr3LHH0Gytyp/yiuqoweHCul1SAR+4
+	BhIQam4E0f/ZsuJaY7e15zG10ajz+a+PCWMXAXFzF6bRulAg4SCSIKTcf5fVUU5gFfWxf17uSb6
+	zeOw3lx+QY5H7xzvZMFwfrX7PTwEkxe3xtkAIHeAQrMYiKxOr3jA67CLqdNcyGme/b1ylGAh1p+
+	PlIr+lk1n+CIvxznxd4dDtmCOBN24R6SZ1P0J6Xe9b1m+0VPbSTN30puPUxIX1HltcPqDjZUc0i
+	anfw0vEKszp3DyWTY/Iq8RR0ogcES8OB6BMkugTp9kTiOioA+O6e/yDm1Vlzav1Ust8WNQ==
+X-Google-Smtp-Source: AGHT+IHnMFyK4wPedXmqlwx7Uy3jvXCrtJ1LuMTdzsfxvdbOvP3q5VhbVHgZkkiVl/c3T1W5ka8SXA==
+X-Received: by 2002:a05:6a21:3511:b0:1f5:9961:c44 with SMTP id adf61e73a8af0-21621882725mr20142425637.3.1747643974720;
+        Mon, 19 May 2025 01:39:34 -0700 (PDT)
+Received: from localhost.localdomain ([45.252.73.168])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b26eb084428sm5705950a12.57.2025.05.19.01.39.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 May 2025 00:58:56 -0700 (PDT)
-Date: Mon, 19 May 2025 13:28:54 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Swapnil Sapkal <swapnil.sapkal@amd.com>
-Cc: rafael@kernel.org, shuah@kernel.org, gautham.shenoy@amd.com,
-	narasimhan.v@amd.com, linux-pm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/cpufreq: Fix cpufreq basic read and update
- testcases
-Message-ID: <20250519075854.opnlhjlbybrkvd2k@vireshk-i7>
-References: <20250430171433.10866-1-swapnil.sapkal@amd.com>
+        Mon, 19 May 2025 01:39:34 -0700 (PDT)
+From: Anish Dabhane <anishdabhane71@gmail.com>
+To: skhan@linuxfoundation.org
+Cc: Anish Dabhane <anishdabhane71@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kernel-mentees@lists.linux.dev,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH] selftests: cachestat: fix typo in error message
+Date: Mon, 19 May 2025 14:08:38 +0530
+Message-ID: <20250519083840.57099-1-anishdabhane71@gmail.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250430171433.10866-1-swapnil.sapkal@amd.com>
+Content-Transfer-Encoding: 8bit
 
-On 30-04-25, 17:14, Swapnil Sapkal wrote:
-> In cpufreq basic selftests, one of the testcases is to read all cpufreq
-> sysfs files and print the values. This testcase assumes all the cpufreq
-> sysfs files have read permissions. However certain cpufreq sysfs files
-> (eg. stats/reset) are write only files and this testcase errors out
-> when it is not able to read the file.
-> Similarily, there is one more testcase which reads the cpufreq sysfs
-> file data and write it back to same file. This testcase also errors out
-> for sysfs files without read permission.
-> Fix these testcases by adding proper read permission checks.
-> 
-> Reported-by: Narasimhan V <narasimhan.v@amd.com>
-> Signed-off-by: Swapnil Sapkal <swapnil.sapkal@amd.com>
-> ---
->  tools/testing/selftests/cpufreq/cpufreq.sh | 15 +++++++++++----
->  1 file changed, 11 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/cpufreq/cpufreq.sh b/tools/testing/selftests/cpufreq/cpufreq.sh
-> index e350c521b467..3484fa34e8d8 100755
-> --- a/tools/testing/selftests/cpufreq/cpufreq.sh
-> +++ b/tools/testing/selftests/cpufreq/cpufreq.sh
-> @@ -52,7 +52,14 @@ read_cpufreq_files_in_dir()
->  	for file in $files; do
->  		if [ -f $1/$file ]; then
->  			printf "$file:"
-> -			cat $1/$file
-> +			#file is readable ?
-> +			local rfile=$(ls -l $1/$file | awk '$1 ~ /^.*r.*/ { print $NF; }')
-> +
-> +			if [ ! -z $rfile ]; then
-> +				cat $1/$file
-> +			else
-> +				printf "$file is not readable\n"
-> +			fi
+Fixes a grammatical error in the output where the word 'to' was missing.
 
-What about:
+Signed-off-by: Anish Dabhane <anishdabhane71@gmail.com>
+---
+ tools/testing/selftests/cachestat/test_cachestat.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-if [ -r $1/$file ]; then
-    cat $1/$file
-else
-    printf "$file is not readable\n"
-fi
-
-
+diff --git a/tools/testing/selftests/cachestat/test_cachestat.c b/tools/testing/selftests/cachestat/test_cachestat.c
+index 632ab44737ec..1406bc9f2b87 100644
+--- a/tools/testing/selftests/cachestat/test_cachestat.c
++++ b/tools/testing/selftests/cachestat/test_cachestat.c
+@@ -76,7 +76,7 @@ bool write_exactly(int fd, size_t filesize)
+ 		ssize_t write_len = write(fd, cursor, remained);
+ 
+ 		if (write_len <= 0) {
+-			ksft_print_msg("Unable write random data to file.\n");
++			ksft_print_msg("Unable to write random data to file.\n");
+ 			ret = false;
+ 			goto out_free_data;
+ 		}
 -- 
-viresh
+2.49.0
+
 
