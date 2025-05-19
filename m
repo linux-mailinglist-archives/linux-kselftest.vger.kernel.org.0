@@ -1,77 +1,76 @@
-Return-Path: <linux-kselftest+bounces-33321-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33322-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5ECFEABBCB9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 May 2025 13:39:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5D91ABBCE2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 May 2025 13:45:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E69B218940AE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 May 2025 11:39:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6AC4C1659FE
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 May 2025 11:45:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB08C27603D;
-	Mon, 19 May 2025 11:39:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4098F20FAAB;
+	Mon, 19 May 2025 11:45:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="NWrP+V+e"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="3L6zwXiN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2087.outbound.protection.outlook.com [40.107.101.87])
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2062.outbound.protection.outlook.com [40.107.243.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F05644C92;
-	Mon, 19 May 2025 11:39:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.101.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7FDD1C700D;
+	Mon, 19 May 2025 11:45:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.62
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747654754; cv=fail; b=ZMr6Tk14wAMuoVJMyesEEwWd9YkViQuc67PsH/Rv0s0ldIdGSVAPGR/ebwEcBA3Tr31HkOSMhwUYolTuo/mO0+26N1TzX7hXQfN0nR+jNgEMuvfpQNVeaoDN8ZhcIgvr9qp1QEMi6nlT+r2NM4O1eFaW0wZ1mQLdwd0+WR4bHes=
+	t=1747655135; cv=fail; b=hi34PaVeKpWiRzM0JcWMezzQFVUwsUFDSUA9umNdoC3SbgPG2vbmamozE5/+bnFq3St/oVWu8FkZ3qOF+E11R+a3Pm7K1oEcSgGyhDNU8Dad2Io4V5xXuKJwq8AX3IyJPYw5YMfcHizh/cgHrG7nmlmwC5uFRCL81tECp00t/Lk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747654754; c=relaxed/simple;
-	bh=GPSXGJRU7j+vKV47vnbGl9j12/pRCTUw6z/OED+YRGc=;
+	s=arc-20240116; t=1747655135; c=relaxed/simple;
+	bh=a2GAXJTWteEJGYHMvWN2ZUmPwVYCBFXlPgt/sLBEecU=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=rsCyQoJp0vVjgiBH8QZ/hBaPpxKzsoOaYGPTSrv2T7Uyc75AdAT5On9czbLtrsyoczvv1X3d1XCN7YsRihq+rcTjNvPQ0qoOheHgwWI/TWWzxTFbXRDGn8kZpG/qMEQAcVKvuKG9uBYhjxcbmfZzirtnxJUNoKff5zn4s00TaBc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=NWrP+V+e; arc=fail smtp.client-ip=40.107.101.87
+	 Content-Type:MIME-Version; b=Z++HOrDtlkfwzSgD9xhGYhynpeQZg4CP9nje43jiz1hlIKv2LXqwg4VPF2bxrGfAy2GTp/KnWfZ8N2K4j41ZBD8SDaf2g0i8ulDghsUrd75yDs2aPfpFxJKE0098pYuhWMhkPXM7RQKjsHbnakdO38GpWp1+0+6hvCtnaUnLVHI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=3L6zwXiN; arc=fail smtp.client-ip=40.107.243.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=t+48LeX6Fjtc/YDbO2XRv49lSu/uv2IjPztQ9kZIDDvcnSyzKQhkKDnweuZ5EoRfmfw4RJrb2Ur+7DmU5YiSQoFC1wIx/U5SzyLZAvqDiRGWV78vO0nc2aeObbpOKXOMW6/DmHen/JeqB1++MBSK9d7T6GdwZPjpJYVJDo0vAcKiQlr/dZfdFj+d1oQVrmUCXikDTD1TKdzZau3T/ArU1ai/BNQN40pIb53rOJMW39xtJ/NEUxviVUYCJKqVtGYc34yJc7i9YTyz9T2/f398OasF8mnza4GPPVDOQri3Pq7ZhRVPXH5amWHU6DUh5Gi4GDTHVhG/A5lKRUVSKoBgPQ==
+ b=Id1ryFkFdc+HHUzA8C/zwShgQncj6nKW0czGxE8eh0eQtUbDV1y5414TAx5XcaHoxS1GGtYVgmuxViVs2h4cZKgLr8qG8Imw9b24U9vVywhlErbPUEl3md2z8kE61LE35xNPit9I4yn2TAI4M6TQbzuSEDr4FvDSPffBm3Rf1QVKVjyzfitXwuj+rrS4lDWsPp9VuAddC2OQ7uF0uuMCdgW3cw3ekVpjWzyW5Osegbd2AegAYVYmLOHMNwaDhR9nLzYC7zrr0Ek2vCi31j/bL6pftqPe2FcS8vGEfd8hhsHCWqY4KSKnQ8U346T9Dfx2q89HX3OusndsYIrNGlOYeg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pnNPrf9RvclxbaBaB0wB+61qgH3zfrp1cOGO3R6JgF8=;
- b=uhIfMoxwsXnWxv2xuR4vAgs59rkFpK+QaRzQloGumrsEpJVk8tJ6eFWRvJhEmB3pP43ShoFX+3LYLvQbZIerjWq27FhYIpXEznsSPZtMyMKBEJFuXxIrkFi/PPUhzPjiA/52ME0MH4Q8EC35B5g4FwAwfKis8kW5sPne6u6QwnSZR/GJU8vfE6gyNAV8PK3316o1C4SjWx/hHMnN9rSxRR4pgCK0X2+eHqzdtA5OHvE6s+2juWF44qdq1BXNm/Jfo83wbRIJM6iBxt8SXRJ+3OWpIZFB+MaejIzFooKzvOrvifWdezB8qEe57ddm9qwoKISqUVsYwaBKvqay2BTJXg==
+ bh=V2Db8k5oQapz7gSsrZVxFU3+caJylwGvG1VvO/gFpmo=;
+ b=GQtbCZ9m/GTyACh38tCI8QM6MA+I9eYjdyVNfpvwMUs1Ml1T33yH6XuFWzMpuRD7p3SfgpszsRy4hjDp+IcKul03W9W9Tzvnm+QzEUdAFkIFiMp9jq5FzHR6+iT/FXkMEB4ySbGpuTBsbbKeTGVxSex3T6A9OpELOsjXTaOt9Y+mSkFA4lD67WutmrZSxL2xE+V9YRnshllyQ7UAqHH4RXRDjHaUvDIWnWWZwBB2eg16JV/56M6WLTv+55AB8IdUB8qg7CtiiIfkumC2W/8cIX0laSrYXQFYxkE13sNaUTHVHIjK1H8WnG6HTTeqMT+QkzNweiTt9/rB0nXsbhM0BQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pnNPrf9RvclxbaBaB0wB+61qgH3zfrp1cOGO3R6JgF8=;
- b=NWrP+V+ekb7rkVhYH7twbsGOp3uWwD5nGhgFDx/LAVI3DNuKxrCTjL5LdKk9CifISWxpMy8L665XE9LpnPIgloILNajdBlEGOCRrvx5hJY7n0qbo3c8/yCIcCWcNcJVuIrVDqhX7GUKt+WsZ13OvBdK89qjpvbLw9HFqzphB0tA=
+ bh=V2Db8k5oQapz7gSsrZVxFU3+caJylwGvG1VvO/gFpmo=;
+ b=3L6zwXiNAquvdkZJ5JzhSgVjyKx1CYeOh1c9kzp9OXInzpaM5zDCBbtoVBZ/eW9eXCmi/qfPc08MMzXrRwRleHuXancufiBrvQPS1DzOedSn7B3QADI0zPI+HbreulzLA3EexG4sE0NplqCAPCQ0oS50gvKXnl1/0A1UPd0+ETM=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from DS7PR12MB6214.namprd12.prod.outlook.com (2603:10b6:8:96::13) by
- SA1PR12MB7174.namprd12.prod.outlook.com (2603:10b6:806:2b1::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8722.28; Mon, 19 May
- 2025 11:39:09 +0000
+ DM6PR12MB4385.namprd12.prod.outlook.com (2603:10b6:5:2a6::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8722.33; Mon, 19 May 2025 11:45:30 +0000
 Received: from DS7PR12MB6214.namprd12.prod.outlook.com
  ([fe80::17e6:16c7:6bc1:26fb]) by DS7PR12MB6214.namprd12.prod.outlook.com
  ([fe80::17e6:16c7:6bc1:26fb%3]) with mapi id 15.20.8746.030; Mon, 19 May 2025
- 11:39:09 +0000
-Message-ID: <6822063e-1ea3-423d-9728-5832ea53e4c9@amd.com>
-Date: Mon, 19 May 2025 17:09:03 +0530
+ 11:45:30 +0000
+Message-ID: <e77951e3-8606-4935-a05f-88b092d5771d@amd.com>
+Date: Mon, 19 May 2025 17:15:24 +0530
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 0/5] Add support for the Bus Lock Threshold
+Subject: Re: [PATCH v5 5/5] KVM: selftests: Add bus lock exit test
 To: Sean Christopherson <seanjc@google.com>
 Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
  pbonzini@redhat.com, nikunj@amd.com, bp@alien8.de
 References: <20250502050346.14274-1-manali.shukla@amd.com>
- <ff1f0e75-a13c-4f6f-82db-94dc600d6367@amd.com> <aCeLcLiioNJYXhRh@google.com>
+ <20250502050346.14274-6-manali.shukla@amd.com> <aCeR2TjPzC_OYBfG@google.com>
 Content-Language: en-US
 From: Manali Shukla <manali.shukla@amd.com>
-In-Reply-To: <aCeLcLiioNJYXhRh@google.com>
+In-Reply-To: <aCeR2TjPzC_OYBfG@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: PN4PR01CA0038.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:277::9) To DS7PR12MB6214.namprd12.prod.outlook.com
+X-ClientProxiedBy: PN4PR01CA0035.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:273::16) To DS7PR12MB6214.namprd12.prod.outlook.com
  (2603:10b6:8:96::13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -80,108 +79,253 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB6214:EE_|SA1PR12MB7174:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0bd54b2f-93f9-4eb7-13c3-08dd96c9c4cc
+X-MS-TrafficTypeDiagnostic: DS7PR12MB6214:EE_|DM6PR12MB4385:EE_
+X-MS-Office365-Filtering-Correlation-Id: 266377fc-a00e-44fb-08ae-08dd96caa7e8
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?cExONE5aOG83YUNHdFkrbGFySzZ3TDFxTFovR2NROWsyVFhCQ0tsNjJtM01r?=
- =?utf-8?B?VllieDlKNm11dW94YmpCVUowL2NCdEVVeGsyMktib3ovblg4OG9haldwWVIw?=
- =?utf-8?B?dWlKeEUxcTEwdjF6UmN3ekh6cndJQzViaTdYRXJJVC9vY0p0c1BhZllHckpn?=
- =?utf-8?B?R012a0hNMXRhWnVDY0d0cGZhLzZsSy9UcG1COUo2eTVLdFJjSW8xcUNRUnNJ?=
- =?utf-8?B?WDVzOFdWbWRhUm5OcnZuekE2Q2RSRjlBdnpEMm9XL0RRSHYxYTdKbVo1Kzdt?=
- =?utf-8?B?c1NIRnNOWFBjaHhGbEJhMXBPdTk4N0J6bzBTOU9DdUdLN0phOG5RWFg2M2Jl?=
- =?utf-8?B?dmJ5QXE1aXIxckFRa3lTT01kejdWb1pCZjcvcEo4d1ZWYTNyRUY5RjYvbnMx?=
- =?utf-8?B?SmFLQ2RqRC9HV3dUbFdqdG43aU5MNVN5bXlxeDQ1bXdoMHFuUTlhMDBBM0hn?=
- =?utf-8?B?OWptZGM0RjR5ZzI5bnJ4enlUYStGdEx2aDljQUlYOW5BOXJlQWxXQS9SWXhM?=
- =?utf-8?B?bU5BRFlBc3FrZnU4ejJqVEdZTXMxdzdnWFA2aHdYaUd0M0pDVTkraythcGNs?=
- =?utf-8?B?YThERXZDaUdYQ1l4aWx5WFJIRkFaM3Z4MXNncjZtU3V2V3Fjd3pleWRJa01T?=
- =?utf-8?B?TzM5NHJzcnhmanV3N3U0ajNsS2R2OVRXL0ZzaU5hUHR1dTJ3QlZJTjB4M0F6?=
- =?utf-8?B?Vy9HSm9ldTYyTDRTZkVRTVMvQkVvWmFXR1hKdmpjalc4SFRoK2tGNEZtaXBG?=
- =?utf-8?B?WXlPZGZtaFJHeGwxYnVwd3lQZXFvZFhoelRBT1RsYWc1blZ4UWdEblpCSmRP?=
- =?utf-8?B?VU9GeEJzSys3a2U2T25HdENQZ2lycnJCQnFSQmNDWnl4S2hUTTdYdjlsTnFl?=
- =?utf-8?B?ejl6VUdVWGZRY3FUaE5HODNKM2NtTFRWOVNzMlBidVZFR2JFL250ZERUaHJ6?=
- =?utf-8?B?RlNQSmZiWlBOYm1ZQWROb3VocmJPaU5xMUw1VUVncGMxUG4vbzFwbm5kM1di?=
- =?utf-8?B?RGhSTUlzNUR1V1dvVmdIbXJadjdlYk9vS1NkVFdDMTRyZWdOcWhhUVRwZDll?=
- =?utf-8?B?Zk5uTHM3V3JTZFViTzBieHJ6UTFMZWo2U3I4L3FKQk45TGZ1VzNHOFNxOFJl?=
- =?utf-8?B?K3pXeHVmc1hoSDV3Y1A2bWVuRzdOUEw4aUhKWG9iOUxqSVJwNGQ4UXhnSDlq?=
- =?utf-8?B?eGN5UUJJQ2d1Zk41WVB5RmNTS2R4TVpaM1hDRzV2Ly9qYnk4Mzg5TlVCZUtB?=
- =?utf-8?B?NTZHRHdJT1hUTCtLbTExMUZLakZlLzhUVVdwQzhOQURQeU03eUMvTCtaQlJn?=
- =?utf-8?B?SlBmYVN0T0paTTJJZGxvUjdneDVWazdVRW9kUTBoc2xIZFFtbFJ0cFhKZVRI?=
- =?utf-8?B?TU5ERmZYL3BjWURUSUp6QVphNFlSN29tRWxOaWFWNVFuK25TZjhTaG5ML0JS?=
- =?utf-8?B?c1liUStTY1B0VDkxU21nTCtUdTVqdkprbzArakRqYk1JUExFVUFaVFBVdVVF?=
- =?utf-8?B?K2t5endsalI0MTQ0Y2lxQ3ZySWx6Y096TEd5UXVmVGVDbEQ0ZFhnUHdGTlFS?=
- =?utf-8?B?T1g1SjI3WHgwSmlpOFZvZEZIS25DUVJtT2RKRU5WTmlRSGM4MXdrQk04dkNn?=
- =?utf-8?B?VkkrOFdxaWpDNkFOTjJwdTR1OUxRVDVSRktLWUUwWHFVMldQbE0xYTcvSWRB?=
- =?utf-8?B?T2Nld01OeTVra1ozQ3U4Q3JFV0FNNEV4cm8vZG5ObkVHVTA3M1dnVTZKYTEx?=
- =?utf-8?B?TVJRUWhxSHEzZmNsTGtlb3BjLy9NcGtNdzE2SVhqMlVWMjJOcm16VExrMXRJ?=
- =?utf-8?B?M3k3QlRSMGhZZ1ptSnNUbzg1VDlHSzk0Rndtbmo1V1ZsbkZ0NzZZaVZyWHQr?=
- =?utf-8?B?by9nMXUvL2RDTDFzZ1JPVEV2Qk1qSkJrS2JXQmNGRmxkRUlLcFZVNmtrczJM?=
- =?utf-8?Q?3t9naHnc8bM=3D?=
+	=?utf-8?B?YWZqM2RNWGhpd2JDd01UTjdTUmFnQ1YxK3o5Q0hKRUdKK1hZRDh4cFpnQWh3?=
+ =?utf-8?B?T3h5VU1jelQzZjBSREE3WXVlbktvb3lobzR4VmwzUlp4VHNCb0x3V3M0QVVZ?=
+ =?utf-8?B?U3FXWVJiUDdHWWtCaFZpUERYNFFrSTlndnFRdWxBVjJJSk53eFc5eHlabTRQ?=
+ =?utf-8?B?VzRWRkFDK3kxUC9iTWRqRHI3MmgzZDhSenNQdXc5U2ZoWlRHYkJUZDhNUEhh?=
+ =?utf-8?B?LzJCVnA1WE95OXk3aFJ2K2pXcUgxSzNZRzJoc04zMUIrMWQrY0VLZ3I0TGZ5?=
+ =?utf-8?B?UzZpTnFCK09BbU5QajJsdDhmQkpDdWtDWHd0OUh3ZlRNVVpCMVZLbWxWSzBz?=
+ =?utf-8?B?TS9rNk9wdkRmclR2a29IbzA0U2tiTmQyWmpKRjZXYXhCdGI2SGJHNkdrYlY2?=
+ =?utf-8?B?alZKTFBZWGRmeXZocmhYY0pESmdvU1VsVUtleHpjZ1NxdjZTMFAvYnVQRStt?=
+ =?utf-8?B?SGdiY2psWWFZZDhLNk1sYWRQRnRsYzFEeUs0T1llNEZmcmp0OVdodTN2Z1hi?=
+ =?utf-8?B?dUdqOWRmbXBaMFk4NnNwa1pmcHB3dEN0Mmozais5UVp1dnVmK0FRUnprYjdm?=
+ =?utf-8?B?ckV5bGd5ZGFtcmwreUNiNTYvQXdyWTJwQ3dUdmxheVM3V1Y5U1NWTGdTdFZC?=
+ =?utf-8?B?a1ZEY0lSYTd1MWg1N3Uybk5UbXhycFNDSUM2M3ovZTlITXczWGUxbzJQcWtL?=
+ =?utf-8?B?TGczSU1xdGVTSTd2Rk9aZitJRS9xZlFaeFhkVXZKdDA1cURUb2hDcmN5c1Fl?=
+ =?utf-8?B?S09ualg1akQvR05oc1JPUjlRd3QyVm0yTTB6REQ1WFh5Z3BOanJpN0Z4cUxw?=
+ =?utf-8?B?c29mRFNWaE5BbmxvZVNSRXI3UHZiSmZJMkhhSHJUVG5NSU9yQlgxdWI3b3Nz?=
+ =?utf-8?B?cklXWEkwVWJWL0ZHRUVnMjFUUmlWM0U4d251NFZGQTZhVEQyRlBLR0V0bHNR?=
+ =?utf-8?B?T1czZ2drTkhjQllsVytGeW5MNnM1dHpzUW5uWkc3aVl5L3hWQ0NpL3crOGpO?=
+ =?utf-8?B?K0lRNHZndU9mWUY5NCtsNUFpVVNqVmZMbXdsWW9Ea1h3QXIzQ1llT0pSRDlN?=
+ =?utf-8?B?TWYwdE9xVTdmVWhyTjJGZXRpNytlTUVkZExWSXZFUERHQ1BiR0JmTTg5bGxU?=
+ =?utf-8?B?OEhHTTdOTzNEdHZ1SmpUd3RyZzVWYktUdVFtbXV3eUZ6RDVFekVtaDVOQndq?=
+ =?utf-8?B?WGVyMEd1YUpyWThCdm00YnN5UGV1Y1c0dkZFWTFPOTVqQk5GTzE2Wkl6bXFm?=
+ =?utf-8?B?OFE2VVdycC9HUE5kMkhMaDRUUDYyVzV5b2x4bVU5WExIV0lKVUdueDVMWTd1?=
+ =?utf-8?B?bk1ZY1N3OHdXdDA4N0szV3g1bEovTHM5WFZNeGxGMTVodXNBbmdnYWxVTjRx?=
+ =?utf-8?B?UnRsTm5WSkVhV3NmVjc4a0dUSmpmcnU5a2lSREVlNW0wRWo5dzlMYmxvTW9j?=
+ =?utf-8?B?MmFVTEpyaktPekkyRlBxZEFBWGZIWEZvNDJvSnI1K3ppeHRBUGd4bmFteFBE?=
+ =?utf-8?B?Q3kvRVJoZ2pZVmxwZi92V0JoK25hVTlWL2doMjRMSGg5RFBjakFuNHJMaWFY?=
+ =?utf-8?B?Z093V3RxYXNwWlF4UytSc0tIeVNSLy95YTRpSllPVUx3N1piQzl1NS9XWXB6?=
+ =?utf-8?B?Tms0UzZmUEt2TWgzYi9DOVFlU1BIcGdMdEo3Q0ltMmE5V3c5bXJmM2svZ21m?=
+ =?utf-8?B?R2p0VDFtYi9Qd3VzdWc0a2Z2WnlYY3JKd3pzNmF3NDVkVFRqSXFWdStGYjBr?=
+ =?utf-8?B?WllxYXdaN2U1b1l1VE1XVDZCaUdxMjFuc1o1SFNlR2JIa1dxRkd0eVNIbTFs?=
+ =?utf-8?B?VG15TFZ6QWVDQWRkNUpZdWs3MjdEVTBSb3pqNysreXdNRDU1MzlkUGh6bmt4?=
+ =?utf-8?B?N1dKaG1ydFFIdDhHdHBoUlhUTU9McGgxVm01ZEViMlJrL0E9PQ==?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6214.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6214.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?ak1UcnBCRGRVRTRJeHJCSTl4Q3h5bmNyTExBM0ljaGxHUG5oaGtrWUdGK3d1?=
- =?utf-8?B?NU9vcW9KK216REpmNEdac2xGa3FJcjd3N1BJNTFiM3VvRGpzeklOS1RMb2xG?=
- =?utf-8?B?bzgyVGRYU2ErN3dtWDJ5TGZjYVpDcWV1QlRnWlJnQnNDSEpISy9tdTZpUDZJ?=
- =?utf-8?B?UndvU0xBRnRFaXdvdG16bGt5ZHVGQlJWQ1dBZTloZTU2bWxsZ2pOVFRHWk1w?=
- =?utf-8?B?N0p1TEp0NjV6YU9LS0o4VHZqbFpubWVCNHFIRU4xQVVaZitTZVZleElzMytm?=
- =?utf-8?B?Q2t0ZFRORW9DNnRKajZFQWYxNTJvWktPd3Q4NTAzSlZOOTBNeTIycExLZXpU?=
- =?utf-8?B?a1FDUldtM2VEekhxRFRObEFKVVlxR2kyUmRSb1JqTEhhdTY0enVMTWNjc0Fl?=
- =?utf-8?B?OStTbzFSODltT0dPYW5GMEY3cmZ3NWUxcmhxZHRuUFpZWkowK25XWnk2RHla?=
- =?utf-8?B?UXpzQWpILzlVc3ZJY0tvdWlaS1dhZThJMUlwOWhSZThSYytlR3l4dzhpNytt?=
- =?utf-8?B?QStLTUlaRDNJUEMvaWNXaEVTczVrOHQ3eEVFWGdQdkNNVjRWVmlLU2I3cWFI?=
- =?utf-8?B?Z25CK2Q5Qy9WMVBhaHFnWkNWTHVKcUlWcURjc0ZNclllSU9UaUVna011SjVL?=
- =?utf-8?B?R2EvOGNMT0NzellScU9jRjFUMVNTaTM2UkdkTDQ3ekVHblJ2VENSSHAzWkZ4?=
- =?utf-8?B?UzlzdVVHY2cvUjhzRmtJUXN0U0RES3ErbHl3VmdvS2lUWUFKWjJyZW1QbitU?=
- =?utf-8?B?M3kyWGttMCsyOHc3Q2kxZ2NrSFRhRWJqbUdteTdoUnozbGcxM216VVBtVEtL?=
- =?utf-8?B?NTgwdXJhZFd2ZUFONm1pdGc5YmFWUkdSWndCdjNlYUIwSEEvenBRT3AzSjk5?=
- =?utf-8?B?MjJDbm5XZWFHNndadDFVeXFNbi9MT0hQK1Zhc2RDNTlZUE9DYlZCcTloTnds?=
- =?utf-8?B?b1Q0WkEreHd6bldnQmVTeGErNXBFQ0hweUxuSXAycVVqdWs0RUhXZVlUeUVT?=
- =?utf-8?B?QytuditCQW9iRkU5dGdleTM1Y3Z3amFNR2lFUUJ5OC9xUi9NQnI0bUFBOFd4?=
- =?utf-8?B?R3YxNkEzTEtLTmdDeEZoNlMzT0hMTW1CRDhtMzR5UHZqaE9MQWZIM1RWSjdD?=
- =?utf-8?B?VWoyNm4rSmszL0ppUjR6N1drSGxvL1I4aXZpMUNEZ1dpMjRXS3NoQkhjblN5?=
- =?utf-8?B?UkxqaUhJTW01dndoZTNadTJyc05hNE1MSldUclF5am1rMkpPWGIxeGduYmti?=
- =?utf-8?B?UDZmeWtBSitDdjhnOG5MdmZLVU1iTHF2NWpibFNZMzRLSEdTUlhJZ3M0K1k5?=
- =?utf-8?B?QlMzYTZWSlRna1R0VXdya1FLeEdzbFphd3pNWlVxQlBiUWhWRmRmQXlnZ2ZY?=
- =?utf-8?B?WWJIUjhIUFY1RXp3a0JQUkEvQ3FZT3F5a2VtR0V3UFQyZ21zUVNEOTBQcVh0?=
- =?utf-8?B?blIxTFRUSUxlVWVYS25WNTAzazVXbmhHSGU0VjhaZnc5QTQxSmthdUNDOVJM?=
- =?utf-8?B?V2RjNERSM21ZZnQxRUpJUGNmUXBReWxaRnV0M3FLbGl5Q0k2Z3YrQkdaVCs3?=
- =?utf-8?B?SWdIMDc3MzFwblhJeXY1SElpdXdRSmVZUG5iN0ExRURIOUZWQmZXb2dPQllN?=
- =?utf-8?B?RkxGYnZMWkwxenZxYVNtbWttYzhGRGVORXh3cXIzUWhOZENWMFJDZ2M2WEFy?=
- =?utf-8?B?VGUvbzFGSWIrcXAxN1p6Tkp2Z0syRzA0N1ZiL3hxamw2REcwbG9vN2pRVk5m?=
- =?utf-8?B?WnpaN3NsbWZzNWtkbHVxU082RWRlTENPQi9SWmpSb0JQZDN6Rm5OMUdKS3BO?=
- =?utf-8?B?NTlyRWlpdmc1RFJjTmFVeVNPUjlqVFhKTStpTElNc2hrTElpMXVRUlRDRmQr?=
- =?utf-8?B?ZlZuQkFxSXdUK25qSDd2aXZuS21ocm9qSTZXQ001RWptdTRUOTdnbGF5bVhU?=
- =?utf-8?B?ejFOQndBQmRLbHAvS2Fic0NwSE1VU2xENkVXa28yQTIrN05lcHo3Q3RTaFQ5?=
- =?utf-8?B?WmVhQnVhZkxGVlp4VFI2M2l6UjNLdzA2b21XQnV2RGlRditVd3BEZFEvNDJt?=
- =?utf-8?B?UUpxRTJOM0hoZ09YczVIZ3pRVXUwQi9xK3hlU2lKQXdTT3ZJQm9FcjUvdG1U?=
- =?utf-8?Q?qVr0FwQjRdV1yWUgztz2UcVuV?=
+	=?utf-8?B?R1VscFVsYll0eStyQUhiUnZTVloveHU3UEdXQ0xpdmVWdWxBWnBpQ1RoR2NM?=
+ =?utf-8?B?MEFpME9QT2YvRVE0TXRJbzAzSDdCZFR3VnVVRWIraVNiTVFPRm1lN3JrSVNV?=
+ =?utf-8?B?UDRzNGZ2NldaNGZWMXlZVkkwMHpWMnhyVnRWZkU0RU1mSHJQbDQ2d3RnbElv?=
+ =?utf-8?B?bUdhV0RiMTdxSFFranRhdWxjUmtwRlB4T0FpZlVWYTVGeXM1NW4yZ3ZWK1c0?=
+ =?utf-8?B?YWF4MmtaRUtWSGMrTUhwSHZsamRJUUsyY1kvOGN0SmR3Y2MyUHZUcGFlSU9E?=
+ =?utf-8?B?MitiZnhvVHpwd0Uxb2VjcUpkRjVNZjRHQlNEMW1nOVR3a0ZHemQxalczeU5I?=
+ =?utf-8?B?OTdVNXZROUtmV1hvVldUdngvTVpsdVlFQ3RHZTJHeHVYN1BpVXl2NHY3djB5?=
+ =?utf-8?B?U1RpOTVLdVZWSHZweUZhZEs1dmNyaGVOdUVKcW1VS0FLZjhBZklqYzBPUDdC?=
+ =?utf-8?B?cXY0RFNNeVFMYlZqbmIvQmVnM1ZZMXgwWjVoMWV6TkRqL0g0WUhCTVY2ekN3?=
+ =?utf-8?B?RzAxTEcyUmR1ZHM4bkNQWmlWOTlHS001WUFjWWFuWE1PbFRiaUJKSVdJcEp1?=
+ =?utf-8?B?UW9ndWlzMUhicWhZK2h6dWkvZ0ZzdHdZcDhOdndrejNraHVoRGtJaktxZ3NG?=
+ =?utf-8?B?TGNwcE9IaEFMbkxlWWFOeEwvKzVuM1RzK1lCejFzSmNOZG90TGJKb2JKOGZh?=
+ =?utf-8?B?NkhqdWxYVDJlYk5ZYTh4dUpuUHpjY0JZZDhqcDdWeERXTG9RcWF4V3lWa1N1?=
+ =?utf-8?B?bGZvbWRFSXg0UndVLzVKNzkzK1Y2Qmd4QjdmVHNmeGIza1ZnMXc4bjdtM3JQ?=
+ =?utf-8?B?Slo1ZDlyTTFoOXNhT0Q1dkxmaG1PRy9Ca1hVVkpBdDV1SHFub1JXaEhLa1hG?=
+ =?utf-8?B?S3k5VTBjK3EyNjFlN3Nld3VzNTI3WTVlYlFYSkpDZjFWWXRoSldxTWo2VUNq?=
+ =?utf-8?B?eG9PbllmQi9iNVhSTHd0ZjN1c2hIVzNTN2EwY3VVUEJnUThlcTgzVFU4Z3Rz?=
+ =?utf-8?B?cFpLVDh5YzZ3K25UWXA2TVRTYVVTQ0pDUk9raFBjYUZqNTJRY1A5bTNtOURj?=
+ =?utf-8?B?NkxLY05nUGpHd0lvTHBaUUh4b2U0MHhnTnBERHBUT29mUjR4YVBKTStmQTV6?=
+ =?utf-8?B?cUZnZXRrRm8wb1hsTnhIVFlrc3RSWWhiNWFtSHlVV2VXU01rT2tRMnVCaFFJ?=
+ =?utf-8?B?RTNuRkR2VTBWL0I0NHFVaW4zejMzOEsyVDAzeTdhTlZUMjZmT0xNTTMyMC9G?=
+ =?utf-8?B?dUFsYW9JOHR6emJHZWtHNjBwQ0VSM3NySlRKUHEyWTdjWC8xcnloTTNNTi9G?=
+ =?utf-8?B?WTdtSnlTTVcrMEl4ZmdFdVovaUFwSHhVSSsrdWEvSG16bmFkMU9VMnhYYjRU?=
+ =?utf-8?B?aVBDZXlIL3lOaWRpVitGeXkvYkVUaktwaGlPU3ArZkluaGliV2VHbHgxWkx5?=
+ =?utf-8?B?TDRua2FuQlZIRGhqdThGRzJXQ1BtUHMwamtNRFZDZlRHK1pYOGlXL1FXQkhm?=
+ =?utf-8?B?djNnNHA0YVNRTDMwYWF4VEpuZnFyeTFJQlVhVm9YODdhS2FOcDh4cDBleUJm?=
+ =?utf-8?B?UXJKRnhRSFd6VlJKY2RNRUNEcHFScGZlYkRSTEM1T29qdU1xS0c4TE1pbklC?=
+ =?utf-8?B?dW1vc1RDMWtGVGtweEdIZWxkT1JrMjU3R0ZqZ2ZVaHE1UVhmZTl5VzNvZ1R3?=
+ =?utf-8?B?aUpvL1gwMDdNNlNnOVFrbVBuYUR0SlFkZFUzOUlHMCtkemU5Nks4MlU2OVR4?=
+ =?utf-8?B?REdiV1k4SFUxbE9ZUUNLMkhrcUZnRnJ5em91cFp4RDkyNlV5NEQ3ZnpEaFZG?=
+ =?utf-8?B?UHpiMTZZdnRDME0yLzZ3UVliL0ZIbjRCMzBCeUF6Z2t2QmpVOHVVeTk4aFMv?=
+ =?utf-8?B?cHpSRzVpWjIxYVhaRnluaUk1OGdtSnEvWTUzVEdnYWNGVnVaR2FkZkt3ek1D?=
+ =?utf-8?B?dGRxck1pbURPWEVPQXRYYm9RYTcvd1VSY2tiVWtpUkpraWRhRS9tYlJmbXJs?=
+ =?utf-8?B?aWJIbHBXcGdIdW5yRS9saEJpN1o0M3UxVGdRS245U3o3VEtzZllHd2xtYnlI?=
+ =?utf-8?B?ejNnWS9wb25DRmlIRkltbU43SVozK2ZKR2c3dm5CdGJWR3VYRXF5Qi9BZDNi?=
+ =?utf-8?Q?wNN8yRI4U68Dlyvsahig81AIQ?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0bd54b2f-93f9-4eb7-13c3-08dd96c9c4cc
+X-MS-Exchange-CrossTenant-Network-Message-Id: 266377fc-a00e-44fb-08ae-08dd96caa7e8
 X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6214.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2025 11:39:09.5408
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2025 11:45:30.5327
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: F+3rXAx3CYD68cmDV/NBD15GeNna0wg0AqUFbS+Y3LAoI585tYWG+UdeZDpGZWOrVOVCl5rwmzcswUJDliN/ng==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7174
+X-MS-Exchange-CrossTenant-UserPrincipalName: ce7a7YV73QH26fNTrQtOmNUaQk6cicOzIKY+F7KGF09ExWAQI9/yZ76K26GiHc8dDS7wYxfw2WAaEQVb5Yj2Vg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4385
 
-On 5/17/2025 12:31 AM, Sean Christopherson wrote:
-> On Mon, May 12, 2025, Manali Shukla wrote:
->> A gentle reminder to review patches
+On 5/17/2025 12:58 AM, Sean Christopherson wrote:
+> On Fri, May 02, 2025, Manali Shukla wrote:
+>> diff --git a/tools/testing/selftests/kvm/x86/kvm_buslock_test.c b/tools/testing/selftests/kvm/x86/kvm_buslock_test.c
+>> new file mode 100644
+>> index 000000000000..9c081525ac2a
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/kvm/x86/kvm_buslock_test.c
+>> @@ -0,0 +1,135 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/*
+>> + * Copyright (C) 2024 Advanced Micro Devices, Inc.
+>> + */
+>> +
+>> +#include "test_util.h"
+>> +#include "kvm_util.h"
+>> +#include "processor.h"
+>> +#include "svm_util.h"
+>> +#include "vmx.h"
+>> +
+>> +#define NR_ITERATIONS 100
+>> +#define L2_GUEST_STACK_SIZE 64
+>> +
+>> +#pragma GCC diagnostic push
+>> +#pragma GCC diagnostic ignored "-Waddress-of-packed-member"
 > 
-> (a) Trim your replies.
+> Eww.
 > 
-> (b) Don't do whatever you did that generated 8 bajillion "prerequisite-patch-id"
->     lines, which causes b4 to barf.
+>> +
+>> +struct buslock_test {
+>> +	unsigned char pad[PAGE_SIZE - 2];
+>> +	atomic_long_t val;
+>> +} __packed;
+> 
+> You don't need an entire page to generate a bus lock, two cache lines will do
+> nicely.  And there's certain no need for __packed.
+> 
+>> +struct buslock_test test __aligned(PAGE_SIZE);
+>> +
+>> +static __always_inline void buslock_atomic_add(int i, atomic_long_t *v)
+>> +{
+>> +	asm volatile(LOCK_PREFIX "addl %1,%0"
+>> +		     : "+m" (v->counter)
+>> +		     : "ir" (i) : "memory");
+>> +}
+> 
+> If only there were utilities for atomics...
+> 
+>> +static void buslock_add(void)
+> 
+> guest_generate_buslocks()
+> 
+>> +{
+>> +	/*
+>> +	 * Increment a page unaligned variable atomically.
+>> +	 * This should generate a bus lock exit.
+> 
+> Not should, will.
+> 
+>> +	 */
+>> +	for (int i = 0; i < NR_ITERATIONS; i++)
+>> +		buslock_atomic_add(2, &test.val);
+> 
+> Don't do weird and completely arbitrary things like adding '2' instead of '1',
+> it makes readers look for intent and purpose that doesn't exist.
+> 
 
-Thanks for the feedback. I’ll be more careful with reply trimming and avoid generating
-unnecessary lines in the future.
+Got it. Thanks for the feedback.
+
+>> +}
+> 
+> ...
+> 
+>> +int main(int argc, char *argv[])
+>> +{
+>> +	struct kvm_vcpu *vcpu;
+>> +	struct kvm_run *run;
+>> +	struct kvm_vm *vm;
+>> +	vm_vaddr_t nested_test_data_gva;
+>> +
+>> +	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_SVM) || kvm_cpu_has(X86_FEATURE_VMX));
+> 
+> There's no reason to make nested support a hard dependency, it's just as easy to
+> make it conditional.
+> 
+>> +	TEST_REQUIRE(kvm_has_cap(KVM_CAP_X86_BUS_LOCK_EXIT));
+>> +
+>> +	vm = vm_create(1);
+>> +	vm_enable_cap(vm, KVM_CAP_X86_BUS_LOCK_EXIT, KVM_BUS_LOCK_DETECTION_EXIT);
+>> +	vcpu = vm_vcpu_add(vm, 0, guest_code);
+>> +
+>> +	if (kvm_cpu_has(X86_FEATURE_SVM))
+>> +		vcpu_alloc_svm(vm, &nested_test_data_gva);
+>> +	else
+>> +		vcpu_alloc_vmx(vm, &nested_test_data_gva);
+>> +
+>> +	vcpu_args_set(vcpu, 1, nested_test_data_gva);
+>> +
+>> +	run = vcpu->run;
+>> +
+>> +	for (;;) {
+>> +		struct ucall uc;
+>> +
+>> +		vcpu_run(vcpu);
+>> +
+>> +		if (run->exit_reason == KVM_EXIT_IO) {
+>> +			switch (get_ucall(vcpu, &uc)) {
+>> +			case UCALL_ABORT:
+>> +				REPORT_GUEST_ASSERT(uc);
+>> +				/* NOT REACHED */
+>> +			case UCALL_SYNC:
+>> +				continue;
+>> +			case UCALL_DONE:
+>> +				goto done;
+>> +			default:
+>> +				TEST_FAIL("Unknown ucall 0x%lx.", uc.cmd);
+>> +			}
+>> +		}
+>> +
+>> +		TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_X86_BUS_LOCK);
+>> +	}
+> 
+> *sigh*
+> 
+> This doesn't actually ****VERIFY**** that the expected number of bus lock exits
+> were generated.  KVM could literally do nothing and the test will pass.  E.g. the
+> test passes if I do this:
+> 
+> diff --git a/tools/testing/selftests/kvm/x86/kvm_buslock_test.c b/tools/testing/selftests/kvm/x86/kvm_buslock_test.c
+> index 9c081525ac2a..aa65d6be0f13 100644
+> --- a/tools/testing/selftests/kvm/x86/kvm_buslock_test.c
+> +++ b/tools/testing/selftests/kvm/x86/kvm_buslock_test.c
+> @@ -93,10 +93,10 @@ int main(int argc, char *argv[])
+>         vm_vaddr_t nested_test_data_gva;
+>  
+>         TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_SVM) || kvm_cpu_has(X86_FEATURE_VMX));
+> -       TEST_REQUIRE(kvm_has_cap(KVM_CAP_X86_BUS_LOCK_EXIT));
+> +//     TEST_REQUIRE(kvm_has_cap(KVM_CAP_X86_BUS_LOCK_EXIT));
+>  
+>         vm = vm_create(1);
+> -       vm_enable_cap(vm, KVM_CAP_X86_BUS_LOCK_EXIT, KVM_BUS_LOCK_DETECTION_EXIT);
+> +//     vm_enable_cap(vm, KVM_CAP_X86_BUS_LOCK_EXIT, KVM_BUS_LOCK_DETECTION_EXIT);
+>         vcpu = vm_vcpu_add(vm, 0, guest_code);
+>  
+>         if (kvm_cpu_has(X86_FEATURE_SVM))
+> --
+> 
+> The test would also fail to detect if KVM completely skipped the instruction.
+> 
+> This is not rocket science.  If you can't make your test fail by introducing bugs
+> in what you're testing, then your test is worthless.
+> 
+> No need for a v6, I'm going to do surgery when I apply, this series has dragged
+> on for far too long.
+
+Understood. I agree the test should catch such failures — I’ll take that into account in future work.
+Thanks for the review and for pushing this forward.
 
 -Manali
+
 
