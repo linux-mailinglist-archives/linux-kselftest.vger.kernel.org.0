@@ -1,65 +1,65 @@
-Return-Path: <linux-kselftest+bounces-33307-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33308-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5898ABB46C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 May 2025 07:21:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDB7AABB473
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 May 2025 07:25:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4E18416F568
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 May 2025 05:21:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B2023B5485
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 May 2025 05:24:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A6761F1507;
-	Mon, 19 May 2025 05:21:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C77FC1F130A;
+	Mon, 19 May 2025 05:24:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B+XTDIfh"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GyxVJOxv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC0AA3595D;
-	Mon, 19 May 2025 05:21:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5AFA1CF96;
+	Mon, 19 May 2025 05:24:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747632082; cv=none; b=WoFSQEGGG4dw0wjZ2L2RawfKRkaZF9W5fcedR5nABnout9NrvWp7OuT913HiC9/qcG1YR3/eJkKiARdFLS3c25DJ5JgJrCRM5Zzlzo/5CusHN8/2M2NlvuhgJ+7FAH2jBqd8/G5uqpVRJb/lQQdCrNEpz7VzlptoaXW91t2e3Xc=
+	t=1747632295; cv=none; b=MgLh7fxFwwFhXPBY/UCacsIuYvUvEeDVvQR4ylOYGh3N7si65EAA2qCvVqlzN4D94Ci6AUQkfHq1gJTT66s7Kv978S3wWAAXmIvnd7OqM/2z6oqzznjhUodr6Wit6sWaXdlfNcwFmkeIoUQeZNje+zqMrZ+i4U91PgctWbAmQf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747632082; c=relaxed/simple;
-	bh=SY0Y7hYN39xgQcVqGaPVqYZ0mV3XyiT8xPuG0QcFo2c=;
+	s=arc-20240116; t=1747632295; c=relaxed/simple;
+	bh=jiTVEkMPDck3ZXVnwfcCr1G6DDOSxv+4n2R0CgzFG7M=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EygCJgn+DouUNfllVwLDSlliUagmd5WE/bxi9gZEh8bbVv8HFTmK7jfxMH33As4f6dva+998Y6tzwRquO/lWCJwZNnRGHHRMszHe79peKdeG2wwKCZm9x17yklXH2/HFt9CTwPY9r6Gblrg5R4KwwE8mk/2sHkAMItqC+NXQsBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B+XTDIfh; arc=none smtp.client-ip=198.175.65.16
+	 In-Reply-To:Content-Type; b=tqDggu6raG0w51khZYKV6dWyslAZIhZ1Gu80PKA15+37Fx6gOknQKb618YgHf6CtSvjPxn6ML8POR8gdvrtO0ErZZ9x1Gmg6/UnngwJ+ybactnpo53kZODlu7NtIG7sPEKlv9ITzf90G+HDmTxzjUOtcMaJXft2WvYau703xFJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GyxVJOxv; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747632081; x=1779168081;
+  t=1747632294; x=1779168294;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=SY0Y7hYN39xgQcVqGaPVqYZ0mV3XyiT8xPuG0QcFo2c=;
-  b=B+XTDIfhcqW1OAJyexVvKh1XlAbs1f+uJCR0G4macooHP1J1bibo+9OH
-   SV1LoiOovebp42ocLuN2jeUTEyjOjoow8xA+lj2DO7Trm4F0sU2ysTbG1
-   yp/v1YxK84myNHoUvaWZREvGvqp4xKjBPYTc2zDKXJabXkUgdTYwGWWU8
-   tPEhtO9zkzr0ZM1iS/5l9q40gMzpH6bYgdTgeJEtyjh+SBx9uVaMU0ZfG
-   lXHzLMVeD1MriltVR9SyloHJNpkQShWxBPbYo0e6Nboer0MY/hjGIeEUc
-   zfO/+i5ZWwxImD3UvAdglNsUX+9jmXTMDr287GsGOVlrqF6Mzz15bg85Q
+  bh=jiTVEkMPDck3ZXVnwfcCr1G6DDOSxv+4n2R0CgzFG7M=;
+  b=GyxVJOxv9iOh2oor3fJVSpYrO+dgnRXvgXxBN4GMUF2/7Ma/jnjBwYSa
+   AayFsIkYebiwGGAOogpNfJqesfA+Om3ZnXH1gi6cAlGL1U37eL2VRRyKm
+   uwm10aerDPR0Cig6XAlJH2BS3uVr5l1KTE1IUEy6DxTNLc4sFULRlvwRT
+   22Be1Lk55fKkkuNnvV6Vw+fByOyDD1GBLfdh9oi8URek/nu6Lqtg/d6P6
+   JK28k/TEy+MhWZRTlYdf+TUGYirFgyAKGZwKh3LBbdGA2+iVmzjxBePvD
+   IYRM6P6Jo/Www2sxPfrWXBI2TOUdwoNMoPNxDzBbg3XRKES2b+n7C9VcH
    g==;
-X-CSE-ConnectionGUID: s9MD7767Qz6eQcuBD4FFCQ==
-X-CSE-MsgGUID: XieQkNdpSui4VnHgRBqwtg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11437"; a="49582890"
+X-CSE-ConnectionGUID: tm2rfTftSAeKg6anY0CnzQ==
+X-CSE-MsgGUID: HBrNMWhYSgyhMDNTBHc5bg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11437"; a="49621779"
 X-IronPort-AV: E=Sophos;i="6.15,300,1739865600"; 
-   d="scan'208";a="49582890"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2025 22:21:17 -0700
-X-CSE-ConnectionGUID: Nzk8Ek0NSROmy59+BkNG1g==
-X-CSE-MsgGUID: okCR8U7+T1W2PHghfzmjtw==
+   d="scan'208";a="49621779"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2025 22:24:53 -0700
+X-CSE-ConnectionGUID: CgDmWs88TUuHrhD9vQA8Jw==
+X-CSE-MsgGUID: x1kdZNoCTfCrgNlU9bvxEg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,300,1739865600"; 
-   d="scan'208";a="144238544"
+   d="scan'208";a="162556027"
 Received: from dapengmi-mobl1.ccr.corp.intel.com (HELO [10.124.245.128]) ([10.124.245.128])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2025 22:21:08 -0700
-Message-ID: <5dc2527f-8fd4-4f66-8168-f2f9653a3712@linux.intel.com>
-Date: Mon, 19 May 2025 13:21:05 +0800
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2025 22:24:45 -0700
+Message-ID: <71123914-ba9b-4ab0-b9c0-fa32fb53dfe2@linux.intel.com>
+Date: Mon, 19 May 2025 13:24:43 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,8 +67,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 24/38] KVM: x86/pmu: Exclude PMU MSRs in
- vmx_get_passthrough_msr_slot()
+Subject: Re: [PATCH v4 32/38] KVM: nVMX: Add nested virtualization support for
+ mediated PMU
 To: Sean Christopherson <seanjc@google.com>,
  Mingwei Zhang <mizhang@google.com>
 Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
@@ -88,70 +88,126 @@ Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
  Shukla Manali <Manali.Shukla@amd.com>,
  Nikunj Dadhania <nikunj.dadhania@amd.com>
 References: <20250324173121.1275209-1-mizhang@google.com>
- <20250324173121.1275209-25-mizhang@google.com> <aCc_LmORNibXBt8V@google.com>
- <aCdPbZiYmtni4Bjs@google.com>
+ <20250324173121.1275209-33-mizhang@google.com> <aCc-q_udsn8o1vBT@google.com>
 Content-Language: en-US
 From: "Mi, Dapeng" <dapeng1.mi@linux.intel.com>
-In-Reply-To: <aCdPbZiYmtni4Bjs@google.com>
+In-Reply-To: <aCc-q_udsn8o1vBT@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 
-On 5/16/2025 10:45 PM, Sean Christopherson wrote:
-> On Fri, May 16, 2025, Sean Christopherson wrote:
->> On Mon, Mar 24, 2025, Mingwei Zhang wrote:
->>> Reject PMU MSRs interception explicitly in
->>> vmx_get_passthrough_msr_slot() since interception of PMU MSRs are
->>> specially handled in intel_passthrough_pmu_msrs().
->>>
->>> Signed-off-by: Mingwei Zhang <mizhang@google.com>
->>> Co-developed-by: Dapeng Mi <dapeng1.mi@linux.intel.com>
->>> Signed-off-by: Dapeng Mi <dapeng1.mi@linux.intel.com>
->>> ---
->>>  arch/x86/kvm/vmx/vmx.c | 12 +++++++++++-
->>>  1 file changed, 11 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
->>> index 38ecf3c116bd..7bb16bed08da 100644
->>> --- a/arch/x86/kvm/vmx/vmx.c
->>> +++ b/arch/x86/kvm/vmx/vmx.c
->>> @@ -165,7 +165,7 @@ module_param(allow_smaller_maxphyaddr, bool, S_IRUGO);
->>>  
->>>  /*
->>>   * List of MSRs that can be directly passed to the guest.
->>> - * In addition to these x2apic, PT and LBR MSRs are handled specially.
->>> + * In addition to these x2apic, PMU, PT and LBR MSRs are handled specially.
-> Except y'all forgot to actually do the "special" handling, vmx_msr_filter_changed()
-> needs to refresh the PMU MSR filters.  Only the x2APIC MSRs are excluded from
-> userspace filtering (see kvm_msr_allowed()), everything else can be intercepted
-> by userespace.  E.g. if an MSR filter is set _before_ PMU refresh, KVM's behavior
-> will diverge from a filter that is set after PMU refresh.
+On 5/16/2025 9:33 PM, Sean Christopherson wrote:
+> This shortlog is unnecessarily confusing.  It reads as if supported for running
+> L2 in a vCPU with a mediated PMU is somehow lacking.
+>
+> On Mon, Mar 24, 2025, Mingwei Zhang wrote:
+>> Add nested virtualization support for mediated PMU by combining the MSR
+>> interception bitmaps of vmcs01 and vmcs12.
+> Do not phrase changelogs related to nested virtualization in terms of enabling a
+> _KVM_ feature.  KVM has no control over what hypervisor runs in L1.  It's a-ok to
+> provide example use cases, but they need to be just that, examples.
+>
+>> Readers may argue even without this patch, nested virtualization works for
+>> mediated PMU because L1 will see Perfmon v2 and will have to use legacy vPMU
+>> implementation if it is Linux. However, any assumption made on L1 may be
+>> invalid, e.g., L1 may not even be Linux.
+>>
+>> If both L0 and L1 pass through PMU MSRs, the correct behavior is to allow
+>> MSR access from L2 directly touch HW MSRs, since both L0 and L1 passthrough
+>> the access.
+>>
+>> However, in current implementation, if without adding anything for nested,
+>> KVM always set MSR interception bits in vmcs02. This leads to the fact that
+>> L0 will emulate all MSR read/writes for L2, leading to errors, since the
+>> current mediated vPMU never implements set_msr() and get_msr() for any
+>> counter access except counter accesses from the VMM side.
+>>
+>> So fix the issue by setting up the correct MSR interception for PMU MSRs.
+> This is not a fix.  
+>
+>     KVM: nVMX: Disable PMU MSR interception as appropriate while running L2
+>     
+>     Merge KVM's PMU MSR interception bitmaps with those of L1, i.e. merge the
+>     bitmaps of vmcs01 and vmcs12, e.g. so that KVM doesn't interpose on MSR
+>     accesses unnecessarily if L1 exposes a mediated PMU (or equivalent) to L2.
 
-Yes, it's indeed missed. Needs to add them. Thanks for reminding it.
+Sure. Thanks.
 
 
 >
->>>   */
->>>  static u32 vmx_possible_passthrough_msrs[MAX_POSSIBLE_PASSTHROUGH_MSRS] = {
->>>  	MSR_IA32_SPEC_CTRL,
->>> @@ -691,6 +691,16 @@ static int vmx_get_passthrough_msr_slot(u32 msr)
->>>  	case MSR_LBR_CORE_FROM ... MSR_LBR_CORE_FROM + 8:
->>>  	case MSR_LBR_CORE_TO ... MSR_LBR_CORE_TO + 8:
->>>  		/* LBR MSRs. These are handled in vmx_update_intercept_for_lbr_msrs() */
->>> +	case MSR_IA32_PMC0 ...
->>> +		MSR_IA32_PMC0 + KVM_MAX_NR_GP_COUNTERS - 1:
->>> +	case MSR_IA32_PERFCTR0 ...
->>> +		MSR_IA32_PERFCTR0 + KVM_MAX_NR_GP_COUNTERS - 1:
->>> +	case MSR_CORE_PERF_FIXED_CTR0 ...
->>> +		MSR_CORE_PERF_FIXED_CTR0 + KVM_MAX_NR_FIXED_COUNTERS - 1:
->>> +	case MSR_CORE_PERF_GLOBAL_STATUS:
->>> +	case MSR_CORE_PERF_GLOBAL_CTRL:
->>> +	case MSR_CORE_PERF_GLOBAL_OVF_CTRL:
->>> +		/* PMU MSRs. These are handled in intel_passthrough_pmu_msrs() */
->>>  		return -ENOENT;
->>>  	}
->> This belongs in the patch that configures interception.  A better split would be
->> to have an Intel patch and an AMD patch, 
-> I take that back, splitting the Intel and AMD logic makes is just as messy,
-> because the control logic is very much shared between VMX and SVM.
+>> Signed-off-by: Mingwei Zhang <mizhang@google.com>
+>> Co-developed-by: Dapeng Mi <dapeng1.mi@linux.intel.com>
+>> Signed-off-by: Dapeng Mi <dapeng1.mi@linux.intel.com>
+>> ---
+>>  arch/x86/kvm/vmx/nested.c | 32 ++++++++++++++++++++++++++++++++
+>>  1 file changed, 32 insertions(+)
+>>
+>> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+>> index cf557acf91f8..dbec40cb55bc 100644
+>> --- a/arch/x86/kvm/vmx/nested.c
+>> +++ b/arch/x86/kvm/vmx/nested.c
+>> @@ -626,6 +626,36 @@ static inline void nested_vmx_set_intercept_for_msr(struct vcpu_vmx *vmx,
+>>  #define nested_vmx_merge_msr_bitmaps_rw(msr) \
+>>  	nested_vmx_merge_msr_bitmaps(msr, MSR_TYPE_RW)
+>>  
+>> +/*
+>> + * Disable PMU MSRs interception for nested VM if L0 and L1 are
+>> + * both mediated vPMU.
+>> + */
+> Again, KVM has no idea what is running in L1.  Drop this.
+
+Yes. thanks.
+
+
+>
+>> +static void nested_vmx_merge_pmu_msr_bitmaps(struct kvm_vcpu *vcpu,
+>> +					     unsigned long *msr_bitmap_l1,
+>> +					     unsigned long *msr_bitmap_l0)
+>> +{
+>> +	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+>> +	struct vcpu_vmx *vmx = to_vmx(vcpu);
+>> +	int i;
+>> +
+>> +	if (!kvm_mediated_pmu_enabled(vcpu))
+> This is a worthwhile check, but a comment would be helpful:
+>
+> 	/*
+> 	 * Skip the merges if the vCPU doesn't have a mediated PMU MSR, i.e. if
+> 	 * none of the MSRs can possibly be passed through to L1.
+> 	 */
+> 	if (!kvm_vcpu_has_mediated_pmu(vcpu))
+> 		return;
+
+Sure. thanks.
+
+
+>
+>> +		return;
+>> +
+>> +	for (i = 0; i < pmu->nr_arch_gp_counters; i++) {
+>> +		nested_vmx_merge_msr_bitmaps_rw(MSR_ARCH_PERFMON_EVENTSEL0 + i);
+> This is unnecessary, KVM always intercepts event selectors.
+
+Yes.
+
+
+>
+>> +		nested_vmx_merge_msr_bitmaps_rw(MSR_IA32_PERFCTR0 + i);
+>> +		nested_vmx_merge_msr_bitmaps_rw(MSR_IA32_PMC0 + i);
+>> +	}
+>> +
+>> +	for (i = 0; i < pmu->nr_arch_fixed_counters; i++)
+>> +		nested_vmx_merge_msr_bitmaps_rw(MSR_CORE_PERF_FIXED_CTR0 + i);
+>> +
+>> +	nested_vmx_merge_msr_bitmaps_rw(MSR_CORE_PERF_FIXED_CTR_CTRL);
+> Same thing here.
+
+Yes.
+
+
+>
+>> +	nested_vmx_merge_msr_bitmaps_rw(MSR_CORE_PERF_GLOBAL_CTRL);
+>> +	nested_vmx_merge_msr_bitmaps_read(MSR_CORE_PERF_GLOBAL_STATUS);
+>> +	nested_vmx_merge_msr_bitmaps_write(MSR_CORE_PERF_GLOBAL_OVF_CTRL);
+>> +}
 
