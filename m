@@ -1,202 +1,215 @@
-Return-Path: <linux-kselftest+bounces-33323-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33324-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F197ABBE13
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 May 2025 14:39:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14BFCABBF1D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 May 2025 15:29:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C2A4716A3F6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 May 2025 12:39:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1713E188BC3E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 May 2025 13:29:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1887279324;
-	Mon, 19 May 2025 12:39:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C757E2797A4;
+	Mon, 19 May 2025 13:28:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="c0asuxeh"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="W036MQbW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94F8826AA93
-	for <linux-kselftest@vger.kernel.org>; Mon, 19 May 2025 12:39:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80C3C1A3177
+	for <linux-kselftest@vger.kernel.org>; Mon, 19 May 2025 13:28:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747658353; cv=none; b=ZvGNLh0wg3JK/i6iPG13PmR2kVm3YD//KIUSSWHfoi/DAcrRXHy86TFqKnJkRIqLX9Nh8SgkR0c+Vxwou5vzO4ECHhbS0BIAHQKOP8uMONjFNRqxZ9cSjl4hSWMuqpdCvgmCq8GB+Pcbe9cdOO0Ck5U3HcTm2ZapbyiSeWXX5gI=
+	t=1747661336; cv=none; b=cMhsufOIECNq0glmU8dhcQoyWgm0z/RrI37Ki1fZFakZx7qcOgxrOl4TMVxqTNdHCcFlZcnUwnqmPKTHWjEGn9yVWbZBk7+fxsBZpfRYxzi8UuaLStnm1g3fkAIhV1twlpB67KAHzwudo5xcQcTEpnAJJuetH42CjVO5ULs0YoY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747658353; c=relaxed/simple;
-	bh=wAgE1d1Nn9Gs3icpp4n2PghbKllsJSUIZKEeigydyr0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
-	 References:In-Reply-To; b=bRklg4CJ8c+juI9HlUOYxBfD5/+fnM6CRO6/6IsfLIZT7v2W1MbBuuzCcSlubSdSj5ITxvn87RL6W+UEX1DmlDo33o87tfEO/3AN/josG//8eLcAG/XhYgHvAQYTsg1rwGyIalvbkDY6Y+xjSo+J0heXE7rOgufc3p25QmccE30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=c0asuxeh; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-43cfe99f2a7so4354085e9.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 May 2025 05:39:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1747658350; x=1748263150; darn=vger.kernel.org;
-        h=in-reply-to:references:to:cc:subject:from:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8TID/8Or9YAzKWADzCmDKYmYbQ3PtBl4rxavpksxXcw=;
-        b=c0asuxeh9zKDI4BFM+0+N/0QABL/hv9jgthEHTsCykJZ49PXAo5NS4AbsKwWngXmAP
-         XUSqAurvr+cBeuW9/QQotGhmFmgPGhn+d6Ja/1dA8PBwkUcBy8CC2B6VeGNshgTdK6Pw
-         tcaZU8hVqAxZaK4Ca5Nih6cf3qFBrNvw0fSbId0IPZZxi//uKN5+xqRuG2TtIfzxzYun
-         F2Pv86q84JNAlfLHK2+scX0atyD/IwnGhwqe9AlZlqwfGNiW3jScfqEuzgkvlPIvlu9s
-         LafrHDMlIQymbeapTyTmKUweUd38786lwxgaaJWyenB/0Z+5jDAYxkMK3BAs9NMI+z21
-         2hfg==
+	s=arc-20240116; t=1747661336; c=relaxed/simple;
+	bh=gaErXZom/SXbS7oWY3Y26Q3auH/Bb0Nnh+BmJjpjXnQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=T7cYABXgCooVzdu2DuutyIxbF01zV1UxODwDWlhNQ6pH9E1vO6x/qzMaISf3fNKlRpR8Y/P+rUM5IwP22rkb70VWcmA2k81NwGanfbdYVWRChVJVIO1VLLmir7Tm9gil+AgHaUA2tjbANlExPSL5B6/i5jZV6nWLxs7OAzM4PKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=W036MQbW; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1747661332;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=LnZPk51OG5730zmFf6blk68sjraSbAgAbyfB3yfDnXw=;
+	b=W036MQbW64V5XDFs8KbfhNqlesDvLNDcxUzwCbAF7ns675TC/lH89TJZirCZxwJNdRQnc0
+	piV6Ge0S7haVXX4XMcKW5nCW0VdTdr9amOSUO4ones3ehuznv1FE4v7RCZr3EH9fBT3eL+
+	FniZW1CDxsvKXRBtRxhuxDy9hRzmV1A=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-182-Sq3U8IjJPxy6oPSdyXFYtQ-1; Mon, 19 May 2025 09:28:50 -0400
+X-MC-Unique: Sq3U8IjJPxy6oPSdyXFYtQ-1
+X-Mimecast-MFC-AGG-ID: Sq3U8IjJPxy6oPSdyXFYtQ_1747661330
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-44059976a1fso19529275e9.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 May 2025 06:28:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747658350; x=1748263150;
-        h=in-reply-to:references:to:cc:subject:from:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=8TID/8Or9YAzKWADzCmDKYmYbQ3PtBl4rxavpksxXcw=;
-        b=H2idiAKU84EVjzFUe1UeaKJG92mg7ocBgSBT83UP+cF5qzT/L/aLofhiWcZANG3hkE
-         kN3Py6x1+HE7NyC4r8toh0oaR2SoONVX6tQHeZo5vLP1i1lLBLBZFfGtT4OrdFkb7gL6
-         +HHt2ZEHO0mWh4u2xUfTVI1/5sR1jrZ1VA6E8m0fTNVvfxrjoOc2nM30vNgAZdwTuq0u
-         AMDWA5ldpPML9hHYMHJC17cAwzPILev8A+lbHq/McTsjoTr+NTTg483rl0Q6CwbDGzFC
-         8WiVz0NQ+j04cf/4gvj1fvj4gHClHSax0HlZ0nXBOfa1VexF0VP2t/BhAGr3WF0wO4o6
-         LycA==
-X-Forwarded-Encrypted: i=1; AJvYcCX6fK1BI7i1FKNwxQ2zFnKOAa1ehTVZmd4EHY600ZGwDx7KGkSIjVeFKrTd7Emluqk2RrSgk5bx6ValzqlZisU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyvpL/4k1AaD+UNuXao+0FVTwd4I5SOV0yE6fN2Xem9qn2Ev+z2
-	nkPbWj2DuDC1F6TaZaANtO6zhhvwHUkked/JRWzgb2dwmoGFbNa96OGntSO7fA/DNLE=
-X-Gm-Gg: ASbGnculBwYaF1l2jtpuOD9Yx9C6zYuZgIoF2I+Nr1S6bOl7W8nPodj3gPVTPuO6MIV
-	yAVkQ76n/htnh1i/7dyzAKIbP1n53e4aJB5talLi5pawv1OHJ9uqizp4mI2nbzUKs2/hBdSg00q
-	3CAtkNtxcH5U9oD94i3qak0A+TvnbTRSZX72h1C9CjgqYbX283OPs6VQWvQg4sV7EPNUJnr7Dhh
-	I35IX3nb/WewWXi077IUg50RQwic3i7UIaKo3V9Xmz2yUN+SIFUTGUObLusyDGdAXjV5NOABso3
-	QcKb3J6xZCScmQDLfybVZkLJgsMWHRA3ZWbz25Hr85QoQV1OlpVhPYC0s+E=
-X-Google-Smtp-Source: AGHT+IFfWi9oi0Jcra9sXbpqrxyg3hOkHnBuCeesfYKMaPVxn3iQR7mctJDpcqzl/F4hYBE/NRWxrg==
-X-Received: by 2002:a05:600d:108:10b0:43b:c0fa:f9bf with SMTP id 5b1f17b1804b1-442fd7165b7mr23100365e9.3.1747658349729;
-        Mon, 19 May 2025 05:39:09 -0700 (PDT)
-Received: from localhost ([2a02:8308:a00c:e200:29b7:4911:a29c:2135])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442fd583f20sm136362615e9.28.2025.05.19.05.39.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 May 2025 05:39:09 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1747661329; x=1748266129;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=LnZPk51OG5730zmFf6blk68sjraSbAgAbyfB3yfDnXw=;
+        b=JnErwhz7k3v6EkijDj5XL8qUFod4lbRjizkcim8kMvM4UVGu3XJL4GP/nzXvHE2YW3
+         neIG4sbv5FFBVj2Udj3wGNrl948obWwH/rTmjGZQsOqi7KE6Dt3S24o2Vt8zOxs44a1K
+         K1A39I2f2p+CUWKTXFwiwWbqtJ+sS0gLVgDwXUbwpsswom99/GKF2LBV5R9MAzQ/Y+Il
+         XvIZe+dvHaCzPIFlVPATlDeG21GDW/ZK87Lt5Z1BoJy2hpwr9YNmN4sIvBF7fr3yJG70
+         OQW8KPxP/ANm51N4uC6RL8rjZk+0y+iXJfxlwfZljrnS1XGJ2R8Rhi61YUB/EDsW7spf
+         cHQw==
+X-Forwarded-Encrypted: i=1; AJvYcCXFWMi9W1gwzqKmHtihRayF6eku0j8ACxtzgXzhPEkEChmKNg+CmHdO2+Iu+u9HVuwJMVW+Y5oVds2nfiFEymM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwLcrx9cX6Pzn8zfT/9Bk1dubkicXovotxZrXtRjaEDlahQ0Bz2
+	y6DjNtuvAWyLy1TKTL+kv6rzBlICbH8WtOeadM+/nWcODIpwymvtJ4xIstpQtImlOVxcfYoAlX2
+	g9oIazMFcXBxxv8cp7a1MHLlA53F52JS2EQSGNzVD4QDluWUnCNrwiGmbGO8zh1IczqbgZS17rv
+	JTHiB/
+X-Gm-Gg: ASbGncs9eCaGj79D/dX352AdOriEvrV8W/GXwjSEuhLKys6Gnq1QsVzXTLabA+b4fNO
+	xFb5fgRHh36mxJkAriPmUh/sfntQIn5rQW0PPlifKCwGJkaZdyupoAxvLpQghLmRqUSEpeaFllX
+	6lVZ36AI5fV0c0HZY+Rkfi84LXOwiAFswgd5VZUeeo+Idx7F1ev/9rh0pseawLwJ54tsluO54lz
+	xkCiqDvwUwtidNyhpf8ov/neEw47QMZpJNlUOZoT/WDbiXnx/9PM63AVCYzmLD9IK31oLnCBH3F
+	A3Zj4QcLxIHnFrKcg+BdC+rEwrqvKqiXclyAu0wa1FNaMWQmOqhCoUeC7Gjrvr5N7N59y+5APnt
+	2ADmU95IolaBsL/UYCCB+X65F+kQtEKXtD5gxSUE=
+X-Received: by 2002:a05:600c:c0da:b0:43d:ed:ad07 with SMTP id 5b1f17b1804b1-442fe667ec9mr98110475e9.29.1747661329565;
+        Mon, 19 May 2025 06:28:49 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGv/14e2S6T0zf4P7jwon6xq8VRpY0NANQiw20OZzdDZ81YY+TIomD54n5XNTVyMN7y1wWMJw==
+X-Received: by 2002:a05:600c:c0da:b0:43d:ed:ad07 with SMTP id 5b1f17b1804b1-442fe667ec9mr98110265e9.29.1747661329140;
+        Mon, 19 May 2025 06:28:49 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f3c:3a00:5662:26b3:3e5d:438e? (p200300d82f3c3a00566226b33e5d438e.dip0.t-ipconnect.de. [2003:d8:2f3c:3a00:5662:26b3:3e5d:438e])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442fd583f71sm136833005e9.27.2025.05.19.06.28.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 May 2025 06:28:48 -0700 (PDT)
+Message-ID: <8131ce62-0cee-455f-9eeb-e2bbed244402@redhat.com>
+Date: Mon, 19 May 2025 15:28:47 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 19 May 2025 14:39:08 +0200
-Message-Id: <DA056HQ5G6S6.2B1OITOT8LLWS@ventanamicro.com>
-From: =?utf-8?q?Radim_Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@ventanamicro.com>
-Subject: Re: [PATCH v15 05/27] riscv: usercfi state for task and
- save/restore of CSR_SSP on trap entry/exit
-Cc: "Alexandre Ghiti" <alex@ghiti.fr>, "Thomas Gleixner"
- <tglx@linutronix.de>, "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov"
- <bp@alien8.de>, "Dave Hansen" <dave.hansen@linux.intel.com>,
- <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, "Andrew Morton"
- <akpm@linux-foundation.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- "Vlastimil Babka" <vbabka@suse.cz>, "Lorenzo Stoakes"
- <lorenzo.stoakes@oracle.com>, "Paul Walmsley" <paul.walmsley@sifive.com>,
- "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert Ou" <aou@eecs.berkeley.edu>,
- "Conor Dooley" <conor@kernel.org>, "Rob Herring" <robh@kernel.org>,
- "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Arnd Bergmann"
- <arnd@arndb.de>, "Christian Brauner" <brauner@kernel.org>, "Peter Zijlstra"
- <peterz@infradead.org>, "Oleg Nesterov" <oleg@redhat.com>, "Eric Biederman"
- <ebiederm@xmission.com>, "Kees Cook" <kees@kernel.org>, "Jonathan Corbet"
- <corbet@lwn.net>, "Shuah Khan" <shuah@kernel.org>, "Jann Horn"
- <jannh@google.com>, "Conor Dooley" <conor+dt@kernel.org>, "Miguel Ojeda"
- <ojeda@kernel.org>, "Alex Gaynor" <alex.gaynor@gmail.com>, "Boqun Feng"
- <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Benno Lossin"
- <benno.lossin@proton.me>, "Andreas Hindborg" <a.hindborg@kernel.org>,
- "Alice Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>,
- <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
- <linux-mm@kvack.org>, <linux-riscv@lists.infradead.org>,
- <devicetree@vger.kernel.org>, <linux-arch@vger.kernel.org>,
- <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <alistair.francis@wdc.com>, <richard.henderson@linaro.org>,
- <jim.shu@sifive.com>, <andybnac@gmail.com>, <kito.cheng@sifive.com>,
- <charlie@rivosinc.com>, <atishp@rivosinc.com>, <evan@rivosinc.com>,
- <cleger@rivosinc.com>, <alexghiti@rivosinc.com>, <samitolvanen@google.com>,
- <broonie@kernel.org>, <rick.p.edgecombe@intel.com>,
- <rust-for-linux@vger.kernel.org>, "Zong Li" <zong.li@sifive.com>,
- "linux-riscv" <linux-riscv-bounces@lists.infradead.org>
-To: "Deepak Gupta" <debug@rivosinc.com>
-References: <20250502-v5_user_cfi_series-v15-0-914966471885@rivosinc.com>
- <20250502-v5_user_cfi_series-v15-5-914966471885@rivosinc.com>
- <D9OZVNOGLU4T.2XOUPX27HN0W8@ventanamicro.com>
- <122fc6cd-2e21-4fca-979d-bcf558107b81@ghiti.fr>
- <D9WLRSAB63M5.3DZD4ND3WVZ6F@ventanamicro.com>
- <aCdbASlCyqhid82c@debug.ba.rivosinc.com>
-In-Reply-To: <aCdbASlCyqhid82c@debug.ba.rivosinc.com>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/mm: Fix test result reporting in gup_longterm
+To: Mark Brown <broonie@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250515-selftests-mm-gup-longterm-dups-v1-1-05f8f731cf63@kernel.org>
+ <f924f789-5269-4046-99a4-2991f9a3ab3c@redhat.com>
+ <aCcvxaFc6DE_Mhr1@finisterre.sirena.org.uk>
+ <58dbef73-6e37-46de-9092-365456306b27@redhat.com>
+ <aCc5E-wB4nBwrKEP@finisterre.sirena.org.uk>
+ <46d151d7-c04b-4538-9725-dc4f46ac8ac1@redhat.com>
+ <aCd-8kEyDm2f2w0z@finisterre.sirena.org.uk>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <aCd-8kEyDm2f2w0z@finisterre.sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-2025-05-16T08:34:25-07:00, Deepak Gupta <debug@rivosinc.com>:
-> On Thu, May 15, 2025 at 10:48:35AM +0200, Radim Kr=C4=8Dm=C3=A1=C5=99 wro=
-te:
->>2025-05-15T09:28:25+02:00, Alexandre Ghiti <alex@ghiti.fr>:
->>> On 06/05/2025 12:10, Radim Kr=C4=8Dm=C3=A1=C5=99 wrote:
->>>> 2025-05-02T16:30:36-07:00, Deepak Gupta <debug@rivosinc.com>:
->>>>> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
->>>>> @@ -91,6 +91,32 @@
->>>>> +.macro restore_userssp tmp
->>>>> +	ALTERNATIVE("nops(2)",
->>>>> +		__stringify(				\
->>>>> +		REG_L \tmp, TASK_TI_USER_SSP(tp);	\
->>>>> +		csrw CSR_SSP, \tmp),
->>>>> +		0,
->>>>> +		RISCV_ISA_EXT_ZICFISS,
->>>>> +		CONFIG_RISCV_USER_CFI)
->>>>> +.endm
->>>> Do we need to emit the nops when CONFIG_RISCV_USER_CFI isn't selected?
->>>>
->>>> (Why not put #ifdef CONFIG_RISCV_USER_CFI around the ALTERNATIVES?)
->>>
->>> The alternatives are used to create a generic kernel that contains the
->>> code for a large number of extensions and only enable it at runtime
->>> depending on the platform capabilities. This way distros can ship a
->>> single kernel that works on all platforms.
->>
->>Yup, and if a kernel is compiled without CONFIG_RISCV_USER_CFI, the nops
->>will only enlarge the binary and potentially slow down execution.
->>In other words, why we don't do something like this
->>
->> (!CONFIG_RISCV_USER_CFI ? "" :
->>   (RISCV_ISA_EXT_ZICFISS ? __stringify(...) : "nops(x)"))
->>
->>instead of the current
->>
->> (CONFIG_RISCV_USER_CFI &&
->>    RISCV_ISA_EXT_ZICFISS ? __stringify(...) : "nops(x)")
->>
->>It could be a new preprocessor macro in case we wanted to make it nice,
->>but it's probably not a common case, so an ifdef could work as well.
->>
->>Do we just generally not care about such minor optimizations?
->
-> On its own just for this series, I am not sure if I would call it even a
-> minor optimization.
+On 16.05.25 20:07, Mark Brown wrote:
+> On Fri, May 16, 2025 at 04:12:08PM +0200, David Hildenbrand wrote:
+>> On 16.05.25 15:09, Mark Brown wrote:
+> 
+>>>> I'm afraid we have other such tests that report duplicate conditions. cow.c
+>>>> is likely another candidate (written by me ;) ).
+> 
+>>> That one's not come up for me (this was one of four different patches
+>>> for mm selftests I sent the other day cleaning up duplicate test names).
+> 
+>> $ sudo ./cow
+> 
+> ...
+> 
+>> 1..778
+>> # [INFO] Anonymous memory tests in private mappings
+>> # [RUN] Basic COW after fork() ... with base page
+>> ok 1 No leak from parent into child
+>> # [RUN] Basic COW after fork() ... with swapped out base page
+>> ok 2 No leak from parent into child
+> 
+>> Aren't the duplicate "No leak from parent into child" the problematic bits?
+>> But maybe I am getting it wrong, what needs to be "unique" :)
+> 
+> Ah, yes - that's got the same issue.  I'm not running that program one
+> way or another, it's not immediately clear to me why not - I can't see
+> any sign of it being invoked by the runner script but I also can't see
+> anything that I'd expect to stop that happening.  I'll have to have a
+> poke at it, thanks for flagging that.
+> 
+> [Converting to kselftet_harness]
+>>> That'd certainly work, though doing that is more surgery on the test
+>>> than I personally have the time/enthusiasm for right now.
+> 
+>> Same over here.
+> 
+>> But probably if we touch it, we should just clean it up right away. Well,
+>> if we decide that that is the right cleanup. (you mention something like that
+>> in your patch description :)
+> 
+> OTOH there's something to be said for just making incremental
+> improvements in the tests where we can, they tend not to get huge
+> amounts of love in general which means perfect can very much be the
+> enemy of good.  If there's some immediate prospect of someone doing a
+> bigger refactoring then that'd be amazing, but if not then it seems
+> useful to make things play better with the automation for now.
 
-This patch uses ifdef in thread_info, but not here.
+I would agree if it would be a handful of small changes.
 
-Both places minimize the runtime impact on kernels that don't have
-CONFIG_RISCV_USER_CFI, so I would like to understand the reasoning
-behind the decision to include one and not the other.
+But here we are already at
 
-> But sure, it may (or may not) have noticeable effect if someone were
-> to go around and muck with ALTERNATIVES macro and emit `old_c` only
-> if config were selected. That should be a patch set on its own with
-> data providing benefits from it.
+  1 file changed, 107 insertions(+), 56 deletions(-)
 
-The difference is small and each build and implementation can behave
-differently, so code analysis seems the most appropriate tool here.
-We must still do a lot of subjective guesswork, because it is hard to
-predict the future development.
+-- 
+Cheers,
 
-We should be moving on the pareto front and there are 3 roughly
-optimization parameters in this case: the C code, the binary code, and
-the work done by the programmer.
-The current patch is forgoing the binary quality (nops are strictly
-worse).
-The ifdef and the macro solutions prefer binary quality, and then differ
-if they consider work minimization (ifdef) or nice C (macro).
+David / dhildenb
 
-Does the current patch represent the ideal compromise?
-(I can just recalibrate my values for future reviews...)
-
-Thanks.
 
