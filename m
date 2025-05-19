@@ -1,213 +1,132 @@
-Return-Path: <linux-kselftest+bounces-33293-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33294-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24A68ABB1B7
-	for <lists+linux-kselftest@lfdr.de>; Sun, 18 May 2025 23:34:24 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFB43ABB33D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 May 2025 04:35:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B41433AEB97
-	for <lists+linux-kselftest@lfdr.de>; Sun, 18 May 2025 21:34:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E57177A90F7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 May 2025 02:34:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D3921FDA61;
-	Sun, 18 May 2025 21:34:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D43CD1C8603;
+	Mon, 19 May 2025 02:35:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="aX5vUadI"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VgFaT2nf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FA301EB18A
-	for <linux-kselftest@vger.kernel.org>; Sun, 18 May 2025 21:34:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B2BB38B
+	for <linux-kselftest@vger.kernel.org>; Mon, 19 May 2025 02:35:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747604059; cv=none; b=ZQLGFGpiaLPX1/NHBgpXav0987gI1GPAyNE7cpmO82owJ8EURVmV751KVGbGC9hYmNyNXWLvQwWVlHJ3G0EX8SIgrYj4AX74X1Ocl8pa25iPtoPQlb5qzYiT94po01tllXXjy4lHfyQJJ2avT09zcrvjY4S5nwJ7HOOmJbmgE9U=
+	t=1747622121; cv=none; b=j4LqOMIvnSKf3QPuvrKwWWlQ9DhCwnl9d6MJGFsDK6LO0zg+V54IvZzAElXb+as4gvJr3DQub/bRvBq9AKkUE2k3qvV2cPFTdlZaynkwtKyY/2EABeoYpVFu2qSIzyUscOOl6LOfo9E4rZKojEYdSOLC6pZE9BNGRM+Y/BKxHDg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747604059; c=relaxed/simple;
-	bh=MVyWvTH9jezrYGixpYmB8VcITaczqnk77BRhuiSVPIc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NGj9zUubSYoGjK2hgjP+EQSgANw//HRZMx4oagc/YOXd9OrBSsllbPFpc7f1mZuBskvbdhi5SOvcRLiiTkNcKJmL0U+SvY+EHLvNufZ6gSOF6LA9m6tlYa5lT89jNzDGOjaBak4+v7GEDTAgBVQ01hGVelLA2eRaNpbeVw/I6Us=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=aX5vUadI; arc=none smtp.client-ip=209.85.219.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-e733e25bfc7so3311533276.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 18 May 2025 14:34:16 -0700 (PDT)
+	s=arc-20240116; t=1747622121; c=relaxed/simple;
+	bh=MLOjAAPcplXLjt0idgSdbv1QlkinDsa4uGJV0cja2/c=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=SpSHD0S7CpxdzrGJ2BlAb3iZ7KQJVYjkyKg+/lO0t9zGu8UJa+jPW6t7c546BONVQJVtpxE0EHgxrBKoiNRR+bro2VdxIramrT/1mNDLWdFxOYoQ0+7vgs3tWJPpLbjOgQCU/2K+us4slAC6822hxqlIEohG1AMnhg8EbFBXKXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VgFaT2nf; arc=none smtp.client-ip=209.85.215.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-af9564001cbso2511166a12.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 18 May 2025 19:35:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1747604056; x=1748208856; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LQP7kiEFeXieUYHTQOWlMajO9SS2h9UcfNmGDRaBXeQ=;
-        b=aX5vUadIzIV8ASEorrYerOBh7+o83iuc5x/ndhc0fQmonqniSuI9umaiKZxSIryMcj
-         pCZN2rcwbp58rU7iUbuKcLsLE70NyHEBJXI62t9OTeuKcJqyA/6Zi8v+8ost8toBFBX+
-         nvLqwnDHcJCjlKa6AN5EPV+hf2r7AykRaEfH9nFdMubumAaFS8RpPgPtp8FUdQQlI7cu
-         Kz89u9LK/j4BwPFHWn6Mhdq9YGo9bxcTQa59HwgZyj+zVFh3ZhCgChFySWBSwgk6U0FV
-         SvKV91Y/kecm+kxvZDX+9CtxV1YQaHOJRsWQwOWsOvm4gBtQt7KspTl5g4b3T5r30Oel
-         ygyw==
+        d=google.com; s=20230601; t=1747622119; x=1748226919; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=T4x7wNdRetlNSCsQonq8ajzFu9C5gDJsZscn/CMz2O0=;
+        b=VgFaT2nfX+ruVDjsDTstxcM8K3vxhYy1Kby8Ej8fWxtGDv+EX+DlSfZWHL4B0QvYmv
+         fl0E4a6q/fEITSz52BjeP1TMn2/JzkHiLzcPgnQWGbO1ss89mLoPkyx7pk2DVlfz8S1Z
+         aB1TIjo9XxUfP7hf3NuYcnzB1Ftqay7Y7og6sWvgqppUSL+G0zZhH9NDtD6fHYIlEJq7
+         nlCnoRXN1tvqGOXHymx/wYIY8njNDXW/WUvhm10qFQn3HPzH8/yhOGK42ujSN/strD72
+         GNUZkVSCG8zIY+TQnBmz7CAunUG3lMTBMm8Tyz09KfkoBfsc3xfCcA66j3n3Bjhfpjlm
+         DPPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747604056; x=1748208856;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LQP7kiEFeXieUYHTQOWlMajO9SS2h9UcfNmGDRaBXeQ=;
-        b=uQbdQw5aRAGz+hqkdjEkpfx47x61Cd9FETawuSpFo6Df8r5m0tis7RRnb5tBY81wLT
-         s4kaQkpIUUsRyiFOh2FhwltJ2Qyu0iWVzDRc3xKIFm1FKs4aSoQFgIhgI44j7jOj+w7o
-         7kGxN2s9PzIIMwRgQBc7lIUWFUsnMvp0CzhXaXQ1REzm+4JU3nldYE0VQuy3yGH+XEp2
-         eIrX87v0NepGQHKF9kHOjod/pd3UAJwIji36lBtVZyHhIfMancXi0U1rG2Mz+a1puGFN
-         vucuMzgMmOi6S8IGc7T9IJRoZGxhtcZ7pFhcEON++Y/B2FkJK/Udn3QfWEZtSKnfTS47
-         JIRw==
-X-Forwarded-Encrypted: i=1; AJvYcCVfGZw/wdueXqguyRh3QEe9j6rv+f1VlUAi2IIfEn/eklI73U5u8auO9Re0n2iKu7qVUuACkfeA+hjS1de5f2U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJUnTZlHOAZRq1x7LW3LnzVmdSumjhvoBrFwaQpj5jNVMn8yqm
-	dNUBVCLGNR60qm1p5mJKz5y0+96UoyRo/5Z/lJkj4l4GRqACablSukxUpN7H5Oxx2zza3+l2GIc
-	S6+8OJcXoSq8VC9roXEb2gujf0oU5HdOmD+IuNcX9
-X-Gm-Gg: ASbGncuzq0WIexQnDdctWFtnx8RW4xWJERq8zvLysY2PBYgqs56KIdn7Ji9WOFvermy
-	ZLITHwe50Y61hQVzZHM4kpR3eQ+0CDr0HkuWT8QfwqKMnqaDEr9cRt2C7XZli0zTFP5iizrHBDV
-	5zCv3qQnCQyDsyc76jAGoIYuyLznRHbV98dEVKsodiwME=
-X-Google-Smtp-Source: AGHT+IE4xhc4enZwnp333lRGkDvOTlvAzIVwQODufuLGxxB3SU2BQ2IFplj8HM2L9kwEdXZjW5DSrE/jizotZyc82E8=
-X-Received: by 2002:a05:6902:1201:b0:e78:f901:6074 with SMTP id
- 3f1490d57ef6-e7b6d39c8e6mr13141403276.5.1747604055898; Sun, 18 May 2025
- 14:34:15 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1747622119; x=1748226919;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=T4x7wNdRetlNSCsQonq8ajzFu9C5gDJsZscn/CMz2O0=;
+        b=wqIAKA0O4gXZeQ4w0BsbIm22FoM/hXrheWOVrBT9KtfOncl9ag/1yBkOMp6iR3PO90
+         PfRtQa6dfx67KeYOR2oYwsQlmYoULdbtDhb+FkdTMyefdbuaEngaRx2RvkK2rvoo1EkP
+         q3eSpyTh8acqo50YNoD1Nt6suoZXOg6BoeDQEwQ0qzKDqk9V39vRzB6A5xOsoWSZ5piA
+         3sRKIKsb45lBiVw6F6hcMrS6e4A00wCr3PIJRTgnhL4+/JNlsfU75PBExodgxvVIMiTT
+         Q/WnRSybWtBNeTuGIWD/cKv/lTh1CNZAGHLFb2WmCCUQzyylsRjZiGsLSjlnWtI77KB7
+         Kxeg==
+X-Forwarded-Encrypted: i=1; AJvYcCXe2VkTuuhyk46pgWjyEpEzZpMsvnB4JPgE9IzXr3bQNpyJWtYMx6Fu+fi9L1yieYGEbTpa5guYzQy2NEBwpok=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyP5YxJfT05TH11NvQjmUg6haBtfZ2w5dEMlhMr+A7OIOE5hB39
+	2I7YS5wkMMFQQXdveI7XpbvXazCqSkxyZCizmVYj+ItiuMIlKiwTti5fKxoySsnqr7NCG5+2El8
+	tAhip3yxEGG2pRBmeCc4AL8M0ug==
+X-Google-Smtp-Source: AGHT+IGmupnY76hX7BcuQdiL3IIli6yYr7kfdGnKxgi2woWXJy5arAeTwD4OJxOiun/hcxLuZq62u/OigAgXEhe0bw==
+X-Received: from plxe18.prod.google.com ([2002:a17:902:ef52:b0:22d:c61d:a4a3])
+ (user=almasrymina job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:902:d4d2:b0:231:faf5:c1d0 with SMTP id d9443c01a7336-231faf5c3ecmr138087165ad.24.1747622119492;
+ Sun, 18 May 2025 19:35:19 -0700 (PDT)
+Date: Mon, 19 May 2025 02:35:08 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250502184421.1424368-1-bboscaccy@linux.microsoft.com>
- <20250502210034.284051-1-kpsingh@kernel.org> <CAHC9VhS5Vevcq90OxTmAp2=XtR1qOiDDe5sSXReX5oXzf+siVQ@mail.gmail.com>
- <CACYkzJ5jsWFiXMRDwoGib5t+Xje6STTuJGRZM9Vg2dFz7uPa-g@mail.gmail.com>
- <CACYkzJ6VQUExfyt0=-FmXz46GHJh3d=FXh5j4KfexcEFbHV-vg@mail.gmail.com>
- <CAHC9VhQL_FkUH8F1fvFZmC-8UwZh3zkwjomCo1PiWNW0EGYUPw@mail.gmail.com>
- <CACYkzJ4+=3owK+ELD9Nw7Rrm-UajxXEw8kVtOTJJ+SNAXpsOpw@mail.gmail.com>
- <CAHC9VhTeFBhdagvw4cT3EvA72EYCfAn6ToptpE9PWipG9YLrFw@mail.gmail.com>
- <CAADnVQJ4GDKvLSWuAMdwajA0V2DEw5m-O228QknW8Eo9jxhyig@mail.gmail.com>
- <CAHC9VhTJcV1mqBpxVUtpLhrN4Y9W_BGgB_La5QCqObGheK28Ug@mail.gmail.com>
- <CAADnVQ+wE5cGhy6tgmWgUwkNutueEsrhh6UR8N2fzrZjt-vb4g@mail.gmail.com>
- <196e1f03128.28a7.85c95baa4474aabc7814e68940a78392@paul-moore.com> <CAADnVQ+=2PnYHui2L0g0brNc+NqV8MtaRaU-XXpoXfJoghXpww@mail.gmail.com>
-In-Reply-To: <CAADnVQ+=2PnYHui2L0g0brNc+NqV8MtaRaU-XXpoXfJoghXpww@mail.gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Sun, 18 May 2025 17:34:04 -0400
-X-Gm-Features: AX0GCFtLeZnisw8iWe1mhoQFds0HugDTz8gkrQRoSC4fm6wSRan9ZFZmtDGOv3w
-Message-ID: <CAHC9VhRKZdEia0XUMs2+hRVC7oDzkBfkk5FPMD+Fq5V7mAk=Vg@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] Introducing Hornet LSM
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: KP Singh <kpsingh@kernel.org>, Blaise Boscaccy <bboscaccy@linux.microsoft.com>, 
-	James Bottomley <James.Bottomley@hansenpartnership.com>, bpf <bpf@vger.kernel.org>, 
-	code@tyhicks.com, Jonathan Corbet <corbet@lwn.net>, "David S. Miller" <davem@davemloft.net>, 
-	David Howells <dhowells@redhat.com>, =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, Jarkko Sakkinen <jarkko@kernel.org>, 
-	James Morris <jmorris@namei.org>, Jan Stancek <jstancek@redhat.com>, 
-	Justin Stitt <justinstitt@google.com>, keyrings@vger.kernel.org, 
-	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, 
-	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, 
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
-	LSM List <linux-security-module@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, Masahiro Yamada <masahiroy@kernel.org>, 
-	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	Bill Wendling <morbo@google.com>, Nathan Chancellor <nathan@kernel.org>, Neal Gompa <neal@gompa.dev>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Nicolas Schier <nicolas@fjasle.eu>, nkapron@google.com, 
-	Roberto Sassu <roberto.sassu@huawei.com>, "Serge E . Hallyn" <serge@hallyn.com>, 
-	Shuah Khan <shuah@kernel.org>, Matteo Croce <teknoraver@meta.com>, 
-	Cong Wang <xiyou.wangcong@gmail.com>, kysrinivasan@gmail.com, 
-	Linus Torvalds <torvalds@linux-foundation.org>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.49.0.1101.gccaa498523-goog
+Message-ID: <20250519023517.4062941-1-almasrymina@google.com>
+Subject: [PATCH net-next v1 0/9] Devmem TCP minor cleanups and ksft improvements
+From: Mina Almasry <almasrymina@google.com>
+To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Cc: Mina Almasry <almasrymina@google.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Neal Cardwell <ncardwell@google.com>, 
+	Kuniyuki Iwashima <kuniyu@amazon.com>, David Ahern <dsahern@kernel.org>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>, sdf@fomichev.me, 
+	ap420073@gmail.com, praan@google.com, shivajikant@google.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Sun, May 18, 2025 at 11:52=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
-> On Sat, May 17, 2025 at 10:49=E2=80=AFPM Paul Moore <paul@paul-moore.com>=
- wrote:
-> > On May 17, 2025 12:13:50 PM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > > On Sat, May 17, 2025 at 8:03=E2=80=AFAM Paul Moore <paul@paul-moore.c=
-om> wrote:
-> > >> On Fri, May 16, 2025 at 7:49=E2=80=AFPM Alexei Starovoitov
-> > >> <alexei.starovoitov@gmail.com> wrote:
-> > >>> On Fri, May 16, 2025 at 12:49=E2=80=AFPM Paul Moore <paul@paul-moor=
-e.com> wrote:
-> > >>>>
-> > >>>> I think we need some clarification on a few of these details, it w=
-ould
-> > >>>> be good if you could answer the questions below about the
-> > >>>> authorization aspects of your design?
-> > >>>>
-> > >>>> * Is the signature validation code in the BPF verifier *always* go=
-ing
-> > >>>> to be enforced when a signature is passed in from userspace?  In o=
-ther
-> > >>>> words, in your design is there going to be either a kernel build t=
-ime
-> > >>>> or runtime configuration knob that could selectively enable (or
-> > >>>> disable) signature verification in the BPF verifier?
-> > >>>
-> > >>> If there is a signature in union bpf_attr and it's incorrect
-> > >>> the prog_load command will be rejected.
-> > >>> No point in adding a knob to control that.
-> > >>
-> > >> I agree that when a signature is provided and that signature check
-> > >> fails, the BPF load should be rejected.  I'm simply trying to
-> > >> understand how you envision your design handling all of the cases, n=
-ot
-> > >> just this one, as well as what build and runtime options you expect
-> > >> for controlling various aspects of this behavior.
-> > >>
-> > >>>> * In the case where the signature validation code in the BPF verif=
-ier
-> > >>>> is active, what happens when a signature is *not* passed in from
-> > >>>> userspace?  Will the BPF verifier allow the program load to take
-> > >>>> place?  Will the load operation be blocked?  Will the load operati=
-on
-> > >>>> be subject to a more granular policy, and if so, how do you plan t=
-o
-> > >>>> incorporate that policy decision into the BPF program load path?
-> > >>>
-> > >>> If there is no signature the existing loading semantics will remain=
- intact.
-> > >>> We can discuss whether to add a sysctl or cgroup knob to disallow
-> > >>> loading when signature is not present ...
-> > >>
-> > >> As mentioned earlier this week, if the BPF verifier is performing th=
-e
-> > >> signature verification as KP described, we will need a LSM hook afte=
-r
-> > >> the verifier to serve as an access control point.  Of course that
-> > >> doesn't preclude the addition of some type of sysctl/cgroup/whatever
-> > >> based access control, but the LSM hook would be needed regardless.
-> > >
-> > > No. New hook is not needed.
-> >
-> > It would be good for you to explain how the existing LSM hook is suffic=
-ient
-> > to authorize the loading of a BPF program using the signature validatio=
-n
-> > state determined in the BPF verifier.
->
-> I already explained:
-> .. a job of trivial LSM:
-> if (prog_attr doesn't have signature &&
->    (task =3D=3D .. || task is under certain cgroup || whatever))
->   disallow.
+Minor cleanups to the devmem tcp code, and not-so-minor improvements to
+the ksft.
 
-I read that earlier reply as an example that covers a sample use case,
-I didn't realize you were asserting that was the only approach you
-were considering.  Perhaps that was the source of confusion earlier,
-we may disagree, but I don't intentionally "twist" words; not only is
-that rude, it's just stupid in public, archived discussions.
+For the cleanups:
+- Address comment from Paolo post-merge.
+- Fix whitespace.
+- Add improvement dropped from Taehee's fix patch.
 
-As I mentioned previously, we really need to see an explicit yes/no
-flag from the BPF verifier to indicate that the signature on the BPF
-program has been validated.  It really should be as simple as adding a
-bool to bpf_prog_aux which the BPF verifier sets to true upon
-successful signature validation, and then an LSM can use this flag as
-input to an access control decision in a hook placed after the
-verifier.  Are you objecting to the addition of a flag in the
-bpf_prog_aux struct (or some other struct tightly coupled to the BPF
-program), the LSM hook after the verifier, or both?  It would also be
-helpful if you can elaborate on the technical reasons behind these
-objections.
+For the ksft:
+- Add support for ipv4 environment.
+- Add support for drivers that are limited to 5-tuple flow steering.
+- Improve test by sending 1K data instead of just "hello\nworld"
 
---=20
-paul-moore.com
+Cc: sdf@fomichev.me
+Cc: ap420073@gmail.com
+Cc: praan@google.com
+Cc: shivajikant@google.com
+
+
+Mina Almasry (9):
+  net: devmem: move list_add to net_devmem_bind_dmabuf.
+  page_pool: fix ugly page_pool formatting
+  net: devmem: preserve sockc_err
+  net: devmem: ksft: remove ksft_disruptive
+  net: devmem: ksft: add ipv4 support
+  net: devmem: ksft: add exit_wait to make rx test pass
+  net: devmem: ksft: add 5 tuple FS support
+  net: devmem: ksft: upgrade rx test to send 1K data
+  net: devmem: ncdevmem: remove unused variable
+
+ net/core/devmem.c                             |  5 +-
+ net/core/devmem.h                             |  5 +-
+ net/core/netdev-genl.c                        |  8 +--
+ net/core/page_pool.c                          |  4 +-
+ net/ipv4/tcp.c                                | 24 ++++-----
+ .../selftests/drivers/net/hw/devmem.py        | 52 +++++++++++++------
+ .../selftests/drivers/net/hw/ncdevmem.c       |  1 -
+ 7 files changed, 59 insertions(+), 40 deletions(-)
+
+
+base-commit: b8fa067c4a76e9a28f2003a50ff9b60f00b11168
+-- 
+2.49.0.1101.gccaa498523-goog
+
 
