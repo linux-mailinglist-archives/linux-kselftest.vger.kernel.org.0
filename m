@@ -1,204 +1,121 @@
-Return-Path: <linux-kselftest+bounces-33365-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33366-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 371F4ABD0B1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 May 2025 09:44:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B4BFABD180
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 May 2025 10:07:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC6D13A516C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 May 2025 07:43:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 10A828A5ADF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 May 2025 08:06:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B16F25DAFF;
-	Tue, 20 May 2025 07:44:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA9972566F9;
+	Tue, 20 May 2025 08:07:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mO8c8ad3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gPfKI2pi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02DBCEEC8;
-	Tue, 20 May 2025 07:43:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E06277102;
+	Tue, 20 May 2025 08:07:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747727041; cv=none; b=KYu86dcYrMcsOnZqckU4+MDe7QfiJVQXGY5Tardm+H7K66q7GeEsPoVK3pNHq3Rzlgef9JlC5w7MH1js4TfdCBfugX3vnG3VldRxodN7Sl8ppFWlvclgc2oCKxD0UW87crXOZReu7bKqEJD7nJZLQ5/jsODX8HxmJX+/MHG2r/Y=
+	t=1747728430; cv=none; b=tXrjDmBhyCu5wZUITcbN3hJYeLtk06bl7hgDc7uk9Jje6W68DIcNLruy7VLlKT+ra55HzWyz8ncJE3Vsr8pJF3Zjw1YYfUtSBQ0sP59txg6N543U99OHfOIp2ASRLBFqXgyME75upGmD+OQFKz20BEMgD5odK0nRJDScQe7ZyDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747727041; c=relaxed/simple;
-	bh=zIL2YBPH1fTre1k7ZCpC3okZ8sjc/bzzUxupO/yQ9jA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ABdsd7w7kmpYkDlSyEtoIv6gOrli5TST+e8hdkR1bfEB/yN7VZc8Hr8IogWI5mZ/TLjiYPdO75a/ZBv0ZeNWo9CgbFPqTHuuyVIsmDtID+niWIULnvaUyIg+02GnffRKpBKr1bkNgWsto7UW8gGLgv45E9blh/wiszFUHcwRtt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mO8c8ad3; arc=none smtp.client-ip=209.85.210.180
+	s=arc-20240116; t=1747728430; c=relaxed/simple;
+	bh=D0OYHWZOSrzkqmr4CoGzl8bVmgydg3QT4qWndKfE0rE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=fEd1zaQ16oW84v7WBIt+JO8OAX9lwn56Zb+Mq5OfppSWgAcQRCpo3AlQY3vOHmBfZm+lzSpcSuQV0MsLMuMC1rvFkApFF+WnkaBXOtLCuTvOSKmSU+hfkMumMk4oas/8hm46JgB8DrHnGEIrAwtn1HTzk1AMSVfl/3Zi17reWnU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gPfKI2pi; arc=none smtp.client-ip=209.85.221.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-742c46611b6so3178993b3a.1;
-        Tue, 20 May 2025 00:43:59 -0700 (PDT)
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3a36e0d22c1so1435375f8f.2;
+        Tue, 20 May 2025 01:07:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747727039; x=1748331839; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9uo8wrvNhdGkpDaupALM2V4X4G0GERtYOC9S6Rbd7JE=;
-        b=mO8c8ad3TQkXvGNdx4kaZSrIM4zaUAN+RJUY3jv/XzJBUNQym7YOqpAsO0HGgHAzjb
-         1BryM9JvF2h5sVJ8NSNIbWmds/aa6W04EwMKE1TceIPM/Jt11Twe1e1l1j0qA418Y2w5
-         VUQ8DrXtFxKwfvA9Tsb4pDilvMsq+z2ioRTTmkKg+ZgIxZZ3bO0bpsLFYE6e1jIZcrB4
-         jA+EQST7BLyKE2VzfB9LMv75iikS4X/uUdwoUeIr5r5u7J+hgwO2O4yIurUfqWl/d9bf
-         zruCyKSwRnKxsh5s6aAA2sul6iRYDd5mbxTRUsiZ+WLFzMvSsQOiu+d1qGSFYF98rfl+
-         8EeA==
+        d=gmail.com; s=20230601; t=1747728427; x=1748333227; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZpHRU034TQkb5cjOdrpKQYdzGgIm3GbrQjUM4K94oQI=;
+        b=gPfKI2pi7sK+SHfShhXu60VN6Dm+vixB1h8KToPUWCnPpa0kP7lL/i4b4doTHdufCa
+         dHUCMd+yPHSYmKnIQ9+8PzLfJjhHviqZjIAR61oqqkCaY5pHiFpocOgMMC9mIiisP5V8
+         v8BYY6sIalj3WlYtnk/2dKujKaJwWTTam7x0JL0150PFsOjpmFSGD8YvEUIcE9UTaF6I
+         C4v7HlWU0DGcf4E5IGSDsLhGX/aRR76N27kHcbkxdQ90FIxI993S5g2K4acGeEft7b2S
+         jV6K6g6goWZiRXeT2YcKw+QKO1nyFWVinjy+DifhPOdqKm/8lvSv/F4PkmX8vlnDlJOl
+         OUIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747727039; x=1748331839;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9uo8wrvNhdGkpDaupALM2V4X4G0GERtYOC9S6Rbd7JE=;
-        b=OM2oc2J7Gl6k4OY9BH2nigp1zWPlGsN9kAyUBogkYCF3ZuldU9DLN+lnJF1DRbG3Kq
-         iOjwD1DB9VA94b6BKDkvULPs0+F4fazg8wcRFKm5svluWL7X01fwBDfkSQ8v9wX6voJI
-         ZmrWkDBo3nGrheczSjhxj51srBYeoT9dpa5TieYLxbVwq3i6ZMVJ5W+0HoRhkHOhPk5+
-         Oyp8w9Cg/aWVgdnlhewPzv372oYMP5vPY/+agg63UmrsnzjZedCt3p5nlH0imIUX+NQA
-         MxUwmz+PUOA2o7hhplbs3uJw6O1QWMlprXuhkqJlVTrgnkC32KilfnXiApIJi+qvNQYK
-         lMUg==
-X-Forwarded-Encrypted: i=1; AJvYcCVJQG98KYU6Vrp5MUXn/GOjifIPL2wkeVB9KIU04477razE5VI3ty8x2VkpDa86teY7GZFWQU0NhRizvhHLU2gw@vger.kernel.org, AJvYcCVbaoj3Wz/tHxBCbC+2eEfYpCP7SpUgkoMNwvIx4QYRTnlhhNRizooAs3NycVNqEdwXeBoMZTKOu/I=@vger.kernel.org, AJvYcCVzYnmJ/AenULUd0KqcZ1HUjT/3BpnDccQ16I6VjCYPXTF0KJt6FknrzJkLR2kDnNhaqrxDzRpg1HenY+Ah@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCoCi9WBdL6B8iBDO0gVaQiu/oEHRs20zyriB4BdLXfar60Dsy
-	6S4FRmLyekTUJ6PbAdpazu8n6d4I1BMsYrDPp5wGrPRfXpJTc44eYr+0xPlpd25d6Az7KusVNQn
-	KlJrFUqOe66x4FXb1lP3Z2Y/KJqzVjxiQxfiFYM8=
-X-Gm-Gg: ASbGncvSlZuoEzr0oIwwfu/2/lWnIqj1XUyuVNIoUJhzouWkVaO0QSZHWCcX1nAepbI
-	wLY7OSyrDW4IdM+9Wv5OFrrgCC6zeHYJfZDStzV4xDKLa+ZlLpyeUDqRsxUIBoiXbIP8c0LYemG
-	tTdszUdIgDzEaDb3zVu1plqODxSwS3ezp2Og==
-X-Google-Smtp-Source: AGHT+IH2XeVratNvJ8FEJrrphJj/JDteq0tJv39Wdwj//5c4Z8WnAee6xYifV9WTkK9RBrjweCf0CdsRboWOvSrgV9Y=
-X-Received: by 2002:ad4:5caa:0:b0:6f8:9a8c:9d83 with SMTP id
- 6a1803df08f44-6f8b2d0d149mr244508426d6.35.1747727028940; Tue, 20 May 2025
- 00:43:48 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1747728427; x=1748333227;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZpHRU034TQkb5cjOdrpKQYdzGgIm3GbrQjUM4K94oQI=;
+        b=sBE4O4jA5lk8cpF/L8q7Y8gg8jy1DQfm+NSTRJUvsIYh4JXrUJIoZ2CuREWvBT4+pf
+         03bzG7Lj8ZBTTIYv404PsOjx1qhT8KZ/fOj7nTVt+Ysj8WKmdk48648PE5OWE2InaaGD
+         UP8cgykxCpl6L8kZ9rlcpBTqn/HPpRmxpuUS7MbgMIDua83Nkr0oAgC1GonnqYAxVYCh
+         slT+GCV/5NwojOvAcnj5iOASHBA2vN/AsEFvrJb+qpOhEqeymqtijfeqbvrUZ/E4KMkU
+         PjYJUuSbMksBV6NIiYbtvLpw24klG2XtKpjkYQIWBKvju+4C1h8CJq/ZlNStdtORvkGB
+         6Szg==
+X-Forwarded-Encrypted: i=1; AJvYcCUpBgUS58t3JWj9T2YhdyRnh3THsTQsWVzuiErhWcnCBIrMhjeY+g2Zir7Oz1S87GOtLIyfr7DZFMcmKXM=@vger.kernel.org, AJvYcCVqPXGjmCFjzaFyCY0wmQh06Nop6FYXeMGXyyudj4bL7kcSNhhVXgzI7/LmzgFsXPXOhVlqvurPebvBXv6wzx11@vger.kernel.org
+X-Gm-Message-State: AOJu0Yznf+RcL8MgTlzAvdSnO3KIL3sJQsaiGptXCC85A8BifZswFJqN
+	6Tt8DnF5HadHebTS+iRyT2cx7Xuv/anmbgHac+6kgYemz7fHDzVuxlMs5h4Pu2g7T+8=
+X-Gm-Gg: ASbGnctdEAjd8+BwA8TXoStgcqmjplj25abbCGNFn6jVVJOkDKSMD4oo7v0ej68IpyU
+	3tqXYZUBZVZ9WQuI5tje0vNGJ7aqewz8dv/WiYBdR5Y+4MCzgPK8NQjX0BYHdCO6jOEhjQNXcHv
+	PH+yqCJ3Asg0YnCPebRqDukWnjiY3FnpjYkW9zESm8i6nPBZylvAywd6k6mROzSdXM2fi0OiUOS
+	9fOjQg4la7TRMVu6PkZnsR8PFzJaIKvjiFiDiOK9tRmfT4F1wyp8qsoGUngAGT1pNPvSPJNsroq
+	EcqVw+68FS8/3T4qzyUgfJM+IqSMdreYV2yCilIv+ZEFtaZmBLYUcnQOIKtJ
+X-Google-Smtp-Source: AGHT+IEZ7lcvAfHdwaoGw0Hd9SkgRJNTKmilJ5RpAOMDo+EDUFFvKvZhoDQePz24CUemumYdt/bp8g==
+X-Received: by 2002:a05:6000:2210:b0:3a3:7bbc:d959 with SMTP id ffacd0b85a97d-3a37bbcdac1mr758115f8f.18.1747728427231;
+        Tue, 20 May 2025 01:07:07 -0700 (PDT)
+Received: from localhost ([87.254.0.133])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3a35ca88899sm15280174f8f.80.2025.05.20.01.07.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 May 2025 01:07:06 -0700 (PDT)
+From: Colin Ian King <colin.i.king@gmail.com>
+To: Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Darren Hart <dvhart@infradead.org>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	=?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	linux-kselftest@vger.kernel.org
+Cc: kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH][next] selftests/futex: Fix spelling mistake "unitiliazed" -> "uninitialized"
+Date: Tue, 20 May 2025 09:06:57 +0100
+Message-ID: <20250520080657.30726-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250515033857.132535-1-npache@redhat.com> <20250515033857.132535-2-npache@redhat.com>
-In-Reply-To: <20250515033857.132535-2-npache@redhat.com>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Tue, 20 May 2025 15:43:12 +0800
-X-Gm-Features: AX0GCFvt6zLLvpZVET4ZwVYJYj9_BSwEJPuE1M1fe9g1tsw5I4FK7vP9A1HV5ug
-Message-ID: <CALOAHbCkhakdoD=HtM7=XwkHvsWu5BA6dLVofO7oFY_Os168uw@mail.gmail.com>
-Subject: Re: [PATCH v6 1/4] mm: defer THP insertion to khugepaged
-To: Nico Pache <npache@redhat.com>
-Cc: linux-mm@kvack.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	rientjes@google.com, hannes@cmpxchg.org, lorenzo.stoakes@oracle.com, 
-	rdunlap@infradead.org, mhocko@suse.com, Liam.Howlett@oracle.com, 
-	zokeefe@google.com, surenb@google.com, jglisse@google.com, cl@gentwo.org, 
-	jack@suse.cz, dave.hansen@linux.intel.com, will@kernel.org, tiwai@suse.de, 
-	catalin.marinas@arm.com, anshuman.khandual@arm.com, dev.jain@arm.com, 
-	raquini@redhat.com, aarcange@redhat.com, kirill.shutemov@linux.intel.com, 
-	yang@os.amperecomputing.com, thomas.hellstrom@linux.intel.com, 
-	vishal.moola@gmail.com, sunnanyong@huawei.com, usamaarif642@gmail.com, 
-	wangkefeng.wang@huawei.com, ziy@nvidia.com, shuah@kernel.org, 
-	peterx@redhat.com, willy@infradead.org, ryan.roberts@arm.com, 
-	baolin.wang@linux.alibaba.com, baohua@kernel.org, david@redhat.com, 
-	mathieu.desnoyers@efficios.com, mhiramat@kernel.org, rostedt@goodmis.org, 
-	corbet@lwn.net, akpm@linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Thu, May 15, 2025 at 12:39=E2=80=AFPM Nico Pache <npache@redhat.com> wro=
-te:
->
-> setting /transparent_hugepages/enabled=3Dalways allows applications
-> to benefit from THPs without having to madvise. However, the page fault
-> handler takes very few considerations to decide weather or not to actuall=
-y
-> use a THP. This can lead to a lot of wasted memory. khugepaged only
-> operates on memory that was either allocated with enabled=3Dalways or
-> MADV_HUGEPAGE.
->
-> Introduce the ability to set enabled=3Ddefer, which will prevent THPs fro=
-m
-> being allocated by the page fault handler unless madvise is set,
-> leaving it up to khugepaged to decide which allocations will collapse to =
-a
-> THP. This should allow applications to benefits from THPs, while curbing
-> some of the memory waste.
->
-> Acked-by: Zi Yan <ziy@nvidia.com>
-> Co-developed-by: Rafael Aquini <raquini@redhat.com>
-> Signed-off-by: Rafael Aquini <raquini@redhat.com>
-> Signed-off-by: Nico Pache <npache@redhat.com>
-> ---
->  include/linux/huge_mm.h | 15 +++++++++++++--
->  mm/huge_memory.c        | 31 +++++++++++++++++++++++++++----
->  2 files changed, 40 insertions(+), 6 deletions(-)
->
-> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
-> index e3d15c737008..02038e3db829 100644
-> --- a/include/linux/huge_mm.h
-> +++ b/include/linux/huge_mm.h
-> @@ -48,6 +48,7 @@ enum transparent_hugepage_flag {
->         TRANSPARENT_HUGEPAGE_UNSUPPORTED,
->         TRANSPARENT_HUGEPAGE_FLAG,
->         TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG,
-> +       TRANSPARENT_HUGEPAGE_DEFER_PF_FLAG,
->         TRANSPARENT_HUGEPAGE_DEFRAG_DIRECT_FLAG,
->         TRANSPARENT_HUGEPAGE_DEFRAG_KSWAPD_FLAG,
->         TRANSPARENT_HUGEPAGE_DEFRAG_KSWAPD_OR_MADV_FLAG,
-> @@ -186,6 +187,7 @@ static inline bool hugepage_global_enabled(void)
->  {
->         return transparent_hugepage_flags &
->                         ((1<<TRANSPARENT_HUGEPAGE_FLAG) |
-> +                       (1<<TRANSPARENT_HUGEPAGE_DEFER_PF_FLAG) |
->                         (1<<TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG));
->  }
->
-> @@ -195,6 +197,12 @@ static inline bool hugepage_global_always(void)
->                         (1<<TRANSPARENT_HUGEPAGE_FLAG);
->  }
->
-> +static inline bool hugepage_global_defer(void)
-> +{
-> +       return transparent_hugepage_flags &
-> +                       (1<<TRANSPARENT_HUGEPAGE_DEFER_PF_FLAG);
-> +}
-> +
->  static inline int highest_order(unsigned long orders)
->  {
->         return fls_long(orders) - 1;
-> @@ -291,13 +299,16 @@ unsigned long thp_vma_allowable_orders(struct vm_ar=
-ea_struct *vma,
->                                        unsigned long tva_flags,
->                                        unsigned long orders)
->  {
-> +       if ((tva_flags & TVA_IN_PF) && hugepage_global_defer() &&
-> +                       !(vm_flags & VM_HUGEPAGE))
-> +               return 0;
-> +
->         /* Optimization to check if required orders are enabled early. */
->         if ((tva_flags & TVA_ENFORCE_SYSFS) && vma_is_anonymous(vma)) {
->                 unsigned long mask =3D READ_ONCE(huge_anon_orders_always)=
-;
-> -
->                 if (vm_flags & VM_HUGEPAGE)
->                         mask |=3D READ_ONCE(huge_anon_orders_madvise);
-> -               if (hugepage_global_always() ||
-> +               if (hugepage_global_always() || hugepage_global_defer() |=
-|
->                     ((vm_flags & VM_HUGEPAGE) && hugepage_global_enabled(=
-)))
->                         mask |=3D READ_ONCE(huge_anon_orders_inherit);
->
-> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> index 700988a0d5cf..ce0ee74753af 100644
-> --- a/mm/huge_memory.c
-> +++ b/mm/huge_memory.c
-> @@ -297,12 +297,15 @@ static ssize_t enabled_show(struct kobject *kobj,
->         const char *output;
->
->         if (test_bit(TRANSPARENT_HUGEPAGE_FLAG, &transparent_hugepage_fla=
-gs))
-> -               output =3D "[always] madvise never";
-> +               output =3D "[always] madvise defer never";
+There is a spelling mistake in a fail error message. Fix it.
 
-a small nit: alphabetical ordering might improve readability here.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ tools/testing/selftests/futex/functional/futex_numa_mpol.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---=20
-Regards
-Yafang
+diff --git a/tools/testing/selftests/futex/functional/futex_numa_mpol.c b/tools/testing/selftests/futex/functional/futex_numa_mpol.c
+index dd70532f293e..8864c610f165 100644
+--- a/tools/testing/selftests/futex/functional/futex_numa_mpol.c
++++ b/tools/testing/selftests/futex/functional/futex_numa_mpol.c
+@@ -181,7 +181,7 @@ int main(int argc, char *argv[])
+ 	test_futex(futex_ptr, 0);
+ 
+ 	if (futex_numa->numa == FUTEX_NO_NODE) {
+-		fail("NUMA node is left unitiliazed\n");
++		fail("NUMA node is left uninitialized\n");
+ 		return 1;
+ 	}
+ 
+-- 
+2.49.0
+
 
