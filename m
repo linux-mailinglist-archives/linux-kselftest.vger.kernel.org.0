@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-33371-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33372-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17C2CABD1D5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 May 2025 10:25:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id ADCB5ABD1D7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 May 2025 10:25:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2AED94A29BF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 May 2025 08:25:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2972F8A13E0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 May 2025 08:25:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EECB264F9C;
-	Tue, 20 May 2025 08:25:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08993265609;
+	Tue, 20 May 2025 08:25:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qMit0kiO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BrejAkOf"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44386264F81;
-	Tue, 20 May 2025 08:25:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAEC1264F9F;
+	Tue, 20 May 2025 08:25:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747729517; cv=none; b=pbJN/ntFFynQCunJARlMVD0PJiz7dfdyGcLxjfRTFOdRSQyrYZZI8L3/DY8QlJI26rpdn0QHidHe6C7H6P0B7Vtb3mq/NZipuFBWQDfkDVtJOjrXZUjQfiqxTpqBg30WFqkNetu2VK2mmkyk1n9c8zIVC8/pSGWJMZAp5O+Cpog=
+	t=1747729519; cv=none; b=MxiTvNVxa1MatBTN317xBbxq9cggeh94yHqHxLRpm57AOTYBKucvGXkk/g1S02EKOajoDmhJLEcrFzYdLUXtOVxM/lgIVSUTGFOyoGQ0iXHSUPQqC2fLuKg4UJ3Ugsw6F9sMpyQu0DiZ9kw0oUm/2siccdeFUZfSdXf6NenjEX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747729517; c=relaxed/simple;
-	bh=7Gqk9JjSJ/fG63XRlpdt6ZRfS4huFSCyqSgLScQXexo=;
+	s=arc-20240116; t=1747729519; c=relaxed/simple;
+	bh=knILOCtQNGTaQcP/xzsYnjivS1CVRek5fFnGxHke0Uk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=U/Xh5UrXd5Vd0YauT0HDgSAEDVBiAHdTA69CDm8CtJHFktfGkBbaLGr6dUaCwfGC6q352JaU0jpow8EGy70d6Xoy+vPhN5CxKZmH3fwqvBODfC8ibDByXnbzjfWb5D/oIVQvZyPlxHYOrJ/QBhLOq3oJxcXyxxEVwiO8OoLmwGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qMit0kiO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63AB6C4CEEF;
-	Tue, 20 May 2025 08:25:14 +0000 (UTC)
+	 MIME-Version; b=fmcfdmY1ETTG7Mw08CxZ41uqYBIKVPX8nbzx+GLRJEjiX2pEoJlunjlSPhd4jDmgrzIxVtdaIRcOse5PEXowh19bTU6L81w70PcFsFvWdXdKW49YUBHZv77txNn6ujullUX+5XMkLZYrkU48b6uqUNrkJ9TivEyBVL7OHWzZyXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BrejAkOf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12D1EC4CEF2;
+	Tue, 20 May 2025 08:25:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747729516;
-	bh=7Gqk9JjSJ/fG63XRlpdt6ZRfS4huFSCyqSgLScQXexo=;
+	s=k20201202; t=1747729519;
+	bh=knILOCtQNGTaQcP/xzsYnjivS1CVRek5fFnGxHke0Uk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=qMit0kiOEB2436VZRhaAyPfwuGQI592EUgAsBXHXPCcKrKRPSE4tjz5DFYy3QQOTl
-	 isndEA+qHni+Eo4sn/Hzd7sH0AJyd18tEwwptvTbRydhR2bL3DhMBM8mH52ZKi6Lzi
-	 kdze5DomGgJqMntYHrRTvnTuXP016katxJBlx8REouhhIkWd+2gkS+FbFJGGrVqTmF
-	 fnxQsaQuJCDiLm4/UW3YBEyi4glUfI8ZbveQcX+OJRiCrGj4TzaAxlTduX29Kr881U
-	 KEGsFaCqh9CkVzOVxy2uXsusJzWOvlicrqdHOEJXsoWiWfX/YJOVQAEhhVjyMUmQLg
-	 H7qjnDnqvhDXA==
+	b=BrejAkOfewqIy4AhB4I0JPfDy+t1hfnEMabu75VOwLXXaxy0asR9U9sA1GJ1h0Khp
+	 1GzX8zG2P0pPSn56ppD5jwCeUykEGqMIF4r8FxSXBzQ8rYWU5Wq3EhGMrIUGcOtRaZ
+	 niA3MjU/VLOHnz5m/Kd3lXvXJuEZH9e4/e2fyCEurCTFEufDJeia46nrUMp3hATops
+	 MpE4B7XFRGLZpdFOyptQnV5T3Xzby5jVkZzF6jFoDhoeqJrchdTYUHHs3oXDqmUdjq
+	 SwonEXGGOUaiUnq4FQ/kh4AbebmOnPTw1NsbL+nzJYu67FeZ7B+UA776f4C+7pqYm6
+	 Bsib8KP3+4dDA==
 From: Tzung-Bi Shih <tzungbi@kernel.org>
 To: bleung@chromium.org,
 	brendan.higgins@linux.dev,
@@ -56,11 +56,10 @@ Cc: tzungbi@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	kunit-dev@googlegroups.com,
 	linux-trace-kernel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Daniel Latypov <dlatypov@google.com>
-Subject: [RFC PATCH 1/7] kunit: expose ftrace-based API for stubbing out functions during tests
-Date: Tue, 20 May 2025 08:24:28 +0000
-Message-ID: <20250520082435.2255639-2-tzungbi@kernel.org>
+	linux-kernel@vger.kernel.org
+Subject: [RFC PATCH 2/7] platform/chrome: kunit: cros_ec_i2c: Add tests with ftrace stub
+Date: Tue, 20 May 2025 08:24:29 +0000
+Message-ID: <20250520082435.2255639-3-tzungbi@kernel.org>
 X-Mailer: git-send-email 2.49.0.1101.gccaa498523-goog
 In-Reply-To: <20250520082435.2255639-1-tzungbi@kernel.org>
 References: <20250520082435.2255639-1-tzungbi@kernel.org>
@@ -72,450 +71,544 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Daniel Latypov <dlatypov@google.com>
+For running the tests:
 
-Allow function redirection using ftrace and kernel livepatch. This is
-basically equivalent to the static_stub support in the previous patch,
-but does not require the function being replaced to be modified (save
-for the addition of KUNIT_STUBBABLE/noinline).
+$ ./tools/testing/kunit/kunit.py run \
+	--arch=x86_64 \
+	--kconfig_add CONFIG_CHROME_PLATFORMS=y \
+	--kconfig_add CONFIG_CROS_EC=y \
+	--kconfig_add CONFIG_FTRACE=y \
+	--kconfig_add CONFIG_FUNCTION_TRACER=y \
+	--kconfig_add CONFIG_MODULES=y \
+	--kconfig_add CONFIG_DEBUG_KERNEL=y \
+	--kconfig_add CONFIG_KALLSYMS_ALL=y \
+	--kconfig_add CONFIG_LIVEPATCH=y \
+	--kconfig_add CONFIG_KUNIT_FTRACE_STUBS=y \
+	--kconfig_add CONFIG_I2C=y \
+	--kconfig_add CONFIG_CROS_EC_I2C=y \
+	--kconfig_add CONFIG_CROS_KUNIT_EC_I2C_TEST=y \
+	cros_ec_i2c*
 
-This is hidden behind the CONFIG_KUNIT_FTRACE_STUBS option, and has a
-number of dependencies, including ftrace, livepatch and
-CONFIG_KALLSYMS_ALL. As a result, it only works on architectures where
-these are available.
-
-You can run the KUnit example tests with the following:
-$ ./tools/testing/kunit/kunit.py run --kunitconfig lib/kunit/stubs_example.kunitconfig --arch=x86_64
-
-To the end user, replacing a function is very simple, e.g.
-  KUNIT_STUBBABLE void real_func(int n);
-  void replacement_func(int n);
-
-  /* in tests */
-  kunit_activate_ftrace_stub(test, real_func, replacement_func);
-
-The implementation is inspired by Steven's snippet here [1].
-
-Some more details:
-* stubbing is automatically undone at the end of tests
-* it can also be manually undone with kunit_deactive_ftrace_stub()
-* stubbing only applies when current->kunit_test == test
-  * note: currently can't have more than one test running at a time
-* KUNIT_STUBBABLE marks tests as noinline when CONFIG_KUNIT_STUBS is set
-  * this ensures we can actually stub all calls
-* KUNIT_STUBBABLE_TRAMPOLINE is a version that evaluates to
-  __always_inline when stubbing is not enabled
-  * This may need to be used with a wrapper function.
-  * See the doc comment for more details.
-
-Sharp-edges:
-* kernel livepatch only works on some arches (not UML)
-* if you don't use noinline/KUNIT_STUBBABLE, functions might be inlined
-  and thus none of this works:
-  * if it's always inlined, at least the attempt to stub will fail
-  * if it's sometimes inlined, then the stub silently won't work
-
-[1] https://lore.kernel.org/lkml/20220224091550.2b7e8784@gandalf.local.home
-[2] https://lore.kernel.org/linux-kselftest/CAGS_qxqtMpjKX+CMF6eBUWfsc-TKR9-Bk+hYM=PHa0_wUtQQuA@mail.gmail.com/
-
-Co-developed-by: David Gow <davidgow@google.com>
-Signed-off-by: David Gow <davidgow@google.com>
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
-[tzungbi:
-  * Resolve contextual conflicts for rebasing.
-  * klp_arch_set_pc() -> ftrace_regs_set_instruction_pointer().
-  * Fix type check in kunit_activate_ftrace_stub() just like what has
-    been done in kunit_activate_static_stub().
-  * Include <kunit/ftrace_stub.h> in lib/kunit/ftrace_stub.c.
-  * Fix typo in include/kunit/ftrace_stub.h as pointed out in [2].
-    * eavlautes -> evaluates.
-    * active -> activate.
-  * Fix typo in kunit-example-test.c and ftrace_stub.c.
-    * static -> ftrace.
-  * EXPORT_SYMBOL_IF_KUNIT() for ftrace_location() as
-    lib/kunit/ftrace_stub.c uses it.  If CONFIG_KUNIT=m, it can't find
-    the symbol ftrace_location().
-  * KUNIT_ASSERT_FAILURE() -> KUNIT_FAIL_AND_ABORT() due to
-    7d4087b01389.
-]
 Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 ---
- include/kunit/ftrace_stub.h         |  84 +++++++++++++++++
- kernel/trace/ftrace.c               |   3 +
- lib/kunit/Kconfig                   |  11 +++
- lib/kunit/Makefile                  |   4 +
- lib/kunit/ftrace_stub.c             | 139 ++++++++++++++++++++++++++++
- lib/kunit/kunit-example-test.c      |  27 +++++-
- lib/kunit/stubs_example.kunitconfig |  11 +++
- 7 files changed, 278 insertions(+), 1 deletion(-)
- create mode 100644 include/kunit/ftrace_stub.h
- create mode 100644 lib/kunit/ftrace_stub.c
- create mode 100644 lib/kunit/stubs_example.kunitconfig
+ drivers/platform/chrome/Kconfig            |   9 +
+ drivers/platform/chrome/Makefile           |   1 +
+ drivers/platform/chrome/cros_ec_i2c_test.c | 479 +++++++++++++++++++++
+ 3 files changed, 489 insertions(+)
+ create mode 100644 drivers/platform/chrome/cros_ec_i2c_test.c
 
-diff --git a/include/kunit/ftrace_stub.h b/include/kunit/ftrace_stub.h
-new file mode 100644
-index 000000000000..79c496b51ac5
---- /dev/null
-+++ b/include/kunit/ftrace_stub.h
-@@ -0,0 +1,84 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _KUNIT_FTRACE_STUB_H
-+#define _KUNIT_FTRACE_STUB_H
-+
-+/** KUNIT_STUBBABLE - marks a function as stubbable when stubbing support is
-+ * enabled.
-+ *
-+ * Stubbing uses ftrace internally, so we can only stub out functions when they
-+ * are not inlined. This macro evaluates to noinline when stubbing support is
-+ * enabled to thus make it safe.
-+ *
-+ * If you cannot add this annotation to the function, you can instead use
-+ * KUNIT_STUBBABLE_TRAMPOLINE, which is the same, but evaluates to
-+ * __always_inline when stubbing is not enabled.
-+ *
-+ * Consider copy_to_user, which is marked as __always_inline:
-+ *
-+ * .. code-block:: c
-+ *	static KUNIT_STUBBABLE_TRAMPOLINE unsigned long
-+ *	copy_to_user_trampoline(void __user *to, const void *from, unsigned long n)
-+ *	{
-+ *		return copy_to_user(to, from, n);
-+ *	}
-+ *
-+ * Then we simply need to update our code to go through this function instead
-+ * (in the places where we want to stub it out).
-+ */
-+#if IS_ENABLED(CONFIG_KUNIT_FTRACE_STUBS)
-+#define KUNIT_STUBBABLE noinline
-+#define KUNIT_STUBBABLE_TRAMPOLINE noinline
-+#else
-+#define KUNIT_STUBBABLE
-+#define KUNIT_STUBBABLE_TRAMPOLINE __always_inline
-+#endif
-+
-+struct kunit;
-+
-+/**
-+ * kunit_activate_ftrace_stub() - makes all calls to @func go to @replacement during @test.
-+ * @test: The test context object.
-+ * @func: The function to stub out, must be annotated with KUNIT_STUBBABLE.
-+ * @replacement: The function to replace @func with.
-+ *
-+ * All calls to @func will instead call @replacement for the duration of the
-+ * current test. If called from outside the test's thread, the function will
-+ * not be redirected.
-+ *
-+ * The redirection can be disabled again with kunit_deactivate_ftrace_stub().
-+ *
-+ * Example:
-+ *
-+ * .. code-block:: c
-+ *	KUNIT_STUBBABLE int real_func(int n)
-+ *	{
-+ *		pr_info("real_func() called with %d", n);
-+ *		return 0;
-+ *	}
-+ *
-+ *	void replacement_func(int n)
-+ *	{
-+ *		pr_info("replacement_func() called with %d", n);
-+ *		return 42;
-+ *	}
-+ *
-+ *	void example_test(struct kunit *test)
-+ *	{
-+ *		kunit_activate_ftrace_stub(test, real_func, replacement_func);
-+ *		KUNIT_EXPECT_EQ(test, real_func(1), 42);
-+ *	}
-+ *
-+ */
-+#define kunit_activate_ftrace_stub(test, func, replacement) do { \
-+	typecheck_fn(typeof(&func), replacement); \
-+	__kunit_activate_ftrace_stub(test, #func, func, replacement); \
-+} while (0)
-+
-+void __kunit_activate_ftrace_stub(struct kunit *test,
-+				  const char *name,
-+				  void *real_fn_addr,
-+				  void *replacement_addr);
-+
-+
-+void kunit_deactivate_ftrace_stub(struct kunit *test, void *real_fn_addr);
-+#endif  /* _KUNIT_STUB_H */
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index 1a48aedb5255..7e86bc57d462 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -36,6 +36,8 @@
- #include <linux/rcupdate.h>
- #include <linux/kprobes.h>
+diff --git a/drivers/platform/chrome/Kconfig b/drivers/platform/chrome/Kconfig
+index 10941ac37305..5e0b44fb7ca7 100644
+--- a/drivers/platform/chrome/Kconfig
++++ b/drivers/platform/chrome/Kconfig
+@@ -327,4 +327,13 @@ config CROS_KUNIT_EC_PROTO_TEST
+ 	help
+ 	  Kunit tests for ChromeOS EC protocol.
  
-+#include <kunit/visibility.h>
-+
- #include <trace/events/sched.h>
- 
- #include <asm/sections.h>
-@@ -1663,6 +1665,7 @@ unsigned long ftrace_location(unsigned long ip)
- 	}
- 	return loc;
- }
-+EXPORT_SYMBOL_IF_KUNIT(ftrace_location);
- 
- /**
-  * ftrace_text_reserved - return true if range contains an ftrace location
-diff --git a/lib/kunit/Kconfig b/lib/kunit/Kconfig
-index a97897edd964..933fda1df5c3 100644
---- a/lib/kunit/Kconfig
-+++ b/lib/kunit/Kconfig
-@@ -93,4 +93,15 @@ config KUNIT_AUTORUN_ENABLED
- 	  In most cases this should be left as Y. Only if additional opt-in
- 	  behavior is needed should this be set to N.
- 
-+config KUNIT_FTRACE_STUBS
-+	bool "Support for stubbing out functions in KUnit tests with ftrace and kernel livepatch"
-+	depends on FTRACE=y && FUNCTION_TRACER=y && MODULES=y && DEBUG_KERNEL=y && KALLSYMS_ALL=y && LIVEPATCH=y
++config CROS_KUNIT_EC_I2C_TEST
++	tristate "Kunit tests for ChromeOS EC over I2C" if !KUNIT_ALL_TESTS
++	depends on KUNIT && CROS_EC
++	default KUNIT_ALL_TESTS
++	depends on KUNIT_FTRACE_STUBS
++	depends on CROS_EC_I2C
 +	help
-+	  Builds support for stubbing out functions for the duration of KUnit
-+	  test cases or suites using ftrace and kernel livepatch.
-+	  See KUNIT_EXAMPLE_TEST for an example.
++	  Kunit tests for ChromeOS EC over I2C.
 +
-+	  NOTE: this does not work on all architectures (like UML, arm64) and
-+	  relies on a lot of magic (see the dependencies list).
-+
- endif # KUNIT
-diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
-index 5aa51978e456..0ecb255576e2 100644
---- a/lib/kunit/Makefile
-+++ b/lib/kunit/Makefile
-@@ -29,3 +29,7 @@ obj-$(CONFIG_KUNIT_TEST) +=		assert_test.o
- endif
- 
- obj-$(CONFIG_KUNIT_EXAMPLE_TEST) +=	kunit-example-test.o
-+
-+ifeq ($(CONFIG_KUNIT_FTRACE_STUBS),y)
-+kunit-objs +=				ftrace_stub.o
-+endif
-diff --git a/lib/kunit/ftrace_stub.c b/lib/kunit/ftrace_stub.c
+ endif # CHROMEOS_PLATFORMS
+diff --git a/drivers/platform/chrome/Makefile b/drivers/platform/chrome/Makefile
+index b981a1bb5bd8..9808f25aea38 100644
+--- a/drivers/platform/chrome/Makefile
++++ b/drivers/platform/chrome/Makefile
+@@ -44,3 +44,4 @@ obj-$(CONFIG_WILCO_EC)			+= wilco_ec/
+ # Kunit test cases
+ obj-$(CONFIG_CROS_KUNIT_EC_PROTO_TEST)	+= cros_kunit_proto_test.o
+ cros_kunit_proto_test-objs		:= cros_ec_proto_test_util.o cros_ec_proto_test.o
++obj-$(CONFIG_CROS_KUNIT_EC_I2C_TEST)	+= cros_ec_i2c_test.o
+diff --git a/drivers/platform/chrome/cros_ec_i2c_test.c b/drivers/platform/chrome/cros_ec_i2c_test.c
 new file mode 100644
-index 000000000000..1cf6edceb19c
+index 000000000000..3a7f1a17d82d
 --- /dev/null
-+++ b/lib/kunit/ftrace_stub.c
-@@ -0,0 +1,139 @@
++++ b/drivers/platform/chrome/cros_ec_i2c_test.c
+@@ -0,0 +1,479 @@
 +// SPDX-License-Identifier: GPL-2.0
++/*
++ * Kunit tests for ChromeOS Embedded Controller I2C interface.
++ */
 +#include <kunit/test.h>
 +#include <kunit/ftrace_stub.h>
 +
-+#include <linux/typecheck.h>
-+
-+#include <linux/ftrace.h>
-+#include <linux/livepatch.h>
++#include <linux/i2c.h>
++#include <linux/platform_data/cros_ec_proto.h>
 +#include <linux/sched.h>
 +
-+struct kunit_ftrace_stub_ctx {
-+	struct kunit *test;
-+	unsigned long real_fn_addr; /* used as a key to lookup the stub */
-+	unsigned long replacement_addr;
-+	struct ftrace_ops ops; /* a copy of kunit_stub_base_ops with .private set */
++#include "cros_ec.h"
++
++#define BUFSIZE 128
++#define I2C_ADDR 0x06
++
++struct cros_ec_i2c_test_priv {
++	struct i2c_adapter *fake_adap;
++	struct i2c_client *client;
++
++	int fake_cros_ec_register_called;
++	struct cros_ec_device *ec_dev;
++
++	int fake_cros_ec_unregister_called;
++
++	struct i2c_msg *i2c_msgs;
++	int i2c_msg_num;
++	int fake_i2c_xfer_res;
++	int fake_i2c_xfer_len;
++	u8 *fake_i2c_xfer_data;
++	u8 fake_i2c_xfer_sum;
++	int fake_i2c_xfer_ret;
 +};
 +
-+static void kunit_stub_trampoline(unsigned long ip, unsigned long parent_ip,
-+				  struct ftrace_ops *ops,
-+				  struct ftrace_regs *fregs)
++static int fake_cros_ec_register(struct cros_ec_device *ec_dev)
 +{
-+	struct kunit_ftrace_stub_ctx *ctx = ops->private;
-+	int lock_bit;
++	struct kunit *test = current->kunit_test;
++	struct cros_ec_i2c_test_priv *priv = test->priv;
 +
-+	if (current->kunit_test != ctx->test)
-+		return;
++	priv->fake_cros_ec_register_called += 1;
 +
-+	lock_bit = ftrace_test_recursion_trylock(ip, parent_ip);
-+	KUNIT_ASSERT_GE(ctx->test, lock_bit, 0);
-+
-+	ftrace_regs_set_instruction_pointer(fregs, ctx->replacement_addr);
-+
-+	ftrace_test_recursion_unlock(lock_bit);
++	priv->ec_dev = ec_dev;
++	priv->ec_dev->din_size = BUFSIZE;
++	priv->ec_dev->din = kunit_kmalloc(test, priv->ec_dev->din_size, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, priv->ec_dev->din);
++	priv->ec_dev->dout_size = BUFSIZE;
++	priv->ec_dev->dout = kunit_kmalloc(test, priv->ec_dev->dout_size, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, priv->ec_dev->dout);
++	return 0;
 +}
 +
-+static struct ftrace_ops kunit_stub_base_ops = {
-+	.func = &kunit_stub_trampoline,
-+	.flags = FTRACE_OPS_FL_IPMODIFY |
-+#ifndef CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS
-+		FTRACE_OPS_FL_SAVE_REGS |
-+#endif
-+		FTRACE_OPS_FL_DYNAMIC
++static void fake_cros_ec_unregister(struct cros_ec_device *ec_dev)
++{
++	struct kunit *test = current->kunit_test;
++	struct cros_ec_i2c_test_priv *priv = test->priv;
++
++	priv->fake_cros_ec_unregister_called += 1;
++}
++
++static int fake_cros_ec_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
++{
++	struct kunit *test = current->kunit_test;
++	struct cros_ec_i2c_test_priv *priv = test->priv;
++	int i;
++
++	priv->i2c_msgs = kunit_kmalloc_array(test, sizeof(struct i2c_msg), num, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, priv->i2c_msgs);
++
++	for (i = 0; i < num; ++i) {
++		memcpy(priv->i2c_msgs + i, msgs + i, sizeof(struct i2c_msg));
++
++		priv->i2c_msgs[i].buf = kunit_kmalloc(test, msgs[i].len, GFP_KERNEL);
++		KUNIT_ASSERT_NOT_NULL(test, priv->i2c_msgs[i].buf);
++		memcpy(priv->i2c_msgs[i].buf, msgs[i].buf, msgs[i].len);
++
++		if (msgs[i].flags == I2C_M_RD) {
++			msgs[i].buf[0] = priv->fake_i2c_xfer_res;
++			msgs[i].buf[1] = priv->fake_i2c_xfer_len;
++
++			if (priv->fake_i2c_xfer_data)
++				memcpy(&msgs[i].buf[2], priv->fake_i2c_xfer_data,
++				       priv->fake_i2c_xfer_len);
++
++			msgs[i].buf[priv->fake_i2c_xfer_len + 2] = priv->fake_i2c_xfer_sum;
++		}
++	}
++	priv->i2c_msg_num = num;
++
++	return priv->fake_i2c_xfer_ret;
++}
++
++static u32 fake_cros_ec_i2c_functionality(struct i2c_adapter *adap)
++{
++	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
++}
++
++static const struct i2c_algorithm fake_cros_ec_i2c_algorithm = {
++	.master_xfer = fake_cros_ec_i2c_xfer,
++	.functionality = fake_cros_ec_i2c_functionality,
 +};
 +
-+static void __kunit_ftrace_stub_resource_free(struct kunit_resource *res)
++static int cros_ec_i2c_test_init(struct kunit *test)
 +{
-+	struct kunit_ftrace_stub_ctx *ctx = res->data;
++	struct cros_ec_i2c_test_priv *priv;
++	static const struct i2c_board_info board_info = {
++		I2C_BOARD_INFO("cros-ec-i2c", I2C_ADDR),
++	};
 +
-+	unregister_ftrace_function(&ctx->ops);
-+	kfree(ctx);
++	kunit_activate_ftrace_stub(test, cros_ec_register, fake_cros_ec_register);
++	kunit_activate_ftrace_stub(test, cros_ec_unregister, fake_cros_ec_unregister);
++
++	priv = kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, priv);
++	test->priv = priv;
++
++	priv->fake_adap = kunit_kzalloc(test, sizeof(*priv->fake_adap), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, priv->fake_adap);
++
++	priv->fake_adap->owner = THIS_MODULE;
++	strscpy(priv->fake_adap->name, "cros-ec-i2c-test");
++	priv->fake_adap->algo = &fake_cros_ec_i2c_algorithm;
++	priv->fake_adap->retries = 3;
++
++	KUNIT_ASSERT_EQ(test, i2c_add_adapter(priv->fake_adap), 0);
++
++	priv->client = i2c_new_client_device(priv->fake_adap, &board_info);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv->client);
++	KUNIT_EXPECT_EQ(test, priv->client->addr, I2C_ADDR);
++
++	KUNIT_EXPECT_EQ(test, priv->fake_cros_ec_register_called, 1);
++	KUNIT_ASSERT_NOT_NULL(test, priv->ec_dev);
++	KUNIT_EXPECT_EQ(test, priv->fake_cros_ec_unregister_called, 0);
++	return 0;
 +}
 +
-+/* Matching function for kunit_find_resource(). match_data is real_fn_addr. */
-+static bool __kunit_ftrace_stub_resource_match(struct kunit *test,
-+						struct kunit_resource *res,
-+						void *match_real_fn_addr)
++static void cros_ec_i2c_test_exit(struct kunit *test)
 +{
-+	/* This pointer is only valid if res is a ftrace stub resource. */
-+	struct kunit_ftrace_stub_ctx *ctx = res->data;
++	struct cros_ec_i2c_test_priv *priv = test->priv;
 +
-+	/* Make sure the resource is a ftrace stub resource. */
-+	if (res->free != &__kunit_ftrace_stub_resource_free)
-+		return false;
++	i2c_unregister_device(priv->client);
++	KUNIT_EXPECT_EQ(test, priv->fake_cros_ec_unregister_called, 1);
 +
-+	return ctx->real_fn_addr == (unsigned long)match_real_fn_addr;
++	i2c_del_adapter(priv->fake_adap);
++
++	kunit_deactivate_ftrace_stub(test, cros_ec_register);
++	kunit_deactivate_ftrace_stub(test, cros_ec_unregister);
 +}
 +
-+void kunit_deactivate_ftrace_stub(struct kunit *test, void *real_fn_addr)
++static int cros_ec_i2c_test_cmd_xfer_init(struct kunit *test)
 +{
-+	struct kunit_resource *res;
++	struct cros_ec_i2c_test_priv *priv;
 +
-+	KUNIT_ASSERT_PTR_NE_MSG(test, real_fn_addr, NULL,
-+				"Tried to deactivate a NULL stub.");
++	cros_ec_i2c_test_init(test);
++	priv = test->priv;
++	priv->ec_dev->proto_version = 2;
++	return 0;
++}
 +
-+	/* Look up the existing stub for this function. */
-+	res = kunit_find_resource(test,
-+				  __kunit_ftrace_stub_resource_match,
-+				  real_fn_addr);
++static void cros_ec_i2c_test_cmd_xfer_normal(struct kunit *test)
++{
++	struct cros_ec_i2c_test_priv *priv = test->priv;
++	struct cros_ec_command *msg;
++	int ret, i;
++	u8 sum;
 +
-+	/* Error out if the stub doesn't exist. */
-+	KUNIT_ASSERT_PTR_NE_MSG(test, res, NULL,
-+				"Tried to deactivate a nonexistent stub.");
++	msg = kunit_kmalloc(test, sizeof(*msg) + 2 /* max(outsize, insize) */, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, msg);
++	msg->version = 0x1000;
++	msg->command = 0x1001;
++	msg->outsize = 2;
++	msg->insize = 1;
++	msg->data[0] = 0xbe;
++	msg->data[1] = 0xef;
 +
-+	/* Free the stub. We 'put' twice, as we got a reference
-+	 * from kunit_find_resource(). The free function will deactivate the
-+	 * ftrace stub.
++	priv->fake_i2c_xfer_res = 0;
++	priv->fake_i2c_xfer_data = kunit_kmalloc(test, msg->insize, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, priv->fake_i2c_xfer_data);
++	priv->fake_i2c_xfer_data[0] = 0xaa;
++	priv->fake_i2c_xfer_len = msg->insize;
++	priv->fake_i2c_xfer_ret = 2 /* # of i2c_msg */;
++	sum = priv->fake_i2c_xfer_res + priv->fake_i2c_xfer_len + priv->fake_i2c_xfer_data[0];
++	priv->fake_i2c_xfer_sum = sum;
++
++	ret = priv->ec_dev->cmd_xfer(priv->ec_dev, msg);
++	KUNIT_EXPECT_EQ(test, ret, 1 /* insize */);
++	KUNIT_EXPECT_EQ(test, msg->result, 0);
++	KUNIT_EXPECT_EQ(test, msg->data[0], 0xaa);
++
++	KUNIT_EXPECT_EQ(test, priv->i2c_msg_num, 2);
++	/*
++	 * Validate output message only which is supposed to be received by EC devices.
 +	 */
-+	kunit_remove_resource(test, res);
-+	kunit_put_resource(res);
++	KUNIT_EXPECT_EQ(test, priv->i2c_msgs[0].addr, I2C_ADDR);
++	KUNIT_EXPECT_EQ(test, priv->i2c_msgs[0].flags, 0);
++	/*
++	 * Total length of the message: EC_MSG_TX_HEADER_BYTES (version, command, length) +
++	 * outsize + EC_MSG_TX_TRAILER_BYTES (checksum).
++	 */
++	KUNIT_EXPECT_EQ(test, priv->i2c_msgs[0].len, EC_MSG_TX_PROTO_BYTES + 2 /* outsize */);
++	KUNIT_EXPECT_EQ(test, priv->i2c_msgs[0].buf[0], (u8)(EC_CMD_VERSION0 + 0x1000));
++	KUNIT_EXPECT_EQ(test, priv->i2c_msgs[0].buf[1], (u8)0x1001);
++	KUNIT_EXPECT_EQ(test, priv->i2c_msgs[0].buf[2], 2 /* outsize */);
++	for (sum = 0, i = 0; i < EC_MSG_TX_HEADER_BYTES + 2 /* outsize */; ++i)
++		sum += priv->i2c_msgs[0].buf[i];
++	KUNIT_EXPECT_EQ(test,
++			priv->i2c_msgs[0].buf[EC_MSG_TX_HEADER_BYTES + 2 /* outsize */], sum);
 +}
-+EXPORT_SYMBOL_GPL(kunit_deactivate_ftrace_stub);
 +
-+void __kunit_activate_ftrace_stub(struct kunit *test,
-+				  const char *name,
-+				  void *real_fn_addr,
-+				  void *replacement_addr)
++static void cros_ec_i2c_test_cmd_xfer_error(struct kunit *test)
 +{
-+	unsigned long ftrace_ip;
-+	struct kunit_ftrace_stub_ctx *ctx;
++	struct cros_ec_i2c_test_priv *priv = test->priv;
++	struct cros_ec_command msg = {};
 +	int ret;
 +
-+	ftrace_ip = ftrace_location((unsigned long)real_fn_addr);
-+	if (!ftrace_ip)
-+		KUNIT_FAIL_AND_ABORT(test, "%s ip is invalid: not a function, or is marked notrace or inline", name);
++	priv->fake_i2c_xfer_ret = -EBUSY;
++	ret = priv->ec_dev->cmd_xfer(priv->ec_dev, &msg);
++	KUNIT_EXPECT_EQ(test, ret, -EBUSY);
 +
-+	/* Allocate the stub context, which contains pointers to the replacement
-+	 * function and the test object. It's also registered as a KUnit
-+	 * resource which can be looked up by address (to deactivate manually)
-+	 * and is destroyed automatically on test exit.
-+	 */
-+	ctx = kmalloc(sizeof(*ctx), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL_MSG(test, ctx, "failed to allocate kunit stub for %s", name);
++	priv->fake_i2c_xfer_ret = 1;
++	ret = priv->ec_dev->cmd_xfer(priv->ec_dev, &msg);
++	KUNIT_EXPECT_EQ(test, ret, -EIO);
 +
-+	ctx->test = test;
-+	ctx->ops = kunit_stub_base_ops;
-+	ctx->ops.private = ctx;
-+	ctx->real_fn_addr = (unsigned long)real_fn_addr;
-+	ctx->replacement_addr = (unsigned long)replacement_addr;
-+
-+	ret = ftrace_set_filter_ip(&ctx->ops, ftrace_ip, 0, 0);
-+	if (ret) {
-+		kfree(ctx);
-+		KUNIT_FAIL_AND_ABORT(test, "failed to set filter ip for %s: %d", name, ret);
-+	}
-+
-+	ret = register_ftrace_function(&ctx->ops);
-+	if (ret) {
-+		kfree(ctx);
-+		if (ret == -EBUSY)
-+			KUNIT_FAIL_AND_ABORT(test, "failed to register stub (-EBUSY) for %s, likely due to already stubbing it?", name);
-+		KUNIT_FAIL_AND_ABORT(test, "failed to register stub for %s: %d", name, ret);
-+	}
-+
-+	/* Register the stub as a resource with a cleanup function */
-+	kunit_alloc_resource(test, NULL,
-+			     __kunit_ftrace_stub_resource_free,
-+			     GFP_KERNEL, ctx);
++	priv->fake_i2c_xfer_ret = 2 /* # of i2c_msg */;
++	priv->fake_i2c_xfer_res = EC_RES_IN_PROGRESS;
++	ret = priv->ec_dev->cmd_xfer(priv->ec_dev, &msg);
++	KUNIT_EXPECT_EQ(test, ret, -EAGAIN);
 +}
-+EXPORT_SYMBOL_GPL(__kunit_activate_ftrace_stub);
-diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-test.c
-index 3056d6bc705d..1974e8d24a50 100644
---- a/lib/kunit/kunit-example-test.c
-+++ b/lib/kunit/kunit-example-test.c
-@@ -8,6 +8,7 @@
- 
- #include <kunit/test.h>
- #include <kunit/static_stub.h>
-+#include <kunit/ftrace_stub.h>
- 
- /*
-  * This is the most fundamental element of KUnit, the test case. A test case
-@@ -152,7 +153,7 @@ static void example_all_expect_macros_test(struct kunit *test)
- }
- 
- /* This is a function we'll replace with static stubs. */
--static int add_one(int i)
-+static KUNIT_STUBBABLE int add_one(int i)
- {
- 	/* This will trigger the stub if active. */
- 	KUNIT_STATIC_STUB_REDIRECT(add_one, i);
-@@ -277,6 +278,29 @@ static void example_slow_test(struct kunit *test)
- 	KUNIT_EXPECT_EQ(test, 1 + 1, 2);
- }
- 
-+/*
-+ * This test shows the use of ftrace stubs.
-+ */
-+static void example_ftrace_stub_test(struct kunit *test)
++
++static void cros_ec_i2c_test_cmd_xfer_response_too_long(struct kunit *test)
 +{
-+#if !IS_ENABLED(CONFIG_KUNIT_FTRACE_STUBS)
-+	kunit_skip(test, "KUNIT_FTRACE_STUBS not enabled");
-+#else
-+	/* By default, function is not stubbed. */
-+	KUNIT_EXPECT_EQ(test, add_one(1), 2);
++	struct cros_ec_i2c_test_priv *priv = test->priv;
++	struct cros_ec_command msg = {};
++	int ret;
 +
-+	/* Replace add_one() with subtract_one(). */
-+	kunit_activate_ftrace_stub(test, add_one, subtract_one);
++	priv->fake_i2c_xfer_res = 0;
++	priv->fake_i2c_xfer_data = kunit_kmalloc(test, 1, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, priv->fake_i2c_xfer_data);
++	priv->fake_i2c_xfer_len = msg.insize + 1; /* make it greater than msg.insize */
++	priv->fake_i2c_xfer_ret = 2 /* # of i2c_msg */;
 +
-+	/* add_one() is now replaced. */
-+	KUNIT_EXPECT_EQ(test, add_one(1), 0);
-+
-+	/* Return add_one() to normal. */
-+	kunit_deactivate_ftrace_stub(test, add_one);
-+	KUNIT_EXPECT_EQ(test, add_one(1), 2);
-+#endif
++	ret = priv->ec_dev->cmd_xfer(priv->ec_dev, &msg);
++	KUNIT_EXPECT_EQ(test, ret, -ENOSPC);
 +}
 +
- /*
-  * Here we make a list of all the test cases we want to add to the test suite
-  * below.
-@@ -297,6 +321,7 @@ static struct kunit_case example_test_cases[] = {
- 	KUNIT_CASE(example_priv_test),
- 	KUNIT_CASE_PARAM(example_params_test, example_gen_params),
- 	KUNIT_CASE_SLOW(example_slow_test),
-+	KUNIT_CASE(example_ftrace_stub_test),
- 	{}
- };
- 
-diff --git a/lib/kunit/stubs_example.kunitconfig b/lib/kunit/stubs_example.kunitconfig
-new file mode 100644
-index 000000000000..a47369199fb9
---- /dev/null
-+++ b/lib/kunit/stubs_example.kunitconfig
-@@ -0,0 +1,11 @@
-+CONFIG_KUNIT=y
-+CONFIG_KUNIT_FTRACE_STUBS=y
-+CONFIG_KUNIT_EXAMPLE_TEST=y
++static void cros_ec_i2c_test_cmd_xfer_response_bad_checksum(struct kunit *test)
++{
++	struct cros_ec_i2c_test_priv *priv = test->priv;
++	struct cros_ec_command msg = {};
++	int ret;
 +
-+# Depedencies
-+CONFIG_FTRACE=y
-+CONFIG_FUNCTION_TRACER=y
-+CONFIG_MODULES=y
-+CONFIG_DEBUG_KERNEL=y
-+CONFIG_KALLSYMS_ALL=y
-+CONFIG_LIVEPATCH=y
++	priv->fake_i2c_xfer_ret = 2 /* # of i2c_msg */;
++	priv->fake_i2c_xfer_sum = (u8)0xbad;
++
++	ret = priv->ec_dev->cmd_xfer(priv->ec_dev, &msg);
++	KUNIT_EXPECT_EQ(test, ret, -EBADMSG);
++}
++
++static struct kunit_case cros_ec_i2c_test_cmd_xfer_cases[] = {
++	KUNIT_CASE(cros_ec_i2c_test_cmd_xfer_normal),
++	KUNIT_CASE(cros_ec_i2c_test_cmd_xfer_error),
++	KUNIT_CASE(cros_ec_i2c_test_cmd_xfer_response_too_long),
++	KUNIT_CASE(cros_ec_i2c_test_cmd_xfer_response_bad_checksum),
++	{},
++};
++
++static struct kunit_suite cros_ec_i2c_test_cmd_xfer_suite = {
++	.name = "cros_ec_i2c_test_cmd_xfer_suite",
++	.init = cros_ec_i2c_test_cmd_xfer_init,
++	.exit = cros_ec_i2c_test_exit,
++	.test_cases = cros_ec_i2c_test_cmd_xfer_cases,
++};
++
++static int cros_ec_i2c_test_pkt_xfer_init(struct kunit *test)
++{
++	struct cros_ec_i2c_test_priv *priv;
++
++	cros_ec_i2c_test_init(test);
++	priv = test->priv;
++	priv->ec_dev->proto_version = 3;
++	return 0;
++}
++
++static void cros_ec_i2c_test_pkt_xfer_normal(struct kunit *test)
++{
++	struct cros_ec_i2c_test_priv *priv = test->priv;
++	struct cros_ec_command *msg;
++	struct ec_host_request *request;
++	struct ec_host_response *response;
++	int ret, i;
++	u8 sum;
++
++	msg = kunit_kmalloc(test, sizeof(*msg) + 2 /* max(outsize, insize) */, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, msg);
++	msg->version = 0x1000;
++	msg->command = 0x1001;
++	msg->outsize = 2;
++	msg->insize = 1;
++	msg->data[0] = 0xbe;
++	msg->data[1] = 0xef;
++
++	priv->fake_i2c_xfer_res = 0;
++	priv->fake_i2c_xfer_len = sizeof(*response) + msg->insize;
++	priv->fake_i2c_xfer_data = kunit_kzalloc(test, priv->fake_i2c_xfer_len, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, priv->fake_i2c_xfer_data);
++	response = (struct ec_host_response *)priv->fake_i2c_xfer_data;
++	response->struct_version = EC_HOST_RESPONSE_VERSION;
++	response->data_len = msg->insize;
++	priv->fake_i2c_xfer_data[sizeof(*response)] = 0xaa;
++	priv->fake_i2c_xfer_ret = 2 /* # of i2c_msg */;
++	for (sum = 0, i = 0; i < priv->fake_i2c_xfer_len; ++i)
++		sum += priv->fake_i2c_xfer_data[i];
++	response->checksum = -sum;
++
++	ret = priv->ec_dev->pkt_xfer(priv->ec_dev, msg);
++	KUNIT_EXPECT_EQ(test, ret, 1 /* insize */);
++	KUNIT_EXPECT_EQ(test, msg->result, 0);
++	KUNIT_EXPECT_EQ(test, msg->data[0], 0xaa);
++
++	KUNIT_EXPECT_EQ(test, priv->i2c_msg_num, 2);
++	/*
++	 * Validate output message only which is supposed to be received by EC devices.
++	 */
++	KUNIT_EXPECT_EQ(test, priv->i2c_msgs[0].addr, I2C_ADDR);
++	KUNIT_EXPECT_EQ(test, priv->i2c_msgs[0].flags, 0);
++	/*
++	 * Total length of the message: sizeof(struct ec_host_request_i2c) + outsize.
++	 * The test can't access struct ec_host_request_i2c directly (in cros_ec_i2c.c).
++	 * However, it is a {u8 + struct ec_host_request} struct.
++	 */
++	KUNIT_EXPECT_EQ(test, priv->i2c_msgs[0].len, 1 + sizeof(*request) + 2 /* outsize */);
++	/*
++	 * i2c_msgs[0].buf is a struct ec_host_request_i2c.  Again, the test can't access the
++	 * struct directly.  Access the u8 and struct ec_host_request separately.
++	 */
++	KUNIT_EXPECT_EQ(test, priv->i2c_msgs[0].buf[0], EC_COMMAND_PROTOCOL_3);
++	request = (struct ec_host_request *)&priv->i2c_msgs[0].buf[1];
++	KUNIT_EXPECT_EQ(test, request->struct_version, EC_HOST_REQUEST_VERSION);
++	KUNIT_EXPECT_EQ(test, request->command, 0x1001);
++	KUNIT_EXPECT_EQ(test, request->command_version, (u8)0x1000);
++	KUNIT_EXPECT_EQ(test, request->data_len, 2 /* outsize */);
++	for (sum = 0, i = 0; i < sizeof(*request); ++i)
++		sum += ((u8 *)request)[i];
++	sum += 0xbe + 0xef;
++	KUNIT_EXPECT_EQ(test, sum, 0);
++}
++
++static void cros_ec_i2c_test_pkt_xfer_msg_too_long(struct kunit *test)
++{
++	struct cros_ec_i2c_test_priv *priv = test->priv;
++	struct cros_ec_command msg = {
++		.insize = 10,
++		.outsize = 10,
++	};
++	int ret;
++
++	priv->ec_dev->din_size = 0;
++	ret = priv->ec_dev->pkt_xfer(priv->ec_dev, &msg);
++	KUNIT_EXPECT_EQ(test, ret, -EINVAL);
++
++	priv->ec_dev->din_size = BUFSIZE;
++	priv->ec_dev->dout_size = 0;
++	ret = priv->ec_dev->pkt_xfer(priv->ec_dev, &msg);
++	KUNIT_EXPECT_EQ(test, ret, -EINVAL);
++}
++
++static void cros_ec_i2c_test_pkt_xfer_error(struct kunit *test)
++{
++	struct cros_ec_i2c_test_priv *priv = test->priv;
++	struct cros_ec_command msg = {};
++	int ret;
++
++	priv->fake_i2c_xfer_ret = -EBUSY;
++	ret = priv->ec_dev->pkt_xfer(priv->ec_dev, &msg);
++	KUNIT_EXPECT_EQ(test, ret, -EBUSY);
++
++	priv->fake_i2c_xfer_ret = 1;
++	ret = priv->ec_dev->pkt_xfer(priv->ec_dev, &msg);
++	KUNIT_EXPECT_EQ(test, ret, -EIO);
++}
++
++static void cros_ec_i2c_test_pkt_xfer_in_progress(struct kunit *test)
++{
++	struct cros_ec_i2c_test_priv *priv = test->priv;
++	struct cros_ec_command msg = {};
++	int ret;
++
++	priv->fake_i2c_xfer_res = EC_RES_IN_PROGRESS;
++	priv->fake_i2c_xfer_ret = 2 /* # of i2c_msg */;
++	ret = priv->ec_dev->pkt_xfer(priv->ec_dev, &msg);
++	KUNIT_EXPECT_EQ(test, ret, -EAGAIN);
++}
++
++static void cros_ec_i2c_test_pkt_xfer_to_v2_proto(struct kunit *test)
++{
++	struct cros_ec_i2c_test_priv *priv = test->priv;
++	struct cros_ec_command msg = {};
++	int ret;
++
++	priv->fake_i2c_xfer_res = EC_RES_INVALID_COMMAND;
++	priv->fake_i2c_xfer_ret = 2 /* # of i2c_msg */;
++	ret = priv->ec_dev->pkt_xfer(priv->ec_dev, &msg);
++	KUNIT_EXPECT_EQ(test, ret, -EPROTONOSUPPORT);
++}
++
++static void cros_ec_i2c_test_pkt_xfer_response_too_short(struct kunit *test)
++{
++	struct cros_ec_i2c_test_priv *priv = test->priv;
++	struct cros_ec_command msg = {};
++	int ret;
++
++	priv->fake_i2c_xfer_len = sizeof(struct ec_host_response) - 1; /* make it shorter */
++	priv->fake_i2c_xfer_ret = 2 /* # of i2c_msg */;
++	ret = priv->ec_dev->pkt_xfer(priv->ec_dev, &msg);
++	KUNIT_EXPECT_EQ(test, ret, -EBADMSG);
++}
++
++static void cros_ec_i2c_test_pkt_xfer_response_too_long(struct kunit *test)
++{
++	struct cros_ec_i2c_test_priv *priv = test->priv;
++	struct cros_ec_command msg = {};
++	struct ec_host_response *response;
++	int ret;
++
++	priv->fake_i2c_xfer_len = sizeof(*response);
++	priv->fake_i2c_xfer_data = kunit_kzalloc(test, priv->fake_i2c_xfer_len, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, priv->fake_i2c_xfer_data);
++	response = (struct ec_host_response *)priv->fake_i2c_xfer_data;
++	response->struct_version = EC_HOST_RESPONSE_VERSION;
++	response->data_len = 100;
++	priv->fake_i2c_xfer_ret = 2 /* # of i2c_msg */;
++
++	ret = priv->ec_dev->pkt_xfer(priv->ec_dev, &msg);
++	KUNIT_EXPECT_EQ(test, ret, -EMSGSIZE);
++}
++
++static void cros_ec_i2c_test_pkt_xfer_bad_checksum(struct kunit *test)
++{
++	struct cros_ec_i2c_test_priv *priv = test->priv;
++	struct cros_ec_command msg = {};
++	struct ec_host_response *response;
++	int ret;
++
++	priv->fake_i2c_xfer_len = sizeof(*response);
++	priv->fake_i2c_xfer_data = kunit_kzalloc(test, priv->fake_i2c_xfer_len, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, priv->fake_i2c_xfer_data);
++	response = (struct ec_host_response *)priv->fake_i2c_xfer_data;
++	response->struct_version = EC_HOST_RESPONSE_VERSION;
++	response->checksum = (u8)0xbad;
++	priv->fake_i2c_xfer_ret = 2 /* # of i2c_msg */;
++
++	ret = priv->ec_dev->pkt_xfer(priv->ec_dev, &msg);
++	KUNIT_EXPECT_EQ(test, ret, -EBADMSG);
++}
++
++static struct kunit_case cros_ec_i2c_test_pkt_xfer_cases[] = {
++	KUNIT_CASE(cros_ec_i2c_test_pkt_xfer_normal),
++	KUNIT_CASE(cros_ec_i2c_test_pkt_xfer_msg_too_long),
++	KUNIT_CASE(cros_ec_i2c_test_pkt_xfer_error),
++	KUNIT_CASE(cros_ec_i2c_test_pkt_xfer_in_progress),
++	KUNIT_CASE(cros_ec_i2c_test_pkt_xfer_to_v2_proto),
++	KUNIT_CASE(cros_ec_i2c_test_pkt_xfer_response_too_short),
++	KUNIT_CASE(cros_ec_i2c_test_pkt_xfer_response_too_long),
++	KUNIT_CASE(cros_ec_i2c_test_pkt_xfer_bad_checksum),
++	{},
++};
++
++static struct kunit_suite cros_ec_i2c_test_pkt_xfer_suite = {
++	.name = "cros_ec_i2c_test_pkt_xfer_suite",
++	.init = cros_ec_i2c_test_pkt_xfer_init,
++	.exit = cros_ec_i2c_test_exit,
++	.test_cases = cros_ec_i2c_test_pkt_xfer_cases,
++};
++
++kunit_test_suites(
++	&cros_ec_i2c_test_cmd_xfer_suite,
++	&cros_ec_i2c_test_pkt_xfer_suite,
++);
++
++MODULE_LICENSE("GPL");
 -- 
 2.49.0.1101.gccaa498523-goog
 
