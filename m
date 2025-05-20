@@ -1,78 +1,78 @@
-Return-Path: <linux-kselftest+bounces-33426-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33427-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92875ABE4B8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 May 2025 22:31:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B29C5ABE4B9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 May 2025 22:31:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B12C24A3B84
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 May 2025 20:31:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D45D71899B12
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 May 2025 20:31:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B5D528C841;
-	Tue, 20 May 2025 20:30:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD33328CF4C;
+	Tue, 20 May 2025 20:30:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iyoQumk2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DVdvxzw6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED7FC24677A;
-	Tue, 20 May 2025 20:30:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34E9A28C5C9;
+	Tue, 20 May 2025 20:30:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747773050; cv=none; b=QvHBvMK5Lok+E0H8M4Hn3JMGsI0krIZZnnKv8aR90JkjpAs3uZXixB8CvEfjd6ifEO5qEbRuVBUamgzmbv1YESFySYQRoyhNRU9Z2YjchfQ++CLB9fGPgr5Kb3AY5v19N8ufQ9qAhElxGlsAyWDuLvD4cxgaWyvrCQCUTeLjhAI=
+	t=1747773051; cv=none; b=Y7q1GuWzEEfuoTFZJwRAAq0Tzq+noBEftylQLqMovXmke/KKG7WjcfLyouwU2fPimvExld3EhD+SQGAyntj55LZ5HGBw31YPTcSPMpfRsyFly9QaPw2+EIDog9NquJxUIO+J4/xfPOuw0v5cqvuOU08NKxiWQqxd1T37O8LMpxM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747773050; c=relaxed/simple;
-	bh=uUMrZw0jkEFqzVjTFFwQnz5ImkmvO+IkfpqEVikOVLY=;
+	s=arc-20240116; t=1747773051; c=relaxed/simple;
+	bh=bcLMozayoGqEz52RybIZIVxk1TOssx6utCvVWOzGK68=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PY//w9BU2rU4ZLO9+PlYOrkmvmMEEt0suiPv/LPd4VLMUku0jTQQR9Aot5DoT47u7od08cwhrMbUDaXcJPZeoHJFSGq16Xm4A+jUQy/mR5tcAbo78byg/GVmgQ98z9nxYSJpVAgeOL2P9N3YnFyeVrTUyuYcTAfHOkifBZg3N0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iyoQumk2; arc=none smtp.client-ip=209.85.216.50
+	 MIME-Version; b=kQRtW8nkEbJg5mOL8h9cfyvzonmCmQjFXG8UV/5cUQ3YLyFVfWQt8Ce2D5IWvMxgIXfSvUW0nzvBL1fXgcpYblHPJF7htdERfbqCBVCArEhURK9ELsooAVTMITvKLcTsPWz5Cufzpc2iMgBV4MozisqvB9jm9Jh5nppFI/qiZEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DVdvxzw6; arc=none smtp.client-ip=209.85.215.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-30e8feb1830so3797263a91.0;
-        Tue, 20 May 2025 13:30:48 -0700 (PDT)
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-b26c5fd40a9so5692690a12.1;
+        Tue, 20 May 2025 13:30:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747773048; x=1748377848; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1747773049; x=1748377849; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+3x4ZwJCvjDyH1DPNa2rKPhJ0r5FyHxXDH1rgrPNGCs=;
-        b=iyoQumk2iahpZa1qdlz5RDuvSEKnjScKGzz6qimXeUWEpIil/3Za+VOBWASuL+Txsk
-         ifa1iZLTMwNa8vQU2EJdCnsAeuDP5aL+pxq1v1dsRCfjfnTLHEIJMXWco2qRoHO8chlR
-         xsgY9pD9Tma0dq60StTAgnLqdIMrzF0Wphvo+UnR9HQXJkbqWoEvjYTZhTSt1vF0xjDt
-         Hrkqy2eic9Sd/ToAVweQF4v0RO19aRnorVEwsZz1T/LN/6UdVAOM2fVDklFbW7HMvOxe
-         yOefNxLD1WPMO080AuHnxQ4oHaVFvIOyhn167M6JhviH4GdTZrRfXKVeauV1D1eoNbKj
-         FNRw==
+        bh=1eLzuw0HTNUjJ6jLhtDsWvEva0lYGbRxIzrs1qJRnlo=;
+        b=DVdvxzw623cHNW4QSpA7xqceGOvJ1svjD/nWKuIlEsaRNkQ77ywtw8kZH2+JywdYzB
+         Nx6nl872uu/+87hm1J8tIW5hLxMoOcu+cyuRbzOuVoA6f0+AxLbCN3Rzew/8kkWd84vE
+         hVE5h3rHUi8NJZ3T6zaDamJVUjJLykzaQJ4Ao01ZuqyOjr4L2Sjw/HP8kYma2AUqOhkY
+         XpV0aEjqLTMbpK8lvt0VZ31kTExpSIFZo8nYzfLdBx2lO3uC8PN1Lb4LtJs4pBualnpK
+         16jQIoe2yGuMmRyAvSxRmw4cldUQ9TtyXTID2ja6rcxQRkCrujzBYL+D2L0Qtqcf4g+A
+         CmXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747773048; x=1748377848;
+        d=1e100.net; s=20230601; t=1747773049; x=1748377849;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+3x4ZwJCvjDyH1DPNa2rKPhJ0r5FyHxXDH1rgrPNGCs=;
-        b=P6XHO2hkmcYS6ndnLEV/wuc5gXUnMTYcZDRCMB7IIanXbANxEWY1WQtV1z6LZI32Ig
-         ai/pZFIUfGBQzuyDQdQYqbxKhLdyueP+gAdEs4n8a2Fl6m+7Lrm24SgMIubSvpFTFBcQ
-         PPB6DrgLAgJWjoN+fESldizin2Xf+36y7WYMkyO78nLKUUaoeFikagRghhVyDYdlBAz4
-         uCYG4dmxldSLxn3frukkvxzYdV1aB4UGsLqqLgKBdbjiefYSn0estJVdxZ6qEu4NvUV7
-         DRSuyWiHXc3JDy1r3ZoD4Y1UdtlDLtmdJusVO6wP70siZSt8/JLsgZb8Gzx9p3kwSFUb
-         qx7g==
-X-Forwarded-Encrypted: i=1; AJvYcCUwvqeTQGx0rUQY22+DVBXSTii0Msa+/s7lZkQ8H+0gS6BeNdfXxu+e3RJszCrRIGAlePrDEtj2VF/Ub9o=@vger.kernel.org, AJvYcCWLYPTRm03BWf3+hW9c9vVaKHhQM7JTaqm1ZF19V+N6AjmyZwMyW3R7nu5RnUDeGErKFoXq8bNXnJdHEJKxMUPR@vger.kernel.org
-X-Gm-Message-State: AOJu0YxzlJ0ErJa0DmOpx03aTApCn7VrFgjjUdDRoBz7qYR9rENmBvW4
-	FqwrKn0HDaDuLwKr6qylwEZFtoze+yLZoc2ATuNDlou08oK4NZrkbWbPzXuz
-X-Gm-Gg: ASbGncswj44ohAV1q8UXNo0i0nMDZ3IjexhPwsnB1QTT3WeYbTbZOjZLbmCixPcJEFk
-	Q5KC/4jQNGAgLPyqDpaaFVebbUJLaFF0n1wy0bc/qNjNry5F8luzuHf9PwH/mB/zwaUazGV4Z46
-	scjud5NNAS0/y7PpoCCrnbj38sWUACbfBEHW/+7w6qxZln6nRvOKK8jpDzY1a/RlTgPsJWbVWf5
-	jKnfHMJQP0uJzGLl6b7PZjIw6XyYbzFD8zxP+DDJtLQ/U9HokzLt98lvG0Uv3sppcsCgJvuFsc7
-	ZSHYR8hWj5z+FsPIDLlwtGiddPcJrFHSgKeqf5zsuXVs2ZZTeLhz9rWnVprGTwvp9DPSd3zfmTz
-	qtm/freSJaSkMPRXYB/TuEl0=
-X-Google-Smtp-Source: AGHT+IHAeOXT9r9/4Ht3bKzae4duZEDDYmbi/jArFcmtsm1/TNhEYfnR0TGpe7AR4KpCslrXt4t1LQ==
-X-Received: by 2002:a17:90b:2892:b0:310:8d4a:a246 with SMTP id 98e67ed59e1d1-3108d4aa3ccmr141850a91.1.1747773047722;
-        Tue, 20 May 2025 13:30:47 -0700 (PDT)
+        bh=1eLzuw0HTNUjJ6jLhtDsWvEva0lYGbRxIzrs1qJRnlo=;
+        b=slM2QLi1x5/R6Gdz2nWrRrvqBWtQgAHUGvGTbW/89TIXxOGvx3+aMuPLPabvHeZ033
+         pgWITHSLDPsqWuXLjvL222t8xwk6YvfCnbGGMtVzbaXHtnUZc+RA6wIhKfn+c6IvGKic
+         zRO1M89HjckyN4PXUivaz45W0BrTzi8JGsUXa4gtoMOWGSE1CeBpU6GigG3GM3Cjp4cJ
+         xgqTs7WPftE8en3tDCNKeew74BQB8NKQmTQEs5va74BkOKo6b0gTk61MLve+9GEqQ3s0
+         +ktkQYZWBtwqKT3nMRwg5nLulG7s+kMSO7zbezRAF2SLFl+0Yyop1dlu1BhAI7jYdSVC
+         Q3YQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXSh5L2/yyiHdzP0g7EueYWW9p+PvneBAA7tjrVhDzocC3gH9a2EsdjFX4SyhwgFVfXXyzE1U1Jlk87lrB3x83P@vger.kernel.org, AJvYcCXd0LCd8vNCV7FxVcRf/mNvw7Z8ev4dG0MMPZ9xvAzjPWPIh1wyeYgrQ9rXbNIwwtK7LJgDCNkj0i1VXbs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YywNbk2gXmLCoA/be6DQDrwMmHX4LjrHmNVDtogk9i202enTGNt
+	Q8cpOOOLuvL/7SktmQGP74cWNMkpJtrVCimYzJV7WHDISHBCGWTQ16O2FuLN
+X-Gm-Gg: ASbGncsg6wks2De/Gu81uAWsjpQ1x33LYR6M8J0zioWzuZ1z49QOQ5mJRr/08l2zgfN
+	EeassQceJ5kJ6s2VKtcEIg/Mh/+/iiEUvGUwVhdv1Wuxbgzu7lsUelSNo/+x1mdLZnKPzAude2J
+	V2vvQfEt7hSqzs1BgOukOXwqhzy35YbAql0BbCC8QDagQ6MlgePn8q+l42tUbIZVaScenQG23BQ
+	QLC+AbnmTB3H7fivXhRd1GRQ/T+OUAkZg5lvQcxPb+gUepzLGsmfH1594kQc5Px0rRjsdWt6dyx
+	rR/6rDvtvFzjd6z9lO3+aovqD+B6MJPkz1uXQKmIacNzhOmOMpmSs0gGCOZb36vBhqnFCyfu9m5
+	OBW18bun3se7Z
+X-Google-Smtp-Source: AGHT+IEVUmgvjua+d3P0w0PYb33BqOETSqmjOHNLhMRKnH3Q74/tsD6IDoR/Hg1n5IlX3rYVJCZ7VA==
+X-Received: by 2002:a17:902:f707:b0:232:11dc:d95f with SMTP id d9443c01a7336-23211dce734mr166616845ad.4.1747773049010;
+        Tue, 20 May 2025 13:30:49 -0700 (PDT)
 Received: from localhost (c-73-158-218-242.hsd1.ca.comcast.net. [73.158.218.242])
-        by smtp.gmail.com with UTF8SMTPSA id 98e67ed59e1d1-30f365e5b51sm2130719a91.32.2025.05.20.13.30.47
+        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-231d4ed5737sm80021205ad.239.2025.05.20.13.30.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 May 2025 13:30:47 -0700 (PDT)
+        Tue, 20 May 2025 13:30:48 -0700 (PDT)
 From: Stanislav Fomichev <stfomichev@gmail.com>
 To: netdev@vger.kernel.org
 Cc: davem@davemloft.net,
@@ -92,9 +92,9 @@ Cc: davem@davemloft.net,
 	kaiyuanz@google.com,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next 2/3] selftests: ncdevmem: make chunking optional
-Date: Tue, 20 May 2025 13:30:43 -0700
-Message-ID: <20250520203044.2689904-2-stfomichev@gmail.com>
+Subject: [PATCH net-next 3/3] selftests: ncdevmem: add tx test with multiple IOVs
+Date: Tue, 20 May 2025 13:30:44 -0700
+Message-ID: <20250520203044.2689904-3-stfomichev@gmail.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250520203044.2689904-1-stfomichev@gmail.com>
 References: <20250520203044.2689904-1-stfomichev@gmail.com>
@@ -106,116 +106,46 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add new -z argument to specify max IOV size. By default, use
-single large IOV.
+Use prime 3 for length to make offset slowly drift away.
 
 Signed-off-by: Stanislav Fomichev <stfomichev@gmail.com>
 ---
- .../selftests/drivers/net/hw/ncdevmem.c       | 49 +++++++++++--------
- 1 file changed, 29 insertions(+), 20 deletions(-)
+ .../testing/selftests/drivers/net/hw/devmem.py  | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/drivers/net/hw/ncdevmem.c b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
-index ca723722a810..fc7ba7d71502 100644
---- a/tools/testing/selftests/drivers/net/hw/ncdevmem.c
-+++ b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
-@@ -82,6 +82,9 @@
- #define MSG_SOCK_DEVMEM 0x2000000
- #endif
+diff --git a/tools/testing/selftests/drivers/net/hw/devmem.py b/tools/testing/selftests/drivers/net/hw/devmem.py
+index 7fc686cf47a2..d7f6a76eb2b7 100755
+--- a/tools/testing/selftests/drivers/net/hw/devmem.py
++++ b/tools/testing/selftests/drivers/net/hw/devmem.py
+@@ -49,12 +49,27 @@ from lib.py import ksft_disruptive
+     ksft_eq(socat.stdout.strip(), "hello\nworld")
  
-+#define MAX_IOV 1024
+ 
++@ksft_disruptive
++def check_tx_chunks(cfg) -> None:
++    cfg.require_ipver("6")
++    require_devmem(cfg)
 +
-+static size_t max_chunk;
- static char *server_ip;
- static char *client_ip;
- static char *port;
-@@ -834,10 +837,10 @@ static int do_client(struct memory_buffer *mem)
- 	struct sockaddr_in6 server_sin;
- 	struct sockaddr_in6 client_sin;
- 	struct ynl_sock *ys = NULL;
-+	struct iovec iov[MAX_IOV];
- 	struct msghdr msg = {};
- 	ssize_t line_size = 0;
- 	struct cmsghdr *cmsg;
--	struct iovec iov[2];
- 	char *line = NULL;
- 	unsigned long mid;
- 	size_t len = 0;
-@@ -893,27 +896,29 @@ static int do_client(struct memory_buffer *mem)
- 		if (line_size < 0)
- 			break;
++    port = rand_port()
++    listen_cmd = f"socat -U - TCP6-LISTEN:{port}"
++
++    with bkg(listen_cmd, exit_wait=True) as socat:
++        wait_port_listen(port)
++        cmd(f"echo -e \"hello\\nworld\"| {cfg.bin_remote} -f {cfg.ifname} -s {cfg.addr_v['6']} -p {port} -z 3", host=cfg.remote, shell=True)
++
++    ksft_eq(socat.stdout.strip(), "hello\nworld")
++
++
+ def main() -> None:
+     with NetDrvEpEnv(__file__) as cfg:
+         cfg.bin_local = path.abspath(path.dirname(__file__) + "/ncdevmem")
+         cfg.bin_remote = cfg.remote.deploy(cfg.bin_local)
  
--		mid = (line_size / 2) + 1;
--
--		iov[0].iov_base = (void *)1;
--		iov[0].iov_len = mid;
--		iov[1].iov_base = (void *)(mid + 2);
--		iov[1].iov_len = line_size - mid;
-+		if (max_chunk) {
-+			msg.msg_iovlen =
-+				(line_size + max_chunk - 1) / max_chunk;
-+			if (msg.msg_iovlen > MAX_IOV)
-+				error(1, 0,
-+				      "can't partition %zd bytes into maximum of %d chunks",
-+				      line_size, MAX_IOV);
+-        ksft_run([check_rx, check_tx],
++        ksft_run([check_rx, check_tx, check_tx_chunks],
+                  args=(cfg, ))
+     ksft_exit()
  
--		provider->memcpy_to_device(mem, (size_t)iov[0].iov_base, line,
--					   iov[0].iov_len);
--		provider->memcpy_to_device(mem, (size_t)iov[1].iov_base,
--					   line + iov[0].iov_len,
--					   iov[1].iov_len);
-+			for (int i = 0; i < msg.msg_iovlen; i++) {
-+				iov[i].iov_base = (void *)(i * max_chunk);
-+				iov[i].iov_len = max_chunk;
-+			}
- 
--		fprintf(stderr,
--			"read line_size=%ld iov[0].iov_base=%lu, iov[0].iov_len=%lu, iov[1].iov_base=%lu, iov[1].iov_len=%lu\n",
--			line_size, (unsigned long)iov[0].iov_base,
--			iov[0].iov_len, (unsigned long)iov[1].iov_base,
--			iov[1].iov_len);
-+			iov[msg.msg_iovlen - 1].iov_len =
-+				line_size - (msg.msg_iovlen - 1) * max_chunk;
-+		} else {
-+			iov[0].iov_base = 0;
-+			iov[0].iov_len = line_size;
-+			msg.msg_iovlen = 1;
-+		}
- 
- 		msg.msg_iov = iov;
--		msg.msg_iovlen = 2;
-+		provider->memcpy_to_device(mem, 0, line, line_size);
- 
- 		msg.msg_control = ctrl_data;
- 		msg.msg_controllen = sizeof(ctrl_data);
-@@ -934,7 +939,8 @@ static int do_client(struct memory_buffer *mem)
- 		fprintf(stderr, "sendmsg_ret=%d\n", ret);
- 
- 		if (ret != line_size)
--			error(1, errno, "Did not send all bytes");
-+			error(1, errno, "Did not send all bytes %d vs %zd", ret,
-+			      line_size);
- 
- 		wait_compl(socket_fd);
- 	}
-@@ -956,7 +962,7 @@ int main(int argc, char *argv[])
- 	int is_server = 0, opt;
- 	int ret;
- 
--	while ((opt = getopt(argc, argv, "ls:c:p:v:q:t:f:")) != -1) {
-+	while ((opt = getopt(argc, argv, "ls:c:p:v:q:t:f:z:")) != -1) {
- 		switch (opt) {
- 		case 'l':
- 			is_server = 1;
-@@ -982,6 +988,9 @@ int main(int argc, char *argv[])
- 		case 'f':
- 			ifname = optarg;
- 			break;
-+		case 'z':
-+			max_chunk = atoi(optarg);
-+			break;
- 		case '?':
- 			fprintf(stderr, "unknown option: %c\n", optopt);
- 			break;
 -- 
 2.49.0
 
