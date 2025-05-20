@@ -1,268 +1,211 @@
-Return-Path: <linux-kselftest+bounces-33397-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33398-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FBD5ABD789
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 May 2025 13:59:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 854ECABD80D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 May 2025 14:16:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AA5B41BA2A13
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 May 2025 11:59:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F0D64C3FD4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 May 2025 12:10:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE042279781;
-	Tue, 20 May 2025 11:59:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38A7327FB2E;
+	Tue, 20 May 2025 12:09:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="C/ts1HLD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FjNVV3IF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9B4221C9F2
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 May 2025 11:59:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB4DF27CCEE
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 May 2025 12:09:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747742345; cv=none; b=DCWgUZFMINpxZSrwQ4PRlnK8fXW0T7vhymoe1lInVVWOOI9JmK/Mb/3knTCd6on2yTrd+yA7zd5pOeFqFtk5ClpRPzIdGAV0zca88CuMqSDG9gKjwkdRrM7+ou+r0pjYvzbYuZkXs+VzSp5O4Qi0zha1CqAp/0H4fRvLhZI5rcM=
+	t=1747742994; cv=none; b=j5GIa5bor7hD42ovy8vFKPc8cVlQvGRCzix4bSLVlLfWzf5+RFqbGa8HA30M81UPgk/Zmf80wYczNL2Yr9m9l0IMvVr1RIFDwSveyCVkiKo7jR6bT44/rNhBFBiKwsUm+O6Fwj/lfCrrdhqBJfw3D1ktnJnPY3jnXiK2iLUUUAk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747742345; c=relaxed/simple;
-	bh=nXWSIhyU39QRKt6WQ0laW5mj88qmkU/jRLeC/v8jbzY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=I2IoZz8+crh4TiKEC9QIoH7bAFLKMP2/QzDuwso9vP3EOND0fkTE4lN3EsFk9mv/KphqW23qb+UnxjsitDnlUzoXRLg/czlyfeB/pBmbMzGQhSZ0g6aZGj1yYCjRLGVU4d0Rc3ZNz18e3zMA8wefnDHEpnLDbcZ/YEnwqErsKF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=C/ts1HLD; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1747742342;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=eiDrqUHrJ5RRFmJ9shg+DFH2qBY04+xmY0waWetIyb0=;
-	b=C/ts1HLDiWJ6J2+0UCQPTQg3zS42yJ4BDKI0Bxf9QSGzzSpTAKLWZDdwhxB9dj6gtdptx5
-	T9OHyUpaqznY8wf9rISVuBrZF0ihk0HfpJ4thbZ94StTQuYjnbDdu1Ivr0Lhi3g5rCAyYU
-	MCQ7EuBG7CiZudgXu5/kmuzvfpvFwZY=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-313-jVnMGMsEMK2Il_T0uEl7jg-1; Tue, 20 May 2025 07:59:01 -0400
-X-MC-Unique: jVnMGMsEMK2Il_T0uEl7jg-1
-X-Mimecast-MFC-AGG-ID: jVnMGMsEMK2Il_T0uEl7jg_1747742340
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3a362dcc86fso1525402f8f.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 May 2025 04:59:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747742340; x=1748347140;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eiDrqUHrJ5RRFmJ9shg+DFH2qBY04+xmY0waWetIyb0=;
-        b=Lcc3I0FNWXLIQCq87e8jf9c/fUPkwESYqY9hB8SYWXX1M69ylTlLGCR/bDGRwEH5LO
-         801gqz3g0oQa3u7KHVZMEuZmMLZ6MaFhVXzgmhSxI/zHZguKGwqWFX79s7QB9moHODgJ
-         hVX6sXvKvzYuxMQWeCCK+GWMbaUxwodprPie+XzlUDKsTMkFIVUGe+mz4yoeDrmG4Hrh
-         pWal7WMBLLwfQ6SOn6N9d5OiitQVgLz9uIUQVlEg5kMMEMl1We0YLIolbUO4YGNr8N6F
-         xlwic3FxojYa/O6ibkXWt3n8vckzERIznqGilG5wnxTtIbRVLKRQYVke+qDl4R1uPm+/
-         ADlg==
-X-Forwarded-Encrypted: i=1; AJvYcCWt55OGF3YgDjymL7IACe8hcGNXefB2TRYe/D+a04Xu0dYZ3oCOX32hXa7/TdatzMGKyQo489NET7/I8ObETxQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzMLNNcRWFs54AHc6+MQLyBpOtpjvMWOlC9GlVjfObI1nyjX81S
-	5bpShsPO/sl66tCJMr0L1Ms8MAvHnbPlKZ0Wf8NgITdm9q5sAAbijbCtnSdwOWMwBI+BQhzYZnm
-	zZZ/L+AariyuuHEnw4Z0ugKP4Ji5Jq2DO45tujiG+w6q7OUJAIbzOQPhYR/E41O66ZSU+Tg==
-X-Gm-Gg: ASbGncuKyF6WZFauytEMKjkNoWynRpvYd5S+bJAry32qxXJQPZ2rB0UEIcb9LXyprTf
-	KLZV174kJB3VgJdq7C6mMOxluGym4VO1/ECwwjw3icagWOsPv9wLZ4v9uvoR5lKtUP0Y7DZj65f
-	JFMWGdidvmmxDoE3NJNYyLRVnRCMHKqRd6t3+Py28YGK/SrTiBl/+gxMoOgQiuuhivC0CDcx3Lg
-	FO8kqW6aO69VOI+t17OOUAOlogq5HbekPWU91EXqpWJoPWAMhjhANjfx4EoHPDIaidmtcp0g/kr
-	JE/jIg0kT5xki4ViAG0=
-X-Received: by 2002:a5d:5846:0:b0:3a3:6ac3:fae2 with SMTP id ffacd0b85a97d-3a36ac3fd1dmr8011203f8f.4.1747742340302;
-        Tue, 20 May 2025 04:59:00 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFYfPr30NAX1g8x8Lo/HkiGqx5uMKfUlxTT6/hqjHQ+Vbin1NVN6yBQP3+UXU+zD3oY0eItGQ==
-X-Received: by 2002:a5d:5846:0:b0:3a3:6ac3:fae2 with SMTP id ffacd0b85a97d-3a36ac3fd1dmr8011156f8f.4.1747742339775;
-        Tue, 20 May 2025 04:58:59 -0700 (PDT)
-Received: from ?IPV6:2a0d:3344:244f:5710::f39? ([2a0d:3344:244f:5710::f39])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a365bc0b5esm12478708f8f.9.2025.05.20.04.58.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 May 2025 04:58:59 -0700 (PDT)
-Message-ID: <2454d982-feaf-49b5-8a17-a79c66cba5b6@redhat.com>
-Date: Tue, 20 May 2025 13:58:57 +0200
+	s=arc-20240116; t=1747742994; c=relaxed/simple;
+	bh=fVy0/x4yZndAeN03YdmNVuKaiMZZdGzPNITKbbzeS1g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Mgp3OGUJivTYziUoXJPWa9jB4rnLTjAQTUt+kE2232+FnAUF8FtYxNEHAFDwyqDVZS1qywzNx9MMk+i98hQ7EuMjEWKya2msmKWOiS8duJabuIct6qTAtwUgUl23blNKXKXTPxr3Ua1kAPzUiFoB4uV677ywqSNFmnIz9ySVJMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FjNVV3IF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1407DC4CEE9;
+	Tue, 20 May 2025 12:09:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747742993;
+	bh=fVy0/x4yZndAeN03YdmNVuKaiMZZdGzPNITKbbzeS1g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FjNVV3IF1gPVthta/ehZUhGd4FMCgvGQSj8FeYWilDBEtE+vrMH9g7RoUILxqY+pQ
+	 0ouCrfbWFvtmrGIVJNxIZcT6xHIp7S7vbeX+TpwJAyZc9AKnMkDf2TW5fdqN0zL7Sp
+	 +vkzziSalyjl63sCFQocjQuClVaMaMD+ss7MCcbAeFxyt3A/OFpPweVtqALz85/pFL
+	 59vg/nc1rJY7/LKtKMU51xkfla+QpEwxYvZVyygpsqX+Pa1jhiAT3we3brLj4AC+qw
+	 o/pwft2DptgxH2UeGdUaV7I7rJfVHjUJboM8a/dvfPRrEQRUbLY1aMzLi7JmKXRTQ6
+	 I71ILU4vjGngw==
+Date: Tue, 20 May 2025 14:09:50 +0200
+From: Maxime Ripard <mripard@kernel.org>
+To: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Simona Vetter <simona.vetter@ffwll.ch>, 
+	David Airlie <airlied@gmail.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, dri-devel@lists.freedesktop.org, 
+	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: Re: [PATCH v2] drm/tests: Drop drm_kunit_helper_acquire_ctx_alloc()
+Message-ID: <20250520-enchanted-spirited-lorikeet-05f0fd@houat>
+References: <20250220132537.2834168-1-mripard@kernel.org>
+ <Z_95jWM2YMTGy3pi@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v16 net-next 2/5] sched: Dump configuration and statistics
- of dualpi2 qdisc
-To: chia-yu.chang@nokia-bell-labs.com, horms@kernel.org,
- donald.hunter@gmail.com, xandfury@gmail.com, netdev@vger.kernel.org,
- dave.taht@gmail.com, jhs@mojatatu.com, kuba@kernel.org,
- stephen@networkplumber.org, xiyou.wangcong@gmail.com, jiri@resnulli.us,
- davem@davemloft.net, edumazet@google.com, andrew+netdev@lunn.ch,
- ast@fiberby.net, liuhangbin@gmail.com, shuah@kernel.org,
- linux-kselftest@vger.kernel.org, ij@kernel.org, ncardwell@google.com,
- koen.de_schepper@nokia-bell-labs.com, g.white@cablelabs.com,
- ingemar.s.johansson@ericsson.com, mirja.kuehlewind@ericsson.com,
- cheshire@apple.com, rs.ietf@gmx.at, Jason_Livingood@comcast.com,
- vidhi_goel@apple.com
-References: <20250516000201.18008-1-chia-yu.chang@nokia-bell-labs.com>
- <20250516000201.18008-3-chia-yu.chang@nokia-bell-labs.com>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20250516000201.18008-3-chia-yu.chang@nokia-bell-labs.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha384;
+	protocol="application/pgp-signature"; boundary="u6r6j7zf67sbxmzv"
+Content-Disposition: inline
+In-Reply-To: <Z_95jWM2YMTGy3pi@arm.com>
 
-On 5/16/25 2:01 AM, chia-yu.chang@nokia-bell-labs.com wrote:
-> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-> 
-> The configuration and statistics dump of the DualPI2 Qdisc provides
-> information related to both queues, such as packet numbers and queuing
-> delays in the L-queue and C-queue, as well as general information such as
-> probability value, WRR credits, memory usage, packet marking counters, max
-> queue size, etc.
-> 
-> The following patch includes enqueue/dequeue for DualPI2.
-> 
-> v16:
-> - Update convert_ns_to_usec() to avoid overflow
 
-The changelog should come after the SoB and a '---' separator.
-> 
-> Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-> ---
->  include/uapi/linux/pkt_sched.h | 15 ++++++
->  net/sched/sch_dualpi2.c        | 89 ++++++++++++++++++++++++++++++++++
->  2 files changed, 104 insertions(+)
-> 
-> diff --git a/include/uapi/linux/pkt_sched.h b/include/uapi/linux/pkt_sched.h
-> index ae8af0e8d479..a7243f32ff0f 100644
-> --- a/include/uapi/linux/pkt_sched.h
-> +++ b/include/uapi/linux/pkt_sched.h
-> @@ -1264,4 +1264,19 @@ enum {
->  
->  #define TCA_DUALPI2_MAX   (__TCA_DUALPI2_MAX - 1)
->  
-> +struct tc_dualpi2_xstats {
-> +	__u32 prob;		/* current probability */
-> +	__u32 delay_c;		/* current delay in C queue */
-> +	__u32 delay_l;		/* current delay in L queue */
-> +	__u32 packets_in_c;	/* number of packets enqueued in C queue */
-> +	__u32 packets_in_l;	/* number of packets enqueued in L queue */
-> +	__u32 maxq;		/* maximum queue size */
-> +	__u32 ecn_mark;		/* packets marked with ecn*/
-> +	__u32 step_marks;	/* ECN marks due to the step AQM */
-> +	__s32 credit;		/* current c_protection credit */
-> +	__u32 memory_used;	/* Memory used of both queues */
-> +	__u32 max_memory_used;	/* Maximum used memory */
-> +	__u32 memory_limit;	/* Memory limit of both queues */
-> +};
-> +
->  #endif
-> diff --git a/net/sched/sch_dualpi2.c b/net/sched/sch_dualpi2.c
-> index ffdfb7803e1f..97986c754e47 100644
-> --- a/net/sched/sch_dualpi2.c
-> +++ b/net/sched/sch_dualpi2.c
-> @@ -123,6 +123,14 @@ static u32 dualpi2_scale_alpha_beta(u32 param)
->  	return tmp;
->  }
->  
-> +static u32 dualpi2_unscale_alpha_beta(u32 param)
-> +{
-> +	u64 tmp = ((u64)param * NSEC_PER_SEC << ALPHA_BETA_SCALING);
-> +
-> +	do_div(tmp, MAX_PROB);
-> +	return tmp;
-> +}
-> +
->  static ktime_t next_pi2_timeout(struct dualpi2_sched_data *q)
->  {
->  	return ktime_add_ns(ktime_get_ns(), q->pi2_tupdate);
-> @@ -223,6 +231,15 @@ static u32 convert_us_to_nsec(u32 us)
->  		return lower_32_bits(ns);
->  }
->  
-> +static u32 convert_ns_to_usec(u64 ns)
-> +{
-> +	do_div(ns, NSEC_PER_USEC);
-> +	if (upper_32_bits(ns))
-> +		return 0xffffffff;
+--u6r6j7zf67sbxmzv
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2] drm/tests: Drop drm_kunit_helper_acquire_ctx_alloc()
+MIME-Version: 1.0
 
-U32_MAX
+Hi Catalin,
 
-> +	else
-> +		return lower_32_bits(ns);
-> +}
-> +
->  static enum hrtimer_restart dualpi2_timer(struct hrtimer *timer)
->  {
->  	struct dualpi2_sched_data *q = from_timer(q, timer, pi2_timer);
-> @@ -458,6 +475,76 @@ static int dualpi2_init(struct Qdisc *sch, struct nlattr *opt,
->  	return 0;
->  }
->  
-> +static int dualpi2_dump(struct Qdisc *sch, struct sk_buff *skb)
-> +{
-> +	struct dualpi2_sched_data *q = qdisc_priv(sch);
-> +	struct nlattr *opts;
-> +
-> +	opts = nla_nest_start_noflag(skb, TCA_OPTIONS);
-> +	if (!opts)
-> +		goto nla_put_failure;
-> +
-> +	if (nla_put_u32(skb, TCA_DUALPI2_LIMIT, READ_ONCE(sch->limit)) ||
-> +	    nla_put_u32(skb, TCA_DUALPI2_MEMORY_LIMIT,
-> +			READ_ONCE(q->memory_limit)) ||
-> +	    nla_put_u32(skb, TCA_DUALPI2_TARGET,
-> +			convert_ns_to_usec(READ_ONCE(q->pi2_target))) ||
-> +	    nla_put_u32(skb, TCA_DUALPI2_TUPDATE,
-> +			convert_ns_to_usec(READ_ONCE(q->pi2_tupdate))) ||
-> +	    nla_put_u32(skb, TCA_DUALPI2_ALPHA,
-> +			dualpi2_unscale_alpha_beta(READ_ONCE(q->pi2_alpha))) ||
-> +	    nla_put_u32(skb, TCA_DUALPI2_BETA,
-> +			dualpi2_unscale_alpha_beta(READ_ONCE(q->pi2_beta))) ||
-> +	    nla_put_u32(skb, TCA_DUALPI2_STEP_THRESH,
-> +			READ_ONCE(q->step_in_packets) ?
-> +			READ_ONCE(q->step_thresh) :
-> +			convert_ns_to_usec(READ_ONCE(q->step_thresh))) ||
-> +	    nla_put_u32(skb, TCA_DUALPI2_MIN_QLEN_STEP,
-> +			READ_ONCE(q->min_qlen_step)) ||
-> +	    nla_put_u8(skb, TCA_DUALPI2_COUPLING,
-> +		       READ_ONCE(q->coupling_factor)) ||
-> +	    nla_put_u8(skb, TCA_DUALPI2_DROP_OVERLOAD,
-> +		       READ_ONCE(q->drop_overload)) ||
-> +	    (READ_ONCE(q->step_in_packets) &&
-> +	     nla_put_flag(skb, TCA_DUALPI2_STEP_PACKETS)) ||
-> +	    nla_put_u8(skb, TCA_DUALPI2_DROP_EARLY,
-> +		       READ_ONCE(q->drop_early)) ||
-> +	    nla_put_u8(skb, TCA_DUALPI2_C_PROTECTION,
-> +		       READ_ONCE(q->c_protection_wc)) ||
-> +	    nla_put_u8(skb, TCA_DUALPI2_ECN_MASK, READ_ONCE(q->ecn_mask)) ||
-> +	    nla_put_u8(skb, TCA_DUALPI2_SPLIT_GSO, READ_ONCE(q->split_gso)))
-> +		goto nla_put_failure;
-> +
-> +	return nla_nest_end(skb, opts);
-> +
-> +nla_put_failure:
-> +	nla_nest_cancel(skb, opts);
-> +	return -1;
-> +}
-> +
-> +static int dualpi2_dump_stats(struct Qdisc *sch, struct gnet_dump *d)
-> +{
-> +	struct dualpi2_sched_data *q = qdisc_priv(sch);
-> +	struct tc_dualpi2_xstats st = {
-> +		.prob			= READ_ONCE(q->pi2_prob),
-> +		.packets_in_c		= q->packets_in_c,
-> +		.packets_in_l		= q->packets_in_l,
-> +		.maxq			= q->maxq,
-> +		.ecn_mark		= q->ecn_mark,
-> +		.credit			= q->c_protection_credit,
-> +		.step_marks		= q->step_marks,
-> +		.memory_used		= q->memory_used,
-> +		.max_memory_used	= q->max_memory_used,
-> +		.memory_limit		= q->memory_limit,
-> +	};
+On Wed, Apr 16, 2025 at 10:34:05AM +0100, Catalin Marinas wrote:
+> On Thu, Feb 20, 2025 at 02:25:37PM +0100, Maxime Ripard wrote:
+> > lockdep complains when a lock is released in a separate thread the
+> > lock is taken in, and it turns out that kunit does run its actions in a
+> > separate thread than the test ran in.
+> >=20
+> > This means that drm_kunit_helper_acquire_ctx_alloc() just cannot work as
+> > it's supposed to, so let's just get rid of it.
+> >=20
+> > Suggested-by: Simona Vetter <simona.vetter@ffwll.ch>
+> > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > Signed-off-by: Maxime Ripard <mripard@kernel.org>
+>=20
+> My scripts for running all possible kunit tests (under arm64 qemu)
+> started failing with 6.15-rc1. I bisected it to commit 30188df0c387
+> ("drm/tests: Drop drm_kunit_helper_acquire_ctx_alloc()"). No idea
+> whether it fails on other architectures but it's fairly easy to
+> reproduce on arm64. Starting from defconfig, enable CONFIG_KUNIT=3Dm and
+> CONFIG_DRM_VC4_KUNIT_TEST=3Dm, build the kernel with gcc. Once a prompt is
+> reached, "modprobe vc4" and the most noticeable thing is the kernel
+> panic with stack protector enabled (by default on arm64):
+>=20
+>   Kernel panic - not syncing: stack-protector: Kernel stack is corrupted =
+in: drm_vc4_test_pv_muxing+0x2a4/0x2a4 [vc4]
+>   CPU: 14 UID: 0 PID: 311 Comm: kunit_try_catch Tainted: G        W      =
+  N  6.15.0-rc2 #1 PREEMPT
+>   Tainted: [W]=3DWARN, [N]=3DTEST
+>   Hardware name: QEMU KVM Virtual Machine, BIOS 2024.08-4 10/25/2024
+>   Call trace:
+>    show_stack+0x18/0x24 (C)
+>    dump_stack_lvl+0x60/0x80
+>    dump_stack+0x18/0x24
+>    panic+0x168/0x360
+>    __ktime_get_real_seconds+0x0/0x20
+>    vc4_test_pv_muxing_gen_params+0x0/0x94 [vc4]
+>    kunit_try_run_case+0x6c/0x160 [kunit]
+>    kunit_generic_run_threadfn_adapter+0x28/0x4c [kunit]
+>    kthread+0x12c/0x204
+>    ret_from_fork+0x10/0x20
+>   SMP: stopping secondary CPUs
+>   Kernel Offset: 0x431a85f00000 from 0xffff800080000000
+>   PHYS_OFFSET: 0xfff0e8f3c0000000
+>   CPU features: 0x0002,00000268,01002640,82004203
+>   Memory Limit: none
+>   ---[ end Kernel panic - not syncing: stack-protector: Kernel stack is c=
+orrupted in: drm_vc4_test_pv_muxing+0x2a4/0x2a4 [vc4] ]---
+>=20
+> Scrolling through the log, I also get a lot of warnings before the
+> panic:
+>=20
+>   WARNING: CPU: 14 PID: 311 at drivers/gpu/drm/drm_modeset_lock.c:296 drm=
+_modeset_lock+0xbc/0xfc [drm]
+>   Modules linked in: vc4 snd_soc_hdmi_codec drm_kunit_helpers drm_exec ce=
+c drm_display_helper drm_client_lib drm_dma_helper kunit drm_kms_helper drm=
+ backlight dm_mod ip_tables x_tables ipv6
+>   CPU: 14 UID: 0 PID: 311 Comm: kunit_try_catch Tainted: G        W      =
+  N  6.15.0-rc2 #1 PREEMPT
+>   Tainted: [W]=3DWARN, [N]=3DTEST
+>   Hardware name: QEMU KVM Virtual Machine, BIOS 2024.08-4 10/25/2024
+>   pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=3D--)
+>   pc : drm_modeset_lock+0xbc/0xfc [drm]
+>   lr : drm_atomic_get_private_obj_state+0x78/0x180 [drm]
+>   sp : ffff800080b0bbd0
+>   x29: ffff800080b0bbd0 x28: 0000000000000004 x27: ffff170d4829a480
+>   x26: ffff170d42968000 x25: ffff170d4829a480 x24: ffff170d40eaf540
+>   x23: 0000000000000038 x22: ffff170d42964400 x21: ffff170d4829a480
+>   x20: ffff170d42968958 x19: ffff800080b0bd58 x18: 00000000ffffffff
+>   x17: 0000000000000000 x16: ffffc31b065888a0 x15: 0000000000000000
+>   x14: 0000000000000040 x13: 01e0000002800280 x12: 0000000000000000
+>   x11: 0000000000000000 x10: 000001e001e001e0 x9 : 0000000000000020
+>   x8 : ffff170d40b70148 x7 : 0000000000000021 x6 : 0000000000000fdf
+>   x5 : 0000000000000fdf x4 : 0000000000000004 x3 : ffff170d429688f0
+>   x2 : ffff170d40eaf540 x1 : 0000000000000000 x0 : ffff800080b0be10
+>   Call trace:
+>    drm_modeset_lock+0xbc/0xfc [drm] (P)
+>    drm_atomic_get_private_obj_state+0x78/0x180 [drm]
+>    vc4_atomic_check+0x47c/0x754 [vc4]
+>    drm_atomic_check_only+0x4d4/0x914 [drm]
+>    drm_vc4_test_pv_muxing+0xe0/0x2a4 [vc4]
+>    kunit_try_run_case+0x6c/0x160 [kunit]
+>    kunit_generic_run_threadfn_adapter+0x28/0x4c [kunit]
+>    kthread+0x12c/0x204
+>    ret_from_fork+0x10/0x20
+>=20
+> Reverting the above commit makes these go away. I did not have time to
+> look deeper, I thought I'd report it here first.
+>=20
+> The panic is with gcc 14.2.0 from Debian unstable. I tried with gcc
+> 12.2.0 in Debian stable and I don't get the stack protector panic, only
+> the lock warnings.
+>=20
+> With clang 14 and 19, I get NULL pointer dereferences with this call
+> trace (decoded):
+>=20
+>   Unable to handle kernel NULL pointer dereference at virtual address 000=
+0000000000008
+>   [...]
+>   drm_modeset_lock (include/linux/list.h:153 include/linux/list.h:169 dri=
+vers/gpu/drm/drm_modeset_lock.c:318 drivers/gpu/drm/drm_modeset_lock.c:396)=
+ drm (P)
+>   drm_atomic_get_connector_state (drm.mod.c:?) drm
+>   vc4_mock_atomic_add_output (drivers/gpu/drm/vc4/tests/vc4_mock_output.c=
+:?) vc4
+>   drm_vc4_test_pv_muxing (drivers/gpu/drm/vc4/tests/vc4_test_pv_muxing.c:=
+688) vc4
+>   kunit_try_run_case (lib/kunit/test.c:400) kunit
+>   kunit_generic_run_threadfn_adapter (lib/kunit/try-catch.c:31) kunit
+>   kthread (kernel/kthread.c:466)
+>   ret_from_fork (arch/arm64/kernel/entry.S:863)
+>=20
+> I can run more tests if you'd like, decode the stack traces.
 
-I *think* you either need READ_ONCE() annotation for the above lockless
-read, or add a  sch_tree_lock(sch)/sch_tree_unlock(sch) pair.
+Sorry I couldn't get to this sooner, and thanks for the awesome report.
 
-/P
+I've just sent a fix, let me know if it also works for you:
+https://lore.kernel.org/dri-devel/20250520-drm-vc4-kunit-fixes-v1-1-ca281e4=
+85f8e@kernel.org/
 
+Maxime
+
+--u6r6j7zf67sbxmzv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCaCxxDgAKCRAnX84Zoj2+
+dvJRAYDN5tln1A+fpx7jD9NVXxhZT5/TuqyhABS2uqasQaOapQKhvbsg1xbL1JQ1
+z82sTKcBewZN6z0WvNvhyR0By4RGzNH7jat9q7u2ZRyMZz+ogjr/5luHPAFi1T5G
+OEtlHirWKQ==
+=mHMv
+-----END PGP SIGNATURE-----
+
+--u6r6j7zf67sbxmzv--
 
