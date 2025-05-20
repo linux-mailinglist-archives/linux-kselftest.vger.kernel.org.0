@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-33375-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33376-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D948ABD1DD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 May 2025 10:26:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17CFDABD1E3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 May 2025 10:27:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD5F81B679BB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 May 2025 08:26:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 95A763AC396
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 May 2025 08:26:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92965266B6A;
-	Tue, 20 May 2025 08:25:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 266B02676D5;
+	Tue, 20 May 2025 08:25:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tnQDSbdo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ky4A4Ctf"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62528266594;
-	Tue, 20 May 2025 08:25:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA5AF2673B9;
+	Tue, 20 May 2025 08:25:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747729527; cv=none; b=lWrLIKg3d11xgxkZFYEOCQyHJbBuaDix58tL127tX0YP1Q3PhySEMelO29Unn7caeUpDZfpAcveMQMZkN6ahUn32S+rw2us9aoTsfTsg9eG8Cvd0VcftaZFrTv3+79DAW6eCcZnhZh5AJvSkYKqmaFdB5JWcHqZYiCJdyK6c9oU=
+	t=1747729530; cv=none; b=K+5LciKd5DJr4zcZ/NQBlKelA38EYI3iF5wEt1mCuYsqhklQ+miL4u9yUNuS4nBQsHfAwADKzbT1VBMdEjLTAFzCLm3MPmcv9nvb/6Dm1VaiAzU9YpmUSzb09kOZaNd3QF/srvwwc2/eUaNanaB91M5T2nySIhLEuCm8Je2/FuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747729527; c=relaxed/simple;
-	bh=+6EIVL7ThX53vHz5L3JTUOBo0sIuRo6+hjEqxH0fBc4=;
+	s=arc-20240116; t=1747729530; c=relaxed/simple;
+	bh=VwHSk8MoYaaONWTt5aKNb+9EuN0bahyPpgTUvEZBz4s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cmHiWUN95zPn8NdDwszPQg4YI6ZNg7ulaTH5PtvvVWcK2WMxGwSszzJ0dqlf4olUn170PDchfyHKNpNsBgyHtob4Xwsx/sWxB/ozWsZ4dh+Ea51kwKgeN+y3RLtT3uaDwEWuA6jE3Nv38WwGWYeGWyZ17nWPdbF0gs8Gh7lZ2/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tnQDSbdo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A898AC4CEF0;
-	Tue, 20 May 2025 08:25:24 +0000 (UTC)
+	 MIME-Version; b=NVV+mOIy+o+dVI0w6x1bMAAAbhcnTCpqb/jjbzDr8YdfoIUNqxWjsepoPCmtNfN79YTepKkvSHqzD08XdZIa4qzg8x00pCPq7ZeODqUnQurkJgQczDVa0gv4mNKHbP5vaN+LbSiqrXmfG2ksYU8gIdNlbKtcvaJq5VW0nI56lVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ky4A4Ctf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38962C4CEEF;
+	Tue, 20 May 2025 08:25:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747729526;
-	bh=+6EIVL7ThX53vHz5L3JTUOBo0sIuRo6+hjEqxH0fBc4=;
+	s=k20201202; t=1747729529;
+	bh=VwHSk8MoYaaONWTt5aKNb+9EuN0bahyPpgTUvEZBz4s=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=tnQDSbdozV4AvdMgXyfkOoq41Q5I5qRVREKTf4Q9I6Hwr4/RW5fKsDC4NoLquJXGx
-	 qI+wgDxmLoe95stKSfr1OEgWVDRRILLjd/GanzdaFrqnfR7AsV6lAJ85dgjCsd6d/8
-	 k/oa6mRol6vdGcA2CfFB6L/ihFqhIyJoRwFYJZQSnUJgcBzQA4+HI3SocOMUaetab0
-	 +SuYejWOmillTMGk3OIgbbbNSxjETQe+pz4ckmqxaNECmz2ftKprczx/EA3wWj5XDU
-	 7g9qqWZR5jRjfVokFDVUkB6XjOW7qaBti2tRirzkDRSR/eOHd9du/EKdjGIN0NNW3U
-	 aDzj0tFVzLHtw==
+	b=ky4A4CtfyytMm4EZKwN2pFBoplenp40uWUZDqWIy7EcQ5KzsNaYiCR0ckq8ErOuGo
+	 7L7IT5edJPSP5J6klwgsm84DozTjGie09nRTocSDERuVrZOYOFDsfaWIQ/th5pC7Ag
+	 5SIwxcH9fwJYRHcRzGRWauzMii7PhmgHYiFyQz6I87hVX3P5g6QnPmch8LEHkOjyY6
+	 mqgEisTw4WDaTON+DA5WO5xovqS17uMADZ5UvdgISTeugnDqGtyOsEFjqOkNTH6rT+
+	 E3p6niRgfbfhOWz/bfzmXvavojmk15ji2/DO2TPPFXG6hxLZ/PoihrZmfN6DcgOIpp
+	 rJD54ndJ63T5A==
 From: Tzung-Bi Shih <tzungbi@kernel.org>
 To: bleung@chromium.org,
 	brendan.higgins@linux.dev,
@@ -57,9 +57,9 @@ Cc: tzungbi@kernel.org,
 	kunit-dev@googlegroups.com,
 	linux-trace-kernel@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 5/7] platform/chrome: kunit: cros_ec_spi: Call .probe() directly
-Date: Tue, 20 May 2025 08:24:32 +0000
-Message-ID: <20250520082435.2255639-6-tzungbi@kernel.org>
+Subject: [RFC PATCH 6/7] kunit: Expose 'kprobes stub' API to redirect functions
+Date: Tue, 20 May 2025 08:24:33 +0000
+Message-ID: <20250520082435.2255639-7-tzungbi@kernel.org>
 X-Mailer: git-send-email 2.49.0.1101.gccaa498523-goog
 In-Reply-To: <20250520082435.2255639-1-tzungbi@kernel.org>
 References: <20250520082435.2255639-1-tzungbi@kernel.org>
@@ -71,99 +71,191 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Get the spi_driver and call .probe() directly.
+Add function redirection API based on Kprobes.
 
-For running the tests:
-
-$ ./tools/testing/kunit/kunit.py run \
-	--arch=x86_64 \
-	--kconfig_add CONFIG_FTRACE=y \
-	--kconfig_add CONFIG_FUNCTION_TRACER=y \
-	--kconfig_add CONFIG_MODULES=y \
-	--kconfig_add CONFIG_DEBUG_KERNEL=y \
-	--kconfig_add CONFIG_KALLSYMS_ALL=y \
-	--kconfig_add CONFIG_LIVEPATCH=y \
-	--kconfig_add CONFIG_KUNIT_FTRACE_STUBS=y \
-	--kconfig_add CONFIG_CHROME_PLATFORMS=y \
-	--kconfig_add CONFIG_CROS_EC=y \
-	--kconfig_add CONFIG_SPI=y \
-	--kconfig_add CONFIG_CROS_EC_SPI=y \
-	--kconfig_add CONFIG_CROS_KUNIT_EC_SPI_TEST=y \
-	cros_ec_spi*
-
+Suggested-by: Masami Hiramatsu <mhiramat@kernel.org>
 Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 ---
- drivers/platform/chrome/cros_ec_spi_test.c | 22 ++++++++--------------
- 1 file changed, 8 insertions(+), 14 deletions(-)
+ include/kunit/kprobes_stub.h |  19 ++++++
+ lib/kunit/Kconfig            |   7 +++
+ lib/kunit/Makefile           |   4 ++
+ lib/kunit/kprobes_stub.c     | 113 +++++++++++++++++++++++++++++++++++
+ 4 files changed, 143 insertions(+)
+ create mode 100644 include/kunit/kprobes_stub.h
+ create mode 100644 lib/kunit/kprobes_stub.c
 
-diff --git a/drivers/platform/chrome/cros_ec_spi_test.c b/drivers/platform/chrome/cros_ec_spi_test.c
-index 2a021569a726..52dea75ecabf 100644
---- a/drivers/platform/chrome/cros_ec_spi_test.c
-+++ b/drivers/platform/chrome/cros_ec_spi_test.c
-@@ -27,6 +27,7 @@ struct cros_ec_spi_test_priv {
- 	struct device dev;
- 	struct spi_controller *fake_ctlr;
- 	struct spi_device *fake_spi_device;
-+	struct spi_driver *spi_drv;
- 
- 	int fake_cros_ec_register_called;
- 	struct cros_ec_device *ec_dev;
-@@ -117,16 +118,12 @@ static int find_target_driver(struct device_driver *drv, void *data)
- static int cros_ec_spi_test_init(struct kunit *test)
- {
- 	struct cros_ec_spi_test_priv *priv;
--	struct spi_board_info board_info = {};
- 	int ret;
- 	struct device_driver *drv;
--	enum probe_type orig;
- 
- 	kunit_activate_ftrace_stub(test, cros_ec_register, fake_cros_ec_register);
- 	kunit_activate_ftrace_stub(test, cros_ec_unregister, fake_cros_ec_unregister);
- 
--	sized_strscpy(board_info.modalias, "cros-ec-spi", SPI_NAME_SIZE);
--
- 	priv = kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
- 	KUNIT_ASSERT_NOT_NULL(test, priv);
- 	test->priv = priv;
-@@ -151,21 +148,17 @@ static int cros_ec_spi_test_init(struct kunit *test)
- 	ret = spi_register_controller(priv->fake_ctlr);
- 	KUNIT_ASSERT_EQ(test, ret, 0);
- 
--	/*
--	 * Force to use synchronous probe so that the upcoming SPI device gets
--	 * probed correctly and synchronously.
--	 */
- 	ret = bus_for_each_drv(&spi_bus_type, NULL, &drv, find_target_driver);
- 	KUNIT_ASSERT_EQ(test, ret, 0);
- 	KUNIT_ASSERT_NOT_NULL(test, drv);
--	orig = drv->probe_type;
--	drv->probe_type = PROBE_FORCE_SYNCHRONOUS;
- 
--	priv->fake_spi_device = spi_new_device(priv->fake_ctlr, &board_info);
--	/* Restore to original probe type. */
--	drv->probe_type = orig;
-+	priv->fake_spi_device = spi_alloc_device(priv->fake_ctlr);
- 	KUNIT_ASSERT_NOT_NULL(test, priv->fake_spi_device);
- 
-+	priv->spi_drv = container_of(drv, struct spi_driver, driver);
-+	ret = priv->spi_drv->probe(priv->fake_spi_device);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
+diff --git a/include/kunit/kprobes_stub.h b/include/kunit/kprobes_stub.h
+new file mode 100644
+index 000000000000..af77c86fe48e
+--- /dev/null
++++ b/include/kunit/kprobes_stub.h
+@@ -0,0 +1,19 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _KUNIT_KPROBES_STUB_H
++#define _KUNIT_KPROBES_STUB_H
 +
- 	KUNIT_EXPECT_EQ(test, priv->fake_cros_ec_register_called, 1);
- 	KUNIT_ASSERT_NOT_NULL(test, priv->ec_dev);
- 	KUNIT_EXPECT_EQ(test, priv->fake_cros_ec_unregister_called, 0);
-@@ -180,9 +173,10 @@ static void cros_ec_spi_test_exit(struct kunit *test)
- {
- 	struct cros_ec_spi_test_priv *priv = test->priv;
++struct kunit;
++
++#define kunit_activate_kprobes_stub(test, func, replacement) do { \
++	typecheck_fn(typeof(&func), replacement); \
++	__kunit_activate_kprobes_stub(test, #func, func, replacement); \
++} while (0)
++
++void __kunit_activate_kprobes_stub(struct kunit *test,
++				  const char *name,
++				  void *real_fn_addr,
++				  void *replacement_addr);
++
++void kunit_deactivate_kprobes_stub(struct kunit *test, void *real_fn_addr);
++
++#endif  /* _KUNIT_KPROBES_STUB_H */
+diff --git a/lib/kunit/Kconfig b/lib/kunit/Kconfig
+index 933fda1df5c3..13fdd3471060 100644
+--- a/lib/kunit/Kconfig
++++ b/lib/kunit/Kconfig
+@@ -104,4 +104,11 @@ config KUNIT_FTRACE_STUBS
+ 	  NOTE: this does not work on all architectures (like UML, arm64) and
+ 	  relies on a lot of magic (see the dependencies list).
  
--	spi_unregister_device(priv->fake_spi_device);
-+	priv->spi_drv->remove(priv->fake_spi_device);
- 	KUNIT_EXPECT_EQ(test, priv->fake_cros_ec_unregister_called, 1);
- 
-+	spi_dev_put(priv->fake_spi_device);
- 	spi_unregister_controller(priv->fake_ctlr);
- 	device_del(&priv->dev);
- 	class_destroy(priv->fake_class);
++config KUNIT_KPROBES_STUBS
++	bool "Support for stubbing out functions in KUnit tests with kprobes"
++	depends on KPROBES
++	help
++	  Builds support for stubbing out functions for the duration of KUnit
++	  test cases or suites using kprobes.
++
+ endif # KUNIT
+diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
+index 0ecb255576e2..727ce86eb61f 100644
+--- a/lib/kunit/Makefile
++++ b/lib/kunit/Makefile
+@@ -33,3 +33,7 @@ obj-$(CONFIG_KUNIT_EXAMPLE_TEST) +=	kunit-example-test.o
+ ifeq ($(CONFIG_KUNIT_FTRACE_STUBS),y)
+ kunit-objs +=				ftrace_stub.o
+ endif
++
++ifeq ($(CONFIG_KUNIT_KPROBES_STUBS),y)
++kunit-objs +=				kprobes_stub.o
++endif
+diff --git a/lib/kunit/kprobes_stub.c b/lib/kunit/kprobes_stub.c
+new file mode 100644
+index 000000000000..95f1dcba346b
+--- /dev/null
++++ b/lib/kunit/kprobes_stub.c
+@@ -0,0 +1,113 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * KUnit function redirection (kprobes stubbing) API.
++ */
++
++#include <kunit/test.h>
++#include <kunit/kprobes_stub.h>
++
++#include <linux/kprobes.h>
++
++struct kunit_kprobes_stub_ctx {
++	unsigned long real_fn_addr;
++	unsigned long replacement_addr;
++	struct kprobe kp;
++};
++
++static void __kunit_kprobes_stub_resource_free(struct kunit_resource *res)
++{
++	struct kunit_kprobes_stub_ctx *ctx = res->data;
++
++	unregister_kprobe(&ctx->kp);
++	kfree(ctx);
++}
++
++static int kprobe_handler(struct kprobe *kp, struct pt_regs *regs)
++{
++	struct kunit_kprobes_stub_ctx *ctx = container_of(kp, struct kunit_kprobes_stub_ctx, kp);
++
++	instruction_pointer_set(regs, ctx->replacement_addr);
++	return 1;
++}
++
++/* Matching function for kunit_find_resource().  match_data is real_fn_addr. */
++static bool __kunit_kprobes_stub_resource_match(struct kunit *test,
++						struct kunit_resource *res,
++						void *match_real_fn_addr)
++{
++	struct kunit_kprobes_stub_ctx *ctx = res->data;
++
++	/* Make sure the resource is a kprobes stub resource. */
++	if (res->free != &__kunit_kprobes_stub_resource_free)
++		return false;
++
++	return ctx->real_fn_addr == (unsigned long)match_real_fn_addr;
++}
++
++void __kunit_activate_kprobes_stub(struct kunit *test,
++				   const char *name,
++				   void *real_fn_addr,
++				   void *replacement_addr)
++{
++	struct kunit_kprobes_stub_ctx *ctx;
++	struct kunit_resource *res;
++
++	KUNIT_ASSERT_PTR_NE_MSG(test, real_fn_addr, NULL,
++				"Tried to activate a stub for function NULL");
++
++	/* If the replacement address is NULL, deactivate the stub. */
++	if (!replacement_addr) {
++		kunit_deactivate_kprobes_stub(test, real_fn_addr);
++		return;
++	}
++
++	/* Look up any existing stubs for this function, and replace them. */
++	res = kunit_find_resource(test,
++				  __kunit_kprobes_stub_resource_match,
++				  real_fn_addr);
++	if (res) {
++		ctx = res->data;
++		ctx->replacement_addr = (unsigned long)replacement_addr;
++
++		/* We got an extra reference from find_resource(), so put it. */
++		kunit_put_resource(res);
++	} else {
++		ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
++		KUNIT_ASSERT_NOT_ERR_OR_NULL_MSG(test, ctx, "Failed to allocate kunit stub for %s",
++						 name);
++
++		ctx->real_fn_addr = (unsigned long)real_fn_addr;
++		ctx->replacement_addr = (unsigned long)replacement_addr;
++
++		ctx->kp.addr = real_fn_addr;
++		ctx->kp.pre_handler = kprobe_handler;
++		KUNIT_ASSERT_EQ_MSG(test, register_kprobe(&ctx->kp), 0,
++				    "Failed to allocate kunit stub for %s", name);
++
++		kunit_alloc_resource(test, NULL,
++				     __kunit_kprobes_stub_resource_free,
++				     GFP_KERNEL, ctx);
++	}
++}
++EXPORT_SYMBOL_GPL(__kunit_activate_kprobes_stub);
++
++void kunit_deactivate_kprobes_stub(struct kunit *test, void *real_fn_addr)
++{
++	struct kunit_resource *res;
++
++	KUNIT_ASSERT_PTR_NE_MSG(test, real_fn_addr, NULL, "Tried to deactivate a NULL stub.");
++
++	res = kunit_find_resource(test,
++				  __kunit_kprobes_stub_resource_match,
++				  real_fn_addr);
++	KUNIT_ASSERT_PTR_NE_MSG(test, res, NULL,
++				"Tried to deactivate a nonexistent stub.");
++
++	/*
++	 * Free the stub. We 'put' twice, as we got a reference
++	 * from kunit_find_resource()
++	 */
++	kunit_remove_resource(test, res);
++	kunit_put_resource(res);
++}
++EXPORT_SYMBOL_GPL(kunit_deactivate_kprobes_stub);
 -- 
 2.49.0.1101.gccaa498523-goog
 
