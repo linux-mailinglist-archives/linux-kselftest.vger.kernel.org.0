@@ -1,211 +1,159 @@
-Return-Path: <linux-kselftest+bounces-33398-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33399-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 854ECABD80D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 May 2025 14:16:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCE56ABD8AC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 May 2025 15:02:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F0D64C3FD4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 May 2025 12:10:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 013FF188BABC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 May 2025 13:02:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38A7327FB2E;
-	Tue, 20 May 2025 12:09:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37C3122CBF3;
+	Tue, 20 May 2025 13:01:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FjNVV3IF"
+	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="TGZjvB2L"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB4DF27CCEE
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 May 2025 12:09:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECAA422B5AA
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 May 2025 13:01:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747742994; cv=none; b=j5GIa5bor7hD42ovy8vFKPc8cVlQvGRCzix4bSLVlLfWzf5+RFqbGa8HA30M81UPgk/Zmf80wYczNL2Yr9m9l0IMvVr1RIFDwSveyCVkiKo7jR6bT44/rNhBFBiKwsUm+O6Fwj/lfCrrdhqBJfw3D1ktnJnPY3jnXiK2iLUUUAk=
+	t=1747746104; cv=none; b=ov7qD05ftuQi5z5ZhfAi2T0yr9FViKFZDpcKjVbbEUq48ww6N/diZM1ftHhFaXlesuCfW70fyistkwLsW+6q3xE2rMAB9MZ9ieClUhHDIZ+fBb7Qp+UjF9ELqeRzWPL8/w7RsA53UkCOlKQas9yIpw5KSCTyFD0PLfZ6Dcap1FI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747742994; c=relaxed/simple;
-	bh=fVy0/x4yZndAeN03YdmNVuKaiMZZdGzPNITKbbzeS1g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mgp3OGUJivTYziUoXJPWa9jB4rnLTjAQTUt+kE2232+FnAUF8FtYxNEHAFDwyqDVZS1qywzNx9MMk+i98hQ7EuMjEWKya2msmKWOiS8duJabuIct6qTAtwUgUl23blNKXKXTPxr3Ua1kAPzUiFoB4uV677ywqSNFmnIz9ySVJMg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FjNVV3IF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1407DC4CEE9;
-	Tue, 20 May 2025 12:09:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747742993;
-	bh=fVy0/x4yZndAeN03YdmNVuKaiMZZdGzPNITKbbzeS1g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FjNVV3IF1gPVthta/ehZUhGd4FMCgvGQSj8FeYWilDBEtE+vrMH9g7RoUILxqY+pQ
-	 0ouCrfbWFvtmrGIVJNxIZcT6xHIp7S7vbeX+TpwJAyZc9AKnMkDf2TW5fdqN0zL7Sp
-	 +vkzziSalyjl63sCFQocjQuClVaMaMD+ss7MCcbAeFxyt3A/OFpPweVtqALz85/pFL
-	 59vg/nc1rJY7/LKtKMU51xkfla+QpEwxYvZVyygpsqX+Pa1jhiAT3we3brLj4AC+qw
-	 o/pwft2DptgxH2UeGdUaV7I7rJfVHjUJboM8a/dvfPRrEQRUbLY1aMzLi7JmKXRTQ6
-	 I71ILU4vjGngw==
-Date: Tue, 20 May 2025 14:09:50 +0200
-From: Maxime Ripard <mripard@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Simona Vetter <simona.vetter@ffwll.ch>, 
-	David Airlie <airlied@gmail.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, dri-devel@lists.freedesktop.org, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v2] drm/tests: Drop drm_kunit_helper_acquire_ctx_alloc()
-Message-ID: <20250520-enchanted-spirited-lorikeet-05f0fd@houat>
-References: <20250220132537.2834168-1-mripard@kernel.org>
- <Z_95jWM2YMTGy3pi@arm.com>
+	s=arc-20240116; t=1747746104; c=relaxed/simple;
+	bh=34t1ctJUizMtaGCXNLsBowJ2GwafQ+PDmebniuWuRcQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=SJT2xO4YJ3a2UwvccmaLHaf85ptED0e/dUCj9/rUzOgob3SjjKf5oHu/iKDCcS7INYrQZ/BRRxcPIAQwMmJ5XRxUPqJYOG3xBsOIC2c3idyrU7pkD0wbzViyqJTS2MGb1RMKiMc4kH4MImNOQiCs1AWJFeYsYR2jnmc9fu3mb58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=TGZjvB2L; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-43d0618746bso44614915e9.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 May 2025 06:01:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent.com; s=google; t=1747746099; x=1748350899; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ALq+75rbc0YSVKBhmMHZ9TQaUd2k8+MFk3atSFaxTp0=;
+        b=TGZjvB2LUIMxlniUq3MZA6Edl0zDjL1J6kyLs/ObOnBQAsFDxB5SqtVCcnbMYlYnEH
+         VeoMg6for0eX/4qDlK9fLds0uOa1KYniTYDNZQsxF7wimcjyyUS9hBC6mGBETv4QSJLq
+         +f2unQzH5sq+nJNkVovJPtbqKLDXKfx/KLNKGrF6XizxgKHkr+ToC89tPAisGQmtluHB
+         jLOMITRenRhStiuuH98P0FD+2bo6135lyFyU9qr/RN0MlcVPaAaF4GkIVUGNL/+DeSJp
+         0TFK4myc/SEvIU5l4JL2EwA5WZmAbnBhmLVsjkHYAcxuscedzmff3bOgjxlZ8YgA/TmS
+         nynw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747746099; x=1748350899;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ALq+75rbc0YSVKBhmMHZ9TQaUd2k8+MFk3atSFaxTp0=;
+        b=OxMvtLLWpSLxMzbIQd+UnMN1pV6dSZpnwsnebUAwGrM6XAyjrB8VedzTJ9Fi9nHzjj
+         6Xh+FxrxY5uOhdXSvsb+n3z/hVEE83j6RvYqC+X9RTQqVEBH1NIiAVmOw4KuNX7rn/AJ
+         fv07IyBEjWj8esmx63iOVYbWwXwFZGozwNGOGUFLza7riQ2mlYiMk+XntSMc4GFZFAd/
+         YPfwUvP1DSNJN+OkkGnmc3ARx941CtFzP6mwek5iGlQo5s+Aznin/GM2ilooOVTQDUoQ
+         vgQBMmG8HtzFV1B/58/29YCi91kruV9ip9fzPGJodpkAzbqOPkErsyvJUvxKyfsPrepm
+         8FHw==
+X-Forwarded-Encrypted: i=1; AJvYcCWCixcdRZ5OyfQ4ZquavTrAnQ+Cnc34AwOXqRpr9gs9DeQ+UO5fEjXU/WCjx7YAozx4K83PK4UwRHtPDKQA480=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwimfRu+SnlkCK/nZErII1lYVnBJkdT9KYGlcFXG6cfLx68dXPv
+	fh0E2u0iCvYjyf6/3NmOMTYwMHX+ouxOQCjhZ+WpgVAigUXU8A5Es24dGzxpX3Geh1/cRhWop3K
+	ypW4l+lg=
+X-Gm-Gg: ASbGncvrvqGxg2cMoqwcq3dWShzo1VCJs8TkkAisohK3VKOf1Bk8+rBSsL6C/hNegYX
+	KSg3uJzZnXgqY5BZNJQ+NJZ0wAg9eaRiixH2surHwbxbqrKN6ocQpgGFGNsu8f9Yiud+mECkNbN
+	sgc5gNbXWkHl1aHo80RQ4Q9If9NPwTYzBQbDY0npmDszkAN5RbX9+BTKntk7tm3hZaqIX48Qi72
+	tM0lnYeRcqGPWxXcp/9fSZC+Iu3pfFpnSCfj1VWvTK9RjLONo6SU3U7/gmUNVwRy5+OtPE3t+Fn
+	zBQ+kA7ogx27KCmWdzisd5mxxXHuZzJjoZQq9H/Pl78SlZUJsFAiTLOrXTtZLgdigp7pa9YJC3b
+	+umWLwTV4cLuG30SEkmFGdKTs5w9y51EBW87w0CLjy73uLs4=
+X-Google-Smtp-Source: AGHT+IFbIOxSLUg33BUpylzuKCK041iXvPKBjS+f2FA17A7KvsDTPjKnbUw6g/iuY+iBfbcHhkntQQ==
+X-Received: by 2002:a05:600c:6296:b0:43d:46de:b0eb with SMTP id 5b1f17b1804b1-442fefee254mr154045245e9.12.1747746099064;
+        Tue, 20 May 2025 06:01:39 -0700 (PDT)
+Received: from [192.168.1.240] (0.0.6.0.0.0.0.0.0.0.0.0.0.0.0.0.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff::600])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a35ca5a8cfsm16538095f8f.37.2025.05.20.06.01.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 May 2025 06:01:38 -0700 (PDT)
+From: Lorenz Bauer <lmb@isovalent.com>
+Subject: [PATCH bpf-next v5 0/3] Allow mmap of /sys/kernel/btf/vmlinux
+Date: Tue, 20 May 2025 14:01:16 +0100
+Message-Id: <20250520-vmlinux-mmap-v5-0-e8c941acc414@isovalent.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha384;
-	protocol="application/pgp-signature"; boundary="u6r6j7zf67sbxmzv"
-Content-Disposition: inline
-In-Reply-To: <Z_95jWM2YMTGy3pi@arm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABx9LGgC/23OQQqDMBAF0KuUrJuSTDJau+o9ShcxjjWgUYwNF
+ vHuDa5EXH4+8/4sLNDoKLDHZWEjRRdc71PA64XZxvgPcVelzEAAChSSx651/jvzrjMDB7KImbK
+ KasnSyTBS7eaNe7FyqLmneWLv1DQuTP3423ai3PpzMkouuDGQg8YcsLg/XeijaclPN9t3GxZhD
+ 8ABgAQUaCGXWmmUxRmg9gAeAJUArFCZ2ohM0OkHegdIcQB0ArKCNOgSTJbDEVjX9Q9WJ3bweQE
+ AAA==
+X-Change-ID: 20250501-vmlinux-mmap-2ec5563c3ef1
+To: Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Lorenz Bauer <lmb@isovalent.com>, Alan Maguire <alan.maguire@oracle.com>
+X-Mailer: b4 0.14.2
 
+I'd like to cut down the memory usage of parsing vmlinux BTF in ebpf-go.
+With some upcoming changes the library is sitting at 5MiB for a parse.
+Most of that memory is simply copying the BTF blob into user space.
+By allowing vmlinux BTF to be mmapped read-only into user space I can
+cut memory usage by about 75%.
 
---u6r6j7zf67sbxmzv
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2] drm/tests: Drop drm_kunit_helper_acquire_ctx_alloc()
-MIME-Version: 1.0
+Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
+---
+Changes in v5:
+- Fix error return of btf_parse_raw_mmap (Andrii)
+- Link to v4: https://lore.kernel.org/r/20250510-vmlinux-mmap-v4-0-69e424b2a672@isovalent.com
 
-Hi Catalin,
+Changes in v4:
+- Go back to remap_pfn_range for aarch64 compat
+- Dropped btf_new_no_copy (Andrii)
+- Fixed nits in selftests (Andrii)
+- Clearer error handling in the mmap handler (Andrii)
+- Fixed build on s390
+- Link to v3: https://lore.kernel.org/r/20250505-vmlinux-mmap-v3-0-5d53afa060e8@isovalent.com
 
-On Wed, Apr 16, 2025 at 10:34:05AM +0100, Catalin Marinas wrote:
-> On Thu, Feb 20, 2025 at 02:25:37PM +0100, Maxime Ripard wrote:
-> > lockdep complains when a lock is released in a separate thread the
-> > lock is taken in, and it turns out that kunit does run its actions in a
-> > separate thread than the test ran in.
-> >=20
-> > This means that drm_kunit_helper_acquire_ctx_alloc() just cannot work as
-> > it's supposed to, so let's just get rid of it.
-> >=20
-> > Suggested-by: Simona Vetter <simona.vetter@ffwll.ch>
-> > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > Signed-off-by: Maxime Ripard <mripard@kernel.org>
->=20
-> My scripts for running all possible kunit tests (under arm64 qemu)
-> started failing with 6.15-rc1. I bisected it to commit 30188df0c387
-> ("drm/tests: Drop drm_kunit_helper_acquire_ctx_alloc()"). No idea
-> whether it fails on other architectures but it's fairly easy to
-> reproduce on arm64. Starting from defconfig, enable CONFIG_KUNIT=3Dm and
-> CONFIG_DRM_VC4_KUNIT_TEST=3Dm, build the kernel with gcc. Once a prompt is
-> reached, "modprobe vc4" and the most noticeable thing is the kernel
-> panic with stack protector enabled (by default on arm64):
->=20
->   Kernel panic - not syncing: stack-protector: Kernel stack is corrupted =
-in: drm_vc4_test_pv_muxing+0x2a4/0x2a4 [vc4]
->   CPU: 14 UID: 0 PID: 311 Comm: kunit_try_catch Tainted: G        W      =
-  N  6.15.0-rc2 #1 PREEMPT
->   Tainted: [W]=3DWARN, [N]=3DTEST
->   Hardware name: QEMU KVM Virtual Machine, BIOS 2024.08-4 10/25/2024
->   Call trace:
->    show_stack+0x18/0x24 (C)
->    dump_stack_lvl+0x60/0x80
->    dump_stack+0x18/0x24
->    panic+0x168/0x360
->    __ktime_get_real_seconds+0x0/0x20
->    vc4_test_pv_muxing_gen_params+0x0/0x94 [vc4]
->    kunit_try_run_case+0x6c/0x160 [kunit]
->    kunit_generic_run_threadfn_adapter+0x28/0x4c [kunit]
->    kthread+0x12c/0x204
->    ret_from_fork+0x10/0x20
->   SMP: stopping secondary CPUs
->   Kernel Offset: 0x431a85f00000 from 0xffff800080000000
->   PHYS_OFFSET: 0xfff0e8f3c0000000
->   CPU features: 0x0002,00000268,01002640,82004203
->   Memory Limit: none
->   ---[ end Kernel panic - not syncing: stack-protector: Kernel stack is c=
-orrupted in: drm_vc4_test_pv_muxing+0x2a4/0x2a4 [vc4] ]---
->=20
-> Scrolling through the log, I also get a lot of warnings before the
-> panic:
->=20
->   WARNING: CPU: 14 PID: 311 at drivers/gpu/drm/drm_modeset_lock.c:296 drm=
-_modeset_lock+0xbc/0xfc [drm]
->   Modules linked in: vc4 snd_soc_hdmi_codec drm_kunit_helpers drm_exec ce=
-c drm_display_helper drm_client_lib drm_dma_helper kunit drm_kms_helper drm=
- backlight dm_mod ip_tables x_tables ipv6
->   CPU: 14 UID: 0 PID: 311 Comm: kunit_try_catch Tainted: G        W      =
-  N  6.15.0-rc2 #1 PREEMPT
->   Tainted: [W]=3DWARN, [N]=3DTEST
->   Hardware name: QEMU KVM Virtual Machine, BIOS 2024.08-4 10/25/2024
->   pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=3D--)
->   pc : drm_modeset_lock+0xbc/0xfc [drm]
->   lr : drm_atomic_get_private_obj_state+0x78/0x180 [drm]
->   sp : ffff800080b0bbd0
->   x29: ffff800080b0bbd0 x28: 0000000000000004 x27: ffff170d4829a480
->   x26: ffff170d42968000 x25: ffff170d4829a480 x24: ffff170d40eaf540
->   x23: 0000000000000038 x22: ffff170d42964400 x21: ffff170d4829a480
->   x20: ffff170d42968958 x19: ffff800080b0bd58 x18: 00000000ffffffff
->   x17: 0000000000000000 x16: ffffc31b065888a0 x15: 0000000000000000
->   x14: 0000000000000040 x13: 01e0000002800280 x12: 0000000000000000
->   x11: 0000000000000000 x10: 000001e001e001e0 x9 : 0000000000000020
->   x8 : ffff170d40b70148 x7 : 0000000000000021 x6 : 0000000000000fdf
->   x5 : 0000000000000fdf x4 : 0000000000000004 x3 : ffff170d429688f0
->   x2 : ffff170d40eaf540 x1 : 0000000000000000 x0 : ffff800080b0be10
->   Call trace:
->    drm_modeset_lock+0xbc/0xfc [drm] (P)
->    drm_atomic_get_private_obj_state+0x78/0x180 [drm]
->    vc4_atomic_check+0x47c/0x754 [vc4]
->    drm_atomic_check_only+0x4d4/0x914 [drm]
->    drm_vc4_test_pv_muxing+0xe0/0x2a4 [vc4]
->    kunit_try_run_case+0x6c/0x160 [kunit]
->    kunit_generic_run_threadfn_adapter+0x28/0x4c [kunit]
->    kthread+0x12c/0x204
->    ret_from_fork+0x10/0x20
->=20
-> Reverting the above commit makes these go away. I did not have time to
-> look deeper, I thought I'd report it here first.
->=20
-> The panic is with gcc 14.2.0 from Debian unstable. I tried with gcc
-> 12.2.0 in Debian stable and I don't get the stack protector panic, only
-> the lock warnings.
->=20
-> With clang 14 and 19, I get NULL pointer dereferences with this call
-> trace (decoded):
->=20
->   Unable to handle kernel NULL pointer dereference at virtual address 000=
-0000000000008
->   [...]
->   drm_modeset_lock (include/linux/list.h:153 include/linux/list.h:169 dri=
-vers/gpu/drm/drm_modeset_lock.c:318 drivers/gpu/drm/drm_modeset_lock.c:396)=
- drm (P)
->   drm_atomic_get_connector_state (drm.mod.c:?) drm
->   vc4_mock_atomic_add_output (drivers/gpu/drm/vc4/tests/vc4_mock_output.c=
-:?) vc4
->   drm_vc4_test_pv_muxing (drivers/gpu/drm/vc4/tests/vc4_test_pv_muxing.c:=
-688) vc4
->   kunit_try_run_case (lib/kunit/test.c:400) kunit
->   kunit_generic_run_threadfn_adapter (lib/kunit/try-catch.c:31) kunit
->   kthread (kernel/kthread.c:466)
->   ret_from_fork (arch/arm64/kernel/entry.S:863)
->=20
-> I can run more tests if you'd like, decode the stack traces.
+Changes in v3:
+- Remove slightly confusing calculation of trailing (Alexei)
+- Use vm_insert_page (Alexei)
+- Simplified libbpf code
+- Link to v2: https://lore.kernel.org/r/20250502-vmlinux-mmap-v2-0-95c271434519@isovalent.com
 
-Sorry I couldn't get to this sooner, and thanks for the awesome report.
+Changes in v2:
+- Use btf__new in selftest
+- Avoid vm_iomap_memory in btf_vmlinux_mmap
+- Add VM_DONTDUMP
+- Add support to libbpf
+- Link to v1: https://lore.kernel.org/r/20250501-vmlinux-mmap-v1-0-aa2724572598@isovalent.com
 
-I've just sent a fix, let me know if it also works for you:
-https://lore.kernel.org/dri-devel/20250520-drm-vc4-kunit-fixes-v1-1-ca281e4=
-85f8e@kernel.org/
+---
+Lorenz Bauer (3):
+      btf: allow mmap of vmlinux btf
+      selftests: bpf: add a test for mmapable vmlinux BTF
+      libbpf: Use mmap to parse vmlinux BTF from sysfs
 
-Maxime
+ include/asm-generic/vmlinux.lds.h                  |  3 +-
+ kernel/bpf/sysfs_btf.c                             | 32 ++++++++
+ tools/lib/bpf/btf.c                                | 89 +++++++++++++++++-----
+ tools/testing/selftests/bpf/prog_tests/btf_sysfs.c | 81 ++++++++++++++++++++
+ 4 files changed, 186 insertions(+), 19 deletions(-)
+---
+base-commit: 7220eabff8cb4af3b93cd021aa853b9f5df2923f
+change-id: 20250501-vmlinux-mmap-2ec5563c3ef1
 
---u6r6j7zf67sbxmzv
-Content-Type: application/pgp-signature; name="signature.asc"
+Best regards,
+-- 
+Lorenz Bauer <lmb@isovalent.com>
 
------BEGIN PGP SIGNATURE-----
-
-iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCaCxxDgAKCRAnX84Zoj2+
-dvJRAYDN5tln1A+fpx7jD9NVXxhZT5/TuqyhABS2uqasQaOapQKhvbsg1xbL1JQ1
-z82sTKcBewZN6z0WvNvhyR0By4RGzNH7jat9q7u2ZRyMZz+ogjr/5luHPAFi1T5G
-OEtlHirWKQ==
-=mHMv
------END PGP SIGNATURE-----
-
---u6r6j7zf67sbxmzv--
 
