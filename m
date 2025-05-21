@@ -1,147 +1,136 @@
-Return-Path: <linux-kselftest+bounces-33446-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33447-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF931ABEB23
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 May 2025 07:09:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 001FCABECB7
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 May 2025 09:05:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9D5304A66F8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 May 2025 05:09:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 783A117FE35
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 May 2025 07:05:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4376722F163;
-	Wed, 21 May 2025 05:09:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73D55235041;
+	Wed, 21 May 2025 07:05:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CByK7fmL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GrIUPiya"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B67CC22D4F2;
-	Wed, 21 May 2025 05:09:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1A1F22B8C3;
+	Wed, 21 May 2025 07:05:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747804152; cv=none; b=N8FNEcp56QlZUwDU4YL7EUmznoLoqH55acNBYTN1VwP7A8kfnGv5ivDvaCTX2yKLSZ9Hx9eb9/Bn1X0r4pGzjFnv9n/1uPJRVtMYzJD0EN3lZ5Nt4vsYUOiyr3OOAHTX9WgT5WXxoa+WXWkiQxzwaCPY7L2qAJxY71ITK1h3bcU=
+	t=1747811123; cv=none; b=u8LgGSZtsBW+YLR3v0EAo+QN5H89eSYorj1Ztj+X5uOezyn7tE//Ix1MHrVarJxKpdwhEznNMBbD1C5U9TXjQI8laMUojPv0NRdWvUPZgsm88bLgRZ10fr00GCSlsYUNaYYlMDz/SzVK2fPYT4Sft4Bz1/Vp7pvi8sCpgObaO48=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747804152; c=relaxed/simple;
-	bh=oF2C4nz7YhujYMmwzGwXXlGgny9pDbjMH6QdlRzkVFs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Su8Eo9oqMgL8dujzEPKq/bloXYi4OoveVIvaVptPRKY7gBy3OVcrpaDEUiaO5xMTh8z9zIsEPtgMb95The7jTYMSB4cG+OHmS/vOHdwRxagXhS98Rt7Goa2jgfLtKCr9Hi716YhDQ3kA0GwMJTEdByLviHjr3pd5pQyZlfYsJKg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CByK7fmL; arc=none smtp.client-ip=209.85.210.170
+	s=arc-20240116; t=1747811123; c=relaxed/simple;
+	bh=CRWJpCEQTlPV9zuvKipkjRcKPNnuB3s5a8Y/uhRQISg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NN/d1Dmsb+zIY70QWdPh5MN0pkcVZd+26clCN/VfM+eM0YnuuVaXEoSAa33XCdC6wtj8REuo0+dPVtcFwJLzolaiQq4vZtMwOkd7hWS0FrjF2Z5E4ZjtJXEPfB2I6omUkDQZixOhgkkdE4ZMgNf36gBxMMRVpGY3gvm1rXhdE+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GrIUPiya; arc=none smtp.client-ip=209.85.128.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-74019695377so4858388b3a.3;
-        Tue, 20 May 2025 22:09:10 -0700 (PDT)
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-43ede096d73so46911685e9.2;
+        Wed, 21 May 2025 00:05:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747804150; x=1748408950; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=A7VQmCzVFvBem7BEULeC/ezxM7T1lAwqR334gl85J1w=;
-        b=CByK7fmLnLmkBQ8qGuJekdqTbdykPUiMYzccJ9ETln8ES99OUA6cyHs9yd7iWGZoDP
-         8rE3tQcFLqWTM4uIgkD0y0pCDuOFhmZT0AdWOkRlQh0zGisWYhSiP+195PAELl21wKtE
-         y4T6433L6eLlBXI28ADHQyCAk/QxNXjXuNGDkL2j5Ivrka6E2OC7O1VBKvdKbcBqrdag
-         qIhRXC3f/Oh8rjbTI0PvP/7e6Ffy4Q/RIFkmjNk64ohKAOkQCk8lySDAGbkIajnLxdN+
-         xmYBBak0vVjFnle9bpx5nZ5eXNgL7bdT+kOHVWN0n86leHxvHsyXQA8yp3MShwDrsqwE
-         B/vA==
+        d=gmail.com; s=20230601; t=1747811120; x=1748415920; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cVBMFYR66wWyXi/ZLPMoKBQITzYK4w2QbdTYAurV8Y8=;
+        b=GrIUPiya8k7FN9ik+h3vp3mcIiJUZs+Xcf+q9Ph2FCA4dzLwevLAaCGLswhATZ1G5v
+         dHhKLiIQd4e8RsQsLR37ivrK5lCP3s5MSIZ2141aELlgbbhVPXBQBkw3wWNuo0Yt99El
+         3KLOtTqMCaX8d4Nt1tmfRgFYN/JPGIVINby7+1eFRTU7EWUTd2+7EZEsptZkbKmMMJ0+
+         6mnEiSgKpHkaUhJGaiC2msFXOUVK7vOq9CCJgIQzlMq+QMi5gKFohaIkfSI+mNxar6X1
+         bqHwD0tddOcvmpLfLWq2x16XbD0DBTS+mQrarbZLBGTBbaS7Fh3x0Qxf0FehIVSWUg3Z
+         E0Mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747804150; x=1748408950;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=A7VQmCzVFvBem7BEULeC/ezxM7T1lAwqR334gl85J1w=;
-        b=j6El7ZzHMl+4DnTmj5WjJg+KeiIRfhrltetHJWqrp3HQubRBwI8Afg5LWWm9l/7h38
-         60n3lpFtS0fSAtbu3eWt+mb7LXlbMrjkXBbZYq6vdukeqdJcBzEqEFewC+HDu3dQyYls
-         HbLtHPtoOrM1FmPeWIimwVW+8f9xEPcZj2kykvFL+7G6EQryZrNqYVmYbBWSx0G/VaPt
-         uAHpIikqHg0WuvAdl3+qprJ46NuUYkkMtR60xAfHeYK0BxjfwpyezAKDppnpHqdF2lRg
-         xiVHttyiwTGHJsYqNj7rpLRTKzfHELCYtgMtmakS/pXuEPg2lMlajFr//HRgQY4CN+JG
-         0I5w==
-X-Forwarded-Encrypted: i=1; AJvYcCU6RiA9nPrYybCvqbNgnOnWE4P2C1r4Y4O44O2Un6qlVTEguFihod9Vxq0VpDRkTBl2ZwD1SfMRWBPU+ICZ6NE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzaBlysHU53o0E2T96ipxLRx5Kua5q68MCtYarb4clmpd7wdrpI
-	ASZVaS2ReAfeXJAASCLnBwjrkaf6VSZsajNaKMBVbc0SVVxsqHEH35WA
-X-Gm-Gg: ASbGncveVtyPDUBCtuHasbD6XehAKdzjWOPK8peB1tpm/CRphluY2aHIgCS8ZmJtAKR
-	mfvfGdAtDXrwBXvTq71ZSWLxIJKUCJWlPmJcRmM+iDDYaTF47u4N0puRB+err+c+gKZWeCLdCOi
-	DRXDRcDMl013FQ5tXeNLZ+N/epJKw58lj8od/mR1eV3cZkHumV7/7q5tjwmYDeWiVufcTVtOHaU
-	ww8rjKh3J82Et1xt9Q3w9244iMpRM2DWbWVm36IA3BpTmgTXppzsuvFYvvTAhPkFuCByx9egNx8
-	+A0jPIE1HfzODcTC3WzNz9BBX0Cu5xCMzbXS4ssFlrOTuHWAXYjQ9Xnqmlh7dLBzFuKjSMCMLqx
-	n8k4E5yefKcyn8q4YmOEpb7NAtZx1
-X-Google-Smtp-Source: AGHT+IHh6Inhnokw4rbwT20mfrVae9IcLmnFQgitRWClEVjJgAmeXA9M9Dt5VSBe2sFqevmUeM+Rrw==
-X-Received: by 2002:a05:6a21:1807:b0:1f5:93b1:6a58 with SMTP id adf61e73a8af0-2162188b87emr30491253637.8.1747804149931;
-        Tue, 20 May 2025 22:09:09 -0700 (PDT)
-Received: from ipravd-Nitro-AN515-55.hsd1.ca.comcast.net ([2601:646:a000:5fc0:aebf:fcbc:c222:fc3d])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-742a986d9c3sm8718738b3a.121.2025.05.20.22.09.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 May 2025 22:09:09 -0700 (PDT)
-From: Ivan Pravdin <ipravdin.official@gmail.com>
-To: brauner@kernel.org,
-	shuah@kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Ivan Pravdin <ipravdin.official@gmail.com>
-Subject: [PATCH] kselftest/pidfd: Make all test functions return int
-Date: Wed, 21 May 2025 01:09:06 -0400
-Message-ID: <20250521050906.629641-1-ipravdin.official@gmail.com>
-X-Mailer: git-send-email 2.45.2
+        d=1e100.net; s=20230601; t=1747811120; x=1748415920;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cVBMFYR66wWyXi/ZLPMoKBQITzYK4w2QbdTYAurV8Y8=;
+        b=GA4ZR5v9+IM7SsGHwjDh6Ov1gQ/HGCo9VOXjpvOiffuFcIC5NfTa7RcByeu4gjLSIz
+         J9wEg9JJlVxSuhsyUPTKFE6cyGS2aduMypldrfrgGskfvF2aEHLyBvidq4JGEYxzWXCJ
+         j4EhYShyD5hs5gLMfOabWoGVCL45Ym4c1FDa0B/DArz5bQpOXhRVHknH7dMaFntwhycq
+         R0Or0UXv1KCfqMDkJAfz4rkFJIx41hLBnOFHPEQWA9mhoxHLY9eLXWlLryVBex5CD31E
+         2KlFbsbG0qUXVbc+4OB8/MtzkiuBn8wcQLa15mUBTfRGys9Wqw3WIEBVX6i5KHN2G9QW
+         ad6g==
+X-Forwarded-Encrypted: i=1; AJvYcCUARHDsqypX7wtVV3ezxlfOkkx1IDUXVz5rBqyS9PJuz5C0QgL5i0RTH1bCBFUImwHilrJx/EkdeZw=@vger.kernel.org, AJvYcCUD5rGDwSe2w5+zhC3UyfH09zhREjjKM/3vRdIzv0YMyLH1ckqtKUqWFcnJZfml5xbPpcjSskcw@vger.kernel.org, AJvYcCUTr4j+BO33yW9DWEpM2VCm/MmbGVKtKCiO06L+Sfg2M9Djx0KqiRxxiqHBsrmk2SMQlhZbkYgfmW7cNA==@vger.kernel.org, AJvYcCVOsn++c/eTSx5QnZEgAEr0/PohnBkvNFTQzME43FTe+EQjllQfKp14/cqJcfTPCoMbL10JnvBo7IY9DG00/rDO@vger.kernel.org, AJvYcCX1Fieiac28MVoB2K0GIvnH+F8Z682FLOi4Ns+M/1woYQY1iXMWgA6CX7zTgHyaRLQa2dFeONU0AwR+eBFn@vger.kernel.org
+X-Gm-Message-State: AOJu0YxyQzJ5d1qJpn8Qt+7tmO/6hp0aezjjPpHzqqjyeu6/VC8ZQiPR
+	lw9Qjr0MV7pH+Ww3HIOxcofdNozeNvvK5VoxjSgIv1ePJ4IunWbpK4dr
+X-Gm-Gg: ASbGnct4Ti7oj2RCkaeO3Jy17GNRdX0AOUkqesUjEpf1RoRiJgepr+qN79K4aS1VEA+
+	6cCqMB+hIM/3ro7xg/wlMkZ1PNi5qzkZZlFRSeDxMiDKc9gsunrIEwmviDTBJwMxyBV5g8C7vqH
+	7w6f5+SrVxOgioiisZxNZgdR6dUglw/3Mxo39m9N7HKQhhriyxLnwKmGnK7g8vZp4yAJgNC0N8r
+	wrEvYyTd5t4SJQ+BKssRKgY6XNp5JlP2mDql3TBJlYld3GBu5NA9JNeujnAmot6chB4/innHTc+
+	8f1dvp4BBxFarJHlCho1vK0RucNmIHM8LukJNWT65kYKzjbtUQlBJyYBv8j1tjlHtXRYgpbD
+X-Google-Smtp-Source: AGHT+IH76b0+NNb6/NkbSwWOkVm7cWNBavLWnfUchKABErnQARC8/2YWL6aXIXncA8+i1sj6S+5VGw==
+X-Received: by 2002:a05:6000:3105:b0:3a3:64d3:4047 with SMTP id ffacd0b85a97d-3a364d3405emr13275697f8f.37.1747811119524;
+        Wed, 21 May 2025 00:05:19 -0700 (PDT)
+Received: from [172.27.21.230] ([193.47.165.251])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a35ca889a7sm18892685f8f.72.2025.05.21.00.05.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 May 2025 00:05:19 -0700 (PDT)
+Message-ID: <80b40828-8fa3-4313-8c98-823ac7c055c1@gmail.com>
+Date: Wed, 21 May 2025 10:05:13 +0300
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next V10 2/6] selftest: netdevsim: Add devlink rate
+ tc-bw test
+To: Jakub Kicinski <kuba@kernel.org>, Carolina Jubran <cjubran@nvidia.com>
+Cc: Tariq Toukan <tariqt@nvidia.com>, "David S. Miller"
+ <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>,
+ Eric Dumazet <edumazet@google.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ Jiri Pirko <jiri@nvidia.com>, Gal Pressman <gal@nvidia.com>,
+ Leon Romanovsky <leonro@nvidia.com>, Donald Hunter
+ <donald.hunter@gmail.com>, Jiri Pirko <jiri@resnulli.us>,
+ Jonathan Corbet <corbet@lwn.net>, Saeed Mahameed <saeedm@nvidia.com>,
+ Leon Romanovsky <leon@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-rdma@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Moshe Shemesh <moshe@nvidia.com>,
+ Mark Bloch <mbloch@nvidia.com>, Cosmin Ratiu <cratiu@nvidia.com>
+References: <1747766287-950144-1-git-send-email-tariqt@nvidia.com>
+ <1747766287-950144-3-git-send-email-tariqt@nvidia.com>
+ <20250520155957.04b27217@kernel.org>
+Content-Language: en-US
+From: Tariq Toukan <ttoukan.linux@gmail.com>
+In-Reply-To: <20250520155957.04b27217@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The pidfd_test suite currently defines six test functions,
-four of which return an int, while the remaining
-two return void. This is inconsistent.
 
-To address this, convert the two void-returning test
-functions to return int, bringing them in line with
-the rest. For now, the functions always return 0.
 
-Fixes: 740378dc7834b ("pidfd: add polling selftests")
-Signed-off-by: Ivan Pravdin <ipravdin.official@gmail.com>
----
- tools/testing/selftests/pidfd/pidfd_test.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+On 21/05/2025 1:59, Jakub Kicinski wrote:
+> On Tue, 20 May 2025 21:38:03 +0300 Tariq Toukan wrote:
+>> Test verifies that netdevsim correctly implements devlink ops callbacks
+>> that set tc-bw on leaf or node rate object.
+> 
+> Please add a test that can actually validate a NIC HW.
+> The test probably needs to be in Python to use a remote endpoint,
+> and should live under tools/testing/../drivers/net/hw
+> 
+> We had a long conversation about what we expect from the API
+> vs how your HW works. One of the test cases should confirm
+> the expected behavior, IOW fail on mlx5. Which is fine,
+> unlikely that any NIC will have 100% compliance. But at
+> least we will be documenting the expectations.
+> 
 
-diff --git a/tools/testing/selftests/pidfd/pidfd_test.c b/tools/testing/selftests/pidfd/pidfd_test.c
-index fcd85cad9f18..645ac8e35033 100644
---- a/tools/testing/selftests/pidfd/pidfd_test.c
-+++ b/tools/testing/selftests/pidfd/pidfd_test.c
-@@ -492,7 +492,7 @@ static int child_poll_exec_test(void *args)
- 	return 0;
- }
- 
--static void test_pidfd_poll_exec(int use_waitpid)
-+static int test_pidfd_poll_exec(int use_waitpid)
- {
- 	int pid, pidfd = 0;
- 	int status, ret;
-@@ -528,6 +528,7 @@ static void test_pidfd_poll_exec(int use_waitpid)
- 		ksft_exit_fail_msg("%s test: Failed\n", test_name);
- 	else
- 		ksft_test_result_pass("%s test: Passed\n", test_name);
-+	return 0;
- }
- 
- static void *test_pidfd_poll_leader_exit_thread(void *priv)
-@@ -558,7 +559,7 @@ static int child_poll_leader_exit_test(void *args)
- 	exit(0);
- }
- 
--static void test_pidfd_poll_leader_exit(int use_waitpid)
-+static int test_pidfd_poll_leader_exit(int use_waitpid)
- {
- 	int pid, pidfd = 0;
- 	int status, ret = 0;
-@@ -608,6 +609,7 @@ static void test_pidfd_poll_leader_exit(int use_waitpid)
- 		ksft_exit_fail_msg("%s test: Failed\n", test_name);
- 	else
- 		ksft_test_result_pass("%s test: Passed\n", test_name);
-+	return 0;
- }
- 
- int main(int argc, char **argv)
--- 
-2.45.2
+No problem with that, we'll add.
+
+We could've saved this extra cycle if my questions [1] exactly about 
+this topic weren't ignored.
+Area is vague and not well defined. We can continue with the iterative 
+guess and fix cycles, or alternatively get it clearly and formally defined.
+
+[1] 
+https://lore.kernel.org/all/98386cab-11c0-4f74-9925-8230af2e65c8@gmail.com/
 
 
