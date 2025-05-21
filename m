@@ -1,114 +1,112 @@
-Return-Path: <linux-kselftest+bounces-33465-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33466-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E24CABF6DA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 May 2025 15:58:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6680ABF746
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 May 2025 16:09:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 06B733AFB92
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 May 2025 13:58:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 928CE4E7A95
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 May 2025 14:09:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DF5A1537C6;
-	Wed, 21 May 2025 13:58:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EB5218DF9D;
+	Wed, 21 May 2025 14:08:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kMxNZFK/"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="r9tzsjMa"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out.smtpout.orange.fr (out-13.smtpout.orange.fr [193.252.22.13])
+	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24CFF86331;
-	Wed, 21 May 2025 13:58:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0111618DB14;
+	Wed, 21 May 2025 14:08:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747835901; cv=none; b=Q/psWx86sRo2EvVI6rYDnzakElR/60zfuyCeCsjuyPZqTbCD49qKia9/dAHb1VSF1kgp6tAZ1ITB2lOkwHjNkeydA7gMRH3sNcH2Nbudzu8M1WLarQijAzLEPhN9PUc5dX6//Wsc+bcPiXm5GWQ2Ylr2rmRj9V6tpEkEph5/alw=
+	t=1747836527; cv=none; b=ROhw/bpTFUyEd+2EX3AIfU0i1TjeOWu03L7s9DlrR4jxSYe5oZBiAnfNo7HWsbkPLFIvvkaV1fnixJ7yCqdhgeIQ5S/cyNWi/fHt44s+WIFmxUxCBsl9Tv0Smd5OBwlJVypEOZRZEbCpOeEStCIP00WWMmKGG+OU+m8SNGfr1fI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747835901; c=relaxed/simple;
-	bh=TV5Um3wEwSm9Yw2CbWgV1hqPi3iVOdmeNBmDMsMJJus=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qSeF2URdAEdWQANI1vNMYdFu1meSiKS1GDL+3Gwvm9mSFqUbjLv75pAI+Hh5p+TS5q7NtTCC/T34a+m5/gOm/xv4AiCBOjjFwrf0JF9lWSGbQ2rOOKTnh/5Kds+vtMjI3eXwsP/aPFxr1GaQH95NL9u56Gz2PayUMtF6VsnVM5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kMxNZFK/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60E2EC4CEE4;
-	Wed, 21 May 2025 13:58:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747835900;
-	bh=TV5Um3wEwSm9Yw2CbWgV1hqPi3iVOdmeNBmDMsMJJus=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kMxNZFK/lgC4ZaEQYoSnJ5VGx6lIKQCL0sODzOUx5mwG4ZPRe5i/T8aw8Nq06ZHQb
-	 9b4Xdw3EV2a2gE0zwB9Xmgqv+lIIEf4Qi46mntSlWQTNNIxqPzhp9djxkXftPNE9Vm
-	 J6k2ZqM+dofAr3L6hoBk5tJk8zt5+f/Fom/HogY3ngdlxV1PAXLXS5JCre12D9p+Hu
-	 vNGSYqzy/hMa6Uz7O3TW36/H/OSFr5C3MZYYAK7r8aKY1gl8i2U8fEqvQ6gM7SALhM
-	 YQNL3z8rlMgv0E5rd7f+Hw+ZLVAVGWb4S5E6RN6LyysgrWxA0o6onC6W8swidmOaov
-	 xSwn+Ig7M1T9g==
-Date: Wed, 21 May 2025 14:58:16 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 1/9] tools/nolibc: move ioctl() to sys/ioctl.h
-Message-ID: <5ca9d57f-b711-4929-89ca-79e6966bf3be@sirena.org.uk>
-References: <20250515-nolibc-sys-v1-0-74f82eea3b59@weissschuh.net>
- <20250515-nolibc-sys-v1-1-74f82eea3b59@weissschuh.net>
- <eda3af4a-8dfe-4f82-a934-2d0256b754e2@sirena.org.uk>
- <89bb5a3e-dd6c-475d-9c5d-0bd1595be735@t-8ch.de>
- <744a1aa8-1efc-4c20-b45e-070fc038f6e8@sirena.org.uk>
- <198bf1a8-98d0-4693-a4cf-234cad728c9b@t-8ch.de>
+	s=arc-20240116; t=1747836527; c=relaxed/simple;
+	bh=7X2bDw7QnzI+Ry95G/GHDrSBj9tycNP3+ulwGxSrXgc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HZo0EunJssC4zhdEZ2OZyFZO1rGOQIvsGTl1SZQdL3sesKbl/CGI5nnofctcXctyueTe39O2KNViYD9WAfAlyEjEbv6Lf5jfX90i18He51YVP4Bi4SwFrGKvuCmG2eQcpNlHOsbn6RO2dGX2W9L61UVqRIiqcZrT64lfpHgwDbk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=r9tzsjMa; arc=none smtp.client-ip=193.252.22.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [172.16.82.72] ([124.33.176.97])
+	by smtp.orange.fr with ESMTPA
+	id Hk6HuahaZpEs6Hk6QuvpuY; Wed, 21 May 2025 16:07:31 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1747836452;
+	bh=1p4bBOM6X/rWnNjj84c+v68lEDBrduzX5mBWWcyQmak=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=r9tzsjMaVrP1Qp77I+48WpcjD4FydBs0ftajiJPZViYAe48B7LJTSj2CH2d+TKOO+
+	 16OhFfgqrot7pKbj0snZf7Kq/jjbHZHDWLFhoxR+JFNn6MtRdI1RkTR8oKEh9EdBsV
+	 M6AW+ZJ7x+SHIYn5Sw3ZvdxEwrBteX4uYcrkgV1w+Sj6T3gr7Q2BOLbvSkPFi9/FXF
+	 tl8sfUam/WhcLu/INgfXQE3Ej7nfpZO5+gY7R15XIv0lS0W8rlChYVbAK8J/qnmBy3
+	 b0koIuIKbpkSzKgr3XEo9cRNnYt3QHHTcGJNvVPJejunkvGcoZOBQUDlo+Y9pDTriR
+	 fIrPZaas4zfYw==
+X-ME-Helo: [172.16.82.72]
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Wed, 21 May 2025 16:07:32 +0200
+X-ME-IP: 124.33.176.97
+Message-ID: <e5487982-2a7a-44ca-95d6-f270a7533749@wanadoo.fr>
+Date: Wed, 21 May 2025 23:07:16 +0900
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="o1EjMuOZVPaPj0Gi"
-Content-Disposition: inline
-In-Reply-To: <198bf1a8-98d0-4693-a4cf-234cad728c9b@t-8ch.de>
-X-Cookie: 42
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] selftests: can: Import tst-filter from can-tests
+To: Felix Maurer <fmaurer@redhat.com>, socketcan@hartkopp.net,
+ mkl@pengutronix.de
+Cc: shuah@kernel.org, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ linux-can@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, dcaratti@redhat.com, fstornio@redhat.com
+References: <87d289f333cba7bbcc9d69173ea1c320e4b5c3b8.1747833283.git.fmaurer@redhat.com>
+Content-Language: en-US
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
+ GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
+ bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
+ BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
+ 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
+ yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
+ CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
+ ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <87d289f333cba7bbcc9d69173ea1c320e4b5c3b8.1747833283.git.fmaurer@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+On 21/05/2025 at 22:16, Felix Maurer wrote:
+> Tests for the can subsystem have been in the can-tests repository[1] so
+> far. Start moving the tests to kernel selftests by importing the current
+> tst-filter test. The test is now named test_raw_filter and is substantially
+> updated to be more aligned with the kernel selftests, follow the coding
+> style, and simplify the validation of received CAN frames. We also include
+> documentation of the test design. The test verifies that the single filters
+> on raw CAN sockets work as expected.
+> 
+> We intend to import more tests from can-tests and add additional test cases
+> in the future. The goal of moving the CAN selftests into the tree is to
+> align the tests more closely with the kernel, improve testing of CAN in
+> general, and to simplify running the tests automatically in the various
+> kernel CI systems.
+> 
+> [1]: https://github.com/linux-can/can-tests
+> 
+> Signed-off-by: Felix Maurer <fmaurer@redhat.com>
+
+Thanks. I will send a follow-up patch which will add the support of physical can
+interfaces.
+
+Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
 
---o1EjMuOZVPaPj0Gi
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yours sincerely,
+Vincent Mailhol
 
-On Wed, May 21, 2025 at 03:45:42PM +0200, Thomas Wei=DFschuh wrote:
-> On 2025-05-21 14:22:30+0100, Mark Brown wrote:
-
-> > Ah, you expect what's currently there to work - good.  I noticed that
-> > the vDSO tests had a -I for the nolibc directory which made me think it
-> > was expected that it be there, it's the only user on most arches.
-
-> The -I is useful to compile applications without guarding the system
-> includes with #ifndef NOLIBC.
-
-These tests are all nolibc specific and so don't reference the system
-headers, the whole point is to not use a real libc.
-
-> What do I have to do to cross-compile these selftests?
-> I get various compiler errors.
-
-Any specific errors?  It's just a standard selftest build, eg:
-
-   make -C tools/testing/selftests LLVM=3D1 ARCH=3Darm64 TARGETS=3Darm64
-
-Unless you've got very current userspace headers you'll probably need
-a headers_install too (that's generally needed for the selftests).
-
---o1EjMuOZVPaPj0Gi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmgt2/cACgkQJNaLcl1U
-h9ARDwf7BozdrB4Bcr6jM/YF1p6VqVRrJ0CeeWvtqJRfjrYx1kAx8w2sVJXMrHhb
-yq0/tQ5Nbms6IAM4evFvplCaqGsxSkjc3rsruqHstlyzQKzGRqEjrqAa9gnuWdHF
-ubgamRun3Ff0/xjVppOSdU8oxMPECjlLfQWgc4MDYNzyg0/B9ALeIOAsb3mjYk1U
-LirAWbSvbWzMqi8lL9gOwFtUyQn0j2+xhYN0pMuAt+g09tFc1+B6j8aPJq/pGbkk
-eko4YyzFx9eB18yUl4NWuv48oUZ46dMokY5K/lBFVo774BYHjFf4SRgATZ+mPkPw
-/BiHFCRIYPs+abzjfSbP6VZpw04SxA==
-=zzfQ
------END PGP SIGNATURE-----
-
---o1EjMuOZVPaPj0Gi--
 
