@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-33483-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33484-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1EE5ABFD96
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 May 2025 21:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DA470ABFD9E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 May 2025 22:00:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3C43416FA67
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 May 2025 19:56:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8F1DC4A1FD2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 May 2025 20:00:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12FF2235358;
-	Wed, 21 May 2025 19:55:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E8E1280CE3;
+	Wed, 21 May 2025 20:00:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PKzkMDDC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S3P9xT4e"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4FD112E5D;
-	Wed, 21 May 2025 19:55:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C6AE22154A;
+	Wed, 21 May 2025 20:00:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747857355; cv=none; b=W/rPUStg/sRuoiiYpOeDsoKNufvqyy6K3W1e6i4BGYgcSwNLc2tyu295T70lc6u6hYW10YpKAicnt61xbmwICBt2slTjPjPDcMPDKauWNNBWjsBPvQrl52pShLEXw6ByiXxWDOzXOWocElu2SMqhBMIVd7A9RovRUqzd4Dv4IvU=
+	t=1747857636; cv=none; b=OY6XLCAyTmo7/kUcc00dZ31mPC/jsPmVoyHeAxXPxOHBZdiRB5epX2eBkh1w9ubkLnsAdVMK7fG3qxJ3mpgCzOiJMJa5mnwtL7tC9hCAM+xllCRYRjmu62LK2LnF3S+4zXIOwUeu75+QBQgm+CVwDBf4osol9+7bAaG28WXQxHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747857355; c=relaxed/simple;
-	bh=EGfeKn8ImgtOcV91WNAlk8LMF6NPF0d6Cm6uL14hBLM=;
+	s=arc-20240116; t=1747857636; c=relaxed/simple;
+	bh=nAUzpcXK1h/ubGnw28aVMwC2X90t/BjKy6cJTAqX1sw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=my1/gCpUuPQ+4vJSR/M35ZRMIjsbQLZgkfRwhrsE3gx0ydLmNoYxWOO1SN8845p54HIoizfzWBpcAgA+I2mLjl2UduvK8d/vG6wChi5NVweNKDNO5/Chy9m5LWY1ka3suMhjg7Za6PUvv9cDc4Ld1cVtyOox4rw68HvtxXO9nmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PKzkMDDC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D458C4CEE4;
-	Wed, 21 May 2025 19:55:53 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=GaeMRV4rRNvIgERcmTwV03SOygRJO8zE/mraEdg3mv89xcn6LiVhhErkpeCPtm5gP9yu3oN/OSecT4zY1Y6a+tN+w+nOZhh1n8Qh0YqZY1+XV2Y3wcT0XbEEZJtNf/eZPCYKOXIGTmS1cOorDO60luKQscsWgLbm0NWtQ0XhYaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S3P9xT4e; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0867EC4CEE4;
+	Wed, 21 May 2025 20:00:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747857354;
-	bh=EGfeKn8ImgtOcV91WNAlk8LMF6NPF0d6Cm6uL14hBLM=;
+	s=k20201202; t=1747857635;
+	bh=nAUzpcXK1h/ubGnw28aVMwC2X90t/BjKy6cJTAqX1sw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PKzkMDDCg/CbBiXIjnlD8GC4AfFKaM28aTKVkuk9dQt/EV4YRMwEH64d29cEIQHeY
-	 YZGfSbq0GxPQUKLY3u3cHpKM9emZzvAAJdTbBziLPFxlT5+miWfx6uFkdvt1Lo0JU+
-	 3+ZrfIK1N1Na4gML35jBdqBe0uOowYTDXeAOs4FmA2yw6mSot4s3akUYzncag6wGSt
-	 ciNQWehFIeUlb0/KtuyZLEg8tkomvmISpxKEgIzMWFk/wtmHqg5xPM3lrmryOC09xJ
-	 6JNCAU0zQ8lKWxK3zPm914zzIG2w/EzVbu2KNnmIHgrq0xNFV5NMwqLyxclfc9jm+A
-	 LrLunTVBhM3kw==
-Date: Wed, 21 May 2025 12:55:52 -0700
+	b=S3P9xT4eR+7x+5B+FMY2h+aRLEqBVVHwuZu7W+ijQlSP56P+RfHhEzc0Gu4e1vKN1
+	 iETpNA00s2Wc+Z7uXyEofa7M4+XKAN951L03R+sRxOVB885hxVAno3rn3aa9I1IwlI
+	 8y3y9Go0NKf4aRmZ/u1VLHUMYHGJaFnqZe3mALKPtIu7EqDMzWWIGx0scJjtiQcw7y
+	 O8vavB/57XukdYSq87NIE7mN0CmDFWiJ7Bqhk/JtGPyOAsE2hWKpOojJaMFiDmH5HS
+	 gUFT+LMiUt1SndlLXKFX4nxFvzRZS05nX0scNS74uHHFNR6p7rosn3E2Da6nB9CPic
+	 olw1BB7RG/oLg==
+Date: Wed, 21 May 2025 13:00:33 -0700
 From: Namhyung Kim <namhyung@kernel.org>
 To: Mingwei Zhang <mizhang@google.com>
 Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
@@ -64,10 +64,11 @@ Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	Eranian Stephane <eranian@google.com>,
 	Shukla Manali <Manali.Shukla@amd.com>,
 	Nikunj Dadhania <nikunj.dadhania@amd.com>
-Subject: Re: [PATCH v4 05/38] perf: Add generic exclude_guest support
-Message-ID: <aC4vyIpKk6m2nz8-@google.com>
+Subject: Re: [PATCH v4 34/38] perf/x86/amd: Support
+ PERF_PMU_CAP_MEDIATED_VPMU for AMD host
+Message-ID: <aC4w4WmPywIEsMwk@google.com>
 References: <20250324173121.1275209-1-mizhang@google.com>
- <20250324173121.1275209-6-mizhang@google.com>
+ <20250324173121.1275209-35-mizhang@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,180 +77,47 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250324173121.1275209-6-mizhang@google.com>
+In-Reply-To: <20250324173121.1275209-35-mizhang@google.com>
 
-On Mon, Mar 24, 2025 at 05:30:45PM +0000, Mingwei Zhang wrote:
-> From: Kan Liang <kan.liang@linux.intel.com>
+On Mon, Mar 24, 2025 at 05:31:14PM +0000, Mingwei Zhang wrote:
+> From: Sandipan Das <sandipan.das@amd.com>
 > 
-> Only KVM knows the exact time when a guest is entering/exiting. Expose
-> two interfaces to KVM to switch the ownership of the PMU resources.
+> Apply the PERF_PMU_CAP_MEDIATED_VPMU flag for version 2 and later
+> implementations of the core PMU. Aside from having Global Control and
+> Status registers, virtualizing the PMU using the passthrough model
+> requires an interface to set or clear the overflow bits in the Global
+> Status MSRs while restoring or saving the PMU context of a vCPU.
 > 
-> All the pinned events must be scheduled in first. Extend the
-> perf_event_sched_in() helper to support extra flag, e.g., EVENT_GUEST.
-> 
-> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-> Signed-off-by: Mingwei Zhang <mizhang@google.com>
-> ---
->  include/linux/perf_event.h |  4 ++
->  kernel/events/core.c       | 80 ++++++++++++++++++++++++++++++++++----
->  2 files changed, 77 insertions(+), 7 deletions(-)
-> 
-> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-> index 7bda1e20be12..37187ee8e226 100644
-> --- a/include/linux/perf_event.h
-> +++ b/include/linux/perf_event.h
-> @@ -1822,6 +1822,8 @@ extern int perf_event_period(struct perf_event *event, u64 value);
->  extern u64 perf_event_pause(struct perf_event *event, bool reset);
->  int perf_get_mediated_pmu(void);
->  void perf_put_mediated_pmu(void);
-> +void perf_guest_enter(void);
-> +void perf_guest_exit(void);
->  #else /* !CONFIG_PERF_EVENTS: */
->  static inline void *
->  perf_aux_output_begin(struct perf_output_handle *handle,
-> @@ -1919,6 +1921,8 @@ static inline int perf_get_mediated_pmu(void)
->  }
->  
->  static inline void perf_put_mediated_pmu(void)			{ }
-> +static inline void perf_guest_enter(void)			{ }
-> +static inline void perf_guest_exit(void)			{ }
->  #endif
->  
->  #if defined(CONFIG_PERF_EVENTS) && defined(CONFIG_CPU_SUP_INTEL)
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index 7a2115b2c5c1..d05487d465c9 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -2827,14 +2827,15 @@ static void task_ctx_sched_out(struct perf_event_context *ctx,
->  
->  static void perf_event_sched_in(struct perf_cpu_context *cpuctx,
->  				struct perf_event_context *ctx,
-> -				struct pmu *pmu)
-> +				struct pmu *pmu,
-> +				enum event_type_t event_type)
->  {
-> -	ctx_sched_in(&cpuctx->ctx, pmu, EVENT_PINNED);
-> +	ctx_sched_in(&cpuctx->ctx, pmu, EVENT_PINNED | event_type);
->  	if (ctx)
-> -		 ctx_sched_in(ctx, pmu, EVENT_PINNED);
-> -	ctx_sched_in(&cpuctx->ctx, pmu, EVENT_FLEXIBLE);
-> +		ctx_sched_in(ctx, pmu, EVENT_PINNED | event_type);
-> +	ctx_sched_in(&cpuctx->ctx, pmu, EVENT_FLEXIBLE | event_type);
->  	if (ctx)
-> -		 ctx_sched_in(ctx, pmu, EVENT_FLEXIBLE);
-> +		ctx_sched_in(ctx, pmu, EVENT_FLEXIBLE | event_type);
->  }
->  
->  /*
-> @@ -2890,7 +2891,7 @@ static void ctx_resched(struct perf_cpu_context *cpuctx,
->  	else if (event_type & EVENT_PINNED)
->  		ctx_sched_out(&cpuctx->ctx, pmu, EVENT_FLEXIBLE);
->  
-> -	perf_event_sched_in(cpuctx, task_ctx, pmu);
-> +	perf_event_sched_in(cpuctx, task_ctx, pmu, 0);
->  
->  	for_each_epc(epc, &cpuctx->ctx, pmu, 0)
->  		perf_pmu_enable(epc->pmu);
-> @@ -4188,7 +4189,7 @@ static void perf_event_context_sched_in(struct task_struct *task)
->  		ctx_sched_out(&cpuctx->ctx, NULL, EVENT_FLEXIBLE);
->  	}
->  
-> -	perf_event_sched_in(cpuctx, ctx, NULL);
-> +	perf_event_sched_in(cpuctx, ctx, NULL, 0);
->  
->  	perf_ctx_sched_task_cb(cpuctx->task_ctx, true);
->  
-> @@ -6040,6 +6041,71 @@ void perf_put_mediated_pmu(void)
->  }
->  EXPORT_SYMBOL_GPL(perf_put_mediated_pmu);
->  
-> +static inline void perf_host_exit(struct perf_cpu_context *cpuctx)
-> +{
-> +	perf_ctx_disable(&cpuctx->ctx, EVENT_GUEST);
-> +	ctx_sched_out(&cpuctx->ctx, NULL, EVENT_GUEST);
-> +	perf_ctx_enable(&cpuctx->ctx, EVENT_GUEST);
-> +	if (cpuctx->task_ctx) {
-> +		perf_ctx_disable(cpuctx->task_ctx, EVENT_GUEST);
-> +		task_ctx_sched_out(cpuctx->task_ctx, NULL, EVENT_GUEST);
-> +		perf_ctx_enable(cpuctx->task_ctx, EVENT_GUEST);
-> +	}
-> +}
+> PerfMonV2-capable hardware has additional MSRs for this purpose namely,
+> PerfCntrGlobalStatusSet and PerfCntrGlobalStatusClr, thereby making it
+> suitable for use with mediated vPMU.
 
-Cpu context and task context may have events in the same PMU.
-How about this?
-
-	perf_ctx_disable(&cpuctx->ctx, EVENT_GUEST);
-	if (cpuctx->task_ctx)
-		perf_ctx_disable(cpuctx->task_ctx, EVENT_GUEST);
-
-	ctx_sched_out(&cpuctx->ctx, NULL, EVENT_GUEST);
-	if (cpuctx->task_ctx)
-		task_ctx_sched_out(cpuctx->task_ctx, NULL, EVENT_GUEST);
-
-	if (cpuctx->task_ctx)
-		perf_ctx_enable(cpuctx->task_ctx, EVENT_GUEST);
-	perf_ctx_enable(&cpuctx->ctx, EVENT_GUEST);
+So IBS cannot be used in the guest (with MEDIATED_VPMU) and host can
+profile guests with it, right?
 
 Thanks,
 Namhyung
 
+> 
+> Signed-off-by: Sandipan Das <sandipan.das@amd.com>
+> Signed-off-by: Mingwei Zhang <mizhang@google.com>
+> ---
+>  arch/x86/events/amd/core.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
+> index 30d6ceb4c8ad..a8b537dd2ddb 100644
+> --- a/arch/x86/events/amd/core.c
+> +++ b/arch/x86/events/amd/core.c
+> @@ -1433,6 +1433,8 @@ static int __init amd_core_pmu_init(void)
+>  
+>  		amd_pmu_global_cntr_mask = x86_pmu.cntr_mask64;
+>  
+> +		x86_get_pmu(smp_processor_id())->capabilities |= PERF_PMU_CAP_MEDIATED_VPMU;
 > +
-> +/* When entering a guest, schedule out all exclude_guest events. */
-> +void perf_guest_enter(void)
-> +{
-> +	struct perf_cpu_context *cpuctx = this_cpu_ptr(&perf_cpu_context);
-> +
-> +	lockdep_assert_irqs_disabled();
-> +
-> +	perf_ctx_lock(cpuctx, cpuctx->task_ctx);
-> +
-> +	if (WARN_ON_ONCE(__this_cpu_read(perf_in_guest)))
-> +		goto unlock;
-> +
-> +	perf_host_exit(cpuctx);
-> +
-> +	__this_cpu_write(perf_in_guest, true);
-> +
-> +unlock:
-> +	perf_ctx_unlock(cpuctx, cpuctx->task_ctx);
-> +}
-> +EXPORT_SYMBOL_GPL(perf_guest_enter);
-> +
-> +static inline void perf_host_enter(struct perf_cpu_context *cpuctx)
-> +{
-> +	perf_ctx_disable(&cpuctx->ctx, EVENT_GUEST);
-> +	if (cpuctx->task_ctx)
-> +		perf_ctx_disable(cpuctx->task_ctx, EVENT_GUEST);
-> +
-> +	perf_event_sched_in(cpuctx, cpuctx->task_ctx, NULL, EVENT_GUEST);
-> +
-> +	if (cpuctx->task_ctx)
-> +		perf_ctx_enable(cpuctx->task_ctx, EVENT_GUEST);
-> +	perf_ctx_enable(&cpuctx->ctx, EVENT_GUEST);
-> +}
-> +
-> +void perf_guest_exit(void)
-> +{
-> +	struct perf_cpu_context *cpuctx = this_cpu_ptr(&perf_cpu_context);
-> +
-> +	lockdep_assert_irqs_disabled();
-> +
-> +	perf_ctx_lock(cpuctx, cpuctx->task_ctx);
-> +
-> +	if (WARN_ON_ONCE(!__this_cpu_read(perf_in_guest)))
-> +		goto unlock;
-> +
-> +	perf_host_enter(cpuctx);
-> +
-> +	__this_cpu_write(perf_in_guest, false);
-> +unlock:
-> +	perf_ctx_unlock(cpuctx, cpuctx->task_ctx);
-> +}
-> +EXPORT_SYMBOL_GPL(perf_guest_exit);
-> +
->  /*
->   * Holding the top-level event's child_mutex means that any
->   * descendant process that has inherited this event will block
+>  		/* Update PMC handling functions */
+>  		x86_pmu.enable_all = amd_pmu_v2_enable_all;
+>  		x86_pmu.disable_all = amd_pmu_v2_disable_all;
 > -- 
 > 2.49.0.395.g12beb8f557-goog
 > 
