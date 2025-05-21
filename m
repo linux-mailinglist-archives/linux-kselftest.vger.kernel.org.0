@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-33443-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33444-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2A8BABE8EC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 May 2025 03:20:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0942ABE8F2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 May 2025 03:21:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 75D514A3FE6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 May 2025 01:20:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8073F1B6867C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 May 2025 01:21:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAEB817C21B;
-	Wed, 21 May 2025 01:20:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EDF218D63A;
+	Wed, 21 May 2025 01:20:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fZHmE8Dx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VrVP50T0"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD32417A586;
-	Wed, 21 May 2025 01:20:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32DB018C002;
+	Wed, 21 May 2025 01:20:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747790416; cv=none; b=Rvgak7JIwkhS20w/REcor5HmC8lilRSADPr9e+GcEqF508uazq2aDxBq8Acz8jxAp8s7WKk/dFvfa9cBy3pPVYOHYqtXtMrU3n3jQspXVAhUT8Yize03rAbC+uQbnfYRAn0X3kGIM51ycyfpaqG8qZep+vCZ7n0EuBV4UwNnpuE=
+	t=1747790419; cv=none; b=HR5s4THO+OVEvB/1KvHoG+7lG0h09tpKrFFOoVDK9jJAgsHwH6fRNO1XTOmhvdus1hbw34ApRtPWfYUJ0Sp98klJQHrYly7NjTwDfttnpGibrPLMIM5jxmwhUv5c+Uc82L3dLdTUJZQnR19h8B5RiilRcp2lIeih+5luLYF3p20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747790416; c=relaxed/simple;
-	bh=l6JuRbFmYACfY6KQAyzsurYTz8i9YitaZrvWgtMs8XQ=;
+	s=arc-20240116; t=1747790419; c=relaxed/simple;
+	bh=LNS1vEUuMVV9aSljVz0rghhANekQi0j1/WToBCW6RQ4=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=GcwJF4TwFmZkHQ9rkF9LLbDGhCOnPuo/Ybe4Syw9y58fR3Zcg30D+4BzAju0qsbQkBs/v0aZbPj5p2wX/jMvrnGlkMLXu+lT9mDywnDKY3T/8fSfdA1ZqgATU8uZQIT9wttMbt2VgjVAr5Qo2srNsBxxbKbWZOAcTg71bhZZx/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fZHmE8Dx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CD0EC4CEED;
-	Wed, 21 May 2025 01:20:16 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=mEqMF//lvPI1MLf6uQor8QWEYTAm+o4pgaZpsx03d1y/p0Nv/NauydBBJ8xh+u0MIvt4oDWl1epKlK+ZmOlplNmIsVgjjS4EO12l33EDr94aukI+kcFySUmiQKAhiK24tVGs5TQfahzcAKsGlV9au1tDJlSET6xgP3e/jnRBsOc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VrVP50T0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9895CC4CEE9;
+	Wed, 21 May 2025 01:20:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747790416;
-	bh=l6JuRbFmYACfY6KQAyzsurYTz8i9YitaZrvWgtMs8XQ=;
+	s=k20201202; t=1747790418;
+	bh=LNS1vEUuMVV9aSljVz0rghhANekQi0j1/WToBCW6RQ4=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=fZHmE8DxN3HlVSCLsm4+ZeQXJkdbopEamiOAvoTr8rcOUffVb1qijw8YS2ILxuq2L
-	 yUkskjnG/4iGOf6p7bg41wwnHu1BsyHRQd63ZGZmipTigplUjoiI5rS9bOOlJom7/I
-	 Gic6vMkLdDcmyT7QOfaXFq8YQE183xAPUg1zMEvN4A0SYuK0ljmyx/iGWGXcU3fQj8
-	 OZzbUDqJjywpehKSXxjBlPZCctX22YLeSLR9Va4OwQJyLFHQwpZp/+er61LPird+2t
-	 0kI/Y4LQItexdOKXUDwNEQqI0Scerqcz+FDo2mcdDRCwoJue28IJBUl4zZv3EzS1ho
-	 c0LsjyP9LGUog==
+	b=VrVP50T03j67dvpY5M1u1w72AT0KYlLtXNvrKQ8eF+PvrrsCDTqfxAfBsGLGlgvRt
+	 93a/XykLLi0ribvvQqHql/zDQQXKRJW4XPDE8q2ObdXIN5HzajpUWTbl8T8DTLC5tO
+	 8sRs+P12V73cGx61qDbKlEGaZU60nrxcFu8xWqkjgFArCOhWYoXznus1jkWUg7cgeB
+	 Pa3PLTmLumbsK8MEkzGB6kAgODaqyvWc6f/jUHMAPdJdL5bo8aCRX73BOwH2jtHBH7
+	 CnPFZsHbAYajehsjm/U6fbIFKD99A1NMJibxvWAmYml3V5kIDGtQexw20NE8mCiNoY
+	 gaLLGzBg2AoIA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33BCC380AAD0;
-	Wed, 21 May 2025 01:20:53 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADDC1380AAD0;
+	Wed, 21 May 2025 01:20:55 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -52,34 +52,40 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] selftests: nci: Fix "Electrnoics" to "Electronics"
+Subject: Re: [PATCH net v2] selftests: net: validate team flags propagation
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <174779045174.1526198.15563146251440869750.git-patchwork-notify@kernel.org>
-Date: Wed, 21 May 2025 01:20:51 +0000
-References: <20250517020003.1159640-1-sumanth.gavini@yahoo.com>
-In-Reply-To: <20250517020003.1159640-1-sumanth.gavini@yahoo.com>
-To: Sumanth Gavini <sumanth.gavini@yahoo.com>
-Cc: skhan@linuxfoundation.org, bongsu.jeon@samsung.com, shuah@kernel.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
+ <174779045449.1526198.4318547635095706511.git-patchwork-notify@kernel.org>
+Date: Wed, 21 May 2025 01:20:54 +0000
+References: <20250516232205.539266-1-stfomichev@gmail.com>
+In-Reply-To: <20250516232205.539266-1-stfomichev@gmail.com>
+To: Stanislav Fomichev <stfomichev@gmail.com>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ jiri@resnulli.us, shuah@kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
 
 Hello:
 
 This patch was applied to netdev/net-next.git (main)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Fri, 16 May 2025 18:59:37 -0700 you wrote:
-> Fix misspelling reported by codespell
+On Fri, 16 May 2025 16:22:05 -0700 you wrote:
+> Cover three recent cases:
+> 1. missing ops locking for the lowers during netdev_sync_lower_features
+> 2. missing locking for dev_set_promiscuity (plus netdev_ops_assert_locked
+>    with a comment on why/when it's needed)
+> 3. rcu lock during team_change_rx_flags
 > 
-> Signed-off-by: Sumanth Gavini <sumanth.gavini@yahoo.com>
-> ---
->  tools/testing/selftests/nci/nci_dev.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Verified that each one triggers when the respective fix is reverted.
+> Not sure about the placement, but since it all relies on teaming,
+> added to the teaming directory.
+> 
+> [...]
 
 Here is the summary with links:
-  - selftests: nci: Fix "Electrnoics" to "Electronics"
-    https://git.kernel.org/netdev/net-next/c/20d9b73217c6
+  - [net,v2] selftests: net: validate team flags propagation
+    https://git.kernel.org/netdev/net-next/c/f792709e0baa
 
 You are awesome, thank you!
 -- 
