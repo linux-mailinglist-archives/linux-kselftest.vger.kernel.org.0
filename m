@@ -1,122 +1,143 @@
-Return-Path: <linux-kselftest+bounces-33467-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33469-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68EC5ABF763
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 May 2025 16:12:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6EFFABF7D8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 May 2025 16:29:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 85B493AC52F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 May 2025 14:11:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7E7144E41D1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 May 2025 14:29:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18C7123FC66;
-	Wed, 21 May 2025 14:10:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DF2C1A23BB;
+	Wed, 21 May 2025 14:29:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LmMkkQJy"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="QLg4w/I5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out.smtpout.orange.fr (out-16.smtpout.orange.fr [193.252.22.16])
+	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6ADE194137;
-	Wed, 21 May 2025 14:10:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C680917E
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 May 2025 14:29:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747836611; cv=none; b=VRIqMc0EbfmCi+ipYzoQeHztE9ffxb+z6qmxBJ/YkEjvhSK7hhceVUJRwy44NSBfR0Nb49jnA7xgHp2woShdybwhcAwV8Q5ShuNbb1xavV+O+D+Lh1rfK/npRgVaDzDAt0FLMBB5yj4/H9NqW08tBjkUfctdzL0hxGPyYz6r6K0=
+	t=1747837760; cv=none; b=ZHLWIeE+402euMnn/DhwGfLrOcHuT3AiZbpttZTgLtE1biZXMLr14mjYheUr3/p5CMogzI7YBD7j0jFAsQCUkFOn6byG6ofrlVmyocOkCrSoaaVsDAAWesCxAAHVbqnJBgM1mFbcKZsDXMEIP1FCAnwndHGlN+DJv35Zz+0htwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747836611; c=relaxed/simple;
-	bh=DZEgFzM4nzHH/r9PZ/9x1SizshuzRtVrhWfn2VQ2doU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TOrMuxzzBQQqnDY+vEC0nX1/w614xThTkif/sYaOWiOBJb5kuGi8DO/YMmJtCF1QIiJdfccnPXhDQ6Iu9mPXHv0EpMPPM9SpjJ7+aF+Sepax+f7uTaqzulsgsi+x/h0+G4rUMz1bznfud5+P2dVfFkehN2hdNhg6TAu6/dhTrMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LmMkkQJy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88FE2C4CEE4;
-	Wed, 21 May 2025 14:10:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747836609;
-	bh=DZEgFzM4nzHH/r9PZ/9x1SizshuzRtVrhWfn2VQ2doU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=LmMkkQJyNw/VJjwBRHSX4EySj8hOlqgazOjmHYKGiPMEaXn8ah3/Tb2sJUt1zHkY7
-	 e4uGKGfZmvJnt6m7xBkPuEdk6A7JHQe7+iHfKB6azSYbRy2coHdgm8xjwAiToeTiIa
-	 AcyuLvWX+EbwkmH9EreeBYC6jjtT9Z8e1NLu5YHz0aQHsEq/SKo8YkWNtvWrgVstJW
-	 Ik21uYYr9k6KO35Ma7+6zyJ+XrpDJKezW+dqqILGnwPw7F8VIjwWUlBDvY8uDH45tP
-	 BNbDPhuXHAmIdp+65UdUcCn/P7rIWt31JyU5T6FWJycJfUhNYNp/72AESV69hrhEwI
-	 NWjGotVjDuyxA==
-Date: Wed, 21 May 2025 07:10:07 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Tariq Toukan <ttoukan.linux@gmail.com>
-Cc: Carolina Jubran <cjubran@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>,
- "David S. Miller" <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>,
- Eric Dumazet <edumazet@google.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
- Jiri Pirko <jiri@nvidia.com>, Gal Pressman <gal@nvidia.com>, Leon
- Romanovsky <leonro@nvidia.com>, Donald Hunter <donald.hunter@gmail.com>,
- Jiri Pirko <jiri@resnulli.us>, Jonathan Corbet <corbet@lwn.net>, Saeed
- Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>, Shuah Khan
- <shuah@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-rdma@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Moshe Shemesh <moshe@nvidia.com>, Mark
- Bloch <mbloch@nvidia.com>, Cosmin Ratiu <cratiu@nvidia.com>
-Subject: Re: [PATCH net-next V10 2/6] selftest: netdevsim: Add devlink rate
- tc-bw test
-Message-ID: <20250521071007.0cb6f546@kernel.org>
-In-Reply-To: <80b40828-8fa3-4313-8c98-823ac7c055c1@gmail.com>
-References: <1747766287-950144-1-git-send-email-tariqt@nvidia.com>
-	<1747766287-950144-3-git-send-email-tariqt@nvidia.com>
-	<20250520155957.04b27217@kernel.org>
-	<80b40828-8fa3-4313-8c98-823ac7c055c1@gmail.com>
+	s=arc-20240116; t=1747837760; c=relaxed/simple;
+	bh=Q/STPmTu7RpLqcmifIG5b8s9o56dmo6SlfYvJbtLwzg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Bkdm5yErfMdU9bZqu0E+cUr6FyfVqVo3AwxZCO/WLTZYSLSstdms3+MgVj/rHgsRAKRyKiRiXq2VBpxPlZNx1EUPHX7drW3INeXE5cO0PZVcccvP/MXjy1aCg+a+oYsD2LRt32dSTQdWaiLo2P2rUCretr17yR4KusNJV3/0D9k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=QLg4w/I5; arc=none smtp.client-ip=193.252.22.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from localhost.localdomain ([124.33.176.97])
+	by smtp.orange.fr with ESMTPA
+	id HkIXuCBk7ftZ8HkIeuL17k; Wed, 21 May 2025 16:20:09 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1747837209;
+	bh=PQFIsv362059jYm/0PMO+rM0+yjRL3CD7EbulC0nNSI=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=QLg4w/I5Sxw1u6InMbClBmA8DSatqmS5NStAx8iXIEWjxFwxv4hV5nRLLPYayDcUK
+	 vU8SVThwNsqnwjxA/mM+AIf3fsgFtv8zkLtj/OxuHTA1DXUQxyKcpUQBktER1cyO4k
+	 k+R7UJ+f+ySz1mG+kUfWCTEubRiqkzRMqphr17sF+2UdRawaqEXHcgbM5ss8cHeLgO
+	 Y7kDkfypt+F8XEybR+9FLlWXDmxfoMJoTFZfI6DW0jrrBhhe66EUgFBKfa0aV4xDuO
+	 38T0HMDXodhtnoLoRplZb6A2Z57QARFcvCFjynDOafm1CyOUKUdlP7KRkkjZcXGanO
+	 Syvx3Feb06n/g==
+X-ME-Helo: localhost.localdomain
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Wed, 21 May 2025 16:20:09 +0200
+X-ME-IP: 124.33.176.97
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To: Felix Maurer <fmaurer@redhat.com>,
+	socketcan@hartkopp.net,
+	mkl@pengutronix.de
+Cc: shuah@kernel.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	linux-can@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	dcaratti@redhat.com,
+	fstornio@redhat.com,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH] selftests: can: test_raw_filter.sh: add support of physical interfaces
+Date: Wed, 21 May 2025 23:18:53 +0900
+Message-ID: <20250521141945.13358-2-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <87d289f333cba7bbcc9d69173ea1c320e4b5c3b8.1747833283.git.fmaurer@redhat.com>
+References: <87d289f333cba7bbcc9d69173ea1c320e4b5c3b8.1747833283.git.fmaurer@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1799; i=mailhol.vincent@wanadoo.fr; h=from:subject; bh=Q/STPmTu7RpLqcmifIG5b8s9o56dmo6SlfYvJbtLwzg=; b=owGbwMvMwCV2McXO4Xp97WbG02pJDBm6DxnNjqcKHbfqNctwrS4oPrbn5bkH5+oPPjyg5eC/z e+F+IylHaUsDGJcDLJiiizLyjm5FToKvcMO/bWEmcPKBDKEgYtTACYiOo3hf3jdlKN+y2MMV6vn LKt812i10O/n6/k6Lb3RfXMZslbFBDEyrD4dZr+80OLtZ0F7h1CXwDsN+/QFj88/Nfvjmiuz+ra KcAIA
+X-Developer-Key: i=mailhol.vincent@wanadoo.fr; a=openpgp; fpr=ED8F700574E67F20E574E8E2AB5FEB886DBB99C2
+Content-Transfer-Encoding: 8bit
 
-On Wed, 21 May 2025 10:05:13 +0300 Tariq Toukan wrote:
-> On 21/05/2025 1:59, Jakub Kicinski wrote:
-> > On Tue, 20 May 2025 21:38:03 +0300 Tariq Toukan wrote:  
-> >> Test verifies that netdevsim correctly implements devlink ops callbacks
-> >> that set tc-bw on leaf or node rate object.  
-> > 
-> > Please add a test that can actually validate a NIC HW.
-> > The test probably needs to be in Python to use a remote endpoint,
-> > and should live under tools/testing/../drivers/net/hw
-> > 
-> > We had a long conversation about what we expect from the API
-> > vs how your HW works. One of the test cases should confirm
-> > the expected behavior, IOW fail on mlx5. Which is fine,
-> > unlikely that any NIC will have 100% compliance. But at
-> > least we will be documenting the expectations.
-> 
-> No problem with that, we'll add.
-> 
-> We could've saved this extra cycle if my questions [1] exactly about 
-> this topic weren't ignored.
-> Area is vague and not well defined. We can continue with the iterative 
-> guess and fix cycles, or alternatively get it clearly and formally defined.
+Allow the user to specify a physical interface through the $CANIF
+environment variable. Add a $BITRATE environment variable set with a
+default value of 500000.
 
-I started a couple of times on answering but my hands go a little limb
-when I have to explain things so obvious like "testing is a crucial part
-of software development" :S  I mean.. nvidia certainly tests their code,
-so I'm not sure where the disconnect is. I had a short conversation with
-Gal at some conference where he, AFAIU, was doubting that device testing
-can be part of an open source project.
+If $CANIF is omitted or if it starts with vcan (e.g. vcan1), the test
+will use the virtual can interface type. Otherwise, it will assume
+that the provided interface is a physical can interface.
 
-It certainly is not advantageous to companies to have to share their
-test code. So when you ask me for details on the rules what I hear is
-"how can we make sure we do as little as possible".
+For example:
 
-Broadly, any new uAPI should come with tests which exercise the
-functionality. We started a decade or so ago with netdevsim tests
-which just validate the API layer itself. That did not provide
-sufficient validation of the real implementations, crucially it did 
-not check whether shallow APIs (devlink) actually behave the same
-when implemented by multiple vendors. So two years ago we built 
-the Python harness to be able to write tests for NIC functionality.
-That is the level of testing we expect now. Obviously there will always
-be exceptions. For instance I was pushing for common tests for the time
-sync code (DPLL etc.) but I was convinced by the experts that it's hard
-and that they generally test with $x0,000 measurement equipment.
-So fair, I guess that's too hard. But for BW shaping tests? 
-IIRC mlxsw has qdisc offload tests for BW shaping upstream.
+  CANIF=can1 BITRATE=1000000 ./test_raw_filter.sh
+
+will run set the can1 interface with a bitrate of one million and run
+the tests on it.
+
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+---
+This depends on "selftests: can: Import tst-filter from can-tests"
+from Felix.
+
+Link: https://lore.kernel.org/linux-can/87d289f333cba7bbcc9d69173ea1c320e4b5c3b8.1747833283.git.fmaurer@redhat.com/
+---
+ tools/testing/selftests/net/can/test_raw_filter.sh | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/net/can/test_raw_filter.sh b/tools/testing/selftests/net/can/test_raw_filter.sh
+index 2216134b431b..276d6c06ac95 100755
+--- a/tools/testing/selftests/net/can/test_raw_filter.sh
++++ b/tools/testing/selftests/net/can/test_raw_filter.sh
+@@ -9,17 +9,25 @@ net_dir=$(dirname $0)/..
+ source $net_dir/lib.sh
+ 
+ export CANIF=${CANIF:-"vcan0"}
++BITRATE=${BITRATE:-500000}
+ 
+ setup()
+ {
+-	ip link add name $CANIF type vcan || exit $ksft_skip
++	if [[ $CANIF == vcan* ]]; then
++		ip link add name $CANIF type vcan || exit $ksft_skip
++	else
++		ip link set dev $CANIF type can bitrate $BITRATE || exit $ksft_skip
++	fi
+ 	ip link set dev $CANIF up
+ 	pwd
+ }
+ 
+ cleanup()
+ {
+-	ip link delete $CANIF
++	ip link set dev $CANIF down
++	if [[ $CANIF == vcan* ]]; then
++		ip link delete $CANIF
++	fi
+ }
+ 
+ test_raw_filter()
+-- 
+2.49.0
+
 
