@@ -1,97 +1,114 @@
-Return-Path: <linux-kselftest+bounces-33464-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33465-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70AF1ABF681
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 May 2025 15:46:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E24CABF6DA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 May 2025 15:58:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 72E004E8481
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 May 2025 13:46:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 06B733AFB92
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 May 2025 13:58:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87AC638385;
-	Wed, 21 May 2025 13:45:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DF5A1537C6;
+	Wed, 21 May 2025 13:58:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="jFXO8i7Z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kMxNZFK/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3150F4A3C;
-	Wed, 21 May 2025 13:45:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24CFF86331;
+	Wed, 21 May 2025 13:58:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747835147; cv=none; b=lzxkvwg2UdMv+VB8dMCM7rwczy1B/gdmNwMicCb/1Rwq/GRlr752YQ+taPpT1yLWd0RgC0qoblJCzQL8EIz9M0wt95WT56oNtPJ0O3BU7UqEKTHn70J8gVnV5W7zrm7+2w9C5HnrUoCczRmi6f2aAsR/hRlrR9SwXXibmE4gvFo=
+	t=1747835901; cv=none; b=Q/psWx86sRo2EvVI6rYDnzakElR/60zfuyCeCsjuyPZqTbCD49qKia9/dAHb1VSF1kgp6tAZ1ITB2lOkwHjNkeydA7gMRH3sNcH2Nbudzu8M1WLarQijAzLEPhN9PUc5dX6//Wsc+bcPiXm5GWQ2Ylr2rmRj9V6tpEkEph5/alw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747835147; c=relaxed/simple;
-	bh=hx9EAyMNBqoj/aG1NmgHhN/MjwuVyWn7maaU7B7ayuU=;
+	s=arc-20240116; t=1747835901; c=relaxed/simple;
+	bh=TV5Um3wEwSm9Yw2CbWgV1hqPi3iVOdmeNBmDMsMJJus=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kA9RZxQxGA3XG1xjX22OLgE2LZYvJ1XOVnu33SAZElrB99FoPv2qubPE6WMnK7b5CcrKXOLMZZY9O77tquv7Q8hhGjJadEWhir/8DPR1TpxBeBL1Q8tL3hzv1NMbiIub8CBBORLCkpdUREf8dr5vu8Px/2c3g9k0vV0fqgDl/ko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=jFXO8i7Z; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1747835143;
-	bh=hx9EAyMNBqoj/aG1NmgHhN/MjwuVyWn7maaU7B7ayuU=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=qSeF2URdAEdWQANI1vNMYdFu1meSiKS1GDL+3Gwvm9mSFqUbjLv75pAI+Hh5p+TS5q7NtTCC/T34a+m5/gOm/xv4AiCBOjjFwrf0JF9lWSGbQ2rOOKTnh/5Kds+vtMjI3eXwsP/aPFxr1GaQH95NL9u56Gz2PayUMtF6VsnVM5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kMxNZFK/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60E2EC4CEE4;
+	Wed, 21 May 2025 13:58:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747835900;
+	bh=TV5Um3wEwSm9Yw2CbWgV1hqPi3iVOdmeNBmDMsMJJus=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jFXO8i7Z7jC48u8qWZRrNqVJtjA9N8sr2YcLKGWhMrWSQ/OPiJMB4j7B4/Rjebmu6
-	 ELu826BpMc18fIvPyzP/xXSMB4H5AY89zvvHmgb6SOKlZHVH+QDVneBWd9ccIhn1IY
-	 lcf8qIuSr/PNo7aYbvSV5K1SX+BfgjWp32wuGUOY=
-Date: Wed, 21 May 2025 15:45:42 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Mark Brown <broonie@kernel.org>
-Cc: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>, 
+	b=kMxNZFK/lgC4ZaEQYoSnJ5VGx6lIKQCL0sODzOUx5mwG4ZPRe5i/T8aw8Nq06ZHQb
+	 9b4Xdw3EV2a2gE0zwB9Xmgqv+lIIEf4Qi46mntSlWQTNNIxqPzhp9djxkXftPNE9Vm
+	 J6k2ZqM+dofAr3L6hoBk5tJk8zt5+f/Fom/HogY3ngdlxV1PAXLXS5JCre12D9p+Hu
+	 vNGSYqzy/hMa6Uz7O3TW36/H/OSFr5C3MZYYAK7r8aKY1gl8i2U8fEqvQ6gM7SALhM
+	 YQNL3z8rlMgv0E5rd7f+Hw+ZLVAVGWb4S5E6RN6LyysgrWxA0o6onC6W8swidmOaov
+	 xSwn+Ig7M1T9g==
+Date: Wed, 21 May 2025 14:58:16 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>,
 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 Subject: Re: [PATCH 1/9] tools/nolibc: move ioctl() to sys/ioctl.h
-Message-ID: <198bf1a8-98d0-4693-a4cf-234cad728c9b@t-8ch.de>
+Message-ID: <5ca9d57f-b711-4929-89ca-79e6966bf3be@sirena.org.uk>
 References: <20250515-nolibc-sys-v1-0-74f82eea3b59@weissschuh.net>
  <20250515-nolibc-sys-v1-1-74f82eea3b59@weissschuh.net>
  <eda3af4a-8dfe-4f82-a934-2d0256b754e2@sirena.org.uk>
  <89bb5a3e-dd6c-475d-9c5d-0bd1595be735@t-8ch.de>
  <744a1aa8-1efc-4c20-b45e-070fc038f6e8@sirena.org.uk>
+ <198bf1a8-98d0-4693-a4cf-234cad728c9b@t-8ch.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="o1EjMuOZVPaPj0Gi"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <744a1aa8-1efc-4c20-b45e-070fc038f6e8@sirena.org.uk>
-
-On 2025-05-21 14:22:30+0100, Mark Brown wrote:
-> On Wed, May 21, 2025 at 03:08:05PM +0200, Thomas Weißschuh wrote:
-> > On 2025-05-21 14:03:37+0100, Mark Brown wrote:
-> 
-> > > > +/* make sure to include all global symbols */
-> > > > +#include "nolibc.h"
-> 
-> > > assumes that the nolibc include directory is in the include path, or
-> > > otherwise set up with a -I path, previously you just had to include
-> > > nolibc.h with the includes that are there working due to being relative
-> > > to nolibc.h.  I'll send a patch for the arm64 tests.
-> 
-> > Thanks for the report.
-> > Inside sys/ this should actually be #include "../nolibc.h".
-> > I'll doublecheck all of sys/ and see why our new header checks didn't
-> > catch this.
-> 
-> Ah, you expect what's currently there to work - good.  I noticed that
-> the vDSO tests had a -I for the nolibc directory which made me think it
-> was expected that it be there, it's the only user on most arches.
-
-The -I is useful to compile applications without guarding the system
-includes with #ifndef NOLIBC.
-
-What do I have to do to cross-compile these selftests?
-I get various compiler errors.
-Or you could run your testsuite with the new nolibc for-next branch
-which should be fixed now.
-
-<snip>
+In-Reply-To: <198bf1a8-98d0-4693-a4cf-234cad728c9b@t-8ch.de>
+X-Cookie: 42
 
 
-Thomas
+--o1EjMuOZVPaPj0Gi
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, May 21, 2025 at 03:45:42PM +0200, Thomas Wei=DFschuh wrote:
+> On 2025-05-21 14:22:30+0100, Mark Brown wrote:
+
+> > Ah, you expect what's currently there to work - good.  I noticed that
+> > the vDSO tests had a -I for the nolibc directory which made me think it
+> > was expected that it be there, it's the only user on most arches.
+
+> The -I is useful to compile applications without guarding the system
+> includes with #ifndef NOLIBC.
+
+These tests are all nolibc specific and so don't reference the system
+headers, the whole point is to not use a real libc.
+
+> What do I have to do to cross-compile these selftests?
+> I get various compiler errors.
+
+Any specific errors?  It's just a standard selftest build, eg:
+
+   make -C tools/testing/selftests LLVM=3D1 ARCH=3Darm64 TARGETS=3Darm64
+
+Unless you've got very current userspace headers you'll probably need
+a headers_install too (that's generally needed for the selftests).
+
+--o1EjMuOZVPaPj0Gi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmgt2/cACgkQJNaLcl1U
+h9ARDwf7BozdrB4Bcr6jM/YF1p6VqVRrJ0CeeWvtqJRfjrYx1kAx8w2sVJXMrHhb
+yq0/tQ5Nbms6IAM4evFvplCaqGsxSkjc3rsruqHstlyzQKzGRqEjrqAa9gnuWdHF
+ubgamRun3Ff0/xjVppOSdU8oxMPECjlLfQWgc4MDYNzyg0/B9ALeIOAsb3mjYk1U
+LirAWbSvbWzMqi8lL9gOwFtUyQn0j2+xhYN0pMuAt+g09tFc1+B6j8aPJq/pGbkk
+eko4YyzFx9eB18yUl4NWuv48oUZ46dMokY5K/lBFVo774BYHjFf4SRgATZ+mPkPw
+/BiHFCRIYPs+abzjfSbP6VZpw04SxA==
+=zzfQ
+-----END PGP SIGNATURE-----
+
+--o1EjMuOZVPaPj0Gi--
 
