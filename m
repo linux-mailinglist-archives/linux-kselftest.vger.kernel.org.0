@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-33484-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33485-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA470ABFD9E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 May 2025 22:00:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE3D1ABFDA4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 May 2025 22:02:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8F1DC4A1FD2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 May 2025 20:00:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 13FAC189F3A5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 May 2025 20:02:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E8E1280CE3;
-	Wed, 21 May 2025 20:00:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E535A28A1C9;
+	Wed, 21 May 2025 20:01:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S3P9xT4e"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qHwsJb1g"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C6AE22154A;
-	Wed, 21 May 2025 20:00:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B37E222B8B9;
+	Wed, 21 May 2025 20:01:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747857636; cv=none; b=OY6XLCAyTmo7/kUcc00dZ31mPC/jsPmVoyHeAxXPxOHBZdiRB5epX2eBkh1w9ubkLnsAdVMK7fG3qxJ3mpgCzOiJMJa5mnwtL7tC9hCAM+xllCRYRjmu62LK2LnF3S+4zXIOwUeu75+QBQgm+CVwDBf4osol9+7bAaG28WXQxHM=
+	t=1747857714; cv=none; b=TtJQ25Vzy4pQu5/ni+I9HAu9Jq1V+2in4IRlgzjaGua1MvfhT++bBid3W8tMwOZp4yizPwK7E2RG4APYGPOe3/CM4VbOsY/byFexkOykaoSlyh9dANNYxYhlcGZTLBRCptCdUmwmeb4zpSw09bKNvAlOiT8i4R3L1oYxG5P8ESI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747857636; c=relaxed/simple;
-	bh=nAUzpcXK1h/ubGnw28aVMwC2X90t/BjKy6cJTAqX1sw=;
+	s=arc-20240116; t=1747857714; c=relaxed/simple;
+	bh=8oYbHgi3dSN5sYtlh/M8hB45JGShP32FfZWXEuCKwsE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GaeMRV4rRNvIgERcmTwV03SOygRJO8zE/mraEdg3mv89xcn6LiVhhErkpeCPtm5gP9yu3oN/OSecT4zY1Y6a+tN+w+nOZhh1n8Qh0YqZY1+XV2Y3wcT0XbEEZJtNf/eZPCYKOXIGTmS1cOorDO60luKQscsWgLbm0NWtQ0XhYaE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S3P9xT4e; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0867EC4CEE4;
-	Wed, 21 May 2025 20:00:35 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=WpufVu42eo/L/1ceLHwBzvqPKkgKQ+ipgFsy7gopQT7UEqFCtabKtkpLV3ZZgMxnmphlkQWGED96xvZ0IEdnhvUPOWzm5bK25W6GeFaTbEIJab4qty+3/IPnOfCSlyIF1iQQy79dmmkNubjgKg1WIocurrbdmQivpR06TwM9sI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qHwsJb1g; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6E29C4CEE4;
+	Wed, 21 May 2025 20:01:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747857635;
-	bh=nAUzpcXK1h/ubGnw28aVMwC2X90t/BjKy6cJTAqX1sw=;
+	s=k20201202; t=1747857714;
+	bh=8oYbHgi3dSN5sYtlh/M8hB45JGShP32FfZWXEuCKwsE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=S3P9xT4eR+7x+5B+FMY2h+aRLEqBVVHwuZu7W+ijQlSP56P+RfHhEzc0Gu4e1vKN1
-	 iETpNA00s2Wc+Z7uXyEofa7M4+XKAN951L03R+sRxOVB885hxVAno3rn3aa9I1IwlI
-	 8y3y9Go0NKf4aRmZ/u1VLHUMYHGJaFnqZe3mALKPtIu7EqDMzWWIGx0scJjtiQcw7y
-	 O8vavB/57XukdYSq87NIE7mN0CmDFWiJ7Bqhk/JtGPyOAsE2hWKpOojJaMFiDmH5HS
-	 gUFT+LMiUt1SndlLXKFX4nxFvzRZS05nX0scNS74uHHFNR6p7rosn3E2Da6nB9CPic
-	 olw1BB7RG/oLg==
-Date: Wed, 21 May 2025 13:00:33 -0700
+	b=qHwsJb1guGYXx1+pNKHsKaypiXjembrKX2sSgoSJ0j7QCGEEdPPUWbBntdksMO/SU
+	 fNkU7WW01z68lrC57WN7qyTKJPc/XT4rOUHUi91E541kElQdob7QADDDTjxxCJWFV6
+	 Wf68LGqXGj9AfTH9UnvpbwRgoxMnazzv5OYjTPnvkje4QZ3hfviKHfAkR6XMuXy0/B
+	 lmA0ikIcLg9UfQlnGciH4+5dSLQVAN0WAQUXv1z9XQYzFCoAYBDWVFcfWM/ZWO4Nz0
+	 god95dJdtAkDsSJFcODryRQajeFr2LwhRB4l72jkRSbzXx3xv+z+m/5Ygba584mf9k
+	 HqhLf0FEC5Ewg==
+Date: Wed, 21 May 2025 13:01:52 -0700
 From: Namhyung Kim <namhyung@kernel.org>
 To: Mingwei Zhang <mizhang@google.com>
 Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
@@ -64,11 +64,10 @@ Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	Eranian Stephane <eranian@google.com>,
 	Shukla Manali <Manali.Shukla@amd.com>,
 	Nikunj Dadhania <nikunj.dadhania@amd.com>
-Subject: Re: [PATCH v4 34/38] perf/x86/amd: Support
- PERF_PMU_CAP_MEDIATED_VPMU for AMD host
-Message-ID: <aC4w4WmPywIEsMwk@google.com>
+Subject: Re: [PATCH v4 09/38] perf: Add switch_guest_ctx() interface
+Message-ID: <aC4xMGPUjGHzKcHB@google.com>
 References: <20250324173121.1275209-1-mizhang@google.com>
- <20250324173121.1275209-35-mizhang@google.com>
+ <20250324173121.1275209-10-mizhang@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -77,48 +76,33 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250324173121.1275209-35-mizhang@google.com>
+In-Reply-To: <20250324173121.1275209-10-mizhang@google.com>
 
-On Mon, Mar 24, 2025 at 05:31:14PM +0000, Mingwei Zhang wrote:
-> From: Sandipan Das <sandipan.das@amd.com>
+On Mon, Mar 24, 2025 at 05:30:49PM +0000, Mingwei Zhang wrote:
+> From: Kan Liang <kan.liang@linux.intel.com>
 > 
-> Apply the PERF_PMU_CAP_MEDIATED_VPMU flag for version 2 and later
-> implementations of the core PMU. Aside from having Global Control and
-> Status registers, virtualizing the PMU using the passthrough model
-> requires an interface to set or clear the overflow bits in the Global
-> Status MSRs while restoring or saving the PMU context of a vCPU.
+> When entering/exiting a guest, some contexts for a guest have to be
+> switched. For examples, there is a dedicated interrupt vector for
+> guests on Intel platforms.
 > 
-> PerfMonV2-capable hardware has additional MSRs for this purpose namely,
-> PerfCntrGlobalStatusSet and PerfCntrGlobalStatusClr, thereby making it
-> suitable for use with mediated vPMU.
+> When PMI switch into a new guest vector, guest_lvtpc value need to be
+> reflected onto HW, e,g., guest clear PMI mask bit, the HW PMI mask
+> bit should be cleared also, then PMI can be generated continuously
+> for guest. So guest_lvtpc parameter is added into perf_guest_enter()
+> and switch_guest_ctx().
+> 
+> Add a dedicated list to track all the pmus with the PASSTHROUGH cap, which
 
-So IBS cannot be used in the guest (with MEDIATED_VPMU) and host can
-profile guests with it, right?
+s/PASSTHROUGH/MEDIATED_VPMU/ ?
 
 Thanks,
 Namhyung
 
+
+> may require switching the guest context. It can avoid going through the
+> huge pmus list.
 > 
-> Signed-off-by: Sandipan Das <sandipan.das@amd.com>
+> Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
 > Signed-off-by: Mingwei Zhang <mizhang@google.com>
-> ---
->  arch/x86/events/amd/core.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
-> index 30d6ceb4c8ad..a8b537dd2ddb 100644
-> --- a/arch/x86/events/amd/core.c
-> +++ b/arch/x86/events/amd/core.c
-> @@ -1433,6 +1433,8 @@ static int __init amd_core_pmu_init(void)
->  
->  		amd_pmu_global_cntr_mask = x86_pmu.cntr_mask64;
->  
-> +		x86_get_pmu(smp_processor_id())->capabilities |= PERF_PMU_CAP_MEDIATED_VPMU;
-> +
->  		/* Update PMC handling functions */
->  		x86_pmu.enable_all = amd_pmu_v2_enable_all;
->  		x86_pmu.disable_all = amd_pmu_v2_disable_all;
-> -- 
-> 2.49.0.395.g12beb8f557-goog
-> 
 
