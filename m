@@ -1,86 +1,86 @@
-Return-Path: <linux-kselftest+bounces-33471-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33472-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB177ABFC22
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 May 2025 19:17:30 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 915E3ABFC2B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 May 2025 19:21:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E14CAA20ECD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 May 2025 17:17:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 223CE7A58F0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 May 2025 17:20:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBDA228981A;
-	Wed, 21 May 2025 17:17:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DE0528313D;
+	Wed, 21 May 2025 17:21:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ovoLN7NW"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GPDeNWWG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39AAE1E2307
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 May 2025 17:16:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3ADE27FB11
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 May 2025 17:21:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747847822; cv=none; b=h09KOzGoLN9b4XKJbR6PbzATy9DOA8e9Saz3NhgkClhHxk5NgF9unPqoJJej9T7rlcJWoARPIMa+kiaeawNSKOgLGbv+i0eiSHblKeV2/BCgPA6QzmgcgPUjeBXDwYQXKEDd0uZw992aBMWs8psb3jD3KFPOWRvdyq7LUVBSaLI=
+	t=1747848083; cv=none; b=CjEUB2Vw1oCq17StL3githR7T7A+2wxdvfJezfXESWihz+FhTe7yjT7aaVG0CmayCp2TTc2O8dnfRQQsNAUvI2LxDmaHpzPi22RWJo+djMOY6xsvPKSUdZYzZLz4UHiBbtW0XDdmnjh9smaPutbvPvTVblG1/Biis5ilZNWME60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747847822; c=relaxed/simple;
-	bh=D4ISe/FLvyr4CVhVYBHD6n3L5UFpgvuWP7bM5t7YOuU=;
+	s=arc-20240116; t=1747848083; c=relaxed/simple;
+	bh=cqtVnYMwytU621vRDMWnywFjE3FJFp4m1Fu1HokVKxE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NUqwPXR5nKgE1DxL6RxpqBjmg1OugYWyp4qChRaG8qYd9HYbb/YQdvWtUtn83tD0cRP7+BqCIFb8gn0fgpNd3upmbOFz8ybKUR0phY5NzWNwMzCZNigtbsfft4dsPIccuMyHABDNmkFrJZuHqps5v0FEdmaI2ZS/CLJRlRd2myo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ovoLN7NW; arc=none smtp.client-ip=209.85.214.176
+	 To:Cc:Content-Type; b=B5oF/9fNiN2WU8KrhyMgSnnhnWLa1/vMEW2xHBcgoPfTcSAjFpWFntamzPgtAy1bD+ecWZMKZnnDYMnwNr6aXgnsNbaNj2E1LPcd4a/LgZo0Ya0oiywaklqMqJFX/D2aUelqZtTxcj1fh9648Qx5ion0A+ZuYQ11GKHv/PiXuVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GPDeNWWG; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-231f61dc510so1096245ad.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 May 2025 10:16:59 -0700 (PDT)
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-231f37e114eso1056715ad.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 May 2025 10:21:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1747847819; x=1748452619; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1747848080; x=1748452880; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NjNF/EshajwntpVrmxofKLtSpmDRMldtvHl1a1kJfXU=;
-        b=ovoLN7NWm/fAj3Rryts6klo6HLNyz5amt6nL27kcFGNCcTWKd5S01e83iMN3oZRh+b
-         fk/snncw+3smXPaTeWDV4SxfTTONGXnTlynasmSZDzbTEiiog5Jsb/aMWWqbhS0/fxCj
-         pgHjz60x5BLfUdU4vsn63T2pufMquOH6ct0uW2ht7L6kN68h2B1oyO6rVu8tLH3dpdgZ
-         wMsfLAMAz0wBob6chtRzrSQjWLvptqjOhJ84Ar3d3kE8+lFxC9a110TN3O1TBFZwHLye
-         DF8CkQXNVypf0XsnGX3JCZrG/fiCm/IGCHtT+GBqojNFuWIR2oqsFerklQ3Cklld5nhk
-         ltkA==
+        bh=8TzRULGTaOq2SCZGYjVrgxuJH6Vmk6OskDH6n5154vg=;
+        b=GPDeNWWGsboLyTXFd3gYxjrakkGWca4DBDpTVsUqSi9QHLMAsJVXJ1vBMxpjOPdm+S
+         /c8KWZetjQmL/qToPir7B9lz8FZXukFpaP9OTpdgILJZ44YI+pGCDs6X7vb/MGqXDJ1x
+         P0hlTQJf9VGztFGiaoYRMo27tsokfmSvd6qbCquT3fxoTdvXko3qp8yR8smpEhNmuLUw
+         twsCAykf74gh3XpQdqmuFS3AWTO4cmhmOKpaXcJX0oUo0PpvEyiCDt61YmLSupYdox5M
+         XyW3bmVsuRG6JuwwvwA9Mvml5rhdW+Ik4KwUmScbChAfFK7mDt+SMR0aPdBZyN9JPzph
+         XXLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747847819; x=1748452619;
+        d=1e100.net; s=20230601; t=1747848080; x=1748452880;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NjNF/EshajwntpVrmxofKLtSpmDRMldtvHl1a1kJfXU=;
-        b=sd5j1myJMEUNZ5bqqpAeMYqqHY1r10KSmg0T7M4y0PmL+gk0+z4axtquEbL7smodG+
-         oBQR0a5/o4voz4x2wxMXYyO8XOZOtiQQUhBHKitHgUOQ9QT7deJHvtE1HAVuge3GPqT0
-         b4DJMG8Gto/JLb3h9O8sxw80YzNcLjvNFO65ga8a4eMU1j2o4JddyzA6C/lNtE5PK6DN
-         zW+U6T2j2hlATUSs2Q4GFP2AToPEHExG7LV8K6urwHZ4pndwViKBHueDPkpmc+t7v9D4
-         tnEYJdnki+PLe8j1mHmxJnyGa2No9SO0RLGvtHzrGSUW1/N1lZmY3tEl/lbXHzW2Kzo6
-         tBzA==
-X-Forwarded-Encrypted: i=1; AJvYcCWGR0K8DBmHGNjWbV88Tq4RwP99lAKba62Lwcpvam86wzbP9coac/IzQ+w58/ZHifPyDMXG3NlpRGqkelG3opU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwKTuFgQMVm9Mf586BToElKSyPA0zwcWt3iVXSNyk3gIg/HEUEv
-	Zt0MfiP6cEi6fWsA+pJzbxd3wj7jgbVGX4a1Pu5jH5PlYZnNYzlS3pip9uvdHAilrN1fVOG4n3p
-	ziP5tchVEDGmfJZi81VlAE6+K6KT0UGsEHs85TNX5
-X-Gm-Gg: ASbGncsTi7Z799P3R79yOk5DYP93Ir4sI3zqHu2OtFZxNJ+FZMjMiA0x05GbqHyxEYf
-	1uIWO6adoPAqoM2jLDOh9kA0oslN4tVFXMps4ARnnwuzdcGlSUeDcOOyj6PUHbunHMh4rfR/oX4
-	U5gTvxLi+XQV3WZR2WOEr4cwK2RhlrmvVhv2/D+ps1Afj/8m7rhy1VJS/SsxRLtwJdD4YA1lX0
-X-Google-Smtp-Source: AGHT+IEcLaieaT6i2N8bO/10/CNvd74NMT4xZt9ijO05OydHwziDOCVx023CgKji5TDdxf9zVv/qUvK6mdJYoPHbsrA=
-X-Received: by 2002:a17:902:e80b:b0:21f:3c4a:136f with SMTP id
- d9443c01a7336-231ffdc5dd7mr11782905ad.28.1747847819084; Wed, 21 May 2025
- 10:16:59 -0700 (PDT)
+        bh=8TzRULGTaOq2SCZGYjVrgxuJH6Vmk6OskDH6n5154vg=;
+        b=C9P8Caw1c1FvcI0O2PUXXcR1bsAYLC8IIfniET9hk15EiFrnT3ryN3yUB/0QvsGtpC
+         KClWdAEYkF0L6vnA2tjYTip7Ff/6BZ8qSj1+NJKY90LMZjDUwqzmgsN7qwefWwX31jJW
+         kmajMCgPg4qMoOYW0KPDll1BmIqhEnJHuOVDO5BwcLF5jLb8uZYpBxZLfi893eBPHC01
+         6Pep+wbCVLXTQyLOPRXaOFl+GEvqSsOLbDFH6SbiR1I/I59pesn8b+PZ7+yhtlFDWJOg
+         W9lKbaChD06II55h480gGNqsvi0iC6RY3CvdugTT38hdZtHQI+Aj34Y5q2DB0hT74LYb
+         5zlw==
+X-Forwarded-Encrypted: i=1; AJvYcCVVyk3MV4qYaJD650kbiMrEdbNhqV73h7AhXdVIPvpLobVCD+03YsOFl9iScPmN/n2DpOx/zzfATo41zYCI/+I=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy0G+Qt0RKBqPLu8MSMt2CI4q91S1NgGaLF8lgzULVgSc8UUjDH
+	E9MvS5EDxUeCA2W6hz7cPez/wOppqWSMHlmIPOoulNG7i5efO76wIAKOGaNAubnYK0Uc/FdnOBe
+	DfUdGWX/WOmdetiwECeGsODxW/PzBGycVJTvEB6zX
+X-Gm-Gg: ASbGncu1ZMmbqSYdRkMX0FoOrL4Hab0k+In6XSvp8JA7yLn1BrMwqVcfqmXjFeXCK58
+	ASzmCItQSN1X6xy5+szs8ZsvSwIkP5Cxxyi+eIWDGGlA4BvP7bjOBTm1Oa5Nhd1/R5FEwlgOFeo
+	yrUl38NpPOeOA2QyoQ4Lx2kVEoFMZvl3+Kvu4Oqd+YeWvTI3aZiSfQZctKbGMyHRr5ew/lF8bD
+X-Google-Smtp-Source: AGHT+IHXSLEh1ng48lSqSLKU62F5dm1IpyqVjnrXWcmc9Cn5aEIx79tGlkJf4Cvd8k/BEpZgaiZIo4LCPAtmC17HrN4=
+X-Received: by 2002:a17:902:f68a:b0:231:e976:a829 with SMTP id
+ d9443c01a7336-232041664fbmr11191355ad.27.1747848079650; Wed, 21 May 2025
+ 10:21:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250520203044.2689904-1-stfomichev@gmail.com>
-In-Reply-To: <20250520203044.2689904-1-stfomichev@gmail.com>
+References: <20250520203044.2689904-1-stfomichev@gmail.com> <20250520203044.2689904-2-stfomichev@gmail.com>
+In-Reply-To: <20250520203044.2689904-2-stfomichev@gmail.com>
 From: Mina Almasry <almasrymina@google.com>
-Date: Wed, 21 May 2025 10:16:46 -0700
-X-Gm-Features: AX0GCFs1YWRcByoee8OrB1N_JWqtKzwROSm78yacol8kNV9a-DsAubo73LOdPp4
-Message-ID: <CAHS8izOTWF9PO9N6ZamJ0xSCTOojXV+LfYm+5B5b8Ad1MA0QpA@mail.gmail.com>
-Subject: Re: [PATCH net-next 1/3] net: devmem: support single IOV with sendmsg
+Date: Wed, 21 May 2025 10:21:06 -0700
+X-Gm-Features: AX0GCFvIb1Mor4qHBJWuRsulh2MAvDR01XTEdcXxYf4IzCEkeO4dm8bvfQxtp1k
+Message-ID: <CAHS8izNwpgf3ks1C6SCqDhUPnR=mbo-AdE2kQ3yk4HK-tFUUhg@mail.gmail.com>
+Subject: Re: [PATCH net-next 2/3] selftests: ncdevmem: make chunking optional
 To: Stanislav Fomichev <stfomichev@gmail.com>
 Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com, 
 	kuba@kernel.org, pabeni@redhat.com, viro@zeniv.linux.org.uk, horms@kernel.org, 
@@ -93,63 +93,135 @@ Content-Transfer-Encoding: quoted-printable
 On Tue, May 20, 2025 at 1:30=E2=80=AFPM Stanislav Fomichev <stfomichev@gmai=
 l.com> wrote:
 >
-> sendmsg() with a single iov becomes ITER_UBUF, sendmsg() with multiple
-> iovs becomes ITER_IOVEC. iter_iov_len does not return correct
-> value for UBUF, so teach to treat UBUF differently.
+> Add new -z argument to specify max IOV size. By default, use
+> single large IOV.
 >
-> Cc: Al Viro <viro@zeniv.linux.org.uk>
-> Cc: Pavel Begunkov <asml.silence@gmail.com>
-> Cc: Mina Almasry <almasrymina@google.com>
-> Fixes: bd61848900bf ("net: devmem: Implement TX path")
 > Signed-off-by: Stanislav Fomichev <stfomichev@gmail.com>
 > ---
->  include/linux/uio.h | 8 +++++++-
->  net/core/datagram.c | 3 ++-
->  2 files changed, 9 insertions(+), 2 deletions(-)
+>  .../selftests/drivers/net/hw/ncdevmem.c       | 49 +++++++++++--------
+>  1 file changed, 29 insertions(+), 20 deletions(-)
 >
-> diff --git a/include/linux/uio.h b/include/linux/uio.h
-> index 49ece9e1888f..393d0622cc28 100644
-> --- a/include/linux/uio.h
-> +++ b/include/linux/uio.h
-> @@ -99,7 +99,13 @@ static inline const struct iovec *iter_iov(const struc=
-t iov_iter *iter)
->  }
+> diff --git a/tools/testing/selftests/drivers/net/hw/ncdevmem.c b/tools/te=
+sting/selftests/drivers/net/hw/ncdevmem.c
+> index ca723722a810..fc7ba7d71502 100644
+> --- a/tools/testing/selftests/drivers/net/hw/ncdevmem.c
+> +++ b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
+> @@ -82,6 +82,9 @@
+>  #define MSG_SOCK_DEVMEM 0x2000000
+>  #endif
 >
->  #define iter_iov_addr(iter)    (iter_iov(iter)->iov_base + (iter)->iov_o=
-ffset)
-> -#define iter_iov_len(iter)     (iter_iov(iter)->iov_len - (iter)->iov_of=
-fset)
+> +#define MAX_IOV 1024
 > +
-> +static inline size_t iter_iov_len(const struct iov_iter *i)
-> +{
-> +       if (i->iter_type =3D=3D ITER_UBUF)
-> +               return i->count;
-> +       return iter_iov(i)->iov_len - i->iov_offset;
-> +}
+> +static size_t max_chunk;
+>  static char *server_ip;
+>  static char *client_ip;
+>  static char *port;
+> @@ -834,10 +837,10 @@ static int do_client(struct memory_buffer *mem)
+>         struct sockaddr_in6 server_sin;
+>         struct sockaddr_in6 client_sin;
+>         struct ynl_sock *ys =3D NULL;
+> +       struct iovec iov[MAX_IOV];
+>         struct msghdr msg =3D {};
+>         ssize_t line_size =3D 0;
+>         struct cmsghdr *cmsg;
+> -       struct iovec iov[2];
+>         char *line =3D NULL;
+>         unsigned long mid;
+>         size_t len =3D 0;
+> @@ -893,27 +896,29 @@ static int do_client(struct memory_buffer *mem)
+>                 if (line_size < 0)
+>                         break;
 >
+> -               mid =3D (line_size / 2) + 1;
+> -
+> -               iov[0].iov_base =3D (void *)1;
+> -               iov[0].iov_len =3D mid;
+> -               iov[1].iov_base =3D (void *)(mid + 2);
+> -               iov[1].iov_len =3D line_size - mid;
+> +               if (max_chunk) {
+> +                       msg.msg_iovlen =3D
+> +                               (line_size + max_chunk - 1) / max_chunk;
+> +                       if (msg.msg_iovlen > MAX_IOV)
+> +                               error(1, 0,
+> +                                     "can't partition %zd bytes into max=
+imum of %d chunks",
+> +                                     line_size, MAX_IOV);
+>
+> -               provider->memcpy_to_device(mem, (size_t)iov[0].iov_base, =
+line,
+> -                                          iov[0].iov_len);
+> -               provider->memcpy_to_device(mem, (size_t)iov[1].iov_base,
+> -                                          line + iov[0].iov_len,
+> -                                          iov[1].iov_len);
+> +                       for (int i =3D 0; i < msg.msg_iovlen; i++) {
+> +                               iov[i].iov_base =3D (void *)(i * max_chun=
+k);
+> +                               iov[i].iov_len =3D max_chunk;
 
-This change looks good to me from devmem perspective, but aren't you
-potentially breaking all these existing callers to iter_iov_len?
+Isn't the last iov going to be truncated in the case where line_size
+is not exactly divisible with max_chunk?
 
-ackc -i iter_iov_len
-fs/read_write.c
-846:                                            iter_iov_len(iter), ppos);
-849:                                            iter_iov_len(iter), ppos);
-858:            if (nr !=3D iter_iov_len(iter))
+> +                       }
+>
+> -               fprintf(stderr,
+> -                       "read line_size=3D%ld iov[0].iov_base=3D%lu, iov[=
+0].iov_len=3D%lu, iov[1].iov_base=3D%lu, iov[1].iov_len=3D%lu\n",
+> -                       line_size, (unsigned long)iov[0].iov_base,
+> -                       iov[0].iov_len, (unsigned long)iov[1].iov_base,
+> -                       iov[1].iov_len);
+> +                       iov[msg.msg_iovlen - 1].iov_len =3D
+> +                               line_size - (msg.msg_iovlen - 1) * max_ch=
+unk;
+> +               } else {
+> +                       iov[0].iov_base =3D 0;
+> +                       iov[0].iov_len =3D line_size;
+> +                       msg.msg_iovlen =3D 1;
+> +               }
 
-mm/madvise.c
-1808:           size_t len_in =3D iter_iov_len(iter);
-1838:           iov_iter_advance(iter, iter_iov_len(iter));
+Do you need to special case this? Shouldn't this be the same as max_chunk=
+=3D=3D1?
 
-io_uring/rw.c
-710:                    len =3D iter_iov_len(iter);
-
-Or are you confident this change is compatible with these callers for
-some reason?
-
-Maybe better to handle this locally in zerocopy_fill_skb_from_devmem,
-and then follow up with a more ambitious change that streamlines how
-all the iters behave.
+>
+>                 msg.msg_iov =3D iov;
+> -               msg.msg_iovlen =3D 2;
+> +               provider->memcpy_to_device(mem, 0, line, line_size);
+>
+>                 msg.msg_control =3D ctrl_data;
+>                 msg.msg_controllen =3D sizeof(ctrl_data);
+> @@ -934,7 +939,8 @@ static int do_client(struct memory_buffer *mem)
+>                 fprintf(stderr, "sendmsg_ret=3D%d\n", ret);
+>
+>                 if (ret !=3D line_size)
+> -                       error(1, errno, "Did not send all bytes");
+> +                       error(1, errno, "Did not send all bytes %d vs %zd=
+", ret,
+> +                             line_size);
+>
+>                 wait_compl(socket_fd);
+>         }
+> @@ -956,7 +962,7 @@ int main(int argc, char *argv[])
+>         int is_server =3D 0, opt;
+>         int ret;
+>
+> -       while ((opt =3D getopt(argc, argv, "ls:c:p:v:q:t:f:")) !=3D -1) {
+> +       while ((opt =3D getopt(argc, argv, "ls:c:p:v:q:t:f:z:")) !=3D -1)=
+ {
+>                 switch (opt) {
+>                 case 'l':
+>                         is_server =3D 1;
+> @@ -982,6 +988,9 @@ int main(int argc, char *argv[])
+>                 case 'f':
+>                         ifname =3D optarg;
+>                         break;
+> +               case 'z':
+> +                       max_chunk =3D atoi(optarg);
+> +                       break;
+>                 case '?':
+>                         fprintf(stderr, "unknown option: %c\n", optopt);
+>                         break;
+> --
+> 2.49.0
+>
 
 
 --=20
