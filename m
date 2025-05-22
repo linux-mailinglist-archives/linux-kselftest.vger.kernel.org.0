@@ -1,107 +1,170 @@
-Return-Path: <linux-kselftest+bounces-33531-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33532-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7620AAC1703
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 May 2025 00:51:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B716AAC1717
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 May 2025 01:01:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF4C71C037E5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 May 2025 22:51:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 405A53A7655
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 May 2025 23:01:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3EF129A9EF;
-	Thu, 22 May 2025 22:51:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CC4C2BFC6A;
+	Thu, 22 May 2025 23:01:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="gE1CE75C"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Q3W+9IFW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D37A29A32B
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 May 2025 22:51:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CBA82882D5
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 May 2025 23:01:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747954274; cv=none; b=mGEUDWiYPeCPZ8NPNHAOjd1v9jVE5G6Ag1AVNedv/34GDbnUIFWPYQji7mCDcAsJwrxD6eNOZkdUmgI3BVq7TZY3fF2+zrG7TGqwOjDbYz3UsAa355mvAUo2/oBu5DByKcP5u3ed8eGRdY7+HSrzqz07HYaXQNbTKPDiML54iDI=
+	t=1747954892; cv=none; b=pxLdykdLo/Rmz2QtKd6uc/odHSQU+yQDV+NowKP/0n5zCaAcYUW2lSTOEJoo10CAhpbILkdyZy10qoAedzSJ+kxPsPMmx39k+XoGW/8AwA0rfuUNKbONC2veerWZ4do+rAouhv/FebR5k01eaviw9roVApZ4kA+l7js9Zn7JrsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747954274; c=relaxed/simple;
-	bh=XJ27/xwWLz/W8KH2VMTPmg1fVqnXe1xQPj7iei/d3S4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fwp0TRapwqyHs4fZD/HaKB9E8Xb31bHGzQZLnfOPxscbbGIcGi6VXkxnUYnw2+CPpfwsjpKdZdv5PnBxy/VR4YtQmgiqFCpkclQOMsu3MNvV5fMgNllSqeGJRI2oOf6vZStM02OFMWU37p9hgpYGZ5DYmK9D0ShjWXoJ35IPTZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=gE1CE75C; arc=none smtp.client-ip=209.85.160.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-2c873231e7bso4744032fac.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 May 2025 15:51:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1747954271; x=1748559071; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zqOqsD9enrwocZN2XCXrFciGa3ZPBF1bqsvBC9V48ds=;
-        b=gE1CE75CcxONMlk5kg5jVtsNefbYKUGLDITmGAX3cRrNlgu7QCbiyGSmE5NQMIpdus
-         OPhFOWumImWGyzoahCjUNOc9GKkYOHhCs+Fz0M1wFRx7XQP3xN3pZtHN/Mn8ZZXZ3MQy
-         Wb2dMWLehrB+dA7cYKykr+2FA3lDv0IAuaPeM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747954271; x=1748559071;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zqOqsD9enrwocZN2XCXrFciGa3ZPBF1bqsvBC9V48ds=;
-        b=mGlzv9q7uABlBAdPZ4WvDKrxtaAe4c6fnUQj8YQCY0ZkKnNyoWuDNGqVRozQkrwEq/
-         TuURtw3+mwahRx0w4bO0XSwiqc9+ZGMd4J8eKsubZxTh1nPkqoea3fAuvm6l/sfeM0Nx
-         T919MAQTVPAtrvSlFqgi79nT6vSl5kSP7DSB4WoM5B88ULBZKB8fblPXVJcTtevPytzb
-         fSi8KljTDMwxcd1OaqySOloHpVI/ySNv3kwe/Rx3syydXpPxbdVvsIsoJ5hHmYYyeEKy
-         f/8PyiJ4Q8lRfPu7bCVgcX68SF9TV7yDFET3x8qtHCZelDbOgTzPl3upPOOmsJQ+bAcf
-         QaXA==
-X-Gm-Message-State: AOJu0YwtQFEDVFys6KUMLHZ9oG+eSF8QXxxAphfpfHHwGEYwVPsBdLU2
-	w/Ks6+PbWpdAbcNe+hEl/4BE5qyF8WwqSlMAc6qSYBNtkKaxgAf9uPKjXmTtDROg9j6GvpdVR1+
-	8tXvJ
-X-Gm-Gg: ASbGnctPkNKatlocEtQWfIXxYLZzOvZ7OdCkhgSBOSLEe0t7j+UAEpzXww+84TfsRJ6
-	QikMYDwz0b+RRQjXyzm0kwx4S9soHveT89W7G0fKwFhrmxv5GVFj/a31YCPFZor8mssIUP3nUA/
-	mDX6xwr4yDaPHnj/IPXNFW+Gvr95DDVa5wqF8ezxMorgmFqX7x1rPtpHF0LnesffXz7yxlDPoOf
-	5hJD5XsVbpEz6pv3MZimNhJhPxPMXq2t1K0O+IDbwh3ej47xkjDxiKYmEHYjJwt9uJv2TjfFZ2D
-	T4tsAhttvIjFN7NUMo2YioY/ormsn2IAgA+GfwvAgCSZ2q05PcogCiZ8ZtNnUQ==
-X-Google-Smtp-Source: AGHT+IFzOV554lWXzcF1YV5aYeLFpUIO3UBsBYGo8BFzCMTUpdmhgcxpCdf+r6HZsu3QdP1/3Sm1pg==
-X-Received: by 2002:a05:6e02:2164:b0:3db:6fb2:4b95 with SMTP id e9e14a558f8ab-3db857a6f7fmr318356595ab.18.1747954260746;
-        Thu, 22 May 2025 15:51:00 -0700 (PDT)
-Received: from [192.168.1.14] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3db843f72e0sm36708835ab.35.2025.05.22.15.50.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 May 2025 15:51:00 -0700 (PDT)
-Message-ID: <4f0d5c19-8358-4e5b-a8f0-3adcee34ffd4@linuxfoundation.org>
-Date: Thu, 22 May 2025 16:50:59 -0600
+	s=arc-20240116; t=1747954892; c=relaxed/simple;
+	bh=CAq6Olkm0gyHVjAbyNXiMAUCtt/20xW3ZHsmPluUdEs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VymIjRLqHJNXVFmO78kfZqWn2ZMJw4ptcRV9/MhABvliifl0qt/dQyKXtWqq7ngBUOaBERUNN3ETFaP0/gbrsrJ75V7iqhxKwMP0rZto/z0YDmNTXcK6PHuhb/EoYFrAmYOb18VJK18C80qCHfKsN0N7mV5WZxzGggztBpPrBQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Q3W+9IFW; arc=none smtp.client-ip=91.218.175.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Thu, 22 May 2025 16:01:21 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1747954887;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=uf0ek8B4u+hUNQgv5LpC16rMo6YMxbrp0ZjUjPp6Kl0=;
+	b=Q3W+9IFWgjXnivtRIyzeGR+bIhMb6UZ1xypwtk9xXcRKQsK3gS5RB+cHRknYQUUt/Sbrw1
+	NhNwL1ZJi75D8oC7n2/0uVXCXXhlNZ0QVdQ2ZWvAtm2jcca6nlwzkteEPnvTqIye8xzyso
+	tBGKJDhdlqzeGQhsw6t3TMdNJaGhx9A=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Shakeel Butt <shakeel.butt@linux.dev>
+To: Lorenz Bauer <lmb@isovalent.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
+	Shuah Khan <shuah@kernel.org>, linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Alan Maguire <alan.maguire@oracle.com>
+Subject: Re: [PATCH bpf-next v5 1/3] btf: allow mmap of vmlinux btf
+Message-ID: <y42h33hluaspiexeck5gkq7aow45stvf72is2k4hy46ydmlyhp@nr3lb27lrrqo>
+References: <20250520-vmlinux-mmap-v5-0-e8c941acc414@isovalent.com>
+ <20250520-vmlinux-mmap-v5-1-e8c941acc414@isovalent.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: net: fix spelling and grammar mistakes
-To: Praveen Balakrishnan <praveen.balakrishnan@magd.ox.ac.uk>,
- shuah@kernel.org
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kernel-mentees@lists.linux.dev
-References: <20250517015912.131187-1-praveen.balakrishnan@magd.ox.ac.uk>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20250517015912.131187-1-praveen.balakrishnan@magd.ox.ac.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250520-vmlinux-mmap-v5-1-e8c941acc414@isovalent.com>
+X-Migadu-Flow: FLOW_OUT
 
-On 5/16/25 19:59, Praveen Balakrishnan wrote:
-> Fix several spelling and grammatical mistakes in output messages from
-> the net selftests to improve readability.
+On Tue, May 20, 2025 at 02:01:17PM +0100, Lorenz Bauer wrote:
+> User space needs access to kernel BTF for many modern features of BPF.
+> Right now each process needs to read the BTF blob either in pieces or
+> as a whole. Allow mmaping the sysfs file so that processes can directly
+> access the memory allocated for it in the kernel.
 > 
-> Only the message strings for the test output have been modified. No
-> changes to the functional logic of the tests have been made.
+> remap_pfn_range is used instead of vm_insert_page due to aarch64
+> compatibility issues.
 > 
-> Signed-off-by: Praveen Balakrishnan <praveen.balakrishnan@magd.ox.ac.uk>
+> Tested-by: Alan Maguire <alan.maguire@oracle.com>
+> Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
+> ---
+>  include/asm-generic/vmlinux.lds.h |  3 ++-
+>  kernel/bpf/sysfs_btf.c            | 32 ++++++++++++++++++++++++++++++++
+>  2 files changed, 34 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+> index 58a635a6d5bdf0c53c267c2a3d21a5ed8678ce73..1750390735fac7637cc4d2fa05f96cb2a36aa448 100644
+> --- a/include/asm-generic/vmlinux.lds.h
+> +++ b/include/asm-generic/vmlinux.lds.h
+> @@ -667,10 +667,11 @@ defined(CONFIG_AUTOFDO_CLANG) || defined(CONFIG_PROPELLER_CLANG)
+>   */
+>  #ifdef CONFIG_DEBUG_INFO_BTF
+>  #define BTF								\
+> +	. = ALIGN(PAGE_SIZE);						\
+>  	.BTF : AT(ADDR(.BTF) - LOAD_OFFSET) {				\
+>  		BOUNDED_SECTION_BY(.BTF, _BTF)				\
+>  	}								\
+> -	. = ALIGN(4);							\
+> +	. = ALIGN(PAGE_SIZE);						\
+>  	.BTF_ids : AT(ADDR(.BTF_ids) - LOAD_OFFSET) {			\
+>  		*(.BTF_ids)						\
+>  	}
+> diff --git a/kernel/bpf/sysfs_btf.c b/kernel/bpf/sysfs_btf.c
+> index 81d6cf90584a7157929c50f62a5c6862e7a3d081..941d0d2427e3a2d27e8f1cff7b6424d0d41817c1 100644
+> --- a/kernel/bpf/sysfs_btf.c
+> +++ b/kernel/bpf/sysfs_btf.c
+> @@ -7,14 +7,46 @@
+>  #include <linux/kobject.h>
+>  #include <linux/init.h>
+>  #include <linux/sysfs.h>
+> +#include <linux/mm.h>
+> +#include <linux/io.h>
+> +#include <linux/btf.h>
+>  
+>  /* See scripts/link-vmlinux.sh, gen_btf() func for details */
+>  extern char __start_BTF[];
+>  extern char __stop_BTF[];
+>  
+> +static int btf_sysfs_vmlinux_mmap(struct file *filp, struct kobject *kobj,
+> +				  const struct bin_attribute *attr,
+> +				  struct vm_area_struct *vma)
+> +{
+> +	unsigned long pages = PAGE_ALIGN(attr->size) >> PAGE_SHIFT;
+> +	size_t vm_size = vma->vm_end - vma->vm_start;
+> +	phys_addr_t addr = virt_to_phys(__start_BTF);
+> +	unsigned long pfn = addr >> PAGE_SHIFT;
+> +
+> +	if (attr->private != __start_BTF || !PAGE_ALIGNED(addr))
 
-This patch is missing net maintainers. RUn get_maintainers.pl for
-complete list recipients for this patch.
+With vmlinux.lds.h change above, is the page aligned check still needed?
 
-thanks,
--- Shuah
+Oh also can the size of btf region be non-page aligned?
+
+> +		return -EINVAL;
+> +
+> +	if (vma->vm_pgoff)
+> +		return -EINVAL;
+> +
+> +	if (vma->vm_flags & (VM_WRITE | VM_EXEC | VM_MAYSHARE))
+> +		return -EACCES;
+> +
+> +	if (pfn + pages < pfn)
+> +		return -EINVAL;
+> +
+> +	if ((vm_size >> PAGE_SHIFT) > pages)
+> +		return -EINVAL;
+> +
+> +	vm_flags_mod(vma, VM_DONTDUMP, VM_MAYEXEC | VM_MAYWRITE);
+
+Is it ok for fork() to keep the mapping in the child? (i.e. do you need
+VM_DONTCOPY). BTW VM_DONTDUMP is added by remap_pfn_range(), so if you
+want you can remove it here.
+
+> +	return remap_pfn_range(vma, vma->vm_start, pfn, vm_size, vma->vm_page_prot);
+> +}
+> +
+>  static struct bin_attribute bin_attr_btf_vmlinux __ro_after_init = {
+>  	.attr = { .name = "vmlinux", .mode = 0444, },
+>  	.read_new = sysfs_bin_attr_simple_read,
+> +	.mmap = btf_sysfs_vmlinux_mmap,
+>  };
+>  
+>  struct kobject *btf_kobj;
+> 
+
+Overall this looks good to me, so you can add:
+
+Reviewed-by: Shakeel Butt <shakeel.butt@linux.dev>
 
