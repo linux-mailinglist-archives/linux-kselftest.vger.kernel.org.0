@@ -1,188 +1,132 @@
-Return-Path: <linux-kselftest+bounces-33491-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33492-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E09E5AC01C6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 May 2025 03:37:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63663AC0360
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 May 2025 06:35:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 93595166C63
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 May 2025 01:37:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B44A41BA2666
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 May 2025 04:35:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6DA82A1BB;
-	Thu, 22 May 2025 01:37:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2FDD1531E9;
+	Thu, 22 May 2025 04:34:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j9qKkD0E"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QhUGLuTC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9A8C2F3E;
-	Thu, 22 May 2025 01:37:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BACA613C3C2;
+	Thu, 22 May 2025 04:34:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747877828; cv=none; b=F1oJsqntpgLhZbMBhTI8EW1zmI9UHET0gaqGnF7cBmA3mzn/G4J5sOmEOHxLGWHIkq9Jhe0YKf/OLKUz+6MvYbZHCuwIMx+RTEvDqi2I8InMcCayWAZOOFOov79gcIsuM13/DP464I3sTWVjVOrRiX9wZIzmoBlxC7ZRxeenmRc=
+	t=1747888495; cv=none; b=XTfWbDwSoGnCWDN5RwuBuUNzFiPb1fwj1Kvr4dA/lPo4aNiLusjhrM9esFGmO3ELVw9PW95J2RY+lT1117Rcje1xjZpUvH02DNIs0FTI8whACj66HcqRYuPoRE+kVF9AuBgY2z6o8u5KRlPnSmQHHFlhiXMS2RwI5lxAsV7DXKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747877828; c=relaxed/simple;
-	bh=il8bkfvjDGki95nEhszu8/+jTMJsPVEjXY92QWq+E2c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Xd5Ct/jm1Z66hl+8zGLPGxPTyBYPHd6YxIQ0/1Yq29hGEHYEQxnDjB0qZMfn0bwajiekbUzyj45KRrExHFr+/7UkOcevvG5sweyY7jRHBAJvQrR2tbefMVYgU3xLTtfWcu8M9w3QFpcRbYbrw8IaW9ObWX9mQ94QmmSlyUSrsx8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j9qKkD0E; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747877827; x=1779413827;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=il8bkfvjDGki95nEhszu8/+jTMJsPVEjXY92QWq+E2c=;
-  b=j9qKkD0ER66xklUP046L6dHQfR4INVuZRsaVPNOjGu+UvQSt+yi+Suhw
-   CvG9ptfw2rUt0BwpfgNKkgpqzqLGl8UpkeU6RlDfW3q34W3VmYPYOVNng
-   GOAE4okyFj5LWCXI3p3brKMyD6iSgzy4G9ljOszOUvzBOkeS9t97qF/IT
-   n+8RKCFVBhuKQDgTYPo+NYTbKwp7b4zGFOMSBztieZM15aGgd9YYpp4Jw
-   /UEfWibICIQ/HNMD/lnOs284TKvHTbWanzieb64Vr6EzzPXu4ucy1TK+y
-   dZYV/1hPy82z2TPPNkW8yRsk3LjxS1eYZ37j4/LjOhk5pyfoA3w2X4UCb
-   w==;
-X-CSE-ConnectionGUID: ZUTzSXpeTgaAA69GWi6Zrw==
-X-CSE-MsgGUID: Y3/PJWctQpaIb1QxOh8Yzg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11440"; a="60932147"
-X-IronPort-AV: E=Sophos;i="6.15,304,1739865600"; 
-   d="scan'208";a="60932147"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2025 18:37:06 -0700
-X-CSE-ConnectionGUID: hTO/8/4JRweAIlDGpCaZKw==
-X-CSE-MsgGUID: OndiVDn1RQyRZW1/vkilgg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,304,1739865600"; 
-   d="scan'208";a="171331916"
-Received: from dapengmi-mobl1.ccr.corp.intel.com (HELO [10.124.245.128]) ([10.124.245.128])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2025 18:36:58 -0700
-Message-ID: <2e227e09-b8aa-4f94-abd3-8c31d46f7e3e@linux.intel.com>
-Date: Thu, 22 May 2025 09:36:55 +0800
+	s=arc-20240116; t=1747888495; c=relaxed/simple;
+	bh=maXsqPtGcGxSazJ5XApc+kX6npnd7DTsARU3qhaPnjU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lSSZAoI7a9fX71tb1C1zm7bGEMm0TSWvWhEh7aK7kXvs5SrHfUBSAYgG1BtU8VfY5VaFYDJUAK5YldcFnU7pIxJSKf4U1UBtNJZvWtTK/bF07L/JS4TrXc11xYbJfGIUKky/JYIxadXaVefrbNAyFOjP9zk+SD+imin/bz/c3rE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QhUGLuTC; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-739b3fe7ce8so6229415b3a.0;
+        Wed, 21 May 2025 21:34:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1747888493; x=1748493293; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Dky3FIQgBX8aNP78AifCGTL6ccyTVByog03wzzXO4zc=;
+        b=QhUGLuTCRA9hlvAwKZP96PMj7Wljt4qJC3MHW1BppWwLxyIPLxDoXiT+qdIgeVPQVM
+         A7aAwmkqEZsPgDyvX/xlIQVhv+AxMLPwbNVO2rb9TaitvBzTF7HDjg36qmbuAR7gCi4B
+         mZc51WY9MsPv1ZPWKYcSz4iYFkDDVhv6vQGmZS40gur4AST1mFQAI+uUIaPH3/8iW0v9
+         NRX5Z7JLu99btYJq+wH5d+q6NeJa2acadldymyGSFBmrBG15m3jvvcIbQtJe2H6j6fji
+         AA7l5P4qAR6i2H6RUJ6ylbog4Y1U2jFqZUdWLHW9ebB0LzoQKkC/lpHzBjLAvKZnFevX
+         GzyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747888493; x=1748493293;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Dky3FIQgBX8aNP78AifCGTL6ccyTVByog03wzzXO4zc=;
+        b=YYzyYvmxhsRz+AUerImcxZuzcOED+SgMPeaFdV/9p54igiBoPmU6LMD5R30uhtdzwk
+         SBw8la8SjyHLle4jbaiipcXH2W3ojVB3Q1upfw37HKgHQJJPEUJb63q8DMXjdOVoSvVS
+         ZgTXqWwmMcidxhRze0k6BP7i2WP0vTF+pjAT9rkETsH5+mMC2iStofsBx3z6Fd7RCOx2
+         q5PVrZ89N0hblxz2POumgBfRVYmQa069zuEFc7eEDP5wzZ26hP2Tuf8f6BbgV8MbjBOR
+         MMrcAKfCNV14JqVOgVTK2LIp+r4LJ4JMACK96OJwdVe3oxszUtnpVtbxE9aj0IdyKBGo
+         1BGg==
+X-Forwarded-Encrypted: i=1; AJvYcCWgHxE8O/co7S93An9wqPADrOthzZrDnt7WpfZAsa/AjBGF6C7Tg9KrshswVyXflV/uG0FUxPOh9bkemLs=@vger.kernel.org, AJvYcCXh52mFpdhHDLRtomLHV/SMv2PHamXc787sSRrpx8Z4nS6LdZHvtJYsu5XZbULoYTabdsZDLUK/qCsYpzpQPCro@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyk1GQU8KIovwPuSrpNUrsTmEHfdslm9A0LelpEVj0pfy8xnC+8
+	X4Dz5WOxvOrUGiehLrvI0XaUjrkEjDLlCOowpSkD/dSFG32UqRndvAld
+X-Gm-Gg: ASbGncsOX0M4dz4PqB095QZ3mpMUHarGeRVGLhVJmTGPqS14E1DHFCtUHd13ybtjl0F
+	nMlcN8UGXfcNkUBhD/rOaoUXL3+gHTA6SltIn986k9dN8CIhOgpBmGjL23fkYYuUdkhV1Y50eWk
+	CWG+vNoywocTLqeT8n5IbpcTZw/OVaXf0jGc14cAeT6Hgs6PRloV+/LdnxRpfh0ZfKrvSi2vyqy
+	zQQxcj99ZVoqh64BZq4GVEessxM00HKKssc5P8x88gkSbES5JEWN7D7jNAODE4e+1w6dcIc1ptY
+	J8cAXimMsnRf5qXiMt7MS97jWyyk7xtEk+vfFIu5GUBhvP+44IhT8tiC
+X-Google-Smtp-Source: AGHT+IGh3Q2clU7Qyx5JWq+TxnZeFNMMnKfZXa7ry6Qxs7rCrVIzwW2jPAJC0kCMqhcqM6mA3QmumQ==
+X-Received: by 2002:a05:6a21:3993:b0:1f5:56fe:b437 with SMTP id adf61e73a8af0-216219b13demr42046834637.32.1747888492887;
+        Wed, 21 May 2025 21:34:52 -0700 (PDT)
+Received: from fedora ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b26eb0a9893sm10518551a12.72.2025.05.21.21.34.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 May 2025 21:34:51 -0700 (PDT)
+Date: Thu, 22 May 2025 04:34:44 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Simon Horman <horms@kernel.org>, Phil Sutter <phil@nwl.cc>,
+	Florian Westphal <fw@strlen.de>, Petr Mladek <pmladek@suse.com>,
+	Yoann Congal <yoann.congal@smile.fr>, wireguard@lists.zx2c4.com,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv6 net-next 0/2] wireguard: selftests: use nftables for
+ testing
+Message-ID: <aC6pZJJn3BiGFVwr@fedora>
+References: <20250408081652.1330-1-liuhangbin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 14/38] KVM: x86/pmu: Introduce enable_mediated_pmu
- global parameter
-To: Sean Christopherson <seanjc@google.com>
-Cc: Mingwei Zhang <mizhang@google.com>, Peter Zijlstra
- <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
- Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>, Liang@google.com,
- Kan <kan.liang@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
- linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
- kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Yongwei Ma <yongwei.ma@intel.com>,
- Xiong Zhang <xiong.y.zhang@linux.intel.com>,
- Jim Mattson <jmattson@google.com>, Sandipan Das <sandipan.das@amd.com>,
- Zide Chen <zide.chen@intel.com>, Eranian Stephane <eranian@google.com>,
- Shukla Manali <Manali.Shukla@amd.com>,
- Nikunj Dadhania <nikunj.dadhania@amd.com>
-References: <20250324173121.1275209-1-mizhang@google.com>
- <20250324173121.1275209-15-mizhang@google.com> <aCUwvXPKD0ANKFb7@google.com>
- <1d024d71-0b02-4481-a0d4-f1786313c1e7@linux.intel.com>
- <aC4ezRH8msD6yUhC@google.com>
-Content-Language: en-US
-From: "Mi, Dapeng" <dapeng1.mi@linux.intel.com>
-In-Reply-To: <aC4ezRH8msD6yUhC@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250408081652.1330-1-liuhangbin@gmail.com>
 
+Hi Jason,
 
-On 5/22/2025 2:43 AM, Sean Christopherson wrote:
-> On Thu, May 15, 2025, Dapeng Mi wrote:
->> On 5/15/2025 8:09 AM, Sean Christopherson wrote:
->>> On Mon, Mar 24, 2025, Mingwei Zhang wrote:
->>>> +	return vcpu->kvm->arch.enable_pmu &&
->>> This is superfluous, pmu->version should never be non-zero without the PMU being
->>> enabled at the VM level.
->> Strictly speaking, "arch.enable_pmu" and pmu->version doesn't indicates
->> fully same thing.  "arch.enable_pmu" indicates whether PMU function is
->> enabled in KVM, but the "pmu->version" comes from user space configuration.
->> In theory user space could configure a "0"  PMU version just like
->> pmu_counters_test does. Currently I'm not sure if the check for
->> "pmu->version" can be removed, let me have a double check.
-> Gah, sorry, my comment was vague and confusing.  What I was trying to say is that
-> the vcpu->kvm->arch.enable_pmu check is superfluous and can be dropped.
+I just saw this patch set is not applied to wireguard tree. Did I missed
+any change request? Should I repost the patch?
 
-Hmm, yes.  "pmu->version > 0" implies that arch.enable_pmu must be true
-(kvm_pmu_refresh() checks if arch.enable_pmu is true before setting
-pmu->verison).
+BTW, what prefix should I use when the target is wireguard next?
+[PATCH wireguard-next] ?
 
+Thanks
+Hangbin
 
->
->>>> +	kvm->arch.enable_pmu = enable_pmu && !enable_mediated_pmu;
->>> So I tried to run a QEMU with this and it failed, because QEMU expected the PMU
->>> to be enabled and tried to write to PMU MSRs.  I haven't dug through the QEMU
->>> code, but I assume that QEMU rightly expects that passing in PMU in CPUID when
->>> KVM_GET_SUPPORTED_CPUID says its supported will result in the VM having a PMU.
->> As long as the module parameter "enable_mediated_pmu" is enabled, qemu
->> needs below extra code to enable mediated vPMU, otherwise PMU is disabled
->> in KVM.
->>
->> https://lore.kernel.org/all/20250324123712.34096-1-dapeng1.mi@linux.intel.com/
->>
->>> I.e. by trying to get cute with backwards compatibility, I think we broke backwards
->>> compatiblity.  At this point, I'm leaning toward making the module param off-by-default,
->>> but otherwise not messing with the behavior of kvm->arch.enable_pmu.  Not sure if
->>> that has implications for KVM_PMU_CAP_DISABLE though.
->> I'm not sure if it's a kind of break for backwards compatibility.  As long
->> as "enable_mediated_pmu" is not enabled, the qemu doesn't need any changes,
->> the legacy vPMU can still be enabled by old qemu version. But if user want
->> to enable mediated vPMU, so they should use the new version qemu which has
->> the capability to enable mediated vPMU, it sounds reasonable for me.
-> I agree it's reasonable to require a userspace update to take advantage of new
-> features, what I don't like is what happens if userspace _hasn't_ been updated.
-> I also don't love that forcing a userspace update in this case is more than a bit
-> contrived.  It's very doable to let existing userspace utilize the mediated PMU,
-> forcing KVM_CAP_PMU_CAPABILITY is essentially KVM punting a problem to userspace.
->
-> And the complications with the mediated PMU don't really have anything to do with
-> the VMM, they're more about all the other tasks and daemons running on the system,
-> e.g. that might be using perf.
->
-> Thinking more about this, the problem isn't so much that enabling mediated PMUs
-> by default is undesirable, it's that giving userspace a binary choise doesn't
-> provide enough flexibility.  E.g. for single-user QEMU-based use cases (including
-> my use of QEMU), requiring a new QEMU is painful and annoying, and so having an
-> on-by-default option would be nice.
->
-> But for use cases that already utilize KVM_CAP_PMU_CAPABILITY, e.g. to explicitly
-> disable PMUs for a subset of VMs, on-by-default is very undesirable, e.g. would
-> require KVM to support KVM_PMU_CAP_DISABLE, and would generate unnecessary noise
-> and contention in perf.
->
-> So, what if we simply make enable_mediated_pmu a tri-state of sorts?
->
->   0   == disabled
->   > 0 == enabled for all VMs (no opt-in or opt-out supported)
->   < 0 == enabled, but off by default (requires opt-in)
->
-> Then use cases like my personal usage of QEMU can run with enable_mediated_pmu=1,
-> while use cases like Google Cloud can run with enable_mediated_pmu=-1, and everyone
-> is happy (hopefully), without too much added complexity in KVM.
-
-Hmm, I agree. a tri-state "enable_mediated_pmu" is much flexible, but we
-need to a good document to describe it, maybe like this.
-
-enable_mediated_pmu
-
-0       ==  globally disabled for all VMs
-
-> 0    ==  globally enabled for all VMs
-
-< 0    ==  VM-scoped disabled, need VMM explicitly enables by
-KVM_CAP_PMU_CAPABILITY ioctl.
-
-
-
+On Tue, Apr 08, 2025 at 08:16:50AM +0000, Hangbin Liu wrote:
+> This patch set convert the wireguard selftest to nftables, as iptables is
+> deparated and nftables is the default framework of most releases.
+> 
+> v6: fix typo in patch 1/2. Update the description (Phil Sutter)
+> v5: remove the counter in nft rules and link nft statically (Jason A. Donenfeld)
+> v4: no update, just re-send
+> v3: drop iptables directly (Jason A. Donenfeld)
+>     Also convert to using nft for qemu testing (Jason A. Donenfeld)
+> v2: use one nft table for testing (Phil Sutter)
+> 
+> Hangbin Liu (2):
+>   wireguard: selftests: convert iptables to nft
+>   wireguard: selftests: update to using nft for qemu test
+> 
+>  tools/testing/selftests/wireguard/netns.sh    | 29 +++++++++------
+>  .../testing/selftests/wireguard/qemu/Makefile | 36 ++++++++++++++-----
+>  .../selftests/wireguard/qemu/kernel.config    |  7 ++--
+>  3 files changed, 49 insertions(+), 23 deletions(-)
+> 
+> -- 
+> 2.46.0
+> 
 
