@@ -1,81 +1,79 @@
-Return-Path: <linux-kselftest+bounces-33495-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33496-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8B54AC04CD
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 May 2025 08:49:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36829AC071F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 May 2025 10:29:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D2DFF1B677C3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 May 2025 06:50:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 73FBF9E1D80
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 May 2025 08:29:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECE03221734;
-	Thu, 22 May 2025 06:49:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53104265CD3;
+	Thu, 22 May 2025 08:29:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="h2yatspl"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lrHNM0r2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A220146D65
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 May 2025 06:49:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F6FA149C6F;
+	Thu, 22 May 2025 08:29:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747896588; cv=none; b=r3pCBBjS0RFPf5uj671KYAFo83v2wOCtTpdj29q5chzk8WDi5at6ewp3eO1LABYUpIGT/zDN41CYdx/K1jWgoUxxqB63yKcs7XDLKIVG5kMs+tAaXDDBSmyIeGFvObqoOHf290VI7Ym5jguFPW9VcuOnqph2tqNQ6ZF602/Uf14=
+	t=1747902592; cv=none; b=Si9yTiyMVI8EXVxUvVn3gs3+miSqYseRo34QQADHEpB4f963ZbHhKlLUyrjuk6mfRuFB+zkiAXdkOU8VwgvROex1EbNO6jED2fMc6p3EdDsjr6IXtZgMjYDZQZov6ZsX5JmQeUBsSzFub4YvhmQtfVh3trk9zxoM3NqqgpB6Yyo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747896588; c=relaxed/simple;
-	bh=NN18PvERwtDdoTCnb8dTOMXJOoITZnwSQBbXNQA7a0Q=;
+	s=arc-20240116; t=1747902592; c=relaxed/simple;
+	bh=EI6iGpDZ/vQcd4w9J8oLLbHPKEuZtpcIMzOkLo3pq64=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GMnN1EU389WdWcV/yXAEOpXHoCQb4EoRwnREjSB7jJoE/XGMcgIb4C3QNgVKzfOz3INOVdi/E8w7bKJjVGqNs0K5ees6ZRHanCN+frxJ2BwDwit9gKZmQZGftj/hQX0EeGShmsE9Ga+PPB68pgvstJU1CLt7yR4WRjuEQUU2d74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=h2yatspl; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-43d0618746bso61772375e9.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 May 2025 23:49:45 -0700 (PDT)
+	 In-Reply-To:Content-Type; b=mLub3zMZukv5+TVwOC3LBnrcW6RhG4lsdjLFH3hSXh3M/fEQltxXQmkUx7S02hAqyAPD8MJMbp1RD5umRbr2Wvk8TOEgTFb2T0Fp2YGXwr2g7DUKsm5+7gmkkF8yBZH3TZnN5eu7FR1rcX3zwpAEKB5LEbEgwNlU5D9d45B/tdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lrHNM0r2; arc=none smtp.client-ip=209.85.208.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-601f1914993so6875297a12.0;
+        Thu, 22 May 2025 01:29:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1747896584; x=1748501384; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1747902589; x=1748507389; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=mSfZsD4God9Ts/HLONlfHOWEtM7BhkFonFKtAqIE5Mk=;
-        b=h2yatspl14MsY6LqiXygHE0cZu/D0s7+Fwtp37NKiq43zLuVrS7EyQrIpZdKrEwA5Z
-         3OkjgQ8uFHAA16JzoSAM2WpHJ/vTXryyIsdHmW/dujtGIgcwXcOU0LAh2r8DcqaIg65o
-         O37E4sGvn3nNFoBLMYtZM69dk49IFsU2rFp6CJ/P4GaNUEgtebOV4LfuvWtV/EsuNKcl
-         tIRpk0OWE1pgkYRpOzufx69hWN6WWUIFfux/5KB9pyv2HP4cRWD3B0HCPAH9zkbk6892
-         0Eulj5wmVyX/UeCTt9zWBZ3lFUrlwr4VSvesTMJz6WrY7y6rJzqgP63Aya+jjE1DPKxv
-         OqmQ==
+        bh=JwcG1HfHxOaR8Nuyw/gar5ZU0L/jTzPHaK9H13HupME=;
+        b=lrHNM0r2Mx7qaaaA/zN75XKe4sv8de4AGQJPfycAB3rxLSpPZE7FFk8TfvKUgBgoe3
+         YgdckAjNgCKDV/ESVs/T0OPvrDrI9cU4qc5V4Ekv/aYa1dzjBo+OvcOjotv2Fu/3jEHZ
+         IOOMaP+U1xNY5OH4NWHuwER4X1DEnY1Liw9ZWTn9ql0lrG3W/LoIYArSH8YTL9++Z2m7
+         NjtFWxb+zayKWzeeNIzyl6X4bQ3dY0+m4hj8tcaNNmVT1XfJ1XJmJbYaYobs7q++1quv
+         AJydL01ismmVQ1stKGZkWB1irEtHzY2AV4COUVyyIsAMQYbsLLV6o8SHKXNDk+lrX4FF
+         7FFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747896584; x=1748501384;
+        d=1e100.net; s=20230601; t=1747902589; x=1748507389;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mSfZsD4God9Ts/HLONlfHOWEtM7BhkFonFKtAqIE5Mk=;
-        b=R5UpMz1lvsnpxm7N94mO+EBei/jr47WiLPRa7/v9fQ7jcJcut4WogsweE9YCfRK7Fx
-         TJIiikaWcB0qOjBs7XjZGcAlrltcH1r1ENbKOZsQCWaT26XI9RUCQvdc60Wo9MObdxjB
-         tODPS+eObt6QzUE1FdP33xj3RuMOd0oivDLisFIOO/qax1vjbXX6hx5AXeG2TprQXff5
-         mOAiL8dTS00hHvu5BBBKOO7SLm/Qc5Mf/UnuzRxLpfHquxIiDTZFhJBjDkV+YgPKNESy
-         FO3TRau0VJ2bHesaejmM80YMMg3doyqJEdZkHCOyGTtb2An63ny6BFRYXrD/QEfKkx7h
-         380g==
-X-Forwarded-Encrypted: i=1; AJvYcCVoJUNoB8BtsM3DLrfhqim4R2pucGzIqk7IEv8uoLdAD1aaQUc+SbpPGQeV3nsdJtRvRyDqyW9QzQQUIOvWSr4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzr1TLiH2/Se+Oujc3oqbBrcX1ME546y1Lmpzhe+V/TRFWn01aD
-	AfEv8xcsCOYA64nsSzSG+I5/U44DgljQKHrPTDUyAq07cq73Nwa0bhZ+evWYWC/lZT9ktfQMt7W
-	cDgohnsY=
-X-Gm-Gg: ASbGncuRzhcFFd2QQgRJ00DaPBjvjoX6ZxwJg9bV/SHtIPPmQ5/5c31A2CeS647wkns
-	JOoMiGRq9zThdrXFFwp1EXGKd3DeVziYOaQLr0li9P2l1CvVoOvSDpKNZZTdnH5TbqUysTRw6tb
-	KZZ+qcxLnoa65zDI9qHX9Ooaf+RG6TP6Pe7bWnyphMEc4r/tslh+L5QKadkCb2mZc7SgqWHgGde
-	kj2GP10i89NzTEgriMIR4hX7qruWWge9EVatA2ud7V6/b6qFZDkQW29Hj6T2k9aAKDPeXfjM1h7
-	i+5GVArcQtNREwA9/xsXy1sHvKTYTDyE7kxA3fHJMJrpgy2gugkfEOGQAvi16Z+6lRfpofadTXd
-	KGlYyFfGtzPiQGBpGzzTB
-X-Google-Smtp-Source: AGHT+IHcBrXU/Fz3UA3Men54JBGMvR7rPmgEKbKc+z1Guu78ah8GEwVQySPOphDeLouhsLRO/zwPHg==
-X-Received: by 2002:a05:600c:3c87:b0:442:d9f2:c6ef with SMTP id 5b1f17b1804b1-442fefd5f98mr249592835e9.2.1747896583771;
-        Wed, 21 May 2025 23:49:43 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:e17:9700:16d2:7456:6634:9626? ([2a01:e0a:e17:9700:16d2:7456:6634:9626])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-447f78b2f19sm90646175e9.32.2025.05.21.23.49.42
+        bh=JwcG1HfHxOaR8Nuyw/gar5ZU0L/jTzPHaK9H13HupME=;
+        b=UmZvfb5eLJe6vWFbLDbcCbOW2uMQKEjYMUykL/b4tDjdjwfyMwVm2RweS7PSZeSOPo
+         0AS3QSbRC5gNBX2SFua2+g+CBY1Sw30yfv5+/q8mm4tHwW7KjiCLkl930IHXEBx0nwi0
+         2uN86F+mDYpkCzsUsjviZjvuVP67Q5yhLICKMJlrOq9iQOG0bkHkgxeMjOfcWVk2jGlN
+         anIo6BHdPPFZxQYSqEzHzjZ7PUaPesU0dGECrMp8pP+pGH2MzGLaEm8TLZuXzbnq0Ygt
+         6tLv35hUg+/2QO/MuD4Tspl54Gdu9SQ594t0C4V7Y5jnFmwxxZDUI7iWS/JmtDKuru2l
+         Z6VQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVNCdZt8gn1HI4NzfNJ1UWCUnva+iAn5pgauHf/ZxJQR4p8Z6BfK5AeHqMPFeD/npXjMiin3FcRMyDBOfSSeJ2C@vger.kernel.org, AJvYcCXdDyIsWtHpqHdNdzFflu+pNx3kM4QX1dR8+6lpMr2fATjQ+PshKheg70HCPSpKhw6Gs45TQy0pPAfTpp0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwcvGKe+5azcKvZ2YgD4JRmzrNWDeywCKUwXph01Dsh2DksoEvF
+	+vcrWbbH5iwnL6lAdwa3iWqFaOGXDbVhesJfG7/vNwLgl2WG6XVRKOFo
+X-Gm-Gg: ASbGncs6hlqWmnJFpGDHJiiQZxXWMadjbq9LqJl99Sgfs8rFT8umKsHhmni7wFN+Pem
+	Dw+FMm/o8zbFvn7wa+Q0xvLvn3c7ce5HWhP6e9smbM8UYevA1DjD3b72+yKe0Ft8t/AHBA8zawo
+	iVUaXSQpXJaIV56aEhKzQ341FL71IribnvbfT305KFvZ81kSOzudT2xZwmXnCQB8FjG7bbQFyRw
+	XiAcM5ApzogyKntoZAqwMdY8yVrAkmE5KcDYjPtB4mJ1WQb2k2lHk4n4HJP5UQaIafqsgf0hjN5
+	0/SZpSp5JkBe17ZzG/eT4hkQOKiMCo9dM7OpeXyPViAEIjTpqAjfzgra5RGzE62T
+X-Google-Smtp-Source: AGHT+IHmBpSiEsaipefyb2BI/VSpVRuTf2kD6pmT43qZJsIDgTDNcfucjr30BL1XPtEUnszdDiTyyg==
+X-Received: by 2002:a17:906:3890:b0:ad5:501a:b3c6 with SMTP id a640c23a62f3a-ad5501abddamr1443443966b.32.1747902588434;
+        Thu, 22 May 2025 01:29:48 -0700 (PDT)
+Received: from ?IPV6:2620:10d:c096:325::3f6? ([2620:10d:c092:600::1:9142])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad52d04b08bsm1053154166b.13.2025.05.22.01.29.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 May 2025 23:49:43 -0700 (PDT)
-Message-ID: <957c479e-6233-4294-ac03-ac20b87dfacd@rivosinc.com>
-Date: Thu, 22 May 2025 08:49:42 +0200
+        Thu, 22 May 2025 01:29:47 -0700 (PDT)
+Message-ID: <dd139cb5-3554-4b65-b886-fe648f2413d3@gmail.com>
+Date: Thu, 22 May 2025 09:31:04 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,139 +81,98 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 09/14] riscv: misaligned: move emulated access
- uniformity check in a function
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, Anup Patel <anup@brainfault.org>,
- Atish Patra <atishp@atishpatra.org>, Shuah Khan <shuah@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
- linux-kselftest@vger.kernel.org, Samuel Holland <samuel.holland@sifive.com>,
- Andrew Jones <ajones@ventanamicro.com>, Deepak Gupta <debug@rivosinc.com>
-References: <20250515082217.433227-1-cleger@rivosinc.com>
- <20250515082217.433227-10-cleger@rivosinc.com> <aCu_ce-kVQsyjrh5@ghost>
- <126762fc-17ca-4e9d-94d0-3aed1ae321ff@rivosinc.com> <aCy3A6uUbnWoO9uC@ghost>
+Subject: Re: [PATCH net-next 1/3] net: devmem: support single IOV with sendmsg
+To: Stanislav Fomichev <stfomichev@gmail.com>,
+ Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, viro@zeniv.linux.org.uk,
+ horms@kernel.org, andrew+netdev@lunn.ch, shuah@kernel.org, sagi@grimberg.me,
+ willemb@google.com, jdamato@fastly.com, kaiyuanz@google.com,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20250520203044.2689904-1-stfomichev@gmail.com>
+ <CAHS8izOTWF9PO9N6ZamJ0xSCTOojXV+LfYm+5B5b8Ad1MA0QpA@mail.gmail.com>
+ <aC4OgpSHKf51wQS-@mini-arch>
 Content-Language: en-US
-From: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
-In-Reply-To: <aCy3A6uUbnWoO9uC@ghost>
-Content-Type: text/plain; charset=UTF-8
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <aC4OgpSHKf51wQS-@mini-arch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-
-
-On 20/05/2025 19:08, Charlie Jenkins wrote:
-> On Tue, May 20, 2025 at 10:19:47AM +0200, Clément Léger wrote:
->>
->>
->> On 20/05/2025 01:32, Charlie Jenkins wrote:
->>> On Thu, May 15, 2025 at 10:22:10AM +0200, Clément Léger wrote:
->>>> Split the code that check for the uniformity of misaligned accesses
->>>> performance on all cpus from check_unaligned_access_emulated_all_cpus()
->>>> to its own function which will be used for delegation check. No
->>>> functional changes intended.
->>>>
->>>> Signed-off-by: Clément Léger <cleger@rivosinc.com>
->>>> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
->>>> ---
->>>>  arch/riscv/kernel/traps_misaligned.c | 20 ++++++++++++++------
->>>>  1 file changed, 14 insertions(+), 6 deletions(-)
->>>>
->>>> diff --git a/arch/riscv/kernel/traps_misaligned.c b/arch/riscv/kernel/traps_misaligned.c
->>>> index e551ba17f557..287ec37021c8 100644
->>>> --- a/arch/riscv/kernel/traps_misaligned.c
->>>> +++ b/arch/riscv/kernel/traps_misaligned.c
->>>> @@ -647,6 +647,18 @@ bool __init check_vector_unaligned_access_emulated_all_cpus(void)
->>>>  }
->>>>  #endif
->>>>  
->>>> +static bool all_cpus_unaligned_scalar_access_emulated(void)
->>>> +{
->>>> +	int cpu;
->>>> +
->>>> +	for_each_online_cpu(cpu)
->>>> +		if (per_cpu(misaligned_access_speed, cpu) !=
+On 5/21/25 18:33, Stanislav Fomichev wrote:
+> On 05/21, Mina Almasry wrote:
+>> On Tue, May 20, 2025 at 1:30 PM Stanislav Fomichev <stfomichev@gmail.com> wrote:
 >>>
->>> misaligned_access_speed is only defined when
->>> CONFIG_RISCV_SCALAR_MISALIGNED. This function should return false when
->>> !CONFIG_RISCV_SCALAR_MISALIGNED and only use this logic otherwise.
+>>> sendmsg() with a single iov becomes ITER_UBUF, sendmsg() with multiple
+>>> iovs becomes ITER_IOVEC. iter_iov_len does not return correct
+>>> value for UBUF, so teach to treat UBUF differently.
+>>>
+>>> Cc: Al Viro <viro@zeniv.linux.org.uk>
+>>> Cc: Pavel Begunkov <asml.silence@gmail.com>
+>>> Cc: Mina Almasry <almasrymina@google.com>
+>>> Fixes: bd61848900bf ("net: devmem: Implement TX path")
+>>> Signed-off-by: Stanislav Fomichev <stfomichev@gmail.com>
+>>> ---
+>>>   include/linux/uio.h | 8 +++++++-
+>>>   net/core/datagram.c | 3 ++-
+>>>   2 files changed, 9 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/include/linux/uio.h b/include/linux/uio.h
+>>> index 49ece9e1888f..393d0622cc28 100644
+>>> --- a/include/linux/uio.h
+>>> +++ b/include/linux/uio.h
+>>> @@ -99,7 +99,13 @@ static inline const struct iovec *iter_iov(const struct iov_iter *iter)
+>>>   }
+>>>
+>>>   #define iter_iov_addr(iter)    (iter_iov(iter)->iov_base + (iter)->iov_offset)
+>>> -#define iter_iov_len(iter)     (iter_iov(iter)->iov_len - (iter)->iov_offset)
+>>> +
+>>> +static inline size_t iter_iov_len(const struct iov_iter *i)
+>>> +{
+>>> +       if (i->iter_type == ITER_UBUF)
+>>> +               return i->count;
+>>> +       return iter_iov(i)->iov_len - i->iov_offset;
+>>> +}
+>>>
 >>
->> Hi Charlie,
+>> This change looks good to me from devmem perspective, but aren't you
+>> potentially breaking all these existing callers to iter_iov_len?
 >>
->> misaligned_access_speed is defined in unaligned_access_speed.c which is
->> compiled based on CONFIG_RISCV_MISALIGNED (ditto for trap_misaligned.c)
+>> ackc -i iter_iov_len
+>> fs/read_write.c
+>> 846:                                            iter_iov_len(iter), ppos);
+>> 849:                                            iter_iov_len(iter), ppos);
+>> 858:            if (nr != iter_iov_len(iter))
 >>
->> obj-$(CONFIG_RISCV_MISALIGNED)	+= unaligned_access_speed.o
+>> mm/madvise.c
+>> 1808:           size_t len_in = iter_iov_len(iter);
+>> 1838:           iov_iter_advance(iter, iter_iov_len(iter));
 >>
->> However, the declaration for it in the header cpu-feature.h however is
->> under a CONFIG_RISCV_SCALAR_MISALIGNED ifdef. So either the declaration
->> or the definition is wrong but the ifdefery soup makes it quite
->> difficult to understand what's going on.
+>> io_uring/rw.c
+>> 710:                    len = iter_iov_len(iter);
 >>
->> I would suggest to move the DECLARE_PER_CPU under
->> CONFIG_RISCV_MISALIGNED so that it reduces ifdef in traps_misaligned as
->> well.
+>> Or are you confident this change is compatible with these callers for
+>> some reason?
+>   
+> Pavel did go over all callers, see:
+> https://lore.kernel.org/netdev/7f06216e-1e66-433e-a247-2445dac22498@gmail.com/
+
+Yes, the patch should work
+
+Reviewed-by: Pavel Begunkov <asml.silence@gmail.com>
+
 > 
-> Here is the patch I am using locally for testing purposes, but if there
-> is a way to reduce the number of ifdefs that is probably the better way to go:
+>> Maybe better to handle this locally in zerocopy_fill_skb_from_devmem,
+>> and then follow up with a more ambitious change that streamlines how
+>> all the iters behave.
 > 
+> Yes, I can definitely do that, but it seems a bit strange that the
+> callers need to distinguish between IOVEC and UBUF (which is a 1-entry
+> IOVEC), so having working iter_iov_len seems a bit cleaner.
 
-Hi Charlie,
+It might be a good idea to rename it at some point to highlight that
+it also works with ubufs (but not as a part of this fix).
 
-I have another way to do so which indeed reduces the number of
-ifdef/duplicated functions. I'll submit that.
-
-Thanks,
-
-Clément
-
-> From 18f9a056d3b597934c931abdf72fb6e775ccb714 Mon Sep 17 00:00:00 2001
-> From: Charlie Jenkins <charlie@rivosinc.com>
-> Date: Mon, 19 May 2025 16:35:51 -0700
-> Subject: [PATCH] fixup! riscv: misaligned: move emulated access uniformity
->  check in a function
-> 
-> ---
->  arch/riscv/kernel/traps_misaligned.c | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/riscv/kernel/traps_misaligned.c b/arch/riscv/kernel/traps_misaligned.c
-> index f3ab84bc4632..1449c6a4ac21 100644
-> --- a/arch/riscv/kernel/traps_misaligned.c
-> +++ b/arch/riscv/kernel/traps_misaligned.c
-> @@ -647,6 +647,10 @@ bool __init check_vector_unaligned_access_emulated_all_cpus(void)
->  }
->  #endif
->  
-> +#ifdef CONFIG_RISCV_SCALAR_MISALIGNED
-> +
-> +static bool unaligned_ctl __read_mostly;
-> +
->  static bool all_cpus_unaligned_scalar_access_emulated(void)
->  {
->  	int cpu;
-> @@ -659,10 +663,6 @@ static bool all_cpus_unaligned_scalar_access_emulated(void)
->  	return true;
->  }
->  
-> -#ifdef CONFIG_RISCV_SCALAR_MISALIGNED
-> -
-> -static bool unaligned_ctl __read_mostly;
-> -
->  static void check_unaligned_access_emulated(void *arg __always_unused)
->  {
->  	int cpu = smp_processor_id();
-> @@ -716,6 +716,10 @@ bool unaligned_ctl_available(void)
->  	return unaligned_ctl;
->  }
->  #else
-> +static bool all_cpus_unaligned_scalar_access_emulated(void)
-> +{
-> +	return false;
-> +}
->  bool __init check_unaligned_access_emulated_all_cpus(void)
->  {
->  	return false;
+-- 
+Pavel Begunkov
 
 
