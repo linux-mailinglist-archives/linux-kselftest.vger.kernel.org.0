@@ -1,76 +1,77 @@
-Return-Path: <linux-kselftest+bounces-33529-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33530-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41ADEAC16F2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 May 2025 00:43:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9D86AC16FF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 May 2025 00:49:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C7E2B7A3CA4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 May 2025 22:42:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 01120A261C2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 May 2025 22:49:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1249D2882C5;
-	Thu, 22 May 2025 22:43:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0410B29A9DC;
+	Thu, 22 May 2025 22:49:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Q4ROYLk9"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="PX9kju42"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
+Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4041286D65
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 May 2025 22:43:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D657928D82B
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 May 2025 22:49:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747953823; cv=none; b=GEBq98AHMWKPA4fRryBG1U+lEOrOdSd/J98ysGnvCi01zBUVV3x8Tjvbw6g2DbwBwHmXvkg6GCGHF5AQmstcAA4yTqKXNXO4Dok1RFLnQu6JIKVhp0aLrPo0Q5gRb8jBuvShHwclX4vGl2lIqFEmeK/PR/RiCNd533ZB3meu/nk=
+	t=1747954187; cv=none; b=oXPArWLm+10cwD8wezdqCJ75rSWqMC3SVCjN/bTuE5Jc+dhWhdA/O69ZjN3iWjc6R1ZSfOVLPkFh0J3R3srW1nrVgbzulh8PDeCiR/KDEBwdaF9Ttm9NQjPdemFYcfDpd86CbuuJCxoQdDO/FKAuphTfQ81ikCNezQXs0R8dW+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747953823; c=relaxed/simple;
-	bh=d8ElNV1KxKf1PTMc9BiSriOci7moGD7yluHGQynQVf4=;
+	s=arc-20240116; t=1747954187; c=relaxed/simple;
+	bh=MpOiOzRLBDqHqB2k9gzP+UZBhD0AxK51yQUlhLwvf8k=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CkBNBlHJRQmee+d35k+5aqLJKYb1gTlUL7HWr43q7DMvVFYC4G720TryDlU8lYeRO1h7KEpTgWgKpeeEFjKMrAOVAMvblpLx/lx1IxYkLSkXb4ylKISqJRzT4YZ+9GTFuEvHumnISqyKQq5Q5NY7kpWQyydkQzoURvaQbG2AIH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Q4ROYLk9; arc=none smtp.client-ip=209.85.166.180
+	 In-Reply-To:Content-Type; b=j4YRJSP4Vk6FeEMgFEry3j1XtPyyE1623Su/VFg5thB7EHtjb7Fn0FhTmSwWD5/2tXgLQVpf1mKHpsj2bMvqhqaPdQS8Aadi4ISNhEDEt0Nhv95kH+0q56KWBWP2ZT/xikj57fZpXBAjfVYX5JmuTUamYAaJ89x+Nbio25IyoNw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=PX9kju42; arc=none smtp.client-ip=209.85.166.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f180.google.com with SMTP id e9e14a558f8ab-3dc6f6530c5so36104205ab.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 May 2025 15:43:39 -0700 (PDT)
+Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-3d8020ba858so81194615ab.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 May 2025 15:49:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1747953819; x=1748558619; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1747954184; x=1748558984; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=SgAx9FRjAiSPVmD+10IVtHJnBsxw+8aMplanI2nZMN4=;
-        b=Q4ROYLk9WwKxIjKIoOaiWWf9PUKeUP0J+yExkA0SoGTwi2C10purbPzas95RyyCkCK
-         ZIq61ypWB2cYSIQSL/6CKRmyN9809QtMSgKWIvvJJhsltEVKKD4qjmQXEJp4Y7Yff+hJ
-         tM1x0NB0ZlBRVUEn7aJTJnR48jkCGwI+Hsd6A=
+        bh=4s3zSEh4snp0xBeK01CCVtJfz7Wl6wxDOdDf1VotpRM=;
+        b=PX9kju42Se4jcYByT3jUj7Ppby8Ei8CjFJ9oexJxCKCTsRLDidqC/VI8/LotcVF/zW
+         VMjoZbJ1vFlc8afW3s7Gk52e0B0shET2dDZjz2ebu0tY76H7F4eLY+gkrQN35Fn5BqjR
+         ctB+2v24C0uj+rnxDUZ6M+ssCv+/GYsYcWhy4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747953819; x=1748558619;
+        d=1e100.net; s=20230601; t=1747954184; x=1748558984;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SgAx9FRjAiSPVmD+10IVtHJnBsxw+8aMplanI2nZMN4=;
-        b=M7ZmUYmBHo6z/8ViwdvZvoaYbeeuJpEVFrr0t5LiaPxskln3lpfEab8+vua4TCFBfm
-         pZ7lQOAlQMu1uzLu5mUL7v1eLZsTKBGSw6n2OnEIPGc5RVjLWC4t4M2KDXcYr1Gd6tHZ
-         vSIUKND2nI9mzC3qbGEMskdpax/zx4B3rugYf+CphmozhrHZwNtpeLGHGoYT6ihprGwD
-         Xgm+GjBb8znKubgOpzs3N4oOVr2F+dKEdVha+39XEDGIS3aSLYZyXTJKk07wUiaZ6qDr
-         ikhlY+UrW0kzMm2WrGm/p2+5LJlDcPRX2FlCjh/8C4Qxurt51SsTGckcMCTkaCnC9wpT
-         b9cw==
-X-Gm-Message-State: AOJu0YwZnmcvRityTg0d/zMhbemWS68OytTiXw3cyD8eSmxWRs7SCBKE
-	1vqEPEHxeCuTpNPdMR/PW7+cG3UMr9X7UZfaVJlYcJwGQdziwTANEyCJrRfqGsPdrqgJB41bKEL
-	hQAhv
-X-Gm-Gg: ASbGnctN+9Bj2fkyEvrbeUJRcbYZ2/8fMF0ekzfHNZ4WLjK5qx+VXdcvIcuO+OG82Fd
-	Uvyf9lnvdWf7dPFFzkXmvQZJomiCR8LqvWQRBepcWE6g8pJyq5RhryA9yCSPa8s4oIM1geI1dem
-	63OBWFkv6fnSdvnOtUoE18xD47pOObYZ2to8/DOCeJsL5kzC30pl91891LvmtmSRju9J2ugeRsf
-	7GGtfZ+irL7XoB0GGVRZ3XtirrfDhqhX8GZsjq5DoI8Gs4DHEj+5e4SrK9i2J6wxSH0EYEcdOQm
-	mos8nuXLck32v/iAtwHuUGqpwog+2OmOHAiVNFRMzu8kCUV6Qp6y9P8e2OGD6Q==
-X-Google-Smtp-Source: AGHT+IGgZrub3EqyIIKtPGhYUaoxCm8eFkqbXkOsp+d+6Y4GjpSAtke5qsqtY8wSwjMno4kibcNjng==
-X-Received: by 2002:a05:6e02:3c02:b0:3d8:1dc7:ca7a with SMTP id e9e14a558f8ab-3db84296d9amr301540885ab.5.1747953818933;
-        Thu, 22 May 2025 15:43:38 -0700 (PDT)
+        bh=4s3zSEh4snp0xBeK01CCVtJfz7Wl6wxDOdDf1VotpRM=;
+        b=ctz8Cw18t2K52r6bgT/XHVHkDI09ipdxQtZlbfx5F79+kynydAY54kE6zI17IPuXll
+         HeHDvumjvRvQHSlkXLuSzZ0DyKM7EYGa7Rs0q+YS7gSMpaNcXV5J1WHWlWfCNdOput1w
+         QEMfnCC0kqwR7DiOPrQAXOCK9uWKCjElxDZVQA3Os3sxBlU1XJuTChh8QvPvP37NmtT7
+         Vv30VHGybCS7qYvVVqEo6Of87qA0J3o3KI+jN6UUAfkvary+RiIVFQDPeY8VjWr6LsJN
+         MS8bxMj2ns2sTHYjK6wgoNnoQeZrtGD5o/mxD+ChyZp3JADHri0J1qEY8Fn95BmkxJYe
+         GL9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXxkzjNreLEMX5Ex7IH84S9T7DQAJuvl/5BeLPmrztf/nBVMX7cERQ5Wgsy/FLcQwxq5tExJIn9f8MKPCStqDw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwIq12h7JvTVqkilp1CqN+tBsMvDZgsY33nBucdTxDh2t6Aeglu
+	/LGi1rLYTXDYI+mzwyVd+XFoQlBARNki8nFEGfV5i+q2dGOffvj5f4EdxF9+A0TbTvYwEtw7TLP
+	e/muT
+X-Gm-Gg: ASbGncvCvXQxZsZAqXXC0/JU7xDvHw9tiRrzO/sVmQ6uKUBZHkVRFt6hCJ4ZjprZv2x
+	LodIaMJyFyEFi5+qCtd+d5niDjJiPJONYZuy+ok2HVLsuNyDg3KHaGHJxwk5cNZWGSx1Y0ruTUy
+	/zbJL4ttjzQBHwnLOIwvfrvIOYJdgPVs6MEXcg7M1Zz/NfXOhe3bbMsKIQLsfQ79MQMuO/yUxhb
+	56raOiJkysOu7FhFDXNnLJe3cG9c7fkFtY8vX6nzlax5oOaRBFzT7f+G0pr9KzdM0AykzsizW7v
+	jo+FcC2oxdu48RicIO2YqdCrIGbu7bj42cjdIsWFzsklXEAeQCZY45IPMATYsw==
+X-Google-Smtp-Source: AGHT+IHQS+ZDp8ppQECt+VzLm3Py7wm28k4VQfjNDxyLCiw94PysHUBvarpgdnsCuhzk1t38nuqn2Q==
+X-Received: by 2002:a05:6e02:19cf:b0:3d4:244b:db1d with SMTP id e9e14a558f8ab-3dc932664c2mr10876065ab.6.1747954183964;
+        Thu, 22 May 2025 15:49:43 -0700 (PDT)
 Received: from [192.168.1.14] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3db843cf8fbsm37711915ab.1.2025.05.22.15.43.38
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3dc84ceeccesm11041375ab.45.2025.05.22.15.49.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 May 2025 15:43:38 -0700 (PDT)
-Message-ID: <a2980c99-6a6e-42ac-8978-8e0ab5319a9c@linuxfoundation.org>
-Date: Thu, 22 May 2025 16:43:37 -0600
+        Thu, 22 May 2025 15:49:43 -0700 (PDT)
+Message-ID: <57f3f9ec-41bf-4a7b-b4b2-a4dd78ad7801@linuxfoundation.org>
+Date: Thu, 22 May 2025 16:49:42 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -78,58 +79,47 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/1] Fix typo in cpu-on-off-test selftest script:
-To: Jihed Chaibi <jihed.chaibi.dev@gmail.com>, shuah@kernel.org
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kernel-mentees@lists.linux.dev
-References: <20250517011928.673585-1-jihed.chaibi.dev@gmail.com>
+Subject: Re: [PATCH v2] selftests: Add functional test for the abort file in
+ fusectl
+To: Chen Linxuan <chenlinxuan@uniontech.com>, Shuah Khan <shuah@kernel.org>,
+ Miklos Szeredi <miklos@szeredi.hu>
+Cc: zhanjun@uniontech.com, niecheng1@uniontech.com, wentao@uniontech.com,
+ Amir Goldstein <amir73il@gmail.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20250517012350.10317-2-chenlinxuan@uniontech.com>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20250517011928.673585-1-jihed.chaibi.dev@gmail.com>
+In-Reply-To: <20250517012350.10317-2-chenlinxuan@uniontech.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 5/16/25 19:19, Jihed Chaibi wrote:
-> Fix typo in hotplaggable_offline_cpus function name:
+On 5/16/25 19:23, Chen Linxuan wrote:
+> This patch add a simple functional test for the "abort" file
+> in fusectlfs (/sys/fs/fuse/connections/ID/about).
 > 
-> "hotplaggable" is replaced by "hotpluggable"
+> A simple fuse daemon is added for testing.
 > 
-> Signed-off-by: Jihed Chaibi <jihed.chaibi.dev@gmail.com>
+> Related discussion can be found in the link below.
+> 
+> Link: https://lore.kernel.org/all/CAOQ4uxjKFXOKQxPpxtS6G_nR0tpw95w0GiO68UcWg_OBhmSY=Q@mail.gmail.com/
+> Cc: Amir Goldstein <amir73il@gmail.com>
+> Signed-off-by: Chen Linxuan <chenlinxuan@uniontech.com>
 > ---
+> Changes in v2:
+> - Apply changes suggested by Amir Goldstein
+>    - Check errno
+> - Link to v1: https://lore.kernel.org/all/20250515073449.346774-2-chenlinxuan@uniontech.com/
 
-Change looks good to me. Change log should specify the
-subsusystem. Check submitting patches document and refer
-to a few change logs for this file using git log.
+Short summary should include the test name:
 
-Send v2 with a proper change log.
+selftests: filesystems: Add functional test for the abort file in fusectl
 
->   tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh b/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
-> index d5dc7e0dc..6232a46ca 100755
-> --- a/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
-> +++ b/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
-> @@ -67,7 +67,7 @@ hotpluggable_cpus()
->   	done
->   }
->   
-> -hotplaggable_offline_cpus()
-> +hotpluggable_offline_cpus()
->   {
->   	hotpluggable_cpus 0
->   }
-> @@ -151,7 +151,7 @@ offline_cpu_expect_fail()
->   
->   online_all_hot_pluggable_cpus()
->   {
-> -	for cpu in `hotplaggable_offline_cpus`; do
-> +	for cpu in `hotpluggable_offline_cpus`; do
->   		online_cpu_expect_success $cpu
->   	done
->   }
+Also if this test requires root previlege, add check for it. The rest
+looks good to me.
+
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
 thanks,
 -- Shuah
-
 
