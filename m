@@ -1,110 +1,120 @@
-Return-Path: <linux-kselftest+bounces-33526-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33527-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB77BAC168B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 May 2025 00:20:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E5DDAC1697
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 May 2025 00:21:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 257057AC604
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 May 2025 22:18:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 65FE13B9967
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 May 2025 22:21:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2801526FA56;
-	Thu, 22 May 2025 22:20:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C91FA26FD9E;
+	Thu, 22 May 2025 22:21:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K4xUTCq9"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="QLda/JMF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1BBE26B968;
-	Thu, 22 May 2025 22:20:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A184D26B96F
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 May 2025 22:21:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747952405; cv=none; b=Y0kquuKIzWS1run+edeYATE7HnzPAm6TEfhidP9yHuuYCYzJJMlD/B5aLY7t+qJiiB7FPRp25cJburLoxjMpklRjKG2aJbObOnSF+QeLI4bsGXRMGwWbuitO6EfFO2siskivDkKaJnGjuwbspiHdL4d2c+7KM+I6IxNvvPWV/4o=
+	t=1747952512; cv=none; b=RgfzubMszUDO56nutAkw0tqYOJcJU/3dzZKq9W2UhqIjMpx6LmOG/BP9JWF9sPiYegANv7z3MET9scLfs2SdJx43PXpwPUkzqUXe5Lm150Gkns2qKAiayqfvkbjaRp3dcOzXFl1G/aln32+2UTkSR3L0nMheis9PEQy3HdlDS+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747952405; c=relaxed/simple;
-	bh=PwYK2yYeLn+Oou4JsY36nhUzSuMSbtdBTpEgutARMqk=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=pDcVfhYbY9+WFb1dG6AaVgX9rrRTfbQ9qjk1MSvp6sAwPCGoyR/ONxZtb6vdM9p1M+wOyuNDeOsI1/YFNVE01Icu4rAKrXG0uNuYYAB30v7YjmVY0WFFZ5zs5GfkyGUnAz5+YwKRi8KMupxf3+ZLiGLgbWy5q1XwG79PEwbD4bE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K4xUTCq9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5C3AC4CEE4;
-	Thu, 22 May 2025 22:20:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747952404;
-	bh=PwYK2yYeLn+Oou4JsY36nhUzSuMSbtdBTpEgutARMqk=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=K4xUTCq9L/f9q5t09qgMqOhjW5B9jn5+55XxG9/AMRiIqFkYHzxhV4oFCeiUiMKPC
-	 kx3Hpcidc5gISWI/zx9uppOssfDkoeehyil5/XSUt112fb+MgMdHm76l64JoJSy6u0
-	 0w97zpTGtqzQ8iu3lqyTwVNfGMsR3nwzQLXxKLsQ9Ehfu7OsEHBjlMdwFbtNEbMdHV
-	 KuCvubzaJk1ZUolnsd1nvgojSyQ0TQcNmjLHbcU6oVYq5bkOMnrwPVwlhteE0RmpKc
-	 j3NTofxXCTBysNbk9VgJAcmoXf8sxJYBTKNwe2UCljHYBViESGbJBLTlSFPAWBl2lh
-	 oT4KAhx3sMsqQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70E2C3805D89;
-	Thu, 22 May 2025 22:20:41 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1747952512; c=relaxed/simple;
+	bh=mNIIiTjvtytH4knIqgAqMbf5Ewmg/ZFc64IhbBi3Vdk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=U2GZMLtAb4ZLDELMkjN/z6KcOvg4k2GyDT1PjidBq+6feKQ3tmBM/UdXzFFO697ofscVAYXtrhqpGSmcsA/KiHY50F3uICFGk83snJlebVwNq7tG9svplBGl97ucSe6kRqYVd2TXNQxxXG/2EOdw0t8cs3weku9RuVO3nDBPWEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=QLda/JMF; arc=none smtp.client-ip=209.85.166.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-85dac9728cdso279612639f.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 May 2025 15:21:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1747952510; x=1748557310; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2WumDBboBbqjKrIFNDMqIj4OU2U2Il7ihCN6R/RgGaE=;
+        b=QLda/JMFI3WjBb9KwasMKmMhdHr4BqIxvOc3W8ILUuCwERJIOJTJzVlKSvf+RrY88L
+         IN9ub/oy0dFYgHO2BlbiYVRMq56wTRxsBR95RAPfPzzzCsW+h0etcCPztwBRHM8KJHS5
+         2SC5k2lheCZtm2asAgL9SGJlXNGBuwkxifkOQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747952510; x=1748557310;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2WumDBboBbqjKrIFNDMqIj4OU2U2Il7ihCN6R/RgGaE=;
+        b=ci29GgXiz8zU7OxK4qBphiMR/VTToy9VRsfKscHp4bX98520QHgj0Rs+GjYjH7jJHK
+         KJQJFa6zhNhY7/2l8efxUkylSWIkfn+zs60Y3eRTEew6vJ/qG7rxMeRHol6jQj/ymRHi
+         GXGaiEua8tDG7mKuXhLDH5ydZR25cz1L9d5uI5I9wlPRe7wdxzI8LX1hCJop0bsBHwrq
+         j10E3qTGXLz2XZSr/QJTIplxdBT8IcoONbQo7T59XFLzx+mhB1y4UgseuRyC8xrrE1fI
+         euk1jyZ2rX6BkXIBM8KO27HzvZlZJzrFwyORiSUZVuDSNxX1iQoeUY1ilMaotyLVKoIN
+         YWPw==
+X-Gm-Message-State: AOJu0YyUp4xMqznNYLAQncbaXmziy38kYx1HRsOGciMAAtQam7a8zmIL
+	rWY+Trux+sQVKoOic0rqwV6FDN2suNN6l7J+7zqyUsSM4dz2GRT629Oc9rMmdhKWpm8=
+X-Gm-Gg: ASbGncsV/42JaafNbMdGs++6J5gdCB9ZcDdh5LLmN8tz+AEvi7kb8ueS7Wc6zKgs1oG
+	rdu+L8jYI8JqEUWwLX4r6Mu/zkZjppQE3wF1d3HqUWxRwyv6uhbbJskAu+uFvbrGiE5gCUCoSwY
+	5hKN+9tuLMmI3/sOsd24GdZpksS8K7qitz2+ziA4H3nq1NPWxNqT6OBiew50Y/6TTDoXVxaJMGL
+	y96cdTNYFDA/iJfDS1MYEeB3tWjv4HTq4+yn+I/IvPYPYFEJT0BmIGoZW2WIcS2kgx7IuB4oecC
+	ehPA8griBB9LrIYICrc2DkTsWa6+6wayiGuF7SK5iP2KbaLfqYDT1IpXqCX4Dg==
+X-Google-Smtp-Source: AGHT+IF6i4zqwY+JBhmaF7DvaOm1r/5AaHpcOaVaT1YyrMVNieZOKZaK6Fd3OhODW0J03U/i8rnFLA==
+X-Received: by 2002:a05:6602:c86:b0:86a:25d5:2db0 with SMTP id ca18e2360f4ac-86caf0d4272mr132154039f.4.1747952509713;
+        Thu, 22 May 2025 15:21:49 -0700 (PDT)
+Received: from [192.168.1.14] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4fbcc3b1aa5sm3462066173.50.2025.05.22.15.21.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 May 2025 15:21:49 -0700 (PDT)
+Message-ID: <195e5806-df31-4476-bf6e-4c911d261fbb@linuxfoundation.org>
+Date: Thu, 22 May 2025 16:21:48 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3 0/8] selftests/bpf: Test sockmap/sockhash
- redirection
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <174795244025.3035914.3223968241025374027.git-patchwork-notify@kernel.org>
-Date: Thu, 22 May 2025 22:20:40 +0000
-References: <20250515-selftests-sockmap-redir-v3-0-a1ea723f7e7e@rbox.co>
-In-Reply-To: <20250515-selftests-sockmap-redir-v3-0-a1ea723f7e7e@rbox.co>
-To: Michal Luczaj <mhal@rbox.co>
-Cc: andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
- daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, jakub@cloudflare.com, mrpre@163.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] [PATCH] Change pidns to pid namespace
+To: rodgepritesh@gmail.com
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250516164902.91085-1-rodgepritesh@gmail.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20250516164902.91085-1-rodgepritesh@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hello:
-
-This series was applied to bpf/bpf-next.git (master)
-by Martin KaFai Lau <martin.lau@kernel.org>:
-
-On Thu, 15 May 2025 00:15:23 +0200 you wrote:
-> John, this revision introduces one more patch: "selftests/bpf: Introduce
-> verdict programs for sockmap_redir". I've kept you cross-series Acked-by. I
-> hope it's ok.
+On 5/16/25 10:49, rodgepritesh@gmail.com wrote:
+> From: Pritesh Rodge <rodgepritesh@gmail.com>
 > 
-> Jiayuan, I haven't heard back from you regarding [*], so I've kept things
-> unchanged for now. Please let me know what you think.
+> Changed a comment in memfd_test.c , Unabbreviated pidns to pid namespace
+> for better understanding .
 > 
-> [...]
+> Signed-off-by: Pritesh Rodge <rodgepritesh@gmail.com>
+> ---
+>   tools/testing/selftests/memfd/memfd_test.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/selftests/memfd/memfd_test.c
+> index 5b993924cc3f..4e4c46246a4e 100644
+> --- a/tools/testing/selftests/memfd/memfd_test.c
+> +++ b/tools/testing/selftests/memfd/memfd_test.c
+> @@ -1359,7 +1359,7 @@ static int sysctl_nested_child(void *arg)
+>   
+>   	printf("%s nested sysctl 0\n", memfd_str);
+>   	sysctl_assert_write("0");
+> -	/* A further nested pidns works the same. */
+> +	/* A further nested pid-namespace works the same. */
+>   	pid = spawn_thread(CLONE_NEWPID, sysctl_simple_child, NULL);
+>   	join_thread(pid);
+>   
 
-Here is the summary with links:
-  - [bpf-next,v3,1/8] selftests/bpf: Support af_unix SOCK_DGRAM socket pair creation
-    https://git.kernel.org/bpf/bpf-next/c/fb1131d5e181
-  - [bpf-next,v3,2/8] selftests/bpf: Add socket_kind_to_str() to socket_helpers
-    https://git.kernel.org/bpf/bpf-next/c/d87857946ded
-  - [bpf-next,v3,3/8] selftests/bpf: Add u32()/u64() to sockmap_helpers
-    https://git.kernel.org/bpf/bpf-next/c/b57482b0fe8e
-  - [bpf-next,v3,4/8] selftests/bpf: Introduce verdict programs for sockmap_redir
-    https://git.kernel.org/bpf/bpf-next/c/f266905bb3d8
-  - [bpf-next,v3,5/8] selftests/bpf: Add selftest for sockmap/hashmap redirection
-    https://git.kernel.org/bpf/bpf-next/c/f0709263a07e
-  - [bpf-next,v3,6/8] selftests/bpf: sockmap_listen cleanup: Drop af_vsock redir tests
-    https://git.kernel.org/bpf/bpf-next/c/9266e49d608c
-  - [bpf-next,v3,7/8] selftests/bpf: sockmap_listen cleanup: Drop af_unix redir tests
-    https://git.kernel.org/bpf/bpf-next/c/f3de1cf621f7
-  - [bpf-next,v3,8/8] selftests/bpf: sockmap_listen cleanup: Drop af_inet SOCK_DGRAM redir tests
-    https://git.kernel.org/bpf/bpf-next/c/c04eeeb2af8e
+Please run get_maintainers.pl to find the complete list of recipients
+for this patch.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+thanks,
+-- Shuah
 
