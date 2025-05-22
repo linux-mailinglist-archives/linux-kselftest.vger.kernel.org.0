@@ -1,148 +1,156 @@
-Return-Path: <linux-kselftest+bounces-33509-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33510-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BB18AC0FB8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 May 2025 17:17:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F56FAC110B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 May 2025 18:30:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D67773A6BA2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 May 2025 15:17:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7EDA21C00706
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 May 2025 16:30:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A8E12980D8;
-	Thu, 22 May 2025 15:17:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37D0723BD06;
+	Thu, 22 May 2025 16:30:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="XLPHO6rK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a+6PMrVG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AD1E2980CF
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 May 2025 15:17:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F00C23814C;
+	Thu, 22 May 2025 16:30:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747927051; cv=none; b=mrddtwXbwwPM3oJgGWr1/HU+rRR7hali4eePvbxvT/NeK2F9M5yWxlbvIMU1u7ju7+0KiPP5lsLq9OcTO98JBFlQWSq6Z7uqKYumxFUifZx7zuMzQddad41FW8B/utf8qRExPb5xkasFEz01w5N220jaa33F6Cx/k2+2FrFSK1g=
+	t=1747931421; cv=none; b=jyoY7sl7aksGjApc0im9YuK6MVdGfIqRUtMK4l4TNrp9tf6zh6nMKJhgQ6JUEXVS8lQgIYomdl+n+Y3ZbamZrrzAfuhMgGEmoUe+fowqDEKg1fiOHiV8YWWeFhGaF1GxX4yvwPLcruaHFYJzveiigrWgCApgwnp97X7qABw/r+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747927051; c=relaxed/simple;
-	bh=yECD6ZktgTjXDSCFgMyFUoroNATnVYVOCITlOnNEHpc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZPmXynpsOUP4LZsaaETDV/9s1UvYpB9J6BTwYgCFOzjklQxg5DYlzlROEjkmBuTObULspqvwyIldV9M4578LzMiAJ78NEs9aAjQ3IGb59scj6WvtucRelA2K7JeQQXhcqk8TNgLSpgwjKZyI6n2qvkaKOCUttHfdotSe6ft2ViQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=XLPHO6rK; arc=none smtp.client-ip=209.85.166.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-3dc7c19a4c6so10741585ab.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 May 2025 08:17:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1747927047; x=1748531847; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IETGeB30Ud5t90dKFtz7PPdKbD88fIhHcL4tZXb4WTs=;
-        b=XLPHO6rKWko+sw+IZXc/CqddPJL2u1YVjas/lQyH6No6tywCoJ7tXRSOTQxrtLDOVH
-         LNnjbQDtVPx+89YwKtWJQHrYaKnKaB2ScLHuG13vC8AwOKipjeQg3aQt1ryQnI8tvACg
-         V3CIVdUvzcmWqoCUHxCjnID5DGrM0g0GvBXRw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747927047; x=1748531847;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IETGeB30Ud5t90dKFtz7PPdKbD88fIhHcL4tZXb4WTs=;
-        b=RfWV8EfTUqDg9miuPMrJ/p3D301CsKxkDE9QL5pa/xQHzwHVh/MnCSfCvz0i91shRc
-         QuUUmZTum4EKLxVoTdsVfk3AH5HSCEVKPGVqpG1DxQkVCldiAJzq+yxrLAbOSflXEfBT
-         bTb5AioYZi94oTDULaQfAG5kS/OMZo/UQ8T+SSOZXT2HyrIB0kTNZbJYCNeoz28l+oYp
-         kWNv1z/4ZPJusW3npDEba9TGowLdlXIBVxHWSgIwlHxirENd2GeIWBXEcV1+dbhBz7nJ
-         kmMlNjDLfIE3iRlfveIEJtuml2tDkEc/hzCodTQURSJpbV5xFhUYXXXiROAK95CexthQ
-         n6qQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUuJ3L38DjP/J1Nfci6UyTdNSEtTKB+89Ye97NfH5AahWvZM/xmov5JYyT+sFkmDhYCCOFb6tSpD+sQPv4gKSY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyizxcOQ5siCHu7Pdl0H6kuYbe646rJJwuUwiAZ09/KUK3uirVw
-	mCSJaeQdhOjoRLVrMXmSpwQ69xab3PjKH035mhqdt1Ed/ZKS+Kv/D7zXpHRyYT9mqTY=
-X-Gm-Gg: ASbGncsZNkD7katQ/UsGOdocC1oUwGB1hNSaP7uvfuogrctQpJZ2LSP7IjjlwPaK+it
-	XVLiQ4jl1E76QxyRIEUifklPKiihhNMH+ha0FwruSWznIqNAj50z8XTWN23DK9SioqSeULZgvy0
-	qDpIajXGWlYgoOMAaWnfwjZ45tRo7H1lJpfF4jhocw+vs9IIGEmDlcnhLCBftrFAhudycXYrxpY
-	rWQSm3/tcmz77OeUdQJfWJ+YwdZW5v9W6an4k3IU0lSGwAUcG916JwjvEgH/q2Rik0mtM1snexq
-	QdMtXtlM0P1H5yzC1bBmTdNDRaRw5Vxu/bV9slaTKVJF6ML2qHnuGLt6SS3x7A==
-X-Google-Smtp-Source: AGHT+IE4miy92v8IzzM9z3nzWIqMhYC4PYeZ/1gnpzPA+Nm1GpEEXc0VF3cDp3wCEis+0MsO80e57g==
-X-Received: by 2002:a05:6e02:3e06:b0:3d5:893a:93ea with SMTP id e9e14a558f8ab-3db843046c6mr236224255ab.13.1747927047461;
-        Thu, 22 May 2025 08:17:27 -0700 (PDT)
-Received: from [192.168.1.14] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3dc8ad89ecfsm5792365ab.26.2025.05.22.08.17.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 May 2025 08:17:26 -0700 (PDT)
-Message-ID: <2b7acb5f-65c7-4787-aac5-ebcec83c8ac0@linuxfoundation.org>
-Date: Thu, 22 May 2025 09:17:26 -0600
+	s=arc-20240116; t=1747931421; c=relaxed/simple;
+	bh=VvYoIAPws8oKWrSzmwyl5I2kVoNn7TSdR7yt+32hlHw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Lqh0TVTKq+qpbJ8EEzaxuPfXY0Mf+osvI/7u/2j+9LVlxhumLEfbLbnoRWfAC9DtS4DLa6XrrOaewLcZVLgo3WbWVFFN199bvWdSIcc8ZCjkdMPxjeFk32jR6gyPwCq5WiXQAR6a+BQ+2UIIRJ9COPKJHaoJ39aVJ2lq/rlQt2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a+6PMrVG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18942C4CEE4;
+	Thu, 22 May 2025 16:30:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747931420;
+	bh=VvYoIAPws8oKWrSzmwyl5I2kVoNn7TSdR7yt+32hlHw=;
+	h=From:Date:Subject:To:Cc:From;
+	b=a+6PMrVGQUrDneoBqo7DpWq3C22wqZjSn0oPDNex12hEXE6P4jNg9TL+coc9VhPv3
+	 v3H9whzPkI1a66RrzKo8eVKrvAn1vzrZPvXCSgm9vQT2vt1FkePpF7Mm6+zcf/zgd+
+	 vrbpV2fwolsZffJQ8ROfywhL/8TNw8BbBq7dOYvzdYz32LDiqpsxsdKBVaN3GXPyHP
+	 HyeFuJN5AWGXicgR03nnbHlg023X8N7Pt9VSPc+l4LrEa7RjbLObAXAOpwuz1ho0IJ
+	 9ERA+94SSEf+KX/VQGZLKC1tlKO1pPAqQPCyWEhS6hnvJzK/upDQsCeLYCgMsogeye
+	 ndC7CquUbPedQ==
+From: Mark Brown <broonie@kernel.org>
+Date: Thu, 22 May 2025 17:29:00 +0100
+Subject: [PATCH] selftests/mm: Deduplicate test names in madv_populate
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/cpufreq: Fix cpufreq basic read and update
- testcases
-To: Viresh Kumar <viresh.kumar@linaro.org>,
- Swapnil Sapkal <swapnil.sapkal@amd.com>
-Cc: rafael@kernel.org, shuah@kernel.org, gautham.shenoy@amd.com,
- narasimhan.v@amd.com, linux-pm@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20250430171433.10866-1-swapnil.sapkal@amd.com>
- <20250519075854.opnlhjlbybrkvd2k@vireshk-i7>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20250519075854.opnlhjlbybrkvd2k@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20250522-selftests-mm-madv-populate-dedupe-v1-1-fd1dedd79b4b@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAMtQL2gC/x3NQQrCMBBG4auUWTvQRCLqVcRFSP7RQNOGTFoKp
+ Xc3uPw27x2kqAlKz+Ggii1pWuYOcxkofP38AafYTXa0bnTWsGKSBm3KOXP2ceOylHXyDRwR1wJ
+ +OPFibuEa7kK9Uyok7f/H632eP7/4p4BzAAAA
+X-Change-ID: 20250521-selftests-mm-madv-populate-dedupe-95faf16c3c8f
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ Shuah Khan <shuah@kernel.org>, David Hildenbrand <david@redhat.com>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.15-dev-c25d1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3082; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=VvYoIAPws8oKWrSzmwyl5I2kVoNn7TSdR7yt+32hlHw=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBoL1EaPKKO67XVukLC02kQQKb86S1XJSrhZcwTGdkT
+ d3uiRGGJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaC9RGgAKCRAk1otyXVSH0KUEB/
+ 9nHnsZi6fuK8Z2Egd5gNc+gg3Dv5KcnWZDd4FCa5MoUrj2Js/x0OfjS9yujvOqaksSwIkyaaNdn5cN
+ Y3lHvmHA+U8CV2bkF2baU/2/E2yb8FHdOtxt/GORbzgtou0sCubqI9/7oOL5D8nIqaBQC5qEdnoPKs
+ 9U0RR0i5WBYfnlu6ZJwzwProVavVofRyOrSNTUFmPkR6C4IGU9EsXlJuTtdtCt1NV+LjBWwFw0voyN
+ S2EjvNxlsO60xMlFqkjuaHGKm6HcqcvhDatX1ZYGvYb8iix4Jw9FZNE6Hzy1/xQCZsS2DJi1FQruXZ
+ Y7Ji+ehGYg8SmjkFoiAOE3PYzOq4da
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-On 5/19/25 01:58, Viresh Kumar wrote:
-> On 30-04-25, 17:14, Swapnil Sapkal wrote:
->> In cpufreq basic selftests, one of the testcases is to read all cpufreq
->> sysfs files and print the values. This testcase assumes all the cpufreq
->> sysfs files have read permissions. However certain cpufreq sysfs files
->> (eg. stats/reset) are write only files and this testcase errors out
->> when it is not able to read the file.
->> Similarily, there is one more testcase which reads the cpufreq sysfs
->> file data and write it back to same file. This testcase also errors out
->> for sysfs files without read permission.
->> Fix these testcases by adding proper read permission checks.
+The madv_populate selftest has some repetitive code for several different
+cases that it covers, included repeated test names used in ksft_test_result()
+reports. This causes problems for automation, the test name is used to both
+track the test between runs and distinguish between multiple tests within
+the same run. Fix this by tweaking the messages with duplication to be more
+specific about the contexts they're in.
 
-Can you share how you ran the test?
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/mm/madv_populate.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
->>
->> Reported-by: Narasimhan V <narasimhan.v@amd.com>
->> Signed-off-by: Swapnil Sapkal <swapnil.sapkal@amd.com>
->> ---
->>   tools/testing/selftests/cpufreq/cpufreq.sh | 15 +++++++++++----
->>   1 file changed, 11 insertions(+), 4 deletions(-)
->>
->> diff --git a/tools/testing/selftests/cpufreq/cpufreq.sh b/tools/testing/selftests/cpufreq/cpufreq.sh
->> index e350c521b467..3484fa34e8d8 100755
->> --- a/tools/testing/selftests/cpufreq/cpufreq.sh
->> +++ b/tools/testing/selftests/cpufreq/cpufreq.sh
->> @@ -52,7 +52,14 @@ read_cpufreq_files_in_dir()
->>   	for file in $files; do
->>   		if [ -f $1/$file ]; then
->>   			printf "$file:"
->> -			cat $1/$file
->> +			#file is readable ?
->> +			local rfile=$(ls -l $1/$file | awk '$1 ~ /^.*r.*/ { print $NF; }')
->> +
->> +			if [ ! -z $rfile ]; then
->> +				cat $1/$file
->> +			else
->> +				printf "$file is not readable\n"
->> +			fi
-> 
-> What about:
-> 
-> if [ -r $1/$file ]; then
->      cat $1/$file
-> else
->      printf "$file is not readable\n"
-> fi
-> 
-> 
+diff --git a/tools/testing/selftests/mm/madv_populate.c b/tools/testing/selftests/mm/madv_populate.c
+index ef7d911da13e..b6fabd5c27ed 100644
+--- a/tools/testing/selftests/mm/madv_populate.c
++++ b/tools/testing/selftests/mm/madv_populate.c
+@@ -172,12 +172,12 @@ static void test_populate_read(void)
+ 	if (addr == MAP_FAILED)
+ 		ksft_exit_fail_msg("mmap failed\n");
+ 	ksft_test_result(range_is_not_populated(addr, SIZE),
+-			 "range initially not populated\n");
++			 "read range initially not populated\n");
+ 
+ 	ret = madvise(addr, SIZE, MADV_POPULATE_READ);
+ 	ksft_test_result(!ret, "MADV_POPULATE_READ\n");
+ 	ksft_test_result(range_is_populated(addr, SIZE),
+-			 "range is populated\n");
++			 "read range is populated\n");
+ 
+ 	munmap(addr, SIZE);
+ }
+@@ -194,12 +194,12 @@ static void test_populate_write(void)
+ 	if (addr == MAP_FAILED)
+ 		ksft_exit_fail_msg("mmap failed\n");
+ 	ksft_test_result(range_is_not_populated(addr, SIZE),
+-			 "range initially not populated\n");
++			 "write range initially not populated\n");
+ 
+ 	ret = madvise(addr, SIZE, MADV_POPULATE_WRITE);
+ 	ksft_test_result(!ret, "MADV_POPULATE_WRITE\n");
+ 	ksft_test_result(range_is_populated(addr, SIZE),
+-			 "range is populated\n");
++			 "write range is populated\n");
+ 
+ 	munmap(addr, SIZE);
+ }
+@@ -247,19 +247,19 @@ static void test_softdirty(void)
+ 	/* Clear any softdirty bits. */
+ 	clear_softdirty();
+ 	ksft_test_result(range_is_not_softdirty(addr, SIZE),
+-			 "range is not softdirty\n");
++			 "cleared range is not softdirty\n");
+ 
+ 	/* Populating READ should set softdirty. */
+ 	ret = madvise(addr, SIZE, MADV_POPULATE_READ);
+-	ksft_test_result(!ret, "MADV_POPULATE_READ\n");
++	ksft_test_result(!ret, "softdirty MADV_POPULATE_READ\n");
+ 	ksft_test_result(range_is_not_softdirty(addr, SIZE),
+-			 "range is not softdirty\n");
++			 "range is not softdirty after MADV_POPULATE_READ\n");
+ 
+ 	/* Populating WRITE should set softdirty. */
+ 	ret = madvise(addr, SIZE, MADV_POPULATE_WRITE);
+-	ksft_test_result(!ret, "MADV_POPULATE_WRITE\n");
++	ksft_test_result(!ret, "softdirty MADV_POPULATE_WRITE\n");
+ 	ksft_test_result(range_is_softdirty(addr, SIZE),
+-			 "range is softdirty\n");
++			 "range is softdirty after MADV_POPULATE_WRITE \n");
+ 
+ 	munmap(addr, SIZE);
+ }
 
-thanks,
--- Shuah
+---
+base-commit: a5806cd506af5a7c19bcd596e4708b5c464bfd21
+change-id: 20250521-selftests-mm-madv-populate-dedupe-95faf16c3c8f
+
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
+
 
