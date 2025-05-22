@@ -1,79 +1,77 @@
-Return-Path: <linux-kselftest+bounces-33496-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33497-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36829AC071F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 May 2025 10:29:57 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC57CAC0742
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 May 2025 10:37:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 73FBF9E1D80
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 May 2025 08:29:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 22F787B7B16
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 May 2025 08:36:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53104265CD3;
-	Thu, 22 May 2025 08:29:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 323CA26A0D6;
+	Thu, 22 May 2025 08:37:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lrHNM0r2"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="ZcYgRtk7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2051.outbound.protection.outlook.com [40.107.220.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F6FA149C6F;
-	Thu, 22 May 2025 08:29:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747902592; cv=none; b=Si9yTiyMVI8EXVxUvVn3gs3+miSqYseRo34QQADHEpB4f963ZbHhKlLUyrjuk6mfRuFB+zkiAXdkOU8VwgvROex1EbNO6jED2fMc6p3EdDsjr6IXtZgMjYDZQZov6ZsX5JmQeUBsSzFub4YvhmQtfVh3trk9zxoM3NqqgpB6Yyo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747902592; c=relaxed/simple;
-	bh=EI6iGpDZ/vQcd4w9J8oLLbHPKEuZtpcIMzOkLo3pq64=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mLub3zMZukv5+TVwOC3LBnrcW6RhG4lsdjLFH3hSXh3M/fEQltxXQmkUx7S02hAqyAPD8MJMbp1RD5umRbr2Wvk8TOEgTFb2T0Fp2YGXwr2g7DUKsm5+7gmkkF8yBZH3TZnN5eu7FR1rcX3zwpAEKB5LEbEgwNlU5D9d45B/tdE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lrHNM0r2; arc=none smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-601f1914993so6875297a12.0;
-        Thu, 22 May 2025 01:29:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747902589; x=1748507389; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JwcG1HfHxOaR8Nuyw/gar5ZU0L/jTzPHaK9H13HupME=;
-        b=lrHNM0r2Mx7qaaaA/zN75XKe4sv8de4AGQJPfycAB3rxLSpPZE7FFk8TfvKUgBgoe3
-         YgdckAjNgCKDV/ESVs/T0OPvrDrI9cU4qc5V4Ekv/aYa1dzjBo+OvcOjotv2Fu/3jEHZ
-         IOOMaP+U1xNY5OH4NWHuwER4X1DEnY1Liw9ZWTn9ql0lrG3W/LoIYArSH8YTL9++Z2m7
-         NjtFWxb+zayKWzeeNIzyl6X4bQ3dY0+m4hj8tcaNNmVT1XfJ1XJmJbYaYobs7q++1quv
-         AJydL01ismmVQ1stKGZkWB1irEtHzY2AV4COUVyyIsAMQYbsLLV6o8SHKXNDk+lrX4FF
-         7FFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747902589; x=1748507389;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JwcG1HfHxOaR8Nuyw/gar5ZU0L/jTzPHaK9H13HupME=;
-        b=UmZvfb5eLJe6vWFbLDbcCbOW2uMQKEjYMUykL/b4tDjdjwfyMwVm2RweS7PSZeSOPo
-         0AS3QSbRC5gNBX2SFua2+g+CBY1Sw30yfv5+/q8mm4tHwW7KjiCLkl930IHXEBx0nwi0
-         2uN86F+mDYpkCzsUsjviZjvuVP67Q5yhLICKMJlrOq9iQOG0bkHkgxeMjOfcWVk2jGlN
-         anIo6BHdPPFZxQYSqEzHzjZ7PUaPesU0dGECrMp8pP+pGH2MzGLaEm8TLZuXzbnq0Ygt
-         6tLv35hUg+/2QO/MuD4Tspl54Gdu9SQ594t0C4V7Y5jnFmwxxZDUI7iWS/JmtDKuru2l
-         Z6VQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVNCdZt8gn1HI4NzfNJ1UWCUnva+iAn5pgauHf/ZxJQR4p8Z6BfK5AeHqMPFeD/npXjMiin3FcRMyDBOfSSeJ2C@vger.kernel.org, AJvYcCXdDyIsWtHpqHdNdzFflu+pNx3kM4QX1dR8+6lpMr2fATjQ+PshKheg70HCPSpKhw6Gs45TQy0pPAfTpp0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwcvGKe+5azcKvZ2YgD4JRmzrNWDeywCKUwXph01Dsh2DksoEvF
-	+vcrWbbH5iwnL6lAdwa3iWqFaOGXDbVhesJfG7/vNwLgl2WG6XVRKOFo
-X-Gm-Gg: ASbGncs6hlqWmnJFpGDHJiiQZxXWMadjbq9LqJl99Sgfs8rFT8umKsHhmni7wFN+Pem
-	Dw+FMm/o8zbFvn7wa+Q0xvLvn3c7ce5HWhP6e9smbM8UYevA1DjD3b72+yKe0Ft8t/AHBA8zawo
-	iVUaXSQpXJaIV56aEhKzQ341FL71IribnvbfT305KFvZ81kSOzudT2xZwmXnCQB8FjG7bbQFyRw
-	XiAcM5ApzogyKntoZAqwMdY8yVrAkmE5KcDYjPtB4mJ1WQb2k2lHk4n4HJP5UQaIafqsgf0hjN5
-	0/SZpSp5JkBe17ZzG/eT4hkQOKiMCo9dM7OpeXyPViAEIjTpqAjfzgra5RGzE62T
-X-Google-Smtp-Source: AGHT+IHmBpSiEsaipefyb2BI/VSpVRuTf2kD6pmT43qZJsIDgTDNcfucjr30BL1XPtEUnszdDiTyyg==
-X-Received: by 2002:a17:906:3890:b0:ad5:501a:b3c6 with SMTP id a640c23a62f3a-ad5501abddamr1443443966b.32.1747902588434;
-        Thu, 22 May 2025 01:29:48 -0700 (PDT)
-Received: from ?IPV6:2620:10d:c096:325::3f6? ([2620:10d:c092:600::1:9142])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad52d04b08bsm1053154166b.13.2025.05.22.01.29.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 May 2025 01:29:47 -0700 (PDT)
-Message-ID: <dd139cb5-3554-4b65-b886-fe648f2413d3@gmail.com>
-Date: Thu, 22 May 2025 09:31:04 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 911C7269D1B;
+	Thu, 22 May 2025 08:37:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1747903048; cv=fail; b=EM7+JgJIe0qAEOotuz0ksdJgbF/ZfsDpkTXot4tCbDP9APQMWhGjeH9IbMtc98j5EIatRtTewCU1+N9BURvSGhr97wyirtWz0JjEVgtEIosYZ/OgvRCCFWrRED70L935Vbr18uv0+IkvDlgJBUUptnP57GIyDvBjB24LUdOLzKY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1747903048; c=relaxed/simple;
+	bh=iQRcpPbNodHSFoSugFmmpo9uAoV7Lp2cao492WOrtps=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=ep/usY4Mt5MTwiGN4L3hCInA1ScPk4gIKKzwKhmaayQ5+aDldH+8yVDiBBWDd8zXXPPyy8o7GyzRCmlHp9Zkg1AscWA1BsEMruT275Ccyi5U5FXJCFYoVHjbpfotGOUzQxw0Q+oUfbEM4AisGArB4c7h5A/vzpcjaIjVJrtA+X8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=ZcYgRtk7; arc=fail smtp.client-ip=40.107.220.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Y/uiQ9hgUn0uwcfSDnEpKL+tipt1RjlDdOxNvz09+iwKc1aodnehMiExieD02ko2foeS2RMCeFjtdgAoCP+y5egMhkTh3O4WGOkyTuGlTitROQFe2U2pYNZd1re4faFUdPvwXAkH1SxYfMTbFbO4s2q+9gQYHC+tzZL6KkQECsehAjUbVKIgojlnbbETI9x1EICPqz3g3weEPptnerFVKHpLVXIs9XrZyndKGW9ANMn6rQGyKU73atIs1wlCmWnl4ZpwzbAqm4TdQ7PK7UBBUoP5/6Mb4p+NsSYRcKLs6MLOoQ2NbUAEesT6g5yh4UN0cEzONbZ0yFnMhkiW4RFUIQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2O9oy36g3JGmz4VpP/hX9S121errp4ZyvLKjzOfZgKs=;
+ b=kY9ajLPjd2vAZ7wSfi1DhapXvxEnx1/C4gK7gdc1TpXLdDiHzOJY58bjwqfv29RWr0AbRqA6FcgnzETQuWss7uWllD7I0rFeCoFGdw/2Y/8f0mIBcBdl5INW7zZHWixxK1WPqdJ2pTuB0bu7lg8Ye2nEf/VaY9PYQyA27IRz8Dc90gNcPEaZ5qwz5mgYOhmcPOEAqQMw4HkmlpTQE3ig+0+TQU8DSQD7t0K0NMUULl3TlttnSwzTcdssiE776FWluscKjmgSvAUuCRbKqOdR4vlsVReqmRRrGVZnnMmcelSULjDA1FEcSK1MCsHCBOLsrQM+FX6PEZCiMmgQ+oER9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linaro.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2O9oy36g3JGmz4VpP/hX9S121errp4ZyvLKjzOfZgKs=;
+ b=ZcYgRtk7IKmATwa1irjwF5doDeyD103vlFM+MFBGtJwtUIH0PTZxgVmjFtzKTf3VN417MRU9bpbCx+WA7JMW6p2ER3mrKoFI3uhM10cWXEuyCgciOz9XJCtZjjXesRa7DKyQBuiAX3i1Lrwx+VLEYJSLUjG9R/nv5So9sd1L8Lg=
+Received: from MN2PR02CA0015.namprd02.prod.outlook.com (2603:10b6:208:fc::28)
+ by PH7PR12MB6738.namprd12.prod.outlook.com (2603:10b6:510:1a9::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8722.31; Thu, 22 May
+ 2025 08:37:22 +0000
+Received: from BL02EPF0002992C.namprd02.prod.outlook.com
+ (2603:10b6:208:fc:cafe::79) by MN2PR02CA0015.outlook.office365.com
+ (2603:10b6:208:fc::28) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8769.18 via Frontend Transport; Thu,
+ 22 May 2025 08:37:21 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL02EPF0002992C.mail.protection.outlook.com (10.167.249.57) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8769.18 via Frontend Transport; Thu, 22 May 2025 08:37:21 +0000
+Received: from [10.85.43.148] (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 22 May
+ 2025 03:37:15 -0500
+Message-ID: <8a2149ca-a0fe-4b40-8fd4-61a5bf57c8b6@amd.com>
+Date: Thu, 22 May 2025 14:07:12 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,98 +79,130 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 1/3] net: devmem: support single IOV with sendmsg
-To: Stanislav Fomichev <stfomichev@gmail.com>,
- Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, viro@zeniv.linux.org.uk,
- horms@kernel.org, andrew+netdev@lunn.ch, shuah@kernel.org, sagi@grimberg.me,
- willemb@google.com, jdamato@fastly.com, kaiyuanz@google.com,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20250520203044.2689904-1-stfomichev@gmail.com>
- <CAHS8izOTWF9PO9N6ZamJ0xSCTOojXV+LfYm+5B5b8Ad1MA0QpA@mail.gmail.com>
- <aC4OgpSHKf51wQS-@mini-arch>
+Subject: Re: [PATCH] selftests/cpufreq: Fix cpufreq basic read and update
+ testcases
+To: Viresh Kumar <viresh.kumar@linaro.org>
+CC: <rafael@kernel.org>, <shuah@kernel.org>, <gautham.shenoy@amd.com>,
+	<narasimhan.v@amd.com>, <linux-pm@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20250430171433.10866-1-swapnil.sapkal@amd.com>
+ <20250519075854.opnlhjlbybrkvd2k@vireshk-i7>
 Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <aC4OgpSHKf51wQS-@mini-arch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From: "Sapkal, Swapnil" <swapnil.sapkal@amd.com>
+In-Reply-To: <20250519075854.opnlhjlbybrkvd2k@vireshk-i7>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF0002992C:EE_|PH7PR12MB6738:EE_
+X-MS-Office365-Filtering-Correlation-Id: 176cf0d1-67f1-46d9-dd8c-08dd990bdeb2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|82310400026|1800799024|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?OHh0bEtQVkZzdWNkVkp6OTVsQ2o5ei9jUEtCTnk3ZmMwaHpiSEc5S3pFYzhw?=
+ =?utf-8?B?TWpwUkh6OGZXZ29kQXFydFVWaWlUN3NxZTJwREllYUNXeVZ1aFJnUE9NUnh0?=
+ =?utf-8?B?c3B2b3h4UGY2MmVjejlaN01TOGpOdHpDSE0zckNFNkFUaDJKc2VCekJONVpo?=
+ =?utf-8?B?OXNtNm9ZTnBNamhXN0FFMkFaQlZEUFpNSXN4UnpuaXM1UWp0WHpkWlV0Yk03?=
+ =?utf-8?B?Y2lHOHZNV2RWcHMvM0VHY04yZ2lLb04rT2FjZTlSd0xieTRWTnY5QWYwT1JL?=
+ =?utf-8?B?WTVQbTBlRWRCOGhBTTRhYkNTUjYyR3dtZHFpaVdIRVQ3RElsMWtDQlVQMTgw?=
+ =?utf-8?B?cmpWN1Zoc1o1ZFNKdTBFSTMxSHJ0KzI4Yk9vK2gzZmV4UTJzQUI3MXN0TURV?=
+ =?utf-8?B?b09MbG5Pd2xVdVZGUEVlSW0yR3cvUkZmUkliKys1ZEhkUzdsNGVZbGV0NVNP?=
+ =?utf-8?B?RTFtbm04YnBpYW5Ya2xDTWFqU0liUFI3QklCTUxtNEIvam9RM0xlcFRwazdY?=
+ =?utf-8?B?a2QzdWxPOXJDZWI2a2k2UzU1aW82OUxMRTdIdG5ZVEM4aHI4NUtnaXlIWVRR?=
+ =?utf-8?B?R3FZcVpZd015OVpkbkdiL3hmbTE4RVJwS0NUL2xiSWI1dFo3WTRsVjBqcVpt?=
+ =?utf-8?B?b0xaYWpQOCtxN2c0bk1UekM0Uko2dzU4SmZrVzVpUms5enlLRjBITnkybkdS?=
+ =?utf-8?B?MkVUWjlnMFVPWm43c1JLTUwzb0VaWFR2RFpteitPS1AweXZEZytOTWkwSXBo?=
+ =?utf-8?B?My9vUjVoVTZqU3A0NlBBdGIzUFJ5YWRnWVJsMjhtdWZBdkxWakIvNFc0UkdI?=
+ =?utf-8?B?dlM2VmVSNHVENXRzVWl6cERTTzJqbmtUeTRsQ2h4TE1zUTVaRDZGa3Z4bGpz?=
+ =?utf-8?B?SFFoc0lJN2JONVgwMXdvdUkzdmFtUk9FMm50U1VuZm0vamZUalZhQnV2OHEw?=
+ =?utf-8?B?VnFwWjlJM0gwMmlxZGx4aG9VNi9WcS9wVzB1SWVsUDZSelpMTUxEQVlqQjd6?=
+ =?utf-8?B?VGdqVmhlcEgrMmxuSUQyTGNOME5qYlM4UFcrRVowYlM3KytxM0hKUFJtUFRk?=
+ =?utf-8?B?RnZrZVlLRzhJdm96T0Z2S0tXWFJ4WmtmOU9NZGlZRXNabVM4dDhsSzNSQ1VQ?=
+ =?utf-8?B?Z0xqN2xKUlA1c1AwblY2MkJEZW5zOGsrUXovRnBZbnBYSjM2UzZudGt0bjc5?=
+ =?utf-8?B?M2lyTm5tUmhTZlJLSytGKysxTlJ4cTVBMXl1STBWcGl3NUtQT0RONklKc3Jt?=
+ =?utf-8?B?VWZ2Yit3RkFySVpoR3BCb05sTmZXM25ZVU16V09LdmVHdlRkcUpBRVkrMjV3?=
+ =?utf-8?B?bUx2alhNd0ljRFlNM2NrdHVjQXRPdmVITi9FWXN0ZjlNYTVaNlNUVzdPa1NB?=
+ =?utf-8?B?L3ZBK0pEOG14ZGZRd2c5cmo0WTNrS05PNkIwcGRZbjRTYUpWaWxuODRIR1lP?=
+ =?utf-8?B?bDBybGUzTVJTUGRlVGtLK1h4Ly83WUsraHBBNmExK2xIbXVnYWZJNC8xN2FU?=
+ =?utf-8?B?NzNwVWZmS3RaUmZJcy9rZnU5VGtVazBmTlEzbUF0MmxlQWVWUUtqMzRLVkpZ?=
+ =?utf-8?B?dTJGUVo2OU45NDlQOVd0R1NrQVlQSGkzczRZTnYyWnZkVEtHMW1ENnBwb1d3?=
+ =?utf-8?B?czFLNFltMnRZRjZ6dzgwMVl6QmYvTlpHOUZpWDgxRzkvbStXR2E0eW1EZEdL?=
+ =?utf-8?B?eW1IRmROcnJyay9CTk9DQzRYNEVicU5hMkJRbEhYR1dBbVc4SzZQMEs0QVgx?=
+ =?utf-8?B?OGs2NWJRVW8xT0U4SHpQZzE4RUM2dDB1WGVQL3NZQ01uREIvM3psQlhtUzVq?=
+ =?utf-8?B?d2pNSlhHZUl6VXpIdGY4SjFKSHJuOFgwYXQyME9yS0JRRGtWd0ZZVzBhaVlO?=
+ =?utf-8?B?MkRoc2RqMDZxcDBaSFJSempURVc5Yk4rSEw4SDNtSXdkM0hqTEVxS1ljTVBP?=
+ =?utf-8?B?NzNQREFrOFJsVGtkLzNUUElkcVlEd29vaUhmU2RDYit1aHk3SHdKcHdGbTk0?=
+ =?utf-8?B?cXI3bkVHQWVmNkRRQ3BmVi9wbmQ3cFl5cmxSKzhicEwwakw1MzVXMmNxRnpJ?=
+ =?utf-8?Q?fzJhDn?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(1800799024)(376014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2025 08:37:21.5992
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 176cf0d1-67f1-46d9-dd8c-08dd990bdeb2
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL02EPF0002992C.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6738
 
-On 5/21/25 18:33, Stanislav Fomichev wrote:
-> On 05/21, Mina Almasry wrote:
->> On Tue, May 20, 2025 at 1:30 PM Stanislav Fomichev <stfomichev@gmail.com> wrote:
->>>
->>> sendmsg() with a single iov becomes ITER_UBUF, sendmsg() with multiple
->>> iovs becomes ITER_IOVEC. iter_iov_len does not return correct
->>> value for UBUF, so teach to treat UBUF differently.
->>>
->>> Cc: Al Viro <viro@zeniv.linux.org.uk>
->>> Cc: Pavel Begunkov <asml.silence@gmail.com>
->>> Cc: Mina Almasry <almasrymina@google.com>
->>> Fixes: bd61848900bf ("net: devmem: Implement TX path")
->>> Signed-off-by: Stanislav Fomichev <stfomichev@gmail.com>
->>> ---
->>>   include/linux/uio.h | 8 +++++++-
->>>   net/core/datagram.c | 3 ++-
->>>   2 files changed, 9 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/include/linux/uio.h b/include/linux/uio.h
->>> index 49ece9e1888f..393d0622cc28 100644
->>> --- a/include/linux/uio.h
->>> +++ b/include/linux/uio.h
->>> @@ -99,7 +99,13 @@ static inline const struct iovec *iter_iov(const struct iov_iter *iter)
->>>   }
->>>
->>>   #define iter_iov_addr(iter)    (iter_iov(iter)->iov_base + (iter)->iov_offset)
->>> -#define iter_iov_len(iter)     (iter_iov(iter)->iov_len - (iter)->iov_offset)
->>> +
->>> +static inline size_t iter_iov_len(const struct iov_iter *i)
->>> +{
->>> +       if (i->iter_type == ITER_UBUF)
->>> +               return i->count;
->>> +       return iter_iov(i)->iov_len - i->iov_offset;
->>> +}
->>>
->>
->> This change looks good to me from devmem perspective, but aren't you
->> potentially breaking all these existing callers to iter_iov_len?
->>
->> ackc -i iter_iov_len
->> fs/read_write.c
->> 846:                                            iter_iov_len(iter), ppos);
->> 849:                                            iter_iov_len(iter), ppos);
->> 858:            if (nr != iter_iov_len(iter))
->>
->> mm/madvise.c
->> 1808:           size_t len_in = iter_iov_len(iter);
->> 1838:           iov_iter_advance(iter, iter_iov_len(iter));
->>
->> io_uring/rw.c
->> 710:                    len = iter_iov_len(iter);
->>
->> Or are you confident this change is compatible with these callers for
->> some reason?
->   
-> Pavel did go over all callers, see:
-> https://lore.kernel.org/netdev/7f06216e-1e66-433e-a247-2445dac22498@gmail.com/
+Hi Viresh,
 
-Yes, the patch should work
-
-Reviewed-by: Pavel Begunkov <asml.silence@gmail.com>
-
+On 5/19/2025 1:28 PM, Viresh Kumar wrote:
+> On 30-04-25, 17:14, Swapnil Sapkal wrote:
+>> In cpufreq basic selftests, one of the testcases is to read all cpufreq
+>> sysfs files and print the values. This testcase assumes all the cpufreq
+>> sysfs files have read permissions. However certain cpufreq sysfs files
+>> (eg. stats/reset) are write only files and this testcase errors out
+>> when it is not able to read the file.
+>> Similarily, there is one more testcase which reads the cpufreq sysfs
+>> file data and write it back to same file. This testcase also errors out
+>> for sysfs files without read permission.
+>> Fix these testcases by adding proper read permission checks.
+>>
+>> Reported-by: Narasimhan V <narasimhan.v@amd.com>
+>> Signed-off-by: Swapnil Sapkal <swapnil.sapkal@amd.com>
+>> ---
+>>   tools/testing/selftests/cpufreq/cpufreq.sh | 15 +++++++++++----
+>>   1 file changed, 11 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/cpufreq/cpufreq.sh b/tools/testing/selftests/cpufreq/cpufreq.sh
+>> index e350c521b467..3484fa34e8d8 100755
+>> --- a/tools/testing/selftests/cpufreq/cpufreq.sh
+>> +++ b/tools/testing/selftests/cpufreq/cpufreq.sh
+>> @@ -52,7 +52,14 @@ read_cpufreq_files_in_dir()
+>>   	for file in $files; do
+>>   		if [ -f $1/$file ]; then
+>>   			printf "$file:"
+>> -			cat $1/$file
+>> +			#file is readable ?
+>> +			local rfile=$(ls -l $1/$file | awk '$1 ~ /^.*r.*/ { print $NF; }')
+>> +
+>> +			if [ ! -z $rfile ]; then
+>> +				cat $1/$file
+>> +			else
+>> +				printf "$file is not readable\n"
+>> +			fi
 > 
->> Maybe better to handle this locally in zerocopy_fill_skb_from_devmem,
->> and then follow up with a more ambitious change that streamlines how
->> all the iters behave.
+> What about:
 > 
-> Yes, I can definitely do that, but it seems a bit strange that the
-> callers need to distinguish between IOVEC and UBUF (which is a 1-entry
-> IOVEC), so having working iter_iov_len seems a bit cleaner.
+> if [ -r $1/$file ]; then
+>      cat $1/$file
+> else
+>      printf "$file is not readable\n"
+> fi
+> 
+> 
 
-It might be a good idea to rename it at some point to highlight that
-it also works with ubufs (but not as a part of this fix).
+Initially I tried the same, but it does not work properly with the root user.
 
--- 
-Pavel Begunkov
-
+--
+Thanks and Regards,
+Swapnil
 
