@@ -1,75 +1,75 @@
-Return-Path: <linux-kselftest+bounces-33524-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33525-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80DAAAC167A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 May 2025 00:14:28 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3409CAC168A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 May 2025 00:19:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B82361C02C94
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 May 2025 22:14:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CE1D57A84D6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 May 2025 22:18:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B87626B95D;
-	Thu, 22 May 2025 22:14:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7E7A26FA42;
+	Thu, 22 May 2025 22:19:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="YRc4X0pM"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="WggiKPvr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
+Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4950B26B96C
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 May 2025 22:14:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB44B26FA6E
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 May 2025 22:19:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747952047; cv=none; b=SZTpTo3epTmgZLYAQF8AkL0lVA3Hjx2Tti2jLgFRp5r9VHOkNUk75JgBQqkcIDtO+ezbTdlsedH7TldAQ6MH4w00vLExZCU3v0WO6/nTr1H4QP0ugIAQBT4wK9JRDzmZm0FRGHXbknhuVq/WW1QEKPSnDZYIgxWrrO1EVPcT5Rg=
+	t=1747952366; cv=none; b=p0EC6oiVUS6CJLidytOrutYkk3qGQNbfQfmZw52Z8ZTd2JhR27TLa/DJdooG4kuWnDGVa6XpI5LPFwAkxw/oU0spFsIR4MXBclg1yFExe5hklLjyV52yLGviHuxl3u0QcfDhF3G2IK/nBmfseZjVe+HWZuf9WBTKe+kR6ZjuP0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747952047; c=relaxed/simple;
-	bh=jQxZc8Y032ak08Q0emttPc7dQ2u6AroqvGo538WQ7Tc=;
+	s=arc-20240116; t=1747952366; c=relaxed/simple;
+	bh=7NRYbwbYrh3x1KViQ1U6RIE08C8vCKcJ8G+srM/U/p8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gKe3CuzE+hEzcrQ2swzWuEz0iePMHak05fZwgNPHRIOkZ96aO06a4YoywDMVQF5ulSCp8GGDfHeYaIp5QSlN8wrzI7fUqCAci6JpSIRO9wXDr+T8Uu7ADgU9zGj8AjXKd3gvAsFOxR/7hUSd46wmgWnBjkM6MIsuB+aNXiP3mXE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=YRc4X0pM; arc=none smtp.client-ip=209.85.166.176
+	 In-Reply-To:Content-Type; b=LrJLBvBm23Mpr2m6mGd4EdiAzYbIz7kGfEuMkonGHv9JsAQf48mUW/51oESqtnvcK3255ZBQ7d7QJC/Yfi2gbATkHYlmUZWlgJqLqcp9/dLom2957G38+vQGarG71ugafBZ5vowjOlI4PkIvfLCThgjTcvBsVyc71jyhDOzYA+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=WggiKPvr; arc=none smtp.client-ip=209.85.166.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-3da73df6c4eso67424295ab.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 May 2025 15:14:05 -0700 (PDT)
+Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-3da73998419so24484315ab.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 May 2025 15:19:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1747952044; x=1748556844; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1747952364; x=1748557164; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=5J4a3zUt5UqnI9NTo1FnvOQZ+RKzfc651OJ0pMNk2Gs=;
-        b=YRc4X0pMfPYUWM1bs4/3+Q4/UXN1G1BG9c58s0XSuE2Tj/D4eSEhk+n0IZ7eKTw8mw
-         7w1lSKvLswgLZdnWm4pt4gS4VgRpJkzq24KPKzLA0beCXKAhtJasey3a+yvr6PgWJEY+
-         4xMazALxFNZ2njUdhYPOQPJDU5274rspYIo6Q=
+        bh=T2BBhyB5BSe8xiN4xkcpWffnGhtL3C+c766u9Ynb8BA=;
+        b=WggiKPvr0tej5qduo7EGEx5EiOEToql8Z6USOF4LOnTBht3mjVPm5TR0Ug6yYxV7zX
+         e3FUYoOJ/LsuMKFBSAZGmJvaRtqjHmFFnGmZuJ9/Zq42X+7+vpQx2c6KTWWV63HfRBig
+         4PPAU7rjPapl7H9Txq9hZ1B3PUW+at8GShKsI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747952044; x=1748556844;
+        d=1e100.net; s=20230601; t=1747952364; x=1748557164;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5J4a3zUt5UqnI9NTo1FnvOQZ+RKzfc651OJ0pMNk2Gs=;
-        b=cPStml8RFRh6kVr3DH2BeZN6+4iL0XpUP964l+52yNfxJN/J8xsuHuDOU/Tjbfa6XF
-         CjaCzZB4dr4qD9t741I8k12Wyk3P1dUOk/4EMcTiHvI8MVCoMXe0SsChAyv4oTsFltrD
-         O5fyMUyIuOYFRYR6csmf6VApcRP95Yo//IGVVzEUm3GyCQlOCBxgNxn3VHFddDdASmjx
-         Gk1HcN+h6Clgn8bu7UrhYUPWQRS0iojl5Ccscj969oZ9+8UHYTxJrRF0lXGSnbE3Z2ZS
-         1nQLKek5SguKo4r1EI3YEg0JoM9fF27X29AMVmpvGRy+kCyNWqkheoW2y3ytCNzCQFti
-         NIlQ==
-X-Gm-Message-State: AOJu0YyoOv68UwBj4Ef9rJVG4J61r4hzU5+r+xDczXcBjoXm60k9FG5O
-	RBHwP+JbUuMIHKVAngk+bwlICU+gnW60oMtNcbfSJ7vjr6GWBPdiufbSR5mDcT+/GJ0=
-X-Gm-Gg: ASbGncse0eFaBVUNIzacPO7dMjPVjPisJYyFMBGXtWeXnTuRBdyvqdRuruL5i8xFR+B
-	gyrmxgT1cN8RzQ1BQw+V4IDwHouxjZxbDsZf4u/xQ7f3H3/cF6sJlEsxukWIrS8C0sCes3EgBOg
-	gmMw6MvOa1OiNzK8yWzact9+WsHA1v5ul9zU+W52MetcykFWzf+X1oQmzPtAkgqSyZwgN4SjvtI
-	/ec4KpbLeTdaGGjUHN44KB9BpE4n0r4fgW7uHT+gazn+zc8j+4XuMNXPaIGrH3fuii1SQHY+GBE
-	jOP2eRv6gDFNC3vedaCIy6CKx8r+pi303p6i9YFNg092C9tDyIJUmP/kakmkXKf6+Y5urxXF
-X-Google-Smtp-Source: AGHT+IHZwWolaO+Fli0MkyNXJU+s8LgK5LKgl/nzRVICPjKpFxXTDptFKvju9PZib6E6vi0/FV/j5w==
-X-Received: by 2002:a05:6e02:3b89:b0:3ce:8ed9:ca94 with SMTP id e9e14a558f8ab-3db84321c68mr281912535ab.14.1747952044306;
-        Thu, 22 May 2025 15:14:04 -0700 (PDT)
+        bh=T2BBhyB5BSe8xiN4xkcpWffnGhtL3C+c766u9Ynb8BA=;
+        b=aLvshwVQvGFLUOt5ouHqyIA0kr8XnkzpWTKUZWKzRocW4P1Vn/0iGeqfg7BBJN+PtJ
+         RGUeLNYKmaonQdizpkkMlLa/3YWEBnfCBT2vhHFrsNh44wKSc13sCsp+xvgXeG2+pq0T
+         m19E91yLAf73cRcdoT2dkTEqe1Ts1zU59uhKuf3BcRbojpjBzFDoS3M/SM55P1aNZJ17
+         nO5jeiEO8uVtO/OrCeu6TJeGphLdlcCuha/ut2aLeCYCkg2Qs3xPwHJ2dCqbK4yAlOeJ
+         vgO55AdNJiB0mhevcgiY5XoGI8uZlctZxvrFBJGCoLdWsGJrFn+YI679D9cSR2/qLBV+
+         x+bQ==
+X-Gm-Message-State: AOJu0YyTLVkl6vR0OhK03aABKj8Rwj+ojIMQgyuQhRDd1WUbgchquYbE
+	CrtztXNLm1FZSTgdI4a/0bJTTRGGwymD6xHTTgwdWvsfRqOfRaMLOtaHxYF/JaGbvy8=
+X-Gm-Gg: ASbGncvGVt452QQwrEWvc0SkRMK/O1byDyqZfd6nLxi9mi+NPPF0IVaFh+C1DOSESJ5
+	tAykCUgWyawQSHgRiR5iCRxjm0H9d1+fCXlrgDZvIngUcu33w3PIZJV75jnH2OaaHVJmx180FW5
+	lR2TsuLLbLLVyg3AiZZRnIrRZ+2R0arJuSiRCclblMkICyd4ggLl0l45lRes0oX+VnE+paKqZsL
+	oCz9HkeGdBjvWEI3gxwl5gsx3DF5LUvJSJOZyWZYxoJUvCysZlX/DUZqKysD0R45siuODf2pdnm
+	jPIQxJw+ZvybwNgAN0uI/lmdvTnpdl4ggNMYqx9yP8s8L1G3Q/B//0O7Ja8mMLI7usQO69dv
+X-Google-Smtp-Source: AGHT+IGIm2be03aa+hk73LqpnK7jFcUNiFbXggRZAdWiAlqqdT6OIX3F0RPmogpvOlodCQDE5M6LuQ==
+X-Received: by 2002:a05:6e02:3709:b0:3dc:787f:2bb5 with SMTP id e9e14a558f8ab-3dc93407c47mr9424535ab.19.1747952363816;
+        Thu, 22 May 2025 15:19:23 -0700 (PDT)
 Received: from [192.168.1.14] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3dc879a918esm9653705ab.41.2025.05.22.15.14.03
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4fbcc38a460sm3349280173.26.2025.05.22.15.19.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 May 2025 15:14:03 -0700 (PDT)
-Message-ID: <9d502cef-b2cb-4309-b268-7c75f8451833@linuxfoundation.org>
-Date: Thu, 22 May 2025 16:14:02 -0600
+        Thu, 22 May 2025 15:19:23 -0700 (PDT)
+Message-ID: <73a4b1c9-44b4-4f06-a766-ea7ed391c578@linuxfoundation.org>
+Date: Thu, 22 May 2025 16:19:22 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -77,142 +77,103 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests: Improve test output grammar, code style
-To: =?UTF-8?B?SGFubmUtTG90dGEgTcOkZW5ww6TDpA==?= <hannelotta@gmail.com>,
- shuah@kernel.org, alexandre.belloni@bootlin.com
+Subject: Re: [PATCH] selftests: firmware: Add details in error logging
+To: Harshal <embedkari167@gmail.com>, shuah@kernel.org
 Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-rtc@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20250516084233.66594-1-hannelotta@gmail.com>
+ linux-kernel-mentees@lists.linux.dev, Shuah Khan <skhan@linuxfoundation.org>
+References: <20250516153955.111815-1-embedkari167@gmail.com>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20250516084233.66594-1-hannelotta@gmail.com>
+In-Reply-To: <20250516153955.111815-1-embedkari167@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 5/16/25 02:42, Hanne-Lotta Mäenpää wrote:
-> Add small grammar fixes in perf events and Real Time Clock tests'
-> output messages.
+On 5/16/25 09:39, Harshal wrote:
+> Specify details in logs of failed cases
 > 
-> Include braces around a single if statement, when there are multiple
-> statements in the else branch, to align with the kernel coding style.
+> Use die() instead of exit() when write to
+> sys_path fails
 
-This patch combines several changes in one including combining changes
-to two tests.
+Please explain why this change is needed?
 
 > 
-> Signed-off-by: Hanne-Lotta Mäenpää <hannelotta@gmail.com>
+> Signed-off-by: Harshal <embedkari167@gmail.com>
 > ---
+>   tools/testing/selftests/firmware/fw_namespace.c | 17 +++++++++--------
+>   1 file changed, 9 insertions(+), 8 deletions(-)
 > 
-> Notes:
->      v1 -> v2: Improved wording in RTC tests based on feedback from
->      Alexandre Belloni <alexandre.belloni@bootlin.com>
-> 
->   tools/testing/selftests/perf_events/watermark_signal.c |  7 ++++---
->   tools/testing/selftests/rtc/rtctest.c                  | 10 +++++-----
->   2 files changed, 9 insertions(+), 8 deletions(-)
-> 
+> diff --git a/tools/testing/selftests/firmware/fw_namespace.c b/tools/testing/selftests/firmware/fw_namespace.c
+> index 04757dc7e546..deff7f57b694 100644
+> --- a/tools/testing/selftests/firmware/fw_namespace.c
+> +++ b/tools/testing/selftests/firmware/fw_namespace.c
+> @@ -38,10 +38,11 @@ static void trigger_fw(const char *fw_name, const char *sys_path)
+>   
+>   	fd = open(sys_path, O_WRONLY);
+>   	if (fd < 0)
+> -		die("open failed: %s\n",
+> +		die("open of sys_path failed: %s\n",
+>   		    strerror(errno));
+>   	if (write(fd, fw_name, strlen(fw_name)) != strlen(fw_name))
+> -		exit(EXIT_FAILURE);
+> +		die("write to sys_path failed: %s\n",
+> +		    strerror(errno));
 
-Send separate patches for selftests/perf_events and selftests/rtc/rtctest.c
+Hmm. Wrapper scripts key off of the EXIT_FAILURE - how does
+the output change with this change?
 
-
-> diff --git a/tools/testing/selftests/perf_events/watermark_signal.c b/tools/testing/selftests/perf_events/watermark_signal.c
-> index 49dc1e831174..6176afd4950b 100644
-> --- a/tools/testing/selftests/perf_events/watermark_signal.c
-> +++ b/tools/testing/selftests/perf_events/watermark_signal.c
-> @@ -65,8 +65,9 @@ TEST(watermark_signal)
+>   	close(fd);
+>   }
+>   
+> @@ -52,10 +53,10 @@ static void setup_fw(const char *fw_path)
+>   
+>   	fd = open(fw_path, O_WRONLY | O_CREAT, 0600);
+>   	if (fd < 0)
+> -		die("open failed: %s\n",
+> +		die("open of firmware file failed: %s\n",
+>   		    strerror(errno));
+>   	if (write(fd, fw, sizeof(fw) -1) != sizeof(fw) -1)
+> -		die("write failed: %s\n",
+> +		die("write to firmware file failed: %s\n",
+>   		    strerror(errno));
+>   	close(fd);
+>   }
+> @@ -66,7 +67,7 @@ static bool test_fw_in_ns(const char *fw_name, const char *sys_path, bool block_
+>   
+>   	if (block_fw_in_parent_ns)
+>   		if (mount("test", "/lib/firmware", "tmpfs", MS_RDONLY, NULL) == -1)
+> -			die("blocking firmware in parent ns failed\n");
+> +			die("blocking firmware in parent namespace failed\n");
 >   
 >   	child = fork();
->   	EXPECT_GE(child, 0);
-> -	if (child == 0)
-> +	if (child == 0) {
->   		do_child();
-> +	}
->   	else if (child < 0) {
->   		perror("fork()");
->   		goto cleanup;
-> @@ -75,7 +76,7 @@ TEST(watermark_signal)
->   	if (waitpid(child, &child_status, WSTOPPED) != child ||
->   	    !(WIFSTOPPED(child_status) && WSTOPSIG(child_status) == SIGSTOP)) {
->   		fprintf(stderr,
-> -			"failed to sycnhronize with child errno=%d status=%x\n",
-> +			"failed to synchronize with child errno=%d status=%x\n",
-
-This change is good.
-
->   			errno,
->   			child_status);
->   		goto cleanup;
-> @@ -84,7 +85,7 @@ TEST(watermark_signal)
->   	fd = syscall(__NR_perf_event_open, &attr, child, -1, -1,
->   		     PERF_FLAG_FD_CLOEXEC);
->   	if (fd < 0) {
-> -		fprintf(stderr, "failed opening event %llx\n", attr.config);
-> +		fprintf(stderr, "failed to setup performance monitoring %llx\n", attr.config);
-
-This change make it hard to understand what went wrong unlike the original
-message.
-
->   		goto cleanup;
+>   	if (child == -1) {
+> @@ -99,11 +100,11 @@ static bool test_fw_in_ns(const char *fw_name, const char *sys_path, bool block_
+>   			strerror(errno));
 >   	}
+>   	if (mount(NULL, "/", NULL, MS_SLAVE|MS_REC, NULL) == -1)
+> -		die("remount root in child ns failed\n");
+> +		die("remount root in child namespace failed\n");
 >   
-> diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
-> index be175c0e6ae3..930bf0ce4fa6 100644
-> --- a/tools/testing/selftests/rtc/rtctest.c
-> +++ b/tools/testing/selftests/rtc/rtctest.c
-> @@ -138,10 +138,10 @@ TEST_F_TIMEOUT(rtc, date_read_loop, READ_LOOP_DURATION_SEC + 2) {
->   		rtc_read = rtc_time_to_timestamp(&rtc_tm);
->   		/* Time should not go backwards */
->   		ASSERT_LE(prev_rtc_read, rtc_read);
-> -		/* Time should not increase more then 1s at a time */
-> +		/* Time should not increase more than 1s per read */
->   		ASSERT_GE(prev_rtc_read + 1, rtc_read);
+>   	if (!block_fw_in_parent_ns) {
+>   		if (mount("test", "/lib/firmware", "tmpfs", MS_RDONLY, NULL) == -1)
+> -			die("blocking firmware in child ns failed\n");
+> +			die("blocking firmware in child namespace failed\n");
+>   	} else
+>   		umount("/lib/firmware");
 >   
-> -		/* Sleep 11ms to avoid killing / overheating the RTC */
-> +		/* Sleep 11ms to avoid overheating the RTC */
-
-This change removes important information. What is the reason for this
-change?
-
->   		nanosleep_with_retries(READ_LOOP_SLEEP_MS * 1000000);
+> @@ -129,8 +130,8 @@ int main(int argc, char **argv)
+>   		die("error: failed to build full fw_path\n");
 >   
->   		prev_rtc_read = rtc_read;
-> @@ -236,7 +236,7 @@ TEST_F(rtc, alarm_alm_set) {
->   	if (alarm_state == RTC_ALARM_DISABLED)
->   		SKIP(return, "Skipping test since alarms are not supported.");
->   	if (alarm_state == RTC_ALARM_RES_MINUTE)
-> -		SKIP(return, "Skipping test since alarms has only minute granularity.");
-> +		SKIP(return, "Skipping test since alarm has only minute granularity.");
->   
->   	rc = ioctl(self->fd, RTC_RD_TIME, &tm);
->   	ASSERT_NE(-1, rc);
-> @@ -306,7 +306,7 @@ TEST_F(rtc, alarm_wkalm_set) {
->   	if (alarm_state == RTC_ALARM_DISABLED)
->   		SKIP(return, "Skipping test since alarms are not supported.");
+>   	setup_fw(fw_path);
+> -
+>   	setvbuf(stdout, NULL, _IONBF, 0);
+> +
+>   	/* Positive case: firmware in PID1 mount namespace */
+>   	printf("Testing with firmware in parent namespace (assumed to be same file system as PID1)\n");
+>   	if (!test_fw_in_ns(fw_name, sys_path, false))
 
-This one still says "alarms"
-
->   	if (alarm_state == RTC_ALARM_RES_MINUTE)
-> -		SKIP(return, "Skipping test since alarms has only minute granularity.");
-> +		SKIP(return, "Skipping test since alarm has only minute granularity.");
-
-Isn't "alarms" consistent with other messages?
-
->   
->   	rc = ioctl(self->fd, RTC_RD_TIME, &alarm.time);
->   	ASSERT_NE(-1, rc);
-> @@ -502,7 +502,7 @@ int main(int argc, char **argv)
->   	if (access(rtc_file, R_OK) == 0)
->   		ret = test_harness_run(argc, argv);
->   	else
-> -		ksft_exit_skip("[SKIP]: Cannot access rtc file %s - Exiting\n",
-> +		ksft_exit_skip("Cannot access RTC file %s - exiting\n",
->   						rtc_file);
-
-I don't see any reason for this change either.
-
->   
->   	return ret;
+The rest look fine.
 
 thanks,
 -- Shuah
+
 
