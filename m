@@ -1,91 +1,79 @@
-Return-Path: <linux-kselftest+bounces-33565-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33569-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3A6EAC1B34
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 May 2025 06:40:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18131AC1B3D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 May 2025 06:40:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F16F41BA7D23
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 May 2025 04:40:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 946191BA65DD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 May 2025 04:41:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9ACF24C08D;
-	Fri, 23 May 2025 04:39:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1640425DD09;
+	Fri, 23 May 2025 04:39:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CQzG9oRP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cuoIUYt5"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 627C623F413;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFDBB2505A9;
 	Fri, 23 May 2025 04:39:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747975181; cv=none; b=IUsaWgkNXVOsf8yAPh6MuH+LpxouXhK+UlTItQxir7sgrft9eSgOW76lzOIptlEy/KTsMeMAGj6gPRg4AtLCiodQaRWBNyR/d21M3pqvYnvu+VFjNOGNyoLOwxYZq2iu/a5PS5bt606ydWuLkJoZ0rVhcefl4ZyNQYnqQQDYAq4=
+	t=1747975181; cv=none; b=RualcrJO2mjxSdjwFmA8q/zERPESuE0POeZxOCnp3/15LsrQuXqmwFGcGYiReqPu+hDspe5HSHKZQed04zPmiCQcXNFE4JHCTHVCIDMwEuMD431EEbSLJ1zmeJxKM9wXMMEVIMxEW+WMnmLTqzTpKzaNFkkQx9nsKtjP0GFwkGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1747975181; c=relaxed/simple;
-	bh=9V+bffTinVGVEjmw6TF+C5G0YfQpy53YZa3Wm2q7aj4=;
+	bh=p+7YUBTmffdnZ8pKAPuZ2rzC3Zvp9P0MFRgY7Xz1ydU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=diEEh8vVRwaU8RwZ9kcHdqInccht8umu0ZKL0Kg4YNohfcQHDJfXg0BLA7YPepmuW3o9qAFbPT5clI+zwswYK5roEiWahCj32MRBQMZm8gj1kxmmX9nKAzUt41zK9GuVPNs5jJfJQb6p313rW76JhL+Z2FQzuw7n1DMWw9tUvEU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CQzG9oRP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 382C3C4AF0C;
+	 MIME-Version; b=YOBMyqaK3xMRf7lcXHCP6VMjYpbynnTLVXCXSCE7KckyG6b1E3/NBw4vbB9D8CMN2KEf09+9+cKQVM9QeZARzpebKAiImtxmHH7g9dKfrWW9fr5QBUTi2grCyJ8UbbLLu30YdYA6G1FvnjFS2s3LuHI8NrpyU7xyj1xOzw+n5Es=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cuoIUYt5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37879C4AF09;
 	Fri, 23 May 2025 04:39:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1747975181;
-	bh=9V+bffTinVGVEjmw6TF+C5G0YfQpy53YZa3Wm2q7aj4=;
+	bh=p+7YUBTmffdnZ8pKAPuZ2rzC3Zvp9P0MFRgY7Xz1ydU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=CQzG9oRPTanTBH3Dl63lrA8eEch+sC2faTWSG3nXeBdtxalGP1gnN8dEyqbNm7ZXn
-	 unsRVKOVKuk4zIpHq+kubtAx/ANRaNUShS+XdLXy5eWh9u9l90J7Pk39eFPenhTzFI
-	 s88j8rHEiHN+CZFLnQibZIfBwwIqHbwSX4WB9TfOUjfLpncwqy+6gCMmtokBaHeHFd
-	 td4pqOqMiOa9CAAHlhha/9wqCjbuNaHn+lvQ3tGWRTuzfrDMFNSWT2M1eS/Y7wg3ii
-	 H3nDMaOAzTetrFxbuGu8UNrCL6D3sy363qcc7zOe/Dyr3b0I5ttw/k+A/YYw0fDMXt
-	 ahJiVX+qUi50A==
+	b=cuoIUYt5lZT/MOb5bo+IaJ7aQ3M00dLryP3hUiTSuemr+Glf19Mqt9NCJ7hvzcGA8
+	 cF6XXsa9V8bFu81nQe8KR17Go7G/c1wTpTz+HnOv+456DDqlf5145g9eKiconkOAhz
+	 l4QndzvhhW3ELKWijIE2p1gBkE2eVtJAW19EridJn5a4hpye1jt2OTnUmVBXTxLD/F
+	 kaPldkcRShipvrgSO1ODJHLlAGizRNTFYqWNtGcCgfWKe1QaSTl7fIOF4jpwa+gF2e
+	 LBYHB8dyw1Ajs2TM/20TZSefBCyBo5opbte97pHeo20nA0S2wVguHNFvVg25EUr92m
+	 95IVkUtrl6qVQ==
 From: Kees Cook <kees@kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>
 Cc: Kees Cook <kees@kernel.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
 	Marco Elver <elver@google.com>,
 	Andrey Konovalov <andreyknvl@gmail.com>,
 	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
 	Ard Biesheuvel <ardb@kernel.org>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	Hou Wenlong <houwenlong.hwl@antgroup.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	kasan-dev@googlegroups.com,
 	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	linux-kbuild@vger.kernel.org,
+	kasan-dev@googlegroups.com,
+	linux-hardening@vger.kernel.org,
 	Christoph Hellwig <hch@lst.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
 	linux-kernel@vger.kernel.org,
+	x86@kernel.org,
 	linux-doc@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	kvmarm@lists.linux.dev,
 	linux-riscv@lists.infradead.org,
 	linux-s390@vger.kernel.org,
 	linux-efi@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
-	linux-kbuild@vger.kernel.org,
 	linux-security-module@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	sparclinux@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH v2 11/14] init.h: Disable sanitizer coverage for __init and __head
-Date: Thu, 22 May 2025 21:39:21 -0700
-Message-Id: <20250523043935.2009972-11-kees@kernel.org>
+Subject: [PATCH v2 12/14] kstack_erase: Support Clang stack depth tracking
+Date: Thu, 22 May 2025 21:39:22 -0700
+Message-Id: <20250523043935.2009972-12-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250523043251.it.550-kees@kernel.org>
 References: <20250523043251.it.550-kees@kernel.org>
@@ -95,77 +83,69 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2887; i=kees@kernel.org; h=from:subject; bh=9V+bffTinVGVEjmw6TF+C5G0YfQpy53YZa3Wm2q7aj4=; b=owGbwMvMwCVmps19z/KJym7G02pJDBn6v39z3tX005Y/rnL4YOLkChWuJ+9Wl0ZxtHAnf5w+4 +zlC8f3dZSyMIhxMciKKbIE2bnHuXi8bQ93n6sIM4eVCWQIAxenAEzk8SRGhsnn/rn8m/7L8JvJ sSfzOhSq+TU4fvE+u8S/Metrj/ZaW1eGfyYVhxIUl7qsrup9tc1w3of4xW0amTu32l3mnx7BlO2 twQEA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2299; i=kees@kernel.org; h=from:subject; bh=p+7YUBTmffdnZ8pKAPuZ2rzC3Zvp9P0MFRgY7Xz1ydU=; b=owGbwMvMwCVmps19z/KJym7G02pJDBn6v3/vPnPUwKQyTLv6YDRX59942Z9pVg4x/Z3tr6sPL i8Lmbqoo5SFQYyLQVZMkSXIzj3OxeNte7j7XEWYOaxMIEMYuDgFYCIh3gy/2RSNKlmvL8m9MY2r Wbrn3fITnxd82hB9cYHtv/Cm+4suZTMyPNm8de0lHpnV+k8jWq5Yr/ylxKmUuEhjp6St9pbzk2V 2cwEA
 X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
-While __noinstr already contained __no_sanitize_coverage, it needs to
-be added to __init and __head section markings to support the Clang
-implementation of CONFIG_KSTACK_ERASE. This is to make sure the stack
-depth tracking callback is not executed in unsupported contexts.
+Wire up CONFIG_KSTACK_ERASE to Clang 21's new stack depth tracking
+callback[1] option.
 
-The other sanitizer coverage options (trace-pc and trace-cmp) aren't
-needed in __head nor __init either ("We are interested in code coverage
-as a function of a syscall inputs"[1]), so this is fine to disable for
-them as well.
-
-Link: https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/kcov.c?h=v6.14#n179 [1]
-Acked-by: Marco Elver <elver@google.com>
+Link: https://clang.llvm.org/docs/SanitizerCoverage.html#tracing-stack-depth [1]
 Signed-off-by: Kees Cook <kees@kernel.org>
 ---
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nicolas Schier <nicolas.schier@linux.dev>
 Cc: Marco Elver <elver@google.com>
 Cc: Andrey Konovalov <andreyknvl@gmail.com>
 Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: <x86@kernel.org>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
 Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc: Hou Wenlong <houwenlong.hwl@antgroup.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Sami Tolvanen <samitolvanen@google.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: <linux-kbuild@vger.kernel.org>
 Cc: <kasan-dev@googlegroups.com>
+Cc: <linux-hardening@vger.kernel.org>
 ---
- arch/x86/include/asm/init.h | 2 +-
- include/linux/init.h        | 4 +++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ security/Kconfig.hardening    | 5 ++++-
+ scripts/Makefile.kstack_erase | 6 ++++++
+ 2 files changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/init.h b/arch/x86/include/asm/init.h
-index 8b1b1abcef15..6bfdaeddbae8 100644
---- a/arch/x86/include/asm/init.h
-+++ b/arch/x86/include/asm/init.h
-@@ -5,7 +5,7 @@
- #if defined(CONFIG_CC_IS_CLANG) && CONFIG_CLANG_VERSION < 170000
- #define __head	__section(".head.text") __no_sanitize_undefined __no_stack_protector
- #else
--#define __head	__section(".head.text") __no_sanitize_undefined
-+#define __head	__section(".head.text") __no_sanitize_undefined __no_sanitize_coverage
- #endif
+diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
+index f7aa2024ab25..b9a5bc3430aa 100644
+--- a/security/Kconfig.hardening
++++ b/security/Kconfig.hardening
+@@ -82,10 +82,13 @@ choice
  
- struct x86_mapping_info {
-diff --git a/include/linux/init.h b/include/linux/init.h
-index ee1309473bc6..c65a050d52a7 100644
---- a/include/linux/init.h
-+++ b/include/linux/init.h
-@@ -49,7 +49,9 @@
+ endchoice
  
- /* These are for everybody (although not all archs will actually
-    discard it in modules) */
--#define __init		__section(".init.text") __cold  __latent_entropy __noinitretpoline
-+#define __init		__section(".init.text") __cold __latent_entropy	\
-+						__noinitretpoline	\
-+						__no_sanitize_coverage
- #define __initdata	__section(".init.data")
- #define __initconst	__section(".init.rodata")
- #define __exitdata	__section(".exit.data")
++config CC_HAS_SANCOV_STACK_DEPTH_CALLBACK
++	def_bool $(cc-option,-fsanitize-coverage-stack-depth-callback-min=1)
++
+ config KSTACK_ERASE
+ 	bool "Poison kernel stack before returning from syscalls"
+ 	depends on HAVE_ARCH_KSTACK_ERASE
+-	depends on GCC_PLUGINS
++	depends on GCC_PLUGINS || CC_HAS_SANCOV_STACK_DEPTH_CALLBACK
+ 	help
+ 	  This option makes the kernel erase the kernel stack before
+ 	  returning from system calls. This has the effect of leaving
+diff --git a/scripts/Makefile.kstack_erase b/scripts/Makefile.kstack_erase
+index 5223d3a35817..c7bc2379e113 100644
+--- a/scripts/Makefile.kstack_erase
++++ b/scripts/Makefile.kstack_erase
+@@ -8,6 +8,12 @@ kstack-erase-cflags-$(CONFIG_GCC_PLUGIN_STACKLEAK_VERBOSE) += -fplugin-arg-stack
+ DISABLE_KSTACK_ERASE := -fplugin-arg-stackleak_plugin-disable
+ endif
+ 
++ifdef CONFIG_CC_IS_CLANG
++kstack-erase-cflags-y += -fsanitize-coverage=stack-depth
++kstack-erase-cflags-y += -fsanitize-coverage-stack-depth-callback-min=$(CONFIG_KSTACK_ERASE_TRACK_MIN_SIZE)
++DISABLE_KSTACK_ERASE  := -fno-sanitize-coverage=stack-depth
++endif
++
+ KSTACK_ERASE_CFLAGS   := $(kstack-erase-cflags-y)
+ 
+ export STACKLEAK_CFLAGS DISABLE_KSTACK_ERASE
 -- 
 2.34.1
 
