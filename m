@@ -1,182 +1,202 @@
-Return-Path: <linux-kselftest+bounces-33672-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33673-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1505AC29DB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 May 2025 20:39:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B180CAC29E3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 May 2025 20:43:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EE81B1C0711E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 May 2025 18:39:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E53811BC4A9F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 May 2025 18:43:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 598A029AAE9;
-	Fri, 23 May 2025 18:39:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DCEF29A33E;
+	Fri, 23 May 2025 18:43:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="wyGRVvgO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lUmVSEay"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C13F8299A80
-	for <linux-kselftest@vger.kernel.org>; Fri, 23 May 2025 18:39:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 299AA47F4A;
+	Fri, 23 May 2025 18:43:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748025547; cv=none; b=gxtS5TCWCPu5k6dme+IokudOGUfRDTIPJJCIMbz+i73gOfm85R3/Dld40TsoFCq6ND2OXcbfhxMEOQmOGIlAhX9E3Wm8UgR5y+W5jTaPclMkIDcsKpCECO0rPEUj+vA9kAsdleFd6uq1CWg9Na/wY23HwVcwOmCUCeixXiN/R9A=
+	t=1748025799; cv=none; b=N2dymyx+Zc5qdhMjQqasmVth9cs0OzzaDSPZsYI2W2teuodwdSvmSXQxN0+GyYvnI2Hy0BJHnRw6j2Py1xeRMwGL7FNv7bS1iSFyANu9seNRxuGImOP4jY94sLASMKuilPrivrnu5PSHW9M6Y0Xtp+QwsuyVWb1ASW6CP5zw+UI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748025547; c=relaxed/simple;
-	bh=sm7CqC4WkQU8Rs7RoFNINgIkwM4zl0GJTRDwvhiASto=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pIM6UCBehGG2km66WqtDsl3H8jtJsrXR00+Zpze+gxJuyurnPXrKUl+425X9IiZIhnFq+SGbc/niSgkStuxgrizgwA1qAjVb8Aii3zZzqnW5lGl78lEjJrrvlAJQ+eIimGGTUWiSDBYFAkx9lMnMKGfPnRal5ntFOgtCfjXtilQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=wyGRVvgO; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-b26f5f47ba1so109647a12.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 May 2025 11:39:05 -0700 (PDT)
+	s=arc-20240116; t=1748025799; c=relaxed/simple;
+	bh=gs5K2rq/cBIABkj5iFdt3STh54GNK4JoTpG2QNUrWDw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=or19p3k/vuhm+5yhw1jhRiTbVom+ultgjznYTViKCYyC2D1w5Rn6OxjGBGYnGs+qtOn0kWPMkn7zlQTjwg5ZOxGKAqdoXo73HZjSxlnaW7no/8CJuM8IYoAOyDre3JiId91g7oklYQ64S1tU/SSyqGwL0vIbGQ/KLTakNeze19g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lUmVSEay; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-43cfa7e7f54so1537495e9.1;
+        Fri, 23 May 2025 11:43:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1748025545; x=1748630345; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Brp4+tqBANTAovFCP7pOokKjsZ8jKRtxHJAFYCZnyiw=;
-        b=wyGRVvgOlImg/zqqQf0ymijykUY1lSQijEsrkZ1TH5I+UUvFWjlMFStdUg0l51pfae
-         bs9CyS5TLewmUF/FqSTDb3yVtDjXW5zE6Hxhs7zePnjOT1XBzmFLgSUkDeT9m8tQ0ZdG
-         T0o1qRoUMyVDqhY1MquqC36G+eAqJaTP2w4Cs8UxJyWmdd3nFZRfmDZu7p7jvCSqj42W
-         i4LoD8rBSrvb/DEuGVvTpBHiYOP3FIEQB/7aXrPcDHjRyH/MEsKcVAqdAKvk6G09XDiu
-         u1HWeZXpKukOfJZXdv3BGOkiXpTowegB7Yql28IAsx/kgFpb+Sk1+aUGFq1a9PaXDUu8
-         YG0w==
+        d=gmail.com; s=20230601; t=1748025796; x=1748630596; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=btTTfvQ93Rrp+cfCkaZPBbleiZuXCpTdB3DJ5XEH6Kk=;
+        b=lUmVSEayn/cYUyPyN2IkHTqlKQmtePCfj0cVAHbMtNnVnlv6V1fDoT5cs1iFrlPcLR
+         V5h3tpob3Z2JWCG+cYgx5RieSkaJWV0DbNGjq/WpnaATQRqkkBgKQShBN+hZd0xZCuEw
+         GD4ZYzv1sl1Pg+6k8KRSI+fmVEMp/ynn3pRZ8kw8uCexlTb0kVVsLKnN8/rhwiaqOv5p
+         Whg65Hc3tmVuv9cZZaTN1p+C26eulZuWYHAjxvQjmkURM+C10UAKQZq9/VK/5CuyCrvn
+         yb+0y9Vv468q60AB3I6GUEBOaAanYfBJ7UgxhjfftTWa0DEn4oHUrd1dv9pt1cPiplK1
+         1Jlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748025545; x=1748630345;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Brp4+tqBANTAovFCP7pOokKjsZ8jKRtxHJAFYCZnyiw=;
-        b=QXDIGW/bM3EIJAaX+8ltQvaJZpPydm6D0sYJq8FQ5IQ9Cs4KP0Vqzb2yD3gXAZGkLa
-         vvXtViAJ8vhSjw6p1NGRcpYLDeiQZVnDaHACzeD3dQbR50lGje+1HksZ5gUzeSLRXXD5
-         FgTtbb2xj+yQ1CXxWqgHdFFy5ki50ePRCPpG1QhjD/hDciLR8S7FcfX3scZN3fvotPKt
-         Jl6avaJSrrudWlHPW1+OjWUD8T22elbXeeZZ7x+OXgb6SmBEjkpvdlFYA/y12yHXhJxO
-         vMbV3pH1ML4jCkWnyIvsEuVw14nniQ90fev8JQpF9CSDol6x9alIurbbtEXy+i07Mf3O
-         6FPQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXXFHFotOnNI6JeZxfLwfYnJLhOIr4Oj3sXyXSL7llkxLY6TAvUguubQdy/XzmX2fR7Grn5lOBDR8O/Zhr+X7M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxAdPkTDyCZej6pptYXT1LUssa7IKQ16p45DTrszHgViymjNIN9
-	miC/OaGqM9b1ZsD72+Pin/zko94EpJefjqNwghg74QBSl6qtWtx7G0947Zcb9s9MqOg=
-X-Gm-Gg: ASbGnctJTkHVb9wS1LHs0V6FpYL1cT2kWpIxvBdjHWrZ0EaXvkgrz2Wy51tc2/Powf6
-	N7wfa0gcOPiDbN3EBuMkGpPKcC9ncATGPiS7Wvx4o5/AU2ad25xpXqNNB/29fWegg+ZzaKbjNXU
-	AqFtaG5g5IE5aED5ajqODUl1l6aP8DM9apTxHRPxkucN70j/AzqHpvQ5Wu5KR4VIaXfNGX/SnUc
-	sbT2B+Yf8cfnMf7OLKilS1YWQWALc+1VbjQIih3vt7oUJEzomhbV6HC+1HxIponiPyv5/xKdz63
-	9zKQasAsaVa2uvr+15f+5b3GXGLkYacIfeB4RlNNO0wRvv0=
-X-Google-Smtp-Source: AGHT+IF/W7rgN2cGONT1rL6VsHTy6gKpmlK8jFDydK2LaE8qLgbyfqjrk3Jd1cMhblWh+YfsU/FBoQ==
-X-Received: by 2002:a17:903:b8d:b0:224:93e:b5d7 with SMTP id d9443c01a7336-23414fb2593mr7004755ad.34.1748025544999;
-        Fri, 23 May 2025 11:39:04 -0700 (PDT)
-Received: from ghost ([2601:647:6700:64d0:bb2c:c7d9:9014:13ab])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-231d4ed2508sm127432885ad.221.2025.05.23.11.39.03
+        d=1e100.net; s=20230601; t=1748025796; x=1748630596;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=btTTfvQ93Rrp+cfCkaZPBbleiZuXCpTdB3DJ5XEH6Kk=;
+        b=E6zTQtflGqXsNC6YlPDRzPytM8cMtwAQhOF82ayFofC7jvIck55AE3WQhujT3wSy14
+         N/e3EcyUL9IfeVwwIut8PaPYFQEKiD2J1Y9vzF8for+7cVxe6MGx+Qqti2EeQMzULEJK
+         WaTriB/tzJX8KgtKu1cjVj1K/cKj0q+jrbgUR02gwtEyk+9wSit7V0/dHijp1O7+OjpI
+         zRPMs3waurb8BiDjozoGVeTi9axOYnU10olRABwiEsLXztZ64g/TrYizFg08myyGRGkG
+         BwoTgqWDwK1VvRDEQbEvWVMmt6S2RAGv94Sbj96c7YpZYsO/W8FdB4Mq7YTDzU8G7M9A
+         Wrow==
+X-Forwarded-Encrypted: i=1; AJvYcCW0tdDbBPqAj96S6mGJAGy87NsNxwSkx/MhRnNe+xyyS286zgvTUmabWlA9gDK6BO6BBFYHQ3TZyFZBqR8=@vger.kernel.org, AJvYcCX2jS3lyt/R3Be5NioH10Ih38iUzytti2yDr3Yz8O1aXfP8bp1vWl/PApSMo1uzrlpf7EeBfj4d5xIE/GWdq1dv@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJ+vscOsKmvpJrRp556rKAwdkwrzsGF01bABISJyUVltXw6TmJ
+	hsljMTNqYK96ZvDXtBVBgg7I02xlZNG+ZH+NbVxGK9e5d+7+hOvKnESn
+X-Gm-Gg: ASbGncu86gVHYo7UnwSonupVEPhNVx+/Og0j7k/iBgPmoThoreLBTnSWn5EsttLvEhd
+	SaYIqVBJYpepUhasFY6w4W96iGJS0WTKVk457juTMyjO0v3Kr728v19tf91cABclIWLeh0oIddU
+	PsEY+Wakg2ng11pRQIHVexF4VGGGZMWCA3/QgaBlylO9PCSRlDr0VxgK/zq6S5i0Dg5cPEEcRbS
+	74Z3/BBbKYWqKlZM5HQf6A/+XTeOJB0ENREGGscPQhQWLl6WudUN46x0yNDAGCrLUPIZ6q9jMSb
+	SgSdZsurW0lOr/BjFaA68bwVYehBu3us6DIvdarvRRDqY8ngZGHwq7N57jzfa0WtoaRpXhV01ZC
+	TzcY6eFJnjbAw
+X-Google-Smtp-Source: AGHT+IGbySv0kJkzhoWrw/RDGSmd5NY01lUNmRSyAzY3QDkI4nh5xMLz5f+ebRm9TH2KKXtfV5Tq6A==
+X-Received: by 2002:a05:600c:524c:b0:440:69f5:f179 with SMTP id 5b1f17b1804b1-44b51f4c57bmr45533255e9.7.1748025796031;
+        Fri, 23 May 2025 11:43:16 -0700 (PDT)
+Received: from localhost.localdomain ([154.183.50.249])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-447f74cce5bsm145897875e9.24.2025.05.23.11.43.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 May 2025 11:39:04 -0700 (PDT)
-Date: Fri, 23 May 2025 11:39:02 -0700
-From: Charlie Jenkins <charlie@rivosinc.com>
-To: =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Anup Patel <anup@brainfault.org>,
-	Atish Patra <atishp@atishpatra.org>, Shuah Khan <shuah@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        Fri, 23 May 2025 11:43:15 -0700 (PDT)
+From: Khaled Elnaggar <khaledelnaggarlinux@gmail.com>
+To: linux-mm@kvack.org
+Cc: Khaled Elnaggar <khaledelnaggarlinux@gmail.com>,
+	linux-kernel-mentees@lists.linux.dev,
+	akpm@linux-foundation.org,
+	shuah@kernel.org,
 	linux-kselftest@vger.kernel.org,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Andrew Jones <ajones@ventanamicro.com>,
-	Deepak Gupta <debug@rivosinc.com>
-Subject: Re: [PATCH v8 10/14] riscv: misaligned: add a function to check
- misalign trap delegability
-Message-ID: <aDDAxugIa6XhLSSv@ghost>
-References: <20250523101932.1594077-1-cleger@rivosinc.com>
- <20250523101932.1594077-11-cleger@rivosinc.com>
+	linux-kernel@vger.kernel.org
+Subject: [RFC] selftests/mm: Skip tests dependent on a binary not built
+Date: Fri, 23 May 2025 21:43:12 +0300
+Message-ID: <20250523184312.2647781-1-khaledelnaggarlinux@gmail.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250523101932.1594077-11-cleger@rivosinc.com>
 
-On Fri, May 23, 2025 at 12:19:27PM +0200, Clément Léger wrote:
-> Checking for the delegability of the misaligned access trap is needed
-> for the KVM FWFT extension implementation. Add a function to get the
-> delegability of the misaligned trap exception.
-> 
-> Signed-off-by: Clément Léger <cleger@rivosinc.com>
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+Hello.
 
-Reviewed-by: Charlie Jenkins <charlie@rivosinc.com>
-Tested-by: Charlie Jenkins <charlie@rivosinc.com>
+Running the mm selftests from the kernel's root directory
+on an x86_64 debian machine using:
 
-> ---
->  arch/riscv/include/asm/cpufeature.h  |  6 ++++++
->  arch/riscv/kernel/traps_misaligned.c | 17 +++++++++++++++--
->  2 files changed, 21 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/riscv/include/asm/cpufeature.h b/arch/riscv/include/asm/cpufeature.h
-> index 2bfa4ef383ed..fbd0e4306c93 100644
-> --- a/arch/riscv/include/asm/cpufeature.h
-> +++ b/arch/riscv/include/asm/cpufeature.h
-> @@ -81,6 +81,12 @@ static inline bool unaligned_ctl_available(void)
->  
->  #if defined(CONFIG_RISCV_MISALIGNED)
->  DECLARE_PER_CPU(long, misaligned_access_speed);
-> +bool misaligned_traps_can_delegate(void);
-> +#else
-> +static inline bool misaligned_traps_can_delegate(void)
-> +{
-> +	return false;
-> +}
->  #endif
->  
->  bool __init check_vector_unaligned_access_emulated_all_cpus(void);
-> diff --git a/arch/riscv/kernel/traps_misaligned.c b/arch/riscv/kernel/traps_misaligned.c
-> index 7ecaa8103fe7..93043924fe6c 100644
-> --- a/arch/riscv/kernel/traps_misaligned.c
-> +++ b/arch/riscv/kernel/traps_misaligned.c
-> @@ -724,10 +724,10 @@ static int cpu_online_check_unaligned_access_emulated(unsigned int cpu)
->  }
->  #endif
->  
-> -#ifdef CONFIG_RISCV_SBI
-> -
->  static bool misaligned_traps_delegated;
->  
-> +#ifdef CONFIG_RISCV_SBI
-> +
->  static int cpu_online_sbi_unaligned_setup(unsigned int cpu)
->  {
->  	if (sbi_fwft_set(SBI_FWFT_MISALIGNED_EXC_DELEG, 1, 0) &&
-> @@ -763,6 +763,7 @@ static int cpu_online_sbi_unaligned_setup(unsigned int cpu __always_unused)
->  {
->  	return 0;
->  }
-> +
->  #endif
->  
->  int cpu_online_unaligned_access_init(unsigned int cpu)
-> @@ -775,3 +776,15 @@ int cpu_online_unaligned_access_init(unsigned int cpu)
->  
->  	return cpu_online_check_unaligned_access_emulated(cpu);
->  }
-> +
-> +bool misaligned_traps_can_delegate(void)
-> +{
-> +	/*
-> +	 * Either we successfully requested misaligned traps delegation for all
-> +	 * CPUs, or the SBI does not implement the FWFT extension but delegated
-> +	 * the exception by default.
-> +	 */
-> +	return misaligned_traps_delegated ||
-> +	       all_cpus_unaligned_scalar_access_emulated();
-> +}
-> +EXPORT_SYMBOL_GPL(misaligned_traps_can_delegate);
-> -- 
-> 2.49.0
-> 
+  make defconfig
+  sudo make kselftest TARGETS=mm
+
+the tests run normally till we reach one which stalls
+for 180 seconds and times out according to the following logs:
+
+```
+ -----------------------------------------------
+ running ./charge_reserved_hugetlb.sh -cgroup-v2
+ -----------------------------------------------
+ CLEANUP DONE
+ CLEANUP DONE
+ Â 
+ Test normal case.
+ private=, populate=, method=0, reserve=
+ nr hugepages = 10
+ writing cgroup limit: 20971520
+ writing reseravation limit: 20971520
+
+ Starting:
+ hugetlb_usage=0
+ reserved_usage=0
+ expect_failure is 0
+ Putting task in cgroup 'hugetlb_cgroup_test'
+ Method is 0
+ >>> write_hugetlb_memory.sh: line 22: ./write_to_hugetlbfs: No such file or directory <<<
+ Waiting for hugetlb memory reservation to reach size 10485760.
+ 0
+ Waiting for hugetlb memory reservation to reach size 10485760.
+ 0
+ ...
+ Waiting for hugetlb memory reservation to reach size 10485760.
+ 0
+ Waiting for hugetlb memory reservation to reach size 10485760.
+ 0
+
+ not ok 1 selftests: mm: run_vmtests.sh # TIMEOUT 180 seconds
+ make[3]: Leaving directory '/linux/tools/testing/selftests/mm'
+```
+
+Logs show that the executable "write_to_hugetlbfs" is missing, causing
+the test to hang waiting for hugepage reservations.
+
+The executable not found means it was not built by the Make system.
+It is mentioned in Makefile:136-142, and only built if ARCH is 64-bit
+
+```
+   ifneq (,$(filter $(ARCH),arm64 mips64 parisc64 powerpc riscv64 s390x sparc64 x86_64 s390))
+   TEST_GEN_FILES += va_high_addr_switch
+   ifneq ($(ARCH),riscv64)
+   TEST_GEN_FILES += virtual_address_range
+   endif
+   TEST_GEN_FILES += write_to_hugetlbfs
+   endif
+```
+
+So, for some reason, the top-level Makefile provides ARCH as x86.
+
+My proposed solution is similar to existing virtual_address_range check
+that is to check for the binary, and if it is not found, skip these 2
+test cases: charge_reserved_hugetlb.sh and hugetlb_reparenting_test.sh
+since they directly and indirectly depend on write_to_hugetlbfs binary.
+
+This is just a workaround, the root issue of different ARCH detection
+when running tests from the kernel root directory should still be
+addressed. I am not sure how to approach it and open for your suggestions.
+
+Note that this issue does not happen when ran from selftests/mm using
+something like
+
+  sudo make -C tools/testing/selftests/mm
+
+because then mm/Makefile's ARCH detection runs correctly (x86_64)
+
+Kindly review and share your thoughts.
+
+Signed-off-by: Khaled Elnaggar <khaledelnaggarlinux@gmail.com>
+---
+ tools/testing/selftests/mm/run_vmtests.sh | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+index dddd1dd8af14..cdbcfdb62f8a 100755
+--- a/tools/testing/selftests/mm/run_vmtests.sh
++++ b/tools/testing/selftests/mm/run_vmtests.sh
+@@ -375,8 +375,13 @@ CATEGORY="process_mrelease" run_test ./mrelease_test
+ CATEGORY="mremap" run_test ./mremap_test
+
+ CATEGORY="hugetlb" run_test ./thuge-gen
++
++# the following depend on write_to_hugetlbfs binary
++if [ -x ./write_to_hugetlbfs ]; then
+ CATEGORY="hugetlb" run_test ./charge_reserved_hugetlb.sh -cgroup-v2
+ CATEGORY="hugetlb" run_test ./hugetlb_reparenting_test.sh -cgroup-v2
++fi
++
+ if $RUN_DESTRUCTIVE; then
+ nr_hugepages_tmp=$(cat /proc/sys/vm/nr_hugepages)
+ enable_soft_offline=$(cat /proc/sys/vm/enable_soft_offline)
+--
+2.47.2
+
 
