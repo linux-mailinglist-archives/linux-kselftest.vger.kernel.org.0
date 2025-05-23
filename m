@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-33709-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33710-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C181AC2C40
-	for <lists+linux-kselftest@lfdr.de>; Sat, 24 May 2025 01:31:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5782EAC2C44
+	for <lists+linux-kselftest@lfdr.de>; Sat, 24 May 2025 01:31:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F35201C06DCD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 May 2025 23:31:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0253A188ABD5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 May 2025 23:32:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73DAF217701;
-	Fri, 23 May 2025 23:30:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD5CD220F5F;
+	Fri, 23 May 2025 23:30:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="J/jgdd7g"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mwrA6RSG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F10121E0B7
-	for <linux-kselftest@vger.kernel.org>; Fri, 23 May 2025 23:30:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2E32220F36
+	for <linux-kselftest@vger.kernel.org>; Fri, 23 May 2025 23:30:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748043051; cv=none; b=bDrqSMBGf5sJuNuBVLC2Mp7Ocg6Mg4auhOkhCHwLjOeHI88NHWm08ObHP2bDJBv6CcgCbl/VkBCtKl0o69CfekDz/5izvTovDjW5yiXjcf92g31QjG3k/i+R9Yp9+QOn9ta5MkeQ+HoOnz5N0pQ19xrPTGmhzNh3qMlse5xtLGw=
+	t=1748043052; cv=none; b=bMtOf751CiR8NCxzqP1uB+zD65wGLGXS0jcXBzVvGtO9spkwVfbMBVTs1mvFdlr45feZR/+zIDXi0LrIBwx7xZdgPlCDKWzvxtQof6UKfieD1sxsLSGCykbJVzs9UeS/u7f68VEcTpkeOhJgqjvAr2AddgvQl9awoDedPDyaJAc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748043051; c=relaxed/simple;
-	bh=pfR5Ax4SlBdY1xv8/Ocrr2ZX/YysW0uHrkkhEqsptWc=;
+	s=arc-20240116; t=1748043052; c=relaxed/simple;
+	bh=km0htpuAkJUV0zuVrkGxs+M34Ahf+Loi9SWQ3zbCDtQ=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=qaSxNrwQd1NER8Kw3La/Q9vZvtVYkf9hSmXh7JcpoNG/8oU8NjIvbnZ77CrJXbHUMLEQa6ueOtmYvFhmg3LMgBTBQSVlslgZpWT8HZC+AXlPeZXTwzd1a6QniG7LfUFpD/KjdidnA48Yuhqdvd+QeouC1Twn0dd0EXoGix5RcEM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=J/jgdd7g; arc=none smtp.client-ip=209.85.216.73
+	 To:Cc:Content-Type; b=t1JLIb5YrKGhIfo/caD0hUGDhRbpP3PSWvg3VAocSY4qCADudznCwDwtYeTJ/j0cxXyVXHCql9JnLZUrYcr9l8lXlO9fCBuOaG5NP+kc93Y5SpQI5sm1hqEwKb5K4QpTnt/dmRMtnx/Q+1ciRcXsmF0th1yAkogQK4SJzruTd3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mwrA6RSG; arc=none smtp.client-ip=209.85.215.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-30e9338430eso275474a91.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 May 2025 16:30:49 -0700 (PDT)
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-b26e0fee541so210647a12.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 23 May 2025 16:30:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1748043049; x=1748647849; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1748043050; x=1748647850; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=r5uvmx1jOCCOOD7uCtAHcBHBFBslsVYIy8nOh66YmN4=;
-        b=J/jgdd7gXDUI3EmCZ/5tKrf8GKZlt0T0oLxzXU+N+FXCwxgKQ2cSbXuOiLvBavxAgb
-         UBLi+WeJe75M+l0acsHErFsMcuBY4mepG6Eg0CgNTb9i+Prgmyf7+ZQH6VXs6xcX84AT
-         C/nB0yjCh0Ej2EOgH1+B4X/SMidJNHUr60Qpw5Kw41azElno0j2dHyDpKr0f/A190ECN
-         GoiEvEHW+Dfuvch2Po9Yqrh2ExJWkxU0bOpNhCUbp0fRLwEiU53IxaM+ZsWFCGtdNN6a
-         LGxXtbsqpKYidElmmhhCCV9tjpUuHFu2PVg1fLtVDg7aIVPwqynPFKQS5nadNy3MDOjw
-         4m7w==
+        bh=ytBIFo98xFNB1MVt6EkCempGxNhbLpE0MPkhz750Fyc=;
+        b=mwrA6RSGTpGNEETylLkNABsB0mmC9tHxAuZH++uv193bpAJoxmquBp8aKYJ0CgB4iF
+         dp3peziSyrcwVrJWqpzhU0tHPZyk8MKXm4aqRDYoQM1pJOWXcjbW/fc81ATd5PFv9Qik
+         tkCYJZzYl+S5xr2jVen1MMr34wWM7C8TiX+LG9FkX94BbbyP1d3pfafPe+vBHQCMTIbW
+         ZLWS6K91EEmAY11dnCQYIWQrbxD6ViLUkFEprjA1+j47N84r18chxw+8JBmjrrx8hOpc
+         4QkDHqVMbNIPqs1g4Qhf49V0SB1hJOJI2LLrZxAw8HWtRe4m6EHw9zPFff6/HpbLQO2T
+         GxhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748043049; x=1748647849;
+        d=1e100.net; s=20230601; t=1748043050; x=1748647850;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=r5uvmx1jOCCOOD7uCtAHcBHBFBslsVYIy8nOh66YmN4=;
-        b=WPkMFi0igx030qb5kh+umUBvLtHevj53qXcsYJF9M6L37rI/GKYBzesXJ2jyWBN3/k
-         JajorxfzVbhZsC16ThWZMXrF8NhazdRrdv4CApwCM8LxNTbO1AMJPjcaCTVEWqyd+kL9
-         UVsVm5zQO8iETsMeb5SoIvm/xVOcgPiweBaExpjvEQGrw7yCPzngdqigFJBWSTEq9TEN
-         9unCEa6uFOl4o1nagPWZoaA342ZcnfLu/IZeDIQPuycyYkySJap5ASExbs7ujm74bG+e
-         oMCgUsGUgShzaSCWAN4js02f7QL/dZ7APq5/ANDhzU1WUmRAwpuGqDJPoVFi6mJKDAAV
-         EV5g==
-X-Forwarded-Encrypted: i=1; AJvYcCUTsbEnI6+MDtG6+yaodgzm3dWX4LaCYgtwNSxspzLeg5WYnUwTie/IPOp5l7EEfpyTvda5QD/iBoQd/PzZCHU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNDQFt2l8tEsYgEdhzMSHof91RubZLWuGzOW9lpyQFnrlQr9p+
-	qWcZJgHaoY5BSR/bl5w9Cm82Jo0RsgOtDzWZlzPGXeusYUlghVZL2O+n+xxx1I6ntEF0GA5zYjw
-	tTIDYmChH5UAU7A==
-X-Google-Smtp-Source: AGHT+IEE9DFbhmMXYaN/7MbPbRi/a73H7vVeGRag6AqCzXOsKH0OPrFkPjU5nIZ6jA+AvQhDlr6QlYxGh/nPKg==
-X-Received: from pjbsr13.prod.google.com ([2002:a17:90b:4e8d:b0:301:a339:b558])
+        bh=ytBIFo98xFNB1MVt6EkCempGxNhbLpE0MPkhz750Fyc=;
+        b=CVBSbkYt4isxNh76E4MlidJbQ61YvlqT2cf/3vLoflbwMCPJRrDtLInZ2iePhXcNFe
+         BseqoqsX8FM+358eHRUq2Lb+X3ZMp9Dq8vQ3dPwW0NVHUsHWTEXGYURNorI3xKOReEIZ
+         3X07d7IUdTzyY8cNHRGHbaWgWHlZ3FwlEbd+BrefNOmEZLxPAaldqXNqyM2NA2yMdT5b
+         fwbJh1jt0fFNK7nzWvB7wFf41qA+gnu1aJbDJdTWWdWZpg0pVhGZC0iklKmGr2onpArh
+         880y4J7KiNlbVYJ3UtM5j4bLS9MfUy+Qnfg2olP8DyU0JVT/WRc2JpB4ytz77miNiuiD
+         bNWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV9jJesqQtjjem00tr7hb0K+MArsS01A/kr+tER7Vkkv9JZK6NlyHHdF9HwY0x71t5X4A0rqYSCeom/aWrSgW8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/7wGc9WFxj+/BvNpxSf4w8lGqk2i985Py93Aq7WxfwC18BDDi
+	3Txlniukh1KRwzJpiXQ/Ng5pLuyqVAFCsOsKs8yozLSOsV+slFD8glc7YoM4mZ1MG6jAc5w3V9p
+	FDGIh/fArosH/sw==
+X-Google-Smtp-Source: AGHT+IGITjGEmjYwA0OzIiOuTLVVQ30T9NDX5D0e99YXFv1OioDrXF13PWhstptBBVs3gyOR+z4+EVpkYcPkCg==
+X-Received: from pjf6.prod.google.com ([2002:a17:90b:3f06:b0:2ea:9d23:79a0])
  (user=dmatlack job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:554f:b0:310:eea1:1c1 with SMTP id 98e67ed59e1d1-311100db9cfmr1690348a91.16.1748043048946;
- Fri, 23 May 2025 16:30:48 -0700 (PDT)
-Date: Fri, 23 May 2025 23:29:58 +0000
+ 2002:a05:6a21:6da1:b0:215:f6ab:cf78 with SMTP id adf61e73a8af0-2188c34da5cmr1689283637.28.1748043050085;
+ Fri, 23 May 2025 16:30:50 -0700 (PDT)
+Date: Fri, 23 May 2025 23:29:59 +0000
 In-Reply-To: <20250523233018.1702151-1-dmatlack@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250523233018.1702151-1-dmatlack@google.com>
 X-Mailer: git-send-email 2.49.0.1151.ga128411c76-goog
-Message-ID: <20250523233018.1702151-14-dmatlack@google.com>
-Subject: [RFC PATCH 13/33] tools headers: Import drivers/dma/ioat/{hw.h,registers.h}
+Message-ID: <20250523233018.1702151-15-dmatlack@google.com>
+Subject: [RFC PATCH 14/33] tools headers: Import drivers/dma/idxd/registers.h
 From: David Matlack <dmatlack@google.com>
 To: Alex Williamson <alex.williamson@redhat.com>
 Cc: Shuah Khan <shuah@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, 
@@ -98,555 +98,628 @@ Cc: Shuah Khan <shuah@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
 	Dave Jiang <dave.jiang@intel.com>, Dan Williams <dan.j.williams@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Import drivers/dma/ioat/{hw.h,registers.h} into tools/include/ so that
-they can be used in VFIO selftests to interact with Intel CBDMA devices.
+Import drivers/dma/idxd/registers.h into tools/include/ so that it can
+be used in VFIO selftests to interact with Intel DSA devices.
 
 Changes made when importing:
- - Drop system_has_dca_enabled() prototype from hw.h
+ - Drop macro definitions that access struct idxd_device (e.g.
+   WQCFG_OFFSET()).
 
+Cc: Vinicius Costa Gomes <vinicius.gomes@intel.com>
 Cc: Dave Jiang <dave.jiang@intel.com>
-Cc: Dan Williams <dan.j.williams@intel.com>
 Signed-off-by: David Matlack <dmatlack@google.com>
 ---
- tools/include/drivers/dma/ioat/hw.h        | 270 +++++++++++++++++++++
- tools/include/drivers/dma/ioat/registers.h | 251 +++++++++++++++++++
- 2 files changed, 521 insertions(+)
- create mode 100644 tools/include/drivers/dma/ioat/hw.h
- create mode 100644 tools/include/drivers/dma/ioat/registers.h
+ tools/include/drivers/dma/idxd/registers.h | 601 +++++++++++++++++++++
+ 1 file changed, 601 insertions(+)
+ create mode 100644 tools/include/drivers/dma/idxd/registers.h
 
-diff --git a/tools/include/drivers/dma/ioat/hw.h b/tools/include/drivers/dma/ioat/hw.h
+diff --git a/tools/include/drivers/dma/idxd/registers.h b/tools/include/drivers/dma/idxd/registers.h
 new file mode 100644
-index 000000000000..62c7a6644376
+index 000000000000..7f4699e6a5c3
 --- /dev/null
-+++ b/tools/include/drivers/dma/ioat/hw.h
-@@ -0,0 +1,270 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+/*
-+ * Copyright(c) 2004 - 2009 Intel Corporation. All rights reserved.
-+ */
-+#ifndef _IOAT_HW_H_
-+#define _IOAT_HW_H_
++++ b/tools/include/drivers/dma/idxd/registers.h
+@@ -0,0 +1,601 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Copyright(c) 2019 Intel Corporation. All rights rsvd. */
++#ifndef _IDXD_REGISTERS_H_
++#define _IDXD_REGISTERS_H_
 +
++#include <linux/compiler.h>
 +#include <linux/types.h>
++#include <linux/idxd.h>
 +
-+/* PCI Configuration Space Values */
-+#define IOAT_MMIO_BAR		0
++/* PCI Config */
++#define PCI_DEVICE_ID_INTEL_DSA_SPR0	0x0b25
++#define PCI_DEVICE_ID_INTEL_IAX_SPR0	0x0cfe
 +
-+/* CB device ID's */
-+#define PCI_DEVICE_ID_INTEL_IOAT_IVB0	0x0e20
-+#define PCI_DEVICE_ID_INTEL_IOAT_IVB1	0x0e21
-+#define PCI_DEVICE_ID_INTEL_IOAT_IVB2	0x0e22
-+#define PCI_DEVICE_ID_INTEL_IOAT_IVB3	0x0e23
-+#define PCI_DEVICE_ID_INTEL_IOAT_IVB4	0x0e24
-+#define PCI_DEVICE_ID_INTEL_IOAT_IVB5	0x0e25
-+#define PCI_DEVICE_ID_INTEL_IOAT_IVB6	0x0e26
-+#define PCI_DEVICE_ID_INTEL_IOAT_IVB7	0x0e27
-+#define PCI_DEVICE_ID_INTEL_IOAT_IVB8	0x0e2e
-+#define PCI_DEVICE_ID_INTEL_IOAT_IVB9	0x0e2f
++#define DEVICE_VERSION_1		0x100
++#define DEVICE_VERSION_2		0x200
 +
-+#define PCI_DEVICE_ID_INTEL_IOAT_HSW0	0x2f20
-+#define PCI_DEVICE_ID_INTEL_IOAT_HSW1	0x2f21
-+#define PCI_DEVICE_ID_INTEL_IOAT_HSW2	0x2f22
-+#define PCI_DEVICE_ID_INTEL_IOAT_HSW3	0x2f23
-+#define PCI_DEVICE_ID_INTEL_IOAT_HSW4	0x2f24
-+#define PCI_DEVICE_ID_INTEL_IOAT_HSW5	0x2f25
-+#define PCI_DEVICE_ID_INTEL_IOAT_HSW6	0x2f26
-+#define PCI_DEVICE_ID_INTEL_IOAT_HSW7	0x2f27
-+#define PCI_DEVICE_ID_INTEL_IOAT_HSW8	0x2f2e
-+#define PCI_DEVICE_ID_INTEL_IOAT_HSW9	0x2f2f
++#define IDXD_MMIO_BAR		0
++#define IDXD_WQ_BAR		2
++#define IDXD_PORTAL_SIZE	PAGE_SIZE
 +
-+#define PCI_DEVICE_ID_INTEL_IOAT_BWD0	0x0C50
-+#define PCI_DEVICE_ID_INTEL_IOAT_BWD1	0x0C51
-+#define PCI_DEVICE_ID_INTEL_IOAT_BWD2	0x0C52
-+#define PCI_DEVICE_ID_INTEL_IOAT_BWD3	0x0C53
++/* MMIO Device BAR0 Registers */
++#define IDXD_VER_OFFSET			0x00
++#define IDXD_VER_MAJOR_MASK		0xf0
++#define IDXD_VER_MINOR_MASK		0x0f
++#define GET_IDXD_VER_MAJOR(x)		(((x) & IDXD_VER_MAJOR_MASK) >> 4)
++#define GET_IDXD_VER_MINOR(x)		((x) & IDXD_VER_MINOR_MASK)
 +
-+#define PCI_DEVICE_ID_INTEL_IOAT_BDXDE0	0x6f50
-+#define PCI_DEVICE_ID_INTEL_IOAT_BDXDE1	0x6f51
-+#define PCI_DEVICE_ID_INTEL_IOAT_BDXDE2	0x6f52
-+#define PCI_DEVICE_ID_INTEL_IOAT_BDXDE3	0x6f53
++union gen_cap_reg {
++	struct {
++		u64 block_on_fault:1;
++		u64 overlap_copy:1;
++		u64 cache_control_mem:1;
++		u64 cache_control_cache:1;
++		u64 cmd_cap:1;
++		u64 rsvd:3;
++		u64 dest_readback:1;
++		u64 drain_readback:1;
++		u64 rsvd2:3;
++		u64 evl_support:2;
++		u64 batch_continuation:1;
++		u64 max_xfer_shift:5;
++		u64 max_batch_shift:4;
++		u64 max_ims_mult:6;
++		u64 config_en:1;
++		u64 rsvd3:32;
++	};
++	u64 bits;
++} __packed;
++#define IDXD_GENCAP_OFFSET		0x10
 +
-+#define PCI_DEVICE_ID_INTEL_IOAT_BDX0	0x6f20
-+#define PCI_DEVICE_ID_INTEL_IOAT_BDX1	0x6f21
-+#define PCI_DEVICE_ID_INTEL_IOAT_BDX2	0x6f22
-+#define PCI_DEVICE_ID_INTEL_IOAT_BDX3	0x6f23
-+#define PCI_DEVICE_ID_INTEL_IOAT_BDX4	0x6f24
-+#define PCI_DEVICE_ID_INTEL_IOAT_BDX5	0x6f25
-+#define PCI_DEVICE_ID_INTEL_IOAT_BDX6	0x6f26
-+#define PCI_DEVICE_ID_INTEL_IOAT_BDX7	0x6f27
-+#define PCI_DEVICE_ID_INTEL_IOAT_BDX8	0x6f2e
-+#define PCI_DEVICE_ID_INTEL_IOAT_BDX9	0x6f2f
++union wq_cap_reg {
++	struct {
++		u64 total_wq_size:16;
++		u64 num_wqs:8;
++		u64 wqcfg_size:4;
++		u64 rsvd:20;
++		u64 shared_mode:1;
++		u64 dedicated_mode:1;
++		u64 wq_ats_support:1;
++		u64 priority:1;
++		u64 occupancy:1;
++		u64 occupancy_int:1;
++		u64 op_config:1;
++		u64 wq_prs_support:1;
++		u64 rsvd4:8;
++	};
++	u64 bits;
++} __packed;
++#define IDXD_WQCAP_OFFSET		0x20
++#define IDXD_WQCFG_MIN			5
 +
-+#define PCI_DEVICE_ID_INTEL_IOAT_SKX	0x2021
++union group_cap_reg {
++	struct {
++		u64 num_groups:8;
++		u64 total_rdbufs:8;	/* formerly total_tokens */
++		u64 rdbuf_ctrl:1;	/* formerly token_en */
++		u64 rdbuf_limit:1;	/* formerly token_limit */
++		u64 progress_limit:1;	/* descriptor and batch descriptor */
++		u64 rsvd:45;
++	};
++	u64 bits;
++} __packed;
++#define IDXD_GRPCAP_OFFSET		0x30
 +
-+#define PCI_DEVICE_ID_INTEL_IOAT_ICX	0x0b00
++union engine_cap_reg {
++	struct {
++		u64 num_engines:8;
++		u64 rsvd:56;
++	};
++	u64 bits;
++} __packed;
 +
-+#define IOAT_VER_1_2            0x12    /* Version 1.2 */
-+#define IOAT_VER_2_0            0x20    /* Version 2.0 */
-+#define IOAT_VER_3_0            0x30    /* Version 3.0 */
-+#define IOAT_VER_3_2            0x32    /* Version 3.2 */
-+#define IOAT_VER_3_3            0x33    /* Version 3.3 */
-+#define IOAT_VER_3_4		0x34	/* Version 3.4 */
++#define IDXD_ENGCAP_OFFSET		0x38
 +
-+#define IOAT_DESC_SZ	64
++#define IDXD_OPCAP_NOOP			0x0001
++#define IDXD_OPCAP_BATCH			0x0002
++#define IDXD_OPCAP_MEMMOVE		0x0008
++struct opcap {
++	u64 bits[4];
++};
 +
-+struct ioat_dma_descriptor {
-+	uint32_t	size;
++#define IDXD_MAX_OPCAP_BITS		256U
++
++#define IDXD_OPCAP_OFFSET		0x40
++
++#define IDXD_TABLE_OFFSET		0x60
++union offsets_reg {
++	struct {
++		u64 grpcfg:16;
++		u64 wqcfg:16;
++		u64 msix_perm:16;
++		u64 ims:16;
++		u64 perfmon:16;
++		u64 rsvd:48;
++	};
++	u64 bits[2];
++} __packed;
++
++#define IDXD_TABLE_MULT			0x100
++
++#define IDXD_GENCFG_OFFSET		0x80
++union gencfg_reg {
++	struct {
++		u32 rdbuf_limit:8;
++		u32 rsvd:4;
++		u32 user_int_en:1;
++		u32 evl_en:1;
++		u32 rsvd2:18;
++	};
++	u32 bits;
++} __packed;
++
++#define IDXD_GENCTRL_OFFSET		0x88
++union genctrl_reg {
++	struct {
++		u32 softerr_int_en:1;
++		u32 halt_int_en:1;
++		u32 evl_int_en:1;
++		u32 rsvd:29;
++	};
++	u32 bits;
++} __packed;
++
++#define IDXD_GENSTATS_OFFSET		0x90
++union gensts_reg {
++	struct {
++		u32 state:2;
++		u32 reset_type:2;
++		u32 rsvd:28;
++	};
++	u32 bits;
++} __packed;
++
++enum idxd_device_status_state {
++	IDXD_DEVICE_STATE_DISABLED = 0,
++	IDXD_DEVICE_STATE_ENABLED,
++	IDXD_DEVICE_STATE_DRAIN,
++	IDXD_DEVICE_STATE_HALT,
++};
++
++enum idxd_device_reset_type {
++	IDXD_DEVICE_RESET_SOFTWARE = 0,
++	IDXD_DEVICE_RESET_FLR,
++	IDXD_DEVICE_RESET_WARM,
++	IDXD_DEVICE_RESET_COLD,
++};
++
++#define IDXD_INTCAUSE_OFFSET		0x98
++#define IDXD_INTC_ERR			0x01
++#define IDXD_INTC_CMD			0x02
++#define IDXD_INTC_OCCUPY			0x04
++#define IDXD_INTC_PERFMON_OVFL		0x08
++#define IDXD_INTC_HALT_STATE		0x10
++#define IDXD_INTC_EVL			0x20
++#define IDXD_INTC_INT_HANDLE_REVOKED	0x80000000
++
++#define IDXD_CMD_OFFSET			0xa0
++union idxd_command_reg {
++	struct {
++		u32 operand:20;
++		u32 cmd:5;
++		u32 rsvd:6;
++		u32 int_req:1;
++	};
++	u32 bits;
++} __packed;
++
++enum idxd_cmd {
++	IDXD_CMD_ENABLE_DEVICE = 1,
++	IDXD_CMD_DISABLE_DEVICE,
++	IDXD_CMD_DRAIN_ALL,
++	IDXD_CMD_ABORT_ALL,
++	IDXD_CMD_RESET_DEVICE,
++	IDXD_CMD_ENABLE_WQ,
++	IDXD_CMD_DISABLE_WQ,
++	IDXD_CMD_DRAIN_WQ,
++	IDXD_CMD_ABORT_WQ,
++	IDXD_CMD_RESET_WQ,
++	IDXD_CMD_DRAIN_PASID,
++	IDXD_CMD_ABORT_PASID,
++	IDXD_CMD_REQUEST_INT_HANDLE,
++	IDXD_CMD_RELEASE_INT_HANDLE,
++};
++
++#define CMD_INT_HANDLE_IMS		0x10000
++
++#define IDXD_CMDSTS_OFFSET		0xa8
++union cmdsts_reg {
++	struct {
++		u8 err;
++		u16 result;
++		u8 rsvd:7;
++		u8 active:1;
++	};
++	u32 bits;
++} __packed;
++#define IDXD_CMDSTS_ACTIVE		0x80000000
++#define IDXD_CMDSTS_ERR_MASK		0xff
++#define IDXD_CMDSTS_RES_SHIFT		8
++
++enum idxd_cmdsts_err {
++	IDXD_CMDSTS_SUCCESS = 0,
++	IDXD_CMDSTS_INVAL_CMD,
++	IDXD_CMDSTS_INVAL_WQIDX,
++	IDXD_CMDSTS_HW_ERR,
++	/* enable device errors */
++	IDXD_CMDSTS_ERR_DEV_ENABLED = 0x10,
++	IDXD_CMDSTS_ERR_CONFIG,
++	IDXD_CMDSTS_ERR_BUSMASTER_EN,
++	IDXD_CMDSTS_ERR_PASID_INVAL,
++	IDXD_CMDSTS_ERR_WQ_SIZE_ERANGE,
++	IDXD_CMDSTS_ERR_GRP_CONFIG,
++	IDXD_CMDSTS_ERR_GRP_CONFIG2,
++	IDXD_CMDSTS_ERR_GRP_CONFIG3,
++	IDXD_CMDSTS_ERR_GRP_CONFIG4,
++	/* enable wq errors */
++	IDXD_CMDSTS_ERR_DEV_NOTEN = 0x20,
++	IDXD_CMDSTS_ERR_WQ_ENABLED,
++	IDXD_CMDSTS_ERR_WQ_SIZE,
++	IDXD_CMDSTS_ERR_WQ_PRIOR,
++	IDXD_CMDSTS_ERR_WQ_MODE,
++	IDXD_CMDSTS_ERR_BOF_EN,
++	IDXD_CMDSTS_ERR_PASID_EN,
++	IDXD_CMDSTS_ERR_MAX_BATCH_SIZE,
++	IDXD_CMDSTS_ERR_MAX_XFER_SIZE,
++	/* disable device errors */
++	IDXD_CMDSTS_ERR_DIS_DEV_EN = 0x31,
++	/* disable WQ, drain WQ, abort WQ, reset WQ */
++	IDXD_CMDSTS_ERR_DEV_NOT_EN,
++	/* request interrupt handle */
++	IDXD_CMDSTS_ERR_INVAL_INT_IDX = 0x41,
++	IDXD_CMDSTS_ERR_NO_HANDLE,
++};
++
++#define IDXD_CMDCAP_OFFSET		0xb0
++
++#define IDXD_SWERR_OFFSET		0xc0
++#define IDXD_SWERR_VALID		0x00000001
++#define IDXD_SWERR_OVERFLOW		0x00000002
++#define IDXD_SWERR_ACK			(IDXD_SWERR_VALID | IDXD_SWERR_OVERFLOW)
++union sw_err_reg {
++	struct {
++		u64 valid:1;
++		u64 overflow:1;
++		u64 desc_valid:1;
++		u64 wq_idx_valid:1;
++		u64 batch:1;
++		u64 fault_rw:1;
++		u64 priv:1;
++		u64 rsvd:1;
++		u64 error:8;
++		u64 wq_idx:8;
++		u64 rsvd2:8;
++		u64 operation:8;
++		u64 pasid:20;
++		u64 rsvd3:4;
++
++		u64 batch_idx:16;
++		u64 rsvd4:16;
++		u64 invalid_flags:32;
++
++		u64 fault_addr;
++
++		u64 rsvd5;
++	};
++	u64 bits[4];
++} __packed;
++
++union iaa_cap_reg {
++	struct {
++		u64 dec_aecs_format_ver:1;
++		u64 drop_init_bits:1;
++		u64 chaining:1;
++		u64 force_array_output_mod:1;
++		u64 load_part_aecs:1;
++		u64 comp_early_abort:1;
++		u64 nested_comp:1;
++		u64 diction_comp:1;
++		u64 header_gen:1;
++		u64 crypto_gcm:1;
++		u64 crypto_cfb:1;
++		u64 crypto_xts:1;
++		u64 rsvd:52;
++	};
++	u64 bits;
++} __packed;
++
++#define IDXD_IAACAP_OFFSET	0x180
++
++#define IDXD_EVLCFG_OFFSET	0xe0
++union evlcfg_reg {
++	struct {
++		u64 pasid_en:1;
++		u64 priv:1;
++		u64 rsvd:10;
++		u64 base_addr:52;
++
++		u64 size:16;
++		u64 pasid:20;
++		u64 rsvd2:28;
++	};
++	u64 bits[2];
++} __packed;
++
++#define IDXD_EVL_SIZE_MIN	0x0040
++#define IDXD_EVL_SIZE_MAX	0xffff
++
++union msix_perm {
++	struct {
++		u32 rsvd:2;
++		u32 ignore:1;
++		u32 pasid_en:1;
++		u32 rsvd2:8;
++		u32 pasid:20;
++	};
++	u32 bits;
++} __packed;
++
++union group_flags {
++	struct {
++		u64 tc_a:3;
++		u64 tc_b:3;
++		u64 rsvd:1;
++		u64 use_rdbuf_limit:1;
++		u64 rdbufs_reserved:8;
++		u64 rsvd2:4;
++		u64 rdbufs_allowed:8;
++		u64 rsvd3:4;
++		u64 desc_progress_limit:2;
++		u64 rsvd4:2;
++		u64 batch_progress_limit:2;
++		u64 rsvd5:26;
++	};
++	u64 bits;
++} __packed;
++
++struct grpcfg {
++	u64 wqs[4];
++	u64 engines;
++	union group_flags flags;
++} __packed;
++
++union wqcfg {
++	struct {
++		/* bytes 0-3 */
++		u16 wq_size;
++		u16 rsvd;
++
++		/* bytes 4-7 */
++		u16 wq_thresh;
++		u16 rsvd1;
++
++		/* bytes 8-11 */
++		u32 mode:1;	/* shared or dedicated */
++		u32 bof:1;	/* block on fault */
++		u32 wq_ats_disable:1;
++		u32 wq_prs_disable:1;
++		u32 priority:4;
++		u32 pasid:20;
++		u32 pasid_en:1;
++		u32 priv:1;
++		u32 rsvd3:2;
++
++		/* bytes 12-15 */
++		u32 max_xfer_shift:5;
++		u32 max_batch_shift:4;
++		u32 rsvd4:23;
++
++		/* bytes 16-19 */
++		u16 occupancy_inth;
++		u16 occupancy_table_sel:1;
++		u16 rsvd5:15;
++
++		/* bytes 20-23 */
++		u16 occupancy_limit;
++		u16 occupancy_int_en:1;
++		u16 rsvd6:15;
++
++		/* bytes 24-27 */
++		u16 occupancy;
++		u16 occupancy_int:1;
++		u16 rsvd7:12;
++		u16 mode_support:1;
++		u16 wq_state:2;
++
++		/* bytes 28-31 */
++		u32 rsvd8;
++
++		/* bytes 32-63 */
++		u64 op_config[4];
++	};
++	u32 bits[16];
++} __packed;
++
++#define WQCFG_PASID_IDX                2
++#define WQCFG_PRIVL_IDX		2
++#define WQCFG_OCCUP_IDX		6
++
++#define WQCFG_OCCUP_MASK	0xffff
++
++#define GRPCFG_SIZE		64
++#define GRPWQCFG_STRIDES	4
++
++/* Following is performance monitor registers */
++#define IDXD_PERFCAP_OFFSET		0x0
++union idxd_perfcap {
++	struct {
++		u64 num_perf_counter:6;
++		u64 rsvd1:2;
++		u64 counter_width:8;
++		u64 num_event_category:4;
++		u64 global_event_category:16;
++		u64 filter:8;
++		u64 rsvd2:8;
++		u64 cap_per_counter:1;
++		u64 writeable_counter:1;
++		u64 counter_freeze:1;
++		u64 overflow_interrupt:1;
++		u64 rsvd3:8;
++	};
++	u64 bits;
++} __packed;
++
++#define IDXD_EVNTCAP_OFFSET		0x80
++union idxd_evntcap {
++	struct {
++		u64 events:28;
++		u64 rsvd:36;
++	};
++	u64 bits;
++} __packed;
++
++struct idxd_event {
 +	union {
-+		uint32_t ctl;
 +		struct {
-+			unsigned int int_en:1;
-+			unsigned int src_snoop_dis:1;
-+			unsigned int dest_snoop_dis:1;
-+			unsigned int compl_write:1;
-+			unsigned int fence:1;
-+			unsigned int null:1;
-+			unsigned int src_brk:1;
-+			unsigned int dest_brk:1;
-+			unsigned int bundle:1;
-+			unsigned int dest_dca:1;
-+			unsigned int hint:1;
-+			unsigned int rsvd2:13;
-+			#define IOAT_OP_COPY 0x00
-+			unsigned int op:8;
-+		} ctl_f;
++			u32 event_category:4;
++			u32 events:28;
++		};
++		u32 val;
 +	};
-+	uint64_t	src_addr;
-+	uint64_t	dst_addr;
-+	uint64_t	next;
-+	uint64_t	rsv1;
-+	uint64_t	rsv2;
-+	/* store some driver data in an unused portion of the descriptor */
-+	union {
-+		uint64_t	user1;
-+		uint64_t	tx_cnt;
-+	};
-+	uint64_t	user2;
-+};
++} __packed;
 +
-+struct ioat_xor_descriptor {
-+	uint32_t	size;
++#define IDXD_CNTRCAP_OFFSET		0x800
++struct idxd_cntrcap {
 +	union {
-+		uint32_t ctl;
 +		struct {
-+			unsigned int int_en:1;
-+			unsigned int src_snoop_dis:1;
-+			unsigned int dest_snoop_dis:1;
-+			unsigned int compl_write:1;
-+			unsigned int fence:1;
-+			unsigned int src_cnt:3;
-+			unsigned int bundle:1;
-+			unsigned int dest_dca:1;
-+			unsigned int hint:1;
-+			unsigned int rsvd:13;
-+			#define IOAT_OP_XOR 0x87
-+			#define IOAT_OP_XOR_VAL 0x88
-+			unsigned int op:8;
-+		} ctl_f;
++			u32 counter_width:8;
++			u32 rsvd:20;
++			u32 num_events:4;
++		};
++		u32 val;
 +	};
-+	uint64_t	src_addr;
-+	uint64_t	dst_addr;
-+	uint64_t	next;
-+	uint64_t	src_addr2;
-+	uint64_t	src_addr3;
-+	uint64_t	src_addr4;
-+	uint64_t	src_addr5;
-+};
++	struct idxd_event events[];
++} __packed;
 +
-+struct ioat_xor_ext_descriptor {
-+	uint64_t	src_addr6;
-+	uint64_t	src_addr7;
-+	uint64_t	src_addr8;
-+	uint64_t	next;
-+	uint64_t	rsvd[4];
-+};
++#define IDXD_PERFRST_OFFSET		0x10
++union idxd_perfrst {
++	struct {
++		u32 perfrst_config:1;
++		u32 perfrst_counter:1;
++		u32 rsvd:30;
++	};
++	u32 val;
++} __packed;
 +
-+struct ioat_pq_descriptor {
++#define IDXD_OVFSTATUS_OFFSET		0x30
++#define IDXD_PERFFRZ_OFFSET		0x20
++#define IDXD_CNTRCFG_OFFSET		0x100
++union idxd_cntrcfg {
++	struct {
++		u64 enable:1;
++		u64 interrupt_ovf:1;
++		u64 global_freeze_ovf:1;
++		u64 rsvd1:5;
++		u64 event_category:4;
++		u64 rsvd2:20;
++		u64 events:28;
++		u64 rsvd3:4;
++	};
++	u64 val;
++} __packed;
++
++#define IDXD_FLTCFG_OFFSET		0x300
++
++#define IDXD_CNTRDATA_OFFSET		0x200
++union idxd_cntrdata {
++	struct {
++		u64 event_count_value;
++	};
++	u64 val;
++} __packed;
++
++union event_cfg {
++	struct {
++		u64 event_cat:4;
++		u64 event_enc:28;
++	};
++	u64 val;
++} __packed;
++
++union filter_cfg {
++	struct {
++		u64 wq:32;
++		u64 tc:8;
++		u64 pg_sz:4;
++		u64 xfer_sz:8;
++		u64 eng:8;
++	};
++	u64 val;
++} __packed;
++
++#define IDXD_EVLSTATUS_OFFSET		0xf0
++
++union evl_status_reg {
++	struct {
++		u32 head:16;
++		u32 rsvd:16;
++		u32 tail:16;
++		u32 rsvd2:14;
++		u32 int_pending:1;
++		u32 rsvd3:1;
++	};
++	struct {
++		u32 bits_lower32;
++		u32 bits_upper32;
++	};
++	u64 bits;
++} __packed;
++
++#define IDXD_MAX_BATCH_IDENT	256
++
++struct __evl_entry {
++	u64 rsvd:2;
++	u64 desc_valid:1;
++	u64 wq_idx_valid:1;
++	u64 batch:1;
++	u64 fault_rw:1;
++	u64 priv:1;
++	u64 err_info_valid:1;
++	u64 error:8;
++	u64 wq_idx:8;
++	u64 batch_id:8;
++	u64 operation:8;
++	u64 pasid:20;
++	u64 rsvd2:4;
++
++	u16 batch_idx;
++	u16 rsvd3;
 +	union {
-+		uint32_t	size;
-+		uint32_t	dwbes;
++		/* Invalid Flags 0x11 */
++		u32 invalid_flags;
++		/* Invalid Int Handle 0x19 */
++		/* Page fault 0x1a */
++		/* Page fault 0x06, 0x1f, only operand_id */
++		/* Page fault before drain or in batch, 0x26, 0x27 */
 +		struct {
-+			unsigned int rsvd:25;
-+			unsigned int p_val_err:1;
-+			unsigned int q_val_err:1;
-+			unsigned int rsvd1:4;
-+			unsigned int wbes:1;
-+		} dwbes_f;
++			u16 int_handle;
++			u16 rci:1;
++			u16 ims:1;
++			u16 rcr:1;
++			u16 first_err_in_batch:1;
++			u16 rsvd4_2:9;
++			u16 operand_id:3;
++		};
 +	};
-+	union {
-+		uint32_t ctl;
-+		struct {
-+			unsigned int int_en:1;
-+			unsigned int src_snoop_dis:1;
-+			unsigned int dest_snoop_dis:1;
-+			unsigned int compl_write:1;
-+			unsigned int fence:1;
-+			unsigned int src_cnt:3;
-+			unsigned int bundle:1;
-+			unsigned int dest_dca:1;
-+			unsigned int hint:1;
-+			unsigned int p_disable:1;
-+			unsigned int q_disable:1;
-+			unsigned int rsvd2:2;
-+			unsigned int wb_en:1;
-+			unsigned int prl_en:1;
-+			unsigned int rsvd3:7;
-+			#define IOAT_OP_PQ 0x89
-+			#define IOAT_OP_PQ_VAL 0x8a
-+			#define IOAT_OP_PQ_16S 0xa0
-+			#define IOAT_OP_PQ_VAL_16S 0xa1
-+			unsigned int op:8;
-+		} ctl_f;
-+	};
-+	uint64_t	src_addr;
-+	uint64_t	p_addr;
-+	uint64_t	next;
-+	uint64_t	src_addr2;
-+	union {
-+		uint64_t	src_addr3;
-+		uint64_t	sed_addr;
-+	};
-+	uint8_t		coef[8];
-+	uint64_t	q_addr;
-+};
++	u64 fault_addr;
++	u64 rsvd5;
++} __packed;
 +
-+struct ioat_pq_ext_descriptor {
-+	uint64_t	src_addr4;
-+	uint64_t	src_addr5;
-+	uint64_t	src_addr6;
-+	uint64_t	next;
-+	uint64_t	src_addr7;
-+	uint64_t	src_addr8;
-+	uint64_t	rsvd[2];
-+};
++struct dsa_evl_entry {
++	struct __evl_entry e;
++	struct dsa_completion_record cr;
++} __packed;
 +
-+struct ioat_pq_update_descriptor {
-+	uint32_t	size;
-+	union {
-+		uint32_t ctl;
-+		struct {
-+			unsigned int int_en:1;
-+			unsigned int src_snoop_dis:1;
-+			unsigned int dest_snoop_dis:1;
-+			unsigned int compl_write:1;
-+			unsigned int fence:1;
-+			unsigned int src_cnt:3;
-+			unsigned int bundle:1;
-+			unsigned int dest_dca:1;
-+			unsigned int hint:1;
-+			unsigned int p_disable:1;
-+			unsigned int q_disable:1;
-+			unsigned int rsvd:3;
-+			unsigned int coef:8;
-+			#define IOAT_OP_PQ_UP 0x8b
-+			unsigned int op:8;
-+		} ctl_f;
-+	};
-+	uint64_t	src_addr;
-+	uint64_t	p_addr;
-+	uint64_t	next;
-+	uint64_t	src_addr2;
-+	uint64_t	p_src;
-+	uint64_t	q_src;
-+	uint64_t	q_addr;
-+};
-+
-+struct ioat_raw_descriptor {
-+	uint64_t	field[8];
-+};
-+
-+struct ioat_pq16a_descriptor {
-+	uint8_t coef[8];
-+	uint64_t src_addr3;
-+	uint64_t src_addr4;
-+	uint64_t src_addr5;
-+	uint64_t src_addr6;
-+	uint64_t src_addr7;
-+	uint64_t src_addr8;
-+	uint64_t src_addr9;
-+};
-+
-+struct ioat_pq16b_descriptor {
-+	uint64_t src_addr10;
-+	uint64_t src_addr11;
-+	uint64_t src_addr12;
-+	uint64_t src_addr13;
-+	uint64_t src_addr14;
-+	uint64_t src_addr15;
-+	uint64_t src_addr16;
-+	uint64_t rsvd;
-+};
-+
-+union ioat_sed_pq_descriptor {
-+	struct ioat_pq16a_descriptor a;
-+	struct ioat_pq16b_descriptor b;
-+};
-+
-+#define SED_SIZE	64
-+
-+struct ioat_sed_raw_descriptor {
-+	uint64_t	a[8];
-+	uint64_t	b[8];
-+	uint64_t	c[8];
-+};
++struct iax_evl_entry {
++	struct __evl_entry e;
++	u64 rsvd[4];
++	struct iax_completion_record cr;
++} __packed;
 +
 +#endif
-diff --git a/tools/include/drivers/dma/ioat/registers.h b/tools/include/drivers/dma/ioat/registers.h
-new file mode 100644
-index 000000000000..54cf0ad39887
---- /dev/null
-+++ b/tools/include/drivers/dma/ioat/registers.h
-@@ -0,0 +1,251 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+/*
-+ * Copyright(c) 2004 - 2009 Intel Corporation. All rights reserved.
-+ */
-+#ifndef _IOAT_REGISTERS_H_
-+#define _IOAT_REGISTERS_H_
-+
-+#define IOAT_PCI_DMACTRL_OFFSET			0x48
-+#define IOAT_PCI_DMACTRL_DMA_EN			0x00000001
-+#define IOAT_PCI_DMACTRL_MSI_EN			0x00000002
-+
-+#define IOAT_PCI_DEVICE_ID_OFFSET		0x02
-+#define IOAT_PCI_DMAUNCERRSTS_OFFSET		0x148
-+#define IOAT_PCI_CHANERR_INT_OFFSET		0x180
-+#define IOAT_PCI_CHANERRMASK_INT_OFFSET		0x184
-+
-+/* MMIO Device Registers */
-+#define IOAT_CHANCNT_OFFSET			0x00	/*  8-bit */
-+
-+#define IOAT_XFERCAP_OFFSET			0x01	/*  8-bit */
-+#define IOAT_XFERCAP_4KB			12
-+#define IOAT_XFERCAP_8KB			13
-+#define IOAT_XFERCAP_16KB			14
-+#define IOAT_XFERCAP_32KB			15
-+#define IOAT_XFERCAP_32GB			0
-+
-+#define IOAT_GENCTRL_OFFSET			0x02	/*  8-bit */
-+#define IOAT_GENCTRL_DEBUG_EN			0x01
-+
-+#define IOAT_INTRCTRL_OFFSET			0x03	/*  8-bit */
-+#define IOAT_INTRCTRL_MASTER_INT_EN		0x01	/* Master Interrupt Enable */
-+#define IOAT_INTRCTRL_INT_STATUS		0x02	/* ATTNSTATUS -or- Channel Int */
-+#define IOAT_INTRCTRL_INT			0x04	/* INT_STATUS -and- MASTER_INT_EN */
-+#define IOAT_INTRCTRL_MSIX_VECTOR_CONTROL	0x08	/* Enable all MSI-X vectors */
-+
-+#define IOAT_ATTNSTATUS_OFFSET			0x04	/* Each bit is a channel */
-+
-+#define IOAT_VER_OFFSET				0x08	/*  8-bit */
-+#define IOAT_VER_MAJOR_MASK			0xF0
-+#define IOAT_VER_MINOR_MASK			0x0F
-+#define GET_IOAT_VER_MAJOR(x)			(((x) & IOAT_VER_MAJOR_MASK) >> 4)
-+#define GET_IOAT_VER_MINOR(x)			((x) & IOAT_VER_MINOR_MASK)
-+
-+#define IOAT_PERPORTOFFSET_OFFSET		0x0A	/* 16-bit */
-+
-+#define IOAT_INTRDELAY_OFFSET			0x0C	/* 16-bit */
-+#define IOAT_INTRDELAY_MASK			0x3FFF	/* Interrupt Delay Time */
-+#define IOAT_INTRDELAY_COALESE_SUPPORT		0x8000	/* Interrupt Coalescing Supported */
-+
-+#define IOAT_DEVICE_STATUS_OFFSET		0x0E	/* 16-bit */
-+#define IOAT_DEVICE_STATUS_DEGRADED_MODE	0x0001
-+#define IOAT_DEVICE_MMIO_RESTRICTED		0x0002
-+#define IOAT_DEVICE_MEMORY_BYPASS		0x0004
-+#define IOAT_DEVICE_ADDRESS_REMAPPING		0x0008
-+
-+#define IOAT_DMA_CAP_OFFSET			0x10	/* 32-bit */
-+#define IOAT_CAP_PAGE_BREAK			0x00000001
-+#define IOAT_CAP_CRC				0x00000002
-+#define IOAT_CAP_SKIP_MARKER			0x00000004
-+#define IOAT_CAP_DCA				0x00000010
-+#define IOAT_CAP_CRC_MOVE			0x00000020
-+#define IOAT_CAP_FILL_BLOCK			0x00000040
-+#define IOAT_CAP_APIC				0x00000080
-+#define IOAT_CAP_XOR				0x00000100
-+#define IOAT_CAP_PQ				0x00000200
-+#define IOAT_CAP_DWBES				0x00002000
-+#define IOAT_CAP_RAID16SS			0x00020000
-+#define IOAT_CAP_DPS				0x00800000
-+
-+#define IOAT_PREFETCH_LIMIT_OFFSET		0x4C	/* CHWPREFLMT */
-+
-+#define IOAT_CHANNEL_MMIO_SIZE			0x80	/* Each Channel MMIO space is this size */
-+
-+/* DMA Channel Registers */
-+#define IOAT_CHANCTRL_OFFSET			0x00	/* 16-bit Channel Control Register */
-+#define IOAT_CHANCTRL_CHANNEL_PRIORITY_MASK	0xF000
-+#define IOAT3_CHANCTRL_COMPL_DCA_EN		0x0200
-+#define IOAT_CHANCTRL_CHANNEL_IN_USE		0x0100
-+#define IOAT_CHANCTRL_DESCRIPTOR_ADDR_SNOOP_CONTROL	0x0020
-+#define IOAT_CHANCTRL_ERR_INT_EN		0x0010
-+#define IOAT_CHANCTRL_ANY_ERR_ABORT_EN		0x0008
-+#define IOAT_CHANCTRL_ERR_COMPLETION_EN		0x0004
-+#define IOAT_CHANCTRL_INT_REARM			0x0001
-+#define IOAT_CHANCTRL_RUN			(IOAT_CHANCTRL_INT_REARM |\
-+						 IOAT_CHANCTRL_ERR_INT_EN |\
-+						 IOAT_CHANCTRL_ERR_COMPLETION_EN |\
-+						 IOAT_CHANCTRL_ANY_ERR_ABORT_EN)
-+
-+#define IOAT_DMA_COMP_OFFSET			0x02	/* 16-bit DMA channel compatibility */
-+#define IOAT_DMA_COMP_V1			0x0001	/* Compatibility with DMA version 1 */
-+#define IOAT_DMA_COMP_V2			0x0002	/* Compatibility with DMA version 2 */
-+
-+#define IOAT_CHANSTS_OFFSET		0x08	/* 64-bit Channel Status Register */
-+#define IOAT_CHANSTS_COMPLETED_DESCRIPTOR_ADDR	(~0x3fULL)
-+#define IOAT_CHANSTS_SOFT_ERR			0x10ULL
-+#define IOAT_CHANSTS_UNAFFILIATED_ERR		0x8ULL
-+#define IOAT_CHANSTS_STATUS	0x7ULL
-+#define IOAT_CHANSTS_ACTIVE	0x0
-+#define IOAT_CHANSTS_DONE	0x1
-+#define IOAT_CHANSTS_SUSPENDED	0x2
-+#define IOAT_CHANSTS_HALTED	0x3
-+
-+
-+
-+#define IOAT_CHAN_DMACOUNT_OFFSET	0x06    /* 16-bit DMA Count register */
-+
-+#define IOAT_DCACTRL_OFFSET         0x30   /* 32 bit Direct Cache Access Control Register */
-+#define IOAT_DCACTRL_CMPL_WRITE_ENABLE 0x10000
-+#define IOAT_DCACTRL_TARGET_CPU_MASK   0xFFFF /* APIC ID */
-+
-+/* CB DCA Memory Space Registers */
-+#define IOAT_DCAOFFSET_OFFSET       0x14
-+/* CB_BAR + IOAT_DCAOFFSET value */
-+#define IOAT_DCA_VER_OFFSET         0x00
-+#define IOAT_DCA_VER_MAJOR_MASK     0xF0
-+#define IOAT_DCA_VER_MINOR_MASK     0x0F
-+
-+#define IOAT_DCA_COMP_OFFSET        0x02
-+#define IOAT_DCA_COMP_V1            0x1
-+
-+#define IOAT_FSB_CAPABILITY_OFFSET  0x04
-+#define IOAT_FSB_CAPABILITY_PREFETCH    0x1
-+
-+#define IOAT_PCI_CAPABILITY_OFFSET  0x06
-+#define IOAT_PCI_CAPABILITY_MEMWR   0x1
-+
-+#define IOAT_FSB_CAP_ENABLE_OFFSET  0x08
-+#define IOAT_FSB_CAP_ENABLE_PREFETCH    0x1
-+
-+#define IOAT_PCI_CAP_ENABLE_OFFSET  0x0A
-+#define IOAT_PCI_CAP_ENABLE_MEMWR   0x1
-+
-+#define IOAT_APICID_TAG_MAP_OFFSET  0x0C
-+#define IOAT_APICID_TAG_MAP_TAG0    0x0000000F
-+#define IOAT_APICID_TAG_MAP_TAG0_SHIFT 0
-+#define IOAT_APICID_TAG_MAP_TAG1    0x000000F0
-+#define IOAT_APICID_TAG_MAP_TAG1_SHIFT 4
-+#define IOAT_APICID_TAG_MAP_TAG2    0x00000F00
-+#define IOAT_APICID_TAG_MAP_TAG2_SHIFT 8
-+#define IOAT_APICID_TAG_MAP_TAG3    0x0000F000
-+#define IOAT_APICID_TAG_MAP_TAG3_SHIFT 12
-+#define IOAT_APICID_TAG_MAP_TAG4    0x000F0000
-+#define IOAT_APICID_TAG_MAP_TAG4_SHIFT 16
-+#define IOAT_APICID_TAG_CB2_VALID   0x8080808080
-+
-+#define IOAT_DCA_GREQID_OFFSET      0x10
-+#define IOAT_DCA_GREQID_SIZE        0x04
-+#define IOAT_DCA_GREQID_MASK        0xFFFF
-+#define IOAT_DCA_GREQID_IGNOREFUN   0x10000000
-+#define IOAT_DCA_GREQID_VALID       0x20000000
-+#define IOAT_DCA_GREQID_LASTID      0x80000000
-+
-+#define IOAT3_CSI_CAPABILITY_OFFSET 0x08
-+#define IOAT3_CSI_CAPABILITY_PREFETCH    0x1
-+
-+#define IOAT3_PCI_CAPABILITY_OFFSET 0x0A
-+#define IOAT3_PCI_CAPABILITY_MEMWR  0x1
-+
-+#define IOAT3_CSI_CONTROL_OFFSET    0x0C
-+#define IOAT3_CSI_CONTROL_PREFETCH  0x1
-+
-+#define IOAT3_PCI_CONTROL_OFFSET    0x0E
-+#define IOAT3_PCI_CONTROL_MEMWR     0x1
-+
-+#define IOAT3_APICID_TAG_MAP_OFFSET 0x10
-+#define IOAT3_APICID_TAG_MAP_OFFSET_LOW  0x10
-+#define IOAT3_APICID_TAG_MAP_OFFSET_HIGH 0x14
-+
-+#define IOAT3_DCA_GREQID_OFFSET     0x02
-+
-+#define IOAT1_CHAINADDR_OFFSET		0x0C	/* 64-bit Descriptor Chain Address Register */
-+#define IOAT2_CHAINADDR_OFFSET		0x10	/* 64-bit Descriptor Chain Address Register */
-+#define IOAT_CHAINADDR_OFFSET(ver)		((ver) < IOAT_VER_2_0 \
-+						? IOAT1_CHAINADDR_OFFSET : IOAT2_CHAINADDR_OFFSET)
-+#define IOAT1_CHAINADDR_OFFSET_LOW	0x0C
-+#define IOAT2_CHAINADDR_OFFSET_LOW	0x10
-+#define IOAT_CHAINADDR_OFFSET_LOW(ver)		((ver) < IOAT_VER_2_0 \
-+						? IOAT1_CHAINADDR_OFFSET_LOW : IOAT2_CHAINADDR_OFFSET_LOW)
-+#define IOAT1_CHAINADDR_OFFSET_HIGH	0x10
-+#define IOAT2_CHAINADDR_OFFSET_HIGH	0x14
-+#define IOAT_CHAINADDR_OFFSET_HIGH(ver)		((ver) < IOAT_VER_2_0 \
-+						? IOAT1_CHAINADDR_OFFSET_HIGH : IOAT2_CHAINADDR_OFFSET_HIGH)
-+
-+#define IOAT1_CHANCMD_OFFSET		0x14	/*  8-bit DMA Channel Command Register */
-+#define IOAT2_CHANCMD_OFFSET		0x04	/*  8-bit DMA Channel Command Register */
-+#define IOAT_CHANCMD_OFFSET(ver)		((ver) < IOAT_VER_2_0 \
-+						? IOAT1_CHANCMD_OFFSET : IOAT2_CHANCMD_OFFSET)
-+#define IOAT_CHANCMD_RESET			0x20
-+#define IOAT_CHANCMD_RESUME			0x10
-+#define IOAT_CHANCMD_ABORT			0x08
-+#define IOAT_CHANCMD_SUSPEND			0x04
-+#define IOAT_CHANCMD_APPEND			0x02
-+#define IOAT_CHANCMD_START			0x01
-+
-+#define IOAT_CHANCMP_OFFSET			0x18	/* 64-bit Channel Completion Address Register */
-+#define IOAT_CHANCMP_OFFSET_LOW			0x18
-+#define IOAT_CHANCMP_OFFSET_HIGH		0x1C
-+
-+#define IOAT_CDAR_OFFSET			0x20	/* 64-bit Current Descriptor Address Register */
-+#define IOAT_CDAR_OFFSET_LOW			0x20
-+#define IOAT_CDAR_OFFSET_HIGH			0x24
-+
-+#define IOAT_CHANERR_OFFSET			0x28	/* 32-bit Channel Error Register */
-+#define IOAT_CHANERR_SRC_ADDR_ERR	0x0001
-+#define IOAT_CHANERR_DEST_ADDR_ERR	0x0002
-+#define IOAT_CHANERR_NEXT_ADDR_ERR	0x0004
-+#define IOAT_CHANERR_NEXT_DESC_ALIGN_ERR	0x0008
-+#define IOAT_CHANERR_CHAIN_ADDR_VALUE_ERR	0x0010
-+#define IOAT_CHANERR_CHANCMD_ERR		0x0020
-+#define IOAT_CHANERR_CHIPSET_UNCORRECTABLE_DATA_INTEGRITY_ERR	0x0040
-+#define IOAT_CHANERR_DMA_UNCORRECTABLE_DATA_INTEGRITY_ERR	0x0080
-+#define IOAT_CHANERR_READ_DATA_ERR		0x0100
-+#define IOAT_CHANERR_WRITE_DATA_ERR		0x0200
-+#define IOAT_CHANERR_CONTROL_ERR	0x0400
-+#define IOAT_CHANERR_LENGTH_ERR	0x0800
-+#define IOAT_CHANERR_COMPLETION_ADDR_ERR	0x1000
-+#define IOAT_CHANERR_INT_CONFIGURATION_ERR	0x2000
-+#define IOAT_CHANERR_SOFT_ERR			0x4000
-+#define IOAT_CHANERR_UNAFFILIATED_ERR		0x8000
-+#define IOAT_CHANERR_XOR_P_OR_CRC_ERR		0x10000
-+#define IOAT_CHANERR_XOR_Q_ERR			0x20000
-+#define IOAT_CHANERR_DESCRIPTOR_COUNT_ERR	0x40000
-+
-+#define IOAT_CHANERR_HANDLE_MASK (IOAT_CHANERR_XOR_P_OR_CRC_ERR | IOAT_CHANERR_XOR_Q_ERR)
-+#define IOAT_CHANERR_RECOVER_MASK (IOAT_CHANERR_READ_DATA_ERR | \
-+				   IOAT_CHANERR_WRITE_DATA_ERR)
-+
-+#define IOAT_CHANERR_MASK_OFFSET		0x2C	/* 32-bit Channel Error Register */
-+
-+#define IOAT_CHAN_DRSCTL_OFFSET			0xB6
-+#define IOAT_CHAN_DRSZ_4KB			0x0000
-+#define IOAT_CHAN_DRSZ_8KB			0x0001
-+#define IOAT_CHAN_DRSZ_2MB			0x0009
-+#define IOAT_CHAN_DRS_EN			0x0100
-+#define IOAT_CHAN_DRS_AUTOWRAP			0x0200
-+
-+#define IOAT_CHAN_LTR_SWSEL_OFFSET		0xBC
-+#define IOAT_CHAN_LTR_SWSEL_ACTIVE		0x0
-+#define IOAT_CHAN_LTR_SWSEL_IDLE		0x1
-+
-+#define IOAT_CHAN_LTR_ACTIVE_OFFSET		0xC0
-+#define IOAT_CHAN_LTR_ACTIVE_SNVAL		0x0000	/* 0 us */
-+#define IOAT_CHAN_LTR_ACTIVE_SNLATSCALE		0x0800	/* 1us scale */
-+#define IOAT_CHAN_LTR_ACTIVE_SNREQMNT		0x8000	/* snoop req enable */
-+
-+#define IOAT_CHAN_LTR_IDLE_OFFSET		0xC4
-+#define IOAT_CHAN_LTR_IDLE_SNVAL		0x0258	/* 600 us */
-+#define IOAT_CHAN_LTR_IDLE_SNLATSCALE		0x0800	/* 1us scale */
-+#define IOAT_CHAN_LTR_IDLE_SNREQMNT		0x8000	/* snoop req enable */
-+
-+#endif /* _IOAT_REGISTERS_H_ */
 -- 
 2.49.0.1151.ga128411c76-goog
 
