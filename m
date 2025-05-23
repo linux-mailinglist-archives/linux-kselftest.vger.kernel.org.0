@@ -1,160 +1,123 @@
-Return-Path: <linux-kselftest+bounces-33622-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33623-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB8DDAC1FD7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 May 2025 11:36:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30BB9AC20B2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 May 2025 12:14:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E6F901BC7D2C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 May 2025 09:36:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A2983AACCF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 May 2025 10:14:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0248F22540B;
-	Fri, 23 May 2025 09:36:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CBA5227581;
+	Fri, 23 May 2025 10:14:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="R3CkCkzB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MLkpQQQc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 208A620FA84;
-	Fri, 23 May 2025 09:36:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11325226D04;
+	Fri, 23 May 2025 10:14:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747992989; cv=none; b=f4CCsju3GFgjBFSlZwlh0l5OSAw1GucPmyu6kA3H6vxs32stBE6nrZGiB7vZtddvUU7iuCdysmKhoYmeVJ+jGMgG+XXXsONy5NeSDM8f4xJooTIqlDA+Fdu/TXCA5XpgAJh9fXx1sTH/aXkMTtCpg9afUiPrX0V1ONT2Z3MVyXI=
+	t=1747995278; cv=none; b=a8mJeaF9mLA16PCWm0gy0ixQfqtQ/GEsMD7pXbLl2l/nOXC0LTMeh+oVO38SpvXQs5FLNOv9I1VpT9P1CeU4avwmg029cP86dLv1k9qRbAcCVMO5WnxyJHZzBDePL+WeMY7lhEpDM/g8Bvmd+vDWdT+XRm/OJnZZkNKANeyrdFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747992989; c=relaxed/simple;
-	bh=cPC4fHGWPka8bstxiXogJPlkvyOjtaWI2Dl+2o9kDZk=;
+	s=arc-20240116; t=1747995278; c=relaxed/simple;
+	bh=j4f7StKSUjnfIxsKZ4PCRY7thFWBu9DMMOUlqJko6Ts=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MRgpdkdD1venfbuW2XGsNcvDeNeLfpfKZlzYb4ZF0mVL9sTeIDzYAxy0C4wanSpscBbOvM17jJtt0leDgxbXXcYjQUxyRYTUa7e3d3hrFqg1yNJeI0EgIyy7U+MdC1oHiM6ZHOqhs8/FhLPwKk5CTBxtBxkszyjohP5H+B4cmhQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=R3CkCkzB; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54MNWFqO004792;
-	Fri, 23 May 2025 09:35:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=vMybJrVOxCi72E1Pt60pMqYpdyjf6S
-	s0XPZB55xj29M=; b=R3CkCkzBXxxe/KYe1HZxSJvJw7yMOWqLIb1q9Fi1+dx9HB
-	lzrW5uC2D+o8DDUmBu0XM/PAJmqmuHehdBrEVMHqfoUhcHLi6ToYHjCmmhOlgfpT
-	TQwI7DqaMRONrgRWKiGKDFCg4cmfGAVkPkHI9lynHES6VI4ywZ1JOR5QZTqGu76w
-	l7XrHGeY+Mdy+bNlQw3PXcMHZHCcVz5cFIIGqdwXcz8+J5jIoQ3qIK8Fq943SHuV
-	uKIOU7g/2MkYBPKsPCpXWeosqUVJ5uPlb0FmkK8RcqZ/FUkJllqmSvNDLeiC6gz6
-	jIMSQ2cId1paOBWJTP7lt+mEa75GUm/RTw1LZivA==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46t14jp33r-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 23 May 2025 09:35:57 +0000 (GMT)
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 54N9Ub2D019284;
-	Fri, 23 May 2025 09:35:56 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46t14jp33p-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 23 May 2025 09:35:56 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 54N65XYR020693;
-	Fri, 23 May 2025 09:35:55 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 46rwkq5x35-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 23 May 2025 09:35:55 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 54N9ZqFH47186204
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 23 May 2025 09:35:52 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0B10D2004D;
-	Fri, 23 May 2025 09:35:52 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 47DD220043;
-	Fri, 23 May 2025 09:35:50 +0000 (GMT)
-Received: from osiris (unknown [9.111.71.83])
-	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Fri, 23 May 2025 09:35:50 +0000 (GMT)
-Date: Fri, 23 May 2025 11:35:48 +0200
-From: Heiko Carstens <hca@linux.ibm.com>
-To: Kees Cook <kees@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>, linux-s390@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Christoph Hellwig <hch@lst.de>, Marco Elver <elver@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nicolas Schier <nicolas.schier@linux.dev>,
-        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, kasan-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-riscv@lists.infradead.org, linux-efi@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        sparclinux@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 07/14] s390: Handle KCOV __init vs inline mismatches
-Message-ID: <20250523093548.9524A8b-hca@linux.ibm.com>
-References: <20250523043251.it.550-kees@kernel.org>
- <20250523043935.2009972-7-kees@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=UY99hTE5nBL3g11cQLQ9YlttsAXeZcRxGw2SMf6xshFprbMGqNnCO5rJj4gjPXk1mszIcJAGcJaG2ZRWFOXmSCPDYHEI2mP5IRU/oYoolkNp2Oty3XU6DBQDamghoKe/RwuD7wDob++f7gJNfgzuWkJeoTfzI39wyJKLR6T5MAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MLkpQQQc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3631CC4CEEF;
+	Fri, 23 May 2025 10:14:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747995277;
+	bh=j4f7StKSUjnfIxsKZ4PCRY7thFWBu9DMMOUlqJko6Ts=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MLkpQQQcgFQS8Ckgkq1xi3SKqfWulGkQ+gHbq1/TcwBs6onPvXEtVmKJMFucD2Yw3
+	 FOoPhBC1HG5UJF+Fygb07VEQunWh8f3mdfy5iEsNDwYT6bcAg5AuyTlloLwZY3VA7b
+	 ad2cxqbkf0WWEbcjYdRC72xIkJoULg8Th7d5CusV3MjQNXqa0raF3xXIVGCpBIvlHA
+	 n9/ZnrAf843ncYUt8XfN7XJpW1599In67N9SsOKa+SauU6W2KKC3P8qiHOIX5v+yaF
+	 TwaSforl7c/pVQeocWU39OgTUN4hcmhftz/IYLz6cEpp7iGhPJYtL+hKlG36YN5FEV
+	 dQgpZwgEezyCg==
+Date: Fri, 23 May 2025 11:14:33 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 1/9] tools/nolibc: move ioctl() to sys/ioctl.h
+Message-ID: <aDBKiafQmW8mGuN8@finisterre.sirena.org.uk>
+References: <20250515-nolibc-sys-v1-0-74f82eea3b59@weissschuh.net>
+ <20250515-nolibc-sys-v1-1-74f82eea3b59@weissschuh.net>
+ <eda3af4a-8dfe-4f82-a934-2d0256b754e2@sirena.org.uk>
+ <89bb5a3e-dd6c-475d-9c5d-0bd1595be735@t-8ch.de>
+ <744a1aa8-1efc-4c20-b45e-070fc038f6e8@sirena.org.uk>
+ <198bf1a8-98d0-4693-a4cf-234cad728c9b@t-8ch.de>
+ <ccc18ae8-80e5-471e-b1ef-da132b13b27c@sirena.org.uk>
+ <25a18e14-8ac9-4ac8-8907-a087050b1eb6@t-8ch.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="Rru5DFlX4L7d80S4"
 Content-Disposition: inline
-In-Reply-To: <20250523043935.2009972-7-kees@kernel.org>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: KqDaZI-N24qPBCncGoId1M5821jvyXiL
-X-Authority-Analysis: v=2.4 cv=XOkwSRhE c=1 sm=1 tr=0 ts=6830417d cx=c_pps a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17 a=kj9zAlcOel0A:10 a=dt9VzEwgFbYA:10 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8 a=i0EeH86SAAAA:8 a=ZhbCrNo_nw5myWupG0oA:9
- a=CjuIK1q_8ugA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTIzMDA4NCBTYWx0ZWRfX0w0P9E3aDLPl xKkdIDIhLiwjTmqVc2SrRDCWVWFZrVDCFjUtGWXwGKiqzPx3aH1H3kR3L9ztCvCTG2dYW5CKwL9 sICNUHibIsoUXe9IU/++4/n8wIvLqcN/lTpzb6AwUj21nwbHo2PrdccpN7uJ5neULr3iZ+x0IDO
- cp9vaJXECGONZX36cRDNAuI3GEBAklLQu6bmjDNQyoWpyWcL52i8nxzjSMmMG12/PXn7Ht4o/I9 rKz7HWr8sXVyui6OGhJ6oXDcKWfiiMUq3fRRvh9CBFKWIWsQnUS30/UPfY4kp/wqVcXw92l9rKW 3UN+JfNQzPqTmiL+lKipax/ZfWe+uKv2lFByzGPt8jex7JX31DFbbxTGQxDZdrqyBmdG3LASN+L
- ff1/Bps89M6t1nUW1d6VQ0r0f4R0IG0qDcI6J5H3ztJ8TgF0KLAewZp36812jwJ9B/V82K6H
-X-Proofpoint-GUID: FAZQIEfWbNoED4pzflxHiaQq3RMT7Za1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-05-23_03,2025-05-22_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
- mlxlogscore=586 bulkscore=0 mlxscore=0 lowpriorityscore=0 adultscore=0
- impostorscore=0 suspectscore=0 priorityscore=1501 spamscore=0 phishscore=0
- classifier=spam authscore=0 authtc=n/a authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2505160000
- definitions=main-2505230084
+In-Reply-To: <25a18e14-8ac9-4ac8-8907-a087050b1eb6@t-8ch.de>
+X-Cookie: Well begun is half done.
 
-On Thu, May 22, 2025 at 09:39:17PM -0700, Kees Cook wrote:
-> When KCOV is enabled all functions get instrumented, unless
-> the __no_sanitize_coverage attribute is used. To prepare for
-> __no_sanitize_coverage being applied to __init functions, we have to
-> handle differences in how GCC's inline optimizations get resolved. For
-> s390 this exposed a place where the __init annotation was missing but
-> ended up being "accidentally correct". Fix this cases and force a couple
-> functions to be inline with __always_inline.
-> 
-> Signed-off-by: Kees Cook <kees@kernel.org>
-> ---
-> Cc: Heiko Carstens <hca@linux.ibm.com>
-> Cc: Vasily Gorbik <gor@linux.ibm.com>
-> Cc: Alexander Gordeev <agordeev@linux.ibm.com>
-> Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
-> Cc: Sven Schnelle <svens@linux.ibm.com>
-> Cc: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-> Cc: Gaosheng Cui <cuigaosheng1@huawei.com>
-> Cc: <linux-s390@vger.kernel.org>
-> ---
->  arch/s390/hypfs/hypfs.h      | 2 +-
->  arch/s390/hypfs/hypfs_diag.h | 2 +-
->  arch/s390/mm/init.c          | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
 
-Acked-by: Heiko Carstens <hca@linux.ibm.com>
+--Rru5DFlX4L7d80S4
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, May 23, 2025 at 10:33:13AM +0200, Thomas Wei=DFschuh wrote:
+> On 2025-05-21 19:49:39+0100, Mark Brown wrote:
+
+> > That seems to build with 869c788909b93a78ead1ca28c42b95eeb0779215 which
+> > is the current HEAD of:
+
+> >   git://git.kernel.org/pub/scm/linux/kernel/git/nolibc/linux-nolibc.git=
+ for-next
+
+> Thanks for testing!
+
+> To be sure, was this your full test-run? Or did you do a full test-run
+
+Just a build of the arm64 selftests (which are the only thing I build
+that was affected).
+
+> on linux-next in the meantime?
+> I'd like to get your confirmation before sending these changes to Linus.
+
+Today's -next appears to have built and be running the arm64 selftests
+OK again in my personal CI:
+
+   https://lava.sirena.org.uk/scheduler/job/1419721#L2482
+
+There shoud also be results (both build and runtime) from KernelCI:
+
+   https://dashboard.kernelci.org/
+
+but there might be a bit more lag seeing the results there.
+
+--Rru5DFlX4L7d80S4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmgwSogACgkQJNaLcl1U
+h9A+QQf/U/M/4FJnWwx7NUX5+Am97EppmQp46sPy6UAVufxg6ycX30+I2Q783cqF
+R+ZGbegaiq0C/lrsGTsAE5NKScgoJ1OvbAbdd5STiUZ2f2s+st6cPkoR+VbiXNJ/
+0bteweky73k8zzaEr5f96+3v9kZfbZSYa3ldDHH8vuE0ZkIWfR8vxsjvvUby2UVI
+qqZgySIx1Ggj+O55dLf37+mkMU8AT6OhFnj/aLZgXUDlkKKhH6YDsgOQHqW46IsE
+ZxyfocDTCbUBGaqS5bte4G3mFoOnvl8be0D3D8lvIfvr59VVHjzkm9CcfHwYbNvI
+eH6XOI+OfpqYQn2UutGlfCdjhCKJlg==
+=fK8J
+-----END PGP SIGNATURE-----
+
+--Rru5DFlX4L7d80S4--
 
