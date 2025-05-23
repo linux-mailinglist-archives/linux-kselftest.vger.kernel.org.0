@@ -1,135 +1,128 @@
-Return-Path: <linux-kselftest+bounces-33651-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33652-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCD9EAC2510
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 May 2025 16:33:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF1A3AC251F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 May 2025 16:35:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DBE1B9E1056
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 May 2025 14:33:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E851C540879
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 May 2025 14:35:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E8E02951A8;
-	Fri, 23 May 2025 14:33:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 238AD296158;
+	Fri, 23 May 2025 14:35:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UGS2n06M"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="b84De/zP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AFFE202995
-	for <linux-kselftest@vger.kernel.org>; Fri, 23 May 2025 14:33:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4CA0295D8F
+	for <linux-kselftest@vger.kernel.org>; Fri, 23 May 2025 14:35:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748010818; cv=none; b=teQrKu2rlb8lzSDA4895cMdsWUYg6hN8ua+qtgOUOM/wQsM3cX9zldILbKUkVA+OewMa0xps+hIyQHN2tWMf2FcMQ6QzvRvm2v0FpAC/KHD1OaWJOnrPlCwwYd/C7gyhbAYg9rTYldqY+w9vJz3seGKeQhIYkJnjeKL7D9Y4mqQ=
+	t=1748010912; cv=none; b=klSOKjBdpSbXEvtaRtPi9NKzBj+20aWLmXxWbrZbePzVIvl+9A1DoBDLAp3Stkmr1B25+gRrmihROUqZp5f2kOMaEMch9xDxXoDyaZTejqItf3V9Tjnfs19X68z3vyuKvuDuDZ+LXb65HjzyKA3EiO4tKqUVYzD+GKBjVBmto0s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748010818; c=relaxed/simple;
-	bh=M0JM/iagUnyNnadh7PX4hbYGXfsli6u0A5pI6J9XwVs=;
+	s=arc-20240116; t=1748010912; c=relaxed/simple;
+	bh=rpziN1/05Zj11wUE9u4BbCxVKKTZOSPJiBdxOoe4oCQ=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Dussb7Mo1zpxVZ9rJSWUfMqC87xL6hm0Zz/P1oDAJi4HuxTinMYOiT7O2qQgNHLNoU5B66nVrV9fhf3d4NcQoRIeAyPRi1eWD4Htr9z3YIAJBPNRSlMTwKORZwFSq+fHiObjZGUNqLNukFCTA+/UcHoqgWZHbEt1Tjt8w+Xh4wU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UGS2n06M; arc=none smtp.client-ip=209.85.216.73
+	 To:Cc:Content-Type; b=eT4cLg0jjNypPDnHx64McQ2zgU2bn43Eyc3ooEw1459fVtoKCrji4a6VEkhgP1iYQxu55rkWA6S+jg4yA/e3nnRbh4gjDtfl1RnG+Mo2vIunarwTqxd4xZ/zZ1xVa165HcZAlFchmmaEstU4b2I9DwSZg0dAdgbq9Bjh6EGk0QI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=b84De/zP; arc=none smtp.client-ip=209.85.214.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-310efb64693so23255a91.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 May 2025 07:33:37 -0700 (PDT)
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-231e76f6eafso66656425ad.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 23 May 2025 07:35:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1748010817; x=1748615617; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1748010909; x=1748615709; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/uvu6aXDIrLF08vsxpzyNfXk0GOFzmWSaZdsX/BEX7c=;
-        b=UGS2n06M5/05ZUKItqdnuGPEzmo5dJVjlLUB3D1caODAOB+jKIETCgx1+O6aUiA/oQ
-         5GjzTv57ve4j7q1asD/bPaXFmgO5NYGTBtTLcDvAPBAG3DAqg44DGdk+0cnkZbfeuuQU
-         dZLfRz+SnHakvMSmI3Gymt50xhywAhJ5KngCpXd2KLIVFsIsjqdL3MvTd8fRUPgk6g6f
-         crqHNuEPL6QBfB0KDZ/NnT1LhGXZoMrA4vi/zvcONk6CNlJqBtcqkjyZall+guv04GxF
-         mq6QAIwK6HRjTPYTAPC9X9gyhLz8fI6BTod4q+GdXgVfaYg2icFqxe3q7huE1eA9CEgh
-         bquQ==
+        bh=OHIXFovAEYPRF7pj3DkvXM+Wh6ry7OAZQdb2dc5cgKo=;
+        b=b84De/zPy6OG7FPMct1S/l0RArSEw077OwRFF8QI1wCXcsIr22NtiTb84AWT63UXbP
+         RfM3rq17cVcnzqgWKhmBoF+fXJTWsZbY4F/p8C/xjl0ettvBg6kn/kgB9W5QVh2Yvi2Y
+         4Mf+ZzIJd2th0q3njefRUC3Dj3tZTzrFD0do/0h28Lgx9fGfwnW5b8SZ6IMBZurC3HOM
+         p9dzZj/9SpMFYBFzYmh/PlOz/oMQz0ZLLY3NlRWunqFyPr8lpy6o1b4lIbxcOhb2xIKd
+         BdsWUWUpRel+re7QfPTc+rW7RtdZgHK2xYATjZ0VzkEICtxIe8tLX8GxMjEOKKkXoQ6O
+         +4jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748010817; x=1748615617;
+        d=1e100.net; s=20230601; t=1748010909; x=1748615709;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/uvu6aXDIrLF08vsxpzyNfXk0GOFzmWSaZdsX/BEX7c=;
-        b=afQwpboldFuCVVe+lLI7U7vQXJ4lrqlMWxvaXuOk3qE9Mqgogh8jeMvdtkhzp0gZYx
-         4sjZsNP5YbBvSEDMBqyw764oV1ja7XosJ+tASODWUDvRm972Snzd5azYgaDjHQ4jz8bv
-         SYXJbEgvQGjaJK9fK30aNyw5fPY0vaZ0PaCxPVbXNX/Mv3qSQsF3zmp7phhzcJPIshzX
-         zqetA4yxebbMn7eIpqRaY/Wpl1U2Q0E25f7E/GwFO3KwuH08iQ9RdsJytxoLW3O87PKo
-         bsqzqCovSA1ejN+y/5yW5AWs2jzYcUTeQxuU7/RVGQadeDU1F2TF46NitsJV4A5a8bmt
-         b6Zw==
-X-Forwarded-Encrypted: i=1; AJvYcCU2CYb4BRzts+RF+kZ9Yeq5ECs4HBaxlt6hqWkDtdfZ5PjIt07IRoPtVh2n1eO1QR8R8KYbK8dMmZl3KDo5ooo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzaZfFnj1Ewazka9O/uDYX+eupnReuWQ89qgqIKOJ+Ce5VVIjtj
-	pxtcAGaDnNH4ythSQkt0wmwMDswP2LhX8mUqxa6feycC09EApjGOIiAYoa8OJFRbQivzCGAkzCG
-	fIzkGTA==
-X-Google-Smtp-Source: AGHT+IHsZ0QnOLBFT5oLqgFlsou+V6RqzdnkAMpT1uyTVqCC/FSYHIecluEf4Yy5p3wiVYxCHPutaUGV15c=
-X-Received: from pjbmf7.prod.google.com ([2002:a17:90b:1847:b0:30e:7b26:f68b])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:1846:b0:301:9f62:a944
- with SMTP id 98e67ed59e1d1-30e7d5ca287mr50858908a91.33.1748010816755; Fri, 23
- May 2025 07:33:36 -0700 (PDT)
-Date: Fri, 23 May 2025 07:33:30 -0700
-In-Reply-To: <2c52daad-0b64-48a9-8e73-d1aba977993b@amd.com>
+        bh=OHIXFovAEYPRF7pj3DkvXM+Wh6ry7OAZQdb2dc5cgKo=;
+        b=PxVc8yI//TH2AyoHKsz24eOQoh7FNUhzJSIG84DwzFwtGKBHRpfrel8NqNty6RhXwH
+         njrkAK+YrxPNQ3k2r85njwDrvLACrILgLSl2LMCtDdRi/jqWAXHPyU2helwFezalm2as
+         UTidv3+sd7J+Gdm2uRxuHAGKi6myFfhIE5iQwodZDV4Cip9j9NYmW4xhkgBA3hk+F0Gx
+         e0n+L0x5h4p+w8e/MYFEIXJ+5d3kwgFS20vLTO1d/apS0PnfMzNN2D0r1QFOMvyCJepK
+         shXH1809tMJw9eHUfxu3PZDEeSYDHcfLOd5ifx/AKnpCFSLgcMlwFkMBQE4377BI0p7u
+         IrXg==
+X-Forwarded-Encrypted: i=1; AJvYcCUPhEt7lMKiBaJmokGYVNXftNxFMlFKmru1mbpUdWZwMao3mXTJa0PgOMgjg0qTIHM2YKpOWdvannepijPL5do=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyutWc66rOegUnNQG4wYGVnc1pzIQmdAFX8SuilOHBxU+jpiC9G
+	tltmcIjN8oP3vn2iDO0ARTTAeG/LA7DSyxQanP9w2IUoQk/xKw2lsG4xSYXztNVAbgLl50cO7R1
+	fwA6H4w==
+X-Google-Smtp-Source: AGHT+IFz7sb0nLy8RLNRfKCeKqRGA0z4OYWQ9Q5+lv5cIKJ3DXiQQbAp7L//6YajGR6GltgQpVeH/+sDQGY=
+X-Received: from plka13.prod.google.com ([2002:a17:903:f8d:b0:231:def0:d268])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:41c7:b0:224:1221:1ab4
+ with SMTP id d9443c01a7336-231de317b43mr439457305ad.22.1748010908457; Fri, 23
+ May 2025 07:35:08 -0700 (PDT)
+Date: Fri, 23 May 2025 07:35:03 -0700
+In-Reply-To: <20250523043935.2009972-4-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20250522235223.3178519-1-seanjc@google.com> <20250522235223.3178519-14-seanjc@google.com>
- <2c52daad-0b64-48a9-8e73-d1aba977993b@amd.com>
-Message-ID: <aDB-2lcq4jJm9-OV@google.com>
-Subject: Re: [PATCH v3 13/13] KVM: selftests: Add a KVM_IRQFD test to verify
- uniqueness requirements
+References: <20250523043251.it.550-kees@kernel.org> <20250523043935.2009972-4-kees@kernel.org>
+Message-ID: <aDCHl0RBMgNzGu6j@google.com>
+Subject: Re: [PATCH v2 04/14] x86: Handle KCOV __init vs inline mismatches
 From: Sean Christopherson <seanjc@google.com>
-To: Sairaj Kodilkar <sarunkod@amd.com>
-Cc: "K. Y. Srinivasan" <kys@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>, 
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>, 
-	Juergen Gross <jgross@suse.com>, Stefano Stabellini <sstabellini@kernel.org>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Ingo Molnar <mingo@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Shuah Khan <shuah@kernel.org>, 
-	Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, linux-kernel@vger.kernel.org, 
-	linux-hyperv@vger.kernel.org, xen-devel@lists.xenproject.org, 
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+To: Kees Cook <kees@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Vitaly Kuznetsov <vkuznets@redhat.com>, Henrique de Moraes Holschuh <hmh@hmh.eng.br>, 
+	Hans de Goede <hdegoede@redhat.com>, 
+	"Ilpo =?utf-8?B?SsOkcnZpbmVu?=" <ilpo.jarvinen@linux.intel.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Len Brown <lenb@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>, Ard Biesheuvel <ardb@kernel.org>, 
+	Mike Rapoport <rppt@kernel.org>, Michal Wilczynski <michal.wilczynski@intel.com>, 
+	Juergen Gross <jgross@suse.com>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, Roger Pau Monne <roger.pau@citrix.com>, 
+	David Woodhouse <dwmw@amazon.co.uk>, Usama Arif <usama.arif@bytedance.com>, 
+	"Guilherme G. Piccoli" <gpiccoli@igalia.com>, Thomas Huth <thuth@redhat.com>, Brian Gerst <brgerst@gmail.com>, 
+	kvm@vger.kernel.org, ibm-acpi-devel@lists.sourceforge.net, 
+	platform-driver-x86@vger.kernel.org, linux-acpi@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-efi@vger.kernel.org, 
+	linux-mm@kvack.org, "Gustavo A. R. Silva" <gustavoars@kernel.org>, Christoph Hellwig <hch@lst.de>, 
+	Marco Elver <elver@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
+	kasan-dev@googlegroups.com, linux-doc@vger.kernel.org, 
 	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	K Prateek Nayak <kprateek.nayak@amd.com>, David Matlack <dmatlack@google.com>
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
+	linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	sparclinux@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="us-ascii"
 
-On Fri, May 23, 2025, Sairaj Kodilkar wrote:
-> On 5/23/2025 5:22 AM, Sean Christopherson wrote:
-> 
-> > +
-> > +int main(int argc, char *argv[])
-> > +{
-> > +	pthread_t racing_thread;
-> > +	int r, i;
-> > +
-> > +	/* Create "full" VMs, as KVM_IRQFD requires an in-kernel IRQ chip. */
-> > +	vm1 = vm_create(1);
-> > +	vm2 = vm_create(1);
-> > +
-> > +	WRITE_ONCE(__eventfd, kvm_new_eventfd());
-> > +
-> > +	kvm_irqfd(vm1, 10, __eventfd, 0);
-> > +
-> > +	r = __kvm_irqfd(vm1, 11, __eventfd, 0);
-> > +	TEST_ASSERT(r && errno == EBUSY,
-> > +		    "Wanted EBUSY, r = %d, errno = %d", r, errno);
-> > +
-> > +	r = __kvm_irqfd(vm2, 12, __eventfd, 0);
-> > +	TEST_ASSERT(r && errno == EBUSY,
-> > +		    "Wanted EBUSY, r = %d, errno = %d", r, errno);
-> > +
-> > +	kvm_irqfd(vm1, 11, READ_ONCE(__eventfd), KVM_IRQFD_FLAG_DEASSIGN);
-> > +	kvm_irqfd(vm1, 12, READ_ONCE(__eventfd), KVM_IRQFD_FLAG_DEASSIGN);
-> > +	kvm_irqfd(vm1, 13, READ_ONCE(__eventfd), KVM_IRQFD_FLAG_DEASSIGN);
-> > +	kvm_irqfd(vm1, 14, READ_ONCE(__eventfd), KVM_IRQFD_FLAG_DEASSIGN);
-> 
-> Hi Sean,
-> I dont see any allocation for the GSI 13 and 14..
-> Is there any reason for the deassigning these two GSIs ?
+On Thu, May 22, 2025, Kees Cook wrote:
+> diff --git a/arch/x86/kernel/kvm.c b/arch/x86/kernel/kvm.c
+> index 921c1c783bc1..72f13d643fca 100644
+> --- a/arch/x86/kernel/kvm.c
+> +++ b/arch/x86/kernel/kvm.c
+> @@ -420,7 +420,7 @@ static u64 kvm_steal_clock(int cpu)
+>  	return steal;
+>  }
+>  
+> -static inline void __set_percpu_decrypted(void *ptr, unsigned long size)
+> +static __always_inline void __set_percpu_decrypted(void *ptr, unsigned long size)
 
-Yes, KVM's rather bizarre ABI is that DEASSIGN is allowed even if the VM doesn't
-have a corresponding assigned irqfd.  The reason I added these early DEASSIGN
-calls is so that there will be an easier-to-debug failure if KVM's behavior
-changes (the racing threads part of the test abuses KVM's ABI).  I didn't add a
-comment because the helpers already have comments, but looking at this again, I
-agree that main() needs a better comment.
+I'd rather drop the "inline" and explicitly mark this "__init".  There's value
+in documenting and enforcing that memory is marked decrypted/shared only during
+boot.
+
+>  {
+>  	early_set_memory_decrypted((unsigned long) ptr, size);
+>  }
 
