@@ -1,93 +1,88 @@
-Return-Path: <linux-kselftest+bounces-33609-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33610-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DE41AC1DB8
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 May 2025 09:33:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81C40AC1DD5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 May 2025 09:43:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 84AD71BC28B9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 May 2025 07:33:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2BFB73AFE9D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 May 2025 07:42:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FA071E501C;
-	Fri, 23 May 2025 07:33:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23B4C264A9F;
+	Fri, 23 May 2025 07:42:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=brighamcampbell.com header.i=@brighamcampbell.com header.b="RLZ0F8Em"
+	dkim=pass (2048-bit key) header.d=hammernet-be.20230601.gappssmtp.com header.i=@hammernet-be.20230601.gappssmtp.com header.b="PTptsFHZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F15851DD0C7
-	for <linux-kselftest@vger.kernel.org>; Fri, 23 May 2025 07:33:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8426420F080
+	for <linux-kselftest@vger.kernel.org>; Fri, 23 May 2025 07:42:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747985596; cv=none; b=jyxv+PHZy3TGFvDpou65EIX35B2EBPOfcNFEyllJOdDUdxyefnB40JEpiCZIlRA8vBZO8s4L6/P80w2pN8nauXpVv09K95R/7Eg8/E00AfiNyK3BWYYUdqCJ7Kg5KrKxulzEOQSWKNYgC9SnZsUvdwr28j6mr1LgFHTZQMovnE8=
+	t=1747986179; cv=none; b=Y8R8FwMefcT00ZyHVyH9AmhDqpMqjUSgWMDV6DUnU5ZSWrI4SkBIwdndz+R0hooqcOyRAOkhCfAvVnkZer6J8zMaef2WMCQ1cQthF/mTwX/wWRnhMTdsHtunEQ1R348isv5Lmj7EcN5mEGARHprx2DOlGerVhFqKg8Ry8Jkpkio=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747985596; c=relaxed/simple;
-	bh=qAY6EeFJTZG28TvoJgL9U5bXPgvj6ZZgzASuq00yAbk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=csJH5o+SojpQneJCuhSpZoAgQs24XrN9qdaMwx/41gy9ve8GYoBHEJSQlsSNOklpeSKa398dcObAFxBLAXoC4406lweg4xFCugoXQAupC+4ZRVUgLTaxk+ACLCCvE0eTQcBJFgv3L3SYdB9VPbQ5TamisOYD+H+N5obGSqH8d8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=brighamcampbell.com; spf=pass smtp.mailfrom=brighamcampbell.com; dkim=fail (0-bit key) header.d=brighamcampbell.com header.i=@brighamcampbell.com header.b=RLZ0F8Em reason="key not found in DNS"; arc=none smtp.client-ip=209.85.166.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=brighamcampbell.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=brighamcampbell.com
-Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-3dc82baf4eeso11854005ab.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 May 2025 00:33:13 -0700 (PDT)
+	s=arc-20240116; t=1747986179; c=relaxed/simple;
+	bh=o8Z9F+s3H5s+WHRu8VrEBEw3xQJt57LQ6mx6MD0qMFo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=obNpQYORdQY9XG1RlXEPr0YCtVibQevCwRxWZD3BIVQT7G+4mTGsgb0gIJQBGRM+e766+3gGf3DTcHX170IEcDFVFtYf0FUekrfFl6oAqjx5rReVDqfFJ6mLH0S9H3GaEDld4RMDmn390EO3FTF3d+wFP0oBTQOVYu8gqqCjVB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hammernet.be; spf=fail smtp.mailfrom=hammernet.be; dkim=pass (2048-bit key) header.d=hammernet-be.20230601.gappssmtp.com header.i=@hammernet-be.20230601.gappssmtp.com header.b=PTptsFHZ; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hammernet.be
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=hammernet.be
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-442d146a1aaso87749495e9.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 23 May 2025 00:42:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brighamcampbell.com; s=google; t=1747985593; x=1748590393; darn=vger.kernel.org;
+        d=hammernet-be.20230601.gappssmtp.com; s=20230601; t=1747986173; x=1748590973; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=EhDC8DXcjYenT+PN1rPVu6Md6wucoYZjvtH8KVhEPDM=;
-        b=RLZ0F8EmpKF9ZzJeaC0it7Lgr9JFnBgyRUh3XBbY5SWav0fK/mcPKZVRJyuy/fEuqo
-         id7wkfSegzL5hQkdSAL9gvqZAHL0MVBdz08QY+na1Nc/QbyLg1ASGIgezM+0wd0AE7Bd
-         wrLm/JoOOsriYl88em+4IgWn/9ZsLwhHSrWXj77vXnzAwb7lhK0HR2kOZ9TCxSz3Vdic
-         ueWEx5AU0IfYtr3azoT4NJWa2bO4C1G+1ixGlEyTBSUSdA7ZSt/1yR9+emIVq42hdbb4
-         AwDslKoZz6tMEHWVR0Vwg+J8vbjg/CQnVRg/LO5vHuso2+GHOyXmahqjQMJh6UqoCwJY
-         RKKg==
+        bh=sf5oVq0p4V1KNu2SAoViuAhUyDDrJF+OTYRvlB2marA=;
+        b=PTptsFHZm8IP5q2doJKqNchdsqFNMVl5fv90piuiMgkSYyHvPjPS2/KHSrk8UWwRQf
+         7VBWlsoFp+i1XMCFiNtRd7Hm05CPNYhgom23q0/yYraUPHwZdc9ZZ2B3R/wvcR4tKfnL
+         YwyQ/mfq6Hr2euJhGOblWiDP37vP23GN9PG4cC9eHHijXXETCay4vDQHaNe7q3Jm5jpO
+         1HtiK4mcS/iPH77Q5nalfwAeRQB7R30NhzyQ6Jg2vYwTbHd/4UmMkdDf5FnWH+RwQP81
+         x1fUzrrHiulzc/Ung4lsY+/1cnycCWgz1lQUqrg4WzsW41RmbAxMwiwLo6ycj7KyiN1G
+         ZyXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747985593; x=1748590393;
+        d=1e100.net; s=20230601; t=1747986173; x=1748590973;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=EhDC8DXcjYenT+PN1rPVu6Md6wucoYZjvtH8KVhEPDM=;
-        b=dmbEvFRoPqw0yHy8PaZM+cMRv+MPEz54kjBuORTPvIdLZ6OytIu2fLnSlZUQkwWtMg
-         EdGVla+lIMHZ1onitT/3DRVO36Q6T+J4T2DabYiehl/HyYtZn53seN8pZ2f9DI0K6HYR
-         Z6H0Eu8srav0bQ56qh22blVOb0rVXEa3XCCOQf5AXAz/F5hG9lMjGFfVA2YvtuOoCE6R
-         2ZDLBRxFAupEamedV60pmaJmfJt4R8AoVfFbLyhTTPmAZ43aUSnl8GeFgz0eEnAJyoZY
-         2nqdheLkeGE8f2uc6ySgcYRbzi982fMRYngmfcFJe3NKMWuQYjlORaB2rW+SN2FxirQ8
-         yceQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWNKLRqb6CJikH2gQiypdj3Jnv/6vBPDFUdfUvUyQvG1Ofxp+OaHNATJxTE8QCWapUOpeS/j6SVOFE2BnqE1PU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyADvtPdAiw1rNcR1UlEetalGRLpDA6RP2LLVOxcYLt1Boh1jx3
-	QEEpWjcyiJI0knaXP5Z5EbUySVvcZA1OCgHnByjfTdQEubRuACFDetFQWLkLyfdyUVY=
-X-Gm-Gg: ASbGncspxRCk8ZJnVhBbBgc6K2lwAktFo/yYF1tbNkUZZ/ZRP4xUEPhQVQ0VyM+cj91
-	ZSzeqs33JDLkjdThTF2QMcnbI9RbJ7H8PaNqcXjzoUFfS1yvnh7mfYHVxzgasVxo+rvwuB29Sw3
-	vthZCFrXP7lZN6x7iUAEamkVjZX+7ainTaEIz87R/IRLeUbznse/Mv7kN004RhjOmM23YV15DRj
-	GXAQjVM4XEifQHoNQTp5VZqaMLh4QOrxvSrXKKIKLPf6yUarWU4OeOrfBJf8PRS2y+TYcgLIJPz
-	8DU9I2vd3xBiPAggTbLzRXYmw88ruMPFixVnRMwnrfCVW117YcCMd5feEKxN9oFOP1+L+Y+oyPd
-	8eZBtHIg=
-X-Google-Smtp-Source: AGHT+IG79dWbaOnWh6fbDdUHStp0frh1mqNr2bxuilmex7AQRbHU72XCruvtgyU30RqIruk4/I1vVA==
-X-Received: by 2002:a05:6e02:3b05:b0:3dc:7a9a:4529 with SMTP id e9e14a558f8ab-3dc7a9a4999mr104600585ab.16.1747985592940;
-        Fri, 23 May 2025 00:33:12 -0700 (PDT)
-Received: from mystery-machine.brighamcampbell.com ([64.71.154.6])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4fbcc3ae5b9sm3460807173.32.2025.05.23.00.33.11
+        bh=sf5oVq0p4V1KNu2SAoViuAhUyDDrJF+OTYRvlB2marA=;
+        b=HebN1C3wJVeobNzmfE1Y6hsatUrdmJI3skydnU9jOwBISkbkOeNtupu05l5e4dLt1x
+         83cxS+Jn5xk04EuZymk/NoP2yogORRp7QxBFpYZADD3d0lCkPPvyUIcd9SHZy6KsJDIl
+         +NBd7gI44gT/6XDG8Du0GFv9C0tEISn9n/njsxCqC90B/uVrSsMhp2I733LdI3hvKSCJ
+         HS5lEaxlIoDkn3H0opFMOl3F7kFtwngpS0VCex0t6D8303+v6uLqgXq1CUAUGE6zxxy8
+         p6INw3BIkoTLOct9+HYe+pu1Tg8+x8nucoBY7+Nlp4SYgM/JLSSG7ccuEI5HzQQW17MH
+         +ZJg==
+X-Forwarded-Encrypted: i=1; AJvYcCW6B/evLyZOXSKVer9PomriEXZoj9/5PJ+V4BG+ZRqc5WBOczvp20f/LKAa3mRVDi4UFFEj9qBTvpHwx62nvp0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwvwNAH96orYXqMFr4iW4Klqs0SEH8kx4KP3F8Ry4cSBSi5CgZa
+	WqIixqhQtkJwqpK0wbzH9OoSCOytuWROTH6CW1nYHE5Y573cFpvoN5DqqafvhzaJLEJrzEjKAAA
+	ryPYKxEs=
+X-Gm-Gg: ASbGncsKCPYnMjGKsfFiG7PVNs/yh3fGVZtuPWAynn22gRPcICtwOwQodPfmPYFq9kV
+	zS5GZ55EL9wdf88YaCJWblcVKNc7dDGdFu5LGPENNULRvkN9hWgXeGM6hAtfP/BstSUTFtP0GgB
+	CjhSQvGJDFu3A5SGQt/SX0Z7sqLFHRWLPy+7E+D7t6l7/46VLk4GzbqtWjazam0dEnV9glAJ45i
+	PEUastwc26IpP4v948JICzGPIg75GA3zUEABWqb5WsoI2o4QPixogMwhKSnl+Tay0G9h3r/ceux
+	QaDSARhOMsCq9rGYWO2hFyn47kcnA7PLeLQiCAdC+p8MjReMyg4AC7cQkwYt/K/Qcl33hS/BGEF
+	Hw9E=
+X-Google-Smtp-Source: AGHT+IGZ+zW9xJjdx7/pyHegoY0b4cvGq/St5kfIPDWd2+jyQJwKX8XOdYUArgxgNbWKJ8peo6soWg==
+X-Received: by 2002:a05:600c:34d5:b0:441:b3eb:574e with SMTP id 5b1f17b1804b1-442fefd77eamr257454705e9.5.1747986173415;
+        Fri, 23 May 2025 00:42:53 -0700 (PDT)
+Received: from pop-os.telenet.be ([2a02:1807:2a00:3400:aeb5:4cbf:e382:76a8])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-447f23bfd54sm137616955e9.17.2025.05.23.00.42.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 May 2025 00:33:12 -0700 (PDT)
-From: Brigham Campbell <me@brighamcampbell.com>
-To: skhan@linuxfoundation.org,
+        Fri, 23 May 2025 00:42:53 -0700 (PDT)
+From: Hendrik Hamerlinck <hendrik.hamerlinck@hammernet.be>
+To: shuah@kernel.org
+Cc: skhan@linuxfoundation.org,
 	linux-kernel-mentees@lists.linux.dev,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Cc: Brigham Campbell <me@brighamcampbell.com>
-Subject: [PATCH v2] kselftest: x86: Improve MOV SS test result message
-Date: Fri, 23 May 2025 01:32:21 -0600
-Message-ID: <20250523073220.112238-2-me@brighamcampbell.com>
-X-Mailer: git-send-email 2.49.0
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Hendrik Hamerlinck <hendrik.hamerlinck@hammernet.be>
+Subject: [PATCH v2] selftests: filesystems: fix "memebers" typo in mount-notify
+Date: Fri, 23 May 2025 09:42:32 +0200
+Message-ID: <20250523074232.15274-1-hendrik.hamerlinck@hammernet.be>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -96,32 +91,31 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Apparently, this test completes successfully when it completes execution
-without either causing a kernel panic or being killed by the kernel.
-This new test result message is more descriptive and grammatically
-correct.
+Corrects a spelling mistake "memebers" instead of "members" in 
+tools/testing/selftests/filesystems/mount-notify/mount-notify_test.c 
 
-There are no changes in v2. I'm resending this patch because I addressed
-it to the wrong email for Shuah.
-
-Signed-off-by: Brigham Campbell <me@brighamcampbell.com>
+Signed-off-by: Hendrik Hamerlinck <hendrik.hamerlinck@hammernet.be>
 ---
- tools/testing/selftests/x86/mov_ss_trap.c | 2 +-
+Changes since v1:
+Improved commit message to be consistent with other commit messages.
+
+ .../selftests/filesystems/mount-notify/mount-notify_test.c      | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/x86/mov_ss_trap.c b/tools/testing/selftests/x86/mov_ss_trap.c
-index f22cb6b382f9..d80033c0d7eb 100644
---- a/tools/testing/selftests/x86/mov_ss_trap.c
-+++ b/tools/testing/selftests/x86/mov_ss_trap.c
-@@ -269,6 +269,6 @@ int main()
- 			);
+diff --git a/tools/testing/selftests/filesystems/mount-notify/mount-notify_test.c b/tools/testing/selftests/filesystems/mount-notify/mount-notify_test.c
+index 59a71f22fb11..af2b61224a61 100644
+--- a/tools/testing/selftests/filesystems/mount-notify/mount-notify_test.c
++++ b/tools/testing/selftests/filesystems/mount-notify/mount-notify_test.c
+@@ -230,7 +230,7 @@ static void verify_mount_ids(struct __test_metadata *const _metadata,
+ 			}
+ 		}
  	}
- 
--	printf("[OK]\tI aten't dead\n");
-+	printf("[OK]\tkernel handled MOV SS without crashing test\n");
- 	return 0;
- }
+-	// Check that all list1 memebers can be found in list2. Together with
++	// Check that all list1 members can be found in list2. Together with
+ 	// the above it means that the list1 and list2 represent the same sets.
+ 	for (i = 0; i < num; i++) {
+ 		for (j = 0; j < num; j++) {
 -- 
-2.49.0
+2.43.0
 
 
