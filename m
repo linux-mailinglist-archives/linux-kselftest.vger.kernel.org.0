@@ -1,382 +1,181 @@
-Return-Path: <linux-kselftest+bounces-33754-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33755-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70139AC35EE
-	for <lists+linux-kselftest@lfdr.de>; Sun, 25 May 2025 19:24:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 726C4AC3639
+	for <lists+linux-kselftest@lfdr.de>; Sun, 25 May 2025 20:26:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DCBB01893887
-	for <lists+linux-kselftest@lfdr.de>; Sun, 25 May 2025 17:24:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D4CF9188FCC8
+	for <lists+linux-kselftest@lfdr.de>; Sun, 25 May 2025 18:27:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 813FB216605;
-	Sun, 25 May 2025 17:24:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54A161F8BC6;
+	Sun, 25 May 2025 18:26:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="TrXn2qTr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q5S9Yz4A"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010049.outbound.protection.outlook.com [52.101.84.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6776433C4;
-	Sun, 25 May 2025 17:24:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748193874; cv=fail; b=JdGlyf4iGR2awkHxLP+5sd6SLlab+S18ZzBqcsB5IEI1PKNWSonS7rFAg5dmUop/xplTyNPyiXhj96/QZozRKxskXx7EoUjRnhWbyzYefmNbH0cT1oCBacYTwFcPTNhNtD7B2ysV1T+GQ+rMSnORFTJexofN/yibFx4YfSZGw6U=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748193874; c=relaxed/simple;
-	bh=hLCYnrVuwoduCLUbqkPSjHb65SPeNMhDXd5OveZiOcQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kta6YvaRPhIqTRn2OsepkjPi8ADc2dg8s7B3pXrtX6YlX8/8P4l+MHpenexD2hFKDb19d5N9BCIpzjlRzvgipdVolOcjeYIgMbtZ45yFiFhrFO/U4SMFL+aqgKSf/1Hv81dRSyaG4zZdKgApiIc0AkX8QVRUhD5VM61nk8/a1F0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=TrXn2qTr; arc=fail smtp.client-ip=52.101.84.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=I0O9p3qdwqHJ36bETmINM2menSqi12kZHYiXWP/sIr3v17T9in9fcZ4IdhQ4uDzTULxjrkmjzBhiSUlfotkThoDjHyQCNDcBowV0jRpKhigOhRmSccRNN1eoHqOPF3NsdcPW4mqCRp2jqW/ZcAx/KqeTJTU9t0T8gDWFyeTg4Xv4TikGk6e/96nl7UGxkKDjZBPyomsuqGlPOFufrDloo1zkstLEmkzeHLVsEKR/h0Fp+VViB49I8ckFXPfRinhXmeKSYdoaMj8EnQjQyBTkmaJ3UEGRUGTaSXi+DTyiWkBmL1o9cLXDDpdAAnOz7DdEIkmH7YWWVinbd4jaKopHtg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hoOeTBQUHnUi66jC4kNiiQ8svzr4H5iPoNHR3+qvgxQ=;
- b=iPoIDiGnWdrmxtwF/GZaip/Me441QMZj1bQEasT2/oS4waAHj3+nRlXmIg4XtoekszIIStXA9fI8ikfKcbuoh6bemZllP0CEl+BCEHYluRlUwA2orjYYSiFLO7L4JYqou7YqkFDz6T7kJsTv9pWw/ne+il7c23rf8rniPBn9bl8hC9/DXz0pcIOk+p997gMxY2nzYLZMclB7w8erwVQAhQyZSrQbit9Bjf4uQRACydXJgfZBWs4giCJeAfrZdIs7CslHQM3qRRD41Hcw9KP6rTGv6cXgaCbDXqfjGI6vHcXpAVvhwyLJrxlvJ5ohzTagXZpMZFX1pj2rcEumAG7+XA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 131.228.2.241) smtp.rcpttodomain=apple.com smtp.mailfrom=nokia-bell-labs.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nokia-bell-labs.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hoOeTBQUHnUi66jC4kNiiQ8svzr4H5iPoNHR3+qvgxQ=;
- b=TrXn2qTrifFY74pTJ8l3dyhlD7TWL6/UkXVpXtuPGkjwFXzY72RfxRycFY2uvG3CXwgxEm957v6kO99Fu3ksOllkehcstMGIaFF1uXaG8WVlczfN6qDL9fAKCqkOJQzEmavtR7ZMY0YZqxBcRphYdQr8vDe4G/f4NL30PAgMLuwn5/aMrSqyfJJbeL/jZQkpIVrkGe4WQDt1XN7S7c+MMnE8WM5zDrWkZeBGK81Bq7ero3YXzWdonOTRvIINUpSVtaXKF4JcX159IUBaiQq6kTnIn4hK0/7uWia5jau4szUx0CfMhzszhPjtUqdocpL01NF6Cri/M7PIr2dhegB3Dw==
-Received: from AM0PR01CA0136.eurprd01.prod.exchangelabs.com
- (2603:10a6:208:168::41) by DU0PR07MB9363.eurprd07.prod.outlook.com
- (2603:10a6:10:449::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8746.30; Sun, 25 May
- 2025 17:24:28 +0000
-Received: from AMS0EPF0000019B.eurprd05.prod.outlook.com
- (2603:10a6:208:168:cafe::49) by AM0PR01CA0136.outlook.office365.com
- (2603:10a6:208:168::41) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8769.25 via Frontend Transport; Sun,
- 25 May 2025 17:23:45 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.2.241)
- smtp.mailfrom=nokia-bell-labs.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nokia-bell-labs.com;
-Received-SPF: Pass (protection.outlook.com: domain of nokia-bell-labs.com
- designates 131.228.2.241 as permitted sender)
- receiver=protection.outlook.com; client-ip=131.228.2.241;
- helo=fihe3nok0734.emea.nsn-net.net; pr=C
-Received: from fihe3nok0734.emea.nsn-net.net (131.228.2.241) by
- AMS0EPF0000019B.mail.protection.outlook.com (10.167.16.247) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.8769.18
- via Frontend Transport; Sun, 25 May 2025 17:24:27 +0000
-Received: from sarah.nbl.nsn-rdnet.net (sarah.nbl.nsn-rdnet.net [10.0.73.150])
-	by fihe3nok0734.emea.nsn-net.net (Postfix) with ESMTP id 119F32004B;
-	Sun, 25 May 2025 20:24:26 +0300 (EEST)
-From: chia-yu.chang@nokia-bell-labs.com
-To: horms@kernel.org,
-	donald.hunter@gmail.com,
-	xandfury@gmail.com,
-	netdev@vger.kernel.org,
-	dave.taht@gmail.com,
-	pabeni@redhat.com,
-	jhs@mojatatu.com,
-	kuba@kernel.org,
-	stephen@networkplumber.org,
-	xiyou.wangcong@gmail.com,
-	jiri@resnulli.us,
-	davem@davemloft.net,
-	edumazet@google.com,
-	andrew+netdev@lunn.ch,
-	ast@fiberby.net,
-	liuhangbin@gmail.com,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	ij@kernel.org,
-	ncardwell@google.com,
-	koen.de_schepper@nokia-bell-labs.com,
-	g.white@cablelabs.com,
-	ingemar.s.johansson@ericsson.com,
-	mirja.kuehlewind@ericsson.com,
-	cheshire@apple.com,
-	rs.ietf@gmx.at,
-	Jason_Livingood@comcast.com,
-	vidhi_goel@apple.com
-Cc: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-Subject: [PATCH v17 net-next 5/5] Documentation: netlink: specs: tc: Add DualPI2 specification
-Date: Sun, 25 May 2025 19:19:24 +0200
-Message-Id: <20250525171924.15603-6-chia-yu.chang@nokia-bell-labs.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250525171924.15603-1-chia-yu.chang@nokia-bell-labs.com>
-References: <20250525171924.15603-1-chia-yu.chang@nokia-bell-labs.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A364523D2A4;
+	Sun, 25 May 2025 18:26:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1748197613; cv=none; b=lrwWaV248ZdFMPjXZxzCoqJ06sq8+5U2C3XA89CHOQTet+PXLl5J6My0ejfxNnw+8l//zvDxJG6fNUv2Xn9Qnv8gSvPdQ+Uu2HJldw0D2SlzcWsALMuM9iAGc/sv6O+nJOKF4a+l9HYz4SAqPpapUTXqUo9dXPhITLgRNqJcirc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1748197613; c=relaxed/simple;
+	bh=Lp4APZVxa0/0BiLlhBNI1ETmFXHx8UAVaUVMg6qM4oc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=loyKZ/IcyfKJ9pq46EtV/ovDskNNnQYB1AJaT19+bK70J3tRaLsS6AzQbXttq/NOqIbdQ1pHN9fuuffm6F8hzrHYioMcloHsk2S/4JDUk2fLoCxaTkjY5cGdMoHaOMI+jqJANUPKWQZquXq/khkveWk12EeelRhhYFbG2Q3ofpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q5S9Yz4A; arc=none smtp.client-ip=209.85.219.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6f8cf00d96fso14860306d6.0;
+        Sun, 25 May 2025 11:26:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1748197610; x=1748802410; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3iQDuus6tHDjaYlJVgQfU6K3sGxod1e20Y6UqFJQz8E=;
+        b=Q5S9Yz4Av0gt9NCGGb8eSGJYCdXhyhAqcjImmqxFiDraTQc64AOvNv8Dys/HtVxN4f
+         6TpzJKpUY4bxbPrSDy/zQ1gurpkGhojq7vr5erFU1WLQDHs9lluP2fJcYJyIIKay3Tqq
+         qa3lX/HsvawCEsgkj3Qoa4JymKWge98ZZmCNf8LRuCx9uvEJDsAR+gJOP+v1AXkhEe2W
+         Hzk/diZVK8HNZ5Zi7WU6OQqmQxi6oB4CAiIsCuiRSMa4oMq0mhIgmwaBpZdFeOz2dnUv
+         T2I5jeVdDuYXXbrewvRdM32dM629KCUZm4+lqWma5pxXe7XnED/eYdsus1qq1MfYs+/+
+         ePhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748197610; x=1748802410;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3iQDuus6tHDjaYlJVgQfU6K3sGxod1e20Y6UqFJQz8E=;
+        b=h8yif2TIXWMttGWuYm5sigT4NvK3db0HvzvsbOSD+zsXuFg9MuK5GAfvqk7xb0X65m
+         QgDvQE3iXXnMB4E3pgM/5ujHFXtbh9Y8TbAz9swDCBcJsfQGVncNFnQNpSUxDxiy8GWn
+         7dt3J1wyjYt+dBQLwaeqsmq94E9BUc/jU5wHOg9gcQDoi0naPHj9bgjzVHrZiNjjqGQU
+         iuo+iwd2hUx4/rszlH1LkKeQff4eAnjdVLkkcbA9akZxWeZOHTfpPgy2cCVH1SaFZYFE
+         Yzv3zpk9zYpF61qkJzxTIPXsFQ/xGLC+5+LkBcloP4PjU61Cp7awlkbqMZuApbahNHY2
+         z1Qg==
+X-Forwarded-Encrypted: i=1; AJvYcCUvuQlKBkoB0horrxLex4G5P1MF8QA4ZeygNrzahPTzFlKNc9fPeRL+SvEPRgoRo0gg4Ub4uYzEQA1NI5dVTae1@vger.kernel.org, AJvYcCVI1ZLQNvqMW1LQQnkg77o8+vgdfJN+clojrX73XBypSepGjZisg8kRw1SzmxY2uOlHUVvJX046aNelofA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZ6nZbzcEDy8RTuRDbILpVrgzeWLpBMHErIPP84C/oievlapQt
+	kgnLZg/w55ZEs+NOQkwWXz/Tf8BAL25XX84AXZCOX7R5aGu7DeEUuSiRoiTDA6sm1W/R7G5zeOC
+	tPi3H2QPF4mcqj9gpM/2kcYGcvztbfKs=
+X-Gm-Gg: ASbGncufufaJLiO/RSRxy9ChpvH1elBKsDxXi+Ma3FzBSSrkVNkJhEBM8gOrFhhkt38
+	3OoogL9+bKZqcK4IXeAHMcPfg17CcCilA/J3GlCSy+H2IvHhUTFCmKO0KnxMFHRHVuFvno2uM5n
+	U9xi7WOAoPC3dLcHq2DbGrdTjB/t/sogGkbySjMIsOnVlBsU+z+rKrzjUfgxolzQkC
+X-Google-Smtp-Source: AGHT+IH/ciCbn34OAJnjEtsVPXlZMxHLOCNYfrbDPIJVqMMgLW3oTWLp5LliA1ycngh+GRJSBBjNNa948wlOeUzbXBU=
+X-Received: by 2002:a05:6214:c27:b0:6fa:980d:528 with SMTP id
+ 6a1803df08f44-6fa9d15983dmr111569806d6.23.1748197610414; Sun, 25 May 2025
+ 11:26:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AMS0EPF0000019B:EE_|DU0PR07MB9363:EE_
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: 37734d98-6118-4f8c-567a-08dd9bb10077
-X-LD-Processed: 5d471751-9675-428d-917b-70f44f9630b0,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
- BCL:0;ARA:13230040|82310400026|1800799024|36860700013|7416014|376014|921020|13003099007;
-X-Microsoft-Antispam-Message-Info:
- =?us-ascii?Q?PaOO5f6Kr4T5NvPeJlHoAIew0Y/8cXcCOyVR+Vfl4Cpe3qUJaosQcvPPlQYj?=
- =?us-ascii?Q?1XHFkR7dP0+/zqxDTxNMEuBqvAMbwS9UTTfV6kwLSmOaDJ+Q6OoNklXYswg0?=
- =?us-ascii?Q?WwyD7c/VRJsNkJwtnarI3yxtzbmQetxoEPt2HwsHJiKsrv6iWacIBVAIp8a9?=
- =?us-ascii?Q?cjBaO8LvmilJubWMOjTrtJWieWKhkLj4XeRltV2PtKUPuLR2uiFDEZOB17yQ?=
- =?us-ascii?Q?TD1EFS/2Bm4EYiF2z6cWlhMS2ou+umbWYcE0V1Q/Y+BYzlXhOoHSIFNKNy+O?=
- =?us-ascii?Q?NmPaxW1Dg8XxJleDTY8codo+va3LPcgca9kFR/bE3x24F3ocQ3FUFxvoc4ev?=
- =?us-ascii?Q?W+cWhqusk373goo/vG+EtPnFYQkh7eMW4RmhfyaX/fZJ3eN7XpvvgznXJpns?=
- =?us-ascii?Q?NrlaNeUSeSRVcTczcqpAJemg4LcfQ1jMSWSAh1BeghTIlzo//fzkk5O6o071?=
- =?us-ascii?Q?IHHMds+7SWr6GCBGj4vLu/UVVkBMJ4pqdWkNvnT/6rnmrpTew6pLRVii0ARt?=
- =?us-ascii?Q?QS+a2IPfJ2+YIllcspYYEO82tSwKggKM55t+LoT6tdoeiOolsMmSq2aNr7kR?=
- =?us-ascii?Q?vqxDWeknR1h9VWiGr9PwDtsf83iz7y61pGFGO1ogshm7acJMkW+rO38OEaaR?=
- =?us-ascii?Q?0i2Ykd/0jJFTVv9beVoBs6anvsIldlB27W7CvbcP++1Rg98w7URyqeHvZoA2?=
- =?us-ascii?Q?YbQmU/4RHux6/8fD6rSLBHOfWkTsTfjcvbU8hvn+sHC8ExSvBNy5OL20cPgd?=
- =?us-ascii?Q?ckSDHntMSrmyMEJU1iyYxADq+vhliqbHvRUIYx7hs73vjOTszVr5v55XcAIC?=
- =?us-ascii?Q?ysLl8NYRFj6uhPgrpbvAzMBhLA+m+b0km6TbkxOMHsXclvNZXCduKpv7+dyo?=
- =?us-ascii?Q?q/cjwtnA9nZhbIYJWv5NI7RC3I7xuxObKK4PY6eSd0nfpcZO8y6tUfwlG0pF?=
- =?us-ascii?Q?4ADm7a1HpUe9Ndnw5GFNsGpjXhxMUyQSpC+d6NvXeJPjpT9KhFyliXw/dq5N?=
- =?us-ascii?Q?B+B9KAvUDOXDUza8GjEdpi7C8F7ZHpVkguE8mIsy4g4oekI4xEuIcmR1LpiA?=
- =?us-ascii?Q?gQHXjlLMSaAzTOUAY9dMSP7iSnZzD0JGtqoFjEVyslVgExtn2BUF5F+A5jhf?=
- =?us-ascii?Q?g6FbLS0oslOmnYJIET/zMbIMfA5VPecrG55/U2Kqo2qMs85zuh7rJtJZXXaz?=
- =?us-ascii?Q?Dqpyuyhrmo+gLiMfj9X44FUxryW8JS+HhVBRzIGNt81tAAqg8LYq8ShAmA6b?=
- =?us-ascii?Q?SJUpJE5xCeRAROB+fQl6RA5bBGmz4HAI9G0iR3m8VNkOhmhbQkFfdBUumNtY?=
- =?us-ascii?Q?g1WZaYKg/toynb9xprXub9ea8zYT6d/qJcl2zN9cD3wxTodpEzN6ceXpFZTS?=
- =?us-ascii?Q?JRqRuZtBRKWQEgPoCvBckS8nLIXF46i+KW4XY9OCbcmgwsaA/DoQY+8pC/ps?=
- =?us-ascii?Q?J8rbq7rCkum+6EyydKjOLR/ShbqsZUmZ/h0QKyUmRX16IyEhXsfCq/fOuB0q?=
- =?us-ascii?Q?ddNC6YDgtcnPgjDV8lJO7WlduGJp96AekHxQLziHx+HMLs+CIiGGnoQYCw?=
- =?us-ascii?Q?=3D=3D?=
-X-Forefront-Antispam-Report:
- CIP:131.228.2.241;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fihe3nok0734.emea.nsn-net.net;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(36860700013)(7416014)(376014)(921020)(13003099007);DIR:OUT;SFP:1101;
-X-OriginatorOrg: nokia-bell-labs.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2025 17:24:27.4884
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 37734d98-6118-4f8c-567a-08dd9bb10077
-X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.2.241];Helo=[fihe3nok0734.emea.nsn-net.net]
-X-MS-Exchange-CrossTenant-AuthSource: AMS0EPF0000019B.eurprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR07MB9363
+References: <20250516153955.111815-1-embedkari167@gmail.com> <73a4b1c9-44b4-4f06-a766-ea7ed391c578@linuxfoundation.org>
+In-Reply-To: <73a4b1c9-44b4-4f06-a766-ea7ed391c578@linuxfoundation.org>
+From: Harshal Wadhwa <embedkari167@gmail.com>
+Date: Sun, 25 May 2025 23:56:48 +0530
+X-Gm-Features: AX0GCFvYMuOMlqQOBQdvGQ_5hOiN-rfQdg0Zgzfo8_JP-XwbcWnufmY5l3adJvQ
+Message-ID: <CAPCCTVOXHUh7j6Vb=dmnY4wi37f4NMo+Pumuho-sA7jq1iH_fQ@mail.gmail.com>
+Subject: Re: [PATCH] selftests: firmware: Add details in error logging
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: shuah@kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kernel-mentees@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+On Fri, 23 May 2025 at 03:49, Shuah Khan <skhan@linuxfoundation.org> wrote:
+>
+> On 5/16/25 09:39, Harshal wrote:
+> > Specify details in logs of failed cases
+> >
+> > Use die() instead of exit() when write to
+> > sys_path fails
+>
+> Please explain why this change is needed?
+>
+> >
+> > Signed-off-by: Harshal <embedkari167@gmail.com>
+> > ---
+> >   tools/testing/selftests/firmware/fw_namespace.c | 17 +++++++++--------
+> >   1 file changed, 9 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/firmware/fw_namespace.c b/tools/testing/selftests/firmware/fw_namespace.c
+> > index 04757dc7e546..deff7f57b694 100644
+> > --- a/tools/testing/selftests/firmware/fw_namespace.c
+> > +++ b/tools/testing/selftests/firmware/fw_namespace.c
+> > @@ -38,10 +38,11 @@ static void trigger_fw(const char *fw_name, const char *sys_path)
+> >
+> >       fd = open(sys_path, O_WRONLY);
+> >       if (fd < 0)
+> > -             die("open failed: %s\n",
+> > +             die("open of sys_path failed: %s\n",
+> >                   strerror(errno));
+> >       if (write(fd, fw_name, strlen(fw_name)) != strlen(fw_name))
+> > -             exit(EXIT_FAILURE);
+> > +             die("write to sys_path failed: %s\n",
+> > +                 strerror(errno));
+>
+> Hmm. Wrapper scripts key off of the EXIT_FAILURE - how does
+> the output change with this change?
 
-Introduce the specification of tc qdisc DualPI2 stats and attributes,
-which is the reference implementation of IETF RFC9332 DualQ Coupled AQM
-(https://datatracker.ietf.org/doc/html/rfc9332) providing two different
-queues: low latency queue (L-queue) and classic queue (C-queue).
-
-Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-
----
-v17:
-- Rebase tc.yaml on commit ba5a199b2401d and commit f9aec8025ab5f
----
- Documentation/netlink/specs/tc.yaml | 156 ++++++++++++++++++++++++++++
- 1 file changed, 156 insertions(+)
-
-diff --git a/Documentation/netlink/specs/tc.yaml b/Documentation/netlink/specs/tc.yaml
-index cb7ea7d62e56..dbec0fc748be 100644
---- a/Documentation/netlink/specs/tc.yaml
-+++ b/Documentation/netlink/specs/tc.yaml
-@@ -56,6 +56,37 @@ definitions:
-       - tundf
-       - tunoam
-       - tuncrit
-+  -
-+    name: tc-dualpi2-drop-overload-enum
-+    type: enum
-+    entries:
-+      - overflow
-+      - drop
-+  -
-+    name: tc-dualpi2-drop-early-enum
-+    type: enum
-+    entries:
-+      - drop-dequeue
-+      - drop-enqueue
-+  -
-+    name: tc-dualpi2-ecn-mask-enum
-+    type: enum
-+    entries:
-+      -
-+        name: l4s-ect
-+        value: 1
-+      -
-+        name: cla-ect
-+        value: 2
-+      -
-+        name: any-ect
-+        value: 3
-+  -
-+    name: tc-dualpi2-split-gso-enum
-+    type: enum
-+    entries:
-+      - no-split-gso
-+      - split-gso
-   -
-     name: tc-stats
-     type: struct
-@@ -822,6 +853,58 @@ definitions:
-       -
-         name: drop-overmemory
-         type: u32
-+  -
-+    name: tc-dualpi2-xstats
-+    type: struct
-+    members:
-+      -
-+        name: prob
-+        type: u32
-+        doc: Current probability
-+      -
-+        name: delay-c
-+        type: u32
-+        doc: Current C-queue delay in microseconds
-+      -
-+        name: delay-l
-+        type: u32
-+        doc: Current L-queue delay in microseconds
-+      -
-+        name: pkts-in-c
-+        type: u32
-+        doc: Number of packets enqueued in the C-queue
-+      -
-+        name: pkts-in-l
-+        type: u32
-+        doc: Number of packets enqueued in the L-queue
-+      -
-+        name: maxq
-+        type: u32
-+        doc: Maximum number of packets seen by the DualPI2
-+      -
-+        name: ecn-mark
-+        type: u32
-+        doc: All packets marked with ecn
-+      -
-+        name: step-mark
-+        type: u32
-+        doc: Only packets marked with ecn due to L-queue step AQM
-+      -
-+        name: credit
-+        type: s32
-+        doc: Current credit value for WRR
-+      -
-+        name: memory-used
-+        type: u32
-+        doc: Memory used in bytes by the DualPI2
-+      -
-+        name: max-memory-used
-+        type: u32
-+        doc: Maximum memory used in bytes by the DualPI2
-+      -
-+        name: memory-limit
-+        type: u32
-+        doc: Memory limit in bytes
-   -
-     name: tc-fq-pie-xstats
-     type: struct
-@@ -2281,6 +2364,73 @@ attribute-sets:
-       -
-         name: quantum
-         type: u32
-+  -
-+    name: tc-dualpi2-attrs
-+    attributes:
-+      -
-+        name: limit
-+        type: u32
-+        doc: Limit of total number of packets in queue
-+      -
-+        name: memory-limit
-+        type: u32
-+        doc: Memory limit of total number of packets in queue
-+      -
-+        name: target
-+        type: u32
-+        doc: Classic target delay in microseconds
-+      -
-+        name: tupdate
-+        type: u32
-+        doc: Drop probability update interval time in microseconds
-+      -
-+        name: alpha
-+        type: u32
-+        doc: Integral gain factor in Hz for PI controller
-+      -
-+        name: beta
-+        type: u32
-+        doc: Proportional gain factor in Hz for PI controller
-+      -
-+        name: step-thresh
-+        type: u32
-+        doc: L4S step marking threshold (see also step-packets)
-+      -
-+        name: step-packets
-+        type: flag
-+        doc: L4S Step marking threshold unit in packets (otherwise is in microseconds)
-+      -
-+        name: min-qlen-step
-+        type: u32
-+        doc: Packets enqueued to the L-queue can apply the step threshold when the queue length of L-queue is larger than this value. (0 is recommended)
-+      -
-+        name: coupling
-+        type: u8
-+        doc: Probability coupling factor between Classic and L4S (2 is recommended)
-+      -
-+        name: drop-overload
-+        type: u8
-+        doc: Control the overload strategy (drop to preserve latency or let the queue overflow)
-+        enum: tc-dualpi2-drop-overload-enum
-+      -
-+        name: drop-early
-+        type: u8
-+        doc: Decide where the Classic packets are PI-based dropped or marked
-+        enum: tc-dualpi2-drop-early-enum
-+      -
-+        name: c-protection
-+        type: u8
-+        doc: Classic WRR weight in percentage (from 0 to 100)
-+      -
-+        name: ecn-mask
-+        type: u8
-+        doc: Configure the L-queue ECN classifier
-+        enum: tc-dualpi2-ecn-mask-enum
-+      -
-+        name: split-gso
-+        type: u8
-+        doc: Split aggregated skb or not
-+        enum: tc-dualpi2-split-gso-enum
-   -
-     name: ematch-attrs
-     name-prefix: tca-ematch-
-@@ -3705,6 +3855,9 @@ sub-messages:
-       -
-         value: drr
-         attribute-set: drr-attrs
-+      -
-+        value: dualpi2
-+        attribute-set: tc-dualpi2-attrs
-       -
-         value: etf
-         attribute-set: etf-attrs
-@@ -3872,6 +4025,9 @@ sub-messages:
-       -
-         value: codel
-         fixed-header: tc-codel-xstats
-+      -
-+        value: dualpi2
-+        fixed-header: tc-dualpi2-xstats
-       -
-         value: fq
-         fixed-header: tc-fq-qd-stats
--- 
-2.34.1
-
+In the whole test file, all fail cases uses die() with the specified
+error log and error code, so just wanted to add a error log for this
+fault condition and maintain consistency.
+> >       close(fd);
+> >   }
+> >
+> > @@ -52,10 +53,10 @@ static void setup_fw(const char *fw_path)
+> >
+> >       fd = open(fw_path, O_WRONLY | O_CREAT, 0600);
+> >       if (fd < 0)
+> > -             die("open failed: %s\n",
+> > +             die("open of firmware file failed: %s\n",
+> >                   strerror(errno));
+> >       if (write(fd, fw, sizeof(fw) -1) != sizeof(fw) -1)
+> > -             die("write failed: %s\n",
+> > +             die("write to firmware file failed: %s\n",
+> >                   strerror(errno));
+> >       close(fd);
+> >   }
+> > @@ -66,7 +67,7 @@ static bool test_fw_in_ns(const char *fw_name, const char *sys_path, bool block_
+> >
+> >       if (block_fw_in_parent_ns)
+> >               if (mount("test", "/lib/firmware", "tmpfs", MS_RDONLY, NULL) == -1)
+> > -                     die("blocking firmware in parent ns failed\n");
+> > +                     die("blocking firmware in parent namespace failed\n");
+> >
+> >       child = fork();
+> >       if (child == -1) {
+> > @@ -99,11 +100,11 @@ static bool test_fw_in_ns(const char *fw_name, const char *sys_path, bool block_
+> >                       strerror(errno));
+> >       }
+> >       if (mount(NULL, "/", NULL, MS_SLAVE|MS_REC, NULL) == -1)
+> > -             die("remount root in child ns failed\n");
+> > +             die("remount root in child namespace failed\n");
+> >
+> >       if (!block_fw_in_parent_ns) {
+> >               if (mount("test", "/lib/firmware", "tmpfs", MS_RDONLY, NULL) == -1)
+> > -                     die("blocking firmware in child ns failed\n");
+> > +                     die("blocking firmware in child namespace failed\n");
+> >       } else
+> >               umount("/lib/firmware");
+> >
+> > @@ -129,8 +130,8 @@ int main(int argc, char **argv)
+> >               die("error: failed to build full fw_path\n");
+> >
+> >       setup_fw(fw_path);
+> > -
+> >       setvbuf(stdout, NULL, _IONBF, 0);
+> > +
+> >       /* Positive case: firmware in PID1 mount namespace */
+> >       printf("Testing with firmware in parent namespace (assumed to be same file system as PID1)\n");
+> >       if (!test_fw_in_ns(fw_name, sys_path, false))
+>
+> The rest look fine.
+>
+> thanks,
+> -- Shuah
+>
 
