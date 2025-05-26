@@ -1,167 +1,277 @@
-Return-Path: <linux-kselftest+bounces-33783-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33784-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94D8EAC3FE9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 14:59:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6C34AC4057
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 15:28:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 326D07A2A17
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 12:57:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9AFD31888CB8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 13:28:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34EC820297B;
-	Mon, 26 May 2025 12:58:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D895202C46;
+	Mon, 26 May 2025 13:28:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eO1cAbaq"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WvK05rX3"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EB1420298E
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 May 2025 12:57:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EEA11876
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 May 2025 13:28:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748264281; cv=none; b=ScDY4LWCJaVVX0ATVaKEys61fSkw3TOjuzNogs3BRG/vxidcrcoqMgMOPDk8/fVM34hwiY+/9koIwddjsgabGOnuHWTV7HSWO831xZcf+F0UzBWh5+pfWAbQIlyAIp6zMdz5p8rDZ6eUAJKHFufAuXOscX3kW93o6F+UzMtaxWw=
+	t=1748266102; cv=none; b=jdSYsQIjT3z2ZFhWoOZ26mkaGDbqRGc1VUKzFIk1KYLqd7mLnbaBhEcU5B/Ikzea2nVBS2Asypfjv3s0Ej9lteIvwBG3x+PP8TenvvGBGhfDWZF+jpc3R0/d/HL+Id8nZtVNHg8IkGOeMZEnjsdiyYtQ55YUlBpKi6opaH/wwas=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748264281; c=relaxed/simple;
-	bh=BAtTg1IAz2Pq4xa5WP5MKDboCtbXwFTv3JIyx9SvTNQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=drc5nJBrxfqxlJBuxF3q1+N1QYK6see7dlcCj2IcVlwdKDvqCzmpRkvJ4EY1l8vfWgr4RK1QpFxvmegI564+Uy/mstKn/xF1r0x8JbvcPHtWQRWMrFXLxgLZRLQiM2G6ZCVi6idtsdzzxdamG/5CMSPOnJg+nu0TQ6owk5XfyR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eO1cAbaq; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1748266102; c=relaxed/simple;
+	bh=jWGCVJvCwWmqnY7C1gLvFAf5WbhXCFFFGXco88wozQ8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 Content-type; b=ibn2yy8Zg+AWTyLWgLnIns0oTUJzNYyvkQ3yESXEAdMtcOyxHeXvyqxrjoqt5vOxIKu1Tw7WD5UA5dKaUqEilFVy5psOvAa8bSLdm0JtxqeKFqL0RZY0PlzyHOy6ab1E0TQ+pyj1lmd82io3+Rn7020jcGLPpjwB70u/y/PtGWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WvK05rX3; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1748264278;
+	s=mimecast20190719; t=1748266098;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=pWIfCfk8Tmt/gpieQtOyE1YH2gioYRnHCPB+QvtRvzo=;
-	b=eO1cAbaqDKWPOP0xsih3oHb0JRXDlDGhTo1cPJzl1PY4Of8rjrSD+xbekHoRO2Qppe9n3l
-	yWg4ogzrh7yYJYbTKvTCDoQ2uNTkLC/vQ+QpglMdqmTA2+r2EBYF+tTdu+Tsv2MruA4BKI
-	HoR/BM0ubSb5KpXRpxoef2i2kPZDs3s=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+	 to:to:cc:cc:mime-version:mime-version:  content-type:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=CaDjeuor3qvehrWwyZqxrxslYPrtt2O/kVi0sHBOQXY=;
+	b=WvK05rX3UUyLIwbLFHRjmVWSHY+/Tep0usbbB4NUnwRmJNv08gdLaBh+/0PDUR7T2oeQiO
+	UN8gIjz09sTU9+cwrw3rgoeDz17hy/zp/26dp9LQasS7hodr/JJI1DHZczH3NvpkoiwqZj
+	cpNI2SXr9SCTeAppC9PXwcj9CAF7cio=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-580-G30zxMWEOceWTaOQuWcZzQ-1; Mon, 26 May 2025 08:57:57 -0400
-X-MC-Unique: G30zxMWEOceWTaOQuWcZzQ-1
-X-Mimecast-MFC-AGG-ID: G30zxMWEOceWTaOQuWcZzQ_1748264276
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-3a4d95375c6so379130f8f.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 May 2025 05:57:56 -0700 (PDT)
+ us-mta-18-FkTwtWvOM7esFUBCFlIvSQ-1; Mon, 26 May 2025 09:28:16 -0400
+X-MC-Unique: FkTwtWvOM7esFUBCFlIvSQ-1
+X-Mimecast-MFC-AGG-ID: FkTwtWvOM7esFUBCFlIvSQ_1748266096
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3a4dcfb3bbcso304339f8f.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 May 2025 06:28:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748264276; x=1748869076;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=pWIfCfk8Tmt/gpieQtOyE1YH2gioYRnHCPB+QvtRvzo=;
-        b=bVgtO78/4ymJ3A/X04feZX8qIuc2jiKZx7P7cv8qg8DEi6w62NmHlrCcGA8bzPqnAp
-         AvEbwNtUNyTZ5NQcXkUu6y94n2Y24+V0nxjAVlzBe44jTcnH/vAZn54sByW5ywJ0d4tb
-         I+3NZRT1udaXMbrNbHQbh8B23RtJj2M1cXRlgjJm+6rFMT1W4wEUeadKz3CV0DTNix0M
-         HTXTaFLAMyDP1SJSWCAcyXxQp3Sb6upa0LPdnJwfmIVwZYqcuBzdOwQRVLp4EO5dC0Sh
-         eZiT7a/M67QNRTksuGOSqVvnW8iKCtTGzl2ddrtt9owFGPILcYDiZGCfK+X2/oLjPXoG
-         +2YA==
-X-Forwarded-Encrypted: i=1; AJvYcCVQF7fD6wvYuX4fGaRR2KfJ3hGD1p2sBKHLGebgGBJHMPXVq4UmAb83XORHPCjb+eRbafZmHYhB4s3qBEDMRz4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQFUkuO2TcOrCkSU5bNlDMyPp4Sy2hYg1FQHV75nJxbYJtxjjQ
-	j6l9H/+5En0rSkcz+svXGQOTZxHm0kMa5V7Z/ATNAjVfOEtMXaM2kepFaHQ1g6IxOPgtKDu0RWm
-	+6tultnO9U9Qwbb61SvYHc5dbLowQasU0ka3RiAQu9bAre3P9gfPgAXShNOgJVscdDJHM6A==
-X-Gm-Gg: ASbGncs5meq9wS853Itx7O+DNGXchVZRJI9vvMJ8BBwVS5iancYXCZhl3iCf6kgygKw
-	pnRobeqf/3FCQTwN9pof6ImXPznWuqjf/8smljWcVkK3MWAGEIUh2gQwdL3lIdmCes35+YDNsqc
-	hcFp09BAv2VTAmq86BODBBERnT6Xt+X/oilwX6RCJMOYxKHtwd5iu9ri48uM2Zw6+GLQDta/zN3
-	2azwQh9gNIhapWDWdJA6ZwhkQao87SLTyMyO0tZ7nGissLg5vCcmSYuGsECBn9Ia1ipBrrlogsy
-	2NSJemW/zLm4tzzZjkY21pD4PtEiGnQl0EQ4xaMcfqEnqZ/yKQ/TWoclhf4z0MEhy9CE37zQI6k
-	v6krqP0XxnLm5OxJviiNPxiD+ioFs2OgwtpF9XzM=
-X-Received: by 2002:a05:6000:4203:b0:3a3:648e:17da with SMTP id ffacd0b85a97d-3a4cb449628mr6930392f8f.7.1748264275882;
-        Mon, 26 May 2025 05:57:55 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGjHzgu2wHsQTTM5XNjk6hrAMmOf9m3x1GeSPiXUCnbdAfJ+yu2Z2J7ENby+z8F/q3Gqcf27A==
-X-Received: by 2002:a05:6000:4203:b0:3a3:648e:17da with SMTP id ffacd0b85a97d-3a4cb449628mr6930371f8f.7.1748264275515;
-        Mon, 26 May 2025 05:57:55 -0700 (PDT)
-Received: from ?IPV6:2003:d8:2f19:6500:e1c1:8216:4c25:efe4? (p200300d82f196500e1c182164c25efe4.dip0.t-ipconnect.de. [2003:d8:2f19:6500:e1c1:8216:4c25:efe4])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-447f6f0554fsm234468685e9.9.2025.05.26.05.57.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 May 2025 05:57:55 -0700 (PDT)
-Message-ID: <a360912b-4d07-47ce-bdaf-7125fc020e65@redhat.com>
-Date: Mon, 26 May 2025 14:57:54 +0200
+        d=1e100.net; s=20230601; t=1748266095; x=1748870895;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CaDjeuor3qvehrWwyZqxrxslYPrtt2O/kVi0sHBOQXY=;
+        b=daWUIMaki7lkIr5X+XV0VFImi5Te6fZvbzTnK1MqKMKg8hWdv42T0fwOvTV3qcmYQG
+         dXdNpDg2Yaxbz7qEqiAiqveuBFFopDNtkXYBwwldnYjxVz5MRhzlVks3t7V1KyjCJinF
+         nf3QL5XlTXAcxLD5U1FoT1CLNfFbperTijvjUtH8GlsiPSDVQ2GtWkHUx7k/z7K63e3T
+         1PRDyTVuP+5p7MdUIuIgaF8ZX9BsAKrEcNEV6DkNW+UCRnPXbBRkB6lKXNMVm9iK0KXw
+         cCTiLRauUhuh6mJNkHMIC+96Tm43DVs7bUKPSo2FqYqcAm75zy7eYjg7nQ8/I3ts13Gm
+         Co3g==
+X-Gm-Message-State: AOJu0YwNmo06oZiwvIyA8hTBGTkEicQVTw4CgztyuLiDrs7QhDxDAS/+
+	GIS7CGGZNLe0ivbuK7ocRMSk+aKgky0+JAhyJHKVmWY3DyhHzHAKERRL9cTCJUIbzhPqgvS2C7n
+	WRLVKWII1kv7v7/ArGJqDxp9RI/3i142NehCdkXxhEp/cfJseZLYs2jVpyfxCnPj5eeM09qtV8X
+	zcbhW+8Rz3mUp8yj968dtnMWVaq8w52kquBMxLalyuF/UD5Uu2EWdvlIdW
+X-Gm-Gg: ASbGncsfEXnyQojLeAvAcYyDTqBL05YVSzWlIuajD9VLHZBVJ/QGSylQHk6llji4qv1
+	KXmF64hsQ3DEwRLDVzYRuEPYC/FdevB7psy8D3M4mfkjh429KTt8VWOx8sYV6NZaKbBqGJqo7+7
+	/sErZW4yUPfYEGhzI4JGZmRkCLKUfLRmqatX99TpxaGQhQJJgccRufHL1d4PoDSdczURdpTYHHj
+	mHqBkTUyuEQS6TL9g5LU27XrmzMjkKS2ltRg2iwQxRnsvO7+gRYxnCyaSWk26tqksufg9vwC0ju
+	QJjq2BMYuSLecJ/M
+X-Received: by 2002:a05:6000:2301:b0:3a4:da87:3a73 with SMTP id ffacd0b85a97d-3a4da873b5dmr1710171f8f.42.1748266094862;
+        Mon, 26 May 2025 06:28:14 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHeYvbzrZNcWcmW1qUBxQajDh+d2LT6ajoVkh4KOQZsRA+0DvHZ1ZoRl+TxtNrpzzd9byku2A==
+X-Received: by 2002:a05:6000:2301:b0:3a4:da87:3a73 with SMTP id ffacd0b85a97d-3a4da873b5dmr1710127f8f.42.1748266094346;
+        Mon, 26 May 2025 06:28:14 -0700 (PDT)
+Received: from lab.hqhome163.com ([81.57.75.210])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3a4c8455e7dsm8836663f8f.9.2025.05.26.06.28.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 May 2025 06:28:13 -0700 (PDT)
+From: Alessandro Carminati <acarmina@redhat.com>
+To: linux-kselftest@vger.kernel.org
+Cc: Dan Carpenter <dan.carpenter@linaro.org>,
+	Kees Cook <keescook@chromium.org>,
+	Daniel Diaz <daniel.diaz@linaro.org>,
+	David Gow <davidgow@google.com>,
+	Arthur Grillo <arthurgrillo@riseup.net>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	Naresh Kamboju <naresh.kamboju@linaro.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Maxime Ripard <mripard@kernel.org>,
+	Ville Syrjala <ville.syrjala@linux.intel.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Alessandro Carminati <alessandro.carminati@gmail.com>,
+	Jani Nikula <jani.nikula@intel.com>,
+	Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Linux Kernel Functional Testing <lkft@linaro.org>,
+	dri-devel@lists.freedesktop.org,
+	kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org,
+	Alessandro Carminati <acarmina@redhat.com>
+Subject: [PATCH v5 0/5] kunit: Add support for suppressing warning backtraces
+Date: Mon, 26 May 2025 13:27:50 +0000
+Message-Id: <20250526132755.166150-1-acarmina@redhat.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: Deduplicate test names in madv_populate
-To: Mark Brown <broonie@kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250522-selftests-mm-madv-populate-dedupe-v1-1-fd1dedd79b4b@kernel.org>
-From: David Hildenbrand <david@redhat.com>
-Content-Language: en-US
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <20250522-selftests-mm-madv-populate-dedupe-v1-1-fd1dedd79b4b@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
 
-On 22.05.25 18:29, Mark Brown wrote:
-> The madv_populate selftest has some repetitive code for several different
-> cases that it covers, included repeated test names used in ksft_test_result()
-> reports. This causes problems for automation, the test name is used to both
-> track the test between runs and distinguish between multiple tests within
-> the same run. Fix this by tweaking the messages with duplication to be more
-> specific about the contexts they're in.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
+Some unit tests intentionally trigger warning backtraces by passing bad
+parameters to kernel API functions. Such unit tests typically check the
+return value from such calls, not the existence of the warning backtrace.
 
-Acked-by: David Hildenbrand <david@redhat.com>
+Such intentionally generated warning backtraces are neither desirable
+nor useful for a number of reasons:
+- They can result in overlooked real problems.
+- A warning that suddenly starts to show up in unit tests needs to be
+  investigated and has to be marked to be ignored, for example by
+  adjusting filter scripts. Such filters are ad hoc because there is
+  no real standard format for warnings. On top of that, such filter
+  scripts would require constant maintenance.
+
+One option to address the problem would be to add messages such as
+"expected warning backtraces start/end here" to the kernel log.
+However, that would again require filter scripts, might result in
+missing real problematic warning backtraces triggered while the test
+is running, and the irrelevant backtrace(s) would still clog the
+kernel log.
+
+Solve the problem by providing a means to identify and suppress specific
+warning backtraces while executing test code. Support suppressing multiple
+backtraces while at the same time limiting changes to generic code to the
+absolute minimum.
+
+Overview:
+Patch#1 Introduces the suppression infrastructure.
+Patch#2 Mitigate the impact at WARN*() sites.
+Patch#3 Adds selftests to validate the functionality.
+Patch#4 Demonstrates real-world usage in the DRM subsystem.
+Patch#5 Documents the new API and usage guidelines.
+
+Design Notes:
+The objective is to suppress unwanted WARN*() generated messages.
+
+Although most major architectures share common bug handling via `lib/bug.c`
+and `report_bug()`, some minor or legacy architectures still rely on their
+own platform-specific handling. This divergence must be considered in any
+such feature. Additionally, a key challenge in implementing this feature is
+the fragmentation of `WARN*()` messages emission: specific part in the
+macro, common with BUG*() part in the exception handler.
+As a result, any intervention to suppress the message must occur before the
+illegal instruction.
+
+Lessons from the Previous Attempt
+In earlier iterations, suppression logic was added inside the
+`__report_bug()` function to intercept WARN*() messages not producing
+messages in the macro.
+To implement the check in the check in the bug handler code, two strategies
+were considered:
+
+* Strategy #1: Use `kallsyms` to infer the originating functionid, namely
+  a pointer to the function. Since in any case, the user interface relies
+  on function names, they must be translated in addresses at suppression-
+  time or at check-time.
+  Assuming to translate at suppression-time, the `kallsyms` subsystem needs
+  to be used to determine the symbol address from the name, and again to
+  produce the functionid from `bugaddr`. This approach proved unreliable
+  due to compiler-induced transformations such as inlining, cloning, and
+  code fragmentation. Attempts to preventing them is also unconvenient
+  because several `WARN()` sites are in functions intentionally declared 
+  as `__always_inline`.
+
+* Strategy #2: Store function name `__func__` in `struct bug_entry` in
+  the `__bug_table`. This implementation was used in the previous version.
+  However, `__func__` is a compiler-generated symbol, which complicates
+  relocation and linking in position-independent code. Workarounds such as
+  storing offsets from `.rodata` or embedding string literals directly into
+  the table would have significantly either increased complexity or
+  increase the __bug_table size. 
+  Additionally, architectures not using the unified `BUG()` path would 
+  still require ad-hoc handling. Because current WARN*() message production
+  strategy, a few WARN*() macros still need a check to suppress the part of
+  the message produced in the macro itself.
+
+Current Proposal: Check Directly in the `WARN()` Macros.
+This avoids the need for function symbol resolution or ELF section
+modification.
+Suppression is implemented directly in the `WARN*()` macros.
+
+A helper function, `__kunit_is_suppressed_warning()`, is used to determine
+whether suppression applies. It is marked as `noinstr`, since some `WARN*()`
+sites reside in non-instrumentable sections. As it uses `strcmp`, a
+`noinstr` version of `strcmp` was introduced.
+The implementation is deliberately simple and avoids architecture-specific
+optimizations to preserve portability. Since this mechanism compares
+function names and is intended for test usage only, performance is not a
+primary concern.
+
+This series is based on the RFC patch and subsequent discussion at
+https://patchwork.kernel.org/project/linux-kselftest/patch/02546e59-1afe-4b08-ba81-d94f3b691c9a@moroto.mountain/
+and offers a more comprehensive solution of the problem discussed there.
+
+Changes since RFC:
+- Introduced CONFIG_KUNIT_SUPPRESS_BACKTRACE
+- Minor cleanups and bug fixes
+- Added support for all affected architectures
+- Added support for counting suppressed warnings
+- Added unit tests using those counters
+- Added patch to suppress warning backtraces in dev_addr_lists tests
+
+Changes since v1:
+- Rebased to v6.9-rc1
+- Added Tested-by:, Acked-by:, and Reviewed-by: tags
+  [I retained those tags since there have been no functional changes]
+- Introduced KUNIT_SUPPRESS_BACKTRACE configuration option, enabled by
+  default.
+
+Changes since v2:
+- Rebased to v6.9-rc2
+- Added comments to drm warning suppression explaining why it is needed.
+- Added patch to move conditional code in arch/sh/include/asm/bug.h
+  to avoid kerneldoc warning
+- Added architecture maintainers to Cc: for architecture specific patches
+- No functional changes
+
+Changes since v3:
+- Rebased to v6.14-rc6
+- Dropped net: "kunit: Suppress lock warning noise at end of dev_addr_lists tests"
+  since 3db3b62955cd6d73afde05a17d7e8e106695c3b9
+- Added __kunit_ and KUNIT_ prefixes.
+- Tested on interessed architectures.
+
+Changes since v4:
+- Rebased to v6.15-rc7
+- Dropped all code in __report_bug()
+- Moved all checks in WARN*() macros.
+- Dropped all architecture specific code.
+- Made __kunit_is_suppressed_warning nice to noinstr functions.
+
+Alessandro Carminati (2):
+  bug/kunit: Core support for suppressing warning backtraces
+  bug/kunit: Suppressing warning backtraces reduced impact on WARN*()
+    sites
+
+Guenter Roeck (3):
+  Add unit tests to verify that warning backtrace suppression works.
+  drm: Suppress intentional warning backtraces in scaling unit tests
+  kunit: Add documentation for warning backtrace suppression API
+
+ Documentation/dev-tools/kunit/usage.rst |  30 ++++++-
+ drivers/gpu/drm/tests/drm_rect_test.c   |  16 ++++
+ include/asm-generic/bug.h               |  48 +++++++----
+ include/kunit/bug.h                     |  62 ++++++++++++++
+ include/kunit/test.h                    |   1 +
+ lib/kunit/Kconfig                       |   9 ++
+ lib/kunit/Makefile                      |   9 +-
+ lib/kunit/backtrace-suppression-test.c  | 105 ++++++++++++++++++++++++
+ lib/kunit/bug.c                         |  54 ++++++++++++
+ 9 files changed, 316 insertions(+), 18 deletions(-)
+ create mode 100644 include/kunit/bug.h
+ create mode 100644 lib/kunit/backtrace-suppression-test.c
+ create mode 100644 lib/kunit/bug.c
 
 -- 
-Cheers,
-
-David / dhildenb
+2.34.1
 
 
