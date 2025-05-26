@@ -1,73 +1,73 @@
-Return-Path: <linux-kselftest+bounces-33822-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33823-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B4DCAC4533
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 May 2025 00:30:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B852DAC453F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 May 2025 00:31:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 17C9618986AF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 22:30:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 46EA41899B22
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 22:31:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84B731E9B1A;
-	Mon, 26 May 2025 22:30:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9912241679;
+	Mon, 26 May 2025 22:31:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jAf/5M8z"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AcAgsPHj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4BD1176AC5;
-	Mon, 26 May 2025 22:30:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C628F84D13;
+	Mon, 26 May 2025 22:31:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748298626; cv=none; b=PYOnu9GAvjx4lRys2MICAdgB0KZXZu5z4Eo0Rxth4rOJJhLzuqvp9eo4+akRZR5cC9tzw1x8vSRrz4m/ARGiSjv7Y8T4RfxkXxe5xNAe2jpjCSqPeVWr5kPVh9+/Y2/3xk2CZB3WLcXJJpnw8GbRWciR3yQpr9EvaG/wIbt3Gy8=
+	t=1748298696; cv=none; b=n9C8PIxtOgRlwHBblT6xlaasLcKIUbzzJI1uVwX2RUU+AbqWXI3/pXRhK1DCzaisC2Z6agJMyVd1bXUtMb20sUjnxu7fVUGMEzNxFQ2tiWzh7CB4xj+E7XTsgQk6sFfLfpsmFKxirjUYwDL5sYOiSSJ9X6eR6jUY4NZ3I5kaIDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748298626; c=relaxed/simple;
-	bh=P7IpezzEQW0J+xvr79pZ7xwPmXCfC2utnBP44H5MHuU=;
+	s=arc-20240116; t=1748298696; c=relaxed/simple;
+	bh=P4mDwunV/VK6ZdqBCM8ixj0ovsAxRm+C2bbqZqX2aJA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CNeYaYPDbveNfjoS72xn5ElAZH5jMYNRWoAXpJS6BrFrVtAomR8JhOXhG/qVgnNnMMW1At7Bf9VF70kMswyJAREV6LygdHBOtbCSqiYErO7L5+vXvlqw8/8OY4NwKsl1YBALS6vsQcmZjBnE+udp8LXqDgF+quFpOABfRpi6LHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jAf/5M8z; arc=none smtp.client-ip=209.85.208.175
+	 To:Cc:Content-Type; b=Yfb5zkfnj9Gw+zpJhS09Djz9pMTHYiaCc2qp3gwRTzXYVP7yrKXbYd3EB4VJTiX8ZxOpQfTVn3ylq1HUr3FNo7WuCDHljLgBnncRty2Wn7ZemRuX8Ltmgoj/ezBDKQMRa9UT79YEuEWUIAb7/f/atkaabpenn+aZuVmVU1auTFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AcAgsPHj; arc=none smtp.client-ip=209.85.208.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-31062172698so26343841fa.0;
-        Mon, 26 May 2025 15:30:24 -0700 (PDT)
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-32a6b34acd9so2923251fa.1;
+        Mon, 26 May 2025 15:31:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748298623; x=1748903423; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1748298692; x=1748903492; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DeRtQfopGgqdSMrju5Mssh4B08QuGYql7A9ITbZgjgA=;
-        b=jAf/5M8zh17bXmaacVOKZIFT2fXRvYs2eZb26p4rNyUwjTLlLYCSETyt0h/zLsLjDq
-         leOmR34YGdIdP2QSxS8x9wFY6SmAiHIQuo0M1Q0B2PU91p1DpHkw5qHXSEN2j/i86OIe
-         Q5/BJ+gbstOpk7aayfBzD4vR7wr1U4ltZIaS0pgaIF92FQq66qhdnmGkr7l5XHe1mVdR
-         tQ1FQl4/50JfOUUm9842cjiZZ1SlwNiLkpSDvu3WQ/LuQNP70vNVhclfMomYcZK4Frb5
-         8CIV5L5I2W5pTHyww8p/UgCQsDzuwB9P3DcrRF09V3jr6lwFljXCX3ytJ2lW6DfiuDQ2
-         5mKg==
+        bh=jvLHYVJDLL1tRu00kxb4TV63RHH86AdnGIzbeTcCyBM=;
+        b=AcAgsPHj7WP76AIqzvXSp6uRTWeh7NPFbmeKMMKeLuWmxHiyDa5+dbhf+M6UcaLim/
+         hj53dMETzpAuyUDEJzI6TE2J8A/2UV6huxDEhpp1bsY5lTZYurfXpFNJJal4nRJDEqPj
+         jMnH+YA9YcRaFMKZx4oSotzPdCV90C/0VqftOfK883os6Q9cHothq5Zkc6RsjVSkMjRU
+         5xewyPpdVoJuE/YhKxiDW+l1ORFz5gzzpUrnCCBdapJOSGpzvQqqML7k8ViuWXgRQCp8
+         lgyubdoDQGStJliX88dzLdt4Ad6bmtwIvT9F9NYE0vA9tk+PR5UyFt0o6LSaZDP+yS/S
+         kZJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748298623; x=1748903423;
+        d=1e100.net; s=20230601; t=1748298692; x=1748903492;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DeRtQfopGgqdSMrju5Mssh4B08QuGYql7A9ITbZgjgA=;
-        b=NJoBKlHXId6hh2nD/cir3JEkd8vZuLc5gAY8QIJuvtZECjQ2woKxuUgQ6ryv5XcjyJ
-         3p908Whw2TgE7kYgXdXRQiH0OJ+5TqTRS4wkmrgRax3tMqZy7Uy9yYpbHC7aFZGMa8sJ
-         Ys2CQUKPFY32Z8VrgxeExXKKKVFFr/UNq1UAdMvGbe9ujejFXgjwa4h1qYnUjtsbYZxN
-         8RwnBCm5ikTyDqcoAiaJMh/8iFXnaTq5AWDFmzj2cJod8QuuGYHjjXKfGU9R31ccAQPV
-         Qog+ZymUhtCwOP7qxnKiK7Gi6qWK9BS6jURgiNdQPWuXYmEsM07SA8XBoO86fAw8TZ4G
-         PPhA==
-X-Forwarded-Encrypted: i=1; AJvYcCUG9K0kbfrCun3hLZPSfmooZPhFIJjjZJxlxJYyIf0PGfbMqLg3WUvo7TAbuxX3ZBi0cmDgF7g6dCJC@vger.kernel.org, AJvYcCVBy3LuJMQpswdcFUFso5hp8eRb9eIge3VQTzutCaMpPdbhOpQ7jrKCLqaErmkkg9o2kE7K+sP+zXcN318dq7Dz@vger.kernel.org, AJvYcCVorkrf9LP3GbK7a/ddpvlofNkyvUhRuQr6ebTcFD1Vbfg5ZQ5pIp23mwRYmAR4ZOEYIGc+f+zXcHmi2ZFX96Y=@vger.kernel.org, AJvYcCWcHnlMf79jZqNWqkFQp/ZYUFNWkSqiXSVzoxLGAysJu1fy5015X/hWwYG/3WN20Z9P5apM3Mpc@vger.kernel.org, AJvYcCWea1Vi5Q73DkjKkP5FDj6hieFc5j+N2skAWHz8dyMVVf5fJs/S4xRLPEIF/bmm4gSsv0MK9NmmKuYq@vger.kernel.org, AJvYcCXNCFiBswBo5rNXhqO34XMtYrX/VJCJcNsJzi2GcjWKZKquaLB8VvY7Tu6er1Sdru4v+KhqoMBzW7Y7RA8e@vger.kernel.org, AJvYcCXahuKkJJ6cRR05FEgi9J4WtKInkgUAIHlTFKZc94lDF2HoxP3qGCIeRcuBhkEsHSNsteEpbNNRf/v7FQw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxgQIwtTRGkuQV1EjiIl/CQDUa0Ccn+pfxMn0X95VjGOl875gV1
-	HmCMwBQ3Ig4yMuaxNW/L98ADzAPYWrkSRQw+YIx6hqnLDSTd3tMPmEU1g5oEx0fWrFkNoDvfsh7
-	FaX7zKx9LaRLM8cboLJsI4RkAUXJGmoQ=
-X-Gm-Gg: ASbGncuyH2GVjFn3REWffQwmFi9ePnnFQRcP3srUm+yH6ey3I90eDhBHzZEwwvgBi3q
-	V2vDajoAQCHR3qWDbdeLnvQrjQv7e5ATjjXO+Fu1KL8c8yTa1FBn6dU1BTVRe9JMcMJSr1Z+wjJ
-	wx1hDcrSDVLPjOUm7yECIeahEvIj4Qcj2z8b01ThT/GWTwYc0+3yuUhnlsP3EZQhIgG+0=
-X-Google-Smtp-Source: AGHT+IHobXPM6nV57q0LkxjWMI5y+a9fqFFRAaaAVdT/IiyU5kBtoHLbzkKYgFh6GOZFHTnYbitctcnCYMHIu3rZzy0=
-X-Received: by 2002:a05:651c:1b11:b0:32a:6bef:7587 with SMTP id
- 38308e7fff4ca-32a6bef7741mr3018881fa.20.1748298622556; Mon, 26 May 2025
- 15:30:22 -0700 (PDT)
+        bh=jvLHYVJDLL1tRu00kxb4TV63RHH86AdnGIzbeTcCyBM=;
+        b=tcE0IVBMV8pSHETOSW3NB+IZybTsWReuH334zZXTzEGkamuZcBii9YYg4nyFECOUcl
+         DABZhiC1B+epV7COaHjWU7CzI990W8UbGNpcOBpi8CLykIgK8vChSiRwSu3QKedamwHI
+         G4EKPiBQ6Fs+M/2V2VMXDaO2nCxPTYc75hSEFc1CJcyf74PNSN4xBig60Sb7qh8gdYnn
+         llRO5DpWLuZW9yPc14DezWdER/7rzWnNfT0ep87gqu0ufLwWxmZX44q66E2UF+ENHu3l
+         aCKlvW+yIdzzx+l60QZak0rpdAFm19Wun2ndXy0LUSHbQAece4U+pIIwEO8qEh37eWZd
+         qImw==
+X-Forwarded-Encrypted: i=1; AJvYcCUeSY8OyXvRCasiezCs/U9ZU/JcDqoW9IRsRCxJh86+IE84fuNvt9amilkfckQyF3QRFhYBMmHN1+ukLEG+@vger.kernel.org, AJvYcCV/1GJYMqO0GeJzYTqc+PGocFztV/ntvtlvGaA5WZZZnwro5ewu33vxYJ5ZFPTZPDuYBxY/XcXG9wLOS0ID4Q7V@vger.kernel.org, AJvYcCVRUb2lq6LOX9Ax8eiMEy14LtSt2pyt3GBMIVwVDD2I9NkNvcaMy6Sg4qszyVJmlbcUlrVpykKGMUTV@vger.kernel.org, AJvYcCWE0ywH+0A2EqrYDTdmUJq9CyTjwmi9Dw5WarLv4S5mowkIjtuRX9rLEenqeFoB9qIozFQ1KQ0qcLbliOU=@vger.kernel.org, AJvYcCWQcSNs4uhL75v/KhIC9jUAHO3icBGc9maJaYMlH/msGAmVN/BhZRk4MlNUIm6zqhM4R9PbPqmjMwm0HQAGYmw=@vger.kernel.org, AJvYcCWh/5nW/Km/FlGS61HVyt8Lj2zwmYK5hTfN+q7D5Jwkn9aHrvFAZxLO1v6DgLpg78jqvG5XVs7ug6KG@vger.kernel.org, AJvYcCXu/478++46yTY51naKwSQu133M5keYOrrL7hLQ+1ioc0lQakZki+FQpIi3oJQpuQXa7iHx9j5d@vger.kernel.org
+X-Gm-Message-State: AOJu0YzUoumvWkyesBhZwc22yUNIp3WvxU3UQDuYwboFC6Y7KUOsG54x
+	SFC1o63Gb1MR1nT2/YmEEZZ/mAR8HOVxwcyWlnT+9xA341p/1rkJb+bEiXhZ//00jBoTM9G31f0
+	kNhNcz2H47rNpEmtery5aD89D20JkLKY=
+X-Gm-Gg: ASbGncvoiPWGbGzKrK4qPQAtzeyeYhc3i4+2MJ2K60uozvCMVfo/loLDntPwPyPPLuP
+	rcySQNwojswBGiZKkY0ciYV+hSjBnke2wQu773/G3Q4RgujxU5HQEfn2JEPNXy94RZvCvTMEPzG
+	D3RBygZAseA1+U7w07szrxQcdu1AONKS6alZ4tma/fZ0BOK9c410KdNPrqUnzwL9bH2i8=
+X-Google-Smtp-Source: AGHT+IEJfWzc6VPUDuyUq0aTn+WE4sTfnbgvmOYP1K86Po8lb+CyhSBKVylPu7Ej7IoVB3uFqztWGvTQz/dCfNqAd+Q=
+X-Received: by 2002:a05:651c:f01:b0:32a:664e:a923 with SMTP id
+ 38308e7fff4ca-32a664ea9e0mr10313091fa.22.1748298691742; Mon, 26 May 2025
+ 15:31:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -75,13 +75,13 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20250524-cstr-core-v10-0-6412a94d9d75@gmail.com>
- <20250524-cstr-core-v10-4-6412a94d9d75@gmail.com> <DA66NJXU86M4.1HU12P6E79JLO@kernel.org>
-In-Reply-To: <DA66NJXU86M4.1HU12P6E79JLO@kernel.org>
+ <20250524-cstr-core-v10-5-6412a94d9d75@gmail.com> <DA66OFXQCWUK.31LM78DIVABZV@kernel.org>
+In-Reply-To: <DA66OFXQCWUK.31LM78DIVABZV@kernel.org>
 From: Tamir Duberstein <tamird@gmail.com>
-Date: Mon, 26 May 2025 18:29:46 -0400
-X-Gm-Features: AX0GCFuvvdq9fWPFcsB31U1UA0LVEWVFnDG5B-zpmEiF_aWL5P9UrGYE0gqlG8U
-Message-ID: <CAJ-ks9nd6_iGK+ie-f+F0x4kwpyEGJ-kQiQGt-ffdbVN5S6kOg@mail.gmail.com>
-Subject: Re: [PATCH v10 4/5] rust: replace `kernel::c_str!` with C-Strings
+Date: Mon, 26 May 2025 18:30:55 -0400
+X-Gm-Features: AX0GCFuHGuPmwsi9tWeeUypjxRW1UrvRCX_LVo0C-ggOVzUmGabC1z1bBuoaiZU
+Message-ID: <CAJ-ks9m=okC9_K2MJU80xbnO+3+Z0hvC_FYzCtzW9pD=WA_xqQ@mail.gmail.com>
+Subject: Re: [PATCH v10 5/5] rust: remove core::ffi::CStr reexport
 To: Benno Lossin <lossin@kernel.org>
 Cc: Michal Rostecki <vadorovsky@protonmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
 	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
@@ -112,50 +112,44 @@ Cc: Michal Rostecki <vadorovsky@protonmail.com>, Miguel Ojeda <ojeda@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 26, 2025 at 11:04=E2=80=AFAM Benno Lossin <lossin@kernel.org> w=
+On Mon, May 26, 2025 at 11:05=E2=80=AFAM Benno Lossin <lossin@kernel.org> w=
 rote:
 >
 > On Sat May 24, 2025 at 10:33 PM CEST, Tamir Duberstein wrote:
-> > +macro_rules! c_str_avoid_literals {
+> > Clean up references to `kernel::str::CStr`.
+> >
+> > Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+> > ---
+> >  drivers/gpu/drm/drm_panic_qr.rs   |  3 ++-
+> >  drivers/gpu/nova-core/firmware.rs |  2 +-
+> >  drivers/net/phy/ax88796b_rust.rs  |  1 +
+> >  drivers/net/phy/qt2025.rs         |  1 +
+> >  rust/kernel/device.rs             |  3 +--
+> >  rust/kernel/driver.rs             |  4 ++--
+> >  rust/kernel/error.rs              |  6 ++----
+> >  rust/kernel/faux.rs               |  5 ++++-
+> >  rust/kernel/firmware.rs           | 15 ++++-----------
+> >  rust/kernel/kunit.rs              |  6 +++---
+> >  rust/kernel/lib.rs                |  2 +-
+> >  rust/kernel/miscdevice.rs         |  3 +--
+> >  rust/kernel/net/phy.rs            |  4 +++-
+> >  rust/kernel/of.rs                 |  3 ++-
+> >  rust/kernel/pci.rs                |  2 +-
+> >  rust/kernel/platform.rs           |  2 +-
+> >  rust/kernel/prelude.rs            |  5 +----
+> >  rust/kernel/str.rs                | 22 ++++++++++------------
+> >  rust/kernel/sync/condvar.rs       |  4 ++--
+> >  rust/kernel/sync/lock.rs          |  4 ++--
+> >  rust/kernel/sync/lock/global.rs   |  5 +++--
+> >  rust/kernel/sync/poll.rs          |  1 +
+> >  rust/kernel/workqueue.rs          |  1 +
+> >  rust/macros/module.rs             |  2 +-
+> >  24 files changed, 51 insertions(+), 55 deletions(-)
 >
-> I don't like this name, how about `concat_to_c_str` or
-> `concat_with_nul`?
->
-> This macro also is useful from macros that have a normal string literal,
-> but can't turn it into a `c""` one.
+> Haven't compile tested this series yet, but this commit seems to suggest
+> to me that some of the previous commits introduced code that doesn't
+> compile or emits warnings? If so that needs to be fixed.
 
-Uh, can you give an example? I'm not attached to the name.
-
->
-> > +    // NB: we could write `($str:lit) =3D> compile_error!("use a C str=
-ing literal instead");` here but
-> > +    // that would trigger when the literal is at the top of several ma=
-cro expansions. That would be
-> > +    // too limiting to macro authors, so we rely on the name as a hint=
- instead.
-> >      ($str:expr) =3D> {{
-> > -        const S: &str =3D concat!($str, "\0");
-> > -        const C: &$crate::str::CStr =3D match $crate::str::CStr::from_=
-bytes_with_nul(S.as_bytes()) {
-> > -            Ok(v) =3D> v,
-> > -            Err(_) =3D> panic!("string contains interior NUL"),
-> > -        };
-> > +        const S: &'static str =3D concat!($str, "\0");
-> > +        const C: &'static $crate::str::CStr =3D
-> > +            match $crate::str::CStr::from_bytes_with_nul(S.as_bytes())=
- {
->
-> Why is this still our CStr?
-
-Good question. I'll just revert all the changes here, I don't need to
-touch this.
-
->
-> > +                Ok(v) =3D> v,
-> > +                Err(err) =3D> {
-> > +                    let _: core::ffi::FromBytesWithNulError =3D err;
->
-> Is this really necessary?
-
-No. Reverted in v11.
+That's not the case. There are no warnings and no compilation failures
+in prior commits.
 
