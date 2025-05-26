@@ -1,39 +1,39 @@
-Return-Path: <linux-kselftest+bounces-33775-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33776-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2B4FAC3DC8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 12:23:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 671FBAC3DE6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 12:31:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BE54C1745E6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 10:23:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BB2463B9416
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 10:30:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B6DB1F4E4F;
-	Mon, 26 May 2025 10:23:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 284521F4CBF;
+	Mon, 26 May 2025 10:30:55 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D23861F463B;
-	Mon, 26 May 2025 10:23:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E9FB1885A1;
+	Mon, 26 May 2025 10:30:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748255015; cv=none; b=bRa1AQa6nhLDMuL10e26HA3xv+S9O2ZF4ryqgaV/WgXTN0Cno9m2xPkZ6LVy2I2m8nCnJJNv0Zgp1nQed5ur76BMOfp297xtZlpxleNM3W03EaCKt2zPIUydrKIHsZTKv+lkzVlbYehlPsbLyaU1/2U+vqnk5u62taZVePRXcKU=
+	t=1748255455; cv=none; b=HYxntBNUnv9JIPrlucTq+5CVNUzTeJh4MR7BDxsIu58blaVRWdw84mFwQHs11hTkokpmHuQYlzWEg6vVBSHgj6ghvSFhQNo9i7l/wXhQKoVWv7cqSk09XoY4riiaeCd3Q8evi+yQ2ycgGtBYzSSFYEzjXKWcyhwZJj6+QFl31yo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748255015; c=relaxed/simple;
-	bh=Cg3w/aTss7Xq9PEh9oXqGyGb9ze/I/m78kwhXSI3dxw=;
+	s=arc-20240116; t=1748255455; c=relaxed/simple;
+	bh=eqq9mvdtmV+u0J80UCNQOsXE89t6MP1L/Dyt+TiUW0Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r4q6dieYcTb1HzFlcDlgV5WJgsdYMJxClkK7RSRwsili3pj3cYrTgqeTQa4tsCJLEBGOvZZyqL6SzmmkNBjfGxfQZcgzITQ/RS+4ZpZX63dwMjIuTw0kV5DRRwoFhnrnaxeInchj1kxL8pKxjnHjaZYLJ5SljfyT2GyxLfuYShE=
+	 Content-Type:Content-Disposition:In-Reply-To; b=ltNu6eE9Wb/UomPapYuf3Js1xF3EjPUGyhvZN8KgrfMsGe+BLJTGfRVmTTF0SDCT/BM++qpYq8CU9MNxYdvoRPyuCnP36Wuf08UviuT8KzhkFpVJmSvCSz4yrNCbMnLpsQITSQuenBJrE452UNFn0NI2DqwqGSycTCNE47oGkJE=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 32BE72F;
-	Mon, 26 May 2025 03:23:16 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E12D42F;
+	Mon, 26 May 2025 03:30:36 -0700 (PDT)
 Received: from J2N7QTR9R3 (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 378BE3F5A1;
-	Mon, 26 May 2025 03:23:30 -0700 (PDT)
-Date: Mon, 26 May 2025 11:23:24 +0100
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F2A163F5A1;
+	Mon, 26 May 2025 03:30:50 -0700 (PDT)
+Date: Mon, 26 May 2025 11:30:48 +0100
 From: Mark Rutland <mark.rutland@arm.com>
 To: Mark Brown <broonie@kernel.org>
 Cc: Catalin Marinas <catalin.marinas@arm.com>,
@@ -41,9 +41,11 @@ Cc: Catalin Marinas <catalin.marinas@arm.com>,
 	Shuah Khan <skhan@linuxfoundation.org>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] kselftest/arm64: Update sve-ptrace for ABI changes
-Message-ID: <aDRBHDJZyXnic6i7@J2N7QTR9R3>
+Subject: Re: [PATCH 1/3] kselftest/arm64: Fix check for setting new VLs in
+ sve-ptrace
+Message-ID: <aDRC2BJddPL8v8TD@J2N7QTR9R3>
 References: <20250523-kselftest-arm64-ssve-fixups-v1-0-65069a263b21@kernel.org>
+ <20250523-kselftest-arm64-ssve-fixups-v1-1-65069a263b21@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,40 +54,48 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250523-kselftest-arm64-ssve-fixups-v1-0-65069a263b21@kernel.org>
+In-Reply-To: <20250523-kselftest-arm64-ssve-fixups-v1-1-65069a263b21@kernel.org>
 
-On Fri, May 23, 2025 at 04:27:11PM +0100, Mark Brown wrote:
-> Mark Rutland's recent SME fixes updated the SME ABI to reject any
-> attempt to write FPSIMD register data via the streaming mode SVE
-> register set but did not update the sve-ptrace test to take account of
-> this, resulting in spurious failures.  Update the test for this, and
-> also fix another preexisting issue I noticed while looking at this.
+On Fri, May 23, 2025 at 04:27:12PM +0100, Mark Brown wrote:
+> The check that the new vector length we set was the expected one was typoed
+> to an assignment statement which for some reason the compilers didn't spot,
+> most likely due to the macros involved.
+> 
+> Fixes: 0dca276ac4d2 ("selftests: arm64: Add test for the SVE ptrace interface")
 
-For the sake of the mail archive, that series of fixes was:
+I don't think that fixes tag is correct. AFAICT, this code was
+introduced in commit:
 
-  https://lore.kernel.org/linux-arm-kernel/20250508132644.1395904-1-mark.rutland@arm.com/
+  a1d7111257cd ("selftests: arm64: More comprehensively test the SVE ptrace interface")
 
-Evidently I only fixed up the fpsimd-ptrace tests, and missed the
-sve-ptrace tests. My bad; sorry about that.
+... and there wasn't something equivalent prior to that.
+
+With that fixed:
+
+Acked-by: Mark Rutland <mark.rutland@arm.com>
 
 Mark.
 
-> 
 > Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
-> Mark Brown (3):
->       kselftest/arm64: Fix check for setting new VLs in sve-ptrace
->       kselftest/arm64: Fix test for streaming FPSIMD write in sve-ptrace
->       kselftest/arm64: Specify SVE data when testing VL set in sve-ptrace
+>  tools/testing/selftests/arm64/fp/sve-ptrace.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->  tools/testing/selftests/arm64/fp/sve-ptrace.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
-> ---
-> base-commit: 1c1abfd151c824698830ee900cc8d9f62e9a5fbb
-> change-id: 20250523-kselftest-arm64-ssve-fixups-b68ae61c1ebf
+> diff --git a/tools/testing/selftests/arm64/fp/sve-ptrace.c b/tools/testing/selftests/arm64/fp/sve-ptrace.c
+> index 577b6e05e860..c499d5789dd5 100644
+> --- a/tools/testing/selftests/arm64/fp/sve-ptrace.c
+> +++ b/tools/testing/selftests/arm64/fp/sve-ptrace.c
+> @@ -253,7 +253,7 @@ static void ptrace_set_get_vl(pid_t child, const struct vec_type *type,
+>  		return;
+>  	}
+>  
+> -	ksft_test_result(new_sve->vl = prctl_vl, "Set %s VL %u\n",
+> +	ksft_test_result(new_sve->vl == prctl_vl, "Set %s VL %u\n",
+>  			 type->name, vl);
+>  
+>  	free(new_sve);
 > 
-> Best regards,
 > -- 
-> Mark Brown <broonie@kernel.org>
+> 2.39.5
 > 
 
