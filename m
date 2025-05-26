@@ -1,136 +1,115 @@
-Return-Path: <linux-kselftest+bounces-33770-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33772-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A7A9AC3C2E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 10:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 46760AC3C69
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 11:08:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2019E7A2289
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 08:57:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 259627A249B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 09:07:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C6D31EA7EB;
-	Mon, 26 May 2025 08:58:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A7901EF391;
+	Mon, 26 May 2025 09:08:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="nBfqjNff"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AAnYrsLE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-wr1-f74.google.com (mail-wr1-f74.google.com [209.85.221.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 903141E47A8
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 May 2025 08:58:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 496111EEA47
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 May 2025 09:08:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748249931; cv=none; b=PJrsBFopkImoVs8CYLWoV6pa42UKBfEgxjbVwnaD/XmkbybHUTExesR7LaLd7sg1njq6KsI1OahYwFE/zFwqahyEMmwbz3m7DD+F8b72/HSfk0bw4ZKm1vuAh+J2/fAeyPKYJBslTSe8Q5IFKo36pkbt7iOsFvhYnTVkwlPSY0Y=
+	t=1748250531; cv=none; b=ASewbmOcm5TwhvBm6Z2spx9EopzUovTkPS+XP6N84eH9RyGbpPqzqBSkwYaEwnO3TTJvetdaEFtDlKcP0w4oMNuaJRmzkcHvbtU5NV/Vwr7kgJfPFQTXRIXuzJY7YiJlqr4+agPdhbtKsExHhiPXLeACJgCEP9z0wUKMdF69JoQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748249931; c=relaxed/simple;
-	bh=A07uMUlAiHODBnye6U6+ZYgmI+z5BqjupTHEKb1apD0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=WN6TlWrBi2cB2mLW2ptcaoxxeBHfUUxW4wyvMu0C2skmD3hJWf7wuhf6IcyDfkASJtFAIw14MJ288rWUDxEoh3k763qfwYfoV2txVkfjb0KG2mbAjdWicN+poDtP9VULOm0Zp5KyTo+mUTREMQhGzqzXwvRUxHS4QVll9OfW6f0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=nBfqjNff; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-442ea0b3a9fso388615e9.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 May 2025 01:58:49 -0700 (PDT)
+	s=arc-20240116; t=1748250531; c=relaxed/simple;
+	bh=MY3yWw8Vp2xlTwAqSqo+mPvjKSzOe/68Igjza+AVaBA=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=OBoFgFqqlrI08cEtf8X21LqRMr2x6MNom/T6plD51xWpdbwQ7frli+84jBpKbH3C6agPz+YDFQin7Phkp+Y3rFHky0nKrzgKtMl5sKaqhZsgu0PGJe2HHiGLniQpxQukPvOPzjlwDLAbErPVwV0USt74RGHM4GnnXbrhCxaQPNk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AAnYrsLE; arc=none smtp.client-ip=209.85.221.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
+Received: by mail-wr1-f74.google.com with SMTP id ffacd0b85a97d-3a4d95f197dso451276f8f.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 May 2025 02:08:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1748249928; x=1748854728; darn=vger.kernel.org;
-        h=in-reply-to:references:from:to:cc:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7XUa5QDzySuu6U8WB9K8OF+ZIZj9kEnHYCZp+dCaCR0=;
-        b=nBfqjNffw48hNkVyyQHtfWhCWLtfYgFnYlWzQxkgwUg1QVgDUfH9XpKxk+cOUvnn3g
-         IO4NuFbH15/FllezFedzKyq6v4jZkTFrzMIVGMorT1c/7reVH0HMY8Nz0YuVR5bcVmbb
-         2cYsdaUWh1i8uj+KivWANTASq1cxKAOyKd9hA6RY0Yh0COw9BO2AN9tbP4tIXopmWdOr
-         vd8Md2mx+PAJyt+XKTBrUa4maEOyVzugxAHU1ZQ8PjDSXzn4RTmGYVmL2OPWbec3tK7s
-         dOhESPB4+SQSYcav2M8frCWMcUsa5so2Kxplu5y0B8Tw/fsgpHC44Bnf6Ce9Gec8edEn
-         UqSg==
+        d=google.com; s=20230601; t=1748250528; x=1748855328; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vV1ZLtaPYPIU9C4hlxpLQHgd5RO8hZ+AB4T6N5ac4gY=;
+        b=AAnYrsLEaETAbkoUp2cftkcR12c7jm3VBkzhUw2ry/3TL0hIG4RHAOSciOGJhF5ujV
+         UyXHnXVdpTjQTIJbXmqm8WXU+pPuo0BNukRQKAF5MEyxaXejOqcUlevtB4AlSCa8aAih
+         ofLEgZ5ot76TtgRUBuWOtrwwuX1qx5STA9iogknt9yiFA5sV2JKvg214W4JbjskgD/2C
+         8dPJctIvpGx+JZFwYdo9WImU9jz6+AHQ/1aW4n8JQv/13r3QRDvBVxlLSlV78zDSpb9A
+         OKGDrJ9mGapGzxWAL0x8Q5pAlwN2KjCleBIyRnwsixG4Z663YRnZACrF8PYPFG31qMcT
+         9K0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748249928; x=1748854728;
-        h=in-reply-to:references:from:to:cc:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7XUa5QDzySuu6U8WB9K8OF+ZIZj9kEnHYCZp+dCaCR0=;
-        b=VULHUTdLhSlxtRThUku8hzDuM1p6fDLfQPZs4tc4cYtmeqtim7tX6fOM3WkiwE81gv
-         syKnN546hO/1HTGu58E5iaSmDF15tUeksxAEucuQXjt02CJ5Wl3jrZ5aq3zlZ+O8lX4p
-         xhgah67uJgzKblAh9BE1i2aliHKtzefvRhipX2I48J5Sj4gA32RZn1kVhPZ52PT5Qqr1
-         doYCAQfFIzOU2LIhLAbtlLFmV2FnETn9eSwckIgAYO7fSWE9uHxEbRqdttsx+wexcHcD
-         oLjbAJt2QCsH891bcczwYaizG1g6qErlWra2Od3+8vOCgH2drMgToyDHU0ZX+mqJlccm
-         NfrA==
-X-Forwarded-Encrypted: i=1; AJvYcCU6a9wIZr4vsx5gC4OYmUtqa9kHRGiRGj+lOJQ2JltkVtBrgf61SkfnY+uhOoVOhgkp2m4c5NobEDcGenNa2/s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzY/qcCbsma/c2sM6Lrg5JURvCnYrByaNvKjIx9+e0cN6GW6qdK
-	FEE7A8zib8tDy0lLYFgjuC3nay6MRkyH8oSAConmA+1iJhdFi/y1cw5wN0SMiVc5frQ=
-X-Gm-Gg: ASbGncs2UurUaYFLGwlUsfcElL1pZ1uNnJBz/qwwHijje+fXLorHXv4fuJA8TU0xNxB
-	KChHqYYmEEbmv1LmSEckXemYsfmgcnOB7AMWX7g2Yc4TKr5ww21r/9oDl7j2Tz0W7rTXN+mO2D9
-	/al5NgnSWqdy0EQ8ZVs/C92bCYK0bQnH5GTphr7frQPr/lH7br90JF59fcNIDv3CirHjtY9PP6p
-	EPC6MXG0G848w2WlB6wZYRSeutzCb8JaKtSelxPwJV3VJD13u9ipz0uU+XgmuYeJhpVAJPM6XlD
-	2IO026XX/k6UgeSi5EvL22N2uppSrZXRT/3oeqZTvr2cowGBtMpNMWHWtU0=
-X-Google-Smtp-Source: AGHT+IEdx9Lxmxr6Jj4a/VtrbY6n55+AjozaESSFCcKKfyGvvRTO9hEvIbHH5Dnsj/C495VBfSOibw==
-X-Received: by 2002:a05:600c:1c24:b0:439:9ec5:dfa with SMTP id 5b1f17b1804b1-44c938cb1e6mr27073595e9.7.1748249927727;
-        Mon, 26 May 2025 01:58:47 -0700 (PDT)
-Received: from localhost ([2a02:8308:a00c:e200:b85a:a7d4:fa4e:bb11])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a4d007bbccsm5654781f8f.89.2025.05.26.01.58.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 May 2025 01:58:47 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1748250528; x=1748855328;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vV1ZLtaPYPIU9C4hlxpLQHgd5RO8hZ+AB4T6N5ac4gY=;
+        b=X0X9ftCz/fRSqsAf1cVyESHZBJGmNgtLYpTbWw/shnAIfH1s429TWXhcpep7snglrb
+         SIH1N3qOORbUJcFSeQpiYzY9YQN/nAGjL+fMKPJ6Ewwt70Wk7qS218cfYjjcptxuSaU4
+         fmlacs7aUUkcFhrj7RwC4b8y8YWD4T0S0Hf87kIRCfL5xg9Jo014WhxlCZKtkIAqUdmp
+         +Dgsfk3RWxjdTJ99I4OB/QPPwS9cU2duFzT73OzVHVAZjNtvKJndarqmk0WGD+RoJteY
+         SgG8+epO4LSF7wZBe3cdvE1mlvbk49/3pJHF1GjvYDxhZnQRhQJPE/R/ogyILj/ffy5o
+         Dpxw==
+X-Forwarded-Encrypted: i=1; AJvYcCXkhcUv1XaDJKfRW2y/wEGPl8wFiWxXf9WTQIsmPeQVNfsQNfEAVUK3SH2njkp+g3+yNLJw90ntVj8D6XN0K4M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyCLw1+CeZorT7QyN6iy3bFLLKDR0bgZ7c1mezRGKHp67J4RdKz
+	9M5uEfTxACbyv79CfKAWCOWUvWdkfULNN2B2wcTtSk4g1WygFeTAK85yR9fltN7vlSgaDQfG0N/
+	R3JzsbipWCNaKRg==
+X-Google-Smtp-Source: AGHT+IHAQLjrmeWjPRISFIiXgvA5maVZRslviy+wu0GfEc4uIyIYcxyOpXuuEsFBPNoXDEFyqckMW1YRit0mQg==
+X-Received: from wmcn11.prod.google.com ([2002:a05:600c:c0cb:b0:44a:82c6:853f])
+ (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6000:250c:b0:3a4:cfbf:51ae with SMTP id ffacd0b85a97d-3a4cfbf5352mr5135469f8f.4.1748250528651;
+ Mon, 26 May 2025 02:08:48 -0700 (PDT)
+Date: Mon, 26 May 2025 09:08:46 +0000
+In-Reply-To: <CALkFLLK19Uqr2veWCn79cbLLgde5f+otf9Qx0xSPGdhdnekGrw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 26 May 2025 10:58:46 +0200
-Message-Id: <DA5YVKW682V3.2DODRY4EDL3IW@ventanamicro.com>
-Subject: Re: [PATCH v8 13/14] RISC-V: KVM: add support for FWFT SBI
- extension
-Cc: "Samuel Holland" <samuel.holland@sifive.com>, "Andrew Jones"
- <ajones@ventanamicro.com>, "Deepak Gupta" <debug@rivosinc.com>, "Charlie
- Jenkins" <charlie@rivosinc.com>, "linux-riscv"
- <linux-riscv-bounces@lists.infradead.org>
-To: "Atish Patra" <atish.patra@linux.dev>,
- =?utf-8?q?Cl=C3=A9ment_L=C3=A9ger?= <cleger@rivosinc.com>, "Paul Walmsley"
- <paul.walmsley@sifive.com>, "Palmer Dabbelt" <palmer@dabbelt.com>, "Anup
- Patel" <anup@brainfault.org>, "Atish Patra" <atishp@atishpatra.org>, "Shuah
- Khan" <shuah@kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
- <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
- <linux-doc@vger.kernel.org>, <kvm@vger.kernel.org>,
- <kvm-riscv@lists.infradead.org>, <linux-kselftest@vger.kernel.org>
-From: =?utf-8?q?Radim_Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@ventanamicro.com>
-References: <20250523101932.1594077-1-cleger@rivosinc.com>
- <20250523101932.1594077-14-cleger@rivosinc.com>
- <DA3K95ZYJ52S.1K6O3LN6WEI0N@ventanamicro.com>
- <9f9e2869-725d-4590-887a-9b0ef091472e@rivosinc.com>
- <DA3OJ7WWUGLT.35AVP0QQDJRZV@ventanamicro.com>
- <5dd587b3-8c04-41d1-b677-5b07266cfec5@linux.dev>
-In-Reply-To: <5dd587b3-8c04-41d1-b677-5b07266cfec5@linux.dev>
+References: <20250501163827.2598-1-ujwal.kundur@gmail.com> <20250510160335.1898-1-ujwal.kundur@gmail.com>
+ <D9V0UTL5BCLM.1WHR6F4UN14QQ@google.com> <CALkFLLLfxT1pQ_ySB1NU4KXOEGLd2wB8pbhpBG2HfK3_mLOYAQ@mail.gmail.com>
+ <DA0VHZ6KE96B.XOYNEFMGWD58@google.com> <CALkFLLK19Uqr2veWCn79cbLLgde5f+otf9Qx0xSPGdhdnekGrw@mail.gmail.com>
+X-Mailer: aerc 0.20.0
+Message-ID: <DA5Z38N5WHO5.2FFOQZYC6WKMI@google.com>
+Subject: Re: [PATCH v3 1/1] selftests/mm/uffd: Refactor non-composite global
+ vars into struct
+From: Brendan Jackman <jackmanb@google.com>
+To: Ujwal Kundur <ujwal.kundur@gmail.com>
+Cc: <akpm@linux-foundation.org>, <peterx@redhat.com>, <shuah@kernel.org>, 
+	<linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>, 
+	<linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-2025-05-23T11:02:11-07:00, Atish Patra <atish.patra@linux.dev>:
-> On 5/23/25 9:27 AM, Radim Kr=C3=84m=C3=83=C2=A1=C3=85 wrote:
->> 2025-05-23T17:29:49+02:00, Cl=C3=A9ment L=C3=A9ger <cleger@rivosinc.com>=
-:
->>> Is this something blocking though ? We'd like to merge FWFT once SBI 3.=
-0
->>> is ratified so that would be nice not delaying it too much. I'll take a
->>> look at it to see if it isn't too long to implement.
->>=20
->> Not blocking, but I would at least default FWFT to disabled, because
->> current userspace cannot handle [14/14].  (Well... save/restore was
->> probably broken even before, but let's try to not make it worse. :])
->>=20
+On Sun May 25, 2025 at 7:19 PM UTC, Ujwal Kundur wrote:
+>> I'm afraid I'm too ignorant of this code to be able to suggest something
+>> good here. But, can we just remove the comment and plumb the gopts
+>> through to uffd_poll_thread()->uffd_handle_page_fault()->__copy_page()?
+>>
+>> This is not pretty but it lets us remove the global vars which is
+>> clearly a step in the right direction.
 >
-> User space can not enable or disable misaligned access delegation as=20
-> there is no interface for now rightly pointed by you.
+> Perhaps Andrew can weigh in? If I understood this correctly, we're
+> trying to assert that retrying a successful UFFDIO_COPY operation
+> always results in EEXIST. This is being done in a somewhat racy
+> fashion where a flag (test_uffdio_copy_eexist) is set every 10 seconds
+> using alarm(2). IMO this is a flaky test, we should either:
+> - remove this variable and associated logic entirely (preferred)
+> - use a probability function to set this a % of the time instead of
+> every 10 seconds
+> - use an async library that can replace the implementation without the
+> use of global vars
 
-I mean setting default_disabled=3Dtrue and just disabling FWFT for the
-guest unless userspace explicitly enables the incomplete extension.
-We would blame the user for wanting mutually exclusive features.
+Sorry I don't have an opinion on which of these is the best (I can try
+to find some time to form an opionion on this later!), but:
 
->                                                       I guess supporting=
-=20
-> that would be quicker than fixing the broader guest save/restore=20
-> anyways. Isn't it ?
-
-Yes.  The save/restore for FWFT is simple (if we disregard the
-discussions), but definitely more than a single line.
+Fixing the flakiness sounds great, but I would suggest decoupling that
+from the refactoring. If it's practical, focus on removing the globals
+first, while leaving the fundamental logic the same, even if it's bad.
+Then as a separate series, fix the logic. 
 
