@@ -1,183 +1,167 @@
-Return-Path: <linux-kselftest+bounces-33782-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33783-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E5B0AC3F8C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 14:52:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94D8EAC3FE9
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 14:59:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A2555177269
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 12:52:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 326D07A2A17
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 12:57:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEAA1204C0F;
-	Mon, 26 May 2025 12:51:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34EC820297B;
+	Mon, 26 May 2025 12:58:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cnFqwu23"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eO1cAbaq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7618D20298E
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 May 2025 12:51:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EB1420298E
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 May 2025 12:57:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748263913; cv=none; b=JGH6X4q9dRXsOi/aQaMBO3eu0PWCbdg+56MFEOclam6LM9FW9XwwDuHv3lax70GKB1JbS8Z0/9bW9WMlScWiSJc9M87aSmS2pn9ClgG9JfZIINdapIDYWRf0xh8mha4MshIigDmnIxP1uWIGrss9FlI/E8ubWrAKYpZG3zN9pHQ=
+	t=1748264281; cv=none; b=ScDY4LWCJaVVX0ATVaKEys61fSkw3TOjuzNogs3BRG/vxidcrcoqMgMOPDk8/fVM34hwiY+/9koIwddjsgabGOnuHWTV7HSWO831xZcf+F0UzBWh5+pfWAbQIlyAIp6zMdz5p8rDZ6eUAJKHFufAuXOscX3kW93o6F+UzMtaxWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748263913; c=relaxed/simple;
-	bh=xGtgOVGl/7+FDUtfK4xwWE1CZC1f6N33ajHG2jCeSsU=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=u6AoPf+JqRw9WBZhVK33rFAQ1lICMcxhOywxY3fOXftO6Xy8wzmGGO1TISVxFk/a6MJP1NH5YdptrR98OqDctuf8lsrYKWwG74eTbwOmKvSRnGPz12HEgvS3IkgA63iewDrPITYk50r7aomoREL483MrbA+AI8H+caMzMpiNZGU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cnFqwu23; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1748264281; c=relaxed/simple;
+	bh=BAtTg1IAz2Pq4xa5WP5MKDboCtbXwFTv3JIyx9SvTNQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=drc5nJBrxfqxlJBuxF3q1+N1QYK6see7dlcCj2IcVlwdKDvqCzmpRkvJ4EY1l8vfWgr4RK1QpFxvmegI564+Uy/mstKn/xF1r0x8JbvcPHtWQRWMrFXLxgLZRLQiM2G6ZCVi6idtsdzzxdamG/5CMSPOnJg+nu0TQ6owk5XfyR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eO1cAbaq; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1748263909;
+	s=mimecast20190719; t=1748264278;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5h5iun9WeuvV4gJlQiA1mE7zK3XNw6p2G6AruARxVOU=;
-	b=cnFqwu23iW0paQrGc/xvzZZDMwyaHqFd3ju6QonvMBD/D/y6klkb3H7AoQ9+aMlR7rrV8+
-	yhbzjAsBzy98PgDRaG4+ScufqwV59nFF4TzEnSuHdmQWEC6J1ZN40sa2hS+cXvj/d1r4w3
-	6TMr9O3y++k2xuoSsre0htBYJ15lRbk=
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=pWIfCfk8Tmt/gpieQtOyE1YH2gioYRnHCPB+QvtRvzo=;
+	b=eO1cAbaqDKWPOP0xsih3oHb0JRXDlDGhTo1cPJzl1PY4Of8rjrSD+xbekHoRO2Qppe9n3l
+	yWg4ogzrh7yYJYbTKvTCDoQ2uNTkLC/vQ+QpglMdqmTA2+r2EBYF+tTdu+Tsv2MruA4BKI
+	HoR/BM0ubSb5KpXRpxoef2i2kPZDs3s=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-223-BO8v3uVCM-KKrk3Vp0micQ-1; Mon, 26 May 2025 08:51:48 -0400
-X-MC-Unique: BO8v3uVCM-KKrk3Vp0micQ-1
-X-Mimecast-MFC-AGG-ID: BO8v3uVCM-KKrk3Vp0micQ_1748263906
-Received: by mail-lf1-f71.google.com with SMTP id 2adb3069b0e04-54e750de36dso1121438e87.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 May 2025 05:51:47 -0700 (PDT)
+ us-mta-580-G30zxMWEOceWTaOQuWcZzQ-1; Mon, 26 May 2025 08:57:57 -0400
+X-MC-Unique: G30zxMWEOceWTaOQuWcZzQ-1
+X-Mimecast-MFC-AGG-ID: G30zxMWEOceWTaOQuWcZzQ_1748264276
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-3a4d95375c6so379130f8f.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 May 2025 05:57:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748263906; x=1748868706;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5h5iun9WeuvV4gJlQiA1mE7zK3XNw6p2G6AruARxVOU=;
-        b=WKG/s1syJ0w8WAXeudAeoOeHHJyHFf/18lOCOVud7VMn3PeF8m0DcATBmsG1eCbZFY
-         sIQauJLLLK3WggVkFsBR/I0Pl2FRqIpMUi5AA+hieNOiZMlayTVuRyb1YylAWAP9BqKT
-         hIIWqGy9LIyYMuCcKkcDav7USch67tT6qHkMDHcEHUNGxkBNeqcncTRZ+0Ro4inI+ZiP
-         lGZ9491H4C9pmzpXFSJ4xrESRrOsmS/R3wZ1TppXd9a9SLNljKJysVfPuS/AvgaSi0qp
-         OkfCvATmn1DoPniXBGiwBXqHtYiRQ41VTITLiYCnPqrRHQfupZc36QVLwiISFuZyrQMw
-         GUFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWuG9dh4U03OWk8wL7VSuSrs+kHt75hkhgrCttl5zFuV5Pmd/uoh950WhKEXb1xFal1ylBjJq9LHPVWs+/og/Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzyG5ks7IPHoTiITaEHZ6V+weOjQzUk8QwgtfBS+s+Mx18jBQ2T
-	JfsPol3s/1mOpCYLROOolAn3o3MdwB1Bcpt7i+pw8kUuMvTXLpPzbj96IafBIcHvA1UZafOxi7C
-	dQ1hxjKQm9WKeQhzBlDBr+YXziJdQ/RywOlY0b8JwQyE53TYNarLukkASt8MsElKFDbZkIw==
-X-Gm-Gg: ASbGncttV0VVBPD/f+3wC2iX5kPcwHCQrPOC7rXBDtmUyUbbSo2p3/dOiy0NH/+hURR
-	Pb/vYz2DLpmrqtU3cg3bmvjOKGTj9Qxjx10fU6Lj9CCvCCcqM2P/Hn5ae7X/ZxHaJ88p4o4toRB
-	PNZlsBPvGd9JX8aAsWne+Z7+/sLnATdXOLoXRGZtJUw4k5L1i7NsPzYhtGyHiYv9yn4K3U09djF
-	kR/BCGY5FPAE1vO2M/PNHDetCB91xbeZkNoqPJZ/q7YDRX2F7SINgPd6xyU3SUv531R+lSBLomo
-	phoP9Jt4
-X-Received: by 2002:a05:6512:4147:b0:553:25e9:7f3a with SMTP id 2adb3069b0e04-55325e97fbdmr160066e87.36.1748263906261;
-        Mon, 26 May 2025 05:51:46 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEbUYYwfzZb+OGN39N2NMQpTC1fcBTwawJZeg/s6ljgk9Apq9BdD2PbfjdkZ+T1CNXKmlehQQ==
-X-Received: by 2002:a05:6512:4147:b0:553:25e9:7f3a with SMTP id 2adb3069b0e04-55325e97fbdmr160062e87.36.1748263905761;
-        Mon, 26 May 2025 05:51:45 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-550e702f1desm5129402e87.208.2025.05.26.05.51.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 May 2025 05:51:45 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id 427701AA3F2A; Mon, 26 May 2025 14:51:44 +0200 (CEST)
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc: Jesper Dangaard Brouer <hawk@kernel.org>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
- <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
- <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Ilias Apalodimas
- <ilias.apalodimas@linaro.org>, Mina Almasry <almasrymina@google.com>
-Subject: Re: [PATCH RFC net-next v2] page_pool: import Jesper's page_pool
- benchmark
-In-Reply-To: <20250525034354.258247-1-almasrymina@google.com>
-References: <20250525034354.258247-1-almasrymina@google.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date: Mon, 26 May 2025 14:51:44 +0200
-Message-ID: <87iklna61r.fsf@toke.dk>
+        d=1e100.net; s=20230601; t=1748264276; x=1748869076;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=pWIfCfk8Tmt/gpieQtOyE1YH2gioYRnHCPB+QvtRvzo=;
+        b=bVgtO78/4ymJ3A/X04feZX8qIuc2jiKZx7P7cv8qg8DEi6w62NmHlrCcGA8bzPqnAp
+         AvEbwNtUNyTZ5NQcXkUu6y94n2Y24+V0nxjAVlzBe44jTcnH/vAZn54sByW5ywJ0d4tb
+         I+3NZRT1udaXMbrNbHQbh8B23RtJj2M1cXRlgjJm+6rFMT1W4wEUeadKz3CV0DTNix0M
+         HTXTaFLAMyDP1SJSWCAcyXxQp3Sb6upa0LPdnJwfmIVwZYqcuBzdOwQRVLp4EO5dC0Sh
+         eZiT7a/M67QNRTksuGOSqVvnW8iKCtTGzl2ddrtt9owFGPILcYDiZGCfK+X2/oLjPXoG
+         +2YA==
+X-Forwarded-Encrypted: i=1; AJvYcCVQF7fD6wvYuX4fGaRR2KfJ3hGD1p2sBKHLGebgGBJHMPXVq4UmAb83XORHPCjb+eRbafZmHYhB4s3qBEDMRz4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxQFUkuO2TcOrCkSU5bNlDMyPp4Sy2hYg1FQHV75nJxbYJtxjjQ
+	j6l9H/+5En0rSkcz+svXGQOTZxHm0kMa5V7Z/ATNAjVfOEtMXaM2kepFaHQ1g6IxOPgtKDu0RWm
+	+6tultnO9U9Qwbb61SvYHc5dbLowQasU0ka3RiAQu9bAre3P9gfPgAXShNOgJVscdDJHM6A==
+X-Gm-Gg: ASbGncs5meq9wS853Itx7O+DNGXchVZRJI9vvMJ8BBwVS5iancYXCZhl3iCf6kgygKw
+	pnRobeqf/3FCQTwN9pof6ImXPznWuqjf/8smljWcVkK3MWAGEIUh2gQwdL3lIdmCes35+YDNsqc
+	hcFp09BAv2VTAmq86BODBBERnT6Xt+X/oilwX6RCJMOYxKHtwd5iu9ri48uM2Zw6+GLQDta/zN3
+	2azwQh9gNIhapWDWdJA6ZwhkQao87SLTyMyO0tZ7nGissLg5vCcmSYuGsECBn9Ia1ipBrrlogsy
+	2NSJemW/zLm4tzzZjkY21pD4PtEiGnQl0EQ4xaMcfqEnqZ/yKQ/TWoclhf4z0MEhy9CE37zQI6k
+	v6krqP0XxnLm5OxJviiNPxiD+ioFs2OgwtpF9XzM=
+X-Received: by 2002:a05:6000:4203:b0:3a3:648e:17da with SMTP id ffacd0b85a97d-3a4cb449628mr6930392f8f.7.1748264275882;
+        Mon, 26 May 2025 05:57:55 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGjHzgu2wHsQTTM5XNjk6hrAMmOf9m3x1GeSPiXUCnbdAfJ+yu2Z2J7ENby+z8F/q3Gqcf27A==
+X-Received: by 2002:a05:6000:4203:b0:3a3:648e:17da with SMTP id ffacd0b85a97d-3a4cb449628mr6930371f8f.7.1748264275515;
+        Mon, 26 May 2025 05:57:55 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f19:6500:e1c1:8216:4c25:efe4? (p200300d82f196500e1c182164c25efe4.dip0.t-ipconnect.de. [2003:d8:2f19:6500:e1c1:8216:4c25:efe4])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-447f6f0554fsm234468685e9.9.2025.05.26.05.57.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 May 2025 05:57:55 -0700 (PDT)
+Message-ID: <a360912b-4d07-47ce-bdaf-7125fc020e65@redhat.com>
+Date: Mon, 26 May 2025 14:57:54 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/mm: Deduplicate test names in madv_populate
+To: Mark Brown <broonie@kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250522-selftests-mm-madv-populate-dedupe-v1-1-fd1dedd79b4b@kernel.org>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <20250522-selftests-mm-madv-populate-dedupe-v1-1-fd1dedd79b4b@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Mina Almasry <almasrymina@google.com> writes:
+On 22.05.25 18:29, Mark Brown wrote:
+> The madv_populate selftest has some repetitive code for several different
+> cases that it covers, included repeated test names used in ksft_test_result()
+> reports. This causes problems for automation, the test name is used to both
+> track the test between runs and distinguish between multiple tests within
+> the same run. Fix this by tweaking the messages with duplication to be more
+> specific about the contexts they're in.
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 
-> From: Jesper Dangaard Brouer <hawk@kernel.org>
->
-> We frequently consult with Jesper's out-of-tree page_pool benchmark to
-> evaluate page_pool changes.
->
-> Import the benchmark into the upstream linux kernel tree so that (a)
-> we're all running the same version, (b) pave the way for shared
-> improvements, and (c) maybe one day integrate it with nipa, if possible.
->
-> Import bench_page_pool_simple from commit 35b1716d0c30 ("Add
-> page_bench06_walk_all"), from this repository:
-> https://github.com/netoptimizer/prototype-kernel.git
->
-> Changes done during upstreaming:
-> - Fix checkpatch issues.
-> - Remove the tasklet logic not needed.
-> - Move under tools/testing
-> - Create ksft for the benchmark.
-> - Changed slightly how the benchmark gets build. Out of tree, time_bench
->   is built as an independent .ko. Here it is included in
->   bench_page_pool.ko
->
-> Steps to run:
->
-> ```
-> mkdir -p /tmp/run-pp-bench
-> make -C ./tools/testing/selftests/net/bench
-> make -C ./tools/testing/selftests/net/bench install INSTALL_PATH=3D/tmp/r=
-un-pp-bench
-> rsync --delete -avz --progress /tmp/run-pp-bench mina@$SERVER:~/
-> ssh mina@$SERVER << EOF
->   cd ~/run-pp-bench && sudo ./test_bench_page_pool.sh
-> EOF
-> ```
->
-> Output:
->
-> ```
-> (benchmrk dmesg logs)
->
-> Fast path results:
-> no-softirq-page_pool01 Per elem: 11 cycles(tsc) 4.368 ns
->
-> ptr_ring results:
-> no-softirq-page_pool02 Per elem: 527 cycles(tsc) 195.187 ns
->
-> slow path results:
-> no-softirq-page_pool03 Per elem: 549 cycles(tsc) 203.466 ns
-> ```
->
-> Cc: Jesper Dangaard Brouer <hawk@kernel.org>
-> Cc: Ilias Apalodimas <ilias.apalodimas@linaro.org>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Toke H=C3=B8iland-J=C3=B8rgensen <toke@toke.dk>
->
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
+Acked-by: David Hildenbrand <david@redhat.com>
 
-Back when you posted the first RFC, Jesper and I chatted about ways to
-avoid the ugly "load module and read the output from dmesg" interface to
-the test.
+-- 
+Cheers,
 
-One idea we came up with was to make the module include only the "inner"
-functions for the benchmark, and expose those to BPF as kfuncs. Then the
-test runner can be a BPF program that runs the tests, collects the data
-and passes it to userspace via maps or a ringbuffer or something. That's
-a nicer and more customisable interface than the printk output. And if
-they're small enough, maybe we could even include the functions into the
-page_pool code itself, instead of in a separate benchmark module?
-
-WDYT of that idea? :)
-
--Toke
+David / dhildenb
 
 
