@@ -1,218 +1,138 @@
-Return-Path: <linux-kselftest+bounces-33773-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33774-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8E6AAC3D0B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 11:38:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26DC2AC3D73
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 11:56:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4B38F1888A7E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 09:38:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63F303A75A0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 09:56:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4514B1EFFB2;
-	Mon, 26 May 2025 09:38:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B21F1F2C58;
+	Mon, 26 May 2025 09:56:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="t75CBBJ7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cu05q3jt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 366CD19D88F
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 May 2025 09:38:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A4141EFFB2;
+	Mon, 26 May 2025 09:56:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748252300; cv=none; b=oiubRXIcoU54rrxKU4BAKggOkRgVyRIcyoM4o/CVuCJRjTcpuIdFgSavciz7TXHZ6KQX9AUe4KJnvHicNrimhj41iWYjDv4MQZ2zcr7tNLhmsIVYnQVK7bBwsiDyDmgMLRZY251SW+wEsssNauR9HnY2BkBj7KLVcD+UPcs/8G4=
+	t=1748253397; cv=none; b=n5eW+DrVzemFJMVj/U0ubDp+KtJ+DMWBZDcdbZZDGW5y3Eoe4CnptXb3xmA8gry6+rgRK1SpF0vKqcNbVNY6SktSxoNqSdED+JJ2C+TzNjfJQLKyDrVyfDB3vve9it9ipIeidgyFQo0B8t0S3AHuv678ekINuvCuDrGzj9CButU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748252300; c=relaxed/simple;
-	bh=i9i8/ewq7VfXozbNbj+b/u9iFiv/PHquWUPkUve+/0M=;
+	s=arc-20240116; t=1748253397; c=relaxed/simple;
+	bh=InKrliOxA419G5GRSK3MtNB+5MDBGLDnUFFqYKshanc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uG9mqbNPlgATCrFh7z0qk2iF5pvAmLumxWBkUNHIgQnAQhnuC3yoBAkikuCW3PNDKzbnYsq2u4A097A7QFSYGEFfMGTJWmC5721zD2xCUpXJT8fqpmlV95mugOIuFQzwS9J6KlrgX1rA9141fdiU4kvZU8Owr6Lg56ide3ac3Zk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=t75CBBJ7; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-7426c44e014so1546395b3a.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 May 2025 02:38:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1748252297; x=1748857097; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ayXEI8Cfv1/N/P9sk6QD8plzK1Zh4bjNNg4FyYTKeW8=;
-        b=t75CBBJ7R1LrkYCsBz5TIfMTqIl70m9KyqO7kgTF4RIHArUiDG3ZzgE1UVinXfohWk
-         GJ9cvQDAcoC/365RclM8JQL6xgG9pCX2slQfk/2DvrMbhVqdP8ZBZMJ+Al+U5ODE5Mhc
-         mp+M+7B7u8vQ7ENRPl6mzi0UZle+l8TqTtl2BmcoRorbmkr9sgdbD64QW0KEz8iopxT1
-         shCd5t/b7KEM92tFRZcN//Cxs23PDZt9jwtHhF7l5d1gTT+FpFqoj168WEvVYfqku8sq
-         gKLUvQdgDMvsLtsdUPHAoP3OpR0pFkmEleuPHHsfGjcnZRzU8JCOTCvWzEwMulLXWrDC
-         gxTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748252297; x=1748857097;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ayXEI8Cfv1/N/P9sk6QD8plzK1Zh4bjNNg4FyYTKeW8=;
-        b=VoNt6OGnzPg7mBELDrKuut8W93KI1xXr1wFymRSsN3xWbTa3gftZTWnjTnuxqNbqMD
-         SB67iGexL3pZHD6akBCW7/m2ozIw1uhE+pP3HZUJtd/6h7CK0tLqJM32ZZHF0XAguEIi
-         W3JmInyWiXiVpwIdTbeGzTUjJCwkXpvB68d0g4ZqFuwJbmOp6HDqhmQRRW3alfuu/hZm
-         vXmmNyA6x7V+bHSdn69E974XJ+U+X+balLd/PpB9CyzV3VlJosG9rN7o940xpcazVJYR
-         9ndtp0UBy6UmUISPNs0L7diqX3gXDLSqqDMnbaM/S8v0E37ztKmBe+CSqTR/Ii4wx12o
-         KF4g==
-X-Forwarded-Encrypted: i=1; AJvYcCWpdMD+/hFrIKxeVSR3NEnW/7/36FVah7o4ks5Bjpw3QOVmrAGYktTKOhi4xzyk4xwfrIIHQY97OsQMYnMBKC8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzCUYEZOazQnKS0vgXSfU0b+INUrlOXFGstj81o+373JD+yiYBx
-	P5iuWvozd2T7xfnI+j03wzAXL9ZeGKagF1qG+M+hdF5ldTB+75nlOX6VJFZNv1Fduhc=
-X-Gm-Gg: ASbGncth9skPK5S8Gf9r5CEajXIQGm/tgVz0KHUXOndGyvPRrP6Vvtstxfo+iXB8tk6
-	iJLZDCk2ZJWyzaTdoLH8e/z2rqKGPXmvXRbEuP/Yqq9H7SQLTrfWwg2NRhYrDbMPDnSd2GA12Nt
-	EAl6uOCXC/ebLFM5RaUcZhAS9GTjbNzUu4/6PzDb6wy5DQKGs1VsKD3NtXtgHMA4x0NC+8xp+jr
-	Oof0GS8J3oyMj74akw66B/6RvGNqiVVaUttwX4k/kGCE2rEyFkVhSI+a4o0nw160SijvAfmiMkP
-	IQkiHL8GTsB+jCibXSQyf3TQc2fcLtJM0ebbo7TUlpV9t/98u7jOMfG1k5hQXBi0PoBO3B1wbjN
-	g61dnBbFzpQ/0l0p1qPs/
-X-Google-Smtp-Source: AGHT+IGtpgkfGcWHXNllZ6N7OfshZvdC/ul39y9uFpqnjdl5yZSiN5+nr2uee+5tOzhJpdCxTYM3zg==
-X-Received: by 2002:a05:6a21:8dc6:b0:20d:5076:dd78 with SMTP id adf61e73a8af0-2188c3c78f7mr13332787637.42.1748252297429;
-        Mon, 26 May 2025 02:38:17 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:e17:9700:16d2:7456:6634:9626? ([2a01:e0a:e17:9700:16d2:7456:6634:9626])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b26eb0a4af6sm16624196a12.77.2025.05.26.02.38.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 May 2025 02:38:16 -0700 (PDT)
-Message-ID: <20aeb166-6128-4dda-a963-c9f66f491bcc@rivosinc.com>
-Date: Mon, 26 May 2025 11:38:04 +0200
+	 In-Reply-To:Content-Type; b=Xz/IRpFhOC7UouINKM/y1gKNxgQob0NlzhK3iCFF1TNA3RWNcCy+wJNxx7LFTKu+YEcpz0QYH5anJ/7d3eBypYDKOshrgObKMse3CW+Q9jNpiEjgFuhTstvD26k2SKxJDFubB7zZmQ9wD+4XWMNBFBavnJiL0ON5zZz5p7h9mv0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cu05q3jt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62073C4CEE7;
+	Mon, 26 May 2025 09:56:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1748253396;
+	bh=InKrliOxA419G5GRSK3MtNB+5MDBGLDnUFFqYKshanc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Cu05q3jtPCd0yl8GDMycEECc+PYFmxK4F8SQmoQZYpM95F3zN7SlZVgrg+1Z+7TyG
+	 6IUtO3y/FO4czYALZcjRIOHkzifoFFmcNaUjSubOG297QhfLN8w/818BkBPEni5esi
+	 KXEqZdPhFfR6VsTS3gcOx3Zn2chQKM4fJdTzemtQymdiwCwp7h9U9IOVJ76uxeX3HJ
+	 z7MrFZtIGK7yV880T28+HqqMkXRqhreMjZVtcfeKktljoTlt7ORzPxKbLywuqfNBOI
+	 BAlQ0ppmfkOi0f2EGSlaleajgtBUsi9WOjMHyhEa7nLUvLeKBP2NfOzsAOGEVuU7Ov
+	 vyw/BujB2b6RA==
+Message-ID: <66cedd9e-e296-4d82-a623-aa4ad5435b3d@kernel.org>
+Date: Mon, 26 May 2025 11:56:31 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 09/14] riscv: misaligned: move emulated access
- uniformity check in a function
-To: Andrew Jones <ajones@ventanamicro.com>
-Cc: Charlie Jenkins <charlie@rivosinc.com>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Anup Patel <anup@brainfault.org>,
- Atish Patra <atishp@atishpatra.org>, Shuah Khan <shuah@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
- linux-kselftest@vger.kernel.org, Samuel Holland <samuel.holland@sifive.com>,
- Deepak Gupta <debug@rivosinc.com>
-References: <20250523101932.1594077-1-cleger@rivosinc.com>
- <20250523101932.1594077-10-cleger@rivosinc.com> <aDC-0qe5STR7ow4m@ghost>
- <b2afb9c7-a3d2-4bf6-bfaa-d804358ccd88@rivosinc.com>
- <20250526-baaca3f03adcac2b6488f040@orel>
-Content-Language: en-US
-From: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
-In-Reply-To: <20250526-baaca3f03adcac2b6488f040@orel>
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCHv2 net-next] selftests: net: move wait_local_port_listen to
+ lib.sh
+Content-Language: en-GB, fr-BE
+To: Hangbin Liu <liuhangbin@gmail.com>, netdev@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Mat Martineau <martineau@kernel.org>,
+ Geliang Tang <geliang@kernel.org>, mptcp@lists.linux.dev,
+ linux-kselftest@vger.kernel.org
+References: <20250526014600.9128-1-liuhangbin@gmail.com>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <20250526014600.9128-1-liuhangbin@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
+Hi Hangbin,
 
-
-On 26/05/2025 10:41, Andrew Jones wrote:
-> On Fri, May 23, 2025 at 09:21:51PM +0200, Clément Léger wrote:
->>
->>
->> On 23/05/2025 20:30, Charlie Jenkins wrote:
->>> On Fri, May 23, 2025 at 12:19:26PM +0200, Clément Léger wrote:
->>>> Split the code that check for the uniformity of misaligned accesses
->>>> performance on all cpus from check_unaligned_access_emulated_all_cpus()
->>>> to its own function which will be used for delegation check. No
->>>> functional changes intended.
->>>>
->>>> Signed-off-by: Clément Léger <cleger@rivosinc.com>
->>>> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
->>>> ---
->>>>  arch/riscv/kernel/traps_misaligned.c | 20 ++++++++++++++------
->>>>  1 file changed, 14 insertions(+), 6 deletions(-)
->>>>
->>>> diff --git a/arch/riscv/kernel/traps_misaligned.c b/arch/riscv/kernel/traps_misaligned.c
->>>> index f1b2af515592..7ecaa8103fe7 100644
->>>> --- a/arch/riscv/kernel/traps_misaligned.c
->>>> +++ b/arch/riscv/kernel/traps_misaligned.c
->>>> @@ -645,6 +645,18 @@ bool __init check_vector_unaligned_access_emulated_all_cpus(void)
->>>>  }
->>>>  #endif
->>>>  
->>>> +static bool all_cpus_unaligned_scalar_access_emulated(void)
->>>> +{
->>>> +	int cpu;
->>>> +
->>>> +	for_each_online_cpu(cpu)
->>>> +		if (per_cpu(misaligned_access_speed, cpu) !=
->>>> +		    RISCV_HWPROBE_MISALIGNED_SCALAR_EMULATED)
->>>> +			return false;
->>>> +
->>>> +	return true;
->>>> +}
->>>
->>> This ends up wasting time when !CONFIG_RISCV_SCALAR_MISALIGNED since it
->>> will always return false in that case. Maybe there is a way to simplify
->>> the ifdefs and still have performant code, but I don't think this is a
->>> big enough problem to prevent this patch from merging.
->>
->> Yeah I though of that as well but the amount of call to this function is
->> probably well below 10 times so I guess it does not really matters in
->> that case to justify yet another ifdef ?
+On 26/05/2025 03:46, Hangbin Liu wrote:
+> The function wait_local_port_listen() is the only function defined in
+> net_helper.sh. Since some tests source both lib.sh and net_helper.sh,
+> we can simplify the setup by moving wait_local_port_listen() to lib.sh.
 > 
-> Would it need an ifdef? Or can we just do
+> With this change, net_helper.sh becomes redundant and can be removed.
 > 
->  if (!IS_ENABLED(CONFIG_RISCV_SCALAR_MISALIGNED))
->     return false;
+> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+> ---
 > 
-> at the top of the function?
-> 
-> While the function wouldn't waste much time since it's not called much and
-> would return false on the first check done in the loop, since it's a
-> static function, adding the IS_ENABLED() check would likely allow the
-> compiler to completely remove it and all the branches depending on it.
+> v2: remove net_helper in selftests/drivers (Matthieu Baerts)
 
-Ah yeah indeed ! I'll do that
+Thank you for the update!
 
-Thanks,
+The new version looks good to me:
 
-Clément
+Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 
-> 
-> Thanks,
-> drew
-> 
->>
->>>
->>> Reviewed-by: Charlie Jenkins <charlie@rivosinc.com>
->>> Tested-by: Charlie Jenkins <charlie@rivosinc.com>
->>
->> Thanks,
->>
->> Clément
->>
->>>
->>>> +
->>>>  #ifdef CONFIG_RISCV_SCALAR_MISALIGNED
->>>>  
->>>>  static bool unaligned_ctl __read_mostly;
->>>> @@ -683,8 +695,6 @@ static int cpu_online_check_unaligned_access_emulated(unsigned int cpu)
->>>>  
->>>>  bool __init check_unaligned_access_emulated_all_cpus(void)
->>>>  {
->>>> -	int cpu;
->>>> -
->>>>  	/*
->>>>  	 * We can only support PR_UNALIGN controls if all CPUs have misaligned
->>>>  	 * accesses emulated since tasks requesting such control can run on any
->>>> @@ -692,10 +702,8 @@ bool __init check_unaligned_access_emulated_all_cpus(void)
->>>>  	 */
->>>>  	on_each_cpu(check_unaligned_access_emulated, NULL, 1);
->>>>  
->>>> -	for_each_online_cpu(cpu)
->>>> -		if (per_cpu(misaligned_access_speed, cpu)
->>>> -		    != RISCV_HWPROBE_MISALIGNED_SCALAR_EMULATED)
->>>> -			return false;
->>>> +	if (!all_cpus_unaligned_scalar_access_emulated())
->>>> +		return false;
->>>>  
->>>>  	unaligned_ctl = true;
->>>>  	return true;
->>>> -- 
->>>> 2.49.0
->>>>
->>
+Cheers,
+Matt
+-- 
+Sponsored by the NGI0 Core fund.
 
 
