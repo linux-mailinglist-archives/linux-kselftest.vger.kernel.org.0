@@ -1,188 +1,231 @@
-Return-Path: <linux-kselftest+bounces-33791-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33792-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA1C7AC4077
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 15:30:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97270AC412E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 16:19:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 684FB177D70
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 13:30:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E913E1899FEF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 14:19:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA354202C40;
-	Mon, 26 May 2025 13:30:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3EC720E002;
+	Mon, 26 May 2025 14:19:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ut00by3A"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="U4T43Ytx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2058.outbound.protection.outlook.com [40.107.220.58])
+Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6953B45009;
-	Mon, 26 May 2025 13:30:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.58
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748266251; cv=fail; b=fFd7yPfjvmvOeOKjRmQXpiHn7EnnNny/yJoggMi5ShTRuX4RRCpVZ4C5/TvmKxloU++AYXlRmPJTFj+8IUY9rtVjD8smvc3oijIF/EROQxbVH5vInW/7o98MmVZf3x7zFVECzBZTZqvYCwobcwRFfdOd/OQnXtA+Y8d376G1bRE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748266251; c=relaxed/simple;
-	bh=HW2hQTR8K/hLgbbRaJh2gUL3OYDZZ3IiLuXXbT0Cl6Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=C0ezcGKBM2P1u3ZncOU/GldRFp1IHF+4KhIh2Utgx22xDXNjRrdntmWX2T9TN7GCzXYJt6Z3WmiiUERV3O/bIHoVrc45ijwKmXNGW7CJo0Gguh35OEN6YkOvRucQ67zjnxMurDEtcvoMUgC5bkD0PFoapL8DFe0y9wdcHdUq/30=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ut00by3A; arc=fail smtp.client-ip=40.107.220.58
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=NJlm7f3oAzdXZorAfkB+tY8/W0zcSiH5uL/FpmNtidQQj/aaZWW7wiqL6PGHTg/obcliQvws//3nrNOh9xyB8ODApB9JdqrnDk/El+ES6FagIwP8X6guepy48SEhVfwQNz8G6UrX5aYh4NsaE/tyRwxmSQc14sCGlaKFi1IHr+5vanqtF+yhxIuI8oO5rVunpLJfgdw6QteoD6wjY/I1WFc0D9yEpk9NaJoamP1fSvFTBDsy8WUGdLXEyxlT8Ri5OtrISH5KKqXtr4KFhBJt5p9MUR4QdvBkXqNh3bGGoijV47b/6kQlWlof/NV6Fj7gvBxuJXwsWN4+V1gZEouCBg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cnBYyrvKQO19fIrvVH1iHkQkLCAlLdUcINadjeQdBLc=;
- b=ofZvcMOWYM3DzIn7n3gt7w6pRyg5wVLqRzEloVF65mk0vzHDgextiknBtKfWnbebqn5pVucA7/Jp5bQ+FjfBMdlxVAczzgrQpqqy2IJ7vfKuYGQO8oa78E8AhIolobBmSUmoSDU396IdK65b2/9VuRMqzohH8XyAZr+jnr9zDaZNW3KW79cwzTxUmEoyC30PFa4p4bCwsUtg8Rz6hz+l0g8AeMuyVOpJRCd1a1+IxJOMxSvFXYsS+APY+7kf9m4+g7rtNbvbFe///ur04PVZDQtOXqaBGqAcZicsATUAGm73l5v18IdV3fTejYkENJHlw0L4uReyypkYlOaNWq+OxQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cnBYyrvKQO19fIrvVH1iHkQkLCAlLdUcINadjeQdBLc=;
- b=ut00by3AGK3aPkz3qBE1b/ACYlWsKpRrP9VfT6XOQCBKeUQulrqGKRw0xub8dC9+Mf7IvX3B5MvFvIzwmM1kbjreKqxc0VmclEJp6lwJ8wqFJYffwsr0Ufb7BG4C8LKe2YzoTP9IR93WClwRfN6UTuF5sCjy+6MZPCeF49QNaQVPmttz5Omm8rvaIvH9cG/SS7/CMAq+jz3KkQZSq0+hiFKs0vIOVfP+HUHdwMfNq7XPByjWMaF2s9yYLvCRigytS2sQZSwI7KpC7185RabAXxnjhhm9wVQyniX45WbrrOBAaYM+drpGiZvc2fhWRoBsM6NbLfLgxobikgkaSrl9iQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
- by SA5PPFE3F7EF2AE.namprd12.prod.outlook.com (2603:10b6:80f:fc04::8e6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8699.23; Mon, 26 May
- 2025 13:30:47 +0000
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732%6]) with mapi id 15.20.8769.022; Mon, 26 May 2025
- 13:30:47 +0000
-Date: Mon, 26 May 2025 10:30:46 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Nicolin Chen <nicolinc@nvidia.com>
-Cc: kevin.tian@intel.com, corbet@lwn.net, will@kernel.org,
-	bagasdotme@gmail.com, robin.murphy@arm.com, joro@8bytes.org,
-	thierry.reding@gmail.com, vdumpa@nvidia.com, jonathanh@nvidia.com,
-	shuah@kernel.org, jsnitsel@redhat.com, nathan@kernel.org,
-	peterz@infradead.org, yi.l.liu@intel.com, mshavit@google.com,
-	praan@google.com, zhangzekun11@huawei.com, iommu@lists.linux.dev,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, patches@lists.linux.dev,
-	mochs@nvidia.com, alok.a.tiwari@oracle.com, vasant.hegde@amd.com
-Subject: Re: [PATCH v4 05/23] iommufd/driver: Let iommufd_viommu_alloc helper
- save ictx to viommu->ictx
-Message-ID: <20250526133046.GD9786@nvidia.com>
-References: <cover.1746757630.git.nicolinc@nvidia.com>
- <5288cec9804e7e394be3b7de6b246d8ca9c4792a.1746757630.git.nicolinc@nvidia.com>
- <20250514170637.GE382960@nvidia.com>
- <aCadeeP+Z4s6WzOi@Asurada-Nvidia>
- <20250516132845.GH613512@nvidia.com>
- <aCemeved47HE6Q2B@Asurada-Nvidia>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aCemeved47HE6Q2B@Asurada-Nvidia>
-X-ClientProxiedBy: MN2PR07CA0004.namprd07.prod.outlook.com
- (2603:10b6:208:1a0::14) To CH3PR12MB8659.namprd12.prod.outlook.com
- (2603:10b6:610:17c::13)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65565202998
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 May 2025 14:19:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1748269152; cv=none; b=irmEABxf11wQBTIR6CihMSIgQSiREzbS2ShK5PMNd8QAs0ROaP03dB/UJI+9EknR3ST2clknCoUfZDhvC2osJjdaIBFyIbX3NDKDSkigo5qTfNBi4no5r0pYs6ZUMgMsO17MMA7HIU9p72ZQyxp/3E70zx/NmKL1rnde2Hu8CRg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1748269152; c=relaxed/simple;
+	bh=zZY12G2RUE6dyOkl3opChCWHjj1XJx+3D/Lm++dU8bA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OJSoWj9mBTRcWLvSHAIVDmsSyvBUIrN/45kzm+mS336mrmYPUW3cvLM9vog29d7MsHsOc/CrVH5J6oG+6H+jR3Cg7lQeK0jjNRRsJVh9cgfa/70/YaGVuPO7BH7siVCOo/CricW6hexa/V/QEOV4ISCk7LPnNHtRpfeIMbNfAqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=U4T43Ytx; arc=none smtp.client-ip=95.215.58.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Mon, 26 May 2025 16:19:01 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1748269147;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=QP47mBiBQT/WSbbK5SaleZH/+hgZqZTeZEh/OAuW384=;
+	b=U4T43Ytxt22kYjLevAzW8hC3OqOrtz6ZyCo6XjtEFtQOFqdwKb/z5GADfUlQUJaLmnxPNI
+	GT7jkQhvfOJoKjyOq2fC3ODIg8T45kHtE/3roqnuIesTaamXRb6xrk+9/IAh8SaNswuUVa
+	dhjX8nnp5bca2pOtF/0OQwtOVRZW/Ow=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Nicolas Schier <nicolas.schier@linux.dev>
+To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>,
+	Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH v2 00/11] kunit: Introduce UAPI testing framework
+Message-ID: <20250523-winged-donkey-of-advance-fffac7@l-nschier-aarch64>
+References: <20250407-kunit-kselftests-v2-0-454114e287fd@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|SA5PPFE3F7EF2AE:EE_
-X-MS-Office365-Filtering-Correlation-Id: e1876dbc-34bf-42fd-cb9d-08dd9c59861d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?pFAlow/I7M519XMW0PGCpLlmVqJuY01rrsSstpO+taccOAvpESUOCosefI7R?=
- =?us-ascii?Q?oWmE/6WZjEHxksfCj7JTjMb1PSsBb9EEEOITmPt24T0JJYOUn4vcHZibbFTT?=
- =?us-ascii?Q?yvHvM2EMlMLZY9m9LFQ8cOyUGFwv+Wp9QDd1jsMObsYFEg1FTLFT/xn1woNq?=
- =?us-ascii?Q?ESz+qgFnNWkbK/jryk3kzuvMgLdPkBcsc7jH0Jsp5VaZ/W04h2qzxNF5a5Ig?=
- =?us-ascii?Q?rFjQPcOQvIy7EYWW0dOAUQBbGhseRMzJLUIiYEETjYZ/cqe/Ym/Me6B1e3iD?=
- =?us-ascii?Q?wNmh5mDWBHZhOqpB5qa/SC6bKnVBMgTUlTJZsI3Zqm9vQp5U+v9HChsFVl8J?=
- =?us-ascii?Q?2jkck3kpRYdPBhj4qqXBO0LHATyW4KS+toxsfUK105cPpOZflkp1fDB0U719?=
- =?us-ascii?Q?m746uLaB7Z1u7B4OdY9vjtwZTMidQy25i2Z3ZY3f26nG0988IW71/fnKMpJe?=
- =?us-ascii?Q?1xonLcBbLGBJEv4P+fT/eo23VSAJ2Uis+O15GJOyIvFtnthTpXX4oqrKIkHT?=
- =?us-ascii?Q?pwsfhBcqDdAPARxEkaDhZZD7mcUKRY2zI3OqQ0FHF3iLGidwnj2lHBgNfLz2?=
- =?us-ascii?Q?uQXNU0k97Q+eigAuwx+jmPod/7m1HLabtWYOW6Eo4XAO2xaf+v7Y0ZSjxGvm?=
- =?us-ascii?Q?t8PPTD4FJPPj6ywB76twNYWHBlh2VMjWUcjX75/bVl7d86v4GQgN5ps9bKZN?=
- =?us-ascii?Q?A3CQf7Nw5hR/WmxSo5xDM4gR57v88+SQuyx/Y4no78UfRS97EgqBCJk7kmrK?=
- =?us-ascii?Q?tpoaOOtZjNCadrBqWJKE4lmPjgbUmQ9z05O+k8G5NbAR5Lhk3jYXsB1KGTos?=
- =?us-ascii?Q?lKSIFHVNs50b7L0v7/5yqdC+TKVTCl0T5Hub/BHe9jIRlANftKCF5KWlTjG4?=
- =?us-ascii?Q?bxFnpPVOUMYHkET/fzavSY+1A9M8QwrZ2PMO96qQWcrZkF8eomp3J6b4145b?=
- =?us-ascii?Q?wViotJSGX5vPy8Fy62JW6ay9dFJfYhsZ4HgCtjesXMEme6RFkR6rOipFTWu1?=
- =?us-ascii?Q?CLVKo8rzbpz+x++D2dVg5/noS0AJGMdstknJqh/slc2r6P2/M5ZwA6YEiZjD?=
- =?us-ascii?Q?GVgeBO8go7hgTqHpIVFrqi9VmF+/iEJ1x8rR1+vVNCgmnxH5mHH5qHrQK6QT?=
- =?us-ascii?Q?d52nw6BVzH6bYAO+NTKmbJDPs3mrqIXMJKWkTV9d09fqNYEyZkxmB95VR3kL?=
- =?us-ascii?Q?ZLlaj4EToUXtRhKlWw8L/hUYmOvWe4YR6umhXbART7weXU4dIcm+7s63FSZA?=
- =?us-ascii?Q?wKTiHjqqRgrqWLouJiJTbY+Ae34sELu6vf9RlCGJrxXoT9wSGdMQqQumS+JU?=
- =?us-ascii?Q?zr/4A7KO4lybgjYbU1uEpciK49w8Cp62VIB+21TgN3z8LIHVkWK61nknIoVF?=
- =?us-ascii?Q?dfKcr0ltOcaNrwWF+1NyXqNkR/r2x5lMJalZYcnNinqO40kOzm1qqyoEQ33h?=
- =?us-ascii?Q?YYKs2qhTgDc=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?o36fO8c7YgiFnbHOBT7DFEwvWBooaL7Se4lQDT0gxw9cqcuZPnRSzMhwFqHD?=
- =?us-ascii?Q?gdfNA34Wn2kZ3TMuky7W1H3dO5+s3tB2KP2DlT5vWLAYUAb6MKwvCzgX9wAF?=
- =?us-ascii?Q?g5sq1PjcSyNCn8C5vID327c3q8D/mGESueWibK7CQPSdXE/HJBtcei4a9f1h?=
- =?us-ascii?Q?/9DR341UKM6qeniFZT8EW/P5WoEaahIANfgdjOlriNPfmNyMwqZR4UW59ykb?=
- =?us-ascii?Q?Qyrfbfg74fu7b02QcwnY+GeNib6B3huaBhCmCvCllQlkeWl1lxbXtEhgdbzG?=
- =?us-ascii?Q?Zxc5ZtHKRl9c6zvrhnzKT8zQba2KAb+n74xqLClSo/jSa+y7UjbnlPstRbt7?=
- =?us-ascii?Q?V6eIsBmexr+yFeRiOwGYCpvHR1qbLhfwoIRQi0+BJhsBnaH/G85GnIFIxb6h?=
- =?us-ascii?Q?jf3ZhJEkn+44fJWXZhv07fXlNpgOOGgGQ2gkS8aCdC1DRkUTCyV6wuGTUhau?=
- =?us-ascii?Q?Hxx/16phb7wucx899yImqlmjFcyJT08iZl8Ca9AtpJPqcH06oChMd6rqE5ya?=
- =?us-ascii?Q?nCSTLvMCwN8mlfYo8nbsgRWoccOsf+Mk8FuTVib2RwQObxd5JS9sVxNdEGiO?=
- =?us-ascii?Q?k3Wo5YahMMnRWs6FXMOlgpdU4YaqV+BmzUnZPMTbfNa1RV8MH3qN8LnwppQ0?=
- =?us-ascii?Q?645iC9cvezCnziDLor1qGorm93cWDzU16qhDcFxuGPLJVEkX42J/9hwlzOjc?=
- =?us-ascii?Q?BxU22mq+nzycClyfpoWHzVg2GnhFZwGrbQV1+pI9iTRdWRVvOn7DKeJoV1/B?=
- =?us-ascii?Q?j3KFUg8fdkNS8SqXFrJKyu+FIexzvDGin9jKaqWU+FuIFLI+Ixd2EKAxzphV?=
- =?us-ascii?Q?knlPsHZMPgFlHIXgXl/1gGW059Dw9El8M3sVPV5vQOJbc6s18vT/DOhlrZ4w?=
- =?us-ascii?Q?FYGRQjtlVZZjvMTvFmHv9rqlz98wNrxypMFLC3md3nKfwfEwuEFcBEb54IDp?=
- =?us-ascii?Q?ZfZkJRusnu9Hj3JSR59E16Ag1T3Aw4JeimHPk6gCNN6DgRlUnXoGIk8gEfUA?=
- =?us-ascii?Q?fXMXWB1YJ78AiqdgOm1hN84tVTLqqM+boFb01gkNlTuY/XKs0PJj6B8z/vDH?=
- =?us-ascii?Q?uYs5djihvxKgn9E0qXuDcgJ2bq2HZSvXGZw5dhsR/bCixFoqIAk9wEcQeUlO?=
- =?us-ascii?Q?uwyuLlPOrwDMvBpleHDkMLtGzjNxOxM/8L9ijg9msJ2+o7S3hLMqJLdxrW57?=
- =?us-ascii?Q?YaERv2HQMFryZZXz6kasWfKB6kpsXGdQykUoZqfPJeU3y+U6CNhc7YzoGuoB?=
- =?us-ascii?Q?3NCvkBcFFUS5wip2ESBpOEvR/SCFeV5SDEnlzatKC0otLSrs6bZegpDn5vZf?=
- =?us-ascii?Q?W1FxS14Kx46WOsFETvnV1+KwwKGkK+dRVmhFPClGBJZitYIyZgFJlphl7zwr?=
- =?us-ascii?Q?xuxjmnnZq/HW+NBK+qY2RjZFFyXfx50UgdNnB6vUGDo1a0MVoNUHuH9HI0dm?=
- =?us-ascii?Q?izQbczdtkM32NpoAzcwMDdxQcXXwJ1EKhIcJGlk+mXeLEj3Kqks9vxsleEin?=
- =?us-ascii?Q?8Wdil1r+IOdDse4DpWYN0ZYhb54u6+NX4YgoMEyvd0FJxeuAKU+JKeUuu7d9?=
- =?us-ascii?Q?Wed6bg5ljyt6vZcbDGtbqf9s//bHm1skKAv/47LH?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e1876dbc-34bf-42fd-cb9d-08dd9c59861d
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 May 2025 13:30:47.4954
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UotRtQtPWOd8JpTh9aCsF+6kOMCdcyPy0B+5cifeV2C2hQUaYdylWfVAByi4OBVa
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA5PPFE3F7EF2AE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250407-kunit-kselftests-v2-0-454114e287fd@linutronix.de>
+Organization: AVM GmbH
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, May 16, 2025 at 01:56:26PM -0700, Nicolin Chen wrote:
-
-> > You don't need to move this unless you are using inlines. Just use a
-> > forward declaration.
+On Mon, Apr 07, 2025 at 09:42:37AM +0200, Thomas Weißschuh wrote:
+> Currently testing of userspace and in-kernel API use two different
+> frameworks. kselftests for the userspace ones and Kunit for the
+> in-kernel ones. Besides their different scopes, both have different
+> strengths and limitations:
 > 
-> Since we forward ucmd now, ictx is in the ucmd so we need this
-> structure for:
+> Kunit:
+> * Tests are normal kernel code.
+> * They use the regular kernel toolchain.
+> * They can be packaged and distributed as modules conveniently.
 > 
-> -		if (!IS_ERR(ret))                                              \
-> +		if (!IS_ERR(ret)) {                                            \
->  			ret->member.ops = viommu_ops;                          \
-> +			ret->member.ictx = ucmd->ictx;                         \
-> +		}                                                              \
+> Kselftests:
+> * Tests are normal userspace code
+> * They need a userspace toolchain.
+>   A kernel cross toolchain is likely not enough.
+> * A fair amout of userland is required to run the tests,
+>   which means a full distro or handcrafted rootfs.
+> * There is no way to conveniently package and run kselftests with a
+>   given kernel image.
+> * The kselftests makefiles are not as powerful as regular kbuild.
+>   For example they are missing proper header dependency tracking or more
+>   complex compiler option modifications.
+> 
+> Therefore kunit is much easier to run against different kernel
+> configurations and architectures.
+> This series aims to combine kselftests and kunit, avoiding both their
+> limitations. It works by compiling the userspace kselftests as part of
+> the regular kernel build, embedding them into the kunit kernel or module
+> and executing them from there. If the kernel toolchain is not fit to
+> produce userspace because of a missing libc, the kernel's own nolibc can
+> be used instead.
+> The structured TAP output from the kselftest is integrated into the
+> kunit KTAP output transparently, the kunit parser can parse the combined
+> logs together.
+> 
+> Further room for improvements:
+> * Call each test in its completely dedicated namespace
+> * Handle additional test files besides the test executable through
+>   archives. CPIO, cramfs, etc.
+> * Compatibility with kselftest_harness.h (in progress)
+> * Expose the blobs in debugfs
+> * Provide some convience wrappers around compat userprogs
+> * Figure out a migration path/coexistence solution for
+>   kunit UAPI and tools/testing/selftests/
+> 
+> Output from the kunit example testcase, note the output of
+> "example_uapi_tests".
+> 
+> $ ./tools/testing/kunit/kunit.py run --kunitconfig lib/kunit example
+> ...
+> Running tests with:
+> $ .kunit/linux kunit.filter_glob=example kunit.enable=1 mem=1G console=tty kunit_shutdown=halt
+> [11:53:53] ================== example (10 subtests) ===================
+> [11:53:53] [PASSED] example_simple_test
+> [11:53:53] [SKIPPED] example_skip_test
+> [11:53:53] [SKIPPED] example_mark_skipped_test
+> [11:53:53] [PASSED] example_all_expect_macros_test
+> [11:53:53] [PASSED] example_static_stub_test
+> [11:53:53] [PASSED] example_static_stub_using_fn_ptr_test
+> [11:53:53] [PASSED] example_priv_test
+> [11:53:53] =================== example_params_test  ===================
+> [11:53:53] [SKIPPED] example value 3
+> [11:53:53] [PASSED] example value 2
+> [11:53:53] [PASSED] example value 1
+> [11:53:53] [SKIPPED] example value 0
+> [11:53:53] =============== [PASSED] example_params_test ===============
+> [11:53:53] [PASSED] example_slow_test
+> [11:53:53] ======================= (4 subtests) =======================
+> [11:53:53] [PASSED] procfs
+> [11:53:53] [PASSED] userspace test 2
+> [11:53:53] [SKIPPED] userspace test 3: some reason
+> [11:53:53] [PASSED] userspace test 4
+> [11:53:53] ================ [PASSED] example_uapi_test ================
+> [11:53:53] ===================== [PASSED] example =====================
+> [11:53:53] ============================================================
+> [11:53:53] Testing complete. Ran 16 tests: passed: 11, skipped: 5
+> [11:53:53] Elapsed time: 67.543s total, 1.823s configuring, 65.655s building, 0.058s running
+> 
+> Based on v6.15-rc1.
+> 
+> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+> ---
+> Changes in v2:
+> - Rebase onto v6.15-rc1
+> - Add documentation and kernel docs
+> - Resolve invalid kconfig breakages
+> - Drop already applied patch "kbuild: implement CONFIG_HEADERS_INSTALL for Usermode Linux"
+> - Drop userprogs CONFIG_WERROR integration, it doesn't need to be part of this series
+> - Replace patch prefix "kconfig" with "kbuild"
+> - Rename kunit_uapi_run_executable() to kunit_uapi_run_kselftest()
+> - Generate private, conflict-free symbols in the blob framework
+> - Handle kselftest exit codes
+> - Handle SIGABRT
+> - Forward output also to kunit debugfs log
+> - Install a fd=0 stdin filedescriptor
+> - Link to v1: https://lore.kernel.org/r/20250217-kunit-kselftests-v1-0-42b4524c3b0a@linutronix.de
+> 
+> ---
+> Thomas Weißschuh (11):
+>       kbuild: userprogs: add nolibc support
+>       kbuild: introduce CONFIG_ARCH_HAS_NOLIBC
+>       kbuild: doc: add label for userprogs section
+>       kbuild: introduce blob framework
+>       kunit: tool: Add test for nested test result reporting
+>       kunit: tool: Don't overwrite test status based on subtest counts
+>       kunit: tool: Parse skipped tests from kselftest.h
+>       kunit: Introduce UAPI testing framework
+>       kunit: uapi: Add example for UAPI tests
+>       kunit: uapi: Introduce preinit executable
+>       kunit: uapi: Validate usability of /proc
+> 
+>  Documentation/dev-tools/kunit/api/index.rst        |   5 +
+>  Documentation/dev-tools/kunit/api/uapi.rst         |  12 +
+>  Documentation/kbuild/makefiles.rst                 |  37 ++-
+>  MAINTAINERS                                        |   2 +
+>  include/kunit/uapi.h                               |  24 ++
+>  include/linux/blob.h                               |  32 +++
+>  init/Kconfig                                       |   2 +
+>  lib/kunit/.kunitconfig                             |   2 +
+>  lib/kunit/Kconfig                                  |  11 +
+>  lib/kunit/Makefile                                 |  18 +-
+>  lib/kunit/kunit-example-test.c                     |  15 ++
+>  lib/kunit/kunit-example-uapi.c                     |  56 ++++
+>  lib/kunit/uapi-preinit.c                           |  65 +++++
+>  lib/kunit/uapi.c                                   | 294 +++++++++++++++++++++
+>  scripts/Makefile.blobs                             |  19 ++
+>  scripts/Makefile.build                             |   6 +
+>  scripts/Makefile.clean                             |   2 +-
+>  scripts/Makefile.userprogs                         |  16 +-
+>  scripts/blob-wrap.c                                |  27 ++
+>  tools/include/nolibc/Kconfig.nolibc                |  13 +
+>  tools/testing/kunit/kunit_parser.py                |  13 +-
+>  tools/testing/kunit/kunit_tool_test.py             |   9 +
+>  .../test_is_test_passed-failure-nested.log         |  10 +
+>  .../test_data/test_is_test_passed-kselftest.log    |   3 +-
+>  24 files changed, 682 insertions(+), 11 deletions(-)
+> ---
+> base-commit: bf9962cc9ec3ac1dae2bf81b126657c1c49c348a
+> change-id: 20241015-kunit-kselftests-56273bc40442
+> 
+> Best regards,
+> -- 
+> Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+> 
 
-De-inline more of that function probably..
+Hi Thomas,
 
-Also seem my other remarks about not storing ictx so much..
+sorry for the long delay.  I started reviewing but am not completely 
+through the whole set (especially, I did not really look at the kunit 
+patches, yet) but would like to send you at least some feedback already.
 
-Jason
+In general, I really like the idea and your approach and am looking 
+forward for an integration.
+
+Kind regards,
+Nicolas
 
