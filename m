@@ -1,197 +1,151 @@
-Return-Path: <linux-kselftest+bounces-33798-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33799-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8343AC4196
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 16:40:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7B55AC41B5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 16:48:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 89E42170815
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 14:40:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F1E093BA176
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 14:47:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80EB72101A0;
-	Mon, 26 May 2025 14:40:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5421A212B18;
+	Mon, 26 May 2025 14:47:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="YaqPh+cT";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="4UI7GP3j"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="sTqS0WMZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E7EB20DD4E;
-	Mon, 26 May 2025 14:40:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 914AB211A2A;
+	Mon, 26 May 2025 14:47:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748270425; cv=none; b=exAO8XpEANKFqXc4IFVsE6/aZVc4ao+TP5mJCx4Nj9EjBgP4OY0smbLKcw6FOgSvDxXSTnLllLO7UCR93i5WvkdW4fkD8gR8veOqC0fb8DGPZyHlxdisibuangCT2aA/MWpz8gYA5ISd94rtLeUHHFlNLrG+KGHihO6blnHGSUw=
+	t=1748270869; cv=none; b=UgawEyB9L2gqqFWXWPGO9tuCOmaEG4CnfJFIzyDMUZkpCwVhPvg/Gn/9gph4fKesRanEDBZhr/PqY8YJqbqHFmbdm3roM/Wi8j1jflcILYWv/lxUYKkDXe6dZp1r2AkB5H7x7kSgFAEavJxYhVitkZBYTCILrrJnw8Z6yIwZjtE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748270425; c=relaxed/simple;
-	bh=ep1DMStgP4KLh6kjdF/WowDeKpc6b4Jr1zjb7jz95KE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bg4PtCZnG6qTAFDlN4JVwuVI0A/Ap9B7p0eTcQ95eTcNHsylhiG9clWB+OiN1hMw8m5pVx0R2Bo4aYXrVDvgZ5UXB5o4pWy9PGf9m+o9h8KcHKNvX5MFtAIE0uGZMUngxOO6Pdr/FwdNiTUvfsmFgkZPhiDP5lB0r29o6VodOhs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=YaqPh+cT; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=4UI7GP3j; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Mon, 26 May 2025 16:40:17 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1748270421;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5TV7kVDxmFuWEFaBNT2bTxAWVnJUcrUxNAcskziBBPw=;
-	b=YaqPh+cTVv5lTI5hx6r+wn4iVxIXWsXlZq9NNG9ZJrowba5y96FUCXn4V9S9OtEmvsAnE1
-	BZeIXFupqA3oxM2jR+7gypjG7pLtOzQLmaA6NfHfW6w7EpLaJUJM9K/OsNu0TAav/1ZZyp
-	p3XHSmTeyQ3PdTEbF5TvaCGHyjh08ALd/czrLMDTCxgYW/1OgEV6phLi1zUBCHv4rfStV8
-	XYdUId9gJEhaL98yD0Wneh6LjOuLO29r/gJ51BWJlPkOck3+g0j8JBUNFketul+PQ8I24Q
-	OkzkjQYdCWQYkWo9BcEdzJwc6x+0pL71A9xM0ALChTPNFde0V3eekKclAcHhTg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1748270421;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5TV7kVDxmFuWEFaBNT2bTxAWVnJUcrUxNAcskziBBPw=;
-	b=4UI7GP3jRqpneYJ72JmNnXXUSJd4HUvvqHF+iKuexX3Mz+vq6IbmremQ77q1N5HxM7CFlp
-	31goQIRm4O7oynCQ==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Nicolas Schier <nicolas.schier@linux.dev>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Willy Tarreau <w@1wt.eu>, Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
-	Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 01/11] kbuild: userprogs: add nolibc support
-Message-ID: <20250526163610-88b7aae6-7be4-4a02-be20-ec7fe74cbf31@linutronix.de>
-References: <20250407-kunit-kselftests-v2-0-454114e287fd@linutronix.de>
- <20250407-kunit-kselftests-v2-1-454114e287fd@linutronix.de>
- <20250522-fluorescent-liberal-pigeon-0404ed@l-nschier-aarch64>
+	s=arc-20240116; t=1748270869; c=relaxed/simple;
+	bh=/d2q2+ybdDcoWjDhaEyMP/HPI7aeq2l6SVEQGCr9WPo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=c6WEty1ea6ml55V5yYt61NQrJc+nm+iIiFlrGe8RbhlHDueHpG2MyP8YGFrucG3RlTD6FYBoHV7ruorUp219KTmT+A5UNDF/oMDXIm1xiTnuwx+PjKQ+zsda7onp1v8HHVnPFmYxWUTpfLQ3wanjQoRG0WmJQKgqtrwK7Wj2unU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=sTqS0WMZ; arc=none smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54Q8uIGP010994;
+	Mon, 26 May 2025 14:47:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=corp-2025-04-25; bh=bRX6T2Oi34tK2U3V0BzEFIzB+sbVD
+	fg9vFDZDCWgZF4=; b=sTqS0WMZPGA+VIBufhgmjyeKH1T7Rl6LBxSzeo4hVpP/T
+	uV+20Sqw2LSfCsPz/Ev1MTVVJsRqdgVkZsueYP8RZSm/AMx1SN9xUUEyxyg1TvFy
+	0YgTq1bcLiFszkmBjVCuKKmELoPolmH6fdKZ/wk9MjEZJsetArC+QpFr5DEBKZb1
+	0b6qoN6AlfmqZLXq3n6LN7gzzFBPXvRDopvv8J8DtbFSFhlN90SgIZ1OeNOL9xr6
+	3ZXiq3uu6kGmZckssR418gSrfD1xc7CEiWnXDa/tThuYvHfjZz56m+7hLQMcgM4c
+	7OO2/gIFfC7HU7buK9O52WTN2PsvKQl6wMSuP35Uw==
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 46v21s1h7n-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 26 May 2025 14:47:39 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 54QDdofU023148;
+	Mon, 26 May 2025 14:47:39 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 46u4j7v79k-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 26 May 2025 14:47:39 +0000
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 54QElcYl040639;
+	Mon, 26 May 2025 14:47:38 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 46u4j7v798-1;
+	Mon, 26 May 2025 14:47:38 +0000
+From: Alok Tiwari <alok.a.tiwari@oracle.com>
+To: davem@davemloft.ne, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
+Cc: alok.a.tiwari@oracle.com, linux-kernel@vger.kernel.org,
+        darren.kenny@oracle.com
+Subject: [PATCH] selftests: nettest: Fix typo in log and error messages for clarity
+Date: Mon, 26 May 2025 07:47:23 -0700
+Message-ID: <20250526144735.1484545-1-alok.a.tiwari@oracle.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250522-fluorescent-liberal-pigeon-0404ed@l-nschier-aarch64>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-26_07,2025-05-26_02,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 mlxlogscore=999
+ bulkscore=0 suspectscore=0 malwarescore=0 spamscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2505160000
+ definitions=main-2505260125
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTI2MDEyNSBTYWx0ZWRfX/X1Y375yFHtZ 7qEGdMClqKYznAALervWyVBZ1rR4j/Q8Lb4Z0KhjJJNAeuieQh7hbgM7YwcifqLBKgFLuRqFH6d LdXatHZihcLF8ZKkum3wOj1phsBnod92+7M31GGpeZE8AfE6ba4dERjWxbT3l9shJOj6SBUZIQ1
+ xmtTwLnE+GjwM/FP8r8XozHTYS9OGs1cmioQrUzGjMDLOt/swcXQ1Cg9r3JaKP1OtzFu5v9YqJo VbbxzJRVbFbMx9ecHz106Kg4v61H46UXLkeq8TFJ+Mm6YUEDhs95rssvH7bxUyPi7yy9yfeQ+1Q HYRjDHGkT9oLm4ZVEm4edseJMvpa7XialhNwYq7tQDebaLIQQSE8Xo47/INookM7gdi/pjhsrh3
+ 3OFPosKAhMTMUiROq5rBg8KQEeYu0kF7WSVJ/HdDT+ZIEBlAoiUo9Iy+sxjtAg3R9QMVnonn
+X-Proofpoint-GUID: x5SUmlykWc0y0ZPffVdlABWz48YVD9FB
+X-Authority-Analysis: v=2.4 cv=UvhjN/wB c=1 sm=1 tr=0 ts=68347f0b b=1 cx=c_pps a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17 a=dt9VzEwgFbYA:10 a=yPCof4ZbAAAA:8 a=9X4DUQxQdoZdu0pZ4wIA:9 cc=ntf awl=host:14714
+X-Proofpoint-ORIG-GUID: x5SUmlykWc0y0ZPffVdlABWz48YVD9FB
 
-On Mon, May 26, 2025 at 04:19:53PM +0200, Nicolas Schier wrote:
-> On Mon, Apr 07, 2025 at 09:42:38AM +0200, Thomas Weiﬂschuh wrote:
-> > Userprogs are built with the regular kernel compiler $CC.
-> > A kernel compiler does not necessarily contain a libc which is required
-> > for a normal userspace application.
-> > However the kernel tree does contain a minimal libc implementation
-> > "nolibc" which can be used to build userspace applications.
-> > 
-> > Introduce support to build userprogs against nolibc instead of the
-> > default libc of the compiler, which may not exist.
-> > 
-> > Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
-> > 
-> > ---
-> > This could probably be moved out of the generic kbuild makefiles.
-> > I think the ergonimics would suffer and this functionality could be
-> > used by other users of userprogs.
-> > 
-> > Also this does currently not support out-of-tree builds.
-> 
-> (out-of-tree == external kmods;  out-of-source == build-dir != source-dir)
-> 
-> you probably meant out-of-source.
+This patch corrects several logging and error message typos in nettest.c:
+- Corrects function name in log messages "setsockopt" -> "getsockopt".
+- Closes missing parentheses in "setsockopt(IPV6_FREEBIND)".
+- Replaces misleading error text ("Invalid port") with the correct
+  description ("Invalid prefix length").
+- remove Redundant wording like "status from status" and clarifies
+  context in IPC error messages.
 
-I *did* mean out-of-tree.
+These changes improve readability and aid in debugging test output.
 
-Out-of-source already works with the current patchset. It is the default setup of kunit.py.
+Signed-off-by: Alok Tiwari <alok.a.tiwari@oracle.com>
+---
+ tools/testing/selftests/net/nettest.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-> > For that tools/include/nolibc/*.h and usr/include/*.h would need to be
-> > installed into the build directory.
-> 
-> Out-of-source builds could be achieved by adding 'headers' as 
-> dependency, see below.
-> 
-> > ---
-> >  Documentation/kbuild/makefiles.rst | 12 ++++++++++++
-> >  scripts/Makefile.userprogs         | 16 +++++++++++++---
-> >  2 files changed, 25 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/Documentation/kbuild/makefiles.rst b/Documentation/kbuild/makefiles.rst
-> > index 3b9a8bc671e2e92126857059e985d6e5b2c43fd4..f905a6f77c965311c491cfd7ab3103185af7e82e 100644
-> > --- a/Documentation/kbuild/makefiles.rst
-> > +++ b/Documentation/kbuild/makefiles.rst
-> > @@ -970,6 +970,18 @@ When linking bpfilter_umh, it will be passed the extra option -static.
-> >  
-> >  From command line, :ref:`USERCFLAGS and USERLDFLAGS <userkbuildflags>` will also be used.
-> >  
-> > +Bulding userprogs against nolibc
-> 
-> Bulding -> Building
+diff --git a/tools/testing/selftests/net/nettest.c b/tools/testing/selftests/net/nettest.c
+index cd8a58097448..250189309e69 100644
+--- a/tools/testing/selftests/net/nettest.c
++++ b/tools/testing/selftests/net/nettest.c
+@@ -385,7 +385,7 @@ static int get_bind_to_device(int sd, char *name, size_t len)
+ 	name[0] = '\0';
+ 	rc = getsockopt(sd, SOL_SOCKET, SO_BINDTODEVICE, name, &optlen);
+ 	if (rc < 0)
+-		log_err_errno("setsockopt(SO_BINDTODEVICE)");
++		log_err_errno("getsockopt(SO_BINDTODEVICE)");
+ 
+ 	return rc;
+ }
+@@ -535,7 +535,7 @@ static int set_freebind(int sd, int version)
+ 		break;
+ 	case AF_INET6:
+ 		if (setsockopt(sd, SOL_IPV6, IPV6_FREEBIND, &one, sizeof(one))) {
+-			log_err_errno("setsockopt(IPV6_FREEBIND");
++			log_err_errno("setsockopt(IPV6_FREEBIND)");
+ 			rc = -1;
+ 		}
+ 		break;
+@@ -812,7 +812,7 @@ static int convert_addr(struct sock_args *args, const char *_str,
+ 			sep++;
+ 			if (str_to_uint(sep, 1, pfx_len_max,
+ 					&args->prefix_len) != 0) {
+-				fprintf(stderr, "Invalid port\n");
++				fprintf(stderr, "Invalid prefix length\n");
+ 				return 1;
+ 			}
+ 		} else {
+@@ -1912,7 +1912,7 @@ static int ipc_parent(int cpid, int fd, struct sock_args *args)
+ 	 * waiting to be told when to continue
+ 	 */
+ 	if (read(fd, &buf, sizeof(buf)) <= 0) {
+-		log_err_errno("Failed to read IPC status from status");
++		log_err_errno("Failed to read IPC status from pipe");
+ 		return 1;
+ 	}
+ 	if (!buf) {
+-- 
+2.47.1
 
-Ack.
-
-> > +--------------------------------
-> > +
-> > +Not all kernel toolchains provide a libc.
-> > +Simple userprogs can be built against a very simple libc call "nolibc" provided
-> > +by the kernel source tree.
-> > +
-> > +Example::
-> > +
-> > +  # lib/kunit/Makefile
-> > +  uapi-preinit-nolibc := $(CONFIG_ARCH_HAS_NOLIBC)
-> > +
-> >  When userspace programs are actually built
-> >  ------------------------------------------
-> >  
-> > diff --git a/scripts/Makefile.userprogs b/scripts/Makefile.userprogs
-> > index f3a7e1ef3753b54303718fae97f4b3c9d4eac07c..a1447c02b948901631098b585f5cf4d3ea383a57 100644
-> > --- a/scripts/Makefile.userprogs
-> > +++ b/scripts/Makefile.userprogs
-> > @@ -16,10 +16,20 @@ user-csingle	:= $(addprefix $(obj)/, $(user-csingle))
-> >  user-cmulti	:= $(addprefix $(obj)/, $(user-cmulti))
-> >  user-cobjs	:= $(addprefix $(obj)/, $(user-cobjs))
-> >  
-> > +user-libgcc     := $(call try-run,$(CC) -Werror $(KBUILD_USERCFLAGS) -lgcc -x c -shared /dev/null -o "$$TMP",-lgcc)
-> > +
-> > +user_nolibc_ccflags := -nostdlib -nostdinc -static -fno-ident -fno-asynchronous-unwind-tables \
-> > +		      -ffreestanding -fno-stack-protector \
-> > +		      -isystem $(objtree)/usr/include -include $(srctree)/tools/include/nolibc/nolibc.h -isystem $(srctree)/tools/include/nolibc/
-> > +user_nolibc_ldflags := -nostdlib -nostdinc -static
-> > +user_nolibc_ldlibs  := $(user-libgcc)
-> > +
-> >  user_ccflags	= -Wp,-MMD,$(depfile) $(KBUILD_USERCFLAGS) $(userccflags) \
-> > -			$($(target-stem)-userccflags)
-> > -user_ldflags	= $(KBUILD_USERLDFLAGS) $(userldflags) $($(target-stem)-userldflags)
-> > -user_ldlibs	= $(userldlibs) $($(target-stem)-userldlibs)
-> > +			$($(target-stem)-userccflags) $(if $($(target-stem)-nolibc),$(user_nolibc_ccflags))
-> > +user_ldflags	= $(KBUILD_USERLDFLAGS) $(userldflags) $($(target-stem)-userldflags) \
-> > +			$(if $($(target-stem)-nolibc),$(user_nolibc_ldflags))
-> > +user_ldlibs	= $(userldlibs) $($(target-stem)-userldlibs) \
-> > +			$(if $($(target-stem)-nolibc),$(user_nolibc_ldlibs))
-> >  
-> >  # Create an executable from a single .c file
-> >  quiet_cmd_user_cc_c = CC [U]  $@
-> 
-> Adding another hunk for scripts/Makefile.userprogs would allow to build
-> out-of-source:
-> 
-> @@ -39,5 +49,5 @@ $(call multi_depend, $(user-cmulti), , -objs)
->  # Create .o file from a .c file
->  quiet_cmd_user_cc_o_c = CC [U]  $@
->        cmd_user_cc_o_c = $(CC) $(user_ccflags) -c -o $@ $<
-> -$(user-cobjs): $(obj)/%.o: $(src)/%.c FORCE
-> +$(user-cobjs): $(obj)/%.o: $(src)/%.c headers FORCE
->         $(call if_changed_dep,user_cc_o_c)
-> 
-> But I am unsure if it is ok to add 'headers' as a build dependency for 
-> userprogs.  For me, it feels a bit odd, but I think it really makes 
-> sense here.
-
-Currently this dependency is encoded in Kconfig.
-If CONFIG_HEADERS_INSTALL=y then the headers are installed in the 'prepare'
-phase and already available when building any userprog.
-To me this seems like the easier and nicer implementation.
 
