@@ -1,260 +1,214 @@
-Return-Path: <linux-kselftest+bounces-33763-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33764-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 330CCAC381A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 04:53:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 068FDAC383C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 05:37:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 03A8C3B066E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 02:52:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7F655188F537
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 03:37:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1825C17A316;
-	Mon, 26 May 2025 02:53:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6240B1917D0;
+	Mon, 26 May 2025 03:36:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HxwNn8cY"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="rG+8xNaa"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2051.outbound.protection.outlook.com [40.107.236.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F65EEEBA;
-	Mon, 26 May 2025 02:53:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748227982; cv=none; b=U+SlBwLZYROUGdwZDp9ArdU8xWGgHjHaKNyu+8LQtRCuO8B9UrvRL6O4AQpsIF6iSGCQH/cs7cWPXh2ef75hy2N4aLlD8SCFQJTkFMp+S390VFktjajoti0PoKehMKr0sAzFaBNjDZxIJGWvG6oO34gDHFlXcM18u078z5BrylI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748227982; c=relaxed/simple;
-	bh=Ic3rldhFd7J/0KTpMZOiNrtnmtzUni0MW27IMQUHTm0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UP2ceDDPIWT+BhLZpoqu2dZZ6M2ZkKShn1J5ERJ9H3e9EeBmlR8Du02qAtLcIjT+rUsWQW8tLKyYcmk7ICduvhwzSgpB8o3X0FDE8b2WhpHyg7Aml1Ar2M3nVz6Do4RJQ9kFYOEyWHDahWdriItvdKi2UW6AGPF1AFxjIhLIPmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HxwNn8cY; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-234488c2ea6so6644355ad.3;
-        Sun, 25 May 2025 19:53:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748227980; x=1748832780; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ic3rldhFd7J/0KTpMZOiNrtnmtzUni0MW27IMQUHTm0=;
-        b=HxwNn8cYTu75b2Eo4dePgJBhyJLjGTsbZuQ3qtui8bEPMFcL4aR7ruuG0hrzZ33TxW
-         WeokqgkTctUNVd9DYrbxrqOCP8iKS9e4jDX6yZu5mHAp4XarFmQXLjL1NaxZE+o/KkhK
-         xJ7EG1tgxXbsJfykb4Cmg9aYXm/TvGt8v0Uv4oYWTTzfeSrRsRlHSX0eT5rxdl0H/wtb
-         c6CEgG+jZyzkrJJzIntrNtTm+MZEXLMNZPuO8yrrf1H8hPtZfy0d7WWNQjtrCmoi9fRO
-         WlPXcrKUE3ghx5FYeG+PE3eh96gIYPrKb6ojw4LGlIKPQx8RCYI6S98a1lNOHV7zyGpB
-         PQ9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748227980; x=1748832780;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ic3rldhFd7J/0KTpMZOiNrtnmtzUni0MW27IMQUHTm0=;
-        b=my341+NaDmXwO7Bg1o2ZITiCXRg3Uj4YTxfFKw36MYbr8BwCLwAQFo2B/93VKsZvYV
-         ZJtSKCXq+/fBYitLbY7xiEtFSh4RnZA20dmhXBObkcoi3JuQuFdBNzlDM/BKlfb2wmWQ
-         hitGtYiXmRZod6t53tcnUGfbUaJGIDGOYINo6Pt5UT/qTu1rfXVtRlnjO0sgX1piZ+cn
-         quT2+1xahla/NIBSZUQ+tq69lafTw2dqGG1vfophGsNmeEIz7JhxiIQmQxPS2oXYqVOS
-         +gOXDp0ZwM65Baso6S/q+xXdlNJe/0V6XD/bY0wbW4GzFuMHy4ngpo6z12AHF3ChYAa2
-         XIvA==
-X-Forwarded-Encrypted: i=1; AJvYcCVTr6+rg8m88PAYPDhN2z7SOP04lrp0sbIjQDDxfZ9oWE4GDGza7vpTwnCWCnLYU3Oy+S2UoIAkuTgc@vger.kernel.org, AJvYcCWmrqs4ptY7tqnwnK/eAYn2PdZ+b6Q4uIQURRhUplAApLQB8jDnDU/stP1MVEVhWEctYlSo803V5qF4sRg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxM6vnjSJUihxG/YdGUxjyBeTX4DrnSnkWFcJq6nciAhVr4buC5
-	AF1aSpy5mY7LXkBQFDFBaq4vjEjOIcQmDWIC2b4RHyKEFY0Hg9d3AAzaeJTgzQ==
-X-Gm-Gg: ASbGnctz5uHid3wq3q7oI2D2CVvL8RMWOTS7763mCH8gdemt1B88V3y23XL/dfqfk9X
-	bwt/XjeFdvgRqE5WBNTFBca+Es1VRUpVZxDFJamcMaQ9Z1QleOqmggAt82V211m13m1Wt9FMR+G
-	94GI8GCTIKBp11c+b9ubqxwNNGl0Nx3c00R4A59PkWTR4TcUyjYU/1vkO6KM1Hv4k7Jg4DN8pVz
-	CEBM0Appv/rPMoSDwtjO1feaUzdci6ie7NtSdFXPCOWww/ouDAu840wJxsVKsgHTeD+DFHkKjTd
-	GLha7pTEIjBdxaTNH5kYcIvHO+AUBSH8BPPFDeES6rOZS6Jn5S8=
-X-Google-Smtp-Source: AGHT+IFVqieLEMKMolbdEk2hFuaJxR+SVCi4ml94UHnzMDO+wHx4vUPHJjf5BqVxIrT2nDpGebPf3w==
-X-Received: by 2002:a17:903:4b30:b0:231:d16c:7f55 with SMTP id d9443c01a7336-23414ea1745mr116001445ad.0.1748227979506;
-        Sun, 25 May 2025 19:52:59 -0700 (PDT)
-Received: from archie.me ([103.124.138.155])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-231d4eedb92sm158201015ad.258.2025.05.25.19.52.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 May 2025 19:52:58 -0700 (PDT)
-Received: by archie.me (Postfix, from userid 1000)
-	id D0A084209E8A; Mon, 26 May 2025 09:52:56 +0700 (WIB)
-Date: Mon, 26 May 2025 09:52:56 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Hanne-Lotta =?utf-8?B?TcOkZW5ww6TDpA==?= <hannelotta@gmail.com>,
-	Shuah Khan <skhan@linuxfoundation.org>, shuah@kernel.org,
-	alexandre.belloni@bootlin.com
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v2] selftests: Improve test output grammar, code style
-Message-ID: <aDPXiE4z1_fejuy3@archie.me>
-References: <20250516084233.66594-1-hannelotta@gmail.com>
- <9d502cef-b2cb-4309-b268-7c75f8451833@linuxfoundation.org>
- <ff076589-4a93-4e4c-8e85-77499e27898c@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9948195811;
+	Mon, 26 May 2025 03:36:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1748230615; cv=fail; b=BduhRSKNFXB4gvM2pCS2hnntZBCsGqdVsif0tbhgC8yxcJ9zM5PjhtQ07K5PugKTab1lThtuR9+VyduxCgcvhzpqbA27mh1tIX/7AeQKKrY5iKBbPa8Texen2rf8+qgvzx02nWOQYZ1tCt/dZbmvFW/W2V0e6ZHFwYkGe3btsLE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1748230615; c=relaxed/simple;
+	bh=gBikVCO8qyAuPJ8AQNllBoODkE5DywT1gzjCfjVBVVk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=cCfSm3rZbmGg01ATdVAruQdF40at+8xLjuWP6na34tn+VDqtaTpebHyyWAbS6U9a7dzSTcSF81N2K9nqvarZ2Nwfv8DCNDJV8mIvm+Cfk3e1jD3vf0zfb07MJLUJiAYKndskJRu5gzPEiHmQlG6H9+6dcQi8fANAbKoRDnKTW+w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=rG+8xNaa; arc=fail smtp.client-ip=40.107.236.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=cyOutsl0JWDdUi3VF7Fbf6XYNd983YSiFIUvcFbSIxsKWZ4E6PtF+PVkPMa+ox7yk8Af/jYb3/UIcjv7IPJJJQfpjEaGN8z3GwksmThm2mDxJEnchROPa2UJ5JY4XZpWum38F2Vhc+r/fb52x97T84egFUubcPHej6YBun/lkC8WGqFMi3fzIJuW/set3BJapPWeOatbCEyfy2CBc+lTUF3mEydLN9kUsyJurUXCmRY+k0X4GNeb5ry6D6UrZ6PRfBqOanMSfmqJPiMY77UfMBfBPn7EuTHhxEhJ+l5oPjInk4t7lW4OxcQNT6N3O0sUypGc0vrPIeShI1ESgu9Leg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AcW/L6v+m+CrfjHxmtlsRoH+9g7AQSR4jQVgl1NCXok=;
+ b=YWI93GBpJHbad4AzFVb6m92G5KJiIgT/GGpN4+agPRR/zGkGHnZfCvsLblFJcStwqyqcLQLv7Q2vgDDWjbjXW12wGI4oR0ER3zgmpimtKDw+BQFUECeaUA4wqRxhvOjzRrYnTGQkEQz+8Pg0U/tl0zrosiCL6QiMoEJBQp6o/3FE4khYJlvWkVDaVPW4Ag2mGcPAe44i06tnikyagiOqGVRLWIazAD0Vfpjla9hCErNEBLDc44T6VsBFZhor4dJZnRBGrdguCJQRowXe/FvBJ1+s6SebKKQ4yeCnPgfrwKhwNZrBVBiEZxfB6QEJEQMNytCfkVcus3Y4IVR9zuhffA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AcW/L6v+m+CrfjHxmtlsRoH+9g7AQSR4jQVgl1NCXok=;
+ b=rG+8xNaa9F+5+WBOHbfSXgrc2X6ucBKfObO64gzRjAaLgcg5FEHYT82PL2sjILB1KLX9iS+JkPN5zxYguN6RWEy6PGe3h9Xk6ruVUktZ5d8g/WeBJtS2BLWAi1G40SbRM5nW4Mz6Bqk0pUGjUGFaYMGbb4OFTPjS+aMlshLEyyA=
+Received: from MW4P222CA0008.NAMP222.PROD.OUTLOOK.COM (2603:10b6:303:114::13)
+ by BL3PR12MB9049.namprd12.prod.outlook.com (2603:10b6:208:3b8::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8769.26; Mon, 26 May
+ 2025 03:36:48 +0000
+Received: from SJ1PEPF00001CE7.namprd03.prod.outlook.com
+ (2603:10b6:303:114:cafe::91) by MW4P222CA0008.outlook.office365.com
+ (2603:10b6:303:114::13) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8769.19 via Frontend Transport; Mon,
+ 26 May 2025 03:36:48 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ SJ1PEPF00001CE7.mail.protection.outlook.com (10.167.242.23) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8769.18 via Frontend Transport; Mon, 26 May 2025 03:36:47 +0000
+Received: from [10.85.47.107] (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Sun, 25 May
+ 2025 22:36:36 -0500
+Message-ID: <432193cf-e4bd-4cfb-a146-25b19c02d78e@amd.com>
+Date: Mon, 26 May 2025 09:06:35 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="IsOyzGd2L+s1ut4R"
-Content-Disposition: inline
-In-Reply-To: <ff076589-4a93-4e4c-8e85-77499e27898c@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 13/13] KVM: selftests: Add a KVM_IRQFD test to verify
+ uniqueness requirements
+To: Sean Christopherson <seanjc@google.com>
+CC: "K. Y. Srinivasan" <kys@microsoft.com>, Haiyang Zhang
+	<haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, Dexuan Cui
+	<decui@microsoft.com>, Juergen Gross <jgross@suse.com>, Stefano Stabellini
+	<sstabellini@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, Ingo Molnar
+	<mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Juri Lelli
+	<juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, "Shuah
+ Khan" <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton
+	<oliver.upton@linux.dev>, <linux-kernel@vger.kernel.org>,
+	<linux-hyperv@vger.kernel.org>, <xen-devel@lists.xenproject.org>,
+	<kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>, "K Prateek
+ Nayak" <kprateek.nayak@amd.com>, David Matlack <dmatlack@google.com>
+References: <20250522235223.3178519-1-seanjc@google.com>
+ <20250522235223.3178519-14-seanjc@google.com>
+ <2c52daad-0b64-48a9-8e73-d1aba977993b@amd.com> <aDB-2lcq4jJm9-OV@google.com>
+Content-Language: en-US
+From: Sairaj Kodilkar <sarunkod@amd.com>
+In-Reply-To: <aDB-2lcq4jJm9-OV@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PEPF00001CE7:EE_|BL3PR12MB9049:EE_
+X-MS-Office365-Filtering-Correlation-Id: 93188829-a743-42d1-a849-08dd9c068b78
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|36860700013|1800799024|376014|7416014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?a0EralROS043WjhCbHFOZ2lydDZJaGFDRUdGR3JxZVVwT3FYbTZJOUdvZGhZ?=
+ =?utf-8?B?YktPQXg5Zy9EMXcwMzFHaFNFOVBPc0UxUHBiUFlIeThjRmVaSW5IbDNKekpI?=
+ =?utf-8?B?bWFnbTR5VXZ6WEVoTUFRcWN2alVDbHlKRU9BRzA4bEU2Qlp5aXZZcVl4cTgx?=
+ =?utf-8?B?UHFqYm9Wbkx6ak9oWGpMRldMbmxsdy9OQ3ZxWVN6cTFSK2dmdy9pMFlHYVU5?=
+ =?utf-8?B?MnNUWHZRRFNYNXRhR3o4blBQbksxM1FkN2dqL0hjdHhpRE9oTkRwRmFKY1Na?=
+ =?utf-8?B?bUN6NG04UlBxM0tZczJqSEVOZ0FSNW44NFNLTWZMTDFCbERJQklhWnVvalFK?=
+ =?utf-8?B?RDJsOXMxL2txVWl5cGJqdFU1OEwwSGU2eGtWaVNweWdJWVRscWFsNDQyNFdL?=
+ =?utf-8?B?QTZBYW5Fd1RyY3pENHYzNmJsME0xOU5XOGovNmNkWmlkaDRIME5ncEFJQ0Fh?=
+ =?utf-8?B?N2MwT2JydW15VWFOQ255VGxxNXhiM2FxSnFFRzl6dVo3UEo4bGRnS3ZzbnFq?=
+ =?utf-8?B?SERiUGZpQnJndmRmbGc3eko5aFFhNGozUUI3d1U4TkorOHlpSFp3USs1NnZU?=
+ =?utf-8?B?TjNJTnVTYVhlR0dnRWQzODlNQWQxTk4vWTgvVjI5Vm5pTnJEam5mOHdBWVdK?=
+ =?utf-8?B?akE4MlVqRzM5R2UxTUZMSjFZbVA2T2hWQ1VHVHVkaC9mWWlldXFEdCs3NTk5?=
+ =?utf-8?B?Mkd4Z21aSXViUG92ZHJaUkZxeHlteFcyNnRiTEZEd2F6QWhURS9ESkNFbmlB?=
+ =?utf-8?B?N2FZT0tnTmZkdzU0eDFoSzhHbS8ydHJsWmRTN3FWdGlOVUhVa09ydSt5N3Fm?=
+ =?utf-8?B?UjIvZnpVYkluSVVUdENzMzE2ZGdtd1I5WHZ1bmIxSGNtRzhLaElWc1JWZjFt?=
+ =?utf-8?B?VW14b3dOVDMxU1B2bnQ3d0RBam5mcWwwUzdCRkZjWFJHUk1tTEN6aE9TTFhI?=
+ =?utf-8?B?OVUvUzg2d2N1QjZGdjI0QkxFMzZDTEZOanYxQWdJcURDT3J4bnFZVkxhajht?=
+ =?utf-8?B?dEF0cEs4SUhyRVNyVTErZzRqRS91ZXU2d2pDd3B4L0tJN2VBMEV6cDlidGJX?=
+ =?utf-8?B?NkhxQnM3dDAyQnNpVDhqTVM3Ly9QS25NMWtUa3IvbE0vM2pVMmlrOHFPampn?=
+ =?utf-8?B?LythNmVYUDN4ajFQWmdjbXpMbzdDUW1mUWpJb0E2aGdTc2dLZkNTdXU2MlBD?=
+ =?utf-8?B?TnFLakZzWUlROWJNWDRXL3Rsb0dDYWhzcTFIQ0pPakp6VEVkWWNub1A0dFpP?=
+ =?utf-8?B?MTRKSk1LRkYvYnJYb2gvTjRDbkx3ZFRqL3BtdUtoeUZmcFh2ZHBRMlJWSkRF?=
+ =?utf-8?B?R0xVOEVEU1crVEJlV0ZzVlFTcWtCQmt0NWpHdnp6S2JmN3hacmgvMG5jOS9E?=
+ =?utf-8?B?RWg3ZjhNMy9CRjhCS1Z4VGppKzdoYzdjbVhJREJ5ZGZobUFGTUtPVEFWZVUv?=
+ =?utf-8?B?OVhySWhOVzBORXdmajJxK25TWE5JWnlxb05IRUVkcGt3RElRek1ycStzbFFG?=
+ =?utf-8?B?NkFkTi8zb29TYUd1bGVWdXdtTENaQUFKOHpka0JSaUF0NVZZU2ZwVE9OM2M4?=
+ =?utf-8?B?UGVRWHdTWE5KNis4STd1Mm9pU0FjUU9MUnBPT3l0cnpPTTRLaGY1dXZEL0Qx?=
+ =?utf-8?B?czNURXVwUkFKS0JoMzFOalo5VzVNU3VYVHFtQnFSVkxzbGdicndNbU03dDla?=
+ =?utf-8?B?TnRReVQ3eFM2dysxNThZWUgwZU9YUWRKNjFRb3RMMFNLdWdqUDFGcDAyS0VN?=
+ =?utf-8?B?NldMbW5sWXNwb1JGYmxmd2lBUS9SRUZTNDdiT0l5MWtpc3YxaDFIdUdnQTFM?=
+ =?utf-8?B?dmFtWEtaVEhtdUxjMjFCZU5rSXpCMFBUREJQdytINW5BN3dWT1NhT3FrQnMr?=
+ =?utf-8?B?dGgvQThnVmJsd1VnVnIzRy83NlQ1bUdDWStmaVRoczk2WnhXSk9HZVFVcGQ4?=
+ =?utf-8?B?WFhOL3FiZUxsck5KZ2lObjZTNXlIcWM3ajgzd3IzU1pUVmNqeVpzTUduYm16?=
+ =?utf-8?B?bnNhWnJORGlUcVRZNGNuV21vbEFqYkl2Y2huT2dxTkwyYWIvbmQ3VktodCtF?=
+ =?utf-8?Q?nSkLAd?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(36860700013)(1800799024)(376014)(7416014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 May 2025 03:36:47.8886
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 93188829-a743-42d1-a849-08dd9c068b78
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ1PEPF00001CE7.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB9049
 
 
---IsOyzGd2L+s1ut4R
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Sun, May 25, 2025 at 09:27:31PM +0300, Hanne-Lotta M=C3=A4enp=C3=A4=C3=
-=A4 wrote:
-> Hello,
->=20
-> On 5/23/25 01:14, Shuah Khan wrote:
-> > On 5/16/25 02:42, Hanne-Lotta M=C3=A4enp=C3=A4=C3=A4 wrote:
-> > > Add small grammar fixes in perf events and Real Time Clock tests'
-> > > output messages.
-> > >=20
-> > > Include braces around a single if statement, when there are multiple
-> > > statements in the else branch, to align with the kernel coding style.
-> >=20
-> > This patch combines several changes in one including combining changes
-> > to two tests.
-> >=20
-> > >=20
-> > > Signed-off-by: Hanne-Lotta M=C3=A4enp=C3=A4=C3=A4 <hannelotta@gmail.c=
-om>
-> > > ---
-> > >=20
-> > > Notes:
-> > > =C2=A0=C2=A0=C2=A0=C2=A0 v1 -> v2: Improved wording in RTC tests base=
-d on feedback from
-> > > =C2=A0=C2=A0=C2=A0=C2=A0 Alexandre Belloni <alexandre.belloni@bootlin=
-=2Ecom>
-> > >=20
-> > > =C2=A0 tools/testing/selftests/perf_events/watermark_signal.c |=C2=A0=
- 7 ++++---
-> > > =C2=A0 tools/testing/selftests/rtc/rtctest.c=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 | 10 +++++-----
-> > > =C2=A0 2 files changed, 9 insertions(+), 8 deletions(-)
-> > >=20
-> >=20
-> > Send separate patches for selftests/perf_events and selftests/rtc/rtcte=
-st.c
->=20
-> Sure, I can do that. If I split this patch into two, is it OK to send the
-> other patch as a new one (without version history)? Or should I send both
-> patches converted to a patch series (v3)?
+On 5/23/2025 8:03 PM, Sean Christopherson wrote:
+> On Fri, May 23, 2025, Sairaj Kodilkar wrote:
+>> On 5/23/2025 5:22 AM, Sean Christopherson wrote:
+>>
+>>> +
+>>> +int main(int argc, char *argv[])
+>>> +{
+>>> +	pthread_t racing_thread;
+>>> +	int r, i;
+>>> +
+>>> +	/* Create "full" VMs, as KVM_IRQFD requires an in-kernel IRQ chip. */
+>>> +	vm1 = vm_create(1);
+>>> +	vm2 = vm_create(1);
+>>> +
+>>> +	WRITE_ONCE(__eventfd, kvm_new_eventfd());
+>>> +
+>>> +	kvm_irqfd(vm1, 10, __eventfd, 0);
+>>> +
+>>> +	r = __kvm_irqfd(vm1, 11, __eventfd, 0);
+>>> +	TEST_ASSERT(r && errno == EBUSY,
+>>> +		    "Wanted EBUSY, r = %d, errno = %d", r, errno);
+>>> +
+>>> +	r = __kvm_irqfd(vm2, 12, __eventfd, 0);
+>>> +	TEST_ASSERT(r && errno == EBUSY,
+>>> +		    "Wanted EBUSY, r = %d, errno = %d", r, errno);
+>>> +
+>>> +	kvm_irqfd(vm1, 11, READ_ONCE(__eventfd), KVM_IRQFD_FLAG_DEASSIGN);
+>>> +	kvm_irqfd(vm1, 12, READ_ONCE(__eventfd), KVM_IRQFD_FLAG_DEASSIGN);
+>>> +	kvm_irqfd(vm1, 13, READ_ONCE(__eventfd), KVM_IRQFD_FLAG_DEASSIGN);
+>>> +	kvm_irqfd(vm1, 14, READ_ONCE(__eventfd), KVM_IRQFD_FLAG_DEASSIGN);
+>>
+>> Hi Sean,
+>> I dont see any allocation for the GSI 13 and 14..
+>> Is there any reason for the deassigning these two GSIs ?
+> 
+> Yes, KVM's rather bizarre ABI is that DEASSIGN is allowed even if the VM doesn't
+> have a corresponding assigned irqfd.  The reason I added these early DEASSIGN
+> calls is so that there will be an easier-to-debug failure if KVM's behavior
+> changes (the racing threads part of the test abuses KVM's ABI).  I didn't add a
+> comment because the helpers already have comments, but looking at this again, I
+> agree that main() needs a better comment.
 
-Send both patches as a series.
+Makes sense, thanks for the explanation.
 
-> >=20
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 goto cleanup;
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
-> > > diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/
-> > > selftests/rtc/rtctest.c
-> > > index be175c0e6ae3..930bf0ce4fa6 100644
-> > > --- a/tools/testing/selftests/rtc/rtctest.c
-> > > +++ b/tools/testing/selftests/rtc/rtctest.c
-> > > @@ -138,10 +138,10 @@ TEST_F_TIMEOUT(rtc, date_read_loop,
-> > > READ_LOOP_DURATION_SEC + 2) {
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 rtc_read =3D r=
-tc_time_to_timestamp(&rtc_tm);
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* Time should=
- not go backwards */
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ASSERT_LE(prev=
-_rtc_read, rtc_read);
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* Time should not increa=
-se more then 1s at a time */
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* Time should not increa=
-se more than 1s per read */
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ASSERT_GE(prev=
-_rtc_read + 1, rtc_read);
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* Sleep 11ms to avoid ki=
-lling / overheating the RTC */
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* Sleep 11ms to avoid ov=
-erheating the RTC */
-> >=20
-> > This change removes important information. What is the reason for this
-> > change?
->=20
-> Well, it is less verbose and still informative (avoiding overheating). I =
-can
-> leave out this change, though.
+Thanks
+Sairaj Kodilkar
 
-s/then/than/ typofix should be kept.
-
->=20
-> >=20
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 nanosleep_with=
-_retries(READ_LOOP_SLEEP_MS * 1000000);
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 prev_rtc_read =
-=3D rtc_read;
-> > > @@ -236,7 +236,7 @@ TEST_F(rtc, alarm_alm_set) {
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (alarm_state =3D=3D RTC_ALARM_DISAB=
-LED)
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 SKIP(return, "=
-Skipping test since alarms are not supported.");
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (alarm_state =3D=3D RTC_ALARM_RES_M=
-INUTE)
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 SKIP(return, "Skipping te=
-st since alarms has only minute
-> > > granularity.");
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 SKIP(return, "Skipping te=
-st since alarm has only minute
-> > > granularity.");
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 rc =3D ioctl(self->fd, RTC_RD_TIME, &t=
-m);
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ASSERT_NE(-1, rc);
-> > > @@ -306,7 +306,7 @@ TEST_F(rtc, alarm_wkalm_set) {
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (alarm_state =3D=3D RTC_ALARM_DISAB=
-LED)
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 SKIP(return, "=
-Skipping test since alarms are not supported.");
-> >=20
-> > This one still says "alarms"
->=20
-> Yes, because "alarms are not supported" refers to alarms as a feature.
-
-Disambiguate (like "alarms feature is not supported")?
-
->=20
-> >=20
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (alarm_state =3D=3D RTC_ALARM_RES_M=
-INUTE)
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 SKIP(return, "Skipping te=
-st since alarms has only minute
-> > > granularity.");
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 SKIP(return, "Skipping te=
-st since alarm has only minute
-> > > granularity.");
-> >=20
-> > Isn't "alarms" consistent with other messages?
->=20
-> Yes, plural "alarms" would be consistent with other messages, and when
-> referring to them as a feature. The verb form should then change, either:
->=20
-> - alarm has ... OR
-> - alarms have ...
->=20
-> In the test, only one alarm is set - it makes sense to refer to it as
-> singular. I received feedback regarding this from Alexandre, because I had
-> plural form in the first version of this patch.
-
-I would rather write the message as "Skipping test since the alarm has ..."
-
-Thanks.=20
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---IsOyzGd2L+s1ut4R
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCaDPXiAAKCRD2uYlJVVFO
-o8rkAP9VqUjGfIEBUq/vNPbcUN3yntOSa1bmt36Z/68JmexfNwD/eqj+VVhucR13
-q03PPGj6Ewtp0eenY+3VDF/9xIaKigc=
-=oeJ+
------END PGP SIGNATURE-----
-
---IsOyzGd2L+s1ut4R--
 
