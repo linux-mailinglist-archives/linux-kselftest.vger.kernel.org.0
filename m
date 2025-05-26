@@ -1,182 +1,136 @@
-Return-Path: <linux-kselftest+bounces-33769-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33770-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C681AC3C15
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 10:53:03 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A7A9AC3C2E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 10:58:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D11C43B10C8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 08:52:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2019E7A2289
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 May 2025 08:57:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C4F51F2BAB;
-	Mon, 26 May 2025 08:52:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C6D31EA7EB;
+	Mon, 26 May 2025 08:58:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="KI2ed8D8"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="nBfqjNff"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2065.outbound.protection.outlook.com [40.107.92.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 762491DE2AD;
-	Mon, 26 May 2025 08:52:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.65
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748249545; cv=fail; b=QcT/2TPsac8adONi0zde/NDsp/y9/4q74tNkotniS98xTBbFUMiXjFryCzdqdy1/2R8h0VIjqOFOAEAuxHGPMLKOIeFEwE3JEG39zStb6amjeDeMLHhfFoWXz8feY20id/Ods2ikXz9JqkrwQgGU/p3gYu1G4h6jq/KLhpdibuI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748249545; c=relaxed/simple;
-	bh=h7uRSKB0H2NKIzR94aIXteAVwBotb3d07s6rBlWrxrg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=VLl2+8QKJevrfgLAjfrOI2lgw7NxhD4zjSM9Ut9MuVu3hvPiNGhL+XwfijbFR9HkXKlPjzMHmJwYb14/aibDiolennwbl8ieEEyfeASZlhHZ8RVFFHnzOcv6j655XlDBd5nxtRlwlruq2Cx812iHRHZ0QePXaJmcxM0KhuzOBJk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=KI2ed8D8; arc=fail smtp.client-ip=40.107.92.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=xZJ5q4K+1/5mjUTAdZTGb+ey+dEVTBlk2M0axseLZaXzGBWwp4IqxUnVlTajuMQyE1V7j4DvEmsoxtSauDT37GFHso6BaAXvOrVMC3AIofJST39I8HnQuCqber/Qw/BolxJm+pEiRHUQntw2xzHMyZwyJzeEf1JGcY6xy3Rd0z/y2+yhpcbvkm6oGztPaf40DiEi81xV5mV78U1pMcqKvox348BVwX6wHZyRcwDWAwfqeDHR8WnF2v7mTYM3ymBGuvUjM2WZizOKRmAi2HmhjCNkZ58KEWFL8SR3fjwt20AFakrhvhgnWInDQinPzTENpH2LPblS3/7J9N3w1yWRiQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zCVWm6aj10XvkEBP3F6pSIheRN+bS2GNzljGXYnaZ1k=;
- b=Jcp92uewmwrrC4nuKA/zZSIBcu4iYxmqI+UFOwVTdENH5V+BkxMSCpmbF3sUBYdKFYVw+zHQ0WdPrsLcnOak/lGIV3QPFVr1oAeoejr4DAO+ngAQz9nVRj85zX4AMOnBpcOEFY5+zkO0fkOgHfP9irXI4W+eFCSGP4WJEY0wRCZ+uzunf6n/bef9PfWNOwdacmD3JTbF/Ajy71PlJ7Iya92nCD/ycl/PA5WXLx11PYNdZTm6yhB7b/VcSwpkwNjUQD0j0NIZZwnMJZJwgKOeagPGEak+E7rD9s5Kf50FGZg0DF7PDOcvPDbmhmCM2lDZI03af9UyMg+FUS/PwTD04Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linaro.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zCVWm6aj10XvkEBP3F6pSIheRN+bS2GNzljGXYnaZ1k=;
- b=KI2ed8D87NcZ8Hi+sS2PSJM/fdfXyB6ioLmnsJG2+V2qWJZxzSPOstCx5aaIU1UZYl0QRkqqXxoXllO0UuszLNE0UlkYnDOuYM3K8ACZN0suxMwN3OOsDCA7wIucqRT8d4BsN6Fu/uWC5E2nsGS0z81OFz5umebj3PpBNu8K+Eg=
-Received: from MN2PR22CA0012.namprd22.prod.outlook.com (2603:10b6:208:238::17)
- by CH3PR12MB8728.namprd12.prod.outlook.com (2603:10b6:610:171::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8769.24; Mon, 26 May
- 2025 08:52:20 +0000
-Received: from BN3PEPF0000B076.namprd04.prod.outlook.com
- (2603:10b6:208:238:cafe::de) by MN2PR22CA0012.outlook.office365.com
- (2603:10b6:208:238::17) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8746.31 via Frontend Transport; Mon,
- 26 May 2025 08:52:20 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN3PEPF0000B076.mail.protection.outlook.com (10.167.243.121) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8769.18 via Frontend Transport; Mon, 26 May 2025 08:52:20 +0000
-Received: from [10.252.216.136] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 26 May
- 2025 03:52:16 -0500
-Message-ID: <76b4dd65-43a9-4d34-88bc-1632c08a9bb6@amd.com>
-Date: Mon, 26 May 2025 14:22:08 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 903141E47A8
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 May 2025 08:58:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1748249931; cv=none; b=PJrsBFopkImoVs8CYLWoV6pa42UKBfEgxjbVwnaD/XmkbybHUTExesR7LaLd7sg1njq6KsI1OahYwFE/zFwqahyEMmwbz3m7DD+F8b72/HSfk0bw4ZKm1vuAh+J2/fAeyPKYJBslTSe8Q5IFKo36pkbt7iOsFvhYnTVkwlPSY0Y=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1748249931; c=relaxed/simple;
+	bh=A07uMUlAiHODBnye6U6+ZYgmI+z5BqjupTHEKb1apD0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=WN6TlWrBi2cB2mLW2ptcaoxxeBHfUUxW4wyvMu0C2skmD3hJWf7wuhf6IcyDfkASJtFAIw14MJ288rWUDxEoh3k763qfwYfoV2txVkfjb0KG2mbAjdWicN+poDtP9VULOm0Zp5KyTo+mUTREMQhGzqzXwvRUxHS4QVll9OfW6f0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=nBfqjNff; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-442ea0b3a9fso388615e9.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 May 2025 01:58:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1748249928; x=1748854728; darn=vger.kernel.org;
+        h=in-reply-to:references:from:to:cc:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7XUa5QDzySuu6U8WB9K8OF+ZIZj9kEnHYCZp+dCaCR0=;
+        b=nBfqjNffw48hNkVyyQHtfWhCWLtfYgFnYlWzQxkgwUg1QVgDUfH9XpKxk+cOUvnn3g
+         IO4NuFbH15/FllezFedzKyq6v4jZkTFrzMIVGMorT1c/7reVH0HMY8Nz0YuVR5bcVmbb
+         2cYsdaUWh1i8uj+KivWANTASq1cxKAOyKd9hA6RY0Yh0COw9BO2AN9tbP4tIXopmWdOr
+         vd8Md2mx+PAJyt+XKTBrUa4maEOyVzugxAHU1ZQ8PjDSXzn4RTmGYVmL2OPWbec3tK7s
+         dOhESPB4+SQSYcav2M8frCWMcUsa5so2Kxplu5y0B8Tw/fsgpHC44Bnf6Ce9Gec8edEn
+         UqSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748249928; x=1748854728;
+        h=in-reply-to:references:from:to:cc:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=7XUa5QDzySuu6U8WB9K8OF+ZIZj9kEnHYCZp+dCaCR0=;
+        b=VULHUTdLhSlxtRThUku8hzDuM1p6fDLfQPZs4tc4cYtmeqtim7tX6fOM3WkiwE81gv
+         syKnN546hO/1HTGu58E5iaSmDF15tUeksxAEucuQXjt02CJ5Wl3jrZ5aq3zlZ+O8lX4p
+         xhgah67uJgzKblAh9BE1i2aliHKtzefvRhipX2I48J5Sj4gA32RZn1kVhPZ52PT5Qqr1
+         doYCAQfFIzOU2LIhLAbtlLFmV2FnETn9eSwckIgAYO7fSWE9uHxEbRqdttsx+wexcHcD
+         oLjbAJt2QCsH891bcczwYaizG1g6qErlWra2Od3+8vOCgH2drMgToyDHU0ZX+mqJlccm
+         NfrA==
+X-Forwarded-Encrypted: i=1; AJvYcCU6a9wIZr4vsx5gC4OYmUtqa9kHRGiRGj+lOJQ2JltkVtBrgf61SkfnY+uhOoVOhgkp2m4c5NobEDcGenNa2/s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzY/qcCbsma/c2sM6Lrg5JURvCnYrByaNvKjIx9+e0cN6GW6qdK
+	FEE7A8zib8tDy0lLYFgjuC3nay6MRkyH8oSAConmA+1iJhdFi/y1cw5wN0SMiVc5frQ=
+X-Gm-Gg: ASbGncs2UurUaYFLGwlUsfcElL1pZ1uNnJBz/qwwHijje+fXLorHXv4fuJA8TU0xNxB
+	KChHqYYmEEbmv1LmSEckXemYsfmgcnOB7AMWX7g2Yc4TKr5ww21r/9oDl7j2Tz0W7rTXN+mO2D9
+	/al5NgnSWqdy0EQ8ZVs/C92bCYK0bQnH5GTphr7frQPr/lH7br90JF59fcNIDv3CirHjtY9PP6p
+	EPC6MXG0G848w2WlB6wZYRSeutzCb8JaKtSelxPwJV3VJD13u9ipz0uU+XgmuYeJhpVAJPM6XlD
+	2IO026XX/k6UgeSi5EvL22N2uppSrZXRT/3oeqZTvr2cowGBtMpNMWHWtU0=
+X-Google-Smtp-Source: AGHT+IEdx9Lxmxr6Jj4a/VtrbY6n55+AjozaESSFCcKKfyGvvRTO9hEvIbHH5Dnsj/C495VBfSOibw==
+X-Received: by 2002:a05:600c:1c24:b0:439:9ec5:dfa with SMTP id 5b1f17b1804b1-44c938cb1e6mr27073595e9.7.1748249927727;
+        Mon, 26 May 2025 01:58:47 -0700 (PDT)
+Received: from localhost ([2a02:8308:a00c:e200:b85a:a7d4:fa4e:bb11])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a4d007bbccsm5654781f8f.89.2025.05.26.01.58.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 May 2025 01:58:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/cpufreq: Fix cpufreq basic read and update
- testcases
-To: Viresh Kumar <viresh.kumar@linaro.org>
-CC: <rafael@kernel.org>, <shuah@kernel.org>, <gautham.shenoy@amd.com>,
-	<narasimhan.v@amd.com>, <linux-pm@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20250430171433.10866-1-swapnil.sapkal@amd.com>
- <20250519075854.opnlhjlbybrkvd2k@vireshk-i7>
- <8a2149ca-a0fe-4b40-8fd4-61a5bf57c8b6@amd.com>
- <20250522094520.22zwevl6vgrjf3aw@vireshk-i7>
-Content-Language: en-US
-From: "Sapkal, Swapnil" <swapnil.sapkal@amd.com>
-In-Reply-To: <20250522094520.22zwevl6vgrjf3aw@vireshk-i7>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN3PEPF0000B076:EE_|CH3PR12MB8728:EE_
-X-MS-Office365-Filtering-Correlation-Id: be3dd064-05bd-40dc-832b-08dd9c329fe3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|376014|82310400026|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?eENjVTRvUWZRVDZGL3plZUtBTjJTdnBUYlZ4WnN3dzRsYUJva0d6KzZPSFRj?=
- =?utf-8?B?Ky9sTHF6WmdrTWJQeEp0cFVJdVR3TUU0SGMyTnp5UlhLWHZlM3kyZ3hwVHFL?=
- =?utf-8?B?QU0vcndxODl1bHVIdmt5VDFka29SUldWOGhjakw3K0lpc3d6MlhtR2cwWW5R?=
- =?utf-8?B?REhmbHZHTkMxNS9POUZZTy9rV0tBLy8wVmJJdCs2S25GSGxmSHMvZHVVenNo?=
- =?utf-8?B?Wmx6bUYyTk8wL0tZTzZIeExBWDNrY0VvbHhVR2V2dXFma2FLc3FOTVhtWC90?=
- =?utf-8?B?bDYyK3U1R3pXcVhRK1RhV3RKR1VLS0QycE84WUV0TXFGbkNSWit1SW1JSFJx?=
- =?utf-8?B?d0xvWDVRRmYxREk2bWM0R0F0N2hQbnd1OURHSjVqcytmZjFCYUFKUkFDVWRH?=
- =?utf-8?B?bzlhcUcxc0NkZHBEanBiNWdCc0lpS04xVTkzVzMrcWFUWUw4S0hGWWRhSHBB?=
- =?utf-8?B?SVNkYzl1YlQyQkp1UzZNSC93VjBaSlNhRFpTcDU1bSt0dnVULzlBTHJVaUZO?=
- =?utf-8?B?bVlYeVZEOU5HTndGYUxhQi8zM1BJV0tBRUdQYWoxeFQwamIzTlowMk5UaXZn?=
- =?utf-8?B?eXcycE1BMjN0dm1VbEphVTVqbXVORzgzV0Z1Q1VkY3pzOWY4TGpuaHJKZWI3?=
- =?utf-8?B?bVduMU9ETlgvcjdFd3I1Tmg0NFlQWGo4TVZPbDhodzZSMHZET2d4RzE3ZlNY?=
- =?utf-8?B?VHZGcllEb1NLNVFmMjVOaTZSOXFQOU1uYlZNdGRhNXIrcVliRnR2UklzY0g0?=
- =?utf-8?B?ZUdLcWpCeXpDbkJISXppTzZtL0tDKzVoKzlsYTk0VHpNZVNKZm9kSEQrWmZB?=
- =?utf-8?B?VEVMY3Y3RUxmMkp2T054WCtRUzBwbU5vZGw3M21rMTZIUkNXSHNWQTRkdjZD?=
- =?utf-8?B?ZWpNaEhUV0NSTEtubVR0SkJNTkpZd3grdUtadGtSSDRzVVF6aDVYL0I3TWV2?=
- =?utf-8?B?M0p3dU5wbHpHbzBaaUpkMFM4cVRIZzJCM3dTUXJFL1Zrem1HbDJzdVRvVllQ?=
- =?utf-8?B?UzRDL3JSd0ZzTnJqdmwyU2pETHFmNEZmcTR1eUVsNEtHc05ZdlZXQTlXRmE5?=
- =?utf-8?B?OTRwamg0TWIxaHptQTFCVFRDcys1dEtPVE9NRjhsL3I1Y29WaHZCYWN1aUp0?=
- =?utf-8?B?SjQvS25UWVcvRXRUNzRzdWdZaHRYbGhxeVhnSENKazMzbENiaU9HSTZ2QzNx?=
- =?utf-8?B?c2ozZXBzTmYzUzdCeEZ2QUN4QjIxa3VncFB2MjUzMlZPL1c0cDBnUjFxbmJX?=
- =?utf-8?B?cEIrYUFPTUxoMEFaWGJyemVHZDVoamRsQWVicWxXa2ZmK0RwU3F3eGdmcjhV?=
- =?utf-8?B?dTFWWHo2a3hzV2Jjb2JNSW5ScDl2dUJ3N3ZqZ0VJdktISWJMWW50TzhPVmxq?=
- =?utf-8?B?cVFPeDBRZDNUMGg4Z2thaWg3MHVYbFVjNWhCencxak1hNTlzZk8wbDc4U21P?=
- =?utf-8?B?YXQxblhnWFRkT1pqNjlUM2hCZEV4dXdvdXNiSkFUcEQwWkRqdDZ6RjlQbTFV?=
- =?utf-8?B?ZC9yV2VxaGFaTUcyREh1OHRHMlo3WXhheFZuYVo5RkxoeW1VcFIvRVQ1Vmtn?=
- =?utf-8?B?Z05GcnRSU3NYbGdqRUlaeUFTZEFxK3E1K3NXckYzNTg4eU9NQWJ0dWQwVW5y?=
- =?utf-8?B?VHNYSnNybU9wck8zZ0ZEaFFSY1VtQVAzTW5OdVE1L2hMeFdYWS9WaDM0SWV2?=
- =?utf-8?B?UmNrYW1VdmZZMnVpVUkyMWpObGswQS9NMUQ1RWZpcmdTTUFTbEkydHl1UjlJ?=
- =?utf-8?B?ZmJZR0E1Mm4zZER0R3NwWUtRUFFaeWJMMGVkZjRFUThHU0V3VEdQd2hQekFR?=
- =?utf-8?B?RTZIekdwSVpCY05POEVIZzNFZ3BaZXkrd3AreE1jWjBjSGs1TFBhOS9PYkli?=
- =?utf-8?B?bzQzSFlKTTN6K0FGbHN0aFlSN2V4UHlVUU1RcGJKMHpVYnRsWFNwUHJVVW1S?=
- =?utf-8?B?TldBZlExajArc3U3RVJzT0R1NVZqTDdwWUhZV0wvRW9Ga2w3QWZiMElOUzNl?=
- =?utf-8?B?TmpSRU51RGlCUlJBQkV5TlpYM1JpKzcwQjF3a3l0KzVPM21UYU1TbVJkQjBO?=
- =?utf-8?Q?GX0oKo?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(376014)(82310400026)(1800799024);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 May 2025 08:52:20.0835
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: be3dd064-05bd-40dc-832b-08dd9c329fe3
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN3PEPF0000B076.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8728
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 26 May 2025 10:58:46 +0200
+Message-Id: <DA5YVKW682V3.2DODRY4EDL3IW@ventanamicro.com>
+Subject: Re: [PATCH v8 13/14] RISC-V: KVM: add support for FWFT SBI
+ extension
+Cc: "Samuel Holland" <samuel.holland@sifive.com>, "Andrew Jones"
+ <ajones@ventanamicro.com>, "Deepak Gupta" <debug@rivosinc.com>, "Charlie
+ Jenkins" <charlie@rivosinc.com>, "linux-riscv"
+ <linux-riscv-bounces@lists.infradead.org>
+To: "Atish Patra" <atish.patra@linux.dev>,
+ =?utf-8?q?Cl=C3=A9ment_L=C3=A9ger?= <cleger@rivosinc.com>, "Paul Walmsley"
+ <paul.walmsley@sifive.com>, "Palmer Dabbelt" <palmer@dabbelt.com>, "Anup
+ Patel" <anup@brainfault.org>, "Atish Patra" <atishp@atishpatra.org>, "Shuah
+ Khan" <shuah@kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
+ <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+ <linux-doc@vger.kernel.org>, <kvm@vger.kernel.org>,
+ <kvm-riscv@lists.infradead.org>, <linux-kselftest@vger.kernel.org>
+From: =?utf-8?q?Radim_Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@ventanamicro.com>
+References: <20250523101932.1594077-1-cleger@rivosinc.com>
+ <20250523101932.1594077-14-cleger@rivosinc.com>
+ <DA3K95ZYJ52S.1K6O3LN6WEI0N@ventanamicro.com>
+ <9f9e2869-725d-4590-887a-9b0ef091472e@rivosinc.com>
+ <DA3OJ7WWUGLT.35AVP0QQDJRZV@ventanamicro.com>
+ <5dd587b3-8c04-41d1-b677-5b07266cfec5@linux.dev>
+In-Reply-To: <5dd587b3-8c04-41d1-b677-5b07266cfec5@linux.dev>
 
-Hi Viresh,
+2025-05-23T11:02:11-07:00, Atish Patra <atish.patra@linux.dev>:
+> On 5/23/25 9:27 AM, Radim Kr=C3=84m=C3=83=C2=A1=C3=85 wrote:
+>> 2025-05-23T17:29:49+02:00, Cl=C3=A9ment L=C3=A9ger <cleger@rivosinc.com>=
+:
+>>> Is this something blocking though ? We'd like to merge FWFT once SBI 3.=
+0
+>>> is ratified so that would be nice not delaying it too much. I'll take a
+>>> look at it to see if it isn't too long to implement.
+>>=20
+>> Not blocking, but I would at least default FWFT to disabled, because
+>> current userspace cannot handle [14/14].  (Well... save/restore was
+>> probably broken even before, but let's try to not make it worse. :])
+>>=20
+>
+> User space can not enable or disable misaligned access delegation as=20
+> there is no interface for now rightly pointed by you.
 
-On 5/22/2025 3:15 PM, Viresh Kumar wrote:
-> On 22-05-25, 14:07, Sapkal, Swapnil wrote:
->> Initially I tried the same, but it does not work properly with the root user.
-> 
-> Hmm,
-> 
-> Tried chatgpt now and it says this should work:
-> 
-> if ! cat "$1/$file" 2>/dev/null; then
->      printf "$file is not readable\n"
-> fi
-> 
-> - This attempts to read the file.
-> - If it fails, the cat command returns non-zero, and you print a message.
-> - 2>/dev/null suppresses error messages (Permission denied, etc.)
-> - This works reliably for both root and non-root users, because it actually tests the read action, not just permission bits.
-> 
+I mean setting default_disabled=3Dtrue and just disabling FWFT for the
+guest unless userspace explicitly enables the incomplete extension.
+We would blame the user for wanting mutually exclusive features.
 
-This looks clean. I will send v2 with this change.
+>                                                       I guess supporting=
+=20
+> that would be quicker than fixing the broader guest save/restore=20
+> anyways. Isn't it ?
 
---
-Thanks and Regards,
-Swapnil
+Yes.  The save/restore for FWFT is simple (if we disregard the
+discussions), but definitely more than a single line.
 
