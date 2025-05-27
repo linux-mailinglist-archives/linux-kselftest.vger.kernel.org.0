@@ -1,81 +1,45 @@
-Return-Path: <linux-kselftest+bounces-33839-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33840-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3BC1AC4ABA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 May 2025 10:52:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B961DAC4B39
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 May 2025 11:10:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9DA1417CA07
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 May 2025 08:52:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F54417D28B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 May 2025 09:10:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 144FE24BBEE;
-	Tue, 27 May 2025 08:52:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hammernet-be.20230601.gappssmtp.com header.i=@hammernet-be.20230601.gappssmtp.com header.b="cDkza7l3"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAC2924DD04;
+	Tue, 27 May 2025 09:09:25 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77F4FF50F
-	for <linux-kselftest@vger.kernel.org>; Tue, 27 May 2025 08:52:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 477E324DCFD;
+	Tue, 27 May 2025 09:09:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748335934; cv=none; b=BumiJ0RiFQxKx31OY5rh4dq/uMz4OqlDnUfU1tQyBm2d+oTUSJNo0eUDzCxsdtf6keX6q9SqL4sXYb44pPr7D0I0M/ICa39Zp/itXq72RRm48Q8UEGXQdOaMto4LfMBoXl6UDuAF2IZ7utimYXO/b91NY70GMtWaRKsW5Ba+UVo=
+	t=1748336965; cv=none; b=ZNNrcB+LSVqUY6IXcrrkE275eV+OgicBJ9dj2e/YGnLzZz70gVLE1ABunpLImZCRAdKhWwEB9GGfJspl5DeE896UjMS923zp+lUo7SRwFSFfoIv2z3jNMS+w0VmPJ/8GvCWN01wT4F9d1uxp35KZ7NHAN0eeq4Hj3l8/AvweJPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748335934; c=relaxed/simple;
-	bh=4mSKtba4yH/6S4y+/PV83qun/HcTtQ/B2r4C5DqnP1o=;
+	s=arc-20240116; t=1748336965; c=relaxed/simple;
+	bh=L9SJ6XIHO1/dhWjxSjRaAIMTyMX04beCIk3yi5amM5k=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LUGTARwvYGPJ+a4SgJe2ZdRMUk/kzBypcRTYHEA5s+xw6KZccR9JaSED9FJgCDvfqv6UlT1Ouas3s6l1Elyk8v/YXn0fDCLrD0BzRxCxl6c5M5nOqpQPACnKBGN2JD165V+yBT1FSsw8QEBTqCAImM/7UviAMiXjk3qBZ68b148=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hammernet.be; spf=fail smtp.mailfrom=hammernet.be; dkim=pass (2048-bit key) header.d=hammernet-be.20230601.gappssmtp.com header.i=@hammernet-be.20230601.gappssmtp.com header.b=cDkza7l3; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hammernet.be
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=hammernet.be
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3a363d15c64so2181313f8f.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 May 2025 01:52:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=hammernet-be.20230601.gappssmtp.com; s=20230601; t=1748335929; x=1748940729; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4mSKtba4yH/6S4y+/PV83qun/HcTtQ/B2r4C5DqnP1o=;
-        b=cDkza7l33Py6g4Coa2OrK61vrK0m+2jYKt1UnZ9oNEnaw70b2T0PyuoRqMoPpOsfHQ
-         0HLEW55OpncZBOY8nqxRR9u2PLQF2iuOB/ICte8vxXtBv7QWiRmoaOtervY6R6jA9QR0
-         m5AwMmlBwgfX6d5rJyEHr7K11HIbms2csz9WYeW27NliVCbL5uIfxn8fQkN599gEioxV
-         asvGpGGsJaUtE6n0Us0vLVkDEQDp/Y1x7lJGuMuICrQe8KHqPpRAIl4iNgR9R8g8kLlx
-         iLXXcI63cMjm6iMU49sF8Z8q0V9SRaob4Z1bKTWs7tqY24KkYc5kIakw4RD/xv5FsS6f
-         /h1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748335929; x=1748940729;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4mSKtba4yH/6S4y+/PV83qun/HcTtQ/B2r4C5DqnP1o=;
-        b=KyNT74CX9VwdCf84lEPzQa6XYidVTBdATyQq/QrO62dyNl97P3sHBYF0z5GAlGLcJS
-         7JgwRrDF1VJOuNvLf4mLQ8nX7zJAGtnXbdR4hoPEnbTLJIAFIuEYvjtjuYeCdD54cpLF
-         f6QgczpypPKLVAGt7l3bO5xRj6tr8z3G0YACAhKEAnznS68mdj6IqNVmCE7kCtB2GhV4
-         zh1b0o6vDjZa32AfXzuy/yKwEqsaqY1Ym0cXf4XhWmjjsqKkoihWjE4aK8jW3PxfsGiI
-         1TR+5D/4U/ZI5qt6+vetmdG7xQna7MdyEsG9s15QmCaguW0jVpjcvqg0arnqMFV9uQH8
-         Zt3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXdUosFmXkmmfOGDzZi1jfo0d1G5bHCbSU4NuwXhcRF06FMgO6moLphN5BHvzr0uks7eyhbcYbKzl/vfanDwEA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyy4y66aDKqFq/voXNFnnIZUG8TpIQ/Toefny8HS7CzNlHV097l
-	Tvxp6Uj6OGVHIgytxR4gb4JLOY9CGI9ngOUVz7X9UgrINLgnEUG0liz0H/YVcXTmTrodcgffjfN
-	gERRxPYE=
-X-Gm-Gg: ASbGncvDARk5SLq8qLxCUUCyGGQLAfecWi4Aq59V2ErjmzUp/JwIbo4HslRfQpzBpNh
-	PPw5U2GswGTewoyMUzLIVpAQkbeeCSDWqPvHG1l0i8KszYu8E1jaSLmBlK/qTJYhOW2j5fTOFgn
-	qAF0d0eor8yT3AjUO4UW49Rhgnr/7putToGdkvgpfzm4mN3R2GKUGbNPH3VR9s+LI3YskYmEyqA
-	vune3V5ysPe9BI5aw09LpkDzdyQJqf0PPk0PIQYroxnmccj31hvF/hAkLMjMUOtKsehK+B8aEIb
-	kqVgMO6toQsAhTMcodSrTQtwYXImPpdB3VjR6ZQjyAGuosTxbrOZrCjRwAGrCl+kZDE+qia5iR9
-	R056I0lyS6IBO0oNfmWwQ2BsRCmQ=
-X-Google-Smtp-Source: AGHT+IFfujMszzRhLDZ4PQR9OlTYbQFnFLu3AYpbNNyivRDUe3CYGLHt0XR6JINggLt7Mrt+OkN0Mg==
-X-Received: by 2002:a5d:64ea:0:b0:3a3:7753:20ff with SMTP id ffacd0b85a97d-3a4cb45f1f4mr10543773f8f.35.1748335928526;
-        Tue, 27 May 2025 01:52:08 -0700 (PDT)
-Received: from [192.168.3.93] (178-116-3-140.access.telenet.be. [178.116.3.140])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a4dc7e69c8sm4196245f8f.95.2025.05.27.01.52.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 May 2025 01:52:08 -0700 (PDT)
-Message-ID: <db649de3-f070-414a-8201-3a5406a4eaf7@hammernet.be>
-Date: Tue, 27 May 2025 10:52:07 +0200
+	 In-Reply-To:Content-Type; b=naFyHH2kH5pnW7VLaleFfisWOq4e0jLxTrpXGBl7iJLjjY+8cKrrMOH4tuHYShz44kzSJLn3/5+7ZiJmJhDcZjPPderNnpYxbnz+XPl6M80jGjCaZJVHQtJNLMlKaSIozp1eYE7d3FLqW9eribzyNzgn6QfWRrOpKEFNWRwWxVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4b66J50c3Xz4f3lDc;
+	Tue, 27 May 2025 17:08:53 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id D03DE1A1513;
+	Tue, 27 May 2025 17:09:19 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+	by APP4 (Coremail) with SMTP id gCh0CgDnSF0+gTVoOO+iNg--.59571S2;
+	Tue, 27 May 2025 17:09:19 +0800 (CST)
+Message-ID: <5535f49f-8903-4055-b99a-cf8b2d4666e1@huaweicloud.com>
+Date: Tue, 27 May 2025 17:09:18 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,40 +47,70 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: fix "memebers" typo in
- filesystems/mount-notify
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: linux-kernel-mentees@lists.linux.dev, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250513144816.72566-1-hendrik.hamerlinck@hammernet.be>
- <7e386efb-8f7b-4bc0-9ccf-784ddbdcce78@linuxfoundation.org>
+Subject: Re: [PATCH bpf-next v2 1/2] bpf, arm64: Support up to 12 function
+ arguments
 Content-Language: en-US
-From: Hendrik Hammernet <hendrik.hamerlinck@hammernet.be>
-In-Reply-To: <7e386efb-8f7b-4bc0-9ccf-784ddbdcce78@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Puranjay Mohan <puranjay@kernel.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Florent Revest <revest@chromium.org>
+Cc: Bastien Curutchet <bastien.curutchet@bootlin.com>,
+ ebpf@linuxfoundation.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com, Xu Kuohai <xukuohai@huawei.com>
+References: <20250522-many_args_arm64-v2-0-d6afdb9cf819@bootlin.com>
+ <20250522-many_args_arm64-v2-1-d6afdb9cf819@bootlin.com>
+ <8d184497-fecf-497f-8b4c-bcd4b0a697ce@huaweicloud.com>
+ <DA6T7OEF94IG.2BH2PWTCVEOTA@bootlin.com>
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+In-Reply-To: <DA6T7OEF94IG.2BH2PWTCVEOTA@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgDnSF0+gTVoOO+iNg--.59571S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+	VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYV7kC6x804xWl14x267AKxVWrJVCq3wAF
+	c2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII
+	0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xv
+	wVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4
+	x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG
+	64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r
+	1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kI
+	c2xKxwCF04k20xvY0x0EwIxGrwCF54CYxVCY1x0262kKe7AKxVW8ZVWrXwCFx2IqxVCFs4
+	IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1r
+	MI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJV
+	WUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j
+	6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
+	BIdaVFxhVjvjDU0xZFpf9x07UAkuxUUUUU=
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
+On 5/27/2025 4:45 PM, Alexis Lothoré wrote:
 
-On 5/22/25 23:34, Shuah Khan wrote:
-> Change the shortlog to indicate test clearly. Check a few logs
-> for this file for examples. Here is how the correct format looks
-> like:
->
-> selftests: filesystems: fix "memebers" typo in mount-notify
->
-> SZend v2 with this correction.
->
-> thanks,
-> -- Shuah
+[...]
 
-Thank you for the feedback. I have sent a v2 version of the patch a couple of days ago titled:
-`[PATCH v2] selftests: filesystems: fix "memebers" typo in mount-notify`.
+>>> +		/* We can not know for sure about exact alignment needs for
+>>> +		 * struct passed on stack, so deny those
+>>> +		 */
+>>> +		if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG)
+>>> +			return -EOPNOTSUPP;
+>> leave the error code as is, namely, return -ENOTSUPP?
+> Actually this change follows a complaint from checkpatch:
+> 
+> "WARNING: ENOTSUPP is not a SUSV4 error code, prefer EOPNOTSUPP"
 
-I did send it as a separate mail thread, which was probably a mistake.
-In the mailing list history I've noticed new versions being sent both as new threads and in the same thread.
-I also could not find a clear answer in the documentation. What is the correct way to do it?
+Seems we can just ignore this warning, as ENOTSUPP is already used
+throughout bpf, and the actual value -524 is well recognized.
 
-Kind regards,
-Hendrik
+[...]
 
 
