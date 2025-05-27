@@ -1,120 +1,165 @@
-Return-Path: <linux-kselftest+bounces-33841-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33842-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D884AAC4B4D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 May 2025 11:13:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B07CAC4B5C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 May 2025 11:19:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 596F2189B4A7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 May 2025 09:13:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F2633BCD54
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 May 2025 09:18:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E55E24DD14;
-	Tue, 27 May 2025 09:13:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A81322505A5;
+	Tue, 27 May 2025 09:19:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Xb2vwIHV"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="y75tqTOl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D54B2517B9;
-	Tue, 27 May 2025 09:13:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F27CD1B423C
+	for <linux-kselftest@vger.kernel.org>; Tue, 27 May 2025 09:19:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748337208; cv=none; b=hb/p28DMJMAlLA37fjD9RNAVKptRGp7IQBOM8xozFBKX1S36065McwvSThlt/Vtmb/n6/tjW2egspVtxJPCL0Hrf22F3ZIMzY76S3u97RtcngMBRdkAaDpbKBcLQqT6BW0ccLacqwq3M37QgREPzB41uR5yyGNmM39UrWiNKSmk=
+	t=1748337543; cv=none; b=Fly5IByli8IYDlJRFdQF/yo1KY5MkIFVGnuEvfiNEaT3eSUp/jGTjq/J7jlvbz0x8Q3n45cCXFPpsXvOzlE2VIESaVEaoWNqNWTu7xJisb5VHik9RIiAxmpzPAXkK7wYxgBGoqGr4ax+m7mz/VD/13p80RNsq2GtlnTTfLLCmOk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748337208; c=relaxed/simple;
-	bh=zAuOrHemnpeLyMupl1/xQld0ci1rYZ5ezTxSN+CP3lU=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=TQgLeFllz6dSDLCa1l0pRfSvVMsg2R1ps4Kjf3B3y/HotJaQQxLJ/WqocNJvHyLeSlcNu5/QoX8X98uzOyWDPrCtLA0DPkEpoiDTwGzZytwwCZte9rCrnwzzB3/GQmESDdOxBcWhJWVC0lw/yVQAdDhJ8KAY7arJsWCZw6e0yEg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Xb2vwIHV; arc=none smtp.client-ip=217.70.183.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 72BCA43289;
-	Tue, 27 May 2025 09:13:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1748337203;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Pg9vGp1YHkXIBdUOEtw6pvaguTK4l9KgzQWa/jWZ448=;
-	b=Xb2vwIHVkxdOdtkzTqahMB8Ob0dPQkUA3ReoZGJM1L+qUX1Vj82fd4mZq3PzhNP32O1Jkx
-	rxSGUArUiUNECAYK3qxLtiRJm5PaVkldh1ripu3EGGANBnyTGQYq5Z+wUniIQZpG3OSQyk
-	fxy6iFkZ1zsno/GpVwOBAXOScSRK5Mgsp+pYsnop4MUJoH89/jvP3BX3j5OL2l62j7QPHZ
-	TRfxyJo+oz1CBl0pusuylCCBt1fFB0hODm+XfsGwexCOGnNlrkkNuQndIhVhgWYEdQAkkB
-	hu1CaDW+KPMGWdK7cB6wT/wJ4KKgUCIsA72wVLDaMj7d8mqzcV15qqamYMzVfw==
+	s=arc-20240116; t=1748337543; c=relaxed/simple;
+	bh=ZcsiE8VsJGY/SJgauAXul2G1y5iuid8pqouGSPzQaOM=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=GgMKxWs7AXpzhB3exq9iWThjPvYRUs1WzlsoTF8Rm/bWZF98l5x+nmJKjkypkcK+eWKHFV6pxuBrDSUWIx6DwJ6T05w9VlWItppfOVWpHT28ycqxW+GzGrt3BXBS+cGq9T8l6VjPytd3qbt6SxKJJkXnGBZ2q5S1oB3ZhwJxa2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--yuyanghuang.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=y75tqTOl; arc=none smtp.client-ip=209.85.216.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--yuyanghuang.bounces.google.com
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-31147652b36so2218973a91.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 May 2025 02:19:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1748337540; x=1748942340; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5+6sb9vR4ahmHqnY0N3Qi6sQkZ9rrv10CM4PGUMbiSo=;
+        b=y75tqTOl3L7sMt7z8IJAZ8pl8dQMAAgt92wXANWZt3h2cA2dWqb3d1h9jT40Yv/8zw
+         HcPVrrNvuBDosv0ZWFYt1eke2wcaWoJAewwmz8d/0dv3//bUQWVm4z4rNM3IyeKTLr4W
+         2khLrZoSH8rYtJeVHxMHjR7rPeZ39tGDXN0rig34fEvMavirvjAgoVCNUBect0UIBvcw
+         ryhNdTz3yB6r7xoZtoPa+ic0vnq5N31HYeb73i77GS6owlXbiIXwe9EUDkbOy8k/H3uW
+         Iq6SGZhUkRNdqcE6uUI0XWQbB316x1viI0dzpl17RAVsukawduwvHfG7xZ8+etTJKowA
+         Q53w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748337540; x=1748942340;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5+6sb9vR4ahmHqnY0N3Qi6sQkZ9rrv10CM4PGUMbiSo=;
+        b=AoJ7g1AqQl3WUAo6zvxBevn6SVrS9SUHm+hgpLP3E3hFmk3BosWU1jVQPrMJU4uI6+
+         Z4JlUrS6Lv6bCrinhIpOLKGvDOxTSnunDRP30tuEm2bwWQOKaUIjTgL48JEknIsWd7IS
+         HAjqFg65BFlqfmQRhOESVOw3OkdOPPTi7IWFPlqEgPqxaw+Fi/qP9sx1vSAQk+xA3vub
+         SVZUxDAUHMy5Qkpq28NJdaaRFBcL629NB5eYfOFP/BbQ1/OyRZ+Q52eTfQy/GhDsgl+m
+         DzPibSdCZkU88LSaTDEISujepRk+kqUZm3wNJPSwtFZ3BX6dJAnDnzB8zvyAylb0SApt
+         Fhsw==
+X-Forwarded-Encrypted: i=1; AJvYcCX8wt6TfwhC2fxba5uyuVOagJWyODWE/y8JhxBGIx3I+lCIscs6wXdzmFFCP90cde6g1eP3vy/LRtas0RLsN/Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJrNvFz0T2DR2AeDLwLOxAirpSvX7FvKsFrn9VgJyKlEoDvhkw
+	TbxvSqEzA3LD5J2hViOHWgBUnyu799lLjsa5b6iT5zh+Jf7ltV2XuLsgLsweysvw6RV5M/LIEPp
+	6c9uNIiWm6GI1yuyoU4xs65U+yA==
+X-Google-Smtp-Source: AGHT+IEKkHTv4glwErR8dVXArbvKUI6+TJ+cA7jQ653G2DWqcR73lUfYneMuq9cYAAq8g6aexkFnA+JWaq+2vaSkJA==
+X-Received: from pjqq6.prod.google.com ([2002:a17:90b:5846:b0:311:4c94:2910])
+ (user=yuyanghuang job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:90b:3f0d:b0:2f5:88bb:118 with SMTP id 98e67ed59e1d1-31111657d33mr16592647a91.22.1748337540290;
+ Tue, 27 May 2025 02:19:00 -0700 (PDT)
+Date: Tue, 27 May 2025 18:18:55 +0900
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+X-Mailer: git-send-email 2.49.0.1204.g71687c7c1d-goog
+Message-ID: <20250527091855.340837-1-yuyanghuang@google.com>
+Subject: [PATCH net-next] selftest: Add selftest for multicast address notifications
+From: Yuyang Huang <yuyanghuang@google.com>
+To: Yuyang Huang <yuyanghuang@google.com>
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, 
+	"=?UTF-8?q?Maciej=20=C5=BBenczykowski?=" <maze@google.com>, Lorenzo Colitti <lorenzo@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 27 May 2025 11:13:21 +0200
-Message-Id: <DA6TTA76AU5Z.32W0O8EORBCQC@bootlin.com>
-To: "Xu Kuohai" <xukuohai@huaweicloud.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "John
- Fastabend" <john.fastabend@gmail.com>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong
- Song" <yonghong.song@linux.dev>, "KP Singh" <kpsingh@kernel.org>,
- "Stanislav Fomichev" <sdf@fomichev.me>, "Hao Luo" <haoluo@google.com>,
- "Jiri Olsa" <jolsa@kernel.org>, "Puranjay Mohan" <puranjay@kernel.org>,
- "Catalin Marinas" <catalin.marinas@arm.com>, "Will Deacon"
- <will@kernel.org>, "Mykola Lysenko" <mykolal@fb.com>, "Shuah Khan"
- <shuah@kernel.org>, "Maxime Coquelin" <mcoquelin.stm32@gmail.com>,
- "Alexandre Torgue" <alexandre.torgue@foss.st.com>, "Florent Revest"
- <revest@chromium.org>
-Cc: "Bastien Curutchet" <bastien.curutchet@bootlin.com>,
- <ebpf@linuxfoundation.org>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
- <linux-kselftest@vger.kernel.org>,
- <linux-stm32@st-md-mailman.stormreply.com>, "Xu Kuohai"
- <xukuohai@huawei.com>
-Subject: Re: [PATCH bpf-next v2 1/2] bpf, arm64: Support up to 12 function
- arguments
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-X-Mailer: aerc 0.20.1-0-g2ecb8770224a
-References: <20250522-many_args_arm64-v2-0-d6afdb9cf819@bootlin.com>
- <20250522-many_args_arm64-v2-1-d6afdb9cf819@bootlin.com>
- <8d184497-fecf-497f-8b4c-bcd4b0a697ce@huaweicloud.com>
- <DA6T7OEF94IG.2BH2PWTCVEOTA@bootlin.com>
- <5535f49f-8903-4055-b99a-cf8b2d4666e1@huaweicloud.com>
-In-Reply-To: <5535f49f-8903-4055-b99a-cf8b2d4666e1@huaweicloud.com>
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddtgdduleelleculddtuddrgeefvddrtddtmdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepggfgtgffkffvvefuhffofhgjsehtqhertdertdejnecuhfhrohhmpeetlhgvgihishcunfhothhhohhrrocuoegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepkefgfffhhefhfeegkefhffduhfehkeevffeluefhlefgfeeuveehvdekudfhheevnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemkeegvdekmehfleegtgemvgdttdemmeguieehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeekgedvkeemfhelgegtmegvtddtmeemugeihedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomheprghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeeftddprhgtphhtthhopeiguhhkuhhohhgriheshhhurgifvghitghlohhuugdrtghomhdprhgtphhtthhopegrshhtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprhgtphhtthhopehjohhhnhdrf
- hgrshhtrggsvghnugesghhmrghilhdrtghomhdprhgtphhtthhopegrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdhrtghpthhtohepvgguugihiiekjeesghhmrghilhdrtghomhdprhgtphhtthhopehsohhngheskhgvrhhnvghlrdhorhhg
-X-GND-Sasl: alexis.lothore@bootlin.com
 
-On Tue May 27, 2025 at 11:09 AM CEST, Xu Kuohai wrote:
-> On 5/27/2025 4:45 PM, Alexis Lothor=C3=A9 wrote:
->
-> [...]
->
->>>> +		/* We can not know for sure about exact alignment needs for
->>>> +		 * struct passed on stack, so deny those
->>>> +		 */
->>>> +		if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG)
->>>> +			return -EOPNOTSUPP;
->>> leave the error code as is, namely, return -ENOTSUPP?
->> Actually this change follows a complaint from checkpatch:
->>=20
->> "WARNING: ENOTSUPP is not a SUSV4 error code, prefer EOPNOTSUPP"
->
-> Seems we can just ignore this warning, as ENOTSUPP is already used
-> throughout bpf, and the actual value -524 is well recognized.
+This commit adds a new kernel selftest to verify RTNLGRP_IPV4_MCADDR
+and RTNLGRP_IPV6_MCADDR notifications. The test works by adding and
+removing a dummy interface and then confirming that the system
+correctly receives join and removal notifications for the 224.0.0.1
+and ff02::1 multicast addresses.
 
-Ok, then I'll switch it back to ENOTSUPP
+The test relies on the iproute2 version to be 6.13+.
 
+Tested by the following command:
+$ vng -v --user root --cpus 16 -- \
+make -C tools/testing/selftests TARGETS=3Dnet TEST_PROGS=3Drtnetlink.sh \
+TEST_GEN_PROGS=3D"" run_tests
 
+Cc: Maciej =C5=BBenczykowski <maze@google.com>
+Cc: Lorenzo Colitti <lorenzo@google.com>
+Signed-off-by: Yuyang Huang <yuyanghuang@google.com>
+---
+ tools/testing/selftests/net/rtnetlink.sh | 34 ++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+
+diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/selft=
+ests/net/rtnetlink.sh
+index 2e8243a65b50..9dbcaaeaf8cd 100755
+--- a/tools/testing/selftests/net/rtnetlink.sh
++++ b/tools/testing/selftests/net/rtnetlink.sh
+@@ -21,6 +21,7 @@ ALL_TESTS=3D"
+ 	kci_test_vrf
+ 	kci_test_encap
+ 	kci_test_macsec
++	kci_test_mcast_addr_notification
+ 	kci_test_ipsec
+ 	kci_test_ipsec_offload
+ 	kci_test_fdb_get
+@@ -1334,6 +1335,39 @@ kci_test_mngtmpaddr()
+ 	return $ret
+ }
+=20
++kci_test_mcast_addr_notification()
++{
++	local tmpfile
++	local monitor_pid
++	local match_result
++
++	tmpfile=3D$(mktemp)
++
++	ip monitor maddr > $tmpfile &
++	monitor_pid=3D$!
++	sleep 1
++
++	run_cmd ip link add name test-dummy1 type dummy
++	run_cmd ip link set test-dummy1 up
++	run_cmd ip link del dev test-dummy1
++	sleep 1
++
++	match_result=3D$(grep -cE "test-dummy1.*(224.0.0.1|ff02::1)" $tmpfile)
++
++	kill $monitor_pid
++	rm $tmpfile
++	# There should be 4 line matches as follows.
++	# 13: test-dummy1=C2=A0 =C2=A0 inet6 mcast ff02::1 scope global=C2=A0
++	# 13: test-dummy1=C2=A0 =C2=A0 inet mcast 224.0.0.1 scope global=C2=A0
++	# Deleted 13: test-dummy1=C2=A0 =C2=A0 inet mcast 224.0.0.1 scope global=
+=C2=A0
++	# Deleted 13: test-dummy1=C2=A0 =C2=A0 inet6 mcast ff02::1 scope global=
+=C2=A0
++	if [ $match_result -ne 4 ];then
++		end_test "FAIL: mcast addr notification"
++		return 1
++	fi
++	end_test "PASS: mcast addr notification"
++}
++
+ kci_test_rtnl()
+ {
+ 	local current_test
 --=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.49.0.1204.g71687c7c1d-goog
 
 
