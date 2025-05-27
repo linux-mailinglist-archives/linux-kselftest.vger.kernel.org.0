@@ -1,156 +1,120 @@
-Return-Path: <linux-kselftest+bounces-33885-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33886-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB186AC56EE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 May 2025 19:27:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20DF1AC59AB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 May 2025 20:00:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 47F031883A75
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 May 2025 17:27:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B491E188EC8F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 May 2025 18:00:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96B5D27FD69;
-	Tue, 27 May 2025 17:26:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 063C227F747;
+	Tue, 27 May 2025 17:59:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uZ9EiBdn"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ggt6+u75"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CE6726F449
-	for <linux-kselftest@vger.kernel.org>; Tue, 27 May 2025 17:26:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE31F1D6DC5;
+	Tue, 27 May 2025 17:59:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748366814; cv=none; b=EGIo/Tok936DAOnsuLhPyP73m+Jh3lFhBc/DJVSiws1vum4fiHnpjFQKZFHdokI3a0CjsGAI19beXjRFBQEJXxt5zpKUWaEEKQj3u3RKXuP3/yZzHGk6IGwHw6YTwFk5S24wOayXmMyekrptOKdKxq4+zM3X/FYsl3whqdz5UgE=
+	t=1748368798; cv=none; b=kWsH9BH8M87gsqvGuZKjtlLcaZlvV48PVOkMVzW1dBQDLnDxZuGl24vNjwc76ygMYc7tU5iSfDyQYc4slzb/pk889jUh/7pDH7FLYcO+BtYg+GPGU74L7N4k8LeFZss+x9489CyfqGtUlOzHO1HIkGT9AbrWxmIYzD6YP69hBCk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748366814; c=relaxed/simple;
-	bh=OwFNtM5RYwIt2cO5YB7MinCYHeC0TqnuHl7oHp5frJc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eapBlJ4tX2b+UODJBeORC9TwfRkOO1jr0E9lvez6IIrFF3c8pymch1R68mrKLKb0vaTWrjq+07kJF64llfFDDjiStFbFMGP3wLyf2bQvZSqp5OAAXuKxEETqyKxj+x3oAIWVgFuyCtgfdlfh7MbsHQnj7UWZTNvZ68kga7jtJ8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uZ9EiBdn; arc=none smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-54998f865b8so4220182e87.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 May 2025 10:26:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1748366811; x=1748971611; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ge83cQZDvnwGXmNV4VWDL33n4ztMUCoEodBwwkHhulY=;
-        b=uZ9EiBdnz1wue5oxSdbWB+IOdlX5I/p5lLB7eY4O/+Gkvb1qv0UbNU5DaPAq9MrC1M
-         DGfDh1Ap1hviEeuLAWExD/4OlaFexpcXw//jEmqqAiDg4GtfoFz4vCJJA9SNoAFIBO4/
-         Cog3cHmdpmYVulzq/cq4AnODFkICfg4htn12Xp9ePmTKuf05v2TByid/MP4Y7/IXOsfV
-         CPXBh1cA9DgvVUExHhEUQJGtaAB3CeWhwX7ZH344CdCpLLvgFgUaW6rQkKnk6UpIBclV
-         oyHMmHoVupjfD3132w1GUpxuyL1fGJWmAAfE5MXirq1XalcBkiSAlnhDIvftnL3itoDh
-         b8Og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748366811; x=1748971611;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ge83cQZDvnwGXmNV4VWDL33n4ztMUCoEodBwwkHhulY=;
-        b=g9uMfDwvIOisiRildI4hSP9Pl3MRf0RH/xqbFfKRclECnal3IPHs8BA4I9A1N5vYaX
-         uq4CbqtycQZUyiwzVBCoC/jKFBomGbHj/j6freU3bUla+rm0ZNWsDV6b1FQZKR6OHjNs
-         7koFnfGX+mdYeSeDxagTOSxzR0PGOTn4ATX4Z++TqZhCY/GZJa55WPQZIZCDX8rnG2HW
-         oJukhrsgJHOD6B+qHAA9Fv0n2HeWjOGritf+TJpOFrcqZdLrM0CugaO+xp0AO/BBrmhb
-         nq50AWu18CtZXB3h1uw3tGoc4wtrBntS/lzmfWEf/yGlmXKBV6eMRd9W+pM2E15c4RsH
-         i/ng==
-X-Forwarded-Encrypted: i=1; AJvYcCVqXtALfqIM3FZgUaIJ4tt41/5rnQ/b6yV5UiRtc5Vi3BDcLB+OrX5oJqndfYTSisWxCqzrYwNSHMZ9pWrvGxE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzCIxylLAGXHX243VgIwz99FaMhxf0SCZAbljGviiigW2IOPGJ4
-	rvMU6gCoUWjNlJjS9AxIYVBKkAHu5fZ9GFdEE9iwuHIkuG9UERhNV/wIJU8gDruO8RdKjT0py0q
-	3tFe7XMAkZofQ7vu0/kL/wPvwH3AWYPJMw4Cd22dM
-X-Gm-Gg: ASbGnculqZViKjr2rVG2iOz53qlmZh1KByGmVfspXVepkh0iCyX5zikWCVLRcFyPe0F
-	EGkp3PkrYXqM7ibUa9TaCjlOxwmaGK0OOcziEFaHdqC7i9W+kFdPSI+Hp/Sn/u5dqB08woqmyQ9
-	JOfrmfiQRBr90QOnn6A+VXqIrNYon9Ei8bQO4JKKBBYn4=
-X-Google-Smtp-Source: AGHT+IHQDkOSTVRIROJ+g7i1WPwyUVIKFbvtifpyRiMYJgBZVGOkUtWOB91Yxj7Taj/VjxKKSP5XcOpwZzb1xtZE/Xw=
-X-Received: by 2002:a05:6512:3d07:b0:550:e4a2:e0e0 with SMTP id
- 2adb3069b0e04-5521cbaec9cmr4595357e87.44.1748366810298; Tue, 27 May 2025
- 10:26:50 -0700 (PDT)
+	s=arc-20240116; t=1748368798; c=relaxed/simple;
+	bh=tGyF8P4S3EbpCGhv5Z7+NumLX4kyyVCYj56OYjztRUc=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=ic4wpnEZfcmDIY/inx16WITDLkGkNkzim1/WD6KafNqEf5st0Lff5g2UYfzTYg5H7vrONh4VonPv59SsHw7RnZj3CRu3JfGHMTUy3y32UKh3dgoXSkT71sQxkA4Pd3m1YwbWpcMQok9pghWMUE04UGuiTymrdSIuDZYiuM6xXs0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ggt6+u75; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 828BBC4CEE9;
+	Tue, 27 May 2025 17:59:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1748368798;
+	bh=tGyF8P4S3EbpCGhv5Z7+NumLX4kyyVCYj56OYjztRUc=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=ggt6+u75DuvvhATXL/Ewb/Tq5FV0I1Sxv6il87g5pmcWFTwGMNBYEIz0F+RpIpq2L
+	 y5xDFiwe5FhVeBpkceQMQDA11szxUtqBezuC4ejM7PnpXXCsvb/leNkeqUCU2jyP+L
+	 iCzGf9c30L1bTSveU3ZRMPLosVFHfbFNftZUkyWSFKCOrqpO+AsoItqhbJYktg9BPe
+	 XRpxjQziE+o8xnvHVP8IjsEfpwzKrvJi+Q0lDl1yoCFm69wfQApAUbYYYr2KkM4ovI
+	 f1XcwM6CypG/fOxjpYJsYlGkXCYiKKwY5NoWZgzMzSjIosmKx9ZvbILKzeTX9Ha16t
+	 X7BNVlEMOv7pg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB29F380AAE2;
+	Tue, 27 May 2025 18:00:33 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250523233018.1702151-1-dmatlack@google.com> <a2149117-7b52-4d18-8eb0-baf14e80ee06@intel.com>
-In-Reply-To: <a2149117-7b52-4d18-8eb0-baf14e80ee06@intel.com>
-From: David Matlack <dmatlack@google.com>
-Date: Tue, 27 May 2025 10:26:23 -0700
-X-Gm-Features: AX0GCFs7UkeAuRIPrTUv7pRJieaZK5xiuzysfdv4dchrDmafqztZf4XeVmWqJik
-Message-ID: <CALzav=dY53+zTrjwe3-XGHCDbU6i1e7RyoAfOsPuQMsDzczeGA@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/33] vfio: Introduce selftests for VFIO
-To: Yi Liu <yi.l.liu@intel.com>
-Cc: Alex Williamson <alex.williamson@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Vinod Koul <vkoul@kernel.org>, 
-	Fenghua Yu <fenghua.yu@intel.com>, "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, 
-	Adhemerval Zanella <adhemerval.zanella@linaro.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Wei Yang <richard.weiyang@gmail.com>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Takashi Iwai <tiwai@suse.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Pierre-Louis Bossart <pierre-louis.bossart@linux.dev>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	FUJITA Tomonori <fujita.tomonori@gmail.com>, WangYuli <wangyuli@uniontech.com>, 
-	Sean Christopherson <seanjc@google.com>, Andrew Jones <ajones@ventanamicro.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, Eric Auger <eric.auger@redhat.com>, 
-	Josh Hilke <jrhilke@google.com>, linux-kselftest@vger.kernel.org, kvm@vger.kernel.org, 
-	Jason Gunthorpe <jgg@nvidia.com>, Kevin Tian <kevin.tian@intel.com>, Vipin Sharma <vipinsh@google.com>, 
-	Pasha Tatashin <pasha.tatashin@soleen.com>, Saeed Mahameed <saeedm@nvidia.com>, 
-	Adithya Jayachandran <ajayachandra@nvidia.com>, Parav Pandit <parav@nvidia.com>, 
-	Leon Romanovsky <leonro@nvidia.com>, Vinicius Costa Gomes <vinicius.gomes@intel.com>, 
-	Dave Jiang <dave.jiang@intel.com>, Dan Williams <dan.j.williams@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v3 0/2] bpf, arm64: support up to 12 arguments
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <174836883250.1728518.5524041990135634472.git-patchwork-notify@kernel.org>
+Date: Tue, 27 May 2025 18:00:32 +0000
+References: <20250527-many_args_arm64-v3-0-3faf7bb8e4a2@bootlin.com>
+In-Reply-To: <20250527-many_args_arm64-v3-0-3faf7bb8e4a2@bootlin.com>
+To: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29_=3Calexis=2Elothore=40bo?=@codeaurora.org,
+	=?utf-8?q?otlin=2Ecom=3E?=@codeaurora.org
+Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, puranjay@kernel.org,
+ xukuohai@huaweicloud.com, catalin.marinas@arm.com, will@kernel.org,
+ mykolal@fb.com, shuah@kernel.org, mcoquelin.stm32@gmail.com,
+ alexandre.torgue@foss.st.com, revest@chromium.org,
+ bastien.curutchet@bootlin.com, ebpf@linuxfoundation.org,
+ thomas.petazzoni@bootlin.com, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kselftest@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ xukuohai@huawei.com
 
-On Mon, May 26, 2025 at 2:07=E2=80=AFAM Yi Liu <yi.l.liu@intel.com> wrote:
->
-> On 2025/5/24 07:29, David Matlack wrote:
-> > This series introduces VFIO selftests, located in
-> > tools/testing/selftests/vfio/.
-> >
-> > VFIO selftests aim to enable kernel developers to write and run tests
-> > that take the form of userspace programs that interact with VFIO and
-> > IOMMUFD uAPIs. VFIO selftests can be used to write functional tests for
-> > new features, regression tests for bugs, and performance tests for
-> > optimizations.
-> >
-> > These tests are designed to interact with real PCI devices, i.e. they d=
-o
-> > not rely on mocking out or faking any behavior in the kernel. This
-> > allows the tests to exercise not only VFIO but also IOMMUFD, the IOMMU
-> > driver, interrupt remapping, IRQ handling, etc.
-> >
-> > We chose selftests to host these tests primarily to enable integration
-> > with the existing KVM selftests. As explained in the next section,
-> > enabling KVM developers to test the interaction between VFIO and KVM is
-> > one of the motivators of this series.
->
-> interesting. Two quick questions:
-> 1) does this selftest support all the vfio iommu drivers (typ1 and
-> spapr_tce)? Maybe also the iommufd vfio_compat as well.
+Hello:
 
-This series supports the following IOMMU drivers [1]:
-  - VFIO Type1 IOMMU
-  - VFIO Type1v2 IOMMU
-  - IOMMUFD compat-mode with Type1
-  - IOMMUFD compat-mode with Type1v2
-  - IOMMUFD
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-I have not lookied at spapr_tce or any other modes, but I implemented
-the code in such a way that other modes could be added in the future.
+On Tue, 27 May 2025 12:06:02 +0200 you wrote:
+> Hello,
+> 
+> this is the v2 of the many args series for arm64, being itself a revival
+> of Xu Kuhoai's work to enable larger arguments count for BPF programs on
+> ARM64 ([1]).
+> 
+> The discussions in v1 shed some light on some issues around specific
+> cases, for example with functions passing struct on stack with custom
+> packing/alignment attributes: those cases can not be properly detected
+> with the current BTF info. So this new revision aims to separate
+> concerns with a simpler implementation, just accepting additional args
+> on stack if we can make sure about the alignment constraints (and so,
+> refusing attachment to functions passing structs on stacks). I then
+> checked if the specific alignment constraints could be checked with
+> larger scalar types rather than structs, but it appears that this use
+> case is in fact rejected at the verifier level (see a9b59159d338 ("bpf:
+> Do not allow btf_ctx_access with __int128 types")). So in the end the
+> specific alignment corner cases raised in [1] can not really happen in
+> the kernel in its current state. This new revision still brings support
+> for the standard cases as a first step, it will then be possible to
+> iterate on top of it to add the more specific cases like struct passed
+> on stack and larger types.
+> 
+> [...]
 
-[1] https://github.com/dmatlack/linux/blob/9832935d7a44aab725ff627c6acf22b8=
-a17d407f/tools/testing/selftests/vfio/lib/vfio_pci_device.c#L409
+Here is the summary with links:
+  - [bpf-next,v3,1/2] bpf, arm64: Support up to 12 function arguments
+    https://git.kernel.org/bpf/bpf-next/c/9014cf56f13d
+  - [bpf-next,v3,2/2] selftests/bpf: enable many-args tests for arm64
+    https://git.kernel.org/bpf/bpf-next/c/149ead9d7e3d
 
-> 2) I know Alex has a test suit as the below. Has this series referred
->     it?
->
-> https://github.com/awilliam/tests/commits/for-clg/
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-I was not aware of these tests, thanks for sharing the link.
 
-If we think the approach taken in this series makes sense, we could
-presumably port those tests to tools/testing/selftests/vfio/. I would
-be happy to help with that.
 
