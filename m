@@ -1,144 +1,156 @@
-Return-Path: <linux-kselftest+bounces-33869-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33870-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24E59AC51E4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 May 2025 17:23:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54296AC5214
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 May 2025 17:32:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B29B1BA24ED
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 May 2025 15:23:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DDF783AB170
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 May 2025 15:31:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0AC227AC41;
-	Tue, 27 May 2025 15:22:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAC2D27AC3F;
+	Tue, 27 May 2025 15:31:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K7N/JIhY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J2G0p1eU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EA1827AC26;
-	Tue, 27 May 2025 15:22:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F99B27A93D;
+	Tue, 27 May 2025 15:31:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748359361; cv=none; b=rDdWZepUyujb9099HzQshxGKw9pfTSXP9/4CvpHGGSvAWzaNzyAYj1CoPfuoORUb29vMx3OGcAz1GpudwZMLl0dEeQh8qvXVz8TXIf+nZMb43+dwuhXt848TJfXR82xlPcJwQVWJ0Btsn6wIcKKH/F8WcCXPWrTIuF4RDTsgR88=
+	t=1748359905; cv=none; b=OlTlFlQAH/VvbsXo7B7KNlLFNcvg+Ga44JKhGPSxGuu+do6Wd8/bP2xU74p2K+L6IC/nGNj20P22x+23xvRr39f0V0IksI+JGRfX1TqRxUzobhVffznFSNmHJnv35DKNg3ZLX8lTENOEH7fysAONvZGr+6l66OaForm6yMkb8aw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748359361; c=relaxed/simple;
-	bh=xFVApp8xTfR/YzA8SQhWfU8t8lZcJsWBKVg3yZcwNbM=;
+	s=arc-20240116; t=1748359905; c=relaxed/simple;
+	bh=iznhlCHEPeP5gtUawFfO/CMtIcM+gezphiFD8zog8f4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=e6R9o3Ae/5jBTiBmxSoog3sWc4V+39RZ7Hxu3Nuil6nWIX1Sq+LWt5YEkbpzAH1Jej0QhWYobxlm7nTBS6QdKCL0emtEtHMWCpM3MbgfmlAelg2FF03yrQq42s0SwN5NANIf8103POKyrxWdFaKb6KWAggZtRKdJbw+FdBzYNNI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K7N/JIhY; arc=none smtp.client-ip=209.85.214.170
+	 To:Cc:Content-Type; b=XcXYPVR0nCd31BSZVPdcRaNsc3+2NSGyvcBOE3gcApvVq1KmazKG1/VJofzv5gLgjjpedZ5okhtfeUgHx0bTmzjhnOdt3Ex5POFFvPnYnb8Y3iGXv6kLZmfhHLEvxwhxSC7ASYxKYp4q2/suzCh0dzwpBhrTZULulYy+JPiaT8c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J2G0p1eU; arc=none smtp.client-ip=209.85.208.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-231f39b1b7aso3129135ad.2;
-        Tue, 27 May 2025 08:22:39 -0700 (PDT)
+Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-30db1bd3bebso33553981fa.2;
+        Tue, 27 May 2025 08:31:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748359359; x=1748964159; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1748359901; x=1748964701; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xFVApp8xTfR/YzA8SQhWfU8t8lZcJsWBKVg3yZcwNbM=;
-        b=K7N/JIhYLLWF74Do7LKeHsBnGzqpN3J7lcH87N1ppBqlfNNASyb30ulTIbYX2vvSo+
-         cp/NHezpMp3qGVg/sC0D4uSCuBM0t+1yFY5YImM2ooYHJg+YxQfk9TbxWE5RzHBN5YiV
-         pyTPY0c8c53V8h+C8q36aicBiAi0pxdzOqgItnrfYoLzN7JaKrjHQybbqxIK68GPdG8z
-         EY0nghCu/oN81w1QyZX2kfNDDoK8k0xjRYjqsxONj3dK2xVaoIo5sotxHow8sMuIvq12
-         jEMWgRM0nKJrCZfXWFwtH760PYtH3Pjh0diUv+HTeJC+u6zbjSo6sUZP9bz2G11pK7R4
-         1ehQ==
+        bh=iznhlCHEPeP5gtUawFfO/CMtIcM+gezphiFD8zog8f4=;
+        b=J2G0p1eU4saE3xpl5AhH9Nc6rzSAldYMZwK7UrJYLwT0t9AUu6s3IRjwAeNbU+Ky1X
+         VhTkE+1bsec8kdLm3Ra8XLDSsZR8unXPdzFfO3IDhS98+0ZwNiEsblzURdWGV5ojg/Yh
+         gfoOXZZTrUd98fIQr3EKu9/h/jZi5TT7lnQJ1uEB11JxfqiPbOM1TnxqI6OukEHL8kvf
+         T5+l/gQ8y4+lGp7QkFBTweJDm7jpIL0ij9zurn3SfQYGYrD6S7zSf2/DGNiHRAzzQ6u4
+         eRGLssfgQTs2HgtIecGY3CtOmsJTzKDui9rKbn1qn4Hkss0lxX8c5vj6VDjfFC+g0X7e
+         ezBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748359359; x=1748964159;
+        d=1e100.net; s=20230601; t=1748359901; x=1748964701;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xFVApp8xTfR/YzA8SQhWfU8t8lZcJsWBKVg3yZcwNbM=;
-        b=AW3W96obosyQlA6HFhXpHDUVFNkKvIG6a0tK/VQz+ZjUVH+1JdUEiFocTmlew2BGTi
-         Xsf/yqtJFu8z8A+LFmEHxpFsBqlJ7jjocqjP9cMSCj2EJSIZva94H1uW5PtIkafxTYBt
-         HVqSO1cbuG92Vp5h8VFoMRY70dOwOae78mWelbaUWhkDOxLCFZWQ1Bk/I2MCWng/O51w
-         /qlbcm/vko2gU3TAwGlhhN/LBJMSIAapKv0ym/95Fi0drPpL4X6Tk5earHLwVDxWyB3L
-         SK0d4WSBFfU2WitJBlsiYrPszcaTagyZf4IHIqMn9FZvzAklTDCppyqUemKXQklmPpT9
-         zRsg==
-X-Forwarded-Encrypted: i=1; AJvYcCUILJhR+yLjmZcgsbflkPvkP9T3XF+HmQrBH0JZf/tUcvqUnMkBfZ8hrXfvqcpDZy8YWhotDTg2ONKnmvY+Pf0=@vger.kernel.org, AJvYcCVJBrpulZvF3foRQCppsRCav82zwJWqv+/6T+1xq5oPF6wFPD91OVVO4VUxI2LdVWZ7jBcCMzZoNRBuA7j0urHq@vger.kernel.org, AJvYcCXNz/I7ZleCk/xtGA/Xwl6sSToKKpezsOKuM0uNQfTsveQNGF2RCKuIly6H1075k5vGQfLc5G4PIGATK/A=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzp7tT9rtjfhRl7VQ/Oy5VXD0zpBjlluefj89nKZQj+JYW1JOGg
-	5AGqpD1++qc1uOCbpP7C09L5hG/NlqWhDzVGnRb/mgZZ3bfeMeGF2g4ZTw5AzztukcIrZPvbGla
-	aP2guKDnBWXjgf4yTo1mwNVvy6Finmrg=
-X-Gm-Gg: ASbGncvsR8Vuqp5vq9vicXxSomyg/JrEhVMJ/zIhB9Pkp2uBX04KN5i9mUBMie+KBT3
-	iWwHdgHtXfh8ysoqIBtgOAN2rFmEqrnHNLdQecpBpd42OtF+HVN9AWxwJxCoRjFw0hYWYTqmCBR
-	SFYjDjYljROQlyDKA3fHS72knlVnzvS5vP
-X-Google-Smtp-Source: AGHT+IHQ0WA1MTUyC6cHQOw0z+tsCUEH0shIicp1agCv9Ylpi4oiC765zmtaMYFB7Tkm8FdLcYHAnrnZmM6rCS/lHhg=
-X-Received: by 2002:a17:902:cf03:b0:21f:356:758f with SMTP id
- d9443c01a7336-23414f2f960mr82446905ad.3.1748359359182; Tue, 27 May 2025
- 08:22:39 -0700 (PDT)
+        bh=iznhlCHEPeP5gtUawFfO/CMtIcM+gezphiFD8zog8f4=;
+        b=hKMsvCk3Yl2WBdS4zR4Z9aldVAmpW0w3VxEeyGYIUsi22PbZwgJXQPlTAI/skl7ayK
+         jtQjZkVpx+8xOby9P/BghT9r1dNAow5naG79ugat91meGVn+mD/MS+4ZuAbA613g2pQD
+         x/SQpZhzH9lZCff4XQDIGZfq8tqLJnOM80oP8OOf58teyKsmfwKIZWcw+/NmX0oNjolg
+         gxeJWPiOYdEYd8la7GilBPlhr8+ZZsTx3bEbzgwx4XTC6V986zeey1liO2838t21rEFm
+         nJcDTMuofNqkqe7ZeUng3qKnok+sxYNSFbgwTwGr5qvirayt2jKUqZxJBEy23rAM/LkV
+         Djmg==
+X-Forwarded-Encrypted: i=1; AJvYcCUKjmM//ihtPaOGUISBXL5LScJFOWVHusmacciqSFOCmlUUn/AuHvBG6On3QmiW40JgtDUBLTdb0mg9/p05ys0/@vger.kernel.org, AJvYcCUozOWpUsmihg/igVWTc4CKTOPDvN69ZkItufiobMHIBWGGshuKHIcbbR7r2GuDphDETQyEWUz8xg8MSbE=@vger.kernel.org, AJvYcCV1Mqu6oxGqaF1CN/0aHp4zJcQ4hRgxw3rJfDjrjl+CLSGsqCO/qSn1nKp9cQmFbtHei+m6S3/foKTAdLLBESY=@vger.kernel.org, AJvYcCVKPanrK3IQkK84zIfKe3lopSayZ619m1HdKx4QZJmOUJSOeURBt2vGYPxk6sIpY9WdyQgNg643@vger.kernel.org, AJvYcCVZpb+PHe5WBxmJWCcogIMy9VEDCwri0MgTkUYeHa5vAURvRENCuCZbGvfL77J/svNUt95P06O7YaQh@vger.kernel.org, AJvYcCWE83ADzCK3YcCOQS958jaEvKpD9Q7fId1apQl4FD/r97HAU3c23tFJTDF2S5dWg4KPr/f3JH0fTmOUnXNh@vger.kernel.org, AJvYcCWtuI82HQZnS4hLyKK5tdSAmRen5paDEWf+8rsrjC3rjn+B493174xAjUfoObxKiyiewRLmNzBRyX5c@vger.kernel.org
+X-Gm-Message-State: AOJu0YxcnsgO7644Mv4HF9b48feyxBeJbhoBhPTNYBUlw+lq5hBZO8hu
+	XFmmq+vSTpKYAVF95Tf9AxT+g2qc0tGfDy5ftZmIsoOymoyiWhVxcHYWphc8e7KiX0L3MQAqMNf
+	STnCpzrl+3StyXZbD8pX/8wFyS/BUWAQ=
+X-Gm-Gg: ASbGnct3ta2nAo751gD2yw1L1bewghMFt7RzVigR660yajUD0XFMnha5GOp6PxR72fE
+	nM++rwCV2fXoRzInKTmFAzPfVLKOdFIMx8/Bhs0NZaz2phTHOsNFLXbzsfBmcfzLPbGoZZLklNg
+	eS3ZMctqXnTC7mcSelmH30UQXcZgDsfPtY1JWSsg+VILUsYDqW
+X-Google-Smtp-Source: AGHT+IGh7j3R2Lz5ku1NP2jO6jmUvppwAP/M8QfRt/BCMIbepGXx0xkMd+/B+0FfsH2Ts/09nLW8pSm9EZf3hMbUgb0=
+X-Received: by 2002:a05:651c:304c:b0:30d:895d:2fa5 with SMTP id
+ 38308e7fff4ca-3295ba248d3mr26953991fa.14.1748359900905; Tue, 27 May 2025
+ 08:31:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250502215133.1923676-1-ojeda@kernel.org> <20250502215133.1923676-3-ojeda@kernel.org>
- <CABVgOSm8T+_kXY78sioUHEcG7rYApfWK2Gfxkrvw94Dz57G0oQ@mail.gmail.com>
- <681912de.050a0220.383f17.18c4@mx.google.com> <CABVgOSnqtxwYQBbed_-TYr6D3BZJ=MT3KVv-eXUFbnRm1UyETw@mail.gmail.com>
-In-Reply-To: <CABVgOSnqtxwYQBbed_-TYr6D3BZJ=MT3KVv-eXUFbnRm1UyETw@mail.gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 27 May 2025 17:22:26 +0200
-X-Gm-Features: AX0GCFuo2q6SOgnXa03Y5boBAZLUrzMqZnJGPrSsiqpZAwCDDg2s1k_ev0Vzb3E
-Message-ID: <CANiq72kSjCueyXQBONE+nOOiHd-AFTu91N55a=pu07Z6iNjyjQ@mail.gmail.com>
-Subject: Re: [PATCH 2/7] rust: kunit: support checked `-> Result`s in KUnit `#[test]`s
-To: David Gow <davidgow@google.com>
-Cc: Boqun Feng <boqun.feng@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Rae Moar <rmoar@google.com>, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, patches@lists.linux.dev
+References: <20250524-cstr-core-v10-0-6412a94d9d75@gmail.com>
+ <20250524-cstr-core-v10-3-6412a94d9d75@gmail.com> <DA66HHUA8ANF.BI2FH7POFSRJ@kernel.org>
+ <CAJ-ks9kmDiOV_qH_s-r4Z4iQf2k6H7ZnqOf5okaQxWWxrj5Deg@mail.gmail.com> <DA6GUB3YOVBD.RWGBCC8CTE7K@kernel.org>
+In-Reply-To: <DA6GUB3YOVBD.RWGBCC8CTE7K@kernel.org>
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Tue, 27 May 2025 11:31:04 -0400
+X-Gm-Features: AX0GCFt3TZm7A3lWw22HaGxbcPpRtWDbLI6U-f3H-j7VP2POqxnjTzuj9-Y7MDw
+Message-ID: <CAJ-ks9mCZ5rKUFmkM=KPdw=gALjCjdMrMzedu89w7TxwvPyREg@mail.gmail.com>
+Subject: Re: [PATCH v10 3/5] rust: replace `CStr` with `core::ffi::CStr`
+To: Benno Lossin <lossin@kernel.org>
+Cc: Michal Rostecki <vadorovsky@protonmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	Trevor Gross <tmgross@umich.edu>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
+	Danilo Krummrich <dakr@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
+	FUJITA Tomonori <fujita.tomonori@gmail.com>, Rob Herring <robh@kernel.org>, 
+	Saravana Kannan <saravanak@google.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Andrew Lunn <andrew@lunn.ch>, 
+	Heiner Kallweit <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Jens Axboe <axboe@kernel.dk>, 
+	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	dri-devel@lists.freedesktop.org, netdev@vger.kernel.org, 
+	devicetree@vger.kernel.org, llvm@lists.linux.dev, linux-pci@vger.kernel.org, 
+	nouveau@lists.freedesktop.org, linux-block@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 6, 2025 at 8:33=E2=80=AFAM David Gow <davidgow@google.com> wrot=
-e:
+On Mon, May 26, 2025 at 7:03=E2=80=AFPM Benno Lossin <lossin@kernel.org> wr=
+ote:
 >
-> FWIW, having out-of-memory situations trigger a test failure is
-> consistent with what other KUnit tests (written in C) do.
+> On Tue May 27, 2025 at 12:24 AM CEST, Tamir Duberstein wrote:
+> > On Mon, May 26, 2025 at 10:56=E2=80=AFAM Benno Lossin <lossin@kernel.or=
+g> wrote:
+> >>
+> >> On Sat May 24, 2025 at 10:33 PM CEST, Tamir Duberstein wrote:
+> >> > `std::ffi::CStr` was moved to `core::ffi::CStr` in Rust 1.64. Replac=
+e
+> >> > `kernel::str::CStr` with `core::ffi::CStr` now that we can.
+> >>
+> >> What's this supposed to mean?
+> >
+> > It means that kernel::str::CStr was introduced before core::ffi:CStr
+> > was available. I didn't check this before, but it is indeed true - see
+> > https://github.com/Rust-for-Linux/linux/commit/faa3cbcca03d0dec8f8e43f1=
+d8d5c0860d98a23f.
 >
-> There's both advantages and disadvantages to this: on the one hand,
-> it's prone to false positives (as you mention), on the other, it
-> catches cases where the test is using an unusually large amount of
-> memory (which could indeed be a test issues).
+> I see, then just write that and mention the commit.
+
+=F0=9F=91=8D
+
+> >> > C-String literals were added in Rust 1.77. Opportunistically replace
+> >> > instances of `kernel::c_str!` with C-String literals where other cod=
+e
+> >> > changes were already necessary; the rest will be done in a later com=
+mit.
+> >>
+> >> Similarly this, the message should explain the motivation for the
+> >> change, the change itself and can include additional information.
+> >
+> > The motivation is implied (that using standard types is preferable to
+> > having custom ones; this is also implicit rather than explicit in
+> > https://github.com/Rust-for-Linux/linux/issues/1075), but I can
+> > sharpen it.
 >
-> My go-to rule is that tests should fail if small allocations (which,
-> in the normal course of events, _should_ succeed) fail, but if they
-> have unusual resource requirements (beyond "enough memory for the
-> system to run normally") these should be checked separately when the
-> test starts.
->
-> That being said, I definitely think that, by default, an `Err` return
-> should map to a FAILED test result, as not all Err Results are a
-> resource exhaustion issue, and we definitely don't want to mark a test
-> as skipped if there's a real error occurring. If test authors wish to
-> skip a test when an out-of-memory condition occurs, they probably
-> should handle that explicitly. (But I'd not be opposed to helpers to
-> make it easier.)
+> Please add this information to the commit message.
 
-Yeah, agreed.
-
-There may be value in differentiating errors coming from `?` vs.
-`assert!`s -- i.e. the discussion in the other thread. It could even
-be a different error state if that was valuable -- though I think over
-complicating is not great either.
-
-By the way, before I forget to write this down: I talked to Alice
-about this back when this discussion happened and she suggested having
-a `Result` that carries extra information -- the location. I was
-worried about the added cost of doing that in all cases (i.e. for
-every `Result` in the kernel), so I suggested doing that but opt-in,
-i.e. with a Kconfig option that would be in e.g. the debug menu. Then
-people could typically run their debug kernels and things like KUnit
-with it enabled, but production kernels without it. Then later on, if
-it proves useful for other things, we could try to figure out ways to
-do it without too much cost.
-
-Cheers,
-Miguel
+=F0=9F=91=8D
 
