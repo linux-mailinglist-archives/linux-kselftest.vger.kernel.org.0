@@ -1,113 +1,161 @@
-Return-Path: <linux-kselftest+bounces-33856-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33857-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 017FBAC503A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 May 2025 15:51:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BD7CAC504F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 May 2025 15:56:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 961E33A6505
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 May 2025 13:51:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F1E8517BE54
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 May 2025 13:56:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3AB02750EC;
-	Tue, 27 May 2025 13:51:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27FE827602C;
+	Tue, 27 May 2025 13:56:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PsA3NYur"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CCUiOMhd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3435D274FD9;
-	Tue, 27 May 2025 13:51:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A337B134CB;
+	Tue, 27 May 2025 13:56:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748353897; cv=none; b=ClguTCSov6jEzU6h8L0UcndsEegDRBE2HYBUiKLuyn+r/KlIVcECAxfxjCEckZOEcQzqxO8rKVk3V0HrMCOTe6WG21ITIupv96wO6c1vOxjfcO/m/NpnVN20QpIle1wiscuIV0iJqSMTkmYMlIjlEgvIUvNa+mzi7bwf4xMb6JA=
+	t=1748354183; cv=none; b=KW+MSicXPJKVHn4QZL/GCx4F63nJywRU13sS1Hc8Yc1VvpStV9CyQf26Ju0Uv4pbAH9C/RCH9Zr42UZIGoutgQDDv4XrvjMHnzjuIoNjCvPyBtKgvYN7QCLnmS0Z1T4NgjS1icDI6y85kkEYasJT6bOm6lQ46Hz4AZ69gT2edWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748353897; c=relaxed/simple;
-	bh=7F1ee+yy/Njni7Dw2zSyIXqtdK6yXJhzoen+bfGcQ68=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ezqWbBTNPUmuOTgOUNZMPjpNWqbISrWk3PYMwOF7+uUjDX+Lm7DoEqohUB4IXBnzSEUus1uYWC3e+sZQ8dWv96eRWAoJ8sogzwxEa0dbXNgNdJ796jaX8skH5ys260eI+WPaefzDnqqrWSLwGqn608Sw/UoVlEb/BnG0x4KeuaE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PsA3NYur; arc=none smtp.client-ip=209.85.215.169
+	s=arc-20240116; t=1748354183; c=relaxed/simple;
+	bh=wMlcAUTr2JWpW/Jw3FrSvD4HubPhNV5PvBq4p8YRk00=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=ReEu3iL0NL76zjnGqMDGnsFm3KU1VifpxBNHIGqAbk3xXt+t+UFxGSlGm+LONiJ9CfedBzdHmA7qiTtd8DLupS0B7kWrRWt8BAsW4yHQoXJaGluBpJAq95ol3HqgAFR5C2iJpFlZUhL85aegFTA6dNrDcmNT+gtuo6owdbf8wFs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CCUiOMhd; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-b26ed340399so355760a12.2;
-        Tue, 27 May 2025 06:51:35 -0700 (PDT)
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2346765d5b0so19345465ad.2;
+        Tue, 27 May 2025 06:56:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748353895; x=1748958695; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1748354177; x=1748958977; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7F1ee+yy/Njni7Dw2zSyIXqtdK6yXJhzoen+bfGcQ68=;
-        b=PsA3NYur8KJIrZv559PYgIeX2mhFNpgo7c3xZTqtCsr+bjIjuNQACrPMOzgjTAldaJ
-         0jC2+Vv5y1AKDxlAXt3K4HpYOgaXOGqIt/kJRYsEl7xKRak4i/dnFkMc5Mo/AbGMsxhs
-         KjGINLQAsYlm3mHxVrGG4JYfKyC0xOGd0Os6ARUvzZgTAP/G5xldz7TUikzrbHLDyONR
-         yvGFUm2H6LosBk2mXhRhDeuy6hpgTE6zR2ZBgZXYp6cNXDPYRh9WES/+Ggk8LHQbeyMu
-         N7y0DFUULJTLxR/+UhKdTFRHKw6cTNCZE+KIBlplBjMgOWDSyd7nkBiBrbwtXIeam8cB
-         TqGw==
+        bh=XnktFiXJXJodN0pB61aJG59CK1E9b68p2VWpKi9y8vw=;
+        b=CCUiOMhddQUodpu/cXeo/oyESSX+rawGMqih2vlfV9uFyENsCdq0hQS28+nm1VLoYY
+         /z5WKuzaU+KQWjt8i1ULG5ZXtt3ao42iz8/p6K9rqCv9WFkWfYHRaZpTzlxldxJgqgp9
+         GbsB+d2x5w/GV1aqgTc22c8Mk6QIPv6GmMn+glQMYtFSyLfgeb6MPWereggmtK95cNvO
+         a03+HMvKiHB3w/ltOUKH4fLX4BxvbeJTvogsBqlCXR9oCbeGNPB7U6YRQiQp0ivepV8X
+         1LSKFQ7vjtVZccWcBMkW9gOeSSu8X/DIef67ybN8U8B+VeivBHwvA6o+bHjdGexkKwC/
+         Rzeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748353895; x=1748958695;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1748354177; x=1748958977;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7F1ee+yy/Njni7Dw2zSyIXqtdK6yXJhzoen+bfGcQ68=;
-        b=g9E+hg+c+ho8G9LDYFqWtu8mAkyzyT40OvPBEwfF3wKdprALe9GVd49/jdtMQpeFVM
-         oBxES3+IHpYpyFyKvEvEeuQWSi+t3nLduXhQCXjAgrT/VgKMSiiw2GkgAy6qpKyxd2tX
-         EEaZSOZM9E4MdYRaUFQUJn4mWvdEYJIrY4EOQzFP++xIJtmFFWobf6MchqKfi+Mh9RKz
-         b42VOlmk/pGrbxAHuM7uhgolw5Xy5MxNr/ghyrsEI1P3fxPaPrRKfeKInlxvSAffPOBJ
-         ullMfzwxZe6PEUb7iqtqftBoFukLR9U0IrIt3H6uy7k2CbPcuQ8FzmOTzc3UlA0DkW9o
-         SO6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVET4+Pn34GeonO/HRDWVZBLtK3SYS3Dh8V1UhU9HfG2P6LRk3jLwtySkt7u6ORH1MWSXtFLI0fxLwniz40CP8=@vger.kernel.org, AJvYcCX5S/zamVEwk2HWT7LA6y5eL4Blug/dSVl8CO87yEqRFY06BP47rjEudqyp6kzVF4eLxmuHypEM3V1FVG6Xt2tO@vger.kernel.org, AJvYcCXvJSVQteSAwXD51Ws+o7oy06553DXV6ylxMOFgjrng8vTg1khY8DynMi3SnKHyNxlbAQ/FzHU4NhUmAiM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwYIG6ctxoTfq5yZT7qvUQqAlt9s7yXkChPzpbcLyKmu6PN7VNH
-	l/yTxkpLMWB1r5eF/4nKZ2Mf50Pz1ahaHnOxTDmUn1o/l9SJ+ItUftdAMZnxUikmgeaTPzdiNOY
-	OTbdSgd621mq/qTnTBZrRf88t//41I+k=
-X-Gm-Gg: ASbGncumfSFYQv6I67olSQvYpwZNhOba0lVC4WgbA25WLrThIkSKFr9RUSi7zZnI8Uw
-	VsuNjCJZ87EXtAotrCQaud5v5YcNK1jPpO2S+2ztK3ZibXUPdwo1SZcXgW6kb2GmMv8ceeUeayH
-	xepNgVNSUHCXiUTE10XBPueZo+Oe7AnwDBY3hOIgyBCNM=
-X-Google-Smtp-Source: AGHT+IEtIQ1z32zAY2NEFKsK2DZNLLbwjhnGL64WMVavBityRy9+1/bAxBjuVOOV9i2JKI6LmOxTYNC0DZF59fX+M1Y=
-X-Received: by 2002:a17:90b:17cb:b0:305:5f20:b28c with SMTP id
- 98e67ed59e1d1-3110f33ecacmr7596771a91.5.1748353895332; Tue, 27 May 2025
- 06:51:35 -0700 (PDT)
+        bh=XnktFiXJXJodN0pB61aJG59CK1E9b68p2VWpKi9y8vw=;
+        b=tUdanh0ViSWPONtK6KSZ0ij3U8wx7TW0ZRXgLWRXvhvDhDdbuRnH7eGqSo2z8bMDGD
+         tsmmaHd9IzzFF1Nuf9uOcoV8dcKmGkhV++4P2fRqw1/qMDSx1QJv1/pNEUX6Fabo61fw
+         atAypINBzG1uGwXCk7wFExiZuN2ttAi8XvO1/g3Ou8tcUZasvUV2kyKFMtVZvaXuiXBQ
+         oFiqIsFRWIjlQqmvCMuNhlBTutDxqW1Qr9b7fUB48ynuV0jvd6QJ/hdDTmlTYhDCUsa2
+         QpxKfCKaXIMICaUYwvF1VCDZ2asKl8x9pqQZKTolAWz5AISj6nRW/T5wtvV0KzGIUkDo
+         wyNA==
+X-Forwarded-Encrypted: i=1; AJvYcCWAlOTXZRThKu5jjMyYpdCnC3x8XFSz1HwmEdjr3U7rjx2PSd9V0mTapNoHFiHIwHpK2/vnwzoag+lkKoE=@vger.kernel.org, AJvYcCWeEG4wkXa0Ah9DgjqjhhL6q+fKO8888B9cCQp4RpOn6NJb7IxeXpDmjkbG4qEzWXOsVv+GPGwwSLnadYfq7vM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwXuDaV30UuZgBccmG6+lePjxOD2HKWXnmyM6+gI9QeMNpNo3UW
+	jhHHS5fiIbMyI+7Kx9KSo1QbsawOKbx7WCYnwmq2QC3J/p6kbg8Ga/cp
+X-Gm-Gg: ASbGnctgtUIqxVjiIfoL/TRbWjQgjznJAL8APQzU7zNUTXgTgDwC1OXsSQTBlspbylg
+	yv7DnmDNQwVBVNILmvIParjuHXvLUl0k13OglS2Y7RaBGMh9er2Q9ur7+IYOWja4lZ8uvXjPt55
+	XR+V+LUy78dlqo7GlGoYHGWBx3v9rqum1diDAoWzsrSqFSOWtSLMSCVcbEX2YUPqYtQoU9fQxTB
+	mLYZUtgbV0pv173vZbeB+htBaWoDy+rdiFxMO9MYp74vS2QCTIJ+lyM+ZuZwlmhyobe5aOHogNI
+	isjTz9Pj/oLcwKueUcqQ98jexKDBQ0m6fUurj7eSP2znAQSiR55K8zLTxDcRqyI=
+X-Google-Smtp-Source: AGHT+IFNNoxF29EfkZcUJGXn/ohVeLl/OG6M5rRHNblzkgPj16tTYH/KioWbWzao9437hQv8KtCczg==
+X-Received: by 2002:a17:902:f54c:b0:22c:35c5:e30a with SMTP id d9443c01a7336-23414f4a6b9mr166280325ad.16.1748354176742;
+        Tue, 27 May 2025 06:56:16 -0700 (PDT)
+Received: from localhost.localdomain ([104.28.249.218])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-234018ac5desm67801475ad.158.2025.05.27.06.56.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 May 2025 06:56:16 -0700 (PDT)
+From: Jesung Yang <y.j3ms.n@gmail.com>
+To: Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>,
+	Rae Moar <rmoar@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>
+Cc: linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Jesung Yang <y.j3ms.n@gmail.com>
+Subject: Re: [PATCH] rust: kunit: use crate-level mapping for `c_void`
+Date: Tue, 27 May 2025 13:55:49 +0000
+Message-Id: <20250527135549.1982244-1-y.j3ms.n@gmail.com>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <DA6XI37GNRHE.1FN5893KE2OIG@kernel.org>
+References: <DA6XI37GNRHE.1FN5893KE2OIG@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250526162429.1114862-1-y.j3ms.n@gmail.com> <DA6XI37GNRHE.1FN5893KE2OIG@kernel.org>
-In-Reply-To: <DA6XI37GNRHE.1FN5893KE2OIG@kernel.org>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 27 May 2025 15:51:22 +0200
-X-Gm-Features: AX0GCFsfs3QdZvA4icfA5wPLKbrCfW_02pE3_eM6-6sXiZ7RxS8FT94BATqtVvY
-Message-ID: <CANiq72=ue5Fw+7TPPpRcK+0Zk4KTRhH+5YnAY8BQQVX_4YUWqA@mail.gmail.com>
-Subject: Re: [PATCH] rust: kunit: use crate-level mapping for `c_void`
-To: Benno Lossin <lossin@kernel.org>
-Cc: Jesung Yang <y.j3ms.n@gmail.com>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, May 27, 2025 at 2:06=E2=80=AFPM Benno Lossin <lossin@kernel.org> wr=
-ote:
+Hi,
+
+On Tue, May 27, 2025 at 9:06 PM Benno Lossin <lossin@kernel.org> wrote:
 >
 > We don't need to explicitly import it, as `c_void` is present in the
 > prelude since 3d5bef5d47c3 ("rust: add C FFI types to the prelude").
 
-Hmm... But the prelude isn't there yet in this patch, no? i.e. our
-prelude is (so far) not a "real prelude" that gets injected
-automatically. So I guess you mean importing the prelude instead.
+The base commit of my patch is f4daa80d6be7 ("rust: compile libcore with
+edition 2024 for 1.87+"), which unfortunately predates the addition of
+`use crate::prelude::*`. As a result, removing `use kernel::ffi::c_void`
+causes the build to fail with the following error:
 
-(It is imported in the KUnit series anyway, so it will llikely be
-there either way)
+```
+error[E0412]: cannot find type `c_void` in this scope
+  --> rust/kernel/kunit.rs:22:41
+   |
+22 |             &args as *const _ as *const c_void,
+   |                                         ^^^^^^ not found in this scope
+   |
+help: consider importing one of these enums
+   |
+9  + use crate::prelude::c_void;
+   |
+9  + use core::ffi::c_void;
+   |
+9  + use ffi::c_void;
+   |
 
-Thanks!
+error[E0412]: cannot find type `c_void` in this scope
+  --> rust/kernel/kunit.rs:38:41
+   |
+38 |             &args as *const _ as *const c_void,
+   |                                         ^^^^^^ not found in this scope
+   |
+help: consider importing one of these enums
+   |
+9  + use crate::prelude::c_void;
+   |
+9  + use core::ffi::c_void;
+   |
+9  + use ffi::c_void;
+   |
 
-Cheers,
-Miguel
+error: aborting due to 2 previous errors
+```
+
+Starting from commit c4c0574ee33b ("rust: add `kunit_tests` to the
+prelude"), we do have `use crate::prelude::*;`, so the explicit import
+is no longer necessary in that context.
+
+Thanks for pointing this out!
+
+Best regards,
+Jesung
 
