@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-33858-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33859-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A854CAC5053
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 May 2025 15:56:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 935EAAC5070
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 May 2025 16:02:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 880CC17DB32
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 May 2025 13:56:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A48E3189E1A3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 May 2025 14:02:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7C25276031;
-	Tue, 27 May 2025 13:56:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84D592749C3;
+	Tue, 27 May 2025 14:02:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DBPEPISB"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BAk2Pbd/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E21052749DB
-	for <linux-kselftest@vger.kernel.org>; Tue, 27 May 2025 13:56:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FA3126A0E0
+	for <linux-kselftest@vger.kernel.org>; Tue, 27 May 2025 14:02:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748354194; cv=none; b=LAx7etKKOxKC5h4myM0C6F7+lljeQJA0yChdMa7GtVdwBknV9vj6niCmtyhue5EUUKKBRjK96X2e7hFLi94VEyYRF0U71kjPOU1gbw6WIUe3aErfvd6TQovHXUOL/jd4VYyZzdp7b54r9B5wBi2DbM4o+MOUBW/q6EXqIHQGc5o=
+	t=1748354541; cv=none; b=GKLIDPLLqw7Wo9rMTGK07f6BOE3vNKdv33uKMI8bLD5VpPsl5uF5wT8lCTLvgYIBbBkofCm7DQJi5VROvb6Av3Y71Nu7mMoQDQSD1k7OSZVkF4QdmZzE/jybDVfALPcxX5rpR9fHhrU91voAXuGmnxizVKJ/18h2QLIlfJcvPI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748354194; c=relaxed/simple;
-	bh=DR0eII5fbH35C4esC9dtXj1fUTepV7Btut4D7Bi+Yo4=;
+	s=arc-20240116; t=1748354541; c=relaxed/simple;
+	bh=yo0oZBlfMtOYp40SB2fAqqqKfsg0rNIT7m84sU2j4s4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EXfMiqdLr28aSvl9gag9bQtviIlHt3cGnLg6u45c4yvgsnWq7qLYRXYMCbBdxDhze4iL5vvgSs+5w/y9tBcrVMh0R3sRdK/ur3rGy5Ouh0mxBL+3+6TiKXOSCNv58JVsPGtff3kn7mu5fY/vO+AWTZvXNcGbugyToJVHI4/6VU0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DBPEPISB; arc=none smtp.client-ip=91.218.175.182
+	 Content-Type:Content-Disposition:In-Reply-To; b=PeItdfDA/h8GkZSEgCzWPL+vN61MsjnwITcv6Q1ACTTo9i1pm+kBD3HtdatOrr6ayR2W+KrU0/MBvvji5lRKSV/g4fD9N1gOlCGpaRiJNJs0XOgW9a+OHByMzZhpMfc6nn7sbZz8qVgFSKiYZxzrWUCYZrxkZ32OBOSRB8RxR+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BAk2Pbd/; arc=none smtp.client-ip=95.215.58.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Tue, 27 May 2025 15:56:17 +0200
+Date: Tue, 27 May 2025 16:01:56 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1748354181;
+	t=1748354526;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=FLl9VxDhC/oIjgX+m65ElyBei2vf8OKiPQtUyOdtfwU=;
-	b=DBPEPISBgfSQ0+cpOKL9TKTUzheLNL5fUFFpah1KlDRHiP+f2RorQQ12kUmuwzhQ3hM9/+
-	aXep8APlTJpGUUHdgMd5UD3XQpN1rq/czK2GzFIPWQMP6UbWVUynRwWcU27FqS8a/hnsPf
-	8Qhj4uKdcBfmBLcbqA62M1shAHCWV1g=
+	bh=1RLjeN+B9ynhfLIpwmZXtdB5HF0huSI0hOjSO/VoOEo=;
+	b=BAk2Pbd/JJPysmSNfFdWpiFzw1ZbscmqwYi0OO5P4uUbbl/cxRm+cE67R9CUmG77lSWEKN
+	OIVxcR42DttYY+yGY3ybCgCJFgSCcRgI8cMZvgho5su03pe8ri6GZRqnaWb6SeVn/uRWGy
+	JEB9XIELPgnKUhyf/iGlS86pm8X460E=
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Nicolas Schier <nicolas.schier@linux.dev>
 To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
@@ -56,12 +56,12 @@ Cc: Masahiro Yamada <masahiroy@kernel.org>,
 	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
 	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 09/11] kunit: uapi: Add example for UAPI tests
-Message-ID: <20250527-dark-uakari-from-pluto-fbc8ae@l-nschier-aarch64>
+Subject: Re: [PATCH v2 01/11] kbuild: userprogs: add nolibc support
+Message-ID: <20250527-fearless-impala-of-poetry-8acc3a@l-nschier-aarch64>
 References: <20250407-kunit-kselftests-v2-0-454114e287fd@linutronix.de>
- <20250407-kunit-kselftests-v2-9-454114e287fd@linutronix.de>
- <20250526-marvellous-abstract-koala-317cb4@l-nschier-aarch64>
- <20250526164038-12259c68-586f-4a24-a814-8ffed5778742@linutronix.de>
+ <20250407-kunit-kselftests-v2-1-454114e287fd@linutronix.de>
+ <20250522-fluorescent-liberal-pigeon-0404ed@l-nschier-aarch64>
+ <20250526163610-88b7aae6-7be4-4a02-be20-ec7fe74cbf31@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -71,83 +71,133 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250526164038-12259c68-586f-4a24-a814-8ffed5778742@linutronix.de>
+In-Reply-To: <20250526163610-88b7aae6-7be4-4a02-be20-ec7fe74cbf31@linutronix.de>
 Organization: AVM GmbH
 X-Migadu-Flow: FLOW_OUT
 
-On Mon, May 26, 2025 at 04:50:19PM +0200, Thomas Weißschuh wrote:
-> On Mon, May 26, 2025 at 04:22:02PM +0200, Nicolas Schier wrote:
-> > On Mon, Apr 07, 2025 at 09:42:46AM +0200, Thomas Weißschuh wrote:
-> > > Extend the example to show how to run a userspace executable.
+On Mon, May 26, 2025 at 04:40:17PM +0200, Thomas Weißschuh wrote:
+> On Mon, May 26, 2025 at 04:19:53PM +0200, Nicolas Schier wrote:
+> > On Mon, Apr 07, 2025 at 09:42:38AM +0200, Thomas Weißschuh wrote:
+> > > Userprogs are built with the regular kernel compiler $CC.
+> > > A kernel compiler does not necessarily contain a libc which is required
+> > > for a normal userspace application.
+> > > However the kernel tree does contain a minimal libc implementation
+> > > "nolibc" which can be used to build userspace applications.
+> > > 
+> > > Introduce support to build userprogs against nolibc instead of the
+> > > default libc of the compiler, which may not exist.
 > > > 
 > > > Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+> > > 
 > > > ---
-> > >  lib/kunit/.kunitconfig         |  2 ++
-> > >  lib/kunit/Makefile             |  9 ++++++++-
-> > >  lib/kunit/kunit-example-test.c | 15 +++++++++++++++
-> > >  lib/kunit/kunit-example-uapi.c | 22 ++++++++++++++++++++++
-> > >  4 files changed, 47 insertions(+), 1 deletion(-)
+> > > This could probably be moved out of the generic kbuild makefiles.
+> > > I think the ergonimics would suffer and this functionality could be
+> > > used by other users of userprogs.
+> > > 
+> > > Also this does currently not support out-of-tree builds.
 > > 
+> > (out-of-tree == external kmods;  out-of-source == build-dir != source-dir)
 > > 
-> > Adding this diff allows 'make clean' to clean up the UAPI test binary:
-> > 
-> > 
-> > diff --git a/lib/Makefile b/lib/Makefile
-> > --- a/lib/Makefile
-> > +++ b/lib/Makefile
-> > @@ -112,8 +112,6 @@ CFLAGS_REMOVE_test_fpu_impl.o += $(CC_FLAGS_NO_FPU)
-> >  # Some KUnit files (hooks.o) need to be built-in even when KUnit is a module,
-> >  # so we can't just use obj-$(CONFIG_KUNIT).
-> > -ifdef CONFIG_KUNIT
-> > -obj-y += kunit/
-> > -endif
-> > +obj-$(if $(CONFIG_KUNIT),y) += kunit/
+> > you probably meant out-of-source.
 > 
-> Wouldn't the following be sufficient?
+> I *did* mean out-of-tree.
 > 
-> obj-y += kunit/
+> Out-of-source already works with the current patchset. It is the default setup of kunit.py.
 > 
-> The the kunit Makefile doesn't do anything if CONFIG_KUNIT=y and AFAIK for
-> directories obj-m and obj-y should do the same.
-
-that's wrong.  In lib/kunit/Makefile there is
-
-    obj-y += hooks.o
-
-thus, lib/kunit/hooks.o would then be built unconditionally (even w/o 
-CONFIG_KUNIT).
-
-Iff we would add 'obj-y += kunit/' in lib/Makefile we'd have to adjust the 
-hooks.o line in lib/kunit/Makefile appropriately.
-
-> 
-> >  
-> >  ifeq ($(CONFIG_DEBUG_KOBJECT),y)
-> >  CFLAGS_kobject.o += -DDEBUG
+> > > For that tools/include/nolibc/*.h and usr/include/*.h would need to be
+> > > installed into the build directory.
 > > 
+> > Out-of-source builds could be achieved by adding 'headers' as 
+> > dependency, see below.
 > > 
-> > 
-> > plus the 'clean-files' addition below.
-> 
-> <snip>
-> 
-> > > diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
-> > > index 989933dab9ad2267f376db470b876ce2a88711b4..1b6be12676f89cafa34f0093d8136b36f4cf5532 100644
-> > > --- a/lib/kunit/Makefile
-> > > +++ b/lib/kunit/Makefile
-> > > @@ -30,4 +30,11 @@ obj-$(CONFIG_KUNIT_TEST) +=		string-stream-test.o
-> > >  obj-$(CONFIG_KUNIT_TEST) +=		assert_test.o
-> > >  endif
+> > > ---
+> > >  Documentation/kbuild/makefiles.rst | 12 ++++++++++++
+> > >  scripts/Makefile.userprogs         | 16 +++++++++++++---
+> > >  2 files changed, 25 insertions(+), 3 deletions(-)
+> > > 
+> > > diff --git a/Documentation/kbuild/makefiles.rst b/Documentation/kbuild/makefiles.rst
+> > > index 3b9a8bc671e2e92126857059e985d6e5b2c43fd4..f905a6f77c965311c491cfd7ab3103185af7e82e 100644
+> > > --- a/Documentation/kbuild/makefiles.rst
+> > > +++ b/Documentation/kbuild/makefiles.rst
+> > > @@ -970,6 +970,18 @@ When linking bpfilter_umh, it will be passed the extra option -static.
 > > >  
-> > > -obj-$(CONFIG_KUNIT_EXAMPLE_TEST) +=	kunit-example-test.o
-> > > +userprogs +=				kunit-example-uapi
+> > >  From command line, :ref:`USERCFLAGS and USERLDFLAGS <userkbuildflags>` will also be used.
+> > >  
+> > > +Bulding userprogs against nolibc
 > > 
-> > clean-files +=				kunit-example-uapi
+> > Bulding -> Building
 > 
-> This shouldn't be necessary as $(userprogs) is automatically added to
-> __clean-files in scripts/Makefile.clean.
+> Ack.
+> 
+> > > +--------------------------------
+> > > +
+> > > +Not all kernel toolchains provide a libc.
+> > > +Simple userprogs can be built against a very simple libc call "nolibc" provided
+> > > +by the kernel source tree.
+> > > +
+> > > +Example::
+> > > +
+> > > +  # lib/kunit/Makefile
+> > > +  uapi-preinit-nolibc := $(CONFIG_ARCH_HAS_NOLIBC)
+> > > +
+> > >  When userspace programs are actually built
+> > >  ------------------------------------------
+> > >  
+> > > diff --git a/scripts/Makefile.userprogs b/scripts/Makefile.userprogs
+> > > index f3a7e1ef3753b54303718fae97f4b3c9d4eac07c..a1447c02b948901631098b585f5cf4d3ea383a57 100644
+> > > --- a/scripts/Makefile.userprogs
+> > > +++ b/scripts/Makefile.userprogs
+> > > @@ -16,10 +16,20 @@ user-csingle	:= $(addprefix $(obj)/, $(user-csingle))
+> > >  user-cmulti	:= $(addprefix $(obj)/, $(user-cmulti))
+> > >  user-cobjs	:= $(addprefix $(obj)/, $(user-cobjs))
+> > >  
+> > > +user-libgcc     := $(call try-run,$(CC) -Werror $(KBUILD_USERCFLAGS) -lgcc -x c -shared /dev/null -o "$$TMP",-lgcc)
+> > > +
+> > > +user_nolibc_ccflags := -nostdlib -nostdinc -static -fno-ident -fno-asynchronous-unwind-tables \
+> > > +		      -ffreestanding -fno-stack-protector \
+> > > +		      -isystem $(objtree)/usr/include -include $(srctree)/tools/include/nolibc/nolibc.h -isystem $(srctree)/tools/include/nolibc/
+> > > +user_nolibc_ldflags := -nostdlib -nostdinc -static
+> > > +user_nolibc_ldlibs  := $(user-libgcc)
+> > > +
+> > >  user_ccflags	= -Wp,-MMD,$(depfile) $(KBUILD_USERCFLAGS) $(userccflags) \
+> > > -			$($(target-stem)-userccflags)
+> > > -user_ldflags	= $(KBUILD_USERLDFLAGS) $(userldflags) $($(target-stem)-userldflags)
+> > > -user_ldlibs	= $(userldlibs) $($(target-stem)-userldlibs)
+> > > +			$($(target-stem)-userccflags) $(if $($(target-stem)-nolibc),$(user_nolibc_ccflags))
+> > > +user_ldflags	= $(KBUILD_USERLDFLAGS) $(userldflags) $($(target-stem)-userldflags) \
+> > > +			$(if $($(target-stem)-nolibc),$(user_nolibc_ldflags))
+> > > +user_ldlibs	= $(userldlibs) $($(target-stem)-userldlibs) \
+> > > +			$(if $($(target-stem)-nolibc),$(user_nolibc_ldlibs))
+> > >  
+> > >  # Create an executable from a single .c file
+> > >  quiet_cmd_user_cc_c = CC [U]  $@
+> > 
+> > Adding another hunk for scripts/Makefile.userprogs would allow to build
+> > out-of-source:
+> > 
+> > @@ -39,5 +49,5 @@ $(call multi_depend, $(user-cmulti), , -objs)
+> >  # Create .o file from a .c file
+> >  quiet_cmd_user_cc_o_c = CC [U]  $@
+> >        cmd_user_cc_o_c = $(CC) $(user_ccflags) -c -o $@ $<
+> > -$(user-cobjs): $(obj)/%.o: $(src)/%.c FORCE
+> > +$(user-cobjs): $(obj)/%.o: $(src)/%.c headers FORCE
+> >         $(call if_changed_dep,user_cc_o_c)
+> > 
+> > But I am unsure if it is ok to add 'headers' as a build dependency for 
+> > userprogs.  For me, it feels a bit odd, but I think it really makes 
+> > sense here.
+> 
+> Currently this dependency is encoded in Kconfig.
+> If CONFIG_HEADERS_INSTALL=y then the headers are installed in the 'prepare'
+> phase and already available when building any userprog.
+> To me this seems like the easier and nicer implementation.
 
-oh yes, you're right.  Please do not any of these 'clean-files' lines.
+I am sure, I had an out-of-source test build that failed due to missing 
+header files -- but I can't reproduce it any more and yes, 
+CONFIG_HEADERS_INSTALL should really be enough and better in several 
+ways.
+
+Sorry for the noice.
 
 Kind regards,
 Nicolas
