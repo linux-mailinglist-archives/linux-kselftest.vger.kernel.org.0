@@ -1,143 +1,200 @@
-Return-Path: <linux-kselftest+bounces-33944-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33945-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57EC5AC6D45
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 May 2025 17:58:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB3AEAC6DD1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 May 2025 18:19:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2874E1BC7B6D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 May 2025 15:58:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 97BD5174DE5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 May 2025 16:18:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93AAD28C5C2;
-	Wed, 28 May 2025 15:58:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5164428DEFB;
+	Wed, 28 May 2025 16:17:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mD9I6qF3"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Ddr3eeqn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F0BC286436;
-	Wed, 28 May 2025 15:58:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D40D28CF45
+	for <linux-kselftest@vger.kernel.org>; Wed, 28 May 2025 16:17:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748447908; cv=none; b=bOUJeHb6X8PSEPAMO0ziwWfBZwvXJIfA0bupBTDP9nE48qygCEbelQ3SZqUZwfWkmxWTKK8HrMNcsK+6/xYYSRM92syCd+ZDwKa56XozuwcdD19FGHP+d68B6BIvSkmbIwDjDBOOGJUrLe118Mz6UJeVOtk23RT5+C1lVjrRVyo=
+	t=1748449045; cv=none; b=FNIOoXzvuviJXlByrPaojkrSjCHuJHH4Ktruv0dR9BjxcpNjbLJ9cZftrekPkhGz+VmQgaT5C5K6dm0LVDUcv2zIHzh08ZD5zQ7c8bHfALbJMK5e4BaCrUm5GFFW3Kp9BGfTNDkhCcSLvTwjclDyop208ljEkHyjnpgoUICLzIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748447908; c=relaxed/simple;
-	bh=NIZUO6nfWzxOmDFR7kuS4TIBoOtvv4jh2sd4GzavqT4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D+uHYdfNyzZtR9pEl0o+3RxHD2x+ykFc6FQwuK0MxAHEFFTS2D/LOVD2KrLYuzDFa0GtRAl3emJQFdQCh+4/cDNnkSzk5YOCAcgOWi9hJ/A1UdpSDEpcEiYkF6YtIDJQi0ZhDTDfV9xqVaCKaejqx6v4i/rrJ5Xahj00c2cVNnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mD9I6qF3; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1748447908; x=1779983908;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NIZUO6nfWzxOmDFR7kuS4TIBoOtvv4jh2sd4GzavqT4=;
-  b=mD9I6qF3nKN2HG0XnXD+sxfcnJnZkj2zevJTpFMGkU6HHoPGnotFIOjj
-   ybEyWs3i34MNrLaqGreSY4G2EO45vSmfyrj/7XuBh/t2GgDaSlAL3zfl+
-   feYExZ/GvPWQO/9jHeabNgldzNLaXW+meQiGchaQP27Phm3G3WKkRqU6U
-   ++j5unesiiLgDNpLhzEGN83llExWKvinQ462sCh4RqUTzfqEroktNTXH+
-   6mWkPFplitKdDZh1mbd3P+M10Oztpz2CprPd9SMZq7aQt5Ufuz7YmobaU
-   SzpGUgttWjQRngHL7XsKF1sRgZQLIaYe9OYDwI+qe0X/Pb1+AuCbvGTyF
-   A==;
-X-CSE-ConnectionGUID: D/7DjDcEQNijX9zStQLZUA==
-X-CSE-MsgGUID: 9wbXrTghRliEQhdjaqFTiQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11447"; a="67897079"
-X-IronPort-AV: E=Sophos;i="6.15,321,1739865600"; 
-   d="scan'208";a="67897079"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2025 08:58:27 -0700
-X-CSE-ConnectionGUID: 8KS9rMUsR8uWNQsowgjXnQ==
-X-CSE-MsgGUID: bU31e17nRDSY4Nv7jkm57w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,321,1739865600"; 
-   d="scan'208";a="144248096"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 28 May 2025 08:58:22 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uKJAZ-000Vou-2c;
-	Wed, 28 May 2025 15:58:19 +0000
-Date: Wed, 28 May 2025 23:57:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tamir Duberstein <tamird@gmail.com>, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com, rust-for-linux@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Tamir Duberstein <tamird@gmail.com>
-Subject: Re: [PATCH] rust: replace length checks with match
-Message-ID: <202505282330.oOHtt60s-lkp@intel.com>
-References: <20250527-idiomatic-match-slice-v1-1-34b0b1d1d58c@gmail.com>
+	s=arc-20240116; t=1748449045; c=relaxed/simple;
+	bh=ASJATDXHJ1cff1RjM4ZAA2vRF3PIUif1svRlmTRlIN8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=k1H99EJLpMT2rOF/dVciPgAY4TGwXndpJ5PLO4hCAW+wFVNBhXVH/+lZ9eruvTuaQ6DPmrAsEHYf5m/l/93PLelTMMOHe1M08/WBrkz3Dau7bWYHiKcn0AfIMp0ujRcMPW1aW9JQsqqseGLFCIlKRCrDU1Ca8Q4aFNUx6It1TyA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Ddr3eeqn; arc=none smtp.client-ip=95.215.58.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1748449034;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=BB0IE1lnbJy5zpZRdhFIn+OnRh+wjVB9ZlPmF9vEgZQ=;
+	b=Ddr3eeqnknPlT2TUs4jc/5e5ZIqxAEn6zrlKujUIy2pi9ZkQ3bnuR8Gpaa8rQ243NNR1a1
+	1J7dp/zUfXVVtosYzuXzUX2x1pS58ZTq5GXJ253UtPOQ1VrBLATa3aKI6fbVop73jET6oq
+	Ix/dhQxh4i+ivAiumbzGVc8pF7KE978=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	syzbot+9767c7ed68b95cfa69e6@syzkaller.appspotmail.com,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Feng Yang <yangfeng@kylinos.cn>,
+	Tejun Heo <tj@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v1 1/2] bpf: Restrict usage scope of bpf_get_cgroup_classid
+Date: Thu, 29 May 2025 00:16:25 +0800
+Message-ID: <20250528161653.55162-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250527-idiomatic-match-slice-v1-1-34b0b1d1d58c@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi Tamir,
+A previous commit expanded the usage scope of bpf_get_cgroup_classid() to
+all contexts (see Fixes tag), but this was inappropriate.
 
-kernel test robot noticed the following build errors:
+First, syzkaller reported a bug [1].
+Second, it uses skb as an argument, but its implementation varies across
+different bpf prog types. For example, in sock_filter and sock_addr, it
+retrieves the classid from the current context
+(bpf_get_cgroup_classid_curr_proto) instead of from skb. In tc egress and
+lwt, it fetches the classid from skb->sk, but in tc ingress, it returns 0.
 
-[auto build test ERROR on bfc3cd87559bc593bb32bb1482f9cae3308b6398]
+In summary, the definition of bpf_get_cgroup_classid() is ambiguous and
+its usage scenarios are limited. It should not be treated as a
+general-purpose helper. This patch reverts part of the previous commit.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tamir-Duberstein/rust-replace-length-checks-with-match/20250528-001121
-base:   bfc3cd87559bc593bb32bb1482f9cae3308b6398
-patch link:    https://lore.kernel.org/r/20250527-idiomatic-match-slice-v1-1-34b0b1d1d58c%40gmail.com
-patch subject: [PATCH] rust: replace length checks with match
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250528/202505282330.oOHtt60s-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250528/202505282330.oOHtt60s-lkp@intel.com/reproduce)
+[1] https://syzkaller.appspot.com/bug?extid=9767c7ed68b95cfa69e6
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505282330.oOHtt60s-lkp@intel.com/
+Fixes: ee971630f20f ("bpf: Allow some trace helpers for all prog types")
+Reported-by: syzbot+9767c7ed68b95cfa69e6@syzkaller.appspotmail.com
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+---
+ include/linux/bpf-cgroup.h |  8 ++++++++
+ kernel/bpf/cgroup.c        | 25 +++++++++++++++++++++++++
+ kernel/bpf/helpers.c       |  4 ----
+ 3 files changed, 33 insertions(+), 4 deletions(-)
 
-All errors (new ones prefixed by >>):
-
-   PATH=/opt/cross/clang-18/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-   INFO PATH=/opt/cross/rustc-1.78.0-bindgen-0.65.1/cargo/bin:/opt/cross/clang-18/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-   /usr/bin/timeout -k 100 12h /usr/bin/make KCFLAGS= -Wno-error=return-type -Wreturn-type -funsigned-char -Wundef W=1 --keep-going LLVM=1 -j24 -C source O=/kbuild/obj/consumer/x86_64-rhel-9.4-rust ARCH=x86_64 SHELL=/bin/bash rustfmtcheck
-   make: Entering directory '/kbuild/src/consumer'
-   make[1]: Entering directory '/kbuild/obj/consumer/x86_64-rhel-9.4-rust'
->> Diff in scripts/rustdoc_test_gen.rs at line 90:
-                "No path candidates found for `{file}`. This is likely a bug in the build system, or \
-                some files went away while compiling."
-            ),
-   -        [valid_path] => {
-   -            valid_path.to_str().unwrap()
-   -        }
-   +        [valid_path] => valid_path.to_str().unwrap(),
-            valid_paths => {
-                eprintln!("Several path candidates found:");
-                for path in valid_paths {
-   make[2]: *** [Makefile:1826: rustfmt] Error 123
-   make[2]: Target 'rustfmtcheck' not remade because of errors.
-   make[1]: Leaving directory '/kbuild/obj/consumer/x86_64-rhel-9.4-rust'
-   make[1]: *** [Makefile:248: __sub-make] Error 2
-   make[1]: Target 'rustfmtcheck' not remade because of errors.
-   make: *** [Makefile:248: __sub-make] Error 2
-   make: Target 'rustfmtcheck' not remade because of errors.
-   make: Leaving directory '/kbuild/src/consumer'
-
+diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
+index 4847dcade917..9de7adb68294 100644
+--- a/include/linux/bpf-cgroup.h
++++ b/include/linux/bpf-cgroup.h
+@@ -427,6 +427,8 @@ int cgroup_bpf_prog_query(const union bpf_attr *attr,
+ 
+ const struct bpf_func_proto *
+ cgroup_common_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog);
++const struct bpf_func_proto *
++cgroup_current_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog);
+ #else
+ 
+ static inline int cgroup_bpf_inherit(struct cgroup *cgrp) { return 0; }
+@@ -463,6 +465,12 @@ cgroup_common_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 	return NULL;
+ }
+ 
++static inline const struct bpf_func_proto *
++cgroup_current_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
++{
++	return NULL;
++}
++
+ static inline int bpf_cgroup_storage_assign(struct bpf_prog_aux *aux,
+ 					    struct bpf_map *map) { return 0; }
+ static inline struct bpf_cgroup_storage *bpf_cgroup_storage_alloc(
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 62a1d8deb3dc..a99b72e6f1c9 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -1653,6 +1653,10 @@ cgroup_dev_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 	if (func_proto)
+ 		return func_proto;
+ 
++	func_proto = cgroup_current_func_proto(func_id, prog);
++	if (func_proto)
++		return func_proto;
++
+ 	switch (func_id) {
+ 	case BPF_FUNC_perf_event_output:
+ 		return &bpf_event_output_data_proto;
+@@ -2200,6 +2204,10 @@ sysctl_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 	if (func_proto)
+ 		return func_proto;
+ 
++	func_proto = cgroup_current_func_proto(func_id, prog);
++	if (func_proto)
++		return func_proto;
++
+ 	switch (func_id) {
+ 	case BPF_FUNC_sysctl_get_name:
+ 		return &bpf_sysctl_get_name_proto;
+@@ -2343,6 +2351,10 @@ cg_sockopt_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 	if (func_proto)
+ 		return func_proto;
+ 
++	func_proto = cgroup_current_func_proto(func_id, prog);
++	if (func_proto)
++		return func_proto;
++
+ 	switch (func_id) {
+ #ifdef CONFIG_NET
+ 	case BPF_FUNC_get_netns_cookie:
+@@ -2589,3 +2601,16 @@ cgroup_common_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return NULL;
+ 	}
+ }
++
++const struct bpf_func_proto *
++cgroup_current_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
++{
++	switch (func_id) {
++#ifdef CONFIG_CGROUP_NET_CLASSID
++	case BPF_FUNC_get_cgroup_classid:
++		return &bpf_get_cgroup_classid_curr_proto;
++#endif
++	default:
++		return NULL;
++	}
++}
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index b71e428ad936..9d0d54f4f0de 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -2024,10 +2024,6 @@ bpf_base_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return &bpf_get_current_ancestor_cgroup_id_proto;
+ 	case BPF_FUNC_current_task_under_cgroup:
+ 		return &bpf_current_task_under_cgroup_proto;
+-#endif
+-#ifdef CONFIG_CGROUP_NET_CLASSID
+-	case BPF_FUNC_get_cgroup_classid:
+-		return &bpf_get_cgroup_classid_curr_proto;
+ #endif
+ 	case BPF_FUNC_task_storage_get:
+ 		if (bpf_prog_check_recur(prog))
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.47.1
+
 
