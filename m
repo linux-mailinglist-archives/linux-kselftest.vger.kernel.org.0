@@ -1,60 +1,63 @@
-Return-Path: <linux-kselftest+bounces-33910-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33911-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BA6CAC5ECD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 May 2025 03:30:35 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7564CAC5F23
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 May 2025 04:16:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 45D6B4A12CC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 May 2025 01:30:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BFD4A7AE526
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 May 2025 02:14:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49A2E3B2A0;
-	Wed, 28 May 2025 01:30:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17D983D544;
+	Wed, 28 May 2025 02:15:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JMWjjY35"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qi/oVwOv"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 177488C0E;
-	Wed, 28 May 2025 01:30:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E304F382;
+	Wed, 28 May 2025 02:15:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748395831; cv=none; b=ueBcw1RSkIO+LyPDyovaIvbEf+ZdBb9zN8NQJxrVAGayKIyEP4aLUFfp2bibwJT2kOBJ4AtJkp9J7JeGaW8Czru2mYzCx0s3XE9uJhe7uOxDENTsG2Fj7SyoGLttPDvZOik6nffdnHA+uMvxFUVuBXyLd8TnjNENOVExGEmQhfc=
+	t=1748398559; cv=none; b=BmTIdyg7NCBFKwXPvt+xnULXSW+Z5UM94VUGdx6xyw3fDNM7aWaf2uxPnJXDgAYlG7h412MhYuqhaCp+k+2sB0cDpvou2dKHK3MeteDKVGcStHgY+YF1vVooQMag5Ucl6JL341zZtGfiBAzYJctjZWdsXlYq/M6vPB+3ZPPpQU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748395831; c=relaxed/simple;
-	bh=xmLIszYoDwjBy4Ya5Nrjwz37sz09hLjWrnjs4tzoxAw=;
+	s=arc-20240116; t=1748398559; c=relaxed/simple;
+	bh=oxYH+gkFPjL0vF9T4oxhzs3SiBbk2xtkclWFIPJ7sR4=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OMqYFhX80Hr+ZS8u8VWuXMamCgu/k0H2W1Cid3gFdTGvhayV4B2DTAde2XLctoAJ9MkgDMlYyqDloJO2iYFTG6ehzx8OmwKnQ+mNF7qrHcRQI+lmyVeBLp6U6PZBSZeLoa+TuyyVz8yO0rG0NNEktrSheW1twmVgAKEp+VbdtMI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JMWjjY35; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76DE2C4CEE9;
-	Wed, 28 May 2025 01:30:29 +0000 (UTC)
+	 MIME-Version:Content-Type; b=D+qUH/mX/bivtzbsIMIxbTU6wB3efTNlpoqe0ACv82ScoNpm4AWw70BYlTp+N/fUvqFGFQvVl6ik0xDj1rSUOJ/lYLf4yfVY9dDGB/UN49vxR6fNBA24r3cvESNifaEJKFOd3Evy0nNS1MjO4tUkBXTuJ9iI5oLMDY7NJWr7Juo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qi/oVwOv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4047BC4CEED;
+	Wed, 28 May 2025 02:15:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748395830;
-	bh=xmLIszYoDwjBy4Ya5Nrjwz37sz09hLjWrnjs4tzoxAw=;
+	s=k20201202; t=1748398558;
+	bh=oxYH+gkFPjL0vF9T4oxhzs3SiBbk2xtkclWFIPJ7sR4=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=JMWjjY351iYisgqOnXpI2b+8vAgBGVDwAsa7g/yeAnnvajZqpeJPpPnIZFxIMnZgI
-	 SCcQrtJCqkPJ7S7kEdA+U9RhJXQeOE1adTXC8laWgwKbiaXB38vSdEXe1CeZto8vi5
-	 tY/p7vphnb2BFuZVae89rvHjT+FNl6OwlKPEjvrGuPXQg5SxdiSfaP2FB2zHRpygSk
-	 +x/9hx5OAmDnPy27r8IvjO9bMXTkvi+SRVSop2scLXIVUmx2ugwpzJ/jqGaEEWK3Nf
-	 wDaIC6cIUXWraesI8E0dczB1iEHYZk+ipEUFsH/jy4ue9Z73pjvt1YQ4daT5kwBpWd
-	 ywLL8PdZYHRJA==
-Date: Tue, 27 May 2025 18:30:28 -0700
+	b=qi/oVwOvn6DbS2f4MxjxHwwoVq/k6Yvcy8mF5c79UaAwN1MihGzjTMYgwRmHoQo8v
+	 hGsCYrnu/eSqCnp7zjk+dSHK6IkU/9OpKt97WAgag7Tu+jI7eS540pgsEh+7elWmSt
+	 DdfRmH6/9uLksw2qINyZ0rRyPiNispW69f1aghQWYFHQeBWFvkpu3T1gM3fNC2QwgE
+	 sccOVvKXk4MOx7gXol8V6R7yvE0QpwdFY3Pbp1jIvqkS1KWf2MOpUvz4Js7yOh/XQa
+	 K+Wb7itl49X2ZMxJ+jlu/jVj/LA7uTPCDnBZYErZQXylz5QCHscDCR6iJCGsLSCkbC
+	 B49RU57ac5JFQ==
+Date: Tue, 27 May 2025 19:15:56 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: Stanislav Fomichev <stfomichev@gmail.com>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
- pabeni@redhat.com, viro@zeniv.linux.org.uk, horms@kernel.org,
- andrew+netdev@lunn.ch, shuah@kernel.org, sagi@grimberg.me,
- willemb@google.com, asml.silence@gmail.com, almasrymina@google.com,
- jdamato@fastly.com, kaiyuanz@google.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 1/3] net: devmem: support single IOV with
- sendmsg
-Message-ID: <20250527183028.37e62c56@kernel.org>
-In-Reply-To: <20250520203044.2689904-1-stfomichev@gmail.com>
-References: <20250520203044.2689904-1-stfomichev@gmail.com>
+To: chia-yu.chang@nokia-bell-labs.com
+Cc: horms@kernel.org, donald.hunter@gmail.com, xandfury@gmail.com,
+ netdev@vger.kernel.org, dave.taht@gmail.com, pabeni@redhat.com,
+ jhs@mojatatu.com, stephen@networkplumber.org, xiyou.wangcong@gmail.com,
+ jiri@resnulli.us, davem@davemloft.net, edumazet@google.com,
+ andrew+netdev@lunn.ch, ast@fiberby.net, liuhangbin@gmail.com,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org, ij@kernel.org,
+ ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com,
+ g.white@cablelabs.com, ingemar.s.johansson@ericsson.com,
+ mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at,
+ Jason_Livingood@comcast.com, vidhi_goel@apple.com
+Subject: Re: [PATCH v17 net-next 0/5] DUALPI2 patch
+Message-ID: <20250527191556.50958768@kernel.org>
+In-Reply-To: <20250525171924.15603-1-chia-yu.chang@nokia-bell-labs.com>
+References: <20250525171924.15603-1-chia-yu.chang@nokia-bell-labs.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -64,10 +67,29 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Tue, 20 May 2025 13:30:42 -0700 Stanislav Fomichev wrote:
-> sendmsg() with a single iov becomes ITER_UBUF, sendmsg() with multiple
-> iovs becomes ITER_IOVEC. iter_iov_len does not return correct
-> value for UBUF, so teach to treat UBUF differently.
+On Sun, 25 May 2025 19:19:19 +0200 chia-yu.chang@nokia-bell-labs.com
+wrote:
+>   Please find the DualPI2 patch v17.
+> 
+>   This patch serise adds DualPI Improved with a Square (DualPI2) with following features:
+> * Supports congestion controls that comply with the Prague requirements in RFC9331 (e.g. TCP-Prague)
+> * Coupled dual-queue that separates the L4S traffic in a low latency queue (L-queue), without harming remaining traffic that is scheduled in classic queue (C-queue) due to congestion-coupling using PI2 as defined in RFC9332
+> * Configurable overload strategies
+> * Use of sojourn time to reliably estimate queue delay
+> * Supports ECN L4S-identifier (IP.ECN==0b*1) to classify traffic into respective queues
+> 
+> For more details of DualPI2, please refer IETF RFC9332 (https://datatracker.ietf.org/doc/html/rfc9332).
 
-Looks like this has been merged (silently), thanks!
+## Form letter - net-next-closed
+
+The merge window for v6.16 has begun and therefore net-next is closed
+for new drivers, features, code refactoring and optimizations.
+
+Please repost when net-next reopens after June 9th.
+
+RFC patches sent for review only are obviously welcome at any time.
+
+See: https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#development-cycle
+-- 
+pw-bot: defer
 
