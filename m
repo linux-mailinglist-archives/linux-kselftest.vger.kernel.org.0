@@ -1,173 +1,168 @@
-Return-Path: <linux-kselftest+bounces-33963-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33964-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76D68AC71B7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 May 2025 21:48:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B8E3AC71BB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 May 2025 21:48:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CFF881C021C1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 May 2025 19:48:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 375057B4879
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 May 2025 19:47:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1639221DA4;
-	Wed, 28 May 2025 19:46:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7200D2206A7;
+	Wed, 28 May 2025 19:47:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="orMDSJ5+"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YJjxc5wg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05763220694
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 May 2025 19:46:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B560F82C60
+	for <linux-kselftest@vger.kernel.org>; Wed, 28 May 2025 19:47:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748461601; cv=none; b=IsjnX94u6zZ03cHuuNkGz28PbIMpZToolOLd502yCp3llXUOb3wDH88zT/LBpjLaNhdLHh/8s9VRKtWYITDIo0wVHe5/uPvweHU8JiCzGx0UPpuRsmX7MEyVNfrsOe5Se3yVRln7DHTYiMuO5IHAVz7lTRmGX7Jf/mECHmpuZ14=
+	t=1748461645; cv=none; b=l7vZqOsyHzhwUSqQhSqhcrN8xSlosaxaGWU8E2pgdXLLL627fVUmwrBiDkw/u0PLn4w5oyB5bwmhZF8mKC+99bhrNTVXaVP6cg+9B/BE1UK/GswLBG43YMawz0bHQjJ6/D/abHzjEgLMREuCVh3QAbpkEF0dmBceOs3MuWlnjbk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748461601; c=relaxed/simple;
-	bh=+uNg2ZNM9774GNllUWRARlObsSVU4a3QOAeIWqn6Zs4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AHkniYyyGQbC9w/R30x8BkjkvDfKlTE33iiz5yAUikm2LqHnMYKFIE9haunk9fISFiXdO75rRUKxGG8HM5qD6/o4IDLdbpt/mUsCT/fbc68vA8qpHcCiM/x2OKWDFEIXssYKDTeldCanZIdQTBlxf4uZwiv753qjSsaBrIjhBgM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=orMDSJ5+; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2348ac8e0b4so1715ad.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 May 2025 12:46:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1748461599; x=1749066399; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+uNg2ZNM9774GNllUWRARlObsSVU4a3QOAeIWqn6Zs4=;
-        b=orMDSJ5+ynn2T7LSl6Kkf7/LT1+JSI8vU1sRQ90H5PNnK3cB83I9Zw+lbiN3m4InKA
-         K25QKoZZyKBZ1oA/6KbC1OT+N1LhWNzGEDgGSVzIKHvAVM9IKa6uzY7dWnQ1G3o+4O+w
-         DnaBjklgNnO/1pZtAE+/wUj9cMk55pVxxjH4MelnaZ/FyZfqN/UOOGh2Ej245brU0pwv
-         yRchogI+Bdk7QTSFiay9qZ9Vh5u/W5rOm0ipjS+P9TEa3Ay6XrenNAteqDSeR8GFbnua
-         zn1fQSfxAe4VIJ8bFEajBcOHNAWw4vsIwIehja2poA/2znaImouWqkPriFO22JmzQ/Tt
-         j78w==
+	s=arc-20240116; t=1748461645; c=relaxed/simple;
+	bh=qzu/O5cbgHa1A7SMmfPezi+LRJu7xmZg3Qe1HliCsUI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=W3u/R/h7YqPeOaMVSRuLiMtOqHf33ZyJKFkPUilVTKTkX7HMJAaQarDkx/VpOwAcaEUIO3qtlOZFryIZ1eMCe2rFJ6EEOZPEJ3a+bs1pS0dDYczO1VAboNndFzAiWNli5fgXm0wM4hT3NSPckQIbSic8bAqLYx1tw3wQIDtoqes=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YJjxc5wg; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1748461641;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=E1sbNbzJcyv5ylnPczL2lJsFgJT8miYzZgeExLDdJSA=;
+	b=YJjxc5wgtL+oL9WeLrePtYMWaMJzkesZAsZGvoxTN+sYcXlpb4uYL3vqavgfsVtqdhmxsj
+	TqzwHrVAp2ROud7AEQ6/aOnpl4gZS3sgJPgYKQTMBdtHN30kMyg+z3QOyVMgXQFzfOuViK
+	opD242Be2KPP95HSdYCuMfZ7Gx4D7UY=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-218-Y3rPUQzhPOWV4oGgk47igQ-1; Wed, 28 May 2025 15:47:20 -0400
+X-MC-Unique: Y3rPUQzhPOWV4oGgk47igQ-1
+X-Mimecast-MFC-AGG-ID: Y3rPUQzhPOWV4oGgk47igQ_1748461639
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-441c122fa56so934335e9.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 May 2025 12:47:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748461599; x=1749066399;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+uNg2ZNM9774GNllUWRARlObsSVU4a3QOAeIWqn6Zs4=;
-        b=eUnZO6b5BA6Ryl3+UjR4LxcV/q1SfOhX9AzW2VuLbmCKuUpif5kxFSnfeMWFX+C6hc
-         8gxIXc6jd4BYx+uy1+DNkpPpUrUA4G8TTX/SLfHo1I6kJW7xYJjbt6dFLMUr3u2qVqkb
-         Ml/6R3oN/LegeA1+HWZ8Nq8sMXoGqoB7C59nRNyyKJ4giM6fmhLK0pCVwh0+/rZOgZ4E
-         kS9/1s0ni21xp1QEYGrcGHSpwD88AGSt1o5CF9FmIBJba8+xT5nZVhZiH8yP8186hAc3
-         SCBne62FbUK4YYhNU23Ug/1fbjm4Mis+kLIdHj5BqQmxlyT7YGgI2pDWTDAkwk6ljM/V
-         6Okw==
-X-Forwarded-Encrypted: i=1; AJvYcCUIMLxZ/ryNtseXxyRTDKAvVCAuUzgxyxixytlf7zp2LWlEUwEmtc0jPt05vp5MARAWak2EtbySaK4Ut/nnbDs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw12gR5/tFOuqTmMzCaAEryZ8LaImA6rNlu+64DJHbzwiDgc2E8
-	3C/zKWdW2rkUi6q/OGU0r+Sz4RGiczs5CJ5iDj1AjX7ZrMo8ncw6LmVAaOx7Xqajk8OpoGHhor7
-	7JE5QP10EazGYXEDYhGVB/KhjwH3b8MOBpA4Rkj1e
-X-Gm-Gg: ASbGncvPgwB0ys1Egl+UyO3c/LHnqu+uOKGCNpdqDAN32nKlO0iUqUocRYIsg7dKKcn
-	muThdNYmhI8XsGue+JHNWSixBz5PQwD3Avse3RKpcUnAXCemXlQ/5QBDITB1mAtQk7DIaMuf8SC
-	3zBRV1PtwSUeBSLn7EUpoe4XOOpn6ybDmpWG0TuLrOibnEA7lPSAlokQcNtMN47+8U2D6oX9ySp
-	g==
-X-Google-Smtp-Source: AGHT+IG5pJp+Ll9vBD2Ex9mtsA5ekYQjmYsVW8dgVZjb+a6ny2LQFZUjoGZtmZJcRrNBSbewuLItVb656yqYYibxVxo=
-X-Received: by 2002:a17:903:46c3:b0:234:b441:4d4c with SMTP id
- d9443c01a7336-2350545f23fmr467515ad.5.1748461598995; Wed, 28 May 2025
- 12:46:38 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1748461639; x=1749066439;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=E1sbNbzJcyv5ylnPczL2lJsFgJT8miYzZgeExLDdJSA=;
+        b=BtHSuFkia0HA2Mh1Y7wYNXzgysclFwYrShWwMzfQ6eoJ4Me2qzrinatd3Ofzo1ZT/h
+         kRc950Wsf2JTLPcX4MNnykkSM9KzEk2OZ+kMC++3OXV+MEj/volv9+sB1nqOL1dhRMha
+         04R4wu2O/Lc3BqSJdvo9tHoauu/gpPNhehCGzW225DMIn1dCqOnnQQq4caUJd0wA2TC5
+         Ulb5g/FO+y2FoYDUkn49OBks6SqOM/bD+TXjEQbJJGSVS8SudIdjjd/wqtZOIkv4ft+2
+         mrT8LoEGI/VhNie5VethidUSi4YYTlfUXsYC4SLUc758eSzLZvk2HKKJRQnbJJKEJWVI
+         T/Ww==
+X-Forwarded-Encrypted: i=1; AJvYcCWVvFLs50wTUUgIb5FcHXQoLVtMIOejnlgzNWmi7Icr+KzHRnXFNnt93x3PY7yUXJqJFkc7e+1Atc0t7yN+QAA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyuLSECjsezOQ4cnvDXIEC9KtihSKygM5mr9sUVCXRIPcK71T0A
+	3x+KoTTZ/b9Wno9sb5UNJvmyyfsugarQgr8+N4NkMakVqnplds9An0hN8LoUK7prk5q1WS1Lo+Q
+	n0psItpoNUcRz0drLkIS3gUf0FEkC8/CoczLxE0SCoUowCxXCqY0lSXiE5hQlJO/jGvTMmA==
+X-Gm-Gg: ASbGncuSvwzEaUt6uH6bY4tPR+bVqNBVvFToTJGLijI3R7OO6/CWqB98UoiTMsI9vNb
+	GCAnuOJoucxaRoBXdD8YmAK0gy5smzXfm92CB+o/yIK+WX5DzLHBUDBEkUqxDg4dfB0uDtnK9zr
+	16i8ia+/fMi9gr7PJn6wc+vsY6OvbSQ89cUWQD6KM74KeCrYtI5zRDPUJmhe+yFKZMTqv7rjH3f
+	53V5FZL2CW5tNj48XKt2t7uAxJXltnMwd0rX5ABD7Y4fbsLju9WuBIs0F/HJFqZB3Am5SGrnWcv
+	712wldyhwPr+WQNbKyJoJOOMpaXC9IUOMZMbo3gg4A==
+X-Received: by 2002:a05:600c:3c84:b0:442:f4d4:53a with SMTP id 5b1f17b1804b1-44c9151293fmr194849025e9.2.1748461638639;
+        Wed, 28 May 2025 12:47:18 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEQSAvLo7Eqie62HosnzGxfv7hN4MV9xC0sn4CXjoTPfCTvWdS3TabcRAGK23QJ3x/FpWJtCw==
+X-Received: by 2002:a05:600c:3c84:b0:442:f4d4:53a with SMTP id 5b1f17b1804b1-44c9151293fmr194848835e9.2.1748461638332;
+        Wed, 28 May 2025 12:47:18 -0700 (PDT)
+Received: from [192.168.3.141] (p57a1aa11.dip0.t-ipconnect.de. [87.161.170.17])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a4eac7e919sm2361522f8f.33.2025.05.28.12.47.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 May 2025 12:47:17 -0700 (PDT)
+Message-ID: <cc13e6f0-3894-46b9-b234-11e066a9aadb@redhat.com>
+Date: Wed, 28 May 2025 21:47:16 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250525034354.258247-1-almasrymina@google.com>
- <87iklna61r.fsf@toke.dk> <CAHS8izOSW8dZpqgKT=ZxqpctVE3Y9AyR8qXyBGvdW0E8KFgonA@mail.gmail.com>
- <87h615m6cp.fsf@toke.dk>
-In-Reply-To: <87h615m6cp.fsf@toke.dk>
-From: Mina Almasry <almasrymina@google.com>
-Date: Wed, 28 May 2025 12:46:25 -0700
-X-Gm-Features: AX0GCFu3OTeh8uk-NocaEzNOkLCNo2rSHU7frkp5goouJg3UdVULK6dSsjJSF88
-Message-ID: <CAHS8izNDSTkmC32aRA9R=phqRfZUyz06Psc=swOpfVW5SW4R_w@mail.gmail.com>
-Subject: Re: [PATCH RFC net-next v2] page_pool: import Jesper's page_pool benchmark
-To: =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] selftests/mm: add simple VM_PFNMAP tests based on
+ mmap'ing /dev/mem
+To: Aishwarya <aishwarya.tcv@arm.com>
+Cc: ryan.roberts@arm.com, akpm@linux-foundation.org, dev.jain@arm.com,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mm@kvack.org, lorenzo.stoakes@oracle.com, mingo@redhat.com,
+ peterx@redhat.com, shuah@kernel.org
+References: <7df6ecb7-0aa8-4f18-ba8a-ce6d095cbd42@arm.com>
+ <20250528182338.30117-1-aishwarya.tcv@arm.com>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <20250528182338.30117-1-aishwarya.tcv@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, May 28, 2025 at 2:28=E2=80=AFAM Toke H=C3=B8iland-J=C3=B8rgensen <t=
-oke@redhat.com> wrote:
->
-> Mina Almasry <almasrymina@google.com> writes:
->
-> > On Mon, May 26, 2025 at 5:51=E2=80=AFAM Toke H=C3=B8iland-J=C3=B8rgense=
-n <toke@redhat.com> wrote:
-> >> > Fast path results:
-> >> > no-softirq-page_pool01 Per elem: 11 cycles(tsc) 4.368 ns
-> >> >
-> >> > ptr_ring results:
-> >> > no-softirq-page_pool02 Per elem: 527 cycles(tsc) 195.187 ns
-> >> >
-> >> > slow path results:
-> >> > no-softirq-page_pool03 Per elem: 549 cycles(tsc) 203.466 ns
-> >> > ```
-> >> >
-> >> > Cc: Jesper Dangaard Brouer <hawk@kernel.org>
-> >> > Cc: Ilias Apalodimas <ilias.apalodimas@linaro.org>
-> >> > Cc: Jakub Kicinski <kuba@kernel.org>
-> >> > Cc: Toke H=C3=B8iland-J=C3=B8rgensen <toke@toke.dk>
-> >> >
-> >> > Signed-off-by: Mina Almasry <almasrymina@google.com>
-> >>
-> >> Back when you posted the first RFC, Jesper and I chatted about ways to
-> >> avoid the ugly "load module and read the output from dmesg" interface =
-to
-> >> the test.
-> >>
-> >
-> > I agree the existing interface is ugly.
-> >
-> >> One idea we came up with was to make the module include only the "inne=
-r"
-> >> functions for the benchmark, and expose those to BPF as kfuncs. Then t=
-he
-> >> test runner can be a BPF program that runs the tests, collects the dat=
-a
-> >> and passes it to userspace via maps or a ringbuffer or something. That=
-'s
-> >> a nicer and more customisable interface than the printk output. And if
-> >> they're small enough, maybe we could even include the functions into t=
-he
-> >> page_pool code itself, instead of in a separate benchmark module?
-> >>
-> >> WDYT of that idea? :)
-> >
-> > ...but this sounds like an enormous amount of effort, for something
-> > that is a bit ugly but isn't THAT bad. Especially for me, I'm not that
-> > much of an expert that I know how to implement what you're referring
-> > to off the top of my head. I normally am open to spending time but
-> > this is not that high on my todolist and I have limited bandwidth to
-> > resolve this :(
-> >
-> > I also feel that this is something that could be improved post merge.
-> > I think it's very beneficial to have this merged in some form that can
-> > be improved later. Byungchul is making a lot of changes to these mm
-> > things and it would be nice to have an easy way to run the benchmark
-> > in tree and maybe even get automated results from nipa. If we could
-> > agree on mvp that is appropriate to merge without too much scope creep
-> > that would be ideal from my side at least.
->
-> Right, fair. I guess we can merge it as-is, and then investigate whether
-> we can move it to BPF-based (or maybe 'perf bench' - Cc acme) later :)
+On 28.05.25 20:23, Aishwarya wrote:
+> Hi David,
+> 
+> I applied the patch on next-20250515 and ran the test. The issue is no
+> longer observed, and the test completed successfully. I can confirm
+> that the patch resolves the problem.
+> 
+> Tested-by: Aishwarya TCV <aishwarya.tcv@arm.com>
 
-Thanks for the pliability. Reviewed-bys and comments welcome.
+Thanks a bunch for the fast re-test!
 
-Additionally Signed-off-by from Jesper is needed I think. Since most
-of this code is his, I retained his authorship. Jesper, whenever this
-looks good to me, a signed-off-by would be good and I would carry it
-to future versions. Changing authorship to me is also fine by me but I
-would think you want to retain the credit.
+-- 
+Cheers,
 
---=20
-Thanks,
-Mina
+David / dhildenb
+
 
