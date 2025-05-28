@@ -1,49 +1,50 @@
-Return-Path: <linux-kselftest+bounces-33945-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33946-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB3AEAC6DD1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 May 2025 18:19:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8730AC6DD0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 May 2025 18:19:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 97BD5174DE5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 May 2025 16:18:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E1E23AA19C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 May 2025 16:18:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5164428DEFB;
-	Wed, 28 May 2025 16:17:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C73028D8FA;
+	Wed, 28 May 2025 16:17:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Ddr3eeqn"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pK06utRe"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
+Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D40D28CF45
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 May 2025 16:17:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAE6828CF5D
+	for <linux-kselftest@vger.kernel.org>; Wed, 28 May 2025 16:17:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748449045; cv=none; b=FNIOoXzvuviJXlByrPaojkrSjCHuJHH4Ktruv0dR9BjxcpNjbLJ9cZftrekPkhGz+VmQgaT5C5K6dm0LVDUcv2zIHzh08ZD5zQ7c8bHfALbJMK5e4BaCrUm5GFFW3Kp9BGfTNDkhCcSLvTwjclDyop208ljEkHyjnpgoUICLzIM=
+	t=1748449056; cv=none; b=t5Ro3M7MnGlXIWMRk0YTGiU+gfD7BcugZtwEULgBJw3rivQwuQLnwxmZ19MLsQgYLqICNZVsL4q5CpIFLFLRueTHQaMuezWM88mgT00i/eF3W4YOnSVOvUC7ZnJmqv2ebLLNH8Gzd2ehY5CIA388JQU1vO84I4rg1M1TQgflNPM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748449045; c=relaxed/simple;
-	bh=ASJATDXHJ1cff1RjM4ZAA2vRF3PIUif1svRlmTRlIN8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=k1H99EJLpMT2rOF/dVciPgAY4TGwXndpJ5PLO4hCAW+wFVNBhXVH/+lZ9eruvTuaQ6DPmrAsEHYf5m/l/93PLelTMMOHe1M08/WBrkz3Dau7bWYHiKcn0AfIMp0ujRcMPW1aW9JQsqqseGLFCIlKRCrDU1Ca8Q4aFNUx6It1TyA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Ddr3eeqn; arc=none smtp.client-ip=95.215.58.171
+	s=arc-20240116; t=1748449056; c=relaxed/simple;
+	bh=eoA47rogCFpNR9Tkp0qdf/QF8lVs8dsGQjdd9xff9mo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=r9dCQBFmyEExXJIAfc28MTKM87rFX1cvjJmZuH+aibrc0KAfTLjqkaukDzEHS8SmLfJ2NE8mdZi5C5Kh1fkbAGu+Z9xrtOVgAAsUnk1GsY82YX3yCKEq5dHmwdbsn7UrZGTs00g9M96W5N5wOzb+/sNyLBhLu99SVUqvxKUNGwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pK06utRe; arc=none smtp.client-ip=95.215.58.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1748449034;
+	t=1748449050;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=BB0IE1lnbJy5zpZRdhFIn+OnRh+wjVB9ZlPmF9vEgZQ=;
-	b=Ddr3eeqnknPlT2TUs4jc/5e5ZIqxAEn6zrlKujUIy2pi9ZkQ3bnuR8Gpaa8rQ243NNR1a1
-	1J7dp/zUfXVVtosYzuXzUX2x1pS58ZTq5GXJ253UtPOQ1VrBLATa3aKI6fbVop73jET6oq
-	Ix/dhQxh4i+ivAiumbzGVc8pF7KE978=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Pn98AFuFJVRfrXheY2sIBg6u+lxsCC5KB/mfc1OY4Tc=;
+	b=pK06utRe4sZNQgZl6s+J01SB4EAoD/2YJCoowUhDM3w+6jdLWZ9bptn16zfUHGblnkealE
+	9nzOtsd5RsEyrRkKIAykY9VdTqypr/jZGD8cESst1SN+bjfYqNG0RBrpBhbMhbvz+MK3Im
+	5PVmtOw6N5ncYeu0tQSRmxycn0WxTP8=
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	syzbot+9767c7ed68b95cfa69e6@syzkaller.appspotmail.com,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -62,9 +63,11 @@ Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	Tejun Heo <tj@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v1 1/2] bpf: Restrict usage scope of bpf_get_cgroup_classid
-Date: Thu, 29 May 2025 00:16:25 +0800
-Message-ID: <20250528161653.55162-1-jiayuan.chen@linux.dev>
+Subject: [PATCH bpf-next v1 2/2] bpf/selftests: Add test cases for retrieving classid
+Date: Thu, 29 May 2025 00:16:26 +0800
+Message-ID: <20250528161653.55162-2-jiayuan.chen@linux.dev>
+In-Reply-To: <20250528161653.55162-1-jiayuan.chen@linux.dev>
+References: <20250528161653.55162-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -74,126 +77,299 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-A previous commit expanded the usage scope of bpf_get_cgroup_classid() to
-all contexts (see Fixes tag), but this was inappropriate.
+Covers all scenarios where classid can be retrieved with bpf.
 
-First, syzkaller reported a bug [1].
-Second, it uses skb as an argument, but its implementation varies across
-different bpf prog types. For example, in sock_filter and sock_addr, it
-retrieves the classid from the current context
-(bpf_get_cgroup_classid_curr_proto) instead of from skb. In tc egress and
-lwt, it fetches the classid from skb->sk, but in tc ingress, it returns 0.
+./test_progs -a cgroup_get_classid
+53/1    cgroup_get_classid/get classid from tc:OK
+53/2    cgroup_get_classid/get classid from sysctl:OK
+53/3    cgroup_get_classid/get classid from cgroup dev:OK
+53/4    cgroup_get_classid/get classid from cgroup sockopt:OK
+53      cgroup_get_classid:OK
+Summary: 1/4 PASSED, 0 SKIPPED, 0 FAILED
 
-In summary, the definition of bpf_get_cgroup_classid() is ambiguous and
-its usage scenarios are limited. It should not be treated as a
-general-purpose helper. This patch reverts part of the previous commit.
-
-[1] https://syzkaller.appspot.com/bug?extid=9767c7ed68b95cfa69e6
-
-Fixes: ee971630f20f ("bpf: Allow some trace helpers for all prog types")
-Reported-by: syzbot+9767c7ed68b95cfa69e6@syzkaller.appspotmail.com
 Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
- include/linux/bpf-cgroup.h |  8 ++++++++
- kernel/bpf/cgroup.c        | 25 +++++++++++++++++++++++++
- kernel/bpf/helpers.c       |  4 ----
- 3 files changed, 33 insertions(+), 4 deletions(-)
+ .../selftests/bpf/prog_tests/cgroup_classid.c | 212 ++++++++++++++++++
+ .../selftests/bpf/progs/test_cgroup_classid.c |  51 +++++
+ 2 files changed, 263 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_classid.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_cgroup_classid.c
 
-diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
-index 4847dcade917..9de7adb68294 100644
---- a/include/linux/bpf-cgroup.h
-+++ b/include/linux/bpf-cgroup.h
-@@ -427,6 +427,8 @@ int cgroup_bpf_prog_query(const union bpf_attr *attr,
- 
- const struct bpf_func_proto *
- cgroup_common_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog);
-+const struct bpf_func_proto *
-+cgroup_current_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog);
- #else
- 
- static inline int cgroup_bpf_inherit(struct cgroup *cgrp) { return 0; }
-@@ -463,6 +465,12 @@ cgroup_common_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 	return NULL;
- }
- 
-+static inline const struct bpf_func_proto *
-+cgroup_current_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_classid.c b/tools/testing/selftests/bpf/prog_tests/cgroup_classid.c
+new file mode 100644
+index 000000000000..f00da952e52c
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/cgroup_classid.c
+@@ -0,0 +1,212 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <sys/types.h>
++#include <unistd.h>
++#include <test_progs.h>
++#include "cgroup_helpers.h"
++#include "network_helpers.h"
++#include "test_cgroup_classid.skel.h"
++
++#define TEST_CGROUP "/cgroup_classid"
++
++static int test_cgroup_get_classid_from_tc(int cgroup_fd, int srv_fd, int srv_port, bool egress)
 +{
-+	return NULL;
-+}
++	struct test_cgroup_classid *skel;
++	int cli_fd = -1, ret = -1, expected;
 +
- static inline int bpf_cgroup_storage_assign(struct bpf_prog_aux *aux,
- 					    struct bpf_map *map) { return 0; }
- static inline struct bpf_cgroup_storage *bpf_cgroup_storage_alloc(
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index 62a1d8deb3dc..a99b72e6f1c9 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -1653,6 +1653,10 @@ cgroup_dev_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 	if (func_proto)
- 		return func_proto;
- 
-+	func_proto = cgroup_current_func_proto(func_id, prog);
-+	if (func_proto)
-+		return func_proto;
++	LIBBPF_OPTS(bpf_tcx_opts, optl);
 +
- 	switch (func_id) {
- 	case BPF_FUNC_perf_event_output:
- 		return &bpf_event_output_data_proto;
-@@ -2200,6 +2204,10 @@ sysctl_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 	if (func_proto)
- 		return func_proto;
- 
-+	func_proto = cgroup_current_func_proto(func_id, prog);
-+	if (func_proto)
-+		return func_proto;
++	skel = test_cgroup_classid__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
++		return ret;
 +
- 	switch (func_id) {
- 	case BPF_FUNC_sysctl_get_name:
- 		return &bpf_sysctl_get_name_proto;
-@@ -2343,6 +2351,10 @@ cg_sockopt_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 	if (func_proto)
- 		return func_proto;
- 
-+	func_proto = cgroup_current_func_proto(func_id, prog);
-+	if (func_proto)
-+		return func_proto;
-+
- 	switch (func_id) {
- #ifdef CONFIG_NET
- 	case BPF_FUNC_get_netns_cookie:
-@@ -2589,3 +2601,16 @@ cgroup_common_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return NULL;
- 	}
- }
-+
-+const struct bpf_func_proto *
-+cgroup_current_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
-+{
-+	switch (func_id) {
-+#ifdef CONFIG_CGROUP_NET_CLASSID
-+	case BPF_FUNC_get_cgroup_classid:
-+		return &bpf_get_cgroup_classid_curr_proto;
-+#endif
-+	default:
-+		return NULL;
++	skel->bss->classid = -1;
++	if (egress) {
++		expected = getpid();
++		skel->links.tc_egress =
++			bpf_program__attach_tcx(skel->progs.tc_egress, 1, &optl);
++	} else {
++		expected = 0;
++		skel->links.tc_ingress =
++			bpf_program__attach_tcx(skel->progs.tc_ingress, 1, &optl);
 +	}
++
++	cli_fd = connect_to_fd_opts(srv_fd, NULL);
++	if (!ASSERT_GE(cli_fd, 0, "connect_to_fd_opts"))
++		goto out;
++
++	ASSERT_EQ(skel->bss->classid, expected, "classid mismatch");
++	ret = 0;
++out:
++	if (cli_fd > 0)
++		close(cli_fd);
++
++	test_cgroup_classid__destroy(skel);
++	return ret;
 +}
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index b71e428ad936..9d0d54f4f0de 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -2024,10 +2024,6 @@ bpf_base_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_get_current_ancestor_cgroup_id_proto;
- 	case BPF_FUNC_current_task_under_cgroup:
- 		return &bpf_current_task_under_cgroup_proto;
--#endif
--#ifdef CONFIG_CGROUP_NET_CLASSID
--	case BPF_FUNC_get_cgroup_classid:
--		return &bpf_get_cgroup_classid_curr_proto;
- #endif
- 	case BPF_FUNC_task_storage_get:
- 		if (bpf_prog_check_recur(prog))
++
++static void test_cgroup_get_classid_tc(void)
++{
++	int srv_fd = -1, srv_port = -1;
++	int cgroup_fd = -1;
++
++	setup_classid_environment();
++	set_classid();
++	join_classid();
++
++	cgroup_fd = open_classid();
++	if (!ASSERT_GE(cgroup_fd, 0, "open_classid"))
++		goto out;
++
++	srv_fd = start_server(AF_INET, SOCK_STREAM, NULL, 0, 0);
++	if (!ASSERT_GE(srv_fd, 0, "srv_fd"))
++		goto out;
++
++	srv_port = get_socket_local_port(srv_fd);
++	if (!ASSERT_GE(srv_port, 0, "get_socket_local_port"))
++		goto out;
++
++	ASSERT_OK(test_cgroup_get_classid_from_tc(cgroup_fd, srv_fd, srv_port, 1), "egress");
++	ASSERT_OK(test_cgroup_get_classid_from_tc(cgroup_fd, srv_fd, srv_port, 0), "ingress");
++out:
++	if (srv_fd > 0)
++		close(srv_fd);
++	if (cgroup_fd > 0)
++		close(cgroup_fd);
++	cleanup_classid_environment();
++}
++
++static void test_cgroup_get_classid_cgroup_dev(void)
++{
++	struct test_cgroup_classid *skel = NULL;
++	int cgroup_fd = -1;
++
++	cgroup_fd = test__join_cgroup(TEST_CGROUP);
++	if (!ASSERT_GE(cgroup_fd, 0, "join cgroup"))
++		goto out;
++
++	if (!ASSERT_OK(setup_classid_environment(), "setup env"))
++		goto out;
++
++	if (!ASSERT_OK(set_classid(), "set_classid"))
++		goto out;
++
++	skel = test_cgroup_classid__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "load program"))
++		goto out;
++
++	skel->links.cg_dev =
++		bpf_program__attach_cgroup(skel->progs.cg_dev, cgroup_fd);
++
++	if (!ASSERT_OK_PTR(skel->links.cg_dev, "attach_program"))
++		goto out;
++
++	skel->bss->classid = -1;
++	if (!ASSERT_OK(join_classid(), "join_classid"))
++		goto out;
++
++	open("/dev/null", O_RDWR);
++	ASSERT_EQ(skel->bss->classid, getpid(), "classid mismatch");
++out:
++	if (cgroup_fd > 0)
++		close(cgroup_fd);
++	test_cgroup_classid__destroy(skel);
++	cleanup_classid_environment();
++}
++
++static void test_cgroup_get_classid_sysctl(void)
++{
++	struct test_cgroup_classid *skel = NULL;
++	int cgroup_fd = -1;
++
++	cgroup_fd = test__join_cgroup(TEST_CGROUP);
++	if (!ASSERT_GE(cgroup_fd, 0, "join cgroup"))
++		goto out;
++
++	if (!ASSERT_OK(setup_classid_environment(), "setup env"))
++		goto out;
++
++	if (!ASSERT_OK(set_classid(), "set_classid"))
++		goto out;
++
++	skel = test_cgroup_classid__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "load program"))
++		goto out;
++
++	skel->links.sysctl_tcp_mem =
++		bpf_program__attach_cgroup(skel->progs.sysctl_tcp_mem, cgroup_fd);
++	if (!ASSERT_OK_PTR(skel->links.sysctl_tcp_mem, "attach_program"))
++		goto out;
++
++	skel->bss->classid = -1;
++	if (!ASSERT_OK(join_classid(), "join_classid"))
++		goto out;
++
++	SYS_NOFAIL("cat /proc/sys/net/ipv4/tcp_mem");
++	ASSERT_EQ(skel->bss->classid, getpid(), "classid mismatch");
++out:
++	if (cgroup_fd > 0)
++		close(cgroup_fd);
++	test_cgroup_classid__destroy(skel);
++	cleanup_classid_environment();
++}
++
++static void test_cgroup_get_classid_sockopt(void)
++{
++	struct test_cgroup_classid *skel = NULL;
++	int cgroup_fd = -1, fd = -1, val, err;
++	socklen_t val_len;
++
++	cgroup_fd = test__join_cgroup(TEST_CGROUP);
++	if (!ASSERT_GE(cgroup_fd, 0, "join cgroup"))
++		goto out;
++
++	if (!ASSERT_OK(setup_classid_environment(), "setup env"))
++		goto out;
++
++	if (!ASSERT_OK(set_classid(), "set_classid"))
++		goto out;
++
++	skel = test_cgroup_classid__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "load program"))
++		goto out;
++
++	skel->links.cg_getsockopt =
++		bpf_program__attach_cgroup(skel->progs.cg_getsockopt, cgroup_fd);
++	if (!ASSERT_OK_PTR(skel->links.cg_getsockopt, "attach_program"))
++		goto out;
++
++	skel->bss->classid = -1;
++	if (!ASSERT_OK(join_classid(), "join_classid"))
++		goto out;
++
++	fd = socket(AF_INET, SOCK_STREAM, 0);
++	if (!ASSERT_OK_FD(fd, "socket"))
++		goto out;
++
++	val_len = sizeof(val);
++	err = getsockopt(fd,  SOL_SOCKET, SO_SNDBUF, &val, &val_len);
++	if (!ASSERT_OK(err, "getsockopt"))
++		goto out;
++
++	ASSERT_EQ(skel->bss->classid, getpid(), "classid mismatch");
++out:
++	if (fd > 0)
++		close(fd);
++	if (cgroup_fd > 0)
++		close(cgroup_fd);
++	test_cgroup_classid__destroy(skel);
++	cleanup_classid_environment();
++}
++
++void test_cgroup_get_classid(void)
++{
++	if (test__start_subtest("get classid from tc"))
++		test_cgroup_get_classid_tc();
++	if (test__start_subtest("get classid from sysctl"))
++		test_cgroup_get_classid_sysctl();
++	if (test__start_subtest("get classid from cgroup dev"))
++		test_cgroup_get_classid_cgroup_dev();
++	if (test__start_subtest("get classid from cgroup sockopt"))
++		test_cgroup_get_classid_sockopt();
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_cgroup_classid.c b/tools/testing/selftests/bpf/progs/test_cgroup_classid.c
+new file mode 100644
+index 000000000000..7a555ba6bb17
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_cgroup_classid.c
+@@ -0,0 +1,51 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/bpf.h>
++#include <sys/socket.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_endian.h>
++
++int classid;
++
++SEC("tc/egress")
++int tc_egress(struct __sk_buff *skb)
++{
++	/* expecte real classid */
++	classid = bpf_get_cgroup_classid(skb);
++	return TCX_PASS;
++}
++
++SEC("tc/ingress")
++int tc_ingress(struct __sk_buff *skb)
++{
++	/* expecte 0 */
++	classid = bpf_get_cgroup_classid(skb);
++	return TCX_PASS;
++}
++
++SEC("cgroup/dev")
++int cg_dev(struct bpf_cgroup_dev_ctx *ctx)
++{
++	/* expecte real classid */
++	classid = bpf_get_cgroup_classid((struct __sk_buff *)ctx);
++	/* Allow all */
++	return 1;
++}
++
++SEC("cgroup/sysctl")
++int sysctl_tcp_mem(struct bpf_sysctl *ctx)
++{
++	/* expecte real classid */
++	classid = bpf_get_cgroup_classid((struct __sk_buff *)ctx);
++	return 1;
++}
++
++SEC("cgroup/getsockopt")
++int cg_getsockopt(struct bpf_sockopt *ctx)
++{
++	/* expecte real classid */
++	classid = bpf_get_cgroup_classid((struct __sk_buff *)ctx);
++	return 1;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.47.1
 
