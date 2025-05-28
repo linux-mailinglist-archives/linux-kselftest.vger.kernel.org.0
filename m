@@ -1,376 +1,162 @@
-Return-Path: <linux-kselftest+bounces-33946-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33947-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8730AC6DD0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 May 2025 18:19:18 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3F2FAC6DE6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 May 2025 18:21:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E1E23AA19C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 May 2025 16:18:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9B0997B406F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 May 2025 16:19:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C73028D8FA;
-	Wed, 28 May 2025 16:17:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AA5D28C86C;
+	Wed, 28 May 2025 16:20:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pK06utRe"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LEf2JTUg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAE6828CF5D
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 May 2025 16:17:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DBB82798EB;
+	Wed, 28 May 2025 16:20:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748449056; cv=none; b=t5Ro3M7MnGlXIWMRk0YTGiU+gfD7BcugZtwEULgBJw3rivQwuQLnwxmZ19MLsQgYLqICNZVsL4q5CpIFLFLRueTHQaMuezWM88mgT00i/eF3W4YOnSVOvUC7ZnJmqv2ebLLNH8Gzd2ehY5CIA388JQU1vO84I4rg1M1TQgflNPM=
+	t=1748449252; cv=none; b=Vvv33eRHx8FRBv9vxs0N8SPQz3z5am4SjG+1XJT/w2Z0w7od6L8Npsi2r5fJgnUO0St8dtzJ6mnLZjrjY5Zz86TjiuuLk4ivl8oHCXQ7VYGtVyeg/kx1LDVGJavtSDXXBFql/mCzmHWOu49HlaUk4GJKZ03zbbA1kWwXbOkJG6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748449056; c=relaxed/simple;
-	bh=eoA47rogCFpNR9Tkp0qdf/QF8lVs8dsGQjdd9xff9mo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=r9dCQBFmyEExXJIAfc28MTKM87rFX1cvjJmZuH+aibrc0KAfTLjqkaukDzEHS8SmLfJ2NE8mdZi5C5Kh1fkbAGu+Z9xrtOVgAAsUnk1GsY82YX3yCKEq5dHmwdbsn7UrZGTs00g9M96W5N5wOzb+/sNyLBhLu99SVUqvxKUNGwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pK06utRe; arc=none smtp.client-ip=95.215.58.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1748449050;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Pn98AFuFJVRfrXheY2sIBg6u+lxsCC5KB/mfc1OY4Tc=;
-	b=pK06utRe4sZNQgZl6s+J01SB4EAoD/2YJCoowUhDM3w+6jdLWZ9bptn16zfUHGblnkealE
-	9nzOtsd5RsEyrRkKIAykY9VdTqypr/jZGD8cESst1SN+bjfYqNG0RBrpBhbMhbvz+MK3Im
-	5PVmtOw6N5ncYeu0tQSRmxycn0WxTP8=
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Feng Yang <yangfeng@kylinos.cn>,
-	Tejun Heo <tj@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v1 2/2] bpf/selftests: Add test cases for retrieving classid
-Date: Thu, 29 May 2025 00:16:26 +0800
-Message-ID: <20250528161653.55162-2-jiayuan.chen@linux.dev>
-In-Reply-To: <20250528161653.55162-1-jiayuan.chen@linux.dev>
-References: <20250528161653.55162-1-jiayuan.chen@linux.dev>
+	s=arc-20240116; t=1748449252; c=relaxed/simple;
+	bh=pVfN9eS0l7ihongB0LOBdjBA6cxaKVHJrt34QSlJ1sI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=h7nkNzyh2zfNMNZsx0UlNMAIsDGsXdTHKx4p90ceTv8eUtSqp85JrA/ujix7kq6r4p0Mkr4qwie44CRwkrrAx3cckVT3F1dxHqbKicX+EIJadEsYk4wK559EQd2YB0VTKib5KbiF6/pb0FVs+UQrgqcBQJX/vrWtS6uYyWk1GjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LEf2JTUg; arc=none smtp.client-ip=209.85.208.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-32a6083ef65so28461551fa.2;
+        Wed, 28 May 2025 09:20:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1748449249; x=1749054049; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yX1eTIuJOFJ1d8HmF81QUkvA4Oc+VUDTFQ5Tkm2VlKI=;
+        b=LEf2JTUg47tDz/5Nq7NOGOb4KMtNOvx07nVAjiktSk+5JnCPovnVhpO8TX3h1EThIO
+         ofaTvc+ylFwiZpfFviudq4g1V7itEzsA1B5Bt3K5FzUxoC7c7YY/SDWlpigOFkLFxpoD
+         QuIdktaKP9pPtBMF1LrZwzl08wr2JcHimmbUPA2G6+k3Okg4FYJ9NkbFpDm+i1vT1YNC
+         5mgtTlTAcB45iGm/Q7OLASkrdEGrycRcGqbfBCHW8M5d20HhGv6GqyrmocsYMxRIoJdJ
+         xf5fY48Fx8ZGXqIgTGSlr9T9HIAA0V7Z64UnwWOFgp/Bj0EH9qFZu72V8cl2pUIIthgr
+         6oKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748449249; x=1749054049;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yX1eTIuJOFJ1d8HmF81QUkvA4Oc+VUDTFQ5Tkm2VlKI=;
+        b=w7wTF9fFbCC1NbXp8Q/cMARpG0K/KjA5yRwFkkfzsdhkljnl4ub7HnYCzVPeS/pECZ
+         Nz+8miNi4zV7+4n7B5XLInTmShCIsyBbGl7wl5NMbt68wleaBpRAxuM4Pa3qrJ0GuvLi
+         7nlKcHEphYXvfFD6ax1yKWKwJEdu4H4NcNzg44x8I0aniVDIDsxjeh0527sUhUPoD4RW
+         x0Lp9ypJXHSI7paOoaunmFsZXV4JQ85Nbd4QcWE9IIGmKBZtXLU67blsqXCCZTutYo6J
+         4bNQX5movTYe94yAezM1oDBQLvOLX+Sk24uRXBof+WirYi54Ty8YxW94bTXZnFXPY2N+
+         iEKw==
+X-Forwarded-Encrypted: i=1; AJvYcCUcgXQE5XdUiDLiOKDK27I2/Q8yq2VNNx1ncLxA5JlK1FXzxO5Os6ffDha1wvhqn+78APsTjmuY+MtqwpB/Xk8=@vger.kernel.org, AJvYcCVLfn8Qs6JbIpW6QjvGrALzIxaBdsGXfz7Vb99KOQ7UgdPHgI0mfArGK7jwnLetVIYzVZJrq7DLslM/8FM=@vger.kernel.org, AJvYcCWexzghDyiomsrJHUkafl40ClvqcXtXsxqdbiFEftUZhnOhyd7hpi0oqP9fsVroEdLCsfZoJGZ+ObCuuS4SJNtu@vger.kernel.org
+X-Gm-Message-State: AOJu0YxqF9+5AddQp3FqHuxbtHMMK4tanYtQu8ycfnlcu78tr0PcvB7b
+	YtD7jHF/sGxhMX7IbOeaNipGhv+Is0hwPcxBGr4cNnEuEgRPXuhySioOORD7I9vvPAY+y/b9p7N
+	D8EOMzkSQVia/pz9TVG8eaIffJ+funx4=
+X-Gm-Gg: ASbGncvPx8OX4VqkhlieocMMid459Y8rYJ8RWq2VXAAdjFqJ58CDi+4jf5soBnNfcwA
+	+ar31x2QYseCYSz6ekUd3w+Pqn+6mGhxzywNo0GMckf03m3mEg+nJYCKwfONCIkr8f1/5owhJeu
+	oB3inA0rOobLPzBzSEpRXFju78OTVKY6pv4tfMCbnfKmdpwO2Y
+X-Google-Smtp-Source: AGHT+IERNF6nJP16os1FaKc3/sdXmm8EwNv8eCauOgOToi64bP3nXEDmXCRmFZmrwxC0g1SSj5SgySzC5xDlCsB7Oow=
+X-Received: by 2002:a05:651c:214e:b0:32a:5e74:5726 with SMTP id
+ 38308e7fff4ca-32a5e745900mr27333001fa.38.1748449248922; Wed, 28 May 2025
+ 09:20:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20250527-idiomatic-match-slice-v1-1-34b0b1d1d58c@gmail.com> <202505282330.oOHtt60s-lkp@intel.com>
+In-Reply-To: <202505282330.oOHtt60s-lkp@intel.com>
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Wed, 28 May 2025 12:20:12 -0400
+X-Gm-Features: AX0GCFtwpZSAhj_4TToLyRo1WFyFxvpTkmyybwSPHteM3wp-9wZFIJXZ0dupnGM
+Message-ID: <CAJ-ks9m30hV+OiN3yO5nU47EoVfuBr=OhjS8QHpgBSWcoB4vWw@mail.gmail.com>
+Subject: Re: [PATCH] rust: replace length checks with match
+To: kernel test robot <lkp@intel.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, oe-kbuild-all@lists.linux.dev, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Covers all scenarios where classid can be retrieved with bpf.
+On Wed, May 28, 2025 at 11:58=E2=80=AFAM kernel test robot <lkp@intel.com> =
+wrote:
+>
+> Hi Tamir,
+>
+> kernel test robot noticed the following build errors:
+>
+> [auto build test ERROR on bfc3cd87559bc593bb32bb1482f9cae3308b6398]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Tamir-Duberstein/r=
+ust-replace-length-checks-with-match/20250528-001121
+> base:   bfc3cd87559bc593bb32bb1482f9cae3308b6398
+> patch link:    https://lore.kernel.org/r/20250527-idiomatic-match-slice-v=
+1-1-34b0b1d1d58c%40gmail.com
+> patch subject: [PATCH] rust: replace length checks with match
+> config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/202=
+50528/202505282330.oOHtt60s-lkp@intel.com/config)
+> compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b=
+5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+> rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20250528/202505282330.oOHtt60s-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202505282330.oOHtt60s-lkp=
+@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+>    PATH=3D/opt/cross/clang-18/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin=
+:/bin
+>    INFO PATH=3D/opt/cross/rustc-1.78.0-bindgen-0.65.1/cargo/bin:/opt/cros=
+s/clang-18/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+>    /usr/bin/timeout -k 100 12h /usr/bin/make KCFLAGS=3D -Wno-error=3Dretu=
+rn-type -Wreturn-type -funsigned-char -Wundef W=3D1 --keep-going LLVM=3D1 -=
+j24 -C source O=3D/kbuild/obj/consumer/x86_64-rhel-9.4-rust ARCH=3Dx86_64 S=
+HELL=3D/bin/bash rustfmtcheck
+>    make: Entering directory '/kbuild/src/consumer'
+>    make[1]: Entering directory '/kbuild/obj/consumer/x86_64-rhel-9.4-rust=
+'
+> >> Diff in scripts/rustdoc_test_gen.rs at line 90:
+>                 "No path candidates found for `{file}`. This is likely a =
+bug in the build system, or \
+>                 some files went away while compiling."
+>             ),
+>    -        [valid_path] =3D> {
+>    -            valid_path.to_str().unwrap()
+>    -        }
+>    +        [valid_path] =3D> valid_path.to_str().unwrap(),
+>             valid_paths =3D> {
+>                 eprintln!("Several path candidates found:");
+>                 for path in valid_paths {
+>    make[2]: *** [Makefile:1826: rustfmt] Error 123
+>    make[2]: Target 'rustfmtcheck' not remade because of errors.
+>    make[1]: Leaving directory '/kbuild/obj/consumer/x86_64-rhel-9.4-rust'
+>    make[1]: *** [Makefile:248: __sub-make] Error 2
+>    make[1]: Target 'rustfmtcheck' not remade because of errors.
+>    make: *** [Makefile:248: __sub-make] Error 2
+>    make: Target 'rustfmtcheck' not remade because of errors.
+>    make: Leaving directory '/kbuild/src/consumer'
 
-./test_progs -a cgroup_get_classid
-53/1    cgroup_get_classid/get classid from tc:OK
-53/2    cgroup_get_classid/get classid from sysctl:OK
-53/3    cgroup_get_classid/get classid from cgroup dev:OK
-53/4    cgroup_get_classid/get classid from cgroup sockopt:OK
-53      cgroup_get_classid:OK
-Summary: 1/4 PASSED, 0 SKIPPED, 0 FAILED
-
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
----
- .../selftests/bpf/prog_tests/cgroup_classid.c | 212 ++++++++++++++++++
- .../selftests/bpf/progs/test_cgroup_classid.c |  51 +++++
- 2 files changed, 263 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_classid.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_cgroup_classid.c
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_classid.c b/tools/testing/selftests/bpf/prog_tests/cgroup_classid.c
-new file mode 100644
-index 000000000000..f00da952e52c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_classid.c
-@@ -0,0 +1,212 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <sys/types.h>
-+#include <unistd.h>
-+#include <test_progs.h>
-+#include "cgroup_helpers.h"
-+#include "network_helpers.h"
-+#include "test_cgroup_classid.skel.h"
-+
-+#define TEST_CGROUP "/cgroup_classid"
-+
-+static int test_cgroup_get_classid_from_tc(int cgroup_fd, int srv_fd, int srv_port, bool egress)
-+{
-+	struct test_cgroup_classid *skel;
-+	int cli_fd = -1, ret = -1, expected;
-+
-+	LIBBPF_OPTS(bpf_tcx_opts, optl);
-+
-+	skel = test_cgroup_classid__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		return ret;
-+
-+	skel->bss->classid = -1;
-+	if (egress) {
-+		expected = getpid();
-+		skel->links.tc_egress =
-+			bpf_program__attach_tcx(skel->progs.tc_egress, 1, &optl);
-+	} else {
-+		expected = 0;
-+		skel->links.tc_ingress =
-+			bpf_program__attach_tcx(skel->progs.tc_ingress, 1, &optl);
-+	}
-+
-+	cli_fd = connect_to_fd_opts(srv_fd, NULL);
-+	if (!ASSERT_GE(cli_fd, 0, "connect_to_fd_opts"))
-+		goto out;
-+
-+	ASSERT_EQ(skel->bss->classid, expected, "classid mismatch");
-+	ret = 0;
-+out:
-+	if (cli_fd > 0)
-+		close(cli_fd);
-+
-+	test_cgroup_classid__destroy(skel);
-+	return ret;
-+}
-+
-+static void test_cgroup_get_classid_tc(void)
-+{
-+	int srv_fd = -1, srv_port = -1;
-+	int cgroup_fd = -1;
-+
-+	setup_classid_environment();
-+	set_classid();
-+	join_classid();
-+
-+	cgroup_fd = open_classid();
-+	if (!ASSERT_GE(cgroup_fd, 0, "open_classid"))
-+		goto out;
-+
-+	srv_fd = start_server(AF_INET, SOCK_STREAM, NULL, 0, 0);
-+	if (!ASSERT_GE(srv_fd, 0, "srv_fd"))
-+		goto out;
-+
-+	srv_port = get_socket_local_port(srv_fd);
-+	if (!ASSERT_GE(srv_port, 0, "get_socket_local_port"))
-+		goto out;
-+
-+	ASSERT_OK(test_cgroup_get_classid_from_tc(cgroup_fd, srv_fd, srv_port, 1), "egress");
-+	ASSERT_OK(test_cgroup_get_classid_from_tc(cgroup_fd, srv_fd, srv_port, 0), "ingress");
-+out:
-+	if (srv_fd > 0)
-+		close(srv_fd);
-+	if (cgroup_fd > 0)
-+		close(cgroup_fd);
-+	cleanup_classid_environment();
-+}
-+
-+static void test_cgroup_get_classid_cgroup_dev(void)
-+{
-+	struct test_cgroup_classid *skel = NULL;
-+	int cgroup_fd = -1;
-+
-+	cgroup_fd = test__join_cgroup(TEST_CGROUP);
-+	if (!ASSERT_GE(cgroup_fd, 0, "join cgroup"))
-+		goto out;
-+
-+	if (!ASSERT_OK(setup_classid_environment(), "setup env"))
-+		goto out;
-+
-+	if (!ASSERT_OK(set_classid(), "set_classid"))
-+		goto out;
-+
-+	skel = test_cgroup_classid__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "load program"))
-+		goto out;
-+
-+	skel->links.cg_dev =
-+		bpf_program__attach_cgroup(skel->progs.cg_dev, cgroup_fd);
-+
-+	if (!ASSERT_OK_PTR(skel->links.cg_dev, "attach_program"))
-+		goto out;
-+
-+	skel->bss->classid = -1;
-+	if (!ASSERT_OK(join_classid(), "join_classid"))
-+		goto out;
-+
-+	open("/dev/null", O_RDWR);
-+	ASSERT_EQ(skel->bss->classid, getpid(), "classid mismatch");
-+out:
-+	if (cgroup_fd > 0)
-+		close(cgroup_fd);
-+	test_cgroup_classid__destroy(skel);
-+	cleanup_classid_environment();
-+}
-+
-+static void test_cgroup_get_classid_sysctl(void)
-+{
-+	struct test_cgroup_classid *skel = NULL;
-+	int cgroup_fd = -1;
-+
-+	cgroup_fd = test__join_cgroup(TEST_CGROUP);
-+	if (!ASSERT_GE(cgroup_fd, 0, "join cgroup"))
-+		goto out;
-+
-+	if (!ASSERT_OK(setup_classid_environment(), "setup env"))
-+		goto out;
-+
-+	if (!ASSERT_OK(set_classid(), "set_classid"))
-+		goto out;
-+
-+	skel = test_cgroup_classid__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "load program"))
-+		goto out;
-+
-+	skel->links.sysctl_tcp_mem =
-+		bpf_program__attach_cgroup(skel->progs.sysctl_tcp_mem, cgroup_fd);
-+	if (!ASSERT_OK_PTR(skel->links.sysctl_tcp_mem, "attach_program"))
-+		goto out;
-+
-+	skel->bss->classid = -1;
-+	if (!ASSERT_OK(join_classid(), "join_classid"))
-+		goto out;
-+
-+	SYS_NOFAIL("cat /proc/sys/net/ipv4/tcp_mem");
-+	ASSERT_EQ(skel->bss->classid, getpid(), "classid mismatch");
-+out:
-+	if (cgroup_fd > 0)
-+		close(cgroup_fd);
-+	test_cgroup_classid__destroy(skel);
-+	cleanup_classid_environment();
-+}
-+
-+static void test_cgroup_get_classid_sockopt(void)
-+{
-+	struct test_cgroup_classid *skel = NULL;
-+	int cgroup_fd = -1, fd = -1, val, err;
-+	socklen_t val_len;
-+
-+	cgroup_fd = test__join_cgroup(TEST_CGROUP);
-+	if (!ASSERT_GE(cgroup_fd, 0, "join cgroup"))
-+		goto out;
-+
-+	if (!ASSERT_OK(setup_classid_environment(), "setup env"))
-+		goto out;
-+
-+	if (!ASSERT_OK(set_classid(), "set_classid"))
-+		goto out;
-+
-+	skel = test_cgroup_classid__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "load program"))
-+		goto out;
-+
-+	skel->links.cg_getsockopt =
-+		bpf_program__attach_cgroup(skel->progs.cg_getsockopt, cgroup_fd);
-+	if (!ASSERT_OK_PTR(skel->links.cg_getsockopt, "attach_program"))
-+		goto out;
-+
-+	skel->bss->classid = -1;
-+	if (!ASSERT_OK(join_classid(), "join_classid"))
-+		goto out;
-+
-+	fd = socket(AF_INET, SOCK_STREAM, 0);
-+	if (!ASSERT_OK_FD(fd, "socket"))
-+		goto out;
-+
-+	val_len = sizeof(val);
-+	err = getsockopt(fd,  SOL_SOCKET, SO_SNDBUF, &val, &val_len);
-+	if (!ASSERT_OK(err, "getsockopt"))
-+		goto out;
-+
-+	ASSERT_EQ(skel->bss->classid, getpid(), "classid mismatch");
-+out:
-+	if (fd > 0)
-+		close(fd);
-+	if (cgroup_fd > 0)
-+		close(cgroup_fd);
-+	test_cgroup_classid__destroy(skel);
-+	cleanup_classid_environment();
-+}
-+
-+void test_cgroup_get_classid(void)
-+{
-+	if (test__start_subtest("get classid from tc"))
-+		test_cgroup_get_classid_tc();
-+	if (test__start_subtest("get classid from sysctl"))
-+		test_cgroup_get_classid_sysctl();
-+	if (test__start_subtest("get classid from cgroup dev"))
-+		test_cgroup_get_classid_cgroup_dev();
-+	if (test__start_subtest("get classid from cgroup sockopt"))
-+		test_cgroup_get_classid_sockopt();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_cgroup_classid.c b/tools/testing/selftests/bpf/progs/test_cgroup_classid.c
-new file mode 100644
-index 000000000000..7a555ba6bb17
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_cgroup_classid.c
-@@ -0,0 +1,51 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/bpf.h>
-+#include <sys/socket.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_endian.h>
-+
-+int classid;
-+
-+SEC("tc/egress")
-+int tc_egress(struct __sk_buff *skb)
-+{
-+	/* expecte real classid */
-+	classid = bpf_get_cgroup_classid(skb);
-+	return TCX_PASS;
-+}
-+
-+SEC("tc/ingress")
-+int tc_ingress(struct __sk_buff *skb)
-+{
-+	/* expecte 0 */
-+	classid = bpf_get_cgroup_classid(skb);
-+	return TCX_PASS;
-+}
-+
-+SEC("cgroup/dev")
-+int cg_dev(struct bpf_cgroup_dev_ctx *ctx)
-+{
-+	/* expecte real classid */
-+	classid = bpf_get_cgroup_classid((struct __sk_buff *)ctx);
-+	/* Allow all */
-+	return 1;
-+}
-+
-+SEC("cgroup/sysctl")
-+int sysctl_tcp_mem(struct bpf_sysctl *ctx)
-+{
-+	/* expecte real classid */
-+	classid = bpf_get_cgroup_classid((struct __sk_buff *)ctx);
-+	return 1;
-+}
-+
-+SEC("cgroup/getsockopt")
-+int cg_getsockopt(struct bpf_sockopt *ctx)
-+{
-+	/* expecte real classid */
-+	classid = bpf_get_cgroup_classid((struct __sk_buff *)ctx);
-+	return 1;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.47.1
-
+Yep, I already noticed this. Will send v2 with proper formatting.
 
