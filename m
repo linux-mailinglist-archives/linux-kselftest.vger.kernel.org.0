@@ -1,168 +1,231 @@
-Return-Path: <linux-kselftest+bounces-33964-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33965-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B8E3AC71BB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 May 2025 21:48:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B7A9AC71BE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 May 2025 21:52:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 375057B4879
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 May 2025 19:47:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3383C1C016DA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 May 2025 19:53:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7200D2206A7;
-	Wed, 28 May 2025 19:47:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D2BF21D594;
+	Wed, 28 May 2025 19:52:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YJjxc5wg"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HT47kzr7"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B560F82C60
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 May 2025 19:47:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33E2D21FF3B
+	for <linux-kselftest@vger.kernel.org>; Wed, 28 May 2025 19:52:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748461645; cv=none; b=l7vZqOsyHzhwUSqQhSqhcrN8xSlosaxaGWU8E2pgdXLLL627fVUmwrBiDkw/u0PLn4w5oyB5bwmhZF8mKC+99bhrNTVXaVP6cg+9B/BE1UK/GswLBG43YMawz0bHQjJ6/D/abHzjEgLMREuCVh3QAbpkEF0dmBceOs3MuWlnjbk=
+	t=1748461971; cv=none; b=m+3PMUOAXvE20Uu6T75Vvp/4ipEWAL1s6kuDha+JNuak262sSGTBaGIyoP2FPbGrqR0lYtzho6XARlsNvuhLe9mZKB292SR4XmKkXD2hpboqwKqQFxMBYVr7D8Zx6zbr66nHrpGH2qDwLEqDPx9mv22lW56q602cnL4ujxY8Q98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748461645; c=relaxed/simple;
-	bh=qzu/O5cbgHa1A7SMmfPezi+LRJu7xmZg3Qe1HliCsUI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=W3u/R/h7YqPeOaMVSRuLiMtOqHf33ZyJKFkPUilVTKTkX7HMJAaQarDkx/VpOwAcaEUIO3qtlOZFryIZ1eMCe2rFJ6EEOZPEJ3a+bs1pS0dDYczO1VAboNndFzAiWNli5fgXm0wM4hT3NSPckQIbSic8bAqLYx1tw3wQIDtoqes=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YJjxc5wg; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1748461971; c=relaxed/simple;
+	bh=31R4xKWKmitjG5RnBTZ6fLS+lQ/xEclC30oq87oWNSQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=odDsPP26hyF1AqhcE9sl18gkHVN0pMWbS94x9mOWQZc65BZAM7fuFlESQjm4RB0xSp9XEYjFGogacm1dG4J2PwuLyIcMCdSzQwtN7GVgJWwR3YER5LuFG3Qu1Epr6MNG1IQ/7Uep5ZQvsAmtnIFh5KXY/VhbWYrXFP+kOdb3a2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HT47kzr7; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1748461641;
+	s=mimecast20190719; t=1748461968;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=E1sbNbzJcyv5ylnPczL2lJsFgJT8miYzZgeExLDdJSA=;
-	b=YJjxc5wgtL+oL9WeLrePtYMWaMJzkesZAsZGvoxTN+sYcXlpb4uYL3vqavgfsVtqdhmxsj
-	TqzwHrVAp2ROud7AEQ6/aOnpl4gZS3sgJPgYKQTMBdtHN30kMyg+z3QOyVMgXQFzfOuViK
-	opD242Be2KPP95HSdYCuMfZ7Gx4D7UY=
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=g+3zZ1K31xkV4VckIAeGyggNzsEYBYLzL0Y5N0v1H1Q=;
+	b=HT47kzr7n3YDtVnrEexGftdH/0VJL4TE2MdRpIE8uazINytsp9cS7xAlSDSUop7HXdzar9
+	iLywH7Qx2E38VIm8VQ6kFaj6+sUUkEWMha2EoSSlZnEqCMRhc4Leky+Ssz41XOp0Omw541
+	gCC7lR82oCqU0tdUHPmu6GtHkQVlADY=
 Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
  [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-218-Y3rPUQzhPOWV4oGgk47igQ-1; Wed, 28 May 2025 15:47:20 -0400
-X-MC-Unique: Y3rPUQzhPOWV4oGgk47igQ-1
-X-Mimecast-MFC-AGG-ID: Y3rPUQzhPOWV4oGgk47igQ_1748461639
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-441c122fa56so934335e9.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 May 2025 12:47:19 -0700 (PDT)
+ us-mta-146-_ycaMKMxNfmjCMvb5gH69g-1; Wed, 28 May 2025 15:52:47 -0400
+X-MC-Unique: _ycaMKMxNfmjCMvb5gH69g-1
+X-Mimecast-MFC-AGG-ID: _ycaMKMxNfmjCMvb5gH69g_1748461966
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-43d209dc2d3so1213015e9.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 May 2025 12:52:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748461639; x=1749066439;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=E1sbNbzJcyv5ylnPczL2lJsFgJT8miYzZgeExLDdJSA=;
-        b=BtHSuFkia0HA2Mh1Y7wYNXzgysclFwYrShWwMzfQ6eoJ4Me2qzrinatd3Ofzo1ZT/h
-         kRc950Wsf2JTLPcX4MNnykkSM9KzEk2OZ+kMC++3OXV+MEj/volv9+sB1nqOL1dhRMha
-         04R4wu2O/Lc3BqSJdvo9tHoauu/gpPNhehCGzW225DMIn1dCqOnnQQq4caUJd0wA2TC5
-         Ulb5g/FO+y2FoYDUkn49OBks6SqOM/bD+TXjEQbJJGSVS8SudIdjjd/wqtZOIkv4ft+2
-         mrT8LoEGI/VhNie5VethidUSi4YYTlfUXsYC4SLUc758eSzLZvk2HKKJRQnbJJKEJWVI
-         T/Ww==
-X-Forwarded-Encrypted: i=1; AJvYcCWVvFLs50wTUUgIb5FcHXQoLVtMIOejnlgzNWmi7Icr+KzHRnXFNnt93x3PY7yUXJqJFkc7e+1Atc0t7yN+QAA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyuLSECjsezOQ4cnvDXIEC9KtihSKygM5mr9sUVCXRIPcK71T0A
-	3x+KoTTZ/b9Wno9sb5UNJvmyyfsugarQgr8+N4NkMakVqnplds9An0hN8LoUK7prk5q1WS1Lo+Q
-	n0psItpoNUcRz0drLkIS3gUf0FEkC8/CoczLxE0SCoUowCxXCqY0lSXiE5hQlJO/jGvTMmA==
-X-Gm-Gg: ASbGncuSvwzEaUt6uH6bY4tPR+bVqNBVvFToTJGLijI3R7OO6/CWqB98UoiTMsI9vNb
-	GCAnuOJoucxaRoBXdD8YmAK0gy5smzXfm92CB+o/yIK+WX5DzLHBUDBEkUqxDg4dfB0uDtnK9zr
-	16i8ia+/fMi9gr7PJn6wc+vsY6OvbSQ89cUWQD6KM74KeCrYtI5zRDPUJmhe+yFKZMTqv7rjH3f
-	53V5FZL2CW5tNj48XKt2t7uAxJXltnMwd0rX5ABD7Y4fbsLju9WuBIs0F/HJFqZB3Am5SGrnWcv
-	712wldyhwPr+WQNbKyJoJOOMpaXC9IUOMZMbo3gg4A==
-X-Received: by 2002:a05:600c:3c84:b0:442:f4d4:53a with SMTP id 5b1f17b1804b1-44c9151293fmr194849025e9.2.1748461638639;
-        Wed, 28 May 2025 12:47:18 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEQSAvLo7Eqie62HosnzGxfv7hN4MV9xC0sn4CXjoTPfCTvWdS3TabcRAGK23QJ3x/FpWJtCw==
-X-Received: by 2002:a05:600c:3c84:b0:442:f4d4:53a with SMTP id 5b1f17b1804b1-44c9151293fmr194848835e9.2.1748461638332;
-        Wed, 28 May 2025 12:47:18 -0700 (PDT)
-Received: from [192.168.3.141] (p57a1aa11.dip0.t-ipconnect.de. [87.161.170.17])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a4eac7e919sm2361522f8f.33.2025.05.28.12.47.17
+        d=1e100.net; s=20230601; t=1748461966; x=1749066766;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=g+3zZ1K31xkV4VckIAeGyggNzsEYBYLzL0Y5N0v1H1Q=;
+        b=quEomM3T1S0kzyakkPyh87T6jvgkIza5zMHTD9O3tBI1AIaUCm7/1TnreMI13dPJD1
+         +/F3Osv+SnDFdT6ATBOBPeas4oYXhKvGpeFyO0AJVxCubSUBxtiW0vz2ZScqrxAnTMAD
+         mkCO4cWSx4T6nnnjeEMfvoLL6411sh+n5o9OHBiki98hhma+eQlFk7nlSCWd14G/0pB9
+         Tv4W1FAl6Tz4epZ/ragkKZKqKPQ7F5o9kuwatsH/GT2Xce/Mt73Rm+tRH+MicEA/zxr0
+         nhT0wgQyeZdBE35PuFojvnhK+39SQL/BekBoPGH/HOyPu3zuccTL8m3iIrwnGJjaCoC8
+         uBEg==
+X-Forwarded-Encrypted: i=1; AJvYcCXS+c5m6/4nL5ixuMtzT1M6XW/k9Zl2oqPMUaSzkwQFS24Jegre/nrtWRQHz1fKHOS/+hWshErqKPOcxKSjAi0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3th5KCuIHt5puHmmlLqv+Tqg89sZgp0cwvz4QE6awJx+byk24
+	YkGPw8COWOjvu7LTebSTmSZ6cK+8X/XasTul2bmRuwsbsr/bXlYynVwRqeC0iypNKE+IiT7VQez
+	rJiOPL6WzDJ38Yti1gn+N+27tQ8Alr6pyMqM+Ve8JF/wXKhsccbiDQQLptQdlxp1fM22JgA==
+X-Gm-Gg: ASbGncvw1dNPxM2geZ1mxlonEWZGw2qg7TYjB7hYj1qD1BavkaQIYfumyKrAgEK66VG
+	ZoHDMwxXcAxadMZgeTmUsbi0PJvRujgnkB6tzb91bpKQcWcam2s2oK4TRAodqaOH4WismxzHCwo
+	byxE891wjktM6lqeNfXcjMtQczSxnyOkFmT+Dj79NaPjC+bTRJ6oqoTW3UI2Y5RGsf+O6ZR6TAm
+	99uilOI7fWfT5xC426GQ1x5CAGKu/IIhDrutuYB9QOfmxMGqP1WieMsrSMM+YAhcVmqBr5esMCn
+	b5lrv3qpjAhrRxUeB4vqfJxw+f9Gr6LELGgTvw==
+X-Received: by 2002:a05:600c:64c6:b0:442:ffa6:d07e with SMTP id 5b1f17b1804b1-44c9141d996mr142856515e9.1.1748461966140;
+        Wed, 28 May 2025 12:52:46 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGgw89HXpBys9AtsSs/u0lppq8iYMgrEKAe3lvjHHrT75X3gsbzLMb8QzLWDC7F41Sro+0ENQ==
+X-Received: by 2002:a05:600c:64c6:b0:442:ffa6:d07e with SMTP id 5b1f17b1804b1-44c9141d996mr142856365e9.1.1748461965729;
+        Wed, 28 May 2025 12:52:45 -0700 (PDT)
+Received: from localhost (p57a1aa11.dip0.t-ipconnect.de. [87.161.170.17])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3a4eac89d98sm2283367f8f.42.2025.05.28.12.52.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 May 2025 12:47:17 -0700 (PDT)
-Message-ID: <cc13e6f0-3894-46b9-b234-11e066a9aadb@redhat.com>
-Date: Wed, 28 May 2025 21:47:16 +0200
+        Wed, 28 May 2025 12:52:45 -0700 (PDT)
+From: David Hildenbrand <david@redhat.com>
+To: linux-kernel@vger.kernel.org
+Cc: linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	David Hildenbrand <david@redhat.com>,
+	Ryan Roberts <ryan.roberts@arm.com>,
+	Aishwarya TCV <aishwarya.tcv@arm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Subject: [PATCH v1] selftests/mm: two fixes for the pfnmap test
+Date: Wed, 28 May 2025 21:52:44 +0200
+Message-ID: <20250528195244.1182810-1-david@redhat.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests/mm: add simple VM_PFNMAP tests based on
- mmap'ing /dev/mem
-To: Aishwarya <aishwarya.tcv@arm.com>
-Cc: ryan.roberts@arm.com, akpm@linux-foundation.org, dev.jain@arm.com,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-mm@kvack.org, lorenzo.stoakes@oracle.com, mingo@redhat.com,
- peterx@redhat.com, shuah@kernel.org
-References: <7df6ecb7-0aa8-4f18-ba8a-ce6d095cbd42@arm.com>
- <20250528182338.30117-1-aishwarya.tcv@arm.com>
-From: David Hildenbrand <david@redhat.com>
-Content-Language: en-US
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <20250528182338.30117-1-aishwarya.tcv@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 28.05.25 20:23, Aishwarya wrote:
-> Hi David,
-> 
-> I applied the patch on next-20250515 and ran the test. The issue is no
-> longer observed, and the test completed successfully. I can confirm
-> that the patch resolves the problem.
-> 
-> Tested-by: Aishwarya TCV <aishwarya.tcv@arm.com>
+When unregistering the signal handler, we have to pass SIG_DFL, and
+blindly reading from PFN 0 and PFN 1 seems to be problematic on !x86
+systems. In particularly, on arm64 tx2 machines where noting resides
+at these physical memory locations, we can generate RAS errors.
 
-Thanks a bunch for the fast re-test!
+Let's fix it by scanning /proc/iomem for actual "System RAM".
 
+Reported-by: Ryan Roberts <ryan.roberts@arm.com>
+Closes: https://lore.kernel.org/all/232960c2-81db-47ca-a337-38c4bce5f997@arm.com/T/#u
+Fixes: 2616b370323a ("selftests/mm: add simple VM_PFNMAP tests based on mmap'ing /dev/mem")
+Reviewed-by: Ryan Roberts <ryan.roberts@arm.com>
+Tested-by: Aishwarya TCV <aishwarya.tcv@arm.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Signed-off-by: David Hildenbrand <david@redhat.com>
+---
+ tools/testing/selftests/mm/pfnmap.c | 61 +++++++++++++++++++++++++++--
+ 1 file changed, 57 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/mm/pfnmap.c b/tools/testing/selftests/mm/pfnmap.c
+index 8a9d19b6020c7..866ac023baf5c 100644
+--- a/tools/testing/selftests/mm/pfnmap.c
++++ b/tools/testing/selftests/mm/pfnmap.c
+@@ -12,6 +12,8 @@
+ #include <stdint.h>
+ #include <unistd.h>
+ #include <errno.h>
++#include <stdio.h>
++#include <ctype.h>
+ #include <fcntl.h>
+ #include <signal.h>
+ #include <setjmp.h>
+@@ -43,14 +45,62 @@ static int test_read_access(char *addr, size_t size, size_t pagesize)
+ 			/* Force a read that the compiler cannot optimize out. */
+ 			*((volatile char *)(addr + offs));
+ 	}
+-	if (signal(SIGSEGV, signal_handler) == SIG_ERR)
++	if (signal(SIGSEGV, SIG_DFL) == SIG_ERR)
+ 		return -EINVAL;
+ 
+ 	return ret;
+ }
+ 
++static int find_ram_target(off_t *phys_addr,
++		unsigned long long pagesize)
++{
++	unsigned long long start, end;
++	char line[80], *end_ptr;
++	FILE *file;
++
++	/* Search /proc/iomem for the first suitable "System RAM" range. */
++	file = fopen("/proc/iomem", "r");
++	if (!file)
++		return -errno;
++
++	while (fgets(line, sizeof(line), file)) {
++		/* Ignore any child nodes. */
++		if (!isalnum(line[0]))
++			continue;
++
++		if (!strstr(line, "System RAM\n"))
++			continue;
++
++		start = strtoull(line, &end_ptr, 16);
++		/* Skip over the "-" */
++		end_ptr++;
++		/* Make end "exclusive". */
++		end = strtoull(end_ptr, NULL, 16) + 1;
++
++		/* Actual addresses are not exported */
++		if (!start && !end)
++			break;
++
++		/* We need full pages. */
++		start = (start + pagesize - 1) & ~(pagesize - 1);
++		end &= ~(pagesize - 1);
++
++		if (start != (off_t)start)
++			break;
++
++		/* We need two pages. */
++		if (end > start + 2 * pagesize) {
++			fclose(file);
++			*phys_addr = start;
++			return 0;
++		}
++	}
++	return -ENOENT;
++}
++
+ FIXTURE(pfnmap)
+ {
++	off_t phys_addr;
+ 	size_t pagesize;
+ 	int dev_mem_fd;
+ 	char *addr1;
+@@ -63,14 +113,17 @@ FIXTURE_SETUP(pfnmap)
+ {
+ 	self->pagesize = getpagesize();
+ 
++	/* We'll require two physical pages throughout our tests ... */
++	if (find_ram_target(&self->phys_addr, self->pagesize))
++		SKIP(return, "Cannot find ram target in '/proc/iomem'\n");
++
+ 	self->dev_mem_fd = open("/dev/mem", O_RDONLY);
+ 	if (self->dev_mem_fd < 0)
+ 		SKIP(return, "Cannot open '/dev/mem'\n");
+ 
+-	/* We'll require the first two pages throughout our tests ... */
+ 	self->size1 = self->pagesize * 2;
+ 	self->addr1 = mmap(NULL, self->size1, PROT_READ, MAP_SHARED,
+-			   self->dev_mem_fd, 0);
++			   self->dev_mem_fd, self->phys_addr);
+ 	if (self->addr1 == MAP_FAILED)
+ 		SKIP(return, "Cannot mmap '/dev/mem'\n");
+ 
+@@ -129,7 +182,7 @@ TEST_F(pfnmap, munmap_split)
+ 	 */
+ 	self->size2 = self->pagesize;
+ 	self->addr2 = mmap(NULL, self->pagesize, PROT_READ, MAP_SHARED,
+-			   self->dev_mem_fd, 0);
++			   self->dev_mem_fd, self->phys_addr);
+ 	ASSERT_NE(self->addr2, MAP_FAILED);
+ }
+ 
 -- 
-Cheers,
-
-David / dhildenb
+2.49.0
 
 
