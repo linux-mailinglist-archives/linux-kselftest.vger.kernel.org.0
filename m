@@ -1,88 +1,88 @@
-Return-Path: <linux-kselftest+bounces-33930-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33931-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66E08AC67A2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 May 2025 12:47:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C21B7AC67AA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 May 2025 12:49:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E6A984E4835
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 May 2025 10:46:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 445993A4880
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 May 2025 10:48:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E83D27FD61;
-	Wed, 28 May 2025 10:45:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFA8D2139D8;
+	Wed, 28 May 2025 10:49:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RqdILdSr"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hgKji96V"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C3F27FD4C
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 May 2025 10:45:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5CD33398A
+	for <linux-kselftest@vger.kernel.org>; Wed, 28 May 2025 10:49:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748429113; cv=none; b=WQJ3FQYB14OWnM0a3UFeZjpv5/4kjlW0JEAXOoe3CMsQ3R85/2YNgy3uPDKYc5yb9hhARtVED+hFWMRShnq29Shg0jrY5Jogcw4zyhCaErklbi5DPpu1Fso3Vxdb9slX9d2rgMgE+CKIOZ4Qu07Sg3vyCPgv/JBphw6zpDQ+rlU=
+	t=1748429346; cv=none; b=qdVnLoFQp1eeH14vp52Gn5K56r+njn2+eKa7YajGKmfi9qzL8Od91n2Ff6kR/W+ZjGZZlV+j0p6zUHz7eqCrbOkXiU7H6OGJnZ8wxUPfYJCKCwGw2FNyA/GhOODnoTh86+BquYaZBwXpMGV4inIRjfiHSo4Y0bQss+U45TKB7NQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748429113; c=relaxed/simple;
-	bh=co/uBLSGp53c7N+mMpcb7E6STfbfEyBwA2pfzeCn2cM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pAPEzinfkA2qWLXXn0ENES2TqedBHGYxIyUUAUgvcn2ps4LyMkdWOGLP6WblJMkoCnBDDuCpoS49hHESoKP6fwQmbmYuypi3RvnvxswKawcKr/TwJ7NiYf266H/a29ZoayNkAOszeDCIW+0AAYFtZZCG0ByQEb/j8okIu/Ku6fk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RqdILdSr; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1748429346; c=relaxed/simple;
+	bh=ohq0aKy46MqiNiDa5pDJ2hhxanBLxI6940+C/u71zSw=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=AnMp0i/k4S/VHStW7eSv0KNAMdkyLgykA1qS6OysZCFFKs2PUKEsLl9U4caqr4/sfJiHmls4XaOBfFhlXxlICmXtbOINyhz8HpPoL4d8jmNz6SvfapfHmd4dg/m0PvYhjitocxfehI1H72g7wPHHx2pG9NI9LZiP8l5bqTAyBTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hgKji96V; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1748429110;
+	s=mimecast20190719; t=1748429343;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=IE8zZqs9qBuIS+UhWEzh2HdhWYiIOXmhgGdM2au/NtM=;
-	b=RqdILdSrBgSyZ6uAEMTgDzGXdhB1i/6mPuiv1YikGFmdX5PuXABn/6eVJVXdbtW1N5OSmQ
-	eOeDI8hUiSOtMPCNbZ6QJXn7AwcpMpyCv7TZBvEhZXwuI03VS4CDOS8n23jXM9uZZ66W1Z
-	xs+ohfTWei2nTHT6g6trDA6WMDSdu7A=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=L9zdNnDwAfNYHub/SLO4R5U1ZnoXRuT66VkqLwVbfTw=;
+	b=hgKji96VZdmfvDLLpIdIWs8ueDqTPq1ES5pQ/dyMnz3hGMF3lkxRpHPf7APSuWvk6aJow+
+	aQE7bgOTDqkkDWQDIhRVXYDQIR5tnze/0HjwQ8E4KyGJOhcg31NjR0fosuwPRYnJc1ps2P
+	TYKJcGCaM62k8Iahqs/OposwleYgsos=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-318-gwJqMLhAO5y5sOmX4i9YcA-1; Wed, 28 May 2025 06:45:09 -0400
-X-MC-Unique: gwJqMLhAO5y5sOmX4i9YcA-1
-X-Mimecast-MFC-AGG-ID: gwJqMLhAO5y5sOmX4i9YcA_1748429108
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-43cec217977so25344115e9.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 May 2025 03:45:08 -0700 (PDT)
+ us-mta-231-LNCvA1p8N5eklivB9IDSBQ-1; Wed, 28 May 2025 06:49:02 -0400
+X-MC-Unique: LNCvA1p8N5eklivB9IDSBQ-1
+X-Mimecast-MFC-AGG-ID: LNCvA1p8N5eklivB9IDSBQ_1748429341
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-442ffaa7dbeso33086805e9.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 May 2025 03:49:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748429108; x=1749033908;
+        d=1e100.net; s=20230601; t=1748429341; x=1749034141;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:user-agent
+         :content-language:references:cc:to:from:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=IE8zZqs9qBuIS+UhWEzh2HdhWYiIOXmhgGdM2au/NtM=;
-        b=Q/5iwBjfYKu+ELWUFCqZwyuV0Ts7CURi+X/XQIJM26DOLonVnpTqWdCQiomytbod/I
-         FiBinoSCBCayLR1lJNkpKXm6J8FOAappMfhHMnuKD6dOrSrZ6UNW6jVhg0mPDksq6jX1
-         kdlP2KhmtLVjUbL45ORQsehl2/+E+rg2THHzUNgaKGnMnPSDG0w/Pi3gLObYhr8Y1Y+X
-         X34N2m6FAbAwNyEbys14RTpbfo/pssd0CeWyIzlGW8XwaxGCUEv/vJS2VLO+c+zIPMx1
-         fj+oSZLn5xYsO35UtEPIrOTmzYfCTcfZ0ZwQVlF0ltWEnv6ou1bD8Bkqpy4chbR1RMpH
-         wWoA==
-X-Forwarded-Encrypted: i=1; AJvYcCU0GLF8yRiGpIdG+MppA3FWkicHpABD/gNStFgC9juGngaW6yda9YzdLZUmMAPyRdXQhO6dj1nlA4pNoaGmlXM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzzRBk1BIgsraED4I63PRO/k0kK9zliQ+8XsI2FR7PTRXtQC9k1
-	BKoV6YbLxA2uVG/9U+xFOz5VfbZqxYtI4gj0FpLqz5PnJUS5KJvZ2WmV4i+niVl744WMI7gUI8f
-	hvlFCWOigayg0a7jdupWaa1rntCoGxiOdF8OfIma4M+VY6rRHbMnIT5KFCqV5z1PiqB/jcMd+oZ
-	sNnWjK
-X-Gm-Gg: ASbGncsID6ipX6VbGV/Aeumel05fUUo/3jMZCePLxYpdxQkTa0jteR1igtXpXdQCkyE
-	2fe6dBebY+6pAVEq620mSFwMJUpD6ep1as8xEm1QofVaODBED6Mx1Z+cgKGHEiLpF0ZWkLVEOJB
-	AC36L6gDFQ4y0n0SK12IVBeooytz+PKA3m/IV8Ff2Hbzot0duBMl2XW858HQKZSdxPXNvJdtLcN
-	1CRlMNdbwiwE0Qxd3M+2uTyBWBU3YuA6Xle56XqEBDC2rDAxUWxV5Ngl5zcq0Gh+70f0RxInFJM
-	npWtN/7MhX1vvMIXYxgneZfUPC2sAcHiFmv8qOSWbQ==
-X-Received: by 2002:a05:600c:348d:b0:43c:e7a7:1e76 with SMTP id 5b1f17b1804b1-44c930164e9mr135342685e9.1.1748429107573;
-        Wed, 28 May 2025 03:45:07 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGqaM2F9y7Cz/Ou34Qp3QRxOSMXmQR7BVDBUFBfuKZ4r79nAuU1/Hi+bdNGUeCGQloNJ0UjLg==
-X-Received: by 2002:a05:600c:348d:b0:43c:e7a7:1e76 with SMTP id 5b1f17b1804b1-44c930164e9mr135342385e9.1.1748429107111;
-        Wed, 28 May 2025 03:45:07 -0700 (PDT)
-Received: from [192.168.3.141] (p57a1aa11.dip0.t-ipconnect.de. [87.161.170.17])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4507253bebdsm13854235e9.4.2025.05.28.03.45.06
+        bh=L9zdNnDwAfNYHub/SLO4R5U1ZnoXRuT66VkqLwVbfTw=;
+        b=ritofb+ni1YJPb241j11x/j/uIlx13G1nU9E8/T04Yf0m5u9jZ0y52mdv8oC2chZQq
+         llbDK9vTXFrYXzJs43W968i52QiYKN1Xq40tk0Mn6fyZXg/4+FvzcbRrvCMZqydMwWGl
+         4OGfwx+PoYvXbJ0vzF6Q+rYGskhE2uAq8Sxv3doFrM1GHBa/ckJVBuXW56e0TcmcSpt3
+         YaWOMvPrsn1M01bTqeaf2btkfTlfk7YvqUY3VqPmCZjuLTIevdelX7kUDEsZigaBXEOw
+         +/3SitU2GNs/4d7KEKO6L+Sap106aFEIoaz0Q5ojQg1ezUoVmdxzasEBQqx4aYIsZ9np
+         UVCw==
+X-Forwarded-Encrypted: i=1; AJvYcCWd4aGhdgN0oqhAY+HGuXutb9FLm+6siL6WRqJu++6jitoceWwA4HHxQEgf8cKkhbGZD8AGa2hV6VDYJBAlHVo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyPkv9OZ+FqV04VW2PS/Vjx1OK18UMM3cDL6NuBSJ8aw96yRdDP
+	FjdfR72OOyE7MaZPvTGVnlDoMXKgusgluHZNxYoRQhk+1sUcKGZajP8+M8HcYBhNRyeNqZiN9bP
+	CdkI/saoNHS1VDJ0LR07/WByxcnK5/wuXJuPempnE1WrPVdij/uc1dNDBwKmjMPfi0pR+Lg==
+X-Gm-Gg: ASbGncs6ThuRURv/guMC27ugB235QI+dAqkctpgVfgW60o/Fa22cXCGy/I8XUtWZZKa
+	bUj7XrH1NN/Zh1Kq2aqdpXNjI/1/+HxrUMXxc+yuNt8hu6jCdcOspF2Hs3ENywYgvxY8TgRjyLq
+	PlgFEfxOj2d5utJEtD7PgUPBDQxkdmCNkJTv8ze2l4D2brUvxhwgHNUQ1AL8RtTd1RRjAgRzNQ3
+	OKRWHDTLl3O6lg9Jlqsue4Q6Egskle+gJHqoRp2XQEnZ4m3owQhLC7qTbSBvjysR1wRDGkRk7ur
+	5NG6lXEng18ecI41rECZ3uMVRalIVIdx8uuLLJlG+FMU19FjSHIWawcgF4f0Ond7nV7nEUGNDx6
+	kYzzU31CfQowp0dgpbxqX6PTA8hTrk7ubP0k8Jas=
+X-Received: by 2002:a05:600c:648a:b0:43e:a7c9:8d2b with SMTP id 5b1f17b1804b1-44c92f21e1fmr127213115e9.24.1748429340969;
+        Wed, 28 May 2025 03:49:00 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHhLT5tb7zUh11ADM14vMwzRiC9TD0IByrsLMVhGQOhNMyEK6r+6gLgjV47NeCbATlZyERZlA==
+X-Received: by 2002:a05:600c:648a:b0:43e:a7c9:8d2b with SMTP id 5b1f17b1804b1-44c92f21e1fmr127212825e9.24.1748429340531;
+        Wed, 28 May 2025 03:49:00 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f30:ec00:8f7e:58a4:ebf0:6a36? (p200300d82f30ec008f7e58a4ebf06a36.dip0.t-ipconnect.de. [2003:d8:2f30:ec00:8f7e:58a4:ebf0:6a36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-450725403c6sm14119995e9.3.2025.05.28.03.48.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 May 2025 03:45:06 -0700 (PDT)
-Message-ID: <7cb7f23a-ce9e-4664-8083-deb73ed23da3@redhat.com>
-Date: Wed, 28 May 2025 12:44:59 +0200
+        Wed, 28 May 2025 03:49:00 -0700 (PDT)
+Message-ID: <3c15a093-7c19-4c2a-a571-56a5ed4b445f@redhat.com>
+Date: Wed, 28 May 2025 12:48:59 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -92,6 +92,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2] selftests/mm: add simple VM_PFNMAP tests based on
  mmap'ing /dev/mem
+From: David Hildenbrand <david@redhat.com>
 To: Ryan Roberts <ryan.roberts@arm.com>, linux-kernel@vger.kernel.org
 Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
  Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
@@ -100,7 +101,7 @@ Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
  <dev.jain@arm.com>, Aishwarya TCV <Aishwarya.TCV@arm.com>
 References: <20250509153033.952746-1-david@redhat.com>
  <232960c2-81db-47ca-a337-38c4bce5f997@arm.com>
-From: David Hildenbrand <david@redhat.com>
+ <7cb7f23a-ce9e-4664-8083-deb73ed23da3@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
  xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
@@ -147,253 +148,56 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <232960c2-81db-47ca-a337-38c4bce5f997@arm.com>
+In-Reply-To: <7cb7f23a-ce9e-4664-8083-deb73ed23da3@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 28.05.25 12:34, Ryan Roberts wrote:
-> Hi David,
-> 
-> 
-> On 09/05/2025 16:30, David Hildenbrand wrote:
->> Let's test some basic functionality using /dev/mem. These tests will
->> implicitly cover some PAT (Page Attribute Handling) handling on x86.
+On 28.05.25 12:44, David Hildenbrand wrote:
+> On 28.05.25 12:34, Ryan Roberts wrote:
+>> Hi David,
 >>
->> These tests will only run when /dev/mem access to the first two pages
->> in physical address space is possible and allowed; otherwise, the tests
->> are skipped.
+>>
+>> On 09/05/2025 16:30, David Hildenbrand wrote:
+>>> Let's test some basic functionality using /dev/mem. These tests will
+>>> implicitly cover some PAT (Page Attribute Handling) handling on x86.
+>>>
+>>> These tests will only run when /dev/mem access to the first two pages
+>>> in physical address space is possible and allowed; otherwise, the tests
+>>> are skipped.
+>>
+>> We are seeing really horrible RAS errors with this test when run on arm64 tx2
+>> machine. Based solely on reviewing the code, I think the problem is that tx2
+>> doesn't have anything at phys address 0, so test_read_access() is trying to put
+>> trasactions out to a bad address on the bus.
+>>
+>> tx2 /proc/iomem:
+>>
+>> $ sudo cat /proc/iomem
+>> 30000000-37ffffff : PCI ECAM
+>> 38000000-3fffffff : PCI ECAM
+>> 40000000-5fffffff : PCI Bus 0000:00
+>> ...
+>>
+>> Whereas my x86 box has some reserved memory:
+>>
+>> $ sudo cat /proc/iomem
+>> 00000000-00000fff : Reserved
+>> 00001000-0003dfff : System RAM
+>> ...
+>>
 > 
-> We are seeing really horrible RAS errors with this test when run on arm64 tx2
-> machine. Based solely on reviewing the code, I think the problem is that tx2
-> doesn't have anything at phys address 0, so test_read_access() is trying to put
-> trasactions out to a bad address on the bus.
+> A quick fix would be to make this test specific to x86 (the only one I
+> tested on). We should always have the lower two pages IIRC (BIOS stuff etc).
 > 
-> tx2 /proc/iomem:
+>> I think perhaps the only safe way to handle this is to parse /proc/iomem for a
+>> region of "System RAM" that is at least 2 pages then use that for your read
+>> tests. This would also solve the hypothetical issue of reading something that
+>> has read size effects.
 > 
-> $ sudo cat /proc/iomem
-> 30000000-37ffffff : PCI ECAM
-> 38000000-3fffffff : PCI ECAM
-> 40000000-5fffffff : PCI Bus 0000:00
-> ...
-> 
-> Whereas my x86 box has some reserved memory:
-> 
-> $ sudo cat /proc/iomem
-> 00000000-00000fff : Reserved
-> 00001000-0003dfff : System RAM
-> ...
-> 
+> That sounds also plausible yes. I somehow remembered that mmap() would
+> fail if "there is nothing".
 
-A quick fix would be to make this test specific to x86 (the only one I 
-tested on). We should always have the lower two pages IIRC (BIOS stuff etc).
-
-> I think perhaps the only safe way to handle this is to parse /proc/iomem for a
-> region of "System RAM" that is at least 2 pages then use that for your read
-> tests. This would also solve the hypothetical issue of reading something that
-> has read size effects.
-
-That sounds also plausible yes. I somehow remembered that mmap() would 
-fail if "there is nothing".
-
-> 
-> I also spotted a few nits while reading the code...
-> 
->>
->> On current x86-64 with PAT inside a VM, all tests pass:
->>
->> 	TAP version 13
->> 	1..6
->> 	# Starting 6 tests from 1 test cases.
->> 	#  RUN           pfnmap.madvise_disallowed ...
->> 	#            OK  pfnmap.madvise_disallowed
->> 	ok 1 pfnmap.madvise_disallowed
->> 	#  RUN           pfnmap.munmap_split ...
->> 	#            OK  pfnmap.munmap_split
->> 	ok 2 pfnmap.munmap_split
->> 	#  RUN           pfnmap.mremap_fixed ...
->> 	#            OK  pfnmap.mremap_fixed
->> 	ok 3 pfnmap.mremap_fixed
->> 	#  RUN           pfnmap.mremap_shrink ...
->> 	#            OK  pfnmap.mremap_shrink
->> 	ok 4 pfnmap.mremap_shrink
->> 	#  RUN           pfnmap.mremap_expand ...
->> 	#            OK  pfnmap.mremap_expand
->> 	ok 5 pfnmap.mremap_expand
->> 	#  RUN           pfnmap.fork ...
->> 	#            OK  pfnmap.fork
->> 	ok 6 pfnmap.fork
->> 	# PASSED: 6 / 6 tests passed.
->> 	# Totals: pass:6 fail:0 xfail:0 xpass:0 skip:0 error:0
->>
->> However, we are able to trigger:
->>
->> [   27.888251] x86/PAT: pfnmap:1790 freeing invalid memtype [mem 0x00000000-0x00000fff]
->>
- >> There are probably more things worth testing in the future, such 
-as>> MAP_PRIVATE handling. But this set of tests is sufficient to cover 
-most of
->> the things we will rework regarding PAT handling.
->>
->> Cc: Andrew Morton <akpm@linux-foundation.org>
->> Cc: Shuah Khan <shuah@kernel.org>
->> Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
->> Cc: Ingo Molnar <mingo@redhat.com>
->> Cc: Peter Xu <peterx@redhat.com>
->> Cc: Dev Jain <dev.jain@arm.com>
->> Signed-off-by: David Hildenbrand <david@redhat.com>
->> ---
->>
->> Hopefully I didn't miss any review feedback.
->>
->> v1 -> v2:
->> * Rewrite using kselftest_harness, which simplifies a lot of things
->> * Add to .gitignore and run_vmtests.sh
->> * Register signal handler on demand
->> * Use volatile trick to force a read (not factoring out FORCE_READ just yet)
->> * Drop mprotect() test case
->> * Add some more comments why we test certain things
->> * Use NULL for mmap() first parameter instead of 0
->> * Smaller fixes
->>
->> ---
->>   tools/testing/selftests/mm/.gitignore     |   1 +
->>   tools/testing/selftests/mm/Makefile       |   1 +
->>   tools/testing/selftests/mm/pfnmap.c       | 196 ++++++++++++++++++++++
->>   tools/testing/selftests/mm/run_vmtests.sh |   4 +
->>   4 files changed, 202 insertions(+)
->>   create mode 100644 tools/testing/selftests/mm/pfnmap.c
->>
->> diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
->> index 91db34941a143..824266982aa36 100644
->> --- a/tools/testing/selftests/mm/.gitignore
->> +++ b/tools/testing/selftests/mm/.gitignore
->> @@ -20,6 +20,7 @@ mremap_test
->>   on-fault-limit
->>   transhuge-stress
->>   pagemap_ioctl
->> +pfnmap
->>   *.tmp*
->>   protection_keys
->>   protection_keys_32
->> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
->> index ad4d6043a60f0..ae6f994d3add7 100644
->> --- a/tools/testing/selftests/mm/Makefile
->> +++ b/tools/testing/selftests/mm/Makefile
->> @@ -84,6 +84,7 @@ TEST_GEN_FILES += mremap_test
->>   TEST_GEN_FILES += mseal_test
->>   TEST_GEN_FILES += on-fault-limit
->>   TEST_GEN_FILES += pagemap_ioctl
->> +TEST_GEN_FILES += pfnmap
->>   TEST_GEN_FILES += thuge-gen
->>   TEST_GEN_FILES += transhuge-stress
->>   TEST_GEN_FILES += uffd-stress
->> diff --git a/tools/testing/selftests/mm/pfnmap.c b/tools/testing/selftests/mm/pfnmap.c
->> new file mode 100644
->> index 0000000000000..8a9d19b6020c7
->> --- /dev/null
->> +++ b/tools/testing/selftests/mm/pfnmap.c
->> @@ -0,0 +1,196 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Basic VM_PFNMAP tests relying on mmap() of '/dev/mem'
->> + *
->> + * Copyright 2025, Red Hat, Inc.
->> + *
->> + * Author(s): David Hildenbrand <david@redhat.com>
->> + */
->> +#define _GNU_SOURCE
->> +#include <stdlib.h>
->> +#include <string.h>
->> +#include <stdint.h>
->> +#include <unistd.h>
->> +#include <errno.h>
->> +#include <fcntl.h>
->> +#include <signal.h>
->> +#include <setjmp.h>
->> +#include <linux/mman.h>
->> +#include <sys/mman.h>
->> +#include <sys/wait.h>
->> +
->> +#include "../kselftest_harness.h"
->> +#include "vm_util.h"
->> +
->> +static sigjmp_buf sigjmp_buf_env;
->> +
->> +static void signal_handler(int sig)
->> +{
->> +	siglongjmp(sigjmp_buf_env, -EFAULT);
->> +}
->> +
->> +static int test_read_access(char *addr, size_t size, size_t pagesize)
->> +{
->> +	size_t offs;
->> +	int ret;
->> +
->> +	if (signal(SIGSEGV, signal_handler) == SIG_ERR)
->> +		return -EINVAL;
->> +
->> +	ret = sigsetjmp(sigjmp_buf_env, 1);
->> +	if (!ret) {
->> +		for (offs = 0; offs < size; offs += pagesize)
->> +			/* Force a read that the compiler cannot optimize out. */
->> +			*((volatile char *)(addr + offs));
->> +	}
->> +	if (signal(SIGSEGV, signal_handler) == SIG_ERR)
-> 
-> I think you mean:
-> 	if (signal(SIGSEGV, SIG_DFL) == SIG_ERR)
-> 
-> Otherwise your signal_handler will remain installed, right?
-
-Yeah, copy and past error.
-
-> 
->> +		return -EINVAL;
->> +
->> +	return ret;
->> +}
->> +
->> +FIXTURE(pfnmap)
->> +{
->> +	size_t pagesize;
->> +	int dev_mem_fd;
->> +	char *addr1;
->> +	size_t size1;
->> +	char *addr2;
->> +	size_t size2;
->> +};
->> +
->> +FIXTURE_SETUP(pfnmap)
->> +{
->> +	self->pagesize = getpagesize();
->> +
->> +	self->dev_mem_fd = open("/dev/mem", O_RDONLY);
->> +	if (self->dev_mem_fd < 0)
->> +		SKIP(return, "Cannot open '/dev/mem'\n");
->> +
->> +	/* We'll require the first two pages throughout our tests ... */
->> +	self->size1 = self->pagesize * 2;
->> +	self->addr1 = mmap(NULL, self->size1, PROT_READ, MAP_SHARED,
->> +			   self->dev_mem_fd, 0);
->> +	if (self->addr1 == MAP_FAILED)
->> +		SKIP(return, "Cannot mmap '/dev/mem'\n");
->> +
->> +	/* ... and want to be able to read from them. */
->> +	if (test_read_access(self->addr1, self->size1, self->pagesize))
->> +		SKIP(return, "Cannot read-access mmap'ed '/dev/mem'\n");
->> +
->> +	self->size2 = 0;
->> +	self->addr2 = MAP_FAILED;
-> 
-> Do you need to init all the params in FIXTURE(pfnmap) to their "safe" values
-> before any possible early returns? We don't want FIXTURE_TEARDOWN(pfnmap)
-> getting confused.
-
-If FIXTURE_SETUP fails, we'll exit immediately. See __TEST_F_IMPL().
-
-Note that all tests are executed in a fork'ed child process, so quitting 
-early (or not even having FIXTURE_TEARDOWN in most cases ...) does not 
-really matter.
+Ah, my memory comes back, we perform checks only with CONFIG_STRICT_DEVMEM.
 
 -- 
 Cheers,
