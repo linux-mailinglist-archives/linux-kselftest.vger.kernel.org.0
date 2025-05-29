@@ -1,88 +1,87 @@
-Return-Path: <linux-kselftest+bounces-34021-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34018-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B82CDAC855F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 May 2025 01:48:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51F01AC8569
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 May 2025 01:49:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D97AC4E5166
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 May 2025 23:48:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A918F9E0FD6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 May 2025 23:47:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56F9B25C815;
-	Thu, 29 May 2025 23:47:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E80EA25A355;
+	Thu, 29 May 2025 23:47:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="VChr60mi"
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="HVM4EM5o"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oo1-f98.google.com (mail-oo1-f98.google.com [209.85.161.98])
+Received: from mail-pl1-f228.google.com (mail-pl1-f228.google.com [209.85.214.228])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33E882522B5
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 May 2025 23:47:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C33082580F3
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 May 2025 23:47:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.228
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748562462; cv=none; b=RLOUPsglxHICpXknz36X+kNOWTJKnHEnLFR24T0o1Cfra0Tdtl2cVDjmjSeeyWPMsr9cDLRrIUvzHqxo6lH+4aVgCvr6le21pMAZAZJiLW3wald7VwujVdAFgr3W41gZ0orPLz0il1ylMOuuQ07eTlfgLz+GyaiwR7P0iOcMcX8=
+	t=1748562461; cv=none; b=SwkKXMFdL6NRm39iSai5XVncz+e7PpQzz9L6Ww2Gkmdz0qb1FJP9Rfu6thXjbt0vBz1Lp4wSgHcEorFjqF471SwUiPu33AFZaNZpjbL8lYzDKYJPN8/AiRCSQ01KHaC8Xjsf9hoC/q6S8d/8wNcWgcWy6Q6zBg+hscmw/US1l3Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748562462; c=relaxed/simple;
-	bh=cUd78MMEbgFPUkXKSGAnKUwyPufXJBeXnM/cAC/MM0s=;
+	s=arc-20240116; t=1748562461; c=relaxed/simple;
+	bh=KFzR2R0oE+f8Zx4hoiyK9LWJS5zkAw4p1aYmlL54wbY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=dcwkyv4hNpRGpqI5KVKry2f7Y4uTfrQenlBjIbmsFtD09BHIxiQeoeLEEASGn8+gWonFI2UR0IBgiVUEujQyEdt7CYpVfHGFCC0x5W8X8m2jh3oIrntcza+YpYj/JINTdrsek17nKgmJKUuQTKXu/luomwzQlDqlcJZhcu6XdYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=VChr60mi; arc=none smtp.client-ip=209.85.161.98
+	 In-Reply-To:To:Cc; b=qP3PGpMbUFCO9jokdgshFl+VM6RXM0rKMppCZWELBR2mvrOoBs71FBfckvVD7QTF8w5RYziuIBFNFa0lLOBbhdjlZ33JDD1YCU0AKkVQaaqpJD97tsQEzgv0vl92r1tbPWsJ+EcKgpYg2xGubYvUqraH6Kej0tIJ2giU1wAt04E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=HVM4EM5o; arc=none smtp.client-ip=209.85.214.228
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
-Received: by mail-oo1-f98.google.com with SMTP id 006d021491bc7-6063462098eso988701eaf.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 May 2025 16:47:37 -0700 (PDT)
+Received: by mail-pl1-f228.google.com with SMTP id d9443c01a7336-2347012f81fso19619465ad.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 May 2025 16:47:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=purestorage.com; s=google2022; t=1748562456; x=1749167256; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=s4kPtR57n6FehTlRVxMvWCX+QEvXXFmJrsdczp0NHd8=;
-        b=VChr60mi5UAGLyFROxdel2vDV+h22rrwcNRmpB5/gn9K/Ayv7s+cLu+8B0GOoSTD/X
-         6CCyicRxRZPQpl+Y8CkhodHGvpA6XLDA/cHtG1Z+Seplxx3vyiQM38YaWdMl1ZI5LjPn
-         h5pL3Maj5a7KbECjxDUzYzCXMoynahjxDZaedDqD8DGdNyM1v79YehukWJjX19X5fPNm
-         aOQKcQJajJ1Wwx9bLfC54l4473f/DDD39n27BrKfo0TiEWxa01ExQlvXWJwSRqlp0jI/
-         LqDNfk5dCqtUcpYbRBvoerC7xLHna407ojCmIZVypYXr85yQG9adDVbRIOfFZODNGO5P
-         qjaA==
+        bh=ZpDwixmcLhBwd2X2YXKWEWGwjdFqClV/mbfesZkbLZ4=;
+        b=HVM4EM5o3m5NnyEnDtFVv851YsRsOYFOfvZ5S1meTMdIU7rIo79NCE6BVgQbbJqLw3
+         PIVBnT2YWC8n/NNFeclz3BHE/1/apz4YPqNxoAsg59bmNnoWMAnJdiuMwsretwYUcKHU
+         fffqBc4ghupzcLgrSnVVUAhzC3XvvZ7fJkZuD8R/OHn5unKdzJvMy6X5QZhhzcUFyPrY
+         2dy6o8JtHfaA5SrkN4fSMkpGbhwb7HfotO9us3pei2LYmngGYe4hRGvc3EttEkLEBIeH
+         +t+m0wCV4CrvC62wKOnlhZiXOPWYXG/VW579qtgzAgNuF0QbBDJUELhIvhwZ+YkPaTcU
+         nCbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1748562456; x=1749167256;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=s4kPtR57n6FehTlRVxMvWCX+QEvXXFmJrsdczp0NHd8=;
-        b=NtJI1+AXWO1j+2bfelROisut5NktTk353TFadXVMD+oW5rtk4B38vH6t6XZwoQyYBS
-         mAD3wkEZsM+InylMPa4Sg4V5GRo8PfNp3QQp4AduKvDEsMXg4w1m97coKZ+KrmzPPSD8
-         SfvZht6Sen31vFnGCUjz0pS7W8breYoOChU+lRukfeuLeQlYWzmJunYjyLHKIzPjXyiR
-         6fpQVIRoW5mCAXvI67fJzkPBdoIUW7zyeo6RYkpn8k7JKtvjwjpTb8egdjf86ka5OyE5
-         PvY/5rBx+fhaN5UVHsFshXPxfszOBs641rT25fPtjx04u0XjSBj8SRRNbgMHyOs4JJMI
-         ANgw==
-X-Forwarded-Encrypted: i=1; AJvYcCXdZzfulmMGg/ZXUOmYquLDY75OfjhQ2UkjhSh+m9zmqj77kJ8Qv1tdR88DN1F9WRP2v13VNyS6PyqjaWi9AAk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7zxls99vzA+nDttDV23sDoFv4BnZ+yKVaL3ha6DtHPM5bqnbT
-	zzgK/mj8XHFORz+yblv6CgjwrghfTr3SxWTpsKb8qtegFWQN4quV+I1fWFNi/JrwS09n4KVY/jQ
-	HEa12KKJoT8tFuyDIYSAJsMaHRLWl4Tr1VzDIL59O2qFXaBhoOxnu
-X-Gm-Gg: ASbGncujIcTHYsZbPIEZ8W4xPbwf6VfqQ0Annzq1IrUNRRHLvWoAEacHcJogq59ZM6W
-	qyqpcbNsXIJy63H440AqjoMba/U9T+5tBtDrpPvv9uOMWLfFgwjCJBRqD9ANX4LKkHoMwoE7bWQ
-	qYagYwrXpFs3waDn30LPf7V/uKMrwtWi2xyp0kkR1kLtoIqAaJXTDjBUxn51fGWk0VhbQh9/vOu
-	oe4R+zCw+nBb9G+EEyOdNN+RSfWAqY26oMak10hxWNbcGVozA6++wk/b/fMCr7Ady3Uq3tBiOSX
-	dkOa/dE1jcf84XmdCY+jrqeP1wfJfVw=
-X-Google-Smtp-Source: AGHT+IHpKni8rHg6UuaANZQmvzfFdnX2JDl7jNpDLZLVglSH02MMb3WrcTgtWUK2lyP5qkHej4/tqbnL56v9
-X-Received: by 2002:a05:6870:d208:b0:2da:843d:e530 with SMTP id 586e51a60fabf-2e921166c9cmr845404fac.2.1748562456391;
-        Thu, 29 May 2025 16:47:36 -0700 (PDT)
+        bh=ZpDwixmcLhBwd2X2YXKWEWGwjdFqClV/mbfesZkbLZ4=;
+        b=Csz/YIyMHJXrCHZcnrpThDRTTUr+32/JZw1xAagip50aZ7jvRW0UcJIk1c32pGXhvX
+         IPDhWn3yUybvZlkPn2ENwzkGz2qq718XSOCQmczxT2uVqdEwCc6d9FyKZbegl5FVgAfF
+         uQ/dWJU+xxZwLNc9RIVsGV4HEPsMzk6PbvkZZlF4S+U6iDEG86nARopWLTOSmDlItceh
+         grLdDcbUeCQduaRFgVwjOePFTj9GKcdg7rBmyMYsVb+3Hs+73ZT4SU3+k2X3Rb+P0dy+
+         kbIMEXhk6zv9t9Xy3ROA4p2T88RCZty0j80CUIg1N4SfRKKMZtXUUOx1tdigu3hMIBPM
+         lX9w==
+X-Forwarded-Encrypted: i=1; AJvYcCUy4QYxmHEQObw2ZJvGbJy6ywtOIzEHcIZdF+HPO8MqQUccpqmii2LqrbzQLXmmp+b05EH+Lw68ic4/AEhbRCY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwO+Zd06MDdRW01tkIz/xEfPmsnhK5VFD3ryVWRxTqmgzjecXav
+	8G6/IdumvzrMNJaPokwZuDGUBhvGlKEdE4gwpx4X+vUiepNiayacyM68+JejgT6n7v/GKc5PChi
+	+TBM0p1OTtG9AQ5fH9EjpjNo40n1IWWo+8039PnSPR/snUwqGHg/b
+X-Gm-Gg: ASbGnct1SdmYKOKWq38KyTydQRR5ScgTFaav9bAXqyTP23WaOW1k5Io6OR4kZci+aYB
+	PKoqI0F84njzfDYwGQ1rrXVweoH8LCoAE3sX/+bHLHsY0iINAOeBGZsn5TXLMZz7IoBH8h9mhYo
+	z9Hw4lV/QAO6N7Z8XTh0pYlfV1BBqcL1C6zoV3Aa6eQFjuGRvQDStCl0QQQlTie7JmcPcJbxY+M
+	s2pqFxNY7EvWZVMk6XcM6Vd2NjTxjx7k9REZ3dGZEGoLKqT26Mit8hiLRGAy60nPjGV1UNDOyHP
+	AmoBBY72wm1MY6r0+nveIxva5nWNx7M2e5t8GmOl0w==
+X-Google-Smtp-Source: AGHT+IF+JXhCtFUI7qIQoWLQaSp7IslKBmx1r2vGs1hjp44ssVnCEbbybY4kaM+WQWqB2rfGGO71/R3O8mVk
+X-Received: by 2002:a17:902:f652:b0:234:f580:9ed with SMTP id d9443c01a7336-235390e41b7mr1149165ad.21.1748562455933;
+        Thu, 29 May 2025 16:47:35 -0700 (PDT)
 Received: from c7-smtp-2023.dev.purestorage.com ([2620:125:9017:12:36:3:5:0])
-        by smtp-relay.gmail.com with ESMTPS id 586e51a60fabf-2e906790b48sm118303fac.11.2025.05.29.16.47.35
+        by smtp-relay.gmail.com with ESMTPS id d9443c01a7336-23506d37f6csm1336845ad.83.2025.05.29.16.47.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 May 2025 16:47:36 -0700 (PDT)
+        Thu, 29 May 2025 16:47:35 -0700 (PDT)
 X-Relaying-Domain: purestorage.com
 Received: from dev-ushankar.dev.purestorage.com (dev-ushankar.dev.purestorage.com [IPv6:2620:125:9007:640:7:70:36:0])
-	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 217E33404A3;
+	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 223603404BD;
 	Thu, 29 May 2025 17:47:35 -0600 (MDT)
 Received: by dev-ushankar.dev.purestorage.com (Postfix, from userid 1557716368)
-	id CEC5DE40FA6; Thu, 29 May 2025 17:47:34 -0600 (MDT)
+	id D603DE4133B; Thu, 29 May 2025 17:47:34 -0600 (MDT)
 From: Uday Shankar <ushankar@purestorage.com>
-Date: Thu, 29 May 2025 17:47:16 -0600
-Subject: [PATCH v8 7/9] selftests: ublk: add functional test for per io
- daemons
+Date: Thu, 29 May 2025 17:47:17 -0600
+Subject: [PATCH v8 8/9] selftests: ublk: add stress test for per io daemons
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -91,7 +90,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250529-ublk_task_per_io-v8-7-e9d3b119336a@purestorage.com>
+Message-Id: <20250529-ublk_task_per_io-v8-8-e9d3b119336a@purestorage.com>
 References: <20250529-ublk_task_per_io-v8-0-e9d3b119336a@purestorage.com>
 In-Reply-To: <20250529-ublk_task_per_io-v8-0-e9d3b119336a@purestorage.com>
 To: Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>, 
@@ -103,121 +102,96 @@ Cc: linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
  Uday Shankar <ushankar@purestorage.com>
 X-Mailer: b4 0.14.2
 
-Add a new test test_generic_12 which:
+Add a new test_stress_06 for the per io daemons feature. This is just a
+copy of test_stress_01 with the per_io_tasks flag added, with varying
+amounts of nthreads. This test is able to reproduce a panic which was
+caught manually during development [1]; in the current version of this
+patch set, it passes.
 
-- sets up a ublk server with per_io_tasks and a different number of ublk
-  server threads and ublk_queues. This is possible now that these
-  objects are decoupled
-- runs some I/O load from a single CPU
-- verifies that all the ublk server threads handle some I/O
+Note that this commit also makes all stress tests using the
+run_io_and_remove helper more stressful by additionally exercising the
+batch submit (queue_rqs) path.
 
-Before this changeset, this test fails, since I/O issued from one CPU is
-always handled by the one ublk server thread. After this changeset, the
-test passes.
+[1] https://lore.kernel.org/linux-block/aDgwGoGCEpwd1mFY@fedora/
 
-In the future, the last check above may be strengthened to "verify that
-all ublk server threads handle the same amount of I/O." However, this
-requires some adjustments/bugfixes to tag allocation, so this work is
-postponed to a followup.
-
+Suggested-by: Ming Lei <ming.lei@redhat.com>
 Signed-off-by: Uday Shankar <ushankar@purestorage.com>
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
 ---
- tools/testing/selftests/ublk/Makefile              |  1 +
- tools/testing/selftests/ublk/test_generic_12.sh    | 55 ++++++++++++++++++++++
- .../selftests/ublk/trace/count_ios_per_tid.bt      | 11 +++++
- 3 files changed, 67 insertions(+)
+ tools/testing/selftests/ublk/Makefile          |  1 +
+ tools/testing/selftests/ublk/test_common.sh    |  5 ++++
+ tools/testing/selftests/ublk/test_stress_06.sh | 36 ++++++++++++++++++++++++++
+ 3 files changed, 42 insertions(+)
 
 diff --git a/tools/testing/selftests/ublk/Makefile b/tools/testing/selftests/ublk/Makefile
-index 4dde8838261d660ba31a07d608332d1733a6321d..5d7f4ecfb81612f919a89eb442f948d6bfafe225 100644
+index 5d7f4ecfb81612f919a89eb442f948d6bfafe225..1fb1a95d452c2e9a7ed78cb8b12be2b759074e11 100644
 --- a/tools/testing/selftests/ublk/Makefile
 +++ b/tools/testing/selftests/ublk/Makefile
-@@ -19,6 +19,7 @@ TEST_PROGS += test_generic_08.sh
- TEST_PROGS += test_generic_09.sh
- TEST_PROGS += test_generic_10.sh
- TEST_PROGS += test_generic_11.sh
-+TEST_PROGS += test_generic_12.sh
+@@ -38,6 +38,7 @@ TEST_PROGS += test_stress_02.sh
+ TEST_PROGS += test_stress_03.sh
+ TEST_PROGS += test_stress_04.sh
+ TEST_PROGS += test_stress_05.sh
++TEST_PROGS += test_stress_06.sh
  
- TEST_PROGS += test_null_01.sh
- TEST_PROGS += test_null_02.sh
-diff --git a/tools/testing/selftests/ublk/test_generic_12.sh b/tools/testing/selftests/ublk/test_generic_12.sh
+ TEST_GEN_PROGS_EXTENDED = kublk
+ 
+diff --git a/tools/testing/selftests/ublk/test_common.sh b/tools/testing/selftests/ublk/test_common.sh
+index 0145569ee7e9a45b41898c2c789842b4c8380f18..8a4dbd09feb0a885ec7539f1a285ed6f437fe3ab 100755
+--- a/tools/testing/selftests/ublk/test_common.sh
++++ b/tools/testing/selftests/ublk/test_common.sh
+@@ -278,6 +278,11 @@ __run_io_and_remove()
+ 	fio --name=job1 --filename=/dev/ublkb"${dev_id}" --ioengine=libaio \
+ 		--rw=randrw --norandommap --iodepth=256 --size="${size}" --numjobs="$(nproc)" \
+ 		--runtime=20 --time_based > /dev/null 2>&1 &
++	fio --name=batchjob --filename=/dev/ublkb"${dev_id}" --ioengine=io_uring \
++		--rw=randrw --norandommap --iodepth=256 --size="${size}" \
++		--numjobs="$(nproc)" --runtime=20 --time_based \
++		--iodepth_batch_submit=32 --iodepth_batch_complete_min=32 \
++		--force_async=7 > /dev/null 2>&1 &
+ 	sleep 2
+ 	if [ "${kill_server}" = "yes" ]; then
+ 		local state
+diff --git a/tools/testing/selftests/ublk/test_stress_06.sh b/tools/testing/selftests/ublk/test_stress_06.sh
 new file mode 100755
-index 0000000000000000000000000000000000000000..7abbb00d251df9403857b1c6f53aec8bf8eab176
+index 0000000000000000000000000000000000000000..3aee8521032e3962b8b070cda8eb295b01e7b124
 --- /dev/null
-+++ b/tools/testing/selftests/ublk/test_generic_12.sh
-@@ -0,0 +1,55 @@
++++ b/tools/testing/selftests/ublk/test_stress_06.sh
+@@ -0,0 +1,36 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +
 +. "$(cd "$(dirname "$0")" && pwd)"/test_common.sh
-+
-+TID="generic_12"
++TID="stress_06"
 +ERR_CODE=0
 +
-+if ! _have_program bpftrace; then
++ublk_io_and_remove()
++{
++	run_io_and_remove "$@"
++	ERR_CODE=$?
++	if [ ${ERR_CODE} -ne 0 ]; then
++		echo "$TID failure: $*"
++		_show_result $TID $ERR_CODE
++	fi
++}
++
++if ! _have_program fio; then
 +	exit "$UBLK_SKIP_CODE"
 +fi
 +
-+_prep_test "null" "do imbalanced load, it should be balanced over I/O threads"
++_prep_test "stress" "run IO and remove device with per_io_tasks"
 +
-+NTHREADS=6
-+dev_id=$(_add_ublk_dev -t null -q 4 -d 16 --nthreads $NTHREADS --per_io_tasks)
-+_check_add_dev $TID $?
++_create_backfile 0 256M
++_create_backfile 1 128M
++_create_backfile 2 128M
 +
-+dev_t=$(_get_disk_dev_t "$dev_id")
-+bpftrace trace/count_ios_per_tid.bt "$dev_t" > "$UBLK_TMP" 2>&1 &
-+btrace_pid=$!
-+sleep 2
-+
-+if ! kill -0 "$btrace_pid" > /dev/null 2>&1; then
-+	_cleanup_test "null"
-+	exit "$UBLK_SKIP_CODE"
-+fi
-+
-+# do imbalanced I/O on the ublk device
-+# pin to cpu 0 to prevent migration/only target one queue
-+fio --name=write_seq \
-+    --filename=/dev/ublkb"${dev_id}" \
-+    --ioengine=libaio --iodepth=16 \
-+    --rw=write \
-+    --size=512M \
-+    --direct=1 \
-+    --bs=4k \
-+    --cpus_allowed=0 > /dev/null 2>&1
-+ERR_CODE=$?
-+kill "$btrace_pid"
++ublk_io_and_remove 8G -t null -q 4 --nthreads 5 --per_io_tasks &
++ublk_io_and_remove 256M -t loop -q 4 --nthreads 3 --per_io_tasks \
++        "${UBLK_BACKFILES[0]}" &
++ublk_io_and_remove 256M -t stripe -q 4 --nthreads 4 --per_io_tasks \
++        "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
 +wait
 +
-+# check that every task handles some I/O, even though all I/O was issued
-+# from a single CPU. when ublk gets support for round-robin tag
-+# allocation, this check can be strengthened to assert that every thread
-+# handles the same number of I/Os
-+NR_THREADS_THAT_HANDLED_IO=$(grep -c '@' ${UBLK_TMP})
-+if [[ $NR_THREADS_THAT_HANDLED_IO -ne $NTHREADS ]]; then
-+        echo "only $NR_THREADS_THAT_HANDLED_IO handled I/O! expected $NTHREADS"
-+        cat "$UBLK_TMP"
-+        ERR_CODE=255
-+fi
-+
-+_cleanup_test "null"
++_cleanup_test "stress"
 +_show_result $TID $ERR_CODE
-diff --git a/tools/testing/selftests/ublk/trace/count_ios_per_tid.bt b/tools/testing/selftests/ublk/trace/count_ios_per_tid.bt
-new file mode 100644
-index 0000000000000000000000000000000000000000..f4aa63ff2938a4097c2b848f379dbc87fe898a7f
---- /dev/null
-+++ b/tools/testing/selftests/ublk/trace/count_ios_per_tid.bt
-@@ -0,0 +1,11 @@
-+/*
-+ * Tabulates and prints I/O completions per thread for the given device
-+ *
-+ * $1: dev_t
-+*/
-+tracepoint:block:block_rq_complete
-+{
-+	if (args.dev == $1) {
-+		@[tid] = count();
-+	}
-+}
 
 -- 
 2.34.1
