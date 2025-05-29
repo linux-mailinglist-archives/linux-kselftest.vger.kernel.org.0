@@ -1,118 +1,194 @@
-Return-Path: <linux-kselftest+bounces-33972-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33973-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26529AC7519
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 May 2025 02:34:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04C5CAC7586
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 May 2025 03:53:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E49731C05B48
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 May 2025 00:35:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B5A054E705B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 May 2025 01:53:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F7FC1519AC;
-	Thu, 29 May 2025 00:34:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5884221D86;
+	Thu, 29 May 2025 01:53:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZQul/jay"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xLH9qh6W"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7A163D81;
-	Thu, 29 May 2025 00:34:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D426E21CA0A
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 May 2025 01:53:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748478891; cv=none; b=VghPYLsdvmve+hsV/+F5I0v/iHJgud+rUGPEF1o5FDL3rq9C641N/SnlatBfhSLhiluF0eBX7azfELwYnDTrqD/GGyTTKdixhU4Me8h7obndSGvn4DYdzyhThP/aSka0/xVxo1f+HT8NlmGQ3jPqjofIPDvMlLYYCC/6fAwymKQ=
+	t=1748483605; cv=none; b=ZOpTxPpxQjZAsHtcH+46NlfS39R6nhrN6RThP8WSbdjWQnXstRIVxHFsPMoKnLVBrwLs+KclosXEKDKDKWuezMKOBS2xp/IqC6upfusE2/7Rr44Y2kxHPcCp8Ghu4MMpxON/urqiJXZdJIvcdZb83QT/ZPGoLFPWHeuTiGnpUWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748478891; c=relaxed/simple;
-	bh=et8BQHPfuIOihW3pxNT8F8nns/wLQ1/wWQ1CwdJO4lg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oMBYgvgsIPTofXhK7dXPqbt9Ur9mwzKtum3/+mjlrABJZG29isiggzpz45yjQuWvMMTJFhoTtDVsmw1VuVH0Z1Np1KMhrOStbPT0pV87PA9rDLi5iEgTigAU6WIivTE21jcFF/KldN3uf6zJjrxHYGRNzJ5vShZ4yLQv9sBgCwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZQul/jay; arc=none smtp.client-ip=209.85.161.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-60be8b6f1e2so36824eaf.1;
-        Wed, 28 May 2025 17:34:49 -0700 (PDT)
+	s=arc-20240116; t=1748483605; c=relaxed/simple;
+	bh=rJbOnLrons4tTuN78stT1ORqO5zSyyGsE+esZxR3PBs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rU03u/clyE5U66UzAqQe4sCQ6CS8LHGmIbSWAajsgze+kUVK5DwJL23PxZT1beUEOkaWKQuUizmwqDHRI5xgNwR+cnM7kDM6sqhq8RJXQJvAlcVpfTVcYrM8vMzhLnKw2JhgL5UZDrGjOscu9bD6hPabfnGDPCL1wych0IAmMhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xLH9qh6W; arc=none smtp.client-ip=209.85.166.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-3dc9caf4cc7so15ab.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 May 2025 18:53:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748478889; x=1749083689; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ERglwhE5E/w6EsEgiGx9ksfEVnryvmo5As3wii4rmHY=;
-        b=ZQul/jay+WE2uJSe/Q1vb2Kip+QbtPorFPXJrof3JZI9DctILdEoReY7aC5maKXbuQ
-         UmZu4zv0o5yAxaXpLlQhff/ww6JVvjVhfv2V5XsOb4PHR8yu04A8mA5fg+laCzzT/tST
-         r2XtnoroNlTN8uEvKxIucV6k04nV/6C29gNd0hllMkHun9c7JadabTc1mvfltXB6GHiP
-         A5gxLzHaA4E7fLn0KHYOjv6w221a9mOQJjFYqTm+1fQyc7WIrmOc4No8SGVQbFJeNVlh
-         86Dj6aqSpsdPrU6oLnu1no0OSGQjL7LYYkvqEMoM2Uq8iYTeEPhcCqa8mMaaH4O4FiSd
-         p5EQ==
+        d=google.com; s=20230601; t=1748483602; x=1749088402; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rK28GjLplaS1k6sqbBmLq7Kl/oZsU4xMjKQXJ8HS3rA=;
+        b=xLH9qh6Wzyel+Qcwg7oraOeFJvWcjbp2sDQo3q+QMvOdqB5Is/qIbwKEdx62m17kcB
+         NDcN1BJVn4c6RojJriZALkozb3UabYmyqbER7XNquDEDzF484+6rhfTtJX694bibKxLw
+         oEefb6zx8WJ/ViWFjMUgCf8tdjOtVITIs9nq+YeBiNGZAuIO76FMS1bNHFc8+din55kJ
+         7C5iGk5mTPOyH/t6M4NlhQLt5u1ekxUDgoMDVye1wgcTp7T1USKQpG9vPGOQ0NP5tjmU
+         9N1+PaYxLCNi3mN86gip2sIg0kQLF/Cq2QYqIOUzuAU3nD66n7EY21Q+eHYNpSyy3ifn
+         bW5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748478889; x=1749083689;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ERglwhE5E/w6EsEgiGx9ksfEVnryvmo5As3wii4rmHY=;
-        b=Mq7npTlpZs8geDM8HiUsflr76FwSdWu8EjdU0aPTbjwkrSeHOtgxBqbcIDo1kMDIUy
-         Mb6unAJA0CLof5jwsSAD1CohCvIfdzcjEp6IEy79GghE7tpCqlm7NLgaE+RAV0TDhiwb
-         eGnzc1CQV0+ngPEsX8b7GA0ZzTlbSXHNOwBqbMuSO2Dr9o28CrjDcuUYeB6DASLZeoxZ
-         LSyuzH6nmPYPAtrxBlekwAcaye7g5EaWVkW2nhefnLZMY71+D7ec3//7IlnCmHVFoQGk
-         Uz+C5zQRTGApMPXQMHLHkBBMdCv+f2qzoTm9Z8iJTENDzsIm8vz3ndozSypZWAMtfcWL
-         70qQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV3hTubfOw7pkLNRoOR2TQ9ztMnErnh/Sf2BSGYgApYox1yBPHbwQ/gdogoktdWvW5/DLo6GqnMyua9GdE=@vger.kernel.org, AJvYcCWndCMc51VWBN9N1YgZVYamhhMaJlbdmbOdIs9uMwjYoCR1odbhMLtAzqEeWb11xtRe4xoGjFSj2DJubE9AJ4di@vger.kernel.org
-X-Gm-Message-State: AOJu0YzR6hoTrxrMWHeyWRv9gDAAuJfZi2i8DFXy4zSIWvvAPtvVD25m
-	KR/um0AMTUXTWF5G4hce3AihqYDLxqiZUwX/P3TKvNlE/qNiJZNlAow6
-X-Gm-Gg: ASbGncs+6Xat6j8lvTVc5pcLP/QTTxvCtmSdjF9N2CwFrXk4TPxm81diNYj4WQicM6p
-	iI8YJ5GF/Ivxyn3xG3eaERQjgiYXuIwTJ/X2dPV+ku1obqhAXW+7ayMOdDAJ4j12gSLuaqbSQoc
-	MlcINCieLcOUgvH6QV2lph4ZUGTwzhluYpQz/faJQy9H70dr8G+dBgiSstAQZnSwF+Uo0FIxxA/
-	f8GA9HpiimQfM56Zl/dV8/dW8NAGFV5ljlaljtzPfuhQWqhejN9fCHH+QVYKPR0+/5F5wz2mF+J
-	HGrm5N3qaXDpKsbZZx6wF7rV/WQD1xqIz3i4byFnS74=
-X-Google-Smtp-Source: AGHT+IGQbLJXcwFxwTH4rcjVv8bjk5YHD7H4HOpr18KLDDrWRuJdkA/O6jpOndZnydVN2vZqafSgBw==
-X-Received: by 2002:a05:6870:1f17:b0:2cf:bc73:7bbb with SMTP id 586e51a60fabf-2e86219357dmr10237081fac.25.1748478888623;
-        Wed, 28 May 2025 17:34:48 -0700 (PDT)
-Received: from localhost ([2a03:2880:11ff:73::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-2e906457afesm63981fac.1.2025.05.28.17.34.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 May 2025 17:34:48 -0700 (PDT)
-From: Tianyi Cui <1997cui@gmail.com>
-To: shuah@kernel.org
-Cc: Tianyi Cui <1997cui@gmail.com>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: Add version file to kselftest installation dir
-Date: Wed, 28 May 2025 17:33:54 -0700
-Message-ID: <20250529003417.468478-1-1997cui@gmail.com>
-X-Mailer: git-send-email 2.47.1
+        d=1e100.net; s=20230601; t=1748483602; x=1749088402;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rK28GjLplaS1k6sqbBmLq7Kl/oZsU4xMjKQXJ8HS3rA=;
+        b=M3MB1WwoZt1T/kIrSN6ciKYHUTIk+tqfhOo/r8QJ4O7MzHbkUXR6Oyto337Wf9js1T
+         Q3myAONL4VdRAkYPW4Ji+QpyeGPu2H25A6lQnerW8zOFcse3jVygQ1AmrEbdpiubXfMg
+         vfOlkGdIIdPbk1d50bdJyzutVzhjp8hNjESvF6WExqLjLxrdN4rxzzo6mzyA18ZlEsCX
+         FibNWbxQHyzDYKxwwhU66lbPk11m45Z9B6mfG1m0URERyrntkMUVInANIgD4z71ldb9C
+         f9cWAPMtPBY63I1DaOiW7bocZ9PEBHBN83UwtuL2oFx6MR07dSQ50ToHmUPHdQPXiy5L
+         WWkg==
+X-Forwarded-Encrypted: i=1; AJvYcCX+74I7BjrslltyQawOaxK8ASKSOCsee44Gx679B3Ppp/e8WKXKPUOxbT/qaSaa3qLtTrdsBXBUxFxOP053+3E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyIlYyC2FXetRplk+eWlLAflJemXWJA4GWv0dtXPukrGqDLEkfc
+	X282zqM1JBoY/gKJjQGRVxqvO2IA6Mom8+i1m0r4hrt1VekZFERqIcSN0L2TkHYJhBgpwbgNdpO
+	dAyWyF23m6n0hhb7zwBcXrb/pBd6pEdyUwScDR1G6
+X-Gm-Gg: ASbGncvscf10tY3PYSm14td4ZsDW+U+C+X32ciLi3qnpnYDv9nJ6TdEErl1p2pDAN5U
+	o5f9RsxMb4RwMnGG2RWHDEvcNz8Qv34QZjEZKroFZtQ5jgcoFVdWp5GDYRhxvN2UMBW1WAxfw1L
+	wxK8/9Cn9OD+AxF3atg+w61qIdAGoJOL/5CRBOor9EsH4ukhoNsXqXbcrasHMMRpMgfiWDatOiX
+	Q==
+X-Google-Smtp-Source: AGHT+IHvXpxdbsNsdSIj7f0krR3C592J4ox9Z6xPbGgTujvSL8gBecLol8wGmmUwIDp3VmUxXJZIQ9cqFHX68YMuAB0=
+X-Received: by 2002:a05:6e02:17cb:b0:3d9:6c7a:2b37 with SMTP id
+ e9e14a558f8ab-3dd943b659dmr165085ab.0.1748483600459; Wed, 28 May 2025
+ 18:53:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250527091855.340837-1-yuyanghuang@google.com> <20250528154906.GD1484967@horms.kernel.org>
+In-Reply-To: <20250528154906.GD1484967@horms.kernel.org>
+From: Yuyang Huang <yuyanghuang@google.com>
+Date: Thu, 29 May 2025 10:52:43 +0900
+X-Gm-Features: AX0GCFuYgCNb70ORjeZSMAVUwUmRpmuC-GcYb2mnhAWrV6WRxyL5vLj9hHEg0Fc
+Message-ID: <CADXeF1E7zuqpixcB+9j90d7tZhR5bsSsrniYD-BtpK8+uzA_Pw@mail.gmail.com>
+Subject: Re: [PATCH net-next] selftest: Add selftest for multicast address notifications
+To: Simon Horman <horms@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>, 
+	Lorenzo Colitti <lorenzo@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-As titled, adding version file to kselftest installation dir, so the user
-of the tarball can know which kernel version the tarball belongs to.
+Hi Simon
 
-Signed-off-by: Tianyi Cui <1997cui@gmail.com>
----
- tools/testing/selftests/Makefile | 6 ++++++
- 1 file changed, 6 insertions(+)
+>Other tests in this file seem to warn if the ip command is too old
+>to support the test. Perhaps we can achieve that here something like this
+>(completely untested!):
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index a0a6ba47d600..246e9863b45b 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -291,6 +291,12 @@ ifdef INSTALL_PATH
- 		$(MAKE) -s --no-print-directory OUTPUT=$$BUILD_TARGET COLLECTION=$$TARGET \
- 			-C $$TARGET emit_tests >> $(TEST_LIST); \
- 	done;
-+	@if git describe HEAD > /dev/null 2>&1; then \
-+		git describe HEAD > $(INSTALL_PATH)/VERSION; \
-+		printf "Version saved to $(INSTALL_PATH)/VERSION\n"; \
-+	else \
-+		printf "Unable to get version from git describe\n"; \
-+	fi
- else
- 	$(error Error: set INSTALL_PATH to use install)
- endif
--- 
-2.47.1
+Thanks for the advice. I will modify the test to make sure it skips on
+old iproute2 versions. I will send the patch after net-next reopens.
 
+Thanks,
+
+Yuyang
+
+
+On Thu, May 29, 2025 at 12:49=E2=80=AFAM Simon Horman <horms@kernel.org> wr=
+ote:
+>
+> On Tue, May 27, 2025 at 06:18:55PM +0900, Yuyang Huang wrote:
+> > This commit adds a new kernel selftest to verify RTNLGRP_IPV4_MCADDR
+> > and RTNLGRP_IPV6_MCADDR notifications. The test works by adding and
+> > removing a dummy interface and then confirming that the system
+> > correctly receives join and removal notifications for the 224.0.0.1
+> > and ff02::1 multicast addresses.
+> >
+> > The test relies on the iproute2 version to be 6.13+.
+> >
+> > Tested by the following command:
+> > $ vng -v --user root --cpus 16 -- \
+> > make -C tools/testing/selftests TARGETS=3Dnet TEST_PROGS=3Drtnetlink.sh=
+ \
+> > TEST_GEN_PROGS=3D"" run_tests
+> >
+> > Cc: Maciej =C5=BBenczykowski <maze@google.com>
+> > Cc: Lorenzo Colitti <lorenzo@google.com>
+> > Signed-off-by: Yuyang Huang <yuyanghuang@google.com>
+>
+> ...
+>
+> > +kci_test_mcast_addr_notification()
+> > +{
+> > +     local tmpfile
+> > +     local monitor_pid
+> > +     local match_result
+> > +
+> > +     tmpfile=3D$(mktemp)
+> > +
+> > +     ip monitor maddr > $tmpfile &
+> > +     monitor_pid=3D$!
+>
+> Hi Yuyang Huang,
+>
+> Other tests in this file seem to warn if the ip command is too old
+> to support the test. Perhaps we can achieve that here something like this
+> (completely untested!):
+>
+>         if [ ! -e "/proc/$monitor_pid" ]; then
+>                 end_test "SKIP: mcast addr notification: iproute2 too old=
+"
+>                 rm $tmpfile
+>                 return $ksft_skip
+>         fi
+>
+> > +     sleep 1
+> > +
+> > +     run_cmd ip link add name test-dummy1 type dummy
+> > +     run_cmd ip link set test-dummy1 up
+> > +     run_cmd ip link del dev test-dummy1
+> > +     sleep 1
+> > +
+> > +     match_result=3D$(grep -cE "test-dummy1.*(224.0.0.1|ff02::1)" $tmp=
+file)
+> > +
+> > +     kill $monitor_pid
+> > +     rm $tmpfile
+> > +     # There should be 4 line matches as follows.
+> > +     # 13: test-dummy1    inet6 mcast ff02::1 scope global
+> > +     # 13: test-dummy1    inet mcast 224.0.0.1 scope global
+> > +     # Deleted 13: test-dummy1    inet mcast 224.0.0.1 scope global
+> > +     # Deleted 13: test-dummy1    inet6 mcast ff02::1 scope global
+> > +     if [ $match_result -ne 4 ];then
+> > +             end_test "FAIL: mcast addr notification"
+> > +             return 1
+> > +     fi
+> > +     end_test "PASS: mcast addr notification"
+> > +}
+> > +
+>
+> ...
+>
+> ## Form letter - net-next-closed
+>
+> The merge window for v6.16 has begun and therefore net-next is closed
+> for new drivers, features, code refactoring and optimizations. We are
+> currently accepting bug fixes only.
+>
+> Please repost when net-next reopens after June 8th.
+>
+> RFC patches sent for review only are obviously welcome at any time.
+>
+> pw-bot: deffer
 
