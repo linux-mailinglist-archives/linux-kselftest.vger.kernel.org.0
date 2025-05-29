@@ -1,138 +1,110 @@
-Return-Path: <linux-kselftest+bounces-33998-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33999-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63E36AC7E76
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 May 2025 15:15:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B8D2AC7EA0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 May 2025 15:22:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 29E9D1C01DEA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 May 2025 13:15:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5F6093A9890
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 May 2025 13:21:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F8CC22539C;
-	Thu, 29 May 2025 13:15:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0815B225A32;
+	Thu, 29 May 2025 13:21:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HTOFfuSB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SRqL0uu5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0C7519ABB6;
-	Thu, 29 May 2025 13:15:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 931E3647;
+	Thu, 29 May 2025 13:21:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748524515; cv=none; b=gCU1/wS8VURYiucZ0+ppxUHbMCHexXYy80HlR1STbwusnjTUjwLz14nuH5cKRrizNRXQaKEM/PaZWfMlpzlPyLNRWr1QBS5rJFewnCtX59zIYKq0inaJ+CKQZWs2OPrevl/DV15shIoSYozzVWXYpTwvpN60AfdStNSBavcXgzs=
+	t=1748524917; cv=none; b=hCGrAVQaZDhPcXwBnmqq4tVCDfqG1YvgElUC0exJr7Nzc8IKZK/NWioNeFgU43azKy/zjV5txTS49vEJ8fscF7lsJiUiNQauQv6SIcjYd85D7VWRxn9ZRNgiNjEhTy7aCZJH+CsJrb81mzYaxDo2xjNIF8NdByrIE6f6lV8TLuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748524515; c=relaxed/simple;
-	bh=izTBMmwweAGuAnXHJtubgKrUDiBkjD0FY51OCVbyMBI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=bDdwOpbguNMQUwygZcbxk0J8juANZObXdZfgHczgNhEYCc2FnDS9unU+HECy4z/XCFIwjRvpmu8AGWygNDwaC5KA1uUh47XCVl+FJdGT2vrIIBLTZUX7xdraNggU4fMvHfpro+uu3AUCNRQXmEdfxksgWiDRc5vHi6y3u+7tVgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HTOFfuSB; arc=none smtp.client-ip=209.85.210.182
+	s=arc-20240116; t=1748524917; c=relaxed/simple;
+	bh=SN6Mu4JxvkIGTbp2VoyF8l025poz7YYnqBe3byiyb+Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CaCYG+09J4SvWK+UVkDAtDbb3c8o5/YECdVKamyp9jO9MepRt4B51tVZGgv7ZKnGuvHI2DXs3aqtalfLW7+188gS3ilXy1RYzOFznhDXxowMl/pHVemyxAUj8hX9zw/4GL+iVrVSEsyQLmHAQwm2GG2DmoLp6eNeOksQSRT77b0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SRqL0uu5; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-7376dd56f8fso1000876b3a.2;
-        Thu, 29 May 2025 06:15:13 -0700 (PDT)
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2322d8316f6so1064625ad.3;
+        Thu, 29 May 2025 06:21:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748524513; x=1749129313; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yDjprSXjpWj7IN/c9BrZgUvfGIdrnvmdvSk6h2l12/E=;
-        b=HTOFfuSBFocmpqb3FmcErkXaD9FaN0+X2HtlYB9TLwgEfuFnv6wIo3SnVru9208Rg7
-         LvS369+mX8kZQfIritMPDjZ0tLRo+U/DGtNPCqOM+Qy5O1GRwhMdAWZlVI7n7dJSmV8L
-         Qmg3YcG9gEsmdIGEflGwaTP/Jvb6rgiF9tGetxOb2E15v0iRIbWFind5m0NvLsoQUFAe
-         wXjevlqhvb2VPw7byGpaCKZ3hOeA/WAP5E9Lg/SEp4/2ds17oMSt5s/Ik+K5DMLhuPWl
-         01JcmZqrc/J9VDA83mXm+rw6bcEKIHnzPW7lv0fpvGRmQlrl6dskumrTV6yQSbtVz9/M
-         ntGg==
+        d=gmail.com; s=20230601; t=1748524916; x=1749129716; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SN6Mu4JxvkIGTbp2VoyF8l025poz7YYnqBe3byiyb+Q=;
+        b=SRqL0uu5UAiK7emC6cU3gG1kTyFmeDOAkog3G7bqgiWZf3nymoSkgD7fD8nRNZTkAv
+         KPzkKSzvzfk9rRZdcPoiNxjvFRIhgSMlmDj7+Nf91xDbXqPY1ywZMi8utd66xU16Ozah
+         mT142MNJG22R8on6sKbWBk5doSWXfy/mCOFdz8OFGuY+lloLXLxGuqLhtzUTj1hPCi/b
+         3dDQCmtDu2vDw5wqOWgVMjgdpLkBigmM42FDRCDoN+hZ9oW6YAjrlZNpMbJaq73phttb
+         VjdG3Nqs9sU17OMOhT2SYrH7TKbGvKtcBylBS8dAKMeqgxShhbIMKm9z+NloLwHuNDeT
+         GNvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748524513; x=1749129313;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1748524916; x=1749129716;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yDjprSXjpWj7IN/c9BrZgUvfGIdrnvmdvSk6h2l12/E=;
-        b=w3X4wXpRKF1267XH8BlvjK5Bdm5EGcVMyzRtraS+qjl9JEEINqcX3XDVIWjIIslkz5
-         8CpIeWwa3e9eq08vKTbzV/ai8FVwofL0BJPQFktKOkd7OwhdSOHhrFvbZ5td4isw3GKB
-         w30/pkvTQvzIqt3LE6WCEcNNdIVVvJB6NX8UPsPClsdzS8ROL9jn1vYQj5AngMA7M9n+
-         UzhvMU6KX1ATb5yb1hBrqcgo6RPDUlBVFADaPkT5FikQn9UB7OXLj/1FsgkEQXxTL3na
-         2EVkQAwMWX4J5Z92LrdDEIJFnSU4yCTUefg9wZ+qL1gKhzJuDgv8nALD4hEIlPQPRNj0
-         QdRQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX1qA8M+7jtKtgItw3t9nHV1EeaW8SfzY9zMEFEru31DmQMGkl0KWE2+iZswlvXytdioXeMH6k6UyL0D08=@vger.kernel.org, AJvYcCX2ar1PYiiuWPEtX1THb1mTh/qXX58uF2nIrTzupxt7Iy8r7zHBvtNry1k16YlQhuGlN2Z8+uBjKiwlZEncG6o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYe3BNaY4nuKJUi788/GXkYVK1mJVvqJVp+ywfbRCt6e1w07Q0
-	Z26cyZHDmKuOmqjPFvznbSbMCNr5jEwpjl7HLzuVrsQHWlUAYJDhC2ywYf+69/B/TZI=
-X-Gm-Gg: ASbGnctC3rBMvbdVEPunTIpUzZtrgBd5ebMlpVzVuwXJwT/M1sBFhT/2VjBGZ9b8fiw
-	TMd2cwPwCoOb7Pqtm1vuEgYRFO4Zgfgh0rJLt54D0Jhx6dbUvDI4HPLjFxNcqi0bUG0rVHGjDE7
-	I0tOqQmAtnZGWzzpc5qOCB7J7P1ZAlm4IehP0/5KzZGwd3+dfoIB7LrRlzP9dE0jhHSXr2XZmYx
-	wuwqsuzBKmeAJnTXGYNayFdfthRCtBiYQT3uO1HLUNbim3HbJOHOcXTP00K/iM/37plSumEO40c
-	VUrEqZOboNbKHy+nm78/dnBl87aVmwswQLHS0MxmwwSguOq14rwmnXygsT92UZ5pcTRAhMJ3NIX
-	oq1fKbsUfzNhD9Q==
-X-Google-Smtp-Source: AGHT+IFZS4//fV7KzceypZuAS7jRaNoJwp5bqwCgeHwzNmiDtrX7cm9iZXd/41HxrzX2+eLp4Tw1Yg==
-X-Received: by 2002:a05:620a:4550:b0:7ca:ef12:966d with SMTP id af79cd13be357-7d09aba561dmr374330585a.56.1748524502690;
-        Thu, 29 May 2025 06:15:02 -0700 (PDT)
-Received: from tamird-mac.local ([2600:4041:5be7:7c00:da0:d9ee:5c71:a02a])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7d09a0f7d96sm91528285a.30.2025.05.29.06.15.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 May 2025 06:15:02 -0700 (PDT)
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Thu, 29 May 2025 09:14:59 -0400
-Subject: [PATCH v2 2/2] rust: emit path candidates in panic message
+        bh=SN6Mu4JxvkIGTbp2VoyF8l025poz7YYnqBe3byiyb+Q=;
+        b=HlPcarBHtDOouMWnTud4raUml0o2y05DIrTH2bgEqPeQzAg7L7mW4fSbFfBCYunv6F
+         LXYFt56KEzOx6t4p3+l+cp5ax60Q71F0rIYFKZnpIK7riQj3+F3fHFB2KqK7pQFLzAg8
+         GjVmVFpzvLMyY/6FxLkHDm8a2q4810qvtq3IYGAGcZgErLQtsKGHQTdE6Y6zY2vNPbo5
+         LyzuM+ovFxznddiyv3uog32xl5v0MFSaD+QjyqpUJ7dcQI/W05p7wSP14NvvdOf71dlS
+         vW7lSOmE9BpVgLLA+oUfwSnGdndzBkqG7o0b/M2CN1PClBmcDD3yALrAB9dBviNqy9cV
+         mbeQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU8mjN0P4R1HOw9J/MzA1O/ecbeNcpKguYzN4pj0n9saP6/46jBaIYqUjus9arhJT0/EKcY+NlElLNiWn+Vj7Wv@vger.kernel.org, AJvYcCUawHqA8nBZ/g0lw90QYbTGNAc7Q5b5XDzzp+d9ovgpmjhZO7IPmJ9Rs0TjDanj7+aqMeUuVtp/ZNFB/sc=@vger.kernel.org, AJvYcCX37SLC84ahPhqiP6jgPqqHzDUFoTU7vH+USxBmmWoZcMYMolCReb/5qkwnF9AXP47zJWRQwCwChjMFqpVT8gg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4oM3xycSzTmma30bGyXgic90dsG2bFJb3pzcYYNSPVwxwAU5T
+	8GXz8t/boDBgrbDFzA9B/SRHMXgdhE3KDVAgQSn/WRZOKufl8S8NkKwEqY+m+ClORNUCL4oiI5z
+	LSMZklEFWpX3MroLesj2f0DOkUW0deFc=
+X-Gm-Gg: ASbGncvmLsY5/IJOVyGCyh2ga3Y2PqtyzlNeFb/Iby01saqmgbkRj7vxRZUfz9e+2L8
+	JYeI2TGbU01qAsXn7p8xxf+htBh82FzgKN8iYFPN5z7FWfmPbkvlxGwXWd3lH/kZUYV37jfO3zr
+	dpQ46FaUdnpBtvh94JQu5E/fitIaI+7pchFB7Ke82yMWc=
+X-Google-Smtp-Source: AGHT+IEw3IfjRiVmB9B6f5XuML+7UkncMFZmzabzcloIvrow/Wn2iV4+leCCTt22pE+x9RCQAjX6Ih6PN46tqK1oGuI=
+X-Received: by 2002:a17:902:c407:b0:235:737:7a8 with SMTP id
+ d9443c01a7336-23507370992mr13730985ad.3.1748524915877; Thu, 29 May 2025
+ 06:21:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250529-idiomatic-match-slice-v2-2-4925ca2f1550@gmail.com>
-References: <20250529-idiomatic-match-slice-v2-0-4925ca2f1550@gmail.com>
-In-Reply-To: <20250529-idiomatic-match-slice-v2-0-4925ca2f1550@gmail.com>
-To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
- Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
- Danilo Krummrich <dakr@kernel.org>, 
- Brendan Higgins <brendan.higgins@linux.dev>, 
- David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>
-Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
- rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Tamir Duberstein <tamird@gmail.com>
-X-Mailer: b4 0.15-dev
+References: <20250529-idiomatic-match-slice-v2-0-4925ca2f1550@gmail.com> <20250529-idiomatic-match-slice-v2-2-4925ca2f1550@gmail.com>
+In-Reply-To: <20250529-idiomatic-match-slice-v2-2-4925ca2f1550@gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Thu, 29 May 2025 15:21:43 +0200
+X-Gm-Features: AX0GCFuco26rV0hLqSzHou5ShkVizO8CV01DHgm65dtjBe0oghAxdH5dFDdhRcA
+Message-ID: <CANiq72nigDV2R_9PNOv98nGBxDZ=46WcRM7V05nQWni5VQRw6w@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] rust: emit path candidates in panic message
+To: Tamir Duberstein <tamird@gmail.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Include all information in the panic message rather than emit fragments
-to stderr.
+On Thu, May 29, 2025 at 3:15=E2=80=AFPM Tamir Duberstein <tamird@gmail.com>=
+ wrote:
+>
+> Include all information in the panic message rather than emit fragments
+> to stderr.
 
-Signed-off-by: Tamir Duberstein <tamird@gmail.com>
----
- scripts/rustdoc_test_gen.rs | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+Could we explain the "why" as well in the message? (i.e. not just the "what=
+")
 
-diff --git a/scripts/rustdoc_test_gen.rs b/scripts/rustdoc_test_gen.rs
-index d796481f4359..f95129b03cd8 100644
---- a/scripts/rustdoc_test_gen.rs
-+++ b/scripts/rustdoc_test_gen.rs
-@@ -92,13 +92,15 @@ fn find_candidates(
-         ),
-         [valid_path] => valid_path.to_str().unwrap(),
-         valid_paths => {
--            eprintln!("Several path candidates found:");
-+            use std::fmt::Write;
-+
-+            let mut candidates = String::new();
-             for path in valid_paths {
--                eprintln!("    {path:?}");
-+                write!(&mut candidates, "    {path:?}").unwrap();
-             }
-             panic!(
-                 "Several path candidates found for `{file}`, please resolve the ambiguity by \
--                renaming a file or folder."
-+                renaming a file or folder. Candidates:\n{candidates}",
-             );
-         }
-     }
+Thanks!
 
--- 
-2.49.0
-
+Cheers,
+Miguel
 
