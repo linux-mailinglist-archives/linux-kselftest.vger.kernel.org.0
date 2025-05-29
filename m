@@ -1,130 +1,123 @@
-Return-Path: <linux-kselftest+bounces-33991-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33992-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC42CAC7C5B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 May 2025 13:04:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92B58AC7D58
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 May 2025 13:48:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DACA43B9B7D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 May 2025 11:04:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7179A4E64F0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 May 2025 11:48:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEED52882A5;
-	Thu, 29 May 2025 11:04:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A826222584;
+	Thu, 29 May 2025 11:48:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bT4PDFxS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MsQQPjxS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5471B20E6E3;
-	Thu, 29 May 2025 11:04:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D07F613A3F7;
+	Thu, 29 May 2025 11:48:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748516664; cv=none; b=uMjPcPo2EloMIXpDg3blLNcx3coZ5AJrCznnCxEAjWf/OyaNDZKHWI3r3UAFVlC3NwXEQVl775FYdRfxojLMJYDkWyjF5Csj8LOZBxSF0411C5LpUyP0ImBeEq3rJHszguCoSSmOx0aEKW9hYsZZQASkA0nx7ODvPBRbjjLxwT4=
+	t=1748519288; cv=none; b=ipKPUqjzTqzNYjCFPjN/umqMLMf0fZD1RWD7aszNNkKWNTNDLWBnYr+phGBbE49h7vSe/gfHcrtHLb1p/n9Lb1z0qdj/VCAmfKC+1TPy3palcMQ6slPkmZ08jOj1aeYm+320Ayqcewck4OebTzKIxiUbbkuEfTc8fj3TUBWfM2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748516664; c=relaxed/simple;
-	bh=bjFdJf+Dm1UZ3P8YltWnNwfPAQJXnYFs0CGmDjW+6gk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rMvp+qcPDUgTNS/094+akJup6pWoOUT1f4LEqsk8YsBchB7Q+ArCKxkXfMV76Yn/hS+XUffIIXMj4g6tnEetZRf8LoH7P8V9br2sDsN3ckjMtK+Cun3XwDMNWep2a0EGzR8e/aydwc2tg2ofvjQ4Ivvbt3mqMFHLOjDTyHCrbXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bT4PDFxS; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-74264d1832eso717091b3a.0;
-        Thu, 29 May 2025 04:04:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748516662; x=1749121462; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=elb0IQnO73maUG0NJbzoI/IOVIfGmzvtWXJxilsL9mo=;
-        b=bT4PDFxSfvmgLjkax8HlZpNGFRpXvuXbiHB4brlQ/s0/cILmS+My+pcUm17A5Lo/Uz
-         yCmaQqe+05VHFUkdLx4rP4SDBMgawtLQhkNXQgUAZm0VGdGydWYiMoNOb3HQhFVzxbGX
-         cwxNrafds7eHeKtT3zcQXFmRMZI5URVHpKigPvoTMjtant5d5v/1cO7mM4C0bK7DDzXi
-         yIGIa2780WJzbtz3nyaxqepERLpRq4Hl7l/cihqlLmdnHMkjTTySEQLWUMlKuGRWHfDh
-         D+DlZXPXLa+/ZXHRdz4EAx3Z8RccVDAkOWJE4LCB8JHh48MA8thrTnE5zBpT130xAYpj
-         SOXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748516662; x=1749121462;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=elb0IQnO73maUG0NJbzoI/IOVIfGmzvtWXJxilsL9mo=;
-        b=jKtnVl0OGaSKguIopFcsdOPst1VUjE5plURlL14KsJ820NtqmOu+9f0IGvbd1emXDq
-         MBR8vENCgdVcVkyNGapxYCTs1YHRBZd1bFPzbbJOfle3S2R5T0fgQcgiAYG6Ts+krW/2
-         Mfdmm7hD/gTOiOdB/RyCGd8MhP1B4jIPGc+S4MRHD0PdOIDqN3skJRV87cHxqPZjJwBC
-         sOztgsh1ZBs8QWjQrAEJcwjfjXlSMgujcNo66Lby8KDALF334d0Iw2Fqg8qQhJeBVObs
-         Q6lcLWvgexEVIiYEsH7Rh6MurOGczLoQIxcAbdj1tMqjlOZ6FpvPQBfCdlDMqQyi2jLi
-         sFcA==
-X-Forwarded-Encrypted: i=1; AJvYcCVOwjXxKw0Tt4z6QzdTG0haL1QNuHKCot9btggVc2GP+KVf1yQwWMxQoBaAIHtqB3KsEMuWLYhb4UR1Mfc=@vger.kernel.org, AJvYcCXkX8Se80XbVneWKXCK7mj1cAsyfQ+/qChwGQS+8NoojgJkOZUXe6TVVg1DxXxVKGi+jq0YMfDhwvyP+TlB8jJ6@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCayYqIfIQRl0m4Xvli86UjgmxUu1JiaoM/MrfwrvWYxcfk6LL
-	4pZsbcEsBFBNtOlSp8FFP1sJdvn1ZB/QPQZAWD9Dr1OzxAuIGaU1BgF8
-X-Gm-Gg: ASbGncthwXx2fhalPIgfb/Q3IzMRX34RA9oOsAgO+6Aimur99+XKtx3rTE4Z9azkSOs
-	WS2b6nGqBDrrdGqnOojqP2iq9wWRFlmRHtQ5LCl+S+Q1m+GIB+CV4lD3+UlxTGBE+E6rUZAGDb4
-	AsLvMDior48m2toj9grPooK1KmTADYDteOk3v7vc+vMXAusKq1czhFx2mV9HvGyjV8XSOrIpwSt
-	kpXbMK1pV11G2Rh5B/Ni4cuu2M+y+u0Q5Ic2B8FJIMAFZqLudW554ROgGeFhWcOwrVPSACzs7p+
-	r8T0e1lI0H/Cy0WyfkPetyV2Yh9oL4B9fUVYMQ01mkWLgNbyShG1D7DbJHGOYIXnVcLMn31CeXt
-	VOWuT0LmY+fGylYvLASazzmjTbTYpDf8zAp4j8M31
-X-Google-Smtp-Source: AGHT+IH5zfeo/HBOiXWizEuXHO3WU2MEzyWgONfZvWvMMvUVOiVgGFx3iOqK4PF3pd4B0YjP702rFQ==
-X-Received: by 2002:a05:6a00:1381:b0:740:9d7c:8f5c with SMTP id d2e1a72fcca58-745fe036213mr33229676b3a.18.1748516662427;
-        Thu, 29 May 2025 04:04:22 -0700 (PDT)
-Received: from ?IPV6:2001:ee0:4f0e:fb30:d434:b1b6:e451:f5d9? ([2001:ee0:4f0e:fb30:d434:b1b6:e451:f5d9])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-747affafb44sm1113913b3a.107.2025.05.29.04.04.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 May 2025 04:04:21 -0700 (PDT)
-Message-ID: <da0339d6-b6a3-44d8-8ed4-b99249fa0fd1@gmail.com>
-Date: Thu, 29 May 2025 18:04:17 +0700
+	s=arc-20240116; t=1748519288; c=relaxed/simple;
+	bh=P7souVYNDTCPcO1CXMYGoclN1/o/FL5aiEHy0SwZIR4=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=kjCi8wpm31DepW38Z5UhDhEiQhE2KbmtMSi0cL0wwMShbap1tts3cKmWCpvM0xruSErfd8cZRm8+7yC8eKP+B764258p0d53paa1alVgEdrGe/Rbf0KxXtVCdmR7tQFOpCWbmM/bgwEt4yr7sa6ACYjBVrnMMSmTI8Ospf7LsBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MsQQPjxS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33FD2C4CEE7;
+	Thu, 29 May 2025 11:48:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1748519288;
+	bh=P7souVYNDTCPcO1CXMYGoclN1/o/FL5aiEHy0SwZIR4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=MsQQPjxSX+4DmYyhHGCpSURnuD0cmkl4qu3BbZUy07xbxOHBZySYUKM1CNg1Impvd
+	 jFhl1sras34WV5jDj2ARxFbselPnvdCeGBX/0eI3BxG4PiyVx1SF7vzJyCzS8/ycj7
+	 eWasMHhhL1/SsYfthIZpZfaeZi2TJiJ39y14cuMYeQh4h7KM8hNbUP7aowkQt6vEAr
+	 MRO4II492FsEbgtuY8bUWwQyWnhssfZR8sLVqQbbdeGUZQhFUylja5L081wmJfHUOJ
+	 zGzEmOcB/Cx+/YgfA8kD0lE0IMqIZyyqwE79fO3E0GntYoQXkNX4BneWixatifPs5I
+	 cQKUKuyc2tWRQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1uKbjx-001YLY-Ia;
+	Thu, 29 May 2025 12:48:05 +0100
+Date: Thu, 29 May 2025 12:48:05 +0100
+Message-ID: <86a56veiyy.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
+Cc: Eric Auger <eauger@redhat.com>,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	oliver.upton@linux.dev,
+	joey.gouly@arm.com,
+	suzuki.poulose@arm.com,
+	yuzenghui@huawei.com,
+	seanjc@google.com,
+	darren@os.amperecomputing.com
+Subject: Re: [RFC PATCH v2 0/9] KVM: Enable Nested Virt selftests
+In-Reply-To: <7bf7bd52-7553-42a7-afdb-a5e95f8699b5@os.amperecomputing.com>
+References: <20250512105251.577874-1-gankulkarni@os.amperecomputing.com>
+	<92c7e99c-5574-422c-92f1-62d5cde58fec@redhat.com>
+	<7bf7bd52-7553-42a7-afdb-a5e95f8699b5@os.amperecomputing.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net] selftests: net: build net/lib dependency in all
- target
-To: Simon Horman <horms@kernel.org>
-Cc: netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
- Philip Li <philip.li@intel.com>, oliver.sang@intel.com,
- Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250529070536.84491-1-minhquangbui99@gmail.com>
- <20250529103221.GN1484967@horms.kernel.org>
-Content-Language: en-US
-From: Bui Quang Minh <minhquangbui99@gmail.com>
-In-Reply-To: <20250529103221.GN1484967@horms.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: gankulkarni@os.amperecomputing.com, eauger@redhat.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, seanjc@google.com, darren@os.amperecomputing.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On 5/29/25 17:32, Simon Horman wrote:
-> On Thu, May 29, 2025 at 02:05:36PM +0700, Bui Quang Minh wrote:
->> Currently, we only build net/lib dependency in install target. This
->> commit moves that to all target so that net/lib is included in in-tree
->> build and run_tests.
-> Hi,
->
-> The above describes what is being done.
-> I think it would be good to also describe why.
+On Thu, 29 May 2025 11:29:58 +0100,
+Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com> wrote:
+> 
+> 
+> Hi Eric,
+> 
+> On 5/28/2025 6:58 PM, Eric Auger wrote:
+> > Hi Ganapatrao,
+> > 
+> > On 5/12/25 12:52 PM, Ganapatrao Kulkarni wrote:
+> >> This patch series makes the selftest work with NV enabled. The guest code
+> >> is run in vEL2 instead of EL1. We add a command line option to enable
+> >> testing of NV. The NV tests are disabled by default.
+> > 
+> > For commodity, I would add in the coverletter that for all tests
+> > enhanced with vEL2 testing "-g 1" option shall be added to force that mode.
+> 
+> Sure, will do.
+> 
+> > 
+> > I don't really get how you chose tests capable to run at vEL2 and
+> > excluded others? Wouldn't it make sense to have a way to run all tests
+> > in either mode?
+> There is no selection as such. I have worked on around 50% of the tests and sent for the early review.
+> Yes, almost all tests can/should run in vEL2 except few.
 
-Hi,
+Define EL2. You are so far assuming a E2H RES1 guest, and I don't see
+anything that is even trying E2H RES0. After all the complaining that
+E2H0 wasn't initially supported, this is a bit... disappointing.
 
-Currently, when building net related selftests, we need to
+Also, running EL2 is the least of our worries, because that's pretty
+easy to deal with. It is running at EL1/0 when EL2 is present that is
+interesting, and I see no coverage on that front.
 
-     make install
+	M.
 
-so that the net/lib is compiled. In case we do
-
-     make
-
-or
-
-     make run_tests
-
-the net/lib is not compiled. So I move the INSTALL_DEP_TARGETS which is 
-net/lib if the selftests is net related to all. As a result, all 
-make/make install/make run_tests will have the net/lib compiled.
-
-Thanks,
-Quang Minh.
+-- 
+Without deviation from the norm, progress is not possible.
 
