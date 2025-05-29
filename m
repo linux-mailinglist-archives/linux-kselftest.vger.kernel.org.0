@@ -1,58 +1,57 @@
-Return-Path: <linux-kselftest+bounces-33992-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33993-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92B58AC7D58
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 May 2025 13:48:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1999EAC7D6C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 May 2025 13:51:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7179A4E64F0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 May 2025 11:48:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3AC643AED7B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 May 2025 11:50:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A826222584;
-	Thu, 29 May 2025 11:48:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 860C3220F3B;
+	Thu, 29 May 2025 11:51:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MsQQPjxS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JYh+GNkp"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D07F613A3F7;
-	Thu, 29 May 2025 11:48:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56F0918DB03;
+	Thu, 29 May 2025 11:51:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748519288; cv=none; b=ipKPUqjzTqzNYjCFPjN/umqMLMf0fZD1RWD7aszNNkKWNTNDLWBnYr+phGBbE49h7vSe/gfHcrtHLb1p/n9Lb1z0qdj/VCAmfKC+1TPy3palcMQ6slPkmZ08jOj1aeYm+320Ayqcewck4OebTzKIxiUbbkuEfTc8fj3TUBWfM2Q=
+	t=1748519463; cv=none; b=rndVBOdpwJWSqUgdwy/mqRm4e7AubkaynIDE3Xdt+UuMI2jZwTc5rMkvEs9h1Lms9nzkVzEWuUeWkKAvA/18Q3Jqew/T+H/ME5+31OxHwlR7ympzZq/s+FJP6yqtKBtVQ+iYpqpx2dy/gPOz35W99YuIl2jEz4UQcR2Qlo8QHzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748519288; c=relaxed/simple;
-	bh=P7souVYNDTCPcO1CXMYGoclN1/o/FL5aiEHy0SwZIR4=;
+	s=arc-20240116; t=1748519463; c=relaxed/simple;
+	bh=d4MsMe4pb18cEZ2F/ko49Z5Bbu2Yfh5WWdKzReuzb88=;
 	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kjCi8wpm31DepW38Z5UhDhEiQhE2KbmtMSi0cL0wwMShbap1tts3cKmWCpvM0xruSErfd8cZRm8+7yC8eKP+B764258p0d53paa1alVgEdrGe/Rbf0KxXtVCdmR7tQFOpCWbmM/bgwEt4yr7sa6ACYjBVrnMMSmTI8Ospf7LsBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MsQQPjxS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33FD2C4CEE7;
-	Thu, 29 May 2025 11:48:08 +0000 (UTC)
+	 MIME-Version:Content-Type; b=B1a4Rew2Afwth+TN1NMH6X0M2CN1qPK1ZXu8ygI72ZMV5TUEYSyb9ZouyqXzP1LrbX27C/FqD25/vjq8ZiyzCsVYz6k/vSH0j2Ok1cEvJ/Jb97BlBq+nPl6DfqG0IvjxFVm6qYEp9EDzZpmlnTYAmlaV8uQHYBKYVoFG5D9LLEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JYh+GNkp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAAE7C4CEED;
+	Thu, 29 May 2025 11:51:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748519288;
-	bh=P7souVYNDTCPcO1CXMYGoclN1/o/FL5aiEHy0SwZIR4=;
+	s=k20201202; t=1748519462;
+	bh=d4MsMe4pb18cEZ2F/ko49Z5Bbu2Yfh5WWdKzReuzb88=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=MsQQPjxSX+4DmYyhHGCpSURnuD0cmkl4qu3BbZUy07xbxOHBZySYUKM1CNg1Impvd
-	 jFhl1sras34WV5jDj2ARxFbselPnvdCeGBX/0eI3BxG4PiyVx1SF7vzJyCzS8/ycj7
-	 eWasMHhhL1/SsYfthIZpZfaeZi2TJiJ39y14cuMYeQh4h7KM8hNbUP7aowkQt6vEAr
-	 MRO4II492FsEbgtuY8bUWwQyWnhssfZR8sLVqQbbdeGUZQhFUylja5L081wmJfHUOJ
-	 zGzEmOcB/Cx+/YgfA8kD0lE0IMqIZyyqwE79fO3E0GntYoQXkNX4BneWixatifPs5I
-	 cQKUKuyc2tWRQ==
+	b=JYh+GNkp7sNYp8+SPQ+ZD2Kjjm3AHGxBypUc+oPOT+GBw5Sjsy/K5IadsbrjAHAk7
+	 GDUC86ShhVHXYU1yFmUjdnPg9kCTqcZ4T/eelBy68/DUtehdcEy/R8OSAXojZqN4W2
+	 We1STqEbzcDrbfC0438q3ZZDbrD+o6xDH2GDM4zUe5JUykXxEynoeDSYhomy+i6oqQ
+	 fucuMUb4TjhKIJAeJmddWh/P6dqoo7TvodkDRvAUvQ8MsaPoUfTGvx/H8RaWbPQQoC
+	 +sChcy3KwaP+wUqRSHlKec/0iZqzj8xzDJwgeKu1KuNhFvTIJzqclPl0f6mErzzFgb
+	 AOOVQZu+uul4w==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
 	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.95)
 	(envelope-from <maz@kernel.org>)
-	id 1uKbjx-001YLY-Ia;
-	Thu, 29 May 2025 12:48:05 +0100
-Date: Thu, 29 May 2025 12:48:05 +0100
-Message-ID: <86a56veiyy.wl-maz@kernel.org>
+	id 1uKbmm-001YOC-Jq;
+	Thu, 29 May 2025 12:51:00 +0100
+Date: Thu, 29 May 2025 12:50:59 +0100
+Message-ID: <868qmfeiu4.wl-maz@kernel.org>
 From: Marc Zyngier <maz@kernel.org>
 To: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
-Cc: Eric Auger <eauger@redhat.com>,
-	linux-arm-kernel@lists.infradead.org,
+Cc: linux-arm-kernel@lists.infradead.org,
 	kvmarm@lists.linux.dev,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
@@ -62,11 +61,10 @@ Cc: Eric Auger <eauger@redhat.com>,
 	yuzenghui@huawei.com,
 	seanjc@google.com,
 	darren@os.amperecomputing.com
-Subject: Re: [RFC PATCH v2 0/9] KVM: Enable Nested Virt selftests
-In-Reply-To: <7bf7bd52-7553-42a7-afdb-a5e95f8699b5@os.amperecomputing.com>
+Subject: Re: [RFC PATCH v2 1/9] KVM: arm64: nv: selftests: Add support to run guest code in vEL2.
+In-Reply-To: <20250512105251.577874-2-gankulkarni@os.amperecomputing.com>
 References: <20250512105251.577874-1-gankulkarni@os.amperecomputing.com>
-	<92c7e99c-5574-422c-92f1-62d5cde58fec@redhat.com>
-	<7bf7bd52-7553-42a7-afdb-a5e95f8699b5@os.amperecomputing.com>
+	<20250512105251.577874-2-gankulkarni@os.amperecomputing.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
  (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -78,43 +76,93 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
 X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: gankulkarni@os.amperecomputing.com, eauger@redhat.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, seanjc@google.com, darren@os.amperecomputing.com
+X-SA-Exim-Rcpt-To: gankulkarni@os.amperecomputing.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, seanjc@google.com, darren@os.amperecomputing.com
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Thu, 29 May 2025 11:29:58 +0100,
+On Mon, 12 May 2025 11:52:43 +0100,
 Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com> wrote:
 > 
+> This patch adds required changes to vcpu init to run a guest code
+> in vEL2 context and also adds NV specific helper functions.
 > 
-> Hi Eric,
+> Signed-off-by: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
+> ---
+>  tools/testing/selftests/kvm/Makefile.kvm      |  2 +
+>  .../kvm/include/arm64/kvm_util_arch.h         |  3 +
+>  .../selftests/kvm/include/arm64/nv_util.h     | 45 ++++++++++++++
+>  .../selftests/kvm/include/arm64/vgic.h        |  1 +
+>  .../testing/selftests/kvm/include/kvm_util.h  |  3 +
+>  tools/testing/selftests/kvm/lib/arm64/nv.c    | 46 ++++++++++++++
+>  .../selftests/kvm/lib/arm64/processor.c       | 61 ++++++++++++++-----
+>  tools/testing/selftests/kvm/lib/arm64/vgic.c  |  8 +++
+>  8 files changed, 155 insertions(+), 14 deletions(-)
+>  create mode 100644 tools/testing/selftests/kvm/include/arm64/nv_util.h
+>  create mode 100644 tools/testing/selftests/kvm/lib/arm64/nv.c
 > 
-> On 5/28/2025 6:58 PM, Eric Auger wrote:
-> > Hi Ganapatrao,
-> > 
-> > On 5/12/25 12:52 PM, Ganapatrao Kulkarni wrote:
-> >> This patch series makes the selftest work with NV enabled. The guest code
-> >> is run in vEL2 instead of EL1. We add a command line option to enable
-> >> testing of NV. The NV tests are disabled by default.
-> > 
-> > For commodity, I would add in the coverletter that for all tests
-> > enhanced with vEL2 testing "-g 1" option shall be added to force that mode.
-> 
-> Sure, will do.
-> 
-> > 
-> > I don't really get how you chose tests capable to run at vEL2 and
-> > excluded others? Wouldn't it make sense to have a way to run all tests
-> > in either mode?
-> There is no selection as such. I have worked on around 50% of the tests and sent for the early review.
-> Yes, almost all tests can/should run in vEL2 except few.
+> diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+> index f773f8f99249..3348f729d3b2 100644
+> --- a/tools/testing/selftests/kvm/Makefile.kvm
+> +++ b/tools/testing/selftests/kvm/Makefile.kvm
+> @@ -37,6 +37,7 @@ LIBKVM_arm64 += lib/arm64/processor.c
+>  LIBKVM_arm64 += lib/arm64/spinlock.c
+>  LIBKVM_arm64 += lib/arm64/ucall.c
+>  LIBKVM_arm64 += lib/arm64/vgic.c
+> +LIBKVM_arm64 += lib/arm64/nv.c
+>  
+>  LIBKVM_s390 += lib/s390/diag318_test_handler.c
+>  LIBKVM_s390 += lib/s390/processor.c
+> @@ -155,6 +156,7 @@ TEST_GEN_PROGS_arm64 += arm64/vgic_irq
+>  TEST_GEN_PROGS_arm64 += arm64/vgic_lpi_stress
+>  TEST_GEN_PROGS_arm64 += arm64/vpmu_counter_access
+>  TEST_GEN_PROGS_arm64 += arm64/no-vgic-v3
+> +TEST_GEN_PROGS_arm64 += arm64/nv_guest_hypervisor
+>  TEST_GEN_PROGS_arm64 += access_tracking_perf_test
+>  TEST_GEN_PROGS_arm64 += arch_timer
+>  TEST_GEN_PROGS_arm64 += coalesced_io_test
+> diff --git a/tools/testing/selftests/kvm/include/arm64/kvm_util_arch.h b/tools/testing/selftests/kvm/include/arm64/kvm_util_arch.h
+> index e43a57d99b56..ab5279c24413 100644
+> --- a/tools/testing/selftests/kvm/include/arm64/kvm_util_arch.h
+> +++ b/tools/testing/selftests/kvm/include/arm64/kvm_util_arch.h
+> @@ -2,6 +2,9 @@
+>  #ifndef SELFTEST_KVM_UTIL_ARCH_H
+>  #define SELFTEST_KVM_UTIL_ARCH_H
+>  
+> +#define CurrentEL_EL1		(1 << 2)
+> +#define CurrentEL_EL2		(2 << 2)
+> +
+>  struct kvm_vm_arch {};
+>  
+>  #endif  // SELFTEST_KVM_UTIL_ARCH_H
+> diff --git a/tools/testing/selftests/kvm/include/arm64/nv_util.h b/tools/testing/selftests/kvm/include/arm64/nv_util.h
+> new file mode 100644
+> index 000000000000..622a17c9d142
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/include/arm64/nv_util.h
+> @@ -0,0 +1,45 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (c) 2025 Ampere Computing
+> + */
+> +#ifndef SELFTEST_NV_UTIL_H
+> +#define SELFTEST_NV_UTIL_H
+> +
+> +#include <linux/bitmap.h>
+> +#include <vgic.h>
+> +
+> +#define HCR_NV2		(UL(1) << 45)
+> +#define HCR_AT		(UL(1) << 44)
+> +#define HCR_NV		(UL(1) << 42)
+> +#define HCR_E2H		(UL(1) << 34)
+> +#define HCR_TTLB        (UL(1) << 25)
+> +
+> +/* Enable NV2 and guest in VHE mode */
+> +#define HCR_EL2_NV_EANBLE (HCR_E2H | HCR_NV | HCR_NV2 | HCR_AT | HCR_TTLB)
+> +
 
-Define EL2. You are so far assuming a E2H RES1 guest, and I don't see
-anything that is even trying E2H RES0. After all the complaining that
-E2H0 wasn't initially supported, this is a bit... disappointing.
-
-Also, running EL2 is the least of our worries, because that's pretty
-easy to deal with. It is running at EL1/0 when EL2 is present that is
-interesting, and I see no coverage on that front.
+What is the point of enabling NV and trapping all sort of things,
+given that you're not even enabling a guest? How do you expect to deal
+with EL0 without TGE being set?
 
 	M.
 
