@@ -1,171 +1,159 @@
-Return-Path: <linux-kselftest+bounces-33993-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-33994-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1999EAC7D6C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 May 2025 13:51:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1084AC7E14
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 May 2025 14:46:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3AC643AED7B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 May 2025 11:50:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B02631BC73EF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 May 2025 12:46:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 860C3220F3B;
-	Thu, 29 May 2025 11:51:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FDBB226173;
+	Thu, 29 May 2025 12:43:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JYh+GNkp"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="kP6lhdRG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56F0918DB03;
-	Thu, 29 May 2025 11:51:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AA05225407
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 May 2025 12:43:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748519463; cv=none; b=rndVBOdpwJWSqUgdwy/mqRm4e7AubkaynIDE3Xdt+UuMI2jZwTc5rMkvEs9h1Lms9nzkVzEWuUeWkKAvA/18Q3Jqew/T+H/ME5+31OxHwlR7ympzZq/s+FJP6yqtKBtVQ+iYpqpx2dy/gPOz35W99YuIl2jEz4UQcR2Qlo8QHzg=
+	t=1748522590; cv=none; b=GgJcSaCIBZ1osULzZMWzwgLFqnzjlTBWmFLJYFMDpK1oabh35SkfpNoKVpk8y6EEXM3+C+vXvlRroq4BKNUzVEpjNuUNbeknpAMmY1ERGI7FijrJNun4iNbu1nhlYWXfQHRQci5x4ofz5D6KmqCMsvOl0ubwwVjjROaTSza0zho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748519463; c=relaxed/simple;
-	bh=d4MsMe4pb18cEZ2F/ko49Z5Bbu2Yfh5WWdKzReuzb88=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=B1a4Rew2Afwth+TN1NMH6X0M2CN1qPK1ZXu8ygI72ZMV5TUEYSyb9ZouyqXzP1LrbX27C/FqD25/vjq8ZiyzCsVYz6k/vSH0j2Ok1cEvJ/Jb97BlBq+nPl6DfqG0IvjxFVm6qYEp9EDzZpmlnTYAmlaV8uQHYBKYVoFG5D9LLEg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JYh+GNkp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAAE7C4CEED;
-	Thu, 29 May 2025 11:51:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748519462;
-	bh=d4MsMe4pb18cEZ2F/ko49Z5Bbu2Yfh5WWdKzReuzb88=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=JYh+GNkp7sNYp8+SPQ+ZD2Kjjm3AHGxBypUc+oPOT+GBw5Sjsy/K5IadsbrjAHAk7
-	 GDUC86ShhVHXYU1yFmUjdnPg9kCTqcZ4T/eelBy68/DUtehdcEy/R8OSAXojZqN4W2
-	 We1STqEbzcDrbfC0438q3ZZDbrD+o6xDH2GDM4zUe5JUykXxEynoeDSYhomy+i6oqQ
-	 fucuMUb4TjhKIJAeJmddWh/P6dqoo7TvodkDRvAUvQ8MsaPoUfTGvx/H8RaWbPQQoC
-	 +sChcy3KwaP+wUqRSHlKec/0iZqzj8xzDJwgeKu1KuNhFvTIJzqclPl0f6mErzzFgb
-	 AOOVQZu+uul4w==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1uKbmm-001YOC-Jq;
-	Thu, 29 May 2025 12:51:00 +0100
-Date: Thu, 29 May 2025 12:50:59 +0100
-Message-ID: <868qmfeiu4.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
-Cc: linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	oliver.upton@linux.dev,
-	joey.gouly@arm.com,
-	suzuki.poulose@arm.com,
-	yuzenghui@huawei.com,
-	seanjc@google.com,
-	darren@os.amperecomputing.com
-Subject: Re: [RFC PATCH v2 1/9] KVM: arm64: nv: selftests: Add support to run guest code in vEL2.
-In-Reply-To: <20250512105251.577874-2-gankulkarni@os.amperecomputing.com>
-References: <20250512105251.577874-1-gankulkarni@os.amperecomputing.com>
-	<20250512105251.577874-2-gankulkarni@os.amperecomputing.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=arc-20240116; t=1748522590; c=relaxed/simple;
+	bh=V+k0YYVajMtJvjJHVuTTJYUaZiiFudh9Jn7Ksm1pgoU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hko3E19OUF7MnIvfu+dWKhdmlVwF3wXSekrUHYj+Iklvkf6WR/dKUvQ5vtoUsLgu8vVWu2MFYkxbd4zlP5W3V+SL7Lc8SVnlQgidHnCQsNIBRrt29FsrTt8XT0zKxEnEZegZ4S7BRL4GBjmF4sjex93Z9gc9PaoEPybbOszKNHg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=kP6lhdRG; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3a35c894313so764579f8f.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 May 2025 05:43:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1748522587; x=1749127387; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=mJYtTflbkn898/BLxpK7QKxJtXnTWVg7vYFavAXp8EE=;
+        b=kP6lhdRGJGkdXgQzXxmy1ksFt5oU4/5W/LyM1p1LngNC0bZNtI6jROQSrP3jnzjdZl
+         Ltb4flIV+bPyYT4hvSKuuYQlJUy/DM0Md4TFDwk5L4NjClsQ6l1qDNUWDWe6lzTsdZpy
+         mn0Cfy3cb2NHpD8nn3RLAVLf2l92ajODi23NtUwlVuAWCE7jCSTGZYiACsJNke7l2UWp
+         4e0h7xJXJEiEXIHo+Z2yKwQ1Ufmx6b2msJXicZ7ZMiSntjaJe/6qHwg6rbVnwXHWaSEF
+         0lnFZdOJW5YBrDMEzPzs0jl7pIvSOiRNqxJgrnS7oCDjqER8i4o/K99GZAGiTaSc48U6
+         1YAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748522587; x=1749127387;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mJYtTflbkn898/BLxpK7QKxJtXnTWVg7vYFavAXp8EE=;
+        b=ZPZ5g0oFY4RvQDscZq5SxXw47yPISkTmlJMDC0a2QtH2KLIE0i6H+AyGtEM5ABMGBm
+         fLjPS5YWV+2zQHtS9CxA/8KblDg56VfhOhcpdEHFXjl7GzQ+9J73V8K1ydFxxszoKg57
+         yQdsAre+kcecXjoTpuhCipzzdMCtJW1JNbg9Q5onbVgIpj5YuWd7ncbcoUm+hOmX/8J3
+         Njwtmnb9Kw7n7YyxnVyjYlHRESnpuNWYOAYb5SYfHQyAJIoxnfCNQj3Z+YeXYqV/EbZ3
+         doT1O4OoAm5Y/8ymf9K2yGJ8XKcxEOUkgClTGukr9snZ4TlPlF0McFBjSENKPikAw6+/
+         O05A==
+X-Forwarded-Encrypted: i=1; AJvYcCX93JROvAydUg54rAqGgD8j9Z7i/r0K21TTlu6WeNnOPusfxnpPtcigxB8ynKZ/D4Paj+PXwYHz97b2i5SqEkM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJyeolbZSY8DzDYZufVka/6DWbseRTlO3OEN6q+hCAAgGkIm5o
+	HrLzYm2ukOe8djPilqm9F67mbEsZL7vb42vDKqdEDTCqP/VN+3NumlBzPPbiaYa1W34=
+X-Gm-Gg: ASbGncsFOIQKCzAArYZ9//7u7WjgP0s4jvROdQOclSIWqZVOOlMmeHrpHGThOp8SXLo
+	qJb5+Vd10hiQf/fAIoehmHZFoBdleKiQ5CB5KChSviatqsSg/ymz4BpjgiUOhD2I25cuDgVt7zx
+	bYPxQQyvf0UOpHEHsXI+5iIeDpK275EEn7ueUjgXVlxg+qP9LIMBHweVO8k/N5zGc9LJdRhaN9Z
+	01qg6tDRiqIfBj6tKJ0K/3RsWZHi+qyJ036iHtF2wA4WxfnD6jS8S/XfgPkswHk71tTT+rPeAlJ
+	LBosw5yp4Es/TL2YyN94k2rkULvJVI5fl+pegJk=
+X-Google-Smtp-Source: AGHT+IH1qVc7QxmWdlIwYswNWc2JM2wrCY/fhXTQ9RO7aSAjTmjiWe3//9USHzfv3DqUERGinpMtXg==
+X-Received: by 2002:a05:6000:26c8:b0:3a4:ef70:e0e1 with SMTP id ffacd0b85a97d-3a4ef70e20dmr1890290f8f.55.1748522586703;
+        Thu, 29 May 2025 05:43:06 -0700 (PDT)
+Received: from localhost ([2a02:8308:a00c:e200::ce80])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a4efe7415asm1948902f8f.57.2025.05.29.05.43.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 May 2025 05:43:06 -0700 (PDT)
+Date: Thu, 29 May 2025 14:43:05 +0200
+From: Andrew Jones <ajones@ventanamicro.com>
+To: =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Anup Patel <anup@brainfault.org>, 
+	Atish Patra <atishp@atishpatra.org>, Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org, 
+	Samuel Holland <samuel.holland@sifive.com>, Deepak Gupta <debug@rivosinc.com>, 
+	Charlie Jenkins <charlie@rivosinc.com>
+Subject: Re: [PATCH v8 08/14] riscv: misaligned: declare
+ misaligned_access_speed under CONFIG_RISCV_MISALIGNED
+Message-ID: <20250529-84d9bececfab561dfc68b723@orel>
+References: <20250523101932.1594077-1-cleger@rivosinc.com>
+ <20250523101932.1594077-9-cleger@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: gankulkarni@os.amperecomputing.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, seanjc@google.com, darren@os.amperecomputing.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250523101932.1594077-9-cleger@rivosinc.com>
 
-On Mon, 12 May 2025 11:52:43 +0100,
-Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com> wrote:
+On Fri, May 23, 2025 at 12:19:25PM +0200, Clément Léger wrote:
+> While misaligned_access_speed was defined in a file compile with
+> CONFIG_RISCV_MISALIGNED, its definition was under
+> CONFIG_RISCV_SCALAR_MISALIGNED. This resulted in compilation problems
+> when using it in a file compiled with CONFIG_RISCV_MISALIGNED.
 > 
-> This patch adds required changes to vcpu init to run a guest code
-> in vEL2 context and also adds NV specific helper functions.
+> Move the declaration under CONFIG_RISCV_MISALIGNED so that it can be
+> used unconditionnally when compiled with that config and remove the check
+> for that variable in traps_misaligned.c.
 > 
-> Signed-off-by: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
+> Signed-off-by: Clément Léger <cleger@rivosinc.com>
 > ---
->  tools/testing/selftests/kvm/Makefile.kvm      |  2 +
->  .../kvm/include/arm64/kvm_util_arch.h         |  3 +
->  .../selftests/kvm/include/arm64/nv_util.h     | 45 ++++++++++++++
->  .../selftests/kvm/include/arm64/vgic.h        |  1 +
->  .../testing/selftests/kvm/include/kvm_util.h  |  3 +
->  tools/testing/selftests/kvm/lib/arm64/nv.c    | 46 ++++++++++++++
->  .../selftests/kvm/lib/arm64/processor.c       | 61 ++++++++++++++-----
->  tools/testing/selftests/kvm/lib/arm64/vgic.c  |  8 +++
->  8 files changed, 155 insertions(+), 14 deletions(-)
->  create mode 100644 tools/testing/selftests/kvm/include/arm64/nv_util.h
->  create mode 100644 tools/testing/selftests/kvm/lib/arm64/nv.c
+>  arch/riscv/include/asm/cpufeature.h  | 5 ++++-
+>  arch/riscv/kernel/traps_misaligned.c | 2 --
+>  2 files changed, 4 insertions(+), 3 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-> index f773f8f99249..3348f729d3b2 100644
-> --- a/tools/testing/selftests/kvm/Makefile.kvm
-> +++ b/tools/testing/selftests/kvm/Makefile.kvm
-> @@ -37,6 +37,7 @@ LIBKVM_arm64 += lib/arm64/processor.c
->  LIBKVM_arm64 += lib/arm64/spinlock.c
->  LIBKVM_arm64 += lib/arm64/ucall.c
->  LIBKVM_arm64 += lib/arm64/vgic.c
-> +LIBKVM_arm64 += lib/arm64/nv.c
+> diff --git a/arch/riscv/include/asm/cpufeature.h b/arch/riscv/include/asm/cpufeature.h
+> index dbe5970d4fe6..2bfa4ef383ed 100644
+> --- a/arch/riscv/include/asm/cpufeature.h
+> +++ b/arch/riscv/include/asm/cpufeature.h
+> @@ -72,7 +72,6 @@ int cpu_online_unaligned_access_init(unsigned int cpu);
+>  #if defined(CONFIG_RISCV_SCALAR_MISALIGNED)
+>  void unaligned_emulation_finish(void);
+>  bool unaligned_ctl_available(void);
+> -DECLARE_PER_CPU(long, misaligned_access_speed);
+>  #else
+>  static inline bool unaligned_ctl_available(void)
+>  {
+> @@ -80,6 +79,10 @@ static inline bool unaligned_ctl_available(void)
+>  }
+>  #endif
 >  
->  LIBKVM_s390 += lib/s390/diag318_test_handler.c
->  LIBKVM_s390 += lib/s390/processor.c
-> @@ -155,6 +156,7 @@ TEST_GEN_PROGS_arm64 += arm64/vgic_irq
->  TEST_GEN_PROGS_arm64 += arm64/vgic_lpi_stress
->  TEST_GEN_PROGS_arm64 += arm64/vpmu_counter_access
->  TEST_GEN_PROGS_arm64 += arm64/no-vgic-v3
-> +TEST_GEN_PROGS_arm64 += arm64/nv_guest_hypervisor
->  TEST_GEN_PROGS_arm64 += access_tracking_perf_test
->  TEST_GEN_PROGS_arm64 += arch_timer
->  TEST_GEN_PROGS_arm64 += coalesced_io_test
-> diff --git a/tools/testing/selftests/kvm/include/arm64/kvm_util_arch.h b/tools/testing/selftests/kvm/include/arm64/kvm_util_arch.h
-> index e43a57d99b56..ab5279c24413 100644
-> --- a/tools/testing/selftests/kvm/include/arm64/kvm_util_arch.h
-> +++ b/tools/testing/selftests/kvm/include/arm64/kvm_util_arch.h
-> @@ -2,6 +2,9 @@
->  #ifndef SELFTEST_KVM_UTIL_ARCH_H
->  #define SELFTEST_KVM_UTIL_ARCH_H
+> +#if defined(CONFIG_RISCV_MISALIGNED)
+> +DECLARE_PER_CPU(long, misaligned_access_speed);
+> +#endif
+> +
+>  bool __init check_vector_unaligned_access_emulated_all_cpus(void);
+>  #if defined(CONFIG_RISCV_VECTOR_MISALIGNED)
+>  void check_vector_unaligned_access_emulated(struct work_struct *work __always_unused);
+> diff --git a/arch/riscv/kernel/traps_misaligned.c b/arch/riscv/kernel/traps_misaligned.c
+> index 34b4a4e9dfca..f1b2af515592 100644
+> --- a/arch/riscv/kernel/traps_misaligned.c
+> +++ b/arch/riscv/kernel/traps_misaligned.c
+> @@ -369,9 +369,7 @@ static int handle_scalar_misaligned_load(struct pt_regs *regs)
 >  
-> +#define CurrentEL_EL1		(1 << 2)
-> +#define CurrentEL_EL2		(2 << 2)
-> +
->  struct kvm_vm_arch {};
+>  	perf_sw_event(PERF_COUNT_SW_ALIGNMENT_FAULTS, 1, regs, addr);
 >  
->  #endif  // SELFTEST_KVM_UTIL_ARCH_H
-> diff --git a/tools/testing/selftests/kvm/include/arm64/nv_util.h b/tools/testing/selftests/kvm/include/arm64/nv_util.h
-> new file mode 100644
-> index 000000000000..622a17c9d142
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/include/arm64/nv_util.h
-> @@ -0,0 +1,45 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (c) 2025 Ampere Computing
-> + */
-> +#ifndef SELFTEST_NV_UTIL_H
-> +#define SELFTEST_NV_UTIL_H
-> +
-> +#include <linux/bitmap.h>
-> +#include <vgic.h>
-> +
-> +#define HCR_NV2		(UL(1) << 45)
-> +#define HCR_AT		(UL(1) << 44)
-> +#define HCR_NV		(UL(1) << 42)
-> +#define HCR_E2H		(UL(1) << 34)
-> +#define HCR_TTLB        (UL(1) << 25)
-> +
-> +/* Enable NV2 and guest in VHE mode */
-> +#define HCR_EL2_NV_EANBLE (HCR_E2H | HCR_NV | HCR_NV2 | HCR_AT | HCR_TTLB)
-> +
+> -#ifdef CONFIG_RISCV_PROBE_UNALIGNED_ACCESS
+>  	*this_cpu_ptr(&misaligned_access_speed) = RISCV_HWPROBE_MISALIGNED_SCALAR_EMULATED;
+> -#endif
+>  
+>  	if (!unaligned_enabled)
+>  		return -1;
+> -- 
+> 2.49.0
+>
 
-What is the point of enabling NV and trapping all sort of things,
-given that you're not even enabling a guest? How do you expect to deal
-with EL0 without TGE being set?
-
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 
