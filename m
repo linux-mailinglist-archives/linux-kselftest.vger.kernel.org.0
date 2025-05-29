@@ -1,170 +1,307 @@
-Return-Path: <linux-kselftest+bounces-34009-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34010-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CEA0AC8206
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 May 2025 20:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D0564AC83E7
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 May 2025 00:08:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8062A7AE679
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 May 2025 18:15:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6BFCE7B3CDE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 May 2025 22:07:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC84422A7EC;
-	Thu, 29 May 2025 18:16:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2025D21C9E5;
+	Thu, 29 May 2025 22:08:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fvqwBrdI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eiXfxJ6W"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 542ED2AD31;
-	Thu, 29 May 2025 18:16:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ED1C1AF0C8;
+	Thu, 29 May 2025 22:08:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748542576; cv=none; b=q4/0VdAzoUODohX/dGXAgybQFIGwt2SfcQeEB53OVJsgoRPx5ATFE2ffrcTljW/x7GWcVooVdPnBOrZl/0lk8i3fquqnaSPv+yxexU4eL8z6GO0+JvBr6fXSnpNuE9bJihX68RC41j5AquGu1lP8zwW3ffLlUmI0V48GOPOXwhs=
+	t=1748556515; cv=none; b=HymqUhZVzE24jicSVuuQgLwVY/GTbi4EKqvgMJ7P8lPyz0O2j+JDTT4tHY88LPBZ1kiIdap+qkVkzSNyR0bwPl4T/mdXtlmwhChMczcPXN4zE03NEKG5pl6tg/LiF8DbA3TEi/nHoZYxXbrrxvofqOCXQWmPm829f1q4oIS+M4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748542576; c=relaxed/simple;
-	bh=Ndkxafaee8/iJXBR/9wIrvk3wAPeoCIY5F3xoJ8MQeQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P2Z0eXdv/udoD7ZFXYPZHbwLbR8dci5IPsLab39amjSretCTFeBIfDbz9rCoR2gf1CAlsRaEoJ5fr3j87z/C1pa5koGvQFR8wKsEKQ5ivgh3//HPbVC+EPkB0U5xXm3MQxt59DCJZJaP9hUkp+L/z5HTBDaRxa7BLSkBvaoUtNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fvqwBrdI; arc=none smtp.client-ip=209.85.210.170
+	s=arc-20240116; t=1748556515; c=relaxed/simple;
+	bh=M0tbtdLApdJAq/4ogJahNv+Hgt/JeFqIHwEJhoEDBdQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BXnLimkf8PpBuMa5tcDgyuZuX1fxQuRHU+/BWMoS4VqhuCHYUAbwAWyhvTE5BwKHBHmQ/72cx8staZLAJ6GJ0jcXJ++aiGImOD88AfTNTZsSt7bb7hLxmQo/tYlTfbVf4jLo0CaLoxDLBizaUSyEkXgBWF5i8KL7jKZZCYM5ZMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eiXfxJ6W; arc=none smtp.client-ip=209.85.208.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-745fe311741so1335429b3a.0;
-        Thu, 29 May 2025 11:16:13 -0700 (PDT)
+Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-32a63ff3bdfso10096961fa.3;
+        Thu, 29 May 2025 15:08:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748542573; x=1749147373; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wLWFabGjnu2pjZUWCnlpH8NuxluCsu9GKNAcPMcaZ8M=;
-        b=fvqwBrdIzu3TLGhXH/iIadXVzkROACE+4svgiCk+BlyTO1YrSePeGwswJYcVQPCXpT
-         RfsIo+vo5wf10wdKlPvQyVLJ23Oj1tVoeCeAirUc1kwsHMIn38tdCZQUCegBUgiBtpSV
-         zddMFLJLyax5t6pBPuqkri8MdfqFd8pcYu9Qu1eetMKMzUksP5G8P3jmjzi8q3/OZ05L
-         iG70tfL4mvrELwVLetFusX7kEXti8Z19jct46BEpSjqFh+EQwEh25fm25Nn+Qcnpu4cV
-         B32FsLpxXTWfoJH/O/WA0b9tWizHoyVlK+9+blct44qpzec2Ggu3/FybUbzF30c/Qylz
-         P/Kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748542573; x=1749147373;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1748556510; x=1749161310; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wLWFabGjnu2pjZUWCnlpH8NuxluCsu9GKNAcPMcaZ8M=;
-        b=k/8nIgsfmgpS0g7cjN59o5SLc7LrXOWjwTjIpGTDPS9a80tj97Rb6jfVKfRGGevqrs
-         Z+q4EcFJNWxjISLJ6mMujB7CMvgwSidN28UQOZD+mE5sAh+H63ZkQNttJNsNy6j8eJEL
-         iekfC4zseNGBWq/UUKyEJp0fRXBCuyM5B1RLg91xWBcoQxIKf57RUAvqJrdH6F7CILDZ
-         4zhmozCQTrm9RxGLCxddn8aAqcNpvcM1io6BuRLakw0doYOWHNNq/YR3ih8MxIdW1yiE
-         qgciETwoz14qgwFjLX9irivuQRczjUWJ1drosNj/qqqbvZNxvT89YYqle9NyUPfuM3Ha
-         vtOA==
-X-Forwarded-Encrypted: i=1; AJvYcCUkGm35seAoYUDC0EXNnFmVP20Sf4BAwyiRNE9OAuHq/RyXaJiTQxgysSjP6mi8wwZY7NpXKi8M@vger.kernel.org, AJvYcCW5gBVhXhR/B1WJ/1I1hsEcDkYdUUDu1NEikJBpBW2wMvwrEAiu2kAU5aGqGXUvKg+vtplnHa4OUndtk6mPRXKv@vger.kernel.org, AJvYcCWXN0hbrhBqN+0uOWZHv42k3iHdHBweTTedNIuPKg+Rx3E+ZOiEWQLogVSGI531LoL2cF19RJLlnh1Sw88=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwBGSn11nQ42/niDtu2X7j3cmEjfoXXi0OjU00ySo44I1pV+453
-	mY2OU6PRSF4Hqmn3bGHD8wSq2e8iPnNuB1m3xaV7NYhhWCztXhb5et5r
-X-Gm-Gg: ASbGncs91nPD3h1fEWAXU3lO/w409YREEHOeVVHFVhf4m2Pm6uUrbmCzOEWwmJ6K8ya
-	IPAd0dJEyVDnPBVcZ0OXKLCsD4Zit3c/Xz1wPXPX+dsuup9T7/cphKY4KlxgCn2YTk6/KRThi+K
-	NVHkHXrNouRjHYg+nXf6lKYKEdhEH3VPloq6iaJHPIwODlD12PP9cLp6NsnZHpf/ADSyc6vHr5+
-	D4k4xA4L2ODy1hCVuEorQZPrfHlA1CuW2zStuji6KRTVxwy04iXlUuNvHBUwNOepvmOtGfn+1I3
-	YcJD4EoTdGq4G97YcDU387icMz1JcCTq0WBFQSRN/WakQqWxV3He+0g=
-X-Google-Smtp-Source: AGHT+IHJe1nExEO/Gk3fjmlnSLJlBBab7HsdJ5qF4WOhLnq5aGIP+ewfPH1xG2NndfuxJCuOLv8QZA==
-X-Received: by 2002:a05:6a00:847:b0:740:a52f:9652 with SMTP id d2e1a72fcca58-747bd969f9cmr491255b3a.6.1748542573505;
-        Thu, 29 May 2025 11:16:13 -0700 (PDT)
-Received: from localhost ([129.210.115.104])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-747afe96781sm1630018b3a.29.2025.05.29.11.16.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 May 2025 11:16:12 -0700 (PDT)
-Date: Thu, 29 May 2025 11:16:11 -0700
-From: Cong Wang <xiyou.wangcong@gmail.com>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org, Boris Pismenny <borisp@nvidia.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>, Ihor Solodrai <isolodrai@meta.com>,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v1 1/2] bpf,ktls: Fix data corruption when using
- bpf_msg_pop_data() in ktls
-Message-ID: <aDika2FRd4n+VRmZ@pop-os.localdomain>
-References: <20250523131915.19349-1-jiayuan.chen@linux.dev>
- <20250523131915.19349-2-jiayuan.chen@linux.dev>
+        bh=rpJVcptDcpTpszgwiBlbfF17mFy9KW509xkzZ9NUjik=;
+        b=eiXfxJ6WeQcEoq232QqFmHB4GXmoObkb0md3lMdmOpYB+3XoubUPt0JSJ5KRnnPkIO
+         tEB0EGwYqgvch37afi+h4w+yLUfIg10Az7chHl87igpdpNtiUB2Anb1t1Wp7fDWE6bDI
+         haGvJWfINY18JtyjOCpAvZEGjCgHWcNr7BGHIM/durFQVA1/DUQJPomMY3HFwvuZTtpZ
+         ZO/OfjYUGp9Dne5SIbYYbadJ2mO4xeDbg24RxW/21glAVMMMKSogUYdD0zp/DKVyFg4u
+         pdx8OpuDKc0TTOjWjpBlSCzf1MkUjZof/cMMvrEHWFJ+L63Rhcyu7RmhezAMAPZloHC7
+         W4fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748556510; x=1749161310;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rpJVcptDcpTpszgwiBlbfF17mFy9KW509xkzZ9NUjik=;
+        b=nOMd6SiZO1z4Tu7tRuirb0lXgZx1jd1jO5CyU2eAvbINkg7CaSLu3dRdnFNipu04Me
+         TNPAyBFeoCis5aUg/3XgZi2hQlISAwfFsTZLvL/Q+pWm99dhSepGxpdHEjBYExK1V/YV
+         dKaFowQs9z/OoGBzqmKkSuS4ennjObXp6iNR0whKztRcLwCympG0f062TVBN6rwpFlCY
+         S19+NWuuSXe6D2fnXe9OUiwWahNqeVD+YH7HLkUWKa4lLhE3GnBcB5TpTgrZA3VdzqV1
+         lGV9b+DEjgCnLUcSaKadurPKZIMzxk05mAH8AuB45DKSQGzIEAiYbimf5ZDJpEUKPcL3
+         Is/w==
+X-Forwarded-Encrypted: i=1; AJvYcCUAQ8pbkFrAk07zJeQHBTkSsF+xnRBvRxRaDHGEXPoksGXZuRkyo2HEnK2BEndz4E32nbXm3MFfaPWOfAoB@vger.kernel.org, AJvYcCULq+o+pmpGHDjuVcwRPZ2Q9zlYGCx+UDw2N38vuHaIB/Cmfskpmi2CbfVZ1goUVPFrEa1YaNne7NVKxYQ=@vger.kernel.org, AJvYcCVQaDcgmS+9wYmzVw7Sskysn0iJir/OJJ03QQ92rSV2bg8ZOAOgOOD32aQYeiELheZaCpSPXVAy@vger.kernel.org, AJvYcCVjSgH9eZZ4bBxaaHurmGPO+TnsM1BO9HpSCwqdHxeUBXwynSKWpmM/NIt8QClHLdW0+YR2PudOZWp0K4dY6bKm@vger.kernel.org, AJvYcCVjcrECEaFBdZtolDUYuXDList+ZPWGUhGarBqPksaFr8ZTxXYFA7SeEfHKWBAi6+LOBwnSP193amY1/y1hXh8=@vger.kernel.org, AJvYcCXGcqIlnB0yF0pk27+sMe4aTiQ5hEjQrBPhEvVA4F1vW0CQcjSOZ5BnKxnC7chlzoPWwVvPB7CEgyp7@vger.kernel.org, AJvYcCXWYhrxbZ2M4QQkbMFx6EVTSC9NiZcdMMdSc+7bpD3hAtFK2hEEbtccub7NmsHae1oirLtmo3mpqVDe@vger.kernel.org
+X-Gm-Message-State: AOJu0Yylq/AdtOfHquUclaUDVUua7ynrBUy++jS57qF6FgD43kH2FjaF
+	/5PoqUU2H4CMnJeXBrxOKeW3FiskNQYH8LDDTOCAWaCv1DzmfvMebWGDo/CiCTnQUWl4+hfeTkt
+	HvY6OwG81Eh+Lh8t67zQjixgPX5uq78E=
+X-Gm-Gg: ASbGnctRZrHEbWRJum7HsqC0X96HB/oIBVp9ZHjuLOCGdGZ6Kxtnhrh/l42atafjbdt
+	JyiCEhInG3f4XZ1/mvHGI6Z0pr6Nrxwzwa+fYqA9DuLS3A0Soau663FJChqoWa9vA28NBPVxgts
+	DSrFx5BVGfsgOTZGd53lVAGuDxNV3yEIPjkjBGtFGhpHjh1s662pSmwop7F2DnTyWgXQ==
+X-Google-Smtp-Source: AGHT+IF7xscUHJvyGi+GvuMMKxSnSgP5AcyU3GpJtxmnO/5KSLUzYGntXscHYyM85fadDL0Kyjmy6YDgmBtNFpFE8dI=
+X-Received: by 2002:a2e:b8c6:0:b0:32a:8916:55a1 with SMTP id
+ 38308e7fff4ca-32a8cd3fd89mr5150041fa.7.1748556509725; Thu, 29 May 2025
+ 15:08:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250523131915.19349-2-jiayuan.chen@linux.dev>
+References: <20250524-cstr-core-v10-0-6412a94d9d75@gmail.com>
+ <20250524-cstr-core-v10-2-6412a94d9d75@gmail.com> <DA66BBX1PDGI.10NHLG3D4CIT7@kernel.org>
+ <CAJ-ks9m48gmar0WWP9WknV2JLqkKNU0X4nwXaQ+JdG+b-EcVxA@mail.gmail.com>
+ <DA6GSMHMLRFM.YH9RGZWLY2X4@kernel.org> <CAJ-ks9nTf4dCoDdg4+YSkXM1sJsZ-0vuSC7wybc2JMAoGemhXQ@mail.gmail.com>
+ <DA78MDRNCNB8.X69904APMYCB@kernel.org>
+In-Reply-To: <DA78MDRNCNB8.X69904APMYCB@kernel.org>
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Thu, 29 May 2025 18:07:52 -0400
+X-Gm-Features: AX0GCFu41pC0z7_KQ2CYQPyB1pil2qNhuH6L70S1ECJZkmQT9P0P8s6oLTTUl3c
+Message-ID: <CAJ-ks9=OsopMhr6Ui3PLD-ZkBo736ha9Ltkw=0ZaBzrQLC60Eg@mail.gmail.com>
+Subject: Re: [PATCH v10 2/5] rust: support formatting of foreign types
+To: Benno Lossin <lossin@kernel.org>
+Cc: Michal Rostecki <vadorovsky@protonmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	Trevor Gross <tmgross@umich.edu>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
+	Danilo Krummrich <dakr@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
+	FUJITA Tomonori <fujita.tomonori@gmail.com>, Rob Herring <robh@kernel.org>, 
+	Saravana Kannan <saravanak@google.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Andrew Lunn <andrew@lunn.ch>, 
+	Heiner Kallweit <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Jens Axboe <axboe@kernel.dk>, 
+	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	dri-devel@lists.freedesktop.org, netdev@vger.kernel.org, 
+	devicetree@vger.kernel.org, llvm@lists.linux.dev, linux-pci@vger.kernel.org, 
+	nouveau@lists.freedesktop.org, linux-block@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 23, 2025 at 09:18:58PM +0800, Jiayuan Chen wrote:
-> When sending plaintext data, we initially calculated the corresponding
-> ciphertext length. However, if we later reduced the plaintext data length
-> via socket policy, we failed to recalculate the ciphertext length.
-> 
-> This results in transmitting buffers containing uninitialized data during
-> ciphertext transmission.
-> 
-> This causes uninitialized bytes to be appended after a complete
-> "Application Data" packet, leading to errors on the receiving end when
-> parsing TLS record.
-> 
-> Fixes: d3b18ad31f93 ("tls: add bpf support to sk_msg handling")
-> Reported-by: Cong Wang <xiyou.wangcong@gmail.com>
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-> ---
->  net/tls/tls_sw.c | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
-> diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-> index fc88e34b7f33..b23a4655be6a 100644
-> --- a/net/tls/tls_sw.c
-> +++ b/net/tls/tls_sw.c
-> @@ -872,6 +872,21 @@ static int bpf_exec_tx_verdict(struct sk_msg *msg, struct sock *sk,
->  		delta = msg->sg.size;
->  		psock->eval = sk_psock_msg_verdict(sk, psock, msg);
->  		delta -= msg->sg.size;
-> +
-> +		if ((s32)delta > 0) {
-> +			/* It indicates that we executed bpf_msg_pop_data(),
-> +			 * causing the plaintext data size to decrease.
-> +			 * Therefore the encrypted data size also needs to
-> +			 * correspondingly decrease. We only need to subtract
-> +			 * delta to calculate the new ciphertext length since
-> +			 * ktls does not support block encryption.
-> +			 */
-> +			if (!WARN_ON_ONCE(!ctx->open_rec)) {
+On Tue, May 27, 2025 at 4:49=E2=80=AFPM Benno Lossin <lossin@kernel.org> wr=
+ote:
+>
+> On Tue May 27, 2025 at 5:02 PM CEST, Tamir Duberstein wrote:
+> > On Mon, May 26, 2025 at 7:01=E2=80=AFPM Benno Lossin <lossin@kernel.org=
+> wrote:
+> >> On Tue May 27, 2025 at 12:17 AM CEST, Tamir Duberstein wrote:
+> >> > On Mon, May 26, 2025 at 10:48=E2=80=AFAM Benno Lossin <lossin@kernel=
+.org> wrote:
+> >> >> On Sat May 24, 2025 at 10:33 PM CEST, Tamir Duberstein wrote:
+> >> >> > +impl_display_forward!(
+> >> >> > +    bool,
+> >> >> > +    char,
+> >> >> > +    core::panic::PanicInfo<'_>,
+> >> >> > +    crate::str::BStr,
+> >> >> > +    fmt::Arguments<'_>,
+> >> >> > +    i128,
+> >> >> > +    i16,
+> >> >> > +    i32,
+> >> >> > +    i64,
+> >> >> > +    i8,
+> >> >> > +    isize,
+> >> >> > +    str,
+> >> >> > +    u128,
+> >> >> > +    u16,
+> >> >> > +    u32,
+> >> >> > +    u64,
+> >> >> > +    u8,
+> >> >> > +    usize,
+> >> >> > +    {<T: ?Sized>} crate::sync::Arc<T> {where crate::sync::Arc<T>=
+: fmt::Display},
+> >> >> > +    {<T: ?Sized>} crate::sync::UniqueArc<T> {where crate::sync::=
+UniqueArc<T>: fmt::Display},
+> >> >> > +);
+> >> >>
+> >> >> If we use `{}` instead of `()`, then we can format the contents
+> >> >> differently:
+> >> >>
+> >> >>     impl_display_forward! {
+> >> >>         i8, i16, i32, i64, i128, isize,
+> >> >>         u8, u16, u32, u64, u128, usize,
+> >> >>         bool, char, str,
+> >> >>         crate::str::BStr,
+> >> >>         fmt::Arguments<'_>,
+> >> >>         core::panic::PanicInfo<'_>,
+> >> >>         {<T: ?Sized>} crate::sync::Arc<T> {where Self: fmt::Display=
+},
+> >> >>         {<T: ?Sized>} crate::sync::UniqueArc<T> {where Self: fmt::D=
+isplay},
+> >> >>     }
+> >> >
+> >> > Is that formatting better? rustfmt refuses to touch it either way.
+> >>
+> >> Yeah rustfmt doesn't touch macro parameters enclosed in `{}`. I think
+> >> it's better.
+> >
+> > OK, but why? This seems entirely subjective.
+>
+> If more types are added to the list, it will grow over one screen size.
+> With my formatting, leaving related types on a single line, that will
+> only happen much later.
+>
+> >> >> > +/// Please see [`crate::fmt`] for documentation.
+> >> >> > +pub(crate) fn fmt(input: TokenStream) -> TokenStream {
+> >> >> > +    let mut input =3D input.into_iter();
+> >> >> > +
+> >> >> > +    let first_opt =3D input.next();
+> >> >> > +    let first_owned_str;
+> >> >> > +    let mut names =3D BTreeSet::new();
+> >> >> > +    let first_lit =3D {
+> >> >> > +        let Some((mut first_str, first_lit)) =3D (match first_op=
+t.as_ref() {
+> >> >> > +            Some(TokenTree::Literal(first_lit)) =3D> {
+> >> >> > +                first_owned_str =3D first_lit.to_string();
+> >> >> > +                Some(first_owned_str.as_str()).and_then(|first| =
+{
+> >> >> > +                    let first =3D first.strip_prefix('"')?;
+> >> >> > +                    let first =3D first.strip_suffix('"')?;
+> >> >> > +                    Some((first, first_lit))
+> >> >> > +                })
+> >> >> > +            }
+> >> >> > +            _ =3D> None,
+> >> >> > +        }) else {
+> >> >> > +            return first_opt.into_iter().chain(input).collect();
+> >> >> > +        };
+> >> >>
+> >> >> This usage of let-else + match is pretty confusing and could just b=
+e a
+> >> >> single match statement.
+> >> >
+> >> > I don't think so. Can you try rewriting it into the form you like?
+> >>
+> >>     let (mut first_str, first_lit) match first_opt.as_ref() {
+> >>         Some(TokenTree::Literal(lit)) if lit.to_string().starts_with('=
+"') =3D> {
+> >>             let contents =3D lit.to_string();
+> >>             let contents =3D contents.strip_prefix('"').unwrap().strip=
+_suffix('"').unwrap();
+> >>             ((contents, lit))
+> >>         }
+> >>         _ =3D> return first_opt.into_iter().chain(input).collect(),
+> >>     };
+> >
+> > What happens if the invocation is utterly malformed, e.g.
+> > `fmt!("hello)`? You're unwrapping here, which I intentionally avoid.
+>
+> That example won't even survive lexing (macros always will get valid
+> rust tokens as input). If a literal begins with a `"`, it also will end
+> with one AFAIK.
+>
+> >> Yes it will error like that, but if we do the replacement only when th=
+e
+> >> syntax is correct, there also will be compile errors because of a
+> >> missing `Display` impl, or is that not the case?
+> >
+> > I'm not sure - I would guess syntax errors "mask" typeck errors.
+>
+> I checked and it seems to be so, that's good.
 
-I am wondering if we need to WARN here? Because the code below this
-handles it gracefully:
+=F0=9F=91=8D
 
- 931                 bool reset_eval = !ctx->open_rec;
- 932 
- 933                 rec = ctx->open_rec;
- 934                 if (rec) {
- 935                         msg = &rec->msg_plaintext;
- 936                         if (!msg->apply_bytes)
- 937                                 reset_eval = true;
- 938                 }
- 939                 if (reset_eval) {
- 940                         psock->eval = __SK_NONE;
- 941                         if (psock->sk_redir) {
- 942                                 sock_put(psock->sk_redir);
- 943                                 psock->sk_redir = NULL;
- 944                         }
- 945                 }
+>
+> >> >> > +                    first_str =3D rest;
+> >> >> > +                    continue;
+> >> >> > +                }
+> >> >> > +                let name =3D name.split_once(':').map_or(name, |=
+(name, _)| name);
+> >> >> > +                if !name.is_empty() && !name.chars().all(|c| c.i=
+s_ascii_digit()) {
+> >> >> > +                    names.insert(name);
+> >> >> > +                }
+> >> >> > +                break;
+> >> >> > +            }
+> >> >> > +        }
+> >> >> > +        first_lit
+> >> >>
+> >> >> `first_lit` is not modified, so could we just the code above it int=
+o a
+> >> >> block instead of keeping it in the expr for `first_lit`?
+> >> >
+> >> > As above, can you suggest the alternate form you like better? The
+> >> > gymnastics here are all in service of being able to let malformed
+> >> > input fall through to core::format_args which will do the hard work =
+of
+> >> > producing good diagnostics.
+> >>
+> >> I don't see how this is hard, just do:
+> >>
+> >>     let (first_str, first_lit) =3D ...;
+> >
+> > It requires you to unwrap, like you did above, which is what I'm
+> > trying to avoid.
+>
+> How so? What do you need to unwrap?
 
+I was referring to your unwraps above.
 
-Thanks for fixing it!
-Cong
+> >> >> > +    };
+> >> >> > +
+> >> >> > +    let first_span =3D first_lit.span();
+> >> >> > +    let adapt =3D |expr| {
+> >> >> > +        let mut borrow =3D
+> >> >> > +            TokenStream::from_iter([TokenTree::Punct(Punct::new(=
+'&', Spacing::Alone))]);
+> >> >> > +        borrow.extend(expr);
+> >> >> > +        make_ident(first_span, ["kernel", "fmt", "Adapter"])
+> >> >> > +            .chain([TokenTree::Group(Group::new(Delimiter::Paren=
+thesis, borrow))])
+> >> >>
+> >> >> This should be fine with using `quote!`:
+> >> >>
+> >> >>     quote!(::kernel::fmt::Adapter(&#expr))
+> >> >
+> >> > Yeah, I have a local commit that uses quote_spanned to remove all th=
+e
+> >> > manual constructions.
+> >>
+> >> I don't think that you need `quote_spanned` here at all. If you do, th=
+en
+> >> let me know, something weird with spans is going on then.
+> >
+> > You need to give idents a span, so each of `kernel`, `fmt`, and
+> > `adapter` need a span. I *could* use `quote!` and get whatever span it
+> > uses (mixed_site) but I'd rather retain control.
+>
+> Please use `quote!` if it works. No need to make this more complex than
+> it already is. If it doesn't work then that's another story.
+
+Let's adjudicate that on v11, where you can see the code.
 
