@@ -1,400 +1,136 @@
-Return-Path: <linux-kselftest+bounces-34059-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34056-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 957CEAC9047
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 May 2025 15:35:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C14DCAC8FC6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 May 2025 15:20:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9EAF6189C4E4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 May 2025 13:33:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DD5601C23161
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 May 2025 13:15:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B299016132F;
-	Fri, 30 May 2025 13:33:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17D24231C9F;
+	Fri, 30 May 2025 13:07:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="NweBX4q9"
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="VO6PZKdE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA7AF1547D2;
-	Fri, 30 May 2025 13:33:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.148.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2312122C35D
+	for <linux-kselftest@vger.kernel.org>; Fri, 30 May 2025 13:07:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748611997; cv=none; b=hCeEpNiwQyyR1S9jH9+sXb9d2mW3c4jktfxpVH/n0wmrobN8S2H5ctxkfZFj+jvqeSrkQcF3t1gy6y1HyPYG8bIx/WW8o2XhwsOOTyojdhUoDMkgsuC5HHQuRaAGN7J1siwfFWQ5GZ1I6UYNTOzUmNE2FBx2vZR+SNU07HIobAs=
+	t=1748610453; cv=none; b=awg+hfVAgV8RDQS71Zr33aonHo/3NzQUdG+HyD5aNPXs0sCKLDCKcbGUxNyttnkDvaWlSLf5C8BMoQQ9QllDhHSnPfsAo59hCk+H8FObYiGV21j/EiiwoEuYHQibc0IlC7VzqWoMU0sdSnXUAUM9E8V0OWlj9MGbdmmZlnfEoZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748611997; c=relaxed/simple;
-	bh=4w22kZ52negMUTuIli5dR16SY+t1/SlhL095ZunFByM=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nvcKWYbxTwDxnPnmMRTD5xlnHB6k2Z9RuAbm6LTRzTtr3X8wz/7pnVOGIDmMph0ze+NQMVNEVJURONnL3A180VZb8aPXzP+1ci5ytchaydB3QV3JkIjTrYM3GFfIcYkTxtrMopztuu537RgtngD1Fzb7UtnrTMR6nTFqSq7tP/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=NweBX4q9; arc=none smtp.client-ip=148.163.148.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
-Received: from pps.filterd (m0354652.ppops.net [127.0.0.1])
-	by mx0a-00206402.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54UCLQEJ002202;
-	Fri, 30 May 2025 12:58:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=default; bh=Wz
-	t3C1uyCswPs1cKeQlufIRtqHdv3juNPPqO3gwQN9g=; b=NweBX4q9U8U+Xwn+TB
-	dxkaC5s7rVhsmhpnkXk+AIyZ6BfIcPhOpTE/t4n6bU08npF4lSl7Td0psX416x1v
-	mgN2EzP3rTcIbXkvdHsppxHZOTelclkYxCgTDJJ7+rkYxBNn3kIPgdKag+F0aUHf
-	7Wvk3bqcGKEa/c/+1vGgn2EB89ngJ4gA/VVf6QdpotqwL4nsfnHyLCOp5basQ9R+
-	Eh3oE/mRPaNp004RVBsH3RSBoR8kcYazvDlPgY9eveO40yK+JS6JaeeB5iOFJ4LR
-	qOPtoEPY92fy/CT59rU2OTi599VJRNrE2RZXSBYYThEfk0ZPQB8VjcBoAkSZ42Vs
-	Yd8Q==
-Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 46uux3kfr6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 30 May 2025 12:58:07 +0000 (GMT)
-Received: from ML-CTVHTF21DX.crowdstrike.sys (10.100.11.122) by
- 04WPEXCH007.crowdstrike.sys (10.100.11.74) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Fri, 30 May 2025 12:58:02 +0000
-From: Slava Imameev <slava.imameev@crowdstrike.com>
-To: <qmo@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <andrii@kernel.org>, <martin.lau@linux.dev>, <eddyz87@gmail.com>,
-        <song@kernel.org>, <yonghong.song@linux.dev>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@fomichev.me>,
-        <haoluo@google.com>, <jolsa@kernel.org>, <mykolal@fb.com>,
-        <shuah@kernel.org>, <slava.imameev@crowdstrike.com>,
-        <justin.deschamp@crowdstrike.com>, <mark.fontana@crowdstrike.com>,
-        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Add test for bpftool access to read-only protected maps
-Date: Fri, 30 May 2025 22:57:17 +1000
-Message-ID: <20250530125717.34746-2-slava.imameev@crowdstrike.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <20250530125717.34746-1-slava.imameev@crowdstrike.com>
-References: <20250530125717.34746-1-slava.imameev@crowdstrike.com>
+	s=arc-20240116; t=1748610453; c=relaxed/simple;
+	bh=h4jwctbW8pXg3O6hJrQAv0f+KY+PlydbIAeGTRF0HdE=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=GEt5EGWB1iZZ916cENQCcJQYk2FjvGewAypQ2SkdssxWzW9b+d9fulf5evhX8HE0Nj1QG0aunOYweWelOxpZ9sHQ9lzQbNMyH2IbviH8MCa26lY/fRpzx/PyayvlJ6hvhzh8YVcaZ2+UheAdNrlVB2r7pBL6S152RM2iys690oc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=VO6PZKdE; arc=none smtp.client-ip=209.85.166.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-86cf3dd8c97so156702839f.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 30 May 2025 06:07:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1748610450; x=1749215250; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M+zllA0JepvlfuREVmf3nCF0usvpNrfKCbR5PkTeodQ=;
+        b=VO6PZKdEzYmCiAL4/bfvM6EAnbxC1HVa8lz2kZMsMzLCRm7p0n9+W8yJD9IH2JxkaR
+         nHe5CksjbM8qHonhSykwH0P7+D2ZBc+P8PcJosgYRAl6FzM0UVx+qpXHueJUjPVZlhea
+         xd+h6mQNBch6coBDdk/ozPsQFt1hdcOjzdv8RkvcrmpWU01ykoCDZiQf5weiy2Kue1su
+         ZICHzVsKoE0ZGEC/Rc9u9csSEljXJy7XRRFnm9dukspZqTQfCvxD+Ip70K6RlDaiaAQJ
+         3OYuFoVNxR3ocTp49r7HxVadcFmcDHP+MpaLlDDV051EEu7DYnOrMSvegGUk15UO+JoE
+         71IA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748610450; x=1749215250;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=M+zllA0JepvlfuREVmf3nCF0usvpNrfKCbR5PkTeodQ=;
+        b=l8jvKA87HWIm+bD9hQxkGn8SlDChv+QKLP+XYR/f9z7blwkG5lsdOOc035+mg9svNl
+         L3JmIAU7lQhuCv488XsYNlJYVHQGFW9q591NZgbQS5xNg8jfGxDh8CHDT7ewlNOz4muR
+         2LqFSe91pwEN7WhdzRsSZFpm69FErIs16+7NHd9xfKmKJ7mHi02e4F70Lbzh46pskqm8
+         i0CJ+zTsm5PhUYZpT9+ZIIG5SXoQwg4JigDXqRETNv/n4ElLhfqQspSmRR4zC1NvoJ8F
+         jLNwRiWFaLPWrV17WpN0kEqrzoOPEM/PQISPmY2zaqaem16MkrAieaWZ9s+iFJv52YXT
+         Q1gg==
+X-Forwarded-Encrypted: i=1; AJvYcCVvwJAqsZfkvfJVcBPpr+IHYU5AeO0R5vqXy2hogv0IRUu5FYoLKUZRwjLuxtmKWY3OYeaqPdmsRX/UByA0hlA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwhceNCIqumCoo0mOwCtq11ttjtME7NqL6kSxSz7DNlcu0izv1f
+	dyB6HA1U+w6+gLp1N0Jt1LvOsjw3oxUU74/QyzDAX6kAsGXKh2TIy7UhhvXov9qXfFY=
+X-Gm-Gg: ASbGncsksUAKRC4aWxukwJO79YeU+efMmO8eqdIQu2X3BPZHifjAPW/2iswrZx5I/C+
+	nUGXy+qeLF+niRJaZ+GdzuFWctt+m87u+XrzC1M3S0FexT7jM/1mv3AjOkbpW+X/6WJIfARoimQ
+	9sIA4wzPcpEQlSLzBEvuxqf5PB4TjG0uPFFyxzea8L58KFf909+VondVO4SpAq9zDQTQ25lVAIO
+	8hvwhX4S5EPW8SSlhnaStcuswxGvDkWFU8WRpVtEZSWvtT5qSNeNYvBnoCsiMcLPqUW1rBXGZq5
+	gSQ+X6zHrn1yhWeHOfOBPIxN+ZVPHVRvxWDU3uxOnQ==
+X-Google-Smtp-Source: AGHT+IFfMvqEazUYtf2SirmN7JtlcpvFyW/az1d0hhAS8lUwYVAN/ahd2bFle1R0bSvbYHbgXjTrew==
+X-Received: by 2002:a05:6602:4017:b0:86c:f2c1:70d2 with SMTP id ca18e2360f4ac-86d000aeacdmr411795639f.3.1748610449967;
+        Fri, 30 May 2025 06:07:29 -0700 (PDT)
+Received: from [127.0.0.1] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4fdd7ed8154sm424022173.100.2025.05.30.06.07.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 May 2025 06:07:29 -0700 (PDT)
+From: Jens Axboe <axboe@kernel.dk>
+To: Ming Lei <ming.lei@redhat.com>, 
+ Caleb Sander Mateos <csander@purestorage.com>, 
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
+ Jonathan Corbet <corbet@lwn.net>, Uday Shankar <ushankar@purestorage.com>
+Cc: linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+In-Reply-To: <20250529-ublk_task_per_io-v8-0-e9d3b119336a@purestorage.com>
+References: <20250529-ublk_task_per_io-v8-0-e9d3b119336a@purestorage.com>
+Subject: Re: [PATCH v8 0/9] ublk: decouple server threads from
+ ublk_queues/hctxs
+Message-Id: <174861044873.875376.13955426854748469811.b4-ty@kernel.dk>
+Date: Fri, 30 May 2025 07:07:28 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: 04WPEXCH009.crowdstrike.sys (10.100.11.79) To
- 04WPEXCH007.crowdstrike.sys (10.100.11.74)
-X-Disclaimer: USA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-05-30_05,2025-05-30_01,2025-03-28_01
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.3-dev-7b9b9
 
-Add selftest cases that validate bpftool's expected behavior when
-accessing maps protected from modification via security_bpf_map.
 
-The test includes a BPF program attached to security_bpf_map with two maps:
-- A protected map that only allows read-only access
-- An unprotected map that allows full access
+On Thu, 29 May 2025 17:47:09 -0600, Uday Shankar wrote:
+> This patch set aims to allow ublk server threads to better balance load
+> amongst themselves by decoupling server threads from ublk_queues/hctxs,
+> so that multiple threads can service I/Os that are issued from a single
+> CPU. This can improve performance for workloads in which ublk server CPU
+> is a bottleneck, and for which load is issued from CPUs which are not
+> balanced across ublk_queues/hctxs.
+> 
+> [...]
 
-The test script attaches the BPF program to security_bpf_map and
-verifies that for the bpftool map command:
-- Read access works on both maps
-- Write access fails on the protected map
-- Write access succeeds on the unprotected map
-- These behaviors remain consistent when the maps are pinned
+Applied, thanks!
 
-Signed-off-by: Slava Imameev <slava.imameev@crowdstrike.com>
----
- tools/testing/selftests/bpf/Makefile          |   1 +
- .../selftests/bpf/progs/security_bpf_map.c    |  56 +++++
- .../testing/selftests/bpf/test_bpftool_map.sh | 208 ++++++++++++++++++
- 3 files changed, 265 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/security_bpf_map.c
- create mode 100755 tools/testing/selftests/bpf/test_bpftool_map.sh
+[1/9] ublk: have a per-io daemon instead of a per-queue daemon
+      commit: b8af2e5dfcc3314c09a97dabcf6e2b1f644cf820
+[2/9] selftests: ublk: kublk: plumb q_id in io_uring user_data
+      commit: b9c564b74d8aa549d74f97b6a9f429fedb9a4e97
+[3/9] selftests: ublk: kublk: tie sqe allocation to io instead of queue
+      commit: c306e71dba79624cee2eb5a80bc5013b47943241
+[4/9] selftests: ublk: kublk: lift queue initialization out of thread
+      commit: 83f5c5d62905353a1be597c62d82b0ad14f23a7f
+[5/9] selftests: ublk: kublk: move per-thread data out of ublk_queue
+      commit: f21561bc01bf887c2f620d2e4a9a52b999f776cd
+[6/9] selftests: ublk: kublk: decouple ublk_queues from ublk server threads
+      commit: 5163fa0f106d7a31c185559f95c7afd3672e69e6
+[7/9] selftests: ublk: add functional test for per io daemons
+      commit: 5e580d6b7e2004e308148a67d9ade3f26fd5949d
+[8/9] selftests: ublk: add stress test for per io daemons
+      commit: 6b29c3106a5fc2b4e14facf1ee7e663554f805bd
+[9/9] Documentation: ublk: document UBLK_F_PER_IO_DAEMON
+      commit: b02f5eedbcabe6e1982fdd7ff3f0ac5d1fddc68f
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index cf5ed3bee573..731a86407799 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -109,6 +109,7 @@ TEST_PROGS := test_kmod.sh \
- 	test_xdping.sh \
- 	test_bpftool_build.sh \
- 	test_bpftool.sh \
-+	test_bpftool_map.sh \
- 	test_bpftool_metadata.sh \
- 	test_doc_build.sh \
- 	test_xsk.sh \
-diff --git a/tools/testing/selftests/bpf/progs/security_bpf_map.c b/tools/testing/selftests/bpf/progs/security_bpf_map.c
-new file mode 100644
-index 000000000000..57226f2ceb5f
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/security_bpf_map.c
-@@ -0,0 +1,56 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_helpers.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+#define EPERM 1 /* Operation not permitted */
-+
-+/* From include/linux/mm.h. */
-+#define FMODE_WRITE	0x2
-+
-+struct map;
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+	__uint(max_entries, 1);
-+} prot_map SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+	__uint(max_entries, 1);
-+} not_prot_map SEC(".maps");
-+
-+SEC("fmod_ret/security_bpf_map")
-+int BPF_PROG(fmod_bpf_map, struct bpf_map *map, int fmode)
-+{
-+	if (map == &prot_map) {
-+		/* Allow read-only access */
-+		if (fmode & FMODE_WRITE)
-+			return -EPERM;
-+	}
-+
-+	return 0;
-+}
-+
-+/*
-+ * This program keeps references to maps. This is needed to prevent
-+ * optimizing them out.
-+ */
-+SEC("fentry/bpf_fentry_test1")
-+int BPF_PROG(bpf_fentry_test1, int a)
-+{
-+	__u32 key = 0;
-+	__u32 val1 = a;
-+	__u32 val2 = a + 1;
-+
-+	bpf_map_update_elem(&prot_map, &key, &val1, BPF_ANY);
-+	bpf_map_update_elem(&not_prot_map, &key, &val2, BPF_ANY);
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/test_bpftool_map.sh b/tools/testing/selftests/bpf/test_bpftool_map.sh
-new file mode 100755
-index 000000000000..c7c7f3d2071e
---- /dev/null
-+++ b/tools/testing/selftests/bpf/test_bpftool_map.sh
-@@ -0,0 +1,208 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
-+PROTECTED_MAP_NAME="prot_map"
-+NOT_PROTECTED_MAP_NAME="not_prot_map"
-+BPF_FILE="security_bpf_map.bpf.o"
-+TESTNAME="security_bpf_map"
-+BPF_FS=$(awk '$3 == "bpf" {print $2; exit}' /proc/mounts)
-+BPF_DIR="$BPF_FS/test_$TESTNAME"
-+SCRIPT_DIR=$(dirname $(realpath "$0"))
-+BPF_FILE_PATH="$SCRIPT_DIR/$BPF_FILE"
-+# Assume the script is located under tools/testing/selftests/bpf/
-+KDIR_ROOT_DIR=$(realpath "$SCRIPT_DIR"/../../../../)
-+
-+_cleanup()
-+{
-+	set +eu
-+	[ -d "$TMPDIR" ] && rm -rf "$TMPDIR" 2> /dev/null
-+	[ -d "$BPF_DIR" ] && rm -rf "$BPF_DIR" 2> /dev/null
-+}
-+
-+cleanup_skip()
-+{
-+	echo "selftests: $TESTNAME [SKIP]"
-+	_cleanup
-+
-+	exit $ksft_skip
-+}
-+
-+cleanup()
-+{
-+	if [ "$?" = 0 ]; then
-+		echo "selftests: $TESTNAME [PASS]"
-+	else
-+		echo "selftests: $TESTNAME [FAILED]"
-+	fi
-+	_cleanup
-+}
-+
-+# Parameters:
-+#   $1: The top of kernel repository
-+#   $2: Output directory
-+build_bpftool()
-+{
-+	local kdir_root_dir="$1"
-+	local output_dir="$2"
-+	local pwd="$(pwd)"
-+	local ncpus=1
-+
-+	echo Building bpftool ...
-+
-+	#We want to start build from the top of kernel repository.
-+	cd "$kdir_root_dir"
-+	if [ ! -e tools/bpf/bpftool/Makefile ]; then
-+		echo bpftool files not found
-+		exit $ksft_skip
-+	fi
-+
-+	# Determine the number of CPUs for parallel compilation
-+	if command -v nproc >/dev/null 2>&1; then
-+		ncpus=$(nproc)
-+	fi
-+
-+	make -C tools/bpf/bpftool -s -j"$ncpus" OUTPUT="$output_dir"/ >/dev/null
-+	echo ... finished building bpftool
-+	cd "$pwd"
-+}
-+
-+# Function to test map access with configurable write expectations
-+# Parameters:
-+#   $1: Map name
-+#   $2: Whether write should succeed (true/false)
-+#   $3: bpftool path
-+#   $4: BPF_DIR
-+test_map_access() {
-+	local map_name="$1"
-+	local write_should_succeed="$2"
-+	local bpftool_path="$3"
-+	local pin_path="$4/${map_name}_pinned"
-+	local key="0 0 0 0"
-+	local value="1 1 1 1"
-+
-+	echo "Testing access to map: $map_name"
-+
-+	# Test read access to the map
-+	if "$bpftool_path" map lookup name "$map_name" key $key; then
-+		echo "  Read access to $map_name succeeded"
-+	else
-+		echo "  Read access to $map_name failed"
-+		exit 1
-+	fi
-+
-+	# Test write access to the map
-+	if "$bpftool_path" map update name "$map_name" key $key value $value; then
-+		if [ "$write_should_succeed" = "true" ]; then
-+			echo "  Write access to $map_name succeeded as expected"
-+		else
-+			echo "  Write access to $map_name succeeded but should have failed"
-+			exit 1
-+		fi
-+	else
-+		if [ "$write_should_succeed" = "true" ]; then
-+			echo "  Write access to $map_name failed but should have succeeded"
-+			exit 1
-+		else
-+			echo "  Write access to $map_name failed as expected"
-+		fi
-+	fi
-+
-+	# Pin the map to the BPF filesystem
-+	"$bpftool_path" map pin name "$map_name" "$pin_path"
-+	if [ -e "$pin_path" ]; then
-+		echo "  Successfully pinned $map_name to $pin_path"
-+	else
-+		echo "  Failed to pin $map_name"
-+		exit 1
-+	fi
-+
-+	# Test read access to the pinned map
-+	if "$bpftool_path" map lookup pinned "$pin_path" key $key; then
-+		echo "  Read access to pinned $map_name succeeded"
-+	else
-+		echo "  Read access to pinned $map_name failed"
-+		exit 1
-+	fi
-+
-+	# Test write access to the pinned map
-+	if "$bpftool_path" map update pinned "$pin_path" key $key value $value; then
-+		if [ "$write_should_succeed" = "true" ]; then
-+			echo "  Write access to pinned $map_name succeeded as expected"
-+		else
-+			echo "  Write access to pinned $map_name succeeded but should have failed"
-+			exit 1
-+		fi
-+	else
-+		if [ "$write_should_succeed" = "true" ]; then
-+			echo "  Write access to pinned $map_name failed but should have succeeded"
-+			exit 1
-+		else
-+			echo "  Write access to pinned $map_name failed as expected"
-+		fi
-+	fi
-+
-+	echo "  Finished testing $map_name"
-+	echo
-+}
-+
-+check_root_privileges() {
-+	if [ $(id -u) -ne 0 ]; then
-+		echo "Need root privileges"
-+		exit $ksft_skip
-+	fi
-+}
-+
-+check_bpffs() {
-+	if [ -z "$BPF_FS" ]; then
-+		echo "Could not run test without bpffs mounted"
-+		exit $ksft_skip
-+	fi
-+}
-+
-+create_tmp_dir() {
-+	TMPDIR=$(mktemp -d)
-+	if [ $? -ne 0 ] || [ ! -d "$TMPDIR" ]; then
-+		echo "Failed to create temporary directory"
-+		exit $ksft_skip
-+	fi
-+}
-+
-+locate_or_build_bpftool() {
-+	if ! bpftool version > /dev/null 2>&1; then
-+		build_bpftool "$KDIR_ROOT_DIR" "$TMPDIR"
-+		BPFTOOL_PATH="$TMPDIR"/bpftool
-+	else
-+		echo "Using bpftool from PATH"
-+		BPFTOOL_PATH="bpftool"
-+	fi
-+}
-+
-+set -eu
-+
-+trap cleanup_skip EXIT
-+
-+check_root_privileges
-+
-+check_bpffs
-+
-+create_tmp_dir
-+
-+locate_or_build_bpftool
-+
-+mkdir "$BPF_DIR"
-+
-+trap cleanup EXIT
-+
-+# Load and attach the BPF programs to control maps access
-+"$BPFTOOL_PATH" prog loadall "$BPF_FILE_PATH" "$BPF_DIR"/prog autoattach
-+
-+# Test protected map (write should fail)
-+test_map_access "$PROTECTED_MAP_NAME" "false" "$BPFTOOL_PATH" "$BPF_DIR"
-+
-+# Test not protected map (write should succeed)
-+test_map_access "$NOT_PROTECTED_MAP_NAME" "true" "$BPFTOOL_PATH" "$BPF_DIR"
-+
-+exit 0
+Best regards,
 -- 
-2.34.1
+Jens Axboe
+
+
 
 
