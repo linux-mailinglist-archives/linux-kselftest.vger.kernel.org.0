@@ -1,81 +1,81 @@
-Return-Path: <linux-kselftest+bounces-34054-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34055-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43F34AC8DA0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 May 2025 14:29:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA589AC8DA5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 May 2025 14:29:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 942CBA2483A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 May 2025 12:29:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 622C19E1DD9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 May 2025 12:29:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B342D22F768;
-	Fri, 30 May 2025 12:28:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A96F622FE0E;
+	Fri, 30 May 2025 12:28:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TI7KLqy6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bkwWQ0we"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0C2522E3E0;
-	Fri, 30 May 2025 12:28:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F2D022F74D;
+	Fri, 30 May 2025 12:28:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748608084; cv=none; b=ADGJHKt4hL+u4In4GCg4sQCWfJoOV835eS+q3WyiXxge5SufFu2XPe4tAVIKC51zHiVXMe8WEd5hwKQJhaErnkDvbz9t+kyJ9pnkETNvX37nDjLBcxKkfT98zDCE4Z62bt8GYwtv5Ipj1hrZKs3tf47IW5aLoUHV7o2LDzoYAzU=
+	t=1748608085; cv=none; b=tCt2WcSF89Z01GxBCY266nvZL0XMwYtaFICTO5EkUdJ0kHnvJ/5Kx6ynbixg2LMqaBcVFOObfNU1M1Cw4gvI3w9R0ODk6+sK5e/6wX3yONe6DSrYBIGtwp4QRSu2caFBL2N4fbPMiocIj/U7Sa7h80Gz/Gi2PhPaEOIBbxqfp2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748608084; c=relaxed/simple;
-	bh=WakuJQOnZgcMfeJvLyxbd1RbJBMui0HPPVXLR+Hbsdo=;
+	s=arc-20240116; t=1748608085; c=relaxed/simple;
+	bh=aG+azcEM0t2Q0q7aSeRrxns6TNc28W7IDUOf/FvzDaE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=GOjgyIbgPMOZsOPH7HBLckJG8QQrwJ6FRClLcF5F6LJzIAAlcB9DyQUIqet8Gco6sb6Xs5jNFeoduSdXSsBCBN4I9/0KH9hJqZqBNCLSLdgYRFiiexk96NHlduG++aVqgphnc7/YgW+s9xh++K481bbazpJqTu1xETlEgneG+zM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TI7KLqy6; arc=none smtp.client-ip=209.85.160.175
+	 In-Reply-To:To:Cc; b=QLYQ7fJDptrZ5MFcfcklWfJugNc5fN9Fdi7b0qb7Mou8JKI7OWTvvtdaU8QkF/vlnsczuBy4QNFMjfjbiTe9YiyDq+sXPnmiyYxg04qFGs2ysHY2SRePI4aw66ygh61C+BkdeI0DF875TIiT1glVK2+nrPwPNqmIR/n5n9Owa9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bkwWQ0we; arc=none smtp.client-ip=209.85.222.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-4769bbc21b0so20317041cf.2;
-        Fri, 30 May 2025 05:28:00 -0700 (PDT)
+Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-7c5675dec99so206746785a.0;
+        Fri, 30 May 2025 05:28:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748608080; x=1749212880; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1748608082; x=1749212882; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=SeM+z+DHkAQcdW3Yn2QwEqQNNlIJjISRwSMBuKcIOig=;
-        b=TI7KLqy6WqjLqBshlO28SFHkwz/J9xF9NRhY+4xYS17vL7VXE58s302+oMuqGfb0/s
-         F5TON2wTn1H2ephM+FrN2LgELuQmLfCVhpZP/W3CpBF/JidN7n6NarBNbk8jVoCT/dsR
-         G8k0UjzGrpeVJ+pTU95uT7YbFjR5s3h7zaTv6Wt2xQs4M4EyOmrxI5WaRtMhwAKIZov1
-         Yse/XSAY/dza3XBEv9wuE8+x5VtfN9V1ZD+K5KGVp3wcy9xXdXyVvr5KVhpraM84V/UZ
-         6In1L7wsYKvYq9zFn2p3anZSU4mn/CU3l1JDl+wu2W63CffN9ZobbnwmuchaZmU/zeMz
-         cmHA==
+        bh=G7jnJ7AlpnOgkaNlu7SRmHaToN0O+rqjJSEWeahti/0=;
+        b=bkwWQ0wenwmuPXd637qqaxuX8wEi8WbM74ix9EgODI/YZO3aPngIgfP1ITl5RBbs5m
+         nFkdYXoddkxGIDc++r7hPqwPydDAJo1t4MUMPT71YJWKm0XbEcHU/YkNvwtBQBjn+qPM
+         0hplBjHmrEzzARCsg9pxGIA7SGeBD2TEtTc+o50RjBB1nqC0zLopfHNWIw6fQtiEKZ9n
+         WNrmUtZsA3RIUS4k5MkYwS4sQ1U2jEiozLNolD1UHNuKT/g5XMTzYeIlmqngaUR4mUTC
+         C8zDy93/zKyfZ9J4i+448XKMv6kGNZo2dDEDgymggxz/q3msQUQYmGWk08MLg0YN3mel
+         gh9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748608080; x=1749212880;
+        d=1e100.net; s=20230601; t=1748608082; x=1749212882;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SeM+z+DHkAQcdW3Yn2QwEqQNNlIJjISRwSMBuKcIOig=;
-        b=TC7wereKALZTxkqMH3LJz1Bh5JyA8ftLCe6e0DXYELq3fi/XvtrDjI/L34NAR5iLKA
-         nMz1YsZ6MFfpxjioK1QGdNUI2tmdcWZqrcNosLta/bnFTcrHlk2/mntI8e1dzGRpgfGF
-         qC7L2Kxsc8Dcm/l9Cl/JNTuazhDNG7et/cnzA4u+67go3Hsk+hKXJPs0JpiS7TSql2Z9
-         fQoYVjE1gcv4I7Wvmrz52l6udSdOHeMnEUrH7r/EFNXJcwxaImacCi2Yy7R3X58P+sTk
-         Cyvc2GF82AVz/PGfkzCYqZv9wOVASZRAaz/pbUwWNIJh0Lk/HjJqXwIRPNrcp2DAGp+e
-         pfWg==
-X-Forwarded-Encrypted: i=1; AJvYcCUoopv+TwRrq9J7Cqy7YSVmIDNM6GI1vQFLHJfEyFkwebomX3wgX3tQuq86K0ne+c1E38Zf/WoaXNN7Xt20@vger.kernel.org, AJvYcCW/UY4w03z0wYMkdxWjOQJQFmIeiRwLRes4sUYkNascpLObs1YjamYChbnYRaxNMhR4L9cOPQzH//4n@vger.kernel.org, AJvYcCWCo38if4uPS7ivAFK6DFGlqPCCF84Xbsrov7zsm73bMy4VNs2tMlyrHOa2WJys918qK6xPVIu5lwzTqSU=@vger.kernel.org, AJvYcCWVpB706+H6pic6Vy0XqRtThhdAQKuuVCIHGzTnhCR+rjjGb0InkruRQJw3I9w4jZyfSLeVWjdin5GR@vger.kernel.org, AJvYcCWeSVTnrjmScosFrBCbISfAgC8QCw7Wctf49LjiQOrM0hriuCuLO1xGcKN8BiqbEvadq1yuJAJ14bOqC7bg1G1v@vger.kernel.org, AJvYcCXLL4/ZXPZhFWjOI84mPUVlPv/QlK5/GvisFAUjdZAvxkxgdZQdw1jQGq0uDE+3SmpLcIAmUuVc@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy1xmlhHYGI53bsXdLGsZZTRO1YKL9lZHxNE9HbfHz7vCFY8nHO
-	SIgFT19eMUvT14Cctvw9suNf9GrE8VTqaVIaikmuTkxDnQMlR2/BtfDd
-X-Gm-Gg: ASbGncuKyIoLdHozuuXwZrHDkHn/SBjw3co3tBOYZ0QcTmik1PfeMURkzTg09+kOAxb
-	cuyCjUgn7PA6iX+J0h0rOaHRGPtfGFsh3OSNRaRdVrKagwFXnxN4RsPlmm5DgsFBRV+gj64jXjH
-	QjB+xw0hKwTN6XawajTi6UVxrqrZx8PiW0CK3lT9FIep3EHmC5kRwEczYlNurGFfs68FWYunIwg
-	3oBhtDvF5sS0Cd42ODdj6UjAgWgi3QwXJjrculXlZlIgHI7qmyVaOmyUEx2A8Bw5kwhjtT+yiy9
-	bW72G7JYm/xKlZ9HslId+lECWHndBbUh0OFbvpHUe/s7XgO2/CRHgZfM59OQdFxJAqYUNMS+d1j
-	AiftGWzmvbCdRoM+PmQPdQ4tSFKcLixeDhy/FMVpswLVGlD57ADFTmlQLiL0r
-X-Google-Smtp-Source: AGHT+IFgnz6wQ1Z0Zt9nypbcaxCPKG1C/QLzpRFl1Jd4PIw3zkKTqlNyLnL/j32cR9DHzl+EGiXsKg==
-X-Received: by 2002:a05:622a:4816:b0:490:8cc3:d111 with SMTP id d75a77b69052e-4a4400549c0mr61016841cf.27.1748608079313;
-        Fri, 30 May 2025 05:27:59 -0700 (PDT)
+        bh=G7jnJ7AlpnOgkaNlu7SRmHaToN0O+rqjJSEWeahti/0=;
+        b=cAr4CGATd3PVKx3CgBW4NlKAWS0Bw/r/vLEssRpyOg1/2xDEWWtbQrYlJFSgxTabql
+         BDLxL+6re2zMIJmi2jJWmyWd7iwKlfLiQm5BU7a0/BrcdG/AmJt4xNcLRQokK6ES+wpv
+         iSqq68Nep3SSD6xfv5YdxYiY2kbf5eqE8s8M0qbELzFgCGjgFWLooQn2Pfg99IVqfqQx
+         oIwSmeZQREPMg0/K3uXK68GfSOaTZcBGicO8wWjIRBDjsnxtqG/G5MUzzstIGP24MSvV
+         jioe7oyWqhIOfVJSUDpUhSWfokmN1uwVz9mEny3GrRDKvrZPCJpjenhw/hr0Dg/LfCYi
+         PYUw==
+X-Forwarded-Encrypted: i=1; AJvYcCU4ZxABB9fpNW+ar++mssG1HEmRjcPGg5r748+5Z/DWCm81+w1QRFKN8VpvtmU7m9P1xsjsOhf3tZ8D1fx7sSbz@vger.kernel.org, AJvYcCVs3z6adQgFYoZKzoNUZqXrMWwRvZfBgghiHPNuoepPKGTFXTAqp0qR2qnwNAeKozIaRUgkZlwef0k4ZbA=@vger.kernel.org, AJvYcCX23ZsCYeppsaK8NQGTrI8JijSgW6BAEzeWwpp3yX7qkkBnFSZJFwIeyRIGbFti2YLyVScJub0I6Qma@vger.kernel.org, AJvYcCXP+qoB/7rj/JxI9yDs8pQOdR/0I2miWeJywE0kfS/ZLnUPaR4iQuZr4z3ndLuWUlQGPwolNaZh@vger.kernel.org, AJvYcCXeLfMz5tuVvdelLNiPAVNwrxIb7C6uoetx/6sLdgAGcdy+t1x8pPU8ZGngBLH8gRtZrQ0AGzUq/PJE1t4k@vger.kernel.org, AJvYcCXzgAijKtde9bb/HlSYCNor3e5JuQB3WRKr1xzUXsvh+MHyF9cwBr3Yw3cd0lPqvsKDhYvUy/NdmxfJ@vger.kernel.org
+X-Gm-Message-State: AOJu0YzWT5LqFSW1uqAsp5ha9SiV7l6cs9V7B0m3IrGKCESDdMPPOx1D
+	cBop7qaRMac+V8VwPXnsb1rcYcyoOpbcEAOrLulTZ2SEDXC6rQtE1PIr
+X-Gm-Gg: ASbGncs2H1TvocOTdGs5qiyvnuakTtZC6b/VGX7y9DYqHpvGt79an5qu4XXnqDo/CLQ
+	6clgmCv8233Ka/Guf5Xtop75qgX1Ggk96ISXHLhjsQ+WgbzAkkrZw6bAE7FaoQ0FroJ2mfN4Lis
+	Mm+lD3YmN8nz++iF38vKyEKmH/G7HJMGYOvIqQWnRODf0B6pBPMOCkUhNrJIuUu0OxJYagwgOT8
+	oRT1qeAnnPW/2qG+xdCgdLqPro9AitTt2v4xxyAXuAmR0WjtviLmH3f7T02bmyjhqfUUxGyj5h8
+	J4Ah8qoMR/p/rzdsheHAXXkD09oOHV+E0OsmVB7U5n8lTX56C1UdyHYu/sdWF55lbVu2Hk3r5ev
+	5EDIp0wbAF8UqOYBWxlcxoR7i+592hWXpJoS40NOWvo+ml9vvRB7BDR8gpkLi
+X-Google-Smtp-Source: AGHT+IH5mqS+/k5lKVHR5A7kT0427JiEKiLRbp8abhViCNWcsWQSsJNPwNzZyuM4w2nU1vb4dsRPIQ==
+X-Received: by 2002:a05:620a:4083:b0:7c7:bb07:af07 with SMTP id af79cd13be357-7d0a1fe0204mr530721285a.22.1748608081802;
+        Fri, 30 May 2025 05:28:01 -0700 (PDT)
 Received: from 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa ([2620:10d:c091:600::1:fbe8])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a4358ad334sm19700201cf.27.2025.05.30.05.27.56
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a4358ad334sm19700201cf.27.2025.05.30.05.27.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 May 2025 05:27:57 -0700 (PDT)
+        Fri, 30 May 2025 05:28:00 -0700 (PDT)
 From: Tamir Duberstein <tamird@gmail.com>
-Date: Fri, 30 May 2025 08:27:45 -0400
-Subject: [PATCH v11 4/5] rust: replace `kernel::c_str!` with C-Strings
+Date: Fri, 30 May 2025 08:27:46 -0400
+Subject: [PATCH v11 5/5] rust: remove core::ffi::CStr reexport
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -84,7 +84,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250530-cstr-core-v11-4-cd9c0cbcb902@gmail.com>
+Message-Id: <20250530-cstr-core-v11-5-cd9c0cbcb902@gmail.com>
 References: <20250530-cstr-core-v11-0-cd9c0cbcb902@gmail.com>
 In-Reply-To: <20250530-cstr-core-v11-0-cd9c0cbcb902@gmail.com>
 To: Michal Rostecki <vadorovsky@protonmail.com>, 
@@ -124,558 +124,492 @@ Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
  Tamir Duberstein <tamird@gmail.com>
 X-Mailer: b4 0.15-dev
 
-C-String literals were added in Rust 1.77. Replace instances of
-`kernel::c_str!` with C-String literals where possible and rename
-`kernel::c_str!` to `str_to_cstr!` to clarify its intended use.
+Clean up references to `kernel::str::CStr`.
 
-Closes: https://github.com/Rust-for-Linux/linux/issues/1075
 Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 ---
- drivers/block/rnull.rs               |  2 +-
- drivers/gpu/nova-core/driver.rs      |  2 +-
- drivers/net/phy/ax88796b_rust.rs     |  7 +++----
- drivers/net/phy/qt2025.rs            |  5 ++---
- rust/kernel/devres.rs                |  2 +-
- rust/kernel/firmware.rs              |  6 +++---
- rust/kernel/kunit.rs                 |  7 ++++---
- rust/kernel/net/phy.rs               |  6 ++----
- rust/kernel/platform.rs              |  4 ++--
- rust/kernel/str.rs                   | 24 ++++++++++++++++--------
- rust/kernel/sync.rs                  |  7 +++----
- rust/kernel/sync/lock/global.rs      |  3 ++-
- rust/kernel/workqueue.rs             |  8 ++++----
- rust/macros/kunit.rs                 | 10 +++++-----
- rust/macros/module.rs                |  2 +-
- samples/rust/rust_driver_faux.rs     |  4 ++--
- samples/rust/rust_driver_pci.rs      |  4 ++--
- samples/rust/rust_driver_platform.rs |  4 ++--
- samples/rust/rust_misc_device.rs     |  3 +--
- scripts/rustdoc_test_gen.rs          |  4 ++--
- 20 files changed, 59 insertions(+), 55 deletions(-)
+ drivers/gpu/drm/drm_panic_qr.rs   |  3 ++-
+ drivers/gpu/nova-core/firmware.rs |  2 +-
+ drivers/net/phy/ax88796b_rust.rs  |  1 +
+ drivers/net/phy/qt2025.rs         |  1 +
+ rust/kernel/device.rs             |  3 +--
+ rust/kernel/driver.rs             |  4 ++--
+ rust/kernel/error.rs              |  6 ++----
+ rust/kernel/faux.rs               |  5 ++++-
+ rust/kernel/firmware.rs           | 15 ++++-----------
+ rust/kernel/kunit.rs              |  6 +++---
+ rust/kernel/lib.rs                |  2 +-
+ rust/kernel/miscdevice.rs         |  3 +--
+ rust/kernel/net/phy.rs            |  4 +++-
+ rust/kernel/of.rs                 |  3 ++-
+ rust/kernel/pci.rs                |  2 +-
+ rust/kernel/platform.rs           |  2 +-
+ rust/kernel/prelude.rs            |  5 +----
+ rust/kernel/str.rs                |  8 +++-----
+ rust/kernel/sync/condvar.rs       |  4 ++--
+ rust/kernel/sync/lock.rs          |  4 ++--
+ rust/kernel/sync/lock/global.rs   |  5 +++--
+ rust/kernel/sync/poll.rs          |  1 +
+ rust/kernel/workqueue.rs          |  1 +
+ rust/macros/module.rs             |  2 +-
+ 24 files changed, 44 insertions(+), 48 deletions(-)
 
-diff --git a/drivers/block/rnull.rs b/drivers/block/rnull.rs
-index 6366da12c5a5..9aa79b862b63 100644
---- a/drivers/block/rnull.rs
-+++ b/drivers/block/rnull.rs
-@@ -55,7 +55,7 @@ fn init(_module: &'static ThisModule) -> impl PinInit<Self, Error> {
-         })();
+diff --git a/drivers/gpu/drm/drm_panic_qr.rs b/drivers/gpu/drm/drm_panic_qr.rs
+index d8192a9bef63..ba63238d352f 100644
+--- a/drivers/gpu/drm/drm_panic_qr.rs
++++ b/drivers/gpu/drm/drm_panic_qr.rs
+@@ -27,7 +27,8 @@
+ //! * <https://github.com/erwanvivien/fast_qr>
+ //! * <https://github.com/bjguillot/qr>
  
-         try_pin_init!(Self {
--            _disk <- new_mutex!(disk?, "nullb:disk"),
-+            _disk <- new_mutex!(disk?, c"nullb:disk"),
-         })
+-use kernel::{prelude::*, str::CStr};
++use core::ffi::CStr;
++use kernel::prelude::*;
+ 
+ #[derive(Debug, Clone, Copy, PartialEq, Eq, Ord, PartialOrd)]
+ struct Version(usize);
+diff --git a/drivers/gpu/nova-core/firmware.rs b/drivers/gpu/nova-core/firmware.rs
+index 6e6361c59ca1..0af1f0df2fa5 100644
+--- a/drivers/gpu/nova-core/firmware.rs
++++ b/drivers/gpu/nova-core/firmware.rs
+@@ -30,7 +30,7 @@ const fn make_entry_chipset(self, chipset: &str) -> Self {
      }
- }
-diff --git a/drivers/gpu/nova-core/driver.rs b/drivers/gpu/nova-core/driver.rs
-index a08fb6599267..776970049974 100644
---- a/drivers/gpu/nova-core/driver.rs
-+++ b/drivers/gpu/nova-core/driver.rs
-@@ -33,7 +33,7 @@ fn probe(pdev: &pci::Device<Core>, _info: &Self::IdInfo) -> Result<Pin<KBox<Self
-         pdev.enable_device_mem()?;
-         pdev.set_master();
  
--        let bar = pdev.iomap_region_sized::<BAR0_SIZE>(0, c_str!("nova-core/bar0"))?;
-+        let bar = pdev.iomap_region_sized::<BAR0_SIZE>(0, c"nova-core/bar0")?;
- 
-         let this = KBox::pin_init(
-             try_pin_init!(Self {
+     pub(crate) const fn create(
+-        module_name: &'static kernel::str::CStr,
++        module_name: &'static core::ffi::CStr,
+     ) -> firmware::ModInfoBuilder<N> {
+         let mut this = Self(firmware::ModInfoBuilder::new(module_name));
+         let mut i = 0;
 diff --git a/drivers/net/phy/ax88796b_rust.rs b/drivers/net/phy/ax88796b_rust.rs
-index bc73ebccc2aa..2d24628a4e58 100644
+index 2d24628a4e58..68b8e30ae296 100644
 --- a/drivers/net/phy/ax88796b_rust.rs
 +++ b/drivers/net/phy/ax88796b_rust.rs
-@@ -5,7 +5,6 @@
+@@ -4,6 +4,7 @@
+ //! Rust Asix PHYs driver
  //!
  //! C version of this driver: [`drivers/net/phy/ax88796b.c`](./ax88796b.c)
++use core::ffi::CStr;
  use kernel::{
--    c_str,
      net::phy::{self, reg::C22, DeviceId, Driver},
      prelude::*,
-     uapi,
-@@ -41,7 +40,7 @@ fn asix_soft_reset(dev: &mut phy::Device) -> Result {
- #[vtable]
- impl Driver for PhyAX88772A {
-     const FLAGS: u32 = phy::flags::IS_INTERNAL;
--    const NAME: &'static CStr = c_str!("Asix Electronics AX88772A");
-+    const NAME: &'static CStr = c"Asix Electronics AX88772A";
-     const PHY_DEVICE_ID: DeviceId = DeviceId::new_with_exact_mask(0x003b1861);
- 
-     // AX88772A is not working properly with some old switches (NETGEAR EN 108TP):
-@@ -105,7 +104,7 @@ fn link_change_notify(dev: &mut phy::Device) {
- #[vtable]
- impl Driver for PhyAX88772C {
-     const FLAGS: u32 = phy::flags::IS_INTERNAL;
--    const NAME: &'static CStr = c_str!("Asix Electronics AX88772C");
-+    const NAME: &'static CStr = c"Asix Electronics AX88772C";
-     const PHY_DEVICE_ID: DeviceId = DeviceId::new_with_exact_mask(0x003b1881);
- 
-     fn suspend(dev: &mut phy::Device) -> Result {
-@@ -125,7 +124,7 @@ fn soft_reset(dev: &mut phy::Device) -> Result {
- 
- #[vtable]
- impl Driver for PhyAX88796B {
--    const NAME: &'static CStr = c_str!("Asix Electronics AX88796B");
-+    const NAME: &'static CStr = c"Asix Electronics AX88796B";
-     const PHY_DEVICE_ID: DeviceId = DeviceId::new_with_model_mask(0x003b1841);
- 
-     fn soft_reset(dev: &mut phy::Device) -> Result {
 diff --git a/drivers/net/phy/qt2025.rs b/drivers/net/phy/qt2025.rs
-index 0b9400dcb4c1..9ccc75f70219 100644
+index 9ccc75f70219..78ce2866f2b6 100644
 --- a/drivers/net/phy/qt2025.rs
 +++ b/drivers/net/phy/qt2025.rs
-@@ -9,7 +9,6 @@
+@@ -9,6 +9,7 @@
  //!
  //! The QT2025 PHY integrates an Intel 8051 micro-controller.
  
--use kernel::c_str;
++use core::ffi::CStr;
  use kernel::error::code;
  use kernel::firmware::Firmware;
  use kernel::net::phy::{
-@@ -36,7 +35,7 @@
+diff --git a/rust/kernel/device.rs b/rust/kernel/device.rs
+index 9074322c79e8..2cf5903f7dde 100644
+--- a/rust/kernel/device.rs
++++ b/rust/kernel/device.rs
+@@ -6,10 +6,9 @@
  
- #[vtable]
- impl Driver for PhyQT2025 {
--    const NAME: &'static CStr = c_str!("QT2025 10Gpbs SFP+");
-+    const NAME: &'static CStr = c"QT2025 10Gpbs SFP+";
-     const PHY_DEVICE_ID: phy::DeviceId = phy::DeviceId::new_with_exact_mask(0x0043a400);
+ use crate::{
+     bindings,
+-    str::CStr,
+     types::{ARef, Opaque},
+ };
+-use core::{fmt, ptr};
++use core::{ffi::CStr, fmt, ptr};
  
-     fn probe(dev: &mut phy::Device) -> Result<()> {
-@@ -69,7 +68,7 @@ fn probe(dev: &mut phy::Device) -> Result<()> {
-         // The micro-controller will start running from the boot ROM.
-         dev.write(C45::new(Mmd::PCS, 0xe854), 0x00c0)?;
+ #[cfg(CONFIG_PRINTK)]
+ use crate::str::CStrExt as _;
+diff --git a/rust/kernel/driver.rs b/rust/kernel/driver.rs
+index ec9166cedfa7..9926664d9ba2 100644
+--- a/rust/kernel/driver.rs
++++ b/rust/kernel/driver.rs
+@@ -6,8 +6,8 @@
+ //! register using the [`Registration`] class.
  
--        let fw = Firmware::request(c_str!("qt2025-2.0.3.3.fw"), dev.as_ref())?;
-+        let fw = Firmware::request(c"qt2025-2.0.3.3.fw", dev.as_ref())?;
-         if fw.data().len() > SZ_16K + SZ_8K {
-             return Err(code::EFBIG);
-         }
-diff --git a/rust/kernel/devres.rs b/rust/kernel/devres.rs
-index ddb1ce4a78d9..8735b227f0d3 100644
---- a/rust/kernel/devres.rs
-+++ b/rust/kernel/devres.rs
-@@ -45,7 +45,7 @@ struct DevresInner<T> {
- /// # Example
+ use crate::error::{Error, Result};
+-use crate::{device, of, str::CStr, try_pin_init, types::Opaque, ThisModule};
+-use core::pin::Pin;
++use crate::{device, of, try_pin_init, types::Opaque, ThisModule};
++use core::{ffi::CStr, pin::Pin};
+ use pin_init::{pin_data, pinned_drop, PinInit};
+ 
+ /// The [`RegistrationOps`] trait serves as generic interface for subsystems (e.g., PCI, Platform,
+diff --git a/rust/kernel/error.rs b/rust/kernel/error.rs
+index 933c048c04f1..b2b46d26f7b7 100644
+--- a/rust/kernel/error.rs
++++ b/rust/kernel/error.rs
+@@ -4,11 +4,9 @@
+ //!
+ //! C header: [`include/uapi/asm-generic/errno-base.h`](srctree/include/uapi/asm-generic/errno-base.h)
+ 
+-use crate::{
+-    alloc::{layout::LayoutError, AllocError},
+-    str::CStr,
+-};
++use crate::alloc::{layout::LayoutError, AllocError};
+ 
++use core::ffi::CStr;
+ use core::fmt;
+ use core::num::NonZeroI32;
+ use core::num::TryFromIntError;
+diff --git a/rust/kernel/faux.rs b/rust/kernel/faux.rs
+index 8a50fcd4c9bb..d9e5cd265101 100644
+--- a/rust/kernel/faux.rs
++++ b/rust/kernel/faux.rs
+@@ -7,7 +7,10 @@
+ //! C header: [`include/linux/device/faux.h`]
+ 
+ use crate::{bindings, device, error::code::*, prelude::*};
+-use core::ptr::{addr_of_mut, null, null_mut, NonNull};
++use core::{
++    ffi::CStr,
++    ptr::{addr_of_mut, null, null_mut, NonNull},
++};
+ 
+ /// The registration of a faux device.
  ///
- /// ```no_run
--/// # use kernel::{bindings, c_str, device::Device, devres::Devres, io::{Io, IoRaw}};
-+/// # use kernel::{bindings, device::Device, devres::Devres, io::{Io, IoRaw}};
- /// # use core::ops::Deref;
- ///
- /// // See also [`pci::Bar`] for a real example.
 diff --git a/rust/kernel/firmware.rs b/rust/kernel/firmware.rs
-index 582ab648b14c..09fd3a27bcf0 100644
+index 09fd3a27bcf0..4ba5e5589d7b 100644
 --- a/rust/kernel/firmware.rs
 +++ b/rust/kernel/firmware.rs
-@@ -51,13 +51,13 @@ fn request_nowarn() -> Self {
- /// # Examples
+@@ -4,15 +4,8 @@
+ //!
+ //! C header: [`include/linux/firmware.h`](srctree/include/linux/firmware.h)
+ 
+-use crate::{
+-    bindings,
+-    device::Device,
+-    error::Error,
+-    error::Result,
+-    ffi,
+-    str::{CStr, CStrExt as _},
+-};
+-use core::ptr::NonNull;
++use crate::{bindings, device::Device, error::Error, error::Result, ffi, str::CStrExt as _};
++use core::{ffi::CStr, ptr::NonNull};
+ 
+ /// # Invariants
  ///
- /// ```no_run
--/// # use kernel::{c_str, device::Device, firmware::Firmware};
-+/// # use kernel::{device::Device, firmware::Firmware};
+@@ -168,7 +161,7 @@ unsafe impl Sync for Firmware {}
+ ///     const DIR: &'static str = "vendor/chip/";
+ ///     const FILES: [&'static str; 3] = [ "foo", "bar", "baz" ];
  ///
- /// # fn no_run() -> Result<(), Error> {
- /// # // SAFETY: *NOT* safe, just for the example to get an `ARef<Device>` instance
- /// # let dev = unsafe { Device::get_device(core::ptr::null_mut()) };
+-///     const fn create(module_name: &'static kernel::str::CStr) -> firmware::ModInfoBuilder<N> {
++///     const fn create(module_name: &'static core::ffi::CStr) -> firmware::ModInfoBuilder<N> {
+ ///         let mut builder = firmware::ModInfoBuilder::new(module_name);
  ///
--/// let fw = Firmware::request(c_str!("path/to/firmware.bin"), &dev)?;
-+/// let fw = Firmware::request(c"path/to/firmware.bin", &dev)?;
- /// let blob = fw.data();
- ///
- /// # Ok(())
-@@ -203,7 +203,7 @@ macro_rules! module_firmware {
+ ///         let mut i = 0;
+@@ -202,7 +195,7 @@ macro_rules! module_firmware {
+     // this macro. Hence, we can neither use `expr` nor `ty`.
      ($($builder:tt)*) => {
          const _: () = {
-             const __MODULE_FIRMWARE_PREFIX: &'static $crate::str::CStr = if cfg!(MODULE) {
--                $crate::c_str!("")
-+                c""
+-            const __MODULE_FIRMWARE_PREFIX: &'static $crate::str::CStr = if cfg!(MODULE) {
++            const __MODULE_FIRMWARE_PREFIX: &'static ::core::ffi::CStr = if cfg!(MODULE) {
+                 c""
              } else {
                  <LocalModule as $crate::ModuleMetadata>::NAME
-             };
 diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
-index 4927aa0b656e..2bab61910f1e 100644
+index 2bab61910f1e..5504a6216d19 100644
 --- a/rust/kernel/kunit.rs
 +++ b/rust/kernel/kunit.rs
-@@ -57,9 +57,10 @@ macro_rules! kunit_assert {
+@@ -57,9 +57,9 @@ macro_rules! kunit_assert {
                  break 'out;
              }
  
--            static FILE: &'static $crate::str::CStr = $crate::c_str!($file);
-+            static FILE: &'static $crate::str::CStr = $file;
+-            static FILE: &'static $crate::str::CStr = $file;
++            static FILE: &'static ::core::ffi::CStr = $file;
              static LINE: i32 = ::core::line!() as i32 - $diff;
--            static CONDITION: &'static $crate::str::CStr = $crate::c_str!(stringify!($condition));
-+            static CONDITION: &'static $crate::str::CStr =
-+                $crate::str_to_cstr!(stringify!($condition));
+-            static CONDITION: &'static $crate::str::CStr =
++            static CONDITION: &'static ::core::ffi::CStr =
+                 $crate::str_to_cstr!(stringify!($condition));
  
              // SAFETY: FFI call without safety requirements.
-             let kunit_test = unsafe { $crate::bindings::kunit_get_current_test() };
-@@ -246,7 +247,7 @@ pub const fn kunit_case_null() -> kernel::bindings::kunit_case {
- /// }
- ///
- /// static mut KUNIT_TEST_CASES: [kernel::bindings::kunit_case; 2] = [
--///     kernel::kunit::kunit_case(kernel::c_str!("name"), test_fn),
-+///     kernel::kunit::kunit_case(c"name", test_fn),
- ///     kernel::kunit::kunit_case_null(),
- /// ];
- /// kernel::kunit_unsafe_test_suite!(suite_name, KUNIT_TEST_CASES);
+@@ -195,7 +195,7 @@ pub fn is_test_result_ok(t: impl TestResult) -> bool {
+ /// Use [`kunit_case_null`] to generate such a delimiter.
+ #[doc(hidden)]
+ pub const fn kunit_case(
+-    name: &'static kernel::str::CStr,
++    name: &'static core::ffi::CStr,
+     run_case: unsafe extern "C" fn(*mut kernel::bindings::kunit),
+ ) -> kernel::bindings::kunit_case {
+     kernel::bindings::kunit_case {
+diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+index 6e8eb57fb225..1b162973b71d 100644
+--- a/rust/kernel/lib.rs
++++ b/rust/kernel/lib.rs
+@@ -152,7 +152,7 @@ fn init(module: &'static ThisModule) -> impl pin_init::PinInit<Self, error::Erro
+ /// Metadata attached to a [`Module`] or [`InPlaceModule`].
+ pub trait ModuleMetadata {
+     /// The name of the module as specified in the `module!` macro.
+-    const NAME: &'static crate::str::CStr;
++    const NAME: &'static core::ffi::CStr;
+ }
+ 
+ /// Equivalent to `THIS_MODULE` in the C API.
+diff --git a/rust/kernel/miscdevice.rs b/rust/kernel/miscdevice.rs
+index d684ec4ef4d0..47f718a9ceb5 100644
+--- a/rust/kernel/miscdevice.rs
++++ b/rust/kernel/miscdevice.rs
+@@ -16,10 +16,9 @@
+     fs::File,
+     prelude::*,
+     seq_file::SeqFile,
+-    str::CStr,
+     types::{ForeignOwnable, Opaque},
+ };
+-use core::{marker::PhantomData, mem::MaybeUninit, pin::Pin};
++use core::{ffi::CStr, marker::PhantomData, mem::MaybeUninit, pin::Pin};
+ 
+ /// Options for creating a misc device.
+ #[derive(Copy, Clone)]
 diff --git a/rust/kernel/net/phy.rs b/rust/kernel/net/phy.rs
-index 652e060e47bd..8129419a3931 100644
+index 8129419a3931..72635af8f20e 100644
 --- a/rust/kernel/net/phy.rs
 +++ b/rust/kernel/net/phy.rs
-@@ -780,7 +780,6 @@ const fn as_int(&self) -> u32 {
+@@ -7,7 +7,7 @@
+ //! C headers: [`include/linux/phy.h`](srctree/include/linux/phy.h).
+ 
+ use crate::{error::*, prelude::*, types::Opaque};
+-use core::{marker::PhantomData, ptr::addr_of_mut};
++use core::{ffi::CStr, marker::PhantomData, ptr::addr_of_mut};
+ 
+ pub mod reg;
+ 
+@@ -780,6 +780,7 @@ const fn as_int(&self) -> u32 {
  ///
  /// ```
  /// # mod module_phy_driver_sample {
--/// use kernel::c_str;
++/// use core::ffi::CStr;
  /// use kernel::net::phy::{self, DeviceId};
  /// use kernel::prelude::*;
  ///
-@@ -799,7 +798,7 @@ const fn as_int(&self) -> u32 {
- ///
- /// #[vtable]
- /// impl phy::Driver for PhySample {
--///     const NAME: &'static CStr = c_str!("PhySample");
-+///     const NAME: &'static CStr = c"PhySample";
- ///     const PHY_DEVICE_ID: phy::DeviceId = phy::DeviceId::new_with_exact_mask(0x00000001);
- /// }
- /// # }
-@@ -808,7 +807,6 @@ const fn as_int(&self) -> u32 {
+@@ -807,6 +808,7 @@ const fn as_int(&self) -> u32 {
  /// This expands to the following code:
  ///
  /// ```ignore
--/// use kernel::c_str;
++/// use core::ffi::CStr;
  /// use kernel::net::phy::{self, DeviceId};
  /// use kernel::prelude::*;
  ///
-@@ -828,7 +826,7 @@ const fn as_int(&self) -> u32 {
- ///
- /// #[vtable]
- /// impl phy::Driver for PhySample {
--///     const NAME: &'static CStr = c_str!("PhySample");
-+///     const NAME: &'static CStr = c"PhySample";
- ///     const PHY_DEVICE_ID: phy::DeviceId = phy::DeviceId::new_with_exact_mask(0x00000001);
- /// }
- ///
+diff --git a/rust/kernel/of.rs b/rust/kernel/of.rs
+index 12ea65df46de..087ac8e05551 100644
+--- a/rust/kernel/of.rs
++++ b/rust/kernel/of.rs
+@@ -2,7 +2,8 @@
+ 
+ //! Device Tree / Open Firmware abstractions.
+ 
+-use crate::{bindings, device_id::RawDeviceId, prelude::*};
++use crate::{bindings, device_id::RawDeviceId};
++use core::ffi::CStr;
+ 
+ /// IdTable type for OF drivers.
+ pub type IdTable<T> = &'static dyn kernel::device_id::IdTable<DeviceId, T>;
+diff --git a/rust/kernel/pci.rs b/rust/kernel/pci.rs
+index c17a32b76d74..86df366bf911 100644
+--- a/rust/kernel/pci.rs
++++ b/rust/kernel/pci.rs
+@@ -13,11 +13,11 @@
+     error::{to_result, Result},
+     io::Io,
+     io::IoRaw,
+-    str::CStr,
+     types::{ARef, ForeignOwnable, Opaque},
+     ThisModule,
+ };
+ use core::{
++    ffi::CStr,
+     marker::PhantomData,
+     ops::Deref,
+     ptr::{addr_of_mut, NonNull},
 diff --git a/rust/kernel/platform.rs b/rust/kernel/platform.rs
-index a02ae5b25b74..65916b5936e6 100644
+index 65916b5936e6..272a7401c0dc 100644
 --- a/rust/kernel/platform.rs
 +++ b/rust/kernel/platform.rs
-@@ -124,7 +124,7 @@ macro_rules! module_platform_driver {
- /// # Example
- ///
- ///```
--/// # use kernel::{bindings, c_str, device::Core, of, platform};
-+/// # use kernel::{bindings, device::Core, of, platform};
- ///
- /// struct MyDriver;
- ///
-@@ -133,7 +133,7 @@ macro_rules! module_platform_driver {
- ///     MODULE_OF_TABLE,
- ///     <MyDriver as platform::Driver>::IdInfo,
- ///     [
--///         (of::DeviceId::new(c_str!("test,device")), ())
-+///         (of::DeviceId::new(c"test,device"), ())
- ///     ]
- /// );
- ///
+@@ -9,12 +9,12 @@
+     error::{to_result, Result},
+     of,
+     prelude::*,
+-    str::CStr,
+     types::{ARef, ForeignOwnable, Opaque},
+     ThisModule,
+ };
+ 
+ use core::{
++    ffi::CStr,
+     marker::PhantomData,
+     ops::Deref,
+     ptr::{addr_of_mut, NonNull},
+diff --git a/rust/kernel/prelude.rs b/rust/kernel/prelude.rs
+index 244b660fa835..3f7ca5a95160 100644
+--- a/rust/kernel/prelude.rs
++++ b/rust/kernel/prelude.rs
+@@ -40,10 +40,7 @@
+ 
+ pub use super::error::{code::*, Error, Result};
+ 
+-pub use super::{
+-    str::{CStr, CStrExt as _},
+-    ThisModule,
+-};
++pub use super::{str::CStrExt as _, ThisModule};
+ 
+ pub use super::init::InPlaceInit;
+ 
 diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
-index f8164fd23f61..ff5ae125be0d 100644
+index ff5ae125be0d..cc882c5a8d67 100644
 --- a/rust/kernel/str.rs
 +++ b/rust/kernel/str.rs
-@@ -266,15 +266,14 @@ impl fmt::Display for crate::fmt::Adapter<&CStr> {
-     /// Formats printable ASCII characters, escaping the rest.
-     ///
-     /// ```
--    /// # use kernel::c_str;
-     /// # use kernel::prelude::fmt;
-     /// # use kernel::str::CStr;
-     /// # use kernel::str::CString;
--    /// let penguin = c_str!("🐧");
-+    /// let penguin = c"🐧";
-     /// let s = CString::try_from_fmt(fmt!("{}", penguin))?;
-     /// assert_eq!(s.to_bytes_with_nul(), "\\xf0\\x9f\\x90\\xa7\0".as_bytes());
-     ///
--    /// let ascii = c_str!("so \"cool\"");
-+    /// let ascii = c"so \"cool\"";
-     /// let s = CString::try_from_fmt(fmt!("{}", ascii))?;
-     /// assert_eq!(s.to_bytes_with_nul(), "so \"cool\"\0".as_bytes());
-     /// # Ok::<(), kernel::error::Error>(())
-@@ -365,19 +364,28 @@ fn as_ref(&self) -> &BStr {
-     }
+@@ -3,6 +3,7 @@
+ //! String representations.
+ 
+ use crate::alloc::{flags::*, AllocError, KVec};
++use core::ffi::CStr;
+ use core::fmt::{self, Write};
+ use core::ops::{Deref, DerefMut, Index};
+ 
+@@ -175,8 +176,6 @@ macro_rules! b_str {
+     }};
  }
  
--/// Creates a new [`CStr`] from a string literal.
-+/// Creates a static C string wrapper at compile time.
- ///
--/// The string literal should not contain any `NUL` bytes.
-+/// Rust supports C string literals since Rust 1.77, and they should be used instead of this macro
-+/// where possible. This macro exists to allow static *non-literal* C strings to be created at
-+/// compile time. This is most often used in other macros.
-+///
-+/// # Panics
-+///
-+/// This macro panics if the operand contains an interior `NUL` byte.
- ///
+-pub use core::ffi::CStr;
+-
+ /// Returns a C pointer to the string.
+ // It is a free function rather than a method on an extension trait because:
+ //
+@@ -267,7 +266,6 @@ impl fmt::Display for crate::fmt::Adapter<&CStr> {
+     ///
+     /// ```
+     /// # use kernel::prelude::fmt;
+-    /// # use kernel::str::CStr;
+     /// # use kernel::str::CString;
+     /// let penguin = c"🐧";
+     /// let s = CString::try_from_fmt(fmt!("{}", penguin))?;
+@@ -377,8 +375,8 @@ fn as_ref(&self) -> &BStr {
  /// # Examples
  ///
  /// ```
--/// # use kernel::c_str;
-+/// # use kernel::str_to_cstr;
- /// # use kernel::str::CStr;
--/// const MY_CSTR: &CStr = c_str!("My awesome CStr!");
-+/// const MY_CSTR: &CStr = str_to_cstr!(concat!(file!(), ":", line!(), ": My CStr!"));
++/// # use core::ffi::CStr;
+ /// # use kernel::str_to_cstr;
+-/// # use kernel::str::CStr;
+ /// const MY_CSTR: &CStr = str_to_cstr!(concat!(file!(), ":", line!(), ": My CStr!"));
  /// ```
  #[macro_export]
--macro_rules! c_str {
-+macro_rules! str_to_cstr {
-+    // NB: we could write `($str:lit) => compile_error!("use a C string literal instead");` here but
-+    // that would trigger when the literal is at the top of several macro expansions. That would be
-+    // too limiting to macro authors, so we rely on the name as a hint instead.
+@@ -388,7 +386,7 @@ macro_rules! str_to_cstr {
+     // too limiting to macro authors, so we rely on the name as a hint instead.
      ($str:expr) => {{
          const S: &str = concat!($str, "\0");
-         const C: &$crate::str::CStr = match $crate::str::CStr::from_bytes_with_nul(S.as_bytes()) {
-diff --git a/rust/kernel/sync.rs b/rust/kernel/sync.rs
-index 36a719015583..e38629147f42 100644
---- a/rust/kernel/sync.rs
-+++ b/rust/kernel/sync.rs
-@@ -41,7 +41,6 @@ impl LockClassKey {
-     ///
-     /// # Example
-     /// ```
--    /// # use kernel::c_str;
-     /// # use kernel::alloc::KBox;
-     /// # use kernel::types::ForeignOwnable;
-     /// # use kernel::sync::{LockClassKey, SpinLock};
-@@ -53,7 +52,7 @@ impl LockClassKey {
-     /// {
-     ///     stack_pin_init!(let num: SpinLock<u32> = SpinLock::new(
-     ///         0,
--    ///         c_str!("my_spinlock"),
-+    ///         c"my_spinlock",
-     ///         // SAFETY: `key_ptr` is returned by the above `into_foreign()`, whose
-     ///         // `from_foreign()` has not yet been called.
-     ///         unsafe { <Pin<KBox<LockClassKey>> as ForeignOwnable>::borrow(key_ptr) }
-@@ -106,9 +105,9 @@ macro_rules! static_lock_class {
- #[macro_export]
- macro_rules! optional_name {
-     () => {
--        $crate::c_str!(::core::concat!(::core::file!(), ":", ::core::line!()))
-+        $crate::str_to_cstr!(::core::concat!(::core::file!(), ":", ::core::line!()))
-     };
-     ($name:literal) => {
--        $crate::c_str!($name)
-+        $name
-     };
- }
+-        const C: &$crate::str::CStr = match $crate::str::CStr::from_bytes_with_nul(S.as_bytes()) {
++        const C: &core::ffi::CStr = match core::ffi::CStr::from_bytes_with_nul(S.as_bytes()) {
+             Ok(v) => v,
+             Err(_) => panic!("string contains interior NUL"),
+         };
+diff --git a/rust/kernel/sync/condvar.rs b/rust/kernel/sync/condvar.rs
+index 0b6bc7f2878d..09bc35feb451 100644
+--- a/rust/kernel/sync/condvar.rs
++++ b/rust/kernel/sync/condvar.rs
+@@ -8,14 +8,14 @@
+ use super::{lock::Backend, lock::Guard, LockClassKey};
+ use crate::{
+     ffi::{c_int, c_long},
+-    str::{CStr, CStrExt as _},
++    str::CStrExt as _,
+     task::{
+         MAX_SCHEDULE_TIMEOUT, TASK_FREEZABLE, TASK_INTERRUPTIBLE, TASK_NORMAL, TASK_UNINTERRUPTIBLE,
+     },
+     time::Jiffies,
+     types::Opaque,
+ };
+-use core::{marker::PhantomPinned, pin::Pin, ptr};
++use core::{ffi::CStr, marker::PhantomPinned, pin::Pin, ptr};
+ use pin_init::{pin_data, pin_init, PinInit};
+ 
+ /// Creates a [`CondVar`] initialiser with the given name and a newly-created lock class.
+diff --git a/rust/kernel/sync/lock.rs b/rust/kernel/sync/lock.rs
+index a777a22976e0..21deff0bb13b 100644
+--- a/rust/kernel/sync/lock.rs
++++ b/rust/kernel/sync/lock.rs
+@@ -7,10 +7,10 @@
+ 
+ use super::LockClassKey;
+ use crate::{
+-    str::{CStr, CStrExt as _},
++    str::CStrExt as _,
+     types::{NotThreadSafe, Opaque, ScopeGuard},
+ };
+-use core::{cell::UnsafeCell, marker::PhantomPinned, pin::Pin};
++use core::{cell::UnsafeCell, ffi::CStr, marker::PhantomPinned, pin::Pin};
+ use pin_init::{pin_data, pin_init, PinInit};
+ 
+ pub mod mutex;
 diff --git a/rust/kernel/sync/lock/global.rs b/rust/kernel/sync/lock/global.rs
-index 79d0ef7fda86..9caa9b419f09 100644
+index 9caa9b419f09..ab5a3947fdd6 100644
 --- a/rust/kernel/sync/lock/global.rs
 +++ b/rust/kernel/sync/lock/global.rs
-@@ -267,7 +267,8 @@ macro_rules! global_lock {
+@@ -5,13 +5,14 @@
+ //! Support for defining statics containing locks.
+ 
+ use crate::{
+-    str::{CStr, CStrExt as _},
++    str::CStrExt as _,
+     sync::lock::{Backend, Guard, Lock},
+     sync::{LockClassKey, LockedBy},
+     types::Opaque,
+ };
+ use core::{
+     cell::UnsafeCell,
++    ffi::CStr,
+     marker::{PhantomData, PhantomPinned},
+     pin::Pin,
+ };
+@@ -267,7 +268,7 @@ macro_rules! global_lock {
          $pub enum $name {}
  
          impl $crate::sync::lock::GlobalLockBackend for $name {
--            const NAME: &'static $crate::str::CStr = $crate::c_str!(::core::stringify!($name));
-+            const NAME: &'static $crate::str::CStr =
-+                $crate::str_to_cstr!(::core::stringify!($name));
+-            const NAME: &'static $crate::str::CStr =
++            const NAME: &'static ::core::ffi::CStr =
+                 $crate::str_to_cstr!(::core::stringify!($name));
              type Item = $valuety;
              type Backend = $crate::global_lock_inner!(backend $kind);
+diff --git a/rust/kernel/sync/poll.rs b/rust/kernel/sync/poll.rs
+index d7e6e59e124b..bf2fb24d04ea 100644
+--- a/rust/kernel/sync/poll.rs
++++ b/rust/kernel/sync/poll.rs
+@@ -11,6 +11,7 @@
+     sync::{CondVar, LockClassKey},
+     types::Opaque,
+ };
++use core::ffi::CStr;
+ use core::ops::Deref;
  
+ /// Creates a [`PollCondVar`] initialiser with the given name and a newly-created lock class.
 diff --git a/rust/kernel/workqueue.rs b/rust/kernel/workqueue.rs
-index d092112d843f..dbec533fd31f 100644
+index dbec533fd31f..bb3f917204f8 100644
 --- a/rust/kernel/workqueue.rs
 +++ b/rust/kernel/workqueue.rs
-@@ -51,7 +51,7 @@
- //!     fn new(value: i32) -> Result<Arc<Self>> {
- //!         Arc::pin_init(pin_init!(MyStruct {
- //!             value,
--//!             work <- new_work!("MyStruct::work"),
-+//!             work <- new_work!(c"MyStruct::work"),
- //!         }), GFP_KERNEL)
- //!     }
- //! }
-@@ -98,8 +98,8 @@
- //!         Arc::pin_init(pin_init!(MyStruct {
- //!             value_1,
- //!             value_2,
--//!             work_1 <- new_work!("MyStruct::work_1"),
--//!             work_2 <- new_work!("MyStruct::work_2"),
-+//!             work_1 <- new_work!(c"MyStruct::work_1"),
-+//!             work_2 <- new_work!(c"MyStruct::work_2"),
- //!         }), GFP_KERNEL)
- //!     }
- //! }
-@@ -215,7 +215,7 @@ pub fn try_spawn<T: 'static + Send + FnOnce()>(
-         func: T,
-     ) -> Result<(), AllocError> {
-         let init = pin_init!(ClosureWork {
--            work <- new_work!("Queue::try_spawn"),
-+            work <- new_work!(c"Queue::try_spawn"),
-             func: Some(func),
-         });
+@@ -135,6 +135,7 @@
  
-diff --git a/rust/macros/kunit.rs b/rust/macros/kunit.rs
-index 81d18149a0cc..c64df1a01b9d 100644
---- a/rust/macros/kunit.rs
-+++ b/rust/macros/kunit.rs
-@@ -89,8 +89,8 @@ pub(crate) fn kunit_tests(attr: TokenStream, ts: TokenStream) -> TokenStream {
-     // unsafe extern "C" fn kunit_rust_wrapper_bar(_test: *mut ::kernel::bindings::kunit) { bar(); }
-     //
-     // static mut TEST_CASES: [::kernel::bindings::kunit_case; 3] = [
--    //     ::kernel::kunit::kunit_case(::kernel::c_str!("foo"), kunit_rust_wrapper_foo),
--    //     ::kernel::kunit::kunit_case(::kernel::c_str!("bar"), kunit_rust_wrapper_bar),
-+    //     ::kernel::kunit::kunit_case(c"foo", kunit_rust_wrapper_foo),
-+    //     ::kernel::kunit::kunit_case(c"bar", kunit_rust_wrapper_bar),
-     //     ::kernel::kunit::kunit_case_null(),
-     // ];
-     //
-@@ -109,7 +109,7 @@ pub(crate) fn kunit_tests(attr: TokenStream, ts: TokenStream) -> TokenStream {
-         writeln!(kunit_macros, "{kunit_wrapper}").unwrap();
-         writeln!(
-             test_cases,
--            "    ::kernel::kunit::kunit_case(::kernel::c_str!(\"{test}\"), {kunit_wrapper_fn_name}),"
-+            "    ::kernel::kunit::kunit_case(c\"{test}\", {kunit_wrapper_fn_name}),"
-         )
-         .unwrap();
-         writeln!(
-@@ -119,7 +119,7 @@ pub(crate) fn kunit_tests(attr: TokenStream, ts: TokenStream) -> TokenStream {
- #[allow(unused)]
- macro_rules! assert {{
-     ($cond:expr $(,)?) => {{{{
--        kernel::kunit_assert!("{test}", "{path}", 0, $cond);
-+        kernel::kunit_assert!("{test}", c"{path}", 0, $cond);
-     }}}}
- }}
+ use crate::alloc::{AllocError, Flags};
+ use crate::{prelude::*, sync::Arc, sync::LockClassKey, types::Opaque};
++use core::ffi::CStr;
+ use core::marker::PhantomData;
  
-@@ -127,7 +127,7 @@ macro_rules! assert {{
- #[allow(unused)]
- macro_rules! assert_eq {{
-     ($left:expr, $right:expr $(,)?) => {{{{
--        kernel::kunit_assert_eq!("{test}", "{path}", 0, $left, $right);
-+        kernel::kunit_assert_eq!("{test}", c"{path}", 0, $left, $right);
-     }}}}
- }}
-         "#
+ /// Creates a [`Work`] initialiser with the given name and a newly-created lock class.
 diff --git a/rust/macros/module.rs b/rust/macros/module.rs
-index de9304498a97..ef1906285a55 100644
+index ef1906285a55..1ec923eb9383 100644
 --- a/rust/macros/module.rs
 +++ b/rust/macros/module.rs
 @@ -232,7 +232,7 @@ pub(crate) fn module(ts: TokenStream) -> TokenStream {
              type LocalModule = {type_};
  
              impl ::kernel::ModuleMetadata for {type_} {{
--                const NAME: &'static ::kernel::str::CStr = ::kernel::c_str!(\"{name}\");
-+                const NAME: &'static ::kernel::str::CStr = c\"{name}\";
+-                const NAME: &'static ::kernel::str::CStr = c\"{name}\";
++                const NAME: &'static ::core::ffi::CStr = c\"{name}\";
              }}
  
              // Double nested modules, since then nobody can access the public items inside.
-diff --git a/samples/rust/rust_driver_faux.rs b/samples/rust/rust_driver_faux.rs
-index ecc9fd378cbd..23add3160693 100644
---- a/samples/rust/rust_driver_faux.rs
-+++ b/samples/rust/rust_driver_faux.rs
-@@ -2,7 +2,7 @@
- 
- //! Rust faux device sample.
- 
--use kernel::{c_str, faux, prelude::*, Module};
-+use kernel::{faux, prelude::*, Module};
- 
- module! {
-     type: SampleModule,
-@@ -20,7 +20,7 @@ impl Module for SampleModule {
-     fn init(_module: &'static ThisModule) -> Result<Self> {
-         pr_info!("Initialising Rust Faux Device Sample\n");
- 
--        let reg = faux::Registration::new(c_str!("rust-faux-sample-device"), None)?;
-+        let reg = faux::Registration::new(c"rust-faux-sample-device", None)?;
- 
-         dev_info!(reg.as_ref(), "Hello from faux device!\n");
- 
-diff --git a/samples/rust/rust_driver_pci.rs b/samples/rust/rust_driver_pci.rs
-index 2bb260aebc9e..8da48c1c3c2d 100644
---- a/samples/rust/rust_driver_pci.rs
-+++ b/samples/rust/rust_driver_pci.rs
-@@ -4,7 +4,7 @@
- //!
- //! To make this driver probe, QEMU must be run with `-device pci-testdev`.
- 
--use kernel::{bindings, c_str, device::Core, devres::Devres, pci, prelude::*, types::ARef};
-+use kernel::{bindings, device::Core, devres::Devres, pci, prelude::*, types::ARef};
- 
- struct Regs;
- 
-@@ -73,7 +73,7 @@ fn probe(pdev: &pci::Device<Core>, info: &Self::IdInfo) -> Result<Pin<KBox<Self>
-         pdev.enable_device_mem()?;
-         pdev.set_master();
- 
--        let bar = pdev.iomap_region_sized::<{ Regs::END }>(0, c_str!("rust_driver_pci"))?;
-+        let bar = pdev.iomap_region_sized::<{ Regs::END }>(0, c"rust_driver_pci")?;
- 
-         let drvdata = KBox::new(
-             Self {
-diff --git a/samples/rust/rust_driver_platform.rs b/samples/rust/rust_driver_platform.rs
-index 8b42b3cfb363..e6487a970a59 100644
---- a/samples/rust/rust_driver_platform.rs
-+++ b/samples/rust/rust_driver_platform.rs
-@@ -2,7 +2,7 @@
- 
- //! Rust Platform driver sample.
- 
--use kernel::{c_str, device::Core, of, platform, prelude::*, types::ARef};
-+use kernel::{device::Core, of, platform, prelude::*, types::ARef};
- 
- struct SampleDriver {
-     pdev: ARef<platform::Device>,
-@@ -14,7 +14,7 @@ struct SampleDriver {
-     OF_TABLE,
-     MODULE_OF_TABLE,
-     <SampleDriver as platform::Driver>::IdInfo,
--    [(of::DeviceId::new(c_str!("test,rust-device")), Info(42))]
-+    [(of::DeviceId::new(c"test,rust-device"), Info(42))]
- );
- 
- impl platform::Driver for SampleDriver {
-diff --git a/samples/rust/rust_misc_device.rs b/samples/rust/rust_misc_device.rs
-index c881fd6dbd08..12b64296e912 100644
---- a/samples/rust/rust_misc_device.rs
-+++ b/samples/rust/rust_misc_device.rs
-@@ -98,7 +98,6 @@
- use core::pin::Pin;
- 
- use kernel::{
--    c_str,
-     device::Device,
-     fs::File,
-     ioctl::{_IO, _IOC_SIZE, _IOR, _IOW},
-@@ -133,7 +132,7 @@ fn init(_module: &'static ThisModule) -> impl PinInit<Self, Error> {
-         pr_info!("Initialising Rust Misc Device Sample\n");
- 
-         let options = MiscDeviceOptions {
--            name: c_str!("rust-misc-device"),
-+            name: c"rust-misc-device",
-         };
- 
-         try_pin_init!(Self {
-diff --git a/scripts/rustdoc_test_gen.rs b/scripts/rustdoc_test_gen.rs
-index 507d36875196..0e86bdf1b5b1 100644
---- a/scripts/rustdoc_test_gen.rs
-+++ b/scripts/rustdoc_test_gen.rs
-@@ -173,7 +173,7 @@ pub extern "C" fn {kunit_name}(__kunit_test: *mut ::kernel::bindings::kunit) {{
-     macro_rules! assert {{
-         ($cond:expr $(,)?) => {{{{
-             ::kernel::kunit_assert!(
--                "{kunit_name}", "{real_path}", __DOCTEST_ANCHOR - {line}, $cond
-+                "{kunit_name}", c"{real_path}", __DOCTEST_ANCHOR - {line}, $cond
-             );
-         }}}}
-     }}
-@@ -183,7 +183,7 @@ macro_rules! assert {{
-     macro_rules! assert_eq {{
-         ($left:expr, $right:expr $(,)?) => {{{{
-             ::kernel::kunit_assert_eq!(
--                "{kunit_name}", "{real_path}", __DOCTEST_ANCHOR - {line}, $left, $right
-+                "{kunit_name}", c"{real_path}", __DOCTEST_ANCHOR - {line}, $left, $right
-             );
-         }}}}
-     }}
 
 -- 
 2.49.0
