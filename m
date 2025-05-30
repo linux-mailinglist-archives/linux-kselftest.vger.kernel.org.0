@@ -1,155 +1,104 @@
-Return-Path: <linux-kselftest+bounces-34042-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34043-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54639AC883C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 May 2025 08:34:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 31A43AC8936
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 May 2025 09:45:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4D3C11BA787C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 May 2025 06:34:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 317FA1BA6BFE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 May 2025 07:45:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D60C11F4C85;
-	Fri, 30 May 2025 06:34:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC02220D506;
+	Fri, 30 May 2025 07:45:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="K5NDaARE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dfRovX3e"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out203-205-221-210.mail.qq.com (out203-205-221-210.mail.qq.com [203.205.221.210])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58E3910E4;
-	Fri, 30 May 2025 06:34:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.210
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50AD01F5425;
+	Fri, 30 May 2025 07:45:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748586862; cv=none; b=vElofMBtfI8+TrDdUFjyd1SQ7rmnhhw6oNSReR9nEigHL/4DcbJ6GmThm+/1NFyB/wROEJuCQHkDFqwxK2S1GRLlt47AF2qwGIJ9GxHKZKj0aDkJJeHmNUkszYQrYoc1sMUcrwD/Bud34XINDjQJAzcefcpYi/3JtiGDB0YH2Ac=
+	t=1748591128; cv=none; b=WJJkA+oe3j6tuyg7Fp5d/tlA5deOBwjY/gKcVKAInshR7FuqsH6QtYTlYwoAS862tvLh5C5vVwzdZSLl24uF8DQBPYF91NgeCCgr1CmBqliqEN+PgxzlxEAwveYUA5XY0C/o6fSALGh+nG6xmY2UUqGNv4hbFkszMlUksnj2Uxg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748586862; c=relaxed/simple;
-	bh=tV4VuMBLa/kEjMITalpMd3xexYEhPloYOUSsa5uWW8o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XdEaYX2nJo5+2duEgYJZJrLBgQU3gmNtaICqcUP/i6mWCSsWo3IGWNcdro0g/dRPXw6gMdOFwwuk59fV/ideoRp9nEiFzhx30nZM9Bd3vATtRX9ccx4FfXOugimer9B87dkdR7pwEw4+pRAoDv/d22QHyggCNBgZiJ3vBcHsQHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=K5NDaARE; arc=none smtp.client-ip=203.205.221.210
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1748586846;
-	bh=fLRtGI/dkGFjlZENN6WGzEywpI9et7ean0MKT3oN79U=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=K5NDaAREZgSKHmT+AZ7Zv8iD2RTuYYxTKa7JV/5TVgfMMjQ6v6qkEhCpfQhE+BTLX
-	 Hut9GEZh63nRRZF7nCvYBFuVlNgoXDRNTgcD7g7Rr9grZ1ruLFhqfVQajY1TLjAtZz
-	 ifam5CN2XpO6OLlQpfthyIe87UPU8ljgqPtJrHaY=
-Received: from [10.56.52.9] ([39.156.73.10])
-	by newxmesmtplogicsvrszc13-0.qq.com (NewEsmtp) with SMTP
-	id 88210633; Fri, 30 May 2025 14:34:02 +0800
-X-QQ-mid: xmsmtpt1748586842t4r3aac12
-Message-ID: <tencent_0C1631C5C04C0820EBEE925625E195713405@qq.com>
-X-QQ-XMAILINFO: NFcI4DQTV9fmJUZxq503s5HvZwxuwcSCHrJMNC9bWMF/EMerRepCVZNm3TpeJz
-	 P6m++hwB9GvtJsp2muycCL/iYZCBnEsrKsdn7SoAYxpXzK4cFeFXRdJUwAixqXMflwJNtOZOqPJN
-	 BjMz1dv+roqxDveovyirzSm5Iin+okTdslRBOx+ltn6TsRxyejtR1kM/yK1U1MgHHGJQ52R6C+0s
-	 IH+mxvQVFyfE5ogro30FglxT7QgUfEtrl3vBNbV0IhIcLxetpN2EZIjcEIsRgN171wkMaMCjlA9Y
-	 K6olgahP19ZTlJNMrwN0at01SfZazM4cKFmcKkiuPdyD1kGkrUiSdPZFKzh53j9R7B5zAhH24IbI
-	 XUTHVoBt2spOr5jOy334SfWpQ+jTo/Mckrb4I6d3l+8SFBsBV/6dB8NGuN3gqtOuiGE/m6xTMC7f
-	 PwvjTItXbxut0+ktL8tJhf5pDhdJ6uGA+MhI5Wf353hgsxYYpz+0mV30n6c30Xp9FyzOXSE0x5/h
-	 EqTidJA+6Fh9abeiWrqd+/JYptzm9eipDsR3k207rcIHTWJ0nzPRD9WgM+exjjngJ5yKdlYKU4pH
-	 u+vA2YWOEdHOm+J/TsujWwSq0ZSd7zoUXzhn62PNiqH0of/7/jMeXVK0FNTtDolx/++2umFWeph5
-	 KyevxfzqE4deH+SCkfDJx1ckPxAm+IM/cbm0fiEo18BRBF9zg/mzS4F/6Yz/GOZrqD0WJSyknBzc
-	 kEZhsudbwCu/SpNGCxG5XauGwwrNEa8pGzesRpYnBrMhN85Q8frgg38Q7qrnvzX7ydld0IhjKzCJ
-	 ajlEOxiBwi1dYYTTkG20qyH+4DLj8cj5csJvm7t295wlE4ogWHaH9gpat3vTUPqN+cMkUb+5hNkW
-	 W6jraBdcDHAo0ZdkzJ/o+oeKd5E0IrD98b8UsO0mwXPEYWgf7X5RVddKphsoL54y5RLzCXIJvHzs
-	 inLFKOmGSriG4bkkLj3yVVcPReFZR2jrdz016lFA4e1oXCHh1sox+zK3ofWWEoCIdk9b+XoEDcag
-	 /Uw+ZqzQ==
-X-QQ-XMRINFO: MSVp+SPm3vtS1Vd6Y4Mggwc=
-X-OQ-MSGID: <3fbc45fd-5806-495d-bea9-fa7606001a30@foxmail.com>
-Date: Fri, 30 May 2025 14:34:02 +0800
+	s=arc-20240116; t=1748591128; c=relaxed/simple;
+	bh=pzOa/UgrS9Umku7hdGQ7ovp+X/tJyw92DDjRJCHRzbI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AS2XLBXnNWEjzq3vBhv9cYhYJ4ukt5h15Qb3BKNjAzwiNoNEDDYypykcNSwLdpD4i87unMOf9O0PB+EgdKQ6GOoo0dLB7sH0eKWZ3zOVqXLfRAoDgKESCFgEWW/u3akD8xFMnRa62IfdyY3EaEFs4JjVg0Bj39NXTvDr4XdQs0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dfRovX3e; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-7424ccbef4eso1382804b3a.2;
+        Fri, 30 May 2025 00:45:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1748591126; x=1749195926; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pzOa/UgrS9Umku7hdGQ7ovp+X/tJyw92DDjRJCHRzbI=;
+        b=dfRovX3eRH15CCuKXzCizPQsfv5XiNtB0ETr6VzZTVI8hKhyYMFG2IZ6QfnrTXl3CQ
+         u8sCNMxTwKAVibz7yfchW3Q42BTOBQyg1s5KYKzGSEcGasRq5N41UX+F7dE5E4zuC977
+         OphFsn2dSmnLn4rXZFMpfDSI/1jDRGtFatKtHkBaEEcMi3t18lnR/wA4v3DSex+M/2ka
+         NbnbFy9KwAXBIRsoOT5LgYQDTlz4gJj3eRD+hJoZ09WpZWNkwpcHaTwRvsH42A+nc4HG
+         tWGYaQbe4LGHZpHO9fW3lIPxlOKlFfR4kfBkxCl4sEJoW03+Tcf6gNixy2i1C0KAmv2w
+         n5+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748591126; x=1749195926;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pzOa/UgrS9Umku7hdGQ7ovp+X/tJyw92DDjRJCHRzbI=;
+        b=vqIZmA5opWnKaftTNfzNEjtGFcWNcROjLnG5Jg/+LJRsje6EgOlz0UXErgIRjSp3PH
+         Z4J68VPufHMObOI7Pauzvw8ni0BXNlC8dL8orOHfcv+hU8LJjkxtY3LTEQxydK1bZfvE
+         jv5ups3GnYea4dmugeXPHy0obGMHzioXNG37CORJIbr7vkKWbw8HvcIXmJGg5gkF1694
+         /N2LBdxXHiIHJ+g9ZyUm1R+8C8iv+Uvax6LScG+n1wLFgK9ZqD1za+aKJrSynDxjGLj7
+         80dx6Xr2UnPCjn5glrhBYCK8xfg/9nEfkRIerABjyyC+u912CuvTWun6eJRe9WKTAX7a
+         0byA==
+X-Forwarded-Encrypted: i=1; AJvYcCVojGy/NP+ACg1Z5A8hSiM020wUpI5eRzMeuUJazCAzUmRvLTgDilOgLkcK3ThjSEiBM/9u4ABnQ11ibHk=@vger.kernel.org, AJvYcCWL8yuNZKun1HrApYtbD8NJMFY8Ia/cKyXp4qVpJTXoFr2kXvb4U51U9U2OWsBwKj/HOQQArcp6puRIx7EiAT58@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEhVjf3TB0kNjhM1uRRGT6efDdEIvRw5j50U//HhD4zIT0nsEA
+	jpZs6hr0Ojjk9vQSkL5HCDNxxwCwEqvzg0I8PVqgYXCeIft5tg7zIqOwRnTCpeiUwGSwKSnYz4g
+	lWI443LNr1t5yKDkwaJ8Xug0XUI4mcljcbtuPsQ==
+X-Gm-Gg: ASbGncvqC820+JMqTiSO0aqSQqiLxLg5pyuWylQD6WwHA4fW+R07foT+Dql3aP1QPSp
+	baJaBvdqUzTW7Rhg8Vof0SLeZNvvb3q0rApfiyahWJjLrjfTDX8uZGh9xSiQUVOAP24LKtVvNJ+
+	tHPbF7iW5brcf7uAvC04mkC9SzEGr6Tq/EefwROjKlcW2uudNQzKtmvuvHpBftNhVFsZFtPujvP
+	II=
+X-Google-Smtp-Source: AGHT+IGjkyt+5maMLA3DqnIou9TTiHmTo5+xl6kXpbOGFBDFFRIUaD90grOdP2fLlk7ybBrIk+t94W9pQB2C97dcVy0=
+X-Received: by 2002:a05:6a00:a29:b0:746:2a0b:3dc8 with SMTP id
+ d2e1a72fcca58-747bd9ed7c6mr2995642b3a.17.1748591126498; Fri, 30 May 2025
+ 00:45:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 1/2] bpf: Add bpf_task_cwd_from_pid() kfunc
-To: Yonghong Song <yonghong.song@linux.dev>,
- Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, rongtao@cestc.cn,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
- Juntong Deng <juntong.deng@outlook.com>,
- Amery Hung <amery.hung@bytedance.com>,
- Dave Marchevsky <davemarchevsky@fb.com>, Hou Tao <houtao1@huawei.com>,
- "open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)"
- <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-References: <cover.1748488784.git.rtoax@foxmail.com>
- <tencent_97F8B56B340F51DB604B482FEBF012460505@qq.com>
- <CAADnVQ+hUk2wV3M+9mgv_i5sNt_FuHpAnDpkQJ22D37bxAJHsQ@mail.gmail.com>
- <tencent_C8CF57BAD10D440E8308A19E2C894B341507@qq.com>
- <599838d4-7faf-41ce-9a7f-6eebd5173db7@linux.dev>
-Content-Language: en-US
-From: Rong Tao <rtoax@foxmail.com>
-In-Reply-To: <599838d4-7faf-41ce-9a7f-6eebd5173db7@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20250501163827.2598-1-ujwal.kundur@gmail.com> <20250510160335.1898-1-ujwal.kundur@gmail.com>
+ <D9V0UTL5BCLM.1WHR6F4UN14QQ@google.com> <CALkFLLLfxT1pQ_ySB1NU4KXOEGLd2wB8pbhpBG2HfK3_mLOYAQ@mail.gmail.com>
+ <DA0VHZ6KE96B.XOYNEFMGWD58@google.com> <CALkFLLK19Uqr2veWCn79cbLLgde5f+otf9Qx0xSPGdhdnekGrw@mail.gmail.com>
+ <DA5Z38N5WHO5.2FFOQZYC6WKMI@google.com>
+In-Reply-To: <DA5Z38N5WHO5.2FFOQZYC6WKMI@google.com>
+From: Ujwal Kundur <ujwal.kundur@gmail.com>
+Date: Fri, 30 May 2025 13:15:14 +0530
+X-Gm-Features: AX0GCFvl1t3aZ635dE3UAXR9Vmuz_M0u8DD3KfxntZ3wNAPx5Iro3jK1qTCBrQU
+Message-ID: <CALkFLLKc30TGwsZ6Ntw9UwKthJ0cW9BMfrHRJjgT_y+zAu1Ftg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/1] selftests/mm/uffd: Refactor non-composite global
+ vars into struct
+To: Brendan Jackman <jackmanb@google.com>
+Cc: akpm@linux-foundation.org, peterx@redhat.com, shuah@kernel.org, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+> Sorry I don't have an opinion on which of these is the best (I can try
+> to find some time to form an opionion on this later!), but:
+>
+> Fixing the flakiness sounds great, but I would suggest decoupling that
+> from the refactoring. If it's practical, focus on removing the globals
+> first, while leaving the fundamental logic the same, even if it's bad.
+> Then as a separate series, fix the logic.
 
-On 5/30/25 09:55, Yonghong Song wrote:
->
->
-> On 5/29/25 6:28 PM, Rong Tao wrote:
->>
->> On 5/29/25 13:44, Alexei Starovoitov wrote:
->>> On Wed, May 28, 2025 at 8:37 PM Rong Tao <rtoax@foxmail.com> wrote:
->>>> From: Rong Tao <rongtao@cestc.cn>
->>>>
->>>> It is a bit troublesome to get cwd based on pid in bpf program, 
->>>> such as
->>>> bpftrace example [1].
->>>>
->>>> This patch therefore adds a new bpf_task_cwd_from_pid() kfunc which
->>>> allows BPF programs to get cwd from a pid.
->>>>
->>>> [1] https://github.com/bpftrace/bpftrace/issues/3314
->>> Yes. This is cumbersome, but adding a very specific kfunc
->>> to the kernel is not a solution.
->>> This is tracing, no need for precise cwd. probe_read_kernel
->>> can do the job. bpftrace needs to have better C interop.
->>> Once that happens any kind of tracing extraction will be
->>> easy to write in C. Like this bpf_task_cwd_from_pid()
->>> can already be written as C bpf program.
->> Thanks for your reply, Yesterday I tried many ways to implement
->> the solution of getting cwd from pid/task, but all failed. The basic
->> idea is to rewrite the d_path() code, but in the bpf program, there
->> will be various memory security access problems, even if enough
->>  `if (!ptr)` are added, the program cannot be loaded successfully.
->>
->> https://github.com/Rtoax/bcc/commit/2ba7a2389fc1183264e5195ff26561d93038886c 
->>
->>
->>     bcc/tools$ sudo ./opensnoop.py -F
->>
->>     ; if (dentry == vfsmnt->mnt_root || dentry == dentry->d_parent) { 
->> @ main.c:174
->>     109: (79) r2 = *(u64 *)(r7 +0)
->>     R7 invalid mem access 'scalar'
->
-> I think you can use bpf_probe_read_kernel() helper to get r2?
-Thanks a lot, bpf_probe_read_kernel() works :)
->
->>
->> At the same time, bpf_d_path cannot be used because it can only be
->> applied to functions in btf_allowlist_d_path. Currently, it is
->> impossible to get cwd from pid/task in user mode. Any suggestions?
->>
->> In addition, I fully tested this patch yesterday and it performed well.
->>
->> Rong Tao
->>
->>
->
-
+Thanks, much appreciated. I'll send a patch with the refactoring + a comment
+regarding this variable left-in and follow-up with a fix.
 
