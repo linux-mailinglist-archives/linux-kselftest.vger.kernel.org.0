@@ -1,132 +1,139 @@
-Return-Path: <linux-kselftest+bounces-34028-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34029-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A2F9AC861B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 May 2025 03:56:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 084E5AC8623
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 May 2025 04:05:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 775213B7603
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 May 2025 01:56:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E10871BC2433
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 May 2025 02:06:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F55D190477;
-	Fri, 30 May 2025 01:56:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C25D19A288;
+	Fri, 30 May 2025 02:05:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MOqa+S2B"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Q4//rodC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FB062CCC5
-	for <linux-kselftest@vger.kernel.org>; Fri, 30 May 2025 01:56:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 944FD19309E
+	for <linux-kselftest@vger.kernel.org>; Fri, 30 May 2025 02:05:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748570180; cv=none; b=J5aJ/D5AD6j+VJNWTPZWzpIy35m/O+0xLA2XlQNsZ3td1rayRbw3ajJ3iqij+6aG7jav9v8fUNlo8puDSPGmpbTdLSpuoN374pZdspd4w1oYqU7+naM1TnLhT36zxMjz9OZasLH7pgXVDI7ofbNyRnCkCtnPKUciEXIyt9GxcQI=
+	t=1748570742; cv=none; b=qQDic4UnS0mZzf0+LHG7MX8MnB9WPUVTQnBQqMRwI3h25/5X8lWBGRzG+QjiGFKbrboAg00yFYwrXnLVn9OSVJBBFjiGBKrxcaCUuiaLZJCoO32cTuay9bdpXezYs0+1XX9EzUx5j61OYX9QPtRpC5xTa88XB4vMx9iEvUQMElc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748570180; c=relaxed/simple;
-	bh=u7VyUFhkpp3iahCut82BwLg3+2sCvnO38zqnNgASCpY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WXP+UXH7P9skRvSWtm1ADVgEvtUFdw0R2oFAkT1Gwq2NfqNaev6zY3vg7cw//NFtBubUmqsW5DeOqp5zfkbc5T8IJkaRK4JKPFqGNj3FY5mAzHt5Glk1Z5cvtrjmePe5lqj9ZJBwLmZ5uv+mfYdLXntDHbOKjmZS9Kjq18MNNGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MOqa+S2B; arc=none smtp.client-ip=91.218.175.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <599838d4-7faf-41ce-9a7f-6eebd5173db7@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1748570165;
+	s=arc-20240116; t=1748570742; c=relaxed/simple;
+	bh=5aqObgmG0Uz2hk5FayQ5YGrx2f47e6fCDc2Ix8gVh4U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=spu+SgzRd2Y0v5BaKH/AOpjnvjaeMk04Kg98ITTRkla2qEI4170oN+oHxvwe05M3vFcXS96ofzVpZS42oxHEAzz+I5nBOQT35cVMdY06Pu7EknWQsTfqVvr+I11zOwnwHPsu7tJlSd0qLojImOhr2Z4f6ZcjpYNdBd6cLE7Le1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Q4//rodC; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1748570739;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=q9wJXvfCN3kwmaDp7fZIzUrWKt3creevaq+W6CDqyW4=;
-	b=MOqa+S2BTvgi6QE6ogqD4uge/Rm/j4oBEMhrH97yjl3kSkpfGECd1sUEHG1E56arwPsoDu
-	0oaMn1mT2NjMCDm91Q8Re4F+tDZrG1JsHEzNfofBmLeEKu1yjg0QuFes2mLVodBqfdN2Tr
-	HhKCuqZxxN57W6Kppw50A+vHDw+wGyE=
-Date: Thu, 29 May 2025 18:55:56 -0700
+	bh=ywVTKcS7LKE/mWfUseZ77s4QJB9QB/8+Twjpn21G2hg=;
+	b=Q4//rodC9O9eN42K18uxAzqeOhgPUisjwZJMK65AZyQhy0TPPjqKaYrgTi3KlFbJHOfLBb
+	AEyTlG9fFlBYtqmbXk2rIioK2zNDgYjSNgk7JSCrvwTLG5nX1N+ihxaDzoDxcRO+TNMxdu
+	IHPD1s5j9A5ls5CiDAzN/ey3qHQsr/M=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-454-KPtzBjDXON2VseZAJmCFTg-1; Thu,
+ 29 May 2025 22:05:32 -0400
+X-MC-Unique: KPtzBjDXON2VseZAJmCFTg-1
+X-Mimecast-MFC-AGG-ID: KPtzBjDXON2VseZAJmCFTg_1748570731
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3A9C71800570;
+	Fri, 30 May 2025 02:05:30 +0000 (UTC)
+Received: from fedora (unknown [10.72.116.107])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BE439180047F;
+	Fri, 30 May 2025 02:05:23 +0000 (UTC)
+Date: Fri, 30 May 2025 10:05:18 +0800
+From: Ming Lei <ming.lei@redhat.com>
+To: Uday Shankar <ushankar@purestorage.com>
+Cc: Jens Axboe <axboe@kernel.dk>,
+	Caleb Sander Mateos <csander@purestorage.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v8 1/9] ublk: have a per-io daemon instead of a per-queue
+ daemon
+Message-ID: <aDkSXliGj_syKKsr@fedora>
+References: <20250529-ublk_task_per_io-v8-0-e9d3b119336a@purestorage.com>
+ <20250529-ublk_task_per_io-v8-1-e9d3b119336a@purestorage.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 1/2] bpf: Add bpf_task_cwd_from_pid() kfunc
-Content-Language: en-GB
-To: Rong Tao <rtoax@foxmail.com>,
- Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, rongtao@cestc.cn,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
- Juntong Deng <juntong.deng@outlook.com>,
- Amery Hung <amery.hung@bytedance.com>,
- Dave Marchevsky <davemarchevsky@fb.com>, Hou Tao <houtao1@huawei.com>,
- "open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)"
- <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-References: <cover.1748488784.git.rtoax@foxmail.com>
- <tencent_97F8B56B340F51DB604B482FEBF012460505@qq.com>
- <CAADnVQ+hUk2wV3M+9mgv_i5sNt_FuHpAnDpkQJ22D37bxAJHsQ@mail.gmail.com>
- <tencent_C8CF57BAD10D440E8308A19E2C894B341507@qq.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <tencent_C8CF57BAD10D440E8308A19E2C894B341507@qq.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250529-ublk_task_per_io-v8-1-e9d3b119336a@purestorage.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+
+On Thu, May 29, 2025 at 05:47:10PM -0600, Uday Shankar wrote:
+> Currently, ublk_drv associates to each hardware queue (hctx) a unique
+> task (called the queue's ubq_daemon) which is allowed to issue
+> COMMIT_AND_FETCH commands against the hctx. If any other task attempts
+> to do so, the command fails immediately with EINVAL. When considered
+> together with the block layer architecture, the result is that for each
+> CPU C on the system, there is a unique ublk server thread which is
+> allowed to handle I/O submitted on CPU C. This can lead to suboptimal
+> performance under imbalanced load generation. For an extreme example,
+> suppose all the load is generated on CPUs mapping to a single ublk
+> server thread. Then that thread may be fully utilized and become the
+> bottleneck in the system, while other ublk server threads are totally
+> idle.
+> 
+> This issue can also be addressed directly in the ublk server without
+> kernel support by having threads dequeue I/Os and pass them around to
+> ensure even load. But this solution requires inter-thread communication
+> at least twice for each I/O (submission and completion), which is
+> generally a bad pattern for performance. The problem gets even worse
+> with zero copy, as more inter-thread communication would be required to
+> have the buffer register/unregister calls to come from the correct
+> thread.
+> 
+> Therefore, address this issue in ublk_drv by allowing each I/O to have
+> its own daemon task. Two I/Os in the same queue are now allowed to be
+> serviced by different daemon tasks - this was not possible before.
+> Imbalanced load can then be balanced across all ublk server threads by
+> having the ublk server threads issue FETCH_REQs in a round-robin manner.
+> As a small toy example, consider a system with a single ublk device
+> having 2 queues, each of depth 4. A ublk server having 4 threads could
+> issue its FETCH_REQs against this device as follows (where each entry is
+> the qid,tag pair that the FETCH_REQ targets):
+> 
+> ublk server thread:	T0	T1	T2	T3
+> 			0,0	0,1	0,2	0,3
+> 			1,3	1,0	1,1	1,2
+> 
+> This setup allows for load that is concentrated on one hctx/ublk_queue
+> to be spread out across all ublk server threads, alleviating the issue
+> described above.
+> 
+> Add the new UBLK_F_PER_IO_DAEMON feature to ublk_drv, which ublk servers
+> can use to essentially test for the presence of this change and tailor
+> their behavior accordingly.
+> 
+> Signed-off-by: Uday Shankar <ushankar@purestorage.com>
+> Reviewed-by: Caleb Sander Mateos <csander@purestorage.com>
+
+Reviewed-by: Ming Lei <ming.lei@redhat.com>
 
 
 
-On 5/29/25 6:28 PM, Rong Tao wrote:
->
-> On 5/29/25 13:44, Alexei Starovoitov wrote:
->> On Wed, May 28, 2025 at 8:37 PM Rong Tao <rtoax@foxmail.com> wrote:
->>> From: Rong Tao <rongtao@cestc.cn>
->>>
->>> It is a bit troublesome to get cwd based on pid in bpf program, such as
->>> bpftrace example [1].
->>>
->>> This patch therefore adds a new bpf_task_cwd_from_pid() kfunc which
->>> allows BPF programs to get cwd from a pid.
->>>
->>> [1] https://github.com/bpftrace/bpftrace/issues/3314
->> Yes. This is cumbersome, but adding a very specific kfunc
->> to the kernel is not a solution.
->> This is tracing, no need for precise cwd. probe_read_kernel
->> can do the job. bpftrace needs to have better C interop.
->> Once that happens any kind of tracing extraction will be
->> easy to write in C. Like this bpf_task_cwd_from_pid()
->> can already be written as C bpf program.
-> Thanks for your reply, Yesterday I tried many ways to implement
-> the solution of getting cwd from pid/task, but all failed. The basic
-> idea is to rewrite the d_path() code, but in the bpf program, there
-> will be various memory security access problems, even if enough
->  `if (!ptr)` are added, the program cannot be loaded successfully.
->
-> https://github.com/Rtoax/bcc/commit/2ba7a2389fc1183264e5195ff26561d93038886c 
->
->
->     bcc/tools$ sudo ./opensnoop.py -F
->
->     ; if (dentry == vfsmnt->mnt_root || dentry == dentry->d_parent) { 
-> @ main.c:174
->     109: (79) r2 = *(u64 *)(r7 +0)
->     R7 invalid mem access 'scalar'
-
-I think you can use bpf_probe_read_kernel() helper to get r2?
-
->
-> At the same time, bpf_d_path cannot be used because it can only be
-> applied to functions in btf_allowlist_d_path. Currently, it is
-> impossible to get cwd from pid/task in user mode. Any suggestions?
->
-> In addition, I fully tested this patch yesterday and it performed well.
->
-> Rong Tao
->
->
+Thanks,
+Ming
 
 
