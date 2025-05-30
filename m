@@ -1,95 +1,145 @@
-Return-Path: <linux-kselftest+bounces-34047-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34048-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6EC7AC8AAD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 May 2025 11:27:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24712AC8C3C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 May 2025 12:39:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E52403AFC55
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 May 2025 09:26:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 145937A83C9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 May 2025 10:38:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3CDE21578F;
-	Fri, 30 May 2025 09:27:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E7D9222570;
+	Fri, 30 May 2025 10:39:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="WpoQ9h57"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fBOVtftm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 521F028E7;
-	Fri, 30 May 2025 09:27:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 239E21EA7C8;
+	Fri, 30 May 2025 10:39:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748597231; cv=none; b=JdnBE48od39KiDkS7NuPVX2o599/N9OAEGsWSOVEUlRN7KgoKIWMtfcvoHNhKqs7ikdaZTWaPxdlzQiDawAhEQ8r+Fxtx3bVvPwLh9H6gz8EI91crhi5SDspPpYMfO4QW84kzE19sR2wluG83x0SJ2oRa9Oczq2z8DTZWlsO/B8=
+	t=1748601553; cv=none; b=IwTCYAmsRtjnmHSKBYpb2IcHcnVVtdUPzsiBXUREDrcALawuigXnfp996kCoaRdQaVwgJwJVVlC0YNAEYnffG6agaiDNee6uwTXnusngHmgryhqZACUqJo5gBU0VYvtrgQNkQ3c5/VsNSr/FfJt2FcTYAPKB1CGLEc5ytOKXVkw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748597231; c=relaxed/simple;
-	bh=S68uPq17WZaaig3YYau5FbjK8jVtSkT3sV5dlxTcvbw=;
+	s=arc-20240116; t=1748601553; c=relaxed/simple;
+	bh=Cc2l0TKz5YaK8S3redSaC1apH9Fo0cyDOkhqfVmqyV8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C1F7IoKlkML4T3FBJhuBkTEs3NzWHPcaIbZ+kutgyiLCJQVSQNIFSEFGfJdefTDm1dR5pcCvO7n2YuCv5S+N5zMhv9fev/nWtDe9leO4ctBm+Dx06wUCdWDy15OylDrEAQoby6/B/ffUFpyoCnYdGMi2l28ZPGwnxEyEs7sGaIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=WpoQ9h57; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=S68uPq17WZaaig3YYau5FbjK8jVtSkT3sV5dlxTcvbw=; b=WpoQ9h57imN1XDky33PL1TodSv
-	nU41lQXxPIhVXakg1H7t0QzxNN1TqmvTUP9oIsTFOezvvJ7yWTfQlz+t2QBBtYWk1SwdWZ0zw+T9T
-	KQl22fYC4+NrFD8Bcu/5uAAWoCfOiu6dWRColJ+DrXI6zGBwCl/2x2rwObCx4gvnQD49x2sSQJxQJ
-	0dTqxQfeVECwhY7qXBAksnDrfgJfw/h7JCaHdhvfp8jej/pVVDgKgt690wRa7OEjePfjyq/wglHyX
-	27aHCMACf413OMjvmAHdCZ1XclrJ36nRWqdo5D8j36FpkrMi4J8WwMjdU4MT7tcxZDJK8/gtaNj/u
-	lIqzCukA==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uKw0x-00000000EKE-3gbi;
-	Fri, 30 May 2025 09:27:00 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 733FE30066A; Fri, 30 May 2025 11:26:59 +0200 (CEST)
-Date: Fri, 30 May 2025 11:26:59 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Alessandro Carminati <acarmina@redhat.com>
-Cc: linux-kselftest@vger.kernel.org,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Kees Cook <keescook@chromium.org>,
-	Daniel Diaz <daniel.diaz@linaro.org>,
-	David Gow <davidgow@google.com>,
-	Arthur Grillo <arthurgrillo@riseup.net>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	Naresh Kamboju <naresh.kamboju@linaro.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Maxime Ripard <mripard@kernel.org>,
-	Ville Syrjala <ville.syrjala@linux.intel.com>,
-	Daniel Vetter <daniel@ffwll.ch>, Guenter Roeck <linux@roeck-us.net>,
-	Alessandro Carminati <alessandro.carminati@gmail.com>,
-	Jani Nikula <jani.nikula@intel.com>,
-	Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Linux Kernel Functional Testing <lkft@linaro.org>,
-	dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/5] bug/kunit: Core support for suppressing warning
- backtraces
-Message-ID: <20250530092659.GD21197@noisy.programming.kicks-ass.net>
-References: <20250526132755.166150-1-acarmina@redhat.com>
- <20250526132755.166150-2-acarmina@redhat.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=L4n1lM1U59PHCwVx8g1XIFdIzh5pcTcFxQQ4dPS22y9WTdCqZMXcBxb52XsJpac0fzi/pc4ZuhSFqFrbD74JT0k0FqfQu600RdOQ3AGZQ8v6OZWHVWjwbZPsS2iop5LmcVr16tvphekjcQ29ZLX5vkR1ZRHZ3PEt18Cn4NYZMDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fBOVtftm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23472C4CEE9;
+	Fri, 30 May 2025 10:39:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1748601552;
+	bh=Cc2l0TKz5YaK8S3redSaC1apH9Fo0cyDOkhqfVmqyV8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fBOVtftmYoDSz8Bt5BjQ/uzq726rmBsv5MS2Nm1e5hA45gB8lpcf1jec5FbGK1KoE
+	 b33TNaiQ5KuKgHbj2Wj+1lWNNr5AzT7M8Iv8SM6TuNl0kfxIHKiNcsgcnNg/avAPPq
+	 ClSX2StLLgVvq9R4VOc5JSceZquAd4Y+ek3+FQ/Ikkl3dFAisnW+R1WP4b4ZbLD5Z3
+	 3OQGXYnY/qfZ1XYdfM7oNbLigEu6iMcTvcHGVQJQkXaKEhnj73glkcscBAiqY54RRH
+	 TaC3EYyGMuRwdsXzqjBhHQbQXFElCEp7KUMQ0705zEG735JsEuNcI+i+hwId0D0G15
+	 0C2H5FgovOerw==
+Date: Fri, 30 May 2025 11:39:09 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
+	Jeff Layton <jlayton@kernel.org>,
+	Amir Goldstein <amir73il@gmail.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/filesystems: Fix build of anon_inode_test
+Message-ID: <aDmKzSkIlOAkj_Bq@finisterre.sirena.org.uk>
+References: <20250518-selftests-anon-inode-build-v1-1-71eff8183168@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="DLuH41Ng1iRNSMtA"
+Content-Disposition: inline
+In-Reply-To: <20250518-selftests-anon-inode-build-v1-1-71eff8183168@kernel.org>
+X-Cookie: Anger is momentary madness.
+
+
+--DLuH41Ng1iRNSMtA
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250526132755.166150-2-acarmina@redhat.com>
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 26, 2025 at 01:27:51PM +0000, Alessandro Carminati wrote:
-> A helper function, `__kunit_is_suppressed_warning()`, is used to determine
-> whether suppression applies. It is marked as `noinstr`, since some `WARN*()`
-> sites reside in non-instrumentable sections. As it uses `strcmp`, a
-> `noinstr` version of `strcmp` was introduced.
+On Sun, May 18, 2025 at 03:01:34PM +0100, Mark Brown wrote:
+> The anon_inode_test test fails to build due to attempting to include
+> a nonexisting overlayfs/wrapper.h:
+>=20
+> anon_inode_test.c:10:10: fatal error: overlayfs/wrappers.h: No such file =
+or directory
+>    10 | #include "overlayfs/wrappers.h"
+>       |          ^~~~~~~~~~~~~~~~~~~~~~
 
-That just sounds all sorts of wrong.
+This build failure, first reported against -next and which should be
+fixed by this patch, is now present in mainline.
+
+> This is due to 0bd92b9fe538 ("selftests/filesystems: move wrapper.h out
+> of overlayfs subdir") which was added in the vfs-6.16.selftests branch
+> which was based on -rc5 and does not contain the newly added test so
+> once things were merged into vfs.all in the build started failing - both
+> parent commits are fine.
+>=20
+> Fixes: feaa00dbff45a ("Merge branch 'vfs-6.16.selftests' into vfs.all")
+
+I see that the two branches get sent separately to Linus so the merge
+that triggers things is now:
+
+   3e406741b19890 ("Merge tag 'vfs-6.16-rc1.selftests' of git://git.kernel.=
+org/pub/scm/linux/kernel/git/vfs/vfs")
+
+I'll resend with that updated.
+
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  tools/testing/selftests/filesystems/anon_inode_test.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/tools/testing/selftests/filesystems/anon_inode_test.c b/tool=
+s/testing/selftests/filesystems/anon_inode_test.c
+> index e8e0ef1460d2..73e0a4d4fb2f 100644
+> --- a/tools/testing/selftests/filesystems/anon_inode_test.c
+> +++ b/tools/testing/selftests/filesystems/anon_inode_test.c
+> @@ -7,7 +7,7 @@
+>  #include <sys/stat.h>
+> =20
+>  #include "../kselftest_harness.h"
+> -#include "overlayfs/wrappers.h"
+> +#include "wrappers.h"
+> =20
+>  TEST(anon_inode_no_chown)
+>  {
+>=20
+> ---
+> base-commit: feaa00dbff45ad9a0dcd04a92f88c745bf880f55
+> change-id: 20250516-selftests-anon-inode-build-007e206e8422
+>=20
+> Best regards,
+> --=20
+> Mark Brown <broonie@kernel.org>
+>=20
+
+--DLuH41Ng1iRNSMtA
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmg5iswACgkQJNaLcl1U
+h9A0ngf/a9bipV7ZRWFfwG/WshIDaw6GGK5V72tmc3qGRudNpzCiAiJ/qrXXJ3k3
+4CDmCgSmRRvNlIiX2JC+tk/0tZVFhLhri+RdUwOo1xx8KSHgJiW82JhZC4pdNk1O
+1n9Fqhk40psqQnMBJX5P5eBgYA9JqyavrXbTDGbQ+N4E/Kg6r99f9ktvFamL06Gt
+biRdnGJiB01Kime1zU3Q/PWz4YYRf291dwcoC+KxIKpG/NwWfUMQhHOfpPsOCSRx
+Se0RNrB5TAScO1DEXjWFjx4fG7MPWf3XjIFu8r5Grv/nxwp2lDfZN1LZsARVl1i6
+jDRAxTTwCxXrfBZw/PzO7SSBdvMovw==
+=7Piu
+-----END PGP SIGNATURE-----
+
+--DLuH41Ng1iRNSMtA--
 
