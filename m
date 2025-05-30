@@ -1,106 +1,132 @@
-Return-Path: <linux-kselftest+bounces-34027-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34028-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72FB4AC8606
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 May 2025 03:33:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A2F9AC861B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 May 2025 03:56:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4736D4A4022
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 May 2025 01:33:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 775213B7603
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 May 2025 01:56:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72F1278F59;
-	Fri, 30 May 2025 01:33:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F55D190477;
+	Fri, 30 May 2025 01:56:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="YbSgN/vP"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MOqa+S2B"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF54379D2
-	for <linux-kselftest@vger.kernel.org>; Fri, 30 May 2025 01:33:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FB062CCC5
+	for <linux-kselftest@vger.kernel.org>; Fri, 30 May 2025 01:56:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748568829; cv=none; b=XUK1sLW10O7e3OvrouAw8+khFG51A421aksMfovn9u1+PQHi7mCz1/1+hYRuDPckVsO7680NdLIwY7kzpieK9gWfdOg1VQLAWEu2XeYiudKDAk5IfukIUkgJKd3mN4uk7fce0yVHIc7mmwfuhveOlvN7KpcGe3AMxI+3Zz5s4Zg=
+	t=1748570180; cv=none; b=J5aJ/D5AD6j+VJNWTPZWzpIy35m/O+0xLA2XlQNsZ3td1rayRbw3ajJ3iqij+6aG7jav9v8fUNlo8puDSPGmpbTdLSpuoN374pZdspd4w1oYqU7+naM1TnLhT36zxMjz9OZasLH7pgXVDI7ofbNyRnCkCtnPKUciEXIyt9GxcQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748568829; c=relaxed/simple;
-	bh=FMpA4RSm8ne9pEdJlb8jlNv3zSaTEZX72+fA8B7cDZQ=;
+	s=arc-20240116; t=1748570180; c=relaxed/simple;
+	bh=u7VyUFhkpp3iahCut82BwLg3+2sCvnO38zqnNgASCpY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tlz1JLMIwB6OtmfF90OjJY8DxmqKEjH5VSxgRt2ZOcXNfEnm4iakYmZsYBz7TvyM8nERE5Es5pBAXRfMKX1jaPtGxXV9qByoZ53RgBmWgNKMfBWliomAgPkIYyJ4tgpHqC3Hz7lXZlO8SCjwYmbWNxOwvNIyUvQY9D4JLNR849I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=YbSgN/vP; arc=none smtp.client-ip=209.85.166.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
-Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-85d9a87660fso136573439f.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 May 2025 18:33:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1748568825; x=1749173625; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=63YhklUO+WBFbPxAfzObLOK/MHzwz+yybl5BUcMH4q8=;
-        b=YbSgN/vPPvKka3jZDEtkJbCQ12e2jYrQWs/2EK66K2iJP+Nn0NhGcB26/qtczjyEU+
-         zVnpx6fvF/iZQpO8iS/H9PjRUmBnhqvgr8vY7BeefCExk+DBLF9Zn3yD7RLZeivwk+Le
-         yaBf38ej3UTVI+BTm6kBgOgAPhjvi6q0oQkAacXnUPGLCAkTCxqH2UIZ6XGsRaIUvRDm
-         mdj7gIEN9gNCkwYYtsKAds0f9OeWSmulKVnCiGNxNsH4qXQauOFiZV280WL5nxwz2AEx
-         Urx5MDweS2sse7RviXZ1ys+FE701EuE5DEHO9lbc/zl399ss22DrPBhxarYy4LCTHnc9
-         hvlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748568825; x=1749173625;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=63YhklUO+WBFbPxAfzObLOK/MHzwz+yybl5BUcMH4q8=;
-        b=ZqcyXJbi1l77swNUZtnRqAyfUKHtU8heg1RJZCiUFRZwMCRdMQS3jonF/y6LipHaTR
-         r/giwKTPNFGVSuGpD0pvd8SECf9B5iIcaWsqgZJOD9HzqitoUvUcorZOF43YXKmthAuy
-         t/NqikAua+9Yyy0cuy0c7Jx5LfypVTT3kTRobD5BHwY4O9xS0tMKfYcYgSdqkyO1J0uf
-         4tMfwKB0IwSybZx0NkXU+bsYlAKvmQIsX8kw02AMS4OxugAQsKHJQ1jSp1o77IqcusAU
-         IwUuLj/5HowhOMria/985OQUWrZeXwCEKvq0SYk7E/yXl4wBmVbKd4oxiHiQvgSidrE6
-         Ia5g==
-X-Forwarded-Encrypted: i=1; AJvYcCUG+z2rDv22KqlqkffvfbXCkyLZyHKMyAgxRRWOkRc9DNRlUWYJ5AallqSpKncR4T0t9VlX59yjmQ29cmDuNmQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YziY8fu/3J5AI9ery2+jWXraeSFlo1uTGuj5/Gj0x2vyi+wczXG
-	VFYn12AIi0Y8eIFuWA/P1VJGSB5IcaBi+4sCQ0aYTSkRnEaeARxmAPfuiCDOGDjPkzo=
-X-Gm-Gg: ASbGnctN84buafjqQbO3ZUpeaXpgiuUFx+QJBLM0kd46PM347DzmNgo7fFTEbW7Gw8c
-	xcvywVFjlDq+78K54WcxlOFU127SSi59M/hi9jiQup1kMgEnSBqDayQGoVX+DvnANduIGTj0HhN
-	HVeZPbt5Kf2EqPWfsIVKpVRzbVgxC8cslZJqQf0hOyk9i/nPgyfnIYF+k2bCi1dN0zhbs07Wgrx
-	UG6zUdIYLfyKe6Ix93tSr26wiOcpI1gSPw+SzogxLwgVbWlZtUBaJUf1IQTePMXJRlk7XXZ0mFE
-	LpWGvVpZv0bDFU9O7e2PfWpMgc1EyW2d5Og1SYL8DsRBIN0OnuelCD4uDRA=
-X-Google-Smtp-Source: AGHT+IEFewJDcfGiFulGvASHgCG+gQHnrzGVAH4ehGl9q9BWmJdWLOEPyauL/ILbXyseIIfHsaD5lA==
-X-Received: by 2002:a05:6602:5dd:b0:86d:5b3:15d7 with SMTP id ca18e2360f4ac-86d05b316a6mr11323139f.0.1748568825576;
-        Thu, 29 May 2025 18:33:45 -0700 (PDT)
-Received: from [192.168.1.150] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4fdd7e28fa3sm255381173.45.2025.05.29.18.33.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 May 2025 18:33:44 -0700 (PDT)
-Message-ID: <d3882634-1071-4219-86fd-c9c72ded91b9@kernel.dk>
-Date: Thu, 29 May 2025 19:33:43 -0600
+	 In-Reply-To:Content-Type; b=WXP+UXH7P9skRvSWtm1ADVgEvtUFdw0R2oFAkT1Gwq2NfqNaev6zY3vg7cw//NFtBubUmqsW5DeOqp5zfkbc5T8IJkaRK4JKPFqGNj3FY5mAzHt5Glk1Z5cvtrjmePe5lqj9ZJBwLmZ5uv+mfYdLXntDHbOKjmZS9Kjq18MNNGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MOqa+S2B; arc=none smtp.client-ip=91.218.175.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <599838d4-7faf-41ce-9a7f-6eebd5173db7@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1748570165;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=q9wJXvfCN3kwmaDp7fZIzUrWKt3creevaq+W6CDqyW4=;
+	b=MOqa+S2BTvgi6QE6ogqD4uge/Rm/j4oBEMhrH97yjl3kSkpfGECd1sUEHG1E56arwPsoDu
+	0oaMn1mT2NjMCDm91Q8Re4F+tDZrG1JsHEzNfofBmLeEKu1yjg0QuFes2mLVodBqfdN2Tr
+	HhKCuqZxxN57W6Kppw50A+vHDw+wGyE=
+Date: Thu, 29 May 2025 18:55:56 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 1/9] ublk: have a per-io daemon instead of a per-queue
- daemon
-To: Uday Shankar <ushankar@purestorage.com>, Ming Lei <ming.lei@redhat.com>,
- Caleb Sander Mateos <csander@purestorage.com>,
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>
-Cc: linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20250529-ublk_task_per_io-v8-0-e9d3b119336a@purestorage.com>
- <20250529-ublk_task_per_io-v8-1-e9d3b119336a@purestorage.com>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20250529-ublk_task_per_io-v8-1-e9d3b119336a@purestorage.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH bpf-next 1/2] bpf: Add bpf_task_cwd_from_pid() kfunc
+Content-Language: en-GB
+To: Rong Tao <rtoax@foxmail.com>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, rongtao@cestc.cn,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+ Juntong Deng <juntong.deng@outlook.com>,
+ Amery Hung <amery.hung@bytedance.com>,
+ Dave Marchevsky <davemarchevsky@fb.com>, Hou Tao <houtao1@huawei.com>,
+ "open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)"
+ <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+References: <cover.1748488784.git.rtoax@foxmail.com>
+ <tencent_97F8B56B340F51DB604B482FEBF012460505@qq.com>
+ <CAADnVQ+hUk2wV3M+9mgv_i5sNt_FuHpAnDpkQJ22D37bxAJHsQ@mail.gmail.com>
+ <tencent_C8CF57BAD10D440E8308A19E2C894B341507@qq.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <tencent_C8CF57BAD10D440E8308A19E2C894B341507@qq.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-LGTM:
 
-Reviewed-by: Jens Axboe <axboe@kernel.dk>
 
--- 
-Jens Axboe
+On 5/29/25 6:28 PM, Rong Tao wrote:
+>
+> On 5/29/25 13:44, Alexei Starovoitov wrote:
+>> On Wed, May 28, 2025 at 8:37 PM Rong Tao <rtoax@foxmail.com> wrote:
+>>> From: Rong Tao <rongtao@cestc.cn>
+>>>
+>>> It is a bit troublesome to get cwd based on pid in bpf program, such as
+>>> bpftrace example [1].
+>>>
+>>> This patch therefore adds a new bpf_task_cwd_from_pid() kfunc which
+>>> allows BPF programs to get cwd from a pid.
+>>>
+>>> [1] https://github.com/bpftrace/bpftrace/issues/3314
+>> Yes. This is cumbersome, but adding a very specific kfunc
+>> to the kernel is not a solution.
+>> This is tracing, no need for precise cwd. probe_read_kernel
+>> can do the job. bpftrace needs to have better C interop.
+>> Once that happens any kind of tracing extraction will be
+>> easy to write in C. Like this bpf_task_cwd_from_pid()
+>> can already be written as C bpf program.
+> Thanks for your reply, Yesterday I tried many ways to implement
+> the solution of getting cwd from pid/task, but all failed. The basic
+> idea is to rewrite the d_path() code, but in the bpf program, there
+> will be various memory security access problems, even if enough
+>  `if (!ptr)` are added, the program cannot be loaded successfully.
+>
+> https://github.com/Rtoax/bcc/commit/2ba7a2389fc1183264e5195ff26561d93038886c 
+>
+>
+>     bcc/tools$ sudo ./opensnoop.py -F
+>
+>     ; if (dentry == vfsmnt->mnt_root || dentry == dentry->d_parent) { 
+> @ main.c:174
+>     109: (79) r2 = *(u64 *)(r7 +0)
+>     R7 invalid mem access 'scalar'
+
+I think you can use bpf_probe_read_kernel() helper to get r2?
+
+>
+> At the same time, bpf_d_path cannot be used because it can only be
+> applied to functions in btf_allowlist_d_path. Currently, it is
+> impossible to get cwd from pid/task in user mode. Any suggestions?
+>
+> In addition, I fully tested this patch yesterday and it performed well.
+>
+> Rong Tao
+>
+>
+
 
