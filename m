@@ -1,201 +1,137 @@
-Return-Path: <linux-kselftest+bounces-34022-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34026-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EC7FAC8562
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 May 2025 01:49:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC4B2AC8601
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 May 2025 03:30:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A0B94500270
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 May 2025 23:48:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8BC231BA523D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 May 2025 01:30:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0276525CC51;
-	Thu, 29 May 2025 23:47:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2901E170A2B;
+	Fri, 30 May 2025 01:30:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="DrOiVl4F"
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="xdkkHen9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f226.google.com (mail-il1-f226.google.com [209.85.166.226])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out162-62-57-252.mail.qq.com (out162-62-57-252.mail.qq.com [162.62.57.252])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8887E258CFA
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 May 2025 23:47:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.226
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 634819475;
+	Fri, 30 May 2025 01:29:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.252
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748562463; cv=none; b=Unm52aPJnHFgoiyafC1YhXr3L9jnbGXco1ZVy+TBt0Ds3CTtOJQVRnCcxGnl373yplJtBXyMDG4pkM+D9o1ERsHDQrHVAghG0Y6wPBFyquic9xfe6iCjm/MfVrQoSZjo0Nbc1ub2Iu1KN6OvZ4VXPyYQ7DUM7S46fvdGlV/vA8M=
+	t=1748568602; cv=none; b=ESU3qWpx5tBbbXjKlNBD8+fpRhlIsUWSOOMgk4Kq6bp2cyXpe5k9BJFE1me1NTkjBRru9WqTlhAF0dHUqffwp5Q8OjdMN1x5FXFS6lgXGqAJOPoIpHjvg2cerAVe51Cqidup/aEFwbQsaUJv7cTpsoObohdHSHRK6uhFL6kcgDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748562463; c=relaxed/simple;
-	bh=UlVvBoGqKoKJcf+0ZFrctzlh1+h1AUFzmSOJWeWCcGQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Ljw5jeR8i8TrZuPnj7Rvd8sCZcmOIFps0lYd1acbBVLAvD8V9eZB2C2AYR5rgJ50PZOooALcaT5jL7xVp0f7wkdBodxLqmGPGI7qRJWCn9XrjLCWhW3Xyzgw4wDU5gcInYfo+Kac95BbM+ruUHCh09cytDpgMm7FbuGrcw3jCik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=DrOiVl4F; arc=none smtp.client-ip=209.85.166.226
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
-Received: by mail-il1-f226.google.com with SMTP id e9e14a558f8ab-3da831c17faso4746375ab.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 May 2025 16:47:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1748562457; x=1749167257; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EZFCCSYb7OQcdQGIOyhLYDx1YKKptgh0Rjc24K7ab4g=;
-        b=DrOiVl4F3p/SU3cW1h8G7I9QsSGv6q+U2rT1UzpWyLIdXfILQiFXqXiv8AZyzB0qxY
-         XpjJNvtHJpPYeega7SDHXH1dCkfMLKV1jhxif4C84ds8CrxRFVuMXPKGb0GnwlKWdQif
-         uW0Y9xLKwwYVG31cOWZJ54gts4WJRztXOdVdwbUqnKJ8I6yxcS+BnDnXDh6ek//ovOgD
-         wnkGUNTYfQY8bZ4kE7SfTsygHtezRYRMQSBnKgb9fUtFXLf4h4hkiATVp8yXtsajGE04
-         qTKoV1/8g9qe8FtuuEElNag/8veQAlWmCuNAj8Q4SqVVFUeqsU4felCMf24Hc0Chx/pJ
-         e1jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748562457; x=1749167257;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EZFCCSYb7OQcdQGIOyhLYDx1YKKptgh0Rjc24K7ab4g=;
-        b=iI4TrSQLlXOhQdFrP6sVYSXIghc4/zC7l2W9aFeBNN+IJzXoCvrk85hXMNENdOuLCN
-         vWJpVgzqp6CfAJTJYmipiorp9XooEYIyDbCfVkF6lMn2/AlyOlZC+bJIf4H5I9LTM7G/
-         L5f/vzKhpQzSHQXRgz1wBTdhRwW/THv28rTKmVEzs3BSAo+UZHOswuwxeKkxiGNDtj7W
-         JUOiAvWI2fxGP8hMqF/6VheOvjqW0J9yH46mEIYEW0dYubudtyV7nQcgeR2FkyyU3SMI
-         oO8KYeBK1LXDxLn7hZBek4xDbA6HoN98lwiwtmZlU8Jym3buEi59lTlUnsaPhqQ8Bu2L
-         Bg9A==
-X-Forwarded-Encrypted: i=1; AJvYcCW5FnlsuNoGgZM6MmN8gKoyE9nAauVLqqz0vLpCnT+916GLlgtcOajMLn882uRSIpK2pqU3lobCgeccNTf6dbU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw2L/W9wsI2A552Q5O/k72iGDYhr+tmUclmEn4izgyNreW+yAOv
-	thLSMsQM0kDNgwnsjQNTupIdVmON/72LAoaVBn9LCzJlAPaYGqxBr2OKgo5AkMpx5ZgmuaVm6Fq
-	r39KNJr45ief/wmm3KILseQIfKGu+2Ijiq6Ub
-X-Gm-Gg: ASbGncur+2EqMTqS7KwYG2zYCXkuceLMeGCAzUWUZGwY9wNobiTG6umlEdo9a/vY6X7
-	9gD+eQ6/NI27NIyL+c2waR9P0Lsz+G+iViwnfLf0+dQwm4RMiFK4PQvNvMe/QShix3RLnlb26w7
-	zoYSzz3BAEUCu2vikzp9BzhCSoQW+dAwuo/GE0ArT3oLP6qEX1GRsgWr5/Lw00yZKozAC4oRl9w
-	oQkSrWoYM0ekCmxM3ZwRgFeVVEtJQ9tesxGUz5KEYBYp1NYdqV/Dpj/3irl/6UlBaPypsvzqI31
-	Oi6GiPYkFrxfvoLiCgtNCeDVGLVYGhOCimFW0i89q0WhRg==
-X-Google-Smtp-Source: AGHT+IEmapYeqtmTfFncijI4MwHEFzRRnr1f1vhtV+NAcgKtHsK/Gh4LJUu8859z517RtmYPXqkV7MLrHRxh
-X-Received: by 2002:a05:6e02:3c84:b0:3dc:8bb8:28b3 with SMTP id e9e14a558f8ab-3dd99bd00fbmr19760835ab.5.1748562457107;
-        Thu, 29 May 2025 16:47:37 -0700 (PDT)
-Received: from c7-smtp-2023.dev.purestorage.com ([208.88.159.129])
-        by smtp-relay.gmail.com with ESMTPS id e9e14a558f8ab-3dd9353520dsm1277765ab.7.2025.05.29.16.47.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 May 2025 16:47:37 -0700 (PDT)
-X-Relaying-Domain: purestorage.com
-Received: from dev-ushankar.dev.purestorage.com (dev-ushankar.dev.purestorage.com [IPv6:2620:125:9007:640:7:70:36:0])
-	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 2382234057A;
-	Thu, 29 May 2025 17:47:35 -0600 (MDT)
-Received: by dev-ushankar.dev.purestorage.com (Postfix, from userid 1557716368)
-	id DD5A2E4133C; Thu, 29 May 2025 17:47:34 -0600 (MDT)
-From: Uday Shankar <ushankar@purestorage.com>
-Date: Thu, 29 May 2025 17:47:18 -0600
-Subject: [PATCH v8 9/9] Documentation: ublk: document UBLK_F_PER_IO_DAEMON
+	s=arc-20240116; t=1748568602; c=relaxed/simple;
+	bh=+TFmXCqtLZ8kiawumxahT/VHs4zh/m9qAIziG3dAgZA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RuZKny8ne0zOvf4+rNrARZ3Y+r8RrqP/Af8NBZZ7BuCmh1VwnR92jW6Vj4Rdkdvl48JEpPW6lMuoq5mA/YOlzYYqarOKPQQmIZ2rl8UANm9GNInJ1RdQJrB1aFtfigHbL7X+hYitGIdxKrGpQ9nk2XXGxm4JxzmcdnzB6BvDQwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=xdkkHen9; arc=none smtp.client-ip=162.62.57.252
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1748568593;
+	bh=d/Y6VEfM9SurICbLntJEFopmvBrML0o9kXS3a5I2T2E=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=xdkkHen9UG2KjxWMfMvZ5YARakhb8PatUjAHYFje7i76H7eJT6+Icn++Egrnx39tZ
+	 +V1dznCbPlCFgW6cSmxg7w2T6Dhi30Gt27N42POeGCXqQnD4unW7D7LYqMAEKVO7Dv
+	 9/mkbpDNpC5hNewiwMIXry9WIQs9MFuN2biB14KU=
+Received: from [10.56.52.9] ([39.156.73.10])
+	by newxmesmtplogicsvrszb20-0.qq.com (NewEsmtp) with SMTP
+	id 7288748B; Fri, 30 May 2025 09:28:40 +0800
+X-QQ-mid: xmsmtpt1748568520tyjwdxpn4
+Message-ID: <tencent_C8CF57BAD10D440E8308A19E2C894B341507@qq.com>
+X-QQ-XMAILINFO: No4GWyI4cWt6a1L7H8fewm5WKIVIP5BHfKlE5bVXolURhqFbtLdqoSpronad9P
+	 1nt257iai3dasHZFj9kwS+xbRum60Y1KIE5k3f8JXobZBQgIgiQtjMwBst+ken4NniB8kRBJuDki
+	 0zGqlD1aPCHtrFbF8CaRM1dkWhV3UJ6zAnwUdyCDUis3Za1r/MThHGN3vItxT104WZL5JF+pTMY6
+	 7hzBIV0KawuuI90BU5X22AAAHMFW00VEAjBPHIDS9JDVL88xhGmrjPnDqESg+C1YrF9OcpnWgUem
+	 FaEAbGpB6gEETDzK9V4qEDwheu7Q8xXfugm0QwTxZnEU/foIEJBAjqWZCQWn/Pl7WoGqgsg4+O1E
+	 5Nj3o5kne+KI17XcxTgtJwVeVwKkQRjaqBSW3CJi/8+I7XDy9QEXova7zRaOoEOs4X2/BF0EdXm0
+	 fThHL0fKhzplL5EO9yha3uQfPJ5M0cb5UvSDxjS8p7BQxdXT1LnOqwBv7Vgej6BkW3EMCHCI+FxJ
+	 j6VDlYnnM7q4C4icf9Og/nDokfwwqf55VRPaE2H4f+YTlC8AGdo4vTWItFuNI8Yxj3lt/ZYALC7s
+	 qUWg2gdaurJygWthl0YYoblsGZmsQedhWiAPI1vBy2+WO1nPfGhE1ZY1j5EOoYWTvGi2+Hs+e/Px
+	 u0EjoyrsDRheZqrRBtYi2MSSz0rUToiZ8GAe0g6LKLtyDyl7/DNII3Zzh8rwawyEF1dFuztoPiUo
+	 I7JTzPjiZafIvNkMLQIJHfpEzQkJzVhCpyPfcd18JIfR2M+ClA62QyNNr0I/fgmfbslFw4X0Xl90
+	 Kl425X80hC7pQ1RY8n4wt4TuEv49HFMrTB314ARKX8cWzqzdvAvglitqy8e3qxGyYO862kDADT6K
+	 pcs2avJEaN+FQX9+txltkXZv1AmbQb1nfBWzrZ0XD+kKF272NGwkfpgIKRmPUPjv33NTzZx8qDiR
+	 3qPfF8n22JUZ9p+Y0tmrPHh1++cFl8xFBqDC+qRg8F5xQld4yqiaUVUZoxvcp/
+X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
+X-OQ-MSGID: <0a5e325f-9567-4cfa-9e34-08e0258a96f0@foxmail.com>
+Date: Fri, 30 May 2025 09:28:40 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250529-ublk_task_per_io-v8-9-e9d3b119336a@purestorage.com>
-References: <20250529-ublk_task_per_io-v8-0-e9d3b119336a@purestorage.com>
-In-Reply-To: <20250529-ublk_task_per_io-v8-0-e9d3b119336a@purestorage.com>
-To: Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>, 
- Caleb Sander Mateos <csander@purestorage.com>, 
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
- Jonathan Corbet <corbet@lwn.net>
-Cc: linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
- Uday Shankar <ushankar@purestorage.com>
-X-Mailer: b4 0.14.2
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 1/2] bpf: Add bpf_task_cwd_from_pid() kfunc
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, rongtao@cestc.cn,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+ Shuah Khan <shuah@kernel.org>, Juntong Deng <juntong.deng@outlook.com>,
+ Amery Hung <amery.hung@bytedance.com>,
+ Dave Marchevsky <davemarchevsky@fb.com>, Hou Tao <houtao1@huawei.com>,
+ "open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)"
+ <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+References: <cover.1748488784.git.rtoax@foxmail.com>
+ <tencent_97F8B56B340F51DB604B482FEBF012460505@qq.com>
+ <CAADnVQ+hUk2wV3M+9mgv_i5sNt_FuHpAnDpkQJ22D37bxAJHsQ@mail.gmail.com>
+Content-Language: en-US
+From: Rong Tao <rtoax@foxmail.com>
+In-Reply-To: <CAADnVQ+hUk2wV3M+9mgv_i5sNt_FuHpAnDpkQJ22D37bxAJHsQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Explain the restrictions imposed on ublk servers in two cases:
-1. When UBLK_F_PER_IO_DAEMON is set (current ublk_drv)
-2. When UBLK_F_PER_IO_DAEMON is not set (legacy)
 
-Remove most references to per-queue daemons, as the new
-UBLK_F_PER_IO_DAEMON feature renders that concept obsolete.
+On 5/29/25 13:44, Alexei Starovoitov wrote:
+> On Wed, May 28, 2025 at 8:37 PM Rong Tao <rtoax@foxmail.com> wrote:
+>> From: Rong Tao <rongtao@cestc.cn>
+>>
+>> It is a bit troublesome to get cwd based on pid in bpf program, such as
+>> bpftrace example [1].
+>>
+>> This patch therefore adds a new bpf_task_cwd_from_pid() kfunc which
+>> allows BPF programs to get cwd from a pid.
+>>
+>> [1] https://github.com/bpftrace/bpftrace/issues/3314
+> Yes. This is cumbersome, but adding a very specific kfunc
+> to the kernel is not a solution.
+> This is tracing, no need for precise cwd. probe_read_kernel
+> can do the job. bpftrace needs to have better C interop.
+> Once that happens any kind of tracing extraction will be
+> easy to write in C. Like this bpf_task_cwd_from_pid()
+> can already be written as C bpf program.
+Thanks for your reply, Yesterday I tried many ways to implement
+the solution of getting cwd from pid/task, but all failed. The basic
+idea is to rewrite the d_path() code, but in the bpf program, there
+will be various memory security access problems, even if enough
+  `if (!ptr)` are added, the program cannot be loaded successfully.
 
-Signed-off-by: Uday Shankar <ushankar@purestorage.com>
-Reviewed-by: Caleb Sander Mateos <csander@purestorage.com>
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
----
- Documentation/block/ublk.rst | 35 ++++++++++++++++++++++++-----------
- 1 file changed, 24 insertions(+), 11 deletions(-)
+https://github.com/Rtoax/bcc/commit/2ba7a2389fc1183264e5195ff26561d93038886c
 
-diff --git a/Documentation/block/ublk.rst b/Documentation/block/ublk.rst
-index 854f823b46c2add01d0b65ba36aecd26c45bb65d..c368e1081b4111c581567058f87ecb52db08758b 100644
---- a/Documentation/block/ublk.rst
-+++ b/Documentation/block/ublk.rst
-@@ -115,15 +115,15 @@ managing and controlling ublk devices with help of several control commands:
- 
- - ``UBLK_CMD_START_DEV``
- 
--  After the server prepares userspace resources (such as creating per-queue
--  pthread & io_uring for handling ublk IO), this command is sent to the
-+  After the server prepares userspace resources (such as creating I/O handler
-+  threads & io_uring for handling ublk IO), this command is sent to the
-   driver for allocating & exposing ``/dev/ublkb*``. Parameters set via
-   ``UBLK_CMD_SET_PARAMS`` are applied for creating the device.
- 
- - ``UBLK_CMD_STOP_DEV``
- 
-   Halt IO on ``/dev/ublkb*`` and remove the device. When this command returns,
--  ublk server will release resources (such as destroying per-queue pthread &
-+  ublk server will release resources (such as destroying I/O handler threads &
-   io_uring).
- 
- - ``UBLK_CMD_DEL_DEV``
-@@ -208,15 +208,15 @@ managing and controlling ublk devices with help of several control commands:
-   modify how I/O is handled while the ublk server is dying/dead (this is called
-   the ``nosrv`` case in the driver code).
- 
--  With just ``UBLK_F_USER_RECOVERY`` set, after one ubq_daemon(ublk server's io
--  handler) is dying, ublk does not delete ``/dev/ublkb*`` during the whole
-+  With just ``UBLK_F_USER_RECOVERY`` set, after the ublk server exits,
-+  ublk does not delete ``/dev/ublkb*`` during the whole
-   recovery stage and ublk device ID is kept. It is ublk server's
-   responsibility to recover the device context by its own knowledge.
-   Requests which have not been issued to userspace are requeued. Requests
-   which have been issued to userspace are aborted.
- 
--  With ``UBLK_F_USER_RECOVERY_REISSUE`` additionally set, after one ubq_daemon
--  (ublk server's io handler) is dying, contrary to ``UBLK_F_USER_RECOVERY``,
-+  With ``UBLK_F_USER_RECOVERY_REISSUE`` additionally set, after the ublk server
-+  exits, contrary to ``UBLK_F_USER_RECOVERY``,
-   requests which have been issued to userspace are requeued and will be
-   re-issued to the new process after handling ``UBLK_CMD_END_USER_RECOVERY``.
-   ``UBLK_F_USER_RECOVERY_REISSUE`` is designed for backends who tolerate
-@@ -241,10 +241,11 @@ can be controlled/accessed just inside this container.
- Data plane
- ----------
- 
--ublk server needs to create per-queue IO pthread & io_uring for handling IO
--commands via io_uring passthrough. The per-queue IO pthread
--focuses on IO handling and shouldn't handle any control & management
--tasks.
-+The ublk server should create dedicated threads for handling I/O. Each
-+thread should have its own io_uring through which it is notified of new
-+I/O, and through which it can complete I/O. These dedicated threads
-+should focus on IO handling and shouldn't handle any control &
-+management tasks.
- 
- The's IO is assigned by a unique tag, which is 1:1 mapping with IO
- request of ``/dev/ublkb*``.
-@@ -265,6 +266,18 @@ with specified IO tag in the command data:
-   destined to ``/dev/ublkb*``. This command is sent only once from the server
-   IO pthread for ublk driver to setup IO forward environment.
- 
-+  Once a thread issues this command against a given (qid,tag) pair, the thread
-+  registers itself as that I/O's daemon. In the future, only that I/O's daemon
-+  is allowed to issue commands against the I/O. If any other thread attempts
-+  to issue a command against a (qid,tag) pair for which the thread is not the
-+  daemon, the command will fail. Daemons can be reset only be going through
-+  recovery.
-+
-+  The ability for every (qid,tag) pair to have its own independent daemon task
-+  is indicated by the ``UBLK_F_PER_IO_DAEMON`` feature. If this feature is not
-+  supported by the driver, daemons must be per-queue instead - i.e. all I/Os
-+  associated to a single qid must be handled by the same task.
-+
- - ``UBLK_IO_COMMIT_AND_FETCH_REQ``
- 
-   When an IO request is destined to ``/dev/ublkb*``, the driver stores
+     bcc/tools$ sudo ./opensnoop.py -F
 
--- 
-2.34.1
+     ; if (dentry == vfsmnt->mnt_root || dentry == dentry->d_parent) { @ 
+main.c:174
+     109: (79) r2 = *(u64 *)(r7 +0)
+     R7 invalid mem access 'scalar'
+
+At the same time, bpf_d_path cannot be used because it can only be
+applied to functions in btf_allowlist_d_path. Currently, it is
+impossible to get cwd from pid/task in user mode. Any suggestions?
+
+In addition, I fully tested this patch yesterday and it performed well.
+
+Rong Tao
 
 
