@@ -1,116 +1,135 @@
-Return-Path: <linux-kselftest+bounces-34097-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34098-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5BE9AC98B8
-	for <lists+linux-kselftest@lfdr.de>; Sat, 31 May 2025 03:07:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FAC2AC9953
+	for <lists+linux-kselftest@lfdr.de>; Sat, 31 May 2025 07:11:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B32781BA5EC0
-	for <lists+linux-kselftest@lfdr.de>; Sat, 31 May 2025 01:08:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 157AE1BA4023
+	for <lists+linux-kselftest@lfdr.de>; Sat, 31 May 2025 05:11:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ABB0EAF9;
-	Sat, 31 May 2025 01:07:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7050E28A1EA;
+	Sat, 31 May 2025 05:10:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BIb2ib9a"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hfCgZX3G"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E03C610D;
-	Sat, 31 May 2025 01:07:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E62E11096F;
+	Sat, 31 May 2025 05:10:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748653672; cv=none; b=eyjMIyWs4WE4j8jHc/cIEUN/UaOXKq354S7ns10iFZDkcvbFUymawpltBrWwOeeOcdq6HeM81YWQ+lpSL34Sx8R72Bl85++eUAu9BDzDOxx/HqP5HcicBMBeN/f6P3fqPEiEj2sY6b8S64XcRcfdZpuK7vXV+DBx9MJUizQkZPs=
+	t=1748668258; cv=none; b=LmJ7QzMqrh/IVGJNq2O9yGujIoKNCnoGLg65anQgNM7T6A1n2uDgO8v1WVSsj/CWsk1SrlDUuD4bvhRp/7V3egJ/kj70D8yXC4Omg+27hIhR/sGKF8uj4y5LL6LcAT152jyt/juC6h/QVGvV7xU0QtuEp2RzmQlL/aFjn166NK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748653672; c=relaxed/simple;
-	bh=sAY+KKOh4dL6fGDFlataz+zoSNoAKHS7ZH2uGv8Kobw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IyWhFuZp6/Ow/wZtPamHg+zEutbKfOQDzF3Pc/L3dCgub4INJNewTfqi6N+r2FNrhmtfFl4EQcVkCScEW95hRiwJb8rTSwvMllW8jGt45nddR+VRdc8mTiV1OOGa+evjuSqWp7ubwKmkPR1/VvArxigxMJi4r5eiNzouUrJHD4o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BIb2ib9a; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42E30C4CEEB;
-	Sat, 31 May 2025 01:07:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748653671;
-	bh=sAY+KKOh4dL6fGDFlataz+zoSNoAKHS7ZH2uGv8Kobw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=BIb2ib9aoL4fiOjmLev0FLBO2BW/12tVA39QsLDi6GL5YdTrNJviGnk+zRVPXzT4D
-	 ch/GjFguRC02R63ifr7IIj3b9iaJMEzocnJ6BU1WgcYwe8yEtFPce3hbPxCy7t6Ymw
-	 I0w6YfvbwKVNlK/bvl2uL2XCgYhs3wstwh0VhtRUbAcB/MHX8O5VFMVYIuQwiy793U
-	 R9VCX0EDSufCzfnpkEccl/qbsTYmefPUelTsbmqrokqPhRmWHsiNgCxZp9Jd2DsaIf
-	 FD+1MtvvPZgYJYt9WVd3HDjehU+WFJ1Q9rGoS1Z8Yr2X/8fU5rWP7YdyDVNtn6rWb4
-	 Cdk4u/7pOZEIw==
-Date: Fri, 30 May 2025 18:07:50 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, brendan.higgins@linux.dev,
- davidgow@google.com, rmoar@google.com, broonie@kernel.org,
- rf@opensource.cirrus.com, mic@digikod.net, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com
-Subject: Re: [PATCH net] Revert "kunit: configs: Enable
- CONFIG_INIT_STACK_ALL_PATTERN in all_tests"
-Message-ID: <20250530180750.4c722f71@kernel.org>
-In-Reply-To: <9628c61e-234f-45af-bc30-ab6db90f09c6@linuxfoundation.org>
-References: <20250530135800.13437-1-kuba@kernel.org>
-	<9628c61e-234f-45af-bc30-ab6db90f09c6@linuxfoundation.org>
+	s=arc-20240116; t=1748668258; c=relaxed/simple;
+	bh=Q/3NgC5YAv/sLlRho9eipXhR4jPMKVejH7/5YMH1zLU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AiSENV0nQ2uk11r9lL1uhmHxSKg/vThVD8XE/QvnJnKJ0DjMKmdNDeyP2a0p1Eprtwbx6TvfcFbW7IJBN0p1ewX7OvuNM/v48ZZSLJ8i90qkzsLKsZIhUEbH275quALS+4nENUONl4g/DE7ZaIM/fH/y6kyCGReMImnNvT6LVxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hfCgZX3G; arc=none smtp.client-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-b2c41acd479so1856364a12.2;
+        Fri, 30 May 2025 22:10:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1748668256; x=1749273056; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mU0qbiJgr9zua+cBR3kFzOAUJVTnz0mj9Ono3++R7a4=;
+        b=hfCgZX3GAcmkT2IA9Todqy/fEuMBp7QgqM5TAjdXLuZSjeoPRHlmSHoJtBUEHM2zpL
+         pCyyJemsbaFOzXF9/vXnHxsvXPfqLNkJ/96KeEsi0LmfTVAjfh+EfH5BV9otLgSFdvGq
+         TSWBHcvJ/O/z2yjsd6tSDH5i0T2O611gs0Kh+CsYkdUa3pb/wSpxZlfFYDCDP8sQwTjx
+         Bj+2r8/pumpQRUZfL53co7H8svB6b++BZ0craVpkO760/A1LtHfV309eHRwVDKMawzYp
+         J2tvrLkceBNMNDpOrqg72Nbr0pTXRGCFGYzHudAwi1OW3EZ3gfsh6nMRNFJR/YIjHzR1
+         RCdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748668256; x=1749273056;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mU0qbiJgr9zua+cBR3kFzOAUJVTnz0mj9Ono3++R7a4=;
+        b=DpqIvwsMYFPpGi2ocP7bPC8bBIVl9V3fUW9xye//31sTawZ4BFCwSphO1/Kg3jl+72
+         /H8kvJQg/y1ZBC4gOH2vUmYLjpUsv6g76ATej9TXHU3r+C9DQg2085vHkMAe3p9V++/W
+         RiEJLyMHU8clj47/sB7Ow2oWgcXqnlDsyK6Gt9AP2LOySUGqh8DtIGzyTKLeeN1rNsBs
+         t7QCmJU9Nn9n0U11VMusWw8eyDCd2K5otpQYGc5e1DBFMVnKD1Ea/SwJ2vuYrJlLf7De
+         MdeBdW1L7npXJjxhOkgckmoVdfCeCq+2q4+QQuxKLCIcuiZL5JyOWQC9XEmQ8NHvi01a
+         3Q+A==
+X-Forwarded-Encrypted: i=1; AJvYcCVBC1dAZOgso21mw0sXEYDKJfeF11p9pm/ESuwxO4lx9nmiCyv79PW6o+6gtpj24QPGq+ZIVTx3o1ID31I=@vger.kernel.org, AJvYcCVZuX6FO7bpLNVbqLOLdMQRyenOw5PC/8Wr6qcRWpwTGxpHHZFujQ3FX2D4G3Fr2OR+g4OewI71pH5C8vcgCWMt@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMWCgDhOhPgwYK4Tk8t2kW1ZGnD572Nvuts3NSOB/CwwJ4NSOq
+	ktyPefCUXKkrFQR0YBi4iPyNvgxOTLABQVhwLYn7+gwGpbEuxo7MH/iNUU3ipTKu3Cw=
+X-Gm-Gg: ASbGncua3GMGYf6zkCUUzy1SVAWRVeAELCEVbyLWDgoU8H2uSWlL+dYitrkAqK0kD0p
+	zHLlszTGOWGdcVnCeTj9I3SRvs/Dj0OxwLSRDvC43KiZWTid51p7FJG7xwITxKrcPP2LTpfuJfk
+	2SRzC/quN4j+30uAmKpBzybz8rKAfpO1lirKQp/o9ANYLpBLAGj8N8Lgll+PFKMNUNxePdAErhr
+	gtkCa9NtjTM4cYpIhsqjn73FBU7zWWR4CtK2Dk9eNWUIP05woJshBng2CVbD4i623Z4PLjJzo8t
+	Tjq61CBe3Tf9DAYkHBZtTjYUI7LEVI/ypjS3xxqAZ19a8uKBqP84Fwy/4noeHLVqDvU=
+X-Google-Smtp-Source: AGHT+IF7KKaVbGsmx/RswYFw51WZct5NOZ14VEoN8FMOS4cHviEpTeI3GVxjG6n7f1TM0qV2ZO1J1A==
+X-Received: by 2002:a17:902:d58d:b0:234:8c64:7885 with SMTP id d9443c01a7336-2355f784ab6mr13423525ad.53.1748668255766;
+        Fri, 30 May 2025 22:10:55 -0700 (PDT)
+Received: from minh.192.168.1.1 ([2001:ee0:4f0e:fb30:1655:88ee:e7f3:487a])
+        by smtp.googlemail.com with ESMTPSA id 41be03b00d2f7-b2eceb297c8sm2291117a12.26.2025.05.30.22.10.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 May 2025 22:10:55 -0700 (PDT)
+From: Bui Quang Minh <minhquangbui99@gmail.com>
+To: netdev@vger.kernel.org
+Cc: Jakub Kicinski <kuba@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	Philip Li <philip.li@intel.com>,
+	oliver.sang@intel.com,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Bui Quang Minh <minhquangbui99@gmail.com>
+Subject: [PATCH net v2] selftests: net: build net/lib dependency in all target
+Date: Sat, 31 May 2025 12:10:39 +0700
+Message-ID: <20250531051039.6561-1-minhquangbui99@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Fri, 30 May 2025 10:59:54 -0600 Shuah Khan wrote:
-> On 5/30/25 07:58, Jakub Kicinski wrote:
-> > This reverts commit a571a9a1b120264e24b41eddf1ac5140131bfa84.
-> > 
-> > The commit in question breaks kunit for older compilers:  
-> > > $ gcc --version  
-> >   gcc (GCC) 11.5.0 20240719 (Red Hat 11.5.0-5)
-> > 
-> > $ ./tools/testing/kunit/kunit.py run  --alltests --json --arch=x86_64
-> >   Configuring KUnit Kernel ...
-> >   Regenerating .config ...
-> >   Populating config with:
-> >   $ make ARCH=x86_64 O=.kunit olddefconfig  
-> 
-> 
-> >   ERROR:root:Not all Kconfig options selected in kunitconfig were in the generated .config.
-> >   This is probably due to unsatisfied dependencies.
-> >   Missing: CONFIG_INIT_STACK_ALL_PATTERN=y  
-> 
-> Does adding config option work for you?
-> ./tools/testing/kunit/kunit.py run --kconfig_add CONFIG_INIT_STACK_ALL_PATTERN
+We have the logic to include net/lib automatically for net related
+selftests. However, currently, this logic is only in install target
+which means only `make install` will have net/lib included. This commit
+moves the logic to all target so that all `make`, `make run_tests` and
+`make install` will have net/lib included in net related selftests.
 
-Nope (with this patch applied):
+Reviewed-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Bui Quang Minh <minhquangbui99@gmail.com>
+---
+Changes in v2:
+- Make the commit message clearer.
 
-$ ./tools/testing/kunit/kunit.py run --kconfig_add CONFIG_INIT_STACK_ALL_PATTERN=y
-[18:02:47] Configuring KUnit Kernel ...
-Regenerating .config ...
-Populating config with:
-$ make ARCH=um O=.kunit olddefconfig
-ERROR:root:Not all Kconfig options selected in kunitconfig were in the generated .config.
-This is probably due to unsatisfied dependencies.
-Missing: CONFIG_INIT_STACK_ALL_PATTERN=y
-Note: many Kconfig options aren't available on UML. You can try running on a different architecture with something like "--arch=x86_64".
+ tools/testing/selftests/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> > Link: https://lore.kernel.org/20250529083811.778bc31b@kernel.org
-> > Fixes: a571a9a1b120 ("kunit: configs: Enable CONFIG_INIT_STACK_ALL_PATTERN in all_tests")
-> > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> > ---
-> > I'd like to take this in via netdev since it fixes our CI.
-> > We'll send it to Linus next week.
-> >   
-> 
-> I am good with reverting it for now.
-> 
-> David, Brendan,
-> We will have to enable this at a later time. Also we saw this problem
-> before with other configs. Anyway way to fix this for alltests case?
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 6aa11cd3db42..5b04d83ad9a1 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -205,7 +205,7 @@ export KHDR_INCLUDES
+ 
+ all:
+ 	@ret=1;							\
+-	for TARGET in $(TARGETS); do				\
++	for TARGET in $(TARGETS) $(INSTALL_DEP_TARGETS); do	\
+ 		BUILD_TARGET=$$BUILD/$$TARGET;			\
+ 		mkdir $$BUILD_TARGET  -p;			\
+ 		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET	\
+@@ -270,7 +270,7 @@ ifdef INSTALL_PATH
+ 	install -m 744 run_kselftest.sh $(INSTALL_PATH)/
+ 	rm -f $(TEST_LIST)
+ 	@ret=1;	\
+-	for TARGET in $(TARGETS) $(INSTALL_DEP_TARGETS); do \
++	for TARGET in $(TARGETS); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+ 		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET install \
+ 				INSTALL_PATH=$(INSTALL_PATH)/$$TARGET \
+-- 
+2.43.0
 
-FWIW Richard commented in the linked thread, IIUC this was just for
-added coverage but not a hard requirement.
 
