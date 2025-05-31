@@ -1,284 +1,341 @@
-Return-Path: <linux-kselftest+bounces-34100-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34101-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0D84AC99C1
-	for <lists+linux-kselftest@lfdr.de>; Sat, 31 May 2025 09:03:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F6E6AC99D6
+	for <lists+linux-kselftest@lfdr.de>; Sat, 31 May 2025 09:20:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 94E03189B055
-	for <lists+linux-kselftest@lfdr.de>; Sat, 31 May 2025 07:03:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A823D4A24A0
+	for <lists+linux-kselftest@lfdr.de>; Sat, 31 May 2025 07:20:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B17A22D7BF;
-	Sat, 31 May 2025 07:03:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15F862367BC;
+	Sat, 31 May 2025 07:20:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OG83xyDa"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IUluujMm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEF803398B;
-	Sat, 31 May 2025 07:02:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F47222CBD8
+	for <linux-kselftest@vger.kernel.org>; Sat, 31 May 2025 07:20:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748674981; cv=none; b=hUtBi0DaCvfb3azRcQ4fZKEBlmI4WsB/26EfSFEJEHe05mPLEHtnU1CXj0kSQ0o0oOcvGwnKveost4ikSYHbCOK5nf1NAMSSpvjQosHy1/uaj+gmLYV4fvrDBu6JzZQjntxU8SDr5pHEDkf842qd6+VLL4rBvqi0wOypfkOMtas=
+	t=1748676046; cv=none; b=Y15ZDDof/e/GE64UFp1hxO4zCm3UOJ2CdHNUbGxCMv8fjBegvRmuvvZMYyDrIbL5H2fKkUoIZP/fqJQRrVmuKLZo4YY6D7VI4P5uzYztNArh8x9vQFInD37G5oxgRHPNDtzXFq/AS+OreeX4OsYVJ1WEbJVvummuV0uS1SKOrAY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748674981; c=relaxed/simple;
-	bh=DswE2TwuuIytt3LvxEg3WwL0l+4g2d16uTME9WzPi2c=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=A+QSfPhzFQES/6ZjbG3oQAtnzcrzfIGja4jLR5OnC8S5izhQOjAyhz+iRYnFnM2Ne+vF2LGk9asIukLAyFNzh+FjOw99R17i0x4GZjDo3F6uEbPVu/Z/CCaBrPrEUDeBzcssdwdwRYbpTjeZZkdnb43zjgy2g/T9m4uDxIFYrUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OG83xyDa; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-747d59045a0so53490b3a.1;
-        Sat, 31 May 2025 00:02:59 -0700 (PDT)
+	s=arc-20240116; t=1748676046; c=relaxed/simple;
+	bh=JYRAtjfbQbexez6DzLbAn++nRbKQ2hLy6stSmzX5WLw=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=JRGkJ+KmLoLeIn4eHysNTbQvSKxUCzUYqT6d0hZGiceiBUqCws92bUjwuOPTt9IL4bE1gAZnmQ9/V17oxvmUJvKhO4RdbOZD6HNkTgy6qgGN2jAnpPrZ0l6RFC98yIECOtirB6MMyEC1gbo3tfXZ/HgH4e18JdP+N3x3i6mQSqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--blakejones.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IUluujMm; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--blakejones.bounces.google.com
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2323bd7f873so27547905ad.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 31 May 2025 00:20:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748674979; x=1749279779; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vaJSKOBzeU+bQnzHBt7Umgn5ZEd7j+MngwkiV+M03AY=;
-        b=OG83xyDaXorMyfkOW3PlRDn76lyX0DmA005Wf5raZigVy8cE9pIzcCDnShGURXrVQv
-         VwvuUCVN8ZQIbEXgjOR852cj5WUpRoaB63SzqJHa9oXmtXAvyKqxwRqnTqhhhBjjiS1p
-         kqmvP/y7sFx2RTe1Rrc4pWeVefMZ/7DhpgRLVDVCbVswQCBBEdCs7R+fr0JnItgBqy+m
-         ugnlc1UaILP01xW6uX6J5IJulPdYivWR89WZ2ZjxtZ4NWUXU0kCe78IOiTGewynOwFuZ
-         2NNe3IIqdSbcyeRcj+i3lBOsFGfUFQ6In0MB0v6nxXnsJKvreXWy3iB6O9NPBPFbmdWo
-         65VQ==
+        d=google.com; s=20230601; t=1748676042; x=1749280842; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=FnpYXBCDsrO3XrowDX8lwOY6h9hDw7KEtyfape8Lgkc=;
+        b=IUluujMmTLr8Lq8RlCtUgVfdVgTBLaMQzTYCj9VYWhcNbscOLZ1S7+8tryRkTlCZ8E
+         YptDDkif4WfHRUW52JPvdzMZW0XV9M+Z6HhDKA/FbZHkxx8Rd2kCqMy6aYj3U4G7ZI25
+         GKAdEzsNxrgZU1tu3o+Ohl6ApzIFhKQrjag+Q9ZfiFIbzqzHSsaLkyENWDapINW0MDP+
+         aZqtGoexVFUjYm/moLw9WZ1yAy86X0R2VR17WuJyUKMbq1OZq16easU2yLfMLnienoOT
+         YYe6El9mPSUBfV0r4AH6+6VHZJBbI9Ce2JTGqiUcl60vDeCEWCTMTgoZBnMKAESeF/5W
+         Ze5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748674979; x=1749279779;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vaJSKOBzeU+bQnzHBt7Umgn5ZEd7j+MngwkiV+M03AY=;
-        b=QjPAYAF2/ZEBd1Y/wwGHxyoR8zAXQqhE2/quEWazk9DXo/0UOiNk0caQaRd+f3iPI0
-         0haMjnjnYIKdk9rr3bgD/g1OO+8bZ1Gn9fvO99ZAzTZfj3MlvwkXUUsDPa616IOxbEB0
-         d8WvjLYTDpIzAFuPljqPET/rH2Y1HNDAhcByQFKkXdNUUcgJGo5hzjRbccmoKCqBHtsz
-         MxBVIew/1M0xF1VVTRzRQHgKBq7Td5Vg7M9Z3yy9tnOfKMxfpuXkq2cbvY4ECBz0rl6y
-         lXOgCW0kmEJrw17lRolpah6J2D1O+ZCdO/UhbdaCJceyLOPNS3GjSMSqL966lHCnbRpm
-         PY/g==
-X-Forwarded-Encrypted: i=1; AJvYcCViulKgIpusuEBwxkdt/quKCxwXh+nm0Rl9e9AVpymJLWRf6rEhqVUMPdOR2aYhdv8aXBHbmTBtej3P11U=@vger.kernel.org, AJvYcCWlO22aQlkyb/YkPPzhpSWolrk+ORvjqTMbBSpkeoo2cDUsSVNAfmIRwsZ5n7h8T0cc2p3MwvZV6HI3LqQLqU7m@vger.kernel.org
-X-Gm-Message-State: AOJu0YyuYiA7aiaKhVv41J/fCQ/676ZZomfigeJPt+sjsbI3Iy2Mze6g
-	6u32lRvkqHUm7DqJjYakUF9TvumCnaEjIgKurLIymvre4MdzzJFmEj/I
-X-Gm-Gg: ASbGncvLeDxfD3pmFsaydmsvpT0nPaIEnc65jZTiFgY4k29HYqk0+6LhQDSDw42TtZt
-	gsrZwmcQSL8OWMsa7YkeWybIZQWMopGnte9mz4eNOt8YuXgVoUAQaA3nLb2VGZbQ+9SbUEQb/b+
-	lk6gOo8uZ/4Dj4DuRUlic+XUs1QGH3CrW1Y0mveUQry70dFbAf8RmYhqdZbJ0wj/AscJCFlW8WM
-	zrMyGMZkdN5rIZ1N+KuYSvZFyspWGEn04RmiL4rqU/0IgTespj3QQrXIdGQ+gyZs0RczOjIfhyf
-	aFjSioYiT44sV1bfgB6qcvlejgk8gLEzUnx7t3AexbmXzT3uR+Ce4HEqKhtjxK7CoOXzzOuh7I+
-	LvUcm6uG4JIHUMaqGoVFKpyM+rSxUO2CvTiyy17OBAg==
-X-Google-Smtp-Source: AGHT+IGh3EaAtFlrfSeI9IH8D1uOTK4HYia9JvlVMLpWPHep8rlmidI+sAlX9uRRm9NAevjP+iAWQg==
-X-Received: by 2002:a05:6a20:3ca5:b0:203:becd:f9ce with SMTP id adf61e73a8af0-21ae00ce772mr6822768637.39.1748674978829;
-        Sat, 31 May 2025 00:02:58 -0700 (PDT)
-Received: from localhost.localdomain (114-136-199-106.emome-ip.hinet.net. [114.136.199.106])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b2eceb29a39sm2116126a12.22.2025.05.31.00.02.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 May 2025 00:02:58 -0700 (PDT)
-From: Nick Huang <sef1548@gmail.com>
-To: shuah@kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: usama.anjum@collabora.com,
-	zhangjiao2@cmss.chinamobile.com,
-	linux-kernel@vger.kernel.org,
-	Nick Huang <sef1548@gmail.com>
-Subject: [PATCH] selftests: ipc: Replace fail print statements with ksft_test_result_fail
-Date: Sat, 31 May 2025 15:01:40 +0800
-Message-ID: <20250531070140.24287-1-sef1548@gmail.com>
-X-Mailer: git-send-email 2.48.1
+        d=1e100.net; s=20230601; t=1748676042; x=1749280842;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FnpYXBCDsrO3XrowDX8lwOY6h9hDw7KEtyfape8Lgkc=;
+        b=LO2Wtxibazum+Zpe76otMQFjG8lxC2f6sLgVkpWhvO5lB5jxjj/kLAiVwvXwPbP8M1
+         /YmvtTVrN9EQd0yagwrP3JdJkOpy9MAKqnDfuLfNLXZ2pDc8CKc/WI0xoneb4zhezWFC
+         ceL4GbUNoQTMhKTz/yM8uMurCb6/L1bFAsNFTykcC75YgXxUnkjO7zFXbAh8tXQqoz89
+         HbiOkNawIVvmrN5+vtnfHuO1xQwVkfjONBVQ4NwQwBwQxRWdeMLix447FwlV9xmQO4oy
+         MLWvXGsnfwH480th4z9skcw6md4VLNlAXrWKqPi9GxPAUQdDQYL5hgxsMStbbxzlNsYf
+         U0Tg==
+X-Forwarded-Encrypted: i=1; AJvYcCU0hCi8CO+kUIxJKXbUOHlIDy3O7qWZLLV5kOueuiz6NeYmTldOXHetLugrO7QDn1BXlDf6O6JelyXvjykmaXc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxwJPJkacxmgFjyYGPdnm5kxDxmORaWcwsoRg7nzUVdCspuLBU9
+	6dmJ7ZujQ7xzzt+Fcraemjjl5OatTZp3eSEB//ourJ7i2hDOZi4FUkpQGfnZ3n4jJNKEJtWpQsh
+	fvRyp+MTwckT66zG39t0pcw==
+X-Google-Smtp-Source: AGHT+IHqVzQuAfCWZJ0i2lpECpuI8J7A8UURukqTUlT7ZQYqAtCFnDsazLTEp9TfImh5iMxGbxg/BVnItcPMlt13
+X-Received: from pllq23.prod.google.com ([2002:a17:902:7897:b0:234:8a16:9a5])
+ (user=blakejones job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:902:cf0a:b0:224:26fd:82e5 with SMTP id d9443c01a7336-23529b4637emr102706605ad.48.1748676042608;
+ Sat, 31 May 2025 00:20:42 -0700 (PDT)
+Date: Sat, 31 May 2025 00:20:31 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.49.0.1204.g71687c7c1d-goog
+Message-ID: <20250531072031.2263491-1-blakejones@google.com>
+Subject: [PATCH] libbpf: add support for printing BTF character arrays as strings
+From: Blake Jones <blakejones@google.com>
+To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Namhyung Kim <namhyung@kernel.org>, 
+	Ian Rogers <irogers@google.com>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Blake Jones <blakejones@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Use the standard kselftest failure report function to ensure consistent
-test output formatting. This improves readability and integration with
-automated test frameworks.
+The BTF dumper code currently displays arrays of characters as just that -
+arrays, with each character formatted individually. Sometimes this is what
+makes sense, but it's nice to be able to treat that array as a string.
 
-Signed-off-by: Nick Huang <sef1548@gmail.com>
+This change adds a special case to the btf_dump functionality to allow
+arrays of single-byte integer values to be printed as character strings.
+Characters for which isprint() returns false are printed as hex-escaped
+values. This is enabled when the new ".print_strings" is set to 1 in the
+btf_dump_type_data_opts structure.
+
+As an example, here's what it looks like to dump the string "hello" using
+a few different field values for btf_dump_type_data_opts (.compact = 1):
+
+- .print_strings = 0, .skip_names = 0:  (char[6])['h','e','l','l','o',]
+- .print_strings = 0, .skip_names = 1:  ['h','e','l','l','o',]
+- .print_strings = 1, .skip_names = 0:  (char[6])"hello"
+- .print_strings = 1, .skip_names = 1:  "hello"
+
+Here's the string "h\xff", dumped with .compact = 1 and .skip_names = 1:
+
+- .print_strings = 0:  ['h',-1,]
+- .print_strings = 1:  "h\xff"
+
+Signed-off-by: Blake Jones <blakejones@google.com>
 ---
- tools/testing/selftests/ipc/msgque.c | 47 ++++++++++++++--------------
- 1 file changed, 23 insertions(+), 24 deletions(-)
+ tools/lib/bpf/btf.h                           |   3 +-
+ tools/lib/bpf/btf_dump.c                      |  51 ++++++++-
+ .../selftests/bpf/prog_tests/btf_dump.c       | 102 ++++++++++++++++++
+ 3 files changed, 154 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/ipc/msgque.c b/tools/testing/selftests/ipc/msgque.c
-index e9dbb84c100a..5e36aeeb9901 100644
---- a/tools/testing/selftests/ipc/msgque.c
-+++ b/tools/testing/selftests/ipc/msgque.c
-@@ -39,26 +39,26 @@ int restore_queue(struct msgque_data *msgque)
+diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+index 4392451d634b..be8e8e26d245 100644
+--- a/tools/lib/bpf/btf.h
++++ b/tools/lib/bpf/btf.h
+@@ -326,9 +326,10 @@ struct btf_dump_type_data_opts {
+ 	bool compact;		/* no newlines/indentation */
+ 	bool skip_names;	/* skip member/type names */
+ 	bool emit_zeroes;	/* show 0-valued fields */
++	bool print_strings;	/* print char arrays as strings */
+ 	size_t :0;
+ };
+-#define btf_dump_type_data_opts__last_field emit_zeroes
++#define btf_dump_type_data_opts__last_field print_strings
  
- 	fd = open("/proc/sys/kernel/msg_next_id", O_WRONLY);
- 	if (fd == -1) {
--		printf("Failed to open /proc/sys/kernel/msg_next_id\n");
-+		ksft_test_result_fail("Failed to open /proc/sys/kernel/msg_next_id\n");
- 		return -errno;
- 	}
- 	sprintf(buf, "%d", msgque->msq_id);
+ LIBBPF_API int
+ btf_dump__dump_type_data(struct btf_dump *d, __u32 id,
+diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
+index 460c3e57fadb..a07dd5accdd8 100644
+--- a/tools/lib/bpf/btf_dump.c
++++ b/tools/lib/bpf/btf_dump.c
+@@ -75,6 +75,7 @@ struct btf_dump_data {
+ 	bool is_array_member;
+ 	bool is_array_terminated;
+ 	bool is_array_char;
++	bool print_strings;
+ };
  
- 	ret = write(fd, buf, strlen(buf));
- 	if (ret != strlen(buf)) {
--		printf("Failed to write to /proc/sys/kernel/msg_next_id\n");
-+		ksft_test_result_fail("Failed to write to /proc/sys/kernel/msg_next_id\n");
- 		return -errno;
- 	}
+ struct btf_dump {
+@@ -2028,6 +2029,50 @@ static int btf_dump_var_data(struct btf_dump *d,
+ 	return btf_dump_dump_type_data(d, NULL, t, type_id, data, 0, 0);
+ }
  
- 	id = msgget(msgque->key, msgque->mode | IPC_CREAT | IPC_EXCL);
- 	if (id == -1) {
--		printf("Failed to create queue\n");
-+		ksft_test_result_fail("Failed to create queue\n");
- 		return -errno;
- 	}
- 
- 	if (id != msgque->msq_id) {
--		printf("Restored queue has wrong id (%d instead of %d)\n",
--							id, msgque->msq_id);
-+		ksft_test_result_fail("Restored queue has wrong id (%d instead of %d)\n"
-+								, id, msgque->msq_id);
- 		ret = -EFAULT;
- 		goto destroy;
- 	}
-@@ -66,7 +66,7 @@ int restore_queue(struct msgque_data *msgque)
- 	for (i = 0; i < msgque->qnum; i++) {
- 		if (msgsnd(msgque->msq_id, &msgque->messages[i].mtype,
- 			   msgque->messages[i].msize, IPC_NOWAIT) != 0) {
--			printf("msgsnd failed (%m)\n");
-+			ksft_test_result_fail("msgsnd failed (%m)\n");
- 			ret = -errno;
- 			goto destroy;
- 		}
-@@ -90,23 +90,22 @@ int check_and_destroy_queue(struct msgque_data *msgque)
- 		if (ret < 0) {
- 			if (errno == ENOMSG)
- 				break;
--			printf("Failed to read IPC message: %m\n");
-+			ksft_test_result_fail("Failed to read IPC message: %m\n");
- 			ret = -errno;
- 			goto err;
- 		}
- 		if (ret != msgque->messages[cnt].msize) {
--			printf("Wrong message size: %d (expected %d)\n", ret,
--						msgque->messages[cnt].msize);
-+			ksft_test_result_fail("Wrong message size: %d (expected %d)\n", ret, msgque->messages[cnt].msize);
- 			ret = -EINVAL;
- 			goto err;
- 		}
- 		if (message.mtype != msgque->messages[cnt].mtype) {
--			printf("Wrong message type\n");
-+			ksft_test_result_fail("Wrong message type\n");
- 			ret = -EINVAL;
- 			goto err;
- 		}
- 		if (memcmp(message.mtext, msgque->messages[cnt].mtext, ret)) {
--			printf("Wrong message content\n");
-+			ksft_test_result_fail("Wrong message content\n");
- 			ret = -EINVAL;
- 			goto err;
- 		}
-@@ -114,7 +113,7 @@ int check_and_destroy_queue(struct msgque_data *msgque)
- 	}
- 
- 	if (cnt != msgque->qnum) {
--		printf("Wrong message number\n");
-+		ksft_test_result_fail("Wrong message number\n");
- 		ret = -EINVAL;
- 		goto err;
- 	}
-@@ -139,7 +138,7 @@ int dump_queue(struct msgque_data *msgque)
- 		if (ret < 0) {
- 			if (errno == EINVAL)
- 				continue;
--			printf("Failed to get stats for IPC queue with id %d\n",
-+			ksft_test_result_fail("Failed to get stats for IPC queue with id %d\n",
- 					kern_id);
- 			return -errno;
- 		}
-@@ -150,7 +149,7 @@ int dump_queue(struct msgque_data *msgque)
- 
- 	msgque->messages = malloc(sizeof(struct msg1) * ds.msg_qnum);
- 	if (msgque->messages == NULL) {
--		printf("Failed to get stats for IPC queue\n");
-+		ksft_test_result_fail("Failed to get stats for IPC queue\n");
- 		return -ENOMEM;
++static int btf_dump_string_data(struct btf_dump *d,
++				const struct btf_type *t,
++				__u32 id,
++				const void *data)
++{
++	const struct btf_array *array = btf_array(t);
++	__u32 i;
++
++	if (!btf_is_int(skip_mods_and_typedefs(d->btf, array->type, NULL)) ||
++	    btf__resolve_size(d->btf, array->type) != 1 ||
++	    !d->typed_dump->print_strings) {
++		pr_warn("unexpected %s() call for array type %u\n",
++			__func__, array->type);
++		return -EINVAL;
++	}
++
++	btf_dump_data_pfx(d);
++	btf_dump_printf(d, "\"");
++
++	for (i = 0; i < array->nelems; i++, data++) {
++		char c;
++
++		if (data >= d->typed_dump->data_end)
++			return -E2BIG;
++
++		c = *(char *)data;
++		if (c == '\0') {
++			/* When printing character arrays as strings, NUL bytes
++			 * are always treated as string terminators; they are
++			 * never printed.
++			 */
++			break;
++		}
++		if (isprint(c))
++			btf_dump_printf(d, "%c", c);
++		else
++			btf_dump_printf(d, "\\x%02x", *(__u8 *)data);
++	}
++
++	btf_dump_printf(d, "\"");
++
++	return 0;
++}
++
+ static int btf_dump_array_data(struct btf_dump *d,
+ 			       const struct btf_type *t,
+ 			       __u32 id,
+@@ -2055,8 +2100,11 @@ static int btf_dump_array_data(struct btf_dump *d,
+ 		 * char arrays, so if size is 1 and element is
+ 		 * printable as a char, we'll do that.
+ 		 */
+-		if (elem_size == 1)
++		if (elem_size == 1) {
++			if (d->typed_dump->print_strings)
++				return btf_dump_string_data(d, t, id, data);
+ 			d->typed_dump->is_array_char = true;
++		}
  	}
  
-@@ -162,7 +161,7 @@ int dump_queue(struct msgque_data *msgque)
- 		ret = msgrcv(msgque->msq_id, &msgque->messages[i].mtype,
- 				MAX_MSG_SIZE, i, IPC_NOWAIT | MSG_COPY);
- 		if (ret < 0) {
--			printf("Failed to copy IPC message: %m (%d)\n", errno);
-+			ksft_test_result_fail("Failed to copy IPC message: %m (%d)\n", errno);
- 			return -errno;
- 		}
- 		msgque->messages[i].msize = ret;
-@@ -178,7 +177,7 @@ int fill_msgque(struct msgque_data *msgque)
- 	memcpy(msgbuf.mtext, TEST_STRING, sizeof(TEST_STRING));
- 	if (msgsnd(msgque->msq_id, &msgbuf.mtype, sizeof(TEST_STRING),
- 				IPC_NOWAIT) != 0) {
--		printf("First message send failed (%m)\n");
-+		ksft_test_result_fail("First message send failed (%m)\n");
- 		return -errno;
- 	}
+ 	/* note that we increment depth before calling btf_dump_print() below;
+@@ -2544,6 +2592,7 @@ int btf_dump__dump_type_data(struct btf_dump *d, __u32 id,
+ 	d->typed_dump->compact = OPTS_GET(opts, compact, false);
+ 	d->typed_dump->skip_names = OPTS_GET(opts, skip_names, false);
+ 	d->typed_dump->emit_zeroes = OPTS_GET(opts, emit_zeroes, false);
++	d->typed_dump->print_strings = OPTS_GET(opts, print_strings, false);
  
-@@ -186,7 +185,7 @@ int fill_msgque(struct msgque_data *msgque)
- 	memcpy(msgbuf.mtext, ANOTHER_TEST_STRING, sizeof(ANOTHER_TEST_STRING));
- 	if (msgsnd(msgque->msq_id, &msgbuf.mtype, sizeof(ANOTHER_TEST_STRING),
- 				IPC_NOWAIT) != 0) {
--		printf("Second message send failed (%m)\n");
-+		ksft_test_result_fail("Second message send failed (%m)\n");
- 		return -errno;
- 	}
- 	return 0;
-@@ -202,44 +201,44 @@ int main(int argc, char **argv)
+ 	ret = btf_dump_dump_type_data(d, NULL, t, id, data, 0, 0);
  
- 	msgque.key = ftok(argv[0], 822155650);
- 	if (msgque.key == -1) {
--		printf("Can't make key: %d\n", -errno);
-+		ksft_test_result_fail("Can't make key: %d\n", -errno);
- 		ksft_exit_fail();
- 	}
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dump.c b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
+index c0a776feec23..70e51943f148 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf_dump.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
+@@ -879,6 +879,106 @@ static void test_btf_dump_var_data(struct btf *btf, struct btf_dump *d,
+ 			  "static int bpf_cgrp_storage_busy = (int)2", 2);
+ }
  
- 	msgque.msq_id = msgget(msgque.key, IPC_CREAT | IPC_EXCL | 0666);
- 	if (msgque.msq_id == -1) {
- 		err = -errno;
--		printf("Can't create queue: %d\n", err);
-+		ksft_test_result_fail("Can't create queue: %d\n", err);
- 		goto err_out;
- 	}
++/*
++ * String-like types are generally not named, so they need to be
++ * found this way rather than via btf__find_by_name().
++ */
++static int find_char_array_type(struct btf *btf, int nelems)
++{
++	const int nr_types = btf__type_cnt(btf);
++	const int char_type = btf__find_by_name(btf, "char");
++
++	for (int i = 1; i < nr_types; i++) {
++		const struct btf_type *t;
++		const struct btf_array *at;
++
++		t = btf__type_by_id(btf, i);
++		if (btf_kind(t) != BTF_KIND_ARRAY)
++			continue;
++
++		at = btf_array(t);
++		if (at->nelems == nelems && at->type == char_type)
++			return i;
++	}
++
++	return -ENOENT;
++}
++
++static int btf_dump_string_data(struct btf *btf, struct btf_dump *d,
++				char *str, struct btf_dump_type_data_opts *opts,
++				char *ptr, size_t ptr_sz,
++				const char *expected_val)
++{
++	char name[64];
++	size_t type_sz;
++	int type_id;
++	int ret = 0;
++
++	snprintf(name, sizeof(name), "char[%zu]", ptr_sz);
++	type_id = find_char_array_type(btf, ptr_sz);
++	if (!ASSERT_GE(type_id, 0, "find type id"))
++		return -ENOENT;
++	type_sz = btf__resolve_size(btf, type_id);
++	str[0] = '\0';
++	ret = btf_dump__dump_type_data(d, type_id, ptr, ptr_sz, opts);
++	if (type_sz <= ptr_sz) {
++		if (!ASSERT_EQ(ret, type_sz, "failed/unexpected type_sz"))
++			return -EINVAL;
++	} else {
++		if (!ASSERT_EQ(ret, -E2BIG, "failed to return -E2BIG"))
++			return -EINVAL;
++	}
++	if (!ASSERT_STREQ(str, expected_val, "ensure expected/actual match"))
++		return -EFAULT;
++	return 0;
++}
++
++static void test_btf_dump_string_data(struct btf *btf, struct btf_dump *d,
++				      char *str)
++{
++	DECLARE_LIBBPF_OPTS(btf_dump_type_data_opts, opts);
++
++	opts.compact = true;
++	opts.emit_zeroes = false;
++	opts.print_strings = true;
++
++	opts.skip_names = false;
++	btf_dump_string_data(btf, d, str, &opts, "foo", 4,
++		"(char[4])\"foo\"");
++
++	opts.skip_names = true;
++	btf_dump_string_data(btf, d, str, &opts, "foo", 4,
++		"\"foo\"");
++
++	/* This should have no effect. */
++	opts.emit_zeroes = false;
++	btf_dump_string_data(btf, d, str, &opts, "foo", 4,
++		"\"foo\"");
++
++	/* This should have no effect. */
++	opts.compact = false;
++	btf_dump_string_data(btf, d, str, &opts, "foo", 4,
++		"\"foo\"");
++
++	/* Non-printable characters come out as hex. */
++	btf_dump_string_data(btf, d, str, &opts, "fo\xff", 4,
++		"\"fo\\xff\"");
++	btf_dump_string_data(btf, d, str, &opts, "fo\x7", 4,
++		"\"fo\\x07\"");
++
++	/* Should get printed properly even though there's no NUL. */
++	char food[4] = { 'f', 'o', 'o', 'd' };
++
++	btf_dump_string_data(btf, d, str, &opts, food, 4,
++		"\"food\"");
++
++	/* The embedded NUL should terminate the string. */
++	char embed[4] = { 'f', 'o', '\0', 'd' };
++
++	btf_dump_string_data(btf, d, str, &opts, embed, 4,
++		"\"fo\"");
++}
++
+ static void test_btf_datasec(struct btf *btf, struct btf_dump *d, char *str,
+ 			     const char *name, const char *expected_val,
+ 			     void *data, size_t data_sz)
+@@ -970,6 +1070,8 @@ void test_btf_dump() {
+ 		test_btf_dump_struct_data(btf, d, str);
+ 	if (test__start_subtest("btf_dump: var_data"))
+ 		test_btf_dump_var_data(btf, d, str);
++	if (test__start_subtest("btf_dump: string_data"))
++		test_btf_dump_string_data(btf, d, str);
+ 	btf_dump__free(d);
+ 	btf__free(btf);
  
- 	err = fill_msgque(&msgque);
- 	if (err) {
--		printf("Failed to fill queue: %d\n", err);
-+		ksft_test_result_fail("Failed to fill queue: %d\n", err);
- 		goto err_destroy;
- 	}
- 
- 	err = dump_queue(&msgque);
- 	if (err) {
--		printf("Failed to dump queue: %d\n", err);
-+		ksft_test_result_fail("Failed to dump queue: %d\n", err);
- 		goto err_destroy;
- 	}
- 
- 	err = check_and_destroy_queue(&msgque);
- 	if (err) {
--		printf("Failed to check and destroy queue: %d\n", err);
-+		ksft_test_result_fail("Failed to check and destroy queue: %d\n", err);
- 		goto err_out;
- 	}
- 
- 	err = restore_queue(&msgque);
- 	if (err) {
--		printf("Failed to restore queue: %d\n", err);
-+		ksft_test_result_fail("Failed to restore queue: %d\n", err);
- 		goto err_destroy;
- 	}
- 
- 	err = check_and_destroy_queue(&msgque);
- 	if (err) {
--		printf("Failed to test queue: %d\n", err);
-+		ksft_test_result_fail("Failed to test queue: %d\n", err);
- 		goto err_out;
- 	}
- 	ksft_exit_pass();
 -- 
-2.48.1
+2.49.0.1204.g71687c7c1d-goog
 
 
