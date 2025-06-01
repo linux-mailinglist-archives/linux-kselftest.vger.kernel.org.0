@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-34118-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34119-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74A66ACA43D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Jun 2025 02:05:18 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24A06ACA53F
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Jun 2025 02:26:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4230817591A
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Jun 2025 00:05:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A028F7A5AEE
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Jun 2025 00:25:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 951C6295525;
-	Sun,  1 Jun 2025 23:33:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADF223024E8;
+	Sun,  1 Jun 2025 23:36:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d8S6lMFa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dX5mjCsJ"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6762E29551D;
-	Sun,  1 Jun 2025 23:33:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DEF326B09D;
+	Sun,  1 Jun 2025 23:36:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748820789; cv=none; b=rPjDckhaVq/+lTQ9DfLm7olxrRKPuQcbZy1c9ExZns0E5xd4yxVeU0bTq7zMg9QJJOoqbPPn/eudmkJD5SU4OcCbBXNRxQCqUeSPVCavBZXr3oEuluSXUzRC2XQBDLh3xWIozxteHGLCVvz/KAABjny+sPbnQijpKU9C72WyJ9c=
+	t=1748821016; cv=none; b=Qw79r/ZU7AHyrj7tBy2Gs0WYL2g3PoAH0Mo7t40gJ9u41IOihIR5XDWxGtJWmaTguFF64SiCI6G5TUhcggBG3xIckQp68sABn9Z2nR5ZNZ9Di1om4rKhjFiUqFaLAR3tt+/VVBRJ90Wl/egDPKbx41az+KJG9CkwqPgATnEOwXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748820789; c=relaxed/simple;
+	s=arc-20240116; t=1748821016; c=relaxed/simple;
 	bh=8Tp3AU6og9BHvtwofmSrID3yJJnOozXAX6ODrCrL0/A=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tx4vBw8TcoQy9dQX2AM+DViET4fC8N80cOXynzNkWA43DVUNsSlqMu9vVwLvMVsIXynFmmBwwU5dCAOwVS58mkNvk7/J7gOqSPH5x6iMsHa9VqUnY51CkqMVy2f0uSKqZDKtun1g78WU2ZzIWVgaJenEjr1eKWyag3hl8V04Gps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d8S6lMFa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C32CC4CEF4;
-	Sun,  1 Jun 2025 23:33:07 +0000 (UTC)
+	 MIME-Version:Content-Type; b=k82aNaEGKBt6oUE93TPZA1hjUuty8b9tPJpYlYh1HiPcxfnTmOW1GV+OLmG0//qBOZjqDGrap4JQ/FkPihaTKptWgKn4q7fTM/KfAWciqqhnJaCvPaSroyGMLb8DsUYdEYQneOW1JCWSlpSiC+wtRxJt1ux4s81eczuOYe0HCuM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dX5mjCsJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0D9DC4CEF2;
+	Sun,  1 Jun 2025 23:36:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748820788;
+	s=k20201202; t=1748821016;
 	bh=8Tp3AU6og9BHvtwofmSrID3yJJnOozXAX6ODrCrL0/A=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=d8S6lMFarp7Lhf4Ughx2Ce92RDeq5lQUJVe3eZN85RGq5hx/lZsR6vNK8c9omnwIi
-	 AQAhk+ZmwN8lg7s8RHDmSDQ9+o4/b985JBMZ1GXU0diuF0WxHx3ENR71jvwPbqjuTS
-	 HGRnrYGLYrCC4ScSPc4DSh8F/3qcNO+HKSBF0sFxBTO0tc9m106R1J/n62Pm4GrH/U
-	 nLHOWE2lkHvlzX6wKqa9TiEdO0NFcW/Fz+RqpribYpqKoGmhgYvh3jm8NU8/V8vqGy
-	 aKpIAIP7r3QZUCfJ3ESuey9GioazHQX3pDRsY3URWkpn2N7+nN8RG7qD0apaPWURO8
-	 8+lUElieQv6HQ==
+	b=dX5mjCsJooeVyMC/mqe4zvbWv/HS8FxuS+Os9pUrFpfELYqisFwbEtPXNMuIREh00
+	 UH70ELOMRe5jvKUdXN8Xrpjuq+PvCGy6Gf4JZF8I2B8c4p69BVeroRcUx0XM427+Wp
+	 HHWqmtIobkLCHzHeGdv665f+kAFBWSwcgWNLRmIPqAFGbzyIQTPajZwd8Lqd+w6Lrv
+	 DcPfnIKWC7WsIpuJ0qlj4eiSQ9cAw9jciOxttS9PpwL/MJyat1rkQ1xMCTKcW7ACM/
+	 upKIlilCkdVMtKxzWYKF087ymIzv8GNV2ntMrxyQ/Bd6mPPhgMo05kGZZ37jvRXjCN
+	 9ck9CUn3cNfyw==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
@@ -53,12 +53,12 @@ Cc: =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
 	shuah@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.14 076/102] selftests: harness: Mark functions without prototypes static
-Date: Sun,  1 Jun 2025 19:29:08 -0400
-Message-Id: <20250601232937.3510379-76-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.12 69/93] selftests: harness: Mark functions without prototypes static
+Date: Sun,  1 Jun 2025 19:33:36 -0400
+Message-Id: <20250601233402.3512823-69-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250601232937.3510379-1-sashal@kernel.org>
-References: <20250601232937.3510379-1-sashal@kernel.org>
+In-Reply-To: <20250601233402.3512823-1-sashal@kernel.org>
+References: <20250601233402.3512823-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -68,7 +68,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.14.9
+X-stable-base: Linux 6.12.31
 Content-Transfer-Encoding: 8bit
 
 From: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
