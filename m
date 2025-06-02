@@ -1,198 +1,240 @@
-Return-Path: <linux-kselftest+bounces-34152-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34153-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A45BACBB21
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Jun 2025 20:39:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D9A2ACBB83
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Jun 2025 21:29:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C1CE0172D43
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Jun 2025 18:39:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4002516E107
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Jun 2025 19:29:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD5F11B0F0A;
-	Mon,  2 Jun 2025 18:39:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29B1C2253E9;
+	Mon,  2 Jun 2025 19:29:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B7KQriAP"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XDrZYzTf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-il1-f201.google.com (mail-il1-f201.google.com [209.85.166.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03A983EA98;
-	Mon,  2 Jun 2025 18:39:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37E801A5B92
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Jun 2025 19:28:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748889563; cv=none; b=X9YSFRpLyAsa7xVGwQhXj6k9Khc+0Y1wnNfrmXYnOGrT+GO/uzZk6t2XNFmM0W9ngkzKY9vK/+ju3P9TDUQGoUxi9CVWCdirkftFZrnTFpvyh1xms8AlOoTMzFrkk4/zXqFjwR0eFNXLSHSc3NXJKPBmGYWMZCTSydfnJcGTwJs=
+	t=1748892540; cv=none; b=G77N9ngEtEgqG57p7Nc2SdN+9TwBEe9iYtv9lfVwiuPIhP/ik6Iip5ijQkx7LdrhOAljdI3mpl8Axd/DjVtALG2jXvNXCY1PBqh+Pvi3GOo8BoZ9IuzXZTyPeFVgufNwTaKZn7X2PBi7TK40sQI86sucB/iGM+cG1QHSEwFa6Wc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748889563; c=relaxed/simple;
-	bh=bGGkzeql+kLBnwAhHz5NwSXdhWSCN087guRy3TwIvTs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PlEvW+XAOGDYMHpax6eNERQq9bUF0hMdMEgCz3E4z4uCR7LO5JTEvtsbp0r1C+AMjyBIuB9JI6H1EQ5Dwp5eWNzRAtvdfplWZin4yWJfdGX5oWZHQrovCsqDENa2K3iT6LaoK2Q+7cwYaCYdm9TptaTx95eijR5g6d6wb8TQlpo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B7KQriAP; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-3a36efcadb8so4169820f8f.0;
-        Mon, 02 Jun 2025 11:39:20 -0700 (PDT)
+	s=arc-20240116; t=1748892540; c=relaxed/simple;
+	bh=Bkp+RHmq5Zb8XC8EbWlPhlhfVe8QwDCY3ZtSkb5UPso=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=aRJeMCez69I5zeC/d4R2uuUFAwXRgr3TzKGQ3La3Gc471qlVaZ0nOqahA+eDQSQfEqfKNRI5k3rbYAsCCkjt8mqkppUh+EHTWpu1JX3K/Jpe8xiAgYkA5xbnxY303d6xP5WN6qusXqOTQLEtozET2EJa5VdmPHuiDAPR7XQ12LM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XDrZYzTf; arc=none smtp.client-ip=209.85.166.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com
+Received: by mail-il1-f201.google.com with SMTP id e9e14a558f8ab-3da6fe2a552so92869435ab.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Jun 2025 12:28:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748889559; x=1749494359; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p4EJ/bNdkxlN82qnQqNLj+AZOld+xZ2/fvExor8dpnA=;
-        b=B7KQriAPfJc/bCpO2Y0q5W7M6ABYLfIKKYmLnIPBqGqVqTp4B4gV073J5XRWLxVr5g
-         Ur6GTbO1OOPtW3wDwzn7HTQ8RK82wfXC8AYqZ85bBPtofP+1AFg8tGyK7XxDiIqMzX4x
-         GCYThM0LCtP7AJ0X4BnksMWOFpECeShYba/eN2goEVtbXTWTmDyAfK/kBsOyBkFuQ8OT
-         cTP4Ng+NwLacgAx7z+MKqxOKyTsixIqbrndCnptI65tz5eI+NueNe8YDijWix0HYCZ5y
-         yGeGTZEhstoWJ5orJ/OEW7elP2kX8JBOMpK3NnNhd5FqOFG5gxoY2x/zHltcFxiPVBpg
-         AMQg==
+        d=google.com; s=20230601; t=1748892537; x=1749497337; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=XDqE8mFNSY/ZirLnr+lInzWb5qO4cUyD2wakE3p29r0=;
+        b=XDrZYzTfUvfcveiV/2SQ3WvdQeceqlug2ytLntPdDuPPTnoTrNaYRh6IRYgh70BxJn
+         G47KoGTrpJjSvRjiOBFHdgUhd2vjt0cbJZdDJLl2bu+2BeTgZ8YXnWeysk8346CeYH5b
+         vQnRmtDS6ZPDIjzZlunD/tSRQ6FugEnoOqSoDAMZ0D62yS4MuRJizK0IrMQZC+FtHBVB
+         ZrDUQcfO+Bh4uU3OfDCioGBfoGIG9eNmFcPFxphi7Ew0KKPrZ80Wm0peBY9chO2hPaWn
+         tngZne7iGzJ6LAR972Ppv7mIhuaiTUcDzRWjoobQYGtPtg3X9UccCbM5g22B86+LIphx
+         iFMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748889559; x=1749494359;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=p4EJ/bNdkxlN82qnQqNLj+AZOld+xZ2/fvExor8dpnA=;
-        b=rZPmejEBxaGZ/WZh6fvlBHbOMHrPSGUYRcnjB24RdZfAv7XRW2JoFM+KSwIYMFhaNt
-         hloS6FnDd0x7HWohFwmsUoMtaX17GvgNsMy7JH6iIqCw5N4lmV447PHncm+tK/LWO0Gu
-         WnJH1Jhx7GNs006u02KpHXh0YxJAO1bPGkxr+OsXxrgs8SCmVBiviWacEZVVgJC58VR4
-         DQ4/cOIQBV59UOrD+OpLVURVOyx7gi/GIm6n2+jXshZsXiedLHYPRk1z0L0q4PRjIlv+
-         2oKDQ3NUOeR6ldnTzMi9zRS6pnmp0Dx0UXOT68DudYLsLaVTtctN8c4xZsfKQ9ap5e/9
-         DwAw==
-X-Forwarded-Encrypted: i=1; AJvYcCUzN2CkoSTzVybjVNOENNA8N0d9OeWm/S4Fi7oBZ6fKVO6+Qpdt+GP2nGiIjtEkGkwX6G0=@vger.kernel.org, AJvYcCVlUF3kzAsny5M6BUXtMPmGv7ImeDUOmvYJiCSUDJwiT4eO8gsSu/G5d72VCf31AXyeJlRtEnzPJeD2956Mfl/w@vger.kernel.org, AJvYcCXsOmy+S76kcEn9Sfo+I2iX1Z+eGHflwpxejn170EsxPLsNciga/WhMI+NnKZGZUewOciaynxNo3BjXdP3n@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz++2myKrZ4bFNfqj5yXDm/wzUztIqkbp8m81sHvsCBBDyssGgW
-	IBB5vYLxN6QF4lK1cW6jkJ4cwbuIRmV3y1RTH7M/K+VAG4mMUo4rmAtkXvHXQ3PUrLirrIbTtdO
-	nVk552JpnWIO/HD7C8gOqH2TtTiaFguM=
-X-Gm-Gg: ASbGncs2KObI/28uN1ITVsPUcs3vsBkGydjWUxNPE+sGHVkHaJiZZ+WPVFkHCO/tkc6
-	7zTqJkq0qBXdcFl/fC1WjjItZWWF5Qkdg+WySJkWDcY6HN6NUWTwmVs4NJt6GYh9SkEB1MbwgTG
-	xerYarZcuKAWlyIZdJEKFgiBrO7VztqnNpq0D1EfiGfDYmQI9oTnhcWD6WO3lCteTWGedyGg==
-X-Google-Smtp-Source: AGHT+IHUqx+mgL8hi72589JB27VJBUMwBIp9UzNzlH5b5s1OhLB/pURvh6gvJXZGV2bvvKk9RnNCYMD8HuP9sRI3DPU=
-X-Received: by 2002:a05:6000:3112:b0:3a0:7f9c:189a with SMTP id
- ffacd0b85a97d-3a4f799acd4mr11273853f8f.0.1748889559007; Mon, 02 Jun 2025
- 11:39:19 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1748892537; x=1749497337;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XDqE8mFNSY/ZirLnr+lInzWb5qO4cUyD2wakE3p29r0=;
+        b=JYvMKq/y8crFt+iCKxANr4k2xISNoBZUzN/aYXckh0OppdKYhqnpweQk3tskNrrp1I
+         IQ2TfKOso0KNm/vZHq/PMUu11xFlPMPsOU1c3LwcTBSV7b/kRDurkmUWHZX3nsdqd9I3
+         ZVDS3BBXSKBmrp44kFa7c5yWKqMua1NS1woBsRioLbzyq8VE/batDz03zjSA5GQ4VZyr
+         CsKo4xOYbm4l/QE1r+pLU6rN3yIRShxp9cZln5gvkiCuG2nGUVZ8JO3St9QynMKkZqpK
+         rOtxrf9/r5P22GTvwqlPSIqlc+0l+T0dJE2CimBhC6ycyoORXK3nQuu+3n8grDzI9I8H
+         MVIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU5E28Ueluqagcq93T3rFE0SvbeMnbscp/YHHnMm93yv4jh7BVR7xGcalIY1qqWwL2DETdN5v2sTgqlgYNKYL8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyuvvwNKaBUEzqGqiAdKxVpTSSYl0sVeRayxfWJ1lOvwEo6uxPe
+	FE6gU7JOY98XrAZ202TcieNAFCGIfDPt7LfRmiSVfw7ScaaRhNIO0Kmo0RQ66fFQdKQsenmw4NL
+	NjxA0OVY9AvhvHwFN8oEA5gTiAw==
+X-Google-Smtp-Source: AGHT+IFxeHQ76hpwbia1zMeQqWVTlfaiwmMC2Ena7lOl4cpvV3skj0sAcuon/x4Imo4A5kPFT2TaGxeLGLjA5Bo9DQ==
+X-Received: from ilbby12.prod.google.com ([2002:a05:6e02:260c:b0:3dd:b4dc:eb43])
+ (user=coltonlewis job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6e02:194b:b0:3dc:787f:2bc8 with SMTP id e9e14a558f8ab-3dda3363f25mr100622585ab.12.1748892537342;
+ Mon, 02 Jun 2025 12:28:57 -0700 (PDT)
+Date: Mon,  2 Jun 2025 19:26:45 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250531072031.2263491-1-blakejones@google.com>
- <CAADnVQJv_FVciT9LC+W=sVtWAt9oXeAACzmTHzyqY-2svi4ugA@mail.gmail.com> <CAP-5=fWADfh9WNXgUOhXYW5hZWk-FZL1oJTdaDgq8Hqr8_Fd0g@mail.gmail.com>
-In-Reply-To: <CAP-5=fWADfh9WNXgUOhXYW5hZWk-FZL1oJTdaDgq8Hqr8_Fd0g@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 2 Jun 2025 11:39:07 -0700
-X-Gm-Features: AX0GCFtiw9IZLAsO114ncb1PisrfRk2ajYyxEUOp4PqScN6vm6DijNlIQ-pyHHA
-Message-ID: <CAADnVQKeJUdvJ7tKhpdatL-A5zDi9DXKFun8fwM2e7Bynd5FDg@mail.gmail.com>
-Subject: Re: [PATCH] libbpf: add support for printing BTF character arrays as strings
-To: Ian Rogers <irogers@google.com>
-Cc: Blake Jones <blakejones@google.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Namhyung Kim <namhyung@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.49.0.1204.g71687c7c1d-goog
+Message-ID: <20250602192702.2125115-1-coltonlewis@google.com>
+Subject: [PATCH 00/17] ARM64 PMU Partitioning
+From: Colton Lewis <coltonlewis@google.com>
+To: kvm@vger.kernel.org
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+	Joey Gouly <joey.gouly@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Zenghui Yu <yuzenghui@huawei.com>, Mark Rutland <mark.rutland@arm.com>, 
+	Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Colton Lewis <coltonlewis@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 2, 2025 at 8:05=E2=80=AFAM Ian Rogers <irogers@google.com> wrot=
-e:
->
-> On Sat, May 31, 2025 at 11:20=E2=80=AFAM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Sat, May 31, 2025 at 12:20=E2=80=AFAM Blake Jones <blakejones@google=
-.com> wrote:
-> > >
-> > > The BTF dumper code currently displays arrays of characters as just t=
-hat -
-> > > arrays, with each character formatted individually. Sometimes this is=
- what
-> > > makes sense, but it's nice to be able to treat that array as a string=
-.
-> > >
-> > > This change adds a special case to the btf_dump functionality to allo=
-w
-> > > arrays of single-byte integer values to be printed as character strin=
-gs.
-> > > Characters for which isprint() returns false are printed as hex-escap=
-ed
-> > > values. This is enabled when the new ".print_strings" is set to 1 in =
-the
-> > > btf_dump_type_data_opts structure.
-> > >
-> > > As an example, here's what it looks like to dump the string "hello" u=
-sing
-> > > a few different field values for btf_dump_type_data_opts (.compact =
-=3D 1):
-> > >
-> > > - .print_strings =3D 0, .skip_names =3D 0:  (char[6])['h','e','l','l'=
-,'o',]
-> > > - .print_strings =3D 0, .skip_names =3D 1:  ['h','e','l','l','o',]
-> > > - .print_strings =3D 1, .skip_names =3D 0:  (char[6])"hello"
-> > > - .print_strings =3D 1, .skip_names =3D 1:  "hello"
-> > >
-> > > Here's the string "h\xff", dumped with .compact =3D 1 and .skip_names=
- =3D 1:
-> > >
-> > > - .print_strings =3D 0:  ['h',-1,]
-> > > - .print_strings =3D 1:  "h\xff"
-> > >
-> > > Signed-off-by: Blake Jones <blakejones@google.com>
-> > > ---
-> > >  tools/lib/bpf/btf.h                           |   3 +-
-> > >  tools/lib/bpf/btf_dump.c                      |  51 ++++++++-
-> > >  .../selftests/bpf/prog_tests/btf_dump.c       | 102 ++++++++++++++++=
-++
-> > >  3 files changed, 154 insertions(+), 2 deletions(-)
-> >
-> > Please split selftests vs main libbpf parts.
-> >
-> > > diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
-> > > index 4392451d634b..be8e8e26d245 100644
-> > > --- a/tools/lib/bpf/btf.h
-> > > +++ b/tools/lib/bpf/btf.h
-> > > @@ -326,9 +326,10 @@ struct btf_dump_type_data_opts {
-> > >         bool compact;           /* no newlines/indentation */
-> > >         bool skip_names;        /* skip member/type names */
-> > >         bool emit_zeroes;       /* show 0-valued fields */
-> > > +       bool print_strings;     /* print char arrays as strings */
-> > >         size_t :0;
-> > >  };
-> > > -#define btf_dump_type_data_opts__last_field emit_zeroes
-> > > +#define btf_dump_type_data_opts__last_field print_strings
-> > >
-> > >  LIBBPF_API int
-> > >  btf_dump__dump_type_data(struct btf_dump *d, __u32 id,
-> > > diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-> > > index 460c3e57fadb..a07dd5accdd8 100644
-> > > --- a/tools/lib/bpf/btf_dump.c
-> > > +++ b/tools/lib/bpf/btf_dump.c
-> > > @@ -75,6 +75,7 @@ struct btf_dump_data {
-> > >         bool is_array_member;
-> > >         bool is_array_terminated;
-> > >         bool is_array_char;
-> > > +       bool print_strings;
-> >
-> > Looks useful, but make sure to add a feature detection
-> > to perf, since it has to work with old and new libbpf.
->
-> Just for clarity on this. We'll need a "libbpf-strings" feature like
-> the existing "libbpf" one:
-> https://web.git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.=
-git/tree/tools/build/feature/test-libbpf.c?h=3Dperf-tools-next
->
-> Currently these features are only used if perf is built with
-> LIBBPF_DYNAMIC=3D1 as part of the build arguments (ie its not the
-> default):
-> https://web.git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.=
-git/tree/tools/perf/Makefile.config?h=3Dperf-tools-next#n580
->
-> If no suitable libbpf is detected then the build will error out. I
-> guess if feature-libbpf is present but not feature-libbpf-strings then
-> we'll need a perf #define so that the string feature won't cause
-> perf's build to fail.
+Overview:
 
-Yes. Something like this.
-It will also allow libbpf and perf patches to land in parallel.
+This series implements a new PMU scheme on ARM, a partitioned PMU
+that exists alongside the existing emulated PMU and may be enabled by
+the kernel command line kvm.reserved_host_counters or by the vcpu
+ioctl KVM_ARM_PARTITION_PMU. This is a continuation of the RFC posted
+earlier this year. [1]
+
+The high level overview and reason for the name is that this
+implementation takes advantage of recent CPU features to partition the
+PMU counters into a host-reserved set and a guest-reserved set. Guests
+are allowed untrapped hardware access to the most frequently used PMU
+registers and features for the guest-reserved counters only.
+
+This untrapped hardware access significantly reduces the overhead of
+using performance monitoring capabilities such as the `perf` tool
+inside a guest VM. Register accesses that aren't trapping to KVM mean
+less time spent in the host kernel and more time on the workloads
+guests care about. This optimization especially shines during high
+`perf` sample rates or large numbers of events that require
+multiplexing hardware counters.
+
+Performance:
+
+For example, the following tests were carried out on identical ARM
+machines with 10 general purpose counters with identical guest images
+run on QEMU, the only difference being my PMU implementation or the
+existing one. Some arguments have been simplified here to clarify the
+purpose of the test:
+
+1) time perf record -e ${FIFTEEN_HW_EVENTS} -F 1000 -- \
+   gzip -c tmpfs/random.64M.img >/dev/null
+
+On emulated PMU this command took 4.143s real time with 0.159s system
+time. On partitioned PMU this command took 3.139s real time with
+0.110s system time, runtime reductions of 24.23% and 30.82%.
+
+2) time perf stat -dd -- \
+   automated_specint2017.sh
+
+On emulated PMU this benchmark completed in 3789.16s real time with
+224.45s system time and a final benchmark score of 4.28. On
+partitioned PMU this benchmark completed in 3525.67s real time with
+15.98s system time and a final benchmark score of 4.56. That is a
+6.95% reduction in runtime, 92.88% reduction in system time, and
+6.54% improvement in overall benchmark score.
+
+Seeing these improvements on something as lightweight as perf stat is
+remarkable and implies there would have been a much greater
+improvement with perf record. I did not test that because I was not
+confident it would even finish in a reasonable time on the emulated
+PMU
+
+Test 3 was slightly different, I ran the workload in a VM with a
+single VCPU pinned to a physical CPU and analyzed from the host where
+the physical CPU spent its time using mpstat.
+
+3) perf record -e ${FIFTEEN_HW_EVENTS} -F 4000 -- \
+   stress-ng --cpu 0 --timeout 30
+
+Over a period of 30s the cpu running with the emulated PMU spent
+34.96% of the time in the host kernel and 55.85% of the time in the
+guest. The cpu running the partitioned PMU spent 0.97% of its time in
+the host kernel and 91.06% of its time in the guest.
+
+Taken together, these tests represent a remarkable performance
+improvement for anything perf related using this new PMU
+implementation.
+
+Caveats:
+
+Because the most consistent and performant thing to do was untrap
+PMCR_EL0, the number of counters visible to the guest via PMCR_EL0.N
+is always equal to the value KVM sets for MDCR_EL2.HPMN. Previously
+allowed writes to PMCR_EL0.N via {GET,SET}_ONE_REG no longer affect
+the guest.
+
+These improvements come at a cost to 7-35 new registers that must be
+swapped at every vcpu_load and vcpu_put if the feature is enabled. I
+have been informed KVM would like to avoid paying this cost when
+possible.
+
+One solution is to make the trapping changes and context swapping lazy
+such that the trapping changes and context swapping only take place
+after the guest has actually accessed the PMU so guests that never
+access the PMU never pay the cost.
+
+This is not done here because it is not crucial to the primary
+functionality and I thought review would be more productive as soon as
+I had something complete enough for reviewers to easily play with.
+
+However, this or any better ideas are on the table for inclusion in
+future re-rolls.
+
+[1] https://lore.kernel.org/kvmarm/20250213180317.3205285-1-coltonlewis@google.com/
+
+Colton Lewis (16):
+  arm64: cpufeature: Add cpucap for HPMN0
+  arm64: Generate sign macro for sysreg Enums
+  arm64: cpufeature: Add cpucap for PMICNTR
+  KVM: arm64: Reorganize PMU functions
+  KVM: arm64: Introduce method to partition the PMU
+  perf: arm_pmuv3: Generalize counter bitmasks
+  perf: arm_pmuv3: Keep out of guest counter partition
+  KVM: arm64: Set up FGT for Partitioned PMU
+  KVM: arm64: Writethrough trapped PMEVTYPER register
+  KVM: arm64: Use physical PMSELR for PMXEVTYPER if partitioned
+  KVM: arm64: Writethrough trapped PMOVS register
+  KVM: arm64: Context switch Partitioned PMU guest registers
+  perf: pmuv3: Handle IRQs for Partitioned PMU guest counters
+  KVM: arm64: Inject recorded guest interrupts
+  KVM: arm64: Add ioctl to partition the PMU when supported
+  KVM: arm64: selftests: Add test case for partitioned PMU
+
+Marc Zyngier (1):
+  KVM: arm64: Cleanup PMU includes
+
+ Documentation/virt/kvm/api.rst                |  16 +
+ arch/arm/include/asm/arm_pmuv3.h              |  24 +
+ arch/arm64/include/asm/arm_pmuv3.h            |  36 +-
+ arch/arm64/include/asm/kvm_host.h             | 208 +++++-
+ arch/arm64/include/asm/kvm_pmu.h              |  82 +++
+ arch/arm64/kernel/cpufeature.c                |  15 +
+ arch/arm64/kvm/Makefile                       |   2 +-
+ arch/arm64/kvm/arm.c                          |  24 +-
+ arch/arm64/kvm/debug.c                        |  13 +-
+ arch/arm64/kvm/hyp/include/hyp/switch.h       |  65 +-
+ arch/arm64/kvm/pmu-emul.c                     | 629 +----------------
+ arch/arm64/kvm/pmu-part.c                     | 358 ++++++++++
+ arch/arm64/kvm/pmu.c                          | 630 ++++++++++++++++++
+ arch/arm64/kvm/sys_regs.c                     |  54 +-
+ arch/arm64/tools/cpucaps                      |   2 +
+ arch/arm64/tools/gen-sysreg.awk               |   1 +
+ arch/arm64/tools/sysreg                       |   6 +-
+ drivers/perf/arm_pmuv3.c                      |  55 +-
+ include/kvm/arm_pmu.h                         | 199 ------
+ include/linux/perf/arm_pmu.h                  |  15 +-
+ include/linux/perf/arm_pmuv3.h                |  14 +-
+ include/uapi/linux/kvm.h                      |   4 +
+ tools/include/uapi/linux/kvm.h                |   2 +
+ .../selftests/kvm/arm64/vpmu_counter_access.c |  40 +-
+ virt/kvm/kvm_main.c                           |   1 +
+ 25 files changed, 1616 insertions(+), 879 deletions(-)
+ create mode 100644 arch/arm64/include/asm/kvm_pmu.h
+ create mode 100644 arch/arm64/kvm/pmu-part.c
+ delete mode 100644 include/kvm/arm_pmu.h
+
+
+base-commit: 1b85d923ba8c9e6afaf19e26708411adde94fba8
+--
+2.49.0.1204.g71687c7c1d-goog
 
