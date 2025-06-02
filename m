@@ -1,108 +1,122 @@
-Return-Path: <linux-kselftest+bounces-34180-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34181-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15B79ACBD65
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 00:40:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27C89ACBD7C
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 00:48:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CEFC63A2111
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Jun 2025 22:40:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5EB1618926C9
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Jun 2025 22:48:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2FC8253350;
-	Mon,  2 Jun 2025 22:40:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78B40205AB9;
+	Mon,  2 Jun 2025 22:48:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DRGlTg2l"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="AlX5fJuF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD31B24DD0F;
-	Mon,  2 Jun 2025 22:40:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AC4CC2E0
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Jun 2025 22:48:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748904031; cv=none; b=dJR+UlgOQ1xgO0d4YRsHHl7/pT/wZxezYzFZlzSZKtXRu/UCCkdWVtge+eXsQ7MX8wD/cKEC2UVSGoxLmPI1SQ60VIL+qyJoyif4H+dyKLYrezGuaZiI+f5sqFC2GplNls7Oy15C+Rhgl9sAOnakKCvebfNeKJtaiWVZ/vyb2cQ=
+	t=1748904490; cv=none; b=tmfjkFFYrICIE0d+gCi23ZCHkWwXEvO4eb6Lj35ZtJw48d7+qaWd92gSB0D7mIXrlVW6tpDHt8E1ZkGEte+lmOuyc9FmNM4hj990HR2rlrnUIaZJQoUinXpfWgCVvUdAl33yMg9hMRynxrGN+6LeJX9BkmjmxHevdfrz90xxTDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748904031; c=relaxed/simple;
-	bh=Raej5S0fr0owynKaFtp+ssLwlG8DLE+hbQHXsl4GgeQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BWkEZodEXNRxApuRWPMiZEELJWLEtpT/joPVA0cX6y2Ei5uD4ZtUrYExEh35L5jgH8IVd23BJlBv+6zlajwTxAq96QP3wmpOjFaBcs3HNSXMBt2RSZVStMt58tR8hbt/lj2ONWifc8/5HMEjYV5bWBKiAVJbPz8v4kpPmESMe8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DRGlTg2l; arc=none smtp.client-ip=91.218.175.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Mon, 2 Jun 2025 15:40:11 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1748904017;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pVDqG7Qru3dfMpTwDZ3dCGAw70KwMy1IAEgL6+IAtD0=;
-	b=DRGlTg2l6dj3mx3YU+Hkrx8unn1zTLt40R3DTpki2p/KXrAfQdCsBTXlNY3/1LiA5NL/C3
-	AKu5HQu4fMzKoqvysZOOGOi+dS5HDBNebnMVbg8Q3KTQ3HS+lmWRWnqZ0S7Jx7EQrbL9cC
-	j1ccMBNvsr0LPvKUOue0qfpmAfPYP1w=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Oliver Upton <oliver.upton@linux.dev>
-To: Colton Lewis <coltonlewis@google.com>
-Cc: kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Mark Rutland <mark.rutland@arm.com>, Shuah Khan <shuah@kernel.org>,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 16/17] KVM: arm64: Add ioctl to partition the PMU when
- supported
-Message-ID: <aD4oS1_tnMPlgDJ6@linux.dev>
-References: <20250602192702.2125115-1-coltonlewis@google.com>
- <20250602192702.2125115-17-coltonlewis@google.com>
+	s=arc-20240116; t=1748904490; c=relaxed/simple;
+	bh=dV8jNwoaHn3pYzAQqE0xKwHO/o+oj5FSIrvUimpRDk4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=C8qn2Oxu9+Lrni9Ltn41/VJytdDaCaoDXxZkY9jWGYht7UdmiG1w7LxZFe/zct0/yfs5Rg0ksrWWer260YmAw6R/mz3qoJmZo17kAgU+RS/zKPQXsT/jWBIBvbKsbQX3sxynAWlLSfgr6/vqNM7ZV0H+e8tPRgot/RHojhGnSfw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=AlX5fJuF; arc=none smtp.client-ip=209.85.166.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-86d00ae076dso93747139f.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Jun 2025 15:48:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1748904486; x=1749509286; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=k0MPRxC3zSKa9lUKC3PPGWxNiqxgy6DGxhs8CNtCqjc=;
+        b=AlX5fJuF8oQq+andlgeBt8tco6K++GKywsYfAMFGdEjTcqBFRqqcl9NwheZL20K1rl
+         OKiZzVrYlzq096E+6tNrnTDQ4dP52A6bmT2kkAeWTR7JQUHICFNSYxe2ekdcZ17Uh6+N
+         A+sK8OY0cWbG+kN4Du++HEpuexgJ8EfyyyuyA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748904486; x=1749509286;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=k0MPRxC3zSKa9lUKC3PPGWxNiqxgy6DGxhs8CNtCqjc=;
+        b=wH1Diz8H+dh/o7+tQ4MkW36Bh1sZO+tfBC87z+ez7yJOopOIp+fU6Nn5ZkA2BqKKYd
+         C2mmacTON5nwueVtc9C8KdNz2neTdPW2iIULre0GwINglLKdr11tsb5d4XzTH+wXkkoG
+         DK73bdCW13u84A6WjffzcmbNR4L2g7tZHLxZq/kN611ptkItXGXQDrGmjZ51tTXlmDrM
+         5QOULL6mxyusgkr+P9LD8oDv1FVB+yNbPhMhhwcd4AiUbkTlIA1SzmcjgrGkba4l7oWu
+         qrIvCaHqXW3/b2E+g2spbTlHbtlLos9haUvXdnsqgwpZqZsdE7tzqUDhwnu8Wdf1YT1m
+         nGQw==
+X-Gm-Message-State: AOJu0Yy/++OQ0Rhw6NPRGxtDrmDoIc2sgLJBfFrheZH3jg6GVQlyW3X9
+	mwcMYoJxsHg8vJUdFFJ31QLtJ4sltC2VLEi6Y69TBfW65tXnlSxePoyv0upYmE3SJjU=
+X-Gm-Gg: ASbGncvBzO1X36R1KDii6gHg9xsgXx/qKKjBYtZb5pZ+wpZBnWWfc9p7Odhqhi1r0ir
+	2yCleUVhIBWlb89XZtbWFv3TqytkNFonOk/g25XzblgB7UwdPCXefiW1cB1yP/jBAaPBepseSVJ
+	0aah8Y8w99RWOQ1EjOBNfIvha2Bkejrv6Sooa9Bt3n01EZrWSxgjhqRucqCD71/e1N1UDaiLFa+
+	pA6GzyMh9RbAYQJRZjjP6Qgkayl+COuhmmtCqJI5a5gOWQRGoTecV0IZe/1PVSV0Ef4SzxVrerJ
+	BaxoQvjPfJajWhWxuVB8TgEYCdZEG9Ju4lgrH4cAKcMcpu4sti3HEHynqNoLdg==
+X-Google-Smtp-Source: AGHT+IGcqPQ6Br4YkdnS67IYJqV4bo0xOj2HBlD5gFqWwiSIyNPUyz3F+NvBmsbbGyAdNmOLbKGGBg==
+X-Received: by 2002:a92:c26e:0:b0:3d4:2ea4:6b87 with SMTP id e9e14a558f8ab-3ddb79ff68amr2712545ab.11.1748904486155;
+        Mon, 02 Jun 2025 15:48:06 -0700 (PDT)
+Received: from [192.168.1.14] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3dd93546c38sm22951685ab.38.2025.06.02.15.48.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Jun 2025 15:48:05 -0700 (PDT)
+Message-ID: <4a28c302-b37e-4963-86c2-87c5793c2661@linuxfoundation.org>
+Date: Mon, 2 Jun 2025 16:48:04 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250602192702.2125115-17-coltonlewis@google.com>
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: Add version file to kselftest installation dir
+To: Tianyi Cui <1997cui@gmail.com>, shuah@kernel.org
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20250529003417.468478-1-1997cui@gmail.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20250529003417.468478-1-1997cui@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Jun 02, 2025 at 07:27:01PM +0000, Colton Lewis wrote:
-> +	case KVM_ARM_PARTITION_PMU: {
+On 5/28/25 18:33, Tianyi Cui wrote:
+> As titled, adding version file to kselftest installation dir, so the user
+> of the tarball can know which kernel version the tarball belongs to.
+> 
+> Signed-off-by: Tianyi Cui <1997cui@gmail.com>
+> ---
+>   tools/testing/selftests/Makefile | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index a0a6ba47d600..246e9863b45b 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -291,6 +291,12 @@ ifdef INSTALL_PATH
+>   		$(MAKE) -s --no-print-directory OUTPUT=$$BUILD_TARGET COLLECTION=$$TARGET \
+>   			-C $$TARGET emit_tests >> $(TEST_LIST); \
+>   	done;
+> +	@if git describe HEAD > /dev/null 2>&1; then \
+> +		git describe HEAD > $(INSTALL_PATH)/VERSION; \
+> +		printf "Version saved to $(INSTALL_PATH)/VERSION\n"; \
+> +	else \
+> +		printf "Unable to get version from git describe\n"; \
+> +	fi
+>   else
+>   	$(error Error: set INSTALL_PATH to use install)
+>   endif
 
-This should be a vCPU attribute similar to the other PMUv3 controls we
-already have. Ideally a single attribute where userspace tells us it
-wants paritioning and specifies the PMU ID to use. None of this can be
-changed after INIT'ing the PMU.
+Why not use "make kernelrelease" to get the version?
 
-> +		struct arm_pmu *pmu;
-> +		u8 host_counters;
-> +
-> +		if (unlikely(!kvm_vcpu_initialized(vcpu)))
-> +			return -ENOEXEC;
-> +
-> +		if (!kvm_pmu_partition_supported())
-> +			return -EPERM;
-> +
-> +		if (copy_from_user(&host_counters, argp, sizeof(host_counters)))
-> +			return -EFAULT;
-> +
-> +		pmu = vcpu->kvm->arch.arm_pmu;
-> +		return kvm_pmu_partition(pmu, host_counters);
-
-Yeah, we really can't be changing the counters available to the ARM PMU
-driver at this point. What happens to host events already scheduled on
-the CPU?
-
-Either the partition of host / KVM-owned counters needs to be computed
-up front (prior to scheduling events) or KVM needs a way to direct perf
-to reschedule events on the PMU based on the new operating constraints.
-
-Thanks,
-Oliver
+thanks,
+-- Shuah
 
