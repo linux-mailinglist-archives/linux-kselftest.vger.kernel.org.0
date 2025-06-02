@@ -1,164 +1,221 @@
-Return-Path: <linux-kselftest+bounces-34133-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34134-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 614C4ACACBC
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Jun 2025 12:50:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FE50ACACF1
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Jun 2025 13:05:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A42727A5AEF
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Jun 2025 10:48:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E3E5A162533
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Jun 2025 11:05:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA3FA20103A;
-	Mon,  2 Jun 2025 10:49:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CCA1204840;
+	Mon,  2 Jun 2025 11:05:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HWC1Lb6F"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RJvGo5Eu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEDE119049A;
-	Mon,  2 Jun 2025 10:49:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A99A1A0BE0
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Jun 2025 11:05:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748861397; cv=none; b=JGjPZW1nu3dULJc5HVPveCz6b7bMuP9vzLhJ8X85iADwjipphC4RzlIFOQ9eGgZHF0eQ4jhCMYMAOqlEXesMHkLZbaM0Uh5VZmC3GBTxf8JxdJhiHhmJlNgh6hU6vJ1fegA2Jhl2r+wAnRUc4SWtwK6Vzuj8/dkTtoIK9lFrgeI=
+	t=1748862308; cv=none; b=J6LjUKVUrajv64KjsFWCh+fMFE3Gzq71dsKNkL5tWxb+NkflqJ/AD9udszzsgc5e88Wjy74tuOyEii7KTaOELgRtjkdhQZ7d9iHObzjEK81qeH7DupVCWmYw+emxFB18y2XZrzGcBqv9uTPf1bozSHOgj04M9hjOgYVhqbwQuGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748861397; c=relaxed/simple;
-	bh=9WaAM0DFviW3Ug8kMcuL6hIx12rSZL33x0znJQdobt4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=f4FAD7mFU7IEHQXQocwlhYBJe3vP0tPMF6tTuAZ+oLQuz8YKJwXAM5GWNbqL818UBvLkUg6tywQdmuSwh0eqSbxW9u07D678c29lBmzKToYTOW8vLAsyk3s+Va6XAZOfWqfQuALKN25l0cDTOEhjo1V5LUGLYesw7Y3j8xsRsJU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HWC1Lb6F; arc=none smtp.client-ip=209.85.208.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-32a658c4cc4so40283391fa.2;
-        Mon, 02 Jun 2025 03:49:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748861393; x=1749466193; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AsxbXe8qRFrC4RTDRdhQf2KM3tIF4wckI+MuVJmqklg=;
-        b=HWC1Lb6FbVRo1lrUqjfo7D4NwWEnu7ph5Vpgx6vGUIpChXxTPfgSqu7aMX49SSi6ED
-         tQ+oAXJ1Qgsbopr4kVgFGfwO/98cXEqwp8gUbkfvFEYIHdVXUt2ErOgKcfG/VjfXIlLQ
-         cM2K6mGx8VdATihr9bjw4Ht7Z9vg/LyoQGhOAtK31KV+WDh0L2KwJHMTpGMgP6eOwtkZ
-         KzZ/OQrqJijzbPRXPscinzUR9ao9Sgi1Qp72fk2AZ6e2CDAUzSLSMcYwhzwcFM2K1C68
-         IDrZJKz3xyboHHerICpkb1VJNyrFtWCp/yyXlP9D1rSka1KL8pXMW8VpryqnW6IH7uzC
-         CE1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748861393; x=1749466193;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AsxbXe8qRFrC4RTDRdhQf2KM3tIF4wckI+MuVJmqklg=;
-        b=CYHcVb36eyE22otQr2hXZ+XFzbHFJCCMkwXhGn5CJOSSEWDz9IF05Y6Pkhx460wrC4
-         BLA5ObnfNTv5PGHfbn0anVFACY4Ruk1KeRjgLPPc1SghisKKFPdWqMFBfv7TF7DLmlXN
-         FAwsAHz2TBcAmuEOO3YSUlahDdwDtZu7tp5NvV444xqgF53AQH55s9YgdyLgNJvsK6mZ
-         kbYzVDg8QC8NXhAS8euu/C9s/t0IZTu8lK179CrPyAtmLzTkPKXA6AkLhYoDTvzIZjAP
-         2kp+dh5UF/eZGav5lKAWBAQgLlDCz0zcIvmHt/05jDaM2PlRE1t5EJq3VlP5RFdGvKZs
-         iEwg==
-X-Forwarded-Encrypted: i=1; AJvYcCVBp8G8WTG9do7Zb7Hs8HEwzz0vbBa9TZidOF8JTHV+wrFqU4JA2KtpUfaIt0TPnxEstirEhzf91Cmmqea5EZ0=@vger.kernel.org, AJvYcCVMBXj3dPxlPMlyg+1JWAO5MHM0hrCTABQ9T+kuUmuaW2nFPHbSg6cP/yGvNN1QxbaljVKSUjsrEyajF7WhB5ep@vger.kernel.org, AJvYcCVp88goaywfWZl39BRz+FNqnyNnPVx+H5rFBQYTb4bM1XeBXmjUFE/Wp8sOtspSf3cs5JdQ+mrRJ3RXP/5a@vger.kernel.org, AJvYcCWaC9eJ7bki2yxUI2EdFnCqZPkyyexmN2KDr2HWySkSLD6pp1i7KnHSmJVSbngLGeREYFSoX7pB@vger.kernel.org, AJvYcCWgtJnXWKXAw0d5ygE8cmQ9sJoHK1i5BHOnkzRK96Nc3NLJOCm3myiPENUYZshq/egGtgkuj5lUGE29@vger.kernel.org, AJvYcCXOIBj455Fa0O40s2pImyoEB0myrirCc6qHQUSwzC8ov44EQYvOTdiu9DDEISIozHoHoljIM/dsCYvyr9I=@vger.kernel.org, AJvYcCXwKgWSB1f/zq0HdZp9OI7NhZ6D6FgMzEbHhmvYUfdHBMWlWuOgpLyzJS4tsvJeCH2y3ESsXuGFJkBM@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZUQHtDEipPHRXSn5ljDxm4g3lADq3kAOCuEVqb6UCJWvXblon
-	r4cka8m2CSrFNU+0KzPHZBF/8CayQlBDJYxVMSX+fGk01QP3N9XXLgIoYglkmK8+4YfiGXZzkQb
-	oypzI7j8S3RDDlVw5hjp8ymAR+pEQjQs=
-X-Gm-Gg: ASbGncvs5BzYOsZwuLpICIHv1AqXa3eekxCxSqC5/lMCj9sQQSSjSm/qkwmLeosrvHH
-	o5UL7R9T6RxbUKvuFvJtGkRfx6gZH1Fm6xvZsNcJH0RFGCnHaR9+FacG3EYgukkSffKoU2DyELo
-	7GU84yieIL8yy/eJO0+QG4NMzU1VvuI9ndwWxKV8mizWxlgcQSeuhanPp9bxkkr21xXOg=
-X-Google-Smtp-Source: AGHT+IF5DWduxzl0/XGIjOoG2XZtzGtCfUO0aae++aWVjLV4gjiYEpeAaDYwqvBq64IuoR3CqF43l9YblyYjyY9SlHs=
-X-Received: by 2002:a2e:9a0d:0:b0:32a:6a85:f294 with SMTP id
- 38308e7fff4ca-32a9ea8fcabmr18219761fa.35.1748861392393; Mon, 02 Jun 2025
- 03:49:52 -0700 (PDT)
+	s=arc-20240116; t=1748862308; c=relaxed/simple;
+	bh=A4OkNO6pKJdoJr7vYx9FCXoetIQb+v3bG4umPUpfy0U=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=mOqQ1ZPg+ISw41U3SQlQCQuu2IwrLh20Yt7tdGkewyocu+on2Hkgoc0Lo0aFXO5c7NyfE8+nGydyGT+ft5IrfMITJPyyf+hBkeClD6mG56urxFWorxMSaun4Sx6Ut6QJw/LrHKs5E+sbq476cAOrUGjk06981+J5xWhbtQMrSkk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RJvGo5Eu; arc=none smtp.client-ip=91.218.175.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250530-cstr-core-v11-0-cd9c0cbcb902@gmail.com>
- <20250530-cstr-core-v11-3-cd9c0cbcb902@gmail.com> <aD1k4rRK8Pt5Tkva@google.com>
-In-Reply-To: <aD1k4rRK8Pt5Tkva@google.com>
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Mon, 2 Jun 2025 06:49:16 -0400
-X-Gm-Features: AX0GCFuWGPYle2xpajsjX9J5Dr7DqqKyrlmViDc69KiPl9rdFF48mQDz9UTJ46o
-Message-ID: <CAJ-ks9nx8fbm5J1yKfg4a1OOgBepu0LFFjdtomE=j4Gkszj=fA@mail.gmail.com>
-Subject: Re: [PATCH v11 3/5] rust: replace `CStr` with `core::ffi::CStr`
-To: Alice Ryhl <aliceryhl@google.com>
-Cc: Michal Rostecki <vadorovsky@protonmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
-	Rae Moar <rmoar@google.com>, Danilo Krummrich <dakr@kernel.org>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
-	FUJITA Tomonori <fujita.tomonori@gmail.com>, Rob Herring <robh@kernel.org>, 
-	Saravana Kannan <saravanak@google.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Andrew Lunn <andrew@lunn.ch>, 
-	Heiner Kallweit <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Jens Axboe <axboe@kernel.dk>, Benno Lossin <lossin@kernel.org>, 
-	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	dri-devel@lists.freedesktop.org, netdev@vger.kernel.org, 
-	devicetree@vger.kernel.org, llvm@lists.linux.dev, linux-pci@vger.kernel.org, 
-	nouveau@lists.freedesktop.org, linux-block@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1748862292;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GgzGn7mX9LPHdW6wIq04NEoY4o/2aPy+ycvjiVMwLpA=;
+	b=RJvGo5Eu4br18T4wfwZrZxPFmIVPvINsrBo79u62AgI5wKOCaCRHE5yQvXLFeAq1u04q7N
+	FBhRi1ecNlz/GAEFqwRlNVaOJYJYYo9zPrbLJtzhOBJSXiooO43G0A3vV6B3AcV6RBQC9Y
+	LKGiZjm0w1tEwp6JhnEU7ycN1A/x6fY=
+Date: Mon, 02 Jun 2025 11:04:50 +0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
+Message-ID: <d99805aaeadd9cd041c9048801084648832a6da1@linux.dev>
+TLS-Required: No
+Subject: Re: [PATCH bpf-next v1 1/2] bpf,ktls: Fix data corruption when using
+ bpf_msg_pop_data() in ktls
+To: "Cong Wang" <xiyou.wangcong@gmail.com>
+Cc: bpf@vger.kernel.org, "Boris Pismenny" <borisp@nvidia.com>, "John
+ Fastabend" <john.fastabend@gmail.com>, "Jakub Kicinski"
+ <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, "Eric
+ Dumazet" <edumazet@google.com>, "Paolo Abeni" <pabeni@redhat.com>, "Simon
+ Horman" <horms@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Mykola Lysenko"
+ <mykolal@fb.com>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "KP Singh" <kpsingh@kernel.org>, "Stanislav
+ Fomichev" <sdf@fomichev.me>, "Hao Luo" <haoluo@google.com>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Shuah Khan" <shuah@kernel.org>, "Ihor Solodrai"
+ <isolodrai@meta.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+In-Reply-To: <aDika2FRd4n+VRmZ@pop-os.localdomain>
+References: <20250523131915.19349-1-jiayuan.chen@linux.dev>
+ <20250523131915.19349-2-jiayuan.chen@linux.dev>
+ <aDika2FRd4n+VRmZ@pop-os.localdomain>
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, Jun 2, 2025 at 4:46=E2=80=AFAM Alice Ryhl <aliceryhl@google.com> wr=
-ote:
->
-> On Fri, May 30, 2025 at 08:27:44AM -0400, Tamir Duberstein wrote:
-> > `kernel::ffi::CStr` was introduced in commit d126d2380131 ("rust: str:
-> > add `CStr` type") in November 2022 as an upstreaming of earlier work
-> > that was done in May 2021[0]. That earlier work, having predated the
-> > inclusion of `CStr` in `core`, largely duplicated the implementation of
-> > `std::ffi::CStr`.
-> >
-> > `std::ffi::CStr` was moved to `core::ffi::CStr` in Rust 1.64 in
-> > September 2022. Hence replace `kernel::str::CStr` with `core::ffi::CStr=
-`
-> > to reduce our custom code footprint, and retain needed custom
-> > functionality through an extension trait.
-> >
-> > C-String literals were added in Rust 1.77, while our MSRV is 1.78. Thus
-> > opportunistically replace instances of `kernel::c_str!` with C-String
-> > literals where other code changes were already necessary or where
-> > existing code triggered clippy lints; the rest will be done in a later
-> > commit.
-> >
-> > Link: https://github.com/Rust-for-Linux/linux/commit/faa3cbcca03d0dec8f=
-8e43f1d8d5c0860d98a23f [0]
-> > Signed-off-by: Tamir Duberstein <tamird@gmail.com>
->
-> > diff --git a/rust/kernel/firmware.rs b/rust/kernel/firmware.rs
-> > index 2494c96e105f..582ab648b14c 100644
-> > --- a/rust/kernel/firmware.rs
-> > +++ b/rust/kernel/firmware.rs
-> > @@ -4,7 +4,14 @@
-> >  //!
-> >  //! C header: [`include/linux/firmware.h`](srctree/include/linux/firmw=
-are.h)
-> >
-> > -use crate::{bindings, device::Device, error::Error, error::Result, ffi=
-, str::CStr};
-> > +use crate::{
-> > +    bindings,
-> > +    device::Device,
-> > +    error::Error,
-> > +    error::Result,
-> > +    ffi,
-> > +    str::{CStr, CStrExt as _},
-> > +};
->
-> Did you not add CStrExt to the prelude?
+2025/5/30 02:16, "Cong Wang" <xiyou.wangcong@gmail.com> =E5=86=99=E5=88=
+=B0:
 
-I did, but I didn't add the prelude to all files I had to update. This
-one, like others, doesn't import the prelude.
+
+
+>=20
+>=20On Fri, May 23, 2025 at 09:18:58PM +0800, Jiayuan Chen wrote:
+>=20
+>=20>=20
+>=20> When sending plaintext data, we initially calculated the correspond=
+ing
+> >=20
+>=20>  ciphertext length. However, if we later reduced the plaintext data=
+ length
+> >=20
+>=20>  via socket policy, we failed to recalculate the ciphertext length.
+> >=20
+>=20>=20=20
+>=20>=20
+>=20>  This results in transmitting buffers containing uninitialized data=
+ during
+> >=20
+>=20>  ciphertext transmission.
+> >=20
+>=20>=20=20
+>=20>=20
+>=20>  This causes uninitialized bytes to be appended after a complete
+> >=20
+>=20>  "Application Data" packet, leading to errors on the receiving end =
+when
+> >=20
+>=20>  parsing TLS record.
+> >=20
+>=20>=20=20
+>=20>=20
+>=20>  Fixes: d3b18ad31f93 ("tls: add bpf support to sk_msg handling")
+> >=20
+>=20>  Reported-by: Cong Wang <xiyou.wangcong@gmail.com>
+> >=20
+>=20>  Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+> >=20
+>=20>  ---
+> >=20
+>=20>  net/tls/tls_sw.c | 15 +++++++++++++++
+> >=20
+>=20>  1 file changed, 15 insertions(+)
+> >=20
+>=20>=20=20
+>=20>=20
+>=20>  diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+> >=20
+>=20>  index fc88e34b7f33..b23a4655be6a 100644
+> >=20
+>=20>  --- a/net/tls/tls_sw.c
+> >=20
+>=20>  +++ b/net/tls/tls_sw.c
+> >=20
+>=20>  @@ -872,6 +872,21 @@ static int bpf_exec_tx_verdict(struct sk_msg =
+*msg, struct sock *sk,
+> >=20
+>=20>  delta =3D msg->sg.size;
+> >=20
+>=20>  psock->eval =3D sk_psock_msg_verdict(sk, psock, msg);
+> >=20
+>=20>  delta -=3D msg->sg.size;
+> >=20
+>=20>  +
+> >=20
+>=20>  + if ((s32)delta > 0) {
+> >=20
+>=20>  + /* It indicates that we executed bpf_msg_pop_data(),
+> >=20
+>=20>  + * causing the plaintext data size to decrease.
+> >=20
+>=20>  + * Therefore the encrypted data size also needs to
+> >=20
+>=20>  + * correspondingly decrease. We only need to subtract
+> >=20
+>=20>  + * delta to calculate the new ciphertext length since
+> >=20
+>=20>  + * ktls does not support block encryption.
+> >=20
+>=20>  + */
+> >=20
+>=20>  + if (!WARN_ON_ONCE(!ctx->open_rec)) {
+> >=20
+>=20
+> I am wondering if we need to WARN here? Because the code below this
+>=20
+>=20handles it gracefully:
+>=20
+
+Hi=20Cong
+
+The ctx->open_rec is freed after a TLS record is processed (regardless
+of whether the redirect check passes or triggers a redirect).
+The 'if (rec)' check in the subsequent code you print is indeed designed
+to handle the expected lifecycle state of open_rec.
+
+But the code path I modified should never see a NULL open_rec under norma=
+l
+operation As this is a bug fix, I need to ensure the fix itself doesn't
+create new issues.=20
+
+Thanks.
+
+
+>=20 931 bool reset_eval =3D !ctx->open_rec;
+>=20
+>=20 932=20
+>=20
+>  933 rec =3D ctx->open_rec;
+>=20
+>=20 934 if (rec) {
+>=20
+>=20 935 msg =3D &rec->msg_plaintext;
+>=20
+>=20 936 if (!msg->apply_bytes)
+>=20
+>=20 937 reset_eval =3D true;
+>=20
+>=20 938 }
+>=20
+>=20 939 if (reset_eval) {
+>=20
+>=20 940 psock->eval =3D __SK_NONE;
+>=20
+>=20 941 if (psock->sk_redir) {
+>=20
+>=20 942 sock_put(psock->sk_redir);
+>=20
+>=20 943 psock->sk_redir =3D NULL;
+>=20
+>=20 944 }
+>=20
+>=20 945 }
+>=20
+>=20Thanks for fixing it!
+>=20
+>=20Cong
+>
 
