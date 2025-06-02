@@ -1,83 +1,117 @@
-Return-Path: <linux-kselftest+bounces-34149-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34150-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CA12ACBAE0
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Jun 2025 20:12:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E9C0ACBAFB
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Jun 2025 20:14:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ED8CA7A2427
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Jun 2025 18:10:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C73481883182
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Jun 2025 18:14:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32E0D228CB5;
-	Mon,  2 Jun 2025 18:11:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lDBayr8/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13E1D2236F8;
+	Mon,  2 Jun 2025 18:14:25 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06E392288CB;
-	Mon,  2 Jun 2025 18:11:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FDF55D8F0;
+	Mon,  2 Jun 2025 18:14:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748887892; cv=none; b=i1HqsvX1Oz0IY/sI+t0cxI030IpnDa8pXygWuIo7KgH3cEp4YbgPZQWFXybKHMeBKH4T60ThnBtp3kZnk3IRIZk8dn67e48km0gkPB8IPEYzBVKCAE0waOpBr++SUuzHL7DB4m5mlpapKkilcyR/ZXldXVB6lDH3nN/vKIA1vaA=
+	t=1748888065; cv=none; b=Zj3XIZitL1riOnQ43OJio62MeLDyGTpOJHrwJhjVy9zG0tVAJuNPHVhrzsD0gZlYYWR9RN81P9BIJ2wQSCMBLl78uAgL36II4RnE04f6yuAHGo6WEP1yO0BW/6afMY2y5nS/o1NxJKXSZcYHhTD8jJUb/Y4ohTktLr2xL8FTg6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748887892; c=relaxed/simple;
-	bh=pKayk//axGGraHGB1+iIPIKX+7C+PbImGLMS5A9QTJc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tDouxZJpS7zdLWlS22vfhKCJAKa8RHAuQx5bQcFIQ43vsR2DPKGntZeS9hs0Q65CRsoNExXqos+iCKum4DwfYlXy/mXZtKJOTXNeHNCbFh28XP0hAEQaAh0rFzMOZk3fKNSFEQjgkwgkB7Gtb8yBMhTV/2yFlMqLKbnp/FXVj9s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lDBayr8/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76482C4CEEB;
-	Mon,  2 Jun 2025 18:11:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748887891;
-	bh=pKayk//axGGraHGB1+iIPIKX+7C+PbImGLMS5A9QTJc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lDBayr8/Lc+nq0Nvcf7flG3POh9qvI7+421CSQPBFo/8rtUgqueGctqpFg1LScGO4
-	 zspG0+fazamdPVYFcTjQdLFr2wfNV5pdyELzLHNP08COVMypTdB75UtPl6xbpLTTQw
-	 x4i6ipt+V77NuAogEpbLU2pLpWLqzApEOuezjukRocF+F8yG/zYnKk6q0B/TgqQ6xW
-	 Er3uQi/+J50j3Eql3JRoZdvBqP93WaSnMdbzMQ2qFQ52XxmyU1eiSa+eOAMqyXd3QO
-	 td4SMhyWGLPjjX1JeFvX3+1p3af4XJ0A3EopAZyeXrYYmFsrKy1Jq4NSZEwAFo0XjU
-	 JuJZWlLOwJtig==
-Date: Mon, 2 Jun 2025 11:11:28 -0700
-From: Kees Cook <kees@kernel.org>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
-	David Gow <davidgow@google.com>, linux-hardening@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] lib/tests: Make FORTIFY_KUNIT_TEST depend on
- FORTIFY_SOURCE
-Message-ID: <202506021108.3AD999F73@keescook>
-References: <e36d5e6996a7ea4dc694c4b8dedd15943952d33d.1748875801.git.geert@linux-m68k.org>
+	s=arc-20240116; t=1748888065; c=relaxed/simple;
+	bh=9jQ0U2gHRObiwUnXO9MXOQpk4vA5/JitVdacAj9Suiw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=N8/GFOHB2PNi8HU/0GHGNEIvrfrXsSv5ifu6Djd2Gg77wrfMlRwMbnOsphY4zwIrAPzRe4XBEgCcACiDbFurJZdA3SLBdw63JopPn7OqgiNkk6tRpWsf6NmX9GhalsCMPkKvQjYodFvkWOp/J3UkVwnvkvZitKYllgBa+gt3ZlU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-530807a8691so1198264e0c.0;
+        Mon, 02 Jun 2025 11:14:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748888061; x=1749492861;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OfcaPVpyaX4xx974IzagCVdP/HZRVzw7PK6bWsNoyHI=;
+        b=m04ojuKucGeeJhgQxSfWE0Orni9Ewg6WY2zL1ePfkVpHTJs/Typej+q5LvG3XFJUgw
+         TXnL+6fHq0BKm+6hhG9TE7jsttqOW/uxoKVJsHwcwqtDZQOQ0nkeyCXkhhV49dvFsn72
+         MFROZ4q8gnruqNbqdeUqpA2pPs3qa+jcFEjxzO9uyas1v8B3zvz2P5JK6ulfKcvNbTXw
+         hIIKUu1LUNCXakn4xCCiOOFPwL2x8vPlnFSouZ3hnYv2dzYhMeqJaEmgwteMLUTQt1fP
+         nO6LDjhugyMEC9D6Zz7w7OSuHp7ocFBkx8LSFWOlm/g3PJuQlXCnuy+ZQ9CTvHX7KJMt
+         SXMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUmTV+U6XJS3NX2RSUFbV4jav5CNm+YC78lTgm12yaYib/7iWqEV/EF8AIrq+Au9PFtOeJD7xkAd2mIjcmB7s0=@vger.kernel.org, AJvYcCWG13q3wIZJcaDcDY47frpBSXg5cfSRvohzF/nfbFvCTpW2hpKxbUj5ACShg2TdBBJJ4fn8l3SYgfyel86j@vger.kernel.org, AJvYcCWHnOZQdF17wDze4CbyDj+5GYKkcCyHiz08ky3ac7PXnMYluGH8KrQ6CDTZAl00XLvWkBX2BEof6ASug0E8aC29@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx+zwBnAvi0DDcIP9dIKU53YbWVd4e5XB5papLK9iXtGeQacYWZ
+	yT/n2zrA+tnhXVvNGliXo0pWwLUu2TnM8euS96+O7aqDgR6esrf3qJ2vMY1RNaUf
+X-Gm-Gg: ASbGncsPat/CTNQFCX+QkHVBD8kClRFmnlOeLmAFY4FwF5p81e6dOu4ZoCNB7Siu7OT
+	AsKWpMAEn8Ys/9adAIQfI8HTzUh+6E6nBCl1xl54v0jXyqYnv9sZP2WsS81W/34frJZD9dsD5Tt
+	nz2WcADDhOINV36svdJKn+Y01iq9pvymi0DTfDugFyqKVavtYa3KqFtSq6wxK4zEFMMX3ttPwOd
+	V5UIquWytR1F6e9PUyqgkV0J6jyWbinVpVLK1AiF7Sg5bosGJJSUwc3Iy3vWmmZHzLGjxxWk93q
+	07cZeLDGNqc4vkz0pqXw5hxeHWfULQ4EPPHA9UoyLne9EwLQT9PywdRP8gNuF68smJlUx4g69cB
+	4OgYPmB4zIVlyIQ==
+X-Google-Smtp-Source: AGHT+IFxKwZOorger+hXumaGbX8E7ZDPgSJ4s/NSq5QgcaVYnsi/AJcKOrzx1cLUnVkYFWXgUTCj0A==
+X-Received: by 2002:a05:6122:3c8d:b0:52f:4680:1c89 with SMTP id 71dfb90a1353d-5309377b27bmr6719224e0c.7.1748888061361;
+        Mon, 02 Jun 2025 11:14:21 -0700 (PDT)
+Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com. [209.85.217.53])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-53074b066b2sm8005151e0c.26.2025.06.02.11.14.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Jun 2025 11:14:20 -0700 (PDT)
+Received: by mail-vs1-f53.google.com with SMTP id ada2fe7eead31-4dfa2aeec86so1983395137.1;
+        Mon, 02 Jun 2025 11:14:20 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCURwOIx7N5X7hk2oDpVWNk8Z2lTgE9UeQ6I9FrYav9gfD2mqLqLQflcTInvVbiualxPBQDaPXvbdamwElS4@vger.kernel.org, AJvYcCWmQSL/O2OikKfKvLNX4JlebTDgdQNCmyZBRpWPHPANTx7D7KEKVCY9M+axml6E85YluAKkJU+LaNLxpfYFNrk=@vger.kernel.org, AJvYcCXzI68+IWouuZNExKr6Nm51EP6X2dxPk6FGYYXhcFWT5b1gfKDAW6HtRFSaiyAickclRrbI5nXaQ9PSdlU+jusk@vger.kernel.org
+X-Received: by 2002:a05:6102:5112:b0:4e6:df89:66c4 with SMTP id
+ ada2fe7eead31-4e701c885c7mr7061879137.15.1748888060110; Mon, 02 Jun 2025
+ 11:14:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e36d5e6996a7ea4dc694c4b8dedd15943952d33d.1748875801.git.geert@linux-m68k.org>
+References: <22d9c2fa9e751a9de3c599aa082be588ea82a7a0.1748875640.git.geert@linux-m68k.org>
+ <202506021107.EA2F1CBDB8@keescook>
+In-Reply-To: <202506021107.EA2F1CBDB8@keescook>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 2 Jun 2025 20:14:08 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXN_1zwWuTGYuv4aH57cynsNA8443dbRgp+UTMzdvyLNw@mail.gmail.com>
+X-Gm-Features: AX0GCFtDu7rVYpa0wj_soUXZNLZi24EssDl7iT7tfOOyF2W8n_Ma87VlvY7UkI4
+Message-ID: <CAMuHMdXN_1zwWuTGYuv4aH57cynsNA8443dbRgp+UTMzdvyLNw@mail.gmail.com>
+Subject: Re: [PATCH] lib/tests: Make RANDSTRUCT_KUNIT_TEST depend on RANDSTRUCT
+To: Kees Cook <kees@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	"Gustavo A . R . Silva" <gustavoars@kernel.org>, David Gow <davidgow@google.com>, 
+	linux-hardening@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Jun 02, 2025 at 04:51:44PM +0200, Geert Uytterhoeven wrote:
-> When CONFIG_FORTIFY_SOURCE is not enabled, all fortify tests are
-> skipped.  Move this logic from run-time to config-time, to avoid people
-> building and running tests that do not do anything.
-> 
-> This basically reverts commit 1a78f8cb5daac774 ("fortify: Allow KUnit
-> test to build without FORTIFY") in v6.9, which was v3 of commit
-> a9dc8d0442294b42 ("fortify: Allow KUnit test to build without FORTIFY")
-> in v6.5, which was quickly reverted in commit 5e2956ee46244ffb ("Revert
-> "fortify: Allow KUnit test to build without FORTIFY"").
+Hi Kees,
 
-Same thing as for randstruct: I want the test to always be available. I
-don't want 1a78f8cb5daac reverted.
+On Mon, 2 Jun 2025 at 20:08, Kees Cook <kees@kernel.org> wrote:
+> On Mon, Jun 02, 2025 at 04:49:51PM +0200, Geert Uytterhoeven wrote:
+> > When CONFIG_RANDSTRUCT is not enabled, all randstruct tests are skipped.
+> > Move this logic from run-time to config-time, to avoid people building
+> > and running tests that do not do anything.
+>
+> I don't like doing this because it means that looking at CI output means
+> I can't tell if the test was not built or if the config was not
+> included. I want to always have the test available, but skip the test if
+> the config is missing.
 
--Kees
+So should we drop all dependencies from tests?
+Do you want Zorro bus, NuBus, ... tests (assumed we have them) to
+be built on all platforms, and "run" on all CIs?
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-Kees Cook
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
