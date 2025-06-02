@@ -1,164 +1,150 @@
-Return-Path: <linux-kselftest+bounces-34125-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34126-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5991ACAACE
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Jun 2025 10:46:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1E23ACAC95
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Jun 2025 12:36:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9771117A0FA
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Jun 2025 08:46:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CD9683A685E
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Jun 2025 10:36:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E2D01D95B3;
-	Mon,  2 Jun 2025 08:46:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zh5H11YE"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 417231F8751;
+	Mon,  2 Jun 2025 10:36:53 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2380A2C3240
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Jun 2025 08:46:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BC221DED5C;
+	Mon,  2 Jun 2025 10:36:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748853992; cv=none; b=e7DQ9/qXvUwcktvH1PBKSACv+zm5duso66Kf6PLHiVH/kmbrygPDKGdW8DT7SO7fKApTcuyRvAVUGhfsgcfohu+TtrFYHvmthx/R1yqQqCAgE1L9lPluwGSju9poHhvYeEEXb2wiAwRmPd4TrLM1VxRKaWxSfUKRrZyGGuAlBqs=
+	t=1748860613; cv=none; b=fC+vdL4Or4ZBOj9PQshvVWWE8cHFZkCUPwTPR2wdVYFji4gSKGYdG6BpKavaE80au6/r65bcgH9KAO9FgsAWXOdip7JeUoHgK1RWbE7Vo3ojSDvhY+cEYqra/UVW+gjYymIW6QRuE19ps8dHCWNT1W5GZ9cXBNXuCWys7DCwSzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748853992; c=relaxed/simple;
-	bh=jMbUYSpsToA7O3te9eApd0pFDpdOD0eqFMFbPLpvW2I=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=XIitUbiuh0mS3iQauLdL9a5rjJfR0BsYDVJaYBUiA3CsxFi2DamXMgm5FGRWIKasFJ9MrKSZE3uMAE4CRqJVFb2FmjShmCN+vVIQGwDjvC2rKBazML/staDmJD/2UevmrUKGlSMK8tt2tRs0/L8wy9J7s1i74ekls+bHdSat7KA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zh5H11YE; arc=none smtp.client-ip=209.85.128.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-440667e7f92so28239515e9.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Jun 2025 01:46:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1748853989; x=1749458789; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ktsVoxepsNTrdCKxowANypGkEb6jHKbHJKn1XhGy1Uw=;
-        b=zh5H11YEjyHf/ZrGbGCtt0Ram36PTgfDVCpkP50fPzhGYifYz56NsRHr1SJDNOLkQ/
-         K0iIa1gQLeNm/fTQQs/czGTGqMofzLe2kIGZYtnEa+BEwPMN7UyWN1IEcthJNN3RVcUy
-         0Z7P2OkpuUPlOXy/X0P85wCgLYOEdFcCBqAJHOTcb4wGIUzFx63gWOmKA8CdR7tnTkj/
-         Zz70blfHTTQpuj78I9t7GOjB5Mf744L7BHpQJkQhGqV18HSQgzt5WvCsdmR4R1upBO/A
-         9MPR8B2tW4PgVrYLjVzx81Q6Bbx4p4HWo6rlttExAAA3/ib3ASiiG4OPZWaLzyvHrXdy
-         ebLQ==
+	s=arc-20240116; t=1748860613; c=relaxed/simple;
+	bh=Iii/Yj+1tStQr0+EYCTD9JhtDIsq64XtSnizfzrvUYY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=msXzwz7fyzkjZsLFYR95rPwWgX9S3Z5vPtQYETwEBb2fme2naNiprLmBkOjPP1xMqYrXnrkMtR5zj7NXXRddlfoPti9WhFzWltGV4t3RT1IuY6bM3/xihulbMg6irxsa3wKXD5RTcrStfGKD5cI1HZ7nkfolm5H4Z6CM48KikOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-ad51ef2424bso814455366b.0;
+        Mon, 02 Jun 2025 03:36:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748853989; x=1749458789;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ktsVoxepsNTrdCKxowANypGkEb6jHKbHJKn1XhGy1Uw=;
-        b=f8VBMlhOdLZqKVPPrzWySUDwLyoo+GrDUuCOkTZ8BFCajucN+ZHGIKC7wFc55ozF8/
-         PqkFrClaZOwGO+GJ4z9I1WAFqjZ/rsRnnJjX7TV8wJh1uZfzIQwe/yh6pjayPeckmauM
-         cFrd62g96s0OffHVUlV21TB1yS8KUm5mY2G/GcdgcrHeCY0H7VBFR4z+lMKGsWjF/eEz
-         Ebnoi6DOoH308wAoKO5qQgdWSti1QVbpDe3daSY0YWFQ59gb19dvPhqZ5IbyHJ0uC7D9
-         JIMBV2o6LL4cyb7s2kl2DL/9NdJ+AuGsHTRga26sPlSMX+JFS64mlVrDFoPmqde+ddCR
-         +tqA==
-X-Forwarded-Encrypted: i=1; AJvYcCVq6rLzwtV460JJaA9NsCjed/cLDQUf/3XuDc5j6IaG8H+cR6xRkisJQIagQEBcM5XnX9K99FVRzoWbKfyssJo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzPO9ZH4KSetyvNRfQpALe3zDYt0OYT95XfaVWy1Ngg5GEmSPsV
-	mqq6hqsBTcuwiOEQdk2i1ypBb7ajin2f8SSo3sj4WxQVAOZneCkoPqHAo3fHQnfkptFqsdVU1uq
-	AMe6hPStOmjLKpdEYbA==
-X-Google-Smtp-Source: AGHT+IEN8wW1H0RTzFbTdIlqYAJYXEVRMaA4cvq7c8CG74BNxW0QzTAmaWpfyWc/gO5HljzZUpfF3+rdjR1DcgY=
-X-Received: from wmbhc27.prod.google.com ([2002:a05:600c:871b:b0:450:d422:69f9])
- (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:4ec9:b0:442:ccfa:fa with SMTP id 5b1f17b1804b1-45121fb9373mr61377385e9.27.1748853988668;
- Mon, 02 Jun 2025 01:46:28 -0700 (PDT)
-Date: Mon, 2 Jun 2025 08:46:26 +0000
-In-Reply-To: <20250530-cstr-core-v11-3-cd9c0cbcb902@gmail.com>
+        d=1e100.net; s=20230601; t=1748860610; x=1749465410;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eOvWlqJyIdxb0F+c7ZReClfTkAnCyE8T1KtZuZ09rWA=;
+        b=SquxWGodXI0rQOxXAqJ2TipghcuDnKPnjRU8/F6s/hWIym99wyYFMvuSRqS23FcSh1
+         HGdRYTh46JuILqoSPpFdp8l5jHNrLwtqJbA2GgT8JFiuyEL3B2BLOUdaIG72I6vzBn9b
+         wOT1P/ZnvWBzRk2zgMZcSnJjRm3sh1FpxWcRODtDChsomOS3vjrxhDMh58gnO2fy60VQ
+         Y5Y0ul2WHv2HVSIUtI4BrlocQg5vNbqNFIw7+Z5TnTsPigTQt14m82m7E4XK5IBBQUnl
+         roddSDmRt6k2xZamZOKgcVro321kl0DsK9U+9oGNbRXY6WfKs66CvI1XlmMCYKkTqRTM
+         oU7A==
+X-Forwarded-Encrypted: i=1; AJvYcCUTScFPDwu44cZUnVoxdz0r95JQhJ95bKdZKoSrr0KNwYpdMCDP65sTgXeOrwrMpvQ7GcKqH5kq0f2/8Tm0avRz@vger.kernel.org, AJvYcCUUSDEhUPjhOXQGFYlyM/9BJnnvzb2aIpQPBv1/pMMYWzcUG5Org9OGS0TnojF+0BNwUMDMOJW7Z+8NkfY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzIgL4qurHAdnmDJhae0irt5KSAkikFpMM1lgHn0E52J8KX8LtI
+	nfVuCIaTVGjmHA9cfXnyMCnHC4dMB5Jz6zts0q3hNpdblejyiy8qiYUpyYKwiQ==
+X-Gm-Gg: ASbGncudXjByOrYTjWVdz5SnTN+0b9vJ0ko+FrzKFHCPYGR9Afamy9vZa9v7P8uvval
+	MYyZKutDi1xX+14tu18yHjXmcsCJAwgbr1i7FeqbsN19spjlLbcAVT5wDVhYpBtGrIgJ+3u+5FP
+	AVQ1+okeBLsaABp//C5UXKG26pkcKbe7skTO3oGVKj6Jtv6mut7TCHG++YloZcT7rbaYEyzquGZ
+	3j/phZKTJ1p9HOtR/XrI4ocmGJnkHII32Z/94F+/Zr6d1mwb0BnbaD/1hmE8yL0ZpJg+isy58fg
+	vpB+3Pjo1VqqzoHCDcYc/n7xtPMER2YiFIENKo89X+I=
+X-Google-Smtp-Source: AGHT+IFqrSsK8DY8V7dpy2QWJnivCTTR1nffZQDrcCO1vwDrUr8YD0Tyd2L3H6BOPP2E8rlS+6MgwQ==
+X-Received: by 2002:a17:907:7f94:b0:ad5:557b:c369 with SMTP id a640c23a62f3a-adb494e5db8mr823445366b.33.1748860609305;
+        Mon, 02 Jun 2025 03:36:49 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:43::])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ada5d82ef07sm781166166b.69.2025.06.02.03.36.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Jun 2025 03:36:48 -0700 (PDT)
+From: Breno Leitao <leitao@debian.org>
+Subject: [PATCH net-next v2 0/4] netconsole: Optimize console registration
+ and improve testing
+Date: Mon, 02 Jun 2025 03:34:40 -0700
+Message-Id: <20250602-netcons_ext-v2-0-ef88d999326d@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250530-cstr-core-v11-0-cd9c0cbcb902@gmail.com> <20250530-cstr-core-v11-3-cd9c0cbcb902@gmail.com>
-Message-ID: <aD1k4rRK8Pt5Tkva@google.com>
-Subject: Re: [PATCH v11 3/5] rust: replace `CStr` with `core::ffi::CStr`
-From: Alice Ryhl <aliceryhl@google.com>
-To: Tamir Duberstein <tamird@gmail.com>
-Cc: Michal Rostecki <vadorovsky@protonmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, 
-	"=?utf-8?B?QmrDtnJu?= Roy Baron" <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Trevor Gross <tmgross@umich.edu>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
-	Danilo Krummrich <dakr@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
-	FUJITA Tomonori <fujita.tomonori@gmail.com>, Rob Herring <robh@kernel.org>, 
-	Saravana Kannan <saravanak@google.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Andrew Lunn <andrew@lunn.ch>, 
-	Heiner Kallweit <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Jens Axboe <axboe@kernel.dk>, Benno Lossin <lossin@kernel.org>, 
-	"Krzysztof =?utf-8?Q?Wilczy=C5=84ski?=" <kwilczynski@kernel.org>, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org, 
-	netdev@vger.kernel.org, devicetree@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-pci@vger.kernel.org, nouveau@lists.freedesktop.org, 
-	linux-block@vger.kernel.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEB+PWgC/23NSwqDMBRG4a2Ef2xKEnyPuo8iJepV7+SmJEEs4
+ t4Ljjs+8J0TiSJTQq9ORNo5cRD0yhUK0+ZlJc0zegVnXGUq12qhPAVJbzqyrhrXta623UgehcI
+ n0sLHrb0glLXQkTEUChunHOL33uz27n/F3Wqr625pLJWmJGOeM43s5RHiiuG6rh8g3lNgsQAAA
+ A==
+X-Change-ID: 20250528-netcons_ext-572982619bea
+To: Breno Leitao <leitao@debian.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Tejun Heo <tj@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+ Shuah Khan <shuah@kernel.org>, horms@kernel.org
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ gustavold@gmail.com, Usama Arif <usamaarif642@gmail.com>, 
+ linux-kselftest@vger.kernel.org, kernel-team@meta.com
+X-Mailer: b4 0.15-dev-42535
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2005; i=leitao@debian.org;
+ h=from:subject:message-id; bh=Iii/Yj+1tStQr0+EYCTD9JhtDIsq64XtSnizfzrvUYY=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBoPX6/XCo3OGp0efr+CfY3n2LxrS9VH9qlf6pd6
+ vzJTtkLITaJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaD1+vwAKCRA1o5Of/Hh3
+ bTRED/9FNDpQXJQZFpIM6d8twxfbI14m6eLbFhZcbuYmAY9jfqOVzEt9hR3yy3msK24qedtwrcE
+ MbL5oNbemOnQJ+L+TQ7dXi0Vv+vLuvQatDn3vMJu1jVlNzhVh27uICk8o4dRKScpFRcM0fiZlNE
+ zEHylAkhPiY0zF5kd5jqWAh6pPxfP49UEbscwRFT2d9FtqfDOROZBM/twJG7bOnuaHvsGt/v1Sg
+ 73jzVeoHsYHNbNpfGeCM4y5NhVgVPgfqJL9mS7ctKk1NK9N3BF2QcT0lOCUxQEIjCn4hpBC1+8s
+ zjDRzm/aAWPdYvipQhFPKIt1Gp6V9DYYACHB5p8qus6ePsq/SS5f40LqSnEw2e6Flv6cHoJPoJu
+ DC0JVs/yBo8nEAew06loItGrhP2JO371QtOniyGlYg0IpXgre3erm6D7TJt+9YgsHBX33DDJvX0
+ v+EJOCANYkK08zpVwff9HxojfEDUEW2VjZ7mRPtk17jujo2VHnV7gRayfEGOEIpsDIg0TPpXzd/
+ uEeOGMMwWN4xX6eUdSYALfNQxRTydVTRM7Czy+ER/yFa2lmumtdhlykQCQE+7ZOmEbA7E408lZ+
+ 5FgIndLqDVHVnI8uwRotrmvzQkzQKiiq8qREuxUFHMjcti37V8XOcSFFnT9YgFN8qh+9AYn7Q/l
+ VfN4KeLASj4NrYw==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
-On Fri, May 30, 2025 at 08:27:44AM -0400, Tamir Duberstein wrote:
-> `kernel::ffi::CStr` was introduced in commit d126d2380131 ("rust: str:
-> add `CStr` type") in November 2022 as an upstreaming of earlier work
-> that was done in May 2021[0]. That earlier work, having predated the
-> inclusion of `CStr` in `core`, largely duplicated the implementation of
-> `std::ffi::CStr`.
-> 
-> `std::ffi::CStr` was moved to `core::ffi::CStr` in Rust 1.64 in
-> September 2022. Hence replace `kernel::str::CStr` with `core::ffi::CStr`
-> to reduce our custom code footprint, and retain needed custom
-> functionality through an extension trait.
-> 
-> C-String literals were added in Rust 1.77, while our MSRV is 1.78. Thus
-> opportunistically replace instances of `kernel::c_str!` with C-String
-> literals where other code changes were already necessary or where
-> existing code triggered clippy lints; the rest will be done in a later
-> commit.
-> 
-> Link: https://github.com/Rust-for-Linux/linux/commit/faa3cbcca03d0dec8f8e43f1d8d5c0860d98a23f [0]
-> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+During performance analysis of console subsystem latency, I discovered that
+netconsole registers console handlers even when no active targets exist.
+These orphaned console handlers are invoked on every printk() call, get
+the lock, iterate through empty target lists, and consume CPU cycles
+without performing any useful work.
 
-> diff --git a/rust/kernel/firmware.rs b/rust/kernel/firmware.rs
-> index 2494c96e105f..582ab648b14c 100644
-> --- a/rust/kernel/firmware.rs
-> +++ b/rust/kernel/firmware.rs
-> @@ -4,7 +4,14 @@
->  //!
->  //! C header: [`include/linux/firmware.h`](srctree/include/linux/firmware.h)
->  
-> -use crate::{bindings, device::Device, error::Error, error::Result, ffi, str::CStr};
-> +use crate::{
-> +    bindings,
-> +    device::Device,
-> +    error::Error,
-> +    error::Result,
-> +    ffi,
-> +    str::{CStr, CStrExt as _},
-> +};
+This patch series addresses the inefficiency by:
 
-Did you not add CStrExt to the prelude?
+1. Implementing dynamic console registration/unregistration based on target
+   availability, ensuring console handlers are only active when needed
+2. Adding automatic cleanup of unused console registrations when targets
+   are disabled or removed
+3. Extending the selftest suite to cover non-extended console format,
+   which was previously untested
 
-> --- a/rust/kernel/error.rs
-> +++ b/rust/kernel/error.rs
-> @@ -164,6 +164,8 @@ pub fn name(&self) -> Option<&'static CStr> {
->          if ptr.is_null() {
->              None
->          } else {
-> +            use crate::str::CStrExt as _;
-> +
->              // SAFETY: The string returned by `errname` is static and `NUL`-terminated.
->              Some(unsafe { CStr::from_char_ptr(ptr) })
->          }
+The optimization reduces printk() overhead by eliminating unnecessary
+function calls and list traversals when netconsole targets are not
+configured, improving overall system performance during heavy logging
+scenarios.
 
-Ditto here.
+---
+Changes in v2:
+- Added selftests to test the new mechanism
+- Unregister the console if the last target got disabled
+- Sending to net-next instead of net (Jakub)
+- Link to v1: https://lore.kernel.org/r/20250528-netcons_ext-v1-1-69f71e404e00@debian.org
 
-Alice
+---
+Breno Leitao (4):
+      netconsole: Only register console drivers when targets are configured
+      netconsole: Add automatic console unregistration on target removal
+      selftests: netconsole: Do not exit from inside the validation function
+      selftests: netconsole: Add support for basic netconsole target format
+
+ drivers/net/netconsole.c                           | 61 +++++++++++++++++++---
+ .../selftests/drivers/net/lib/sh/lib_netcons.sh    | 27 ++++++++--
+ .../testing/selftests/drivers/net/netcons_basic.sh | 50 +++++++++++-------
+ 3 files changed, 107 insertions(+), 31 deletions(-)
+---
+base-commit: 914873bc7df913db988284876c16257e6ab772c6
+change-id: 20250528-netcons_ext-572982619bea
+
+Best regards,
+-- 
+Breno Leitao <leitao@debian.org>
+
 
