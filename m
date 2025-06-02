@@ -1,122 +1,108 @@
-Return-Path: <linux-kselftest+bounces-34179-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34180-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3178ACBD5C
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 00:33:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15B79ACBD65
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 00:40:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 11E70188F31E
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Jun 2025 22:34:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CEFC63A2111
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Jun 2025 22:40:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1028E2253A7;
-	Mon,  2 Jun 2025 22:33:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2FC8253350;
+	Mon,  2 Jun 2025 22:40:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="KzzsNTFe"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DRGlTg2l"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 400B2F9EC
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Jun 2025 22:33:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD31B24DD0F;
+	Mon,  2 Jun 2025 22:40:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748903624; cv=none; b=LnWB4dUQ4iN3eV6L5fBfLDDdkeQWRowagvphUuwBclncHXKddaW8bDklcNjtztB1EX5IQx0pqCEshIfLlNrVj2Cgn6QiJGUAxQKAAr0zZDKLgiandHUJGNgBww8P4hwJT/8bydr9As8FuQpjeAfA31SABMb2XkqCysByq4ajZB8=
+	t=1748904031; cv=none; b=dJR+UlgOQ1xgO0d4YRsHHl7/pT/wZxezYzFZlzSZKtXRu/UCCkdWVtge+eXsQ7MX8wD/cKEC2UVSGoxLmPI1SQ60VIL+qyJoyif4H+dyKLYrezGuaZiI+f5sqFC2GplNls7Oy15C+Rhgl9sAOnakKCvebfNeKJtaiWVZ/vyb2cQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748903624; c=relaxed/simple;
-	bh=4A6/DFadQ6PEoiQRDBjp3zfAlAKxeoFH4k1O19zzaFM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lCyNNRkjJv01/rec43GTkXHZxIGYaFvqS28eS4Rq3C5XqmLSLhNSLh1aWgnQ/mw6xWGFptpjceGFIHSbtcAZ769sWlJZPOh3jws48LTmrCbhDljPK7V9Jo9gQxJrmxjU5N6Dn2JYmqLKjXQ+cW3xzXptfksO0pQCoQqGZn+eoFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=KzzsNTFe; arc=none smtp.client-ip=209.85.166.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-3da73df6b6bso14524445ab.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Jun 2025 15:33:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1748903621; x=1749508421; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BGNygOz2PUzKUKDRozF3XmR1BLxdv32LAzNyS4YZMko=;
-        b=KzzsNTFe5pS2A4lxxzLR74YtXHL3DgbBMfIGnoR5NbEK5Drvh/5H5Nmw9U9XbY1hpc
-         fVWGMA9Bu6L8KHbavyFPqiHlefuY26fAsyx7tsUtDXz0884xl0qD4PWUDhuzDJ+geucW
-         lQzQ+47RpZB+Xn2DKrUMjoBKya1tt8RHEx8+4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748903621; x=1749508421;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BGNygOz2PUzKUKDRozF3XmR1BLxdv32LAzNyS4YZMko=;
-        b=BTSRib43dCbrxsl05DwJTTITjHsos+WDP2AVXx2tVAx8cCwLiNT/irAXL+QZC8lVar
-         SIi77i5bJe602de1ZUWDJeMoBlKm1p3sySJ1dv3iOn7yMKaSk3AUw245L/zQzH2SMQpq
-         J8+Q1nlmELfPuysNLuBATWN6KzE/uLuAO5uugKvcqBj+5Ivwes+LzobHC6baBFRD0yES
-         X/W/oxfbBDOxGL8GBPPnJH5UeH9yQfMFKPHQaoDp5LhblO0eLNGV1FA8kkhTjX2cGdIt
-         we9sb0yL/tSzSMHW+fxbFo5p5wPR6M6KCYAtmJdk2hEMv5cKMpZigTzHHDpf0BOcG0bB
-         JpLA==
-X-Gm-Message-State: AOJu0Yxnnqw1Svfv7cx85WNmDwuk0+tgeF/fy+FkfgU5oeUIQ2o6PDia
-	qEpMQ43seYn+qbghTWl3WbMaDwUKTKns7nthaihg4P0gzgKZBIsJHGiW9L/M2nAHvpA=
-X-Gm-Gg: ASbGncsanzlw5jt+szeKC4K9vkOOp/Bjf21WVRmaRkWbeyodX/ktxIqeFg64HKm1iyM
-	oQ6IZI3VfDDfeaxKm9guK8Ht6YNMpzSprUwPf2tPklAPSiGjStbbqk0kO1Y845IAYfWgfGi6D+n
-	/YU5WIwPf2KmhtEA8Wz5XDacWP4dCRYj7JB+yZFKDumHsiAbxGiVwEytv+87TvEbr4lRHqwb9Uw
-	6OhwhIQkrGEq3kBJw9kEYuyHCwpTZMcbEQFIxSINEaa4fUTJ7yZsbCtlVG0YDZpga60dXvEwlnD
-	6tCDgouVlpYm4V9QGTPUcxwkUTU72hoyQPOiCzBXbrwuhv6Tq/B3TPFc8jn8Fw==
-X-Google-Smtp-Source: AGHT+IF0xbLpXUt9eRmOQdLbCz/+5KPlrOqNN3OTQBxtKEQe70WAV9CDZv7hCKzlBIA2qwn/X91AYA==
-X-Received: by 2002:a05:6e02:378d:b0:3dc:7a9a:44db with SMTP id e9e14a558f8ab-3dda33922a8mr95638915ab.16.1748903621299;
-        Mon, 02 Jun 2025 15:33:41 -0700 (PDT)
-Received: from [192.168.1.14] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4fdd7ce29d0sm1990151173.0.2025.06.02.15.33.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Jun 2025 15:33:40 -0700 (PDT)
-Message-ID: <99f32bcc-0754-4414-b69e-c4d5d000f216@linuxfoundation.org>
-Date: Mon, 2 Jun 2025 16:33:39 -0600
+	s=arc-20240116; t=1748904031; c=relaxed/simple;
+	bh=Raej5S0fr0owynKaFtp+ssLwlG8DLE+hbQHXsl4GgeQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BWkEZodEXNRxApuRWPMiZEELJWLEtpT/joPVA0cX6y2Ei5uD4ZtUrYExEh35L5jgH8IVd23BJlBv+6zlajwTxAq96QP3wmpOjFaBcs3HNSXMBt2RSZVStMt58tR8hbt/lj2ONWifc8/5HMEjYV5bWBKiAVJbPz8v4kpPmESMe8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DRGlTg2l; arc=none smtp.client-ip=91.218.175.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Mon, 2 Jun 2025 15:40:11 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1748904017;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pVDqG7Qru3dfMpTwDZ3dCGAw70KwMy1IAEgL6+IAtD0=;
+	b=DRGlTg2l6dj3mx3YU+Hkrx8unn1zTLt40R3DTpki2p/KXrAfQdCsBTXlNY3/1LiA5NL/C3
+	AKu5HQu4fMzKoqvysZOOGOi+dS5HDBNebnMVbg8Q3KTQ3HS+lmWRWnqZ0S7Jx7EQrbL9cC
+	j1ccMBNvsr0LPvKUOue0qfpmAfPYP1w=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Oliver Upton <oliver.upton@linux.dev>
+To: Colton Lewis <coltonlewis@google.com>
+Cc: kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Mark Rutland <mark.rutland@arm.com>, Shuah Khan <shuah@kernel.org>,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 16/17] KVM: arm64: Add ioctl to partition the PMU when
+ supported
+Message-ID: <aD4oS1_tnMPlgDJ6@linux.dev>
+References: <20250602192702.2125115-1-coltonlewis@google.com>
+ <20250602192702.2125115-17-coltonlewis@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests/filesystems: Fix build of anon_inode_test
-To: Mark Brown <broonie@kernel.org>,
- Linus Torvalds <torvalds@linux-foundation.org>, Shuah Khan
- <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
- Jeff Layton <jlayton@kernel.org>, Amir Goldstein <amir73il@gmail.com>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20250530-selftests-anon-inode-build-v2-1-74c47eeeacd1@kernel.org>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20250530-selftests-anon-inode-build-v2-1-74c47eeeacd1@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250602192702.2125115-17-coltonlewis@google.com>
+X-Migadu-Flow: FLOW_OUT
 
-On 5/30/25 04:42, Mark Brown wrote:
-> The newly added anon_inode_test test fails to build due to attempting to
-> include a nonexisting overlayfs/wrapper.h:
-> 
-> anon_inode_test.c:10:10: fatal error: overlayfs/wrappers.h: No such file or directory
->     10 | #include "overlayfs/wrappers.h"
->        |          ^~~~~~~~~~~~~~~~~~~~~~
-> 
-> This is due to 0bd92b9fe538 ("selftests/filesystems: move wrapper.h out
-> of overlayfs subdir") which was added in the vfs-6.16.selftests branch
-> which was based on -rc5 and did not contain the newly added test so once
-> things were merged into mainline the build started failing - both
-> parent commits are fine.
-> 
-> Fixes: 3e406741b1989 ("Merge tag 'vfs-6.16-rc1.selftests' of git://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs")
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
-> Changes in v2:
-> - Rebase onto mainline and adjust fixes commit now the two branches got
->    merged there.
-> - Link to v1: https://lore.kernel.org/r/20250518-selftests-anon-inode-build-v1-1-71eff8183168@kernel.org
+On Mon, Jun 02, 2025 at 07:27:01PM +0000, Colton Lewis wrote:
+> +	case KVM_ARM_PARTITION_PMU: {
 
-Looks this will have to go directly to Linu's tree or vfs tree.
+This should be a vCPU attribute similar to the other PMUv3 controls we
+already have. Ideally a single attribute where userspace tells us it
+wants paritioning and specifies the PMU ID to use. None of this can be
+changed after INIT'ing the PMU.
 
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+> +		struct arm_pmu *pmu;
+> +		u8 host_counters;
+> +
+> +		if (unlikely(!kvm_vcpu_initialized(vcpu)))
+> +			return -ENOEXEC;
+> +
+> +		if (!kvm_pmu_partition_supported())
+> +			return -EPERM;
+> +
+> +		if (copy_from_user(&host_counters, argp, sizeof(host_counters)))
+> +			return -EFAULT;
+> +
+> +		pmu = vcpu->kvm->arch.arm_pmu;
+> +		return kvm_pmu_partition(pmu, host_counters);
 
-thanks,
--- Shuah
+Yeah, we really can't be changing the counters available to the ARM PMU
+driver at this point. What happens to host events already scheduled on
+the CPU?
+
+Either the partition of host / KVM-owned counters needs to be computed
+up front (prior to scheduling events) or KVM needs a way to direct perf
+to reschedule events on the PMU based on the new operating constraints.
+
+Thanks,
+Oliver
 
