@@ -1,122 +1,182 @@
-Return-Path: <linux-kselftest+bounces-34181-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34182-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27C89ACBD7C
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 00:48:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F640ACBD82
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 00:56:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5EB1618926C9
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Jun 2025 22:48:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1E5A616B384
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Jun 2025 22:56:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78B40205AB9;
-	Mon,  2 Jun 2025 22:48:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="AlX5fJuF"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F19C25291D;
+	Mon,  2 Jun 2025 22:56:15 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AC4CC2E0
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Jun 2025 22:48:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.42
+Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03CA6224240;
+	Mon,  2 Jun 2025 22:56:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.107.17.57
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748904490; cv=none; b=tmfjkFFYrICIE0d+gCi23ZCHkWwXEvO4eb6Lj35ZtJw48d7+qaWd92gSB0D7mIXrlVW6tpDHt8E1ZkGEte+lmOuyc9FmNM4hj990HR2rlrnUIaZJQoUinXpfWgCVvUdAl33yMg9hMRynxrGN+6LeJX9BkmjmxHevdfrz90xxTDQ=
+	t=1748904975; cv=none; b=fEUAI/bgplfPhc8aSSUQjowqkW5DpPMVYgMfVPSuNVcO5obWyv9dRBXZTB3HEnz3K2No+n9dgIvAtAlNqIqYxPEUrMWLI8JALkrn1WahwnpOPczZNw0pO7YoZEmhAW6WSzNPsbdfUe/X11SOOjZcBDZVekwe/FztrtawcdEsvC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748904490; c=relaxed/simple;
-	bh=dV8jNwoaHn3pYzAQqE0xKwHO/o+oj5FSIrvUimpRDk4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=C8qn2Oxu9+Lrni9Ltn41/VJytdDaCaoDXxZkY9jWGYht7UdmiG1w7LxZFe/zct0/yfs5Rg0ksrWWer260YmAw6R/mz3qoJmZo17kAgU+RS/zKPQXsT/jWBIBvbKsbQX3sxynAWlLSfgr6/vqNM7ZV0H+e8tPRgot/RHojhGnSfw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=AlX5fJuF; arc=none smtp.client-ip=209.85.166.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-86d00ae076dso93747139f.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Jun 2025 15:48:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1748904486; x=1749509286; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k0MPRxC3zSKa9lUKC3PPGWxNiqxgy6DGxhs8CNtCqjc=;
-        b=AlX5fJuF8oQq+andlgeBt8tco6K++GKywsYfAMFGdEjTcqBFRqqcl9NwheZL20K1rl
-         OKiZzVrYlzq096E+6tNrnTDQ4dP52A6bmT2kkAeWTR7JQUHICFNSYxe2ekdcZ17Uh6+N
-         A+sK8OY0cWbG+kN4Du++HEpuexgJ8EfyyyuyA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748904486; x=1749509286;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k0MPRxC3zSKa9lUKC3PPGWxNiqxgy6DGxhs8CNtCqjc=;
-        b=wH1Diz8H+dh/o7+tQ4MkW36Bh1sZO+tfBC87z+ez7yJOopOIp+fU6Nn5ZkA2BqKKYd
-         C2mmacTON5nwueVtc9C8KdNz2neTdPW2iIULre0GwINglLKdr11tsb5d4XzTH+wXkkoG
-         DK73bdCW13u84A6WjffzcmbNR4L2g7tZHLxZq/kN611ptkItXGXQDrGmjZ51tTXlmDrM
-         5QOULL6mxyusgkr+P9LD8oDv1FVB+yNbPhMhhwcd4AiUbkTlIA1SzmcjgrGkba4l7oWu
-         qrIvCaHqXW3/b2E+g2spbTlHbtlLos9haUvXdnsqgwpZqZsdE7tzqUDhwnu8Wdf1YT1m
-         nGQw==
-X-Gm-Message-State: AOJu0Yy/++OQ0Rhw6NPRGxtDrmDoIc2sgLJBfFrheZH3jg6GVQlyW3X9
-	mwcMYoJxsHg8vJUdFFJ31QLtJ4sltC2VLEi6Y69TBfW65tXnlSxePoyv0upYmE3SJjU=
-X-Gm-Gg: ASbGncvBzO1X36R1KDii6gHg9xsgXx/qKKjBYtZb5pZ+wpZBnWWfc9p7Odhqhi1r0ir
-	2yCleUVhIBWlb89XZtbWFv3TqytkNFonOk/g25XzblgB7UwdPCXefiW1cB1yP/jBAaPBepseSVJ
-	0aah8Y8w99RWOQ1EjOBNfIvha2Bkejrv6Sooa9Bt3n01EZrWSxgjhqRucqCD71/e1N1UDaiLFa+
-	pA6GzyMh9RbAYQJRZjjP6Qgkayl+COuhmmtCqJI5a5gOWQRGoTecV0IZe/1PVSV0Ef4SzxVrerJ
-	BaxoQvjPfJajWhWxuVB8TgEYCdZEG9Ju4lgrH4cAKcMcpu4sti3HEHynqNoLdg==
-X-Google-Smtp-Source: AGHT+IGcqPQ6Br4YkdnS67IYJqV4bo0xOj2HBlD5gFqWwiSIyNPUyz3F+NvBmsbbGyAdNmOLbKGGBg==
-X-Received: by 2002:a92:c26e:0:b0:3d4:2ea4:6b87 with SMTP id e9e14a558f8ab-3ddb79ff68amr2712545ab.11.1748904486155;
-        Mon, 02 Jun 2025 15:48:06 -0700 (PDT)
-Received: from [192.168.1.14] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3dd93546c38sm22951685ab.38.2025.06.02.15.48.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Jun 2025 15:48:05 -0700 (PDT)
-Message-ID: <4a28c302-b37e-4963-86c2-87c5793c2661@linuxfoundation.org>
-Date: Mon, 2 Jun 2025 16:48:04 -0600
+	s=arc-20240116; t=1748904975; c=relaxed/simple;
+	bh=bs0uQbFC8a3+B+UVBUz/7Mj+FMPhbCeM9qCsUm37p5U=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=oZdiHr8qwzyPvuq1t6zMy1D22Zk/qm8H2zr4yyaNUG+WCh5XR0vr1gz1zqBBqRo15n4v6VeRfiytcIrGS0kwEwPXGiuf2xk/Mvks9N3AhPGeElx+C8ABjxLmYqqL94Pf0m+cYNasP7W6yb+sOkLaS8Q2g3f+4AUIQR0D06geIQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=194.107.17.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
+Received: from mua.local.altlinux.org (mua.local.altlinux.org [192.168.1.14])
+	by vmicros1.altlinux.org (Postfix) with ESMTP id 3764772C8CC;
+	Tue,  3 Jun 2025 01:56:11 +0300 (MSK)
+Received: by mua.local.altlinux.org (Postfix, from userid 508)
+	id 224917CCB3A; Tue,  3 Jun 2025 01:56:11 +0300 (IDT)
+Date: Tue, 3 Jun 2025 01:56:11 +0300
+From: "Dmitry V. Levin" <ldv@strace.io>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Shuah Khan <shuah@kernel.org>, Oleg Nesterov <oleg@redhat.com>,
+	"Maciej W. Rozycki" <macro@orcam.me.uk>,
+	strace-devel@lists.strace.io, linux-kselftest@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] selftests/ptrace/get_syscall_info: fix for MIPS n32
+Message-ID: <20250602225610.GA6005@strace.io>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: Add version file to kselftest installation dir
-To: Tianyi Cui <1997cui@gmail.com>, shuah@kernel.org
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20250529003417.468478-1-1997cui@gmail.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20250529003417.468478-1-1997cui@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 5/28/25 18:33, Tianyi Cui wrote:
-> As titled, adding version file to kselftest installation dir, so the user
-> of the tarball can know which kernel version the tarball belongs to.
-> 
-> Signed-off-by: Tianyi Cui <1997cui@gmail.com>
-> ---
->   tools/testing/selftests/Makefile | 6 ++++++
->   1 file changed, 6 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> index a0a6ba47d600..246e9863b45b 100644
-> --- a/tools/testing/selftests/Makefile
-> +++ b/tools/testing/selftests/Makefile
-> @@ -291,6 +291,12 @@ ifdef INSTALL_PATH
->   		$(MAKE) -s --no-print-directory OUTPUT=$$BUILD_TARGET COLLECTION=$$TARGET \
->   			-C $$TARGET emit_tests >> $(TEST_LIST); \
->   	done;
-> +	@if git describe HEAD > /dev/null 2>&1; then \
-> +		git describe HEAD > $(INSTALL_PATH)/VERSION; \
-> +		printf "Version saved to $(INSTALL_PATH)/VERSION\n"; \
-> +	else \
-> +		printf "Unable to get version from git describe\n"; \
-> +	fi
->   else
->   	$(error Error: set INSTALL_PATH to use install)
->   endif
+MIPS n32 is one of two ILP32 architectures supported by the kernel
+that have 64-bit syscall arguments (another one is x32).
 
-Why not use "make kernelrelease" to get the version?
+When this test passed 32-bit arguments to syscall(), they were
+sign-extended in libc, PTRACE_GET_SYSCALL_INFO reported these
+sign-extended 64-bit values, and the test complained about the mismatch.
 
-thanks,
--- Shuah
+Fix this by passing arguments of the appropriate type to syscall(),
+which is "unsigned long long" on MIPS n32, and __kernel_ulong_t on other
+architectures, the same way as selftests/ptrace/set_syscall_info already
+does.
+
+As a side effect, this also extends the test on all 64-bit architectures
+by choosing constants that don't fit into 32-bit integers.
+
+Signed-off-by: Dmitry V. Levin <ldv@strace.io>
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+
+v3: Added Acked-by:
+    https://lore.kernel.org/all/b2e62143-fa68-4cd1-bf6c-67f0ad49c670@linuxfoundation.org/
+
+v2: Fixed MIPS #ifdef:
+    https://lore.kernel.org/all/20250115233747.GA28541@strace.io/
+
+ .../selftests/ptrace/get_syscall_info.c       | 53 +++++++++++--------
+ 1 file changed, 32 insertions(+), 21 deletions(-)
+
+diff --git a/tools/testing/selftests/ptrace/get_syscall_info.c b/tools/testing/selftests/ptrace/get_syscall_info.c
+index 5bcd1c7b5be6..2970f72d66d3 100644
+--- a/tools/testing/selftests/ptrace/get_syscall_info.c
++++ b/tools/testing/selftests/ptrace/get_syscall_info.c
+@@ -11,8 +11,19 @@
+ #include <err.h>
+ #include <signal.h>
+ #include <asm/unistd.h>
++#include <linux/types.h>
+ #include "linux/ptrace.h"
+ 
++#if defined(_MIPS_SIM) && _MIPS_SIM == _MIPS_SIM_NABI32
++/*
++ * MIPS N32 is the only architecture where __kernel_ulong_t
++ * does not match the bitness of syscall arguments.
++ */
++typedef unsigned long long kernel_ulong_t;
++#else
++typedef __kernel_ulong_t kernel_ulong_t;
++#endif
++
+ static int
+ kill_tracee(pid_t pid)
+ {
+@@ -42,37 +53,37 @@ sys_ptrace(int request, pid_t pid, unsigned long addr, unsigned long data)
+ 
+ TEST(get_syscall_info)
+ {
+-	static const unsigned long args[][7] = {
++	const kernel_ulong_t args[][7] = {
+ 		/* a sequence of architecture-agnostic syscalls */
+ 		{
+ 			__NR_chdir,
+-			(unsigned long) "",
+-			0xbad1fed1,
+-			0xbad2fed2,
+-			0xbad3fed3,
+-			0xbad4fed4,
+-			0xbad5fed5
++			(uintptr_t) "",
++			(kernel_ulong_t) 0xdad1bef1bad1fed1ULL,
++			(kernel_ulong_t) 0xdad2bef2bad2fed2ULL,
++			(kernel_ulong_t) 0xdad3bef3bad3fed3ULL,
++			(kernel_ulong_t) 0xdad4bef4bad4fed4ULL,
++			(kernel_ulong_t) 0xdad5bef5bad5fed5ULL
+ 		},
+ 		{
+ 			__NR_gettid,
+-			0xcaf0bea0,
+-			0xcaf1bea1,
+-			0xcaf2bea2,
+-			0xcaf3bea3,
+-			0xcaf4bea4,
+-			0xcaf5bea5
++			(kernel_ulong_t) 0xdad0bef0caf0bea0ULL,
++			(kernel_ulong_t) 0xdad1bef1caf1bea1ULL,
++			(kernel_ulong_t) 0xdad2bef2caf2bea2ULL,
++			(kernel_ulong_t) 0xdad3bef3caf3bea3ULL,
++			(kernel_ulong_t) 0xdad4bef4caf4bea4ULL,
++			(kernel_ulong_t) 0xdad5bef5caf5bea5ULL
+ 		},
+ 		{
+ 			__NR_exit_group,
+ 			0,
+-			0xfac1c0d1,
+-			0xfac2c0d2,
+-			0xfac3c0d3,
+-			0xfac4c0d4,
+-			0xfac5c0d5
++			(kernel_ulong_t) 0xdad1bef1fac1c0d1ULL,
++			(kernel_ulong_t) 0xdad2bef2fac2c0d2ULL,
++			(kernel_ulong_t) 0xdad3bef3fac3c0d3ULL,
++			(kernel_ulong_t) 0xdad4bef4fac4c0d4ULL,
++			(kernel_ulong_t) 0xdad5bef5fac5c0d5ULL
+ 		}
+ 	};
+-	const unsigned long *exp_args;
++	const kernel_ulong_t *exp_args;
+ 
+ 	pid_t pid = fork();
+ 
+@@ -154,7 +165,7 @@ TEST(get_syscall_info)
+ 			}
+ 			ASSERT_LT(0, (rc = sys_ptrace(PTRACE_GET_SYSCALL_INFO,
+ 						      pid, size,
+-						      (unsigned long) &info))) {
++						      (uintptr_t) &info))) {
+ 				LOG_KILL_TRACEE("PTRACE_GET_SYSCALL_INFO: %m");
+ 			}
+ 			ASSERT_EQ(expected_none_size, rc) {
+@@ -177,7 +188,7 @@ TEST(get_syscall_info)
+ 		case SIGTRAP | 0x80:
+ 			ASSERT_LT(0, (rc = sys_ptrace(PTRACE_GET_SYSCALL_INFO,
+ 						      pid, size,
+-						      (unsigned long) &info))) {
++						      (uintptr_t) &info))) {
+ 				LOG_KILL_TRACEE("PTRACE_GET_SYSCALL_INFO: %m");
+ 			}
+ 			switch (ptrace_stop) {
+-- 
+ldv
 
