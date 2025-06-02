@@ -1,126 +1,164 @@
-Return-Path: <linux-kselftest+bounces-34132-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34133-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8C8BACACB5
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Jun 2025 12:48:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 614C4ACACBC
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Jun 2025 12:50:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1A7E07A3626
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Jun 2025 10:46:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A42727A5AEF
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Jun 2025 10:48:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A235B1F4165;
-	Mon,  2 Jun 2025 10:48:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA3FA20103A;
+	Mon,  2 Jun 2025 10:49:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h4kk0B7F"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HWC1Lb6F"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 785B72C3264;
-	Mon,  2 Jun 2025 10:48:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEDE119049A;
+	Mon,  2 Jun 2025 10:49:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748861282; cv=none; b=U4suxPtXJ9P5rRH4W07KbyNQtR1ZAyPNq1eD56EpmnjtYnSv9FTJR0kgzZiO9FqYUDNYJJivKmnLVV22kIy3mMa2dsDIDmC9jPcuOBzkg6mgKMHax+MwYQP0O0u/8evDJmqARUwVbdp64q/LzfYHDiGtmpK6g/9PFmXaDxpEPhg=
+	t=1748861397; cv=none; b=JGjPZW1nu3dULJc5HVPveCz6b7bMuP9vzLhJ8X85iADwjipphC4RzlIFOQ9eGgZHF0eQ4jhCMYMAOqlEXesMHkLZbaM0Uh5VZmC3GBTxf8JxdJhiHhmJlNgh6hU6vJ1fegA2Jhl2r+wAnRUc4SWtwK6Vzuj8/dkTtoIK9lFrgeI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748861282; c=relaxed/simple;
-	bh=Wty6Wq68ewqvz7Tt1hRI0LScGyWfS4wxoxNlHZ5WXU4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S9PD+1G+/IOA1Zfczn3OJZsFPKFpAmS+kMaksC8YCwyMN5jhI5GUeI2WWtpVnYEGhc/mHh2Bkt9sR0BoVlft75iR9A/Y+n+P+vJgNnQq/0pPdLEGXzVdnlWEfUAfBeUg11+nbfjwfOGQDHGonunkXxhtAmpeQasElFzZCB7OxaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h4kk0B7F; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73003C4CEEB;
-	Mon,  2 Jun 2025 10:48:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748861281;
-	bh=Wty6Wq68ewqvz7Tt1hRI0LScGyWfS4wxoxNlHZ5WXU4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=h4kk0B7FNN1ZWr9IWZzltdeaBe0qWfnLlcEMgdhEwFJNkNnT2LuieXSkAIjPSeJLm
-	 vh8e7PueCedUKuMw0OEEI2Ln9T8EID4npDcPbYzZMn0Aeqkcusw2RuNevc1wg6L5az
-	 GGYiY7uI5CQoZsQXNAvSqUxIHrJb/RBhRlmBjMRMB4iobjmAuTIFLR8bCoD7+VQA3e
-	 DD7qw/dy8dBdoXbnM41U6tAl785b+pAkKE1e+SLmB884KnplLOfdkbpyoTLNsMKBMT
-	 2odQhjvO8z6TATn/rb24eixdNpkEsTuV42fCn97yHTiv8PnvelUOlGO2yAoJPf5l7V
-	 vpBR+36pz1aTQ==
-Date: Mon, 2 Jun 2025 12:47:59 +0200
-From: Maxime Ripard <mripard@kernel.org>
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Alessandro Carminati <acarmina@redhat.com>, 
-	linux-kselftest@vger.kernel.org, Kees Cook <keescook@chromium.org>, 
-	Daniel Diaz <daniel.diaz@linaro.org>, David Gow <davidgow@google.com>, 
-	Arthur Grillo <arthurgrillo@riseup.net>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	Naresh Kamboju <naresh.kamboju@linaro.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Ville Syrjala <ville.syrjala@linux.intel.com>, Daniel Vetter <daniel@ffwll.ch>, 
-	Guenter Roeck <linux@roeck-us.net>, Alessandro Carminati <alessandro.carminati@gmail.com>, 
-	Jani Nikula <jani.nikula@intel.com>, Jeff Johnson <jeff.johnson@oss.qualcomm.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Linux Kernel Functional Testing <lkft@linaro.org>, 
-	dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 0/5] kunit: Add support for suppressing warning
- backtraces
-Message-ID: <20250602-polar-gray-toucanet-a68a41@houat>
-References: <20250526132755.166150-1-acarmina@redhat.com>
- <aD1Roe-z6o1Y5K2V@stanley.mountain>
+	s=arc-20240116; t=1748861397; c=relaxed/simple;
+	bh=9WaAM0DFviW3Ug8kMcuL6hIx12rSZL33x0znJQdobt4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=f4FAD7mFU7IEHQXQocwlhYBJe3vP0tPMF6tTuAZ+oLQuz8YKJwXAM5GWNbqL818UBvLkUg6tywQdmuSwh0eqSbxW9u07D678c29lBmzKToYTOW8vLAsyk3s+Va6XAZOfWqfQuALKN25l0cDTOEhjo1V5LUGLYesw7Y3j8xsRsJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HWC1Lb6F; arc=none smtp.client-ip=209.85.208.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-32a658c4cc4so40283391fa.2;
+        Mon, 02 Jun 2025 03:49:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1748861393; x=1749466193; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AsxbXe8qRFrC4RTDRdhQf2KM3tIF4wckI+MuVJmqklg=;
+        b=HWC1Lb6FbVRo1lrUqjfo7D4NwWEnu7ph5Vpgx6vGUIpChXxTPfgSqu7aMX49SSi6ED
+         tQ+oAXJ1Qgsbopr4kVgFGfwO/98cXEqwp8gUbkfvFEYIHdVXUt2ErOgKcfG/VjfXIlLQ
+         cM2K6mGx8VdATihr9bjw4Ht7Z9vg/LyoQGhOAtK31KV+WDh0L2KwJHMTpGMgP6eOwtkZ
+         KzZ/OQrqJijzbPRXPscinzUR9ao9Sgi1Qp72fk2AZ6e2CDAUzSLSMcYwhzwcFM2K1C68
+         IDrZJKz3xyboHHerICpkb1VJNyrFtWCp/yyXlP9D1rSka1KL8pXMW8VpryqnW6IH7uzC
+         CE1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748861393; x=1749466193;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AsxbXe8qRFrC4RTDRdhQf2KM3tIF4wckI+MuVJmqklg=;
+        b=CYHcVb36eyE22otQr2hXZ+XFzbHFJCCMkwXhGn5CJOSSEWDz9IF05Y6Pkhx460wrC4
+         BLA5ObnfNTv5PGHfbn0anVFACY4Ruk1KeRjgLPPc1SghisKKFPdWqMFBfv7TF7DLmlXN
+         FAwsAHz2TBcAmuEOO3YSUlahDdwDtZu7tp5NvV444xqgF53AQH55s9YgdyLgNJvsK6mZ
+         kbYzVDg8QC8NXhAS8euu/C9s/t0IZTu8lK179CrPyAtmLzTkPKXA6AkLhYoDTvzIZjAP
+         2kp+dh5UF/eZGav5lKAWBAQgLlDCz0zcIvmHt/05jDaM2PlRE1t5EJq3VlP5RFdGvKZs
+         iEwg==
+X-Forwarded-Encrypted: i=1; AJvYcCVBp8G8WTG9do7Zb7Hs8HEwzz0vbBa9TZidOF8JTHV+wrFqU4JA2KtpUfaIt0TPnxEstirEhzf91Cmmqea5EZ0=@vger.kernel.org, AJvYcCVMBXj3dPxlPMlyg+1JWAO5MHM0hrCTABQ9T+kuUmuaW2nFPHbSg6cP/yGvNN1QxbaljVKSUjsrEyajF7WhB5ep@vger.kernel.org, AJvYcCVp88goaywfWZl39BRz+FNqnyNnPVx+H5rFBQYTb4bM1XeBXmjUFE/Wp8sOtspSf3cs5JdQ+mrRJ3RXP/5a@vger.kernel.org, AJvYcCWaC9eJ7bki2yxUI2EdFnCqZPkyyexmN2KDr2HWySkSLD6pp1i7KnHSmJVSbngLGeREYFSoX7pB@vger.kernel.org, AJvYcCWgtJnXWKXAw0d5ygE8cmQ9sJoHK1i5BHOnkzRK96Nc3NLJOCm3myiPENUYZshq/egGtgkuj5lUGE29@vger.kernel.org, AJvYcCXOIBj455Fa0O40s2pImyoEB0myrirCc6qHQUSwzC8ov44EQYvOTdiu9DDEISIozHoHoljIM/dsCYvyr9I=@vger.kernel.org, AJvYcCXwKgWSB1f/zq0HdZp9OI7NhZ6D6FgMzEbHhmvYUfdHBMWlWuOgpLyzJS4tsvJeCH2y3ESsXuGFJkBM@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZUQHtDEipPHRXSn5ljDxm4g3lADq3kAOCuEVqb6UCJWvXblon
+	r4cka8m2CSrFNU+0KzPHZBF/8CayQlBDJYxVMSX+fGk01QP3N9XXLgIoYglkmK8+4YfiGXZzkQb
+	oypzI7j8S3RDDlVw5hjp8ymAR+pEQjQs=
+X-Gm-Gg: ASbGncvs5BzYOsZwuLpICIHv1AqXa3eekxCxSqC5/lMCj9sQQSSjSm/qkwmLeosrvHH
+	o5UL7R9T6RxbUKvuFvJtGkRfx6gZH1Fm6xvZsNcJH0RFGCnHaR9+FacG3EYgukkSffKoU2DyELo
+	7GU84yieIL8yy/eJO0+QG4NMzU1VvuI9ndwWxKV8mizWxlgcQSeuhanPp9bxkkr21xXOg=
+X-Google-Smtp-Source: AGHT+IF5DWduxzl0/XGIjOoG2XZtzGtCfUO0aae++aWVjLV4gjiYEpeAaDYwqvBq64IuoR3CqF43l9YblyYjyY9SlHs=
+X-Received: by 2002:a2e:9a0d:0:b0:32a:6a85:f294 with SMTP id
+ 38308e7fff4ca-32a9ea8fcabmr18219761fa.35.1748861392393; Mon, 02 Jun 2025
+ 03:49:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha384;
-	protocol="application/pgp-signature"; boundary="lvmkbabpg6illdhp"
-Content-Disposition: inline
-In-Reply-To: <aD1Roe-z6o1Y5K2V@stanley.mountain>
-
-
---lvmkbabpg6illdhp
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
+References: <20250530-cstr-core-v11-0-cd9c0cbcb902@gmail.com>
+ <20250530-cstr-core-v11-3-cd9c0cbcb902@gmail.com> <aD1k4rRK8Pt5Tkva@google.com>
+In-Reply-To: <aD1k4rRK8Pt5Tkva@google.com>
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Mon, 2 Jun 2025 06:49:16 -0400
+X-Gm-Features: AX0GCFuWGPYle2xpajsjX9J5Dr7DqqKyrlmViDc69KiPl9rdFF48mQDz9UTJ46o
+Message-ID: <CAJ-ks9nx8fbm5J1yKfg4a1OOgBepu0LFFjdtomE=j4Gkszj=fA@mail.gmail.com>
+Subject: Re: [PATCH v11 3/5] rust: replace `CStr` with `core::ffi::CStr`
+To: Alice Ryhl <aliceryhl@google.com>
+Cc: Michal Rostecki <vadorovsky@protonmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
+	Rae Moar <rmoar@google.com>, Danilo Krummrich <dakr@kernel.org>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
+	FUJITA Tomonori <fujita.tomonori@gmail.com>, Rob Herring <robh@kernel.org>, 
+	Saravana Kannan <saravanak@google.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Andrew Lunn <andrew@lunn.ch>, 
+	Heiner Kallweit <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Jens Axboe <axboe@kernel.dk>, Benno Lossin <lossin@kernel.org>, 
+	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	dri-devel@lists.freedesktop.org, netdev@vger.kernel.org, 
+	devicetree@vger.kernel.org, llvm@lists.linux.dev, linux-pci@vger.kernel.org, 
+	nouveau@lists.freedesktop.org, linux-block@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v5 0/5] kunit: Add support for suppressing warning
- backtraces
-MIME-Version: 1.0
 
-On Mon, Jun 02, 2025 at 10:24:17AM +0300, Dan Carpenter wrote:
-> I like suppressing warning messages but there are still many cases, such
-> as mm/kasan/kasan_test_c.c where printing the warning message is the
-> whole point.
->=20
-> We should create a standard way that test bots can filter out deliberate
-> errors from unintentional errors.  This would also help humans who have
-> to look at test results.
->=20
-> #define intentional_warning_marker(type) do {				\
-> 	pr_err("Triggering intentional %s warning!", type);		\
-> } while (0)
->=20
-> intentional_warning_marker("KASAN");
+On Mon, Jun 2, 2025 at 4:46=E2=80=AFAM Alice Ryhl <aliceryhl@google.com> wr=
+ote:
+>
+> On Fri, May 30, 2025 at 08:27:44AM -0400, Tamir Duberstein wrote:
+> > `kernel::ffi::CStr` was introduced in commit d126d2380131 ("rust: str:
+> > add `CStr` type") in November 2022 as an upstreaming of earlier work
+> > that was done in May 2021[0]. That earlier work, having predated the
+> > inclusion of `CStr` in `core`, largely duplicated the implementation of
+> > `std::ffi::CStr`.
+> >
+> > `std::ffi::CStr` was moved to `core::ffi::CStr` in Rust 1.64 in
+> > September 2022. Hence replace `kernel::str::CStr` with `core::ffi::CStr=
+`
+> > to reduce our custom code footprint, and retain needed custom
+> > functionality through an extension trait.
+> >
+> > C-String literals were added in Rust 1.77, while our MSRV is 1.78. Thus
+> > opportunistically replace instances of `kernel::c_str!` with C-String
+> > literals where other code changes were already necessary or where
+> > existing code triggered clippy lints; the rest will be done in a later
+> > commit.
+> >
+> > Link: https://github.com/Rust-for-Linux/linux/commit/faa3cbcca03d0dec8f=
+8e43f1d8d5c0860d98a23f [0]
+> > Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+>
+> > diff --git a/rust/kernel/firmware.rs b/rust/kernel/firmware.rs
+> > index 2494c96e105f..582ab648b14c 100644
+> > --- a/rust/kernel/firmware.rs
+> > +++ b/rust/kernel/firmware.rs
+> > @@ -4,7 +4,14 @@
+> >  //!
+> >  //! C header: [`include/linux/firmware.h`](srctree/include/linux/firmw=
+are.h)
+> >
+> > -use crate::{bindings, device::Device, error::Error, error::Result, ffi=
+, str::CStr};
+> > +use crate::{
+> > +    bindings,
+> > +    device::Device,
+> > +    error::Error,
+> > +    error::Result,
+> > +    ffi,
+> > +    str::{CStr, CStrExt as _},
+> > +};
+>
+> Did you not add CStrExt to the prelude?
 
-I understand what your usecase is, and would definitely appreciate
-something like that too, but I don't think this is the right way to do
-it.
-
-Once we have the basic infrastructure in place to flag which warnings
-are legitimate and which aren't, I believe a better way to achieve what
-you're asking for would be to treat as failures any warning with a WARN,
-and any test expecting a warn that didn't trigger any.
-
-This would bring kunit on par with pretty much every other unit test
-frameworks out there, and would make it pretty obvious to any users (CI
-and humans) when it works and when it doesn't.
-
-Maxime
-
---lvmkbabpg6illdhp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCaD2BXwAKCRAnX84Zoj2+
-drLwAYDKoxTUiusghkG4/DVOcfFiLWP8RIQ7MwBrgQX33S75ABf2lkV/jtSOd+vB
-nydVLEoBfjnS1T5PyeXGeC1wvJOrdYpF3Pnuk4fGn/aoyenjNNsyIbj92pw0fPHy
-ybYZj0r0mA==
-=r4oE
------END PGP SIGNATURE-----
-
---lvmkbabpg6illdhp--
+I did, but I didn't add the prelude to all files I had to update. This
+one, like others, doesn't import the prelude.
 
