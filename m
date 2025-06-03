@@ -1,169 +1,146 @@
-Return-Path: <linux-kselftest+bounces-34243-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34244-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17E0DACCE2C
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 22:27:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43FA0ACCE42
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 22:36:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B895E3A420F
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 20:27:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0E62516776E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 20:36:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2FDB221D92;
-	Tue,  3 Jun 2025 20:27:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDAEE1CD215;
+	Tue,  3 Jun 2025 20:36:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pzIr5FP0"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FFaIgmgy"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+Received: from mail-vk1-f173.google.com (mail-vk1-f173.google.com [209.85.221.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBA0D221703
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Jun 2025 20:27:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 472012940B
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Jun 2025 20:36:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748982440; cv=none; b=h2wsOKM+E3R3Fd4h7FhZSGlTSNHp5himulIAUBcdXf8uW5gQoIA4/34R+ai3Xj+XPB66j+Q20cmAJ3UTKtBDFutrPIYPlnvh3mTlm87uTGddb1PqOM78KdL7qAtrcQ+AD/foHpjo43SvHCITK6Feu3lQnNPbocO1z51foalssHU=
+	t=1748982994; cv=none; b=VErOhoy1gX3Cf+lp7POagDVWvYn0kr1KqIr3g9wlmKw+r/v9kuV/vTGdVUBJJv1bc9VCh48ZvfYY2bb55/ZSn+n8K3WtDtl8AEBv2A7laR75vDU0XABkWNtRWbv7JlP4mlF/2YrsRG6wM0ANFOZPihZZuvZoprmd013hMKeIJ4o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748982440; c=relaxed/simple;
-	bh=FkyXOZFJS2JTs2yvyJibGlBLckskxePeubP27I+ZqKw=;
+	s=arc-20240116; t=1748982994; c=relaxed/simple;
+	bh=yfm0amT5NtwY4hnU1FL15bhuF3XOKunYKYTy7ZjhN84=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EWvGYd5Qs1tZa5SMueOEYn9okfjJ+CGWWTJPrnzaJqYwfE+3+mlKCuh4VyecOKlRIEo0skTbXek3lwyeLcC0WVQReoYm2GVd93NLhGqdbazVDX6YUJI+jU3lANhSHl7zgnXjSq0/OTKn1yWeVoFvOOTrRZO98T3UlrtGWy1gQ1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pzIr5FP0; arc=none smtp.client-ip=209.85.167.48
+	 To:Cc:Content-Type; b=XxMOCgY7gHswoGP9mrWBb0gboytZowQZKBPbYg/9lNl9lDlPlOkcD6OcaAjL5/rtA5NGVhRSicslpY+z4a63Kx1LocjE0VSt/VjQiYmIm/A8Ed8m0MU8S46QJQ3LhS0MXScbI020w0u0eCW+Yut8Riz+AXAooI7aXnwXlypvi0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FFaIgmgy; arc=none smtp.client-ip=209.85.221.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5534edc6493so2934293e87.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Jun 2025 13:27:18 -0700 (PDT)
+Received: by mail-vk1-f173.google.com with SMTP id 71dfb90a1353d-52b2290e292so2057279e0c.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Jun 2025 13:36:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1748982437; x=1749587237; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1748982992; x=1749587792; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1+IyIfkIPOra+AocHu+9QAm2JwpYmUQiCUktZpdyAo0=;
-        b=pzIr5FP0y+LAGAeiFLCW2qeJIr36wbZfSA+M411vWFufTscHXuDgoaNpVoMPmEf98g
-         42yY5DDZQh4zPFZ/MP5pVfmb/WSlO4l4QAB1kYKBIBbUrtgsm5q/I0WsmspFiadKscxH
-         C0uL6lVYzlUClOBrnuSvARjGSLRVzPUBp+3Dp09XvAtrN/j8+zE5tqGNbvx6pa96g0z/
-         YcALG7xmN+ClYNaokmehDCce2qEfD1FsjzBpFlWNmaSp1BFeCuZat1t16idz3NVNVZS5
-         /mJZpvlyh1UYWWn/AWpZ0HHlCLo9Y+QFJlSLfHvnFHgUVBH16wSMBxhYxruL2nmDORGK
-         oR+Q==
+        bh=IgkRH+3yLQUgKV5wOSUdEvO3hRUeuun/3TUnglkvQDw=;
+        b=FFaIgmgy8V0Mf86VDojKovRSRnMDCGIORBJQzvSwzuixIuuukl+LrMEQD+WsbaJdes
+         oO5VDrPb4vuxtQ8afhfnqQawAMFcOaQdYi5el4Q1JJ4+rOqZo4P9x8F5Ynvvy+D9+dPJ
+         rUqQlnd2gdKwHQ7PdoUpD1CqPdWqlZuCTRiNTlia2p5R6/tfMqAirNku/yK4Ek1ire+1
+         rAgrsGZ7FxtuI/NdcfVO40HXwrHht52RsgVEU93RXV9cwO201GbxPZLGnL1el5ZvP0sX
+         NYE6CE1Tv05wZb80KaX21x1UL3hjOBDIoqoyGj0vr5qekv5RGTdFyByFP8Fn3pGbPSUq
+         JA5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748982437; x=1749587237;
+        d=1e100.net; s=20230601; t=1748982992; x=1749587792;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1+IyIfkIPOra+AocHu+9QAm2JwpYmUQiCUktZpdyAo0=;
-        b=ftbS/qV45NbuLh1NIDHVm3kbMdSRlSlKkvMizPqxzLyYnM5wEyn+FU99fTZOybK3ki
-         +0sX8B530+uPQ+Lctcxoa/PRDC2PIqqhJKjBpq/kS2Mf3U1UMabpmqEJ3ujuhASg7cnV
-         ac9tzLf9hK6Y1EyXWP/FgW+pPiYaEkgyRt6RO5leG81K9j0eHhWPVuqH1d+aF3YKQRzS
-         /xJgtXfRgIAi56iGg9DKBCSe8K4DMfx3Aql3Lgy+mPaCsvwfiNRyp4/j8/Du5ygysBzl
-         i4ZwiYSZGJMX2sBvobuSp6E9wyBLi8H65Roig6dx89QyoQ8xXFT0/rHD8UicDGDMl9kn
-         E0Hg==
-X-Forwarded-Encrypted: i=1; AJvYcCUAAEvl3Y604Ox4ikf+e4kQdgyRoz8Td+9ZCbiix28b/vzdL1U0Sp+MAMDKglpXbLrCjdme4JljR+ppho1V1JY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/PajgL/uzkEKiGbcYc/NKO+Zxi3gk+aXlaImWpGx6capYutCy
-	kRB7P5DgNB3R4M0t1O4rHDYF4SvLzzTZE04iUrtKWwcW1Q+m/dY8oJJDqgLDqyGK1hr6tvXDOt9
-	4Db5LUkhOf0quCkdyU9qSxE/X/gv2xSXH0Q7Geho=
-X-Gm-Gg: ASbGncuE2A5+qQt/IiUMRoRpD/u/mlejO4mFPG+Y+lsQ2RaI35CCBWl1zNqGr4KyXHV
-	oSEQJcx/6tFXBG7bG0C5Jq3sEjCppNCKsZoXcaMfI8Reg23viKr0rVGdMEDwhscax4lAhuTKhi9
-	VlFEkzTgCh8LS1V+LAKRl2QQcmVtPWPNO0vtr7HFtHGriTFRJJDY0AK2tyJkihA/oUZw0gqnFb
-X-Google-Smtp-Source: AGHT+IFh1B+A+fdjQ0CvAxPbjMYP1A9rdTXQW/HM/GhCzzE5FNCpc4tMd+qHVqr75+gws1rXT4Ypm9ihHODwnJj5SLo=
-X-Received: by 2002:a05:6512:124b:b0:553:399d:58e6 with SMTP id
- 2adb3069b0e04-55356df9977mr125129e87.31.1748982436553; Tue, 03 Jun 2025
- 13:27:16 -0700 (PDT)
+        bh=IgkRH+3yLQUgKV5wOSUdEvO3hRUeuun/3TUnglkvQDw=;
+        b=wJXRarM3vHEKeJRlLHIK/yc+R/9QRqSOpG1ByJL6NYPeuXqvBAg8WIAPFSk00qRb/J
+         LHnHXEqNtsbvmkFtDmMTT0r3Bd1gFCrFf01eoce3GRxywLlDEgRwcVmq9Qo3Un7V7YQN
+         8aAXBnWQ9vPSCmyLMX4Bqgqb2SO9qIjkvDAvN6fsE73gjzzw9RqxI5BfmmouUhGy/Op5
+         4KzunayLKuyy+bqplXRBjBjZb9ptAg5TvyunnNeQ47OUrRwXcO3pzuRgrDY+Y1Zri7BL
+         wO55qdO9dYIpv67VXRb5zlfYl4hY9y1k4PA525UWH1byzogSnoWFkV0IFqj/7lUL89Iq
+         IHmw==
+X-Forwarded-Encrypted: i=1; AJvYcCV/o+qETrMIhwezr1v5ieKl78mkntzsCv0tmVd81KBT0t9xtbe0XZHKW+2nB5ECm08hS62iKaYJfjSnyP+XhC4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzzLAfCYXuj6h7z8+bmG1TrXcI4DCB2vpsHzi6SE7WliKp1IH0L
+	qnx1PLpb1GLwrUGiE2IWkLufyeWvYNajQ2eA/vb5uwIhr6pzEmoryjhkP8WGtjgl/c95GLS3PdB
+	fmioUnNzUXj7l10/MetoBkv+VwD/78uuYzRi//JlN
+X-Gm-Gg: ASbGncvsX8uFLJ7WBXtynjoszGvPgPChm2aXfAmXcegNBr06o3LcJaxjX9hhg/gvLc1
+	tgyL59cXrIqgoISZns3Y819bwUzpKwajxG+Y+UdnF4kJBYujsdoRSTnpZCKDTdnOrd9pi+kIr45
+	Bs/0WLXg5psUzm0BczXK3VAgpYUUs57HLRyvSKnLvf1eUXuAAGaI213trUs6O1mx808hfB3kEPf
+	Q==
+X-Google-Smtp-Source: AGHT+IGHTtd8GwYL6s47duOtvI11yvQhyMCmulRFLFgan9XM4NL5YqgUm7lrMXaSMf7Xg+hGF009Ceh+BvemOxenRjE=
+X-Received: by 2002:a05:6122:8d1:b0:52c:4eb0:118d with SMTP id
+ 71dfb90a1353d-530c72aea25mr471405e0c.4.1748982991815; Tue, 03 Jun 2025
+ 13:36:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250603201036.44504-1-terry.tritton@linaro.org>
-In-Reply-To: <20250603201036.44504-1-terry.tritton@linaro.org>
-From: John Stultz <jstultz@google.com>
-Date: Tue, 3 Jun 2025 13:27:04 -0700
-X-Gm-Features: AX0GCFuuX4lVBQbzNpicNH90nbJZyqUiFq9bOfP2TAZziYhan0ThpfFSgl5qplE
-Message-ID: <CANDhNCoiKjPOyGwiu5Apg2y4LduPTRQvEjG7snmbzrenZojAKg@mail.gmail.com>
-Subject: Re: [PATCH] selftests/timers: Fix integer overlow errors on 32 bit systems
-To: Terry Tritton <terry.tritton@linaro.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Stephen Boyd <sboyd@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	ttritton@google.com, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+References: <20250603044813.88265-1-blakejones@google.com> <aD72CVq-kWr3G4S3@krava>
+ <CAP_z_CgAAAaAPGfYY2DErT_V2-E2e8E+fDHcGPVSaOq+_D9EeQ@mail.gmail.com> <CAEf4BzbYrjOwzhvSn0M5sPtOJu5dXuPDhrWPkkLvLaL3+R20=A@mail.gmail.com>
+In-Reply-To: <CAEf4BzbYrjOwzhvSn0M5sPtOJu5dXuPDhrWPkkLvLaL3+R20=A@mail.gmail.com>
+From: Blake Jones <blakejones@google.com>
+Date: Tue, 3 Jun 2025 13:36:21 -0700
+X-Gm-Features: AX0GCFux8Pf7j5PbJWHTWQG8crurwVe0RL2F0e4S34PAatQdl9mJe8_5ita_d1Y
+Message-ID: <CAP_z_Cj-v+h6giXb4W3NuVEN5+QMJwTQgqWO7cQHMgPxzSCZ=Q@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] libbpf: add support for printing BTF character
+ arrays as strings
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Jiri Olsa <olsajiri@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Namhyung Kim <namhyung@kernel.org>, 
+	Ian Rogers <irogers@google.com>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 3, 2025 at 1:10=E2=80=AFPM Terry Tritton <terry.tritton@linaro.=
-org> wrote:
->
-> The use of NSEC_PER_SEC (1000000000L) as defined in include/vdso/time64.h
-> causes several integer overflow warnings and test errors on 32 bit
-> architectures.
->
-> Use a long long instead of long to prevent integer overflow when
-> converting seconds to nanoseconds.
->
-> Signed-off-by: Terry Tritton <terry.tritton@linaro.org>
+Hi Andrii,
 
-Needs a Fixes: tag?
+On Tue, Jun 3, 2025 at 11:39=E2=80=AFAM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+> > Good question. That E2BIG error would happen, for example, if we tried
+> > to print the array "{ 'a', 'b', 'c' }" when the type was "char[4]".
+>
+> Exactly, data is truncated, we have to return E2BIG. But I think that
+> is checked earlier with btf_dump_type_data_check_overflow(), so we
+> probably don't need to do this here?
 
-> ---
->  tools/testing/selftests/timers/adjtick.c             | 5 ++++-
->  tools/testing/selftests/timers/alarmtimer-suspend.c  | 4 +++-
->  tools/testing/selftests/timers/inconsistency-check.c | 4 +++-
->  tools/testing/selftests/timers/leap-a-day.c          | 4 +++-
->  tools/testing/selftests/timers/mqueue-lat.c          | 3 ++-
->  tools/testing/selftests/timers/nanosleep.c           | 4 +++-
->  tools/testing/selftests/timers/nsleep-lat.c          | 4 +++-
->  tools/testing/selftests/timers/posix_timers.c        | 5 ++++-
->  tools/testing/selftests/timers/raw_skew.c            | 4 +++-
->  tools/testing/selftests/timers/set-2038.c            | 4 +++-
->  tools/testing/selftests/timers/set-timer-lat.c       | 4 +++-
->  tools/testing/selftests/timers/valid-adjtimex.c      | 5 ++++-
->  12 files changed, 38 insertions(+), 12 deletions(-)
->
-> diff --git a/tools/testing/selftests/timers/adjtick.c b/tools/testing/sel=
-ftests/timers/adjtick.c
-> index 777d9494b683..b5929c33b632 100644
-> --- a/tools/testing/selftests/timers/adjtick.c
-> +++ b/tools/testing/selftests/timers/adjtick.c
-> @@ -22,10 +22,13 @@
->  #include <sys/time.h>
->  #include <sys/timex.h>
->  #include <time.h>
-> -#include <include/vdso/time64.h>
->
->  #include "../kselftest.h"
->
-> +/* define NSEC_PER_SEC as long long to avoid overflow on 32 bit architec=
-tures*/
-> +#define NSEC_PER_SEC   1000000000LL
-> +#define USEC_PER_SEC   1000000LL
-> +
->  #define MILLION                        1000000
->
->  long systick;
-> diff --git a/tools/testing/selftests/timers/alarmtimer-suspend.c b/tools/=
-testing/selftests/timers/alarmtimer-suspend.c
-> index a9ef76ea6051..b5799df271ae 100644
-> --- a/tools/testing/selftests/timers/alarmtimer-suspend.c
-> +++ b/tools/testing/selftests/timers/alarmtimer-suspend.c
-> @@ -28,10 +28,12 @@
->  #include <signal.h>
->  #include <stdlib.h>
->  #include <pthread.h>
-> -#include <include/vdso/time64.h>
->  #include <errno.h>
->  #include "../kselftest.h"
->
-> +/* define NSEC_PER_SEC as long long to avoid overflow on 32 bit architec=
-tures*/
-> +#define NSEC_PER_SEC   1000000000LL
-> +
->  #define UNREASONABLE_LAT (NSEC_PER_SEC * 5) /* hopefully we resume in 5 =
-secs */
+btf_dump_type_data_check_overflow() only looks at INT, FLOAT, PTR, ENUM,
+and ENUM64 types:
+https://elixir.bootlin.com/linux/v6.15/source/tools/lib/bpf/btf_dump.c#L230=
+4-L2315
 
-So this seems to be undoing commit 80fa614e2fbc ("selftests: timers:
-Remove local NSEC_PER_SEC and USEC_PER_SEC defines")
+So we still need to do this manually for this ARRAY type.
 
-Would it make more sense to fix the NSEC_PER_SEC definition in time64.h to =
-a LL?
+> Please add tests with truncated data so we know for sure?
 
-thanks
--john
+I've added tests; see below.
+
+> > I'd say your proposed behavior would be consistent with the semantic of
+> > ".emit_strings should display strings in an intuitively useful way",
+>
+> It still should follow the overall contract, so I think E2BIG is
+> justified for truncated data.
+>
+> But there is also a bit of a quirk. If a string is not
+> zero-terminated, we actually don't distinguish it in any way. Would it
+> make sense to detect this and still print it as an array of individual
+> characters? It's clearly not a valid C string at that point, so
+> emit_strings doesn't have to apply. WDYT? The implementation would be
+> simple -- find zero in an array, if found - emit everything up to that
+> point as string, if not - emit character array?
+
+I don't have strong feelings one way or another, so I've just implemented
+this.  btf_dump_array_data() now keeps going and does its current behavior
+if btf_dump_string_data() hit an error. In practice, btf_dump_array_data()
+does *not* return E2BIG if the provided array is too big for the type; it
+just displays the first N elements of the array and then returns. I don't
+plan to change this behavior.
+
+Updated patches coming shortly.
+
+Blake
 
