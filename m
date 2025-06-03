@@ -1,116 +1,129 @@
-Return-Path: <linux-kselftest+bounces-34223-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34224-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BCC2ACCA0A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 17:22:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5EA7CACCA51
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 17:39:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 940A2188605B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 15:22:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 86ADE188EAB5
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 15:39:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 709BD23A990;
-	Tue,  3 Jun 2025 15:22:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDA2723C4E6;
+	Tue,  3 Jun 2025 15:39:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AFsrjOn5"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="27ezcxZ4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com [209.85.221.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46954231A55;
-	Tue,  3 Jun 2025 15:22:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 666D3165F16
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Jun 2025 15:39:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748964146; cv=none; b=cWqBIBNE8dKNYWQ4DQJfTC5+rzCXNUIDo+whVC2cyvA0+y4KNh4UQjPpyGoJ5RD/KiUvChDpOal9P6er8sQ85OE84wBhUFRk+f4F53v/msDSguZiabOZ9U6iVfGlEWbAdmUPScjGQftHHYSyKSUBHKcHSsGy5ho1YIsHeVfLxQs=
+	t=1748965178; cv=none; b=NdUQYnWLWm1llYoJk9zJOhBAIh2oGiEJddsd0fV9pEGmjOHDrRhkVHzjnJbaBhYfduwmw0rvmTKbVA1w8lOiUca9vyw5mCVSywM0sImNypC4VTJrsR6ZnZuKR5spnad+YmMGImr91sTNkgdfsL2PMHWXg6MGvv7Hfpo2ljBeVQU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748964146; c=relaxed/simple;
-	bh=0hTLQi0oAwCP5NrLU1AZ6DJvGLwP+iyJza4JG77lOJE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cl9qUaAK6n01gcGSZubTCdZsL5dzcISfAbRncmPjmSigpPewnmNXrnGuV4ut7Mvce+sS7U37PItJuA+Md0m3CEYcBt3fPr3ywjGZH1zsKgk0drZyd/GYgOYpz94ezebylWOK8IN+1oFzwfUkufWRHwT3dT8ge33/QLj3aZSwRrA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AFsrjOn5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DE31C4CEED;
-	Tue,  3 Jun 2025 15:22:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748964145;
-	bh=0hTLQi0oAwCP5NrLU1AZ6DJvGLwP+iyJza4JG77lOJE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AFsrjOn5vr9Qx6cv8CU2jpKkc9VU0PPSyinAwF+o5qu8Xq5NtS8oRk0goJY0ZNVYD
-	 JVMgwbUq4EYAtqOf4sa1+QDPK8JMLU4/1lIwpL/MTNWtW6y+LLcDZSFB2lBf2HOfye
-	 ifpAS8qF1RIX2CVPUEbInQK/GMp72nwToZxhfG4VESJ3VrL1vZQEjCXD/WxGEp4ra3
-	 uWA4wLFceuKfXmZodfLTfWAcI1g56Zw0ScbrxosOL00SzJnQCIPlNASgq7yrCxqLNJ
-	 eOGfx4f19K6S2PofASc0rGGXA0hfIBNtOdseoF3I3VOWGqoP6Ukr3r38BH20DNRKzZ
-	 1fN+FI5xeCauw==
-Date: Tue, 3 Jun 2025 16:22:21 +0100
-From: Mark Brown <broonie@kernel.org>
-To: David Hildenbrand <david@redhat.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] selftests/mm: Report unique test names for each
- cow test
-Message-ID: <e1d20dbf-734f-4a2c-915a-86c9fbac998a@sirena.org.uk>
-References: <20250527-selftests-mm-cow-dedupe-v2-0-ff198df8e38e@kernel.org>
- <20250527-selftests-mm-cow-dedupe-v2-3-ff198df8e38e@kernel.org>
- <c43347ce-433b-498e-bfd7-f09b8e781197@redhat.com>
- <9961082f-848d-43d3-b97d-3df675ca4415@sirena.org.uk>
- <4676a010-a977-4d5a-b42a-edbbea7d356d@redhat.com>
- <e3d584fe-6297-403d-84f3-397a0fe459c5@sirena.org.uk>
- <df85fba8-826f-41fb-8850-077a4e4dd240@redhat.com>
+	s=arc-20240116; t=1748965178; c=relaxed/simple;
+	bh=UuT5g9Si2iw2CIgCkdkvrI6apMY4EOTkxGjsvbaoGu0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fGKyNBiSbd84ts80e+Y/KxESWrC6ZMQITT1ivPQNGgcmrHHBYHjefXWCQu3CiranaO6lhB+NJN8A+i4nxTx8+Uw/U14q8VX9M/vtOrOMjVJNQrDQO52QVjH1zfx1vkotLbEIqTWPNmdW3i66b0YuU3gkyCFkuTtU5RLlDtTmBfA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=27ezcxZ4; arc=none smtp.client-ip=209.85.221.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-vk1-f171.google.com with SMTP id 71dfb90a1353d-52617ceae0dso2031901e0c.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Jun 2025 08:39:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1748965176; x=1749569976; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KI0KUCc4GKGFyOQz+VkwvXZxmWd+cX7dW8bnjIdqNfw=;
+        b=27ezcxZ44/B6MjglwU0uJ1RKQRT6nZgV4VxjMh0AHeBnMB4xp8J5nuXXTMCIG/CSuW
+         D0nB/w8CTZbiGIi8/X0jNrZkVaAMvtCzUNlG0yFfX1NCJmsPJlL1Iqj05LVwP+vCm+XD
+         6iDO3k/mB7gUqB9Pr1V0xLCf6SIx8kSmFwPp7Z5u8kGgvWSKrkpmcKxsFC6RgsORqa2U
+         7Cwikva6jEYjqGJW/UZBXaGHVLl85lWx8YYe/RJ4saGabX2f1XV1XvWQSOSvlb07Vg+F
+         K10BZMrWGZtxT7Lw/2Eov+hM+EuP68dbI78QpzBwR0lDvgKpxOhmlfEpszJa3E8ywU98
+         OHww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748965176; x=1749569976;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KI0KUCc4GKGFyOQz+VkwvXZxmWd+cX7dW8bnjIdqNfw=;
+        b=g1p9KxsINTvcSbLnrqllmNeX7qq8UMHIgXJvckFe5LtI137cXrPRl7bfFSnx4cX8lu
+         n4QRNuBT/I/fal8z5qu7Tdq/xSwNbmIdkSvaeKa5fjxtMUspRgkL05bLkE8wkf5rPKWD
+         wT6XQ7yp2OxRT8wnZZmp+YRrHHBGpgp6svBhg3hs3xbzMzWaJaU+yY2Q+SF/+S10U/bT
+         RNI9GjkrpNQJNUO5dgwECUk01PntyutiQ+IUSDliEvUDo4T1a3q05lJeHl05QwqR6+4s
+         s5x4YxFXtnNNodfwgIP6gQPnKE9oAwrmix2LYV8+PoFxNb2IJ56Y18CH/iY5t9IyU5im
+         UQkw==
+X-Forwarded-Encrypted: i=1; AJvYcCXz6uuwy0HvRL3D6WfmGks0uwFu9iqlOQbPV9diWOLzqkMebBmxH6MOmLW34lpSCFxy5aJwFk1rMg8HiYwhtLE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwlBk+RffjMB9kxH9ojliMPiswbfV0TY7ssqGVclEkXKcan7oGA
+	ujzF3XMw5XZNKE2T4GQC7CDt6ipZDxzjatfNSNHiSUP+dug3Akc/6dtNZNPqsc81NR+JQR6Aq9j
+	XHAoKqQFzM4J0qxwaZG9XIHzq7I68wVVsDKiDE/Rn
+X-Gm-Gg: ASbGncsYRyWPsbvsmUz/ue2TXTOVkAt4ZceOmRpzPBIiPqoh5U5sV4kirRqypEfyDX1
+	N8WbWZ5Lh4S+nZqnufYdPjf0CFLfB5tLOw8ShgTxHQSHT7LkMZjWBI8YEv2rba3PyLWFZ8afrmJ
+	NGjkB2aCxrcfcWyJKfh+ui7ylg44nhvh0rArcpsXY3HWM=
+X-Google-Smtp-Source: AGHT+IFP1W8JY2mCchvmzAj895DlittXPX7dwIqkrpqJOi2cGxL0MhFgoA+lb/sIi6f+nQXajzDBlAkwp1cCik+mccg=
+X-Received: by 2002:a05:6122:17a8:b0:530:5f5a:1362 with SMTP id
+ 71dfb90a1353d-53084d9df14mr11975682e0c.10.1748965171447; Tue, 03 Jun 2025
+ 08:39:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="vzYPTz+0185M4LPA"
-Content-Disposition: inline
-In-Reply-To: <df85fba8-826f-41fb-8850-077a4e4dd240@redhat.com>
-X-Cookie: Avec!
+References: <20250603044813.88265-1-blakejones@google.com> <aD72CVq-kWr3G4S3@krava>
+In-Reply-To: <aD72CVq-kWr3G4S3@krava>
+From: Blake Jones <blakejones@google.com>
+Date: Tue, 3 Jun 2025 08:39:20 -0700
+X-Gm-Features: AX0GCFuztqxiBrROMefdagMnpx8xS7mbzVyRECRkSzeDsnAU9IK_GlaCTp_q3q0
+Message-ID: <CAP_z_CgAAAaAPGfYY2DErT_V2-E2e8E+fDHcGPVSaOq+_D9EeQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] libbpf: add support for printing BTF character
+ arrays as strings
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Namhyung Kim <namhyung@kernel.org>, 
+	Ian Rogers <irogers@google.com>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, Jun 3, 2025 at 6:18=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrote=
+:
+> > +static int btf_dump_string_data(struct btf_dump *d,
+> > +                             const struct btf_type *t,
+> > +                             __u32 id,
+> > +                             const void *data)
+> > +{
+> > +     const struct btf_array *array =3D btf_array(t);
+> > +     __u32 i;
+> > +
+> > +     btf_dump_data_pfx(d);
+> > +     btf_dump_printf(d, "\"");
+> > +
+> > +     for (i =3D 0; i < array->nelems; i++, data++) {
+> > +             char c;
+> > +
+> > +             if (data >=3D d->typed_dump->data_end)
+> > +                     return -E2BIG;
+>
+> curious, is this just string array without null terminating byte?
+> should we just print " and return 0 instead of E2BIG error ?
 
---vzYPTz+0185M4LPA
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Good question. That E2BIG error would happen, for example, if we tried
+to print the array "{ 'a', 'b', 'c' }" when the type was "char[4]".
+I'd say your proposed behavior would be consistent with the semantic of
+".emit_strings should display strings in an intuitively useful way",
+and I'd be in favor of doing that (replacing "return -E2BIG" with "break").
+If others agree (specifically Andrii, who had comments about the semantics
+yesterday), I'll make that change.
 
-On Tue, Jun 03, 2025 at 05:06:17PM +0200, David Hildenbrand wrote:
-> On 03.06.25 16:58, Mark Brown wrote:
-
-> > Like I said I suspect the test name is just unclear here...
-
-> I would hope we find some mechanical replacement.
-
-> E.g.,
-
-> ksft_test_result_pass("No leak from parent into child\n");
-
-> becomes
-
-> ksft_print_msg("No leak from parent into child\n");
-> log_test_result(KSFT_PASS);
-
-Like I've been saying this is just the final test result, in this case I
-would expect that for the actual thing we're trying to test any
-confusion would be addressed in the name of the test so that it's clear
-what it was trying to test.  So adding "Leak from parent to child" to
-the name of all the tests?
-
---vzYPTz+0185M4LPA
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmg/EywACgkQJNaLcl1U
-h9C7RQf+NaJb8aic+VrkqhBtJNm1XQMiWUrS35SXFbO6qEGxn5oQanJY13y3xyky
-/wQsVQhd2hLb1Zin1X6CINnGYyYMdyTIxpxXzTw72Q5DB0DSK46/7oRZTqPgiuIh
-aHjF9pBHNRQVZvsuhzGJOu3yHbilan4LEjp1ZawjyudxZOyDyW477RJYk+WrE8iu
-f5ptoGT1Eukrm2ZmdEI51GIvRxtx1K0tVYQN2nTqzb2gzQS4u4vuPNpZhn5uPMBU
-8Gf0VDRL3hVckY6XbYIhZwIjzSee6UJe0UudgmwilChz+K3C8kQQ5k+Ia1PYIgNZ
-q4LsgYvunzKlJK1b9QA4BJmrJ1506g==
-=QnWD
------END PGP SIGNATURE-----
-
---vzYPTz+0185M4LPA--
+Blake
 
