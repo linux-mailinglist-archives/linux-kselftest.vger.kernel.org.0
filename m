@@ -1,331 +1,191 @@
-Return-Path: <linux-kselftest+bounces-34240-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34241-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9EC1ACCDFC
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 22:11:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF2F0ACCE16
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 22:18:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AAD0F174F00
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 20:11:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 03569188E642
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 20:19:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 112691DDC1B;
-	Tue,  3 Jun 2025 20:10:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38F70221739;
+	Tue,  3 Jun 2025 20:18:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="T7w3knaj"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QNoCSJk9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E92294A23
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Jun 2025 20:10:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80AB013AD05
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Jun 2025 20:18:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748981457; cv=none; b=qPw3a/fZsf8m8BXA0w6R4XqK31TLPGNYWoRCkbD3IMb1l+Jl5E5DChmHNWk+WNvEGAxb0J0Gwq/d9Mu3CdsTSxVETYdMzHxm+aJY1JXqqXDsiCf0xRG/CbZU0pRAtqvlVoaMrhKB0vYHqVbAx3oYcMaBQZsnwVzihTL2BWG8YRA=
+	t=1748981922; cv=none; b=LGB7MawLNeDd+wi6WDtuJwI06oZEKDBVMYbRRtOY9LFP/0TYaXELANZFtDWqjxoBX2R3D8eHoiBWcq7SKi2zsbOBPi8iHEWWoyKzLbKOA3L7HXkKM8HOQBB2ejs5pP/nKpQIV//59UP5lTnEpThCbRXTcg5IszWw0aQXqEGv7Xw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748981457; c=relaxed/simple;
-	bh=aN65jyOOlulDGqRV+3dR3KUf2ZNoBiszJnl/rlNQoFw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=B5LaU0wvBVOvXdVbE1UC9W2zAYrEWgNuONBPE3Czjd5uQaR92hbHSByvSMod9dTxuQuyz5pleKue/iD2Vj086N1z4fS1j3xrgrG7Bg0msciOLmmWpXS6RWVkKanZoAUDMIB/IfMv6VaJL5OHIVfA6YwtBUkn+0zNrdHwIodUEoY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=T7w3knaj; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-451ebd3d149so8016395e9.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Jun 2025 13:10:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1748981453; x=1749586253; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=VwB24AhjYH1g0oTgqkjrBjkMlDyt0oxM7Ekx/Bvp0/o=;
-        b=T7w3knajGs5z7vGsyR6V1C6/0akvwOb80+bruVFmQrP5h8x2PnEM98JjeCxavwNwuR
-         hqNQqgqaADL+/wjRl8mEG6S89lyqSIzFkBYEbRp99TdxLlk8RJ6u6iEFH6LjWfAbDxVP
-         +K50/hs5Y2djIVEk3dSBeobyhfRmYzcjvMWVfaIcgp3ONIthP9AYlmclxwiGmH/h42cE
-         kerUkaoHTRxtw9b9dtMj5nSI2CGyrqbrKP4icRpgPwdZZJ2ANsm8nNY1OB/bX4VnbtWY
-         JSZnFyOt/hoP7zjbpHwb96iuBbjnAvkrLvP3chQeFynvAh/ON0ofkoNC8tga3UtY/1Z6
-         nlYw==
+	s=arc-20240116; t=1748981922; c=relaxed/simple;
+	bh=PhnGju2FaAl/Ou4Mi4eqXEqaDfOHiRecarv05XteqWo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sbNckFqIbcp8BcHOC7wAVYfHXFaCeNzsB6d1BpIJXFuoLmHQbS9Kd8Nh+GICEl90EB47COKjQ/j4izlsXpiUWvBEzJ1lgThyc/pLhzx9OFMAW4Q5/bXnyWttuBKI9sHa07iF9UdnolAbRhTmH1+FGEimZykMBtKIjXJAemxeQlU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QNoCSJk9; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1748981919;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=dmdW4bmka8D9iCjUm0LgPnNY9QDzyr1/KIwj6yPU5Nc=;
+	b=QNoCSJk9Y86dSBEszck5M12WcEV0mpy4H1NHEij2SYKBscuVS0HR8V+JmAM6tsPTHMJH9N
+	fU5umsflQfPWjwKzzctsr0C3Dh/z6bGiBmn81Lkk1EER99cplkzfpaArsY5q0/GvKXfqqZ
+	YK/2P7Dstnht2ypj0WPo6UnnS2m3Kyc=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-59-HEFC4xudPnmfbFlCM4j8Vw-1; Tue, 03 Jun 2025 16:18:36 -0400
+X-MC-Unique: HEFC4xudPnmfbFlCM4j8Vw-1
+X-Mimecast-MFC-AGG-ID: HEFC4xudPnmfbFlCM4j8Vw_1748981915
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-450cb8ff0c6so29205635e9.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Jun 2025 13:18:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748981453; x=1749586253;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VwB24AhjYH1g0oTgqkjrBjkMlDyt0oxM7Ekx/Bvp0/o=;
-        b=rNmKhQzKSNPfVU5xhxLGP2z6DL13oijBpJqUvSdaPiANOgWAjL9/IVBQLWSL27n6Kq
-         WfZ/RqtwuoAVQ7zHCk+gibK9zeBmwTruVQ156AwOeWSYixATUtwuRavJ8LWVi3dkTsqa
-         PewdgMDpGx7AMSQBPstldUdkEfvxQQbCkAlmCuL8IN+Pui039nAgMJ0IPSFqaVxGX6H9
-         Xdl3NSRUL+ouREuPzifnLzE2RhMlGq+vxHVP4KJizHPf3EOBjiIkYpGFnwvR+RFxHtrG
-         uNZEfVXKym32YfUw7pUuTZhFtzvtLuDnLEexquzv7EjO1o7V6Tcuo1bqhBU9Sklb9LeI
-         nDGA==
-X-Forwarded-Encrypted: i=1; AJvYcCVQl8kge+C3RMjBda2vibfFeZiRM06/HP+1FXPXqnzJ8k+cM6odwwn9dBX+80jb7PO0N/Cfvj6UGRq0cVogMdg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxAPts71Tl7SoA7Q0zJmD7+iVl6khEv1RwwVeNkhOQYnBWpx+4a
-	OoW1E2jgeuC1TUuBpBBehITokd0/USp4D9NJglL1ljz30lkn9P9VV+FWNC+gdivfAdU=
-X-Gm-Gg: ASbGncspC6PIQFGhFAIQTzVYwiZRSjjegenMtdMlmTCTKXnaGbhl50Cpdkj1+XZT5+G
-	Jtum7QyWJEsH9OSsEar1FSLi/tD08FRpb06sPPnO4+CLbmy0s990mC2axdmc+0sMEOWj60nK5jW
-	OJe734AhPCI732WrgO48BHroglUFNmXyddVJ6lzFVmew3W1CwUsGygc0JscL0vtqHgqn0YJItc3
-	syU/nmqviZA9de0BnCbH1l3mFoFjvl5KuI4j8fn1kkLXq+XgKXGtl0FD9QM7Ey4dJ9Zan7z7bKT
-	8hOKD1uduvyceBMt365cSC4P4mivOLIHPBcC7RWiI3Bl9mm6g9VhWifR89EwQAGPEbshkCW0H7j
-	uVAkXj4GMl253gGsg1Je5SQAl2O707ECPWLt3KWDUVxjMTyBrSPvYjCDsm/g5HgTBvGM2j1w=
-X-Google-Smtp-Source: AGHT+IGA2ew16lW9hkbjwj2+dxBXTO8ITHoc4YIhf4OdJI3DPA33Hmk3EHAKN/4i7DrRFAalKoK0EQ==
-X-Received: by 2002:a05:600c:3542:b0:439:86fb:7340 with SMTP id 5b1f17b1804b1-451f0b3938cmr493875e9.30.1748981453165;
-        Tue, 03 Jun 2025 13:10:53 -0700 (PDT)
-Received: from green.cable.virginm.net (nail-04-b2-v4wan-166353-cust693.vm26.cable.virginm.net. [82.35.130.182])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-450d80065e0sm180719895e9.29.2025.06.03.13.10.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jun 2025 13:10:52 -0700 (PDT)
-From: Terry Tritton <terry.tritton@linaro.org>
-To: John Stultz <jstultz@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: ttritton@google.com,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Terry Tritton <terry.tritton@linaro.org>
-Subject: [PATCH] selftests/timers: Fix integer overlow errors on 32 bit systems
-Date: Tue,  3 Jun 2025 21:10:36 +0100
-Message-Id: <20250603201036.44504-1-terry.tritton@linaro.org>
-X-Mailer: git-send-email 2.39.5
+        d=1e100.net; s=20230601; t=1748981915; x=1749586715;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=dmdW4bmka8D9iCjUm0LgPnNY9QDzyr1/KIwj6yPU5Nc=;
+        b=egLruGsM2MZYQahT9FqGEQxUu2BZrumYQtZa4+JLwTu8pTgBv2fTgtljrEq0JG215a
+         W1IbP99iHv/Zo9FaUactbcwWUaWuTblzmdStNEtuqtzN768a7VsgwrblVwNHvGqpvrvz
+         vxvPcSDMtghzJnDozKtNtV4aKccgvvqQprgA1mznwBWdY98kHjWZhRaS/V4z9e7tyzaX
+         l9swwFpUFrTk518yj5Ym7kF2HcLtq83bfzoecmKcf4bR29WX/tv0+SdUULkegGMSnrnN
+         P+hqzwyub+PMZnF1mFXaaIluPH14odx5+/sNGq2+BnhAZ39AfJLZ96uBBhnM1kO3OWya
+         31bQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUdjNuHUWfx69FuxRrsnnm6gILMI7UD/rkAF9+znEl27wkNeuksZfltivbh+tOoACvrEcvUKEwexJ6S0OV41Lw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyeblOQ/UCuaQO/P2/M9U4k99wsrKy0wR1OQCFXNPxZ8UJAaxdF
+	rWmd8f4juPOZbphy7hdIFghoDAJCWSAfUENTh80z0YlO7pwQj2m3zulVoIG90++YfzL4Ghlbj5n
+	GFETZigZuIVU4MUXGY4BkS9V28xssMKfjYHKiPlJpexJcU5vlCoebIoF2Ag3nj/EpNgZFbQ==
+X-Gm-Gg: ASbGncvX6PcH9UB3Uczq/n0niq3Zi1NY/V3r4oSujXEPs59WBi6ETrI6HD2+ve0NHuQ
+	q3uXL8X5BBazjbWQ2+S8gs1u+DS+t5psaEVYbhiL9v+fIfHaNc99RhBSjqLE0jHdDeka1yFknNF
+	3qhDo8CRldDVRqPF60abmPFYy6xmnmqlHoCLBp5MbZqdd276vQD+7YSs24L/bG+ntSLX/o5O3Wy
+	1IVb4M0pPIQoddh5WT+JncOnC7V6bA10yBLhODIBWC1aG5zd7gGwPQWEiFELH2JF5UYCzgyOrRW
+	0tJOiO6LTH41r/t8QmSkYPWEnv9Wo+6Xv53lRHidOvHTx6LGhJMTlOxXnuzr3frZdkWLGjs8WAV
+	QCyIYc7+l4183bohfXQ5C4gztx+RagF3f7FKz4U8=
+X-Received: by 2002:a05:600c:818e:b0:440:6a5f:c308 with SMTP id 5b1f17b1804b1-451f0a772b1mr800225e9.13.1748981915238;
+        Tue, 03 Jun 2025 13:18:35 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEFoZbzZ9OiBB+hfEam1+vq0MIwdg8ikG1TlX+hLCXBEfbkk5dPOMwLME6VFx/Iyp28v7K66w==
+X-Received: by 2002:a05:600c:818e:b0:440:6a5f:c308 with SMTP id 5b1f17b1804b1-451f0a772b1mr800135e9.13.1748981914874;
+        Tue, 03 Jun 2025 13:18:34 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f0d:f000:eec9:2b8d:4913:f32a? (p200300d82f0df000eec92b8d4913f32a.dip0.t-ipconnect.de. [2003:d8:2f0d:f000:eec9:2b8d:4913:f32a])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-450d7fb09a3sm171214265e9.24.2025.06.03.13.18.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Jun 2025 13:18:33 -0700 (PDT)
+Message-ID: <d7c61e25-f09e-4260-8228-d28f0289795a@redhat.com>
+Date: Tue, 3 Jun 2025 22:18:32 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/4] selftests/mm: Add helper for logging test start
+ and results
+To: Mark Brown <broonie@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250527-selftests-mm-cow-dedupe-v2-0-ff198df8e38e@kernel.org>
+ <20250527-selftests-mm-cow-dedupe-v2-2-ff198df8e38e@kernel.org>
+ <63e00cf8-8592-4117-bb27-42bc8c1f8921@redhat.com>
+ <5e00c276-2d3b-4004-9f98-4703e2d642f9@sirena.org.uk>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <5e00c276-2d3b-4004-9f98-4703e2d642f9@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The use of NSEC_PER_SEC (1000000000L) as defined in include/vdso/time64.h
-causes several integer overflow warnings and test errors on 32 bit 
-architectures.
+On 03.06.25 20:27, Mark Brown wrote:
+> On Tue, Jun 03, 2025 at 02:37:41PM +0200, David Hildenbrand wrote:
+>> On 27.05.25 18:04, Mark Brown wrote:
+> 
+>>> +static char test_name[1024];
+>>> +
+>>> +static inline void log_test_start(const char *name, ...)
+>>> +{
+>>> +	va_list args;
+>>> +	va_start(args, name);
+>>> +
+>>> +	vsnprintf(test_name, sizeof(test_name), name, args);
+>>> +	ksft_print_msg("[RUN] %s\n", test_name);
+> 
+>> We could allocate the array in log_test_start() and free it in
+>> log_test_result(). Then, we could assert more easily that we always have a
+>> log_test_result() follow exactly one log_test_start() etc.
+> 
+> We could, however we don't have vasprintf() in nolibc and people have
+> been doing work towards making nolibc more generally useful as a libc
+> for the selftests (and/or the selftest interfaces more friendly to
+> nolibc).  I don't really know what the end goal with that is but given
+> the fairly small gain and the hope that this won't be a long term
+> framework for anything I'd rather not add something that gets in the way
+> of whatever's going on there.
+> 
+> Ideally the test programs would be refactored and these helpers deleted,
+> but as we said previously that's a bigger job that neither of us is
+> likely to get to in the short term :(
 
-Use a long long instead of long to prevent integer overflow when 
-converting seconds to nanoseconds.
+Jup ...
 
-Signed-off-by: Terry Tritton <terry.tritton@linaro.org>
----
- tools/testing/selftests/timers/adjtick.c             | 5 ++++-
- tools/testing/selftests/timers/alarmtimer-suspend.c  | 4 +++-
- tools/testing/selftests/timers/inconsistency-check.c | 4 +++-
- tools/testing/selftests/timers/leap-a-day.c          | 4 +++-
- tools/testing/selftests/timers/mqueue-lat.c          | 3 ++-
- tools/testing/selftests/timers/nanosleep.c           | 4 +++-
- tools/testing/selftests/timers/nsleep-lat.c          | 4 +++-
- tools/testing/selftests/timers/posix_timers.c        | 5 ++++-
- tools/testing/selftests/timers/raw_skew.c            | 4 +++-
- tools/testing/selftests/timers/set-2038.c            | 4 +++-
- tools/testing/selftests/timers/set-timer-lat.c       | 4 +++-
- tools/testing/selftests/timers/valid-adjtimex.c      | 5 ++++-
- 12 files changed, 38 insertions(+), 12 deletions(-)
-
-diff --git a/tools/testing/selftests/timers/adjtick.c b/tools/testing/selftests/timers/adjtick.c
-index 777d9494b683..b5929c33b632 100644
---- a/tools/testing/selftests/timers/adjtick.c
-+++ b/tools/testing/selftests/timers/adjtick.c
-@@ -22,10 +22,13 @@
- #include <sys/time.h>
- #include <sys/timex.h>
- #include <time.h>
--#include <include/vdso/time64.h>
- 
- #include "../kselftest.h"
- 
-+/* define NSEC_PER_SEC as long long to avoid overflow on 32 bit architectures*/
-+#define NSEC_PER_SEC   1000000000LL
-+#define USEC_PER_SEC   1000000LL
-+
- #define MILLION			1000000
- 
- long systick;
-diff --git a/tools/testing/selftests/timers/alarmtimer-suspend.c b/tools/testing/selftests/timers/alarmtimer-suspend.c
-index a9ef76ea6051..b5799df271ae 100644
---- a/tools/testing/selftests/timers/alarmtimer-suspend.c
-+++ b/tools/testing/selftests/timers/alarmtimer-suspend.c
-@@ -28,10 +28,12 @@
- #include <signal.h>
- #include <stdlib.h>
- #include <pthread.h>
--#include <include/vdso/time64.h>
- #include <errno.h>
- #include "../kselftest.h"
- 
-+/* define NSEC_PER_SEC as long long to avoid overflow on 32 bit architectures*/
-+#define NSEC_PER_SEC   1000000000LL
-+
- #define UNREASONABLE_LAT (NSEC_PER_SEC * 5) /* hopefully we resume in 5 secs */
- 
- #define SUSPEND_SECS 15
-diff --git a/tools/testing/selftests/timers/inconsistency-check.c b/tools/testing/selftests/timers/inconsistency-check.c
-index 9d1573769d55..2b2d7293b313 100644
---- a/tools/testing/selftests/timers/inconsistency-check.c
-+++ b/tools/testing/selftests/timers/inconsistency-check.c
-@@ -28,9 +28,11 @@
- #include <sys/timex.h>
- #include <string.h>
- #include <signal.h>
--#include <include/vdso/time64.h>
- #include "../kselftest.h"
- 
-+/* define NSEC_PER_SEC as long long to avoid overflow on 32 bit architectures*/
-+#define NSEC_PER_SEC   1000000000LL
-+
- /* CLOCK_HWSPECIFIC == CLOCK_SGI_CYCLE (Deprecated) */
- #define CLOCK_HWSPECIFIC		10
- 
-diff --git a/tools/testing/selftests/timers/leap-a-day.c b/tools/testing/selftests/timers/leap-a-day.c
-index 04004a7c0934..008c38ce4b2f 100644
---- a/tools/testing/selftests/timers/leap-a-day.c
-+++ b/tools/testing/selftests/timers/leap-a-day.c
-@@ -48,9 +48,11 @@
- #include <string.h>
- #include <signal.h>
- #include <unistd.h>
--#include <include/vdso/time64.h>
- #include "../kselftest.h"
- 
-+/* define NSEC_PER_SEC as long long to avoid overflow on 32 bit architectures*/
-+#define NSEC_PER_SEC   1000000000LL
-+
- #define CLOCK_TAI 11
- 
- time_t next_leap;
-diff --git a/tools/testing/selftests/timers/mqueue-lat.c b/tools/testing/selftests/timers/mqueue-lat.c
-index 63de2334a291..1a6d26f86137 100644
---- a/tools/testing/selftests/timers/mqueue-lat.c
-+++ b/tools/testing/selftests/timers/mqueue-lat.c
-@@ -29,9 +29,10 @@
- #include <signal.h>
- #include <errno.h>
- #include <mqueue.h>
--#include <include/vdso/time64.h>
- #include "../kselftest.h"
- 
-+/* define NSEC_PER_SEC as long long to avoid overflow on 32 bit architectures*/
-+#define NSEC_PER_SEC   1000000000LL
- 
- #define TARGET_TIMEOUT		100000000	/* 100ms in nanoseconds */
- #define UNRESONABLE_LATENCY	40000000	/* 40ms in nanosecs */
-diff --git a/tools/testing/selftests/timers/nanosleep.c b/tools/testing/selftests/timers/nanosleep.c
-index 252c6308c569..55ea67478fdd 100644
---- a/tools/testing/selftests/timers/nanosleep.c
-+++ b/tools/testing/selftests/timers/nanosleep.c
-@@ -27,9 +27,11 @@
- #include <sys/timex.h>
- #include <string.h>
- #include <signal.h>
--#include <include/vdso/time64.h>
- #include "../kselftest.h"
- 
-+/* define NSEC_PER_SEC as long long to avoid overflow on 32 bit architectures*/
-+#define NSEC_PER_SEC   1000000000LL
-+
- /* CLOCK_HWSPECIFIC == CLOCK_SGI_CYCLE (Deprecated) */
- #define CLOCK_HWSPECIFIC		10
- 
-diff --git a/tools/testing/selftests/timers/nsleep-lat.c b/tools/testing/selftests/timers/nsleep-lat.c
-index de23dc0c9f97..347d622987c8 100644
---- a/tools/testing/selftests/timers/nsleep-lat.c
-+++ b/tools/testing/selftests/timers/nsleep-lat.c
-@@ -24,9 +24,11 @@
- #include <sys/timex.h>
- #include <string.h>
- #include <signal.h>
--#include <include/vdso/time64.h>
- #include "../kselftest.h"
- 
-+/* define NSEC_PER_SEC as long long to avoid overflow on 32 bit architectures*/
-+#define NSEC_PER_SEC   1000000000LL
-+
- #define UNRESONABLE_LATENCY 40000000 /* 40ms in nanosecs */
- 
- /* CLOCK_HWSPECIFIC == CLOCK_SGI_CYCLE (Deprecated) */
-diff --git a/tools/testing/selftests/timers/posix_timers.c b/tools/testing/selftests/timers/posix_timers.c
-index f0eceb0faf34..555bf161f420 100644
---- a/tools/testing/selftests/timers/posix_timers.c
-+++ b/tools/testing/selftests/timers/posix_timers.c
-@@ -16,11 +16,14 @@
- #include <string.h>
- #include <unistd.h>
- #include <time.h>
--#include <include/vdso/time64.h>
- #include <pthread.h>
- 
- #include "../kselftest.h"
- 
-+/* define NSEC_PER_SEC as long long to avoid overflow on 32 bit architectures*/
-+#define NSEC_PER_SEC   1000000000LL
-+#define USEC_PER_SEC   1000000LL
-+
- #define DELAY 2
- 
- static void __fatal_error(const char *test, const char *name, const char *what)
-diff --git a/tools/testing/selftests/timers/raw_skew.c b/tools/testing/selftests/timers/raw_skew.c
-index 957f7cd29cb1..ff7675d98560 100644
---- a/tools/testing/selftests/timers/raw_skew.c
-+++ b/tools/testing/selftests/timers/raw_skew.c
-@@ -25,9 +25,11 @@
- #include <sys/time.h>
- #include <sys/timex.h>
- #include <time.h>
--#include <include/vdso/time64.h>
- #include "../kselftest.h"
- 
-+/* define NSEC_PER_SEC as long long to avoid overflow on 32 bit architectures*/
-+#define NSEC_PER_SEC   1000000000LL
-+
- #define shift_right(x, s) ({		\
- 	__typeof__(x) __x = (x);	\
- 	__typeof__(s) __s = (s);	\
-diff --git a/tools/testing/selftests/timers/set-2038.c b/tools/testing/selftests/timers/set-2038.c
-index ed244315e11c..8130d551a11c 100644
---- a/tools/testing/selftests/timers/set-2038.c
-+++ b/tools/testing/selftests/timers/set-2038.c
-@@ -27,9 +27,11 @@
- #include <unistd.h>
- #include <time.h>
- #include <sys/time.h>
--#include <include/vdso/time64.h>
- #include "../kselftest.h"
- 
-+/* define NSEC_PER_SEC as long long to avoid overflow on 32 bit architectures*/
-+#define NSEC_PER_SEC   1000000000LL
-+
- #define KTIME_MAX	((long long)~((unsigned long long)1 << 63))
- #define KTIME_SEC_MAX	(KTIME_MAX / NSEC_PER_SEC)
- 
-diff --git a/tools/testing/selftests/timers/set-timer-lat.c b/tools/testing/selftests/timers/set-timer-lat.c
-index 9d8437c13929..79a6a6cba186 100644
---- a/tools/testing/selftests/timers/set-timer-lat.c
-+++ b/tools/testing/selftests/timers/set-timer-lat.c
-@@ -28,9 +28,11 @@
- #include <signal.h>
- #include <stdlib.h>
- #include <pthread.h>
--#include <include/vdso/time64.h>
- #include "../kselftest.h"
- 
-+/* define NSEC_PER_SEC as long long to avoid overflow on 32 bit architectures*/
-+#define NSEC_PER_SEC   1000000000LL
-+
- /* CLOCK_HWSPECIFIC == CLOCK_SGI_CYCLE (Deprecated) */
- #define CLOCK_HWSPECIFIC		10
- 
-diff --git a/tools/testing/selftests/timers/valid-adjtimex.c b/tools/testing/selftests/timers/valid-adjtimex.c
-index 6b7801055ad1..e4f31e678630 100644
---- a/tools/testing/selftests/timers/valid-adjtimex.c
-+++ b/tools/testing/selftests/timers/valid-adjtimex.c
-@@ -29,9 +29,12 @@
- #include <string.h>
- #include <signal.h>
- #include <unistd.h>
--#include <include/vdso/time64.h>
- #include "../kselftest.h"
- 
-+/* define NSEC_PER_SEC as long long to avoid overflow on 32 bit architectures*/
-+#define NSEC_PER_SEC   1000000000LL
-+#define USEC_PER_SEC   1000000LL
-+
- #define ADJ_SETOFFSET 0x0100
- 
- #include <sys/syscall.h>
 -- 
-2.39.5
+Cheers,
+
+David / dhildenb
 
 
