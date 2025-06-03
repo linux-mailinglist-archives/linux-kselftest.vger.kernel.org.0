@@ -1,62 +1,62 @@
-Return-Path: <linux-kselftest+bounces-34253-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34250-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52E6CACCEA9
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 23:09:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1FACACCE9A
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 23:04:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 39CD57A1AFC
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 21:07:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0DF51889839
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 21:04:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86D9B224247;
-	Tue,  3 Jun 2025 21:08:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9ABDB2236FC;
+	Tue,  3 Jun 2025 21:04:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="nTEM85N1"
+	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="wbOymEgZ"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mx-rz-3.rrze.uni-erlangen.de (mx-rz-3.rrze.uni-erlangen.de [131.188.11.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E46C754918;
-	Tue,  3 Jun 2025 21:08:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04A4F1F12F4;
+	Tue,  3 Jun 2025 21:04:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.188.11.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748984937; cv=none; b=Qpdxl8t4Gi7MRvyjFpwQrMeGuMR7DuhiuyiodJ+ksCImtCieZ99AJFUTaej0zuBJQpPJvEvcB0G72oLt65AnjtcYOBFJDDYTJr+ohVxccPDvBLlP0ek5lXgEegZQi/2k54tjbqdb85Sh6AaNrz7GX+w5V3VxTIH9f6+YnsYuFvo=
+	t=1748984660; cv=none; b=ckA6r6/1/jh9ammce36dnz4n0mJooWcbdQalao89jq2fGjqa2T24AWinRViBDSqeOWBEIrCqw/RX8qh2qIJ/BXhe14H/C/jrm6bjLjDU4UDWnmOap7Sl4Bcd/zlbcFiO6oZuFjsv/nyIBUUKuqJ8ax0hC9Qm+BCLfVso/P2oqc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748984937; c=relaxed/simple;
-	bh=aWBgCi3B1Scf1zMtzS8uMObJlL/HdGNSPVktksO3kbI=;
+	s=arc-20240116; t=1748984660; c=relaxed/simple;
+	bh=JA8VLAJVwnfb2S1nrJrM04QNaNui1/wkR/RKqV9Jvhc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sfkukSIpLDrpIZCd3gimBDgYzGwv1HyGLEFQ+HstdY7mHyy0KDLXNU6g09E1KEhNJtCzHlgJijZsShMO3yp1lLb78LQS3iaKUBOTC/9MkrxmfQYcKFxyagy/jT5RgWcrx1EH9e9nkTtZWdnMafbu3lymmIN307C8N6YNheDMhC8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=nTEM85N1; arc=none smtp.client-ip=131.188.11.22
+	 MIME-Version; b=RJnLPjfoJsnnfEvOWfGvPPSfnOz5GhRr6WqkQqdFRMxRfhIRmL7Os1Y9m0JifFr3Tzh8Eb+TVxCY+Ss7b0Eu4Ec+c2lFvjf1TfBCjf7wttfKk20Y7nrryHUydjivphSGl4lZcBz5JLaQchn5gs1IV8vVNwa2PZd1IBycYbpPt+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=wbOymEgZ; arc=none smtp.client-ip=131.188.11.22
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fau.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fau.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fau.de; s=fau-2021;
-	t=1748984470; bh=2Lf9tfZYrOpzCpGiAeazFx+eYcO3ZXEjViLfHjoKxvc=;
+	t=1748984655; bh=2UwvqxyJ2K/g48t8U4HwZCTixs5aBO0jfSMiokXjqnU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From:To:CC:
 	 Subject;
-	b=nTEM85N1SHQYBShr1GceFe4QgYoYiCtWda0eqtuwoWSdUj007/bn3nxjsDnPS7Zqg
-	 itwtev5rBKG3nXIQD1m8IOiYHFMtBqIhtlvPtLuwXLtS9xG9MeqeMYOz+X8inKIOoA
-	 XM2TpZJM1mxD6E9UF3nbrLJflQo1D2xoSKHkxegJY5jaq/Z7l7r+ymcwadTm0vKkIC
-	 fyYucJTtduSuE0d9hA5sLk0NFQ7z39iMA4z0tRLpT0HGjeDB6aG+eo8TFn8TjD7lEX
-	 H3/wlqGmWqxU8ss6IHu4WPNGwGxPJg1S8PWxLqBWNFB/Z3kKUqrd53LfLdVQV/LYvK
-	 GMU5GeGq5Q0UQ==
+	b=wbOymEgZJKXNIzpeaUKrrp5oi0BLy74WRh9F3bwtCLqd61ATLudI+i9TyAASaewVx
+	 1KCMgLhcMmSyhK5V2Gp4mHHdUrNt3yssRKlmRoRWNe/1aX51cOV1u1X1L0S1zYCPxr
+	 E97Q6dNoPofYhPz6xe02s6xanKM1LKzcIbl6C03D+ylvz8wP7Z3Q4ybppxrGIeXM7r
+	 FyiGksjD6Y+m4BZ9Wywtm8yksqQthGPndCVETWx6/tAqG5EgN1ie1zc6LyaEDfo/uW
+	 RCyMLneCN9We0rW4+IVRP3rS1ONtTLecLrtsaQ7Ev9B+M84UW7h3/IIKvj0Z4rBCvr
+	 S4CCr13iAm4vA==
 Received: from mx-rz-smart.rrze.uni-erlangen.de (mx-rz-smart.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1e])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-rz-3.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4bBjmk3hHVz1yNg;
-	Tue,  3 Jun 2025 23:01:10 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at boeck4.rrze.uni-erlangen.de (RRZE)
+	by mx-rz-3.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4bBjrH49Rpz1yZg;
+	Tue,  3 Jun 2025 23:04:15 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at boeck1.rrze.uni-erlangen.de (RRZE)
 X-RRZE-Flag: Not-Spam
 X-RRZE-Submit-IP: 2001:9e8:3639:fe00:a21f:4ce4:8495:5578
 Received: from luis-tp.fritz.box (unknown [IPv6:2001:9e8:3639:fe00:a21f:4ce4:8495:5578])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	(Authenticated sender: U2FsdGVkX1/NbMnGaXYiRuu9sySXs39BAyREF6WAvO0=)
-	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4bBjmd5NPMz1xxq;
-	Tue,  3 Jun 2025 23:01:05 +0200 (CEST)
+	(Authenticated sender: U2FsdGVkX1+WzYk6/QiU80/dd/SlFMOAjg12F+WTVXc=)
+	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4bBjrB4xLxz1y5T;
+	Tue,  3 Jun 2025 23:04:10 +0200 (CEST)
 From: Luis Gerhorst <luis.gerhorst@fau.de>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -99,9 +99,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Maximilian Ott <ott@cs.fau.de>,
 	Milan Stephan <milan.stephan@fau.de>
-Subject: [PATCH bpf-next v4 1/9] bpf: Move insn if/else into do_check_insn()
-Date: Tue,  3 Jun 2025 22:57:52 +0200
-Message-ID: <20250603205800.334980-2-luis.gerhorst@fau.de>
+Subject: [PATCH bpf-next v4 2/9] bpf: Return -EFAULT on misconfigurations
+Date: Tue,  3 Jun 2025 22:57:53 +0200
+Message-ID: <20250603205800.334980-3-luis.gerhorst@fau.de>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250603205800.334980-1-luis.gerhorst@fau.de>
 References: <20250603205800.334980-1-luis.gerhorst@fau.de>
@@ -113,505 +113,191 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This is required to catch the errors later and fall back to a nospec if
-on a speculative path.
+Mark these cases as non-recoverable to later prevent them from being
+caught when they occur during speculative path verification.
 
-Eliminate the regs variable as it is only used once and insn_idx is not
-modified in-between the definition and usage.
+Eduard writes [1]:
 
-Do not pass insn but compute it in the function itself. As Eduard points
-out [1], insn is assumed to correspond to env->insn_idx in many places
-(e.g, __check_reg_arg()).
+  The only pace I'm aware of that might act upon specific error code
+  from verifier syscall is libbpf. Looking through libbpf code, it seems
+  that this change does not interfere with libbpf.
 
-Move code into do_check_insn(), replace
-* "continue" with "return 0" after modifying insn_idx
-* "goto process_bpf_exit" with "return PROCESS_BPF_EXIT"
-* "goto process_bpf_exit_full" with "return process_bpf_exit_full()"
-* "do_print_state = " with "*do_print_state = "
-
-[1] https://lore.kernel.org/all/293dbe3950a782b8eb3b87b71d7a967e120191fd.camel@gmail.com/
+[1] https://lore.kernel.org/all/785b4531ce3b44a84059a4feb4ba458c68fce719.camel@gmail.com/
 
 Signed-off-by: Luis Gerhorst <luis.gerhorst@fau.de>
+Reviewed-by: Eduard Zingerman <eddyz87@gmail.com>
 Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Acked-by: Henriette Herzog <henriette.herzog@rub.de>
 Cc: Maximilian Ott <ott@cs.fau.de>
 Cc: Milan Stephan <milan.stephan@fau.de>
 ---
- kernel/bpf/verifier.c | 428 ++++++++++++++++++++++--------------------
- 1 file changed, 223 insertions(+), 205 deletions(-)
+ kernel/bpf/verifier.c | 36 ++++++++++++++++++------------------
+ 1 file changed, 18 insertions(+), 18 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index a7d6e0c5928b..2e70be0cad49 100644
+index 2e70be0cad49..c76fbf46a365 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -19421,20 +19421,223 @@ static int save_aux_ptr_type(struct bpf_verifier_env *env, enum bpf_reg_type typ
- 	return 0;
- }
+@@ -8954,7 +8954,7 @@ static int resolve_map_arg_type(struct bpf_verifier_env *env,
+ 	if (!meta->map_ptr) {
+ 		/* kernel subsystem misconfigured verifier */
+ 		verbose(env, "invalid map_ptr to access map->type\n");
+-		return -EACCES;
++		return -EFAULT;
+ 	}
  
-+enum {
-+	PROCESS_BPF_EXIT = 1
-+};
-+
-+static int process_bpf_exit_full(struct bpf_verifier_env *env,
-+				 bool *do_print_state,
-+				 bool exception_exit)
-+{
-+	/* We must do check_reference_leak here before
-+	 * prepare_func_exit to handle the case when
-+	 * state->curframe > 0, it may be a callback function,
-+	 * for which reference_state must match caller reference
-+	 * state when it exits.
-+	 */
-+	int err = check_resource_leak(env, exception_exit,
-+				      !env->cur_state->curframe,
-+				      "BPF_EXIT instruction in main prog");
-+	if (err)
-+		return err;
-+
-+	/* The side effect of the prepare_func_exit which is
-+	 * being skipped is that it frees bpf_func_state.
-+	 * Typically, process_bpf_exit will only be hit with
-+	 * outermost exit. copy_verifier_state in pop_stack will
-+	 * handle freeing of any extra bpf_func_state left over
-+	 * from not processing all nested function exits. We
-+	 * also skip return code checks as they are not needed
-+	 * for exceptional exits.
-+	 */
-+	if (exception_exit)
-+		return PROCESS_BPF_EXIT;
-+
-+	if (env->cur_state->curframe) {
-+		/* exit from nested function */
-+		err = prepare_func_exit(env, &env->insn_idx);
-+		if (err)
-+			return err;
-+		*do_print_state = true;
-+		return 0;
-+	}
-+
-+	err = check_return_code(env, BPF_REG_0, "R0");
-+	if (err)
-+		return err;
-+	return PROCESS_BPF_EXIT;
-+}
-+
-+static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
-+{
-+	int err;
-+	struct bpf_insn *insn = &env->prog->insnsi[env->insn_idx];
-+	u8 class = BPF_CLASS(insn->code);
-+
-+	if (class == BPF_ALU || class == BPF_ALU64) {
-+		err = check_alu_op(env, insn);
-+		if (err)
-+			return err;
-+
-+	} else if (class == BPF_LDX) {
-+		bool is_ldsx = BPF_MODE(insn->code) == BPF_MEMSX;
-+
-+		/* Check for reserved fields is already done in
-+		 * resolve_pseudo_ldimm64().
-+		 */
-+		err = check_load_mem(env, insn, false, is_ldsx, true, "ldx");
-+		if (err)
-+			return err;
-+	} else if (class == BPF_STX) {
-+		if (BPF_MODE(insn->code) == BPF_ATOMIC) {
-+			err = check_atomic(env, insn);
-+			if (err)
-+				return err;
-+			env->insn_idx++;
-+			return 0;
-+		}
-+
-+		if (BPF_MODE(insn->code) != BPF_MEM || insn->imm != 0) {
-+			verbose(env, "BPF_STX uses reserved fields\n");
-+			return -EINVAL;
-+		}
-+
-+		err = check_store_reg(env, insn, false);
-+		if (err)
-+			return err;
-+	} else if (class == BPF_ST) {
-+		enum bpf_reg_type dst_reg_type;
-+
-+		if (BPF_MODE(insn->code) != BPF_MEM ||
-+		    insn->src_reg != BPF_REG_0) {
-+			verbose(env, "BPF_ST uses reserved fields\n");
-+			return -EINVAL;
-+		}
-+		/* check src operand */
-+		err = check_reg_arg(env, insn->dst_reg, SRC_OP);
-+		if (err)
-+			return err;
-+
-+		dst_reg_type = cur_regs(env)[insn->dst_reg].type;
-+
-+		/* check that memory (dst_reg + off) is writeable */
-+		err = check_mem_access(env, env->insn_idx, insn->dst_reg,
-+				       insn->off, BPF_SIZE(insn->code),
-+				       BPF_WRITE, -1, false, false);
-+		if (err)
-+			return err;
-+
-+		err = save_aux_ptr_type(env, dst_reg_type, false);
-+		if (err)
-+			return err;
-+	} else if (class == BPF_JMP || class == BPF_JMP32) {
-+		u8 opcode = BPF_OP(insn->code);
-+
-+		env->jmps_processed++;
-+		if (opcode == BPF_CALL) {
-+			if (BPF_SRC(insn->code) != BPF_K ||
-+			    (insn->src_reg != BPF_PSEUDO_KFUNC_CALL &&
-+			     insn->off != 0) ||
-+			    (insn->src_reg != BPF_REG_0 &&
-+			     insn->src_reg != BPF_PSEUDO_CALL &&
-+			     insn->src_reg != BPF_PSEUDO_KFUNC_CALL) ||
-+			    insn->dst_reg != BPF_REG_0 || class == BPF_JMP32) {
-+				verbose(env, "BPF_CALL uses reserved fields\n");
-+				return -EINVAL;
-+			}
-+
-+			if (env->cur_state->active_locks) {
-+				if ((insn->src_reg == BPF_REG_0 &&
-+				     insn->imm != BPF_FUNC_spin_unlock) ||
-+				    (insn->src_reg == BPF_PSEUDO_KFUNC_CALL &&
-+				     (insn->off != 0 || !kfunc_spin_allowed(insn->imm)))) {
-+					verbose(env,
-+						"function calls are not allowed while holding a lock\n");
-+					return -EINVAL;
-+				}
-+			}
-+			if (insn->src_reg == BPF_PSEUDO_CALL) {
-+				err = check_func_call(env, insn, &env->insn_idx);
-+			} else if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
-+				err = check_kfunc_call(env, insn, &env->insn_idx);
-+				if (!err && is_bpf_throw_kfunc(insn))
-+					return process_bpf_exit_full(env, do_print_state, true);
-+			} else {
-+				err = check_helper_call(env, insn, &env->insn_idx);
-+			}
-+			if (err)
-+				return err;
-+
-+			mark_reg_scratched(env, BPF_REG_0);
-+		} else if (opcode == BPF_JA) {
-+			if (BPF_SRC(insn->code) != BPF_K ||
-+			    insn->src_reg != BPF_REG_0 ||
-+			    insn->dst_reg != BPF_REG_0 ||
-+			    (class == BPF_JMP && insn->imm != 0) ||
-+			    (class == BPF_JMP32 && insn->off != 0)) {
-+				verbose(env, "BPF_JA uses reserved fields\n");
-+				return -EINVAL;
-+			}
-+
-+			if (class == BPF_JMP)
-+				env->insn_idx += insn->off + 1;
-+			else
-+				env->insn_idx += insn->imm + 1;
-+			return 0;
-+		} else if (opcode == BPF_EXIT) {
-+			if (BPF_SRC(insn->code) != BPF_K ||
-+			    insn->imm != 0 ||
-+			    insn->src_reg != BPF_REG_0 ||
-+			    insn->dst_reg != BPF_REG_0 ||
-+			    class == BPF_JMP32) {
-+				verbose(env, "BPF_EXIT uses reserved fields\n");
-+				return -EINVAL;
-+			}
-+			return process_bpf_exit_full(env, do_print_state, false);
-+		} else {
-+			err = check_cond_jmp_op(env, insn, &env->insn_idx);
-+			if (err)
-+				return err;
-+		}
-+	} else if (class == BPF_LD) {
-+		u8 mode = BPF_MODE(insn->code);
-+
-+		if (mode == BPF_ABS || mode == BPF_IND) {
-+			err = check_ld_abs(env, insn);
-+			if (err)
-+				return err;
-+
-+		} else if (mode == BPF_IMM) {
-+			err = check_ld_imm(env, insn);
-+			if (err)
-+				return err;
-+
-+			env->insn_idx++;
-+			sanitize_mark_insn_seen(env);
-+		} else {
-+			verbose(env, "invalid BPF_LD mode\n");
-+			return -EINVAL;
-+		}
-+	} else {
-+		verbose(env, "unknown insn class %d\n", class);
-+		return -EINVAL;
-+	}
-+
-+	env->insn_idx++;
-+	return 0;
-+}
-+
- static int do_check(struct bpf_verifier_env *env)
- {
- 	bool pop_log = !(env->log.level & BPF_LOG_LEVEL2);
- 	struct bpf_verifier_state *state = env->cur_state;
- 	struct bpf_insn *insns = env->prog->insnsi;
--	struct bpf_reg_state *regs;
- 	int insn_cnt = env->prog->len;
- 	bool do_print_state = false;
- 	int prev_insn_idx = -1;
- 
- 	for (;;) {
--		bool exception_exit = false;
- 		struct bpf_insn *insn;
--		u8 class;
- 		int err;
- 
- 		/* reset current history entry on each new instruction */
-@@ -19448,7 +19651,6 @@ static int do_check(struct bpf_verifier_env *env)
+ 	switch (meta->map_ptr->map_type) {
+@@ -9642,7 +9642,7 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 			 * that kernel subsystem misconfigured verifier
+ 			 */
+ 			verbose(env, "invalid map_ptr to access map->key\n");
+-			return -EACCES;
++			return -EFAULT;
  		}
+ 		key_size = meta->map_ptr->key_size;
+ 		err = check_helper_mem_access(env, regno, key_size, BPF_READ, false, NULL);
+@@ -9669,7 +9669,7 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 		if (!meta->map_ptr) {
+ 			/* kernel subsystem misconfigured verifier */
+ 			verbose(env, "invalid map_ptr to access map->value\n");
+-			return -EACCES;
++			return -EFAULT;
+ 		}
+ 		meta->raw_mode = arg_type & MEM_UNINIT;
+ 		err = check_helper_mem_access(env, regno, meta->map_ptr->value_size,
+@@ -10965,7 +10965,7 @@ record_func_map(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
  
- 		insn = &insns[env->insn_idx];
--		class = BPF_CLASS(insn->code);
+ 	if (map == NULL) {
+ 		verbose(env, "kernel subsystem misconfigured verifier\n");
+-		return -EINVAL;
++		return -EFAULT;
+ 	}
  
- 		if (++env->insn_processed > BPF_COMPLEXITY_LIMIT_INSNS) {
+ 	/* In case of read-only, some additional restrictions
+@@ -11004,7 +11004,7 @@ record_func_key(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
+ 		return 0;
+ 	if (!map || map->map_type != BPF_MAP_TYPE_PROG_ARRAY) {
+ 		verbose(env, "kernel subsystem misconfigured verifier\n");
+-		return -EINVAL;
++		return -EFAULT;
+ 	}
+ 
+ 	reg = &regs[BPF_REG_3];
+@@ -11258,7 +11258,7 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 	if (changes_data && fn->arg1_type != ARG_PTR_TO_CTX) {
+ 		verbose(env, "kernel subsystem misconfigured func %s#%d: r1 != ctx\n",
+ 			func_id_name(func_id), func_id);
+-		return -EINVAL;
++		return -EFAULT;
+ 	}
+ 
+ 	memset(&meta, 0, sizeof(meta));
+@@ -11560,7 +11560,7 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 		if (meta.map_ptr == NULL) {
  			verbose(env,
-@@ -19518,215 +19720,31 @@ static int do_check(struct bpf_verifier_env *env)
- 				return err;
- 		}
- 
--		regs = cur_regs(env);
- 		sanitize_mark_insn_seen(env);
- 		prev_insn_idx = env->insn_idx;
- 
--		if (class == BPF_ALU || class == BPF_ALU64) {
--			err = check_alu_op(env, insn);
--			if (err)
--				return err;
--
--		} else if (class == BPF_LDX) {
--			bool is_ldsx = BPF_MODE(insn->code) == BPF_MEMSX;
--
--			/* Check for reserved fields is already done in
--			 * resolve_pseudo_ldimm64().
--			 */
--			err = check_load_mem(env, insn, false, is_ldsx, true,
--					     "ldx");
--			if (err)
--				return err;
--		} else if (class == BPF_STX) {
--			if (BPF_MODE(insn->code) == BPF_ATOMIC) {
--				err = check_atomic(env, insn);
--				if (err)
--					return err;
--				env->insn_idx++;
--				continue;
--			}
--
--			if (BPF_MODE(insn->code) != BPF_MEM || insn->imm != 0) {
--				verbose(env, "BPF_STX uses reserved fields\n");
--				return -EINVAL;
--			}
--
--			err = check_store_reg(env, insn, false);
--			if (err)
--				return err;
--		} else if (class == BPF_ST) {
--			enum bpf_reg_type dst_reg_type;
--
--			if (BPF_MODE(insn->code) != BPF_MEM ||
--			    insn->src_reg != BPF_REG_0) {
--				verbose(env, "BPF_ST uses reserved fields\n");
--				return -EINVAL;
--			}
--			/* check src operand */
--			err = check_reg_arg(env, insn->dst_reg, SRC_OP);
--			if (err)
--				return err;
--
--			dst_reg_type = regs[insn->dst_reg].type;
--
--			/* check that memory (dst_reg + off) is writeable */
--			err = check_mem_access(env, env->insn_idx, insn->dst_reg,
--					       insn->off, BPF_SIZE(insn->code),
--					       BPF_WRITE, -1, false, false);
--			if (err)
--				return err;
--
--			err = save_aux_ptr_type(env, dst_reg_type, false);
--			if (err)
--				return err;
--		} else if (class == BPF_JMP || class == BPF_JMP32) {
--			u8 opcode = BPF_OP(insn->code);
--
--			env->jmps_processed++;
--			if (opcode == BPF_CALL) {
--				if (BPF_SRC(insn->code) != BPF_K ||
--				    (insn->src_reg != BPF_PSEUDO_KFUNC_CALL
--				     && insn->off != 0) ||
--				    (insn->src_reg != BPF_REG_0 &&
--				     insn->src_reg != BPF_PSEUDO_CALL &&
--				     insn->src_reg != BPF_PSEUDO_KFUNC_CALL) ||
--				    insn->dst_reg != BPF_REG_0 ||
--				    class == BPF_JMP32) {
--					verbose(env, "BPF_CALL uses reserved fields\n");
--					return -EINVAL;
--				}
--
--				if (env->cur_state->active_locks) {
--					if ((insn->src_reg == BPF_REG_0 && insn->imm != BPF_FUNC_spin_unlock) ||
--					    (insn->src_reg == BPF_PSEUDO_KFUNC_CALL &&
--					     (insn->off != 0 || !kfunc_spin_allowed(insn->imm)))) {
--						verbose(env, "function calls are not allowed while holding a lock\n");
--						return -EINVAL;
--					}
--				}
--				if (insn->src_reg == BPF_PSEUDO_CALL) {
--					err = check_func_call(env, insn, &env->insn_idx);
--				} else if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
--					err = check_kfunc_call(env, insn, &env->insn_idx);
--					if (!err && is_bpf_throw_kfunc(insn)) {
--						exception_exit = true;
--						goto process_bpf_exit_full;
--					}
--				} else {
--					err = check_helper_call(env, insn, &env->insn_idx);
--				}
--				if (err)
--					return err;
--
--				mark_reg_scratched(env, BPF_REG_0);
--			} else if (opcode == BPF_JA) {
--				if (BPF_SRC(insn->code) != BPF_K ||
--				    insn->src_reg != BPF_REG_0 ||
--				    insn->dst_reg != BPF_REG_0 ||
--				    (class == BPF_JMP && insn->imm != 0) ||
--				    (class == BPF_JMP32 && insn->off != 0)) {
--					verbose(env, "BPF_JA uses reserved fields\n");
--					return -EINVAL;
--				}
--
--				if (class == BPF_JMP)
--					env->insn_idx += insn->off + 1;
--				else
--					env->insn_idx += insn->imm + 1;
--				continue;
--
--			} else if (opcode == BPF_EXIT) {
--				if (BPF_SRC(insn->code) != BPF_K ||
--				    insn->imm != 0 ||
--				    insn->src_reg != BPF_REG_0 ||
--				    insn->dst_reg != BPF_REG_0 ||
--				    class == BPF_JMP32) {
--					verbose(env, "BPF_EXIT uses reserved fields\n");
--					return -EINVAL;
--				}
--process_bpf_exit_full:
--				/* We must do check_reference_leak here before
--				 * prepare_func_exit to handle the case when
--				 * state->curframe > 0, it may be a callback
--				 * function, for which reference_state must
--				 * match caller reference state when it exits.
--				 */
--				err = check_resource_leak(env, exception_exit, !env->cur_state->curframe,
--							  "BPF_EXIT instruction in main prog");
--				if (err)
--					return err;
--
--				/* The side effect of the prepare_func_exit
--				 * which is being skipped is that it frees
--				 * bpf_func_state. Typically, process_bpf_exit
--				 * will only be hit with outermost exit.
--				 * copy_verifier_state in pop_stack will handle
--				 * freeing of any extra bpf_func_state left over
--				 * from not processing all nested function
--				 * exits. We also skip return code checks as
--				 * they are not needed for exceptional exits.
--				 */
--				if (exception_exit)
--					goto process_bpf_exit;
--
--				if (state->curframe) {
--					/* exit from nested function */
--					err = prepare_func_exit(env, &env->insn_idx);
--					if (err)
--						return err;
--					do_print_state = true;
--					continue;
--				}
--
--				err = check_return_code(env, BPF_REG_0, "R0");
--				if (err)
--					return err;
-+		err = do_check_insn(env, &do_print_state);
-+		if (err < 0) {
-+			return err;
-+		} else if (err == PROCESS_BPF_EXIT) {
- process_bpf_exit:
--				mark_verifier_state_scratched(env);
--				update_branch_counts(env, env->cur_state);
--				err = pop_stack(env, &prev_insn_idx,
--						&env->insn_idx, pop_log);
--				if (err < 0) {
--					if (err != -ENOENT)
--						return err;
--					break;
--				} else {
--					if (verifier_bug_if(env->cur_state->loop_entry, env,
--							    "broken loop detection"))
--						return -EFAULT;
--					do_print_state = true;
--					continue;
--				}
--			} else {
--				err = check_cond_jmp_op(env, insn, &env->insn_idx);
--				if (err)
--					return err;
--			}
--		} else if (class == BPF_LD) {
--			u8 mode = BPF_MODE(insn->code);
--
--			if (mode == BPF_ABS || mode == BPF_IND) {
--				err = check_ld_abs(env, insn);
--				if (err)
--					return err;
--
--			} else if (mode == BPF_IMM) {
--				err = check_ld_imm(env, insn);
--				if (err)
-+			mark_verifier_state_scratched(env);
-+			update_branch_counts(env, env->cur_state);
-+			err = pop_stack(env, &prev_insn_idx, &env->insn_idx,
-+					pop_log);
-+			if (err < 0) {
-+				if (err != -ENOENT)
- 					return err;
--
--				env->insn_idx++;
--				sanitize_mark_insn_seen(env);
-+				break;
- 			} else {
--				verbose(env, "invalid BPF_LD mode\n");
--				return -EINVAL;
-+				if (verifier_bug_if(env->cur_state->loop_entry, env,
-+						    "broken loop detection"))
-+					return -EFAULT;
-+				do_print_state = true;
-+				continue;
- 			}
--		} else {
--			verbose(env, "unknown insn class %d\n", class);
+ 				"kernel subsystem misconfigured verifier\n");
 -			return -EINVAL;
++			return -EFAULT;
  		}
--
--		env->insn_idx++;
-+		WARN_ON_ONCE(err);
+ 
+ 		if (func_id == BPF_FUNC_map_lookup_elem &&
+@@ -16729,7 +16729,7 @@ static int check_ld_imm(struct bpf_verifier_env *env, struct bpf_insn *insn)
+ 		dst_reg->type = CONST_PTR_TO_MAP;
+ 	} else {
+ 		verbose(env, "bpf verifier is misconfigured\n");
+-		return -EINVAL;
++		return -EFAULT;
  	}
  
  	return 0;
+@@ -16776,7 +16776,7 @@ static int check_ld_abs(struct bpf_verifier_env *env, struct bpf_insn *insn)
+ 
+ 	if (!env->ops->gen_ld_abs) {
+ 		verbose(env, "bpf verifier is misconfigured\n");
+-		return -EINVAL;
++		return -EFAULT;
+ 	}
+ 
+ 	if (insn->dst_reg != BPF_REG_0 || insn->off != 0 ||
+@@ -20816,7 +20816,7 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
+ 						 -(subprogs[0].stack_depth + 8));
+ 		if (epilogue_cnt >= INSN_BUF_SIZE) {
+ 			verbose(env, "bpf verifier is misconfigured\n");
+-			return -EINVAL;
++			return -EFAULT;
+ 		} else if (epilogue_cnt) {
+ 			/* Save the ARG_PTR_TO_CTX for the epilogue to use */
+ 			cnt = 0;
+@@ -20839,13 +20839,13 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
+ 	if (ops->gen_prologue || env->seen_direct_write) {
+ 		if (!ops->gen_prologue) {
+ 			verbose(env, "bpf verifier is misconfigured\n");
+-			return -EINVAL;
++			return -EFAULT;
+ 		}
+ 		cnt = ops->gen_prologue(insn_buf, env->seen_direct_write,
+ 					env->prog);
+ 		if (cnt >= INSN_BUF_SIZE) {
+ 			verbose(env, "bpf verifier is misconfigured\n");
+-			return -EINVAL;
++			return -EFAULT;
+ 		} else if (cnt) {
+ 			new_prog = bpf_patch_insn_data(env, 0, insn_buf, cnt);
+ 			if (!new_prog)
+@@ -21002,7 +21002,7 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
+ 
+ 			if (type == BPF_WRITE) {
+ 				verbose(env, "bpf verifier narrow ctx access misconfigured\n");
+-				return -EINVAL;
++				return -EFAULT;
+ 			}
+ 
+ 			size_code = BPF_H;
+@@ -21021,7 +21021,7 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
+ 		if (cnt == 0 || cnt >= INSN_BUF_SIZE ||
+ 		    (ctx_field_size && !target_size)) {
+ 			verbose(env, "bpf verifier is misconfigured\n");
+-			return -EINVAL;
++			return -EFAULT;
+ 		}
+ 
+ 		if (is_narrower_load && size < target_size) {
+@@ -21029,7 +21029,7 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
+ 				off, size, size_default) * 8;
+ 			if (shift && cnt + 1 >= INSN_BUF_SIZE) {
+ 				verbose(env, "bpf verifier narrow ctx load misconfigured\n");
+-				return -EINVAL;
++				return -EFAULT;
+ 			}
+ 			if (ctx_field_size <= 4) {
+ 				if (shift)
+@@ -21794,7 +21794,7 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
+ 			cnt = env->ops->gen_ld_abs(insn, insn_buf);
+ 			if (cnt == 0 || cnt >= INSN_BUF_SIZE) {
+ 				verbose(env, "bpf verifier is misconfigured\n");
+-				return -EINVAL;
++				return -EFAULT;
+ 			}
+ 
+ 			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
+@@ -22130,7 +22130,7 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
+ 					goto patch_map_ops_generic;
+ 				if (cnt <= 0 || cnt >= INSN_BUF_SIZE) {
+ 					verbose(env, "bpf verifier is misconfigured\n");
+-					return -EINVAL;
++					return -EFAULT;
+ 				}
+ 
+ 				new_prog = bpf_patch_insn_data(env, i + delta,
+@@ -22490,7 +22490,7 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
+ 		    !map_ptr->ops->map_poke_untrack ||
+ 		    !map_ptr->ops->map_poke_run) {
+ 			verbose(env, "bpf verifier is misconfigured\n");
+-			return -EINVAL;
++			return -EFAULT;
+ 		}
+ 
+ 		ret = map_ptr->ops->map_poke_track(map_ptr, prog->aux);
 -- 
 2.49.0
 
