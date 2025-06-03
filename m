@@ -1,189 +1,129 @@
-Return-Path: <linux-kselftest+bounces-34234-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34235-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 290EFACCC8D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 19:55:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6043EACCC90
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 19:55:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5004D1890726
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 17:55:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ECF503A38E5
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 17:55:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDB181EEA40;
-	Tue,  3 Jun 2025 17:55:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C1081F237D;
+	Tue,  3 Jun 2025 17:55:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BjkV/1HZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nxai5nHZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D09F41E8356
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Jun 2025 17:55:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3DF71F0E32;
+	Tue,  3 Jun 2025 17:55:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748973330; cv=none; b=JakK7BEOhe/hGJ07+xYE7nA5gn7g5bfNrW5Mgef41NH844NJFlMUxvLr3lfrOWawa+jPfKuJ6EHJcNimEipaDweuoeHU9FB+Dq6G26Hp5x6WgQxgv9A0NU41m1uf9QqRwtojxV2btRQ6jR68ymy8lwUyJS8CTRGiqRgmQ3rXn+E=
+	t=1748973333; cv=none; b=Bt9wYqoe/ouliAjwErZwNLEdLD66alrOs8ckCxSJBpbxqbL/PQJ6uJASTfZb1WBoGXmBb+C75e2r7b84Z67hCr05ZNGTvIdj6FLjijPxaMmxKDxgOHMA2T34U0CcyEruOQEiv8N089i81Olk4ZCGr8uR8V2DKKX4OMaJnogpCJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748973330; c=relaxed/simple;
-	bh=c45GtF2NgyQzejp5bMuW+j3uJNUfGruUk0n0QKANtRg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ASYYHNLTsEi4hDVlaZNteM/hru+xqMv3zCTea93898/L+gNdrhYFNSubtO+c1GWLtiX8bzP3kkeQS00O8YPMh/gPcK6qqs5k3I7YME0qbwKZYPUAQhUgIjSve8LlA8agm4Ir9KWZdrX9wlZZY136hkzvp1wA+CnLoA1QWnVbwPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BjkV/1HZ; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-450d726f61aso6525e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Jun 2025 10:55:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1748973327; x=1749578127; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ojV48z9aXEdGn2OT2DKHUp0OlbWYdZap6cRg6lS1OBc=;
-        b=BjkV/1HZAo2oT1JGkXxZBce8uxOv95DeNkjDV0I7zMUK0qPs52mUeS86fEvDkSkvHU
-         pS1+VbnG6TPtIy3nOBfjYmch46u39kv8O4/9S015gYq72h4hXTyTG1uokcW3BHovLvxT
-         Pg817zZcGs3HGBowvlgWBFj/cUVJXHx0QjSu1t7H69vVrcm+p+3IkC7TfXH7olyxVhLF
-         r1NN0bhoEaLncaKB52jCeI4Y1uZ3tIljddrtDpFF87ZEDCSiXpGqKCjvlje4P2pTbKQZ
-         UX8zvLufsMvFsOsXtaogmruKlC+f5KRmUMkQLRaGTsRaFHR4NhLN24Gtn9bJvTIY+3Hl
-         BzHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748973327; x=1749578127;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ojV48z9aXEdGn2OT2DKHUp0OlbWYdZap6cRg6lS1OBc=;
-        b=GCCCfWvdfjPIuGce6fxlzzxVz8aQsNgPheUsCDSvNXdjML+e47kyIHMOJ6HCwNl6gj
-         931xIb7pOo4CzD7yBonVYxQ/CdpXo8t4eCBe54+TKqBogy5BDV4oJ3k46ZYtS9hNp8Ad
-         ShzBtj0flyCOOn2Rv7Lfv9MvgMgx0Uwhyj77pCt3/ruooAOkgDBTARL3y3dXKmez1gCq
-         f/Gd1y+e7GtftmXiZ3jPhnFa01jRTMh9BYjBAC+i0mLNVs/p2g/HZYoTeY1Dh6/d56/e
-         Z/RjDaqUbaSo2xxRGDhCgIPzMefOXfHTQQXxcSySRrgoM8w6EGymntOopNon+SQmYPNG
-         s5fQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUrHPwnSCA3LFjmZlgm2t/fzSHQBR0pS4KgZkQT+nrTXiNVyfgohKlh9o7zVFEl9QFU1TAbWLXDZG9F8tTry8o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwibbF3nfV+jNLDCZRNgtypT1vzHOoaXIKdrWLALoQY5IJmXVHB
-	bjkp8I5TUS1GjYs756+C0JLcx8i3bET0u9jkPeO8FWOAfKhYl/cy331IL1CSfYmppSmWzEtf0pg
-	Vsg9AH9qCKkIjyBUbprFPH4dyePVfAJ1E3aX6rftc
-X-Gm-Gg: ASbGncv05TCX21fXW+1d6suPD3OzWJXwwnF3zmE2tEm0KF7sqPIB1hNjYhjrjTnaS5n
-	alsiwbdWIzQV7xNTsGurPfnnoHfh1g/YIH/9c8rmdxZNDy2KA7ADIRI7FW3KmmZyFkqSPPtGmp5
-	007YXIY/1sYX/zBSMFqDgDnLsDXv/t2gvDQ7V5MHUduB5/fScacnoXANzYU1tNKZDFPfGWH3YJV
-	2WsYA==
-X-Google-Smtp-Source: AGHT+IFn+MXcQMSx5ZelVSBHPMB42FF4a5qIDNqQvvUWSmhllHrAaiDMiLd4+ulqAvDPp91tPekjTDAKq0N4QZWV80M=
-X-Received: by 2002:a05:600c:4510:b0:450:ceac:62cf with SMTP id
- 5b1f17b1804b1-451e5fe840fmr2009315e9.5.1748973326911; Tue, 03 Jun 2025
- 10:55:26 -0700 (PDT)
+	s=arc-20240116; t=1748973333; c=relaxed/simple;
+	bh=BqpJYvEEm44Wut0dEbEcSr4ol/Oxc8jp7Jp3kQ74+iI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=azCF35hUAPw3F6eaPOdqVUILZ1MljMNly8LMC3HpT//Eb8fIMu5ixWmV+SS5ntbqqeIC2cv4sCyFjse1GZo0+CRrK1m0O1T8cFLn2FbDWfWcRcqi55zDdYkvgmQpnTt6cJv/Q7ygFPUJIuynIhIWvbLN6VbyaDKDQbLELCKYM1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nxai5nHZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C51F2C4CEED;
+	Tue,  3 Jun 2025 17:55:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1748973333;
+	bh=BqpJYvEEm44Wut0dEbEcSr4ol/Oxc8jp7Jp3kQ74+iI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Nxai5nHZqWlBY5TDc4svlBTtJT8OHagNBIDoJDmHFQWwn/Oi28apk2DwLrDknmu+k
+	 xRVXoO5KkD1ytkkP3iBuZpA+HnfdfcHIiIlqSw2Nhc4hbvCfT5MSEeVKwlhK6klNbN
+	 8F7ZjmnSdHUw/amg5AdQ3u/6yWmi6nLPjsWUUqij/iVoMXN9LPYFRPPMWSu6O0piN7
+	 yvfQIz5qTbyuXyrmnkWHWhAcSwt1my5bsbOqrzUdn9EmgbhuALaOhKS8/7+aRsCru2
+	 WsFKfUXe9TGyoh8ygrgrLbvYlcIMJqv+23kCOz6r1dGGQ8yMtmj770TDWRrIJ7fnuk
+	 rYhC5TInUT1Lg==
+Date: Tue, 3 Jun 2025 18:55:29 +0100
+From: Mark Brown <broonie@kernel.org>
+To: David Hildenbrand <david@redhat.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/4] selftests/mm: Report unique test names for each
+ cow test
+Message-ID: <2117dfe4-befc-4fe4-9b5f-184433299494@sirena.org.uk>
+References: <20250527-selftests-mm-cow-dedupe-v2-0-ff198df8e38e@kernel.org>
+ <20250527-selftests-mm-cow-dedupe-v2-3-ff198df8e38e@kernel.org>
+ <c43347ce-433b-498e-bfd7-f09b8e781197@redhat.com>
+ <9961082f-848d-43d3-b97d-3df675ca4415@sirena.org.uk>
+ <4676a010-a977-4d5a-b42a-edbbea7d356d@redhat.com>
+ <e3d584fe-6297-403d-84f3-397a0fe459c5@sirena.org.uk>
+ <df85fba8-826f-41fb-8850-077a4e4dd240@redhat.com>
+ <e1d20dbf-734f-4a2c-915a-86c9fbac998a@sirena.org.uk>
+ <27f74a9c-8bf9-4877-ba14-82dcd79f6d0d@redhat.com>
+ <d35bdd4d-d210-434d-b259-97a4bb93c64e@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250512091108.2015615-1-skb99@linux.ibm.com> <CABdmKX1nhR3BXKyuLaAoo50KNyBwaexmH+af_s8WxULJUZ9+pA@mail.gmail.com>
- <CAPhsuW7pyQuLgq6S7+KQ3K-MdavmCzBb-tNhg9J_56X_yYug3g@mail.gmail.com>
-In-Reply-To: <CAPhsuW7pyQuLgq6S7+KQ3K-MdavmCzBb-tNhg9J_56X_yYug3g@mail.gmail.com>
-From: "T.J. Mercier" <tjmercier@google.com>
-Date: Tue, 3 Jun 2025 10:55:14 -0700
-X-Gm-Features: AX0GCFv_Lt9ScU6hcdIgKqcgflEyVE0GtXfNhaXJacaRBEaJF17vb8aAJZOjoU0
-Message-ID: <CABdmKX0thb23TPqyuFvDeTXh56e6r6bT-QGabQu_FL2S=ScOPw@mail.gmail.com>
-Subject: Re: [RESEND PATCH] selftests/bpf: Fix bpf selftest build error
-To: Song Liu <song@kernel.org>
-Cc: Saket Kumar Bhaskar <skb99@linux.ibm.com>, gregkh@linuxfoundation.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-next@vger.kernel.org, hbathini@linux.ibm.com, maddy@linux.ibm.com, 
-	venkat88@linux.ibm.com, sfr@canb.auug.org.au, alexei.starovoitov@gmail.com, 
-	daniel@iogearbox.net, mykolal@fb.com, yoong.siang.song@intel.com, 
-	martin.lau@linux.dev, yonghong.song@linux.dev, john.fastabend@gmail.com, 
-	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, 
-	shuah@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="9K5Lxces5yzC9hI4"
+Content-Disposition: inline
+In-Reply-To: <d35bdd4d-d210-434d-b259-97a4bb93c64e@sirena.org.uk>
+X-Cookie: Avec!
+
+
+--9K5Lxces5yzC9hI4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 3, 2025 at 10:50=E2=80=AFAM Song Liu <song@kernel.org> wrote:
->
-> On Tue, Jun 3, 2025 at 10:33=E2=80=AFAM T.J. Mercier <tjmercier@google.co=
-m> wrote:
-> >
-> > On Mon, May 12, 2025 at 2:12=E2=80=AFAM Saket Kumar Bhaskar <skb99@linu=
-x.ibm.com> wrote:
-> > >
-> > > On linux-next, build for bpf selftest displays an error due to
-> > > mismatch in the expected function signature of bpf_testmod_test_read
-> > > and bpf_testmod_test_write.
-> > >
-> > > Commit 97d06802d10a ("sysfs: constify bin_attribute argument of bin_a=
-ttribute::read/write()")
-> > > changed the required type for struct bin_attribute to const struct bi=
-n_attribute.
-> > >
-> > > To resolve the error, update corresponding signature for the callback=
-.
-> > >
-> > > Fixes: 97d06802d10a ("sysfs: constify bin_attribute argument of bin_a=
-ttribute::read/write()")
-> > > Reported-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-> > > Closes: https://lore.kernel.org/all/e915da49-2b9a-4c4c-a34f-877f37812=
-9f6@linux.ibm.com/
-> > > Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-> > > Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-> > > ---
-> > >
-> > > [RESEND]:
-> > >  - Added Fixes and Tested-by tag.
-> > >  - Added Greg as receipent for driver-core tree.
-> > >
-> > > Original patch: https://lore.kernel.org/all/20250509122348.649064-1-s=
-kb99@linux.ibm.com/
-> > >
-> > >  tools/testing/selftests/bpf/test_kmods/bpf_testmod.c | 4 ++--
-> > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/t=
-ools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> > > index 2e54b95ad898..194c442580ee 100644
-> > > --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> > > +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> > > @@ -385,7 +385,7 @@ int bpf_testmod_fentry_ok;
-> > >
-> > >  noinline ssize_t
-> > >  bpf_testmod_test_read(struct file *file, struct kobject *kobj,
-> > > -                     struct bin_attribute *bin_attr,
-> > > +                     const struct bin_attribute *bin_attr,
-> > >                       char *buf, loff_t off, size_t len)
-> > >  {
-> > >         struct bpf_testmod_test_read_ctx ctx =3D {
-> > > @@ -465,7 +465,7 @@ ALLOW_ERROR_INJECTION(bpf_testmod_test_read, ERRN=
-O);
-> > >
-> > >  noinline ssize_t
-> > >  bpf_testmod_test_write(struct file *file, struct kobject *kobj,
-> > > -                     struct bin_attribute *bin_attr,
-> > > +                     const struct bin_attribute *bin_attr,
-> > >                       char *buf, loff_t off, size_t len)
-> > >  {
-> > >         struct bpf_testmod_test_write_ctx ctx =3D {
-> > > --
-> > > 2.43.5
-> > >
-> > >
-> >
-> > The build is broken in Linus's tree right now. We also now need:
-> >
-> > @@ -567,7 +567,7 @@ static void testmod_unregister_uprobe(void)
-> >
-> >  static ssize_t
-> >  bpf_testmod_uprobe_write(struct file *file, struct kobject *kobj,
-> > -                        struct bin_attribute *bin_attr,
-> > +                        const struct bin_attribute *bin_attr,
-> >                          char *buf, loff_t off, size_t len)
-> >  {
-> >
-> > Should I send a separate patch, or can we update this and get it to Lin=
-us?
->
-> A fix is already in the bpf tree, with this fix as well:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git/commit/?id=3D=
-4b65d5ae971430287855a89635a184c489bd02a5
->
-> Thanks,
-> Song
+On Tue, Jun 03, 2025 at 06:48:19PM +0100, Mark Brown wrote:
+> On Tue, Jun 03, 2025 at 06:57:38PM +0200, David Hildenbrand wrote:
 
-Thanks, I was looking for it in driver-core.
+> > I agree that printing something in case KSFT_PASS does not make sense
+> > indeed.
+> >=20
+> > But if something goes wrong (KSFT_FAIL/KSFT_SKIP) I would expect a reas=
+on in
+> > all cases.
+> >=20
+> > IIRC kselftest_harness.h behaves that way:
+>=20
+> That's mostly just it being chatty because it uses an assert based idiom
+> rather than explicit pass/fail reports, it's a lot less common for
+> things written directly to kselftest.h where it's for example fairly
+> common to see a result detected directly in a ksft_result() call.
+> That does tend to be quite helpful when looking at the results, you
+> don't need to dig out the logs so often.
+
+As was the case with the prior:
+
+        /* Finally, check if we read what we expected. */
+-       ksft_test_result(!memcmp(mem, tmp, size),
+-                        "Longterm R/W pin is reliable\n");
++       if (!memcmp(mem, tmp, size))
++               log_test_result(KSFT_PASS);
++       else
++               log_test_result(KSFT_FAIL);
+=20
+
+
+--9K5Lxces5yzC9hI4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmg/NxAACgkQJNaLcl1U
+h9AYLgf+ISgFWBb0M/8bRo5cBiZ0eLhHKK91ccJp2NsN17X4/KsfEJDXpDoU5jmJ
+VBfAHk3KYWoNUHEgISMveAvjx7VNrbiK2rwtKz0MWtoj/IeUUgnVINfng7+H+sZA
+1Cr6IiChsu/NX4rBUyoChrgKcPyj3VwI6/MaItC9nCblcsJdqCCpDOq/pg2R3WVB
+0ZZWo2cOyOW68Bn+TO5Y3PhX2T6VonJbH1NedXvqU0zQOILaUxkvgWqwIDqgIEpX
+2Eii26c8nDis/YP/4aty3w7lRi32KSP+eY3WyUNaDFQQNYY1CrvLbnUcladl7fBb
+Bo4eil1iXsv3RyDy0ryj+0J7YzTVfw==
+=7hL4
+-----END PGP SIGNATURE-----
+
+--9K5Lxces5yzC9hI4--
 
