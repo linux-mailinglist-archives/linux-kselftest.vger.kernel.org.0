@@ -1,989 +1,350 @@
-Return-Path: <linux-kselftest+bounces-34192-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34193-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86C8DACBE8F
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 04:37:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99121ACBECA
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 05:19:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC2433A61BB
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 02:36:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC268188FF56
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 03:19:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA46F185B67;
-	Tue,  3 Jun 2025 02:36:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48AEE18DF6E;
+	Tue,  3 Jun 2025 03:19:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="Js0RwMyC"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="c9kmRvo/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A947A42A96
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Jun 2025 02:36:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 769FD156C6F
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Jun 2025 03:19:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748918218; cv=none; b=Evg1G8/U+kP4OHkew7iY4bQASA1j6BkuM5Cn2KcBxsMCVNh9STgtSmxTGnvyu95G3VCw+ZiPdWh1YgJTg2HmmTChGyXZyv14WkKzcPpizEZtc4YGkYhbVsM+ulYSjtnLvwAW7Hmg6ARW9biWeuP/AObOBxWv1pFABF21Xzu3Uwo=
+	t=1748920761; cv=none; b=e+w+o/+hh7Rn0+jCZcDoU/0dVNqDx9krAZOQ3Jr7LEzOyS6+927Aa8/GPyDp1OYsYf6FIORMsduNywemFoinyzkQq2qKY2gG+GUGNhZHevhTo7Gwb0V72uGwU+AQETTGfGcxQOMxExE6BfFps7qjFWMobOnlaQAAVEgatKGvohY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748918218; c=relaxed/simple;
-	bh=/qL8qbfJ1Qr7/rIwyMUu78x4a2aKLR+kZnOpzl102N4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pYgAq1ZT9JANNmOAOlaIDg9pru0jfhBftqljTo9lR3m6LEHmKLyU2fJqVUDc9od+QlRbU3bidusP58hMyry2xbVQM5YY7AkwT2ACUqAdouzxQGRdpABrkmmvJC9YztfR6KO58QA+ZL9MS3HKm/pKRdr8vbWozeFwtet3vImgibs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=Js0RwMyC; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-234e48b736aso61046155ad.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Jun 2025 19:36:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1748918214; x=1749523014; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PBu1ZzF5jnBL6WD8cUefAW9ukOIsx02y3B0j6dEzYQM=;
-        b=Js0RwMyCl+Xm1l+vHZA1rwTewCcWqQsXTvj1YSIUBbfZ227Q9ZLA1PAxLhwoDBme0e
-         Z/cgLQ1hAHJjEIg4yKFqXrmiIw0THO31/W/1ea1IfqRz8GktxwPwWLbMtOnWlDo6F2l+
-         nB5sy8lw229IDMHKk0ZXtSXhhF0WQbzXwuPrFWXrQocdl1F01gCLbbL5nL3MQnl6MLgr
-         Rdu7jEg3X3tcgapfnfrOjmHFFG3/bF3qBfelfg2LEHHof8iBH1l8fHTlL99aZp0lJbpR
-         /oJeWZo0kPuNZGCd5qr7schdFiYUsOUPKmAuqRHVuVZkb8+6x46TEQbA/CYP5I5s80ZU
-         T3RA==
+	s=arc-20240116; t=1748920761; c=relaxed/simple;
+	bh=ulahXhuT8yDizo0bw9N/2oF8mAlXjmDARNszSAnWgEs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AFdiMZd/V8z1DKpYEMhI4inB/OgULJZcU1cxwbynyHWep5wSIzOW4V9SKBmFpn+n18ZJuTWS+uYnN4kleC1598pTNyyuAX1rOG8fVX2QHeia6zXXWmkOql9TQASYa6qabiRwacNnY56vT6IR3TKYvI4FsEP/ceMVMldhlH/NPKE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=c9kmRvo/; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1748920757;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=aLUswlGrIATyOOlI6fhYu4jJYFEad2pBjyge/hX+nFY=;
+	b=c9kmRvo/bTbgE2fbYbh7Z4pyeARezSCdE3nHcglQD0Q7/eZtFtpFh1wDYY3718cgouArSd
+	pa6wuilqGcz93kvHgfDmo5S+eXIixRpNqFKVVx3fBMoYFFwJ4fAwjXme5/rN+2FVLe18IZ
+	arzkNu+P08srjPMg+BT1iDVrh5tjmsI=
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
+ [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-613-bhDysNv9O7-8nYN68dqJHw-1; Mon, 02 Jun 2025 23:19:16 -0400
+X-MC-Unique: bhDysNv9O7-8nYN68dqJHw-1
+X-Mimecast-MFC-AGG-ID: bhDysNv9O7-8nYN68dqJHw_1748920755
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-234a102faa3so35399265ad.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Jun 2025 20:19:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748918214; x=1749523014;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PBu1ZzF5jnBL6WD8cUefAW9ukOIsx02y3B0j6dEzYQM=;
-        b=Kl9D9C0V79yLfph55Pdq+SaK/MVI71d7CpllVZVqvdPRUexcqYQT/eZFwB44xtJ6Bt
-         I6Hov5jKr+UGoAzX+Wruwce2ebWKgF2DSKhoRflSbh9wZnztCXzlUtEMuz4+GkZJ6PVu
-         rPf1FfwKnnGmjG0sUzxnrPTtQRtxSvGKtbiWa63d5n0UN7Z/F8CHlcwzcH4ERYIBj6uE
-         6MVuBM6lbd3ygtC9FRUpu9XpcVCv3wZpxaKmWhPvqVeii0JTf3QSjv0j1bXp2kbvtIF2
-         AA+fpTrlip850Jh5IIGz5QeOsY2nWwrD7ysBFGknCYqPeVEU0MK+T+skbQOP50RZE7bO
-         Va0w==
-X-Forwarded-Encrypted: i=1; AJvYcCXAAev1eiFWVOWl1XTf9emirCWU9pcHy/3TASVzOw1Dr1eKKx+/7ArxqoQi3ucd1d2C9VFTNau8iJh/cj5nVvo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx9d1HzWbYhf+QeeetuxM7u8tH7iiy5XUyr0FvFrqv2vmCxUjSK
-	oqM/eqbKtB0iS71reNccAaNuY7pLdmT94T2H69wnJIVSTruV4kmfIq8F1wV4tGDZJW/XLgUG6Hk
-	jneVnJbI=
-X-Gm-Gg: ASbGncvtoFrZ5TisMj8WNeabcaVf4eXdLTTwExgbUhtyJmXHrVFhC2GpUnZdD81hMKr
-	MWIZrHE3KKeC+hO8eKVnSQa5fAj/iv0gxgAowHiYqfpcAuoC740D+Xt/DfPgz9+aZsJun0wLa/s
-	dBQ8Vwld/5x1NRtM2qxMz73R3D8H1gTk7VJ7V9/uJIJtjuY+/UNWHv2VW1CaGqVVFzKgJPW+ACO
-	DOkHvAD9bf6PHuHoGdkc1f2XZj5vK6hFM4wuX85evz8U/nqbcJXLEZh3W8TtktmBn7dn88s5Svl
-	YmvK0Ojy/PO5WQvcu4Qwan+I9klGRMi1s40d7F78CkKtG7oH2qHfUdcXLQ==
-X-Google-Smtp-Source: AGHT+IGsn/5YFdDQieHDqAGLsQPH5xSQygkEqGpaXZGunJ8vg5knOSxmxYtp6a4OjBcojEK+ySeB3g==
-X-Received: by 2002:a17:903:1a2d:b0:234:a139:1217 with SMTP id d9443c01a7336-23528fec1f0mr202379955ad.18.1748918213546;
-        Mon, 02 Jun 2025 19:36:53 -0700 (PDT)
-Received: from ghost ([2601:647:6700:64d0:3831:e87c:eedb:3ff2])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23506cf9084sm76976225ad.199.2025.06.02.19.36.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Jun 2025 19:36:53 -0700 (PDT)
-Date: Mon, 2 Jun 2025 19:36:51 -0700
-From: Charlie Jenkins <charlie@rivosinc.com>
-To: Jesse Taube <jesse@rivosinc.com>
-Cc: kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
-	linux-kselftest@vger.kernel.org,
-	Atish Patra <atishp@atishpatra.org>,
-	Anup Patel <anup@brainfault.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	=?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>,
-	Himanshu Chauhan <hchauhan@ventanamicro.com>
-Subject: Re: [kvm-unit-tests PATCH] riscv: sbi: Add SBI Debug Triggers
- Extension tests
-Message-ID: <aD5fw6cbGwpZFvlQ@ghost>
-References: <20250529223611.644410-1-jesse@rivosinc.com>
+        d=1e100.net; s=20230601; t=1748920755; x=1749525555;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aLUswlGrIATyOOlI6fhYu4jJYFEad2pBjyge/hX+nFY=;
+        b=BHrX/i8mj1UYcuJfYWKNcaH7LRDmac65DdB7WrXbQIC/Q7KWnXKmH3FibzYRedRF7J
+         bXPUTatZhKosZ4hv1CM0HXraN0FEQ8TS3niSeRYPAAKiSzGOxzGNcsWH8jgpKq7NP/NN
+         emDtfojn7cBMUZzFy0htbnauYly53u0LfOWc+VF28rA11kT4KmC12vfsrhr8PmRqi/Ik
+         Wl+JMaeHyZksVnGz/WovEaw0nrYjd8x36XTDbfSoOc8m6C526gY0MpC+24pIazzmhq0k
+         GV9b9dZxcRb/hItWrnwyQTcyGnzGNc6mLzUC7ES48ciCTlaDbHsfTW81GiAe5Wir0UU+
+         lqaw==
+X-Forwarded-Encrypted: i=1; AJvYcCWU+4zw9vMr5K8WOVCPf2FTKugWzsz0pfLvfhKnAqt/dx8F0EN4HqVvSoxcDdssLGuluavetMiJ3yUC91NqRMc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzf2a07HISfaQ/OF/z3qPkqo9oE/tJxdgdDvmNE8neV0ifoHld6
+	Z+2s/X9RLCADplDyE6i8k/u2FgDd8D5w1qJyAVGgHnaIjCZ1bO+hUhHho7qvfTLi9Uunk9eHNz7
+	1lyyzVtvIuCCU4T+myP24Czr823irziR6zToPlus3DEv6xO64o4+0C9B0MojC2pwmLlXlf/Eaw4
+	YWdXi5PSbIzj7I6nphhSkCX8lLAwspFt7OGQeSSH0FV0Qy
+X-Gm-Gg: ASbGncu5MVbZYXQcwOwUaALozgnw3UeI/f+yw6140VWKIXma2BDndfe/3Kkho7Y1PNQ
+	A0yUx8kmp8wuw/2fkjnclgTtpR2Rdpa/hXslx5ES4Jf804j2/IYSmMcg3aofzrWATuZ8g4Q==
+X-Received: by 2002:a17:902:e849:b0:234:8a4a:ada5 with SMTP id d9443c01a7336-23529904f21mr247668405ad.37.1748920755088;
+        Mon, 02 Jun 2025 20:19:15 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHywPCLM/Qh3jSdbKsF9dOuO472rVd+vIBVeTePaa/6GUJRTTw4v5rkd8bePaost/OoMXAMwCrz5QAOrqb7r5E=
+X-Received: by 2002:a17:902:e849:b0:234:8a4a:ada5 with SMTP id
+ d9443c01a7336-23529904f21mr247667985ad.37.1748920754675; Mon, 02 Jun 2025
+ 20:19:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250529223611.644410-1-jesse@rivosinc.com>
+References: <20250530-rss-v12-0-95d8b348de91@daynix.com> <20250530-rss-v12-1-95d8b348de91@daynix.com>
+In-Reply-To: <20250530-rss-v12-1-95d8b348de91@daynix.com>
+From: Jason Wang <jasowang@redhat.com>
+Date: Tue, 3 Jun 2025 11:19:03 +0800
+X-Gm-Features: AX0GCFv2w2DYNXanInKBc5HQRF8lqBk-gAKp63FMQ8nnSSAfo4iUv1CXTbXlSAw
+Message-ID: <CACGkMEufffSj1GQMqwf598__-JgNtXRpyvsLtjSbr3angLmJXg@mail.gmail.com>
+Subject: Re: [PATCH net-next v12 01/10] virtio_net: Add functions for hashing
+To: Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	"Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
+	Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	netdev@vger.kernel.org, kvm@vger.kernel.org, 
+	virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org, 
+	Yuri Benditovich <yuri.benditovich@daynix.com>, Andrew Melnychenko <andrew@daynix.com>, 
+	Stephen Hemminger <stephen@networkplumber.org>, gur.stavi@huawei.com, 
+	Lei Yang <leiyang@redhat.com>, Simon Horman <horms@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 29, 2025 at 03:36:10PM -0700, Jesse Taube wrote:
-> Add tests for the DBTR SBI extension.
-> 
-> Signed-off-by: Jesse Taube <jesse@rivosinc.com>
-
-Thanks!
-
-Reviewed-by: Charlie Jenkins <charlie@rivosinc.com>
-Tested-by: Charlie Jenkins <charlie@rivosinc.com>
-
+On Fri, May 30, 2025 at 12:50=E2=80=AFPM Akihiko Odaki <akihiko.odaki@dayni=
+x.com> wrote:
+>
+> They are useful to implement VIRTIO_NET_F_RSS and
+> VIRTIO_NET_F_HASH_REPORT.
+>
+> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+> Tested-by: Lei Yang <leiyang@redhat.com>
 > ---
->  lib/riscv/asm/sbi.h |  28 ++
->  lib/riscv/sbi.c     |  58 ++++
->  riscv/Makefile      |   1 +
->  riscv/sbi-dbtr.c    | 703 ++++++++++++++++++++++++++++++++++++++++++++
->  riscv/sbi-tests.h   |   1 +
->  riscv/sbi.c         |   1 +
->  6 files changed, 792 insertions(+)
->  create mode 100644 riscv/sbi-dbtr.c
-> 
-> diff --git a/lib/riscv/asm/sbi.h b/lib/riscv/asm/sbi.h
-> index a5738a5c..ce19ab89 100644
-> --- a/lib/riscv/asm/sbi.h
-> +++ b/lib/riscv/asm/sbi.h
-> @@ -51,6 +51,7 @@ enum sbi_ext_id {
->  	SBI_EXT_SUSP = 0x53555350,
->  	SBI_EXT_FWFT = 0x46574654,
->  	SBI_EXT_SSE = 0x535345,
-> +	SBI_EXT_DBTR = 0x44425452,
->  };
->  
->  enum sbi_ext_base_fid {
-> @@ -125,6 +126,17 @@ enum sbi_ext_fwft_fid {
->  
->  #define SBI_FWFT_SET_FLAG_LOCK			BIT(0)
->  
-> +enum sbi_ext_dbtr_fid {
-> +	SBI_EXT_DBTR_NUM_TRIGGERS = 0,
-> +	SBI_EXT_DBTR_SETUP_SHMEM,
-> +	SBI_EXT_DBTR_TRIGGER_READ,
-> +	SBI_EXT_DBTR_TRIGGER_INSTALL,
-> +	SBI_EXT_DBTR_TRIGGER_UPDATE,
-> +	SBI_EXT_DBTR_TRIGGER_UNINSTALL,
-> +	SBI_EXT_DBTR_TRIGGER_ENABLE,
-> +	SBI_EXT_DBTR_TRIGGER_DISABLE,
+>  include/linux/virtio_net.h | 188 +++++++++++++++++++++++++++++++++++++++=
+++++++
+>  1 file changed, 188 insertions(+)
+>
+> diff --git a/include/linux/virtio_net.h b/include/linux/virtio_net.h
+> index 02a9f4dc594d..426f33b4b824 100644
+> --- a/include/linux/virtio_net.h
+> +++ b/include/linux/virtio_net.h
+> @@ -9,6 +9,194 @@
+>  #include <uapi/linux/tcp.h>
+>  #include <uapi/linux/virtio_net.h>
+>
+> +struct virtio_net_hash {
+> +       u32 value;
+> +       u16 report;
 > +};
 > +
->  enum sbi_ext_sse_fid {
->  	SBI_EXT_SSE_READ_ATTRS = 0,
->  	SBI_EXT_SSE_WRITE_ATTRS,
-> @@ -282,6 +294,22 @@ static inline bool sbi_sse_event_is_global(uint32_t event_id)
->  	return !!(event_id & SBI_SSE_EVENT_GLOBAL_BIT);
->  }
->  
-> +struct sbiret sbi_debug_num_triggers(unsigned long trig_tdata1);
-> +struct sbiret sbi_debug_set_shmem(void *shmem);
-> +struct sbiret sbi_debug_set_shmem_raw(unsigned long shmem_phys_lo,
-> +				      unsigned long shmem_phys_hi,
-> +				      unsigned long flags);
-> +struct sbiret sbi_debug_read_triggers(unsigned long trig_idx_base,
-> +				      unsigned long trig_count);
-> +struct sbiret sbi_debug_install_triggers(unsigned long trig_count);
-> +struct sbiret sbi_debug_update_triggers(unsigned long trig_count);
-> +struct sbiret sbi_debug_uninstall_triggers(unsigned long trig_idx_base,
-> +					   unsigned long trig_idx_mask);
-> +struct sbiret sbi_debug_enable_triggers(unsigned long trig_idx_base,
-> +					unsigned long trig_idx_mask);
-> +struct sbiret sbi_debug_disable_triggers(unsigned long trig_idx_base,
-> +					 unsigned long trig_idx_mask);
-> +
->  struct sbiret sbi_sse_read_attrs_raw(unsigned long event_id, unsigned long base_attr_id,
->  				     unsigned long attr_count, unsigned long phys_lo,
->  				     unsigned long phys_hi);
-> diff --git a/lib/riscv/sbi.c b/lib/riscv/sbi.c
-> index 2959378f..39c0d3bd 100644
-> --- a/lib/riscv/sbi.c
-> +++ b/lib/riscv/sbi.c
-> @@ -32,6 +32,64 @@ struct sbiret sbi_ecall(int ext, int fid, unsigned long arg0,
->  	return ret;
->  }
->  
-> +struct sbiret sbi_debug_num_triggers(unsigned long trig_tdata1)
-> +{
-> +	return sbi_ecall(SBI_EXT_DBTR, SBI_EXT_DBTR_NUM_TRIGGERS, trig_tdata1, 0, 0, 0, 0, 0);
-> +}
-> +
-> +struct sbiret sbi_debug_set_shmem(void *shmem)
-> +{
-> +	phys_addr_t p = virt_to_phys(shmem);
-> +
-> +	return sbi_debug_set_shmem_raw(lower_32_bits(p), upper_32_bits(p), 0);
-> +}
-> +
-> +struct sbiret sbi_debug_set_shmem_raw(unsigned long shmem_phys_lo,
-> +				      unsigned long shmem_phys_hi,
-> +				      unsigned long flags)
-> +{
-> +	return sbi_ecall(SBI_EXT_DBTR, SBI_EXT_DBTR_SETUP_SHMEM, shmem_phys_lo,
-> +			 shmem_phys_hi, flags, 0, 0, 0);
-> +}
-> +
-> +struct sbiret sbi_debug_read_triggers(unsigned long trig_idx_base,
-> +				      unsigned long trig_count)
-> +{
-> +	return sbi_ecall(SBI_EXT_DBTR, SBI_EXT_DBTR_TRIGGER_READ, trig_idx_base,
-> +			 trig_count, 0, 0, 0, 0);
-> +}
-> +
-> +struct sbiret sbi_debug_install_triggers(unsigned long trig_count)
-> +{
-> +	return sbi_ecall(SBI_EXT_DBTR, SBI_EXT_DBTR_TRIGGER_INSTALL, trig_count, 0, 0, 0, 0, 0);
-> +}
-> +
-> +struct sbiret sbi_debug_update_triggers(unsigned long trig_count)
-> +{
-> +	return sbi_ecall(SBI_EXT_DBTR, SBI_EXT_DBTR_TRIGGER_UPDATE, trig_count, 0, 0, 0, 0, 0);
-> +}
-> +
-> +struct sbiret sbi_debug_uninstall_triggers(unsigned long trig_idx_base,
-> +					   unsigned long trig_idx_mask)
-> +{
-> +	return sbi_ecall(SBI_EXT_DBTR, SBI_EXT_DBTR_TRIGGER_UNINSTALL, trig_idx_base,
-> +			 trig_idx_mask, 0, 0, 0, 0);
-> +}
-> +
-> +struct sbiret sbi_debug_enable_triggers(unsigned long trig_idx_base,
-> +					unsigned long trig_idx_mask)
-> +{
-> +	return sbi_ecall(SBI_EXT_DBTR, SBI_EXT_DBTR_TRIGGER_ENABLE, trig_idx_base,
-> +			 trig_idx_mask, 0, 0, 0, 0);
-> +}
-> +
-> +struct sbiret sbi_debug_disable_triggers(unsigned long trig_idx_base,
-> +					 unsigned long trig_idx_mask)
-> +{
-> +	return sbi_ecall(SBI_EXT_DBTR, SBI_EXT_DBTR_TRIGGER_DISABLE, trig_idx_base,
-> +			 trig_idx_mask, 0, 0, 0, 0);
-> +}
-> +
->  struct sbiret sbi_sse_read_attrs_raw(unsigned long event_id, unsigned long base_attr_id,
->  				     unsigned long attr_count, unsigned long phys_lo,
->  				     unsigned long phys_hi)
-> diff --git a/riscv/Makefile b/riscv/Makefile
-> index 11e68eae..55c7ac93 100644
-> --- a/riscv/Makefile
-> +++ b/riscv/Makefile
-> @@ -20,6 +20,7 @@ all: $(tests)
->  $(TEST_DIR)/sbi-deps += $(TEST_DIR)/sbi-asm.o
->  $(TEST_DIR)/sbi-deps += $(TEST_DIR)/sbi-fwft.o
->  $(TEST_DIR)/sbi-deps += $(TEST_DIR)/sbi-sse.o
-> +$(TEST_DIR)/sbi-deps += $(TEST_DIR)/sbi-dbtr.o
->  
->  all_deps += $($(TEST_DIR)/sbi-deps)
->  
-> diff --git a/riscv/sbi-dbtr.c b/riscv/sbi-dbtr.c
-> new file mode 100644
-> index 00000000..e557aae1
-> --- /dev/null
-> +++ b/riscv/sbi-dbtr.c
-> @@ -0,0 +1,703 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * SBI DBTR testsuite
-> + *
-> + * Copyright (C) 2025, Rivos Inc., Jesse Taube <jesse@rivosinc.com>
-> + */
-> +
-> +#include <asm/io.h>
-> +
-> +#include "sbi-tests.h"
-> +
-> +#define INSN_LEN(insn)			((((insn) & 0x3) < 0x3) ? 2 : 4)
-> +
-> +#if __riscv_xlen == 64
-> +#define SBI_DBTR_SHMEM_INVALID_ADDR	0xFFFFFFFFFFFFFFFFUL
-> +#elif __riscv_xlen == 32
-> +#define SBI_DBTR_SHMEM_INVALID_ADDR	0xFFFFFFFFUL
-> +#else
-> +#error "Unexpected __riscv_xlen"
-> +#endif
-> +
-> +#define RV_MAX_TRIGGERS     32
-> +
-> +#define SBI_DBTR_TRIG_STATE_MAPPED		BIT(0)
-> +#define SBI_DBTR_TRIG_STATE_U			BIT(1)
-> +#define SBI_DBTR_TRIG_STATE_S			BIT(2)
-> +#define SBI_DBTR_TRIG_STATE_VU			BIT(3)
-> +#define SBI_DBTR_TRIG_STATE_VS			BIT(4)
-> +#define SBI_DBTR_TRIG_STATE_HAVE_HW_TRIG	BIT(5)
-> +
-> +#define SBI_DBTR_TRIG_STATE_HW_TRIG_IDX_SHIFT		8
-> +#define SBI_DBTR_TRIG_STATE_HW_TRIG_IDX(trig_state)	(trig_state >> SBI_DBTR_TRIG_STATE_HW_TRIG_IDX_SHIFT)
-> +
-> +#define SBI_DBTR_TDATA1_TYPE_SHIFT		(__riscv_xlen - 4)
-> +
-> +#define SBI_DBTR_TDATA1_MCONTROL6_LOAD_BIT	BIT(0)
-> +#define SBI_DBTR_TDATA1_MCONTROL6_STORE_BIT	BIT(1)
-> +#define SBI_DBTR_TDATA1_MCONTROL6_EXECUTE_BIT	BIT(2)
-> +#define SBI_DBTR_TDATA1_MCONTROL6_U_BIT		BIT(3)
-> +#define SBI_DBTR_TDATA1_MCONTROL6_S_BIT		BIT(4)
-> +#define SBI_DBTR_TDATA1_MCONTROL6_SELECT_BIT	BIT(21)
-> +#define SBI_DBTR_TDATA1_MCONTROL6_VS_BIT	BIT(23)
-> +#define SBI_DBTR_TDATA1_MCONTROL6_VU_BIT	BIT(24)
-> +
-> +#define SBI_DBTR_TDATA1_MCONTROL_LOAD_BIT	BIT(0)
-> +#define SBI_DBTR_TDATA1_MCONTROL_STORE_BIT	BIT(1)
-> +#define SBI_DBTR_TDATA1_MCONTROL_EXECUTE_BIT	BIT(2)
-> +#define SBI_DBTR_TDATA1_MCONTROL_U_BIT		BIT(3)
-> +#define SBI_DBTR_TDATA1_MCONTROL_S_BIT		BIT(4)
-> +#define SBI_DBTR_TDATA1_MCONTROL_SELECT_BIT	BIT(19)
-> +
-> +typedef enum {
-> +	SBI_DBTR_TDATA1_TYPE_NONE =		(0UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
-> +	SBI_DBTR_TDATA1_TYPE_LEGACY =		(1UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
-> +	SBI_DBTR_TDATA1_TYPE_MCONTROL =		(2UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
-> +	SBI_DBTR_TDATA1_TYPE_ICOUNT =		(3UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
-> +	SBI_DBTR_TDATA1_TYPE_ITRIGGER =		(4UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
-> +	SBI_DBTR_TDATA1_TYPE_ETRIGGER =		(5UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
-> +	SBI_DBTR_TDATA1_TYPE_MCONTROL6 =	(6UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
-> +	SBI_DBTR_TDATA1_TYPE_TMEXTTRIGGER =	(7UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
-> +	SBI_DBTR_TDATA1_TYPE_RESERVED0 =	(8UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
-> +	SBI_DBTR_TDATA1_TYPE_RESERVED1 =	(9UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
-> +	SBI_DBTR_TDATA1_TYPE_RESERVED2 =	(10UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
-> +	SBI_DBTR_TDATA1_TYPE_RESERVED3 =	(11UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
-> +	SBI_DBTR_TDATA1_TYPE_CUSTOM0 =		(12UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
-> +	SBI_DBTR_TDATA1_TYPE_CUSTOM1 =		(13UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
-> +	SBI_DBTR_TDATA1_TYPE_CUSTOM2 =		(14UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
-> +	SBI_DBTR_TDATA1_TYPE_DISABLED =		(15UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
-> +} McontrolType;
-> +
-> +typedef enum {
-> +	VALUE_NONE =	0,
-> +	VALUE_LOAD =	BIT(0),
-> +	VALUE_STORE =	BIT(1),
-> +	VALUE_EXECUTE =	BIT(2),
-> +} Tdata1Value;
-> +
-> +typedef enum {
-> +	MODE_NONE =	0,
-> +	MODE_M =	BIT(0),
-> +	MODE_U =	BIT(1),
-> +	MODE_S =	BIT(2),
-> +	MODE_VU =	BIT(3),
-> +	MODE_VS =	BIT(4),
-> +} Tdata1Mode;
-> +
-> +struct sbi_dbtr_data_msg {
-> +	unsigned long tstate;
-> +	unsigned long tdata1;
-> +	unsigned long tdata2;
-> +	unsigned long tdata3;
+> +struct virtio_net_toeplitz_state {
+> +       u32 hash;
+> +       const u32 *key;
 > +};
 > +
-> +struct sbi_dbtr_id_msg {
-> +	unsigned long idx;
-> +};
+> +#define VIRTIO_NET_SUPPORTED_HASH_TYPES (VIRTIO_NET_RSS_HASH_TYPE_IPv4 |=
+ \
+> +                                        VIRTIO_NET_RSS_HASH_TYPE_TCPv4 |=
+ \
+> +                                        VIRTIO_NET_RSS_HASH_TYPE_UDPv4 |=
+ \
+> +                                        VIRTIO_NET_RSS_HASH_TYPE_IPv6 | =
+\
+> +                                        VIRTIO_NET_RSS_HASH_TYPE_TCPv6 |=
+ \
+> +                                        VIRTIO_NET_RSS_HASH_TYPE_UDPv6)
 > +
-> +/* SBI shared mem messages layout */
-> +struct sbi_dbtr_shmem_entry {
-> +	union {
-> +		struct sbi_dbtr_data_msg data;
-> +		struct sbi_dbtr_id_msg id;
-> +	};
-> +};
+> +#define VIRTIO_NET_RSS_MAX_KEY_SIZE 40
 > +
-> +static bool dbtr_handled;
-> +
-> +// Expected to be leaf function as not to disrupt frame-pointer
-> +static __attribute__((naked)) void exec_call(void)
+> +static inline void virtio_net_toeplitz_convert_key(u32 *input, size_t le=
+n)
 > +{
-> +	// skip over nop when triggered instead of ret.
-> +	asm volatile ("nop\n"
-> +		      "nop\n"
-> +		      "ret\n");
+> +       while (len >=3D sizeof(*input)) {
+> +               *input =3D be32_to_cpu((__force __be32)*input);
+> +               input++;
+> +               len -=3D sizeof(*input);
+> +       }
 > +}
 > +
-> +static void dbtr_exception_handler(struct pt_regs *regs)
+> +static inline void virtio_net_toeplitz_calc(struct virtio_net_toeplitz_s=
+tate *state,
+> +                                           const __be32 *input, size_t l=
+en)
 > +{
-> +	dbtr_handled = true;
+> +       while (len >=3D sizeof(*input)) {
+> +               for (u32 map =3D be32_to_cpu(*input); map; map &=3D (map =
+- 1)) {
+> +                       u32 i =3D ffs(map);
 > +
-> +	/* Reading may cause a fault, skip over two nops if compressed, one if not */
-> +	if ((void *)regs->epc == exec_call) {
-> +		regs->epc += 4;
-> +		return;
-> +	}
+> +                       state->hash ^=3D state->key[0] << (32 - i) |
+> +                                      (u32)((u64)state->key[1] >> i);
+> +               }
 > +
-> +	/* WARNING: Skips over the trapped intruction */
-> +	regs->epc += INSN_LEN(readw((void *)regs->epc));
+> +               state->key++;
+> +               input++;
+> +               len -=3D sizeof(*input);
+> +       }
 > +}
 > +
-> +static bool do_save(void *tdata2)
+> +static inline u8 virtio_net_hash_key_length(u32 types)
 > +{
-> +	bool ret;
+> +       size_t len =3D 0;
 > +
-> +	writel(0, tdata2);
+> +       if (types & VIRTIO_NET_HASH_REPORT_IPv4)
+> +               len =3D max(len,
+> +                         sizeof(struct flow_dissector_key_ipv4_addrs));
 > +
-> +	ret = dbtr_handled;
-> +	dbtr_handled = false;
+> +       if (types &
+> +           (VIRTIO_NET_HASH_REPORT_TCPv4 | VIRTIO_NET_HASH_REPORT_UDPv4)=
+)
+> +               len =3D max(len,
+> +                         sizeof(struct flow_dissector_key_ipv4_addrs) +
+> +                         sizeof(struct flow_dissector_key_ports));
 > +
-> +	return ret;
+> +       if (types & VIRTIO_NET_HASH_REPORT_IPv6)
+> +               len =3D max(len,
+> +                         sizeof(struct flow_dissector_key_ipv6_addrs));
+> +
+> +       if (types &
+> +           (VIRTIO_NET_HASH_REPORT_TCPv6 | VIRTIO_NET_HASH_REPORT_UDPv6)=
+)
+> +               len =3D max(len,
+> +                         sizeof(struct flow_dissector_key_ipv6_addrs) +
+> +                         sizeof(struct flow_dissector_key_ports));
+> +
+> +       return len + sizeof(u32);
 > +}
 > +
-> +static bool do_load(void *tdata2)
+> +static inline u32 virtio_net_hash_report(u32 types,
+> +                                        const struct flow_keys_basic *ke=
+ys)
 > +{
-> +	bool ret;
+> +       switch (keys->basic.n_proto) {
+> +       case cpu_to_be16(ETH_P_IP):
+> +               if (!(keys->control.flags & FLOW_DIS_IS_FRAGMENT)) {
+> +                       if (keys->basic.ip_proto =3D=3D IPPROTO_TCP &&
+> +                           (types & VIRTIO_NET_RSS_HASH_TYPE_TCPv4))
+> +                               return VIRTIO_NET_HASH_REPORT_TCPv4;
 > +
-> +	readl(tdata2);
+> +                       if (keys->basic.ip_proto =3D=3D IPPROTO_UDP &&
+> +                           (types & VIRTIO_NET_RSS_HASH_TYPE_UDPv4))
+> +                               return VIRTIO_NET_HASH_REPORT_UDPv4;
+> +               }
 > +
-> +	ret = dbtr_handled;
-> +	dbtr_handled = false;
+> +               if (types & VIRTIO_NET_RSS_HASH_TYPE_IPv4)
+> +                       return VIRTIO_NET_HASH_REPORT_IPv4;
 > +
-> +	return ret;
+> +               return VIRTIO_NET_HASH_REPORT_NONE;
+> +
+> +       case cpu_to_be16(ETH_P_IPV6):
+> +               if (!(keys->control.flags & FLOW_DIS_IS_FRAGMENT)) {
+> +                       if (keys->basic.ip_proto =3D=3D IPPROTO_TCP &&
+> +                           (types & VIRTIO_NET_RSS_HASH_TYPE_TCPv6))
+> +                               return VIRTIO_NET_HASH_REPORT_TCPv6;
+> +
+> +                       if (keys->basic.ip_proto =3D=3D IPPROTO_UDP &&
+> +                           (types & VIRTIO_NET_RSS_HASH_TYPE_UDPv6))
+> +                               return VIRTIO_NET_HASH_REPORT_UDPv6;
+> +               }
+> +
+> +               if (types & VIRTIO_NET_RSS_HASH_TYPE_IPv6)
+> +                       return VIRTIO_NET_HASH_REPORT_IPv6;
+> +
+> +               return VIRTIO_NET_HASH_REPORT_NONE;
+> +
+> +       default:
+> +               return VIRTIO_NET_HASH_REPORT_NONE;
+> +       }
 > +}
 > +
-> +static bool do_exec(void)
+> +static inline void virtio_net_hash_rss(const struct sk_buff *skb,
+> +                                      u32 types, const u32 *key,
+> +                                      struct virtio_net_hash *hash)
 > +{
-> +	bool ret;
+> +       struct virtio_net_toeplitz_state toeplitz_state =3D { .key =3D ke=
+y };
+> +       struct flow_keys flow;
+> +       struct flow_keys_basic flow_basic;
+> +       u16 report;
 > +
-> +	exec_call();
+> +       if (!skb_flow_dissect_flow_keys(skb, &flow, 0)) {
+> +               hash->report =3D VIRTIO_NET_HASH_REPORT_NONE;
+> +               return;
+> +       }
 > +
-> +	ret = dbtr_handled;
-> +	dbtr_handled = false;
+> +       flow_basic =3D (struct flow_keys_basic) {
+> +               .control =3D flow.control,
+> +               .basic =3D flow.basic
+> +       };
 > +
-> +	return ret;
+> +       report =3D virtio_net_hash_report(types, &flow_basic);
+> +
+> +       switch (report) {
+> +       case VIRTIO_NET_HASH_REPORT_IPv4:
+> +               virtio_net_toeplitz_calc(&toeplitz_state,
+> +                                        (__be32 *)&flow.addrs.v4addrs,
+> +                                        sizeof(flow.addrs.v4addrs));
+> +               break;
+> +
+> +       case VIRTIO_NET_HASH_REPORT_TCPv4:
+> +               virtio_net_toeplitz_calc(&toeplitz_state,
+> +                                        (__be32 *)&flow.addrs.v4addrs,
+> +                                        sizeof(flow.addrs.v4addrs));
+> +               virtio_net_toeplitz_calc(&toeplitz_state, &flow.ports.por=
+ts,
+> +                                        sizeof(flow.ports.ports));
+> +               break;
+> +
+> +       case VIRTIO_NET_HASH_REPORT_UDPv4:
+> +               virtio_net_toeplitz_calc(&toeplitz_state,
+> +                                        (__be32 *)&flow.addrs.v4addrs,
+> +                                        sizeof(flow.addrs.v4addrs));
+> +               virtio_net_toeplitz_calc(&toeplitz_state, &flow.ports.por=
+ts,
+> +                                        sizeof(flow.ports.ports));
+> +               break;
+> +
+> +       case VIRTIO_NET_HASH_REPORT_IPv6:
+> +               virtio_net_toeplitz_calc(&toeplitz_state,
+> +                                        (__be32 *)&flow.addrs.v6addrs,
+> +                                        sizeof(flow.addrs.v6addrs));
+> +               break;
+> +
+> +       case VIRTIO_NET_HASH_REPORT_TCPv6:
+> +               virtio_net_toeplitz_calc(&toeplitz_state,
+> +                                        (__be32 *)&flow.addrs.v6addrs,
+> +                                        sizeof(flow.addrs.v6addrs));
+> +               virtio_net_toeplitz_calc(&toeplitz_state, &flow.ports.por=
+ts,
+> +                                        sizeof(flow.ports.ports));
+> +               break;
+> +
+> +       case VIRTIO_NET_HASH_REPORT_UDPv6:
+> +               virtio_net_toeplitz_calc(&toeplitz_state,
+> +                                        (__be32 *)&flow.addrs.v6addrs,
+> +                                        sizeof(flow.addrs.v6addrs));
+> +               virtio_net_toeplitz_calc(&toeplitz_state, &flow.ports.por=
+ts,
+> +                                        sizeof(flow.ports.ports));
+> +               break;
+> +
+> +       default:
+> +               hash->report =3D VIRTIO_NET_HASH_REPORT_NONE;
+> +               return;
+
+So I still think we need a comment here to explain why this is not an
+issue if the device can report HASH_XXX_EX. Or we need to add the
+support, since this is the code from the driver side, I don't think we
+need to worry about the device implementation issues.
+
+For the issue of the number of options, does the spec forbid fallback
+to VIRTIO_NET_HASH_REPORT_NONE? If not, we can do that.
+
+Thanks
+
+> +       }
+> +
+> +       hash->value =3D toeplitz_state.hash;
+> +       hash->report =3D report;
 > +}
 > +
-> +static unsigned long gen_tdata1_mcontrol(Tdata1Mode mode, Tdata1Value value)
-> +{
-> +	unsigned long tdata1 = SBI_DBTR_TDATA1_TYPE_MCONTROL;
-> +
-> +	if (value & VALUE_LOAD)
-> +		tdata1 |= SBI_DBTR_TDATA1_MCONTROL_LOAD_BIT;
-> +
-> +	if (value & VALUE_STORE)
-> +		tdata1 |= SBI_DBTR_TDATA1_MCONTROL_STORE_BIT;
-> +
-> +	if (value & VALUE_EXECUTE)
-> +		tdata1 |= SBI_DBTR_TDATA1_MCONTROL_EXECUTE_BIT;
-> +
-> +	if (mode & MODE_M)
-> +		tdata1 |= SBI_DBTR_TDATA1_MCONTROL_U_BIT;
-> +
-> +	if (mode & MODE_U)
-> +		tdata1 |= SBI_DBTR_TDATA1_MCONTROL_U_BIT;
-> +
-> +	if (mode & MODE_S)
-> +		tdata1 |= SBI_DBTR_TDATA1_MCONTROL_S_BIT;
-> +
-> +	return tdata1;
-> +}
-> +
-> +static unsigned long gen_tdata1_mcontrol6(Tdata1Mode mode, Tdata1Value value)
-> +{
-> +	unsigned long tdata1 = SBI_DBTR_TDATA1_TYPE_MCONTROL6;
-> +
-> +	if (value & VALUE_LOAD)
-> +		tdata1 |= SBI_DBTR_TDATA1_MCONTROL6_LOAD_BIT;
-> +
-> +	if (value & VALUE_STORE)
-> +		tdata1 |= SBI_DBTR_TDATA1_MCONTROL6_STORE_BIT;
-> +
-> +	if (value & VALUE_EXECUTE)
-> +		tdata1 |= SBI_DBTR_TDATA1_MCONTROL6_EXECUTE_BIT;
-> +
-> +	if (mode & MODE_M)
-> +		tdata1 |= SBI_DBTR_TDATA1_MCONTROL6_U_BIT;
-> +
-> +	if (mode & MODE_U)
-> +		tdata1 |= SBI_DBTR_TDATA1_MCONTROL6_U_BIT;
-> +
-> +	if (mode & MODE_S)
-> +		tdata1 |= SBI_DBTR_TDATA1_MCONTROL6_S_BIT;
-> +
-> +	if (mode & MODE_VU)
-> +		tdata1 |= SBI_DBTR_TDATA1_MCONTROL6_VU_BIT;
-> +
-> +	if (mode & MODE_VS)
-> +		tdata1 |= SBI_DBTR_TDATA1_MCONTROL6_VS_BIT;
-> +
-> +	return tdata1;
-> +}
-> +
-> +static unsigned long gen_tdata1(McontrolType type, Tdata1Value value, Tdata1Mode mode)
-> +{
-> +	switch (type) {
-> +	case SBI_DBTR_TDATA1_TYPE_MCONTROL:
-> +		return gen_tdata1_mcontrol(mode, value);
-> +	case SBI_DBTR_TDATA1_TYPE_MCONTROL6:
-> +		return gen_tdata1_mcontrol6(mode, value);
-> +	default:
-> +		return 0;
-> +	}
-> +}
-> +
-> +static bool dbtr_install_trigger(struct sbi_dbtr_shmem_entry *shmem, void *tdata2,
-> +				 unsigned long tdata1)
-> +{
-> +	struct sbiret sbi_ret;
-> +	bool ret;
-> +
-> +	shmem->data.tdata1 = tdata1;
-> +	shmem->data.tdata2 = (unsigned long)tdata2;
-> +
-> +	sbi_ret = sbi_debug_install_triggers(1);
-> +	ret = sbiret_report_error(&sbi_ret, SBI_SUCCESS, "sbi_debug_install_triggers");
-> +
-> +	if (ret)
-> +		install_exception_handler(EXC_BREAKPOINT, dbtr_exception_handler);
-> +
-> +	return ret;
-> +}
-> +
-> +static bool dbtr_uninstall_trigger(void)
-> +{
-> +	struct sbiret ret;
-> +
-> +	install_exception_handler(EXC_BREAKPOINT, NULL);
-> +
-> +	ret = sbi_debug_uninstall_triggers(0, 1);
-> +	return sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_uninstall_triggers");
-> +}
-> +
-> +static unsigned long dbtr_test_num_triggers(void)
-> +{
-> +	struct sbiret ret;
-> +
-> +	//sbi_debug_num_triggers will return trig_max in sbiret.value when trig_tdata1 == 0
-> +	unsigned long tdata1 = 0;
-> +
-> +	// should be atleast one trigger.
-> +	ret = sbi_debug_num_triggers(tdata1);
-> +	sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_num_triggers");
-> +
-> +	if (ret.value == 0)
-> +		report_fail("sbi_debug_num_triggers: Returned 0 triggers avalible");
-> +	else
-> +		report_pass("sbi_debug_num_triggers: Returned %lu triggers avalible", ret.value);
-> +
-> +	return ret.value;
-> +}
-> +
-> +static McontrolType dbtr_test_type(unsigned long *num_trig)
-> +{
-> +	struct sbiret ret;
-> +
-> +	//sbi_debug_num_triggers will return trig_max in sbiret.value when trig_tdata1 == 0
-> +	unsigned long tdata1 = SBI_DBTR_TDATA1_TYPE_MCONTROL6;
-> +
-> +	ret = sbi_debug_num_triggers(tdata1);
-> +	sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_num_triggers");
-> +	if (ret.value > 0) {
-> +		report_pass("sbi_debug_num_triggers: Returned %lu mcontrol6 triggers avalible",
-> +			    ret.value);
-> +		*num_trig = ret.value;
-> +		return tdata1;
-> +	}
-> +
-> +	tdata1 = SBI_DBTR_TDATA1_TYPE_MCONTROL;
-> +
-> +	ret = sbi_debug_num_triggers(tdata1);
-> +	sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_num_triggers");
-> +	*num_trig = ret.value;
-> +	if (ret.value > 0) {
-> +		report_pass("sbi_debug_num_triggers: Returned %lu mcontrol triggers avalible",
-> +			    ret.value);
-> +		return tdata1;
-> +	}
-> +
-> +	report_fail("sbi_debug_num_triggers: Returned 0 mcontrol(6) triggers avalible");
-> +
-> +	return SBI_DBTR_TDATA1_TYPE_NONE;
-> +}
-> +
-> +static struct sbiret dbtr_test_save_install_uninstall(struct sbi_dbtr_shmem_entry *shmem,
-> +						      McontrolType type)
-> +{
-> +	static unsigned long test;
-> +	struct sbiret ret;
-> +
-> +	report_prefix_push("save_trigger");
-> +
-> +	shmem->data.tdata1 = gen_tdata1(type, VALUE_STORE, MODE_S | MODE_S);
-> +	shmem->data.tdata2 = (unsigned long)&test;
-> +
-> +	ret = sbi_debug_install_triggers(1);
-> +	if (!sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_install_triggers"))
-> +		return ret;
-> +
-> +	install_exception_handler(EXC_BREAKPOINT, dbtr_exception_handler);
-> +
-> +	report(do_save(&test), "triggered");
-> +
-> +	if (do_load(&test))
-> +		report_fail("triggered by load");
-> +
-> +	ret = sbi_debug_uninstall_triggers(0, 1);
-> +	sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_uninstall_triggers");
-> +
-> +	if (do_save(&test))
-> +		report_fail("triggered after uninstall");
-> +
-> +	install_exception_handler(EXC_BREAKPOINT, NULL);
-> +	report_prefix_pop();
-> +
-> +	return ret;
-> +}
-> +
-> +static void dbtr_test_update(struct sbi_dbtr_shmem_entry *shmem, McontrolType type)
-> +{
-> +	static unsigned long test;
-> +	struct sbiret ret;
-> +
-> +	report_prefix_push("update_trigger");
-> +
-> +	dbtr_install_trigger(shmem, NULL, gen_tdata1(type, VALUE_NONE, MODE_NONE));
-> +
-> +	shmem->id.idx = 0;
-> +	shmem->data.tdata1 = gen_tdata1(type, VALUE_STORE, MODE_S);
-> +	shmem->data.tdata2 = (unsigned long)&test;
-> +
-> +	ret = sbi_debug_update_triggers(1);
-> +	sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_update_triggers");
-> +
-> +	report(do_save(&test), "triggered");
-> +
-> +	dbtr_uninstall_trigger();
-> +	report_prefix_pop();
-> +}
-> +
-> +static void dbtr_test_load(struct sbi_dbtr_shmem_entry *shmem, McontrolType type)
-> +{
-> +	static unsigned long test;
-> +
-> +	report_prefix_push("load_trigger");
-> +	dbtr_install_trigger(shmem, &test, gen_tdata1(type, VALUE_LOAD, MODE_S) | 1);
-> +
-> +	report(do_load(&test), "triggered");
-> +
-> +	if (do_save(&test))
-> +		report_fail("triggered by save");
-> +
-> +	dbtr_uninstall_trigger();
-> +	report_prefix_pop();
-> +}
-> +
-> +static void dbtr_test_disable_enable(struct sbi_dbtr_shmem_entry *shmem, McontrolType type)
-> +{
-> +	static unsigned long test;
-> +	struct sbiret ret;
-> +
-> +	report_prefix_push("sbi_debug_disable_triggers");
-> +	dbtr_install_trigger(shmem, &test, gen_tdata1(type, VALUE_STORE, MODE_S));
-> +
-> +	ret = sbi_debug_disable_triggers(0, 1);
-> +	sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_disable_triggers");
-> +
-> +	if (do_save(&test)) {
-> +		report_fail("should not trigger");
-> +
-> +		dbtr_uninstall_trigger();
-> +		report_prefix_pop();
-> +		report_skip("sbi_debug_enable_triggers: no disable");
-> +
-> +		return;
-> +	}
-> +
-> +	report_pass("should not trigger");
-> +
-> +	report_prefix_pop();
-> +	report_prefix_push("sbi_debug_enable_triggers");
-> +
-> +	ret = sbi_debug_enable_triggers(0, 1);
-> +	sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_enable_triggers");
-> +
-> +	report(do_save(&test), "triggered");
-> +
-> +	dbtr_uninstall_trigger();
-> +	report_prefix_pop();
-> +}
-> +
-> +static void dbtr_test_exec(struct sbi_dbtr_shmem_entry *shmem, McontrolType type)
-> +{
-> +	static unsigned long test;
-> +
-> +	report_prefix_push("exec_trigger");
-> +	/* check if loads and saves trigger exec */
-> +	dbtr_install_trigger(shmem, &test, gen_tdata1(type, VALUE_EXECUTE, MODE_S));
-> +
-> +	if (do_load(&test))
-> +		report_fail("triggered by load");
-> +
-> +	if (do_save(&test))
-> +		report_fail("triggered by save");
-> +
-> +	dbtr_uninstall_trigger();
-> +
-> +	/* Check if exec works */
-> +	dbtr_install_trigger(shmem, exec_call, gen_tdata1(type, VALUE_EXECUTE, MODE_S));
-> +	report(do_exec(), "exec trigger");
-> +
-> +	dbtr_uninstall_trigger();
-> +	report_prefix_pop();
-> +}
-> +
-> +static void dbtr_test_read(struct sbi_dbtr_shmem_entry *shmem, McontrolType type)
-> +{
-> +	const unsigned long tstatus_expected = SBI_DBTR_TRIG_STATE_S | SBI_DBTR_TRIG_STATE_MAPPED;
-> +	const unsigned long tdata1 = gen_tdata1(type, VALUE_STORE, MODE_S);
-> +	static unsigned long test;
-> +	struct sbiret ret;
-> +
-> +	report_prefix_push("sbi_debug_read_triggers");
-> +	dbtr_install_trigger(shmem, &test, tdata1);
-> +
-> +	ret = sbi_debug_read_triggers(0, 1);
-> +	sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_read_triggers");
-> +
-> +	report(shmem->data.tdata1 == tdata1, "tdata1 expected: 0x%016lx, found: 0x%016lx",
-> +	       tdata1, shmem->data.tdata1);
-> +	report(shmem->data.tdata2 == ((unsigned long)&test),
-> +	       "tdata2 expected: 0x%016lx, found: 0x%016lx", ((unsigned long)&test),
-> +	       shmem->data.tdata2);
-> +	report(shmem->data.tstate == tstatus_expected, "tstate expected: 0x%016lx, found: 0x%016lx",
-> +	       tstatus_expected, shmem->data.tstate);
-> +
-> +	dbtr_uninstall_trigger();
-> +	report_prefix_pop();
-> +}
-> +
-> +static void check_exec(unsigned long base)
-> +{
-> +		struct sbiret ret;
-> +
-> +		report(do_exec(), "exec triggered");
-> +
-> +		ret = sbi_debug_uninstall_triggers(base, 1);
-> +		sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_uninstall_triggers");
-> +}
-> +
-> +static void dbtr_test_multiple(struct sbi_dbtr_shmem_entry *shmem, McontrolType type,
-> +			       unsigned long num_trigs)
-> +{
-> +	static unsigned long test[2];
-> +	struct sbiret ret;
-> +	bool have_three = num_trigs > 2;
-> +
-> +	if (num_trigs < 2)
-> +		return;
-> +
-> +	report_prefix_push("test_multiple");
-> +
-> +	dbtr_install_trigger(shmem, &test[0], gen_tdata1(type, VALUE_STORE, MODE_S));
-> +	dbtr_install_trigger(shmem, &test[1], gen_tdata1(type, VALUE_LOAD, MODE_S));
-> +	if (have_three)
-> +		dbtr_install_trigger(shmem, exec_call, gen_tdata1(type, VALUE_EXECUTE, MODE_S));
-> +
-> +	report(do_save(&test[0]), "save triggered");
-> +
-> +	if (do_load(&test[0]))
-> +		report_fail("save triggered by load");
-> +
-> +	report(do_load(&test[1]), "load triggered");
-> +
-> +	if (do_save(&test[1]))
-> +		report_fail("load triggered by save");
-> +
-> +	if (have_three)
-> +		check_exec(2);
-> +
-> +	ret = sbi_debug_uninstall_triggers(1, 1);
-> +	sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_uninstall_triggers");
-> +
-> +	if (do_load(&test[1]))
-> +		report_fail("load triggered after uninstall");
-> +
-> +	report(do_save(&test[0]), "save triggered");
-> +
-> +	if (!have_three) {
-> +		dbtr_install_trigger(shmem, exec_call, gen_tdata1(type, VALUE_EXECUTE, MODE_S));
-> +		check_exec(1);
-> +	}
-> +
-> +	ret = sbi_debug_uninstall_triggers(0, 1);
-> +	sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_uninstall_triggers");
-> +
-> +	install_exception_handler(EXC_BREAKPOINT, NULL);
-> +	report_prefix_pop();
-> +}
-> +
-> +static void dbtr_test_multiple_types(struct sbi_dbtr_shmem_entry *shmem, unsigned long type)
-> +{
-> +	static unsigned long test;
-> +
-> +	report_prefix_push("dbtr_test_multiple_types");
-> +
-> +	/* check if loads and saves trigger exec */
-> +	dbtr_install_trigger(shmem, &test,
-> +			     gen_tdata1(type, VALUE_EXECUTE | VALUE_LOAD | VALUE_STORE, MODE_S));
-> +
-> +	report(do_load(&test), "load trigger");
-> +
-> +	report(do_save(&test), "save trigger");
-> +
-> +	dbtr_uninstall_trigger();
-> +
-> +	/* Check if exec works */
-> +	dbtr_install_trigger(shmem, exec_call,
-> +			     gen_tdata1(type, VALUE_EXECUTE | VALUE_LOAD | VALUE_STORE, MODE_S));
-> +
-> +	report(do_exec(), "exec trigger");
-> +
-> +	dbtr_uninstall_trigger();
-> +	report_prefix_pop();
-> +}
-> +
-> +static void dbtr_test_disable_unistall(struct sbi_dbtr_shmem_entry *shmem, McontrolType type)
-> +{
-> +	static unsigned long test;
-> +	struct sbiret ret;
-> +
-> +	report_prefix_push("disable uninstall");
-> +	dbtr_install_trigger(shmem, &test, gen_tdata1(type, VALUE_STORE, MODE_S));
-> +
-> +	ret = sbi_debug_disable_triggers(0, 1);
-> +	sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_disable_triggers");
-> +
-> +	dbtr_uninstall_trigger();
-> +
-> +	dbtr_install_trigger(shmem, &test, gen_tdata1(type, VALUE_STORE, MODE_S));
-> +
-> +	report(do_save(&test), "triggered");
-> +
-> +	dbtr_uninstall_trigger();
-> +	report_prefix_pop();
-> +}
-> +
-> +static void dbtr_test_unistall_enable(struct sbi_dbtr_shmem_entry *shmem, McontrolType type)
-> +{
-> +	static unsigned long test;
-> +	struct sbiret ret;
-> +
-> +	report_prefix_push("uninstall enable");
-> +	dbtr_install_trigger(shmem, &test, gen_tdata1(type, VALUE_STORE, MODE_S));
-> +
-> +	dbtr_uninstall_trigger();
-> +
-> +	ret = sbi_debug_enable_triggers(0, 1);
-> +	sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_enable_triggers");
-> +
-> +	install_exception_handler(EXC_BREAKPOINT, dbtr_exception_handler);
-> +
-> +	report(!do_save(&test), "should not trigger");
-> +
-> +	install_exception_handler(EXC_BREAKPOINT, NULL);
-> +	report_prefix_pop();
-> +}
-> +
-> +static void dbtr_test_unistall_update(struct sbi_dbtr_shmem_entry *shmem, McontrolType type)
-> +{
-> +	static unsigned long test;
-> +	struct sbiret ret;
-> +
-> +	report_prefix_push("uninstall update");
-> +	dbtr_install_trigger(shmem, NULL, gen_tdata1(type, VALUE_NONE, MODE_NONE));
-> +
-> +	dbtr_uninstall_trigger();
-> +
-> +	shmem->id.idx = 0;
-> +	shmem->data.tdata1 = gen_tdata1(type, VALUE_STORE, MODE_S);
-> +	shmem->data.tdata2 = (unsigned long)&test;
-> +
-> +	ret = sbi_debug_update_triggers(1);
-> +	sbiret_report_error(&ret, SBI_ERR_FAILURE, "sbi_debug_update_triggers");
-> +
-> +	install_exception_handler(EXC_BREAKPOINT, dbtr_exception_handler);
-> +
-> +	report(!do_save(&test), "should not trigger");
-> +
-> +	install_exception_handler(EXC_BREAKPOINT, NULL);
-> +	report_prefix_pop();
-> +}
-> +
-> +static void dbtr_test_disable_read(struct sbi_dbtr_shmem_entry *shmem, McontrolType type)
-> +{
-> +	const unsigned long tstatus_expected = SBI_DBTR_TRIG_STATE_S | SBI_DBTR_TRIG_STATE_MAPPED;
-> +	const unsigned long tdata1 = gen_tdata1(type, VALUE_STORE, MODE_NONE);
-> +	static unsigned long test;
-> +	struct sbiret ret;
-> +
-> +	report_prefix_push("disable_read");
-> +	dbtr_install_trigger(shmem, &test, gen_tdata1(type, VALUE_STORE, MODE_S));
-> +
-> +	ret = sbi_debug_disable_triggers(0, 1);
-> +	sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_disable_triggers");
-> +
-> +	ret = sbi_debug_read_triggers(0, 1);
-> +	sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_read_triggers");
-> +
-> +	report(shmem->data.tdata1 == tdata1, "tdata1 expected: 0x%016lx, found: 0x%016lx",
-> +	       tdata1, shmem->data.tdata1);
-> +	report(shmem->data.tdata2 == ((unsigned long)&test),
-> +	       "tdata2 expected: 0x%016lx, found: 0x%016lx",
-> +	       ((unsigned long)&test), shmem->data.tdata2);
-> +	report(shmem->data.tstate == tstatus_expected, "tstate expected: 0x%016lx, found: 0x%016lx",
-> +	       tstatus_expected, shmem->data.tstate);
-> +
-> +
-> +	dbtr_uninstall_trigger();
-> +	report_prefix_pop();
-> +}
-> +
-> +void check_dbtr(void)
-> +{
-> +	static struct sbi_dbtr_shmem_entry shmem[RV_MAX_TRIGGERS] = {};
-> +	unsigned long num_trigs;
-> +	McontrolType trig_type;
-> +	struct sbiret ret;
-> +
-> +	report_prefix_push("dbtr");
-> +
-> +	if (!sbi_probe(SBI_EXT_DBTR)) {
-> +		report_skip("extension not available");
-> +		report_prefix_pop();
-> +		return;
-> +	}
-> +
-> +	if (__sbi_get_imp_id() == SBI_IMPL_OPENSBI &&
-> +	    __sbi_get_imp_version() < sbi_impl_opensbi_mk_version(1, 6)) {
-> +		report_skip("OpenSBI < v1.7 detected, skipping tests");
-> +		report_prefix_pop();
-> +		return;
-> +	}
-> +
-> +	num_trigs = dbtr_test_num_triggers();
-> +	if (!num_trigs)
-> +		return;
-> +
-> +	trig_type = dbtr_test_type(&num_trigs);
-> +	if (trig_type == SBI_DBTR_TDATA1_TYPE_NONE)
-> +		return;
-> +
-> +	ret = sbi_debug_set_shmem(shmem);
-> +	sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_set_shmem");
-> +
-> +	ret = dbtr_test_save_install_uninstall(&shmem[0], trig_type);
-> +	/* install or unistall failed */
-> +	if (ret.error != SBI_SUCCESS)
-> +		return;
-> +
-> +	dbtr_test_load(&shmem[0], trig_type);
-> +	dbtr_test_exec(&shmem[0], trig_type);
-> +	dbtr_test_read(&shmem[0], trig_type);
-> +	dbtr_test_disable_enable(&shmem[0], trig_type);
-> +	dbtr_test_update(&shmem[0], trig_type);
-> +	dbtr_test_multiple_types(&shmem[0], trig_type);
-> +	dbtr_test_multiple(shmem, trig_type, num_trigs);
-> +	dbtr_test_disable_unistall(&shmem[0], trig_type);
-> +	dbtr_test_unistall_enable(&shmem[0], trig_type);
-> +	dbtr_test_unistall_update(&shmem[0], trig_type);
-> +	dbtr_test_disable_read(&shmem[0], trig_type);
-> +
-> +	report_prefix_pop();
-> +}
-> diff --git a/riscv/sbi-tests.h b/riscv/sbi-tests.h
-> index d5c4ae70..6a227745 100644
-> --- a/riscv/sbi-tests.h
-> +++ b/riscv/sbi-tests.h
-> @@ -99,6 +99,7 @@ static inline bool env_enabled(const char *env)
->  
->  void sbi_bad_fid(int ext);
->  void check_sse(void);
-> +void check_dbtr(void);
->  
->  #endif /* __ASSEMBLER__ */
->  #endif /* _RISCV_SBI_TESTS_H_ */
-> diff --git a/riscv/sbi.c b/riscv/sbi.c
-> index edb1a6be..5bd496d0 100644
-> --- a/riscv/sbi.c
-> +++ b/riscv/sbi.c
-> @@ -1561,6 +1561,7 @@ int main(int argc, char **argv)
->  	check_susp();
->  	check_sse();
->  	check_fwft();
-> +	check_dbtr();
->  
->  	return report_summary();
->  }
-> -- 
-> 2.43.0
-> 
+>  static inline bool virtio_net_hdr_match_proto(__be16 protocol, __u8 gso_=
+type)
+>  {
+>         switch (gso_type & ~VIRTIO_NET_HDR_GSO_ECN) {
+>
+> --
+> 2.49.0
+>
+
 
