@@ -1,130 +1,146 @@
-Return-Path: <linux-kselftest+bounces-34201-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34202-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E62D6ACC02A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 08:26:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1363AACC10A
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 09:14:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 418937A5836
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 06:25:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E9AE1188432B
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 07:13:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7BAF25D527;
-	Tue,  3 Jun 2025 06:26:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A78CE268C6B;
+	Tue,  3 Jun 2025 07:12:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="UBoLwNWX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="glvRPAXC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtpbg154.qq.com (smtpbg154.qq.com [15.184.224.54])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F0E01482E7;
-	Tue,  3 Jun 2025 06:26:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=15.184.224.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C1FD2686B3;
+	Tue,  3 Jun 2025 07:12:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748932007; cv=none; b=WaZLF9TcyYnsOypHnm0ZysxBEbcqNYyLg2+/i1xashDKmE2zUoSKFeNQFrNa3at1PgHT8xPGTfLEUf8KuOXW8GokXu7nETLwuhqElfuJNvNEz75HvCNDKzfyHW7V3mC3eXo+i27O43lM82B0aDS/L/KTzLus1hwIxiLPVDvtb4Q=
+	t=1748934771; cv=none; b=arR/BrSW6ENMPPTYDnipwzCMC4crTWXiNQGmlfsDGncRUy2nQRp0azMuZm/ffxY13jyvwY4UIbKmWdukv4apdZJRcKX1qv51w/QzVghL3rRkqwYEYfyrjR7JXwy+lvcD9rYRipl3z+OnQQ0Xzghgm9FpokVCSp/ExQNbQIcPytM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748932007; c=relaxed/simple;
-	bh=R+OerVyVxj6IqrndRPrUYFsv52NUlRFWDcYIsq2Ylpo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cpKADcKLust+oZ1rOF4yEtsST32si/UCruTw/3P/9zOuPStqHRgBnYXCCr3zZokRqi3bc4zsdc27biBcj6dktHVfl2ISiE0NKahJvnuuxwHJNTAVczInV0LvSSApDoXIFWYCcHSBt8kDokzxncEEYIwOwvLg47r8wrEwaqAvF1s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=UBoLwNWX; arc=none smtp.client-ip=15.184.224.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1748931987;
-	bh=R+OerVyVxj6IqrndRPrUYFsv52NUlRFWDcYIsq2Ylpo=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To;
-	b=UBoLwNWXsfbw9HMh3GMcLubTcy8o9PD460Gh0Z0RVm3KNaI6yeq7kOy7ZDGxBoxfJ
-	 550Hlbwfe7mEmfqy2vCxXnvzxRUM/r0VaScpusx8gecLTEbVrHSYmU7Z6rK8aAJwcZ
-	 Yq/WBc1D7Du+U1PBB1dwmxMsAz8/E05WT6pouAGY=
-X-QQ-mid: zesmtpgz9t1748931985tb95e0d80
-X-QQ-Originating-IP: i+o66jrVhkv3ZXJ7FFjZMcYF1ZaZk/3iW1joDJQYrWY=
-Received: from mail-yw1-f172.google.com ( [209.85.128.172])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Tue, 03 Jun 2025 14:26:23 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 510946114599463882
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-70dd2d35449so40748437b3.3;
-        Mon, 02 Jun 2025 23:26:24 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVioy45hkq40Gjr51zt3Xo4wr+z5qK2IY7P9qeSUKqHWm3LuUk/qd56LwRLtakJsUtnctblofzP+95szl3R4sn8@vger.kernel.org, AJvYcCXuFJQZ+phbNb/58/Y45/aeNSdT76jmFySoj6VcSF8aN9vvX1O7RnfSbOr7YAN4Ps2epN1If1G/QMaqdp5E@vger.kernel.org, AJvYcCXzfwABnsAW7mre5kLMYyo0X2zCN2Jjo88aU6mqfQXdENGGP+WOGQx42/i+xcRCuM3clLsnFEWUbwQGhwtN@vger.kernel.org
-X-Gm-Message-State: AOJu0YwEvEA78jOTb/Mrq6rn7qsxHFfMhiV9kD0znj6Xb9enGmrmH9Zk
-	N5OzOAxm5ypYz41d8BRyfx9YR8lQw43EnLRhXNMT3usHivg6vRJG+L3t/nUsabZwME9y3Fn0gpg
-	oHSp9I7xmmP2+FzMfNAtjwrOcqWjaRXM=
-X-Google-Smtp-Source: AGHT+IGFv6a8e259ikLqOLxS+7Zsi1dR9R9kdEmpFbse2dsMl6bm+BYsFIg7D+fNCJT5T0VMXAuPEgcSIx+T3sgWG7g=
-X-Received: by 2002:a05:690c:6f81:b0:70e:2c7f:2edd with SMTP id
- 00721157ae682-71057c1702amr188775307b3.9.1748931982521; Mon, 02 Jun 2025
- 23:26:22 -0700 (PDT)
+	s=arc-20240116; t=1748934771; c=relaxed/simple;
+	bh=56OvzeerDwzgeauclku9aTidkmN34AE7R4xLIov9A2g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KjZz0q/dy4W82aUb9INgtW2rOBaieJNHfJ7z7rzoAinFr19OFaCgQiRUFH6kJKhaBq3C0YCM1rwlDM79PusbqgQdjTjQbT7Ri9LiqLMLyELXLECs9+38heBa47oe1wX1k7by7e/7R5eGu90UfqZPoQOp3ibNN4Ol9UZj1twuzCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=glvRPAXC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70147C4CEED;
+	Tue,  3 Jun 2025 07:12:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1748934770;
+	bh=56OvzeerDwzgeauclku9aTidkmN34AE7R4xLIov9A2g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=glvRPAXCWMTv46/bEjU9dXzmIAo9bS6YOO4TWNAeb1eD5NBlbhrpd1MUw0gfyq7iZ
+	 UI0ITf5G9DWx3SbMAgGtSgrR/CtqhyTK6toEEGj5ExJScvBhF9cfXbKsj+DKEkxEda
+	 fHFT2rpMKyxGnLAY/PW85Bv1iwCtynVs+X60WPfgHiI79NXzbKcZRD0DhA740vI9OU
+	 wNusUb048Zrf6r27swrpQTZkdY/Ei7SGfQAaD0fKLaO0nT7VfkT8gYXqqtL1ChMXyI
+	 b4nF3Sl/L7/KJm9qQV+GzAB3FO5ubiMeFf72t84ECV6HQWvvA0gZ+/cHiil6wCOnwm
+	 JBJ8MbAJpY3IA==
+Date: Tue, 3 Jun 2025 09:11:43 +0200
+From: Joel Granados <joel.granados@kernel.org>
+To: David Matlack <dmatlack@google.com>
+Cc: Jason Gunthorpe <jgg@nvidia.com>, 
+	Alex Williamson <alex.williamson@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Vinod Koul <vkoul@kernel.org>, Fenghua Yu <fenghua.yu@intel.com>, 
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>, Adhemerval Zanella <adhemerval.zanella@linaro.org>, 
+	Jiri Olsa <jolsa@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Wei Yang <richard.weiyang@gmail.com>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Takashi Iwai <tiwai@suse.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Pierre-Louis Bossart <pierre-louis.bossart@linux.dev>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	FUJITA Tomonori <fujita.tomonori@gmail.com>, WangYuli <wangyuli@uniontech.com>, 
+	Sean Christopherson <seanjc@google.com>, Andrew Jones <ajones@ventanamicro.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, Eric Auger <eric.auger@redhat.com>, 
+	Josh Hilke <jrhilke@google.com>, linux-kselftest@vger.kernel.org, kvm@vger.kernel.org, 
+	Kevin Tian <kevin.tian@intel.com>, Vipin Sharma <vipinsh@google.com>, 
+	Pasha Tatashin <pasha.tatashin@soleen.com>, Saeed Mahameed <saeedm@nvidia.com>, 
+	Adithya Jayachandran <ajayachandra@nvidia.com>, Parav Pandit <parav@nvidia.com>, 
+	Leon Romanovsky <leonro@nvidia.com>, Vinicius Costa Gomes <vinicius.gomes@intel.com>, 
+	Dave Jiang <dave.jiang@intel.com>, Dan Williams <dan.j.williams@intel.com>
+Subject: Re: [RFC PATCH 00/33] vfio: Introduce selftests for VFIO
+Message-ID: <ueyiol53fpx3nvj4y2mespc3qekaco5sy5wn43lypkfie36h7u@gpc62pmkmkiy>
+References: <20250523233018.1702151-1-dmatlack@google.com>
+ <20250526170951.GD61950@nvidia.com>
+ <CALzav=f_12DE4iJ4XxU+jsaEcP2LZioVfuVwGMnK8a=JJbA0JA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250517012350.10317-2-chenlinxuan@uniontech.com>
- <57f3f9ec-41bf-4a7b-b4b2-a4dd78ad7801@linuxfoundation.org>
- <CAC1kPDOH+QZDjg46KRNmQQpH-_yLbQwMUGsiBk9gW1kqjyy9xw@mail.gmail.com> <053cab6e-1898-4948-8f82-ac082d85a20d@linuxfoundation.org>
-In-Reply-To: <053cab6e-1898-4948-8f82-ac082d85a20d@linuxfoundation.org>
-From: Chen Linxuan <chenlinxuan@uniontech.com>
-Date: Tue, 3 Jun 2025 14:26:11 +0800
-X-Gmail-Original-Message-ID: <85BAB723C5A7D075+CAC1kPDNQqTJVXzH4GYJOOmbHsA6Q17j+W5n0Yr2apghzr61spQ@mail.gmail.com>
-X-Gm-Features: AX0GCFs82Z1K6MX8VaHf9i_XOg-ZwKtAnx2bBI9te-zxkwwgfc73GMcNhg8LjEI
-Message-ID: <CAC1kPDNQqTJVXzH4GYJOOmbHsA6Q17j+W5n0Yr2apghzr61spQ@mail.gmail.com>
-Subject: Re: [PATCH v2] selftests: Add functional test for the abort file in fusectl
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Chen Linxuan <chenlinxuan@uniontech.com>, Shuah Khan <shuah@kernel.org>, 
-	Miklos Szeredi <miklos@szeredi.hu>, zhanjun@uniontech.com, niecheng1@uniontech.com, 
-	wentao@uniontech.com, Amir Goldstein <amir73il@gmail.com>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="zjhz76lozamlraev"
+Content-Disposition: inline
+In-Reply-To: <CALzav=f_12DE4iJ4XxU+jsaEcP2LZioVfuVwGMnK8a=JJbA0JA@mail.gmail.com>
+
+
+--zjhz76lozamlraev
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpgz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-QQ-XMAILINFO: NEuxXjgkfD8wBi/AxbImeAmkRXq1bKHZNH1nk9PdHl2kcQ1vAdjdtnr5
-	kAEDnc+WJ/dDTE6Y55EnALPyx75e5p5OD4mBqUn0HCws3VdVCevnls0vBYsr1WLYqf9SwzW
-	atDo3ZY37zA5XyKRQgvSLeIRgVlpnrqVxfzDnrRM7WZeJBhQYcEoAdzEjqRp6+xQ7Yt1bZh
-	liVtKQ7VOgKbYe5pH0WgYXsdyCFbG/MlLET28nxcb6GnLuwqjYtKDXsx+SSb5szEh7E8JX3
-	EcLPyKa1MLcFPQOSQy4YCQkd1sC/dr8VDo4rnm7GwuNP0PObOCaSkMnbLMiuuMunay8oOQ5
-	HPqPpnlvcn+F6LQAup5rXdTvVWZI+/g2jj1Th2Q8cNHN/mgxF1QgLsbD6L4ru1Qf8bNx+N0
-	7UprgVlCLnjSlxmEGyzto49tM+SbI2DBm7hmNXz/39V8uxai1jdToHiGiVouGVOUc3/z3zx
-	UzEcq06pqNcCYSHPcsJPpQj8NOULpd8dP83UlcBUcN+jz3tVKn7rZSNcoSd4yj1YambG0uI
-	Xe+hfZBmf5s02ijKMTweqsxDpAQLtiTUq2u+lXduu+WFmzM6tBSemVlBG7eiewPSjfSOgpC
-	clHs3XK0VTuQuFcryGxp8vI6g4tC88K6oo3zAcODfjsGju5kKXq9RR5irbEOc+w02raEt6C
-	PfDJL5VN/l0v9NaHLq7WtXJjdvgbiNjjCTqPRVGCOxoBW1/7d2vTpQl9xTL+x79sW1tJWqL
-	uEERNEg2fws8XEZ9MCVAn5yfM8ngD4ToMBAcyNlPkFRfT3hJ2kTwsOpdhhGLgvgdrDOkQmR
-	Lw2vJrNd3OqBRgCRaAq7WUXd/Y6vXnJalePp0oKu8KAkYxpraN5+EZXnJeHBScz9/xkdy8D
-	CBl83hvECLR1xVvcZMKI4VLqTIrOsTgv8ch58mUgZI16gACMnyZcyBMwJw1I+/XaSk/L8Tw
-	9TUVlZ05dQwk0HV88wItF2IbBoKs9UyG0021brzyIS5u/o74ain2fyOc6NAFsPHnChrc7tf
-	OeY1sO4HBbIg3gT0Lzrdux5sb9Cbb6NIRd9HmGKZBnADrkLudoixJMhM1wt3KlegHTOcPid
-	ybRKtAtzD9Z
-X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
-X-QQ-RECHKSPAM: 0
 
-V3 has been sent. See
-https://lore.kernel.org/all/20250526014226.14192-1-chenlinxuan@uniontech.co=
-m/
+On Tue, May 27, 2025 at 04:01:52PM -0700, David Matlack wrote:
+> On Mon, May 26, 2025 at 10:09=E2=80=AFAM Jason Gunthorpe <jgg@nvidia.com>=
+ wrote:
+> >
+> > On Fri, May 23, 2025 at 11:29:45PM +0000, David Matlack wrote:
+> > > Drivers must implement the following methods:
+> > >
+> > >  - probe():        Check if the driver supports a given device.
+> > >  - init():         Initialize the driver.
+> > >  - remove():       Deinitialize the driver and reset the device.
+> > >  - memcpy_start(): Kick off a series of repeated memcpys (DMA reads a=
+nd
+> > >                    DMA writes).
+> > >  - memcpy_wait():  Wait for a memcpy operation to complete.
+> > >  - send_msi():     Make the device send an MSI interrupt.
+> > >
+> > > memcpy_start/wait() are for generating DMA. We separate the operation
+> > > into 2 steps so that tests can trigger a long-running DMA operation. =
+We
+> > > expect to use this to stress test Live Updates by kicking off a
+> > > long-running mempcy operation and then performing a Live Update. These
+> > > methods are required to not generate any interrupts.
+> >
+> > I like this, it is a smart way to go about building a testing
+> > framework.
+> >
+> > Joel had sent something that looks related:
+> >
+> > https://lore.kernel.org/r/5zoh5r6eovbpijic22htkqik6mvyfbma5w7kjzcpz7kgb=
+jufd2@yw6ymwy2a54s
+>=20
+> Thanks for sharing, I've started to take a look. Joel, please take a
+> look at this series too and let me know your thoughts.
+Added to my back log. Looking forward to see if this fits into iommutests.
 
-On Tue, Jun 3, 2025 at 7:02=E2=80=AFAM Shuah Khan <skhan@linuxfoundation.or=
-g> wrote:
->
-> On 5/25/25 19:41, Chen Linxuan wrote:
-> > On Fri, May 23, 2025 at 6:50=E2=80=AFAM Shuah Khan <skhan@linuxfoundati=
-on.org> wrote:
-> >
-> >> Also if this test requires root previlege, add check for it.
-> >
-> > Currently, this test does not require root privileges.
-> >
-> > Thanks,
-> > Chen Linxuan
->
-> Thanks. Looks good to me.
->
-> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
->
-> thanks,
-> -- Shuah
->
->
+Best
+
+--=20
+
+Joel Granados
+
+--zjhz76lozamlraev
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQGzBAABCgAdFiEErkcJVyXmMSXOyyeQupfNUreWQU8FAmg+oCYACgkQupfNUreW
+QU/umAv/RtySM7YTm5G0rHUHuQ1r3KCBdSR0ku5U3nrBZUxZZxb4XgTaVOR4ZRC3
+CQJ1DOY18chw7SDLkPQarIMJx8GjvfxTiETen9cKWpDL/Vn5CWJk4ldJy84LEjPx
+K/Iuz9H3WB2SycK5BYJuP+yzEDHRNemJIseIklAgIAVc9ke/Ixfd/JQCiJDo5akp
+g6yJRfMNfsBb1iD68SWrMZzzEx7kLfYt0ldBFkXWLbdRp1No9aLzYZKQG+aQcxd1
++3X6lMXI31PB4VdNoNxDLtZm1DLDQhWVx+KOwwDNY6Xk51vRkWQxkt3zLxQaAff7
++tnc7qoG+Y8jbnYDNUQj6AaHAFv4ykonPnfxT6xWc07/dUJGabWVIZJLVLd2hDqA
+09cdPx5GxswZYanyQA0hbgTKFIhYm6y6YqLIW8/TsvA+jE9XKUHEXnp3t06XhlCY
+u8A3ePLEX/+RtjQd9BVYy6u9L0+RIkuu5drK81IBE/VJoM15BFIWavWkhcsrCeFP
+66rvPEuE
+=Zzxz
+-----END PGP SIGNATURE-----
+
+--zjhz76lozamlraev--
 
