@@ -1,119 +1,126 @@
-Return-Path: <linux-kselftest+bounces-34211-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34212-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 796B1ACC689
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 14:26:53 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84C1FACC6B9
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 14:35:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3DB1A172074
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 12:26:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AF7467A43AC
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 12:33:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A032E22D7B0;
-	Tue,  3 Jun 2025 12:26:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="oIyeAiXy"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A24C422D4DC;
+	Tue,  3 Jun 2025 12:35:07 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FA4D22F774;
-	Tue,  3 Jun 2025 12:26:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 024EE1A0BE0;
+	Tue,  3 Jun 2025 12:35:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748953584; cv=none; b=XDsSsyCNxzSibyUMUc38W5RITPcj78lWXD0EShp7X8hLEOod2y4JnKwhnI6783gIvMALl9BT/6PA50hJIX93GeBUJ+vF4VGVy//glSCpEKIk6WneCAdv6ON7ywbPDrWBAAYXJ5O7ReH7rwhpDGdRujkuyoPAzxZX6TqEL3C/odY=
+	t=1748954107; cv=none; b=U8dRoIkDJv7NsAaSNa/4Cz0Af+9WBzwttnu+EEUswtNo8G9d4lmV9mUOL8GU3eucV88KfMNZcm0j8IzDCwzlMiMhCAGhdtHunEfAo8YajyMhN3Ko5CfNcUJS20HnDM1JXpLASOORfvhTsb1Q/VXXN95I9kumR+fG2kQx4+TXcbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748953584; c=relaxed/simple;
-	bh=DluH728ii1EO703dxfxEx2UaGwKCfhTtTW0HCAZeC4Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BeAOmlcToPVqGvTdWbdIX+9Tr0tzcVIERERrAuNP8cgxb9XGwAt4DMxcu1NNyefqK1U0U8dsSapM4kC4DZEr4gwrf9x1UtUavQZeOHApy61nxy4LYiXwccDHQRnsrWXNm3T64qNdPzmsQf1C9kNWf7Kfm4FJDmqKrabsItl+94Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=oIyeAiXy; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=DluH728ii1EO703dxfxEx2UaGwKCfhTtTW0HCAZeC4Q=; b=oIyeAiXyOldaNVtPlBKKZqTGD3
-	mpDagybwF9S+hqKsQSW31foTSUCygvvm5wxKgCjiGNRlSp7Nkii/G/lle/aZvQtrDX5u6tQnkTnr9
-	PSQqrzLLfGGAAptQ1I+HnHxOMuO32HSdb5gjN/KA04ILM9U7jY+rK6wBQXsTWD/Ue0b9LBYeFgJva
-	0CuUx6pySzhKoO/3JjDgsnwOSr3Kmw/St8ljRKEhtUfPNKlpvxNycRC83i/4YLpbOWSYeeEoDqFxX
-	MFsHCU3T9lb5WX75CSy7Fbv7TsSGs2sno7k39o++eb3EN4GQT4RB0qtuUmucFxlG/XzNFilfK47iW
-	ipNoANSQ==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uMQiS-000000020dE-2aYw;
-	Tue, 03 Jun 2025 12:26:04 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 0037930057C; Tue,  3 Jun 2025 14:26:03 +0200 (CEST)
-Date: Tue, 3 Jun 2025 14:26:03 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Maxime Ripard <mripard@kernel.org>
-Cc: Kees Cook <kees@kernel.org>, Alessandro Carminati <acarmina@redhat.com>,
-	linux-kselftest@vger.kernel.org,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Daniel Diaz <daniel.diaz@linaro.org>,
-	David Gow <davidgow@google.com>,
-	Arthur Grillo <arthurgrillo@riseup.net>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	Naresh Kamboju <naresh.kamboju@linaro.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Ville Syrjala <ville.syrjala@linux.intel.com>,
-	Daniel Vetter <daniel@ffwll.ch>, Guenter Roeck <linux@roeck-us.net>,
-	Alessandro Carminati <alessandro.carminati@gmail.com>,
-	Jani Nikula <jani.nikula@intel.com>,
-	Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Linux Kernel Functional Testing <lkft@linaro.org>,
-	dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [PATCH v5 1/5] bug/kunit: Core support for suppressing warning
- backtraces
-Message-ID: <20250603122603.GK21197@noisy.programming.kicks-ass.net>
-References: <20250526132755.166150-1-acarmina@redhat.com>
- <20250526132755.166150-2-acarmina@redhat.com>
- <20250529090129.GZ24938@noisy.programming.kicks-ass.net>
- <CAGegRW76X8Fk_5qqOBw_aqBwAkQTsc8kXKHEuu9ECeXzdJwMSw@mail.gmail.com>
- <20250530140140.GE21197@noisy.programming.kicks-ass.net>
- <202505301037.D816A49@keescook>
- <20250531102304.GF21197@noisy.programming.kicks-ass.net>
- <20250602-phenomenal-turkey-of-hurricane-aadcde@houat>
+	s=arc-20240116; t=1748954107; c=relaxed/simple;
+	bh=34ur0U6vtA9C6kezmUaRFXNbvfQ0KUk517aG4VIHXww=;
+	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=SUtymYOuzoTIYHMmERoDDVywxoQG2TUxPcXxWtXePx8lNP2eXp8b0FLqbFrBgkX4Enw+itYWs29OSR/oo/obY9s+IM7n/D++Y56ptp0vwBuvJfaDvsIwIqTYHSnneOvAndEm94Gy2FnDY1rDs5OcQziIj3scYQlyGTnUda5n9fA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.48])
+	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4bBVSK3nP7z1BFhD;
+	Tue,  3 Jun 2025 20:31:13 +0800 (CST)
+Received: from kwepemk200017.china.huawei.com (unknown [7.202.194.83])
+	by mail.maildlp.com (Postfix) with ESMTPS id 78D9318007F;
+	Tue,  3 Jun 2025 20:35:01 +0800 (CST)
+Received: from [10.174.178.219] (10.174.178.219) by
+ kwepemk200017.china.huawei.com (7.202.194.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Tue, 3 Jun 2025 20:35:00 +0800
+Subject: Re: [PATCH v2 0/3] KVM: arm64: selftests: arch_timer_edge_cases fixes
+To: Sebastian Ott <sebott@redhat.com>
+CC: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>,
+	Colton Lewis <coltonlewis@google.com>, Ricardo Koller <ricarkol@google.com>,
+	Joey Gouly <joey.gouly@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Shuah Khan <shuah@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<kvmarm@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>
+References: <20250527142434.25209-1-sebott@redhat.com>
+From: Zenghui Yu <yuzenghui@huawei.com>
+Message-ID: <adf8b877-7ca2-f60b-fb59-578c70d0e3c0@huawei.com>
+Date: Tue, 3 Jun 2025 20:35:00 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20250602-phenomenal-turkey-of-hurricane-aadcde@houat>
+In-Reply-To: <20250527142434.25209-1-sebott@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
+ kwepemk200017.china.huawei.com (7.202.194.83)
 
-On Mon, Jun 02, 2025 at 01:13:29PM +0200, Maxime Ripard wrote:
+Hi Sebastian,
 
-> > I can't operate kunit
->=20
-> Why not?
+On 2025/5/27 22:24, Sebastian Ott wrote:
+> Some small fixes for arch_timer_edge_cases that I stumbled upon
+> while debugging failures for this selftest on ampere-one.
+> 
+> Changes since v1: modified patch 3 based on suggestions from Marc.
+> 
+> I've done some tests with this on various machines - seems to be all
+> good, however on ampere-one I now hit this in 10% of the runs:
+> ==== Test Assertion Failure ====
+>   arm64/arch_timer_edge_cases.c:481: timer_get_cntct(timer) >= DEF_CNT + (timer_get_cntfrq() * (uint64_t)(delta_2_ms) / 1000)
+>   pid=166657 tid=166657 errno=4 - Interrupted system call
+>      1  0x0000000000404db3: test_run at arch_timer_edge_cases.c:933
+>      2  0x0000000000401f9f: main at arch_timer_edge_cases.c:1062
+>      3  0x0000ffffaedd625b: ?? ??:0
+>      4  0x0000ffffaedd633b: ?? ??:0
+>      5  0x00000000004020af: _start at ??:?
+>   timer_get_cntct(timer) >= DEF_CNT + msec_to_cycles(delta_2_ms)
+> 
+> This is not new, it was just hidden behind the other failure. I'll
+> try to figure out what this is about (seems to be independent of
+> the wait time)..
 
-Too complicated. People have even wrecked tools/testing/selftests/ to
-the point that it is now nearly impossible to run the simple selftests
-:-(
+Not sure if you have figured it out. I can easily reproduce it on my box
+and I *guess* it is that we have some random XVAL values when we enable
+the timer..
 
-And while I don't mind tests -- they're quite useful. Kunit just looks
-to make it all more complicated that it needs to be. Not to mention
-there seems to be snakes involved -- and I never can remember how that
-works.
+test_reprogramming_timer()
+{
+	local_irq_disable();
+	reset_timer_state(timer, DEF_CNT);
 
-Basically, if the stuff takes more effort to make run, than the time it
-runs for, its a loss. And in that respect much of the kernel testing
-stuff is a fail. Just too damn hard to make work.
+	/* Program the timer to DEF_CNT + delta_1_ms. */
+	set_tval_irq(timer, msec_to_cycles(delta_1_ms), CTL_ENABLE);
 
-I want to: make; ./run.sh or something similarly trivial. But clearly
-that is too much to task these days :-(
+	[...]
+}
 
-I spent almost a full day trying to get kvm selftests working a couple
-of weeks ago; that's time I don't have. And it makes me want to go hulk
-and smash things.
+set_tval_irq()
+{
+	timer_set_ctl(timer, ctl);
+
+	// There is a window that we enable the timer with *random* XVAL
+	// values and we may get the unexpected interrupt.. And it's
+	// unlikely that KVM can be aware of TVAL's change (and
+	// re-evaluate the interrupt's pending state) before hitting the
+	// GUEST_ASSERT().
+
+	timer_set_tval(timer, tval_cycles);
+}
+
+I'm not familiar with the test so I'm not 100% sure that this is the
+root cause. But I hope this helps with your analysis ;-) .
+
+Thanks,
+Zenghui
 
