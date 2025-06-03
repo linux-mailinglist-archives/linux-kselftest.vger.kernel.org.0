@@ -1,179 +1,214 @@
-Return-Path: <linux-kselftest+bounces-34195-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34196-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F69BACBF4D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 06:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FA82ACBF50
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 06:48:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E98F0165A84
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 04:48:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 30F28169CB1
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jun 2025 04:48:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25B0318FC91;
-	Tue,  3 Jun 2025 04:47:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 989DC1C7005;
+	Tue,  3 Jun 2025 04:48:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3rY+LNWd"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ge0oo5IQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com [209.85.217.48])
+Received: from mail-oa1-f74.google.com (mail-oa1-f74.google.com [209.85.160.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65BFF146A66
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Jun 2025 04:47:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E24282F42
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Jun 2025 04:48:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748926078; cv=none; b=A4m9BVarxMhpwr+oQWFAQvSJORhOF33DwDxlIG11GDtrUAVspgGYLsBHslM6yBqm/u4B75g+EWFfDdLPKcEjs0QUjqWiEXsaAwQGmja9eOrNa7a08u96gMUCmoZHEHwlRLUn/wBuFxz8j0ZNLTpLUWlxaCZ9ggCM7UJRd21uNyM=
+	t=1748926105; cv=none; b=eFqB23NO3Ee3cry21Oc6kuPR5662+1vAXIO4pmYKMdWKRrrp4h3DrtzrFwM5FFIbdEOzk9JgAx+xIZCZRTu7QX7tabwRrMFKTA2VsBiu7WNHZdI1v+WLQ1akjp0Z8VLj2BYx4f2Zu6ba901yFA+RHhJZbTshEVhEP+Jj2Zs8CYI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748926078; c=relaxed/simple;
-	bh=Cgf4uJUUkUndlqeoRIwJ1DirxTrSOgGNFLZSraEodVc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=l5Aj5pAU4lkrO6w1KiigG+NPsCIgmHz30Px4JkgZywlEKNeECEvb7sKh+tPwdMhDP3FMWJqKV16cNvdIQ1y5oPoi4DIkxw6U0wTCr40d84nYPgMbEWEM5IDO4KfVxYja62ihFakhs7B2RM0kmycT4IaaeaFBtjpXyA7z5muSSWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3rY+LNWd; arc=none smtp.client-ip=209.85.217.48
+	s=arc-20240116; t=1748926105; c=relaxed/simple;
+	bh=NllOIGpaByDvSmSbLrJYL5Gk4SUKoHcjdQDk9IHf0tc=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=YhkTyY/CtbsIM0eiYmn4JUMSL1bRZIVIGE/E/EPIDA2tYndQ/y7YNcXTsphwrTn844Vx1R0xZIDiWFgskNgVuzcogtdWEBVY3yWw9+bC/APldjxhvR+S1j8YVMk7S44qGIt45PMB5zSlgA5lrrP6gdDzLZnQjpe4BLcA+elmWNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--blakejones.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ge0oo5IQ; arc=none smtp.client-ip=209.85.160.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-vs1-f48.google.com with SMTP id ada2fe7eead31-4e5962a0f20so1498077137.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Jun 2025 21:47:56 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--blakejones.bounces.google.com
+Received: by mail-oa1-f74.google.com with SMTP id 586e51a60fabf-2e8eaf0a2b1so4477015fac.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Jun 2025 21:48:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1748926075; x=1749530875; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aJEm8CuAi/t+jAarwCEcsP7zVwYAqs3E2ajamXZGJEU=;
-        b=3rY+LNWdjkNR7/D9MZNOnHUY3PiBVm0ZOoOwK/umEWr7uVeP07RrID5GpJdN+sSk3v
-         GntYl5ghr4JDWxlqemZfLB2quNmGxwzM3zAme0BAqO14AteQwRYX17rfrAHmlxPo3BtN
-         zHsRYxwxT8xBTLSi1Ju/lWgeH1hNz0TlI5mfMkSOdlQBFyY2Kh+c94pFDQ6Uyn3eSE32
-         fERZEXY/z9CVAA20ax6Ew9NUUXUjjqAUwjhf2q/hB1J0tjQhSpUJ6a0kKRpsE2vIbau9
-         dD4gx16dxrXM4Z5sYc0L4pa6ZqkJZsWo4yPMxPzF//sphBADFruLvqaJypYqhcUp8SLY
-         ZLnQ==
+        d=google.com; s=20230601; t=1748926103; x=1749530903; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=NQovLzfFYqS8ULAAc1LRS+ATtBISGpWrZbU6Yt/MC+M=;
+        b=Ge0oo5IQ4NsF64XNN9yobCOxWvoklaEit5OElhSuRH6UeUF7Tj/GSE8Drg4mCzkEfS
+         58IRWMzosVlMHftEHeR8ksTesM/JmkrEWvKXfSXkRTgF5Q9flMvz+VUXiPbROpLnc1A6
+         p2pnH4O1Lw9NhAWN/jADJKTX/EhffQ1dnQU9l64IERNaWKZ2XXCFQhbzmIIEo1WWcU2M
+         yrmk9NlrIEtAxbz/z7RVrAjPM535DcrDVhPZtAJq9RTeaBvmCY645EAKPD5MCkExaOI4
+         tQml00dU1d3+4lKalZWdVNVJZV4V/cuGeqk4Nmb5Cul6voS4fml0uTGF/RfoLre7Kqg1
+         MaEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748926075; x=1749530875;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aJEm8CuAi/t+jAarwCEcsP7zVwYAqs3E2ajamXZGJEU=;
-        b=tz/zweZw2gVWxwxeBsQsUlTDq9MDtIX61b56aAA3iqaCSI0UaF0y64IWw/91AV3Ibm
-         d+4IuvYabECtsx3ESAnKEzetGwZ8Yy4yYZp122SI+lhsj8ZQExU+SBUS8zUnv3LHug8+
-         6lhYT0ARcaxa6ZzqnwmI0kKA9f/CXbTfVy4jT2B8rrreCSe+oSwtf2/jzZbyq2xXfqed
-         Jx4JpXA58lYcVYoh70WXR7bEcdvwjb1kcLSq1RyQMealF4vKcw9AABDexjemZ2Ip9NU/
-         dOGeDIUj70KUMCUzx8bKGZ6iZ/oWlKg/EDOVf4dRBXL8aVgFWN2CotjCNPAn59o7Xb+W
-         3jog==
-X-Forwarded-Encrypted: i=1; AJvYcCXiC6dk+6Rbty+bCTdhr6cU1PKowGu8BlLmDFupm0ylqU8dAxBuNd7VX/AjD2v4W48h0VuwEY9vL+dV3pb4lDM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxmiF3HlN3XMhNtxnkjYTaFjQZw6JqV3bWSZSlPjZ8jqCCRBh1/
-	JlLmfoY5mn29quqvZNgB2StaslITvCraKvTBoFF+StBofoZcEoCUyqqa2gib0V1A8EiZPQOPT72
-	u/rgRv679zoXaS15sftwMZCFlGweUcsB72sH36rQK
-X-Gm-Gg: ASbGncs9XfF2u6/tB2ppxzMELkHBJAeCe8imjFFhn0HeQUTsYWiGDUqz6gYwZWqLuuw
-	NVogmSiWAyyiXXRP0CkjXdEUeMtq273cG/2WkufGZutVp2W3Z2hHnQnl+mtTLdOvFvYd70ik741
-	MJjyfQHOeRHcZPPyfIWbL9pFnjktocdeDUavNPdkPcv6HhHsR1+jX0wA==
-X-Google-Smtp-Source: AGHT+IEpIjGceN2rv1hrs1pvu0Ely5BSyrBVy6Mmn3bTojzhqzoFXABgDgARO99epxYcLU46y74uRkrGE51OEqI32QE=
-X-Received: by 2002:a05:6102:41a9:b0:4e5:acea:2dec with SMTP id
- ada2fe7eead31-4e6ecd568f9mr10344192137.7.1748926074812; Mon, 02 Jun 2025
- 21:47:54 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1748926103; x=1749530903;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NQovLzfFYqS8ULAAc1LRS+ATtBISGpWrZbU6Yt/MC+M=;
+        b=FKxbR7Mdppq4EPGkFCmiZxCbfWQni99DisfDw/9dxltIA6SmdOGCYsoTWPsEf2OTfK
+         IZYNu8lCPQdI2xQBsnTLKKoCK2oQu27gbASQIS6BnIFZlu9V+ZNEF0yq/cbKopOrsdW1
+         U5qeN0LgBCCe1GWA99EBA7HgbSsQoNXb+YKGt7iprwkmYjCCHqKo6dnHGSsDNMq9go+c
+         zIRabMWYahYDJTNGm1t4QPSM1HILzaRwVsmchRafN+UdI1rUe5ZlH+OjIgsNJPKVOZfL
+         yLHUvkkT7HFF7y5et7U8wTbkSz5Lynu8vdOU9UdfKMtgcAjOP7Z8OvORS7+1Jgca/3ZL
+         a79Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXp5cW6qiu6kwTDpRN7H4CusznGmO2O+PORUnZFk/pGDMEM9bckxU+i8oETkh9qVZ6/hzncoOWn22Qc/TD9TDk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyu4XV8TVjQBiwZPM4NwJB8R5AGVItm0xdXIylTefPM3drPhQym
+	sDnsVmwm+VFNLdzKdYKiURWBbw/X8cAALW+xgPY17hJOo6UDnoOAwFF5bmUQHQRVQAr/PxiRl2J
+	pOon2E6jABttuQpIz3ur2LA==
+X-Google-Smtp-Source: AGHT+IFIbl3uoV4l5J9b+gYBYAYxS0IF/Lwszpko4xEPrl37YlAgArfbXHX+mufmu2Lr7izvnMtwJQp1hAJW9Yhk
+X-Received: from oabns6.prod.google.com ([2002:a05:6870:ac86:b0:2bc:6267:d082])
+ (user=blakejones job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6870:7a11:b0:2d5:4f4:e24d with SMTP id 586e51a60fabf-2e92a11d025mr9741353fac.6.1748926102997;
+ Mon, 02 Jun 2025 21:48:22 -0700 (PDT)
+Date: Mon,  2 Jun 2025 21:48:12 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250531072031.2263491-1-blakejones@google.com> <CAEf4BzapWKWVzPFeZN5Ms6tOMhrtfpd8aiKenHgf4K4_1fhqMg@mail.gmail.com>
-In-Reply-To: <CAEf4BzapWKWVzPFeZN5Ms6tOMhrtfpd8aiKenHgf4K4_1fhqMg@mail.gmail.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.49.0.1204.g71687c7c1d-goog
+Message-ID: <20250603044813.88265-1-blakejones@google.com>
+Subject: [PATCH v2 1/2] libbpf: add support for printing BTF character arrays
+ as strings
 From: Blake Jones <blakejones@google.com>
-Date: Mon, 2 Jun 2025 21:47:43 -0700
-X-Gm-Features: AX0GCFscdET_wsUXTylJujBnbhv9BhHKKV6VK3h7Z8lQxMbBW9ESGrRePttAXKM
-Message-ID: <CAP_z_CgGAFydp2qVGtUEive=ipWToqzuO-7w13PBSHVhYzhhdQ@mail.gmail.com>
-Subject: Re: [PATCH] libbpf: add support for printing BTF character arrays as strings
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
 	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
 	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
 	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
 	Ihor Solodrai <ihor.solodrai@linux.dev>, Namhyung Kim <namhyung@kernel.org>, 
 	Ian Rogers <irogers@google.com>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
+	linux-kselftest@vger.kernel.org, Blake Jones <blakejones@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Andrii,
+The BTF dumper code currently displays arrays of characters as just that -
+arrays, with each character formatted individually. Sometimes this is what
+makes sense, but it's nice to be able to treat that array as a string.
 
-Thanks for your careful review.
+This change adds a special case to the btf_dump functionality to allow
+arrays of single-byte integer values to be printed as character strings.
+Characters for which isprint() returns false are printed as hex-escaped
+values. This is enabled when the new ".emit_strings" is set to 1 in the
+btf_dump_type_data_opts structure.
 
-On Mon, Jun 2, 2025 at 5:06=E2=80=AFPM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
-> > +       bool print_strings;     /* print char arrays as strings */
->
-> let's use "emit_strings" naming, so it's consistent with emit_zeroes?
+As an example, here's what it looks like to dump the string "hello" using
+a few different field values for btf_dump_type_data_opts (.compact = 1):
 
-Done.
+- .emit_strings = 0, .skip_names = 0:  (char[6])['h','e','l','l','o',]
+- .emit_strings = 0, .skip_names = 1:  ['h','e','l','l','o',]
+- .emit_strings = 1, .skip_names = 0:  (char[6])"hello"
+- .emit_strings = 1, .skip_names = 1:  "hello"
 
-> > @@ -75,6 +75,7 @@ struct btf_dump_data {
-> > [...]
-> > +       bool print_strings;
->
-> ditto, emit_strings (and maybe put it next to emit_zeroes then)
+Here's the string "h\xff", dumped with .compact = 1 and .skip_names = 1:
 
-Done.
+- .emit_strings = 0:  ['h',-1,]
+- .emit_strings = 1:  "h\xff"
 
-> > +static int btf_dump_string_data(struct btf_dump *d,
-> > [...]
-> > +       if (!btf_is_int(skip_mods_and_typedefs(d->btf, array->type, NUL=
-L)) ||
-> > +           btf__resolve_size(d->btf, array->type) !=3D 1 ||
-> > +           !d->typed_dump->print_strings) {
-> > +               pr_warn("unexpected %s() call for array type %u\n",
-> > +                       __func__, array->type);
-> > +               return -EINVAL;
-> > +       }
-> > +
->
-> IMO, a bit too defensive. You literally checked that we have char[] in
-> the caller, I think it's fine not to double-check that here, let's
-> drop this
+Signed-off-by: Blake Jones <blakejones@google.com>
+---
+ tools/lib/bpf/btf.h      |  3 ++-
+ tools/lib/bpf/btf_dump.c | 44 +++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 45 insertions(+), 2 deletions(-)
 
-Done.
+diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+index 4392451d634b..ccfd905f03df 100644
+--- a/tools/lib/bpf/btf.h
++++ b/tools/lib/bpf/btf.h
+@@ -326,9 +326,10 @@ struct btf_dump_type_data_opts {
+ 	bool compact;		/* no newlines/indentation */
+ 	bool skip_names;	/* skip member/type names */
+ 	bool emit_zeroes;	/* show 0-valued fields */
++	bool emit_strings;	/* print char arrays as strings */
+ 	size_t :0;
+ };
+-#define btf_dump_type_data_opts__last_field emit_zeroes
++#define btf_dump_type_data_opts__last_field emit_strings
+ 
+ LIBBPF_API int
+ btf_dump__dump_type_data(struct btf_dump *d, __u32 id,
+diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
+index 460c3e57fadb..336a6646e0fa 100644
+--- a/tools/lib/bpf/btf_dump.c
++++ b/tools/lib/bpf/btf_dump.c
+@@ -68,6 +68,7 @@ struct btf_dump_data {
+ 	bool compact;
+ 	bool skip_names;
+ 	bool emit_zeroes;
++	bool emit_strings;
+ 	__u8 indent_lvl;	/* base indent level */
+ 	char indent_str[BTF_DATA_INDENT_STR_LEN];
+ 	/* below are used during iteration */
+@@ -2028,6 +2029,43 @@ static int btf_dump_var_data(struct btf_dump *d,
+ 	return btf_dump_dump_type_data(d, NULL, t, type_id, data, 0, 0);
+ }
+ 
++static int btf_dump_string_data(struct btf_dump *d,
++				const struct btf_type *t,
++				__u32 id,
++				const void *data)
++{
++	const struct btf_array *array = btf_array(t);
++	__u32 i;
++
++	btf_dump_data_pfx(d);
++	btf_dump_printf(d, "\"");
++
++	for (i = 0; i < array->nelems; i++, data++) {
++		char c;
++
++		if (data >= d->typed_dump->data_end)
++			return -E2BIG;
++
++		c = *(char *)data;
++		if (c == '\0') {
++			/*
++			 * When printing character arrays as strings, NUL bytes
++			 * are always treated as string terminators; they are
++			 * never printed.
++			 */
++			break;
++		}
++		if (isprint(c))
++			btf_dump_printf(d, "%c", c);
++		else
++			btf_dump_printf(d, "\\x%02x", *(__u8 *)data);
++	}
++
++	btf_dump_printf(d, "\"");
++
++	return 0;
++}
++
+ static int btf_dump_array_data(struct btf_dump *d,
+ 			       const struct btf_type *t,
+ 			       __u32 id,
+@@ -2055,8 +2093,11 @@ static int btf_dump_array_data(struct btf_dump *d,
+ 		 * char arrays, so if size is 1 and element is
+ 		 * printable as a char, we'll do that.
+ 		 */
+-		if (elem_size == 1)
++		if (elem_size == 1) {
++			if (d->typed_dump->emit_strings)
++				return btf_dump_string_data(d, t, id, data);
+ 			d->typed_dump->is_array_char = true;
++		}
+ 	}
+ 
+ 	/* note that we increment depth before calling btf_dump_print() below;
+@@ -2544,6 +2585,7 @@ int btf_dump__dump_type_data(struct btf_dump *d, __u32 id,
+ 	d->typed_dump->compact = OPTS_GET(opts, compact, false);
+ 	d->typed_dump->skip_names = OPTS_GET(opts, skip_names, false);
+ 	d->typed_dump->emit_zeroes = OPTS_GET(opts, emit_zeroes, false);
++	d->typed_dump->emit_strings = OPTS_GET(opts, emit_strings, false);
+ 
+ 	ret = btf_dump_dump_type_data(d, NULL, t, id, data, 0, 0);
+ 
+-- 
+2.49.0.1204.g71687c7c1d-goog
 
-> > +               if (c =3D=3D '\0') {
-> > +                       /* When printing character arrays as strings, N=
-UL bytes
-> > +                        * are always treated as string terminators; th=
-ey are
-> > +                        * never printed.
-> > +                        */
-> > +                       break;
->
-> what if there are non-zero characters after the terminating zero?
-> should we keep going and if there is any non-zero one, still emit
-> them? or maybe that should be an extra option?... When capturing some
-> data and dumping, it might be important to know all the contents (it
-> might be garbage or not, but you'll still see non-garbage values
-> before \0, so maybe it's fine to always do it?)
-
-I was thinking of this option as being optimized for common-case
-pretty-printing, rather than being the ideal tool for displaying arbitrary
-character arrays. If there are garbage values that are worth displaying,
-btf_dump() without the ".emit_strings" option would still show them.
-
-> > +static int find_char_array_type(struct btf *btf, int nelems)
-> > [...]
-> > +               if (btf_kind(t) !=3D BTF_KIND_ARRAY)
->
-> btf_is_array()
-
-Removed, in light of your next comment.
-
-> > +static int btf_dump_string_data(struct btf *btf, struct btf_dump *d,
-> > [...]
-> > +       snprintf(name, sizeof(name), "char[%zu]", ptr_sz);
-> > +       type_id =3D find_char_array_type(btf, ptr_sz);
->
-> instead of trying to find a suitable type in kernel BTF, just generate
-> a tiny custom BTF with necessary char[N] types? see btf__add_xxx()
-> usage for an example.
-
-Ah thanks, that's a much better approach. Fixed.
-
-I'll send out an updated version of these changes with the
-comments I've received so far.
-
-Blake
 
