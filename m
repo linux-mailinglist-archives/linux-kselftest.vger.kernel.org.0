@@ -1,120 +1,114 @@
-Return-Path: <linux-kselftest+bounces-34297-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34298-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CF77ACDAE9
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Jun 2025 11:23:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 829D5ACDF67
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Jun 2025 15:39:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC8491898ED2
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Jun 2025 09:23:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9022E1658AB
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Jun 2025 13:39:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0485E28B500;
-	Wed,  4 Jun 2025 09:23:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C9A028FFE6;
+	Wed,  4 Jun 2025 13:39:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="ycher373"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dR6JecI2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out162-62-57-64.mail.qq.com (out162-62-57-64.mail.qq.com [162.62.57.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D50B2169397;
-	Wed,  4 Jun 2025 09:23:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E401C28FFCD;
+	Wed,  4 Jun 2025 13:39:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749029006; cv=none; b=oZOlsA951cXzo4Ah1UQw3oLSPFsPnm0WXHDpPQixXtd/bphi7zRAVuXm4eEzuVM1mq/nM/9K2RbI87GsfLeNgtRtUEIODXaaUHKOQnel1tdQWU0PkamLzZltBeTeRCoCwuq0MpGzgOyF0asHa/m9oNcn+yezgBi7W4NoUH8Fqpg=
+	t=1749044363; cv=none; b=UmXQzOETbEzoaROyjAIg59pqxGcBuRgteyUgR35uJXTqYEWlWx0wyyx3tQMChWEmHJ/FlGKw4LAihs0nYmNBCdrd8GAHuoph7P6eIJOYlYU2+l1MEdBhsUEjcfuGE7r01JraXpzTk2BAuU7SvNsao/AeYsiAPSbmLS5q8/Tb5aY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749029006; c=relaxed/simple;
-	bh=RIYky3gjpTsCWWoJfEf+lc/dCW5mVapm/m/j24bH0IQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qB2GYhmjleqDoLmO8Gx+QJF1E5CG/1qeTlOOHAXUw3E2lEksY19xN5UwtHDreTPxZcRViE234i2CohWis+n28GL/aAhb0t/hIqKwLz0Ovff7BqYL3uq3EOxonbmwkV18j1PcBPyGC42LKZNexdPsS0kflppvSi4s5hPlzQeK2A4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=ycher373; arc=none smtp.client-ip=162.62.57.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1749028692;
-	bh=RIYky3gjpTsCWWoJfEf+lc/dCW5mVapm/m/j24bH0IQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=ycher37324IbzHf505SgsNe0/N4ZdnkYj649dMDb/GhGeWesGIE3SrM/+cZ1q2okb
-	 yoMMu8EXjpW6yYmzZxhOwF48U3a5v616v1tM7AX9TvI4I6ArVWldq/pnj/WxCLLTtR
-	 FlhD+VLFxgrMTYZlAD4Xez5wbXyrcPWL13F9q/lA=
-Received: from [10.56.52.9] ([39.156.73.10])
-	by newxmesmtplogicsvrszc16-0.qq.com (NewEsmtp) with SMTP
-	id 30098838; Wed, 04 Jun 2025 17:12:00 +0800
-X-QQ-mid: xmsmtpt1749028320tno68hupx
-Message-ID: <tencent_CC0310590D7085E8B3EC2E1955E45E4B4709@qq.com>
-X-QQ-XMAILINFO: NvKPbWBbh1DVYUNrtUaO4h9Jj+nOhO0LDaL7Td6QvGV4lWUff2j/vEKUwNnLFs
-	 OLHiU8HjtO7X0BTo/mZpmoEGAb9JuMxziyE13yu5EmANI/1w0vmju9epZ/bZzbSXA1flXKOlJCZZ
-	 0xdvAOAB8VyNKr2QluATxTOYVEe1IAEr29eygOc9y2gqvHEs7zbaNV8svwb2YcQomlJh10O1DWLo
-	 PXJrtg35/w2KjVub9G4hXlaaODVaIv5HxLJLIeGw8haZVbKol3pxT1UVrVP9PIE6iW6oGW1DASKk
-	 JglRxN8iFlXFrH408POil0NYTrv4Qls947B0al8UFnJ6xeYWFPfvmK+l6mw3Cl/4BLpWgDOMRt+k
-	 UrYDh0qAZTVf2FDZg6dIj2VABZbbalypmmpKQdY8zk4jeja07vCJfEocQCBNTybGixtgoKvRvcd0
-	 dSUcqfu9AgFxz8oM4ks2OZfJVc/+1YSKiZdZ5oWg4JzNvrD9IgDKripzGOCf2gfOXHhj67JKwtdc
-	 Xvt5qdrp6RIu3qv8q79nDMT9pBldnw+GpvGZd/GLfkykzwt4ZRmcEt2ADl0Bj/tfDN1XajAgi+NF
-	 AsgwcY3cJtX3K3Gh0WXK45o4Zof4kxKsygFeKzZU7NXl28+E4sH5vCLV4aIsOknG4m5D4CDUYdkm
-	 ac+ZcB+WCWf2D8wX5w4fMtWUtYNjW7X5EOQolpYsuNItcckXyWQP4hfCMgfdHYjzdbYS0UlIiByU
-	 buyWQSQCSzDpvNini1IwsOxoHQ0QcHWYCf9zveyqN85O1YLWoGw3uO39Vd/oSSS+IDCnTmE0vPoY
-	 owrNAXU/M0Msa9kRe2HGy9sJT5ME7CAy1QM/JX+1nQtOq0ShztSqPRXhjEkQ1Q9NeYf8YE416HyZ
-	 z06m9cTiKe6VUYzTY0knFb75smemeGwBRoXSxAC2fADTT93GciJy/QFtVo0WJYjvAQga58hOqboM
-	 8qdx5zDNtzNRgK0zCw8mhNrpqwX8kASut9RkRk/ypcFd0xG05u1ALrQq/VzpXCpTMwV84eDOcSsO
-	 PVaspGNOPthDgcgF8X
-X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
-X-OQ-MSGID: <365843f4-d33d-490d-b567-fe9250577725@foxmail.com>
-Date: Wed, 4 Jun 2025 17:12:00 +0800
+	s=arc-20240116; t=1749044363; c=relaxed/simple;
+	bh=Ol1P+2wBIL194NxYgULcBDieqS7zCToAfy1HbdBFgRU=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=GhTwzQDBobNe2I00yym7jEwn3x5KuF9WEYUgc5cW25ZcbmyT9v81T62H2t0PVijioKGmLqdKXRkV6g6y0xGv0zKZRkr2kP1dXqyFp8nwOn0aRq5BcsFZztXkwKOcZgxB+GGOEtXtMzNZvoz8GLNfM9LQXqhoYNwJyYM3EZRg0Bs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dR6JecI2; arc=none smtp.client-ip=209.85.128.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-70e6bddc30aso62271117b3.0;
+        Wed, 04 Jun 2025 06:39:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1749044361; x=1749649161; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PC+rEZEkFyNzF5RGnxbQD57hLniaWRHKQEFbtHBo84w=;
+        b=dR6JecI21KRE4oHUHk29DqT/ZcHloasPlobIOk0pSEx7RiqlS3A1st5XWuEG5zvQzD
+         X0Zp0WL8uW2X7n7vyhDbzGNr1KdBnru6Gxvq6YDcXdIFp7J/OGAGzAnx3PZchn3aikj7
+         CMrzVCAF6PYWwH38hB39mA8pVjND7tRhl6YQzOsdhTX4U0gpRETxNYJqeACazwhWgAg9
+         URzUNU0Fmxe7Q3AEVNKwQxaHZ+By1Z3zD+d/kIqogFxewxKPCkruEYxbTff9nbs57wqe
+         TuB+eUKmw40lN0Holv/DqZaRkYyzxecwna/8l7Xm+eC4rOTkHCitwk3sT/6fl2Segfi7
+         7r5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749044361; x=1749649161;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=PC+rEZEkFyNzF5RGnxbQD57hLniaWRHKQEFbtHBo84w=;
+        b=DfQZJHQDNx/SwsxD4w2YxwMBkZO9eqpc6Fm32CieIWk4bBS4dT85GmxpZUhDR+0CFg
+         f5O23RezHsNcXEUL8movC3TiOJh8OG7y12x8BPz6HxBqfb6tFP+dAVOKExj7mQ4ZV+ge
+         68hBm0OOqJayrQgcspGbWDFrgvlBWv5Zt0DObrNrwrR/xsWiXgCDFfadp0qk93GVl8os
+         yIvxGSz4Q+NI5J9pZtjqxPjgOltbwAyEjMwveC71kUuguvAup5KI2/8wBo5Gu9dlhYrP
+         5ePIWMKnF/A70vSZFieQSjfPvisR7J34K0iPv4vvV86oe287cipat/VG6eav/o6UoVkT
+         bRPg==
+X-Forwarded-Encrypted: i=1; AJvYcCVVor0mQ/qPhed818P45yfcjx+7wvaFxTtT2lFB7EEmmjNK/Rc/9yQwW+ui1s1xVd1rY9UK10qPzBRInDgmF5M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyF3+FKJ/Pw2nn3Q5MST2p5YpxBFRY0uqsfDSIwQkz4O4s5BQqR
+	9y2A1SdQ5Ut7gF6tQ6x5EXWCl0TjaZUuuC1KbSY3ro3B0ftuv48o7lCt
+X-Gm-Gg: ASbGncsNweUAiDaYmN7WiZYQ9uAA95kTCvRn794cmJX/Em70UnMoHO5j6nNEIjj4QRM
+	jlYOzGX5tvpnE8MR3QvqMKBBy3vSK/xB7L+Dahef16J+Z5/2/2wyn/9VwCcnTuB2/lTWR1IRFJY
+	cyzqw6nqwjQsKcAnIfhixSEmEEByh7n06LBbuLqz2NJDKBG0C3osxsF6xx6AAIeSCOJF+uHJ4Vb
+	2oPPcMf68js7DL4K6s/r3agb3KZoyspIw6ekRgTkHwCJzvdR4gzqURrjAHbt7cX8SDI5VpKR1Pw
+	cfsh70/Dde2pSYG3Y3KCiEqvvdUONDts03wSRjuPNPxeUFlZoxseyKaRIUinnkwpZL0QWtw85kG
+	vgKTJtDBwB3EMBTv4+Mt3edc=
+X-Google-Smtp-Source: AGHT+IF05R/RUpXOCcDBbiH9wnIoG1/Rm1gSoi3qFQWXGoOMrwCsUsYNpPUiNKBm8CHlv4Gnmoz1ww==
+X-Received: by 2002:a05:690c:8e19:b0:710:e6b0:1688 with SMTP id 00721157ae682-710e6b01c61mr455107b3.14.1749044360719;
+        Wed, 04 Jun 2025 06:39:20 -0700 (PDT)
+Received: from localhost (23.67.48.34.bc.googleusercontent.com. [34.48.67.23])
+        by smtp.gmail.com with UTF8SMTPSA id 00721157ae682-710de73be23sm2041347b3.43.2025.06.04.06.39.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jun 2025 06:39:20 -0700 (PDT)
+Date: Wed, 04 Jun 2025 09:39:19 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>, 
+ davem@davemloft.net
+Cc: netdev@vger.kernel.org, 
+ edumazet@google.com, 
+ pabeni@redhat.com, 
+ andrew+netdev@lunn.ch, 
+ horms@kernel.org, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ shuah@kernel.org, 
+ willemb@google.com, 
+ linux-kselftest@vger.kernel.org
+Message-ID: <68404c87d5090_1e99f529455@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20250604012031.891242-1-kuba@kernel.org>
+References: <20250604012031.891242-1-kuba@kernel.org>
+Subject: Re: [PATCH net] selftests: drv-net: tso: fix the GRE device name
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix compile error of
- bin_attribute::read/write()
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: andrii@kernel.org, eddyz87@gmail.com, rongtao@cestc.cn,
- Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Shuah Khan <shuah@kernel.org>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Peter Zijlstra <peterz@infradead.org>, Amery Hung <ameryhung@gmail.com>,
- Juntong Deng <juntong.deng@outlook.com>, Oleg Nesterov <oleg@redhat.com>,
- "open list:BPF [SELFTESTS] (Test Runners & Infrastructure)"
- <bpf@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- "moderated list:ARM/STM32 ARCHITECTURE"
- <linux-stm32@st-md-mailman.stormreply.com>,
- "moderated list:ARM/STM32 ARCHITECTURE"
- <linux-arm-kernel@lists.infradead.org>,
- open list <linux-kernel@vger.kernel.org>
-References: <tencent_A6502A28AF21A3CA88B106F3421159869708@qq.com>
- <aEAJbBH00yL2iTgn@krava>
-Content-Language: en-US
-From: Rong Tao <rtoax@foxmail.com>
-In-Reply-To: <aEAJbBH00yL2iTgn@krava>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: 7bit
 
+Jakub Kicinski wrote:
+> The device type for IPv4 GRE is "gre" not "ipgre",
+> unlike for IPv6 which uses "ip6gre".
+> 
+> Not sure how I missed this when writing the test, perhaps
+> because all HW I have access to is on an IPv6-only network.
+> 
+> Fixes: 0d0f4174f6c8 ("selftests: drv-net: add a simple TSO test")
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
-On 6/4/25 16:53, Jiri Olsa wrote:
-> On Wed, Jun 04, 2025 at 01:53:22PM +0800, Rong Tao wrote:
->> From: Rong Tao <rongtao@cestc.cn>
->>
->> Since commit 97d06802d10a ("sysfs: constify bin_attribute argument of
->> bin_attribute::read/write()"), make bin_attribute parameter of
->> bin_attribute::read/write() const.
-> hi,
-> there's already fix for this in bpf/master
->
-> thanks,
-> jirka
-I am confused, when should I use bpf/master[2] and when should I use
-bpf-next/master[1]? thank you :)
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
-
+Reviewed-by: Willem de Bruijn <willemb@google.com>
 
