@@ -1,200 +1,209 @@
-Return-Path: <linux-kselftest+bounces-34275-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34276-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A1A9ACD690
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Jun 2025 05:30:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 654BEACD757
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Jun 2025 07:09:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1BB8A16DE28
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Jun 2025 03:30:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 940951896FFA
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Jun 2025 05:09:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B5AF1531C8;
-	Wed,  4 Jun 2025 03:30:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4388D2620CB;
+	Wed,  4 Jun 2025 05:09:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="u1zifknf"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OkYH/epC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-vk1-f177.google.com (mail-vk1-f177.google.com [209.85.221.177])
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9357472601
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Jun 2025 03:30:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 699A01B414A
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Jun 2025 05:09:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749007853; cv=none; b=FmAoz+jU2upN3p2fu76hbdc7M3Vl2i1iSQZhH3bh9o1ieMJeq+dAoRdKedYSd8YQ7y14grX2R598iz34oYFZbaNzWVDFNMCTbLAxoWN4ZuFUx+eg/9G7TpSmgFKscNum8+DJgtdyLv5M1WXvXVj80uYCc282ggxHKAoWS9isHz8=
+	t=1749013747; cv=none; b=UhJSP4hX+HwYMb2XcX/A1AShr3sv1szP8XNl6H9DZGyqJ/MjKI6PwPutfVPp67OuRfWx4JttYpD+ufccAkLCBHsUlroEKqlzcqwJsPR4IqHNr7bJto5KihY4UfcsXmgpFeviz09x1qlW6vgz7o5dnrq/5+FAOgvWgMIpwDKJXFU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749007853; c=relaxed/simple;
-	bh=RjbcDYu1YtPRkYoseSOkPO3tTHTmQiLWaXOKSPCvdkg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jt54vORTsALvKh80oEu2ci+1lxCtj53FAWEcfDViuJUkg9f1V6Y+7LVhLUTogu5cODR4hSBVYp9IOzkjFHsG0Mtbd3W4X4NdKDVKlgcW4zGcsNaWTS0OBzq4MwmMOkQWAgGhOw6zElUV0qujaC8AebtpD0tpUHV0dMtFQ3kZ4x8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=u1zifknf; arc=none smtp.client-ip=209.85.221.177
+	s=arc-20240116; t=1749013747; c=relaxed/simple;
+	bh=bXYb3Fv57WgD098ckyuMFMuLy5/rfO9F4rSK52NJVXg=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=WxeH3ACqvXOWa1dHxI0vCW4Np70d9lJqGemT54+QLZ6zKaHM2iwvdSI4uXASC9O+OOjTPkY+s4fdSfrm9uLEmRusF8Zi77RGZh2ijb9jMd8IczrtpiIVhrhbf3KIcjoSyYBkcP9YWLUDmdFDVSrt40KlyCM8l2N7phL7OHUGheE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jiaqiyan.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OkYH/epC; arc=none smtp.client-ip=209.85.210.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-vk1-f177.google.com with SMTP id 71dfb90a1353d-51eb1a714bfso4304621e0c.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Jun 2025 20:30:51 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jiaqiyan.bounces.google.com
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-740774348f6so5434804b3a.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Jun 2025 22:09:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1749007850; x=1749612650; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fOC+m4zOJ34UxxPz/TiQmD5iaJADylPzttows/BWe1k=;
-        b=u1zifknfr6t5nmdCp5Weiv9v9NFrIhppaj4mCQomDKnMXHkSLkIjuRMYlSIh0qPxOO
-         2t6Vzv+ARTyl/MmhTAqXxOMzp4O1hDPvjXKUcsn1+JSQK+a4fPO1TQqC/yxkh18L6mp5
-         li0oP5H7KsbE9OxuHWeMHxaeQpjb2f3JQGtQtjpMbbwk/HGhTiFIdK5MbwL7JEwYJ/1j
-         h3SbhNWL9DMBbHFoyLQrURyMl9xo3hPMta+x4pW8B+eZLQ4ovaopiP8oR9voN74sRV7w
-         E6tbsAdnAlR0fQbUHWknR9juHrfmDRMmcQGUeQYN/1oCPw9L8O7ipLkJ8Ty8tXPfXQBD
-         v59g==
+        d=google.com; s=20230601; t=1749013745; x=1749618545; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=NrHVO1JlSwACRF1JM0S/mT4335rXAQlO0tShDIgF4kg=;
+        b=OkYH/epChKHPPZlfS6IyUjrdvLMKQLJK/RyuLYoK96W2E+E3txL6+LRnjMAxfCWzgm
+         1jQXEesJgnVbkT7bZCw1PDculuyhLrRyXWl+Z6BzfMrzC3qXqe/gRtuc0qpSldk2JQqs
+         C+Etgb17ZSJtd0/NdlLwI7EpyErRcEjYnE1QkPs6R73saUIfNW7yXqPamz/xGwNP5z/i
+         H7zFEBudGw1w2lNVHotFtsr4B/G5yNFKnr3oHmHND2nZbiais0inya1MymC1AGKtfaOY
+         h7bIWzcnx7vnTkHOy0hnsJPeglPMHkwM6NrqnbuFEbdWzhgFM+1zePMcRwfK85T+N3wc
+         83Wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749007850; x=1749612650;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fOC+m4zOJ34UxxPz/TiQmD5iaJADylPzttows/BWe1k=;
-        b=wO6U2f5TojLdsl5IFRQEvIPhEEAVADlX+v89AYWytooNeJsfEW6GcUHsbBezuPFp2i
-         PosuT4BRKQlj6w0103h/YsRM9m7I815zWJUtbaUvlzfPxd6+YnNHWsNtl83CocFRZYTe
-         X7EMPjeM7tnouCudCvKh/3Yth41gpvzc90UOESqvMGgC0TTIBDz3bZWL90pbQWX4CBZ1
-         yg03VlVBks9cJXi3m2wxAEHnLtSPXAlhcXfAlarLHQCBxBuMgx0WNVrCpAZHPHSP7X/X
-         Zl7Sv1rZ78EgIGcqKBhZ76n3zWOah9kvEShGBTlHOroLPCDWc/U3jCWv1t7tocTzvdgc
-         Cwpw==
-X-Forwarded-Encrypted: i=1; AJvYcCX72S2tNyhsMvDPza2GE2PlqbUm2ZJxGo2PM9KSskZHFL1uMpMQxKtxF30/WKe1/VF4VCO2FxURnaBMHisys5o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCT7wf6NH3dcvZQeaLPpuV2m6cYKhKQIJkDBtMgQsw4MoNw26d
-	W9tEGdgRNJnVlO9OuFiL31cuhDYhgwOOkMQIgYTG9EeeTqEquJaq378evf+SvYybPNKisRZkbkA
-	bafBBuutCYYRrjCLpD0CBHhj5UfyXYOni3S45POs4
-X-Gm-Gg: ASbGncsXsBXebk6yYftHFg0r6DWbrla+ZK2Hh72YgqrSVdZ2smvT79pfGV8iymT9qNG
-	XUJr8RwEynWwC0mQh+Ply6bzNWcjnkKjD4sIWMb2ImLm1p/FEr+nNaheFS4dRkm5aoWB2ADkHXz
-	AhZbehzyby0sk+gVdUWCE2raxk7dbY2mpXUDLb/KtFW1Wz+O18RmjbiCqwYlldcHCTN38nd7QCG
-	A==
-X-Google-Smtp-Source: AGHT+IG5bw78Odqgpd3EBpVfqxdEd4THXeUjYORslhfe3Gche7FcK086w9JV/cR2nIVnS6RTWNlPCnRW0vrV7HVy6qs=
-X-Received: by 2002:a05:6102:b0b:b0:4e2:82c3:661c with SMTP id
- ada2fe7eead31-4e746d8c858mr770783137.11.1749007850171; Tue, 03 Jun 2025
- 20:30:50 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1749013745; x=1749618545;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NrHVO1JlSwACRF1JM0S/mT4335rXAQlO0tShDIgF4kg=;
+        b=DcqziY3wxRdcpTfgsNwMRdSh0+q1aZf+JCcCx6PXMDPGggLp1EVAhlw/i2bbdaOhah
+         wvv3q0pmlQKV+SiTC66fhR2tKrbqsIFwLEbFa/WIy6MJNMSn9k564YFcikItY2NaqfT5
+         w7DRv9X/vYTO76k+M0ae2XO0Kw1GWt/odufsQdwKCMXdOqjlZCukwVg1hS051f2q8MFW
+         qZJteJCyjYD8fQndEnliLGXJDfV6QClubEf80/uEfh9OWibg7diBzVh+TpOzr9datHVR
+         9z19sED+aFVRX/W2oo56y2rqA1hHiw/Yq3I2jPSbNU95+bvCIh60FlsCX4HYpwiAlOew
+         Iuiw==
+X-Forwarded-Encrypted: i=1; AJvYcCV7tJsRqeUcISS92Q2tMi7kx5/8DZZ3pBxdSBHE1EdZnU7Fy6fCrrjcvc/VRyNkPjLbhqToI6338kaTvk0xXvI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZxgxX8Ph1MHZTUWSkOrl2li9lVIZoITpP928+6LL9DqYB7xmY
+	ShWp1XUH9JK3AEwJguw0ZXw+xMe0FeaLDL/MlKfPnaDXWDIxd5/y9wAA0r6LAt3xU5YY/8sCY5u
+	gHq917yID+hu9DA==
+X-Google-Smtp-Source: AGHT+IEABKtEFFU5liXpEXSptkYGDpsy283hDhs01hedhxVkwnKMuF3CclWqZbgRuZmc+jHI4P4dRe8JCJ2ZzQ==
+X-Received: from pgbcq2.prod.google.com ([2002:a05:6a02:4082:b0:b2d:249f:ea07])
+ (user=jiaqiyan job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6a20:1586:b0:1f5:8e94:2e81 with SMTP id adf61e73a8af0-21d22a6ca78mr2158789637.9.1749013744670;
+ Tue, 03 Jun 2025 22:09:04 -0700 (PDT)
+Date: Wed,  4 Jun 2025 05:08:55 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250526132755.166150-1-acarmina@redhat.com> <20250526132755.166150-2-acarmina@redhat.com>
- <20250529090129.GZ24938@noisy.programming.kicks-ass.net> <CAGegRW76X8Fk_5qqOBw_aqBwAkQTsc8kXKHEuu9ECeXzdJwMSw@mail.gmail.com>
- <20250530140140.GE21197@noisy.programming.kicks-ass.net> <202505301037.D816A49@keescook>
- <20250531102304.GF21197@noisy.programming.kicks-ass.net> <20250602-phenomenal-turkey-of-hurricane-aadcde@houat>
- <20250603122603.GK21197@noisy.programming.kicks-ass.net>
-In-Reply-To: <20250603122603.GK21197@noisy.programming.kicks-ass.net>
-From: Daniel Latypov <dlatypov@google.com>
-Date: Wed, 4 Jun 2025 12:30:38 +0900
-X-Gm-Features: AX0GCFsGfqrM-mb1TX-evfPNlSjXcsDpFP46rFQa5C7LWSuPpBr8suouJ-eIUyU
-Message-ID: <CAGS_qxoxkcDyUDKPYWAV2Sk1Df0kMYaDpSwinxUTyhtWpjkr6g@mail.gmail.com>
-Subject: Re: [PATCH v5 1/5] bug/kunit: Core support for suppressing warning backtraces
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Maxime Ripard <mripard@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Alessandro Carminati <acarmina@redhat.com>, linux-kselftest@vger.kernel.org, 
-	Dan Carpenter <dan.carpenter@linaro.org>, Daniel Diaz <daniel.diaz@linaro.org>, 
-	David Gow <davidgow@google.com>, Arthur Grillo <arthurgrillo@riseup.net>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, Naresh Kamboju <naresh.kamboju@linaro.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Ville Syrjala <ville.syrjala@linux.intel.com>, 
-	Daniel Vetter <daniel@ffwll.ch>, Guenter Roeck <linux@roeck-us.net>, 
-	Alessandro Carminati <alessandro.carminati@gmail.com>, Jani Nikula <jani.nikula@intel.com>, 
-	Jeff Johnson <jeff.johnson@oss.qualcomm.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Shuah Khan <skhan@linuxfoundation.org>, 
-	Linux Kernel Functional Testing <lkft@linaro.org>, dri-devel@lists.freedesktop.org, 
-	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
-	Mark Rutland <mark.rutland@arm.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.50.0.rc0.604.gd4ff7b7c86-goog
+Message-ID: <20250604050902.3944054-1-jiaqiyan@google.com>
+Subject: [PATCH v2 0/6] VMM can handle guest SEA via KVM_EXIT_ARM_SEA
+From: Jiaqi Yan <jiaqiyan@google.com>
+To: maz@kernel.org, oliver.upton@linux.dev
+Cc: joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, 
+	catalin.marinas@arm.com, will@kernel.org, pbonzini@redhat.com, corbet@lwn.net, 
+	shuah@kernel.org, kvm@vger.kernel.org, kvmarm@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	duenwen@google.com, rananta@google.com, jthoughton@google.com, 
+	Jiaqi Yan <jiaqiyan@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 3, 2025 at 9:26=E2=80=AFPM Peter Zijlstra <peterz@infradead.org=
-> wrote:
->
-> On Mon, Jun 02, 2025 at 01:13:29PM +0200, Maxime Ripard wrote:
->
-> > > I can't operate kunit
-> >
-> > Why not?
->
-> Too complicated. People have even wrecked tools/testing/selftests/ to
-> the point that it is now nearly impossible to run the simple selftests
-> :-(
->
-> And while I don't mind tests -- they're quite useful. Kunit just looks
-> to make it all more complicated that it needs to be. Not to mention
-> there seems to be snakes involved -- and I never can remember how that
-> works.
+Problem
+=======
 
-I've been out of the loop for a while, but I'm curious.
-What parts in particular are the most annoying, or is it basically all of t=
-hem?
+When host APEI is unable to claim synchronous external abort (SEA)
+during stage-2 guest abort, today KVM directly injects an async SError
+into the VCPU then resumes it. The injected SError usually results in
+unpleasant guest kernel panic.
 
-Is it that adding a new test file requires editing at least 3 files
-(Makefile, Kconfig, the actual test.c file)?
-Is it editing/writing new tests because the C API is hard to use? (Has
-too many funcs to know how to do simple things, etc.?)
+One of the major situation of guest SEA is when VCPU consumes recoverable
+uncorrected memory error (UER), which is not uncommon at all in modern
+datacenter servers with large amounts of physical memory. Although SError
+and guest panic is sufficient to stop the propagation of corrupted memory
+there is room to recover from an UER in a more graceful manner.
 
-For me personally, it's the first part about all the additional edits
-you have to make.
-I _hate_ doing it, but can't think of a good alternative that feels it
-makes the right tradeoffs (implementation complexity, requiring users
-to learn some new system or not, etc.)
+Proposed Solution
+=================
 
->
-> Basically, if the stuff takes more effort to make run, than the time it
-> runs for, its a loss. And in that respect much of the kernel testing
-> stuff is a fail. Just too damn hard to make work.
->
-> I want to: make; ./run.sh or something similarly trivial. But clearly
-> that is too much to task these days :-(
+Alternatively KVM can replay the SEA to the faulting VCPU, via existing
+KVM_SET_VCPU_EVENTS API. If the memory poison consumption or the fault
+that cause SEA is not from guest kernel, the blast radius can be limited
+to the consuming or faulting guest userspace process, so the VM can keep
+running.
 
-Agreed that ultimately, it would be nice if it was as simple as one of thes=
-e
-$ run_kunit_tests --suite=3Dtest_suite_name
-$ run_kunit_tests --in_file=3Dlib/my_test.c
-or something similar.
+In addition, instead of doing under the hood without involving userspace,
+there are benefits to redirect the SEA to VMM:
 
-But while I don't see a way to get there, if you've set your new test
-config to `default KUNIT_ALL_TESTS` and are fine running on UML, then
-it could be as simple as
-$ ./tools/testing/kunit/kunit.py run
+- VM customers care about the disruptions caused by memory errors, and
+  VMM usually has the responsibility to start the process of notifying
+  the customers of memory error events in their VMs. For example some
+  cloud provider emits a critical log in their observability UI [1], and
+  provides playbook for customers on how to mitigate disruptions to
+  their workloads.
 
-It should basically do what you want: `make` to regen the .config and
-build and then execute the tests.
+- VMM can protect future memory error consumption by unmapping the poisoned
+  pages from stage-2 page table with KVM userfault, or by splitting the
+  memslot that contains the poisoned guest pages [2].
 
-But I can see these pain points with it,
-a) it'll run a bunch of other tests too by default but they shouldn't
-be failing, nor should they add too much build or test runtime
-overhead.
-b) if the new test you're adding doesn't work on UML, you'd have to
-fiddle with enabling more kconfig options or switch arches
-c) it can be confusing how it has multiple subcommands in addition to
-`run` and it's not immediately clear when/why you'd ever use them
-d) the fact it's not like kselftest and just part of make, i.e. `make
-TARGETS=3D"foo" kselftest`
-   * even if kunit.py was dead simple (and it's not, but I don't think
-it's _that_ complex), it's another tool to learn and keep in your
-head.
+- VMM can keep track of SEA events in the VM. When VMM thinks the status
+  on the host or the VM is bad enough, e.g. number of distinct SEAs
+  exceeds a threshold, it can restart the VM on another healthy host.
 
-Do these cover what you've experienced?
-Or are there others?
+- Behavior parity with x86 architecture. When machine check exception
+  (MCE) is caused by VCPU, kernel or KVM signals userspace SIGBUS to
+  let VMM either recover from the MCE, or terminate itself with VM.
+  The prior RFC proposes to implement SIGBUS on arm64 as well, but
+  Marc preferred VCPU exit over signal [3]. However, implementation
+  aside, returning SEA to VMM is on par with returning MCE to VMM.
 
->
-> I spent almost a full day trying to get kvm selftests working a couple
-> of weeks ago; that's time I don't have. And it makes me want to go hulk
-> and smash things.
+Once SEA is redirected to VMM, among other actions, VMM is encouraged
+to inject external aborts into the faulting VCPU, which is already
+supported by KVM on arm64. We notice injecting instruction abort is not
+fully supported by KVM_SET_VCPU_EVENTS. Complement it in the patchset.
 
-Stepping back, I think there'll always be relatively simple things
-that take a bit too much effort to do in KUnit.
+New UAPIs
+=========
 
-But I'd like to get to the point where anyone can feel comfortable
-doing the very simple things.
-And I don't want it to be with the caveat of "after they've read 10
-pages of docs", because none of us have the time for that, as you say.
+This patchset introduces following userspace-visiable changes to empower
+VMM to control what happens next for SEA on guest memory:
 
-E.g. If someone is introducing a new data structure, it should be easy
-to ask them to learn a enough KUnit so that they write _basic_ sanity
-tests for it and add it to their patch series.
-Maybe it's annoying to cover all edge cases properly and very
-difficult to try and test concurrent read/writes, but those are
-inherently harder problems.
+- KVM_CAP_ARM_SEA_TO_USER. While taking SEA, if userspace has enabled
+  this new capability at VM creation, and the SEA is not caused by
+  memory allocated for stage-2 translation table, instead of injecting
+  SError, return KVM_EXIT_ARM_SEA to userspace.
 
-Cheers,
-Daniel
+- KVM_EXIT_ARM_SEA. This is the VM exit reason VMM gets. The details
+  about the SEA is provided in arm_sea as much as possible, including
+  sanitized ESR value at EL2, if guest virtual and physical addresses
+  (GPA and GVA) are available and the values if available.
+
+- KVM_CAP_ARM_INJECT_EXT_IABT. VMM today can inject external data abort
+  to VCPU via KVM_SET_VCPU_EVENTS API. However, in case of instruction
+  abort, VMM cannot inject it via KVM_SET_VCPU_EVENTS.
+  KVM_CAP_ARM_INJECT_EXT_IABT is just a natural extend to
+  KVM_CAP_ARM_INJECT_EXT_DABT that tells VMM KVM_SET_VCPU_EVENTS now
+  supports external instruction abort.
+
+
+* From v1 [4]:
+  - Rebased on commit 4d62121ce9b5 ("KVM: arm64: vgic-debug: Avoid
+    dereferencing NULL ITE pointer").
+  - Sanitize ESR_EL2 before reporting it to userspace.
+  - Do not do KVM_EXIT_ARM_SEA when SEA is caused by memory allocated to
+    stage-2 translation table.
+
+[1] https://cloud.google.com/solutions/sap/docs/manage-host-errors
+[2] https://lore.kernel.org/kvm/20250109204929.1106563-1-jthoughton@google.com
+[3] https://lore.kernel.org/kvm/86pljbqqh0.wl-maz@kernel.org
+[4] https://lore.kernel.org/kvm/20250505161412.1926643-1-jiaqiyan@google.com
+
+Jiaqi Yan (5):
+  KVM: arm64: VM exit to userspace to handle SEA
+  KVM: arm64: Set FnV for VCPU when FAR_EL2 is invalid
+  KVM: selftests: Test for KVM_EXIT_ARM_SEA and KVM_CAP_ARM_SEA_TO_USER
+  KVM: selftests: Test for KVM_CAP_INJECT_EXT_IABT
+  Documentation: kvm: new uAPI for handling SEA
+
+Raghavendra Rao Ananta (1):
+  KVM: arm64: Allow userspace to inject external instruction aborts
+
+ Documentation/virt/kvm/api.rst                | 128 ++++++-
+ arch/arm64/include/asm/kvm_emulate.h          |  67 ++++
+ arch/arm64/include/asm/kvm_host.h             |   8 +
+ arch/arm64/include/asm/kvm_ras.h              |   2 +-
+ arch/arm64/include/uapi/asm/kvm.h             |   3 +-
+ arch/arm64/kvm/arm.c                          |   6 +
+ arch/arm64/kvm/guest.c                        |  13 +-
+ arch/arm64/kvm/inject_fault.c                 |   3 +
+ arch/arm64/kvm/mmu.c                          |  59 ++-
+ include/uapi/linux/kvm.h                      |  12 +
+ tools/arch/arm64/include/asm/esr.h            |   2 +
+ tools/arch/arm64/include/uapi/asm/kvm.h       |   3 +-
+ tools/testing/selftests/kvm/Makefile.kvm      |   2 +
+ .../testing/selftests/kvm/arm64/inject_iabt.c |  98 +++++
+ .../testing/selftests/kvm/arm64/sea_to_user.c | 340 ++++++++++++++++++
+ tools/testing/selftests/kvm/lib/kvm_util.c    |   1 +
+ 16 files changed, 718 insertions(+), 29 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/arm64/inject_iabt.c
+ create mode 100644 tools/testing/selftests/kvm/arm64/sea_to_user.c
+
+-- 
+2.49.0.1266.g31b7d2e469-goog
+
 
