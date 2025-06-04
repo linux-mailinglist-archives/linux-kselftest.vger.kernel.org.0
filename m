@@ -1,181 +1,194 @@
-Return-Path: <linux-kselftest+bounces-34342-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34343-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74E29ACE6A8
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Jun 2025 00:35:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EACDACE6FE
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Jun 2025 01:12:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EBBF13A8F3D
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Jun 2025 22:35:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CB5F17A6325
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Jun 2025 23:10:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C57B520E005;
-	Wed,  4 Jun 2025 22:35:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9470D26B2D2;
+	Wed,  4 Jun 2025 23:11:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fgaG+D8/"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jUqqWFsH"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F100E10E9;
-	Wed,  4 Jun 2025 22:35:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E685D82864
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Jun 2025 23:11:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749076545; cv=none; b=a+xGQYCuzeL+dGu95QCbthYQZPBoRX+glEwMoRZhsqX4d0iffaDHSJsTJ8S45frAY+N/DBTCbP5/QAgoZb9bNmX+w8T+gqCPiCbkpdkd/WLN/n9ASK1oaxqJ1mcguN6+vxfPamkLaZCGDcgC3/fLnj0Ps+qfWWhtxMAkQBKgUX0=
+	t=1749078718; cv=none; b=Ut345jnR+Ewp6XjZZHryvyFmWE/ZU2ilguDZM1c3r5+LnoC4y+hA9N/XuVDSuPXCS6VWUyA9TiFMFd17h7JJ+tNzERoI48XyRsYuRjpwCDRyfju+hBENXmbMiU0TUqPjgUWA6epFEqoKA98v7C3OZygZBm05FQpxQojXw3XhpfQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749076545; c=relaxed/simple;
-	bh=8ltgHvPktIGvd828kCWmlW2E8Mj9LPG0Na5cHECVRK4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=T7Sou9lNWUlt8BnTuzt0f917lRTf4otu566SV9WmlHQb7ZN28sdqator6PWVcDURyOqsLiT2DqsS8MMKaP/M6Fzbf2rC9wDi7L2HqcRnW3v2emNn2jabUTBZsu3EfyQs8lqYVfKSzfTpl9RKXi+KVzEXbtMpaRgzT15o/onDcLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fgaG+D8/; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-3a366843fa6so182242f8f.1;
-        Wed, 04 Jun 2025 15:35:43 -0700 (PDT)
+	s=arc-20240116; t=1749078718; c=relaxed/simple;
+	bh=pGoib3ydjtZ/I78fQ6QPvniLoEWzR+5uyTMk2OKAQ9s=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Qj2X56AC02gUzmqKGoBTxkXoM3s2ZsH+Zpvy+hd0s8I2WXOXj6ZwvnD+qfCebpW5UnTZa3cUWhCVKX5z0WwivcXkxDaiyWwuQ7Lh4isUHqcQKDnjbp9SAxaPfr+HsqBtdsBru4mhzgFuG1bSgKnmyv0OqrwX0of1w5IXvBOIqWc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jUqqWFsH; arc=none smtp.client-ip=209.85.210.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-7395d07a3dcso287394b3a.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Jun 2025 16:11:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749076542; x=1749681342; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XsxuIdbiBj+7yBzMpSX2Y7tbBVv3OjmpCi4ReJWvjY4=;
-        b=fgaG+D8/Eu/pv54xN6EeNHjiYwZbJG+9rgeJW3HuTwkEdBvUfIC+Kpm2GIK7l/94TE
-         4Q4RYkjiBffvAMT3So0CEmfQdlgkX7zO/PEUMm5ZsquWLEoJv1i22pLpt1ZeKxx93sRU
-         Q7+3Dvn9XhVlVvaf8x785BEGKJt9IAgrJJ0MQ1CShoRm7Vr/AhFPiZWiTpLnSXyD+6vp
-         GPKjD2u+sdoMAcRDK7KgnZnZJcJlsKtIlQwVklbyfVXnMYT99Wtd7LaeJogKScsoleM1
-         zV8igKz35Zi04q3vcjmNWaujssHtFc49RRRXl5HmqdLViZqBh4Umj0vjs5H54u64M21B
-         5AZQ==
+        d=google.com; s=20230601; t=1749078715; x=1749683515; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=3npSTljTroS8UV+to+K7B0gejhUv63EMca56GSqeKhA=;
+        b=jUqqWFsHJeauJ0UdL6a3yAD//Y5nRdJb+lt+Wu0tijNSrPD6kvpliaA4bdlIyuZUnl
+         nufCdwEie7ELjDuQ+sKvQmW4TzsqezJErSbxWtWjOeah9rFLVO0tcERcpdPOEPsAXy4O
+         NG0x2enC2+02iwrZ0ligWErT/SmgpabylcgCGIChaP8/CA/4Pv9SvYkfEUt1FOviDp7h
+         ZWR4s2NkiRs5yfv0d2sbGSGmM1YAMAStfgmhUDChYiKBSf09E5jXvUWc4nC5g+J2rrrO
+         AY3Yj3bMV2VYlhaDvcgbk+l8mAhqqs005lYANeSmzlYZxlTct5hZ9pukUd1TuPetaEiw
+         VC6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749076542; x=1749681342;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XsxuIdbiBj+7yBzMpSX2Y7tbBVv3OjmpCi4ReJWvjY4=;
-        b=XFBiL/Bh4gjhfezye9VfKO0RKpdyCUKVFHxZaPOVkqteNPSlp4Z8PhUgj8qWPgRNBN
-         PDY5v9OkDvV4jOnJPuxrQjpBtfThMfVqLR+MzY4lnU+DCA6B75dcm1eQzN3Sjt9cHdjk
-         LTZu3VHvpOHEuHhN/mbZiZoqGq6Tm0J308HskdFNmiYgHjtEadNjQX7zT41y/4h9Dw5s
-         A3PY7rQY32e7IPYabVRt2+lfz8P7MSrO7f2cubE+zEtfvbOLUBXllnGUNg9AhgPpdfWW
-         Jfc+CE02BdLTbdMwAdQ66dSsJCHb8TiPF9+6Mt4FuBwalIYheDqpK/QLEEoAFPB7UjKN
-         gE1g==
-X-Forwarded-Encrypted: i=1; AJvYcCVpZuhhdwZsWcr+rWKtTWdSJmqwpoSdzs40uFnAd/XQ8ibRb7wcfR9KJFY5AfoDWpOpfMIfoYrKy466OojMJhSA@vger.kernel.org, AJvYcCWIN268+iQquSuyU/z5zmkYN9O4OZ5zNL+hmikWBJ9VzZWG75N01REZvi4id9NL1bzfJN9MfROq6StQFOQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyByKtHj2CQxpSGuzZJyF66K11uFyEYDV3vbWDgV1kfV/UpGSYc
-	gJK35GBLmA5CjXMSsf5pQg3bB02H7erDZY4i3tmH2fgrPXsCh3795wdefGnpJA==
-X-Gm-Gg: ASbGncvBcygU4WWQxvXCfF82lPP+UydoVH0XSPbjzRwLMYV3udO4gsjcpG6rwOB2GpT
-	0twFIGI3zAzTKPi70MMeKgAZKC6/TGKauQy1HTPRfrIxpjwFy85Lb599Fj3te+sSivzNTRPliam
-	Je/Wr6T48UttTAcZKi3jtTJigPYkesW1gkdK2EeqW/VZjfrflYr6veRoRJaqcXayaEcmPGy0bf3
-	k+BYNy8rL72z7u6iXxBgE966cTHTbucLSH/0/Z226eOyRwCv5ndINVeqpY6rKA42mgAVxlRsEgC
-	61OdBX3064Gm57+Baf6aWwxUZbJ47h8zq9KHFSEcKgWZRXbdocXJhWwa5OCNKH+WoGM=
-X-Google-Smtp-Source: AGHT+IGEcHI3RKpGrEdI8XRlMdKJaExfTVUZGwbopS+GoA+PBaW44CIH9k3dDaDSNYUTDJCDoEh9DA==
-X-Received: by 2002:a5d:584c:0:b0:3a4:fbaf:749e with SMTP id ffacd0b85a97d-3a51d985961mr3683521f8f.49.1749076542052;
-        Wed, 04 Jun 2025 15:35:42 -0700 (PDT)
-Received: from [192.168.1.5] ([197.63.202.146])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a4efe73f83sm22159582f8f.49.2025.06.04.15.35.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Jun 2025 15:35:40 -0700 (PDT)
-Message-ID: <959cfd37-1f27-4e2e-8922-19eb72227e28@gmail.com>
-Date: Thu, 5 Jun 2025 01:35:38 +0300
+        d=1e100.net; s=20230601; t=1749078715; x=1749683515;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3npSTljTroS8UV+to+K7B0gejhUv63EMca56GSqeKhA=;
+        b=le97FRFhhQcU6LzJ04lrslRWiBj6sfE6MhN4RMl7oM2y3A3Tkb7+SbW1quxJuy5TJp
+         YXBNc1pquu/btpCTJJbMHzDa1Edk7E7AwRY2m4gR3Hzn80aBiVu1hfzPYU4NPP8mhqtT
+         E13o4xckg1bUugcupzOCoC7CghLTt/t0GLDfVXk/HBWKXbir0bVoV9Hwgax8PSsdtFQd
+         Hu2A8gTMW94/NBGfLceZS1pNzs1FoqD8EyiovfcfrKmnODFJZAN8LuD8D6lUQHf4Aho/
+         to+eKXZ+o67TinjDAdWRzmHMXzKItkjMgZRmdHK2hZrsPl7Ez7f+ddDdCbIrMCe7wg+E
+         WN6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVhw7AcB51ubzfRis+a94RwJ+Y9ldwaLXK2IUiUJ3VN8UxrQM7cuzmpEwRbrMIhwZVT3MjULV7celydSqgpxuk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTj7AVFCOpan1L08xBMgh7yZ42VdjLoRfpFXtXY0Ka6PXFa28h
+	82HyxV649uf36QXLedfGbll941ouxbiaIvKFODi4r01CuE0ScBWhY08miTHROBRXqhEXBL0CHYg
+	eCTr+iw==
+X-Google-Smtp-Source: AGHT+IE5vyjpR0b4JnX96tHDLjXZe/ay0gti7aWB7+1hKtbXecOEAJBb165hSe99jrOqgpdnI0DBhGLXyQk=
+X-Received: from pgac22.prod.google.com ([2002:a05:6a02:2956:b0:b2c:3dd5:8139])
+ (user=surenb job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:6b02:b0:216:1ea0:a516
+ with SMTP id adf61e73a8af0-21d22d4ce34mr7310828637.41.1749078715129; Wed, 04
+ Jun 2025 16:11:55 -0700 (PDT)
+Date: Wed,  4 Jun 2025 16:11:44 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND] selftests/mm/run_vmtests.sh: skip hugevm tests if
- write_to_hugetlbfs is missing
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-mm@kvack.org, linux-kernel-mentees@lists.linux.dev,
- shuah@kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250523184312.2647781-1-khaledelnaggarlinux@gmail.com>
- <20250602232233.224099-1-khaledelnaggarlinux@gmail.com>
- <20250602191216.7173b77e4f9ab5f659d1a448@linux-foundation.org>
-Content-Language: en-US
-From: Khaled Elnaggar <khaledelnaggarlinux@gmail.com>
-In-Reply-To: <20250602191216.7173b77e4f9ab5f659d1a448@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.49.0.1266.g31b7d2e469-goog
+Message-ID: <20250604231151.799834-1-surenb@google.com>
+Subject: [PATCH v4 0/7] use per-vma locks for /proc/pid/maps reads and PROCMAP_QUERY
+From: Suren Baghdasaryan <surenb@google.com>
+To: akpm@linux-foundation.org
+Cc: Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, david@redhat.com, 
+	vbabka@suse.cz, peterx@redhat.com, jannh@google.com, hannes@cmpxchg.org, 
+	mhocko@kernel.org, paulmck@kernel.org, shuah@kernel.org, adobriyan@gmail.com, 
+	brauner@kernel.org, josef@toxicpanda.com, yebin10@huawei.com, 
+	linux@weissschuh.net, willy@infradead.org, osalvador@suse.de, 
+	andrii@kernel.org, ryan.roberts@arm.com, christophe.leroy@csgroup.eu, 
+	tjmercier@google.com, kaleshsingh@google.com, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, surenb@google.com
+Content-Type: text/plain; charset="UTF-8"
 
-On 03/06/2025 5:12 am, Andrew Morton wrote:
-> On Tue,  3 Jun 2025 02:22:32 +0300 Khaled Elnaggar <khaledelnaggarlinux@gmail.com> wrote:
-> 
->> The hugevm tests 'charge_reserved_hugetlb.sh' and 'hugetlb_reparenting_test.sh'
->> depend on the 'write_to_hugetlbfs' binary to simulate writes to hugetlbfs
->> while checking reservations asynchronously in the background.
->>
->> When this binary is missing (e.g., excluded from the build), these tests hang
->> for up to 180 seconds. During this time, run_vmtests.sh is eventually killed
->> due to timeout, aborting all subsequent tests.
->>
->> This patch skips these tests if the binary is not found, preventing delays
->> and ensuring that the test suite runs to completion.
-> 
-> OK, but why is write_to_hugetlbfs missing?  If we're in a situation
-> where we _could_ run it then we _should_ run it!  The user wants to
-> test stuff so we should test as much as we can.
-> So I'm thinking that it would be preferable to make sure the dang thing
-> is there?
-> 
+Reading /proc/pid/maps requires read-locking mmap_lock which prevents any
+other task from concurrently modifying the address space. This guarantees
+coherent reporting of virtual address ranges, however it can block
+important updates from happening. Oftentimes /proc/pid/maps readers are
+low priority monitoring tasks and them blocking high priority tasks
+results in priority inversion.
 
-Totally agree, let me try to explain how I understand the issue.
+Locking the entire address space is required to present fully coherent
+picture of the address space, however even current implementation does not
+strictly guarantee that by outputting vmas in page-size chunks and
+dropping mmap_lock in between each chunk. Address space modifications are
+possible while mmap_lock is dropped and userspace reading the content is
+expected to deal with possible concurrent address space modifications.
+Considering these relaxed rules, holding mmap_lock is not strictly needed
+as long as we can guarantee that a concurrently modified vma is reported
+either in its original form or after it was modified.
 
-The write_to_hugetlbfs binary is built from selftests/mm/Makefile,
-lines 136–142. It is only compiled if ARCH matches one of the explicitly
-listed 64-bit architectures:
+This patchset switches from holding mmap_lock while reading /proc/pid/maps
+to taking per-vma locks as we walk the vma tree. This reduces the
+contention with tasks modifying the address space because they would have
+to contend for the same vma as opposed to the entire address space. Same
+is done for PROCMAP_QUERY ioctl which locks only the vma that fell into
+the requested range instead of the entire address space. Previous version
+of this patchset [1] tried to perform /proc/pid/maps reading under RCU,
+however its implementation is quite complex and the results are worse than
+the new version because it still relied on mmap_lock speculation which
+retries if any part of the address space gets modified. New implementaion
+is both simpler and results in less contention. Note that similar approach
+would not work for /proc/pid/smaps reading as it also walks the page table
+and that's not RCU-safe.
+
+Paul McKenney's designed a test [2] to measure mmap/munmap latencies while
+concurrently reading /proc/pid/maps. The test has a pair of processes
+scanning /proc/PID/maps, and another process unmapping and remapping 4K
+pages from a 128MB range of anonymous memory.  At the end of each 10
+second run, the latency of each mmap() or munmap() operation is measured,
+and for each run the maximum and mean latency is printed. The map/unmap
+process is started first, its PID is passed to the scanners, and then the
+map/unmap process waits until both scanners are running before starting
+its timed test.  The scanners keep scanning until the specified
+/proc/PID/maps file disappears. This test registered close to 10x
+improvement in update latencies:
+
+Before the change:
+./run-proc-vs-map.sh --nsamples 100 --rawdata -- --busyduration 2
+    0.011     0.008     0.455
+    0.011     0.008     0.472
+    0.011     0.008     0.535
+    0.011     0.009     0.545
+    ...
+    0.011     0.014     2.875
+    0.011     0.014     2.913
+    0.011     0.014     3.007
+    0.011     0.015     3.018
+
+After the change:
+./run-proc-vs-map.sh --nsamples 100 --rawdata -- --busyduration 2
+    0.006     0.005     0.036
+    0.006     0.005     0.039
+    0.006     0.005     0.039
+    0.006     0.005     0.039
+    ...
+    0.006     0.006     0.403
+    0.006     0.006     0.474
+    0.006     0.006     0.479
+    0.006     0.006     0.498
+
+The patchset also adds a number of tests to check for /proc/pid/maps data
+coherency. They are designed to detect any unexpected data tearing while
+performing some common address space modifications (vma split, resize and
+remap). Even before these changes, reading /proc/pid/maps might have
+inconsistent data because the file is read page-by-page with mmap_lock
+being dropped between the pages. An example of user-visible inconsistency
+can be that the same vma is printed twice: once before it was modified and
+then after the modifications. For example if vma was extended, it might be
+found and reported twice. What is not expected is to see a gap where there
+should have been a vma both before and after modification. This patchset
+increases the chances of such tearing, therefore it's event more important
+now to test for unexpected inconsistencies.
+
+[1] https://lore.kernel.org/all/20250418174959.1431962-1-surenb@google.com/
+[2] https://github.com/paulmckrcu/proc-mmap_sem-test
+
+Suren Baghdasaryan (7):
+  selftests/proc: add /proc/pid/maps tearing from vma split test
+  selftests/proc: extend /proc/pid/maps tearing test to include vma
+    resizing
+  selftests/proc: extend /proc/pid/maps tearing test to include vma
+    remapping
+  selftests/proc: test PROCMAP_QUERY ioctl while vma is concurrently
+    modified
+  selftests/proc: add verbose more for tests to facilitate debugging
+  mm/maps: read proc/pid/maps under per-vma lock
+  mm/maps: execute PROCMAP_QUERY ioctl under per-vma locks
+
+ fs/proc/internal.h                         |   6 +
+ fs/proc/task_mmu.c                         | 233 +++++-
+ tools/testing/selftests/proc/proc-pid-vm.c | 793 ++++++++++++++++++++-
+ 3 files changed, 1011 insertions(+), 21 deletions(-)
 
 
-```
-   ifneq (,$(filter $(ARCH),arm64 mips64 parisc64 powerpc riscv64 s390x sparc64 x86_64 s390))
-   TEST_GEN_FILES += va_high_addr_switch
-   ifneq ($(ARCH),riscv64)
-   TEST_GEN_FILES += virtual_address_range
-   endif
-   TEST_GEN_FILES += write_to_hugetlbfs
-   endif
-```
-
-However, when the MM selftests are run from the kernel’s top-level Makefile,
-(root directory for example:
-
-  make defconfig
-  sudo make kselftest TARGETS=mm
-
-
-ARCH is resolved as x86, even on an x86_64 machine (Debian in my case),
-ARCH=x86 is the reason why the binary gets excluded from the build system.
-
-As far as I understand, the top-level Makefile normalizes both
-i.86 and x86_64 to x86 for ARCH variable:
-
-Makfile: lines: 383,403
-        383:include $(srctree)/scripts/subarch.include
-        403:ARCH                ?= $(SUBARCH)
-
-scripts/subarch.include: line: 7
-        7:SUBARCH := $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
-
-This mapping probably makes sense for selecting the correct arch/ directory
-(since we have arch/x86, not arch/x86_64) for top-level Makefile.
-
-But the mm selftests Makefile expects ARCH to differentiate between x86 and x86_64
-to decide whether to build certain binaries.
-As a result, the 64-bit-only binaries like write_to_hugetlbfs are skipped
-during build, yet still expected at runtime (by run_vmtests.sh).
-
-That's why this whole issue of the missing executable does not happen when
-ran from selftests/mm using something like:
-
-  sudo make -C tools/testing/selftests/mm
-
-Because then selftests/mm/Makefile arch detection rus as intended.
-
-You're right — the proper fix is to improve how we propagate architecture
-information from the top-level Makefile to selftests.
-But since that's a larger change (and possibly beyond what I can safely
-attempt at this point), this patch is just a targeted workaround to
-avoid test stalls when the binary is missing.
-
-I hope I haven't gone completely wrong with this analysis, happy to improve
-or revise it further if needed.
+base-commit: 2d0c297637e7d59771c1533847c666cdddc19884
+-- 
+2.49.0.1266.g31b7d2e469-goog
 
 
