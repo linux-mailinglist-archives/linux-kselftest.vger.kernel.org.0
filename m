@@ -1,233 +1,125 @@
-Return-Path: <linux-kselftest+bounces-34286-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34287-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 275CAACD885
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Jun 2025 09:25:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 23FD7ACD997
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Jun 2025 10:22:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3B946174EED
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Jun 2025 07:25:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C1AD16FAAE
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Jun 2025 08:22:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4B2423D290;
-	Wed,  4 Jun 2025 07:24:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E5DD288CAA;
+	Wed,  4 Jun 2025 08:22:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="ktpO+2cZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K7XVgHF9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A9652356BA
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Jun 2025 07:24:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6F4824503B
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Jun 2025 08:22:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749021891; cv=none; b=OW0YCzzPFeGXbzNRF4fr4mFTULdyD+b5Kb+tPxDles6GDvetCtJsCDkvP0XC1vyvDmR1Ge+SwnwZ9jojf2/niJq3zXheiRoI/tbEMdAH186z10wsR/8W5SDK+qj9v4njOiCsb1XdF2WPZmRa2GTwKEjKgO8BAUWk7y8pDAeu3XE=
+	t=1749025322; cv=none; b=bsz+EXdBUimh3CrAKpbZUvk6pzbl+oJRuguqU44F7mQCB4QD7Yk2/aeeny1EIvVNSZjMS/1GluXmYsPEDWIHfLjgzebZAtNeORtMOZW0Fxp19Dza0ZgC9Rn+cl38cTAGedmoKPzTrLiy7HCDcjsot/xM8w1XxG6o3dumviZpmhk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749021891; c=relaxed/simple;
-	bh=eJaM9PF91eHJBG8Hc+d7PGAX8a/KIWNyoS3YQxQ6GVM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iLCH9huAO0V0wHLb5VfhyMuM5d2JN5GbCulLq8F1KbeHjUs52OVZ96yXFkJE/ZZMcye7Ie8dEqJ4rMZGOS6fc8CvuCsQXaioD1+cXivJ5QiKWfGRVSxIoXBI/4xenZQNJ9/caesD6xFMYI1Ds0cv6wjBu4MxO1Laqg1n9Nfsltw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com; spf=pass smtp.mailfrom=daynix.com; dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b=ktpO+2cZ; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=daynix.com
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-747d59045a0so2372910b3a.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Jun 2025 00:24:48 -0700 (PDT)
+	s=arc-20240116; t=1749025322; c=relaxed/simple;
+	bh=IGXzs+S5NkzhTxjCd7UEIuWp3voVZPTKtZnGQtboBJo=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=h8RZc2k5vAEcK84eF8D2e5BuxRcl1yTXNoco4kPS3XCXAfnCxnv0uojyKwx7w9wpGMP5JlcU9AezrZ/M/lts2LrerN04Q2rWVO+igJn5c/FGBDCtPnn6NvtxI1JhestdJqK2i4ChscAIuEZ8qXlcENgoz3Fkrc6dik9k4R+04I8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K7XVgHF9; arc=none smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-60410a9c6dcso2548455a12.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Jun 2025 01:22:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1749021888; x=1749626688; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gtGbzLUDxU2IB9qPjKURq38VfX8ZCpDlPYi0PWx3MpY=;
-        b=ktpO+2cZ3s8p7tfhy9ELVkKdk/xSniXFRRelWOEdFg0wPZ4Kwb9xZXmIRUkubTIP7l
-         2TzQZk6SwGnnUesNwOPjxD5RFupY84UNFqHi+YSuHdYrbIQxDlKEMMFgiLoRCWP6wl2a
-         ImxS/klFMWYaRglpqEKcKOZQa1hS5bv1S9tfWPadOi9AkAkia8N6YCNN9hbaaHHcCcFE
-         rhp0OiyvloswvQXlUw4BW5MtZOFC4G1BDVLd7h32EP5YpaS7t/JGctxM7WJ+zSNF502S
-         5uHgvcOQShcsX8Merrk8GvbW+hQ8Nka1batBN2LUFCiDtD1D7tX2cwp1gZ0kl0pK9byD
-         YPMA==
+        d=gmail.com; s=20230601; t=1749025319; x=1749630119; darn=vger.kernel.org;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MIbd83p7XUFk1nIUFG1NDnXEafOj80GqhwMEQ6R7KE0=;
+        b=K7XVgHF9cjSdNJQt+yFlkh8vMs6lCXJ46PI6FAth7sr6FyYirh+lVe2V0KLwiraNvR
+         v+gqw5HVIVRsdb6wwuE97GvBztBVZ1p9F9HFy3nyz+5FSrd6D2TSQLtj+1vAg9coBpEg
+         9iDYX/0CtAuC9yihmOhXLGnWkoo3EyGJbz0HKjiBDFufIREsumnCocDVh6xrw/b/4yZd
+         N6+1mCkWdt1c1IgmsQzaf1IP7UfTdVjJ+1BW6wjzkXFRsRiFnheMlBlIT8WfOZ6FcZM6
+         nWiywI/tVW9bU+le8rs+YEoY3+5lPSHf6Ql1KNC09uzMNSGlzA3dBqSdZ+QUQGPgLBVt
+         8AKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749021888; x=1749626688;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gtGbzLUDxU2IB9qPjKURq38VfX8ZCpDlPYi0PWx3MpY=;
-        b=a7nPg8KQ2D1kdxhT4G/BN1L9yV4uvNnBAx62KQJ06qn3rhsovGEsvCKI05HgqsZ/ZE
-         SqaDTOqij3CdFt5nZIMBhqQbHvcVmEIZ+5QF4dgaxwBpPsZAQkiUqtA1qY2DraQmjEb9
-         1sHZJmr+m2onzAdTesYym66islBNSmBqNcRGWAktcZy/uOR1LDeDFTdelWea0gI8Bu8Y
-         4+onBciUyJ1ePrCPvDv8h9gBA91T8Nx8ulw5ZHDwLkVzm/cpHebz1IXoeStNs03XIVvV
-         C4nCw3jeNmPRJNDmOKrc3fr3rqMk9FnwoDoS8NuvzAB4c/S3WkwMNb+Qa1AjetZbmihI
-         JupA==
-X-Forwarded-Encrypted: i=1; AJvYcCUrzc+TQRcNjTkj/obODg8kOCViKzXmnhF6AwJW9RsXGdMiOEVXz6G8+/HlWbfaKRBY7nrMZEyLwshddqIL6Y0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwvTEH/cYFqK/75/kv1nCxcEkxgHwuYDkxquAfv0Ohhynw9T6wt
-	Kr5flOTqOQwJuur4k6dsdNl0ZBXtkUlkNUwDrgTdpMwwVZEPRkdznm37MJ8mZMD0s7s=
-X-Gm-Gg: ASbGnctZdvKctgjLdxBlNgJKOtLgdI0zU6VMBl1+i0JU2mxN4L949uiPV2meywDnw6/
-	vPizq5Y298HCDSVoq/AfK+HnzcK1miL+b8MraIMu9dDCP0X4Y/JhEH3LEftFeBsi/NDEx5AaYPd
-	arSIqWU4d1YcpMbkzH37vfB4H92fBTrkFsbZ6kvvQVUBSjmqh2kZ9SNXW/CKDV5tHi3ugZzAbBO
-	wQ9vSdeqgqHhzNbEsv0ui8o/V3bDtTznFKkLpmqYpGqVGFCLW8pZg7BjMI7QQqiA582UAKDtEDy
-	ocJka4kqe5MdYDxH8A21qpP45clQX5e60KQwur/J2GMNxYnGE/mk8oUWnrIOV0zt
-X-Google-Smtp-Source: AGHT+IHXDTL1GYPRjqoXaAf0lXb/mQXNX5irqPQDyrCtJl+J8aEBhNquD8+cbiWqUJBWAylgDPuoqQ==
-X-Received: by 2002:a05:6a20:6a03:b0:216:1c88:df46 with SMTP id adf61e73a8af0-21d22909953mr3036667637.0.1749021887895;
-        Wed, 04 Jun 2025 00:24:47 -0700 (PDT)
-Received: from [157.82.203.223] ([157.82.203.223])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-747affd478bsm10590024b3a.155.2025.06.04.00.24.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Jun 2025 00:24:47 -0700 (PDT)
-Message-ID: <517d5838-3313-4b31-b96d-d471b062cd1a@daynix.com>
-Date: Wed, 4 Jun 2025 16:24:42 +0900
+        d=1e100.net; s=20230601; t=1749025319; x=1749630119;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MIbd83p7XUFk1nIUFG1NDnXEafOj80GqhwMEQ6R7KE0=;
+        b=S/DpyCJ64UwK+qsFskDXUfY5FWWHxnsEspu/6S2+Cz/4wKpMzIsyYi7dpfUtXFYeNK
+         AhfeaFtWIrqDPxVvLrBVsNDg7IRyzti10ynVDceQZfQa+xMKfiBPkOoS9dgFD3RMjUkS
+         EA0JVJ49HUxbzPBTa6WPBJF9/ng+cI0NRE5GOy3aLx2kCVkstmKELZEVvmR1TJK1Vura
+         VCOslTIDyLamhmXfBbpwHWbZvHQn/bg8lkM1QihVLa4KeglE+uNFERO1SyURSyglhYSb
+         Hzb5fS/bns433aZ5LZfDW2ssaUQMpUjK11oRNsnaUJCctII2J/TymvUKgDibLWLbyRgb
+         KFfg==
+X-Forwarded-Encrypted: i=1; AJvYcCV5kC+K1GO0agp/VFStaTWuvyYayQ8piJI9vJ85kmdcFMURB/fgDI+U2ypp5XqzsoSA+Npr591Q0wXDrIMaa58=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYOaJGjjPgb0bnYVKDpTbUw/y1l/+zN5gWHY/x2/bnjgFRoe+6
+	DwQuL2kWI2E43mQIySzLPOv73el0CN1/GltlOvT11N4RVrvoYhQHG6T/5gE+HFjM
+X-Gm-Gg: ASbGnct9MzGV0spNMkzTAE8ntNBFf2xx4sIIZhWXO5pvzQ+xY72/Y+MWaFyEgetam5p
+	pgOPucCeE0G5lVIJjS8VMQLjWoVAIS+sNC/zdgpOr3dCJ6aip7qxKeb0dSrSRtU90q2a+YVpbxh
+	KeFsa+h7ncBrj6Fq9hIT2Fgxxt9t4hgNe1+fLIT9P5jpO68TuyJRe03pcAtCTO925lhEgdTA5wz
+	NR4tqUWCp120cQaFs6UwMute/HbSD3oHu4lWtD8g0DU//bBKSpUjkyfDMPLuPp6zu+97s0iZEXu
+	OKi5d85IBG0DIMDBvByaYB5KhOJKk/cVVT/zD/HlnqFJf3v+kzeG3qWECiTlBA==
+X-Google-Smtp-Source: AGHT+IFjY69ZgP3ucPvqNFgnViZIHn36gJ0JSTO8M8OHEh+t1p17nS9SaCTWn4dRKk+/kx2U2PRgyA==
+X-Received: by 2002:a17:907:6d02:b0:ad5:2328:e39b with SMTP id a640c23a62f3a-addf8ed687amr161560166b.31.1749025318686;
+        Wed, 04 Jun 2025 01:21:58 -0700 (PDT)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ada5d84f389sm1053537566b.82.2025.06.04.01.21.58
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 04 Jun 2025 01:21:58 -0700 (PDT)
+From: Wei Yang <richard.weiyang@gmail.com>
+To: akpm@linux-foundation.org,
+	david@redhat.com,
+	lorenzo.stoakes@oracle.com,
+	riel@surriel.com,
+	Liam.Howlett@oracle.com,
+	vbabka@suse.cz,
+	harry.yoo@oracle.com
+Cc: linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	Wei Yang <richard.weiyang@gmail.com>
+Subject: [RFC Patch 0/2] selftests/mm: assert rmap behave as expected
+Date: Wed,  4 Jun 2025 08:21:43 +0000
+Message-Id: <20250604082145.13800-1-richard.weiyang@gmail.com>
+X-Mailer: git-send-email 2.11.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v12 03/10] tun: Allow steering eBPF program to
- fall back
-To: Jason Wang <jasowang@redhat.com>
-Cc: Jonathan Corbet <corbet@lwn.net>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- "Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo
- <xuanzhuo@linux.alibaba.com>, Shuah Khan <shuah@kernel.org>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, kvm@vger.kernel.org,
- virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org,
- Yuri Benditovich <yuri.benditovich@daynix.com>,
- Andrew Melnychenko <andrew@daynix.com>,
- Stephen Hemminger <stephen@networkplumber.org>, gur.stavi@huawei.com,
- Lei Yang <leiyang@redhat.com>, Simon Horman <horms@kernel.org>
-References: <20250530-rss-v12-0-95d8b348de91@daynix.com>
- <20250530-rss-v12-3-95d8b348de91@daynix.com>
- <CACGkMEvVf0LrquZcWSv3vp-r44sTj0ZDnjwbwB20N0aU35+vxw@mail.gmail.com>
-Content-Language: en-US
-From: Akihiko Odaki <akihiko.odaki@daynix.com>
-In-Reply-To: <CACGkMEvVf0LrquZcWSv3vp-r44sTj0ZDnjwbwB20N0aU35+vxw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
-On 2025/06/04 10:27, Jason Wang wrote:
-> On Fri, May 30, 2025 at 12:50 PM Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
->>
->> This clarifies a steering eBPF program takes precedence over the other
->> steering algorithms.
-> 
-> Let's give an example on the use case for this.
-> 
->>
->> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
->> ---
->>   Documentation/networking/tuntap.rst |  7 +++++++
->>   drivers/net/tun.c                   | 28 +++++++++++++++++-----------
->>   include/uapi/linux/if_tun.h         |  9 +++++++++
->>   3 files changed, 33 insertions(+), 11 deletions(-)
->>
->> diff --git a/Documentation/networking/tuntap.rst b/Documentation/networking/tuntap.rst
->> index 4d7087f727be..86b4ae8caa8a 100644
->> --- a/Documentation/networking/tuntap.rst
->> +++ b/Documentation/networking/tuntap.rst
->> @@ -206,6 +206,13 @@ enable is true we enable it, otherwise we disable it::
->>         return ioctl(fd, TUNSETQUEUE, (void *)&ifr);
->>     }
->>
->> +3.4 Reference
->> +-------------
->> +
->> +``linux/if_tun.h`` defines the interface described below:
->> +
->> +.. kernel-doc:: include/uapi/linux/if_tun.h
->> +
->>   Universal TUN/TAP device driver Frequently Asked Question
->>   =========================================================
->>
->> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
->> index d8f4d3e996a7..9133ab9ed3f5 100644
->> --- a/drivers/net/tun.c
->> +++ b/drivers/net/tun.c
->> @@ -476,21 +476,29 @@ static u16 tun_automq_select_queue(struct tun_struct *tun, struct sk_buff *skb)
->>          return txq;
->>   }
->>
->> -static u16 tun_ebpf_select_queue(struct tun_struct *tun, struct sk_buff *skb)
->> +static bool tun_ebpf_select_queue(struct tun_struct *tun, struct sk_buff *skb,
->> +                                 u16 *ret)
->>   {
->>          struct tun_prog *prog;
->>          u32 numqueues;
->> -       u16 ret = 0;
->> +       u32 prog_ret;
->> +
->> +       prog = rcu_dereference(tun->steering_prog);
->> +       if (!prog)
->> +               return false;
->>
->>          numqueues = READ_ONCE(tun->numqueues);
->> -       if (!numqueues)
->> -               return 0;
->> +       if (!numqueues) {
->> +               *ret = 0;
->> +               return true;
->> +       }
->>
->> -       prog = rcu_dereference(tun->steering_prog);
->> -       if (prog)
->> -               ret = bpf_prog_run_clear_cb(prog->prog, skb);
->> +       prog_ret = bpf_prog_run_clear_cb(prog->prog, skb);
->> +       if (prog_ret == TUN_STEERINGEBPF_FALLBACK)
->> +               return false;
-> 
-> This seems to break the uAPI. So I think we need a new ioctl to enable
-> the behaviour
+As David suggested, currently we don't have a high level test case to
+verify the behavior of rmap. This patch set introduce the verification 
+on rmap by migration.
 
-I assumed it is fine to repurpose one of the 32-bit integer values since 
-32-bit integer is too big to specify the queue number, but it may not be 
-fine. I don't have a concrete use case either.
+Patch 1 is a preparation to move ksm related operation into vm_util.
+Patch 2 is the new test case.
 
-Perhaps it is safer to note that TUNSETSTEERINGEBPF takes precedence 
-over TUNSETVNETRSS to allow such an extension in the future (but without 
-implementing one now).
+Currently it covers following four scenarios:
 
-> 
->>
->> -       return ret % numqueues;
->> +       *ret = (u16)prog_ret % numqueues;
->> +       return true;
->>   }
->>
->>   static u16 tun_select_queue(struct net_device *dev, struct sk_buff *skb,
->> @@ -500,9 +508,7 @@ static u16 tun_select_queue(struct net_device *dev, struct sk_buff *skb,
->>          u16 ret;
->>
->>          rcu_read_lock();
->> -       if (rcu_dereference(tun->steering_prog))
->> -               ret = tun_ebpf_select_queue(tun, skb);
->> -       else
->> +       if (!tun_ebpf_select_queue(tun, skb, &ret))
->>                  ret = tun_automq_select_queue(tun, skb);
->>          rcu_read_unlock();
->>
->> diff --git a/include/uapi/linux/if_tun.h b/include/uapi/linux/if_tun.h
->> index 287cdc81c939..980de74724fc 100644
->> --- a/include/uapi/linux/if_tun.h
->> +++ b/include/uapi/linux/if_tun.h
->> @@ -115,4 +115,13 @@ struct tun_filter {
->>          __u8   addr[][ETH_ALEN];
->>   };
->>
->> +/**
->> + * define TUN_STEERINGEBPF_FALLBACK - A steering eBPF return value to fall back
->> + *
->> + * A steering eBPF program may return this value to fall back to the steering
->> + * algorithm that should have been used if the program was not set. This allows
->> + * selectively overriding the steering decision.
->> + */
->> +#define TUN_STEERINGEBPF_FALLBACK -1
-> 
-> Not a native speaker, consider it works more like XDP_PASS, would it
-> be better to use "TUN_STERRING_PASS"?
+  * anonymous page
+  * shmem page
+  * pagecache page
+  * ksm page
 
-That sounds indeed better to me.
+Wei Yang (2):
+  selftests/mm: put general ksm operation into vm_util
+  selftests/mm: assert rmap behave as expected
 
-Regards,
-Akihiko Odaki
+ MAINTAINERS                                   |   1 +
+ tools/testing/selftests/mm/.gitignore         |   1 +
+ tools/testing/selftests/mm/Makefile           |   3 +
+ .../selftests/mm/ksm_functional_tests.c       |  76 +--
+ tools/testing/selftests/mm/rmap.c             | 466 ++++++++++++++++++
+ tools/testing/selftests/mm/run_vmtests.sh     |   4 +
+ tools/testing/selftests/mm/vm_util.c          |  71 +++
+ tools/testing/selftests/mm/vm_util.h          |   7 +
+ 8 files changed, 563 insertions(+), 66 deletions(-)
+ create mode 100644 tools/testing/selftests/mm/rmap.c
+
+-- 
+2.34.1
+
 
