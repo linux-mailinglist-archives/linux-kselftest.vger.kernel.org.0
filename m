@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-34281-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34282-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95495ACD76D
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Jun 2025 07:10:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D7C4DACD771
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Jun 2025 07:10:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 781151898332
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Jun 2025 05:10:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3683218980BA
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Jun 2025 05:10:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14DF9265621;
-	Wed,  4 Jun 2025 05:09:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 573DC265CDF;
+	Wed,  4 Jun 2025 05:09:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PV4Yjq9A"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="t1E5mJqh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C447326158B
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Jun 2025 05:09:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6579264A95
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Jun 2025 05:09:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749013754; cv=none; b=QK/SptKazCrib5J/8QMFS/shFPbHvT5EHK5DPJdKZiUk4pScENpKi+W4x5k/12EArSOk6YA0ayw9NL4+AjH/4M5VggWuCGELQ3ZDHToKLWI+py0pcQ3YLdBAqzjlzZe3XZmguiPGg4NnNZ9wwCGbJp+MangfT1LIKLmX92h5Wb0=
+	t=1749013756; cv=none; b=lgzd4UUZi6ZiUv37yeq+Cs0INTc/ruUtj97CrFTjGquTt6q04bv0bmaoFC1yLsYVryerld3ITQLLIMWwI6uSXNzDv8sUGCcgyDvCy02Ed3wVz3A6bTeQlclC/5jotIxVPh+zV33tF9auj1KAOR4zj6eDpX1pfVwOhkjRffZbCyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749013754; c=relaxed/simple;
-	bh=eU3yapsGWA2+7vXxKVhKcdiYurD0MP5WlF1wcLUeT3c=;
+	s=arc-20240116; t=1749013756; c=relaxed/simple;
+	bh=0gfkpc4dNi2Ih4MnTfuUct9EpQso8+ggaMkVuPeWOTc=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=OXyyMi06zV5od5ZjPKRuW54a6VqYb4gb1r6P/Lz1GdhTQYhXLjrQeNIr+daJJR8cFDGAVGHKd3x6OVqomwjtEMDtM7SguPX5FDW7uWElUSo7bGOmwQxO8a23YT3jX3CSqhCo2xP8QVSH2CKaVqKY5+MXwnsDOu04lPAtOBZJ4F8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jiaqiyan.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PV4Yjq9A; arc=none smtp.client-ip=209.85.210.201
+	 To:Cc:Content-Type; b=jm9EqSY344ofgP2Kan4x4uZnVAz2am8nrYc3gc8dUIhct6EOXdKekOAP7NWZl72dUVeRontySPYRFnx2FsQodZfHiFBe5wvkkue9IF7WkB33FBU6LiV4BtgEexjuaNWyAaLpy9SGx4ZVpDRGBczuJ8Vn/FonvP1a/QcAsg36elo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jiaqiyan.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=t1E5mJqh; arc=none smtp.client-ip=209.85.216.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jiaqiyan.bounces.google.com
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-747ddba7c90so2576946b3a.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Jun 2025 22:09:12 -0700 (PDT)
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-311fa374c2fso8525222a91.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Jun 2025 22:09:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1749013752; x=1749618552; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1749013753; x=1749618553; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ca5XEEBBkHI7wnxKesidI9Ic1vb2lLJagV9Bw44j+oc=;
-        b=PV4Yjq9Ab486yPrzuVBzJ07KNJ6zVwAIOmZxQaTbwrPKz7byGqUoBU8MU+LkTYsIrS
-         tQONGo51cr1YFSayXj9d2lm0YeMK9La4brPpuJIr+M/NY+9p+gtidzAptWQdQoNspuHF
-         PSgLJr3J5X7TVRNMYmDcidtaoxApJoPGMBC2n+XltfAuy7xXNOtMSj4MXGW/4bY/QCow
-         sNV6ekawPlCDA0b18hmft1964dZrLYl51ZH8hrvDc2h4TJIjTjdfq15amFZngpQLoKTv
-         DlcyjWQX+5xaa083AQLF7xMxoU8puHurI/ic1Nm+EK70wcLg5l8zPE6mFVCQCcQLtbIz
-         sISg==
+        bh=f1C4xwS1oja4BGMpJEnpH51GbWTCvJSr7fg34G4M8Z0=;
+        b=t1E5mJqh4c0whgKHdU6foUxlAR874KIYhiRVwf85M4p3AJv03NwGLnpXVwdZKlBWSe
+         4ma2bQc9dj6S8FbA5kaWHlUUKY3rXgtQPQWAUo3GPGPEz8uCh77MgBnj4V3/w2BVvN2A
+         ILCeLFFlgybnbKKv5E/dGHIJC7C8ODJmbpIF430ZpBXcs9ox3o07yYVL1JtebAUsjHbn
+         Ef2p79Uc6YNZtUFXMYzM6JhHxUE4rRxOWwTt3n+95N7b3zP6sAy8yI7dkFMUv6xkCueA
+         Q/nIDSDhgm2j4bNkTdcdFx+W3yPolV1gG+0F+twlAi/pyvjZoV9fR6XFWoWZaRkTXbnt
+         MVow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749013752; x=1749618552;
+        d=1e100.net; s=20230601; t=1749013753; x=1749618553;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ca5XEEBBkHI7wnxKesidI9Ic1vb2lLJagV9Bw44j+oc=;
-        b=l9hq9l0/PBUrksXUL/geAXbaXEHSFo9+GKcWyFvQxro35nnDkCfRiWQglm2OjzhKRp
-         PWzi/KLGQP4lAVICbvrB0D0mcovGJGIbtPjAeZzzZQoQIubUA4E8niUwqra/7JnoT6+T
-         98Axr0VxFBBwHJowQC95FVA1bWeQNhhTrOO4m6U8F9QNAUde4Nv0ZR44FBjr0ndyIbHk
-         LXKkv+W3+pTZJoq/dvYdzXebYwRmnn3O6SoV6GeWGygiwayGNI7YNotiFeiJDh6RHd94
-         9108Sr4KJcDTIP/qoKuBnORZgfJiRjSnRYTn+krzxBaI3zevB0TpVX/+GQXmrSfCf9e+
-         Yjbw==
-X-Forwarded-Encrypted: i=1; AJvYcCXW3/rk/1niqUsqpUghRhBtOfc7oe5WmlqSQ/mhpkpJ75AzxEJM/J5/iGFREiVWpG78DALoz2Vs2sHJsKHK7UE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwhBbdJhc4ahtU0ZDporso1u0bnJbK5o/FpajlTLlxaT+ABIY9U
-	0yepek7YaQSWv3hRJMycMksP5ecmhmSeIRTF55U+zxrHXYEcmoaSGQHL0MF6tOTY2+5c2/dmNcl
-	ADsyCZrUBvN3r/w==
-X-Google-Smtp-Source: AGHT+IGY9FewZRutQWX3kPabe7vpLnmhGCzy5qRwLJrwts22IIPU9KOO/oVkiPw3lXzpgoETazm1TXUFA3gKDg==
-X-Received: from pfblr56.prod.google.com ([2002:a05:6a00:73b8:b0:747:a8ac:ca05])
+        bh=f1C4xwS1oja4BGMpJEnpH51GbWTCvJSr7fg34G4M8Z0=;
+        b=symvVUj5ZDVZKIXVpH2UTKwe+RkNV8qWY7HlK40otiaM85yYyi2Z0/XKsqPl3qdEyb
+         2NB/kev+JAKoy765GP5wEiLHN1/PbIalDUmuw65MGwkMAJi4YHpA/jlcmkuZ6/C4GTuk
+         WBdPkP19a+1i3VoedBOkU25FqomMEjqhM0PQ/H4ZfRvsfUvS8TtYP7KxljD184/LbHzY
+         vggD0PAtN0qJ8F8M8tLQFST/09ZWwz4MkUoongqyOQUIl4riE21RnlRzEssCViSG7r3x
+         BcYh8HHKTJcP+BzY7MTo8llSjyBn/Dzxdwgc3UjcZWUQ5uCx7IIZQZY1hqOMtA1vTibO
+         kzIA==
+X-Forwarded-Encrypted: i=1; AJvYcCVEm3WO9AQyQiuBc6PwYIyk4UM8Qs4OwgyiUKmSwoC4MgBpJZ8PU4AQn5yBLEZWX6qenggcKSxV3DkcVvvpuGQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHrCppOJvRI8osP+aoxknznmTJqNFuTwDsdiifzE3vpK2WYzAw
+	FmMyCViwtFn2TpSChhrRruQZhXT4n5kCcOw9CoBddUmE/siAj1uxf0H5XkIZydCUpGOX07e1pvX
+	fHwCIhVBuXk63GQ==
+X-Google-Smtp-Source: AGHT+IE37oF7FCdLRpvsoThAtQNnQsYjorBYGpuYCRvh2E+9sV6A3UsbG7Yq0ZEVRpNgSOSMEJKUi/G7O4PeZg==
+X-Received: from pjbpw6.prod.google.com ([2002:a17:90b:2786:b0:311:4201:4021])
  (user=jiaqiyan job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a00:2e18:b0:730:9946:5973 with SMTP id d2e1a72fcca58-7480b200bf5mr2177985b3a.5.1749013751697;
- Tue, 03 Jun 2025 22:09:11 -0700 (PDT)
-Date: Wed,  4 Jun 2025 05:09:00 +0000
+ 2002:a17:90b:35c6:b0:30e:ee4:3094 with SMTP id 98e67ed59e1d1-3130ccf5129mr2212286a91.1.1749013752906;
+ Tue, 03 Jun 2025 22:09:12 -0700 (PDT)
+Date: Wed,  4 Jun 2025 05:09:01 +0000
 In-Reply-To: <20250604050902.3944054-1-jiaqiyan@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250604050902.3944054-1-jiaqiyan@google.com>
 X-Mailer: git-send-email 2.50.0.rc0.604.gd4ff7b7c86-goog
-Message-ID: <20250604050902.3944054-6-jiaqiyan@google.com>
-Subject: [PATCH v2 5/6] KVM: selftests: Test for KVM_CAP_INJECT_EXT_IABT
+Message-ID: <20250604050902.3944054-7-jiaqiyan@google.com>
+Subject: [PATCH v2 6/6] Documentation: kvm: new uAPI for handling SEA
 From: Jiaqi Yan <jiaqiyan@google.com>
 To: maz@kernel.org, oliver.upton@linux.dev
 Cc: joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, 
@@ -87,24 +87,24 @@ Cc: joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com,
 	Jiaqi Yan <jiaqiyan@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Test userspace can use KVM_SET_VCPU_EVENTS to inject an external
-instruction abort into guest. The test injects instruction abort at an
-arbitrary time without real SEA happening in the guest VCPU, so only
-certain ESR_EL1 bits are expected and asserted.
+Document the new userspace-visible features and APIs for handling
+synchronous external abort (SEA)
+- KVM_CAP_ARM_SEA_TO_USER: How userspace enables the new feature.
+- KVM_EXIT_ARM_SEA: When userspace needs to handle SEA and what
+  userspace gets while taking the SEA.
+- KVM_CAP_ARM_INJECT_EXT_(D|I)ABT: How userspace injects SEA to
+  guest while taking the SEA.
 
 Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
 ---
- tools/arch/arm64/include/uapi/asm/kvm.h       |  3 +-
- tools/testing/selftests/kvm/Makefile.kvm      |  1 +
- .../testing/selftests/kvm/arm64/inject_iabt.c | 98 +++++++++++++++++++
- 3 files changed, 101 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/kvm/arm64/inject_iabt.c
+ Documentation/virt/kvm/api.rst | 128 +++++++++++++++++++++++++++++----
+ 1 file changed, 115 insertions(+), 13 deletions(-)
 
-diff --git a/tools/arch/arm64/include/uapi/asm/kvm.h b/tools/arch/arm64/include/uapi/asm/kvm.h
-index af9d9acaf9975..d3a4530846311 100644
---- a/tools/arch/arm64/include/uapi/asm/kvm.h
-+++ b/tools/arch/arm64/include/uapi/asm/kvm.h
-@@ -184,8 +184,9 @@ struct kvm_vcpu_events {
+diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+index fe3d6b5d2acca..c58ecb72a4b4d 100644
+--- a/Documentation/virt/kvm/api.rst
++++ b/Documentation/virt/kvm/api.rst
+@@ -1236,8 +1236,9 @@ directly to the virtual CPU).
  		__u8 serror_pending;
  		__u8 serror_has_esr;
  		__u8 ext_dabt_pending;
@@ -115,122 +115,162 @@ index af9d9acaf9975..d3a4530846311 100644
  		__u64 serror_esr;
  	} exception;
  	__u32 reserved[12];
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index 9eecce6b8274f..e6b504ded9c1c 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -149,6 +149,7 @@ TEST_GEN_PROGS_arm64 += arm64/arch_timer_edge_cases
- TEST_GEN_PROGS_arm64 += arm64/debug-exceptions
- TEST_GEN_PROGS_arm64 += arm64/host_sve
- TEST_GEN_PROGS_arm64 += arm64/hypercalls
-+TEST_GEN_PROGS_arm64 += arm64/inject_iabt
- TEST_GEN_PROGS_arm64 += arm64/mmio_abort
- TEST_GEN_PROGS_arm64 += arm64/page_fault_test
- TEST_GEN_PROGS_arm64 += arm64/psci_test
-diff --git a/tools/testing/selftests/kvm/arm64/inject_iabt.c b/tools/testing/selftests/kvm/arm64/inject_iabt.c
-new file mode 100644
-index 0000000000000..0c7999e5ba5b3
---- /dev/null
-+++ b/tools/testing/selftests/kvm/arm64/inject_iabt.c
-@@ -0,0 +1,98 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * inject_iabt.c - Tests for injecting instruction aborts into guest.
-+ */
+@@ -1292,20 +1293,57 @@ ARM64:
+ 
+ User space may need to inject several types of events to the guest.
+ 
++Inject SError
++~~~~~~~~~~~~~
 +
-+#include "processor.h"
-+#include "test_util.h"
+ Set the pending SError exception state for this VCPU. It is not possible to
+ 'cancel' an Serror that has been made pending.
+ 
+-If the guest performed an access to I/O memory which could not be handled by
+-userspace, for example because of missing instruction syndrome decode
+-information or because there is no device mapped at the accessed IPA, then
+-userspace can ask the kernel to inject an external abort using the address
+-from the exiting fault on the VCPU. It is a programming error to set
+-ext_dabt_pending after an exit which was not either KVM_EXIT_MMIO or
+-KVM_EXIT_ARM_NISV. This feature is only available if the system supports
+-KVM_CAP_ARM_INJECT_EXT_DABT. This is a helper which provides commonality in
+-how userspace reports accesses for the above cases to guests, across different
+-userspace implementations. Nevertheless, userspace can still emulate all Arm
+-exceptions by manipulating individual registers using the KVM_SET_ONE_REG API.
++Inject SEA (synchronous external abort)
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 +
-+static void expect_iabt_handler(struct ex_regs *regs)
-+{
-+	u64 esr = read_sysreg(esr_el1);
++- If the guest performed an access to I/O memory which could not be handled by
++  userspace, for example because of missing instruction syndrome decode
++  information or because there is no device mapped at the accessed IPA.
 +
-+	GUEST_PRINTF("Handling Guest SEA\n");
-+	GUEST_PRINTF("  ESR_EL1=%#lx\n", esr);
++- If the guest consumed an uncorrected memory error, and RAS extension in the
++  Trusted Firmware chooses to notify PE with SEA, KVM has to handle it when
++  host APEI is unable to claim the SEA. For the following types of faults,
++  if userspace has enabled KVM_CAP_ARM_SEA_TO_USER, KVM returns to userspace
++  with KVM_EXIT_ARM_SEA:
 +
-+	GUEST_ASSERT_EQ(ESR_ELx_EC(esr), ESR_ELx_EC_IABT_CUR);
-+	GUEST_ASSERT_EQ(esr & ESR_ELx_FSC_TYPE, ESR_ELx_FSC_EXTABT);
++  - Synchronous external abort, not on translation table walk or hardware
++    update of translation table.
 +
-+	GUEST_DONE();
-+}
++  - Synchronous external abort on stage-1 translation table walk or hardware
++    update of stage-1 translation table, including all levels.
 +
-+static void guest_code(void)
-+{
-+	GUEST_FAIL("Guest should only run SEA handler");
-+}
++  - Synchronous parity or ECC error on memory access, not on translation table
++    walk.
 +
-+static void vcpu_run_expect_done(struct kvm_vcpu *vcpu)
-+{
-+	struct ucall uc;
-+	bool guest_done = false;
++  - Synchronous parity or ECC error on memory access on stage-1 translation
++    table walk or hardware update of stage-1 translation table, including
++    all levels.
 +
-+	do {
-+		vcpu_run(vcpu);
-+		switch (get_ucall(vcpu, &uc)) {
-+		case UCALL_ABORT:
-+			REPORT_GUEST_ASSERT(uc);
-+			break;
-+		case UCALL_PRINTF:
-+			ksft_print_msg("From guest: %s", uc.buffer);
-+			break;
-+		case UCALL_DONE:
-+			ksft_print_msg("Guest done gracefully!\n");
-+			guest_done = true;
-+			break;
-+		default:
-+			TEST_FAIL("Unexpected ucall: %lu", uc.cmd);
-+		}
-+	} while (!guest_done);
-+}
++Note that external abort or ECC error on memory access on stage-2 translation
++table walk or hardware update of stage-2 translation table does not results in
++KVM_EXIT_ARM_SEA, even if KVM_CAP_ARM_SEA_TO_USER is enabled.
 +
-+static void vcpu_inject_ext_iabt(struct kvm_vcpu *vcpu)
-+{
-+	struct kvm_vcpu_events events = {};
++For the cases above, userspace can ask the kernel to replay either an external
++data abort (by setting ext_dabt_pending) or an external instruction abort
++(by setting ext_iabt_pending) into the faulting VCPU. KVM will use the address
++from the existing fault on the VCPU. Setting both ext_dabt_pending and
++ext_iabt_pending at the same time will return -EINVAL.
 +
-+	events.exception.ext_iabt_pending = true;
-+	vcpu_events_set(vcpu, &events);
-+}
++It is a programming error to set ext_dabt_pending or ext_iabt_pending after an
++exit which was not KVM_EXIT_MMIO, KVM_EXIT_ARM_NISV or KVM_EXIT_ARM_SEA.
++Injecting SEA for data and instruction abort is only available if KVM supports
++KVM_CAP_ARM_INJECT_EXT_DABT and KVM_CAP_ARM_INJECT_EXT_IABT respectively.
 +
-+static void vcpu_inject_invalid_abt(struct kvm_vcpu *vcpu)
-+{
-+	struct kvm_vcpu_events events = {};
-+	int r;
++This is a helper which provides commonality in how userspace reports accesses
++for the above cases to guests, across different userspace implementations.
++Nevertheless, userspace can still emulate all Arm exceptions by manipulating
++individual registers using the KVM_SET_ONE_REG API.
+ 
+ See KVM_GET_VCPU_EVENTS for the data structure.
+ 
+@@ -7163,6 +7201,58 @@ The valid value for 'flags' is:
+   - KVM_NOTIFY_CONTEXT_INVALID -- the VM context is corrupted and not valid
+     in VMCS. It would run into unknown result if resume the target VM.
+ 
++::
 +
-+	events.exception.ext_iabt_pending = true;
-+	events.exception.ext_dabt_pending = true;
++    /* KVM_EXIT_ARM_SEA */
++    struct {
++      __u64 esr;
++  #define KVM_EXIT_ARM_SEA_FLAG_GVA_VALID   (1ULL << 0)
++  #define KVM_EXIT_ARM_SEA_FLAG_GPA_VALID   (1ULL << 1)
++      __u64 flags;
++      __u64 gva;
++      __u64 gpa;
++    } arm_sea;
 +
-+	ksft_print_msg("Injecting invalid external abort events\n");
-+	r = __vcpu_ioctl(vcpu, KVM_SET_VCPU_EVENTS, &events);
-+	TEST_ASSERT(r && errno == EINVAL,
-+		    KVM_IOCTL_ERROR(KVM_SET_VCPU_EVENTS, r));
-+}
++Used on arm64 systems. When the VM capability KVM_CAP_ARM_SEA_TO_USER is
++enabled, a VM exit is generated if guest causes a synchronous external abort
++(SEA) and the host APEI fails to handle the SEA.
 +
-+static void test_inject_iabt(void)
-+{
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
++Historically KVM handles SEA by first delegating the SEA to host APEI as there
++is high chance that the SEA is caused by consuming uncorrected memory error.
++However, not all platforms support SEA handling in APEI, and KVM's fallback
++handling is to inject an async SError into the guest, which usually panics
++guest kernel unpleasantly. As an alternative, userspace can participate into
++the SEA handling by enabling KVM_CAP_ARM_SEA_TO_USER at VM creation, after
++querying the capability. Once enabled, when KVM has to handle the guest
++caused SEA, it returns to userspace with KVM_EXIT_ARM_SEA, with details
++about the SEA available in 'arm_sea'.
 +
-+	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
++The 'esr' field holds the value of the exception syndrome register (ESR) while
++KVM taking the SEA, which tells userspace the character of the current SEA,
++such as its Exception Class, Synchronous Error Type, Fault Specific Code and
++so on. For more details on ESR, check the Arm Architecture Registers
++documentation.
 +
-+	vm_init_descriptor_tables(vm);
-+	vcpu_init_descriptor_tables(vcpu);
++The 'flags' field indicates if the faulting addresses are valid while taking
++the SEA:
 +
-+	vm_install_sync_handler(vm, VECTOR_SYNC_CURRENT,
-+				ESR_ELx_EC_IABT_CUR, expect_iabt_handler);
++  - KVM_EXIT_ARM_SEA_FLAG_GVA_VALID -- the faulting guest virtual address
++    is valid and userspace can get its value in the 'gva' field.
++  - KVM_EXIT_ARM_SEA_FLAG_GPA_VALID -- the faulting guest physical address
++    is valid and userspace can get its value in the 'gpa' field.
 +
-+	vcpu_inject_invalid_abt(vcpu);
++Userspace needs to take actions to handle guest SEA synchronously, namely in
++the same thread that runs KVM_RUN and receives KVM_EXIT_ARM_SEA. One of the
++encouraged approaches is to utilize the KVM_SET_VCPU_EVENTS to inject the SEA
++to the faulting VCPU. This way, the guest has the opportunity to keep running
++and limit the blast radius of the SEA to the particular guest application that
++caused the SEA. If the Exception Class indicated by 'esr' field in 'arm_sea'
++is data abort, userspace should inject data abort. If the Exception Class is
++instruction abort, userspace should inject instruction abort. Userspace may
++also emulate the SEA to VM by itself using the KVM_SET_ONE_REG API. In this
++case, it can use the valid values from 'gva' and 'gpa' fields to manipulate
++VCPU's registers (e.g. FAR_EL1, HPFAR_EL1).
 +
-+	vcpu_inject_ext_iabt(vcpu);
-+	vcpu_run_expect_done(vcpu);
+ ::
+ 
+ 		/* Fix the size of the union. */
+@@ -8490,7 +8580,7 @@ ENOSYS for the others.
+ When enabled, KVM will exit to userspace with KVM_EXIT_SYSTEM_EVENT of
+ type KVM_SYSTEM_EVENT_SUSPEND to process the guest suspend request.
+ 
+-7.37 KVM_CAP_ARM_WRITABLE_IMP_ID_REGS
++7.42 KVM_CAP_ARM_WRITABLE_IMP_ID_REGS
+ -------------------------------------
+ 
+ :Architectures: arm64
+@@ -8508,6 +8598,18 @@ aforementioned registers before the first KVM_RUN. These registers are VM
+ scoped, meaning that the same set of values are presented on all vCPUs in a
+ given VM.
+ 
++7.43 KVM_CAP_ARM_SEA_TO_USER
++----------------------------
 +
-+	kvm_vm_free(vm);
-+}
++:Architecture: arm64
++:Target: VM
++:Parameters: none
++:Returns: 0 on success, -EINVAL if unsupported.
 +
-+int main(void)
-+{
-+	test_inject_iabt();
-+	return 0;
-+}
++This capability, if KVM_CHECK_EXTENSION indicates that it is available, means
++that KVM has an implementation that allows userspace to participate in handling
++synchronous external abort caused by VM, by an exit of KVM_EXIT_ARM_SEA.
++
+ 8. Other capabilities.
+ ======================
+ 
 -- 
 2.49.0.1266.g31b7d2e469-goog
 
