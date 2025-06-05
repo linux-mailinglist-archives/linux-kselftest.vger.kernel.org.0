@@ -1,158 +1,117 @@
-Return-Path: <linux-kselftest+bounces-34378-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34379-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 055A5ACF3CB
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Jun 2025 18:10:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D887EACF3E8
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Jun 2025 18:16:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C47F47A681D
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Jun 2025 16:09:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 504F13A7F1B
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Jun 2025 16:15:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 560FA2749CF;
-	Thu,  5 Jun 2025 16:10:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EE9D1C4A13;
+	Thu,  5 Jun 2025 16:15:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZfuKyTca"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F1C3ytCw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8118327465B;
-	Thu,  5 Jun 2025 16:10:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2345C1624F7;
+	Thu,  5 Jun 2025 16:15:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749139808; cv=none; b=jFcO788qlgC1R0dpFSoO5U5tZlohHHbKe0kauzndpgubnzya2ohFlExdkjk369rmX6EOccfItGCwlmFKHBZsPN58LzpXNFv7/lXbrNctwDMjHRWipIAZhR8NKIwMTcbqY1WnB8DYe1QSa+3S6e8/UUk7N9JOiCIArHInupGXd+I=
+	t=1749140157; cv=none; b=b1rdiEp0jZtC25TOIybaY5AVdOQ/SP0sEDygMYWOsf6p9cauXyIJwGZuHuHqew9zYzSFYNPdsakBK7PimWu0PG2oCl2oonlkrCGgM5fSKL8gqKIzoLk0fSpPKtCdiV2NaePMSPffoyC3B589rjoqaVHZIzJcNLUh1bNVTciup44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749139808; c=relaxed/simple;
-	bh=YnIQvPD9lJYDOlBpOrCy1ioFdRL5RyD0q+hZaolXlzo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Wn5pWzuZdMpAIaUseEMEeFekcvFyaCnOVbyneo3RAe0G0Zqzc9JxxkKeBVL0JoDHefh0p+87HoE43fLjzotMMsZQUgCPmF+qziqLSoGisVpMmPFLeVYBRHjZH6MpgIdOdkWTZb/ZOjEbSRhN80V28Y/8ozVrjMfjU3Sumowgoos=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZfuKyTca; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3a3673e12c4so741579f8f.2;
-        Thu, 05 Jun 2025 09:10:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749139805; x=1749744605; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YnIQvPD9lJYDOlBpOrCy1ioFdRL5RyD0q+hZaolXlzo=;
-        b=ZfuKyTcaeJFqu+dTkbPlSa7ggOFULpTlQC0g4os60Fxs9toYm9QedRnswqwwPB0qtM
-         d4kq0tj94rZw/EGp99Hl5jXMwlI74USyXppVjuQXZngYp69zfb57C+3kK5AD907S6MFy
-         YdlpGlHzNqRhGIdxzQu0lja7DzWsXVeEK58VGUyjivC5DcWiACHH/my26n38VXG+rMD4
-         bfnWuJuDwkFfx0n0vYxDCWZaJSA4ebQUqhERQboADu7qpL7RRLFYg2ACyzASQw2VYeDy
-         Z3lZrDtDWJxa+wESUIvNINVdrZsCRHvffVwa1SSaHdNmxMuP28si3REGpurut0VU0bV/
-         qqbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749139805; x=1749744605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YnIQvPD9lJYDOlBpOrCy1ioFdRL5RyD0q+hZaolXlzo=;
-        b=vi+WHxLFmjDlPVV5+WXVUs73ef8DptcbpfV/F6+aBBd5IfpZ1cU/bgquwwcVO/92ni
-         0Pn9h3Gj0JEoW3lJL0Wx2AKHf3zi/ohDAuPKQHhumV1RucS09rajB2dtWQFaygIheMKE
-         8dRNZjL+aZSi3oxeuHgLwKaDHRXAvzdSMTHPJODSLOmAO9K/sSKrpRJw5UpEKR27zk1E
-         s2fFNLbbx2M9+WIeQoT5aGlG4SEUqeSBK4fq/41uc4sGZTXp4F8IR2Uo1+l4kibvjE3O
-         W97+CNckZlN3uo13Wi4bcm4DhC09uSTAGwwXx+w/BRsvR6G4iYbpUMwPvPvq4u3O7mnB
-         Yq7w==
-X-Forwarded-Encrypted: i=1; AJvYcCUZ1xrYrB6eFDe4rNOkEXKd4uZ+UMNjzGsRFgg2Zu7GbcF45F4QgWJZCIlFf9dPkKZyxahhfxjPqQ==@vger.kernel.org, AJvYcCX0MCDNvEBFXRBrxn7DNiVVVcYUFLyXRRyR76bDro/WOhL4T5YnFaq0vMo4XPI+yhn7eFqjWxHw/z29VQcw@vger.kernel.org, AJvYcCX4Ho6zlCGbRYw9yU6RTyRgbfB5nXBniZ2y3MZE75hsJKl9tk4UeSSPmGnnHn0hPPGXMfevwB5+sda9ydOLPRJC@vger.kernel.org, AJvYcCXsoUU8pcESvspGYzsM0eNqvjHZtEmDXv4h9PQEcxk4sjJSBuxDiGnbdBcVAtDixVgT4g0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzU85nEDqW6PtPQTbDGotUinYSZU3Qi+Tyuvxx7ml/17iftQ0q5
-	oXMMmcl1EANaETli/mds4zGXVsklpfokmRdLFbkpe9Txn54PczQctZIrkDYIQz7obBXUJ6fXmeV
-	ce/HCsmmhta5MVchiuZkVToQnA/en0Aw=
-X-Gm-Gg: ASbGncsE0/kKnqrrSF8kNEosTzO0r4e5b5UrDKPqg2vcHvdeZkv5jqMvcgU1J4ok+Jo
-	fFNFixpmEXkTnd6j+CIu5H1K478YN68R7DHb8n3QghYA+X6hOr0vNmrK3c56mESMhVro6hXdBm2
-	HuqKe1guNgrUvHY1ICZs7vJiPkdkFzt5pAUMHqoU1kb5GeobhqFKMt2VPhCDzGW9bUDikD+Q==
-X-Google-Smtp-Source: AGHT+IF4/r/MeCk1ofRbXjeQgnJMl2fjGGz6lBVtftByV5fvMH1+Rl6IDv+s6YX9w9uN5TsW5ALs3oMs2ojfpEr5ugw=
-X-Received: by 2002:a5d:4291:0:b0:3a5:2875:f986 with SMTP id
- ffacd0b85a97d-3a52875fc63mr2749955f8f.44.1749139804629; Thu, 05 Jun 2025
- 09:10:04 -0700 (PDT)
+	s=arc-20240116; t=1749140157; c=relaxed/simple;
+	bh=5chTMrgQJS2vmZa5XplnJeYkwgfYEOhwNWxnlCNJXYg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JjkMS7AIpZEXCO/Oc23Wnc01H6eI8BdDGu2xJ8BfI8kESdZglP/8ZSoclJ938PYS+2wsxKi7Gbp/Act0XumuJF4apK4mOwzi8zh2kFnLEvtFjGO27DXWEBehCrt8bSjgrIlaQPQVoJQprf5QseI6MA8/Dp7YksRQHaxwUzGcBVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F1C3ytCw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E121C4CEE7;
+	Thu,  5 Jun 2025 16:15:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749140155;
+	bh=5chTMrgQJS2vmZa5XplnJeYkwgfYEOhwNWxnlCNJXYg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=F1C3ytCwGT18Y0qV/xxv2qNGYZHjS2yR3yFvxeeLYQlVyOq/+vXAAYBPJs1YqQCnP
+	 889PwElOGACTCQKo+AvCCl7OBZ9u/NQ7v335m5+aytdAek5Imq9G/rkaQJO5Iod1e/
+	 rt9KIx7u8zSAQPV6ydutJ5WhT3ipEzF2d2EyI7/i0Eq1YQV3k0ToMb5Kefb6kE/i3G
+	 wtM94kOgQLc5wlDfNI/1SeVzcewZw7RMTHREhuJMmMOOzKxeW+sUprTTmLv7lVAe3X
+	 XlzEuIO78m4dMsPOLp8OH2ljQZ0h1JuRMnQU1yRhSa3+t2HeX8U3W/MEyKYJe+SwLZ
+	 26su1QQ4Y0d/g==
+Date: Thu, 5 Jun 2025 17:15:51 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>, David Hildenbrand <david@redhat.com>,
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/4] selftests/mm: Fix test result reporting in
+ gup_longterm
+Message-ID: <722628a8-f3fd-4fb9-ae04-2313a52ffb36@sirena.org.uk>
+References: <20250527-selftests-mm-cow-dedupe-v2-0-ff198df8e38e@kernel.org>
+ <20250527-selftests-mm-cow-dedupe-v2-4-ff198df8e38e@kernel.org>
+ <a76fc252-0fe3-4d4b-a9a1-4a2895c2680d@lucifer.local>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250411-many_args_arm64-v1-0-0a32fe72339e@bootlin.com>
- <20250411-many_args_arm64-v1-1-0a32fe72339e@bootlin.com> <CAEf4Bzbn6BdXTOb0dTcsQmOMZpp5=DzGS2hHHQ3+dwcja=gv+w@mail.gmail.com>
- <D98Q8BRNUVS9.11J60C67L1ALR@bootlin.com> <CAEf4BzZHMYyGDZ4c4eNXG7Fm=ecxCCbKhKbQTbCjvWmKtdwvBw@mail.gmail.com>
- <D9E9IQQ3QKXM.3UJ17G9CBS1FH@bootlin.com> <DADMLIVHMSSO.3AXSI5216WCT6@bootlin.com>
- <9a2ba0ad-b34d-42f8-89a6-d9a44f007bdc@linux.dev> <DAEFD2WH7HRV.2SOG9Q00QSEXH@bootlin.com>
-In-Reply-To: <DAEFD2WH7HRV.2SOG9Q00QSEXH@bootlin.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 5 Jun 2025 09:09:53 -0700
-X-Gm-Features: AX0GCFt6yH5UVLu_OY8YyoKeWCoB2_l0Zw4RyPbCo3gsHpLrUJ01bzW8146d9WY
-Message-ID: <CAADnVQ+T_s6dAwJ5JKqNqA8tq1P+MdfPvPw0EoY5yOf8PnGT4g@mail.gmail.com>
-Subject: Re: [Question] attributes encoding in BTF
-To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Cc: Ihor Solodrai <ihor.solodrai@linux.dev>, Andrii Nakryiko <andrii.nakryiko@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Puranjay Mohan <puranjay@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
-	Florent Revest <revest@chromium.org>, Bastien Curutchet <bastien.curutchet@bootlin.com>, 
-	ebpf@linuxfoundation.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
-	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-stm32@st-md-mailman.stormreply.com, 
-	dwarves@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="y5zP/ODICYjBWB2e"
+Content-Disposition: inline
+In-Reply-To: <a76fc252-0fe3-4d4b-a9a1-4a2895c2680d@lucifer.local>
+X-Cookie: That's no moon...
+
+
+--y5zP/ODICYjBWB2e
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 5, 2025 at 12:35=E2=80=AFAM Alexis Lothor=C3=A9
-<alexis.lothore@bootlin.com> wrote:
->
-> Hi Ihor,
->
-> On Wed Jun 4, 2025 at 7:31 PM CEST, Ihor Solodrai wrote:
-> > On 6/4/25 2:02 AM, Alexis Lothor=C3=83=C2=A9 wrote:
->
-> [...]
->
-> >> Could I be missing something obvious ? Or did I misunderstand the actu=
-al
-> >> attribute encoding feature ?
-> >
-> > Hi Alexis.
-> >
-> > The changes recently landed in pahole and libbpf re attributes had a
-> > very narrow goal: passing through particular attributes for some BPF
-> > kfuncs from the kernel source to vmlinux.h
-> >
-> > BTF now has a way of encoding any attribute (as opposed to only bpf
-> > type/decl tags) by setting type/decl tag kind flag [1]. So it is
-> > possible to represent attributes like packed and aligned in BTF.
-> >
-> > However, the BTF tags need to be generated by something, in case of
-> > vmlinux by pahole. Pahole generates BTF by parsing DWARF. And, as far a=
-s
-> > I understand, attributes are not (can not be?) represented in DWARF in =
-a
-> > generic way, it really depends on specifics of the attribute.
-> >
-> > In order to support packed/aligned, pahole needs to know how to figure
-> > them out from DWARF input and add the tags to BTF. And this does not
-> > happen right now, which is why you don't see anything in bpftool output=
-.
-> >
-> > [1]
-> > https://lore.kernel.org/bpf/20250130201239.1429648-1-ihor.solodrai@linu=
-x.dev/
->
-> Thanks for the details ! I have missed this possibility, as I have been
-> assuming that DWARF info was exposing the needed info. I'll take a look a=
-t
-> it, but if those attributes can not be represented by DWARF, I'll have to
-> find another way of getting those packing/alignment modifications on data
-> type (eg: re-use/share btf__align_of from libbpf, as suggested by Andrii,
-> but it may not able to cover all cases).
+On Thu, Jun 05, 2025 at 05:00:49PM +0100, Lorenzo Stoakes wrote:
 
-Not sure all the trouble is worth it.
-I feel it's a corner case. Something we don't need to fix.
+> This seems to be causing tests to fail rather than be skipped if hugetlb
+> isn't configured. I bisected the problem to this patch so it's definitely
+> changed how things are handled (though of course it might just be
+> _revealing_ some previously existing bug in this test...).
+
+> Using a couple of tests as an example:
+
+> Before this patch:
+
+> # [RUN] R/O longterm GUP-fast pin in MAP_PRIVATE file mapping ... with me=
+mfd hugetlb (2048 kB)
+> # memfd_create() failed (Cannot allocate memory)
+> not ok 39 R/O longterm GUP-fast pin in MAP_PRIVATE file mapping ... with =
+memfd hugetlb (2048 kB)
+> # [RUN] R/O longterm GUP-fast pin in MAP_PRIVATE file mapping ... with me=
+mfd hugetlb (1048576 kB)
+> # memfd_create() failed (Cannot allocate memory)
+> not ok 40 R/O longterm GUP-fast pin in MAP_PRIVATE file mapping ... with =
+memfd hugetlb (1048576 kB)
+
+That's the thing with memfd being special and skipping on setup failure
+that David mentioned, I've got a patch as part of the formatting series
+I was going to send after the merge window. =20
+
+--y5zP/ODICYjBWB2e
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmhBwrYACgkQJNaLcl1U
+h9BZfgf/ZkJKx9DMIc/WRlEi/afFnFOqjI8V2apX7B3CuS7klARJ57l1fyMdKlRd
+3MRc5VRV31VuwmfYdIFPwqHzOnn6PEy7PHvtCwSKO9uCs/po21b3wMlknaaloFwn
+2sDENLSd39sWNBlnqqcOVK7A8p2rjTkidUo8Qhhy3NfaoOCwL2b9iiL5gr59cily
+YkwCy4Un4qDCryspKDr90H1wZGOnt0GbILGTWd/hNIsnwqvXVCG7WAZf0CvIoXSE
+e3LHCIoLXa7w/qhdakdrV+MHWf7MYmFbbG86hks1Kl0Q1yy+/9pNAgLtYm4vQmZz
+il0Wv7YKAdwiLTWWn/o2cL6qDoufDw==
+=Cxj0
+-----END PGP SIGNATURE-----
+
+--y5zP/ODICYjBWB2e--
 
