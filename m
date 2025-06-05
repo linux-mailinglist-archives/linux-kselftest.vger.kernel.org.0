@@ -1,214 +1,124 @@
-Return-Path: <linux-kselftest+bounces-34350-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34351-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0D61ACE711
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Jun 2025 01:13:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 718DFACE7C1
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Jun 2025 03:30:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F9793A9849
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Jun 2025 23:13:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E5A49189240F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Jun 2025 01:30:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C220926E15D;
-	Wed,  4 Jun 2025 23:12:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78F854AEE2;
+	Thu,  5 Jun 2025 01:30:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TJVzIoT7"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WAUmGJwH"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33F5626C39D
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Jun 2025 23:12:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 412B33209;
+	Thu,  5 Jun 2025 01:29:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749078750; cv=none; b=XpTJAhJRXbxfkzDCCyKExT4Wrdbe0o+1yddoONCNAJ39stW/tkRTPvd+KDqygPS5EOVP+AcsTMFrIR4RBytTTnd02hjkujziF+K3FP1v9h9JZRD8v7WAGCVy3U3RnmI2gakdGYH+17/QulHPfo3QaGpxRituu8fyq0KifoA7Hmk=
+	t=1749087000; cv=none; b=U44KKZyTJldJSJWuvuIAcvNyAo7hgOCgSP69G1xGAgzCkO1Wm4ggBSUqK/FispDpSLUON/KMrbS3GfpPK7wNn4AHAT+JnApGxwy1EQCR5KmGb3FS6QtsQ4VUbraluKlNYIvO9pLG7/CGThgprZjlOO125c++fQbojFIdORljQrM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749078750; c=relaxed/simple;
-	bh=1JKj07CL69YetOd3eAJtrIP/4dLtscsRaKvQHy9XVnU=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=WK9F9JVw1/TA9uFw0nqIF1wH5j/s/zhxB24omznqdhspiag+os/oGpo/uojsUl7ZfR2BAcRad93j5elsy23nuYvTniA7RCBI2tH+euuLYYUFy3wBpm/nfNkLJpHaib5zv7VwbV1dx5dv9c9tdOeogBDMD0eSF90704OvbeVJHnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TJVzIoT7; arc=none smtp.client-ip=209.85.214.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-23507382e64so2847715ad.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Jun 2025 16:12:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1749078749; x=1749683549; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5S3jZ35KMoBO4RnXYNxi81hGE/ddSIH7so+ydU69UE8=;
-        b=TJVzIoT7pt0B4DP3NqlGSwg+ostgG6dZHP9ZCFbM08kEnoc/yLCT8ucyA5vOT69UqA
-         fjFl/ATtuT79r9sxhVk124XfOrFtgCj3vsaazrKFARHV8xy8gkpJzOu/ejj/3SFxLNkH
-         2uqw2nIArev12mAI/KwDY8/Xz8hFN6J8fY2/n2MXa0+yiI7IyaOPLp3kHYbrYXikpc/+
-         ogPP1HBxI43rS9SvkfueoI2VBftoRrrK4yMnvAZZChy0ML05Eh9ddz1VS1jCnuiYHCLK
-         /6lw/qhFjCsrsCV79QL4q5b5xy4npLqBg3KcSGwrobupJJxbYXcCQ718vilBFuc0PGX1
-         CXTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749078749; x=1749683549;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5S3jZ35KMoBO4RnXYNxi81hGE/ddSIH7so+ydU69UE8=;
-        b=wvxTMo4sJaiOrgIarJ8cMegCMIaMz0A55sTCHRQw6ZuCGRUgdgf1qajZ9o1eAabYVG
-         vdUft3Re/2t44nWLvC3bx3CzOGdVTjTlZsDBVh662gWvtV4aHsRd/J0FfFZwlNrp+qaf
-         XFM0AdQIOhcAUG2pB2jwH+6GC5+qhAnZaLnKQrzHa0HjIe895qEMs0YEkPMxy7/pjYev
-         bkOm4no/C2WXMvaT8sIjoMC+MKvO2bCtX2K1m0GZYQTB+6nw6zBr8SBXWyCnRnlnywcH
-         TRjWkCzkuBwGriMnTyvnBS5Elb6IA1YfCtqx03YRc4H3Ng1olrl1zARrZ/yQSi9wGTOi
-         UfLg==
-X-Forwarded-Encrypted: i=1; AJvYcCVCa0n27xw6xZzRTd9EoOLHuQQ8K//01ErKeF1CQwyr0o+NAlqb+LzIp1pt79IxsSAkBAFZ/l7cfwcv2PU2aY4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxW4zgnCTf0N+UvL4L6kZB/dL20GrsIpv1UOXdBn8ZQO+RogsnT
-	LhRm1jpM6man1nhLsOy4FF6KY93ZW+Zf7sFApEMHeD652YJ26hnR32RNXHilceCvNqhuL6/dr7Z
-	1XuM/tQ==
-X-Google-Smtp-Source: AGHT+IGoGwd/Y8vsxaXkZq3lcq5gV0uAcPoWJqxGcCejiu9rQZwPdtbf9qfiVIzoSAsbfmD8Xw6SbN6aqVM=
-X-Received: from plnz4.prod.google.com ([2002:a17:902:8344:b0:231:e2fb:ebf])
- (user=surenb job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:ccd0:b0:234:e655:a62e
- with SMTP id d9443c01a7336-235e101356bmr63542455ad.9.1749078748733; Wed, 04
- Jun 2025 16:12:28 -0700 (PDT)
-Date: Wed,  4 Jun 2025 16:11:51 -0700
-In-Reply-To: <20250604231151.799834-1-surenb@google.com>
+	s=arc-20240116; t=1749087000; c=relaxed/simple;
+	bh=oBRR0U72ZWaszWIIDxHCBlFYwKXTGXUi/Puz8CELYE0=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=Yk2ZmRtZQgWzPca1tC8Sl4RxmvrRv2mvDr9waRxnYugeZiL6fYj5Q2CQu4QRcd43cqbPUolkCcJpVau53U3XulE4kocG0hVuFXCfqSKkPURnTNpkLHaxwNh5ct3muB7LtYYEDQe6Y2AI1aL7uU7FtdYK3i7cO6cGwYbHC+I1ob8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WAUmGJwH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC6C4C4CEE4;
+	Thu,  5 Jun 2025 01:29:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749086999;
+	bh=oBRR0U72ZWaszWIIDxHCBlFYwKXTGXUi/Puz8CELYE0=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=WAUmGJwHqQPtGkL6BxJp/lZ6BFMHW2rR5SSx1vKYpiYv35GufWZAXhYdfIoADeXjD
+	 CGOegwiqaNxX4DBQ9Bed4vlObt4tMM8L1BRG7/4YtwTRMVRfPYTel1RiWIRdJKDoTJ
+	 ko1zekAV8LuRiArTZETLi/h9pc9sHbqAH7eIiAEaCJK4ktXv40J3H/oZgA4Q73MiJe
+	 7PzT1m/d6yNJ7nJCPQothhNEI48BHa3hfwg2axJaIl0spw9Hmt9/Go1fykE+2FK3WT
+	 GtkfoEyQwDCfXvvJlEVD8DBOLQe0svrAJuPGs0J7ngslXyAQeHTaGdhcNkbvNVGaex
+	 AXAJbqSuAGr6w==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAFC338111E5;
+	Thu,  5 Jun 2025 01:30:32 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250604231151.799834-1-surenb@google.com>
-X-Mailer: git-send-email 2.49.0.1266.g31b7d2e469-goog
-Message-ID: <20250604231151.799834-8-surenb@google.com>
-Subject: [PATCH v4 7/7] mm/maps: execute PROCMAP_QUERY ioctl under per-vma locks
-From: Suren Baghdasaryan <surenb@google.com>
-To: akpm@linux-foundation.org
-Cc: Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, david@redhat.com, 
-	vbabka@suse.cz, peterx@redhat.com, jannh@google.com, hannes@cmpxchg.org, 
-	mhocko@kernel.org, paulmck@kernel.org, shuah@kernel.org, adobriyan@gmail.com, 
-	brauner@kernel.org, josef@toxicpanda.com, yebin10@huawei.com, 
-	linux@weissschuh.net, willy@infradead.org, osalvador@suse.de, 
-	andrii@kernel.org, ryan.roberts@arm.com, christophe.leroy@csgroup.eu, 
-	tjmercier@google.com, kaleshsingh@google.com, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, surenb@google.com
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v8 00/14] riscv: add SBI FWFT misaligned exception
+ delegation
+ support
+From: patchwork-bot+linux-riscv@kernel.org
+Message-Id: 
+ <174908703175.2529829.13116744092084054612.git-patchwork-notify@kernel.org>
+Date: Thu, 05 Jun 2025 01:30:31 +0000
+References: <20250523101932.1594077-1-cleger@rivosinc.com>
+In-Reply-To: <20250523101932.1594077-1-cleger@rivosinc.com>
+To: =?utf-8?b?Q2zDqW1lbnQgTMOpZ2VyIDxjbGVnZXJAcml2b3NpbmMuY29tPg==?=@codeaurora.org
+Cc: linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
+ palmer@dabbelt.com, anup@brainfault.org, atishp@atishpatra.org,
+ shuah@kernel.org, corbet@lwn.net, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, kvm@vger.kernel.org,
+ kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
+ samuel.holland@sifive.com, ajones@ventanamicro.com, debug@rivosinc.com,
+ charlie@rivosinc.com
 
-Utilize per-vma locks to stabilize vma after lookup without taking
-mmap_lock during PROCMAP_QUERY ioctl execution. While we might take
-mmap_lock for reading during contention, we do that momentarily only
-to lock the vma.
-This change is designed to reduce mmap_lock contention and prevent
-PROCMAP_QUERY ioctl calls from blocking address space updates.
+Hello:
 
-Signed-off-by: Suren Baghdasaryan <surenb@google.com>
----
- fs/proc/task_mmu.c | 56 ++++++++++++++++++++++++++++++++++++----------
- 1 file changed, 44 insertions(+), 12 deletions(-)
+This series was applied to riscv/linux.git (for-next)
+by Palmer Dabbelt <palmer@dabbelt.com>:
 
-diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-index 36d883c4f394..93ba35a84975 100644
---- a/fs/proc/task_mmu.c
-+++ b/fs/proc/task_mmu.c
-@@ -550,28 +550,60 @@ static int pid_maps_open(struct inode *inode, struct file *file)
- 		PROCMAP_QUERY_VMA_FLAGS				\
- )
- 
--static int query_vma_setup(struct mm_struct *mm)
-+#ifdef CONFIG_PER_VMA_LOCK
-+
-+static int query_vma_setup(struct proc_maps_private *priv)
- {
--	return mmap_read_lock_killable(mm);
-+	rcu_read_lock();
-+	priv->locked_vma = NULL;
-+	priv->mmap_locked = false;
-+
-+	return 0;
- }
- 
--static void query_vma_teardown(struct mm_struct *mm, struct vm_area_struct *vma)
-+static void query_vma_teardown(struct proc_maps_private *priv)
- {
--	mmap_read_unlock(mm);
-+	unlock_vma(priv);
-+	rcu_read_unlock();
-+}
-+
-+static struct vm_area_struct *query_vma_find_by_addr(struct proc_maps_private *priv,
-+						     unsigned long addr)
-+{
-+	vma_iter_init(&priv->iter, priv->mm, addr);
-+	return get_next_vma(priv, addr);
-+}
-+
-+#else /* CONFIG_PER_VMA_LOCK */
-+
-+static int query_vma_setup(struct proc_maps_private *priv)
-+{
-+	return mmap_read_lock_killable(priv->mm);
-+}
-+
-+static void query_vma_teardown(struct proc_maps_private *priv)
-+{
-+	mmap_read_unlock(priv->mm);
- }
- 
--static struct vm_area_struct *query_vma_find_by_addr(struct mm_struct *mm, unsigned long addr)
-+static struct vm_area_struct *query_vma_find_by_addr(struct proc_maps_private *priv,
-+						     unsigned long addr)
- {
--	return find_vma(mm, addr);
-+	return find_vma(priv->mm, addr);
- }
- 
--static struct vm_area_struct *query_matching_vma(struct mm_struct *mm,
-+#endif  /* CONFIG_PER_VMA_LOCK */
-+
-+static struct vm_area_struct *query_matching_vma(struct proc_maps_private *priv,
- 						 unsigned long addr, u32 flags)
- {
- 	struct vm_area_struct *vma;
- 
- next_vma:
--	vma = query_vma_find_by_addr(mm, addr);
-+	vma = query_vma_find_by_addr(priv, addr);
-+	if (IS_ERR(vma))
-+		return vma;
-+
- 	if (!vma)
- 		goto no_vma;
- 
-@@ -647,13 +679,13 @@ static int do_procmap_query(struct proc_maps_private *priv, void __user *uarg)
- 	if (!mm || !mmget_not_zero(mm))
- 		return -ESRCH;
- 
--	err = query_vma_setup(mm);
-+	err = query_vma_setup(priv);
- 	if (err) {
- 		mmput(mm);
- 		return err;
- 	}
- 
--	vma = query_matching_vma(mm, karg.query_addr, karg.query_flags);
-+	vma = query_matching_vma(priv, karg.query_addr, karg.query_flags);
- 	if (IS_ERR(vma)) {
- 		err = PTR_ERR(vma);
- 		vma = NULL;
-@@ -738,7 +770,7 @@ static int do_procmap_query(struct proc_maps_private *priv, void __user *uarg)
- 	}
- 
- 	/* unlock vma or mmap_lock, and put mm_struct before copying data to user */
--	query_vma_teardown(mm, vma);
-+	query_vma_teardown(priv);
- 	mmput(mm);
- 
- 	if (karg.vma_name_size && copy_to_user(u64_to_user_ptr(karg.vma_name_addr),
-@@ -758,7 +790,7 @@ static int do_procmap_query(struct proc_maps_private *priv, void __user *uarg)
- 	return 0;
- 
- out:
--	query_vma_teardown(mm, vma);
-+	query_vma_teardown(priv);
- 	mmput(mm);
- 	kfree(name_buf);
- 	return err;
+On Fri, 23 May 2025 12:19:17 +0200 you wrote:
+> The SBI Firmware Feature extension allows the S-mode to request some
+> specific features (either hardware or software) to be enabled. This
+> series uses this extension to request misaligned access exception
+> delegation to S-mode in order to let the kernel handle it. It also adds
+> support for the KVM FWFT SBI extension based on the misaligned access
+> handling infrastructure.
+> 
+> [...]
+
+Here is the summary with links:
+  - [v8,01/14] riscv: sbi: add Firmware Feature (FWFT) SBI extensions definitions
+    https://git.kernel.org/riscv/c/cf8651f7319d
+  - [v8,02/14] riscv: sbi: remove useless parenthesis
+    https://git.kernel.org/riscv/c/a7cd450f0e06
+  - [v8,03/14] riscv: sbi: add new SBI error mappings
+    https://git.kernel.org/riscv/c/99cf5b7c7387
+  - [v8,04/14] riscv: sbi: add FWFT extension interface
+    https://git.kernel.org/riscv/c/6d6d0641dcfa
+  - [v8,05/14] riscv: sbi: add SBI FWFT extension calls
+    https://git.kernel.org/riscv/c/c4a50db1e173
+  - [v8,06/14] riscv: misaligned: request misaligned exception from SBI
+    https://git.kernel.org/riscv/c/cf5a8abc6560
+  - [v8,07/14] riscv: misaligned: use on_each_cpu() for scalar misaligned access probing
+    https://git.kernel.org/riscv/c/9f9f6fdd1dc6
+  - [v8,08/14] riscv: misaligned: declare misaligned_access_speed under CONFIG_RISCV_MISALIGNED
+    https://git.kernel.org/riscv/c/1317045a7d6f
+  - [v8,09/14] riscv: misaligned: move emulated access uniformity check in a function
+    https://git.kernel.org/riscv/c/4eaaa65e3012
+  - [v8,10/14] riscv: misaligned: add a function to check misalign trap delegability
+    https://git.kernel.org/riscv/c/7977448bf374
+  - [v8,11/14] RISC-V: KVM: add SBI extension init()/deinit() functions
+    (no matching commit)
+  - [v8,12/14] RISC-V: KVM: add SBI extension reset callback
+    (no matching commit)
+  - [v8,13/14] RISC-V: KVM: add support for FWFT SBI extension
+    (no matching commit)
+  - [v8,14/14] RISC-V: KVM: add support for SBI_FWFT_MISALIGNED_DELEG
+    (no matching commit)
+
+You are awesome, thank you!
 -- 
-2.49.0.1266.g31b7d2e469-goog
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
