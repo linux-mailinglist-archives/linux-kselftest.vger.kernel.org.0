@@ -1,213 +1,107 @@
-Return-Path: <linux-kselftest+bounces-34396-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34397-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57CA8ACF641
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Jun 2025 20:11:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5665DACF681
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Jun 2025 20:25:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7662189D668
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Jun 2025 18:11:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C4EE53AD6A5
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Jun 2025 18:24:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 163E727A131;
-	Thu,  5 Jun 2025 18:11:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D93F27A103;
+	Thu,  5 Jun 2025 18:24:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="V7JarOo7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M/B05Pdc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 669F34400;
-	Thu,  5 Jun 2025 18:11:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 432CA276051;
+	Thu,  5 Jun 2025 18:24:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749147078; cv=none; b=CkD2UMQoSIb8xJVQVsU+U2xNbYVRE6FJwjjzvZ+yDC83n8Quj1CSiKCNc0WT/AGg6rEM6YFsWr0pP9nG16YQ/ymdFLnthdUMI3AnsVOApgCoxclM9wmIHfYN0k9+IxYMk5jyxoSCW97QlTPWwy7an23IYw5ZS+z3o7fMFtmQ93k=
+	t=1749147882; cv=none; b=Y4gAvZ83WMBnBXLjtHtOHIxCxsg0Z1yuGf9zTveJDU45kljj6dEVjdDLKZwcahpIHrR+lCPt884StrRxotzpO0W6qOqpRJeVrB+aau/1L+W7LC8SVOVoP4v55EpGqw4S1u4BqpG3z7/t8wQX6RtjNCg2IkCl/PbnZooSWKTjkqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749147078; c=relaxed/simple;
-	bh=mJY0uIX1J84krwKRlYOLFhfzYeO/MWXUS/H9y19INa8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PEkSIHa9SuaMmPw+Qo7KucmGtTZzsccXytqtG1PuNiy0zk+/90daOt4cGXp8tVFv7zuGm8U5UfoPIkeg3zc6Nnp8tsb1jGn0Q91yyAjPWuIG141hLaNurTYxSwwH68GqExoTsPA6QtrXWJgBq10B/HMw5WUCy2Wi2ndIbvBPFck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=V7JarOo7; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
-Received: from terminus.zytor.com (terminus.zytor.com [IPv6:2607:7c80:54:3:0:0:0:136])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 555IAKGd590473
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-	Thu, 5 Jun 2025 11:10:25 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 555IAKGd590473
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025052101; t=1749147026;
-	bh=8ZQwv5P/GSxsAlH1pNNKRH747oDOTo7muJYoDg6M0fk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=V7JarOo7foqaOES7Kr7LtPswNkHXt5y+4q17sgNCIJBe5VGqMHi7Qq9+6zrzYDIHS
-	 26wMDqCKo28LlvKe4F0ZnodoSesU9gZPu3FEV8WqBK3sDqKkztvXVmD9D2TYw3FbiV
-	 9fkM2dYreE0N+dQII4Y0jGNrxtWSuBSZpKVl/ow51hWn184QnFEOItRCzEobe0Ucch
-	 0U6J7drhVcS/NjIq8V3OBBLYQ+Q6k98kl1+sQl++gpVZs3iiGkUCnLkYJRQVw6gybr
-	 nQCMc9tEIysJ3t3zg/lt+XvMkm11hy/Mntmo3rDBiDPwg6/aO7uI8KdNDPDyt7nrvH
-	 Y1yNyrDgsPd3w==
-From: "Xin Li (Intel)" <xin@zytor.com>
-To: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        shuah@kernel.org, andrew.cooper3@citrix.com, sohil.mehta@intel.com
-Subject: [PATCH v4 2/2] selftests/x86: Add a test to detect infinite sigtrap handler loop
-Date: Thu,  5 Jun 2025 11:10:20 -0700
-Message-ID: <20250605181020.590459-3-xin@zytor.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250605181020.590459-1-xin@zytor.com>
-References: <20250605181020.590459-1-xin@zytor.com>
+	s=arc-20240116; t=1749147882; c=relaxed/simple;
+	bh=h59WDfgXYE9Pb86KnZDa6AJUEpLoHUxQH/9dgjM8T7s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iqU76mCg7xlweHETTZhSIEd1feeOUni9TYFNfiXEIIFSqPKqRbo0F09qGtgNfDYh9T14wkqE/a6t1rz2f5jOh4RXp0Q/8QI9R4UCs7/Eo5aM/pPPU52UymaCYr6wi/oT6ZdQkFLfCJ48zxj/vFy6N7p6snq5X4gxfqJJiVa9t4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M/B05Pdc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50580C4CEE7;
+	Thu,  5 Jun 2025 18:24:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749147880;
+	bh=h59WDfgXYE9Pb86KnZDa6AJUEpLoHUxQH/9dgjM8T7s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=M/B05PdcgIwIxY4Y40GFQWYpLlOJUSyIHxJ+BKK5DvdeVhb7+gJFx9o9TGk8T8iiW
+	 8XPN7Dc9sw/P2/QpN1l2YOQylJ5gn87gBubAPCsoczi0GFAnTJCWxAj4gEXRfch/M5
+	 KnhbGuih02Gs29Kfwd954vDs3EGkG7dbf3w/iMOLm1+tgoQszwjGcnIlHgbb9g/XBV
+	 tbqP1Edik1NcCKLL9P4voVzUq7NIJCO7qwH+aBiKub6j3cQ5oTMFmx8Ts86JqSkIaX
+	 4PLKPAP9an6Yhb+Dzl1O61Elo/qreKGt7iJIb9GAHgYg41850yQwCH3LiODiy6N42K
+	 XlFpni7xY0Pgw==
+Date: Thu, 5 Jun 2025 19:24:36 +0100
+From: Mark Brown <broonie@kernel.org>
+To: David Hildenbrand <david@redhat.com>
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/4] selftests/mm: Fix test result reporting in
+ gup_longterm
+Message-ID: <1fec0548-6507-466d-ace8-702fadbc68f1@sirena.org.uk>
+References: <20250527-selftests-mm-cow-dedupe-v2-0-ff198df8e38e@kernel.org>
+ <20250527-selftests-mm-cow-dedupe-v2-4-ff198df8e38e@kernel.org>
+ <a76fc252-0fe3-4d4b-a9a1-4a2895c2680d@lucifer.local>
+ <722628a8-f3fd-4fb9-ae04-2313a52ffb36@sirena.org.uk>
+ <66db3d9e-73a6-4fcd-8abd-db65cfff49ab@lucifer.local>
+ <661fc4ce-839f-4c47-bc3a-0c864e846324@sirena.org.uk>
+ <077b6af0-bef3-4f1f-b785-9e351d01a89f@redhat.com>
+ <d039ca05-da2f-4317-be04-34edb7ad3496@sirena.org.uk>
+ <beee85ae-8b36-4705-af96-1d65c40df215@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="HpBeBDudQufsoeBi"
+Content-Disposition: inline
+In-Reply-To: <beee85ae-8b36-4705-af96-1d65c40df215@redhat.com>
+X-Cookie: That's no moon...
 
-When FRED is enabled, if the Trap Flag (TF) is set without an external
-debugger attached, it can lead to an infinite loop in the SIGTRAP
-handler.  To avoid this, the software event flag in the augmented SS
-must be cleared, ensuring that no single-step trap remains pending when
-ERETU completes.
 
-This test checks for that specific scenario—verifying whether the kernel
-correctly prevents an infinite SIGTRAP loop in this edge case when FRED
-is enabled.
+--HpBeBDudQufsoeBi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The test should _always_ pass with IDT event delivery, thus no need to
-disable the test even when FRED is not enabled.
+On Thu, Jun 05, 2025 at 07:34:28PM +0200, David Hildenbrand wrote:
+> On 05.06.25 19:19, Mark Brown wrote:
 
-Signed-off-by: Xin Li (Intel) <xin@zytor.com>
----
+> > TBH this has been a lot better than the more common failure mode with
+> > working on selftests where people just completely ignore or are openly
+> > dismissive about them :/ .  Probably room for a middle ground though.
 
-Changes in this version:
-*) Address review comments from Sohil.
----
- tools/testing/selftests/x86/Makefile       |  2 +-
- tools/testing/selftests/x86/sigtrap_loop.c | 97 ++++++++++++++++++++++
- 2 files changed, 98 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/x86/sigtrap_loop.c
+> Can we *please* limit such reworks to mechanical changes in the future?
 
-diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-index f703fcfe9f7c..83148875a12c 100644
---- a/tools/testing/selftests/x86/Makefile
-+++ b/tools/testing/selftests/x86/Makefile
-@@ -12,7 +12,7 @@ CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh "$(CC)" trivial_program.c -no-pie)
- 
- TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
- 			check_initial_reg_state sigreturn iopl ioperm \
--			test_vsyscall mov_ss_trap \
-+			test_vsyscall mov_ss_trap sigtrap_loop \
- 			syscall_arg_fault fsgsbase_restore sigaltstack
- TARGETS_C_BOTHBITS += nx_stack
- TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
-diff --git a/tools/testing/selftests/x86/sigtrap_loop.c b/tools/testing/selftests/x86/sigtrap_loop.c
-new file mode 100644
-index 000000000000..dfb05769551d
---- /dev/null
-+++ b/tools/testing/selftests/x86/sigtrap_loop.c
-@@ -0,0 +1,97 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2025 Intel Corporation
-+ */
-+#define _GNU_SOURCE
-+
-+#include <err.h>
-+#include <signal.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/ucontext.h>
-+
-+#ifdef __x86_64__
-+# define REG_IP REG_RIP
-+#else
-+# define REG_IP REG_EIP
-+#endif
-+
-+static void sethandler(int sig, void (*handler)(int, siginfo_t *, void *), int flags)
-+{
-+	struct sigaction sa;
-+
-+	memset(&sa, 0, sizeof(sa));
-+	sa.sa_sigaction = handler;
-+	sa.sa_flags = SA_SIGINFO | flags;
-+	sigemptyset(&sa.sa_mask);
-+
-+	if (sigaction(sig, &sa, 0))
-+		err(1, "sigaction");
-+
-+	return;
-+}
-+
-+static unsigned int loop_count_on_same_ip;
-+
-+static void sigtrap(int sig, siginfo_t *info, void *ctx_void)
-+{
-+	ucontext_t *ctx = (ucontext_t *)ctx_void;
-+	static unsigned long last_trap_ip;
-+
-+	if (last_trap_ip == ctx->uc_mcontext.gregs[REG_IP]) {
-+		printf("\tTrapped at %016lx\n", last_trap_ip);
-+
-+		/*
-+		 * If the same IP is hit more than 10 times in a row, it is
-+		 * _considered_ an infinite loop.
-+		 */
-+		if (++loop_count_on_same_ip > 10) {
-+			printf("[FAIL]\tDetected sigtrap infinite loop\n");
-+			exit(1);
-+		}
-+
-+		return;
-+	}
-+
-+	loop_count_on_same_ip = 0;
-+	last_trap_ip = ctx->uc_mcontext.gregs[REG_IP];
-+	printf("\tTrapped at %016lx\n", last_trap_ip);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	sethandler(SIGTRAP, sigtrap, 0);
-+
-+	/*
-+	 * Set the Trap Flag (TF) to single-step the test code, therefore to
-+	 * trigger a SIGTRAP signal after each instruction until the TF is
-+	 * cleared.
-+	 *
-+	 * Because the arithmetic flags are not significant here, the TF is
-+	 * set by pushing 0x302 onto the stack and then popping it into the
-+	 * flags register.
-+	 *
-+	 * Four instructions in the following asm code are executed with the
-+	 * TF set, thus the SIGTRAP handler is expected to run four times.
-+	 */
-+	printf("[RUN]\tsigtrap infinite loop detection\n");
-+	asm volatile(
-+#ifdef __x86_64__
-+		/* Avoid clobbering the redzone */
-+		"sub $128, %rsp\n\t"
-+#endif
-+		"push $0x302\n\t"
-+		"popf\n\t"
-+		"nop\n\t"
-+		"nop\n\t"
-+		"push $0x202\n\t"
-+		"popf\n\t"
-+#ifdef __x86_64__
-+		"add $128, %rsp\n\t"
-+#endif
-+	);
-+
-+	printf("[OK]\tNo sigtrap infinite loop detected\n");
-+	return 0;
-+}
--- 
-2.49.0
+Yes, that's better in general.
 
+--HpBeBDudQufsoeBi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmhB4OMACgkQJNaLcl1U
+h9Al1Af/a6G87pi3kA/SrMQRDKlWTzVxwv3blS6pt6Ks3luo0YCwAnyuv31qYJO/
+F2Y29QAhRS/q3/szS1Oc6dgLEDjBqOQY5lohv0FgMM4cKvFnrEusqh06KVlnrGCa
+wVir6kF7qRc+/WAyrbh1ilobORYMpLHLi8F+cidREacOP+KYOU4MqrMjp5GBVK0M
+Dr8HvKTSQst5p3R+u6Hv123JKDRQl65Pc+xGGjB0xV+V3TBVutENafKAWvRwwbtI
+PqXYhWkre2dndR+qw8tMxGs2B5woNRh8ZdQDkjlN2iYUy/rjI+v2RYB3uLnEIUvK
+Y3GT8Jbmuwyy90alEh6E+lMxX73YQg==
+=cOEy
+-----END PGP SIGNATURE-----
+
+--HpBeBDudQufsoeBi--
 
