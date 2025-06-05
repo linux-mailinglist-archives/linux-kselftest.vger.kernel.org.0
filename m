@@ -1,65 +1,65 @@
-Return-Path: <linux-kselftest+bounces-34397-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34398-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5665DACF681
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Jun 2025 20:25:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22A4FACF692
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Jun 2025 20:30:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C4EE53AD6A5
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Jun 2025 18:24:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E5D0E16C3A7
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Jun 2025 18:30:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D93F27A103;
-	Thu,  5 Jun 2025 18:24:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8E4B27A933;
+	Thu,  5 Jun 2025 18:30:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M/B05Pdc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SIekId6S"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 432CA276051;
-	Thu,  5 Jun 2025 18:24:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FF6A27A445;
+	Thu,  5 Jun 2025 18:30:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749147882; cv=none; b=Y4gAvZ83WMBnBXLjtHtOHIxCxsg0Z1yuGf9zTveJDU45kljj6dEVjdDLKZwcahpIHrR+lCPt884StrRxotzpO0W6qOqpRJeVrB+aau/1L+W7LC8SVOVoP4v55EpGqw4S1u4BqpG3z7/t8wQX6RtjNCg2IkCl/PbnZooSWKTjkqo=
+	t=1749148203; cv=none; b=AZpekf/Bp2IjqdG18jKoEasvsVCBemP8IJTkhSyBfsLNkVUHbhqc5BKVCcknw+u5Bd6enFJNmuSDFtOw3xpnbf15gd9lcQxWHr04/wmZHBTDdgtDIiA64slUtGR4Co5vnR/DN8sZn6hkFCunQprd4idc1WqFAHBmBFGVE92uMAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749147882; c=relaxed/simple;
-	bh=h59WDfgXYE9Pb86KnZDa6AJUEpLoHUxQH/9dgjM8T7s=;
+	s=arc-20240116; t=1749148203; c=relaxed/simple;
+	bh=hy75hSPJwRq14gtdJlzgwmegdwxEg8Yl7eucloOyWOo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iqU76mCg7xlweHETTZhSIEd1feeOUni9TYFNfiXEIIFSqPKqRbo0F09qGtgNfDYh9T14wkqE/a6t1rz2f5jOh4RXp0Q/8QI9R4UCs7/Eo5aM/pPPU52UymaCYr6wi/oT6ZdQkFLfCJ48zxj/vFy6N7p6snq5X4gxfqJJiVa9t4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M/B05Pdc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50580C4CEE7;
-	Thu,  5 Jun 2025 18:24:39 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=lrLoRZ+DZ/NGhgvAfBOapDkjINNVJaB9I0NAixZAinQcCEeaEs1/GG0rpjtxQj2Pxv8/9lw7KuJbNoixSxEHnWm/1I30zPuoARpX9pTwgca9iv80GFZlWrLovFzdqtFlBqcnTU4A2KEGiAkQaoLeIB+RtF84U6/kiF6WJIfCj84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SIekId6S; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 746EDC4CEE7;
+	Thu,  5 Jun 2025 18:30:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749147880;
-	bh=h59WDfgXYE9Pb86KnZDa6AJUEpLoHUxQH/9dgjM8T7s=;
+	s=k20201202; t=1749148203;
+	bh=hy75hSPJwRq14gtdJlzgwmegdwxEg8Yl7eucloOyWOo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=M/B05PdcgIwIxY4Y40GFQWYpLlOJUSyIHxJ+BKK5DvdeVhb7+gJFx9o9TGk8T8iiW
-	 8XPN7Dc9sw/P2/QpN1l2YOQylJ5gn87gBubAPCsoczi0GFAnTJCWxAj4gEXRfch/M5
-	 KnhbGuih02Gs29Kfwd954vDs3EGkG7dbf3w/iMOLm1+tgoQszwjGcnIlHgbb9g/XBV
-	 tbqP1Edik1NcCKLL9P4voVzUq7NIJCO7qwH+aBiKub6j3cQ5oTMFmx8Ts86JqSkIaX
-	 4PLKPAP9an6Yhb+Dzl1O61Elo/qreKGt7iJIb9GAHgYg41850yQwCH3LiODiy6N42K
-	 XlFpni7xY0Pgw==
-Date: Thu, 5 Jun 2025 19:24:36 +0100
+	b=SIekId6S4JB/WwvVZJsHDO8pKi9c+jslyub6rvOokbUy6wrBTcscKMEfYeIOb3zlM
+	 oFRQfstINt12oIZMi6rfg7cRzJeReWtcUV8DPNqGFxZs2B0ZfNyMHL6k+im1zpg1lB
+	 Z3a+IHkomB2UZbYo3Rn2/92831outWsyoe1pYqvr+xkSUJemBVGwtsvalKasKJ/AdQ
+	 TvLcI1rdyTYdGiDUXWCf0qufUtqviF5BNe/x3uG0PerJvNFGVW1KJqn89jmssiqpMm
+	 Wg+pdg5p/Khq4Ret+8MnCiuLARhPGmhw+ws7q65IzDtQ3kuVGBznESjxZ0616adbnY
+	 YX0dGonQ5Qujw==
+Date: Thu, 5 Jun 2025 19:29:58 +0100
 From: Mark Brown <broonie@kernel.org>
-To: David Hildenbrand <david@redhat.com>
-Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>, David Hildenbrand <david@redhat.com>,
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v2 4/4] selftests/mm: Fix test result reporting in
  gup_longterm
-Message-ID: <1fec0548-6507-466d-ace8-702fadbc68f1@sirena.org.uk>
+Message-ID: <fde974b7-de82-4a2a-bb8f-efa9955d50da@sirena.org.uk>
 References: <20250527-selftests-mm-cow-dedupe-v2-0-ff198df8e38e@kernel.org>
  <20250527-selftests-mm-cow-dedupe-v2-4-ff198df8e38e@kernel.org>
  <a76fc252-0fe3-4d4b-a9a1-4a2895c2680d@lucifer.local>
  <722628a8-f3fd-4fb9-ae04-2313a52ffb36@sirena.org.uk>
  <66db3d9e-73a6-4fcd-8abd-db65cfff49ab@lucifer.local>
  <661fc4ce-839f-4c47-bc3a-0c864e846324@sirena.org.uk>
- <077b6af0-bef3-4f1f-b785-9e351d01a89f@redhat.com>
- <d039ca05-da2f-4317-be04-34edb7ad3496@sirena.org.uk>
- <beee85ae-8b36-4705-af96-1d65c40df215@redhat.com>
+ <976bbe1a-ef16-4006-acac-8b6be46ee5ea@lucifer.local>
+ <961a62b0-d0d3-40db-8008-61c634172ca6@sirena.org.uk>
+ <ab2e1fc5-a0bc-4694-9449-adf85b96b38f@lucifer.local>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,41 +67,40 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="HpBeBDudQufsoeBi"
+	protocol="application/pgp-signature"; boundary="+CaRyybbQXauNurH"
 Content-Disposition: inline
-In-Reply-To: <beee85ae-8b36-4705-af96-1d65c40df215@redhat.com>
+In-Reply-To: <ab2e1fc5-a0bc-4694-9449-adf85b96b38f@lucifer.local>
 X-Cookie: That's no moon...
 
 
---HpBeBDudQufsoeBi
+--+CaRyybbQXauNurH
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Thu, Jun 05, 2025 at 07:34:28PM +0200, David Hildenbrand wrote:
-> On 05.06.25 19:19, Mark Brown wrote:
+On Thu, Jun 05, 2025 at 06:47:28PM +0100, Lorenzo Stoakes wrote:
 
-> > TBH this has been a lot better than the more common failure mode with
-> > working on selftests where people just completely ignore or are openly
-> > dismissive about them :/ .  Probably room for a middle ground though.
+> Mark, I'm not finding this productive.
 
-> Can we *please* limit such reworks to mechanical changes in the future?
+> Bottom line is you've broken the tests, please fix them or if you're not
+> willing to I'll send a fix.
 
-Yes, that's better in general.
+Sure, like I said further up I'm just running my patch through testing
+at the minute.
 
---HpBeBDudQufsoeBi
+--+CaRyybbQXauNurH
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmhB4OMACgkQJNaLcl1U
-h9Al1Af/a6G87pi3kA/SrMQRDKlWTzVxwv3blS6pt6Ks3luo0YCwAnyuv31qYJO/
-F2Y29QAhRS/q3/szS1Oc6dgLEDjBqOQY5lohv0FgMM4cKvFnrEusqh06KVlnrGCa
-wVir6kF7qRc+/WAyrbh1ilobORYMpLHLi8F+cidREacOP+KYOU4MqrMjp5GBVK0M
-Dr8HvKTSQst5p3R+u6Hv123JKDRQl65Pc+xGGjB0xV+V3TBVutENafKAWvRwwbtI
-PqXYhWkre2dndR+qw8tMxGs2B5woNRh8ZdQDkjlN2iYUy/rjI+v2RYB3uLnEIUvK
-Y3GT8Jbmuwyy90alEh6E+lMxX73YQg==
-=cOEy
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmhB4iUACgkQJNaLcl1U
+h9Bm4gf/cad7/YCdDz829GeDIoTAYLP1HXTO02TTMMjpoG+Dl4Z6TAgfKS03DO+Q
+VJim6CI8aE0BR8IdWc34MAEosN9EVLaIph38dukhe2DKCDoSEmexbR0q6byrdP4t
+EaJEk7KvosAheFDNO3FsyYjzD1waupbrN52bWAY98f34EDxStZxSDR/uCwAnowtV
+a8hC5olhLBC+foXqhTF6ODZXxlioUtwdoUYYHU0R0IzVAoIPsx9GqLUreccX6Rxv
+c3fX0q9tLgv+faEIjBIHrhwDV/hbNlDMY/ShXR9EBLrz2zOS/Kr7lOP0SewGecMU
+yTFOZ3EzDuzAkgyrKilO/CFJqMeNvg==
+=QSyT
 -----END PGP SIGNATURE-----
 
---HpBeBDudQufsoeBi--
+--+CaRyybbQXauNurH--
 
