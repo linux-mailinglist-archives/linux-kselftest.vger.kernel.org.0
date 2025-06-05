@@ -1,100 +1,121 @@
-Return-Path: <linux-kselftest+bounces-34407-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34408-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64AD4ACF919
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Jun 2025 23:04:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8D10ACF93E
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Jun 2025 23:40:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D243A3AFF0E
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Jun 2025 21:03:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7A9AC173F60
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Jun 2025 21:40:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA39D27CCEA;
-	Thu,  5 Jun 2025 21:04:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29DE627F73A;
+	Thu,  5 Jun 2025 21:40:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="cD7s8vD0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GlKPATe/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D75927452;
-	Thu,  5 Jun 2025 21:04:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F119E20330;
+	Thu,  5 Jun 2025 21:40:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749157448; cv=none; b=e2ATYI2lORvTE5eMgORlc5VCzLeNKe2zHekf/RYBUe1Qxl5wJBzIr2WiEITI7z9ptK4GwKdxIs/2BIpl3Q9R7UX3rY7oEG/RXPpZR6CM7Y5Ch7gJdKAWEvfBubC6SXCEQV+7DssJTjQdvwDNEQiry4IHRGk0nGv+I2TuU0jssRQ=
+	t=1749159613; cv=none; b=U5tWDjEt26/3fT4IVUGeI/8MqSaazwBLjBpX/Y4YZTj08mgSqBbee0HpHH4xM5S+8y2IJS50FTcto1xU/LBrqs2Bq6wcowLXz/6r77zWuy+52xOhlIQzbuvEwyANZV0QaAFY2tz/AxT1paSYk+0IofRjwiccA6ws4fwHzqZKhfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749157448; c=relaxed/simple;
-	bh=5z4lyN6eFPIUIuW6ETWM+sIFBqvUb6kdsqF23bzMXIQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Dx9MWYnh8TJkgyXsnR8JlBij0O0tl+mnZTxvbBjymSoCKCGiQw2jG53Jp2QiTxULSRt+XDGTHIbnU+Bn/uzxRywK1cp63+v2jt3QMxbZH/CtRi9G+rXieOvHiZ4Y/QnqMZLpOSRGViFA/xqG9OB9TInUBk399cMqgUc6zn6Y75M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=cD7s8vD0; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from DESKTOP-0403QTC. (unknown [40.65.108.177])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 8450D210D0C2;
-	Thu,  5 Jun 2025 14:04:00 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8450D210D0C2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1749157441;
-	bh=Gund+dK5aJW6UtaEJ+x2rgplZpVnxwe1S5F5gyh6HAA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Reply-To:From;
-	b=cD7s8vD0a0AfPh3ebIr231hpAoYtxnmr5f0EAkqfQvSQ1jXXObO60Olle7BNyh26Y
-	 PQSAfLA3l+EG5LI4UboSinv7mYXWDeCbzO5VLzMylLYL36WykSm86yqe0ISRwemYjE
-	 RuzFbs8q4U3a2qW3X85abq+4uV8QpooHP9orWnmw=
-Date: Thu, 5 Jun 2025 14:03:58 -0700
-From: Jacob Pan <jacob.pan@linux.microsoft.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, iommu@lists.linux.dev, Joerg Roedel
- <joro@8bytes.org>, Justin Stitt <justinstitt@google.com>, Kevin Tian
- <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, Bill Wendling
- <morbo@google.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
- <nick.desaulniers+lkml@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, Robin
- Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>, Suravee
- Suthikulpanit <suravee.suthikulpanit@amd.com>, Will Deacon
- <will@kernel.org>, Alexey Kardashevskiy <aik@amd.com>, Alejandro Jimenez
- <alejandro.j.jimenez@oracle.com>, James Gowans <jgowans@amazon.com>,
- Michael Roth <michael.roth@amd.com>, Pasha Tatashin
- <pasha.tatashin@soleen.com>, patches@lists.linux.dev,
- jacob.pan@linux.microsoft.com
-Subject: Re: [PATCH v2 12/15] iommupt: Add the x86 64 bit page table format
-Message-ID: <20250605140358.2dd6c083@DESKTOP-0403QTC.>
-In-Reply-To: <12-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
-References: <0-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
-	<12-v2-5c26bde5c22d+58b-iommu_pt_jgg@nvidia.com>
-Reply-To: jacob.pan@linux.microsoft.com
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1749159613; c=relaxed/simple;
+	bh=jF4uQG4JzF72d7snTV6xQmqLe92fvsopln0oHorfTsM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=YfQZ0oXh0vFFgiY/jVByGQlBrJaHAWlkHNVAb7S8DQG/nDOoipIzJwTkaBCBjNOrVGhgSWNIxM1h+lc6puZOkvRPnIN+V/8mBNJvOor+Gf0vpgkVfki4S7szC3YdB1FsRMOogwfITGEu/2+PttoUCCPhVPjeySjdGWphUVrw/1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GlKPATe/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B46CC4CEEB;
+	Thu,  5 Jun 2025 21:40:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749159612;
+	bh=jF4uQG4JzF72d7snTV6xQmqLe92fvsopln0oHorfTsM=;
+	h=From:Date:Subject:To:Cc:From;
+	b=GlKPATe/Avsm6ZuNOpe704ziDRKivTFQ7MOe6uZNlB9t5qMm4cqmXH6Rq4RRm0K0x
+	 r8Iflr3yiR1/Oi0EntShR5LLAD4hoyLjugTn2+0RFwR/GfE3zdFbYI0NUZF8QRnPVN
+	 GpaRipwiY/8HVIFMgMZHpE3MlPJyUSarM/Rp1fDwhAWgqqRwYXkE7I7yYpsKl4gcJW
+	 5BvSqaIHmGWbw13oHaIn/153L5/p+17TEcfRzXaxckIwH+efuSKbpkkGRBbaMXFs65
+	 xtGI/0sMcLRMhykdLzBRfXGj0XWB6ElV+5pYkGN/xXDBw1IVhz+PUbCd3frBU0tez/
+	 VXDSGwzHHS7UQ==
+From: Mark Brown <broonie@kernel.org>
+Date: Thu, 05 Jun 2025 22:34:31 +0100
+Subject: [PATCH] selftests/mm: Skip failed memfd setups in gup_longterm
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20250605-selftest-mm-gup-longterm-tweaks-v1-1-2fae34b05958@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAGYNQmgC/x3NQQ6CMBBG4auQWTtJwRTQqxgWjf7UCbSQTkETw
+ t1tXH6b9w5SJIHSvTooYReVJRbUl4qebxc9WF7F1JjGmtZcWTGPGZo5BPbbyvMSfUYKnD9wkzL
+ a3rre4dbZmkplTRjl+z88hvP8AZBYcXJxAAAA
+X-Change-ID: 20250603-selftest-mm-gup-longterm-tweaks-e685a8ae9751
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ Shuah Khan <shuah@kernel.org>, David Hildenbrand <david@redhat.com>
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, linux-mm@kvack.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.15-dev-c25d1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1375; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=jF4uQG4JzF72d7snTV6xQmqLe92fvsopln0oHorfTsM=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBoQg66dsI93JV7jaEUVWpgeecRKK89umoSWS2U+wte
+ WjYo/yuJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaEIOugAKCRAk1otyXVSH0PtTB/
+ 9/UeYw9A7wm3FKaXvq2MEwdVcJo4LgFSyAItBCoqVAe00bppjaqaxjMIGfBh0rzwY5pSqr/7gk7D7w
+ /T78BTJ8ChN1LUXm++WUw72gXvhxCAxtTY2LyaQvAjAN0wOSWf61ziQmAy6zDdSNqVGEzO3IBtnmlc
+ pnH/CoibYybieEhalHrnxOJtti7shLtoYtNRKoW8gQQZPHCaSk+phYC2PkVzj8aifFvj3J+l5V6wxA
+ EDkDZ6HYWlXTZ4Twqw2knAXmTPo/n79shLjahyarK6LchvzMRGGSKLH/BCETV0NX09Zre275yqLEL4
+ vALD93orwfK0aSVdE37UE0zhGGMufx
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-Hi Jason,
+Unlike the other cases gup_longterm's memfd tests previously skipped the
+test when failing to set up the file descriptor to test, restore this
+behaviour.
 
-On Mon,  5 May 2025 11:18:42 -0300
-Jason Gunthorpe <jgg@nvidia.com> wrote:
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/mm/gup_longterm.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-> +config IOMMU_PT_X86_64
-> +       tristate "IOMMU page table for x86 64 bit, 4/5 levels"
-> +	depends on !GENERIC_ATOMIC64 # for cmpxchg64
-> +	default n
-> +	help
-> +	  iommu_domain implementation for the x86 64 bit 4/5 level
-> page table.
-> +	  It supports 4K/2M/1G page sizes and can decode a sign
-> extended
-> +	  portion of the 64 bit IOVA space.
-> +
-> +	  Selected automatically by an IOMMU driver that uses this
-> format. +
->  config IOMMU_PT_KUNIT_TEST
->  	tristate "IOMMU Page Table KUnit Test" if !KUNIT_ALL_TESTS
->  	depends on KUNIT
->  	depends on IOMMU_PT_AMDV1 || !IOMMU_PT_AMDV1
-> +	depends on IOMMU_PT_X86_64 || !IOMMU_PT_X86_64
-Is this intended? or you mean:
-depends on IOMMU_PT_X86_64 || IOMMU_PT_AMDV1
+diff --git a/tools/testing/selftests/mm/gup_longterm.c b/tools/testing/selftests/mm/gup_longterm.c
+index 8a97ac5176a4..29047d2e0c49 100644
+--- a/tools/testing/selftests/mm/gup_longterm.c
++++ b/tools/testing/selftests/mm/gup_longterm.c
+@@ -298,8 +298,11 @@ static void run_with_memfd(test_fn fn, const char *desc)
+ 	log_test_start("%s ... with memfd", desc);
+ 
+ 	fd = memfd_create("test", 0);
+-	if (fd < 0)
++	if (fd < 0) {
+ 		ksft_print_msg("memfd_create() failed (%s)\n", strerror(errno));
++		log_test_result(KSFT_SKIP);
++		return;
++	}
+ 
+ 	fn(fd, pagesize);
+ 	close(fd);
+@@ -366,6 +369,8 @@ static void run_with_memfd_hugetlb(test_fn fn, const char *desc,
+ 	fd = memfd_create("test", flags);
+ 	if (fd < 0) {
+ 		ksft_print_msg("memfd_create() failed (%s)\n", strerror(errno));
++		log_test_result(KSFT_SKIP);
++		return;
+ 	}
+ 
+ 	fn(fd, hugetlbsize);
+
+---
+base-commit: ec7714e4947909190ffb3041a03311a975350fe0
+change-id: 20250603-selftest-mm-gup-longterm-tweaks-e685a8ae9751
+
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
+
 
