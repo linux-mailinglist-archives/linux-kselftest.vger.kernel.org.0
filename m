@@ -1,185 +1,172 @@
-Return-Path: <linux-kselftest+bounces-34356-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34357-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF91DACE8FE
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Jun 2025 06:31:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 01D5AACEA68
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Jun 2025 08:46:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0302E1896ACF
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Jun 2025 04:31:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 71C58189A468
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Jun 2025 06:47:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC854146D6A;
-	Thu,  5 Jun 2025 04:31:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA49D18C933;
+	Thu,  5 Jun 2025 06:46:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="nxmIL+2L"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NLwSt/rX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2046.outbound.protection.outlook.com [40.107.237.46])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7E13D530;
-	Thu,  5 Jun 2025 04:31:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749097869; cv=fail; b=kYd1m+3WtMWqGtmKXKExT1L3KmkkTf9Phkdzrwc0pOt9Sdvn7VoS+KwfvuHTjTNaBImRCA/2bDa7fdsVn4XOi9NVQRlsLfMVE9egWR1OobI3w8QDq1zkY9OOp9Qa+ZHVydUrECAf2sP5vSPWgLm/kF0d1c67DLWpWmFJSn5+i/o=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749097869; c=relaxed/simple;
-	bh=hNTqxbvVnAOkXmqbK79/9J3JOTwFDOwJ6ynQwiLqQjk=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t7AHe5KrFAKBO95DR/Phemg32tQL9HkQ0kd0nEbFo1vn8EnrmajiYXct3oTsb3OaTfe2AYx4NDy4VPwkqlhoTuLCQt+V3gJ0WHni6tAN14ir4poCr5dHVpDx8LUMJOCn7YcH33RDZ/ZACxeJQQU5TT14Z1ld4QMSLOWY42bR4kk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=nxmIL+2L; arc=fail smtp.client-ip=40.107.237.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=GmVN105MMbiHb6TetFj11SAxmrt5WIIjRxvpEbEblVdBexJQPaQwXDsD8CG41oVbzqTL/T9F0NgY+mYA8Et06jqFioOat8NWQUHKBPW2LQ59TnQBBC214o5RlkpmJk/q6tH6jukjyAu6RiIEee4DjPMEjJvrxy/p8GQG4z0kPzzG/MeIuU2Hksm3pBEMoT/zcuIq6JqSXvZltegvF4ruBpDX/KPVM5Z3GfWdHqq+woVFQ0YlKWpZK0yT9A5LRJbbe8QZQkA0lTLQ1lFQbG2/Swz+67Sp3leWlXDKbZ547aJx1pNyeSbPxqOywZL8nerRwE2WDWMeT17pI+TIelYmjA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Graq5oPHM/ZTYuWvaLkdJcd+VeT0j4xdlqa4jEASiQU=;
- b=GIjAtyybcCIwON6LBM4+6V1RAahO7kp0GVHDCYcf9yF6K9t8R/igfk0XTiXkVenoN4SBQ+K2LwtHSoKAt1znT5leOsnb0cQjZ0sL2Ep/9hGA/zSRJzzhhAxfKXXaKWedFMhUn+bEfFhJlgTtmeUQGd9SiDdSF0sP7BhHVaw5w9PbOcb3nm8gdqtB2uVL36Bz/6+7SgdX4QGcxUOQSWpVu6o9oGUL0os/qhslUFR1Kn78NHdCE7K5zSQQJtQ+Suz9iyzkrDtvJqBEzovMdqpuo4sPf0pHwqZQbAeIfWNweSYWY/Df2DijlFGdSQaVSv1yoUV9pNMJ0NKlmoGj+v6IEA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=amd.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Graq5oPHM/ZTYuWvaLkdJcd+VeT0j4xdlqa4jEASiQU=;
- b=nxmIL+2LS70BbUbBaQED1AtNuYgfXruLYnxtxORyd3gMj7tnzyDfIdFqGG/d7KxS69lpwlu1paHwWPG8OvW2zH5P7ueoSpz5vT7g3QZgC01BVEs0jcCNzf4RASoFLUTVT6m9NmIO7JyQSJ07o7931ePWI0cCi1NGXuxe/w8m5oU7M5uXtJXuw198D+A5BxVW2ec2tBAA5ha4Ymt5TOw5jX0RrdLiL7oiqYstHgYzq57H9zW8Y9x0s/CgLYL8HKYzoYtv1VaysYS0ob7dddmx8QPd/cs+rDJt1FhEVG8wc9TXYUOx9belA2QfMsY2PZftcx5kNwkQPH+we4NDob30kQ==
-Received: from SJ0PR13CA0055.namprd13.prod.outlook.com (2603:10b6:a03:2c2::30)
- by LV2PR12MB5990.namprd12.prod.outlook.com (2603:10b6:408:170::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8792.33; Thu, 5 Jun
- 2025 04:31:02 +0000
-Received: from MWH0EPF000A6733.namprd04.prod.outlook.com
- (2603:10b6:a03:2c2:cafe::c5) by SJ0PR13CA0055.outlook.office365.com
- (2603:10b6:a03:2c2::30) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8769.15 via Frontend Transport; Thu,
- 5 Jun 2025 04:31:01 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- MWH0EPF000A6733.mail.protection.outlook.com (10.167.249.25) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8792.29 via Frontend Transport; Thu, 5 Jun 2025 04:31:01 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 4 Jun 2025
- 21:30:42 -0700
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Wed, 4 Jun
- 2025 21:30:41 -0700
-Received: from Asurada-Nvidia (10.127.8.14) by mail.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14 via Frontend
- Transport; Wed, 4 Jun 2025 21:30:40 -0700
-Date: Wed, 4 Jun 2025 21:30:38 -0700
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-CC: <kevin.tian@intel.com>, <corbet@lwn.net>, <will@kernel.org>,
-	<bagasdotme@gmail.com>, <robin.murphy@arm.com>, <joro@8bytes.org>,
-	<thierry.reding@gmail.com>, <vdumpa@nvidia.com>, <jonathanh@nvidia.com>,
-	<shuah@kernel.org>, <jsnitsel@redhat.com>, <nathan@kernel.org>,
-	<peterz@infradead.org>, <yi.l.liu@intel.com>, <mshavit@google.com>,
-	<praan@google.com>, <zhangzekun11@huawei.com>, <iommu@lists.linux.dev>,
-	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-tegra@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <patches@lists.linux.dev>,
-	<mochs@nvidia.com>, <alok.a.tiwari@oracle.com>, <vasant.hegde@amd.com>,
-	<dwmw2@infradead.org>, <baolu.lu@linux.intel.com>
-Subject: Re: [PATCH v5 09/29] iommufd: Do not unmap an owned iopt_area
-Message-ID: <aEEdbha8TNCUtTgQ@Asurada-Nvidia>
-References: <cover.1747537752.git.nicolinc@nvidia.com>
- <3ddc8c678406772a8358a265912bb1c064f4c796.1747537752.git.nicolinc@nvidia.com>
- <20250528170845.GX61950@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC27D2114;
+	Thu,  5 Jun 2025 06:46:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1749106010; cv=none; b=SEo8l0u8ms9Rs5pcCd6uOZ5jDluC/2KKHzax7FLvxINLu8XLUh+KQpYjprVztsyIswe1TsMpspMjWA/QAOso/+kkmfFKd+zv7Z8SIbXUTplXmfvT9OSEx3DiW8Bk6n+oEYTFiTSSniwiREfQkjNsmrU7c1fRymEDFJow2US62pY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1749106010; c=relaxed/simple;
+	bh=TkwPaC5LkiD2AzRfVu53V8vYeTTkIIo3sfS9ma0nNMo=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=MT/bkBVu9RHiABTI9rqEV3d26L+GJ+cMfeK8Q/W2e61E1fPIw/Am9qfeGcwB2HO8Cs95jwsPFFx8g7Vz4XUznurHQiKNHO1G4BuhKrAXOdoFJiJFb96pHB3W+eIumWtZuUeYhlzbXE5450zimPhL2qT6TqhPrH2Z3akGujvw6QA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NLwSt/rX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26139C4CEE7;
+	Thu,  5 Jun 2025 06:46:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749106010;
+	bh=TkwPaC5LkiD2AzRfVu53V8vYeTTkIIo3sfS9ma0nNMo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=NLwSt/rXojX3cThmkkKEtcWLjAXAPd5COS5p+Snz0xS/Qt8dFWs9aFgZTSynHEUYt
+	 0WOgzX/u8wBdR1j6HqyW778WPuvy9f3QYkxnimgdhuDMOygd9mYMAWGifExKCLCd2C
+	 6Dpws77QthBmsN2YZHenwEBVBlrMaVwWZcxCwoBQVttY5qYr16STOTp/MFQjmBft6o
+	 tGT/3MadWrMWAQ7QZcFsjcmMNtj6NDoE6bqtXzRZGcm5zqbZBnI7ZgSiqHahi3K7az
+	 odhwsr187j3x+jQY/oGDRNaQDwepertrh9W+B4O7Xuvtv5v+l4mT0CU/n9uuSEVSAP
+	 pGnZ4w/x9+jyw==
+Received: from [149.88.19.236] (helo=lobster-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1uN4ND-0049uH-Cb;
+	Thu, 05 Jun 2025 07:46:47 +0100
+Date: Thu, 05 Jun 2025 07:46:45 +0100
+Message-ID: <875xhaeld6.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Sebastian Ott <sebott@redhat.com>
+Cc: Zenghui Yu <yuzenghui@huawei.com>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Colton Lewis <coltonlewis@google.com>,
+	Ricardo Koller <ricarkol@google.com>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] KVM: arm64: selftests: arch_timer_edge_cases fixes
+In-Reply-To: <9b9f7099-4e81-9b74-a1ac-37cd4965675b@redhat.com>
+References: <20250527142434.25209-1-sebott@redhat.com>
+	<adf8b877-7ca2-f60b-fb59-578c70d0e3c0@huawei.com>
+	<9b9f7099-4e81-9b74-a1ac-37cd4965675b@redhat.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20250528170845.GX61950@nvidia.com>
-X-NV-OnPremToCloud: AnonymousSubmission
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000A6733:EE_|LV2PR12MB5990:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3c7dfe08-f8cc-4a15-239b-08dda3e9c6ec
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|36860700013|1800799024|376014|7416014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?k6PWESUSbdvB68j3UHO2RXSMnMciwn8KuWN9ZzoNeo1GiQxifUtOrUhzN/Mp?=
- =?us-ascii?Q?aYS/BRNokUMrAs1Dfyf6tpMB8ywR2Pydd83PdFSAr5gcjdxL+v9LX6SsMmwM?=
- =?us-ascii?Q?eE+WRmJt4/FDNVRPc3buoTKPAyhl0hMAMw0vElt76qG8xDtV6z/KoUGqd6Lq?=
- =?us-ascii?Q?GYL68yt7cp4Vxg5LrqYlPWvpHqknDJiTUgoFko+g34KM3JzDiy6tdLxwDtR4?=
- =?us-ascii?Q?iMXW3Le+rtPHhoesnVRC9xt84zrGo2JEwB9wJjt4yLHslfSvMJ/HzvMEpiOz?=
- =?us-ascii?Q?zd3A6LPiDpPKZ6hD5+Oj0dBEYCC+UOPwGtR1mdYJCLBhvS/7cLWYU5UWFrpA?=
- =?us-ascii?Q?k0GRIiWfJfhjY/VViTmzdpAuBa8uRT2VdB1kPFAn8HjVq8WdxKlOsulfAVqb?=
- =?us-ascii?Q?PwwMwoXXW2MS591YzGkmBKD/vqsD0ysLw/eSzRPGMX4yskCY9dYUvpE6ZW1c?=
- =?us-ascii?Q?8qib+26jTUxsCKF3agg+Xh5NxiFvxzECd0EvPIfiWckhicO0V87/c/ZuT0yM?=
- =?us-ascii?Q?xiGVG81sVOoAui3szHDVz7VK/HQfFg5OjRlDx4hSZ3dMeH7vYlf4hKiijkJ9?=
- =?us-ascii?Q?T4c0IeQ159H/e1V4LZl9bUcakePbZHDQLyFTZ3zYMEStQtXYcx+3Y9/if3tk?=
- =?us-ascii?Q?rtqu8iHb8WCryhWlpJbXMervoCE51hwv8PIht/fF9MyfURKJG3U3YV7uLTeU?=
- =?us-ascii?Q?Mh7e5v/gv/MUgyPPkGxpfjiqxfvJWlgMxtApnLr6kfwFIx6zyGOh57kBKHzz?=
- =?us-ascii?Q?zLXUoAVLFooKAlpYMIBbmE683NwlubWB5HlS5ulY1IUpbNuJrcTehDAc8kS4?=
- =?us-ascii?Q?ilEFsTaPffbQJBKnwtUmPQE9GHweM1jSA3VgJd3tc9VSIFhbUdjMqfF0Mjvz?=
- =?us-ascii?Q?q2WS1FDDuM2kFYcrlYMKKZlw+vR1yJ67dpn+4Nt7hJbJx7VODNdXSCgTIXRZ?=
- =?us-ascii?Q?8GxhtJ/XRwtL6dVqUbQRywjHd2D1equBSMJV5q1kYn8ETh49Qf9qngV+s44m?=
- =?us-ascii?Q?ygXcvkeNvFnl0Klt4/TnCYa2ls9GCD3osJQJX6Xw3FDj3yAfgwwOn1kkQ1Yl?=
- =?us-ascii?Q?UPqlPJNs32EFepxgMFYaqpTAdXqEyASMgMAavvGlv9DNVvffQUvQTWSGEUh7?=
- =?us-ascii?Q?YTdEELe8dqbAA/o1zfkFF3saXLiI91olCNDXDRYxWMY4A9xLIZJ8P/lyW0Ga?=
- =?us-ascii?Q?6SEvRSQeQbKRB8v/0A7e+Ddcd0X16kYGaLAOpf64KolO4ZP0943EkBHUjdxK?=
- =?us-ascii?Q?1tftlcTQUit5EnLiBfFLrJnWo7l071sJyL676lajpvAJedg7Pz7vMltXZvMq?=
- =?us-ascii?Q?Ct7bymMnjGdAMPfP3I8MGijW6KerqqfpJOfYQsylc5+Jd5ZaQELr+6a8JGqg?=
- =?us-ascii?Q?SXI0vVA7AiwpgdGDfXR42U1yyPj6vqkf5EbVvQXbBpa/n8FkJeIhK/Z5ZotF?=
- =?us-ascii?Q?qp23vsnqeLRJn9IMEyQbhHxWFLM0MtDCR38/5fPAM72ycWQg8zbc4bQVIkwD?=
- =?us-ascii?Q?PHXDZ1E4r0So6PHHd3p6T+z8m1B4DBLF86Q2?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(36860700013)(1800799024)(376014)(7416014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2025 04:31:01.5167
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3c7dfe08-f8cc-4a15-239b-08dda3e9c6ec
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	MWH0EPF000A6733.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5990
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 149.88.19.236
+X-SA-Exim-Rcpt-To: sebott@redhat.com, yuzenghui@huawei.com, oliver.upton@linux.dev, coltonlewis@google.com, ricarkol@google.com, joey.gouly@arm.com, suzuki.poulose@arm.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Wed, May 28, 2025 at 02:08:45PM -0300, Jason Gunthorpe wrote:
-> @@ -740,11 +740,16 @@ static int iopt_unmap_iova_range(struct io_pagetable *iopt, unsigned long start,
->  			up_write(&iopt->iova_rwsem);
->  			up_read(&iopt->domains_rwsem);
->  
-> -			iommufd_access_notify_unmap(iopt, area_first, length);
-> +			rc = iommufd_access_notify_unmap(iopt, area_first, length);
-> +			if (rc)
-> +				goto out_unmapped;
-> +
+On Wed, 04 Jun 2025 21:58:48 +0100,
+Sebastian Ott <sebott@redhat.com> wrote:
+> 
+> Hi Zenghui,
+> 
+> On Tue, 3 Jun 2025, Zenghui Yu wrote:
+> > On 2025/5/27 22:24, Sebastian Ott wrote:
+> >> Some small fixes for arch_timer_edge_cases that I stumbled upon
+> >> while debugging failures for this selftest on ampere-one.
+> >> 
+> >> Changes since v1: modified patch 3 based on suggestions from Marc.
+> >> 
+> >> I've done some tests with this on various machines - seems to be all
+> >> good, however on ampere-one I now hit this in 10% of the runs:
+> >> ==== Test Assertion Failure ====
+> >>   arm64/arch_timer_edge_cases.c:481: timer_get_cntct(timer) >= DEF_CNT + (timer_get_cntfrq() * (uint64_t)(delta_2_ms) / 1000)
+> >>   pid=166657 tid=166657 errno=4 - Interrupted system call
+> >>      1  0x0000000000404db3: test_run at arch_timer_edge_cases.c:933
+> >>      2  0x0000000000401f9f: main at arch_timer_edge_cases.c:1062
+> >>      3  0x0000ffffaedd625b: ?? ??:0
+> >>      4  0x0000ffffaedd633b: ?? ??:0
+> >>      5  0x00000000004020af: _start at ??:?
+> >>   timer_get_cntct(timer) >= DEF_CNT + msec_to_cycles(delta_2_ms)
+> >> 
+> >> This is not new, it was just hidden behind the other failure. I'll
+> >> try to figure out what this is about (seems to be independent of
+> >> the wait time)..
+> > 
+> > Not sure if you have figured it out. I can easily reproduce it on my box
+> > and I *guess* it is that we have some random XVAL values when we enable
+> > the timer..
+> 
+> Yes, I think so, too.
+> 
+> > test_reprogramming_timer()
+> > {
+> > 	local_irq_disable();
+> > 	reset_timer_state(timer, DEF_CNT);
+> 
+> My first attempt was to also initialize cval here
 
-I found that we have to re-take those rwsems to unset a flag:
+Note that CVAL and TVAL are two views of the same thing. It should be
+enough to initialise one of them (though TVAL is stupidly narrow).
 
-			rc = iommufd_access_notify_unmap(iopt, area_first, length);
-			if (rc) {
-				down_read(&iopt->domains_rwsem);
-  				down_write(&iopt->iova_rwsem);
-				area->prevent_access = false;
-				goto out_unlock_iova;
-			}
+> 
+> > 
+> > 	/* Program the timer to DEF_CNT + delta_1_ms. */
+> > 	set_tval_irq(timer, msec_to_cycles(delta_1_ms), CTL_ENABLE);
+> > 
+> > 	[...]
+> > }
+> > 
+> > set_tval_irq()
+> > {
+> > 	timer_set_ctl(timer, ctl);
+> > 
+> > 	// There is a window that we enable the timer with *random* XVAL
+> > 	// values and we may get the unexpected interrupt.. And it's
+> > 	// unlikely that KVM can be aware of TVAL's change (and
+> > 	// re-evaluate the interrupt's pending state) before hitting the
+> > 	// GUEST_ASSERT().
+> > 
+> > 	timer_set_tval(timer, tval_cycles);
+> 
+> Yes, I stumbled over this as well. I've always assumed that this order is
+> becauase of this from the architecture "If CNTV_CTL_EL0.ENABLE is 0,
+> the value returned is UNKNOWN." However re-reading that part today I
+> realized
+> that this only concerns register reads.
+> 
+> Maybe somone on cc knows why it's in that order?
 
-Will include this in the patch.
+I can't think of a valid reason. Enabling the timer without having set
+the deadline first is just silly.
 
-Thanks
-Nicolin
+> I'm currently testing this with the above swapped and it's looking good,
+> so far.
+
+The swapped version (set xVAL, then enable the timer) is the only one
+that makes any sense.
+
+Thanks,
+
+	M.
+
+-- 
+Jazz isn't dead. It just smells funny.
 
