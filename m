@@ -1,113 +1,103 @@
-Return-Path: <linux-kselftest+bounces-34404-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34405-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 415D1ACF8E6
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Jun 2025 22:46:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F27DAACF90B
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Jun 2025 23:00:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7AE74189CBED
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Jun 2025 20:46:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 683B53A1316
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Jun 2025 21:00:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD08A27E7D9;
-	Thu,  5 Jun 2025 20:45:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E25F527F171;
+	Thu,  5 Jun 2025 21:00:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TGpzMmoA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TbUhexF/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50CEB19D880;
-	Thu,  5 Jun 2025 20:45:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B40A227F160;
+	Thu,  5 Jun 2025 21:00:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749156358; cv=none; b=XaeYxAzXJgeU01/qxpKXkefmUDYeNO5qsU5hPJd8UxRJ0BZZoKJk0Spqi/sohm3ZYRmGWED9CdDuQgqyW/BWFyz8QOUkviYenhHNJtcMiJSkI+6w6rnIPVu1Vt6nAN9F5BTQ2bjHwuNsC/Gxlvk7a6u1xdmxYHkbdneMDWYbpKU=
+	t=1749157201; cv=none; b=rhXogB8uCIOBSNW/nqU6lXQ7R7prnmluCbfkCYxCy3wcobJjNTgUqA/6EFPMBq3CR7bZmROLFwmBH7jhDAjNnUvZS+UGyCEetVu0iKpDeiskiQc10EIMby/C1TjkpRFfdCPBu0xccTNktTU5iAEEvTYzSxzQVwUkvR//KVDcjLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749156358; c=relaxed/simple;
-	bh=KaleJOZCFYwOjK3nI6qlWVXegytr99EwRh96RQIPuX8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WRjhpihuh4mEjOSefBEbaX1C4PLjDVQj1Fp5ENxdX405Vdc0bx0oMHZ14s5dtdpNEu/QGgUEp4hYr8+7eZ4QLezIZ1VdSpGyASiyq665MwQeNeosgRf+/mlFkL7s3JniDRLmx60VQYbklZKVoPMRsyNjMjRv9LWuN+h0KvgNuFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TGpzMmoA; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-3122a63201bso1285309a91.0;
-        Thu, 05 Jun 2025 13:45:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749156356; x=1749761156; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=08nvIWQniSHmCFLizlsO6hV7YjeqPzOvfL/VB+gEMjQ=;
-        b=TGpzMmoArGh92boshPkIgyyRzUM76ISskMt0AysCDrtJMSsFOpxUwIJ3JkPcy/NDkL
-         0WK1odIwqI1cH8pMeiB25RFT+9kelTHkDJ7Z1jtQMv6P0ZLFPru7j+DHYynVV+7+7A8x
-         fV1/HLpDe9NemgeSEirjy7JXOSeRDOjUUfNpfWh9yPvyaEd88wdpCMK5FgyoFJ3Oyi1M
-         scm/Ji5d4mhHbDYTp9rJk2faS910QJiZignijW/Bq80iWod1Ya5BU81WY+K5mqh2HKI6
-         vvUIEDlikp69qzrhJ1MAhFKyefccbYZkKTR2IOAAH4jnigQwGsfBT1jMKo/TJkEAtQUO
-         omgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749156356; x=1749761156;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=08nvIWQniSHmCFLizlsO6hV7YjeqPzOvfL/VB+gEMjQ=;
-        b=onsXXDYlnhU/qVvGFKDUCjXAs9P3VAkDkk1UNW6/rAgUkfheYoLFOazpgVL/eyWG3v
-         SevCI1kDBbkstsmzGCd7dHT+ZG0cm/A9y/RM2lkvI+QUfAaUGloY2cItKu8dvaYY48yA
-         MygN3lineQFsA8TDIyR6MOrSlw6jL7FxyFSOnqZOLynsR6VAd51R8nuhyhK9PRoEmf8i
-         rQUoSxpTjtAy+42dXAGHbXQ6gCJoSOluF6JoiJr5Yi3LtGrpNIa5cBg1bpujWM5/kHYE
-         Z3Q7EPsLnic0u6PJU6mlSnQyA+klnsEvcI/C0aT1xLi9VDNBAHuLdsA/SFldB2febp56
-         dqxg==
-X-Forwarded-Encrypted: i=1; AJvYcCWIRZPxpQCLGcIwnBbEy+cP7H0BqPlThj1xy3QDssXRWyYmzaMxyjts9zqh2I+va04+lQjbhJAejELXWUnt@vger.kernel.org, AJvYcCWftN1v4hoWtZaT0lyT3uTDeN7FX2tbpQdyZajetDyvZ1+P79/3Ie6ohaFR46uY+YjEBJo9P32wRdMhsUNsMDLU@vger.kernel.org, AJvYcCWp9my6zr39cSNW360avezYsHpclNdbbPc3NRXbKFKxMWCNwL+ty0O8URy7BWXpqFrk3nw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyuVfcmKcnLGRnSmPXkme7UDBR9izkHmfzLfgP48EIfVcNCL8tV
-	pgpgX2c8nFKGZDdbbdZ+ooXTJ4+4soquq9hWerdpt8uxiKa8cjaRqD6xrk4qbtzEDc/x5NKHu5M
-	0U7TVjjaqRvSnDimJJlQXSNNzDCafDd4=
-X-Gm-Gg: ASbGncsm8J2vaCxaDK7bGfQUkqy56nW6yX23MfcxhFDcq3Gd5T/PDP9/rL5P6c+Bpse
-	IlRGI8OIDPHkeqzD6W0OIidOkp7YX991fIaTexUtm4ufWXbsNwiwkGEVAeloUlKf+ERhs+WGPWN
-	1Awfgpqyno3ERq0+ZK5QLeEWRsy6MfU5+x5aEEgFKHA15upMa6rs/3+J8YkIc=
-X-Google-Smtp-Source: AGHT+IHsr9ttE7WIn3845WOdkjd+yiJ7dZGR1JHZtZQdlQhQ6XinR/AD3N+nP6o+ND2yd8oiZBZvEkpoETpzIV7L2t4=
-X-Received: by 2002:a17:90b:58cf:b0:311:ea13:2e63 with SMTP id
- 98e67ed59e1d1-31347300dafmr1668278a91.13.1749156356548; Thu, 05 Jun 2025
- 13:45:56 -0700 (PDT)
+	s=arc-20240116; t=1749157201; c=relaxed/simple;
+	bh=M6AWFw6DpnJscLYSXXW9hmN9ozrU6aQy3z0YghQmcmI=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=liytFGVMDql2IzjWyvGywtDKzIhWVPww15AnZS67cGpMqdzaCc7roGSyqPE47g/e5lRUeGbfX+X36lsTVDL8qmgX7xQ7eQNjiMMv11xF52dtJ+x5i25P53CRLtXS/Jlcd2qYRIptbPK1iDmCJ1FtwyaVSL3CjBHxZyKa/xSlpWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TbUhexF/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E6CDC4CEE7;
+	Thu,  5 Jun 2025 21:00:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749157201;
+	bh=M6AWFw6DpnJscLYSXXW9hmN9ozrU6aQy3z0YghQmcmI=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=TbUhexF/yMtVtlj+z+d2SftvKDZKfqQ33LMsaklDBdR37OTtuEgLzuEiXBwpONkCQ
+	 YSliPwBELN14U41qIcMuubhvik4iGjb0QyzDRwots2SIAG/tskncHpm6O6nNdsVG6B
+	 t5PY59b0KQfQVa+aEss2Rn/nWK7BWbxkS/zaQLdbYO1pKL9ULBvSYxod2MdxeRWoJU
+	 NkgAaRBdjEfixd0ez2gEQySCeHTYPuLqcabs3UpmlENfd1xx4uMztpslzknFAirk/2
+	 yggm0cgLFa9YHw4GmXyUY0FqLHUMGnzneSRoDPoVl8czb/iOqwCPJHT6uFO5CTgnud
+	 GS+Y7fuWanBNg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33BE939D60B4;
+	Thu,  5 Jun 2025 21:00:34 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250603203701.520541-1-blakejones@google.com> <20250603203701.520541-2-blakejones@google.com>
-In-Reply-To: <20250603203701.520541-2-blakejones@google.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 5 Jun 2025 13:45:42 -0700
-X-Gm-Features: AX0GCFsF8bZqbHLzfHuC1RDhJourh4uvIqmM0-HJinP_vZEVbnxfekkB0vbUQNM
-Message-ID: <CAEf4BzYyn0=d-M45czJe-Qfk0tTuqLcjzCOge_p9iu6vXWR7hA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] Tests for the ".emit_strings" functionality in the
- BTF dumper.
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v3 1/2] libbpf: add support for printing BTF character
+ arrays
+ as strings
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <174915723301.3244853.343931856692302765.git-patchwork-notify@kernel.org>
+Date: Thu, 05 Jun 2025 21:00:33 +0000
+References: <20250603203701.520541-1-blakejones@google.com>
+In-Reply-To: <20250603203701.520541-1-blakejones@google.com>
 To: Blake Jones <blakejones@google.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Namhyung Kim <namhyung@kernel.org>, 
-	Ian Rogers <irogers@google.com>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+ shuah@kernel.org, ihor.solodrai@linux.dev, namhyung@kernel.org,
+ irogers@google.com, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
 
-On Tue, Jun 3, 2025 at 1:37=E2=80=AFPM Blake Jones <blakejones@google.com> =
-wrote:
->
-> When this mode is turned on, "emit_zeroes" and "compact" have no effect,
-> and embedded NUL characters always terminate printing of an array.
->
-> Signed-off-by: Blake Jones <blakejones@google.com>
-> ---
->  .../selftests/bpf/prog_tests/btf_dump.c       | 118 ++++++++++++++++++
->  1 file changed, 118 insertions(+)
->
+Hello:
 
-Nice set of tests, thank you! Applied to bpf-next.
+This series was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
-[...]
+On Tue,  3 Jun 2025 13:37:00 -0700 you wrote:
+> The BTF dumper code currently displays arrays of characters as just that -
+> arrays, with each character formatted individually. Sometimes this is what
+> makes sense, but it's nice to be able to treat that array as a string.
+> 
+> This change adds a special case to the btf_dump functionality to allow
+> 0-terminated arrays of single-byte integer values to be printed as
+> character strings. Characters for which isprint() returns false are
+> printed as hex-escaped values. This is enabled when the new ".emit_strings"
+> is set to 1 in the btf_dump_type_data_opts structure.
+> 
+> [...]
+
+Here is the summary with links:
+  - [v3,1/2] libbpf: add support for printing BTF character arrays as strings
+    https://git.kernel.org/bpf/bpf-next/c/87c9c79a02b4
+  - [v3,2/2] Tests for the ".emit_strings" functionality in the BTF dumper.
+    https://git.kernel.org/bpf/bpf-next/c/a570f386f3d1
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
