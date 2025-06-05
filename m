@@ -1,85 +1,85 @@
-Return-Path: <linux-kselftest+bounces-34363-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34365-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90CBAACEDC4
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Jun 2025 12:37:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9964BACEDC7
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Jun 2025 12:37:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4FF367A28B7
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Jun 2025 10:35:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5A4EB1701E6
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Jun 2025 10:37:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 594EF2165EC;
-	Thu,  5 Jun 2025 10:37:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85119217734;
+	Thu,  5 Jun 2025 10:37:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Uv+MQfO1"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KfYLkCY5"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A41AB2040B6
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Jun 2025 10:37:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE584215175
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Jun 2025 10:37:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749119824; cv=none; b=cQUaiLsx7h5k6D5dIKul4YCm5kN7eRdp9jiGwPimaYptQm/jHHqUrmy8FKkuwDD+iUmKfpV1eSXeVL22JReTRLn5ZWGp+b8W4Pvw74jlHhG/Xf2ycJpIsetgkot0z6GnDCW6Lge7O+rb9goCdFs2dqORDoHK8NPa7L4UdsLsf+w=
+	t=1749119825; cv=none; b=XxvomefMbudTBIEySy0n8FnOUWYYsG52F6wYPDu5ar7C9tuMcDokI9f7R5Y0cuoYELJzGCKd7FQWlRZwZvPIv5+TPhtVskPrwTmR8sHJEThTP7blXpugJcmKXgSYalpDrW9iGmIMN0vWStz0K0t8oyIf85jrRtCXZCSTEK5uNUU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749119824; c=relaxed/simple;
-	bh=VzQyPkruYWrDZAOkmL/UT3N0xShjKnGR9pQJo0jQ/Qk=;
+	s=arc-20240116; t=1749119825; c=relaxed/simple;
+	bh=cOsu4Qrb+3bx73g5aMRxtPG7+Gkx5amoz9G8WVXNU9c=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XHxHaQsOWrsQGWNdDLRKZVnk6pbD1H1s/JYYDvhj6Pw3DQnsO2T2xWsikP2IHw4caUERlkyA+i4+kb1EIzXZMRWnAlgtIiSvxO0mRggOptGWOH1cBfcs8/4UGwMb1RBCd4GnYH6CTbv5V3KWXSfzSMSRgHiZhRierG58SqTj/tA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Uv+MQfO1; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=EvvVxqGwbwW6bJ8wgOBmWgW4YoorEP9qbXFLS4cyoWoxXWkw8LIZVYJZl1ls5pY34C3uuvhn1FoUutN1xP2WEWD3ebBpt3k/ry5QNgHxPtp3uE8PWIPzaLzQnHnNLKX+yD+LumNQSITDMmLBnKE6BUjHGGX8N7aemajiJxiKu/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KfYLkCY5; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1749119821;
+	s=mimecast20190719; t=1749119823;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=AdRsO2Uefrz8JMO751IFZEkS7KH/EcFqwNDUBdHYAOY=;
-	b=Uv+MQfO1hJLdRNQc5RbCrFffkuT6VY62Vo/TMGCOFJBu0/GjkqEW5QL6claC+JfbUOsf8Y
-	nK7N1LkCM9uXRz3UebFePpBymKvfdK/0YoDeNURLvddI7vNiSLGg+F0Hn5Vwzm2e2oS5F1
-	G/8W2MBbfvmnsBtZu/UsvD8WFxZPzsk=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=HiFig5XrzaKxrne/VffAS5Dccms79XHv1+bktez4Dgg=;
+	b=KfYLkCY5Ibfns3yY5fwO0kFdujfCOVRQ+CtLu8D2PM/PFTK0SWpN/1TIGv+Gobpzh8humL
+	j+SIfyVP4YtskmjMO8eoz+Z8LyAR98nmOOMGw/OGb/hqFgmatXm7e5aCMt8IBnkJZQ2nka
+	+z1LU7rjg+CN4fN89F5e6oqRdk/jLIw=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-121-4pYT4vHhOsu4DCkDHKTbFg-1; Thu, 05 Jun 2025 06:37:00 -0400
-X-MC-Unique: 4pYT4vHhOsu4DCkDHKTbFg-1
-X-Mimecast-MFC-AGG-ID: 4pYT4vHhOsu4DCkDHKTbFg_1749119819
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-3a4ee113461so312442f8f.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Jun 2025 03:37:00 -0700 (PDT)
+ us-mta-235-FAw9IqG-OMuS56taOHyqaQ-1; Thu, 05 Jun 2025 06:37:01 -0400
+X-MC-Unique: FAw9IqG-OMuS56taOHyqaQ-1
+X-Mimecast-MFC-AGG-ID: FAw9IqG-OMuS56taOHyqaQ_1749119821
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-450d57a0641so5613945e9.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Jun 2025 03:37:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749119819; x=1749724619;
+        d=1e100.net; s=20230601; t=1749119821; x=1749724621;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AdRsO2Uefrz8JMO751IFZEkS7KH/EcFqwNDUBdHYAOY=;
-        b=cmCoNZa1k47quklYkeHnAul/De38aMT7f/dv//OdHHsS4FkID2ESXOmP6LR0FKVcyT
-         ScllOXdSEkGuDcBTolTWRXPg4WjH1ArZHZTZ5eam/+cuI+vQeo/wf1jvUNEHziYV/ABP
-         U0T2kCi/hzzXFew65di2fOSF+6dSnF7XS7BsaPTP4jgcWpIvLIkNXMnnwcNk3UxaRBWX
-         WQ23c/ti98trept+zB99R1KFtN6QpVbPrOvn5GhoFrIiOsgv3EqazB/pFMRvzmbWlred
-         HY6c8fdb6kRwmpRts3YKsd0Bl5PuwmuSULknY2NjhubKp5tO90aPwf6Iv42N1ypnTGS4
-         VIug==
-X-Forwarded-Encrypted: i=1; AJvYcCW0681k3CuuXrTzALX86n3PsouRpr/KmHSRhJxsyevNUNCbVm4vWEs2nz+Tnz2zECYILjsbVfaxmRV6RQOs7Eg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy2St+X5OAtEL1JxHdupA7Px+XB+my42uZ5v0F4W25i39nNms6W
-	+igPGv51wfmSiCFnYRPb6pHKK/hsRkRcNhnpCN1c/OAg6jUIxssZN+DUh8edXgeUIiXFCQ7C6vO
-	KaRJMBkyDbLOXXC8IXGWr0U5dbM34goi89EZ5FJV5R8b/R3qDAdkyendEvDjIDrmAXBxBhg==
-X-Gm-Gg: ASbGncsvSZREBN7BRuMgTsITbf3sRfaUJ1uPTll6x4P4vxREPJ32Dxrvbib5+kzYhUY
-	mcK4OXql6ok1gp2nfwp85aYqYlFw4YIOerugOaTaVyeJuOS+sQSc+fwsWjWp4n14PgS60aQhL+t
-	eiHwkrBaqtmargg2E7E6GT8P9Cv8JGMNdzwgBE0ZmIPB79ki11g8aj4L0EQWX2rouBlDXgRJN4m
-	1K5KZ9M12xfxBh0g2gVQia2C/BtTUrRydFXSay18RbYCq8Dm4nZBb8UXAxVHT1lF0A5iYo1bXOF
-	fH52lzavJvy65HAlWuKMyN0xSl7mOc2wqJu0kx/n/crw+s36NV68dOkZTWzLWxouDCIYZta3dQ=
+        bh=HiFig5XrzaKxrne/VffAS5Dccms79XHv1+bktez4Dgg=;
+        b=AMtFP44YsCx2+W7wGjZAOJu8FAK6kcDiqR+TUbz1hWyfgqEQZmoL6q9vfIGtVhOJ10
+         mo8GiSnhHYjic9ra82qxPYuvM7FjSlL7kxt3O5yvWnaqaNILE00k1arfbznpaXKMvJoZ
+         sFguZF34x556Y7ccnAD2m6prmL8nDYagJ4VOHl4f8OUjTFwcastkHJaAQcLWpkMS0NBR
+         IhdTqySIy2Q0jhUGOcX80mhUuFe1X5NFXn9z9cty2DmS/FgJypITBgSX4bKYExG/YAwG
+         lVlT9KmtEDEW0qgE5VbqZtx8RHcPmgE5i6ORWp4hLfJlOuGjOJr3Mt/l8HmWzddsgFV5
+         NGMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW3uL+qOTKae3eaLi70RLNRDeyxen7Cpx7ky2B7254tkGEyuBLqC3K0c2qKzKQisKy79M3UwgdgXVnfRaf5Feg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8w3+2o73ZZVVX88il6sbyCNg+K4Qar1lDn1GuO7/3YE9UsVvf
+	j5R9+oBuS4GLRcg/Zi775abPg8Oy2hTU/aMxZS88f19LB0GS12AU1qJT3SZA98N8Iy98nEuGPD/
+	eqtCmW75B72qta8eEeU6F1ywUdiEM5TLgzr+zGsYuXWonTvCmpQnGRF1ERhwmTsTMQ7zqmA==
+X-Gm-Gg: ASbGncvbAVN9TYZWBnZcLAZUAZpBCxuHJOgasx+ytOVArrxXS9+k6/XYvtRn6YVXYXJ
+	Y8WMmw4hztSypUltR8/wSxBW6GNpwpXqCSPbxJAVMn/P2O1cAtojstyJreOXTBGmH4SbVOw6N/z
+	vw3uYtpmWmE9iJX07Ta/p41rvdvTBEqKgbMFVbjsWERRspIpDFypgtiNB/rhgM0JyWBBoi7Vbrm
+	oOXdgGWlY5B0Cr6sdEMsPszAVa/grPvhstQZXgQXInH8xcjdQ3eCSZx9hEr2NCvZj1Xhay92Obr
+	kvpkyvS+WZuJrQHg9M9ovJECQaLPeZmZNu4KSVq4/Iv7bXhUuuQF0x2iUJ052jSpPx80SJXjbg=
 	=
-X-Received: by 2002:a05:6000:144e:b0:3a3:ec58:ebf2 with SMTP id ffacd0b85a97d-3a51d8f6a68mr5594165f8f.7.1749119819364;
-        Thu, 05 Jun 2025 03:36:59 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFRjZpPO2+0jMcuZP9CR9nsUnOUJ7V0YuUBqF23a88OV3aPhw4HnJ7EZRrzi+l8ZxUNJutO1Q==
-X-Received: by 2002:a05:6000:144e:b0:3a3:ec58:ebf2 with SMTP id ffacd0b85a97d-3a51d8f6a68mr5594137f8f.7.1749119819002;
-        Thu, 05 Jun 2025 03:36:59 -0700 (PDT)
+X-Received: by 2002:a05:600c:828f:b0:43d:ac5:11e8 with SMTP id 5b1f17b1804b1-451f0b26621mr50050475e9.21.1749119820630;
+        Thu, 05 Jun 2025 03:37:00 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFs6aFjV1ri9gglwDDly0k/rNzs1/j6SDKTIoXHxHHy0T2KK5H3bwQ524CbBRzv8yzrX28AyQ==
+X-Received: by 2002:a05:600c:828f:b0:43d:ac5:11e8 with SMTP id 5b1f17b1804b1-451f0b26621mr50050275e9.21.1749119820235;
+        Thu, 05 Jun 2025 03:37:00 -0700 (PDT)
 Received: from rh.fritz.box (p200300f6af1bce00e6fe5f11c0a7f4a1.dip0.t-ipconnect.de. [2003:f6:af1b:ce00:e6fe:5f11:c0a7:f4a1])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-451f8311ae6sm14105175e9.2.2025.06.05.03.36.57
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-451f8311ae6sm14105175e9.2.2025.06.05.03.36.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jun 2025 03:36:58 -0700 (PDT)
+        Thu, 05 Jun 2025 03:36:59 -0700 (PDT)
 From: Sebastian Ott <sebott@redhat.com>
 To: Marc Zyngier <maz@kernel.org>,
 	Oliver Upton <oliver.upton@linux.dev>
@@ -94,9 +94,9 @@ Cc: Colton Lewis <coltonlewis@google.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Sebastian Ott <sebott@redhat.com>
-Subject: [PATCH v3 1/4] KVM: arm64: selftests: fix help text for arch_timer_edge_cases
-Date: Thu,  5 Jun 2025 12:36:10 +0200
-Message-ID: <20250605103613.14544-2-sebott@redhat.com>
+Subject: [PATCH v3 2/4] KVM: arm64: selftests: fix thread migration in arch_timer_edge_cases
+Date: Thu,  5 Jun 2025 12:36:11 +0200
+Message-ID: <20250605103613.14544-3-sebott@redhat.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250605103613.14544-1-sebott@redhat.com>
 References: <20250605103613.14544-1-sebott@redhat.com>
@@ -108,27 +108,54 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Fix the help text for arch_timer_edge_cases to show the correct
-option for setting the wait time.
+arch_timer_edge_cases tries to migrate itself across host cpus. Before
+the first test it migrates to cpu 0 by setting up an affinity mask with
+only bit 0 set. After that it looks for the next possible cpu in the
+current affinity mask which still has only bit 0 set. So there is no
+migration at all.
+
+Fix this by reading the default mask at start and use this to find
+the next cpu in each iteration.
 
 Signed-off-by: Sebastian Ott <sebott@redhat.com>
 ---
- tools/testing/selftests/kvm/arm64/arch_timer_edge_cases.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/kvm/arm64/arch_timer_edge_cases.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/arm64/arch_timer_edge_cases.c b/tools/testing/selftests/kvm/arm64/arch_timer_edge_cases.c
-index a36a7e2db434..c4716e0c1438 100644
+index c4716e0c1438..a813b4c6c817 100644
 --- a/tools/testing/selftests/kvm/arm64/arch_timer_edge_cases.c
 +++ b/tools/testing/selftests/kvm/arm64/arch_timer_edge_cases.c
-@@ -986,7 +986,7 @@ static void test_print_help(char *name)
- 	pr_info("\t-b: Test both physical and virtual timers (default: true)\n");
- 	pr_info("\t-l: Delta (in ms) used for long wait time test (default: %u)\n",
- 	     LONG_WAIT_TEST_MS);
--	pr_info("\t-l: Delta (in ms) used for wait times (default: %u)\n",
-+	pr_info("\t-w: Delta (in ms) used for wait times (default: %u)\n",
- 		WAIT_TEST_MS);
- 	pr_info("\t-p: Test physical timer (default: true)\n");
- 	pr_info("\t-v: Test virtual timer (default: true)\n");
+@@ -849,17 +849,17 @@ static void guest_code(enum arch_timer timer)
+ 	GUEST_DONE();
+ }
+ 
++static cpu_set_t default_cpuset;
++
+ static uint32_t next_pcpu(void)
+ {
+ 	uint32_t max = get_nprocs();
+ 	uint32_t cur = sched_getcpu();
+ 	uint32_t next = cur;
+-	cpu_set_t cpuset;
++	cpu_set_t cpuset = default_cpuset;
+ 
+ 	TEST_ASSERT(max > 1, "Need at least two physical cpus");
+ 
+-	sched_getaffinity(0, sizeof(cpuset), &cpuset);
+-
+ 	do {
+ 		next = (next + 1) % CPU_SETSIZE;
+ 	} while (!CPU_ISSET(next, &cpuset));
+@@ -1046,6 +1046,8 @@ int main(int argc, char *argv[])
+ 	if (!parse_args(argc, argv))
+ 		exit(KSFT_SKIP);
+ 
++	sched_getaffinity(0, sizeof(default_cpuset), &default_cpuset);
++
+ 	if (test_args.test_virtual) {
+ 		test_vm_create(&vm, &vcpu, VIRTUAL);
+ 		test_run(vm, vcpu);
 -- 
 2.49.0
 
