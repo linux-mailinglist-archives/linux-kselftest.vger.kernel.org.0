@@ -1,176 +1,123 @@
-Return-Path: <linux-kselftest+bounces-34423-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34425-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBEB4AD068A
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Jun 2025 18:22:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B332CAD07B3
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Jun 2025 19:46:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1556F3A4D97
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Jun 2025 16:22:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8186916BFD5
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Jun 2025 17:46:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3104428982A;
-	Fri,  6 Jun 2025 16:22:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8938D27F163;
+	Fri,  6 Jun 2025 17:46:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AkgXZ7UD"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="qE84Qrwb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A9CD1A38F9;
-	Fri,  6 Jun 2025 16:22:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 213EB323D;
+	Fri,  6 Jun 2025 17:46:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749226959; cv=none; b=fm6bcHjXiVi9A3prklGc9FJzVHDh05S6JhT4KRG0YxDjUv/Ivtkgx98uSIr0IWiaCaby1RGDzsnOnFYN4SizgXoBYnuDG3VqxnBHijzfKLjbgyzPOluqeyaH1jH5lGRG+e9O/bhy7uTkuQCTtIggyI+iiys26pIPwP55ZrOjcvM=
+	t=1749231966; cv=none; b=d+Qk2dBXjOTHfRQ96LstVjlFWw+iHuCggdAfo8+rzHX8FQ7jxEj+osz0A+xFFFUV5dMRICZvTwuyyOA50nOxPrBas1kkntlagOfcKmDiesIC5Mb/MwCwu5UM55IlvhrROG6ft8dMkIs6dVlBRqm29d1cE0ke3K/BHG4Iv7E5iFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749226959; c=relaxed/simple;
-	bh=jn0A54m+AigrC0Kje3Ksl/fHLeDP7CfNeV5+EpwZARg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ucVkzGH6dyL7zsQDSNp9HaXFqWA9x/PoCGVtPI827VfKvkkfVtcXB+fQAyFvTCKLwuEgPGzXX7QqNaNX+9vcRVOs6A+aeE/mf6qrXTmcyf2S/UynX7nrCQ+/coGob4iBXn5CvjhxA80KGrwSUVOhbjoBzVlHMRWjt22UaNYHL1s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AkgXZ7UD; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3a503d9ef59so1842938f8f.3;
-        Fri, 06 Jun 2025 09:22:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749226956; x=1749831756; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KP+8ZJbQ3Iy35rM91JKh8W2oEf1yzBugHuEwD4w/SXs=;
-        b=AkgXZ7UDFNmFeYGhbkVSl3n2NGvuvMlYq0xAE5qojNwJCIuj1h8CxGwj1sEbx3Sm9X
-         gAhku1mlnsCXc+oNOgKd9oy6DeT6OXAscJntKBGypIcpmMem8lkKSsNnJIhC3a+9HH9k
-         +92yRFDFdsK1Kf9E6lvHf4gVJ2T0xZn8fm2Km8G+St/p2rwGPH1oEvON1brbevZ+UrMP
-         ycTqgPHpWUFSQFocgicFUl0pKJLRuRJt7yXnIqQ7nVLdeaNCxqu/AcjqtXLoKdQhSYa6
-         CHfcBTCLj7uB/5fgQpX+ygypYTvCni65ByH8JhssS6sIzJus9rQEn6+7wqkumPfYVj+y
-         2z8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749226956; x=1749831756;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KP+8ZJbQ3Iy35rM91JKh8W2oEf1yzBugHuEwD4w/SXs=;
-        b=C9luDzNnwEj/qVwbg+hZDwbvQkRn+OSx7imKbIsjf5brvJxhSlf8g3xDleDVPP8ccy
-         W2m6soXzU6hWJww8rCos+Z0np2pps7itTnFPPXT6aUI4dG85dxNMz6mKxzSi5w8NgYK3
-         eGmRE6qoaAgo9KW9RqeTF2giuMx4Gsen6x50ULFjm7Tftw7/yW/fRMBH5Ndo9C5R5XK+
-         eUerEbdO7mYkuI+lGrN+BCzRMV/uhngKuuqG/2qX65IUqYK2IgyfKKsFiQPwb02vY81F
-         nw2il4r1JJYLSJX4eHxrnPscfPaPOoixpd0YzQpcZ9ZmNrdWifOrhYkT16EsiQ+bvvGH
-         3lLA==
-X-Forwarded-Encrypted: i=1; AJvYcCUJbyizmhBsoQVseY5v6Obm4QSZ/vwxmy3cyZY2bzR+TOw60tG/GCfXdcsX0NOEE2dYH4kDJLpqPyiIJNkrAaRW@vger.kernel.org, AJvYcCWfzbpivWrRUMsbWdttOB8g5Ys4PkXV3luJljFy9yKSDfleilrbxc1FkLEmwlqqbzfbcCmfQsrFAA==@vger.kernel.org, AJvYcCX/FfMbyS9bcZPDc7PkzsC0uleYO5MWU8m9iMCuu29TVd5nFxsR6PQwOBf12zHyNbO6mPA=@vger.kernel.org, AJvYcCX6TCrxZ0lb5eiU3Xwa2sytpqCixep6zVUjm+lIZ5YcWnmS92EVxiotd0s5/U5niLzwEHNSmSev+rCRdkzQ@vger.kernel.org
-X-Gm-Message-State: AOJu0YyYQ9ns578lsokB+R8bo+pWe0UiApeTD98NcSYhhOAmp8H4tn3J
-	7xDDlvTszRhjgwKweVhz/FWV8yBTxafaf9UWYa9ss7fvqPebvSA4hO1hhqF2/lO6rXW4QypNsG2
-	PY0Ay1//YIxj4yKQ19xgmkY7GPLFrjuo=
-X-Gm-Gg: ASbGncvmLMLfmjTMW3A7SS1QZiaAxXAVfKkeI4+nDMC3KjPJG90joNpnYXD3gIVhtX5
-	GqZGpDU2l6VY0ZInLSZSFHnVv4QICM08GRPouRyTc/j5TeCNGBxZfs3zREtiavMA88JzHXhr6pO
-	j2V4gxZEOJFiphY90uFaGl/JYEdGIqPq2bkFJ5ZNyH8pjQVZC2OWSZ2offN4eWtg==
-X-Google-Smtp-Source: AGHT+IGVEAky3KX3oy4NEAVyuC3jToJkW1CmYjw5OMscoOz7z7KXYJisj9AihaxTJFjuwXjoE5ERBeNQiq7yk/6UiSY=
-X-Received: by 2002:a05:6000:288c:b0:3a4:db49:94aa with SMTP id
- ffacd0b85a97d-3a531ab5272mr3524523f8f.21.1749226955387; Fri, 06 Jun 2025
- 09:22:35 -0700 (PDT)
+	s=arc-20240116; t=1749231966; c=relaxed/simple;
+	bh=kzZo/pPwS2a7woTNhFPCC1pFFoifVZqTySTlI5BhV1g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=IqpyUOdeT4LypJNawqOEtFTrdGAzzOdOlpPjV59QLYFV+IAVT8ulsKIHCNIamnR8gHAG7hAHUvdZMS05VpxmqS9j+YV0vuwiHtBKk17SkDhIIbWB0O7RMK8XQOeFuvFufmYxHmypknyfb15agqqKdMyInEjh0lzf99mcOw7o1qc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=qE84Qrwb; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Received: from terminus.zytor.com (terminus.zytor.com [IPv6:2607:7c80:54:3:0:0:0:136])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 556HjTFp1004770
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+	Fri, 6 Jun 2025 10:45:33 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 556HjTFp1004770
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025052101; t=1749231933;
+	bh=0fzXvFcjV1jijNBzKFIeWvGOahvlidSk1fy1tPhoqJM=;
+	h=From:To:Cc:Subject:Date:From;
+	b=qE84Qrwb2bZ7OsLlWMVzd+0jAE9+EgkORYDkjdGmNVQuv06TdJhu4Ad10qP55w7v4
+	 RKCUa8S8KPzVSZCF0eAd8ABUSxJcxF71R7UmGKIDjVnoVXim2nESJT07hK31y1FrFc
+	 R5VK7d/lUkcYv6hGgUR6wUPzRtm0fXUKPDoOSLFafLRq/EtVIBBNaI5tdU1tcHD2Z2
+	 YW0P7utoZ77ANrcW4yt79DSGwfttGKlViazlAQjFyUnp2WxhP3WmjyftARBWAzj7eD
+	 zfu++TTXw12ROzR+M/9nxHhKML6oKpger0piyj6q/QOvZS0acIMKojroDCkhN0cNSW
+	 U11hoNOr8ltZg==
+From: "Xin Li (Intel)" <xin@zytor.com>
+To: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        shuah@kernel.org, andrew.cooper3@citrix.com, sohil.mehta@intel.com,
+        stable@vger.kernel.org
+Subject: [PATCH v5 0/2] x86/fred: Prevent immediate repeat of single step trap on return from SIGTRAP handler
+Date: Fri,  6 Jun 2025 10:45:26 -0700
+Message-ID: <20250606174528.1004756-1-xin@zytor.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250411-many_args_arm64-v1-0-0a32fe72339e@bootlin.com>
- <20250411-many_args_arm64-v1-1-0a32fe72339e@bootlin.com> <CAEf4Bzbn6BdXTOb0dTcsQmOMZpp5=DzGS2hHHQ3+dwcja=gv+w@mail.gmail.com>
- <D98Q8BRNUVS9.11J60C67L1ALR@bootlin.com> <CAEf4BzZHMYyGDZ4c4eNXG7Fm=ecxCCbKhKbQTbCjvWmKtdwvBw@mail.gmail.com>
- <D9E9IQQ3QKXM.3UJ17G9CBS1FH@bootlin.com> <DADMLIVHMSSO.3AXSI5216WCT6@bootlin.com>
- <9a2ba0ad-b34d-42f8-89a6-d9a44f007bdc@linux.dev> <DAEFD2WH7HRV.2SOG9Q00QSEXH@bootlin.com>
- <CAADnVQ+T_s6dAwJ5JKqNqA8tq1P+MdfPvPw0EoY5yOf8PnGT4g@mail.gmail.com> <DAFA7QSTVFQF.3MG5408HBVNT7@bootlin.com>
-In-Reply-To: <DAFA7QSTVFQF.3MG5408HBVNT7@bootlin.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 6 Jun 2025 09:22:24 -0700
-X-Gm-Features: AX0GCFtcDPhEpzZqMjlQoxov485AHY3mrKKmWdCvVJeIQl1NL0jKc2KqPI-LVsc
-Message-ID: <CAADnVQKr3ftNt1uQVrXBE0a2o37ZYRo2PHqCoHUnw6PE5T2LoA@mail.gmail.com>
-Subject: Re: [Question] attributes encoding in BTF
-To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Cc: Ihor Solodrai <ihor.solodrai@linux.dev>, Andrii Nakryiko <andrii.nakryiko@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Puranjay Mohan <puranjay@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
-	Florent Revest <revest@chromium.org>, Bastien Curutchet <bastien.curutchet@bootlin.com>, 
-	ebpf@linuxfoundation.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
-	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-stm32@st-md-mailman.stormreply.com, 
-	dwarves@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, Jun 6, 2025 at 12:45=E2=80=AFAM Alexis Lothor=C3=A9
-<alexis.lothore@bootlin.com> wrote:
->
-> Hi Alexei,
->
-> On Thu Jun 5, 2025 at 6:09 PM CEST, Alexei Starovoitov wrote:
-> > On Thu, Jun 5, 2025 at 12:35=E2=80=AFAM Alexis Lothor=C3=A9
-> > <alexis.lothore@bootlin.com> wrote:
-> >>
-> >> Hi Ihor,
-> >>
-> >> On Wed Jun 4, 2025 at 7:31 PM CEST, Ihor Solodrai wrote:
-> >> > On 6/4/25 2:02 AM, Alexis Lothor=C3=83=C2=A9 wrote:
->
-> [...]
->
-> >> Thanks for the details ! I have missed this possibility, as I have bee=
-n
-> >> assuming that DWARF info was exposing the needed info. I'll take a loo=
-k at
-> >> it, but if those attributes can not be represented by DWARF, I'll have=
- to
-> >> find another way of getting those packing/alignment modifications on d=
-ata
-> >> type (eg: re-use/share btf__align_of from libbpf, as suggested by Andr=
-ii,
-> >> but it may not able to cover all cases).
-> >
-> > Not sure all the trouble is worth it.
-> > I feel it's a corner case. Something we don't need to fix.
->
-> TBH I don't own any specific use case really needing this handling, so if
-> it does not feel worth the trouble, I'm fine with not trying to support
-> this. My effort is rather motivated by the goal of aligning the ARM64
-> features with other platform, and so of getting rid of
-> tools/testing/selftests/bpf/DENYLIST.aarch64.
->
-> For the record, this effort also showed that the same kind of issue affec=
-ts
-> other platforms already supporting many args + structs passed by value ([=
-1])
-> - structs alignment with specific alignment constraints are not
->   specifically handled (eg: a struct with an __int128 as a top-level
->   member, leading to a 16 byte alignment requirement)
-> - packing and custom alignment is not handled
->
-> From there, I could do two different things:
-> 1. do nothing, keep ARM64 as-is with the current version which has been
->   recently merged: ARM64 then denies attachment to any function trying to
->   pass a struct by value on stack. We keep the tracing_struct tests denie=
-d
->   for ARM64. Other platforms still allow to attach such functions, but ma=
-y
->   be parsing wrongly arguments in those specific cases.
-> 2. add the constraint applied on ARM64 (refusing attachment when structs =
-are
->   passed through stack) to other JIT compilers. Then update the
->   tracing_struct test to ensure this specific case is properly denied on
->   all platforms to avoid risking reading wrongly arguments passed through
->   stack when structs or large types are involved.
->
-> I tend to think 2. is better, but let me know if you have a different
-> opinion here.
+IDT event delivery has a debug hole in which it does not generate #DB
+upon returning to userspace before the first userspace instruction is
+executed if the Trap Flag (TF) is set.
 
-Agree. tracing_struct_many_args is working on x86, but assumptions
-about BTF being able to express everything about calling convention
-were not correct, so let's roll back.
+FRED closes this hole by introducing a software event flag, i.e., bit
+17 of the augmented SS: if the bit is set and ERETU would result in
+RFLAGS.TF = 1, a single-step trap will be pending upon completion of
+ERETU.
+
+However I overlooked properly setting and clearing the bit in different
+situations.  Thus when FRED is enabled, if the Trap Flag (TF) is set
+without an external debugger attached, it can lead to an infinite loop
+in the SIGTRAP handler.  To avoid this, the software event flag in the
+augmented SS must be cleared, ensuring that no single-step trap remains
+pending when ERETU completes.
+
+This patch set combines the fix [1] and its corresponding selftest [2]
+(requested by Dave Hansen) into one patch set.
+
+[1] https://lore.kernel.org/lkml/20250523050153.3308237-1-xin@zytor.com/
+[2] https://lore.kernel.org/lkml/20250530230707.2528916-1-xin@zytor.com/
+
+
+This patch set is based on tip/x86/urgent branch as of today.
+
+
+Link to v4 of this patch set:
+https://lore.kernel.org/lkml/20250605181020.590459-1-xin@zytor.com/
+
+Changes in v5:
+*) Accurately rephrase the shortlog (hpa).
+*) Do "sub $-128, %rsp" rather than "add $128, %rsp", which is more
+   efficient in code size (hpa).
+*) Add TB from Sohil.
+*) Add Cc: stable@vger.kernel.org to all patches.
+
+
+Xin Li (Intel) (2):
+  x86/fred/signal: Prevent immediate repeat of single step trap on
+    return from SIGTRAP handler
+  selftests/x86: Add a test to detect infinite sigtrap handler loop
+
+ arch/x86/include/asm/sighandling.h         | 22 +++++
+ arch/x86/kernel/signal_32.c                |  4 +
+ arch/x86/kernel/signal_64.c                |  4 +
+ tools/testing/selftests/x86/Makefile       |  2 +-
+ tools/testing/selftests/x86/sigtrap_loop.c | 98 ++++++++++++++++++++++
+ 5 files changed, 129 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/x86/sigtrap_loop.c
+
+
+base-commit: dd2922dcfaa3296846265e113309e5f7f138839f
+-- 
+2.49.0
+
 
