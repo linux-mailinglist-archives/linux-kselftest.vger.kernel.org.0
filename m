@@ -1,224 +1,134 @@
-Return-Path: <linux-kselftest+bounces-34424-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34427-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07364AD07B0
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Jun 2025 19:46:12 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0E5FAD0821
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Jun 2025 20:34:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A1D13A68F3
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Jun 2025 17:45:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 82A787A4472
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Jun 2025 18:32:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F15621C8621;
-	Fri,  6 Jun 2025 17:46:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 506321E25EF;
+	Fri,  6 Jun 2025 18:33:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="wL/RJ5Du"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IqbNiGAD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 213C22CA6;
-	Fri,  6 Jun 2025 17:46:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BCFC84039;
+	Fri,  6 Jun 2025 18:33:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749231965; cv=none; b=GV4NH9AfB7o6pCWMm5DH/nO8YyGC/UVJQzZHQ/+aGyUkdZ7BblzOe/ukT21lOXC3/1ljsdd4MqAPcsrVL6Mo52J8casLvGWRAohr+wVt1deMS6NV9AjvX2iFeYNtZQUlbBd7ds75RvMh9G37/d0DsoOS/9Qsvy7jHC5/Z+3s2j4=
+	t=1749234836; cv=none; b=JShGHj+KUbulyJrEauxOX5GGyECCyt8L7vC8sUcwChI8SyCPix0sNtYAer0avlrJYTgjjG0s9vr27duFHdBao5h/GO4XlpVwNv2ss+Ry4JZHZDH5kwlAjKS7oo2KCOPxjINJe8MIyb+cEz2NqGnytbj+1S7d9ZJgyKJv4Q4qDsA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749231965; c=relaxed/simple;
-	bh=Xpw4mWSOO7kejGU+gJhqwieNSFJdgh8TBFqeDX3BoWg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oLXWydqCOJ7c0Pos9m4wjZybwhGXaGZGcf0MMzbrakJsLLckFpentBV9AC3MLr8JYevVicWg7Zgec0gcP3gIX1rm98eIswUfI1lCgDXOOKe5Uu7OnkobZ+g/bNAxH/CLznsq6KK0wr0DcIPPr8MTa4oep9FbLA01zVEQj8AD6EY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=wL/RJ5Du; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
-Received: from terminus.zytor.com (terminus.zytor.com [IPv6:2607:7c80:54:3:0:0:0:136])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 556HjTFr1004770
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-	Fri, 6 Jun 2025 10:45:34 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 556HjTFr1004770
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025052101; t=1749231935;
-	bh=kCy/xiNsp62Fz2xwI9lC/MHqUS8hAxK1tf4Y5NVC7uE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=wL/RJ5DuMB5upfqEbHEcxEzoFaisK14ElcReYKSwVKh0t3jOcM8ATdrNBNM/Wqhgc
-	 B/jNbFRiaUrMSedwNcjQwqbgSt5DYVO7ffXMeCm65/0rtuJXgyU4Z34L+m/4/qvsBB
-	 G1SV2oPwO3D/cbZ+wO1GRpy2+PmuIctz+CzhXXw0YpgHnp5wXv6A/YxSrzmgW+BFlC
-	 6vSYV3bD7Jfgd0xlQiXuqM5m3DhS5awm2CFeZShtHhOZUUCPRqnIyaQGmDeIvlZugP
-	 zCwjiStk1hRlVWGVm+tFUf9i+kpLO4O/bD7ZSc//T0h6WZIIXa8Y5/OYqEJcUhdX+p
-	 ujSTxPRS7iCcA==
-From: "Xin Li (Intel)" <xin@zytor.com>
-To: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        shuah@kernel.org, andrew.cooper3@citrix.com, sohil.mehta@intel.com,
-        stable@vger.kernel.org
-Subject: [PATCH v5 2/2] selftests/x86: Add a test to detect infinite sigtrap handler loop
-Date: Fri,  6 Jun 2025 10:45:28 -0700
-Message-ID: <20250606174528.1004756-3-xin@zytor.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250606174528.1004756-1-xin@zytor.com>
-References: <20250606174528.1004756-1-xin@zytor.com>
+	s=arc-20240116; t=1749234836; c=relaxed/simple;
+	bh=WPEmaBIYJ9sU3gGC4h+IrESjpWpOI4f0O/VQoPXsCzg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YGVfuJlHVB3bZPmw+wSskiYeGNfyRkFXJF3eQrEocKCrApPYqD2rjElPBTPbyxGvAJvUuHgYHYf3FLvK+4HOYPxmMSgL6ZO0MMEDqv4VoIv9g+rD2287E2xWpYBDU7Kmim+9I+OhqD6v04btCCVeyh9nNJVxonf++U97yHWS1d8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IqbNiGAD; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3a5123c1533so1363745f8f.2;
+        Fri, 06 Jun 2025 11:33:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1749234833; x=1749839633; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eQv2ssfQSM3/efOHHHs2JPOHP+zl9UYVFNXEqlMK6OA=;
+        b=IqbNiGADYnTd8QQDO+owjvG70x+oDlOFLHT0WwIVaQj/ytMUMVY4g0kLj0wO5tMU9/
+         kfA1l4yHYGhAarzfyA5ybUF+4gXmryfxyhEUVY4vLSW9hUeNmn8Nr8uWGJGc4QI19ZTL
+         g9PuBWZWjWRrPHmv9CzYvqcuwg7hK73Kn9lN+RtvWzwsDm9S/b1bdA8zfkIvGnXxbpTP
+         QTEe/oaWfL8wkWLYUIEcYPL/QlQuXLc1R5MDxfKkwETVupXg66m8LU3aAKbHC90Kop7M
+         YH8hamjaI6nLu6AA0eSy4typFt+iZEC6rR8MYJzK6IAIRmWoLpbi5NsTbQXCuEff/nKi
+         0M7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749234833; x=1749839633;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eQv2ssfQSM3/efOHHHs2JPOHP+zl9UYVFNXEqlMK6OA=;
+        b=p+9oq0SIEN05+8V0yYtSTRWiOwNoMuFSM3qgwMrUnRnT62+Ir+GH5ErPhycRFAkVQM
+         fr08Xj7EJgurtGtBku4MAtfc0AKKw179Nd5vGmH7MoHciNMh0OaSo6JQjASj93WoRF0S
+         NcMotEwneX62c0HofWv5gIhXAeGQ3Se+c4zS9AEp+eXLJwDSl/jFdUAC5BMRAWW6jHCi
+         gb3dQrkTPY5iWbl/so/zNhK/xUQfqcQjMzmZcHtISGv526vgyVC3YlkJMOe07UpsYAZj
+         iuMj6Lj/p/AzkKY1rq2e9XpR6W+HelSvBEMUNo8bvZ27AOOJB9cvtAVU6nxWz+oJn2Fq
+         gANw==
+X-Forwarded-Encrypted: i=1; AJvYcCV+SpbqnR5wNySbcjmyIfC+m+GMp4v86ACZH7z7F+MBJ5hliOMHNeFepeCdTrVyzf5gpW0Wy1KYLlbia5oE@vger.kernel.org, AJvYcCW1CeSv07sbhLaHTTxAmpozSLdm9DkyG1Z8CQB+wYiyXkOqOdHcAVPcfN9cz///oxTz6CfSpPddUKFTrdOlspYe@vger.kernel.org, AJvYcCWO7vDVdOPdJFbEI75+6wQX4ZbjcYdQq0vNTK2Xu7QSDCM2gSXKtg6ZnPW+hkTE+9aLrk4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLHL+8L8d+CYRIELqKHJWss9WuHZWuFT04pNYgWIa9dbPbw+bR
+	eD8bdJfa3wcyTA8N6cvFtVaMQDt8S/eTqhPA+KAr+fhmQUcHsopuvOGjRcoEe6ryzeJwkdxfgTc
+	jWlxh35L7sxQGNzjHwsneEtxA5aiUfEI=
+X-Gm-Gg: ASbGncsRnHu10s6Bc8EIcEiFUalwGAhYj9H99uTXjire+JVeULC7Gb4PI2XseWUMSNd
+	6el93s/uGemWyviL5rKy0QaYSZjI4g3ekr2kEbeJmGl/dm8k4Ye3sOuAZFduNyX4ejKII3WULjJ
+	V19ULXHrxqNd/19JWbKSyBnI2Hav2tzZhiq5HCr7JMKtcBhU5Z8xpJmtrDjgsvaecJN0e/cj30
+X-Google-Smtp-Source: AGHT+IEc6TzG3uaZeGwv5pZfjdsn0kZFQLBTIfMNyGLmpPkgMe/NTjOfs3TsNLE+XHQgBKhukABKooSDlGna1v7f8ek=
+X-Received: by 2002:a05:6000:2903:b0:3a4:eac6:e320 with SMTP id
+ ffacd0b85a97d-3a5319ba3b2mr3730137f8f.3.1749234832772; Fri, 06 Jun 2025
+ 11:33:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20250603052805.13042-1-suchitkarunakaran@gmail.com>
+In-Reply-To: <20250603052805.13042-1-suchitkarunakaran@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 6 Jun 2025 11:33:41 -0700
+X-Gm-Features: AX0GCFuZvpym6rX1eh0SX_-m8m3yTJemsUsryxSt-5zV4CAcbPkE23D_3fvUodk
+Message-ID: <CAADnVQLUpRqP73gJ4+PM57jofFp-jPU_xj4eKwMT6mpeKxMu0Q@mail.gmail.com>
+Subject: Re: [PATCH v2] selftests/bpf: Validate UDP length in cls_redirect test
+To: Suchit Karunakaran <suchitkarunakaran@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-When FRED is enabled, if the Trap Flag (TF) is set without an external
-debugger attached, it can lead to an infinite loop in the SIGTRAP
-handler.  To avoid this, the software event flag in the augmented SS
-must be cleared, ensuring that no single-step trap remains pending when
-ERETU completes.
+On Mon, Jun 2, 2025 at 10:28=E2=80=AFPM Suchit Karunakaran
+<suchitkarunakaran@gmail.com> wrote:
+>
+> From: Suchit <suchitkarunakaran@gmail.com>
+>
+> Add validation step to ensure that the UDP payload is
+> long enough to contain the expected GUE and UNIGUE encapsulation
+> headers
+>
+> Signed-off-by: Suchit <suchitkarunakaran@gmail.com>
+> ---
+>
+> Changes since v2:
+> - Rebase
+>
+>  tools/testing/selftests/bpf/progs/test_cls_redirect.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/bpf/progs/test_cls_redirect.c b/tool=
+s/testing/selftests/bpf/progs/test_cls_redirect.c
+> index f344c6835e84..c1d2eaee2e77 100644
+> --- a/tools/testing/selftests/bpf/progs/test_cls_redirect.c
+> +++ b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
+> @@ -978,7 +978,14 @@ int cls_redirect(struct __sk_buff *skb)
+>                 return TC_ACT_OK;
+>         }
+>
+> -       /* TODO Check UDP length? */
+> +       uint16_t udp_len =3D bpf_ntohs(encap->udp.len);
+> +       uint16_t min_encap_len =3D sizeof(encap->udp) + sizeof(encap->gue=
+) + sizeof(encap->unigue);
+> +
+> +       if (udp_len < min_encap_len) {
+> +               metrics->errors_total_malformed_encapsulation++;
+> +               return TC_ACT_SHOT;
+> +       }
 
-This test checks for that specific scenario—verifying whether the kernel
-correctly prevents an infinite SIGTRAP loop in this edge case when FRED
-is enabled.
-
-The test should _always_ pass with IDT event delivery, thus no need to
-disable the test even when FRED is not enabled.
-
-Signed-off-by: Xin Li (Intel) <xin@zytor.com>
-Tested-by: Sohil Mehta <sohil.mehta@intel.com>
-Cc: stable@vger.kernel.org
----
-
-Changes in v5:
-*) Do "sub $-128, %rsp" rather than "add $128, %rsp", which is more
-   efficient in code size (hpa).
-*) Add TB from Sohil.
-*) Add Cc: stable@vger.kernel.org.
-
-Changes in v4:
-*) merge this selftest with its bug fix patch set (Dave Hansen).
-*) Address review comments from Sohil.
----
- tools/testing/selftests/x86/Makefile       |  2 +-
- tools/testing/selftests/x86/sigtrap_loop.c | 98 ++++++++++++++++++++++
- 2 files changed, 99 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/x86/sigtrap_loop.c
-
-diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-index f703fcfe9f7c..83148875a12c 100644
---- a/tools/testing/selftests/x86/Makefile
-+++ b/tools/testing/selftests/x86/Makefile
-@@ -12,7 +12,7 @@ CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh "$(CC)" trivial_program.c -no-pie)
- 
- TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
- 			check_initial_reg_state sigreturn iopl ioperm \
--			test_vsyscall mov_ss_trap \
-+			test_vsyscall mov_ss_trap sigtrap_loop \
- 			syscall_arg_fault fsgsbase_restore sigaltstack
- TARGETS_C_BOTHBITS += nx_stack
- TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
-diff --git a/tools/testing/selftests/x86/sigtrap_loop.c b/tools/testing/selftests/x86/sigtrap_loop.c
-new file mode 100644
-index 000000000000..9eecf32c79c2
---- /dev/null
-+++ b/tools/testing/selftests/x86/sigtrap_loop.c
-@@ -0,0 +1,98 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2025 Intel Corporation
-+ */
-+#define _GNU_SOURCE
-+
-+#include <err.h>
-+#include <signal.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/ucontext.h>
-+
-+#ifdef __x86_64__
-+# define REG_IP REG_RIP
-+#else
-+# define REG_IP REG_EIP
-+#endif
-+
-+static void sethandler(int sig, void (*handler)(int, siginfo_t *, void *), int flags)
-+{
-+	struct sigaction sa;
-+
-+	memset(&sa, 0, sizeof(sa));
-+	sa.sa_sigaction = handler;
-+	sa.sa_flags = SA_SIGINFO | flags;
-+	sigemptyset(&sa.sa_mask);
-+
-+	if (sigaction(sig, &sa, 0))
-+		err(1, "sigaction");
-+
-+	return;
-+}
-+
-+static unsigned int loop_count_on_same_ip;
-+
-+static void sigtrap(int sig, siginfo_t *info, void *ctx_void)
-+{
-+	ucontext_t *ctx = (ucontext_t *)ctx_void;
-+	static unsigned long last_trap_ip;
-+
-+	if (last_trap_ip == ctx->uc_mcontext.gregs[REG_IP]) {
-+		printf("\tTrapped at %016lx\n", last_trap_ip);
-+
-+		/*
-+		 * If the same IP is hit more than 10 times in a row, it is
-+		 * _considered_ an infinite loop.
-+		 */
-+		if (++loop_count_on_same_ip > 10) {
-+			printf("[FAIL]\tDetected sigtrap infinite loop\n");
-+			exit(1);
-+		}
-+
-+		return;
-+	}
-+
-+	loop_count_on_same_ip = 0;
-+	last_trap_ip = ctx->uc_mcontext.gregs[REG_IP];
-+	printf("\tTrapped at %016lx\n", last_trap_ip);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	sethandler(SIGTRAP, sigtrap, 0);
-+
-+	/*
-+	 * Set the Trap Flag (TF) to single-step the test code, therefore to
-+	 * trigger a SIGTRAP signal after each instruction until the TF is
-+	 * cleared.
-+	 *
-+	 * Because the arithmetic flags are not significant here, the TF is
-+	 * set by pushing 0x302 onto the stack and then popping it into the
-+	 * flags register.
-+	 *
-+	 * Four instructions in the following asm code are executed with the
-+	 * TF set, thus the SIGTRAP handler is expected to run four times.
-+	 */
-+	printf("[RUN]\tsigtrap infinite loop detection\n");
-+	asm volatile(
-+#ifdef __x86_64__
-+		/* Avoid clobbering the redzone */
-+		"sub $128, %rsp\n\t"
-+#endif
-+		"push $0x302\n\t"
-+		"popf\n\t"
-+		"nop\n\t"
-+		"nop\n\t"
-+		"push $0x202\n\t"
-+		"popf\n\t"
-+#ifdef __x86_64__
-+		/* Equivalent to "add $128, %rsp" with 3 fewer bytes in encoding */
-+		"sub $-128, %rsp\n\t"
-+#endif
-+	);
-+
-+	printf("[OK]\tNo sigtrap infinite loop detected\n");
-+	return 0;
-+}
--- 
-2.49.0
-
+I don't quite see the point.
+This is a test prog. It's not supposed to be used as production code.
 
