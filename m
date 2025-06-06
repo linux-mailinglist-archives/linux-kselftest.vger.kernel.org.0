@@ -1,159 +1,165 @@
-Return-Path: <linux-kselftest+bounces-34429-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34430-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78D4FAD0A01
-	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Jun 2025 00:40:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74391AD0A28
+	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Jun 2025 01:05:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 058AC179C0C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Jun 2025 22:40:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B06A83B3AEA
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Jun 2025 23:05:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22806238D2B;
-	Fri,  6 Jun 2025 22:40:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39E1023C506;
+	Fri,  6 Jun 2025 23:05:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bSLoMz3s"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jstj1ls3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4405A233156;
-	Fri,  6 Jun 2025 22:40:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5CB923A98D
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Jun 2025 23:05:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749249621; cv=none; b=agn/xQU1MMIrV8RqErpIAj2E32wIaQLdaA33x5qrwiREfdqR/JJdwz9wM3QdFuXwgBqZeQwY2lWK+VAPM9K1lwrFguj174M3y0+1WU/szYApyO8bUqtDp04FMU/LMLj+4eMhn7e5lVDsPJkYTzO6u1bdUjDv6NbOU/cAvUJ8Emc=
+	t=1749251154; cv=none; b=RNXbuKCBrTcxzter8shsg/Te44LS/cv9Qx7xxmp+eQ11vjpVbm9hyFiMp0sW2pcX76/74dPKsVMePBku2wvkX6lcYFnzN8jewtIk2DfIn/G3q8m/32tYUn4ATQZ7XXL/Z4jedKoZTCNn+ba/qU/DeEV55uNH6BlctK/U0E8cE3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749249621; c=relaxed/simple;
-	bh=Umf6aZ0L2/WBdq94G/QOnFxf54hsMxax8i4F49KC5fU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=GRHqZDPc358fwKtobDtg1ebeeypTiEYI7wh2VizCduzshgdwLIHT9X/0z4QxgBcjS1KvjJRNLQpIV/OcwF8v9+o9SmDGXAKIxz1EkA+SerLvK9RgqP0bt8N9daa/Bdcumeo9/2YSUj5bquDoim9BTJBcyPw47p7UMwo5bsgRTd4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bSLoMz3s; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3a4f7865b22so435733f8f.0;
-        Fri, 06 Jun 2025 15:40:19 -0700 (PDT)
+	s=arc-20240116; t=1749251154; c=relaxed/simple;
+	bh=MW2wNb43ypWSdufjoPAtH5Ju1OuPQquVw5NL7Ah2DOw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mu+cQ0+apoJ6lRC2Re/zxxQJ1eVfoGioBqWDweFrUoUc/ZLhjCFQUSmzjJHfdFX6o1tKHj4n/PNQIpKreIm8kOrMN4R8DffX3JFrNY4n1y0j0Pgm0BFfFJLInJXSyJ737bjdYX/wxr0jffBOaQ7wRsSDu+8++8Nf68yrfofUaRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jstj1ls3; arc=none smtp.client-ip=209.85.215.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-b2c4476d381so2385487a12.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Jun 2025 16:05:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749249617; x=1749854417; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xXshBSIZNU4BeC4KDEJtIathlHJ2M2oUxcH/B0uC15o=;
-        b=bSLoMz3sBsiEN8RN+5/iN+PKp+Cg1uBqrWC6vK7VXmwELWJ3BSZBOcMUaWzRuFbn9L
-         P5UCQxDgLVqJ5RHtSnmR4mfWXPj8KBYaXoFvhr2yvFKKilDNLVBF+K5qW9uUnx/pWI5x
-         NIvcT2UxM0Jy0FEygiEfqsGRT5rShekwY8I1omz5+eTQkRdHuzI6seTVdT0HIA/v/e2G
-         zbuG0YkOVE3KPKtgP5csl3KnUbUxlITSjgHehxnhnek+FXVPD9reSPyhx2EzAOI1B0XF
-         b+S85V9JYERy26crgZyymcTFHmFQb83aD379r+em84r0x24zHy/C9LPnGttWgIzK+Xe2
-         wqBA==
+        d=google.com; s=20230601; t=1749251152; x=1749855952; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=M0KcYnorcCYmwOfCT2vfZqpyW+O1lNC3ODlw57DQvoE=;
+        b=jstj1ls37+b0ljHgs1FVN8vUogS6+mRWa6UsUgac1qk0wDCF6HzBMEk40Fem+iJ0dZ
+         P4eucJdBHwisN1wEDDZ/XKz/BbbrgIKkEZ0WZVAS4OJuCMkr1y4IBhSBW/rzao4rfwqM
+         3v2bB+dq4ErzT5No65utgJd6HoRGkngfibJmLgldKUmajKWoLK2bOw5czOu8pWkLZXlS
+         JnyfWIj0M/2YcGbRyAywy/otv97MmykCO8f5x5MDCYRXSO8OnYz6YtLIG+OonSG2uME0
+         e1RZAvz+V2pUgZ0diP4GQkMNw9TEjI8noDO/2UOs8W0rSz3TsqEVMrxWlqY4Jv3VPjxb
+         TFpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749249617; x=1749854417;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xXshBSIZNU4BeC4KDEJtIathlHJ2M2oUxcH/B0uC15o=;
-        b=fkICQKXJcLh3tB0z7BafiV/Beh90DUfviR+EeDbt47Kag6k+N2He3T+F4tsGccWjnB
-         +jQk+VBbtpktxDqNDrIfD/HnpaMe1eq+zuynPj9dd7gKsNnwQjrdCeUdLorIZxLRUX8A
-         Byx7RCBox5tCH0jRWx4A4Q6PW4aUlRLOvStUIhi6RmOKNCuNU3LDfJp8XQdgbCzzchDV
-         67bXRS2LN7WV+VsRRTtfRdOMxcSeEavxMk9seRBbPq15QNUinee30glSnt9E4agU3oMi
-         j7XdtkF+WqWqu23dozRZjMEsj74EFBE77Z6Iwhka+EdX+FcR/9M+kvffsZG2172VH8LC
-         M4cA==
-X-Forwarded-Encrypted: i=1; AJvYcCUAX3bSRhyRzucYYCVWBGu2JLAio9xrRYW60vUqmwg7CeOkOplPtCDeHJZHSDa2tU+si6ZsGthIWZDzXNx33saa@vger.kernel.org, AJvYcCUNdBUvT85OHCbH/zSZ9umhhbHAg+BXXegjfXLAZI/vkrC49DVKxj8z3BD8wP1zsa4gnsuw105ZfCJ5B9E=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw8o4dgbYV5wsosLcALGg/SlwccZRDYKYuBX/bTMKcGShcrg8Jk
-	KY8MsIV8TIidmZ98ngF140cSchWnCDEHXeqymnDGIpvG93CQVXWCMT3L
-X-Gm-Gg: ASbGncuLSKmQoXsb7upFKTZi40u9KnO466jOFjRP6xtGpUfKQvFfG7/FA9CB1ul9Bio
-	tqW4uFmxGWYE5uVV1bLjnGUWg0HODd6raZTOETP+Etk9irx855Jzc47gr6srR18aR54M+aU/DFL
-	Tj9yfbOfAuwx/NubfFdTn2eS7HDXXijjQFEfvwEYq2PllYSn7LUpKpjKOtlJa+rm02jsEWwA2DW
-	p2f9s+WrPdALnYNuaWG2jk4JvwuhCMn35SVdUcxX0NoA11hy/N4UQ6xgXSq2NWOrTjB9G5OKQ5J
-	EDu8YH3d5wSLvHVyMaguVckTewqzRYerzEY/YrJQbp/rqMWpYN48RCm7jAf/pbIsEmhDYxLp2V+
-	2g96TWrRmvso=
-X-Google-Smtp-Source: AGHT+IG2IOCjOeOs8sYspOVGNo6JXAP4dCv2MZ+rJKi1VOqe3yrtvfxYWbt/lxPo4/W3/HuTbHFpPw==
-X-Received: by 2002:a05:6000:2281:b0:3a4:f7ae:77cd with SMTP id ffacd0b85a97d-3a53313110emr1363448f8f.1.1749249617020;
-        Fri, 06 Jun 2025 15:40:17 -0700 (PDT)
-Received: from localhost.localdomain ([41.34.150.118])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a5323bee86sm2968132f8f.43.2025.06.06.15.40.15
+        d=1e100.net; s=20230601; t=1749251152; x=1749855952;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M0KcYnorcCYmwOfCT2vfZqpyW+O1lNC3ODlw57DQvoE=;
+        b=L2X3PJqpNubh30KL4PCU4rr2p3NfRq6YJ5eq/CqwYJbktB4Doo5fDaZX6e7RAVPuB3
+         pyB4r25G2OtltMyK5frdLnxJ/Co8TfEStEMO+nrCHSMNDXWuNypX9JqQy7BAGL+CYuCW
+         SmBMTGnL7teb9WyAvfYdMyaENvTPQqiT7E+8NtRT0e92XQoiWfqaBmot9YlHtboi4EM6
+         NEAJRrNSzDJtDozMtwu7QgXIiXN36Gi1gGpRlMUgcSyhlgQ8a1oCC6j2XPwxuCwm83h8
+         s55t8HN/NvMocLcnVV4Dme9Q28qdpHxnY0An7xNF470vpH2eBdQ72pw4XaSAGtZ5YRjJ
+         InlQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVrcie4kT0gkPAeBN51HqM4cJ2bFZn/Vr1iZpDcGCcaTSNFShSjd8hh/fZGvo0suf3K4eNbLSDixIo0koHlRDc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxZWgiuPnEZdTt9mY+CBPITNE9RLxhCD4XAcdWnGOaXlhWzRvTU
+	/SWvSMC/2gqBzgMq3fXQshqH4ay4OEoCrFHVojn3HOu5QkF/tjqhhPgkW0ZkbmXm3w==
+X-Gm-Gg: ASbGncu+uxMY67Tj7xDtaYu1ntxGPzXsIGky6oskzeQKRvJM0BNivg/FtcghCBMoyfA
+	I5p3vDFNLWbFIuLK1ZohBWxw3iuhgtuarre4TFF8ffOVs2alimKdhF5Y3duTOE28Q2Ktu7BzCbr
+	TYtTyLWLXDRO/2BAdDgFiMDevj1tyUwWLL/OIJ5E0RCI8p8HckIz+O/3xLwGJ4E65E4vK2S8yNS
+	IJr63o4C3OPhpwYQEw23c8mAa+bzppkiAKeSgb1BM5en4MwIiuO2kOd8OWsst9oa8VIAdgp+hPY
+	eWajKA0fzeSe40Hcc7Vw5UQ0GzT17RgpE+1SMxRaFus+q68Ca5mlmt9U/Z4B5zXpjOLM88XIdga
+	YCTZKR9cpnFU7qLBnepxOIz+0
+X-Google-Smtp-Source: AGHT+IG7hO9GoY+lsjfIcKo8gdqn8/SJyMesPC+8pn55vRpHA2eE9UpdENnEjjBD2oj6HtS8wcJVKw==
+X-Received: by 2002:a17:903:22c5:b0:215:ba2b:cd55 with SMTP id d9443c01a7336-2360204d1c3mr66275695ad.2.1749251151608;
+        Fri, 06 Jun 2025 16:05:51 -0700 (PDT)
+Received: from google.com (111.67.145.34.bc.googleusercontent.com. [34.145.67.111])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-236030969ebsm17399595ad.72.2025.06.06.16.05.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jun 2025 15:40:16 -0700 (PDT)
-From: Abdelrahman Fekry <abdelrahmanfekry375@gmail.com>
-To: skhan@linuxfoundation.org,
-	shuah@kernel.org
-Cc: linux-kernel-mentees@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Abdelrahman Fekry <abdelrahmanfekry375@gmail.com>
-Subject: [PATCH v2] selftests: ir_decoder: Convert header comment to proper multi-line block
-Date: Sat,  7 Jun 2025 01:39:14 +0300
-Message-Id: <20250606223914.117449-1-abdelrahmanfekry375@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <65743e71-fc2c-4a04-b7f1-b977031a4fb8@linuxfoundation.org>
-References: <65743e71-fc2c-4a04-b7f1-b977031a4fb8@linuxfoundation.org>
+        Fri, 06 Jun 2025 16:05:50 -0700 (PDT)
+Date: Fri, 6 Jun 2025 23:05:46 +0000
+From: David Matlack <dmatlack@google.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Alex Williamson <alex.williamson@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+	Vinod Koul <vkoul@kernel.org>, Fenghua Yu <fenghua.yu@intel.com>,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+	Adhemerval Zanella <adhemerval.zanella@linaro.org>,
+	Jiri Olsa <jolsa@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+	Wei Yang <richard.weiyang@gmail.com>,
+	Bjorn Helgaas <bhelgaas@google.com>, Takashi Iwai <tiwai@suse.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Pierre-Louis Bossart <pierre-louis.bossart@linux.dev>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	FUJITA Tomonori <fujita.tomonori@gmail.com>,
+	WangYuli <wangyuli@uniontech.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Andrew Jones <ajones@ventanamicro.com>,
+	Claudio Imbrenda <imbrenda@linux.ibm.com>,
+	Eric Auger <eric.auger@redhat.com>, Josh Hilke <jrhilke@google.com>,
+	linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
+	Kevin Tian <kevin.tian@intel.com>,
+	Vipin Sharma <vipinsh@google.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Adithya Jayachandran <ajayachandra@nvidia.com>,
+	Parav Pandit <parav@nvidia.com>,
+	Leon Romanovsky <leonro@nvidia.com>,
+	Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Dan Williams <dan.j.williams@intel.com>
+Subject: Re: [RFC PATCH 07/33] vfio: selftests: Use command line to set
+ hugepage size for DMA mapping test
+Message-ID: <aEN0Sr96nyJkN3fL@google.com>
+References: <20250523233018.1702151-1-dmatlack@google.com>
+ <20250523233018.1702151-8-dmatlack@google.com>
+ <20250526171501.GE61950@nvidia.com>
+ <CALzav=fxvZNY=nBhDKZP=MGEDx5iGqCi-noDRo3q7eENJ5XBWw@mail.gmail.com>
+ <20250530172559.GQ233377@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250530172559.GQ233377@nvidia.com>
 
-So, this is an updated version following
-the right way of writing change logs while
-making sure the signed-off-by mismatch is fixed.
+On 2025-05-30 02:25 PM, Jason Gunthorpe wrote:
+> On Fri, May 30, 2025 at 09:50:22AM -0700, David Matlack wrote:
+> > I'll explore doing this. For a single dimension this looks possible.
+> > But for multiple dimensions (e.g. cross product of iommu_mode and
+> > backing_src) I don't see a clear way to do it. But that's just after a
+> > cursory look.
+> 
+> Explicitly list all the combinations with macros?
+> 
+> Enhance the userspace tests allow code to generate the
+> variants? Kernel tests can do this:
 
-The test file for the IR decoder used single-line comments
-at the top to document its purpose and licensing,
-which is inconsistent with the style used throughout the
-Linux kernel.
+I got a chance to play around with generating fixture variants today and
+eneded up with this, which I think is pretty clean.
 
-In this patch i converted the file header to
-a proper multi-line comment block
-(/*) that aligns with standard kernel practices.
-This improves readability, consistency across selftests,
-and ensures the license and documentation are
-clearly visible in a familiar format.
+tools/testing/selftests/vfio/lib/include/vfio_util.h:
 
-No functional changes have been made.
+  #define ALL_IOMMU_MODES_VARIANT_ADD(...) \
+  __IOMMU_MODE_VARIANT_ADD(vfio_type1_iommu, ##__VA_ARGS__); \
+  __IOMMU_MODE_VARIANT_ADD(vfio_type1v2_iommu, ##__VA_ARGS__); \
+  __IOMMU_MODE_VARIANT_ADD(iommufd_compat_type1, ##__VA_ARGS__); \
+  __IOMMU_MODE_VARIANT_ADD(iommufd_compat_type1v2, ##__VA_ARGS__); \
+  __IOMMU_MODE_VARIANT_ADD(iommufd, ##__VA_ARGS__)
 
-Signed-off-by: Abdelrahman Fekry <abdelrahmanfekry375@gmail.com>
----
-Changes in v2:
-- Fixed multiple trailing whitespace errors
-- Fixed Signed-off-by mismatch
-- Appropriate change log
- tools/testing/selftests/ir/ir_loopback.c | 23 +++++++++++++----------
- 1 file changed, 13 insertions(+), 10 deletions(-)
+tools/testing/selftests/vfio/vfio_dma_mapping_test.c:
 
-diff --git a/tools/testing/selftests/ir/ir_loopback.c b/tools/testing/selftests/ir/ir_loopback.c
-index f4a15cbdd5ea..c94faa975630 100644
---- a/tools/testing/selftests/ir/ir_loopback.c
-+++ b/tools/testing/selftests/ir/ir_loopback.c
-@@ -1,14 +1,17 @@
- // SPDX-License-Identifier: GPL-2.0
--// test ir decoder
--//
--// Copyright (C) 2018 Sean Young <sean@mess.org>
--
--// When sending LIRC_MODE_SCANCODE, the IR will be encoded. rc-loopback
--// will send this IR to the receiver side, where we try to read the decoded
--// IR. Decoding happens in a separate kernel thread, so we will need to
--// wait until that is scheduled, hence we use poll to check for read
--// readiness.
--
-+/* Copyright (C) 2018 Sean Young <sean@mess.org>
-+ *
-+ * Selftest for IR decoder
-+ *
-+ *
-+ * When sending LIRC_MODE_SCANCODE, the IR will be encoded.
-+ * rc-loopback will send this IR to the receiver side,
-+ * where we try to read the decoded IR.
-+ * Decoding happens in a separate kernel thread,
-+ * so we will need to wait until that is scheduled,
-+ * hence we use poll to check for read
-+ * readiness.
-+ */
- #include <linux/lirc.h>
- #include <errno.h>
- #include <stdio.h>
--- 
-2.25.1
+  #define __IOMMU_MODE_VARIANT_ADD(_iommu_mode, _name, _size, _mmap_flags)	\
+  FIXTURE_VARIANT_ADD(vfio_dma_mapping_test, _iommu_mode ## _name)		\
+  {										\
+  	.iommu_mode = #_iommu_mode,						\
+  	.size = (_size),							\
+  	.mmap_flags = MAP_ANONYMOUS | MAP_PRIVATE | (_mmap_flags),		\
+  }
 
+  ALL_IOMMU_MODES_VARIANT_ADD(anonymous, 0, 0);
+  ALL_IOMMU_MODES_VARIANT_ADD(anonymous_hugetlb_2mb, SZ_2M, MAP_HUGETLB | MAP_HUGE_2MB);
+  ALL_IOMMU_MODES_VARIANT_ADD(anonymous_hugetlb_1gb, SZ_1G, MAP_HUGETLB | MAP_HUGE_1GB);
+
+  #undef __IOMMU_MODE_VARIANT_ADD
+
+Let me know if you think this looks reasonable.
 
