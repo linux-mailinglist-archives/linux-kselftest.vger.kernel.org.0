@@ -1,67 +1,67 @@
-Return-Path: <linux-kselftest+bounces-34457-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34458-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE2B7AD1AEA
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jun 2025 11:47:07 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E73D8AD1AED
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jun 2025 11:47:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B1FB16B78C
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jun 2025 09:47:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DB9367A26EC
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jun 2025 09:45:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B5C925228E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86CA7253920;
 	Mon,  9 Jun 2025 09:46:42 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F5CB1A238C;
-	Mon,  9 Jun 2025 09:46:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A96AF1B78F3;
+	Mon,  9 Jun 2025 09:46:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749462401; cv=none; b=aD5t2gQLxmxsZWdZn8lPnjeRJvWnnTGBxxU+Fk+yskPdepXHCh7G3Ct7fHocU+iRTScCl5HYx0GxiYS+d+BpxiIeiQE/eoIR7HE3bx1eDL1hxXXIWlY7S0TuZnk2OD7CF7ZFVmyYsoAOeFtpgi6h6MdskXBr9Ll1E32xUP6PC+c=
+	t=1749462402; cv=none; b=M+CGgbDCfZWdg3YemOyVevzPpLk4NYFAXvwN6KXhhTkMsMK0o5m6MxbTXA/QF3x4pTRGiyX8xDD0Ic9uL7hF/mkZpU8Q7zpl6KVdi3DXzIyXA8N9mNzLaXDvyOYyEStwdHzAmWVZGdr85E6CJhhYTulr+CHlg4FWerAFrUsJo6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749462401; c=relaxed/simple;
-	bh=PcMgP/Xx+i1wlGQQTmnJJGspz6T6srm8czqC/8uKNrg=;
+	s=arc-20240116; t=1749462402; c=relaxed/simple;
+	bh=M77Dohdcks7F+pmdLkwjKzh3y7A/CL8UcrnCn8JYYjY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=unkOetBz+vRIDK6/mMZL+8StXGYLFX9dSpwH0GDoOC4fhu3ioHlGK9OviPUtirDr10HFRs2CZU5VrNaG8axKPpU9+NvPtd1uSkmoS29bh7serPDwNmZVxUk6DVZ21moaxkPqdgxZO9oRfBZPguv7eN2/iq9S6by/UhLxMMf6arc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.52
+	 In-Reply-To:To:Cc; b=b3KntWxCeCd57fVF0sXQ/MW0HoMMEOfR5PWomVec3Zkr49Usjx1OYgS3i5EA1AgYIkmiVJZuIAGj4TPSHKE/J14rej9+FQaHLqP0mbgRmRS9T42sfJfwMNJpcSfiL2vJCemQkOgvP+2NK/BlR+uIyqnAy0H2FssklGmb6u3FPC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-605b9488c28so6607056a12.2;
-        Mon, 09 Jun 2025 02:46:38 -0700 (PDT)
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-ade33027bcfso303041466b.1;
+        Mon, 09 Jun 2025 02:46:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749462397; x=1750067197;
+        d=1e100.net; s=20230601; t=1749462399; x=1750067199;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9srcSMol0c+UDsrqSjvhXDEchnbl8eBTxxIuTk0MKl4=;
-        b=t/nYqclP+oqmP0wPFrj0J3mPyBP31jtJDDhky2xttFkrZC1/Hh66wMxN/v/dnElwY4
-         TKL0bGOXH+YuPOBErWd2+kGlisDKxPbDncvXslqZNF6CZPT6TCzkhqo2MX00F6gHQTz5
-         lxAe15uHhKcGY5f71q/cuwF/Qiw7R6Lldg4per1v5rE66Yy+wJnoE7k5IgIRMeFg/qhC
-         KZSqH0D6h+TPGrPYMVK6yn7YiUrEwh38ATx+jU/RIpmAWkSwuD6lm3eyN6tvrkrisKH8
-         StPMW22fijq2pfJYBd3j45WBPg9oEH2PTAUbiMAfSjtSzq7Pn+Kjdx5jHXZnUnA1HeeX
-         nY+w==
-X-Forwarded-Encrypted: i=1; AJvYcCU+SGPX5wxB8uWTgOxgjsL8gEILr6t624xxx7lFk+6ax9i0yRXJHbyfcgK+187h8mhaJuX7LyBeqnZKfbm1i0Rl@vger.kernel.org, AJvYcCXaN4Hs22b1jcWNS5CT/eB5QY1RyA8TDdT7r9pevVdHjQJ2BmayyiVo/BoV2palPHu+EIz4lNPTohWlKpk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxXC+TW/phRnchcUdX8cIFUaHaNpv1p8eUTBxhEUx3xd/WdtPXh
-	iVPOaowFHr5FvmHZWbmBGmPzvYGs1VAMUKpothO6Qc9Q1usjkAF7S9UUNpjRiw==
-X-Gm-Gg: ASbGncsoun/wz+hq0pKGmDZH15bbGRsQOZrjdENooUyith9V1cb/kJf73O39b2tAoEy
-	dW57ysBBH2tPYKk0GZ7uWZw8sLovJ4cWcZelL8HXQZ+LZLDrl15L/9eIz5ZnFyh7gMdLtphLzyS
-	ZTsMTAYoMsVhMwF9XoFm8XJZ8waIGQ6NN35S+RgyKbfEccwvcwYcEkKaL71jDzyZ0jyuSVC9Yr/
-	jISAEf5Xe0TrWCwtbGyFX9abUoeqBE/h2DI4TpZQsIM7Oc07CSi+2Fdknm9TZG0EGIrnZa8jiRS
-	l3KTijIrlPRO1s1noggLNWpjkafEC7yrd3VjnTD2mdX+hFNPDeArNg==
-X-Google-Smtp-Source: AGHT+IExjHyiPhte1wwY1E+snj45M23nryaOO7uTbbMCxtigSnjey2IkVn1y4SiCS8mVaf9DAC0EDw==
-X-Received: by 2002:a17:906:dc8b:b0:ad2:28be:9a16 with SMTP id a640c23a62f3a-ade1abc4055mr1125553066b.51.1749462397154;
-        Mon, 09 Jun 2025 02:46:37 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:71::])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ade1db575f9sm523118766b.48.2025.06.09.02.46.36
+        bh=8m3a7UChjUd7XKPt0ibqoeBEr419vnR0BHhyGlJO5vk=;
+        b=Kb2ye8AkJNFI1Q23sJL84kcPhgX7RSJMsYENEUwrtQxgmU9Sbp8fqJ5NGvHBxMYwht
+         +/ZB2HAjGGwya2Uvrpo2RFLNiYCyywCxCyKpVc9WY/k5JqomKn6JX64i5NmiGK3/WdrL
+         ledhP/CBCRpnmYvEpZaBmYu3JXwXZ4cnSE2qpjU8p44qPgIlOotEzFFNT8uSgMvF3cQP
+         +e8ed6WfGvno/0zlaTP3MvDTMP+3js943uoE5zDvFE4HwQxWVm8+CZteYVqDXRxOgLl/
+         VUB63u5XKLaYhrZBBjx3qx00CmeUnks1egZjyAwxaZfC9wMdrKGDVqaeYKuMtpikUD8f
+         qRdA==
+X-Forwarded-Encrypted: i=1; AJvYcCUKWBnDsRqEa9E2LCkxusSLnics8VzIcVatpTg/+9KnvKGl0yBWX94tvW6yW+NMh2Y/o4l8DtaIzkae9m0=@vger.kernel.org, AJvYcCXD+hTt0LirUxBQAHbpGBhQ2sKbCESQ3jZySZmI9Yk5YKTlSIrhV8Tp0G+Pd4pfnq5oeRZYH3B5tPXBWLOVIZdY@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEcvACNxzObmsdfhtx2Rd4hHy7NUk+ccN53dIpHp9GBJ2QdUjW
+	I0B1FcO3VvAMT4rAtUYxJ5wt1Sdzse+ZSgXfcsttKGwUlwiDdzw/ZOQkc/pkLg==
+X-Gm-Gg: ASbGnctjytImdRnBvz5f+jiedUTQ5XSYUBSNAmCVsU+z4qMtszP7DQm+jct15qI13e8
+	bF3F/YWdIMKVfTR2o/lcFqSbCjy93C4H+1b3DiZxfwfahfWPhkQ4FRvY0l7QqUaBZCZLLxOL2gn
+	Pq8xfwyl0ZYJOAk6md7Gx6+Mfs6KKinefYH5p8eRw5xL/PhoIsXwX4Qw5TZsqxQYUu7/oypcb7O
+	2kg3cHkuDOsX8jzyswJE2E5O6PZ6OW7w6dzJ4GEfVFJn24FVptUst6v/YbUMbgc+q5zsgwd83ik
+	i6VoGTpkQNewJdryQ5HDHKOzKC2V7bcflrcjqrtbNQ==
+X-Google-Smtp-Source: AGHT+IFf2A541fHEB70IxIl9r/qHLkmoAHSrk1DX6IYAvQjouUtGTRuKB/Oul1WEFv80beUotf6usQ==
+X-Received: by 2002:a17:907:94c4:b0:acb:5c83:25b with SMTP id a640c23a62f3a-ade1a9c818amr1211994966b.7.1749462398564;
+        Mon, 09 Jun 2025 02:46:38 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:1::])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ade1dc3a4absm532197866b.143.2025.06.09.02.46.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jun 2025 02:46:36 -0700 (PDT)
+        Mon, 09 Jun 2025 02:46:38 -0700 (PDT)
 From: Breno Leitao <leitao@debian.org>
-Date: Mon, 09 Jun 2025 02:46:27 -0700
-Subject: [PATCH net-next v3 2/4] netconsole: Add automatic console
- unregistration on target removal
+Date: Mon, 09 Jun 2025 02:46:28 -0700
+Subject: [PATCH net-next v3 3/4] selftests: netconsole: Do not exit from
+ inside the validation function
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250609-netcons_ext-v3-2-5336fa670326@debian.org>
+Message-Id: <20250609-netcons_ext-v3-3-5336fa670326@debian.org>
 References: <20250609-netcons_ext-v3-0-5336fa670326@debian.org>
 In-Reply-To: <20250609-netcons_ext-v3-0-5336fa670326@debian.org>
 To: Breno Leitao <leitao@debian.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
@@ -82,109 +82,62 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  gustavold@gmail.com, Usama Arif <usamaarif642@gmail.com>, 
  linux-kselftest@vger.kernel.org, kernel-team@meta.com
 X-Mailer: b4 0.15-dev-42535
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3187; i=leitao@debian.org;
- h=from:subject:message-id; bh=PcMgP/Xx+i1wlGQQTmnJJGspz6T6srm8czqC/8uKNrg=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBoRq14syo3K59GlRRtZ/UTJ18TAka+WDv7liY1z
- Ie8t+/sMs6JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaEateAAKCRA1o5Of/Hh3
- bfmrEACC6/RhIchyphNzgUoDnwYukGg0+m1yS0ka+SpqBs/N2ddHwFjNVNHKoiKLt8Quha0EF/Y
- oDAklIbHOP8eR4ZFBHK6D5AhGw3M5xeAzZpNMmI5KRs0+4UUqUIhXa78tftmEpK/ZxhxTdnfm07
- kOHZSYM9iJud7vQMe3ABkrbVVKzWqfmLZAwZhyQJTJr1HL5PuFHXYNokJKOJEEFRy3PDir9aYKx
- +o6UHkXx0aHXhar4wJXqya1N6EUSQh8EVsfvFpkvk/oBYMgc5WAfDb6bAcTPDJ5N472VBpOF3S+
- IT/lUvDpOf6uWtTGgngw3Cqx3yfSOPH5sy/FsK/ndjLMDKezfpdUAeVD4hRERuCI1OAVZXkm53j
- et54Gea4bNTatQDGdsGUJpKB7Mk9Ej7fb+dFrNRg5m21e1eKV+czFr/e+bLol6VckULXctpVP0i
- yr3MmoH/jqnSqYPpkWo4aFe4beZSkifRnfUiu85xe4/qfQKhRsVBsIRDUiR1Qack+2ytzhz3RHN
- kk2OI9uVsjRemCllal35e9Mk+6x6yAtBkpnUEQ93RN37AeEiKqr9B5AcOijKHFA2lZ9GhZVZztN
- HI1ZgqkiWNAF3rxuHvMk/9Hj1tvH+Xj0typTIMy1JcEOXIXHC0Ze3YF9oVgWELKPn1wPLtuyaSg
- XeTerqsc4OR1znA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1842; i=leitao@debian.org;
+ h=from:subject:message-id; bh=M77Dohdcks7F+pmdLkwjKzh3y7A/CL8UcrnCn8JYYjY=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBoRq14sjI2ZotnHIOJAiEOYzYnNNjI2XncK4uBZ
+ Or/9NSFQcmJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaEateAAKCRA1o5Of/Hh3
+ bVWZD/9zW8W8nXlsc0Vqd34Qd121sHapyvL0JszEa9ylMDHeG+VB9Z1XZRicAxqYGDP3IGIBKrk
+ SayaKm1d3jaJygPa+16n3hVFNFgy7VScczfo3Ik8J9aJ+NAJ54uYIteDVj2+iyqrvzA5Shuj1XN
+ RobXC3IdvDc3bq8bAVy4lzgbekzP3z9Sh0vju4ujRink3r5KGr4LW4bfAheTnXz6mHq+PWcmhTe
+ VgponPTliOF00VBrqLlFpBDkYzVOijrPAPgN6Y2mdJuf07+/w5fdgc/xZk/crQkYxfPO+9KVqMR
+ J8Ox2n5rxDQ26DcPt1iHV74QJvk2vhWdwOj68H5n56jzWB++f8/6so+mMdtLctHVtIH2d5eQaEw
+ GrjuFBVmm3Q2M3uWn6R2IsRgYYGxhpdHnSOSRkE2oIql353zblPBbzwxwVENlrMv/rz605Lb2N5
+ CJABvtRibO28ZerXQ7y/VoQorX7FI4p9LQyCDtv95GGgv98Ab5T1Q6HyHG81Ytgui0TQFaUsHz2
+ hB2DS2yxmuyjImn7q4bb7UQ+tAQ2XI3CGPB3JRfN5ioWZf/ocNNhQaFiwXHjfZ4SGE+2P+bGsWL
+ S5M5RXgb9SvzB94Hw0DTDjxiZwP2A5bdTz1YzuT2ib4S7gO1BTFZ9LcKof++d5rR51G9FQkKd8S
+ X9H9/qxHXFJU63w==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
-Add unregister_netcons_consoles() function to automatically unregister
-console handlers when no targets of the corresponding type remain active.
+Remove the exit call from validate_result() function and move the
+test exit logic to the main script. This allows the function to
+be reused in scenarios where the test needs to continue execution
+after validation, rather than terminating immediately.
 
-The function iterates through the target list to determine which console
-types (basic vs extended) are still needed, and unregisters any console
-handlers that are no longer required. This prevents having registered
-console handlers without corresponding active targets.
-
-The function is called when a target is disabled and moved to the cleanup
-list, ensuring proper cleanup of unused console registrations.
+The validate_result() function should focus on validation logic
+only, while the calling script maintains control over program
+flow and exit conditions. This change improves code modularity
+and prepares for potential future enhancements where multiple
+validations might be needed in a single test run.
 
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
- drivers/net/netconsole.c | 39 +++++++++++++++++++++++++++++++++++++--
- 1 file changed, 37 insertions(+), 2 deletions(-)
+ tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh | 1 -
+ tools/testing/selftests/drivers/net/netcons_basic.sh      | 2 ++
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
-index 01baa45221b4b..21077aff061c5 100644
---- a/drivers/net/netconsole.c
-+++ b/drivers/net/netconsole.c
-@@ -460,6 +460,33 @@ static ssize_t sysdata_release_enabled_show(struct config_item *item,
- 	return sysfs_emit(buf, "%d\n", release_enabled);
+diff --git a/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh b/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
+index 29b01b8e2215c..2d5dd3297693c 100644
+--- a/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
++++ b/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
+@@ -185,7 +185,6 @@ function validate_result() {
+ 	# Delete the file once it is validated, otherwise keep it
+ 	# for debugging purposes
+ 	rm "${TMPFILENAME}"
+-	exit "${ksft_pass}"
  }
  
-+/* Iterate in the list of target, and make sure we don't have any console
-+ * register without targets of the same type
-+ */
-+static void unregister_netcons_consoles(void)
-+{
-+	struct netconsole_target *nt;
-+	u32 console_type_needed = 0;
-+	unsigned long flags;
+ function check_for_dependencies() {
+diff --git a/tools/testing/selftests/drivers/net/netcons_basic.sh b/tools/testing/selftests/drivers/net/netcons_basic.sh
+index fe765da498e84..d2f0685d24ba3 100755
+--- a/tools/testing/selftests/drivers/net/netcons_basic.sh
++++ b/tools/testing/selftests/drivers/net/netcons_basic.sh
+@@ -50,3 +50,5 @@ busywait "${BUSYWAIT_TIMEOUT}" test -s "${OUTPUT_FILE}"
+ # Make sure the message was received in the dst part
+ # and exit
+ validate_result "${OUTPUT_FILE}"
 +
-+	spin_lock_irqsave(&target_list_lock, flags);
-+	list_for_each_entry(nt, &target_list, list) {
-+		if (nt->extended)
-+			console_type_needed |= CONS_EXTENDED;
-+		else
-+			console_type_needed |= CONS_BASIC;
-+	}
-+	spin_unlock_irqrestore(&target_list_lock, flags);
-+
-+	if (!(console_type_needed & CONS_EXTENDED) &&
-+	    console_is_registered(&netconsole_ext))
-+		unregister_console(&netconsole_ext);
-+
-+	if (!(console_type_needed & CONS_BASIC) &&
-+	    console_is_registered(&netconsole))
-+		unregister_console(&netconsole);
-+}
-+
- /*
-  * This one is special -- targets created through the configfs interface
-  * are not enabled (and the corresponding netpoll activated) by default.
-@@ -493,14 +520,18 @@ static ssize_t enabled_store(struct config_item *item,
- 			goto out_unlock;
- 		}
- 
--		if (nt->extended && !console_is_registered(&netconsole_ext))
-+		if (nt->extended && !console_is_registered(&netconsole_ext)) {
-+			netconsole_ext.flags |= CON_ENABLED;
- 			register_console(&netconsole_ext);
-+		}
- 
- 		/* User might be enabling the basic format target for the very
- 		 * first time, make sure the console is registered.
- 		 */
--		if (!nt->extended && !console_is_registered(&netconsole))
-+		if (!nt->extended && !console_is_registered(&netconsole)) {
-+			netconsole.flags |= CON_ENABLED;
- 			register_console(&netconsole);
-+		}
- 
- 		/*
- 		 * Skip netpoll_parse_options() -- all the attributes are
-@@ -528,6 +559,10 @@ static ssize_t enabled_store(struct config_item *item,
- 		list_move(&nt->list, &target_cleanup_list);
- 		spin_unlock_irqrestore(&target_list_lock, flags);
- 		mutex_unlock(&target_cleanup_list_lock);
-+		/* Unregister consoles, whose the last target of that type got
-+		 * disabled.
-+		 */
-+		unregister_netcons_consoles();
- 	}
- 
- 	ret = strnlen(buf, count);
++exit "${ksft_pass}"
 
 -- 
 2.47.1
