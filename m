@@ -1,116 +1,97 @@
-Return-Path: <linux-kselftest+bounces-34485-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34486-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E62CAD2264
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jun 2025 17:26:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B5EBAD2292
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jun 2025 17:35:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 962313A5812
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jun 2025 15:25:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 92CCF3B082F
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jun 2025 15:34:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D4292139B0;
-	Mon,  9 Jun 2025 15:25:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36515202C5C;
+	Mon,  9 Jun 2025 15:34:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JHFbwsGA"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="SyaH7X2A"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 530892116F2;
-	Mon,  9 Jun 2025 15:25:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7797C1D5145;
+	Mon,  9 Jun 2025 15:34:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749482753; cv=none; b=gxrvdAbpt1IeQwJVlj+dgd8701EJLXpACEOiJJaY7k6rBR6laipG/IUSCd5zBTXGhzHbo7y9a8K+k4/fRMlUAqQ9AYhpfzk4pwQI9ikkbFs/p7G7QI+ZElzGLcdQJEXqTt7IrAqRIlFdFMsyb3XwLjl5T2Pgo9f+2d6UdZ6ymIA=
+	t=1749483279; cv=none; b=BZvCcqMAoILL+7lasex2I/V2ytb13nPnVNkcwy/uPilCoVSVMlEcDGTO8xHnfECbUvHKaRkyUKjy+fzBchmOdDk+BZqX6pTSt4YxVzDR731iTedbXt9X+etclIISDY1X3nMSaMpjpxFzI+0nU7KPJlHx/0rI3VTBqn8KnFalWrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749482753; c=relaxed/simple;
-	bh=YiFiB0gJqqVhDkl2hVnB2VVfQod5K7jSRTa08zi1g3A=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=jBPORXVNfYzOx14iFBZLXd8788tgKYPM6HrNJWNEe8jISOKPPFTOyYWDGHElPUP1Am7GU/Z/VNw4Yb+DeJZWtXL75IUwyTSTo174UbXY08cPAkRMiCCYAYijQScveu4H3QLUzwxxN5BvmhMr7CleI6I4elAILqKKqS3R9P12lH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JHFbwsGA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27938C4CEEF;
-	Mon,  9 Jun 2025 15:25:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749482752;
-	bh=YiFiB0gJqqVhDkl2hVnB2VVfQod5K7jSRTa08zi1g3A=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=JHFbwsGA9NvrUXv28rBLETzbHH3jvPOJSUhw9dTYnxnkZVG7Qf0Syvsx1EKVwZkBp
-	 G0hM3XLi4FAoKjzzyhLMv0jNt04ub6m1UmIWHQRzhE2TO+NdhiH6ThMkDfCCqYo03w
-	 5zpy0UFHQrgTNQ56io5EC/EOzlWpdAbrzb0lCeygyPeeHYxUE9Z4IIKjlcE1ssrOV7
-	 ebs0sAaDzPPSRbTWkqd/qyfxjbEIh3gda8BjCNra/jnD9jMVCxCIeK2R+YKXpkeG/R
-	 Rbua09Ds4wfCHWD559/hwdTIHhN4CzDKgWYk6PQpo5OgnDy3kjskIxgeMQVoarYoRs
-	 FzmfjWoowOLbA==
-From: Mark Brown <broonie@kernel.org>
-Date: Mon, 09 Jun 2025 16:25:33 +0100
-Subject: [PATCH v2 3/3] kselftest/arm64: Specify SVE data when testing VL
- set in sve-ptrace
+	s=arc-20240116; t=1749483279; c=relaxed/simple;
+	bh=rJ0dKCI6FizSqv1KsmJCxjCnLfD7wV+uXaYhQiwtVyw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d5+2PZ3P5PuEXd0/iJ9NEzmAS5x3NAegGGvYxwteaQUayFAuIlHlquQS9P5M8cDBRKl5PbTtRnQeEEXxLc12fRKDIpxlJ3YT80b8gDsWSmFK6/N2XHfsWGMrbN0aj0pnnYBi9PlYU7m6/dqqLrmpXOYDcJ/vj+5FXsUQeReVPyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=SyaH7X2A; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1749483274;
+	bh=rJ0dKCI6FizSqv1KsmJCxjCnLfD7wV+uXaYhQiwtVyw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SyaH7X2AjTdpmHREtSCNh+inUQ81NzASls6AVx1xftSWlXoSsoHAha+lLWLfOWPH7
+	 3t6w10VagEIJgtmPS0I8C3Bt6sXKQxQkVfbEtKgddptuOQNMX9cMO+StgD7ele+l18
+	 pngksDER6b6aQnIVsNfUAJns+QQZzXKby2rBOTuk=
+Date: Mon, 9 Jun 2025 17:34:33 +0200
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Mark Brown <broonie@kernel.org>
+Cc: Willy Tarreau <w@1wt.eu>, Christian Brauner <brauner@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 1/2] tools/nolibc: Provide vfork()
+Message-ID: <df6f5620-5986-4080-bb00-c7bee856bf66@t-8ch.de>
+References: <20250609-arm64-gcs-vfork-exit-v1-0-baad0f085747@kernel.org>
+ <20250609-arm64-gcs-vfork-exit-v1-1-baad0f085747@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250609-kselftest-arm64-ssve-fixups-v2-3-998fcfa6f240@kernel.org>
-References: <20250609-kselftest-arm64-ssve-fixups-v2-0-998fcfa6f240@kernel.org>
-In-Reply-To: <20250609-kselftest-arm64-ssve-fixups-v2-0-998fcfa6f240@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>, 
- Shuah Khan <skhan@linuxfoundation.org>, 
- linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.15-dev-c25d1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1584; i=broonie@kernel.org;
- h=from:subject:message-id; bh=YiFiB0gJqqVhDkl2hVnB2VVfQod5K7jSRTa08zi1g3A=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBoRvz35uw4ddJPvpDN/dzqJsanKCxAQyD2Ha9ER7Yr
- Zs35tqyJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaEb89wAKCRAk1otyXVSH0LAaB/
- 9dY59pv9f64cvRL5SwQdgxAsI9AN/Fa8n9B9AOLV/8yI26OL6icpvFxOm+xMGqQrKccfZwBY4dGhFB
- Nh2zxYF3P8mBWOEBSjQDvn8TxyL1GcdZis3jP17X0oEjYh3y4IEjifSazXut+K4Szq2Er68xBv8wXz
- svEqCr4jCZ4e/lzKSUf2OHekwAxbTAiP3EyUyQYAsR9Y926yP2nGmHw/c258cenegC9ZdBH8PiPkLv
- mZn7RQ05xmk0lGHnCL/f58tMLa+RkjssJglDa8AHPPdZBfa/KY7HBzf0sKQli37VRIjZZVYnFBXBJk
- lXWcIrhd0hUxPnCcZx0+nhdyhdWiIJ
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250609-arm64-gcs-vfork-exit-v1-1-baad0f085747@kernel.org>
 
-Since f916dd32a943 ("arm64/fpsimd: ptrace: Mandate SVE payload for
-streaming-mode state") we reject attempts to write to the streaming mode
-regset even if there is no register data supplied, causing the tests for
-setting vector lengths and setting SVE_VL_INHERIT in sve-ptrace to
-spuriously fail. Set the flag to avoid the issue, we still support not
-supplying register data.
+Small followup review, sorry for the noise.
 
-Acked-by: Mark Rutland <mark.rutland@arm.com>
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/arm64/fp/sve-ptrace.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+On 2025-06-09 16:08:56+0100, Mark Brown wrote:
+<snip>
 
-diff --git a/tools/testing/selftests/arm64/fp/sve-ptrace.c b/tools/testing/selftests/arm64/fp/sve-ptrace.c
-index 7e259907805b..7f9b6a61d369 100644
---- a/tools/testing/selftests/arm64/fp/sve-ptrace.c
-+++ b/tools/testing/selftests/arm64/fp/sve-ptrace.c
-@@ -170,7 +170,7 @@ static void ptrace_set_get_inherit(pid_t child, const struct vec_type *type)
- 	memset(&sve, 0, sizeof(sve));
- 	sve.size = sizeof(sve);
- 	sve.vl = sve_vl_from_vq(SVE_VQ_MIN);
--	sve.flags = SVE_PT_VL_INHERIT;
-+	sve.flags = SVE_PT_VL_INHERIT | SVE_PT_REGS_SVE;
- 	ret = set_sve(child, type, &sve);
- 	if (ret != 0) {
- 		ksft_test_result_fail("Failed to set %s SVE_PT_VL_INHERIT\n",
-@@ -235,6 +235,7 @@ static void ptrace_set_get_vl(pid_t child, const struct vec_type *type,
- 	/* Set the VL by doing a set with no register payload */
- 	memset(&sve, 0, sizeof(sve));
- 	sve.size = sizeof(sve);
-+	sve.flags = SVE_PT_REGS_SVE;
- 	sve.vl = vl;
- 	ret = set_sve(child, type, &sve);
- 	if (ret != 0) {
+> +#ifndef sys_vfork
 
--- 
-2.39.5
+This ifndef is not necessary here.
+No architecture has a special version.
 
+> +static __attribute__((unused))
+> +pid_t sys_vfork(void)
+> +{
+> +#ifdef __NR_vfork
+
+For consistency:
+#if defined(__NR_vfork)
+
+> +	return my_syscall0(__NR_vfork);
+> +#elif defined(__NR_clone3)
+> +	/*
+> +	 * clone() could be used but has different argument orders per
+> +	 * architecture.
+> +	 */
+> +	struct clone_args args = {
+> +		.flags		= CLONE_VM | CLONE_VFORK,
+> +		.exit_signal	= SIGCHLD,
+> +	};
+> +
+> +	return my_syscall2(__NR_clone3, &args, sizeof(args));
+> +#else
+> +	return __nolibc_enosys(__func__);
+> +#endif
+> +}
+> +#endif
 
