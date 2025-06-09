@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-34512-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34513-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA52EAD250E
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jun 2025 19:35:42 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96A1BAD250B
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jun 2025 19:35:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 80A291891942
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jun 2025 17:35:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1EAF57A7815
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jun 2025 17:34:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D857C21D00D;
-	Mon,  9 Jun 2025 17:34:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3991A21D3DC;
+	Mon,  9 Jun 2025 17:34:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RndpDoCc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fj5eqiuN"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADFA521CFF4;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F8E321D3CA;
 	Mon,  9 Jun 2025 17:34:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749490497; cv=none; b=BwYwXDMObbA6DR/hR202Q4NqMLD/uUNFfEoBDw8tGX2KMJTA6Qv2cev4Bmx5V781q5YWU8e1G2i1zGFg6qiVKpbFCzupetv/tkC00hIfjSwuq+yrdtKREnmY0p0XkuZH+fzkMV0/BGAfUE0sOtB3UFPi1CyAo4yt4uFI00oVGs4=
+	t=1749490498; cv=none; b=fGyI9UeN/zn4blvChqW4nOsnwodEDQzovioJMZtzJWJjkmRj1o8nwVE2hkHGP5vE13EHhyRYfrn7NhT78fwONMuihiVp9bDGgUNJflUxz0zpcvOLw5KSoMB+z2H+me3WeUYhifJaYFha9ATA8IuD352y8MwGAYHlBkM5i/GfIA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749490497; c=relaxed/simple;
-	bh=8H8hEpWXQkhTJSSB0aoHtRWu5OCi4/cvplwAeuUL16U=;
+	s=arc-20240116; t=1749490498; c=relaxed/simple;
+	bh=P0uyLXZUJ1b2YGY6ixM1C+JXdrEdr9j6L4IfO3sQ7R8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XEKKaH3ed7Z6rizxkG2D2Wsaa6O8AsIkQBGkirS0q8jLrCkIHoKb2APMbb+rGXmXghhioKBVlV+bNaACIYUUvVdY0rVh3O2aJpo9Os8t9h2aXy0qq0eztZlCoA9lZRMoFUI3+SO2TgSowbv1rOmw2QBAWivBzvnz/4se/1hJdBU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RndpDoCc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAC3BC4CEEF;
-	Mon,  9 Jun 2025 17:34:56 +0000 (UTC)
+	 MIME-Version; b=SGuAWQ8WrQlFZxEVksJ837B2LB6vGaeuRq+G85CpdtVWVVUbImDzkXS7xVSQImW8i7nF5GpVAAVmOqz7waRCaQVs7bZ8T4qbkgm7IzayG37mLMh4OuoOrAr6Zp0FI5R1rYU0lzIA7vf98ajZrorTQJGqeP1OYT10kPvu3eHiuJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fj5eqiuN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54773C4CEF6;
+	Mon,  9 Jun 2025 17:34:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1749490497;
-	bh=8H8hEpWXQkhTJSSB0aoHtRWu5OCi4/cvplwAeuUL16U=;
+	bh=P0uyLXZUJ1b2YGY6ixM1C+JXdrEdr9j6L4IfO3sQ7R8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=RndpDoCcX4mBM8J5p5iSGeo3nErrU/fHKbaalUHSjOrOEUDmFi8I+WzWGD//B9Y1K
-	 JaBCTPNSJ1CQz7/MBYssZDIqomCNpDKPXQsPYTCwFLNc75bU+aSdFOMvEmJxyM2m8Y
-	 CvRVMs9kA7xBSPkB9a/5taUkg9occRbdHsRRZ05QCtTIz98YBvCVmkGuvuIZLXX3Ty
-	 jLh9T8DsINZqo8ET+MQmOJrsycLRGDygaM20pjdDca2iXyv29qG5xtT2nnlaZ+Txfy
-	 Pisiv2BctUl1J2c1aZwja5qV59G270IYDoXZVOFdXJ9hJbHK3xnzZxiOj3fTzVEniN
-	 eFWNAztpTsd/Q==
+	b=fj5eqiuNf2Y5tsv10HOnXxTcxQ0stff3Bg9U1nxzTFCaZfHbIKAER+EzqER8IrGaS
+	 BAWX99AYfG94OFUhTWgzD1mQJiuT7nlpSYnTrMDRut6CMCCGT+LGK7WmAApaoZkaNH
+	 tAildvKjNA0oBTRBcJqpoFN618Gz8narWR7fVWtlyk6pde2BIMx5n/0ERkDNhees5H
+	 jfxz79MaNf5xDQL5tm1bMBwgQU5RufVOMz8EewbR0sGcFxxW4f32M80bCyb1MnnmZ2
+	 wldmYLcYdbC56AiTWMGrRojn8PWWUxW0Qz9LYkNbMDA6vjEK/9Il39h752aNQFCOBf
+	 cTerovs+zp2zw==
 From: Jakub Kicinski <kuba@kernel.org>
 To: michael.chan@broadcom.com,
 	pavan.chebbi@broadcom.com
@@ -53,13 +53,11 @@ Cc: willemdebruijn.kernel@gmail.com,
 	horms@kernel.org,
 	Jakub Kicinski <kuba@kernel.org>,
 	shuah@kernel.org,
-	mohan.prasad@microchip.com,
 	sdf@fomichev.me,
-	dw@davidwei.uk,
 	linux-kselftest@vger.kernel.org
-Subject: [RFC net-next 5/6] selftests: drv-net: import things in lib one by one
-Date: Mon,  9 Jun 2025 10:34:41 -0700
-Message-ID: <20250609173442.1745856-6-kuba@kernel.org>
+Subject: [RFC net-next 6/6] selftests: drv-net: add test for RSS on flow label
+Date: Mon,  9 Jun 2025 10:34:42 -0700
+Message-ID: <20250609173442.1745856-7-kuba@kernel.org>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250609173442.1745856-1-kuba@kernel.org>
 References: <20250609173442.1745856-1-kuba@kernel.org>
@@ -71,78 +69,196 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-pylint doesn't understand our path hacks, and it generates a lot
-of warnings for driver tests. Import what we use one by one, this
-is hopefully not too tedious and it makes pylint happy.
+Add a simple test for checking that RSS on flow label works,
+and that its rejected for IPv4 flows.
+
+ # ./tools/testing/selftests/drivers/net/hw/rss_flow_label.py
+ TAP version 13
+ 1..2
+ ok 1 rss_flow_label.test_rss_flow_label
+ ok 2 rss_flow_label.test_rss_flow_label_6only
+ # Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
 CC: shuah@kernel.org
-CC: mohan.prasad@microchip.com
 CC: sdf@fomichev.me
-CC: dw@davidwei.uk
 CC: linux-kselftest@vger.kernel.org
 ---
- .../selftests/drivers/net/hw/lib/py/__init__.py | 17 +++++++++++++++++
- .../selftests/drivers/net/lib/py/__init__.py    | 14 ++++++++++++++
- 2 files changed, 31 insertions(+)
+ .../testing/selftests/drivers/net/hw/Makefile |   1 +
+ .../drivers/net/hw/rss_flow_label.py          | 151 ++++++++++++++++++
+ 2 files changed, 152 insertions(+)
+ create mode 100755 tools/testing/selftests/drivers/net/hw/rss_flow_label.py
 
-diff --git a/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py b/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
-index b582885786f5..56ff11074b55 100644
---- a/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
-+++ b/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
-@@ -7,8 +7,25 @@ KSFT_DIR = (Path(__file__).parent / "../../../../..").resolve()
- 
- try:
-     sys.path.append(KSFT_DIR.as_posix())
+diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
+index df2c047ffa90..56bf1f1b8377 100644
+--- a/tools/testing/selftests/drivers/net/hw/Makefile
++++ b/tools/testing/selftests/drivers/net/hw/Makefile
+@@ -17,6 +17,7 @@ TEST_PROGS = \
+ 	loopback.sh \
+ 	pp_alloc_fail.py \
+ 	rss_ctx.py \
++	rss_flow_label.py \
+ 	rss_input_xfrm.py \
+ 	tso.py \
+ 	xsk_reconfig.py \
+diff --git a/tools/testing/selftests/drivers/net/hw/rss_flow_label.py b/tools/testing/selftests/drivers/net/hw/rss_flow_label.py
+new file mode 100755
+index 000000000000..e471e13160ae
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/hw/rss_flow_label.py
+@@ -0,0 +1,151 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
 +
-     from net.lib.py import *
-     from drivers.net.lib.py import *
++"""
++Tests for RSS hashing on IPv6 Flow Label.
++"""
 +
-+    # Import one by one to avoid pylint false positives
-+    from net.lib.py import EthtoolFamily, NetdevFamily, NetshaperFamily, \
-+        NlError, RtnlFamily
-+    from net.lib.py import CmdExitFailure
-+    from net.lib.py import bkg, cmd, defer, ethtool, fd_read_timeout, ip, \
-+        rand_port, tool, wait_port_listen
-+    from net.lib.py import fd_read_timeout
-+    from net.lib.py import KsftSkipEx, KsftFailEx, KsftXfailEx
-+    from net.lib.py import ksft_disruptive, ksft_exit, ksft_pr, ksft_run, \
-+        ksft_setup
-+    from net.lib.py import ksft_eq, ksft_ge, ksft_in, ksft_is, ksft_lt, \
-+        ksft_ne, ksft_not_in, ksft_raises, ksft_true
-+    from net.lib.py import NetNSEnter
-+    from drivers.net.lib.py import GenerateTraffic
-+    from drivers.net.lib.py import NetDrvEnv, NetDrvEpEnv
- except ModuleNotFoundError as e:
-     ksft_pr("Failed importing `net` library from kernel sources")
-     ksft_pr(str(e))
-diff --git a/tools/testing/selftests/drivers/net/lib/py/__init__.py b/tools/testing/selftests/drivers/net/lib/py/__init__.py
-index 401e70f7f136..9ed1d8f70524 100644
---- a/tools/testing/selftests/drivers/net/lib/py/__init__.py
-+++ b/tools/testing/selftests/drivers/net/lib/py/__init__.py
-@@ -7,7 +7,21 @@ KSFT_DIR = (Path(__file__).parent / "../../../..").resolve()
- 
- try:
-     sys.path.append(KSFT_DIR.as_posix())
++import glob
++import socket
++from lib.py import CmdExitFailure
++from lib.py import ksft_run, ksft_exit, ksft_eq, ksft_ge, ksft_in, \
++    ksft_not_in, ksft_raises, KsftSkipEx
++from lib.py import bkg, cmd, defer, fd_read_timeout, rand_port
++from lib.py import NetDrvEpEnv
 +
-     from net.lib.py import *
 +
-+    # Import one by one to avoid pylint false positives
-+    from net.lib.py import EthtoolFamily, NetdevFamily, NetshaperFamily, \
-+        NlError, RtnlFamily
-+    from net.lib.py import CmdExitFailure
-+    from net.lib.py import bkg, cmd, defer, ethtool, fd_read_timeout, ip, \
-+        rand_port, tool, wait_port_listen
-+    from net.lib.py import fd_read_timeout
-+    from net.lib.py import KsftSkipEx, KsftFailEx, KsftXfailEx
-+    from net.lib.py import ksft_disruptive, ksft_exit, ksft_pr, ksft_run, \
-+        ksft_setup
-+    from net.lib.py import ksft_eq, ksft_ge, ksft_in, ksft_is, ksft_lt, \
-+        ksft_ne, ksft_not_in, ksft_raises, ksft_true
- except ModuleNotFoundError as e:
-     ksft_pr("Failed importing `net` library from kernel sources")
-     ksft_pr(str(e))
++def _ethtool_get_cfg(cfg, fl_type):
++    descr = cmd(f"ethtool -n {cfg.ifname} rx-flow-hash {fl_type}").stdout
++
++    converter = {
++        "IP SA": "s",
++        "IP DA": "d",
++        "L3 proto": "t",
++        "L4 bytes 0 & 1 [TCP/UDP src port]": "f",
++        "L4 bytes 2 & 3 [TCP/UDP dst port]": "n",
++        "IPv6 Flow Label": "l",
++    }
++
++    ret = ""
++    for line in descr.split("\n")[1:-2]:
++        # if this raises we probably need to add more keys to converter above
++        ret += converter[line]
++    return ret
++
++
++def _traffic(cfg, one_sock, one_cpu):
++    local_port  = rand_port(socket.SOCK_DGRAM)
++    remote_port = rand_port(socket.SOCK_DGRAM)
++
++    sock = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
++    sock.bind(("", local_port))
++    sock.connect((cfg.remote_addr_v["6"], 0))
++    if one_sock:
++        send = f"exec 5<>/dev/udp/{cfg.addr_v['6']}/{local_port}; " \
++                "for i in `seq 20`; do echo a >&5; sleep 0.02; done; exec 5>&-"
++    else:
++        send = "for i in `seq 20`; do echo a | socat -t0.02 - UDP6:" \
++              f"[{cfg.addr_v['6']}]:{local_port},sourceport={remote_port}; done"
++
++    cpus = set()
++    with bkg(send, shell=True, host=cfg.remote, exit_wait=True):
++        for _ in range(20):
++            fd_read_timeout(sock.fileno(), 1)
++            cpu = sock.getsockopt(socket.SOL_SOCKET, socket.SO_INCOMING_CPU)
++            cpus.add(cpu)
++
++    if one_cpu:
++        ksft_eq(len(cpus), 1,
++                f"{one_sock=} - expected one CPU, got traffic on: {cpus=}")
++    else:
++        ksft_ge(len(cpus), 2,
++                f"{one_sock=} - expected many CPUs, got traffic on: {cpus=}")
++
++
++def test_rss_flow_label(cfg):
++    """
++    Test hashing on IPv6 flow label. Send traffic over a single socket
++    and over multiple sockets. Depend on the remote having auto-label
++    enabled so that it randomizes the label per socket.
++    """
++
++    cfg.require_ipver("6")
++    cfg.require_cmd("socat", remote=True)
++    if not hasattr(socket, "SO_INCOMING_CPU"):
++        raise KsftSkipEx("socket.SO_INCOMING_CPU was added in Python 3.11")
++
++    # 1 is the default, if someone changed it we probably shouldn"t mess with it
++    af = cmd("cat /proc/sys/net/ipv6/auto_flowlabels", host=cfg.remote).stdout
++    if af.strip() != "1":
++        raise KsftSkipEx("Remote does not have auto_flowlabels enabled")
++
++    qcnt = len(glob.glob(f"/sys/class/net/{cfg.ifname}/queues/rx-*"))
++    if qcnt < 2:
++        raise KsftSkipEx(f"Local has only {qcnt} queues")
++
++    # Enable flow label hashing for UDP6
++    initial = _ethtool_get_cfg(cfg, "udp6")
++    no_lbl = initial.replace("l", "")
++    if "l" not in initial:
++        try:
++            cmd(f"ethtool -N {cfg.ifname} rx-flow-hash udp6 l{no_lbl}")
++        except CmdExitFailure as exc:
++            raise KsftSkipEx("Device doesn't support Flow Label for UDP6") from exc
++
++        defer(cmd, f"ethtool -N {cfg.ifname} rx-flow-hash udp6 {initial}")
++
++    _traffic(cfg, one_sock=True, one_cpu=True)
++    _traffic(cfg, one_sock=False, one_cpu=False)
++
++    # Disable it, we should see no hashing (reset was already defer()ed)
++    cmd(f"ethtool -N {cfg.ifname} rx-flow-hash udp6 {no_lbl}")
++
++    _traffic(cfg, one_sock=False, one_cpu=True)
++
++
++def _check_v4_flow_types(cfg):
++    for fl_type in ["tcp4", "udp4", "ah4", "esp4", "sctp4"]:
++        try:
++            cur = cmd(f"ethtool -n {cfg.ifname} rx-flow-hash {fl_type}").stdout
++            ksft_not_in("Flow Label", cur,
++                        comment=f"{fl_type=} has Flow Label:" + cur)
++        except CmdExitFailure:
++            # Probably does not support this flow type
++            pass
++
++
++def test_rss_flow_label_6only(cfg):
++    """
++    Test interactions with IPv4 flow types. It should not be possible to set
++    IPv6 Flow Label hashing for an IPv4 flow type. The Flow Label should also
++    not appear in the IPv4 "current config".
++    """
++
++    with ksft_raises(CmdExitFailure) as cm:
++        cmd(f"ethtool -N {cfg.ifname} rx-flow-hash tcp4 sdfnl")
++    ksft_in("Invalid argument", cm.exception.cmd.stderr)
++
++    _check_v4_flow_types(cfg)
++
++    # Try to enable Flow Labels and check again, in case it leaks thru
++    initial = _ethtool_get_cfg(cfg, "udp6")
++    changed = initial.replace("l", "") if "l" in initial else initial + "l"
++
++    cmd(f"ethtool -N {cfg.ifname} rx-flow-hash udp6 {changed}")
++    restore = defer(cmd, f"ethtool -N {cfg.ifname} rx-flow-hash udp6 {initial}")
++
++    _check_v4_flow_types(cfg)
++    restore.exec()
++    _check_v4_flow_types(cfg)
++
++
++def main() -> None:
++    with NetDrvEpEnv(__file__, nsim_test=False) as cfg:
++        ksft_run([test_rss_flow_label,
++                  test_rss_flow_label_6only],
++                 args=(cfg, ))
++    ksft_exit()
++
++
++if __name__ == "__main__":
++    main()
 -- 
 2.49.0
 
