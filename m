@@ -1,371 +1,241 @@
-Return-Path: <linux-kselftest+bounces-34476-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34477-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BD7FAD1EE7
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jun 2025 15:32:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F1A9AD204D
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jun 2025 15:57:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 32B551615F4
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jun 2025 13:32:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BC9F71886A45
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jun 2025 13:54:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EB412459F2;
-	Mon,  9 Jun 2025 13:32:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5080325D559;
+	Mon,  9 Jun 2025 13:50:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OlSY2SGr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nz3Di2xi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 569F8D528;
-	Mon,  9 Jun 2025 13:32:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 783A62571D8;
+	Mon,  9 Jun 2025 13:50:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749475943; cv=none; b=WgcERqcsqCTEc7E6bW4MOpXbpa8ESAyA4pGnysI9MfN8zNZkngtC1BSjQvYIXJ8zud2Wj7XjVdzRA7xX6vXPf+j3KrDr0jl0AxziU38UsgSqonrd7TaXuye03HvwWdMAB60Eb62n4clrRusQ2asciv3qcWaKHYQf4uz+5v/eU0Y=
+	t=1749477034; cv=none; b=Vg/y/mC2jufBp4wzudHcAjgKy6vrjZh+6gfOrHvB4GJKP998SIApcl3/bV2u8oB95subAxedhzbpgwPf73DSw4JxRk7JR6gdZxbq9377K3irr1UJipnpPQ/oG3luYYdixo2k4kIhVtFjWx/ODjQy676wm265zgIgHrpSWHrzT2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749475943; c=relaxed/simple;
-	bh=saOkQ/3rx6ZFGPKCS6zsEVobhtu/zh8QlGy2Xu55YeA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=fk76P/R/z4MSy+iIa9xaSPCNSQAQfcY67a4nAKpJ+fU3EY0F6QnMGbI2biRbFAMxba2wTY0bzkfrOk6p7IoyevIyhtVSMfeF3EnY1bGjnLr/5Msl/8nyquFp/8QKEXfCjTkAAyv410zpHnG4RqSTppu4p9S+USbbMW9zx3r4vxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OlSY2SGr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A3DCC4CEEB;
-	Mon,  9 Jun 2025 13:32:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749475942;
-	bh=saOkQ/3rx6ZFGPKCS6zsEVobhtu/zh8QlGy2Xu55YeA=;
-	h=From:Date:Subject:To:Cc:From;
-	b=OlSY2SGrvEgdjETHVplkoK82hdbxeZt2Z0qtL3sZhblJ4lD97mWgjVH5RTzhB3nfm
-	 wWXUwXqGdxh2wNOZ/dTbTRDRRuAfVFIeolAc8Nf8HEQsSYGS73a/i+vRjh8u99YiyX
-	 hAmc4jO7Uv6hwbdHRXhvAS3mrn1JGbf4xut8TwnWTCem3aw6Iz4+d+ux7vTMwd9Rml
-	 UWyZCIrv8WVdce7KcSq10JpmBa4vkStzFupPr9JeEZ0/aDmTH6re4YBlDQRzJ+Ywe3
-	 U9GoCxG+ZbsKzV1uaViQOLreIR33CH12Hs45NyHR7EBUdEka9DyV65YmTT/qhXsLaY
-	 x5DDBUybnSeng==
-From: Mark Brown <broonie@kernel.org>
-Date: Mon, 09 Jun 2025 14:29:10 +0100
-Subject: [PATCH] kselftest/arm64: Convert tpidr2 test to use kselftest.h
+	s=arc-20240116; t=1749477034; c=relaxed/simple;
+	bh=TfJRv3Jq8V/kbJ9EAFnJDVvFjSVflQQqAcFlIwK70d4=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=ePSqode9XyufJ4eK79zgALDw3XPgg8kSD8ikxMPKa5mogPBFTCZduW48OUAH7hiChQGeetT6ZrikuyiaU6/wuhByp1NndrW3CUAbJcj8Ii6FuPvc0DxvivXtkuJluwM+K+c1eDtLJdMR4dr8+fti13SDxRH4b1i/NlIXn1aGRWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nz3Di2xi; arc=none smtp.client-ip=209.85.128.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-710f39f5cb9so30749737b3.3;
+        Mon, 09 Jun 2025 06:50:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1749477031; x=1750081831; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UCFKHnn9XDXTSH/ces8W9yv4oDl2tYdrN0/ngfBqiGg=;
+        b=Nz3Di2xiHeOWgHzQeuoFddY5EoqXPAP8aTOAFkVKp1e9HoiebY+uJy5TJ4RQtStLWX
+         bt//s7veI9hlMO3q18I+41fdn2bu64I3C2APyXfvQrsjmSvbOL8JmbGXRlgYL3nQZwFI
+         /nsiFNxwTiG4m4PFRBT1WVxjMgdpt95259JY3c9iCrhXUun/SNkru0H2GFyS7nA2MpAL
+         COPDpKmPVq6X4+H4Xc7WU59GPN9QBfxaUFQCbR95OlUGhSP7P9H5nsCAJvNQwTmsuJ3S
+         +xIZsc0z+CiR5d+syzZiGhwMEhTk41N2WY/9hi1W4wWKiyHfPx1ovjDbU+TbJ4sj+rpt
+         SqpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749477031; x=1750081831;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=UCFKHnn9XDXTSH/ces8W9yv4oDl2tYdrN0/ngfBqiGg=;
+        b=WlpwTEPYihRb7Q4CArsWAKfmQN1/nr7iTr1BW+2aMdmn7fpu0DHOVWEvOHQIn8h1qI
+         rAtQdd+QJzYRjeimdC6wks9q2zkrJV3rTc1Goi913pXyAJVD1g7YCYt0g1YKyKVMbB22
+         32sqFJobTxCwBKT7NuLES8M+1EdmAcznj8JViBTc+J9lyiTYC/81zg+31NxvKZ19GSQm
+         KEQMf+4YVTNrPwjfi8H4aMuRkm9zs+OP609QLNLG4NX46cTmLI7Gkj8pGrSAZu3htX9q
+         6hv9EBKtz2jHvJqrIKamr1E/ylAf/QC/+2sJnmKnozgyz7tIPutjtcSW88t4B5BwC/eS
+         esGw==
+X-Forwarded-Encrypted: i=1; AJvYcCWIEMRnxUUEogtSORRCXSUnJkeERp/gRMcFlGz3Rv3CMjdz3FiARSeQV3er57k/zpzCY0o=@vger.kernel.org, AJvYcCWXoPRsRcZhRA4W4LKJZwc9/h2SRhblez+dpx0crBRhO06BvuK94A/orQRYI/a4JjrG8QWJa3vn@vger.kernel.org, AJvYcCXgSMraFUNowKQoPkC9AfgCb8H62ESbX2F+cZZvLgnlGQNmN9V91DLE8tJNmfg49v7kAz5yn0brqH0qJTHUAZy5@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx0cEwUpqFUJ+4PxJPOXRiFkhY+VlLR224oFoPIHzk4F2mRL9K6
+	z6YGywY1l0XZ2TaI22+VwH4YA6gXCHN8EJbhBmS0HvHaj/DmdA30JBtM
+X-Gm-Gg: ASbGncuVkFIUsh7boniQalh3CtcB6RLyc31PYk8o2cCn+j1rdTOtVgcbepad2VkkiN7
+	eHvuBybtb1YWlXjPL9f8EfxXFMcclgB8eGg/yZbn7wx6zfucRBv8dd9yKE5jVSeicRIdXYe+Yyo
+	uB1odTmK6CxiSViiCdow2nJCAtiD97QSABdIVLcSTo4scjpfrSlmwiwpssA+kXNLipXeN9kCvdw
+	7aX5x0qmiKgrgxKYUxcAcKARxkMTQtYdrhpyXIGmavNCMnt4t1VszzE5/uaocu+2qiI/uI9J7i4
+	KOz7Lq2HXd5AquQv5Mf6GCVBZb/A+5i4pHNy2BzFQImHpVwmW6rx9E8ITi1cREdQUBGZxNge0v6
+	tNSuOGEteRBFdWsIIVSupFmO3l//jVk8m2NaRh00Etg==
+X-Google-Smtp-Source: AGHT+IE9BX0iSiWC9oKQMJC2n+ps6EL2p2MU+EEs0w2d3NOwBfHjr3+wwU8sQL4sDbXG/qwafEx5UQ==
+X-Received: by 2002:a05:690c:389:b0:70d:ed5d:b4bd with SMTP id 00721157ae682-710f76ff597mr174049457b3.21.1749477031438;
+        Mon, 09 Jun 2025 06:50:31 -0700 (PDT)
+Received: from localhost (141.139.145.34.bc.googleusercontent.com. [34.145.139.141])
+        by smtp.gmail.com with UTF8SMTPSA id 00721157ae682-710f98af944sm12555627b3.13.2025.06.09.06.50.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jun 2025 06:50:30 -0700 (PDT)
+Date: Mon, 09 Jun 2025 09:50:30 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: =?UTF-8?B?TWFjaWVqIMW7ZW5jenlrb3dza2k=?= <maze@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, 
+ netdev@vger.kernel.org, 
+ edumazet@google.com, 
+ pabeni@redhat.com, 
+ andrew+netdev@lunn.ch, 
+ horms@kernel.org, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ martin.lau@linux.dev, 
+ john.fastabend@gmail.com, 
+ eddyz87@gmail.com, 
+ sdf@fomichev.me, 
+ haoluo@google.com, 
+ willemb@google.com, 
+ william.xuanziyang@huawei.com, 
+ alan.maguire@oracle.com, 
+ bpf@vger.kernel.org, 
+ shuah@kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ yonghong.song@linux.dev
+Message-ID: <6846e6a6342c7_34e997294f9@willemb.c.googlers.com.notmuch>
+In-Reply-To: <CANP3RGcUbSG3dQQbDrsYq9YSMStXbmEsq6U34jcieA_45H4_JQ@mail.gmail.com>
+References: <20250607204734.1588964-1-kuba@kernel.org>
+ <CANP3RGcUbSG3dQQbDrsYq9YSMStXbmEsq6U34jcieA_45H4_JQ@mail.gmail.com>
+Subject: Re: [PATCH net v2] net: clear the dst when changing skb protocol
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250609-kselftest-arm64-nolibc-header-v1-1-16ee1c6fbfed@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAKXhRmgC/x3MQQqDMBAF0KvIrDuQhsRAr1K6iPpTh9pYZkQK4
- t0bunybd5BBBUa37iDFLiZrbbheOhrnXJ9gmZrJOx9d9IlfhqVssI2zvvvAdV1kGHlGnqA89NH
- lEFNJJVA7Pooi3/9/f5znD5iyh2FvAAAA
-X-Change-ID: 20250527-kselftest-arm64-nolibc-header-b650a457f7f4
-To: Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.15-dev-c25d1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7946; i=broonie@kernel.org;
- h=from:subject:message-id; bh=saOkQ/3rx6ZFGPKCS6zsEVobhtu/zh8QlGy2Xu55YeA=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBoRuJk/IFe0UeZ4Zbvl0mqp/8nsgL1KSj9e2Sgwl8n
- fx0n/iiJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaEbiZAAKCRAk1otyXVSH0IbGB/
- 9f/99sdxXDh6Em94zAfg8m8nqAB9JvEEp0nbL1+GpwGjwCZdy9uRfyKC2lMNobWUlSlRtD1vknZo71
- NmizF1vO0kfQz6mb+PUW2B/JHZhbmbjqjrfVUdrykSCiul2etMf3zsIUVTcYHkDVaAeIPVGtaIDQi1
- e9ZsqwL8FJdsIFLWlnVb+Ny4oCck+QlBFf46ohMBH2NXkJ3o0Gd+4OHGpY2B4686DOZ0xb6b/oiz+X
- 5cxIH1wxRjcFywUzPqe05TyAin1DGqzskRpUb1sLz8nePn2uTDr/IHKJniFZkFSu66JL4HMcJ+YI2z
- zvD0jqrZt0xXwsWaenN6mmqY+Lezm6
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Recent work by Thomas Weißschuh means that it is now possible to use
-kselftest.h with nolibc. Convert the tpidr2 test which is nolibc specific
-to use kselftest.h, making it look more standard and ensuring it gets the
-benefit of any work done on kselftest.h.
+Maciej =C5=BBenczykowski wrote:
+> On Sat, Jun 7, 2025 at 10:47=E2=80=AFPM Jakub Kicinski <kuba@kernel.org=
+> wrote:
+> >
+> > A not-so-careful NAT46 BPF program can crash the kernel
+> > if it indiscriminately flips ingress packets from v4 to v6:
+> >
+> >   BUG: kernel NULL pointer dereference, address: 0000000000000000
+> >     ip6_rcv_core (net/ipv6/ip6_input.c:190:20)
+> >     ipv6_rcv (net/ipv6/ip6_input.c:306:8)
+> >     process_backlog (net/core/dev.c:6186:4)
+> >     napi_poll (net/core/dev.c:6906:9)
+> >     net_rx_action (net/core/dev.c:7028:13)
+> >     do_softirq (kernel/softirq.c:462:3)
+> >     netif_rx (net/core/dev.c:5326:3)
+> >     dev_loopback_xmit (net/core/dev.c:4015:2)
+> >     ip_mc_finish_output (net/ipv4/ip_output.c:363:8)
+> >     NF_HOOK (./include/linux/netfilter.h:314:9)
+> >     ip_mc_output (net/ipv4/ip_output.c:400:5)
+> >     dst_output (./include/net/dst.h:459:9)
+> >     ip_local_out (net/ipv4/ip_output.c:130:9)
+> >     ip_send_skb (net/ipv4/ip_output.c:1496:8)
+> >     udp_send_skb (net/ipv4/udp.c:1040:8)
+> >     udp_sendmsg (net/ipv4/udp.c:1328:10)
+> >
+> > The output interface has a 4->6 program attached at ingress.
+> > We try to loop the multicast skb back to the sending socket.
+> > Ingress BPF runs as part of netif_rx(), pushes a valid v6 hdr
+> > and changes skb->protocol to v6. We enter ip6_rcv_core which
+> > tries to use skb_dst(). But the dst is still an IPv4 one left
+> > after IPv4 mcast output.
+> >
+> > Clear the dst in all BPF helpers which change the protocol.
+> > Also clear the dst if we did an encap or decap as those
+> > will most likely make the dst stale.
+> > Try to preserve metadata dsts, those may carry non-routing
+> > metadata.
+> >
+> > Reviewed-by: Maciej =C5=BBenczykowski <maze@google.com>
+> > Acked-by: Daniel Borkmann <daniel@iogearbox.net>
+> > Fixes: d219df60a70e ("bpf: Add ipip6 and ip6ip decap support for bpf_=
+skb_adjust_room()")
+> > Fixes: 1b00e0dfe7d0 ("bpf: update skb->protocol in bpf_skb_net_grow")=
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/arm64/abi/Makefile |   2 +-
- tools/testing/selftests/arm64/abi/tpidr2.c | 140 ++++++++---------------------
- 2 files changed, 38 insertions(+), 104 deletions(-)
+> > Fixes: 6578171a7ff0 ("bpf: add bpf_skb_change_proto helper")
+> > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
-diff --git a/tools/testing/selftests/arm64/abi/Makefile b/tools/testing/selftests/arm64/abi/Makefile
-index a6d30c620908..483488f8c2ad 100644
---- a/tools/testing/selftests/arm64/abi/Makefile
-+++ b/tools/testing/selftests/arm64/abi/Makefile
-@@ -12,4 +12,4 @@ $(OUTPUT)/syscall-abi: syscall-abi.c syscall-abi-asm.S
- $(OUTPUT)/tpidr2: tpidr2.c
- 	$(CC) -fno-asynchronous-unwind-tables -fno-ident -s -Os -nostdlib \
- 		-static -include ../../../../include/nolibc/nolibc.h \
--		-ffreestanding -Wall $^ -o $@ -lgcc
-+		-I../.. -ffreestanding -Wall $^ -o $@ -lgcc
-diff --git a/tools/testing/selftests/arm64/abi/tpidr2.c b/tools/testing/selftests/arm64/abi/tpidr2.c
-index eb19dcc37a75..f58a9f89b952 100644
---- a/tools/testing/selftests/arm64/abi/tpidr2.c
-+++ b/tools/testing/selftests/arm64/abi/tpidr2.c
-@@ -3,31 +3,12 @@
- #include <linux/sched.h>
- #include <linux/wait.h>
- 
-+#include "kselftest.h"
-+
- #define SYS_TPIDR2 "S3_3_C13_C0_5"
- 
- #define EXPECTED_TESTS 5
- 
--static void putstr(const char *str)
--{
--	write(1, str, strlen(str));
--}
--
--static void putnum(unsigned int num)
--{
--	char c;
--
--	if (num / 10)
--		putnum(num / 10);
--
--	c = '0' + (num % 10);
--	write(1, &c, 1);
--}
--
--static int tests_run;
--static int tests_passed;
--static int tests_failed;
--static int tests_skipped;
--
- static void set_tpidr2(uint64_t val)
- {
- 	asm volatile (
-@@ -50,20 +31,6 @@ static uint64_t get_tpidr2(void)
- 	return val;
- }
- 
--static void print_summary(void)
--{
--	if (tests_passed + tests_failed + tests_skipped != EXPECTED_TESTS)
--		putstr("# UNEXPECTED TEST COUNT: ");
--
--	putstr("# Totals: pass:");
--	putnum(tests_passed);
--	putstr(" fail:");
--	putnum(tests_failed);
--	putstr(" xfail:0 xpass:0 skip:");
--	putnum(tests_skipped);
--	putstr(" error:0\n");
--}
--
- /* Processes should start with TPIDR2 == 0 */
- static int default_value(void)
- {
-@@ -105,9 +72,8 @@ static int write_fork_read(void)
- 	if (newpid == 0) {
- 		/* In child */
- 		if (get_tpidr2() != oldpid) {
--			putstr("# TPIDR2 changed in child: ");
--			putnum(get_tpidr2());
--			putstr("\n");
-+			ksft_print_msg("TPIDR2 changed in child: %llx\n",
-+				       get_tpidr2());
- 			exit(0);
- 		}
- 
-@@ -115,14 +81,12 @@ static int write_fork_read(void)
- 		if (get_tpidr2() == getpid()) {
- 			exit(1);
- 		} else {
--			putstr("# Failed to set TPIDR2 in child\n");
-+			ksft_print_msg("Failed to set TPIDR2 in child\n");
- 			exit(0);
- 		}
- 	}
- 	if (newpid < 0) {
--		putstr("# fork() failed: -");
--		putnum(-newpid);
--		putstr("\n");
-+		ksft_print_msg("fork() failed: %d\n", newpid);
- 		return 0;
- 	}
- 
-@@ -132,23 +96,22 @@ static int write_fork_read(void)
- 		if (waiting < 0) {
- 			if (errno == EINTR)
- 				continue;
--			putstr("# waitpid() failed: ");
--			putnum(errno);
--			putstr("\n");
-+			ksft_print_msg("waitpid() failed: %d\n", errno);
- 			return 0;
- 		}
- 		if (waiting != newpid) {
--			putstr("# waitpid() returned wrong PID\n");
-+			ksft_print_msg("waitpid() returned wrong PID: %d != %d\n",
-+				       waiting, newpid);
- 			return 0;
- 		}
- 
- 		if (!WIFEXITED(status)) {
--			putstr("# child did not exit\n");
-+			ksft_print_msg("child did not exit\n");
- 			return 0;
- 		}
- 
- 		if (getpid() != get_tpidr2()) {
--			putstr("# TPIDR2 corrupted in parent\n");
-+			ksft_print_msg("TPIDR2 corrupted in parent\n");
- 			return 0;
- 		}
- 
-@@ -188,35 +151,32 @@ static int write_clone_read(void)
- 
- 	stack = malloc(__STACK_SIZE);
- 	if (!stack) {
--		putstr("# malloc() failed\n");
-+		ksft_print_msg("malloc() failed\n");
- 		return 0;
- 	}
- 
- 	ret = sys_clone(CLONE_VM, (unsigned long)stack + __STACK_SIZE,
- 			&parent_tid, 0, &child_tid);
- 	if (ret == -1) {
--		putstr("# clone() failed\n");
--		putnum(errno);
--		putstr("\n");
-+		ksft_print_msg("clone() failed: %d\n", errno);
- 		return 0;
- 	}
- 
- 	if (ret == 0) {
- 		/* In child */
- 		if (get_tpidr2() != 0) {
--			putstr("# TPIDR2 non-zero in child: ");
--			putnum(get_tpidr2());
--			putstr("\n");
-+			ksft_print_msg("TPIDR2 non-zero in child: %llx\n",
-+				       get_tpidr2());
- 			exit(0);
- 		}
- 
- 		if (gettid() == 0)
--			putstr("# Child TID==0\n");
-+			ksft_print_msg("Child TID==0\n");
- 		set_tpidr2(gettid());
- 		if (get_tpidr2() == gettid()) {
- 			exit(1);
- 		} else {
--			putstr("# Failed to set TPIDR2 in child\n");
-+			ksft_print_msg("Failed to set TPIDR2 in child\n");
- 			exit(0);
- 		}
- 	}
-@@ -227,25 +187,22 @@ static int write_clone_read(void)
- 		if (waiting < 0) {
- 			if (errno == EINTR)
- 				continue;
--			putstr("# wait4() failed: ");
--			putnum(errno);
--			putstr("\n");
-+			ksft_print_msg("wait4() failed: %d\n", errno);
- 			return 0;
- 		}
- 		if (waiting != ret) {
--			putstr("# wait4() returned wrong PID ");
--			putnum(waiting);
--			putstr("\n");
-+			ksft_print_msg("wait4() returned wrong PID %d\n",
-+				       waiting);
- 			return 0;
- 		}
- 
- 		if (!WIFEXITED(status)) {
--			putstr("# child did not exit\n");
-+			ksft_print_msg("child did not exit\n");
- 			return 0;
- 		}
- 
- 		if (parent != get_tpidr2()) {
--			putstr("# TPIDR2 corrupted in parent\n");
-+			ksft_print_msg("TPIDR2 corrupted in parent\n");
- 			return 0;
- 		}
- 
-@@ -253,35 +210,14 @@ static int write_clone_read(void)
- 	}
- }
- 
--#define run_test(name)			     \
--	if (name()) {			     \
--		tests_passed++;		     \
--	} else {			     \
--		tests_failed++;		     \
--		putstr("not ");		     \
--	}				     \
--	putstr("ok ");			     \
--	putnum(++tests_run);		     \
--	putstr(" " #name "\n");
--
--#define skip_test(name)			     \
--	tests_skipped++;		     \
--	putstr("ok ");			     \
--	putnum(++tests_run);		     \
--	putstr(" # SKIP " #name "\n");
--
- int main(int argc, char **argv)
- {
- 	int ret;
- 
--	putstr("TAP version 13\n");
--	putstr("1..");
--	putnum(EXPECTED_TESTS);
--	putstr("\n");
-+	ksft_print_header();
-+	ksft_set_plan(5);
- 
--	putstr("# PID: ");
--	putnum(getpid());
--	putstr("\n");
-+	ksft_print_msg("PID: %d\n", getpid());
- 
- 	/*
- 	 * This test is run with nolibc which doesn't support hwcap and
-@@ -290,23 +226,21 @@ int main(int argc, char **argv)
- 	 */
- 	ret = open("/proc/sys/abi/sme_default_vector_length", O_RDONLY, 0);
- 	if (ret >= 0) {
--		run_test(default_value);
--		run_test(write_read);
--		run_test(write_sleep_read);
--		run_test(write_fork_read);
--		run_test(write_clone_read);
-+		ksft_test_result(default_value(), "default_value\n");
-+		ksft_test_result(write_read, "write_read\n");
-+		ksft_test_result(write_sleep_read, "write_sleep_read\n");
-+		ksft_test_result(write_fork_read, "write_fork_read\n");
-+		ksft_test_result(write_clone_read, "write_clone_read\n");
- 
- 	} else {
--		putstr("# SME support not present\n");
-+		ksft_print_msg("SME support not present\n");
- 
--		skip_test(default_value);
--		skip_test(write_read);
--		skip_test(write_sleep_read);
--		skip_test(write_fork_read);
--		skip_test(write_clone_read);
-+		ksft_test_result_skip("default_value\n");
-+		ksft_test_result_skip("write_read\n");
-+		ksft_test_result_skip("write_sleep_read\n");
-+		ksft_test_result_skip("write_fork_read\n");
-+		ksft_test_result_skip("write_clone_read\n");
- 	}
- 
--	print_summary();
--
--	return 0;
-+	ksft_finished();
- }
+Reviewed-by: Willem de Bruijn <willemb@google.com>
 
----
-base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
-change-id: 20250527-kselftest-arm64-nolibc-header-b650a457f7f4
+> > ---
+> > v2:
+> >  - drop on encap/decap
+> >  - fix typo (protcol)
+> >  - add the test to the Makefile
+> > v1: https://lore.kernel.org/20250604210604.257036-1-kuba@kernel.org
+> >
+> > I wonder if we should not skip ingress (tc_skip_classify?)
+> > for looped back packets in the first place. But that doesn't
+> > seem robust enough vs multiple redirections to solve the crash.
+> >
+> > Ignoring LOOPBACK packets (like the NAT46 prog should) doesn't
+> > work either, since BPF can change pkt_type arbitrarily.
+> >
+> > CC: martin.lau@linux.dev
+> > CC: daniel@iogearbox.net
+> > CC: john.fastabend@gmail.com
+> > CC: eddyz87@gmail.com
+> > CC: sdf@fomichev.me
+> > CC: haoluo@google.com
+> > CC: willemb@google.com
+> > CC: william.xuanziyang@huawei.com
+> > CC: alan.maguire@oracle.com
+> > CC: bpf@vger.kernel.org
+> > CC: edumazet@google.com
+> > CC: maze@google.com
+> > CC: shuah@kernel.org
+> > CC: linux-kselftest@vger.kernel.org
+> > CC: yonghong.song@linux.dev
+> > ---
+> >  tools/testing/selftests/net/Makefile   |  1 +
+> >  net/core/filter.c                      | 31 +++++++++++++++++++-----=
+--
+> >  tools/testing/selftests/net/nat6to4.sh | 15 +++++++++++++
+> >  3 files changed, 39 insertions(+), 8 deletions(-)
+> >  create mode 100755 tools/testing/selftests/net/nat6to4.sh
+> >
+> > diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/sel=
+ftests/net/Makefile
+> > index ea84b88bcb30..ab996bd22a5f 100644
+> > --- a/tools/testing/selftests/net/Makefile
+> > +++ b/tools/testing/selftests/net/Makefile
+> > @@ -27,6 +27,7 @@ TEST_PROGS +=3D amt.sh
+> >  TEST_PROGS +=3D unicast_extensions.sh
+> >  TEST_PROGS +=3D udpgro_fwd.sh
+> >  TEST_PROGS +=3D udpgro_frglist.sh
+> > +TEST_PROGS +=3D nat6to4.sh
+> >  TEST_PROGS +=3D veth.sh
+> >  TEST_PROGS +=3D ioam6.sh
+> >  TEST_PROGS +=3D gro.sh
+> > diff --git a/net/core/filter.c b/net/core/filter.c
+> > index 327ca73f9cd7..d5917d6446f2 100644
+> > --- a/net/core/filter.c
+> > +++ b/net/core/filter.c
+> > @@ -3406,8 +3406,14 @@ BPF_CALL_3(bpf_skb_change_proto, struct sk_buf=
+f *, skb, __be16, proto,
+> >          * need to be verified first.
+> >          */
+> >         ret =3D bpf_skb_proto_xlat(skb, proto);
+> > +       if (ret)
+> > +               return ret;
+> > +
+> >         bpf_compute_data_pointers(skb);
+> > -       return ret;
 
-Best regards,
--- 
-Mark Brown <broonie@kernel.org>
+I wonder whether that unconditional call to bpf_compute_data_pointers
+even if ret was there for a reason.
 
+From reviewing the bpf_skb_proto_xlat error paths, it does seem safe
+to remove it. The cases where an error may be returned after the skb
+is modified only modify the skb in terms of headroom, not headlen.
+
+> > +       if (skb_valid_dst(skb))
+> > +               skb_dst_drop(skb);
+> > +
+> > +       return 0;
+> >  }
+> >=
 
