@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-34471-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34472-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2E74AD1E5E
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jun 2025 15:02:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B628AD1E60
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jun 2025 15:03:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5C053A7CA9
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jun 2025 13:02:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 48381188D832
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jun 2025 13:02:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA193258CE8;
-	Mon,  9 Jun 2025 13:01:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F110325A2B5;
+	Mon,  9 Jun 2025 13:01:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IaIZrzQZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pQGaFpC4"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC4DC2459FF;
-	Mon,  9 Jun 2025 13:01:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4385257427;
+	Mon,  9 Jun 2025 13:01:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749474107; cv=none; b=WxroWxeo1l7ILjbnqC7efPGGLSpBUniIUBdNAzZoOkP06JZnIzaylisTlxJImEoKxC3vcIOSAns1VYEHI53hKxNHZGDRPEqo15KS6qOFo3fxZn6nA/rDPNrU7N2OqxF0qqNgAP5xWGcot6JFckvECAImiVEl1dThLECgPuBakoc=
+	t=1749474113; cv=none; b=Eg5iDMi6lOlvDZSUApGQwGkEzLv2+PoSOugJbpikUtzgkimsRPzhMlw4ppPbsKMuVOU5YX30ge22O55mURnI5JREr3nyBLjnKlZfi8L04rF9GbvE3o3lygzbq21Jn0rUKzg7cTIGlR6HB0A+4gqPpjh4N7goBkA8vhJHr08GTJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749474107; c=relaxed/simple;
-	bh=/AYgqTLwHHsTkCX7TTH1Na+bth+vthYvgf8svHl0eTc=;
+	s=arc-20240116; t=1749474113; c=relaxed/simple;
+	bh=1QQTqlYHUjewASmFh86Dd+jl+m64vZGkDAeB+lVVa3I=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ssBIsvFibPnZZtN2qt07M7He7+9EAbput5vLdBYgQ98kXx3NiDZ6v61RXyquOARvNr+ZF5Qh7xeDxME+gwQE1g8TaMqhQMveVKdNhXpep+GRnqgCVa2Np571MMvBvQ3yWcpVwRI4nG8fL5w0CAGxCB/B01d5pjo2MFZshWWgqks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IaIZrzQZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B856C4CEF0;
-	Mon,  9 Jun 2025 13:01:40 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=a2fh/MKEKihPi+Gyv+eDID3ai4wdgpIIdLH7vVcYeRyrlJ//fl1huo567q6lrbC0htXOVEN2twj8UZvNAvobSIyPODlFH7ZmkXu9CWoTtkKFwGswxQCZ+UPb1+D4SmnCs8WRSEPQDVVLpb2e8YcCT+EOV2T4HI2YtbBb1fP/Ucw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pQGaFpC4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACDBFC4CEED;
+	Mon,  9 Jun 2025 13:01:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749474106;
-	bh=/AYgqTLwHHsTkCX7TTH1Na+bth+vthYvgf8svHl0eTc=;
+	s=k20201202; t=1749474112;
+	bh=1QQTqlYHUjewASmFh86Dd+jl+m64vZGkDAeB+lVVa3I=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=IaIZrzQZ+uv1kKDldsV/EvuATu9K0vsuv+7o0wgjGCihOxzLzaxF50T8P5acDCXt9
-	 IyLgZIMB4aAP9c3psnXpFHr6jgs0nDZruT2qXpk7FIMSEKlwDACd5s7xshrIXK9dtC
-	 eAMD91M3/JqYmjiBiLWea2DBUzlecYO9cJbevl9XW4QTvMI2YmUZcOxwDyhMi8wFfU
-	 KtB6rcAPCCk+InQbnSsF26+d1xINEemGGnczidSU7cy6B+YfsoQxsnAM0bipOoj+IC
-	 vUuCBR58EBCX1BmnGYUIWHvqGfPd2a5rzVF8/AOPpZMX3y0S7cbIq4Jlkdtm7LDUC2
-	 dYHeXTNQqmOBg==
+	b=pQGaFpC4aZGav+xqV/eOuFlAo6DhSKOo0JM3iTPeO6JHTVHbTrNULCU8ZO0rHa1My
+	 p6SA4Gcg/dHEgEfp1AaZCN1OIUPG1MFxvzljJrkKnnhkc+VXlsa9DpL16OSYqM9TzY
+	 SnBUQUptFs9utdEy8xpcwLLnMd+FydWTq9o+pGxjxrOk7Rh70zGb1CcbwEypCZB9dh
+	 njouDNQDRLi2DHg3u5AFv6KAowwyHQb5hh2XTl9wUShxuDxOg6RFLPGFDz2dCRCMko
+	 r+oCPBBsH4llqz+9Pjncdsn9H13ptqBGGMRcatYt3PIjycqZ9UPhxo4a4Wmnu7Wwze
+	 Gk6daNEXZYKeg==
 From: Mark Brown <broonie@kernel.org>
-Date: Mon, 09 Jun 2025 13:54:06 +0100
-Subject: [PATCH RFT v17 5/8] selftests/clone3: Remove redundant flushes of
- output streams
+Date: Mon, 09 Jun 2025 13:54:07 +0100
+Subject: [PATCH RFT v17 6/8] selftests/clone3: Factor more of main loop
+ into test_clone3()
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250609-clone3-shadow-stack-v17-5-8840ed97ff6f@kernel.org>
+Message-Id: <20250609-clone3-shadow-stack-v17-6-8840ed97ff6f@kernel.org>
 References: <20250609-clone3-shadow-stack-v17-0-8840ed97ff6f@kernel.org>
 In-Reply-To: <20250609-clone3-shadow-stack-v17-0-8840ed97ff6f@kernel.org>
 To: "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>, 
@@ -76,23 +76,24 @@ Cc: linux-kernel@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
  Kees Cook <kees@kernel.org>, Kees Cook <kees@kernel.org>, 
  Shuah Khan <skhan@linuxfoundation.org>
 X-Mailer: b4 0.15-dev-c25d1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1114; i=broonie@kernel.org;
- h=from:subject:message-id; bh=/AYgqTLwHHsTkCX7TTH1Na+bth+vthYvgf8svHl0eTc=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBoRtsS1oPeDocMgm73asbkgrJDqf/dmIf1MoyVCP7l
- VlqN7wmJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaEbbEgAKCRAk1otyXVSH0H38B/
- 9+FjvMlTH0jTGI3KZdTd8CvLC+lW4KPtL6YHiZaQ94w5KM+M1BgJXCP4JNn5dCxIo04Zz+hxiTnJrs
- YLGFZdbPhP2FpRu7udvb8mGzVTrQKSUpHptHWRdTkrF5zbsGV/AiEwuYUOOPUP69JoLUsvJ/f1/kmA
- pb74UanyIqwuZXsso50Rdlz4OcIJHcAbqklNxFSkFBUePUd/dNX96IRSAR6jAmAkz0I0pXI4/7ntYH
- zFMMaZIQ4BHBexS9M2ArJjmcsZ28jO+0JeZztPqApTyox9QZ6HSALFbkcR9gGoZKVBFgU2QIH8o+D1
- YutT4Wxxubo1mfvGa6WBW36wz+FPAg
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3931; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=1QQTqlYHUjewASmFh86Dd+jl+m64vZGkDAeB+lVVa3I=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBoRtsToJCQKwGQ277bYZWxVksp8FjMj832kEt+fz6S
+ RctJyyGJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaEbbEwAKCRAk1otyXVSH0E2hB/
+ 4iNpgly9R7xX5Av2asT6ogSOlxPgTPEUB7v/RTUFXH2ZjxpiB8pvkblnfUkQW+XG+XqkdpOE9nTv3C
+ EBGrrRBoIhUCEU3Haw8T6DWOSPflqEJFOiO8Ij71ECtS7RCWFjNC/etQzaTKbpC27ioQbJ282a3SJu
+ T/GB4U+oijqCl3rCHPGvRaJCk5w5U5fdagSaEbr/femutM+5pM26vfCt+7kVteg07B4LMa1Fb8VucX
+ UJ9nkFuVrnD82Qh4HiY+v257sSrsGE0pE/W58GHVtQ7qU5NHuuIwc9fgO7mhPkwQFedpmHqFZdP7B9
+ xWStn1/RRFHbsELVt9+wScwMNHEpMt
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-Since there were widespread issues with output not being flushed the
-kselftest framework was modified to explicitly set the output streams
-unbuffered in commit 58e2847ad2e6 ("selftests: line buffer test
-program's stdout") so there is no need to explicitly flush in the clone3
-tests.
+In order to make it easier to add more configuration for the tests and
+more support for runtime detection of when tests can be run pass the
+structure describing the tests into test_clone3() rather than picking
+the arguments out of it and have that function do all the per-test work.
+
+No functional change.
 
 Reviewed-by: Kees Cook <kees@kernel.org>
 Tested-by: Kees Cook <kees@kernel.org>
@@ -100,22 +101,130 @@ Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/clone3/clone3_selftests.h | 2 --
- 1 file changed, 2 deletions(-)
+ tools/testing/selftests/clone3/clone3.c | 77 ++++++++++++++++-----------------
+ 1 file changed, 37 insertions(+), 40 deletions(-)
 
-diff --git a/tools/testing/selftests/clone3/clone3_selftests.h b/tools/testing/selftests/clone3/clone3_selftests.h
-index eeca8005723f..939b26c86d42 100644
---- a/tools/testing/selftests/clone3/clone3_selftests.h
-+++ b/tools/testing/selftests/clone3/clone3_selftests.h
-@@ -35,8 +35,6 @@ struct __clone_args {
+diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
+index e61f07973ce5..e066b201fa64 100644
+--- a/tools/testing/selftests/clone3/clone3.c
++++ b/tools/testing/selftests/clone3/clone3.c
+@@ -30,6 +30,19 @@ enum test_mode {
+ 	CLONE3_ARGS_INVAL_EXIT_SIGNAL_NSIG,
+ };
  
- static pid_t sys_clone3(struct __clone_args *args, size_t size)
++typedef bool (*filter_function)(void);
++typedef size_t (*size_function)(void);
++
++struct test {
++	const char *name;
++	uint64_t flags;
++	size_t size;
++	size_function size_function;
++	int expected;
++	enum test_mode test_mode;
++	filter_function filter;
++};
++
+ static int call_clone3(uint64_t flags, size_t size, enum test_mode test_mode)
  {
--	fflush(stdout);
--	fflush(stderr);
- 	return syscall(__NR_clone3, args, size);
+ 	struct __clone_args args = {
+@@ -109,30 +122,40 @@ static int call_clone3(uint64_t flags, size_t size, enum test_mode test_mode)
+ 	return 0;
  }
  
+-static bool test_clone3(uint64_t flags, size_t size, int expected,
+-			enum test_mode test_mode)
++static void test_clone3(const struct test *test)
+ {
++	size_t size;
+ 	int ret;
+ 
++	if (test->filter && test->filter()) {
++		ksft_test_result_skip("%s\n", test->name);
++		return;
++	}
++
++	if (test->size_function)
++		size = test->size_function();
++	else
++		size = test->size;
++
++	ksft_print_msg("Running test '%s'\n", test->name);
++
+ 	ksft_print_msg(
+ 		"[%d] Trying clone3() with flags %#" PRIx64 " (size %zu)\n",
+-		getpid(), flags, size);
+-	ret = call_clone3(flags, size, test_mode);
++		getpid(), test->flags, size);
++	ret = call_clone3(test->flags, size, test->test_mode);
+ 	ksft_print_msg("[%d] clone3() with flags says: %d expected %d\n",
+-			getpid(), ret, expected);
+-	if (ret != expected) {
++			getpid(), ret, test->expected);
++	if (ret != test->expected) {
+ 		ksft_print_msg(
+ 			"[%d] Result (%d) is different than expected (%d)\n",
+-			getpid(), ret, expected);
+-		return false;
++			getpid(), ret, test->expected);
++		ksft_test_result_fail("%s\n", test->name);
++		return;
+ 	}
+ 
+-	return true;
++	ksft_test_result_pass("%s\n", test->name);
+ }
+ 
+-typedef bool (*filter_function)(void);
+-typedef size_t (*size_function)(void);
+-
+ static bool not_root(void)
+ {
+ 	if (getuid() != 0) {
+@@ -160,16 +183,6 @@ static size_t page_size_plus_8(void)
+ 	return getpagesize() + 8;
+ }
+ 
+-struct test {
+-	const char *name;
+-	uint64_t flags;
+-	size_t size;
+-	size_function size_function;
+-	int expected;
+-	enum test_mode test_mode;
+-	filter_function filter;
+-};
+-
+ static const struct test tests[] = {
+ 	{
+ 		.name = "simple clone3()",
+@@ -319,24 +332,8 @@ int main(int argc, char *argv[])
+ 	ksft_set_plan(ARRAY_SIZE(tests));
+ 	test_clone3_supported();
+ 
+-	for (i = 0; i < ARRAY_SIZE(tests); i++) {
+-		if (tests[i].filter && tests[i].filter()) {
+-			ksft_test_result_skip("%s\n", tests[i].name);
+-			continue;
+-		}
+-
+-		if (tests[i].size_function)
+-			size = tests[i].size_function();
+-		else
+-			size = tests[i].size;
+-
+-		ksft_print_msg("Running test '%s'\n", tests[i].name);
+-
+-		ksft_test_result(test_clone3(tests[i].flags, size,
+-					     tests[i].expected,
+-					     tests[i].test_mode),
+-				 "%s\n", tests[i].name);
+-	}
++	for (i = 0; i < ARRAY_SIZE(tests); i++)
++		test_clone3(&tests[i]);
+ 
+ 	ksft_finished();
+ }
 
 -- 
 2.39.5
