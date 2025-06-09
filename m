@@ -1,75 +1,80 @@
-Return-Path: <linux-kselftest+bounces-34442-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34443-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA3A9AD16A5
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jun 2025 04:09:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9AF62AD16AA
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jun 2025 04:10:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AB03D3AA244
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jun 2025 02:09:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A792B188AAF6
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jun 2025 02:10:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8BA9126BF1;
-	Mon,  9 Jun 2025 02:09:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 723F71632C8;
+	Mon,  9 Jun 2025 02:09:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YMMgk8yf"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wQF2FcFk"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 534612A1BA
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Jun 2025 02:09:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4D5C3FF1
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Jun 2025 02:09:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749434979; cv=none; b=qGRY7mLeLB6gNUbrJEUgAoKB5LRb/K1xgPJBq332xYqK7VpC8ARkSk09MpFiLL06XfXNLHoku/9pdnHvJOWodHK2+Hb85hHL1JLjPIgZMhu1Q77Z0nWp0JEn69wQtyau3gA72Yh+aMrUh4BiZwSfHVYkkWwLELQDFs687a2d/ek=
+	t=1749434997; cv=none; b=UbiUsQ2cDPjb93P9PyqM4RpCe74cWfKvHjxPys2HMFNc6qVnXVKHwlf+o2sbHBFC/bXTciGdItFDbR8PY2VLF8VSV2dqbY12W+G/KQ2tBuCwpbMDyyFgn2rIhUs/i1mBrte95/S6EA85a32VDboneqwhiW8DXWaUU681uQaeb/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749434979; c=relaxed/simple;
-	bh=GeWygMgxmy9e5D7IMTdYwFaop2Xjvnmt7KoVFbT7EBM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Dk6UZZWBvrQol3y+oZtv8mown+e3yR5eH0TTkXrDG0dj4PSQN+ew4RgRJtQ6G1FSuJru1GOXWxSErHfgg7F1X76VzNLNkrtXuDpvblaX68uLOnP0LW7XNIjq5IV/Ggpqh7XBZXpbO/Fj16LWys/FYEYn8d5bKi2cxPnbVG203Sg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YMMgk8yf; arc=none smtp.client-ip=91.218.175.178
+	s=arc-20240116; t=1749434997; c=relaxed/simple;
+	bh=nRsCnCRLiwqLjDwWyrro57XGoUWgUmDNq1dKoWvg30w=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Jf17TGZHNyPfcWpcdI8WuiNRlP/V2ea1bBTbvxArVZx7mXDo2SNgeeQrXc61rZM9JBviQOEToHj3B9VUCaPc4rFCCX8atzKF8PecHbjrsUXv2HihP22Jk1GOfUSadDiNcdmI6bSM5bAjlIH33VUh/XZX9qY6yI2Ny9yHAPi/jH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wQF2FcFk; arc=none smtp.client-ip=91.218.175.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1749434973;
+	t=1749434993;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=iN+SXm4q7iQ2OIKW68klB939c0ZWm/n4ntMalSnwg/s=;
-	b=YMMgk8yfvm6x41gj4xWjJ/JH/vBM5FgS2p2lIdzQbKrzY0Jz4l7mj5YDL+40w3Yi6Hq/Iz
-	7G4108kGpVdJu6p6uzHi/EJlhg2ikV7BeMUjMFKbtvo9SEwLJJTQqVyA2b1wWlqym/qXl9
-	qBSvAf30AviTh330YB+gr6+7cKII9h8=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+eH5xtoEPtJbeyPY7kvr8xlbx6AhkEMjg/GVm+YZpk8=;
+	b=wQF2FcFkGMrA4GW+UQftcdm21aZLjRqAgQO0p58y9DiHKgPaHNgjuheDejzbzTKd2V9Vvj
+	cCHqbXyGXvU/3tTDCWiZ7JnRm0Vq6xEzyYBIM+o//+eHIr3MoXQLdmm4DUItL/LPVUrFlQ
+	xHrieJ7fhKbwrn10GETFuY2esc2LvM8=
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Boris Pismenny <borisp@nvidia.com>,
+	Cong Wang <xiyou.wangcong@gmail.com>,
 	John Fastabend <john.fastabend@gmail.com>,
+	Boris Pismenny <borisp@nvidia.com>,
 	Jakub Kicinski <kuba@kernel.org>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
 	Paolo Abeni <pabeni@redhat.com>,
 	Simon Horman <horms@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Mykola Lysenko <mykolal@fb.com>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
 	Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	KP Singh <kpsingh@kernel.org>,
 	Stanislav Fomichev <sdf@fomichev.me>,
 	Hao Luo <haoluo@google.com>,
 	Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>,
 	Shuah Khan <shuah@kernel.org>,
 	Ihor Solodrai <isolodrai@meta.com>,
 	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2 0/2] bpf,ktls: Fix data corruption caused by using bpf_msg_pop_data() in ktls
-Date: Mon,  9 Jun 2025 10:08:51 +0800
-Message-ID: <20250609020910.397930-1-jiayuan.chen@linux.dev>
+Subject: [PATCH bpf-next v2 1/2] bpf,ktls: Fix data corruption when using bpf_msg_pop_data() in ktls
+Date: Mon,  9 Jun 2025 10:08:52 +0800
+Message-ID: <20250609020910.397930-2-jiayuan.chen@linux.dev>
+In-Reply-To: <20250609020910.397930-1-jiayuan.chen@linux.dev>
+References: <20250609020910.397930-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -79,14 +84,6 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-
-Cong reported an issue where running 'test_sockmap' in the current
-bpf-next tree results in an error [1].
-
-The specific test case that triggered the error is a combined test
-involving ktls and bpf_msg_pop_data().
-
-Root Cause:
 When sending plaintext data, we initially calculated the corresponding
 ciphertext length. However, if we later reduced the plaintext data length
 via socket policy, we failed to recalculate the ciphertext length.
@@ -98,78 +95,38 @@ This causes uninitialized bytes to be appended after a complete
 "Application Data" packet, leading to errors on the receiving end when
 parsing TLS record.
 
-This issue has existed for a long time but was only exposed after the
-following test code was merged.
-commit 47eae080410b ("selftests/bpf: Add more tests for test_txmsg_push_pop in test_sockmap")
-
-Although we already had tests for pop data before this commit, the
-pop data length was insufficient (less than 5 bytes). This meant that the
-corrupted TLS records with data length <5 bytes were cached without being
-parsed, resulting in no error being triggered.
-
-After this fix, all tests pass.
-
- 1/ 6  sockmap::txmsg test passthrough:OK
- 2/ 6  sockmap::txmsg test redirect:OK
- 3/ 2  sockmap::txmsg test redirect wait send mem:OK
- 4/ 6  sockmap::txmsg test drop:OK
- 5/ 6  sockmap::txmsg test ingress redirect:OK
- 6/ 7  sockmap::txmsg test skb:OK
- 7/12  sockmap::txmsg test apply:OK
- 8/12  sockmap::txmsg test cork:OK
- 9/ 3  sockmap::txmsg test hanging corks:OK
-10/11  sockmap::txmsg test push_data:OK
-11/17  sockmap::txmsg test pull-data:OK
-12/ 9  sockmap::txmsg test pop-data:OK
-13/ 6  sockmap::txmsg test push/pop data:OK
-14/ 1  sockmap::txmsg test ingress parser:OK
-15/ 1  sockmap::txmsg test ingress parser2:OK
-16/ 6 sockhash::txmsg test passthrough:OK
-17/ 6 sockhash::txmsg test redirect:OK
-18/ 2 sockhash::txmsg test redirect wait send mem:OK
-19/ 6 sockhash::txmsg test drop:OK
-20/ 6 sockhash::txmsg test ingress redirect:OK
-21/ 7 sockhash::txmsg test skb:OK
-22/12 sockhash::txmsg test apply:OK
-23/12 sockhash::txmsg test cork:OK
-24/ 3 sockhash::txmsg test hanging corks:OK
-25/11 sockhash::txmsg test push_data:OK
-26/17 sockhash::txmsg test pull-data:OK
-27/ 9 sockhash::txmsg test pop-data:OK
-28/ 6 sockhash::txmsg test push/pop data:OK
-29/ 1 sockhash::txmsg test ingress parser:OK
-30/ 1 sockhash::txmsg test ingress parser2:OK
-31/ 6 sockhash:ktls:txmsg test passthrough:OK
-32/ 6 sockhash:ktls:txmsg test redirect:OK
-33/ 2 sockhash:ktls:txmsg test redirect wait send mem:OK
-34/ 6 sockhash:ktls:txmsg test drop:OK
-35/ 6 sockhash:ktls:txmsg test ingress redirect:OK
-36/ 7 sockhash:ktls:txmsg test skb:OK
-37/12 sockhash:ktls:txmsg test apply:OK
-38/12 sockhash:ktls:txmsg test cork:OK
-39/ 3 sockhash:ktls:txmsg test hanging corks:OK
-40/11 sockhash:ktls:txmsg test push_data:OK
-41/17 sockhash:ktls:txmsg test pull-data:OK
-42/ 9 sockhash:ktls:txmsg test pop-data:OK
-43/ 6 sockhash:ktls:txmsg test push/pop data:OK
-44/ 1 sockhash:ktls:txmsg test ingress parser:OK
-45/ 0 sockhash:ktls:txmsg test ingress parser2:OK
-Pass: 45 Fail: 0
-
-[1]: https://lore.kernel.org/bpf/CAM_iQpU7=4xjbefZoxndKoX9gFFMOe7FcWMq5tHBsymbrnMHxQ@mail.gmail.com/
+Fixes: d3b18ad31f93 ("tls: add bpf support to sk_msg handling")
+Reported-by: Cong Wang <xiyou.wangcong@gmail.com>
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+Reviewed-by: John Fastabend <john.fastabend@gmail.com>
 ---
-v2 -> v1: Removed WARN_ON() check and added Reviewed-by tag.
-https://lore.kernel.org/bpf/20250605145529.3q3aqr6iygpa6xg6@gmail.com/
+ net/tls/tls_sw.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-Jiayuan Chen (2):
-  bpf,ktls: Fix data corruption when using bpf_msg_pop_data() in ktls
-  selftests/bpf: Add test to cover ktls with bpf_msg_pop_data
-
- net/tls/tls_sw.c                              | 13 +++
- .../selftests/bpf/prog_tests/sockmap_ktls.c   | 91 +++++++++++++++++++
- .../selftests/bpf/progs/test_sockmap_ktls.c   |  4 +
- 3 files changed, 108 insertions(+)
-
+diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+index fc88e34b7f33..549d1ea01a72 100644
+--- a/net/tls/tls_sw.c
++++ b/net/tls/tls_sw.c
+@@ -872,6 +872,19 @@ static int bpf_exec_tx_verdict(struct sk_msg *msg, struct sock *sk,
+ 		delta = msg->sg.size;
+ 		psock->eval = sk_psock_msg_verdict(sk, psock, msg);
+ 		delta -= msg->sg.size;
++
++		if ((s32)delta > 0) {
++			/* It indicates that we executed bpf_msg_pop_data(),
++			 * causing the plaintext data size to decrease.
++			 * Therefore the encrypted data size also needs to
++			 * correspondingly decrease. We only need to subtract
++			 * delta to calculate the new ciphertext length since
++			 * ktls does not support block encryption.
++			 */
++			struct sk_msg *enc = &ctx->open_rec->msg_encrypted;
++
++			sk_msg_trim(sk, enc, enc->sg.size - delta);
++		}
+ 	}
+ 	if (msg->cork_bytes && msg->cork_bytes > msg->sg.size &&
+ 	    !enospc && !full_record) {
 -- 
 2.47.1
 
