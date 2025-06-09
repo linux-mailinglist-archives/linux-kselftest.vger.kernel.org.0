@@ -1,67 +1,67 @@
-Return-Path: <linux-kselftest+bounces-34456-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34455-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98039AD1AE5
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jun 2025 11:46:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29772AD1AE3
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jun 2025 11:46:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB38F3A4276
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jun 2025 09:46:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D9E4516B0D9
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jun 2025 09:46:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F1CB207A08;
-	Mon,  9 Jun 2025 09:46:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E09F21E5205;
+	Mon,  9 Jun 2025 09:46:40 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AAA843ABC;
-	Mon,  9 Jun 2025 09:46:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A616224FA;
+	Mon,  9 Jun 2025 09:46:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749462401; cv=none; b=RKWuKial/4OAvpVWEGG042Sai4oIAYyzZHF+RD3G1B2PwIyXWYqyczJdgcBNDkX71xUvRr1wulKhMaGbFqpmkT2KrVGoXN6PJXfTh+K8HtPgXaW3xUL41xyykVx88vzpl+lTehWjXdIAXdCdEZnIwOC2/1VlGi2nUAOE9EAXYUg=
+	t=1749462400; cv=none; b=szq5nAS69oij+EAYc5A6f1RWyMoBwdz3aqJ2bbNtbjNkPaUUOXvJdlp6JEZw5jO1Ag9HGUVm8VZ1XXK7ZCY9PJaDuzgH5NKW+DDSilBFD0K3Dp0u+WfC5kzKaHAMpbSAOzJdPsqDTKmAaWHGWb/hL3r1zBPKnrUh4CmHlnYirmM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749462401; c=relaxed/simple;
-	bh=S0zLAeHsvrQely1Eg98rRJ60Qe7vUeRLcvUYKnD+2dY=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ZljJu1Gm8/mr8WEyAF5xxt9uCHWwdFjPnDOnPcy5y/h1/dhE9cJhZatzz7d43/RNV5CvnHsS8ra0FQIf05pDbgMmSvQNB/2ytDOQAxzAM11g6IIA5S75QXvYebIK7q8DYQlWnZs4ki8MvV3aD6nITtiblqQz7baKw70rf80OO5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.42
+	s=arc-20240116; t=1749462400; c=relaxed/simple;
+	bh=nvE9yPETJ0cMSZMbyble0XWiAJ5+Ig2FHrelAm52G1A=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=YqVlL1+0cV+bJTRn4NKFPqs9b/6cp/z+ra3vRHrcU+MlWToKYGM6i2pZlVnkvPBvJgDAZEgK3Ho5k5yDRpW/AYPZaopsWGBK0sc66l+WP3o+sTL0RoBG2pdFy9D5U8ymhZQE+bW96V1UqKfo0KRxqq7tU6pI6pYDdTq8LcmidE4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-607873cc6c4so4930248a12.1;
-        Mon, 09 Jun 2025 02:46:36 -0700 (PDT)
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-6070293103cso6824555a12.0;
+        Mon, 09 Jun 2025 02:46:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749462394; x=1750067194;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UTWm875t3M6R+O/wif88xNULhJplDQ78uU2/bqyGyzg=;
-        b=PU1DA+h2RPWYPU+ciOqkb8tERCGjDDmzeVtvOWFPnZi1r0WX0a8vitr7QSLNVXue6f
-         SZEZEnm/1AmTe8cvfXtP+9G6rjM56S8vtMjh/fZhTAOGWljUx7Ccz0hEq0MngzN6eeVV
-         x/eLRqe2xj/ol5RJe1oRhOsBMN2YDTvUYXriOowRWvwAV+m0Em+7Bs0IhjmpjCWAKGWM
-         +sIO3EmMpFQsBC78Z31t3WJG1N8jFMuDfPauzKW3INnf8c5mwqzWPJFBK3NpRJ+oOyBT
-         HHxNCtX9df6l8UfaVf3jI8sxRKLlhxmTH4/2yS8amsaR6d+dIhFHFo6IHAd/fsbChor0
-         briw==
-X-Forwarded-Encrypted: i=1; AJvYcCWUTaohM41bjZZAJtnctklGTxkawtp63MqHbdcJRov/v6YWkC/j8I5De8u3ZyEvHM40/NSgI4Jc0jMpwvQ=@vger.kernel.org, AJvYcCX4WjwsdCGq2+D9KMlE55X3VepZq9q8aMQ6xOUnmSM+Nee2CQt6/zm4ijIKQkEcZ1eK4Z65Cp65Dw7ik7+GBNXD@vger.kernel.org
-X-Gm-Message-State: AOJu0YwAlL4PvW2Me22VzbP7MDmDURg2YxTN/Mvx+bLkaCEQ36ZiKxT9
-	GZDj51qVaL8Qb4O9OhiCMgIKL2OOe426TNbXQxBV0wFUQVvrmCJXyk3e5+tiBw==
-X-Gm-Gg: ASbGnctxBJ5888DMdxnAOvNvwMMdc/dTg6le7Gbng7VABGLi/5H7Hnx5WPMEGgttT1J
-	rrTMwBUu6X7Cj2PwP+fcEGXLLVqIEzmKpNQJNB0BwZL2G6pkExy7jjP+JPXZMxxBDRsqjlpfPf9
-	pqwwH6tBRodoRR9NhBEtOyDz6IkPzfLufi5ia4+f/rRgv9dkvDeMFlSxxXQpbCgs+Fi5otnRQcF
-	wvtg2olDRCeMAmPdNWUzQBc2MWb795pi5O2grptSKO/pbJpSfk/1RbdDGIGL3F+kM0r8NLDx5Ut
-	FuUi6i9hapfOlL/xQGsO/o1NGAk8szFT5lQyv55vrC9WIA9RDsqG7BaE9hxRJQY=
-X-Google-Smtp-Source: AGHT+IE77dDQ9ytDhfYQaoseol1SrMwVYetw2MHEsjZHaMq/3LNPtCCtli11UGUK9q7VGMW8OzpZbA==
-X-Received: by 2002:a05:6402:34cd:b0:602:427c:452b with SMTP id 4fb4d7f45d1cf-60772a65fc3mr11750323a12.3.1749462394257;
-        Mon, 09 Jun 2025 02:46:34 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:8::])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-607783de35bsm4427006a12.67.2025.06.09.02.46.33
+        d=1e100.net; s=20230601; t=1749462396; x=1750067196;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=N6K5ax7dZlM1ceqO80t37SY5RGau3fBKg0lIDvsG7A4=;
+        b=ou0hmepsBGKgJALdA+VddNDjrtzX0N/j2/9DLHzOplRKTIwhsN5AMNzwxTJpkpnfC/
+         e/fWgGt6L64kJLS2aCR5n+eFBefxNfo9fZ6/BVszVNdoaThnho9yxqly8rdNeEgLbT3S
+         e3hUll/EjPzDBAhTWQt56Tsdo3lR2bHPQUZ8PGw7ESt6OjQTpfyMvUyxKY6Az/YYXbuY
+         XQv0h8NI0L1R//SMrsM6g/jjOUiodsMZw1evfT4nRq0MqTJGYcS1iB0CoRWS0iwn7bYE
+         j41beM8D9+LbGLz1Ulq4IlUfV4h2d9jddJAfe6MHNVbVUWyE1kT9zVLi4l+iv49MUvko
+         PJyA==
+X-Forwarded-Encrypted: i=1; AJvYcCUfRbWwXBwpwYxR2PvE/EdX100Ly9fytzxn3fO0+LlIC2QhlSL4tRhoDS+1rXJp0qKU/a+aVT7RGOQOuCE=@vger.kernel.org, AJvYcCVTTXpiGLe0944ddIs9BcQ+VIqbRPpZ37MbGGdL0/W5eNGhJY5Vrk8/7KiXGo53zafa/dO4uIWN1qc9tUTn2UP2@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz3RtBiL47NSh47o5EbELMPPqA8mI6KNGIA9MR6eQyrKpNqFmf2
+	GppJd+WrJn69SJfD13qZ8qh4A3EPWkWO+qeCOLgCnhsZ0QLo7qaEjHvGWWb7YA==
+X-Gm-Gg: ASbGnctUk2R7l2SH8lO6731ZxGsEfW4JkEkKlIn/Y6LoIBd6yfMWOdq8l+WlbS+CEMZ
+	E3nEW2pneizLJ9bFJJstFtdGtnksvDZBFMRHjQ65Z25IuDcDBSbt/e+tDikXLlOsPnHTpZ9rgZk
+	Q94sHLtiXRhjvGYyKabkocATMbFLDMkFffAC+LDOIVoKoPQgVdHFXL0K2ZDYAKvKHwFevv9LCkD
+	55Th4F6YVr/Ou2JHBBP9lrxQZb1magNxlT8w906SsbFLmoP/SoIN1pEY8jzwSM1Q6/adgrTTRgz
+	IilX4HQrHmyuexKKIpncfzGPRPQtcyg/f2X/sNoUZL/prF7umrQ8cE9AwgUURPc=
+X-Google-Smtp-Source: AGHT+IHXb5Lt1xkTHURyUlGaCjSEG0oUpnSdcl086/v+gHb3uUHfr89IF7Pbwr3lH0tImuY6hHSJFw==
+X-Received: by 2002:a17:906:730c:b0:adb:3345:7581 with SMTP id a640c23a62f3a-ade1a8da66bmr1144295866b.12.1749462395758;
+        Mon, 09 Jun 2025 02:46:35 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:4::])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ade31896bddsm447849166b.182.2025.06.09.02.46.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jun 2025 02:46:33 -0700 (PDT)
+        Mon, 09 Jun 2025 02:46:35 -0700 (PDT)
 From: Breno Leitao <leitao@debian.org>
-Subject: [PATCH net-next v3 0/4] netconsole: Optimize console registration
- and improve testing
-Date: Mon, 09 Jun 2025 02:46:25 -0700
-Message-Id: <20250609-netcons_ext-v3-0-5336fa670326@debian.org>
+Date: Mon, 09 Jun 2025 02:46:26 -0700
+Subject: [PATCH net-next v3 1/4] netconsole: Only register console drivers
+ when targets are configured
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,11 +70,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAHKtRmgC/23NQQqDMBCF4auEWZuSjBoTV71HKUXNqNkkJQliE
- e9eyKYIXT++/x2QKDpK0LMDIm0uueChZ3XFYFoHvxB3FnoGKLAVLWruKU/BpxftmbcdGo1KmpE
- GqBi8I81uL7UHeMrc057hWTFYXcohfsrNJsv+t7hJLrkycyepEQ0Jcbc0usHfQlxKaMMfVgKvG
- LngNGttjTE1KnvB53l+Afgh7inuAAAA
-X-Change-ID: 20250528-netcons_ext-572982619bea
+Message-Id: <20250609-netcons_ext-v3-1-5336fa670326@debian.org>
+References: <20250609-netcons_ext-v3-0-5336fa670326@debian.org>
+In-Reply-To: <20250609-netcons_ext-v3-0-5336fa670326@debian.org>
 To: Breno Leitao <leitao@debian.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
@@ -84,72 +82,137 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  gustavold@gmail.com, Usama Arif <usamaarif642@gmail.com>, 
  linux-kselftest@vger.kernel.org, kernel-team@meta.com
 X-Mailer: b4 0.15-dev-42535
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2229; i=leitao@debian.org;
- h=from:subject:message-id; bh=S0zLAeHsvrQely1Eg98rRJ60Qe7vUeRLcvUYKnD+2dY=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBoRq14GCabtcxMjK2YejjIEZqnAa6sTG7YBYGUf
- EFrBeC3RMyJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaEateAAKCRA1o5Of/Hh3
- bTf/D/4ubFlvfMPN6Ia+28eIX5AyBNVi9hY32aWLi+kp02fpuzs11y2sd8air9Y82LbgHHHpe2r
- CnqZqKw/XnoHmKulEd3GPE1fdMPC0ZqJrJ39IPV2h3D3yAawR2K6us+nYJUElgKxeg+a9Rjc8ie
- XIyA4eL47RsykFwr5SoXW7CTU/njU+xHdtpECCdugjgrzDMInWStu+vlISMR7GZXq+ZSoQBEt0X
- O/BRYujrr0jtwKqVchpyjFsQlI4ACvncm3CH0BfdDG1cPY2DpTd9xpbNVUW00JGzJPQfuZ2PXS5
- c0by9C6rKEKSngRwvk730dtLWNM301VJvmDNXH+vAyMiY1pM54bbc3CsLobsrbs5hdcFIyz79IQ
- Lc3MMrFHlcbAnqrNHVrdGE+aJPNOWguviBhXMfq0XZTrVGndPdbu9qDKtoZhDUlx/cCWiFYRH5C
- 1Q2izO5WPCNEQJQ6S5Z48aQbIR6d+vA4c2bcPggqRBXDfcbvkyaBrXeVjMy1EFQzGY21RMtB/YX
- ZFwQwqlT24bMmA1ZB3s5KdmlBaDZ5tyXo/JPbJV0B1pKZpq2RQZKxg4k6Y2UL922tQrTKYqC/cJ
- JhzznXfCpo4zQIeH1k5V6edd2PAd72XMSRDaEujxovlD706NvRb15KF6hXblGFqAvAySkanwtZo
- EEui9EvMW4XJg1g==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4242; i=leitao@debian.org;
+ h=from:subject:message-id; bh=nvE9yPETJ0cMSZMbyble0XWiAJ5+Ig2FHrelAm52G1A=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBoRq142lf4H3g8cmhyKjEKuIseMJWVxMPHL8Rct
+ GNVYfS8vZ+JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaEateAAKCRA1o5Of/Hh3
+ bYS2D/474DrpvR+Kv5UdIdphNIq5OyhuRiXTmYA2ETeMaxkqGEchSXVlNFku/vk828ubvu3MxVw
+ RC/pArU1fx5BZo4u+iRYJhr6a43LbQE2qax8L2Ik5LgJLRrg7ae98IJkgX1pvkbFom8FQdw96jb
+ x+G64bxpltG1CZoxE5RtuVeqewUyfi0l0IhgzJFG1aMD0rWccspXNLO0j/OAkX/fN15sJ9bHZXs
+ xyyagVc4L9AJ+vkefwGC8ETcBEx7+7ikPkfjEm2EFEqALqld6jCH/FS2sjeDbadKGyBShrtd/dj
+ xKgLbtO3/xV4l4DEmjxX71UzAeobPmMyTMC6dVrB7FHx4ruvzU1tRWwZpk6CcuaP6m5VAzaMmlo
+ 6pAQEPAcGbWg4ptCIo+rO1r3ccA/gin2MMr/ZUhiuEhaPKyqcUCe5R7Sq4DVie2UAbhzeY2Rkh/
+ H+XEsAxYzpA0ZMEtEfplEmrWmPihVyoUD3JiJdRWsrt/nzBzKCntkW7tF9bdEpjKEYNDGBg84Fr
+ /9cWOiG+2U71ycrpDd8peFAte5PhA1JEJD1AH2Z+tHASvfmeLfqdLaSfKunPCdRF3w51F0B4ZNU
+ gUlxv1epFF+ID/uOKlrikuipiOzJo87URs5TWi5R4vO4fKJ0KXURhjbsdsbTpxw4+PZTLGs7W31
+ mnkovat/xvbAmPA==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
-During performance analysis of console subsystem latency, I discovered that
-netconsole registers console handlers even when no active targets exist.
-These orphaned console handlers are invoked on every printk() call, get
-the lock, iterate through empty target lists, and consume CPU cycles
-without performing any useful work.
+The netconsole driver currently registers the basic console driver
+unconditionally during initialization, even when only extended targets
+are configured. This results in unnecessary console registration and
+performance overhead, as the write_msg() callback is invoked for every
+log message only to return early when no matching targets are found.
 
-This patch series addresses the inefficiency by:
+Optimize the driver by conditionally registering console drivers based
+on the actual target configuration. The basic console driver is now
+registered only when non-extended targets exist, same as the extended
+console. The implementation also handles dynamic target creation through
+the configfs interface.
 
-1. Implementing dynamic console registration/unregistration based on target
-   availability, ensuring console handlers are only active when needed
-2. Adding automatic cleanup of unused console registrations when targets
-   are disabled or removed
-3. Extending the selftest suite to cover non-extended console format,
-   which was previously untested
+This change eliminates unnecessary console driver registrations,
+redundant write_msg() callbacks for unused console types, and associated
+lock contention and target list iterations. The optimization is
+particularly beneficial for systems using only the most common extended
+console type.
 
-The optimization reduces printk() overhead by eliminating unnecessary
-function calls and list traversals when netconsole targets are not
-configured, improving overall system performance during heavy logging
-scenarios.
-
+Fixes: e2f15f9a79201 ("netconsole: implement extended console support")
+Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
-Changes in v3:
-- Set CON_ENABLED before re-enabling the console, to fix a selftest that
-  was failing, as reported by Jakub on v2.
-- Link to v2: https://lore.kernel.org/r/20250602-netcons_ext-v2-0-ef88d999326d@debian.org
+ drivers/net/netconsole.c | 30 ++++++++++++++++++++++--------
+ 1 file changed, 22 insertions(+), 8 deletions(-)
 
-Changes in v2:
-- Added selftests to test the new mechanism
-- Unregister the console if the last target got disabled
-- Sending to net-next instead of net (Jakub)
-- Link to v1: https://lore.kernel.org/r/20250528-netcons_ext-v1-1-69f71e404e00@debian.org
+diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
+index 4289ccd3e41bf..01baa45221b4b 100644
+--- a/drivers/net/netconsole.c
++++ b/drivers/net/netconsole.c
+@@ -86,10 +86,10 @@ static DEFINE_SPINLOCK(target_list_lock);
+ static DEFINE_MUTEX(target_cleanup_list_lock);
+ 
+ /*
+- * Console driver for extended netconsoles.  Registered on the first use to
+- * avoid unnecessarily enabling ext message formatting.
++ * Console driver for netconsoles.  Register only consoles that have
++ * an associated target of the same type.
+  */
+-static struct console netconsole_ext;
++static struct console netconsole_ext, netconsole;
+ 
+ struct netconsole_target_stats  {
+ 	u64_stats_t xmit_drop_count;
+@@ -97,6 +97,11 @@ struct netconsole_target_stats  {
+ 	struct u64_stats_sync syncp;
+ };
+ 
++enum console_type {
++	CONS_BASIC = BIT(0),
++	CONS_EXTENDED = BIT(1),
++};
++
+ /* Features enabled in sysdata. Contrary to userdata, this data is populated by
+  * the kernel. The fields are designed as bitwise flags, allowing multiple
+  * features to be set in sysdata_fields.
+@@ -491,6 +496,12 @@ static ssize_t enabled_store(struct config_item *item,
+ 		if (nt->extended && !console_is_registered(&netconsole_ext))
+ 			register_console(&netconsole_ext);
+ 
++		/* User might be enabling the basic format target for the very
++		 * first time, make sure the console is registered.
++		 */
++		if (!nt->extended && !console_is_registered(&netconsole))
++			register_console(&netconsole);
++
+ 		/*
+ 		 * Skip netpoll_parse_options() -- all the attributes are
+ 		 * already configured via configfs. Just print them out.
+@@ -1691,8 +1702,8 @@ static int __init init_netconsole(void)
+ {
+ 	int err;
+ 	struct netconsole_target *nt, *tmp;
++	u32 console_type_needed = 0;
+ 	unsigned int count = 0;
+-	bool extended = false;
+ 	unsigned long flags;
+ 	char *target_config;
+ 	char *input = config;
+@@ -1708,9 +1719,10 @@ static int __init init_netconsole(void)
+ 			}
+ 			/* Dump existing printks when we register */
+ 			if (nt->extended) {
+-				extended = true;
++				console_type_needed |= CONS_EXTENDED;
+ 				netconsole_ext.flags |= CON_PRINTBUFFER;
+ 			} else {
++				console_type_needed |= CONS_BASIC;
+ 				netconsole.flags |= CON_PRINTBUFFER;
+ 			}
+ 
+@@ -1729,9 +1741,10 @@ static int __init init_netconsole(void)
+ 	if (err)
+ 		goto undonotifier;
+ 
+-	if (extended)
++	if (console_type_needed & CONS_EXTENDED)
+ 		register_console(&netconsole_ext);
+-	register_console(&netconsole);
++	if (console_type_needed & CONS_BASIC)
++		register_console(&netconsole);
+ 	pr_info("network logging started\n");
+ 
+ 	return err;
+@@ -1761,7 +1774,8 @@ static void __exit cleanup_netconsole(void)
+ 
+ 	if (console_is_registered(&netconsole_ext))
+ 		unregister_console(&netconsole_ext);
+-	unregister_console(&netconsole);
++	if (console_is_registered(&netconsole))
++		unregister_console(&netconsole);
+ 	dynamic_netconsole_exit();
+ 	unregister_netdevice_notifier(&netconsole_netdev_notifier);
+ 
 
----
-Breno Leitao (4):
-      netconsole: Only register console drivers when targets are configured
-      netconsole: Add automatic console unregistration on target removal
-      selftests: netconsole: Do not exit from inside the validation function
-      selftests: netconsole: Add support for basic netconsole target format
-
- drivers/net/netconsole.c                           | 67 +++++++++++++++++++---
- .../selftests/drivers/net/lib/sh/lib_netcons.sh    | 27 +++++++--
- .../testing/selftests/drivers/net/netcons_basic.sh | 50 ++++++++++------
- 3 files changed, 112 insertions(+), 32 deletions(-)
----
-base-commit: 2c7e4a2663a1ab5a740c59c31991579b6b865a26
-change-id: 20250528-netcons_ext-572982619bea
-
-Best regards,
 -- 
-Breno Leitao <leitao@debian.org>
+2.47.1
 
 
