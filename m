@@ -1,78 +1,78 @@
-Return-Path: <linux-kselftest+bounces-34615-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34616-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE8F2AD4037
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jun 2025 19:15:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4770DAD403C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jun 2025 19:16:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA41418932AE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jun 2025 17:16:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 204D13A51A0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jun 2025 17:15:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7336C2459C6;
-	Tue, 10 Jun 2025 17:15:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D8E724678B;
+	Tue, 10 Jun 2025 17:15:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ebGAu6xF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qxf/ALbo"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBDEB24469D;
-	Tue, 10 Jun 2025 17:15:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99B652459C9;
+	Tue, 10 Jun 2025 17:15:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749575729; cv=none; b=AjvRp3qrsFjMxGANIxL03H3y4LyjNJrFZV3f97+6qZV7GRQCtQEnhfLcU8YgmgNPlf9hvxvtW0e9/NHqUF6br3L7KdaNktXiauaAGzJOuYUMSu7u21o6Y0WJ0IkKrl0EvmYb/uhhjaUMXJkqoDsSGAJacZNpvh6OKEcNn/qgWuY=
+	t=1749575731; cv=none; b=dqfPC1too3vOFj1wBUNsIg29Oq688j3NkscMOfdSU0IMb66GFqoRfh93nxYWInUksFIUfaRFDJ2IHxme4zfMIofjesoJ/Qab3/k5m3y3PRjSwX1tz4QCMFPF3Su+Ai42hwD6b2+nH0V4ifct2lXVkyIbPY3TE6tJMduq/Hqb1Cs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749575729; c=relaxed/simple;
-	bh=gJFmnMD6We7T8CJJ9MqQYVPFTCjVQwwgiQcPRp9KYL8=;
+	s=arc-20240116; t=1749575731; c=relaxed/simple;
+	bh=jrPADGdQVSlhHaHu88CYeq9ejs0dqL4pa8LW21dVeyc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dk8Z4Orh9gK5MCyUiVbx9XOS7PwnP81rUjuPnKksBCmsBxA7tc584jm/xd/psUI2YOLyW8ZIHZnLBrCWPWgZEkZKxDiIkg1BzgeZf8V/2RjyUhGNHKFh24iK6X2oyS79iWYSgLc3TLWAO0GX2Uswj+ihiqqOhD19R/oQDtK2q18=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ebGAu6xF; arc=none smtp.client-ip=209.85.215.179
+	 MIME-Version; b=eDBmFEcwQQihMes4abNHVPkEILL5MGLwtBiwRp+QmYYcwyVMXfrgD0WefSjrs75j53YfmVF/vvMCPhsz0nVVAE0Q++m26D75/Mr5cLIgNRLsCtKSCF4KGEV2eW9MC99g45gQyGex/vusqeAFw7vBNMRbb5onNw8yy3quOrn9b0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qxf/ALbo; arc=none smtp.client-ip=209.85.210.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-b1fd59851baso3299891a12.0;
-        Tue, 10 Jun 2025 10:15:27 -0700 (PDT)
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-742c3d06de3so6566391b3a.0;
+        Tue, 10 Jun 2025 10:15:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749575727; x=1750180527; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1749575728; x=1750180528; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OIpCecH4yJO034nC1LHMnR1mqJnd63DXTBjtuXwa8mc=;
-        b=ebGAu6xF11ojNi1SrLVi0IdX4MZClJznmhWTOMPfiU8vBp0V0UZP+XP8KjVXCPDRXa
-         cBfV/1McSUcs1qWCV1izVl/zY2qHLyuC+hAiYojwtYEUtdhLI8me3C/SWykuZIHcLDCZ
-         WlOc0Qq+EH9rFAFOenaCMHw7yKoqdQdHNydrQKLo+KkBbzJgwdyvuT4rlLovQg8ksxtn
-         7cKICdhqMBI1tegTMZJ/Ng4Qs/3jltHjBU1TbY4gabUY+Rbej+iEqctgCY2bkcf5bnBX
-         Tp5bo26KkoMmU7Zpv0x3DOWSJDwZ7ae5n+3bGNUAZATJGjCfZpWvirnyS+bTnHzm9oYJ
-         APlg==
+        bh=sO4neuwpUVoDLsDzSFLxxvkPcabDlga25iey737Q9/w=;
+        b=Qxf/ALbomQba8c+yLlzKIhnzhpheLJWTJmRPh47Dm35AzjH9qtAmVWTPXQTtwFCSzp
+         jHwpDVppw3Mrgp/+XfV3mbEbEhJzTSh9HytMrlZcYF3VQ5ZQqyHeg0qDT9JOv7H4vV61
+         Ros1eot/mGhnokYatGsxmmyUchlh5L9GNfDL4MXzvR0Xl9akzKX5/rLBDcTn9uiTKmLD
+         72U6+tHmsVcYQgFdlYTfYyYOPWO6Q8NthPXLRpkQisdp9fVSaNY3trMgY5Z/TT7pjfIb
+         wYoOj23DdtzhcsdEuAuJh6XoUgShdG/5WIF7qONPE0e4yy9XM/Nqd/ednyknIlkSsd78
+         LfGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749575727; x=1750180527;
+        d=1e100.net; s=20230601; t=1749575728; x=1750180528;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OIpCecH4yJO034nC1LHMnR1mqJnd63DXTBjtuXwa8mc=;
-        b=nqeamJFpSDuMIlBilYqjtRR0Fjy4HBx1lQ+ybEXM/zFH2ylCzCb/zWRQQm9Je3iRLj
-         hLBwhpFDrijycWNKYxAXnCYFzcju1P6+hb0cgmROb0l0rEoH7yk74oRBrqzaafkXtq8V
-         zT6jFdLgveRHwahPpw1JKe3/gs7sZB3fxHb8EvoME+Hv46i1dvzHocQ3aXhraIPPnvmn
-         NPt6Eh5aWKJvRVcSLM+Lq+8ezZwqCVWVp9S4Gsba+A9SCOOQCYcb7OWSirXk/qKccqjc
-         hR/8cbKRRTDZVmLqvFfn53UMuzHv88XQIAQDqCMmkS8WfZnmzi1mXvGRVXUgShrum6Vp
-         etWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVi8PgeDaqBn7BANqu7QBM/ctQ+fv+VKEWY0wlC6ezCK+qOdXOaiXLegNk886IrkDfMS+cwc455RPQm8Q==@vger.kernel.org, AJvYcCWFSKs3l9JlfU+24kG98aEbuQ57MpxTfLlkKjikdb02GeSx7a7OZvDxS8cEWyWw3uIviQyCotFHmMNZtUqGv/WV@vger.kernel.org, AJvYcCXve1/CZFXH/VVzC6CnCeCUByrtBDZdxdAQPC9tT6qLleJUpoYzEZVxluDH+km980yGfyQNfk4jIj7om3c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzSz5aShLBXpCLJwc46xwNvH6aZ3fAN7yaF30HU4F6G593Hkxpr
-	up3KM88REbAoaHsPPl1cho57JK7o8wsVHUP/qd5lGCtyJvJg+tt1AuZwa1CZ
-X-Gm-Gg: ASbGnctfDuGAd5mTsfqeJDV9XkjHoqTRU8j9SlWXEo/UpP54zEGkjXM+lBi+m+Hs7mX
-	qsd/AZfNLkpj31RhEKbbxoD5bS6fqMcQg9pH99kyXEjt4x0/zjY0GWqz12Z+ZbZqJp6YTCfT2V7
-	NbVgWFLMLOyraEnUjSEFzbS8g4ySCrjZgBu+B3glsDoiZGMS3NlaPyuA8TOK7Qv00wPk/Rj+AAi
-	GYiWVC+SMDw6sYmbKJxomJbrsmnlseqVdsEsf04GPZhrV9jrJ+z46L+m+eGfLbCmjPqUkVs0tZD
-	4c6XwOug2v6XfjTsuliVEMEAbxUUJljxCqrwYSLSc7KaQn0vm+7cp2VEew8lfDxAbKJ4u4eKWQ1
-	XtT6FuwnhX9WZXk3lG8i/oYM=
-X-Google-Smtp-Source: AGHT+IFNn384M0APO9NR5szwd5Jx/eM8GcxVstTXNBBj5YHPeF57nNlZNzxLY41eKB4Udjdn0vnI0g==
-X-Received: by 2002:a17:90b:390e:b0:311:e8cc:424c with SMTP id 98e67ed59e1d1-313af2603c8mr453324a91.25.1749575726795;
-        Tue, 10 Jun 2025 10:15:26 -0700 (PDT)
+        bh=sO4neuwpUVoDLsDzSFLxxvkPcabDlga25iey737Q9/w=;
+        b=HAqXdkYvwzpMuQm7jKd5u+VfliLRIK7aZcQF7ESVp5s4OraYBd0hmpkrGQqAg2NFZi
+         S8fpCR++k6kLXAukGXRkM1+UX7XgWgmhG3MzrRLIEK3m1wiW+SEfWTojKDmZqOUbYTx/
+         +9zWgKxK1Z27XvYshT7nlzFDJYn1Kezz07UOWZKNjL2m5TZZaxVpD4nF+5EU41jP+xa9
+         V0GF3/1hbiEMrVTg2/gW7bFbyn1I9tDSu2uDujQmdq7HEA4W65g1G0nodBr+PkUXPBUG
+         TKLtDVCUHmi2P6dUbsokHwDlp/x8WAeby6l+e7xapY0xXkZVaBh7RGJeH6fKAQLMPXvT
+         DMgA==
+X-Forwarded-Encrypted: i=1; AJvYcCW8zmAfm8oqnJQOJxKL05RJT1cm89re531AL4OduPsnYt03G7Zg8BvmOav/wbGI5UOiMZ1XW2GqfzXNsi8=@vger.kernel.org, AJvYcCWSagzO6wSk0Qxf+UpsXbqqpEiiIOifKFKaGmSBZv5sqchpA4lrwrJH+294R56oGwyfFL0/A7mkveqw1R2tttdv@vger.kernel.org, AJvYcCXARO625jr7pbx5GIWQDO2mV7plT7XpNDrSEAe+FPrdnwPbE0n/Ivzw8wIc9JU7EAnvPC2KqgjEYeodcg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/E3KOO4qgx812abV5nqSjl8k0u5H1mhMmJ2cqAmRfuRTH17o+
+	IlblrInJll/hQKWSgOK7UqketqDQd40zbxMplpvqm5t3ULeUIIEUbpJJ08U6
+X-Gm-Gg: ASbGncvfGloED0o3TVd8UUUOJDpsUWi+zxY5hyYZoTcNipKzFsWs8vJ8vyiwYtG8Ilj
+	4Wb36O7WQZBxymH1/8Qj2FkoSQD//dayqOlsrq+NojviIno5mZbEnG1DmynIoJVj/M5t0yPDQmH
+	GUP12VMrIF+PJCkMR76+GRWCvuumCbWpY65mAWuFMRUpHAnn3CbodyhsVOC6k5l6hDe5cwWfb4y
+	Ru4EdeI4LQvMIMFDcLB0wnQZLu46J4dXLnAACfzy0vt0VfJx60TdHTD9lE0s7fPkeILyho/xuka
+	NzG8SxnrYPtYQFe2iq1cwAla+SvlOfD/OPnlxM0wuSjbYntDAsMe/nSs4W5croE5IPws+z0gYO/
+	+hidE6tkaNqSpg83Xv4zRZTw=
+X-Google-Smtp-Source: AGHT+IHQwD6S166ldxXHEAmMKaFIErFHVt3BndZz352NvZiGIWSykeBPCm21SoRRvyVBIk1bASc9ZA==
+X-Received: by 2002:a05:6a21:3289:b0:21f:4459:c032 with SMTP id adf61e73a8af0-21f86618eccmr614511637.18.1749575728142;
+        Tue, 10 Jun 2025 10:15:28 -0700 (PDT)
 Received: from localhost (c-73-158-218-242.hsd1.ca.comcast.net. [73.158.218.242])
-        by smtp.gmail.com with UTF8SMTPSA id 98e67ed59e1d1-31349fc3e72sm7562065a91.31.2025.06.10.10.15.26
+        by smtp.gmail.com with UTF8SMTPSA id d2e1a72fcca58-7482b0c212fsm7901253b3a.135.2025.06.10.10.15.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jun 2025 10:15:26 -0700 (PDT)
+        Tue, 10 Jun 2025 10:15:27 -0700 (PDT)
 From: Stanislav Fomichev <stfomichev@gmail.com>
 To: netdev@vger.kernel.org
 Cc: davem@davemloft.net,
@@ -107,10 +107,11 @@ Cc: davem@davemloft.net,
 	oss-drivers@corigine.com,
 	linux-net-drivers@amd.com,
 	linux-kselftest@vger.kernel.org,
-	leon@kernel.org
-Subject: [PATCH net-next v3 2/4] net: remove redundant ASSERT_RTNL() in queue setup functions
-Date: Tue, 10 Jun 2025 10:15:20 -0700
-Message-ID: <20250610171522.2119030-3-stfomichev@gmail.com>
+	leon@kernel.org,
+	Aleksandr Loktionov <aleksandr.loktionov@intel.com>
+Subject: [PATCH net-next v3 3/4] netdevsim: remove udp_ports_sleep
+Date: Tue, 10 Jun 2025 10:15:21 -0700
+Message-ID: <20250610171522.2119030-4-stfomichev@gmail.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250610171522.2119030-1-stfomichev@gmail.com>
 References: <20250610171522.2119030-1-stfomichev@gmail.com>
@@ -122,36 +123,177 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The existing netdev_ops_assert_locked() already asserts that either
-the RTNL lock or the per-device lock is held, making the explicit
-ASSERT_RTNL() redundant.
+Now that there is only one path in udp_tunnel, there is no need to
+have udp_ports_sleep knob. Remove it and adjust the test.
 
 Cc: Michael Chan <michael.chan@broadcom.com>
+Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
 Signed-off-by: Stanislav Fomichev <stfomichev@gmail.com>
 ---
- net/core/dev.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/net/netdevsim/netdevsim.h             |  2 --
+ drivers/net/netdevsim/udp_tunnels.c           |  8 -------
+ .../drivers/net/netdevsim/udp_tunnel_nic.sh   | 23 +------------------
+ 3 files changed, 1 insertion(+), 32 deletions(-)
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index be97c440ecd5..72997636b8ec 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -3179,7 +3179,6 @@ int netif_set_real_num_tx_queues(struct net_device *dev, unsigned int txq)
+diff --git a/drivers/net/netdevsim/netdevsim.h b/drivers/net/netdevsim/netdevsim.h
+index d04401f0bdf7..511ed72a93ce 100644
+--- a/drivers/net/netdevsim/netdevsim.h
++++ b/drivers/net/netdevsim/netdevsim.h
+@@ -131,7 +131,6 @@ struct netdevsim {
+ 	struct nsim_macsec macsec;
+ 	struct {
+ 		u32 inject_error;
+-		u32 sleep;
+ 		u32 __ports[2][NSIM_UDP_TUNNEL_N_PORTS];
+ 		u32 (*ports)[NSIM_UDP_TUNNEL_N_PORTS];
+ 		struct dentry *ddir;
+@@ -342,7 +341,6 @@ struct nsim_dev {
+ 		bool ipv4_only;
+ 		bool shared;
+ 		bool static_iana_vxlan;
+-		u32 sleep;
+ 	} udp_ports;
+ 	struct nsim_dev_psample *psample;
+ 	u16 esw_mode;
+diff --git a/drivers/net/netdevsim/udp_tunnels.c b/drivers/net/netdevsim/udp_tunnels.c
+index 10cbbf1c584b..89fff76e51cf 100644
+--- a/drivers/net/netdevsim/udp_tunnels.c
++++ b/drivers/net/netdevsim/udp_tunnels.c
+@@ -18,9 +18,6 @@ nsim_udp_tunnel_set_port(struct net_device *dev, unsigned int table,
+ 	ret = -ns->udp_ports.inject_error;
+ 	ns->udp_ports.inject_error = 0;
  
- 	if (dev->reg_state == NETREG_REGISTERED ||
- 	    dev->reg_state == NETREG_UNREGISTERING) {
--		ASSERT_RTNL();
- 		netdev_ops_assert_locked(dev);
+-	if (ns->udp_ports.sleep)
+-		msleep(ns->udp_ports.sleep);
+-
+ 	if (!ret) {
+ 		if (ns->udp_ports.ports[table][entry]) {
+ 			WARN(1, "entry already in use\n");
+@@ -47,8 +44,6 @@ nsim_udp_tunnel_unset_port(struct net_device *dev, unsigned int table,
+ 	ret = -ns->udp_ports.inject_error;
+ 	ns->udp_ports.inject_error = 0;
  
- 		rc = netdev_queue_update_kobjects(dev, dev->real_num_tx_queues,
-@@ -3229,7 +3228,6 @@ int netif_set_real_num_rx_queues(struct net_device *dev, unsigned int rxq)
- 		return -EINVAL;
+-	if (ns->udp_ports.sleep)
+-		msleep(ns->udp_ports.sleep);
+ 	if (!ret) {
+ 		u32 val = be16_to_cpu(ti->port) << 16 | ti->type;
  
- 	if (dev->reg_state == NETREG_REGISTERED) {
--		ASSERT_RTNL();
- 		netdev_ops_assert_locked(dev);
+@@ -170,7 +165,6 @@ int nsim_udp_tunnels_info_create(struct nsim_dev *nsim_dev,
+ 		       GFP_KERNEL);
+ 	if (!info)
+ 		return -ENOMEM;
+-	ns->udp_ports.sleep = nsim_dev->udp_ports.sleep;
  
- 		rc = net_rx_queue_update_kobjects(dev, dev->real_num_rx_queues,
+ 	if (nsim_dev->udp_ports.sync_all) {
+ 		info->set_port = NULL;
+@@ -213,6 +207,4 @@ void nsim_udp_tunnels_debugfs_create(struct nsim_dev *nsim_dev)
+ 			    &nsim_dev->udp_ports.shared);
+ 	debugfs_create_bool("udp_ports_static_iana_vxlan", 0600, nsim_dev->ddir,
+ 			    &nsim_dev->udp_ports.static_iana_vxlan);
+-	debugfs_create_u32("udp_ports_sleep", 0600, nsim_dev->ddir,
+-			   &nsim_dev->udp_ports.sleep);
+ }
+diff --git a/tools/testing/selftests/drivers/net/netdevsim/udp_tunnel_nic.sh b/tools/testing/selftests/drivers/net/netdevsim/udp_tunnel_nic.sh
+index 92c2f0376c08..4c859ecdad94 100755
+--- a/tools/testing/selftests/drivers/net/netdevsim/udp_tunnel_nic.sh
++++ b/tools/testing/selftests/drivers/net/netdevsim/udp_tunnel_nic.sh
+@@ -266,7 +266,6 @@ for port in 0 1; do
+ 	echo $NSIM_ID > /sys/bus/netdevsim/new_device
+     else
+ 	echo 1 > $NSIM_DEV_DFS/udp_ports_open_only
+-	echo 1 > $NSIM_DEV_DFS/udp_ports_sleep
+ 	echo 1 > $NSIM_DEV_SYS/new_port
+     fi
+     NSIM_NETDEV=`get_netdev_name old_netdevs`
+@@ -350,23 +349,11 @@ old_netdevs=$(ls /sys/class/net)
+ port=0
+ echo $NSIM_ID > /sys/bus/netdevsim/new_device
+ echo 0 > $NSIM_DEV_SYS/del_port
+-echo 1000 > $NSIM_DEV_DFS/udp_ports_sleep
+ echo 0 > $NSIM_DEV_SYS/new_port
+ NSIM_NETDEV=`get_netdev_name old_netdevs`
+ 
+ msg="create VxLANs"
+-exp0=( 0 0 0 0 ) # sleep is longer than out wait
+-new_vxlan vxlan0 10000 $NSIM_NETDEV
+-
+-modprobe -r vxlan
+-modprobe -r udp_tunnel
+-
+-msg="remove tunnels"
+-exp0=( 0 0 0 0 )
+-check_tables
+-
+-msg="create VxLANs"
+-exp0=( 0 0 0 0 ) # sleep is longer than out wait
++exp0=( `mke 10000 1` 0 0 0 )
+ new_vxlan vxlan0 10000 $NSIM_NETDEV
+ 
+ exp0=( 0 0 0 0 )
+@@ -428,7 +415,6 @@ echo 0 > $NSIM_DEV_SYS/del_port
+ for port in 0 1; do
+     if [ $port -ne 0 ]; then
+ 	echo 1 > $NSIM_DEV_DFS/udp_ports_open_only
+-	echo 1 > $NSIM_DEV_DFS/udp_ports_sleep
+     fi
+ 
+     echo $port > $NSIM_DEV_SYS/new_port
+@@ -486,7 +472,6 @@ echo 1 > $NSIM_DEV_DFS/udp_ports_sync_all
+ for port in 0 1; do
+     if [ $port -ne 0 ]; then
+ 	echo 1 > $NSIM_DEV_DFS/udp_ports_open_only
+-	echo 1 > $NSIM_DEV_DFS/udp_ports_sleep
+     fi
+ 
+     echo $port > $NSIM_DEV_SYS/new_port
+@@ -543,7 +528,6 @@ echo 0 > $NSIM_DEV_SYS/del_port
+ for port in 0 1; do
+     if [ $port -ne 0 ]; then
+ 	echo 1 > $NSIM_DEV_DFS/udp_ports_open_only
+-	echo 1 > $NSIM_DEV_DFS/udp_ports_sleep
+     fi
+ 
+     echo $port > $NSIM_DEV_SYS/new_port
+@@ -573,7 +557,6 @@ echo 1 > $NSIM_DEV_DFS/udp_ports_ipv4_only
+ for port in 0 1; do
+     if [ $port -ne 0 ]; then
+ 	echo 1 > $NSIM_DEV_DFS/udp_ports_open_only
+-	echo 1 > $NSIM_DEV_DFS/udp_ports_sleep
+     fi
+ 
+     echo $port > $NSIM_DEV_SYS/new_port
+@@ -634,7 +617,6 @@ echo 0 > $NSIM_DEV_SYS/del_port
+ for port in 0 1; do
+     if [ $port -ne 0 ]; then
+ 	echo 1 > $NSIM_DEV_DFS/udp_ports_open_only
+-	echo 1 > $NSIM_DEV_DFS/udp_ports_sleep
+     fi
+ 
+     echo $port > $NSIM_DEV_SYS/new_port
+@@ -690,7 +672,6 @@ echo 0 > $NSIM_DEV_SYS/del_port
+ for port in 0 1; do
+     if [ $port -ne 0 ]; then
+ 	echo 1 > $NSIM_DEV_DFS/udp_ports_open_only
+-	echo 1 > $NSIM_DEV_DFS/udp_ports_sleep
+     fi
+ 
+     echo $port > $NSIM_DEV_SYS/new_port
+@@ -750,7 +731,6 @@ echo 0 > $NSIM_DEV_SYS/del_port
+ for port in 0 1; do
+     if [ $port -ne 0 ]; then
+ 	echo 1 > $NSIM_DEV_DFS/udp_ports_open_only
+-	echo 1 > $NSIM_DEV_DFS/udp_ports_sleep
+     fi
+ 
+     echo $port > $NSIM_DEV_SYS/new_port
+@@ -809,7 +789,6 @@ echo $NSIM_ID > /sys/bus/netdevsim/new_device
+ echo 0 > $NSIM_DEV_SYS/del_port
+ 
+ echo 0 > $NSIM_DEV_DFS/udp_ports_open_only
+-echo 1 > $NSIM_DEV_DFS/udp_ports_sleep
+ echo 1 > $NSIM_DEV_DFS/udp_ports_shared
+ 
+ old_netdevs=$(ls /sys/class/net)
 -- 
 2.49.0
 
