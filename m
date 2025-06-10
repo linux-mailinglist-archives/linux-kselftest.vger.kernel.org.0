@@ -1,177 +1,113 @@
-Return-Path: <linux-kselftest+bounces-34556-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34557-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73A07AD3605
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jun 2025 14:22:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9028AD373E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jun 2025 14:50:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 259B97A8235
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jun 2025 12:21:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 95DDA17AABC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jun 2025 12:49:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FA56290D93;
-	Tue, 10 Jun 2025 12:22:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 716942980B7;
+	Tue, 10 Jun 2025 12:42:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ixfbwWCC";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="i6IJxC6d";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="L5LPzlMY";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="QqvtAvf9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S6W8ANdd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0DCA222598
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Jun 2025 12:22:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A62E28C5A6;
+	Tue, 10 Jun 2025 12:42:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749558137; cv=none; b=OcAIQBwXkwNM0AFjEMs8fSv5CgNeTG1uhyQq76WOm4VqE1DaILEB67cfc5RwkdkCQYjbF2DeeD6FmYPiZ8XUFfz2UafvdRmAPHNT48GfJz6bqEe8cs5A/82yY7LcdQBz1hGUGiogS3j58M8Nl4mlyd+L71EPYiDfmduLY0dFh5k=
+	t=1749559349; cv=none; b=qFCmVERmvIG/ht3dyypWZ6Pjwn+xtkc2tQSKN4l0WEcsgDfBWZ7IkWtVDNIgJjejgUfYJtCaZwU8jJvOpoGWHj7kaw4d1q4usr7bjMkuXEYMCxpRQTxWzxQfj1Dmdl0fKUe9QANKUv5r8wl+eEgQD29PeFTcprrfP41m48QFPAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749558137; c=relaxed/simple;
-	bh=6Z6RdtFgu89+ueb/BzlO5rNh6RCM0Q+YM8hETMjuPs8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=twfndKZdL6ZZF5lzK0NC5n+bXDNkPjbCS8PwrjTOs1Nf2aRxxBCFmNyEaUu466r1D5ZRTF9OF4XHTzbYqWL59qTbFMxWgQcrekjB5GYpDP/Tuml6tKJ8448qIWbTGbgMgFtLyNKChZI9X+xIiNI5Hkfg2CuXI8B679j+BftoHf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ixfbwWCC; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=i6IJxC6d; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=L5LPzlMY; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=QqvtAvf9; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id BEB73211F1;
-	Tue, 10 Jun 2025 12:22:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1749558134; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=5t7Or3woO7t0abLNHbSdmQ4BjdUmYarkFC/ji/k7CaU=;
-	b=ixfbwWCC3PzUi1vbx6ECWYGG8YvFpCea1TbXtwulrv8YZwateQ7vQViedXF53/JBruh3tu
-	kfTxcF8+ME2rmjr2xLn/OAyvAuF2q9CLej4L9uw2j5SF3j9R2HmpWbDOTO1uqb+NottzXA
-	8hDVe6tV6HuEEV4NTs/AW7Wm3CbDl50=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1749558134;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=5t7Or3woO7t0abLNHbSdmQ4BjdUmYarkFC/ji/k7CaU=;
-	b=i6IJxC6ddnkW6oBDZ2kteTRPqg4wZvncGS7IDA2XZZbSvcGLXOrtUdkmO2toMTBs51a5dR
-	tiZYmRZS6yf5RDBg==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1749558132; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=5t7Or3woO7t0abLNHbSdmQ4BjdUmYarkFC/ji/k7CaU=;
-	b=L5LPzlMYm0oPF4xdmxX0mAS5nv5HjJ4HZvVdu1kx44YPEPEAaCIkzlXpOyWPWSL+/JZSvf
-	9OhE2SXIGbAxjrC8298kjzpAwd737n0jJdk1gHXFRlGoizJgwA8FLtysp/p9uRmJQETXU9
-	cNa7mKTKzyaTC0jF5oalf49B0S1zvdA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1749558132;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=5t7Or3woO7t0abLNHbSdmQ4BjdUmYarkFC/ji/k7CaU=;
-	b=QqvtAvf9koJ+7uHRAUVpCm+wg63s+4xupMSXzGvHmZT3Aqzplc0oCpIGFIe4s/Llt9zwKi
-	X2J1eJV+YfhhgVCg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id F25D413AD9;
-	Tue, 10 Jun 2025 12:22:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 3Df2N3MjSGgRdQAAD6G6ig
-	(envelope-from <pfalcato@suse.de>); Tue, 10 Jun 2025 12:22:11 +0000
-From: Pedro Falcato <pfalcato@suse.de>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Vlastimil Babka <vbabka@suse.cz>,
-	Jann Horn <jannh@google.com>,
-	Pu Lehui <pulehui@huawei.com>,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	Aishwarya <aishwarya.tcv@arm.com>,
-	broonie@kernel.org,
-	Pedro Falcato <pfalcato@suse.de>
-Subject: [PATCH] selftests/mm: Skip uprobe vma merge test if uprobes are not enabled
-Date: Tue, 10 Jun 2025 13:22:09 +0100
-Message-ID: <20250610122209.3177587-1-pfalcato@suse.de>
-X-Mailer: git-send-email 2.49.0
+	s=arc-20240116; t=1749559349; c=relaxed/simple;
+	bh=/1iUBspDEJPAm1syGxDL8nO0vqi84Psh/DKw5YFPtZY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=CvPLHi+TGSDMVcYqztj0+4yrv31JusalcJq3Q5853mTJd65vFZcwGqBO71BoX3d3AKSgj6BgvIN/fn2ep7CUgOIfxUb3z4I3yTOyxxOjcBdbEReMyzRp1AGYhtS6TTT5sn5AsN23+V79d9bt+e0k7LybCYt/lquVR9/4pYaB8Yo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S6W8ANdd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DF41C4CEED;
+	Tue, 10 Jun 2025 12:42:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749559349;
+	bh=/1iUBspDEJPAm1syGxDL8nO0vqi84Psh/DKw5YFPtZY=;
+	h=From:Subject:Date:To:Cc:From;
+	b=S6W8ANddI6Mxzhu+bXnGcpy8S6b5KZK+nZEs+R3mO2Auw38nnZC1tRvDbYZdoa1+0
+	 Hpw84ytsKQ6UMY3RRV/KpuP9rMKbz5z/VDVqfpA/FGAgQKBEjEt8xVp4m0HPidvSGV
+	 rlWFHjMs6YaD7pNrWyWC+0HX4Q5gFH7lzSCIOtHu8Dwg2EMFR8sWn72aaDRdAikOJw
+	 EI6QgZONtHdHf1uf+Vq4aah3loDxstGSWePBaHay6Kj9nIO9hBjGyL84cFpp9ODwu3
+	 WK47sJd+a+goDLNyagg+vBxTgzplTDmDiXhFFQJxdXvwVJj2kJGEArcbvXvm3SmqnK
+	 WXav1c4Uxba4Q==
+From: Mark Brown <broonie@kernel.org>
+Subject: [PATCH v2 0/4] kselftest/arm64: Add coverage for the interaction
+ of vfork() and GCS
+Date: Tue, 10 Jun 2025 13:29:43 +0100
+Message-Id: <20250610-arm64-gcs-vfork-exit-v2-0-929443dfcf82@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,suse.de:mid,imap1.dmz-prg2.suse.org:helo,arm.com:email];
-	RCVD_TLS_ALL(0.00)[]
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Spam-Score: -2.80
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADglSGgC/22NQQ6CMBBFr2Jm7ZjSUIquvIdhUWEKE5SaKWkwh
+ LtbcevyveS/v0IkYYpwOawglDhymDLo4wHawU09IXeZQSttlNE1OnlWJfZtxOSDjEgLz1g62zl
+ vK6OJIE9fQp6XPXtrMg8c5yDv/SUVX/sLVur8P5gKVHh3rlNe1caW9jqSTPQ4Bemh2bbtA6YdR
+ OS5AAAA
+X-Change-ID: 20250528-arm64-gcs-vfork-exit-4a7daf7652ee
+To: Willy Tarreau <w@1wt.eu>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+ Christian Brauner <brauner@kernel.org>, 
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.15-dev-c25d1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1234; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=/1iUBspDEJPAm1syGxDL8nO0vqi84Psh/DKw5YFPtZY=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBoSCgu82PSVmQPG9g1oJQrsyvsTSf2h9mS1ONCsW21
+ mqjhbFOJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaEgoLgAKCRAk1otyXVSH0BMCB/
+ 98zbKt51BDbhAYnQSZMke8OJDPGCHrlTF1lGFJxPCARcuIDzBp0prKAYytmm00o9LOAKqSVTyCpegx
+ 36l/v8Ig3awVYYtpl5D3hnvGppd5weMjb59iEegi0cJaNRIHjnSYKjI8XjnlrRrRV+hkr1QsjDOdYE
+ OF4si6AwG9Nskqf/O295slJO/OyJZiy/Jn7aKHbpXQE8Ldw9KckocVneCaqLoBhxDs0MeigiSicVpN
+ 97h4+IpmCEA45bBJhCoZNTGDP000E5Fq3/bOuLfWZLbY8fbCEaHD7MeDP+QqAHAzowbXjJcirYclA1
+ FJ9v/u3BYt8jGyR6+o/ue1MRNC4WRw
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-If uprobes are not enabled, the test currently fails with:
+I had cause to look at the vfork() support for GCS and realised that we
+don't have any direct test coverage, this series does so by adding
+vfork() to nolibc and then using that in basic-gcs to provide some
+simple vfork() coverage.
 
-7151 12:46:54.627936  # # #  RUN           merge.handle_uprobe_upon_merged_vma ...
-7152 12:46:54.639014  # # f /sys/bus/event_source/devices/uprobe/type
-7153 12:46:54.639306  # # fopen: No such file or directory
-7154 12:46:54.650451  # # # merge.c:473:handle_uprobe_upon_merged_vma:Expected
-read_sysfs("/sys/bus/event_source/devices/uprobe/type", &type) (1) == 0 (0)
-7155 12:46:54.650730  # # # handle_uprobe_upon_merged_vma: Test terminated by assertion
-7156 12:46:54.661750  # # #          FAIL  merge.handle_uprobe_upon_merged_vma
-7157 12:46:54.662030  # # not ok 8 merge.handle_uprobe_upon_merged_vma
-
-Skipping is a more sane and friendly behavior here.
-
-Fixes: efe99fabeb11b ("selftests/mm: add test about uprobe pte be orphan during vma merge")
-Reported-by: Aishwarya <aishwarya.tcv@arm.com>
-Closes: https://lore.kernel.org/linux-mm/20250610103729.72440-1-aishwarya.tcv@arm.com/
-Signed-off-by: Pedro Falcato <pfalcato@suse.de>
+Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/mm/merge.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Changes in v2:
+- Add replacement of ifdef with if defined() in nolibc since the code
+  doesn't reflect the coding style.
+- Remove check for arch specific vfork().
+- Link to v1: https://lore.kernel.org/r/20250609-arm64-gcs-vfork-exit-v1-0-baad0f085747@kernel.org
 
-diff --git a/tools/testing/selftests/mm/merge.c b/tools/testing/selftests/mm/merge.c
-index bbae66fc5038..cc26480098ae 100644
---- a/tools/testing/selftests/mm/merge.c
-+++ b/tools/testing/selftests/mm/merge.c
-@@ -470,7 +470,9 @@ TEST_F(merge, handle_uprobe_upon_merged_vma)
- 	ASSERT_GE(fd, 0);
- 
- 	ASSERT_EQ(ftruncate(fd, page_size), 0);
--	ASSERT_EQ(read_sysfs("/sys/bus/event_source/devices/uprobe/type", &type), 0);
-+	if (read_sysfs("/sys/bus/event_source/devices/uprobe/type", &type) != 0) {
-+		SKIP(goto out, "Failed to read uprobe sysfs file, skipping");
-+	}
- 
- 	memset(&attr, 0, attr_sz);
- 	attr.size = attr_sz;
-@@ -491,6 +493,7 @@ TEST_F(merge, handle_uprobe_upon_merged_vma)
- 	ASSERT_NE(mremap(ptr2, page_size, page_size,
- 			 MREMAP_MAYMOVE | MREMAP_FIXED, ptr1), MAP_FAILED);
- 
-+out:
- 	close(fd);
- 	remove(probe_file);
- }
+---
+Mark Brown (4):
+      tools/nolibc: Replace ifdef with if defined() in sys.h
+      tools/nolibc: Provide vfork()
+      kselftest/arm64: Add a test for vfork() with GCS
+      selftests/nolibc: Add coverage of vfork()
+
+ tools/include/nolibc/sys.h                    | 57 +++++++++++++++++-------
+ tools/testing/selftests/arm64/gcs/basic-gcs.c | 63 +++++++++++++++++++++++++++
+ tools/testing/selftests/nolibc/nolibc-test.c  | 23 ++++++++--
+ 3 files changed, 124 insertions(+), 19 deletions(-)
+---
+base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
+change-id: 20250528-arm64-gcs-vfork-exit-4a7daf7652ee
+
+Best regards,
 -- 
-2.49.0
+Mark Brown <broonie@kernel.org>
 
 
