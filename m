@@ -1,163 +1,94 @@
-Return-Path: <linux-kselftest+bounces-34608-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34609-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E873AD3EBE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jun 2025 18:24:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22BC4AD3ED7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jun 2025 18:28:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5AFCB17A14E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jun 2025 16:23:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F065F3A77CE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jun 2025 16:27:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30BE22417E0;
-	Tue, 10 Jun 2025 16:23:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A75C8239E63;
+	Tue, 10 Jun 2025 16:27:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="kYJwfzmX"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VQlxGt+F"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2066.outbound.protection.outlook.com [40.107.92.66])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 873FF23F43C;
-	Tue, 10 Jun 2025 16:23:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.66
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749572604; cv=fail; b=rDGFRkKkHwlCMHp7d3Jh0m7+YEZPpBON3SSUUHSVnvib8TmBT9kL1ANiYU099ZSKobwjbbhY7hkoWCoHzbghAXGbOoJjxgS6BAa1zq+wCJ/rYs4t2Yr/1qqN1j6D2Hx6NbsB0u/ZneGZn9VmmEGg2YeialC1iUzM5I9A9grGr9A=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749572604; c=relaxed/simple;
-	bh=urU0pp24u+LyuJIsUBY84YTPSsgPPy5w3n+3AKlV6dg=;
-	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=F9NEx2pbr9HCs0xk1j0z/45dSyLfoVxVfw8nbLY6DaFaticXN3HwEhILd1XmEZNss1jtXlUg6+hIpt6B51NnX33g1IMb74gMTl+/5JNycSKUsIl+Yy7Sv+p6ZxJWlu+PT3rmNR+ooXrg/ofIM38YKEqz5gioQCrvQ8wkQFlMYu8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=kYJwfzmX; arc=fail smtp.client-ip=40.107.92.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Nxd7ik6xmg9dfXRcfaObkxTXqxwbrhyObCIOXErgVwE3IwVyDgwWHpKzFjuTJZWhf8tGeZ4Fh0fO/sCnAQS6oL6WGwa6gGI1P2jGxcvk05W/H7UyKZGsthjqyV5hSs+PggFbExq/ffcJN0KDi80NRNWivTXY0d6FraFKKIBRK7NvYzT3iJu4JBNUFfeoNB7Y++7/PBkyA7bGfj83YFwXZ2uW0B8gdOFAE8kNN228k8FGMk/oocdzZUaAdM5N180BsQNJ8NTTbLaiosICJCr+63bXu55XyrUxWTzKA+TcdIGRsv/EZjBNlUQ2wqXxHe793OwRtdk4bJz2Hosa1FD4hA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=urU0pp24u+LyuJIsUBY84YTPSsgPPy5w3n+3AKlV6dg=;
- b=YquVqpczY49/nNtqluuGVGKlBZrzDgCisLHx/F4DBpbdlYa9vQ6mfsu1tYz1/oJDLRTLR3IawIf3onNdfaSy8AzyWAi5b0Qcb7Jxx9MBD2LAUjf5pmfQFS8rPCGlOfO0GTofxIjOix1iklD83QdBgOxPYi+xIsmuYL+ZDDr0wR0qTDENXOh0HZ3hjPm2vmYxNcNF4zllMfGBKDoQGwADCAr11o2DlrMtInRamXLsPWnfbeVlg4B0kHzcjC5ZLscQBz13c2xCyaABT+o7Kk+b/VD2R7l1gldwr4szFygRvAkAlMMBrLfLxxoztrSOn0XjbkZ+h5YNXLnrBFtcspDNpA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=urU0pp24u+LyuJIsUBY84YTPSsgPPy5w3n+3AKlV6dg=;
- b=kYJwfzmXziW/jz7sHrDQrWp/w5zhZNuYT5ZonpjzF9pidZREtwcWzVitfK9huk0Lt5d0AJzi/E0zzYPPLobX3bgVj31ZYlpqqbtJ8g+bo5VDAlJUaF8YTSRbRxrDoGlpdPRTkngKXNkwoVz7Gxul2iSVVwJML3tdYsANI/nREtJDY5d8eZxHFTJiq25EdzThlwAM5ryZum0UUxZZlHvzTY7I9rG3U0sPp+/OpXW50QE4jtEPyyUAfXaXUSdIGaVBj8QkAg/K/vhE1vKpw1N5cNHwD8gzfWCUWXH+NZclekEl5tBO7A02Jw/i9aVsQYn3Omqn3tIEixccZISf5qHTEQ==
-Received: from DM6PR05CA0043.namprd05.prod.outlook.com (2603:10b6:5:335::12)
- by CH1PPF68E8581EB.namprd12.prod.outlook.com (2603:10b6:61f:fc00::611) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8699.24; Tue, 10 Jun
- 2025 16:23:19 +0000
-Received: from DS1PEPF0001708E.namprd03.prod.outlook.com
- (2603:10b6:5:335:cafe::9e) by DM6PR05CA0043.outlook.office365.com
- (2603:10b6:5:335::12) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8835.10 via Frontend Transport; Tue,
- 10 Jun 2025 16:23:19 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- DS1PEPF0001708E.mail.protection.outlook.com (10.167.17.134) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8835.15 via Frontend Transport; Tue, 10 Jun 2025 16:23:19 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 10 Jun
- 2025 09:23:05 -0700
-Received: from fedora (10.126.231.35) by rnnvmail201.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Tue, 10 Jun
- 2025 09:22:59 -0700
-References: <cover.1749499963.git.petrm@nvidia.com>
- <d47a5edc84638eb27e2f57655a619b06051fa7ae.1749499963.git.petrm@nvidia.com>
- <20250610060259.00a17ce8@kernel.org>
-User-agent: mu4e 1.8.14; emacs 29.4
-From: Petr Machata <petrm@nvidia.com>
-To: Jakub Kicinski <kuba@kernel.org>
-CC: Petr Machata <petrm@nvidia.com>, "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, "David
- Ahern" <dsahern@gmail.com>, <netdev@vger.kernel.org>, Simon Horman
-	<horms@kernel.org>, Nikolay Aleksandrov <razor@blackwall.org>, Ido Schimmel
-	<idosch@nvidia.com>, <mlxsw@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-	<linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH net-next 14/14] selftests: forwarding: Add a test for
- verifying VXLAN MC underlay
-Date: Tue, 10 Jun 2025 18:22:32 +0200
-In-Reply-To: <20250610060259.00a17ce8@kernel.org>
-Message-ID: <87o6uvefc1.fsf@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B5B9238C34;
+	Tue, 10 Jun 2025 16:27:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1749572878; cv=none; b=DWBRlQlv0KMevf4dYcrgxCYr2ilbrPppB/3l0dI9EwNgugoSQODRXz/wnZ2Y+3iF0n9GhRpJZ2w0aEYw5QPnnSdw4/SQ0/13rkJBfJs2zSiUwxQ4IEIceHq3TGBpR7GgXT5QbXVlI3s+BDJtGe5VesbJRNlP1HXWc4fMkxBHxM8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1749572878; c=relaxed/simple;
+	bh=mFxvI/kVZrzum73f4JuAnsQvQ7oMH5qbvvBDTrR8D+M=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=agfIaX3SU6JKwRH64W9nWApxXjLe+SfygECRQCiktEIYZqIP3weJiFBJQIc31B4Mzl+L0/WvnoemdeQIH9BY17jSC7WFjC2WjBj11idNvgEvmtKdXgJ8uU/9FPtyxUcbIuscgRDQ6zrzJhsAvP4cPB1tjnATnKOK0MSfZFubaww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VQlxGt+F; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F90EC4CEED;
+	Tue, 10 Jun 2025 16:27:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749572878;
+	bh=mFxvI/kVZrzum73f4JuAnsQvQ7oMH5qbvvBDTrR8D+M=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=VQlxGt+FqI3gqtXadAFcUs97IUFFcFFoQNYIS1YMiCOwSw8fB/GQHW3sWVdyKgdtn
+	 A9h7kD4lIg/z42ZzV6iLq1g5+hdToOz613HUg0jc9ejXI3gOBwpLF5auyibwmxHj/y
+	 6ijU1n8/v5T9xkeScsbxE9VSa7vg7ojvmOmnYKGzWYzRqF3B6N/QWFU7U9ZhZ3P+Ry
+	 FugqWsvm1yFMJVeMSIHmPLExxcOeDibIVB25PcgtDmYVrINYjyzrlxleA+92+FKvID
+	 lC3xC5Ryva24Rv/ABPfx4G6MBufp3gcpx0OINvtiGz2nS6pyIguwKrl2Ad4IW9v+hO
+	 X8ytWgu7gICwg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADD1A39D6540;
+	Tue, 10 Jun 2025 16:28:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS1PEPF0001708E:EE_|CH1PPF68E8581EB:EE_
-X-MS-Office365-Filtering-Correlation-Id: 84468d36-2222-406f-18ba-08dda83b1ccd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|36860700013|82310400026|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?pqC1cwad6dz/CnnzynuiE7oOdonFMtCRkTMShNDE8PagihpA9BKPZ4qgU7ZU?=
- =?us-ascii?Q?bg1Z8Mjb8Rm/ZpEa1ccLWptgMea/L3YGBfIf5SF4LPNR6/EGm8JVb5kKLLcH?=
- =?us-ascii?Q?D4Zve+3c7S3qx0niXgTd+xZH/4GvZTyl3q3+AmtPZvBaiMAenIhqcHJAY/xl?=
- =?us-ascii?Q?KrvB7dLTUh2svcLWmI96ihVp+kZ+v/QyziTORajdDySgB4JXtUexzgcGF4bM?=
- =?us-ascii?Q?SCfx0/P+nvu7IQtEzbbn+a6RCpWTeW5y24G1PfPLlpXH/RKFj6uAsFsuc/gJ?=
- =?us-ascii?Q?DfRC5vAOPmyEntMVkVcc1tCOmD4yyWJqUFNKEI5xDtBcV9bN30Xj2v+I1lgx?=
- =?us-ascii?Q?XqRhahBOks8d1ojaBQ9z6CFWAWEoSa/HpJrCdV5J3ahDoQ/eei8kYo0BIM01?=
- =?us-ascii?Q?Oc4piip4hhvilKnHrqGq1AkacNtMMk+96m8zhJ4uqMgTz9rbkTSDOSPMZSKH?=
- =?us-ascii?Q?Rp6ky62SQQH+mZhY0sjn36lHnLvbqIR+qsPvEFIc1BSXkqEehdIwSyaxMMWR?=
- =?us-ascii?Q?ziW+5N+JKiwg0Pg/JfWnYL8zWeMsufPA/0vPD3OHG0/ZWSgbcUN7TChKHek/?=
- =?us-ascii?Q?7n+x9LmChEdgr6TU5nlui4558wKYXYsZdHC6a3cZygfHeHlpR758/VKEZZM0?=
- =?us-ascii?Q?4GAvsvgrqgP4TxlLLwY2y2KKxHg7Jzw9WZ6grK05xYLbjKKq+Cmwin1W+X2j?=
- =?us-ascii?Q?7LBydrpYxaI4cgHaJmNipCJoLGwGyuKK3uIKKP6btOo84v21wGOrP3hC0o32?=
- =?us-ascii?Q?wwhNCKi4x6NPjwr8+6seyb/oK4vi/BseVuCMY8BbpHmdAZCuALb1mFlfULS6?=
- =?us-ascii?Q?XmLl3yripxz0pja4gxRumv6l0qn6eIvKig2nimklJJmdafpMUq9Kc3JUwQP5?=
- =?us-ascii?Q?d/mkITD6+4JHndDTQAoIOOysDFMqgF6alPCvIlB7yRf1+uTsjkImoa7YI6ZE?=
- =?us-ascii?Q?HUCu6ARbrl6bUyy2ZHrnBHIPwF/IniuyE1IxNlsVLM1nQajZyHTJGhE6w5hQ?=
- =?us-ascii?Q?yPz6nXewAlDDWiMFXGY7Ti5ZJqs+ucI80HwRVkkBpKiOuzuimzGvKpM09ncv?=
- =?us-ascii?Q?7SpMkrCTR9dzRmF0NOTYECyvVTlbHHwnX5stN6gMhk6GOGw7Uh2RzoMsnUEe?=
- =?us-ascii?Q?vnt1zQiuzxU0wu2yWx2G2HRs67e4ZsjQxFOxAEkeSuVFyNc9i8ZZ6jiYeGeb?=
- =?us-ascii?Q?8YbTotv+8QdVjszVjo90crEK/otLne2AQafU3ZDGwTyoy7OFYgepRoshJQ1t?=
- =?us-ascii?Q?htE+gLYnFZ6cnOmMHsWnXGBz0BrlrPdZ7Odrh6WZiklh6rTSD+Zkc/WqpYfl?=
- =?us-ascii?Q?cIlq3QHt7PHPGR/ywwqk1y49FfhmakuFmBtJcWggjPgQmFrXbVuckrNKYZF2?=
- =?us-ascii?Q?+Xi9ILNRDwjlm4tPuGgDAQfYPnOk2coEvY0kzAfEV1bcy/ewy+soMZR/K0XI?=
- =?us-ascii?Q?3btk1V89Erv2YULyFkdOpTtpGelzLsqi0vAYTyELvU9mHnBYolTKlpry5Jtt?=
- =?us-ascii?Q?G621sBCcbGRXoTAljTaU/23RAISCQJGPqIkM?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(7416014)(376014)(36860700013)(82310400026)(1800799024);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2025 16:23:19.4765
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 84468d36-2222-406f-18ba-08dda83b1ccd
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DS1PEPF0001708E.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH1PPF68E8581EB
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] kunit: qemu_configs: Add riscv32 config
+From: patchwork-bot+linux-riscv@kernel.org
+Message-Id: 
+ <174957290850.2454024.5667943279293290236.git-patchwork-notify@kernel.org>
+Date: Tue, 10 Jun 2025 16:28:28 +0000
+References: <20250407-kunit-qemu-riscv32-v1-1-7b9800034a35@linutronix.de>
+In-Reply-To: <20250407-kunit-qemu-riscv32-v1-1-7b9800034a35@linutronix.de>
+To: =?utf-8?q?Thomas_Wei=C3=9Fschuh_=3Cthomas=2Eweissschuh=40linutronix=2Ede=3E?=@codeaurora.org
+Cc: linux-riscv@lists.infradead.org, brendan.higgins@linux.dev,
+ davidgow@google.com, rmoar@google.com, paul.walmsley@sifive.com,
+ palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kunit-dev@googlegroups.com
+
+Hello:
+
+This patch was applied to riscv/linux.git (fixes)
+by Shuah Khan <skhan@linuxfoundation.org>:
+
+On Mon, 07 Apr 2025 10:17:12 +0200 you wrote:
+> Add a basic config to run kunit tests on riscv32.
+> 
+> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+> ---
+>  tools/testing/kunit/qemu_configs/riscv32.py | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+> 
+> [...]
+
+Here is the summary with links:
+  - kunit: qemu_configs: Add riscv32 config
+    https://git.kernel.org/riscv/c/9aa08e761b67
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-Jakub Kicinski <kuba@kernel.org> writes:
-
-> On Mon, 9 Jun 2025 22:50:30 +0200 Petr Machata wrote:
->> Add tests for MC-routing underlay VXLAN traffic.
->
-> nit: we started using shellcheck, may be worth addressing the
-> warning-level complaints?
-
-Sure. Sorry, I noticed and meant to do that, but it slipped my mind :-|
 
