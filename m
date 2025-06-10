@@ -1,192 +1,205 @@
-Return-Path: <linux-kselftest+bounces-34536-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34537-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A3CBAD2C0E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jun 2025 05:03:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E81D6AD2D45
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jun 2025 07:29:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BC68A16C47F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jun 2025 03:03:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 60D92188ED85
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jun 2025 05:29:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B96E42566FD;
-	Tue, 10 Jun 2025 03:03:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBBFE25C813;
+	Tue, 10 Jun 2025 05:28:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GAg4c81g"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="iZI2hzT1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f67.google.com (mail-ej1-f67.google.com [209.85.218.67])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2046.outbound.protection.outlook.com [40.107.244.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B90E7EEAA;
-	Tue, 10 Jun 2025 03:03:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.67
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749524596; cv=none; b=VEhWxWzLkCBw5QuMfsLwyrhngj9s66ARR7WQ5lUx2gv800KF0nolY0vG5piqV+NLsFB3mVGdCWMHX17WpjZWIgUuCtHTmYvPVHEI/J7vl1Yc4tvZYqrThyZPsMARpftQND4BFe1/bA2jyGOTnaLuic1nEGdGdfxwczY6VMMm7WU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749524596; c=relaxed/simple;
-	bh=zv0yreVmcdl60T5BhuMgSl2cqisSgrbqf6ghuj2YQNg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hfyULqXRIkHLBAc0/00Q405CaIp/SYX5nmKmAm9yrUrtAA5xdiztxWf5fMmzVDqO7vjxb1i/odsnFLOouZGjlfUbGkGmMgLvV6HukHfIVOSIoJP+V7SlmpmRDnP/B9REiSg7dAeaXyUtWZFu6CZT/OMvR0bu5MWsJZY1dj4tzK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GAg4c81g; arc=none smtp.client-ip=209.85.218.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f67.google.com with SMTP id a640c23a62f3a-ad8a8da2376so802972466b.3;
-        Mon, 09 Jun 2025 20:03:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749524593; x=1750129393; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=iIEKtN06Lki2LXMwWPqlBYVbjTpO1FFusGuijePViww=;
-        b=GAg4c81g9V7FI467sN72x+8ej2lckmCEdPVvM7bFwVeUWgSlBSwN2WJEM5q2sKwlCh
-         fYkty3RY3aRAoVaN9HB8Hz6tWlhNed1KuQS4X4v0PIV0oBKBdP0dDGNdQh5/zUqqDUlL
-         PJy11K17UTnvuBwuAxYVe5krtoNoQ+r8iSXe50Q8Qp0DssQrKBZHjlEFA070CO+Qdwt4
-         eINdvfGo/rHBsYI+CMyi+JEndgtKfD+mZ2Q6Z0btSNUzVynrimY0ODZJr8mPU2cqpfO/
-         4D+rkzHTKNeq1q1246/Z2DqPn+JMZ7F6a3Gy7/ZWN4MUCvVvPfOoQVXi632xUVcAtLom
-         ubXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749524593; x=1750129393;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iIEKtN06Lki2LXMwWPqlBYVbjTpO1FFusGuijePViww=;
-        b=f7KbaxK2LcOM3BgvpczCRJCOrO/Fyr/Vr8RrHXZzUqD22N17FYX7d0KI6s2PB1PCeG
-         NLYluiFvbubii3C0ZaoILlof7QoCmwy/WiQ4qPjiJcciVN7yvbQxB8xNiVKpNqFmb2to
-         IhfBjTAqUROOObzY7N8M5WZjbVqSCpUstHrTCZaqwnsoFEUXSJ2U2kXZArdRGmQB7Uw2
-         GJxue8Nvm4hNlL3SRsdg0KtBtq0LEzbaxf3P+VVQH3R8eA8dUsLO9d5p/I+hDQq8IkpP
-         jPZzUAe+RmFI6zpgZ9ayA4NrHogh1j/p3x06KgNZtwyY9Iny1XjkAlm8Q6MArDlJ2tLO
-         UJwg==
-X-Forwarded-Encrypted: i=1; AJvYcCVVc1rkEEXYQarWGeZOY/t0F08TwF5rs+d+nzabz+u6cT1KZjBMBnU00UIMBOQDsfEkCQ+6vs0ALny7Tmeg@vger.kernel.org, AJvYcCVrpUOr1LSL+cWPDz/0ldjpnK7W9Ii/W8/ETLAV5GgHy0tLOoWm0YCwTcKoGNADCDTDKwM=@vger.kernel.org, AJvYcCVxFveIxZBPLY4ogVvAa3tctbYzXf0tr0StsStSFw92bTMEn/8bKNKgpANkrOzZwlkKo9rKjmW6Q4EOipOyERCk@vger.kernel.org
-X-Gm-Message-State: AOJu0YyxubkkuYcdEOfzMJQeQoAlh0XjE2sSxlkJ+6U1YZzfMQKtQu79
-	pQiPYzUyvONWrgiR2t9+zkd0lYoBRKX8pAnDL3zm/oUkYe8IvsaYbtEnW2j5KJNmCrKJsi4yVjo
-	M9eEv/1dDRPCbtbOWoPYrMlBzgUclrUA=
-X-Gm-Gg: ASbGncv5oK68Ip8yIWTok/NaKquzICsyb+NNOtx5fGqpQC7+Nx9KX6FwXiEWC5HpmJ8
-	f5dQeOewRR0OyY0IuMna6evKS+iDyI1ZG62dup+hLdtq3qiMristEbYojcw8JVJ88ZA1k+/LXG7
-	7mcTVKEIUKpdaxR7xQRRO2vitI/78Ay+pR2/6elwL+z2eRc9uuBii09GKDNSRz5pMekEpcphSec
-	sJbzLyIGw3c5A4d
-X-Google-Smtp-Source: AGHT+IGSVrkhyZq9vvvsVr44VoqUZGF3wcQ/tPIjHH2PKLhYYyk/OK3JkxJPJ6OOCePVO2GT4bNI9XVsW4Z5WF4Rz1o=
-X-Received: by 2002:a17:906:6a0e:b0:ad5:72d4:85f9 with SMTP id
- a640c23a62f3a-ade1a9c7cd2mr1539157966b.40.1749524592671; Mon, 09 Jun 2025
- 20:03:12 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2861C19D07B;
+	Tue, 10 Jun 2025 05:28:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1749533336; cv=fail; b=OnQgyBC+9Jzd39NRcwkyYVf8DVCeZG0bKZRSaP5ldY5QuJIk6OMDbj+iLoqxBIZ8296Aq9SEXnJMHs+TjeuntF/oLpHfZZrYtctChPsJY5f/d1EPbMeu7utB/lBh1tWtA7T7ONWLGbUb7tGyqn5zGUxrEuTiigw/wt66vhe3SkQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1749533336; c=relaxed/simple;
+	bh=qu4Ieuq+h2pzg/SorrpfAGmNAvgZ3aai+Rg6wblt8wk=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=dA8p4BTC3OmaXkKaaw4lL+5FV88rFL3hHlcVg7OgINFBAGsh9KOOVQYlt0vV6RiUNDXYIrhRiiq1m7KgP3nF8DkDZfb1gWFnhOXoYdB6TSLLGRetNqRGkrlF1RoFTIQVuEYvn7G4LkVui7oFp27XOk1tcO/nOcmP+pNgW/cBwHE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=iZI2hzT1; arc=fail smtp.client-ip=40.107.244.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Clxmes3nTUfWlTBuaM84dMycxbxSYEZE1WKX2W4bY/3O+GcMVP35IAZu6+Lzztkpo/mVpEJhxXhLP26owS5aqiGzZ+DIcnJqZkkeHlP1S+B+jo0P8smFplo3KaL/6tz3bXydAWc5i3LtHSYnksJeiAiF8IgyKbN98HOy/VuYxq61RS1ovcRZQrRrZ7n+i/6+kyUTt1XviqWPp7mJ/LN/zLC/L5ZGNjtpsBXL1hliJBmcjzk2rtCU8hB7gs1a9jdX3MGn0CFJ2F20gFaYwKoDjE9T5w5ghSfmJdPz6GIizwuqgym6wWveeYn+ipvCulbAqqxxtDTgOFMFIBeuF7WuAw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rz7FX2HDnZq2/WaN+R0sciVdZA8hosgJK3JOe1Dw5gY=;
+ b=R5h6JrTJw+YJKVoVnuEdAUbN5BoLMipAg5iS3x8HiWjeq1ebunejC0nt0pwFYNWhiItoty7Z/C/1cudO1TTu5SnIWK0hgYoCaNiozEUCKjZp21ilnZPFMzFQrAjsdZx/Ehy+CkSTku7v+ry+ZZUnMOp2qI9CWIaT9jzLGlnENvnY3G8fL9qTysDklEvkK66Zo/zV7ZuK8CrZwQO0lZvtVgudGVlvF01XR9LM/w7d0tLEIW5UrQ03ReUgvVXwQJQmsdJ4EgWP2ce4DfPkfugc75tcYmbt5uwsStYUmpT5icEfdlY+w3t9I9LdL/aeL04Ki6n9cZypBXftKHeknrHADQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rz7FX2HDnZq2/WaN+R0sciVdZA8hosgJK3JOe1Dw5gY=;
+ b=iZI2hzT1h/ySF4r+hrXcrpfYfyBHzSQYRSpzYBj5uTmzQ6XgWGHuWG9b8B0Wz+UC3ws5vj/4i8Cvjd9OKlt4rE/ygQxpHK0ibme198qy5CgAvAohjkVIB21o4k8iqCQgrW8Cgzlm9CV6qjn3LNRkJiblhnW04mgh1UFQQDUWfvE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CH2PR12MB4262.namprd12.prod.outlook.com (2603:10b6:610:af::8)
+ by SJ5PPF183341E5B.namprd12.prod.outlook.com (2603:10b6:a0f:fc02::98c) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8699.19; Tue, 10 Jun
+ 2025 05:28:53 +0000
+Received: from CH2PR12MB4262.namprd12.prod.outlook.com
+ ([fe80::3bdb:bf3d:8bde:7870]) by CH2PR12MB4262.namprd12.prod.outlook.com
+ ([fe80::3bdb:bf3d:8bde:7870%5]) with mapi id 15.20.8813.024; Tue, 10 Jun 2025
+ 05:28:53 +0000
+Message-ID: <b1fe7706-cfce-4c8c-ae21-b2ddd03a0917@amd.com>
+Date: Tue, 10 Jun 2025 10:58:47 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/mm: Increase timeout from 180 to 900 seconds
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: shuah@kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250609120606.73145-2-shivankg@amd.com>
+ <20250609160719.9c07424afaf33651f64522aa@linux-foundation.org>
+Content-Language: en-US
+From: Shivank Garg <shivankg@amd.com>
+In-Reply-To: <20250609160719.9c07424afaf33651f64522aa@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN4PR01CA0007.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:272::16) To CH2PR12MB4262.namprd12.prod.outlook.com
+ (2603:10b6:610:af::8)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250603205800.334980-1-luis.gerhorst@fau.de>
-In-Reply-To: <20250603205800.334980-1-luis.gerhorst@fau.de>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Tue, 10 Jun 2025 05:02:36 +0200
-X-Gm-Features: AX0GCFsg0jFdSRfQwjdMDtUT5JBYaZq4q7ARo5V7e_WrDdDiMUVd3IyUlXozaCc
-Message-ID: <CAP01T76BFe57wUaqsQYFu0vk-ST1kSSk1MghDAUhS3n2F892AQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 0/9] bpf: Mitigate Spectre v1 using barriers
-To: Luis Gerhorst <luis.gerhorst@fau.de>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Puranjay Mohan <puranjay@kernel.org>, 
-	Xu Kuohai <xukuohai@huaweicloud.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Hari Bathini <hbathini@linux.ibm.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	Henriette Herzog <henriette.herzog@rub.de>, Saket Kumar Bhaskar <skb99@linux.ibm.com>, 
-	Cupertino Miranda <cupertino.miranda@oracle.com>, Jiayuan Chen <mrpre@163.com>, 
-	Matan Shachnai <m.shachnai@gmail.com>, Dimitar Kanaliev <dimitar.kanaliev@siteground.com>, 
-	Shung-Hsi Yu <shung-hsi.yu@suse.com>, Daniel Xu <dxu@dxuuu.xyz>, bpf@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH2PR12MB4262:EE_|SJ5PPF183341E5B:EE_
+X-MS-Office365-Filtering-Correlation-Id: a8798d82-7194-4dfd-6730-08dda7dfafd3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?VWsxK1plcU8rN1ZJb3NjRVlDd0sxajJMaHBuWVczZG0wNkEwVEFPZ080dW01?=
+ =?utf-8?B?d2RiNE9FaHdPb2l2L0ZXcFN1azRrUElsODBYVEJkb2ZNTCtBanRpUWRwRjdG?=
+ =?utf-8?B?WVV0b1d4ZmVEbmtsZkdCcTdsODcyaVR0QTRFMzRrMW1WWHFFdzlhcjBXL2dY?=
+ =?utf-8?B?K3FET3l6S0gvYTFrNjNWOXFIN1ZvMzcwRUJHUHRwU25QRTB5ZHZ4K0NteU5O?=
+ =?utf-8?B?QXFWQUFQTjk2dDZWaWFoK1pWaWFnYkZnRkNWUWVZdU9iYXFlZ1BwaUw0dm50?=
+ =?utf-8?B?Q3ZoQzhOS1Y3a2NWanhTeHJ0VGEyaTJsU1dEajhRa0tZOUJVZjRVbUdFNVVH?=
+ =?utf-8?B?bUlGa0JYeWJrdmlVUXpNT1l1RndpYy9tNkt6b3FlSkNiR2Z0bk5NcHhudDNi?=
+ =?utf-8?B?REFja3UyTnNSNUtTSWVrYjY0QkdpVkZNUjY4MWZFYkpTRi82Z0Vxdk56WU1s?=
+ =?utf-8?B?eUlZYXJ5ZHl5ZmI0NGgyUzFRazZjejBONjFPdlRUV3JmYmpkcFg2T2NDYm1w?=
+ =?utf-8?B?ZGVLdVNJM3UzdFdmOW41RTcrZHBhUUhJRnVtaW44SEpnZW1HTmNTSXdLUENq?=
+ =?utf-8?B?bXRXZlMwZVE4Yi9XazFIOEZUNFdrdngyRUVQK2EzQnltaCtIdE9BYkZPMUhP?=
+ =?utf-8?B?TS9xRkx6eHdPTkllbTVqUGpLS1o5eFlEaTZNRnB6SkY4c3V6dXZjOGVPMXpo?=
+ =?utf-8?B?cko0VXhNdU9yTnAvbkVJVkxXNURKTnovemY5T0U1RGFHL3Y4c1VBWGkxNzRU?=
+ =?utf-8?B?QlNtMys4UHpNdi9LbjUyNEFxQnRLZXZHalpQVkN0cHJGUWNzUkoyanczalBw?=
+ =?utf-8?B?NEZSanZTWnBUbUZ0TGxkTkJKWmt0cWs5WjdaUzBJNU95THBwamo0c2lIbEw5?=
+ =?utf-8?B?Snpwc3A0TVRMb1QxVW9QMFhiVkp2ZkluTXg0YzlhU1A4Q0NuNlpwMnkyYTJE?=
+ =?utf-8?B?cEJYM2JmOXpIc3BzWXBsd2hRNE4rVk5iR0hoVGFjYXNCd2s3ZTdXSi9wbi9i?=
+ =?utf-8?B?K3AxOWY0K0dYV0lyazRqWkltbHljb0xlS3NIb0VPZ3BFSVpodG44OGN4VnVG?=
+ =?utf-8?B?L2thTmEzTW1wcmovM3c1OWVydlVYczFKaGdUNHVwZTVaNDlrL3VzQW1ZZFBZ?=
+ =?utf-8?B?NkpEUFIrcmR3T0VsdmhFWEZBK1dPcUFUblVEMkhuWE9LYnBjZjZic1NnbGhZ?=
+ =?utf-8?B?QlZjb0hLK0VZUnVqOFJQMGV5cVE2bjAzRDZ0cW1WM1RnYTFUSk1sL3grQmZE?=
+ =?utf-8?B?a3hRbENHTnlhc2ZuMkt2ejV0b2xjbG85OVVNekMwRnJVNjhQa1haL3lwOEhD?=
+ =?utf-8?B?Y0RtdHZaLytMWXVaMjR3K1NDcU53V1dOclZRbFNZNWtxdGhkMHZMU3I1R3BB?=
+ =?utf-8?B?MWlHRVlVYnJQVGJQMGNOaG9KRE5OdTR1TWxsRWhGbVkzeTF3OVRqczRIY2t0?=
+ =?utf-8?B?WU54bTA4NGtramc5Y0xvdUppK1FXNVdxQVdLbkNFczFPNGphNW9kVldKeEF0?=
+ =?utf-8?B?R3pjZ1VZbjBCNlJCNEF0OFNsMFVHcWdxZ1krdmpmb0xmd01zL1NnaEVQVnZ1?=
+ =?utf-8?B?TzJ5a3BxWVdiTzNieVhFOXVJUmkvd1JCVERteWJzUjUzVWI3VzQ1ejdORk5R?=
+ =?utf-8?B?WFhWWlBmeC9xSCt4clRnTTZ2UFNrUGxOMDA1K3E4dGxRU24xWUZnS0tVMzFj?=
+ =?utf-8?B?d3BYVGdRWGhScEphVGcyWGtOand0Z2dVU0ZONmdTL1VRQlBmRlQyZlpxbmJX?=
+ =?utf-8?B?aDVYaWlvU3dmSTFLWDdqMm9kK3FmUWxwMWp6VHdYUUZQd1FYQ2Z4YnNDWEZN?=
+ =?utf-8?B?dG5ndXRnUVNJNi9nRFVuWXNwU1VHK3A0VU94TFo2Sm13NkRBbjZPQU12ekpp?=
+ =?utf-8?B?NzlUaU1oK1NvNUhIZHh4WFYzaXdKdUsyai9lTGFPYklkU3NsMGpzSk55YnZU?=
+ =?utf-8?Q?f+2ySlNDkFo=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR12MB4262.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?N3ZMRng0ems2cTlURkp0V2FSckhGQ1U0d2lOQ0NBM3BMYXJ4SU8yZXZwR2Rh?=
+ =?utf-8?B?a3h3N1dxTE5yRGJRTnViajRtNmpwMVd6M3lTNWNGK1dTeUNXMnladnViM3dZ?=
+ =?utf-8?B?M2NKbDF0M1lyL2F3THA3Uk1WTFE5bnZqRmVxc3VHSTMrT0FtRy85OU1UZTBP?=
+ =?utf-8?B?K2RXKy9IcGxTTGJTK1B1eDlTSGw4K25RNkM3UWRQRVNNbkVuWXpSbENsdmJ0?=
+ =?utf-8?B?TitvcTFRU1hmMmNiQ0VUN3owYTZ2YTcwOWdEV2E0ZGh5aisyT1lsUVIwOTdt?=
+ =?utf-8?B?Rlc1bjk0bXIzMEhHRGYybWp2SFZoMGJXNytPc2JoTUtuUnpkZy9pbHdWYS85?=
+ =?utf-8?B?R1daMVJ3S3VSSmdLeFBJNFZXcnJBaHVvWHRmd1F5UWlJRkp4S3ZBQXhCdmVo?=
+ =?utf-8?B?TEI1ai9kcThLSm8zbnhZQ1ZJVGFaM282NlhHV3ZwanErbHhuMDVwc0FNWVVz?=
+ =?utf-8?B?VFFwYjVWeE9LL2VWSzZHU1BTNlVXNUgwRVBoRmZxTHovMWZ3bk5taWxoMFNW?=
+ =?utf-8?B?SllHNHVjNTNGOWpqNW1QenhYWmpyVXA1UTBTcmREMVNvV05aTVFKU0RLVXpU?=
+ =?utf-8?B?WVdITEFOZnUrdlN6eDRWNXNXdzNVY0NyNlBoT3RIdTJGWVk2VE94MHRHMjZ4?=
+ =?utf-8?B?OWJYTENiZFVsVzVZbzhpUjY2cjNPT1dXK0V2anRkYU10VXhoTEpxTy9rT3Rq?=
+ =?utf-8?B?bVA5Zjd5bWRwc0RxdnorKysya1dwOXJKak41cU5oOWxLQzc2bkliUjdJRkw3?=
+ =?utf-8?B?ZHpQeW1EcmFlRnFlRDhsZVkrQnFNYUh1NDNtclM3bkZVTjZEckpKb3hmOUd6?=
+ =?utf-8?B?ME9heVZxVk1ielV2VlNjNTZyeXdWbnBvUStESkJWbkhQZldhMTBQdDJzeUZD?=
+ =?utf-8?B?dXVaaDM2ZVNDSW5NWU1sZnl6aTFYY2p0QUZic284a21uYnltK2VrVllWdUIz?=
+ =?utf-8?B?VEk3U1dXWS84Nnd1NlNGRFBNNHB0QTdGaW5HbHNvYW04bE5oSUV2YnIra3pQ?=
+ =?utf-8?B?dSt6SnJOOTl6TXZiUEpkdkpiMUhBN3VKTXQ1UDRQbUsrTDBnbnNlT2djTWdV?=
+ =?utf-8?B?MVduMGVoS0JWbFNGcDJZcC85d2pxK2k5bk5DK2NYYnNyWDllQllpU1h1M2FQ?=
+ =?utf-8?B?Y2FXb2VOeTV3SjAwd1o2UmQ5cFFVNnRMK0Jtc1NMR3Avd1hzNSt0NHlWejBh?=
+ =?utf-8?B?blhlMWJrNDNwUUJQVDN3M05OVHlkZUwxMy9xNmZqNkJuMGFQS0d1clRWUTBF?=
+ =?utf-8?B?MFlibXg2bjZiZHlYdlltMElFa1d5MmFTL21Sc0V3VmNZWHRIY0pPYkMxeDdF?=
+ =?utf-8?B?R1Fxem1tNm1Va2hubUFOK2RYeFArYVJCRUNZc1UzZTN1NjE1cUtLWVZobXdB?=
+ =?utf-8?B?R2QyZFl1dUpWcHJWTmRxK1IzOGpoM1cwYU42eHBSSmdEd1MxZDE2c2NpNVFK?=
+ =?utf-8?B?L1FmY3RSL2RCVFBUVXhIYnlGYWk2MS9uVURnOTNmd3dCM21tMFhkdlNnQndL?=
+ =?utf-8?B?RGxqbFVjUGFkdkxDWWpYYVQ2b3BhYWRkcTluZ1hYT0c3SUl0dEdvbmdvMDJi?=
+ =?utf-8?B?Mnhkb2hHOTBFSkZjTUZoTDlsOTErRHhEQllSQU13dm1XVFp5RWxVc0NVUGRi?=
+ =?utf-8?B?dnVrQTkzeW9FZGFDeWlGdk9kMUlhc3lJUGp5dXdQb3ZkVSs0ejlqTWUrOGNO?=
+ =?utf-8?B?eFZFVHMzZUZ3RFBDczMyTTgwdStXTzZ2bS9yTE5KWEpRdDFzRHdzekt0THhx?=
+ =?utf-8?B?YzVRUXZaRkQzNUMvbVJMaFc3ZjFiRW1WOXJwdkZLMzdTdDIvM1NCYzBLUlJ4?=
+ =?utf-8?B?dmhUSllzQmw1N2Z2SHJIYk9BMXptVXZwUzNyYjFQa3M1bTV4L0dRWlFBbWwy?=
+ =?utf-8?B?WlduT21ZTTVYN3pXdncyYSs4SlJRaHkzdUJ6MnZVNVlPc0JsY1VTV2UvcXFF?=
+ =?utf-8?B?bHRrQUtTNjdiM3c3V0xXL2hCSXhUYkhoQkdtcG0xU2ZJODJXWGJ2ZzhMM2pR?=
+ =?utf-8?B?Z0N0KzVxUEhZREs1bGlBdTNVc08ya25oZjNFcXMvajAwdzlrQUNoU3pIeDIy?=
+ =?utf-8?B?NkUwSm9RYldJRU9xSHVCY0o1aktkQkhYcE11K2ExZGVoK1dFR2tLWEM5TkY5?=
+ =?utf-8?Q?ByvcD7Hnxi9zjS5OutcW1eBdx?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a8798d82-7194-4dfd-6730-08dda7dfafd3
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB4262.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2025 05:28:52.9962
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: WpR55SR75LAx1Y5npk+Am2YTkG/2I9j+vaC5V17sCHxRwDSI5wt3t1wKfTEt5JKB66sULQi7r62u0LaafqQdLA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ5PPF183341E5B
 
-On Tue, 3 Jun 2025 at 23:04, Luis Gerhorst <luis.gerhorst@fau.de> wrote:
->
-> This improves the expressiveness of unprivileged BPF by inserting
-> speculation barriers instead of rejecting the programs.
->
-> The approach was previously presented at LPC'24 [1] and RAID'24 [2].
->
-> To mitigate the Spectre v1 (PHT) vulnerability, the kernel rejects
-> potentially-dangerous unprivileged BPF programs as of
-> commit 9183671af6db ("bpf: Fix leakage under speculation on mispredicted
-> branches"). In [2], we have analyzed 364 object files from open source
-> projects (Linux Samples and Selftests, BCC, Loxilb, Cilium, libbpf
-> Examples, Parca, and Prevail) and found that this affects 31% to 54% of
-> programs.
->
-> To resolve this in the majority of cases this patchset adds a fall-back
-> for mitigating Spectre v1 using speculation barriers. The kernel still
-> optimistically attempts to verify all speculative paths but uses
-> speculation barriers against v1 when unsafe behavior is detected. This
-> allows for more programs to be accepted without disabling the BPF
-> Spectre mitigations (e.g., by setting cpu_mitigations_off()).
->
-> For this, it relies on the fact that speculation barriers generally
-> prevent all later instructions from executing if the speculation was not
-> correct (not only loads). See patch 7 ("bpf: Fall back to nospec for
-> Spectre v1") for a detailed description and references to the relevant
-> vendor documentation (AMD and Intel x86-64, ARM64, and PowerPC).
->
-> In [1] we have measured the overhead of this approach relative to having
-> mitigations off and including the upstream Spectre v4 mitigations. For
-> event tracing and stack-sampling profilers, we found that mitigations
-> increase BPF program execution time by 0% to 62%. For the Loxilb network
-> load balancer, we have measured a 14% slowdown in SCTP performance but
-> no significant slowdown for TCP. This overhead only applies to programs
-> that were previously rejected.
->
-> I reran the expressiveness-evaluation with v6.14 and made sure the main
-> results still match those from [1] and [2] (which used v6.5).
->
-> Main design decisions are:
->
-> * Do not use separate bytecode insns for v1 and v4 barriers (inspired by
->   Daniel Borkmann's question at LPC). This simplifies the verifier
->   significantly and has the only downside that performance on PowerPC is
->   not as high as it could be.
->
-> * Allow archs to still disable v1/v4 mitigations separately by setting
->   bpf_jit_bypass_spec_v1/v4(). This has the benefit that archs can
->   benefit from improved BPF expressiveness / performance if they are not
->   vulnerable (e.g., ARM64 for v4 in the kernel).
->
-> * Do not remove the empty BPF_NOSPEC implementation for backends for
->   which it is unknown whether they are vulnerable to Spectre v1.
->
-> [1] https://lpc.events/event/18/contributions/1954/ ("Mitigating
->     Spectre-PHT using Speculation Barriers in Linux eBPF")
-> [2] https://arxiv.org/pdf/2405.00078 ("VeriFence: Lightweight and
->     Precise Spectre Defenses for Untrusted Linux Kernel Extensions")
->
-> Changes:
->
-> * v3 -> v4:
->   - Remove insn parameter from do_check_insn() and extract
->     process_bpf_exit_full as a function as requested by Eduard
->   - Investigate apparent sanitize_check_bounds() bug reported by
->     Kartikeya (does appear to not be a bug but only confusing code),
->     sent separate patch to document it and add an assert
->   - Remove already-merged commit 1 ("selftests/bpf: Fix caps for
->     __xlated/jited_unpriv")
->   - Drop former commit 10 ("bpf: Allow nospec-protected var-offset stack
->     access") as it did not include a test and there are other places
->     where var-off is rejected. Also, none of the tested real-world
->     programs used var-off in the paper. Therefore keep the old behavior
->     for now and potentially prepare a patch that converts all cases
->     later if required.
->   - Add link to AMD lfence and PowerPC speculation barrier (ori 31,31,0)
->     documentation
->   - Move detailed barrier documentation to commit 7 ("bpf: Fall back to
->     nospec for Spectre v1")
->   - Link to v3: https://lore.kernel.org/all/20250501073603.1402960-1-luis.gerhorst@fau.de/
->
 
-LGTM. For the set,
 
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+On 6/10/2025 4:37 AM, Andrew Morton wrote:
+> On Mon, 9 Jun 2025 12:06:07 +0000 Shivank Garg <shivankg@amd.com> wrote:
+> 
+>> The mm selftests are timing out with the current 180-second limit.
+>> Testing shows that run_vmtests.sh takes approximately 11 minutes
+>> (664 seconds) to complete.
+>>
+>> Increase the timeout to 900 seconds (15 minutes) to provide sufficient
+>> buffer for the tests to complete successfully.
+>>
+>> ...
+>>
+>> --- a/tools/testing/selftests/mm/settings
+>> +++ b/tools/testing/selftests/mm/settings
+>> @@ -1 +1 @@
+>> -timeout=180
+>> +timeout=900
+> 
+> Gee, that's a bit crude, isn't it.  I have a laptop which will need 90000 ;)
+> 
+> I guess it's better than it was before.  Some sort of smarter monitor
+> of ongoing activity can be bothered about later.
+> 
+900s is crude, and I can imagine some systems needing even more time!
+I think the real issue is run_vmtests.sh bundles many tests together. Most finish quickly but few (e.g. compaction) tests take significant time.
+I agree that a smarter approach with per-test timeouts would be better.
 
-> [...]
->
+Thanks,
+Shivank
 
