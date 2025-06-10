@@ -1,188 +1,177 @@
-Return-Path: <linux-kselftest+bounces-34555-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34556-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADBC0AD35FB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jun 2025 14:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 73A07AD3605
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jun 2025 14:22:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 68C1A7A2DAA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jun 2025 12:20:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 259B97A8235
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jun 2025 12:21:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9035290094;
-	Tue, 10 Jun 2025 12:21:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FA56290D93;
+	Tue, 10 Jun 2025 12:22:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="MApbkGza";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="uR929m69"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ixfbwWCC";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="i6IJxC6d";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="L5LPzlMY";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="QqvtAvf9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B88DF28F507;
-	Tue, 10 Jun 2025 12:21:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0DCA222598
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Jun 2025 12:22:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749558089; cv=none; b=RIrnmzTQP56y992UtEkwvECDWH7jPksZuUXNFxUG9yFKBI+yFSGxjbyLpjM5Xln7bluVulHa11yXZ6hi23nkR8zQi4g5qwuRYxCdO73cKQSd2/dvSHPmrGbnlyQBZFC0BUpA9L6t3SXFXuyU8eWaFpy8odzxbhAk+1xa+9YU/G8=
+	t=1749558137; cv=none; b=OcAIQBwXkwNM0AFjEMs8fSv5CgNeTG1uhyQq76WOm4VqE1DaILEB67cfc5RwkdkCQYjbF2DeeD6FmYPiZ8XUFfz2UafvdRmAPHNT48GfJz6bqEe8cs5A/82yY7LcdQBz1hGUGiogS3j58M8Nl4mlyd+L71EPYiDfmduLY0dFh5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749558089; c=relaxed/simple;
-	bh=fuAXOuUm6fFJtBIJC25rC27qpQWeJjXNesUbOsfwxYg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I1X1+0IGxdegI2z15nwsq2N/TgxQA+IiWpowpJ+yom6zGyTDAoY+3raDKmF/LtQ7SUYSFrQBoZPGP/eu3ZMMgS1qtVXrsZt+3huC2T/w5RJuIS2weDeY7oKnhr5CxfGMdZLfqvfmQ9/RIhSnl/lePdFbsRm4JEnTRdLN3jUg1aI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=MApbkGza; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=uR929m69; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Tue, 10 Jun 2025 14:21:25 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1749558085;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=S7XHwyMIvux7mHDycUbcxmSE3NX5d97oyLdcmCQZNOo=;
-	b=MApbkGzaNia4rcytfKGi496yLbsnZgNtl8TJ2QJQiZT2yhHV4ip9/Tdl6HM/XPI/i2xatF
-	Lcp29FoGPeU3i9dx5NRx5VnhX6RsP/GtnOBpJJS4UsSX5FI7fNQjON9uoaFZFi9ZFD06YW
-	h54AOg4i4jiZqYypJELtCpvQQuyygpezD350okq/rCDDZdkfXkphg9Cia9jh/AhXxagDJP
-	Qs1x8kfefA27NspOe+NfatuyHhSJhTpue29s2SJE2QpM/IpNyArkKrm+SiWuMuPvh+yG+Z
-	u4c09/rPPjPmsGcQJJu9lWlLboJd5GsJaLNwnMdlgPJRnKUzmt9HsKWdTyggVA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1749558085;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=S7XHwyMIvux7mHDycUbcxmSE3NX5d97oyLdcmCQZNOo=;
-	b=uR929m69LoihHTip8d1IsYJO9C90dAsayC2j74Q1/j4ThsmenxpqxfttAovYmqB8P40QB2
-	GJ/15xc0lnKOibBw==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Nicolin Chen <nicolinc@nvidia.com>
-Cc: Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Willy Tarreau <w@1wt.eu>, Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>, 
-	Will Drewry <wad@chromium.org>, Mark Brown <broonie@kernel.org>, 
-	Muhammad Usama Anjum <usama.anjum@collabora.com>, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Jason Gunthorpe <jgg@nvidia.com>
-Subject: Re: [PATCH v4 12/14] selftests: harness: Stop using
- setjmp()/longjmp()
-Message-ID: <20250610141252-1ee7ae72-dbad-4a80-931c-5b4b14fb07ce@linutronix.de>
-References: <20250505-nolibc-kselftest-harness-v4-0-ee4dd5257135@linutronix.de>
- <20250505-nolibc-kselftest-harness-v4-12-ee4dd5257135@linutronix.de>
- <aEfTYkVdphiOhqPg@nvidia.com>
+	s=arc-20240116; t=1749558137; c=relaxed/simple;
+	bh=6Z6RdtFgu89+ueb/BzlO5rNh6RCM0Q+YM8hETMjuPs8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=twfndKZdL6ZZF5lzK0NC5n+bXDNkPjbCS8PwrjTOs1Nf2aRxxBCFmNyEaUu466r1D5ZRTF9OF4XHTzbYqWL59qTbFMxWgQcrekjB5GYpDP/Tuml6tKJ8448qIWbTGbgMgFtLyNKChZI9X+xIiNI5Hkfg2CuXI8B679j+BftoHf4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ixfbwWCC; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=i6IJxC6d; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=L5LPzlMY; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=QqvtAvf9; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id BEB73211F1;
+	Tue, 10 Jun 2025 12:22:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1749558134; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=5t7Or3woO7t0abLNHbSdmQ4BjdUmYarkFC/ji/k7CaU=;
+	b=ixfbwWCC3PzUi1vbx6ECWYGG8YvFpCea1TbXtwulrv8YZwateQ7vQViedXF53/JBruh3tu
+	kfTxcF8+ME2rmjr2xLn/OAyvAuF2q9CLej4L9uw2j5SF3j9R2HmpWbDOTO1uqb+NottzXA
+	8hDVe6tV6HuEEV4NTs/AW7Wm3CbDl50=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1749558134;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=5t7Or3woO7t0abLNHbSdmQ4BjdUmYarkFC/ji/k7CaU=;
+	b=i6IJxC6ddnkW6oBDZ2kteTRPqg4wZvncGS7IDA2XZZbSvcGLXOrtUdkmO2toMTBs51a5dR
+	tiZYmRZS6yf5RDBg==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1749558132; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=5t7Or3woO7t0abLNHbSdmQ4BjdUmYarkFC/ji/k7CaU=;
+	b=L5LPzlMYm0oPF4xdmxX0mAS5nv5HjJ4HZvVdu1kx44YPEPEAaCIkzlXpOyWPWSL+/JZSvf
+	9OhE2SXIGbAxjrC8298kjzpAwd737n0jJdk1gHXFRlGoizJgwA8FLtysp/p9uRmJQETXU9
+	cNa7mKTKzyaTC0jF5oalf49B0S1zvdA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1749558132;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=5t7Or3woO7t0abLNHbSdmQ4BjdUmYarkFC/ji/k7CaU=;
+	b=QqvtAvf9koJ+7uHRAUVpCm+wg63s+4xupMSXzGvHmZT3Aqzplc0oCpIGFIe4s/Llt9zwKi
+	X2J1eJV+YfhhgVCg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id F25D413AD9;
+	Tue, 10 Jun 2025 12:22:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 3Df2N3MjSGgRdQAAD6G6ig
+	(envelope-from <pfalcato@suse.de>); Tue, 10 Jun 2025 12:22:11 +0000
+From: Pedro Falcato <pfalcato@suse.de>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Vlastimil Babka <vbabka@suse.cz>,
+	Jann Horn <jannh@google.com>,
+	Pu Lehui <pulehui@huawei.com>,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	Aishwarya <aishwarya.tcv@arm.com>,
+	broonie@kernel.org,
+	Pedro Falcato <pfalcato@suse.de>
+Subject: [PATCH] selftests/mm: Skip uprobe vma merge test if uprobes are not enabled
+Date: Tue, 10 Jun 2025 13:22:09 +0100
+Message-ID: <20250610122209.3177587-1-pfalcato@suse.de>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <aEfTYkVdphiOhqPg@nvidia.com>
+X-Spamd-Result: default: False [-2.80 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,suse.de:mid,imap1.dmz-prg2.suse.org:helo,arm.com:email];
+	RCVD_TLS_ALL(0.00)[]
+X-Spam-Level: 
+X-Spam-Flag: NO
+X-Spam-Score: -2.80
 
-Hi Nicolin,
+If uprobes are not enabled, the test currently fails with:
 
-On Mon, Jun 09, 2025 at 11:40:34PM -0700, Nicolin Chen wrote:
-> Hi Thomas,
-> 
-> CC += Jason
-> 
-> On Mon, May 05, 2025 at 05:15:30PM +0200, Thomas Weißschuh wrote:
-> > Usage of longjmp() was added to ensure that teardown is always run in
-> > commit 63e6b2a42342 ("selftests/harness: Run TEARDOWN for ASSERT failures")
-> > However instead of calling longjmp() to the teardown handler it is easier to
-> > just call the teardown handler directly from __bail().
-> > Any potential duplicate teardown invocations are harmless as the actual
-> > handler will only ever be executed once since
-> > commit fff37bd32c76 ("selftests/harness: Fix fixture teardown").
-> > 
-> > Additionally this removes a incompatibility with nolibc,
-> > which does not support setjmp()/longjmp().
-> > 
-> > Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-> 
-> The iommufd selftest (CONFIG_IOMMUFD_TEST) starts to give warnings
-> when building with v6.16-rc1, though the test code wasn't changed
-> at these two functions:
+7151 12:46:54.627936  # # #  RUN           merge.handle_uprobe_upon_merged_vma ...
+7152 12:46:54.639014  # # f /sys/bus/event_source/devices/uprobe/type
+7153 12:46:54.639306  # # fopen: No such file or directory
+7154 12:46:54.650451  # # # merge.c:473:handle_uprobe_upon_merged_vma:Expected
+read_sysfs("/sys/bus/event_source/devices/uprobe/type", &type) (1) == 0 (0)
+7155 12:46:54.650730  # # # handle_uprobe_upon_merged_vma: Test terminated by assertion
+7156 12:46:54.661750  # # #          FAIL  merge.handle_uprobe_upon_merged_vma
+7157 12:46:54.662030  # # not ok 8 merge.handle_uprobe_upon_merged_vma
 
-Thanks for the report.
+Skipping is a more sane and friendly behavior here.
 
-> ------------------------------------------------------------------
-> make: Entering directory '/nicolinc/linux-stable/tools/testing/selftests/iommu'
->   CC       iommufd
-> iommufd.c: In function ‘wrapper_iommufd_mock_domain_all_aligns’:
-> iommufd.c:1806:17: warning: ‘mfd’ may be used uninitialized in this function [-Wmaybe-uninitialized]
->  1806 |                 close(mfd);
->       |                 ^~~~~~~~~~
-> iommufd.c:1766:13: note: ‘mfd’ was declared here
->  1766 |         int mfd;
->       |             ^~~
-> iommufd.c: In function ‘wrapper_iommufd_mock_domain_all_aligns_copy’:
-> iommufd.c:1869:17: warning: ‘mfd’ may be used uninitialized in this function [-Wmaybe-uninitialized]
->  1869 |                 close(mfd);
->       |                 ^~~~~~~~~~
-> iommufd.c:1818:13: note: ‘mfd’ was declared here
->  1818 |         int mfd;
->       |             ^~~
->   CC       iommufd_fail_nth
-> make: Leaving directory '/nicolinc/linux-stable/tools/testing/selftests/iommu'
-> ------------------------------------------------------------------
-> 
-> Git bisect points to this patch, and reverting it fixes these.
-> 
-> Both mfds are under the same "if (variant->driver)" check, so the
-> warnings don't seem legit to me.
-> 
-> Do you have any idea why this happens?
+Fixes: efe99fabeb11b ("selftests/mm: add test about uprobe pte be orphan during vma merge")
+Reported-by: Aishwarya <aishwarya.tcv@arm.com>
+Closes: https://lore.kernel.org/linux-mm/20250610103729.72440-1-aishwarya.tcv@arm.com/
+Signed-off-by: Pedro Falcato <pfalcato@suse.de>
+---
+ tools/testing/selftests/mm/merge.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-It does look very weird. I could understand if the compiler assumes that
-variant->file changes during the runtime of the function.
-But even if I work around this, by introducing a local variable "bool file =
-variant->file" the issue persists.
-However as soon as the value of of "bool file" is fixed to either "true" or
-"false" it goes away.
-
-
-The following diff *alone* also prevents the warning, but that doesn't
-make any sense either:
-
---- a/tools/testing/selftests/iommu/iommufd_utils.h
-+++ b/tools/testing/selftests/iommu/iommufd_utils.h
-@@ -65,7 +65,7 @@ static inline void *memfd_mmap(size_t length, int prot, int flags, int *mfd_p)
-                return MAP_FAILED;
-        if (ftruncate(mfd, length))
-                return MAP_FAILED;
--       *mfd_p = mfd;
-+       *mfd_p = 0;
-        return mmap(0, length, prot, flags, mfd, 0);
+diff --git a/tools/testing/selftests/mm/merge.c b/tools/testing/selftests/mm/merge.c
+index bbae66fc5038..cc26480098ae 100644
+--- a/tools/testing/selftests/mm/merge.c
++++ b/tools/testing/selftests/mm/merge.c
+@@ -470,7 +470,9 @@ TEST_F(merge, handle_uprobe_upon_merged_vma)
+ 	ASSERT_GE(fd, 0);
+ 
+ 	ASSERT_EQ(ftruncate(fd, page_size), 0);
+-	ASSERT_EQ(read_sysfs("/sys/bus/event_source/devices/uprobe/type", &type), 0);
++	if (read_sysfs("/sys/bus/event_source/devices/uprobe/type", &type) != 0) {
++		SKIP(goto out, "Failed to read uprobe sysfs file, skipping");
++	}
+ 
+ 	memset(&attr, 0, attr_sz);
+ 	attr.size = attr_sz;
+@@ -491,6 +493,7 @@ TEST_F(merge, handle_uprobe_upon_merged_vma)
+ 	ASSERT_NE(mremap(ptr2, page_size, page_size,
+ 			 MREMAP_MAYMOVE | MREMAP_FIXED, ptr1), MAP_FAILED);
+ 
++out:
+ 	close(fd);
+ 	remove(probe_file);
  }
+-- 
+2.49.0
 
-
-Maybe the logic became too complex for GCC?
-Case in point, when trying with an older GCC 13.2, the following warning appeared:
-
-In file included from iommufd_utils.h:14,
-                 from iommufd.c:12:
-In function 'iommufd_viommu_vdevice_alloc',
-    inlined from 'wrapper_iommufd_viommu_vdevice_alloc' at iommufd.c:2731:1:
-../kselftest_harness.h:760:12: warning: 'ret' may be used uninitialized [-Wmaybe-uninitialized]
-  760 |         if (!(__exp _t __seen)) { \
-      |            ^
-../kselftest_harness.h:513:9: note: in expansion of macro '__EXPECT'
-  513 |         __EXPECT(expected, #expected, seen, #seen, ==, 1)
-      |         ^~~~~~~~
-iommufd_utils.h:1005:9: note: in expansion of macro 'ASSERT_EQ'
- 1005 |         ASSERT_EQ(0, _test_cmd_trigger_vevents(self->fd, dev_id, nvevents))
-      |         ^~~~~~~~~
-iommufd.c:2766:17: note: in expansion of macro 'test_cmd_trigger_vevents'
- 2766 |                 test_cmd_trigger_vevents(dev_id, 3);
-      |                 ^~~~~~~~~~~~~~~~~~~~~~~~
-iommufd_utils.h: In function 'wrapper_iommufd_viommu_vdevice_alloc':
-iommufd_utils.h:993:13: note: 'ret' was declared here
-  993 |         int ret;
-      |             ^~~
-
-Which is also just a false-positive and fixed with newer GCCs.
-
-
-Thomas
 
