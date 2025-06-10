@@ -1,163 +1,139 @@
-Return-Path: <linux-kselftest+bounces-34586-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34587-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D96EBAD3921
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jun 2025 15:28:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39574AD39F3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jun 2025 15:51:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3426E163A1A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jun 2025 13:23:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B31573AA73E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jun 2025 13:50:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ED9628A1F5;
-	Tue, 10 Jun 2025 13:21:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 931C628B7FC;
+	Tue, 10 Jun 2025 13:51:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EXXT663/"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="C0Yn2Zwu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3BDC29553C;
-	Tue, 10 Jun 2025 13:21:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D762423ABBB
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Jun 2025 13:50:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749561673; cv=none; b=naT2j3lJQLFjiYrKlDPti1aP/R2cB0Awu9lJyjuW04r9Jpd2Hsw3wwOJLDYdmkFXdeb4gU1/N1kg1X0HncWDunFPoFOt2CdzmA3NR/nXPlxl4jhBkNodGhTyVxgFYNRD3KBOddUWlOILtWbToYoiNWBiCaEABqQ+1RHQd5sBHM0=
+	t=1749563460; cv=none; b=EcJgIrIvoI0p99NG1N/RPQYkY+m2PbVZvsCJmDJc1IJqzFZOjoHwFmcbgQEAFpYQY/btW3/CteN2S+U6faEBXBPRx7NCWRmRyuqk5CKoxXpCmahzlt6QQztm3UcUUi5od8s9+JzYtgu4nmqPAl448aoNsLxTMrP+p+/DSs0ZIUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749561673; c=relaxed/simple;
-	bh=PHXnIq9DvbYMMAiqfb9kdye4N3LNNMsDCltUJ6z2pmc=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=M00e5OWv+xTeG+sD+8t8EglUzzs6qPkAZwU6N9C63YqLYsg6T7k5laF8owT7/7nhhIrAkFdUS4AMMQoP64SyX8wnKtje0em2lMLUdHJBqbx749P6qxIGMNbFI4SGEhXuIR/wyOL5jIhRfNjSp/xyqCgFoAL15rHNjUOw4GBtHzk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EXXT663/; arc=none smtp.client-ip=209.85.128.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-70e77831d68so51621317b3.2;
-        Tue, 10 Jun 2025 06:21:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749561671; x=1750166471; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nqK/Pdx79AulxZE87TK3GYJJhMmOA+0kbCJDeCtjwXQ=;
-        b=EXXT663/T8yg6QwubhaXBIFKO+aewtvBW7FE8UnEXL7ajtazYP4fxZyNWB4Qc1MFkn
-         c2oKJHaKuh1/1qRZljEz9rRsS6uQawRX4ly/vrspz8AnI8GYBksC71fgoD2qvV2XBkZM
-         fdxBNH8u1eppJj2kZtZJnQiRuSArErJq7Bb7zEBPFu0DnH3XbO0uRFu93rK94nSJlgFl
-         Y2kc0IeNOeRDqZLwnDDyT4xXRT9jT/hgCLZX/DH8KQ+AL2nWVAJxmDfb4wZs8do4mRd/
-         rkM8mDYaQrO+pjc4z6SB/pMwtBWbpIJlraJ+Xdk+LqIsAE6WIeM+Jj4QX+D4qKlNGO6P
-         pP1w==
+	s=arc-20240116; t=1749563460; c=relaxed/simple;
+	bh=h4S4qXsxNClFRPavFrSL5VPIFTv8rXbohKWGXFSTiEI=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=bWqrAQvf5Wpz7c910LAp9mQrwajWMQrseMvRkCdJGX7BHHJm87TI/KE6LRL+D5HRURf1MQkAMEpwl+C7DyfIBHAJj7Wc3zODs0jIwdrzQ1NhIpGExDe5C7opqXI94YoKnLpIlfv5ubBwcixsJGKyJjbKvj7tlfBue7I8K23rVWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=C0Yn2Zwu; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1749563457;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8AZiv2BWFM4GhtysbZzbwwVGm/Lo1Gm6qrn3+2ylp4E=;
+	b=C0Yn2ZwulvUaDHql3SezRUSKmbP82HvHe8XZ9k5ZU/WD1kxbPyxVdOc6qoItg9h/9lgHOk
+	/CUGk6KxH/vaU65oEgR4kPSFP7eNzciDTBbViB2ZXAXzXqhEUyOSPOKriLJiUfUZcsGVk7
+	k42gFAozzvvDuBUBWRbMWVKZIipoXZ4=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-639-26N8tWS4N96atGBaSPjH6w-1; Tue, 10 Jun 2025 09:50:56 -0400
+X-MC-Unique: 26N8tWS4N96atGBaSPjH6w-1
+X-Mimecast-MFC-AGG-ID: 26N8tWS4N96atGBaSPjH6w_1749563455
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-451d2037f1eso33858565e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Jun 2025 06:50:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749561671; x=1750166471;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=nqK/Pdx79AulxZE87TK3GYJJhMmOA+0kbCJDeCtjwXQ=;
-        b=w4jJolvocrnaan/fo4BaqUq7o7gqYFsMzfCmZgzMR8jn1leFpKFF/9QqdusOoAt5gY
-         JJBKte0H5gbaBMoPEdq0nicIpTwxrxvGxlH3Q+/a5cC0D9S9pKMr357wVrXfeZxwWGaH
-         7cf73i4gwH38Tr856An9ojVlqabENNzHb2QB1RYwWesgj0j37Qum7NskkPYSLfiO9CSU
-         rIiiH+00DhX4lfI2D4JtGWtgOhmoAWipuLLG5+FOvwI1UBtQxv3RAdUly1REO1qxcJK/
-         vOfKopmeJ6pFokDeLKKqNCn3vCr6fL3TYbzBtTzabuAcZz0l+OAZrMggskV7q1mturQl
-         1vGA==
-X-Forwarded-Encrypted: i=1; AJvYcCV/OKRLHJlJagAKHjyZ2rl7dUu6b9kuEWSOEratpuIEa/7hM9bc1W52ISfM3PUYJE0Di+3TzY0y@vger.kernel.org, AJvYcCWLhPDtIzMCPVv++CZxGXFEf7wEQTJZkPqv3KBVqch1xqSySx/mSvKt6QgGK8/F89TNYNE=@vger.kernel.org, AJvYcCWP0Rc2l8cFrjc0edVxJG/wQhYYydx+g5Pt2c1T4WUytBMBr9jjRkR//Y1IGCpKuukenmJj/u/x2H5b7S21/kGY@vger.kernel.org
-X-Gm-Message-State: AOJu0YxaZM0wunA37rWHHzzyRZFaR15SA1VDmp0lS+akJThxZqe83El3
-	ZUghyF9BgCHW7KJAmX7/CV/zdblocnrL4IRMzRUW+0EIlNjIHxV8nrOY
-X-Gm-Gg: ASbGncuFb118css+7WavVjMBCpQho6r1csoViMffcvv2J9ULjdKvPgjClIc0/Hcd4v5
-	zCXnV3xnNL7xOqiAPeerqBnTMLJthMxkVF/F6EQYYY5UZ+wnV/mqp6UanGKQhAF8+YExyAQJhaN
-	wpI5/BTKEEFVR/z8laCSEvrzA4QXhufhjeRpb+tdYpz8UNys/HAiYUv0cgu+aV82BxVJByuWpJd
-	0EfS/Etbd26VWpPZj87diCPoKA0+9C7Gvngy+OjvZJRP8Fuk9Jz3Ik3tlYlqLV0f6RoYk1tXKDw
-	OtOXn3nN/v9ldIL0c3Dm9ZPXURgE6GadhK4uyFBwwdHj4VmtlKzQ0LoMiIjvOEhzUFnqcFycfAw
-	Y9a0kyx4zrUb5/JWdcflnT9E1/QJturjZesQHj9RlrA==
-X-Google-Smtp-Source: AGHT+IGz0NOsByVzKDDWHAu+pNwYUyitsWzgIpouRvSRsvxeGdftrTwG2Yu8Iv8RPDuXDpr/1jA0gw==
-X-Received: by 2002:a05:690c:6d12:b0:70e:2d1a:82b8 with SMTP id 00721157ae682-710f772b158mr246129037b3.34.1749561670642;
-        Tue, 10 Jun 2025 06:21:10 -0700 (PDT)
-Received: from localhost (141.139.145.34.bc.googleusercontent.com. [34.145.139.141])
-        by smtp.gmail.com with UTF8SMTPSA id 00721157ae682-710f98afb0esm16081257b3.3.2025.06.10.06.21.09
+        d=1e100.net; s=20230601; t=1749563455; x=1750168255;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8AZiv2BWFM4GhtysbZzbwwVGm/Lo1Gm6qrn3+2ylp4E=;
+        b=pAjWHv3KQfHQvZg3qJgD+io23sHNSZlBuu9q/o5iUkJM1/8wA+O+6t3NjJA5QZ7td3
+         AIDVnlmvF3nzeiD7RCvxHJqpggPwAgYe+CPZ6aaXmfqMnhM5Rnjn6htQIE0Y8QhWOlmv
+         UD+quXsWzHqC+V4A3I+g/Wx5Q94DkjRIhhyK6FiV+pBdhFChzSr6iZTXbmFQeOFNzdvE
+         Omiirjcw2Bjyby3D6aI3b+v4puEkppx7WfKdzXdB9+zIESlybF5nIAJ9uZEEoLiSv2Ev
+         KqxQnX3tmCZkoekcAjYzma3HUnuNqPdWScucgQ/sW2tYMRL7D+f++BTteuigPyPI2fEj
+         M8sg==
+X-Forwarded-Encrypted: i=1; AJvYcCUSkVS0K0LF2V0/bpc/d/uI5AlgOSBjyOBoMQrkTsXa+cp7VBnsak5uGJPvx+Wq/cB6n5wXSzDP1pseFQg4yyE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyVyiPjGe275+CagJYOhEIhCl3M528YZae637CmgZsXgbgca5Up
+	OabhNswHd893cHyWjdlfDbMsyI1eIbYvWHRYfZfKVyHa0CKoN6/+6fLuvN4VHxiwHOrsfEQ3hNL
+	K6mBBLmvSXi4FolZl9psLflDKfBJ1Hxdx50BG0I0vwmTRasB+ir/LU5Dlp7W/W+5sHPEJpg==
+X-Gm-Gg: ASbGncsb8Eq6b1C9LLf2DLCWZDJCkhzvtETGlrpyZ4j0xTWp26A6oUEQsHzxp377RXk
+	6UkIEqwsTGTfAvGq4kGxG7cDmvg7w91JrCkmVN0gGjvgBsOTK/44yAlsC/QEOfjSfp2QpWGoRz6
+	xV6ijloaGTk/ufXvYQkRnmkmzJ25NeDfhOYzafbkSpsSptQHAkZ2dCO2+ebgS1D+B/fkUrdGSig
+	8umsauZ1NwBHvlRG0NspKCoI7VQ/K8gKNIN/zQ0xCt5y2gEKqEZ4WXEtBQaF+/eQNomek9xo1Ot
+	huejaa/K3hx0NTnxa+q+xb102w11WjLwU7MWvHauYr6dIc7yskMTIExGEsy0pMFnb8EuErk=
+X-Received: by 2002:a05:6000:2389:b0:3a4:f786:4fa1 with SMTP id ffacd0b85a97d-3a5316841c4mr14614321f8f.2.1749563455527;
+        Tue, 10 Jun 2025 06:50:55 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHJKrB4JYjJGiymCLMDjzBOek1jTekdNGl4zWkT4PdFepViV8CQdeLU5rPmaZjMcFcjiosmIg==
+X-Received: by 2002:a05:6000:2389:b0:3a4:f786:4fa1 with SMTP id ffacd0b85a97d-3a5316841c4mr14614288f8f.2.1749563455083;
+        Tue, 10 Jun 2025 06:50:55 -0700 (PDT)
+Received: from rh (p200300f6af1bce00e6fe5f11c0a7f4a1.dip0.t-ipconnect.de. [2003:f6:af1b:ce00:e6fe:5f11:c0a7:f4a1])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-452fba4621csm131448645e9.13.2025.06.10.06.50.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jun 2025 06:21:09 -0700 (PDT)
-Date: Tue, 10 Jun 2025 09:21:09 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>, 
- davem@davemloft.net
-Cc: netdev@vger.kernel.org, 
- edumazet@google.com, 
- pabeni@redhat.com, 
- andrew+netdev@lunn.ch, 
- horms@kernel.org, 
- willemdebruijn.kernel@gmail.com, 
- maze@google.com, 
- daniel@iogearbox.net, 
- Jakub Kicinski <kuba@kernel.org>, 
- stable@vger.kernel.org, 
- martin.lau@linux.dev, 
- john.fastabend@gmail.com, 
- eddyz87@gmail.com, 
- sdf@fomichev.me, 
- haoluo@google.com, 
- willemb@google.com, 
- william.xuanziyang@huawei.com, 
- alan.maguire@oracle.com, 
- bpf@vger.kernel.org, 
- shuah@kernel.org, 
- linux-kselftest@vger.kernel.org, 
- yonghong.song@linux.dev
-Message-ID: <68483145957ee_3cd66f29430@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20250610001245.1981782-1-kuba@kernel.org>
-References: <20250610001245.1981782-1-kuba@kernel.org>
-Subject: Re: [PATCH net v3 1/2] net: clear the dst when changing skb protocol
+        Tue, 10 Jun 2025 06:50:54 -0700 (PDT)
+Date: Tue, 10 Jun 2025 15:50:53 +0200 (CEST)
+From: Sebastian Ott <sebott@redhat.com>
+To: Miguel Luis <miguel.luis@oracle.com>
+cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+    Colton Lewis <coltonlewis@google.com>, 
+    Ricardo Koller <ricarkol@google.com>, Joey Gouly <joey.gouly@arm.com>, 
+    Suzuki K Poulose <suzuki.poulose@arm.com>, 
+    Zenghui Yu <yuzenghui@huawei.com>, Shuah Khan <shuah@kernel.org>, 
+    "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+    "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>, 
+    "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+    "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v3 0/4] KVM: arm64: selftests: arch_timer_edge_cases
+ fixes
+In-Reply-To: <B77F70F2-EECA-4E10-9F00-972F6AE27831@oracle.com>
+Message-ID: <8f15a5d6-0f73-194a-8fa2-b7ba8cc8c5b2@redhat.com>
+References: <20250605103613.14544-1-sebott@redhat.com> <B77F70F2-EECA-4E10-9F00-972F6AE27831@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="-1463806286-426200590-1749563454=:18875"
 
-Jakub Kicinski wrote:
-> A not-so-careful NAT46 BPF program can crash the kernel
-> if it indiscriminately flips ingress packets from v4 to v6:
-> =
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
->   BUG: kernel NULL pointer dereference, address: 0000000000000000
->     ip6_rcv_core (net/ipv6/ip6_input.c:190:20)
->     ipv6_rcv (net/ipv6/ip6_input.c:306:8)
->     process_backlog (net/core/dev.c:6186:4)
->     napi_poll (net/core/dev.c:6906:9)
->     net_rx_action (net/core/dev.c:7028:13)
->     do_softirq (kernel/softirq.c:462:3)
->     netif_rx (net/core/dev.c:5326:3)
->     dev_loopback_xmit (net/core/dev.c:4015:2)
->     ip_mc_finish_output (net/ipv4/ip_output.c:363:8)
->     NF_HOOK (./include/linux/netfilter.h:314:9)
->     ip_mc_output (net/ipv4/ip_output.c:400:5)
->     dst_output (./include/net/dst.h:459:9)
->     ip_local_out (net/ipv4/ip_output.c:130:9)
->     ip_send_skb (net/ipv4/ip_output.c:1496:8)
->     udp_send_skb (net/ipv4/udp.c:1040:8)
->     udp_sendmsg (net/ipv4/udp.c:1328:10)
-> =
+---1463806286-426200590-1749563454=:18875
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8BIT
 
-> The output interface has a 4->6 program attached at ingress.
-> We try to loop the multicast skb back to the sending socket.
-> Ingress BPF runs as part of netif_rx(), pushes a valid v6 hdr
-> and changes skb->protocol to v6. We enter ip6_rcv_core which
-> tries to use skb_dst(). But the dst is still an IPv4 one left
-> after IPv4 mcast output.
-> =
+Hej Miguel,
 
-> Clear the dst in all BPF helpers which change the protocol.
-> Try to preserve metadata dsts, those may carry non-routing
-> metadata.
-> =
+On Mon, 9 Jun 2025, Miguel Luis wrote:
+>> On 5 Jun 2025, at 10:36, Sebastian Ott <sebott@redhat.com> wrote:
+>>
+>> Some small fixes for arch_timer_edge_cases that I stumbled upon
+>> while debugging failures for this selftest on ampere-one.
+>>
+>
+> I’ve tested this test under three circumstances:
+>
+> 1) Original (!HAS_EL2 && !HAS_EL2_E2H0)
+>
+> 2) HAS_EL2 && HAS_EL2_E2H0
+>
+> 3) HAS_EL2 && !HAS_EL2_E2H0
+>
+> Tests 1) and 2) returned in approx. the same amount of real time (about 12s) although 3) doesn’t
+> seem to return at all.
 
-> Cc: stable@vger.kernel.org
-> Reviewed-by: Maciej =C5=BBenczykowski <maze@google.com>
-> Acked-by: Daniel Borkmann <daniel@iogearbox.net>
-> Fixes: d219df60a70e ("bpf: Add ipip6 and ip6ip decap support for bpf_sk=
-b_adjust_room()")
-> Fixes: 1b00e0dfe7d0 ("bpf: update skb->protocol in bpf_skb_net_grow")
-> Fixes: 6578171a7ff0 ("bpf: add bpf_skb_change_proto helper")
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+I've never really looked at nested stuff, I'll try to set smth up and see
+if I can reproduce that..
 
-Reviewed-by: Willem de Bruijn <willemb@google.com>
+Thanks,
+Sebastian
+---1463806286-426200590-1749563454=:18875--
+
 
