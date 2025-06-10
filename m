@@ -1,115 +1,108 @@
-Return-Path: <linux-kselftest+bounces-34618-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34619-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D397BAD4048
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jun 2025 19:17:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2C43AD4058
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jun 2025 19:21:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 650973A5973
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jun 2025 17:16:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B94516992D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jun 2025 17:21:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F007C244693;
-	Tue, 10 Jun 2025 17:16:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD44C238143;
+	Tue, 10 Jun 2025 17:21:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c2zKLg5K"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C5W8FrX8"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C77782B9BF;
-	Tue, 10 Jun 2025 17:16:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A68CE1EA84
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Jun 2025 17:21:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749575775; cv=none; b=VCpCgAvLzeNaWsQgDMUPAPlwSoD2vD6Q3WL2LhoEfbQwpBjj6WTXC1jbxFa3+iapXMof7qeTrKHc0c0PNoS+c/CzVr/FZ+kyJX2b27Rygb18uCi7lhoqd2oaNxAiwmK/zbp1vWcWMKbRLxN0U8/CCDV9UF2b63ZjkkptGPxsgEI=
+	t=1749576091; cv=none; b=QgtPFvJcHJi65rSGQBDHQaSwMTqW9ivK5O1s35OKljE8FCnIR1XSSqUWuGh5YOa2xLcQHEJ54f5anveDL6VM+OguNSY6yJ3PLrUfVzA9y+J6nnQMtWog55L78o6P8kihhmvhWnuk+2lw5I+1YPWLcY2iK+cert0RhyYxtYYeauY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749575775; c=relaxed/simple;
-	bh=55+RaM6BdEkpfdOTQyijX7TveBZCvrjRknaE/fwutoA=;
+	s=arc-20240116; t=1749576091; c=relaxed/simple;
+	bh=uMUbDDWbv5sCEg0wSyQ8mfK14YGIgnjUU7mUXHnNmkA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PfXxpfn9F4Atr9Jb6xYTELt3Qc6x2GcQtFndPP4tMRcNmAA13NymwxXpqM3B09EE07sICQXRDrr6IG0mJOyibiGXQOOqEzatpSzCDzVPHx1CCnVBrn33lXXaKt7oKtu0ehFLkLKRf28X1T5PfDE5pu8u/YCK6RCZF8QLpXAPIqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c2zKLg5K; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30406C4CEED;
-	Tue, 10 Jun 2025 17:16:12 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=r0exarabdKL3Hg2bR7vEMOHt1kHKUE/APlyi+nVyTat9afLff0sTDgD1aXZC+XtrztqmKJa9SmF3h50Gxd9P9oXVGCQulec140g7m191q+h46V/2AQtv2rGJIm+kobJFnFPpCeuC79vMo8HoApfAJTgUjZjL9pgmqR0cQ2csy78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C5W8FrX8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33FD6C4CEED;
+	Tue, 10 Jun 2025 17:21:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749575775;
-	bh=55+RaM6BdEkpfdOTQyijX7TveBZCvrjRknaE/fwutoA=;
+	s=k20201202; t=1749576091;
+	bh=uMUbDDWbv5sCEg0wSyQ8mfK14YGIgnjUU7mUXHnNmkA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=c2zKLg5KKQ1hBezRVOupzHaNocG57d803thXInhwPM+26e+OgK+eZ4iZa0c9XGK78
-	 xMquwBHKK22kE672T/pEyEtq4Xpt1z8ldkt1+eIUfrMzR6Ev65F9sEwh0QAds4EGyv
-	 muXQuxmEHRTA1EjJco8KdUDQOrtG+hzuYQorPGJMOmsznKDZBYOpnKtzsrkydyCVlX
-	 r04Uw1P5b07DHiQbKnHnN7gx8u0HsB1drqTR+P2KdnlgZqUoxpcSUgGfQ0JYFz/aP5
-	 qTa/ygvxEkhIb+knrCk6S53TB0zQrHvASD+DDVr4siexj/ZF8T6u6Fgjk8qBTxd6t9
-	 t2QvhkRD82JpA==
-Date: Tue, 10 Jun 2025 20:16:09 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/mm: Check for YAMA ptrace_scope configuraiton
- before modifying it
-Message-ID: <aEhoWVH0Ka6jB8QR@kernel.org>
-References: <20250610-selftest-mm-enable-yama-v1-1-0097b6713116@kernel.org>
+	b=C5W8FrX8vJzCA9tlBAky6AfFI8j03Hulw1Lff6BoOSmC7FyxImBimfdHUmaewntYS
+	 8uHbHqR6fkMbdizPOpQczYyLBifLAlzCXT85FXe/QWCIc4WIupRxSOEN2/ZnwjDzUM
+	 rXtLRzg1bCQFxyB3864jTAqOHCEMW81BW1oTPfB+1noyEjceRCeTP1OsVdpjIs2XiN
+	 jJehePkl6QPz3EYV4MAwtGCPVioAFfGBB23Vv55Qeko4zPsg0JP27Hj9WtpDuo7o1A
+	 na0PoVVNRQ9WU36UuC1ZMMZcUHFf84MRg9TIqi+gZyuN/ixsepCQhe+Da5E/YOqe5z
+	 Hh9qIA4r9oWFw==
+Date: Tue, 10 Jun 2025 18:21:27 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org
+Subject: Re: nolibc test target overwites kernel config without asking
+Message-ID: <3f874365-c113-442c-a32f-f0b9611f999e@sirena.org.uk>
+References: <3d5128b9-b4b6-4a8e-94ce-ea5ff4ea655b@sirena.org.uk>
+ <5df3037e-2486-43f2-9fc8-e0aeb716c848@t-8ch.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="wFropd4Gc2BtY91J"
 Content-Disposition: inline
-In-Reply-To: <20250610-selftest-mm-enable-yama-v1-1-0097b6713116@kernel.org>
+In-Reply-To: <5df3037e-2486-43f2-9fc8-e0aeb716c848@t-8ch.de>
+X-Cookie: When in doubt, follow your heart.
 
-On Tue, Jun 10, 2025 at 03:07:44PM +0100, Mark Brown wrote:
-> When running the memfd_secret test run_vmtests.sh unconditionally tries
-> to confgiure the YAMA LSM's ptrace_scope configuration, leading to an error
-> if YAMA is not in the running kernel:
-> 
-> # ./run_vmtests.sh: line 432: /proc/sys/kernel/yama/ptrace_scope: No such file or directory
-> # # ----------------------
-> # # running ./memfd_secret
-> # # ----------------------
-> 
-> Check that this file is present before trying to write to it.
-> 
-> The indentation here is a bit odd, and it doesn't seem great that we
-> configure but don't restore ptrace_scope.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
 
-Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+--wFropd4Gc2BtY91J
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> ---
->  tools/testing/selftests/mm/run_vmtests.sh | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-> index dddd1dd8af14..33fc7fafa8f9 100755
-> --- a/tools/testing/selftests/mm/run_vmtests.sh
-> +++ b/tools/testing/selftests/mm/run_vmtests.sh
-> @@ -429,7 +429,9 @@ CATEGORY="vma_merge" run_test ./merge
->  
->  if [ -x ./memfd_secret ]
->  then
-> -(echo 0 > /proc/sys/kernel/yama/ptrace_scope 2>&1) | tap_prefix
-> +if [ -f /proc/sys/kernel/yama/ptrace_scope ]; then
-> +	(echo 0 > /proc/sys/kernel/yama/ptrace_scope 2>&1) | tap_prefix
-> +fi
->  CATEGORY="memfd_secret" run_test ./memfd_secret
->  fi
->  
-> 
-> ---
-> base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
-> change-id: 20250605-selftest-mm-enable-yama-1541c2d2ddcd
-> 
-> Best regards,
-> -- 
-> Mark Brown <broonie@kernel.org>
-> 
+On Tue, Jun 10, 2025 at 07:05:59PM +0200, Thomas Wei=DFschuh wrote:
+> On 2025-06-09 17:42:47+0100, Mark Brown wrote:
 
--- 
-Sincerely yours,
-Mike.
+> > KUnit deals with this by doing it's kernel build in a .kunit directory,
+> > it'd probably be good to do something similar for nolibc.
+
+> I assume you are using "make" directly. For a more complete
+> kunit.py-like solution we have run-tests.sh, which does indeed use a
+> dedicated build directory.
+
+Given that the tests were in tools/testing/selftests I initially tried
+to run them via the selftests build infra which didn't work since
+they're not glued into that at all and I ran into this as part of
+debugging.  It didn't actually occur to me to look anywhere other than
+the Makefile, that's how you normally invoke selftests.
+
+Given that AFAICT the tests don't use any kselftest infrastructure or
+otherwise overlap with it I think it'd be better to move them to
+tools/testing/nolibc, that'd make it clearer that they're their own
+thing and avoid surprises.
+
+--wFropd4Gc2BtY91J
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmhIaZYACgkQJNaLcl1U
+h9DgRAf6AxP0bXmbsfc7J1mcxRBArqguj9lcn2JHH1EbbEKPmc4pA+akL1mpSLqg
+t29OT/v8Uf81e6Co/SGgtHkWLpxeYaUeKy1Lu/K31h8OYoRyog59TTSX/nQ4I+Kj
+1oGENyZQI+Crnwv0Wyf49wls2BCvHBzjc1/dXQ9kJyguHaOtVzw+Bh7H3ch4Pabm
+v++R/au04yhWKr8QF8UWgEzfm9zrTSOlxuhitvKlw+IQrKFcl4lAGULagbxN1UkK
+fZGZeQd1aIPP2x7HIlAf0eL9LZuFAODDa6gHE4svx0pDam/YXtCWddaEGMONBelE
+2AJDuKNTqhQO75YRx4psVBjg7UUpDA==
+=wNfW
+-----END PGP SIGNATURE-----
+
+--wFropd4Gc2BtY91J--
 
