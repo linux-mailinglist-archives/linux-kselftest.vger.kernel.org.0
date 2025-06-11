@@ -1,213 +1,176 @@
-Return-Path: <linux-kselftest+bounces-34709-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34710-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79D9FAD561F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 14:56:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34718AD56D3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 15:21:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2CF61172B2F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 12:56:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D652C3A1BDE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 13:20:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AE06283141;
-	Wed, 11 Jun 2025 12:56:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 874EA287519;
+	Wed, 11 Jun 2025 13:21:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QvcvQhpl"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="P1kSA2As"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57C07281372
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Jun 2025 12:56:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A927817A58F
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Jun 2025 13:21:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749646610; cv=none; b=NMaDzfOJYagbDaMFwVgi0s0W7AB497YnGfr6GVYznLZ3pKHXZI26MirC50d8PwtBMeEGgOk61cOw8euYpMjssY0ekmJ47WbAq9q34oCUB/GuOOl/3HyBcooW0BqprvLMLCII33DYL4e08BC6nEmASoCtTuixxn3DNasAHgVa8uk=
+	t=1749648077; cv=none; b=mVVq2RuvZ4dtQ0CIBdE1Be13s0zXQfp0RPoAvGJrRoaj8rWylkgAvAksmbdjrm/2RDkJ7yP3+IV4ssg3S45R6+zW+5sIlIhsqE3rmRv04fA1SL3KE55c0CRLh9cNdARAfGMd4aQ1V7K87djJpVzYpOnwnBn8KAT9ywoFar+3ADY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749646610; c=relaxed/simple;
-	bh=8buD8yDg3TR0fx8Q7bXACvJc4a/CvqRbB7CH+Pikfmk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sy3aTlrYPHhD9rFEhJMrnOkjpsBg0MRNGYfP+XYH9HhuwcnmHasU8IdfRkNRxfMFbmpBihE0BRYskWJa2VUBZZ9lvwZD3SxJqJxCKP6E+y8HO/Ry5Bzo7pLYP9ztDAEpyoO1yqKZT/hE62U4hbWGAET851+94geWNMgnTDr6Ci0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QvcvQhpl; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1749648077; c=relaxed/simple;
+	bh=C4hxsxe0fLBrBotaEoFZDYCLmEECNhldsO7lXFI9foc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sf6+Un6gJv+eUNhCz01EHyPd2cOW7ueFBGfzNEk1j5Oc++IhrCOxTwCcsASK9WYsGFgwsxN57kg0qOIiWAoXGLY0/q8TDSdvSRbOmRRS2Kv1kkL0q892ru52WlhfPwQq7E0shgRsRtNCXrArUzRkAaFniNAS8hmWXmUZwf8bYN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=P1kSA2As; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1749646607;
+	s=mimecast20190719; t=1749648074;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=A5Kas9xwQ+OPm3yoVaGIsnzULAQTcfMhc6nbP8S9fvE=;
-	b=QvcvQhplfihYlpgq4DVTicbMK50f+BQ2JmqC0nyS5vYk9jeMUf7l+0xXeijP7khPt6adrL
-	bPknNRf2j63k92IiTG5FBFy9JGcU6INKbq+2Em52kupa6sbIU0JEPiq4FdwM//2A7NmfVh
-	XxeGUHzCp8XMZ3WGdpt1VnqIWk3CY3o=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=BgaQSbJjCXfhBaWKuPSsh/e0eXuCE8ryvRzwpdMmhNk=;
+	b=P1kSA2AsoeCB+yyswsur1yDfsHfxbvldjSIokwSataMx5Y4QYrT++wrOUjkcV1/5lh8ZPX
+	ZaVoGtYwiTQP4XybgOGckfvb9tskIXFDmT2ThowSw6/ZO8njsKxrL8KaMS2zBxJSjP6nzP
+	iZP6sSbahOxdUIdfcX0por2K1zYMA94=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-398-9-J9hVdIOZaWZPTTSb3WOg-1; Wed, 11 Jun 2025 08:56:46 -0400
-X-MC-Unique: 9-J9hVdIOZaWZPTTSb3WOg-1
-X-Mimecast-MFC-AGG-ID: 9-J9hVdIOZaWZPTTSb3WOg_1749646606
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-6faca0f2677so186794366d6.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Jun 2025 05:56:46 -0700 (PDT)
+ us-mta-240-SBMimf8NPJCItOw-ZFYIIQ-1; Wed, 11 Jun 2025 09:21:12 -0400
+X-MC-Unique: SBMimf8NPJCItOw-ZFYIIQ-1
+X-Mimecast-MFC-AGG-ID: SBMimf8NPJCItOw-ZFYIIQ_1749648072
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-4a43ae0dcf7so9889781cf.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Jun 2025 06:21:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749646606; x=1750251406;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A5Kas9xwQ+OPm3yoVaGIsnzULAQTcfMhc6nbP8S9fvE=;
-        b=Xno3cv5w/tZktFPcpPwGOcGYc8Th6KUdyKK9P9e4rxmBiKwWfKITl1Fu0YnHyxDQ3f
-         IEW840gd4E8FCCYUNPkWwY7mppV7/03hh1fNAWqVrmCVRN9ltkPcxRozp/MGf3nIeFuM
-         iKg8Y14V7K/b79HeI8R5t/1YsnpUksZtjrJRnjBeIaB1Fsso0U9b9T7ZguwejJdB4m8w
-         flxdhLJqVfctsgVoauHcvB8meeGSNU/rs96xzshfNsWc7jjYFPcOat+t7y1DI0uuCF6h
-         KCGLM64Gt/1MuDMFAiuCrKiCDq49Nk6dgTIXIPaFnlij9FucNxlumA3fC/yPEY0D3pEr
-         OWvA==
-X-Forwarded-Encrypted: i=1; AJvYcCXRoMqP+JbHNCZgubJpPjb9feFrh4YGzdv6T7DW8QztT+FRCX/p0oN3LlTPxxPL6eExSZsqYkRCWFRI97cM+14=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyPVZMQPmgM2GwUjVv9Ly/JvB/+W0zzPU4fyUE6jszGeS+zxc9f
-	hezpeuap/+hHj/LjQjt7fxdkn7kiCp7URuQ6RvMhKElW2FCJZ8xJIPf/i1VgphFOpqv4Lsv1SSp
-	pyC5fxXFT/Od56ztgtS+NATX27K1iQDL3vbdwyDN+yjO+1VwM6SjVfqpIJYkB89ufn1dT0Q==
-X-Gm-Gg: ASbGncvO/e3M2vj8kvEaeLwmTbo+DYqwee0+NavEnyLa56tuflY8qtJDuaxT4KRM3BA
-	CWeqUsFhc2rDA2bFJADOkBXGJo5Ip2lWe0IFSOUvpnVa9VZjINrtIqOUOSSBXeVLXSDeZsVsSN/
-	GT+rrEpC0/bHm7IRm546i/EX/jkGXa8EvkGGp2OhVXY5hquF4IdomcDtNxVVAWdBkJ2MorTzFEQ
-	4w9QG0X+gLVfd76Qb7f9yqOOIJI+K5oS90MHIjd9cWx2Sy6Mho0gOKvQbvjY8qWqozlh6hBcC4s
-	iDStk8KRyjGQnw==
-X-Received: by 2002:ad4:5de3:0:b0:6ea:d033:2846 with SMTP id 6a1803df08f44-6fb2d150f50mr46124756d6.25.1749646605464;
-        Wed, 11 Jun 2025 05:56:45 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHZ3II3J1nqirG0Y1l89AqC5v1uU5YGX748p4ie8CqW4+N2aTm8LOyMY61BMCGc48dang2fKg==
-X-Received: by 2002:ad4:5de3:0:b0:6ea:d033:2846 with SMTP id 6a1803df08f44-6fb2d150f50mr46124046d6.25.1749646604859;
-        Wed, 11 Jun 2025 05:56:44 -0700 (PDT)
-Received: from x1.local ([85.131.185.92])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6fb09ab8a0esm82314846d6.25.2025.06.11.05.56.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jun 2025 05:56:44 -0700 (PDT)
-Date: Wed, 11 Jun 2025 08:56:40 -0400
-From: Peter Xu <peterx@redhat.com>
-To: Nikita Kalyazin <kalyazin@amazon.com>
-Cc: akpm@linux-foundation.org, pbonzini@redhat.com, shuah@kernel.org,
-	viro@zeniv.linux.org.uk, brauner@kernel.org, muchun.song@linux.dev,
-	hughd@google.com, kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, jack@suse.cz,
-	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com,
-	jannh@google.com, ryan.roberts@arm.com, david@redhat.com,
-	jthoughton@google.com, graf@amazon.de, jgowans@amazon.com,
-	roypat@amazon.co.uk, derekmn@amazon.com, nsaenz@amazon.es,
-	xmarcalx@amazon.com
-Subject: Re: [PATCH v3 1/6] mm: userfaultfd: generic continue for non
- hugetlbfs
-Message-ID: <aEl9CNGLY0Sil7nq@x1.local>
-References: <20250404154352.23078-1-kalyazin@amazon.com>
- <20250404154352.23078-2-kalyazin@amazon.com>
- <aEiwHjl4tsUt98sh@x1.local>
- <36d96316-fd9b-4755-bb35-d1a2cea7bb7e@amazon.com>
+        d=1e100.net; s=20230601; t=1749648072; x=1750252872;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=BgaQSbJjCXfhBaWKuPSsh/e0eXuCE8ryvRzwpdMmhNk=;
+        b=u+zMPtZncClavKixi+M573OargFppHBQKkMETpOimbahRqiQwg1xOPQ3fO5dvOb7y0
+         Kqt2166oJOwObopO6R0CEuH9uTsArx5xUAGLGJAq5OkIdvHoHVyH4U2VNput9g6tyqAb
+         bZJPbS1+xNLuYt77yksUVtIehoL72IhHKZ02ReezdsSk61OkRK5sS8s+ln3QmGf/D9mJ
+         R6ZydA8pEMb/sluBW+1PWjOKuwaOV9+hKQ5SIrVnXDvp9/KIlYvwRiE/k8oS5xYdupuv
+         iKWtYfcKJretf/LJpJuGxRttK4mAhrC6JYPlmPsqKelEFluhcuHY2MMeyzNemYFXoBP8
+         wv1A==
+X-Forwarded-Encrypted: i=1; AJvYcCUhf09VvsJXhXujb0XkTSqYtBvn3zNlTK7tv/YDS1hW1lyJz8ElnHkCONqun+JGueUGeM1rpOJ6lgjF6IFpDiA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzuzne2w8XHaRX95RpKRu6MAX+Wtw2SHrTtWVlUsCmY9mbq9vvo
+	E6tYL5zhXbJti4LIw+9FSdG0c2O4w2fB7uMPWV6evnVjL995wk3XeH3QXSAmqAAhjwvdLsyZI0n
+	GVQxadZ9Pm8/XP2uhhstlesv60BeYYpxBfqnl4BJYC2ehAFoC2dPw+o1Ig5WV7Vs3DQkE8A==
+X-Gm-Gg: ASbGncuFXAvsZoTi37YOvJO0e09RFR9oDUaVWLkZ7wK9xWpslyHUMneLx4N1YOxz6V6
+	prgANP/WM8fgEulodVXsEgPAIsdwgx8JoppCvNQsbDjaihN0mD7Q3QrKx+wshVvbuCwd5G7HVJn
+	/hMH4fGH/kR+Qx1ry3DtaDuxPyEaHoDE/tVQrXzL5y0wL4WQs449UHa42/TLqQJPVIuI/mZE2ml
+	VItl6ts9jKZ1pCFCyWRlbYzyPkMJDkRCCayKOWvEg3SfpmY203UDMjN+z6pPdihAp3T3TbKu4n5
+	yZnM8X020ObllNDjOr1VvlZZ519IEpDl3i+rzZv/E94V
+X-Received: by 2002:a05:622a:5c17:b0:4a6:c5ee:6ced with SMTP id d75a77b69052e-4a713b8ba7dmr56471081cf.4.1749648068359;
+        Wed, 11 Jun 2025 06:21:08 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IH1ArCnkm2Czjve19sYRLRVRmIA4chf1R1aoKdRXRTJmJlpegiSPkj7PSA7rA024CD57QwdaQ==
+X-Received: by 2002:a05:622a:5c17:b0:4a6:c5ee:6ced with SMTP id d75a77b69052e-4a713b8ba7dmr56464691cf.4.1749648059408;
+        Wed, 11 Jun 2025 06:20:59 -0700 (PDT)
+Received: from [10.32.64.156] (nat-pool-muc-t.redhat.com. [149.14.88.26])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a61116c02asm86858761cf.32.2025.06.11.06.20.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Jun 2025 06:20:59 -0700 (PDT)
+Message-ID: <a020ab91-2da7-4c47-b88e-4639b8b0bd37@redhat.com>
+Date: Wed, 11 Jun 2025 15:20:57 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <36d96316-fd9b-4755-bb35-d1a2cea7bb7e@amazon.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/mm: Check for YAMA ptrace_scope configuraiton
+ before modifying it
+To: Mark Brown <broonie@kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+ Mike Rapoport <rppt@kernel.org>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250610-selftest-mm-enable-yama-v1-1-0097b6713116@kernel.org>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <20250610-selftest-mm-enable-yama-v1-1-0097b6713116@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jun 11, 2025 at 01:09:32PM +0100, Nikita Kalyazin wrote:
+On 10.06.25 16:07, Mark Brown wrote:
+> When running the memfd_secret test run_vmtests.sh unconditionally tries
+> to confgiure the YAMA LSM's ptrace_scope configuration, leading to an error
+> if YAMA is not in the running kernel:
 > 
+> # ./run_vmtests.sh: line 432: /proc/sys/kernel/yama/ptrace_scope: No such file or directory
+> # # ----------------------
+> # # running ./memfd_secret
+> # # ----------------------
 > 
-> On 10/06/2025 23:22, Peter Xu wrote:
-> > On Fri, Apr 04, 2025 at 03:43:47PM +0000, Nikita Kalyazin wrote:
-> > > Remove shmem-specific code from UFFDIO_CONTINUE implementation for
-> > > non-huge pages by calling vm_ops->fault().  A new VMF flag,
-> > > FAULT_FLAG_USERFAULT_CONTINUE, is introduced to avoid recursive call to
-> > > handle_userfault().
-> > 
-> > It's not clear yet on why this is needed to be generalized out of the blue.
-> > 
-> > Some mentioning of guest_memfd use case might help for other reviewers, or
-> > some mention of the need to introduce userfaultfd support in kernel
-> > modules.
+> Check that this file is present before trying to write to it.
 > 
-> Hi Peter,
+> The indentation here is a bit odd, and it doesn't seem great that we
+> configure but don't restore ptrace_scope.
 > 
-> Sounds fair, thank you.
-> 
-> > > 
-> > > Suggested-by: James Houghton <jthoughton@google.com>
-> > > Signed-off-by: Nikita Kalyazin <kalyazin@amazon.com>
-> > > ---
-> > >   include/linux/mm_types.h |  4 ++++
-> > >   mm/hugetlb.c             |  2 +-
-> > >   mm/shmem.c               |  9 ++++++---
-> > >   mm/userfaultfd.c         | 37 +++++++++++++++++++++++++++----------
-> > >   4 files changed, 38 insertions(+), 14 deletions(-)
-> > > 
-> > > diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-> > > index 0234f14f2aa6..2f26ee9742bf 100644
-> > > --- a/include/linux/mm_types.h
-> > > +++ b/include/linux/mm_types.h
-> > > @@ -1429,6 +1429,9 @@ enum tlb_flush_reason {
-> > >    * @FAULT_FLAG_ORIG_PTE_VALID: whether the fault has vmf->orig_pte cached.
-> > >    *                        We should only access orig_pte if this flag set.
-> > >    * @FAULT_FLAG_VMA_LOCK: The fault is handled under VMA lock.
-> > > + * @FAULT_FLAG_USERFAULT_CONTINUE: The fault handler must not call userfaultfd
-> > > + *                                 minor handler as it is being called by the
-> > > + *                                 userfaultfd code itself.
-> > 
-> > We probably shouldn't leak the "CONTINUE" concept to mm core if possible,
-> > as it's not easy to follow when without userfault minor context.  It might
-> > be better to use generic terms like NO_USERFAULT.
-> 
-> Yes, I agree, can name it more generically.
-> 
-> > Said that, I wonder if we'll need to add a vm_ops anyway in the latter
-> > patch, whether we can also avoid reusing fault() but instead resolve the
-> > page faults using the vm_ops hook too.  That might be helpful because then
-> > we can avoid this new FAULT_FLAG_* that is totally not useful to
-> > non-userfault users, meanwhile we also don't need to hand-cook the vm_fault
-> > struct below just to suite the current fault() interfacing.
-> 
-> I'm not sure I fully understand that.  Calling fault() op helps us reuse the
-> FS specifics when resolving the fault.  I get that the new op can imply the
-> userfault flag so the flag doesn't need to be exposed to mm, but doing so
-> will bring duplication of the logic within FSes between this new op and the
-> fault(), unless we attempt to factor common parts out.  For example, for
-> shmem_get_folio_gfp(), we would still need to find a way to suppress the
-> call to handle_userfault() when shmem_get_folio_gfp() is called from the new
-> op.  Is that what you're proposing?
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
 
-Yes it is what I was proposing.  shmem_get_folio_gfp() always has that
-handling when vmf==NULL, then vma==NULL and userfault will be skipped.
-
-So what I was thinking is one vm_ops.userfaultfd_request(req), where req
-can be:
-
-  (1) UFFD_REQ_GET_SUPPORTED: this should, for existing RAM-FSes return
-      both MISSING/WP/MINOR.  Here WP should mean sync-wp tracking, async
-      was so far by default almost supported everywhere except
-      VM_DROPPABLE. For guest-memfd in the future, we can return MINOR only
-      as of now (even if I think it shouldn't be hard to support the rest
-      two..).
-
-  (2) UFFD_REQ_FAULT_RESOLVE: this should play the fault() role but well
-      defined to suite userfault's need on fault resolutions.  It likely
-      doesn't need vmf as the parameter, but likely (when anon isn't taking
-      into account, after all anon have vm_ops==NULL..) the inode and
-      offsets, perhaps some flag would be needed to identify MISSING or
-      MINOR faults, for example.
-
-Maybe some more.
-
-I was even thinking whether we could merge hugetlb into the picture too on
-generalize its fault resolutions.  Hugetlb was always special, maye this is
-a chance too to make it generalized, but it doesn't need to happen in one
-shot even if it could work.  We could start with shmem.
-
-So this does sound like slightly involved, and I'm not yet 100% sure this
-will work, but likely.  If you want, I can take a stab at this this week or
-next just to see whether it'll work in general.  I also don't expect this
-to depend on guest-memfd at all - it can be alone a refactoring making
-userfault module-ready.
-
-Thanks,
+Acked-by: David Hildenbrand <david@redhat.com>
 
 -- 
-Peter Xu
+Cheers,
+
+David / dhildenb
 
 
