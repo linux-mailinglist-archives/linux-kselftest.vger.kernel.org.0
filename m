@@ -1,174 +1,136 @@
-Return-Path: <linux-kselftest+bounces-34754-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34755-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D319AD5E22
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 20:30:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B370AD5F7B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 21:52:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C14C016C68A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 18:30:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E2E101882847
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 19:52:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE7EB2248B8;
-	Wed, 11 Jun 2025 18:30:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 949C52BD01E;
+	Wed, 11 Jun 2025 19:51:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="C4IJI/H6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SrXTWMuN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D27E1E8329
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Jun 2025 18:30:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA95D221F1C;
+	Wed, 11 Jun 2025 19:51:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749666607; cv=none; b=LyerDWVN9rbmvFT/a3hHnNGDWAYotPxB/6zk4yhPbPgfhfAl2DfQL/mqB4q0ktlgNswToTFCtghDtKKpBauymQr8lNieR+hWz4oNcVKFDU0eHLt8E6RCowKFjmr0xH2ltTbNaAsBetXcwCbTzMN4/jjw95M6U7QgPpgdtDfMNHw=
+	t=1749671495; cv=none; b=KEZNVumRuFDbFszZ51AVzC1IJuut1AH0xipC/IlMXcueYBxob2q4aOeSvygTqdXqPyeHm6BOn7qftDahuzE42DJlY2jpAUN6Vy1Nmm5m5RvdHOUc0x5KYoso5dLA+x2VPSJQ1bNwfn3nnV4Pk4ulHPpOALGVEkYAfKV8HdUUBUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749666607; c=relaxed/simple;
-	bh=JiBEW9GnpC6nphMw1Nmi6/whGvQxkUqmaI4odvdQYMk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PwoJDlWVn71YEESzy3iFMwXhaYP9pwq0Gkg7/f8q4bXVNKcpuZa12Jb6+skSMuv35izj5psKVWo5ciMdwJBJj80lILfwrG1GjF1I/JUrmzMjy+kD4C8x6ocRZxqT4yPyKymkL8cSZLNhyeb0S6PmQm4YKRBBIV/Mv/sMWWr2xUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=C4IJI/H6; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-450cf214200so718905e9.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Jun 2025 11:30:05 -0700 (PDT)
+	s=arc-20240116; t=1749671495; c=relaxed/simple;
+	bh=X/OA1aXD+x1kt5nNgWcOiOS8Y92tVVSfC0Xz93AMSXc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fGtIYJBQELJMVB3HW74mK6FwczlrMq40e63u+DIRN/QW7X0iYWQ3pNGcHOOYH3E/qUlp8Bk/NMWy6LR0PpNqmN6dxo0rvTKpCHG6nkWUxhJH0V+P8AuAcgMddhS7L9f3jn20YB3EQjyopPEssySgEnZ0pk+H9b5FRjq2QRzu9tc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SrXTWMuN; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-3a54700a46eso253470f8f.1;
+        Wed, 11 Jun 2025 12:51:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1749666604; x=1750271404; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kZUFhp39dTZAMXovncJ1VhLVfSRWQwMXUrqA+mPJGfc=;
-        b=C4IJI/H6X0BPuMTp+YEnc+ZzqqQw2cQtwAPjVGxI7uAhgSUTBRsTlgODWAbeSDPPkM
-         PD8RI6xwxWn57OpalpNwedk/5DGfh/mQ5cIzGJ3QpU/NBS/VPavEZEUbGJ4s7/0MFYF6
-         tzE3AfQB5tTOnBQ5R6BMEJk8ZSxTRg+XRKm1FRiqCQ5aEJdURHAMbnmP4G4rNIVzV3BF
-         3+CMt75HUTW8KzZr6JTMbpxNb6/SPEsj2xR5Ey44RVjjxzWf4cQLAam6LmtvTkpBlmIy
-         J2NF0GnHCCs0/KJjlzD3mY98b1z7vR7kSMMmizt1IqhIw6umMv3cCMxPGYnDb3E8GSY1
-         bfaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749666604; x=1750271404;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1749671492; x=1750276292; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kZUFhp39dTZAMXovncJ1VhLVfSRWQwMXUrqA+mPJGfc=;
-        b=tHlV8SS4BiBjdjNW1ZqL8m1g7AyFEhrjfT7A+u3Ugn3Jm3OThmALNAglEngUmjURng
-         AJWYMqi7/6BBxXhyNsG3IBf8P8bAyiPMUOXkis/F/Mu0mgIaAOLYRodZV0OIzeN3vYSt
-         YeWKy+mzByEvmvD4b05HReEWkL6lgpThrm3H5hV8KymTVw45VDJW8eGaqC9c+GDy99df
-         O9eWj8TyK70gHK4Iq/xSK+6BsF26DIbDUK8qhOF9aw9ELct7pUhp/DOgoZegJQy4vH5i
-         f+aIki6Cdv+K5fW1ttGrQaO3/lCh4h51/C6TEZDj+NKfpSBwZ5M+j8Y8AQps4LwVS3RN
-         2new==
-X-Forwarded-Encrypted: i=1; AJvYcCXdp0tIBcrYz5iBZuv8S3nH3uIGprZst3IvFbP9zJQ8N4BLgYtA/EejN94vaAxw2ruC94l+/gcl03iUfU5mb4g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyGU1OFcwtXbaTr1FPQzU5KjeqmL384/fT96fmumycwly0EJqFp
-	+LMEBZZs9OwLSgOqK5E//8Pjs4XSTuG/Zd0MYXAXHVoDCsTnOIAsrfp/4zF+KCOy3hsr6XAgPex
-	yI9ta
-X-Gm-Gg: ASbGncusUKaeC75MGL/vIKPviHc0hCZIQzeZa8HULNHJEr3qpuXzWrjgBDPpyLFMI3h
-	CTq2LrcrrPUyshCf6OuMMq4iSl0x5WcYPk3ByUc+rbr7B/Rx5ADU9d/m6tXwqoPA9SuPQ8vuFn1
-	17BJw1binFsSYbFyIdKt81p+O52L7lj1T/lzoMD9Vgg9KAn0wfLXukkDe/c2gK4UyC0JNHB0Ejp
-	6F8xdmS5Dn+Jag5UsMu2K5/pjq1HtzogfpztAxs4dK4g+hSimUMyy/HMRXcXXWGvkeGDMwOuG+m
-	auZtYdfuGDgQPaCVAMfUKi7+uVTd6qAszpNAvWF1awtJC0MUG+KXAvDWUpubI3UgE8c=
-X-Google-Smtp-Source: AGHT+IEOnrEhGtLnO/aBJWRPFeQDku4c9EmVz/spaw65LaaOkpsBO4KbA6/7mK4y3l0ElS0ayRNSyw==
-X-Received: by 2002:a05:600c:6612:b0:453:8a6:d8de with SMTP id 5b1f17b1804b1-4532b8c5819mr8416435e9.1.1749666604214;
-        Wed, 11 Jun 2025 11:30:04 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3a5323b6612sm15852258f8f.41.2025.06.11.11.30.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jun 2025 11:30:03 -0700 (PDT)
-Date: Wed, 11 Jun 2025 21:29:59 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Nathan Chancellor <nathan@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Jeff Layton <jlayton@kernel.org>
-Cc: Naresh Kamboju <naresh.kamboju@linaro.org>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	lkft-triage@lists.linaro.org,
-	Anders Roxell <anders.roxell@linaro.org>,
-	Arnd Bergmann <arnd@arndb.de>, Sasha Levin <sashal@kernel.org>
-Subject: Re: selftests/filesystem: clang warning null passed to a callee that
- requires a non-null argument [-Wnonnull]
-Message-ID: <aEnLJ0CkfrHieKrG@stanley.mountain>
-References: <CA+G9fYt-CMBGCFxV5ziP98upkeK2LBxkZRo7-0XN1G+zLtWK4A@mail.gmail.com>
- <aEmzK5B4pbF5MZ6Y@stanley.mountain>
- <20250611175052.GA2307190@ax162>
+        bh=JQzMghNz4SMc/jj8ZNDpIvLoMQsd+F/Mm9SKGgQM0Dg=;
+        b=SrXTWMuNKADkbaTmDXEOzjg3hBT3owisiPs58b3332j9ikLYYthd0Jpo3V2/3G89Pb
+         8GSxsv9S+SnCTMfcuilkHJdzOIli1xS9/r9ZhvLEVE+DTCPAANyBuCOr8MEmVhfJTi/n
+         t7fO9SybEoTTNh9qjCHj/oNGcT8KBiEnzpQNjms18ops0f5RFYvNVMYIJUVnD69kLTza
+         Ag1KMWIzs4qF4kxOhZEepCUESklrtWZQgr6oTJOYfg9KnNT5Hx6Pl6CNHVWI+qabX0Hj
+         zDAdDu1omNz1AjYpp24bIWYpMsHLjk/b8kO/SksDH6yPDev84lT264cPdGese7yMaJYG
+         fo5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749671492; x=1750276292;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JQzMghNz4SMc/jj8ZNDpIvLoMQsd+F/Mm9SKGgQM0Dg=;
+        b=EsTiJbh33ycicovKW+uneABEbOCEcNFRKkXFldCkjlFF0ubcunYw8eS1PsWhXwKpNn
+         8rJoQAVx7TyKie+G71b42YO6TanZbTI48UQy3lAKy60GpQRnfO605bV0xETASpHKnWuh
+         Pe9a/DKGDMjJtxhMzoCqPn8VSxq3LCZn1lEH+jnCRIqZKrVNAgvuuELg5NuofMCVPS/N
+         HQjAbE0reiq8LIuwsCDhwx06dw3dpkdA7FodfhMf5bLztyl1jxFN8A5aUCoPYvthOstW
+         dEr74olygQVgr20gakjtxr007sMz7PQmr+3fjyS+g2D9HhBewwe1cBrasZIZs/t/wnEU
+         +5Xw==
+X-Forwarded-Encrypted: i=1; AJvYcCVVxIcjAC5K8EXlC1+3T6TkkNYUrKNJBKansWhIROjv3suLO9glMg1ypNXF+GtRFLKeHltyl/dz5InjYRy3k4JS@vger.kernel.org, AJvYcCWUkXQLRCQfTFqtm5xz7UMaFgbLgqVkCCHLSCAxrywRlPc2eV4Bn2Cp0p1Alu6W4dfWxARliP7DrQ5MfICU@vger.kernel.org, AJvYcCX5K1RlWzuUglHbOKXAO3Vlm50OP78qLFs2FD/d2N2TYyB6q4D7aji9E6UyNLXcvXPuMn4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBP08Nxc2jtPRX6gD71n3srFWhhTYmpKLeUmiLpFVcT1TDMLL3
+	r/11upLfepHn3ggNeJVzKx1p8i4XqoC9uvCa8H0dLqvT3NyPgMrDqk5VPIhrIc264AC6DMfl6wH
+	fwNpQgFdRiG0DA1FYOL7bQsQqK1eQAoM=
+X-Gm-Gg: ASbGncuVb+8YJptp5+0TekWxz7gB6feAualKjULSLJHoeVKHmqXsQpEu78q15EEeQfl
+	ByFukQrY+dLDUU3DwB9g0lCc6ADyKNG/5Gw0VPxDqHlBvEPFKRfE0YqU8C1+Jh4XfJ6e22K1Bf6
+	bKDmQY4KRYGP0VkLtXOwR2rocS6Y/N6KyvcKSKmvr2gZE1wD++QjyQ+wF0ZeTWQdkADBvOy+Uz
+X-Google-Smtp-Source: AGHT+IHsMOspB6UuSIxOVa8i+vzccdKZaI+htNn9UjH3qwVgBZvxXthrfaJmH1ZHicGFh3pG6c73MfkN8aXZP5JK+T4=
+X-Received: by 2002:a05:6000:310a:b0:3a4:d53d:be20 with SMTP id
+ ffacd0b85a97d-3a558695d45mr3327455f8f.18.1749671492015; Wed, 11 Jun 2025
+ 12:51:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250611175052.GA2307190@ax162>
+References: <20250608143623.25242-1-wangfushuai@baidu.com>
+In-Reply-To: <20250608143623.25242-1-wangfushuai@baidu.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 11 Jun 2025 12:51:21 -0700
+X-Gm-Features: AX0GCFv7vXXDLbAwxkRk67UWzs3RvlU2LBWLjvW30iGM-xMtg-Wi-MUDz_hGEmI
+Message-ID: <CAADnVQ+SSPhZNN05F2-MS_79Vhp+mSTWF3Ss1rcoWRnaDjFx+A@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: fix signedness bug in redir_partial()
+To: wangfushuai <wangfushuai@baidu.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
+	Mykola Lysenko <mykolal@fb.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Shuah Khan <shuah@kernel.org>, Michal Luczaj <mhal@rbox.co>, 
+	Jakub Sitnicki <jakub@cloudflare.com>, Kui-Feng Lee <thinker.li@gmail.com>, bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 11, 2025 at 10:50:52AM -0700, Nathan Chancellor wrote:
-> On Wed, Jun 11, 2025 at 07:47:39PM +0300, Dan Carpenter wrote:
-> > This seems like a Clang bug, right?  The test for _Nullable is reversed
-> > or something?
-> 
-> My copy of unistd.h has
-> 
->   /* Execute program relative to a directory file descriptor.  */
->   extern int execveat (int __fd, const char *__path, char *const __argv[],
->                        char *const __envp[], int __flags)
->       __THROW __nonnull ((2, 3));
-> 
-> so I think the warning is valid in this case. I will note that
-> tools/testing/selftests/exec/recursion-depth.c uses execve() with a NULL
-> argv and disables -Wnonnull so maybe that should happen for this test
-> case too? Or should that NULL be changed into a ""?
-> 
+On Sun, Jun 8, 2025 at 7:38=E2=80=AFAM wangfushuai <wangfushuai@baidu.com> =
+wrote:
+>
+> When xsend() returns -1 (error), the check 'n < sizeof(buf)' incorrectly
+> treats it as success due to unsigned promotion. Explicitly check for -1
+> first.
+>
+> Fixes: a4b7193d8efd ("selftests/bpf: Add sockmap test for redirecting par=
+tial skb data")
+> Signed-off-by: wangfushuai <wangfushuai@baidu.com>
 
-Oh, huh.  The man page for execveat() says _Nullable but the headerfile
-says the opposite.
+Looks good, but please spell out your name as First Last
+in both From and Signed-off
 
-regards,
-dan carpenter
+Also use [PATCH bpf-next] in subject
 
-> > On Thu, Jun 05, 2025 at 05:41:01PM +0530, Naresh Kamboju wrote:
-> > > Regressions found on arm, arm64 and x86_64 building warnings with clang-20
-> > > and clang-nightly started from Linux next-20250603
-> > > 
-> > > Regressions found on arm, arm64 and x86_64
-> > >  - selftests/filesystem
-> > > 
-> > > Regression Analysis:
-> > >  - New regression? Yes
-> > >  - Reproducible? Yes
-> > > 
-> > > First seen on the next-20250603
-> > > Good: next-20250530
-> > > Bad:  next-20250603
-> > > 
-> > > Test regression: arm arm64 x86_64 clang warning null passed to a
-> > > callee that requires a non-null argument [-Wnonnull]
-> > > 
-> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > > 
-> > > ## Build warnings
-> > > make[4]: Entering directory '/builds/linux/tools/testing/selftests/filesystems'
-> > >   CC       devpts_pts
-> > >   CC       file_stressor
-> > >   CC       anon_inode_test
-> > > anon_inode_test.c:45:37: warning: null passed to a callee that
-> > > requires a non-null argument [-Wnonnull]
-> > >    45 |         ASSERT_LT(execveat(fd_context, "", NULL, NULL,
-> > > AT_EMPTY_PATH), 0);
-> > >       |                                            ^~~~
-> > > 
-> > > ## Source
-> > > * Kernel version: 6.15.0-next-20250605
-> > > * Git tree: https://kernel.googlesource.com/pub/scm/linux/kernel/git/next/linux-next.git
-> > > * Git sha: a0bea9e39035edc56a994630e6048c8a191a99d8
-> > > * Toolchain: Debian clang version 21.0.0
-> > > (++20250529012636+c474f8f2404d-1~exp1~20250529132821.1479)
-> > > 
-> > > ## Build
-> > > * Test log: https://qa-reports.linaro.org/api/testruns/28651387/log_file/
-> > > * Build link: https://storage.tuxsuite.com/public/linaro/lkft/builds/2xzM4wMl8SvuLKE3mw3csiuv3Jz/
-> > > * Kernel config:
-> > > https://storage.tuxsuite.com/public/linaro/lkft/builds/2xzM4wMl8SvuLKE3mw3csiuv3Jz/config
-> > > 
-> > > --
-> > > Linaro LKFT
-> > > https://lkft.linaro.org
+pw-bot: cr
+
+> ---
+>  tools/testing/selftests/bpf/prog_tests/sockmap_listen.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/to=
+ols/testing/selftests/bpf/prog_tests/sockmap_listen.c
+> index 1d98eee7a2c3..f1bdccc7e4e7 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+> @@ -924,6 +924,8 @@ static void redir_partial(int family, int sotype, int=
+ sock_map, int parser_map)
+>                 goto close;
+>
+>         n =3D xsend(c1, buf, sizeof(buf), 0);
+> +       if (n =3D=3D -1)
+> +               goto close;
+>         if (n < sizeof(buf))
+>                 FAIL("incomplete write");
+>
+> --
+> 2.36.1
+>
 
