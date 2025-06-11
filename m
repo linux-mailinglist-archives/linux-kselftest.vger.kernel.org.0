@@ -1,280 +1,260 @@
-Return-Path: <linux-kselftest+bounces-34642-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34643-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03B1AAD4C84
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 09:24:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AD31AD4D0E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 09:38:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 291151896494
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 07:24:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D63BB1BC115D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 07:38:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74B9B22D9E0;
-	Wed, 11 Jun 2025 07:24:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CC14231854;
+	Wed, 11 Jun 2025 07:38:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="memtE4D2"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ztIvbMWq";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="9TOXAu3T"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58F78A923;
-	Wed, 11 Jun 2025 07:24:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.21
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749626657; cv=fail; b=VnYOp3Ow1vENfVIcHkkBnxn0FEJxB2TA1fXxeFmNximvxAAm7D/o6hERezfIwE1nRC40P/fKxj6sF0t1ByDugIvsNWUSMIE1Y81BTGuV/wK58n72qv+PoZIlMSIp7R6iBXKj99M0qNeG87I7koE8OrvoScYB2czlGFbpb/MtiK0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749626657; c=relaxed/simple;
-	bh=P4n091rrB/i9vMIyjSVY+AhJ9DnEmI/hCMZvCeMDMK4=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=OomDjK6uLT+CQDNrqYnFlnSBlD5FPOAKdj8mnByaZ47Bm3EC0aA8zg4gvXF61crOyFEsmvVu397xV8smqkrUwjXZDRzMQIiP/llYDci6K2LcMQ/0H8JsMKvcMaIHRUuzXxQk9sTtG+51VdpJpSIvRBCe8/M9eZjeGlOHtRC+zU8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=memtE4D2; arc=fail smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749626656; x=1781162656;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=P4n091rrB/i9vMIyjSVY+AhJ9DnEmI/hCMZvCeMDMK4=;
-  b=memtE4D20nu4a39tqslTsz9s6us6HzzWyuT+oO6meC2zoxzmfAlO2DZp
-   1cw1PmvsLP5B5JIws/qixtuzI1uQBOLBtKBoPEmUKOMWyZgPxSH1TwbzP
-   TZDIlOU1iA9ucNZgzEAFUqCH0qRtzxbRNGSrF7KQ8Jr2Hz5NtpYp2Uy3F
-   mhQRsyg7KZY+p0MuooPHk8FL++nI8ndWuhy8fYs7RHKh+hoYjmmolnew+
-   NOzM087aYiEhf2FtJFyxK3eY1NGeMeWLb0BXTbFrSvzcVS4/S4CsGvCGo
-   IC6WnahrfRLlVnih3zjCf4jkSSJbjMG95WnxzZkHmzpQC7CVtCecqXPin
-   w==;
-X-CSE-ConnectionGUID: JzkBmtyqT2q2upllYtBriA==
-X-CSE-MsgGUID: c3Ga4M3MQ5mCkQd7D7RDtg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11460"; a="51618500"
-X-IronPort-AV: E=Sophos;i="6.16,227,1744095600"; 
-   d="scan'208";a="51618500"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2025 00:24:14 -0700
-X-CSE-ConnectionGUID: yGZEb1cJTHK6vKhuERV7wA==
-X-CSE-MsgGUID: 00EPSSk5TeqDM5aDFQcNiA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,227,1744095600"; 
-   d="scan'208";a="147589018"
-Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
-  by fmviesa010.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2025 00:24:13 -0700
-Received: from ORSMSX902.amr.corp.intel.com (10.22.229.24) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25; Wed, 11 Jun 2025 00:24:12 -0700
-Received: from ORSEDG902.ED.cps.intel.com (10.7.248.12) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25 via Frontend Transport; Wed, 11 Jun 2025 00:24:12 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (40.107.93.41) by
- edgegateway.intel.com (134.134.137.112) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25; Wed, 11 Jun 2025 00:24:12 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=y6DoLnSuviXnoJ+QH7W85w1MiN4v4end2UhTYm4eHrTbTNhSfCLMc4BwiR5Vbu0kFlyosC+vQC4p7IYTuBgAFtdpXja+D2g3ciH17k/6Tn4GsHwIinUc6n3oKJwKaU8AyAevf7PQ4aSDsexDGXgTtsM/hnVa7O1FOM8Sky9dVe5BMN+wzvOR7M4F7PjERB5Kk65nCSI38GRWvmpi8tA95FU8Ci3kK8A556Mrgx6ovdci2q6YEtsBqTgAcfVC0qumYfCgIyIrTzpfUFVsIQ+fSmIrM5tHPU50CqpmK/ZrLhllPAcQ4lIF27wifqOryWAmKZ6wC9n2EiZdhPcbXQiZ7w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+V5DD4e5su5WEQwb0Cktuc6w1kJVQUa56pfxuhdD0L8=;
- b=IqPt7Hpu3yCh7B1IHAUL7bLBeVkMC/dSwZACWhipAP2iDNDYVFA/0+VXePD/LY6bF7o4SR141EpTHOg0nkN+SlcVCjTm1e8x5WI9eSFkR7EAJ4iODn1iAslGwpMRr5URDTsOUuSELUCN5R596yfcJyGh482anid98q23LN3WhIINJ+x+Zb/FThiLAveVr4Skk23jisdo71X+ovKaCMO4T2yU+Kb+hJvTkdPuuNyMUBpogjPiCKyIS9ljJ3pCEifFQv1ALHhQ7dhC/uYWzSIGleE5Vf+bBk+eqASZiqJ7wNZuT8hwoqbffMF4mj8SPMd55cjo7MLf4x3+FrJIS7jvfQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from IA3PR11MB8986.namprd11.prod.outlook.com (2603:10b6:208:577::21)
- by MN6PR11MB8169.namprd11.prod.outlook.com (2603:10b6:208:47d::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8835.19; Wed, 11 Jun
- 2025 07:24:10 +0000
-Received: from IA3PR11MB8986.namprd11.prod.outlook.com
- ([fe80::395e:7a7f:e74c:5408]) by IA3PR11MB8986.namprd11.prod.outlook.com
- ([fe80::395e:7a7f:e74c:5408%7]) with mapi id 15.20.8769.022; Wed, 11 Jun 2025
- 07:24:10 +0000
-From: "Loktionov, Aleksandr" <aleksandr.loktionov@intel.com>
-To: Stanislav Fomichev <stfomichev@gmail.com>, "netdev@vger.kernel.org"
-	<netdev@vger.kernel.org>
-CC: "davem@davemloft.net" <davem@davemloft.net>, "edumazet@google.com"
-	<edumazet@google.com>, "kuba@kernel.org" <kuba@kernel.org>,
-	"pabeni@redhat.com" <pabeni@redhat.com>, "skalluru@marvell.com"
-	<skalluru@marvell.com>, "manishc@marvell.com" <manishc@marvell.com>,
-	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>, "michael.chan@broadcom.com"
-	<michael.chan@broadcom.com>, "pavan.chebbi@broadcom.com"
-	<pavan.chebbi@broadcom.com>, "ajit.khaparde@broadcom.com"
-	<ajit.khaparde@broadcom.com>, "sriharsha.basavapatna@broadcom.com"
-	<sriharsha.basavapatna@broadcom.com>, "somnath.kotur@broadcom.com"
-	<somnath.kotur@broadcom.com>, "Nguyen, Anthony L"
-	<anthony.l.nguyen@intel.com>, "Kitszel, Przemyslaw"
-	<przemyslaw.kitszel@intel.com>, "tariqt@nvidia.com" <tariqt@nvidia.com>,
-	"saeedm@nvidia.com" <saeedm@nvidia.com>, "louis.peens@corigine.com"
-	<louis.peens@corigine.com>, "shshaikh@marvell.com" <shshaikh@marvell.com>,
-	"GR-Linux-NIC-Dev@marvell.com" <GR-Linux-NIC-Dev@marvell.com>,
-	"ecree.xilinx@gmail.com" <ecree.xilinx@gmail.com>, "horms@kernel.org"
-	<horms@kernel.org>, "dsahern@kernel.org" <dsahern@kernel.org>,
-	"shuah@kernel.org" <shuah@kernel.org>, "ruanjinjie@huawei.com"
-	<ruanjinjie@huawei.com>, "mheib@redhat.com" <mheib@redhat.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-	"linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-	"oss-drivers@corigine.com" <oss-drivers@corigine.com>,
-	"linux-net-drivers@amd.com" <linux-net-drivers@amd.com>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"leon@kernel.org" <leon@kernel.org>
-Subject: RE: [Intel-wired-lan] [PATCH net-next v3 2/4] net: remove redundant
- ASSERT_RTNL() in queue setup functions
-Thread-Topic: [Intel-wired-lan] [PATCH net-next v3 2/4] net: remove redundant
- ASSERT_RTNL() in queue setup functions
-Thread-Index: AQHb2itimoBKcUg66EmM61zCFYDEQ7P9jtOg
-Date: Wed, 11 Jun 2025 07:24:10 +0000
-Message-ID: <IA3PR11MB89868956679C54BD4E291C2EE575A@IA3PR11MB8986.namprd11.prod.outlook.com>
-References: <20250610171522.2119030-1-stfomichev@gmail.com>
- <20250610171522.2119030-3-stfomichev@gmail.com>
-In-Reply-To: <20250610171522.2119030-3-stfomichev@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: IA3PR11MB8986:EE_|MN6PR11MB8169:EE_
-x-ms-office365-filtering-correlation-id: 5498af33-4dd1-4519-a26e-08dda8b8f592
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014|7053199007|38070700018;
-x-microsoft-antispam-message-info: =?us-ascii?Q?MYMK/pMF8vEZkJtvAvk+V6K2K819zR1D08VCionXXsM4aJ5izuCgTjWkWHly?=
- =?us-ascii?Q?lcioSoPXgtCw/WvXXhzfow2oROYaQmH4dRPI6IK9GYcknB/f1ukMibcXqb2j?=
- =?us-ascii?Q?EkpLsIRiqiTuPOiqVQRQQ3bVUJIfo1jaNsW85irWzoero7VlX5Y8H5NxHLR2?=
- =?us-ascii?Q?c/FaP11ML5WlV1DD7w9GsRJMwCOdQttWbO37KPPhj67CUUXNhUtZax0L0OZT?=
- =?us-ascii?Q?BUaReJzgbvcpc1cN/eKCEroNvLQnpstBCPJjPUnNpwKcBz9v8KVZAvMAKE3g?=
- =?us-ascii?Q?0RuGggtuSBU8TZbqeNHUZaB6L1VvL2PwEYlKb2OaT5wCY7hVXl/O0PNrINBz?=
- =?us-ascii?Q?IpcrG1ZVTjU+QjACbZLMK2FtppccGPxY5xDQQ2h2v//qac+z+Tgq7n3XBKEw?=
- =?us-ascii?Q?6pHuO8g9gDXiY/72DMczQADUNWG3luxQ3k8rK7ct+p1Dm+SBlKXjUUao1RlO?=
- =?us-ascii?Q?zQwLw69zwRwp8U+ZZFGPCZGfaB0h2DahgG2Te1H2EslgzrRahh5mg0upgZvZ?=
- =?us-ascii?Q?9/duVq3FnhkHtduBYYQHcSNUudjyxhcfcX9AA0cImFA6h10YIwAPzH91mbpL?=
- =?us-ascii?Q?aspNFKysBjkkBZbCnVraIYYM2P8MiylA9CVHnfu+p3WzdD6CkpIoKDfmpICN?=
- =?us-ascii?Q?rfUfOzW3Pj8wiIQ1l1UTlOSRSpWSko39PoRXWFhpanib2gUGivxHuNQpACeW?=
- =?us-ascii?Q?t9jDLF6S+Q7WGcg4iXEbfladeFkpiiHaejsg3UO4yJMhsxQpF5KJXNG/PlEl?=
- =?us-ascii?Q?ZInHgmg74S2LxG6P1EAlaH3OEnSPlNCD2wkweySSBa1OnrAC22Ih7HCCPMnC?=
- =?us-ascii?Q?b/NbFqz3RYZnJ+X4dlOvQt3SwUBK4PdhcIs7/O/Vf6SMg6hFWRvWiosOu6eh?=
- =?us-ascii?Q?y3Tcz7TGqaLTke0qJHHUs6xoUY3GBKBM+FAAwnNj29sP7bHZ2o7ZXdhQT7IW?=
- =?us-ascii?Q?VqPs0GNvKK6ONximiYxFLfN8h/jckuesNB6HIV2dl+rVloHWWHLhihpPTF1x?=
- =?us-ascii?Q?9TwghEEdaT1+cMDnP7vKVLALLLduBS7hNsG6QRCSD3UxoBdHQ6rpsQnfwIRo?=
- =?us-ascii?Q?dZn3VG9sQyWzBsoM/IXHTXEhO+/DjIFAiBScOZVapdT0FPn7DxkAWIIu+G+M?=
- =?us-ascii?Q?76b155CJunw7QB2ZIiuyjTw2CAIDVd37uvzEUgNLx1S36iGeVRhuRVW/V6Hl?=
- =?us-ascii?Q?XwlbBiD9twuY/EpCaIG5/vPUBxdlEiZT3SB1W17L1yIPwRGYc7x7Z/7TGttM?=
- =?us-ascii?Q?XY8CJ7j2PYBwLpikqHSMtCOiBD1Br+aqEj+X5FclDLdBSxDAMbOvAtvOiaol?=
- =?us-ascii?Q?we+nfxoTWvyPNTYP9N2NnE5+eHUz7oj/dLgA/cFAZRdHSc+brul0iyJ0WWBX?=
- =?us-ascii?Q?4upNB7FIMhmUE7Kn8WKqnqJlM4SnNmMMbh7ymP8COj+xcS7JieLM1xDvy3ig?=
- =?us-ascii?Q?hB5MDyUflXaKQsLeoG/RvtA7x/tbFMlPxwN83bfstykjPR1mGS3agw=3D=3D?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA3PR11MB8986.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(7053199007)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?YTnP0AcLfLJd/7jX6aUnlebRo4C9HEO+ch2nzhQoKlhHckiaEPoW0UQ9AXEg?=
- =?us-ascii?Q?OGFYogrKN5eB+O2TV+GgKHwhAdfA2fGM81nSDnK2NudTf6R7FK+f0nM0AKQU?=
- =?us-ascii?Q?VCVzdkdw7tbLqxgFJXnHScwbclNKtycUTj793++M9G4dG/SCt6ozYo1X2vzy?=
- =?us-ascii?Q?MzwZNxKw8T9wCD7ImIiTGhORgBk6+6AuUGAsJe+NAkSZbqAiSlr8lgaX0jzo?=
- =?us-ascii?Q?zpA5STx78MuVZEzym/123M7imn/FbAdbt0bGGicfSmfHcmmffffZtzoi2iIC?=
- =?us-ascii?Q?VRBDt3npZ+Qp9xuML0wWAWUzOh5KXY9SQgMq4yfJaC1NigyxQ+EW/pLdZsq6?=
- =?us-ascii?Q?RXFh1FAKkjwLPwT+9pFUr8siky87pgYr6f4y7ir1SqSLdkXcmOfCiWHazT6j?=
- =?us-ascii?Q?Yp8y79mlIbiqnGSVMM3CAQ5xPuq4il0A+tT/A71fLnlp0SEvpB9oew3PrTg7?=
- =?us-ascii?Q?Ga7zTOJghE4F5aI7/NtjKfEmba1utDY/hCDNm3Ofpph38j4lrHV/1917yT+L?=
- =?us-ascii?Q?PYY4dqLOIJIBvioqY1KX2vfdGzul8HLGKI/jUyWyLcVemCfL6ORQcgeprTrF?=
- =?us-ascii?Q?+MD9QpEpYcAf638iHrVQYNwszJ34zFLDAMPgIKEJ9sCjR+YIoAr7zHyMKnBD?=
- =?us-ascii?Q?ess4HF94O5iMML8BUboALz+OjUomVXR1t5dTZSKdNLekOi2+9jcKHW4cwWhu?=
- =?us-ascii?Q?8QIPG5elYu5e8erkJt9IrJoKhYKk3M4pBSDu0np6VvThmtLv69exTln4FhRg?=
- =?us-ascii?Q?bzZUGJCel/4XPiBTimd4zK7Px3HbwTgp+6rtzp4+jzYje3J3+pvJZcoS/l1P?=
- =?us-ascii?Q?aEpsxBbDB7A71r9UfxjFuiEMofx2HHZIY86yvWhdGiefbxSA5nOXtAs1fbi+?=
- =?us-ascii?Q?8rD4bymsdvcCSTwr8xi+UvLKXN8SWm388xoO/mVLDAlwJgWFCPWRMFxKxKbr?=
- =?us-ascii?Q?wQxRqQPMUffEwiuI5ILFKUycQQJnfRCUtT8rK6hfUlDOXy3mC6Bw+yodA07c?=
- =?us-ascii?Q?2jFHbogWKGnq6l+rvjYSEcq9qX9mK5GGhZso9mSMHVF5EpRwUpvKzDI3iUl5?=
- =?us-ascii?Q?KSVq+ZJ2G4a+u4F8egly+Iz8T/pQR6kYDsSY1jqSxfGWvGnHF+dvkIHYNgzS?=
- =?us-ascii?Q?+3SOIwK1E4OymNpqrOl8b47M3sb7Uqru7E418noprMNKQtseDdQyW3zdW8os?=
- =?us-ascii?Q?s4fFPx9KEesP0MmFW4PV18DTxcYrtEc4ldkVvg0LtUmFWcgTJvbATCsCtvIF?=
- =?us-ascii?Q?mMy8VP6peq8/qX6dGA3FLRyjissD6+BlMbScBhNric9WBhQuNlMkCUFSr2Uj?=
- =?us-ascii?Q?zj+HIHHO51Z18Z2WwWYaZQbWy1pfrMzvtZTgZtBSajIVZMKfiU5lI4kf/17B?=
- =?us-ascii?Q?y5Q5qQ8ShOUOyrudfoRKwq7cHS61i5zaVcea3aTD7NVDyEShPWuQAphSAwiz?=
- =?us-ascii?Q?TKT1R+NOVFd/hT0jfPNuVZy/h/Qc7CZF1m2ArwDAyAdLX/xMxp7d245hbXcH?=
- =?us-ascii?Q?hDNIcXdaq1mmdjkxljjvHM7AdDD5wMkgmwVI+3rcz/la6kU4EZh6YSWMDxwt?=
- =?us-ascii?Q?iAMmFnQntKPYlmBIZzx0Z0n/yFDeVYYLrPGja+zEQX8tvzJy/f31g91zUZyX?=
- =?us-ascii?Q?/Q=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C83A2206BE;
+	Wed, 11 Jun 2025 07:38:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1749627514; cv=none; b=p6wQG3OCH1gMuLQPxMfUvGa590OBLAKHgJRcVTAJhQXmRWSUoUPNmRKPAoUGMFp29taz9E/zO+JbuF1F6l7bQUfo8IwSvOi1nwk2T/j+vDD/ElvqAIrX1egYEajhvc3ZtlK4sK9IU4+peSZQrzs9WQKqCGv5p9xCc0Bm0F0kV6E=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1749627514; c=relaxed/simple;
+	bh=6UMiXcyoIq9M4FKEOo43nM5aQWsXH6QWlxEFJpS01j4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=pvNjKDwsDYmlRGQiXDiZDzDN1qxf2yZp4heN2a1jIzm/UdKY27XFe8xfdkCmicQiqMfyryd15wVN9UkvAKbtde4PrZE6qhby6CjvW5LGGb4oMn+qaNh6JoKhINtufVcFGmktSvh6W5L6+hj7LkgA4Gx4fskU56jYA9M9jxWboTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ztIvbMWq; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=9TOXAu3T; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1749627510;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=8zSLyZYo3ihzjC5JPibnrIQcHyWB1lKmlNba6ZPoZzI=;
+	b=ztIvbMWqVWSgNjkbrJXoKdI7hUTZHor6f97gBCi+H/iLxBYg6JO5/BI+B9zcvIxRoLLOPX
+	T2Y1WucFoQST4fiqptCky6bLHPiI8E0NbFHetjwuMDWTdJZZwdmKynlkOW48xg717w+SSO
+	e8aOiFRHgVpaArBdBObvDiAsFEiS++JST7XvcQk47x9zVLgiWFB+e4kfm9NXuFDxQuu2uW
+	9q7ChHh7VRWwY1fXeH5hhw7h+WPSlwCsgoPh9/nLnuiFhI3DvBqRJqbAugrRop9qZL2OOx
+	YHCsUkG2Z4iHUcZuMNgwzoVMO+GzxY+IDLFVKJMN549xFv9beiqoeMPm52i6Gg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1749627510;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=8zSLyZYo3ihzjC5JPibnrIQcHyWB1lKmlNba6ZPoZzI=;
+	b=9TOXAu3TR8e8oxSGMK/Ns27pNDTHuN31oWDLNtT93C0RhlkuzZlo2KJQF2HU70uk+Sk6og
+	5xG+toq8rpm3sgDQ==
+Subject: [PATCH v3 00/16] kunit: Introduce UAPI testing framework
+Date: Wed, 11 Jun 2025 09:38:06 +0200
+Message-Id: <20250611-kunit-kselftests-v3-0-55e3d148cbc6@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: IA3PR11MB8986.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5498af33-4dd1-4519-a26e-08dda8b8f592
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jun 2025 07:24:10.3869
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: HtT2zYwuvUcHjBWJigaYFK9Lma1rDUDg8jOamHODo1TTfcXRwKI2cZMjDOwvjaJMIbkDiz6FOuzATyE7Qgy9TH+doA6MpZU3KgAGXu+fJ4Y=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR11MB8169
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAF4ySWgC/3WOzQrCMBAGX0VyNpJsNlY8+R7ioT9buyipJGmpl
+ L67TRGEqsdZmNlvFIE8UxDHzSg89Ry4dTOY7UaUTe6uJLmaWYAC1EpbeescR3kLdK8jhRik3UN
+ mihIVIohZe3iqeViS58vMDYfY+ufyodfpmmJWgTbfsV5LJfPCZOZQ2dxqOt3ZddG3joddRan/l
+ rM/MkKBFrA0hcpXclrTw2cBql8RSBGLWiPBIaurdWSaphdQFecDNgEAAA==
+X-Change-ID: 20241015-kunit-kselftests-56273bc40442
+To: Masahiro Yamada <masahiroy@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+ Brendan Higgins <brendan.higgins@linux.dev>, 
+ David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
+ Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+ Nicolas Schier <nicolas.schier@linux.dev>, 
+ Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Alexandre Ghiti <alex@ghiti.fr>, Nicolas Schier <nicolas.schier@linux.dev>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>, 
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+ linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org, 
+ workflows@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
+ Nicolas Schier <nicolas.schier@linux.dev>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1749627510; l=7808;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=6UMiXcyoIq9M4FKEOo43nM5aQWsXH6QWlxEFJpS01j4=;
+ b=18VMEmLrljDcRsOhGwao/W03s2JLnOkTRGlPyVZ2UXmujK255AvlJ9B3925MhMULIPUW4p0IV
+ /2I5SrvLM4wD37E6h3AQ96/aSnhCRr/PmR9v2JjFVANaPos3sCpuTZf
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
+Currently testing of userspace and in-kernel API use two different
+frameworks. kselftests for the userspace ones and Kunit for the
+in-kernel ones. Besides their different scopes, both have different
+strengths and limitations:
 
+Kunit:
+* Tests are normal kernel code.
+* They use the regular kernel toolchain.
+* They can be packaged and distributed as modules conveniently.
 
-> -----Original Message-----
-> From: Intel-wired-lan <intel-wired-lan-bounces@osuosl.org> On Behalf
-> Of Stanislav Fomichev
-> Sent: Tuesday, June 10, 2025 7:15 PM
-> To: netdev@vger.kernel.org
-> Cc: davem@davemloft.net; edumazet@google.com; kuba@kernel.org;
-> pabeni@redhat.com; skalluru@marvell.com; manishc@marvell.com;
-> andrew+netdev@lunn.ch; michael.chan@broadcom.com;
-> pavan.chebbi@broadcom.com; ajit.khaparde@broadcom.com;
-> sriharsha.basavapatna@broadcom.com; somnath.kotur@broadcom.com;
-> Nguyen, Anthony L <anthony.l.nguyen@intel.com>; Kitszel, Przemyslaw
-> <przemyslaw.kitszel@intel.com>; tariqt@nvidia.com; saeedm@nvidia.com;
-> louis.peens@corigine.com; shshaikh@marvell.com; GR-Linux-NIC-
-> Dev@marvell.com; ecree.xilinx@gmail.com; horms@kernel.org;
-> dsahern@kernel.org; shuah@kernel.org; ruanjinjie@huawei.com;
-> mheib@redhat.com; stfomichev@gmail.com; linux-kernel@vger.kernel.org;
-> intel-wired-lan@lists.osuosl.org; linux-rdma@vger.kernel.org; oss-
-> drivers@corigine.com; linux-net-drivers@amd.com; linux-
-> kselftest@vger.kernel.org; leon@kernel.org
-> Subject: [Intel-wired-lan] [PATCH net-next v3 2/4] net: remove
-> redundant ASSERT_RTNL() in queue setup functions
->=20
-> The existing netdev_ops_assert_locked() already asserts that either
-> the RTNL lock or the per-device lock is held, making the explicit
-> ASSERT_RTNL() redundant.
->=20
-> Cc: Michael Chan <michael.chan@broadcom.com>
-> Signed-off-by: Stanislav Fomichev <stfomichev@gmail.com>
-Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
+Kselftests:
+* Tests are normal userspace code
+* They need a userspace toolchain.
+  A kernel cross toolchain is likely not enough.
+* A fair amout of userland is required to run the tests,
+  which means a full distro or handcrafted rootfs.
+* There is no way to conveniently package and run kselftests with a
+  given kernel image.
+* The kselftests makefiles are not as powerful as regular kbuild.
+  For example they are missing proper header dependency tracking or more
+  complex compiler option modifications.
 
-> ---
->  net/core/dev.c | 2 --
->  1 file changed, 2 deletions(-)
->=20
-> diff --git a/net/core/dev.c b/net/core/dev.c index
-> be97c440ecd5..72997636b8ec 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -3179,7 +3179,6 @@ int netif_set_real_num_tx_queues(struct
-> net_device *dev, unsigned int txq)
->=20
->  	if (dev->reg_state =3D=3D NETREG_REGISTERED ||
->  	    dev->reg_state =3D=3D NETREG_UNREGISTERING) {
-> -		ASSERT_RTNL();
->  		netdev_ops_assert_locked(dev);
->=20
->  		rc =3D netdev_queue_update_kobjects(dev, dev-
-> >real_num_tx_queues, @@ -3229,7 +3228,6 @@ int
-> netif_set_real_num_rx_queues(struct net_device *dev, unsigned int rxq)
->  		return -EINVAL;
->=20
->  	if (dev->reg_state =3D=3D NETREG_REGISTERED) {
-> -		ASSERT_RTNL();
->  		netdev_ops_assert_locked(dev);
->=20
->  		rc =3D net_rx_queue_update_kobjects(dev, dev-
-> >real_num_rx_queues,
-> --
-> 2.49.0
+Therefore kunit is much easier to run against different kernel
+configurations and architectures.
+This series aims to combine kselftests and kunit, avoiding both their
+limitations. It works by compiling the userspace kselftests as part of
+the regular kernel build, embedding them into the kunit kernel or module
+and executing them from there. If the kernel toolchain is not fit to
+produce userspace because of a missing libc, the kernel's own nolibc can
+be used instead.
+The structured TAP output from the kselftest is integrated into the
+kunit KTAP output transparently, the kunit parser can parse the combined
+logs together.
+
+Further room for improvements:
+* Call each test in its completely dedicated namespace
+* Handle additional test files besides the test executable through
+  archives. CPIO, cramfs, etc.
+* Compatibility with kselftest_harness.h (in progress)
+* Expose the blobs in debugfs
+* Provide some convience wrappers around compat userprogs
+* Figure out a migration path/coexistence solution for
+  kunit UAPI and tools/testing/selftests/
+
+Output from the kunit example testcase, note the output of
+"example_uapi_tests".
+
+$ ./tools/testing/kunit/kunit.py run --kunitconfig lib/kunit example
+...
+Running tests with:
+$ .kunit/linux kunit.filter_glob=example kunit.enable=1 mem=1G console=tty kunit_shutdown=halt
+[11:53:53] ================== example (10 subtests) ===================
+[11:53:53] [PASSED] example_simple_test
+[11:53:53] [SKIPPED] example_skip_test
+[11:53:53] [SKIPPED] example_mark_skipped_test
+[11:53:53] [PASSED] example_all_expect_macros_test
+[11:53:53] [PASSED] example_static_stub_test
+[11:53:53] [PASSED] example_static_stub_using_fn_ptr_test
+[11:53:53] [PASSED] example_priv_test
+[11:53:53] =================== example_params_test  ===================
+[11:53:53] [SKIPPED] example value 3
+[11:53:53] [PASSED] example value 2
+[11:53:53] [PASSED] example value 1
+[11:53:53] [SKIPPED] example value 0
+[11:53:53] =============== [PASSED] example_params_test ===============
+[11:53:53] [PASSED] example_slow_test
+[11:53:53] ======================= (4 subtests) =======================
+[11:53:53] [PASSED] procfs
+[11:53:53] [PASSED] userspace test 2
+[11:53:53] [SKIPPED] userspace test 3: some reason
+[11:53:53] [PASSED] userspace test 4
+[11:53:53] ================ [PASSED] example_uapi_test ================
+[11:53:53] ===================== [PASSED] example =====================
+[11:53:53] ============================================================
+[11:53:53] Testing complete. Ran 16 tests: passed: 11, skipped: 5
+[11:53:53] Elapsed time: 67.543s total, 1.823s configuring, 65.655s building, 0.058s running
+
+Based on v6.15-rc1.
+
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+Changes in v3:
+- Reintroduce CONFIG_CC_CAN_LINK_STATIC
+- Enable CONFIG_ARCH_HAS_NOLIBC for m68k and SPARC
+- Properly handle 'clean' target for userprogs
+- Use ramfs over tmpfs to reduce dependencies
+- Inherit userprogs byte order and ABI from kernel
+- Drop now unnecessary "#ifndef NOLIBC"
+- Pick up review tags
+- Drop usage of __private in blob.h,
+  sparse complains and it is not really necessary
+- Fix execution on loongarch when using clang
+- Drop userprogs libgcc handling, it was ugly and is not yet necessary
+- Link to v2: https://lore.kernel.org/r/20250407-kunit-kselftests-v2-0-454114e287fd@linutronix.de
+
+Changes in v2:
+- Rebase onto v6.15-rc1
+- Add documentation and kernel docs
+- Resolve invalid kconfig breakages
+- Drop already applied patch "kbuild: implement CONFIG_HEADERS_INSTALL for Usermode Linux"
+- Drop userprogs CONFIG_WERROR integration, it doesn't need to be part of this series
+- Replace patch prefix "kconfig" with "kbuild"
+- Rename kunit_uapi_run_executable() to kunit_uapi_run_kselftest()
+- Generate private, conflict-free symbols in the blob framework
+- Handle kselftest exit codes
+- Handle SIGABRT
+- Forward output also to kunit debugfs log
+- Install a fd=0 stdin filedescriptor
+- Link to v1: https://lore.kernel.org/r/20250217-kunit-kselftests-v1-0-42b4524c3b0a@linutronix.de
+
+---
+Thomas Weißschuh (16):
+      kbuild: userprogs: avoid duplicating of flags inherited from kernel
+      kbuild: userprogs: also inherit byte order and ABI from kernel
+      init: re-add CONFIG_CC_CAN_LINK_STATIC
+      kbuild: userprogs: add nolibc support
+      kbuild: introduce CONFIG_ARCH_HAS_NOLIBC
+      kbuild: doc: add label for userprogs section
+      kbuild: introduce blob framework
+      kunit: tool: Add test for nested test result reporting
+      kunit: tool: Don't overwrite test status based on subtest counts
+      kunit: tool: Parse skipped tests from kselftest.h
+      kunit: Always descend into kunit directory during build
+      kunit: qemu_configs: loongarch: Enable LSX/LSAX
+      kunit: Introduce UAPI testing framework
+      kunit: uapi: Add example for UAPI tests
+      kunit: uapi: Introduce preinit executable
+      kunit: uapi: Validate usability of /proc
+
+ Documentation/dev-tools/kunit/api/index.rst        |   5 +
+ Documentation/dev-tools/kunit/api/uapi.rst         |  12 +
+ Documentation/kbuild/makefiles.rst                 |  38 ++-
+ MAINTAINERS                                        |   2 +
+ Makefile                                           |   7 +-
+ include/kunit/uapi.h                               |  24 ++
+ include/linux/blob.h                               |  31 +++
+ init/Kconfig                                       |   7 +
+ lib/Makefile                                       |   4 -
+ lib/kunit/Kconfig                                  |  10 +
+ lib/kunit/Makefile                                 |  20 +-
+ lib/kunit/kunit-example-test.c                     |  15 ++
+ lib/kunit/kunit-example-uapi.c                     |  54 ++++
+ lib/kunit/uapi-preinit.c                           |  63 +++++
+ lib/kunit/uapi.c                                   | 294 +++++++++++++++++++++
+ scripts/Makefile.blobs                             |  19 ++
+ scripts/Makefile.build                             |   6 +
+ scripts/Makefile.clean                             |   2 +-
+ scripts/Makefile.userprogs                         |  13 +-
+ scripts/blob-wrap.c                                |  27 ++
+ tools/include/nolibc/Kconfig.nolibc                |  15 ++
+ tools/testing/kunit/kunit_parser.py                |  13 +-
+ tools/testing/kunit/kunit_tool_test.py             |   9 +
+ tools/testing/kunit/qemu_configs/loongarch.py      |   2 +
+ .../test_is_test_passed-failure-nested.log         |  10 +
+ .../test_data/test_is_test_passed-kselftest.log    |   3 +-
+ 26 files changed, 686 insertions(+), 19 deletions(-)
+---
+base-commit: f07a3558c4a5d76f3fea004075e5151c4516d055
+change-id: 20241015-kunit-kselftests-56273bc40442
+
+Best regards,
+-- 
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 
 
