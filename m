@@ -1,72 +1,70 @@
-Return-Path: <linux-kselftest+bounces-34761-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34762-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9139AD60F2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 23:17:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 317EDAD60F5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 23:17:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 799CC3AB194
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 21:17:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 022F51BC2956
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 21:18:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2616A1C8632;
-	Wed, 11 Jun 2025 21:17:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE20E247DE1;
+	Wed, 11 Jun 2025 21:17:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cm1llxK3"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qZ+shGyL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F15C2441A0
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Jun 2025 21:16:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5055D246797
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Jun 2025 21:17:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749676621; cv=none; b=mYCVlNq1DDj1o7hxWN/2IBe2ffuUofI/JaryrCtL/wna2kTgvlAQ0TyStfDsqKFsG+GIiEKmKpwmkD7foFfdtXSf3PqeJ5wdMY/nIOJ/lf8zIqa2eCS4WN7qmZZuattKdG3uFkA6lfQFtDcM1HdIuPyFrgwJI4RKBNmW1Kg70co=
+	t=1749676622; cv=none; b=TlW4ssVPhFfT1oLJ46CG7DnRUz/9f5chnWHxzlLzJ0ENKHs17wa5VZwGX4ePBrvNX5yzV2CpIe8NDLiD+KUDGKh6EjU/WXFzSoBFf7fp04py1opZ4zLqfffF8DWce+C+hA3ZUQRZ7vPgpd/jn1kB1NHUWzilDq+DVu/2HLX4s2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749676621; c=relaxed/simple;
-	bh=b4VA2RGdpApRaSDkLmIRrxzmznFdKL/sDPXrbgY9dp8=;
+	s=arc-20240116; t=1749676622; c=relaxed/simple;
+	bh=EliRXJasvagyPsAst5/DK5fV9+Nz9GPWmMU52maUMAU=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=j4QYeJPk+S31B2lkeeDneAHFp0nuaio14o9b+PlSFyXw9ujpjiWsbcbTEk76CD2dXsTweeVlrPf4ASo90v0Kpe1YRWEwqLJnoyZGz3nAgmr8lM8mGUQISRbqHZn3RYDobegl7kF6N+XsrDIWXIMR6zpxwVSuxw1qW613MpuaU/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--afranji.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cm1llxK3; arc=none smtp.client-ip=209.85.215.202
+	 To:Cc:Content-Type; b=aR+Y1aujjI1l1qyCrjPIXMKut2WTQOoLdy8pDaw3xs1OzC81XzaL9RjzHxLLNdTPGqBSXJIXbmtqOY0Ko6jKmArvnN7TUpBzwtPqf7keIPHIJT0Nhzrl5larldInA0ymvEsnLsMU4X+SZgCMXZA+YVK3VZ+RhAnnPmIOwL8hPg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--afranji.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qZ+shGyL; arc=none smtp.client-ip=209.85.210.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--afranji.bounces.google.com
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-b2fa1a84568so128094a12.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Jun 2025 14:16:59 -0700 (PDT)
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-747d394f45fso216532b3a.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Jun 2025 14:17:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1749676619; x=1750281419; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zir2Z2BYD9TVMhA71zOuRqts4XDUJGWDctYBYtUWNnI=;
-        b=cm1llxK3nvYST9jiAVqkkidlRCmrAXeSYqwy5PPrNaWKYbh+8JqYpvcGN3lgsTf/Wc
-         ozOIWGOnoc3hfQTF0B6lXe3+itn5k30LD3dLFa4w4HfC5LGDLbWXOVRs+IXdnlE1Z98Q
-         mJ6ntD92WvBTZ/ut1U/0QlZcolXoKaZa8e641SZ+cebYF2uEvRFg7j2FaC4+JXDpMKbp
-         HBqnC5tMXLi16unbvBxg/+CzaOhV09X5+Or0itEx7ufRKimATNBtoHrmhh7F+viWJSz8
-         FrO+aSNBa/wQGiIXEyLzUIFtM3fVraFwQk2o3P65osGSVPAnfM3WFKUENx0utPSoZV5j
-         flYw==
+        d=google.com; s=20230601; t=1749676620; x=1750281420; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=sBfca3HTQRqrJJwA201rhl29YEXxOvfPcejKdAe4i9w=;
+        b=qZ+shGyLSQDl3spdrL0FFV3vW8iGhGw1Z4h2wPqXxeuGsCLcQ83MZ8ue9g2j+X11kA
+         z4f2FeAxrBjXCuL4LI1Kg1+KYbESqQMmvL8jLkkPTxWAR6ZW2Q6/UnkSxArJMqajDHyt
+         9qus/WWX/IdL0fyCnsrbg2U6v746JoU7MwQ1wurBfJP2vMY73ehVDrAeJPPXN6dQfK5k
+         Nn+FGefxQTSUJWI4TZuMcNKTV/94VEbZ8wG9wIpFGIO5prdLP8gGGVIB5j5cOWTLUBkU
+         GvIRC8K0EkDvz5yImlGoUJLt0rIqKbN7g3XXsS4ZnaaVHbvFTSVZ+nNRiZ1Sf6avuKPa
+         JutA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749676619; x=1750281419;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=zir2Z2BYD9TVMhA71zOuRqts4XDUJGWDctYBYtUWNnI=;
-        b=kt4tg4s3qfdZf5Na8QgFVGF9cV+jX/MAYfbJokN0SkjmYBU9qHo939jBFsDU8Eb69V
-         h2QeYepeuPu7InEBaSUpQQ0JIbD3WSohRkUMWcTmy5FGZWTpiZYHVeDbjDl/LRZIfEw+
-         IiEbKiW/EzzVfQqJld/yX8TqYZy4A0nTxJ7WlFgXQhcueT5XDCkd6BPA7uukR/1WGJxp
-         GDUGW7nZhQRF+lyeNGCabS1HvFfT5ISsfkGRfyn1i7/b8qQgtayIBcSMhnVQXIvdIcmI
-         TEzw07Y2c5A1hYdevklXxWzLpqch+fS9irYVfZl5MGtx4CCXPQfIcOizhZM1auJ2ZrwR
-         L5Hw==
-X-Forwarded-Encrypted: i=1; AJvYcCXxhqHsMYPB0QnHkQMQ2sFNJbvJvQAOLkQj+GR4/z6KQY7tZ/o8kIylWn42c1PDiNDZXZkOMwn00KsaLJHSfts=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzMhSoyWwsNDhz0kcerrw6GmO5r32JE4C0BLmRwzpyT3nxHHxMR
-	9d5wC195ni+VESgqEdyhnfYyVzwe7QcrydxZ4njiKk/JPizf2Nh6ii8CR+LxutYVd8n1d2iWVz6
-	r0/cfhGU3ng==
-X-Google-Smtp-Source: AGHT+IFEdzwI0hLX7jOjgrsvuEtZ1pf59QC5BkheGfaBuI5bKPz0+MMRvkX5eBM8K7fT56stpLxx97K0L1P1
-X-Received: from pjbof7.prod.google.com ([2002:a17:90b:39c7:b0:312:e5dd:9248])
- (user=afranji job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:5866:b0:311:b5ac:6f7d
- with SMTP id 98e67ed59e1d1-313bfd90b31mr1285824a91.6.1749676618837; Wed, 11
- Jun 2025 14:16:58 -0700 (PDT)
-Date: Wed, 11 Jun 2025 21:16:29 +0000
+        d=1e100.net; s=20230601; t=1749676620; x=1750281420;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sBfca3HTQRqrJJwA201rhl29YEXxOvfPcejKdAe4i9w=;
+        b=QDlSIDt4CDkun555RIxJsXpRgBtm/7iVeS99QuEnlPQCpaoxs3ftrQGHDE/5et9/Ez
+         yvnHm51osg7u+I+Jq54S6JTi40K5UOOZ5eMCQxEbPycgAkRyL7qo3bMvuuywzkgtJbpm
+         l+33zeVQLwTnL5+kGjxZyJPWdtlptq6MuRCcdi3xDaqc3wFdzmdgXXK4L0R3oiHvL5Ry
+         pH46qCw46fJHmEeQm+eIs5huUM0Co6hYuvDRo/Ad9ytxzoLeDNKI/h1Dth3bTKuzI2NG
+         RwoLw4ZoHWV37MppTrG9h82bjcTuGFeurq3EJIm06UvDzuc/denS/b4VcffEzOhdG6Up
+         CebA==
+X-Forwarded-Encrypted: i=1; AJvYcCUOdua2at7JkIFm/3Ddwr4XL09e94yNaM8uDm6lus4uIaO/j4NGCzq+aSO+w0AdTBqQ4wuMSiHKtROLVubxoJs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YylGk5SWlFTUCWG4A1yUNCBWn0vrEtPI0265BqjSreP63LBJWDr
+	cSE30b0BmgP4NChiWMWePW1kAyrvu6SrOmn7EovuYZ+TvKV0rwWPbzfcRHzx9oGg1Neb4BaPTsr
+	/gNHB1D3sAQ==
+X-Google-Smtp-Source: AGHT+IEwt8NGYhwzS0nUmHsR7Wm0KUS2I53PheVpr9xT2i86QWOhPPHtzrsha444DVNmTlDTkv6MnyHBFveF
+X-Received: from pfblm9.prod.google.com ([2002:a05:6a00:3c89:b0:746:3244:f1e6])
+ (user=afranji job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:194b:b0:748:3485:b99d
+ with SMTP id d2e1a72fcca58-7487c338367mr1420302b3a.18.1749676620423; Wed, 11
+ Jun 2025 14:17:00 -0700 (PDT)
+Date: Wed, 11 Jun 2025 21:16:30 +0000
 In-Reply-To: <cover.1749672978.git.afranji@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -76,8 +74,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <cover.1749672978.git.afranji@google.com>
 X-Mailer: git-send-email 2.50.0.rc1.591.g9c95f17f64-goog
-Message-ID: <ee22d844512a828dc5285a93676699d1aca0e0ed.1749672978.git.afranji@google.com>
-Subject: [RFC PATCH v2 02/10] KVM: x86: Adjust locking order in move_enc_context_from
+Message-ID: <c55644ec81c22e7239d52f97e744eb4bafeccac3.1749672978.git.afranji@google.com>
+Subject: [RFC PATCH v2 03/10] KVM: TDX: Add base implementation for tdx_vm_move_enc_context_from
 From: Ryan Afranji <afranji@google.com>
 To: kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org
 Cc: sagis@google.com, bp@alien8.de, chao.p.peng@linux.intel.com, 
@@ -90,94 +88,101 @@ Cc: sagis@google.com, bp@alien8.de, chao.p.peng@linux.intel.com,
 	yan.y.zhao@intel.com, rick.p.edgecombe@intel.com, 
 	Ryan Afranji <afranji@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Previously, the order for acquiring the locks required for the migration
-function move_enc_context_from() was: 1) memslot lock 2) vCPU lock. This
-can trigger a deadlock warning because a vCPU IOCTL modifying memslots
-will acquire the locks in reverse order: 1) vCPU lock 2) memslot lock.
+From: Sagi Shahar <sagis@google.com>
 
-This patch adjusts move_enc_context_from() to match vCPU IOCTL=E2=80=99s lo=
-cking
-order to prevent deadlock warnings.
+This should mostly match the logic in sev_vm_move_enc_context_from.
 
+Signed-off-by: Sagi Shahar <sagis@google.com>
 Signed-off-by: Ryan Afranji <afranji@google.com>
 ---
- arch/x86/kvm/svm/sev.c | 13 +------------
- arch/x86/kvm/x86.c     | 14 +++++++++++++-
- 2 files changed, 14 insertions(+), 13 deletions(-)
+ arch/x86/kvm/vmx/main.c    | 12 +++++++++++-
+ arch/x86/kvm/vmx/tdx.c     | 24 ++++++++++++++++++++++++
+ arch/x86/kvm/vmx/x86_ops.h |  1 +
+ 3 files changed, 36 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-index 402543994b0b..380d5951f8dd 100644
---- a/arch/x86/kvm/svm/sev.c
-+++ b/arch/x86/kvm/svm/sev.c
-@@ -1961,26 +1961,15 @@ int sev_vm_move_enc_context_from(struct kvm *kvm, s=
-truct kvm *source_kvm)
- 		charged =3D true;
- 	}
-=20
--	ret =3D kvm_lock_all_vcpus(kvm);
--	if (ret)
--		goto out_dst_cgroup;
--	ret =3D kvm_lock_all_vcpus(source_kvm);
--	if (ret)
--		goto out_dst_vcpu;
--
- 	ret =3D sev_check_source_vcpus(kvm, source_kvm);
- 	if (ret)
--		goto out_source_vcpu;
-+		goto out_dst_cgroup;
-=20
- 	sev_migrate_from(kvm, source_kvm);
- 	kvm_vm_dead(source_kvm);
- 	cg_cleanup_sev =3D src_sev;
- 	ret =3D 0;
-=20
--out_source_vcpu:
--	kvm_unlock_all_vcpus(source_kvm);
--out_dst_vcpu:
--	kvm_unlock_all_vcpus(kvm);
- out_dst_cgroup:
- 	/* Operates on the source on success, on the destination on failure.  */
- 	if (charged)
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index b1672379a16b..c28fa28a8e42 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -6743,10 +6743,18 @@ static int kvm_vm_move_enc_context_from(struct kvm =
-*kvm, unsigned int source_fd)
- 	if (r)
- 		goto out_mark_migration_done;
-=20
--	r =3D kvm_lock_vm_memslots(kvm, source_kvm);
-+	r =3D kvm_lock_all_vcpus(kvm);
- 	if (r)
- 		goto out_unlock;
-=20
-+	r =3D kvm_lock_all_vcpus(source_kvm);
-+	if (r)
-+		goto out_unlock_vcpus;
+diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
+index d1e02e567b57..125af25fd09a 100644
+--- a/arch/x86/kvm/vmx/main.c
++++ b/arch/x86/kvm/vmx/main.c
+@@ -879,6 +879,14 @@ static int vt_gmem_private_max_mapping_level(struct kvm *kvm, kvm_pfn_t pfn)
+ 	return 0;
+ }
+ 
++static int vt_move_enc_context_from(struct kvm *kvm, struct kvm *source_kvm)
++{
++	if (!is_td(kvm))
++		return -ENOTTY;
 +
-+	r =3D kvm_lock_vm_memslots(kvm, source_kvm);
-+	if (r)
-+		goto out_unlock_source_vcpus;
++	return tdx_vm_move_enc_context_from(kvm, source_kvm);
++}
 +
- 	r =3D kvm_move_memory_ctxt_from(kvm, source_kvm);
- 	if (r)
- 		goto out_unlock_memslots;
-@@ -6762,6 +6770,10 @@ static int kvm_vm_move_enc_context_from(struct kvm *=
-kvm, unsigned int source_fd)
-=20
- out_unlock_memslots:
- 	kvm_unlock_vm_memslots(kvm, source_kvm);
-+out_unlock_source_vcpus:
-+	kvm_unlock_all_vcpus(source_kvm);
-+out_unlock_vcpus:
-+	kvm_unlock_all_vcpus(kvm);
- out_unlock:
- 	kvm_unlock_two_vms(kvm, source_kvm);
- out_mark_migration_done:
---=20
+ #define vt_op(name) vt_##name
+ #define vt_op_tdx_only(name) vt_##name
+ #else /* CONFIG_KVM_INTEL_TDX */
+@@ -1044,7 +1052,9 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
+ 	.mem_enc_ioctl = vt_op_tdx_only(mem_enc_ioctl),
+ 	.vcpu_mem_enc_ioctl = vt_op_tdx_only(vcpu_mem_enc_ioctl),
+ 
+-	.private_max_mapping_level = vt_op_tdx_only(gmem_private_max_mapping_level)
++	.private_max_mapping_level = vt_op_tdx_only(gmem_private_max_mapping_level),
++
++	.vm_move_enc_context_from = vt_move_enc_context_from
+ };
+ 
+ struct kvm_x86_init_ops vt_init_ops __initdata = {
+diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+index b952bc673271..07583a11d6e3 100644
+--- a/arch/x86/kvm/vmx/tdx.c
++++ b/arch/x86/kvm/vmx/tdx.c
+@@ -626,6 +626,7 @@ int tdx_vm_init(struct kvm *kvm)
+ 	kvm->arch.has_protected_state = true;
+ 	kvm->arch.has_private_mem = true;
+ 	kvm->arch.disabled_quirks |= KVM_X86_QUIRK_IGNORE_GUEST_PAT;
++	kvm->arch.use_vm_enc_ctxt_op = true;
+ 
+ 	/*
+ 	 * Because guest TD is protected, VMM can't parse the instruction in TD.
+@@ -3524,3 +3525,26 @@ int __init tdx_bringup(void)
+ 	enable_tdx = 0;
+ 	return 0;
+ }
++
++static __always_inline bool tdx_finalized(struct kvm *kvm)
++{
++	struct kvm_tdx *tdx_kvm = to_kvm_tdx(kvm);
++
++	return tdx_kvm->state == TD_STATE_RUNNABLE;
++}
++
++static int tdx_migrate_from(struct kvm *dst, struct kvm *src)
++{
++	return -EINVAL;
++}
++
++int tdx_vm_move_enc_context_from(struct kvm *kvm, struct kvm *src_kvm)
++{
++	if (!is_td(kvm) || !is_td(src_kvm))
++		return -EINVAL;
++
++	if (tdx_finalized(kvm) || !tdx_finalized(src_kvm))
++		return -EINVAL;
++
++	return tdx_migrate_from(kvm, src_kvm);
++}
+diff --git a/arch/x86/kvm/vmx/x86_ops.h b/arch/x86/kvm/vmx/x86_ops.h
+index b4596f651232..001f1540a560 100644
+--- a/arch/x86/kvm/vmx/x86_ops.h
++++ b/arch/x86/kvm/vmx/x86_ops.h
+@@ -164,6 +164,7 @@ void tdx_flush_tlb_current(struct kvm_vcpu *vcpu);
+ void tdx_flush_tlb_all(struct kvm_vcpu *vcpu);
+ void tdx_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_hpa, int root_level);
+ int tdx_gmem_private_max_mapping_level(struct kvm *kvm, kvm_pfn_t pfn);
++int tdx_vm_move_enc_context_from(struct kvm *kvm, struct kvm *source_kvm);
+ #endif
+ 
+ #endif /* __KVM_X86_VMX_X86_OPS_H */
+-- 
 2.50.0.rc1.591.g9c95f17f64-goog
 
 
