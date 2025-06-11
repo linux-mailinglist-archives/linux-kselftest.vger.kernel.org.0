@@ -1,221 +1,130 @@
-Return-Path: <linux-kselftest+bounces-34667-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34669-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD6F7AD50A2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 11:55:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53DABAD50B7
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 11:59:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D7191885E29
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 09:55:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ECD41189406D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 09:59:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E068825EF99;
-	Wed, 11 Jun 2025 09:55:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37C2525F980;
+	Wed, 11 Jun 2025 09:59:14 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0F2325E448;
-	Wed, 11 Jun 2025 09:55:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A32C6239E72;
+	Wed, 11 Jun 2025 09:59:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749635714; cv=none; b=dQi8Tul+qPyDAT5PpIEsDmQKbsXiM97NQilLbcd7ydxQ47VmYpEMKy2oU0L6bAMNhcpTA9XJfymFyQbYQgf0EGdG4HTNM8xFkC/u0fDSHuboCy4FFjKguoCfFjI+mCWpqraSOUZvKFG7V/JHGilMtq/3A4vu7+O7dRsXG5Z2ksg=
+	t=1749635954; cv=none; b=PUa7ksOjmI9Hl6Ot77E+zLwzsfl8aydDihahUAkyilLT436Fml4gS8WbTmCFUFHDi9/ZxlYYu2+/Kq8FM6K44udr2Ld+8KdhIfofz8Zd7xv192ALjXAyGs4v/rsbDYFAYnQOvZ2k8vAXpJ9+utGmcOhGlMwSnL0GUy9uyuzsh80=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749635714; c=relaxed/simple;
-	bh=zTtNa9u3miJvvq4tYJwTLl2HITw6xg3ryiY0JwCVhyc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tIJ7CdZk8kkznbwcSa/26Wd5tz7pPvcROvoVTdOBDH5eX3GPtgZi0W89BtUSjTxPudeyQtYtSEUjrsmCgML84Pe+lUVXj/u/UJGFaLAshlBoHC89lJqJ6UBM6vIXBhkAZjJlrRdeydmmKYWx1QchKAmR3QCD//z/QDRKa5Wobx8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4bHLcY6XHnzYQvRf;
-	Wed, 11 Jun 2025 17:55:09 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id E306C1A0842;
-	Wed, 11 Jun 2025 17:55:08 +0800 (CST)
-Received: from [10.67.109.184] (unknown [10.67.109.184])
-	by APP4 (Coremail) with SMTP id gCh0CgDHKF17UkloXOW4PA--.40312S2;
-	Wed, 11 Jun 2025 17:55:08 +0800 (CST)
-Message-ID: <0dc9c413-c979-4d18-b804-00ed2aaa3d3c@huaweicloud.com>
-Date: Wed, 11 Jun 2025 17:55:07 +0800
+	s=arc-20240116; t=1749635954; c=relaxed/simple;
+	bh=HwXs6qp3W7EZHA1+yzvKN6nMOhRAgv4bEYIrYnnhwjU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=O/sXy8AsghOHelsubfvbgYGNIYYzqjcZerTFFGhhYHmFQhbx9S6OY2BJDzoYciZGYeqwIi/k7Nwqk33lMQBImJqTatD9R9kkCyY85JmLZe6/UxoLxj9AhmPPBmuWZ7Dm9y8CAEQcIWaD1+NvZ4BM6q42GH4N2ixR1TQl/dI3bl0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7E2651596;
+	Wed, 11 Jun 2025 02:58:52 -0700 (PDT)
+Received: from J2N7QTR9R3 (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 999603F673;
+	Wed, 11 Jun 2025 02:59:09 -0700 (PDT)
+Date: Wed, 11 Jun 2025 10:59:06 +0100
+From: Mark Rutland <mark.rutland@arm.com>
+To: Anshuman Khandual <anshuman.khandual@arm.com>
+Cc: Marc Zyngier <maz@kernel.org>, linux-arm-kernel@lists.infradead.org,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Ada Couprie Diaz <ada.coupriediaz@arm.com>,
+	linux-kernel@vger.kernel.org, Oliver Upton <oliver.upton@linux.dev>,
+	Joey Gouly <joey.gouly@arm.com>, kvm@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH V3 2/2] KVM: selftests: Change MDSCR_EL1 register holding
+ variables as uint64_t
+Message-ID: <aElTaqOqzAi17H2b@J2N7QTR9R3>
+References: <20250610053128.4118784-1-anshuman.khandual@arm.com>
+ <20250610053128.4118784-3-anshuman.khandual@arm.com>
+ <864iwnedjk.wl-maz@kernel.org>
+ <9b378582-44eb-4fbb-a03a-40eb317daebd@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: Use generic read_sysfs in thuge-gen test
-Content-Language: en-US
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: akpm@linux-foundation.org, shuah@kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- pulehui@huawei.com
-References: <20250611084011.1047132-1-pulehui@huaweicloud.com>
- <caad6357-a4a3-469f-a824-4d7a36a0e629@lucifer.local>
- <097fa60d-cb5c-4f0b-a2b1-db22b26cc49b@huaweicloud.com>
- <1fad971c-dd57-4fa9-b951-10f749829c10@lucifer.local>
-From: Pu Lehui <pulehui@huaweicloud.com>
-In-Reply-To: <1fad971c-dd57-4fa9-b951-10f749829c10@lucifer.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:gCh0CgDHKF17UkloXOW4PA--.40312S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxXFy5trW7KFyfXFWrKFWDtwb_yoWrWFW8pF
-	s5JFyjkF40qryUGryjqFn09r1Yyr4UtFW8Xw4xA34UZr1DtF9IgF4xJryUG3WkurWxWr4f
-	Z3y3Grsa9r15JaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUylb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
-	r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
-	xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0
-	cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
-	AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E
-	14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUwxhLUUUUU
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9b378582-44eb-4fbb-a03a-40eb317daebd@arm.com>
 
-
-
-On 2025/6/11 17:48, Lorenzo Stoakes wrote:
-> On Wed, Jun 11, 2025 at 05:40:06PM +0800, Pu Lehui wrote:
->>
->>
->> On 2025/6/11 17:18, Lorenzo Stoakes wrote:
->>> On Wed, Jun 11, 2025 at 08:40:11AM +0000, Pu Lehui wrote:
->>>> From: Pu Lehui <pulehui@huawei.com>
->>>>
->>>> As generic read_sysfs is available in vm_utils, let's
->>>> use is in thuge-gen test.
->>>>
->>>> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+On Wed, Jun 11, 2025 at 09:15:10AM +0530, Anshuman Khandual wrote:
 > 
-> With the fix below:
 > 
-> Reviewed-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> On 10/06/25 10:31 PM, Marc Zyngier wrote:
+> > On Tue, 10 Jun 2025 06:31:28 +0100,
+> > Anshuman Khandual <anshuman.khandual@arm.com> wrote:
+> >>
+> >> Change MDSCR_EL1 register holding local variables as uint64_t that reflects
+> >> its true register width as well.
+> >>
+> >> Cc: Marc Zyngier <maz@kernel.org>
+> >> Cc: Oliver Upton <oliver.upton@linux.dev>
+> >> Cc: Joey Gouly <joey.gouly@arm.com>
+> >> Cc: kvm@vger.kernel.org
+> >> Cc: kvmarm@lists.linux.dev
+> >> Cc: linux-kernel@vger.kernel.org
+> >> Cc: linux-kselftest@vger.kernel.org
+> >> Cc: linux-arm-kernel@lists.infradead.org
+> >> Reviewed-by: Ada Couprie Diaz <ada.coupriediaz@arm.com>
+> >> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> >> ---
+> >>  tools/testing/selftests/kvm/arm64/debug-exceptions.c | 4 ++--
+> >>  1 file changed, 2 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/tools/testing/selftests/kvm/arm64/debug-exceptions.c b/tools/testing/selftests/kvm/arm64/debug-exceptions.c
+> >> index c7fb55c9135b..e34963956fbc 100644
+> >> --- a/tools/testing/selftests/kvm/arm64/debug-exceptions.c
+> >> +++ b/tools/testing/selftests/kvm/arm64/debug-exceptions.c
+> >> @@ -140,7 +140,7 @@ static void enable_os_lock(void)
+> >>  
+> >>  static void enable_monitor_debug_exceptions(void)
+> >>  {
+> >> -	uint32_t mdscr;
+> >> +	uint64_t mdscr;
+> >>  
+> >>  	asm volatile("msr daifclr, #8");
+> >>  
+> >> @@ -223,7 +223,7 @@ void install_hw_bp_ctx(uint8_t addr_bp, uint8_t ctx_bp, uint64_t addr,
+> >>  
+> >>  static void install_ss(void)
+> >>  {
+> >> -	uint32_t mdscr;
+> >> +	uint64_t mdscr;
+> >>  
+> >>  	asm volatile("msr daifclr, #8");
+> >>  
+> > 
+> > Why change this in the place that matters *the least*?
+> > 
+> > arch/arm64/kernel/debug-monitors.c is full of 32bit manipulation of
+> > this register, and that's only one example of it. So if you are going
+> > to change this, please do it fully, not as a random change in a random
+> > file.
+> 
+> The first patch in this series changes mdscr system register to 64 bit
+> in the mentioned file (i.e arch/arm64/kernel/debug-monitors.c). 
 
-will send new soon, thanks!
+You did not Cc Marc on oatch 1 or the cover letter. KVM folk are only
+Cc'd on patch 2.
 
-> 
->>>
->>> It generally looks good, just one point about a warning below to address.
->>>
->>>> ---
->>>>    tools/testing/selftests/mm/thuge-gen.c | 37 +++++++-------------------
->>>>    1 file changed, 9 insertions(+), 28 deletions(-)
->>>>
->>>> diff --git a/tools/testing/selftests/mm/thuge-gen.c b/tools/testing/selftests/mm/thuge-gen.c
->>>> index 95b6f043a3cb..e11dfbfa661b 100644
->>>> --- a/tools/testing/selftests/mm/thuge-gen.c
->>>> +++ b/tools/testing/selftests/mm/thuge-gen.c
->>>> @@ -77,40 +77,19 @@ void show(unsigned long ps)
->>>>    	system(buf);
->>>>    }
->>>>
->>>> -unsigned long thuge_read_sysfs(int warn, char *fmt, ...)
->>>> +unsigned long read_free(unsigned long ps)
->>>>    {
->>>> -	char *line = NULL;
->>>> -	size_t linelen = 0;
->>>> -	char buf[100];
->>>> -	FILE *f;
->>>> -	va_list ap;
->>>>    	unsigned long val = 0;
->>>> +	char buf[100];
->>>>
->>>> -	va_start(ap, fmt);
->>>> -	vsnprintf(buf, sizeof buf, fmt, ap);
->>>> -	va_end(ap);
->>>> +	snprintf(buf, sizeof(buf),
->>>> +		 "/sys/kernel/mm/hugepages/hugepages-%lukB/free_hugepages",
->>>> +		 ps >> 10);
->>>> +	read_sysfs(buf, &val);
->>>
->>> We're losing all of the 'warn' logic here so if we can't find
->>> /sys/kernel/mm/hugepages/hugepages-%lukB/free_hugepages when ps != getpagesize()
->>> we no longer print a message about it.
->>
->>
->> Hi Lorenzo,
->>
->> Thanks for review. Right, we should explicit that warning when ps !=
->> getpagesize(). How about the following modify?
-> 
-> Looks good to me!
-> 
->>
->> diff --git a/tools/testing/selftests/mm/thuge-gen.c
->> b/tools/testing/selftests/mm/thuge-gen.c
->> index e11dfbfa661b..8e2b08dc5762 100644
->> --- a/tools/testing/selftests/mm/thuge-gen.c
->> +++ b/tools/testing/selftests/mm/thuge-gen.c
->> @@ -85,7 +85,8 @@ unsigned long read_free(unsigned long ps)
->>          snprintf(buf, sizeof(buf),
->>                   "/sys/kernel/mm/hugepages/hugepages-%lukB/free_hugepages",
->>                   ps >> 10);
->> -       read_sysfs(buf, &val);
->> +       if (read_sysfs(buf, &val) && ps != getpagesize())
->> +               ksft_print_msg("missing %s\n", buf);
->>
->>          return val;
->>   }
->>
->>>
->>> Should we reinstate that?
->>>
->>> Other than this, we're ignoring errors, which by default means we return 0, but
->>> this is what we were doing anyway. It's only this case I think that matters.
->>>
->>>>
->>>> -	f = fopen(buf, "r");
->>>> -	if (!f) {
->>>> -		if (warn)
->>>> -			ksft_print_msg("missing %s\n", buf);
->>>> -		return 0;
->>>> -	}
->>>> -	if (getline(&line, &linelen, f) > 0) {
->>>> -		sscanf(line, "%lu", &val);
->>>> -	}
->>>> -	fclose(f);
->>>> -	free(line);
->>>>    	return val;
->>>>    }
->>>>
->>>> -unsigned long read_free(unsigned long ps)
->>>> -{
->>>> -	return thuge_read_sysfs(ps != getpagesize(),
->>>> -			  "/sys/kernel/mm/hugepages/hugepages-%lukB/free_hugepages",
->>>> -			  ps >> 10);
->>>> -}
->>>> -
->>>>    void test_mmap(unsigned long size, unsigned flags)
->>>>    {
->>>>    	char *map;
->>>> @@ -173,6 +152,7 @@ void test_shmget(unsigned long size, unsigned flags)
->>>>    void find_pagesizes(void)
->>>>    {
->>>>    	unsigned long largest = getpagesize();
->>>> +	unsigned long shmmax_val = 0;
->>>>    	int i;
->>>>    	glob_t g;
->>>>
->>>> @@ -195,7 +175,8 @@ void find_pagesizes(void)
->>>>    	}
->>>>    	globfree(&g);
->>>>
->>>> -	if (thuge_read_sysfs(0, "/proc/sys/kernel/shmmax") < NUM_PAGES * largest)
->>>> +	read_sysfs("/proc/sys/kernel/shmmax", &shmmax_val);
->>>> +	if (shmmax_val < NUM_PAGES * largest)
->>>>    		ksft_exit_fail_msg("Please do echo %lu > /proc/sys/kernel/shmmax",
->>>>    				   largest * NUM_PAGES);
->>>>
->>>> --
->>>> 2.34.1
->>>>
->>
+Marc, for context the series is:
 
+  https://lore.kernel.org/linux-arm-kernel/20250610053128.4118784-1-anshuman.khandual@arm.com/
+
+... and I've asked Anshuman to better describe the rationale.
+
+Mark.
 
