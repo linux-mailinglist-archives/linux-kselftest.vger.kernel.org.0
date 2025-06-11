@@ -1,97 +1,159 @@
-Return-Path: <linux-kselftest+bounces-34661-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34662-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21F77AD4DFB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 10:10:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 06AB2AD4E94
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 10:38:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1BE63188769B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 08:10:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8BBF71BC1D48
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 08:38:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0A87236442;
-	Wed, 11 Jun 2025 08:09:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60696243370;
+	Wed, 11 Jun 2025 08:37:44 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FCB82356B3;
-	Wed, 11 Jun 2025 08:09:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C669243969;
+	Wed, 11 Jun 2025 08:37:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749629344; cv=none; b=lISXHNtI/Ftbwbwl4ZZ6e7telmBWf4SaaKIkuCd09v9XlyMTyyAi04vFU0Hvuho5d4Ei6RDmEySPk/fXprv1xXg1gmLJTtHz3H3B7D192wxNocurYOjGLAaIHwOoAC2ezaoM36UawmOImkVXHApWBJ65k6oqPxad2o94fPWPCao=
+	t=1749631064; cv=none; b=UDLH53o2O9SWFnyM2azZBjjlw/VpuEUf4PBtHzH+69eqQ7dVoZmTasZG6YztxpTbgSkMASkBzF9jawQqSEAyY8sVGQRSkwR8+hrg6tSuuJmh4oSplgYLjWv34r5fsSa6CoLFQhfumtoLK5mkIJnQCHT1HzfyTlerEtwnNOpDHmk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749629344; c=relaxed/simple;
-	bh=bb/gYoBGqnnv8Qs7r02fycV4dkWTGnthEecbIoM/PwQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QgsLcgSA7M/DYPeGA/isRNd/n04m6mASkrNkN+IFbIFVVd6t3M4sQKQfIVlBKx5wSTDoikKF6GBZPAnzpQ3QKXQ/QIE+Prh+oJJuA2jMywab1B5RkDuYCXB0cXTMzczgJBb5Pz7L+DFfrIy1v7ZtMMG4nWrFAmXaRxiMDhKPLzk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-acb5ec407b1so1135165866b.1;
-        Wed, 11 Jun 2025 01:09:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749629341; x=1750234141;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xGRU+Kv08xe5NBWzNvaRaFDet3u9/sA86Kboke4WJ9A=;
-        b=kHS9Tn5+qJl99lehQqT16FVawKmtjMAY5bA3SIdSISW3hO87UQApHy6qAhU08EXKhd
-         JFFk0cVdHhJ8/ekRcOXoCRtuPggdze42W2/JFDE+MlnlqBc5S+dLIDpvfgaEdHtDPNNx
-         YIa2rWjAUaKe1c/K/wyKTeQ9qeWRLSHJbUYJBNNPeM2zYEpM2LopDjg5dqsQN8hGqIj5
-         dUycMoWe1ELeAyjyCwpUZ/HcieeUn/C6l4hXuPEZ+FtiP7x8xUq11e9VY3vk8Cunv8nX
-         ynmDi0iBMIKONY/5Ime6n19p5hSGPcd5hAwPmHjufy/ZOMNK7RO3ZK5uCea68INt+9Uw
-         Zumw==
-X-Forwarded-Encrypted: i=1; AJvYcCUBmg9H1DlrD3/tJVVAXow+Ipz0fPupTIwW1BU7dI11KuAQ6YI59GTEuEd89fWMQDRji9W+13W2BWNHjYUZb0a4@vger.kernel.org, AJvYcCVf/YqmSEOKDFgKRX9bhWi+Fk672fi+L9aYUm7YCgiJQ7jVwrtwiNujDTGjn7CkbXSmElT5RU/cX8T47K4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxC6SY2geJoSFfNwkt6e50JDi3egI7rZEzJl6QQ5NEjJrViWMoh
-	ukv2WNc0T9dzmmaTYSfY3mOoqGUBshc1DKuAARnlilMGoKqig93f0v8v
-X-Gm-Gg: ASbGncsqkDHTTiakaRAu4WUZnD4l/JYyvLKy2ei8/ehzG8+a+qB0k6lxP9cn/cGT+ic
-	eYJ7Q2KToHz4szMmzCdAQgZsaxP6v9lxsGpkIcDA0PT1ALRTegP3KDKw3X+qm0B9NrRyLsBGNmS
-	oy3s6uGM5nh6NwexP1UuvvtHJnK2FpfIZkubjR1tFcwRteCW+Fw6e3W3Khr3DgaeDpaQNC6CMBO
-	61/z7J+WVfjHs4IvghFybbZTzGQ8bMhJOIB1uICB3ma5MOwswkpb5YS0cc9UoGQzwFT4pfDEyWD
-	4FYQp5M0vid88BQHA1eplEsp160kCsl+AIq7sgm4XkTtL4LeZYIiXksmJK1ZzX+g
-X-Google-Smtp-Source: AGHT+IGbQu5qlFUouSqkJhPj8jhxnrJC0Olr7Zwa5gMMOkWdUeanOk7UUb5kvt1BxjCg3bkg0oosmw==
-X-Received: by 2002:a17:907:9449:b0:ad2:2fa8:c0a7 with SMTP id a640c23a62f3a-ade8c76b521mr172874366b.21.1749629341249;
-        Wed, 11 Jun 2025 01:09:01 -0700 (PDT)
-Received: from gmail.com ([2a03:2880:30ff:72::])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ade1dc1c5besm845927466b.87.2025.06.11.01.09.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jun 2025 01:09:00 -0700 (PDT)
-Date: Wed, 11 Jun 2025 01:08:58 -0700
-From: Breno Leitao <leitao@debian.org>
-To: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH net-next 0/7] netpoll: Untangle netconsole and netpoll
-Message-ID: <aEk5mv69Ha7xyvPV@gmail.com>
-References: <20250610-rework-v1-0-7cfde283f246@debian.org>
+	s=arc-20240116; t=1749631064; c=relaxed/simple;
+	bh=YMXTcyMncS+OYLcYJJSBaiK//v5mGME8+PN5/+MBWsg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=IrMQ7LJTTf2ak4OFfnXcSWQ8wBRsL4wSifLoX2TnLz1wR1mtS30o4mrXEgHkE81Zqz8TXowYzUYV40bXOqxSHEb4+DogBJyK42+B0EW1WOaKtJiKA/W7yoJkGP+L2SJuO8JONcCQjrfKD/pXjhZaF2KeYkryh4U2VtJdJlGX/Ts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4bHJv80H56zKHN79;
+	Wed, 11 Jun 2025 16:37:40 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.75])
+	by mail.maildlp.com (Postfix) with ESMTP id 60FF21A0AF7;
+	Wed, 11 Jun 2025 16:37:38 +0800 (CST)
+Received: from ultra.huawei.com (unknown [10.90.53.71])
+	by APP2 (Coremail) with SMTP id Syh0CgDHhGdRQEloV8o1PA--.29312S2;
+	Wed, 11 Jun 2025 16:37:38 +0800 (CST)
+From: Pu Lehui <pulehui@huaweicloud.com>
+To: akpm@linux-foundation.org,
+	shuah@kernel.org,
+	lorenzo.stoakes@oracle.com
+Cc: linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	pulehui@huawei.com
+Subject: [PATCH] selftests/mm: Use generic read_sysfs in thuge-gen test
+Date: Wed, 11 Jun 2025 08:40:11 +0000
+Message-Id: <20250611084011.1047132-1-pulehui@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250610-rework-v1-0-7cfde283f246@debian.org>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:Syh0CgDHhGdRQEloV8o1PA--.29312S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7WFWDCr4rXr1rWw48GFWDXFb_yoW8ury5pF
+	s3K34j93yxKr98GryUXFs8Wry5Ar4Dt3y0y397A34rZw1UJr9IgrZ7ZasrJa1kurZ7Wayf
+	Aay3Grsakr1UJaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUyKb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI
+	7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+	Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY
+	6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6x
+	AIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
+	1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUwxhLUUUUU
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-On Tue, Jun 10, 2025 at 08:18:12AM -0700, Breno Leitao wrote:
->  drivers/net/netconsole.c                           | 137 ++++++++++++++++++++-
->  include/linux/netpoll.h                            |  10 +-
->  net/core/netpoll.c                                 | 136 +-------------------
->  tools/testing/selftests/drivers/net/Makefile       |   1 +
->  .../selftests/drivers/net/lib/sh/lib_netcons.sh    |  39 +++++-
->  .../selftests/drivers/net/netcons_cmdline.sh       |  52 ++++++++
->  6 files changed, 228 insertions(+), 147 deletions(-)
+From: Pu Lehui <pulehui@huawei.com>
 
-I've just found that this current patchset didn't apply to
-net-next, thus, the NIPA tests didn't run. I will send a v2 soon. I do
-not plan to change anything, other than rebasing it.
+As generic read_sysfs is available in vm_utils, let's
+use is in thuge-gen test.
 
---breno
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
+---
+ tools/testing/selftests/mm/thuge-gen.c | 37 +++++++-------------------
+ 1 file changed, 9 insertions(+), 28 deletions(-)
+
+diff --git a/tools/testing/selftests/mm/thuge-gen.c b/tools/testing/selftests/mm/thuge-gen.c
+index 95b6f043a3cb..e11dfbfa661b 100644
+--- a/tools/testing/selftests/mm/thuge-gen.c
++++ b/tools/testing/selftests/mm/thuge-gen.c
+@@ -77,40 +77,19 @@ void show(unsigned long ps)
+ 	system(buf);
+ }
+ 
+-unsigned long thuge_read_sysfs(int warn, char *fmt, ...)
++unsigned long read_free(unsigned long ps)
+ {
+-	char *line = NULL;
+-	size_t linelen = 0;
+-	char buf[100];
+-	FILE *f;
+-	va_list ap;
+ 	unsigned long val = 0;
++	char buf[100];
+ 
+-	va_start(ap, fmt);
+-	vsnprintf(buf, sizeof buf, fmt, ap);
+-	va_end(ap);
++	snprintf(buf, sizeof(buf),
++		 "/sys/kernel/mm/hugepages/hugepages-%lukB/free_hugepages",
++		 ps >> 10);
++	read_sysfs(buf, &val);
+ 
+-	f = fopen(buf, "r");
+-	if (!f) {
+-		if (warn)
+-			ksft_print_msg("missing %s\n", buf);
+-		return 0;
+-	}
+-	if (getline(&line, &linelen, f) > 0) {
+-		sscanf(line, "%lu", &val);
+-	}
+-	fclose(f);
+-	free(line);
+ 	return val;
+ }
+ 
+-unsigned long read_free(unsigned long ps)
+-{
+-	return thuge_read_sysfs(ps != getpagesize(),
+-			  "/sys/kernel/mm/hugepages/hugepages-%lukB/free_hugepages",
+-			  ps >> 10);
+-}
+-
+ void test_mmap(unsigned long size, unsigned flags)
+ {
+ 	char *map;
+@@ -173,6 +152,7 @@ void test_shmget(unsigned long size, unsigned flags)
+ void find_pagesizes(void)
+ {
+ 	unsigned long largest = getpagesize();
++	unsigned long shmmax_val = 0;
+ 	int i;
+ 	glob_t g;
+ 
+@@ -195,7 +175,8 @@ void find_pagesizes(void)
+ 	}
+ 	globfree(&g);
+ 
+-	if (thuge_read_sysfs(0, "/proc/sys/kernel/shmmax") < NUM_PAGES * largest)
++	read_sysfs("/proc/sys/kernel/shmmax", &shmmax_val);
++	if (shmmax_val < NUM_PAGES * largest)
+ 		ksft_exit_fail_msg("Please do echo %lu > /proc/sys/kernel/shmmax",
+ 				   largest * NUM_PAGES);
+ 
+-- 
+2.34.1
+
 
