@@ -1,78 +1,81 @@
-Return-Path: <linux-kselftest+bounces-34759-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34760-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBFC0AD60EC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 23:17:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8ABD6AD60EF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 23:17:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 22AF97A706E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 21:15:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F0731BC1E04
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 21:17:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B38BC235BEE;
-	Wed, 11 Jun 2025 21:16:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FCC4244661;
+	Wed, 11 Jun 2025 21:16:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jYGZKaX5"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tX0dj0C6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BC6A1A8F82
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Jun 2025 21:16:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 056DD1A8F82
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Jun 2025 21:16:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749676617; cv=none; b=oUgI5OCNWWFfVPL5rXP7ccAxaua6Y1ek0VDY35bRQkgvmCM5iFMGY4XptJABYmUpq76lOPh6YRZN+C5sQjl16H99gWL6N0aw+C7/Hu9qxnhyV4mDnnArk7KXBcKrnz9kYyzHJqr3Uwe2Dk3jhPIBLqpmPGM0IvY631M1I2IfF7c=
+	t=1749676619; cv=none; b=QpzkyptP3SNVZgiRF+K9ZeHg4ySLsR2PsR6Ff8jNvv48kZ7S0DMkH7rY7U3hnpbg3z98xb9kWXlpBP7LAN3CjaskOLZ2M2GRsk1TuNAUScPHnaK1cuPSgy/F/F6JEgAN1vff+3VUySZx4jcFtFyhyjXQonppdVp1bzqOYMycLfs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749676617; c=relaxed/simple;
-	bh=NECYWsPH7RKAtQbRL0XnwHUNxi8qMBhhQIcgYAF72FU=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=AqefCtaYxc1nf0F2E5VbUIisRhwHxmdCoM5SRgMkH8tDcaao/C5LpC6MKw9dZKu99UwN7MdOttuThJQA8rCv/vbe8ELn7WC3Q/BkOrW8cz/XHStoKtEnAbyQNlbWO9s4bRtVLcoBlrgPjs8Oj/dy3gXh1PzoNmgimiR7+DUDV0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--afranji.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jYGZKaX5; arc=none smtp.client-ip=209.85.216.73
+	s=arc-20240116; t=1749676619; c=relaxed/simple;
+	bh=1J2BNASlNa1Dhe5jluI1gAN0W9RVPLyHfYbBUQPkC54=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=Jv9cAXIaWfyhP4jHzF6szEUxcWuf5Qm64CuJ4B617Ze/NfNHSdcIADtWC8nGaeW4ty1zbrzKnHQOil5QqWF+nPm93muqb2W7RVygUX5/vESj1mxCNnHJi4jNeVIIbGAkykI3t8PE9GZ6kVNwzyZ7QRkPEel6/elP+iXBkiI2dU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--afranji.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tX0dj0C6; arc=none smtp.client-ip=209.85.210.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--afranji.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-3138e64b3f1so292074a91.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Jun 2025 14:16:55 -0700 (PDT)
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-747cebffd4eso193726b3a.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Jun 2025 14:16:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1749676615; x=1750281415; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=LOsJ8fO8l9KNsBrYZMTXVSP3wn3/FZjJX+dB1opvLg8=;
-        b=jYGZKaX5LNUxWcMqgpTV2NUUw6oUIKcSxTfToAFaivjmEn8d7CqwqEVOwVR/R/rhn1
-         K4O+xQB+eY7biq1mo2zqTQjrh2Ww5R7Qp02ZR5bNwIv1aiJSegQYQFr+O9aUZqoY30QH
-         PIb1glceS0V9B9lFOsQOH/5V6dq3EyjhmKJ3SVDhHCL6Aa3NC9zdzKBwPCJpjQTedVBo
-         ZbTASs9ovX0+7C9PGI8Ki7xkYDxsX78bactpJCM05alqcsAaDmi+yo/aCRZc8AZg8MRm
-         2jqMJA7FO0f3xcs432+eMtmQJbhzRCV/+lGhNgNDLXmeXjB8dbmF3RQoqrjG/lEGXGHO
-         8sOg==
+        d=google.com; s=20230601; t=1749676617; x=1750281417; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JVZUY5qeKcLxvon3A1qgzFOnqGD8w3UB+MEi0rObhNA=;
+        b=tX0dj0C6FlJ+8eMNwdZODidXdYTeEqpSRvjX9G1HOn1NuSC4Z0Zn3+2CocNpvgyFJ/
+         4ddOneDuYzDCBy6xehXPXgZaK5cxZ+41J+tUNhynqUKn0agFJ4SAO1DV6EsEY8zXt7kr
+         wvfXG4/jMJrHxtfE7tjOC/2kwmEVrI1vh3aaR/ZvZObH7Z8uYnXePADn0bh+SU0qe6wp
+         iLJL+YvTz+oj7v/eMnu70WaJ522v6jI/BK0/1ZO8aGDiOwNEmIkAdNuXW6NAB4ye+tgo
+         pMkS41hMyBeHWl6Nh47llY/7Mtl3gPshfdtNc321TLrH4M17R7m7XVBswzhEK/d7rzlp
+         H8FA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749676615; x=1750281415;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LOsJ8fO8l9KNsBrYZMTXVSP3wn3/FZjJX+dB1opvLg8=;
-        b=UCXuV9ssJ6evE8FyHk7Z3/8OH7LWY/N39CchxM7rwQU3vaxPftULiawuGRVhYJxXhf
-         9Td7ecizuJ0I9uqRW3u6d/NzJvyv+H6Iyrkbf67Zy2iTGf61Cx9NvR44CEqQ7BCQSdvB
-         sFShTp3gPtCu756OU4+eidqach9R2KqQoIEBxqvV9kiLUwhNnvzx58Ebvkr2iDNWZLP4
-         w2lFJndaV+hV5aYuIpTGJl5PKgualkq8UwKCVkS12xV73ismqiCBtumQXU7G3p5t18fG
-         f9uwaGoxHMDqxC7ExSQ3U0NH5GYZNHYYJ27Krj6bNwOhtMTMObl8OTSMpO0hA+eqoyYp
-         X6NA==
-X-Forwarded-Encrypted: i=1; AJvYcCUwDXR5UKzwnLj1PyoGIfmi+SI7CPeSj/r5bZsFnSxtYKWfFdN6v6xF3kgJ06s9bqZMyJaq9wB2tHjv0MnEYGg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzp8xJANNqUn1tdkPhc0DY+2u0KQ5u3+162+MPGwYzxI7FP60iS
-	dCQ/llfMTiM2ok+nWCqCf94urrVeMeHNyrKbXKBrtPXp06N0I9YmiOgXNwnzS0uzU5OVHOexzg9
-	Pm+LyGvc4wQ==
-X-Google-Smtp-Source: AGHT+IF6qbV42OSMgEB/L2JOEi7E6FqjbgD2fsncm8r6Nqy7IPKImoaTuEIAXwkZoxK9ENk1RCq0tlxAz2mg
-X-Received: from pjh5.prod.google.com ([2002:a17:90b:3f85:b0:311:485b:d057])
- (user=afranji job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3b8b:b0:311:e9ac:f5ce
- with SMTP id 98e67ed59e1d1-313c08bbb9dmr724334a91.21.1749676615444; Wed, 11
- Jun 2025 14:16:55 -0700 (PDT)
-Date: Wed, 11 Jun 2025 21:16:27 +0000
+        d=1e100.net; s=20230601; t=1749676617; x=1750281417;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JVZUY5qeKcLxvon3A1qgzFOnqGD8w3UB+MEi0rObhNA=;
+        b=wRzIqCXx6jNA8wBGZ9Q32pfLBZnOUTrhOwBxPHwezj5kz7GZW25q/crYgzM5PNW6Du
+         hT/VJstYLd5ecaVXDxE6ib2MNjNeee7bdnBjKVrMSwfa4kDXHBi0MkQFl8/2EpVOhwWo
+         aj3qq03CPZZCvYXT6ElCNKLMcD6tUFCb/HYQ0U358P50TxiDjiNL5yX+rzQWEYpw5ErM
+         CpAjY3ncjCv1JsYMBYgo5HYVqWNCoAfVTcX29SPWRgMQu2vLokmGuY+iXbWUUitCWsTk
+         7zMINDmEyFZ96uTWeLljGKTi+f4KPw7phpD3UA/s9F1oHxzuDxIRFC2LIcnhHp2EtLmk
+         /Obw==
+X-Forwarded-Encrypted: i=1; AJvYcCWfPXZCASV//Q1TTxnrHm/OtNFHaIxOmkqpCTRXu1K4yDU9lJskEbozWWV+e370JqFYpI7rtIWE+wOSGQwdvmM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw8TCuCarY6cAGG11gOirX/VaZSDih6eAjboYuOMOJ3p9slAogC
+	sUczmpl/yBdvf/FJJ708MzdSu6qCX7VHRVzXlhrxs7+R5oEvTQu4nsjIoImGF8/TelCEdfYhqtA
+	6PThf6fKbaA==
+X-Google-Smtp-Source: AGHT+IEJ/qdunyiMvwsT10mftztZECZsqDYMcHYykS/gDMvyJ2du0eMtdA6wuu+sltqOX8qT0k9ifIs5X5dW
+X-Received: from pfble12.prod.google.com ([2002:a05:6a00:4fcc:b0:746:1d26:e8c8])
+ (user=afranji job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:394b:b0:21f:775d:107e
+ with SMTP id adf61e73a8af0-21f9b9f75ebmr370105637.17.1749676617125; Wed, 11
+ Jun 2025 14:16:57 -0700 (PDT)
+Date: Wed, 11 Jun 2025 21:16:28 +0000
+In-Reply-To: <cover.1749672978.git.afranji@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <cover.1749672978.git.afranji@google.com>
 X-Mailer: git-send-email 2.50.0.rc1.591.g9c95f17f64-goog
-Message-ID: <cover.1749672978.git.afranji@google.com>
-Subject: [RFC PATCH v2 00/10] Add TDX intra-host migration support
+Message-ID: <884dc45a13920578973d5628c7cad79d8d50b7a2.1749672978.git.afranji@google.com>
+Subject: [RFC PATCH v2 01/10] KVM: Split tdp_mmu_pages to mirror and direct counters
 From: Ryan Afranji <afranji@google.com>
 To: kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org
 Cc: sagis@google.com, bp@alien8.de, chao.p.peng@linux.intel.com, 
@@ -86,77 +89,79 @@ Cc: sagis@google.com, bp@alien8.de, chao.p.peng@linux.intel.com,
 	Ryan Afranji <afranji@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Hello,
+From: Sagi Shahar <sagis@google.com>
 
-This is RFC v2 for the TDX intra-host migration patch series. It
-addresses comments in RFC v1 [1] and is rebased onto the latest kvm/next
-(v6.16-rc1).
+tdp_mmu_pages counts all the active pages used by the mmu. When we
+transfer the state during intra-host migration we need to transfer the
+mirror pages but not the direct ones. The direct pages are going to
+be re-faulted as needed on the destination, but that approach doesn't
+work for mirrored pages which stores information in the secure EPT.
 
-This patchset was built on top of the latest TDX selftests [2] and gmem
-linking [3] RFC patch series.
+Keeping them in separate counters makes this transfer more efficient.
 
-Here is the series stitched together for your convenience:
-https://github.com/googleprodkernel/linux-cc/tree/tdx-copyless-rfc-v2
+Signed-off-by: Sagi Shahar <sagis@google.com>
+Signed-off-by: Ryan Afranji <afranji@google.com>
+---
+ arch/x86/include/asm/kvm_host.h |  7 +++++--
+ arch/x86/kvm/mmu/tdp_mmu.c      | 11 +++++++++--
+ 2 files changed, 14 insertions(+), 4 deletions(-)
 
-Changes from RFC v1:
-+ Added patch to prevent deadlock warnings by re-ordering locking order.
-+ Added patch to allow vCPUs to be created for uninitialized VMs.
-+ Minor optimizations to TDX intra-host migration core logic.
-+ Moved lapic state transfer into TDX intra-host migration core logic.
-+ Added logic to handle posted interrupts that are injected during
-migration.
-+ Added selftests.
-+ Addressed comments from RFC v1.
-+ Various small changes to make patchset compatible with latest version
-of kvm/next.
-
-[1] https://lore.kernel.org/lkml/20230407201921.2703758-2-sagis@google.com
-[2] https://lore.kernel.org/lkml/20250414214801.2693294-2-sagis@google.com
-[3] https://lore.kernel.org/all/cover.1747368092.git.afranji@google.com
-
-Ackerley Tng (2):
-  KVM: selftests: Add TDX support for ucalls
-  KVM: selftests: Add irqfd/interrupts test for TDX with migration
-
-Ryan Afranji (3):
-  KVM: x86: Adjust locking order in move_enc_context_from
-  KVM: TDX: Allow vCPUs to be created for migration
-  KVM: selftests: Refactor userspace_mem_region creation out of
-    vm_mem_add
-
-Sagi Shahar (5):
-  KVM: Split tdp_mmu_pages to mirror and direct counters
-  KVM: TDX: Add base implementation for tdx_vm_move_enc_context_from
-  KVM: TDX: Implement moving mirror pages between 2 TDs
-  KVM: TDX: Add core logic for TDX intra-host migration
-  KVM: selftests: TDX: Add tests for TDX in-place migration
-
- arch/x86/include/asm/kvm_host.h               |   7 +-
- arch/x86/kvm/mmu.h                            |   2 +
- arch/x86/kvm/mmu/mmu.c                        |  66 ++++
- arch/x86/kvm/mmu/tdp_mmu.c                    |  72 +++-
- arch/x86/kvm/mmu/tdp_mmu.h                    |   6 +
- arch/x86/kvm/svm/sev.c                        |  13 +-
- arch/x86/kvm/vmx/main.c                       |  12 +-
- arch/x86/kvm/vmx/tdx.c                        | 236 +++++++++++-
- arch/x86/kvm/vmx/x86_ops.h                    |   1 +
- arch/x86/kvm/x86.c                            |  14 +-
- tools/testing/selftests/kvm/Makefile.kvm      |   2 +
- .../testing/selftests/kvm/include/kvm_util.h  |  25 ++
- .../selftests/kvm/include/x86/tdx/tdx_util.h  |   3 +
- .../selftests/kvm/include/x86/tdx/test_util.h |   5 +
- .../testing/selftests/kvm/include/x86/ucall.h |   4 +-
- tools/testing/selftests/kvm/lib/kvm_util.c    | 222 ++++++++----
- .../testing/selftests/kvm/lib/ucall_common.c  |   2 +-
- .../selftests/kvm/lib/x86/tdx/tdx_util.c      |  63 +++-
- .../selftests/kvm/lib/x86/tdx/test_util.c     |  17 +
- tools/testing/selftests/kvm/lib/x86/ucall.c   | 108 ++++--
- .../kvm/x86/tdx_irqfd_migrate_test.c          | 264 ++++++++++++++
- .../selftests/kvm/x86/tdx_migrate_tests.c     | 337 ++++++++++++++++++
- 22 files changed, 1349 insertions(+), 132 deletions(-)
- create mode 100644 tools/testing/selftests/kvm/x86/tdx_irqfd_migrate_test.c
- create mode 100644 tools/testing/selftests/kvm/x86/tdx_migrate_tests.c
-
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index 999872c13722..b9966394acda 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -1484,10 +1484,13 @@ struct kvm_arch {
+ #ifdef CONFIG_X86_64
+ #ifdef CONFIG_KVM_PROVE_MMU
+ 	/*
+-	 * The number of TDP MMU pages across all roots.  Used only to sanity
+-	 * check that KVM isn't leaking TDP MMU pages.
++	 * The number of non-mirrored TDP MMU pages across all roots.
++	 * Used only to sanity check that KVM isn't leaking TDP MMU pages.
+ 	 */
+ 	atomic64_t tdp_mmu_pages;
++
++	/* Same as tdp_mmu_pages but only for mirror pages. */
++	atomic64_t tdp_mirror_mmu_pages;
+ #endif
+ 
+ 	/*
+diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+index 7f3d7229b2c1..115af5e4c5ed 100644
+--- a/arch/x86/kvm/mmu/tdp_mmu.c
++++ b/arch/x86/kvm/mmu/tdp_mmu.c
+@@ -42,6 +42,7 @@ void kvm_mmu_uninit_tdp_mmu(struct kvm *kvm)
+ 
+ #ifdef CONFIG_KVM_PROVE_MMU
+ 	KVM_MMU_WARN_ON(atomic64_read(&kvm->arch.tdp_mmu_pages));
++	KVM_MMU_WARN_ON(atomic64_read(&kvm->arch.tdp_mirror_mmu_pages));
+ #endif
+ 	WARN_ON(!list_empty(&kvm->arch.tdp_mmu_roots));
+ 
+@@ -328,7 +329,10 @@ static void tdp_account_mmu_page(struct kvm *kvm, struct kvm_mmu_page *sp)
+ {
+ 	kvm_account_pgtable_pages((void *)sp->spt, +1);
+ #ifdef CONFIG_KVM_PROVE_MMU
+-	atomic64_inc(&kvm->arch.tdp_mmu_pages);
++	if (sp->role.is_mirror)
++		atomic64_inc(&kvm->arch.tdp_mirror_mmu_pages);
++	else
++		atomic64_inc(&kvm->arch.tdp_mmu_pages);
+ #endif
+ }
+ 
+@@ -336,7 +340,10 @@ static void tdp_unaccount_mmu_page(struct kvm *kvm, struct kvm_mmu_page *sp)
+ {
+ 	kvm_account_pgtable_pages((void *)sp->spt, -1);
+ #ifdef CONFIG_KVM_PROVE_MMU
+-	atomic64_dec(&kvm->arch.tdp_mmu_pages);
++	if (sp->role.is_mirror)
++		atomic64_dec(&kvm->arch.tdp_mirror_mmu_pages);
++	else
++		atomic64_dec(&kvm->arch.tdp_mmu_pages);
+ #endif
+ }
+ 
 -- 
 2.50.0.rc1.591.g9c95f17f64-goog
 
