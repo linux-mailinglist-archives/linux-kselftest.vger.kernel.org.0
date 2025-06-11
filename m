@@ -1,81 +1,80 @@
-Return-Path: <linux-kselftest+bounces-34730-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34731-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C6CFAD58F6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 16:39:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63E5FAD58FA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 16:39:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA71A3A502B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 14:38:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 573BB1782BB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 14:39:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C1422BE7DC;
-	Wed, 11 Jun 2025 14:37:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28C532BEC57;
+	Wed, 11 Jun 2025 14:38:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jaFE6AvY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BtBKBOaO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F4AB27815B;
-	Wed, 11 Jun 2025 14:37:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 700DD2BD5B6;
+	Wed, 11 Jun 2025 14:38:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749652677; cv=none; b=C5GS9xYAQsTaBXokh1RVmRiW2k/fCx+qwCpYKqPRUa3p7zP/EuvrcVaD5lHpZvHTuRIB4BqjRQ6GI+jlr6WjncpPolEC/j5JKY1XnrN5EEBXg/kntLvySrCDgA4bq38GvuqVQFCR6AO/1HG4vNkN3nuHIbrkgpRILADLxE7RBRU=
+	t=1749652682; cv=none; b=T+DeZNUV4ArF6yvfpwZsvTRWaE4PtkHrOhaF/NUbv+sgUYr7w7oYwdLnvO0aeY0hCG7omUP4UUv5r+tDmODlA7mbuq+IBC9oygB4exI1ejF0V5VDViB9COrfIaj44KU7R+JnvAGUO+2Z/CzqQljMeI5XcVABOmylqimlGGM+ooY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749652677; c=relaxed/simple;
-	bh=6QEznI5dDLWlKvkkHo/QuzqxbGMfjbjAro9UR7sEabw=;
+	s=arc-20240116; t=1749652682; c=relaxed/simple;
+	bh=tOzgL0KY9yFrjchFg5tvk0J/AejOvH97Tt3OuAqyGZA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=vC8dBNwEZ/KctaE5orIZKkOIlikTKXloadVffbo9yPhgLUeu3KA/kcrwBooDSBUf4fYdH4ENsRb9oK0tw+jIdeqCnsZ8O934YelHVGgRoE5C1Jrm/OBNMQiVZpU5dRdsy6EJLXktaVOKT4hkSCx4TE4E3c2lm8cX4lLbvWeHc60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jaFE6AvY; arc=none smtp.client-ip=209.85.160.170
+	 In-Reply-To:To:Cc; b=KEV0sLsItpP/XmXMxAaidgJ4jZlicIs8t59Fot/nUVkNs0/b8JVDlKWmJRKFZmHGs3iG9Q/BmiisWWOHoIm5gRzdIbnZcf9HtGKqmr0zk3GVA6mjUfH1Fay97f+/g4cq6k1gmnu3OqISLpuziLrvev4cPTPGtfykeIWad0euNmI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BtBKBOaO; arc=none smtp.client-ip=209.85.219.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-4a5901854e3so592711cf.3;
-        Wed, 11 Jun 2025 07:37:55 -0700 (PDT)
+Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-6fac4e2fcd1so144046d6.0;
+        Wed, 11 Jun 2025 07:38:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749652674; x=1750257474; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1749652679; x=1750257479; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=mWTHHniH+bU9oQ9NHxDCHqm92WzrmLWSDAFi+6Fga6c=;
-        b=jaFE6AvYz2dJTlkvbuKo3C4VfF+Ooj27hEryW8eU2Ymx8YMyBhBy24EUZtAbgb/E9B
-         BUvDTwy1M41LyReGZn48M8cDpWjb3SjXPePBl5TqX7dBxUgCJ/48Jq2aqGqKJ9TJcs3x
-         gL47ZXOejE6dmkXvyZRR6bCU7yGesWQwkzJ7rEvc2WsOEn2QE1FrtsWoTQ1yGDWT+1pb
-         UUimyyQKNDORSwWXT7XMV0eqbjvdUmHgNCCnoynF5Nqykwsuh2CyRhSp7z9DN4i2PZTh
-         pLo4JnpXi9jzFvtk9O1KYh+LJBHOvaXLVR+RAfurrviLMsb1To0Ipw6TLBGqaArxMQEo
-         lMdA==
+        bh=LEWFUemvl7siyfmS6XSp2BMVs4pqCozC91INbpbQZrY=;
+        b=BtBKBOaOaRWiPauG8AGmK0BnMFHDRD1TBBwGUqHJ4KatXjnWyn5CffwDCgai9MkhUe
+         9vbFMvuauXgFesDJdqxcyhbJLz8K6lYzMDaKl0ilz+CoHlmZ95xshZmlcl2bT+82NVvC
+         JLEbFiaQh00rIl6J5biOmSHGvUgoAYGOnFngwWBc2lFBy+DSeBI6VtEJKkgsEs//KV5l
+         jIDTwXcRMPDyyJtH/eapUteX5l23Cgwtuh1TqexQFuU4M50jYmN00qYzzAFGUhyphqHi
+         Mt3Z2W5N8kccQNTKE9cYJtbeBOYZkrwgdtSLgPnt4QMDDLd+qrFWtmOXK59hZF7Bg9Eb
+         nPew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749652674; x=1750257474;
+        d=1e100.net; s=20230601; t=1749652679; x=1750257479;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mWTHHniH+bU9oQ9NHxDCHqm92WzrmLWSDAFi+6Fga6c=;
-        b=Yv5eMoWL9apqaT20E3kqKAGi2pArnrUJ4OPEuhFnnwLnA9b6SbbPEp2WfAZFX5AWek
-         sT6vMyunrvyxFfnU/nOrcIIDMlCxSqCwTLG1qr6HlnIvkFWsW1eUMQNCLDAdzju14sIb
-         MoEpBBHLb0bDnCQVj89KrhSJVFJwSbE3oMGfEzj/jbKzqYjlxlNJVSfTOJoy/TyHu9U7
-         sxheQzfp8riG7wx3YYvjXik33rZcH0qXd3sJ9hfXIh+uQvngm1k6uzyjZjjp2zBAWPg8
-         IUPw3nFZ2kkqZ/qPx0N5nCFiUIG2Wajz6By7xM4noAxo/VhNzqtnta3uEhpAbrOoITLR
-         ZvGQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV2Vi1kt82T8n+9OrCiHlAH9P0B96RQaJOBksUFKjwbrVHMKV0UZiALRRHDuHcHbiS5nV/yrCeKS2RaaDcl@vger.kernel.org, AJvYcCVtPraL4mmjR7BRqPYIuomNeqMqS7SchpqrCRjiKnPgtX0sn16xN+bJFXPA2cb4RKjju1IpYOz13jykXLADC4fx@vger.kernel.org, AJvYcCWOeKON0GSw/5ey7kRQ4tuI7SpWy3rsSFVUZqoTJ50/QH0UrgygI1bdfbw03g/7Kx+8682GWunbAcY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQ6PdenEzxDpVlHsdxOAoX+aTOs3Dte3whWtYXufFkpcL5tyne
-	mkC/vMDPbUilgsxNG/ZoVV93HT0tnEEEv1ojz98tLdiAHHGx4MWQuItZDa3pxol5UfA=
-X-Gm-Gg: ASbGncs+H9itNFPlwua0oPIDDLPH7bqbpc2nz6snGi9F88K3kUust6O+5irJ7G3JNER
-	gAh33t3IamjwrWJvgANeX+5H4qRzUPep+8Y7DSl2zWYJiZfmxh6bjeVbIxcFbnRb2AQPt3JP9wm
-	3rqb5uvT6aHl0wG3y14R+nH0OmRnAg+tlYPH3VIkQ9hmoc4cjc+8z/vGdtdM+D8pqsJ7Z+jht4G
-	dZLrcnq29dV+Wj4CSJaJM31X/4Y1RZL+1qF+ctXmhMm0KQkeOFc3v6y1W0Ew7yv/fPvtEmNbr9k
-	M1yxz5byo2AB3mdR7p/IN2QhCx/ebCh4ESYOEcvv05kNSMS57RFSUqgz
-X-Google-Smtp-Source: AGHT+IGpoQb1VZnYZFkyUPWRdqFbZp2QlhkzTSMnfG7PGjcKk2oqkZ6BSv2d7fW+qfiyp5LbxQ0IJg==
-X-Received: by 2002:ac8:7f52:0:b0:4a5:aaeb:dce2 with SMTP id d75a77b69052e-4a713c2128cmr21232271cf.10.1749652673543;
-        Wed, 11 Jun 2025 07:37:53 -0700 (PDT)
-Received: from localhost ([2a03:2880:20ff:7d::])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a619894b05sm87327141cf.75.2025.06.11.07.37.53
+        bh=LEWFUemvl7siyfmS6XSp2BMVs4pqCozC91INbpbQZrY=;
+        b=qYluR5EpSHnjpLj3XFFqJG8+8jBQkjO8yy4G5nRxhFRBKKkN40/PdM8qR8UrgFKOr6
+         /+OTOjMKVdqXJbvR6eiEZsa/GWLiqCOlNZ50jsfVztIzB7T9kvzfGzb6DsQ4UeGu7e9h
+         Rdn4VoBbMHT8HUTl0emSHxC2PMWkbNjjt5mGkOUpyBqA8tlX2pjfC2UzoV1m71JPE7rr
+         LtqRJ5cVnvE7yv+N26dVqe6puErkrOlMtNkYc7umJisf1t8++d1n7cOESYqKB+gtTHRS
+         fwWwHLIDecAnfEL8/QgpUTgbRmleF5PxJshcYqY705JmJAxqVJOqSSYX0TVb4k5IVlyq
+         nHlA==
+X-Forwarded-Encrypted: i=1; AJvYcCU0qmUQ+EvMl1+H+l8OthJ3HD9xy84dfQNVUwOfJKHzKK9sIs7lV+U+dt5+T4cJR4TvRWI3v8a02EdEf9K8@vger.kernel.org, AJvYcCVbOBKg0C58OMo5u0MWrAAa2Z3gz8OzGmQcSnQCo7PQz/wSteDdx8QlSDFekWdG7npIy18PpZAf1lY=@vger.kernel.org, AJvYcCXJypFgIsrzUxk3iUgQON7lgJRgeoQjoCRAuETlt5jXhGKmsvBpUyU3d5H1gDt4lV9ASaXzY13+FaScFidtZ8ol@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy9TVH+czVCLpmFQDL6WQLY1b00VPj3VxH0D2a3uY+anTS/AP6Q
+	IYmkKnuSSvjsjNiduDmhhAycGkWSbes1UZKj4e5scJ7Dq+H2RP1Z1F3uIF8aJEgfnEU=
+X-Gm-Gg: ASbGnctjQFYTVDgii2tb+Gj6YPOOoa2XZtkUSyVO98Xz70dszhM8xwvaH8Y4SR7tnBC
+	EaCfBwogocssnMBXE7h1o5XSADIlT5UJVzUJosrdmX/4jJSO0HHVfDE9hQS/tEnKn4K5InoHt5E
+	tMOmIEZaUldbcXN34jFwHKZWQdAJ9booS93yqrZIKQUUWHAlz0d4Gt3MiOlhtR6d1sHv3bUTdIt
+	79+JTc9C8QKihl5buRGb9Y9GysD6kuJlYWGEDB0GfX9Kfq58DEPcaYPMexF3pfImdFNP4xsjM9J
+	Jn9AofbzcpUT7A+InsR9YiwRd2leUArf5UWRmuZZw6pDl5ULUp8QhbE=
+X-Google-Smtp-Source: AGHT+IHJUXXQFyBk9F2cncTLJpxIYvehgFqAwrqxUqIhkdJDPaNUQfAOqJdsZttNUJYQKPxTN6q6Ng==
+X-Received: by 2002:a05:6214:2509:b0:6fb:fe9:e90d with SMTP id 6a1803df08f44-6fb2c38cb32mr22229576d6.10.1749652678841;
+        Wed, 11 Jun 2025 07:37:58 -0700 (PDT)
+Received: from localhost ([2a03:2880:20ff:8::])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6fb09b1ce20sm82252766d6.67.2025.06.11.07.37.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jun 2025 07:37:53 -0700 (PDT)
+        Wed, 11 Jun 2025 07:37:58 -0700 (PDT)
 From: Gustavo Luiz Duarte <gustavold@gmail.com>
-Date: Wed, 11 Jun 2025 07:36:06 -0700
-Subject: [PATCH net-next 4/5] selftests: netconsole: Add tests for 'msgid'
- feature in sysdata
+Date: Wed, 11 Jun 2025 07:36:07 -0700
+Subject: [PATCH net-next 5/5] docs: netconsole: document msgid feature
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -84,7 +83,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250611-netconsole-msgid-v1-4-1784a51feb1e@gmail.com>
+Message-Id: <20250611-netconsole-msgid-v1-5-1784a51feb1e@gmail.com>
 References: <20250611-netconsole-msgid-v1-0-1784a51feb1e@gmail.com>
 In-Reply-To: <20250611-netconsole-msgid-v1-0-1784a51feb1e@gmail.com>
 To: Breno Leitao <leitao@debian.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
@@ -97,99 +96,51 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  Gustavo Luiz Duarte <gustavold@gmail.com>
 X-Mailer: b4 0.13.0
 
-Extend the self-tests to cover the 'msgid' feature in sysdata.
+Add documentation explaining the msgid feature in netconsole.
 
-Verify that msgid is appended to the message when the feature is enabled
-and that it is not appended when the feature is disabled.
+This feature appends unique id to the userdata dictionary. The message
+ID is populated from a per-target 32 bit counter which is incremented
+for each message sent to the target. This allows a target to detect if
+messages are dropped before reaching the target.
 
 Signed-off-by: Gustavo Luiz Duarte <gustavold@gmail.com>
 ---
- .../selftests/drivers/net/netcons_sysdata.sh       | 30 ++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ Documentation/networking/netconsole.rst | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/tools/testing/selftests/drivers/net/netcons_sysdata.sh b/tools/testing/selftests/drivers/net/netcons_sysdata.sh
-index a737e377bf08..baf69031089e 100755
---- a/tools/testing/selftests/drivers/net/netcons_sysdata.sh
-+++ b/tools/testing/selftests/drivers/net/netcons_sysdata.sh
-@@ -53,6 +53,17 @@ function set_release() {
- 	echo 1 > "${NETCONS_PATH}/userdata/release_enabled"
- }
+diff --git a/Documentation/networking/netconsole.rst b/Documentation/networking/netconsole.rst
+index a0076b542e9c..42a0acf2eb5e 100644
+--- a/Documentation/networking/netconsole.rst
++++ b/Documentation/networking/netconsole.rst
+@@ -340,6 +340,28 @@ In this example, the message was sent by CPU 42.
+       cpu=42    # kernel-populated value
  
-+# Enable the msgid to be appended to sysdata
-+function set_msgid() {
-+	if [[ ! -f "${NETCONS_PATH}/userdata/msgid_enabled" ]]
-+	then
-+		echo "Not able to enable msgid sysdata append. Configfs not available in ${NETCONS_PATH}/userdata/msgid_enabled" >&2
-+		exit "${ksft_skip}"
-+	fi
+ 
++Message ID auto population in userdata
++--------------------------------------
 +
-+	echo 1 > "${NETCONS_PATH}/userdata/msgid_enabled"
-+}
++Within the netconsole configfs hierarchy, there is a file named `msgid_enabled`
++located in the `userdata` directory. This file controls the message ID
++auto-population feature, which assigns a unique id to each message sent to a
++given target and appends the ID to userdata dictionary in every message sent.
 +
- # Disable the sysdata cpu_nr feature
- function unset_cpu_nr() {
- 	echo 0 > "${NETCONS_PATH}/userdata/cpu_nr_enabled"
-@@ -67,6 +78,10 @@ function unset_release() {
- 	echo 0 > "${NETCONS_PATH}/userdata/release_enabled"
- }
- 
-+function unset_msgid() {
-+	echo 0 > "${NETCONS_PATH}/userdata/msgid_enabled"
-+}
++The message ID is built from a per-target 32 bit counter that is incremented
++for every message sent to the target. This ID can be used by the target to
++detect if messages were dropped before reaching the target.
 +
- # Test if MSG contains sysdata
- function validate_sysdata() {
- 	# OUTPUT_FILE will contain something like:
-@@ -74,6 +89,7 @@ function validate_sysdata() {
- 	#  userdatakey=userdatavalue
- 	#  cpu=X
- 	#  taskname=<taskname>
-+	#  msgid=<id>
- 
- 	# Echo is what this test uses to create the message. See runtest()
- 	# function
-@@ -104,6 +120,12 @@ function validate_sysdata() {
- 		exit "${ksft_fail}"
- 	fi
- 
-+	if ! grep -q "msgid=[0-9]\+$" "${OUTPUT_FILE}"; then
-+		echo "FAIL: 'msgid=<id>' not found in ${OUTPUT_FILE}" >&2
-+		cat "${OUTPUT_FILE}" >&2
-+		exit "${ksft_fail}"
-+	fi
++Example::
 +
- 	rm "${OUTPUT_FILE}"
- 	pkill_socat
- }
-@@ -155,6 +177,12 @@ function validate_no_sysdata() {
- 		exit "${ksft_fail}"
- 	fi
- 
-+	if grep -q "msgid=" "${OUTPUT_FILE}"; then
-+		echo "FAIL: 'msgid=  found in ${OUTPUT_FILE}" >&2
-+		cat "${OUTPUT_FILE}" >&2
-+		exit "${ksft_fail}"
-+	fi
++  echo "This is message #1" > /dev/kmsg
++  echo "This is message #2" > /dev/kmsg
++  13,434,54928466,-;This is message #1
++   msgid=1
++  13,435,54934019,-;This is message #2
++   msgid=2
 +
- 	rm "${OUTPUT_FILE}"
- }
++
+ Extended console:
+ =================
  
-@@ -206,6 +234,7 @@ set_cpu_nr
- # Enable taskname to be appended to sysdata
- set_taskname
- set_release
-+set_msgid
- runtest
- # Make sure the message was received in the dst part
- # and exit
-@@ -235,6 +264,7 @@ MSG="Test #3 from CPU${CPU}"
- unset_cpu_nr
- unset_taskname
- unset_release
-+unset_msgid
- runtest
- # At this time, cpu= shouldn't be present in the msg
- validate_no_sysdata
 
 -- 
 2.47.1
