@@ -1,244 +1,163 @@
-Return-Path: <linux-kselftest+bounces-34773-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34759-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31752AD61E1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 23:50:07 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBFC0AD60EC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 23:17:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A6FAD1891B6B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 21:50:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 22AF97A706E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 21:15:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44AE7248880;
-	Wed, 11 Jun 2025 21:49:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B38BC235BEE;
+	Wed, 11 Jun 2025 21:16:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="jUf+PHhC"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jYGZKaX5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47B3B247DF9;
-	Wed, 11 Jun 2025 21:49:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.152.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BC6A1A8F82
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Jun 2025 21:16:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749678581; cv=none; b=qHF8hKI9oyWkGxiCKRpzIcXR7bNDpVkgxi2jXWV7izp/Y3blWDoDfrgrOS2zH+CpLf8XhjO8FIlRspbrQHmWG1SMVhrKhj3IhtX4FL7OUlenZ3I7Jey6VOXDvn4/5AgYhUZuEEX1L33koksgDY/nVHg/j4NPJgT66flE5pRDTa4=
+	t=1749676617; cv=none; b=oUgI5OCNWWFfVPL5rXP7ccAxaua6Y1ek0VDY35bRQkgvmCM5iFMGY4XptJABYmUpq76lOPh6YRZN+C5sQjl16H99gWL6N0aw+C7/Hu9qxnhyV4mDnnArk7KXBcKrnz9kYyzHJqr3Uwe2Dk3jhPIBLqpmPGM0IvY631M1I2IfF7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749678581; c=relaxed/simple;
-	bh=OtDz+EVCzM/AZL6dZm9vgoBTwCYbhlzoU3pVGOM3SQ8=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TDbzNzSdzn4H5kmYAky5VQ/nWdVs2ZcCodfYKT6/+OIZeB86s47tUV69eEmf19lpFf2x4JXBHPD74Z0bXIitFv6G/9jm3mGGg3/kCN4/GAb7tKF91L14bdggyaVAZlAkgSUZv7qPDlI2E+RoHRRYo6Se7MRzoFVVUujTk7IyVAQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=jUf+PHhC; arc=none smtp.client-ip=148.163.152.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
-Received: from pps.filterd (m0354653.ppops.net [127.0.0.1])
-	by mx0b-00206402.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55BGUBYc023981;
-	Wed, 11 Jun 2025 21:06:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=SnGev3U/yD8kg9SDWZeTHMimn/M3rVYK94ITsbFxIR8=; b=jUf+
-	PHhC61HkOauLm/IHn1MrMfklj66WPTUyVwKVrrnjGYbyLsOJUa3I1oBGYIO3tnES
-	4falPcmwRgXzCZMs1KR37H3WPJ4WgyNa69LXtbChVUy50FqTGyzlUUfATRHz3ozd
-	kStvB0TP8Zw21ASY7GItvLH4FEXEZdAWKTTZGbUWzX5nqrUov52ZKcOeGN1Fcgty
-	b3e/XsQn0hjPymzgaHUQkPRjDsYcxzrTGAV+9VcPM4kRz771sEIxyl2LZNO9cdvr
-	0D4tlQv7hdvK4eDeCwsXE55DwATxmME3K/neD1Dj12wl8G1RXKvdv6SvkIfx7Urr
-	GOu9hyKqReB2egUcNA==
-Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 476ps7r7n7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 11 Jun 2025 21:06:41 +0000 (GMT)
-Received: from ML-CTVHTF21DX.crowdstrike.sys (10.100.11.122) by
- 04WPEXCH007.crowdstrike.sys (10.100.11.74) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 11 Jun 2025 21:06:36 +0000
-From: Slava Imameev <slava.imameev@crowdstrike.com>
-To: <qmo@kernel.org>
-CC: <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
-        <daniel@iogearbox.net>, <eddyz87@gmail.com>, <haoluo@google.com>,
-        <john.fastabend@gmail.com>, <jolsa@kernel.org>,
-        <justin.deschamp@crowdstrike.com>, <kpsingh@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <mark.fontana@crowdstrike.com>, <martin.lau@linux.dev>,
-        <mykolal@fb.com>, <sdf@fomichev.me>, <shuah@kernel.org>,
-        <slava.imameev@crowdstrike.com>, <song@kernel.org>,
-        <yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v2 1/2] bpftool: Use appropriate permissions for map access
-Date: Thu, 12 Jun 2025 07:06:33 +1000
-Message-ID: <20250611210633.92084-1-slava.imameev@crowdstrike.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <c3b403f5-4849-44f3-82cb-b0b506b10138@kernel.org>
-References: <c3b403f5-4849-44f3-82cb-b0b506b10138@kernel.org>
+	s=arc-20240116; t=1749676617; c=relaxed/simple;
+	bh=NECYWsPH7RKAtQbRL0XnwHUNxi8qMBhhQIcgYAF72FU=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=AqefCtaYxc1nf0F2E5VbUIisRhwHxmdCoM5SRgMkH8tDcaao/C5LpC6MKw9dZKu99UwN7MdOttuThJQA8rCv/vbe8ELn7WC3Q/BkOrW8cz/XHStoKtEnAbyQNlbWO9s4bRtVLcoBlrgPjs8Oj/dy3gXh1PzoNmgimiR7+DUDV0w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--afranji.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jYGZKaX5; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--afranji.bounces.google.com
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-3138e64b3f1so292074a91.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Jun 2025 14:16:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1749676615; x=1750281415; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=LOsJ8fO8l9KNsBrYZMTXVSP3wn3/FZjJX+dB1opvLg8=;
+        b=jYGZKaX5LNUxWcMqgpTV2NUUw6oUIKcSxTfToAFaivjmEn8d7CqwqEVOwVR/R/rhn1
+         K4O+xQB+eY7biq1mo2zqTQjrh2Ww5R7Qp02ZR5bNwIv1aiJSegQYQFr+O9aUZqoY30QH
+         PIb1glceS0V9B9lFOsQOH/5V6dq3EyjhmKJ3SVDhHCL6Aa3NC9zdzKBwPCJpjQTedVBo
+         ZbTASs9ovX0+7C9PGI8Ki7xkYDxsX78bactpJCM05alqcsAaDmi+yo/aCRZc8AZg8MRm
+         2jqMJA7FO0f3xcs432+eMtmQJbhzRCV/+lGhNgNDLXmeXjB8dbmF3RQoqrjG/lEGXGHO
+         8sOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749676615; x=1750281415;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LOsJ8fO8l9KNsBrYZMTXVSP3wn3/FZjJX+dB1opvLg8=;
+        b=UCXuV9ssJ6evE8FyHk7Z3/8OH7LWY/N39CchxM7rwQU3vaxPftULiawuGRVhYJxXhf
+         9Td7ecizuJ0I9uqRW3u6d/NzJvyv+H6Iyrkbf67Zy2iTGf61Cx9NvR44CEqQ7BCQSdvB
+         sFShTp3gPtCu756OU4+eidqach9R2KqQoIEBxqvV9kiLUwhNnvzx58Ebvkr2iDNWZLP4
+         w2lFJndaV+hV5aYuIpTGJl5PKgualkq8UwKCVkS12xV73ismqiCBtumQXU7G3p5t18fG
+         f9uwaGoxHMDqxC7ExSQ3U0NH5GYZNHYYJ27Krj6bNwOhtMTMObl8OTSMpO0hA+eqoyYp
+         X6NA==
+X-Forwarded-Encrypted: i=1; AJvYcCUwDXR5UKzwnLj1PyoGIfmi+SI7CPeSj/r5bZsFnSxtYKWfFdN6v6xF3kgJ06s9bqZMyJaq9wB2tHjv0MnEYGg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzp8xJANNqUn1tdkPhc0DY+2u0KQ5u3+162+MPGwYzxI7FP60iS
+	dCQ/llfMTiM2ok+nWCqCf94urrVeMeHNyrKbXKBrtPXp06N0I9YmiOgXNwnzS0uzU5OVHOexzg9
+	Pm+LyGvc4wQ==
+X-Google-Smtp-Source: AGHT+IF6qbV42OSMgEB/L2JOEi7E6FqjbgD2fsncm8r6Nqy7IPKImoaTuEIAXwkZoxK9ENk1RCq0tlxAz2mg
+X-Received: from pjh5.prod.google.com ([2002:a17:90b:3f85:b0:311:485b:d057])
+ (user=afranji job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3b8b:b0:311:e9ac:f5ce
+ with SMTP id 98e67ed59e1d1-313c08bbb9dmr724334a91.21.1749676615444; Wed, 11
+ Jun 2025 14:16:55 -0700 (PDT)
+Date: Wed, 11 Jun 2025 21:16:27 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: 04WPEXCH006.crowdstrike.sys (10.100.11.70) To
- 04WPEXCH007.crowdstrike.sys (10.100.11.74)
-X-Disclaimer: USA
-X-Proofpoint-ORIG-GUID: ApAh2UNTX3bCMpO1EKz6kR3-5nHK5-ov
-X-Proofpoint-GUID: ApAh2UNTX3bCMpO1EKz6kR3-5nHK5-ov
-X-Authority-Analysis: v=2.4 cv=OeyYDgTY c=1 sm=1 tr=0 ts=6849efe1 cx=c_pps
- a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
- a=EjBHVkixTFsA:10 a=6IFa9wvqVegA:10 a=pl6vuDidAAAA:8 a=j6b8ci30a58VJQJFYksA:9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjExMDE3OCBTYWx0ZWRfX1mcB1tCRvOqP
- 2JrS/+x3UxZWySTQe5gosarprNVi12I2fnWaZ2dL7d6+RphZkr4hlcgEcesYwLDiIZTDKBf/iKy
- gx/nPYISkHZ8EQh7ACp6KtnkVL8q40wRqx7gK/VBa0Jw3RGe5wJ4AmFNnbQABEypkC/6um/6hwU
- Wk9BPQVTe6c1oL/AwR5m/ZykB3rBzEVwmJO9MNfeQAXVs4OlVVJX31pYDfuhx+ic925lwuBVmB4
- 7xdTow7zBVmgicFLZZDg5tGRTk5TKzBvxk9K0xjmarPe93yqSKAOnKqWr15cmfLeQZBcd92xTBE
- VEd5/cuKA3PK63cN+dJ7zYlu6TBBhlXeQmFCQ7P+9DRxXhkHIkJ2ny+NlqXRY1IwMMEld2yohng
- zjReRLJ1P8MFpiMsBPBlgmU3AMAKnf5LRZ2AGTj7BIAHe5EZ3Zi0fosabjwrdQL1PiPVLI4A
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-11_09,2025-06-10_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 mlxlogscore=999 spamscore=0 bulkscore=0 suspectscore=0
- malwarescore=0 priorityscore=1501 lowpriorityscore=0 phishscore=0
- impostorscore=0 mlxscore=0 clxscore=1015 classifier=spam authscore=0
- authtc=n/a authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2505280000 definitions=main-2506110178
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.50.0.rc1.591.g9c95f17f64-goog
+Message-ID: <cover.1749672978.git.afranji@google.com>
+Subject: [RFC PATCH v2 00/10] Add TDX intra-host migration support
+From: Ryan Afranji <afranji@google.com>
+To: kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org
+Cc: sagis@google.com, bp@alien8.de, chao.p.peng@linux.intel.com, 
+	dave.hansen@linux.intel.com, dmatlack@google.com, erdemaktas@google.com, 
+	isaku.yamahata@intel.com, kai.huang@intel.com, mingo@redhat.com, 
+	pbonzini@redhat.com, seanjc@google.com, tglx@linutronix.de, 
+	zhi.wang.linux@gmail.com, ackerleytng@google.com, andrew.jones@linux.dev, 
+	david@redhat.com, hpa@zytor.com, kirill.shutemov@linux.intel.com, 
+	linux-kselftest@vger.kernel.org, tabba@google.com, vannapurve@google.com, 
+	yan.y.zhao@intel.com, rick.p.edgecombe@intel.com, 
+	Ryan Afranji <afranji@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-> > Modify several functions in tools/bpf/bpftool/common.c to allow
-> > specification of requested access for file descriptors, such as
-> > read-only access.
-> >
-> > Update bpftool to request only read access for maps when write
-> > access is not required. This fixes errors when reading from maps
-> > that are protected from modification via security_bpf_map.
-> >
-> > Signed-off-by: Slava Imameev <slava.imameev@crowdstrike.com>
->
->
-> Thanks for this!
->
-> I think the topic of map access in bpftool has been discussed in the
-> path, but I can't remember what we said or find it again - maybe I don't
-> remember correctly. Looks good to me overall.
->
-> One question: How thoroughly have you tested that write permissions are
-> necessary for the different cases? I'm asking because I'm wondering
-> whether we could restrict to read-only in a couple more cases, see
-> below. (At the end of the day it doesn't matter too much, it's fine
-> being conservative and conserving write permissions for now, we can
-> always refine later; it's already an improvement to do read-only for the
-> dump/list cases).
+Hello,
 
+This is RFC v2 for the TDX intra-host migration patch series. It
+addresses comments in RFC v1 [1] and is rebased onto the latest kvm/next
+(v6.16-rc1).
 
-The goal of this patch was to fix bpftool errors we experienced on our systems.
-The efforts were focused only on changes to the affected subset of map commands.
+This patchset was built on top of the latest TDX selftests [2] and gmem
+linking [3] RFC patch series.
 
+Here is the series stitched together for your convenience:
+https://github.com/googleprodkernel/linux-cc/tree/tdx-copyless-rfc-v2
 
-> > +		/* Get an fd with the requested options. */
-> > +		close(fd);
-> > +		fd = bpf_map_get_fd_by_id_opts(id, opts);
-> > +		if (fd < 0) {
-> > +			p_err("can't get map by id (%u): %s", id,
-> > +			      strerror(errno));
-> > +			goto err_close_fds;
-> > +		}
->
->
-> We could maybe skip this step if the requested options are read-only, no
-> need to close and re-open a fd in that case?
+Changes from RFC v1:
++ Added patch to prevent deadlock warnings by re-ordering locking order.
++ Added patch to allow vCPUs to be created for uninitialized VMs.
++ Minor optimizations to TDX intra-host migration core logic.
++ Moved lapic state transfer into TDX intra-host migration core logic.
++ Added logic to handle posted interrupts that are injected during
+migration.
++ Added selftests.
++ Addressed comments from RFC v1.
++ Various small changes to make patchset compatible with latest version
+of kvm/next.
 
+[1] https://lore.kernel.org/lkml/20230407201921.2703758-2-sagis@google.com
+[2] https://lore.kernel.org/lkml/20250414214801.2693294-2-sagis@google.com
+[3] https://lore.kernel.org/all/cover.1747368092.git.afranji@google.com
 
-I agree. The change will be submitted with version 3.
+Ackerley Tng (2):
+  KVM: selftests: Add TDX support for ucalls
+  KVM: selftests: Add irqfd/interrupts test for TDX with migration
 
+Ryan Afranji (3):
+  KVM: x86: Adjust locking order in move_enc_context_from
+  KVM: TDX: Allow vCPUs to be created for migration
+  KVM: selftests: Refactor userspace_mem_region creation out of
+    vm_mem_add
 
-> > -int map_parse_fds(int *argc, char ***argv, int **fds)
-> > +int map_parse_fds(int *argc, char ***argv, int **fds, __u32 open_flags)
-> >  {
-> > +	LIBBPF_OPTS(bpf_get_fd_by_id_opts, opts);
-> > +
-> > +	if (open_flags & ~BPF_F_RDONLY) {
-> > +		p_err("invalid open_flags: %x", open_flags);
-> > +		return -1;
-> > +	}
->
->
-> I don't think we need this check, the flag is never passed by users. If
-> you want to catch a bug, use an assert() instead?
+Sagi Shahar (5):
+  KVM: Split tdp_mmu_pages to mirror and direct counters
+  KVM: TDX: Add base implementation for tdx_vm_move_enc_context_from
+  KVM: TDX: Implement moving mirror pages between 2 TDs
+  KVM: TDX: Add core logic for TDX intra-host migration
+  KVM: selftests: TDX: Add tests for TDX in-place migration
 
+ arch/x86/include/asm/kvm_host.h               |   7 +-
+ arch/x86/kvm/mmu.h                            |   2 +
+ arch/x86/kvm/mmu/mmu.c                        |  66 ++++
+ arch/x86/kvm/mmu/tdp_mmu.c                    |  72 +++-
+ arch/x86/kvm/mmu/tdp_mmu.h                    |   6 +
+ arch/x86/kvm/svm/sev.c                        |  13 +-
+ arch/x86/kvm/vmx/main.c                       |  12 +-
+ arch/x86/kvm/vmx/tdx.c                        | 236 +++++++++++-
+ arch/x86/kvm/vmx/x86_ops.h                    |   1 +
+ arch/x86/kvm/x86.c                            |  14 +-
+ tools/testing/selftests/kvm/Makefile.kvm      |   2 +
+ .../testing/selftests/kvm/include/kvm_util.h  |  25 ++
+ .../selftests/kvm/include/x86/tdx/tdx_util.h  |   3 +
+ .../selftests/kvm/include/x86/tdx/test_util.h |   5 +
+ .../testing/selftests/kvm/include/x86/ucall.h |   4 +-
+ tools/testing/selftests/kvm/lib/kvm_util.c    | 222 ++++++++----
+ .../testing/selftests/kvm/lib/ucall_common.c  |   2 +-
+ .../selftests/kvm/lib/x86/tdx/tdx_util.c      |  63 +++-
+ .../selftests/kvm/lib/x86/tdx/test_util.c     |  17 +
+ tools/testing/selftests/kvm/lib/x86/ucall.c   | 108 ++++--
+ .../kvm/x86/tdx_irqfd_migrate_test.c          | 264 ++++++++++++++
+ .../selftests/kvm/x86/tdx_migrate_tests.c     | 337 ++++++++++++++++++
+ 22 files changed, 1349 insertions(+), 132 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86/tdx_irqfd_migrate_test.c
+ create mode 100644 tools/testing/selftests/kvm/x86/tdx_migrate_tests.c
 
-I agree. This check is replaced with an assert and will be submitted with v3.
-
-
-> > diff --git a/tools/bpf/bpftool/iter.c b/tools/bpf/bpftool/iter.c
-> > index 5c39c2ed36a2..ad318a8667a4 100644
-> > --- a/tools/bpf/bpftool/iter.c
-> > +++ b/tools/bpf/bpftool/iter.c
-> > @@ -37,7 +37,7 @@ static int do_pin(int argc, char **argv)
-> >  				return -1;
-> >  			}
-> >  
-> > -			map_fd = map_parse_fd(&argc, &argv);
-> > +			map_fd = map_parse_fd(&argc, &argv, 0);
->
->
-> Do you need write permissions here? (I don't remember.)
-
-
-Iterator requires only read access. I changed it to BPF_F_RDONLY for v3.
-An iterator test is added to v3.
-
-
-> > -	fd = map_parse_fd_and_info(&argc, &argv, &info, &len);
-> > +	fd = map_parse_fd_and_info(&argc, &argv, &info, &len, BPF_F_RDONLY);
->
->
-> This one is surprising, don't you need write permissions to delete an
-> element from the map? Please double-check if you haven't already, I
-> wouldn't want to break "bpftool map delete".
->
-> I note you don't test items deletion in your tests, by the way.
-
-
-Right, the delete command requires write access. I changed it and added
-an item deletion test to v3.
-
-
-> >  static int do_pin(int argc, char **argv)
-> >  {
-> >  	int err;
-> >  
-> > -	err = do_pin_any(argc, argv, map_parse_fd);
-> > +	err = do_pin_any(argc, argv, map_parse_read_only_fd);
-> >  	if (!err && json_output)
-> >  		jsonw_null(json_wtr);
-> >  	return err;
-> > @@ -1319,7 +1329,7 @@ static int do_create(int argc, char **argv)
-> >  			if (!REQ_ARGS(2))
-> >  				usage();
-> >  			inner_map_fd = map_parse_fd_and_info(&argc, &argv,
-> > -							     &info, &len);
-> > +							     &info, &len, 0);
->
->
-> Do you need write permissions for the inner map's fd? This is something
-> that could be worth checking in the tests, as well.
-
-The inner map fd can be created with read only access. I changed it and added
-a test for map-of-maps creation to v3.
-
-
-> > @@ -128,7 +128,8 @@ int do_event_pipe(int argc, char **argv)
-> >  	int err, map_fd;
-> >  
-> >  	map_info_len = sizeof(map_info);
-> > -	map_fd = map_parse_fd_and_info(&argc, &argv, &map_info, &map_info_len);
-> > +	map_fd = map_parse_fd_and_info(&argc, &argv, &map_info, &map_info_len,
-> > +				       0);
->
->
-> This one might be worth checking, too.
-
-
-An event pipe map fd requires write access as the map is updated by bpf_map_update_elem
-inside __perf_buffer__new .
-
+-- 
+2.50.0.rc1.591.g9c95f17f64-goog
 
 
