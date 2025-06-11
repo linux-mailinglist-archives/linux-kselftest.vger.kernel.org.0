@@ -1,87 +1,87 @@
-Return-Path: <linux-kselftest+bounces-34698-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34699-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E547BAD551B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 14:10:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72E43AD5521
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 14:11:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6539116C3C8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 12:11:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 60A553AAD54
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 12:11:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C5B927B4E0;
-	Wed, 11 Jun 2025 12:10:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1DEE27BF80;
+	Wed, 11 Jun 2025 12:11:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RBsY8dSQ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bXY97wLh"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8587227780B
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Jun 2025 12:10:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBAA327780B
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Jun 2025 12:11:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749643856; cv=none; b=sDMn+7iNnsKoO53ie8ph4Xtq1U4Mbqos/XT7odoQFfIzPtBWGL8t6DwtaJrjawBUQ0p0Fcw3mCxXqmNfIFE59jmCwUfqXB02VdhZgb+F7/68OuNcbOF/SUa+9iGfvNNcjMLhJ11HJz9bqIarjBE9OGopVteacTRU1MDOrLYJsZ8=
+	t=1749643889; cv=none; b=TwOrPR/l7uOmt7pmYeSs3GtU11WPW07DmBU9okNXDrMujLBCKWoSCqJInhp7b/OIM/Cag5Of2M550OMsFNDAPIG1XtPW8OeMcQadOaYND6KmjvMmJo9lH/n5Wy+a84mMKyewgUTFclLN+XMYafj407Nn7q3Dmjsfz6gh3eA81zg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749643856; c=relaxed/simple;
-	bh=Xk1ddhx77cHWw9Ct61TDaPE3Rg8dzF9dzOF3Dpji2DY=;
+	s=arc-20240116; t=1749643889; c=relaxed/simple;
+	bh=wj+Lp1JIKeXO6eLYNmD4JrguUF/hcBihPWj9REmfNk4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ahUOTsJHayhYKcxZqt+ZRx2KyfTShtF6TisCDpqR5vqpTvKto/Q43PYaSEfuOGM7uKs0AljmsyVCAMHfgw3E/TxyGcEzX96MgA6myOVf9cxIAtUQB8sI/MuN5I1B/lsIoa+8GAXxK/2iqL1FGoh9icJ/keAawbQeXfQ5oGXqFx4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RBsY8dSQ; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:Content-Type; b=lQW7EUGv0dKWn8KZ+G6fy18KNusIiTwhPjgf7NZshtEdkN7ucO2nWcRk/YIpv4B3R9ZuBbkTtqD5AKgOwdv4N/tSoigRv3pc4X/BGQld7IyYHt88hCii2mIG5FqqW4dkLz4P/0Cl7AAO1fKNIBQUYILlmwih2owkJSkzVPwdFS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bXY97wLh; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1749643853;
+	s=mimecast20190719; t=1749643887;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=h9u/BB+Pg7diLVSz+P1K4APpZKD4S0kyw+YGrKVNC4M=;
-	b=RBsY8dSQJx4Ay+BOJi+ouRSA3e7GpcTlkyBZWSrrYajVkzXG69wewhrrOoA+DZK93QTbCE
-	illuW094qAehmUrl9tyk24qG9WvmKT7MYUo5Mmz7EE7pzHn2jOkJ08oBqmKo6dAjOV8WLb
-	DGCAUm8/mRb+PIuCBuYqrPpcdGE9kss=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=94fGjpgENkGfz8xm/0/MvEIE16LMoVi1/Ag2K5nPavY=;
+	b=bXY97wLh2t8V5fillaBuMNWy1I6wyAo3zl7/lLOyLqAkQKgFn6bSM7HjPgk/71O/wpsvVA
+	wPywQV+q2DbyJda56CIiAo/+ajTvpJndb7TXIK4F9CB7XmfsAh6jzx+2wXupi9pvLVZC3T
+	s6hdp8Qbn1DYrSKFYUeUHEdgHOYPXdE=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-184-zvEy92JOOyOPlKeuBjmi1w-1; Wed, 11 Jun 2025 08:10:52 -0400
-X-MC-Unique: zvEy92JOOyOPlKeuBjmi1w-1
-X-Mimecast-MFC-AGG-ID: zvEy92JOOyOPlKeuBjmi1w_1749643852
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-7c5e28d0cc0so1007193485a.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Jun 2025 05:10:52 -0700 (PDT)
+ us-mta-128-bji0OqAyO3i27bEErUK1dw-1; Wed, 11 Jun 2025 08:11:26 -0400
+X-MC-Unique: bji0OqAyO3i27bEErUK1dw-1
+X-Mimecast-MFC-AGG-ID: bji0OqAyO3i27bEErUK1dw_1749643885
+Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-6face1d593bso128753756d6.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Jun 2025 05:11:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749643852; x=1750248652;
+        d=1e100.net; s=20230601; t=1749643885; x=1750248685;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=h9u/BB+Pg7diLVSz+P1K4APpZKD4S0kyw+YGrKVNC4M=;
-        b=KpcbTPgh/4cDoidHLpt7IGIoFXrodkbgjMmdmamUz217gq/MSNToQTjZgzlt5B0fQw
-         KvsHvAZuUezgQO81Bi2C+oM3lAj8FU+SzhfEO/eV7ZctE7O7ID87GqI+/bpz53/5iQng
-         PXtK08OU/su9sTYBc3OepaZEKR2K0hZcP7Ivk2NhyE1mPj5JMfGSbxqCxFqWfGjuBTRN
-         m19m2tYTiEf89nMtbhxZ0nwgyqkBPfLRZEUzSDdNB8ssjHK47ntB/TeycfmnXrzwcIbc
-         aj5OVNeqoVl0Yu7VQjz7lCaHHqeW5OEXvLtDCKn/lny13qGCW5QiZPypyl+hfiJbluYQ
-         9bWw==
-X-Forwarded-Encrypted: i=1; AJvYcCUZk9E8Zqn8pe8bry97Nn1TE8+WAZ+9SC3yZZ7TNfWZkgXS7yLH57w2AUjYyTf05EsgcwMp3c9OXc/zevD/ASw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhuDyjFmYE4ROAndeTSMm0qspBnR5me7MTn5Pe/rEVfC7PpmwN
-	Yy0gFOonvntP/6LdkjCYbffQlf+rsQpeOiGgWU+zND834yN701B/yN2M1sXzQgBWk2pcNWVwoVV
-	Iij/AapNYIkVdAUVLunDDjX+P+BulATctCTiy9b0DvLDtYfhsDCwK2aWoAojGBwLjTVZDNw==
-X-Gm-Gg: ASbGncvKF66wjK1ev19tkdfuodHU38UbTmu9Sq9SwYq+Gd6zMxJ1OrQ66dRct9Z1Mcq
-	wDBrKyh5qnrorb7fCIXyDWXG8JY/MjYpY33Q4z/VdtAHVHHmt0uJW9X9jBIwTDC4OfV9SYmrdce
-	PtZnsoa1gvEPgBegdhs5Qj/DYJz4kdf9IMhPbTXT0rrAIIrD65Qc9ZZBNoOgdyIRsePpvMG0hjb
-	ckxbdSm8JGskGdmeOCB4oVDZnKj5ByWzulRA6ywF92Frz2WsuMhPeAWVyIaWDb+QnJEGL0D9Rx7
-	WJcXEEE1ely9EyXlSjihY7psVbaLVKxq+R356DoXsDK5
-X-Received: by 2002:a05:6214:20c1:b0:6e8:8798:275d with SMTP id 6a1803df08f44-6fb2c251fc2mr50983906d6.0.1749643851793;
-        Wed, 11 Jun 2025 05:10:51 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEpQQObiAAO/LAoeVrc+vGFwd3Oi28mcq0/hlnDd2TbOd9ncS9NKhQhbvQU/ipsx2Ddq/pZBg==
-X-Received: by 2002:a05:6214:20c1:b0:6e8:8798:275d with SMTP id 6a1803df08f44-6fb2c251fc2mr50983586d6.0.1749643851477;
-        Wed, 11 Jun 2025 05:10:51 -0700 (PDT)
+        bh=94fGjpgENkGfz8xm/0/MvEIE16LMoVi1/Ag2K5nPavY=;
+        b=Gf4Xz/V9jMHXQbe/Ym9iDMUoPZY/hT47J11qpxgD+du+O1DXgrFDkJeXwmGZ0QWjkb
+         1WUmImK7fXxoaKjK9f0u023psc3yJ8aCMNLp/xashH42+N2UtdZQoaNy0oyZwiplzMtT
+         bCG+d/7jkwpWeRJrmRn7GHQUCZbkJ6bbvpu2ZU2wW13/DxVlKYyTRo8yUkwkcqZa9JKx
+         D6gG8wTnZvyoXDPVRUMgRLEwHRS4sHCYJ5kdmCE/M5H7sPXIKE3B3M6s+j9cZuv4faDd
+         ajeAqLtkITf848mR8GTj/5290pyj3Vi+nRGjNElMEnBe3MrZxfyq+wIlcPx5tGWUl+MH
+         foBA==
+X-Forwarded-Encrypted: i=1; AJvYcCWVNxUk7hMK0NubWkGCl1t+KkgFLzmd6u5IEF3ZJ9E5McaL0LQ6LKguw5KUM6H/RG20PedpQx6WD/1AL4cyQWQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyX4bxlVmVYC8u/3G92sPzz8DLcyAP64ZcncaQcol58fgfAkOJZ
+	sjHdS3+zqb8HdLAUi/DnmTyjKOmxrhVFtb0DD6cSRQyTwxtPCF6ELOMy3xvo5/eLK4KCUUGiJHG
+	dRA4KVb0cnfMcUeNefjvtUs8Ba/GdyPF885PVnxUhvlTa7323nE9c0S5Hz/iRz0XXhIVxoQ==
+X-Gm-Gg: ASbGncu/SiFV23CyV3lEHvieSnSKZt/+ic2Pc6qpfsF0VsfE603BfPl3eITGMoJ2+dh
+	4w1IYG9ijNUTGFft13o/XAuVQgyVMy3tN9Wkvb8e9r/u6M3FEBWPashlb2dGJtL/0+EdU1vwEzc
+	rhz47YxXVUe3oHQ0kAajGAwvifOqn6xKbC0HKHENWQ/UrXKaDi2jE2lQL0UvmsIVcltXO0/dJoi
+	XNbWqthkAcPIsME2mjYo6Hp/RRI9U8tHtjOVzr2Vet2jwE7ViZAaFd6lHcytXBJaWZFf/9jOXwf
+	iG129Wrt5j1tqbF8Gc7fpZYTiORQmCYoOTgze58pY0AZ
+X-Received: by 2002:a05:6214:76d:b0:6fa:cb72:955a with SMTP id 6a1803df08f44-6fb2d12a834mr42742556d6.4.1749643885366;
+        Wed, 11 Jun 2025 05:11:25 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGHphM2A40eqISPXj3+oqaa57yngTVVZHDTfJeB5+KzJ+lXgUMEjIOP5dF/qLwW0Zst1IP4Yw==
+X-Received: by 2002:a05:6214:76d:b0:6fa:cb72:955a with SMTP id 6a1803df08f44-6fb2d12a834mr42742096d6.4.1749643884976;
+        Wed, 11 Jun 2025 05:11:24 -0700 (PDT)
 Received: from [10.32.64.156] (nat-pool-muc-t.redhat.com. [149.14.88.26])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7d3916f3318sm510764485a.10.2025.06.11.05.10.50
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7d38f4cc6e3sm556234185a.42.2025.06.11.05.11.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Jun 2025 05:10:51 -0700 (PDT)
-Message-ID: <b21349dd-6020-4b8a-b34a-f4085e040908@redhat.com>
-Date: Wed, 11 Jun 2025 14:10:49 +0200
+        Wed, 11 Jun 2025 05:11:24 -0700 (PDT)
+Message-ID: <34a650a6-6885-4d86-8162-567ddf98fd02@redhat.com>
+Date: Wed, 11 Jun 2025 14:11:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -89,13 +89,14 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/4] selftests/mm: Don't compare return values to in cow
+Subject: Re: [PATCH 4/4] selftests/mm: Add messages about test errors to the
+ cow tests
 To: Mark Brown <broonie@kernel.org>, Andrew Morton
  <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
 Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20250610-selftest-mm-cow-tweaks-v1-0-43cd7457500f@kernel.org>
- <20250610-selftest-mm-cow-tweaks-v1-3-43cd7457500f@kernel.org>
+ <20250610-selftest-mm-cow-tweaks-v1-4-43cd7457500f@kernel.org>
 From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
@@ -143,18 +144,19 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <20250610-selftest-mm-cow-tweaks-v1-3-43cd7457500f@kernel.org>
+In-Reply-To: <20250610-selftest-mm-cow-tweaks-v1-4-43cd7457500f@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 10.06.25 16:13, Mark Brown wrote:
-> Tweak the coding style for checking for non-zero return values.
-> While we're at it also remove a now redundant oring of the madvise()
-> return code.
+> It is not sufficiently clear what the individual tests in the cow test
+> program are checking so add messages for the failure cases.
 > 
 > Suggested-by: David Hildenbrand <david@redhat.com>
 > Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
+
+Thanks!
 
 Acked-by: David Hildenbrand <david@redhat.com>
 
