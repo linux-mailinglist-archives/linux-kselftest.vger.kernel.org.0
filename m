@@ -1,220 +1,97 @@
-Return-Path: <linux-kselftest+bounces-34660-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34661-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D92CAD4DD7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 10:05:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21F77AD4DFB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 10:10:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E37EA1797F9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 08:05:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1BE63188769B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 08:10:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA3431EBA09;
-	Wed, 11 Jun 2025 08:04:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Z/2HXK8q";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="con6Hdug"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0A87236442;
+	Wed, 11 Jun 2025 08:09:04 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0235222D79B;
-	Wed, 11 Jun 2025 08:04:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FCB82356B3;
+	Wed, 11 Jun 2025 08:09:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749629080; cv=none; b=SYWGV52stetCzBMZw8qZ37UHwlZZ2vIC+vMn4lJIitpypvz5OfuCrUelomycuBQalu+9r2hVqjlq05f6orBypyqgdo8HHUo86Ekz/9IIFeACx/vAtchx2XEM49LwOUzrfDih+ULsLh0AQoRGAGRCPkg3xt5jd1xtBLqsWUpvChU=
+	t=1749629344; cv=none; b=lISXHNtI/Ftbwbwl4ZZ6e7telmBWf4SaaKIkuCd09v9XlyMTyyAi04vFU0Hvuho5d4Ei6RDmEySPk/fXprv1xXg1gmLJTtHz3H3B7D192wxNocurYOjGLAaIHwOoAC2ezaoM36UawmOImkVXHApWBJ65k6oqPxad2o94fPWPCao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749629080; c=relaxed/simple;
-	bh=3/Efkva65yPVo5qOxC3lVrHAJLXm7UCzGtHmQ4KXEhQ=;
+	s=arc-20240116; t=1749629344; c=relaxed/simple;
+	bh=bb/gYoBGqnnv8Qs7r02fycV4dkWTGnthEecbIoM/PwQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e7A8TsEah4GZqMFBgEqGq/NyGqM6d+PdlfyHDIrZLBP5zTByucmJbL1Eo64o5by4lcVpCwYN8e0VBlTZxmO5Gp3aZCwAkVQ3i2/vBh1NplYG9S6UcmI+kggPLKuxsgEHddD9W5Hdqa5VXeSg/flaEBF2vo6em/LIbi7KMpDHWsM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Z/2HXK8q; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=con6Hdug; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Wed, 11 Jun 2025 10:04:35 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1749629076;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=j2SKKUdPrZUXJA24/Q7m79DvirdquN66Z/YUL7hCSVY=;
-	b=Z/2HXK8qrXAErz0whT4G+v7b2AsxF/jbF8ZBGwtAPR4Rtvzj5bOKkweFBwqzhuXYe1DfyC
-	xR19ojZixIsNy/XrvoL8TT03yW1j/mFdnODEfWqxovfQz+5G3qgY61p4r39mHs6j+kWTpq
-	t3ylT38Yv6G4sC5z0jIB2+Q68cSFCa7afcm/uKANd7kVgY40iidiPp38XdcV0R0D9msY/x
-	FFA2xu3uOp4KAx5BkCMPkzblM3oC6sWQPc2kEYg1T5VTq5t6Dg2MbwbwevTFoA2CH/WlSN
-	fYNXAIc5yFzd35KxpWdJ/EmDIWMD7CxT240hIoIZUtdzmAYsrskcyfkqZ4fjWg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1749629076;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=j2SKKUdPrZUXJA24/Q7m79DvirdquN66Z/YUL7hCSVY=;
-	b=con6HdugG6CXlKqO4IUFGqu2feEReKr7XM9huuYhJk3Oo8kGoFjmhuc8hZVrP7ssTLu6/d
-	jQ/rTkKMZ0A+s4Aw==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Nicolin Chen <nicolinc@nvidia.com>
-Cc: Jason Gunthorpe <jgg@nvidia.com>, Shuah Khan <shuah@kernel.org>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Willy Tarreau <w@1wt.eu>, 
-	Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, Kees Cook <kees@kernel.org>, 
-	Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>, Mark Brown <broonie@kernel.org>, 
-	Muhammad Usama Anjum <usama.anjum@collabora.com>, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 09/14] selftests: harness: Move teardown conditional
- into test metadata
-Message-ID: <20250611093942-f6c65a06-c72a-4451-aa1e-8cb8de0d69cb@linutronix.de>
-References: <20250505-nolibc-kselftest-harness-v4-0-ee4dd5257135@linutronix.de>
- <20250505-nolibc-kselftest-harness-v4-9-ee4dd5257135@linutronix.de>
- <aEfVYQaid5uOHB+Y@nvidia.com>
- <20250610130817-253d2b2d-030a-4eda-91fc-3edb58a4f549@linutronix.de>
- <20250610120902.GB543171@nvidia.com>
- <aEh+DNmbZrqg6rHR@nvidia.com>
- <20250610234657.GO543171@nvidia.com>
- <aEkqtfcOJDrxAAcs@nvidia.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=QgsLcgSA7M/DYPeGA/isRNd/n04m6mASkrNkN+IFbIFVVd6t3M4sQKQfIVlBKx5wSTDoikKF6GBZPAnzpQ3QKXQ/QIE+Prh+oJJuA2jMywab1B5RkDuYCXB0cXTMzczgJBb5Pz7L+DFfrIy1v7ZtMMG4nWrFAmXaRxiMDhKPLzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-acb5ec407b1so1135165866b.1;
+        Wed, 11 Jun 2025 01:09:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749629341; x=1750234141;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xGRU+Kv08xe5NBWzNvaRaFDet3u9/sA86Kboke4WJ9A=;
+        b=kHS9Tn5+qJl99lehQqT16FVawKmtjMAY5bA3SIdSISW3hO87UQApHy6qAhU08EXKhd
+         JFFk0cVdHhJ8/ekRcOXoCRtuPggdze42W2/JFDE+MlnlqBc5S+dLIDpvfgaEdHtDPNNx
+         YIa2rWjAUaKe1c/K/wyKTeQ9qeWRLSHJbUYJBNNPeM2zYEpM2LopDjg5dqsQN8hGqIj5
+         dUycMoWe1ELeAyjyCwpUZ/HcieeUn/C6l4hXuPEZ+FtiP7x8xUq11e9VY3vk8Cunv8nX
+         ynmDi0iBMIKONY/5Ime6n19p5hSGPcd5hAwPmHjufy/ZOMNK7RO3ZK5uCea68INt+9Uw
+         Zumw==
+X-Forwarded-Encrypted: i=1; AJvYcCUBmg9H1DlrD3/tJVVAXow+Ipz0fPupTIwW1BU7dI11KuAQ6YI59GTEuEd89fWMQDRji9W+13W2BWNHjYUZb0a4@vger.kernel.org, AJvYcCVf/YqmSEOKDFgKRX9bhWi+Fk672fi+L9aYUm7YCgiJQ7jVwrtwiNujDTGjn7CkbXSmElT5RU/cX8T47K4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxC6SY2geJoSFfNwkt6e50JDi3egI7rZEzJl6QQ5NEjJrViWMoh
+	ukv2WNc0T9dzmmaTYSfY3mOoqGUBshc1DKuAARnlilMGoKqig93f0v8v
+X-Gm-Gg: ASbGncsqkDHTTiakaRAu4WUZnD4l/JYyvLKy2ei8/ehzG8+a+qB0k6lxP9cn/cGT+ic
+	eYJ7Q2KToHz4szMmzCdAQgZsaxP6v9lxsGpkIcDA0PT1ALRTegP3KDKw3X+qm0B9NrRyLsBGNmS
+	oy3s6uGM5nh6NwexP1UuvvtHJnK2FpfIZkubjR1tFcwRteCW+Fw6e3W3Khr3DgaeDpaQNC6CMBO
+	61/z7J+WVfjHs4IvghFybbZTzGQ8bMhJOIB1uICB3ma5MOwswkpb5YS0cc9UoGQzwFT4pfDEyWD
+	4FYQp5M0vid88BQHA1eplEsp160kCsl+AIq7sgm4XkTtL4LeZYIiXksmJK1ZzX+g
+X-Google-Smtp-Source: AGHT+IGbQu5qlFUouSqkJhPj8jhxnrJC0Olr7Zwa5gMMOkWdUeanOk7UUb5kvt1BxjCg3bkg0oosmw==
+X-Received: by 2002:a17:907:9449:b0:ad2:2fa8:c0a7 with SMTP id a640c23a62f3a-ade8c76b521mr172874366b.21.1749629341249;
+        Wed, 11 Jun 2025 01:09:01 -0700 (PDT)
+Received: from gmail.com ([2a03:2880:30ff:72::])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ade1dc1c5besm845927466b.87.2025.06.11.01.09.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Jun 2025 01:09:00 -0700 (PDT)
+Date: Wed, 11 Jun 2025 01:08:58 -0700
+From: Breno Leitao <leitao@debian.org>
+To: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH net-next 0/7] netpoll: Untangle netconsole and netpoll
+Message-ID: <aEk5mv69Ha7xyvPV@gmail.com>
+References: <20250610-rework-v1-0-7cfde283f246@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aEkqtfcOJDrxAAcs@nvidia.com>
+In-Reply-To: <20250610-rework-v1-0-7cfde283f246@debian.org>
 
-On Wed, Jun 11, 2025 at 12:05:25AM -0700, Nicolin Chen wrote:
-> On Tue, Jun 10, 2025 at 08:46:57PM -0300, Jason Gunthorpe wrote:
-> > On Tue, Jun 10, 2025 at 11:48:44AM -0700, Nicolin Chen wrote:
-> > > On Tue, Jun 10, 2025 at 09:09:02AM -0300, Jason Gunthorpe wrote:
-> > > > On Tue, Jun 10, 2025 at 01:38:22PM +0200, Thomas Weißschuh wrote:
-> > > > > > ------------------------------------------------------------------
-> > > > > > #  RUN           iommufd_dirty_tracking.domain_dirty128M_huge.enforce_dirty ...
-> > > > > > # enforce_dirty: Test terminated unexpectedly by signal 11
-> > > > 
-> > > > Sig 11 is weird..
-> > > 
-> > > > > On another note, the selftest should use the kselftest_harness' ASSERT_*()
-> > > > > macros instead of plain assert().
-> > > > 
-> > > > IIRC the kselftest stuff explodes if you try to use it's assert
-> > > > functions within a fixture setup/teardown context.
-> > > > 
-> > > > I also wasn't able to reproduce this (x86 ubuntu 24 LTS OS) Maybe
-> > > > it is ARM specific, I think Nicolin is running on ARM..
-> > > 
-> > > Yes. And I was running with 64KB page size. I just quickly retried
-> > > with 4KB page size (matching x86), and all failed tests pass now.
-> > 
-> > That's a weird thing to be sensitive too. Can you get a backtrace from
-> > the crash, what function/line is crashing?
-> 
-> I think I am getting what's going on. Here the harness code has a
-> parent process and a child process:
-> 
-> --------------------------------------------------------------
-> 428-            /* _metadata and potentially self are shared with all forks. */ \
-> 429:            child = fork(); \
-> 430:            if (child == 0) { \
-> 431-                    fixture_name##_setup(_metadata, self, variant->data); \
-> 432-                    /* Let setup failure terminate early. */ \
-> 433-                    if (_metadata->exit_code) \
-> 434-                            _exit(0); \
-> 435-                    *_metadata->no_teardown = false; \
-> 436-                    fixture_name##_##test_name(_metadata, self, variant->data); \
-> 437-                    _metadata->teardown_fn(false, _metadata, self, variant->data); \
-> 438-                    _exit(0); \
-> 439:            } else if (child < 0 || child != waitpid(child, &status, 0)) { \
-> 440-                    ksft_print_msg("ERROR SPAWNING TEST GRANDCHILD\n"); \
-> 441-                    _metadata->exit_code = KSFT_FAIL; \
-> 442-            } \
-> 443-            _metadata->teardown_fn(true, _metadata, self, variant->data); \
-> 444-            munmap(_metadata->no_teardown, sizeof(*_metadata->no_teardown)); \
-> 445-            _metadata->no_teardown = NULL; \
-> 446-            if (self && fixture_name##_teardown_parent) \
-> 447-                    munmap(self, sizeof(*self)); \
-> 448-            if (WIFEXITED(status)) { \
-> 449-                    if (WEXITSTATUS(status)) \
-> 450-                            _metadata->exit_code = WEXITSTATUS(status); \
-> 451-            } else if (WIFSIGNALED(status)) { \
-> 452-                    /* Forward signal to __wait_for_test(). */ \
-> 453-                    kill(getpid(), WTERMSIG(status)); \
-> 454-            } \
-> ....
-> 456-    static void wrapper_##fixture_name##_##test_name##_teardown( \
-> 457-            bool in_parent, struct __test_metadata *_metadata, \
-> 458-            void *self, const void *variant) \
-> 459-    { \
-> 460-            if (fixture_name##_teardown_parent == in_parent && \
-> 461-                            !__atomic_test_and_set(_metadata->no_teardown, __ATOMIC_RELAXED)) \
-> 462-                    fixture_name##_teardown(_metadata, self, variant); \
-> 463-    } \
-> --------------------------------------------------------------
-> 
-> I found there is a race between those two processes, resulting in
-> the teardown() not getting invoked: I added some ksft_print_msg()
-> calls in-between the lines to debug, those tests can pass mostly,
-> as teardown() got invoked.
-> 
-> I think the reason why those huge page cases fail is just because 
-> the huge version of setup() takes longer time..
+On Tue, Jun 10, 2025 at 08:18:12AM -0700, Breno Leitao wrote:
+>  drivers/net/netconsole.c                           | 137 ++++++++++++++++++++-
+>  include/linux/netpoll.h                            |  10 +-
+>  net/core/netpoll.c                                 | 136 +-------------------
+>  tools/testing/selftests/drivers/net/Makefile       |   1 +
+>  .../selftests/drivers/net/lib/sh/lib_netcons.sh    |  39 +++++-
+>  .../selftests/drivers/net/netcons_cmdline.sh       |  52 ++++++++
+>  6 files changed, 228 insertions(+), 147 deletions(-)
 
-Can you try to recreate this issue with changes to
-tools/testing/selftests/kselftest_harness/harness-selftest.c ?
+I've just found that this current patchset didn't apply to
+net-next, thus, the NIPA tests didn't run. I will send a v2 soon. I do
+not plan to change anything, other than rebasing it.
 
-> I haven't figured out a proper fix yet, but something smells bad:
-> 1) *no_teardown is set non-atomically, while both processes calls
->    __atomic_test_and_set()
-
-Does this make a difference?
-
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index 2925e47db995..89fb37a21d9d 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -410,7 +410,7 @@
-                /* Makes sure there is only one teardown, even when child forks again. */ \
-                _metadata->no_teardown = mmap(NULL, sizeof(*_metadata->no_teardown), \
-                        PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0); \
--               *_metadata->no_teardown = true; \
-+               __atomic_store_n(_metadata->no_teardown, true, __ATOMIC_SEQ_CST); \
-                if (sizeof(*self) > 0) { \
-                        if (fixture_name##_teardown_parent) { \
-                                self = mmap(NULL, sizeof(*self), PROT_READ | PROT_WRITE, \
-@@ -429,7 +429,7 @@
-                        /* Let setup failure terminate early. */ \
-                        if (_metadata->exit_code) \
-                                _exit(0); \
--                       *_metadata->no_teardown = false; \
-+                       __atomic_store_n(_metadata->no_teardown, false, __ATOMIC_SEQ_CST); \
-                        fixture_name##_##test_name(_metadata, self, variant->data); \
-                        _metadata->teardown_fn(false, _metadata, self, variant->data); \
-                        _exit(0); \
-@@ -455,7 +455,7 @@
-                void *self, const void *variant) \
-        { \
-                if (fixture_name##_teardown_parent == in_parent && \
--                               !__atomic_test_and_set(_metadata->no_teardown, __ATOMIC_RELAXED)) \
-+                               !__atomic_test_and_set(_metadata->no_teardown, __ATOMIC_SEQ_CST)) \
-                        fixture_name##_teardown(_metadata, self, variant); \
-        } \
-        static struct __test_metadata *_##fixture_name##_##test_name##_object; \
-
-> 2) parent doesn't seem to wait for the setup() to complete..
-
-setup() is called in the child (L431) right before the testcase itself is
-called (L436). The parent waits for the child to exit (L439) before unmapping.
-
-> 3) when parent runs faster than the child that is still running
->    setup(), the parent unmaps the no_teardown and set it to NULL,
->    then UAF in the child, i.e. signal 11?
-
-That should never happen as the waitpid() will block until the child running
-setup() and the testcase itself have exited.
-
-Does the issue also happen when you only execute a single testcase?
-$ ./iommufd -r iommufd_dirty_tracking.domain_dirty128M_huge.enforce_dirty
-
-
-Thomas
+--breno
 
