@@ -1,198 +1,116 @@
-Return-Path: <linux-kselftest+bounces-34638-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34639-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76308AD4A44
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 07:08:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF72EAD4C13
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 08:53:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5433D3A5EF3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 05:08:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BB5D41787DC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jun 2025 06:53:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29D58221702;
-	Wed, 11 Jun 2025 05:08:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5CF722ACFA;
+	Wed, 11 Jun 2025 06:53:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mMXtuiZw"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="qsvLbKLJ";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="WarEaKmc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CBC62045B5;
-	Wed, 11 Jun 2025 05:08:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3473114B07A;
+	Wed, 11 Jun 2025 06:53:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749618529; cv=none; b=H2H2jIBjGyMmYPbglsAE+7lSHGkO3SHPvpfFfCHHCTEAwqIUcJd7y6u/1v9uLnqUgRwshn28qMy7JFUdoU3FolTMeX3ep+Ufxujwa3RWV0DdSSfrcnqB7aOASh4XBcGI8afbanu1GHMvY6+6f7VmKLEHA5A6Pt9ENvGMM0QFxsQ=
+	t=1749624807; cv=none; b=tpFldqvYn97mRZf66F4QUosoPUnRCsDWxy9bqUlr/O8jQAzKAAs6hXKaiJOqa2SibqUhZfWhIgA90uWKJXA1gpMhPfTZvJWiARJ7QJM+zNkSEFHDMdrHTDb1IVzviQHbdYPuHoTgXzoi46oV1gkb1Fo+HcjTw+4zO0vTC55KFLc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749618529; c=relaxed/simple;
-	bh=ayaMEU/Ch5YOHTkvvKRCj+w/PTv2ZLP+L7N+vECgU7c=;
+	s=arc-20240116; t=1749624807; c=relaxed/simple;
+	bh=2brzaQdI5K2BRfT9bqvgdFVDaKnfP2G7GR+inuAUFrQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DflK0Kj0zGdJNtfHGV941KhIsxIw2ERYf3cC0MDZWFap6HZcEpRQ68ZoVsXv/wFqJI/53Q+6ibTr8xHB453rhGwxEVim+zuvpBPccmlY5dhdcBb+A/yeMt7y6JP9qAidc3DoK42cavHlnNDyHEAtg0/ae2GKDy6mFrnRsq/QsXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mMXtuiZw; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2363616a1a6so15575505ad.3;
-        Tue, 10 Jun 2025 22:08:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749618526; x=1750223326; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jwiLk2bUgnnXObqCMxhj7bAHaeNINQCjvFcpBiWLLv0=;
-        b=mMXtuiZw4oF2yL2P6XJHBoU5TJhUr+zRYb5CoL3dIfsr2T0F/4HA8gmpOOWZN2lOID
-         LHETHr7QaSAtA10ua2hleOS+6nQyWYl6pQw/kkuwlpcVDEQ2KwI5AinIWV+xXnB4FFwB
-         awbIc7MvC7SD8tpJ0F2206dUGUzXKPsu19iln4Lz8qBfxY/IPYrSTMBddmlDZ215ppd4
-         Gqblw5SJCkddR+39/KC4Ejls2sCuSgoh15hbTQkKomn1iXyH+mgmJ6zvv17IyJYeBMxy
-         /ysPWKMXsEJ8OBYwieeA04xBoufiVvg4y2OOxt8N5ZZN4fUsJXSkoYrw/6cumGJGqKoF
-         lidA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749618526; x=1750223326;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jwiLk2bUgnnXObqCMxhj7bAHaeNINQCjvFcpBiWLLv0=;
-        b=S+vjMmFIGXkZ77eAgyOUStd8wMI9OIMS7z3/cu8yD+q1Wojy5HEIvDZ/wj/MR4j84v
-         eLSFV7oCOU6Hg+3CFXJcLSQvI0WDEKxh/0vZSc+2EWOD8ezguXZaFfEDkdJxXTKg4yoH
-         2szAskTQwMSkoCsII2yhLX89WjkQSQQEce11BisSoNiTl6H7VSSfMvETYJOSM+WdogWo
-         PCGMXGfxI9Hm0LImS9s4CWfKDPmjPkCtX6xNQh40Psl8VgPcDqCEgmvtiNMaRbH5ycaQ
-         4Mlz3QroQ4q1uxtWLPfWByr9hS5YJ+vH6TPXxTfxxuv3rydTnnyCD1iAvSB/uTOvIu62
-         vIcQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV2BwBcGebNjCquWNMIUTHmVwZmZefMZCcNJQALdJpf5BmGmswQZjcRaoXVlm6sEaWMoirraU+h5dV0ctw=@vger.kernel.org, AJvYcCVNWhPR7pBiPSH8je6uvYkiIMYyLt3LhFSkWni+HHsZKnxgKHpu1enjBBLDtV32PhSdocO3Iqanf+Xoo4b4TWhi@vger.kernel.org, AJvYcCXnwJBxsJkpZ/EKvU4VGP42J4xURj283GPU2ZLLBtsDGodh0PwsfdJPF5GCavF5Sh5WzqFTl/V8@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZLP7MDgD+/IoWF9bSUw/Zx0FrI92xkiDGZytz7mjZ2JqeJO59
-	W66DmffnszMSPwYeLsxxGuMj8P7K5OC7X3cDs1CUCxMtTwD4/Ud61MQz
-X-Gm-Gg: ASbGncvqDikgpCSWoo2Es2DL9uJv3dueaDxM53dBpn0R5YoT7k08fSATeDpxNjpK4C2
-	AHZWU6zNTmQx86F362xGntK1Ywx1+1fMdAifZNH7owcEK/PFpWker7N+sIRxnw6iFvagVbtfCzQ
-	RPdFJhkcFdSBv+XOUrKZiSs6/cwLnjCLu2NjqUSrEMPKFPn9MfsCvxWxwgF5I3ONFkZADNo/HE+
-	jQEfrfTaEuEFDQJf6omotwsMHLinzyWSnhh3bGXjGfKEdttTD3EAN26FstlAFIlRwgHdiGeRS9H
-	7/rkKzwuYoppFDNnrjw+CrVAMCbmZDSv2ERw4BDX47001WTkMMhgypDYacjkPK8=
-X-Google-Smtp-Source: AGHT+IGFM8Xvo2UN55UsTBkO320mepaStb5pz10Jir+u7mWjTOBuxTEy2kBpib0AZ9LWVKswMmg+FQ==
-X-Received: by 2002:a17:902:f548:b0:234:b41e:37a4 with SMTP id d9443c01a7336-23641a8ab3cmr19101185ad.6.1749618525494;
-        Tue, 10 Jun 2025 22:08:45 -0700 (PDT)
-Received: from gmail.com ([98.97.39.122])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-313b21393d7sm447552a91.37.2025.06.10.22.08.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jun 2025 22:08:45 -0700 (PDT)
-Date: Tue, 10 Jun 2025 22:08:33 -0700
-From: John Fastabend <john.fastabend@gmail.com>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org, Boris Pismenny <borisp@nvidia.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-	Ihor Solodrai <isolodrai@meta.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Add test to cover ktls
- with bpf_msg_pop_data
-Message-ID: <20250611050833.lhyymoung6rpo5zo@gmail.com>
-References: <20250609020910.397930-1-jiayuan.chen@linux.dev>
- <20250609020910.397930-3-jiayuan.chen@linux.dev>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZXNxmF1Ohtto4846YRI3HX8N4n+iP2ee6i+xPnUdEHtoQF7B4eE+sYkK7D5xmfrm0GdmpS6MwYSHV2mLYj3Sz2TpEEPcBtsUSxALspGTsTe6BsUJyBLaS4ufJ7FXSZxw0G9+kvwe67mJhuQK3Nktk0ZeDDMZT8YuefoNM7dr4bw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=qsvLbKLJ; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=WarEaKmc; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Wed, 11 Jun 2025 08:53:23 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1749624804;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Y93XEFwBv7AiJZNlzn/5hdQGj+mu2itce8t1/fii/Kw=;
+	b=qsvLbKLJ2GuF71ZMVepjRRclTjiuWvouRH3ObVQhMr1P+rntmHGpg8qiSKZbKe6NWP/edA
+	cLwFTK+gxgyevL+MEKPOHIefD5KpJF42QfGjB9IAk4o4RqgMLZXDeV9t0xmHb60FYiPeeE
+	9R0jlK0VX1Wuw65ITjqY4O9CX76BCtPXVDTfJKRkWzv2fiKhfI36sjIsDf/Ce4gnPIG0Um
+	XkgrUsWLdwQGDCepozKq0V2hObekhxaDeMtFRwWoZG0Yv5FVZQzVQTvORF90pb1VhZIKTE
+	+uutkSOE2Iiz2+e41Q28HY3+TsSzEZck595kyYpUsIE3ReHr/peCJaBO20T9JA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1749624804;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Y93XEFwBv7AiJZNlzn/5hdQGj+mu2itce8t1/fii/Kw=;
+	b=WarEaKmcPCsakYLPxMnJQddxt0TBqAmGwqZZZ2S3/8oPKDzgZz0vxiflIHmopSZ0Hnr9Ui
+	CCYGPiBdTXmKHsAg==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: Nicolin Chen <nicolinc@nvidia.com>
+Cc: Jason Gunthorpe <jgg@nvidia.com>, Shuah Khan <shuah@kernel.org>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Willy Tarreau <w@1wt.eu>, 
+	Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, Kees Cook <kees@kernel.org>, 
+	Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>, Mark Brown <broonie@kernel.org>, 
+	Muhammad Usama Anjum <usama.anjum@collabora.com>, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 09/14] selftests: harness: Move teardown conditional
+ into test metadata
+Message-ID: <20250611084548-a6bd87a7-6f35-490a-b613-5718250acf67@linutronix.de>
+References: <20250505-nolibc-kselftest-harness-v4-0-ee4dd5257135@linutronix.de>
+ <20250505-nolibc-kselftest-harness-v4-9-ee4dd5257135@linutronix.de>
+ <aEfVYQaid5uOHB+Y@nvidia.com>
+ <20250610130817-253d2b2d-030a-4eda-91fc-3edb58a4f549@linutronix.de>
+ <20250610120902.GB543171@nvidia.com>
+ <aEh+DNmbZrqg6rHR@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20250609020910.397930-3-jiayuan.chen@linux.dev>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aEh+DNmbZrqg6rHR@nvidia.com>
 
-On 2025-06-09 10:08:53, Jiayuan Chen wrote:
-> The selftest can reproduce an issue where using bpf_msg_pop_data() in
-> ktls causes errors on the receiving end.
+On Tue, Jun 10, 2025 at 11:48:44AM -0700, Nicolin Chen wrote:
+> On Tue, Jun 10, 2025 at 09:09:02AM -0300, Jason Gunthorpe wrote:
+> > On Tue, Jun 10, 2025 at 01:38:22PM +0200, Thomas Weißschuh wrote:
+> > > > ------------------------------------------------------------------
+> > > > #  RUN           iommufd_dirty_tracking.domain_dirty128M_huge.enforce_dirty ...
+> > > > # enforce_dirty: Test terminated unexpectedly by signal 11
+> > 
+> > Sig 11 is weird..
 > 
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-> ---
-
-Reviewed-by: John Fastabend <john.fastabend@gmail.com>
-
->  .../selftests/bpf/prog_tests/sockmap_ktls.c   | 91 +++++++++++++++++++
->  .../selftests/bpf/progs/test_sockmap_ktls.c   |  4 +
->  2 files changed, 95 insertions(+)
+> > > On another note, the selftest should use the kselftest_harness' ASSERT_*()
+> > > macros instead of plain assert().
+> > 
+> > IIRC the kselftest stuff explodes if you try to use it's assert
+> > functions within a fixture setup/teardown context.
+> > 
+> > I also wasn't able to reproduce this (x86 ubuntu 24 LTS OS) Maybe
+> > it is ARM specific, I think Nicolin is running on ARM..
 > 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_ktls.c b/tools/testing/selftests/bpf/prog_tests/sockmap_ktls.c
-> index b6c471da5c28..b87e7f39e15a 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/sockmap_ktls.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_ktls.c
-> @@ -314,6 +314,95 @@ static void test_sockmap_ktls_tx_no_buf(int family, int sotype, bool push)
->  	test_sockmap_ktls__destroy(skel);
->  }
->  
-> +static void test_sockmap_ktls_tx_pop(int family, int sotype)
-> +{
-> +	char msg[37] = "0123456789abcdefghijklmnopqrstuvwxyz\0";
-> +	int c = 0, p = 0, one = 1, sent, recvd;
-> +	struct test_sockmap_ktls *skel;
-> +	int prog_fd, map_fd;
-> +	char rcv[50] = {0};
-> +	int err;
-> +	int i, m, r;
-> +
-> +	skel = test_sockmap_ktls__open_and_load();
-> +	if (!ASSERT_TRUE(skel, "open ktls skel"))
-> +		return;
-> +
-> +	err = create_pair(family, sotype, &c, &p);
-> +	if (!ASSERT_OK(err, "create_pair()"))
-> +		goto out;
-> +
-> +	prog_fd = bpf_program__fd(skel->progs.prog_sk_policy);
-> +	map_fd = bpf_map__fd(skel->maps.sock_map);
-> +
-> +	err = bpf_prog_attach(prog_fd, map_fd, BPF_SK_MSG_VERDICT, 0);
-> +	if (!ASSERT_OK(err, "bpf_prog_attach sk msg"))
-> +		goto out;
-> +
-> +	err = bpf_map_update_elem(map_fd, &one, &c, BPF_NOEXIST);
-> +	if (!ASSERT_OK(err, "bpf_map_update_elem(c)"))
-> +		goto out;
-> +
-> +	err = init_ktls_pairs(c, p);
-> +	if (!ASSERT_OK(err, "init_ktls_pairs(c, p)"))
-> +		goto out;
-> +
-> +	struct {
-> +		int	pop_start;
-> +		int	pop_len;
-> +	} pop_policy[] = {
-> +		/* trim the start */
-> +		{0, 2},
-> +		{0, 10},
-> +		{1, 2},
-> +		{1, 10},
-> +		/* trim the end */
-> +		{35, 2},
-> +		/* New entries should be added before this line */
-> +		{-1, -1},
-> +	};
-> +
-> +	i = 0;
-> +	while (pop_policy[i].pop_start >= 0) {
-> +		skel->bss->pop_start = pop_policy[i].pop_start;
-> +		skel->bss->pop_end =  pop_policy[i].pop_len;
-> +
-> +		sent = send(c, msg, sizeof(msg), 0);
-> +		if (!ASSERT_EQ(sent, sizeof(msg), "send(msg)"))
-> +			goto out;
+> Yes. And I was running with 64KB page size. I just quickly retried
+> with 4KB page size (matching x86), and all failed tests pass now.
 
-Its possible this could actually not send 38B (sent < 38), but then again
-it is only 38B so I guess it should never fail? Anyways we have this
-case in a few places already I think and its not tripping CI so lets go
-for it.
+That is very important to know. It should be mentioned in the report.
 
-Thanks,
-John
+So I tried to reproduce it. To get even the mmap() in the test to succeed I
+needed to also pass default_hugepagesz=2MiB.
+Also 1GiB of memory was not enough. 30GiB was however.
+But then the tests succeeds fine for me.
 
-> +
-> +		recvd = recv_timeout(p, rcv, sizeof(rcv), MSG_DONTWAIT, 1);
-> +		if (!ASSERT_EQ(recvd, sizeof(msg) - pop_policy[i].pop_len, "pop len mismatch"))
-> +			goto out;
+So I'll need reproduction steps.
+
+
+Thomas
 
