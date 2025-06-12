@@ -1,112 +1,87 @@
-Return-Path: <linux-kselftest+bounces-34778-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34779-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD8C8AD649E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jun 2025 02:40:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14F39AD6538
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jun 2025 03:43:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4ED1F3AC3E2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jun 2025 00:40:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B67F47A7901
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jun 2025 01:42:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5042A45948;
-	Thu, 12 Jun 2025 00:40:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D20614D283;
+	Thu, 12 Jun 2025 01:43:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="APAOw6/a"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lSaj5qBT"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DA4E182D0;
-	Thu, 12 Jun 2025 00:40:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A1B61487E9;
+	Thu, 12 Jun 2025 01:43:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749688801; cv=none; b=i0UbWdWkrkOQOdhSX2FbtCwZa2jWCI/UKMP+8mGW/SSFohcut4CUKFIFZJ/mD/LRc8SLauQehr/sU8jinNbE+HAZJ4goSzeHAdnaz4DqTD7bFy/SyYFh8PVulZDYIJXJhPhnCyLe/0HWKotDyBWOUhIcud7qwJzudaJO7/wkicg=
+	t=1749692628; cv=none; b=e9gD/BbEcz4R5loXdasz8p+4MDoiPgPbWBu9KHhxflJX7DfX9m7y7i2CxsqD6Fk1uYS+ZjaCDav9xEF6NezRnfSzbuo08KjQ5kMa3PkenWR+9uHC67qQlEFoOy6tD0P9m/ExVWB1/+a0Y7G09eLfjDlpf9Bk2aXDJ2Ug8InlZNE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749688801; c=relaxed/simple;
-	bh=jpj01HFrpsqQ9KoLARSa3nYvj53bpFwNKRQ3OKEk8As=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=Nh4UeYKiquZoIbF0n/Lx2Krny19yEbOOfJQhiFicxgxqUKMpJKd6oF7+SUyIdYB+Qu2BsNpAjUTex3aBaX0QmH3qRzPQrdhLjOjEW5NcJduYaFo9mp+P8dnTjPDoVG8tl3EHJVOS7yELaXkrt++P4tEOSFwapvd4PhV4pFBKtu8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=APAOw6/a; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A61D1C4CEE3;
-	Thu, 12 Jun 2025 00:40:00 +0000 (UTC)
+	s=arc-20240116; t=1749692628; c=relaxed/simple;
+	bh=LjwFAIBoJN2DFCOZK3YQK/MaS7Ur4DjiuLDzXfrUQhU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=W1eQFkbZc8S13BwFdHDmKVZPwZ50njS4mNY13ZuXMMpuq46/yrHJMz+UQ8sQO4tXFhmMOLfyIDOts9/gvoKNzLKbFkd6ndapssolgwDRB9JU+jf4DJtAoatrmGOjRUcsHwKISx1yuBAefqH8HB4diGHpbCMRO68nd8nudNsqRQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lSaj5qBT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F823C4CEE3;
+	Thu, 12 Jun 2025 01:43:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749688800;
-	bh=jpj01HFrpsqQ9KoLARSa3nYvj53bpFwNKRQ3OKEk8As=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=APAOw6/aLgn4GH1zi0JCsdqyqGgxnYvd2c3XYJyK8H42HsA8b2XK0h9PyTuORr8rS
-	 xrsz+w2cIGCRMxmANmtxU2i4QHYofyh3pDGp0SgDQvm77ZC+tvpyojsGTrcjp578Ad
-	 veA2m+LNcdQbMeyvU2BdE9zpvruzDOJwGJdjRdafK1659VGtsCn2N7bZb4Apv3RHSD
-	 7JBNOQBNKJ0vAiWCipa/554cQeMscB0/o//c7iF47hFWDAt1zy76d+xpEhN5h40gfn
-	 2JkXZuqGaSFaWW5bJNxW2pM/I4TYEWxrIzY/KPG+0gWnbO6pbCFMfgyT1bEZv2xctX
-	 OHFJjGTYVr4Dw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EADAB3822D1A;
-	Thu, 12 Jun 2025 00:40:31 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1749692627;
+	bh=LjwFAIBoJN2DFCOZK3YQK/MaS7Ur4DjiuLDzXfrUQhU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=lSaj5qBTgjvlHyd9hDez5o6TNERrsmupKiHUlCAhlKg4ETATeVKt5W/jmAYbkfOEw
+	 3CHzvNrBX5+udhVCa+fZNmW6GQPQ8s7XGYLVBxqUo598mZSUE4zwADcDKP3txgZgMT
+	 2zKvnAgkHWpVmKlhNcJ95NhyE/PSNUCWbLV2tjKpqjxwWwmZAPazpmfU6+T8K3whlj
+	 4RwgvEi3Rqmb0VuiPl1gcIeZIf+F2/0/sVIhLyPM/pEay/LGrVb0uNCJivCCoZzfPB
+	 87UlI+Pudwnx66ZybIKu8CYxC+Bo0raVTtijIOO0susUCCJBT5DwX0NA9g+ekbiSwB
+	 DtCzRXJhnIzvw==
+Date: Wed, 11 Jun 2025 18:43:45 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Stanislav Fomichev <stfomichev@gmail.com>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+ pabeni@redhat.com, skalluru@marvell.com, manishc@marvell.com,
+ andrew+netdev@lunn.ch, michael.chan@broadcom.com,
+ pavan.chebbi@broadcom.com, ajit.khaparde@broadcom.com,
+ sriharsha.basavapatna@broadcom.com, somnath.kotur@broadcom.com,
+ anthony.l.nguyen@intel.com, przemyslaw.kitszel@intel.com,
+ tariqt@nvidia.com, saeedm@nvidia.com, louis.peens@corigine.com,
+ shshaikh@marvell.com, GR-Linux-NIC-Dev@marvell.com, ecree.xilinx@gmail.com,
+ horms@kernel.org, dsahern@kernel.org, shuah@kernel.org,
+ ruanjinjie@huawei.com, mheib@redhat.com, linux-kernel@vger.kernel.org,
+ intel-wired-lan@lists.osuosl.org, linux-rdma@vger.kernel.org,
+ oss-drivers@corigine.com, linux-net-drivers@amd.com,
+ linux-kselftest@vger.kernel.org, leon@kernel.org, Cosmin Ratiu
+ <cratiu@nvidia.com>
+Subject: Re: [PATCH net-next v3 1/4] udp_tunnel: remove rtnl_lock dependency
+Message-ID: <20250611184345.3b403ad0@kernel.org>
+In-Reply-To: <20250610171522.2119030-2-stfomichev@gmail.com>
+References: <20250610171522.2119030-1-stfomichev@gmail.com>
+	<20250610171522.2119030-2-stfomichev@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v3 1/2] net: clear the dst when changing skb protocol
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <174968883075.3549461.11849610540706113890.git-patchwork-notify@kernel.org>
-Date: Thu, 12 Jun 2025 00:40:30 +0000
-References: <20250610001245.1981782-1-kuba@kernel.org>
-In-Reply-To: <20250610001245.1981782-1-kuba@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
- willemdebruijn.kernel@gmail.com, maze@google.com, daniel@iogearbox.net,
- stable@vger.kernel.org, martin.lau@linux.dev, john.fastabend@gmail.com,
- eddyz87@gmail.com, sdf@fomichev.me, haoluo@google.com, willemb@google.com,
- william.xuanziyang@huawei.com, alan.maguire@oracle.com, bpf@vger.kernel.org,
- shuah@kernel.org, linux-kselftest@vger.kernel.org, yonghong.song@linux.dev
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello:
+On Tue, 10 Jun 2025 10:15:19 -0700 Stanislav Fomichev wrote:
+> Drivers that are using ops lock and don't depend on RTNL lock
+> still need to manage it because udp_tunnel's RTNL dependency.
+> Introduce new udp_tunnel_nic_lock and use it instead of
+> rtnl_lock. Drop non-UDP_TUNNEL_NIC_INFO_MAY_SLEEP mode from
+> udp_tunnel infra (udp_tunnel_nic_device_sync_work needs to
+> grab udp_tunnel_nic_lock mutex and might sleep).
 
-This series was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Mon,  9 Jun 2025 17:12:44 -0700 you wrote:
-> A not-so-careful NAT46 BPF program can crash the kernel
-> if it indiscriminately flips ingress packets from v4 to v6:
-> 
->   BUG: kernel NULL pointer dereference, address: 0000000000000000
->     ip6_rcv_core (net/ipv6/ip6_input.c:190:20)
->     ipv6_rcv (net/ipv6/ip6_input.c:306:8)
->     process_backlog (net/core/dev.c:6186:4)
->     napi_poll (net/core/dev.c:6906:9)
->     net_rx_action (net/core/dev.c:7028:13)
->     do_softirq (kernel/softirq.c:462:3)
->     netif_rx (net/core/dev.c:5326:3)
->     dev_loopback_xmit (net/core/dev.c:4015:2)
->     ip_mc_finish_output (net/ipv4/ip_output.c:363:8)
->     NF_HOOK (./include/linux/netfilter.h:314:9)
->     ip_mc_output (net/ipv4/ip_output.c:400:5)
->     dst_output (./include/net/dst.h:459:9)
->     ip_local_out (net/ipv4/ip_output.c:130:9)
->     ip_send_skb (net/ipv4/ip_output.c:1496:8)
->     udp_send_skb (net/ipv4/udp.c:1040:8)
->     udp_sendmsg (net/ipv4/udp.c:1328:10)
-> 
-> [...]
-
-Here is the summary with links:
-  - [net,v3,1/2] net: clear the dst when changing skb protocol
-    https://git.kernel.org/netdev/net/c/ba9db6f907ac
-  - [net,v3,2/2] selftests: net: add test case for NAT46 looping back dst
-    https://git.kernel.org/netdev/net/c/567766954b2d
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+There are multiple entry points to this code, basically each member of
+struct udp_tunnel_nic_ops and the netdev notifiers. In this patch only
+reset and work are locked. I'm a bit confused as to what is the new
+lock protecting :S
 
