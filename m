@@ -1,88 +1,88 @@
-Return-Path: <linux-kselftest+bounces-34804-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34805-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26EAAAD6D1A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jun 2025 12:09:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EFB99AD6D93
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jun 2025 12:24:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 71925178060
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jun 2025 10:09:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B3283B07C6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jun 2025 10:24:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2354D235059;
-	Thu, 12 Jun 2025 10:09:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 546B3233701;
+	Thu, 12 Jun 2025 10:24:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hS1tIghM"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RxtiJ82g"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F75E231A4D
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Jun 2025 10:09:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9520F2356CF
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Jun 2025 10:24:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749722947; cv=none; b=fWH+NWH+WBIbdDhaIfg+wOJcmVBZ73rxfQq8ukCEuU7hOKDR4US5wI3ADUHQSwDMOLfkeQZaB+h5SCMYsH4k0c0hC8UCfA4aRKMEE5I9UccylymdgVvYBe4FVwjI+TeWtSYuxBOe4eFNcgT7/sYwi/ePbZ1FKuyLoLUDbKhCLZM=
+	t=1749723865; cv=none; b=qLqWtdOJoHs5D2BU8/N6YPYAV4EELP6iA7Lm9J9pkB5nsP0FD3HKdx3jBLj4VfeiUumnsiM/PVRuID0+8PcSmToHymorOh/FMuj6/tA3Uoodr4CnSoZWbe33GoisJgOUr8DH0CkaFcDFxSzLSsJjOThE6CwLORagnmw76tWdUmQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749722947; c=relaxed/simple;
-	bh=62F4NJB2BS7u3zfidjfNCmpCwpjdsdZtOmNG51qYGT0=;
+	s=arc-20240116; t=1749723865; c=relaxed/simple;
+	bh=tmAcToaijMV9XVH4tR5N8noq43eOKPj9irDr++PH6hs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Df2kUsFe0pQAYNpb+wOJ2Oztc9XQNgKJMElEz/uk1YmEPhFPU+69pWRi6/p5U+uXRdnuKxsxOdWo7Dhh5gokekXvoxbwtk/CWFzy70IGoiQw4+xooVevA74QEtHxACOnDs6vZAViWWF82IaGdwBrb6HI1UNckBlWYoSRjZk3A0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hS1tIghM; arc=none smtp.client-ip=170.10.129.124
+	 In-Reply-To:Content-Type; b=r1VgnfSyLpdKTe7mMIyr3bb1YI5GtB2U4krTU0JOOUpYZhQjJ/3h32eSFMRa7zjVf8yPP+0Xxj8J49CorBhxiqhUicCAaQTmTMakYk3RV+LxVmCm3NYxgZWX6YX0lmE9kU9v6LtgwrNltUfJukiFfEFL+p2n3HrxJon5wikDLp8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RxtiJ82g; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1749722944;
+	s=mimecast20190719; t=1749723862;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=FtyzcGGcDbQZcQDEpMvfV5feFpNxVQq4Iu8Jf7s2lq4=;
-	b=hS1tIghM+xQxnrZOMiA7aZ9UJeMQc38zY6UlYrgOjQfWL5ERukjKxUDW7Pyn+BCq5YW2ET
-	H9KOK1GnCbnfJeHfIONmaqnhBZmr2iaFDyHNwRXC8zqoEJieMMYntmWO6G6/0mpxwl3si3
-	jtlxLmRGSZrlrhyMw1ZDv9/RKmh767o=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=wFGl1raplgbMDB2Xn7AcMnjgABlKNLDHjU/hV2WGZ98=;
+	b=RxtiJ82gN3EEDGfUZgeNYZz/3fI+Wr5Krt2tHJzUwJQEFSfe2lkda+r441+l6/Gc/KEpL/
+	A7J296JBRy7yZFSTG4eWMMFHDFX0TwlyaZHwI6RFMwFrQp5SFl7OPuKt+hnYVMKqEUCSL+
+	MRAEmlL6bDZHqiI3OUBMtoTdZmDIvQo=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-245-Lle7jux1O7SKfeGm8kgI6w-1; Thu, 12 Jun 2025 06:09:01 -0400
-X-MC-Unique: Lle7jux1O7SKfeGm8kgI6w-1
-X-Mimecast-MFC-AGG-ID: Lle7jux1O7SKfeGm8kgI6w_1749722940
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-450d57a0641so5392425e9.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Jun 2025 03:09:01 -0700 (PDT)
+ us-mta-438-ArdIa6alNpG5YbdZ6gjQnA-1; Thu, 12 Jun 2025 06:24:21 -0400
+X-MC-Unique: ArdIa6alNpG5YbdZ6gjQnA-1
+X-Mimecast-MFC-AGG-ID: ArdIa6alNpG5YbdZ6gjQnA_1749723860
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-450d244bfabso6252535e9.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Jun 2025 03:24:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749722939; x=1750327739;
+        d=1e100.net; s=20230601; t=1749723860; x=1750328660;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=FtyzcGGcDbQZcQDEpMvfV5feFpNxVQq4Iu8Jf7s2lq4=;
-        b=oy4nunmZ7SIRc7zO0/USdTMm4XFMe0quy+uaFhEg80Jn/ApE2fPvTOUIfQO8B3FZt7
-         deoA7ucNuZHy0FELft7o+9pxCuhVlE83BD1e1XNl3kZfRxovMeJ87DTrBnQwveJ98+hn
-         ujHta80Wz/wvOukHbEK6lBUQDC1MIGM1tRDMCbMRRsCAxTPHA7Ec3RQ+OsjO6drNZbZ/
-         03tldLXzjCDOwFPbZGoxoMOssZCd/M8/3BxkjGephPgb2VcyjRlNYb6rQsnYwy0EEHlo
-         dnui+9v2HXmYnJiEBpFthlYUr4PWkvOxfK6pVON0Fcok2OgLz7T7yT5sFKqD136Ae2wB
-         YZag==
-X-Forwarded-Encrypted: i=1; AJvYcCWGyxI7041T0l6eozHeaQWYCHStPGZFX40FtDmVVHbojQu4REtg475m7V9Ogf5ZipYI9xl55ij1+cBTT8DBMAc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YySCqHjfW9lnjHAxZxVjWbZrwXxrSE47QlZJ0Bl1WgLhI6UbP6K
-	rUXIKy5Bq4Ho5cWyROxg3uvszrnc9uVtyaqPQX/CsDF59pRe2+S/qr9zKgxc0md+AS2ELYaqX7w
-	tFoTHZD+q4qhbT3DwJpLc178PHphJsW57BNpecMSXnfPs4qvkZEDdLCZZNHlca78hwcpwcA==
-X-Gm-Gg: ASbGnctvV6lMDkbOLwjaMb5/rekumiamaOsMyvi0EGbWJNDtwUTVlKBDtdYwK6KaOiw
-	kTSY4XI2wp0nvo/2kP+hKDmbHdEHzM3/Sqzn5X+WT12sUp0X9u2EPMwbxwUQW7+8SziWY8Y2Xvx
-	gCg4XCNpEq2g6wrWlYWXv1+WgZXh7+D8G66akwqa0SeGr9sWZIUdScknnqaWFNeUcNr6/jy/Bqp
-	6hzvUUzcNa6E2zpusYL3oh48kHPWBmiVaPjabJRemkbGN9gzsBuqQUb0hcdmJMQbm4gyMYBDd7j
-	pni7s3Fs34Zzzl07T1213Ga17uM6wVoWHPoMldwKwkkzIz93w2Wn9Rv+lCl/ewSakLrsADlelkW
-	VKAhsDhcvTtEAoHuMg0ONiQDnLMx/I3jDK08RusJWyVK92FYrQA==
-X-Received: by 2002:a05:600c:8b27:b0:450:cde3:f266 with SMTP id 5b1f17b1804b1-4532d33d836mr18693075e9.22.1749722939554;
-        Thu, 12 Jun 2025 03:08:59 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFSsfAJFhAj1LcsO8Jt31ws3dd4bwGEqWAtTOW4HUlzcpub5aRnbZ7DphGMfuDuZaTWtm26Nw==
-X-Received: by 2002:a05:600c:8b27:b0:450:cde3:f266 with SMTP id 5b1f17b1804b1-4532d33d836mr18692795e9.22.1749722939148;
-        Thu, 12 Jun 2025 03:08:59 -0700 (PDT)
+        bh=wFGl1raplgbMDB2Xn7AcMnjgABlKNLDHjU/hV2WGZ98=;
+        b=Akp+ApbkUSY7s8PfzHr73nSsN3+ufJONjjlfYZTqt3ZFqdQC7KOR4kxRQ4m0yMMuC5
+         6nHDmJ1dapePJvbLiyhksIC6bgXV4vyDMgTl8YUKRjl2kTrh64SdxHVRmJnQ+Rj09i4l
+         E1q5Cegmi+PoBmzu8sSaVWGs6rMZFHfLhXzK6tBinmcNlP2y26Ap/k6ZQuVX5elHiiZ1
+         XsBntnAuC7FYiaGALmXwP1KyUu32u7DCH1ahG6t0rYVP0KSGnBSaGkg3gKVs4WyZaJnH
+         nblC0Ddwb0xQR2kVxL0n6fRh8hbQStg2HMfms4aH5uFi99LE0AijM5cg4h3X2T6Q72oG
+         vMSQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVy4OHZL+sbbkYWBtku5CWq/WEpCQrZ/uEO/M+/pjXUah/xEMS2kOEwu3fD9zUkpRfx/7mQ9cZ/PAG836BIObg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzyGj8FxcRf2C67yrsZecT6tUpKyuEDvPTYhmb7sxUea3b82VGF
+	xSWPjaW0FNWyhaSRT0rX18x8DkqTcRUJ4MVXmkB+rBFICyVVF8qfSqY1C1B04QYBV6M09RQnV2t
+	I5odLTlsHg36vpH9QwyFGIbaJOLBvLL60x6rVIzr+ODP6zDMZ/ejP4cF3hh03rWLwB4MoHw==
+X-Gm-Gg: ASbGnctF0KTQ9cMNeD+t9B7sHLL85sseTsaqUu3LD7z+0a7iEzfd41942l23VaWNqZr
+	0Tpy+TpiEcCdeI6v/dTBVcuJGhBBLFNGPnZhAX96Y6bhGnZYef5CKZ3+kuL1ph9LWFnvItcMCho
+	hUKLhMsQsVyQ9BCAY+XCLlYx1qotpbaHOVlTpnW5V7RYAVusn5+dgQpeuX+DDRYVJNWrQUQGHex
+	70l542g5ft/XOBfwGMTAkvkG8/WJ/HBMJrM0n6pA1YziEn4sXxCBnaoFhMS0bFbmcllRJC7nX3A
+	gC2B0yLprNzFoaW7rDVoIFOfYzMBM2nhTUXVDh+hj+DQgQXymTUQfAlYYpTm3u+1YcSw//LOk6b
+	NZcPR2AGD8E3zzpUVjbYBK4G39Ns1ZOx0YjlDsmXsQpeaTUGNaw==
+X-Received: by 2002:a05:600c:8115:b0:453:745:8534 with SMTP id 5b1f17b1804b1-4532d2db38fmr24850375e9.12.1749723860243;
+        Thu, 12 Jun 2025 03:24:20 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHwidAiVklYyr1sQpkURerWWtEzoMlsRFRCkO1e9TaSJr0LtQoH6E7Vf8YH4FDL4LIrsHNQDQ==
+X-Received: by 2002:a05:600c:8115:b0:453:745:8534 with SMTP id 5b1f17b1804b1-4532d2db38fmr24850105e9.12.1749723859812;
+        Thu, 12 Jun 2025 03:24:19 -0700 (PDT)
 Received: from ?IPV6:2003:d8:2f2c:1e00:1e1e:7a32:e798:6457? (p200300d82f2c1e001e1e7a32e7986457.dip0.t-ipconnect.de. [2003:d8:2f2c:1e00:1e1e:7a32:e798:6457])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a561a3c763sm1530124f8f.62.2025.06.12.03.08.58
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4532e14f283sm16205915e9.27.2025.06.12.03.24.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Jun 2025 03:08:58 -0700 (PDT)
-Message-ID: <e06530f6-5c2e-4b6f-b175-c7aaab79aa4e@redhat.com>
-Date: Thu, 12 Jun 2025 12:08:57 +0200
+        Thu, 12 Jun 2025 03:24:19 -0700 (PDT)
+Message-ID: <0d92812e-4b17-460d-ab06-9912fc3d83c0@redhat.com>
+Date: Thu, 12 Jun 2025 12:24:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -90,13 +90,15 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] selftests: khugepaged: fix the shmem collapse failure
+Subject: Re: [PATCH 2/2] selftests: mm: add shmem collpase as a default test
+ item
 To: Baolin Wang <baolin.wang@linux.alibaba.com>, akpm@linux-foundation.org
 Cc: lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, npache@redhat.com,
  ryan.roberts@arm.com, dev.jain@arm.com, baohua@kernel.org, shuah@kernel.org,
  ziy@nvidia.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <c16d1d452aa876b449324d12df6465677158a711.1749697399.git.baolin.wang@linux.alibaba.com>
+ <1352b17c513364164f6231ac32283cbb7093b603.1749697399.git.baolin.wang@linux.alibaba.com>
 From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
@@ -144,82 +146,35 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <c16d1d452aa876b449324d12df6465677158a711.1749697399.git.baolin.wang@linux.alibaba.com>
+In-Reply-To: <1352b17c513364164f6231ac32283cbb7093b603.1749697399.git.baolin.wang@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 12.06.25 05:54, Baolin Wang wrote:
-> When running the khugepaged selftest for shmem (./khugepaged all:shmem),
-
-Hmm, this combination is not run automatically through run_tests.sh, 
-right? IIUC, it only runs "./khugepaged" which tests anon only ...
-
-Should we add it there? Then I would probably have noticed that myself 
-earlier :)
-
-> I encountered the following test failures:
-> "
-> Run test: collapse_full (khugepaged:shmem)
-> Collapse multiple fully populated PTE table.... Fail
-> ...
-> Run test: collapse_single_pte_entry (khugepaged:shmem)
-> Collapse PTE table with single PTE entry present.... Fail
-> ...
-> Run test: collapse_full_of_compound (khugepaged:shmem)
-> Allocate huge page... OK
-> Split huge page leaving single PTE page table full of compound pages... OK
-> Collapse PTE table full of compound pages.... Fail
-> "
+> Currently, we only test anonymous memory collapse by default. We should also
+> add shmem collapse as a default test item to catch issues that could break
+> the test cases.
 > 
-> The reason for the failure is that, it will set MADV_NOHUGEPAGE to prevent
-> khugepaged from continuing to scan shmem VMA after khugepaged finishes
-> scanning in the wait_for_scan() function. Moreover, shmem requires a refault
-> to establish PMD mappings.
-> 
-> However, after commit 2b0f922323cc, PMD mappings are prevented if the VMA is
-> set with MADV_NOHUGEPAGE flag, so shmem cannot establish PMD mappings during
-> refault.
-
-Right. It's always problematic when we have some contradicting 
-information in the VMA vs. pagecache.
-
-> 
-> To fix this issue, we can set the MADV_NOHUGEPAGE flag after the shmem refault.
-> With this fix, the shmem test case passes.
-> 
-> Fixes: 2b0f922323cc ("mm: don't install PMD mappings when THPs are disabled by the hw/process/vma")
 > Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 > ---
->   tools/testing/selftests/mm/khugepaged.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
+>   tools/testing/selftests/mm/run_vmtests.sh | 4 ++++
+>   1 file changed, 4 insertions(+)
 > 
-> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
-> index 8a4d34cce36b..d462f62d8116 100644
-> --- a/tools/testing/selftests/mm/khugepaged.c
-> +++ b/tools/testing/selftests/mm/khugepaged.c
-> @@ -561,8 +561,6 @@ static bool wait_for_scan(const char *msg, char *p, int nr_hpages,
->   		usleep(TICK);
->   	}
+> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+> index 33fc7fafa8f9..a38c984103ce 100755
+> --- a/tools/testing/selftests/mm/run_vmtests.sh
+> +++ b/tools/testing/selftests/mm/run_vmtests.sh
+> @@ -485,6 +485,10 @@ CATEGORY="thp" run_test ./khugepaged
 >   
-> -	madvise(p, nr_hpages * hpage_pmd_size, MADV_NOHUGEPAGE);
-> -
->   	return timeout == -1;
->   }
+>   CATEGORY="thp" run_test ./khugepaged -s 2
 >   
-> @@ -585,6 +583,7 @@ static void khugepaged_collapse(const char *msg, char *p, int nr_hpages,
->   	if (ops != &__anon_ops)
->   		ops->fault(p, 0, nr_hpages * hpage_pmd_size);
->   
-> +	madvise(p, nr_hpages * hpage_pmd_size, MADV_NOHUGEPAGE);
->   	if (ops->check_huge(p, expect ? nr_hpages : 0))
->   		success("OK");
->   	else
+> +CATEGORY="thp" run_test ./khugepaged all:shmem
+> +
+> +CATEGORY="thp" run_test ./khugepaged -s 4 all:shmem
 
-It's a shame we have this weird interface: there is no way we can clear 
-VM_HUGEPAGE without setting VM_NOHUGEPAGE :(
+Ahh, there we have it already, nice :)
 
-But, do we even care about setting MADV_NOHUGEPAGE at all? IIUC, we'll 
-almost immediately later call cleanup_area() where we munmap(), right?
+Acked-by: David Hildenbrand <david@redhat.com>
 
 -- 
 Cheers,
