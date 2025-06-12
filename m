@@ -1,58 +1,62 @@
-Return-Path: <linux-kselftest+bounces-34784-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34785-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48D0FAD6638
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jun 2025 05:36:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CFD4AD664B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jun 2025 05:54:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA6693AD51C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jun 2025 03:36:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE0D43AD25B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jun 2025 03:54:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57A831F0E20;
-	Thu, 12 Jun 2025 03:36:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 022E21CD215;
+	Thu, 12 Jun 2025 03:54:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="nggY2ap/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB4DD1EFF8D;
-	Thu, 12 Jun 2025 03:36:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3065F1A5B92;
+	Thu, 12 Jun 2025 03:54:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.97
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749699368; cv=none; b=Ww267lYjTA/ZM+2glpkamIKfbsw048jkl4X7ex48wsZFTy+n6iaTBocRLjKuZhYbUz0rCuTi7QRslIIL4cWXVRJaAzkMC8mu5Sze4zTuZ1bGyHzEyc1Sh/CRySa8DTzD32tcexwkPDhaq6p6ScraqKmPSydUPy5QJeuOzIYznGc=
+	t=1749700481; cv=none; b=lt87LuZ/XpFiVAJ7GEmBLbe8Wteh/lIsKAy072n0ZFrb95h5pcgmqZ0uiarkr/1PCr50mouo/QhHp6WFuRYrim9ZolGAOLhgqZPLZRldOWH/sjN3ILyB7REf/2sriZoEkleF3pUXMQKI8L7QC7+4LGePHGO88WAE0JcmCQx5eME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749699368; c=relaxed/simple;
-	bh=uMLZZIGntfima+Z+v7TifEE3E+4sqrRZ2e8DOcSjaoU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=kehYj1p32Tc87BYeVOuyVXxLz8e8DjoUWtWk1nV/0eJt6XGUdS5IBVVHwP1vkcERVxO2d8mqisfBmnYe+37YKYABQUQzFdLKZ1QazZjD948/lXjcuZP3wQIO7yHRQLpNxOTC3ak00Q8QxDI+wWzjzEJ5Sx8S8dFpiQIbEFAcyzE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 55ECA1595;
-	Wed, 11 Jun 2025 20:35:46 -0700 (PDT)
-Received: from a076716.blr.arm.com (a076716.blr.arm.com [10.164.21.47])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 544983F66E;
-	Wed, 11 Jun 2025 20:36:02 -0700 (PDT)
-From: Anshuman Khandual <anshuman.khandual@arm.com>
-To: linux-arm-kernel@lists.infradead.org
-Cc: Anshuman Khandual <anshuman.khandual@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Ada Couprie Diaz <ada.coupriediaz@arm.com>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Joey Gouly <joey.gouly@arm.com>,
-	linux-kernel@vger.kernel.org,
-	kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH V4 2/2] KVM: selftests: Change MDSCR_EL1 register holding variables as uint64_t
-Date: Thu, 12 Jun 2025 09:05:47 +0530
-Message-Id: <20250612033547.480952-3-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250612033547.480952-1-anshuman.khandual@arm.com>
-References: <20250612033547.480952-1-anshuman.khandual@arm.com>
+	s=arc-20240116; t=1749700481; c=relaxed/simple;
+	bh=0qO1I6eQHyLDxt28LjGMWfn3ucClxQYRzRmbAjICYbA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hzQjRKE0vLM9fnkSZ9MdiiyrWHpSoxXxOTVtxk6RBUKrb7z1sjc2/Mp5yp8WWCo4RZrV4t+z8s+CUeHPJmU0BedDvJwZYAmFvDr5OkfSq4F+uhAd7Y3xNfdAA8zVJsUbbn0ZfUjS4y1E/WO87aVjRD4DLpXQLkUO745/Lnut3Ik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=nggY2ap/; arc=none smtp.client-ip=115.124.30.97
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1749700471; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=vhGiq7rkvYoNNdtNkWO+TZlRxj9/2gW4OzFoq6S0qAk=;
+	b=nggY2ap/va7ZeHAr45Mq/i5OTGWWYaOf1lfnzGRAfbzbALglPMV9FXLePEYIJkOcDQv1IBxn2t8gH86hJzaTIZ4hXtFOt0NvNTYhb0vt/hWH7m2OoVtnPPBnPQeb2PsRVbLANak2/1+Kmb9q9ZNw/HIGb7UQcx1d0e6hPQvrpBE=
+Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0WdfRnw6_1749700469 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Thu, 12 Jun 2025 11:54:30 +0800
+From: Baolin Wang <baolin.wang@linux.alibaba.com>
+To: akpm@linux-foundation.org,
+	david@redhat.com
+Cc: lorenzo.stoakes@oracle.com,
+	Liam.Howlett@oracle.com,
+	npache@redhat.com,
+	ryan.roberts@arm.com,
+	dev.jain@arm.com,
+	baohua@kernel.org,
+	shuah@kernel.org,
+	ziy@nvidia.com,
+	baolin.wang@linux.alibaba.com,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] selftests: khugepaged: fix the shmem collapse failure
+Date: Thu, 12 Jun 2025 11:54:20 +0800
+Message-ID: <c16d1d452aa876b449324d12df6465677158a711.1749697399.git.baolin.wang@linux.alibaba.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -61,46 +65,61 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Change MDSCR_EL1 register holding local variables as uint64_t that reflects
-its true register width as well.
+When running the khugepaged selftest for shmem (./khugepaged all:shmem),
+I encountered the following test failures:
+"
+Run test: collapse_full (khugepaged:shmem)
+Collapse multiple fully populated PTE table.... Fail
+...
+Run test: collapse_single_pte_entry (khugepaged:shmem)
+Collapse PTE table with single PTE entry present.... Fail
+...
+Run test: collapse_full_of_compound (khugepaged:shmem)
+Allocate huge page... OK
+Split huge page leaving single PTE page table full of compound pages... OK
+Collapse PTE table full of compound pages.... Fail
+"
 
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: Oliver Upton <oliver.upton@linux.dev>
-Cc: Joey Gouly <joey.gouly@arm.com>
-Cc: kvm@vger.kernel.org
-Cc: kvmarm@lists.linux.dev
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Reviewed-by: Ada Couprie Diaz <ada.coupriediaz@arm.com>
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+The reason for the failure is that, it will set MADV_NOHUGEPAGE to prevent
+khugepaged from continuing to scan shmem VMA after khugepaged finishes
+scanning in the wait_for_scan() function. Moreover, shmem requires a refault
+to establish PMD mappings.
+
+However, after commit 2b0f922323cc, PMD mappings are prevented if the VMA is
+set with MADV_NOHUGEPAGE flag, so shmem cannot establish PMD mappings during
+refault.
+
+To fix this issue, we can set the MADV_NOHUGEPAGE flag after the shmem refault.
+With this fix, the shmem test case passes.
+
+Fixes: 2b0f922323cc ("mm: don't install PMD mappings when THPs are disabled by the hw/process/vma")
+Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 ---
- tools/testing/selftests/kvm/arm64/debug-exceptions.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/mm/khugepaged.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/arm64/debug-exceptions.c b/tools/testing/selftests/kvm/arm64/debug-exceptions.c
-index c7fb55c9135b..e34963956fbc 100644
---- a/tools/testing/selftests/kvm/arm64/debug-exceptions.c
-+++ b/tools/testing/selftests/kvm/arm64/debug-exceptions.c
-@@ -140,7 +140,7 @@ static void enable_os_lock(void)
+diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+index 8a4d34cce36b..d462f62d8116 100644
+--- a/tools/testing/selftests/mm/khugepaged.c
++++ b/tools/testing/selftests/mm/khugepaged.c
+@@ -561,8 +561,6 @@ static bool wait_for_scan(const char *msg, char *p, int nr_hpages,
+ 		usleep(TICK);
+ 	}
  
- static void enable_monitor_debug_exceptions(void)
- {
--	uint32_t mdscr;
-+	uint64_t mdscr;
+-	madvise(p, nr_hpages * hpage_pmd_size, MADV_NOHUGEPAGE);
+-
+ 	return timeout == -1;
+ }
  
- 	asm volatile("msr daifclr, #8");
+@@ -585,6 +583,7 @@ static void khugepaged_collapse(const char *msg, char *p, int nr_hpages,
+ 	if (ops != &__anon_ops)
+ 		ops->fault(p, 0, nr_hpages * hpage_pmd_size);
  
-@@ -223,7 +223,7 @@ void install_hw_bp_ctx(uint8_t addr_bp, uint8_t ctx_bp, uint64_t addr,
- 
- static void install_ss(void)
- {
--	uint32_t mdscr;
-+	uint64_t mdscr;
- 
- 	asm volatile("msr daifclr, #8");
- 
++	madvise(p, nr_hpages * hpage_pmd_size, MADV_NOHUGEPAGE);
+ 	if (ops->check_huge(p, expect ? nr_hpages : 0))
+ 		success("OK");
+ 	else
 -- 
-2.25.1
+2.43.5
 
 
