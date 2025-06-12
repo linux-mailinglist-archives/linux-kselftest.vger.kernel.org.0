@@ -1,80 +1,46 @@
-Return-Path: <linux-kselftest+bounces-34808-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34809-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 981BBAD6DFC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jun 2025 12:38:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCB47AD6F24
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jun 2025 13:37:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6BA25165C94
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jun 2025 10:38:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 801B73A135C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jun 2025 11:37:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AF4221B9D6;
-	Thu, 12 Jun 2025 10:38:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21B5A2F432F;
+	Thu, 12 Jun 2025 11:37:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b="jfXzAsN7"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="HyoKHZYP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EC60224B07
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Jun 2025 10:38:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6722D2F4326;
+	Thu, 12 Jun 2025 11:37:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.113
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749724723; cv=none; b=ic0lkoaBnjiFG7pDe84BkKGaKZidyvyITaRtJQHO2bDuFq0fnO6KratXVW8cI7gkysXgw31Kjmky0I3i7bkYxMYEYnIBf4WXzYRE3RGpfGZUsPzva1/0536xjjkbDtwwe0uU0QgQ+L2dEvcvphVb5IOAnZFy7Z0UVEVGdcf7lnQ=
+	t=1749728251; cv=none; b=pXG/cELZPzq2+uw1Wgjn4cgKV5er4ur3+LxUr/Gj/Jdt5TvWHTvKXh3byBzcxgyeo2qu0n+FfzO216k/Y+xNU8iWNIBPePKAQqJBXjBhNb+x29Irvzwhft4VUAytY78Df4IYGrNkBmuzW9e33O1m5S6BV5KNhV4Oj83Q8eVwIDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749724723; c=relaxed/simple;
-	bh=Dxl77DbUFGK7O2Y+toGQAH36dP1XAvme2IiKzEhonNk=;
+	s=arc-20240116; t=1749728251; c=relaxed/simple;
+	bh=YjvbRnt6XlmgNec9sAIGdfmn0F6nyJAgEN3jwxWbdKY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=F9w+BYJtvprM3B+CGjD0qR0uknqQrn6+v6gn3dx4EbrrAsicEf3EELxpIKlAu6rImrj9k179ZO7SLVR7EoYkoFmiKy16GNESr8DZL9y8b4MOCe935OlkubQI8hAM6Jq39+Tv+4C/Cs3PtdL7YIrMXLIgbYlwzrKJ4IGsbNnTye4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b=jfXzAsN7; arc=none smtp.client-ip=209.85.167.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-552206ac67aso702333e87.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Jun 2025 03:38:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1749724720; x=1750329520; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GvTpPQ9lrVJYF3xLC4PEE8D1vqkgVuuEEGD9w4gNmVw=;
-        b=jfXzAsN73gJU4R/hqGf5oGp9CGmC+4K6Dd9m+kPUtMW0nuGg+IUAVevYDpZGlZoslS
-         G+E0zVSYfnHVDvZCd7AjkYBq9gd0iMsWkmC7gDf3gt1m0IYr980nQmzb/RCdfVTbtdgr
-         NIiGARDU4nINS7BoOyJBblyzNCq3yT1XQQ2H3IBBsgOXZVQPg/R6cGDd1OXId7MTTpLR
-         2Ux8xrOoE1A7yUnbQPKTB747Vj/sFmN+gaXdj+3z7Urba+lojKot42XXvdGRDv2aR2jv
-         5neBBVExgc10w/Ay5gGq4yHQKQuQ9P7QVR4rd9HpQsZ4BW7E3LHJaVAfRtlK7gQ0R34j
-         qu6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749724720; x=1750329520;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GvTpPQ9lrVJYF3xLC4PEE8D1vqkgVuuEEGD9w4gNmVw=;
-        b=uc583P2sAvic/sqDicf1lqlRGcoPmxIefS5SlZ7j/NYvZngbFsZs05izjL+x2SK5/0
-         4g5ykN8Ku+pqfF9Orc7Eiqgn/8XbRJGgP+Mya66Z/Yns1IVdq7dNzcSH4MmyIlx5npQ8
-         xAZYD7B4Zskma/XpEm9fmPPxuuRvXa6fg2AeNensDoCWdoQaWtnBC1qV/q7LQJnyxSOr
-         FgDJENtVjQWymW0ZszJ0UXA7WEa2DZ0hQp4EDxc1w+vsl+OECMwrfM7EPDhpqm9etLyO
-         n/wzqnsflT6sJ+nTfqSBYVHdN3P2zN15PYdH8RGS1JE7qKnRjWUMHrF8yu48X+11wya5
-         bSnQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXMEkx6AXt0XJIlkAcMuaGR6ORbcAd5lOPe61jnJEd61VTKpBLvDf0KJFzwCx0/tkzhu2/NmyHBk9puVoIORvE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLH5PCtBUDRC+y58sAK3lbCliGoJg3FCOBpPc+U5UZMfqLYOv+
-	349zFbbRqtC0ia9xcqAt1At26TuE1nazHMIbuCU8heScrR3I4qbXFJxM3v4rkzDsD8A=
-X-Gm-Gg: ASbGncunOdIw79S4BCTl17y4KdVBOpTwaGi98Uj4rgzMFwUgDvvkWjQA3YKUaT/5PCS
-	b/dGOk3pLoTQ5cPJo6Z76HWJisH//xybpTfAR7IvvuJpBdGqyVj73GCji3MIuLD301mBV9wrxKD
-	OSakLRO3SZCoiVZJEuRo0ZHxxMu6IJVrD/dkIaVBCcs7bA+zrxraU2BOntbZAonD+BfY/bE2HGY
-	SOZ0pWtzqeQQw9G8eKPoI8ACQvtUfeFscw1PgCyTMnMEWVSmuIqxDMAPbl1GsFRHtR5E4dKENIY
-	C8u2DgMByOOtILwNkOlRjRJJbDqnTzuzpd/YYy3jd1QQKdQRos5b6udEOyI3ENtIKMNMLQaGxlr
-	i7eZJnkxwWRibroTYSFm4I4/kS3S0gpQ=
-X-Google-Smtp-Source: AGHT+IFes2kLZDGZq979B/RGOBu95QnEAstptKdXBQPpJhdagQxdRARFx1bnJlxzM+/Imeis4MYrlA==
-X-Received: by 2002:a05:6512:4028:b0:553:51a2:4405 with SMTP id 2adb3069b0e04-553a55fdb36mr792090e87.45.1749724720212;
-        Thu, 12 Jun 2025 03:38:40 -0700 (PDT)
-Received: from [100.115.92.205] (176.111.185.210.kyiv.nat.volia.net. [176.111.185.210])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-32b3316fbe1sm1572271fa.73.2025.06.12.03.38.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Jun 2025 03:38:39 -0700 (PDT)
-Message-ID: <1ffa6fa1-b178-4452-b443-266b46495408@blackwall.org>
-Date: Thu, 12 Jun 2025 13:38:38 +0300
+	 In-Reply-To:Content-Type; b=YDXbowZR0gYxLBzviTT1GpRSQPx5aGEtaJN5HXC0zWQuK/6RZ2DqQuic3i7JvWm9GhP9KPo7Q01pudd+j3c7Djht1ftrmCkSRh3Hg/nUhQSQqiRZbXSp0IHk8DxUVsYcjyoPbnNuVVx04EMMnKk8lmX5TZAkCiIJz5HjIBRphtU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=HyoKHZYP; arc=none smtp.client-ip=115.124.30.113
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1749728245; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=QSVPGRlqsJRFkbLxkOY6dxpAL7NHJT8NvpFrxAWvBSo=;
+	b=HyoKHZYPScbjkawo6AOzROvNAi4zoOCT6vSV2uIoT06L2nVIhEpR750abtM7Yg02tyEh7+Z3IIwObSNeLCcw6jAvclMlkq/6OvuGT5RfAGzWmN9gVApa4tvW1h8p7WULc/qIF9KJcvSyT1rZvqjTyE7yWouMY+q69fnd0nezxqY=
+Received: from 30.121.46.129(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0WdgxZ0V_1749728243 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Thu, 12 Jun 2025 19:37:24 +0800
+Message-ID: <42b76dbc-d1a1-4d00-b139-c50e0abf8b0c@linux.alibaba.com>
+Date: Thu, 12 Jun 2025 19:37:23 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -82,43 +48,115 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 13/14] selftests: forwarding: adf_mcd_start():
- Allow configuring custom interfaces
-To: Petr Machata <petrm@nvidia.com>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, David Ahern <dsahern@gmail.com>,
- netdev@vger.kernel.org
-Cc: Simon Horman <horms@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
- mlxsw@nvidia.com, Shuah Khan <shuah@kernel.org>,
- linux-kselftest@vger.kernel.org
-References: <cover.1749499963.git.petrm@nvidia.com>
- <29c1dfbb4882222661fa1546f125d55d72aa74ab.1749499963.git.petrm@nvidia.com>
-Content-Language: en-US
-From: Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <29c1dfbb4882222661fa1546f125d55d72aa74ab.1749499963.git.petrm@nvidia.com>
+Subject: Re: [PATCH 1/2] selftests: khugepaged: fix the shmem collapse failure
+To: David Hildenbrand <david@redhat.com>, akpm@linux-foundation.org
+Cc: lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, npache@redhat.com,
+ ryan.roberts@arm.com, dev.jain@arm.com, baohua@kernel.org, shuah@kernel.org,
+ ziy@nvidia.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <c16d1d452aa876b449324d12df6465677158a711.1749697399.git.baolin.wang@linux.alibaba.com>
+ <e06530f6-5c2e-4b6f-b175-c7aaab79aa4e@redhat.com>
+From: Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <e06530f6-5c2e-4b6f-b175-c7aaab79aa4e@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 6/9/25 23:50, Petr Machata wrote:
-> Tests may wish to add other interfaces to listen on. Notably locally
-> generated traffic uses dummy interfaces. The multicast daemon needs to know
-> about these so that it allows forming rules that involve these interfaces,
-> and so that net.ipv4.conf.X.mc_forwarding is set for the interfaces.
-> 
-> To that end, allow passing in a list of interfaces to configure in addition
-> to all the physical ones.
-> 
-> Signed-off-by: Petr Machata <petrm@nvidia.com>
-> ---
-> 
-> Notes:
-> CC: Shuah Khan <shuah@kernel.org>
-> CC: linux-kselftest@vger.kernel.org
-> 
->   tools/testing/selftests/net/forwarding/lib.sh | 12 ++++++++++++
->   1 file changed, 12 insertions(+)
-> 
 
-Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
 
+On 2025/6/12 18:08, David Hildenbrand wrote:
+> On 12.06.25 05:54, Baolin Wang wrote:
+>> When running the khugepaged selftest for shmem (./khugepaged all:shmem),
+> 
+> Hmm, this combination is not run automatically through run_tests.sh, 
+> right? IIUC, it only runs "./khugepaged" which tests anon only ...
+> 
+> Should we add it there? Then I would probably have noticed that myself 
+> earlier :)
+
+Yes, see patch 2.
+
+>> I encountered the following test failures:
+>> "
+>> Run test: collapse_full (khugepaged:shmem)
+>> Collapse multiple fully populated PTE table.... Fail
+>> ...
+>> Run test: collapse_single_pte_entry (khugepaged:shmem)
+>> Collapse PTE table with single PTE entry present.... Fail
+>> ...
+>> Run test: collapse_full_of_compound (khugepaged:shmem)
+>> Allocate huge page... OK
+>> Split huge page leaving single PTE page table full of compound 
+>> pages... OK
+>> Collapse PTE table full of compound pages.... Fail
+>> "
+>>
+>> The reason for the failure is that, it will set MADV_NOHUGEPAGE to 
+>> prevent
+>> khugepaged from continuing to scan shmem VMA after khugepaged finishes
+>> scanning in the wait_for_scan() function. Moreover, shmem requires a 
+>> refault
+>> to establish PMD mappings.
+>>
+>> However, after commit 2b0f922323cc, PMD mappings are prevented if the 
+>> VMA is
+>> set with MADV_NOHUGEPAGE flag, so shmem cannot establish PMD mappings 
+>> during
+>> refault.
+> 
+> Right. It's always problematic when we have some contradicting 
+> information in the VMA vs. pagecache.
+> 
+>>
+>> To fix this issue, we can set the MADV_NOHUGEPAGE flag after the shmem 
+>> refault.
+>> With this fix, the shmem test case passes.
+>>
+>> Fixes: 2b0f922323cc ("mm: don't install PMD mappings when THPs are 
+>> disabled by the hw/process/vma")
+>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>> ---
+>>   tools/testing/selftests/mm/khugepaged.c | 3 +--
+>>   1 file changed, 1 insertion(+), 2 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/mm/khugepaged.c 
+>> b/tools/testing/selftests/mm/khugepaged.c
+>> index 8a4d34cce36b..d462f62d8116 100644
+>> --- a/tools/testing/selftests/mm/khugepaged.c
+>> +++ b/tools/testing/selftests/mm/khugepaged.c
+>> @@ -561,8 +561,6 @@ static bool wait_for_scan(const char *msg, char 
+>> *p, int nr_hpages,
+>>           usleep(TICK);
+>>       }
+>> -    madvise(p, nr_hpages * hpage_pmd_size, MADV_NOHUGEPAGE);
+>> -
+>>       return timeout == -1;
+>>   }
+>> @@ -585,6 +583,7 @@ static void khugepaged_collapse(const char *msg, 
+>> char *p, int nr_hpages,
+>>       if (ops != &__anon_ops)
+>>           ops->fault(p, 0, nr_hpages * hpage_pmd_size);
+>> +    madvise(p, nr_hpages * hpage_pmd_size, MADV_NOHUGEPAGE);
+>>       if (ops->check_huge(p, expect ? nr_hpages : 0))
+>>           success("OK");
+>>       else
+> 
+> It's a shame we have this weird interface: there is no way we can clear 
+> VM_HUGEPAGE without setting VM_NOHUGEPAGE :(
+
+Right.
+
+> But, do we even care about setting MADV_NOHUGEPAGE at all? IIUC, we'll 
+> almost immediately later call cleanup_area() where we munmap(), right?
+
+I tested removing the MADV_NOHUGEPAGE setting, and the khugepaged test 
+cases all passed.
+
+However, a potential impact of removing MADV_NOHUGEPAGE is that, 
+khugepaged might report 'timeout', but check_huge() would still report 
+'success' (assuming khugepaged tries to scan the VMA and successfully 
+collapses it after the timeout). Such test result could be confusing.
+
+I know this kind of case is very rare and may not even be detectable in 
+tests. At least, I couldn't reproduce it. But I prefer to keep the 
+original test logic and fix the issue without making further changes.
 
