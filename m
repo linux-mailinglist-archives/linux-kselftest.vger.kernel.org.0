@@ -1,155 +1,151 @@
-Return-Path: <linux-kselftest+bounces-34799-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34800-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52B61AD6B58
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jun 2025 10:49:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59261AD6B7D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jun 2025 10:56:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1C9B11893439
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jun 2025 08:49:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F5F73A1BCF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jun 2025 08:56:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5E511DE4CD;
-	Thu, 12 Jun 2025 08:49:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AD9A221DB4;
+	Thu, 12 Jun 2025 08:56:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RFGHLVzd"
+	dkim=pass (1024-bit key) header.d=szeredi.hu header.i=@szeredi.hu header.b="fibZEYV2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C13361AB6F1
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Jun 2025 08:49:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4615E22154A
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Jun 2025 08:56:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749718170; cv=none; b=VCg+3QyxqWWp5+Hj9qTUCwjyeTZRtFWf1tPUYgrPJi5c1wB5Hb+ahh23NV0H2Ybm1j2n75yuEf/+LjrdSJXfhKp9egeXJEaz2Y+uHI0Hy/q1SmkeWwbYoYs3G6zUvfJRHWLGz1/z1/QrRj9r3jMveJr3kiKScRb7lUL96O3SGrQ=
+	t=1749718601; cv=none; b=SsA6OreSk2hec5IS7s5ZzHOe3vXX1I5S49AoxM99Lb7N84hawBOoFx3/uAXqIaGI0J+AeLBHXUxfgrEgIlbHcE8htDokvT4aYJT7r04fLx7LEmDkYdhLPX6wd6Zaop8Tm+pgQGM843+ymNlavXBAopJGr0K57snkKoHWdbiaipY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749718170; c=relaxed/simple;
-	bh=evORccHYl0GxEoXm8jQC2ZEEVf+krB5Z/xCnbYCZvmc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f93Dqs7FO8UWHTPxrnbo5HZCgx643SAxRD9YkdwgrvPsiMqfZnzS4zCFDr2zNqZ7qXT/PPcrJS0l+gnXyKanEYYCsBbOjMtgur3BSiBF6yhJItJs+hJYJjiKclh6jBzTu4nOitmg5P3rqzWJowBJT1tPRUzHuSNQG4czr57sXkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RFGHLVzd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34313C4CEEA;
-	Thu, 12 Jun 2025 08:49:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749718170;
-	bh=evORccHYl0GxEoXm8jQC2ZEEVf+krB5Z/xCnbYCZvmc=;
-	h=From:To:Cc:Subject:Date:From;
-	b=RFGHLVzd4mwjs3ZKK07/eoHFTUPFvaUsFV2xxwJqWJOTisTTivQXvv6E30J0/2Gs4
-	 nBC6BnKoUTcztyHffSSW7gHSu8C6cW6EawOxkgKmLT/ddUNinatdS2B9E67p/2C9KK
-	 b3RMlBevk+2oiMKh1PjuUjRr+PDF1qIQjUeTPo6PiCVnMZbazH8mHeMu1VATg+8IZV
-	 3pm/B6MN165XII/MJfM3Zj6PIVU+ra5gGy0bq/mkorwUWHCAmJHOoxel2r6bHKlXMw
-	 38tzZpQLSvxudcYbCew50DvHakOZ0q6Og/Y8ezKLPXZFpUTawxR5wWUd2JEP0SHFzC
-	 roghnm5d26c0w==
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: brendan.higgins@linux.dev,
-	davidgow@google.com
-Cc: rmoar@google.com,
-	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	tzungbi@kernel.org,
-	skhan@linuxfoundation.org
-Subject: [PATCH v2] kunit: Add test for static stub
-Date: Thu, 12 Jun 2025 08:48:34 +0000
-Message-ID: <20250612084834.587576-1-tzungbi@kernel.org>
-X-Mailer: git-send-email 2.50.0.rc1.591.g9c95f17f64-goog
+	s=arc-20240116; t=1749718601; c=relaxed/simple;
+	bh=OXO9Ksx6UGvju2TD4wjBJsg6mvgy3QZrrLoi3fnzs0M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LPN/HCHQENDc3e3PHb83WnM79WDEJox5MtTQvA3qkLCUERfoqIbp6b4LNuVe9liAgubl+UXvLyNTZ/Nay7pSp1howhABLN6zcbDu02MzfrvkZJMXeZwi1pxVDP5JKU7jAnNtxiMygTLDgnLpbHVfr7STt6JcWgouQIFRTCXR64U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=szeredi.hu; spf=pass smtp.mailfrom=szeredi.hu; dkim=pass (1024-bit key) header.d=szeredi.hu header.i=@szeredi.hu header.b=fibZEYV2; arc=none smtp.client-ip=209.85.160.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=szeredi.hu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=szeredi.hu
+Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-4a42cb03673so9844871cf.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Jun 2025 01:56:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google; t=1749718598; x=1750323398; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OXO9Ksx6UGvju2TD4wjBJsg6mvgy3QZrrLoi3fnzs0M=;
+        b=fibZEYV29jFSNqzXfqDAouKqW3q+/+eFFjkQLT5Wn2hlCs0NDQMk3hpWBlfhMOvhSz
+         Y00DDg1bB0udSJ/p0eI4Sm7CZDgmW3BGuQhhpqKUfJqLjj5YDM1Ui9D1AQ/VmJVGfSEc
+         ex17z+m0Lsq5IV6PvG7avnqHSFzjXpWFtcYd0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749718598; x=1750323398;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OXO9Ksx6UGvju2TD4wjBJsg6mvgy3QZrrLoi3fnzs0M=;
+        b=d2OnXydJHQ4CGN3+NvcvFgSfY3/SIF9GnqxISOE8K0lTEuRUiXuNUdD7/utsZn9YGm
+         uMSLgbSBpFmyWLo792T9uU0FwBKZLlvHKrBV5vDsHs5komtc8gwWdNfmZ+BEbUNctyiQ
+         0VxRX7RLrI39r1nuFALlyzXZV/D80UHb34X2HdmKGI878knooc8OgcrpCujuqYeelpCe
+         EJrI3J+oE4jYUC12Ov9MKAHYvAulEbJTi4O109+JmaHVHcdcfwDtrGm4SbfYf7jsNpT5
+         pteCXw5N+coOHk99jvrqcOEGvuP5CPZWgXwrqYWBpq0RcyM0h7q51aXulUufOQfSR0uY
+         CYIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWoTNU1a3H0/JdnKDu/OEQJOeCI/ruAUqoMQnjPew9daE1V/O0Gk8bUJsVf7I8qj1+LlVqtpxMEbl4IJpBdfQM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLHmCY762FGv7Yjbhbh6ZvluSEE+rAFGRrOlxbujFr0vJM1mzQ
+	wozneQQsf+6ZWELWmdmIyV7nrkiTIPgV7EF2FSd0Yq/34DIXFaD7d7oDnV0hmoCb87VrHJaGwIu
+	mjirw9yYFSiedm0ZDsXTVfHuyRoarLwQd0ie/7qfNRg==
+X-Gm-Gg: ASbGncu8MLjfl13ntfs0iPnA6XPIXNzpNYxdl14qXfuFZXEOyfEWosvq+rZ9GpW6E38
+	C0vNq5Bw4+xN6ufoX6U9NfWd4MEBy+tdSJZlydxaVh/mwiUbZDXwNOsCrLcW0OLA0BLHMs1PSTi
+	yS1TN9sMw/LqA6guwlGvuHxypPasAUXv1K+5yIRGFHMpYe
+X-Google-Smtp-Source: AGHT+IGYeO7fVzidztBGxxJplzm+jm0i0+5bLXNJiagXaREvn8LewE0tDyeq+8GDj9n5nD9Pqh7fmUjqjBeek1GEfYc=
+X-Received: by 2002:a05:622a:191d:b0:477:6f1e:f477 with SMTP id
+ d75a77b69052e-4a713bbf66amr118143031cf.19.1749718598017; Thu, 12 Jun 2025
+ 01:56:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250610021007.2800329-2-chenlinxuan@uniontech.com>
+In-Reply-To: <20250610021007.2800329-2-chenlinxuan@uniontech.com>
+From: Miklos Szeredi <miklos@szeredi.hu>
+Date: Thu, 12 Jun 2025 10:56:26 +0200
+X-Gm-Features: AX0GCFsde1G6EBQoyCCDtWUSQ8g7tbKacMMtsK7I7Ff8_JzJPwy-4V8vuvYrXKI
+Message-ID: <CAJfpegt8Hk6nt5+iPg-if9iquWqr3eecgDSKYZvJY0OX+y5b9A@mail.gmail.com>
+Subject: Re: [PATCH v3 RESEND] selftests: filesystems: Add functional test for
+ the abort file in fusectl
+To: Chen Linxuan <chenlinxuan@uniontech.com>
+Cc: Shuah Khan <shuah@kernel.org>, zhanjun@uniontech.com, niecheng1@uniontech.com, 
+	Shuah Khan <skhan@linuxfoundation.org>, Amir Goldstein <amir73il@gmail.com>, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org
+Content-Type: multipart/mixed; boundary="0000000000007e07d906375c1ba4"
 
-__kunit_activate_static_stub() works effectively as
-kunit_deactivate_static_stub() if `replacement_addr` is NULL.
+--0000000000007e07d906375c1ba4
+Content-Type: text/plain; charset="UTF-8"
 
-Add a test case to catch the issue discovered in 772e50a76ee6 ("kunit: Fix
-wrong parameter to kunit_deactivate_static_stub()").
+On Tue, 10 Jun 2025 at 04:10, Chen Linxuan <chenlinxuan@uniontech.com> wrote:
+>
+> This patch add a simple functional test for the "abort" file
+> in fusectlfs (/sys/fs/fuse/connections/ID/about).
+>
+> A simple fuse daemon is added for testing.
+>
+> Related discussion can be found in the link below.
+>
+> Link: https://lore.kernel.org/all/CAOQ4uxjKFXOKQxPpxtS6G_nR0tpw95w0GiO68UcWg_OBhmSY=Q@mail.gmail.com/
+> Signed-off-by: Chen Linxuan <chenlinxuan@uniontech.com>
+> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+> Reviewed-by: Amir Goldstein <amir73il@gmail.com>
 
-For running the test:
+Thanks.
 
-$ ./tools/testing/kunit/kunit.py run \
-        --arch=x86_64 \
-        kunit_stub
+I suggest setting up a userns environment, see attached patch (also
+fixes a EBUSY on umount/rmdir).
 
-Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
----
-Changes from v1:
-(https://lore.kernel.org/linux-kselftest/20250522054912.2948008-1-tzungbi@kernel.org/)
-- Update the commit message to point to commit 772e50a76ee6.
-- Rebase to v6.16-rc1.
+Thanks,
+Miklos
 
- lib/kunit/kunit-test.c | 46 +++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 45 insertions(+), 1 deletion(-)
+--0000000000007e07d906375c1ba4
+Content-Type: text/x-patch; charset="US-ASCII"; name="fuse-abort-test-userns.patch"
+Content-Disposition: attachment; filename="fuse-abort-test-userns.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_mbt58rz80>
+X-Attachment-Id: f_mbt58rz80
 
-diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
-index d9c781c859fd..f8f567196ca9 100644
---- a/lib/kunit/kunit-test.c
-+++ b/lib/kunit/kunit-test.c
-@@ -8,6 +8,7 @@
- #include "linux/gfp_types.h"
- #include <kunit/test.h>
- #include <kunit/test-bug.h>
-+#include <kunit/static_stub.h>
- 
- #include <linux/device.h>
- #include <kunit/device.h>
-@@ -868,10 +869,53 @@ static struct kunit_suite kunit_current_test_suite = {
- 	.test_cases = kunit_current_test_cases,
- };
- 
-+static void kunit_stub_test(struct kunit *test)
-+{
-+	struct kunit fake_test;
-+	const unsigned long fake_real_fn_addr = 0x1234;
-+	const unsigned long fake_replacement_addr = 0x5678;
-+	struct kunit_resource *res;
-+	struct {
-+		void *real_fn_addr;
-+		void *replacement_addr;
-+	} *stub_ctx;
-+
-+	kunit_init_test(&fake_test, "kunit_stub_fake_test", NULL);
-+	KUNIT_ASSERT_EQ(test, fake_test.status, KUNIT_SUCCESS);
-+	KUNIT_ASSERT_EQ(test, list_count_nodes(&fake_test.resources), 0);
-+
-+	__kunit_activate_static_stub(&fake_test, (void *)fake_real_fn_addr,
-+				     (void *)fake_replacement_addr);
-+	KUNIT_ASSERT_EQ(test, fake_test.status, KUNIT_SUCCESS);
-+	KUNIT_ASSERT_EQ(test, list_count_nodes(&fake_test.resources), 1);
-+
-+	res = list_first_entry(&fake_test.resources, struct kunit_resource, node);
-+	KUNIT_EXPECT_NOT_NULL(test, res);
-+
-+	stub_ctx = res->data;
-+	KUNIT_EXPECT_NOT_NULL(test, stub_ctx);
-+	KUNIT_EXPECT_EQ(test, (unsigned long)stub_ctx->real_fn_addr, fake_real_fn_addr);
-+	KUNIT_EXPECT_EQ(test, (unsigned long)stub_ctx->replacement_addr, fake_replacement_addr);
-+
-+	__kunit_activate_static_stub(&fake_test, (void *)fake_real_fn_addr, NULL);
-+	KUNIT_ASSERT_EQ(test, fake_test.status, KUNIT_SUCCESS);
-+	KUNIT_ASSERT_EQ(test, list_count_nodes(&fake_test.resources), 0);
-+}
-+
-+static struct kunit_case kunit_stub_test_cases[] = {
-+	KUNIT_CASE(kunit_stub_test),
-+	{}
-+};
-+
-+static struct kunit_suite kunit_stub_test_suite = {
-+	.name = "kunit_stub",
-+	.test_cases = kunit_stub_test_cases,
-+};
-+
- kunit_test_suites(&kunit_try_catch_test_suite, &kunit_resource_test_suite,
- 		  &kunit_log_test_suite, &kunit_status_test_suite,
- 		  &kunit_current_test_suite, &kunit_device_test_suite,
--		  &kunit_fault_test_suite);
-+		  &kunit_fault_test_suite, &kunit_stub_test_suite);
- 
- MODULE_DESCRIPTION("KUnit test for core test infrastructure");
- MODULE_LICENSE("GPL v2");
--- 
-2.50.0.rc1.591.g9c95f17f64-goog
-
+ZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2ZpbGVzeXN0ZW1zL2Z1c2UvZnVz
+ZWN0bF90ZXN0LmMgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9maWxlc3lzdGVtcy9mdXNlL2Z1
+c2VjdGxfdGVzdC5jCmluZGV4IDcwNTBmYmUwOTcwZS4uOGQxMjRkMWNhY2IyIDEwMDY0NAotLS0g
+YS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9maWxlc3lzdGVtcy9mdXNlL2Z1c2VjdGxfdGVzdC5j
+CisrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2ZpbGVzeXN0ZW1zL2Z1c2UvZnVzZWN0bF90
+ZXN0LmMKQEAgLTE0LDYgKzE0LDcgQEAKICNpbmNsdWRlIDxzeXMvd2FpdC5oPgogI2luY2x1ZGUg
+PHVuaXN0ZC5oPgogI2luY2x1ZGUgPGRpcmVudC5oPgorI2luY2x1ZGUgPHNjaGVkLmg+CiAjaW5j
+bHVkZSA8bGludXgvbGltaXRzLmg+CiAKICNpbmNsdWRlICIuLi8uLi9rc2VsZnRlc3RfaGFybmVz
+cy5oIgpAQCAtMjMsNiArMjQsMTcgQEAKICNkZWZpbmUgRlVTRV9ERVZJQ0UgIi9kZXYvZnVzZSIK
+ICNkZWZpbmUgRlVTRUNUTF9URVNUX1ZBTFVFICIxIgogCitzdGF0aWMgdm9pZCB3cml0ZV9maWxl
+KHN0cnVjdCBfX3Rlc3RfbWV0YWRhdGEgKmNvbnN0IF9tZXRhZGF0YSwKKwkJICAgICAgIGNvbnN0
+IGNoYXIgKnBhdGgsIGNvbnN0IGNoYXIgKnZhbCkKK3sKKwlpbnQgZmQgPSBvcGVuKHBhdGgsIE9f
+V1JPTkxZKTsKKwlzaXplX3QgbGVuID0gc3RybGVuKHZhbCk7CisKKwlBU1NFUlRfR0UoZmQsIDAp
+OworCUFTU0VSVF9FUSh3cml0ZShmZCwgdmFsLCBsZW4pLCBsZW4pOworCUFTU0VSVF9FUShjbG9z
+ZShmZCksIDApOworfQorCiBGSVhUVVJFKGZ1c2VjdGwpewogCWNoYXIgZnVzZV9tb3VudHBvaW50
+W3NpemVvZihGVVNFX01PVU5UUE9JTlQpXTsKIAlpbnQgY29ubmVjdGlvbjsKQEAgLTMzLDYgKzQ1
+LDE4IEBAIEZJWFRVUkVfU0VUVVAoZnVzZWN0bCkKIAljb25zdCBjaGFyICpmdXNlX21udF9wcm9n
+ID0gIi4vZnVzZV9tbnQiOwogCWludCBzdGF0dXMsIHBpZDsKIAlzdHJ1Y3Qgc3RhdCBzdGF0YnVm
+OworCXVpZF90IHVpZCA9IGdldHVpZCgpOworCWdpZF90IGdpZCA9IGdldGdpZCgpOworCWNoYXIg
+YnVmWzMyXTsKKworCS8qIFNldHVwIHVzZXJucyAqLworCUFTU0VSVF9FUSh1bnNoYXJlKENMT05F
+X05FV05TfENMT05FX05FV1VTRVIpLCAwKTsKKwlzcHJpbnRmKGJ1ZiwgIjAgJWQgMSIsIHVpZCk7
+CisJd3JpdGVfZmlsZShfbWV0YWRhdGEsICIvcHJvYy9zZWxmL3VpZF9tYXAiLCBidWYpOworCXdy
+aXRlX2ZpbGUoX21ldGFkYXRhLCAiL3Byb2Mvc2VsZi9zZXRncm91cHMiLCAiZGVueSIpOworCXNw
+cmludGYoYnVmLCAiMCAlZCAxIiwgZ2lkKTsKKwl3cml0ZV9maWxlKF9tZXRhZGF0YSwgIi9wcm9j
+L3NlbGYvZ2lkX21hcCIsIGJ1Zik7CisJQVNTRVJUX0VRKG1vdW50KCIiLCAiLyIsIE5VTEwsIE1T
+X1JFQ3xNU19QUklWQVRFLCBOVUxMKSwgMCk7CiAKIAlzdHJjcHkoc2VsZi0+ZnVzZV9tb3VudHBv
+aW50LCBGVVNFX01PVU5UUE9JTlQpOwogCkBAIC03Myw3ICs5Nyw3IEBAIEZJWFRVUkVfU0VUVVAo
+ZnVzZWN0bCkKIAogRklYVFVSRV9URUFSRE9XTihmdXNlY3RsKQogewotCXVtb3VudChzZWxmLT5m
+dXNlX21vdW50cG9pbnQpOworCXVtb3VudDIoc2VsZi0+ZnVzZV9tb3VudHBvaW50LCBNTlRfREVU
+QUNIKTsKIAlybWRpcihzZWxmLT5mdXNlX21vdW50cG9pbnQpOwogfQogCg==
+--0000000000007e07d906375c1ba4--
 
