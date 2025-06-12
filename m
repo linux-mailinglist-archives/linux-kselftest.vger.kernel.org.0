@@ -1,203 +1,150 @@
-Return-Path: <linux-kselftest+bounces-34838-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34839-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14C9FAD7AD9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jun 2025 21:08:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8489FAD7BBB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jun 2025 22:05:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C31CF3B1D0E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jun 2025 19:06:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 94A63188507D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jun 2025 20:05:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B25E279798;
-	Thu, 12 Jun 2025 19:03:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49E502E0B4B;
+	Thu, 12 Jun 2025 20:03:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="EXvLchgI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R1u9ex91"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2066.outbound.protection.outlook.com [40.107.92.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E94B72C325B;
-	Thu, 12 Jun 2025 19:03:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.66
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749755024; cv=fail; b=HaVmW541DFajGBtR+IshSnZW22C3O977eN0p7tyXGhBMukDpDHQQ9o/HCoYg4x0XYebY0FkmhbVJ7H0iv7yhFWc/LN4QNZB9BjJjNDl/fVT+ZrLI0GATYNFQ9J03HV6AiGcVIWXMewt7X3933ERJO7PjKy3hqyRd1uOLoqXuUO4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749755024; c=relaxed/simple;
-	bh=9y7LBmjuLN5oAqOEc/5bgtT/IegfHIbLNX0hLCx0mxs=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AZS5Q73vhPcg3F3zdISIPHcuEnp3Ni9QJ40LvZUYCpdiJ/+398lkaT3nE3F5ClWqgIpVOfH91YF8WlVV94N0Hx8cxkEcUVb7rK+wII5oAwsYLYxCqSLZsM9xkv6VMpvFVHRwCSHi2a31CXrjIV+1EYqB/NKiBmeKENWSkMsKYkQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=EXvLchgI; arc=fail smtp.client-ip=40.107.92.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=O8j/LdfpKOG0cBnLMcNGhHetbaz4awRvAnhk8GduymKpX5H5Szh5dFsnJmRRsH80MOg34rLo7QDoJTzqYjkoZN/B59/ab/rt1AoCa6ZPReeuZo3AqCGNLOgMyFFHta28beuPj/i7HXG55tjCXLy6SAKHnnQ4wLGBBHeqccm4c5FVKcnfMyJM5V3TErwisCSEEyrqAthw3J9sexYMgO0igAjXvi7+xAvQ2N6qukNtzz051Yq82XEB+1YGXG9WSyXdHFJAKDxsVIRfx6fw2hf+DyxZH4JWf1F24PIqpdnA0k30UaVIODSio8Psb8BQWfOAmvLn+iTKnLrPsyF+R0BPnQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6ZPdlS1rQ0VvIRt+i4YQIF0sgZYmqbfMuuc+llMdQaE=;
- b=NmKwSRquWSGaVUgiBEp79bdI+j14FoNWuvjptk9H65+dI8lizlr0TxfJ8cgFhgMeLRjvIUfppQqD/qbKj4ZnUMGgSFIB2z0jeDALBsdOT7BMQyjsmoqj5K/5wJw10Xq1nqsQCl91jMx2ia6gOC9+CCMRlc/cZEMNx1fSUK1rIMgzFfcFO9NRFmtaJ2S6JoPGesMD22WKPhCH4miB5Aqi6bMa4h152i1l2ag41WIQGN3Ut2rjEyHeItl064CoTIPRa8ugTrQynSsHNE0g1Zj1DG3deNphmnqD2PSCEYqsXPPZsMqgIfalGf3BfBpjQlLH3Zifpv/Oum92iQXC0HRZIA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=linutronix.de smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6ZPdlS1rQ0VvIRt+i4YQIF0sgZYmqbfMuuc+llMdQaE=;
- b=EXvLchgI64H324uZftH0CUXDENAKgsQKBFw9uy607wNYebYkntjE7ARq91+Wt+JqRQQG/QlYk6ji88hdIdtqna48C4sbTLA02V/t7qPCUoZFlAtlqfsMiOv2o1Qh/XlJY5RlqT8gd7soa/G2qP8rYCuiz+h/dORk0RqtJ00tsjaXSGUFqKLV80B9jKQdU14OPbx01gNaIjQrogHFsqEzTM5hFjfuLKC4JMET7qpxjUDoaAL6QMSwgEQp+woznmpgudiPOodkZyZtUNDF/IxCKxx2wFMavDVVSwiMWwx/XLkrmGWaDBDApqzdGNDYiZfEqpbERi3B9kMnGEcOnA4y1A==
-Received: from BN0PR02CA0015.namprd02.prod.outlook.com (2603:10b6:408:e4::20)
- by CY8PR12MB7513.namprd12.prod.outlook.com (2603:10b6:930:91::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8792.40; Thu, 12 Jun
- 2025 19:03:39 +0000
-Received: from BL6PEPF0001AB75.namprd02.prod.outlook.com
- (2603:10b6:408:e4:cafe::12) by BN0PR02CA0015.outlook.office365.com
- (2603:10b6:408:e4::20) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8835.17 via Frontend Transport; Thu,
- 12 Jun 2025 19:03:39 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BL6PEPF0001AB75.mail.protection.outlook.com (10.167.242.168) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8835.15 via Frontend Transport; Thu, 12 Jun 2025 19:03:39 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 12 Jun
- 2025 12:03:20 -0700
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail202.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Thu, 12 Jun
- 2025 12:03:20 -0700
-Received: from nvidia.com (10.127.8.9) by mail.nvidia.com (10.129.68.8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14 via Frontend
- Transport; Thu, 12 Jun 2025 12:03:17 -0700
-Date: Thu, 12 Jun 2025 12:03:14 -0700
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-CC: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
-	Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, "Willy
- Tarreau" <w@1wt.eu>, Thomas =?iso-8859-1?Q?Wei=DFschuh?=
-	<linux@weissschuh.net>, Kees Cook <kees@kernel.org>, Andy Lutomirski
-	<luto@amacapital.net>, Will Drewry <wad@chromium.org>, Mark Brown
-	<broonie@kernel.org>, Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v4 09/14] selftests: harness: Move teardown conditional
- into test metadata
-Message-ID: <aEskchlFcNL3T6sO@nvidia.com>
-References: <20250611235117.GR543171@nvidia.com>
- <aEp6tGUEFCQz1prh@nvidia.com>
- <20250612135802.GU543171@nvidia.com>
- <20250612162151-1fc97a6c-a1c9-4656-997e-fd02f5f9418b@linutronix.de>
- <20250612145801.GV543171@nvidia.com>
- <20250612171437-450fb7d6-c73a-47e3-9e1c-5c009cba7fe1@linutronix.de>
- <20250612154242.GW543171@nvidia.com>
- <aEsUGP8xPTDjG0ob@nvidia.com>
- <aEsiJFku+wR9KxE8@nvidia.com>
- <20250612185613.GX543171@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 883332D8782;
+	Thu, 12 Jun 2025 20:03:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1749758593; cv=none; b=nDVtLWEFdDuU/sZKm+1lfNNfLa9p0z/bKIyVtmGHPMeC2rB1Qp0ZeNKVfWIGz5JKm5k+AtPJXXTT5Cq82SeqZ2l9P8dguDxSAFHc10o+KLOzC8EZJtGpewJ6j5VdzyOyi6MnTjOk5kIMVFYw3Mk3Hmv6VoPmZ9meBz0Ailm8+Lc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1749758593; c=relaxed/simple;
+	bh=WIciPhkuwpytb96ZPY3/taNGW/mxm70/ocDf/etRYAY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=aMQpT1etPb7CKquTVfCLlpJqZXfOiqb1BtZ0Ti6NP/5gT0M7nqsK1iOVUDOZArJT9T+IjT3OdxwnTyfNmv0ihfNWMmEEmKe26IeohQJ+W3dwZwrfzPZ7wxZ1w/7E8GVTSz2FTDah9RlpqgoSZOn6ERcv8yasZx1f4x1tYdGVAXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R1u9ex91; arc=none smtp.client-ip=209.85.160.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-4a5901854e3so1979181cf.3;
+        Thu, 12 Jun 2025 13:03:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1749758590; x=1750363390; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xc6N+dUinlHw4NHSG2eKigRbuom9TvjgvsTWo0kWaOk=;
+        b=R1u9ex913dDCt8MWvYVKqiLpUwHZlK1jNHSAA47qkTW1knj8vgkNS0ZXL3TN6eXepw
+         JbpttQqV998JFsxk0yHZUr8pIccZFX+E9wjPXoKEX5JeeXtEzIi0bNFX3YNJlAdegPFp
+         NSlLwtxvdEUW9Tentuu9zVrN4+rzc5ReZmGFP1S7xEXv0QtzGMTlLwkeMwRTwGw0/wD0
+         /4c5ICwK+kNptOasVJMwwyYHRcuUFODs9iaKcD71DyCTSxd77i05uDQDzR5yUMS8prT8
+         28U5dSy6K1OR1sGtOjt8xXvsPi0BtyspJO/ufyaWyZfHACtWDM9RzTOaXSi4eHFFvTgU
+         XPOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749758590; x=1750363390;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Xc6N+dUinlHw4NHSG2eKigRbuom9TvjgvsTWo0kWaOk=;
+        b=mgWn1EOEFwtAN1N9YvsbCHlekBWl3nIPHezZHt/d77AwdYu4zaJq66mg4jLmXnGIbB
+         mymlStHgWbj4yykpu0F6NQFRgvG5Slq9b2hZnSeXIF+nWUy373IXSLe3Ztzh8Blhn3JK
+         XZUTZTqhO0ojoKR8d1ePiS1M0nfjz7C+HqmOAfNV/Il5LdQfXxG1ShevMWo6QHLnMmkp
+         1bI94UKzbyhLMujIgQTtWx9GHTceH5qcYgygBSKN5ovXHUbwlM8CtlHGeITsVNFc/HGY
+         OldbOYMnIKml457tzzcwrxe/lw7zXJeuQqMiUqJ1AY7N/7A/b2uwQyPWrxv7S8DE5uzJ
+         NaAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV3YbDF0bSb2wwyAqNNiHYJbnGXf6D8zMPKeBfBTom3oeuNeVm9MPr8UhArRWE+JP1Chg6UtRHsBak9Ll/D@vger.kernel.org, AJvYcCVmFfinmb5Q6wUs1r2Urg+Wnp3gdgjGUn+EOmNuC5zHcdoXbuvMawIXbURxBAbnn/qgKPV2l22bXEU=@vger.kernel.org, AJvYcCXob5MS8c0l04a5WtoYA4RMlPAfM4oXqU4Wu3B7sm608me24OBXBX87ydypoy7L0bzTaHUsAE+qDpoTdZAmKz2R@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyg1iGSrNFEQQL8nN6wj8Ptl8UJf3XTiu1lPDLEeY1wz4l+lFhH
+	v7zddYoPYlbqEq6IBK126nj9v4OxvZ9IDRYddnIDHABlq04qop5kT7bZp1c3cZ9D
+X-Gm-Gg: ASbGncsQraKRwvkEcDaCTMIvbb/3eQZtC6jk5fmN/ylXokmPuSRyAT77XsKbB761Oue
+	HAAsOSZvG0ypKbfa5n/sRkBcz540a1JDcMpf7SclufQqLwA+NmsVxxFgBEaNXG4B4sR1jkDFeRi
+	HbbHvrCWhVRx0KJmNIiM8tkHrqBqqcGUDH2Wy/1el6/auMVNy1JtznlmviHhV3uRRtodERPYFMK
+	c4JTPDzrHUX8Yy3a22BtU6vOPeLMlkmqOJP1Mn5VbcTjMcQr55cky3L8yakk9yyoyF5C0YrMkXG
+	ZkJa7KWgalgEh+ilEI7zANOMNyco8f7ef5tHTLp9LYEYcrU8PbkieTw=
+X-Google-Smtp-Source: AGHT+IGh8hGn1isSQPrREYZv+mteO2JTk2LNLUhOGmq4qos4Tno+tEnXNR6Sbv760f4p4rKcB7Av/w==
+X-Received: by 2002:a05:6214:1cc6:b0:6e8:f645:2639 with SMTP id 6a1803df08f44-6fb3e5ba9famr1175366d6.5.1749758590209;
+        Thu, 12 Jun 2025 13:03:10 -0700 (PDT)
+Received: from localhost ([2a03:2880:20ff:9::])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6fb35c31688sm13592516d6.80.2025.06.12.13.03.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jun 2025 13:03:09 -0700 (PDT)
+From: Gustavo Luiz Duarte <gustavold@gmail.com>
+Subject: [PATCH net-next v2 0/5] netconsole: Add support for msgid in
+ sysdata
+Date: Thu, 12 Jun 2025 13:02:13 -0700
+Message-Id: <20250612-netconsole-msgid-v2-0-d4c1abc84bac@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20250612185613.GX543171@nvidia.com>
-X-NV-OnPremToCloud: AnonymousSubmission
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB75:EE_|CY8PR12MB7513:EE_
-X-MS-Office365-Filtering-Correlation-Id: 55034f0c-3173-4384-8b1d-08dda9e3d76b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|36860700013|82310400026|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?ERcuyYppuELCD3x5oiWrn1NeHO1U6F+J0KWUDdlLuPHuOgT3hSvSaqiYjv7V?=
- =?us-ascii?Q?HO7kGceMTMCbXZjWPUG04tnV28QbVqpGCKo/cxX0D7bJQ65EJRyErxvBfKGa?=
- =?us-ascii?Q?6QDyrfMjnF2xWVoZChRpNpyevq6WUNW42WjAZH/t9xsmDrQs6CLKitH5qqpi?=
- =?us-ascii?Q?rfiapQkYt+j/S+GS3SclxjwBfHcxjdvIuwGbHA47ZbIZYfEWfpXiNJoa8eT2?=
- =?us-ascii?Q?nJUisI4UoJM+u7iKC/7CfTdWNjPndIU1r5lIBct9kjV7JsQA6LI+NHqS+8YL?=
- =?us-ascii?Q?Xc3mXzyMYKOSrGXcFtqEx5cpANDh0XX43ZJZ+0ydh7HqbjcaF2y3/9SQE8u0?=
- =?us-ascii?Q?MQdYKORGAkeHaFs4jqai7I0Ag7zXtiLYtQiMhK176XILhe7cc66eABj7Z8A1?=
- =?us-ascii?Q?hRn3RMp1P2mTDuWbpHyXjSdkbEl/0IVHYB/VNdeQctXGDxLZlSU6gWdC0dh5?=
- =?us-ascii?Q?JVL7hbZ1vSY/QG2R1Kx4feEFHULm4ZmHtJG1zEvLHtzOQC75cABOEDHWq6TN?=
- =?us-ascii?Q?2vOw46X9xLIKNu41FIVS4L9p525hp6TOykdnd5vGaaL0oUjbUDSsBxeq5gPe?=
- =?us-ascii?Q?gmcrsLoO1jf5zPJkWST0EE80cf3co2lF4+llLqoAn8NPz2XN7p4i+LEQeITh?=
- =?us-ascii?Q?KR9kLUlfOffdNdjvImhVXJX0UT0QnEENB9bSn1Mow+w5nUb1DLf4nrAcFgwL?=
- =?us-ascii?Q?vC/bT0upFYlLMYodbFOS4fa/qJsdoui1dx6cu3pWT7CO6iQsUDSxN3BbSw1h?=
- =?us-ascii?Q?7qFxIfeEwPNV7jZDY2Pm6n3XsCNPGOEkTzEXxhVDeG0rAy5SdJp3qC/OxsZf?=
- =?us-ascii?Q?tmgPMslDFfxWpHTV3hxCrOyCbuYgxyaRBFEJmacNMnRodNuq+4auC+grEfWu?=
- =?us-ascii?Q?thUGaIn4mNKD5HZtzi1oIudD1tGyI0+tdSePjpwu1R4FKBmeezq/GNpxUqn2?=
- =?us-ascii?Q?+GPu7sA4vsJLtUhZuBCpnjqhDkyI8GeQe7j6dt5DPc75sWdMJrcU3jkGvKZq?=
- =?us-ascii?Q?C8IwgY0mi1TU3U3qfpjF/91PkcDkKmL+vCSeFtWcQiyWAcnSF9eUCNj5YHwY?=
- =?us-ascii?Q?mat2K9BUYsvwPmA2WC9gNZBl69tpvK5iwpHPIuNajG70e/9gX6JSqwxj+iaY?=
- =?us-ascii?Q?yVZ+y18h+2sKtQNUkbS35uOOaAoegO3cdMqYugjUXuvfXWdDp+7XBMSP2hWw?=
- =?us-ascii?Q?D3OIewM8e8c2IEZ3vnpysySzn/gpxUqV/lRi96112Ci0oeIEhPxnl0++z84l?=
- =?us-ascii?Q?1j3yZYZPekKqgbP/mSj9U1EtZU9jct/3WDnbJeX/RCRlhYWrX6ya9AketAnY?=
- =?us-ascii?Q?U+4Co4jnItt6oLaR2ehBIGfHWBsls/QgWuof/nJkjfZYAUZCdp9Ly4r/veqM?=
- =?us-ascii?Q?1dSBgkQCKPZuBaVYN2UFavHJjlLBc8c13erSEJHPlNFIDxxfNP15wa3UZdwF?=
- =?us-ascii?Q?xOykxNgH+ythO2JaimUuECBnPgOxxmsFTBrWRxCw1vfd26BQMdWCop8iSTs6?=
- =?us-ascii?Q?XyioI0GG80zv0Sr2W1n/5AncH3X4jTSBfKjT?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(7416014)(36860700013)(82310400026)(1800799024);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2025 19:03:39.1230
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 55034f0c-3173-4384-8b1d-08dda9e3d76b
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL6PEPF0001AB75.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7513
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEUyS2gC/2WNwQqDMBBEf0X23JSsrVZ76n8UDzGuumASSUQs4
+ r93scceh5n3ZodEkSnBM9sh0sqJg5eQXzKwo/EDKe4kQ67zQpe6Vp4WG3wKEymXBu5UW99s2Vd
+ U21KDYHOknrdT+QZZC7Et0EgzclpC/JxfK579T4v4r11RaYWP6m4K7KlFeg3O8HS1wUFzHMcXH
+ bMMbLoAAAA=
+To: Breno Leitao <leitao@debian.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
+ Jonathan Corbet <corbet@lwn.net>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
+ Gustavo Luiz Duarte <gustavold@gmail.com>
+X-Mailer: b4 0.13.0
 
-On Thu, Jun 12, 2025 at 03:56:13PM -0300, Jason Gunthorpe wrote:
-> On Thu, Jun 12, 2025 at 11:53:24AM -0700, Nicolin Chen wrote:
-> > @@ -2022,7 +2023,19 @@ FIXTURE_SETUP(iommufd_dirty_tracking)
-> >         self->fd = open("/dev/iommu", O_RDWR);
-> >         ASSERT_NE(-1, self->fd);
-> > 
-> > -       rc = posix_memalign(&self->buffer, HUGEPAGE_SIZE, variant->buffer_size);
-> > +       if (variant->hugepages) {
-> > +               /*
-> > +                * Allocation must be aligned to the HUGEPAGE_SIZE, because the
-> > +                * following mmap() will automatically align the length to be a
-> > +                * multiple of the underlying huge page size. Failing to do the
-> > +                * same at this allocation will result in a memory overwrite by
-> > +                * the mmap().
-> > +                */
-> > +               size = __ALIGN_KERNEL(variant->buffer_size, HUGEPAGE_SIZE);
-> > +       } else {
-> > +               size = variant->buffer_size;
-> > +       }
-> > +       rc = posix_memalign(&self->buffer, HUGEPAGE_SIZE, size);
-> >         if (rc || !self->buffer) {
-> >                 SKIP(return, "Skipping buffer_size=%lu due to errno=%d",
-> >                            variant->buffer_size, rc);
-> > 
-> > It can just upsize the allocation, i.e. the test case will only
-> > use the first 64M or 128MB out of the reserved 512MB huge page.
-> 
-> The MAP_HUGETLBFS is required that is the whole point of what it is
-> doing..
+This patch series introduces a new feature to netconsole which allows
+appending a message ID to the userdata dictionary.
 
-I am not quite following this.. MAP_HUGETLB will be still set.
+If the msgid feature is enabled, the message ID is built from a per-target 32
+bit counter that is incremented and appended to every message sent to the target.
 
-And the underlying selftest case is using:
-	MOCK_HUGE_PAGE_SIZE = 512 * MOCK_IO_PAGE_SIZE
+Example::
+  echo 1 > "/sys/kernel/config/netconsole/cmdline0/userdata/msgid_enabled"
+  echo "This is message #1" > /dev/kmsg
+  echo "This is message #2" > /dev/kmsg
+  13,434,54928466,-;This is message #1
+   msgid=1
+  13,435,54934019,-;This is message #2
+   msgid=2
 
-Does it matter if the underlying allocation has an overshot?
+This feature can be used by the target to detect if messages were dropped or
+reordered before reaching the target. This allows system administrators to
+assess the reliability of their netconsole pipeline and detect loss of messages
+due to network contention or temporary unavailability.
 
-Thanks
-Nicolin
+Suggested-by: Breno Leitao <leitao@debian.org>
+Signed-off-by: Gustavo Luiz Duarte <gustavold@gmail.com>
+
+---
+Changes in v2:
+- Use wrapping_assign_add() to avoid warnings in UBSAN and friends.
+- Improve documentation to clarify wrapping and distinguish msgid from sequnum.
+- Rebase and fix conflict in prepare_extradata().
+- Link to v1: https://lore.kernel.org/r/20250611-netconsole-msgid-v1-0-1784a51feb1e@gmail.com
+
+---
+Gustavo Luiz Duarte (5):
+      netconsole: introduce 'msgid' as a new sysdata field
+      netconsole: implement configfs for msgid_enabled
+      netconsole: append msgid to sysdata
+      selftests: netconsole: Add tests for 'msgid' feature in sysdata
+      docs: netconsole: document msgid feature
+
+ Documentation/networking/netconsole.rst            | 32 +++++++++++
+ drivers/net/netconsole.c                           | 65 ++++++++++++++++++++++
+ .../selftests/drivers/net/netcons_sysdata.sh       | 30 ++++++++++
+ 3 files changed, 127 insertions(+)
+---
+base-commit: 535de528015b56e34a40a8e1eb1629fadf809a84
+change-id: 20250609-netconsole-msgid-b93c6f8e9c60
+
+Best regards,
+-- 
+Gustavo Luiz Duarte <gustavold@gmail.com>
+
 
