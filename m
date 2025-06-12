@@ -1,80 +1,81 @@
-Return-Path: <linux-kselftest+bounces-34839-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34840-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8489FAD7BBB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jun 2025 22:05:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8509AD7BC1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jun 2025 22:06:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 94A63188507D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jun 2025 20:05:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2B7C41883DA9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jun 2025 20:05:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49E502E0B4B;
-	Thu, 12 Jun 2025 20:03:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08E9B2E1729;
+	Thu, 12 Jun 2025 20:03:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R1u9ex91"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="keS+JI32"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 883332D8782;
-	Thu, 12 Jun 2025 20:03:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 510AD2E0B73;
+	Thu, 12 Jun 2025 20:03:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749758593; cv=none; b=nDVtLWEFdDuU/sZKm+1lfNNfLa9p0z/bKIyVtmGHPMeC2rB1Qp0ZeNKVfWIGz5JKm5k+AtPJXXTT5Cq82SeqZ2l9P8dguDxSAFHc10o+KLOzC8EZJtGpewJ6j5VdzyOyi6MnTjOk5kIMVFYw3Mk3Hmv6VoPmZ9meBz0Ailm8+Lc=
+	t=1749758596; cv=none; b=svINsYeh156TvHlewtvUat4gXGJObK7b8wtP45F9f6g50LfRWIfgKBW9rLgdrQv4Bt96hxp0iXiRfHrfxN39LFNkHgnCVbWAw8ufriyiUImDxK6yphFwt9MgPFVECxpKqmgPAyI4joUe4FYnJffsGXP8+eWOasamJ07ZYtGzXD8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749758593; c=relaxed/simple;
-	bh=WIciPhkuwpytb96ZPY3/taNGW/mxm70/ocDf/etRYAY=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=aMQpT1etPb7CKquTVfCLlpJqZXfOiqb1BtZ0Ti6NP/5gT0M7nqsK1iOVUDOZArJT9T+IjT3OdxwnTyfNmv0ihfNWMmEEmKe26IeohQJ+W3dwZwrfzPZ7wxZ1w/7E8GVTSz2FTDah9RlpqgoSZOn6ERcv8yasZx1f4x1tYdGVAXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R1u9ex91; arc=none smtp.client-ip=209.85.160.173
+	s=arc-20240116; t=1749758596; c=relaxed/simple;
+	bh=p94oIFo4jUglnAhbc3gfVf3Xl1s0WKJ0t3PNRYqQRvE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=RzTuRWggctzloCILkr+B2gCAulAugMYk0yG2jSU9M6qlYnuTUap0yi6mL8rtlpYqo8OhFeM+EWWI+E/JTpmkHvOTQ+Quqacyj3Y/Sd2TxuiYVfszPPIcb8KSCWiPrqoE/GU6L0YD/LHdNOkEvIV8YcG5pdPLJFX+teCooKSr+bM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=keS+JI32; arc=none smtp.client-ip=209.85.160.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-4a5901854e3so1979181cf.3;
-        Thu, 12 Jun 2025 13:03:11 -0700 (PDT)
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-48b7747f971so1513301cf.3;
+        Thu, 12 Jun 2025 13:03:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749758590; x=1750363390; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xc6N+dUinlHw4NHSG2eKigRbuom9TvjgvsTWo0kWaOk=;
-        b=R1u9ex913dDCt8MWvYVKqiLpUwHZlK1jNHSAA47qkTW1knj8vgkNS0ZXL3TN6eXepw
-         JbpttQqV998JFsxk0yHZUr8pIccZFX+E9wjPXoKEX5JeeXtEzIi0bNFX3YNJlAdegPFp
-         NSlLwtxvdEUW9Tentuu9zVrN4+rzc5ReZmGFP1S7xEXv0QtzGMTlLwkeMwRTwGw0/wD0
-         /4c5ICwK+kNptOasVJMwwyYHRcuUFODs9iaKcD71DyCTSxd77i05uDQDzR5yUMS8prT8
-         28U5dSy6K1OR1sGtOjt8xXvsPi0BtyspJO/ufyaWyZfHACtWDM9RzTOaXSi4eHFFvTgU
-         XPOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749758590; x=1750363390;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1749758594; x=1750363394; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Xc6N+dUinlHw4NHSG2eKigRbuom9TvjgvsTWo0kWaOk=;
-        b=mgWn1EOEFwtAN1N9YvsbCHlekBWl3nIPHezZHt/d77AwdYu4zaJq66mg4jLmXnGIbB
-         mymlStHgWbj4yykpu0F6NQFRgvG5Slq9b2hZnSeXIF+nWUy373IXSLe3Ztzh8Blhn3JK
-         XZUTZTqhO0ojoKR8d1ePiS1M0nfjz7C+HqmOAfNV/Il5LdQfXxG1ShevMWo6QHLnMmkp
-         1bI94UKzbyhLMujIgQTtWx9GHTceH5qcYgygBSKN5ovXHUbwlM8CtlHGeITsVNFc/HGY
-         OldbOYMnIKml457tzzcwrxe/lw7zXJeuQqMiUqJ1AY7N/7A/b2uwQyPWrxv7S8DE5uzJ
-         NaAQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV3YbDF0bSb2wwyAqNNiHYJbnGXf6D8zMPKeBfBTom3oeuNeVm9MPr8UhArRWE+JP1Chg6UtRHsBak9Ll/D@vger.kernel.org, AJvYcCVmFfinmb5Q6wUs1r2Urg+Wnp3gdgjGUn+EOmNuC5zHcdoXbuvMawIXbURxBAbnn/qgKPV2l22bXEU=@vger.kernel.org, AJvYcCXob5MS8c0l04a5WtoYA4RMlPAfM4oXqU4Wu3B7sm608me24OBXBX87ydypoy7L0bzTaHUsAE+qDpoTdZAmKz2R@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyg1iGSrNFEQQL8nN6wj8Ptl8UJf3XTiu1lPDLEeY1wz4l+lFhH
-	v7zddYoPYlbqEq6IBK126nj9v4OxvZ9IDRYddnIDHABlq04qop5kT7bZp1c3cZ9D
-X-Gm-Gg: ASbGncsQraKRwvkEcDaCTMIvbb/3eQZtC6jk5fmN/ylXokmPuSRyAT77XsKbB761Oue
-	HAAsOSZvG0ypKbfa5n/sRkBcz540a1JDcMpf7SclufQqLwA+NmsVxxFgBEaNXG4B4sR1jkDFeRi
-	HbbHvrCWhVRx0KJmNIiM8tkHrqBqqcGUDH2Wy/1el6/auMVNy1JtznlmviHhV3uRRtodERPYFMK
-	c4JTPDzrHUX8Yy3a22BtU6vOPeLMlkmqOJP1Mn5VbcTjMcQr55cky3L8yakk9yyoyF5C0YrMkXG
-	ZkJa7KWgalgEh+ilEI7zANOMNyco8f7ef5tHTLp9LYEYcrU8PbkieTw=
-X-Google-Smtp-Source: AGHT+IGh8hGn1isSQPrREYZv+mteO2JTk2LNLUhOGmq4qos4Tno+tEnXNR6Sbv760f4p4rKcB7Av/w==
-X-Received: by 2002:a05:6214:1cc6:b0:6e8:f645:2639 with SMTP id 6a1803df08f44-6fb3e5ba9famr1175366d6.5.1749758590209;
-        Thu, 12 Jun 2025 13:03:10 -0700 (PDT)
-Received: from localhost ([2a03:2880:20ff:9::])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6fb35c31688sm13592516d6.80.2025.06.12.13.03.09
+        bh=GqK4XVmf88e+UTUicEUcYEEd52VK5FIFk2p//V1IESs=;
+        b=keS+JI32l9TQ8njvXDiHqu+5MxZq81deZkT8Kc8/8CpDfx6EQ3nmW4V5TukVNjOG6g
+         UFVeKh3RctIw0Ami27xVyBbCH+6gCO8hT3pNMT9Z3SXom9kN9g/Zft7sn7wND2gwulcA
+         +knRN+r2c7JrMVRlcZzNOVrr2QahTCrdixsQkaQsHTe7muf8mpguVzUZA+LvMpracJ+F
+         PeePpxAxljGsEPybzedKlunfbFDN2JuD6a2QVmyXR9s08uSO0g6cj80bWQEDCdiycgEp
+         cNiQRzX+rxHoXMbn/zL9I8xVU/RVhMw1kvoAYUPtdqbHu8hVrKnjwGJxVP3GzSt4YzGz
+         AEtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749758594; x=1750363394;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GqK4XVmf88e+UTUicEUcYEEd52VK5FIFk2p//V1IESs=;
+        b=LuWCMlJtCo8kg0wyhAJRfu1FNs63hgraV4SdY+VzKManiU9f3VAz9LhTGqu+NG7O1+
+         9kmRZprSU317+7doxFcr91SKjzicLB7t8i23yTEtSWv/Z+CB4S4uoCqgS1nGPZn5zWy2
+         A0hvumPtM2fnUhFEEMTjj9LHEgy02/+enxnzTILa8d9qqKHc0/6chClnWSLh4+4g80Tp
+         Tp6zghTVSnj0u4wdrKl02FkrbX2Iq6pd/ndXoxdgsgF1mAYIm4l+TwlUvPotoS4McApf
+         c4Av4Gb9zO8rrIUPUvTEQMbIO81b0of3SBqNbF4Tihob5yMxI77CHe6LSjgTsmAl0l6x
+         8JMw==
+X-Forwarded-Encrypted: i=1; AJvYcCVkmNiFaPoJzGt541P0DGZpqyzuROlEVgAdHE/VYkZ744LZMcioM7zp4W90yXnYv1EL4Pf9xa7lApc=@vger.kernel.org, AJvYcCVwzbuNM2jx+11ANkP1zm9osmzmcpYfLNKRdoFSG1VEbwMHx67F2Hoj/7BPaQM30ABDZ/Wr3HTNCxd18IhaUjuh@vger.kernel.org, AJvYcCWPJCoY0UG0ptVbHNIJuBVlIgpu/aRnAbCexr5RErjB0INCE9zCZtBr3CUUNTNOmjWSbs0jWKm0eoZTjZNz@vger.kernel.org
+X-Gm-Message-State: AOJu0YwTI0ev4ZZleUW9V1em597olyNZh6tAgkUeXDEwoK9iveg+3TH9
+	N+Eo+DSSGL5tZTavH4xSsIfUod0nPBMLQxoeiDEbugsKCrsMjezhZmsr
+X-Gm-Gg: ASbGncu6wg5oDF8hSDZ+KoMw3XigD2Y8RRxUDO5Je8CfOlgSS8rZo8M3IeE7L9RIVgI
+	/eGWB+Pzv89mLEHdzLYvclGf8q8fxSm+bN9rB7qJldiirGnWVD5OPsge50u92a11hLFNNAicgqO
+	cZ7b7eUxxuKqJIF+FQaREitVMr1NSodOuC58+8E705HpYgphuyS+1a8c8GW4zGnmz1qGBbqWhAk
+	OmWSvYy+8kU+1V+rSAZdbwAH1jxYIs+v33hDGD9Gf/K6KkoEfIOHPC67/yc20EOCNhSU/IUQ8lt
+	DHWFJzcBdodpGCYRr3UJkddisJ/Laim5NnAxw+PwrqDF/uzwG6AhZnY=
+X-Google-Smtp-Source: AGHT+IHaJ8YHfWK3ymwJNH+TEVoQLf7B7caofHWGb4f5nJ1C2jtwl17bBUz8ImIy+guO+S4h4KW2tA==
+X-Received: by 2002:a05:6214:f29:b0:6fa:ed8e:372c with SMTP id 6a1803df08f44-6fb3e5fc540mr1071226d6.1.1749758594031;
+        Thu, 12 Jun 2025 13:03:14 -0700 (PDT)
+Received: from localhost ([2a03:2880:20ff:1::])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6fb35b20f67sm13696456d6.16.2025.06.12.13.03.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jun 2025 13:03:09 -0700 (PDT)
+        Thu, 12 Jun 2025 13:03:13 -0700 (PDT)
 From: Gustavo Luiz Duarte <gustavold@gmail.com>
-Subject: [PATCH net-next v2 0/5] netconsole: Add support for msgid in
- sysdata
-Date: Thu, 12 Jun 2025 13:02:13 -0700
-Message-Id: <20250612-netconsole-msgid-v2-0-d4c1abc84bac@gmail.com>
+Date: Thu, 12 Jun 2025 13:02:14 -0700
+Subject: [PATCH net-next v2 1/5] netconsole: introduce 'msgid' as a new
+ sysdata field
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,10 +84,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAEUyS2gC/2WNwQqDMBBEf0X23JSsrVZ76n8UDzGuumASSUQs4
- r93scceh5n3ZodEkSnBM9sh0sqJg5eQXzKwo/EDKe4kQ67zQpe6Vp4WG3wKEymXBu5UW99s2Vd
- U21KDYHOknrdT+QZZC7Et0EgzclpC/JxfK579T4v4r11RaYWP6m4K7KlFeg3O8HS1wUFzHMcXH
- bMMbLoAAAA=
+Message-Id: <20250612-netconsole-msgid-v2-1-d4c1abc84bac@gmail.com>
+References: <20250612-netconsole-msgid-v2-0-d4c1abc84bac@gmail.com>
+In-Reply-To: <20250612-netconsole-msgid-v2-0-d4c1abc84bac@gmail.com>
 To: Breno Leitao <leitao@debian.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
@@ -97,54 +97,41 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  Gustavo Luiz Duarte <gustavold@gmail.com>
 X-Mailer: b4 0.13.0
 
-This patch series introduces a new feature to netconsole which allows
-appending a message ID to the userdata dictionary.
+This adds a new sysdata field to enable assigning a per-target unique id
+to each message sent to that target. This id can later be appended as
+part of sysdata, allowing targets to detect dropped netconsole messages.
+Update count_extradata_entries() to take the new field into account.
 
-If the msgid feature is enabled, the message ID is built from a per-target 32
-bit counter that is incremented and appended to every message sent to the target.
-
-Example::
-  echo 1 > "/sys/kernel/config/netconsole/cmdline0/userdata/msgid_enabled"
-  echo "This is message #1" > /dev/kmsg
-  echo "This is message #2" > /dev/kmsg
-  13,434,54928466,-;This is message #1
-   msgid=1
-  13,435,54934019,-;This is message #2
-   msgid=2
-
-This feature can be used by the target to detect if messages were dropped or
-reordered before reaching the target. This allows system administrators to
-assess the reliability of their netconsole pipeline and detect loss of messages
-due to network contention or temporary unavailability.
-
-Suggested-by: Breno Leitao <leitao@debian.org>
+Reviewed-by: Breno Leitao <leitao@debian.org>
 Signed-off-by: Gustavo Luiz Duarte <gustavold@gmail.com>
-
 ---
-Changes in v2:
-- Use wrapping_assign_add() to avoid warnings in UBSAN and friends.
-- Improve documentation to clarify wrapping and distinguish msgid from sequnum.
-- Rebase and fix conflict in prepare_extradata().
-- Link to v1: https://lore.kernel.org/r/20250611-netconsole-msgid-v1-0-1784a51feb1e@gmail.com
+ drivers/net/netconsole.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
----
-Gustavo Luiz Duarte (5):
-      netconsole: introduce 'msgid' as a new sysdata field
-      netconsole: implement configfs for msgid_enabled
-      netconsole: append msgid to sysdata
-      selftests: netconsole: Add tests for 'msgid' feature in sysdata
-      docs: netconsole: document msgid feature
+diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
+index 1eb678e07dd0..5f8c8c6c5393 100644
+--- a/drivers/net/netconsole.c
++++ b/drivers/net/netconsole.c
+@@ -113,6 +113,8 @@ enum sysdata_feature {
+ 	SYSDATA_TASKNAME = BIT(1),
+ 	/* Kernel release/version as part of sysdata */
+ 	SYSDATA_RELEASE = BIT(2),
++	/* Include a per-target message ID as part of sysdata */
++	SYSDATA_MSGID = BIT(3),
+ };
+ 
+ /**
+@@ -782,6 +784,8 @@ static size_t count_extradata_entries(struct netconsole_target *nt)
+ 		entries += 1;
+ 	if (nt->sysdata_fields & SYSDATA_RELEASE)
+ 		entries += 1;
++	if (nt->sysdata_fields & SYSDATA_MSGID)
++		entries += 1;
+ 
+ 	return entries;
+ }
 
- Documentation/networking/netconsole.rst            | 32 +++++++++++
- drivers/net/netconsole.c                           | 65 ++++++++++++++++++++++
- .../selftests/drivers/net/netcons_sysdata.sh       | 30 ++++++++++
- 3 files changed, 127 insertions(+)
----
-base-commit: 535de528015b56e34a40a8e1eb1629fadf809a84
-change-id: 20250609-netconsole-msgid-b93c6f8e9c60
-
-Best regards,
 -- 
-Gustavo Luiz Duarte <gustavold@gmail.com>
+2.47.1
 
 
