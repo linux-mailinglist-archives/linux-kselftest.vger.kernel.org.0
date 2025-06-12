@@ -1,176 +1,189 @@
-Return-Path: <linux-kselftest+bounces-34829-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34830-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8DF2AD76EF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jun 2025 17:50:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B0BBAD7712
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jun 2025 17:54:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 62B2216E9A8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jun 2025 15:48:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CB1653A49CC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jun 2025 15:51:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 424D129A327;
-	Thu, 12 Jun 2025 15:47:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9191E2C324D;
+	Thu, 12 Jun 2025 15:48:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="cpgu9rqd"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bZgLQcPc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2087.outbound.protection.outlook.com [40.107.244.87])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4CDE299AAB;
-	Thu, 12 Jun 2025 15:47:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.87
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749743253; cv=fail; b=ZRCVotm14sXjJmArOT3LfRDJIsSHFXDXZ8UvnotVVdEPIBuBtxBWIHY+oHzZYNjioP3/Y09OZw3k6hJYd55VKW4tA2ivzgVxAg0uHdezFOzoZA7NVGuDT9Y6QwfuVn6vVeAoUuLGKu1CJMfUaO0qPfY6EgPXoZjS7YO3U8ufY7Y=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749743253; c=relaxed/simple;
-	bh=3l9oPsPq2vQRYhyyIAejCyhPMXFsAhqSKc8y82GPjYQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Y2gEJVC7VtuIIpDgZiSlyLOZNiZMUy2EiWnAXUFuCRGZL398JbgaYHoByOPgIHyrLjAl23cpRyoAO65UO7X8GDx1hBB3ejC0DDAsEZ2Wr66O/0C5NVOlrghPwg3XPPqaMyFZod2/sunhiA0s6YGCumthOuXols4Ews0hYgbChbI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=cpgu9rqd; arc=fail smtp.client-ip=40.107.244.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=HilY8Av0YA4MWWy5KrhjTn3fqTN3VowxQX8xUxv3RX13WlzJ+GHz+1VE6AggNNGmD+2LtO0SCJdhFduRIjLtIIu84iniX8tBYOxYjD0Rb3WJIIhxSXIMzRpBFgxgqy9O7sfK/lPKcW2wfh4RL+3U9ajvHqKs1GcNbwSwf0zE0B13vfc7yBKT4upahFsaQtrl7oUJt7iFH4Ceb4xzABn4yTPoPtxEcp+VZQkKCvjvPr666Nj1BeVbnGxjstv9jYj45NuIMx7k06FFyahuWAf55r1klcDiLqWdNludU6NhMsHX68Z1mLJlNotMOrer7A8xv9/OrjXkYeY8FJMaOdm5yw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SYt9J4k+jtLFC1UhCmxZRORGxveXve9GGzHGlW5sVak=;
- b=lKRGu6ULs5V2DliCCHdaOe3xqP3QidE2P9M50s/axWBHmSO6mPcLHvtetGsOTJjugrc5bkxOGvk1xUdqWbNBxXsNaK5TVEsCkEMj4tolRuioTlVMPxV9g1uK9ZwnC/W59z8NlJwPEVicZJzSSIVj5Sd0QqLZhMvZDGmNAPF6A+yHRQ04UcX/F0EYYxnxy5DPc1VrEKspPck6CH3CP/Aba3c01pRi90ZdE/Q+SbdQs/ZupFz1bVMI2RtNwsA2n8EPUfd+JQDTvLrUyWzdDaj5QRS8GsGi3/TUX5Q1bOGNJAzN1h+Ihclq0fvIuuRqphgTQb+LW7B1kxElSFhqI6uVlA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SYt9J4k+jtLFC1UhCmxZRORGxveXve9GGzHGlW5sVak=;
- b=cpgu9rqdiXilXppVtjcC2WmsqRZv4shsJTxb+tjPDyHREUIelaVPIQJLGRl04KGwMB7tc8DweqUYHbUv3I2dFmCDtzKKxIsc0JK1r9dwGiHoJSmE6f7OsZVIHGTUwEdWzApVxxf3fG97JGNo4pEZAIufvLoFRxhuDHWcWe1rIOShUfy0BII39eeWGqSNWQPhGPrIz870USjxQ1+IbcqPeOsHogWNKOosekQyqmHs3sbjImZPx3osgmhjdegjmq+FeDs6B+T9TaBkt7js+dPrbWESKIxFz7Ld4kGcnt/OseTbUPoBI07gIDOVf5U3wgx2954qlgM3PdXZLgj1w3vEyQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
- CY8PR12MB7219.namprd12.prod.outlook.com (2603:10b6:930:59::15) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8835.19; Thu, 12 Jun 2025 15:47:29 +0000
-Received: from DS7PR12MB9473.namprd12.prod.outlook.com
- ([fe80::5189:ecec:d84a:133a]) by DS7PR12MB9473.namprd12.prod.outlook.com
- ([fe80::5189:ecec:d84a:133a%4]) with mapi id 15.20.8792.038; Thu, 12 Jun 2025
- 15:47:29 +0000
-From: Zi Yan <ziy@nvidia.com>
-To: Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc: akpm@linux-foundation.org, david@redhat.com, lorenzo.stoakes@oracle.com,
- Liam.Howlett@oracle.com, npache@redhat.com, ryan.roberts@arm.com,
- dev.jain@arm.com, baohua@kernel.org, shuah@kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] selftests: mm: add shmem collpase as a default test
- item
-Date: Thu, 12 Jun 2025 11:47:27 -0400
-X-Mailer: MailMate (2.0r6263)
-Message-ID: <2C789980-8C92-42E7-A697-BD791E58845B@nvidia.com>
-In-Reply-To: <1352b17c513364164f6231ac32283cbb7093b603.1749697399.git.baolin.wang@linux.alibaba.com>
-References: <c16d1d452aa876b449324d12df6465677158a711.1749697399.git.baolin.wang@linux.alibaba.com>
- <1352b17c513364164f6231ac32283cbb7093b603.1749697399.git.baolin.wang@linux.alibaba.com>
-Content-Type: text/plain
-X-ClientProxiedBy: BN9PR03CA0971.namprd03.prod.outlook.com
- (2603:10b6:408:109::16) To DS7PR12MB9473.namprd12.prod.outlook.com
- (2603:10b6:8:252::5)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C477F2BFC65
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Jun 2025 15:48:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1749743296; cv=none; b=ikc9WY6Mqgr4cTLGNl9dLOF4VkgZ8BOF/lbhuULXC0MduFR4x4yaaAeKo+uRPGR1A5hgbGO1p3e8w6LVh4b3m4rU97bC+5eWWSbJSvMvmdwajXDhYTHG2QH0FNn02DexU8PRY0wiuuT4z9AHUbV1194n1/6NtvXPsCHgJsp9aMI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1749743296; c=relaxed/simple;
+	bh=zuH9jIzu3uEbL6ck4x154Vp0Q8D1adHK9ehH3B2mO1M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QAUHG4YIh288zF7ZIPG5h/SdUSCfO3u5429MNZGCmUdHj5O3hddtEiMs81xL7j8BCmTpQkP9PJQTefs7KTyvzVXF3fGFXwjhZliZLpru3fV1UbYJOVhrGWA5atLTMZnCoPJT6757MRJGkl+ygylHKD5aqRbIDZ7Zp55lK/kKtNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bZgLQcPc; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1749743293;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=ei/d28RGKwbGgo0BkY8L/1pu6a5ZV2mA8pg90GSA4I0=;
+	b=bZgLQcPc55trnVrGKdzc11fEwCmqDPe2OvndNQ+vYEaeUcqZRsAvr4el+JwJT0v9tgj4EV
+	dLFApZx8+PTIDR1BOhGZv91uHwTYv3AoKH4vDxGYXaOR/8TlqkX08W5Mcy34rmnBBupmkR
+	QeOX01hdaD/GNMLq1xryiq3CHGOwFsg=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-470-_KDhgqfWNlmPlAFbt0I7qA-1; Thu, 12 Jun 2025 11:48:12 -0400
+X-MC-Unique: _KDhgqfWNlmPlAFbt0I7qA-1
+X-Mimecast-MFC-AGG-ID: _KDhgqfWNlmPlAFbt0I7qA_1749743291
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-450d64026baso6735295e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Jun 2025 08:48:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749743291; x=1750348091;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ei/d28RGKwbGgo0BkY8L/1pu6a5ZV2mA8pg90GSA4I0=;
+        b=Lv7GMDRRBWqJ/f5O6VPSbO9HGI7v+j3r941imKRfLMeFJ2B1WnSRMR2SdHrkGqvIbM
+         TfcTOIQEm6SQOke6/MXF7Pd4WqUZFNWWfJ133f0gyq2+kNRihVXJtgxKT3KGl8FCfNyU
+         iJhnIW52PUpM/yIkgpZCeBAVm5iKdTVRyJg6oP/K02A2Rj7teLxCc+k13bDPOVz7UPCx
+         n+/mdIeiT4XuHIN3za6Ja0OIPxMyBunP2NYTY87P5rIGIrPy6XB3wLHcY9mLWFvGd7w2
+         Mg7rZu8Lyd+opPgZMewimb8DbS3g0qaTyqIALIDbskttzqoCS4B5vf/bI275Fhyxzjs8
+         fCiA==
+X-Forwarded-Encrypted: i=1; AJvYcCVzSWAkLZksrVf4p5lTsJDA2QCJkoXR+yyUlSlM+uPdTd8n5vrNiluv85TKF2vAocxn2vk4x3bUx2ASCa8/LbU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YylWfsef16YAm+v5XKps7I7fG445F7wdl5F4Y9m6EG+DEBNQYrd
+	d+RrrERkCH3Vld2kF9ILeyYsBxmIS4N2JlG3+NTm3xH89zzQ8RxWiP8ithXc8iTjuMI9anwIWoK
+	E8n030LbAAY9ca4CtgyUv7Tiwk+Oe8dvOzZWIdhrmewxDpOmvRccR5X0n4ElP89X6bHcCTg==
+X-Gm-Gg: ASbGncs8NlIWQonyySF/ZJN0xRF7obwQ+KoDpft2/Nu+vosHZPmYWrifzS6uc5YTaVF
+	a9asqbZyQP6sMHDjEyaW3rWVK/+aUdxFPBjlbR5W/AdlxjM0HZ6P3GNE3sqQLQy7/cQjYZthLpk
+	Hwkp+77OElZrxhsvFgsyj1rXO4HqLOr+E32PCesOl/QOinih+Gtswkqme42EWYmClHniBZE3nrb
+	Lsn8tWaeTp0uziIxolCBwQW7xBL5l/FbkhSCcx4uWTeCNJgdxajpMXZnK5ghXrd7bywY9GNIgGH
+	ST9K0zGz623sknavp3ZqVjplr2ysOuEve2bJx7gXsS/gD3uP1X65UPkTGZMlWzQ4ugcfmjpYzMZ
+	jrzteNQ2MTfCFNtEnHq+5WvoUl4XXbU65qopWSO6+PUHTKbaAzQ==
+X-Received: by 2002:a05:600c:3489:b0:441:d4e8:76c6 with SMTP id 5b1f17b1804b1-453248dc848mr86660235e9.30.1749743291236;
+        Thu, 12 Jun 2025 08:48:11 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGKJbzhqucCYFF6L45cVov1+4dJDmjC/GWZqYfL6Yk/ZiNCgc95grP7byUyLps7/+rUkN1TbQ==
+X-Received: by 2002:a05:600c:3489:b0:441:d4e8:76c6 with SMTP id 5b1f17b1804b1-453248dc848mr86660005e9.30.1749743290856;
+        Thu, 12 Jun 2025 08:48:10 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f2c:1e00:1e1e:7a32:e798:6457? (p200300d82f2c1e001e1e7a32e7986457.dip0.t-ipconnect.de. [2003:d8:2f2c:1e00:1e1e:7a32:e798:6457])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4532e16e550sm24134635e9.35.2025.06.12.08.48.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Jun 2025 08:48:10 -0700 (PDT)
+Message-ID: <2e5eda85-f1b3-4fc7-a378-346cfb3840e9@redhat.com>
+Date: Thu, 12 Jun 2025 17:48:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|CY8PR12MB7219:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8b6502ff-5878-48dc-3818-08dda9c86ff7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|366016|1800799024|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?COFdGVdr/88WBwXK1/lad7ONBBo75jFMzw7GkAyd8wvXWUKWKCK50UpdxLCe?=
- =?us-ascii?Q?JsrIg/naAzee1r7PFk0VmsbyIUw9/U+flYN0A4r8aubKjqJbCWo9zWHgAghs?=
- =?us-ascii?Q?+mWOd6c9jb16I4kAHCuigc9b98QxWAnthJc6QT6vPr1BjZ+/F+QU5uTPzT9t?=
- =?us-ascii?Q?HRHO/3/zTLclOl6/6e6q7U/xiHGvY+hSXq2WfKvBKcMs5IW3j/DR6wOJWOYj?=
- =?us-ascii?Q?EQwc0jm1w/Nya8mPfBYQLUxVv91w7h935qz2ZYE1Y+a0m++mJ/tCW/uFMjKO?=
- =?us-ascii?Q?5RbIiAQ22H1Lqllr0gnLVVzEWH5oiUYC+Wrwp2n0nX/EnXPOG3xN/jG0+A5Z?=
- =?us-ascii?Q?Pj5E1xFw08F+B253zErQu/3HwG7tnIrAcl4YqZM18gR39xe+m8TUkvpJRyKz?=
- =?us-ascii?Q?OM/hVHO3jB8Q4PxYYYQQNRgsUoGcgKTwhwTfvgFpH2XUb3nfE73PZq/Nj75V?=
- =?us-ascii?Q?Ys+DR2xYjyieHe30kP659uCaJGLy+TFDopzP0GNQ5VAfRbSdyhjab1Dc3GPF?=
- =?us-ascii?Q?+1AzAdPw4W9z0kBMXJCFJ7bX2RqdJgyF7t+bytWnFMXTvJlHexhxOU79rdU4?=
- =?us-ascii?Q?WMR93hU1P+pw6KhA6oOnqRIUVOnIc98nYmD9YmAdlTWo57yv35d8ewBeeUv4?=
- =?us-ascii?Q?aMIWV1qGqLyv2gvrpzL5dZqbPdGtfkiGt7CDrO1Jk7Hh0bf/xr/TbqLRs7Yb?=
- =?us-ascii?Q?mSr14aTTvA4LomnUwExoFl/b7f/LIJD7JrjgJtlRSr/4OzCW43I2prgjmKlA?=
- =?us-ascii?Q?7qQhuIFiarAuIFzb5jvhfDCNVLvw6LQPctnGK9Ri7URYvaOfovexzY5TbPFn?=
- =?us-ascii?Q?+BULPl3cBXDpI9S7zxhZa+ssyZagm3RTsiQERsOy0VV8SlYDdu4EnEA4xHaP?=
- =?us-ascii?Q?H6smA4sIaJxBq4s7nsiC7FrlPrOlBQMOR05nLahN+LVIIuAnAC25bx8rR6pv?=
- =?us-ascii?Q?bb4EqtbOpymbn2QraHJgOnT9Uc3udxur/QHvVfo29bX7H5ppo6Oxb5QLnvEO?=
- =?us-ascii?Q?iMyD0Ee+X1eO3XBVlRZ5KOT6vhtINh6w56dlpcoyWcx67p4u+uGOI+4dpbCW?=
- =?us-ascii?Q?ByPUjnm8Wcz8hZN7bjVzyQRPwAfKbz5U9vD0hfP5bKbIclPNUUGyMpVaEAHE?=
- =?us-ascii?Q?HLycCYEnt+P6WoJSOMALNJiMG11ece4c3MRPDmj0yYK0ge5O7ZtG+9UpO64t?=
- =?us-ascii?Q?8GPYh+LSviv73HAAxfyALWuXStod1ZARGvlXdjQw/WQ0W6VZFZ8gDJxXC7ZX?=
- =?us-ascii?Q?P5wx//kvH9BC6bF0P5Pv8XST+U+869yygXAp+eV+gvSB8HuTkF+pjSOWwZtU?=
- =?us-ascii?Q?aDDFAS+aFBTQ/jUaKQ4VS+OIJ7CCpzTA8vFN0lMiewmcByuzgztbmpNDZBMi?=
- =?us-ascii?Q?OzSWr1FvxS0tSrqwWYDygbFUPSQnFTAFqWA4AP1kHQA/bY3M3fwI3/Lx3/lj?=
- =?us-ascii?Q?622fi54ajus=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?ymp3gV/jMln7xKcfoous/CS8tAxulwcSDNCfsc3s01cjLl2E1qcJUN0xySTA?=
- =?us-ascii?Q?gqfCqah1/2drnQSQGAUyahTynwg7M7q19NoGK5nnzVhLJIFItM8NeOKEMHa9?=
- =?us-ascii?Q?YamM7kFMuZ29ISCB6VB3Fcnb7mY/KXD10ytoz1zu5kQRpu7ksliXGVtBuKwW?=
- =?us-ascii?Q?v5lmHguPZLTPG5yQU1A8Am7Ol7D/xpVqmG9EE5CN29P1fN6x+YoAWeyKJ+oA?=
- =?us-ascii?Q?l7fwupEl8+z5rGc5dxaNg2623IHpkeWTpW2FlcQ24nXxbmQ7jLk5VX6utDbm?=
- =?us-ascii?Q?36TcVrzAHQxYcJo6rnKBytFG7tvhDwrnDWKNDREMJe+zXFAF1XNNxpNesvEk?=
- =?us-ascii?Q?gV630WdS356fOimw1EFrhQUc7RXmAMQSMZvoy9IOuRYzrBXX6O3dHLVi6Ac6?=
- =?us-ascii?Q?pmMItktSWw50x2nG1Li7/FtK9X+QJCVDRLO0ccWPqoQ6eY+UzXEq/fHxbIL9?=
- =?us-ascii?Q?DXBeD9VTwk7W5YlIw25ZF9nWdnFBOpaPC554EZfkMMuo8OWUz0UQAVij36w0?=
- =?us-ascii?Q?X0LZe4ny1D1GVmaglZsmY9CldN+Kj1kL90FLWSzQaT0xv4l8ssr0niX844dX?=
- =?us-ascii?Q?XOJISOvvCBrUYbWG0Y8JdjoQjaMt3s9F4s1lbajb51WYLij3k4z8a8rCu2Eg?=
- =?us-ascii?Q?Q6oZwm/RoSII8khSelcB/OCDbjsH7ZqYqM2ng1Uk0dkoog32pwgMn0tAbeet?=
- =?us-ascii?Q?rBOS+2LvX3g2/t4ZQx6On+73pt8aXW+32Ez6oeupav5roeiYixxDAFl/tIyw?=
- =?us-ascii?Q?gyLaZpg0ysUz3Kid7j+LftkI1jQgq8oNcEEODrLPnQo5RdQvGnKuHWdQa643?=
- =?us-ascii?Q?NYE+v0DAdqoIXMcR484xmjgaX6DhlOTtpCZpOK1iYjOBBqt1VJpZuNOidFFW?=
- =?us-ascii?Q?nDkgQyRdj/F2rW7e70ATQVfmxe4dkdsLpVlZZqTgoUOPNSRW/ugRhOP8ob89?=
- =?us-ascii?Q?m6Szf+tsV2TlR7bqqRo8yZZmFkmmJAwmNom8M3M0YZzXWlh2P3spAhbMZpJt?=
- =?us-ascii?Q?FT2pmacvmgDxR77PSRCUg0LhmHZ/8+G19X8BpcqsqujNZlceSXgJhZht4yoN?=
- =?us-ascii?Q?Ks+Jaee7xRoDQxTFqBHSZovGVJiNNcZhzd4I8ETncXJHxHi4sjRfO7Mr3RiP?=
- =?us-ascii?Q?/Ct6p1j63lXw60jH6pDQMkJ+fG0TG3wd9ro2l7HqqK1ckgfqbmn+eUuW0ynJ?=
- =?us-ascii?Q?XcBwbaiF4To19k36fPEfANVA5DCHE+Zp7O0hD+CZ8dcmegbXY8hHy6RGNGrG?=
- =?us-ascii?Q?ZgWReS8zLM48n8EuiFucpaFMMGgOFjkHJ6jKxYROgfbtknntPHsPv6dk0O/+?=
- =?us-ascii?Q?VZT0dQoKT47AnLVgUfsseOIAiJH69tRwVu5/qhHm+yv5e5Duk7PJ8PedGU7T?=
- =?us-ascii?Q?fh92GlUyAQBvI5eTCHG/nTYr0t0bOZE0iHpxogEa/OKMpGqAzH72uRttNUKG?=
- =?us-ascii?Q?a/h1l91uZ0WTcjjFv95rjcVOniGdqePwWN6VahXJpCJqA3KlghaS+nZaYJKR?=
- =?us-ascii?Q?2XkzTi6jzc15M0ardavsO5luD5LALHmcP8N1uatcaaHbbi2GNtTmRpCeH4GZ?=
- =?us-ascii?Q?sTXVgKr11+om1XqLknY=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8b6502ff-5878-48dc-3818-08dda9c86ff7
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2025 15:47:29.4625
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: iiVneTHqQpD4JRl0pRD62ntGLKDenKFxo2plyzYkqW1JnhEYzCWPffTUTA/kf7KN
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7219
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] selftests: khugepaged: fix the shmem collapse failure
+To: Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc: akpm@linux-foundation.org, lorenzo.stoakes@oracle.com,
+ Liam.Howlett@oracle.com, npache@redhat.com, ryan.roberts@arm.com,
+ dev.jain@arm.com, baohua@kernel.org, shuah@kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <c16d1d452aa876b449324d12df6465677158a711.1749697399.git.baolin.wang@linux.alibaba.com>
+ <AFC17CA1-DF5A-48F0-8E63-E139005F5880@nvidia.com>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <AFC17CA1-DF5A-48F0-8E63-E139005F5880@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 11 Jun 2025, at 23:54, Baolin Wang wrote:
-
-> Currently, we only test anonymous memory collapse by default. We should also
-> add shmem collapse as a default test item to catch issues that could break
-> the test cases.
+On 12.06.25 17:46, Zi Yan wrote:
+> On 11 Jun 2025, at 23:54, Baolin Wang wrote:
+> 
+>> When running the khugepaged selftest for shmem (./khugepaged all:shmem),
+>> I encountered the following test failures:
+>> "
+>> Run test: collapse_full (khugepaged:shmem)
+>> Collapse multiple fully populated PTE table.... Fail
+>> ...
+>> Run test: collapse_single_pte_entry (khugepaged:shmem)
+>> Collapse PTE table with single PTE entry present.... Fail
+>> ...
+>> Run test: collapse_full_of_compound (khugepaged:shmem)
+>> Allocate huge page... OK
+>> Split huge page leaving single PTE page table full of compound pages... OK
+>> Collapse PTE table full of compound pages.... Fail
+>> "
+>>
+>> The reason for the failure is that, it will set MADV_NOHUGEPAGE to prevent
+>> khugepaged from continuing to scan shmem VMA after khugepaged finishes
+>> scanning in the wait_for_scan() function. Moreover, shmem requires a refault
+>> to establish PMD mappings.
+>>
+>> However, after commit 2b0f922323cc, PMD mappings are prevented if the VMA is
+> 
+> Can you add the title of the commit? It is easier to understand the context.
+> 
+> 2b0f922323cc ("mm: don't install PMD mappings when THPs are disabled by the hw/process/vma")
 >
-> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> ---
->  tools/testing/selftests/mm/run_vmtests.sh | 4 ++++
->  1 file changed, 4 insertions(+)
->
 
-Acked-by: Zi Yan <ziy@nvidia.com>
+Probably checkpatch.pl would point out the same :)
 
+-- 
+Cheers,
 
-Best Regards,
-Yan, Zi
+David / dhildenb
+
 
