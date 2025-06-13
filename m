@@ -1,117 +1,165 @@
-Return-Path: <linux-kselftest+bounces-34891-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34892-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75E39AD8A60
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Jun 2025 13:23:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81D64AD8A7A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Jun 2025 13:31:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6F886189D344
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Jun 2025 11:23:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 36DF51E1D2A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Jun 2025 11:32:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4071A2D5C9C;
-	Fri, 13 Jun 2025 11:23:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24AD12D23A6;
+	Fri, 13 Jun 2025 11:31:55 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79FB62D5C95;
-	Fri, 13 Jun 2025 11:23:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 386471E0DE8;
+	Fri, 13 Jun 2025 11:31:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749813803; cv=none; b=TUapeCrsyR57YUt1vEyyXguEOo6iAmdJlQzkmj8CUihrz8rl0HkGCYKeByJzWUJ9Pp7U9yvHgKCDjBZP8eTp6d4rKuQ2tVtNovveiOKhYHnDH0Hc5mN/7Tb5hO36TZmfhpkVJkGhHTDhxIbBO8GGdl8ABUGVOXKoF3mcUrwSOC0=
+	t=1749814315; cv=none; b=Wr28NaChQLL4D65PxxX2Rc+AubQr0JRIGpoMTCOVZ4c/kCnWkp4woxiaBLHthiHw27aPcExZX64DrvABYwG5+GlBVNHgEbXFAr3zYwlbqmrAtsSms0abc9/y1iCY4Ek05RFH+8P+OA8yiHpxtdJxN2TMHvbgBRjDucsUatj5lHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749813803; c=relaxed/simple;
-	bh=lPy9K4tp84sS9dzBKaLxxe+yj2bFe4m1LYpoaKFyl8Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bXIF8DX+QKh3XPc5zwEIq2+mqkcN9BoKQO4MHLlTimJR56t0N05LJbujAlvXhtv9eTSSVStLssFd93Oa55su7X0zZK9wNczA8+yAdpdl60WVN1W80IiITXMlolH+tdqeqPEMNiJZsqYbjrRD4rzjY4JxJNi3QJB7q08OM9kfxRs=
+	s=arc-20240116; t=1749814315; c=relaxed/simple;
+	bh=lgPBblrgv0M68GwCNU3VbSXeCXjyQfs5ViIdZ9bx198=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Umr9MdAqd7tl6aY5XtZ5Pqk27hgZleZXC1XmvR6NvwGdj7xy+tR+0p4vX52sh6xARJPbID4YEK+yvYMbPpjp8Er3MmyF3wlJl548URlJVeC8lsHQrXW5paavRT8ZPby0lg1rHl9uE/68dGJEmS+MIJH60/+FHiQ2oJ/RCmyWclU=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-adb5cb6d8f1so348652566b.3;
-        Fri, 13 Jun 2025 04:23:21 -0700 (PDT)
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-addda47ebeaso386219366b.1;
+        Fri, 13 Jun 2025 04:31:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749813800; x=1750418600;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HZw7odpK1VFuzX1+DMI95ImEufa1i/SGG5I6XZiF9i8=;
-        b=pAEn+xYx3YUMLP98ncfFCxgejoHU/ovypxfM/G+oxXBdvBuwpMW5MKB15iRHEOvH/W
-         HAdFoEk3PSTk54t09B3jwVorJsyuM81whjdQcd4arwUhMc1AKb5gJr31pSPiTo5E3Jdo
-         fCay7d6relciLczW//3bIrIyljqmziVbHDuRZlP5BlwC+r0YEbtg3AHpWjYF8+k3oxru
-         GWzsvN4XdyewOTWYWRxrXCnIqnm0f3rS1ojwFNFTGT+660ajKQFVE8F1TWpik7Seet8H
-         hwWZwDHU3nqE8YldAHWjGxAaaaoEGCY76TKwUmWTsxT6wVLtzu5CHaycwnziLdzTRxIV
-         8oUw==
-X-Forwarded-Encrypted: i=1; AJvYcCW2Xj+4CsXqXpMudocPUsShRAQeODtFWpatay1FFSKUDkatuOyOTCQUjxXfmtsqFb+tU97nLruboyxDpgY=@vger.kernel.org, AJvYcCW5YLGQqC+7JPYx27yFmC2bwGwtVrFVBKtQByOYmOgg048ra27i8Hf+Otmcmy4BBRKhER2voaUHcIc5AA7n3tKq@vger.kernel.org, AJvYcCXW7U5ZE7cd7QX4eOLiMYyBt0QpXepqBXxtJ524RkEegQtcXpeoZ+I3zQZch3F0BvicJBIQJcB1@vger.kernel.org
-X-Gm-Message-State: AOJu0YxdmSF09FINSju7ZZwdIxBEO4G/quZblynUiM9Wczn3j16XcKPw
-	wWPoGfCb+jBRadGtrJEp5WH/7MQJ5eBrxuSG+Pin8sXA151jEfihiUGV7hEC9w==
-X-Gm-Gg: ASbGncuc4DQNh79ZaIFHF/4i1gt739Frjx+jYR3G45nVWSmKIA29E30imVBl4Deg1tt
-	ZtSd3vVGc0y8Xkr39H5LVt3uYVfwvYeGizHYnl49oiCwkQwspzI2Wmu2pPWxHkK+Ng2bUVNzdlZ
-	FR3hzfHPD5gFPqlqIUTtlEqP7XCNLK2AQdhlG9tg1UUgzCS6ytnq12lbgePwRBktG0569wTAOWS
-	oOESFVj/0zS3QWH6tl7flELH8NExYNs53ttqAz2PiZzARFCOJtqpO3BQveSJym0uPmNfpwov9at
-	6w6jqOIjDe+pUyDKSFta7coj5o2w8eZ3LRkQcuWl49Snyu2oCK1b
-X-Google-Smtp-Source: AGHT+IEE2BXLcFQbqzB4y7qNrNGQCWdHF6OzFtsL4qnH4BOAgnAXpYdY7O5wf1roVuCh9PHLr9zhzQ==
-X-Received: by 2002:a17:907:70b:b0:add:deb1:d84d with SMTP id a640c23a62f3a-adec5583fe7mr271589066b.1.1749813799632;
-        Fri, 13 Jun 2025 04:23:19 -0700 (PDT)
-Received: from gmail.com ([2a03:2880:30ff:2::])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-adec88ff425sm111655666b.87.2025.06.13.04.23.18
+        d=1e100.net; s=20230601; t=1749814311; x=1750419111;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+DsHNuCTPZ33OCzYQersZU3liyxjgfm4XynZIaM+fP4=;
+        b=CdUKgk89z62UMuTSa2NYr+zCi3jc1Rs1jGRbLhc2DFGhKKUbdRNHEWqcLzp2FhMquK
+         KM79yXawDk8MNXg3Ei8bCqFHPvhFvYmZreVwj1C4H3UKWGmNk21zPnpH6LATbYJdqoXs
+         ptykjwDsoLr9QWUXficoF0jhPOirPFAR3paovKumu6KYt8c4ukVsYzEEy36stMjiFOXu
+         9tvq6+jqwusaHBitdR6BWBhu69RqaGiyqV2W76PLpDrcATba5kweBgzm1ixDG4b7Vjaz
+         yvREN2hHmMvAEvmuedZMUUATYWbul8bX1ZA4+/sEOHR6r//ICC/tKNl6t4t/v19FeXR/
+         8BMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUXlUUN3ABtkdLpG5ItXgkdFI16aquFGPWkjtASuFULd6SdueQDcm3XGqRNSEbGKEvWTHkJOqYuTYArSx4=@vger.kernel.org, AJvYcCVsD5l270/RB9GTyJqSa7KcUPNpof+qEYZ3bW5So/TfxYv1FfYpXOVf+GPjUT5gtvL1Texx/SJQaCqNDp8IR5bw@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw2DLs2wI1PzhLPmdTf1b1xx2Vi42WgHBIQ+mNLDIU9+pFzLsIy
+	5W0IkZM4QdNnV4ji+wc5KWpcnnZAOoBRZlMGzPfDdUaYuWi49tLrHgiD+QEXrA==
+X-Gm-Gg: ASbGncsP8qpol6SFH1RD+4Sgvbj5VBdYbNdVkRwBP+3aXFIx7EThlPiTQhLqQDs+orR
+	rDviu9UPH8DrUifEfOgxdXE1l4vRfZqX6bl5ek09g5X/KlyaJ4gMmKROY2om5ynkcCRyxyqy/4a
+	RD7FwjGCMG7uh4P9fW6EeVlb61XdUoIP0YvZDmSbzRftTrlEbB5C09U0l7jIy/UcSSVJyoG1dtR
+	Xx22AnzQqnGkn9tCWiV8PljGvGH7dPmCoXZL6sAxQg4gjAnMqPHCXMXQQYNUWs5h2fkKFEC0A1U
+	hOjGwRE008b7PGpPAQwMHh+1GuVAqKk0jkX4sf9xAlTOjibKeWYH
+X-Google-Smtp-Source: AGHT+IEbCs4FhoglbncFe9pZ+ja3OdFwimVMb1BhOCQsjRvvlZn6qGl3xavu+j1ctls1AsRlnwhjzg==
+X-Received: by 2002:a17:907:e8a:b0:add:f4ac:171f with SMTP id a640c23a62f3a-adec55958e1mr262728666b.5.1749814310950;
+        Fri, 13 Jun 2025 04:31:50 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:2::])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-adec81c1f6asm115696666b.55.2025.06.13.04.31.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jun 2025 04:23:19 -0700 (PDT)
-Date: Fri, 13 Jun 2025 04:22:31 -0700
+        Fri, 13 Jun 2025 04:31:50 -0700 (PDT)
 From: Breno Leitao <leitao@debian.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH net-next v2 7/7] selftest: netconsole: add test for
- cmdline configuration
-Message-ID: <aEwJ95gqNkNYMk14@gmail.com>
-References: <20250611-rework-v2-0-ab1d92b458ca@debian.org>
- <20250611-rework-v2-7-ab1d92b458ca@debian.org>
- <20250612150542.0b4a7d71@kernel.org>
+Subject: [PATCH net-next v3 0/8] netpoll: Untangle netconsole and netpoll
+Date: Fri, 13 Jun 2025 04:31:29 -0700
+Message-Id: <20250613-rework-v3-0-0752bf2e6912@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250612150542.0b4a7d71@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABEMTGgC/1XNywrCMBCF4VcJs+5IMr1Yu/I9xEWaTNsgpJKUW
+ Cl9dyGi6Prwf2eDyMFxhE5sEDi56GYPnSgLAWbSfmR0FjoBJKmWjSwx8GMONzTqWBttW0vEUAi
+ 4Bx7cmqELeF7Q87rAtRAwubjM4Zkfksr7G1PygyWFEo9msExtOVDVnC33TvvDHMZsJPrt1Lcjl
+ Kh7ZU/UV3Vr9F+37/sLzxLxAt8AAAA=
+X-Change-ID: 20250603-rework-c175cad8d22e
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Breno Leitao <leitao@debian.org>, 
+ gustavold@gmail.com
+X-Mailer: b4 0.15-dev-42535
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2779; i=leitao@debian.org;
+ h=from:subject:message-id; bh=lgPBblrgv0M68GwCNU3VbSXeCXjyQfs5ViIdZ9bx198=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBoTAwlnyaH8jaRLCKHTntak/Jqr2iUAAuXZ5f7A
+ aujtNNz1+KJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaEwMJQAKCRA1o5Of/Hh3
+ baaPEACHQiX7kPFbVJLLzRVfQgjQ1p9ZsmEiSSXaj8TEKD5Ocph/L4h9C2Fzem5IBEs+R6bR0Oz
+ rMMuLmV847Hxj5HbpydiMzmggeLUkQGiToZL2O612l4HtmEAi1ukB+WSaHqwc4f7bedmxZk207q
+ avG4HcbC9djx1CjRl/ByIDBdomf0PEIrUwIZDWzh5usqFaDAIdhc/Lbj6z3ntCj3ldq5eTVtAss
+ WFgK5vvZk//9o9SaUp1Csl5iNYWbbuj2fUtyqh+pr+SjX/B5k1w9bKyWM+3MDT9ixFE1QzGYFM6
+ WRAkZDUJDcHAMjcMpmNAqIRwjwI1X7Vg7vMo5PRzO0kk6xR3DFnhU1zhkcciCi9uHpfH2hsd/hZ
+ 37UBUCYzYgeHo3yjpI+l5GCyJngavR5f+VhWDqdXyR5/WU6EblYXPhVdvIbp72+WmahXOkidkWr
+ jsslpJBOQ7DLM5SqnFajgxn9EarHYEYfOyyjwL4NQ8XEVumVFWh3gBI9W2WzKb9EXGHrh4ACPGi
+ ymd5+HcixxgxbukXkDdHBEpLiJ6WIpxE+CtpMfNySHTZJFkchj1/GkUmT/1lCinEV0x6f+ZXuHd
+ nBbPBcUk27vKJyJjzSSr4Vsm0aI1oUXmTnTr7F8VmuOTVC4JoXKpFFyTZ6qqJRTIRWxB7GvC7s1
+ LVC3BUeBOqIghjg==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
-On Thu, Jun 12, 2025 at 03:05:42PM -0700, Jakub Kicinski wrote:
-> On Wed, 11 Jun 2025 07:18:56 -0700 Breno Leitao wrote:
-> > Add a new selftest to verify netconsole module loading with command
-> > line arguments. This test exercises the init_netconsole() path and
-> > validates proper parsing of the netconsole= parameter format.
-> > 
-> > The test:
-> > - Loads netconsole module with cmdline configuration instead of
-> >   dynamic reconfiguration
-> > - Validates message transmission through the configured target
-> > - Adds helper functions for cmdline string generation and module
-> >   validation
-> > 
-> > This complements existing netconsole selftests by covering the
-> > module initialization code path that processes boot-time parameters.
-> > This test is useful to test issues like the one described in [1].
-> 
-> I think this leaks the IP address, because if netcons_overflow.sh
-> runs afterwards it skips with:
-> 
-> #     inet 192.0.2.1/24 scope global eni370np1
-> # SKIP: IPs already in use. Skipping it
-> 
-> if netcons_overflow.sh runs first everything is fine.
+Initially netpoll and netconsole were created together, and some
+functions are in the wrong file. Seperate netconsole-only functions
+in netconsole, avoiding exports.
 
-Thanks for the report. I acknowledge there is a bug in the cleanup part
-of the code. Basically `trap cleanup_all_ns EXIT` is not enought because
-it was not removing the local netdevsim interface, which must be removed
-as well. I will update and resend. Good catch, again.
+1. Expose netpoll logging macros in the public header to enable consistent
+   log formatting across netpoll consumers.
 
---breno
+2. Relocate netconsole-specific functions from netpoll to the netconsole
+   module where they are actually used, reducing unnecessary coupling.
+
+3. Remove unnecessary function exports
+
+4. Rename netpoll parsing functions in netconsole to better reflect their
+   specific usage.
+
+5. Create a test to check that cmdline works fine. This was in my todo
+   list since [1], this was a good time to add it here to make sure this
+   patchset doesn't regress.
+
+PS: The code was split in a way that it is easy to review. When copying
+the functions from netpoll to netconsole, I do not change than other
+than adding `static`. This will make checkpatch unhappy, but, further
+patches will address the issues. It is done this way to make it easy for
+reviewers.
+
+Link: https://lore.kernel.org/netdev/Z36TlACdNMwFD7wv@dev-ushankar.dev.purestorage.com/ [1]
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+Changes in v3:
+- The cleanup on the netcons_cmdline.sh test was not cleaning the
+  netdevsim. Clean it at the end of the test. (Jakub)
+- Link to v2: https://lore.kernel.org/r/20250611-rework-v2-0-ab1d92b458ca@debian.org
+
+Changes in v2:
+- No change in the code. Just rebased the patches onto netnext/main
+- Link to v1: https://lore.kernel.org/r/20250610-rework-v1-0-7cfde283f246@debian.org
+
+---
+Breno Leitao (8):
+      netpoll: remove __netpoll_cleanup from exported API
+      netpoll: expose netpoll logging macros in public header
+      netpoll: relocate netconsole-specific functions to netconsole module
+      netpoll: move netpoll_print_options to netconsole
+      netconsole: rename functions to better reflect their purpose
+      netconsole: improve code style in parser function
+      selftests: net: Refactor cleanup logic in lib_netcons.sh
+      selftests: net: add netconsole test for cmdline configuration
+
+ drivers/net/netconsole.c                           | 137 ++++++++++++++++++++-
+ include/linux/netpoll.h                            |  10 +-
+ net/core/netpoll.c                                 | 136 +-------------------
+ tools/testing/selftests/drivers/net/Makefile       |   1 +
+ .../selftests/drivers/net/lib/sh/lib_netcons.sh    |  59 ++++++---
+ .../selftests/drivers/net/netcons_cmdline.sh       |  52 ++++++++
+ 6 files changed, 240 insertions(+), 155 deletions(-)
+---
+base-commit: 6d4e01d29d87356924f1521ca6df7a364e948f13
+change-id: 20250603-rework-c175cad8d22e
+
+Best regards,
+-- 
+Breno Leitao <leitao@debian.org>
+
 
