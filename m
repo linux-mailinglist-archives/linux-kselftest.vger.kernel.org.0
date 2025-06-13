@@ -1,343 +1,140 @@
-Return-Path: <linux-kselftest+bounces-34883-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34884-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32DD5AD8767
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Jun 2025 11:13:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F029EAD899E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Jun 2025 12:40:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0D9FE3B3947
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Jun 2025 09:13:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B33F317E1ED
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Jun 2025 10:40:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8DF22C1595;
-	Fri, 13 Jun 2025 09:13:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GNSRHfh3"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 950002D1F5F;
+	Fri, 13 Jun 2025 10:40:10 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE05C2C1583
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Jun 2025 09:13:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAD822BFC8F;
+	Fri, 13 Jun 2025 10:40:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749805983; cv=none; b=YfNR+JQYsvilKcXiBwlD4cW0eGFMmwqDqHxC5s/b+NBpd1SxOEHpa3Sy/S9m+wFmeo4g3ZrRJ/OwWDNNIgq/OPE5aOeVcVelK1es5aDCG8M8SjKpKM0VxiIjEGT5lj/cHkUFeZM2UBmnMivKUpT+fdkL3v9TD3yIFp5M7mmdedM=
+	t=1749811210; cv=none; b=CJznXx+YdY9W2+TZuTxF5umv7ERKFmOTzKXtkywfbFFCakTiLVagwWWJSs9Bq4dvbsclKI8Lfl1HyGFUZYGXzvNOYjxLJ/16ME23Sf6A84tiko7w210M0dhpt8Fv0s6JnU5qFp7Nmta/IqMGuE1G9NPD1yLlytU25/JcFfuZOYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749805983; c=relaxed/simple;
-	bh=PptqpAgmoytKqOt6xRbMugtr28u2OtS3tp+zS5kWioE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ROx8OHfkboc1lZr0wL+Go9jNc7MXikci1Rf0NZuNhIGBxesVQW6eHxhfT/nZDnLjwycrAQ5bpFXd1G0o1L7YJuVnyFjkIQTlmwt5TXZRGaaa+YfCh5cMdXD0fpg2HrGjlUDN+mrgDDPDW6A5YvwO1CqHKkGlBdUDFoRoQB/Fo28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GNSRHfh3; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1749805980;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Yb5XjEM8UDjaKosEuY2mp6BwacUxQGhu78cSlZl2o+I=;
-	b=GNSRHfh3igJ7uTmB7ZBuJs3l0ofE/tbhTTriuApcnreOCGctzrCeVTBKiZ4qBr6TFnsxJu
-	cnYXW2FlmIAqKLlgwdtb3LV8OXpof8kY0Hcskv0yN319Wibqkim+y25IvcXkpvYMdUFF5O
-	kvYW3079YZNGq0e4u7I9CfkbQZCrFvw=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-67-YsHsy2FCPeyyJP82E-SNBw-1; Fri,
- 13 Jun 2025 05:12:54 -0400
-X-MC-Unique: YsHsy2FCPeyyJP82E-SNBw-1
-X-Mimecast-MFC-AGG-ID: YsHsy2FCPeyyJP82E-SNBw_1749805973
-Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5F4DA19560A2;
-	Fri, 13 Jun 2025 09:12:53 +0000 (UTC)
-Received: from gmonaco-thinkpadt14gen3.rmtit.com (unknown [10.45.224.102])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0FAC6195E344;
-	Fri, 13 Jun 2025 09:12:49 +0000 (UTC)
-From: Gabriele Monaco <gmonaco@redhat.com>
-To: linux-kernel@vger.kernel.org,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org
-Cc: Gabriele Monaco <gmonaco@redhat.com>,
-	Ingo Molnar <mingo@redhat.org>
-Subject: [RESEND PATCH v13 3/3] selftests/rseq: Add test for mm_cid compaction
-Date: Fri, 13 Jun 2025 11:12:28 +0200
-Message-ID: <20250613091229.21500-4-gmonaco@redhat.com>
-In-Reply-To: <20250613091229.21500-1-gmonaco@redhat.com>
-References: <20250613091229.21500-1-gmonaco@redhat.com>
+	s=arc-20240116; t=1749811210; c=relaxed/simple;
+	bh=rSKp47T0t81MXwUdIr7MHyROt2SZQhzDTq0uNM0tYCM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=h0+QCYDBX5WZ9EiHFRUk9LBqlQmXzlngBEbfXTzMIFEcELPLpcCPxxfgq56iNYmh9GdCGMp7jDCQJK9phyh3sWsmJCqrWXwuxdnSOzHxy8LdhHI139bQbQ7ack+M+RuU2B/gwQcRQQw9QooYMIGVPBgNewYnRvZsK+GoA1wp+uw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-ad572ba1347so305563066b.1;
+        Fri, 13 Jun 2025 03:40:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749811207; x=1750416007;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DpqNzGB/fR3CEzQDcBE8HrcB0lblj+/5iDqn/Pkub0A=;
+        b=ZnmGDJGN9vlXR9NKBFeOJs14yY3gw+ULWpYc1h5oqe+wo4D8Ok38plgVNVfAOq813d
+         JttYyXXbHh8VVxQWR37Nrk/fo7hxo/MJrLGyNwCDt+I1Dmwj2TCWW3pZ3m4e2vmoznI1
+         gv9GCS/B0bs2vbVAi245ZfhJaoibKI3pLxd445JENdsdu5PfMUWh0BMSTd1/Gex/Y6tz
+         0hi8E7r1DkK79JIcvatmugMBvx9g2XDAEc984MHgWZdDJm9VccIEeoBmvHf8Wtf0zNPS
+         w2xXA7SZ54BhjEzUhKSAwJKn/gfdR7LvjZw404UqtTY4NH1aubyvr/n6cAQiQb8FhNpy
+         F0Iw==
+X-Forwarded-Encrypted: i=1; AJvYcCU3qSL3QNLJJS2uilAW207qYwHIT7fTINJWVrtJJq87k6/ybSlP6XfSljb9DyuW1vZZuOriPQE6mJ+W9V2JtwA5@vger.kernel.org, AJvYcCXI4IdbixTXHdlxbRBK7nM4eTU3v4tgJsYE6bgpCh3n8nPCmTA10FTAr6FxcM82Vc0Phqip0bhshj8A6pg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwUr0zn1L0/1HN089BXYY2zI6j6gC/RNH1bDP72B/jqiTUyO1Ck
+	RHsYVMOltnKGg4Pl3l9P0xW1/7UdHxKk7o7p1eYTNTDPjo8nEtRcJTwe
+X-Gm-Gg: ASbGnct0xQ9ZbVNeQoKq49SXia0Hvs2xjzvzPvUIEtA67D41VOuJeuJGhJVt+xYJnCo
+	aEIaC7VQbW7PPx7CS3gzXAuFAYr/2nL5G91UqRM3dvjfzvOFAJVtNB/gz+y7+9T4xrmpLxdUWT9
+	+WRk99qCCgAz8pn91elXgZytt0xj+VjarXcn5SI5m+9f61ZV21Ey/kDSOENqw2Dv5oBjCU8iIOF
+	w3loarNzL3JXASnDVmRjy2oOGpzRM9cLsD7mQrzheV7aSM7rJDZqUhW/Cc52Itx6zNOTvk4uXN6
+	1q1BbQa+vhDuroDAM1XqXzcU+wmBv7NxtkffbCHFSMjl4hLmXSYv
+X-Google-Smtp-Source: AGHT+IFgXs2I0yGRlB8yQyaQfKe9oZBQb5w3NUJp4E8+Ex9rdkGREKM3YhDd4R57wFFfdC+g6mDOFQ==
+X-Received: by 2002:a17:906:6a15:b0:adb:449c:7621 with SMTP id a640c23a62f3a-adec5c3e795mr279761366b.29.1749811206604;
+        Fri, 13 Jun 2025 03:40:06 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:6::])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-adec892e756sm107606366b.144.2025.06.13.03.40.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jun 2025 03:40:06 -0700 (PDT)
+From: Breno Leitao <leitao@debian.org>
+Subject: [PATCH net-next v2 0/4] netdevsim: implement RX statistics using
+ NETDEV_PCPU_STAT_DSTATS
+Date: Fri, 13 Jun 2025 03:39:57 -0700
+Message-Id: <20250613-netdevsim_stat-v2-0-98fa38836c48@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAP7/S2gC/13NQQrDIBBA0avIrGNxLFrMqvcooSRxksyipqhIS
+ vDuBemq6w/vn5AoMiXoxQmRCifeA/RCdwLmbQwrSfbQC9BKG2VRyUDZU0n8eqY8ZumMc8ZpJHU
+ l6AS8Iy18NPABgbIMdGQYOgEbp7zHTzsVbP2H4j9aUCo5I07W3Lyz03L3NPEYLntcYai1fgEv6
+ OR3twAAAA==
+X-Change-ID: 20250610-netdevsim_stat-95995921e03e
+To: Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Paolo Abeni <pabeni@redhat.com>, David Wei <dw@davidwei.uk>, 
+ Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, joe@dama.to
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Breno Leitao <leitao@debian.org>, 
+ kernel-team@meta.com
+X-Mailer: b4 0.15-dev-42535
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1506; i=leitao@debian.org;
+ h=from:subject:message-id; bh=rSKp47T0t81MXwUdIr7MHyROt2SZQhzDTq0uNM0tYCM=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBoTAAE+4yDfkOPtcJyOfRRylFv7/7mbVVbxDmXq
+ CzyD1TXcDuJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaEwABAAKCRA1o5Of/Hh3
+ bZhCD/9dCg7a2PvYhxyNME/DaRSj9p1DWq3pyBDvJKWX2aTvbQ/oHtoGOcEjnuMc4mGMxCR/y/3
+ z57HJtYM90pfzRtr/nAVnc98/Mng0sM8M2VNh7b0o7GsV7FtqoiqDktd1Z8315WyuARapeg5Fti
+ F0FS0Fv3PB17JPezBbjT61lKiF2cVuKWd3CKYDbD1UgfaPPwvOAS9i14LNXhvOy5Qgoj5AAlFRo
+ /3hkJE0OcVQGp5m5rlx+SEgFszsJehniUFSKFbpEXbopGm6Ym8E5OCqHPS7Bk1vljAT42j5qYM8
+ YkBA7S1LDbBveytpzV0uyHbyD7YCMRVNLEMktQwLZnpg7uyULXx2kA6P1Bnhz59MS9+JlohgTA7
+ prL10BQ7uzYljWjKUI5Y/K3iGdxa3Ru+QFmlHxCyLCzRh1DzW8dvlZP5CC371mCVAvJDxUVv32V
+ r4m2AOZPvzMK+grY6VBtRxyZkZrxbd3MYs5onrroISrBknNpAuK42YTN+JScsaSrSUB9Gh7/8+M
+ v8U6wIIQclV2IAhMTmNxVn5KRDbmkmpGpk/7fMtI8gcJq1SOE2a1rEqlAJFVk7TP8nTlmaFoRcE
+ uoCaI2BplZWq16RgOQr+sODn2+hpEI0WYhsKtuEdwHC0rq4F2D1BIZqbvaTKWy2iCZb4T64g35u
+ MxByTtNGgUnMEPw==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
-A task in the kernel (task_mm_cid_work) runs somewhat periodically to
-compact the mm_cid for each process. Add a test to validate that it runs
-correctly and timely.
+The netdevsim driver previously lacked RX statistics support, which
+prevented its use with the GenerateTraffic() test framework, as this
+framework verifies traffic flow by checking RX byte counts.
 
-The test spawns 1 thread pinned to each CPU, then each thread, including
-the main one, runs in short bursts for some time. During this period, the
-mm_cids should be spanning all numbers between 0 and nproc.
+This patch migrates netdevsim from its custom statistics collection to
+the NETDEV_PCPU_STAT_DSTATS framework, as suggested by Jakub. This
+change not only standardizes the statistics handling but also adds the
+necessary RX statistics support required by the test framework.
 
-At the end of this phase, a thread with high enough mm_cid (>= nproc/2)
-is selected to be the new leader, all other threads terminate.
-
-After some time, the only running thread should see 0 as mm_cid, if that
-doesn't happen, the compaction mechanism didn't work and the test fails.
-
-The test never fails if only 1 core is available, in which case, we
-cannot test anything as the only available mm_cid is 0.
-
-Reviewed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Signed-off-by: Gabriele Monaco <gmonaco@redhat.com>
+Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
- tools/testing/selftests/rseq/.gitignore       |   1 +
- tools/testing/selftests/rseq/Makefile         |   2 +-
- .../selftests/rseq/mm_cid_compaction_test.c   | 200 ++++++++++++++++++
- 3 files changed, 202 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/rseq/mm_cid_compaction_test.c
+Changes in v2:
+- Changed the RX collection place from nsim_napi_rx() to nsim_rcv (Joe
+  Damato)
+- Collect RX dropped packets statistic in nsim_queue_free() (Jakub)
+- Added a helper in dstat to add values to RX dropped packets
+- Link to v1: https://lore.kernel.org/r/20250611-netdevsim_stat-v1-0-c11b657d96bf@debian.org
 
-diff --git a/tools/testing/selftests/rseq/.gitignore b/tools/testing/selftests/rseq/.gitignore
-index 0fda241fa62b0..b3920c59bf401 100644
---- a/tools/testing/selftests/rseq/.gitignore
-+++ b/tools/testing/selftests/rseq/.gitignore
-@@ -3,6 +3,7 @@ basic_percpu_ops_test
- basic_percpu_ops_mm_cid_test
- basic_test
- basic_rseq_op_test
-+mm_cid_compaction_test
- param_test
- param_test_benchmark
- param_test_compare_twice
-diff --git a/tools/testing/selftests/rseq/Makefile b/tools/testing/selftests/rseq/Makefile
-index 0d0a5fae59547..bc4d940f66d40 100644
---- a/tools/testing/selftests/rseq/Makefile
-+++ b/tools/testing/selftests/rseq/Makefile
-@@ -17,7 +17,7 @@ OVERRIDE_TARGETS = 1
- TEST_GEN_PROGS = basic_test basic_percpu_ops_test basic_percpu_ops_mm_cid_test param_test \
- 		param_test_benchmark param_test_compare_twice param_test_mm_cid \
- 		param_test_mm_cid_benchmark param_test_mm_cid_compare_twice \
--		syscall_errors_test
-+		syscall_errors_test mm_cid_compaction_test
- 
- TEST_GEN_PROGS_EXTENDED = librseq.so
- 
-diff --git a/tools/testing/selftests/rseq/mm_cid_compaction_test.c b/tools/testing/selftests/rseq/mm_cid_compaction_test.c
-new file mode 100644
-index 0000000000000..7ddde3b657dd6
---- /dev/null
-+++ b/tools/testing/selftests/rseq/mm_cid_compaction_test.c
-@@ -0,0 +1,200 @@
-+// SPDX-License-Identifier: LGPL-2.1
-+#define _GNU_SOURCE
-+#include <assert.h>
-+#include <pthread.h>
-+#include <sched.h>
-+#include <stdint.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <stddef.h>
-+
-+#include "../kselftest.h"
-+#include "rseq.h"
-+
-+#define VERBOSE 0
-+#define printf_verbose(fmt, ...)                    \
-+	do {                                        \
-+		if (VERBOSE)                        \
-+			printf(fmt, ##__VA_ARGS__); \
-+	} while (0)
-+
-+/* 0.5 s */
-+#define RUNNER_PERIOD 500000
-+/* Number of runs before we terminate or get the token */
-+#define THREAD_RUNS 5
-+
-+/*
-+ * Number of times we check that the mm_cid were compacted.
-+ * Checks are repeated every RUNNER_PERIOD.
-+ */
-+#define MM_CID_COMPACT_TIMEOUT 10
-+
-+struct thread_args {
-+	int cpu;
-+	int num_cpus;
-+	pthread_mutex_t *token;
-+	pthread_barrier_t *barrier;
-+	pthread_t *tinfo;
-+	struct thread_args *args_head;
-+};
-+
-+static void __noreturn *thread_runner(void *arg)
-+{
-+	struct thread_args *args = arg;
-+	int i, ret, curr_mm_cid;
-+	cpu_set_t cpumask;
-+
-+	CPU_ZERO(&cpumask);
-+	CPU_SET(args->cpu, &cpumask);
-+	ret = pthread_setaffinity_np(pthread_self(), sizeof(cpumask), &cpumask);
-+	if (ret) {
-+		errno = ret;
-+		perror("Error: failed to set affinity");
-+		abort();
-+	}
-+	pthread_barrier_wait(args->barrier);
-+
-+	for (i = 0; i < THREAD_RUNS; i++)
-+		usleep(RUNNER_PERIOD);
-+	curr_mm_cid = rseq_current_mm_cid();
-+	/*
-+	 * We select one thread with high enough mm_cid to be the new leader.
-+	 * All other threads (including the main thread) will terminate.
-+	 * After some time, the mm_cid of the only remaining thread should
-+	 * converge to 0, if not, the test fails.
-+	 */
-+	if (curr_mm_cid >= args->num_cpus / 2 &&
-+	    !pthread_mutex_trylock(args->token)) {
-+		printf_verbose(
-+			"cpu%d has mm_cid=%d and will be the new leader.\n",
-+			sched_getcpu(), curr_mm_cid);
-+		for (i = 0; i < args->num_cpus; i++) {
-+			if (args->tinfo[i] == pthread_self())
-+				continue;
-+			ret = pthread_join(args->tinfo[i], NULL);
-+			if (ret) {
-+				errno = ret;
-+				perror("Error: failed to join thread");
-+				abort();
-+			}
-+		}
-+		pthread_barrier_destroy(args->barrier);
-+		free(args->tinfo);
-+		free(args->token);
-+		free(args->barrier);
-+		free(args->args_head);
-+
-+		for (i = 0; i < MM_CID_COMPACT_TIMEOUT; i++) {
-+			curr_mm_cid = rseq_current_mm_cid();
-+			printf_verbose("run %d: mm_cid=%d on cpu%d.\n", i,
-+				       curr_mm_cid, sched_getcpu());
-+			if (curr_mm_cid == 0)
-+				exit(EXIT_SUCCESS);
-+			usleep(RUNNER_PERIOD);
-+		}
-+		exit(EXIT_FAILURE);
-+	}
-+	printf_verbose("cpu%d has mm_cid=%d and is going to terminate.\n",
-+		       sched_getcpu(), curr_mm_cid);
-+	pthread_exit(NULL);
-+}
-+
-+int test_mm_cid_compaction(void)
-+{
-+	cpu_set_t affinity;
-+	int i, j, ret = 0, num_threads;
-+	pthread_t *tinfo;
-+	pthread_mutex_t *token;
-+	pthread_barrier_t *barrier;
-+	struct thread_args *args;
-+
-+	sched_getaffinity(0, sizeof(affinity), &affinity);
-+	num_threads = CPU_COUNT(&affinity);
-+	tinfo = calloc(num_threads, sizeof(*tinfo));
-+	if (!tinfo) {
-+		perror("Error: failed to allocate tinfo");
-+		return -1;
-+	}
-+	args = calloc(num_threads, sizeof(*args));
-+	if (!args) {
-+		perror("Error: failed to allocate args");
-+		ret = -1;
-+		goto out_free_tinfo;
-+	}
-+	token = malloc(sizeof(*token));
-+	if (!token) {
-+		perror("Error: failed to allocate token");
-+		ret = -1;
-+		goto out_free_args;
-+	}
-+	barrier = malloc(sizeof(*barrier));
-+	if (!barrier) {
-+		perror("Error: failed to allocate barrier");
-+		ret = -1;
-+		goto out_free_token;
-+	}
-+	if (num_threads == 1) {
-+		fprintf(stderr, "Cannot test on a single cpu. "
-+				"Skipping mm_cid_compaction test.\n");
-+		/* only skipping the test, this is not a failure */
-+		goto out_free_barrier;
-+	}
-+	pthread_mutex_init(token, NULL);
-+	ret = pthread_barrier_init(barrier, NULL, num_threads);
-+	if (ret) {
-+		errno = ret;
-+		perror("Error: failed to initialise barrier");
-+		goto out_free_barrier;
-+	}
-+	for (i = 0, j = 0; i < CPU_SETSIZE && j < num_threads; i++) {
-+		if (!CPU_ISSET(i, &affinity))
-+			continue;
-+		args[j].num_cpus = num_threads;
-+		args[j].tinfo = tinfo;
-+		args[j].token = token;
-+		args[j].barrier = barrier;
-+		args[j].cpu = i;
-+		args[j].args_head = args;
-+		if (!j) {
-+			/* The first thread is the main one */
-+			tinfo[0] = pthread_self();
-+			++j;
-+			continue;
-+		}
-+		ret = pthread_create(&tinfo[j], NULL, thread_runner, &args[j]);
-+		if (ret) {
-+			errno = ret;
-+			perror("Error: failed to create thread");
-+			abort();
-+		}
-+		++j;
-+	}
-+	printf_verbose("Started %d threads.\n", num_threads);
-+
-+	/* Also main thread will terminate if it is not selected as leader */
-+	thread_runner(&args[0]);
-+
-+	/* only reached in case of errors */
-+out_free_barrier:
-+	free(barrier);
-+out_free_token:
-+	free(token);
-+out_free_args:
-+	free(args);
-+out_free_tinfo:
-+	free(tinfo);
-+
-+	return ret;
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	if (!rseq_mm_cid_available()) {
-+		fprintf(stderr, "Error: rseq_mm_cid unavailable\n");
-+		return -1;
-+	}
-+	if (test_mm_cid_compaction())
-+		return -1;
-+	return 0;
-+}
+---
+Breno Leitao (4):
+      netdevsim: migrate to dstats stats collection
+      netdevsim: collect statistics at RX side
+      net: add dev_dstats_rx_dropped_add() helper
+      netdevsim: account dropped packet length in stats on queue free
+
+ drivers/net/netdevsim/netdev.c    | 48 ++++++++++++++++-----------------------
+ drivers/net/netdevsim/netdevsim.h |  5 ----
+ include/linux/netdevice.h         | 10 ++++++++
+ 3 files changed, 29 insertions(+), 34 deletions(-)
+---
+base-commit: 6d4e01d29d87356924f1521ca6df7a364e948f13
+change-id: 20250610-netdevsim_stat-95995921e03e
+
+Best regards,
 -- 
-2.49.0
+Breno Leitao <leitao@debian.org>
 
 
