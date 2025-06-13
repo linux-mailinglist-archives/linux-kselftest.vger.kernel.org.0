@@ -1,270 +1,122 @@
-Return-Path: <linux-kselftest+bounces-34967-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34968-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFDC2AD966F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Jun 2025 22:35:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9F2CAD967C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Jun 2025 22:36:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 496853BECBB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Jun 2025 20:34:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 824564A004E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Jun 2025 20:36:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E063125D547;
-	Fri, 13 Jun 2025 20:33:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 624D9247DEA;
+	Fri, 13 Jun 2025 20:36:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TRKNrWj7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RLljrNwW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 322D525C801;
-	Fri, 13 Jun 2025 20:33:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DBB21EEA47;
+	Fri, 13 Jun 2025 20:36:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749846817; cv=none; b=Nfev5s8fs8UXVWAf5qLLouGv21rOMe+A7+478rSrActEKtWVbgJfG9OmgvQKATZ8Mr/z/mL1i0xwFgTKMyUVm2gjIxXeatVB3FP3HnycNXtgfo7rjEuZOf13wBVTPk+BdbFRIXquSSRWvtwcFov2OyHV/zwAf+wjjvxSnbG/d9c=
+	t=1749847002; cv=none; b=QHmGMBX8gJk2UHimLpKjm0Tlzu9tdtEajiJaAsztaT/+1LE6/cXdKpegO5Cs8UGissoiXu3AngOquJbqYDABar0d3CFFpzEX4/9x9eMe9RZQ6+qR9yVW1TDobmI8212G+l3Wczwdo6jRyXm6j8M5BE4CH5AqWuTvLH3N4PG1x3Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749846817; c=relaxed/simple;
-	bh=aV4hNI8aqhzy9bbbQZ0vNyWIkwogBSS8SXPlSQfiUPw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Sx0Qn8y1FxXSkcjGBqmVHFGoYX581/z6x8WBZyPlmBr9vwnHavzWz/pMntBcOnN+Ap9uLcqQs3CPc1vUtCnT/xI1snd9yRiS4m1s8s03pAJg86gcErTx/Is87AWpMRXcMdFv8zXip7enLdvaI0m3l6VmIHGtGO/uqB48us/z3Ac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TRKNrWj7; arc=none smtp.client-ip=209.85.215.169
+	s=arc-20240116; t=1749847002; c=relaxed/simple;
+	bh=NnH1RCLj13aA3sFjZVykyMDY+HQb1oGS1X8FV4CU9bE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=D/cip1KWdtfjiDzA8rmeSdx7V90yydoE7/ie6FiT30kebAfDwE80+QCjkF7oEiFuttPFvKH7Xahep0i/Eh5Cl1JcJQoAyvvGcZHMRqQE7d8RosjQjBAB9X49X8LwLaCyBeQ9JV64eIP8MegCEh+KYBcQlQrs9kRZQLrGtwL/Yrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RLljrNwW; arc=none smtp.client-ip=209.85.215.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-b2f1032e1c4so2714128a12.3;
-        Fri, 13 Jun 2025 13:33:35 -0700 (PDT)
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-afc857702d1so2218364a12.3;
+        Fri, 13 Jun 2025 13:36:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749846815; x=1750451615; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1749846999; x=1750451799; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Vf7ea9OeOxjFZqaN2n/DTUZpfsQZsze4A6wO+u7qE8A=;
-        b=TRKNrWj7PZ+w3dqOtIVDrR4bMtW7dwwlqpaOtu1BSXrx8JBeAUCW6mRjwMpWoMYG27
-         ugSH3blilGn1AJCB1SPnulbt3EEkWuIdYOqDIXdfXyvxkx69L3Q2COFP56V0AjgSRdlL
-         8ylEwkKk1NsFXlXXhz1Yo51rpX/JwIAMMFJR471FNA6BgByJ1DTONU/aSs2JMO2AePQG
-         iK2T6RDaQGgKElhG0Hpdkz8+YnihaW5ptkKmNu1jZgEiZ2O+baeXErEiXIifrbwgMNlD
-         aNwdoOsN3eosE6tj8iAcnnd0BNluQAPUMd1DYsXNSFF1HAxQooxildC5OiPvXrXD9ruY
-         XmFQ==
+        bh=9y/A/honPhmFr4lSoVYSv+uKbj6HRcW5lWe22QcZ78E=;
+        b=RLljrNwWVQvbkbBCrRFGN0BZSFzc+UUlGjKTsTJSxpSfJurh2duBM8fTuItDZLH0uf
+         R6mJVd99BSiVUtpbKME4sPYt7SEQ93R4DMI0gPwejfjztCWHEGkLxfq61McF6IV7y1Zj
+         DKaGljXDUoHYLp+m8GoAenmfzkPOTiTM+rd/VP02gZG5QKjIO0SWCWQynhiPmeAsgF+F
+         iZ74KZ+WM7Y7L0CJNd7QnXWMbvRdd9wzyJtUyJFkU3EeCQXR+EmjpbSE8FfR3KK/p+JQ
+         oUawnrwtBnftztlY2ePwOcb/YfGQ/yWqUQ6p1FN3e8HMUfgPzzReRtzv/XD7Qw0N6Kfs
+         lssw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749846815; x=1750451615;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1749846999; x=1750451799;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Vf7ea9OeOxjFZqaN2n/DTUZpfsQZsze4A6wO+u7qE8A=;
-        b=We+gd3gJldYSGGXQ5Q6Rx3UBqfs2PwgSgr7Vap4roNzT7SbGeVWCzi3//RHyN9LhwA
-         3xx2t9Kn7GaokgSQaGDDbA7lFqZm1MeXwQbfxmqu5asPOBkibXjwgPAt60fUQ0jqXB/I
-         M3yQSJHx8jG0LT7Z7ejONieMusply/9obtB2LnKQ43ZGi0WkwUAnbvK38I8XvujJ/SkO
-         XsNKrplUamGJgJajksIszRqEk864pjWMi9jKXHYdAlqPzIRj7M3s39vug8oGJ85rKLKS
-         FBQCvjN8CyV6sJoqlF+2xZ/ZOAMw7E3CbufoEagIsAOPpB7o5ioLbybTcI8nkXGLf5mG
-         3kLA==
-X-Forwarded-Encrypted: i=1; AJvYcCVN23XVlJhArRVarkKHaTIrBjTiEeAq8eUesYRVMxBLHdS/s8h38rSbf3m3uQd7PeHM/GZO3xtpIR8/msABXpiy@vger.kernel.org, AJvYcCWc9nsAYX77nSj75WiKDDA1Cjq+AxsAptnL6akrEg7dJQq9mVfuQfHP7T555AYqMFCrSZVYgkQ8jqRdJ7E=@vger.kernel.org, AJvYcCXMTGpjPezeCveYkqKGywFQpyD7MDSsiQqRuq9LZ5Zb4oGWRzdRzw2ZJJuawyfFsmFo5x3BXp7nmANJ4Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzgXCvRj/B9KwDjabiB56jUicQAd8yEVDZaKwqsckp1/2mlLbRv
-	fkOE8bc29EgHA1K6gD6KmpzYoZX9XWPEnVVjBUZrSuamQPZSVfisItK0nfgs
-X-Gm-Gg: ASbGncspqKJ4UU0Pphr3BeZy+LreqqT0WYjcSa/LISSjePo/YXuSP2aXkSqY5MaI0Z1
-	qo5SeP6HDaq0wQ6qREw8DkGgy/FQzknfvnCki2Lkcw/01KMa+xn4H9ftdtDuR5+Gq8d/BeSEaPc
-	Wy8J1yy7w0JPEByqImjcSabeoG7we8I5LG6ms8rjgREtkPdTAMQcCNwo8xE7n8ItFVWoBaysAiI
-	xLsP/AUj35bkFgj63MovqRWGcksu33CHph+hN6MnPKzZ/MY+3UmTLDarlLcEDmPjLSqFYzRWuI2
-	O0h9DSINhW/dN3GRCAOfXAvA/gE4JV0PAvEIMALGy/kYi0S0uzAjfWLNlU1UHEGEWySPoOYe/si
-	+bFG0febhDEcacnHvtJyB2C8=
-X-Google-Smtp-Source: AGHT+IFQorw9u2Oum4iWIl3+OfOv8aRF0XYDMBT3yjqF6imdB9HBBTYYcXJhmREswTV0eldeif4+ow==
-X-Received: by 2002:a05:6a21:3298:b0:1f5:8fe3:4e29 with SMTP id adf61e73a8af0-21fbd4567demr1089944637.3.1749846814973;
-        Fri, 13 Jun 2025 13:33:34 -0700 (PDT)
-Received: from localhost (c-73-158-218-242.hsd1.ca.comcast.net. [73.158.218.242])
-        by smtp.gmail.com with UTF8SMTPSA id 41be03b00d2f7-b2fe168ccafsm1859552a12.55.2025.06.13.13.33.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jun 2025 13:33:34 -0700 (PDT)
-From: Stanislav Fomichev <stfomichev@gmail.com>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	skalluru@marvell.com,
-	manishc@marvell.com,
-	andrew+netdev@lunn.ch,
-	michael.chan@broadcom.com,
-	pavan.chebbi@broadcom.com,
-	ajit.khaparde@broadcom.com,
-	sriharsha.basavapatna@broadcom.com,
-	somnath.kotur@broadcom.com,
-	anthony.l.nguyen@intel.com,
-	przemyslaw.kitszel@intel.com,
-	tariqt@nvidia.com,
-	saeedm@nvidia.com,
-	louis.peens@corigine.com,
-	shshaikh@marvell.com,
-	GR-Linux-NIC-Dev@marvell.com,
-	ecree.xilinx@gmail.com,
-	horms@kernel.org,
-	dsahern@kernel.org,
-	shuah@kernel.org,
-	tglx@linutronix.de,
-	mingo@kernel.org,
-	ruanjinjie@huawei.com,
-	idosch@nvidia.com,
-	razor@blackwall.org,
-	petrm@nvidia.com,
-	kuniyu@google.com,
-	sdf@fomichev.me,
-	linux-kernel@vger.kernel.org,
-	intel-wired-lan@lists.osuosl.org,
-	linux-rdma@vger.kernel.org,
-	oss-drivers@corigine.com,
-	linux-net-drivers@amd.com,
-	linux-kselftest@vger.kernel.org,
-	leon@kernel.org,
-	Aleksandr Loktionov <aleksandr.loktionov@intel.com>
-Subject: [PATCH net-next v4 6/6] Revert "bnxt_en: bring back rtnl_lock() in the bnxt_open() path"
-Date: Fri, 13 Jun 2025 13:33:25 -0700
-Message-ID: <20250613203325.1127217-7-stfomichev@gmail.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250613203325.1127217-1-stfomichev@gmail.com>
-References: <20250613203325.1127217-1-stfomichev@gmail.com>
+        bh=9y/A/honPhmFr4lSoVYSv+uKbj6HRcW5lWe22QcZ78E=;
+        b=L6bR2pvO7FB2eqZjEq8ckaINI+C7FnNR1bl9UoJTFFr7tlE4qcVz/MJv3QdJ3eemFu
+         ynYGDHhXFYyBZT23ULxStSCO/1SCViLM6+vAH3L3WNDibmjMgQ0EHQ9m9CKF6W4HmkSp
+         YV8Gna5YJV3qfTfo/Bmrk89NcJhOeUjZk5FHnnT9pZNF91723Om9PK5MHu3tNpeiNdFu
+         QqN0oEMJDosabO4wXs45lLO6XnGjE0CiOq1TarwqiLwFp1pkAiF+OJ1J1x+A/L0+X882
+         +bGa3D1YLS4MTSVAtD/0icKFj3z1OBf2BVq8BScYnswngIEF4YTYHnIvxto/SBfjox9/
+         SC0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUA70oOjDQdhvNbLDtXgKLDCvExCGL/aMk1FzHe3WOFvTl2CZnXQ9tvvXt+L5rBoQtEP4np46CXu/v+JtzH@vger.kernel.org, AJvYcCViAiCMXXJKk5H+QwNJYH+Ew8bxJGFHAcSpj+3q2Q2vT2G7YQ/2aQng7ogdsjUtE1fwd4yxDaoEUMd3JGofDHQW@vger.kernel.org, AJvYcCVyluA8veVHObNi58xL6GYICHP/9LY5nQ23eTSol73moGh93tLD6mzowAt8JqD2p5PeoY7SrYbjUFDlY0It@vger.kernel.org
+X-Gm-Message-State: AOJu0YziMo2SklnDTdylERci/zXI1XtIxuQ5/9UqmHZ6mJKf3ah+J7/0
+	o2BsCDL8yygdu09mKgkKC8FJL58pF9wtSbJSED/VDY/yiO3eiZ0MqNtDBDZgF0Tv6DATvWAUBS2
+	UBaZR1s2jD/Ww8cL8sLzjMZknbELzhMg=
+X-Gm-Gg: ASbGncthj6AAr1rMtzDUa2mkR2ry/UkIs737G1SvMiXun0REjkuz4m4EraOjCdYarX2
+	Qcnwk1ACdO2azWcIITxXEPxZaC+ec3flj8+7S5P0x/Kc13TpF7Co/uszNCdumvhJa2wwAwn/i9N
+	/RzRnzx3/39J2zUIonvq4yDUSqVCM9/1l/pAKnITs/UNAMzGD7QrMadgCnQmQ=
+X-Google-Smtp-Source: AGHT+IE+doNLPK7iQGfmHK2aMnyGWiCbAU7ZVE0TGsJ4ZiOD4WmzWHJdIsobeerDU3u3LIVga2Y0ZGSbz/IF/sJwSKQ=
+X-Received: by 2002:a05:6a20:734d:b0:1ee:efa5:6573 with SMTP id
+ adf61e73a8af0-21fbd475bc7mr1113173637.8.1749846999305; Fri, 13 Jun 2025
+ 13:36:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250604231151.799834-1-surenb@google.com> <20250604231151.799834-8-surenb@google.com>
+In-Reply-To: <20250604231151.799834-8-surenb@google.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 13 Jun 2025 13:36:26 -0700
+X-Gm-Features: AX0GCFvv2DgZg91WNc7kjHPmacufJlE4-r5R7dF4S5nPd7EiZImIO8808EQSIdY
+Message-ID: <CAEf4BzYxOfk3_dTmQY4hkx-6f+OqpCOL0agY1x=9LM08py+s+A@mail.gmail.com>
+Subject: Re: [PATCH v4 7/7] mm/maps: execute PROCMAP_QUERY ioctl under per-vma locks
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: akpm@linux-foundation.org, Liam.Howlett@oracle.com, 
+	lorenzo.stoakes@oracle.com, david@redhat.com, vbabka@suse.cz, 
+	peterx@redhat.com, jannh@google.com, hannes@cmpxchg.org, mhocko@kernel.org, 
+	paulmck@kernel.org, shuah@kernel.org, adobriyan@gmail.com, brauner@kernel.org, 
+	josef@toxicpanda.com, yebin10@huawei.com, linux@weissschuh.net, 
+	willy@infradead.org, osalvador@suse.de, andrii@kernel.org, 
+	ryan.roberts@arm.com, christophe.leroy@csgroup.eu, tjmercier@google.com, 
+	kaleshsingh@google.com, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This reverts commit 325eb217e41fa14f307c7cc702bd18d0bb38fe84.
+On Wed, Jun 4, 2025 at 4:12=E2=80=AFPM Suren Baghdasaryan <surenb@google.co=
+m> wrote:
+>
+> Utilize per-vma locks to stabilize vma after lookup without taking
+> mmap_lock during PROCMAP_QUERY ioctl execution. While we might take
+> mmap_lock for reading during contention, we do that momentarily only
+> to lock the vma.
+> This change is designed to reduce mmap_lock contention and prevent
+> PROCMAP_QUERY ioctl calls from blocking address space updates.
+>
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> ---
+>  fs/proc/task_mmu.c | 56 ++++++++++++++++++++++++++++++++++++----------
+>  1 file changed, 44 insertions(+), 12 deletions(-)
+>
 
-udp_tunnel infra doesn't need RTNL, should be safe to get back
-to only netdev instance lock.
+The overall approach in this patch set looks good to me! PROCMAP_QUERY
+changes specifically are pretty straightforward, nice. LGTM:
 
-Cc: Michael Chan <michael.chan@broadcom.com>
-Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
-Signed-off-by: Stanislav Fomichev <stfomichev@gmail.com>
----
- drivers/net/ethernet/broadcom/bnxt/bnxt.c | 36 +++++------------------
- 1 file changed, 7 insertions(+), 29 deletions(-)
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-index 7946586802af..b359ef4b78a9 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-@@ -14055,28 +14055,13 @@ static void bnxt_unlock_sp(struct bnxt *bp)
- 	netdev_unlock(bp->dev);
- }
- 
--/* Same as bnxt_lock_sp() with additional rtnl_lock */
--static void bnxt_rtnl_lock_sp(struct bnxt *bp)
--{
--	clear_bit(BNXT_STATE_IN_SP_TASK, &bp->state);
--	rtnl_lock();
--	netdev_lock(bp->dev);
--}
--
--static void bnxt_rtnl_unlock_sp(struct bnxt *bp)
--{
--	set_bit(BNXT_STATE_IN_SP_TASK, &bp->state);
--	netdev_unlock(bp->dev);
--	rtnl_unlock();
--}
--
- /* Only called from bnxt_sp_task() */
- static void bnxt_reset(struct bnxt *bp, bool silent)
- {
--	bnxt_rtnl_lock_sp(bp);
-+	bnxt_lock_sp(bp);
- 	if (test_bit(BNXT_STATE_OPEN, &bp->state))
- 		bnxt_reset_task(bp, silent);
--	bnxt_rtnl_unlock_sp(bp);
-+	bnxt_unlock_sp(bp);
- }
- 
- /* Only called from bnxt_sp_task() */
-@@ -14084,9 +14069,9 @@ static void bnxt_rx_ring_reset(struct bnxt *bp)
- {
- 	int i;
- 
--	bnxt_rtnl_lock_sp(bp);
-+	bnxt_lock_sp(bp);
- 	if (!test_bit(BNXT_STATE_OPEN, &bp->state)) {
--		bnxt_rtnl_unlock_sp(bp);
-+		bnxt_unlock_sp(bp);
- 		return;
- 	}
- 	/* Disable and flush TPA before resetting the RX ring */
-@@ -14125,7 +14110,7 @@ static void bnxt_rx_ring_reset(struct bnxt *bp)
- 	}
- 	if (bp->flags & BNXT_FLAG_TPA)
- 		bnxt_set_tpa(bp, true);
--	bnxt_rtnl_unlock_sp(bp);
-+	bnxt_unlock_sp(bp);
- }
- 
- static void bnxt_fw_fatal_close(struct bnxt *bp)
-@@ -15017,17 +15002,15 @@ static void bnxt_fw_reset_task(struct work_struct *work)
- 		bp->fw_reset_state = BNXT_FW_RESET_STATE_OPENING;
- 		fallthrough;
- 	case BNXT_FW_RESET_STATE_OPENING:
--		while (!rtnl_trylock()) {
-+		while (!netdev_trylock(bp->dev)) {
- 			bnxt_queue_fw_reset_work(bp, HZ / 10);
- 			return;
- 		}
--		netdev_lock(bp->dev);
- 		rc = bnxt_open(bp->dev);
- 		if (rc) {
- 			netdev_err(bp->dev, "bnxt_open() failed during FW reset\n");
- 			bnxt_fw_reset_abort(bp, rc);
- 			netdev_unlock(bp->dev);
--			rtnl_unlock();
- 			goto ulp_start;
- 		}
- 
-@@ -15047,7 +15030,6 @@ static void bnxt_fw_reset_task(struct work_struct *work)
- 			bnxt_dl_health_fw_status_update(bp, true);
- 		}
- 		netdev_unlock(bp->dev);
--		rtnl_unlock();
- 		bnxt_ulp_start(bp, 0);
- 		bnxt_reenable_sriov(bp);
- 		netdev_lock(bp->dev);
-@@ -15996,7 +15978,7 @@ static int bnxt_queue_start(struct net_device *dev, void *qmem, int idx)
- 		   rc);
- 	napi_enable_locked(&bnapi->napi);
- 	bnxt_db_nq_arm(bp, &cpr->cp_db, cpr->cp_raw_cons);
--	netif_close(dev);
-+	bnxt_reset_task(bp, true);
- 	return rc;
- }
- 
-@@ -16812,7 +16794,6 @@ static int bnxt_resume(struct device *device)
- 	struct bnxt *bp = netdev_priv(dev);
- 	int rc = 0;
- 
--	rtnl_lock();
- 	netdev_lock(dev);
- 	rc = pci_enable_device(bp->pdev);
- 	if (rc) {
-@@ -16857,7 +16838,6 @@ static int bnxt_resume(struct device *device)
- 
- resume_exit:
- 	netdev_unlock(bp->dev);
--	rtnl_unlock();
- 	bnxt_ulp_start(bp, rc);
- 	if (!rc)
- 		bnxt_reenable_sriov(bp);
-@@ -17023,7 +17003,6 @@ static void bnxt_io_resume(struct pci_dev *pdev)
- 	int err;
- 
- 	netdev_info(bp->dev, "PCI Slot Resume\n");
--	rtnl_lock();
- 	netdev_lock(netdev);
- 
- 	err = bnxt_hwrm_func_qcaps(bp);
-@@ -17041,7 +17020,6 @@ static void bnxt_io_resume(struct pci_dev *pdev)
- 		netif_device_attach(netdev);
- 
- 	netdev_unlock(netdev);
--	rtnl_unlock();
- 	bnxt_ulp_start(bp, err);
- 	if (!err)
- 		bnxt_reenable_sriov(bp);
--- 
-2.49.0
-
+And for the rest of the changes you seem to be in good hands, so I'll
+just be waiting for the final thing to land, thanks for working on
+this!
 
