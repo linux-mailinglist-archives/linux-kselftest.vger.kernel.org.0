@@ -1,67 +1,49 @@
-Return-Path: <linux-kselftest+bounces-34900-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34901-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0476AD8A91
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Jun 2025 13:34:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E6CAAD8B2C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Jun 2025 13:52:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B47EA1E3747
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Jun 2025 11:34:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B42851E4C25
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Jun 2025 11:49:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABD152E7655;
-	Fri, 13 Jun 2025 11:32:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A93E52D8769;
+	Fri, 13 Jun 2025 11:44:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U5J4HV1n"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B52A62E7625;
-	Fri, 13 Jun 2025 11:32:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 776FA26B761;
+	Fri, 13 Jun 2025 11:44:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749814326; cv=none; b=HlRDCT581ALV5+Bmh5bPKZsEiuc/wmLu4IXlsxAKxgVTECLu0VRpc3r55dmAxelqguTPgIpypyAN9x9XGAicEHk/hHsfClWKrVK1rmSHMwMlwHQPCJ85PkU3jxR/x40F4+2IioUDMS3ThVDOt1jtgR292TY4+e8vBC8rqcGokZY=
+	t=1749815086; cv=none; b=oh+DwdoR6JfAq8MNk1ye9CFCIhqQj9IjK9Gm4/iIZasvAChVphVkLLresTuAKsE8d6nsyNeWvBqAHoRZttI1ML2URoUf+fIsBWgOnK4xAg1k8/qpcbo9FFdDxmHM8kgbya6srWGWOcWa/FcLXFMl3nqQFNOWcP1mPs/FpGZ96Qk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749814326; c=relaxed/simple;
-	bh=5v/1hL/ALMXFWvwHghT7FERfuc6HtTVh0PFSKcLiZac=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=XmIOJ2lCFgK51olmTdEGv9TFwh+aRt+LCmArx3YGheC0NETQUa8LQ7qDkCNMFQwNNaCG1jGSg2kKg2cIgak29MEI6yWAE594GTncIQyBDqTfMxSGvzH339juDZMwI0MdPzEFLH+X+SL6ZynFSGHmvmQ+0cEjYA8xt86LEPKTU9s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-acb5ec407b1so328390866b.1;
-        Fri, 13 Jun 2025 04:32:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749814323; x=1750419123;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AFyrorJHtIadhR2WZLtoMNadK7UpAA+1kioSAElIigY=;
-        b=WRnIjvB3Nv1R7Up6O3NhJxPrZigKvM2BS5L/oY5DH/2p6i4tlOzmTFRy0QkjPFpPzx
-         Jgc5q+sfaBIFX3tgfXUA/xedYFu8nRG/ZncqZLZnGO7J1Khccf34W2m3CrVHEj9ge/gf
-         ViHpMJU8iM6YyLH+G29v/OgROvrNJhij4nJxxtP65m5CDtkZSHTHLOOJzfh6Dr2rGWmf
-         2MgRczmAJ8T7nbdV2RGaviZgP3M7AT81w50ZME3sIywd7w2tqzvLjLJgG0DKNAcLeGiY
-         lnAZ2jNmXAeTUC5XdeDd8HUMWi4N54j4rpa4eBNh49LkF3dF8x3YZi7k8p5wuSBuJDTb
-         Y/Hw==
-X-Forwarded-Encrypted: i=1; AJvYcCW5UDWFRmxD/7HlAjwDcB0XuRvlipkDraz0HPdUsLalD98jhzK6iP5YQkM4UukkTCES7RKAUjYZCvCfNhk=@vger.kernel.org, AJvYcCXIifHh4fyNx9FaZRZ5wwwyCcOsfSFRHXQhuVfKaAaJfRhMnOaLMK7KSI+gc4IzEZnXs6+P4i7ibWTXSTU1Fs+Z@vger.kernel.org
-X-Gm-Message-State: AOJu0YznfkqO8qkNEjSWw8pQ11qcVgEkBYbDQl/916ZryjXXwYDmTmyW
-	86jrHMJeTThNBwD8n0aKsUXybjl4hkwT+6I4A1rn5Z9cvvtMnre8u8HsInlK5A==
-X-Gm-Gg: ASbGncvVXq4HB9+4h0Pgqa21mVV4BGE61H3vEU/bfsdQrXO7x5BJ3R5tINJUEXJK9z0
-	fcLNmhVtUTL/Q6MFcR1Aj6/RU0two6NBYEAC0amwBWw6DxyTEGOPUMFgYcsZGmGKykOI/FXguXc
-	jG2crlKfEW67bIDR9F2+JiUz8b0JQ0OaLhyqqDUtzueGJvIE4ODy93YWKCgxrBMGIS9YKBeU170
-	P9GN/sxMw+Eu5AjtN8V5DRgR9cYhl+ChIp6yc6zryD3VGn813BiW6VdClh4LaeW9Q1VKw9Hjjw7
-	+ByiHnptLumWmYqVUAbqfSxKnoxc5L2LZY2VTjVQGxZ2RrXr7EnC4QHreJowuvwq
-X-Google-Smtp-Source: AGHT+IE86EKMksqdrSTrjdwcwtxQBLt3kKhK3FPtOHFNpO6HlR6OunsYgQr09TKPN0G8jkm2FfYzRQ==
-X-Received: by 2002:a17:907:60d6:b0:ade:7512:d9ba with SMTP id a640c23a62f3a-adec56499bdmr274510066b.26.1749814322614;
-        Fri, 13 Jun 2025 04:32:02 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:73::])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-adec815992bsm116199566b.13.2025.06.13.04.32.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jun 2025 04:32:02 -0700 (PDT)
-From: Breno Leitao <leitao@debian.org>
-Date: Fri, 13 Jun 2025 04:31:37 -0700
-Subject: [PATCH net-next v3 8/8] selftests: net: add netconsole test for
- cmdline configuration
+	s=arc-20240116; t=1749815086; c=relaxed/simple;
+	bh=67C8SauhQy4UDCcOAF3lc1WX/+uxuBUuNm519MYFsJc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=vAC1krfSXnEMTglCiJsXGdrlrLycPNs5Q3U/sXtsftXDStj+ag+OSNQMtPCvx8ad4MWDe2Bruu0gEg+12EZNE79zM9aZKdOoa+r1j0HGGcMPLQm8FUShmSm2v+bbCSpFnS4zE+QTToxBG3lybeHhEgxwNddS2RLjn+GL2ef6P40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U5J4HV1n; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93389C4CEE3;
+	Fri, 13 Jun 2025 11:44:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749815085;
+	bh=67C8SauhQy4UDCcOAF3lc1WX/+uxuBUuNm519MYFsJc=;
+	h=From:Date:Subject:To:Cc:From;
+	b=U5J4HV1ngFV03Nwvqb+pAc9sD31Mp9qvuZ+EGB52Y6jF/3OC7/HfsjDzu4k8i+Soe
+	 FvRsQ2iRGAN9oFXErAmU3anccqP0S7a6bGyg0Pl1fciAyaZrLdCjduIGlrMR3Grni1
+	 xdUoHg5UJQSqLtaoKFyrhefka+A0FnGjaJeKFN/ssjB0I8ZePHTS9pS3wWYcBKv/hj
+	 itJAjs45025+JsvzDANFT5Rue+VygzqJz0kPG7thfQH70VvyA8U3Czj6btyfFqfTuL
+	 w0nDZq+GvPC6sRzi39c7ZW4JmxfF27YrpNk+8YqAOyZ3CXTGlzfrQnvAaL2nMFypxD
+	 JXr0I5HxGxfGA==
+From: Mark Brown <broonie@kernel.org>
+Date: Fri, 13 Jun 2025 12:44:07 +0100
+Subject: [PATCH] selftest/mm: Skip if fallocate() is unsupported in
+ gup_longterm
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,198 +52,67 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250613-rework-v3-8-0752bf2e6912@debian.org>
-References: <20250613-rework-v3-0-0752bf2e6912@debian.org>
-In-Reply-To: <20250613-rework-v3-0-0752bf2e6912@debian.org>
-To: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Breno Leitao <leitao@debian.org>, 
- gustavold@gmail.com
-X-Mailer: b4 0.15-dev-42535
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5920; i=leitao@debian.org;
- h=from:subject:message-id; bh=5v/1hL/ALMXFWvwHghT7FERfuc6HtTVh0PFSKcLiZac=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBoTAwl9aFDYw33vVuP4gISRyabn1e94uoNoqrLK
- mHPhWbPNQ6JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaEwMJQAKCRA1o5Of/Hh3
- bZgAD/9vTsG+hAxU5w8AYPcmQleIqYKpT8hxQWBTTMlYIP5YkqTKI5qF+6wX3a912fK/RG9F4rS
- nNnVItg8wauR6g1ryk/juX1MaD87Yj7QSTZ5JN34Bep23rR2KCwbRDQUpI1t8cZ98d4TbQnLyRo
- fIUakeG+tJs8MaDBEQaGEsMIk4B5EHE2CoCtJQbPIfOrf684V9G3uWhHuxnPxGZwFWOt8esC5OF
- 5GXdXdHS+yn2Wv0pKYHG5MV/9KHWbhuvdJx+RRp6+V0p4JaK3MTHh5A3KyWr/NjFn36h/rpjloc
- kKw6mWJGoIUtkF8OlO9fGROrMtcWV9gJ7yw4VQu0qR0b4MlYQXecsNmLRtyVpj5tNwzJuurvjeG
- dwfhTiASM2tlzllOawlCEYMs3modrThP4T3JjDZ/RLqIvt+WWIuevKilIj2RHl5kmCzOYQCioGb
- haW2PUZXinGnhTHnESt5cDB4fh4Dwnge2mME7xV3peBkRuJxckJkTCAnbeUCtEJEK45VdY3BWJ9
- qhbJzel0eOQ5NZ8e6AYXCrbdjGE3CYlDrpbO6khjVLANi459/a/Slt+6tmdg0JYmGcDAmdkRm16
- gJVcXFedLBXGcCu9NwtSOSbbDxtHelBnSdhrnUV9A7bweUGqZqBWkjc7FINRS5XWr6DlZPFsFY/
- jUry8x3ymSymRhg==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+Message-Id: <20250613-selftest-mm-gup-longterm-fallocate-nfs-v1-1-758a104c175f@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAYPTGgC/x3NywrCMBBG4Vcps3YgCbaCryIuQv0nBnIpmViE0
+ nc3uPw25xykaBFK9+mghj1qrGXAXiZa374EcHwNkzNuNos1rEjSoZ1z5vDZONUSOlpm8SnV1Xd
+ wEWVnIfN1cTeIoxHbGiR+/6PH8zx/0+23KngAAAA=
+X-Change-ID: 20250610-selftest-mm-gup-longterm-fallocate-nfs-21ef54627ef2
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ Shuah Khan <shuah@kernel.org>, David Hildenbrand <david@redhat.com>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.15-dev-c25d1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1499; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=67C8SauhQy4UDCcOAF3lc1WX/+uxuBUuNm519MYFsJc=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBoTA8refSwnoxdJb+107nNprcOEDsjz4KiGYmcVQTM
+ W1F/HCmJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaEwPKwAKCRAk1otyXVSH0FtkB/
+ 4+8N5ND04NyqzZJemY5vFK3k75oeTztrRfRyyZ3JvwmcCNAyZZ/S2SYtMfxJCnFaRVBCCrLG3cS6oD
+ zS7FYy6q384+Svt1Eu6qfqAFTZrRXA1Dt+fdXTTEsAcYZk5lzEYMhRn+Pkw5E29gEYcSJp/LVAw6zz
+ 37lA18qLoghB7nm3ndxqQdW5Ip+DPFq1ZKSo5Gtm1NntVlVFb0KvEcYEOr1n2jTO3HIvEmDkVa9d+6
+ lj7pH6N8b3KQR/TaopssA/UlZovbnNeS6DH+1AaDd9szj+rW5yfQKQ83WoEQ8ozXn6/Bbs+v5aBP3+
+ zcDOiUi+Df9d7jjbqpT2NDIHX+F5ew
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-Add a new selftest to verify netconsole module loading with command
-line arguments. This test exercises the init_netconsole() path and
-validates proper parsing of the netconsole= parameter format.
+Currently gup_longterm assumes that filesystems support fallocate() and uses
+that to allocate space in files, however this is an optional feature and is
+in particular not implemented by NFSv3 which is commonly used in CI systems
+leading to spurious failures. Check for lack of support and report a skip
+instead for that case.
 
-The test:
-- Loads netconsole module with cmdline configuration instead of
-  dynamic reconfiguration
-- Validates message transmission through the configured target
-- Adds helper functions for cmdline string generation and module
-  validation
-
-This complements existing netconsole selftests by covering the
-module initialization code path that processes boot-time parameters.
-This test is useful to test issues like the one described in [1].
-
-Link: https://lore.kernel.org/netdev/Z36TlACdNMwFD7wv@dev-ushankar.dev.purestorage.com/ [1]
-Signed-off-by: Breno Leitao <leitao@debian.org>
+Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/drivers/net/Makefile       |  1 +
- .../selftests/drivers/net/lib/sh/lib_netcons.sh    | 39 +++++++++++++---
- .../selftests/drivers/net/netcons_cmdline.sh       | 52 ++++++++++++++++++++++
- 3 files changed, 86 insertions(+), 6 deletions(-)
+ tools/testing/selftests/mm/gup_longterm.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
-index be780bcb73a3b..bd309b2d39095 100644
---- a/tools/testing/selftests/drivers/net/Makefile
-+++ b/tools/testing/selftests/drivers/net/Makefile
-@@ -12,6 +12,7 @@ TEST_GEN_FILES := \
- TEST_PROGS := \
- 	napi_id.py \
- 	netcons_basic.sh \
-+	netcons_cmdline.sh \
- 	netcons_fragmented_msg.sh \
- 	netcons_overflow.sh \
- 	netcons_sysdata.sh \
-diff --git a/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh b/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
-index 598279139a6e5..3fcf85a345969 100644
---- a/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
-+++ b/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
-@@ -121,6 +121,17 @@ function create_dynamic_target() {
- 	echo 1 > "${NETCONS_PATH}"/enabled
- }
+diff --git a/tools/testing/selftests/mm/gup_longterm.c b/tools/testing/selftests/mm/gup_longterm.c
+index 8a97ac5176a4..0e99494268ed 100644
+--- a/tools/testing/selftests/mm/gup_longterm.c
++++ b/tools/testing/selftests/mm/gup_longterm.c
+@@ -114,7 +114,15 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
+ 	}
  
-+# Generate the command line argument for netconsole following:
-+#  netconsole=[+][src-port]@[src-ip]/[<dev>],[tgt-port]@<tgt-ip>/[tgt-macaddr]
-+function create_cmdline_str() {
-+	DSTMAC=$(ip netns exec "${NAMESPACE}" \
-+		 ip link show "${DSTIF}" | awk '/ether/ {print $2}')
-+	SRCPORT="1514"
-+	TGTPORT="6666"
-+
-+	echo "netconsole=\"+${SRCPORT}@${SRCIP}/${SRCIF},${TGTPORT}@${DSTIP}/${DSTMAC}\""
-+}
-+
- # Do not append the release to the header of the message
- function disable_release_append() {
- 	echo 0 > "${NETCONS_PATH}"/enabled
-@@ -173,13 +184,9 @@ function listen_port_and_save_to() {
- 		socat UDP-LISTEN:"${PORT}",fork "${OUTPUT}"
- }
- 
--function validate_result() {
-+# Only validate that the message arrived properly
-+function validate_msg() {
- 	local TMPFILENAME="$1"
--	local FORMAT=${2:-"extended"}
--
--	# TMPFILENAME will contain something like:
--	# 6.11.1-0_fbk0_rc13_509_g30d75cea12f7,13,1822,115075213798,-;netconsole selftest: netcons_gtJHM
--	#  key=value
- 
- 	# Check if the file exists
- 	if [ ! -f "$TMPFILENAME" ]; then
-@@ -192,6 +199,17 @@ function validate_result() {
- 		cat "${TMPFILENAME}" >&2
- 		exit "${ksft_fail}"
- 	fi
-+}
-+
-+# Validate the message and userdata
-+function validate_result() {
-+	local TMPFILENAME="$1"
-+
-+	# TMPFILENAME will contain something like:
-+	# 6.11.1-0_fbk0_rc13_509_g30d75cea12f7,13,1822,115075213798,-;netconsole selftest: netcons_gtJHM
-+	#  key=value
-+
-+	validate_msg "${TMPFILENAME}"
- 
- 	# userdata is not supported on basic format target,
- 	# thus, do not validate it.
-@@ -267,3 +285,12 @@ function pkill_socat() {
- 	pkill -f "${PROCESS_NAME}"
- 	set -e
- }
-+
-+# Check if netconsole was compiled as a module, otherwise exit
-+function check_netconsole_module() {
-+	if modinfo netconsole | grep filename: | grep -q builtin
-+	then
-+		echo "SKIP: netconsole should be compiled as a module" >&2
-+		exit "${ksft_skip}"
-+	fi
-+}
-diff --git a/tools/testing/selftests/drivers/net/netcons_cmdline.sh b/tools/testing/selftests/drivers/net/netcons_cmdline.sh
-new file mode 100755
-index 0000000000000..ad2fb8b1c4632
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/netcons_cmdline.sh
-@@ -0,0 +1,52 @@
-+#!/usr/bin/env bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+# This is a selftest to test cmdline arguments on netconsole.
-+# It exercises loading of netconsole from cmdline instead of the dynamic
-+# reconfiguration. This includes parsing the long netconsole= line and all the
-+# flow through init_netconsole().
-+#
-+# Author: Breno Leitao <leitao@debian.org>
-+
-+set -euo pipefail
-+
-+SCRIPTDIR=$(dirname "$(readlink -e "${BASH_SOURCE[0]}")")
-+
-+source "${SCRIPTDIR}"/lib/sh/lib_netcons.sh
-+
-+check_netconsole_module
-+
-+modprobe netdevsim 2> /dev/null || true
-+rmmod netconsole 2> /dev/null || true
-+
-+# The content of kmsg will be save to the following file
-+OUTPUT_FILE="/tmp/${TARGET}"
-+
-+# Check for basic system dependency and exit if not found
-+# check_for_dependencies
-+# Set current loglevel to KERN_INFO(6), and default to KERN_NOTICE(5)
-+echo "6 5" > /proc/sys/kernel/printk
-+# Remove the namespace and network interfaces
-+trap do_cleanup EXIT
-+# Create one namespace and two interfaces
-+set_network
-+# Create the command line for netconsole, with the configuration from the
-+# function above
-+CMDLINE="$(create_cmdline_str)"
-+
-+# Load the module, with the cmdline set
-+modprobe netconsole "${CMDLINE}"
-+
-+# Listed for netconsole port inside the namespace and destination interface
-+listen_port_and_save_to "${OUTPUT_FILE}" &
-+# Wait for socat to start and listen to the port.
-+wait_local_port_listen "${NAMESPACE}" "${PORT}" udp
-+# Send the message
-+echo "${MSG}: ${TARGET}" > /dev/kmsg
-+# Wait until socat saves the file to disk
-+busywait "${BUSYWAIT_TIMEOUT}" test -s "${OUTPUT_FILE}"
-+# Make sure the message was received in the dst part
-+# and exit
-+validate_msg "${OUTPUT_FILE}"
-+
-+exit "${ksft_pass}"
+ 	if (fallocate(fd, 0, 0, size)) {
+-		if (size == pagesize) {
++		/*
++		 * Some filesystems (eg, NFSv3) don't support
++		 * fallocate(), report this as a skip rather than a
++		 * test failure.
++		 */
++		if (errno == EOPNOTSUPP) {
++			ksft_print_msg("fallocate() not supported by filesystem\n");
++			result = KSFT_SKIP;
++		} else if (size == pagesize) {
+ 			ksft_print_msg("fallocate() failed (%s)\n", strerror(errno));
+ 			result = KSFT_FAIL;
+ 		} else {
 
+---
+base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
+change-id: 20250610-selftest-mm-gup-longterm-fallocate-nfs-21ef54627ef2
+
+Best regards,
 -- 
-2.47.1
+Mark Brown <broonie@kernel.org>
 
 
