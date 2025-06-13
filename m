@@ -1,118 +1,161 @@
-Return-Path: <linux-kselftest+bounces-34901-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34902-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E6CAAD8B2C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Jun 2025 13:52:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E6F6AD8B52
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Jun 2025 13:54:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B42851E4C25
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Jun 2025 11:49:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2E386188B8B5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Jun 2025 11:52:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A93E52D8769;
-	Fri, 13 Jun 2025 11:44:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 376FF2E2F02;
+	Fri, 13 Jun 2025 11:47:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U5J4HV1n"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="1SISVv9d";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="CKlPFkLt";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="FKmWNUBy";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="3oLHDDy5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 776FA26B761;
-	Fri, 13 Jun 2025 11:44:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ACC52DFA24
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Jun 2025 11:47:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749815086; cv=none; b=oh+DwdoR6JfAq8MNk1ye9CFCIhqQj9IjK9Gm4/iIZasvAChVphVkLLresTuAKsE8d6nsyNeWvBqAHoRZttI1ML2URoUf+fIsBWgOnK4xAg1k8/qpcbo9FFdDxmHM8kgbya6srWGWOcWa/FcLXFMl3nqQFNOWcP1mPs/FpGZ96Qk=
+	t=1749815263; cv=none; b=goNJVbK/i/TYnzZ30RHbrIMFcAkldoWF7f8+xVTacl3uKAhBBlQM4EACI/zw/WiVf4prrIq8luxvVg3GiVNyC3kwbOxYgDiIkeFKgmyAdnlpMhLg628QSLuHuiv2WFj4eyqgB6p6Ti+TUW51bFej56FdXga/LLZWDOdEovJiwsc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749815086; c=relaxed/simple;
-	bh=67C8SauhQy4UDCcOAF3lc1WX/+uxuBUuNm519MYFsJc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=vAC1krfSXnEMTglCiJsXGdrlrLycPNs5Q3U/sXtsftXDStj+ag+OSNQMtPCvx8ad4MWDe2Bruu0gEg+12EZNE79zM9aZKdOoa+r1j0HGGcMPLQm8FUShmSm2v+bbCSpFnS4zE+QTToxBG3lybeHhEgxwNddS2RLjn+GL2ef6P40=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U5J4HV1n; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93389C4CEE3;
-	Fri, 13 Jun 2025 11:44:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749815085;
-	bh=67C8SauhQy4UDCcOAF3lc1WX/+uxuBUuNm519MYFsJc=;
-	h=From:Date:Subject:To:Cc:From;
-	b=U5J4HV1ngFV03Nwvqb+pAc9sD31Mp9qvuZ+EGB52Y6jF/3OC7/HfsjDzu4k8i+Soe
-	 FvRsQ2iRGAN9oFXErAmU3anccqP0S7a6bGyg0Pl1fciAyaZrLdCjduIGlrMR3Grni1
-	 xdUoHg5UJQSqLtaoKFyrhefka+A0FnGjaJeKFN/ssjB0I8ZePHTS9pS3wWYcBKv/hj
-	 itJAjs45025+JsvzDANFT5Rue+VygzqJz0kPG7thfQH70VvyA8U3Czj6btyfFqfTuL
-	 w0nDZq+GvPC6sRzi39c7ZW4JmxfF27YrpNk+8YqAOyZ3CXTGlzfrQnvAaL2nMFypxD
-	 JXr0I5HxGxfGA==
-From: Mark Brown <broonie@kernel.org>
-Date: Fri, 13 Jun 2025 12:44:07 +0100
-Subject: [PATCH] selftest/mm: Skip if fallocate() is unsupported in
- gup_longterm
+	s=arc-20240116; t=1749815263; c=relaxed/simple;
+	bh=MbH/V0zkr2sli1gLu9DPU1YWefSRpayxt4a9hARNQiU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KURyvPgy6mZSpFpdrZGvLm1Js+TxP9Dnx3nrNncsdeXYLqjJxPnyvpv4f3lofWeGbQpcWNANrnUzL1BcfQYNTyGCiFGLRryCgbiEN/SxHvjk7/WUCb9D/uTGYu7usPmpRN8j+at28sqY1PSTrz1vRnVLadXr0IhplBCdMRp/Eu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=1SISVv9d; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=CKlPFkLt; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=FKmWNUBy; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=3oLHDDy5; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id E52C71F394;
+	Fri, 13 Jun 2025 11:47:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1749815254; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8jUmzKR2PgiTUl+fyEUA1uAgwr5Zet9xJNASyseI9vw=;
+	b=1SISVv9dteZgzGJiifRQDarurWF9yFvIwDOXgbPPeC449hAzI1B89FB7mGzobuhjYDwmA/
+	mXMTJbjTpki15xcJgrAGcTDi2e6tRKbw7H3btzU0fNu/nOCA6aHCpxH/imLJzD9tqoziD+
+	i0BVpJOyNAPjZvrD9bNOkRzZ/2ZbLT8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1749815254;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8jUmzKR2PgiTUl+fyEUA1uAgwr5Zet9xJNASyseI9vw=;
+	b=CKlPFkLtYgsttllf614dMjYJ2coMEyqfbpyo3ASLtt2aPdFdDvUA7mNExkuPacWmTdyQLj
+	TwqcjnjPze+QGLAg==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1749815253; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8jUmzKR2PgiTUl+fyEUA1uAgwr5Zet9xJNASyseI9vw=;
+	b=FKmWNUByq4uF6vnRjwYaGltD0yi2P8z+HRb8OYu8Pd14//OEoGNUnvzLImvh+nQUE/JeNy
+	27tuXwf4gcrd0esW/Drv3hiYcXRDm7BSOBarRgY8q88WwaPkWcEPAXp/Nqz67Mm3aycIK0
+	XGU+BJsFSlwmXlosO678ber0Nndw4Bo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1749815253;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8jUmzKR2PgiTUl+fyEUA1uAgwr5Zet9xJNASyseI9vw=;
+	b=3oLHDDy585ymk01U+s9dkoFFG6VHOBrv/RNfVPidXBjofC/pkqn0JFWL68DwRpNSD3EUNO
+	SarwdZcKSK0ck2BA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 1340E137FE;
+	Fri, 13 Jun 2025 11:47:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id +cGaAdUPTGhXZAAAD6G6ig
+	(envelope-from <pfalcato@suse.de>); Fri, 13 Jun 2025 11:47:33 +0000
+Date: Fri, 13 Jun 2025 12:47:23 +0100
+From: Pedro Falcato <pfalcato@suse.de>
+To: Dev Jain <dev.jain@arm.com>
+Cc: akpm@linux-foundation.org, Liam.Howlett@oracle.com, 
+	lorenzo.stoakes@oracle.com, shuah@kernel.org, vbabka@suse.cz, jannh@google.com, 
+	pulehui@huawei.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	aishwarya.tcv@arm.com, broonie@kernel.org, ryan.roberts@arm.com, donettom@linux.ibm.com
+Subject: Re: [PATCH v2] selftests/mm: Add configs to fix testcase failure
+Message-ID: <y5nwqrtlph2fzuyhiivsnnjjcnoe3gmzkrfcyyz2q7ezeduga7@7fzae7nfrxr4>
+References: <20250613034912.53791-1-dev.jain@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250613-selftest-mm-gup-longterm-fallocate-nfs-v1-1-758a104c175f@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAYPTGgC/x3NywrCMBBG4Vcps3YgCbaCryIuQv0nBnIpmViE0
- nc3uPw25xykaBFK9+mghj1qrGXAXiZa374EcHwNkzNuNos1rEjSoZ1z5vDZONUSOlpm8SnV1Xd
- wEWVnIfN1cTeIoxHbGiR+/6PH8zx/0+23KngAAAA=
-X-Change-ID: 20250610-selftest-mm-gup-longterm-fallocate-nfs-21ef54627ef2
-To: Andrew Morton <akpm@linux-foundation.org>, 
- Shuah Khan <shuah@kernel.org>, David Hildenbrand <david@redhat.com>
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.15-dev-c25d1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1499; i=broonie@kernel.org;
- h=from:subject:message-id; bh=67C8SauhQy4UDCcOAF3lc1WX/+uxuBUuNm519MYFsJc=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBoTA8refSwnoxdJb+107nNprcOEDsjz4KiGYmcVQTM
- W1F/HCmJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaEwPKwAKCRAk1otyXVSH0FtkB/
- 4+8N5ND04NyqzZJemY5vFK3k75oeTztrRfRyyZ3JvwmcCNAyZZ/S2SYtMfxJCnFaRVBCCrLG3cS6oD
- zS7FYy6q384+Svt1Eu6qfqAFTZrRXA1Dt+fdXTTEsAcYZk5lzEYMhRn+Pkw5E29gEYcSJp/LVAw6zz
- 37lA18qLoghB7nm3ndxqQdW5Ip+DPFq1ZKSo5Gtm1NntVlVFb0KvEcYEOr1n2jTO3HIvEmDkVa9d+6
- lj7pH6N8b3KQR/TaopssA/UlZovbnNeS6DH+1AaDd9szj+rW5yfQKQ83WoEQ8ozXn6/Bbs+v5aBP3+
- zcDOiUi+Df9d7jjbqpT2NDIHX+F5ew
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250613034912.53791-1-dev.jain@arm.com>
+X-Spamd-Result: default: False [-3.80 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	MIME_TRACE(0.00)[0:+];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	MISSING_XM_UA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[arm.com:email,suse.de:email,imap1.dmz-prg2.suse.org:helo]
+X-Spam-Level: 
+X-Spam-Flag: NO
+X-Spam-Score: -3.80
 
-Currently gup_longterm assumes that filesystems support fallocate() and uses
-that to allocate space in files, however this is an optional feature and is
-in particular not implemented by NFSv3 which is commonly used in CI systems
-leading to spurious failures. Check for lack of support and report a skip
-instead for that case.
+On Fri, Jun 13, 2025 at 09:19:12AM +0530, Dev Jain wrote:
+> If CONFIG_UPROBES is not set, a merge subtest fails:
+> 
+> Failure log:
+> 
+>   7151 12:46:54.627936  # # #  RUN           merge.handle_uprobe_upon_merged_vma ...
+>   7152 12:46:54.639014  # # f /sys/bus/event_source/devices/uprobe/type
+>   7153 12:46:54.639306  # # fopen: No such file or directory
+>   7154 12:46:54.650451  # # # merge.c:473:handle_uprobe_upon_merged_vma:Expected read_sysfs("/sys/bus/event_source/devices/uprobe/type", &type) (1) == 0 (0)
+>   7155 12:46:54.650730  # # # handle_uprobe_upon_merged_vma: Test terminated by assertion
+>   7156 12:46:54.661750  # # #          FAIL  merge.handle_uprobe_upon_merged_vma
+>   7157 12:46:54.662030  # # not ok 8 merge.handle_uprobe_upon_merged_vma
+> 
+> CONFIG_UPROBES is enabled by CONFIG_UPROBE_EVENTS, which gets enabled by
+> CONFIG_FTRACE. Therefore add these configs to selftests/mm/config so that
+> CI systems can include this config in the kernel build. To be completely
+> safe, add CONFIG_PROFILING too, to enable the dependency chain
+> PROFILING -> PERF_EVENTS -> UPROBE_EVENTS -> UPROBES.
+> 
+> Fixes: efe99fabeb11b ("selftests/mm: add test about uprobe pte be orphan during vma merge")
+> Reported-by: Aishwarya <aishwarya.tcv@arm.com>
+> Closes: https://lore.kernel.org/all/20250610103729.72440-1-aishwarya.tcv@arm.com/
+> Tested-by: Aishwarya TCV <aishwarya.tcv@arm.com>
+> Tested-by : Donet Tom <donettom@linux.ibm.com> 
+> Reviewed-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> Signed-off-by: Dev Jain <dev.jain@arm.com>
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/mm/gup_longterm.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+Reviewed-by: Pedro Falcato <pfalcato@suse.de>
 
-diff --git a/tools/testing/selftests/mm/gup_longterm.c b/tools/testing/selftests/mm/gup_longterm.c
-index 8a97ac5176a4..0e99494268ed 100644
---- a/tools/testing/selftests/mm/gup_longterm.c
-+++ b/tools/testing/selftests/mm/gup_longterm.c
-@@ -114,7 +114,15 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
- 	}
- 
- 	if (fallocate(fd, 0, 0, size)) {
--		if (size == pagesize) {
-+		/*
-+		 * Some filesystems (eg, NFSv3) don't support
-+		 * fallocate(), report this as a skip rather than a
-+		 * test failure.
-+		 */
-+		if (errno == EOPNOTSUPP) {
-+			ksft_print_msg("fallocate() not supported by filesystem\n");
-+			result = KSFT_SKIP;
-+		} else if (size == pagesize) {
- 			ksft_print_msg("fallocate() failed (%s)\n", strerror(errno));
- 			result = KSFT_FAIL;
- 		} else {
-
----
-base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
-change-id: 20250610-selftest-mm-gup-longterm-fallocate-nfs-21ef54627ef2
-
-Best regards,
 -- 
-Mark Brown <broonie@kernel.org>
-
+Pedro
 
