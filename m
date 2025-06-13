@@ -1,67 +1,67 @@
-Return-Path: <linux-kselftest+bounces-34898-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34899-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF173AD8A89
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Jun 2025 13:33:29 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0E88AD8A8C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Jun 2025 13:33:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1CAEC189EBDF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Jun 2025 11:33:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 426687AD24C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Jun 2025 11:32:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D83782E6D23;
-	Fri, 13 Jun 2025 11:32:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52E622E762F;
+	Fri, 13 Jun 2025 11:32:05 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E56FA2E62B2;
-	Fri, 13 Jun 2025 11:32:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F7622E6D1A;
+	Fri, 13 Jun 2025 11:32:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749814323; cv=none; b=rq4YZU2XRSQhzN6U7Hpb0OfWXgE/r0M/xipHxRaOE/wk+CuJteGfAgLTuDxX3v6vnI2s4kxS9X5zCtsIteRSp+sxirHtM/K5kLuPEf4JEpIZSdd9a3gp6T3pWjHvWqnRXPPrM1feCxen/WghTObce0ELBXmwqIHQAz7GCEZFV4Q=
+	t=1749814325; cv=none; b=moUfC6OfCrrbGzSqoeONcrmxbPj5CnBSyVKoAp6dRWXA28Arv+JwiY1IEdvZ6paXErCGoJMCQ28ALE+vzz1+N1HODfs4gEA9sP4eI9XHcpn/JJNEGqgGVje/d71wo7kMcM/NHL2450W4dNRHD4QfG+kLb96nS9gz/MB2iIxClts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749814323; c=relaxed/simple;
-	bh=v2AyUbx52O1gs/YWNE9pnzapy576jxcuy3r269njaSs=;
+	s=arc-20240116; t=1749814325; c=relaxed/simple;
+	bh=8fFTCY2/FkrInRH57zGLYtSnBzyGpWeIyz40n/hRaYA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=AGdX+T3GKPjzRvX0oxFIZWlbpdcx2pyCp4fYPBsIH1EiCTS3ICi7ej60caD3WsYQUG3dX1vyegL8VQzI8y+DUEG3bYicffIRyAcFWiVUURa6mumFt4E8j984TxqgbzyBTUUy8PGESHqpsoLp+zXnCkxwyQev/DzLDb3t5/NSMTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.43
+	 In-Reply-To:To:Cc; b=oYmw/1V8hkDIH9eEyqvzGm2FVLjJ+DjsBXDgAEHE7xeNun+5Y0eZq6kSqBuj28njyGlcQBvDOnoWwieQbU9T6kSAifJXtKFOWWIW13yJQCXnkNaohUU9GeWwSvf/M1iVdTM9XXv76K8pwkLC3B8iOcprLTdzRx1tgfnFjkFWwkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-60794c43101so3252999a12.1;
-        Fri, 13 Jun 2025 04:32:01 -0700 (PDT)
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-ad89c32a7b5so322239666b.2;
+        Fri, 13 Jun 2025 04:32:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749814320; x=1750419120;
+        d=1e100.net; s=20230601; t=1749814321; x=1750419121;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VhEBmrSyNjBmM6vK3z4Rkzv0tIsdnlSn/AelZ3lrD8Y=;
-        b=pPAdZlf7i9hD7bVipdyez+OuTQ711kvHHNFsOj/IIMKjMAoV+0EEL32XiaJTv4P7SG
-         uTMN8sLR8f+hgoPPrMNNol/S8WkPkcZ9NqSj8r/re+DF/fpGAZyTHMGn/nrPhY+0k3zv
-         cQ88iYw2EEsPgUKoaZVMqDOXIG7LY3O9zVsO/r03AaCtrGQbdyZeOO8qulhNKvKMKTiY
-         atH0aC/AZ4ln/D4o5h8uui2q0TqKsIuqF43mWg5sEoP2HNdyDOFKJgz2yfJx+oOJK87a
-         jgx22yZuX7mrKEATGJnmYTcUT0daA/39nqNrv/5/0k7X+tFAvPMDHwmhYCXypi5i1wS3
-         YBtA==
-X-Forwarded-Encrypted: i=1; AJvYcCWd8q3x20nWuIEcMvCckleaRqLnTsLtkz14F4Rs7ONLTPnWvVP/lNjTiMW5MTQFu1FqAb7nkzeUbjCKNJw=@vger.kernel.org, AJvYcCXrW/LiwnI4tzKFIp8W/IToNK1CXJ06PbCU6BJVMErhNojEo35apt+ayDQZzEmBOtncPsI4pKq0tXMU27X6uKvQ@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzz/X2yZu+6ryNEBto5+TiKfFHES8pf34tgLJ9jiLkkPNppz4EH
-	7BOgWOnZJmuBwIeatA6N62atH6X/CU2rtOARQYjgl4Q6YnE6Ma2GMMv4pEiT6g==
-X-Gm-Gg: ASbGncsfh3cDriREymGbX/VYnsxxNtS9LorarJosNbgi3wDIUU9+GAp/HvSM68TY5kz
-	LeB/Y+V5liUZcCKVsOUWwAJiTlgedaH2IfQEUBFCdFtomnJHJt2WpkOByKHhyJ5w2Aj3nnKygc7
-	CHcM/SrKabX/MLCXBFmsRg1K+D2TPP8wQITmSWLy4540JXddi+TvEt7DejY/sSyYppQteClCY5B
-	cGW+yzUXeuodUH3/tZuQL2OoSVDGcijYE3aYTHsFqnjW7NoeoGMOqr9PmhbGzWBk4pQOXeBhKm9
-	UDVJYXok6zvHQuU+W8U5oX0L/o2irOqocQx05WmaIs2UZkwsGgGp
-X-Google-Smtp-Source: AGHT+IGH29MsGdsyDdX2Z8TNZrZNaJjZsWSLiareYRl29R+I89Y9mWSZZ5fiCjbE615gBy3lWvD7EQ==
-X-Received: by 2002:a05:6402:51d3:b0:608:48fc:ff73 with SMTP id 4fb4d7f45d1cf-608b4a15e54mr2305491a12.26.1749814319839;
-        Fri, 13 Jun 2025 04:31:59 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:5::])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-608b4a5ac30sm1094772a12.47.2025.06.13.04.31.59
+        bh=P+IbNQVCy4OC057F6g21qa7ouXuJTn2/HEWvlOhb4a8=;
+        b=VYkyMfGIFMdf9TXNYQXXXNqkbEtVDDNR35pH/FLvOY+CRmk18hN47MQBi4iIgTHjV+
+         FYlma7bvXUTVHfLG+d0aEsqXC8zuP7OG1km3kQexX0tX3/0ClvUuzLnhU44Bt5maCsi5
+         dYRpdtzhWfz8lXmfT0+e0a3Oc+dtjvPr09jEUrl5r4egYHqG9wnZXic8NDooir6Xlbo4
+         riQnXbM10pSqP/ZOJqmaXOG6Pkh5Gy6NghiHqen7DNDW41I0+GX01v+ghmxk0r2ytAOE
+         BjXpGeFh7F0LUDnpehWBQ3Rbxw7XeJVaxEv6o0lP/+cGQeg8moG6tmC5oR+peI5Zu9BX
+         ZWiA==
+X-Forwarded-Encrypted: i=1; AJvYcCV93WZaH6LkqpQ3mW1JQp55bX9O0X3GgcT195QzBW8pTO/VY02VqsEZIb+ZDmapfLKuORoTTmx5/n1F4eg=@vger.kernel.org, AJvYcCWt2TBm3mCRzPKK7lFZO+eHjU0Vky/zv82axKtWmNOXc8rTst+JjSiUN2P5nqq5tQWOEZ0FOZhbGU80XL8YuqPp@vger.kernel.org
+X-Gm-Message-State: AOJu0YzG4kk1P6bhJV5Q/Wk/a5LHvqUOAT/dOWyPiZSnAUusL1ljG3LL
+	uX0KNXwoXu6wjm2+xVu5e8HZllC0pb8dSkYCYdjUwQPSTArOdfm9uGhdXxnXtA==
+X-Gm-Gg: ASbGnctBuoIOEiF11yLWBXIAsN3ysEaVkKLKBKOeOwolDCLOXv0ZH9JbWSkUfRSt/qe
+	+DVuaTnunMpIpO3MJ5mL06ubMRrzPvRh5Uh3HFxtAQRl1409wUD/beldQQlS3VPhjHZzYh7AkWR
+	I/a/W/fjZ8L38n2D9eoq03wfoNMcy1rjgD/8hyc0Cmd2eNKHL/I1wKRljCiYxOd+IQEx2v+pSvY
+	IgtEXa1gp+wv+hU+9T0du1WoCqzHK2lEc0oix2VLXzQCxhmLzMiMY78fEC3XxNWXAi6ZezX14yi
+	b1ANgd3Za7C4DJfWFiapebCNd+XjrCFyWTTdOGUuELcOwwSTmwsW
+X-Google-Smtp-Source: AGHT+IHZxUVFmP4e15j+pA6R0kuoGa5hkFmV3frmO9LeCWjUF36fXXCmwGK7yWRxeqDP5HoAv23V3w==
+X-Received: by 2002:a17:907:7faa:b0:ad8:85df:865b with SMTP id a640c23a62f3a-adec5b9b856mr243340466b.33.1749814321196;
+        Fri, 13 Jun 2025 04:32:01 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:4::])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-adec81c5be2sm115161766b.64.2025.06.13.04.32.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jun 2025 04:31:59 -0700 (PDT)
+        Fri, 13 Jun 2025 04:32:00 -0700 (PDT)
 From: Breno Leitao <leitao@debian.org>
-Date: Fri, 13 Jun 2025 04:31:35 -0700
-Subject: [PATCH net-next v3 6/8] netconsole: improve code style in parser
- function
+Date: Fri, 13 Jun 2025 04:31:36 -0700
+Subject: [PATCH net-next v3 7/8] selftests: net: Refactor cleanup logic in
+ lib_netcons.sh
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250613-rework-v3-6-0752bf2e6912@debian.org>
+Message-Id: <20250613-rework-v3-7-0752bf2e6912@debian.org>
 References: <20250613-rework-v3-0-0752bf2e6912@debian.org>
 In-Reply-To: <20250613-rework-v3-0-0752bf2e6912@debian.org>
 To: "David S. Miller" <davem@davemloft.net>, 
@@ -81,87 +81,78 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, Breno Leitao <leitao@debian.org>, 
  gustavold@gmail.com
 X-Mailer: b4 0.15-dev-42535
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2089; i=leitao@debian.org;
- h=from:subject:message-id; bh=v2AyUbx52O1gs/YWNE9pnzapy576jxcuy3r269njaSs=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBoTAwlIooOP45UEY2HVSTsbcD8RnHx7dcZUWtxV
- gqFjDJ2xWeJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaEwMJQAKCRA1o5Of/Hh3
- bbdiEACS/g7tKfAyDBTbIj4y+smtuGhcwZyV0W/+GtbSa4/wWam6hfKrF0cQ4kHv6UH74HLEMJy
- eAY0RevLzAzHrmoEn27Cn3wBUu7z0fG0L7vNlzjyieukr/zrlNgRNi+pPzJew0let1KfUmWmwI8
- fs1URPU1inPRhNrEWfVUGQ1lZ1iCFqSyNKNqecmUooN6qzxODq19vGrzx/SMW4WfJcQH6qQBr9K
- JHj775AYiDXuA4Y9s1BCJKnDL4FWtvrpw7L58VyfpVShVy8AhtQl4YJ66O5BlsfRvhG9v5n5/eY
- MmQTJKL+KX2n754YoQG6pBaqKAhXF52hcq+h73nRidSAMfQAsBFoYx9tek58T6zc6k/CsH9IU9K
- dPDntS9YRs/izbYvYtURfgqAZM81SuG93KgdNC99FOpDeNbv51T2G3GVfYGWyOq9kFL4pbE6JS9
- WnUUZQRc2BHnriGHpx2fqkKW5njeltGIcf0whrB1A4WRWbdEIF2xn3XogdZv0jOnsRInaSHdsmW
- qT1Yh8fVNI7fHmsEQ0dsvo7o2yGGv2drILYL2SWQUCNvQiFsuHl+kAL5KfnC4RjY2cAAM/g77Tc
- WhuPT425pxp2MIw/nk3JBvJOmwJ7B05gsox5zu5en7mBHOy5HRXgpY+sDz6HnIJhkyvk4r/ult5
- p1JUexOnJo8eSrA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2032; i=leitao@debian.org;
+ h=from:subject:message-id; bh=8fFTCY2/FkrInRH57zGLYtSnBzyGpWeIyz40n/hRaYA=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBoTAwl5fiSjY+nxre8eeQLZ58PIHIj//vLU5cLE
+ +V4A7iVKqmJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaEwMJQAKCRA1o5Of/Hh3
+ bbFTEACKLB3raaOhaopyolqpWYgr8LaJt8mbiTlmLtiDY9JUsvgO1FNrGj+pJKW8Bbr4SgKE9BM
+ Iv28gSzrX2MFdwSzl0v8Jb2nBVPZ8Qrwalo7Ytd6NjJSb68OPT7Q5XKd96I4+bg49+qSZq7R1o8
+ hiLaHGcdY+UUt1uJTqk9Jtd8jI50yfS7+l5omic+gGTZWhzEH3cimOLTxAUybPS01hlpRVz+Any
+ PuEf3EzY2UZcjIwSCy6/8GYz46Bk6PXw2Xfj6rVBY83snAahDWewklnkEA9Nu28WCA45Sr1LoDk
+ hqFcpxvC5nuUKo8fbLYP78X6Lsl+p95vyKXRWHX90Vt8ZrzwqT/q0PvL3U89N7d3yjvFmZzgRTa
+ gDd3Q3sf0qZE1zyXvofdh6zEwWEZuOUzsYUjuAYoCHEFaHDPAB9u11nM2CVfDYgXVUR3zkZyhVK
+ S7anzHmIOXZj3KVxcF1Qnb/GXsnwOBqZpB1OyQrH0UpWg3oSucIyhmHzWjkNmqHUWwKtaWkH92m
+ DNn6B0e/y6A9YVwxpn5MyxynWFAsL26YOIJKYic9sGafED3SIeyxX43X6WmT+SPMZlG0HfBIi21
+ QZUhqsdYzEG9hRPP3GqxdOqbytkncXbqSd+/RuxCv+i4GoBf1pyPzjT4ENx9Rl/Kxx6Q42VNJ8E
+ 0cgqJ05TCMj4B+w==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
-Split assignment from conditional checks and use preferred null pointer
-check style (!delim instead of == NULL) in netconsole_parser_cmdline().
-This improves code readability and follows kernel coding style
-conventions.
+Extract the network device and namespace cleanup logic from the
+cleanup() function into a new do_cleanup() helper in lib_netcons.sh.
+
+The do_cleanup() function only unconfigure the network and
+printk, while cleanup() cleans the netconsole targets plus the network
+and printk.
+
+This refactoring let this code to be reused in cases netconsole dynamic
+is not being used, as in the upcoming patch.
 
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
- drivers/net/netconsole.c | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ .../selftests/drivers/net/lib/sh/lib_netcons.sh      | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
-index cc45ec18848c9..89afe127b46c9 100644
---- a/drivers/net/netconsole.c
-+++ b/drivers/net/netconsole.c
-@@ -1704,7 +1704,8 @@ static int netconsole_parser_cmdline(struct netpoll *np, char *opt)
- 	int ipv6;
+diff --git a/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh b/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
+index 71a5a8b1712c0..598279139a6e5 100644
+--- a/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
++++ b/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
+@@ -128,16 +128,9 @@ function disable_release_append() {
+ 	echo 1 > "${NETCONS_PATH}"/enabled
+ }
  
- 	if (*cur != '@') {
--		if ((delim = strchr(cur, '@')) == NULL)
-+		delim = strchr(cur, '@');
-+		if (!delim)
- 			goto parse_failed;
- 		*delim = 0;
- 		if (kstrtou16(cur, 10, &np->local_port))
-@@ -1715,7 +1716,8 @@ static int netconsole_parser_cmdline(struct netpoll *np, char *opt)
+-function cleanup() {
++function do_cleanup() {
+ 	local NSIM_DEV_SYS_DEL="/sys/bus/netdevsim/del_device"
  
- 	if (*cur != '/') {
- 		ipversion_set = true;
--		if ((delim = strchr(cur, '/')) == NULL)
-+		delim = strchr(cur, '/');
-+		if (!delim)
- 			goto parse_failed;
- 		*delim = 0;
- 		ipv6 = netpoll_parse_ip_addr(cur, &np->local_ip);
-@@ -1729,7 +1731,8 @@ static int netconsole_parser_cmdline(struct netpoll *np, char *opt)
+-	# delete netconsole dynamic reconfiguration
+-	echo 0 > "${NETCONS_PATH}"/enabled
+-	# Remove all the keys that got created during the selftest
+-	find "${NETCONS_PATH}/userdata/" -mindepth 1 -type d -delete
+-	# Remove the configfs entry
+-	rmdir "${NETCONS_PATH}"
+-
+ 	# Delete netdevsim devices
+ 	echo "$NSIM_DEV_2_ID" > "$NSIM_DEV_SYS_DEL"
+ 	echo "$NSIM_DEV_1_ID" > "$NSIM_DEV_SYS_DEL"
+@@ -149,6 +142,17 @@ function cleanup() {
+ 	echo "${DEFAULT_PRINTK_VALUES}" > /proc/sys/kernel/printk
+ }
  
- 	if (*cur != ',') {
- 		/* parse out dev_name or dev_mac */
--		if ((delim = strchr(cur, ',')) == NULL)
-+		delim = strchr(cur, ',');
-+		if (!delim)
- 			goto parse_failed;
- 		*delim = 0;
- 
-@@ -1746,7 +1749,8 @@ static int netconsole_parser_cmdline(struct netpoll *np, char *opt)
- 
- 	if (*cur != '@') {
- 		/* dst port */
--		if ((delim = strchr(cur, '@')) == NULL)
-+		delim = strchr(cur, '@');
-+		if (!delim)
- 			goto parse_failed;
- 		*delim = 0;
- 		if (*cur == ' ' || *cur == '\t')
-@@ -1758,7 +1762,8 @@ static int netconsole_parser_cmdline(struct netpoll *np, char *opt)
- 	cur++;
- 
- 	/* dst ip */
--	if ((delim = strchr(cur, '/')) == NULL)
-+	delim = strchr(cur, '/');
-+	if (!delim)
- 		goto parse_failed;
- 	*delim = 0;
- 	ipv6 = netpoll_parse_ip_addr(cur, &np->remote_ip);
++function cleanup() {
++	# delete netconsole dynamic reconfiguration
++	echo 0 > "${NETCONS_PATH}"/enabled
++	# Remove all the keys that got created during the selftest
++	find "${NETCONS_PATH}/userdata/" -mindepth 1 -type d -delete
++	# Remove the configfs entry
++	rmdir "${NETCONS_PATH}"
++
++	do_cleanup
++}
++
+ function set_user_data() {
+ 	if [[ ! -d "${NETCONS_PATH}""/userdata" ]]
+ 	then
 
 -- 
 2.47.1
