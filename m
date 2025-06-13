@@ -1,172 +1,170 @@
-Return-Path: <linux-kselftest+bounces-34903-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34904-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC6EEAD8BD0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Jun 2025 14:11:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 868E1AD8C73
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Jun 2025 14:48:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A0C1A17B1F0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Jun 2025 12:11:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2E09716D3B5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Jun 2025 12:48:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 582CC2D23A3;
-	Fri, 13 Jun 2025 12:11:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="Ov/9AN5N"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BE9179F5;
+	Fri, 13 Jun 2025 12:47:57 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A3F0275AE2
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Jun 2025 12:11:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4854B1862A;
+	Fri, 13 Jun 2025 12:47:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749816706; cv=none; b=mDLFwbeKtqKRL6WM+nRbpPJaNVhm4JzyMIiPQKtCdqu34ePEXwAtnq4U7TCLNYS2TexYbyhj7TCUBrPVvJNzf2qaKYQpyuyJb+HtW9iKUwPmrQi8Ft486IaW+AsdZH3t5DltCw5sU51JjXvBQKR7jtj77y+rbLStc0jJNcqsGkM=
+	t=1749818877; cv=none; b=L+EJ8CLObN0Dh+9zJWNFmxrBA5E3Hu3sYVms/EzPEuXRN5IgWgwXkNnu+sX7i1FOj27JaUKQGVmYYs/CqVYzAy6BxcHG7InNy3IOV5mv8lW3KHur1Vn6/+O7coACAEhIQjhxX++jOih0Le6EIZwWmPmcX8MDK2YqdOYMEjopFXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749816706; c=relaxed/simple;
-	bh=PCmyTvAo0Y9E5L3Vm9scl9nxwaWyZ/FjeUDc34zHLvI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bZkVO50Cl2QVuDFP6F29Z1hw/IcnI99JKbTL638SJ0M7Dts+06bxNYXomU5ONIZmVm8YlY6AC/wM0nw+pEI9RcY7mmWRQ11Q/lRH3XVhy5o2zSRQBpmqcE4SG2dwegMEy9G+iKnE6XtbNbTrFEIofncwqGEoQi3iVVXJTSt7IWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=Ov/9AN5N; arc=none smtp.client-ip=209.85.167.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-407a3c0654aso1314877b6e.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Jun 2025 05:11:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1749816703; x=1750421503; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SsOlh25eLPnAb9J/+yH/D8rpShrHOWsq5A94rPdZuNA=;
-        b=Ov/9AN5NpLmzXdI4yon0O4Y/KxRCiFKbzEtV/4t3NT1t7skYjeGBThYV1yWthkcGsx
-         WVJd+hU4R7VPHZzsOsDWS2g0g8Y6CFX+I8U2wMXx4vwXzDuzk2I4QIstnMqppndMabmU
-         hzNtrKJZrSpXLkwdPGh9B0LcMVfNqQkVze4bkqaHeAO0Rz8HQC6jjgDt8zMOeW6Tkexq
-         rSgOf9O7vhnwBfz+e3YtvYe4uiHgIeOrFsKV3Tghv8KWZncwWdp2glvda302Gnz8K1sh
-         GBrNmxNayLiaOZ9GFtYkAssIIkaIPNfKPjRg3FC7raiAycLmXdWYLZUCLb9goL9fLvx8
-         XAog==
+	s=arc-20240116; t=1749818877; c=relaxed/simple;
+	bh=ezXY3qXnquNhyaHYxBN/76XTuscB/Svb9cb+gsY3Hzk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EjUYsct0aUc85Z9BoBlLKa5SSOV5H8NTbE4+ZCNDmSlXQ0esKm9IH9+1M8cg1HtsdqO8DtgPx/PDw3ztP7ObjL9anFSxvtVnI1nHnicf8GPTqR+m/zWkz8UnJx+U1OrRnG1HJuIO88vZZD+BlafbyN1EIRwmpR+CBKRKbPe4xfM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-60768f080d8so4081962a12.1;
+        Fri, 13 Jun 2025 05:47:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749816703; x=1750421503;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SsOlh25eLPnAb9J/+yH/D8rpShrHOWsq5A94rPdZuNA=;
-        b=AOPIiDBZOkXlvxhuMiy3CFQn4aAMjx2HcLmbZg5oywUycRASAwKTkhFT26OejFL9sV
-         QJT9RkVf+QUuJ5JahJ4Sbozfzd9UtJN6/Jr4xZCU16g+upkRVQIAhFung9o4410bwpWA
-         J0R/ERNYWspYWKbmInVu9dTxf+GTuDWJI37UwIAK0/ItrELV1M0fuxWKCdsNS2IVHHKG
-         jOoLDofqrzJQht5odp95xNl6ilRBtk6vixoBTdnpgoHv2s9OVQ90gNZhFW8ikkttrKF2
-         iKhG1TDMFBc8ldzhOnpaAS/mg1Flr6m0tJjj3N3wXDTBvn+NTi5o/YlHJ2j3cYIoXTLo
-         G9Bw==
-X-Forwarded-Encrypted: i=1; AJvYcCXIceOH7beknFn/km3vTiNB7zoZ8hzeCW1j2tTinfgPmSfGzaUMdz22+uJvcplYUvQLaATxFcenXFTaF6ey+Qw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJkKaYJ3i/PnhjuxwgN8A9rDkPWV6I4SmVdNYAArQUnjPwZDGX
-	jWfwPTNRpTLNoePQpeD6O+/jIzDysXz38EvtB9dXKJjfIZWAQUW5FrtrZDr7joqg20OpvWo/vrQ
-	ivgm6gn2XbAaQ+eLsMD3ciKs0X5z9MYyIYNvZU9yRNUEFsCfcfXFPkD8=
-X-Gm-Gg: ASbGncuGN5e0tQO+DIxX2/ye1pVUTK8LMFYnJO6Aa6BqGToqksstGl8B14vpbxBjjCw
-	tEF0TYe/JPJi11Uwbfof9Of6XHhyYI0AXyJiTKGfdOjaGc+e+T7ArkhbRFNLMe18cJIJ/kTABAw
-	+9sZpT+Rg/EZmGXFIRITsFZyb+ZOZkPwKaVZP2VivXDNPE
-X-Google-Smtp-Source: AGHT+IHJC1Pv5X0E431WwxEhgIgJc8iiqdlIrKoTpZ/T0clkN02QwfmvZZtxt0sqPjGUJGPFIV/xXPIH8smfAe45evY=
-X-Received: by 2002:a05:6214:2344:b0:6f8:b4aa:2a4d with SMTP id
- 6a1803df08f44-6fb3e604d8bmr40326486d6.31.1749816692043; Fri, 13 Jun 2025
- 05:11:32 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1749818873; x=1750423673;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+wHh4AEKR+VQShRFBc7WiyNVG6FHWDiPyckjUrWvfps=;
+        b=cwoXK8FqNYC1FFtRwnQdALPKxgvrMBcSAn7OrLchhvd2ReoHaWpxzA2v3rSeugdCCZ
+         KuXOpECDlt3GDWtYRe5ZEPpJAw1wAnllFeD9zQ6i3ZKEfbv/0rO+2A9eRzd66sZnhIr4
+         hT8NF4Se5ndk8VTEVVU36ewuYkO445rBsE+Qtv4x0GbK7mDImJPh3zXiJn+vnZoF/zvi
+         wijYB3Jwxs32t1RaCM/jvARFGQybz3Lwzf6i4iKpGGG8FbSdHD5YQS6pIEsljihbvexh
+         VXsjXofrxIyekkmaCgdfE4F1ooVcenulR5hjxxZWxOazpM7jMwemb4BGqxwyvJir/nYQ
+         53/w==
+X-Forwarded-Encrypted: i=1; AJvYcCUSsrZP/uXoi/JCHbHTlVWGWYT9r7lqvrBLhLVtlKtuXeKX0T9fr5VD65HEq5Zt7XbWqcHvC0UtmTtH+YFCXb7/@vger.kernel.org, AJvYcCW8q6TSBH8ugZxA6bLrM7gYPvk5NnRsFgu2wWVzk1EGeER3kAAw7g4upTHOTpFHkfLehfK/lycX@vger.kernel.org, AJvYcCXCjBEnzFJVKnPu7rnfEDTR2yKIr/nTazctAK9KKqCl4vbNV9sCBmtCT1sEXExcbxrKMAb1yZUOGFiuRYI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxRVI1fdj6QKYdX0c53Vsd5Nr3U7JMu897AplfYpV76vH/yvCOI
+	opwqVQXDw/Wn++R3eFS0YX6eYm62OmSlzrGS9NLD7Vq1sL8V/hJFjjCy
+X-Gm-Gg: ASbGncs/kJKPKzCnHBHDOlVB1XMeq4UOhZ8FVbC/F4w4qh0O4ZZPeazYHxnP48LYeJb
+	Z5xpRbgKRaBqJ+Z6DiVz7VG7NxiyazLuRW8B2qAFwsJB8tWUU1YYS/HL8ao3VCYf5vJy5qF6W82
+	pc2JMTPS3RdTbOzTyq5ipHAbVd/1ADUpzKRoMJTA/6jHiAy04hGhxcliAJ5wK8LyWQ2wl3l/aH0
+	Dy8tQjFL1SudRZqBv8hN6I1WLd7gIGvvRRUo6ji0xBoQwKF+Cw2FU0FkTuj8835CB8Q/YLJXAZ/
+	nbFxBqxaK08aNnJvu2H/AdRDaK2cdV19Ux2blrpaHQqtblMFWQZR
+X-Google-Smtp-Source: AGHT+IEq4rp5HuD75TmcVUsHuvmf88w/CqhBoW1iucFaZkCbfjFQ5I2ZG/geivWvMnTr6dTh72+hCA==
+X-Received: by 2002:a05:6402:40d2:b0:601:f3f1:f10e with SMTP id 4fb4d7f45d1cf-608b48c74b6mr2557695a12.5.1749818873294;
+        Fri, 13 Jun 2025 05:47:53 -0700 (PDT)
+Received: from gmail.com ([2a03:2880:30ff:5::])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-608b48a876asm1151392a12.4.2025.06.13.05.47.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jun 2025 05:47:52 -0700 (PDT)
+Date: Fri, 13 Jun 2025 05:47:50 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	ast@kernel.org
+Subject: Re: [PATCH net-next RFC] selftests: net: add netpoll basic
+ functionality test
+Message-ID: <aEwd9oLRnxna97JK@gmail.com>
+References: <20250612-netpoll_test-v1-1-4774fd95933f@debian.org>
+ <684b8e8abb874_dcc45294a5@willemb.c.googlers.com.notmuch>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250612200747.683635-1-jesse@rivosinc.com> <20250613-68a39013932d854741a41c4c@orel>
-In-Reply-To: <20250613-68a39013932d854741a41c4c@orel>
-From: Jesse Taube <jesse@rivosinc.com>
-Date: Fri, 13 Jun 2025 05:11:19 -0700
-X-Gm-Features: AX0GCFuHUtGMaKg3_RCQsNQ4SX_YAxCzufMbBr9KEFIhZ7lDuZSYG-Ra67cDYtc
-Message-ID: <CALSpo=Y1uq6zAJYgJOTnVxzaNMmms7-eVSF4U_Z2rJ1zNVU9+w@mail.gmail.com>
-Subject: Re: [kvm-unit-tests PATCH 1/2] riscv: Allow SBI_CONSOLE with no uart
- in device tree
-To: Andrew Jones <andrew.jones@linux.dev>
-Cc: kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
-	linux-kselftest@vger.kernel.org, Atish Patra <atish.patra@linux.dev>, 
-	Anup Patel <anup@brainfault.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	=?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>, 
-	Himanshu Chauhan <hchauhan@ventanamicro.com>, Charlie Jenkins <charlie@rivosinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <684b8e8abb874_dcc45294a5@willemb.c.googlers.com.notmuch>
 
-On Fri, Jun 13, 2025 at 12:53=E2=80=AFAM Andrew Jones <andrew.jones@linux.d=
-ev> wrote:
->
-> On Thu, Jun 12, 2025 at 01:07:47PM -0700, Jesse Taube wrote:
-> > When CONFIG_SBI_CONSOLE is enabled and there is no uart defined in the
-> > device tree kvm-unit-tests fails to start.
-> >
-> > Only check if uart exists in device tree if SBI_CONSOLE is false.
-> >
-> > Signed-off-by: Jesse Taube <jesse@rivosinc.com>
-> > ---
-> >  lib/riscv/io.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/lib/riscv/io.c b/lib/riscv/io.c
-> > index fb40adb7..96a3c048 100644
-> > --- a/lib/riscv/io.c
-> > +++ b/lib/riscv/io.c
-> > @@ -104,6 +104,7 @@ static void uart0_init_acpi(void)
-> >
-> >  void io_init(void)
-> >  {
-> > +#ifndef CONFIG_SBI_CONSOLE
-> >       if (dt_available())
-> >               uart0_init_fdt();
-> >       else
-> > @@ -114,6 +115,7 @@ void io_init(void)
-> >                      "Found uart at %p, but early base is %p.\n",
-> >                      uart0_base, UART_EARLY_BASE);
-> >       }
-> > +#endif
->
-> Doesn't this generate uart0_init_fdt/acpi defined but not used types of
-> warnings?
+Hello Willem,
 
-No, but it should have, I'll fix it.
+On Thu, Jun 12, 2025 at 10:35:54PM -0400, Willem de Bruijn wrote:
+> Breno Leitao wrote:
+> > Add a basic selftest for the netpoll polling mechanism, specifically
+> > targeting the netpoll poll() side.
+> > 
+> > The test creates a scenario where network transmission is running at
+> > maximum sppend, and netpoll needs to poll the NIC. This is achieved by:
+> 
+> minor type: sppend/speed
 
-> We need to put everything unused under the #ifndef
-> CONFIG_SBI_CONSOLE, just as uart0_read/write already are. Alternatively,
-> we can keep everything out of the #ifndef and export.
+Thanks! I will update.
 
-The problem is uart0_init_fdt panics if no compatible uart was found.
+> >   1. Configuring a single RX/TX queue to create contention
+> >   2. Generating background traffic to saturate the interface
+> >   3. Sending netconsole messages to trigger netpoll polling
+> >   4. Using dynamic netconsole targets via configfs
+> > 
+> > The test validates a critical netpoll code path by monitoring traffic
+> > flow and ensuring netpoll_poll_dev() is called when the normal TX path
+> > is blocked. Perf probing confirms this test successfully triggers
+> > netpoll_poll_dev() in typical test runs.
+> 
+> So the test needs profiling to make it a pass/fail regression test?
+> Then perhaps add it to TEST_FILES rather than TEST_PROGS. Unless
+> exercising the code on its own is valuable enough.
 
-Thanks,
-Jesse Taube
-> void sbi_puts(const char *s);
-> void uart0_puts(const char *s);
->
-> then just have a single use of the #ifdef,
->
-> void puts(const char *s)
-> {
-> #ifdef CONFIG_SBI_CONSOLE
->     sbi_puts(s);
-> #else
->     uart0_puts(s);
-> #endif
-> }
->
-> I think I like that better since it will ensure all code gets compile
-> tested all the time and allow an SBI console using unit test to also
-> access its uart if it has one, just because...
->
-> Thanks,
-> drew
->
->
-> >  }
-> >
-> >  #ifdef CONFIG_SBI_CONSOLE
-> > --
-> > 2.43.0
-> >
-> >
-> > --
-> > kvm-riscv mailing list
-> > kvm-riscv@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/kvm-riscv
+Sorry for not being clear. This test doesn't depend on any profiling
+data. Basically I just run `perf probe` to guarantee that
+netpoll_poll_dev() was being called (as that was the goal of the test).
+
+This test is self contained and should run at `make run_test` targets.
+
+> Or is there another way that the packets could be observed, e.g.,
+> counters.
+
+Unfortunately netpoll doesn't expose any data, thus, it is hard to get
+it. 
+
+I have plans to create a configfs for netpoll, so, we can check for
+these numbers (as also configure some pre-defined values today, such as
+USEC_PER_POLL, MAX_SKBS, ip6h->version = 6; ip6h->priority = 0, etc.
+
+In fact, I've an private PoC for this, but, I am modernizing the code
+first, and creating some selftests to help me with those changes later
+(given we have very little test on netpoll, and I aim to improve this,
+given how critical it is for some datacenter designs).
+
+> > +NETCONSOLE_CONFIGFS_PATH = "/sys/kernel/config/netconsole"
+> > +REMOTE_PORT = 6666
+> > +LOCAL_PORT = 1514
+> > +# Number of netcons messages to send. I usually see netpoll_poll_dev()
+> > +# being called at least once in 10 iterations.
+> > +ITERATIONS = 10
+> 
+> Is usually sufficient to avoid flakiness, or should this be cranked
+> up?
+
+10 was the minimum number I was able to trigger it on my dev
+environment, either with default configuration and a debug heavy
+configuration, but, the higher the number, more change to trigger it.
+I can crank up it a bit more. Maybe 20?
+
+> > +def check_traffic_flowing(cfg: NetDrvEpEnv, netdevnl: NetdevFamily) -> int:
+> > +    """Check if traffic is flowing on the interface"""
+> > +    stat1 = get_stats(cfg, netdevnl)
+> > +    time.sleep(1)
+> 
+> Can the same be learned with sufficient precision when sleeping
+> for only 100 msec? As tests are added, it's worth trying to keep
+> their runtime short.
+
+100%. In fact, I don't need to wait for 1 seconds. In fact, we don't
+even need to check for traffic flowing after the traffic started. I've
+just added it to help me do develop the test.
+
+We can either reduce it to 100ms or just remove it from the loop,
+without prejudice to the test itself. Maybe reducing it to 100 ms might
+help someone else that might debug this in the future, while just
+slowing down ITERATIONS * 0.1 seconds !?
+
+Thanks for the review!
+--breno
 
