@@ -1,250 +1,297 @@
-Return-Path: <linux-kselftest+bounces-35001-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35003-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2A99AD9AF9
-	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Jun 2025 09:21:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AD6FAD9B72
+	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Jun 2025 10:47:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7006516ED29
-	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Jun 2025 07:21:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 80995189B9D1
+	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Jun 2025 08:48:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95917246BB4;
-	Sat, 14 Jun 2025 07:16:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24E8D1E5B9E;
+	Sat, 14 Jun 2025 08:47:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="oPfpJCYl"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nJLyKtzX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2075.outbound.protection.outlook.com [40.107.236.75])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA0B2241674;
-	Sat, 14 Jun 2025 07:16:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.75
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749885367; cv=fail; b=U2hcuXAl+Cg3fG2lYPQLhbKFj9P1XGzqJKwF0ltILxSC/cbKHIdrOXtXTzJ0/V2tT9+sU89/J4pQjMGRO/R8+Jb7RPmM+wpq/mB+2XcKI7pcbI5s6hZOqt72XhiYfbh0Y+a3N+grKuDkfWgIv07ERQCGckJxC9MG0Vh2WWm3su4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749885367; c=relaxed/simple;
-	bh=gRLw0cJE+VEV7nV2K3jp28dfRu7beppzK1rx7d+susk=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=A9BhpuIX9S1k5AFaJ+dlgHGQagzdipYEWLez0zaAZM/619kebs7A0SkOnTHCa92MXMVEiv9EhFeWcorXVlvwnP5BYHR9Sam6P7UoI3zg+nXKzFJtBVyaICJRteQ6Fur8ZfqtGULFdv433MohbQZLCvIPXU2Ul15lE5CVgiV+OxA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=oPfpJCYl; arc=fail smtp.client-ip=40.107.236.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=AB+Wm2MSj2B4RHtVPcfp0VS1J+ePrxUU8IGJvNtm9CoLsRP4qrZjs/rImeoYWQ2L5LWNlVow9qSeBP+5BTewrzy2sud4Luv85dOgy0ndUZKHI7ejAx/BUx6yngV2h8JPXiq//Mdya/xofUMLaS+rY0KU+jbrr7enkmeK5LLI5kLD4XlQ2568cUY5cPWJjXC8XnXkIFvsXLyVO1nUzsX7u0jqnEPJimHxUFatoDKYnVIOOZSJkg69CiOUuBLBlhx3lLh0MMbuyfJqe1odMm8MLC1Ze9Vu4O8r9GLfYUVyNnHXtXG1dREHKv+BWWcmLmwNnhpl/RzDhmPBngU6FtmkgA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2qUPndBHX/DhgeFzfajcvPFX/HRcvZo+v9JzNaViI3Q=;
- b=V2xSVJS1+lDOMNZBik0lBTOWTisDxkpsGP5zuFMJ+2PKNGvLPRh8qOgLJW446WZGe1S59FEraZ3SzlEJwxZOQT2PpPqXL/oDSypNiGkmV92jYIb/katKu6VFAck0ULY2uksvXJbDiZlbob9rZVxvKfXt4cUhF5bIHszN343ygwnBnKm9n6gGrqSVbiMJBm6/phWh3cGsbqrstX+BLNpkXn6zSr65Ai8vXYGiflwzD5YdfGP2IQ4VjmlAd5uauIz9PTvAe6YOcYd8ddw0AM1XtjUgTfbOBQzXjMk9cN8uOwBUCbuovJpVEvAkULa4KwfD/N/bQa0QWPNUX0BHt1AIaQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=amd.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2qUPndBHX/DhgeFzfajcvPFX/HRcvZo+v9JzNaViI3Q=;
- b=oPfpJCYlw6FqrFIIKArbO6bYNJ734Eehb3L1TnwJZSHpNbETnhO+jZtV73uLgfV9KMHZ6WzvOMhoJ8S/t/lDwQ7hkhnZlf619LVBAy87ZXsXA4FDiQSxILqBwX2ZcUnQziELY1UYGDELbTnE9HSnwsV7Nnc6zt5PhX5QZSWPuqB+sAGkXtn3bCIe2AsTW9Kcqh5kIbZjMIuTuyzmaOyErUoWv/Q9VFxYQrLgXgQ88akRyiWafcnYPHnrfLpq70XNE9DPLlUOLMJTtedDO5LnhpD1CKsxzVJwFDafByUzWwtkSTIWFdJ1qsAAL20HiT4YsgaS4fOx9FULwXZvij8aPg==
-Received: from BL1P223CA0031.NAMP223.PROD.OUTLOOK.COM (2603:10b6:208:5b6::6)
- by MW6PR12MB9018.namprd12.prod.outlook.com (2603:10b6:303:241::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8835.23; Sat, 14 Jun
- 2025 07:15:59 +0000
-Received: from BL02EPF0001A0F9.namprd03.prod.outlook.com
- (2603:10b6:208:5b6:cafe::2) by BL1P223CA0031.outlook.office365.com
- (2603:10b6:208:5b6::6) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8835.28 via Frontend Transport; Sat,
- 14 Jun 2025 07:15:59 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BL02EPF0001A0F9.mail.protection.outlook.com (10.167.242.100) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8835.15 via Frontend Transport; Sat, 14 Jun 2025 07:15:59 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Sat, 14 Jun
- 2025 00:15:47 -0700
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail202.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Sat, 14 Jun
- 2025 00:15:47 -0700
-Received: from Asurada-Nvidia.nvidia.com (10.127.8.11) by mail.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server id 15.2.1544.14 via Frontend
- Transport; Sat, 14 Jun 2025 00:15:45 -0700
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: <jgg@nvidia.com>, <kevin.tian@intel.com>, <corbet@lwn.net>,
-	<will@kernel.org>
-CC: <bagasdotme@gmail.com>, <robin.murphy@arm.com>, <joro@8bytes.org>,
-	<thierry.reding@gmail.com>, <vdumpa@nvidia.com>, <jonathanh@nvidia.com>,
-	<shuah@kernel.org>, <jsnitsel@redhat.com>, <nathan@kernel.org>,
-	<peterz@infradead.org>, <yi.l.liu@intel.com>, <mshavit@google.com>,
-	<praan@google.com>, <zhangzekun11@huawei.com>, <iommu@lists.linux.dev>,
-	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-tegra@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <patches@lists.linux.dev>,
-	<mochs@nvidia.com>, <alok.a.tiwari@oracle.com>, <vasant.hegde@amd.com>,
-	<dwmw2@infradead.org>, <baolu.lu@linux.intel.com>
-Subject: [PATCH v6 25/25] iommu/tegra241-cmdqv: Add IOMMU_VEVENTQ_TYPE_TEGRA241_CMDQV support
-Date: Sat, 14 Jun 2025 00:14:50 -0700
-Message-ID: <35c3f8f83d6bf5544d3982619ff1d7919b67fc07.1749884998.git.nicolinc@nvidia.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1749884998.git.nicolinc@nvidia.com>
-References: <cover.1749884998.git.nicolinc@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BD8B1A2622
+	for <linux-kselftest@vger.kernel.org>; Sat, 14 Jun 2025 08:47:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1749890874; cv=none; b=Xsd7FYFkNYJouH59pKW7Zyls6ar49/A373ua7Amo/RJz0FhwLc0TJRVDZVOjMqPFeWLijIks2pzF2cj0eOiGSrCYO92qhG3YG+iuaBEnATviDSfx2Nbg14J4mCrP4+fZII+jae+yQ7dl60p7aF+vNuYbWrBqNDzUocDQNq4/AXo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1749890874; c=relaxed/simple;
+	bh=1zE5dRa2pTIbWgRSSsDZnGOGsw/ocPUokv7v0pIjIFw=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=qp2CeUnhexHBVS9An0CR+UOIkarnGAMUmZWJVk8spBnMs1fe0l4KDd3Ffm8w8vlLOpooXQDFCWITf8DDhqVcB/iMmOfDlVqSUF9MG6XPiRidWMG69yw4qGSBBUrDQEuijLEBWg2Q/LbWueW17gvaOOUZ10IsGliTSie1enVa8d4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nJLyKtzX; arc=none smtp.client-ip=209.85.215.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-b2c37558eccso2123494a12.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 14 Jun 2025 01:47:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1749890872; x=1750495672; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=UmexxkUsMlwsDUZqAJqCu3m0c/NmHuIKmfWQMr16+98=;
+        b=nJLyKtzXdgxjr5NMSb1YVwm47oslp0U6BdwXvPa5MS4CQ78l+hFqeYe1EYdgk2HDHX
+         OlJhQoxmRbwv0JXJZL2ttb37B64FvWBztxDuNsbkTvy+jWuYsBqOh2RasgiLhErgtunz
+         PGq3oPfah1e6qWIbok8LTQsM8FBYqnrdaHc9yUgUSGeksImr3WEWRYmPiWXiHzJvOyu6
+         Za945L5ILNh6SlFLFKVHKUeQO4jn/BrmHx7cUF7GZQFwNa7lMfIivH9BiKxaieKxUEjb
+         K/EHbT+nI3rnUFFpu9f2tW5QE0sKiYDorqIBp4pNRmTyqKXvPz0FWH7NYKYpAjCbatYA
+         IoXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749890872; x=1750495672;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UmexxkUsMlwsDUZqAJqCu3m0c/NmHuIKmfWQMr16+98=;
+        b=Y+M/pdb9dIeltz4jnIRXubwOz9xRq6jT0gbrhzQp1Le1DZcgbT5rtynF1O0TDWiOJp
+         xlybuMhgW2eW350PsWqBeM1QJFnP56igrjiklBs4uBtF+Ku3FgvFyI1BtlgsMuPzhLHF
+         PYy+/1EH0NUw8ttDhd3PsKk8MnAQ/WMrMx+9Xu/9MfxQ7KkGh/gVXXgVk09V7evmcQLh
+         lynAuRf9K0bE6gtdSzDMNTeweGIrOUTO/pEzEVKEuhusf2nVhbwucs0IzSbfXqkh8sSh
+         YCTMbG1DqYSXm4xiaHXVINbZH+OfLD+l65PbADDBH3o2umYrmaK447xkKPObrTyrOqzG
+         MjcQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVKvEzWV/pS/gZsqXKSteOuFEIITchBryOX/BZy5YW2xTdn/iSDMVQ8FXimSwRk2cKpyLy+Y8kcj2m/H5QhGZk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxW7ISz8tyRyryjeFH/KTlQBFQ6YIJ3LqqrXZJmFW1zGDZO9e+t
+	UJdQkguawG6jATOJFIaopKfG99tsWJNYD+1CWKqrCsB+jZNOMDwLks3ETLiKXb7Bv9aMolGU1Cs
+	EaCegu//jE+g2ig==
+X-Google-Smtp-Source: AGHT+IFCKUfKSAYv//yvPxISNKnOAsmR1cCjTxj8W//eQP2JArQ4PikZxQbSriVlh2ufnFQbzVsf0UUzOE9QZQ==
+X-Received: from pgqw8.prod.google.com ([2002:a65:6948:0:b0:b2f:5b01:af42])
+ (user=davidgow job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6a21:6481:b0:21c:faa4:9ab9 with SMTP id adf61e73a8af0-21fbd631592mr3401257637.22.1749890871693;
+ Sat, 14 Jun 2025 01:47:51 -0700 (PDT)
+Date: Sat, 14 Jun 2025 16:47:11 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: AnonymousSubmission
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF0001A0F9:EE_|MW6PR12MB9018:EE_
-X-MS-Office365-Filtering-Correlation-Id: e10c548c-a8df-40bf-4edb-08ddab135026
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|1800799024|82310400026|376014|7416014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?AR9/hexqZ+bAQdMiEUeFDcILiecVX3DO/EJLZn9EcuCH0OSjeIprXOH+sXL7?=
- =?us-ascii?Q?0gtXVTET+Z8gzr2bvxIGADpx79++GvSqeKDymxHQi/EBoFne0mE+H3so0Q0D?=
- =?us-ascii?Q?sT7Nqs+XPVXfC7Ic6kAYc4KweQZGoo2gqB8/WsrJtbQSalCWxJDDwuievCd5?=
- =?us-ascii?Q?O7DcpdBsjtVazgJbd6LFcVnhWO7U2QNHXCH0tLs8Q7ybu5aP7OHJkJ5/Ca6l?=
- =?us-ascii?Q?rjsvkbzgVCXwOQN8R55wj2JoUCU3s9AFhD0n174/8oL3YLK6xgI8f3caSW0Y?=
- =?us-ascii?Q?gXs1yoKgc19gd+934Gvao1LROFU8Bub8QETUdzcJZFsGbg+7EapNjBZVTSwS?=
- =?us-ascii?Q?SbmWcwyCJa3Q0o6ZL6yCJmeJBMQRg1kgE5JYFwvNFszcP21QBzhKkjIaaniA?=
- =?us-ascii?Q?ynKS/3mv8vmGdgpLOip1pUmv65QRWYyeyUTvKC9+zBQ4DggxB2KsZzMpKUXG?=
- =?us-ascii?Q?/ZZ8BxVRLoJfSl7Rnreaxit9RhK3NpSL+FI8gCxPDjieidUPpnyg6lNN9ltu?=
- =?us-ascii?Q?b582Ijg/e8IiTvaEYBPNPNoMLVR0QPzXBbBKXc+2NZMoZnL982gSQPGGsdEP?=
- =?us-ascii?Q?S1dZfRctebUKGAk+bFI46QICDcXRcih88IQTHDL2CG2wYuAHkz84iC/WnFmA?=
- =?us-ascii?Q?phLvbSumqRiSuPYQZBRDxx7G4E9UFJ2Q7nEbmiRTy4+k1gTNwcPlr6YRFOas?=
- =?us-ascii?Q?3zwdJbvz8XP9KJfd440K2jebGpnu4yGgnFEZZgf+6/boZlsPyeSJB+HP7YMK?=
- =?us-ascii?Q?SHSqcwRaEBj64ZwPVC9CS+IiTbCTBXPjOXD/zref2SgMBCGGaKQ4l7C0g6MP?=
- =?us-ascii?Q?HUI0i87y3u4vrnpio+bF1q1cNZ7ytPrS+JchyYFD1O8v7UcS+clQHBgaMzmv?=
- =?us-ascii?Q?N7o0CVvjAIEMe9HWfeREC5ia0CrXAcwJyWZShaX2iY8pYOcQ7e2f6dXhE+ja?=
- =?us-ascii?Q?CPO0Rt7O4bI3g7rGyHewhKdWbGcYkLa+Me26IJHp5JZKxAQYE1WxM+i+b9oe?=
- =?us-ascii?Q?5rZ3MSP7f9S4qke9Nmm8QBIOQTZjGnXeif662xXj6WLkWgVAoro3hySOMtEP?=
- =?us-ascii?Q?pcWQE2sF9VwyCn/lOHAZBCLcz5iRKyCRI14P6w4xZQmLLgLjme/UQ4Eec8w2?=
- =?us-ascii?Q?kZ8ypYqRROL7k3CzTUGPck+FerLpT2WP0DjkxragdnhX8T2S1Ksbaq7VzoEJ?=
- =?us-ascii?Q?4J07qCBPrzXojIXckxfkz0BvQ2lTzSrQgMElE0bI8C6/c7VgTV7/mkUeXJ3n?=
- =?us-ascii?Q?9HUwFG044L6bVjO3N0xTcNkR2g1M+zV5HqMkGoiL0L03UqUQ4CsxORakygWD?=
- =?us-ascii?Q?39tZ9LN45pHnxX0LDBfzHJVbWSv4xTzSC30uNvWibg+uW1EDR5NDF0JnocbL?=
- =?us-ascii?Q?v0tC4kKlatkIsATndQP0erx1oLWtujCk7e/oUpGdRpXVvZnWCuVKLezQGF4D?=
- =?us-ascii?Q?p2JH3Q9wzoeRkd2cVmXc0OWxrSA9UgcpLLAjUNcm+wB3/+C4kJTa5n70AtGZ?=
- =?us-ascii?Q?9GmhtKs9i1gztTYRQ9//sG8n2oLFX5O8Ww9X?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(82310400026)(376014)(7416014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2025 07:15:59.1833
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e10c548c-a8df-40bf-4edb-08ddab135026
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL02EPF0001A0F9.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB9018
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.50.0.rc1.591.g9c95f17f64-goog
+Message-ID: <20250614084711.2654593-2-davidgow@google.com>
+Subject: [PATCH] kunit: Adjust kunit_test timeout based on test_{suite,case} speed
+From: David Gow <davidgow@google.com>
+To: Rae Moar <rmoar@google.com>, Shuah Khan <skhan@linuxfoundation.org>
+Cc: Ujwal Jain <ujwaljain@google.com>, Geert Uytterhoeven <geert@linux-m68k.org>, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, David Gow <davidgow@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Add a new vEVENTQ type for VINTFs that are assigned to the user space.
-Simply report the two 64-bit LVCMDQ_ERR_MAPs register values.
+From: Ujwal Jain <ujwaljain@google.com>
 
-Reviewed-by: Alok Tiwari <alok.a.tiwari@oracle.com>
-Reviewed-by: Pranjal Shrivastava <praan@google.com>
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+Currently, the in-kernel kunit test case timeout is 300 seconds. (There
+is a separate timeout mechanism for the whole test execution in
+kunit.py, but that's unrelated.) However, tests marked 'slow' or 'very
+slow' may timeout, particularly on slower machines.
+
+Implement a multiplier to the test-case timeout, so that slower tests
+have longer to complete:
+- DEFAULT -> 1x default timeout
+- KUNIT_SPEED_SLOW -> 3x default timeout
+- KUNIT_SPEED_VERY_SLOW -> 12x default timeout
+
+A further change is planned to allow user configuration of the
+default/base timeout to allow people with faster or slower machines to
+adjust these to their use-cases.
+
+Signed-off-by: Ujwal Jain <ujwaljain@google.com>
+Co-developed-by: David Gow <davidgow@google.com>
+Signed-off-by: David Gow <davidgow@google.com>
 ---
- include/uapi/linux/iommufd.h                  | 15 +++++++++++++
- .../iommu/arm/arm-smmu-v3/tegra241-cmdqv.c    | 22 +++++++++++++++++++
- 2 files changed, 37 insertions(+)
+ include/kunit/try-catch.h  |  1 +
+ lib/kunit/kunit-test.c     |  9 +++++---
+ lib/kunit/test.c           | 46 ++++++++++++++++++++++++++++++++++++--
+ lib/kunit/try-catch-impl.h |  4 +++-
+ lib/kunit/try-catch.c      | 29 ++----------------------
+ 5 files changed, 56 insertions(+), 33 deletions(-)
 
-diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
-index 1c9e486113e3..a2840beefa8c 100644
---- a/include/uapi/linux/iommufd.h
-+++ b/include/uapi/linux/iommufd.h
-@@ -1145,10 +1145,12 @@ struct iommufd_vevent_header {
-  * enum iommu_veventq_type - Virtual Event Queue Type
-  * @IOMMU_VEVENTQ_TYPE_DEFAULT: Reserved for future use
-  * @IOMMU_VEVENTQ_TYPE_ARM_SMMUV3: ARM SMMUv3 Virtual Event Queue
-+ * @IOMMU_VEVENTQ_TYPE_TEGRA241_CMDQV: NVIDIA Tegra241 CMDQV Extension IRQ
-  */
- enum iommu_veventq_type {
- 	IOMMU_VEVENTQ_TYPE_DEFAULT = 0,
- 	IOMMU_VEVENTQ_TYPE_ARM_SMMUV3 = 1,
-+	IOMMU_VEVENTQ_TYPE_TEGRA241_CMDQV = 2,
+diff --git a/include/kunit/try-catch.h b/include/kunit/try-catch.h
+index 7c966a1adbd3..d4e1a5b98ed6 100644
+--- a/include/kunit/try-catch.h
++++ b/include/kunit/try-catch.h
+@@ -47,6 +47,7 @@ struct kunit_try_catch {
+ 	int try_result;
+ 	kunit_try_catch_func_t try;
+ 	kunit_try_catch_func_t catch;
++	unsigned long timeout;
+ 	void *context;
  };
  
- /**
-@@ -1172,6 +1174,19 @@ struct iommu_vevent_arm_smmuv3 {
- 	__aligned_le64 evt[4];
- };
+diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
+index d9c781c859fd..387cdf7782f6 100644
+--- a/lib/kunit/kunit-test.c
++++ b/lib/kunit/kunit-test.c
+@@ -43,7 +43,8 @@ static void kunit_test_try_catch_successful_try_no_catch(struct kunit *test)
+ 	kunit_try_catch_init(try_catch,
+ 			     test,
+ 			     kunit_test_successful_try,
+-			     kunit_test_no_catch);
++			     kunit_test_no_catch,
++			     300 * msecs_to_jiffies(MSEC_PER_SEC));
+ 	kunit_try_catch_run(try_catch, test);
  
-+/**
-+ * struct iommu_vevent_tegra241_cmdqv - Tegra241 CMDQV IRQ
-+ *                                      (IOMMU_VEVENTQ_TYPE_TEGRA241_CMDQV)
-+ * @lvcmdq_err_map: 128-bit logical vcmdq error map, little-endian.
-+ *                  (Refer to register LVCMDQ_ERR_MAPs per VINTF )
-+ *
-+ * The 128-bit register value from HW exclusively reflect the error bits for a
-+ * Virtual Interface represented by a vIOMMU object. Read and report directly.
-+ */
-+struct iommu_vevent_tegra241_cmdqv {
-+	__aligned_le64 lvcmdq_err_map[2];
-+};
-+
- /**
-  * struct iommu_veventq_alloc - ioctl(IOMMU_VEVENTQ_ALLOC)
-  * @size: sizeof(struct iommu_veventq_alloc)
-diff --git a/drivers/iommu/arm/arm-smmu-v3/tegra241-cmdqv.c b/drivers/iommu/arm/arm-smmu-v3/tegra241-cmdqv.c
-index ab9c80b4f2e8..c231bdcd5d31 100644
---- a/drivers/iommu/arm/arm-smmu-v3/tegra241-cmdqv.c
-+++ b/drivers/iommu/arm/arm-smmu-v3/tegra241-cmdqv.c
-@@ -294,6 +294,20 @@ static inline int vcmdq_write_config(struct tegra241_vcmdq *vcmdq, u32 regval)
+ 	KUNIT_EXPECT_TRUE(test, ctx->function_called);
+@@ -75,7 +76,8 @@ static void kunit_test_try_catch_unsuccessful_try_does_catch(struct kunit *test)
+ 	kunit_try_catch_init(try_catch,
+ 			     test,
+ 			     kunit_test_unsuccessful_try,
+-			     kunit_test_catch);
++			     kunit_test_catch,
++			     300 * msecs_to_jiffies(MSEC_PER_SEC));
+ 	kunit_try_catch_run(try_catch, test);
  
- /* ISR Functions */
+ 	KUNIT_EXPECT_TRUE(test, ctx->function_called);
+@@ -129,7 +131,8 @@ static void kunit_test_fault_null_dereference(struct kunit *test)
+ 	kunit_try_catch_init(try_catch,
+ 			     test,
+ 			     kunit_test_null_dereference,
+-			     kunit_test_catch);
++			     kunit_test_catch,
++			     300 * msecs_to_jiffies(MSEC_PER_SEC));
+ 	kunit_try_catch_run(try_catch, test);
  
-+static void tegra241_vintf_user_handle_error(struct tegra241_vintf *vintf)
-+{
-+	struct iommufd_viommu *viommu = &vintf->vsmmu.core;
-+	struct iommu_vevent_tegra241_cmdqv vevent_data;
-+	int i;
-+
-+	for (i = 0; i < LVCMDQ_ERR_MAP_NUM_64; i++)
-+		vevent_data.lvcmdq_err_map[i] =
-+			readq_relaxed(REG_VINTF(vintf, LVCMDQ_ERR_MAP_64(i)));
-+
-+	iommufd_viommu_report_event(viommu, IOMMU_VEVENTQ_TYPE_TEGRA241_CMDQV,
-+				    &vevent_data, sizeof(vevent_data));
-+}
-+
- static void tegra241_vintf0_handle_error(struct tegra241_vintf *vintf)
- {
- 	int i;
-@@ -339,6 +353,14 @@ static irqreturn_t tegra241_cmdqv_isr(int irq, void *devid)
- 		vintf_map &= ~BIT_ULL(0);
- 	}
- 
-+	/* Handle other user VINTFs and their LVCMDQs */
-+	while (vintf_map) {
-+		unsigned long idx = __ffs64(vintf_map);
-+
-+		tegra241_vintf_user_handle_error(cmdqv->vintfs[idx]);
-+		vintf_map &= ~BIT_ULL(idx);
-+	}
-+
- 	return IRQ_HANDLED;
+ 	KUNIT_EXPECT_EQ(test, try_catch->try_result, -EINTR);
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index 146d1b48a096..002121675605 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -373,6 +373,46 @@ static void kunit_run_case_check_speed(struct kunit *test,
+ 		   duration.tv_sec, duration.tv_nsec);
  }
  
++/* Returns timeout multiplier based on speed.
++ * DEFAULT:		    1
++ * KUNIT_SPEED_SLOW:        3
++ * KUNIT_SPEED_VERY_SLOW:   12
++ */
++static int kunit_timeout_mult(enum kunit_speed speed)
++{
++	switch (speed) {
++	case KUNIT_SPEED_SLOW:
++		return 3;
++	case KUNIT_SPEED_VERY_SLOW:
++		return 12;
++	default:
++		return 1;
++	}
++}
++
++static unsigned long kunit_test_timeout(struct kunit_suite *suite, struct kunit_case *test_case)
++{
++	int mult = 1;
++	/*
++	 * TODO: Make the default (base) timeout configurable, so that users with
++	 * particularly slow or fast machines can successfully run tests, while
++	 * still taking advantage of the relative speed.
++	 */
++	unsigned long default_timeout = 300;
++
++	/*
++	 * The default test timeout is 300 seconds and will be adjusted by mult
++	 * based on the test speed. The test speed will be overridden by the
++	 * innermost test component.
++	 */
++	if (suite->attr.speed != KUNIT_SPEED_UNSET)
++		mult = kunit_timeout_mult(suite->attr.speed);
++	if (test_case->attr.speed != KUNIT_SPEED_UNSET)
++		mult = kunit_timeout_mult(test_case->attr.speed);
++	return mult * default_timeout * msecs_to_jiffies(MSEC_PER_SEC);
++}
++
++
+ /*
+  * Initializes and runs test case. Does not clean up or do post validations.
+  */
+@@ -527,7 +567,8 @@ static void kunit_run_case_catch_errors(struct kunit_suite *suite,
+ 	kunit_try_catch_init(try_catch,
+ 			     test,
+ 			     kunit_try_run_case,
+-			     kunit_catch_run_case);
++			     kunit_catch_run_case,
++			     kunit_test_timeout(suite, test_case));
+ 	context.test = test;
+ 	context.suite = suite;
+ 	context.test_case = test_case;
+@@ -537,7 +578,8 @@ static void kunit_run_case_catch_errors(struct kunit_suite *suite,
+ 	kunit_try_catch_init(try_catch,
+ 			     test,
+ 			     kunit_try_run_case_cleanup,
+-			     kunit_catch_run_case_cleanup);
++			     kunit_catch_run_case_cleanup,
++			     kunit_test_timeout(suite, test_case));
+ 	kunit_try_catch_run(try_catch, &context);
+ 
+ 	/* Propagate the parameter result to the test case. */
+diff --git a/lib/kunit/try-catch-impl.h b/lib/kunit/try-catch-impl.h
+index 203ba6a5e740..6f401b97cd0b 100644
+--- a/lib/kunit/try-catch-impl.h
++++ b/lib/kunit/try-catch-impl.h
+@@ -17,11 +17,13 @@ struct kunit;
+ static inline void kunit_try_catch_init(struct kunit_try_catch *try_catch,
+ 					struct kunit *test,
+ 					kunit_try_catch_func_t try,
+-					kunit_try_catch_func_t catch)
++					kunit_try_catch_func_t catch,
++					unsigned long timeout)
+ {
+ 	try_catch->test = test;
+ 	try_catch->try = try;
+ 	try_catch->catch = catch;
++	try_catch->timeout = timeout;
+ }
+ 
+ #endif /* _KUNIT_TRY_CATCH_IMPL_H */
+diff --git a/lib/kunit/try-catch.c b/lib/kunit/try-catch.c
+index 6bbe0025b079..d84a879f0a78 100644
+--- a/lib/kunit/try-catch.c
++++ b/lib/kunit/try-catch.c
+@@ -34,31 +34,6 @@ static int kunit_generic_run_threadfn_adapter(void *data)
+ 	return 0;
+ }
+ 
+-static unsigned long kunit_test_timeout(void)
+-{
+-	/*
+-	 * TODO(brendanhiggins@google.com): We should probably have some type of
+-	 * variable timeout here. The only question is what that timeout value
+-	 * should be.
+-	 *
+-	 * The intention has always been, at some point, to be able to label
+-	 * tests with some type of size bucket (unit/small, integration/medium,
+-	 * large/system/end-to-end, etc), where each size bucket would get a
+-	 * default timeout value kind of like what Bazel does:
+-	 * https://docs.bazel.build/versions/master/be/common-definitions.html#test.size
+-	 * There is still some debate to be had on exactly how we do this. (For
+-	 * one, we probably want to have some sort of test runner level
+-	 * timeout.)
+-	 *
+-	 * For more background on this topic, see:
+-	 * https://mike-bland.com/2011/11/01/small-medium-large.html
+-	 *
+-	 * If tests timeout due to exceeding sysctl_hung_task_timeout_secs,
+-	 * the task will be killed and an oops generated.
+-	 */
+-	return 300 * msecs_to_jiffies(MSEC_PER_SEC); /* 5 min */
+-}
+-
+ void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context)
+ {
+ 	struct kunit *test = try_catch->test;
+@@ -85,8 +60,8 @@ void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context)
+ 	task_done = task_struct->vfork_done;
+ 	wake_up_process(task_struct);
+ 
+-	time_remaining = wait_for_completion_timeout(task_done,
+-						     kunit_test_timeout());
++	time_remaining = wait_for_completion_timeout(
++		task_done, try_catch->timeout);
+ 	if (time_remaining == 0) {
+ 		try_catch->try_result = -ETIMEDOUT;
+ 		kthread_stop(task_struct);
 -- 
-2.43.0
+2.50.0.rc1.591.g9c95f17f64-goog
 
 
