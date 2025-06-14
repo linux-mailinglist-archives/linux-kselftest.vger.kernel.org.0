@@ -1,297 +1,194 @@
-Return-Path: <linux-kselftest+bounces-35003-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35004-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AD6FAD9B72
-	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Jun 2025 10:47:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E613AD9C7A
+	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Jun 2025 13:25:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 80995189B9D1
-	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Jun 2025 08:48:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2B79E1893F9B
+	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Jun 2025 11:25:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24E8D1E5B9E;
-	Sat, 14 Jun 2025 08:47:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CACF2737E4;
+	Sat, 14 Jun 2025 11:25:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nJLyKtzX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BHW8qs2g"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BD8B1A2622
-	for <linux-kselftest@vger.kernel.org>; Sat, 14 Jun 2025 08:47:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A55E272E6D;
+	Sat, 14 Jun 2025 11:25:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749890874; cv=none; b=Xsd7FYFkNYJouH59pKW7Zyls6ar49/A373ua7Amo/RJz0FhwLc0TJRVDZVOjMqPFeWLijIks2pzF2cj0eOiGSrCYO92qhG3YG+iuaBEnATviDSfx2Nbg14J4mCrP4+fZII+jae+yQ7dl60p7aF+vNuYbWrBqNDzUocDQNq4/AXo=
+	t=1749900332; cv=none; b=kyukAQMtkAbL2p7l5BhN56aOKuH4XSqrzRgNufXvW+tTvfYeA5puVqps1MX4jEYcura/VD5S77t4EGKQwhqgVN/woplhHhOztkGwn3nPM7/tehMieW1PGd8AUnjSycBjoPyE7H7zZzUMuRpI2/zg3gFuK6dPp5zFLOD7S9QzYc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749890874; c=relaxed/simple;
-	bh=1zE5dRa2pTIbWgRSSsDZnGOGsw/ocPUokv7v0pIjIFw=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=qp2CeUnhexHBVS9An0CR+UOIkarnGAMUmZWJVk8spBnMs1fe0l4KDd3Ffm8w8vlLOpooXQDFCWITf8DDhqVcB/iMmOfDlVqSUF9MG6XPiRidWMG69yw4qGSBBUrDQEuijLEBWg2Q/LbWueW17gvaOOUZ10IsGliTSie1enVa8d4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nJLyKtzX; arc=none smtp.client-ip=209.85.215.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-b2c37558eccso2123494a12.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 14 Jun 2025 01:47:52 -0700 (PDT)
+	s=arc-20240116; t=1749900332; c=relaxed/simple;
+	bh=hVRY+sNaVJCX/22UrodYL7lTYjItuQhZZBlWTI+k1yY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Bi79rfQKrB8hfWzCJAKTnyVqK9IWtQw9SVDkpd94Y3Z74l9cZ28U1ZWPVlyrZmMpFs/QtWd3eZyireATI0pn9MasQI/zWSYFLlpQHYwel+aeuVErzfr5NyNEJs6eSGSk8MAE5e+EiKrqRD82nvhg6bbDEERbt0nG9C8YFhMJFVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BHW8qs2g; arc=none smtp.client-ip=209.85.167.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-551efd86048so2801800e87.3;
+        Sat, 14 Jun 2025 04:25:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1749890872; x=1750495672; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=UmexxkUsMlwsDUZqAJqCu3m0c/NmHuIKmfWQMr16+98=;
-        b=nJLyKtzXdgxjr5NMSb1YVwm47oslp0U6BdwXvPa5MS4CQ78l+hFqeYe1EYdgk2HDHX
-         OlJhQoxmRbwv0JXJZL2ttb37B64FvWBztxDuNsbkTvy+jWuYsBqOh2RasgiLhErgtunz
-         PGq3oPfah1e6qWIbok8LTQsM8FBYqnrdaHc9yUgUSGeksImr3WEWRYmPiWXiHzJvOyu6
-         Za945L5ILNh6SlFLFKVHKUeQO4jn/BrmHx7cUF7GZQFwNa7lMfIivH9BiKxaieKxUEjb
-         K/EHbT+nI3rnUFFpu9f2tW5QE0sKiYDorqIBp4pNRmTyqKXvPz0FWH7NYKYpAjCbatYA
-         IoXA==
+        d=gmail.com; s=20230601; t=1749900329; x=1750505129; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/55vMuY3MFkevHEM5hX66L59C6pwFDgIm2rAf0kmwbA=;
+        b=BHW8qs2gEznZIzGT4kBurOyUHwnNlTM64YH6vEiVKyhDb6BjxTgS/9NKS+ToLPfwUr
+         rGo6QTbMLfOa77eIGGjGZh+RM7vrzIJW6kDgQBZ0Tjv7igrn6BWNnm4YovJL4MeMseM+
+         /b0O8LAGAafgwbbs+07TGle8fXByrIBEWq23qz1vBk2tEfSYFcnMRliFuzwybleESfiG
+         UWbqycWHYZVALLXcwSjNGl9m3tusaISBSRt52iaRDHd8dLlS8gx8p8EBdi3Z34AN7xBh
+         JxQ4W7tF6dEOYvjWWPuBTkIletu/VWoLUmDJ+ZLWpY5RWGqiKGMBy7LkLYJXoi73yztt
+         e/Sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749890872; x=1750495672;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UmexxkUsMlwsDUZqAJqCu3m0c/NmHuIKmfWQMr16+98=;
-        b=Y+M/pdb9dIeltz4jnIRXubwOz9xRq6jT0gbrhzQp1Le1DZcgbT5rtynF1O0TDWiOJp
-         xlybuMhgW2eW350PsWqBeM1QJFnP56igrjiklBs4uBtF+Ku3FgvFyI1BtlgsMuPzhLHF
-         PYy+/1EH0NUw8ttDhd3PsKk8MnAQ/WMrMx+9Xu/9MfxQ7KkGh/gVXXgVk09V7evmcQLh
-         lynAuRf9K0bE6gtdSzDMNTeweGIrOUTO/pEzEVKEuhusf2nVhbwucs0IzSbfXqkh8sSh
-         YCTMbG1DqYSXm4xiaHXVINbZH+OfLD+l65PbADDBH3o2umYrmaK447xkKPObrTyrOqzG
-         MjcQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVKvEzWV/pS/gZsqXKSteOuFEIITchBryOX/BZy5YW2xTdn/iSDMVQ8FXimSwRk2cKpyLy+Y8kcj2m/H5QhGZk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxW7ISz8tyRyryjeFH/KTlQBFQ6YIJ3LqqrXZJmFW1zGDZO9e+t
-	UJdQkguawG6jATOJFIaopKfG99tsWJNYD+1CWKqrCsB+jZNOMDwLks3ETLiKXb7Bv9aMolGU1Cs
-	EaCegu//jE+g2ig==
-X-Google-Smtp-Source: AGHT+IFCKUfKSAYv//yvPxISNKnOAsmR1cCjTxj8W//eQP2JArQ4PikZxQbSriVlh2ufnFQbzVsf0UUzOE9QZQ==
-X-Received: from pgqw8.prod.google.com ([2002:a65:6948:0:b0:b2f:5b01:af42])
- (user=davidgow job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a21:6481:b0:21c:faa4:9ab9 with SMTP id adf61e73a8af0-21fbd631592mr3401257637.22.1749890871693;
- Sat, 14 Jun 2025 01:47:51 -0700 (PDT)
-Date: Sat, 14 Jun 2025 16:47:11 +0800
+        d=1e100.net; s=20230601; t=1749900329; x=1750505129;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/55vMuY3MFkevHEM5hX66L59C6pwFDgIm2rAf0kmwbA=;
+        b=dyV5041PZlzVcUy55xkyKjEHXdiG/zJRWnsYj7SnnIcAV/N9sfqxDQfXmtSYe3IyhC
+         jSch5V9jpELNK66M28JKgEMCdG9JZS3BDKxxaAD0D5+g8KP1kHUQwVpF8xU95cULSTEf
+         MuZeOFx3SYln31aKczR8kKaRaguhhd6CxssHsEcR0lP5QkiG7XYzWWf003SETOUk4Qz8
+         wM3gHUVbJLs7JwYjUAl/UMPddOrtydqmJJ8lFwVMhvDnyxNLjAfyrmCxQpG5igOsW/C1
+         /QbW3I71mpQNENcvcmHARzLmgnJQNH89McYz5NMyByv953B75RRSyZ0veCYfqbbQqWxu
+         Chpg==
+X-Forwarded-Encrypted: i=1; AJvYcCVdsjoVg/GIPXDB7j757wSIcBnjNvNSkgBaedwqApbH/+aC5rsacrRtR7O3D7Po8so+kOpr1WsjLkPNR5O9@vger.kernel.org, AJvYcCWkdqleUNCw04nLTUDL1MCrNIihiPW042iSfoEKDsRwnaAaYlaF8JBjIA7gtfqDsdnr4vNcVi3+TBePiuuy8l27@vger.kernel.org, AJvYcCXMi6nioAu21BwQT1eZsPIpIxLP9CbU1QiIL+FphPLsFiH9PyglA0BPzahEIFaypgkzgxUdtUmj73w=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzo4479FS/6pe2Gh2BcAyonlHGW1pVp9tLLrJcvmeK9ENAu2e9V
+	yzixJM25vXML0geXJwhyns/JagXDs1UQxCSqI63z/RFlgjP7rLzSVDLoq24zmWzG
+X-Gm-Gg: ASbGnctKYLnJhUuy6GvQzBacFmuTiJsJi0OWtGdJTQi24gban9FprRBmCXCmgoSEOBl
+	eFGZmZSA/gZmWkuUTFdd3cfL/Wp7gExheKBPcEMl0dqJ+jzzn70R2DrCvp+amZDxsYMlU8f91JZ
+	7T8+EVx5wtxkAY8SvM3NMltUMIxm1uMkLwGhfSGfFoETcbSMtCr+O6UWNWIJXjOuU7ZYsLQgbKF
+	7dBRbu2TEPhqhNTvkgRPjotp+BYkUWddYPcEyydFlqRUQqmnotfGAHR4DjyAF/TbC6NUrRQXRal
+	j6ZQaJWn+Lzd5vitjOO1rhJnim8+U2PCkYZEW0rvxHdoirIZTHqSEc8bOXUlEy+8XDS6rLFRV5n
+	/lw==
+X-Google-Smtp-Source: AGHT+IEkZs0hvtD2eJeR83LgbrqLik3Ia0PPRTMGtlUcyM0dpFxxvg4tZa9Pomsucl3vSdwEUtotdQ==
+X-Received: by 2002:a05:6512:1150:b0:553:2c01:ff44 with SMTP id 2adb3069b0e04-553b6e7bde8mr493229e87.2.1749900328290;
+        Sat, 14 Jun 2025 04:25:28 -0700 (PDT)
+Received: from localhost (soda.int.kasm.eu. [2001:678:a5c:1202:4fb5:f16a:579c:6dcb])
+        by smtp.gmail.com with UTF8SMTPSA id 2adb3069b0e04-553ac11680fsm777892e87.5.2025.06.14.04.25.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 Jun 2025 04:25:27 -0700 (PDT)
+Date: Sat, 14 Jun 2025 13:25:27 +0200
+From: Klara Modin <klarasmodin@gmail.com>
+To: Nico Pache <npache@redhat.com>
+Cc: linux-mm@kvack.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, rientjes@google.com, 
+	hannes@cmpxchg.org, lorenzo.stoakes@oracle.com, rdunlap@infradead.org, 
+	mhocko@suse.com, Liam.Howlett@oracle.com, zokeefe@google.com, surenb@google.com, 
+	jglisse@google.com, cl@gentwo.org, jack@suse.cz, dave.hansen@linux.intel.com, 
+	will@kernel.org, tiwai@suse.de, catalin.marinas@arm.com, 
+	anshuman.khandual@arm.com, dev.jain@arm.com, raquini@redhat.com, aarcange@redhat.com, 
+	kirill.shutemov@linux.intel.com, yang@os.amperecomputing.com, thomas.hellstrom@linux.intel.com, 
+	vishal.moola@gmail.com, sunnanyong@huawei.com, usamaarif642@gmail.com, 
+	wangkefeng.wang@huawei.com, ziy@nvidia.com, shuah@kernel.org, peterx@redhat.com, 
+	willy@infradead.org, ryan.roberts@arm.com, baolin.wang@linux.alibaba.com, 
+	baohua@kernel.org, david@redhat.com, mathieu.desnoyers@efficios.com, 
+	mhiramat@kernel.org, rostedt@goodmis.org, corbet@lwn.net, akpm@linux-foundation.org
+Subject: Re: [PATCH v6 1/4] mm: defer THP insertion to khugepaged
+Message-ID: <fcd3phzewpgzghrzse3stxi7jz7b6l5uwnhqtswcfnqvuvktip@apqh2achkutn>
+References: <20250515033857.132535-1-npache@redhat.com>
+ <20250515033857.132535-2-npache@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.50.0.rc1.591.g9c95f17f64-goog
-Message-ID: <20250614084711.2654593-2-davidgow@google.com>
-Subject: [PATCH] kunit: Adjust kunit_test timeout based on test_{suite,case} speed
-From: David Gow <davidgow@google.com>
-To: Rae Moar <rmoar@google.com>, Shuah Khan <skhan@linuxfoundation.org>
-Cc: Ujwal Jain <ujwaljain@google.com>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, David Gow <davidgow@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250515033857.132535-2-npache@redhat.com>
 
-From: Ujwal Jain <ujwaljain@google.com>
+Hi,
 
-Currently, the in-kernel kunit test case timeout is 300 seconds. (There
-is a separate timeout mechanism for the whole test execution in
-kunit.py, but that's unrelated.) However, tests marked 'slow' or 'very
-slow' may timeout, particularly on slower machines.
+On 2025-05-14 21:38:54 -0600, Nico Pache wrote:
+> setting /transparent_hugepages/enabled=always allows applications
+> to benefit from THPs without having to madvise. However, the page fault
+> handler takes very few considerations to decide weather or not to actually
+> use a THP. This can lead to a lot of wasted memory. khugepaged only
+> operates on memory that was either allocated with enabled=always or
+> MADV_HUGEPAGE.
+> 
+> Introduce the ability to set enabled=defer, which will prevent THPs from
+> being allocated by the page fault handler unless madvise is set,
+> leaving it up to khugepaged to decide which allocations will collapse to a
+> THP. This should allow applications to benefits from THPs, while curbing
+> some of the memory waste.
+> 
+> Acked-by: Zi Yan <ziy@nvidia.com>
+> Co-developed-by: Rafael Aquini <raquini@redhat.com>
+> Signed-off-by: Rafael Aquini <raquini@redhat.com>
+> Signed-off-by: Nico Pache <npache@redhat.com>
 
-Implement a multiplier to the test-case timeout, so that slower tests
-have longer to complete:
-- DEFAULT -> 1x default timeout
-- KUNIT_SPEED_SLOW -> 3x default timeout
-- KUNIT_SPEED_VERY_SLOW -> 12x default timeout
+...
 
-A further change is planned to allow user configuration of the
-default/base timeout to allow people with faster or slower machines to
-adjust these to their use-cases.
+> @@ -315,13 +318,20 @@ static ssize_t enabled_store(struct kobject *kobj,
+>  
+>  	if (sysfs_streq(buf, "always")) {
+>  		clear_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG, &transparent_hugepage_flags);
+> +		clear_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_FLAG, &transparent_hugepage_flags);
+>  		set_bit(TRANSPARENT_HUGEPAGE_FLAG, &transparent_hugepage_flags);
+> +	} else if (sysfs_streq(buf, "defer")) {
+> +		clear_bit(TRANSPARENT_HUGEPAGE_FLAG, &transparent_hugepage_flags);
+> +		clear_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG, &transparent_hugepage_flags);
+> +		set_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_FLAG, &transparent_hugepage_flags);
+>  	} else if (sysfs_streq(buf, "madvise")) {
+>  		clear_bit(TRANSPARENT_HUGEPAGE_FLAG, &transparent_hugepage_flags);
+> +		clear_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_FLAG, &transparent_hugepage_flags);
+>  		set_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG, &transparent_hugepage_flags);
+>  	} else if (sysfs_streq(buf, "never")) {
+>  		clear_bit(TRANSPARENT_HUGEPAGE_FLAG, &transparent_hugepage_flags);
+>  		clear_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG, &transparent_hugepage_flags);
+> +		clear_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_FLAG, &transparent_hugepage_flags);
+>  	} else
+>  		ret = -EINVAL;
+>  
+> @@ -954,18 +964,31 @@ static int __init setup_transparent_hugepage(char *str)
+>  			&transparent_hugepage_flags);
+>  		clear_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG,
+>  			  &transparent_hugepage_flags);
+> +		clear_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_FLAG,
+> +			  &transparent_hugepage_flags);
+>  		ret = 1;
+> +	} else if (!strcmp(str, "defer")) {
+> +		clear_bit(TRANSPARENT_HUGEPAGE_FLAG,
+> +			  &transparent_hugepage_flags);
+> +		clear_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG,
+> +			  &transparent_hugepage_flags);
+> +		set_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_FLAG,
+> +			  &transparent_hugepage_flags);
 
-Signed-off-by: Ujwal Jain <ujwaljain@google.com>
-Co-developed-by: David Gow <davidgow@google.com>
-Signed-off-by: David Gow <davidgow@google.com>
----
- include/kunit/try-catch.h  |  1 +
- lib/kunit/kunit-test.c     |  9 +++++---
- lib/kunit/test.c           | 46 ++++++++++++++++++++++++++++++++++++--
- lib/kunit/try-catch-impl.h |  4 +++-
- lib/kunit/try-catch.c      | 29 ++----------------------
- 5 files changed, 56 insertions(+), 33 deletions(-)
+There should probably be a corresponding
+		ret = 1;
+here. Otherwise the cannot parse message will displayed even if defer
+was set.
 
-diff --git a/include/kunit/try-catch.h b/include/kunit/try-catch.h
-index 7c966a1adbd3..d4e1a5b98ed6 100644
---- a/include/kunit/try-catch.h
-+++ b/include/kunit/try-catch.h
-@@ -47,6 +47,7 @@ struct kunit_try_catch {
- 	int try_result;
- 	kunit_try_catch_func_t try;
- 	kunit_try_catch_func_t catch;
-+	unsigned long timeout;
- 	void *context;
- };
- 
-diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
-index d9c781c859fd..387cdf7782f6 100644
---- a/lib/kunit/kunit-test.c
-+++ b/lib/kunit/kunit-test.c
-@@ -43,7 +43,8 @@ static void kunit_test_try_catch_successful_try_no_catch(struct kunit *test)
- 	kunit_try_catch_init(try_catch,
- 			     test,
- 			     kunit_test_successful_try,
--			     kunit_test_no_catch);
-+			     kunit_test_no_catch,
-+			     300 * msecs_to_jiffies(MSEC_PER_SEC));
- 	kunit_try_catch_run(try_catch, test);
- 
- 	KUNIT_EXPECT_TRUE(test, ctx->function_called);
-@@ -75,7 +76,8 @@ static void kunit_test_try_catch_unsuccessful_try_does_catch(struct kunit *test)
- 	kunit_try_catch_init(try_catch,
- 			     test,
- 			     kunit_test_unsuccessful_try,
--			     kunit_test_catch);
-+			     kunit_test_catch,
-+			     300 * msecs_to_jiffies(MSEC_PER_SEC));
- 	kunit_try_catch_run(try_catch, test);
- 
- 	KUNIT_EXPECT_TRUE(test, ctx->function_called);
-@@ -129,7 +131,8 @@ static void kunit_test_fault_null_dereference(struct kunit *test)
- 	kunit_try_catch_init(try_catch,
- 			     test,
- 			     kunit_test_null_dereference,
--			     kunit_test_catch);
-+			     kunit_test_catch,
-+			     300 * msecs_to_jiffies(MSEC_PER_SEC));
- 	kunit_try_catch_run(try_catch, test);
- 
- 	KUNIT_EXPECT_EQ(test, try_catch->try_result, -EINTR);
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 146d1b48a096..002121675605 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -373,6 +373,46 @@ static void kunit_run_case_check_speed(struct kunit *test,
- 		   duration.tv_sec, duration.tv_nsec);
- }
- 
-+/* Returns timeout multiplier based on speed.
-+ * DEFAULT:		    1
-+ * KUNIT_SPEED_SLOW:        3
-+ * KUNIT_SPEED_VERY_SLOW:   12
-+ */
-+static int kunit_timeout_mult(enum kunit_speed speed)
-+{
-+	switch (speed) {
-+	case KUNIT_SPEED_SLOW:
-+		return 3;
-+	case KUNIT_SPEED_VERY_SLOW:
-+		return 12;
-+	default:
-+		return 1;
-+	}
-+}
-+
-+static unsigned long kunit_test_timeout(struct kunit_suite *suite, struct kunit_case *test_case)
-+{
-+	int mult = 1;
-+	/*
-+	 * TODO: Make the default (base) timeout configurable, so that users with
-+	 * particularly slow or fast machines can successfully run tests, while
-+	 * still taking advantage of the relative speed.
-+	 */
-+	unsigned long default_timeout = 300;
-+
-+	/*
-+	 * The default test timeout is 300 seconds and will be adjusted by mult
-+	 * based on the test speed. The test speed will be overridden by the
-+	 * innermost test component.
-+	 */
-+	if (suite->attr.speed != KUNIT_SPEED_UNSET)
-+		mult = kunit_timeout_mult(suite->attr.speed);
-+	if (test_case->attr.speed != KUNIT_SPEED_UNSET)
-+		mult = kunit_timeout_mult(test_case->attr.speed);
-+	return mult * default_timeout * msecs_to_jiffies(MSEC_PER_SEC);
-+}
-+
-+
- /*
-  * Initializes and runs test case. Does not clean up or do post validations.
-  */
-@@ -527,7 +567,8 @@ static void kunit_run_case_catch_errors(struct kunit_suite *suite,
- 	kunit_try_catch_init(try_catch,
- 			     test,
- 			     kunit_try_run_case,
--			     kunit_catch_run_case);
-+			     kunit_catch_run_case,
-+			     kunit_test_timeout(suite, test_case));
- 	context.test = test;
- 	context.suite = suite;
- 	context.test_case = test_case;
-@@ -537,7 +578,8 @@ static void kunit_run_case_catch_errors(struct kunit_suite *suite,
- 	kunit_try_catch_init(try_catch,
- 			     test,
- 			     kunit_try_run_case_cleanup,
--			     kunit_catch_run_case_cleanup);
-+			     kunit_catch_run_case_cleanup,
-+			     kunit_test_timeout(suite, test_case));
- 	kunit_try_catch_run(try_catch, &context);
- 
- 	/* Propagate the parameter result to the test case. */
-diff --git a/lib/kunit/try-catch-impl.h b/lib/kunit/try-catch-impl.h
-index 203ba6a5e740..6f401b97cd0b 100644
---- a/lib/kunit/try-catch-impl.h
-+++ b/lib/kunit/try-catch-impl.h
-@@ -17,11 +17,13 @@ struct kunit;
- static inline void kunit_try_catch_init(struct kunit_try_catch *try_catch,
- 					struct kunit *test,
- 					kunit_try_catch_func_t try,
--					kunit_try_catch_func_t catch)
-+					kunit_try_catch_func_t catch,
-+					unsigned long timeout)
- {
- 	try_catch->test = test;
- 	try_catch->try = try;
- 	try_catch->catch = catch;
-+	try_catch->timeout = timeout;
- }
- 
- #endif /* _KUNIT_TRY_CATCH_IMPL_H */
-diff --git a/lib/kunit/try-catch.c b/lib/kunit/try-catch.c
-index 6bbe0025b079..d84a879f0a78 100644
---- a/lib/kunit/try-catch.c
-+++ b/lib/kunit/try-catch.c
-@@ -34,31 +34,6 @@ static int kunit_generic_run_threadfn_adapter(void *data)
- 	return 0;
- }
- 
--static unsigned long kunit_test_timeout(void)
--{
--	/*
--	 * TODO(brendanhiggins@google.com): We should probably have some type of
--	 * variable timeout here. The only question is what that timeout value
--	 * should be.
--	 *
--	 * The intention has always been, at some point, to be able to label
--	 * tests with some type of size bucket (unit/small, integration/medium,
--	 * large/system/end-to-end, etc), where each size bucket would get a
--	 * default timeout value kind of like what Bazel does:
--	 * https://docs.bazel.build/versions/master/be/common-definitions.html#test.size
--	 * There is still some debate to be had on exactly how we do this. (For
--	 * one, we probably want to have some sort of test runner level
--	 * timeout.)
--	 *
--	 * For more background on this topic, see:
--	 * https://mike-bland.com/2011/11/01/small-medium-large.html
--	 *
--	 * If tests timeout due to exceeding sysctl_hung_task_timeout_secs,
--	 * the task will be killed and an oops generated.
--	 */
--	return 300 * msecs_to_jiffies(MSEC_PER_SEC); /* 5 min */
--}
--
- void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context)
- {
- 	struct kunit *test = try_catch->test;
-@@ -85,8 +60,8 @@ void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context)
- 	task_done = task_struct->vfork_done;
- 	wake_up_process(task_struct);
- 
--	time_remaining = wait_for_completion_timeout(task_done,
--						     kunit_test_timeout());
-+	time_remaining = wait_for_completion_timeout(
-+		task_done, try_catch->timeout);
- 	if (time_remaining == 0) {
- 		try_catch->try_result = -ETIMEDOUT;
- 		kthread_stop(task_struct);
--- 
-2.50.0.rc1.591.g9c95f17f64-goog
+>  	} else if (!strcmp(str, "madvise")) {
+>  		clear_bit(TRANSPARENT_HUGEPAGE_FLAG,
+>  			  &transparent_hugepage_flags);
+> +		clear_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_FLAG,
+> +			  &transparent_hugepage_flags);
+>  		set_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG,
+> -			&transparent_hugepage_flags);
+> +			  &transparent_hugepage_flags);
+>  		ret = 1;
+>  	} else if (!strcmp(str, "never")) {
+>  		clear_bit(TRANSPARENT_HUGEPAGE_FLAG,
+>  			  &transparent_hugepage_flags);
+>  		clear_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG,
+>  			  &transparent_hugepage_flags);
+> +		clear_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_FLAG,
+> +			  &transparent_hugepage_flags);
+>  		ret = 1;
+>  	}
+>  out:
+> -- 
+> 2.49.0
+> 
 
+Regards,
+Klara Modin
 
