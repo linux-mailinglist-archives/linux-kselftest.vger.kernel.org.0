@@ -1,140 +1,178 @@
-Return-Path: <linux-kselftest+bounces-34974-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-34975-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69FF1AD99A8
-	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Jun 2025 04:29:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3779CAD99EE
+	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Jun 2025 05:23:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 86E01189DDA6
-	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Jun 2025 02:30:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 54A1F188417F
+	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Jun 2025 03:24:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FAD781741;
-	Sat, 14 Jun 2025 02:29:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A68011ACEDF;
+	Sat, 14 Jun 2025 03:23:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="TbhnSsGu"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="M9YfK+Jl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CE5B320F;
-	Sat, 14 Jun 2025 02:29:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.92.39.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1589C38384
+	for <linux-kselftest@vger.kernel.org>; Sat, 14 Jun 2025 03:23:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749868181; cv=none; b=g0WS1NuJs8/x8P+TeusnqTZUGyDnubmfeyieebg2cVP/31czS3p4Ni97anaIGuhARmS0KykBRhpW6y0iYgIXRHoGz+GW2mFVfff6SpFxDBmTxQ4tJ9+CnjQB7lb6/jKSKe5RoXY0FCqxrQaGYFJCeRjNXfXtuEC+SX2SPBjRArU=
+	t=1749871423; cv=none; b=Fteb74d1Css5LXrJBW6v7K4xSUrDsv9eH2dATFsAda7e/q4EitPpDkIrAdx6Lc8dEpK5CboBtAirl2ls1ZM5f49E6kEC67GIwuvcgxuRYpeP0j7h6k9e1CThrUBmA+h4+9w8RB5+ff4nvOLNCd6YvFkQjSu7UMnFNHSpydweQyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749868181; c=relaxed/simple;
-	bh=BovxG10OZYqF6W5tq+yAPUVvqZuanHu7KGWMGNq8AGs=;
+	s=arc-20240116; t=1749871423; c=relaxed/simple;
+	bh=ks+qgcinxfP2t0Ff5arUdhpbKGhmd/HNmuw7bvh83zw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ursxs3FReL6KS8DTwwEOi2J304eZjli763hWNfTQIj1HXj9yGPlujUzx7zj49+MOiG947phk8ZHxcaplbq/pCjeGDjEorARNUnfpKdl/N1l+rVqXXhlIAbntaw5xJoIs1uSZ/z98RxdKt9uuAekXIw9MGExTO8Moel/b/B9mtfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=TbhnSsGu; arc=none smtp.client-ip=54.92.39.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1749868164;
-	bh=BovxG10OZYqF6W5tq+yAPUVvqZuanHu7KGWMGNq8AGs=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To;
-	b=TbhnSsGu2AzCWsOUu32kpMJhyhMUPwrIp/ObFG0RVdBxAqXEPdtBiQZbbclHQp2AA
-	 Pizx8UpIy52fYwsfPF88ELeqhIKhoT1UMODiEvSN7i35Bn6LIQpzdTRYIhzNM7493U
-	 qs8TX/mCxJUufytjmhfQH8PxpGHwRAGdqrya47mg=
-X-QQ-mid: zesmtpgz4t1749868161t60c621e0
-X-QQ-Originating-IP: HQ1RifYPmrBvX4nJYiTppklWoUSlq/+jeJSe/oh002w=
-Received: from mail-yb1-f170.google.com ( [209.85.219.170])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Sat, 14 Jun 2025 10:29:19 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 17128236805914846518
-Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-e81a6da56b2so1952783276.3;
-        Fri, 13 Jun 2025 19:29:20 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUJp1d+Q7v3Ol18kppXibva4o7biINJfTvw2cRW83E1t89wZ1BL3hma3jQyF1c1RrpzL/jW1U/ku1Zx+cCv@vger.kernel.org, AJvYcCUeQufS1vJRnFK2y95icskimaaMPu+xQEQ4AVVjshICtMtJD20/fQjXhPwEiJGWlInbhIsVMD0mhuN6aJP50T1N@vger.kernel.org, AJvYcCXFpNNxmHZnXiaI2HC3/JSMV1aMUecaJK308iQQPbuwptTYoZKWAVrR/U0llyt/QRroNuzZin5SgSN25iEF@vger.kernel.org
-X-Gm-Message-State: AOJu0YxqEJFdRU1wOwq3QJouVUixg+u6S3xuyoY/YPi+z/Acw9jyHLpD
-	f8Aq5GzLJ/PrsqQeJlXaIzd+HYHCC+LPPZ4cu2Yq9uRHXI1vHSmzxeeF4qaIhVnu8VvkeZOqof1
-	y4Nmc7E5vz4uT4EEBw7qhWsU+ApLkBog=
-X-Google-Smtp-Source: AGHT+IGeNNvwOwAtaxQXk0HpW6trsT1/uxwZhODR+aTOWuDPm2/IDyjtvVhhpVls3I7U/ySgcvAXiXClyo/4la4+70w=
-X-Received: by 2002:a05:690c:25c9:b0:710:e966:bf96 with SMTP id
- 00721157ae682-7117544ca55mr25388537b3.27.1749868158733; Fri, 13 Jun 2025
- 19:29:18 -0700 (PDT)
+	 To:Cc:Content-Type; b=BkGlVg7CFlEtsOw9eUtfxtK/4stYMRfid+vCBkCcT6K34tVWroW9ee1f18kwgwZ5U0zBC4gpzB/X0V6Fm/+HOTJFBkEsczASZuUKmHMrfnfLvzR6xDruCau5xiopwhyuqSkGcUOfFg90f2NLEJ/W+my7/lYLiaIDMgLLT4SFEIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=M9YfK+Jl; arc=none smtp.client-ip=209.85.166.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-3ddc2aabcb4so15ab.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Jun 2025 20:23:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1749871421; x=1750476221; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yMC1RgubSI8jxz91HSzJ6Iomy1CrrH+KUaf8/z5C7uM=;
+        b=M9YfK+JluehVwcqaR7x5IvlFJiuEsbFNnux4limO89c4+tdeohTFk14wbPMMlS110w
+         J3xhKPwFlpaIc0ppy1jgLv+hJK1lP9sgh6z0Cgfju7Wsrn41/MeyzERwLoWB1HhRwCCl
+         g/KJnc7yr+Rq8HXDZ2EAYcuZBV5OcRGkMhqo4UBF5sw6APyiBmCMETFC0vGpWNgco0Wf
+         B4814TIi8sAvf57Bl0cAx41wtsfokeh1lD7IvrxW0R9Hx85v+b26gw414I2REXLYEuon
+         QNSs65LWghJEl8IeyaYyiDKoclGQJQ0jogPHDKAJz+vjv/Sz5WpaFKvvMC0WPGolFWpH
+         Am+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749871421; x=1750476221;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yMC1RgubSI8jxz91HSzJ6Iomy1CrrH+KUaf8/z5C7uM=;
+        b=ivwOeYWujq7RTd3lJbX3S+K78UlYobyVASnHhxSZ66xDJtvLMFoz/+v41yctTDxK8e
+         P2jEaCYlf2trXljeYFW/xXPbyEojDuGKK8pjik2wDdB4kGJggaSBL677k/tPNlM4mRVZ
+         tVn96ey5uQY775pGLpQ0fCByijPjiCYvISTp8KDKOpAkn3412DfFDIzxEujEr86leHHV
+         doIdFU3NvhkbzFiOkiHTmW3wthTNQgmZPBxy6SEF5TnbGi3DyL0svYHdhJJkoIvTnHbq
+         Us08SimzYJ1/0RpqFNhD5xmMjH/ooTvbkvbP6Nqx7Bikl04VQ/CQsPoVH1/ARW9XZuqM
+         QRgg==
+X-Forwarded-Encrypted: i=1; AJvYcCVvegKpkSOSUGhVEWLnwzUrwJz+vMHvRPniIKjX2BgkCGvgcrPMbBZVkBuMx6P872U6d7Ou0D4Z/ZjssX6q77M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxvMy8g07hxT+8m/kulo3LSXmhI/bl90fD8+tWWpc9WQ6+6nTc6
+	vbTHUtvI58rM4IBBL3ttNxWYvUyX9Y9X5bnyCYSnA77iZuMNY5VenG58Brxx2LRdkKifAeNJwVI
+	iB5IHzNhBdgrvniiZaGENOimVJJHCDIqgQpeYWhk9
+X-Gm-Gg: ASbGncshdFJree5tPtNo27omvC+pREzCPWdWquOGouDHM/rzIlWEmCLO66Fu/Ntj85p
+	zk5ldfvB1jcNAEgZnxnAefHmpiLD/wNH2UjKNKMiGrBx39vWfpF20vp7ZBj+UqLWbli2Rh26YZx
+	SHxCvTt4hfLm7AA5HLdyexr9LXxC3/nEe+rmrEKeyjz2JRuzguvPL0t+umGGUWFSA26Z3N6bIb9
+	HWp
+X-Google-Smtp-Source: AGHT+IGlo6uYJF3Gn+pJN5jxgxVqy47hoLKB0YLDiznhdZSCh4GpZSc2oGthgnIZd8sYwsSUIl4f1nc2rSzZ3zzdsK4=
+X-Received: by 2002:a05:6e02:2506:b0:3d9:3ee7:a75b with SMTP id
+ e9e14a558f8ab-3de0817db53mr1219875ab.1.1749871420405; Fri, 13 Jun 2025
+ 20:23:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250610021007.2800329-2-chenlinxuan@uniontech.com> <CAJfpegt8Hk6nt5+iPg-if9iquWqr3eecgDSKYZvJY0OX+y5b9A@mail.gmail.com>
-In-Reply-To: <CAJfpegt8Hk6nt5+iPg-if9iquWqr3eecgDSKYZvJY0OX+y5b9A@mail.gmail.com>
-From: Chen Linxuan <chenlinxuan@uniontech.com>
-Date: Sat, 14 Jun 2025 10:29:07 +0800
-X-Gmail-Original-Message-ID: <AD14EFC7B36E9425+CAC1kPDOvZnjDR9-FxxObdJJDuZ4p_uP=3hkkCUi+S=p-jYT6fQ@mail.gmail.com>
-X-Gm-Features: AX0GCFuGxAdS_kbYhyuhWm8A4nGla2TR44oTlyAhwzQSDVgEI27EUb_JGxe0VDE
-Message-ID: <CAC1kPDOvZnjDR9-FxxObdJJDuZ4p_uP=3hkkCUi+S=p-jYT6fQ@mail.gmail.com>
-Subject: Re: [PATCH v3 RESEND] selftests: filesystems: Add functional test for
- the abort file in fusectl
-To: Miklos Szeredi <miklos@szeredi.hu>
-Cc: Chen Linxuan <chenlinxuan@uniontech.com>, Shuah Khan <shuah@kernel.org>, zhanjun@uniontech.com, 
-	niecheng1@uniontech.com, Shuah Khan <skhan@linuxfoundation.org>, 
-	Amir Goldstein <amir73il@gmail.com>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-fsdevel@vger.kernel.org
+References: <20250612020514.2542424-1-yuyanghuang@google.com> <20250613172941.6c454992@kernel.org>
+In-Reply-To: <20250613172941.6c454992@kernel.org>
+From: Yuyang Huang <yuyanghuang@google.com>
+Date: Sat, 14 Jun 2025 12:23:03 +0900
+X-Gm-Features: Ac12FXxi5jeP--oHy4Yft2q1FN2un7YHLfDbIUoTs8jLrWX9Uvhk2nC5jLxyXBc
+Message-ID: <CADXeF1HJ7dyw5gp7sKZvRgf_WLuEJatqfKmfxzpWtLibB=e9rg@mail.gmail.com>
+Subject: Re: [PATCH net-next, v3] selftest: Add selftest for multicast address notifications
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>, 
+	Lorenzo Colitti <lorenzo@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpgz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-QQ-XMAILINFO: MfMKp/VE+ZXdb8puI5hdDSN789SNzcKwpowcwTeEgu1lfmrZzg+lJF7g
-	UUnwbIjIqeaoKEoidrQ6obPwJgBqK8LfkpGbZezdszSep3o4kpSkJJgUqn4m6tD36ngApe7
-	ynEhh11QUdFMMW94Z7ztLy5bmqdQGv1fNu3whIEZKZZ+16mTN+wRA2aVOEprMKsOZA+8n+S
-	bDJQjiTOqqVNC4Qov6CKQZRph8p68xH8ebkvXDN3MnQPwSkt/ngy7QhNcuA7i3WaYAM6wVq
-	ESOC4mtu5jJjoqVHgY8P00SUr3pdDUkybcOc9IufdQ70W8eV+kJQjNXM8EAiWqJ0VEOJAdm
-	wUBTeIh+cl8RJfh9EZ9a6BMQE1gE4cWOXS+ZQgGNhhRumXmGKnHqhQmHMlwP7ytnMri5R5X
-	3riIWqaxtG+DnpqAGDXDpdcHjwBHd5L+GsiEIuH217ltSAeVd9Pq1GPrwe9qPC1HS1UbUKi
-	goPZ3kvyBMxpj4aIdzfnjK1KY1CHt2yV0MheLFhmnPDeGGQQPN1BDpTwuvZGzUyH6duWFcX
-	e5tUdf45vhGZM395KA496/niQZ72V0+AkN1hIgF1usI9fwIP8rkBylp3RcuKgBVUYcbg4iq
-	w27e8HFlKhFpd3tAcXj2nIx34X5f/MqMWQpaL1UQRZvU+7FsTtTFvl1dJnZBwU551enWxw+
-	TsHDMn4Jfs4qQyXRWQoDcgjFdfYwyx8xgUlsUOCEgyLvkgsEEzN6+dHa+ezQxTwsQemwAXA
-	Wh7e2ove9QgpCFC++epPJlkFucKfX6i0nlIkWj00mPITOqMn155j3fuw6B2+4A2rUrSKDEC
-	67Az/JJE8ifFJQvE9wWn+r9ln6ImE6XTVSdSCbsQdLBkWrXl/fKDFacWFX6zhbeYAT9bKzf
-	DNjetx0AnIDZxVKGSYXwwcknUSq0q4zXjxRytWE9+j29EySs6YVvRy0OBKGioQGFvfvHv2b
-	tpwKqH7NQ7zwB8XNpD8RkYQQNhGsD3JTwQzMpL0334NGxlXYanYhb8Si6gFdTo61APwCD6a
-	Kr15eQ9bFYrNzKs3hMmheoDvDWu13y3Jla1cJpAncLdvUGLUX+nR3T4it1NH2TxjFIYR/R5
-	Q==
-X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
-X-QQ-RECHKSPAM: 0
 
-On Thu, Jun 12, 2025 at 4:56=E2=80=AFPM Miklos Szeredi <miklos@szeredi.hu> =
-wrote:
->
-> On Tue, 10 Jun 2025 at 04:10, Chen Linxuan <chenlinxuan@uniontech.com> wr=
+Thanks for the suggestion.
+
+>Perhaps move these to lib.sh as a separate commit?
+>They seem generic.
+
+I am looking at the existing test cases, and it seems that each case
+is doing its own way of handling the end_test()/run_cmd(). It's
+non-trivial to unify everything into lib.sh, and it seems to be a huge
+refactor if we want to do it this way. I can also imagine each test
+case might want to customize the behavior a little bit differently.
+
+On the other hand, it seems some of the helper functions I copied over
+can be simplified. I will refactor the code a little bit to reduce the
+duplication.
+
+Thanks,
+Yuyang
+
+
+On Sat, Jun 14, 2025 at 9:29=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> wr=
 ote:
-> >
-> > This patch add a simple functional test for the "abort" file
-> > in fusectlfs (/sys/fs/fuse/connections/ID/about).
-> >
-> > A simple fuse daemon is added for testing.
-> >
-> > Related discussion can be found in the link below.
-> >
-> > Link: https://lore.kernel.org/all/CAOQ4uxjKFXOKQxPpxtS6G_nR0tpw95w0GiO6=
-8UcWg_OBhmSY=3DQ@mail.gmail.com/
-> > Signed-off-by: Chen Linxuan <chenlinxuan@uniontech.com>
-> > Acked-by: Shuah Khan <skhan@linuxfoundation.org>
-> > Reviewed-by: Amir Goldstein <amir73il@gmail.com>
 >
-> Thanks.
+> On Thu, 12 Jun 2025 11:05:14 +0900 Yuyang Huang wrote:
+> > +VERBOSE=3D0
+> > +PAUSE=3Dno
+> > +PAUSE_ON_FAIL=3Dno
+> > +
+> > +source lib.sh
+> > +
+> > +# set global exit status, but never reset nonzero one.
+> > +check_err()
+> > +{
+> > +     if [ $ret -eq 0 ]; then
+> > +             ret=3D$1
+> > +     fi
+> > +     [ -n "$2" ] && echo "$2"
+> > +}
+> > +
+> > +run_cmd_common()
+> > +{
+> > +     local cmd=3D"$*"
+> > +     local out
+> > +     if [ "$VERBOSE" =3D "1" ]; then
+> > +             echo "COMMAND: ${cmd}"
+> > +     fi
+> > +     out=3D$($cmd 2>&1)
+> > +     rc=3D$?
+> > +     if [ "$VERBOSE" =3D "1" -a -n "$out" ]; then
+> > +             echo "    $out"
+> > +     fi
+> > +     return $rc
+> > +}
+> > +
+> > +run_cmd() {
+> > +     run_cmd_common "$@"
+> > +     rc=3D$?
+> > +     check_err $rc
+> > +     return $rc
+> > +}
+> > +
+> > +end_test()
+> > +{
+> > +     echo "$*"
+> > +     [ "${VERBOSE}" =3D "1" ] && echo
+> > +
+> > +     if [[ $ret -ne 0 ]] && [[ "${PAUSE_ON_FAIL}" =3D "yes" ]]; then
+> > +             echo "Hit enter to continue"
+> > +             read a
+> > +     fi;
+> > +
+> > +     if [ "${PAUSE}" =3D "yes" ]; then
+> > +             echo "Hit enter to continue"
+> > +             read a
+> > +     fi
+> > +
+> > +}
 >
-> I suggest setting up a userns environment, see attached patch (also
-> fixes a EBUSY on umount/rmdir).
-
-The v4 patch series has been sent with your suggested changes applied:
-https://lore.kernel.org/all/20250612094033.2538122-2-chenlinxuan@uniontech.=
-com/
-
-However, I have some concerns about creating a user namespace.
-Some downstream distributions (such as Ubuntu?) may disable
-unprivileged user namespaces by default.
-If we create the user namespace before mounting FUSE, these tests
-would require privileges.
-
+> Perhaps move these to lib.sh as a separate commit?
+> They seem generic.
 >
-> Thanks,
-> Miklos
+> Please fix the shellcheck warnings. The "info"-level messages
+> are up you, SC2317 can be ignored.
+> --
+> pw-bot: cr
 
