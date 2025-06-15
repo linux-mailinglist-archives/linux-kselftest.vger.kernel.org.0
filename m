@@ -1,172 +1,211 @@
-Return-Path: <linux-kselftest+bounces-35022-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35023-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 128F3ADA154
-	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Jun 2025 10:48:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C2D1ADA1FF
+	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Jun 2025 16:00:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A2647170514
-	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Jun 2025 08:48:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 39B2718908A0
+	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Jun 2025 14:01:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98218262FF9;
-	Sun, 15 Jun 2025 08:48:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37FCC26AA82;
+	Sun, 15 Jun 2025 14:00:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="bFN6H3KJ"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="A7TiUfOZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C564A1BC3F;
-	Sun, 15 Jun 2025 08:48:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 801A33A1BA;
+	Sun, 15 Jun 2025 14:00:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749977330; cv=none; b=g7Wo0VpCAlwKolGcDUpwWKUIU1aipOnK2nxqEFZdi7J1bRHtAmKOfAlF+unLFasunGyeQdgr4xX184VISdhwnuvMALgO3TN2d7ee7TN7Q3yhR7oWL6LMCreI5+O+RTA2dyt22zRTEA0XHvlfSM1bpvN6sAurfiQcfqAPQcPaCis=
+	t=1749996050; cv=none; b=RwXPbOBOndyo1bOT6Gx6Rdrd/Lx5lxwb1DQCae+A7KIqa/deBIrfw6HEn/10iYuN5YQZE4I1aa+UNdRmxr9puVh8RGMJEctZbTOazfhxYPlchC3NVpyuNXJ+kqy3pQUdTHcpCjuTa22DcT2MpsCPQXJZF0wBxilpXmIpOLKn46Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749977330; c=relaxed/simple;
-	bh=/COxccsWVBzdJxzmwc97AIX8XiROPX0ALkZZ4v+t7Os=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZgGEV45vaZXVS2wQzrieRuGXrj2NtalHnGaFDK1OVNWvVjaHzbA0YmPrFeT5cge0JJaYWae7pVYCARSY5uVX3mcdGtRJhtRgDjZIAXEl7APgTk0UKtJE6MXVntPJStGjPhBZ2KvZ155LByz+SvoNmg7hSpzB1Y5XO0QBnb2AVws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=bFN6H3KJ; arc=none smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55F6XYvn013505;
-	Sun, 15 Jun 2025 08:48:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=corp-2025-04-25; bh=kRzPo9BfSat22K7EbkWSZRQfJUqlD
-	XqFsAlOoFuVsCw=; b=bFN6H3KJ99V6oOIHV19vYf9FC9OaG3MVbhs0pSwAdUiKN
-	yrQAADFA3cmD5LFN4qW4pGo2GcISmhYxQbssOdIL9Zhkz8/CtmP6EozWToYx4197
-	5OVuhjARvzIC9mtRqhJMwii+iqUlRBSJwSGGRxjJAgPmVMyifIkgxZGmpcDaTXCJ
-	gEFaPfuR2/CjuF4p2RE46pqF0AlG9FXsjLcp7zWyuwoSgzW93X4e9Hi6Zt35ra7N
-	Irj/AHgWh6kGBmMg62fQw8GSoa8bM/sqhuqq/WutIb+ulh2Vw2+hIw4WJWNpRVfh
-	zLAolb/S3JdWqv4B3rX5o3AvDobZf1WNPG862AeVQ==
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4790yd103e-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sun, 15 Jun 2025 08:48:29 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 55F60Dar032783;
-	Sun, 15 Jun 2025 08:48:28 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 478yh6y6vr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sun, 15 Jun 2025 08:48:28 +0000
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 55F8mR6i022800;
-	Sun, 15 Jun 2025 08:48:27 GMT
-Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 478yh6y6vk-1;
-	Sun, 15 Jun 2025 08:48:27 +0000
-From: Alok Tiwari <alok.a.tiwari@oracle.com>
-To: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
-Cc: alok.a.tiwari@oracle.com, linux-kernel@vger.kernel.org,
-        darren.kenny@oracle.com
-Subject: [PATCH v2] selftests: nettest: Fix typo in log and error messages for clarity
-Date: Sun, 15 Jun 2025 01:48:12 -0700
-Message-ID: <20250615084822.1344759-1-alok.a.tiwari@oracle.com>
-X-Mailer: git-send-email 2.47.1
+	s=arc-20240116; t=1749996050; c=relaxed/simple;
+	bh=tzBgEfNbszZFjneQrhgK2sYcgixJ885U9DAEQALxusE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=kSzcFHteaYoeGMavDklN0+PjIXX1jeftU40ZsklZ7btepxqWgq13OV/JUahTXFq2asRrWbRLMXxCsLFTj8U5ZdC7cfNN/GKiLKQdguoj0heH0eYSSjGoW6yWz5b8CAoBl/BNvszvnlcS4mqHfMD1BU7jruJMFZUDDs1CR+GiQPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=A7TiUfOZ; arc=none smtp.client-ip=217.70.183.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D7A6B205B1;
+	Sun, 15 Jun 2025 14:00:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1749996037;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YxXS5lj0DrF49L/g0V9R5FkVyXH9S7gR1QjB4hu3uuE=;
+	b=A7TiUfOZSoNCNlpd3feyEIMq7JweNSA26Ki+asH1Rd/WvFZi6wU8mGFvLOiyagoFjwL8JL
+	xo9M58/kDnjnSORKMzRqxzrCLgPAGB8Bu5MzN3EMIYoY6aN+6oHKGrYFTIO3qN/Pw67h/B
+	IMc2jyqqF5WnGXYgwIPTBVuwK7QfL9I9ZUJ6sI7veC8g4rtStWZ/IVP4WS757EaSs2cq3B
+	2xNCG4rBNC84HJC/1B3ddFVbvd1E5riocXBoJdq4moXdkt4MuVYmrwo0+OjTp/wdmH6h4R
+	eSQhByt4F2xarijNXWHhMAAbmtcVLzvls0lGIxnTZz73uWzR5oqhqzM6rTospw==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-15_04,2025-06-13_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=999 mlxscore=0
- spamscore=0 malwarescore=0 adultscore=0 phishscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2505160000
- definitions=main-2506150064
-X-Proofpoint-GUID: GHNco0k6xPDRIbBuknuglYQ0WW3FzgH-
-X-Proofpoint-ORIG-GUID: GHNco0k6xPDRIbBuknuglYQ0WW3FzgH-
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjE1MDA2NCBTYWx0ZWRfX1xyvzJ3qW1xD g2Xqldec6ulzmy7IJU9yMZQisoCGubtYrVuB2mGKyRE9ER/AYZx+C3cQDSL1F0G6lq1zd7FpUda gBxUsRNZm0PED7B+mj7593EYx17S4S8y2koSplIdHVdBiaKhGTnks/AIt0+6+n0eUApZCiljsGZ
- av9f2pmoHyOnYLT7gzX2gowYp8zhXipTFL4EYu5IENWKSB1/Z9D/V77F8e74c4uh16HGNRsY8O4 3gmxjwGxxKLGnkP9hflQ/Hf1+lZ2Lza/FxQW+/3YrGsxQ28L/Nqb5D+0yGx4Hxb/0APl+Hy0+q+ ZtkrVGmbYqRsec5DbRrhM3LPnHZQBQuaID5XHLwU9YhIIuo7rQrjeWLbed4lsxIE44vx29z6s4n
- 81mSQkEStMyn0T436Ft7fgyNvvh8oASQ8pMTNUIxp8GX9XZbPd+c9AiBkqrpYrJI0IxBrC7l
-X-Authority-Analysis: v=2.4 cv=XZGJzJ55 c=1 sm=1 tr=0 ts=684e88dd b=1 cx=c_pps a=WeWmnZmh0fydH62SvGsd2A==:117 a=WeWmnZmh0fydH62SvGsd2A==:17 a=6IFa9wvqVegA:10 a=yPCof4ZbAAAA:8 a=yiuC5uV9oDzSQypOcXUA:9
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 15 Jun 2025 16:00:30 +0200
+Message-Id: <DAN5THWRO6KS.XXZ00IOTQZH9@bootlin.com>
+Cc: "Peter Zijlstra" <peterz@infradead.org>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "John Fastabend"
+ <john.fastabend@gmail.com>, "KP Singh" <kpsingh@kernel.org>, "Stanislav
+ Fomichev" <sdf@fomichev.me>, "Hao Luo" <haoluo@google.com>, "Jiri Olsa"
+ <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>, "David Ahern"
+ <dsahern@kernel.org>, "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar"
+ <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
+ <dave.hansen@linux.intel.com>, "X86 ML" <x86@kernel.org>, "H. Peter Anvin"
+ <hpa@zytor.com>, "Menglong Dong" <imagedong@tencent.com>,
+ =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, "Pu Lehui"
+ <pulehui@huawei.com>, "Puranjay Mohan" <puranjay@kernel.org>, "Paul
+ Walmsley" <paul.walmsley@sifive.com>, "Palmer Dabbelt"
+ <palmer@dabbelt.com>, "Albert Ou" <aou@eecs.berkeley.edu>, "Alexandre
+ Ghiti" <alex@ghiti.fr>, "Ilya Leoshkevich" <iii@linux.ibm.com>, "Heiko
+ Carstens" <hca@linux.ibm.com>, "Vasily Gorbik" <gor@linux.ibm.com>,
+ "Alexander Gordeev" <agordeev@linux.ibm.com>, "Christian Borntraeger"
+ <borntraeger@linux.ibm.com>, "Sven Schnelle" <svens@linux.ibm.com>, "Hari
+ Bathini" <hbathini@linux.ibm.com>, "Christophe Leroy"
+ <christophe.leroy@csgroup.eu>, "Naveen N Rao" <naveen@kernel.org>,
+ "Madhavan Srinivasan" <maddy@linux.ibm.com>, "Michael Ellerman"
+ <mpe@ellerman.id.au>, "Nicholas Piggin" <npiggin@gmail.com>, "Mykola
+ Lysenko" <mykolal@fb.com>, "Shuah Khan" <shuah@kernel.org>, "Maxime
+ Coquelin" <mcoquelin.stm32@gmail.com>, "Alexandre Torgue"
+ <alexandre.torgue@foss.st.com>, <ebpf@linuxfoundation.org>, "Thomas
+ Petazzoni" <thomas.petazzoni@bootlin.com>, "Bastien Curutchet"
+ <bastien.curutchet@bootlin.com>, "Network Development"
+ <netdev@vger.kernel.org>, "bpf" <bpf@vger.kernel.org>, "LKML"
+ <linux-kernel@vger.kernel.org>, =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?=
+ <bjorn@rivosinc.com>, "linux-riscv" <linux-riscv@lists.infradead.org>,
+ "linux-s390" <linux-s390@vger.kernel.org>, "ppc-dev"
+ <linuxppc-dev@lists.ozlabs.org>, "open list:KERNEL SELFTEST FRAMEWORK"
+ <linux-kselftest@vger.kernel.org>,
+ <linux-stm32@st-md-mailman.stormreply.com>, "linux-arm-kernel"
+ <linux-arm-kernel@lists.infradead.org>, "dwarves" <dwarves@vger.kernel.org>
+Subject: Re: [PATCH bpf 2/7] bpf/x86: prevent trampoline attachment when
+ args location on stack is uncertain
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+X-Mailer: aerc 0.20.1-0-g2ecb8770224a
+References: <20250613-deny_trampoline_structs_on_stack-v1-0-5be9211768c3@bootlin.com> <20250613-deny_trampoline_structs_on_stack-v1-2-5be9211768c3@bootlin.com> <20250613081150.GJ2273038@noisy.programming.kicks-ass.net> <DAL9GRMH74F4.2IV0HN0NGU65X@bootlin.com> <20250613083232.GL2273038@noisy.programming.kicks-ass.net> <DALA5WYA04OG.1283TZDOVLBPS@bootlin.com> <CAADnVQ+sj9XhscN9PdmTzjVa7Eif21noAUH3y1K6x5bWcL-5pg@mail.gmail.com>
+In-Reply-To: <CAADnVQ+sj9XhscN9PdmTzjVa7Eif21noAUH3y1K6x5bWcL-5pg@mail.gmail.com>
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugddvfeekkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepggfgtgffkfevuffhvffofhgjsehtqhertdertdejnecuhfhrohhmpeetlhgvgihishcunfhothhhohhrrocuoegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepteekleehffevvedvudfhueelffeugfdtveefvdfguefgffehtdekleetheelleffnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepvdgrtddvmeekgedvkeemfhelgegtmegvtddtmeemsgehvgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdekmehfleegtgemvgdttdemmegshegvpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepiedtpdhrtghpthhtoheprghlvgigvghirdhsthgrrhhovhhoihhtohhvsehgmhgrihhlrdgtohhmpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoheprghstheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlsehiohhgvggrrhgso
+ higrdhnvghtpdhrtghpthhtoheprghnughrihhisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmrghrthhinhdrlhgruheslhhinhhugidruggvvhdprhgtphhtthhopegvugguhiiikeejsehgmhgrihhlrdgtohhmpdhrtghpthhtohepshhonhhgsehkvghrnhgvlhdrohhrgh
+X-GND-Sasl: alexis.lothore@bootlin.com
 
-This patch corrects several logging and error message in nettest.c:
-- Corrects function name in log messages "setsockopt" -> "getsockopt".
-- Closes missing parentheses in "setsockopt(IPV6_FREEBIND)".
-- Replaces misleading error text ("Invalid port") with the correct
-  description ("Invalid prefix length").
-- remove Redundant wording like "status from status" and clarifies
-  context in IPC error messages.
+On Sat Jun 14, 2025 at 12:35 AM CEST, Alexei Starovoitov wrote:
+> On Fri, Jun 13, 2025 at 1:59=E2=80=AFAM Alexis Lothor=C3=A9
+> <alexis.lothore@bootlin.com> wrote:
+>>
+>> On Fri Jun 13, 2025 at 10:32 AM CEST, Peter Zijlstra wrote:
+>> > On Fri, Jun 13, 2025 at 10:26:37AM +0200, Alexis Lothor=C3=A9 wrote:
 
-These changes improve readability and aid in debugging test output.
+[...]
 
-Signed-off-by: Alok Tiwari <alok.a.tiwari@oracle.com>
----
-v1 ->v2
-remove extra space
----
- tools/testing/selftests/net/nettest.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+>> If I need to respin, I'll rewrite the commit message to include the deta=
+ils
+>> above.
+>
+> No need to respin. The cover letter is quite detailed already.
+>
+> But looking at the patch and this thread I think we need to agree
+> on the long term approach to BTF, since people assume that
+> it's a more compact dwarf and any missing information
+> should be added to it.
+> Like in this case special alignment case and packed attributes
+> are not expressed in BTF and I believe they should not be.
+> BTF is not a debug format and not a substitute for dwarf.
+> There is no goal to express everything possible in C.
+> It's minimal, because BTF is _practical_ description of
+> types and data present in the kernel.
+> I don't think the special case of packing and alignment exists
+> in the kernel today, so the current format is sufficient.
+> It doesn't miss anything.
+> I think we made arm64 JIT unnecessary restrictive and now considering
+> to make all other JITs restrictive too for hypothetical case
+> of some future kernel functions.
+> I feel we're going in the wrong direction.
+> Instead we should teach pahole to sanitize BTF where functions
+> are using this fancy alignment and packed structs.
+> pahole can see it in dwarf and can skip emitting BTF for such
+> functions. Then the kernel JITs on all architectures won't even
+> see such cases.
+>
+> The issue was initially discovered by a selftest:
+> https://lore.kernel.org/bpf/20250411-many_args_arm64-v1-3-0a32fe72339e@bo=
+otlin.com/
+> that attempted to support these two types:
+> +struct bpf_testmod_struct_arg_4 {
+> + __u64 a;
+> + __u64 b;
+> +};
+> +
+> +struct bpf_testmod_struct_arg_5 {
+> + __int128 a;
+> +};
+>
+> The former is present in the kernel. It's more or less sockptr_t,
+> and people want to access it for observability in tracing.
+> The latter doesn't exist in the kernel and we cannot represent
+> it properly in BTF without losing alignment.
+>
+> So I think we should go back to that series:
+> https://lore.kernel.org/bpf/20250411-many_args_arm64-v1-0-0a32fe72339e@bo=
+otlin.com/
+>
+> remove __int128 selftest, but also teach pahole
+> to recognize types that cannot be represented in BTF and
+> don't emit them either into vmlinux or in kernel module
+> (like in this case it was bpf_testmod.ko)
+> I think that would be a better path forward aligned
+> with the long term goal of BTF.
+>
+> And before people ask... pahole is a trusted component of the build
+> system. We trust it just as we trust gcc, clang, linker, objtool.
 
-diff --git a/tools/testing/selftests/net/nettest.c b/tools/testing/selftests/net/nettest.c
-index cd8a58097448..1f5227f3d64d 100644
---- a/tools/testing/selftests/net/nettest.c
-+++ b/tools/testing/selftests/net/nettest.c
-@@ -385,7 +385,7 @@ static int get_bind_to_device(int sd, char *name, size_t len)
- 	name[0] = '\0';
- 	rc = getsockopt(sd, SOL_SOCKET, SO_BINDTODEVICE, name, &optlen);
- 	if (rc < 0)
--		log_err_errno("setsockopt(SO_BINDTODEVICE)");
-+		log_err_errno("getsockopt(SO_BINDTODEVICE)");
- 
- 	return rc;
- }
-@@ -535,7 +535,7 @@ static int set_freebind(int sd, int version)
- 		break;
- 	case AF_INET6:
- 		if (setsockopt(sd, SOL_IPV6, IPV6_FREEBIND, &one, sizeof(one))) {
--			log_err_errno("setsockopt(IPV6_FREEBIND");
-+			log_err_errno("setsockopt(IPV6_FREEBIND)");
- 			rc = -1;
- 		}
- 		break;
-@@ -812,7 +812,7 @@ static int convert_addr(struct sock_args *args, const char *_str,
- 			sep++;
- 			if (str_to_uint(sep, 1, pfx_len_max,
- 					&args->prefix_len) != 0) {
--				fprintf(stderr, "Invalid port\n");
-+				fprintf(stderr, "Invalid prefix length\n");
- 				return 1;
- 			}
- 		} else {
-@@ -1272,7 +1272,7 @@ static int msg_loop(int client, int sd, void *addr, socklen_t alen,
- 		}
- 	}
- 
--	nfds = interactive ? MAX(fileno(stdin), sd)  + 1 : sd + 1;
-+	nfds = interactive ? MAX(fileno(stdin), sd) + 1 : sd + 1;
- 	while (1) {
- 		FD_ZERO(&rfds);
- 		FD_SET(sd, &rfds);
-@@ -1492,7 +1492,7 @@ static int lsock_init(struct sock_args *args)
- 	sd = socket(args->version, args->type, args->protocol);
- 	if (sd < 0) {
- 		log_err_errno("Error opening socket");
--		return  -1;
-+		return -1;
- 	}
- 
- 	if (set_reuseaddr(sd) != 0)
-@@ -1912,7 +1912,7 @@ static int ipc_parent(int cpid, int fd, struct sock_args *args)
- 	 * waiting to be told when to continue
- 	 */
- 	if (read(fd, &buf, sizeof(buf)) <= 0) {
--		log_err_errno("Failed to read IPC status from status");
-+		log_err_errno("Failed to read IPC status from pipe");
- 		return 1;
- 	}
- 	if (!buf) {
--- 
-2.47.1
+So if I understand correctly your point, it would be better to just move ou=
+t
+those constraints from the JIT compilers, and just not represent those spec=
+ial
+cases in BTF, so that it becomes impossible to hook programs on those funct=
+ions,
+since they are not event present in BTF info.
+And so:
+- cancel this series
+- revert the small ARM64 check about struct passed on stack
+- update pahole to make sure that it does not encode info about this specif=
+ic
+  kind of functions.
+
+I still expect some challenges with this. AFAIU pahole uses DWARF to genera=
+te
+BTF, and discussions in [1] highlighted the fact that the attributes alteri=
+ng
+the structs alignment are not reliably encoded in DWARF. Maybe pahole can
+"guess" if a struct has been altered, by doing something like
+btf_is_struct_packed in libbpf ? As Andrii mentioned in [2], it may not be
+able to cover all cases, but that could  be a start. If that's indeed the
+desired direction, I can take a further look at this.
+
++ CC dwarves ML
+
+Alexis
+
+[1] https://lore.kernel.org/bpf/9a2ba0ad-b34d-42f8-89a6-d9a44f007bdc@linux.=
+dev/
+[2] https://lore.kernel.org/bpf/CAEf4BzZHMYyGDZ4c4eNXG7Fm=3DecxCCbKhKbQTbCj=
+vWmKtdwvBw@mail.gmail.com/
 
 
