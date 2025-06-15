@@ -1,226 +1,149 @@
-Return-Path: <linux-kselftest+bounces-35024-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35025-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB321ADA272
-	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Jun 2025 17:44:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CA222ADA38A
+	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Jun 2025 22:35:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CAACE188E540
-	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Jun 2025 15:45:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 059F9188E2C4
+	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Jun 2025 20:35:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFF5027A933;
-	Sun, 15 Jun 2025 15:44:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F73C27E7FD;
+	Sun, 15 Jun 2025 20:35:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dA10Xkxz"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="j58uOYQs"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FE6917BCE;
-	Sun, 15 Jun 2025 15:44:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA8851FE474
+	for <linux-kselftest@vger.kernel.org>; Sun, 15 Jun 2025 20:35:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750002281; cv=none; b=jdinFbuTZpfmAm137QtlK65dtnUYbRcIiwstV2+fPmh6EAWRaR98ae7myZtdFzukjqoQ0R6YElPNwK8b9Kw00gLgtFklZHEXdLf7jBrOGcOowcWTGHDdrMN2rY4y9+PABKfgV/nWeSalud3cgi4B9n5c58EeSwD1yNAeWC/PsV4=
+	t=1750019721; cv=none; b=SI/oUPTubs4giRVdrWUuWJnlzGrg1NMIIBIkQuas4me7SUIX7BHR8O8HC3VA3btVUOt0NRb2JcFwJbsZN/aNuV1LFK6ugSEF/LoUBCRgrJ2Se6VrDaEao3mmNN9aGskGHfd3Wkip8Ky03Rlq3ang/11ZXS88FKBYdj2mOh45Rsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750002281; c=relaxed/simple;
-	bh=pWRdTeTn/1OegzG4ltWn5U5SgZqMCMMLHaPU9vAtyKk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ibYPepd5YRBXbIcTWpFIMClurkbJao5ZfAm/ZvbziOeH5JlIe4a7azICptpuwFUx9ya0lmmgAcrc6i7Wv78ueSda9gA2kksXbCZi/uMyEeGLp9p5Cu202/BWzN8JKevZuUzKctibGizBuNOE2r0lpPybvSI/cD8+iefcf6g8ma8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dA10Xkxz; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3a53359dea5so2437508f8f.0;
-        Sun, 15 Jun 2025 08:44:36 -0700 (PDT)
+	s=arc-20240116; t=1750019721; c=relaxed/simple;
+	bh=hTKdS9FbvzhPeEzVA/l/oUc1Qn5lQUnlHrMSxWhY3j4=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=V2m9UbWbjDw+NDYqglzCWPV1Jzh156MG/T8osfdFGLe8bfjbgRadDvQ8N+kRVMJFfbWkpva3Hi7Hlwt+YoCeEZh0ncjxmAhk0b2lB/4WMcxPUG63HeMgqBAel8rooL6ov9wXhOOBC+65H5ygtcnNUzYHvqIh4nLwH0z1rcir7Wg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=j58uOYQs; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-235dd77d11fso30032615ad.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 15 Jun 2025 13:35:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750002275; x=1750607075; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q24V+OwPQTKaIgjR+NjdUiOeSoG4NNmYTDA2NhEIjAI=;
-        b=dA10XkxzSI/fHK2luyIGGkG5SXbzX3TwJIiqgInP3v9mHgZxVn12OUeGPFaUBgvJr2
-         OyNOGYYh6JofO1+9Sevl/6F/vmn4RetkQG0F88RTgImmPcCMN/EYPyxX2opJN3HMUbhM
-         5LFmqqckPGtBtIB/a9bvjEGEAOP90OjrcM0/HeIZk6x/BxxVtZ3XuPJ5pwXGhgl/P1c1
-         ofxhNqIN5xBmGOE5LhYHa9z2w1MTyF4o2JX+7ucQVa00wvvMtHOzO/U7lIYESLfBeiAI
-         jkuoLniSOEcDjhQgeu7u8dynaKXxf4ovotMb1bzZzTbUycbGmUXv+cQzB/iH686UAK9U
-         v95w==
+        d=google.com; s=20230601; t=1750019719; x=1750624519; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=TnJOTvPpBZ4s9blihdz8QHYWoHM5MocYduDMaUYYCKg=;
+        b=j58uOYQsh6v6ePcU03wlPusr6ITlpxn8/A7zyUFhBNPNHSTRDn/Q1Q/j2cfd3TVj+m
+         Tz1Z8AOneaW09P0FRxODVY9CFMBbJRoHU45TJEnKVyM2KaulMrEtw1jLPbfUNd9umXe5
+         0VMgU7bxwSLaSNGouBHP7/crKOipQwDHb+MmtqwxFaR+EAyYmZFQBsI80NodQKBiNX8o
+         /9RmsA/nu5/sdFG1gmrDN1xbXVoTnBunPCjFrSy+z3i8R/x9yqN04XvOr5oe4un3IC1M
+         V6cq/J7Pn34Ip/8Vm8pw2aRBuS16Eri4VW4bj0qNO5i80B7SRq5QVVrHyu4kVtiwU09e
+         +ViA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750002275; x=1750607075;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Q24V+OwPQTKaIgjR+NjdUiOeSoG4NNmYTDA2NhEIjAI=;
-        b=nxOElu68sjHS40dc0nmGHT7fzU4U5wY0Ye5M9KPtsSBAkueENBCVbRhYkr3QDyM6gF
-         ADWgUa22R1xAhxvT8Dxk+NFVIycme30ECD52v7BmZeRXLbKSRgpTdr37pFS5q/4/D9Q0
-         Iit5KjRBbI3MVvvDK8VbgGbfL3zD2TEA6RTybM41ty7k5T8JfmLMVd2/w3m7DY6CNzXM
-         FzMMIbDy4bUV+nJGIe/pQ+NncrCWGxBH4Mjkpd6GD2qVBNxcjwlUFSWiLScvEzfcXrqC
-         +0rzSWqiAkhg+Vl52mOaFVkzul+1+6nAVqCZAYjSbGnR2pFWwYuGUf0UYqoM71ts88fN
-         DQ9A==
-X-Forwarded-Encrypted: i=1; AJvYcCUqF+sH0BVxoSz1a3XFrl7qQL4akjOoZbMWdGX/Ddq4j5LDUoM+PzuQKWayyfGC0T0I2S3OYRZci8r4TxXC9rGK@vger.kernel.org, AJvYcCUqTjPyRE+TK/FFK3GKhL344S/4sVWMkUmxSYAvlD3GSg0MZ475BaEVtqIauLFWyW4zk8M=@vger.kernel.org, AJvYcCVSX+jCxW2UyvH4mz3DNSDOFe2W/GhcncI+1b1LWaI2oRrsbhiomGHFHeomsYOW9tmebjO0rEyrIqZbTn6U@vger.kernel.org, AJvYcCWGDN9btWAiDc5xwf1tmQCFkCnnX8osaIN/5FecQvSrdJslsmQgXNI9Tewfx5/croosdz25RBxj@vger.kernel.org, AJvYcCX51SRTh1eye9qHU7BL16tUYjXHfIqix8+IrbPmtvEoP3Ckq1oEsj3kR+TJ8EDhP1wGsPUzmLrjV1wo4A==@vger.kernel.org, AJvYcCXeNAne4/qEsjvjCFZ9+iR959uOeP2EHJ98nAdoJ4vKuv5ny3y1xdHu4aZY7efxyQnb8Rb2Ujx/vg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0/I+xzvokvfS1a2EgdZAcsURvXoH7dylCRxL9wVaQNd1Ma2Ta
-	fOTO0dQQWzGmoUCcXQBAqQQpC5Ut6cF/SMsNcOP98LvmDN1O0lXPFSezanFYHJGM66xmoeg5vBn
-	sOjj5cscxFpQ9eTvpJzm3XeDrJsjVYng=
-X-Gm-Gg: ASbGncvJxNgTmeazZsqW/ffCmJ/xCW32eyB1/lstN3sq5HKdIZLyIPSRQ4CCtfxiV3w
-	TIyBjWD2nhstLSyccafZk/4zCbXzAT7/6k0odhzwp1OGE1NjW9jvPAZRlvDvJSHn9sVP9QlKtZi
-	bPthxsaoAp5qYHhtDrv9dEmAW+PM2bj7VgFPWXxtFkRgypmtrbKyGb4A==
-X-Google-Smtp-Source: AGHT+IEVMqrf36wFDwIu+Qav+T1hxhMtiOfYIpsqMlJITLohO7pPVX7dQmL5OFhL7NsYv2qBiULo8wqoJRikRf0wek4=
-X-Received: by 2002:a05:6000:718:b0:3a5:3b63:58f0 with SMTP id
- ffacd0b85a97d-3a57237178dmr4884718f8f.18.1750002274959; Sun, 15 Jun 2025
- 08:44:34 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1750019719; x=1750624519;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TnJOTvPpBZ4s9blihdz8QHYWoHM5MocYduDMaUYYCKg=;
+        b=sl1Pya2/SAhS8IWtzefk27HEKfO8ehjfDFvR+Dfs7/g8peyC5wfkHnz8uiD2d4PZfj
+         rXlVIL11aB7X1pF3NChVp9P/tLIDaeVCiN9L1CUeXYMq0l17p/o42kjVuUM7VNDgWcSl
+         ELUUGALlWi8e8wxn60UCaUhy8/0lyW7SxEN96LRw8NJ90HOjXCcpIQdfHBn4yOH78diO
+         zk/O4Z+Acp1Fubr4KAycrUlUtY6SNAmYWQ/v32zOYxr1kQEbuBhDE27z63AqngC0YY4u
+         kkFdhGqwDmpRJCctyOX+7cKIqYDE7uRlyKyhgDaNO0oiMbQEwxlLHoOPSgBKZGfvtufF
+         Wc2w==
+X-Forwarded-Encrypted: i=1; AJvYcCUbRXK59QhcAuL/r8aeZOdaC7cJG8To4eC79DRwvRckZPipOCpWT/QmuMW8aM+gsWi0MJsejUMI8CmOzb2i33M=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy5LxZNKpI/MIBEWgM7pJrJmduguqQplgC8dknTQBlhiVTpzrrO
+	72EaTUlhSrQB3RgRt76Op8H3SMHo1hHtSOXhMetDDra4JBTsMcVRB06TRxknUYMYC/Ydxih4l5T
+	fR7Lao2RabF1YM3ldhx1f+LFVrA==
+X-Google-Smtp-Source: AGHT+IEwZSAcU4kaXuKVgkMjf0a9b/HiTa8nTDiEYfTo3yZsML1DJgkgidP9XnaWOOl2cec2ZBI3/xpDqQ+ecXcFIQ==
+X-Received: from pjzz13.prod.google.com ([2002:a17:90b:58ed:b0:2fe:800f:23a])
+ (user=almasrymina job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:903:1a6f:b0:235:129e:f649 with SMTP id d9443c01a7336-2366b344077mr117727625ad.12.1750019719118;
+ Sun, 15 Jun 2025 13:35:19 -0700 (PDT)
+Date: Sun, 15 Jun 2025 20:35:09 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250613-deny_trampoline_structs_on_stack-v1-0-5be9211768c3@bootlin.com>
- <20250613-deny_trampoline_structs_on_stack-v1-2-5be9211768c3@bootlin.com>
- <20250613081150.GJ2273038@noisy.programming.kicks-ass.net>
- <DAL9GRMH74F4.2IV0HN0NGU65X@bootlin.com> <20250613083232.GL2273038@noisy.programming.kicks-ass.net>
- <DALA5WYA04OG.1283TZDOVLBPS@bootlin.com> <CAADnVQ+sj9XhscN9PdmTzjVa7Eif21noAUH3y1K6x5bWcL-5pg@mail.gmail.com>
- <DAN5THWRO6KS.XXZ00IOTQZH9@bootlin.com>
-In-Reply-To: <DAN5THWRO6KS.XXZ00IOTQZH9@bootlin.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sun, 15 Jun 2025 08:44:23 -0700
-X-Gm-Features: AX0GCFum0GptEjJNe1zyPyz2oALA4PaNl_E8ueRtmTM4_c9kw_4GcQiqb2A1p90
-Message-ID: <CAADnVQJPQNC5VaybR_GZry5YZhNcJmWSSouuTSsU1XKhDfXYwQ@mail.gmail.com>
-Subject: Re: [PATCH bpf 2/7] bpf/x86: prevent trampoline attachment when args
- location on stack is uncertain
-To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>, 
-	"H. Peter Anvin" <hpa@zytor.com>, Menglong Dong <imagedong@tencent.com>, 
-	=?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
-	Pu Lehui <pulehui@huawei.com>, Puranjay Mohan <puranjay@kernel.org>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
-	Ilya Leoshkevich <iii@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Hari Bathini <hbathini@linux.ibm.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
-	ebpf@linuxfoundation.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
-	Bastien Curutchet <bastien.curutchet@bootlin.com>, 
-	Network Development <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>, 
-	linux-riscv <linux-riscv@lists.infradead.org>, linux-s390 <linux-s390@vger.kernel.org>, 
-	ppc-dev <linuxppc-dev@lists.ozlabs.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-stm32@st-md-mailman.stormreply.com, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, dwarves <dwarves@vger.kernel.org>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.50.0.rc1.591.g9c95f17f64-goog
+Message-ID: <20250615203511.591438-1-almasrymina@google.com>
+Subject: [PATCH net-next v2 1/3] netmem: fix netmem comments
+From: Mina Almasry <almasrymina@google.com>
+To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Cc: Mina Almasry <almasrymina@google.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Joe Damato <jdamato@fastly.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Sun, Jun 15, 2025 at 7:00=E2=80=AFAM Alexis Lothor=C3=A9
-<alexis.lothore@bootlin.com> wrote:
->
-> On Sat Jun 14, 2025 at 12:35 AM CEST, Alexei Starovoitov wrote:
-> > On Fri, Jun 13, 2025 at 1:59=E2=80=AFAM Alexis Lothor=C3=A9
-> > <alexis.lothore@bootlin.com> wrote:
-> >>
-> >> On Fri Jun 13, 2025 at 10:32 AM CEST, Peter Zijlstra wrote:
-> >> > On Fri, Jun 13, 2025 at 10:26:37AM +0200, Alexis Lothor=C3=A9 wrote:
->
-> [...]
->
-> >> If I need to respin, I'll rewrite the commit message to include the de=
-tails
-> >> above.
-> >
-> > No need to respin. The cover letter is quite detailed already.
-> >
-> > But looking at the patch and this thread I think we need to agree
-> > on the long term approach to BTF, since people assume that
-> > it's a more compact dwarf and any missing information
-> > should be added to it.
-> > Like in this case special alignment case and packed attributes
-> > are not expressed in BTF and I believe they should not be.
-> > BTF is not a debug format and not a substitute for dwarf.
-> > There is no goal to express everything possible in C.
-> > It's minimal, because BTF is _practical_ description of
-> > types and data present in the kernel.
-> > I don't think the special case of packing and alignment exists
-> > in the kernel today, so the current format is sufficient.
-> > It doesn't miss anything.
-> > I think we made arm64 JIT unnecessary restrictive and now considering
-> > to make all other JITs restrictive too for hypothetical case
-> > of some future kernel functions.
-> > I feel we're going in the wrong direction.
-> > Instead we should teach pahole to sanitize BTF where functions
-> > are using this fancy alignment and packed structs.
-> > pahole can see it in dwarf and can skip emitting BTF for such
-> > functions. Then the kernel JITs on all architectures won't even
-> > see such cases.
-> >
-> > The issue was initially discovered by a selftest:
-> > https://lore.kernel.org/bpf/20250411-many_args_arm64-v1-3-0a32fe72339e@=
-bootlin.com/
-> > that attempted to support these two types:
-> > +struct bpf_testmod_struct_arg_4 {
-> > + __u64 a;
-> > + __u64 b;
-> > +};
-> > +
-> > +struct bpf_testmod_struct_arg_5 {
-> > + __int128 a;
-> > +};
-> >
-> > The former is present in the kernel. It's more or less sockptr_t,
-> > and people want to access it for observability in tracing.
-> > The latter doesn't exist in the kernel and we cannot represent
-> > it properly in BTF without losing alignment.
-> >
-> > So I think we should go back to that series:
-> > https://lore.kernel.org/bpf/20250411-many_args_arm64-v1-0-0a32fe72339e@=
-bootlin.com/
-> >
-> > remove __int128 selftest, but also teach pahole
-> > to recognize types that cannot be represented in BTF and
-> > don't emit them either into vmlinux or in kernel module
-> > (like in this case it was bpf_testmod.ko)
-> > I think that would be a better path forward aligned
-> > with the long term goal of BTF.
-> >
-> > And before people ask... pahole is a trusted component of the build
-> > system. We trust it just as we trust gcc, clang, linker, objtool.
->
-> So if I understand correctly your point, it would be better to just move =
-out
-> those constraints from the JIT compilers, and just not represent those sp=
-ecial
-> cases in BTF, so that it becomes impossible to hook programs on those fun=
-ctions,
-> since they are not event present in BTF info.
-> And so:
-> - cancel this series
-> - revert the small ARM64 check about struct passed on stack
-> - update pahole to make sure that it does not encode info about this spec=
-ific
->   kind of functions.
+Trivial fix to a couple of outdated netmem comments. No code changes,
+just more accurately describing current code.
 
-yes
+Signed-off-by: Mina Almasry <almasrymina@google.com>
 
-> I still expect some challenges with this. AFAIU pahole uses DWARF to gene=
-rate
-> BTF, and discussions in [1] highlighted the fact that the attributes alte=
-ring
-> the structs alignment are not reliably encoded in DWARF. Maybe pahole can
-> "guess" if a struct has been altered, by doing something like
-> btf_is_struct_packed in libbpf ? As Andrii mentioned in [2], it may not b=
-e
-> able to cover all cases, but that could  be a start. If that's indeed the
-> desired direction, I can take a further look at this.
+---
 
-so be it. If syzbot was taught to fuzz dwarf I'm sure it would
-have exposed hundreds of bugs in the format itself and compilers,
-but since such convoluted constructs are not present in the kernel
-source code it's not a concern.
+v2: https://lore.kernel.org/netdev/20250613042804.3259045-2-almasrymina@google.com/
+- Adjust comment for clearing lsb as (Jakub)
+---
+ include/net/netmem.h | 21 ++++++++++++++++-----
+ 1 file changed, 16 insertions(+), 5 deletions(-)
+
+diff --git a/include/net/netmem.h b/include/net/netmem.h
+index 386164fb9c18..850869b45b45 100644
+--- a/include/net/netmem.h
++++ b/include/net/netmem.h
+@@ -89,8 +89,7 @@ static inline unsigned int net_iov_idx(const struct net_iov *niov)
+  * typedef netmem_ref - a nonexistent type marking a reference to generic
+  * network memory.
+  *
+- * A netmem_ref currently is always a reference to a struct page. This
+- * abstraction is introduced so support for new memory types can be added.
++ * A netmem_ref can be a struct page* or a struct net_iov* underneath.
+  *
+  * Use the supplied helpers to obtain the underlying memory pointer and fields.
+  */
+@@ -117,9 +116,6 @@ static inline struct page *__netmem_to_page(netmem_ref netmem)
+ 	return (__force struct page *)netmem;
+ }
+ 
+-/* This conversion fails (returns NULL) if the netmem_ref is not struct page
+- * backed.
+- */
+ static inline struct page *netmem_to_page(netmem_ref netmem)
+ {
+ 	if (WARN_ON_ONCE(netmem_is_net_iov(netmem)))
+@@ -178,6 +174,21 @@ static inline unsigned long netmem_pfn_trace(netmem_ref netmem)
+ 	return page_to_pfn(netmem_to_page(netmem));
+ }
+ 
++/* __netmem_clear_lsb - convert netmem_ref to struct net_iov * for access to
++ * common fields.
++ * @netmem: netmem reference to extract as net_iov.
++ *
++ * All the sub types of netmem_ref (page, net_iov) have the same pp, pp_magic,
++ * dma_addr, and pp_ref_count fields at the same offsets. Thus, we can access
++ * these fields without a type check to make sure that the underlying mem is
++ * net_iov or page.
++ *
++ * The resulting value of this function can only be used to access the fields
++ * that are NET_IOV_ASSERT_OFFSET'd. Accessing any other fields will result in
++ * undefined behavior.
++ *
++ * Return: the netmem_ref cast to net_iov* regardless of its underlying type.
++ */
+ static inline struct net_iov *__netmem_clear_lsb(netmem_ref netmem)
+ {
+ 	return (struct net_iov *)((__force unsigned long)netmem & ~NET_IOV);
+
+base-commit: 8909f5f4ecd551c2299b28e05254b77424c8c7dc
+-- 
+2.50.0.rc1.591.g9c95f17f64-goog
+
 
