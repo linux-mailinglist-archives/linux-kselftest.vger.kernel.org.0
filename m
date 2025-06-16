@@ -1,185 +1,107 @@
-Return-Path: <linux-kselftest+bounces-35068-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35069-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7141ADB020
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jun 2025 14:24:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9151ADB07F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jun 2025 14:45:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 56EE2170575
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jun 2025 12:24:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E9A51664B9
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jun 2025 12:46:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 758292737F9;
-	Mon, 16 Jun 2025 12:24:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B170274420;
+	Mon, 16 Jun 2025 12:45:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VPtU/4bD"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b="VmpLgIGV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8912230D0E
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Jun 2025 12:24:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750076677; cv=none; b=QTw8PzmmYJXZ7KhutIWJOlf8V8NujC4YxqGtKAyS0bpaJOhVoTvNFGno3o3+ebObD+nF0lNJssxA3DG+gTNV28te0Ik/g1Fbx+UMFOkvn9Zuy/oIcqGvrFwuGAOsD4GICWLtWEduqLqZo0x/cMeqE+Ly09O5AJM60L2SQ6n7FM4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750076677; c=relaxed/simple;
-	bh=3LM6snJi0Ce6lDe6ldJrcKzmUuCla9s2UvqqkVW2BFo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=Cm3ma9vxerW5zhBuGZh1mae8Ndh1XYWQFzFgQruXW21pavGEMrI/pfNnDsc141oMx8GA9iL0epERHMe1Ua8XX+EK7KWLuWqTQeu5B7yOCuzsyamSQDPf8Aadc2c2u9dwnZhkGSAtkv36OroiWBDOGhrqpam6yvra6Da+Er/i5wg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VPtU/4bD; arc=none smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-607b59b447bso7819144a12.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Jun 2025 05:24:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750076674; x=1750681474; darn=vger.kernel.org;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=AD7KRRpHNhU5Uz1jz5NAfruDi90TK1Z6YNXGVHBZ780=;
-        b=VPtU/4bDa4k4qfor4p/V9t8YRi4l4rMFBk7srTvehb8cNxXl7OXc+CCiQrCKsBIzpu
-         yobEskWpsvUh9K7s7lCWLia00bwTqAuyka+Y/oKUfirOdvIm7Jvgnsu3saAvpcwDzcfi
-         jOanvN3m/HtDTkBXGYAC2Op+6NhNuTKAVysXXmxJzfCeUIOakdCcMhzKV4FVdgwmzXWP
-         UGEuQrO0NTUcMA0hTe/iOpoN+CjzD5/NK/eOP8OzYKHUoqxmY0z6mMX89iKMHf29iKqQ
-         KKzKj40MmlpgnTad+DUwB2HWrtZHR/E1mEyUiolyvNyIZnfWNCcRd6uuF2nOIzOS80lu
-         2npw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750076674; x=1750681474;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AD7KRRpHNhU5Uz1jz5NAfruDi90TK1Z6YNXGVHBZ780=;
-        b=TiWuw1Nywz6zrXuyOF4bWcTgEgsRDEWspOnhnzFUYSbyV5a+gNWrihuQcxe3G/uipv
-         xBD/7f0bZV8h29CFcMY1QUjwQm9tGVgVtloDRWgGz6o5hqHiD+tdkpnIfbV9HFAiTVJq
-         kHD0mbPzTXxl6pF4TFCLk2lNTDH1HFR09FKZGix1k1vo/sWB6lWcBYib61HJ0/XlnEKu
-         llSsqsm7qKZOnOUzpENdo8ZwGkSzrGdSwpFh03VEcQVqEt209avmLdEt1mIwJdB+Z1Nd
-         2NAjJ4W7cG27ST23r3R/TLDBPbMqM+3xJFGcqj8Y59CW8+bo1EfT7k4fpZnGibHR6FZX
-         oNvg==
-X-Gm-Message-State: AOJu0YzTw/PRCM4o5YpUz54bUZIWgzcjcITk+QBTNRTIvgbYloGNDgBJ
-	pQclNbecd2JdKdp/ElLNKvRoiQsTOjCZs2dboL9JaqlNGt6d4yTO1oOp
-X-Gm-Gg: ASbGnctQCc57EIaophUrlMK9FVaTCDLwjngkVXEeX5pOWmfPydNqkiNhXRVeFZoxWfr
-	JRdJGbt7vRUbXplhOU1YmjsodbTnvMjIXOyw9zuCLuQvMLymPCXhN9An9SpXYzKNlafEtcnwPgw
-	IFU/OltxRac+EidDzkNrOVyt1REI8LEFlV4x1fb+t0sQdzZH/+OF3teJC6GptnJ47B0UhtkzwmP
-	udi84ITwgw9SySwgf/j3HUTEXGGcjJJTVDi5Jv+4ziD+tbX5UqCaeUc1Y12IpX+JARW6fSyTPkk
-	+9r/lDz/Qh3CIC5S+WOUs11Q135hOlPWAA5p/uTWvhruAqlla58iM7f5+mVAuKaBzl7e9Qyv
-X-Google-Smtp-Source: AGHT+IFpro3S1m+ppgFk3KTqqLAsH37FukX2KLMV7StaFdRjk3GXHVY6hJHAsVIR80btNB5N35a3og==
-X-Received: by 2002:a17:907:1ca1:b0:ad8:9d9b:40f9 with SMTP id a640c23a62f3a-adfad451623mr870256066b.43.1750076673545;
-        Mon, 16 Jun 2025 05:24:33 -0700 (PDT)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-adfb6c14386sm424839266b.87.2025.06.16.05.24.32
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 16 Jun 2025 05:24:32 -0700 (PDT)
-From: Wei Yang <richard.weiyang@gmail.com>
-To: shuah@kernel.org,
-	kees@kernel.org,
-	luto@amacapital.net,
-	wad@chromium.org
-Cc: linux-kselftest@vger.kernel.org,
-	thomas.weissschuh@linutronix.de,
-	usama.anjum@collabora.com,
-	skhan@linuxfoundation.org,
-	Wei Yang <richard.weiyang@gmail.com>
-Subject: [PATCH 3/3] selftests: harness: Add kselftest harness selftest with variant
-Date: Mon, 16 Jun 2025 12:23:38 +0000
-Message-Id: <20250616122338.32678-4-richard.weiyang@gmail.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20250616122338.32678-1-richard.weiyang@gmail.com>
-References: <20250616122338.32678-1-richard.weiyang@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D974E322A
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Jun 2025 12:45:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750077956; cv=pass; b=dfWy+rOxst9vrc8upORMRgdaSocGHTpJSE3uE6dYZMkwcHKCFTaQNzNmCgsSaCqtAx22sjM44VTCzFw825yR3tdwuWI2tOUxDI1lLITSKqP5tvP8f+RBHUAESizOID+e+AgNAPrPYpbBJjW3u1vGwi/udK8tPzoZwSUO2nCdnsg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750077956; c=relaxed/simple;
+	bh=1lMo/Kx5w65g4hIhEhVM10x5Mmt++2HSgyD2ORTx0VY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aYxPnTfnotAMPm9/5jvy9N8Vzwc/EgT0DYNuqhK/QXqfi3cFgYz/ylDHQrV4J4ftCYsuj0LmncvE546yKKt18snTv37Ub/ksFJ0wqtkzWL4dlPUsUDo9MzSD7u9Y7v7FcAApUT/faKvoluZTBxlzFTr+S70HdN++OfyFg6t0OBI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b=VmpLgIGV; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1750077913; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=hOmbKRGlMK2EOh8d/SliteC93vpxi7ZpEH99Yu7/V2UqHIX4nK7gAODKJJqIBYsRc/CVUfc2l875QLZznxv/Wq4gFntFxYC4EJDAcaHo/ouUGQgik1X2JFSAd3qNKM2KaX3aFfKqCcJpt4vrm0DQJYXf69iaQHAN+RUWTg1QPGQ=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1750077913; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=9gLNoLcgtCNZMnfsCuMXgXWj6+7NoI6mXLggGfc1R38=; 
+	b=i9OEEcttPq1MB7s0Rs7qG+o4LBZ53VT4xL6NsmXfcOKcmVSWeKiRIA7E2EYCejjrq+5iMkrtq6rIM36V0Qnt02IWbQxWxKxHCQhr6mDeZt10A7R0h/FBFLdqR7KscZxmCkY8aE+L9KMjG4TqlswHnZ2O4YGPjNDK312K+zt3jf8=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=usama.anjum@collabora.com;
+	dmarc=pass header.from=<usama.anjum@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1750077913;
+	s=zohomail; d=collabora.com; i=usama.anjum@collabora.com;
+	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=9gLNoLcgtCNZMnfsCuMXgXWj6+7NoI6mXLggGfc1R38=;
+	b=VmpLgIGVXD3LJmIl5ekaIpU7vMEZFkVWIwdw6AQHgByz4Jt7APgGWJhnbG/YznJr
+	2eY4GyabWy8KXTOjhlAB6sCK6eru+egB9Z0X541lJRqxuxOlnjLkunl0W/ZhehnUHtQ
+	tBpuNSHFKpqWdzrxSU8iFcygueWEz4AXn/rzl8c0=
+Received: by mx.zohomail.com with SMTPS id 1750077902735804.2828728333874;
+	Mon, 16 Jun 2025 05:45:02 -0700 (PDT)
+Message-ID: <ff053978-78ce-4ac1-a406-32222bfbde05@collabora.com>
+Date: Mon, 16 Jun 2025 17:44:55 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/3] selftests: print 0 if no test is chosen
+To: Wei Yang <richard.weiyang@gmail.com>, shuah@kernel.org, kees@kernel.org,
+ luto@amacapital.net, wad@chromium.org
+Cc: linux-kselftest@vger.kernel.org, thomas.weissschuh@linutronix.de,
+ skhan@linuxfoundation.org
+References: <20250616122338.32678-1-richard.weiyang@gmail.com>
+ <20250616122338.32678-3-richard.weiyang@gmail.com>
+Content-Language: en-US
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20250616122338.32678-3-richard.weiyang@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ZohoMailClient: External
 
-Each fixture could support variant. Add fixture with variant to verify
-the behavior, so we can validate for further change.
+On 6/16/25 5:23 PM, Wei Yang wrote:
+> In case there is no test chosen, e.g -t non-exist, the following message
+> would be printed at start.
+> 
+>     TAP version 13
+>     1..0
+> 
+> Change it to print 0 if no test is chosen.
+Please give reference from TAP format guidelines for this change.
 
-Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
----
- .../kselftest_harness/harness-selftest.c      | 34 +++++++++++++++++++
- .../harness-selftest.expected                 | 22 +++++++++---
- 2 files changed, 52 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/kselftest_harness/harness-selftest.c b/tools/testing/selftests/kselftest_harness/harness-selftest.c
-index b555493bdb4d..2fd5310b33c7 100644
---- a/tools/testing/selftests/kselftest_harness/harness-selftest.c
-+++ b/tools/testing/selftests/kselftest_harness/harness-selftest.c
-@@ -118,6 +118,40 @@ TEST_F(fixture_setup_failure, pass) {
- 	TH_LOG("after");
- }
- 
-+FIXTURE(fixture_variant) {
-+	pid_t testpid;
-+};
-+
-+FIXTURE_VARIANT(fixture_variant)
-+{
-+	int value;
-+};
-+
-+FIXTURE_VARIANT_ADD(fixture_variant, v32)
-+{
-+	.value = 32,
-+};
-+
-+FIXTURE_VARIANT_ADD(fixture_variant, v64)
-+{
-+	.value = 64,
-+};
-+
-+FIXTURE_SETUP(fixture_variant) {
-+	TH_LOG("setup %d", variant->value);
-+	self->testpid = getpid();
-+}
-+
-+FIXTURE_TEARDOWN(fixture_variant) {
-+	TH_LOG("teardown same-process=%d", self->testpid == getpid());
-+}
-+
-+TEST_F(fixture_variant, pass) {
-+	TH_LOG("before");
-+	ASSERT_EQ(0, 0);
-+	TH_LOG("after");
-+}
-+
- int main(int argc, char **argv)
- {
- 	/*
-diff --git a/tools/testing/selftests/kselftest_harness/harness-selftest.expected b/tools/testing/selftests/kselftest_harness/harness-selftest.expected
-index 97e1418c1c7e..ab081c5aba05 100644
---- a/tools/testing/selftests/kselftest_harness/harness-selftest.expected
-+++ b/tools/testing/selftests/kselftest_harness/harness-selftest.expected
-@@ -1,6 +1,6 @@
- TAP version 13
--1..9
--# Starting 9 tests from 4 test cases.
-+1..11
-+# Starting 11 tests from 6 test cases.
- #  RUN           global.standalone_pass ...
- # harness-selftest.c:19:standalone_pass:before
- # harness-selftest.c:23:standalone_pass:after
-@@ -60,5 +60,19 @@ ok 8 fixture_parent.pass
- # pass: Test terminated by assertion
- #          FAIL  fixture_setup_failure.pass
- not ok 9 fixture_setup_failure.pass
--# FAILED: 4 / 9 tests passed.
--# Totals: pass:4 fail:5 xfail:0 xpass:0 skip:0 error:0
-+#  RUN           fixture_variant.v32.pass ...
-+# harness-selftest.c:141:pass:setup 32
-+# harness-selftest.c:150:pass:before
-+# harness-selftest.c:152:pass:after
-+# harness-selftest.c:146:pass:teardown same-process=1
-+#            OK  fixture_variant.v32.pass
-+ok 10 fixture_variant.v32.pass
-+#  RUN           fixture_variant.v64.pass ...
-+# harness-selftest.c:141:pass:setup 64
-+# harness-selftest.c:150:pass:before
-+# harness-selftest.c:152:pass:after
-+# harness-selftest.c:146:pass:teardown same-process=1
-+#            OK  fixture_variant.v64.pass
-+ok 11 fixture_variant.v64.pass
-+# FAILED: 6 / 11 tests passed.
-+# Totals: pass:6 fail:5 xfail:0 xpass:0 skip:0 error:0
--- 
-2.34.1
+> 
+> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+> ---
+>  tools/testing/selftests/kselftest.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+> index c3b6d2604b1e..9fcf76f0b702 100644
+> --- a/tools/testing/selftests/kselftest.h
+> +++ b/tools/testing/selftests/kselftest.h
+> @@ -144,7 +144,7 @@ static inline void ksft_print_header(void)
+>  static inline void ksft_set_plan(unsigned int plan)
+>  {
+>  	ksft_plan = plan;
+> -	printf("1..%u\n", ksft_plan);
+> +	printf("%u..%u\n", !plan ? 0 : 1, ksft_plan);
+>  }
+>  
+>  static inline void ksft_print_cnts(void)
 
 
