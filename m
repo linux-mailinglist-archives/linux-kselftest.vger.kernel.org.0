@@ -1,181 +1,183 @@
-Return-Path: <linux-kselftest+bounces-35101-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35102-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3AB9ADB677
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jun 2025 18:18:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D96BADB68A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jun 2025 18:21:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B042D3AE7F1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jun 2025 16:18:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 36041188C5F8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jun 2025 16:21:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35283259C9F;
-	Mon, 16 Jun 2025 16:18:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F26B286437;
+	Mon, 16 Jun 2025 16:21:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XDEWEYeK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HxE4ZsKv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A4C717A2FA;
-	Mon, 16 Jun 2025 16:18:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88413259C9F;
+	Mon, 16 Jun 2025 16:21:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750090705; cv=none; b=TS5iS0SoUg75iw8JIAN/ru7S/S+95We8wHDP/xOM9sqqwxONVu/Q/9QyT+X6f3uUz/O/RcgZnIOH6J1MvkRGDIm5pvsybMGRmZrc77ddfTYpCJdGxHIVePHcNDNtZM3WY2MOVWQ1YEDvuHbFyObYrBQ/bZ0uz++mcv7ZtFrZwIs=
+	t=1750090881; cv=none; b=WduYWnOFXP6QwsITeo/woMPKGi3wC3AF5AJB6nr/QcWQThCqXuPjYCCh7NFkRk3jpeXwTgV/NafVKdtoV4cmcdq7a+Bc0iW1cnbfp33ozoUOT0ZZigqcq3oP87DtYHXJ0dSIdK+nAtpcN2E6tiZyvLslMKD1m8skVTm3OT+ZT0w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750090705; c=relaxed/simple;
-	bh=QuPwZTmN5ribhxKsREDovtdslKeq4Hhftis1ZPbSwrE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CdMSeFKQ6SYIK+mCh/1VXN+oTmuFXI/o4o996nWsFvA7RgWOztQB2Reayn5/U21E9+Ns4/T7jBMlsFjy/h0RHTKUlKKCoI9L9cYk2UrX7yKenz2a1b6Y1DhjjABnvbf2jEGRnIT5yO2daPU9mBKAE4cZtCzteTZ/6/C2Iv4U0cM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XDEWEYeK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC033C4CEEA;
-	Mon, 16 Jun 2025 16:18:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750090704;
-	bh=QuPwZTmN5ribhxKsREDovtdslKeq4Hhftis1ZPbSwrE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=XDEWEYeK4BGLUdGmH4Wq0QJapOyIDvi8igvcE/Kz05MItoR23l1DOQxlf5qsXSbB0
-	 wgloOkZrjEKwWjL0KITnMAKtZL6IVnlB0PKc/LYRV0reoH/2L29RNKWdzqHQz2sxNH
-	 z/lqzrTK+VskYHschRctCYTny43pdEJ8IA5uUaKI41b2I4N2KHvI/LbMPT3JrziCQc
-	 LQTtdYqx5De1Ulv0ry+DhLBkj97DSiBKRC7lpWR6BxyIYvqUaUyDFKy3oDQjiZQmR0
-	 SV8nGwErxPHd03rSyz5W+rZCvkP8BK2ysxhCR9RQGUP/B3OOr17uoz27mMxc9Q7c+K
-	 GFrEszAhOk2DQ==
-Message-ID: <426a2c83-38ca-4fa2-9270-b3e600e30d19@kernel.org>
-Date: Mon, 16 Jun 2025 18:18:18 +0200
+	s=arc-20240116; t=1750090881; c=relaxed/simple;
+	bh=k7/WisMXKbWlUR77eX7NtSJyTLCBVVNGedGYzI96uRg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Jx/k5CIhtspKAWKIMcVVUPa4z/VLOcOFfoXa2M9e9fnY9ZbaaB5oKfUpue+DbqNm3XM93lFLsjhtPYb0YLJCQ0IrmjC7Tch1IIrNdVe+APm5/3VKa0GRERgjzXYuBOEMf47MN6xZzPSqHhWdl7gvCt3IjQzDM9JCHAP7AisBxGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HxE4ZsKv; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-b26f7d2c1f1so4908178a12.0;
+        Mon, 16 Jun 2025 09:21:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750090878; x=1750695678; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VpBWNqe15V8+KavYjcJ0yYawZufKK5c9dNkPp38Ln4Y=;
+        b=HxE4ZsKvEhIWz2axYUgC5vfebpG70DD9Lsgbvqpm9DHmE8LXEVvoh64mrysnu1n5T5
+         6ew7G35UqwQ47rPXhmoU48H7RjN7gmHeLpYnaJjdZeMHtYrCcQQ2cq4xgumG7BoX/LQs
+         LyH04YhDJSAos34ojCupIhLrfIjzOnlZbA5IKxUc3n3wPCXL06gydGF1TQjx68u0QN0j
+         /cYX1uYiO6W3X1jshm81WBsUf9yGzQ/Wcx5NQU7jgKjzkOl6rc6nqiSPiwRdmrBQ4grf
+         XIvduLiWQLNrJAYBrPPYyOJT58GsHOK9XIMdm9GaA0dRKL7baDwZGMa2z90Lq61rVNKm
+         Stdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750090878; x=1750695678;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VpBWNqe15V8+KavYjcJ0yYawZufKK5c9dNkPp38Ln4Y=;
+        b=bAiIHfS4ErirhuzsWuTTQQJRy9xnOMB9758yAl09cokrTC0kOq8tVOgCqJHwRgur3w
+         e8950zQy+dsiM8pIwJzJvS0IqeHnhvrgFoX9MrdnC2YtHvaSmkB04WuNP/RLRiR8WhV6
+         gx1SZMjIJQivFEHVYt9YEH65eJ0nwMf/dLhtsVmAcxSpqTMqvSd2LCwkjkWq7ppa/bsW
+         4/6ImzaQoEeqlNr2R86vzzfrJZycuZxOg3kf2/HnqWXCrJ53vr+rEpF3MTpWbPwogiup
+         ghgOc5nD1e+1GYTBJWArxLXNdCTwQLysZBEDPTtCeME2742Ln8KJkhW8sZVK4g+Qw8mi
+         fjUg==
+X-Forwarded-Encrypted: i=1; AJvYcCVQAPLauNpzjOl0LWob1c7368RtGy7YZgks+dOhffdcbD2L+EHmbFWJvpNw2xH2/cF8IKi3vBaS2AbLIwo=@vger.kernel.org, AJvYcCVuK/YeExAPWGzSZCFi3uh5LyXa9ow/xJlrA8CBTa1jYnCxw+QR++fGBzG9PvA1s4ghPP0HkhmTlNzRksvG6bxE@vger.kernel.org, AJvYcCVwHrImk4qotmg7PIXkQaUMx4qyh1ULJnEPJ7Mixgs2UfVUATeZXkQDXk8YLYYfrnBqNXU8y+lpdR/4sw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1fAV3FwSB0uLhmYbVKuiikuykfZd9orNIKaTZ3pwXVUdfoiGa
+	URNrNSDDC+0TNfPGG53oCSjxo599CwFEnj5U5fKt6y/H4ApD2US516r3MJLO
+X-Gm-Gg: ASbGncsNgS0P1U8pwxFpNBuM5jazigdFeR2P7Rueo7nZaw2YwaDYjGH5Sbwz7KEjaRy
+	xSU6EA2eNkmVgPpslKhL1BQwEsWxwD9e+aeT7o2/Q2xcQ6xZ3GoP0UJ+bRHd+A59TcAjRj2Dq9K
+	FqARDUZZduN1WxCHngZ0ZmjTQnm7uG76Sz7Mg9Ha4ehZsWuSyWi5ZXK+8zTJs5ZnX7wrrshDYeq
+	PxVKtXI2P53QuG3dM1WefzVoCSrJ/TN47lbFUZMijYAA1BV3Z0a0MOJNTsYO+wJFIfU/XncBcD6
+	wTwanBeELANQojnNIvQwdNiF2OFPWCEEVTD21AFGIyATcEF+A713sDbxnuYpy2qFyKugWJvfogL
+	d/Cp73Aa5KOywMoGp/Oi4Yq0=
+X-Google-Smtp-Source: AGHT+IH5DqWr8tn3eyoLjnJaVFTvxrJy9DsLY+LkxxLU5h/ESvqg52ldyexR7aG8aD+QL/ZCJHTmfw==
+X-Received: by 2002:a05:6a00:1989:b0:746:24c9:c92e with SMTP id d2e1a72fcca58-7489cfdaf27mr15181815b3a.8.1750090878424;
+        Mon, 16 Jun 2025 09:21:18 -0700 (PDT)
+Received: from localhost (c-73-158-218-242.hsd1.ca.comcast.net. [73.158.218.242])
+        by smtp.gmail.com with UTF8SMTPSA id d2e1a72fcca58-7488ffee55bsm6989549b3a.1.2025.06.16.09.21.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Jun 2025 09:21:17 -0700 (PDT)
+From: Stanislav Fomichev <stfomichev@gmail.com>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	skalluru@marvell.com,
+	manishc@marvell.com,
+	andrew+netdev@lunn.ch,
+	michael.chan@broadcom.com,
+	pavan.chebbi@broadcom.com,
+	ajit.khaparde@broadcom.com,
+	sriharsha.basavapatna@broadcom.com,
+	somnath.kotur@broadcom.com,
+	anthony.l.nguyen@intel.com,
+	przemyslaw.kitszel@intel.com,
+	tariqt@nvidia.com,
+	saeedm@nvidia.com,
+	louis.peens@corigine.com,
+	shshaikh@marvell.com,
+	GR-Linux-NIC-Dev@marvell.com,
+	ecree.xilinx@gmail.com,
+	horms@kernel.org,
+	dsahern@kernel.org,
+	shuah@kernel.org,
+	tglx@linutronix.de,
+	mingo@kernel.org,
+	ruanjinjie@huawei.com,
+	idosch@nvidia.com,
+	razor@blackwall.org,
+	petrm@nvidia.com,
+	kuniyu@google.com,
+	sdf@fomichev.me,
+	linux-kernel@vger.kernel.org,
+	intel-wired-lan@lists.osuosl.org,
+	linux-rdma@vger.kernel.org,
+	oss-drivers@corigine.com,
+	linux-net-drivers@amd.com,
+	linux-kselftest@vger.kernel.org,
+	leon@kernel.org
+Subject: [PATCH net-next v5 0/6] udp_tunnel: remove rtnl_lock dependency
+Date: Mon, 16 Jun 2025 09:21:11 -0700
+Message-ID: <20250616162117.287806-1-stfomichev@gmail.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net-next v2 14/14] selftests: forwarding: Add a test for
- verifying VXLAN MC underlay
-Content-Language: en-GB, fr-BE
-To: Petr Machata <petrm@nvidia.com>
-Cc: Jakub Kicinski <kuba@kernel.org>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Paolo Abeni <pabeni@redhat.com>, David Ahern <dsahern@gmail.com>,
- netdev@vger.kernel.org, Simon Horman <horms@kernel.org>,
- Nikolay Aleksandrov <razor@blackwall.org>, Ido Schimmel <idosch@nvidia.com>,
- mlxsw@nvidia.com, Shuah Khan <shuah@kernel.org>,
- linux-kselftest@vger.kernel.org
-References: <cover.1749757582.git.petrm@nvidia.com>
- <78edac89730a346e957b69d4107fcd8f1c5c6266.1749757582.git.petrm@nvidia.com>
- <20250613095755.54381628@kernel.org>
- <ccaf0784-d7a3-41e2-b3e0-65b9022f15a6@kernel.org> <87wm9bu13q.fsf@nvidia.com>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <87wm9bu13q.fsf@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Petr,
+Recently bnxt had to grow back a bunch of rtnl dependencies because
+of udp_tunnel's infra. Add separate (global) mutext to protect
+udp_tunnel state.
 
-On 16/06/2025 17:06, Petr Machata wrote:
-> 
-> Matthieu Baerts <matttbe@kernel.org> writes:
-> 
->> Hi Jakub, Petr,
->>
->> On 13/06/2025 18:57, Jakub Kicinski wrote:
->>> On Thu, 12 Jun 2025 22:10:48 +0200 Petr Machata wrote:
->>>> Add tests for MC-routing underlay VXLAN traffic.
->>>>
->>>> Signed-off-by: Petr Machata <petrm@nvidia.com>
->>>> ---
->>>>
->>>> Notes:
->>>>     v2:
->>>>     - Adjust as per shellcheck citations
->>>
->>> Noob question - would we also be able to squash the unreachable code
->>> warnings if we declared ALL_TESTS as an array instead of a string?
->>> IDK if there's any trick we could use to make shellcheck stop
->>> complaining. Not blocking the series, obviously.
->>>
->>> CC Matthieu, I presume you may have already investigated this :)
->>
->> Thank you for the Cc. Yes indeed, I already had this case.
->>
->> I don't think declaring ALL_TESTS as an array would help for this case
->> -- even if it looks clearer than a long string -- because I think
->> shellcheck will simply check if all the different functions are called
->> directly. As mentioned in Shellcheck wiki [1]: "ShellCheck may
->> incorrectly believe that code is unreachable if it's invoked by variable
->> name or in a trap. In such a case, please Ignore the message".
->>
->> That what we did with MPTCP, see the top of the mptcp_join.sh file for
->> example [2], where we have:
->>
->>> # ShellCheck incorrectly believes that most of the code here is unreachable
->>> # because it's invoked by variable name, see how the "tests" array is used
->>> #shellcheck disable=SC2317
->>
->> If you add this at the top of your new file, followed by an empty line,
->> shellcheck will ignore this issue for the whole file.
-> 
-> The ALL_TESTS issue is not the end of it either. We use helpers that
-> call stuff indirectly all over the place. defer, in_ns... It would make
-> sense to me to just disable SC2317 in NIPA runs. Or maybe even put it in
-> net/forwarding/.shellcheckrc. Pretty much all those tests are written in
-> a style that will hit these issues.
+v5:
+- remove unused variable (lkp@intel.com)
 
-In this case, I think it would be better to add this .shellcheckrc file
-in net/forwarding. If you modify NIPA, I don't think people will know
-what is allowed or not, or what command line to use, no?
+v4:
+- grab lock in more places, specifically netlink and notifiers (Jakub)
+- convert geneve and vxlan notifiers to (sleepable) rtnl lock
 
-Note that NIPA's shellcheck reports are currently ignoring all "info"
-and "style" severities -- so including SC2317 -- except for new files or
-the ones that were previously shellcheck compliant.
+v3:
+- fix 2 test failures (Jakub NIPA)
 
-Cheers,
-Matt
+v2:
+- move the lock into udp_tunnel_nic (Jakub)
+- reorder the lock ordering (Jakub)
+- move udp_ports_sleep removal into separate patch and update the test
+(Jakub)
+
+Cc: Michael Chan <michael.chan@broadcom.com>
+
+Stanislav Fomichev (6):
+  geneve: rely on rtnl lock in geneve_offload_rx_ports
+  vxlan: drop sock_lock
+  udp_tunnel: remove rtnl_lock dependency
+  net: remove redundant ASSERT_RTNL() in queue setup functions
+  netdevsim: remove udp_ports_sleep
+  Revert "bnxt_en: bring back rtnl_lock() in the bnxt_open() path"
+
+ .../net/ethernet/broadcom/bnx2x/bnx2x_main.c  |  3 +-
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c     | 42 ++-------
+ drivers/net/ethernet/emulex/benet/be_main.c   |  3 +-
+ drivers/net/ethernet/intel/i40e/i40e_main.c   |  1 -
+ drivers/net/ethernet/intel/ice/ice_main.c     |  1 -
+ .../net/ethernet/mellanox/mlx4/en_netdev.c    |  3 +-
+ .../net/ethernet/mellanox/mlx5/core/en_main.c |  3 +-
+ .../ethernet/netronome/nfp/nfp_net_common.c   |  3 +-
+ .../net/ethernet/qlogic/qede/qede_filter.c    |  3 -
+ .../net/ethernet/qlogic/qlcnic/qlcnic_main.c  |  1 -
+ drivers/net/ethernet/sfc/ef10.c               |  1 -
+ drivers/net/geneve.c                          |  7 +-
+ drivers/net/netdevsim/netdevsim.h             |  2 -
+ drivers/net/netdevsim/udp_tunnels.c           | 12 ---
+ drivers/net/vxlan/vxlan_core.c                | 35 +++-----
+ drivers/net/vxlan/vxlan_private.h             |  2 +-
+ drivers/net/vxlan/vxlan_vnifilter.c           | 18 ++--
+ include/net/udp_tunnel.h                      | 87 ++++++++++++++-----
+ net/core/dev.c                                |  4 +-
+ net/ipv4/udp_tunnel_core.c                    | 16 ++--
+ net/ipv4/udp_tunnel_nic.c                     | 78 +++++++++++++----
+ .../drivers/net/netdevsim/udp_tunnel_nic.sh   | 23 +----
+ 22 files changed, 176 insertions(+), 172 deletions(-)
+
 -- 
-Sponsored by the NGI0 Core fund.
+2.49.0
 
 
