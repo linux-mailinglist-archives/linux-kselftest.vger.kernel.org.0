@@ -1,62 +1,62 @@
-Return-Path: <linux-kselftest+bounces-35128-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35136-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36801ADB865
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jun 2025 20:06:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B3A0ADB873
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jun 2025 20:06:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ACA5C16757D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jun 2025 18:06:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 82B511890343
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jun 2025 18:07:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27417289345;
-	Mon, 16 Jun 2025 18:06:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3122728981A;
+	Mon, 16 Jun 2025 18:06:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="GfM6rCd2"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="WE3MARsD"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2043.outbound.protection.outlook.com [40.107.237.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDD2F288C8E;
-	Mon, 16 Jun 2025 18:06:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40B8D289349;
+	Mon, 16 Jun 2025 18:06:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.43
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750097192; cv=fail; b=TX7Ebm4bdUgTNU5fa5LN+D+/Pxit+kdUTnY0J7LVfOEHpZnl1n0IZs3mCYbU1lysPFu0H2EBEtJiigmFNWEEC1GX32C+CwqHjfFzzFmk5AqkIo3RXAw5XYE7/Oub77E3AaBvwuGc6sJWGYuM2YXXpM3D8XOEKOajes1p5YasTE0=
+	t=1750097200; cv=fail; b=l9vSSrc9SrvIPqzQmSJvGdOJ6Ntf8xczHG7wRM3t0VuVmioeuXkboE3+GU8eptUIoEE5fefNjwgrGbYvH+anphi7KXJq7dR/jYes8eicSp72tJi09DKZWGRhMx143qedJmKmZxtYNXj8gBWSFgcdp38uLt32Dau51y+uxsTxjCI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750097192; c=relaxed/simple;
-	bh=bJbpGax42cBq250sT2PmiSclQ1VtdoNPjQqnZcMFUwc=;
+	s=arc-20240116; t=1750097200; c=relaxed/simple;
+	bh=cCD8QiVcWTSag7s8OHnmOZwA8d6pEGUPgkmyzOqLyGA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=J8C4Wy8KE1QLeOYUiBk3UsHwB8Hil+bWkala7gWYfj2fYhffDTXjECdUkR0uiRG+qkBmhL+shGJV1d+uawc0/PStwXIvWAxuP5hzq430z+1FvcFsC02dvu8QvKlAJf6BXMqx6uo7IN3R8ZfgBY89bRtAV2FuDSdGT8X8HPMb4Lg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=GfM6rCd2; arc=fail smtp.client-ip=40.107.237.43
+	 Content-Type:MIME-Version; b=Ley/+s1n2bB1BOxEA1i0QIWw8G9eR7LDX92MZgZMC3shUZuyGL1T/n6siaz4hJkY9CwQds8GC68ZLSvq+qXCQl5M2fy4xkzeVdzu7+XvaYVvvZo3frHR404f3DOZqy7K44XMtNsEo++cLe3AWPumpDRD/6cUpLJbfx5f6lKfclM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=WE3MARsD; arc=fail smtp.client-ip=40.107.237.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=CaKWkABICg3goaj9GzgSA0VWQhD8Bx2P2YqXrZMDImgeAGxir3S9U0cX10T08bWtVat1BoDEZDS1ptdq2JIfE+m1J5n6H//54GIwgWQG6uGvnhGRHRV+/yzDL36iDlmqmCKYXr2Teev6IJayDv6IbENawgzFmfJs1ZK3ORFUhARUUW0FIDYGI0Rp8vOERAgWNtdRQ/4+Rnt88c0cUp2sqZlZFeDQ/vj7B2T56/bHATU0dvOjbjP3KYkTen1fK974s3C3ukGDUQjSrjafyndzJGkjhOMHgpmZWwSRc2oPgMTcrrGnodNOlzVwtcuzDVA39BW5Ek+2ZicPjit5S3B6GQ==
+ b=smfoY+pF+sZH83cF16AD/8CvZO7Yfl27/Ec+jNOWYzJlOksvVslH9Z5D1g7RllVmhJMJZtP2gynWL4O81hnY3hWIgke2PkuKSAQ0DqR0TtjmqU2J5DYFBqIpwPMLKIujuoutGwDfvzjXycg8zb7TbVnCmF6vTMmEto+BkAKxEEO7fPvIqwMPEuGJn08RmDkMSvyuw44IMUKkY2DraqyJwf0VTh2cEeFlVFapnW4LPNYB9wPDHZNuQQRXrEVOWXlKKGytHObxjmNDKOT/r/S0LoE+FbbV35T87yy6h1jUM7TbA0oy6QVmt6TDW0HC48NyUYH4G4Tzyun5K3pLqCyc8g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=47FMNxPrO1KBvICCXZFtGsM/0nQ0u69j1QgilH2oirg=;
- b=Sxa/Eq62XiA5j4z7uZsgl2EoDSOZjyWHoWCshutGKAGDI2Kwqq+kQ96Hj5NHMQvxXE7/+1tZrVqMm+knN3yH2gSDLEXPmwCg3eUzlf5uPk4Y0uy2ObZVK98aJUsI34//wMyyzjioZXYtetrTd3zECJd1P0GtzWC2z64olMEbmcO9qYZbnCQQ84Wht6CXydeTe1rqraKNRKza+JIGrjzy1aBXlSqwEdDR4VpK7xFj/Nbdlip8dfOK3QT/PflF4Izu9uw34Na222atB6hmYXEjjSTAF0xSSP1k9CvrkLAPf2tyVXxOVXsqoAzKqmRZ0Q2sA9BTxfEFoULLkIABYoF4vA==
+ bh=a0A893A1rjih4d31EMWk+QRN02rqEfHHi6remt8e0xY=;
+ b=vaoRLUEKPAwKPZitIIkA9GEGfSktheqcBoIruloVI87hEEnwXWfumppZAcCzMaaCadt4lxmWXZ75+szmrUarbnMbwHVNaLNtohdWJNwpewFsaxif9H3KMNqYw3b85RWC0JdbSAqiNJh59vxYlpKRuNZy4iAUV9OyYuMqMiLuX/llfOR789rOmE8eMS2v6cQTcwOjG0Mgaw19FZNTDR7BNaprZEicO7tyDdEg2+L82zFAFEEJr3gGf4+duCVEknj+Hio1A3EX/hayN7nVjBuNFsf9RfPMpZXbMyKkLr183CdkcKJohJB54S0OWC5gSSdW9mjNQ00n1y3TdbdaHZDSIQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=47FMNxPrO1KBvICCXZFtGsM/0nQ0u69j1QgilH2oirg=;
- b=GfM6rCd2GnOs74YvSQZ9cS5cNu0wRHyDpv0agAQKu045B4HmWjnratYdioUxMqlkCpgVHa7AdDawCtlhicvj59we/+iInw8Rt1QzQlE6vuTjaR1EHrSqVqJ9D5xZj2t0FjofgJCxrn24DhAqde1pIehAPkmwyc0tVB/yJQa2Qxt9DsZNLis1QxKUvl94CGv2wSUZkWqm1D3TNs6GwXes9k30a+VL1Xh9JnFuTmQpPSce+qyrm5H9gW9+IICR5O1shdIsTz75nJ7hPX8d44HtA1nwnRYGUBNyR6vA6p8AGMrp5CR5esrIoNA6qexU224CkqWE7RV26v0BNDxYUF8uaA==
+ bh=a0A893A1rjih4d31EMWk+QRN02rqEfHHi6remt8e0xY=;
+ b=WE3MARsDf1/vXuX+ayurvpA+bCMVZZW0CJ6j2jfcmn03g0B4zXUXpFXb0h2NF0rXaHWeZ9evopCzUOHnP1xIQ0j4UDw6ijo1FH1wY/sx2WxYUIVg9gpu1/ys66QrVkghIMd3RMVWPMbix7rEXkxxvPld35vTGEkYQ6ihBce3aI51RE0tPYKf8sqU50RhK0ZDQCSvmIB0MWun+oTkxnTvFvNdeGc99LR56GTHC8luS2cWpZ8fdZqlwn0dS+alrYZn6n1hKp5OMwq0FuTZnHQXaRwc0eaQD45CzrCalgaMNWXvfyXHbn0YJPBUFUlhTxUdvi574o4gurHEvA+NTDL91w==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
  by SJ1PR12MB6267.namprd12.prod.outlook.com (2603:10b6:a03:456::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8835.28; Mon, 16 Jun
- 2025 18:06:21 +0000
+ 2025 18:06:25 +0000
 Received: from CH3PR12MB8659.namprd12.prod.outlook.com
  ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
  ([fe80::6eb6:7d37:7b4b:1732%7]) with mapi id 15.20.8835.023; Mon, 16 Jun 2025
- 18:06:21 +0000
+ 18:06:25 +0000
 From: Jason Gunthorpe <jgg@nvidia.com>
 To: Jonathan Corbet <corbet@lwn.net>,
 	iommu@lists.linux.dev,
@@ -80,15 +80,15 @@ Cc: Alexey Kardashevskiy <aik@amd.com>,
 	Michael Roth <michael.roth@amd.com>,
 	Pasha Tatashin <pasha.tatashin@soleen.com>,
 	patches@lists.linux.dev
-Subject: [PATCH v3 03/15] iommupt: Add the basic structure of the iommu implementation
-Date: Mon, 16 Jun 2025 15:06:06 -0300
-Message-ID: <3-v3-a93aab628dbc+521-iommu_pt_jgg@nvidia.com>
+Subject: [PATCH v3 04/15] iommupt: Add the AMD IOMMU v1 page table format
+Date: Mon, 16 Jun 2025 15:06:07 -0300
+Message-ID: <4-v3-a93aab628dbc+521-iommu_pt_jgg@nvidia.com>
 In-Reply-To: <0-v3-a93aab628dbc+521-iommu_pt_jgg@nvidia.com>
 References:
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: DS7PR06CA0040.namprd06.prod.outlook.com
- (2603:10b6:8:54::28) To CH3PR12MB8659.namprd12.prod.outlook.com
+X-ClientProxiedBy: PH5P222CA0010.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:510:34b::11) To CH3PR12MB8659.namprd12.prod.outlook.com
  (2603:10b6:610:17c::13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -98,608 +98,711 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|SJ1PR12MB6267:EE_
-X-MS-Office365-Filtering-Correlation-Id: c2bbaeca-d5a3-4c9c-f187-08ddad007edd
+X-MS-Office365-Filtering-Correlation-Id: 68fcd62c-aad3-46ca-5e78-08ddad008046
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|366016|1800799024|7416014|376014|921020;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?HvrCvgWtONTqrwFjv2gt3qwX8AN6DAeFUkPadcEYaoiBKJ2Qa0cf+9obodC6?=
- =?us-ascii?Q?TSzhwnLpGkTspW5k1uqv48y02gfyrsoudVrgxPzZHozvDWxRx8IUT44QYt2C?=
- =?us-ascii?Q?MGhExudtD4/+HO1n+t2bolzstV/FhZFuKsrJUv8tS7hzEELgfpw5XiHAs4LM?=
- =?us-ascii?Q?KwLrkBgUqSouWaiODuxuYygKShU8MEFSa6DK0rX/gEwF08sK8183ukZNVaHy?=
- =?us-ascii?Q?vZCeK9SxUJNxhVmSPzCKYKxFWypxMYg/zCg0IfK03zzOfirOuSYucSWUZGAM?=
- =?us-ascii?Q?5h3c1GqXubRV33Lbcn2Q1K54XE3HegWBgG/EGF3p8x6dOXweJdL1IYoq0uHH?=
- =?us-ascii?Q?zAtk2bb4ToX+ayU+sexkwhR+rZc9i2zmly1iYsW3j9MNHoMhi5AOSZjE1WeG?=
- =?us-ascii?Q?uqXWYGQACXK5BhRghcEzV7dq5fH2HqiKFe82arghyCk0vSJDWDDr72LXj5Aj?=
- =?us-ascii?Q?MQLPZuLrgvKEjHzANmgtwVTOwRM23UZnTpRxEK+Yrw7nqeota0qY7E/DgIym?=
- =?us-ascii?Q?BOp6RKA/XZ3CasVL+zKSfGvRtzOKyaDiE3R6xpA4mB6MeooA/0gWGFXb0xwn?=
- =?us-ascii?Q?h2KPVFitOr1DV6ckjPt+VsWXjeclefyyLv3qMVBbR6SlHX99BUIYHCeeA2x3?=
- =?us-ascii?Q?urt6X4kiTYwlHWJtPj+NxyRXIdF9i9p8g2Q3X5ZR+lZVO3Kmr4hiVGlh/d4C?=
- =?us-ascii?Q?rC5ORcVyFE7rE49hfJrjlTkhwfP4Tlm1+ycPfkLcaLG4SlJpgVZHgf/R2mrq?=
- =?us-ascii?Q?prN7YeK4dTyxIbVc40+N4EYwMCchSkw7gT81qgmLmDipWFwqc+MSe8urcYc6?=
- =?us-ascii?Q?vg8CciDJ+Fnm0UF07QHsL8lsx9o0INDg/ybtUSMVSXoCtzuOWo13uHP64XZ2?=
- =?us-ascii?Q?voCkMg5xjY9ojX0XEPOPyMjLr7UX3REXPAP5LckCEprKekdQ4CQ2eDhdlyDK?=
- =?us-ascii?Q?ANC0D+cFn5kbQNctducTKRBi6oQ9tk/3GlB/xwff3Ld+im7kI4/KAZIkyaER?=
- =?us-ascii?Q?klfSOBrKrz8kvbuzVQG+dWIntP6iTWSB5E/FdLHAb9FgmHMvcTA1LO1FTWxj?=
- =?us-ascii?Q?ZGvkLxKR9GjF1KN+S4jRTcX+bzZAJWgKmtLw6Xd5OPNVQGn1rXyeMG/LBaKE?=
- =?us-ascii?Q?TfSETnHLbufLXluEC9RNjh8Sq7CTNTVvbVcwd71ybskoZ5o6Lsit8fsQI9VI?=
- =?us-ascii?Q?lrJNqDluFZ25vLT/jAUhGpu7aaVfPesSdkIQsUlAI5BbxKppx7t7vdN3UADi?=
- =?us-ascii?Q?kjvzw/6/hKsK9MhHAj1pbyNXin96c8C1v/5oUdSdC1kiRC8LSPwCrljYCu3G?=
- =?us-ascii?Q?DoXL8HRNMtBgUrqphGmIdcmeXhmG1pCaFsBsfGFIGF24d2EI1ugbKl4IYKON?=
- =?us-ascii?Q?0KFePfrMyCj91jXyZZmKC/kA7nAUeDetMLOTfSgZ4F17/gi0qSJvLCcmVRNA?=
- =?us-ascii?Q?AF50U/rGiaJv0tulxkK50U9y56cGTWep?=
+	=?us-ascii?Q?5NKK0sDDwys5n1vCgl0cMLXBrjY47GUqjOR905LSM9F28vt7x3GXLQs/tV5o?=
+ =?us-ascii?Q?qHjw3gsetmJaWzP2Bq63n/YPy4jcRrSq9hKFDLHGpb8AGz22rvBANv1VtI5J?=
+ =?us-ascii?Q?GWMWqYPXEYSXrpPHtTKQ/7Q1CUiQEeTfAwmBQ0IQ5GtZMPEbMWCtpI2SmcZE?=
+ =?us-ascii?Q?j9oDcr0mzgofBHuMkgIm7TYlK+mdaa+RCqNmj2sy+zadwUM+RrBUh65+vlym?=
+ =?us-ascii?Q?j8oT2NJlQLkk7GygGFkDmk1+KR1peQD7EgHZ9IUJLpbOEWs+oC3H4+IZ4HEW?=
+ =?us-ascii?Q?lZD4A1vAshn3Iz5B6gb1l/CGgV2Ct9d+cP2no8qMYLmb/TN9zadPvDpZzVb8?=
+ =?us-ascii?Q?c1+MBaTkMJRmgw+P/PiD/eWULlMVZ5sjuCcbW2fb0Q8RIFec54/R1ombq+vv?=
+ =?us-ascii?Q?WKBsRLyYNWXfkE7g2rmt0njkDtoEanynMAza8UizEcGoeMqGubHJ8vRjZKM0?=
+ =?us-ascii?Q?V6Mwr/UBvUBNojCnOGjh3LNvVIemCAvnsLvdvar0TQZjFntVtGW97iyu1Cs9?=
+ =?us-ascii?Q?D1en158QaRt7l9j3d6gSfqji1iBNcQ2GX4wRyxUFLrSs9HLO8uLsC483x39b?=
+ =?us-ascii?Q?Qjygl5qrG6A5s1ZOscrT2pyQOdNf9oB8wc6hNczPW5wXY/eNk/RR5HURFGNw?=
+ =?us-ascii?Q?ogMKAY5rlP5Edv1fFb3qvT1ywhbxgzmzXYHafoVwJhQHw86ZhvH7lI0sC1rB?=
+ =?us-ascii?Q?4M5tA8cSxKc3pbUp0kcufG2Ay7zDg7/M5S9hAdv3Eyz+3MTiesn4MNzXwaSj?=
+ =?us-ascii?Q?WKIs//DHImAWyOpzZWAXhXw+a+TqNIbpmVshke/d3odFt0N8foGRN4PjKaXD?=
+ =?us-ascii?Q?ZIRn9FVMuKVedX9BX8pNj8sccMwu8pEBYMqz2fZi7iB6zIHC0gNy59IxPmR7?=
+ =?us-ascii?Q?W+rYJEieNuO6AQhtJ0fHF/fCxfmevHoXNYWP3qJIFfcNpH2T821JRKp91Dga?=
+ =?us-ascii?Q?TGQCV7HAaDgUjKNVI1T/gwB/4K6UBtKetLv88A716QdEc9XdLedXVw988w2O?=
+ =?us-ascii?Q?J5oOTj/56eaNw2yFvZ/nuZVCOhtrZcsa3A9xte6EpxuOLGfZaBD6eTBUp18E?=
+ =?us-ascii?Q?/D9cij0TUaz/qfkblq6UFin1/2VnjA8rAkZV/q2EZmBzNG5P+ddSLVncKvKp?=
+ =?us-ascii?Q?ErqeDQE9C/TfBh3oNkIAk2omdiCJ9KqLe/x6JXW1Uic65RqPunXfZUU9DoMY?=
+ =?us-ascii?Q?2TNJ8lRxmhMG6/GxY9/ZSNgaKQPpdgwEZ4VWi+FmYKJQBvGdGLbtC9Dj6JRN?=
+ =?us-ascii?Q?+01Gu+hruHu6eTSMArkLtiy3qCA/cREm3NxZnR0rCkZPUPQnwUibPc4e0XPU?=
+ =?us-ascii?Q?Lg6MH8QmMfMMRlMWzW2O2peZN3/tqsOmgmqj4dWdL/bp+A0GHK+n+VgWhXfJ?=
+ =?us-ascii?Q?gbjPtH7RXxnZjx74tBh8+vMt83uLK1u6LggodoaVL976xmIJk1VlHLWHdf7d?=
+ =?us-ascii?Q?ixfHWSIwIWFYXhtsKCGe8rq+jQESU+XcEYPhxbb3W1vp0ltH48G+4Q=3D=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(921020);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?WWfGD3wwWyoA8PbxMn2r4m26P38egWElEj9jO+Xd8xT/Y4IweNvxVQK4DBet?=
- =?us-ascii?Q?99TboK9HZSaalDQCzMLxwQX40q2gBq0TyeImKT82cmPr5j5KPVpDrZS+WLuJ?=
- =?us-ascii?Q?sJoKZX+TB+l6iMftdmZlqkNLEELNKHH1kNBnRY+qCx5vrABN4tYC5iMPaXm4?=
- =?us-ascii?Q?I9IfQj8u9mtJ1/TpJNZIprCgtUR7Sux8NkZpmAkonmYXhv8ArsNEJ/3KfsAn?=
- =?us-ascii?Q?AxWGX5JyuzrpEA6TvjjDVVnlob8x1UBWnCRfZyUhOjjlTCDip10JZ02C8qpe?=
- =?us-ascii?Q?716u0Nc0LMoYJe19RNkT3+tbWlnvY1Vbmqw4W9uQ6X7hsAMhHds6sD2jQakd?=
- =?us-ascii?Q?t/f1+64l+o9s1InGwPOkGlOgEShfkkc+WRL6gg56DX0sGRK5MXQnmUmMe5r1?=
- =?us-ascii?Q?/HgbboWzeTeTAPn4Fx25lZQ2e2yzghkcCz78BizgRGC1m0RZN8cMjiMpg20Q?=
- =?us-ascii?Q?/lYEPBnGEnu+963mNWtA0Fy6/t06R9vEx3mrsleNLyMA9B6q+zmcze01ZnlA?=
- =?us-ascii?Q?0E8GGwiDOM8e0nBP/BDBz6Oj5PHZV3RAy2KTwPCfHAPV9EoPnigh0Of90U+M?=
- =?us-ascii?Q?H1uuKHUnlSdJpIZYLiFMxtX9UWf7OFrzs+y4es00o6YRuyVyoO9l1ZaalWTU?=
- =?us-ascii?Q?ImagZQFtU5a4APSrrSMqFYo9AnEy1fisLuPp4MVrjHL0YhU/0C5UejVOHxIM?=
- =?us-ascii?Q?amYNQWH5HR1xlqV1oJYYldOos4wl6G+C6qB8z9hwJ9Onxg16Rp2JfaGVQgmx?=
- =?us-ascii?Q?hJXvYCK9V6EIbeVFNqAqHN3O3P3g+OHX+9JVZkbo3aEqIMxmTCwlOb1zKGZO?=
- =?us-ascii?Q?0BrWvNlxAF7xq1wZQfIxW3JeN5MakgUQtRw0OXDYL0AwFP/1SYknk3mLhMKi?=
- =?us-ascii?Q?R5m64P2y81+C9FSl3dXaRi5QVEgM+bZLMI6uSC8P+jhFp+PB0qYXQ9oDi/TZ?=
- =?us-ascii?Q?W1r79gLS1YOXhJUSd6G7ZcBgjv1N7jnRrk9b5H0BS+89zzh/4/q17RaO8Yav?=
- =?us-ascii?Q?U1eWlsL7G5ReUpCqmvdXgXZMzmwMAWBeVT0UyJmdPLdZNRwQrRQFTfCptxNN?=
- =?us-ascii?Q?fQwEmWSoB/jbERb0rBFzBEcP/ZABu2G3E+Ike88+7QodWMKOlDe8Fm3AkJhY?=
- =?us-ascii?Q?nmcF4nU56kn9Xivj7FzfSaayZd+H2UZFBRkMlnz/gjhOPrkmk3GunJVKWlLX?=
- =?us-ascii?Q?iipqn8BjdkVA2OFXCwiaWVdvvRIXf4Ftq/RQAXnm9Y5OUS7+Gm1jnTN9fTX7?=
- =?us-ascii?Q?mucwEOPSX39O/apqkZXQ19MRUTZ68dSc80GR8w9c/bOyQXYJ5KtxoHpxoCcp?=
- =?us-ascii?Q?2fSrk0QhKUFHQqJhyxOgNC4FUGmRvgbgdsZCW5GaIW7GFq9B5trFYHY5xwAM?=
- =?us-ascii?Q?4QRvyd/oCFnG30VuMn3Saf2IweilgQieYA2SN2hieW4VZNCtXXK6enA4Y6ps?=
- =?us-ascii?Q?kvM1B0eEP9eNj6GUdbXwhMutqRUhu90unR6STCcYQcNISNF0pgVpKktflsxq?=
- =?us-ascii?Q?Jl9moq18frE724PJPQXDFq4w25sB4uPldlVYJIy77oegEJM7xhc4eppucS1Q?=
- =?us-ascii?Q?xAGt2fekaqggivt/Uu+VoJ+Ole7x6ikGIRtRlViA?=
+	=?us-ascii?Q?SRRhBS/91pDKtbTjFKLX8UbRAyw0g/nMCiwcT7GPRIwcbtkqEyWjswKcC+j9?=
+ =?us-ascii?Q?d0soBAqp55K3nI3btFBb2Wvg9+7vUvariyVFjiv3mbQ6p4ObFf0JpXmGtcQv?=
+ =?us-ascii?Q?/VYU178e9+nSSRMrBwvzVvPipeEZ4vDvT9/OLXYen+bp2siWCmqNnByHayDa?=
+ =?us-ascii?Q?Mv6l+9Nk3SWZ/bGrMDug4tPywWcxXIM/4zbmcqgXRGwKhq8fCccz1ZXQ25ol?=
+ =?us-ascii?Q?rw8GFFf7usskYR27BZL+a5joW8l6om3kYQPyR47HwacNTDZf9yp4SiqNY1J1?=
+ =?us-ascii?Q?MC0mMpSjQGhtnvIIqqCDDz54qqejFsJnWblZqOtNnRySd1XceNxx6d7aedpS?=
+ =?us-ascii?Q?fiPd7o3PYbWbYWvAXZNPVUaXBImC/w2UizaUYu4JFbV7S5/1yklrc1/2jZFi?=
+ =?us-ascii?Q?jrjUsQV4pcxY0O7Aid6GepBMtkQFaat63p7uigZfcFrRi4MjshUm5dgtDYcq?=
+ =?us-ascii?Q?T4CEExBnd5uavE2KuKsZN0qRhEii/c3C0+MQyjRFWB47C/I9xt2VFVuyUI4s?=
+ =?us-ascii?Q?E/IaV8w8CYj4KU3EWnW7zouWs73NhkqW1OyCtCXXLnKy7mS9IC27vTI48GAL?=
+ =?us-ascii?Q?nRVOlWUecbs9CmIbWeRrArHbozXFw7qn6CWK4MKeLDjSGhtfxY84i8Mf2Zb9?=
+ =?us-ascii?Q?aYDRCLR4M4SnXzC7wJsaI72dak22UPDBVvoVWbsu4vncq8RNdnKkQ3efiCqV?=
+ =?us-ascii?Q?Eb4aFHNnqZNw0M/EseiolDqWRUrs9hLfLDkLwyAgLAUO4ce5yNafV4+THrHm?=
+ =?us-ascii?Q?UCuaysrpuQQW7VhIY2jYaf1mYycJvTJdpvkuRQ/xnYlD8e+CVhz6aX23ODTb?=
+ =?us-ascii?Q?PYyGfrY4GodNT42Ksn5oEuDLrDQ4gwqgoQ4d9tSMpP4PYPxcbD7oV3Dl8ynH?=
+ =?us-ascii?Q?Tkw6JcN786EKIZTrjIfHwCoOse2iKnrianTaTGGYWmYlZ2tLeyrm5ALqouIp?=
+ =?us-ascii?Q?MgfWUT1i7YSFBeP2seHzsn2Zt/KHlgBryfBlgQpe4uaVbLmYrVJgHHUHe1dR?=
+ =?us-ascii?Q?ZL2XtzgnbnpYjakeXPRpvTVeyLlh4bLTu6FO1n/9+3VhT/WyYiJLCsb12fZU?=
+ =?us-ascii?Q?j/oM+u/YcYOnqa8Ya8cRA7N2wVvFqslQpzM8Bmjgj+Dewm3PTAvVtYGWVPZM?=
+ =?us-ascii?Q?TykdimI5lCnHUqAjFPWYLjsaUmp3NQYsqYI6/MtkHlNaxpSotrXZ8fcqTjf+?=
+ =?us-ascii?Q?vlfhJDGU9rDBPqJGslrOWRZca/6E+P6goomRnv+19g48/OfSD62ZT7BV2xcP?=
+ =?us-ascii?Q?ZMTBWPoGf2mvyA+A5hnFYQHdlJivXz1EZ666U7i4JwSlmpcJwNhqMBvEwLuB?=
+ =?us-ascii?Q?UyKN0qBQbJFXYdPn9K0yzLEEOzg+yULFdUpEWuCv+dvgqu6NL3nRpQU03TYf?=
+ =?us-ascii?Q?V6tMMAVsxnm9U92DmCVHPJU8FCagAJLo4HWIXAu1zhHo5Uxh5QFFKwpW+8K8?=
+ =?us-ascii?Q?3C0mqiunLKY3Me1jRUn3TJjpbJgRPwfrHjKjZ3G6fzo0slIfOn+99/EJJKsM?=
+ =?us-ascii?Q?Oarw1IYU6sP2pdY3lL9CsbD3KsTahWVaAQyy9r1Kw/zmup2z+YU5cNxb78Tm?=
+ =?us-ascii?Q?54Ph5eXVLy7aKhkByl92I6OanyLNETZaF3UxDMg5?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c2bbaeca-d5a3-4c9c-f187-08ddad007edd
+X-MS-Exchange-CrossTenant-Network-Message-Id: 68fcd62c-aad3-46ca-5e78-08ddad008046
 X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2025 18:06:20.2794
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2025 18:06:22.6274
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FMCGK7RKHw0A3CvpzEegyQ98PaZfToxcQey4tN2wrtxZ/Vz6xWrN6WGgW19ywjx0
+X-MS-Exchange-CrossTenant-UserPrincipalName: X3F4N/rOKripv7tiEuaKFyfXYAzNiLb8vS/0mMGgY8VEQv+FqTdQR0AY9t1XuvB0
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6267
 
-The existing IOMMU page table implementations duplicate all of the working
-algorithms for each format. By using the generic page table API a single C
-version of the IOMMU algorithms can be created and re-used for all of the
-different formats used in the drivers. The implementation will provide a
-single C version of the iommu domain operations: iova_to_phys, map, unmap,
-and read_and_clear_dirty.
+AMD IOMMU v1 is unique in supporting contiguous pages with a variable size
+and it can decode the full 64 bit VA space. Unlike other x86 page tables
+this explicitly does not do sign extension as part of allowing the entire
+64 bit VA space to be supported.
 
-Further, adding new algorithms and techniques becomes easy to do across
-the entire fleet of drivers and formats.
+The general design is quite similar to the x86 PAE format, except with a
+6th level and quite different PTE encoding.
 
-The C functions are drop in compatible with the existing iommu_domain_ops
-using the IOMMU_PT_DOMAIN_OPS() macro. Each per-format implementation
-compilation unit will produce exported symbols following the pattern
-pt_iommu_FMT_map_pages() which the macro directly maps to the
-iommu_domain_ops members. This avoids the additional function pointer
-indirection like io-pgtable has.
+This format is the only one that uses the PT_FEAT_DYNAMIC_TOP feature in
+the existing code as the existing AMDv1 code starts out with a 3 level
+table and adds levels on the fly if more IOVA is needed.
 
-The top level struct used by the drivers is pt_iommu_table_FMT. It
-contains the other structs to allow container_of() to move between the
-driver, iommu page table, generic page table, and generic format layers.
+Comparing the performance of several operations to the existing version:
 
-   struct pt_iommu_table_amdv1 {
-       struct pt_iommu {
-	      struct iommu_domain domain;
-       } iommu;
-       struct pt_amdv1 {
-	      struct pt_common {
-	      } common;
-       } amdpt;
-   };
+iommu_map()
+   pgsz  ,avg new,old ns, min new,old ns  , min % (+ve is better)
+     2^12,     65,64    ,      62,61      ,  -1.01
+     2^13,     70,66    ,      67,62      ,  -8.08
+     2^14,     73,69    ,      71,65      ,  -9.09
+     2^15,     78,75    ,      75,71      ,  -5.05
+     2^16,     89,89    ,      86,84      ,  -2.02
+     2^17,    128,121   ,     124,112     , -10.10
+     2^18,    175,175   ,     170,163     ,  -4.04
+     2^19,    264,306   ,     261,279     ,   6.06
+     2^20,    444,525   ,     438,489     ,  10.10
+     2^21,     60,62    ,      58,59      ,   1.01
+ 256*2^12,    381,1833  ,     367,1795    ,  79.79
+ 256*2^21,    375,1623  ,     356,1555    ,  77.77
+ 256*2^30,    356,1338  ,     349,1277    ,  72.72
 
-The driver is expected to union the pt_iommu_table_FMT with it's own
-existing domain struct:
+iommu_unmap()
+   pgsz  ,avg new,old ns, min new,old ns  , min % (+ve is better)
+     2^12,     76,89    ,      71,86      ,  17.17
+     2^13,     79,89    ,      75,86      ,  12.12
+     2^14,     78,90    ,      74,86      ,  13.13
+     2^15,     82,89    ,      74,86      ,  13.13
+     2^16,     79,89    ,      74,86      ,  13.13
+     2^17,     81,89    ,      77,87      ,  11.11
+     2^18,     90,92    ,      87,89      ,   2.02
+     2^19,     91,93    ,      88,90      ,   2.02
+     2^20,     96,95    ,      91,92      ,   1.01
+     2^21,     72,88    ,      68,85      ,  20.20
+ 256*2^12,    372,6583  ,     364,6251    ,  94.94
+ 256*2^21,    398,6032  ,     392,5758    ,  93.93
+ 256*2^30,    396,5665  ,     389,5258    ,  92.92
 
-   struct driver_domain {
-       union {
-	       struct iommu_domain domain;
-	       struct pt_iommu_table_amdv1 amdv1;
-       };
-   };
-   PT_IOMMU_CHECK_DOMAIN(struct driver_domain, amdv1, domain);
+The ~5-17x speedup when working with mutli-PTE map/unmaps is because the
+AMD implementation rewalks the entire table on every new PTE while this
+version retains its position. The same speedup will be seen with dirtys as
+well.
 
-To create an alias to avoid renaming 'domain' in a lot of driver code.
-
-This allows all the layers to access all the necessary functions to
-implement their different roles with no change to any of the existing
-iommu core code.
-
-Implement the basic starting point: pt_iommu_init(), get_info() and
-deinit().
+The old implementation triggers a compiler optimization that ends up
+generating a "rep stos" memset for contiguous PTEs. Since AMD can have
+contiguous PTEs that span 2Kbytes of table this is a huge win compared to
+a normal movq loop. It is why the unmap side has a fairly flat runtime as
+the contiguous PTE sides increases. This version makes it explicit with a
+memset64() call.
 
 Tested-by: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
 Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 ---
- drivers/iommu/generic_pt/Kconfig              |  13 +
- drivers/iommu/generic_pt/fmt/iommu_template.h |  39 +++
- drivers/iommu/generic_pt/iommu_pt.h           | 268 ++++++++++++++++++
- include/linux/generic_pt/iommu.h              | 118 ++++++++
- 4 files changed, 438 insertions(+)
- create mode 100644 drivers/iommu/generic_pt/fmt/iommu_template.h
- create mode 100644 drivers/iommu/generic_pt/iommu_pt.h
- create mode 100644 include/linux/generic_pt/iommu.h
+ drivers/iommu/Makefile                     |   1 +
+ drivers/iommu/generic_pt/Kconfig           |  13 +
+ drivers/iommu/generic_pt/fmt/Makefile      |  11 +
+ drivers/iommu/generic_pt/fmt/amdv1.h       | 385 +++++++++++++++++++++
+ drivers/iommu/generic_pt/fmt/defs_amdv1.h  |  21 ++
+ drivers/iommu/generic_pt/fmt/iommu_amdv1.c |  15 +
+ include/linux/generic_pt/common.h          |  19 +
+ include/linux/generic_pt/iommu.h           |  29 ++
+ 8 files changed, 494 insertions(+)
+ create mode 100644 drivers/iommu/generic_pt/fmt/Makefile
+ create mode 100644 drivers/iommu/generic_pt/fmt/amdv1.h
+ create mode 100644 drivers/iommu/generic_pt/fmt/defs_amdv1.h
+ create mode 100644 drivers/iommu/generic_pt/fmt/iommu_amdv1.c
 
+diff --git a/drivers/iommu/Makefile b/drivers/iommu/Makefile
+index 355294fa9033f3..b17ef9818759be 100644
+--- a/drivers/iommu/Makefile
++++ b/drivers/iommu/Makefile
+@@ -3,6 +3,7 @@ obj-y += arm/ iommufd/
+ obj-$(CONFIG_AMD_IOMMU) += amd/
+ obj-$(CONFIG_INTEL_IOMMU) += intel/
+ obj-$(CONFIG_RISCV_IOMMU) += riscv/
++obj-$(CONFIG_GENERIC_PT) += generic_pt/fmt/
+ obj-$(CONFIG_IOMMU_API) += iommu.o
+ obj-$(CONFIG_IOMMU_SUPPORT) += iommu-pages.o
+ obj-$(CONFIG_IOMMU_API) += iommu-traces.o
 diff --git a/drivers/iommu/generic_pt/Kconfig b/drivers/iommu/generic_pt/Kconfig
-index 775a3afb563f72..73b7a54375f9bd 100644
+index 73b7a54375f9bd..887c585a66699a 100644
 --- a/drivers/iommu/generic_pt/Kconfig
 +++ b/drivers/iommu/generic_pt/Kconfig
-@@ -19,4 +19,17 @@ config DEBUG_GENERIC_PT
- 	  kernels.
- 
- 	  The kunit tests require this to be enabled to get full coverage.
+@@ -32,4 +32,17 @@ config IOMMU_PT
+ 	  IOMMU_PT provides an implementation of the page table operations
+ 	  related struct iommu_domain using GENERIC_PT to abstract the page
+ 	  table format.
 +
-+config IOMMU_PT
-+	tristate "IOMMU Page Tables"
-+	select IOMMU_API
-+	depends on IOMMU_SUPPORT
-+	depends on GENERIC_PT
++if IOMMU_PT
++config IOMMU_PT_AMDV1
++	tristate "IOMMU page table for 64 bit AMD IOMMU v1"
++	depends on !GENERIC_ATOMIC64 # for cmpxchg64
 +	default n
 +	help
-+	  Generic library for building IOMMU page tables
++	  iommu_domain implementation for the AMD v1 page table. AMDv1 is the
++	  "host" page table. It supports granular page sizes of almost every
++	  power of 2 and decodes an full 64 bit IOVA space.
 +
-+	  IOMMU_PT provides an implementation of the page table operations
-+	  related struct iommu_domain using GENERIC_PT to abstract the page
-+	  table format.
++	  Selected automatically by an IOMMU driver that uses this format.
++endif
  endif
-diff --git a/drivers/iommu/generic_pt/fmt/iommu_template.h b/drivers/iommu/generic_pt/fmt/iommu_template.h
+diff --git a/drivers/iommu/generic_pt/fmt/Makefile b/drivers/iommu/generic_pt/fmt/Makefile
 new file mode 100644
-index 00000000000000..5b631bc07cbc16
+index 00000000000000..a4d83b7e0cf691
 --- /dev/null
-+++ b/drivers/iommu/generic_pt/fmt/iommu_template.h
-@@ -0,0 +1,39 @@
++++ b/drivers/iommu/generic_pt/fmt/Makefile
+@@ -0,0 +1,11 @@
++# SPDX-License-Identifier: GPL-2.0
++
++iommu_pt_fmt-$(CONFIG_IOMMU_PT_AMDV1) += amdv1
++
++define create_format
++obj-$(2) += iommu_$(1).o
++
++endef
++
++$(eval $(foreach fmt,$(iommu_pt_fmt-y),$(call create_format,$(fmt),y)))
++$(eval $(foreach fmt,$(iommu_pt_fmt-m),$(call create_format,$(fmt),m)))
+diff --git a/drivers/iommu/generic_pt/fmt/amdv1.h b/drivers/iommu/generic_pt/fmt/amdv1.h
+new file mode 100644
+index 00000000000000..901fc4a80e9a83
+--- /dev/null
++++ b/drivers/iommu/generic_pt/fmt/amdv1.h
+@@ -0,0 +1,385 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
 + * Copyright (c) 2024-2025, NVIDIA CORPORATION & AFFILIATES
 + *
-+ * Template to build the iommu module and kunit from the format and
-+ * implementation headers.
++ * AMD IOMMU v1 page table
 + *
-+ * The format should have:
-+ *  #define PT_FMT <name>
-+ *  #define PT_SUPPORTED_FEATURES (BIT(PT_FEAT_xx) | BIT(PT_FEAT_yy))
-+ * And optionally:
-+ *  #define PT_FORCE_ENABLED_FEATURES ..
-+ *  #define PT_FMT_VARIANT <suffix>
++ * This is described in Section "2.2.3 I/O Page Tables for Host Translations"
++ * of the "AMD I/O Virtualization Technology (IOMMU) Specification"
++ *
++ * Note the level numbering here matches the core code, so level 0 is the same
++ * as mode 1.
++ *
 + */
-+#include <linux/args.h>
-+#include <linux/stringify.h>
++#ifndef __GENERIC_PT_FMT_AMDV1_H
++#define __GENERIC_PT_FMT_AMDV1_H
 +
-+#ifdef PT_FMT_VARIANT
-+#define PTPFX_RAW \
-+	CONCATENATE(CONCATENATE(PT_FMT, _), PT_FMT_VARIANT)
-+#else
-+#define PTPFX_RAW PT_FMT
-+#endif
-+
-+#define PTPFX CONCATENATE(PTPFX_RAW, _)
-+
-+#define _PT_FMT_H PT_FMT.h
-+#define PT_FMT_H __stringify(_PT_FMT_H)
-+
-+#define _PT_DEFS_H CONCATENATE(defs_, _PT_FMT_H)
-+#define PT_DEFS_H __stringify(_PT_DEFS_H)
-+
-+#include <linux/generic_pt/common.h>
-+#include PT_DEFS_H
++#include "defs_amdv1.h"
 +#include "../pt_defs.h"
-+#include PT_FMT_H
-+#include "../pt_common.h"
 +
-+#include "../iommu_pt.h"
-diff --git a/drivers/iommu/generic_pt/iommu_pt.h b/drivers/iommu/generic_pt/iommu_pt.h
-new file mode 100644
-index 00000000000000..205c232bda68b5
---- /dev/null
-+++ b/drivers/iommu/generic_pt/iommu_pt.h
-@@ -0,0 +1,268 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (c) 2024-2025, NVIDIA CORPORATION & AFFILIATES
-+ *
-+ * "Templated C code" for implementing the iommu operations for page tables.
-+ * This is compiled multiple times, over all the page table formats to pick up
-+ * the per-format definitions.
-+ */
-+#ifndef __GENERIC_PT_IOMMU_PT_H
-+#define __GENERIC_PT_IOMMU_PT_H
++#include <asm/page.h>
++#include <linux/bitfield.h>
++#include <linux/container_of.h>
++#include <linux/mem_encrypt.h>
++#include <linux/minmax.h>
++#include <linux/sizes.h>
++#include <linux/string.h>
 +
-+#include "pt_iter.h"
++enum {
++	PT_MAX_OUTPUT_ADDRESS_LG2 = 52,
++	PT_MAX_VA_ADDRESS_LG2 = 64,
++	PT_ITEM_WORD_SIZE = sizeof(u64),
++	PT_MAX_TOP_LEVEL = 5,
++	PT_GRANULE_LG2SZ = 12,
++	PT_TABLEMEM_LG2SZ = 12,
 +
-+#include <linux/iommu.h>
-+#include "../iommu-pages.h"
-+#include <linux/export.h>
-+
-+#define DOMAIN_NS(op) CONCATENATE(CONCATENATE(pt_iommu_, PTPFX), op)
-+
-+struct pt_iommu_collect_args {
-+	struct iommu_pages_list free_list;
-+	u8 ignore_mapped : 1;
++	/* The DTE only has these bits for the top phyiscal address */
++	PT_TOP_PHYS_MASK = GENMASK_ULL(51, 12),
 +};
 +
-+static int __collect_tables(struct pt_range *range, void *arg,
-+			    unsigned int level, struct pt_table_p *table)
-+{
-+	struct pt_state pts = pt_init(range, level, table);
-+	struct pt_iommu_collect_args *collect = arg;
-+	int ret;
++/* PTE bits */
++enum {
++	AMDV1PT_FMT_PR = BIT(0),
++	AMDV1PT_FMT_D = BIT(6),
++	AMDV1PT_FMT_NEXT_LEVEL = GENMASK_ULL(11, 9),
++	AMDV1PT_FMT_OA = GENMASK_ULL(51, 12),
++	AMDV1PT_FMT_FC = BIT_ULL(60),
++	AMDV1PT_FMT_IR = BIT_ULL(61),
++	AMDV1PT_FMT_IW = BIT_ULL(62),
++};
 +
-+	if (collect->ignore_mapped && !pt_can_have_table(&pts))
++/*
++ * gcc 13 has a bug where it thinks the output of FIELD_GET() is an enum, make
++ * these defines to avoid it.
++ */
++#define AMDV1PT_FMT_NL_DEFAULT 0
++#define AMDV1PT_FMT_NL_SIZE 7
++
++#define common_to_amdv1pt(common_ptr) \
++	container_of_const(common_ptr, struct pt_amdv1, common)
++#define to_amdv1pt(pts) common_to_amdv1pt((pts)->range->common)
++
++static inline pt_oaddr_t amdv1pt_table_pa(const struct pt_state *pts)
++{
++	return oalog2_mul(FIELD_GET(AMDV1PT_FMT_OA, pts->entry),
++			  PT_GRANULE_LG2SZ);
++}
++#define pt_table_pa amdv1pt_table_pa
++
++/* Returns the oa for the start of the contiguous entry */
++static inline pt_oaddr_t amdv1pt_entry_oa(const struct pt_state *pts)
++{
++	pt_oaddr_t oa = FIELD_GET(AMDV1PT_FMT_OA, pts->entry);
++
++	if (FIELD_GET(AMDV1PT_FMT_NEXT_LEVEL, pts->entry) ==
++	    AMDV1PT_FMT_NL_SIZE) {
++		unsigned int sz_bits = oalog2_ffz(oa);
++
++		oa = oalog2_set_mod(oa, 0, sz_bits);
++	} else if (PT_WARN_ON(FIELD_GET(AMDV1PT_FMT_NEXT_LEVEL, pts->entry) !=
++			      AMDV1PT_FMT_NL_DEFAULT))
++		return 0;
++	return oalog2_mul(oa, PT_GRANULE_LG2SZ);
++}
++#define pt_entry_oa amdv1pt_entry_oa
++
++static inline bool amdv1pt_can_have_leaf(const struct pt_state *pts)
++{
++	/*
++	 * Table 15: Page Table Level Parameters
++	 * The top most level cannot have translation entries
++	 */
++	return pts->level < PT_MAX_TOP_LEVEL;
++}
++#define pt_can_have_leaf amdv1pt_can_have_leaf
++
++static inline unsigned int amdv1pt_table_item_lg2sz(const struct pt_state *pts)
++{
++	return PT_GRANULE_LG2SZ +
++	       (PT_TABLEMEM_LG2SZ - ilog2(PT_ITEM_WORD_SIZE)) * pts->level;
++}
++#define pt_table_item_lg2sz amdv1pt_table_item_lg2sz
++
++static inline unsigned int
++amdv1pt_entry_num_contig_lg2(const struct pt_state *pts)
++{
++	u32 code;
++
++	if (FIELD_GET(AMDV1PT_FMT_NEXT_LEVEL, pts->entry) ==
++	    AMDV1PT_FMT_NL_DEFAULT)
++		return ilog2(1);
++
++	PT_WARN_ON(FIELD_GET(AMDV1PT_FMT_NEXT_LEVEL, pts->entry) !=
++		   AMDV1PT_FMT_NL_SIZE);
++
++	/*
++	 * The contiguous size is encoded in the length of a string of 1's in
++	 * the low bits of the OA. Reverse the equation:
++	 *  code = log2_to_int(num_contig_lg2 + item_lg2sz -
++	 *              PT_GRANULE_LG2SZ - 1) - 1
++	 * Which can be expressed as:
++	 *  num_contig_lg2 = oalog2_ffz(code) + 1 -
++	 *              item_lg2sz - PT_GRANULE_LG2SZ
++	 *
++	 * Assume the bit layout is correct and remove the masking. Reorganize
++	 * the equation to move all the arithmetic before the ffz.
++	 */
++	code = pts->entry >> (__bf_shf(AMDV1PT_FMT_OA) - 1 +
++			      pt_table_item_lg2sz(pts) - PT_GRANULE_LG2SZ);
++	return log2_ffz_t(u32, code);
++}
++#define pt_entry_num_contig_lg2 amdv1pt_entry_num_contig_lg2
++
++static inline unsigned int amdv1pt_num_items_lg2(const struct pt_state *pts)
++{
++	/*
++	 * Top entry covers bits [63:57] only, this is handled through
++	 * max_vasz_lg2.
++	 */
++	if (PT_WARN_ON(pts->level == 5))
++		return 7;
++	return PT_TABLEMEM_LG2SZ - ilog2(sizeof(u64));
++}
++#define pt_num_items_lg2 amdv1pt_num_items_lg2
++
++static inline pt_vaddr_t amdv1pt_possible_sizes(const struct pt_state *pts)
++{
++	unsigned int isz_lg2 = pt_table_item_lg2sz(pts);
++
++	if (!amdv1pt_can_have_leaf(pts))
 +		return 0;
 +
-+	for_each_pt_level_entry(&pts) {
-+		if (pts.type == PT_ENTRY_TABLE) {
-+			iommu_pages_list_add(&collect->free_list, pts.table_lower);
-+			ret = pt_descend(&pts, arg, __collect_tables);
-+			if (ret)
-+				return ret;
-+			continue;
-+		}
-+		if (pts.type == PT_ENTRY_OA && !collect->ignore_mapped)
-+			return -EADDRINUSE;
-+	}
-+	return 0;
-+}
-+
-+static inline struct pt_table_p *table_alloc_top(struct pt_common *common,
-+						 uintptr_t top_of_table,
-+						 gfp_t gfp)
-+{
-+	struct pt_iommu *iommu_table = iommu_from_common(common);
-+
 +	/*
-+	 * Top doesn't need the free list or otherwise, so it technically
-+	 * doesn't need to use iommu pages. Use the API anyhow as the top is
-+	 * usually not smaller than PAGE_SIZE to keep things simple.
++	 * Table 14: Example Page Size Encodings
++	 * Address bits 51:32 can be used to encode page sizes greater than 4
++	 * Gbytes. Address bits 63:52 are zero-extended.
++	 *
++	 * 512GB Pages are not supported due to a hardware bug.
++	 * Otherwise every power of two size is supported.
 +	 */
-+	return iommu_alloc_pages_node_sz(
-+		iommu_table->nid, gfp,
-+		log2_to_int(pt_top_memsize_lg2(common, top_of_table)));
++	return GENMASK_ULL(min(51, isz_lg2 + amdv1pt_num_items_lg2(pts) - 1),
++			   isz_lg2) & ~SZ_512G;
 +}
++#define pt_possible_sizes amdv1pt_possible_sizes
 +
-+static void NS(get_info)(struct pt_iommu *iommu_table,
-+			 struct pt_iommu_info *info)
++static inline enum pt_entry_type amdv1pt_load_entry_raw(struct pt_state *pts)
 +{
-+	struct pt_common *common = common_from_iommu(iommu_table);
-+	struct pt_range range = pt_top_range(common);
-+	struct pt_state pts = pt_init_top(&range);
-+	pt_vaddr_t pgsize_bitmap = 0;
++	const u64 *tablep = pt_cur_table(pts, u64) + pts->index;
++	unsigned int next_level;
++	u64 entry;
 +
-+	if (pt_feature(common, PT_FEAT_DYNAMIC_TOP)) {
-+		for (pts.level = 0; pts.level <= PT_MAX_TOP_LEVEL;
-+		     pts.level++) {
-+			if (pt_table_item_lg2sz(&pts) >= common->max_vasz_lg2)
-+				break;
-+			pgsize_bitmap |= pt_possible_sizes(&pts);
-+		}
++	pts->entry = entry = READ_ONCE(*tablep);
++	if (!(entry & AMDV1PT_FMT_PR))
++		return PT_ENTRY_EMPTY;
++
++	next_level = FIELD_GET(AMDV1PT_FMT_NEXT_LEVEL, pts->entry);
++	if (pts->level == 0 || next_level == AMDV1PT_FMT_NL_DEFAULT ||
++	    next_level == AMDV1PT_FMT_NL_SIZE)
++		return PT_ENTRY_OA;
++	return PT_ENTRY_TABLE;
++}
++#define pt_load_entry_raw amdv1pt_load_entry_raw
++
++static inline void
++amdv1pt_install_leaf_entry(struct pt_state *pts, pt_oaddr_t oa,
++			   unsigned int oasz_lg2,
++			   const struct pt_write_attrs *attrs)
++{
++	unsigned int isz_lg2 = pt_table_item_lg2sz(pts);
++	u64 *tablep = pt_cur_table(pts, u64) + pts->index;
++	u64 entry;
++
++	entry = AMDV1PT_FMT_PR |
++		FIELD_PREP(AMDV1PT_FMT_OA, log2_div(oa, PT_GRANULE_LG2SZ)) |
++		attrs->descriptor_bits;
++
++	if (oasz_lg2 == isz_lg2) {
++		entry |= FIELD_PREP(AMDV1PT_FMT_NEXT_LEVEL,
++				    AMDV1PT_FMT_NL_DEFAULT);
++		WRITE_ONCE(*tablep, entry);
 +	} else {
-+		for (pts.level = 0; pts.level <= range.top_level; pts.level++)
-+			pgsize_bitmap |= pt_possible_sizes(&pts);
++		unsigned int num_contig_lg2 = oasz_lg2 - isz_lg2;
++		u64 *end = tablep + log2_to_int(num_contig_lg2);
++
++		entry |= FIELD_PREP(AMDV1PT_FMT_NEXT_LEVEL,
++				    AMDV1PT_FMT_NL_SIZE) |
++			 FIELD_PREP(AMDV1PT_FMT_OA,
++				    oalog2_to_int(oasz_lg2 - PT_GRANULE_LG2SZ -
++						  1) -
++					    1);
++
++		/* See amdv1pt_clear_entry() */
++		if (num_contig_lg2 <= ilog2(32)) {
++			for (; tablep != end; tablep++)
++				WRITE_ONCE(*tablep, entry);
++		} else {
++			memset64(tablep, entry, log2_to_int(num_contig_lg2));
++		}
 +	}
-+
-+	/* Hide page sizes larger than the maximum OA */
-+	info->pgsize_bitmap = oalog2_mod(pgsize_bitmap, common->max_oasz_lg2);
++	pts->entry = entry;
 +}
++#define pt_install_leaf_entry amdv1pt_install_leaf_entry
 +
-+static void NS(deinit)(struct pt_iommu *iommu_table)
++static inline bool amdv1pt_install_table(struct pt_state *pts,
++					 pt_oaddr_t table_pa,
++					 const struct pt_write_attrs *attrs)
 +{
-+	struct pt_common *common = common_from_iommu(iommu_table);
-+	struct pt_range range = pt_all_range(common);
-+	struct pt_iommu_collect_args collect = {
-+		.free_list = IOMMU_PAGES_LIST_INIT(collect.free_list),
-+		.ignore_mapped = true,
-+	};
-+
-+	iommu_pages_list_add(&collect.free_list, range.top_table);
-+	pt_walk_range(&range, __collect_tables, &collect);
++	u64 entry;
 +
 +	/*
-+	 * The driver has to already have fenced the HW access to the page table
-+	 * and invalidated any caching referring to this memory.
++	 * IR and IW are ANDed from the table levels along with the PTE. We
++	 * always control permissions from the PTE, so always set IR and IW for
++	 * tables.
 +	 */
-+	iommu_put_pages_list(&collect.free_list);
++	entry = AMDV1PT_FMT_PR |
++		FIELD_PREP(AMDV1PT_FMT_NEXT_LEVEL, pts->level) |
++		FIELD_PREP(AMDV1PT_FMT_OA,
++			   log2_div(table_pa, PT_GRANULE_LG2SZ)) |
++		AMDV1PT_FMT_IR | AMDV1PT_FMT_IW;
++	if (pts_feature(pts, PT_FEAT_AMDV1_ENCRYPT_TABLES))
++		entry = __sme_set(entry);
++	return pt_table_install64(pts, entry);
 +}
++#define pt_install_table amdv1pt_install_table
 +
-+static const struct pt_iommu_ops NS(ops) = {
-+	.get_info = NS(get_info),
-+	.deinit = NS(deinit),
-+};
-+
-+static int pt_init_common(struct pt_common *common)
++static inline void amdv1pt_attr_from_entry(const struct pt_state *pts,
++					   struct pt_write_attrs *attrs)
 +{
-+	struct pt_range top_range = pt_top_range(common);
-+
-+	if (PT_WARN_ON(top_range.top_level > PT_MAX_TOP_LEVEL))
-+		return -EINVAL;
-+
-+	if (top_range.top_level == PT_MAX_TOP_LEVEL ||
-+	    common->max_vasz_lg2 == top_range.max_vasz_lg2)
-+		common->features &= ~BIT(PT_FEAT_DYNAMIC_TOP);
-+
-+	if (top_range.max_vasz_lg2 == PT_VADDR_MAX_LG2)
-+		common->features |= BIT(PT_FEAT_FULL_VA);
-+
-+	/* Requested features must match features compiled into this format */
-+	if ((common->features & ~(unsigned int)PT_SUPPORTED_FEATURES) ||
-+	    (!IS_ENABLED(CONFIG_DEBUG_GENERIC_PT) &&
-+	     (common->features & PT_FORCE_ENABLED_FEATURES) !=
-+		     PT_FORCE_ENABLED_FEATURES))
-+		return -EOPNOTSUPP;
-+
-+	if (common->max_oasz_lg2 == 0)
-+		common->max_oasz_lg2 = pt_max_output_address_lg2(common);
-+	else
-+		common->max_oasz_lg2 = min(common->max_oasz_lg2,
-+					   pt_max_output_address_lg2(common));
-+	return 0;
++	attrs->descriptor_bits =
++		pts->entry & (AMDV1PT_FMT_FC | AMDV1PT_FMT_IR | AMDV1PT_FMT_IW);
 +}
++#define pt_attr_from_entry amdv1pt_attr_from_entry
 +
-+static int pt_iommu_init_domain(struct pt_iommu *iommu_table,
-+				struct iommu_domain *domain)
++static inline void amdv1pt_clear_entry(struct pt_state *pts,
++				       unsigned int num_contig_lg2)
 +{
-+	struct pt_common *common = common_from_iommu(iommu_table);
-+	struct pt_iommu_info info;
-+	struct pt_range range;
-+
-+	NS(get_info)(iommu_table, &info);
-+
-+	domain->type = __IOMMU_DOMAIN_PAGING;
-+	domain->pgsize_bitmap = info.pgsize_bitmap;
-+
-+	if (pt_feature(common, PT_FEAT_DYNAMIC_TOP))
-+		range = _pt_top_range(common,
-+				      _pt_top_set(NULL, PT_MAX_TOP_LEVEL));
-+	else
-+		range = pt_top_range(common);
++	u64 *tablep = pt_cur_table(pts, u64) + pts->index;
++	u64 *end = tablep + log2_to_int(num_contig_lg2);
 +
 +	/*
-+	 * A 64 bit high address space table on a 32 bit system cannot work.
++	 * gcc generates rep stos for the io-pgtable code, and this difference
++	 * can show in microbenchmarks with larger contiguous page sizes.
++	 * rep is slower for small cases.
 +	 */
-+	domain->geometry.aperture_start = (unsigned long)range.va;
-+	if ((pt_vaddr_t)domain->geometry.aperture_start != range.va ||
-+	    range.va > ULONG_MAX)
-+		return -EOVERFLOW;
-+
-+	/*
-+	 * The aperture is limited to what the API can do after considering all
-+	 * the different types dma_addr_t/unsigned long/pt_vaddr_t that are used
-+	 * to store a VA. Set the aperture to something that is valid for all
-+	 * cases. Saturate instead of truncate the end if the types are smaller
-+	 * than the top range. aperture_end is a last.
-+	 */
-+	domain->geometry.aperture_end = (unsigned long)range.last_va;
-+	if ((pt_vaddr_t)domain->geometry.aperture_end != range.last_va) {
-+		domain->geometry.aperture_end = ULONG_MAX;
-+		domain->pgsize_bitmap &= ULONG_MAX;
++	if (num_contig_lg2 <= ilog2(32)) {
++		for (; tablep != end; tablep++)
++			WRITE_ONCE(*tablep, 0);
++	} else {
++		memset64(tablep, 0, log2_to_int(num_contig_lg2));
 +	}
-+	domain->geometry.force_aperture = true;
++}
++#define pt_clear_entry amdv1pt_clear_entry
 +
++static inline bool amdv1pt_entry_write_is_dirty(const struct pt_state *pts)
++{
++	unsigned int num_contig_lg2 = amdv1pt_entry_num_contig_lg2(pts);
++	u64 *tablep = pt_cur_table(pts, u64) +
++		      log2_set_mod(pts->index, 0, num_contig_lg2);
++	u64 *end = tablep + log2_to_int(num_contig_lg2);
++
++	for (; tablep != end; tablep++)
++		if (READ_ONCE(*tablep) & AMDV1PT_FMT_D)
++			return true;
++	return false;
++}
++#define pt_entry_write_is_dirty amdv1pt_entry_write_is_dirty
++
++static inline void amdv1pt_entry_set_write_clean(struct pt_state *pts)
++{
++	unsigned int num_contig_lg2 = amdv1pt_entry_num_contig_lg2(pts);
++	u64 *tablep = pt_cur_table(pts, u64) +
++		      log2_set_mod(pts->index, 0, num_contig_lg2);
++	u64 *end = tablep + log2_to_int(num_contig_lg2);
++
++	for (; tablep != end; tablep++)
++		WRITE_ONCE(*tablep, READ_ONCE(*tablep) & ~(u64)AMDV1PT_FMT_D);
++}
++#define pt_entry_set_write_clean amdv1pt_entry_set_write_clean
++
++static inline bool amdv1pt_entry_make_write_dirty(struct pt_state *pts)
++{
++	u64 *tablep = pt_cur_table(pts, u64) + pts->index;
++	u64 new = pts->entry | AMDV1PT_FMT_D;
++
++	return try_cmpxchg64(tablep, &pts->entry, new);
++}
++#define pt_entry_make_write_dirty amdv1pt_entry_make_write_dirty
++
++/* --- iommu */
++#include <linux/generic_pt/iommu.h>
++#include <linux/iommu.h>
++
++#define pt_iommu_table pt_iommu_amdv1
++
++/* The common struct is in the per-format common struct */
++static inline struct pt_common *common_from_iommu(struct pt_iommu *iommu_table)
++{
++	return &container_of(iommu_table, struct pt_iommu_amdv1, iommu)
++			->amdpt.common;
++}
++
++static inline struct pt_iommu *iommu_from_common(struct pt_common *common)
++{
++	return &container_of(common, struct pt_iommu_amdv1, amdpt.common)->iommu;
++}
++
++static inline int amdv1pt_iommu_set_prot(struct pt_common *common,
++					 struct pt_write_attrs *attrs,
++					 unsigned int iommu_prot)
++{
++	u64 pte = 0;
++
++	if (pt_feature(common, PT_FEAT_AMDV1_FORCE_COHERENCE))
++		pte |= AMDV1PT_FMT_FC;
++	if (iommu_prot & IOMMU_READ)
++		pte |= AMDV1PT_FMT_IR;
++	if (iommu_prot & IOMMU_WRITE)
++		pte |= AMDV1PT_FMT_IW;
++
++	/*
++	 * Ideally we'd have an IOMMU_ENCRYPTED flag set by higher levels to
++	 * control this. For now if the tables use sme_set then so do the ptes.
++	 */
++	if (pt_feature(common, PT_FEAT_AMDV1_ENCRYPT_TABLES))
++		pte = __sme_set(pte);
++
++	attrs->descriptor_bits = pte;
 +	return 0;
 +}
++#define pt_iommu_set_prot amdv1pt_iommu_set_prot
 +
-+static void pt_iommu_zero(struct pt_iommu_table *fmt_table)
++static inline int amdv1pt_iommu_fmt_init(struct pt_iommu_amdv1 *iommu_table,
++					 const struct pt_iommu_amdv1_cfg *cfg)
 +{
-+	struct pt_iommu *iommu_table = &fmt_table->iommu;
-+	struct pt_iommu cfg = *iommu_table;
++	struct pt_amdv1 *table = &iommu_table->amdpt;
++	unsigned int max_vasz_lg2 = PT_MAX_VA_ADDRESS_LG2;
 +
-+	static_assert(offsetof(struct pt_iommu_table, iommu.domain) == 0);
-+	memset_after(fmt_table, 0, iommu.domain);
-+
-+	/* The caller can initialize some of these values */
-+	iommu_table->nid = cfg.nid;
-+}
-+
-+#define pt_iommu_table_cfg CONCATENATE(pt_iommu_table, _cfg)
-+#define pt_iommu_init CONCATENATE(CONCATENATE(pt_iommu_, PTPFX), init)
-+int pt_iommu_init(struct pt_iommu_table *fmt_table,
-+		  const struct pt_iommu_table_cfg *cfg, gfp_t gfp)
-+{
-+	struct pt_iommu *iommu_table = &fmt_table->iommu;
-+	struct pt_common *common = common_from_iommu(iommu_table);
-+	struct pt_table_p *table_mem;
-+	int ret;
-+
-+	if (cfg->common.hw_max_vasz_lg2 > PT_MAX_VA_ADDRESS_LG2 ||
-+	    !cfg->common.hw_max_vasz_lg2 || !cfg->common.hw_max_oasz_lg2)
++	if (cfg->starting_level == 0 || cfg->starting_level > PT_MAX_TOP_LEVEL)
 +		return -EINVAL;
 +
-+	pt_iommu_zero(fmt_table);
-+	common->features = cfg->common.features;
-+	common->max_vasz_lg2 = cfg->common.hw_max_vasz_lg2;
-+	common->max_oasz_lg2 = cfg->common.hw_max_oasz_lg2;
-+#ifdef PT_FIXED_TOP_LEVEL
-+	pt_top_set_level(common, PT_FIXED_TOP_LEVEL);
-+#endif
-+	ret = pt_iommu_fmt_init(fmt_table, cfg);
-+	if (ret)
-+		return ret;
++	if (!pt_feature(&table->common, PT_FEAT_DYNAMIC_TOP) &&
++	    cfg->starting_level != PT_MAX_TOP_LEVEL)
++		max_vasz_lg2 = PT_GRANULE_LG2SZ +
++			       (PT_TABLEMEM_LG2SZ - ilog2(sizeof(u64))) *
++				       (cfg->starting_level + 1);
 +
-+	if (cfg->common.hw_max_oasz_lg2 > pt_max_output_address_lg2(common))
-+		return -EINVAL;
-+
-+	ret = pt_init_common(common);
-+	if (ret)
-+		return ret;
-+
-+	if (pt_feature(common, PT_FEAT_SIGN_EXTEND) &&
-+	    (pt_feature(common, PT_FEAT_FULL_VA) ||
-+	     pt_feature(common, PT_FEAT_DYNAMIC_TOP)))
-+		return -EINVAL;
-+
-+	ret = pt_iommu_init_domain(iommu_table, &iommu_table->domain);
-+	if (ret)
-+		return ret;
-+
-+	table_mem = table_alloc_top(common, common->top_of_table, gfp);
-+	if (IS_ERR(table_mem))
-+		return PTR_ERR(table_mem);
-+	pt_top_set(common, table_mem, pt_top_get_level(common));
-+
-+	/* Must be last, see pt_iommu_deinit() */
-+	iommu_table->ops = &NS(ops);
++	table->common.max_vasz_lg2 =
++		min(max_vasz_lg2, cfg->common.hw_max_vasz_lg2);
++	table->common.max_oasz_lg2 =
++		min(PT_MAX_OUTPUT_ADDRESS_LG2, cfg->common.hw_max_oasz_lg2);
++	pt_top_set_level(&table->common, cfg->starting_level);
 +	return 0;
 +}
-+EXPORT_SYMBOL_NS_GPL(pt_iommu_init, "GENERIC_PT_IOMMU");
++#define pt_iommu_fmt_init amdv1pt_iommu_fmt_init
 +
-+#ifdef pt_iommu_fmt_hw_info
-+#define pt_iommu_table_hw_info CONCATENATE(pt_iommu_table, _hw_info)
-+#define pt_iommu_hw_info CONCATENATE(CONCATENATE(pt_iommu_, PTPFX), hw_info)
-+void pt_iommu_hw_info(struct pt_iommu_table *fmt_table,
-+		      struct pt_iommu_table_hw_info *info)
++static inline void
++amdv1pt_iommu_fmt_hw_info(struct pt_iommu_amdv1 *table,
++			  const struct pt_range *top_range,
++			  struct pt_iommu_amdv1_hw_info *info)
 +{
-+	struct pt_iommu *iommu_table = &fmt_table->iommu;
-+	struct pt_common *common = common_from_iommu(iommu_table);
-+	struct pt_range top_range = pt_top_range(common);
-+
-+	pt_iommu_fmt_hw_info(fmt_table, &top_range, info);
++	info->host_pt_root = virt_to_phys(top_range->top_table);
++	PT_WARN_ON(info->host_pt_root & ~PT_TOP_PHYS_MASK);
++	info->mode = top_range->top_level + 1;
 +}
-+EXPORT_SYMBOL_NS_GPL(pt_iommu_hw_info, "GENERIC_PT_IOMMU");
++#define pt_iommu_fmt_hw_info amdv1pt_iommu_fmt_hw_info
 +#endif
-+
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("IOMMU Pagetable implementation for " __stringify(PTPFX_RAW));
-+MODULE_IMPORT_NS("GENERIC_PT");
-+
-+#endif
-diff --git a/include/linux/generic_pt/iommu.h b/include/linux/generic_pt/iommu.h
+diff --git a/drivers/iommu/generic_pt/fmt/defs_amdv1.h b/drivers/iommu/generic_pt/fmt/defs_amdv1.h
 new file mode 100644
-index 00000000000000..9d2152bc64c0d6
+index 00000000000000..0b9614ca6d103c
 --- /dev/null
-+++ b/include/linux/generic_pt/iommu.h
-@@ -0,0 +1,118 @@
++++ b/drivers/iommu/generic_pt/fmt/defs_amdv1.h
+@@ -0,0 +1,21 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
 + * Copyright (c) 2024-2025, NVIDIA CORPORATION & AFFILIATES
++ *
 + */
-+#ifndef __GENERIC_PT_IOMMU_H
-+#define __GENERIC_PT_IOMMU_H
++#ifndef __GENERIC_PT_FMT_DEFS_AMDV1_H
++#define __GENERIC_PT_FMT_DEFS_AMDV1_H
 +
 +#include <linux/generic_pt/common.h>
-+#include <linux/iommu.h>
-+#include <linux/mm_types.h>
++#include <linux/types.h>
 +
-+struct pt_iommu_ops;
++typedef u64 pt_vaddr_t;
++typedef u64 pt_oaddr_t;
 +
-+/**
-+ * DOC: IOMMU Radix Page Table
-+ *
-+ * The iommu implementation of the Generic Page Table provides an ops struct
-+ * that is useful to go with an iommu_domain to serve the DMA API, IOMMUFD and
-+ * the generic map/unmap interface.
-+ *
-+ * This interface uses a caller provided locking approach. The caller must have
-+ * a VA range lock concept that prevents concurrent threads from calling ops on
-+ * the same VA. Generally the range lock must be at least as large as a single
-+ * map call.
-+ */
-+
-+/**
-+ * struct pt_iommu - Base structure for iommu page tables
-+ *
-+ * The format specific struct will include this as the first member.
-+ */
-+struct pt_iommu {
-+	/**
-+	 * @domain - The core iommu domain. The driver should use a union to
-+	 * overlay this memory with its previously existing domain struct to
-+	 * create an alias.
-+	 */
-+	struct iommu_domain domain;
-+
-+	/**
-+	 * @ops - Function pointers to access the API
-+	 */
-+	const struct pt_iommu_ops *ops;
-+
-+	/**
-+	 * @nid - Node ID to use for table memory allocations. The iommu driver
-+	 * may want to set the NID to the device's NID, if there are multiple
-+	 * table walkers.
-+	 */
-+	int nid;
++struct amdv1pt_write_attrs {
++	u64 descriptor_bits;
++	gfp_t gfp;
 +};
-+
-+/**
-+ * struct pt_iommu_info - Details about the iommu page table
-+ *
-+ * Returned from pt_iommu_ops->get_info()
-+ */
-+struct pt_iommu_info {
-+	/**
-+	 * @pgsize_bitmap - A bitmask where each set bit indicates
-+	 * a page size that can be natively stored in the page table.
-+	 */
-+	u64 pgsize_bitmap;
-+};
-+
-+struct pt_iommu_ops {
-+	/**
-+	 * get_info() - Return the pt_iommu_info structure
-+	 * @iommu_table: Table to query
-+	 *
-+	 * Return some basic static information about the page table.
-+	 */
-+	void (*get_info)(struct pt_iommu *iommu_table,
-+			 struct pt_iommu_info *info);
-+
-+	/**
-+	 * deinit() - Undo a format specific init operation
-+	 * @iommu_table: Table to destroy
-+	 *
-+	 * Release all of the memory. The caller must have already removed the
-+	 * table from all HW access and all caches.
-+	 */
-+	void (*deinit)(struct pt_iommu *iommu_table);
-+};
-+
-+static inline void pt_iommu_deinit(struct pt_iommu *iommu_table)
-+{
-+	/*
-+	 * It is safe to call pt_iommu_deinit() before an init, or if init
-+	 * fails. The ops pointer will only become non-NUL if deinit needs to be
-+	 * run.
-+	 */
-+	if (iommu_table->ops)
-+		iommu_table->ops->deinit(iommu_table);
-+}
-+
-+/**
-+ * struct pt_iommu_cfg - Common configuration values for all formats
-+ */
-+struct pt_iommu_cfg {
-+	/**
-+	 * @features - Features required. Only these features will be turned on.
-+	 * The feature list should reflect what the IOMMU HW is capable of.
-+	 */
-+	unsigned int features;
-+	/**
-+	 * @hw_max_vasz_lg2 - Maximum VA the IOMMU HW can support. This will
-+	 * imply the top level of the table.
-+	 */
-+	u8 hw_max_vasz_lg2;
-+	/**
-+	 * @hw_max_oasz_lg2 - Maximum OA the IOMMU HW can support. The format
-+	 * might select a lower maximum OA.
-+	 */
-+	u8 hw_max_oasz_lg2;
-+};
++#define pt_write_attrs amdv1pt_write_attrs
 +
 +#endif
+diff --git a/drivers/iommu/generic_pt/fmt/iommu_amdv1.c b/drivers/iommu/generic_pt/fmt/iommu_amdv1.c
+new file mode 100644
+index 00000000000000..72a2337d0c5510
+--- /dev/null
++++ b/drivers/iommu/generic_pt/fmt/iommu_amdv1.c
+@@ -0,0 +1,15 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (c) 2024-2025, NVIDIA CORPORATION & AFFILIATES
++ */
++#define PT_FMT amdv1
++#define PT_SUPPORTED_FEATURES                                          \
++	(BIT(PT_FEAT_FULL_VA) | BIT(PT_FEAT_DYNAMIC_TOP) |             \
++	 BIT(PT_FEAT_FLUSH_RANGE) | BIT(PT_FEAT_FLUSH_RANGE_NO_GAPS) | \
++	 BIT(PT_FEAT_AMDV1_ENCRYPT_TABLES) |                           \
++	 BIT(PT_FEAT_AMDV1_FORCE_COHERENCE))
++#define PT_FORCE_ENABLED_FEATURES                                       \
++	(BIT(PT_FEAT_DYNAMIC_TOP) | BIT(PT_FEAT_AMDV1_ENCRYPT_TABLES) | \
++	 BIT(PT_FEAT_AMDV1_FORCE_COHERENCE))
++
++#include "iommu_template.h"
+diff --git a/include/linux/generic_pt/common.h b/include/linux/generic_pt/common.h
+index 91869fad33fbdf..b127d8915d48fc 100644
+--- a/include/linux/generic_pt/common.h
++++ b/include/linux/generic_pt/common.h
+@@ -131,4 +131,23 @@ enum pt_features {
+ 	PT_FEAT_FMT_START,
+ };
+ 
++struct pt_amdv1 {
++	struct pt_common common;
++};
++
++enum {
++	/*
++	 * The memory backing the tables is encrypted. Use __sme_set() to adjust
++	 * the page table pointers in the tree. This only works with
++	 * CONFIG_AMD_MEM_ENCRYPT.
++	 */
++	PT_FEAT_AMDV1_ENCRYPT_TABLES = PT_FEAT_FMT_START,
++	/*
++	 * The PTEs are set to prevent cache incoherent traffic, such as PCI no
++	 * snoop. This is set either at creation time or before the first map
++	 * operation.
++	 */
++	PT_FEAT_AMDV1_FORCE_COHERENCE,
++};
++
+ #endif
+diff --git a/include/linux/generic_pt/iommu.h b/include/linux/generic_pt/iommu.h
+index 9d2152bc64c0d6..b51de39c03c431 100644
+--- a/include/linux/generic_pt/iommu.h
++++ b/include/linux/generic_pt/iommu.h
+@@ -115,4 +115,33 @@ struct pt_iommu_cfg {
+ 	u8 hw_max_oasz_lg2;
+ };
+ 
++/* Generate the exported function signatures from iommu_pt.h */
++#define IOMMU_PROTOTYPES(fmt)                                             \
++	int pt_iommu_##fmt##_init(struct pt_iommu_##fmt *table,           \
++				  const struct pt_iommu_##fmt##_cfg *cfg, \
++				  gfp_t gfp);                             \
++	void pt_iommu_##fmt##_hw_info(struct pt_iommu_##fmt *table,       \
++				      struct pt_iommu_##fmt##_hw_info *info)
++#define IOMMU_FORMAT(fmt, member)       \
++	struct pt_iommu_##fmt {         \
++		struct pt_iommu iommu;  \
++		struct pt_##fmt member; \
++	};                              \
++	IOMMU_PROTOTYPES(fmt)
++
++
++struct pt_iommu_amdv1_cfg {
++	struct pt_iommu_cfg common;
++	unsigned int starting_level;
++};
++
++struct pt_iommu_amdv1_hw_info {
++	u64 host_pt_root;
++	u8 mode;
++};
++
++IOMMU_FORMAT(amdv1, amdpt);
++
++#undef IOMMU_PROTOTYPES
++#undef IOMMU_FORMAT
+ #endif
 -- 
 2.43.0
 
