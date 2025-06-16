@@ -1,158 +1,229 @@
-Return-Path: <linux-kselftest+bounces-35121-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35122-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6521FADB7A3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jun 2025 19:11:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01B70ADB7CF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jun 2025 19:32:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2AB053B34D5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jun 2025 17:11:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2036816A2AD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jun 2025 17:32:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA8DD288C86;
-	Mon, 16 Jun 2025 17:10:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01DD4288C8E;
+	Mon, 16 Jun 2025 17:32:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ims2SCYu"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zjTW3cwE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com [209.85.221.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D06D2BF016;
-	Mon, 16 Jun 2025 17:10:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED2E7288C36
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Jun 2025 17:32:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750093821; cv=none; b=AgiEXP2OYCUg2WiP5PbuDRi78/WSxuSATDIsv1b//Dz+r+U+Ws07c+VE33CPHbZE8LdCXeiz7kdMbz1CkN8q0IChhkp0yhuFXN8LmY+F0jC1AGa9BP0IyncXSOpRnJqqPLzo7rGyQ9GnKWkXQwqVbTfefeeJDaMoJGyvjcAOdYY=
+	t=1750095148; cv=none; b=BQ5kfE000Zj4oWMsHY0D90jXU5s4FmDjFhLVgFmPJ91mWDA6Z5EWk3dKuZWcV2oh7KfWBgR23a2LoeJBvp5gwTg3veLtQa/LkmygqBaKpwrEUg+dfqcMdh1L+CXwgV6VBiYgLLN9iS/sLBwpSmmB8gsYL83HRfQjVnIE1mzd99c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750093821; c=relaxed/simple;
-	bh=1fykyusYVro73+SkCEdouTI5VeesZrBsX99TGTggxRY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=EHA3RuQfpUvREYZZapmnC7VODeKLmQcQbJ/YR7tCtEDtlK2XCL2DvqJ0dBfOjAuqdnWFeZhe5wZzrYfRfugw8Z0IvYIvpsHyU3HpuKcwyTpcXY0sLGpZOorGKek0J1sgKKbll1Tr7fdZj5m7T321LdAikN34WMHCc5eTI0Usu80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ims2SCYu; arc=none smtp.client-ip=209.85.222.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-7d20ff236c5so103280985a.2;
-        Mon, 16 Jun 2025 10:10:16 -0700 (PDT)
+	s=arc-20240116; t=1750095148; c=relaxed/simple;
+	bh=53oFqP2M2cmobE/ugaCFp+IPUxUA0YjUIe8mxp0VACQ=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=IrGDFAqKw8/0Dx6XOSIReY8DPQgN6oceGFzlzARp7IhJRiEFGU4ETKCfCnZ9iUTwj1eJHIG1UlCByw4acA+4kCQIwt9bfLX6+29wb53ekViB6djuO9JX0H7JR3zWqyJfG4qKe5g7vpIrH0lQ8QQ4QT4bC4tz1lJZTjLnx1XGeqM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zjTW3cwE; arc=none smtp.client-ip=209.85.221.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-vk1-f175.google.com with SMTP id 71dfb90a1353d-525b44b7720so1096779e0c.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Jun 2025 10:32:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750093815; x=1750698615; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZnKjnGPQVsYruwW26IKQXjP4KtQDe+H/2EepWEDvdH4=;
-        b=ims2SCYuni7gGXtPV4Gv3S8d6ijEGdPb6Eu91dihf7+zWnhmAcg/dVHfHkc1dXH7Gz
-         EJeGlTBq7Uh+X8bkOzwP/7wL97O8wQV4cGmUu0jwfMutpAwMTaCnBka8WDViywmoRL0A
-         ur8OGCxSDfmcGRC4v1MQ/5gFQcAq8knYZvZRPv3hrEmeSqwnfOqi7J8ykvuS0aZURpW6
-         azpgK27KqH9FM2KLBXNk4MIEkjLAskhDWEl2nkqEThjkeZC6i7p4OWSuM2U/GW7+lYEy
-         9vOVgwPJT2QCgVaJW+IJ7Z6/Mxs1gBRqqTBu7oofDTqnWPE003urkdJi5vKNHbj9sGuQ
-         72Cw==
+        d=linaro.org; s=google; t=1750095146; x=1750699946; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=nOL9B0ArRDJ2HgV9zgRwhBeaYRAdymIm6FiPuyILxyE=;
+        b=zjTW3cwEO4K9E87KNylaz8MLGrbucnXeVTgeUxpXP0X1r8EurH66e+/6+tA/f58+gm
+         Qx/Ck3CpiiklYNRlwQbV29pJ9y3WjxVugEW8R2wxWw6cIILpzq6qXjQU33h+1ztiORJu
+         10wYQYwkE6F9gDA9A9Wl0myfUPr+LfaxI96b4Z16Jr9rsjV9XkNw+fziaKgFshBF4wz1
+         cl00vuxGZzKhwieTThUbrwPYh1PPW0l4pGV939M73kWvegNdVK2cgRdlpbvmrzbFi2YY
+         j3HRVepZHzHoU46FJja5XOKUfX0bLwiJy0SwD2ENbWk5Cj/qp96TWptNHqh3IRSlIwqw
+         qPbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750093815; x=1750698615;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZnKjnGPQVsYruwW26IKQXjP4KtQDe+H/2EepWEDvdH4=;
-        b=M4GtTmKjWCGO/T6mar73xjIgvSyvhW2Bp2XeiQS9UMZXaSgu8yXw6UXEfdLzu7CVXY
-         mB6tcM7FZ2XbDFJM9mDq0zmNRqVggcjx2GDhtpfNuMkb2gek+hVmunjFQZxvB3CaZCgt
-         6YM+COgp+3doZwOZ6TSh2rh8tJ52wtLz0d77nHhkFTEvIhVWCuaMKSBKwhkk+Y6tWue3
-         XyyyYYfFA82Uav/xActQceuA2LIVweGH+3rhSdrICTZ65mQ6/Cam2kdyHuFoJdndfxYp
-         oU1yAIevKccorhaYiCPJaYsMPpg6K1GrpiphpMLmqIRA5AHGz9RF9nlv34g/Vy/X1S9J
-         YY4A==
-X-Forwarded-Encrypted: i=1; AJvYcCU3paDD3YEjfD/q/+jey1LosMwoXIBrNX6eiWbMkWgvVaMYfeYJhpYLiul8nUHUrKrMUqccnM7uh7I=@vger.kernel.org, AJvYcCUjsm8dXB2g1gKXOXSyZuKSSBj1NmAVJS1/Rx8ViEycI29JF2L++Y6JbxRnCsSpZd7eWnvC4AZ2AFMjkFq+mWUk@vger.kernel.org, AJvYcCWbe5F9zeZ/yVfTYLDPfo4+163nYuQ0IobkfchxoqCwAwXQozsk5m4rcTpk1mKf6D+ee+1tGWN6HgMkAe0H@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw6DwBD1G1nj1YxCRxGRIVYlnXAHPKjwCIUnH4G70z34YwUNsNk
-	FXs7ABGhvo+/kiemXOGJYbaAeoF6Vw6IA8nJU11O/xubXVC6i9GSfSQ1
-X-Gm-Gg: ASbGncuJ2k5WQv7gOWSpMKIZ73gDWXTXNL7PeJVetry9MfjmxFO0dGHd4pSMUeWEJ6R
-	kiWGaFiuywuXrxUV7dOQnx1fZHyjuvZwWhtXJyC/7/f2Od0uwgVYdBh2DjRC/N/dE9Y4HWh50u9
-	o5Dl4sd88E11GeuQYKDiH1pgg2wW1lL3TjlOxzqnOq4LnztRyHiRgNpykQPY6soFUhCOLPz/SoL
-	GdRR7s3kF6xqSiO+1EF0JFHE4FIPrI9IjaVWM+3jgojwoHYU9sswLt2ERxMZBuqvIBGfI0/g/yv
-	vFapvbAnLWiblHfySGoTyulvZyk+7zszCHB07QIUwzFLeidg0HPCDHDd
-X-Google-Smtp-Source: AGHT+IHsQ9BByXp5pGeWBYEn81TAB7iyvrQOQoiCKdS5unwxLUFClfS9eLO2YORgalJfCQUKj/cW6g==
-X-Received: by 2002:a05:620a:414a:b0:7cd:4a08:ea12 with SMTP id af79cd13be357-7d3dddd3dcamr28146185a.0.1750093814938;
-        Mon, 16 Jun 2025 10:10:14 -0700 (PDT)
-Received: from localhost ([2a03:2880:20ff:73::])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7d3b8e1cf5esm546463585a.49.2025.06.16.10.10.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jun 2025 10:10:14 -0700 (PDT)
-From: Gustavo Luiz Duarte <gustavold@gmail.com>
-Date: Mon, 16 Jun 2025 10:08:39 -0700
-Subject: [PATCH net-next v3 5/5] docs: netconsole: document msgid feature
+        d=1e100.net; s=20230601; t=1750095146; x=1750699946;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nOL9B0ArRDJ2HgV9zgRwhBeaYRAdymIm6FiPuyILxyE=;
+        b=aLkBpQHwWTrYHVlCjuvY735SDm8o+ygTenRHa028h2mhRfSlmA6gDHtyIGlKGEJBBU
+         vyChAfMBGYNZCpTnyTaoAGr50vHzJ0olTIM5+o2ZupIli70Ijn500XwjxXjGM20CdBtf
+         LDCkGylCKI+kuRPqHn7yyYazFNp59YX4dU5NM1WmgOyxkGqOGtLpS84J8rzs0Td3UWGT
+         wYtLq40G8eMhwhLrTKcLM33xdfnGGyD8M2UXXVgSVlGwg0w5pC8JJj6aXgY29TfCOzKb
+         N+84+caiMOvZIWCQBCVtba5HAaYBSmpXWsb+8X4oQ6pBmijiwwwP23LZSFXMW5XCoii6
+         78lQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUQyih7slvMWRkTbrO2oEVQUI9vn0i4mKnKl+w+n4RhpGzM3c33gsv8pLCnKiHMTDA1NuGOluewr/RmYosKFmo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwVtsB4OR3D9+vx9yyI3EwKI9Ep5Vf0yTUD2ylDpYCSmy8w0Isz
+	fvT3+gI2z+NI77qkyZ9vU/Hkyi9Weyr1QC6dD25uiq3ZZvn4vhz7IEL2E6kc+e1i+y9trLKwfRB
+	kQMwTRKcWbWN59VoOIvHq+0w2H0qBFuzkql+QsiaV1w==
+X-Gm-Gg: ASbGnctWeScomodqdB8K4XkwHYiAJDNh5dUAdIR/mWnXrS3Dn40eQqOIewWkZCJJTNb
+	4MfY4M5kFP4e24OvLlh9n05pzT444Ir8ZDYdSQa301h1YW7MvATUkYayVy5o4gg0ZUju/BK/lDz
+	9MgseLvgWlBIsCmXndUA5VWeSfr8YPU3WNWTVmG8YjjP7SxQl+cBEN063weWvw8CtMxqC/7Zs8p
+	H0S
+X-Google-Smtp-Source: AGHT+IHDbuGGx7FLDHd6SFF50nhpSRXNoX9Bm2Q2spE2ZR4tp7m+F74+pbpAxOfBAdUothMPOUPzPvXxKAsnmN6gtsw=
+X-Received: by 2002:a05:6122:8c19:b0:516:18cd:c1fc with SMTP id
+ 71dfb90a1353d-531498af39fmr5799138e0c.8.1750095145850; Mon, 16 Jun 2025
+ 10:32:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250616-netconsole-msgid-v3-5-4d2610577571@gmail.com>
-References: <20250616-netconsole-msgid-v3-0-4d2610577571@gmail.com>
-In-Reply-To: <20250616-netconsole-msgid-v3-0-4d2610577571@gmail.com>
-To: Breno Leitao <leitao@debian.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
- Jonathan Corbet <corbet@lwn.net>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
- Gustavo Luiz Duarte <gustavold@gmail.com>
-X-Mailer: b4 0.13.0
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Mon, 16 Jun 2025 23:02:14 +0530
+X-Gm-Features: AX0GCFtIN6D4edi0dQDj2abPdHOYRSZcQmAsmVEcy9cnxJDmABW66gpRHqdgLtw
+Message-ID: <CA+G9fYssELHcYKwgGNBMLrfeKZa9swGdLrH7gxqzd4P0kaOiZg@mail.gmail.com>
+Subject: clang: selftests/mm gup_longterm error while loading shared libraries
+ liburing.so.2 cannot open shared object file No such file or directory
+To: clang-built-linux <llvm@lists.linux.dev>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
+	lkft-triage@lists.linaro.org, Linux Regressions <regressions@lists.linux.dev>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Vlastimil Babka <vbabka@suse.cz>, Shuah Khan <shuah@kernel.org>, 
+	Zi Yan <ziy@nvidia.com>, David Hildenbrand <david@redhat.com>, lorenzo.stoakes@oracle.com, 
+	Dan Carpenter <dan.carpenter@linaro.org>, Anders Roxell <anders.roxell@linaro.org>, jackmanb@google.com
+Content-Type: text/plain; charset="UTF-8"
 
-Add documentation explaining the msgid feature in netconsole.
+The following test regressions noticed while running selftests/mm gup_longterm
+test cases on Dragonboard-845c, Dragonboard-410c, rock-pi-4, qemu-arm64 and
+qemu-x86_64 this build have required selftest/mm/configs included and toolchain
+is clang nightly.
 
-This feature appends unique id to the userdata dictionary. The message
-ID is populated from a per-target 32 bit counter which is incremented
-for each message sent to the target. This allows a target to detect if
-messages are dropped before reaching the target.
+Regressions found on Dragonboard-845c, Dragonboard-410c, rock-pi-4,
+qemu-arm64 and qemu-x86_64
+  -  selftests mm gup_longterm fails
 
-Signed-off-by: Gustavo Luiz Duarte <gustavold@gmail.com>
----
- Documentation/networking/netconsole.rst | 32 ++++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+Regression Analysis:
+ - New regression? Yes
+ - Reproducibility? Yes
 
-diff --git a/Documentation/networking/netconsole.rst b/Documentation/networking/netconsole.rst
-index a0076b542e9c..59cb9982afe6 100644
---- a/Documentation/networking/netconsole.rst
-+++ b/Documentation/networking/netconsole.rst
-@@ -340,6 +340,38 @@ In this example, the message was sent by CPU 42.
-       cpu=42    # kernel-populated value
- 
- 
-+Message ID auto population in userdata
-+--------------------------------------
-+
-+Within the netconsole configfs hierarchy, there is a file named `msgid_enabled`
-+located in the `userdata` directory. This file controls the message ID
-+auto-population feature, which assigns a numeric id to each message sent to a
-+given target and appends the ID to userdata dictionary in every message sent.
-+
-+The message ID is generated using a per-target 32 bit counter that is
-+incremented for every message sent to the target. Note that this counter will
-+eventually wrap around after reaching uint32_t max value, so the message ID is
-+not globally unique over time. However, it can still be used by the target to
-+detect if messages were dropped before reaching the target by identifying gaps
-+in the sequence of IDs.
-+
-+It is important to distinguish message IDs from the message <sequnum> field.
-+Some kernel messages may never reach netconsole (for example, due to printk
-+rate limiting). Thus, a gap in <sequnum> cannot be solely relied upon to
-+indicate that a message was dropped during transmission, as it may never have
-+been sent via netconsole. The message ID, on the other hand, is only assigned
-+to messages that are actually transmitted via netconsole.
-+
-+Example::
-+
-+  echo "This is message #1" > /dev/kmsg
-+  echo "This is message #2" > /dev/kmsg
-+  13,434,54928466,-;This is message #1
-+   msgid=1
-+  13,435,54934019,-;This is message #2
-+   msgid=2
-+
-+
- Extended console:
- =================
- 
+Test regression: selftests mm gup_longterm error while loading shared
+libraries liburing.so.2 cannot open shared object file No such file or
+directory
+Test regression: selftests mm cow error while loading shared libraries
+liburing.so.2 cannot open shared object file No such file or directory
+Test regression: selftests mm mlock-random-test exit=139
+Test regression: selftests mm pagemap_ioctl exit=1
+Test regression: selftests mm guard_regions file hole_punch
 
--- 
-2.47.1
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+
+## Test log
+Linux version 6.15.0-next-20250606 (tuxmake@tuxmake) (Debian clang
+version 21.0.0 (++20250602112323+c5a56f74fef7-1~exp1~20250602112342.1487),
+Debian LLD 21.0.0) #1 SMP PREEMPT @1749190532
+
+running ./gup_longterm
+----------------------
+./gup_longterm: error while loading shared libraries: liburing.so.2:
+cannot open shared object file: No such file or directory
+[FAIL]
+ not ok 14 gup_longterm # exit=127
+
+./cow: error while loading shared libraries: liburing.so.2: cannot
+open shared object file: No such file or directory
+[FAIL]
+not ok 50 cow # exit=127
+
+running ./mlock-random-test
+---------------------------
+TAP version 13
+1..2
+[  311.408456] traps: mlock-random-te[21661] general protection fault
+ip:7f63210dbf0f sp:7ffdff6fca28 error:0 in
+libc.so.6[adf0f,7f6321056000+165000]
+[FAIL]
+not ok 23 mlock-random-test # exit=139
+
+running ./pagemap_ioctl
+
+...
+ok 53 Huge page testing: only two middle pages dirty
+ok 54 # SKIP Hugetlb shmem testing: all new pages must not be written (dirty)
+ok 55 # SKIP Hugetlb shmem testing: all pages must be written (dirty)
+ok 56 # SKIP Hugetlb shmem testing: all pages dirty other than first
+and the last one
+ok 57 # SKIP Hugetlb shmem testing: PM_SCAN_WP_MATCHING | PM_SCAN_CHECK_WPASYNC
+ok 58 # SKIP Hugetlb shmem testing: only middle page dirty
+ok 59 # SKIP Hugetlb shmem testing: only two middle pages dirty
+ok 60 # SKIP Hugetlb mem testing: all new pages must not be written (dirty)
+ok 61 # SKIP Hugetlb mem testing: all pages must be written (dirty)
+ok 62 # SKIP Hugetlb mem testing: all pages dirty other than first and
+the last one
+ok 63 # SKIP Hugetlb mem testing: PM_SCAN_WP_MATCHING |
+PM_SCAN_CHECK_WPASYNC[  241.731600] run_vmtests.sh (456): drop_caches:
+3
+ok 64 # SKIP Hugetlb mem testing: only middle page dirty
+ok 65 # SKIP Hugetlb mem testing: only two middle pages dirty
+Bail out! uffd-test creation failed 12 Cannot allocate memory
+12 skipped test(s) detected. Consider enabling relevant config options
+to improve coverage.
+Planned tests != run tests (115 != 65)
+Totals: pass:53 fail:0 xfail:0 xpass:0 skip:12 error:0
+[FAIL]
+# not ok 48 pagemap_ioctl # exit=1
+
+running ./guard-regions
+...
+RUN           guard_regions.file.hole_punch ...
+guard-regions.c:1905:hole_punch:Expected madvise(&ptr[3 * page_size],
+4 * page_size, MADV_REMOVE) (-1) == 0 (0)
+hole_punch: Test terminated by assertion
+         FAIL  guard_regions.file.hole_punch
+not ok 80 guard_regions.file.hole_punch
+
+
+## Source
+* Kernel version: 6.16.0-rc2
+* Git tree: https://kernel.googlesource.com/pub/scm/linux/kernel/git/next/linux-next.git
+* Git sha: 050f8ad7b58d9079455af171ac279c4b9b828c11
+* Git describe: next-20250616
+* Project details:
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20250616/
+* Architectures: arm64, x86_64
+* Test environments: Dragonboard-845c, Dragonboard-410c,  rock-pi-4,
+qemu-arm64, qemu-x86_64 and x86
+* Toolchains: clang nightly
+* Kconfigs: selftest/mm/config+defconfig+
+
+## Test
+* Test log: https://qa-reports.linaro.org/api/testruns/28766026/log_file/
+* Test log 2: https://qa-reports.linaro.org/api/testruns/28743077/log_file/
+* Build details:
+https://regressions.linaro.org/lkft/linux-next-master/next-20250616/kselftest-mm/mm_run_vmtests_sh_gup_longterm/
+* Build link: https://storage.tuxsuite.com/public/linaro/lkft/builds/2ya0viPHafKAe0u89drIv5fcwu2/
+* Kernel config:
+https://storage.tuxsuite.com/public/linaro/lkft/builds/2ya0viPHafKAe0u89drIv5fcwu2/config
+
+
+## Steps to reproduce
+  - tuxrun \
+   --runtime podman \
+   --device qemu-x86_64 \
+   --boot-args rw  \
+   --kernel https://storage.tuxsuite.com/public/linaro/lkft/builds/2ya0wmVl0eHb9koWyQYC7myXjpX/bzImage
+\
+   --rootfs https://storage.tuxboot.com/debian/20250605/trixie/amd64/rootfs.ext4.xz
+\
+   --modules https://storage.tuxsuite.com/public/linaro/lkft/builds/2ya0wmVl0eHb9koWyQYC7myXjpX/modules.tar.xz
+/usr/ \
+   --parameters MODULES_PATH=/usr/ \
+   --parameters
+SQUAD_URL=https://qa-reports.linaro.org//api/submit/lkft/linux-next-master/next-20250616/env/
+\
+   --parameters SKIPFILE=skipfile-lkft.yaml \
+   --parameters
+KSELFTEST=https://storage.tuxsuite.com/public/linaro/lkft/builds/2ya0wmVl0eHb9koWyQYC7myXjpX/kselftest.tar.xz
+\
+   --image docker.io/linaro/tuxrun-dispatcher:v1.2.2 \
+   --tests kselftest-mm \
+   --timeouts boot=15
+
+--
+Linaro LKFT
+https://lkft.linaro.org
 
