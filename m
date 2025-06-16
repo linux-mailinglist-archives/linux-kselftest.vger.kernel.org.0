@@ -1,207 +1,178 @@
-Return-Path: <linux-kselftest+bounces-35143-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35144-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76062ADBB2E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jun 2025 22:28:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBAE9ADBB4F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jun 2025 22:41:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC41E188906A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jun 2025 20:29:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6B405175F76
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jun 2025 20:41:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54C641FBE9B;
-	Mon, 16 Jun 2025 20:28:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7680820B800;
+	Mon, 16 Jun 2025 20:40:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="X3QkQIKC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KQUxhmKS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7D3920FAA4
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Jun 2025 20:28:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B730136349;
+	Mon, 16 Jun 2025 20:40:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750105732; cv=none; b=Hy4H58/8d2BeZZKL7QljuyaxwQNHeiIkW2xNiJvMNgH/6JnUcXP31fMRTQlyuY1DCKRp6LVp66brhbHAJQftJouQUZetr4OmC7qW9PdXZ3qMlFBqIMltW3teNjOOjmuv6MtrOlcMvSaYbnWvEzKgeRdNLa3ZnzpQcdk7A+/czFU=
+	t=1750106456; cv=none; b=D5/sVC3AnO2syrKk9gJTQWnwqibUYD81liXOoOLMyMty4AKlTBEDeKu/JxgqdQaVXvATB1Ikcg0qx8o0XEtDss/wmY7ytZvR1F7BszlwlBZK4zjyMlaqGfng0qK3Vrw/7TiGG0qkKwKxX5xB+OaOOxmAVsrKKAceHLtkYnZX2eQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750105732; c=relaxed/simple;
-	bh=YUEMCKij4cw6gsjf4i1nGzv6J2HAa+qxkPKnX3YfliM=;
+	s=arc-20240116; t=1750106456; c=relaxed/simple;
+	bh=VToacuz5C68jjScMIwa6jMdcPhRPipW0PWEYVkfbBp8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fT4jZoPjOfpmNzF0/ff2wTCWH+ZtmssmUZ0D5up+Ry0GcnFsqkKyo/hCfsU0l1OMNOrbVDR5DHLa+hZXGjGWIQIzx/Q43RqB4ex2Gy6exU5asAKg8TkzWs9CgkmNFtlFEC7Fp+ab3Rb5/g67e1ev/x/pTxATH78WurQ0sBDoY1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=X3QkQIKC; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1750105729;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=i1IPXsOEh/p6y3rDNG7kT8FS6NJiHgtYggv8i7AMSnQ=;
-	b=X3QkQIKCWpqzL2eOIqGsPexUTktlCPxfVZNHZ/6aoIfwaGOIzrII/P6rQaPVPwPfiMCgtE
-	yFZmQ7UgrsjrMm7mrhUKgxaBJxfmexcirEnkpdww626MKYx6d3TDRyVzhiGcpCbaQpKA8T
-	bG3eDm0jO8tZdsrHagfVaprT3MEL9Qk=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-507-6FeskZOgNZGp9o1TI8YjoA-1; Mon, 16 Jun 2025 16:28:48 -0400
-X-MC-Unique: 6FeskZOgNZGp9o1TI8YjoA-1
-X-Mimecast-MFC-AGG-ID: 6FeskZOgNZGp9o1TI8YjoA_1750105727
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-3a4fac7fa27so2205263f8f.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Jun 2025 13:28:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750105727; x=1750710527;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=i1IPXsOEh/p6y3rDNG7kT8FS6NJiHgtYggv8i7AMSnQ=;
-        b=D+u1diOwDEu4UpFoUW/ea9Ns39N8bOqzv3885NIFvx6iP/rXXjyf3O5JVDZiZ0LkQ5
-         ZoZ0YfWhu40vQODP6gGM6805PxoK7IF7ieb/AQ4tEJ6Q9h39sgoWJQfnH2RFYuYKP/p1
-         l+WHUnIM8sPT8Gs6xp5iHIUGPbEZ2LRz1D02aas3jaReRzc6hYG3avc37VgzxaoV9WlB
-         UJr6gdI8fyj66OoZ86f06FJWoQb1TB03xIBXES5EgDoYZMVDPUbhedcNbMxFdhAsHvD4
-         GbR0q7aLgLXSq7/e4l2p1Ipfa+rCzoBtlPotC6WbebDL38vtarfDV+DQIcPp0O3o+Z6g
-         ZJCw==
-X-Forwarded-Encrypted: i=1; AJvYcCWgOdCS6jAxylQYkajRfK+cMJBHhGV9rlwUaNYlqfnwvTd6YxeR5BbxMIrbWGtWNpKQPtinUF9VjOrFS70iB70=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwByo9Ohj4PjsgjTIvw9n7GtIdl+3z/4krPR7d7NbA/t/KdqxjJ
-	FWM6A5CD8jCU/RJ4cJepFOpE7BNegaLCdFOgTi0EJEjhWVHmUtFTIVEdzp1vp0zlhd5h8uonq9r
-	KK+7slsr4QB52h4KVeqk1dcTx0nKtRbhx9xljj4Rn6Vj4pPKHLzXg7QpGhZjXlN9CMS70eQ==
-X-Gm-Gg: ASbGncuzMsBHa1CR8CQIEmtGos4AkjzrH72f6AwkTyTwtwUBagM51CL1smTn2BmbOP+
-	etkJxncawxfO9fEFPS7dy+4023s/9iIv/J/nqFZvOLME075ptKd/ThgXpxFpAZ1gEgD/an3BhL8
-	Tluc0SRJS95Pq5HpTu9XnQqoVVnDcY/nDlKA9MEjTh5sxMdijd2OIQQh7+55aDw9nbn7D9WgeIL
-	xbs5s+gSjZE5hyitSJCwZmolBGbD5MTSNZB+Zw9mD0rWE/HfVs7R6vo/HFgEO1db7WHFedzHJt6
-	bkuaU/uqHVf3UctHT4zC9wfXA2vbO/iefXDXdBAfL9yJ4PrID50M8yEWaf97g1nbYuZRukiiAnx
-	nRJh1jc5nHC3mR/9J8fP2zF59nWJa7JPQLRd9dqJvVVZPFpAN6g==
-X-Received: by 2002:a05:6000:2582:b0:3a5:3a03:79c1 with SMTP id ffacd0b85a97d-3a572e2e062mr7702104f8f.48.1750105726986;
-        Mon, 16 Jun 2025 13:28:46 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHG7nU5/7LN/0O+ekOUky7kNwsRWJhG9H1OaqaKshtklk2XpSEzVBRROwu2v7BpseZlkSXqQQ==
-X-Received: by 2002:a05:6000:2582:b0:3a5:3a03:79c1 with SMTP id ffacd0b85a97d-3a572e2e062mr7702084f8f.48.1750105726527;
-        Mon, 16 Jun 2025 13:28:46 -0700 (PDT)
-Received: from ?IPV6:2003:d8:2f3a:e300:c660:4ff5:5bfb:f5c5? (p200300d82f3ae300c6604ff55bfbf5c5.dip0.t-ipconnect.de. [2003:d8:2f3a:e300:c660:4ff5:5bfb:f5c5])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4532e195768sm155188255e9.0.2025.06.16.13.28.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Jun 2025 13:28:46 -0700 (PDT)
-Message-ID: <ec18001d-7123-4d13-aea7-a28594cd137b@redhat.com>
-Date: Mon, 16 Jun 2025 22:28:44 +0200
+	 In-Reply-To:Content-Type; b=PnY8AWNrPD3Q2cu/a1Ovmp2yG1WrRS2bits64m9AlnOtwLYYYN1Ub6i8GBMnRLRHnr1gpGGAT0S0AB9p1LlcTLIB/NyxClLUoremkanam+qqtnnOBfWBKURIMyCANW5u58nSIYY29fnd8m+vyLAmqkC0MVdEAb+WoOBGyzKtQk0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KQUxhmKS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 319D3C4CEEA;
+	Mon, 16 Jun 2025 20:40:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750106455;
+	bh=VToacuz5C68jjScMIwa6jMdcPhRPipW0PWEYVkfbBp8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=KQUxhmKST1yTP9+9MXKhvuAd9dMbhfFbLMwSgtfBTG/VHiSDA8BclseOyJN0yNPqW
+	 B9VQk5WyNmanImzwfw/u79o+MWjtzn5tNgXtE6D9XyMnHF/cnAKDnVwoE8WOliJCwE
+	 btcGPz+mpoaXJJhyxv/WWFZkkldBmVKq1GZveM+UI6yduqIe9Ej/Jc988uNUYvPcMS
+	 GHZXTmUOoanYqZHMmfHFWiCwfsSYbLDPo+Ws60JzzG9D6Vo7gDcc8nlSSE3lRQLTS+
+	 HRtj5zbq+mby6xyduOAIHPw7T2BqzlHJD5gaqlUqSS+7qKI1v22KCjphJ37AIQA57q
+	 mVlEu5/xaqROw==
+Message-ID: <be7149b5-0286-4b39-b6ce-809618354b13@kernel.org>
+Date: Mon, 16 Jun 2025 22:40:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: clang: selftests/mm gup_longterm error while loading shared
- libraries liburing.so.2 cannot open shared object file No such file or
- directory
-To: Christian Heusel <christian@heusel.eu>,
- Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: clang-built-linux <llvm@lists.linux.dev>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>, lkft-triage@lists.linaro.org,
- Linux Regressions <regressions@lists.linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>,
- Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Vlastimil Babka <vbabka@suse.cz>, Shuah Khan <shuah@kernel.org>,
- Zi Yan <ziy@nvidia.com>, lorenzo.stoakes@oracle.com,
- Dan Carpenter <dan.carpenter@linaro.org>,
- Anders Roxell <anders.roxell@linaro.org>, jackmanb@google.com
-References: <CA+G9fYssELHcYKwgGNBMLrfeKZa9swGdLrH7gxqzd4P0kaOiZg@mail.gmail.com>
- <7c101fe5-7c73-4916-a832-d656511eeab8@heusel.eu>
-From: David Hildenbrand <david@redhat.com>
-Content-Language: en-US
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <7c101fe5-7c73-4916-a832-d656511eeab8@heusel.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH net-next v2 14/14] selftests: forwarding: Add a test for
+ verifying VXLAN MC underlay
+Content-Language: en-GB, fr-BE
+To: Petr Machata <petrm@nvidia.com>
+Cc: Jakub Kicinski <kuba@kernel.org>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Paolo Abeni <pabeni@redhat.com>, David Ahern <dsahern@gmail.com>,
+ netdev@vger.kernel.org, Simon Horman <horms@kernel.org>,
+ Nikolay Aleksandrov <razor@blackwall.org>, Ido Schimmel <idosch@nvidia.com>,
+ mlxsw@nvidia.com, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org
+References: <cover.1749757582.git.petrm@nvidia.com>
+ <78edac89730a346e957b69d4107fcd8f1c5c6266.1749757582.git.petrm@nvidia.com>
+ <20250613095755.54381628@kernel.org>
+ <ccaf0784-d7a3-41e2-b3e0-65b9022f15a6@kernel.org> <87wm9bu13q.fsf@nvidia.com>
+ <426a2c83-38ca-4fa2-9270-b3e600e30d19@kernel.org> <87sejztpvj.fsf@nvidia.com>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <87sejztpvj.fsf@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 16.06.25 21:14, Christian Heusel wrote:
-> On 25/06/16 11:02PM, Naresh Kamboju wrote:
->> The following test regressions noticed while running selftests/mm gup_longterm
->> test cases on Dragonboard-845c, Dragonboard-410c, rock-pi-4, qemu-arm64 and
->> qemu-x86_64 this build have required selftest/mm/configs included and toolchain
->> is clang nightly.
->>
->> Regressions found on Dragonboard-845c, Dragonboard-410c, rock-pi-4,
->> qemu-arm64 and qemu-x86_64
->>    -  selftests mm gup_longterm fails
->>
->> Regression Analysis:
->>   - New regression? Yes
->>   - Reproducibility? Yes
->>
->> Test regression: selftests mm gup_longterm error while loading shared
->> libraries liburing.so.2 cannot open shared object file No such file or
->> directory
- >> Test regression: selftests mm cow error while loading shared 
-libraries>> liburing.so.2 cannot open shared object file No such file or 
-directory
+On 16/06/2025 21:53, Petr Machata wrote:
 > 
-> These do not really look like kernel regressions, rather like a bug in
-> the userspace testing tool 🤔 Could it be that the tests were not
-> rebuilt for the new liburing or that the dependency is not installed in
-> the test environment?
+> Matthieu Baerts <matttbe@kernel.org> writes:
+> 
+>> Hi Petr,
+>>
+>> On 16/06/2025 17:06, Petr Machata wrote:
+>>>
+>>> Matthieu Baerts <matttbe@kernel.org> writes:
+> 
+>>>> That what we did with MPTCP, see the top of the mptcp_join.sh file for
+>>>> example [2], where we have:
+>>>>
+>>>>> # ShellCheck incorrectly believes that most of the code here is unreachable
+>>>>> # because it's invoked by variable name, see how the "tests" array is used
+>>>>> #shellcheck disable=SC2317
+>>>>
+>>>> If you add this at the top of your new file, followed by an empty line,
+>>>> shellcheck will ignore this issue for the whole file.
+>>>
+>>> The ALL_TESTS issue is not the end of it either. We use helpers that
+>>> call stuff indirectly all over the place. defer, in_ns... It would make
+>>> sense to me to just disable SC2317 in NIPA runs. Or maybe even put it in
+>>> net/forwarding/.shellcheckrc. Pretty much all those tests are written in
+>>> a style that will hit these issues.
+>>
+>> In this case, I think it would be better to add this .shellcheckrc file
+>> in net/forwarding. If you modify NIPA, I don't think people will know
+>> what is allowed or not, or what command line to use, no?
+> 
+> Good point. The question then is whether to put it to forwarding/ or
+> directly net/, which is has seen more use of lib.sh and therefore the
+> same sort of coding style. I'll experiment with it and should be able to
+> send it later in the week. I don't want to add it to the MC patchset.
 
-It looks like the tests were build with liburing around, and then ran 
-without liburing around.
+Since Jakub disabled SC2317 in NIPA [1], then I guess we can put this
+.shellcheckrc file in net/, no?
 
-Note that the file for example has:
+>> Note that NIPA's shellcheck reports are currently ignoring all "info"
+>> and "style" severities -- so including SC2317 -- except for new files or
+>> the ones that were previously shellcheck compliant.
+> 
+> Yeah, I know, but the result is still very noisy, if you want to verify
+> it prior to sending the patchset. It's a bit annoying to have to scroll
+> through the report trying to find relevant stuff. I could add
+> .shellcheckrc in my own clone, but everybody is going to hit these.
 
-#ifdef LOCAL_CONFIG_HAVE_LIBURING
-#include <liburing.h>
-#endif /* LOCAL_CONFIG_HAVE_LIBURING */
+When Shellcheck got introduced, there were some discussions about SC2317
+and SC2086 [2]. I don't think they are useless -- maybe a function is
+not used by mistake, maybe double quotes are really needed for some
+cases, etc. -- but I agree with you: they create a lot of noise.
 
-You should be running into similar issues with cow.c, which uses the 
-exact same approach for detecting+linking liburing.
+[1] https://github.com/linux-netdev/nipa/commit/23b74dd
+[2] https://github.com/linux-netdev/nipa/pull/51#issuecomment-2939556291
 
-So seems like something is off in your testing environment?
-
--- 
 Cheers,
-
-David / dhildenb
+Matt
+-- 
+Sponsored by the NGI0 Core fund.
 
 
