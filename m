@@ -1,199 +1,207 @@
-Return-Path: <linux-kselftest+bounces-35142-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35143-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE583ADBA85
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jun 2025 22:04:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76062ADBB2E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jun 2025 22:28:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9A0287A5648
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jun 2025 20:03:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC41E188906A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jun 2025 20:29:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAF251F099A;
-	Mon, 16 Jun 2025 20:04:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54C641FBE9B;
+	Mon, 16 Jun 2025 20:28:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="bfSrTt17"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="X3QkQIKC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2074.outbound.protection.outlook.com [40.107.237.74])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 394C61CAA62;
-	Mon, 16 Jun 2025 20:04:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.74
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750104289; cv=fail; b=a0EIF5MCIVm0eU05E1JJwl5/E7ATtrlyo3hEI5dTfraD4lBWTRjILKNqtOx5p3PaDFWG6mSQPkSfI6/rAb4/+5L8h5hWqopcLpR1yKdIFmILzOcraPSspoEGKCINaZy92qMt8/hwVTGMKoMJmJekxYZmALEMb435mV/zfWpwQ6E=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750104289; c=relaxed/simple;
-	bh=xDiY/xc15AqVJTg9q1TJdzn8G+bp9T8piCygvwftWkk=;
-	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=F36j0fh/nBAA/EjueK6oq3FmMUsblvTkZ4gGEdrYpTDcShBj7I68HtG3BbWUEJmyO13RtL4OuB6vcGEWq1MiduzxbgSmsGf9NyqY44TISCnU6pQO89ij2CxFm3TZ9QddLFnblyeUCtuqkSBool52i3AMK1ZBxuWbkgeaV9UNplc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=bfSrTt17; arc=fail smtp.client-ip=40.107.237.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=YnlqgHgP0tj5NblMkK9cMpyQH7I+HyMYZa10tRmbaWqLFbl/CzlpHicEWcMnFtTB6tNxMx8/Fak9dcm5BnR2jTFnGzrG1761KExAgMyUaAK43QB32A2GPVnf1GMshlJHtPOMYcd41XoYEy8EiJKpqLdfHTu8yicG+3IOOiOHbTzoJJVEOfgt61SHTze8a4O2pSx1Z+1y+1JYUlZ+D9oPkykAAcy/m7CKoq4omT5Kf/Q1NWVnBuiZjqb9wr6PMZSLVvw3O6l7G/7zok81N6IycraavkCCAo4RNSlT8/ggyYCJgmr067pg9teSHmHLZjlMP3x5PBR5AdoderSy1czY4Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0XZXVuGFSaU4gYR/B/25jKWbZ7Q2YitZHgPBX2dpnMw=;
- b=ToSOA+V1gYiOTdG3IMHCF+lTXKLj8P/Gb8BfgwXnzrUXhTP9R6EjfG/5xcisR4VSJUuQ/Z9+BuSzdAF13vLMlGYmBwiaGFwuKVws8Nm9FRGha0U1XXpW4C6qFWpufdV6pnZZrw9I4mfVi/oxjhuhulF1syULKdeaNAL+nj1Px2GT36kYbsbtkJT5SCjwINo/e80tPwx1smXWrqKsEXKf9feHBYmQ7lSTBHnXlVGREL1/M9TqF+Fgd3sSN2SJXPCxjrjMU9jrxF5HIXOn27+VW2LxEsOf3RzdT7tZ5BaaBLvYxFBdaaZSjA6CuUpvO1cq8yTe9A0DkK8shB4Ey7r0vA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0XZXVuGFSaU4gYR/B/25jKWbZ7Q2YitZHgPBX2dpnMw=;
- b=bfSrTt17oiY5fWCOaLJzMVkMRQgl4ZWoJ9lGWggG52sbZ7O5Qba+0cDhWWfIpZ3I42P+H3v/9BDF+aXtb5wvqijVLcZ+zBARqEda1Ewf06QNpaRNEe9ZG+c62bOsuue4LhgXFhM3eCYgxQY/lplfKyO+s8wijALOykBCK5CHRZVm5zwlU2NvOFHpHFRdallz73DzWc9TNjvH8rcTLIKAvDMLlgopALwmUBDA+hlcplFbG0WOdo0P7xmdvo16Q7OBVbUopJ92P/O2qs1DlthNRfjDU2Xib6R9ZpoNEB17kE9NmS51zQxAS1rEaunz9sT+FC2i9WKac0i6V07ZZB6DzA==
-Received: from MN2PR22CA0010.namprd22.prod.outlook.com (2603:10b6:208:238::15)
- by IA1PR12MB8336.namprd12.prod.outlook.com (2603:10b6:208:3fc::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8835.30; Mon, 16 Jun
- 2025 20:04:45 +0000
-Received: from BL6PEPF0001AB56.namprd02.prod.outlook.com
- (2603:10b6:208:238:cafe::9e) by MN2PR22CA0010.outlook.office365.com
- (2603:10b6:208:238::15) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8835.23 via Frontend Transport; Mon,
- 16 Jun 2025 20:04:45 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BL6PEPF0001AB56.mail.protection.outlook.com (10.167.241.8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8835.15 via Frontend Transport; Mon, 16 Jun 2025 20:04:44 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 16 Jun
- 2025 13:04:27 -0700
-Received: from fedora (10.126.231.35) by rnnvmail201.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Mon, 16 Jun
- 2025 13:04:21 -0700
-References: <cover.1749757582.git.petrm@nvidia.com>
- <78edac89730a346e957b69d4107fcd8f1c5c6266.1749757582.git.petrm@nvidia.com>
- <20250613095755.54381628@kernel.org>
- <ccaf0784-d7a3-41e2-b3e0-65b9022f15a6@kernel.org>
- <87wm9bu13q.fsf@nvidia.com>
- <426a2c83-38ca-4fa2-9270-b3e600e30d19@kernel.org>
-User-agent: mu4e 1.8.14; emacs 29.4
-From: Petr Machata <petrm@nvidia.com>
-To: Matthieu Baerts <matttbe@kernel.org>
-CC: Petr Machata <petrm@nvidia.com>, Jakub Kicinski <kuba@kernel.org>, "David
- S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, "Paolo
- Abeni" <pabeni@redhat.com>, David Ahern <dsahern@gmail.com>,
-	<netdev@vger.kernel.org>, Simon Horman <horms@kernel.org>, "Nikolay
- Aleksandrov" <razor@blackwall.org>, Ido Schimmel <idosch@nvidia.com>,
-	<mlxsw@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-	<linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH net-next v2 14/14] selftests: forwarding: Add a test for
- verifying VXLAN MC underlay
-Date: Mon, 16 Jun 2025 21:53:24 +0200
-In-Reply-To: <426a2c83-38ca-4fa2-9270-b3e600e30d19@kernel.org>
-Message-ID: <87sejztpvj.fsf@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7D3920FAA4
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Jun 2025 20:28:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750105732; cv=none; b=Hy4H58/8d2BeZZKL7QljuyaxwQNHeiIkW2xNiJvMNgH/6JnUcXP31fMRTQlyuY1DCKRp6LVp66brhbHAJQftJouQUZetr4OmC7qW9PdXZ3qMlFBqIMltW3teNjOOjmuv6MtrOlcMvSaYbnWvEzKgeRdNLa3ZnzpQcdk7A+/czFU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750105732; c=relaxed/simple;
+	bh=YUEMCKij4cw6gsjf4i1nGzv6J2HAa+qxkPKnX3YfliM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fT4jZoPjOfpmNzF0/ff2wTCWH+ZtmssmUZ0D5up+Ry0GcnFsqkKyo/hCfsU0l1OMNOrbVDR5DHLa+hZXGjGWIQIzx/Q43RqB4ex2Gy6exU5asAKg8TkzWs9CgkmNFtlFEC7Fp+ab3Rb5/g67e1ev/x/pTxATH78WurQ0sBDoY1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=X3QkQIKC; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1750105729;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=i1IPXsOEh/p6y3rDNG7kT8FS6NJiHgtYggv8i7AMSnQ=;
+	b=X3QkQIKCWpqzL2eOIqGsPexUTktlCPxfVZNHZ/6aoIfwaGOIzrII/P6rQaPVPwPfiMCgtE
+	yFZmQ7UgrsjrMm7mrhUKgxaBJxfmexcirEnkpdww626MKYx6d3TDRyVzhiGcpCbaQpKA8T
+	bG3eDm0jO8tZdsrHagfVaprT3MEL9Qk=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-507-6FeskZOgNZGp9o1TI8YjoA-1; Mon, 16 Jun 2025 16:28:48 -0400
+X-MC-Unique: 6FeskZOgNZGp9o1TI8YjoA-1
+X-Mimecast-MFC-AGG-ID: 6FeskZOgNZGp9o1TI8YjoA_1750105727
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-3a4fac7fa27so2205263f8f.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Jun 2025 13:28:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750105727; x=1750710527;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=i1IPXsOEh/p6y3rDNG7kT8FS6NJiHgtYggv8i7AMSnQ=;
+        b=D+u1diOwDEu4UpFoUW/ea9Ns39N8bOqzv3885NIFvx6iP/rXXjyf3O5JVDZiZ0LkQ5
+         ZoZ0YfWhu40vQODP6gGM6805PxoK7IF7ieb/AQ4tEJ6Q9h39sgoWJQfnH2RFYuYKP/p1
+         l+WHUnIM8sPT8Gs6xp5iHIUGPbEZ2LRz1D02aas3jaReRzc6hYG3avc37VgzxaoV9WlB
+         UJr6gdI8fyj66OoZ86f06FJWoQb1TB03xIBXES5EgDoYZMVDPUbhedcNbMxFdhAsHvD4
+         GbR0q7aLgLXSq7/e4l2p1Ipfa+rCzoBtlPotC6WbebDL38vtarfDV+DQIcPp0O3o+Z6g
+         ZJCw==
+X-Forwarded-Encrypted: i=1; AJvYcCWgOdCS6jAxylQYkajRfK+cMJBHhGV9rlwUaNYlqfnwvTd6YxeR5BbxMIrbWGtWNpKQPtinUF9VjOrFS70iB70=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwByo9Ohj4PjsgjTIvw9n7GtIdl+3z/4krPR7d7NbA/t/KdqxjJ
+	FWM6A5CD8jCU/RJ4cJepFOpE7BNegaLCdFOgTi0EJEjhWVHmUtFTIVEdzp1vp0zlhd5h8uonq9r
+	KK+7slsr4QB52h4KVeqk1dcTx0nKtRbhx9xljj4Rn6Vj4pPKHLzXg7QpGhZjXlN9CMS70eQ==
+X-Gm-Gg: ASbGncuzMsBHa1CR8CQIEmtGos4AkjzrH72f6AwkTyTwtwUBagM51CL1smTn2BmbOP+
+	etkJxncawxfO9fEFPS7dy+4023s/9iIv/J/nqFZvOLME075ptKd/ThgXpxFpAZ1gEgD/an3BhL8
+	Tluc0SRJS95Pq5HpTu9XnQqoVVnDcY/nDlKA9MEjTh5sxMdijd2OIQQh7+55aDw9nbn7D9WgeIL
+	xbs5s+gSjZE5hyitSJCwZmolBGbD5MTSNZB+Zw9mD0rWE/HfVs7R6vo/HFgEO1db7WHFedzHJt6
+	bkuaU/uqHVf3UctHT4zC9wfXA2vbO/iefXDXdBAfL9yJ4PrID50M8yEWaf97g1nbYuZRukiiAnx
+	nRJh1jc5nHC3mR/9J8fP2zF59nWJa7JPQLRd9dqJvVVZPFpAN6g==
+X-Received: by 2002:a05:6000:2582:b0:3a5:3a03:79c1 with SMTP id ffacd0b85a97d-3a572e2e062mr7702104f8f.48.1750105726986;
+        Mon, 16 Jun 2025 13:28:46 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHG7nU5/7LN/0O+ekOUky7kNwsRWJhG9H1OaqaKshtklk2XpSEzVBRROwu2v7BpseZlkSXqQQ==
+X-Received: by 2002:a05:6000:2582:b0:3a5:3a03:79c1 with SMTP id ffacd0b85a97d-3a572e2e062mr7702084f8f.48.1750105726527;
+        Mon, 16 Jun 2025 13:28:46 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f3a:e300:c660:4ff5:5bfb:f5c5? (p200300d82f3ae300c6604ff55bfbf5c5.dip0.t-ipconnect.de. [2003:d8:2f3a:e300:c660:4ff5:5bfb:f5c5])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4532e195768sm155188255e9.0.2025.06.16.13.28.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Jun 2025 13:28:46 -0700 (PDT)
+Message-ID: <ec18001d-7123-4d13-aea7-a28594cd137b@redhat.com>
+Date: Mon, 16 Jun 2025 22:28:44 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB56:EE_|IA1PR12MB8336:EE_
-X-MS-Office365-Filtering-Correlation-Id: d014fb42-4b14-4298-8c57-08ddad110a07
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|82310400026|1800799024|7416014|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?Qxlr4MXu2X9NBTFrC391IW4RXhabPagN91CenQBt9mpVDWbQAq+wg3r9s7dX?=
- =?us-ascii?Q?bUL8BBBWjej/lUz3aapBO/6DR5flhlzAVMioLfYIKutnv/FkTVS5RW4ataUM?=
- =?us-ascii?Q?CUD7zTy+8hD7MNHudhJDPBAM9ri2umubck57o6zQ8VnAnxyuGicMPmDZ/kRx?=
- =?us-ascii?Q?NZYRvpC6Keg+7qIMliLqOTukqR66mtc7LLiIDTwk0wL5SsPaS0ZZJN+wa89t?=
- =?us-ascii?Q?sr9kqcT7sykc+T45AiH7cw5mVz4zOjwyatETFFSy2Esgs99JfN8RLi6w67Bb?=
- =?us-ascii?Q?ZdJOpAxGRi3NWNVwA+mROfdLz9jJ3x7EwRRDBjwTCVuKTLjMrBcnuvZBYrC+?=
- =?us-ascii?Q?ipZen1a8JHB5zZSvd01fCv+RcsiObaM9bMZLWLks6qWCprRGJ1ea4OW/E0ME?=
- =?us-ascii?Q?UXqpt2vHppbransQThC82lsmqzFxlIQH/JbOJDpjm11FZsK8nDiRl9BrOn/Q?=
- =?us-ascii?Q?mF3bAVCvlawQ9ZWlDP3ksH6HaicVPP805iMnQ0NciVSh6Ok38LufPGBvFmPb?=
- =?us-ascii?Q?HFVTmAMQQNDngAf/GGwIdwMiQQYEys0fSbm02jbX5APel1RR3XlZBKcnr/NA?=
- =?us-ascii?Q?MdbKU9DSR6usRQoIoAtgaI0udfxooa74U0kkG+tZazXD2RbR/pxu4WAME79V?=
- =?us-ascii?Q?u7IESUfP4vZCNO+EIDtHkFp3e1ls5MK8DIiQKZ8hfb7nB2Sgv5T7RLyZ86oX?=
- =?us-ascii?Q?ajWbuEISV50VRydw/Z+MuTWysjJ+U0VhDc7ZGZEp8XYdiex1fLNwV7w5Bpsn?=
- =?us-ascii?Q?rXRILeGydzjjSJteCDsahNPyPIxSxnlEuttH7eJ7ULQoFcEHyFPti5Zyx0WR?=
- =?us-ascii?Q?W3m4duuL4dzh9Amp0Ai+p/o8etz83/ZJFVEwtaKem0RCfCRK8vBLTmUfPY0q?=
- =?us-ascii?Q?VE4+2bWQStWbYSuQQoy0erY0BxzneCLXbLRBXbYILJByk7nJFbcDAQfiyY5I?=
- =?us-ascii?Q?YRdWfZ1xnvZIM+TD6kNxQDlVXIDyDGrri4gJ+9Eiso9tapcSBkKepqDpD65s?=
- =?us-ascii?Q?FmoJKTjdr25emkrMu4FeNu7L+2jOrbNvkvXC6N5B453YiTLCKItbprZoWPov?=
- =?us-ascii?Q?f24LdHs1z+BQeeiraRmVxchGkkOAPcc04/OFV8/7k8yIguBM4EY1KZIwbkMd?=
- =?us-ascii?Q?P9X82uyOjhqFmaTLh5FsLx5fFvcYXvQhVOom5kyRfkAlj0gXQpPRzQquEDaO?=
- =?us-ascii?Q?X2H0cxbT2MNjEJAFWKX3KluB/GQlA/dupAVtsXiHMnltJqdCyTGS71IYuJvy?=
- =?us-ascii?Q?k4w68AFPgGZCN/zym9KtmkNPZf0fQeCwA8tfUL7hALDEkfXyZInH7QoCqauE?=
- =?us-ascii?Q?e8HOkTzMlyiC7dcrAzLdVQU6k1r0EidzSWMV/3e7DZ88zkr5LpmhjBQQc7F+?=
- =?us-ascii?Q?N6vDXEaue22XDZbtEmB5HGNr2igAlNshwavyjF9/1rwx+A4+Tr9xYxjs/Snl?=
- =?us-ascii?Q?k4E1ark6bPq1F0j9Bb5yoJQQI9sBTWQ5YaQMVZnF5cyFHHd3EXoY3yDlvbIw?=
- =?us-ascii?Q?qZMIxMlO0YcfeO6LuZ09JPeLvdNLy2T7XZGi?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(1800799024)(7416014)(376014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2025 20:04:44.8756
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d014fb42-4b14-4298-8c57-08ddad110a07
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL6PEPF0001AB56.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8336
+User-Agent: Mozilla Thunderbird
+Subject: Re: clang: selftests/mm gup_longterm error while loading shared
+ libraries liburing.so.2 cannot open shared object file No such file or
+ directory
+To: Christian Heusel <christian@heusel.eu>,
+ Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: clang-built-linux <llvm@lists.linux.dev>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>, lkft-triage@lists.linaro.org,
+ Linux Regressions <regressions@lists.linux.dev>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Vlastimil Babka <vbabka@suse.cz>, Shuah Khan <shuah@kernel.org>,
+ Zi Yan <ziy@nvidia.com>, lorenzo.stoakes@oracle.com,
+ Dan Carpenter <dan.carpenter@linaro.org>,
+ Anders Roxell <anders.roxell@linaro.org>, jackmanb@google.com
+References: <CA+G9fYssELHcYKwgGNBMLrfeKZa9swGdLrH7gxqzd4P0kaOiZg@mail.gmail.com>
+ <7c101fe5-7c73-4916-a832-d656511eeab8@heusel.eu>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <7c101fe5-7c73-4916-a832-d656511eeab8@heusel.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
+On 16.06.25 21:14, Christian Heusel wrote:
+> On 25/06/16 11:02PM, Naresh Kamboju wrote:
+>> The following test regressions noticed while running selftests/mm gup_longterm
+>> test cases on Dragonboard-845c, Dragonboard-410c, rock-pi-4, qemu-arm64 and
+>> qemu-x86_64 this build have required selftest/mm/configs included and toolchain
+>> is clang nightly.
+>>
+>> Regressions found on Dragonboard-845c, Dragonboard-410c, rock-pi-4,
+>> qemu-arm64 and qemu-x86_64
+>>    -  selftests mm gup_longterm fails
+>>
+>> Regression Analysis:
+>>   - New regression? Yes
+>>   - Reproducibility? Yes
+>>
+>> Test regression: selftests mm gup_longterm error while loading shared
+>> libraries liburing.so.2 cannot open shared object file No such file or
+>> directory
+ >> Test regression: selftests mm cow error while loading shared 
+libraries>> liburing.so.2 cannot open shared object file No such file or 
+directory
+> 
+> These do not really look like kernel regressions, rather like a bug in
+> the userspace testing tool 🤔 Could it be that the tests were not
+> rebuilt for the new liburing or that the dependency is not installed in
+> the test environment?
 
-Matthieu Baerts <matttbe@kernel.org> writes:
+It looks like the tests were build with liburing around, and then ran 
+without liburing around.
 
-> Hi Petr,
->
-> On 16/06/2025 17:06, Petr Machata wrote:
->> 
->> Matthieu Baerts <matttbe@kernel.org> writes:
+Note that the file for example has:
 
->>> That what we did with MPTCP, see the top of the mptcp_join.sh file for
->>> example [2], where we have:
->>>
->>>> # ShellCheck incorrectly believes that most of the code here is unreachable
->>>> # because it's invoked by variable name, see how the "tests" array is used
->>>> #shellcheck disable=SC2317
->>>
->>> If you add this at the top of your new file, followed by an empty line,
->>> shellcheck will ignore this issue for the whole file.
->> 
->> The ALL_TESTS issue is not the end of it either. We use helpers that
->> call stuff indirectly all over the place. defer, in_ns... It would make
->> sense to me to just disable SC2317 in NIPA runs. Or maybe even put it in
->> net/forwarding/.shellcheckrc. Pretty much all those tests are written in
->> a style that will hit these issues.
->
-> In this case, I think it would be better to add this .shellcheckrc file
-> in net/forwarding. If you modify NIPA, I don't think people will know
-> what is allowed or not, or what command line to use, no?
+#ifdef LOCAL_CONFIG_HAVE_LIBURING
+#include <liburing.h>
+#endif /* LOCAL_CONFIG_HAVE_LIBURING */
 
-Good point. The question then is whether to put it to forwarding/ or
-directly net/, which is has seen more use of lib.sh and therefore the
-same sort of coding style. I'll experiment with it and should be able to
-send it later in the week. I don't want to add it to the MC patchset.
+You should be running into similar issues with cow.c, which uses the 
+exact same approach for detecting+linking liburing.
 
-> Note that NIPA's shellcheck reports are currently ignoring all "info"
-> and "style" severities -- so including SC2317 -- except for new files or
-> the ones that were previously shellcheck compliant.
+So seems like something is off in your testing environment?
 
-Yeah, I know, but the result is still very noisy, if you want to verify
-it prior to sending the patchset. It's a bit annoying to have to scroll
-through the report trying to find relevant stuff. I could add
-.shellcheckrc in my own clone, but everybody is going to hit these.
+-- 
+Cheers,
+
+David / dhildenb
+
 
