@@ -1,236 +1,120 @@
-Return-Path: <linux-kselftest+bounces-35041-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35042-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41F12ADA755
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jun 2025 07:03:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45AA6ADA75E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jun 2025 07:07:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CD289188E8ED
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jun 2025 05:03:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F020D168751
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jun 2025 05:07:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02DD01DE889;
-	Mon, 16 Jun 2025 05:02:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E76D1AC88A;
+	Mon, 16 Jun 2025 05:06:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="fLrz6rNW"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="ghnfkWtR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2077.outbound.protection.outlook.com [40.107.220.77])
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 578261DD0F6;
-	Mon, 16 Jun 2025 05:02:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.77
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750050173; cv=fail; b=H9rJeeKaf/pTzd7wq/F8qIZrjSQ6SwX0KnDt9RPjC6+ARY3VY1G7raJ8TwzNn1gCMd3/4ZE+1uiCaOwfM/5BkJsKDG6+G4t43r2I2arQP5WYTriztE3hMqs4AZ+nemMhgzAymejVo5S7Zt0PabAWLnHB98NfS0rKUt0Ub69DDCA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750050173; c=relaxed/simple;
-	bh=qiQ5GkUGjZ+q8vJ7NUB4slVIlr4qCdmz8gr1nrPjyRE=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=blmkfqYNkoP/C7/tnGkbKcMZqGCtH+qmMSsbJQ9YU3ploAOVMLSxnwEZUutp9D4ArQ5a6MJifLhVl/iY6zgJe7hKBWXD5wgwIniMEtPbqh9zDXkv1NWU2ZSowPTrwOiYBnWjl+TlYolNmdNQHYLDVFjI1WLCGgbwhdCvPoS6mJk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=fLrz6rNW; arc=fail smtp.client-ip=40.107.220.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=gS6A9iabMJxCED/vqVAVQMOh8mDqN6iHmiXBBugmidEY0l1ufjHnZsmAEy+Oefo+qSok3bELWd0UhK6eQyIcvBXsY5m/np2XCCbz8eNLuabt5KYFZ6KzEklXlraC/iHtWOOl01OJ4U5bgAvdatm12U10Q4/06kyOPhC3X7rMjKOHQP1CXRYxRi3/+laZYSFZd5Tundi154ehwGqKky8ii/qcWLxP+XIQk9oLl6WVB0QsQFZjE4RoB8VfnLRs2W7K9T/JbJjFgnELSM0vzfaL7+qy41gQDEXhcFi5/vgonlbS404ReELB2PFMAK5ssyUIrV8puVN2gQJnqu8XYjWGVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TNyEDg/zLWkPXnZqMU+5O1XeM+QPexcOgKaAqNHBSaY=;
- b=WlY/bsz8LW+/t99hMFNcHTWIQdnA4yMQladGmkh59BVJoroNHTRIJ4woihJLAHw826caxYhw5HarlLinUACe33fY+IZybSo4DmzyCFaaEywh+kmXjDWkLFMGDAnY1RXNrzQLEUn+XnLEi1LR8/jBO36SdZS7xDMrtjw1L4arE95VSlR+m2U5PeOJ3UKD2dm71MrFFx/HgWno9RbPCk1EZTyAh3PnExfJkiJFn/hTldapF0U2DPliFDkooOZAsvNYcH94d3IRqAYUAEV3OcuBmfXxI2iyZbFly17p2EubYNNFLxm0c4tGPlWnhtx/AmWh0zZx8PSQ/rxGPN+NZLzCvw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=temperror (sender ip
- is 216.228.118.233) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=temperror action=none header.from=nvidia.com; dkim=none (message not
- signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TNyEDg/zLWkPXnZqMU+5O1XeM+QPexcOgKaAqNHBSaY=;
- b=fLrz6rNWPpRVq3LWXUE/k1RnJXrp1KCUdI08ENMChHsaK+Z3MPLsrYmT0B7jaxfSv0gKknxIg4ajiCPpkzHVgXCtfsxY2ct5XxTH4Okyb8dp44USH2ZHQP6N2NH3C9IT9EmZcXioIrR9M0wj+nqYgXr/WkRNSbj4q4/C4gal5zfWkIHumnnnXjtKSsYFoByeag1bGIQ4oUfww2H/SUCCs3/nC0+qXjoa9Z6geLaJjDD+ilWQpDAjAuhGZVUS550DY9Kp5VEY41xCtyJ7bj1paZOh7ygYoGPJNLy4xrB+sZqHpRCvekwq1xg3zrndeo/U/FtMqUuSMTaJ5Q/Xjs6ffA==
-Received: from SA1P222CA0177.NAMP222.PROD.OUTLOOK.COM (2603:10b6:806:3c4::25)
- by MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8835.27; Mon, 16 Jun
- 2025 05:02:47 +0000
-Received: from SN1PEPF00036F3D.namprd05.prod.outlook.com
- (2603:10b6:806:3c4:cafe::31) by SA1P222CA0177.outlook.office365.com
- (2603:10b6:806:3c4::25) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8835.29 via Frontend Transport; Mon,
- 16 Jun 2025 05:02:47 +0000
-X-MS-Exchange-Authentication-Results: spf=temperror (sender IP is
- 216.228.118.233) smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=temperror action=none header.from=nvidia.com;
-Received-SPF: TempError (protection.outlook.com: error in processing during
- lookup of nvidia.com: DNS Timeout)
-Received: from mail.nvidia.com (216.228.118.233) by
- SN1PEPF00036F3D.mail.protection.outlook.com (10.167.248.21) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8835.15 via Frontend Transport; Mon, 16 Jun 2025 05:02:45 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Sun, 15 Jun
- 2025 22:02:26 -0700
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.14; Sun, 15 Jun 2025 22:02:26 -0700
-Received: from Asurada-Nvidia.nvidia.com (10.127.8.11) by mail.nvidia.com
- (10.126.190.180) with Microsoft SMTP Server id 15.2.1544.14 via Frontend
- Transport; Sun, 15 Jun 2025 22:02:25 -0700
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: <jgg@nvidia.com>, <kevin.tian@intel.com>
-CC: <shuah@kernel.org>, <joao.m.martins@oracle.com>,
-	<steven.sistare@oracle.com>, <iommu@lists.linux.dev>,
-	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<thomas.weissschuh@linutronix.de>
-Subject: [PATCH rc 4/4] iommufd/selftest: Fix build warnings due to uninitialized mfd
-Date: Sun, 15 Jun 2025 22:02:06 -0700
-Message-ID: <be226e78fd581585c22c6c7f33c14bfe4a0c3ef4.1750049883.git.nicolinc@nvidia.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1750049883.git.nicolinc@nvidia.com>
-References: <cover.1750049883.git.nicolinc@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0313E1863E;
+	Mon, 16 Jun 2025 05:06:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.132
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750050416; cv=none; b=QpAxdvqtr9bFDaIJfz/Xg9HFQuiGXPG8C4ElGWM9+/hBWSMe5UFgP7PIyS0tZUnA9+Ox4KLWjwkIl9cWsYsW7tSLD0Yqq0BVqa+MCADZqwUT9yTHTSFp+rbDpTQNDZhkhx5MF/hbR69XDB1c2Vdkugpsc460G1znyFeHSXOq1+o=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750050416; c=relaxed/simple;
+	bh=cA3SwmYgYeSIyOV2poq56YF76ctfNib2sQffxNFTYNg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=n2WKfV3aWqCJ1GyrO1Xu28JYJK6LM/W+XLfAvEDUI2ABxOhhCMbVcLkJkOLekAWjFFJWZyVPSWYnrcAWTy3sf2pg8hIlOV8n8cMaRfPRgH5+OoZyR9A4K4z/Ggu0LhfMGGMZN4j4GPVg+ro0GFz7ZQ01GeTu7F8UNkr6yzFT+0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=ghnfkWtR; arc=none smtp.client-ip=115.124.30.132
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1750050410; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=R5GJYlkXT0vSw2Kc0ay2ukzCBmnnFXXk54xXv2Y6mic=;
+	b=ghnfkWtRBN2py6eYOj+JEYDUA5ZtoozP4y6ILy4Rc4yRuqyE93ZN6Zoj2y8FTsuGKJQz4jHs5m2hHrMyxW/Iwi7IgZcZKU92RzqYztzSSpRR5ckTAnLGfYvZnE3vUiBWF3xRxdGrUJB0NUCq1Hfv2u54vItfjl7Jaumcw0aZcmo=
+Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WdrrnGW_1750050408 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Mon, 16 Jun 2025 13:06:49 +0800
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+To: brauner@kernel.org,
+	shuah@kernel.org,
+	will@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Cc: baolin.wang@linux.alibaba.com,
+	tianruidong@linux.alibaba.com,
+	xueshuai@linux.alibaba.com,
+	catalin.marinas@arm.com,
+	mark.rutland@arm.com
+Subject: [RESEND PATCH] selftests/pidfd: align stack to fix SP alignment exception
+Date: Mon, 16 Jun 2025 13:06:48 +0800
+Message-ID: <20250616050648.58716-1-xueshuai@linux.alibaba.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-NV-OnPremToCloud: AnonymousSubmission
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1PEPF00036F3D:EE_|MN0PR12MB6101:EE_
-X-MS-Office365-Filtering-Correlation-Id: 43ace109-f0d6-4f47-9b0c-08ddac930890
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|82310400026|1800799024|36860700013|13003099007;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?YVdZY09XY05HaUNjS1NKWTlaVkJVQU1GMDZ4UWRQMUhFY1M3alpJb2gxRWFW?=
- =?utf-8?B?c2xrM0tBK1M0bjV6Qm5TVyt1eGUxckVZN20vMTRKYm1lSi9VVWxqSkMzcHNx?=
- =?utf-8?B?dUxsbE9aQXJyUE5La2pCek5PbzRpWFhRYkx6REszaXM3UUtzNnd4MkZ2b2Nz?=
- =?utf-8?B?Zk8xM25vaXdUQ210UGp4dTl4L3hjSXlXZXNqd3grNDZ6anBkT3BUY2xpcHBI?=
- =?utf-8?B?OXVGajJXalRPZVdBRGxhdjlHYWNrMEJwOVZ1V2FOV2c3VmRHS0pRdkIxV3A2?=
- =?utf-8?B?VVliVzVlZkVJeGI2R3pvVVRMaGdyc1c2UHR1cFNrVlFXR2pXMlhtL3dhTi9F?=
- =?utf-8?B?RW9kL1dyVUxsK214MzJSbE5XR1dJSjFiUW5od2dldGprTjJhdFhxL2JiYTFs?=
- =?utf-8?B?TzlwMnhiK2tSRUczSXVXSFZoWFBuNjNjOFZpNFM0N3FLazZMbXZwTThqaXdS?=
- =?utf-8?B?VnNqVC9OOVNldE5uWlpxdGZkZGNvaXFtUlZFWXZRblU4RWpYZENDeXZsV1RT?=
- =?utf-8?B?TE9aeWR0THRGQndWdjlscjVWU1BjbXFtTEgyMmEwOXlFVmJGdHBhYnNKd3hl?=
- =?utf-8?B?bEFtNW5lb1FGSFVnckxZdlBhK0l2V0pWMWZYaFB3WitTemFmMG4vbkFaMGVq?=
- =?utf-8?B?Mk5xVVJpOGRGTUMxeGY4eC9SWVJUd2xMVHlMcWxFMXE0Rzhtd093MXNkU3o0?=
- =?utf-8?B?ZEtiemNQbDJHYjN5T2dvcHJRS0kvUEFQcHN1UE9hNmlxTkd3Z2dRenNLZWNM?=
- =?utf-8?B?TG5ZRVRWR3pRMFd1Z056Lyt3VVRrV0IzbFM1WG05VmlHZGhsM3A3NE5KejJI?=
- =?utf-8?B?MDFzU2s4QnU3QXQ5SkU2N1k1dkVTODAvdXpqYUpXT3FVVTltVmhjUDkzdjE3?=
- =?utf-8?B?K1c2Slc5MEN6WUVJZVRQQytyMHdlUFcraGRZdmppUmJLaEFxN3dXcHA1U2VS?=
- =?utf-8?B?Qk5tNEIwdFhFVWdWTFJpTUgrcVNXS25pYlJGMmpiTXRMNEhXekFqUjhWazdY?=
- =?utf-8?B?WEdqekw4YTk4ajJidzdBeHhmOTl0akZEYi9sSDJPa2JweU9KcXNQcmwvd3cz?=
- =?utf-8?B?RStDeUU3Y2wwR0ZyNTlVZWJFRjVRNHNzQnRjRmh0OVBqMVNDK3pscTAwVHMr?=
- =?utf-8?B?UkVEYW1xTnU0K0c5RWIwVHRJMFdIM2NWZVpHSkJXNE9kZThINTYxclBJSlVL?=
- =?utf-8?B?djY3U3FNT0pxK1dEVk9DcHY0ZWgreXprS0tJQmdRc1FzaUpNNnJEZjg3LzZB?=
- =?utf-8?B?SS9ZUzM5ZFdobklQSmRoekxhVWw0TzBFR2dGbDVKM0N3cW1YODJyL0YzU1pQ?=
- =?utf-8?B?c1NSZ2l4cGdzKysyTUZjdlN5VWxFZTNlZ0VqZG9jTnFpKzZhVlE4Q1lwaDhm?=
- =?utf-8?B?YTNiSmtJdERpNTJqMlRpQTlxR0hKMjAvdTROSkpnNGlsVy9HVnRYb3h0VE5C?=
- =?utf-8?B?RVhCaGpEVEhYa2hHNUNTSS9NMiszYlQ3Y2EveHBOMDU0TnlpQXZId1pDQjdr?=
- =?utf-8?B?SmxwRTBzMmN1QUpOVnlNTnJIY2ZDK3dIZkM3ZGtFSXVFTlUvaHo1NHUrb0k0?=
- =?utf-8?B?Rmt5MTZUOEV3Y0hrNStZZ0ZmK3ZBZUs0Wk1DNTFhRzBvMzg0bTVENVE3L1BS?=
- =?utf-8?B?TGpCVlMySFpSYVM5dGNpRHdqd3hXa09nQ0IrK0ZaN09KMTRTMGhMbk9KSFJX?=
- =?utf-8?B?a0RVWVMrUU1wc2hLUkx1VWtIeWQwK3Z1eVYra2MyZnh6U3ZkN3MyUk9lTmtv?=
- =?utf-8?B?THRpVmU0S1BQS0hMTlNybFFqdlVmQXo4U1RxUzFLSEUwWUVPKzdQYnkvM21x?=
- =?utf-8?B?WXZucmNiNXJucFpsbVU5RkpsQjhPdkF0UTczdS8wMzZUMm9UWnFHSjNWOGk5?=
- =?utf-8?B?VFZtWjNub3J4QzNZVksrTXZjUytXVDhkd09FYzZqOU9yWWpnQi9RZDdaNDIz?=
- =?utf-8?B?aS95VDFMZlR3RC9aVTlrMDRUdWhxUlNjQVFPMGwwcUsxcmRGRmFMbEtFcmRE?=
- =?utf-8?B?ZWJXYXozTXgzbDN0azBUbTg3US91TktKN3dSd1NsQ1pPQTc1dE9lMDZYRnhQ?=
- =?utf-8?B?SlRmVVdEU1AveTlUeDdwTW5jUVdJcHZpTTcyZz09?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(82310400026)(1800799024)(36860700013)(13003099007);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2025 05:02:45.8877
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 43ace109-f0d6-4f47-9b0c-08ddac930890
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SN1PEPF00036F3D.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6101
 
-Commit 869c788909b9 ("selftests: harness: Stop using setjmp()/longjmp()")
-changed the harness structure. For some unknown reason, two build warnings
-occur to the iommufd selftest:
+The pidfd_test fails on the ARM64 platform with the following error:
 
-iommufd.c: In function ‘wrapper_iommufd_mock_domain_all_aligns’:
-iommufd.c:1807:17: warning: ‘mfd’ may be used uninitialized in this function
- 1807 |                 close(mfd);
-      |                 ^~~~~~~~~~
-iommufd.c:1767:13: note: ‘mfd’ was declared here
- 1767 |         int mfd;
-      |             ^~~
-iommufd.c: In function ‘wrapper_iommufd_mock_domain_all_aligns_copy’:
-iommufd.c:1870:17: warning: ‘mfd’ may be used uninitialized in this function
- 1870 |                 close(mfd);
-      |                 ^~~~~~~~~~
-iommufd.c:1819:13: note: ‘mfd’ was declared here
- 1819 |         int mfd;
-      |             ^~~
+    Bail out! pidfd_poll check for premature notification on child thread exec test: Failed
 
-All the mfd have been used in the variant->file path only, so it's likely
-a false alarm.
+When exception-trace is enabled, the kernel logs the details:
 
-FWIW, the commit mentioned above does not cause this, yet it might affect
-gcc in a certain way that resulted in the warnings. It is also found that
-ading a dummy setjmp (which doesn't make sense) could mute the warnings:
-https://lore.kernel.org/all/aEi8DV+ReF3v3Rlf@nvidia.com/
+    #echo 1 > /proc/sys/debug/exception-trace
+    #dmesg | tail -n 20
+    [48628.713023] pidfd_test[1082142]: unhandled exception: SP Alignment, ESR 0x000000009a000000, SP/PC alignment exception in pidfd_test[400000+4000]
+    [48628.713049] CPU: 21 PID: 1082142 Comm: pidfd_test Kdump: loaded Tainted: G        W   E      6.6.71-3_rc1.al8.aarch64 #1
+    [48628.713051] Hardware name: AlibabaCloud AliServer-Xuanwu2.0AM-1UC1P-5B/AS1111MG1, BIOS 1.2.M1.AL.P.157.00 07/29/2023
+    [48628.713053] pstate: 60001800 (nZCv daif -PAN -UAO -TCO -DIT +SSBS BTYPE=-c)
+    [48628.713055] pc : 0000000000402100
+    [48628.713056] lr : 0000ffff98288f9c
+    [48628.713056] sp : 0000ffffde49daa8
+    [48628.713057] x29: 0000000000000000 x28: 0000000000000000 x27: 0000000000000000
+    [48628.713060] x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
+    [48628.713062] x23: 0000000000000000 x22: 0000000000000000 x21: 0000000000400e80
+    [48628.713065] x20: 0000000000000000 x19: 0000000000402650 x18: 0000000000000000
+    [48628.713067] x17: 00000000004200d8 x16: 0000ffff98288f40 x15: 0000ffffde49b92c
+    [48628.713070] x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
+    [48628.713072] x11: 0000000000001011 x10: 0000000000402100 x9 : 0000000000000010
+    [48628.713074] x8 : 00000000000000dc x7 : 3861616239346564 x6 : 000000000000000a
+    [48628.713077] x5 : 0000ffffde49daa8 x4 : 000000000000000a x3 : 0000ffffde49daa8
+    [48628.713079] x2 : 0000ffffde49dadc x1 : 0000ffffde49daa8 x0 : 0000000000000000
 
-The job of this selftest is to catch kernel bug, while such warnings will
-unlikely disrupt its role. Mute the warning by force initializing the mfd
-and add an ASSERT_GT().
+According to ARM ARM D1.3.10.2 SP alignment checking:
 
-Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> When the SP is used as the base address of a calculation, regardless of
+> any offset applied by the instruction, if bits [3:0] of the SP are not
+> 0b0000, there is a misaligned SP.
+
+To fix it, align the stack with 16 bytes.
+
+Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
 ---
- tools/testing/selftests/iommu/iommufd.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ tools/testing/selftests/pidfd/pidfd_test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/iommu/iommufd.c b/tools/testing/selftests/iommu/iommufd.c
-index 393d95f88ad4..ca611ae5925f 100644
---- a/tools/testing/selftests/iommu/iommufd.c
-+++ b/tools/testing/selftests/iommu/iommufd.c
-@@ -1749,13 +1749,15 @@ TEST_F(iommufd_mock_domain, all_aligns)
- 	unsigned int end;
- 	uint8_t *buf;
- 	int prot = PROT_READ | PROT_WRITE;
--	int mfd;
-+	int mfd = -1;
+diff --git a/tools/testing/selftests/pidfd/pidfd_test.c b/tools/testing/selftests/pidfd/pidfd_test.c
+index c081ae91313a..ec161a7c3ff9 100644
+--- a/tools/testing/selftests/pidfd/pidfd_test.c
++++ b/tools/testing/selftests/pidfd/pidfd_test.c
+@@ -33,7 +33,7 @@ static bool have_pidfd_send_signal;
+ static pid_t pidfd_clone(int flags, int *pidfd, int (*fn)(void *))
+ {
+ 	size_t stack_size = 1024;
+-	char *stack[1024] = { 0 };
++	char *stack[1024] __attribute__((aligned(16))) = {0};
  
- 	if (variant->file)
- 		buf = memfd_mmap(buf_size, prot, MAP_SHARED, &mfd);
- 	else
- 		buf = mmap(0, buf_size, prot, self->mmap_flags, -1, 0);
- 	ASSERT_NE(MAP_FAILED, buf);
-+	if (variant->file)
-+		ASSERT_GT(mfd, 0);
- 	check_refs(buf, buf_size, 0);
- 
- 	/*
-@@ -1801,13 +1803,15 @@ TEST_F(iommufd_mock_domain, all_aligns_copy)
- 	unsigned int end;
- 	uint8_t *buf;
- 	int prot = PROT_READ | PROT_WRITE;
--	int mfd;
-+	int mfd = -1;
- 
- 	if (variant->file)
- 		buf = memfd_mmap(buf_size, prot, MAP_SHARED, &mfd);
- 	else
- 		buf = mmap(0, buf_size, prot, self->mmap_flags, -1, 0);
- 	ASSERT_NE(MAP_FAILED, buf);
-+	if (variant->file)
-+		ASSERT_GT(mfd, 0);
- 	check_refs(buf, buf_size, 0);
- 
- 	/*
+ #ifdef __ia64__
+ 	return __clone2(fn, stack, stack_size, flags | SIGCHLD, NULL, pidfd);
 -- 
-2.43.0
+2.39.3
 
 
