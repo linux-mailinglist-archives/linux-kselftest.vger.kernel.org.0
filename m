@@ -1,122 +1,111 @@
-Return-Path: <linux-kselftest+bounces-35060-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35061-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3BEDADAE0D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jun 2025 13:10:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FA54ADAEA0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jun 2025 13:33:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E4DD17A46ED
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jun 2025 11:09:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F32F018907A5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jun 2025 11:33:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 463AD2BCF72;
-	Mon, 16 Jun 2025 11:10:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D44832DA763;
+	Mon, 16 Jun 2025 11:33:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eh7+zDd0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XacZ9Hv+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2F76298CDE;
-	Mon, 16 Jun 2025 11:10:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15BBF2D5C71;
+	Mon, 16 Jun 2025 11:33:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750072250; cv=none; b=pUUVvfq4SMNs+y1JKLF2eHcYfw+oHCNP0JHPmcoWdcxcmmE4r3UlSCl2WsjU/GdiJwihqf1WtEpWOkOVinuOPMeZ6RGBG30AlEZdrKXsqRRo6iu5hsysGzgmQaYtPvkPWw5ED7+VtX8gpzPln5FvBfpsQ/8yi0XkXV/G6/3MbIo=
+	t=1750073616; cv=none; b=ahCNGZBtjSgRpzT9XJC96i2NGV7LH/ud49IO/0UoxWaAMlTulRJEIf19MSlsTCjnI9rf3AqiIWKZ//V/VlegkA73BTSj+PPFos7Aua/ks4Egzk63Hd6o07Fin9GaDc4XGPBw62P6pRgRgX29EfsqaJYzxIqUIfchebqw6po/OaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750072250; c=relaxed/simple;
-	bh=xhcOPEUMGjq+mEH0FdaV1/7R5d+5ezqyb9EzkMGxhhA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aE5Cx0D359CEY+38TGMIljxSXiR26zFmU7HiRmPX2V7yAk3YX8Rxj37r7n0e91FZdwG3PAAH+i2vj4qr9IxNxJ3XQYPRbKcp1RgmUOs8FFW8VHpEn5TxULqilMaZmOouRzfVfLSePETOBDy6m6szSD/1qCHd3qNJ0iacha8wmZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eh7+zDd0; arc=none smtp.client-ip=209.85.160.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-2db2f23f174so3094445fac.2;
-        Mon, 16 Jun 2025 04:10:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750072248; x=1750677048; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9JOrikw19Evhiqc8UDDBD5xigLuiawjysCMTOyrgP6g=;
-        b=eh7+zDd0qgJDKX9BO+dPFcmsao3KB+fvQ5ADUJExAF9zGrpMZMUGg5xdqckwbqxa8Z
-         dHkFL4zkeQe6nHCQ6o00cdVG9SGZ2yRug9DbkLhADqDbfLCQmCTCIy6IUe92ct/eXUbr
-         9QvR4BY4e2iyqGuRnEZ9GaBfOfdgFLeCYPgHEvT/qW5uGrVXa0udR3B1uLxFIfa8rBDt
-         0HCkdIxMGIh70vvodUAhxKv/dkUwEk5uaVPhwoDgussxDK0IYFQaXePqf2mcJXKjiBvZ
-         Pl0VbR3YEqaZm5mEAZap20GE3A1dvE0XzmjueD7rM/4tk5QTYc4xx4jxXlauBZ3oHBUc
-         i+JA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750072248; x=1750677048;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9JOrikw19Evhiqc8UDDBD5xigLuiawjysCMTOyrgP6g=;
-        b=E8+6AOEuUc2OCRXqaRfHyE0WvA5szD86mF2aGJLwYb1TvsytP9GXSgSMCIHdq8xWWu
-         Mex+5JAymcCmf73L4NeVHows/HwyCQaOmqxAurZcFIEjfR6a3/ldZNnaw46uaFxDA6Yp
-         VWIlNl445OlNX3lJjqDpZBrPwHgdO0D7NLpCIC77zAf3s/sIQiOWZgrdimQo3BzZ3oCf
-         oZNq4V8Ig491R1vnrOIPP9N8+SCKPFt7L7wNtXhJim1OsNXsc+T7Bv3QdDgAJKUf6xnK
-         1/NfGoXf8dsKeBzRqa199RD14a5QbAv1/jDucHD/BPobqtKAAQx32EtFJxecGpr+T0I7
-         K2uw==
-X-Forwarded-Encrypted: i=1; AJvYcCWgXzklqrcIAqocoetc31JZBocwZSHhh8+uXZybMHgbaUTcXD7Lt2UrvI50YTGAe98pdnv/7kLl@vger.kernel.org, AJvYcCWn5PbOU1fi7h9aw4Hc2olZCz2WY6m1iGw1oLc9Fzf0iF9B+8bauNnRzLxHccFxycZE3mJueCUmKz1eVLUljSc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxBJ8Jnw/9+us2QAEJ0iALsBHZI11KFHyricaSZf6ebTG4g+cpp
-	UybTAq0Ap/m49bT4QgiG4ZBF0H4jsNdG35ZlkWxBobFNqLPuUdjeEuQjRfn9yFoWDWIIr2k6Kt8
-	Z+YuwOOWHbnW7HTcFZ1tiuoIoeTme/y4=
-X-Gm-Gg: ASbGncvZNy9s+MtFwvv3M3Ppnce0qtLHj7p14p7KhrQhqfBXtCfyplBzMSRcMmoqsDg
-	2e36E4UUiPn7M/4mNQ8/hHPyARUox8Q4LIL3teDbpz6/6hQ89dH8j7xXZv+0Dfwln+QJWVfZM2U
-	HBeGtls5UY8dRh23FZJ+YEd/U7ULHPQrMuLqP0T+uIeVAm95U9tA1O/Wrp+oQvlVP75RQR4Mx2L
-	A==
-X-Google-Smtp-Source: AGHT+IGblsALpcTnzDp+zkVZ/nft3tu8iBioL3Oz3LjdP2OgIaHJrxs0jz36iDATUTnwvRAhRVXBRlart+/5mAeYnac=
-X-Received: by 2002:a05:6870:d393:b0:2d5:4b92:a787 with SMTP id
- 586e51a60fabf-2eaf0a14c68mr4656287fac.18.1750072247640; Mon, 16 Jun 2025
- 04:10:47 -0700 (PDT)
+	s=arc-20240116; t=1750073616; c=relaxed/simple;
+	bh=TaASRe4qgqRwxxXiP0Y/pcupbVmXyYU7JDAROJSiwPw=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=rdO0Fnl4bWmKNr2y1tVMeOOeYa4srkTYfo+YSS0qkrYl4JAfUbYzgZ0I3v4aSW6zu3bXEgaOOREodLL+FF7vTqdayoLmqUD01RBlpQoOtuQA1+jmjTjIgxAINBhNzMhV8r0xkXB0LXJZEuokYDGpbfGX25/Ko+5nyRNGRupaezM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XacZ9Hv+; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750073615; x=1781609615;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=TaASRe4qgqRwxxXiP0Y/pcupbVmXyYU7JDAROJSiwPw=;
+  b=XacZ9Hv+jo2WeIQQWA2hO40n9JT6mSf2WQHFiXR5/p62QyjDhd6MUQZo
+   om+4ObtCh3ZPUrNi7zO2lPX4COvFKeCFkXIkbSoXdq0EkafGjSk5jAGoH
+   edIXe3SKuwzENwmTyMVVTtOvPBlhmhLHSxzh74BLSXLaPyyal851eHtO8
+   XyJnRCe4Z1eJ5BWTpHrln69dIvvzPwcTMUp4s3vlzWXFg2KuYvB/p+/1I
+   0WA3XzguNCThCBew7aqO2bj/fChN+HE25WmLxZ87zfb3ShtQN3HQVEiml
+   myDhJKtgq6CHFls7wwzkz7nz3OZewBvHkgD4Mo3yZAhA3RBHfOC1u33PY
+   Q==;
+X-CSE-ConnectionGUID: hzFXzcsTTM6k2byiDV7H4A==
+X-CSE-MsgGUID: VXvQCjjJQzG6XHgyVv+YMw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11465"; a="56014285"
+X-IronPort-AV: E=Sophos;i="6.16,241,1744095600"; 
+   d="scan'208";a="56014285"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2025 04:33:33 -0700
+X-CSE-ConnectionGUID: iWMVCjyURKeZAdHUUOXn7g==
+X-CSE-MsgGUID: 7yInmTY6T6CqB6tjeGUWbQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,241,1744095600"; 
+   d="scan'208";a="179345988"
+Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.124.243.252]) ([10.124.243.252])
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2025 04:33:25 -0700
+Message-ID: <a774510d-bc55-4ea5-bc1a-2d31cb5bf589@linux.intel.com>
+Date: Mon, 16 Jun 2025 19:33:22 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250614160850.11087-1-chia-yu.chang@nokia-bell-labs.com> <20250614160850.11087-6-chia-yu.chang@nokia-bell-labs.com>
-In-Reply-To: <20250614160850.11087-6-chia-yu.chang@nokia-bell-labs.com>
-From: Donald Hunter <donald.hunter@gmail.com>
-Date: Mon, 16 Jun 2025 12:10:35 +0100
-X-Gm-Features: AX0GCFv8Py_NTaergTm8EtgFjKYQJPP8YyYG00spZrlUlc3e_Vh2Pu_cXk4O90Q
-Message-ID: <CAD4GDZxQ_jNch0a71gwJUq4=fYQ963-0b=Xz1gwG5qmNdiQ82g@mail.gmail.com>
-Subject: Re: [PATCH v19 net-next 5/5] Documentation: netlink: specs: tc: Add
- DualPI2 specification
-To: chia-yu.chang@nokia-bell-labs.com
-Cc: alok.a.tiwari@oracle.com, pctammela@mojatatu.com, horms@kernel.org, 
-	xandfury@gmail.com, netdev@vger.kernel.org, dave.taht@gmail.com, 
-	pabeni@redhat.com, jhs@mojatatu.com, kuba@kernel.org, 
-	stephen@networkplumber.org, xiyou.wangcong@gmail.com, jiri@resnulli.us, 
-	davem@davemloft.net, edumazet@google.com, andrew+netdev@lunn.ch, 
-	ast@fiberby.net, liuhangbin@gmail.com, shuah@kernel.org, 
-	linux-kselftest@vger.kernel.org, ij@kernel.org, ncardwell@google.com, 
-	koen.de_schepper@nokia-bell-labs.com, g.white@cablelabs.com, 
-	ingemar.s.johansson@ericsson.com, mirja.kuehlewind@ericsson.com, 
-	cheshire@apple.com, rs.ietf@gmx.at, Jason_Livingood@comcast.com, 
-	vidhi_goel@apple.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Cc: baolu.lu@linux.intel.com, bagasdotme@gmail.com, robin.murphy@arm.com,
+ joro@8bytes.org, thierry.reding@gmail.com, vdumpa@nvidia.com,
+ jonathanh@nvidia.com, shuah@kernel.org, jsnitsel@redhat.com,
+ nathan@kernel.org, peterz@infradead.org, yi.l.liu@intel.com,
+ mshavit@google.com, praan@google.com, zhangzekun11@huawei.com,
+ iommu@lists.linux.dev, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-tegra@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ patches@lists.linux.dev, mochs@nvidia.com, alok.a.tiwari@oracle.com,
+ vasant.hegde@amd.com, dwmw2@infradead.org
+Subject: Re: [PATCH v6 13/25] iommufd: Add mmap interface
+To: Nicolin Chen <nicolinc@nvidia.com>, jgg@nvidia.com, kevin.tian@intel.com,
+ corbet@lwn.net, will@kernel.org
+References: <cover.1749884998.git.nicolinc@nvidia.com>
+ <c9929e0c9ec6f3f6348cd0c399d6fdfa9f35f973.1749884998.git.nicolinc@nvidia.com>
+Content-Language: en-US
+From: Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <c9929e0c9ec6f3f6348cd0c399d6fdfa9f35f973.1749884998.git.nicolinc@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sat, 14 Jun 2025 at 17:09, <chia-yu.chang@nokia-bell-labs.com> wrote:
-> +  -
-> +    name: tc-dualpi2-attrs
+On 6/14/2025 3:14 PM, Nicolin Chen wrote:
+> For vIOMMU passing through HW resources to user space (VMs), allowing a VM
+> to control the passed through HW directly by accessing hardware registers,
+> add an mmap infrastructure to map the physical MMIO pages to user space.
+> 
+> Maintain a maple tree per ictx as a translation table managing mmappable
+> regions, from an allocated for-user mmap offset to an iommufd_mmap struct,
+> where it stores the real PFN range for an io_remap_pfn_range call.
+> 
+> Keep track of the lifecycle of the mmappable region by taking refcount of
+> its owner, so as to enforce user space to unmap the region first before it
+> can destroy its owner object.
+> 
+> To allow an IOMMU driver to add and delete mmappable regions onto/from the
+> maple tree, add iommufd_viommu_alloc/destroy_mmap helpers.
+> 
+> Reviewed-by: Kevin Tian<kevin.tian@intel.com>
+> Signed-off-by: Nicolin Chen<nicolinc@nvidia.com>
 
-I just noticed that this causes a double-prefixed name in
-tools/net/ynl/generated/tc-user.h
-
-struct tc_tc_dualpi2_attrs
-
-It should just be dualpi2-attrs
-
-> +    name-prefix: tca-dualpi2-
-> +    attributes:
-[...]
-> @@ -3708,6 +3868,9 @@ sub-messages:
->        -
->          value: drr
->          attribute-set: drr-attrs
-> +      -
-> +        value: dualpi2
-> +        attribute-set: tc-dualpi2-attrs
-
-And here.
+Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
 
