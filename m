@@ -1,75 +1,63 @@
-Return-Path: <linux-kselftest+bounces-35202-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35203-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 069FEADC909
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 13:05:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4933DADC97F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 13:34:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9BC603B7171
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 11:05:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 341573A1D14
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 11:34:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B704B2DA777;
-	Tue, 17 Jun 2025 11:05:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FFE12DBF5F;
+	Tue, 17 Jun 2025 11:34:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IBPPB2Qd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QruMvEV3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3019D2980AC
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Jun 2025 11:05:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4CAC289812;
+	Tue, 17 Jun 2025 11:34:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750158342; cv=none; b=PvESYn/19jeqjsma3zfeV4DoW6wY0+AN2hDSPchhSddusTVZecb2EA1cEQoEY4axgVkv0b5HdXwK9Y6kX40JtNrF7tnqZvxQVpBIkZTYpbRCPCxJV+MSgiff765uCjMKlXZ9fni3f1z/KzKgU86ZZOolUMKA3/5IvOOvuuln/nA=
+	t=1750160061; cv=none; b=MiiEFrGcTc0C6sGMNqu5CPzsoTZGZ5f57vTR0j7HocfIJIDabcoOVQLjpZjZu1QYwj84W21KoS3VSjVndhy9EawI1WMB1X66faxrgCWJv9HSU9RnzH7fdc5zPdWn7hiCcbD0sTF51dMOH3dpR1f3g4tgqHq2vbfIe+LyV+SBTzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750158342; c=relaxed/simple;
-	bh=0um0R3zeYp1Vpz2CP5NnfVmYK0iAYL/nakFl/p17qOU=;
+	s=arc-20240116; t=1750160061; c=relaxed/simple;
+	bh=/lJ+FLdCZAFvrJYe9sfXUZLx/0jpBGTUY7hMUsF7QeE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EbEZFZlYSvYiEvUqFDs7d62A9vwzKFz7ombbFlTyCWOeUzHKHpfQRFvWURu4bVo7samXnSlOUSa84V2OynbPhGalAFhjbZtnPH2mkO2QiWM+kLfgMd3fFaLfBEcuSflxCtD9cpt9pKGPt6JCr3o3AXycczMWS0M8z7GbaFpfHqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IBPPB2Qd; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1750158340;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=TiYdceZwMX0acoVDusyjf9I10Ybg+SrHFujR2B70YK0=;
-	b=IBPPB2QdaAaZnE1KnUnLU6fWQX01ehZ7hNZNhQ4z5Tbt3qEK+vUSH0c2CDRTpUrr3M9Ys1
-	4ljYzWRqZ97b5dJCpEyW7FEnrWdim6xnpofHdc54+TAoZL6+P4IhF9skQ9xOYtZkyz8T3h
-	YDgpRbdmI3tb2YFFyL/Tc9jtaiVUy+4=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-664--BLfXEdfNw6yvtH9Eb6OFA-1; Tue,
- 17 Jun 2025 07:05:35 -0400
-X-MC-Unique: -BLfXEdfNw6yvtH9Eb6OFA-1
-X-Mimecast-MFC-AGG-ID: -BLfXEdfNw6yvtH9Eb6OFA_1750158333
-Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 087B9180028F;
-	Tue, 17 Jun 2025 11:05:33 +0000 (UTC)
-Received: from fedora (unknown [10.72.116.84])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 00C901956094;
-	Tue, 17 Jun 2025 11:05:25 +0000 (UTC)
-Date: Tue, 17 Jun 2025 19:05:20 +0800
-From: Ming Lei <ming.lei@redhat.com>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	lkft-triage@lists.linaro.org,
-	Linux Regressions <regressions@lists.linux.dev>,
-	Shuah Khan <shuah@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-	kbusch@kernel.org, Anders Roxell <anders.roxell@linaro.org>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Arnd Bergmann <arnd@arndb.de>
-Subject: Re: selftests ublk UBLK_IO_F_NEED_REG_BUF undeclared
-Message-ID: <aFFL8DQufPXnerlm@fedora>
-References: <CA+G9fYsiWN1gWhHBk9uruDBzVHvLYCTL-VcxU2iiPMcS1EXyBg@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=i2B2fP4UBuOL2pWhLuLJf3XTftKcsFcXUhIRc0SyUBPoj9At9qNAQJQw+E3MrGPErpklO245c5UdQh2NsQCg1MXqrK4dVEXX4OfU+ulIKVKTiSg5WtgPCW1r9vu/zLV+CVcufAwph3nvKt1/7xOh6H5ZdiCCnrBDqhUnr8RJwjo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QruMvEV3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D2DAC4CEED;
+	Tue, 17 Jun 2025 11:34:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750160058;
+	bh=/lJ+FLdCZAFvrJYe9sfXUZLx/0jpBGTUY7hMUsF7QeE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QruMvEV3syp0zvzgTiFlFSn9SohoBKo6YhOBCD9srGiOX5KJl7Dgt7RF8kJXL2tVe
+	 2OubJVUhNO5VhRku1629Pqq0ukJNNi4a+qoLW7n9j6cTBwQPLm822+lJoqDZZGqN2T
+	 nF+W+p1VRr7wArBP0iYXA5ezA0s0fCiz3uepRrFG3SrU2zKKNL8jlu5QBaIGjh/Qdv
+	 ewJuENYg1H03pc4fV5vU0xVnxwDZqiWF/LlqRWhItwG8lCVT3P9xh3TIWqQe/KDPgi
+	 QHO7TmscuQwooCFoZzG3yKk+o27gbwZLBnRUbnX3MqvjABeieqcBC4X0l8dchCIn8K
+	 8gcAnMZw0w5Ww==
+Date: Tue, 17 Jun 2025 12:34:14 +0100
+From: Simon Horman <horms@kernel.org>
+To: Eric Woudstra <ericwouds@gmail.com>
+Cc: Pablo Neira Ayuso <pablo@netfilter.org>,
+	Jozsef Kadlecsik <kadlec@netfilter.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Vladimir Oltean <olteanv@gmail.com>,
+	netfilter-devel@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH v2 nf-next] selftests: netfilter: Add
+ bridge_fastpath.sh
+Message-ID: <20250617113414.GI5000@horms.kernel.org>
+References: <20250617065930.23647-1-ericwouds@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -78,34 +66,32 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYsiWN1gWhHBk9uruDBzVHvLYCTL-VcxU2iiPMcS1EXyBg@mail.gmail.com>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
+In-Reply-To: <20250617065930.23647-1-ericwouds@gmail.com>
 
-On Tue, Jun 17, 2025 at 04:27:31PM +0530, Naresh Kamboju wrote:
-> The following build warnings / errors noticed while building the selftest/ublk
-> with gcc-13 and clang-nightly toolchains on Linux next tree.
+On Tue, Jun 17, 2025 at 08:59:30AM +0200, Eric Woudstra wrote:
+> Add a script to test various scenarios where a bridge is involved
+> in the fastpath. It runs tests in the forward path, and also in
+> a bridged path.
 > 
-> Please suggest if I am missing something in my build setup.
+> The setup is similar to a basic home router with multiple lan ports.
 > 
-> Regressions found on arm arm64 x86_64
->   -  selftests ublk
+> It uses 3 pairs of veth-devices. Each or all pairs can be
+> replaced by a pair of real interfaces, interconnected by wire.
+> This is necessary to test the behavior when dealing with
+> dsa ports, foreign (dsa) ports and switchdev userports that support
+> SWITCHDEV_OBJ_ID_PORT_VLAN.
 > 
-> Regression Analysis:
->  - New regression? Yes
->  - Reproducibility? Yes
+> See the head of the script for a detailed description.
 > 
-> Build regression: selftests ublk UBLK_IO_F_NEED_REG_BUF undeclared
+> Run without arguments to perform all tests on veth-devices.
 > 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> ## Build log
-> 
->  CC       kublk
+> Signed-off-by: Eric Woudstra <ericwouds@gmail.com>
 
-Please run 'make headers_install' before running the test.
+Hi Eric,
 
+If this proposal proceeds could you please consider running shellcheck over
+the script and address the warnings it flags produces.
 
-Thanks,
-Ming
-
+A shellcheck test was recently added to NIPA and we'd like to at least
+minimise adding new warnings to the tree.
 
