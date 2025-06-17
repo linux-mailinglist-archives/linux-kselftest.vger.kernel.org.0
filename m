@@ -1,146 +1,111 @@
-Return-Path: <linux-kselftest+bounces-35197-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35198-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06E4FADC75F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 12:01:27 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38938ADC8A6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 12:51:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD2103AECE5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 10:00:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EBDCC7A2222
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 10:49:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B5222C324E;
-	Tue, 17 Jun 2025 10:00:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A038C292B5F;
+	Tue, 17 Jun 2025 10:51:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Ztsa+UgO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iN1vbshQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99AFA288CB5
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Jun 2025 10:00:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C4F0221568;
+	Tue, 17 Jun 2025 10:51:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750154459; cv=none; b=NqU535Gws16dvYvZzYhc92UpIKyUkW/e0BIsm60x0Y+dhQN00ubNqxE6DlCSQ72PCHX+Bsdr2p99dTZy4wrxikISnmxzWCCTfuKl8Ec/wUOlwD4a5ydar0sh8gE7bmGqnzUL+QL2gtgNyyCmqQJr+TiVgaw8sHZpJ19M4lWKork=
+	t=1750157474; cv=none; b=QEbq3Au44DQF13fiqKaqeedtk/N7iINA7eCJHFNc/DoxV4gpJsi5k3FPjcvmyQL/wWjwYVwcVvvi0yfRZs2XchKY7k9HX4nV03BQiY9gnGyoZuemSkNFkNYZ2FXP28wyNRpuiXH7cQqgS43AnCD/bb4if1K36Cl8VfSlliISB7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750154459; c=relaxed/simple;
-	bh=63f0TqEe7ZSJlAEEDh5c6QP7qrLi0rXRzYggtZFz3+4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mk4OHHBjvBrS5K5L3277zBB1tsgVofBRV/KDZx4lHWZT2dGhomTULNKOdUKN6tSLOkqIF4H8TVetq37dCJyTDW24d8wGicpMvS1i3RAeOyh7io5umlt6monNhAVzMJrENWOnWeAeCRdQTfGpIBuHuifC1sZx+Dv0k7gNpJ+GRKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Ztsa+UgO; arc=none smtp.client-ip=209.85.128.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-450ce671a08so34207625e9.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Jun 2025 03:00:57 -0700 (PDT)
+	s=arc-20240116; t=1750157474; c=relaxed/simple;
+	bh=AYMEFxWHOLCq98+TQyFpfiI60acO/fim7T8QGkgbxJ0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RgjmsY8uNXqkCVGsoJ9n54yFsQAV0cAdxnK49BQt8ly+MFnZA+WfZc/eQW/1ZYwEHmQLC8Jhr166/G9k3H7JluvdSpf4kdF/GS67k2DENvDGkhIF3EEHZkawIzcXeFmV8ahE0H0crev4JoNBl2yTSZsL97sEtdmmOaX0lXLY0d8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iN1vbshQ; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-74800b81f1bso4628467b3a.1;
+        Tue, 17 Jun 2025 03:51:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1750154456; x=1750759256; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=63f0TqEe7ZSJlAEEDh5c6QP7qrLi0rXRzYggtZFz3+4=;
-        b=Ztsa+UgOfW/vmywPz5ORYuybLP0dYfXEx7KKoNl7AVRruM1QSq905zjzfSR9miSJ/D
-         hmyq2qaA+lb1x0YFbEpFqrz8W4N9p7aPxPxhabgyiap2OMQEfKHdGsOV4szkVTC+L6BW
-         fkSnN5AXMIJKmacD5HeJ8MLkZOxRganype1ZIATf9tx2Lc+21LA5J8d2EUWzipjDp+fR
-         ZL4b0BmXvsmDKlK85c95PPvtVzS+15EwzlPJetBS9bDo60lxc7qBxi11Ftxz9pFDfMWP
-         fhzASrS8GNiMljS4/mBNtg++creM46pQo595o711WBo9lpNWE5Penb8s0MM2sKToIHHF
-         2PUA==
+        d=gmail.com; s=20230601; t=1750157472; x=1750762272; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=YCooD5TUf7PI1YJO5PSJRlIJLn08pq8F0pRlb6EMveM=;
+        b=iN1vbshQy/9cmvmQlk+3aXRClrS9fSlBTKAUufgHnoxkANddfRhzyeLxe8iOgVEAZJ
+         TXdj3AG2TaNPQfACZv9m508mlgO0KiLeTLeqEaYUyzy2qezc3mc8Ijv+/hQynKTc4gv1
+         2jbRX9VX5u0FTibyiU+eVVtPBuGoN5n4DrN2dyR8J9whYlJbb7XLkdAoIXNpNsIPZv9c
+         8HEdKRh14fg+ZrDXPo7R1zV0v38qj0C4uUxPAEFgWBLq0em1QJdmVu5Oo+iIFxK3H0oJ
+         I6YOWkc1TiNwfCz12t/N4dEo871DOgv2alglmi1kskr8PU6FhQxmQ2Vh4G7bIm16rwFG
+         3s8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750154456; x=1750759256;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=63f0TqEe7ZSJlAEEDh5c6QP7qrLi0rXRzYggtZFz3+4=;
-        b=YEjuGD/OtNoR/OCiAeHYlAPyC8ThUymoJj4lVKTOwoIEjO8IBBGKpG2IJA6E+9vKPz
-         QYvhgtuwnumkKsrOjpejPPzr1DHDgHOKeinUjCkOpiFWeVe85V2wJuy1Y2CqPOPig9FD
-         PHESsc8JPSWaUZkhF5JcP88egS2+gW6Kk1ZTgHvg6xlM5oy3eugWW1tWsy75Wb2fOgVp
-         LTUV54xdaAr9k/YEFtb7sBLBf8xmbXRrwViFJorSXn1R1QwF6Ysb93vJ54Tb2b99/Xs9
-         /FLl68otYuvluNDIcTcZcrqSSq4z0kZcXz3I3tzS681oJqWvAGPFBSGSfUFMBuJfSJue
-         /iMA==
-X-Forwarded-Encrypted: i=1; AJvYcCVjLxO5FSpOFzW+0VLr/FyyqC/R+Nz434tPhgyAzl5n7D4WXxsVp2zWrH5Tt7YAxIfJDfFDggXaLTv0SpNQuOc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy6Z+g4EgZCgJ+hqB2hOX02VsHpYaak7ZBEfVUH/E1qMl7D2q9I
-	9Z/GTmBM2FTZ7mrTRnRXM9z79NombEyVohiX7WVHWFTnHSHQrDfu1MQSSynuXmqoU6U=
-X-Gm-Gg: ASbGncsNlTzoG7cx3x0smxAC35xcuANBobClzlug2SA+OLbqIBLtqDn5jYumifcjwwm
-	cr4r12H0LoBF5++wGpmJX2Hh5xm/aKOifCvoW0zjR+Ik/DHJEUL+US+xWNWSGl7C5kNLkaAnT3n
-	BjhDe+66ZB7vJqqkEzXavkkzJGgfePCax76ZrPag1nkoAvdFIQHnFcQ4iZiL4jfkxAxm/OAEyZX
-	SuP/y3v8Mt02FXIbT1ykpVpFYdOPmZVC1S1tjVrR/aitE46/x+1VamDQthFw+EmvR3SSB1l+LQb
-	09xKdyO5z78Uv2kmZ6g8/SavQR+/dIEmbvECoXoadNSjOOx2mz9i78o7cLiRBxS0
-X-Google-Smtp-Source: AGHT+IFOY4uMo1XQEX4RuwIHAMfgibmwRB22iBO5mpSJQ1+dfkCUk/eEmOPDTUbzxCn/VYVxqmedIA==
-X-Received: by 2002:a05:600d:10f:b0:452:fdfa:3b3b with SMTP id 5b1f17b1804b1-4533cadf885mr65921715e9.5.1750154454019;
-        Tue, 17 Jun 2025 03:00:54 -0700 (PDT)
-Received: from blackdock.suse.cz ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4532e195768sm171790845e9.0.2025.06.17.03.00.52
+        d=1e100.net; s=20230601; t=1750157472; x=1750762272;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YCooD5TUf7PI1YJO5PSJRlIJLn08pq8F0pRlb6EMveM=;
+        b=aAJUD5VMyXQ/O5blKE2xHga9EeXl7fvmXdyc17z7bvj59TxHXZCx2GRYeCdZGYmy+a
+         qKB+ISI3dbhSqI5tTFecBzUi0KgO+a0Z3telpebTQ9TOZNztgGb4GAZFzvudopEx502C
+         EvsXV3Et/WqN8GhP05dagmEFSqZa3cEscYLA8T8ZYnhUpaNBKYGCNMWV05CSE6q1FpXE
+         bNnH2ZbnQ/JPViqbhuhal8vITCNowcDCsgUH8I7n5Osk0jAlSHbnlTwpZnuwGFHYMuiu
+         UM/KRPDpyEhXsTabMKTyMWtCRw6wtgcb8fRZ84UYaSjzIU/+Zn3b3YnRXAafEqrahzuE
+         zoKg==
+X-Forwarded-Encrypted: i=1; AJvYcCXC4uF8LSLZR35uazL15mSxoj5xhtqMTsYqXisaJLUpwFlHFWkMRb2TF4Bgqk+78tN0OgRVMQQTwDet53WYZaU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzRgccbKz8qk8Ug3J7hc6763BUaNfh5PZcW/FcEND4lgfZ5frs9
+	0HuA9YEaDUK+0iEX4pOOg7R5xGgmW8Ekd+EPy+1dv1q/ySJaVYeNs82aG+DAP2gzUPAAmw==
+X-Gm-Gg: ASbGncsJUAv+qS1Vl885na7YJohLhsJESwzl/L0RR4J3nBtn78rPgHTdgRzefFtXz87
+	Gwq+SFNZmZrLScn71+RvoPekAjPSOwWT5P9DD6J5HaLhEWbY08tvSr0+e+NzZFvn346mSRjRuo/
+	kCd2GQ5VZmdOn5RRqfAOlVrmmSIgwolvxKgvDordxNX6/sR06J2LedUTrxztPH9VQodNrlBAY5N
+	pfOcFj2us46YVXs09IusBPHPaYHj9RIjLfuqftUAjQNJJvsIBhfYF8jx4Zn8GMmKTcpAkEK/L/s
+	8f0Ix6DTBuPAGpHHWnNok8/hc6qipIK4f8QJoNbiURXlFTh7vGkt192PmES0AAVUmorNOGK1CM5
+	r7ZNKsA==
+X-Google-Smtp-Source: AGHT+IHMrLEKKWT0IE0Pkp8a2/xdA/5e/01YRbQXnG3u9NBBrDsWnXB6DoDNxd3kBhyGA1zGOhvxpw==
+X-Received: by 2002:a05:6a00:ad1:b0:73c:b86:b47f with SMTP id d2e1a72fcca58-7489ce012b1mr17532261b3a.4.1750157472152;
+        Tue, 17 Jun 2025 03:51:12 -0700 (PDT)
+Received: from fedora.dns.podman ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-748900d2e25sm8795739b3a.171.2025.06.17.03.51.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jun 2025 03:00:53 -0700 (PDT)
-Date: Tue, 17 Jun 2025 12:00:51 +0200
-From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To: syzbot <syzbot+31eb4d4e7d9bc1fc1312@syzkaller.appspotmail.com>, 
-	inwardvessel@gmail.com
-Cc: akpm@linux-foundation.org, andrii@kernel.org, ast@kernel.org, 
-	axboe@kernel.dk, bpf@vger.kernel.org, cgroups@vger.kernel.org, 
-	daniel@iogearbox.net, eddyz87@gmail.com, hannes@cmpxchg.org, haoluo@google.com, 
-	hawk@kernel.org, john.fastabend@gmail.com, jolsa@kernel.org, josef@toxicpanda.com, 
-	kpsingh@kernel.org, linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, martin.lau@linux.dev, mhocko@kernel.org, 
-	muchun.song@linux.dev, mykolal@fb.com, netdev@vger.kernel.org, roman.gushchin@linux.dev, 
-	sdf@fomichev.me, shakeel.butt@linux.dev, shuah@kernel.org, song@kernel.org, 
-	syzkaller-bugs@googlegroups.com, tj@kernel.org, yonghong.song@linux.dev
-Subject: Re: [syzbot] [cgroups?] general protection fault in
- __cgroup_rstat_lock
-Message-ID: <qzzfped7jds7kcr466zahbrcw2eg5n6ke7drzxm6btexv36ca2@mici3xiuajuz>
-References: <6751e769.050a0220.b4160.01df.GAE@google.com>
- <683c7dee.a00a0220.d8eae.0032.GAE@google.com>
- <p32ytuin2hmxacacroykhtfxf6l5l7sji33dt4xknnojqm4xh2@hrldb5d6fgfj>
+        Tue, 17 Jun 2025 03:51:11 -0700 (PDT)
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: netdev@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	Hangbin Liu <liuhangbin@gmail.com>
+Subject: [PATCH net-next 0/2] selftests: net: use slowwait to make sure setup finished
+Date: Tue, 17 Jun 2025 10:50:58 +0000
+Message-ID: <20250617105101.433718-1-liuhangbin@gmail.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="krlwbo2bq63d5qwa"
-Content-Disposition: inline
-In-Reply-To: <p32ytuin2hmxacacroykhtfxf6l5l7sji33dt4xknnojqm4xh2@hrldb5d6fgfj>
+Content-Transfer-Encoding: 8bit
 
+The two updated tests sometimes failed because the network setup hadn't
+completed. Used slowwait to ensure the setup finished and the tests
+always passed. I ran both tests 50 times, and all of them passed.
 
---krlwbo2bq63d5qwa
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [syzbot] [cgroups?] general protection fault in
- __cgroup_rstat_lock
-MIME-Version: 1.0
+Hangbin Liu (2):
+  selftests: net: use slowwait to stabilize vrf_route_leaking test
+  selftests: net: use slowwait to make sure IPv6 setup finished
 
-On Mon, Jun 02, 2025 at 04:15:56PM +0200, Michal Koutn=FD <mkoutny@suse.com=
-> wrote:
-> I'd say this might be relevant (although I don't see the possibly
-> incorrect error handlnig path) but it doesn't mean this commit fixes it,
-> it'd rather require the reproducer to adjust the N on this path.
+ tools/testing/selftests/net/test_vxlan_vnifiltering.sh | 9 ++++-----
+ tools/testing/selftests/net/vrf_route_leaking.sh       | 4 ++--
+ 2 files changed, 6 insertions(+), 7 deletions(-)
 
-Hm, possibly syzbot caught up here [1]:
+-- 
+2.46.0
 
--mkdir(&(0x7f0000000000)=3D'./cgroup/file0\x00', 0xd0939199c36b4d28) (fail_=
-nth: 8)
-+mkdirat$cgroup_root(0xffffffffffffff9c, &(0x7f00000005c0)=3D'./cgroup.net/=
-syz0\x00', 0x1ff) (fail_nth: 23)
-
-So there's something fishy in the error handling.
-
-HTH,
-Michal
-
-[1] https://lore.kernel.org/lkml/68403875.a00a0220.d4325.000a.GAE@google.co=
-m/
-
---krlwbo2bq63d5qwa
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCaFE80QAKCRB+PQLnlNv4
-CFc5AQDFUQDIxN7rZwIY/4HwJm40c4uz7Kwbk8e3RX9sQwVOOQEA0j9JsDa/0bOB
-mCi/pTl0V4lRqubAZXTV4nhvtAtknwY=
-=+ozi
------END PGP SIGNATURE-----
-
---krlwbo2bq63d5qwa--
 
