@@ -1,192 +1,181 @@
-Return-Path: <linux-kselftest+bounces-35215-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35216-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5439ADD0E0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 17:05:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B91A6ADD100
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 17:08:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6485B188A6A3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 15:05:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4D813188CB76
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 15:08:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7292A2E7F26;
-	Tue, 17 Jun 2025 15:04:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAD852E8894;
+	Tue, 17 Jun 2025 15:07:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="oV/Q1qfk"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Ry/r1+nq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8336E20C001;
-	Tue, 17 Jun 2025 15:04:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E6BE20C001
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Jun 2025 15:07:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750172692; cv=none; b=uH35XWIDhtB6nMrZtYx8WP55pn4sWEmbLogvRStFf+efCMqnYRHeX4gKW6j9xoeNn43YK5A9aCjnlPQxvxDPUDJ564JgHgARRj1UhWZpixNqQBvwC7m8N9JlSrbQtyz3t3pA+74bu4K2MPlE/3QhsAwupn9Qg9NxKD32BHSMuLE=
+	t=1750172859; cv=none; b=gAxbkmlUs9MoDQ3o0rsIKEKcrDFUh9l+sryhDVf7NBM4zdJ4J/ct7o/hzIqHXrSLY8vceI3T2aD3cJSGnrvJtQOUWYxOXpxITr+QcL73S4TNbVbLjtBmUGuMPADD1oHumgZyqNWFXQWAFjhGeLg4ON9haP+mgIyFOcbTPJLrxts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750172692; c=relaxed/simple;
-	bh=VyHjRTqOfzaroymnLXyjHij86o2BvFG9B9owgRHE/2w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BLCrptvpu0V8Kl57ACpQxDOc4JoI3GBPkH6enWzsaJ2rMju6rOuiPrlXrKHpeGYLr3wMBvBhyr638YQaf5kqj94QJPN7/ywyLj+gpE4j1lRUeIXgY65gN4jcnQzs6wx1Ikafj0CN2Ygc1EX9BZ/yVGlQzAU/09NADhpayBjhB34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=oV/Q1qfk; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55HEht5A012280;
-	Tue, 17 Jun 2025 15:04:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=5Pco8NtNLrHhB/yIwu2Z6bOKRZjDwP
-	02vOI5xrCA/Fg=; b=oV/Q1qfkdX/Z+dafal7f6S2wkvMSpyiO95yDRCkizF/+c2
-	g/hqvf8PKUhFL+lq4SOhEdALkkdzdPJH8FEtPr2yDYy1akVu4NJSQql/nrlCNpDG
-	fYLVuJ6xoR3c3OyRuSg1FQDls2jqliaqfS9QE43bWRuwIP00L+U8DNC13W/pFBls
-	shw3BE89dsZzECwctFUy1cPdQDjMkoSEGTgQbMgfNmUJihDWePn5EJBrpz2E0IlM
-	flWta5QYj1HMPJ6qDPgN4sfpnksNggyZHRJMc8sQGE3eV5oM8Zof59FRAFB7f+6x
-	xSGV4Y+ne8BDdY/ZgZQauCC4iUKhpvAbcBqk+KFg==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 478ygn904b-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Jun 2025 15:04:32 +0000 (GMT)
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 55HF4WPj018331;
-	Tue, 17 Jun 2025 15:04:32 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 478ygn9042-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Jun 2025 15:04:31 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 55HEsr6K010853;
-	Tue, 17 Jun 2025 15:04:31 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 479kdtcb6v-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Jun 2025 15:04:30 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 55HF4TH946727498
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 17 Jun 2025 15:04:29 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 3DFF520040;
-	Tue, 17 Jun 2025 15:04:29 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 94B6E20049;
-	Tue, 17 Jun 2025 15:04:25 +0000 (GMT)
-Received: from li-06431bcc-2712-11b2-a85c-a6fe68df28f9.ibm.com (unknown [9.109.245.113])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Tue, 17 Jun 2025 15:04:25 +0000 (GMT)
-Date: Tue, 17 Jun 2025 20:34:14 +0530
-From: donettom <donettom@linux.ibm.com>
-To: Dev Jain <dev.jain@arm.com>
-Cc: Aboorva Devarajan <aboorvad@linux.ibm.com>, akpm@linux-foundation.org,
-        Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, shuah@kernel.org,
-        pfalcato@suse.de, david@redhat.com, ziy@nvidia.com,
-        baolin.wang@linux.alibaba.com, npache@redhat.com, ryan.roberts@arm.com,
-        baohua@kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ritesh.list@gmail.com
-Subject: Re: [PATCH 3/6] selftests/mm : fix test_prctl_fork_exec failure
-Message-ID: <aFGD7qEQ6nHg1CTt@li-06431bcc-2712-11b2-a85c-a6fe68df28f9.ibm.com>
-References: <20250616160632.35250-1-aboorvad@linux.ibm.com>
- <20250616160632.35250-4-aboorvad@linux.ibm.com>
- <063206d1-9f60-44b0-a8e6-77b49ba4a871@arm.com>
+	s=arc-20240116; t=1750172859; c=relaxed/simple;
+	bh=pf3mbNNCBaoa+Q8rkyFdnWm1f//ZilqgGf8nwGrFL50=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VinV8XoSDh/Gi1i6NQTBx3g+A8DHt2bARF9yySdrAsBZqvZuLs5ojfTl7+7Bql6B8pSUK6ziuOlxb62M0+SAMvlapW9SqTCEX/m6LZ9/lKjPCdLQQ7Sfa9bvb9ycoKhg1Bak2v5XA/cyEwXCKBFrIXGshNiYeB3D8m2jgUrasrg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Ry/r1+nq; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-450cb2ddd46so33088055e9.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Jun 2025 08:07:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1750172855; x=1750777655; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ILCJmIUaqb1ZxYNljoCiDSpEgRAkdZcWul2gnHHS/uI=;
+        b=Ry/r1+nqtYhFYjET2QNPM+jFZ2M3klU41N2rEBOX6Nab9gdsoOCQ9cHeo3gW4Snm2f
+         N0jQrtv/y/DNMyLmUw6LdiLG2wMAkPUwOeVeY5MStpiWqae1JLz0JRugS7zgiVVnChUu
+         +nfoeGOmgSWWOJ36zRiYhfhIx2e1dFZiWYgRiJKPWl1UmXF9yEY4HJeW/AJkcDsOIe7W
+         fBLfjf1xLzgF/vdmesx3WcEq4rp9nOrcZIUWI6eWv50W5V1sWtGgv+jatJmodTLoaVC0
+         9b4LYDGQn47p4134GVoR1CdEaCExHgqcoEKZ2vexU3r3GaJUCd+pA398K6hxOi+bjacn
+         wnQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750172855; x=1750777655;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ILCJmIUaqb1ZxYNljoCiDSpEgRAkdZcWul2gnHHS/uI=;
+        b=TJo4TAm+Nd+EQEHpO8UYWSw7g01xytKCUdgrXBlgCK3puknr/BwujnwWCAgBJKVCRP
+         cY5zxZuyfwQpF9O/fQurpcESKE/bkHPZQqpkwvdzmKvkYcFQQ7P/UdIxUPi7IwAS4QVd
+         iJPjF173yqEkAOX5BejTefXvJCbVRjBW6bonEeXfJIpnefJWCAeEuZkq5AtTWabUavvC
+         IKUnHSC8ptlk8ek/dy/FjYDx1QtkIzLu7Wa16EsWj5CA+y9VC+gbdFtmleOjMRlo9r9P
+         uNAGLzpcZ8Mlc1ajORHPdFO6FSI5S8L1fqPf6Ec1tvl7az2GDiqHV22UU+o4A7QXfk4n
+         EVPQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUdI5bBLGrR6UqD+XLbU5PfnS275V1JfnzwHgsEwwACCpznnRfh2RB7jJrhheajGxG88QiEqJbtW458bJK3V8s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzC55TwWdcqBsHcYjf83J31I1alpHMjQLUFKP76Mz74Y6h4L9+D
+	8dUmOn1zI6BZfyIKdkgriyP1ZLoEHpYVx3eUNuzUYNTCS9+vCEif8enQeKPaubx5JJE=
+X-Gm-Gg: ASbGncsmyZumwP0oerFgSS2uk8pPwFkd8J/m3mTK0VfP9m7lzdnoOFWCMzDRAsuWQ7d
+	+52Pag/Bz/eSLHTwsz7o3Xm4ExqEEbTyCe+BDIR4X37qXg+s6YfMLaJUm5VZ/9QdcJYzvEqhey3
+	SenjjFw2YIJl5kHmcpSQUlrQVCByQASObowBP1vxpR/ogLwJRqWjj6KdVYCzs1DJQGW4q3hwSAu
+	G1gtYrCSNDrgfVZ8aNNK3zhzmZt8/nByTTx7kxwChf2UK7uPmCkwzXtE+EHCeZJQgSubl0Ra7NE
+	V5VMriXm7GQS2OExPBtJ8vDCrtS5lPCR3d9owEk8VgulYVLvYGCjCzNsFd8TlCEqwxZ/IsHa1XI
+	X
+X-Google-Smtp-Source: AGHT+IFvJAhymz+MlrW7YQcbajgL5kYk/RtK6I3q6YaocDMYQM4Sy3QB0kS30GlFXiWwssZmFhkdPg==
+X-Received: by 2002:a05:600c:a07:b0:453:99f:b1b0 with SMTP id 5b1f17b1804b1-4533caa5c1fmr112862035e9.20.1750172854807;
+        Tue, 17 Jun 2025 08:07:34 -0700 (PDT)
+Received: from [10.100.51.209] ([193.86.92.181])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4532dea1cc5sm183871865e9.16.2025.06.17.08.07.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Jun 2025 08:07:34 -0700 (PDT)
+Message-ID: <1f175340-d109-41c2-be1e-1c5261f9e0d9@suse.com>
+Date: Tue, 17 Jun 2025 17:07:33 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <063206d1-9f60-44b0-a8e6-77b49ba4a871@arm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjE3MDExNSBTYWx0ZWRfX/hgxeb7CRsvT LsyVsgTgBOMNXmr8Gxp4wzPt+ncDUuX/Dj6kzkBhVpe2Iiaax5TjuA81zLPsomkSbAsS2zLRL8j cPVwvFPjOsDiMyesylVVEZNbdLHh/XWTkSOPsvdytOizeIZM/rdlPSeF9aGx00m2QzxcwEYM9WZ
- uvel/It/zWq7d6KGSPGpQIj6P2oYXFFqekTLKXrcOxHCHE97M6LU5lLTjPT1bYfP4ddfack6te9 rjH6e3C99IiZdGAiJnpiu0YbZJ/TcasOqs43g9WQCq6hKcKwuM5kykDuIrVy8p6PMAgt9JFfxzA 2qfxCwqUSfvloxeVkdEBQfCGKLOF7Z5cf3h7jMk/YGyOxv47Rpf2IzD2s2WcchwRes7vignRMGI
- kg1e8qWZgITB8NdS0cT6V08jj7E9yeoao2byhtxzo+nSPaPRlUTvu74rqg+t4uYPQ57x5OLG
-X-Authority-Analysis: v=2.4 cv=fYSty1QF c=1 sm=1 tr=0 ts=68518400 cx=c_pps a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17 a=kj9zAlcOel0A:10 a=6IFa9wvqVegA:10 a=VnNF1IyMAAAA:8 a=cVMMt7Et61PNXrXzi4wA:9 a=CjuIK1q_8ugA:10
-X-Proofpoint-ORIG-GUID: inzRLXJe7eJSyI1kLE0mAF2I7rKUPx-7
-X-Proofpoint-GUID: 6nWfDvfXN16jzlIKnOTpHO36bYZq-x_d
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-17_06,2025-06-13_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
- spamscore=0 mlxlogscore=999 lowpriorityscore=0 adultscore=0 mlxscore=0
- impostorscore=0 bulkscore=0 phishscore=0 clxscore=1011 priorityscore=1501
- classifier=spam authscore=0 authtc=n/a authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2506170115
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] kunit: test: Drop CONFIG_MODULE ifdeffery
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Luis Chamberlain <mcgrof@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
+ <da.gomez@samsung.com>, Brendan Higgins <brendan.higgins@linux.dev>,
+ David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+ linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+References: <20250612-kunit-ifdef-modules-v1-0-fdccd42dcff8@linutronix.de>
+ <20250612-kunit-ifdef-modules-v1-3-fdccd42dcff8@linutronix.de>
+ <fb2a41b2-a872-4fcd-8a97-df3a946c6a81@suse.com>
+ <20250617095936-50d985a4-ea18-49cf-9d16-dfd0dd0b627f@linutronix.de>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20250617095936-50d985a4-ea18-49cf-9d16-dfd0dd0b627f@linutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-esOn Mon, Jun 16, 2025 at 09:58:38PM +0530, Dev Jain wrote:
+On 6/17/25 10:39 AM, Thomas Weißschuh wrote:
+> On Tue, Jun 17, 2025 at 09:44:49AM +0200, Petr Pavlu wrote:
+>> On 6/12/25 4:53 PM, Thomas Weißschuh wrote:
+>>> The function stubs exposed by module.h allow the code to compile properly
+>>> without the ifdeffery. The generated object code stays the same, as the
+>>> compiler can optimize away all the dead code.
+>>> As the code is still typechecked developer errors can be detected faster.
+>>>
+>>> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+>>
+>> I'm worried that patches #2 and #3 make the code harder to understand
+>> because they hide what is compiled and when.
+>>
+>> Normally, '#ifdef CONFIG_XYZ' or IS_ENABLED(CONFIG_XYZ) directly
+>> surrounds functionality that should be conditional. This makes it clear
+>> what is used and when.
 > 
-> On 16/06/25 9:36 pm, Aboorva Devarajan wrote:
-> > From: Donet Tom <donettom@linux.ibm.com>
-> > 
-> > execv argument is an array of pointers to null-terminated strings.
-> > In this patch we added NULL in the execv argument to fix the test
-> > failure.
+> #ifdef is discouraged in C files and IS_ENABLED(CONFIG_MODULES) does not work
+> (here) without patch #2.
 > 
-> Just a comment, how did this test suddenly start failing now? Also is a
-> fixes tag required? Clearly I am missing something.
+>> The patches obscure whether, for instance, kunit_module_notify() in
+>> lib/kunit/test.c is actually used and present in the resulting binary
+>> behind several steps. Understanding its usage requires tracing the code
+>> from kunit_module_notify() to the definition of kunit_mod_nb, then to
+>> the register_module_notifier() call, and finally depends on an ifdef in
+>> another file, include/linux/module.h.
 > 
-
-This test has been failing on my machine since the version in which
-it was introduced.
-
-Will add the fixes-by tag in next version.
-
-
-Below is the test result on 0374af1da077- mm/ksm: test case for prctl fork/exec workflow
-
-./ksm_functional_tests 
-TAP version 13
-1..9
- [RUN] test_unmerge
-ok 1 Pages were unmerged
- [RUN] test_unmerge_zero_pages
-ok 2 KSM zero pages were unmerged
- [RUN] test_unmerge_discarded
-ok 3 Pages were unmerged
- [RUN] test_unmerge_uffd_wp
-ok 4 # SKIP UFFD_FEATURE_PAGEFAULT_FLAG_WP not available
- [RUN] test_prot_none
-ok 5 Pages were unmerged
- [RUN] test_prctl
-ok 6 Setting/clearing PR_SET_MEMORY_MERGE works
- [RUN] test_prctl_fork
-ok 7 PR_SET_MEMORY_MERGE value is inherited
- [RUN] test_prctl_fork_exec
- [RUN] test_prctl_unmerge
-not ok 8 No pages got merged
-Bail out! 1 out of 8 tests failed
- Planned tests != run tests (9 != 8)
- Totals: pass:6 fail:1 xfail:0 xpass:0 skip:1 error:0
-not ok 8 KSM not enabled
- [RUN] test_prctl_unmerge
-ok 9 Pages were unmerged
-Bail out! 1 out of 9 tests failed
- Totals: pass:7 fail:1 xfail:0 xpass:0 skip:1 error:0
-
-
-With the above patch the test is passing.
-
- [RUN] test_prctl_fork_exec
-ok 8 PR_SET_MEMORY_MERGE value is inherited
-
-> > Signed-off-by: Donet Tom <donettom@linux.ibm.com>
-> > Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
-> > ---
-> >   tools/testing/selftests/mm/ksm_functional_tests.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/tools/testing/selftests/mm/ksm_functional_tests.c b/tools/testing/selftests/mm/ksm_functional_tests.c
-> > index d7d3c22c077a..6ea50272a0ba 100644
-> > --- a/tools/testing/selftests/mm/ksm_functional_tests.c
-> > +++ b/tools/testing/selftests/mm/ksm_functional_tests.c
-> > @@ -579,7 +579,7 @@ static void test_prctl_fork_exec(void)
-> >   		return;
-> >   	} else if (child_pid == 0) {
-> >   		char *prg_name = "./ksm_functional_tests";
-> > -		char *argv_for_program[] = { prg_name, FORK_EXEC_CHILD_PRG_NAME };
-> > +		char *argv_for_program[] = { prg_name, FORK_EXEC_CHILD_PRG_NAME, NULL };
-> >   		execv(prg_name, argv_for_program);
-> >   		return;
+> I agree that it is not completely clear what will end up in the binary.
+> On the other hand we can program the happy path and the compiler will take care
+> of all the corner cases.
+> We could add an "if (IS_ENABLED(CONFIG_MODULES))" which does not really change
+> anything but would be clearer to read.
 > 
+>> Is this really better? Are there places where this pattern is already
+>> used? Does it actually help in practice, considering that CONFIG_MODULES
+>> is enabled in most cases?
+> 
+> This came up for me when refactoring some KUnit internal code.
+> I used "kunit.py run" (which uses CONFIG_MODULES=n) to test my changes.
+> But some callers of changed functions were not updated and this wasn't reported.
+
+I see.
+
+> 
+> The stub functions are a standard pattern and already implemented by module.h.
+
+Stub functions are ok, I have no concerns about that pattern.
+
+> I have not found a header which hides structure definitions.
+
+It seems you're right. I think that makes patch #2 acceptable, it is
+consistent with other kernel code.
+
+> 
+> Documentation/process/coding-style.rst:
+> 
+> 	21) Conditional Compilation
+> 	---------------------------
+> 
+> 	Wherever possible, don't use preprocessor conditionals (#if, #ifdef) in .c
+> 	files; doing so makes code harder to read and logic harder to follow.  Instead,
+> 	use such conditionals in a header file defining functions for use in those .c
+> 	files, providing no-op stub versions in the #else case, and then call those
+> 	functions unconditionally from .c files.  The compiler will avoid generating
+> 	any code for the stub calls, producing identical results, but the logic will
+> 	remain easy to follow.
+> 
+> I should add the documentation reference to patch #2.
+
+This part discusses stub functions. I feel patch #3 stretches the
+intention of the coding style described here. As discussed, the patch
+somewhat hides when the functions are actually used, which might not be
+desirable, but I'll leave it to the kunit folks to decide what they
+prefer.
+
+-- 
+Thanks,
+Petr
 
