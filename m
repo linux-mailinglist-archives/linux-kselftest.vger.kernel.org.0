@@ -1,130 +1,130 @@
-Return-Path: <linux-kselftest+bounces-35182-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35183-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 195A3ADC39D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 09:44:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C461ADC3B6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 09:51:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA69016FCF3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 07:44:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DDDA91733A1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 07:51:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82BB928D8EF;
-	Tue, 17 Jun 2025 07:44:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D68328C5CB;
+	Tue, 17 Jun 2025 07:51:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="AP9dpqG3"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="pBHIXIA2";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="xRnqx39l"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78F62289829
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Jun 2025 07:44:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D6F61514F6;
+	Tue, 17 Jun 2025 07:51:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750146294; cv=none; b=NDpYjFt7vTCazfhGTv3AwZxjLbzQuRudw+wdAIlB42eulUdwooz/5lFmqiaeCUCrthhK9lBHAocsmnn5fDpc025khsgwXQgeVHiOdGsialpuONEcW7F6WqAB2unH+YzLHCfPTLHUt4Kr+JZApOy5fyxniQ+6lucMKMysIp96QTM=
+	t=1750146666; cv=none; b=hOtPZeNnB4oMuUgpdHW8vU6EH5FJ2CraroOooucn0nVXCUvUs02LAxH8ywj+BmkTutaJKWtO1IPzNmR2Y4sQcRmKf6Rx3Oi3tRWRLS04wiJnZFp3jAHaC2hP0GxIlzy40LRRbbtMyOOlD5beI8lkoIVAvsaRQ9e3OIAKqZ1k/Nw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750146294; c=relaxed/simple;
-	bh=mrm9OvjabzG4ehnGWZbOBKsIPmkYF4NA6I7pS1JLPj4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=q5OnJCD8qaL7C23F7hdJiP3PrpgKEVavYd1ITIfslhxVJTN1988MsEsAlQM35ytqDZhmb6s3wKjd2+mQ3ajH3E9RPPy02mzqvxBNMomU/lhMQlZ0XXFGXwTNobipbXYowP0JUsAG9lZkuEnsohvQ2+yBSrl23bOcW5IObZB0DKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=AP9dpqG3; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4533a53a6efso1877665e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Jun 2025 00:44:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1750146291; x=1750751091; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=m2PZPtZXiD/pv22zShXPiBng+Z7Vv94EbItbn+tfTVw=;
-        b=AP9dpqG3rRuNzZLOlpQqsz3GBQuA+fBi0dAQJrTqN76W9Nnw2RMdTYfK9Q5cFI1buu
-         N8ggVHG6gRYnRGw61EW/0LfKlON4oqytAv9je72mPqgs4iX5ri1VDACrSF4LRkJAVJYC
-         7/PCqxz1DoNFi7gsxe2gB3KDWw0UnUe22vai/jvOMnGClOeJyV4tNAZOZ12ybtz2fZrM
-         ibiWrCgcewz+DPaNbKzGhDPdjua7uk7gJo9+lin+0xr6RUWuZQhEvrusqbusbfdGUM0M
-         g7AAEXOmkJrYNoMwSVBb/A8wytOFsnGAjkSigU0yC7Rm3BiY60S4WNilMKC/mWlCI4p0
-         e3Dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750146291; x=1750751091;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=m2PZPtZXiD/pv22zShXPiBng+Z7Vv94EbItbn+tfTVw=;
-        b=T1V/MhViq0BZP0TtMBDXlC0OXi0mwwcYCsjKkcA4ZikHFUkUDn9asiEZoZH7PCx/2c
-         pt4s7ffHA2F6lojGZokvWGLmxD6Wo9Sq0XjXpCpJBHd+1xGtr1L4iAt8SbfiEwElusgu
-         PX99nM9Xo0F0K9P/HIe7reN3KpY+PveRDvI3zRo3G+JsznG3w2T7r+ez1KWbOME9kopx
-         yBPxOFHv4sYMZ3O65uAD/dIcHE/5aeSY9vLgvDKJ6Moyztq2ojBoe4m+K3B2+9wnq3dG
-         n4j1RGXTUJM/JFdlpUfaeI13jOGF+cgQgExhHDWt4+XfxFYNHx/XR0AqrsII4U9m0x8A
-         chPw==
-X-Forwarded-Encrypted: i=1; AJvYcCXv5fCwwVEEljvAU3xGiqYToNOR+jIllUi0VWlURI73ahxUmM5pCITLUG208eaEisCIE/Z6YhD38LLLwvZ6SAg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx2gI95MgLKOHsjWmcxQxXKM9tL/Udp2tuq7DA7bIYfCW2mJCEy
-	VKasLpTjAHDaVfGQvquwqsy4vC3YcpbVp4jMpmnPLtr2tJvdZ/zCGJUCBUCOB1VJM90=
-X-Gm-Gg: ASbGncvDpsmAWUH60GpYd+vfAsY92j4uhYcGJYRmK4jDqD6LVGgvsKEuh2w3uxLsG9p
-	LUt0erckSooLeCTJ9tjCUg8tXD2X/MqbNlabGXQ4r9CvtjnHpyniGUN1zoDPqG5IqUJu6WYGF12
-	gYZMc+C1CwkP/fTndWHI6osnFdntUJTQZ2u0EWslo5cPJjtMm55hVMa1u2b1svsTugACaYuW1vY
-	3boYOgUPUQoWEolSoOGi8bQROWI9aUkj+BVZQlpHu+m9zGKKstMJRdbciTk/Uxgziqmhc5ki+a1
-	Rq4hwz6mabYOtqAqX3DJuuMLzmLLSN8evfaCoN1xrBH1msSA374WWWL0OH8nx65L55SNN19kmy6
-	I
-X-Google-Smtp-Source: AGHT+IGLrB0zawXGR//1I7qhDmE02rezk4o0VJxdGCMaX/Yej/wVeBEiSTFkvWU979RCy9khYyBucw==
-X-Received: by 2002:a05:600c:1797:b0:43c:f3e1:a729 with SMTP id 5b1f17b1804b1-4533b27e8e6mr84371805e9.12.1750146290758;
-        Tue, 17 Jun 2025 00:44:50 -0700 (PDT)
-Received: from [10.100.51.209] ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4532e195768sm167991085e9.0.2025.06.17.00.44.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jun 2025 00:44:50 -0700 (PDT)
-Message-ID: <fb2a41b2-a872-4fcd-8a97-df3a946c6a81@suse.com>
-Date: Tue, 17 Jun 2025 09:44:49 +0200
+	s=arc-20240116; t=1750146666; c=relaxed/simple;
+	bh=3R2Ct9P8uSiWej39XY31EtkiX1q4iVyamAFGh/y8KTA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=r2CQoX22eBjGK7Kmalo15hMrcvAiOBTSUkL0uEbrBrIfJWoRXlPKkarWes61GOM5Wevac2gmX61g31uOyP4D2WJtuf5e5M0u/VVeZfdpox1Qjoen/Vd77SqcrduzpHtIlBnSnPvlRVBu9iAyaG7mqDjVvFaIFBq6uPW2B/nhYms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=pBHIXIA2; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=xRnqx39l; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Tue, 17 Jun 2025 09:50:58 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1750146659;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4Jjhcx//IthYr9wU93G8syVel3LsyenN2WbCDiVNpHY=;
+	b=pBHIXIA2nUIPMhiTRpILN2iiHLnKHbbNOTd5eK+f4jnkTY+5JJ+Pli9LRwvybuZ1QZG1A9
+	cC+UAO4NUUvP56+oDc8fS6rJ2ph99eF4qymy3EvZsgZ1p3Ng8XXI9Rj5j/V9BIc7GFDgGs
+	duA6fGScmpCs0+tI57iR2FcX/aKxnly843Fkpo327i3ERWN7/Rim0zmnJauu1JQz3ohnsu
+	RYruqZ2USvkZYHksf1WvQU7oV2YQ2PHzeYj6c8k8pFvW3XVYpXyM0maj7YyUP9UxF06+9u
+	YtpfrAP3/nIKC8l6cbCdMzKliKKXGUSrissi1upq4pYYDdmXpzAF5OuREbbchw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1750146659;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4Jjhcx//IthYr9wU93G8syVel3LsyenN2WbCDiVNpHY=;
+	b=xRnqx39lvyi7u9ydJO6RVHBz2TCIhyj7pF1uF1yldbEVwrjwDqsDwva3GHf7laAkyuCP4h
+	ZO5ooLUM92HS36Dw==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>, 
+	Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, Shuah Khan <shuah@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Nicolas Schier <nicolas.schier@linux.dev>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, linux-doc@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, workflows@vger.kernel.org
+Subject: Re: [PATCH v3 07/16] kbuild: introduce blob framework
+Message-ID: <20250617094327-373f046c-4010-4939-bd07-51365b665cdd@linutronix.de>
+References: <20250611-kunit-kselftests-v3-0-55e3d148cbc6@linutronix.de>
+ <20250611-kunit-kselftests-v3-7-55e3d148cbc6@linutronix.de>
+ <CAK7LNARYXKq9KyCczcY_VjwQG3QWEufV1McayHDnavvuU+JEhQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] kunit: test: Drop CONFIG_MODULE ifdeffery
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Luis Chamberlain <mcgrof@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
- <da.gomez@samsung.com>, Brendan Higgins <brendan.higgins@linux.dev>,
- David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
- linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-References: <20250612-kunit-ifdef-modules-v1-0-fdccd42dcff8@linutronix.de>
- <20250612-kunit-ifdef-modules-v1-3-fdccd42dcff8@linutronix.de>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20250612-kunit-ifdef-modules-v1-3-fdccd42dcff8@linutronix.de>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAK7LNARYXKq9KyCczcY_VjwQG3QWEufV1McayHDnavvuU+JEhQ@mail.gmail.com>
 
-On 6/12/25 4:53 PM, Thomas Weißschuh wrote:
-> The function stubs exposed by module.h allow the code to compile properly
-> without the ifdeffery. The generated object code stays the same, as the
-> compiler can optimize away all the dead code.
-> As the code is still typechecked developer errors can be detected faster.
+On Tue, Jun 17, 2025 at 12:38:21AM +0900, Masahiro Yamada wrote:
+> On Wed, Jun 11, 2025 at 4:38 PM Thomas Weißschuh
+> <thomas.weissschuh@linutronix.de> wrote:
+> >
+> > Various subsystems embed non-code build artifacts into the kernel,
+> > for example the initramfs, /proc/config.gz, vDSO image, etc.
+> > Currently each user has their own implementation for that.
+> >
+> > Add a common "blob" framework to provide this functionality.
+> > It provides standard kbuild and C APIs to embed and later access non-code
+> > build artifacts into the kernel image or modules.
+> >
+> > Reviewed-by: Nicolas Schier <n.schier@avm.de>
+> > Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 > 
-> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+> Kbuild provides only a small set of syntaxes, yet it's flexible enough
+> to allow each Makefile to implement what it needs.
+> I aim to keep Kbuild scripts as simple as possible and avoid over-engineering.
+> 
+> Instead, you can implement this in lib/kunit/Makefile.kunit-uapi or somewhere.
+> That way, I do not have to be worried about what you do.
 
-I'm worried that patches #2 and #3 make the code harder to understand
-because they hide what is compiled and when.
+The goal was to have a framework that can be used independently of KUnit,
+for the usecases listed in the commit message (and a few unlisted ones).
+But I can go with a more specific solution, too.
 
-Normally, '#ifdef CONFIG_XYZ' or IS_ENABLED(CONFIG_XYZ) directly
-surrounds functionality that should be conditional. This makes it clear
-what is used and when.
+> Also, your separate blob approach looks questionable to me.
 
-The patches obscure whether, for instance, kunit_module_notify() in
-lib/kunit/test.c is actually used and present in the resulting binary
-behind several steps. Understanding its usage requires tracing the code
-from kunit_module_notify() to the definition of kunit_mod_nb, then to
-the register_module_notifier() call, and finally depends on an ifdef in
-another file, include/linux/module.h.
+> In your approach, the blob (kunit-example-uapi.blob.o)
+> and the entry point (kunit-example-test.o) can be separate modules.
 
-Is this really better? Are there places where this pattern is already
-used? Does it actually help in practice, considering that CONFIG_MODULES
-is enabled in most cases?
+Indeed, however I don't see the issue for this specific point.
 
--- 
-Thanks,
-Petr
+> The entry point would be a small amount of boilerplate.
+> I would keep the user-program blob and its entry point in the same C file.
+
+A Makefile dependency between the C file and blob payload is also necessary.
+
+> (and I may consider writing a macro for populating a blob + knit entry)
+
+That is what I had in during my early development,
+and I guess I'll go with it again.
+
+
+Thomas
 
