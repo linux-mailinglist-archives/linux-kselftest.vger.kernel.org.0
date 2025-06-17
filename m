@@ -1,80 +1,80 @@
-Return-Path: <linux-kselftest+bounces-35172-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35173-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BC36ADC0CB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 06:36:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EE1BADC0D0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 06:36:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE2C03B56C3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 04:35:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C56318847F7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 04:37:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AC2625B680;
-	Tue, 17 Jun 2025 04:33:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE71025CC42;
+	Tue, 17 Jun 2025 04:33:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QCCsxRY0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LSFDaMtt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B08025A341;
-	Tue, 17 Jun 2025 04:33:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CFB225C6FC;
+	Tue, 17 Jun 2025 04:33:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750134789; cv=none; b=j5419943bwTUHWXKxtygJkEaZFAHIphpcq+RSjUvxKxaCvvmbZ8rbtkPO59ZJWGsaLEdxsSmXkcO1AElVN/GQ2aAfZuPLlqGaPqncWmYicnzFfT1XF1ud0NLajHCykXg591PNPB+NM4CvCA0g8Zm/gZ/HEu00tH2MiDcAq0NE2A=
+	t=1750134791; cv=none; b=RH+qb4EzTg7+cJbDGAQ49/NOyjqdmrx3eWiphaOzuepBafWIfVaHtML2fQVcr5iDDNYzX60W4Oe1ZRjKTOcBmff3LSrDZC0WPPSGhwfP/J+HPAYcefYxGR5uVikDcujcI7iRhHP6api4XPyM2Uh04bLij5INphgWABI1l+P5sho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750134789; c=relaxed/simple;
-	bh=8iL4uzIPqS8RLVh3FNuZXgVHq1hRBKkNvfmU0de7s8w=;
+	s=arc-20240116; t=1750134791; c=relaxed/simple;
+	bh=SvB3qBm1VTjIjRDl1c4e6i1RbCCzA1EXVBxQVVn1tvA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=nCLJ3KhBDRDD1HfDYkrUA1xHRgnYldWasZ88PQuhkxt1JiRD6El6kupGM0N0K5JyyPzVpZziENY0kYY6/YtkXpj5NWtd1P9Qj49MLsiLEewvslnDGvBxrVyY9y51Q0QkDFn1x7JIAV0U0Jh5KHKmcdB9PM8o6YgvKsxzD2hsIoo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QCCsxRY0; arc=none smtp.client-ip=209.85.214.179
+	 In-Reply-To:To:Cc; b=MUg+h2ZSwKQ0fGRl/FsAlYX8j0WoCCO7LMBXnWE7/nApEy6q2gw++CtYxC8ZCe8Wg66fxf/p7Mci9TR42Tl3jtSFS0gK2hT+xY3Shqykxbm4D17nrX+4y3RTDEj4iNGU1/gV5jOM3SdZlfiBFxfl9d47OWqFESLXIxU8K0xhePk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LSFDaMtt; arc=none smtp.client-ip=209.85.215.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-234bfe37cccso66827875ad.0;
-        Mon, 16 Jun 2025 21:33:07 -0700 (PDT)
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-b2d46760950so5474786a12.3;
+        Mon, 16 Jun 2025 21:33:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750134786; x=1750739586; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1750134788; x=1750739588; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=FJN1ESreek0j9m2XTDShreBHd17nPCksTQTpnYLrMbE=;
-        b=QCCsxRY0KHuMSAv3IIb95emS60QJ/wR+qmKIkwndlM17I9x/fOgP1wwISg5uRQE2vI
-         FCfut5QUahDKLu1PuAmOEgWDzV3EVUEXqg0xiRV5e9yVNY+07kdPNl7zZbAkZdCCa9bY
-         yZcmW7OYo9HjHWWp14ev0TT+eQ6Hu0RYuBqubtrMpzFnilaL1xB4cxYME2yzJspNjiAJ
-         C6OBvX8DmcTTYQ4FBl5Uu9vXOFoqE2FRaHscZjPjrdN9CB2KLXJoFfZnlwxaZumF/LZG
-         OX38EGwaZl8MYxDVB/cLKWgRkd4BG/mcXTEQUY6VZkcuhh1xhyOJFPl5/oasGbMckicJ
-         pf6A==
+        bh=rMpypbPx49C4LhAqP1zWnTq1tGkVcmiL21eIZ1oGdsw=;
+        b=LSFDaMttFlZEFAQm3jrRD/9wdtNkMFOcSpIpQwvU6DMf/EwBkqrdEyGUYD4LJYLYGq
+         2Js7tPiXWCYpVnxYM/N3dyVh5FqwdtqlCMDm2HWDX086hHWOMQQBlWzBNSV28PF4VSde
+         XXC4+XQZsQOhn2F0XrXf4tNBjoZGJsvFcvCHYVTCIWy3aylKxF827Q+X/qczIyBFcDwp
+         U2NW+i3Bt54xatERDXyg74J/QivFT7Kzx6Oznx30xJ6xjRvrC0lENmvFxuKiirhq2P30
+         bvez1OL+jSgD2pJUObHLLtI/f5BsiyTC0f5Y/2XLb7jWxNvn4pY5B2R7Y40gUU/0CZ49
+         cSZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750134786; x=1750739586;
+        d=1e100.net; s=20230601; t=1750134788; x=1750739588;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FJN1ESreek0j9m2XTDShreBHd17nPCksTQTpnYLrMbE=;
-        b=RkZRpTKFfe/0oedmL8ogLKS+m1DiuknNcvdV6pXEq4jbu/gzfG3eGvMNVCudkGYgCg
-         Wf+RokB8lJ19pW2GpqGW58E1EPvzea+ICRdiTUctTvR8pEvG4yWLcnoDTl0cjr+NCD0Y
-         6BKclXjN9hqccOLB8/cYxXu/lu4GPzC80OZqHLW0PzNJLGb8+DAmQlNs7BlfpL1EKEhq
-         BjKbR9RxfGB8cE7QsnueFU/Oh82LnGhOFb9cp+0gS2JJ/Jl6bM34Ify/NMrawlKkwqPU
-         cGMRzCUmyRMPwWvZRWPc4uK6U7l/Ax00C7leNaO37+dQMI7mGj4rue8jArURwrOpvmUx
-         lxwQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVqFhQt6LRRk0sNKMdDDeUThGf6kAeIVThszAFLeyktZ3BUQ2c/A0MBwxh+DohnziklTUIlahcUWUdqapkCigLT@vger.kernel.org, AJvYcCVxgLNpt6qThK+SY9Fu+ZpzsB1LRK+klZ/P7CuPNWxWO3L5z6TIM3vqcMS4p8bZlDL11loKglynDfHHTLo=@vger.kernel.org, AJvYcCXLZL8K+ireRobCqXwZJ0ttCNis9qJVLBeIVDU/AaHL5uib7DTQ1u+Bwpsy5GzV0t7hICEafsJy@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx0N3l2DPC1QEqm2aTBbwSg+ZRRSA1q97Kl06ms7cf1cgc5h3ZH
-	Fw9OIqtXQqxrD5Pa1U3Ev5PYpeoA6Mz2668N+bM1ULvHUChLr9GxtCCBDnw/JXW8
-X-Gm-Gg: ASbGnctLuUP0VEsZMSr7rLNcVqgOJpohD2yNj1+8X5aio7M/lZC6GVeVT8zDGn+zhmS
-	2BKWU04fr9e2INkS5JK0vvZjGs2GZIXrwHuQpGzfM08ff1vj3Ie5ifBOiziLkEilLDC8kgLz5Gu
-	ZpzuFqhf/AxHaI6BT40NPLcRnlIKZK4L5D/aNZ60te9FgpklnMDiFYowtr5+9zS206jlXE3NL8r
-	MC9MK4MBU22sxvteg+8sayAXJZJVcQNiOlRFnVQOo1ldaNjBsrXAI+326DR6e0eazcED5IbJoIr
-	Sxx0OlTxQ/D0oXB85gA9bPOSgf5XvzoAMMWk/AMXjgFY42QQ34On+kVMnqmY
-X-Google-Smtp-Source: AGHT+IGkFu9sQ96pWE/tvZJGaNKtT1/Ussv66FYp5oIw+9uvT4GiaGRUxhl5bUUj7am7ZNMIQejaAQ==
-X-Received: by 2002:a17:902:e848:b0:234:a992:96d9 with SMTP id d9443c01a7336-2366b00ee5cmr163590035ad.17.1750134785904;
-        Mon, 16 Jun 2025 21:33:05 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:43::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2365dea7d98sm70324525ad.151.2025.06.16.21.33.05
+        bh=rMpypbPx49C4LhAqP1zWnTq1tGkVcmiL21eIZ1oGdsw=;
+        b=iI9gn/mf+HKCzYMcVX/JF6tT1HAJOAym7gAvbJSI0gRlh3dQA8GIJ1S3ol1gnAV1vy
+         1XHq0I3vD4PIeYNw0wo7jHh6UupWcnHMuoF0SzK8deHpdyCJNtNmdS/KVDp2H9DV9U97
+         JfjwpVqbI6Zm/c8zXpKpXvk+s6iFk+SYLIJzPXrKLd73I89jp6jJppw4AGFtmKJLDg8j
+         lSKwjB+2f780kjhSX+QLIDieWBcaISWYLzfUXA+ekzNU3DH5ZWIjuYfyaSLrnbnJLqVx
+         2ynfCueMBssrGPv9kjsWzw00gy3Vv1KnmnVncEPcmo044p40xJf1sEtGwe7P8EnJHD0K
+         a0mw==
+X-Forwarded-Encrypted: i=1; AJvYcCVIkrK8EvlGqtpd0DROxv7BlIn/PCOTmMYhoR3n4dSY7MxoNU30m7A+z84hLXduUQjPEq/JElIr2dFnX2MGwy6i@vger.kernel.org, AJvYcCVMowbWMnpY/AX/UmOmV725w8bW+yowLvdazpcBCSPS9T47RTaTMEm/CEcSB+LcPBBbUoC1Mxut@vger.kernel.org, AJvYcCX3b/fK20Dq31Moe7OnhFpAuci2b0+fFoBSoL1nNh3f7d5nHsrQQ8dXQ4qIBm9caFab0LX6q/EzRB2D2TI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwvVrUCALYxinh7TB7hcnJHyxrwSO556E+UIQr6lrWFeqOINbl7
+	g8ksbJEGcXAyJbY+Ynxvt2s3NtT1qabhnEuDnMvEvhwjDMZ9iJIrhQRZi3zDtyLr
+X-Gm-Gg: ASbGncsIPy8iDPu88GeSiTSGmGq0Y43cA8O40xy8ijLyedZZU42SdjNs4l45jycaqvo
+	10GG7DAAFJPjLoUqkqFpNfoRn1nGU9ufldACOoI8ehF/h5BCN30QS1176q4cH2/55BJnm3KOo+Y
+	wQnzkZt6hgVMTsagbdJMGm6PETFYMKLmyIzIwF5YfXXSMrSDFxy8yGV5lr+aRQ1eBUx/C7Zqc0P
+	Wc34ZMeXnUA8HCvLgFnwhuAWSGP8Xxmn/6JTSZ74aotMSIiucDKJja4C2G9m6JiyOxEnPkXythw
+	snbArGzfjcr3sVH6N41TOO+cXxFBtCrUGtUNR+UFQpceKKtE5ZL97WXyIV7pi+5O/s6rkU8=
+X-Google-Smtp-Source: AGHT+IHan/Inn+3hHqs41XckrP55r8fD+/kVg11iHSZaNVdMOIOPZ8mHU4EEhc6WhlTm03MzuZLWCw==
+X-Received: by 2002:a17:90b:1e07:b0:312:eaea:afa1 with SMTP id 98e67ed59e1d1-313f1e2bfa7mr18799476a91.29.1750134788030;
+        Mon, 16 Jun 2025 21:33:08 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:70::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2365de782d3sm70339985ad.115.2025.06.16.21.33.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jun 2025 21:33:05 -0700 (PDT)
+        Mon, 16 Jun 2025 21:33:06 -0700 (PDT)
 From: Bobby Eshleman <bobbyeshleman@gmail.com>
-Date: Mon, 16 Jun 2025 21:32:57 -0700
-Subject: [PATCH RFC net-next v4 08/11] vsock/virtio: add netns hooks
+Date: Mon, 16 Jun 2025 21:32:58 -0700
+Subject: [PATCH RFC net-next v4 09/11] hv_sock: add netns hooks
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,7 +83,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250616-vsock-vmtest-v4-8-bdd1659c33fb@meta.com>
+Message-Id: <20250616-vsock-vmtest-v4-9-bdd1659c33fb@meta.com>
 References: <20250616-vsock-vmtest-v4-0-bdd1659c33fb@meta.com>
 In-Reply-To: <20250616-vsock-vmtest-v4-0-bdd1659c33fb@meta.com>
 To: Stefano Garzarella <sgarzare@redhat.com>, 
@@ -99,45 +99,27 @@ X-Mailer: b4 0.13.0
 
 From: Bobby Eshleman <bobbyeshleman@meta.com>
 
-This changes virtio to not be broken by new internal API changes
-required for NS support on the host side. virtio-vsock namespaces are
-always global mode, so behavior is unchanged for them.
+Make NS changes not break hyperv. Guest vsocks still remain in the
+global namespace always, so the behavior is unchanged.
 
 Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
 ---
- net/vmw_vsock/virtio_transport.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ net/vmw_vsock/hyperv_transport.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
-index f0e48e6911fc..25c1bca7b136 100644
---- a/net/vmw_vsock/virtio_transport.c
-+++ b/net/vmw_vsock/virtio_transport.c
-@@ -536,7 +536,7 @@ static bool virtio_transport_msgzerocopy_allow(void)
- 	return true;
- }
+diff --git a/net/vmw_vsock/hyperv_transport.c b/net/vmw_vsock/hyperv_transport.c
+index 31342ab502b4..85b22366ef00 100644
+--- a/net/vmw_vsock/hyperv_transport.c
++++ b/net/vmw_vsock/hyperv_transport.c
+@@ -313,7 +313,7 @@ static void hvs_open_connection(struct vmbus_channel *chan)
+ 		return;
  
--static bool virtio_transport_seqpacket_allow(u32 remote_cid);
-+static bool virtio_transport_seqpacket_allow(struct vsock_sock *vsk, u32 remote_cid);
+ 	hvs_addr_init(&addr, conn_from_host ? if_type : if_instance);
+-	sk = vsock_find_bound_socket(&addr);
++	sk = vsock_find_bound_socket(&addr, vsock_global_net());
+ 	if (!sk)
+ 		return;
  
- static struct virtio_transport virtio_transport = {
- 	.transport = {
-@@ -593,7 +593,7 @@ static struct virtio_transport virtio_transport = {
- 	.can_msgzerocopy = virtio_transport_can_msgzerocopy,
- };
- 
--static bool virtio_transport_seqpacket_allow(u32 remote_cid)
-+static bool virtio_transport_seqpacket_allow(struct vsock_sock *vsk, u32 remote_cid)
- {
- 	struct virtio_vsock *vsock;
- 	bool seqpacket_allow;
-@@ -649,6 +649,7 @@ static void virtio_transport_rx_work(struct work_struct *work)
- 			}
- 
- 			virtio_vsock_skb_rx_put(skb);
-+			virtio_vsock_skb_set_net(skb, vsock_global_net());
- 			virtio_transport_deliver_tap_pkt(skb);
- 			virtio_transport_recv_pkt(&virtio_transport, skb);
- 		}
 
 -- 
 2.47.1
