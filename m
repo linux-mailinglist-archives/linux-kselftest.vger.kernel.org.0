@@ -1,186 +1,144 @@
-Return-Path: <linux-kselftest+bounces-35186-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35187-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11101ADC42B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 10:10:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D616ADC468
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 10:19:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EE5BA172555
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 08:07:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B9D13AC52D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 08:18:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6182B28F523;
-	Tue, 17 Jun 2025 08:03:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KhT8009f"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B55A23D29D;
+	Tue, 17 Jun 2025 08:19:08 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A046C28CF58
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Jun 2025 08:03:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F3B423B613;
+	Tue, 17 Jun 2025 08:19:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750147403; cv=none; b=eIitXDasiRj4+nKovVX12jCAbgZhc43mqU3aVDBzSSIXLkcx6WndRc9mWbdxD0PMjXncXYwvHYRhGnbXr2U4ViQnggCxsUPHkSPfxxq6Xy+kIjUC8ckAMhTq/CHhAY4OjDeTDxjy5z9O5vAkc28XLfMnOPN0azxOUDxWU2TMMrQ=
+	t=1750148348; cv=none; b=KjZlT3Q6ChXAdkkDB+pqIlQXbKZcBPlWj7WXGkCxNQpEssdsE9SyzYJZACAQeulTso5enktnsIg7m12TAYKkkrj6LT+aaDBTrwPahpluy+H0+zS+ugh8s1DCEBxhaK9hnPgUU3lVL1gWVmRFKh63bycMzIARDdPhraYgT//4q3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750147403; c=relaxed/simple;
-	bh=bA/s+nEWNrj//fK7D5RkLh1+Yz6YKukh9Y35BfxnfN0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EzANnlWtkUgvu84C1WXpjb2X64jqe3Ppuw3TBatfj6L8RSIMulsC0bVh3iI06/p7WsiNr0hRrYltPgqfneXdWdK2gexzodAqQiEGKQHyycBkBw0nhF87jOd2gJ91tkXxG/O+v3P2L7cLSCqKl5uDVi3nIXbesJChZRRReoHsUQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KhT8009f; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1750147400;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=I9M5qb9uvgcmFrvNHUSO6JPSDEu8M+uViPg0NcUfDQc=;
-	b=KhT8009fSbJccmKGB7Q4hdIzPBGLHnSgVnEbWV8zwJOzE23OK4O60kgzUzFXLqtKfo8FDh
-	nvL+k4cxySMMUt76d2XPAQMuNEJnlFMwfWDM4PZUDOIOjIaCPPBhXXmcDDO1xtGBQqdtax
-	yD5RKLbMkdfwyrs8CfyYMYAD5x6BoBU=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-97-gvzLpCa0PoaUS3RXcxLwyw-1; Tue, 17 Jun 2025 04:03:17 -0400
-X-MC-Unique: gvzLpCa0PoaUS3RXcxLwyw-1
-X-Mimecast-MFC-AGG-ID: gvzLpCa0PoaUS3RXcxLwyw_1750147396
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-452ff9e054eso28128805e9.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Jun 2025 01:03:17 -0700 (PDT)
+	s=arc-20240116; t=1750148348; c=relaxed/simple;
+	bh=0QBx3S4pR9yGPZRxv42Jcjnl/yxbqO2uUWAQbRqmdcQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=sOdpFyMyycfd3w5dBO6tlnLSoSY8ZzsTsOjiUWJDze/JDo3l+evSSqCy/0z7bejPZNzlAFeIe+b74dDSUC1m2YfLgs/5PuaArX58dDCSxAOrs1XzfZD9nkyfY3e2BAn0lJ5qp/N7f8pax1LM7eh/8oOSExsoxTcIXG6JxSQjWC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-ade48b24c97so849097366b.2;
+        Tue, 17 Jun 2025 01:19:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750147396; x=1750752196;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=I9M5qb9uvgcmFrvNHUSO6JPSDEu8M+uViPg0NcUfDQc=;
-        b=bCkHcIvrdG+2xg9GjOkObnxQXzCIfJ44W8CGJBbb3wMeSUOrq4m7BiyFrPIvzW2IMk
-         tW9WG9xou+GQZHsue4WxUrEfy332S7iTuynqToyLjgtL6ZmJQzeBXHVj/sgahBqfg4R3
-         tekoUeq+1fKtm8l3CqXAN82YwqxeSbcBI+Zdu16IbT+NE4XHDKuX0kHokdblE/g1pVYQ
-         UB1Q8vcddnl4uqeASKF0sUMaimIgmnzL95C9Il7GvFtlR055awVcWDJpbv65jDXlIwY0
-         eQDt0nGrEu7Qm9mjiPHS2UwklCpfdjHjwR37otePExPnT3Zy4DJHVwECk9xuubMNUH4/
-         sGvA==
-X-Forwarded-Encrypted: i=1; AJvYcCVss2OaNFtUC4OTkVGRLbKjlNWFJJdVfOTg3g+inqRGHduM81x7hnLH/T4and6qGJYYxDErBa1thJe6b//yCmg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwqSx2puBotnLJf3kIvOqlEz80Or1hsA4vXh63bokCVeB3doz/N
-	vhtu7TORti1pQQFKpCNOJw0P3ERsvtHIUnywBGF0KIypT0EMsl4BmWZQgSGTN0qipiKB+Z8nQZQ
-	Knz2p7gu+8kpOvGHGb99dL0Ul7R+U/17avfwp0q0aiZOQ8VIIVm11b3/NoeKaxLTmkPR4+Q==
-X-Gm-Gg: ASbGncuGtG079I8YHCyZG/FL5gIcF1ltHhjuDzliTyrxsz8z7vaRDOURpC/w1rh8FgY
-	YPT8VMu1/8zNPUpFRuEyw7gjQnVWxt50beEj3VueFKpO0FOXmWYTiAl8xVEBMv3lpT/CdAwp7Kh
-	KK8mwGqvEE9gDmJ8OsJ34U2VeCTCgdrkejpxXUvIKXdLboYTDIUcaXh2gppzmRhPAxTgXudGXPa
-	xc0Ye9foLBvOzA/ybBOyNN4YsKrlUro0yfyYyfNAVkFcK7ZRCcfVGCD6eLgv3C48M91HxUCtkjl
-	LnsxarEXm6lJOFHtcQRYyu+W1mPa70yqN7VG7PJB3siiYrbS3gJ5WWXErm/r/D4oFledCg==
-X-Received: by 2002:a05:600c:6989:b0:453:9b3:5b65 with SMTP id 5b1f17b1804b1-4533ca502ecmr118289985e9.8.1750147396414;
-        Tue, 17 Jun 2025 01:03:16 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGa5hb12hxOI7NI9LM+Gy/ttziKvFk+cYltrEgu8xSQyQCrypOS1hOsZRqs2NvczVsDJZBItw==
-X-Received: by 2002:a05:600c:6989:b0:453:9b3:5b65 with SMTP id 5b1f17b1804b1-4533ca502ecmr118289205e9.8.1750147395893;
-        Tue, 17 Jun 2025 01:03:15 -0700 (PDT)
-Received: from ?IPV6:2a0d:3344:2448:cb10:3ac6:72af:52e3:719a? ([2a0d:3344:2448:cb10:3ac6:72af:52e3:719a])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4532e16a097sm172162895e9.33.2025.06.17.01.03.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jun 2025 01:03:15 -0700 (PDT)
-Message-ID: <8ff9ee00-1bb6-4558-b2a7-c0ee59badb12@redhat.com>
-Date: Tue, 17 Jun 2025 10:03:10 +0200
+        d=1e100.net; s=20230601; t=1750148345; x=1750753145;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pU9RK0FjTK1hqgTN7WX4td/gkt1srvZwQJntX2m5NRQ=;
+        b=ZC8npfN19uHtt5doADPIs0dDEi6cAJAWLvWDKdd49vU58hpCZV2MLVbbLmlGT8tw9a
+         +MvMdWCEhdaWMncDwwi4+dUK9JTLypINgAOsm9Us8rFNlEUwhteoQaG8ISe3ga/ibWop
+         XYfYfeEk5i3bz/SAgUm0gFUEMuwlr+K3P2JHKF3FuKNhBFWMZR2pmZLX4Ud7/50B0VXc
+         UwUOPvMMnuBv/Esm7E3g2Pgw1H/mSlCsn/Qstyh6k7nEoRz65KFBOlp+AWx3lQwJ39JZ
+         ZpcpETD6zrOkPj8LK4oJ4PV9E2dc5svDzb4aJRFxzVgI8c2oNGjmfnmjS4g9V+O82I9q
+         IWSA==
+X-Forwarded-Encrypted: i=1; AJvYcCV2owwNd7lyYpIFHoqkT9iBXmpoP/Bb+vX4JqTd2WkMw3YVLerytOyWZsSLapESEMOsmXQNUZlSia+EKvnHQCEh@vger.kernel.org, AJvYcCWopoqFStz1/4rwFnIMwyVr6LzQffA0JOYWT/4bJ2Ig5dwTnyy6D4I4Kkt/yvH6aQhO6oT7ltKkdvzwO48=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy7PQAfnsjeLweKPur1wR+arWQxv+N64X/vBQQw6BNi99g0oxA9
+	nrBJ0TslLFK5YNhz1XZuiGY1n8ig8nWurkM51anfdc6oYwO8qxwyTzr8
+X-Gm-Gg: ASbGnctElR9jl/gGyay57Tisj0LZN7EXRb8/NugvVGGuAxx8jzM5mMG7eKpxdeoC5eE
+	o/NHsLDEHd0j9I1tyUp9r9AeMR+A5jWra14hXpArwTKrB8J250MzwSuGa3y+YOzwWMlx2s+i9+L
+	Gqy517RJZqsrg9Y1TMNTQtJ2EtoJaNnPM+0VtLsrdV8gYdzVAug7nzA9/7iqbvkIx8o7sqYLcPu
+	5JHtMXGpPploAtdM/AP0EcHTQNYCD7BjSiRfoKnZluckd6Vmz5gVnheeNtRtJ9A4bcPsTO0i4a6
+	VJQXZFNIdYLsMdBZKSpZsewIJI972YGXnYAc6O2QkT3RK2AGjEySYR3ankrJ
+X-Google-Smtp-Source: AGHT+IG9ywPdN8qyZ23q8J76IOZM0OqfE3nGcxdDTlCQCbnIyPwr4P36tPZ/M786LEOJQ6SOUX9tPA==
+X-Received: by 2002:a17:907:3c94:b0:ad8:9909:20b5 with SMTP id a640c23a62f3a-adfad4b7cf4mr1235254666b.56.1750148344390;
+        Tue, 17 Jun 2025 01:19:04 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff::])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-60992edde8dsm513720a12.23.2025.06.17.01.19.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jun 2025 01:19:03 -0700 (PDT)
+From: Breno Leitao <leitao@debian.org>
+Subject: [PATCH net-next v3 0/4] netdevsim: implement RX statistics using
+ NETDEV_PCPU_STAT_DSTATS
+Date: Tue, 17 Jun 2025 01:18:56 -0700
+Message-Id: <20250617-netdevsim_stat-v3-0-afe4bdcbf237@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 net-next 04/15] tcp: AccECN core
-To: chia-yu.chang@nokia-bell-labs.com, edumazet@google.com,
- linux-doc@vger.kernel.org, corbet@lwn.net, horms@kernel.org,
- dsahern@kernel.org, kuniyu@amazon.com, bpf@vger.kernel.org,
- netdev@vger.kernel.org, dave.taht@gmail.com, jhs@mojatatu.com,
- kuba@kernel.org, stephen@networkplumber.org, xiyou.wangcong@gmail.com,
- jiri@resnulli.us, davem@davemloft.net, andrew+netdev@lunn.ch,
- donald.hunter@gmail.com, ast@fiberby.net, liuhangbin@gmail.com,
- shuah@kernel.org, linux-kselftest@vger.kernel.org, ij@kernel.org,
- ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com,
- g.white@cablelabs.com, ingemar.s.johansson@ericsson.com,
- mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at,
- Jason_Livingood@comcast.com, vidhi_goel@apple.com
-Cc: Olivier Tilmans <olivier.tilmans@nokia.com>
-References: <20250610125314.18557-1-chia-yu.chang@nokia-bell-labs.com>
- <20250610125314.18557-5-chia-yu.chang@nokia-bell-labs.com>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20250610125314.18557-5-chia-yu.chang@nokia-bell-labs.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPEkUWgC/2XNSwrDIBSF4a3IHcfio7GaUfdRSjHxJnFQU1QkJ
+ WTvBemgj/Hh/84GCaPHBB3ZIGLxyS8BOiIbAsNsw4TUO+gICCZapjijAbPDkvz9lrLN1LTGtEZ
+ wZBKhIfCIOPq1ghcImGnANcO1ITD7lJf4rE+F1/2N8l+0cMrowHmv2pMzqh/PDntvw2GJU7WK+
+ OzlXy8oo0aPVmot1XDUX/2+7y9tlkOc9wAAAA==
+X-Change-ID: 20250610-netdevsim_stat-95995921e03e
+To: Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Paolo Abeni <pabeni@redhat.com>, David Wei <dw@davidwei.uk>, 
+ Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Breno Leitao <leitao@debian.org>, 
+ gustavold@gmail.com, Joe Damato <joe@dama.to>
+X-Mailer: b4 0.15-dev-42535
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1691; i=leitao@debian.org;
+ h=from:subject:message-id; bh=0QBx3S4pR9yGPZRxv42Jcjnl/yxbqO2uUWAQbRqmdcQ=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBoUST2VV2ss8ZKdD+wi5ZTaPVUXHOLML5c0Obeh
+ PjmI7e2QEGJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaFEk9gAKCRA1o5Of/Hh3
+ bcyHD/9sD7qMhejP0P0QOecX4XrtneMqqObWYqwy6DLwNIbRiGFV7P4lnTITFqZznWC7ujWLzb9
+ zjaGaSI6LYiUL/6c3EScwVMG/g1OCYpkWBcOMUOcMW2HsJ1WC/c9F7qI8PX9YRg7VbitE2Hb16V
+ LlURQj97s0TBelOEgthzaOz5flj2fAfvKLA1vNdpFsvUYtHqR1yJgVhBsrCF1SgN7bGiupNtUTv
+ 278qbCyQV432wtKK1D+y/crzccDP31x94li4cfDnQhpjwW0mxr38GeSD6xoWAwfZcg6dqxjGMCy
+ lWUegnQCNDIGsMkO7MaKbsALT8jTxRVJM1BLvpQgxK/GcZk6ci5IXnwIcT/5xbcdNJeZcvvjlSW
+ ZGGjJs70dLnTp2AwmnPgzUcJGja6Hf0MkRs/zjcwqUtbpEtASNDsyN3q2Hs1l/jwOZbmL8uilzA
+ GwJMFc2JFIANDGZn6T8v+2J43nfYBLXQRvj5g2N2CcDMEKQFcpQ3HiRpeHmBmSSuvaH3I6r2N3r
+ CbTYR3UvoWI7CD0LAUgXxMGo29GxHLQUeqs/GHCaT/Z3r35NwlqLY5yJnqD2T5bcEA0Jt6anD0C
+ fLFPh09xSvnCvaBwGQc00/Nj9eQDz4mFoZouExwSBFj8a3tfE48thv4meW30BwfcyAiUyWIzaAY
+ 2qxP5ZAuhDuFYCA==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
-On 6/10/25 2:53 PM, chia-yu.chang@nokia-bell-labs.com wrote:
-> From: Ilpo Järvinen <ij@kernel.org>
-> 
-> This change implements Accurate ECN without negotiation and
-> AccECN Option (that will be added by later changes). Based on
-> AccECN specifications:
->   https://tools.ietf.org/id/draft-ietf-tcpm-accurate-ecn-28.txt
-> 
-> Accurate ECN allows feeding back the number of CE (congestion
-> experienced) marks accurately to the sender in contrast to
-> RFC3168 ECN that can only signal one marks-seen-yes/no per RTT.
-> Congestion control algorithms can take advantage of the accurate
-> ECN information to fine-tune their congestion response to avoid
-> drastic rate reduction when only mild congestion is encountered.
-> 
-> With Accurate ECN, tp->received_ce (r.cep in AccECN spec) keeps
-> track of how many segments have arrived with a CE mark. Accurate
-> ECN uses ACE field (ECE, CWR, AE) to communicate the value back
-> to the sender which updates tp->delivered_ce (s.cep) based on the
-> feedback. This signalling channel is lossy when ACE field overflow
-> occurs.
-> 
-> Conservative strategy is selected here to deal with the ACE
-> overflow, however, some strategies using the AccECN option later
-> in the overall patchset mitigate against false overflows detected.
-> 
-> The ACE field values on the wire are offset by
-> TCP_ACCECN_CEP_INIT_OFFSET. Delivered_ce/received_ce count the
-> real CE marks rather than forcing all downstream users to adapt
-> to the wire offset.
-> 
-> This patch uses the first 1-byte hole and the last 4-byte hole of
-> the tcp_sock_write_txrx for 'received_ce_pending' and 'received_ce'.
-> Also, the group size of tcp_sock_write_txrx is increased from
-> 91 + 4 to 95 + 4 due to the new u32 received_ce member. Below are
-> the trimmed pahole outcomes before and after this patch.
+The netdevsim driver previously lacked RX statistics support, which
+prevented its use with the GenerateTraffic() test framework, as this
+framework verifies traffic flow by checking RX byte counts.
 
-AFAICS 'received_ce' fills the existing 4 bytes hole, so
-tcp_sock_write_txrx size should be now (95 + 0), am I missreading something?
+This patch migrates netdevsim from its custom statistics collection to
+the NETDEV_PCPU_STAT_DSTATS framework, as suggested by Jakub. This
+change not only standardizes the statistics handling but also adds the
+necessary RX statistics support required by the test framework.
 
-> @@ -384,17 +387,16 @@ static void tcp_data_ecn_check(struct sock *sk, const struct sk_buff *skb)
->  		if (tcp_ca_needs_ecn(sk))
->  			tcp_ca_event(sk, CA_EVENT_ECN_IS_CE);
->  
-> -		if (!(tp->ecn_flags & TCP_ECN_DEMAND_CWR)) {
-> +		if (!(tp->ecn_flags & TCP_ECN_DEMAND_CWR) &&
-> +		    tcp_ecn_mode_rfc3168(tp)) {
->  			/* Better not delay acks, sender can have a very low cwnd */
->  			tcp_enter_quickack_mode(sk, 2);
->  			tp->ecn_flags |= TCP_ECN_DEMAND_CWR;
->  		}
-> -		tp->ecn_flags |= TCP_ECN_SEEN;
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+Changes in v3:
+- Rely on netdev from caller instead of napi->dev in nsim_queue_free().
+- Link to v2: https://lore.kernel.org/r/20250613-netdevsim_stat-v2-0-98fa38836c48@debian.org
 
-It's not clear why you need to move this statement earlier in the code
-path even for ecn_mode_rfc3168(). Either a comment or
+Changes in v2:
+- Changed the RX collection place from nsim_napi_rx() to nsim_rcv (Joe
+  Damato)
+- Collect RX dropped packets statistic in nsim_queue_free() (Jakub)
+- Added a helper in dstat to add values to RX dropped packets
+- Link to v1: https://lore.kernel.org/r/20250611-netdevsim_stat-v1-0-c11b657d96bf@debian.org
 
-		if (!tcp_ecn_mode_rfc3168(tp))
-			break;
+---
+Breno Leitao (4):
+      netdevsim: migrate to dstats stats collection
+      netdevsim: collect statistics at RX side
+      net: add dev_dstats_rx_dropped_add() helper
+      netdevsim: account dropped packet length in stats on queue free
 
-a few lines aboved could help.
+ drivers/net/netdevsim/netdev.c    | 54 +++++++++++++++------------------------
+ drivers/net/netdevsim/netdevsim.h |  5 ----
+ include/linux/netdevice.h         | 10 ++++++++
+ 3 files changed, 31 insertions(+), 38 deletions(-)
+---
+base-commit: 3b5b1c428260152e47c9584bc176f358b87ca82d
+change-id: 20250610-netdevsim_stat-95995921e03e
 
->  		break;
->  	default:
->  		if (tcp_ca_needs_ecn(sk))
->  			tcp_ca_event(sk, CA_EVENT_ECN_NO_CE);
-> -		tp->ecn_flags |= TCP_ECN_SEEN;
-
-Same here.
-
-Thanks,
-
-Paolo
+Best regards,
+-- 
+Breno Leitao <leitao@debian.org>
 
 
