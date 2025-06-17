@@ -1,124 +1,82 @@
-Return-Path: <linux-kselftest+bounces-35213-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35214-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C323ADCD96
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 15:39:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 171A7ADCE2C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 15:50:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F8E9188FEA4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 13:38:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F1A3F188AC51
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 13:49:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C82D92E2640;
-	Tue, 17 Jun 2025 13:37:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 030A62E2679;
+	Tue, 17 Jun 2025 13:48:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ZcK8urI6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TLk18/tS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EE282E3AE3
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Jun 2025 13:37:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C94482DE1E4;
+	Tue, 17 Jun 2025 13:48:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750167442; cv=none; b=oIEjlbEQpxT/4RsB9UYIujUZzapqtL2ueHu1SdH2FIiFB5CR8lkLVbHOka+FMHlCdVKr4Ovm/zsmpjhoH3uXa7+NIPGOybS32LvBFGLxZMTjAEGMcYDs7ZTAQ3HJE0/262TCfyYEH0k9bOgKeNnD7+/199HKmNH+c4iR+gmn9s4=
+	t=1750168093; cv=none; b=PR9ynY09Kjoo4yTw2UfZNonmWlxPIdA6Fqz8YbYqaL8b71UU4ncfwTjEra3S/vEQm53Bh6i9P4JngGS7gbPt/oTJUloCtECpALB4FfIHhcy2sfDcdJ9zKNkNctR6hIhkiCMgmnQgcWKrp3fzF884sMSuvMaOsBiE5jqW3j/eGyo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750167442; c=relaxed/simple;
-	bh=xtt2rNThOOd0Ch0ay5t/SRPt0e7QyIQa+1AuoLWf+2A=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=W1FIURvZrfBcBPMPpbyopsEL6KE8VTF9WDflmrxpHnob0jswIRr5SVlnVQB5tyj+GcbR4Llj7vrAque2erc1PPjuKD82BjYWugwrnQTS2/BQcqU2JKZb8a8s24YRpXluohOPfAIouoT2C0qbGx6UBx59a9773ojNG/PKgfaLta8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ZcK8urI6; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-451e2f0d9c2so8133735e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Jun 2025 06:37:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1750167438; x=1750772238; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/IirAviWa54+DB/4fGXki7ILuYvAogeRyMVXvAl7uRo=;
-        b=ZcK8urI6w0HZat+W0ETrhst7YwkcpUv2RNrOMD4e51q9NcdtuCa8LB1WZylPwpgd2B
-         bSpseIJDU1r2cJ2GlZ0j4MjwBa7n6sDdDoKxrAu7Tq4dC+0vYIAFLrkeznw/hQXHPrTh
-         KBtGAwMekGhwBmCPEKW4sZ1W7hN7/D/4ZmndrmXvsfnhOLhOAr5YcRAtMOUzooPLAifJ
-         TD6gI1ImQ381LaXyPLL87o04QrQWuTiRKqvQctth9IJB+zM/LNUlYScY/xolpjhGWJEZ
-         BB5iaONU6ouovoVBnR0PGzVU7u+ADE2Hj7uQ3GzgmVskyDdD+EXzqnfkt8xkwPpxpjIV
-         mgLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750167438; x=1750772238;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/IirAviWa54+DB/4fGXki7ILuYvAogeRyMVXvAl7uRo=;
-        b=E9lD6P6kaX2xJ2K/vWqwd6g3ZpKNJGzX+LRBMT0CQWPrU82MB5kaM7GCeyx7yW5gw1
-         c2QV4w7Pf7l5QN9x4Pdcq0dxfhVC17W42Ccf/3EwrZvXtlAYRWK3pRR50QnR5u6ylVQf
-         vnX/FWYDZwE1CxsnH+2/xywTDKrL1PT2aqcJXeHSonmcpPeNdEN1zBGbr1nOG8P4nNtT
-         FR2zmHIa9hNkjM/XBZ90jXHuaZRhOq2VCmRSMmVxBHsLCkrAIiKe+qyKP3uGOnwIOTsA
-         8Pm9ybK3PXDbJQJq7qJnd5jPydwcq4m0l+kfj8qqyf/VPK4SBvwnanSSySIcnPhw7eca
-         8vbQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXFPgvGas55fZkBky/WBH4/JRgcv4RNoOedtQaz9Iw/BF9N0m5kW1Zps+Tb5gYxwsTgDkfbBVF4z43uzMQl/Lo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy+1dxMF2HgeYxUlGN+y2663Y/9UNb7gpxfjMKL24sqO/xrJWx/
-	3rdoHX4OOSwO/dxBUGx4XCbQPoGqxqgjWSwE6S+PhBga5Of570jSrF7NU2yGA1iBXXU=
-X-Gm-Gg: ASbGncs1y6JqIY+K3YiQHVwJrNF9jEVHY8IrMiGkqe1hMI5Cl1DkaFJujq9tGBnbFD7
-	fzcJ3heBVknoXkK+rL4yKbCh/4UVdb1lvtfv51WVJfp/a8MM7Fi9BhfdnxyhalJN7m8h8BxF0mj
-	ji2s80Ll+QQlilHJZ0KEpnrk04KF5IY52LFguzEuWgGE660by3WUdLW77zzq7EhS4Ubt/5bDuvC
-	rjDabE/WnbeygXGvpNkUiwvGbdyjHJbIE/E5GWBL77LIZzZtHAy+38rgc5DLW3zaFuPmG6Zust1
-	GsKrCUtYaUVIgBr++0h8TsDrVu2VVyUiWUeriai6ddnPE2QDUXA0zmocxZa/gI4+JXnic5ttRQc
-	=
-X-Google-Smtp-Source: AGHT+IGrwE0n8xObbXy+xwulox5ORPMmG9dF8KEQ/VAwCkDtHw6tIijP1d7NSitWFCIxbglfxPVesg==
-X-Received: by 2002:a05:600c:5908:b0:453:827:d0b1 with SMTP id 5b1f17b1804b1-4533b235e16mr90149065e9.2.1750167437646;
-        Tue, 17 Jun 2025 06:37:17 -0700 (PDT)
-Received: from blackdock.suse.cz ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4532e224888sm179494365e9.1.2025.06.17.06.37.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jun 2025 06:37:17 -0700 (PDT)
-From: =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
-To: cgroups@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Shuah Khan <shuah@kernel.org>
-Subject: [PATCH 4/4] selftests: cgroup: Fix compilation on pre-cgroupns kernels
-Date: Tue, 17 Jun 2025 15:36:56 +0200
-Message-ID: <20250617133701.400095-5-mkoutny@suse.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250617133701.400095-1-mkoutny@suse.com>
-References: <20250617133701.400095-1-mkoutny@suse.com>
+	s=arc-20240116; t=1750168093; c=relaxed/simple;
+	bh=fd4y+lDswDvbSpTkQLBi/lqOL1Y42ddHNclJLmZUuQE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=kbBY0Gi3yujMwYPMFHOXI8whftI2g53F4abHNIOPuGe9zgdkUcNZky7YoqlPGFJhbLTQqEURiWouo9EhRlMRrZ0zxLhaiIsCvKw/Cjk8+MSnBRtT8zGjyP14PgSw41egAbHOjHdN2x7qorp6Ok8miIux3E5jUYbwQUwyPFO80oY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TLk18/tS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2437C4CEE3;
+	Tue, 17 Jun 2025 13:48:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750168093;
+	bh=fd4y+lDswDvbSpTkQLBi/lqOL1Y42ddHNclJLmZUuQE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=TLk18/tSDBzkkIUumdoXHrKsGoitzuViBjlMEY2DkRatD9c6rWnhabdhB5/EyeJL8
+	 1TGuhdbvASYBkuTUuIXU0WXsnezRSj/hu0h1WNw3ONtHdbdfRZ+deN5LvhUNJ7n+2s
+	 CO2qzWZX9cFejbaCuIVxdWY9G/p+tTFgVJNIGSzGUR1s8JZRo2db7sn1EHWLf67Ssu
+	 jOPqXAaiVqOCJmFz/oTn7Hc/PRr52FycywqDLUugd+I1nxBIAUTAuAuJoMDHfU7KU4
+	 mLRB2YcXvu18E/TnmIN0LWTit5D6Bbyjsv1hqXYnwVgemgcREbJZZVq0D19A8AJFCV
+	 1UR+RmD/sKCGw==
+Date: Tue, 17 Jun 2025 06:48:11 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+ <pabeni@redhat.com>, David Wei <dw@davidwei.uk>, Shuah Khan
+ <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, gustavold@gmail.com
+Subject: Re: [PATCH net-next v3 4/4] netdevsim: account dropped packet
+ length in stats on queue free
+Message-ID: <20250617064811.0d4e1490@kernel.org>
+In-Reply-To: <aFFsh6kFOkhGOO7Q@gmail.com>
+References: <20250617-netdevsim_stat-v3-0-afe4bdcbf237@debian.org>
+	<20250617-netdevsim_stat-v3-4-afe4bdcbf237@debian.org>
+	<20250617055934.3fd9d322@kernel.org>
+	<aFFsh6kFOkhGOO7Q@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-The test would be skipped because of nsdelegate, so the defined value is
-not used (0 is always acceptable).
+On Tue, 17 Jun 2025 06:24:23 -0700 Breno Leitao wrote:
+> > here we are in process context and debug checks complain about the use
+> > of this_cpu_ptr(). Let's wrap this in local_bh_disable() / enable() ?  
+> 
+> Thanks. I was able to reproduce it. Your suggestion avoids the complain.
+> I suppose we should just wrap dev_dstats_rx_dropped_add(), right?
 
-Signed-off-by: Michal Koutný <mkoutny@suse.com>
----
- tools/testing/selftests/cgroup/test_core.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/tools/testing/selftests/cgroup/test_core.c b/tools/testing/selftests/cgroup/test_core.c
-index 452c2abf9794e..a360e2eb2eefd 100644
---- a/tools/testing/selftests/cgroup/test_core.c
-+++ b/tools/testing/selftests/cgroup/test_core.c
-@@ -21,6 +21,9 @@
- #include "cgroup_util.h"
- 
- static bool nsdelegate;
-+#ifndef CLONE_NEWCGROUP
-+#define CLONE_NEWCGROUP 0
-+#endif
- 
- static int touch_anon(char *buf, size_t size)
- {
--- 
-2.49.0
-
+I think so. I hope that makes the preempt checker happy.
+The reason for bh_disable rather than preempt_disable() is that we 
+should only update the stats from one context, the NAPI poll context.
+So we also need to prevent races with another NAPI running on the same
+core while we free an old queue.
 
