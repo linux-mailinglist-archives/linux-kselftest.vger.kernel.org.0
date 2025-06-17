@@ -1,116 +1,132 @@
-Return-Path: <linux-kselftest+bounces-35208-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35209-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A2FFADCD2C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 15:29:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E675CADCD92
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 15:38:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47B253A94AB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 13:24:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D29FE1884BC6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 13:37:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A07E2E719C;
-	Tue, 17 Jun 2025 13:24:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 938742E2657;
+	Tue, 17 Jun 2025 13:37:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="eeeubEMo"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60EAA2E7179;
-	Tue, 17 Jun 2025 13:24:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E9492E2646
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Jun 2025 13:37:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750166670; cv=none; b=nQqacByYDLMdZ+jG8VpqlUQUSOOBdjyER6SDhyTR10EyvpwMUXRVT/+GCLc7UWntZ2W88JIlmX0pxdRsuM22/mBb7BWhleYK9PZG+woeu1RKc6EGG0QL3sgXJvL97UghQwDsxu9Br/T+uM4uFHf9mFgriI0xX4ETyggmYoawsps=
+	t=1750167433; cv=none; b=WuU4t4FmwpcL3lUJEISO/oGGLQh71wYukDhlXgGRyGOqSX3jg4IVU1iOoVPFxJmTl7ktdIwvsxBRdk9U2ly/IQW0TxWMK8JaMe6EsC6oWBAwPoneWpzy+B00VOQEumbiJWGhEC/XNoWz6YlgwuhyRRd98v709je2Zfvz4lsOIWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750166670; c=relaxed/simple;
-	bh=rMdH19Ha3Xz24HHYBArjf+McyOLpaD9H7J/RsDJcwb0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fD/KnzLOHSb5vNqCcVP0tGYsVipP4YVDNRtub6k0jEqrpFeJ5MwhIDbv72yHQ15YJ92ODqdVO1rKq9ZDuFiRD+dsempAFChCt8Pv5Aia2RG2mjrZLZK1Jm7iwz2PQZaoric63eTq337HnaC8ZhCGKFGOI/AFaPblfk4xtcad93s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-adb5cb6d8f1so1054475966b.3;
-        Tue, 17 Jun 2025 06:24:28 -0700 (PDT)
+	s=arc-20240116; t=1750167433; c=relaxed/simple;
+	bh=syEOF23WYnR+m4ZXDu5w2UCFevHV0uRwaU7OFMcE7RY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Zp2OJXHr75zZlyWr8XHAEHFv78ZckKTaSKYKmaIWb4EE0xgv0il6sBAzmTLDv36DzMjlnGSSK2OQDV+CS3Hz9hzJoiyYDgn036PJeiSAA1z+UW09BWv4MZL/Q7e1vJooJvjOrDh4S481qR9/A+WcDAyFtQA86x6QDTOcH/Yjs6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=eeeubEMo; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-451d6ade159so47737715e9.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Jun 2025 06:37:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1750167429; x=1750772229; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zAb6vAt4cs//1SvpF4Ccxpw3YC8TLR2gb172yFffxHY=;
+        b=eeeubEMojDy8IavtdzD88nb70r8zDEOBGSONI9yUjo8UqzFDIGqlTE1j/a1PXJ29z7
+         f8m1JJ0PiT8S223orRhpW1QTRerbgaFXLXv6b4TQtMsPgh0I0RWP9sOTR2EEnw0ebY+2
+         wRHMKxP6Jc2C5hYk6kgc2kgXp4G9z/ob7F6vANYHUO1IJU+UzD48bhHxAmMlXzT3ha9r
+         1NhceHyrJ9Y1CpKCaB9KzEJ1BK/BitLLsXTY284RUvzI0De+aqvC25e+iWMy6vdnPLDX
+         dFhsCnKTth+CTIy8vNTjG7SRiAIoxvOWkBYgOKjVePGlsDV4eYeNr+jYIqAsovEkZbDD
+         VAVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750166667; x=1750771467;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yZICFVnnnVkMN743/FIJcvBC1yVrX98jV652ZYbnCU4=;
-        b=iW9e0F3tdtMOpLJ/74zfLV8/2MYjDzYYkObQGPu0OqwiodwtPbL/5MgfzHVVx7qq8j
-         I2TbNpD2rKXnjhbTlWfTjkmgcwMy6ALXnOsJRnxPsTDlLY6qltR3UsWINha1R1vXSK+k
-         +fKA+LHgqlbm2GzugBxaONQ43Rs/IbZTk+cSAhCXC0VX42eLIy5u/dbBdwGgt/iJKBNX
-         +alqB4RMtZDVcirf9ZZg/RO9bq/zGJLoVX9LJ+0N7iNl9QgU7REtbS1kc9wrVQiN6W5z
-         wVHWV7sO0xagaLDhGou4Gj95h/+Zx1DPKL7Uc9iwUBba6uYIsA3ARP4hDbJdtWf6kcbV
-         kPMA==
-X-Forwarded-Encrypted: i=1; AJvYcCUFBNv1+1mU0iLQ2W8ptLoZBmTK6QUizb1HzqtChlYiZ+4ntYuzl6YTlrhqdOAF80hB9gkpPHg9uPubHGg=@vger.kernel.org, AJvYcCUp4V4XB+hbUDvvgfieilfkOieK/pdRpNdupndOfOUZ1f11hL4OZe5UGR5of8caT0lASS40M3hO0FFdxDd8E5H4@vger.kernel.org, AJvYcCUyguMTzq10E6aGTw7Kv6Q7oYZh1PM5iTt8OswYlgtuiaFQoxjwnA+0sARI4mbQ3OD1l0iTRGEs@vger.kernel.org
-X-Gm-Message-State: AOJu0YwjTnulWUpA+0BN+u0sOGojFnMq8R0Vyu830XJ+4WqBxDptqE2p
-	gedeYVxKJhRmRxkgUTNhODrrFqiSxjHLNOz0gZhk+NRaxctyrABF3MeS
-X-Gm-Gg: ASbGnctc5Jkbhi0XU/LG786kPUUrEghnZT3lBRkgfG8Z28hQ/Di3uGP7UdI07oz44aD
-	t/zWeDM4jhdTlalOkRe3nDba7lK1Yzu6Lt723wkJwwNdLagT7Gbo06URic4e5Ek1m8d12tq+blE
-	+7ye5ilroEP3unnN3XSZgD4W8940ay2UkyZfMjNY72ZU3x270Z0kvQo0k6R2VLfqFW8JM66KlWC
-	7GjRphQW8fiOsqDjEZ0dWXNrga+Wid5ZiCG/ilkYYlLZ7D0KxUSUhE6p6jANodf+Pv1FEEsBZaZ
-	ZZErDh0MkzlZi2jemqJw5g2py/fbWJk2JTbGfIAxm4mqMJ5XTn9Abg==
-X-Google-Smtp-Source: AGHT+IGb/qV6q15Q5myFKayi4K5nSnZqUdVvCniIl3Tz87O9hLcBmM/EKSqLdBxQCLQnRtXfxzrDhw==
-X-Received: by 2002:a17:906:6a18:b0:add:deb1:d84d with SMTP id a640c23a62f3a-adfad29d0b3mr1296023866b.1.1750166666357;
-        Tue, 17 Jun 2025 06:24:26 -0700 (PDT)
-Received: from gmail.com ([2a03:2880:30ff:71::])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae0138c533dsm11930466b.7.2025.06.17.06.24.25
+        d=1e100.net; s=20230601; t=1750167429; x=1750772229;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zAb6vAt4cs//1SvpF4Ccxpw3YC8TLR2gb172yFffxHY=;
+        b=cCgcCXlqt3DINybTyOhIqgAgT1eaGplACbmy5zsvvvCqkqJQfbwztmLeCbE5bPq7VN
+         3OReXab29DWnUKcxmJCwyx5FiQ79MsXp2Wx+xHAdRoaQOau7/Pt8tnCJmVp/la7IjmBN
+         vXhsaYTeEMoi41LxD748hJxwG7qO5PZ0UP8BuYNletLJGnxlrfA2+gNnR55Dj1AtxAq3
+         tc84AF1CsJcMB6+jWl8ITAkA7PV61nrPKPEj9/p//6b1RNakMIk2DAYcnsFHtx8OT/4r
+         KARXEvGVtPOrkFE836dhcVIozHG+AzERxbuiJkAWlCgL48K4ig3F3U9PtPaBtMde5hDs
+         YQdw==
+X-Forwarded-Encrypted: i=1; AJvYcCXonKsh4U3blAIZ1XVKfgpypWLkAx7boOXDIgStwt7cOIr/2TpmCf0cGtmUKe97TROs/PAIOq8UudBuhtLplCc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxrvbI07UK3XCh3RoK7Y+n/9jukY9FrG/QLvXBxYh78GLPbT0wY
+	RbPC5F9DETgR17EdrPvljxT6HJAw26RoFICq2tKxoVk/UX/7dWoqVqu0QGPLPBaYm7Ze1be+PB6
+	KSMCpEx8=
+X-Gm-Gg: ASbGncth1sCBOyBnvJJO+qJRjyOEjWu4QBS+j3z98OniMvnqjzIFeEzXbuVr3zK3k+Y
+	6gPe6Fev5IO/J4MXnn91avd6yhgvzor+yv2M5lhWqOpXD9cJ3aJSx+kK1iPgHnhzdSvSekG6cST
+	c5gUMfartlPX9SEI32z+kPLW8JaFNLUDa7EFG9Sax+Ioc6rGnWRNVDA+C0jMF9frl4NlnlETLP2
+	x2gj8sA19a17TLm8CJXOFyXwO2MhvH9XWOv89TCtoY8Xk4QYlF1J4sQGlg7bED+kvDWA2mjG22M
+	+hawPLLd8NF3JJbHViuWAiidQAiG3dd8oJDFdfdjl8KiV54IFfpBge48zYm3SJSX+5FUW3vmeeM
+	=
+X-Google-Smtp-Source: AGHT+IGyp/xTGp5oc1Flc0suMmUx+z84Pn68KeWyBolHGZeBeRUJhIRXZcDbZoi8bBEnqcyDMtHfRg==
+X-Received: by 2002:a05:600c:470c:b0:442:f482:c429 with SMTP id 5b1f17b1804b1-4533caf534cmr134483935e9.8.1750167428760;
+        Tue, 17 Jun 2025 06:37:08 -0700 (PDT)
+Received: from blackdock.suse.cz ([193.86.92.181])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4532e224888sm179494365e9.1.2025.06.17.06.37.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jun 2025 06:24:25 -0700 (PDT)
-Date: Tue, 17 Jun 2025 06:24:23 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	David Wei <dw@davidwei.uk>, Shuah Khan <shuah@kernel.org>,
-	Simon Horman <horms@kernel.org>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	gustavold@gmail.com
-Subject: Re: [PATCH net-next v3 4/4] netdevsim: account dropped packet length
- in stats on queue free
-Message-ID: <aFFsh6kFOkhGOO7Q@gmail.com>
-References: <20250617-netdevsim_stat-v3-0-afe4bdcbf237@debian.org>
- <20250617-netdevsim_stat-v3-4-afe4bdcbf237@debian.org>
- <20250617055934.3fd9d322@kernel.org>
+        Tue, 17 Jun 2025 06:37:08 -0700 (PDT)
+From: =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
+To: linux-kernel@vger.kernel.org,
+	cgroups@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Tejun Heo <tj@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Subject: [PATCH 0/4] selftests: cgroup: Add support for named v1 hierarchies in test_core
+Date: Tue, 17 Jun 2025 15:36:52 +0200
+Message-ID: <20250617133701.400095-1-mkoutny@suse.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250617055934.3fd9d322@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jun 17, 2025 at 05:59:34AM -0700, Jakub Kicinski wrote:
-> On Tue, 17 Jun 2025 01:19:00 -0700 Breno Leitao wrote:
-> > -static void nsim_queue_free(struct nsim_rq *rq)
-> > +static void nsim_queue_free(struct net_device *dev, struct nsim_rq *rq)
-> >  {
-> >  	hrtimer_cancel(&rq->napi_timer);
-> > +	dev_dstats_rx_dropped_add(dev, rq->skb_queue.qlen);
-> 
-> here we are in process context and debug checks complain about the use
-> of this_cpu_ptr(). Let's wrap this in local_bh_disable() / enable() ?
+This comes useful when using selftests from mainline on older
+kernels/setups that still rely on cgroup v1 while maintains single
+variant of selftests.
+The core tests that rely on v2 specific features are skipped, the
+remaining ones are adjusted to work with a v1 hierarchy.
 
-Thanks. I was able to reproduce it. Your suggestion avoids the complain.
-I suppose we should just wrap dev_dstats_rx_dropped_add(), right?
+The expected output on v1 system:
+    ok 1 # SKIP test_cgcore_internal_process_constraint
+    ok 2 # SKIP test_cgcore_top_down_constraint_enable
+    ok 3 # SKIP test_cgcore_top_down_constraint_disable
+    ok 4 # SKIP test_cgcore_no_internal_process_constraint_on_threads
+    ok 5 # SKIP test_cgcore_parent_becomes_threaded
+    ok 6 # SKIP test_cgcore_invalid_domain
+    ok 7 # SKIP test_cgcore_populated
+    ok 8 test_cgcore_proc_migration
+    ok 9 test_cgcore_thread_migration
+    ok 10 test_cgcore_destroy
+    ok 11 test_cgcore_lesser_euid_open
+    ok 12 # SKIP test_cgcore_lesser_ns_open
 
-	diff --git a/drivers/net/netdevsim/netdev.c b/drivers/net/netdevsim/netdev.c
-	index 5d0b801e81129..07171cf8b07ee 100644
-	--- a/drivers/net/netdevsim/netdev.c
-	+++ b/drivers/net/netdevsim/netdev.c
-	@@ -635,7 +635,9 @@ static struct nsim_rq *nsim_queue_alloc(void)
-	static void nsim_queue_free(struct net_device *dev, struct nsim_rq *rq)
-	{
-		hrtimer_cancel(&rq->napi_timer);
-	+	local_bh_disable();
-		dev_dstats_rx_dropped_add(dev, rq->skb_queue.qlen);
-	+	local_bh_enable();
-		skb_queue_purge_reason(&rq->skb_queue, SKB_DROP_REASON_QUEUE_PURGE);
-		kfree(rq);
-	}
+Michal Koutný (4):
+  selftests: cgroup_util: Add helpers for testing named v1 hierarchies
+  selftests: cgroup: Add support for named v1 hierarchies in test_core
+  selftests: cgroup: Optionally set up v1 environment
+  selftests: cgroup: Fix compilation on pre-cgroupns kernels
+
+ .../selftests/cgroup/lib/cgroup_util.c        |  4 +-
+ .../cgroup/lib/include/cgroup_util.h          |  5 ++
+ tools/testing/selftests/cgroup/test_core.c    | 84 ++++++++++++++++---
+ 3 files changed, 82 insertions(+), 11 deletions(-)
+
+
+base-commit: 9afe652958c3ee88f24df1e4a97f298afce89407
+-- 
+2.49.0
 
 
