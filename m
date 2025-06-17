@@ -1,243 +1,211 @@
-Return-Path: <linux-kselftest+bounces-35217-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35218-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16CD6ADD11B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 17:11:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CAB0AADD148
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 17:25:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1AE473BB452
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 15:11:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 421DE3B3265
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 15:24:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5269C2E92A5;
-	Tue, 17 Jun 2025 15:11:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF4DA2EBDC4;
+	Tue, 17 Jun 2025 15:24:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="NCa84+KR"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="K4CWgUZx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65D122E3B06;
-	Tue, 17 Jun 2025 15:11:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D01A6217F34
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Jun 2025 15:24:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750173085; cv=none; b=suF2yvetCi0rBoOPjJjgZX6AAn/72pSBKD8vw7vz1BQAboRdEVSkJli4JjqHebrYfZeNthihXnLI30Cpicxxbg1u1Jjpj/J6fe7UFuxMv8F4QF+6kqmUy06vKTyXVDif1oVDLWh7eTepf4J60RFYbbNkSqPwrxojp08oOyi6rHg=
+	t=1750173891; cv=none; b=Dj0R02FnpYoDYNOais6rJJzT17hT4MC6q46YZ5vbe+GJy4tCktYLTSleMVtDZx2Jnk4ZZXCucqeBmDcR5qCtiJB3QUuKA/mhoE3HbtHU0IYAwMT4Kppc20lc69ZrQw9SZn+BcNsYSV2qPssnIqZz6NMdTEW5HgljmyGwBcdZLLA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750173085; c=relaxed/simple;
-	bh=XIn+VDVkzqoxXJF3htMqN190qXbVe1Vk1GEFecXNELU=;
+	s=arc-20240116; t=1750173891; c=relaxed/simple;
+	bh=Y8gxeEKFkYw0UIV/IY7FhDkAqzZ2xhiVyi4v6GxhZx0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tkdzUaVpdMzP15Qc+YDVub3XcTb8T3hK0J5OcB9bK1chLvqV/kt6EcmVPGmiQ8mYcTHQ7rPBvnRKPtklw1ujloNv90fNYONo6XAEylsUiPEFhkIKB/L1GB6X5W6QiQ7SSYpDmkK5whJIXDaRalzH/gVBFmhGru0g4fhqkcDdTjg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=NCa84+KR; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55H9LGEm010036;
-	Tue, 17 Jun 2025 15:11:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=ED41I98dWWWiwqsfyllGBoGBfiF5ki
-	5VU5dN4g06/D4=; b=NCa84+KRIM5g6UQm7IhXPMxiYgQGNaOncuA5g4te8HwiZS
-	DRWAuiiVhhyoiP9nmD2jzi5ZVVLnxcHwNN9nvC+Y3uCt1GLPoumvPZUIbzg9XN3j
-	9e1H9aFXpbHaCgwua9ZpqLyTGaFc0I6YdLgChH8SFJieD5I7h5rviEKvs9EhCfUv
-	WSub1jymSIEUogK/pW7MuzxqIKsLktkx6/5SyEd4a80rsQDHHH5Jnhz0ZCaysOEI
-	T5S3GTRWRODUxiEPJ/i29u6aKt2qLAwdSwmTLurB8kbuINOMnR8z6SZqE70AYhdq
-	wXXaD1DKjvgVz0lR+VGWLqDPh1i+BeMGoAFrg7Tg==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4790r20s4p-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Jun 2025 15:11:07 +0000 (GMT)
-Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 55HFB6H9028468;
-	Tue, 17 Jun 2025 15:11:06 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4790r20s4j-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Jun 2025 15:11:06 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 55HCY0Ab000720;
-	Tue, 17 Jun 2025 15:11:06 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 479mdp45eq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Jun 2025 15:11:05 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 55HFB4BW51511736
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 17 Jun 2025 15:11:04 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0D13620043;
-	Tue, 17 Jun 2025 15:11:04 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 98EBA20040;
-	Tue, 17 Jun 2025 15:11:00 +0000 (GMT)
-Received: from li-06431bcc-2712-11b2-a85c-a6fe68df28f9.ibm.com (unknown [9.109.245.113])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Tue, 17 Jun 2025 15:11:00 +0000 (GMT)
-Date: Tue, 17 Jun 2025 20:40:55 +0530
-From: donettom <donettom@linux.ibm.com>
-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>
-Cc: Aboorva Devarajan <aboorvad@linux.ibm.com>, akpm@linux-foundation.org,
-        lorenzo.stoakes@oracle.com, shuah@kernel.org, pfalcato@suse.de,
-        david@redhat.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
-        npache@redhat.com, ryan.roberts@arm.com, dev.jain@arm.com,
-        baohua@kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ritesh.list@gmail.com
-Subject: Re: [PATCH 2/6] selftest/mm: Fix ksm_funtional_test failures
-Message-ID: <aFGFf-SUi41D9ZmV@li-06431bcc-2712-11b2-a85c-a6fe68df28f9.ibm.com>
-References: <20250616160632.35250-1-aboorvad@linux.ibm.com>
- <20250616160632.35250-3-aboorvad@linux.ibm.com>
- <5xw6iujjihdqy3sssmgo7z7rghsi3jgusc3kap7w7gbowisyc2@gfq633qx4bra>
+	 Content-Type:Content-Disposition:In-Reply-To; b=lsaKUJtfaf439Ywr8NbC8nErcmMLPBNa2zxUbNcvbZGnbnFa0YLX8dadEG0cvcWFMCgSBnPIIUwOl4nFL3Qz7yn1XI3J75p2h8zhtceQVJaEgIZp13JVUm0ddhNJN/4y5vjCqrZl6EeTqWEt8j44YAaVxMjKP2kybECvXkaB2FU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=K4CWgUZx; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1750173887;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=H7t/M+XkM4gCOEnwp8IXnN3sMzd4/YJo/8sq4GFgliY=;
+	b=K4CWgUZxupSStE24zHVt/GUp42ujbCzOLtO4fw8IwXXBfDHF+ibCfiJhZmXGLNZpb4bBa+
+	7GSuSNo4Cx1t6VkOIY5ikD6c9WjR6BY2DhgigI1hhgXjOssvedSA3MBv6QDuV3pLSpH/b0
+	AX+3kRhC68/ltCwpDAw8l04Q5RP8Bs0=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-34-yyJAp8LANQ-tXUHiqqin4w-1; Tue, 17 Jun 2025 11:24:46 -0400
+X-MC-Unique: yyJAp8LANQ-tXUHiqqin4w-1
+X-Mimecast-MFC-AGG-ID: yyJAp8LANQ-tXUHiqqin4w_1750173885
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4535011d48eso12308895e9.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Jun 2025 08:24:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750173885; x=1750778685;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H7t/M+XkM4gCOEnwp8IXnN3sMzd4/YJo/8sq4GFgliY=;
+        b=ArIWgj6eLvaHYa6c3QAy2GIqOHO5PkhAGsyU+HINniVIJx7dbCs8UhQS7Wr9ehCku3
+         SjLQn671U2cGX/dNKuHpPBBXy+iYBTDH+epNMx5SfdU0YijIm9BNau3usiZE9gpnPvIj
+         oTQG/JpvOmUpNNbhrIpe8J52N0rysy9Yy8qPhy0cvDNSJQ+xCi76WesFclYarNAmOcSG
+         1XjjW5Tzax4T8J+rbwMdjVsUiAQ3fMXde30+DLCFiRjZwd5pknozfiWv84cXzQmviN1B
+         bAzygui0zJfpFdS/lRAoVlK3mL6y6mVJL60G5all3aRBKXXyipnTtrI+lkmwYVkcJpQL
+         oVrQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUaB5Wb8cu6UH97+mh0x1DjbnEvWdLDct+zpNJbG2/mqbAtXmzR9Us6Oa5LjNzf8J5G7E1E/3TOperIjyA9/rk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxovp9NkGQDmgCKPwpXAkqxexkduMWyXAonfhiTfQhg5Lc7gfCE
+	bxLf8u6cDvAxf5idBTqi4mTWjuiGLCOB7TiHwpSV8wvfy2vh2FuKi8K2a0fPY0NcNiSBaQg38lo
+	39NB4wV663z0wiZ7H/CGIRvo+M6qbPgT9krb6p7ikhXAkMAX/4lV3KnuXugUmCqDrnw0U8g==
+X-Gm-Gg: ASbGncvvk7h5Nyn8Cs9VUfg8aw/Yvh3VPzHKau9TFAVsKxXGXjNxl6AITzVQn3pi9h6
+	DTAk9SvB7tZR8S9Q/Mvek6pwGigtlju2Pcxe4wW+OC43yVSA50EqcskolKCb4lataljuaFPjmiI
+	RlU1AcHBtIKL49nI05wVm+Ol4SOdyAMDsBekaawdGXf3EpcJYRJ4h5zw9UNEJcEYQUd3xR6IxO6
+	f9h63gdytSDyTM5TURPwWGhhyVPISV78n46Az/+7pnTZeM0vFWWGMpX1KtVKYr2FpVOKu+xbz2Y
+	7bIL7SksrihbUp5Nwiv1S1ExvKlQ
+X-Received: by 2002:a05:600c:8b01:b0:441:d437:e3b8 with SMTP id 5b1f17b1804b1-4533cac9179mr118928575e9.23.1750173885152;
+        Tue, 17 Jun 2025 08:24:45 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFsm6jVbEl2m7WR2NEEu2J8dhq+GSg2FL6XFR2OWFKAilrHXhJdlDK5TX0Ng08O9R8MuoDrjg==
+X-Received: by 2002:a05:600c:8b01:b0:441:d437:e3b8 with SMTP id 5b1f17b1804b1-4533cac9179mr118928105e9.23.1750173884572;
+        Tue, 17 Jun 2025 08:24:44 -0700 (PDT)
+Received: from sgarzare-redhat ([193.207.200.233])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a568b089b5sm14100994f8f.48.2025.06.17.08.24.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jun 2025 08:24:43 -0700 (PDT)
+Date: Tue, 17 Jun 2025 17:24:36 +0200
+From: Stefano Garzarella <sgarzare@redhat.com>
+To: Bobby Eshleman <bobbyeshleman@gmail.com>, berrange@redhat.com
+Cc: Stefan Hajnoczi <stefanha@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	kvm@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org, 
+	virtualization@lists.linux.dev, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH RFC net-next v4 00/11] vsock: add namespace support to
+ vhost-vsock
+Message-ID: <bgntskdmtb3usi6izcxywuhpvyldnoaxnomub4t7vfclv3xqhx@gjcs5ay4mkyt>
+References: <20250616-vsock-vmtest-v4-0-bdd1659c33fb@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <5xw6iujjihdqy3sssmgo7z7rghsi3jgusc3kap7w7gbowisyc2@gfq633qx4bra>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: vnWQwtFOm6AgWjbquX-JBGruMgndkPiG
-X-Proofpoint-ORIG-GUID: qYsgt44I4M69X_JetsAMXC-L5shCziKB
-X-Authority-Analysis: v=2.4 cv=AqTu3P9P c=1 sm=1 tr=0 ts=6851858b cx=c_pps a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17 a=kj9zAlcOel0A:10 a=6IFa9wvqVegA:10 a=VnNF1IyMAAAA:8 a=Qi7r7Pc1jYxnUvlcgVAA:9 a=CjuIK1q_8ugA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjE3MDExNSBTYWx0ZWRfX/FjqriRK9bew qMCOX1zzK/80ihxS1pddNhPHW5XIc1JueGjVrc0Q2mjEhLQ0Rc/a0sOpQNe/KHP5yg7WAaLXb3K pSyYE6dYn6eUTnr/PABfdw1wCG6abLBWTWk/ofqX/GNNGskcGXpXG51hT9S6lrB2clGcRxT2XRX
- bH7bip5KdAMaO2i7ZFbI/X8zfAFUbhjfrUisYLvOAEu2tW8iAvd3OUqMfexDr5SCbdCiBnusSBI H4VD4wp2uSRK4XFu4416L0thWtP62VWIjjyVL3HnA70X/+unmOoc7a52dpyGPVaHwTSI5852Dw9 H6dyu+/TorkqPv7Em9Xbd3K9Ouk7XtaUPQypLehOu4Rrpc95SLkALOrOoG7knMPViDB6taVQaXf
- Xkig/p0KJVmwI7kg9Q2a16XvWqWQL90UeTHxPfuz5NSRlGjNv+0SUVG730SxfqsYV7KnNT7D
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-17_06,2025-06-13_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
- lowpriorityscore=0 suspectscore=0 adultscore=0 impostorscore=0
- priorityscore=1501 phishscore=0 mlxlogscore=999 mlxscore=0 spamscore=0
- bulkscore=0 malwarescore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2506170115
+In-Reply-To: <20250616-vsock-vmtest-v4-0-bdd1659c33fb@meta.com>
 
-On Mon, Jun 16, 2025 at 01:04:40PM -0400, Liam R. Howlett wrote:
-> * Aboorva Devarajan <aboorvad@linux.ibm.com> [250616 12:07]:
-> > From: Donet Tom <donettom@linux.ibm.com>
-> > 
-> > This patch fixed 2 issues.
-> > 
-> > 1)After fork() in test_prctl_fork, the child process uses the file
-> > descriptors from the parent process to read ksm_stat and
-> > ksm_merging_pages. This results in incorrect values being read (parent
-> > process ksm_stat and ksm_merge_pages will be read in child), causing
-> > the test to fail.
-> > 
-> > This patch calls init_global_file_handles() in the child process to
-> > ensure that the current process's file descriptors are used to read
-> > ksm_stat and ksm_merging_pages.
-> > 
-> > 2) All tests currently call ksm_merge to trigger page merging.
-> > To ensure the system remains in a consistent state for subsequent
-> > tests, it is better to call ksm_unmerge during the test cleanup phase
-> > 
-> > In the test_prctl_fork test, after a fork(), reading ksm_merging_pages
-> > in the child process returns a non-zero value because a previous test
-> > performed a merge, and the child's memory state is inherited from the
-> > parent.
-> > 
-> > Although the child process calls ksm_unmerge, the ksm_merging_pages
-> > counter in the parent is reset to zero, while the child's counter
-> > remains unchanged. This discrepancy causes the test to fail.
-> > 
-> > To avoid this issue, each test should call ksm_unmerge during cleanup
-> > to ensure the counter is reset and the system is in a clean state for
-> > subsequent tests.
-> > 
-> 
-> Fixes: ?
+CCing Daniel who commented v2.
 
-Sorry I missed it. We will add and send a new version.
+On Mon, Jun 16, 2025 at 09:32:49PM -0700, Bobby Eshleman wrote:
+>This series adds namespace support to vhost-vsock. It does not add
+>namespaces to any of the guest transports (virtio-vsock, hyperv, or
+>vmci).
+>
+>The current revision only supports two modes: local or global. Local
+>mode is complete isolation of namespaces, while global mode is complete
+>sharing between namespaces of CIDs (the original behavior).
+>
+>If it is deemed necessary to add mixed mode up front, it is doable but
+>at the cost of more complexity than local and global modes. Mixed will
+>require adding the notion of allocation to the socket lookup functions
+>(like vhost_vsock_get()) and also more logic will be necessary for
+>controlling or using lookups differently based on mixed-to-global or
+>global-to-mixed scenarios.
+>
+>The current implementation takes into consideration the future need for mixed
+>mode and makes sure it is possible by making vsock_ns_mode per-namespace, as for
+>mixed mode we need at least one "global" namespace and one "mixed"
+>namespace for it to work. Is it feasible to support local and global
+>modes only initially?
+>
+>I've demoted this series to RFC, as I haven't been able to re-run the
+>tests after rebasing onto the upstreamed vmtest.sh, some of the code is
+>still pretty messy, there are still some TODOs, stale comments, and
+>other work to do. I thought reviewers might want to see the current
+>state even though unfinished, since I'll be OoO until the second week of
+>July and that just feels like a long time of silence given we've already
+>all done work on this together.
+>
+>Thanks again for everyone's help and reviews!
+>
+>Signed-off-by: Bobby Eshleman <bobbyeshleman@gmail.com>
+>---
+>Changes in v3:
+>- add notion of "modes"
+>- add procfs /proc/net/vsock_ns_mode
+>- local and global modes only
+>- no /dev/vhost-vsock-netns
+>- vmtest.sh already merged, so new patch just adds new tests for NS
+>- Link to v2:
+>  https://lore.kernel.org/kvm/20250312-vsock-netns-v2-0-84bffa1aa97a@gmail.com
 
-> 
-> > Signed-off-by: Donet Tom <donettom@linux.ibm.com>
-> > Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
-> > ---
-> >  tools/testing/selftests/mm/ksm_functional_tests.c | 10 ++++++++++
-> >  1 file changed, 10 insertions(+)
-> > 
-> > diff --git a/tools/testing/selftests/mm/ksm_functional_tests.c b/tools/testing/selftests/mm/ksm_functional_tests.c
-> > index b61803e36d1c..d7d3c22c077a 100644
-> > --- a/tools/testing/selftests/mm/ksm_functional_tests.c
-> > +++ b/tools/testing/selftests/mm/ksm_functional_tests.c
-> > @@ -46,6 +46,8 @@ static int ksm_use_zero_pages_fd;
-> >  static int pagemap_fd;
-> >  static size_t pagesize;
-> >  
-> > +static void init_global_file_handles(void);
-> > +
-> >  static bool range_maps_duplicates(char *addr, unsigned long size)
-> >  {
-> >  	unsigned long offs_a, offs_b, pfn_a, pfn_b;
-> > @@ -274,6 +276,7 @@ static void test_unmerge(void)
-> >  	ksft_test_result(!range_maps_duplicates(map, size),
-> >  			 "Pages were unmerged\n");
-> >  unmap:
-> > +	ksm_unmerge();
-> >  	munmap(map, size);
-> >  }
-> >  
-> > @@ -338,6 +341,7 @@ static void test_unmerge_zero_pages(void)
-> >  	ksft_test_result(!range_maps_duplicates(map, size),
-> >  			"KSM zero pages were unmerged\n");
-> >  unmap:
-> > +	ksm_unmerge();
-> >  	munmap(map, size);
-> >  }
-> >  
-> > @@ -366,6 +370,7 @@ static void test_unmerge_discarded(void)
-> >  	ksft_test_result(!range_maps_duplicates(map, size),
-> >  			 "Pages were unmerged\n");
-> >  unmap:
-> > +	ksm_unmerge();
-> >  	munmap(map, size);
-> >  }
-> >  
-> > @@ -428,6 +433,7 @@ static void test_unmerge_uffd_wp(void)
-> >  close_uffd:
-> >  	close(uffd);
-> >  unmap:
-> > +	ksm_unmerge();
-> >  	munmap(map, size);
-> >  }
-> >  #endif
-> > @@ -491,6 +497,7 @@ static int test_child_ksm(void)
-> >  	else if (map == MAP_MERGE_SKIP)
-> >  		return -3;
-> >  
-> > +	ksm_unmerge();
-> >  	munmap(map, size);
-> >  	return 0;
-> >  }
-> > @@ -524,6 +531,7 @@ static void test_prctl_fork(void)
-> >  
-> >  	child_pid = fork();
-> >  	if (!child_pid) {
-> > +		init_global_file_handles();
-> >  		exit(test_child_ksm());
-> >  	} else if (child_pid < 0) {
-> >  		ksft_test_result_fail("fork() failed\n");
-> > @@ -620,6 +628,7 @@ static void test_prctl_unmerge(void)
-> >  	ksft_test_result(!range_maps_duplicates(map, size),
-> >  			 "Pages were unmerged\n");
-> >  unmap:
-> > +	ksm_unmerge();
-> >  	munmap(map, size);
-> >  }
-> >  
-> > @@ -653,6 +662,7 @@ static void test_prot_none(void)
-> >  	ksft_test_result(!range_maps_duplicates(map, size),
-> >  			 "Pages were unmerged\n");
-> >  unmap:
-> > +	ksm_unmerge();
-> >  	munmap(map, size);
-> >  }
-> >  
-> > -- 
-> > 2.43.5
-> > 
-> > 
+Thanks for this!
+FYI I'll be off for the next days, I hope to comment next week.
+
+Thanks,
+Stefano
+
+>
+>Changes in v2:
+>- only support vhost-vsock namespaces
+>- all g2h namespaces retain old behavior, only common API changes
+>  impacted by vhost-vsock changes
+>- add /dev/vhost-vsock-netns for "opt-in"
+>- leave /dev/vhost-vsock to old behavior
+>- removed netns module param
+>- Link to v1:
+>  https://lore.kernel.org/r/20200116172428.311437-1-sgarzare@redhat.com
+>
+>Changes in v1:
+>- added 'netns' module param to vsock.ko to enable the
+>  network namespace support (disabled by default)
+>- added 'vsock_net_eq()' to check the "net" assigned to a socket
+>  only when 'netns' support is enabled
+>- Link to RFC: https://patchwork.ozlabs.org/cover/1202235/
+>
+>---
+>Bobby Eshleman (11):
+>      selftests/vsock: add NS tests to vmtest.sh
+>      vsock: a per-net vsock NS mode state
+>      vsock: add vsock net ns helpers
+>      vsock: add net to vsock skb cb
+>      vsock: add common code for vsock NS support
+>      virtio-vsock: add netns to common code
+>      vhost/vsock: add netns support
+>      vsock/virtio: add netns hooks
+>      hv_sock: add netns hooks
+>      vsock/vmci: add netns hooks
+>      vsock/loopback: add netns support
+>
+> MAINTAINERS                             |   1 +
+> drivers/vhost/vsock.c                   |  48 ++-
+> include/linux/virtio_vsock.h            |  12 +
+> include/net/af_vsock.h                  |  53 ++-
+> include/net/net_namespace.h             |   4 +
+> include/net/netns/vsock.h               |  19 ++
+> net/vmw_vsock/af_vsock.c                | 203 +++++++++++-
+> net/vmw_vsock/hyperv_transport.c        |   2 +-
+> net/vmw_vsock/virtio_transport.c        |   5 +-
+> net/vmw_vsock/virtio_transport_common.c |  14 +-
+> net/vmw_vsock/vmci_transport.c          |   4 +-
+> net/vmw_vsock/vsock_loopback.c          |   4 +-
+> tools/testing/selftests/vsock/vmtest.sh | 555 +++++++++++++++++++++++++++++---
+> 13 files changed, 843 insertions(+), 81 deletions(-)
+>---
+>base-commit: 8909f5f4ecd551c2299b28e05254b77424c8c7dc
+>change-id: 20250325-vsock-vmtest-b3a21d2102c2
+>
+>Best regards,
+>-- 
+>Bobby Eshleman <bobbyeshleman@meta.com>
+>
+>
+
 
