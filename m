@@ -1,162 +1,224 @@
-Return-Path: <linux-kselftest+bounces-35221-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35222-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A099ADDA8C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 19:25:11 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3127ADDAE5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 19:53:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9C7653BF9D7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 17:22:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 075A07A185A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 17:51:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 169C428504F;
-	Tue, 17 Jun 2025 17:22:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4F3C23B600;
+	Tue, 17 Jun 2025 17:52:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="h3OG3ntj"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VWY51kPc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34D2A2FA632
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Jun 2025 17:22:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFB2F231837
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Jun 2025 17:52:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750180963; cv=none; b=GvKP488otGNUSYAgrRKzn1hwz6rrRbZcvembuq2Metgd+NVoDrloztGkDF1gkq8KZKiCuN4+pNQlD8ncJ//Y4QQUtrrlbpiaXrfbChmWs53BmZlcUY2qRmkiM8HbbNakNkHmwsoffp6UgGB/ZC8KDo34eRT1oTkKXDejMThh61I=
+	t=1750182778; cv=none; b=CU5kgXY3PrsgfbVtJjSh2GqawMo/ZkQ0EQ/sLFprqr5/ek/sYIdU8dKZvtQpGkCRXm3jj/+QyqtvsDtlAsjzvBcjbyryVCUzpiObNXi+nwZNgqnU7tL/mav9BBuJ0jZLlzHiuu3rGKKUHVdL8cD5b9dGT/Paf9RNZXFsYt7mGVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750180963; c=relaxed/simple;
-	bh=fkSOfdAa8FY7s1fiIR9x8hwRIn5eu9HjdWI0CIobf48=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=k2/A8CFcA0BW/iIIVaOQKS2ZdIK40D5oqggco3woU+ZcLqxUN29WW+YewBMgmV4K2o1sfFFM9IRkSIDVLzfRAQuDwH/X/KlBWouWSXhaGKaWqwgTb+CSCJOlBWPAr3feJxTpDu73grr2ItTSrOjsc6jkQjjEifTGzCHMMYkxGlQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=h3OG3ntj; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1750182778; c=relaxed/simple;
+	bh=t+06naoVmVF2AOSXqBSYrJu3yXVIfw+vx5pfjOIVMmY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DBYP5uJs+nI4DnxSZCDOMTkzLNbT1dlQQzFTJBhrDDTiDRARwhDE87fAq8tAJSkJ7F8i5gY3fv1oHaVFqAp4i2Tv1zhyHj5sHL7UkKDMj8BdlyA9QtD5YbYC/HK4CwjcvBxE2UJSlamslVpOoSgvomLuV2cndXVD4Q2/Do8ctzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VWY51kPc; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1750180959;
+	s=mimecast20190719; t=1750182775;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=34DKIigEpcgfa4tv94Inm/gSRCZZNbs35BdPm5ILfHc=;
-	b=h3OG3ntjL0Min7R6XomFqByaPlb76RuMxrt7RreqVQQQL6Pu9YOmibUfNk7I0ggb9yYv82
-	wsYgVPR22y0/si14hHNL742aOUi7AYj3fcUmFfgyWe+AMLf3vwuY9H0jvR/gbYtRT0YNSz
-	V+bPOFZLbExy3VOt2ll6ZLv1d+CMwCQ=
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
- [209.85.210.199]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=VHVlghtOwl1iYTRYeyXrEKqXKy+rGsdhH54hG2oPsxQ=;
+	b=VWY51kPcMLewrs0lCjf8YUK7r8bvORhnPRsKcyMqDt8BRhcvzFnEDUxeyx+DqLs+6h6ngM
+	y1KmdD0GNUnwsFN+bVUVxsOt+6i6NtyxRL4QbKgzPhEi42znYMdogu8IP7KB/v3v5TX/4l
+	7PlAPc8EW/Pl+TiRgclw++mzlXcNpjc=
+Received: from mail-yw1-f198.google.com (mail-yw1-f198.google.com
+ [209.85.128.198]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-173-uXSjoH1JO9WjCbBsS6Y_Pg-1; Tue, 17 Jun 2025 13:22:37 -0400
-X-MC-Unique: uXSjoH1JO9WjCbBsS6Y_Pg-1
-X-Mimecast-MFC-AGG-ID: uXSjoH1JO9WjCbBsS6Y_Pg_1750180957
-Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-7425efba1a3so4911541b3a.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Jun 2025 10:22:37 -0700 (PDT)
+ us-mta-644-iaydsiu0NZ2_8chS_PpYkg-1; Tue, 17 Jun 2025 13:52:54 -0400
+X-MC-Unique: iaydsiu0NZ2_8chS_PpYkg-1
+X-Mimecast-MFC-AGG-ID: iaydsiu0NZ2_8chS_PpYkg_1750182774
+Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-70e5e6ab756so84488417b3.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Jun 2025 10:52:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750180957; x=1750785757;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=34DKIigEpcgfa4tv94Inm/gSRCZZNbs35BdPm5ILfHc=;
-        b=mHnnld6WH6ZgaR9X7H/eDSNFsanhWfSrV84ZUcZJL7s1nkPFeRQ9omykZyK9W+Xjb7
-         bKHzEzH9YKBa1AIPXVonK5Yy59RWOS5M9OIH2pqzWT5AUmUh3iEwUBfMgpQ1n5grcdlY
-         lCHMVwiZo44v749v+tM+Udtmo3Ftjl7/xWXudaaZGyIDyi/gNRYjZYV0J1eDTGB/1lxJ
-         k3Rer8MYK2AThK9u+guSEprQTRXcNwzLkeu+QkauPMQCMj2if3AXYKSC7mw9SKu9XGlD
-         wvSvpqDSF/dqpEbDqITVbO55KDzLifExOO4f9WCGQEQN4iZGwduIwrx30lRXz0Hplulh
-         4xmg==
-X-Forwarded-Encrypted: i=1; AJvYcCWpY9YXbt//i5ZAwI+9dQl5iExzADVcB+oqaYRQ+LCYGEvHBlFTNKe03eHQyNwpSZvLA7aC2+YkDdn6ziVhXVI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyIsEL9priexwjjs1xub8rdbUsnudoS4GZ9SKZEB7zr5A/9/KAb
-	HMURv2eT/nyUnVnVavAPi9q3lRJlEOVN2WhExAB/EcQLiLSJHO2EXExMKIQ3H3XkAaOFQflGO4a
-	GSicgt7PRz+QCFa+NDhKISb2/A4qRDTxEn0aQJb3ZP8QpDNsDvrDXoncsznNcPfRpnnhuZg==
-X-Gm-Gg: ASbGncvdx/evncY5p2kk/8g0YczUNasmtBGla8n9psp0NYJyMkv+w2KVk8VQOvkjGbq
-	eI8zLkvFX5G0TRRkS/txGr0a8KWPOW7Pf1aHlJ5Z4hiShsh8nSYjXyd3AvFffWr1d8W1jxrmHuG
-	v61PGW7b2b6gHiLr22FrZKIpnCgjoMFVxHdCTeHPg0PxnDsbLUVGHHnrKkmGaFkG6nTE/AFm4Kh
-	95VWoHHA9IB7bDNbLO1TITomAYirgzKDFpmQ5UIBwYpNLBTiZPnb4+57BpdjxCl0oWwl3zrEpp1
-	JSN+DAwI/uzIwA==
-X-Received: by 2002:a05:6a00:b8b:b0:748:6a12:1b47 with SMTP id d2e1a72fcca58-7489c47e470mr18490190b3a.10.1750180956724;
-        Tue, 17 Jun 2025 10:22:36 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFM6/AhfqpvtyHQaLreUDoYWYWZc8npPOOqClxjD7RFi7IF9gRDq4KeeMPXcwtHEi9K0833AA==
-X-Received: by 2002:a05:6a00:b8b:b0:748:6a12:1b47 with SMTP id d2e1a72fcca58-7489c47e470mr18490157b3a.10.1750180956304;
-        Tue, 17 Jun 2025 10:22:36 -0700 (PDT)
-Received: from x1.local ([85.131.185.92])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74890083bb2sm9450419b3a.94.2025.06.17.10.22.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jun 2025 10:22:35 -0700 (PDT)
-Date: Tue, 17 Jun 2025 13:22:30 -0400
-From: Peter Xu <peterx@redhat.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Ujwal Kundur <ujwal.kundur@gmail.com>, shuah@kernel.org,
-	jackmanb@google.com, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v5 1/1] selftests/mm/uffd: Refactor non-composite global
- vars into struct
-Message-ID: <aFGkVh-rs2ZqcL6g@x1.local>
-References: <20250501163827.2598-1-ujwal.kundur@gmail.com>
- <20250616100406.2853-1-ujwal.kundur@gmail.com>
- <20250616172618.0609127a8b1e406d4c228d24@linux-foundation.org>
- <aFGPVPDKGLOIEucg@x1.local>
+        d=1e100.net; s=20230601; t=1750182774; x=1750787574;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VHVlghtOwl1iYTRYeyXrEKqXKy+rGsdhH54hG2oPsxQ=;
+        b=FXwlpxxDgaXGftbpL0+DtFP/xBVB5WEAXGZC+rTs0tPzToQKmePMDnn6QC3lYE8law
+         Bz6yA0/bh5jMLyuNSosUAxoSHq35JoKnlYTcag5rDECJonIa4PKv2fNxpk4t1d5K0iJK
+         Jvjr0vjefhWi4pJP3n5xOsYiryoJYE44pgw3h18hv346MyDr1PsviCt5l6FLyOCEWFH8
+         kNUFubO0PEemJJtkp842buTk4hS+dxvZXmA9xrHITISuZt/9smp5HSyMnW9Eq8mG+2hh
+         yBV8sv7YMZPWCnysObCIXNP7/ivYNyddDd6EMbl9ykExv47LIixcC0tDODDWcvCWOh88
+         No9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXx+hOX45ZzUIEjGOMpriCSlZqfqCACAjHwV48kj32AnPmDi8+YxBPuwj8ZvsrDSwl+9F4J+UggzlQrtvSoeDI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzOEm6M+803Tk2yZ60ACPhEzXH7wdpZrri1dS20oJugjoV8A/NE
+	+YTf+iBzD8d6DO6ZfqKfadazCtpaD2qBj+VXictX+vXNIyntHYut8/IQiS4pwqD49LYmrp8vkSM
+	BRt6lgwZdp0NmIeLnVpxhwcj7WC+DnNSN46uYvHe0SUfwT4VP8z45hHmkfsMzkW0hw6ik2IYq+X
+	z7wDkN6QvYxZlfdYiL4xMmswgvzngze/qyXb/HX1IOIlBO
+X-Gm-Gg: ASbGncuTrlCkowGoed6bfkj3gG80WjAbs43AvFtoC2ltHL1K5nCcDf59so9jvY18OzT
+	Gi15/IOS4g3wpt5d/B87HYd79MqSKsPgnMP0JB3jz4myZ0ooCePtfvSdpzkYadwvxAqMJjBkJz7
+	hMAEggvA==
+X-Received: by 2002:a05:690c:9a07:b0:703:b3b8:1ca1 with SMTP id 00721157ae682-7117536e5f3mr174054427b3.5.1750182773984;
+        Tue, 17 Jun 2025 10:52:53 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHsuDUpqbT4Zm+fDNYLZyRvnIomvlXs1lgyYMEYTlPSDFNwpQpbOwB39H6AdaylUKoeEGHtBp3S/5ilov+jo+Q=
+X-Received: by 2002:a05:690c:9a07:b0:703:b3b8:1ca1 with SMTP id
+ 00721157ae682-7117536e5f3mr174053697b3.5.1750182773635; Tue, 17 Jun 2025
+ 10:52:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <aFGPVPDKGLOIEucg@x1.local>
+References: <20250515033857.132535-1-npache@redhat.com> <20250515033857.132535-2-npache@redhat.com>
+ <fcd3phzewpgzghrzse3stxi7jz7b6l5uwnhqtswcfnqvuvktip@apqh2achkutn>
+In-Reply-To: <fcd3phzewpgzghrzse3stxi7jz7b6l5uwnhqtswcfnqvuvktip@apqh2achkutn>
+From: Nico Pache <npache@redhat.com>
+Date: Tue, 17 Jun 2025 11:52:26 -0600
+X-Gm-Features: AX0GCFswQblbC-fUl4LgnBDpA9J_EkZ2hl0iyVshZHwGMIbdVVRH-b1apF1auqA
+Message-ID: <CAA1CXcDgu3bT-aUEXoFrVVYaTy_rAbdNmwMhzrkwb0+VxQM47w@mail.gmail.com>
+Subject: Re: [PATCH v6 1/4] mm: defer THP insertion to khugepaged
+To: Klara Modin <klarasmodin@gmail.com>
+Cc: linux-mm@kvack.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	rientjes@google.com, hannes@cmpxchg.org, lorenzo.stoakes@oracle.com, 
+	rdunlap@infradead.org, mhocko@suse.com, Liam.Howlett@oracle.com, 
+	zokeefe@google.com, surenb@google.com, jglisse@google.com, cl@gentwo.org, 
+	jack@suse.cz, dave.hansen@linux.intel.com, will@kernel.org, tiwai@suse.de, 
+	catalin.marinas@arm.com, anshuman.khandual@arm.com, dev.jain@arm.com, 
+	raquini@redhat.com, aarcange@redhat.com, kirill.shutemov@linux.intel.com, 
+	yang@os.amperecomputing.com, thomas.hellstrom@linux.intel.com, 
+	vishal.moola@gmail.com, sunnanyong@huawei.com, usamaarif642@gmail.com, 
+	wangkefeng.wang@huawei.com, ziy@nvidia.com, shuah@kernel.org, 
+	peterx@redhat.com, willy@infradead.org, ryan.roberts@arm.com, 
+	baolin.wang@linux.alibaba.com, baohua@kernel.org, david@redhat.com, 
+	mathieu.desnoyers@efficios.com, mhiramat@kernel.org, rostedt@goodmis.org, 
+	corbet@lwn.net, akpm@linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 17, 2025 at 11:52:52AM -0400, Peter Xu wrote:
-> On Mon, Jun 16, 2025 at 05:26:18PM -0700, Andrew Morton wrote:
-> > On Mon, 16 Jun 2025 15:34:06 +0530 Ujwal Kundur <ujwal.kundur@gmail.com> wrote:
-> > 
-> > > Refactor macros and non-composite global variable definitions into a
-> > > struct that is defined at the start of a test and is passed around
-> > > instead of relying on global vars.
-> > 
-> > Well I guess that's nicer.
-> > 
-> > >  5 files changed, 616 insertions(+), 542 deletions(-)
-> > 
-> > It needs to be!
-> > 
-> > Thanks, I'll queue it for testing while Peter thinks about it :)
-> 
-> I didn't pay much attention on this one as I saw Brandan was actively
-> reviewing it, which was great.
-> 
-> This is definitely an improvement to the test.  Thanks both!
-
-I did give it a quick run today, but I found I hit this:
-
-$ ./uffd-unit-tests
-Testing UFFDIO_API (with syscall)... done
-Testing UFFDIO_API (with /dev/userfaultfd)... done
-Testing register-ioctls on anon... done
-ERROR: munmap (errno=22, @uffd-common.c:277)
-
-IIUC it's because after moving most globals to stack, they are not properly
-zero-initialized anymore. In this case it failed at MEM_ANON of
-register-ioctls test, trying to munmap() some address that will start to be
-random garbage since it's on the stack.  So maybe we at least need
-something like this?
-
-diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
-index bed96f41c578..0b66ca3e7b82 100644
---- a/tools/testing/selftests/mm/uffd-unit-tests.c
-+++ b/tools/testing/selftests/mm/uffd-unit-tests.c
-@@ -1744,7 +1744,7 @@ int main(int argc, char *argv[])
-                        mem_type = &mem_types[j];
- 
-                        /* Initialize global test options */
--                       uffd_global_test_opts_t gopts;
-+                       uffd_global_test_opts_t gopts = { 0 };
- 
-                        gopts.map_shared = mem_type->shared;
-                        uffd_test_ops = mem_type->mem_ops;
-
-Even with that, it fails somewhere later.
-
-Ujwal, can you reproduce these issues and have a look?
-
-Thanks,
-
--- 
-Peter Xu
+On Sat, Jun 14, 2025 at 5:25=E2=80=AFAM Klara Modin <klarasmodin@gmail.com>=
+ wrote:
+>
+> Hi,
+>
+> On 2025-05-14 21:38:54 -0600, Nico Pache wrote:
+> > setting /transparent_hugepages/enabled=3Dalways allows applications
+> > to benefit from THPs without having to madvise. However, the page fault
+> > handler takes very few considerations to decide weather or not to actua=
+lly
+> > use a THP. This can lead to a lot of wasted memory. khugepaged only
+> > operates on memory that was either allocated with enabled=3Dalways or
+> > MADV_HUGEPAGE.
+> >
+> > Introduce the ability to set enabled=3Ddefer, which will prevent THPs f=
+rom
+> > being allocated by the page fault handler unless madvise is set,
+> > leaving it up to khugepaged to decide which allocations will collapse t=
+o a
+> > THP. This should allow applications to benefits from THPs, while curbin=
+g
+> > some of the memory waste.
+> >
+> > Acked-by: Zi Yan <ziy@nvidia.com>
+> > Co-developed-by: Rafael Aquini <raquini@redhat.com>
+> > Signed-off-by: Rafael Aquini <raquini@redhat.com>
+> > Signed-off-by: Nico Pache <npache@redhat.com>
+>
+> ...
+>
+> > @@ -315,13 +318,20 @@ static ssize_t enabled_store(struct kobject *kobj=
+,
+> >
+> >       if (sysfs_streq(buf, "always")) {
+> >               clear_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG, &transparen=
+t_hugepage_flags);
+> > +             clear_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_FLAG, &transparen=
+t_hugepage_flags);
+> >               set_bit(TRANSPARENT_HUGEPAGE_FLAG, &transparent_hugepage_=
+flags);
+> > +     } else if (sysfs_streq(buf, "defer")) {
+> > +             clear_bit(TRANSPARENT_HUGEPAGE_FLAG, &transparent_hugepag=
+e_flags);
+> > +             clear_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG, &transparen=
+t_hugepage_flags);
+> > +             set_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_FLAG, &transparent_=
+hugepage_flags);
+> >       } else if (sysfs_streq(buf, "madvise")) {
+> >               clear_bit(TRANSPARENT_HUGEPAGE_FLAG, &transparent_hugepag=
+e_flags);
+> > +             clear_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_FLAG, &transparen=
+t_hugepage_flags);
+> >               set_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG, &transparent_=
+hugepage_flags);
+> >       } else if (sysfs_streq(buf, "never")) {
+> >               clear_bit(TRANSPARENT_HUGEPAGE_FLAG, &transparent_hugepag=
+e_flags);
+> >               clear_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG, &transparen=
+t_hugepage_flags);
+> > +             clear_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_FLAG, &transparen=
+t_hugepage_flags);
+> >       } else
+> >               ret =3D -EINVAL;
+> >
+> > @@ -954,18 +964,31 @@ static int __init setup_transparent_hugepage(char=
+ *str)
+> >                       &transparent_hugepage_flags);
+> >               clear_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG,
+> >                         &transparent_hugepage_flags);
+> > +             clear_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_FLAG,
+> > +                       &transparent_hugepage_flags);
+> >               ret =3D 1;
+> > +     } else if (!strcmp(str, "defer")) {
+> > +             clear_bit(TRANSPARENT_HUGEPAGE_FLAG,
+> > +                       &transparent_hugepage_flags);
+> > +             clear_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG,
+> > +                       &transparent_hugepage_flags);
+> > +             set_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_FLAG,
+> > +                       &transparent_hugepage_flags);
+>
+> There should probably be a corresponding
+>                 ret =3D 1;
+> here. Otherwise the cannot parse message will displayed even if defer
+> was set.
+Thanks Klara-- I will make sure to add it on the next version!
+>
+> >       } else if (!strcmp(str, "madvise")) {
+> >               clear_bit(TRANSPARENT_HUGEPAGE_FLAG,
+> >                         &transparent_hugepage_flags);
+> > +             clear_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_FLAG,
+> > +                       &transparent_hugepage_flags);
+> >               set_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG,
+> > -                     &transparent_hugepage_flags);
+> > +                       &transparent_hugepage_flags);
+> >               ret =3D 1;
+> >       } else if (!strcmp(str, "never")) {
+> >               clear_bit(TRANSPARENT_HUGEPAGE_FLAG,
+> >                         &transparent_hugepage_flags);
+> >               clear_bit(TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG,
+> >                         &transparent_hugepage_flags);
+> > +             clear_bit(TRANSPARENT_HUGEPAGE_DEFER_PF_FLAG,
+> > +                       &transparent_hugepage_flags);
+> >               ret =3D 1;
+> >       }
+> >  out:
+> > --
+> > 2.49.0
+> >
+>
+> Regards,
+> Klara Modin
+>
 
 
