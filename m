@@ -1,76 +1,78 @@
-Return-Path: <linux-kselftest+bounces-35198-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35199-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38938ADC8A6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 12:51:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60CDCADC8A7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 12:51:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EBDCC7A2222
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 10:49:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6323E3BB455
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 10:51:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A038C292B5F;
-	Tue, 17 Jun 2025 10:51:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A72B82BEC53;
+	Tue, 17 Jun 2025 10:51:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iN1vbshQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZaOafEP3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C4F0221568;
-	Tue, 17 Jun 2025 10:51:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2732C221568;
+	Tue, 17 Jun 2025 10:51:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750157474; cv=none; b=QEbq3Au44DQF13fiqKaqeedtk/N7iINA7eCJHFNc/DoxV4gpJsi5k3FPjcvmyQL/wWjwYVwcVvvi0yfRZs2XchKY7k9HX4nV03BQiY9gnGyoZuemSkNFkNYZ2FXP28wyNRpuiXH7cQqgS43AnCD/bb4if1K36Cl8VfSlliISB7k=
+	t=1750157480; cv=none; b=bOiEGz/F2jhYHqJNnpH8/y1POR4xWUE5mUP4IRb91jLvmYsNcOre2K0sEN2Gl81XnYZl25wUEo6E+rKu9uwOXOgG+pASaNKc2tA/6mSbJnbLi5ZN7c+DOwXiHwU0qrToGCtJIwtiMAF45tpenA/yUGtlGxTDXALLojn1sBDQCAY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750157474; c=relaxed/simple;
-	bh=AYMEFxWHOLCq98+TQyFpfiI60acO/fim7T8QGkgbxJ0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RgjmsY8uNXqkCVGsoJ9n54yFsQAV0cAdxnK49BQt8ly+MFnZA+WfZc/eQW/1ZYwEHmQLC8Jhr166/G9k3H7JluvdSpf4kdF/GS67k2DENvDGkhIF3EEHZkawIzcXeFmV8ahE0H0crev4JoNBl2yTSZsL97sEtdmmOaX0lXLY0d8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iN1vbshQ; arc=none smtp.client-ip=209.85.210.175
+	s=arc-20240116; t=1750157480; c=relaxed/simple;
+	bh=kmYjANBc4cilzNOz65lEztNpcUw3yfVhLJuqdv22NSE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=qub4ZAnwq4taA1SZ/EIp5WxWc3BzI09Nmlu4owvqqZ/BZCIwQatYhSpTGi3WdYtytVRG0nSPY+dXKbOSwWazP5wxz5aojQQKYH4uZHan6H2RWFQp30rtQOXDandyRsY7/eD4+qCU96aldyMomM+2QS+sBcaIK2XbsMnU3HHifuU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZaOafEP3; arc=none smtp.client-ip=209.85.215.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-74800b81f1bso4628467b3a.1;
-        Tue, 17 Jun 2025 03:51:12 -0700 (PDT)
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-b2fd091f826so4003651a12.1;
+        Tue, 17 Jun 2025 03:51:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750157472; x=1750762272; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YCooD5TUf7PI1YJO5PSJRlIJLn08pq8F0pRlb6EMveM=;
-        b=iN1vbshQy/9cmvmQlk+3aXRClrS9fSlBTKAUufgHnoxkANddfRhzyeLxe8iOgVEAZJ
-         TXdj3AG2TaNPQfACZv9m508mlgO0KiLeTLeqEaYUyzy2qezc3mc8Ijv+/hQynKTc4gv1
-         2jbRX9VX5u0FTibyiU+eVVtPBuGoN5n4DrN2dyR8J9whYlJbb7XLkdAoIXNpNsIPZv9c
-         8HEdKRh14fg+ZrDXPo7R1zV0v38qj0C4uUxPAEFgWBLq0em1QJdmVu5Oo+iIFxK3H0oJ
-         I6YOWkc1TiNwfCz12t/N4dEo871DOgv2alglmi1kskr8PU6FhQxmQ2Vh4G7bIm16rwFG
-         3s8A==
+        d=gmail.com; s=20230601; t=1750157476; x=1750762276; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eYirVNrH0sBRP/I/DuDVQZwpZNmktE5hYvkDuLzNhwo=;
+        b=ZaOafEP3LNeIl8pw7m2T/cHDG5Xy66BuY0Me4Zgwzpuxkmz/1alERHuRFMaS1KSPkd
+         xnbDvxqhJI8/16k1QeqvxPrcv3CkXzK6akvsFI8SqctLwE6CRu4ULWGdsigvaEz/ApJf
+         UKMj3sg0XxuQL/VXkVMI5OjdxHsOCmjYBNSxarlXfbZtRjwTeoknrAGLoCBgElwYXP7P
+         LfNhBOOyDvPGCWN3HfP3k/1uo4fQEaoqgGtBlnOc1qrgjt1S6qvGi1bCgBIt+LNs8g97
+         CZv81suVGgOYPha0xMs263XaXAiphcof4iTxCH7/vTl+5yrA58nGvwl3f2uIrvIF2Ql8
+         sHcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750157472; x=1750762272;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YCooD5TUf7PI1YJO5PSJRlIJLn08pq8F0pRlb6EMveM=;
-        b=aAJUD5VMyXQ/O5blKE2xHga9EeXl7fvmXdyc17z7bvj59TxHXZCx2GRYeCdZGYmy+a
-         qKB+ISI3dbhSqI5tTFecBzUi0KgO+a0Z3telpebTQ9TOZNztgGb4GAZFzvudopEx502C
-         EvsXV3Et/WqN8GhP05dagmEFSqZa3cEscYLA8T8ZYnhUpaNBKYGCNMWV05CSE6q1FpXE
-         bNnH2ZbnQ/JPViqbhuhal8vITCNowcDCsgUH8I7n5Osk0jAlSHbnlTwpZnuwGFHYMuiu
-         UM/KRPDpyEhXsTabMKTyMWtCRw6wtgcb8fRZ84UYaSjzIU/+Zn3b3YnRXAafEqrahzuE
-         zoKg==
-X-Forwarded-Encrypted: i=1; AJvYcCXC4uF8LSLZR35uazL15mSxoj5xhtqMTsYqXisaJLUpwFlHFWkMRb2TF4Bgqk+78tN0OgRVMQQTwDet53WYZaU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzRgccbKz8qk8Ug3J7hc6763BUaNfh5PZcW/FcEND4lgfZ5frs9
-	0HuA9YEaDUK+0iEX4pOOg7R5xGgmW8Ekd+EPy+1dv1q/ySJaVYeNs82aG+DAP2gzUPAAmw==
-X-Gm-Gg: ASbGncsJUAv+qS1Vl885na7YJohLhsJESwzl/L0RR4J3nBtn78rPgHTdgRzefFtXz87
-	Gwq+SFNZmZrLScn71+RvoPekAjPSOwWT5P9DD6J5HaLhEWbY08tvSr0+e+NzZFvn346mSRjRuo/
-	kCd2GQ5VZmdOn5RRqfAOlVrmmSIgwolvxKgvDordxNX6/sR06J2LedUTrxztPH9VQodNrlBAY5N
-	pfOcFj2us46YVXs09IusBPHPaYHj9RIjLfuqftUAjQNJJvsIBhfYF8jx4Zn8GMmKTcpAkEK/L/s
-	8f0Ix6DTBuPAGpHHWnNok8/hc6qipIK4f8QJoNbiURXlFTh7vGkt192PmES0AAVUmorNOGK1CM5
-	r7ZNKsA==
-X-Google-Smtp-Source: AGHT+IHMrLEKKWT0IE0Pkp8a2/xdA/5e/01YRbQXnG3u9NBBrDsWnXB6DoDNxd3kBhyGA1zGOhvxpw==
-X-Received: by 2002:a05:6a00:ad1:b0:73c:b86:b47f with SMTP id d2e1a72fcca58-7489ce012b1mr17532261b3a.4.1750157472152;
-        Tue, 17 Jun 2025 03:51:12 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1750157476; x=1750762276;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eYirVNrH0sBRP/I/DuDVQZwpZNmktE5hYvkDuLzNhwo=;
+        b=Cz4Vfq+MiQpllIjP96H+2WvSsG44Swpj5eKypVQoPiyiaJeNl+5ZzOCFgi819fEXgB
+         sK82nr0ahPECtUM4GKBQrUieg5l4+VZ3oVkgf4P2cJmv8x3RFKF23E0gAojEizeuHSeg
+         nlZK1TSbariXsZPgub2pj49dBI7ZzYOc3oOX8YEYg55AE8YmFzkXPO2U+5H6BiZMoo0+
+         dDzrKabWuxqp2OOsAUd3Ei3/+MLg42e6jHnMD8U6Ax/K4dDh/FYCyOvh2/+TOvZTZyg+
+         wqWFeqbvqOEb9eAkY17Zv7tsveuF4CsP1DxhHPUCqrOIq3EF1WaNrOBJeFMly4WIV0cD
+         1opg==
+X-Forwarded-Encrypted: i=1; AJvYcCWOr+jzP48Pm/5zSFzBD+zJPHwC4BWktnVXEMujbaufAUBx733TJwxniILmexW8PUx9IChEiTA6HVJWBSk2q8A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxDi5aj3Ll/fB2BUVHzmpWsShBuThGLLveLKFVjcDQma4WMCRNK
+	0mh4Ah3vntwayxkXqwuNhei7naeEXYDjw0xw9oOmNbXew+hdZ9CtmkNxy1UFGs23YCjrkA==
+X-Gm-Gg: ASbGnctcjy7I7sF3SoVW+aaa8nT5PSkZXrs7YvL9EspWv1cGQrDSDhhHo9w+AtrVKFo
+	iPGMm+ZH9jagUG3/rjIQIrDow/xAFi2hWOM81tJJ+sD+p8Tpqzq4PLOUdhCyb+PKbgnX4UeqjB+
+	AqoRcCORHFOf6qPMe4dHLjYUu0otDuPNF181YGD6xTluD935zVyaNVxRfK8FRmP8BZp3/v75rn4
+	r2/EX900kVADLf/tatPUe6X03vFAymv67burfLy7LRjI9/NoIrbj4Vr2KVmBywa9/zKsVkCF0Rz
+	UvJBV1K9mrfkIyboX7w8idQYeDwu+sl9RaDHMwDRMC2HVf3++HfH1SjvZq9vrxZcDmvhHKMP8K2
+	ilpt3TA==
+X-Google-Smtp-Source: AGHT+IG67XV8NAcrc8a3X5TrNY6qOpafQ7r4n3n1P38piqvubgHDmdu+tSgHjAfW2cCwXvv3qdMtpw==
+X-Received: by 2002:a05:6a21:1512:b0:215:d41d:9183 with SMTP id adf61e73a8af0-21fbc62c0e0mr22406556637.1.1750157476221;
+        Tue, 17 Jun 2025 03:51:16 -0700 (PDT)
 Received: from fedora.dns.podman ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-748900d2e25sm8795739b3a.171.2025.06.17.03.51.08
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-748900d2e25sm8795739b3a.171.2025.06.17.03.51.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jun 2025 03:51:11 -0700 (PDT)
+        Tue, 17 Jun 2025 03:51:15 -0700 (PDT)
 From: Hangbin Liu <liuhangbin@gmail.com>
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -81,10 +83,12 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Shuah Khan <shuah@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCH net-next 0/2] selftests: net: use slowwait to make sure setup finished
-Date: Tue, 17 Jun 2025 10:50:58 +0000
-Message-ID: <20250617105101.433718-1-liuhangbin@gmail.com>
+Subject: [PATCH net-next 1/2] selftests: net: use slowwait to stabilize vrf_route_leaking test
+Date: Tue, 17 Jun 2025 10:50:59 +0000
+Message-ID: <20250617105101.433718-2-liuhangbin@gmail.com>
 X-Mailer: git-send-email 2.46.0
+In-Reply-To: <20250617105101.433718-1-liuhangbin@gmail.com>
+References: <20250617105101.433718-1-liuhangbin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -93,18 +97,51 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The two updated tests sometimes failed because the network setup hadn't
-completed. Used slowwait to ensure the setup finished and the tests
-always passed. I ran both tests 50 times, and all of them passed.
+The vrf_route_leaking test occasionally fails due to connectivity issues
+in our testing environment. A sample failure message shows that the ping
+check fails intermittently
 
-Hangbin Liu (2):
-  selftests: net: use slowwait to stabilize vrf_route_leaking test
-  selftests: net: use slowwait to make sure IPv6 setup finished
+  PING 2001:db8:16:2::2 (2001:db8:16:2::2) 56 data bytes
 
- tools/testing/selftests/net/test_vxlan_vnifiltering.sh | 9 ++++-----
- tools/testing/selftests/net/vrf_route_leaking.sh       | 4 ++--
- 2 files changed, 6 insertions(+), 7 deletions(-)
+  --- 2001:db8:16:2::2 ping statistics ---
+  1 packets transmitted, 0 received, 100% packet loss, time 0ms
 
+  TEST: Basic IPv6 connectivity                                       [FAIL]
+
+This is likely due to insufficient wait time on slower machines. To address
+this, switch to using slowwait, which provides a longer and more reliable
+wait for setup completion.
+
+Before this change, the test failed 3 out of 10 times. After applying this
+fix, the test was run 30 times without any failure.
+
+Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+---
+ tools/testing/selftests/net/vrf_route_leaking.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/net/vrf_route_leaking.sh b/tools/testing/selftests/net/vrf_route_leaking.sh
+index e9c2f71da207..ce34cb2e6e0b 100755
+--- a/tools/testing/selftests/net/vrf_route_leaking.sh
++++ b/tools/testing/selftests/net/vrf_route_leaking.sh
+@@ -275,7 +275,7 @@ setup_sym()
+ 
+ 
+ 	# Wait for ip config to settle
+-	sleep 2
++	slowwait 5 ip netns exec $h1 "${ping6}" -c1 -w1 ${H2_N2_IP6} >/dev/null 2>&1
+ }
+ 
+ setup_asym()
+@@ -370,7 +370,7 @@ setup_asym()
+ 	ip -netns $r2 -6 addr add dev eth1 ${R2_N2_IP6}/64 nodad
+ 
+ 	# Wait for ip config to settle
+-	sleep 2
++	slowwait 5 ip netns exec $h1 "${ping6}" -c1 -w1 ${H2_N2_IP6} >/dev/null 2>&1
+ }
+ 
+ check_connectivity()
 -- 
 2.46.0
 
