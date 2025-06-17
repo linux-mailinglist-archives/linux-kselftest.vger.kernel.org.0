@@ -1,154 +1,186 @@
-Return-Path: <linux-kselftest+bounces-35185-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35186-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75094ADC3D9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 09:59:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11101ADC42B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 10:10:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 997B11893A2D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 07:59:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EE5BA172555
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 08:07:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CC5928F933;
-	Tue, 17 Jun 2025 07:59:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6182B28F523;
+	Tue, 17 Jun 2025 08:03:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="riuj8blw";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="3dlU8pnc"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KhT8009f"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55AC028ECCD;
-	Tue, 17 Jun 2025 07:59:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A046C28CF58
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Jun 2025 08:03:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750147151; cv=none; b=nzpRFkFMYZeWjba0C+U4Z6ghAmg6I3+O5CV9E/IwckRdRoQBIA8Sit6QF8uYgfbty+FUoGhVMM/8cCxQFP3Nqc96Ja/V4QaRJgCWtheMuqTp+FttPXept50jd4G35EjqNpzkFw5mKvqeyPFkYhGicPkXT3ZJrmAlv/fJkgAqL6Y=
+	t=1750147403; cv=none; b=eIitXDasiRj4+nKovVX12jCAbgZhc43mqU3aVDBzSSIXLkcx6WndRc9mWbdxD0PMjXncXYwvHYRhGnbXr2U4ViQnggCxsUPHkSPfxxq6Xy+kIjUC8ckAMhTq/CHhAY4OjDeTDxjy5z9O5vAkc28XLfMnOPN0azxOUDxWU2TMMrQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750147151; c=relaxed/simple;
-	bh=NIgJ6S2IMm67sNgLluaxm/t93R9SpN5EK5tTKzscYko=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rg8UqNTLUtGw/5zPkUs1SpKD2yxfxptljTPMIbHfOgIUbBzA1fj9ASL6FfJCkH6m9EtZ5o71AeT1Bbn8b9ecoV5Qa9keC+5QdC19TTKDdqC+hKVgZj0sMFhnmGwwdkl6ryuyUx56+8NpSfL1EfAF1yylnBVCSwqAvnu02gPaQVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=riuj8blw; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=3dlU8pnc; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Tue, 17 Jun 2025 09:59:08 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1750147148;
+	s=arc-20240116; t=1750147403; c=relaxed/simple;
+	bh=bA/s+nEWNrj//fK7D5RkLh1+Yz6YKukh9Y35BfxnfN0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EzANnlWtkUgvu84C1WXpjb2X64jqe3Ppuw3TBatfj6L8RSIMulsC0bVh3iI06/p7WsiNr0hRrYltPgqfneXdWdK2gexzodAqQiEGKQHyycBkBw0nhF87jOd2gJ91tkXxG/O+v3P2L7cLSCqKl5uDVi3nIXbesJChZRRReoHsUQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KhT8009f; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1750147400;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=hj2LJB5Pz+vjWi8da/Iv2JkklxNhs1V6axP5pIrqxJM=;
-	b=riuj8blwvDOsP6wUDdP3Ci9HXHbVoAlg32Weak2qNVuiCsD1ol6m/pAdmc6Wz+nOKmmqKg
-	3IeYSlbgY2321vJgf0z88CN2TJeN2qF5hfUcRL4jBlVM2dUs3HE7qD16NAvAmHP/2Q0Tiu
-	Bv4zf2GgxWNfyv3tMCpI3wG2QM2gYLo0w2MiidaFYgj1M6iVe1g6wxrJ1VTkOJvr9Jf1rH
-	cXvYeuXURM43LbebVBKLsOIftA5ESr5OIcgKGY3NSdHi38sICPCCjfkEXkqUUNYg//cVI+
-	+91Qelw5eKrsAUCwxPXvtbH9iLIk+rBeQm+lUtOKp6N02yrLbZppHMyNUJ3vEQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1750147148;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hj2LJB5Pz+vjWi8da/Iv2JkklxNhs1V6axP5pIrqxJM=;
-	b=3dlU8pncy0paXbKmJi5ztkGhzw3FggNzV5ZHCn4tYoW6SfRQ/nfHyS2G+ZITRQ05Cj+PIu
-	F15f2+z9rzshWKDQ==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>, 
-	Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, Shuah Khan <shuah@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Nicolas Schier <nicolas.schier@linux.dev>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, linux-doc@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, workflows@vger.kernel.org
-Subject: Re: [PATCH v3 04/16] kbuild: userprogs: add nolibc support
-Message-ID: <20250617095102-d3df1c46-3d51-4f77-af0a-8299f5e71ad9@linutronix.de>
-References: <20250611-kunit-kselftests-v3-0-55e3d148cbc6@linutronix.de>
- <20250611-kunit-kselftests-v3-4-55e3d148cbc6@linutronix.de>
- <CAK7LNAQUN3hWYh_1=LMzVp1Ddbq3W=yGHZ5__LbcfBajfuhscg@mail.gmail.com>
+	bh=I9M5qb9uvgcmFrvNHUSO6JPSDEu8M+uViPg0NcUfDQc=;
+	b=KhT8009fSbJccmKGB7Q4hdIzPBGLHnSgVnEbWV8zwJOzE23OK4O60kgzUzFXLqtKfo8FDh
+	nvL+k4cxySMMUt76d2XPAQMuNEJnlFMwfWDM4PZUDOIOjIaCPPBhXXmcDDO1xtGBQqdtax
+	yD5RKLbMkdfwyrs8CfyYMYAD5x6BoBU=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-97-gvzLpCa0PoaUS3RXcxLwyw-1; Tue, 17 Jun 2025 04:03:17 -0400
+X-MC-Unique: gvzLpCa0PoaUS3RXcxLwyw-1
+X-Mimecast-MFC-AGG-ID: gvzLpCa0PoaUS3RXcxLwyw_1750147396
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-452ff9e054eso28128805e9.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Jun 2025 01:03:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750147396; x=1750752196;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=I9M5qb9uvgcmFrvNHUSO6JPSDEu8M+uViPg0NcUfDQc=;
+        b=bCkHcIvrdG+2xg9GjOkObnxQXzCIfJ44W8CGJBbb3wMeSUOrq4m7BiyFrPIvzW2IMk
+         tW9WG9xou+GQZHsue4WxUrEfy332S7iTuynqToyLjgtL6ZmJQzeBXHVj/sgahBqfg4R3
+         tekoUeq+1fKtm8l3CqXAN82YwqxeSbcBI+Zdu16IbT+NE4XHDKuX0kHokdblE/g1pVYQ
+         UB1Q8vcddnl4uqeASKF0sUMaimIgmnzL95C9Il7GvFtlR055awVcWDJpbv65jDXlIwY0
+         eQDt0nGrEu7Qm9mjiPHS2UwklCpfdjHjwR37otePExPnT3Zy4DJHVwECk9xuubMNUH4/
+         sGvA==
+X-Forwarded-Encrypted: i=1; AJvYcCVss2OaNFtUC4OTkVGRLbKjlNWFJJdVfOTg3g+inqRGHduM81x7hnLH/T4and6qGJYYxDErBa1thJe6b//yCmg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwqSx2puBotnLJf3kIvOqlEz80Or1hsA4vXh63bokCVeB3doz/N
+	vhtu7TORti1pQQFKpCNOJw0P3ERsvtHIUnywBGF0KIypT0EMsl4BmWZQgSGTN0qipiKB+Z8nQZQ
+	Knz2p7gu+8kpOvGHGb99dL0Ul7R+U/17avfwp0q0aiZOQ8VIIVm11b3/NoeKaxLTmkPR4+Q==
+X-Gm-Gg: ASbGncuGtG079I8YHCyZG/FL5gIcF1ltHhjuDzliTyrxsz8z7vaRDOURpC/w1rh8FgY
+	YPT8VMu1/8zNPUpFRuEyw7gjQnVWxt50beEj3VueFKpO0FOXmWYTiAl8xVEBMv3lpT/CdAwp7Kh
+	KK8mwGqvEE9gDmJ8OsJ34U2VeCTCgdrkejpxXUvIKXdLboYTDIUcaXh2gppzmRhPAxTgXudGXPa
+	xc0Ye9foLBvOzA/ybBOyNN4YsKrlUro0yfyYyfNAVkFcK7ZRCcfVGCD6eLgv3C48M91HxUCtkjl
+	LnsxarEXm6lJOFHtcQRYyu+W1mPa70yqN7VG7PJB3siiYrbS3gJ5WWXErm/r/D4oFledCg==
+X-Received: by 2002:a05:600c:6989:b0:453:9b3:5b65 with SMTP id 5b1f17b1804b1-4533ca502ecmr118289985e9.8.1750147396414;
+        Tue, 17 Jun 2025 01:03:16 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGa5hb12hxOI7NI9LM+Gy/ttziKvFk+cYltrEgu8xSQyQCrypOS1hOsZRqs2NvczVsDJZBItw==
+X-Received: by 2002:a05:600c:6989:b0:453:9b3:5b65 with SMTP id 5b1f17b1804b1-4533ca502ecmr118289205e9.8.1750147395893;
+        Tue, 17 Jun 2025 01:03:15 -0700 (PDT)
+Received: from ?IPV6:2a0d:3344:2448:cb10:3ac6:72af:52e3:719a? ([2a0d:3344:2448:cb10:3ac6:72af:52e3:719a])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4532e16a097sm172162895e9.33.2025.06.17.01.03.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Jun 2025 01:03:15 -0700 (PDT)
+Message-ID: <8ff9ee00-1bb6-4558-b2a7-c0ee59badb12@redhat.com>
+Date: Tue, 17 Jun 2025 10:03:10 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 net-next 04/15] tcp: AccECN core
+To: chia-yu.chang@nokia-bell-labs.com, edumazet@google.com,
+ linux-doc@vger.kernel.org, corbet@lwn.net, horms@kernel.org,
+ dsahern@kernel.org, kuniyu@amazon.com, bpf@vger.kernel.org,
+ netdev@vger.kernel.org, dave.taht@gmail.com, jhs@mojatatu.com,
+ kuba@kernel.org, stephen@networkplumber.org, xiyou.wangcong@gmail.com,
+ jiri@resnulli.us, davem@davemloft.net, andrew+netdev@lunn.ch,
+ donald.hunter@gmail.com, ast@fiberby.net, liuhangbin@gmail.com,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org, ij@kernel.org,
+ ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com,
+ g.white@cablelabs.com, ingemar.s.johansson@ericsson.com,
+ mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at,
+ Jason_Livingood@comcast.com, vidhi_goel@apple.com
+Cc: Olivier Tilmans <olivier.tilmans@nokia.com>
+References: <20250610125314.18557-1-chia-yu.chang@nokia-bell-labs.com>
+ <20250610125314.18557-5-chia-yu.chang@nokia-bell-labs.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20250610125314.18557-5-chia-yu.chang@nokia-bell-labs.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAK7LNAQUN3hWYh_1=LMzVp1Ddbq3W=yGHZ5__LbcfBajfuhscg@mail.gmail.com>
 
-On Tue, Jun 17, 2025 at 12:35:07AM +0900, Masahiro Yamada wrote:
-> On Wed, Jun 11, 2025 at 4:38 PM Thomas Weißschuh
-> <thomas.weissschuh@linutronix.de> wrote:
-> >
-> > Userprogs are built with the regular kernel compiler $CC.
-> > A kernel compiler does not necessarily contain a libc which is required
-> > for a normal userspace application.
-> > However the kernel tree does contain a minimal libc implementation
-> > "nolibc" which can be used to build userspace applications.
-> >
-> > Introduce support to build userprogs against nolibc instead of the
-> > default libc of the compiler, which may not exist.
-> >
-> > Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-> >
-> > ---
-> > This could probably be moved out of the generic kbuild makefiles.
-> > I think the ergonimics would suffer and this functionality could be
-> > used by other users of userprogs.
-> >
-> > Also this does currently not support out-of-tree builds.
-> > For that tools/include/nolibc/*.h and usr/include/*.h would need to be
-> > installed into the build directory.
-
-<snip>
-
-> > --- a/scripts/Makefile.userprogs
-> > +++ b/scripts/Makefile.userprogs
-> > @@ -16,10 +16,17 @@ user-csingle        := $(addprefix $(obj)/, $(user-csingle))
-> >  user-cmulti    := $(addprefix $(obj)/, $(user-cmulti))
-> >  user-cobjs     := $(addprefix $(obj)/, $(user-cobjs))
-> >
-> > +user_nolibc_ccflags := -nostdlib -nostdinc -static -fno-ident -fno-asynchronous-unwind-tables \
-> > +                     -ffreestanding -fno-stack-protector \
-> > +                     -isystem $(objtree)/usr/include -include $(srctree)/tools/include/nolibc/nolibc.h -isystem $(srctree)/tools/include/nolibc/
+On 6/10/25 2:53 PM, chia-yu.chang@nokia-bell-labs.com wrote:
+> From: Ilpo Järvinen <ij@kernel.org>
 > 
-> The tools/ directory is a different world, and Kbuild scripts do not know
-> anything about it.
+> This change implements Accurate ECN without negotiation and
+> AccECN Option (that will be added by later changes). Based on
+> AccECN specifications:
+>   https://tools.ietf.org/id/draft-ietf-tcpm-accurate-ecn-28.txt
+> 
+> Accurate ECN allows feeding back the number of CE (congestion
+> experienced) marks accurately to the sender in contrast to
+> RFC3168 ECN that can only signal one marks-seen-yes/no per RTT.
+> Congestion control algorithms can take advantage of the accurate
+> ECN information to fine-tune their congestion response to avoid
+> drastic rate reduction when only mild congestion is encountered.
+> 
+> With Accurate ECN, tp->received_ce (r.cep in AccECN spec) keeps
+> track of how many segments have arrived with a CE mark. Accurate
+> ECN uses ACE field (ECE, CWR, AE) to communicate the value back
+> to the sender which updates tp->delivered_ce (s.cep) based on the
+> feedback. This signalling channel is lossy when ACE field overflow
+> occurs.
+> 
+> Conservative strategy is selected here to deal with the ACE
+> overflow, however, some strategies using the AccECN option later
+> in the overall patchset mitigate against false overflows detected.
+> 
+> The ACE field values on the wire are offset by
+> TCP_ACCECN_CEP_INIT_OFFSET. Delivered_ce/received_ce count the
+> real CE marks rather than forcing all downstream users to adapt
+> to the wire offset.
+> 
+> This patch uses the first 1-byte hole and the last 4-byte hole of
+> the tcp_sock_write_txrx for 'received_ce_pending' and 'received_ce'.
+> Also, the group size of tcp_sock_write_txrx is increased from
+> 91 + 4 to 95 + 4 due to the new u32 received_ce member. Below are
+> the trimmed pahole outcomes before and after this patch.
 
-Ack.
+AFAICS 'received_ce' fills the existing 4 bytes hole, so
+tcp_sock_write_txrx size should be now (95 + 0), am I missreading something?
 
-How does this statement affect the next patch which creates
-tools/include/nolibc/Kconfig.nolibc ?
-Is it fine to create the Kconfig file in tools/ or should I move it?
-I do want to maintain this file as part of nolibc and not KUnit.
-The possibilities I see are init/Kconfig.nolibc or lib/Kconfig.nolibc.
+> @@ -384,17 +387,16 @@ static void tcp_data_ecn_check(struct sock *sk, const struct sk_buff *skb)
+>  		if (tcp_ca_needs_ecn(sk))
+>  			tcp_ca_event(sk, CA_EVENT_ECN_IS_CE);
+>  
+> -		if (!(tp->ecn_flags & TCP_ECN_DEMAND_CWR)) {
+> +		if (!(tp->ecn_flags & TCP_ECN_DEMAND_CWR) &&
+> +		    tcp_ecn_mode_rfc3168(tp)) {
+>  			/* Better not delay acks, sender can have a very low cwnd */
+>  			tcp_enter_quickack_mode(sk, 2);
+>  			tp->ecn_flags |= TCP_ECN_DEMAND_CWR;
+>  		}
+> -		tp->ecn_flags |= TCP_ECN_SEEN;
 
-> And, you do not need to implement this in scripts/Makefile.userprogs
-> because you can move this to lib/kunit/Makefile.kunit-uapi or somewhere.
+It's not clear why you need to move this statement earlier in the code
+path even for ecn_mode_rfc3168(). Either a comment or
 
-Understood. This is not unexpected, as hinted in the commit message.
+		if (!tcp_ecn_mode_rfc3168(tp))
+			break;
 
-> > +user_nolibc_ldflags := -nostdlib -nostdinc -static
-> > +
-> >  user_ccflags   = -Wp,-MMD,$(depfile) $(KBUILD_USERCFLAGS) $(userccflags) \
-> > -                       $($(target-stem)-userccflags)
-> > -user_ldflags   = $(KBUILD_USERLDFLAGS) $(userldflags) $($(target-stem)-userldflags)
-> > -user_ldlibs    = $(userldlibs) $($(target-stem)-userldlibs)
-> > +                       $($(target-stem)-userccflags) $(if $($(target-stem)-nolibc),$(user_nolibc_ccflags))
-> > +user_ldflags   = $(KBUILD_USERLDFLAGS) $(userldflags) $($(target-stem)-userldflags) \
-> > +                       $(if $($(target-stem)-nolibc),$(user_nolibc_ldflags))
-> > +user_ldlibs    = $(userldlibs) $($(target-stem)-userldlibs) \
-> > +                       $(if $($(target-stem)-nolibc),$(user_nolibc_ldlibs))
-> >
-> >  # Create an executable from a single .c file
-> >  quiet_cmd_user_cc_c = CC [U]  $@
+a few lines aboved could help.
 
+>  		break;
+>  	default:
+>  		if (tcp_ca_needs_ecn(sk))
+>  			tcp_ca_event(sk, CA_EVENT_ECN_NO_CE);
+> -		tp->ecn_flags |= TCP_ECN_SEEN;
 
-Thomas
+Same here.
+
+Thanks,
+
+Paolo
+
 
