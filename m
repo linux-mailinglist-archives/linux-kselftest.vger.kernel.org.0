@@ -1,164 +1,146 @@
-Return-Path: <linux-kselftest+bounces-35196-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35197-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DBB8ADC6FD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 11:49:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06E4FADC75F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 12:01:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B04911888D3A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 09:49:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD2103AECE5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jun 2025 10:00:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04C552C08A6;
-	Tue, 17 Jun 2025 09:48:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B5222C324E;
+	Tue, 17 Jun 2025 10:00:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Hw1/o4lr"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Ztsa+UgO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com [209.85.222.49])
+Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47EC62C08AC
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Jun 2025 09:48:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99AFA288CB5
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Jun 2025 10:00:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750153737; cv=none; b=G8qtF07zVb2u6jNBn4pVYrSeItLBKN5VLYtq0095QmB30Q2HAyJGdNDiYbzrKIWP5YmlBvahvdj1WqpN93K3rbRo1adjbrcZ4IrYPHhySNgcPh/uptniRHJMH0OclOfWjDyqoCQ8hFkP6H3tdDCmex/Bd/RrtegPkI6s3LiBZXE=
+	t=1750154459; cv=none; b=NqU535Gws16dvYvZzYhc92UpIKyUkW/e0BIsm60x0Y+dhQN00ubNqxE6DlCSQ72PCHX+Bsdr2p99dTZy4wrxikISnmxzWCCTfuKl8Ec/wUOlwD4a5ydar0sh8gE7bmGqnzUL+QL2gtgNyyCmqQJr+TiVgaw8sHZpJ19M4lWKork=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750153737; c=relaxed/simple;
-	bh=yU8B2S0rvUJRYS4eDEpg/4azZ5qYIqxzpKab9dnBZz8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ff6F3S89dDKPbLAS4zwCneN6Exf+RJTWYKUCTOZUWUJWHl5+jbqZSbes6zO1gNaivRI7bgPH16PBQIu5rUk0on2nekORkyIYTk3uUguewzJogjaoKv1NcvPp0neOW2Nic2nkhGnalId+Ke6nTJelDwSGHm96RlLcWtgQii5/qq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Hw1/o4lr; arc=none smtp.client-ip=209.85.222.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ua1-f49.google.com with SMTP id a1e0cc1a2514c-87f1b3a3e7bso728907241.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Jun 2025 02:48:55 -0700 (PDT)
+	s=arc-20240116; t=1750154459; c=relaxed/simple;
+	bh=63f0TqEe7ZSJlAEEDh5c6QP7qrLi0rXRzYggtZFz3+4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mk4OHHBjvBrS5K5L3277zBB1tsgVofBRV/KDZx4lHWZT2dGhomTULNKOdUKN6tSLOkqIF4H8TVetq37dCJyTDW24d8wGicpMvS1i3RAeOyh7io5umlt6monNhAVzMJrENWOnWeAeCRdQTfGpIBuHuifC1sZx+Dv0k7gNpJ+GRKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Ztsa+UgO; arc=none smtp.client-ip=209.85.128.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-450ce671a08so34207625e9.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Jun 2025 03:00:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1750153734; x=1750758534; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JJabXLtW1m0bIrhc/aru55FQgKQQl5SUoAdpl7Ryqe0=;
-        b=Hw1/o4lr6VhQg9YPirI80Udk4EkljoaYnWcf4pUFVIk7I7oEMips1IWVXbtAb4BnpK
-         1WhZn+tBrlvQkkJpmQqGoyW41lu7QLpw/Xx5sh5iOsnBJi1girisLmTAIcJU/VQ9VwAi
-         n2MfPj0fAt0Vtd5FsCqzv3B6iA7E2NWp6baBpSv5FFNyzmuQnrMIxNHdNw79JsMtK04t
-         Y14c+4DD76xs9Z3lnG8RxwrJstNPPvy0tHrMoWQLkm1bH3IVzSGg+QX8rPNKfnIkJnrr
-         Cc+zm5aoH+S4HqPwj4bRDgWeQZt/EWJK3AtOmE/ZCuX+GdotI7o+abeCK53gKQtCZEtK
-         3cJw==
+        d=suse.com; s=google; t=1750154456; x=1750759256; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=63f0TqEe7ZSJlAEEDh5c6QP7qrLi0rXRzYggtZFz3+4=;
+        b=Ztsa+UgOfW/vmywPz5ORYuybLP0dYfXEx7KKoNl7AVRruM1QSq905zjzfSR9miSJ/D
+         hmyq2qaA+lb1x0YFbEpFqrz8W4N9p7aPxPxhabgyiap2OMQEfKHdGsOV4szkVTC+L6BW
+         fkSnN5AXMIJKmacD5HeJ8MLkZOxRganype1ZIATf9tx2Lc+21LA5J8d2EUWzipjDp+fR
+         ZL4b0BmXvsmDKlK85c95PPvtVzS+15EwzlPJetBS9bDo60lxc7qBxi11Ftxz9pFDfMWP
+         fhzASrS8GNiMljS4/mBNtg++creM46pQo595o711WBo9lpNWE5Penb8s0MM2sKToIHHF
+         2PUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750153734; x=1750758534;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JJabXLtW1m0bIrhc/aru55FQgKQQl5SUoAdpl7Ryqe0=;
-        b=shTGHB5X8bE/2cWr4pTFfsaQctTVIyjgLuk3muPfE4KlhbLPj3g4jYci6VceXz2umf
-         7K6bQcIoOX36abK5OoG3MNTqLLm6xbIrc6gmeSGrdly2NeFjJ1vjXV0xp8SDe9mVBV3R
-         wOMa0UI9FKgR9/rWUPqO0CFtA6Hb9ow68PonUzA1NwoF2e5qR9LC3huwY1326hWAC/Xx
-         KDivINsD8CQcYBdVCRNRIBWyYy0kCZsnCHUhVSYKcBC03ZPKDVupEeMh/utGUKCeoz4p
-         Zct0Y0WMjK/MpYjAv24hxh5VOqEsSeGjYYRl/DZXOVW96Ai3DOvUkIl/dCzcIsYRtvRn
-         aHSQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUGWfljEW3Xq6s/3nJIYh3M5arqv4YgjuJBl3NpFbhbSijMEAldwEQ9bsVTf5jeGCplpf7BGuSufNGVQ4LzksM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzN2WTsI966JrpzVX6DYt525d5Ka0WZAk1vNpfEaNxgkQXU9sIi
-	+8y98aDviJz6vNlecmUmTxxxaWc0uTEg9ALWkPdHr6ugVXFwTmSfMpyr4qr0knIHMa/B8ckXemM
-	2obSUKEUTTnFO5psZzOE7V9zDxHWW1rrG5yUTzrc9Gg==
-X-Gm-Gg: ASbGnct41tutm1MtfGSfE9TcQp3pnQoGsu9RuXDrFCwGHgjGOr7ZnW++wqNm6SbrtBE
-	zpQPZJF1+ufPx7ssTIypNEcAP06+j3g87Sf+YvA2+wkaVN5TpMkGLLwnfW7f8N9Rv+BbIr4DmfN
-	I9c4Vp7J59RWvH/oFRVJFRaMSkFcJudSgHwsx2TYB0H4o1c3cJoFYqQZfl3rJfmd8iDtgjldYr/
-	mbwkgnMWA0VQ1Q=
-X-Google-Smtp-Source: AGHT+IFqlwLfs3w5t0Kke4vusAJ0LDpMDoRdBhRndcFHTCxIPX6kVlBZ7kOElI3G6E8LB5BuhyWmQMy9mQlLjgSj4NQ=
-X-Received: by 2002:a05:6102:4b88:b0:4e7:db33:5725 with SMTP id
- ada2fe7eead31-4e7f632331bmr9323586137.3.1750153734104; Tue, 17 Jun 2025
- 02:48:54 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1750154456; x=1750759256;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=63f0TqEe7ZSJlAEEDh5c6QP7qrLi0rXRzYggtZFz3+4=;
+        b=YEjuGD/OtNoR/OCiAeHYlAPyC8ThUymoJj4lVKTOwoIEjO8IBBGKpG2IJA6E+9vKPz
+         QYvhgtuwnumkKsrOjpejPPzr1DHDgHOKeinUjCkOpiFWeVe85V2wJuy1Y2CqPOPig9FD
+         PHESsc8JPSWaUZkhF5JcP88egS2+gW6Kk1ZTgHvg6xlM5oy3eugWW1tWsy75Wb2fOgVp
+         LTUV54xdaAr9k/YEFtb7sBLBf8xmbXRrwViFJorSXn1R1QwF6Ysb93vJ54Tb2b99/Xs9
+         /FLl68otYuvluNDIcTcZcrqSSq4z0kZcXz3I3tzS681oJqWvAGPFBSGSfUFMBuJfSJue
+         /iMA==
+X-Forwarded-Encrypted: i=1; AJvYcCVjLxO5FSpOFzW+0VLr/FyyqC/R+Nz434tPhgyAzl5n7D4WXxsVp2zWrH5Tt7YAxIfJDfFDggXaLTv0SpNQuOc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6Z+g4EgZCgJ+hqB2hOX02VsHpYaak7ZBEfVUH/E1qMl7D2q9I
+	9Z/GTmBM2FTZ7mrTRnRXM9z79NombEyVohiX7WVHWFTnHSHQrDfu1MQSSynuXmqoU6U=
+X-Gm-Gg: ASbGncsNlTzoG7cx3x0smxAC35xcuANBobClzlug2SA+OLbqIBLtqDn5jYumifcjwwm
+	cr4r12H0LoBF5++wGpmJX2Hh5xm/aKOifCvoW0zjR+Ik/DHJEUL+US+xWNWSGl7C5kNLkaAnT3n
+	BjhDe+66ZB7vJqqkEzXavkkzJGgfePCax76ZrPag1nkoAvdFIQHnFcQ4iZiL4jfkxAxm/OAEyZX
+	SuP/y3v8Mt02FXIbT1ykpVpFYdOPmZVC1S1tjVrR/aitE46/x+1VamDQthFw+EmvR3SSB1l+LQb
+	09xKdyO5z78Uv2kmZ6g8/SavQR+/dIEmbvECoXoadNSjOOx2mz9i78o7cLiRBxS0
+X-Google-Smtp-Source: AGHT+IFOY4uMo1XQEX4RuwIHAMfgibmwRB22iBO5mpSJQ1+dfkCUk/eEmOPDTUbzxCn/VYVxqmedIA==
+X-Received: by 2002:a05:600d:10f:b0:452:fdfa:3b3b with SMTP id 5b1f17b1804b1-4533cadf885mr65921715e9.5.1750154454019;
+        Tue, 17 Jun 2025 03:00:54 -0700 (PDT)
+Received: from blackdock.suse.cz ([193.86.92.181])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4532e195768sm171790845e9.0.2025.06.17.03.00.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jun 2025 03:00:53 -0700 (PDT)
+Date: Tue, 17 Jun 2025 12:00:51 +0200
+From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To: syzbot <syzbot+31eb4d4e7d9bc1fc1312@syzkaller.appspotmail.com>, 
+	inwardvessel@gmail.com
+Cc: akpm@linux-foundation.org, andrii@kernel.org, ast@kernel.org, 
+	axboe@kernel.dk, bpf@vger.kernel.org, cgroups@vger.kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, hannes@cmpxchg.org, haoluo@google.com, 
+	hawk@kernel.org, john.fastabend@gmail.com, jolsa@kernel.org, josef@toxicpanda.com, 
+	kpsingh@kernel.org, linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, martin.lau@linux.dev, mhocko@kernel.org, 
+	muchun.song@linux.dev, mykolal@fb.com, netdev@vger.kernel.org, roman.gushchin@linux.dev, 
+	sdf@fomichev.me, shakeel.butt@linux.dev, shuah@kernel.org, song@kernel.org, 
+	syzkaller-bugs@googlegroups.com, tj@kernel.org, yonghong.song@linux.dev
+Subject: Re: [syzbot] [cgroups?] general protection fault in
+ __cgroup_rstat_lock
+Message-ID: <qzzfped7jds7kcr466zahbrcw2eg5n6ke7drzxm6btexv36ca2@mici3xiuajuz>
+References: <6751e769.050a0220.b4160.01df.GAE@google.com>
+ <683c7dee.a00a0220.d8eae.0032.GAE@google.com>
+ <p32ytuin2hmxacacroykhtfxf6l5l7sji33dt4xknnojqm4xh2@hrldb5d6fgfj>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CA+G9fYssELHcYKwgGNBMLrfeKZa9swGdLrH7gxqzd4P0kaOiZg@mail.gmail.com>
- <7c101fe5-7c73-4916-a832-d656511eeab8@heusel.eu> <ec18001d-7123-4d13-aea7-a28594cd137b@redhat.com>
-In-Reply-To: <ec18001d-7123-4d13-aea7-a28594cd137b@redhat.com>
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Tue, 17 Jun 2025 15:18:42 +0530
-X-Gm-Features: AX0GCFuBeLu3_hPbiCBoM4g8VWlAFlv6r7WSlxB2DJ9al6JMin7gQdwU7P-bZ5E
-Message-ID: <CA+G9fYvoYSpyxpBAcAje6X7707+y9cc84mUrWMvdLtZc3Np1eQ@mail.gmail.com>
-Subject: Re: clang: selftests/mm gup_longterm error while loading shared
- libraries liburing.so.2 cannot open shared object file No such file or directory
-To: David Hildenbrand <david@redhat.com>
-Cc: Christian Heusel <christian@heusel.eu>, clang-built-linux <llvm@lists.linux.dev>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
-	lkft-triage@lists.linaro.org, Linux Regressions <regressions@lists.linux.dev>, 
-	Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Vlastimil Babka <vbabka@suse.cz>, Shuah Khan <shuah@kernel.org>, 
-	Zi Yan <ziy@nvidia.com>, lorenzo.stoakes@oracle.com, 
-	Dan Carpenter <dan.carpenter@linaro.org>, Anders Roxell <anders.roxell@linaro.org>, jackmanb@google.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="krlwbo2bq63d5qwa"
+Content-Disposition: inline
+In-Reply-To: <p32ytuin2hmxacacroykhtfxf6l5l7sji33dt4xknnojqm4xh2@hrldb5d6fgfj>
+
+
+--krlwbo2bq63d5qwa
+Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+Subject: Re: [syzbot] [cgroups?] general protection fault in
+ __cgroup_rstat_lock
+MIME-Version: 1.0
 
-On Tue, 17 Jun 2025 at 01:58, David Hildenbrand <david@redhat.com> wrote:
->
-> On 16.06.25 21:14, Christian Heusel wrote:
-> > On 25/06/16 11:02PM, Naresh Kamboju wrote:
-> >> The following test regressions noticed while running selftests/mm gup_=
-longterm
-> >> test cases on Dragonboard-845c, Dragonboard-410c, rock-pi-4, qemu-arm6=
-4 and
-> >> qemu-x86_64 this build have required selftest/mm/configs included and =
-toolchain
-> >> is clang nightly.
-> >>
-> >> Regressions found on Dragonboard-845c, Dragonboard-410c, rock-pi-4,
-> >> qemu-arm64 and qemu-x86_64
-> >>    -  selftests mm gup_longterm fails
-> >>
-> >> Regression Analysis:
-> >>   - New regression? Yes
-> >>   - Reproducibility? Yes
-> >>
-> >> Test regression: selftests mm gup_longterm error while loading shared
-> >> libraries liburing.so.2 cannot open shared object file No such file or
-> >> directory
->  >> Test regression: selftests mm cow error while loading shared
-> libraries>> liburing.so.2 cannot open shared object file No such file or
-> directory
-> >
-> > These do not really look like kernel regressions, rather like a bug in
-> > the userspace testing tool =F0=9F=A4=94 Could it be that the tests were=
- not
-> > rebuilt for the new liburing or that the dependency is not installed in
-> > the test environment?
->
-> It looks like the tests were build with liburing around, and then ran
-> without liburing around.
->
-> Note that the file for example has:
->
-> #ifdef LOCAL_CONFIG_HAVE_LIBURING
-> #include <liburing.h>
-> #endif /* LOCAL_CONFIG_HAVE_LIBURING */
->
-> You should be running into similar issues with cow.c, which uses the
-> exact same approach for detecting+linking liburing.
->
-> So seems like something is off in your testing environment?
+On Mon, Jun 02, 2025 at 04:15:56PM +0200, Michal Koutn=FD <mkoutny@suse.com=
+> wrote:
+> I'd say this might be relevant (although I don't see the possibly
+> incorrect error handlnig path) but it doesn't mean this commit fixes it,
+> it'd rather require the reproducer to adjust the N on this path.
 
-The kselftest built with cross toolchain((gcc-13 and clang) vs (arm64 / x86=
-_64))
-and tar / zipped and exported to NFS and mounted by DUT the
-device under test by using overlayfs.
+Hm, possibly syzbot caught up here [1]:
 
-The tar / zipped file has all installed binaries and script files to run te=
-sts.
+-mkdir(&(0x7f0000000000)=3D'./cgroup/file0\x00', 0xd0939199c36b4d28) (fail_=
+nth: 8)
++mkdirat$cgroup_root(0xffffffffffffff9c, &(0x7f00000005c0)=3D'./cgroup.net/=
+syz0\x00', 0x1ff) (fail_nth: 23)
 
-However, The missing debian package onto the userspace has been installed
- + liburing-dev today. This will fix the reported problem.
+So there's something fishy in the error handling.
 
-- Naresh
+HTH,
+Michal
 
->
-> --
-> Cheers,
->
-> David / dhildenb
->
+[1] https://lore.kernel.org/lkml/68403875.a00a0220.d4325.000a.GAE@google.co=
+m/
+
+--krlwbo2bq63d5qwa
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCaFE80QAKCRB+PQLnlNv4
+CFc5AQDFUQDIxN7rZwIY/4HwJm40c4uz7Kwbk8e3RX9sQwVOOQEA0j9JsDa/0bOB
+mCi/pTl0V4lRqubAZXTV4nhvtAtknwY=
+=+ozi
+-----END PGP SIGNATURE-----
+
+--krlwbo2bq63d5qwa--
 
