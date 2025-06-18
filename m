@@ -1,73 +1,73 @@
-Return-Path: <linux-kselftest+bounces-35318-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35319-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A151ADF540
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Jun 2025 19:59:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5B7BADF564
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Jun 2025 20:02:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0F2AF1BC3A49
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Jun 2025 17:58:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3374C405728
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Jun 2025 17:58:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A65582F49FF;
-	Wed, 18 Jun 2025 17:57:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74DA62EE99E;
+	Wed, 18 Jun 2025 17:58:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QIpUa/PK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vto60moL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0083D3085AC;
-	Wed, 18 Jun 2025 17:57:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA2133085A6;
+	Wed, 18 Jun 2025 17:58:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750269471; cv=none; b=uIM7+pAfFflFjAbwyV3NCPeYYgmhEKX3YgIoKjewdltY5AA6Pbosj4Oa4To81EF4EWCgkvpTh0wPanUpypPsCElIW/baYi2Kfbmge0P9fqy/4JDbKSwlMSxgiCKfAOkiSMforlqgBhhBqWto007cUNYnlKul6jqeAoJqRmOxmEs=
+	t=1750269529; cv=none; b=pydl5UcEKjxaw7xsEBR0qP6fe5k94XL0ReP63VObUW/OTNcXK0MzaLGB8buwP+aNJ2sHveJ9KMcMEB4uuKFpOgLoropHNOmPTidSzKgyKHq4ao5JiEMEyLB/imIh15il/2zokhfH0sFLrdOMYLHD/PX1yKOpfxwL6WCP6xI37FI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750269471; c=relaxed/simple;
-	bh=X6XFf8IdJRgq64/sNAX2ri3Q7ZGbdF1/uOpdG54+E2M=;
+	s=arc-20240116; t=1750269529; c=relaxed/simple;
+	bh=FkPigFeNGfIgRpgDFtGW/mxVfhQYOSm7TXujD5qRUiQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=R5SUbFgNCFoRHp4DCDaFy5EHEEgfJQ5Ayg9cnE1VApsjq5JUEzOuXtIwGym6xvvl+5TUYf80W7lcKZlvXd7RQObHRFG6/6w/7dh2om05f9Pm/pMQN1hWtw2CuaIxprFwLpoKVEWIFO3bORC0/CUk6Tfq3xs7fOc4Gn+ml+paYaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QIpUa/PK; arc=none smtp.client-ip=209.85.214.174
+	 To:Cc:Content-Type; b=e63KoK8kRZ1ZCBz4xLEhK0QpsORa6N1/waTx7Gnofv3aBMYhzba9oHE0+JStpcT5EsbY43+9FgjoeTnljSy9AUjotuW1eQXUz9svqMbIRymNzuqr3ftrQ9ECkM63t9GevA0xhVzHwM7+ud1Mn1D1T7BFFTpmmJQuvjVDe8ZM4v8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vto60moL; arc=none smtp.client-ip=209.85.216.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-234eaea2e4eso6821085ad.0;
-        Wed, 18 Jun 2025 10:57:49 -0700 (PDT)
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-313dc7be67aso961995a91.0;
+        Wed, 18 Jun 2025 10:58:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750269469; x=1750874269; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1750269527; x=1750874327; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=X6XFf8IdJRgq64/sNAX2ri3Q7ZGbdF1/uOpdG54+E2M=;
-        b=QIpUa/PKaWqIJ1PAmwf1rOYqk9U4VqnIoJZvoSejrdqjYrLP3QO5mGuQ9ejPzZIXqu
-         60XpLXJSYLPDUPDNVkWC2FVdVr9PoFV2wM5A8gcidSgUbCogSUVOz5kIru9gy/Sq+EWa
-         bjYK93nwdG8Q7u055P/9HxkH5TKtI68KFAeU05MQ/+Isows4NtgwxL6xiF63Z5hoXg6f
-         26iTrk4cE+2uzUfBt1jX2rNoDRGHMK+W27PfVdNNfG+esvGqdBpLQVVHdKhMl/loSrZj
-         niUTki2ifeCIdU9WEDE+q1c2br2cvkMpa1GeQlTkeQvZUsiw1A5YISTlVsozheJ1n1nG
-         AH9A==
+        bh=FkPigFeNGfIgRpgDFtGW/mxVfhQYOSm7TXujD5qRUiQ=;
+        b=Vto60moLlnn/zs6BMbeqILB9ZNBikcpH5c+AaRXyAZfhOfLLgpkYNHr1eCTfHmdb4W
+         1qWewAlkKBVmXMB83eZa1avjnSkM9ed12I4EW8A3qasLZ7XfcKxiPWvhcjhahMKtrgUC
+         WaLWXWbFPKpCB0b8dmm+wZ84sd6KyL9p9OFWU+zA9dzSkCa3OmhFPGj4EM+kFHnr42uN
+         lbuA2UwmPuI/H9FIGmbRoYI2h0hw+rKsNOpwVLmiC/Ap7Skwig7svOU31Trx3/Gd51rC
+         BhLzho8dJioqMemtMyNPGu3fuloknLiyadAOhrTZltNtt7uI6pt7OsMzDIvZE4nCas5c
+         9YpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750269469; x=1750874269;
+        d=1e100.net; s=20230601; t=1750269527; x=1750874327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=X6XFf8IdJRgq64/sNAX2ri3Q7ZGbdF1/uOpdG54+E2M=;
-        b=hwbw5KUx1i9EV6gSrwxUrhAHrWe3mVUmtMMBHntpkHbtLoiGlMOLW9Yesd2VdkKr+a
-         7ABAtmPd8IPea3fp36uRqDQykKl6itMM0343K+B1EZOTKUwMMucRGxqCkPxXpbp03wEk
-         aftrBtRaCMgVkMcoLHJQ5eI2X33wE/AlsWh39ryFs3arW9ZAEG2txPmNdWUaeM1Up3mp
-         d0XVZiw1UI3qQkKjEZdp/bOU2LGeGjDwvgFqGOJV1uQ9+ZABQJjbxWhr4I89tqROr0w8
-         XBorrCyCp4y86fkUjOyl/PatS9BC7wl/BhwQVo4jGMjUwqU84WjD9uue7Bs0j0DAb5VL
-         DG2g==
-X-Forwarded-Encrypted: i=1; AJvYcCUTMas0hNRvm6zJl3v1eJyzN26rN8yJurOU/xvW+ApoVO68UwH/hlvrlqWjQHwmy3KQHqxtnz1Q0vDZrj1W5Xas@vger.kernel.org, AJvYcCUTtsYuk8HQpd0W7ejbVrRRUBY5c0azYeNxd2SPEGFYMojUOFolc4cdnlXHJ8y82zpJSjGNZ4vGmeA=@vger.kernel.org, AJvYcCUb736O/kHW3oMVluSejXmi3QgV7XJM9zZ1D7z3+ZYAbv+StWOdbg9IDjC9JX8QDB8SQSfinlaglIljcpHB@vger.kernel.org, AJvYcCVFhPgowQ8vMaGkXmRcHtGMid47yioqGr677mf14je7Yb1oD8HzWChObZNhh1T7J/YmGVYt/QoIIjQjjQs=@vger.kernel.org, AJvYcCVLpzT+tNqcVsQVYD+0AZ8agDwS/xJqwJy12F9EYq29ENLP0NOc7Mww0uigLZ1nb5/Bgl/PxOANIC/osL6g@vger.kernel.org, AJvYcCVxBodqak2xOOGbo9tUIyQ4j6epZ91hIrXFbJKqePN0icOfm2I46iE8yIyGsGjgYvLYFApSJ+SYenn+@vger.kernel.org, AJvYcCW6Wz3tRSk9NQBN8fMT1cKbSfjQTiD+7k/WvgN2014vau3g1Uwii9DYQyQscg1AAE2byaeOT5W8@vger.kernel.org, AJvYcCWffXjwAI/AdmVAm+TOySicM/12EkKTzeBQLU3u0IOcUo+mnIoUZDI5wwnooNpBuUEPewPMDip01VDI@vger.kernel.org, AJvYcCXojTEJsPiYMFaACqTRL8rMc3ZOzhSFJr2eDiPRbNRbR/QS7erfNm6WSmkJBnGrey/9rbpAsgeIfsL1vc33+To=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/kK4pabfM6i/TEoZXaQ145iX/qlzdI+VjKwZoAhN+zpluT+X7
-	7fLi1gKfOlQFJy7Ar5tbQy5WdLiMyN43l16ish95bhFkIhcuRYaohskYmE5Uj4VhgqwjkhS2OHx
-	q0XKb2oweuu7xOqm9i8PvO7V2mFm7qr0=
-X-Gm-Gg: ASbGncslGDQtM3Z1qJkQJR6+L4aalJqFbj1p7ngjGKIIGoKsqQwv1779ygGlLo/vYIG
-	z+9suqpCOLkFVougsK/OUkj71I4BWPkrzr7cYUggx2vJ5ToGZWHy72DfysohoX5003ZAKJfLLof
-	w9uiItP+fpuxZRbjFia3zgbFE+DYnTeEzRRVLFean/5AI=
-X-Google-Smtp-Source: AGHT+IEVtT/3f0vGFFzsBMs3GOlT0P6QvR0Bn0p1lko9fCNW+9HJclQmxYU6vH8Ok8iI/KHslbJ7BSrFR23F0qaUQxU=
-X-Received: by 2002:a17:90b:5251:b0:312:e9d:4001 with SMTP id
- 98e67ed59e1d1-3158c10362dmr113240a91.8.1750269468961; Wed, 18 Jun 2025
- 10:57:48 -0700 (PDT)
+        bh=FkPigFeNGfIgRpgDFtGW/mxVfhQYOSm7TXujD5qRUiQ=;
+        b=oVTAP4qSI0PDy33kfakHUo+NlEvYvCQ8wvm+i5BrDYeqvxEIgwIVeBtrU5Xgcru55E
+         reJhX21lG7PTkjv7f8siFGyn4yNwQNnN5MQPdPBO4SQoFo3W3L510Khu4/mZyXTS7cCL
+         RldWs9L2obd+B75XDKsRKOli1DJc1R8i+6g4DQIyHxGKZEghPEHmY6qCYvDeomEjeXTg
+         OQDRBLJFhWoRkL4qX5EfL2VMbGfDAJ4WkbDWuPWDwxP3pOej3gi2jfKr/TCE/Bs8dylS
+         XpesMe0aF37811lqYzjlZGBYSmLVIgKJDua8cF4+wKK9AMtzlvdgO19Xj2GtZUW+LyQU
+         pspg==
+X-Forwarded-Encrypted: i=1; AJvYcCUS76uIXmHwAnBQid60bKclvnzhAQqlegk9aNIfL1iBDIVb3pbO66HXjICt+IZMwOm3yLlPxayxlww=@vger.kernel.org, AJvYcCVD3/mHQb5H8cx83aJwa3S7QBtFntLHd4JG3+Bps6xZlzb+cDQt8SRAzxuPGmDDVymcoUYudQAVG7ihttBG@vger.kernel.org, AJvYcCVNb2IZwYHMCLUUhXlCUx6l5ApZ4TVEDz+B3lT4+edBucbC9WMXd8PfJVi3ZNHuwRHwDVjriDqDAN6e@vger.kernel.org, AJvYcCVV3TUkHMFEKNvlyuDbX08QwS3Jr6UrRDqnVo1yS7gEUe/nqOK9bv7sbYCBhXBPYuMKEVOuAuEJJt49y4tF@vger.kernel.org, AJvYcCVWHqjLxO5jYihPJ8e2ceNVtMrIimQLpNxeFh+gb13aqS7qh9vQLmGcPxgYUWUTor4qLv5Kwo1c@vger.kernel.org, AJvYcCW17TbONPYAVDUWCDsGpzHT7Rxanii1AQA5YGAA0uAHHdOmlNMZt98a/4+HnpAfiXbB+LUcXcc3u1ma2ulKxT/+@vger.kernel.org, AJvYcCW6XIxDnclduBDt3FQwf3d6P3DqNB5RMy9b2CR9mmk7dRsfiSnrVfZNXxV4KP22o7dEddu7qJnN4gnu@vger.kernel.org, AJvYcCWVOvGcVpCg4OXjVpqLGzhf4MF27YJvhHJibLfHSHLiXe4LnsdJPzCNty0fNh1CJOKGB/btsioGXkVI7pg=@vger.kernel.org, AJvYcCWxy+eqU0cLX9IAveOWm+SCfCHssEOVZntwPHj3rRlB5gcc3cXh+FLsLwWoPHKMQtIjbTk9IOEaVEGT4NyRg8o=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4i29aunI4mGEujP4+v5WnMBnEkM7Y8h6pSL6FX+WLBqAQ6f2G
+	xx668rvJ6Ge1AenwFslne5pkdFhuDOW1m3rykzgKJm4F6AcKIZWC6QU4B2i99GpMPiPN5BlesRU
+	EgMTb9CpyqwYUyKEculKi4aTZWj44YNM=
+X-Gm-Gg: ASbGncuutzGXcqzRmRG1wea7rztNz2eGmXaFbzpVGD29Vyx755z0T7PLnYXgGZb9xRk
+	bxbLsW1P2UP37pbT2QP6goPGBWVSNxnhE99hw+9Yp1juDuP+I+RxvujX0T8M8Zzb6OGd0+jSd2I
+	cSh5aYZcPZDAkFk+elSq4fjDCtO4ZO3lJJ77rXINlmSGY=
+X-Google-Smtp-Source: AGHT+IHQA2vB+4lILhLPisOadhxH9fnkiGb8fP5PoJh3YCmrD5jDUJpuN04m9Eq8KLRXTUak2OObg3c6xBn/ciPLwLY=
+X-Received: by 2002:a17:90b:2889:b0:312:db8:dbd3 with SMTP id
+ 98e67ed59e1d1-3158bfeae60mr147244a91.6.1750269527292; Wed, 18 Jun 2025
+ 10:58:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -75,24 +75,23 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20250615-ptr-as-ptr-v12-0-f43b024581e8@gmail.com>
- <20250615-ptr-as-ptr-v12-1-f43b024581e8@gmail.com> <CAJ-ks9=6RSaLmNmDBv-TzJfGF8WzEi9Vd-s=1wyqBcF7_f7qQQ@mail.gmail.com>
- <CANiq72kgnKH2SSp76EdPeysExBWasqhTyf1JyReR65g6FMsidA@mail.gmail.com> <ccbc2a76-20fe-4f70-b69b-9d05b59f24b8@kernel.org>
-In-Reply-To: <ccbc2a76-20fe-4f70-b69b-9d05b59f24b8@kernel.org>
+ <20250615-ptr-as-ptr-v12-4-f43b024581e8@gmail.com> <de30bc80-3dc9-4fac-afe8-bf6b0df42ea9@kernel.org>
+ <CANiq72mOHbxt3xOJw8f=j184TRYs9y3wvcopH-h6P2SLe4jVNQ@mail.gmail.com> <CAJ-ks9nnNjBfzCasOtFZGXBj=UKqZxuyh3-Emj3yFrz=9f8tmg@mail.gmail.com>
+In-Reply-To: <CAJ-ks9nnNjBfzCasOtFZGXBj=UKqZxuyh3-Emj3yFrz=9f8tmg@mail.gmail.com>
 From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Wed, 18 Jun 2025 19:57:35 +0200
-X-Gm-Features: Ac12FXxqyN47ZI8vqKVbteA5mz5j0mgRRC1KtP63MHI54ZnGo4ZP4CLfw3Of01s
-Message-ID: <CANiq72mboC5iz0Z0ZnAAMNr70aQT1vddZ=cXFSO-5_CveVTCng@mail.gmail.com>
-Subject: Re: [PATCH v12 1/6] rust: enable `clippy::ptr_as_ptr` lint
-To: Danilo Krummrich <dakr@kernel.org>
-Cc: Tamir Duberstein <tamird@gmail.com>, Christian Brauner <brauner@kernel.org>, 
-	David Gow <davidgow@google.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Tejun Heo <tj@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, 
+Date: Wed, 18 Jun 2025 19:58:35 +0200
+X-Gm-Features: Ac12FXyGUkldbEIksi1ogTddUr_YiD6acvLXBSTJ1-Ey0i-LXdAiD6xde1bhgwA
+Message-ID: <CANiq72=9VyakSh_bXJjPPeXJP80OtB7iqKBM-p3bEMX3TYF5WQ@mail.gmail.com>
+Subject: Re: [PATCH v12 4/6] rust: enable `clippy::as_underscore` lint
+To: Tamir Duberstein <tamird@gmail.com>
+Cc: Danilo Krummrich <dakr@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, 
 	Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
 	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
 	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
 	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, 
+	Trevor Gross <tmgross@umich.edu>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
 	Bjorn Helgaas <bhelgaas@google.com>, Luis Chamberlain <mcgrof@kernel.org>, 
 	Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>, 
 	Saravana Kannan <saravanak@google.com>, Abdiel Janulgue <abdiel.janulgue@gmail.com>, 
@@ -115,31 +114,13 @@ Cc: Tamir Duberstein <tamird@gmail.com>, Christian Brauner <brauner@kernel.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 18, 2025 at 7:44=E2=80=AFPM Danilo Krummrich <dakr@kernel.org> =
-wrote:
+On Wed, Jun 18, 2025 at 7:56=E2=80=AFPM Tamir Duberstein <tamird@gmail.com>=
+ wrote:
 >
-> Independent from that, won't this potentially leave us with a lot of warn=
-ings
-> from code that goes through other trees in the upcoming merge window? How=
- do we
-> deal with that?
+> Miguel, would you mind taking care of this on apply? Quite a big
+> series to send again.
 
-Yeah, good question.
-
-Since they are Clippy ones, it should not be a big deal (e.g. we
-already had a case of a lint Clippy lingering for a long time due to
-timing of merge window etc. in the QR code).
-
-In this case, I didn't see new ones in -next yet when I looked, so it
-should be mostly fine I think. It is also why I asked Tamir to re-send
-it at the beginning of the cycle, and then a v12 to include a few
-newer parts that were missed that landed lately.
-
-So, worst case, they get fixed during the -rcs.
-
-But, yeah, a while ago I proposed to have -rc1 to -rc2 as "treewide
-cleanups time" -- it would make this sort of things (that is not fully
-automated, but close) easy.
+Yeah, of course.
 
 Cheers,
 Miguel
