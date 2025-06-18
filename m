@@ -1,141 +1,152 @@
-Return-Path: <linux-kselftest+bounces-35324-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35325-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95C67ADF8A5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Jun 2025 23:21:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F6B4ADF8A8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Jun 2025 23:22:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4359216DFEB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Jun 2025 21:21:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 57E2F1BC3A76
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Jun 2025 21:22:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9CAD27A455;
-	Wed, 18 Jun 2025 21:21:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DC0627A93B;
+	Wed, 18 Jun 2025 21:22:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="I+muPs9K"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cCmCBEJi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC78D261362
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Jun 2025 21:21:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13B4E27A10A;
+	Wed, 18 Jun 2025 21:22:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750281706; cv=none; b=SBnnaG2k6SxEJeEhy2DYCYWNiJQx+Ora5p2Z9K1uE77J/2+T1yR4zV4nq0HfA5myLp9E9N0f2jGaOJ9oniq0w7gk8m0g1j1IoS5Pf5z/I7GAAipEUnliWC9D1E5Mvp2040vWzNa7WL7dnbKJU5GNnlJqoatFvvabIFJ0SV9kzgQ=
+	t=1750281752; cv=none; b=ld60/3/V3I0fUio+EE29sc2OHMdM64Uz+dC4qYC/qYOnL4v/Vmq3oRYSA+1Bu8wtCqMkoMhPSDtv5J9h4+ZX1P1Dxbbi1SkQdFzzy8LvIXaijXKZpVBxr1sXAjmg1mlw83EYTwceP/0wVa76UJLPehzY2iq/F5iQl7Ibt7C/3Kw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750281706; c=relaxed/simple;
-	bh=3Q9A+Uy7HEpDEX/GYqxA+SpsZyCTOKE2HK1F7wsecDA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FkUnKHwRCUtPAmq7eCrpCb8Mn1pjYkXLcZbKl9mRwqZCYY1Lwo/eiapWiMt+//9RQtRuGkdcCSL/4hX+sLHb0cUGZqurbOWRqtG/fFs24Uy3zUM1UG6MQheq3VYpsEq/EdrgJ8mYF1Y60zIO1qPalFx/K161f3pXfCx05yXXhAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=I+muPs9K; arc=none smtp.client-ip=209.85.166.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-3ddd32e3955so468165ab.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Jun 2025 14:21:44 -0700 (PDT)
+	s=arc-20240116; t=1750281752; c=relaxed/simple;
+	bh=V/t1gt9M6rjQyJdUJERSP2IMF2CqZn+1I9QkJVP+oFA=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=rwG4lh4ghlRoUFOXSmLEN7SkZ32AYBdVXPOjSdvHtGE4Mwia+q3ELXZarCOnqGmWJ7MDowxE7dYW2IVESi4DLT5mmGljKLAHXxdMf4vn4uXjUnExUxcpV1/xY3DC+Z0OD/rgPPiGBGiFOxfhCHDZDfYRBkmQfLOIfaDseTwPgpM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cCmCBEJi; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-7406c6dd2b1so90050b3a.0;
+        Wed, 18 Jun 2025 14:22:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1750281704; x=1750886504; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7hzjQpLH9P4msqIcMls8fz15GHsVyIhA4zncYp2T3JY=;
-        b=I+muPs9K4M2rexzJQ1Rp4eTUrNd0Ha1m4qBsozNXGH2KGc40Zy5om69dh1QIDe+fxQ
-         xdD7A6chgH2X4p3btPeEckxS8weZQL+bEymjJqAhmEfZMk/8nrtQK9oYyPgXtbPeUSJj
-         A8yAfXLDjNraE3LUgFbARQCVPH90Zj5rAoqqQ=
+        d=gmail.com; s=20230601; t=1750281750; x=1750886550; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=b0zAMXxFoe+upxCIdElSXBtC3aWZiW6q58tCsn6I1+E=;
+        b=cCmCBEJiqBBgAXcKHBi00WuJsyh8xRGCa6Xf+qDI1Z4pOPWkKNgl65y47N+1N23xFg
+         6GcWNfUudXfRjnDot0BFDDHKHU8aCQ+b4YKGGoyL7u/afOAP3fPPPZRKccW0XbsLkPmq
+         ygZxvtlcEve6ONF2bmYIfvIqb+0IHovAXLiGqWTbO3I4pXte1ru4CCjODpI8E86+yufC
+         dcc0hNeyOtZYsOlYONBIUjEcE6pn1gzfQdS7Dn+EpOp6uQ10yiVvkJYD/kH10NEKQkTc
+         bMcdu1BdLZv0C2USIsikQrcEh2gjzxRNbn8b3U5/TPXW6QxosJri6O4Dyj76Us3bX6Hp
+         Bl6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750281704; x=1750886504;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7hzjQpLH9P4msqIcMls8fz15GHsVyIhA4zncYp2T3JY=;
-        b=TygsF8KJaZswumcp5mjfzoeS2xYROXLgDOsM2qKbK2Y7LfvbC4jxefkfMEdbW82nbu
-         zofGz7xnW7goj0CEiz5qYI177Kxqc1RF3eyOYui64j8i+KpDIGH8dj55FN3jquuX/JW+
-         jEVbj/rsH4J7GV8h36gjCZyNomTBm5m7EO8eqJF8Yo8fbY+BSN4hdq04OzZBQ8bB3mKj
-         CNf2SP7gGW31PInZ99MDGGF9jN6yjeOguJUDdbtU1waUJWsMuhOpctYHyiyt8UkPJkfI
-         1hmK/ynANoJxXbzsGYI9IaWnU+23wIbT4VoiX2O/HNHZw2ajSRBGFqW52vB5twrGrB3Y
-         1+gA==
-X-Forwarded-Encrypted: i=1; AJvYcCXlaotRoWqf/bcmdDD9a34veo70hRpb/sL22PJQLdtO2YkOB7lttm7NlvEh08LANYTXHI2E6hiHscDarHOA8Es=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxyD2Uygf1BYhwNjWMxyi4STO54xlwz2aa84Aygp752FeIeOlEu
-	MvNTbYMT5YTzy74mDKQlq1kFWvak+y6UKH4/nf12UQp4Dm3ZWR7Bz1LTv4xb1Wgf0fE=
-X-Gm-Gg: ASbGncstvvpkv9/yDBEdZqkmceu31t3HARjnGW+VSuRSlHorD4IySNpKkY2iEKnDBYD
-	QCIsouAKC6dkRFIM08g8vsGtInkdPzlY+JgCcI+KvdoIYZ15hZOuateP2zHg8zG1cJ0dyr0qud9
-	NLQjqd3iZ2Flt2vUbLk3h5KO5Ucm729qcdRkHeYIuTMouP8mewE9QGidxC5AgCdvLMGCZA8F+GL
-	MxMpKCVYuf6J2lmBTygVobAASDNLLDBq+P6x+enCqU9oJI1hC5VohkEY2tUz9FYG3H2Acky+sL6
-	NPb9SFHTsEotsLtoJU+48zZfPNtIczXVop15sXkuTaSu7vo7kR+D2JBqXFuCVKkB/2FHoMt6Ww=
-	=
-X-Google-Smtp-Source: AGHT+IELzvwbi9JQ7DZZenz0U1vkPgwf8oGH4UkYFmct5jt6JQyDwhZyf2BVjZryMiJrjh2k6xcFdA==
-X-Received: by 2002:a05:6e02:18ce:b0:3dc:8b29:30bc with SMTP id e9e14a558f8ab-3de07cf9efcmr248982405ab.21.1750281703912;
-        Wed, 18 Jun 2025 14:21:43 -0700 (PDT)
-Received: from [192.168.1.14] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3de019b4398sm34101575ab.14.2025.06.18.14.21.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jun 2025 14:21:43 -0700 (PDT)
-Message-ID: <96c46d3d-0e0a-464a-b64c-15c2a544a974@linuxfoundation.org>
-Date: Wed, 18 Jun 2025 15:21:42 -0600
+        d=1e100.net; s=20230601; t=1750281750; x=1750886550;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=b0zAMXxFoe+upxCIdElSXBtC3aWZiW6q58tCsn6I1+E=;
+        b=CUdY7MWaDwpr0D9szWy/scygzHgIev+JpDJujaD9noLxZ3/haUB1Y+22GJSY37DiAh
+         sFdIkb5EGBpI/Fn+mFDJgnHZhoZvaMUiqaKvSGC+x4mepB5PvRKQAs1ti7VCIYGpR3Qb
+         MyIylz4LJ0CLIu4wP94UcvrzhNo1Gxo1KwqnqNb5vyd3VdtWDRoeBWcoRlLplv0GoO6e
+         FdtcWZ65Hz57IHgySiLo6pP2i7Ku822BWtWjdrSXBQPhbNVyEYcxhSViA0/gq/koUhuQ
+         QxbGKrwRTRg13+DRY4b2bMz9p7CaRQm/6J6dHFtbjrb4MD0ab8x/RVgt4eoSwVf0qkzz
+         nLVQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVODSH7Fl7jYHMLva8CPOmYZfSJI+ULUkT9mdikITMRjGBFxsPWpk4ZyMaIbg0g26m7sBZ/xW3rbQu+ECZr@vger.kernel.org, AJvYcCW5ki8h4y6T0V7jO2r8tAhx7nhKGoXLyUN6xYuRM+uWo3qR6Vj8VcuJs1Dps3Klf9pHjbI=@vger.kernel.org, AJvYcCWCCFX+gsBJF2RV0ShwSJDFzcLckmXwMBiWFvv9ELqf5m32wdLcvkwnZufwkloqgS4JF744pUuMlskBJWrFLSQJ@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyvg+P4TlBcVl1JnNfbmC+e9DsaWVZn3INhYSuPHH/Lml7RJBz2
+	Oe3oWjIAHqcEiX39r04OyineGQzbkwESApc3A32pOiwRQuMZUyCEjCRm
+X-Gm-Gg: ASbGncvGhJ4THiwFMaA2Mku8QYdWcWUU4JdDXQ3d2pxZmOt4z2Z+zTqxM9HJ8Js7mDS
+	hLj3tPY4HZL75Bcl3P10X5tFtF6jZLCYWG0M/Yt0TbJDsjUJBzIBw4kST7czC6htTrrt5RdMZm9
+	RXSl5IWoe+wZxNYOH2CKd9v3me0iNkD7FFWua4XKxO/E6QjX10IJZbKkXZSlVNQUqNCrLZo6kQW
+	v/Kei5BLly1bHenmNScNAFk/j0u2vg1v9pXzoyGjl0HUo6713lKUlMt6lU86WJoP0oBPpefpMAG
+	kVFSXXXwZeHaN8vIJC7CIJljxCalqGeCsVfdWJxty9NAOLH0Tlzm2PpaiN95zLfI/rqp
+X-Google-Smtp-Source: AGHT+IFjAwSOo3G7jVf5CkMPOsnDz5CqO1o4ODwWNgkseEzJcUmU+R/WUfLBsS5pB6IR/sJd1UZq6A==
+X-Received: by 2002:a05:6a20:2589:b0:21f:4ecc:119d with SMTP id adf61e73a8af0-220111b1bb6mr1690579637.7.1750281750331;
+        Wed, 18 Jun 2025 14:22:30 -0700 (PDT)
+Received: from [192.168.0.56] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-748900d255fsm12004870b3a.172.2025.06.18.14.22.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jun 2025 14:22:29 -0700 (PDT)
+Message-ID: <5b3b620d04fc3bcf4286dc4bb8c6fd995df86a25.camel@gmail.com>
+Subject: Re: [PATCH v2 2/2] selftests/bpf: Add testcases for BPF_ADD and
+ BPF_SUB
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>, 
+	ast@kernel.org
+Cc: m.shachnai@rutgers.edu, srinivas.narayana@rutgers.edu, 
+	santosh.nagarakatte@rutgers.edu, Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko
+ <andrii@kernel.org>, Martin KaFai Lau	 <martin.lau@linux.dev>, Song Liu
+ <song@kernel.org>, Yonghong Song	 <yonghong.song@linux.dev>, KP Singh
+ <kpsingh@kernel.org>, Stanislav Fomichev	 <sdf@fomichev.me>, Hao Luo
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,  Mykola Lysenko	
+ <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, Matan Shachnai	
+ <m.shachnai@gmail.com>, Luis Gerhorst <luis.gerhorst@fau.de>, Kumar
+ Kartikeya Dwivedi	 <memxor@gmail.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, 	linux-kselftest@vger.kernel.org
+Date: Wed, 18 Jun 2025 14:22:27 -0700
+In-Reply-To: <20250617231733.181797-3-harishankar.vishwanathan@gmail.com>
+References: <20250617231733.181797-1-harishankar.vishwanathan@gmail.com>
+	 <20250617231733.181797-3-harishankar.vishwanathan@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND] selftests/memfd: clean Makefile
-To: Chen Linxuan <chenlinxuan@uniontech.com>, Shuah Khan <shuah@kernel.org>
-Cc: zhanjun@uniontech.com, niecheng1@uniontech.com,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20250610020559.2797938-2-chenlinxuan@uniontech.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20250610020559.2797938-2-chenlinxuan@uniontech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 6/9/25 20:05, Chen Linxuan wrote:
-> When writing a test for fusectl, I referred to this Makefile as a
-> reference for creating a FUSE daemon in the selftests.
-> While doing so, I noticed that there is a minor issue in the Makefile.
-
-What happens if this change isn't made?
-
-> 
-> The fuse_mnt.c file is not actually compiled into fuse_mnt.o,
-> and the code setting CFLAGS for it never takes effect.
-> The reason fuse_mnt compiles successfully is because CFLAGS is set
-> at the very beginning of the file.
-> 
-> Signed-off-by: Chen Linxuan <chenlinxuan@uniontech.com>
+On Tue, 2025-06-17 at 19:17 -0400, Harishankar Vishwanathan wrote:
+> The previous commit improves the precision in scalar(32)_min_max_add,
+> and scalar(32)_min_max_sub. The improvement in precision occurs in
+> cases when all outcomes overflow or underflow, respectively. This
+> commit adds selftests that exercise those cases.
+>=20
+> Co-developed-by: Matan Shachnai <m.shachnai@rutgers.edu>
+> Signed-off-by: Matan Shachnai <m.shachnai@rutgers.edu>
+> Signed-off-by: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.c=
+om>
 > ---
->   tools/testing/selftests/memfd/Makefile | 4 +---
->   1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/memfd/Makefile b/tools/testing/selftests/memfd/Makefile
-> index 163b6f68631c4..e9b886c65153d 100644
-> --- a/tools/testing/selftests/memfd/Makefile
-> +++ b/tools/testing/selftests/memfd/Makefile
-> @@ -1,5 +1,4 @@
->   # SPDX-License-Identifier: GPL-2.0
-> -CFLAGS += -D_FILE_OFFSET_BITS=64
 
-What's the reason for deleting the above?
+Could you please also add test cases when one bound overflows while
+another does not? Or these are covered by some other tests?
 
->   CFLAGS += $(KHDR_INCLUDES)
->   
->   TEST_GEN_PROGS := memfd_test
-> @@ -16,10 +15,9 @@ ifeq ($(VAR_LDLIBS),)
->   VAR_LDLIBS := -lfuse -pthread
->   endif
->   
-> -fuse_mnt.o: CFLAGS += $(VAR_CFLAGS)
-> -
->   include ../lib.mk
->   
-> +$(OUTPUT)/fuse_mnt: CFLAGS += $(VAR_CFLAGS)
->   $(OUTPUT)/fuse_mnt: LDLIBS += $(VAR_LDLIBS)
->   
->   $(OUTPUT)/memfd_test: memfd_test.c common.c
+[...]
 
-thanks,
--- Shuah
+> +SEC("socket")
+> +__description("64-bit addition overflow, all outcomes overflow")
+> +__success __log_level(2)
+> +__msg("7: (0f) r5 +=3D r3 {{.*}} R5_w=3Dscalar(smin=3D0x800003d67e960f7d=
+,umin=3D0x551ee3d67e960f7d,umax=3D0xc0149fffffffffff,smin32=3D0xfe960f7d,um=
+in32=3D0x7e960f7d,var_off=3D(0x3d67e960f7d; 0xfffffc298169f082))")
+
+Would it be possible to pick some more "human readable" constants here?
+As-is it is hard to make sense what verifier actually computes.
+
+> +__retval(0)
+> +__naked void add64_ovf(void)
+> +{
+> +	asm volatile (
+> +	"call %[bpf_get_prandom_u32];"
+> +	"r3 =3D r0;"
+> +	"r4 =3D 0x950a43d67e960f7d ll;"
+> +	"r3 |=3D r4;"
+> +	"r5 =3D 0xc014a00000000000 ll;"
+> +	"r5 +=3D r3;"
+> +	"r0 =3D 0;"
+> +	"exit"
+> +	:
+> +	: __imm(bpf_get_prandom_u32)
+> +	: __clobber_all);
+> +}
+
+[...]
 
 
