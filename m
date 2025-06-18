@@ -1,79 +1,79 @@
-Return-Path: <linux-kselftest+bounces-35252-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35253-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA282ADE4E5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Jun 2025 09:53:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4970ADE504
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Jun 2025 09:56:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2106C1895423
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Jun 2025 07:53:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 94235179B45
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Jun 2025 07:56:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31B7425B687;
-	Wed, 18 Jun 2025 07:53:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAA4627EFE8;
+	Wed, 18 Jun 2025 07:56:41 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68A9E7E105;
-	Wed, 18 Jun 2025 07:52:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19FD027E071;
+	Wed, 18 Jun 2025 07:56:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750233180; cv=none; b=A+/ydjmCjheJUPXsCYtg/U5TV0m7hSyPheIqFaEqw26wXaKRaptuEj2FKP72d49A+k+hiOjMzyJI0/WrnXYXR4HFtsfEnY13DCcpTbHuIHD9RJzgd+TNpl6b7cKw95s7FfKryDjC53rEM6IuEx4JLVw7dVDA1hGoFQfC0IZVyQ8=
+	t=1750233401; cv=none; b=McxygCEgp7X65jFSGyuXzndOVSKleoTC1cIVR4cHsPKYQ9gyBQiLQ3ycfYhf6EXmo9dqIZGievR+ZuoN6JfWJl0JwDeTLHEWOwOM1/prSzYcS0psANeHrvoSiK9kOR7G8SDLAYBeWEkfE+T0ZJ5opP1bVbaxYL90CYChLNq0Xdg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750233180; c=relaxed/simple;
-	bh=BhDhfB0EHERvmRjIgnoNbnxG/iyNgwscUl+OqQOwjz8=;
+	s=arc-20240116; t=1750233401; c=relaxed/simple;
+	bh=Bf099CFhMfpv3aG/dn02iN3VROCJPnC68ni3QLJgbnk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dIwgdnHgSBD1hn4vznNCsX0Nm5mIVyjY91Gv6Xuzy7mdSz0mI0L7JDOGoG+729xzUowsK4bqVUVPwnDsVQmdVtHFe+fG2MgoD4GZf1IBWcm660wRSqr/ueGjUwU4fD4ErIQH2cIz2Hb49+h5bAaF1kYp56QXEG8CVeRjozXOxp0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.51
+	 Content-Type:Content-Disposition:In-Reply-To; b=GdbynmkaQ2CIOMDbaRVdhEPFwCrf2wG8QUfIRj5ZjuAjFPt7VSKNGTfyP4SCYWYjh+v6fyQ42hlJhfBuJAE6CzL95ZELf9dNoTqeeql23SjVclTmJZB/ygQPVxY4xtc5MdB3VlM0W2+h3ozJbjAGI0l32ICAK24yjHMhwIq81p4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-6097de2852aso3139988a12.0;
-        Wed, 18 Jun 2025 00:52:58 -0700 (PDT)
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-addda47ebeaso1340363666b.1;
+        Wed, 18 Jun 2025 00:56:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750233177; x=1750837977;
+        d=1e100.net; s=20230601; t=1750233397; x=1750838197;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JYPJwRlvGFyO8GmZ8lgMNLMh8RXy2GtDgrAPOS61rlg=;
-        b=nE8oJnoj1d3bZpKIDZCRE+dTx1RYJ0Wo/Q/T+1Oi5X+pwvMIE+RSkTRZy14ceur9rU
-         iGx8T+h5rdp5ZbgcrWJ2uvKQ6cogA17roQnBQPuhquF2mGaVbic5/dt08jCLD9KzFstd
-         pbIZsmMOjwonr5dk8Nrn7OYY8+4B/0y3hAlAeKPTBmhnb8qgYmQJFPQW0SwlQmUjuea+
-         wuwJuCkxohI2lxEoMq9CfKUpFviHPDJmPPEytereXcabAZGDJHx1Xb9Kkd/b8n/5BbdN
-         2uwZzWIhQO2AHKNA2Xg9VpxxyYYUjgPoLJh//xAvQq7+lusFD9tCw2nOdR+QKnAjfPIg
-         Qi4g==
-X-Forwarded-Encrypted: i=1; AJvYcCU1L01hqa5KzIIT3bn7RSRDPGprTnRX9bOYqvOA387vuR6Jct/SfKvjW5spPyolvJJ9C3svhxtIcCzV60viViT6@vger.kernel.org, AJvYcCUjoXWUW2qz+PXjBi2m+HoDXtRxxdFIHIdZOamjBNFzym3+G5QluzLNXePsUwl7SPd1nVIhGdFc6XctzBOw@vger.kernel.org, AJvYcCVdtIvnKjH32VlRI61BwDuQnt8l29XkMPnJbiehLrIzpvg+mcyHQsZ2aD3AcldoBBsY6xn9PTx1@vger.kernel.org, AJvYcCWNyUs9/0kzJ3sHiEd6ehlf57O7L5jxu6qGkdMOYXyWfr9T5mTS99FBWUQyQgqDQBiQGMK39Qbr4aE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxozW6uBzC69s5H0wLqqCRhanDDvYsxCWja8M3W21leJar/gz1Y
-	IzBCGHOc2x4TlCxtreZEPbRCL9RZ9vos1Jhtx8Gn6BqAgYGumXAZ+WWNuhXrFg==
-X-Gm-Gg: ASbGnctj5ELT+jFhtP18A4Sg9vVdcCOoG3OJw5JSrQlTW1oT4k6fM3sRofs84hSQOLr
-	3GxSB9FdRg97AQ+fk9jBCA77fIiv2tnXkZgKwga67yd73iEZwgRdVMs327AIgpxckV4pQoKlxpi
-	7NHbDM/oiD0BGibn66ZNLAqxjt7ySLiI6AFtPKxMZWSG3unMRA5gt4i7XGjV2crugqyu474vcWc
-	mjPavfjIdC00suL5tidYHVDfXWE0oX3xU6+2tQnTMIH0SLTr4OlQajxu+BrxHz3u3Ex7a1BMP5S
-	YmRGVnIFzJq3aBLjtbJvq7QO8u8mOpQ8h/7HQxRB5a62ZFnI8rKSZQ==
-X-Google-Smtp-Source: AGHT+IFquzN0jTq3aWguPML5Ppdg3RWLEm95IqKfqZSkaLBrv73foyJdfdkjasK9HTDWDamdeHShmQ==
-X-Received: by 2002:a17:906:6a0a:b0:ad5:372d:87e3 with SMTP id a640c23a62f3a-adfad36811fmr1515638366b.27.1750233176393;
-        Wed, 18 Jun 2025 00:52:56 -0700 (PDT)
+        bh=4UjBMk0LF0uUVft57uPM9nnGKNcd7U7chX18TbiWgGo=;
+        b=OmYuvSgUHDCnRqhBFwN4B7fJWiwxjFKnRn6EcRF6u22Z+CDN2vzBWpSanOz5eKvsmk
+         h6wMXG7Fc2dMVVaQvooSc+4uga2zRVPR2U41zMaz+bFhC7lohqZvXgzCqaOUVTRsAkFK
+         oa0ZniF/16M69HWs85LGk2qRT2/gi584GKFD6ncEZkzeYQeViOy7DY9n+mYWt08vP64H
+         C7KbzbDb3Sy1p7GsBP0/FGMUIzOI1Z2s7/0uu7zB+KX1+c1etH0qkocm9vS4S6cRKCJT
+         oHwDNHLvJXTa4KRdynMrHAf8ziEze8SSCTI8+t5+gEwUNHgpQbNrpRRPnCjk8yByKJf2
+         ajDQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUnEFCpUzhyD4ZyqQzpX4lPR7wlJHej2JRNbUPsJDOYrfFmNSeiO5YrDE5SzPjoNUYXDXhpLoLbbBc=@vger.kernel.org, AJvYcCW24y83ESEyh/f3N/vcDbaxmQur9d8pkO/GRzyAJYj1Tpa0OYYyQ86cV5JGhk1l83epWbLJfGbfJT4AT09Va9QO@vger.kernel.org, AJvYcCXGeKMe0sYpoCwiGVt9kUud9VKetEzAEmgSSAzDqXtx3LKva/5ZqgUqwMZk2K5hnnNAgKaz77yj@vger.kernel.org, AJvYcCXM8VbexYHo/82SOFvvpI1UdwXmtOTm8Ql0fLufB5n+HHMhMCuPyiRj9rFmYKoUVdxpuKtiGUhrJdjme6NT@vger.kernel.org
+X-Gm-Message-State: AOJu0YxsATOmNWAPT4Fn2PH2RESQZKqdi+21V1tV54S75WyMlrYmHOtJ
+	cIfJGsK7OUi9uWjGsQf1hzNPH/4awVTJnPrfUyzt61gG6ArwyipDKOFM
+X-Gm-Gg: ASbGncuVqxkHXQBorwj+q2hu3vfDPiepNLXmlJSOKBc3b5FitMzQ2e1oH/eb8XrJh99
+	qyleclEP4tqavoDZuKduF9cpuKdV7M4zMRI859M2TNZe0/CCYa5oCNK0aHAtIfwtpIbJH8Cl4+u
+	c1wQ+5sqtsOlj9au/Gjs6x/RLmIokN6WydO9xFzeQZ7n03KlQMgveGJpvoBj+P74PbKg9mgfyWq
+	lxxBzFvcIKSx6c7VkxF66QBTQ7qme6PcGxv1LxsfMsS623Uw/Qx4GxgnO9Ie1szOqRi3eNrKpVL
+	3qAf7gJO7r/6siZWlMb3xVcgI7M0zqWTOxOqk7WyVLXfO1j6svWQmQ==
+X-Google-Smtp-Source: AGHT+IFyXJhy8J1yET5nRJVLQ3OTObKlxUd+dALG+dYmVN96XwXu59sC/dvsET1bk3OvVk5TJbrBXg==
+X-Received: by 2002:a17:907:3e93:b0:add:ede0:b9d2 with SMTP id a640c23a62f3a-adfad4ebec5mr1424772266b.44.1750233397009;
+        Wed, 18 Jun 2025 00:56:37 -0700 (PDT)
 Received: from gmail.com ([2a03:2880:30ff:74::])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-adec88ff06fsm1010988966b.102.2025.06.18.00.52.55
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-adec88ff203sm1000120866b.75.2025.06.18.00.56.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jun 2025 00:52:55 -0700 (PDT)
-Date: Wed, 18 Jun 2025 00:52:53 -0700
+        Wed, 18 Jun 2025 00:56:36 -0700 (PDT)
+Date: Wed, 18 Jun 2025 00:56:34 -0700
 From: Breno Leitao <leitao@debian.org>
-To: Gustavo Luiz Duarte <gustavold@gmail.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Gustavo Luiz Duarte <gustavold@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
 	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
 	Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
 	Jonathan Corbet <corbet@lwn.net>, netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	linux-doc@vger.kernel.org
-Subject: Re: [PATCH net-next v3 4/5] selftests: netconsole: Add tests for
- 'msgid' feature in sysdata
-Message-ID: <aFJwVXOwl0WRG3JZ@gmail.com>
+Subject: Re: [PATCH net-next v3 0/5] netconsole: Add support for msgid in
+ sysdata
+Message-ID: <aFJxMne9qzk99sBj@gmail.com>
 References: <20250616-netconsole-msgid-v3-0-4d2610577571@gmail.com>
- <20250616-netconsole-msgid-v3-4-4d2610577571@gmail.com>
+ <20250617184217.63c068f2@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -82,15 +82,24 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250616-netconsole-msgid-v3-4-4d2610577571@gmail.com>
+In-Reply-To: <20250617184217.63c068f2@kernel.org>
 
-On Mon, Jun 16, 2025 at 10:08:38AM -0700, Gustavo Luiz Duarte wrote:
-> Extend the self-tests to cover the 'msgid' feature in sysdata.
-> 
-> Verify that msgid is appended to the message when the feature is enabled
-> and that it is not appended when the feature is disabled.
-> 
-> Signed-off-by: Gustavo Luiz Duarte <gustavold@gmail.com>
+Hello Jakub,
 
-Reviewed-by: Breno Leitao <leitao@debian.org>
+On Tue, Jun 17, 2025 at 06:42:17PM -0700, Jakub Kicinski wrote:
+> On Mon, 16 Jun 2025 10:08:34 -0700 Gustavo Luiz Duarte wrote:
+> > This patch series introduces a new feature to netconsole which allows
+> > appending a message ID to the userdata dictionary.
+> > 
+> > If the msgid feature is enabled, the message ID is built from a per-target 32
+> > bit counter that is incremented and appended to every message sent to the target.
+> 
+> Breno, could you review the last 3 patches? 
+
+Sorry, yes. They all look good.
+
+Feel free to merge them.
+
+Thanks!
+--breno
 
