@@ -1,134 +1,98 @@
-Return-Path: <linux-kselftest+bounces-35249-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35250-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 591DAADE328
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Jun 2025 07:47:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14B2EADE44F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Jun 2025 09:09:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0BB3F7A1D93
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Jun 2025 05:46:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B838917BDFE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Jun 2025 07:09:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 874AA19F10A;
-	Wed, 18 Jun 2025 05:47:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 442E627E06D;
+	Wed, 18 Jun 2025 07:08:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="0+nsG4SZ";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="C93yPb7s"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="MXsffNgP";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="WYBe9HNJ"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF3D4A93D
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Jun 2025 05:47:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8A8878F36;
+	Wed, 18 Jun 2025 07:08:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750225646; cv=none; b=qLp2V5NoWb/P6bS2Hi/CEgCuO85OUUFvrsd22BfUcruuvQytEcIHAEAS2KKiyl4odM699VHE/OyBgsnlDAcsy4OoEFC8Q9gAcsm/PR7jypM7kmm53nuiHx1BA93On6Bjc1zL+/BedXihgotWu5+oLHoVX58FG7bk0TC/wobdiV8=
+	t=1750230520; cv=none; b=RO6BhAXUWheheHraV0xJFRZNUQutb7uS9fQRNnVJIeUyQfBzq2WE63EbufzbVrOzNP6KzThLDvLOLwY8g0O3JwhxeuhAUU094cGFVRugYOKDF8ZVjBz5M/LGW3Ksxnjf/CZA9ftnyp3C/XtSgNf3s6wMMpT0WLnlt3kRZ0cs3u0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750225646; c=relaxed/simple;
-	bh=Mnz8b57+3LRLybY4iw/dqb03f/tWTfG5iDYUaR8gJzU=;
+	s=arc-20240116; t=1750230520; c=relaxed/simple;
+	bh=cHNGWjr3X5xw71GSXE5j9c2WF7a5O2/l2rfVpkeyTus=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ba8gnkPHvFjMbxGlIudYhWXkfCW/NHdn89iEe2USgQi+P+7n9YU8L/qgvbkQvPA2/vjfYaTDfG6Uoxp8yTFtxy0uB1s6qWxtpqzcNcrfinuX3IyYBxaooXkZWNli4Z8NA7oeHqsNQcEjgfy2t4SUFngDo1qhMpnE13cNL0SZ7uM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=0+nsG4SZ; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=C93yPb7s; arc=none smtp.client-ip=193.142.43.55
+	 Content-Type:Content-Disposition:In-Reply-To; b=oRFFmXVnJczlg0e1CvmQrMHzfpw76abqNbB6G8Xeh0v8XZlstq9T5TQlK87uKcayg1ZfCDRVxuCTIw0nLsbGIXpyZH2579WMZnlUw3+5BpuE2d6Bta24laxIO9hmII2octo8VYFD21Tzw94wcgPIV2sfqf2HXmYD4BN3448/dGY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=MXsffNgP; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=WYBe9HNJ; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Wed, 18 Jun 2025 07:47:19 +0200
+Date: Wed, 18 Jun 2025 09:08:33 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1750225642;
+	s=2020; t=1750230514;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=VBHNZ3+fvy4PjuHZKXNMNGa6vvXFQq4b/xIOSxEPzTM=;
-	b=0+nsG4SZq2a1PYWQYHIhv7gN3jwC1B2FPSGBorcEW66AHBlfa2mMnRG3G3AjtER0G9q2pX
-	Kp78MbBXUWXzKQ6S6geDZLwOx4wBx+zATxbAqSeLo+RsmruDQKGQutQ6ZOpwrYhRk160HP
-	qk07UkOVsbrquTxY1bivFJl7ED7TWC/vk03H93mVNx5BunhgvsMVpGkmIP0Gf09qOthCkm
-	V+CvDblgFJAiOMNI3c2CZHQ4VrRtH0maVBLmk255Qigl1v5XTiR7PU9IS324Jkxbd2PHQA
-	5QPWl4nT4xUYajP41XpSxzB16AEXiSif0IiRgnjgUvGaYz9Fvs+Jwt79AEB/5A==
+	bh=Gv+QWbqSIJiJdEEysO8YVV6U0lSqwpLJFjq5bgPk5uo=;
+	b=MXsffNgPYniWRqsOfEgtTPfNzwqWD8WDLcObD0TkBBd0Rd8k8MIwdaUO0+pR0zOTwbA9r/
+	RJhi2yIJB80TlQgq4Zyc7HiCHOEHQQfwGVICNci1NlB8MoR3re0rtr+ex1a4esAyzdIyh+
+	Cb4BFi6MlCVM0+cImnLL5uNt8RfyzOUZ2u9Nj4AZ6DXa2GbgxqeutlOqp2wGEwXiETevOc
+	3Pn+8S3bDgCI6ZVKeQ5pT7a3S1smkucfeLlNt3/W6amrNf+9K8U4aotNcvJtZX5kEMOy+q
+	rAI9bhcWirWeRh9NeXMW8oM6aFUi4uXErfbHdgoFfLErh+SUVHwof0ByvcBQCg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1750225642;
+	s=2020e; t=1750230514;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=VBHNZ3+fvy4PjuHZKXNMNGa6vvXFQq4b/xIOSxEPzTM=;
-	b=C93yPb7suV4ledGljV8SK1hxSoJni5pFxJcEw69NcJiIAm84DFMPAXI8VE/4qo9oJoa9aY
-	XS1l7HKC6bOadrAw==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Wei Yang <richard.weiyang@gmail.com>
-Cc: shuah@kernel.org, kees@kernel.org, luto@amacapital.net, 
-	wad@chromium.org, linux-kselftest@vger.kernel.org, usama.anjum@collabora.com, 
-	skhan@linuxfoundation.org
-Subject: Re: [PATCH 3/3] selftests: harness: Add kselftest harness selftest
- with variant
-Message-ID: <20250618074357-cb331853-aa30-43b1-8a2a-e193fd98eb90@linutronix.de>
-References: <20250616122338.32678-1-richard.weiyang@gmail.com>
- <20250616122338.32678-4-richard.weiyang@gmail.com>
- <20250617093230-7c07d08b-5956-4a78-863c-f35cc300815c@linutronix.de>
- <20250617235748.pbw2mrpneol6gajb@master>
+	bh=Gv+QWbqSIJiJdEEysO8YVV6U0lSqwpLJFjq5bgPk5uo=;
+	b=WYBe9HNJxGZPAIYdwN+XrWmq1mD3UbAg+GxdfBtsZRl/jPeziQStfKvzA09RfWOmLyst1o
+	pAMUtqCZ/JIn/iAg==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: =?utf-8?B?QW5kcsOp?= Almeida <andrealmeid@igalia.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Darren Hart <dvhart@infradead.org>,
+	Davidlohr Bueso <dave@stgolabs.net>, Shuah Khan <shuah@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Waiman Long <longman@redhat.com>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-api@vger.kernel.org, kernel-dev@igalia.com
+Subject: Re: [PATCH RESEND v4 0/7] futex: Create set_robust_list2
+Message-ID: <20250618070833._qeCcHLx@linutronix.de>
+References: <20250617-tonyk-robust_futex-v4-0-6586f5fb9d33@igalia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250617235748.pbw2mrpneol6gajb@master>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250617-tonyk-robust_futex-v4-0-6586f5fb9d33@igalia.com>
 
-On Tue, Jun 17, 2025 at 11:57:48PM +0000, Wei Yang wrote:
-> On Tue, Jun 17, 2025 at 09:35:12AM +0200, Thomas Weißschuh wrote:
+On 2025-06-17 15:34:17 [-0300], Andr=C3=A9 Almeida wrote:
+> This patch adds a new robust_list() syscall. The current syscall
+> can't be expanded to cover the following use case, so a new one is
+> needed. This new syscall allows users to set multiple robust lists per
+> process and to have either 32bit or 64bit pointers in the list.
 
-<snip>
+Thank you for the reminder. It was on my list, it slipped. Two
+questions:
+- there was a bot warning for v3 but this v4 is a RESEND. It the warning
+  addressed in any way?
 
-> >> +FIXTURE_SETUP(fixture_variant) {
-> >> +	TH_LOG("setup %d", variant->value);
-> >> +	self->testpid = getpid();
-> >> +}
-> >> +
-> >> +FIXTURE_TEARDOWN(fixture_variant) {
-> >> +	TH_LOG("teardown same-process=%d", self->testpid == getpid());
-> >> +}
-> >> +
-> >> +TEST_F(fixture_variant, pass) {
-> >> +	TH_LOG("before");
-> >> +	ASSERT_EQ(0, 0);
-> >
-> >Please log the variant value from the test itself and the teardown function.
-> >Also I don't think we need the pid logging and before/after/ASSERT in this test
-> >also, it is already validated in the other ones.
-> >
-> 
-> Sure, per my understanding, is this what you prefer?
-> 
-> 
-> FIXTURE_SETUP(fixture_variant) {
-> 	TH_LOG("setup %d", variant->value);
-> }
-> 
-> FIXTURE_TEARDOWN(fixture_variant) {
-> 	TH_LOG("teardown %d", variant->value);
-> }
-> 
-> TEST_F(fixture_variant, pass) {
-> 	TH_LOG("before %d", variant->value);
-> 	ASSERT_EQ(0, 0);
-> 	TH_LOG("after %d", variant->value);
+- You say 64bit x86-64 does not have the problem due the compat syscall.
+  Arm64 has this problem. New arm64 do not provide arm32 facility. You
+  introduce the syscall here. Why not introduce the compat syscall
+  instead? I'm sorry if this has been answered somewhere below but this
+  was one question I had while I initially skimmed over the patches.
 
-I would drop the three lines above and just do:
-
-TH_LOG("test function %d", variant->value);
-
-Also please note that my earlier comment about the patch prefix
-"selftests: harness:" should only apply to the patches really related to the
-harness.
-Not patch 2, which should use "selftests: kselftest:".
-
-> }
-> 
-> 
-> -- 
-> Wei Yang
-> Help you, Help me
+Sebastian
 
