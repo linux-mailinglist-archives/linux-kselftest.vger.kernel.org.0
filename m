@@ -1,190 +1,97 @@
-Return-Path: <linux-kselftest+bounces-35246-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35247-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 538BDADE080
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Jun 2025 03:16:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F856ADE0C3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Jun 2025 03:41:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E4E6717C51D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Jun 2025 01:16:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 910C917BCBD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Jun 2025 01:41:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBD0B18A6A5;
-	Wed, 18 Jun 2025 01:16:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C99991A9B3D;
+	Wed, 18 Jun 2025 01:40:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wf4hpB4t"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h1L3nMpP"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B41D5186294;
-	Wed, 18 Jun 2025 01:16:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 987611A76DA;
+	Wed, 18 Jun 2025 01:40:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750209395; cv=none; b=O3ZspbkjQsZP5y98mY5UtnstbLBY4vHZy2q0SUbU99uWPDlm7KNIpwDUWqJjFuMz9E1DLy7dkZ4Mw3WL7qxEqQDmFuZBqm3AjcWDn9roMQyNAVa6P7iDP/bq/ErlB5cuDQJtbsxhGyO930omcNN70EEGJ8jxojd81oBLaxAg5x0=
+	t=1750210845; cv=none; b=eJDCImzaY+1cT87Wpr+0dhJnQXTFirIb5w2l0Ci/sDVcHaoxEH38xXOrbmQC+HIhULQNIKVnUxVBDriE0bjybyQAMp17K9+pFHtqDSWx9vTNB1kjw3D6/jeliQRosVL85vsimjM17V/caLrLkK9yB7X+rxKjR+zAtGyJdnuwwGE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750209395; c=relaxed/simple;
-	bh=SBDJcf09SwcwG06z/rkKrsCcFxSZMbyKPtB+DVPGYhA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AZvXDo/kHFf5dYrB2id6FS9qqkQidMYD8Q9UL66nntmHakD0OkEPKv1bBMkjD7bVy5HOq9nnNXHb2qMrwlzL+AU/WEMMCETERVBhmfcgPxS0IYQ6dy5XWGdCP7GE2uXrNcCrT1SQ/jGECtH7cPj/DwtsMwCJyg5I5XiP2QPd8fs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wf4hpB4t; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C92BC4CEF4;
-	Wed, 18 Jun 2025 01:16:35 +0000 (UTC)
+	s=arc-20240116; t=1750210845; c=relaxed/simple;
+	bh=CPDNdYSNL6xVNSl76c7r/hPSIQ5IB5Yq4jCfuT2xYgk=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=S8na8tAro3+dsPvckOB49WKkHF821C0p6skrxjAufnwFsT/VXNpKR91XDdZTQMNwNBd1Ud9qVFFL5nxIzuZ/L8KvF8EAjLMaVBPfVu0A6LZxCry0k6LdtfeD0Rf7DuCHBabYNCZIcdQLsIKUytfFzH9cV4k3axL1Tz4B9G0DSy4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h1L3nMpP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76741C4CEE7;
+	Wed, 18 Jun 2025 01:40:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750209395;
-	bh=SBDJcf09SwcwG06z/rkKrsCcFxSZMbyKPtB+DVPGYhA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Wf4hpB4tJy8O25elPcp4jElL23bQfdMwbL9Fk3DmQrcmWBKK9JoS1aGKpV/gSEWpy
-	 8yTAdqLARCWZNz18qgoio2PISfKsdbaB0z1DzTfJkSQKLCdEBuhnBIga8kmBrXGIg+
-	 Ojl3wCJ/C9gfzhG0hnj2cdWK1YZ7r/cgmv5CGqOyTd15Wl6nyPwCcc7dduhxtcZGYa
-	 GjaphDhlBvxuPa9vOFq7auClfHBnSr+lcZANi574+eM4D169J9HwYr9/diRwKWoVvx
-	 C7wl8SyebWKZMYO62StGWDp4t+LWunxvD0TZUYU9qL5AwwNhC+5+ppZqPYvsdVEFGj
-	 QEDF42xpUloGg==
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-553bcba4ff8so3358872e87.2;
-        Tue, 17 Jun 2025 18:16:35 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUljt6RYt1NXImKKctjMcw2aJiFpN0iCwOrtqVe4Oa6bCmpPoc9AmRPNCSxuFnkaf6aR2Lfq9UQyHoi7RR4@vger.kernel.org, AJvYcCVVsJ0k/tD80rqvK3kvPjlfkNo+oGvDz7b56XyhgvEWUiUvo2cx0Cy5+O6VeSkrDMeQ1uB4k4CwKtA=@vger.kernel.org, AJvYcCVXhkaYGbjq9VYr6++sg2iqn9gcqd/sqqlD/UsavkbDhLU0AU5wapHRg21kwWJLUs1tqmk77hbx4qnf+q9ycA6G@vger.kernel.org, AJvYcCWravQNrMct1F9N8BcHvkcFUCPdmrUFqnXBavH7CFyw8QvsDpk6Vevx1+iGjWg9Mqjde/HM5pDGIivRlNNR@vger.kernel.org, AJvYcCXPpEHT2uXcVH/GJQqPpnNUBFFiuHNR6uTfvkrUURX11gCkw9GmrVdIHUWRpJ5jep0mLERDpwDU3Kkp@vger.kernel.org
-X-Gm-Message-State: AOJu0YxLbo1V3dJ7W01KxCYIfohwUTJdjXMpGFvoeR+CiTgalwNwzVV5
-	AB28Xn381WjioC/D4/9IPRZz2O4xqXyGEdts4Wo7Qm4sjnWQyhKoMSCAHnev2IvT8P0OFlGx/+A
-	AIcO1tk1cg4112+cr1dk0hy7RYTpIPz4=
-X-Google-Smtp-Source: AGHT+IFiIfr5F6VDkk3G3Oh9AbB4n2HtzYAJy/s+BIZll9kvq4oJWZgFM8XLjVs97si6LTR33fQZ3chGvUAjn7TxohA=
-X-Received: by 2002:a05:6512:39d3:b0:553:3073:c38b with SMTP id
- 2adb3069b0e04-553b6e734c9mr3786666e87.1.1750209393856; Tue, 17 Jun 2025
- 18:16:33 -0700 (PDT)
+	s=k20201202; t=1750210845;
+	bh=CPDNdYSNL6xVNSl76c7r/hPSIQ5IB5Yq4jCfuT2xYgk=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=h1L3nMpPhuRC2UGUtItuZYwnT3ikdBj1OHsIzrxq2nlqRcqUiihgCkxg6q+jPfeiA
+	 BOBujCzAOdG8e0nbR5vpPcV4XfhBjZA7cKajGlywl4j39yIWhJjJvzjlV2UGbJf62L
+	 7tW2BwE88mReVqUYqdictoH0PanzJlrITykHpU45obXjFGjzAhQr97nADE/jIk/SYs
+	 rXmAfW9A41qFFmW+S0QGy2oWDzm7RZDCwONoxVJw9cxWm3uk4Two0/w9yG9racllpG
+	 y57GzzN04QARqMASKNWN1AOsaRur1thZGPmEph8V/QfGX2ERyBXPEpeN2T6zrK80yA
+	 oD3yDFZglgmvA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33B6239FEB6F;
+	Wed, 18 Jun 2025 01:41:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250611-kunit-kselftests-v3-0-55e3d148cbc6@linutronix.de>
- <20250611-kunit-kselftests-v3-4-55e3d148cbc6@linutronix.de>
- <CAK7LNAQUN3hWYh_1=LMzVp1Ddbq3W=yGHZ5__LbcfBajfuhscg@mail.gmail.com> <20250617095102-d3df1c46-3d51-4f77-af0a-8299f5e71ad9@linutronix.de>
-In-Reply-To: <20250617095102-d3df1c46-3d51-4f77-af0a-8299f5e71ad9@linutronix.de>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Wed, 18 Jun 2025 10:15:57 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASe0aQdO1m6sUQXEkYxgXT+_2xOVnX4x4f4V4adpaeZ0w@mail.gmail.com>
-X-Gm-Features: AX0GCFvJl9wi9pNxHMzc9efbA-PWAwWgE5oc_vBzkXhWJDp4BubPAbGKLKZ0oL4
-Message-ID: <CAK7LNASe0aQdO1m6sUQXEkYxgXT+_2xOVnX4x4f4V4adpaeZ0w@mail.gmail.com>
-Subject: Re: [PATCH v3 04/16] kbuild: userprogs: add nolibc support
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Nathan Chancellor <nathan@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Willy Tarreau <w@1wt.eu>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
-	Rae Moar <rmoar@google.com>, Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Nicolas Schier <nicolas.schier@linux.dev>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Alexandre Ghiti <alex@ghiti.fr>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	workflows@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2 1/3] netmem: fix netmem comments
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <175021087398.3761578.7087583906945747084.git-patchwork-notify@kernel.org>
+Date: Wed, 18 Jun 2025 01:41:13 +0000
+References: <20250615203511.591438-1-almasrymina@google.com>
+In-Reply-To: <20250615203511.591438-1-almasrymina@google.com>
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, andrew+netdev@lunn.ch,
+ shuah@kernel.org, sdf@fomichev.me, jdamato@fastly.com
 
-On Tue, Jun 17, 2025 at 4:59=E2=80=AFPM Thomas Wei=C3=9Fschuh
-<thomas.weissschuh@linutronix.de> wrote:
->
-> On Tue, Jun 17, 2025 at 12:35:07AM +0900, Masahiro Yamada wrote:
-> > On Wed, Jun 11, 2025 at 4:38=E2=80=AFPM Thomas Wei=C3=9Fschuh
-> > <thomas.weissschuh@linutronix.de> wrote:
-> > >
-> > > Userprogs are built with the regular kernel compiler $CC.
-> > > A kernel compiler does not necessarily contain a libc which is requir=
-ed
-> > > for a normal userspace application.
-> > > However the kernel tree does contain a minimal libc implementation
-> > > "nolibc" which can be used to build userspace applications.
-> > >
-> > > Introduce support to build userprogs against nolibc instead of the
-> > > default libc of the compiler, which may not exist.
-> > >
-> > > Signed-off-by: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de=
->
-> > >
-> > > ---
-> > > This could probably be moved out of the generic kbuild makefiles.
-> > > I think the ergonimics would suffer and this functionality could be
-> > > used by other users of userprogs.
-> > >
-> > > Also this does currently not support out-of-tree builds.
-> > > For that tools/include/nolibc/*.h and usr/include/*.h would need to b=
-e
-> > > installed into the build directory.
->
-> <snip>
->
-> > > --- a/scripts/Makefile.userprogs
-> > > +++ b/scripts/Makefile.userprogs
-> > > @@ -16,10 +16,17 @@ user-csingle        :=3D $(addprefix $(obj)/, $(u=
-ser-csingle))
-> > >  user-cmulti    :=3D $(addprefix $(obj)/, $(user-cmulti))
-> > >  user-cobjs     :=3D $(addprefix $(obj)/, $(user-cobjs))
-> > >
-> > > +user_nolibc_ccflags :=3D -nostdlib -nostdinc -static -fno-ident -fno=
--asynchronous-unwind-tables \
-> > > +                     -ffreestanding -fno-stack-protector \
-> > > +                     -isystem $(objtree)/usr/include -include $(srct=
-ree)/tools/include/nolibc/nolibc.h -isystem $(srctree)/tools/include/nolibc=
-/
-> >
-> > The tools/ directory is a different world, and Kbuild scripts do not kn=
-ow
-> > anything about it.
->
-> Ack.
->
-> How does this statement affect the next patch which creates
-> tools/include/nolibc/Kconfig.nolibc ?
-> Is it fine to create the Kconfig file in tools/ or should I move it?
-> I do want to maintain this file as part of nolibc and not KUnit.
-> The possibilities I see are init/Kconfig.nolibc or lib/Kconfig.nolibc.
+Hello:
 
-Personally I like init/Kconfig.nolibc.
-(I am even fine with adding this new entry to init/Kconfig)
-But, this file is not what I maintain. It is up to you after all.
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Sun, 15 Jun 2025 20:35:09 +0000 you wrote:
+> Trivial fix to a couple of outdated netmem comments. No code changes,
+> just more accurately describing current code.
+> 
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
+> 
+> ---
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,v2,1/3] netmem: fix netmem comments
+    https://git.kernel.org/netdev/net-next/c/0f66b616b87c
+  - [net-next,v2,2/3] selftests: devmem: remove unused variable
+    https://git.kernel.org/netdev/net-next/c/46cbaef5d816
+  - [net-next,v2,3/3] selftests: devmem: add ipv4 support to chunks test
+    https://git.kernel.org/netdev/net-next/c/fb7612b6c44b
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-
-> > And, you do not need to implement this in scripts/Makefile.userprogs
-> > because you can move this to lib/kunit/Makefile.kunit-uapi or somewhere=
-.
->
-> Understood. This is not unexpected, as hinted in the commit message.
-
-One existing example is lib/vdso/Makefile.include, which is included
-from multiple Makefiles.
-
-
-
-
-
-> > > +user_nolibc_ldflags :=3D -nostdlib -nostdinc -static
-> > > +
-> > >  user_ccflags   =3D -Wp,-MMD,$(depfile) $(KBUILD_USERCFLAGS) $(usercc=
-flags) \
-> > > -                       $($(target-stem)-userccflags)
-> > > -user_ldflags   =3D $(KBUILD_USERLDFLAGS) $(userldflags) $($(target-s=
-tem)-userldflags)
-> > > -user_ldlibs    =3D $(userldlibs) $($(target-stem)-userldlibs)
-> > > +                       $($(target-stem)-userccflags) $(if $($(target=
--stem)-nolibc),$(user_nolibc_ccflags))
-> > > +user_ldflags   =3D $(KBUILD_USERLDFLAGS) $(userldflags) $($(target-s=
-tem)-userldflags) \
-> > > +                       $(if $($(target-stem)-nolibc),$(user_nolibc_l=
-dflags))
-> > > +user_ldlibs    =3D $(userldlibs) $($(target-stem)-userldlibs) \
-> > > +                       $(if $($(target-stem)-nolibc),$(user_nolibc_l=
-dlibs))
-> > >
-> > >  # Create an executable from a single .c file
-> > >  quiet_cmd_user_cc_c =3D CC [U]  $@
->
->
-> Thomas
-
-
---
-Best Regards
-Masahiro Yamada
 
