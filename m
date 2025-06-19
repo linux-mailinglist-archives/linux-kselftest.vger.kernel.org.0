@@ -1,163 +1,161 @@
-Return-Path: <linux-kselftest+bounces-35361-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35362-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A038BAE042E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 13:45:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B667AE043B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 13:47:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4612816E190
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 11:45:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C73021884721
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 11:47:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C6D221C167;
-	Thu, 19 Jun 2025 11:45:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45ECD22A7FC;
+	Thu, 19 Jun 2025 11:47:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qJVagwiB"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Fo7amhoE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0032C217737;
-	Thu, 19 Jun 2025 11:45:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEE9F217737
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Jun 2025 11:47:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750333535; cv=none; b=VuQMTgJXNfHlHpc2rjBi2PmSJ033bx+bz5RJBQFmmIH2YSPfxsNkc6jH7v0a6VzfHSrv8vc5DfnOnbcRAvsisIVSq+mu2YHbIEn6jXb+6dvLFxF1w+5AXDWlnL93ekmVYAW6cKryxGV30ToSljuoF/UO4BLi2I5WQRi1LABneu0=
+	t=1750333658; cv=none; b=LFuAwe6aAlczKwnvpQp/7MAGMAJh2NqmHN+AxDRxPS/9k5xt2cBwSWsQpF1V5xUYwWQEsYbI3vryjdbKhD/35D6Visnwp7pW2V8QbOSoyjhqFG6IcWHWb90jTSGIdxMoDR8vjWhDj419Hbxn0MQc1IDRavNarTYXJKk352MQS0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750333535; c=relaxed/simple;
-	bh=XhR2GRxUYANy2ZjZ4aWduKFRjBbNRnBBbV5m0iHoHGs=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=G/sImjCMQU3aCV/3Xmy+Ozx8QQxYhUkj/idQC3nXgoabZJ43QoKveTrlrwW3NUh5xMFjPen4JXq8nBDMTuYeI/rSW9j0a+CxoP8osbJ/ecB65E4UJljAcz0ZgH2Yz98gCQgRlc1JZ6I8gPMiaAwAgKESnRaoa8hqBIC0jh9t5fE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qJVagwiB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66832C4CEEA;
-	Thu, 19 Jun 2025 11:45:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750333533;
-	bh=XhR2GRxUYANy2ZjZ4aWduKFRjBbNRnBBbV5m0iHoHGs=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=qJVagwiBKkGWrKNGo+bnqpyiVCRj09ly2FQh74U1iltN4oFewlKg0aWp3FH62dDm3
-	 JUybYirHDPvejdTha/QyCLBWvcR/RLcctMTTQosXPO6HgtQvvNM5M2H8Sgpp+e184U
-	 ZbJRYTDhle32cGbXvjM0B//CnzhMs8Jg5H3WjRd051AyDYOUjK5PSFRlfgZgyFnagZ
-	 4ABokr+2fZJIiflKaMGwSWjVavgoZUZyGIF1pNHvkslU/BF8zU3zcMLfSs6lvX3Qm3
-	 OFqyVkkvnMN4fY3QHDAJoXui+ZoBkBjnhIwMHj+1nFKgIe7+z7/p83SmTBlHwZtvRS
-	 DbHw59axHZeEg==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1uSDhy-008EQG-NY;
-	Thu, 19 Jun 2025 12:45:30 +0100
-Date: Thu, 19 Jun 2025 12:45:30 +0100
-Message-ID: <86jz58c5ut.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
-Cc: Eric Auger <eauger@redhat.com>,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	oliver.upton@linux.dev,
-	joey.gouly@arm.com,
-	suzuki.poulose@arm.com,
-	yuzenghui@huawei.com,
-	seanjc@google.com,
-	darren@os.amperecomputing.com
-Subject: Re: [RFC PATCH v2 0/9] KVM: Enable Nested Virt selftests
-In-Reply-To: <3be548bf-aee4-46ab-bcbf-15bf629b24da@os.amperecomputing.com>
-References: <20250512105251.577874-1-gankulkarni@os.amperecomputing.com>
-	<92c7e99c-5574-422c-92f1-62d5cde58fec@redhat.com>
-	<7bf7bd52-7553-42a7-afdb-a5e95f8699b5@os.amperecomputing.com>
-	<86a56veiyy.wl-maz@kernel.org>
-	<3be548bf-aee4-46ab-bcbf-15bf629b24da@os.amperecomputing.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=arc-20240116; t=1750333658; c=relaxed/simple;
+	bh=l6Xo2u+S5d7TcFeamcILKuqUG2JxPDCCMjkKufM4aVU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YmZlutiCIjlwUJbs9aLGQs5VP+cKlC9+mTQ7+y9njqTv22ftAsTnpJITQJ1EurCwLuwouMxnwXbxgBXDImj1S+GlmuC0YUhcOxP5jM1hS/XzmdjmSRg+uBS+I1B6bfU6gpkMDwdoNIm97t9yPICeg1eoSavS3BA+zsNVEfb712E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Fo7amhoE; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2348ac8e0b4so125825ad.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Jun 2025 04:47:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1750333656; x=1750938456; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=09J0YSNlS/RD38iZ7EgK8rqCHnRR998neTro1uy3CQ8=;
+        b=Fo7amhoELjgy8G7vhHqpy1FLFhoxe+NKdAayABXlfYuOkvzJ9+vg0l4aJ1+C5gDVNx
+         2ic84ujDwcPYKizpvYPrPR33ESmjFvMLCEzcZ12/xf7EzN4n83UxwbCxpg+mVXleLNvN
+         bx3s2qciduvhACR0D1XjRKRy55TVXFg5vsyf/sjemVSPvupgeeHHwZjirROA+ypFoMjA
+         LXG5iRsRXBfZPA7+YiDVe61+RFRvgIa2H0mx2l3IzhyazqzstynuipksxD6BapJSdKvb
+         PpwdJCngpTRQI3HAyEa2gaMSr1RTfcuy2UqR8Qx1nki1lCMWL6KbcFhLol4aHrSfsRrI
+         5owQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750333656; x=1750938456;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=09J0YSNlS/RD38iZ7EgK8rqCHnRR998neTro1uy3CQ8=;
+        b=ZQONAn5wpHt/d7mIGefMs2C2FDpmeHLMbn6rhPgmJJ/7ldCZafAAs2f56VnYfnlDxB
+         pRQq915VAgbZB8iD59BExsisosFCX7ynv1EmfuD28uccr3NBmL/NI8PvDoOltvW+kLhV
+         BUEYu3DC4p2OrzeRPSnSBYXfvJZ8UjYDJTr9jSVY3BwQnB3DpNs8FhJlzwEGKAX0FyxN
+         6gmt2gbJez6FVEVp2VTBsE8GhsWuyrK6KEnmjm9OKD8R2L7ZfhfOvyDxDmAyEGXFqiNC
+         dOswzGiys7brOpIz/Fswd0iU1pf+pQCNLXNItXDm8J10faheIRQE3UgeyKspOqDCw9rK
+         Mq+Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWVvOXuLbYGgMcult9etfFDMpGWVpqcbNC/p+c1OveyvJRZaEkJhnfJOdzAAgE4uA9RFh4BT476fPVK8M25P8Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yya5740zFUpaq1SBvbBfyTIaA9mSWZhK2j9Gix+KuvRUo9SqMj+
+	gDi2xfzxFPvL7+KzHvOEDRz8gVh+IVZWwh/vvpkkDpGhnU54QWhJiHy7ufdlvbz6PA==
+X-Gm-Gg: ASbGncsd3MhGc43G5QiW5hhRbMpvcaQkSQvy9GMna0LTe+vvaNZlB2bBM5qTptoTV7k
+	kUI1q/xDJGh8upjVKaBBF2oydc+mzhn282+CFxeBl5/3y+KAHriNtVvG+TO+3WT1HaYtyTd6Jes
+	d09n1rVGmVV3cQH9zSMb/p1AvR2koQgC+SSE61ev2HkuIqspDz8twhR9PTar3mxcYtwGWk66bih
+	vINJZucAbWaLDyDI4Q/NBwa7k78+mgEWHXvzMmhltV7Zs8/a1I9XsS+/OqgMrN4li0Vvd76jnJz
+	ydlBWK5gDc+glIpJQh9z0YyFigb1s3ELD5uc+HjeKRlFbhMU1pttpfxxSaf9LewU86oSf94mtOS
+	AZYQwHxd7kx/2RHwk9I9K/8CHTN4v9GY=
+X-Google-Smtp-Source: AGHT+IGbvEiTa5QOLk5NW8yLzYkB32wsjmC6sfvRD4CcA87KLToKCvr4HcCmPmyYeXbSKEiK4HR2MA==
+X-Received: by 2002:a17:903:2b03:b0:215:42a3:e844 with SMTP id d9443c01a7336-237ce0478f4mr2445465ad.17.1750333655627;
+        Thu, 19 Jun 2025 04:47:35 -0700 (PDT)
+Received: from google.com (232.98.126.34.bc.googleusercontent.com. [34.126.98.232])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3158a23c0c5sm1932766a91.13.2025.06.19.04.47.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jun 2025 04:47:35 -0700 (PDT)
+Date: Thu, 19 Jun 2025 11:47:24 +0000
+From: Pranjal Shrivastava <praan@google.com>
+To: Nicolin Chen <nicolinc@nvidia.com>
+Cc: jgg@nvidia.com, kevin.tian@intel.com, corbet@lwn.net, will@kernel.org,
+	bagasdotme@gmail.com, robin.murphy@arm.com, joro@8bytes.org,
+	thierry.reding@gmail.com, vdumpa@nvidia.com, jonathanh@nvidia.com,
+	shuah@kernel.org, jsnitsel@redhat.com, nathan@kernel.org,
+	peterz@infradead.org, yi.l.liu@intel.com, mshavit@google.com,
+	zhangzekun11@huawei.com, iommu@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, patches@lists.linux.dev,
+	mochs@nvidia.com, alok.a.tiwari@oracle.com, vasant.hegde@amd.com,
+	dwmw2@infradead.org, baolu.lu@linux.intel.com
+Subject: Re: [PATCH v6 20/25] iommu/arm-smmu-v3-iommufd: Add hw_info to
+ impl_ops
+Message-ID: <aFP4zHIVT6epJeLb@google.com>
+References: <cover.1749884998.git.nicolinc@nvidia.com>
+ <f36b5e42bac83d0cdf5773cad1c3a44c3eaed396.1749884998.git.nicolinc@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: gankulkarni@os.amperecomputing.com, eauger@redhat.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, seanjc@google.com, darren@os.amperecomputing.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f36b5e42bac83d0cdf5773cad1c3a44c3eaed396.1749884998.git.nicolinc@nvidia.com>
 
-On Thu, 19 Jun 2025 10:40:15 +0100,
-Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com> wrote:
+On Sat, Jun 14, 2025 at 12:14:45AM -0700, Nicolin Chen wrote:
+> This will be used by Tegra241 CMDQV implementation to report a non-default
+> HW info data.
 > 
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> ---
+>  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h         | 1 +
+>  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c | 8 ++++++--
+>  2 files changed, 7 insertions(+), 2 deletions(-)
 > 
-> [Sorry for late reply]
+> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
+> index 07589350b2a1..c408a035e65d 100644
+> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
+> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
+> @@ -721,6 +721,7 @@ struct arm_smmu_impl_ops {
+>  	int (*init_structures)(struct arm_smmu_device *smmu);
+>  	struct arm_smmu_cmdq *(*get_secondary_cmdq)(
+>  		struct arm_smmu_device *smmu, struct arm_smmu_cmdq_ent *ent);
+> +	void *(*hw_info)(struct arm_smmu_device *smmu, u32 *length, u32 *type);
+>  	const size_t vsmmu_size;
+>  	const enum iommu_viommu_type vsmmu_type;
+>  	int (*vsmmu_init)(struct arm_vsmmu *vsmmu,
+> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c
+> index 445365ae19e0..1c138aff73d1 100644
+> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c
+> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c
+> @@ -10,13 +10,17 @@
+>  void *arm_smmu_hw_info(struct device *dev, u32 *length, u32 *type)
+>  {
+>  	struct arm_smmu_master *master = dev_iommu_priv_get(dev);
+> +	const struct arm_smmu_impl_ops *impl_ops = master->smmu->impl_ops;
+>  	struct iommu_hw_info_arm_smmuv3 *info;
+>  	u32 __iomem *base_idr;
+>  	unsigned int i;
+>  
+>  	if (*type != IOMMU_HW_INFO_TYPE_DEFAULT &&
+> -	    *type != IOMMU_HW_INFO_TYPE_ARM_SMMUV3)
+> -		return ERR_PTR(-EOPNOTSUPP);
+> +	    *type != IOMMU_HW_INFO_TYPE_ARM_SMMUV3) {
+> +		if (!impl_ops || !impl_ops->hw_info)
+> +			return ERR_PTR(-EOPNOTSUPP);
+> +		return impl_ops->hw_info(master->smmu, length, type);
+> +	}
+
+I'm not sure if I get this right.. if the user (while porting a VMM or
+something) mistakenly passes *type == IOMMU_HW_INFO_TYPE_INTEL_VTD here,
+they'll get impl-specific info? I agree in that case the impl-specific
+driver needs to check the type, but shouldn't we simply return from here
+itself if the type isn't arm-smmu-v3?
+
+>  
+>  	info = kzalloc(sizeof(*info), GFP_KERNEL);
+>  	if (!info)
+> -- 
+> 2.43.0
 > 
-> On 5/29/2025 5:18 PM, Marc Zyngier wrote:
-> > On Thu, 29 May 2025 11:29:58 +0100,
-> > Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com> wrote:
-> >> 
-> >> 
-> >> Hi Eric,
-> >> 
-> >> On 5/28/2025 6:58 PM, Eric Auger wrote:
-> >>> Hi Ganapatrao,
-> >>> 
-> >>> On 5/12/25 12:52 PM, Ganapatrao Kulkarni wrote:
-> >>>> This patch series makes the selftest work with NV enabled. The guest code
-> >>>> is run in vEL2 instead of EL1. We add a command line option to enable
-> >>>> testing of NV. The NV tests are disabled by default.
-> >>> 
-> >>> For commodity, I would add in the coverletter that for all tests
-> >>> enhanced with vEL2 testing "-g 1" option shall be added to force that mode.
-> >> 
-> >> Sure, will do.
-> >> 
-> >>> 
-> >>> I don't really get how you chose tests capable to run at vEL2 and
-> >>> excluded others? Wouldn't it make sense to have a way to run all tests
-> >>> in either mode?
-> >> There is no selection as such. I have worked on around 50% of the tests and sent for the early review.
-> >> Yes, almost all tests can/should run in vEL2 except few.
-> > 
-> > Define EL2. You are so far assuming a E2H RES1 guest, and I don't see
-> > anything that is even trying E2H RES0. After all the complaining that
-> 
-> Sure, I will mention that default test code runs in EL2 with E2H enabled.
-> The tests code is in vEL2 with E2H RES1 by default, since host is booted with VHE.
-
-Sight... You are still confused with what KVM does. With NV, the host
-is *always* VHE. The guest can be VHE (E2H RES1) or nVHE (E2H RES0).
-
-> > E2H0 wasn't initially supported, this is a bit... disappointing.
-> IIRC, I was mentioning about L1 switching between arch mmu table and guest mmu table(VMID 0).
-> I don't remember why It was switching.
-
--ENOPARSE.
-
->  > 
-> > Also, running EL2 is the least of our worries, because that's pretty
-> > easy to deal with. It is running at EL1/0 when EL2 is present that is
-> > interesting, and I see no coverage on that front.
-> 
-> Sorry, I did not get this comment fully.
-> When we run selftest on Host with -g option, the guest code will run in vEL2 as L1.
-> This is implemented as per comment in V1.
-> 
-> When we run same selftest from L1 shell, then guest_code will be running in EL0/1 like running from L0.
-
-What good does this bring us if we need to boot a full guest OS to run
-tests? What we need is synthetic tests that implement the whole stack:
-
-- L1 guest hypervisor
-- L2 guest hypervisor
-- L2 guest
-- L3 guest hypervisor
-- L3 guest
-- [...]
-
-This is *one* test. Not a test that runs in a guest. That's what I've
-been asking since day one.
-
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
 
