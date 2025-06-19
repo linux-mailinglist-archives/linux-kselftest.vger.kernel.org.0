@@ -1,197 +1,147 @@
-Return-Path: <linux-kselftest+bounces-35388-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35389-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFD08AE0EDE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 23:14:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52276AE0F15
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 23:41:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA0981BC4751
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 21:14:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AB99C5A5C73
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 21:40:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79BC125DAE1;
-	Thu, 19 Jun 2025 21:13:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42A6A25FA05;
+	Thu, 19 Jun 2025 21:40:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MUl832LD"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="AoDdS7dl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-vk1-f174.google.com (mail-vk1-f174.google.com [209.85.221.174])
+Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B82A9220686;
-	Thu, 19 Jun 2025 21:13:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B88A630E852
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Jun 2025 21:40:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750367638; cv=none; b=KTrp8A28dvyEG5XtrEhWpGVZW/zrzsSsMc75OewRg3YjYsiKVGbyhDzYULwjSsZkahM0ILPLfzCf14efaKcAbVWKBWND2bhEv7TFsKK7yMXDtQtp+ilvCxSkH0qNmt2ngQ7I93s0lHiqtouXvkIBc1QkjXnAi1+5NYb6yFU+wN0=
+	t=1750369253; cv=none; b=qnhSfFsUB+6pgij+DQjjB6TENBEPxUqvSqBoxN+E/jhSdlYacBdxaxD2vsLAgkTNAkLrM18rGc96QTPykaYhWetPLtOtVGFfUHHigSGbpM9dstgXoce69NgqRPoqRX4gxQbiLtuj6uRrSKWo7Nt55XppZuu4aMQhnvMhWc+VHxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750367638; c=relaxed/simple;
-	bh=coKPhq4+2hLzHk2Vv74+S3aBbSgJT3Rpv9BsWDpud4c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=R6W1/VfU1A9Lx6HV+r77W1xyqk7VXz2bRDZkZisdaqLoHo/7AHSubpvZZaO3o52Pf/pgUqCf4oPZPXVfkWvm/A1AtQ86nv/Upg5817iRAPLQPVokr4nEancFutc335J3CkzsexUwg5oJIezoMW7I5oe3+AXAqlTjHIfimPdCiLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MUl832LD; arc=none smtp.client-ip=209.85.221.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f174.google.com with SMTP id 71dfb90a1353d-5316a5e4c6cso380494e0c.1;
-        Thu, 19 Jun 2025 14:13:56 -0700 (PDT)
+	s=arc-20240116; t=1750369253; c=relaxed/simple;
+	bh=RFA/yqyQSPUwwdKTZXol6d3OW7IQQFMuZJNDfgY1kfQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OXAk+Thff2HpUAflFVjEx84WwT/TgDsRUIsWuOXQ7qzn8Wc36YgpI3ap/HqJ9kz8zbf+fuYlXRz+45Oey4UUFXOkb76UYoYb5UWet8XOgxCS0ZfdOiMxaoB9PCMpYT5BWRWyOS8jSvFqW59/ll5QNIgKrggAiKi2JLC7LuKa0LQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=AoDdS7dl; arc=none smtp.client-ip=209.85.166.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-3ddd68aeb4fso12760335ab.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Jun 2025 14:40:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750367635; x=1750972435; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/IXOfDU+bla/iqbB8KlX3pd8vBetpC4ORWvQkQPMFNU=;
-        b=MUl832LDG71go67T/5TCopj8W2uaXsIobIo3QW13MbuzIXr7GWTTyetpAQ1YeTpiRi
-         Yk/JIVXM24LdDCGjgI65Uyr+F6AJe/0EfeIMqm0/2lB6+ohVdyjR1DjFrkea8y2EqG+3
-         VFv/OIf5B1bJtYAW7rsypqeMe1f7bnFwpD5nqf8dMFT4XYiQrM2Ya1J2z2Zx407mFLxx
-         N9WpKcfqmPqqoOX1JzJxSYOy2ATRGRb68mXzqEh1l0RwiY72W9yct2YS1e7sSq+etiGp
-         1sDGRCXWRHRikI2nPKVlQDBWVXsQM6m6gthm0qL5wIwsFwnLIH2Je1wyud2i2TB6x29d
-         PZ2w==
+        d=linuxfoundation.org; s=google; t=1750369249; x=1750974049; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2Y3x5oxeT4WtdtCLyQVGKYtv/Q4EkmPLsDdHFSt8usc=;
+        b=AoDdS7dlAi3H+KHslgrptqS7gKW9PLNuEIaZoxi5uPR+r+Wxq3pIGaoD8QrdCJ8lhY
+         ul8ebb7udWhnXCYx/oOvYXk56hdREeE84q7nv0J+J9ULx8ycbWeZ0T/9Vlt/t7g1MN3s
+         OkIDMUKt80Op+5nQk5DgfK5Kt+3W0bPjIdEdU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750367635; x=1750972435;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/IXOfDU+bla/iqbB8KlX3pd8vBetpC4ORWvQkQPMFNU=;
-        b=BcW28pj2uvjy6SIsL+Sofn8Xv6z5VUTE22BjE1BkJMKy1aC9gRCHprDIsghi4o77AU
-         43V053Yo2QwVqVoqOiyox8kaf1xjyqQVBgrw34zqmb8UWJisUJprexGE8F5hHC36l6Yo
-         sikc9e+jhyHWznO9WTbb2ygi9haa62RWPmOylyGLZxYCE0dBBlKNWdtZRz9/cFVCBWMo
-         oZYGZtOuD6/VK3zsZq7iEK+3SqzKW6K+cacN+qS2gWgHQTgVzBkoAAgI0Ll/+6eFJhR9
-         GPSErovJIvhEuwgzuuOYkkfRo4B1dFH82x6ALSd2YSudg6z/5Oeb8BMlZ3JoNAKlNOg9
-         WO9g==
-X-Forwarded-Encrypted: i=1; AJvYcCVaWyYjYoRnvNwnzCdpk6bHeS+CLMCh5ifKtzwHRny59HZUXSzyX1xH8xdWKtI/8FnNxMs=@vger.kernel.org, AJvYcCWzdsrXPDnGoIUgVnpCZW0udmii4ZFNZ+x6GjnHMHfO0qoDh5SFMtIPqBypKCfT1p/bz5GSfLyTLI0V97zRm0uJ@vger.kernel.org, AJvYcCXp3CgoDTgriGQR4WQ4v8vLN2/QxxETZAeXIe5kOonHLAaoaLN+0JFBjRd8BplzMVfRCWCjLO2ZXaOVTAnq@vger.kernel.org
-X-Gm-Message-State: AOJu0YyP35OQfv/ohIyZ2K4/Lp+mm6O3iqukFPEWlSf48zsJfrTteNVN
-	LmGB1hoWvx5c5REAvbDUnp4A6S+D/3VEs+4ccCjP7ORov5If2B20GZp92FKYNnMW8lbccVwLvpt
-	ebE8F4KCN7WEj8RFaJwO2X6Ndt6Xiz5Q=
-X-Gm-Gg: ASbGncuaSqzsM6V+9JXykqmxQzXtxW2j0kk1Oz7DltDg7Ka96y4oCY5gvTdvr97uRCu
-	5o15N5UGFdBdIDFiIYhuAk8X4ToYZsXeaEEPbz87jds5wzTkt4HPni8cV1BoupyozMbLl9Areg6
-	vLKkdoMnafKjR3erUo1fjiA0eGJuTFvm1ludL/vRnb2Bg/ZNewoUNxThCMtek8X+MZtXKdtPRBo
-	eBxJmkjef7pI1mS
-X-Google-Smtp-Source: AGHT+IGl0oUSKOpRmEhg+kx9sWrnrLDZfdXeYRWElnoTRLVTKG2/s36JBcvxB8foyh0sNRF54dkKSCz1NPQILNMLfaU=
-X-Received: by 2002:a05:6102:3913:b0:4dd:b82d:e0de with SMTP id
- ada2fe7eead31-4e9c2f59589mr315371137.17.1750367635575; Thu, 19 Jun 2025
- 14:13:55 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1750369249; x=1750974049;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2Y3x5oxeT4WtdtCLyQVGKYtv/Q4EkmPLsDdHFSt8usc=;
+        b=VYfJnYcPB34jLitFKRY00qkJE7r+BqvWV53FrpDw14z6F4+goaFl+fvPwuLZsHsw3n
+         f1+r5MVnijvEQewrs+h8+v5hnwPfG3sDy0hR1KoE1cjgXwNr61+dDmnQsQA2VZCcOahI
+         AUxm+/LBeD5yPBNsiTD/mmCGyHHA0FDmTZQYlhcC45kYXs+3YD6BNYECL6ZUJ1kNPdhn
+         5cgocMPiFYPoxYKQ/h0EKjQWqVXCHyE4nn8dUgz23SklLFg5LHSe1K7munyOiGVpVOkg
+         RnXr6bnPoOgaXq8eOL6r4TiBCC7e0K2gd5npLe2jWyL+aRL6GYDJs48zuHjbcS3yH/K9
+         yMyw==
+X-Forwarded-Encrypted: i=1; AJvYcCX/Jsy2nfr64Egb8kqPo+pLILLc67lSmvQ3GeDb4ATL/QnS0cEbNeTzCPzzU4g1R42z7Boo9utJGYnC8pWn2HM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz3/24v83mkQfbKvWfNP0V1TvW+Waoi7XWICSAGfGkZiL6ddeFI
+	icIbFtv1/HShTCMGep9kLv02SOEDaPI0lUrGbRR80iq20CfAxVAnaG0fy6OPBGnlbq0=
+X-Gm-Gg: ASbGncunWMxB6MSOWa000Cxc72mr7v8WEFK+RR/kGHU2qliFNXmCH/FiBCBd9PDhTMh
+	lD3CtJu8GoTibPZJQzrHujd4QV+CKji8eMa0brjJ728KdxcHHF1QW4KOyNDE8XjkndzWWAB8FU1
+	MS2c0dLwoOER/JvcSaaQbvLvAZrKpRGNYgz3GX9jbwda/faxYAflb+KD6QRzVkAJKaMCSR2HUmH
+	LR8+PwLpBF8gIHath6UR+d6JTMaNbT5EGaUY6YXrUt6JrsFBIZsZiOfri1ucwR5lNJN4NDacSkS
+	FEh6vjnK84IWCPu03lS9kOBDTFO98w/BqQE6goAecYG4COdDqW3zr7clYaBSfucSnCzi6BUmAw=
+	=
+X-Google-Smtp-Source: AGHT+IGCXQ0P0NRFh7ydIGTlbS1aQeIfIQv8CbB2DliU8PwpYPDyu20ZGQPmw1y1tzyBgx1cTN0BZg==
+X-Received: by 2002:a05:6e02:3f05:b0:3de:12ff:3604 with SMTP id e9e14a558f8ab-3de38cc9db5mr5134765ab.19.1750369248697;
+        Thu, 19 Jun 2025 14:40:48 -0700 (PDT)
+Received: from [192.168.1.14] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-5019e04e4bbsm141990173.70.2025.06.19.14.40.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jun 2025 14:40:48 -0700 (PDT)
+Message-ID: <f73fa51e-87e5-4805-bbbc-a7af9b50a1d8@linuxfoundation.org>
+Date: Thu, 19 Jun 2025 15:40:46 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250617231733.181797-1-harishankar.vishwanathan@gmail.com>
- <20250617231733.181797-3-harishankar.vishwanathan@gmail.com> <5b3b620d04fc3bcf4286dc4bb8c6fd995df86a25.camel@gmail.com>
-In-Reply-To: <5b3b620d04fc3bcf4286dc4bb8c6fd995df86a25.camel@gmail.com>
-From: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
-Date: Thu, 19 Jun 2025 17:13:44 -0400
-X-Gm-Features: Ac12FXwH3RlUZr147tzxEGZzSM-Q9TBhDMdLnQfw2zufhATIdJ6J846D1omd9oI
-Message-ID: <CAM=Ch05aDpkCZ7xF1Fs9SVrU8DFG7kofzRw4g4bkaUSdUsp3jQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] selftests/bpf: Add testcases for BPF_ADD and BPF_SUB
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: ast@kernel.org, m.shachnai@rutgers.edu, srinivas.narayana@rutgers.edu, 
-	santosh.nagarakatte@rutgers.edu, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, Matan Shachnai <m.shachnai@gmail.com>, 
-	Luis Gerhorst <luis.gerhorst@fau.de>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RESEND] selftests: Suppress unused variable warning
+To: John Hubbard <jhubbard@nvidia.com>,
+ Chen Linxuan <chenlinxuan@uniontech.com>
+Cc: Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
+ Amir Goldstein <amir73il@gmail.com>, Miklos Szeredi <mszeredi@redhat.com>,
+ Jan Kara <jack@suse.cz>, zhanjun@uniontech.com, niecheng1@uniontech.com,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20250610020758.2798787-2-chenlinxuan@uniontech.com>
+ <6972404e-0237-47b9-8e3e-15551bea3440@linuxfoundation.org>
+ <CAC1kPDPg0AN9Ft3SNM6JDcZf=XD1oinqeAMzuRpZF3nzemZ=Kg@mail.gmail.com>
+ <265ebc1f-b0c0-4c57-92b2-41714469c7f5@linuxfoundation.org>
+ <91817e12-54c4-4241-b895-2e452a00e0c4@nvidia.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <91817e12-54c4-4241-b895-2e452a00e0c4@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jun 18, 2025 at 5:22=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com=
-> wrote:
->
-> On Tue, 2025-06-17 at 19:17 -0400, Harishankar Vishwanathan wrote:
-> > The previous commit improves the precision in scalar(32)_min_max_add,
-> > and scalar(32)_min_max_sub. The improvement in precision occurs in
-> > cases when all outcomes overflow or underflow, respectively. This
-> > commit adds selftests that exercise those cases.
-> >
-> > Co-developed-by: Matan Shachnai <m.shachnai@rutgers.edu>
-> > Signed-off-by: Matan Shachnai <m.shachnai@rutgers.edu>
-> > Signed-off-by: Harishankar Vishwanathan <harishankar.vishwanathan@gmail=
-.com>
-> > ---
->
-> Could you please also add test cases when one bound overflows while
-> another does not? Or these are covered by some other tests?
+On 6/19/25 13:00, John Hubbard wrote:
+> On 6/19/25 10:00 AM, Shuah Khan wrote:
+>> On 6/19/25 01:46, Chen Linxuan wrote:
+>>> On Thu, Jun 19, 2025 at 5:23 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
+>>>> On 6/9/25 20:07, Chen Linxuan wrote:
+> ...
+>>>>> diff --git a/tools/testing/selftests/filesystems/mount-notify/mount- notify_test.c b/tools/testing/selftests/filesystems/mount-notify/ mount-notify_test.c
+>>>>> index 63ce708d93ed0..34afe27b7978f 100644
+>>>>> --- a/tools/testing/selftests/filesystems/mount-notify/mount- notify_test.c
+>>>>> +++ b/tools/testing/selftests/filesystems/mount-notify/mount- notify_test.c
+>>>>> @@ -465,7 +465,9 @@ TEST_F(fanotify, rmdir)
+>>>>>        ASSERT_GE(ret, 0);
+>>>>>
+>>>>>        if (ret == 0) {
+>>>>> -             chdir("/");
+>>>>> +             // Suppress -Wunused-result
+>>>>> +             // Ref: https://gcc.gnu.org/bugzilla/show_bug.cgi? id=66425#c34
+>>>>> +             (void) !chdir("/");
+> 
+> This is quite ugly. :)
+> 
+>>>>>> Why not fix the problem the right way by checking the return value.
+>>>> Suppressing the error isn't useful.
+>>>
+>>> The code is already handling cleanup in error cases,
+>>> and I don't think checking the result of chdir would be useful here.
+>>
+> 
+> Why not just fail with the appropriate test result, if chdir() fails
+> here, instead of making a bit of a mess with odd void casts to a
+> negated return value, and a reference to a compiler bug report?
+> 
+> Really, Shuah is putting you on the right path here.
 
-Yes this is possible and I can add such test cases. These are not covered b=
-y
-other tests as far as I can see.
+Ha. I didn't ask to suppress the error with the cast. I asked
+to check the return and fail.
 
-[...]
+> 
+>> We check for chdir() in several tools in the kernel. Add a check for
+>> it instead of suppressing the [-Wunused-result] - suppressing doesn't
+>> do any good.
 
-> > +SEC("socket")
-> > +__description("64-bit addition overflow, all outcomes overflow")
-> > +__success __log_level(2)
-> > +__msg("7: (0f) r5 +=3D r3 {{.*}} R5_w=3Dscalar(smin=3D0x800003d67e960f=
-7d,umin=3D0x551ee3d67e960f7d,umax=3D0xc0149fffffffffff,smin32=3D0xfe960f7d,=
-umin32=3D0x7e960f7d,var_off=3D(0x3d67e960f7d; 0xfffffc298169f082))")
->
-> Would it be possible to pick some more "human readable" constants here?
-> As-is it is hard to make sense what verifier actually computes.
->
-> > +__retval(0)
-> > +__naked void add64_ovf(void)
-> > +{
-> > +     asm volatile (
-> > +     "call %[bpf_get_prandom_u32];"
-> > +     "r3 =3D r0;"
-> > +     "r4 =3D 0x950a43d67e960f7d ll;"
-> > +     "r3 |=3D r4;"
-> > +     "r5 =3D 0xc014a00000000000 ll;"
-> > +     "r5 +=3D r3;"
-> > +     "r0 =3D 0;"
-> > +     "exit"
-> > +     :
-> > +     : __imm(bpf_get_prandom_u32)
-> > +     : __clobber_all);
-> > +}
+This is what I said.
 
-It is possible to pick more human readable constants, but the precision gai=
-ns
-might not be as apparent. For instance, with the above (current) test case,
-the old scalar_min_max_add() produced
-[umin_value=3D0x3d67e960f7d, umax_value=3DU64_MAX],
-while the updated scalar_min_max_add() produces a much more
-precise [0x551ee3d67e960f7d, 0xc0149fffffffffff], a bound that has close to
-2**63 fewer inhabitants.
-
-For the purposes of a test case, if human readability is more important
-than the demonstration of a large precision gain, I can prefer one that is =
-more
-readable, similar to the one shown in the commit message of v1 of the
-patch [1]:
-
-With the old scalar_min_max_add(), we get r3's bounds set to unbounded, i.e=
-.,
-[0, U64_MAX] after instruction 6: (0f) r3 +=3D r3
-
-0: R1=3Dctx() R10=3Dfp0
-0: (18) r3 =3D 0x8000000000000000       ; R3_w=3D0x8000000000000000
-2: (18) r4 =3D 0x0                      ; R4_w=3D0
-4: (87) r4 =3D -r4                      ; R4_w=3Dscalar()
-5: (4f) r3 |=3D r4                      ;
-R3_w=3Dscalar(smax=3D-1,umin=3D0x8000000000000000,var_off=3D(0x800000000000=
-0000;
-0x7fffffffffffffff)) R4_w=3Dscalar()
-6: (0f) r3 +=3D r3                      ; R3_w=3Dscalar()
-7: (b7) r0 =3D 1                        ; R0_w=3D1
-8: (95) exit
-
-With the new scalar_min_max_add(), we get r3's bounds set to
-[0, 0xfffffffffffffffe], a bound that is more precise by having only 1 less
-inhabitant.
-
-...
-6: (0f) r3 +=3D r3                      ; R3_w=3Dscalar(umax=3D0xffffffffff=
-fffffe)
-7: (b7) r0 =3D 1                        ; R0_w=3D1
-8: (95) exit
-
-Please advise which test cases to prefer. I will follow up with a v3.
-
-[1]: https://lore.kernel.org/bpf/20250610221356.2663491-1-harishankar.vishw=
-anathan@gmail.com/
-
-[...]
+thanks,
+-- Shuah
 
