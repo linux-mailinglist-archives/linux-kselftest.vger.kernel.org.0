@@ -1,80 +1,81 @@
-Return-Path: <linux-kselftest+bounces-35365-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35366-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6162AE09A6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 17:06:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 012D2AE09AD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 17:07:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 042C37AF92E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 15:05:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 93204161C7F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 15:07:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2B2E219A8E;
-	Thu, 19 Jun 2025 15:06:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7277D263F38;
+	Thu, 19 Jun 2025 15:06:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d3QEA4PO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SguMwELY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD97DDAD;
-	Thu, 19 Jun 2025 15:06:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65492235346;
+	Thu, 19 Jun 2025 15:06:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750345593; cv=none; b=g1h1WQdb+17cSDozzcINiKifXWDYDJz7bc9X21z+p7iwm2LIHxVx6dKQlSXXra8qPq3y8nMjyPJqpcX0b/NVfuOw7O2o3Rua+Ihf+gOn8dOplzG7TF5KIuQhbyRZfnp4eP+oYVVWHPiiYUkfFce4x6B5wVoqUJmCeiSQOU2flh8=
+	t=1750345596; cv=none; b=pUXJ0gtijTitY+ag3uRIPu5SJ4eMCH8ZR0Vpqz6cIpD/aA+DrM3+DTqUHjcCtEdh8W52mpjBVn3XBG8AlG5YXLH5D7a7kl5uBLhYmOoaNlpc4uYW98aQvJPmG3QhdODyuuCR+6bx2FuwsvLzrJHAnYpjQInFlGbEvqmQffhU69s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750345593; c=relaxed/simple;
-	bh=wGxKJCc7qeOmnuSZ+yHqpDhrjglCvryWX3i8qW5pY7s=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=r/Wa+x2i46WhQGRqbEfRcE6Ywcn5iVgbYTyDweceFzokDQkrtJ9EvyBuxFA9WqLxsvciTS5Y18HJPTniVByeFUKupz12/lOuNxqfVnd8b+rzV/2rgfywE2N0WQqW5xPYsQJPwJzTli4O2Uc4w22nit+g2lS8lo8fkUTNUsIbgos=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d3QEA4PO; arc=none smtp.client-ip=209.85.160.179
+	s=arc-20240116; t=1750345596; c=relaxed/simple;
+	bh=EBOv2iJUrNuFvpf6DgfwXDAQle4Ii2A9b6MwmYUjoEA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=l+D/UhOtV2NWqc1DV7gRHIVZ6y+MML01s8CdSqd+hkvZmROkB+TBkKMmwNa136LtHXYEd/Z3rhLkKsUProU/w124KpSlPeJBLJ2w/E0hi9gpoo1cKZvwWEhNPiZIMWmvvB4vrVTpRKm/GwcxpOHcy7v681HSB90x9N5az4TirCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SguMwELY; arc=none smtp.client-ip=209.85.160.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-4a5a196f057so19362361cf.3;
-        Thu, 19 Jun 2025 08:06:31 -0700 (PDT)
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-4a774209cf0so6327151cf.0;
+        Thu, 19 Jun 2025 08:06:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750345590; x=1750950390; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=nXuTpoOb8+LqU5quDMVJCzI6iZgIaVm2IMUXk0GHfM4=;
-        b=d3QEA4POj7ODVz0We39Zw8PpOhR1ta/kOnhCYRcZzymhkn1kI9vmKal5BMZiMgbRXr
-         XG27MF1w0D+dnJmAJsbUIBNfU5Jy2P+aS91gWBSWNZZQ2Cm8hYYFV3jJj06ouLaEWBf2
-         wqLHljESTpDQNaJ6mfZishXEEt500W1pmRufz6OsgrqMHeaK/VKYgmI+lopIcp+S1wVP
-         vDus4AEo4c/oeHTDBY7jR4cA/XZy4zTP22eUBM8BILHmeUDLkADmIbkETRGJ8/sRq8pX
-         anMFo8tU5iEzWmDEMQjRw80HvyKeRdaTSk1bZwxKp5qSWo7thyJl9/8zVUtVFIhmdzFW
-         kcIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750345590; x=1750950390;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1750345593; x=1750950393; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=nXuTpoOb8+LqU5quDMVJCzI6iZgIaVm2IMUXk0GHfM4=;
-        b=jX4ghTLVC/ZiTESleN8RhQFgCP8lKwq5YDIb7NDnoeWH3vOX2qyBuGdCJBXQA+j2yD
-         tb1kOl3wkXZ2n8nLU8obkfr2Gl9lISCdaUjTyEpp+IXlWJcqVhqi4ZQM//ZwxN4w8TrI
-         XkuzlWxe5P4vAL/vtMAodhmlTwOogggFljABTt4Ivgo/GNzjp380ZVpu7ZixKw0+8LUG
-         fLCO8BN3Ws7yWuQDF2/PG6fJukkDfwvrRk8oq6NFj5DkP2R+7wRC9KneSG3z1ptKYICV
-         PA3qSXtsjzxTnuoqCSSd2CT+Ix3cbBjI8Z/xnn0BtqBKbtTZ35UTfZBdMJizD4DNFbS+
-         727Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUCePjPkAKziNvNYbtqB91aCayr62taBWRhuNfsOJ/3MgIX90fECC16coICBiB5Zrd0W7XgOlYBg4LHXrPIeVGY@vger.kernel.org, AJvYcCUPMm4jvtotNH07IU2ErufaRhIA0dtfAimhRd9AM/e8ElkMf21H7hdqBgpeQdztNW/aN9ny3KTm@vger.kernel.org, AJvYcCUxDDfgOfwya6nbgVmbz9IUrct4RhlA8gHc1e1U6Pq26TGfWIQEflmvKOuNyFoLp5SFg+GPwffcFJj89vI=@vger.kernel.org, AJvYcCVT/LA+sOpwaMpngnp2bPsrZRCm2mdx2E5+J6TxWeTP2gzQH2Ue1s1PfW+9wXpq/PQGAF0fT41de1gPjM7L@vger.kernel.org, AJvYcCWgfVD7Eo2J4EwfMlzqM94PIof6VMnFjiCbTQ75EmHG+SJLrfgoBvO5nWULHNZHJqpfewbN9Yy0PFsF@vger.kernel.org, AJvYcCX8hze+R++pKzPhFCm7h+lJNkdcBXEL4CT3OKiIUYb65duCTK7aGBWRgLKUuZ/Zwv2QjkJpauo3LBz+@vger.kernel.org, AJvYcCXUQr963FoXMsOq1VEMFOA6fso276O4EsbObbd76pCD6zpryLNydPIZ4d67sq1g3Qtu1UaAXRs8NStk@vger.kernel.org, AJvYcCXYjHHI4K4mZOQrcxkqsm8lJ0DlCh3547wboVCGWPq2EueeWvQUrrXimdUqizgDhhyHmpdMK8ePtUQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzKa8PZ/9owuobzdFPfu8dkS6SL7l4bH65qpjScjTFyNGkuJKli
-	m1WzKMp9Ja/ij+MhPoOBmvhhGOFPblQc1T+Z4gt8e7eqtKgG5qK4zYUr
-X-Gm-Gg: ASbGnctiu4AiwvIZxAFe+VyoWHtXdHC/kUv1vv0GCIko/BvVWZCMiWQrIp6jleqF8vw
-	qjHBneFursBnv2VtfPLrDo+Tmrhbk52F4mEX/b4B0vQ44RUxYvDrlaOJ0qHeJ9pP+nQS1if9Rk6
-	HAg0Kqdmjv+2+esh8JegqKGqqncod5knFU1njqldCvUEJVVCUr9whmnnia7ALAd+9Ar1CKvJ7wl
-	I66q+WccDM4GR+Yqv5BX4BpN5V2yqc4fq96/23hMxueQRYQ0gSqGLzlkaDj+51Z7xgQ98kgWzZn
-	jTZJQT4eT7/WkcbTq3Pdz4SeZ+lMw0L0xNO7XoABrtjUE6RpQj9/zBjpT08mvqcaWYFnjv8zzlQ
+        bh=bM2aOZbws9YwwuYVjK1ug8LtX85CzdHif6CnDf/GxLg=;
+        b=SguMwELYqOXzrouyRq+qewvN8D67tfxB3T8aJZcKqyP+BfQt2e84lMIJ7XVnm4dcHc
+         0MEpYFBc0hsgHaVoBvNxcVNJs36vaKg1q4gU+YuSV6dEQmKh+tbjD7nZVAvPUNLYMgfA
+         OLEV7wvy2FlrggBQNBGk5D83i5F9Nlbp8B8neWP3phJRLVYb3FkvCeTfZ9EZyk+ZNFcb
+         4uBM2MK5bOcQ1F4c0OSZSpPM330KhWhmh9nj2a28fY0i153dTeW/P+v9U4iUS13S90TC
+         U8plf1E56xcoKwyQg0BbQ2ftfOrcaVNkqqLk+bh0hHIHItqXfhdkVDgbJYzQSWe6XIOo
+         Jc3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750345593; x=1750950393;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bM2aOZbws9YwwuYVjK1ug8LtX85CzdHif6CnDf/GxLg=;
+        b=HlppUm5Cg92wQBHEnK8NRiRXEl/Ly9YMMYhCEtoZ65X1nav+p+enWJ6ebgq9/5lTEF
+         ZGmJ2ppxfWKYGhB0zGiocSqmDHbZixOk2jqw5nh8BkmVYXr0Eu0AdpmRM3IeggMONkh7
+         rzOz18q97vKChVpwNmwQj+5Pj4jJhuor583rI7eH5IkKqnoxgVNCm/MAY+hXTJYmueH1
+         ViSDcHf3EBoyFShsNs3sZM34hhzvBcsluSwzDXr1496lKjoxl+1K43/Oq5xjlLmqJyCs
+         gZdb0qYQDMuv/c8Oy6uyKWIL5krjRmj4ObhpjHKvjkMYyaxoHrRxf4w/QJaqG/huwvr4
+         8R3g==
+X-Forwarded-Encrypted: i=1; AJvYcCUNGTLQD+6pZoqYR7DayRbrDccX34/cHzc6wjt3TGbqlRcgTmCv5WzzuLN6MYyiCpS4Fnd6oWv5qmze@vger.kernel.org, AJvYcCUS7lGXHFMtDyj7PV6E3KXcd/7RwIHBTjrA2T+ujhBF/s16P3u20mWqKEnF5tCjiDSMP+5Y5qhuKnGh6qPZh4/7@vger.kernel.org, AJvYcCUbDzyRz0yMDrIz0mHlM6GLMelyAkFXBESXzJuVBVP+M8PuyUV4N4jQczvraV1sBIeudobqf1RJJYHr@vger.kernel.org, AJvYcCUdEgh+7Z+YJl/VyFntAmX5kLMzCxBr/h69canm8ougUn/7emuuyMOeM8PyNQLQ50y97GvRlIMpDTY=@vger.kernel.org, AJvYcCVAbFV94xqZHwS76UqB0kL4R5gLZ2Xw+ir/DRTVSo5DTfY5qzB6tuKuECK3/skxBXDebKN6ze4M2gsKLPA=@vger.kernel.org, AJvYcCWrtCN+lR+4SSLKMpvTYGxu7wVhP8OZfkRhMGSAVE1ZqODSO1A4svRQpEhHMjOI1EXdUvTlQgSP@vger.kernel.org, AJvYcCXFVADAyvF6F5QkUx9A/QUAH6tKUaonL7kDnaJlT0Fk0n5OwKSyBQ9KmBg1CQsA5sXjjve6TwPEm5TV@vger.kernel.org, AJvYcCXQNlh6m937hA6wIvSh6ejG78+DnTjSyGY36+HSf747ib+ksXfn04aYaaA+C86p823i8X9p83ELvMFNcn0F@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw4E9e47CeWD8iw2Aw9SI06b4naOl4mqWygnbwgizNa1lWejy9z
+	/es1ZvqV+HJ4vaJgFfK4EC/VOheFiNTMYiWlocB5GXMCJc7HPQlgEOSY
+X-Gm-Gg: ASbGnct7lwBmD0nPFl2kDh5MeTLJvE6RjbLUIfcDa0J7vv/ib991KBbTxC1XjA8rGO9
+	elLbl2DfiFe1VcBRb4qBnQhZWzQ80F/tGqtAYL13y/jG3bVdYwkJf6oywagMLWTN/lNlxTj9Q0g
+	rdwC35oAtTc9cLabqLnDuLiGt5apOxGoauKCfwWPxbN+yj40zLFtrcL8Q73mG+oLhPwGu/9Ojlj
+	PgwN66IOHSTKbJtt3HzWAkae96wiGTuijEuOeKCnm++r1UGBPtD+QXdsGGzLiRiYHJ1cCr41uR8
+	SclDqapjX5csmRWbXDw8CJVWLbBZdQHq2xEeGC7eo1XEZ//QZafdmpQtYGXsczFHsmyYOZ70Emc
 	=
-X-Google-Smtp-Source: AGHT+IFX/JE8xs0dtWJTtpxoAw108+yxpwrRoiMuu696MghqABs29FkJDRGkGOS7haSa53S3zqGnCw==
-X-Received: by 2002:a05:622a:11c1:b0:476:7199:4da1 with SMTP id d75a77b69052e-4a73c5ed5bemr350669851cf.46.1750345590333;
-        Thu, 19 Jun 2025 08:06:30 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IH6uoGJ80i+gmE2Fu3xsbwnovJZH3MPF8JNjcwJ3CVhnE00RGYIPfowX1mIbGAqF/jdU2etbQ==
+X-Received: by 2002:a05:622a:188c:b0:4a7:29f2:313 with SMTP id d75a77b69052e-4a73c619203mr287096761cf.42.1750345593031;
+        Thu, 19 Jun 2025 08:06:33 -0700 (PDT)
 Received: from tamird-mac.local ([2600:4041:5be7:7c00:5c8a:fc6a:b57c:e57f])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a7785aaacdsm250531cf.39.2025.06.19.08.06.27
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a7785aaacdsm250531cf.39.2025.06.19.08.06.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jun 2025 08:06:29 -0700 (PDT)
+        Thu, 19 Jun 2025 08:06:32 -0700 (PDT)
 From: Tamir Duberstein <tamird@gmail.com>
-Subject: [PATCH v12 0/5] rust: replace kernel::str::CStr w/ core::ffi::CStr
-Date: Thu, 19 Jun 2025 11:06:24 -0400
-Message-Id: <20250619-cstr-core-v12-0-80c9c7b45900@gmail.com>
+Date: Thu, 19 Jun 2025 11:06:25 -0400
+Subject: [PATCH v12 1/5] rust: macros: reduce collections in `quote!` macro
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,13 +84,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAHAnVGgC/3XOwW6DMAwG4FepOC+VbRKT9NT3mHaAJJRog1QBo
- VUV775QqSvttKPjfL//azH6FPxYHHbXIvk5jCEOeUB62xW2q4eTF8Hlh4KAFBCgsOOUhI3JCyc
- b07BBAtsW+f85+TZ838LeP/LcptiLqUu+vidI0GhQlax4T1pDJUjMtYspzuPn5XhOcYpDX4evv
- Y39GtmFcYrpcqs38xp8L0KbIjMLEFqysY4dmdYdT78ha5G5+ldWWboadV4RyFK/Sr2V5VbqLG1
- TtsS+0qz5VZqHLLHaSpOlQsfWKqKW6VUiPKgiuaUI2bJEqo10xlXqj8WNLeHJ4trYGQu2sY2Bp
- 7vLsvwAOlZtqwwCAAA=
-X-Change-ID: 20250201-cstr-core-d4b9b69120cf
+Message-Id: <20250619-cstr-core-v12-1-80c9c7b45900@gmail.com>
+References: <20250619-cstr-core-v12-0-80c9c7b45900@gmail.com>
+In-Reply-To: <20250619-cstr-core-v12-0-80c9c7b45900@gmail.com>
 To: Michal Rostecki <vadorovsky@protonmail.com>, 
  Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
  Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
@@ -133,175 +130,203 @@ Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
  Tamir Duberstein <tamird@gmail.com>
 X-Mailer: b4 0.15-dev
 
-This picks up from Michal Rostecki's work[0]. Per Michal's guidance I
-have omitted Co-authored tags, as the end result is quite different.
+Remove a handful of unncessary intermediate vectors and token streams;
+mainly the top-level stream can be directly extended with the notable
+exception of groups.
 
-Link: https://lore.kernel.org/rust-for-linux/20240819153656.28807-2-vadorovsky@protonmail.com/t/#u [0]
-Closes: https://github.com/Rust-for-Linux/linux/issues/1075
+Remove an unnecessary `#[allow(dead_code)]` added in commit dbd5058ba60c
+("rust: make pin-init its own crate").
 
 Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 ---
-Changes in v12:
-- Introduce `kernel::fmt::Display` to allow implementations on foreign
-  types.
-- Tidy up doc comment on `str_to_cstr`. (Alice Ryhl).
-- Link to v11: https://lore.kernel.org/r/20250530-cstr-core-v11-0-cd9c0cbcb902@gmail.com
+ rust/macros/quote.rs | 104 ++++++++++++++++++++++++---------------------------
+ 1 file changed, 49 insertions(+), 55 deletions(-)
 
-Changes in v11:
-- Use `quote_spanned!` to avoid `use<'a, T>` and generally reduce manual
-  token construction.
-- Add a commit to simplify `quote_spanned!`.
-- Drop first commit in favor of
-  https://lore.kernel.org/rust-for-linux/20240906164448.2268368-1-paddymills@proton.me/.
-  (Miguel Ojeda)
-- Correctly handle expressions such as `pr_info!("{a}", a = a = a)`.
-  (Benno Lossin)
-- Avoid dealing with `}}` escapes, which is not needed. (Benno Lossin)
-- Revert some unnecessary changes. (Benno Lossin)
-- Rename `c_str_avoid_literals!` to `str_to_cstr!`. (Benno Lossin &
-  Alice Ryhl).
-- Link to v10: https://lore.kernel.org/r/20250524-cstr-core-v10-0-6412a94d9d75@gmail.com
+diff --git a/rust/macros/quote.rs b/rust/macros/quote.rs
+index 92cacc4067c9..acc140c18653 100644
+--- a/rust/macros/quote.rs
++++ b/rust/macros/quote.rs
+@@ -2,7 +2,6 @@
+ 
+ use proc_macro::{TokenStream, TokenTree};
+ 
+-#[allow(dead_code)]
+ pub(crate) trait ToTokens {
+     fn to_tokens(&self, tokens: &mut TokenStream);
+ }
+@@ -47,121 +46,116 @@ fn to_tokens(&self, tokens: &mut TokenStream) {
+ /// `quote` crate but provides only just enough functionality needed by the current `macros` crate.
+ macro_rules! quote_spanned {
+     ($span:expr => $($tt:tt)*) => {{
+-        let mut tokens: ::std::vec::Vec<::proc_macro::TokenTree>;
+-        #[allow(clippy::vec_init_then_push)]
++        let mut tokens = ::proc_macro::TokenStream::new();
+         {
+-            tokens = ::std::vec::Vec::new();
+             let span = $span;
+             quote_spanned!(@proc tokens span $($tt)*);
+         }
+-        ::proc_macro::TokenStream::from_iter(tokens)
++        tokens
+     }};
+     (@proc $v:ident $span:ident) => {};
+     (@proc $v:ident $span:ident #$id:ident $($tt:tt)*) => {
+-        let mut ts = ::proc_macro::TokenStream::new();
+-        $crate::quote::ToTokens::to_tokens(&$id, &mut ts);
+-        $v.extend(ts);
++        $crate::quote::ToTokens::to_tokens(&$id, &mut $v);
+         quote_spanned!(@proc $v $span $($tt)*);
+     };
+     (@proc $v:ident $span:ident #(#$id:ident)* $($tt:tt)*) => {
+         for token in $id {
+-            let mut ts = ::proc_macro::TokenStream::new();
+-            $crate::quote::ToTokens::to_tokens(&token, &mut ts);
+-            $v.extend(ts);
++            $crate::quote::ToTokens::to_tokens(&token, &mut $v);
+         }
+         quote_spanned!(@proc $v $span $($tt)*);
+     };
+     (@proc $v:ident $span:ident ( $($inner:tt)* ) $($tt:tt)*) => {
+         #[allow(unused_mut)]
+-        let mut tokens = ::std::vec::Vec::<::proc_macro::TokenTree>::new();
++        let mut tokens = ::proc_macro::TokenStream::new();
+         quote_spanned!(@proc tokens $span $($inner)*);
+-        $v.push(::proc_macro::TokenTree::Group(::proc_macro::Group::new(
++        $v.extend([::proc_macro::TokenTree::Group(::proc_macro::Group::new(
+             ::proc_macro::Delimiter::Parenthesis,
+-            ::proc_macro::TokenStream::from_iter(tokens)
+-        )));
++            tokens,
++        ))]);
+         quote_spanned!(@proc $v $span $($tt)*);
+     };
+     (@proc $v:ident $span:ident [ $($inner:tt)* ] $($tt:tt)*) => {
+-        let mut tokens = ::std::vec::Vec::new();
++        let mut tokens = ::proc_macro::TokenStream::new();
+         quote_spanned!(@proc tokens $span $($inner)*);
+-        $v.push(::proc_macro::TokenTree::Group(::proc_macro::Group::new(
++        $v.extend([::proc_macro::TokenTree::Group(::proc_macro::Group::new(
+             ::proc_macro::Delimiter::Bracket,
+-            ::proc_macro::TokenStream::from_iter(tokens)
+-        )));
++            tokens,
++        ))]);
+         quote_spanned!(@proc $v $span $($tt)*);
+     };
+     (@proc $v:ident $span:ident { $($inner:tt)* } $($tt:tt)*) => {
+-        let mut tokens = ::std::vec::Vec::new();
++        let mut tokens = ::proc_macro::TokenStream::new();
+         quote_spanned!(@proc tokens $span $($inner)*);
+-        $v.push(::proc_macro::TokenTree::Group(::proc_macro::Group::new(
++        $v.extend([::proc_macro::TokenTree::Group(::proc_macro::Group::new(
+             ::proc_macro::Delimiter::Brace,
+-            ::proc_macro::TokenStream::from_iter(tokens)
+-        )));
++            tokens,
++        ))]);
+         quote_spanned!(@proc $v $span $($tt)*);
+     };
+     (@proc $v:ident $span:ident :: $($tt:tt)*) => {
+-        $v.push(::proc_macro::TokenTree::Punct(
+-                ::proc_macro::Punct::new(':', ::proc_macro::Spacing::Joint)
+-        ));
+-        $v.push(::proc_macro::TokenTree::Punct(
+-                ::proc_macro::Punct::new(':', ::proc_macro::Spacing::Alone)
+-        ));
++        $v.extend([::proc_macro::Spacing::Joint, ::proc_macro::Spacing::Alone].map(|spacing| {
++            ::proc_macro::TokenTree::Punct(::proc_macro::Punct::new(':', spacing))
++        }));
+         quote_spanned!(@proc $v $span $($tt)*);
+     };
+     (@proc $v:ident $span:ident : $($tt:tt)*) => {
+-        $v.push(::proc_macro::TokenTree::Punct(
+-                ::proc_macro::Punct::new(':', ::proc_macro::Spacing::Alone)
+-        ));
++        $v.extend([::proc_macro::TokenTree::Punct(
++            ::proc_macro::Punct::new(':', ::proc_macro::Spacing::Alone),
++        )]);
+         quote_spanned!(@proc $v $span $($tt)*);
+     };
+     (@proc $v:ident $span:ident , $($tt:tt)*) => {
+-        $v.push(::proc_macro::TokenTree::Punct(
+-                ::proc_macro::Punct::new(',', ::proc_macro::Spacing::Alone)
+-        ));
++        $v.extend([::proc_macro::TokenTree::Punct(
++            ::proc_macro::Punct::new(',', ::proc_macro::Spacing::Alone),
++        )]);
+         quote_spanned!(@proc $v $span $($tt)*);
+     };
+     (@proc $v:ident $span:ident @ $($tt:tt)*) => {
+-        $v.push(::proc_macro::TokenTree::Punct(
+-                ::proc_macro::Punct::new('@', ::proc_macro::Spacing::Alone)
+-        ));
++        $v.extend([::proc_macro::TokenTree::Punct(
++            ::proc_macro::Punct::new('@', ::proc_macro::Spacing::Alone),
++        )]);
+         quote_spanned!(@proc $v $span $($tt)*);
+     };
+     (@proc $v:ident $span:ident ! $($tt:tt)*) => {
+-        $v.push(::proc_macro::TokenTree::Punct(
+-                ::proc_macro::Punct::new('!', ::proc_macro::Spacing::Alone)
+-        ));
++        $v.extend([::proc_macro::TokenTree::Punct(
++            ::proc_macro::Punct::new('!', ::proc_macro::Spacing::Alone),
++        )]);
+         quote_spanned!(@proc $v $span $($tt)*);
+     };
+     (@proc $v:ident $span:ident ; $($tt:tt)*) => {
+-        $v.push(::proc_macro::TokenTree::Punct(
+-                ::proc_macro::Punct::new(';', ::proc_macro::Spacing::Alone)
+-        ));
++        $v.extend([::proc_macro::TokenTree::Punct(
++            ::proc_macro::Punct::new(';', ::proc_macro::Spacing::Alone),
++        )]);
+         quote_spanned!(@proc $v $span $($tt)*);
+     };
+     (@proc $v:ident $span:ident + $($tt:tt)*) => {
+-        $v.push(::proc_macro::TokenTree::Punct(
+-                ::proc_macro::Punct::new('+', ::proc_macro::Spacing::Alone)
+-        ));
++        $v.extend([::proc_macro::TokenTree::Punct(
++            ::proc_macro::Punct::new('+', ::proc_macro::Spacing::Alone),
++        )]);
+         quote_spanned!(@proc $v $span $($tt)*);
+     };
+     (@proc $v:ident $span:ident = $($tt:tt)*) => {
+-        $v.push(::proc_macro::TokenTree::Punct(
+-                ::proc_macro::Punct::new('=', ::proc_macro::Spacing::Alone)
+-        ));
++        $v.extend([::proc_macro::TokenTree::Punct(
++            ::proc_macro::Punct::new('=', ::proc_macro::Spacing::Alone),
++        )]);
+         quote_spanned!(@proc $v $span $($tt)*);
+     };
+     (@proc $v:ident $span:ident # $($tt:tt)*) => {
+-        $v.push(::proc_macro::TokenTree::Punct(
+-                ::proc_macro::Punct::new('#', ::proc_macro::Spacing::Alone)
+-        ));
++        $v.extend([::proc_macro::TokenTree::Punct(
++            ::proc_macro::Punct::new('#', ::proc_macro::Spacing::Alone),
++        )]);
+         quote_spanned!(@proc $v $span $($tt)*);
+     };
+     (@proc $v:ident $span:ident _ $($tt:tt)*) => {
+-        $v.push(::proc_macro::TokenTree::Ident(::proc_macro::Ident::new("_", $span)));
++        $v.extend([::proc_macro::TokenTree::Ident(
++            ::proc_macro::Ident::new("_", $span),
++        )]);
+         quote_spanned!(@proc $v $span $($tt)*);
+     };
+     (@proc $v:ident $span:ident $id:ident $($tt:tt)*) => {
+-        $v.push(::proc_macro::TokenTree::Ident(::proc_macro::Ident::new(stringify!($id), $span)));
++        $v.extend([::proc_macro::TokenTree::Ident(
++            ::proc_macro::Ident::new(stringify!($id), $span),
++        )]);
+         quote_spanned!(@proc $v $span $($tt)*);
+     };
+ }
 
-Changes in v10:
-- Rebase on cbeaa41dfe26b72639141e87183cb23e00d4b0dd.
-- Implement Alice's suggestion to use a proc macro to work around orphan
-  rules otherwise preventing `core::ffi::CStr` to be directly printed
-  with `{}`.
-- Link to v9: https://lore.kernel.org/r/20250317-cstr-core-v9-0-51d6cc522f62@gmail.com
-
-Changes in v9:
-- Rebase on rust-next.
-- Restore `impl Display for BStr` which exists upstream[1].
-- Link: https://doc.rust-lang.org/nightly/std/bstr/struct.ByteStr.html#impl-Display-for-ByteStr [1]
-- Link to v8: https://lore.kernel.org/r/20250203-cstr-core-v8-0-cb3f26e78686@gmail.com
-
-Changes in v8:
-- Move `{from,as}_char_ptr` back to `CStrExt`. This reduces the diff
-  some.
-- Restore `from_bytes_with_nul_unchecked_mut`, `to_cstring`.
-- Link to v7: https://lore.kernel.org/r/20250202-cstr-core-v7-0-da1802520438@gmail.com
-
-Changes in v7:
-- Rebased on mainline.
-- Restore functionality added in commit a321f3ad0a5d ("rust: str: add
-  {make,to}_{upper,lower}case() to CString").
-- Used `diff.algorithm patience` to improve diff readability.
-- Link to v6: https://lore.kernel.org/r/20250202-cstr-core-v6-0-8469cd6d29fd@gmail.com
-
-Changes in v6:
-- Split the work into several commits for ease of review.
-- Restore `{from,as}_char_ptr` to allow building on ARM (see commit
-  message).
-- Add `CStrExt` to `kernel::prelude`. (Alice Ryhl)
-- Remove `CStrExt::from_bytes_with_nul_unchecked_mut` and restore
-  `DerefMut for CString`. (Alice Ryhl)
-- Rename and hide `kernel::c_str!` to encourage use of C-String
-  literals.
-- Drop implementation and invocation changes in kunit.rs. (Trevor Gross)
-- Drop docs on `Display` impl. (Trevor Gross)
-- Rewrite docs in the style of the standard library.
-- Restore the `test_cstr_debug` unit tests to demonstrate that the
-  implementation has changed.
-
-Changes in v5:
-- Keep the `test_cstr_display*` unit tests.
-
-Changes in v4:
-- Provide the `CStrExt` trait with `display()` method, which returns a
-   `CStrDisplay` wrapper with `Display` implementation. This addresses
-   the lack of `Display` implementation for `core::ffi::CStr`.
-- Provide `from_bytes_with_nul_unchecked_mut()` method in `CStrExt`,
-   which might be useful and is going to prevent manual, unsafe casts.
-- Fix a typo (s/preffered/prefered/).
-
-Changes in v3:
-- Fix the commit message.
-- Remove redundant braces in `use`, when only one item is imported.
-
-Changes in v2:
-- Do not remove `c_str` macro. While it's preferred to use C-string
-   literals, there are two cases where `c_str` is helpful:
-   - When working with macros, which already return a Rust string literal
-     (e.g. `stringify!`).
-   - When building macros, where we want to take a Rust string literal as an
-     argument (for caller's convenience), but still use it as a C-string
-     internally.
-- Use Rust literals as arguments in macros (`new_mutex`, `new_condvar`,
-   `new_mutex`). Use the `c_str` macro to convert these literals to C-string
-   literals.
-- Use `c_str` in kunit.rs for converting the output of `stringify!` to a
-   `CStr`.
-- Remove `DerefMut` implementation for `CString`.
-
----
-Tamir Duberstein (5):
-      rust: macros: reduce collections in `quote!` macro
-      rust: support formatting of foreign types
-      rust: replace `CStr` with `core::ffi::CStr`
-      rust: replace `kernel::c_str!` with C-Strings
-      rust: remove core::ffi::CStr reexport
-
- drivers/block/rnull.rs                |   4 +-
- drivers/cpufreq/rcpufreq_dt.rs        |   5 +-
- drivers/gpu/drm/drm_panic_qr.rs       |   5 +-
- drivers/gpu/drm/nova/driver.rs        |  10 +-
- drivers/gpu/nova-core/driver.rs       |   6 +-
- drivers/gpu/nova-core/firmware.rs     |   2 +-
- drivers/gpu/nova-core/gpu.rs          |   4 +-
- drivers/gpu/nova-core/nova_core.rs    |   2 +-
- drivers/net/phy/ax88796b_rust.rs      |   8 +-
- drivers/net/phy/qt2025.rs             |   6 +-
- rust/kernel/auxiliary.rs              |   6 +-
- rust/kernel/block/mq.rs               |   2 +-
- rust/kernel/clk.rs                    |   9 +-
- rust/kernel/configfs.rs               |  14 +-
- rust/kernel/cpufreq.rs                |   6 +-
- rust/kernel/device.rs                 |   9 +-
- rust/kernel/devres.rs                 |   2 +-
- rust/kernel/driver.rs                 |   4 +-
- rust/kernel/drm/device.rs             |   4 +-
- rust/kernel/drm/driver.rs             |   3 +-
- rust/kernel/drm/ioctl.rs              |   2 +-
- rust/kernel/error.rs                  |  10 +-
- rust/kernel/faux.rs                   |   5 +-
- rust/kernel/firmware.rs               |  16 +-
- rust/kernel/fmt.rs                    |  89 +++++++
- rust/kernel/kunit.rs                  |  21 +-
- rust/kernel/lib.rs                    |   3 +-
- rust/kernel/miscdevice.rs             |   5 +-
- rust/kernel/net/phy.rs                |  12 +-
- rust/kernel/of.rs                     |   5 +-
- rust/kernel/pci.rs                    |   2 +-
- rust/kernel/platform.rs               |   6 +-
- rust/kernel/prelude.rs                |   5 +-
- rust/kernel/print.rs                  |   4 +-
- rust/kernel/seq_file.rs               |   6 +-
- rust/kernel/str.rs                    | 444 ++++++++++------------------------
- rust/kernel/sync.rs                   |   7 +-
- rust/kernel/sync/condvar.rs           |   4 +-
- rust/kernel/sync/lock.rs              |   4 +-
- rust/kernel/sync/lock/global.rs       |   6 +-
- rust/kernel/sync/poll.rs              |   1 +
- rust/kernel/workqueue.rs              |   9 +-
- rust/macros/fmt.rs                    |  99 ++++++++
- rust/macros/kunit.rs                  |  10 +-
- rust/macros/lib.rs                    |  19 ++
- rust/macros/module.rs                 |   2 +-
- rust/macros/quote.rs                  | 111 ++++-----
- samples/rust/rust_configfs.rs         |   9 +-
- samples/rust/rust_driver_auxiliary.rs |   7 +-
- samples/rust/rust_driver_faux.rs      |   4 +-
- samples/rust/rust_driver_pci.rs       |   4 +-
- samples/rust/rust_driver_platform.rs  |   4 +-
- samples/rust/rust_misc_device.rs      |   3 +-
- scripts/rustdoc_test_gen.rs           |   6 +-
- 54 files changed, 540 insertions(+), 515 deletions(-)
----
-base-commit: e04c78d86a9699d136910cfc0bdcf01087e3267e
-change-id: 20250201-cstr-core-d4b9b69120cf
-
-Best regards,
---  
-Tamir Duberstein <tamird@gmail.com>
+-- 
+2.50.0
 
 
