@@ -1,190 +1,275 @@
-Return-Path: <linux-kselftest+bounces-35355-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35356-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10554AE0290
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 12:24:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB2BEAE029A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 12:26:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6851F1BC1424
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 10:24:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9251B5A25B1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 10:26:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4671A222577;
-	Thu, 19 Jun 2025 10:24:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B0272236FF;
+	Thu, 19 Jun 2025 10:26:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="em0J8tBU"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LEtDX93D"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1587E2222C5;
-	Thu, 19 Jun 2025 10:24:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B20B422259D
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Jun 2025 10:26:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750328675; cv=none; b=LMQ5gCdDOx8SFdi6xCa+8eA/gU3vS9k8wnm0vVN1IVr5MNUttGUjOiZ5cL0qUALc7SpqOYMd6zuGi8b7B2azlyeLw1wGv5xF/uQ+WBKn8yH1rcddL7SAobsrQaUiqn6dTJnPZjMO/rUHHwfB3jfIotDrbV9cr6S7Z1mH8dCe9PU=
+	t=1750328803; cv=none; b=jKOBngyY86HcfHzW7Yvfu/W+DHc+9jHoKreXTmNKpxCxyvFDFB6OPSpZYORpAFXhqkGYrYaMtCJ4Po0mPqoWn1LHhN6ukJGh5LKAIzfx3wDlrVypwhSIrMQ6XOzwcnzxVlyas4zYn01AjcR9SoMyVKxDRGNRjPCROY1PcafOY/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750328675; c=relaxed/simple;
-	bh=KBSsy/BlJxV1qwZnyo+C8SN0dRhnb7EWEpJVD7QDyMQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jFZk9eJqye+ZCQVrdLNyq43pmesGuzB6leS9CNuV3at1LM/QhXn0hAkOM7Wf4HmhO6km1EGOZobcYhWPfCgp5s1dHaX5FOliRX11kPCaEEOp6Jbk+BIcy8OQfkimvjo9of6uYRmNEmksx0pCnKKZBpNcUOC0HbKYTZQ3n7vFL+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=em0J8tBU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F3FDC4CEEA;
-	Thu, 19 Jun 2025 10:24:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750328674;
-	bh=KBSsy/BlJxV1qwZnyo+C8SN0dRhnb7EWEpJVD7QDyMQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=em0J8tBUtud5bznU+lt1PYj2RC2d/Up1tUvdqsRTm6StLJDJDhCQJvvQwsS80WeeP
-	 py777ZWC3yHLV6AkkwHNiT4eH6CXZEWV9eMtp8xrGrGafGx/L+tW5igurnx1GYKEZZ
-	 z2aplgxELANRFosFbcNj17NXmJ8KBKx/4evwkKiTCTgd9DmGNytWC1CdCQHu0Z6oJo
-	 DU3P4HM/YP9+WZIOPewzNdOxDYIlM8aOirJC1r7RRoBuT4nJbKJipBroLPuIDID7uW
-	 /lj/T6nXnoWw++tSTCVn41QVVfpwARgByQ4UOz45IB8QYVFJ/juVh/kYYP6z4Tz+eb
-	 tfuOEziKsv0mA==
-Message-ID: <a122981d-ac9a-4c7e-a8a3-d50a3e613f0b@kernel.org>
-Date: Thu, 19 Jun 2025 12:24:29 +0200
+	s=arc-20240116; t=1750328803; c=relaxed/simple;
+	bh=l5p9J2QLOh7J7ogYCt7vV0BkK248vYvNV1+J7U/FHbI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HvmeXgPqqA6YQV+L7/s9lFev2MUnPvKbxNksGX+p5FT8dc91hWYxJ7N4id+aF5Gb9UpNJLF4dvYpjW12P8Xof2J2A7Z9k7Elqscdd6q6kDX6o59tG631Q2FutuG74nDdOPLfHMrzXKpn2VYkToanqL4vsmtGOFjUdQZdVKEhuIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LEtDX93D; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-235e389599fso166625ad.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Jun 2025 03:26:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1750328801; x=1750933601; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jrdYKQcH3sp0apOchPLnA+m1+Ly6Mzn8RffcZko3gSE=;
+        b=LEtDX93DFDeoZojEpnkHQoJVgEjAjCq1ih1RMCuWDYzYmZZv3SLgc0FZdXOI2A3j/C
+         SdgFl4AhIqn4ONzjhg45rpCucJulpSBGol1w+Th70biz5NQKTz8PWqXeuoKNnRgFaDBc
+         4Bg5zT353R+aAQpkHSL0zA9rUjwWp5Fp9gyNd/PiXTqt9t9FAMB+oSqfwK49GF3E1qwW
+         05hAMioXNDT3Ot+mhhxHdim0wxdl+EFqJX3a7B0CXgvqSRoLMtwtadbTUMnqtbNgLKnI
+         9stDrgABCzz0L1sZxGi45E7bMkyAYLzVmSR7DKFrIry7eUNdzxIgSvXutCHzOWHqc0ig
+         AdZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750328801; x=1750933601;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jrdYKQcH3sp0apOchPLnA+m1+Ly6Mzn8RffcZko3gSE=;
+        b=JdVBNbMUDA7UkrBM+ojQOluK8L/R6LKNS5xjXMf/xnw8ZpKqIEfECTpl8HGfvGtv5+
+         muDOFuyADEEodexVFzp+7iedaVVruMG4YuiZhsFlAO/r0HhmPW+71Tp7uhFl1xWK0JMH
+         Q+GL05fcuFf09qpbQpRLVtAnEt2OFSuZUqfF7ztkVZvK6y0aqfgOgkmTtNQGz+r3jB6Q
+         jmsTZtSJXbQJ5qcZjYIG8bEVMY/9nkTpBKJYOQsZyFthZQ0IWhhDXzGSjNH9Otmi20fB
+         Y9Vq0W7b28VW69LYX3IpJ8vC/NTYAF/+29bGonhzyyHbaWmFf16HisxLjdyI0Q8HBdW5
+         IiFg==
+X-Forwarded-Encrypted: i=1; AJvYcCXHh6YAOQAZSVE1GHOIqCFHohak4gUGvilia3nuQuX7JJKjGP3mHhS1P6WI1JGgZtU5xrp7XO6rKSDmYOZU9V4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxma+inwx7I3LserALXjB1f67rI3w/UMWPZq3a/maMt16ifssAv
+	lTm2T8JWXOCHgSNrtdsIl75J25n+QxRQmpKjkHKG8lm8E/zArAYwnud1GUp/x7J6zA==
+X-Gm-Gg: ASbGncuEMs5umxCUEWhKKJ3gH19wYIC6n4mo9CV6zZuBLlFt/j+evgECDG1q6Yxosk4
+	q1r8soYRpVxDjjlQ1jsQc6L/tmcfF04YA2tzBmQ3meEeaDjknbbDp2wLPRJJ6KN/aYE1PpKJbQj
+	Lkn/UAJN6VQP8Twbs5rAiMGW/Ad6yLEMdxY3hIr6CxQdQS/8567fOKpanIKEwek+LwGXfevtxo8
+	WL6LO0j8vdYp+dRBmCv2GgDqYNiUrU54Pq/wjbsqPxFSpmqqw1tJkNeya3b7z30Qj9ToeZTazdV
+	paTUon/qFR+2AXbqDtvvUfK6jSICiW5v82msWYloTrSDal42M/AxViz2h434eDm1D0MP7xJYkqj
+	LjZ65tI/kSSsVpn2YQinD
+X-Google-Smtp-Source: AGHT+IGiUkrhNhPK9lXuO365Ne3OwVoTaAk8SvrZ2YyadUl+5Mml/HIcLv4k3/+1+30tV1lrdYYgXA==
+X-Received: by 2002:a17:902:e5c3:b0:224:6c8:8d84 with SMTP id d9443c01a7336-237cca5ada5mr2619125ad.4.1750328800415;
+        Thu, 19 Jun 2025 03:26:40 -0700 (PDT)
+Received: from google.com (232.98.126.34.bc.googleusercontent.com. [34.126.98.232])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-748900b04e4sm12850712b3a.121.2025.06.19.03.26.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jun 2025 03:26:39 -0700 (PDT)
+Date: Thu, 19 Jun 2025 10:26:28 +0000
+From: Pranjal Shrivastava <praan@google.com>
+To: Nicolin Chen <nicolinc@nvidia.com>
+Cc: jgg@nvidia.com, kevin.tian@intel.com, corbet@lwn.net, will@kernel.org,
+	bagasdotme@gmail.com, robin.murphy@arm.com, joro@8bytes.org,
+	thierry.reding@gmail.com, vdumpa@nvidia.com, jonathanh@nvidia.com,
+	shuah@kernel.org, jsnitsel@redhat.com, nathan@kernel.org,
+	peterz@infradead.org, yi.l.liu@intel.com, mshavit@google.com,
+	zhangzekun11@huawei.com, iommu@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, patches@lists.linux.dev,
+	mochs@nvidia.com, alok.a.tiwari@oracle.com, vasant.hegde@amd.com,
+	dwmw2@infradead.org, baolu.lu@linux.intel.com
+Subject: Re: [PATCH v6 08/25] iommufd/viommu: Add driver-defined vDEVICE
+ support
+Message-ID: <aFPl1LD8r3Du-Far@google.com>
+References: <cover.1749884998.git.nicolinc@nvidia.com>
+ <937d515032be07af36c06a4adb662ee2f7693c75.1749884998.git.nicolinc@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v4] page_pool: import Jesper's page_pool
- benchmark
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Ilias Apalodimas
- <ilias.apalodimas@linaro.org>, =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?=
- <toke@toke.dk>, Ignat Korchagin <ignat@cloudflare.com>
-References: <20250615205914.835368-1-almasrymina@google.com>
- <c126182c-8f26-41e2-a20d-ceefc2ced886@kernel.org>
- <CAHS8izPyzJvchqFNrRjY95D=41nya8Tmvx1eS9n0ijtHcUUETA@mail.gmail.com>
- <f445633e-b72c-4b5d-bb18-acda1c1d4de6@kernel.org>
- <CAHS8izOhNRNXyAgfuKW1xKb8PTernfer6tJfxG5FZmq7pePjwA@mail.gmail.com>
-Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <CAHS8izOhNRNXyAgfuKW1xKb8PTernfer6tJfxG5FZmq7pePjwA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <937d515032be07af36c06a4adb662ee2f7693c75.1749884998.git.nicolinc@nvidia.com>
 
-
-
-On 19/06/2025 06.19, Mina Almasry wrote:
-> On Wed, Jun 18, 2025 at 5:46 AM Jesper Dangaard Brouer <hawk@kernel.org> wrote:
->>>> Something is off with benchmark numbers compared to the OOT version.
->>>>
->>>
->>> I assume you're comparing my results (my kernel config + my hardware +
->>> upstream benchmark) with your results (your kernel config + your
->>> hardware + OOT version). The problem may be in OOT vs upstream but it
->>> may be just different code/config/hardware.
->>
->> True I used OOT version.
->>
->> Just applied this patch, but I get compile error. Because Makefile tries
->> to get kernel headers (net/page_pool/helpers.h) from local Linux
->> installation instead of git tree.  This need to be adjusted for patch,
->> such that it builds with src-local/git tree provided headers.
->>
+On Sat, Jun 14, 2025 at 12:14:33AM -0700, Nicolin Chen wrote:
+> NVIDIA VCMDQ driver will have a driver-defined vDEVICE structure and do
+> some HW configurations with that.
 > 
-> I believe the fix to that is to do:
+> To allow IOMMU drivers to define their own vDEVICE structures, move the
+> struct iommufd_vdevice to the public header and provide a pair of viommu
+> ops, similar to get_viommu_size and viommu_init.
 > 
-> make KDIR=$(pwd) -C ./tools/testing/selftests/net/bench
+> Doing this, however, creates a new window between the vDEVICE allocation
+> and its driver-level initialization, during which an abort could happen
+> but it can't invoke a driver destroy function from the struct viommu_ops
+> since the driver structure isn't initialized yet. vIOMMU object doesn't
+> have this problem, since its destroy op is set via the viommu_ops by the
+> driver viommu_init function. Thus, vDEVICE should do something similar:
+> add a destroy function pointer inside the struct iommufd_vdevice instead
+> of the struct iommufd_viommu_ops.
+> 
+> Note that there is unlikely a use case for a type dependent vDEVICE, so
+> a static vdevice_size is probably enough for the near term instead of a
+> get_vdevice_size function op.
+> 
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> ---
+>  drivers/iommu/iommufd/iommufd_private.h |  7 -------
+>  include/linux/iommufd.h                 | 26 +++++++++++++++++++++++++
+>  drivers/iommu/iommufd/viommu.c          | 26 ++++++++++++++++++++++++-
+>  3 files changed, 51 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/iommu/iommufd/iommufd_private.h b/drivers/iommu/iommufd/iommufd_private.h
+> index 468717d5e5bc..e6b1eb2ab375 100644
+> --- a/drivers/iommu/iommufd/iommufd_private.h
+> +++ b/drivers/iommu/iommufd/iommufd_private.h
+> @@ -638,13 +638,6 @@ void iommufd_viommu_destroy(struct iommufd_object *obj);
+>  int iommufd_vdevice_alloc_ioctl(struct iommufd_ucmd *ucmd);
+>  void iommufd_vdevice_destroy(struct iommufd_object *obj);
+>  
+> -struct iommufd_vdevice {
+> -	struct iommufd_object obj;
+> -	struct iommufd_viommu *viommu;
+> -	struct device *dev;
+> -	u64 id; /* per-vIOMMU virtual ID */
+> -};
+> -
+>  #ifdef CONFIG_IOMMUFD_TEST
+>  int iommufd_test(struct iommufd_ucmd *ucmd);
+>  void iommufd_selftest_destroy(struct iommufd_object *obj);
+> diff --git a/include/linux/iommufd.h b/include/linux/iommufd.h
+> index 2d1bf2f97ee3..f3b5cfdb6d53 100644
+> --- a/include/linux/iommufd.h
+> +++ b/include/linux/iommufd.h
+> @@ -104,6 +104,16 @@ struct iommufd_viommu {
+>  	enum iommu_viommu_type type;
+>  };
+>  
+> +struct iommufd_vdevice {
+> +	struct iommufd_object obj;
+> +	struct iommufd_viommu *viommu;
+> +	struct device *dev;
+> +	u64 id; /* per-vIOMMU virtual ID */
+
+Nit: Why not call this viommu_id?
+
+> +
+> +	/* Clean up all driver-specific parts of an iommufd_vdevice */
+> +	void (*destroy)(struct iommufd_vdevice *vdev);
+> +};
+> +
+>  /**
+>   * struct iommufd_viommu_ops - vIOMMU specific operations
+>   * @destroy: Clean up all driver-specific parts of an iommufd_viommu. The memory
+> @@ -120,6 +130,14 @@ struct iommufd_viommu {
+>   *                    array->entry_num to report the number of handled requests.
+>   *                    The data structure of the array entry must be defined in
+>   *                    include/uapi/linux/iommufd.h
+> + * @vdevice_size: Size of the driver-defined vDEVICE structure per this vIOMMU
+> + * @vdevice_init: Initialize the driver-level structure of a vDEVICE object, or
+> + *                related HW procedure. @vdev is already initialized by iommufd
+> + *                core: vdev->dev and vdev->viommu pointers; vdev->id carries a
+> + *                per-vIOMMU virtual ID (refer to struct iommu_vdevice_alloc in
+> + *                include/uapi/linux/iommufd.h)
+> + *                If driver has a deinit function to revert what vdevice_init op
+> + *                does, it should set it to the @vdev->destroy function pointer
+>   */
+>  struct iommufd_viommu_ops {
+>  	void (*destroy)(struct iommufd_viommu *viommu);
+> @@ -128,6 +146,8 @@ struct iommufd_viommu_ops {
+>  		const struct iommu_user_data *user_data);
+>  	int (*cache_invalidate)(struct iommufd_viommu *viommu,
+>  				struct iommu_user_data_array *array);
+> +	const size_t vdevice_size;
+> +	int (*vdevice_init)(struct iommufd_vdevice *vdev);
+>  };
+>  
+>  #if IS_ENABLED(CONFIG_IOMMUFD)
+> @@ -224,4 +244,10 @@ static inline int iommufd_viommu_report_event(struct iommufd_viommu *viommu,
+>  	 BUILD_BUG_ON_ZERO(offsetof(drv_struct, member)) +                     \
+>  	 BUILD_BUG_ON_ZERO(!__same_type(struct iommufd_viommu,                 \
+>  					((drv_struct *)NULL)->member)))
+> +
+> +#define VDEVICE_STRUCT_SIZE(drv_struct, member)                                \
+> +	(sizeof(drv_struct) +                                                  \
+> +	 BUILD_BUG_ON_ZERO(offsetof(drv_struct, member)) +                     \
+> +	 BUILD_BUG_ON_ZERO(!__same_type(struct iommufd_vdevice,                \
+> +					((drv_struct *)NULL)->member)))
+>  #endif
+> diff --git a/drivers/iommu/iommufd/viommu.c b/drivers/iommu/iommufd/viommu.c
+> index c5eea9900c54..28ea5d026222 100644
+> --- a/drivers/iommu/iommufd/viommu.c
+> +++ b/drivers/iommu/iommufd/viommu.c
+> @@ -116,6 +116,8 @@ void iommufd_vdevice_destroy(struct iommufd_object *obj)
+>  		container_of(obj, struct iommufd_vdevice, obj);
+>  	struct iommufd_viommu *viommu = vdev->viommu;
+>  
+> +	if (vdev->destroy)
+> +		vdev->destroy(vdev);
+>  	/* xa_cmpxchg is okay to fail if alloc failed xa_cmpxchg previously */
+>  	xa_cmpxchg(&viommu->vdevs, vdev->id, vdev, NULL, GFP_KERNEL);
+>  	refcount_dec(&viommu->obj.users);
+> @@ -126,6 +128,7 @@ int iommufd_vdevice_alloc_ioctl(struct iommufd_ucmd *ucmd)
+>  {
+>  	struct iommu_vdevice_alloc *cmd = ucmd->cmd;
+>  	struct iommufd_vdevice *vdev, *curr;
+> +	size_t vdev_size = sizeof(*vdev);
+>  	struct iommufd_viommu *viommu;
+>  	struct iommufd_device *idev;
+>  	u64 virt_id = cmd->virt_id;
+> @@ -150,7 +153,22 @@ int iommufd_vdevice_alloc_ioctl(struct iommufd_ucmd *ucmd)
+>  		goto out_put_idev;
+>  	}
+>  
+> -	vdev = iommufd_object_alloc_ucmd(ucmd, vdev, IOMMUFD_OBJ_VDEVICE);
+> +	if (viommu->ops && viommu->ops->vdevice_size) {
+> +		/*
+> +		 * It is a driver bug for:
+> +		 * - ops->vdevice_size smaller than the core structure size
+> +		 * - not implementing a pairing ops->vdevice_init op
+> +		 */
+> +		if (WARN_ON_ONCE(viommu->ops->vdevice_size < vdev_size ||
+> +				 !viommu->ops->vdevice_init)) {
+> +			rc = -EOPNOTSUPP;
+> +			goto out_put_idev;
+> +		}
+> +		vdev_size = viommu->ops->vdevice_size;
+> +	}
+> +
+> +	vdev = (struct iommufd_vdevice *)_iommufd_object_alloc_ucmd(
+> +		ucmd, vdev_size, IOMMUFD_OBJ_VDEVICE);
+>  	if (IS_ERR(vdev)) {
+>  		rc = PTR_ERR(vdev);
+>  		goto out_put_idev;
+> @@ -168,6 +186,12 @@ int iommufd_vdevice_alloc_ioctl(struct iommufd_ucmd *ucmd)
+>  		goto out_put_idev;
+>  	}
+>  
+> +	if (viommu->ops && viommu->ops->vdevice_init) {
+> +		rc = viommu->ops->vdevice_init(vdev);
+> +		if (rc)
+> +			goto out_put_idev;
+> +	}
+> +
+>  	cmd->out_vdevice_id = vdev->obj.id;
+>  	rc = iommufd_ucmd_respond(ucmd, sizeof(*cmd));
 > 
 
-Yes, this worked for me.
+Reviewed-by: Pranjal Shrivastava <praan@google.com>
 
-> I.e. the build files assume you're building the test to run it on the
-> current machine, to cross compile it for a different machine under
-> test, we need to pass explicit KDIR. I've kinda copy-pasted what other
-> TEST_GEN_MODS_DIR= makefiles do. In theory we could do something else
-> but I am guessing the way current TEST_GEN_MODS_DIR does it is the way
-> to go. Does it work for you if you do that?
-
-Yes.
-
-> [...]
->>>
->>> Yeah, I actually just checked and I have CONFIG_DEBUG_NET on in my
->>> build, and a lot of other debug configs are turned on.
->>>
->>
->> The CONFIG_DEBUG_NET should be low overhead, so I don't expect this to
->> be the root-cause.  Other CONFIG options are more likely the issue.
->>
+> -- 
+> 2.43.0
 > 
-> Thank you very much for the tips. Perf report showed the locking was
-> taking forever on my kernel... I had locking debug configs enabled in
-> my build... sorry... with those disabled, I get much more sane
-> results:
-> 
-> [  185.557293] bench_page_pool: time_bench_page_pool01_fast_path():
-> Cannot use page_pool fast-path
-> [  185.607873] bench_page_pool: Type:no-softirq-page_pool01 Per elem: 11 cycles(tsc) 4.177 ns (step:0) - (measurement period
-> time:0.041772642 sec time_interval:41772642) - (invoke count:10000000 tsc_interval:112778487)
-> [  185.627090] bench_page_pool: time_bench_page_pool02_ptr_ring():
-> Cannot use page_pool fast-path
-> [  185.826991] bench_page_pool: Type:no-softirq-page_pool02 Per elem: 51 cycles(tsc) 19.117 ns (step:0) - (measurement period
-> time:0.191178107 sec time_interval:191178107) - (invoke count:10000000 tsc_interval:516173586)
-> [  185.846380] bench_page_pool: time_bench_page_pool03_slow(): Cannot
-> use page_pool fast-path
-> [  186.479432] bench_page_pool: Type:no-softirq-page_pool03 Per elem: 168 cycles(tsc) 62.469 ns (step:0) - (measurement period
-> time:0.624690697 sec time_interval:624690697) - (invoke count:10000000 tsc_interval:1686656879)
-
-
-My results with this patch:
-
-$ sudo ./test_bench_page_pool.sh
-rmmod: ERROR: Module bench_page_pool is not currently loaded
-[268960.638885] bench_page_pool: Loaded
-[268960.684603] bench_page_pool: Type:for_loop Per elem: 1 cycles(tsc) 
-0.420 ns (step:0) - (measurement period time:0.042037752 sec 
-time_interval:42037752) - (invoke count:100000000 tsc_interval:151336355)
-[268961.203806] bench_page_pool: Type:atomic_inc Per elem: 18 
-cycles(tsc) 5.010 ns (step:0) - (measurement period time:0.501077936 sec 
-time_interval:501077936) - (invoke count:100000000 tsc_interval:1803899823)
-[268961.332771] bench_page_pool: Type:lock Per elem: 39 cycles(tsc) 
-11.041 ns (step:0) - (measurement period time:0.110410468 sec 
-time_interval:110410468) - (invoke count:10000000 tsc_interval:397481145)
-[268961.350718] bench_page_pool: time_bench_page_pool01_fast_path(): 
-Cannot use page_pool fast-path
-[268961.425335] bench_page_pool: Type:no-softirq-page_pool01 Per elem: 
-23 cycles(tsc) 6.571 ns (step:0) - (measurement period time:0.065719390 
-sec time_interval:65719390) - (invoke count:10000000 tsc_interval:236591475)
-[268961.444666] bench_page_pool: time_bench_page_pool02_ptr_ring(): 
-Cannot use page_pool fast-path
-[268961.622103] bench_page_pool: Type:no-softirq-page_pool02 Per elem: 
-60 cycles(tsc) 16.862 ns (step:0) - (measurement period time:0.168626201 
-sec time_interval:168626201) - (invoke count:10000000 
-tsc_interval:607060218)
-[268961.641608] bench_page_pool: time_bench_page_pool03_slow(): Cannot 
-use page_pool fast-path
-[268962.387479] bench_page_pool: Type:no-softirq-page_pool03 Per elem: 
-265 cycles(tsc) 73.739 ns (step:0) - (measurement period 
-time:0.737399722 sec time_interval:737399722) - (invoke count:10000000 
-tsc_interval:2654665224)
-
-Fast path results:
-no-softirq-page_pool01 Per elem: 23 cycles(tsc) 6.571 ns
-
-ptr_ring results:
-no-softirq-page_pool02 Per elem: 60 cycles(tsc) 16.862 ns
-
-slow path results:
-no-softirq-page_pool03 Per elem: 265 cycles(tsc) 73.739 ns
-
-
-> Does this alleviate your concern? Or do you still see an issue here?
-> There is still a delta between our results, on different
-> hardware/configs but results are in a sane range now.
-
-Now the results a sane and in range :-)
-
---Jesper
-
-
 
