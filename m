@@ -1,223 +1,316 @@
-Return-Path: <linux-kselftest+bounces-35371-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35372-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C710AE09D3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 17:10:38 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC85DAE0A83
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 17:32:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 02CA31776A0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 15:10:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2605F7B03FA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 15:31:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DB9628B7F1;
-	Thu, 19 Jun 2025 15:08:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF9A72288CC;
+	Thu, 19 Jun 2025 15:32:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="k3XeU4OP";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="VThi5RVb";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="k3XeU4OP";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="VThi5RVb"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="d15rC5N6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBFFD28B7E2
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Jun 2025 15:08:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD309237708;
+	Thu, 19 Jun 2025 15:32:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750345716; cv=none; b=De0KuzNvCdZZyciImksRxBWe6Z6soT7ke65yVmge9ZfvVk7/DrBiNKpdbf5k2DNNQDl4UeRLOxw49jWds1L4OoqY6LJYmRp+0kzxMBsFVLQmQJ1xZzMdJQ/JHt++c4YZQnvJIlx8cWLqRK4buSs3nI5SolB1kTRzHmd2k+YC4rg=
+	t=1750347152; cv=none; b=BnVhieuH88oRD/vUZVSNQ56Bhteo2fEo3FIKKYMT+/KpmyPfLpze5rtGO9IAtJvBt/GVb/Asmkr0fnozgjoDO/W+zYiniRptVzALsmswVhU8Nfr1D9AiuGJmJoqSkVPu7klpy2yWXf7v32jtJJuysflHJJYQ3ITKwRUMIzpRXnQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750345716; c=relaxed/simple;
-	bh=LH1skCzN1FBjrg7tuf36knFIeVgnK6zDMLpGrFaW+eA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fJUlG18IqNlRiElxlPa2u/kkYHWDP8sxoO3EyWgfzuqjA6kpf7/rf9F7wQykvgUrR5jIxz24SE5ocvhnmbNFsq3Ro/9nHIU/5kXL0DYsJoJbgiSyTHU2lsQKSbjxefHV+mNDQICzmBl/0ybxKe5KiEqduN9gApBe8XXe+xj7Vlk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=k3XeU4OP; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=VThi5RVb; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=k3XeU4OP; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=VThi5RVb; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 103BB1F7BE;
-	Thu, 19 Jun 2025 15:08:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1750345713; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=X9caHoEImhQ4X+R73f52ETtWf6t/yscAmRC4hn8PReQ=;
-	b=k3XeU4OPjQR8ZyZOhlQTJkJ6ve5ye9NZ4UT+MHIBaqez6y44P6spQFvIFKFbUbtW/cYKsj
-	LFWMrYOt5QdP+s+FIL5VZQUwb8wmkql+RChQhcqJwczsRucNnb596kBRw/Z2JoQPFUZz6V
-	z0dTKPwuMhuVRCUJ48o8GjJOJip8P3Y=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1750345713;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=X9caHoEImhQ4X+R73f52ETtWf6t/yscAmRC4hn8PReQ=;
-	b=VThi5RVbENw5YtUJij9MY6T3JP1P71xKAcL6A0gSdXVQ1L+VpR7JpEoFKBCeQoq23Bi5SS
-	4o6iCCDQECFp2zDQ==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1750345713; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=X9caHoEImhQ4X+R73f52ETtWf6t/yscAmRC4hn8PReQ=;
-	b=k3XeU4OPjQR8ZyZOhlQTJkJ6ve5ye9NZ4UT+MHIBaqez6y44P6spQFvIFKFbUbtW/cYKsj
-	LFWMrYOt5QdP+s+FIL5VZQUwb8wmkql+RChQhcqJwczsRucNnb596kBRw/Z2JoQPFUZz6V
-	z0dTKPwuMhuVRCUJ48o8GjJOJip8P3Y=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1750345713;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=X9caHoEImhQ4X+R73f52ETtWf6t/yscAmRC4hn8PReQ=;
-	b=VThi5RVbENw5YtUJij9MY6T3JP1P71xKAcL6A0gSdXVQ1L+VpR7JpEoFKBCeQoq23Bi5SS
-	4o6iCCDQECFp2zDQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 9E12913721;
-	Thu, 19 Jun 2025 15:08:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id NWRDJvAnVGjmLQAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Thu, 19 Jun 2025 15:08:32 +0000
-Message-ID: <7f917d34-5724-41ff-b904-0ad4598db3b3@suse.cz>
-Date: Thu, 19 Jun 2025 17:08:32 +0200
+	s=arc-20240116; t=1750347152; c=relaxed/simple;
+	bh=4Q/eI3wFmW59o8U0RgGiGAcmlbV8R8dlsPK6cBD7ktM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ADuLy8J2UxEChNXBAa6QPKfSITXcORU6tpHRp2oO/lW4tzlFkIB/ss9LXkteqCIktGP23Iqm5xs0eMp/ykxS/18oTwDLGrE/yYHABDOz3dNeneALp/+Ny8xRYi0cXzmB0lP3QMMbACzOI1xyPLIQJMk08V5ybP/6iGnesm+6zAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=d15rC5N6; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55JB4QHm029477;
+	Thu, 19 Jun 2025 15:32:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=JK0h6q
+	zleQucRALkrfKvbSaIkEuI+QqioAw45QRuuQg=; b=d15rC5N6QNpPLZyEUmrLFl
+	hPKuL9zv3b6VHa2tnQgo5mBnS2eDY9NOgPZSfN+ezdUsq3Jc7MFHKZWDIDpdWGkE
+	ZO7WoFCxjizM2EBCjt94M8vFy4qb6zIXieOrNtMyKkySNzNuxO0PKSLROvZl2GXn
+	H69aw4n9Zb81ZowSKrZaRrwrkK5dUYjTuH7Ti8ItbsMUroKbOrPGqdzKuJy5+ri1
+	FnWC1wHrHpo5B/3ZZuRZaN4ka/oOIroc28UTOSt2um9o0Hr0gG65dhTBQHC5dgHc
+	jJVD4vEZTjFV2iilhbjdOZUXOGtKAbHdaYkAJI32RvdUimQbsZVKoY8VAqSeumeA
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4790ktxfen-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 19 Jun 2025 15:32:11 +0000 (GMT)
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 55JFRRfn001458;
+	Thu, 19 Jun 2025 15:32:11 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4790ktxfeg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 19 Jun 2025 15:32:11 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 55JF6DwB011331;
+	Thu, 19 Jun 2025 15:32:10 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 479kdtpy6j-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 19 Jun 2025 15:32:10 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 55JFW8O219726732
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 19 Jun 2025 15:32:08 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 822DF20043;
+	Thu, 19 Jun 2025 15:32:08 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9B97D20040;
+	Thu, 19 Jun 2025 15:32:04 +0000 (GMT)
+Received: from li-06431bcc-2712-11b2-a85c-a6fe68df28f9.ibm.com (unknown [9.124.208.8])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Thu, 19 Jun 2025 15:32:04 +0000 (GMT)
+Date: Thu, 19 Jun 2025 21:01:57 +0530
+From: Donet Tom <donettom@linux.ibm.com>
+To: Dev Jain <dev.jain@arm.com>
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+        Aboorva Devarajan <aboorvad@linux.ibm.com>, akpm@linux-foundation.org,
+        Liam.Howlett@oracle.com, shuah@kernel.org, pfalcato@suse.de,
+        david@redhat.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
+        npache@redhat.com, ryan.roberts@arm.com, baohua@kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ritesh.list@gmail.com
+Subject: Re: [PATCH 1/6] mm/selftests: Fix virtual_address_range test issues.
+Message-ID: <aFQtbTij87DziSeC@li-06431bcc-2712-11b2-a85c-a6fe68df28f9.ibm.com>
+References: <79bdd993-0e9c-4d7d-b42c-4b5750eff140@lucifer.local>
+ <aaddfd0b-216e-48fe-b48f-35c78eabcf9a@arm.com>
+ <8e23c5d3-6ce3-4fe8-b6fe-69658d5d0727@lucifer.local>
+ <fc5c8193-2642-49f7-9f2a-00ad33353773@arm.com>
+ <c93110a4-19e4-4a1d-b044-6b7f521eaa0d@lucifer.local>
+ <815793f1-6800-4b9a-852e-f13d6308f50f@arm.com>
+ <2756fa2b-e8bf-4c66-bf9b-c85dc63dfc33@lucifer.local>
+ <41d9a70d-9791-4212-af23-5b13d8e4a47d@arm.com>
+ <aFPI_blZGhvKSbNJ@li-06431bcc-2712-11b2-a85c-a6fe68df28f9.ibm.com>
+ <af2618dc-b778-45e6-867e-9ba3a79398c7@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v8 3/7] mm/filemap: Add mempolicy support to the
- filemap layer
-Content-Language: en-US
-To: Shivank Garg <shivankg@amd.com>, seanjc@google.com, david@redhat.com,
- willy@infradead.org, akpm@linux-foundation.org, shuah@kernel.org,
- pbonzini@redhat.com, brauner@kernel.org, viro@zeniv.linux.org.uk
-Cc: ackerleytng@google.com, paul@paul-moore.com, jmorris@namei.org,
- serge@hallyn.com, pvorel@suse.cz, bfoster@redhat.com, tabba@google.com,
- vannapurve@google.com, chao.gao@intel.com, bharata@amd.com, nikunj@amd.com,
- michael.day@amd.com, yan.y.zhao@intel.com, Neeraj.Upadhyay@amd.com,
- thomas.lendacky@amd.com, michael.roth@amd.com, aik@amd.com, jgg@nvidia.com,
- kalyazin@amazon.com, peterx@redhat.com, jack@suse.cz, rppt@kernel.org,
- hch@infradead.org, cgzones@googlemail.com, ira.weiny@intel.com,
- rientjes@google.com, roypat@amazon.co.uk, ziy@nvidia.com,
- matthew.brost@intel.com, joshua.hahnjy@gmail.com, rakie.kim@sk.com,
- byungchul@sk.com, gourry@gourry.net, kent.overstreet@linux.dev,
- ying.huang@linux.alibaba.com, apopple@nvidia.com, chao.p.peng@intel.com,
- amit@infradead.org, ddutile@redhat.com, dan.j.williams@intel.com,
- ashish.kalra@amd.com, gshan@redhat.com, jgowans@amazon.com,
- pankaj.gupta@amd.com, papaluri@amd.com, yuzhao@google.com,
- suzuki.poulose@arm.com, quic_eberman@quicinc.com,
- aneeshkumar.kizhakeveetil@arm.com, linux-fsdevel@vger.kernel.org,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-security-module@vger.kernel.org, kvm@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-coco@lists.linux.dev
-References: <20250618112935.7629-1-shivankg@amd.com>
- <20250618112935.7629-4-shivankg@amd.com>
-From: Vlastimil Babka <vbabka@suse.cz>
-Autocrypt: addr=vbabka@suse.cz; keydata=
- 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
- m6M14QORSWTLRg==
-In-Reply-To: <20250618112935.7629-4-shivankg@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	TAGGED_RCPT(0.00)[];
-	ARC_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	RCPT_COUNT_GT_50(0.00)[65];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[google.com,paul-moore.com,namei.org,hallyn.com,suse.cz,redhat.com,intel.com,amd.com,nvidia.com,amazon.com,kernel.org,infradead.org,googlemail.com,amazon.co.uk,gmail.com,sk.com,gourry.net,linux.dev,linux.alibaba.com,arm.com,quicinc.com,vger.kernel.org,kvack.org,lists.linux.dev];
-	MIME_TRACE(0.00)[0:+];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_SOME(0.00)[];
-	TO_DN_SOME(0.00)[]
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Spam-Score: -2.80
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <af2618dc-b778-45e6-867e-9ba3a79398c7@arm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: -AGxg226a1W1BoHdjzh0mnUYkkdqeudo
+X-Proofpoint-ORIG-GUID: IttxmOtD5-Er_wDH8ObdLR2gawgidXqt
+X-Authority-Analysis: v=2.4 cv=KaDSsRYD c=1 sm=1 tr=0 ts=68542d7b cx=c_pps a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17 a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=ZvAkLkJfXhtqqUnwYFwA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjE5MDEyNyBTYWx0ZWRfX4EWS1qLVqvpU EConTVdIDP4YgNvuxRZjqH1I3yBWEorQiw9zYqKMUUL022luyiVcKRaR+iGxxoVNmxsacqSfH2/ z3tkZTfC3O4ndeMqu13E06lI9kWj4MhF7YWaDZLFedw7jHBXzTdopMJu5oip6FpiynHR1ZmIF4n
+ H4x5Ie85eXDQvJz9fG5bw3VOOk8Jby1Wm5pusUReVVfoYlOYh7CFO32f7ImMXOP1oQMzWc0JLnu nmcAwAgq2fmIuv4YQH4AGPV+eU8CmYhbxzru3zWVo9OvROF4QzwSwoDng40cMpuC4JsWN5C0v0p PXmdx3lgBZSo7K1vW+uWmrEXv3GPj/GXlpXi3fC3NhvoT11OoRbVm85IbqAHVc/OJpy6/kbWKPY
+ tW+pgktK8gyggWacUnRd3cU0CitK5w8puAAYLG9VihKc07FCU+MhlmhFwa2hSNU1LdegF+i5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-06-19_05,2025-06-18_03,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ spamscore=0 clxscore=1015 malwarescore=0 lowpriorityscore=0 suspectscore=0
+ impostorscore=0 mlxlogscore=999 adultscore=0 phishscore=0
+ priorityscore=1501 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2506190127
 
-On 6/18/25 13:29, Shivank Garg wrote:
-> From: Shivansh Dhiman <shivansh.dhiman@amd.com>
+eOn Thu, Jun 19, 2025 at 02:32:19PM +0530, Dev Jain wrote:
 > 
-> Add NUMA mempolicy support to the filemap allocation path by introducing
-> new APIs that take a mempolicy argument:
-> - filemap_grab_folio_mpol()
-> - filemap_alloc_folio_mpol()
-> - __filemap_get_folio_mpol()
+> On 19/06/25 1:53 pm, Donet Tom wrote:
+> > On Wed, Jun 18, 2025 at 08:13:54PM +0530, Dev Jain wrote:
+> > > On 18/06/25 8:05 pm, Lorenzo Stoakes wrote:
+> > > > On Wed, Jun 18, 2025 at 07:47:18PM +0530, Dev Jain wrote:
+> > > > > On 18/06/25 7:37 pm, Lorenzo Stoakes wrote:
+> > > > > > On Wed, Jun 18, 2025 at 07:28:16PM +0530, Dev Jain wrote:
+> > > > > > > On 18/06/25 5:27 pm, Lorenzo Stoakes wrote:
+> > > > > > > > On Wed, Jun 18, 2025 at 05:15:50PM +0530, Dev Jain wrote:
+> > > > > > > > Are you accounting for sys.max_map_count? If not, then you'll be hitting that
+> > > > > > > > first.
+> > > > > > > run_vmtests.sh will run the test in overcommit mode so that won't be an issue.
+> > > > > > Umm, what? You mean overcommit all mode, and that has no bearing on the max
+> > > > > > mapping count check.
+> > > > > > 
+> > > > > > In do_mmap():
+> > > > > > 
+> > > > > > 	/* Too many mappings? */
+> > > > > > 	if (mm->map_count > sysctl_max_map_count)
+> > > > > > 		return -ENOMEM;
+> > > > > > 
+> > > > > > 
+> > > > > > As well as numerous other checks in mm/vma.c.
+> > > > > Ah sorry, didn't look at the code properly just assumed that overcommit_always meant overriding
+> > > > > this.
+> > > > No problem! It's hard to be aware of everything in mm :)
+> > > > 
+> > > > > > I'm not sure why an overcommit toggle is even necessary when you could use
+> > > > > > MAP_NORESERVE or simply map PROT_NONE to avoid the OVERCOMMIT_GUESS limits?
+> > > > > > 
+> > > > > > I'm pretty confused as to what this test is really achieving honestly. This
+> > > > > > isn't a useful way of asserting mmap() behaviour as far as I can tell.
+> > > > > Well, seems like a useful way to me at least : ) Not sure if you are in the mood
+> > > > > to discuss that but if you'd like me to explain from start to end what the test
+> > > > > is doing, I can do that : )
+> > > > > 
+> > > > I just don't have time right now, I guess I'll have to come back to it
+> > > > later... it's not the end of the world for it to be iffy in my view as long as
+> > > > it passes, but it might just not be of great value.
+> > > > 
+> > > > Philosophically I'd rather we didn't assert internal implementation details like
+> > > > where we place mappings in userland memory. At no point do we promise to not
+> > > > leave larger gaps if we feel like it :)
+> > > You have a fair point. Anyhow a debate for another day.
+> > > 
+> > > > I'm guessing, reading more, the _real_ test here is some mathematical assertion
+> > > > about layout from HIGH_ADDR_SHIFT -> end of address space when using hints.
+> > > > 
+> > > > But again I'm not sure that achieves much and again also is asserting internal
+> > > > implementation details.
+> > > > 
+> > > > Correct behaviour of this kind of thing probably better belongs to tests in the
+> > > > userland VMA testing I'd say.
+> > > > 
+> > > > Sorry I don't mean to do down work you've done before, just giving an honest
+> > > > technical appraisal!
+> > > Nah, it will be rather hilarious to see it all go down the drain xD
+> > > 
+> > > > Anyway don't let this block work to fix the test if it's failing. We can revisit
+> > > > this later.
+> > > Sure. @Aboorva and Donet, I still believe that the correct approach is to elide
+> > > the gap check at the crossing boundary. What do you think?
+> > > 
+> > One problem I am seeing with this approach is that, since the hint address
+> > is generated randomly, the VMAs are also being created at randomly based on
+> > the hint address.So, for the VMAs created at high addresses, we cannot guarantee
+> > that the gaps between them will be aligned to MAP_CHUNK_SIZE.
+> > 
+> > High address VMAs
+> > -----------------
+> > 1000000000000-1000040000000 r--p 00000000 00:00 0
+> > 2000000000000-2000040000000 r--p 00000000 00:00 0
+> > 4000000000000-4000040000000 r--p 00000000 00:00 0
+> > 8000000000000-8000040000000 r--p 00000000 00:00 0
+> > e80009d260000-fffff9d260000 r--p 00000000 00:00 0
 > 
-> These APIs allow callers to specify a NUMA policy during page cache
-> allocations, enabling fine-grained control over memory placement. This is
-> particularly needed by KVM when using guest-memfd memory backends, where
-> the guest memory needs to be allocated according to the NUMA policy
-> specified by VMM.
-> 
-> The existing non-mempolicy APIs remain unchanged and continue to use the
-> default allocation behavior.
-> 
-> Signed-off-by: Shivansh Dhiman <shivansh.dhiman@amd.com>
-> Co-developed-by: Shivank Garg <shivankg@amd.com>
-> Signed-off-by: Shivank Garg <shivankg@amd.com>
+> Just confirming, the correct way to test this will be, put a sleep
+> after the VA gets exhausted by the test, and then examine /proc/pid/maps -
+> are you doing something similar?
+>
 
-I think __filemap_get_folio() could become a static inline wrapper for
-__filemap_get_folio_mpol in pagemap.h.
-Otherwise,
+Yes. I am doing the same.
+ 
+> The random generation of the hint addr should not be a problem - if we
+> cannot satisfy the request at addr, then the algorithm falls back to
+> the original approach.
+> 
+> FYI in arch/x86/kernel/sys_x86_64.c :
+> 
+>    * If hint address is above DEFAULT_MAP_WINDOW, look for unmapped area
+>          * in the full address space.
+> 
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
+Yes. Got it.
 
+I ran the same test on x86, and what I am seeing is that mmap with a
+hint in this test is always failing and exiting the loop and no high VMA
+is getting created. Ideally mmap should be succeed with hint right?
+
+
+> Same happens for arm64; if we give a high addr hint, and the high VA space
+> has been exhausted, then we look for free space in the low VA space.
+
+
+So, in the test program, is the second mmap (with hint) returning a
+mapped address, or is it failing in your case?
+ 
+> The only thing I am not sure about is the border. I remember witnessing weird
+> behaviour when I used to test with 16K page config on arm64, across the
+> border.
+> 
+> > 
+> > I have a different approach to solve this issue.
+> > 
+> >  From 0 to 128TB, we map memory directly without using any hint. For the range above
+> > 256TB up to 512TB, we perform the mapping using hint addresses. In the current test,
+> > we use random hint addresses, but I have modified it to generate hint addresses linearly
+> > starting from 128TB.
+> > 
+> > With this change:
+> > 
+> > The 0–128TB range is mapped without hints and verified accordingly.
+> > 
+> > The 128TB–512TB range is mapped using linear hint addresses and then verified.
+> > 
+> > Below are the VMAs obtained with this approach:
+> > 
+> > 10000000-10010000 r-xp 00000000 fd:05 135019531
+> > 10010000-10020000 r--p 00000000 fd:05 135019531
+> > 10020000-10030000 rw-p 00010000 fd:05 135019531
+> > 20000000-10020000000 r--p 00000000 00:00 0
+> > 10020800000-10020830000 rw-p 00000000 00:00 0
+> > 1004bcf0000-1004c000000 rw-p 00000000 00:00 0
+> > 1004c000000-7fff8c000000 r--p 00000000 00:00 0
+> > 7fff8c130000-7fff8c360000 r-xp 00000000 fd:00 792355
+> > 7fff8c360000-7fff8c370000 r--p 00230000 fd:00 792355
+> > 7fff8c370000-7fff8c380000 rw-p 00240000 fd:00 792355
+> > 7fff8c380000-7fff8c460000 r-xp 00000000 fd:00 792358
+> > 7fff8c460000-7fff8c470000 r--p 000d0000 fd:00 792358
+> > 7fff8c470000-7fff8c480000 rw-p 000e0000 fd:00 792358
+> > 7fff8c490000-7fff8c4d0000 r--p 00000000 00:00 0
+> > 7fff8c4d0000-7fff8c4e0000 r-xp 00000000 00:00 0
+> > 7fff8c4e0000-7fff8c530000 r-xp 00000000 fd:00 792351
+> > 7fff8c530000-7fff8c540000 r--p 00040000 fd:00 792351
+> > 7fff8c540000-7fff8c550000 rw-p 00050000 fd:00 792351
+> > 7fff8d000000-7fffcd000000 r--p 00000000 00:00 0
+> > 7fffe9c80000-7fffe9d90000 rw-p 00000000 00:00 0
+> > 800000000000-2000000000000 r--p 00000000 00:00 0    -> High Address (128TB to 512TB)
+> > 
+> > diff --git a/tools/testing/selftests/mm/virtual_address_range.c b/tools/testing/selftests/mm/virtual_address_range.c
+> > index 4c4c35eac15e..0be008cba4b0 100644
+> > --- a/tools/testing/selftests/mm/virtual_address_range.c
+> > +++ b/tools/testing/selftests/mm/virtual_address_range.c
+> > @@ -56,21 +56,21 @@
+> >   #ifdef __aarch64__
+> >   #define HIGH_ADDR_MARK  ADDR_MARK_256TB
+> > -#define HIGH_ADDR_SHIFT 49
+> > +#define HIGH_ADDR_SHIFT 48
+> >   #define NR_CHUNKS_LOW   NR_CHUNKS_256TB
+> >   #define NR_CHUNKS_HIGH  NR_CHUNKS_3840TB
+> >   #else
+> >   #define HIGH_ADDR_MARK  ADDR_MARK_128TB
+> > -#define HIGH_ADDR_SHIFT 48
+> > +#define HIGH_ADDR_SHIFT 47
+> >   #define NR_CHUNKS_LOW   NR_CHUNKS_128TB
+> >   #define NR_CHUNKS_HIGH  NR_CHUNKS_384TB
+> >   #endif
+> > -static char *hint_addr(void)
+> > +static char *hint_addr(int hint)
+> >   {
+> > -       int bits = HIGH_ADDR_SHIFT + rand() % (63 - HIGH_ADDR_SHIFT);
+> > +       unsigned long addr = ((1UL << HIGH_ADDR_SHIFT) + (hint * MAP_CHUNK_SIZE));
+> > -       return (char *) (1UL << bits);
+> > +       return (char *) (addr);
+> >   }
+> >   static void validate_addr(char *ptr, int high_addr)
+> > @@ -217,7 +217,7 @@ int main(int argc, char *argv[])
+> >          }
+> >          for (i = 0; i < NR_CHUNKS_HIGH; i++) {
+> > -               hint = hint_addr();
+> > +               hint = hint_addr(i);
+> >                  hptr[i] = mmap(hint, MAP_CHUNK_SIZE, PROT_READ,
+> >                                 MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> > 
+> > 
+> > 
+> > Can we fix it this way?
+> 
 
