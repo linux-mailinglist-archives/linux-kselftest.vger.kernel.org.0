@@ -1,258 +1,391 @@
-Return-Path: <linux-kselftest+bounces-35358-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35359-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6A8CAE0329
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 13:13:41 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F43EAE0338
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 13:16:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BC34D4A0E8D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 11:13:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A654D7ADF5E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 11:14:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2897B2264BF;
-	Thu, 19 Jun 2025 11:13:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04ADC22686B;
+	Thu, 19 Jun 2025 11:16:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="LWD1cmo0"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ekOQ/lB5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2076.outbound.protection.outlook.com [40.107.101.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4373B221FB5;
-	Thu, 19 Jun 2025 11:13:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.101.76
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750331610; cv=fail; b=Y2CAVrwp3ZnbyTA7CpSE2HdWaknvW2mQFgdCSdRdUX0m54tgX5IQK6HwiQmXexfLVgjrywqLAM5OORwWEukW9xfS1wN+u1NCdHPs5nqwnVacdH3B/yZdkaCD7VS/C1hfQQygIMWUrd2xgEY/qpFYKynBRq7Sdd8fbXd4eIQ9Glo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750331610; c=relaxed/simple;
-	bh=+D2ogRkQvHoMQKt31ppTlICAckIl36Xy49Gi2LckRec=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=K0QFQskpklEMeyYEWpjMoYhNluLAF7sfZYwpGwvjt4Ybtsl97siJ4Thgtl0Spr8nL/2hvO0gK15QTVGmfasXosm7R83rTFij6Vsx8/avDahkO52NEI4YRxvsLuTle4Kdj8mvHZSImYu2eARvcbF9eLHJSM/+W/BuNr0K/hYq8AY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=LWD1cmo0; arc=fail smtp.client-ip=40.107.101.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=DUQYrJeLY2mT+K57xLsjbVRNvVaqrExXnAqhvGzK7DHhCV/CKWYn9oQfXepJBm179njuQCy9c5hTpsWxMP2tGoZKliAQdhL/uTf6l/5p/56Jn9OjBZn+68VHCuN2Dg5ejhnewkLsca6l0ykDSgJXT+YLBd/DPC1gCgbU69Wt3IpOyN4K47M2sjFqYzuOgF2cPZ6trTJGLUuXuUkOiY9VKfFY5j2BM+XDvj5tJYW1GqhvDW3m/fbOpY/Ct602uBEUBZJy7HjM12LxaA3l5F4vSEuz3KEzimEpgmEOHi9I5RoX9cPjD9xp74I/L8u23lJiAvG+Czm65iZGOo6n2cHE/Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DpOMMTdjB6BrY9M7K5wNsKOL5MirLyu39PCyT0SKg64=;
- b=LPM/9uSeHwlZL24fguDtjrAJLNwkN1IT5UalKAXcYBDKmFgPE2R/DPFcpnYrcblt8CnMoZku0bDVdXt4xPWPDzO68fPS+7/JMh4jiL8p9j55p+thLh0AYs5ZPZ1uFWfmkfcHcRUfJBxvN+cY47EP0513NRjvHT+d6mU7wSX4VfmgDeqdX2THs2LqLjCt3tlYsaKpUNNtqPDw5mQWGLGHQrMQaB40YIAui3cTU/GDaDIKdrFEkZNVF4v26JgCVZ7FMaLhMtxy6/rADcNaaXts53Ls6mrnRcMcvwUhXXrAZNsDIKCfyq7uZcC+SU30UdVftjalELSmj9weq/9URbxr6w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DpOMMTdjB6BrY9M7K5wNsKOL5MirLyu39PCyT0SKg64=;
- b=LWD1cmo0u4Hcxj2YkTZXFpUyPA0yJf+BH9//4/pbrKQT1ZFqb699B7YAr3zEHTVsr0BajcisAIxPOpOkksqz0G3ztVuwfV68P/fTkZrL6jj3eWTk3O99I3dfwflm6+e/HgsImGffvcDfATmgdauiSBXuDWQTaod11n1ev/X9Y6M=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CH2PR12MB4262.namprd12.prod.outlook.com (2603:10b6:610:af::8)
- by SA3PR12MB9178.namprd12.prod.outlook.com (2603:10b6:806:396::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8835.36; Thu, 19 Jun
- 2025 11:13:25 +0000
-Received: from CH2PR12MB4262.namprd12.prod.outlook.com
- ([fe80::3bdb:bf3d:8bde:7870]) by CH2PR12MB4262.namprd12.prod.outlook.com
- ([fe80::3bdb:bf3d:8bde:7870%5]) with mapi id 15.20.8835.027; Thu, 19 Jun 2025
- 11:13:24 +0000
-Message-ID: <4267108c-ac26-4528-97cc-0d160568baee@amd.com>
-Date: Thu, 19 Jun 2025 16:43:00 +0530
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v8 4/7] mm/mempolicy: Export memory policy symbols
-To: Gregory Price <gourry@gourry.net>
-Cc: seanjc@google.com, david@redhat.com, vbabka@suse.cz, willy@infradead.org,
- akpm@linux-foundation.org, shuah@kernel.org, pbonzini@redhat.com,
- brauner@kernel.org, viro@zeniv.linux.org.uk, ackerleytng@google.com,
- paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, pvorel@suse.cz,
- bfoster@redhat.com, tabba@google.com, vannapurve@google.com,
- chao.gao@intel.com, bharata@amd.com, nikunj@amd.com, michael.day@amd.com,
- yan.y.zhao@intel.com, Neeraj.Upadhyay@amd.com, thomas.lendacky@amd.com,
- michael.roth@amd.com, aik@amd.com, jgg@nvidia.com, kalyazin@amazon.com,
- peterx@redhat.com, jack@suse.cz, rppt@kernel.org, hch@infradead.org,
- cgzones@googlemail.com, ira.weiny@intel.com, rientjes@google.com,
- roypat@amazon.co.uk, ziy@nvidia.com, matthew.brost@intel.com,
- joshua.hahnjy@gmail.com, rakie.kim@sk.com, byungchul@sk.com,
- kent.overstreet@linux.dev, ying.huang@linux.alibaba.com, apopple@nvidia.com,
- chao.p.peng@intel.com, amit@infradead.org, ddutile@redhat.com,
- dan.j.williams@intel.com, ashish.kalra@amd.com, gshan@redhat.com,
- jgowans@amazon.com, pankaj.gupta@amd.com, papaluri@amd.com,
- yuzhao@google.com, suzuki.poulose@arm.com, quic_eberman@quicinc.com,
- aneeshkumar.kizhakeveetil@arm.com, linux-fsdevel@vger.kernel.org,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-security-module@vger.kernel.org, kvm@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-coco@lists.linux.dev
-References: <20250618112935.7629-1-shivankg@amd.com>
- <20250618112935.7629-5-shivankg@amd.com>
- <aFLXRtCDfoNzQym6@gourry-fedora-PF4VCD3F>
-Content-Language: en-US
-From: Shivank Garg <shivankg@amd.com>
-In-Reply-To: <aFLXRtCDfoNzQym6@gourry-fedora-PF4VCD3F>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BMXPR01CA0082.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:b00:54::22) To CH2PR12MB4262.namprd12.prod.outlook.com
- (2603:10b6:610:af::8)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35F9E222577
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Jun 2025 11:16:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750331771; cv=none; b=u+C0cJMfM7LSOJDMWqkjJegXtYN+5Sy7a9nrFFd04luOuD6ESlKcwz5aiSwYW29WWBVbttOpNzBGQYqXOkoqKxrCG9ByWpS1lTvZmlOE9c8HM1zDYicdLbgaWlZN/Lk06cWGBlOy+2pywPD0hgFSPy99TI8xorKLuNE8jYIwiC8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750331771; c=relaxed/simple;
+	bh=JNzJ+ikVlKEZOEeS2Nkj64WAcOodHqRpXfrd0eO7bg4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tXUPcQ4+4DJxV/FhahfMFqxRs+tllvV1BMr8NwJHIYoYA2lDlwE4KXvIp2Eb0BNSKhqqSmehRyH41LKhz0EEQ6zMrCXs1NsH9MAINTZwW1Wmc5/Gi3/zOJT5cG3twd1O6HcfFmCSl0k8rqLSoVrnNBB/ZesWzyVn5hGYvfpIQ2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ekOQ/lB5; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-235e389599fso173695ad.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Jun 2025 04:16:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1750331769; x=1750936569; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=J0K5kka6ny6/IX+friUQkiPa7P6oG70XusQAK8iDSEg=;
+        b=ekOQ/lB5aTNETw/+LHIvFJamb1ZaoMp+VOW+YpUzL1s1Xv4ey/CNv6QS+B0DjVMXwM
+         43QnSNw1q8bWovEx8N0BcKx3/YiiBVvUsQ4vSOQEUwqlmg0roUV8G5gnHuUq5tRsAkiH
+         JGjMLt6xNvGKjlwarrrFpWQg4eo+rRVnEplZt7rvPE3lca5rA2o0uE3jQN4VdprtpNh7
+         OHSzRosGd+6BP8FJQYgo1Qd936e59S3h4dlOmQ81NzIap7HRf0o6wRVHdJ/wYB5xdp2s
+         JjQBKfoSML9i68IX4JcwnPOkpl2aUx0YLM9x2Vvqntaa7X4f3vW5G8ON60q0lyoAbLE6
+         DbLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750331769; x=1750936569;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J0K5kka6ny6/IX+friUQkiPa7P6oG70XusQAK8iDSEg=;
+        b=U/oVQ2nfvSxnUO+7sz5X0k1UkmY9xr2miTlfkfQHb6H0MgcQpVNJiq2CuCJNPQxLJg
+         SPML63S0btQAF/8+dWHwA5td8S0VAiofgvvJ8bYW0Tuu9hm9CgIgU1o5ZxkstoXen65V
+         9bdDyAMa9rYKkW1PoQNrgw1vWYhDUD/qTyPX+ZOQ9zXSessHHgcAvlZW+zysnrKtPruB
+         SlMN6m6Pl5QDdFx2Nhh643tgigGRV0h0RTSBmDHy/coPEqIOa2Q3k4dHaJIUrY65zRvz
+         YUrw5YY/ewiLBtlKypGuesQU6QMsyUDzCfQcboC+l4D3/zobx6hAve/yxP/6wzzARjAC
+         Lpdg==
+X-Forwarded-Encrypted: i=1; AJvYcCUb8Gv2VRaNs5CiHdnYI4UVgbR98uTaoljQh9W2DXfmNGQiGyUZvgfUAUBkvZY3pHF6xKxXPJ7D1l28nh2l3L4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/AcezQfBwQGv/zBuUXEXERRSc7np/Nw27Qp9wvJeSu9O845bS
+	pR2QoGNGCFfX+Xqm4h+q8A/duX9xnfRMNnUee9hJYj6yQbanB1zwp+kEKU3rK9vvRg==
+X-Gm-Gg: ASbGncsr2ts6ICxiAsqdU2EFy9o5HcNxaWmqG92fCwSn8tte3AxYTYJFrVj/HoalScE
+	vcRgd4tufT3WKPaoYDwtf0mOqdpx8uYArS9fKG7AwvuJdDw8fuzRKBZrsyxTEU9CCbQB8j7uTp2
+	NWfvWK9G1kMGpHNf3yrySAFR3zhYg5rSBq82SfkQ/D5RYjH0f6yfZdKocyxxbtbL7ttTGaoaiSz
+	H23VrT2deLjo9wUxAPB0opJ30lEup64NcWKxRvXY9mUVYXQy/y26gtUiQO58QLMp+VODKPObhhX
+	kYZYJGV2iigqByvY5JFgHH1C05pkZcJdTldFPxOccY+v9S9xipZF6aaE4oMnAa3VwuytoTq1mNB
+	IhUWJ3xRjdW3MmpD/n/Js
+X-Google-Smtp-Source: AGHT+IGLBsKU5Xvykqrr05mmuSSE5AlVTYBeY0JsehoP0OVQHYRUJcJLrjggBr4O05auamlyHYplKw==
+X-Received: by 2002:a17:903:1b64:b0:234:b2bf:e676 with SMTP id d9443c01a7336-237ce039494mr2004475ad.11.1750331769012;
+        Thu, 19 Jun 2025 04:16:09 -0700 (PDT)
+Received: from google.com (232.98.126.34.bc.googleusercontent.com. [34.126.98.232])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3158a3188a3sm1912852a91.36.2025.06.19.04.16.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jun 2025 04:16:08 -0700 (PDT)
+Date: Thu, 19 Jun 2025 11:15:57 +0000
+From: Pranjal Shrivastava <praan@google.com>
+To: Nicolin Chen <nicolinc@nvidia.com>
+Cc: jgg@nvidia.com, kevin.tian@intel.com, corbet@lwn.net, will@kernel.org,
+	bagasdotme@gmail.com, robin.murphy@arm.com, joro@8bytes.org,
+	thierry.reding@gmail.com, vdumpa@nvidia.com, jonathanh@nvidia.com,
+	shuah@kernel.org, jsnitsel@redhat.com, nathan@kernel.org,
+	peterz@infradead.org, yi.l.liu@intel.com, mshavit@google.com,
+	zhangzekun11@huawei.com, iommu@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, patches@lists.linux.dev,
+	mochs@nvidia.com, alok.a.tiwari@oracle.com, vasant.hegde@amd.com,
+	dwmw2@infradead.org, baolu.lu@linux.intel.com
+Subject: Re: [PATCH v6 13/25] iommufd: Add mmap interface
+Message-ID: <aFPxbfDJZzG2EqxQ@google.com>
+References: <cover.1749884998.git.nicolinc@nvidia.com>
+ <c9929e0c9ec6f3f6348cd0c399d6fdfa9f35f973.1749884998.git.nicolinc@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH2PR12MB4262:EE_|SA3PR12MB9178:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6da1ae5a-f926-48dc-7735-08ddaf224ecc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|7416014|376014|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?MVhhdk0vTVU0SERGaUNGemRZTEMwUXp6dlY0cTZHenJ6Z2JMODdHTDdOWElB?=
- =?utf-8?B?T3N2aDVkbnllNnpRaHMyd053N3hRbjBsNmpKY0dpVmJQVUlHay8rZTdLWGNM?=
- =?utf-8?B?WmtrUk94TmtuSTQ0WEpUVENaenRYakVhODBOQXhkSzlhcmpjVm5ocEdyQlRl?=
- =?utf-8?B?anJJUWhvVllRQnQwbmRqdFVsM1BYRGwzK2MwVkMrRnVtSVo3Y1VDaFhLSWNE?=
- =?utf-8?B?TUd6UmhqUGpNVEFUaFM3TE0zTllQeXNNazRVbG5CWjRmU3F2U3c2MHVsb0x1?=
- =?utf-8?B?cTREcUxjMUcwUUphaHk1N0FyMTc1ZkR5NlR1cThBQUdUa0JLWVIwMS9ZM3hR?=
- =?utf-8?B?NGlGMjJ1TzJJOWFWUjlLbk92WFRMbjZXZHplU2c5WEZ0SFpGRUNKR0JuR1Ex?=
- =?utf-8?B?RURQc0JLQzRxbnBwVzBuMmhHODZnTUZzUGR6ek5iVjRkd0ZPd28zeThLNTNq?=
- =?utf-8?B?MkpuOHUvSjVML2tUdnBhVURYemJTcWJ0M0laOE1MdzlvRTFZTHFKSmNqd3dF?=
- =?utf-8?B?cTl2Vnp1bVQ3TFRLWjN2L1NlSFArUllXNDFralhTMUxsQ3JOUEw4eGx6Vjli?=
- =?utf-8?B?N3ZRU3RxMG1VZ3diZEZrMXJyV1pRczJ3NnpweXRwbEpQdjdrN2RQMTU4ejJu?=
- =?utf-8?B?WW5EaVNNWHJCejhmUEM2b2w0VnBIUkpUd29sNnRIWis3MnQrSXdTcFhoZTds?=
- =?utf-8?B?czZhOVV1ZVVPQ2NZM3NnZ2lPcmx1YkUzYVhEbUV1WGlFWC91MWYwTHRtVjhK?=
- =?utf-8?B?Z09oZkxZR1prNDhSanlvdWdxNzZsb2FzV2w1M2ozOGplbUdhK1Jxd1FmWW5i?=
- =?utf-8?B?eWtlTUx1SVNGcFo0eUhDcjZIVWp4Ym4vYkJTdzZ1UUxqaUREd1JOQWdyYnpw?=
- =?utf-8?B?dkJiQ3NCRkt5eVVrNVFMZmk3aEozci9aVEo0MVBlSWFaYmVobjhhdS9KVHlK?=
- =?utf-8?B?RTR3OXFZWHo1RWdKRy85NTR5Nm8wQWsvRnIvVmd0enNIYllrWVRrTUovUjU3?=
- =?utf-8?B?R0R2VHNkcXdaUUdqcGtoZWs4eGtBNVRHZ25WWFdUeDlTVVQ1U2VRSE81VG5N?=
- =?utf-8?B?ZCswaDR2WHRFT3ZVMFdxVXFqVUNGV2dZY1IxWHF6QVBseUJZVFpVM05qeUNh?=
- =?utf-8?B?UDBNL2hHSFNMWnVjWmJhd2dqdnFlUlZ0MEpBbWZsNnJiWGNPOEZzUFJ4Q0g5?=
- =?utf-8?B?a0JXR2tSaVBsdHRwM2FNR0JqNWpINXdwWTJVMDRwcnp2YzBoSzZqMDBXM2Ro?=
- =?utf-8?B?TmRIQmJwT281dkE1ZHY3cG1OUmJPbC9BWGFKb1NyOHVhZHZ2YkZTeWc5VDhI?=
- =?utf-8?B?Z2NNMU5oVVU1ZncxZEdwSEk3b0ROMXI5aENtbVdMVCtQT0dsQVdjc0dyU3R6?=
- =?utf-8?B?ZnpTNnVEa0I2QkIrVzcvaUpXTm1XK25qRUtMUnFCb3R1dGM3clNZd1l1aEEr?=
- =?utf-8?B?RmZmQ24wZkU5Nno3dXh0b1REYnc5clR3aFI3YUttTzM4V0xnUkxvOHFtc3Bn?=
- =?utf-8?B?U3VpRjVpTldHYThLY1FybmNvTTJmWUhvUjB0MlVnMno2a2pmdE5JTUZmbTcx?=
- =?utf-8?B?WVE0MWVBYWRaS0lvYU1MdS8zajNyYmxLZExpSDdnYUtzbzErdmFQaW4yMzlW?=
- =?utf-8?B?d21DMFFZYmVEUG9EMkFaY2pxSUVYMEpoNEYzMS90a1dMYTFadTRWSDJMUm1i?=
- =?utf-8?B?ZnhSOWJHYk9Tc09VZ29ZWWVUZGNUOUhPNGpoL0xqeGxLYkx1S1NMNEVxMXpY?=
- =?utf-8?B?bXhnUHhtSGl0cjhCcXpxVDF6Z0hDZHZOcnQ3YnYzNFk0TkE5UE14Y3hyM0Fl?=
- =?utf-8?B?a1JnZUMzcVRDWFF1T3J0UG1lOTE0b2JpaENPVjROWjhpZU15WWNiYlVGTjdY?=
- =?utf-8?B?TFptVk5sTmxLdVNydjVmaVplK2RMYmp2UFB3MHhMS3ZsREZkZnBqRlNaZjRs?=
- =?utf-8?Q?vi0ZfYqDgk8=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR12MB4262.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?VHdDM3hPRjV3ekVXa0RQaXNWWFcyOUVZRlpCMEwrc0d1N0RMYWdlNjJ4YXB6?=
- =?utf-8?B?cHkxZVB0Nk54V282UUhsK1pzU0tlbHEzbkZHVmJYYk5WL0lLWTlndXlpMUZ6?=
- =?utf-8?B?ck0vaDBwaWg3c2tzRU5odnlVZ29KSS8rWUh5eldsRUlkaWJINDc5dG8xQit4?=
- =?utf-8?B?TDBpd05CSmlGNUlzdFU0TlhBZ1plWEpaNUh5K1B0OGYwS21WOEM0eFZ2TlV3?=
- =?utf-8?B?cW4yWFpKZ1pLQ1o4K2MyYWZiNGhCeDN4Z215d2d6Nk5vMk15RGNtSGpoMjRX?=
- =?utf-8?B?RlU5VmRHRW5LN0tTNDdlSDZyd2Q0UDl0cUVIRHZtM2ZDejB5Y0VaYXJKNm5F?=
- =?utf-8?B?NFlrUmNjK0dGRTVIRm5JQld4UXFVeFFrZm9ONGJSd3Jtd3V6NkVDOGJPR1hk?=
- =?utf-8?B?K2h3VXBreFh2eFJZbTZhVmJacnVLcW82Nmx2eDl0ZkRVMW0wVU1FV0xUYW92?=
- =?utf-8?B?ekhQU2hjTEl3YWh0VEd1cEZIQkdGaGhHQ1pSV3BNSzdVaFkvV2UraVluVGpt?=
- =?utf-8?B?TG80M0E1S05TZWRsVjA3RllLdEpObUdBZkFUOE9vMkYrNjkxdXJhVHM3bWRp?=
- =?utf-8?B?cDBpbm5lOFhLU2E1UVVBUUxXakt4ajRobWFOc0xHcEVrUFNBYXhJVUF3d0c2?=
- =?utf-8?B?QXZ4ZTc3MnRKLzhXMVA5eGZUUVVsK0RqVk5iNkZKQm9rKzFRbm1PQlRpQkVh?=
- =?utf-8?B?OXZhNWZiV3RtZDc0UEhhZHlsS2xzby9ETXEzay9TaVJXU2YrL0grUnpLVWRp?=
- =?utf-8?B?a2J6NGQ0U3BvU2FpWk5aTHNSVERIR3QwbjU0L3JLZzNBTkdiK29pRmRpNUta?=
- =?utf-8?B?a1VZNUxGZUUwVUxjbjYzRjJmV2RpbWpzNXBhbk9icUlmVkJtQ1dOZkJqVDVP?=
- =?utf-8?B?OGpEOFNoc1hXVjYyYktxdTRLblpoWnZhcWs1MTVMbmlZWUt5S1ZpaGY2cmdk?=
- =?utf-8?B?T0xjZDFic0o4VW1oT3k3cWNscTZaWDZ2cldqVmxraFFlSlpqeXRxdW4xNm1r?=
- =?utf-8?B?RUY4eE1sNitOeXNUUzkyKy9TSXBmSWRwZVNVczlYSnNZMnR2KzloeTFDSzRk?=
- =?utf-8?B?TlptUng5K2d3ci96R2RvcWt6R3dUdHh6RWhHTG1RZnZFbGhBRjhMbStuZG5O?=
- =?utf-8?B?a1JDdklaZlg2N2o5bVVBb1RVckJXc2hKL0xVRkdsNkw1dXFuT0NvaW1oQkpM?=
- =?utf-8?B?WkV4SmlnV1dxaTdHMkhMSHI0aGZpSWhNbUNhSVRTK3UzUjhYWkNWUEc2eFY1?=
- =?utf-8?B?TUtOSjZaSTF3RHRjdVg5ZFAyWjdqNWROV0NEK1h0eGFZQXpOaE1iL244QnEy?=
- =?utf-8?B?L2pxNTN4V1ZzS1M5Zjh1VFFmY0FackxOUCtmRmIweTlnbmpsa0hVZWNHUGJq?=
- =?utf-8?B?RnFOT3pZRXZoUTlwYVE2NElyTUhjb20vVVFlSm1mRnJ4U09qcDZhOVh0MXJH?=
- =?utf-8?B?Nmg5cG5uL3dhVkNGNHR3TWxLQTJ0NlhmQTI0cTB1T2VldVFFSWx1ZjR2a05T?=
- =?utf-8?B?QkNNZWhHTWNyY3JPSU1uL01tcnFWMDY2RTlrRzlFVERoWFlXRzZWWUUrVHBj?=
- =?utf-8?B?TVVnNllBbGNYd3pUZEdZRVVTN1BIcjVYNERITUFhay9HdkRIQ2RlTGRnb2Ra?=
- =?utf-8?B?REV6YVZXU3daTUNGZEFSdlRuVXEwcSt4QjYvNnlZdVRKZ3BxS1N0aTFrSkJ4?=
- =?utf-8?B?ZktoTERybWg3Z0w4Z0V0Q1VwQUd3ZnN5V2d5NWZ4bEIzWVJzWlFPSHB4TTBy?=
- =?utf-8?B?dHpTNklaZC95aWNNNGJqalQxLzVIOXF1bGhuUTVYOEoyNGp1cnNRWG8yaTlF?=
- =?utf-8?B?bC8vNzgwMVBXZk8zdGlaSXlSc2psYU1lUzJMN3NSNTcwYWZCYmRtRUcxWmZl?=
- =?utf-8?B?NmdjMmEydmhCY0NSNENUUGxIYVF0M21MaFQrTG01Rld4OHdET1ZBQlE2aklL?=
- =?utf-8?B?MElubHp2THFwOGdpTTVmVEhRYWNpc0VTWmlWeU1XYXlJVWtSUnpmYUs4Y3VV?=
- =?utf-8?B?eW1Mc2I1Y2VPK21JY3J1SzZ1UEd1am43MjRSSFo3RnlxNk9zLzIxazVMNUxm?=
- =?utf-8?B?ZE9BUHBqd3lLWjU3MTU3ZEtiZUxGOC9jWS9rbVlnMUt3MG91d2NyNTVuZ00w?=
- =?utf-8?Q?utzaa49KUsriS74NwJ4PYrwy1?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6da1ae5a-f926-48dc-7735-08ddaf224ecc
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB4262.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jun 2025 11:13:24.6368
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: z2W2SBhDTnyN1P2wln9L5cX00Lrsv5FZnr2M8ZuTrXy7vnJDWLaNBnEF22yKKW91/xUey0phZa4Ma0HR2t+NIA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB9178
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c9929e0c9ec6f3f6348cd0c399d6fdfa9f35f973.1749884998.git.nicolinc@nvidia.com>
 
-
-
-On 6/18/2025 8:42 PM, Gregory Price wrote:
-> On Wed, Jun 18, 2025 at 11:29:32AM +0000, Shivank Garg wrote:
->> KVM guest_memfd wants to implement support for NUMA policies just like
->> shmem already does using the shared policy infrastructure. As
->> guest_memfd currently resides in KVM module code, we have to export the
->> relevant symbols.
->>
->> In the future, guest_memfd might be moved to core-mm, at which point the
->> symbols no longer would have to be exported. When/if that happens is
->> still unclear.
->>
->> Acked-by: David Hildenbrand <david@redhat.com>
->> Acked-by: Vlastimil Babka <vbabka@suse.cz>
->> Signed-off-by: Shivank Garg <shivankg@amd.com>
->> ---
->>  mm/mempolicy.c | 6 ++++++
->>  1 file changed, 6 insertions(+)
->>
->> diff --git a/mm/mempolicy.c b/mm/mempolicy.c
->> index 3b1dfd08338b..d98243cdf090 100644
->> --- a/mm/mempolicy.c
->> +++ b/mm/mempolicy.c
->> @@ -354,6 +354,7 @@ struct mempolicy *get_task_policy(struct task_struct *p)
->>  
->>  	return &default_policy;
->>  }
->> +EXPORT_SYMBOL_GPL(get_task_policy);
->>  
->>  static const struct mempolicy_operations {
->>  	int (*create)(struct mempolicy *pol, const nodemask_t *nodes);
->> @@ -487,6 +488,7 @@ void __mpol_put(struct mempolicy *pol)
->>  		return;
->>  	kmem_cache_free(policy_cache, pol);
->>  }
->> +EXPORT_SYMBOL_GPL(__mpol_put);
->>  
+On Sat, Jun 14, 2025 at 12:14:38AM -0700, Nicolin Chen wrote:
+> For vIOMMU passing through HW resources to user space (VMs), allowing a VM
+> to control the passed through HW directly by accessing hardware registers,
+> add an mmap infrastructure to map the physical MMIO pages to user space.
 > 
-> I'm concerned that get_task_policy doesn't actually increment the policy
-> refcount - and mpol_cond_put only decrements the refcount for shared
-> policies (vma policies) - while __mpol_put decrements it unconditionally.
+> Maintain a maple tree per ictx as a translation table managing mmappable
+> regions, from an allocated for-user mmap offset to an iommufd_mmap struct,
+> where it stores the real PFN range for an io_remap_pfn_range call.
 > 
-> If you look at how get_task_policy is used internally to mempolicy,
-> you'll find that it either completes the operation in the context of the
-> task lock (allocation time) or it calls mpol_get afterwards.
-
-I agree. But the semantics of my usage isn't new. shmem use this in same way.
-
-I think the alloc_frozen_pages_noprof(), alloc_pages_bulk_mempolicy_noprof()
-calls get_task_policy without task_lock or calling mpol_get.
-
+> Keep track of the lifecycle of the mmappable region by taking refcount of
+> its owner, so as to enforce user space to unmap the region first before it
+> can destroy its owner object.
 > 
-> Exporting this as-is creates a triping hazard, if only because get/put
-> naming implies reference counting.
+> To allow an IOMMU driver to add and delete mmappable regions onto/from the
+> maple tree, add iommufd_viommu_alloc/destroy_mmap helpers.
+>
 
-Since KVM is the only user, we could consider newly added EXPORT_SYMBOL_GPL_FOR_MODULES(..., "kvm")
-to avoid wider exposure.
-Does this solve your concern?
-Or should we rename these functions.
-What should be the preferred approach?
+The usage of mtree seems fine now, storing pfns ranges as compared to
+pointers in v3. Input validation checks, vma checks and destroy op look
+good.
 
-Thanks,
-Shivank
+Reviewed-by: Pranjal Shrivastava <praan@google.com>
+
+> Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> ---
+>  drivers/iommu/iommufd/iommufd_private.h | 14 ++++++
+>  include/linux/iommufd.h                 | 42 ++++++++++++++++
+>  drivers/iommu/iommufd/driver.c          | 51 ++++++++++++++++++++
+>  drivers/iommu/iommufd/main.c            | 64 +++++++++++++++++++++++++
+>  4 files changed, 171 insertions(+)
+> 
+> diff --git a/drivers/iommu/iommufd/iommufd_private.h b/drivers/iommu/iommufd/iommufd_private.h
+> index 1bb1c0764bc2..e8192f79fe42 100644
+> --- a/drivers/iommu/iommufd/iommufd_private.h
+> +++ b/drivers/iommu/iommufd/iommufd_private.h
+> @@ -7,6 +7,7 @@
+>  #include <linux/iommu.h>
+>  #include <linux/iommufd.h>
+>  #include <linux/iova_bitmap.h>
+> +#include <linux/maple_tree.h>
+>  #include <linux/rwsem.h>
+>  #include <linux/uaccess.h>
+>  #include <linux/xarray.h>
+> @@ -44,6 +45,7 @@ struct iommufd_ctx {
+>  	struct xarray groups;
+>  	wait_queue_head_t destroy_wait;
+>  	struct rw_semaphore ioas_creation_lock;
+> +	struct maple_tree mt_mmap;
+>  
+>  	struct mutex sw_msi_lock;
+>  	struct list_head sw_msi_list;
+> @@ -55,6 +57,18 @@ struct iommufd_ctx {
+>  	struct iommufd_ioas *vfio_ioas;
+>  };
+>  
+> +/* Entry for iommufd_ctx::mt_mmap */
+> +struct iommufd_mmap {
+> +	struct iommufd_object *owner;
+> +
+> +	/* Allocated start position in mt_mmap tree */
+> +	unsigned long startp;
+> +
+> +	/* Physical range for io_remap_pfn_range() */
+> +	unsigned long mmio_pfn;
+> +	unsigned long num_pfns;
+> +};
+> +
+>  /*
+>   * The IOVA to PFN map. The map automatically copies the PFNs into multiple
+>   * domains and permits sharing of PFNs between io_pagetable instances. This
+> diff --git a/include/linux/iommufd.h b/include/linux/iommufd.h
+> index acf0e8f0c630..0da9bc8f94f3 100644
+> --- a/include/linux/iommufd.h
+> +++ b/include/linux/iommufd.h
+> @@ -251,6 +251,11 @@ int _iommufd_object_depend(struct iommufd_object *obj_dependent,
+>  			   struct iommufd_object *obj_depended);
+>  void _iommufd_object_undepend(struct iommufd_object *obj_dependent,
+>  			      struct iommufd_object *obj_depended);
+> +int _iommufd_alloc_mmap(struct iommufd_ctx *ictx, struct iommufd_object *owner,
+> +			phys_addr_t mmio_addr, size_t length,
+> +			unsigned long *offset);
+> +void _iommufd_destroy_mmap(struct iommufd_ctx *ictx,
+> +			   struct iommufd_object *owner, unsigned long offset);
+>  struct device *iommufd_viommu_find_dev(struct iommufd_viommu *viommu,
+>  				       unsigned long vdev_id);
+>  int iommufd_viommu_get_vdev_id(struct iommufd_viommu *viommu,
+> @@ -271,6 +276,20 @@ _iommufd_object_undepend(struct iommufd_object *obj_dependent,
+>  {
+>  }
+>  
+> +static inline int _iommufd_alloc_mmap(struct iommufd_ctx *ictx,
+> +				      struct iommufd_object *owner,
+> +				      phys_addr_t mmio_addr, size_t length,
+> +				      unsigned long *offset)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static inline void _iommufd_destroy_mmap(struct iommufd_ctx *ictx,
+> +					 struct iommufd_object *owner,
+> +					 unsigned long offset)
+> +{
+> +}
+> +
+>  static inline struct device *
+>  iommufd_viommu_find_dev(struct iommufd_viommu *viommu, unsigned long vdev_id)
+>  {
+> @@ -338,4 +357,27 @@ static inline int iommufd_viommu_report_event(struct iommufd_viommu *viommu,
+>  		_iommufd_object_undepend(&dependent->member.obj,               \
+>  					 &depended->member.obj);               \
+>  	})
+> +
+> +/*
+> + * Helpers for IOMMU driver to alloc/destroy an mmapable area for a structure.
+> + *
+> + * To support an mmappable MMIO region, kernel driver must first register it to
+> + * iommufd core to allocate an @offset, during a driver-structure initialization
+> + * (e.g. viommu_init op). Then, it should report to user space this @offset and
+> + * the @length of the MMIO region for mmap syscall.
+> + */
+> +static inline int iommufd_viommu_alloc_mmap(struct iommufd_viommu *viommu,
+> +					    phys_addr_t mmio_addr,
+> +					    size_t length,
+> +					    unsigned long *offset)
+> +{
+> +	return _iommufd_alloc_mmap(viommu->ictx, &viommu->obj, mmio_addr,
+> +				   length, offset);
+> +}
+> +
+> +static inline void iommufd_viommu_destroy_mmap(struct iommufd_viommu *viommu,
+> +					       unsigned long offset)
+> +{
+> +	_iommufd_destroy_mmap(viommu->ictx, &viommu->obj, offset);
+> +}
+>  #endif
+> diff --git a/drivers/iommu/iommufd/driver.c b/drivers/iommu/iommufd/driver.c
+> index 70b7917da0cb..8220b61d8c8d 100644
+> --- a/drivers/iommu/iommufd/driver.c
+> +++ b/drivers/iommu/iommufd/driver.c
+> @@ -31,6 +31,57 @@ void _iommufd_object_undepend(struct iommufd_object *obj_dependent,
+>  }
+>  EXPORT_SYMBOL_NS_GPL(_iommufd_object_undepend, "IOMMUFD");
+>  
+> +/*
+> + * Allocate an @offset to return to user space to use for an mmap() syscall
+> + *
+> + * Driver should use a per-structure helper in include/linux/iommufd.h
+> + */
+> +int _iommufd_alloc_mmap(struct iommufd_ctx *ictx, struct iommufd_object *owner,
+> +			phys_addr_t mmio_addr, size_t length,
+> +			unsigned long *offset)
+> +{
+> +	struct iommufd_mmap *immap;
+> +	unsigned long startp;
+> +	int rc;
+> +
+> +	if (!PAGE_ALIGNED(mmio_addr))
+> +		return -EINVAL;
+> +	if (!length || !PAGE_ALIGNED(length))
+> +		return -EINVAL;
+> +
+> +	immap = kzalloc(sizeof(*immap), GFP_KERNEL);
+> +	if (!immap)
+> +		return -ENOMEM;
+> +	immap->owner = owner;
+> +	immap->num_pfns = length >> PAGE_SHIFT;
+> +	immap->mmio_pfn = mmio_addr >> PAGE_SHIFT;
+> +
+> +	rc = mtree_alloc_range(&ictx->mt_mmap, &startp, immap, immap->num_pfns,
+> +			       0, U32_MAX >> PAGE_SHIFT, GFP_KERNEL);
+> +	if (rc < 0) {
+> +		kfree(immap);
+> +		return rc;
+> +	}
+> +
+> +	immap->startp = startp;
+> +	/* mmap() syscall will right-shift the offset in vma->vm_pgoff */
+> +	*offset = startp << PAGE_SHIFT;
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_NS_GPL(_iommufd_alloc_mmap, "IOMMUFD");
+> +
+> +/* Driver should use a per-structure helper in include/linux/iommufd.h */
+> +void _iommufd_destroy_mmap(struct iommufd_ctx *ictx,
+> +			   struct iommufd_object *owner, unsigned long offset)
+> +{
+> +	struct iommufd_mmap *immap;
+> +
+> +	immap = mtree_erase(&ictx->mt_mmap, offset >> PAGE_SHIFT);
+> +	WARN_ON_ONCE(!immap || immap->owner != owner);
+> +	kfree(immap);
+> +}
+> +EXPORT_SYMBOL_NS_GPL(_iommufd_destroy_mmap, "IOMMUFD");
+> +
+>  /* Caller should xa_lock(&viommu->vdevs) to protect the return value */
+>  struct device *iommufd_viommu_find_dev(struct iommufd_viommu *viommu,
+>  				       unsigned long vdev_id)
+> diff --git a/drivers/iommu/iommufd/main.c b/drivers/iommu/iommufd/main.c
+> index 4e8dbbfac890..339a269ebbc8 100644
+> --- a/drivers/iommu/iommufd/main.c
+> +++ b/drivers/iommu/iommufd/main.c
+> @@ -275,6 +275,7 @@ static int iommufd_fops_open(struct inode *inode, struct file *filp)
+>  	xa_init_flags(&ictx->objects, XA_FLAGS_ALLOC1 | XA_FLAGS_ACCOUNT);
+>  	xa_init(&ictx->groups);
+>  	ictx->file = filp;
+> +	mt_init_flags(&ictx->mt_mmap, MT_FLAGS_ALLOC_RANGE);
+>  	init_waitqueue_head(&ictx->destroy_wait);
+>  	mutex_init(&ictx->sw_msi_lock);
+>  	INIT_LIST_HEAD(&ictx->sw_msi_list);
+> @@ -479,11 +480,74 @@ static long iommufd_fops_ioctl(struct file *filp, unsigned int cmd,
+>  	return ret;
+>  }
+>  
+> +static void iommufd_fops_vma_open(struct vm_area_struct *vma)
+> +{
+> +	struct iommufd_mmap *immap = vma->vm_private_data;
+> +
+> +	refcount_inc(&immap->owner->users);
+> +}
+> +
+> +static void iommufd_fops_vma_close(struct vm_area_struct *vma)
+> +{
+> +	struct iommufd_mmap *immap = vma->vm_private_data;
+> +
+> +	refcount_dec(&immap->owner->users);
+> +}
+> +
+> +static const struct vm_operations_struct iommufd_vma_ops = {
+> +	.open = iommufd_fops_vma_open,
+> +	.close = iommufd_fops_vma_close,
+> +};
+> +
+> +/* The vm_pgoff must be pre-allocated from mt_mmap, and given to user space */
+> +static int iommufd_fops_mmap(struct file *filp, struct vm_area_struct *vma)
+> +{
+> +	struct iommufd_ctx *ictx = filp->private_data;
+> +	size_t length = vma->vm_end - vma->vm_start;
+> +	struct iommufd_mmap *immap;
+> +	int rc;
+> +
+> +	if (!PAGE_ALIGNED(length))
+> +		return -EINVAL;
+> +	if (!(vma->vm_flags & VM_SHARED))
+> +		return -EINVAL;
+> +	if (vma->vm_flags & VM_EXEC)
+> +		return -EPERM;
+> +
+> +	/* vma->vm_pgoff carries an index to an mtree entry (immap) */
+> +	immap = mtree_load(&ictx->mt_mmap, vma->vm_pgoff);
+> +	if (!immap)
+> +		return -ENXIO;
+> +	/*
+> +	 * mtree_load() returns the immap for any contained pgoff, only allow
+> +	 * the immap thing to be mapped
+> +	 */
+> +	if (vma->vm_pgoff != immap->startp)
+> +		return -ENXIO;
+> +	if (length != immap->num_pfns << PAGE_SHIFT)
+> +		return -ENXIO;
+> +
+> +	vma->vm_pgoff = 0;
+> +	vma->vm_private_data = immap;
+> +	vma->vm_ops = &iommufd_vma_ops;
+> +	vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
+> +
+> +	rc = io_remap_pfn_range(vma, vma->vm_start, immap->mmio_pfn, length,
+> +				vma->vm_page_prot);
+> +	if (rc)
+> +		return rc;
+> +
+> +	/* vm_ops.open won't be called for mmap itself. */
+> +	refcount_inc(&immap->owner->users);
+> +	return rc;
+> +}
+> +
+>  static const struct file_operations iommufd_fops = {
+>  	.owner = THIS_MODULE,
+>  	.open = iommufd_fops_open,
+>  	.release = iommufd_fops_release,
+>  	.unlocked_ioctl = iommufd_fops_ioctl,
+> +	.mmap = iommufd_fops_mmap,
+>  };
+>  
+>  /**
+> -- 
+> 2.43.0
+> 
 
