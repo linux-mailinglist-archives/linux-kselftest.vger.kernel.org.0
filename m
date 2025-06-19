@@ -1,116 +1,102 @@
-Return-Path: <linux-kselftest+bounces-35373-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35374-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7101AE0AAF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 17:39:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCBABAE0B08
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 18:04:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B0EC7188ECA2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 15:37:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ABC1E4A49BB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 16:03:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 035B7236437;
-	Thu, 19 Jun 2025 15:37:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACD9E28B504;
+	Thu, 19 Jun 2025 16:03:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZwGUap/Z"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ZBIPyIW7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ACF5230D2B
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Jun 2025 15:37:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B159323B612;
+	Thu, 19 Jun 2025 16:03:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750347440; cv=none; b=tgOOjenGTnWsrkCxxZRfQ90aZquEuF3SiORPHc1mr4GmIBALxDrrRL3n3Mg9p/MMs2lpQQ1ytlXB53sEKDL9kp+NuCYfzNr7MFNQzChv4LMf/yJoq+FGtCkDPBaf0FGSe9OOoeqmmeqLAwUE+K34S1J0EtalRiV0GP6V1UADSHg=
+	t=1750349021; cv=none; b=bYcvyaDBlCoI8jogszzAK/c24ZSow4Y5vokal1mvuGlrD10S8OgiVYPOrwGsZqqjSFSOYLFBB+M+jZFLFUo3vE5q3GfTtEWTSVU7yMzkZcbUkrNmGAGx3BrBJ8VOdGlVKBbpCXgdL/fWc8Wpk3vKdUSJCQuinI0O8+jbiS/o00g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750347440; c=relaxed/simple;
-	bh=HXqBNC79E8+zULge9cmYzz8aTHkD1900PAbJWPHai6M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BvyRf92H1xQaX7mOuL02CZGq7X4gA5w9I8ByDoQAYLTVkE5LOwe1cZqhnGrmmLVt7oEQuw3ZVPfhztKfNuK5Rm4VJRVWP23j/FQ/CNIIsRMekQSRyOB8gXsCmwhsV209XhYxKmJRPn9y+256t4MKRu3N/rAxRFl/dMGf79AkfEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZwGUap/Z; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2357c61cda7so131885ad.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Jun 2025 08:37:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1750347439; x=1750952239; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HXqBNC79E8+zULge9cmYzz8aTHkD1900PAbJWPHai6M=;
-        b=ZwGUap/ZQIUKxrhMq86JDkwqv74o1d+pL1OoeJh6iuC6Ea3xhpabXhvr4OnF707rGg
-         RhW3wH9P8H5QPJF24ldOIyHIupquYFOEJxcwliGb7A8MYELZV8QJqKX0fVflOScsoMi6
-         EhbXUgicndUXfIGFF6BlE3UeJjDE1rid3x66SmDOD4i0fN06bkMQa+Yjdcntgsa+CQsJ
-         NxTCoLlwlCq2VeAjkVb/YXrWkG0LzcnJq9zDipq0rUjF8c+KUDhMBHofXOqpnQASL5z4
-         7p+p/B3iuhfwSlxZUGSanrPQdtASxcXZiz3sH0T8u4Jh5WcgOWtEd8OmtS9usP2rgeKw
-         Za8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750347439; x=1750952239;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HXqBNC79E8+zULge9cmYzz8aTHkD1900PAbJWPHai6M=;
-        b=ckc4ltUJbjwcziWfUP6ScMzTsYGIHt8KsCMH7NV9l13Kw21iNZ6uA8bn6qddwjiCFe
-         dolAeaghW/2Z9y0OZ3asbyA6jN/GDhgeVWKOigkUNA9fIwSTQMi+qyhG4r+wji+vyz75
-         HMghGV1MVsVTnQN+fRwVXeYZKtb+64siMgEJFU4AnYKNsC46W8qQ8khRc8xGEiYTobiK
-         LdkNcm2xgtoDhBu6asmSulb9cZRcSw1eSvJmuRqqz4s4E/7ooAzIV1FoemFuITW85XwL
-         r2DFsYxp3ngM90lbwDZ72OE30438GVFkZx4IBDbWHBrx9XPlJeOcdijxFC1+157QJwQP
-         sR7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU1e7qNtJbn9mgDMoPRWAdlwX+hoXR+wRz/aK3u0BcUWgJ9FLx3Hy+GTDujSIv/LKko/CxCJELaBdKvchB94PA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyruyM9f/X/N9zVwSFUlBqvhdL54NklXDwkV6ZoveKpyA+U0VJG
-	8HlLTM2r9OIi3GiL7EGmgN1YhFsSuO5UI4bNouyEQ+MGKRgQMONIBDb988k8n4kfB5hh0fg+J3k
-	n5b3vRTBJ4sMPK77udR3bpF/IY6X2yjPml4GFj1Ws
-X-Gm-Gg: ASbGnctPteWjT4v3JOfB/EvY358ThhRb7ZmogSvAkFPO5+SlATfAGZFtX19f8cFYxv2
-	dISYvMZYq5tZZEg6HOIR+3myfrxwQVUMI3A9yGcLr8YvWlrm4nkaORwcnoHlneh5Giv0Rz9xxFW
-	GzUjdgwAabDrugCQDFV1Pfe65UO8J0jUPO3FIxVgVzH92OVsN9DxubF2k=
-X-Google-Smtp-Source: AGHT+IEeijlQPpJuvXLonxzDPjlDUwYkzvUY7s0SbGkDqtAlVdPJnNp8p53qHr02gdS8vRw9Ecwmxce7UO+kYeJGCME=
-X-Received: by 2002:a17:902:ccc9:b0:234:afcf:d9e8 with SMTP id
- d9443c01a7336-237ce035db1mr2436035ad.7.1750347438284; Thu, 19 Jun 2025
- 08:37:18 -0700 (PDT)
+	s=arc-20240116; t=1750349021; c=relaxed/simple;
+	bh=wiz8yGqKTEbOgLco2H006a97kYe0r5QAI/EETtQfT6w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BgDnZ8me5J8OE/SMSjy+nnoNqYcSRfAupIPdfrfy4Y8/ByC8WyPUSq0f8qZp7Lt5m7FsXcvw2KHCSkrzfHhIOY/HtpR5I4xtvXds9gNYb+ixZijWWFyX4Y5ScHdnmXS5Gx5SayvosZX+V5fa73VRCf6kXc2iLg8GJEUdUKlU/ng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ZBIPyIW7; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=OqgTG9bdN8KsCUPIOjEKZnMRxiOerNNgtMPhKjugJzU=; b=ZBIPyIW7OHWA7HpZ/jDa0ZXFT/
+	e75q0jndhVd3ufFi+j6zVf/lV+bTF3M4lyTQhNhMa+BME9MosUJgrG1L8nNV2OJwUfRNPrVqyUwcC
+	wkvOttZUwiJK7P9yFr2v5+Tqz8nzfpGaZgXgG/qOdExAiSBlFpqE8ydY/GzgM+Xcpogwfs1n01mLu
+	LynfUH+cgn8CcH8WzgE2iUNmpQ047OLl4fQGADPyEpRoPwuQSznI+D9C1+dwIXPNtSmaptwVw7bO/
+	AZGKqXE2RLW3Ha/1MZWF9FcHxQGSQSQxqmjQRPTVOLQ0+J5mApbCQximHGy6sAuSMmpkXkzNUeTaa
+	jI1NEVKA==;
+Received: from willy by casper.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1uSHjM-00000009Mqg-03kb;
+	Thu, 19 Jun 2025 16:03:12 +0000
+Date: Thu, 19 Jun 2025 17:03:11 +0100
+From: Matthew Wilcox <willy@infradead.org>
+To: Shivank Garg <shivankg@amd.com>
+Cc: seanjc@google.com, david@redhat.com, vbabka@suse.cz,
+	akpm@linux-foundation.org, shuah@kernel.org, pbonzini@redhat.com,
+	brauner@kernel.org, viro@zeniv.linux.org.uk, ackerleytng@google.com,
+	paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+	pvorel@suse.cz, bfoster@redhat.com, tabba@google.com,
+	vannapurve@google.com, chao.gao@intel.com, bharata@amd.com,
+	nikunj@amd.com, michael.day@amd.com, yan.y.zhao@intel.com,
+	Neeraj.Upadhyay@amd.com, thomas.lendacky@amd.com,
+	michael.roth@amd.com, aik@amd.com, jgg@nvidia.com,
+	kalyazin@amazon.com, peterx@redhat.com, jack@suse.cz,
+	rppt@kernel.org, hch@infradead.org, cgzones@googlemail.com,
+	ira.weiny@intel.com, rientjes@google.com, roypat@amazon.co.uk,
+	ziy@nvidia.com, matthew.brost@intel.com, joshua.hahnjy@gmail.com,
+	rakie.kim@sk.com, byungchul@sk.com, gourry@gourry.net,
+	kent.overstreet@linux.dev, ying.huang@linux.alibaba.com,
+	apopple@nvidia.com, chao.p.peng@intel.com, amit@infradead.org,
+	ddutile@redhat.com, dan.j.williams@intel.com, ashish.kalra@amd.com,
+	gshan@redhat.com, jgowans@amazon.com, pankaj.gupta@amd.com,
+	papaluri@amd.com, yuzhao@google.com, suzuki.poulose@arm.com,
+	quic_eberman@quicinc.com, aneeshkumar.kizhakeveetil@arm.com,
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org,
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-coco@lists.linux.dev
+Subject: Re: [RFC PATCH v8 3/7] mm/filemap: Add mempolicy support to the
+ filemap layer
+Message-ID: <aFQ0v0DfWgUvqK6L@casper.infradead.org>
+References: <20250618112935.7629-1-shivankg@amd.com>
+ <20250618112935.7629-4-shivankg@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250615205914.835368-1-almasrymina@google.com>
- <c126182c-8f26-41e2-a20d-ceefc2ced886@kernel.org> <CAHS8izPyzJvchqFNrRjY95D=41nya8Tmvx1eS9n0ijtHcUUETA@mail.gmail.com>
- <f445633e-b72c-4b5d-bb18-acda1c1d4de6@kernel.org> <CAHS8izOhNRNXyAgfuKW1xKb8PTernfer6tJfxG5FZmq7pePjwA@mail.gmail.com>
- <a122981d-ac9a-4c7e-a8a3-d50a3e613f0b@kernel.org>
-In-Reply-To: <a122981d-ac9a-4c7e-a8a3-d50a3e613f0b@kernel.org>
-From: Mina Almasry <almasrymina@google.com>
-Date: Thu, 19 Jun 2025 08:37:05 -0700
-X-Gm-Features: AX0GCFtbSJkA9B2FmfN23HT-G5zxw5AQXqfUAsX29ALKFUjOOk7WFn4t987JlLo
-Message-ID: <CAHS8izOQLvPAE_E2dgMS7-11ZGFK5jmZ7q58LZCnhymhhUj2bQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v4] page_pool: import Jesper's page_pool benchmark
-To: Jesper Dangaard Brouer <hawk@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>, 
-	Ignat Korchagin <ignat@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250618112935.7629-4-shivankg@amd.com>
 
-On Thu, Jun 19, 2025 at 3:24=E2=80=AFAM Jesper Dangaard Brouer <hawk@kernel=
-.org> wrote:
-> > Does this alleviate your concern? Or do you still see an issue here?
-> > There is still a delta between our results, on different
-> > hardware/configs but results are in a sane range now.
->
-> Now the results a sane and in range :-)
->
+On Wed, Jun 18, 2025 at 11:29:31AM +0000, Shivank Garg wrote:
+> From: Shivansh Dhiman <shivansh.dhiman@amd.com>
+> 
+> Add NUMA mempolicy support to the filemap allocation path by introducing
+> new APIs that take a mempolicy argument:
+> - filemap_grab_folio_mpol()
+> - filemap_alloc_folio_mpol()
+> - __filemap_get_folio_mpol()
 
-Thanks!
-
-Jakub, this patch was marked 'changes requested' for good reason, but
-after investigation we found the patch itself is good and the issues
-were elsewhere. What do I do here? A resend of v4? Or does this un
-'changes requested' as-is?
-
---=20
-Thanks,
-Mina
+You don't use these APIs in this series, so I can't evaludate whether
+any of my suggestiosn for improving this patch would actually work.
+NACK.  Introduce the APIs *with a user*.  Come on, this isn't a new
+requirement.
 
