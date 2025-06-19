@@ -1,148 +1,102 @@
-Return-Path: <linux-kselftest+bounces-35392-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35393-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FAF8AE0FA2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Jun 2025 00:34:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8627CAE0FF8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Jun 2025 01:20:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE31D3B8FDC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 22:33:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5BA6A5A26A5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 23:19:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2D7925F797;
-	Thu, 19 Jun 2025 22:34:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A63C28DF44;
+	Thu, 19 Jun 2025 23:19:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SgKTQsXE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="alyKC85k"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com [209.85.222.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DA2930E83F;
-	Thu, 19 Jun 2025 22:34:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 686B028DF3B;
+	Thu, 19 Jun 2025 23:19:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750372457; cv=none; b=EyHKq3lcAO2WN8rtkhXoEIM8ON2njf06r2zNPLoeobfqxo7Wskixnq5p7YwfTQA+TKDR8MKk6guY9Sy1R19n6sZEft1yZi03OnQxlQT3TeN/KIyoeeeDAmhTsH7knloo95WMP2j8ShfEC5HzDrPAuNmwAzyx82cfo4JaEIM+KcE=
+	t=1750375198; cv=none; b=pNqXI7XZvsptcI1VyYssz25hvgZ3EFYrLKN0JVdEnPLJyrHbKSLIIuskkGV5y8JzV/hyKT3O4EK9cwoWhnJlJo/L2m5UUHoCTYyXavSus4TsS4TWfXcUBIJ3aTDV1Ivx6cylPXuA6MTR6Q9Stwz1wbmDkmsIceW6oUmbTjqLAuQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750372457; c=relaxed/simple;
-	bh=GIDO9BDys8lQULlVy8TnjQvIn6yRHEVxpy5WzFL7pTs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IbNgv/NMObVdjmTO22aS6JMDzwtn2hCizjlNlvAiza1u1KhR2Hcyud5NGKriklylu4WNAnUEvoHCHt/MGrQXxXph2up6gkVjqsb4K26WYXXjoko+TTnmZ1GCzw3PcHe8fcfejZC5cs4oVdFNZ0WWdnnCqws37PpRQRnP1n/rkEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SgKTQsXE; arc=none smtp.client-ip=209.85.222.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f45.google.com with SMTP id a1e0cc1a2514c-86f9c719d63so282181241.1;
-        Thu, 19 Jun 2025 15:34:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750372455; x=1750977255; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+Eu0lFqQOWmj7E0S9GLB+pQ4SPFVJIlw2LIM4BGXQqs=;
-        b=SgKTQsXEt3xvU8AQfsr9ORnoGP8YSdUn1GoflWbleEETDqiG9NoJjwGB08LQUjHf90
-         Tm091V8YOjmWoErwZ5y5V/ld1wCU0o5BMhB14bt0Ha6cC5taPQb0zf6gvZpxH9uprjpD
-         LFdHv308Fw+ar9g67NeKtOjQfJXtf+sIo+NXUa151O9CFd+SEX3GIzyELEGeFb4KMLPF
-         YQbopvAvyOhSGLnrp60CxbDP5UcmF5H+8ERvwX//enXcgzbvnNVpK8mVFPkyFpJ72z3t
-         qUSt3qLzQyTBJSHskNqJOrWWgI9s4oqVGqngcuw+N1Taij2R1IhMBGpoJtE0/42MPqwE
-         gkkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750372455; x=1750977255;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+Eu0lFqQOWmj7E0S9GLB+pQ4SPFVJIlw2LIM4BGXQqs=;
-        b=W91KWuz6BByyfIz5bOAqEN3jpKE97thPSIIiM2iraBbkd+Bk0IHNdbclDP0B18t8w0
-         ta4TOx9VHXHOHd7SFy1SQM8S55R4fSJSfAw1EA1wM47z/3s6n2JmcmOPFTqWfhZkmk3t
-         XXzjz738WW8Ydyxy4wfp5B1EYGMLWN8tS9GjHoWpyR+lrpSO/vNd2Hz8YsX4ht4QnGv1
-         jfWz1jyoAJr8lf4v7xwQx5FYoKBLhCLApUIsgH8YVV0fQ7Q8OLne4SFnkZYCM3SVVQL2
-         DB7xLiem4kD0eEJrN4daWimGMDD/8HLvSPf1vGS+jbmDs/R/5SW2mM8JYP2mqIuPuwYd
-         zrkg==
-X-Forwarded-Encrypted: i=1; AJvYcCVLgmylL27J5PhlGr4NUbkK34rSUOYomnLNPRExLwO8PGSAv2ifTrY8cTIu88CkOdwmRYe9Bt38z3wZsUC72cAm@vger.kernel.org, AJvYcCWsBPA7FuUX8NCl0mf3pE/6Yj0E4fnbYvyA0js8P/iGC55bYhQ6AO+nL+ioZ4jR9CA2eXDrknOq3+7v+lYD@vger.kernel.org, AJvYcCXeV9afQRGmh+OsUvI/rnxJbGEUAIsCoYih9WPJBfjHdVRedsXMJT3Tre5wQhqsz3//VKY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz26FbAnzoTmwgKKPLQBT7wcnj9mxQ709qyCjY+w++6gQ7lV4Pv
-	0Ov4o/0mi6Pa9VBR64t+1vuTzmDlc/UheWIoO5swfK24wIsgA6vnySI2e7DT/nuBxQjIs83jnQ1
-	F3MRcqxSXjrlUobPx0BzLAO8efgn9uLA=
-X-Gm-Gg: ASbGncvOSAqqNTUvHbjSpAZgVrfdv/RRA5rEHLGMTE9EmKeNfegeO8hIQfhKuXb2gwl
-	xcQYKENFMBM13Cj0LftSrl6GUa9SLVi1w9lysMi1NX1NZPRBVuYTwrZga5fjPMlSGDSebH3DB0F
-	7nx1AScoNDp8ZVTRpcUbdJGJ+Qbz1DN0/YrHuIHt22XJrT41ixQfTaFKnpimJesgZY7GDj/0yJt
-	lw7NQ==
-X-Google-Smtp-Source: AGHT+IHe72C1tJM/iB5rsdcWJQTGhwtVphYyYCNbBUmZo81jrxCV8UJZ1GwAYAWo6O2BQQWy1dedvf63/naTFnqb+Kw=
-X-Received: by 2002:a05:6102:449a:b0:4e9:b7e3:bdc5 with SMTP id
- ada2fe7eead31-4e9c2cf24d3mr410953137.15.1750372455117; Thu, 19 Jun 2025
- 15:34:15 -0700 (PDT)
+	s=arc-20240116; t=1750375198; c=relaxed/simple;
+	bh=vebIs/UoufwnNP8MVgPAlX9dhRYxs9Loe44ZLFLYVlc=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=lTOdSrw24B8wyqOMRqaVoz8RjTVMLaAoxDwkD7gXFPAckRgUa1cd7y1Tga9mxIzf8bWurGVJeJ39D2fe2GKXGMWKFmlSV6m3ajoIFSct+fVzeG/+0k+t6hFz2oTFOqw3yrSxDfNVeUIy4Vo9qFT3lHY7yVdmw2xvI7os7wHsM1k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=alyKC85k; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0D5AC4CEF0;
+	Thu, 19 Jun 2025 23:19:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750375198;
+	bh=vebIs/UoufwnNP8MVgPAlX9dhRYxs9Loe44ZLFLYVlc=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=alyKC85ku1caXXj/QcgvZixFReJHQFGjGyv6wv/H1yY58aa4yeFaHYU29EMIQQz/4
+	 NHA30u/Zk7Wdm6wNHmSYJnXdCN87VIFlOwS8+YmUGR50D7OgtVhlHx2kyNVdkVTEyB
+	 CbW/26D6kL1U7W1EdiJMwCwbh1yXpWKdTPgqhzxGOY60l64IFCqb3K8e1bjRnXpgZN
+	 /teLssqz9wfWmWVJCHUAYka1mXujb2GFVqq8olYQ7K9K+9st1U4D3eNQ/0ZX5cuqfI
+	 yqQboEu6818rZflq/crTGe4OqI88RriARiJLj3TPFm4+M3DaO9+2+rsagnCuJwUq8w
+	 iZ6SEGaywy7ug==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33C5038111DD;
+	Thu, 19 Jun 2025 23:20:27 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250617231733.181797-1-harishankar.vishwanathan@gmail.com>
- <20250617231733.181797-3-harishankar.vishwanathan@gmail.com>
- <5b3b620d04fc3bcf4286dc4bb8c6fd995df86a25.camel@gmail.com>
- <CAM=Ch05aDpkCZ7xF1Fs9SVrU8DFG7kofzRw4g4bkaUSdUsp3jQ@mail.gmail.com> <04a5d2572ca2af1ec4dbc9cab5c61b1d0d9af0a9.camel@gmail.com>
-In-Reply-To: <04a5d2572ca2af1ec4dbc9cab5c61b1d0d9af0a9.camel@gmail.com>
-From: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
-Date: Thu, 19 Jun 2025 18:34:04 -0400
-X-Gm-Features: Ac12FXyGtdXXkVrsVuq7BO53UmZ4YR6jgxU7w7dp-jZNI1PCHrcOg3bcAsbVjfc
-Message-ID: <CAM=Ch044aYYx_wJ+wPoDu6u0jqGk_18SyAkkTWf=ygofzDT2bw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] selftests/bpf: Add testcases for BPF_ADD and BPF_SUB
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: ast@kernel.org, m.shachnai@rutgers.edu, srinivas.narayana@rutgers.edu, 
-	santosh.nagarakatte@rutgers.edu, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, Matan Shachnai <m.shachnai@gmail.com>, 
-	Luis Gerhorst <luis.gerhorst@fau.de>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v4 0/4] netdevsim: implement RX statistics using
+ NETDEV_PCPU_STAT_DSTATS
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <175037522573.1016629.13558361368033224988.git-patchwork-notify@kernel.org>
+Date: Thu, 19 Jun 2025 23:20:25 +0000
+References: <20250618-netdevsim_stat-v4-0-19fe0d35e28e@debian.org>
+In-Reply-To: <20250618-netdevsim_stat-v4-0-19fe0d35e28e@debian.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: kuba@kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@google.com, pabeni@redhat.com, dw@davidwei.uk, shuah@kernel.org,
+ horms@kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, gustavold@gmail.com, joe@dama.to
 
-On Thu, Jun 19, 2025 at 5:55=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com=
-> wrote:
->
-> On Thu, 2025-06-19 at 17:13 -0400, Harishankar Vishwanathan wrote:
-> > On Wed, Jun 18, 2025 at 5:22=E2=80=AFPM Eduard Zingerman <eddyz87@gmail=
-.com> wrote:
-> > >
-> > > On Tue, 2025-06-17 at 19:17 -0400, Harishankar Vishwanathan wrote:
-[...]
-> Hm, I see, that's an interesting angle.
-> The problem is, if I do something silly changing the code and this
-> test fails I'd have a hard time understanding the expected output.
-> Therefore, I'd prefer something more obvious.
->
-> Maybe let's go with this:
->
->   SEC("tc")
->   __success
->   __naked void test1(void)
->   {
->         asm volatile (
->         "r3 =3D 0xa000000000000000 ll;"
->         "r4 =3D 0x0;"
->         "r4 =3D -r4;"
->         "r3 |=3D r4;"
->         "r3 +=3D r3;"
->         "r0 =3D 1;"
->         "exit;"
->         :
->         : __imm(bpf_get_prandom_u32)
->         : __clobber_all);
->   }
->
-> Here is verifier log comparison:
->
->   master: 5: (0f) r3 +=3D r3     ; R3_w=3Dscalar()
->   branch: 5: (0f) r3 +=3D r3     ; R3_w=3Dscalar(umin=3D0x400000000000000=
-0,umax=3D0xfffffffffffffffe)
->
-> ?
+Hello:
 
-Okay, this seems both readable and also demonstrates precision gains.
-I'll follow up with a
-v3 with similar updated test cases for full overflow and partial
-overflow for all the four functions.
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-[...]
+On Wed, 18 Jun 2025 01:32:41 -0700 you wrote:
+> The netdevsim driver previously lacked RX statistics support, which
+> prevented its use with the GenerateTraffic() test framework, as this
+> framework verifies traffic flow by checking RX byte counts.
+> 
+> This patch migrates netdevsim from its custom statistics collection to
+> the NETDEV_PCPU_STAT_DSTATS framework, as suggested by Jakub. This
+> change not only standardizes the statistics handling but also adds the
+> necessary RX statistics support required by the test framework.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,v4,1/4] netdevsim: migrate to dstats stats collection
+    https://git.kernel.org/netdev/net-next/c/f9e2511d80c2
+  - [net-next,v4,2/4] netdevsim: collect statistics at RX side
+    https://git.kernel.org/netdev/net-next/c/788eb4de608b
+  - [net-next,v4,3/4] net: add dev_dstats_rx_dropped_add() helper
+    https://git.kernel.org/netdev/net-next/c/27480a7c8f02
+  - [net-next,v4,4/4] netdevsim: account dropped packet length in stats on queue free
+    https://git.kernel.org/netdev/net-next/c/2a68a22304f9
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
