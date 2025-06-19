@@ -1,113 +1,127 @@
-Return-Path: <linux-kselftest+bounces-35331-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35332-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78B30ADFB0E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 03:59:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95567ADFB30
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 04:26:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 355CB3B6F72
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 01:59:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D8AB1BC0A6A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 02:26:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C60F21C9E1;
-	Thu, 19 Jun 2025 01:59:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABFC61F8AC5;
+	Thu, 19 Jun 2025 02:26:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CwK+zBVW"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="sPwtQQ1+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12A6E137932;
-	Thu, 19 Jun 2025 01:59:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A994319D07B;
+	Thu, 19 Jun 2025 02:26:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750298391; cv=none; b=iP/bFYE8qaNj+Pavs8fu3sAL7Cp6ogDM+qVx3HuGwpd4CVV5sqsgpvG87C9W+ZmefUHJ5m4VOfxLyPEz5HVTZEyFfLvQmJ29vyslK7dDu0+qbLluk+zgRDAhMvwCUA04LIg1dadr7qBTbkvBJTdxIM01YXatmYVnLhZ/PdV1Ra0=
+	t=1750299998; cv=none; b=Rr0aplDSgXHXYo+SSWSfXfWubZJXg45KfBmduqRQ0d3K9VnGvhegiyqyMIAqM0KUmQg0K4Y+Y7BXqPFHMcVht/HyYP3Ar/eI9OB2jjCtc3tBvM0rh2a2qABXFUMI9uiVxVv/LHbJd3EHxCv9fQEsuZU8u/+zlOmdU7iAEuiuHNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750298391; c=relaxed/simple;
-	bh=94mN+2+g5h25MlO4Cl08JCW2RHY0uDyNmsYiIn2eS/0=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=cs5Lu45UHPtL7kgJkGX4MgOWPUjuXTsMSS2uR4kB4Jk/qwmlan9vw4yvQwUs806qpVBGWC4kNIHs6uiVvqwQCJCUGNjaZ+i3+T5U1zFw7HQewPpYeQxk45KPMVbDcxL8fawatdPNYt8+wpl2SbaV8L66vIZLxY9ov/jQRvoumVw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CwK+zBVW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AB1AC4CEE7;
-	Thu, 19 Jun 2025 01:59:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750298390;
-	bh=94mN+2+g5h25MlO4Cl08JCW2RHY0uDyNmsYiIn2eS/0=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=CwK+zBVWd9Vt8zSivCtzR8ekuuA7p+dsyureeXvVPF4+kzM0iB0o/1GUz0svw6kVI
-	 ecIlNmV1yyU5D5c0ki3TBJZLgv4RvqL+M0MsMr20qQwj+mTQefW2ApQaGR8OiwZcCz
-	 J2225Ho4HJbQ7u/NeBzUI36iMMG6yJP56aLaYT9QJ4cI+KuAKoLT2LQmbysUD2FNre
-	 s8CNyHzFdJj7y6G74TxZclFFncO/ucFxgHG5HzljGsgtNNOca9D0/YkAuESlXpSZ4X
-	 S6ZuexGLDGU9jkptP+FYSEE9A0U7tA4xDX2/XYYNZkujBjuPGusUvkdX2hG/CqA1lS
-	 EOHj4+ALl+LbQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAEDF3806649;
-	Thu, 19 Jun 2025 02:00:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1750299998; c=relaxed/simple;
+	bh=bNa1LMr25XDkhPXvkNdxjEhOU+//U4wZlbl6WY4h7kw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WWXa+m5DdnHEDqWzmNAkzvmbULvNWwtoMJ8zOu9EbsJb7qbuVnTYtelIOiODvQd3qurCeTLjAnYLZEx+Da2dzhFkFpB8s2ax/5ImR3Q43iK9Yvw9vcWxhGkJf0LF2n1wnrowA5KgP1eokNU77pyEz7cODhqVfz2yknQIbX975KI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=sPwtQQ1+; arc=none smtp.client-ip=115.124.30.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1750299986; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=fdIXidgTQoJZ+pqA8Hrjl4qfJ3FwmVN/K/H7yiiXnsg=;
+	b=sPwtQQ1+g1TgTDoSNyFEiYjDSRhDt6iX0f15o4QIKUH38GSLEkMZR6AWIwtk1cPaYH0QUesixX5PofJH49/U1W1uAGA5ULJ45nwibTfe6pxJKycJUWAzk1azEo817hj6X35afMrsfLiA2JME8ozqg3kfbjDVsjf1j84dVQPvUiE=
+Received: from 30.221.131.111(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WeFTxhP_1750299985 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Thu, 19 Jun 2025 10:26:26 +0800
+Message-ID: <0a8d5fdb-28b9-41f5-a601-cf36641bddbf@linux.alibaba.com>
+Date: Thu, 19 Jun 2025 10:26:24 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RESEND PATCH] selftests/pidfd: align stack to fix SP alignment
+ exception
+To: Shuah Khan <skhan@linuxfoundation.org>, brauner@kernel.org,
+ shuah@kernel.org, will@kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc: baolin.wang@linux.alibaba.com, tianruidong@linux.alibaba.com,
+ catalin.marinas@arm.com, mark.rutland@arm.com
+References: <20250616050648.58716-1-xueshuai@linux.alibaba.com>
+ <ee095fdd-b3c1-4c41-9b06-a8e3695c1863@linuxfoundation.org>
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <ee095fdd-b3c1-4c41-9b06-a8e3695c1863@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v5 0/6] udp_tunnel: remove rtnl_lock dependency
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <175029841848.320658.9308379649509683113.git-patchwork-notify@kernel.org>
-Date: Thu, 19 Jun 2025 02:00:18 +0000
-References: <20250616162117.287806-1-stfomichev@gmail.com>
-In-Reply-To: <20250616162117.287806-1-stfomichev@gmail.com>
-To: Stanislav Fomichev <stfomichev@gmail.com>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, skalluru@marvell.com,
- manishc@marvell.com, andrew+netdev@lunn.ch, michael.chan@broadcom.com,
- pavan.chebbi@broadcom.com, ajit.khaparde@broadcom.com,
- sriharsha.basavapatna@broadcom.com, somnath.kotur@broadcom.com,
- anthony.l.nguyen@intel.com, przemyslaw.kitszel@intel.com, tariqt@nvidia.com,
- saeedm@nvidia.com, louis.peens@corigine.com, shshaikh@marvell.com,
- GR-Linux-NIC-Dev@marvell.com, ecree.xilinx@gmail.com, horms@kernel.org,
- dsahern@kernel.org, shuah@kernel.org, tglx@linutronix.de, mingo@kernel.org,
- ruanjinjie@huawei.com, idosch@nvidia.com, razor@blackwall.org,
- petrm@nvidia.com, kuniyu@google.com, sdf@fomichev.me,
- linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
- linux-rdma@vger.kernel.org, oss-drivers@corigine.com,
- linux-net-drivers@amd.com, linux-kselftest@vger.kernel.org, leon@kernel.org
 
-Hello:
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
 
-On Mon, 16 Jun 2025 09:21:11 -0700 you wrote:
-> Recently bnxt had to grow back a bunch of rtnl dependencies because
-> of udp_tunnel's infra. Add separate (global) mutext to protect
-> udp_tunnel state.
+在 2025/6/19 05:36, Shuah Khan 写道:
+> On 6/15/25 23:06, Shuai Xue wrote:
+>> The pidfd_test fails on the ARM64 platform with the following error:
+>>
+>>      Bail out! pidfd_poll check for premature notification on child thread exec test: Failed
+>>
+>> When exception-trace is enabled, the kernel logs the details:
+>>
+>>      #echo 1 > /proc/sys/debug/exception-trace
+>>      #dmesg | tail -n 20
+>>      [48628.713023] pidfd_test[1082142]: unhandled exception: SP Alignment, ESR 0x000000009a000000, SP/PC alignment exception in pidfd_test[400000+4000]
+>>      [48628.713049] CPU: 21 PID: 1082142 Comm: pidfd_test Kdump: loaded Tainted: G        W   E      6.6.71-3_rc1.al8.aarch64 #1
+>>      [48628.713051] Hardware name: AlibabaCloud AliServer-Xuanwu2.0AM-1UC1P-5B/AS1111MG1, BIOS 1.2.M1.AL.P.157.00 07/29/2023
+>>      [48628.713053] pstate: 60001800 (nZCv daif -PAN -UAO -TCO -DIT +SSBS BTYPE=-c)
+>>      [48628.713055] pc : 0000000000402100
+>>      [48628.713056] lr : 0000ffff98288f9c
+>>      [48628.713056] sp : 0000ffffde49daa8
+>>      [48628.713057] x29: 0000000000000000 x28: 0000000000000000 x27: 0000000000000000
+>>      [48628.713060] x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
+>>      [48628.713062] x23: 0000000000000000 x22: 0000000000000000 x21: 0000000000400e80
+>>      [48628.713065] x20: 0000000000000000 x19: 0000000000402650 x18: 0000000000000000
+>>      [48628.713067] x17: 00000000004200d8 x16: 0000ffff98288f40 x15: 0000ffffde49b92c
+>>      [48628.713070] x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
+>>      [48628.713072] x11: 0000000000001011 x10: 0000000000402100 x9 : 0000000000000010
+>>      [48628.713074] x8 : 00000000000000dc x7 : 3861616239346564 x6 : 000000000000000a
+>>      [48628.713077] x5 : 0000ffffde49daa8 x4 : 000000000000000a x3 : 0000ffffde49daa8
+>>      [48628.713079] x2 : 0000ffffde49dadc x1 : 0000ffffde49daa8 x0 : 0000000000000000
+>>
+>> According to ARM ARM D1.3.10.2 SP alignment checking:
+>>
+>>> When the SP is used as the base address of a calculation, regardless of
+>>> any offset applied by the instruction, if bits [3:0] of the SP are not
+>>> 0b0000, there is a misaligned SP.
+>>
+>> To fix it, align the stack with 16 bytes.
+>>
+>> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+>> ---
 > 
-> v5:
-> - remove unused variable (lkp@intel.com)
+> Assuming this is going through Christian's tree.
 > 
-> [...]
+> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+> 
+> Let me know if you would like me to pick it up.
+> 
+> thanks,
+> -- Shuah
 
-Here is the summary with links:
-  - [net-next,v5,1/6] geneve: rely on rtnl lock in geneve_offload_rx_ports
-    https://git.kernel.org/netdev/net-next/c/3e14960f3bd2
-  - [net-next,v5,2/6] vxlan: drop sock_lock
-    https://git.kernel.org/netdev/net-next/c/df5425b3bd85
-  - [net-next,v5,3/6] udp_tunnel: remove rtnl_lock dependency
-    https://git.kernel.org/netdev/net-next/c/1ead7501094c
-  - [net-next,v5,4/6] net: remove redundant ASSERT_RTNL() in queue setup functions
-    https://git.kernel.org/netdev/net-next/c/3a321b6b1f76
-  - [net-next,v5,5/6] netdevsim: remove udp_ports_sleep
-    https://git.kernel.org/netdev/net-next/c/e054c8ba3bce
-  - [net-next,v5,6/6] Revert "bnxt_en: bring back rtnl_lock() in the bnxt_open() path"
-    https://git.kernel.org/netdev/net-next/c/850d9248d2ea
+Hi, Shuah
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Thanks for your review.
+
+I send this fix in Mar, but it missed last linux version.
+I think I need your help to pick it up.
+
+Thanks.
+Shuai
+
 
 
 
