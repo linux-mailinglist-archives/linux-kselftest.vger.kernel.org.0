@@ -1,188 +1,166 @@
-Return-Path: <linux-kselftest+bounces-35333-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35334-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2752EADFBFB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 05:51:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 11FD3ADFC4E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 06:20:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D126F3BE947
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 03:51:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BB5AD3A9FA0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jun 2025 04:19:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C37262253FC;
-	Thu, 19 Jun 2025 03:51:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E429423C8BE;
+	Thu, 19 Jun 2025 04:19:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wp/wHoUl"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lh1HfRYm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40B684A3C
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Jun 2025 03:51:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4096418DB03
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Jun 2025 04:19:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750305082; cv=none; b=Xr3r/0bsn8fuBwCfj2M+A+hh/p5BEawco4QTuOGEKblAjwdRq0kqLRzwHgeCtylemyYd7FET8C+MC/VEHzKNzssrRRJXnLDGFUPAxSrLneHjuQHEPp0l0+nfOqLy/bNok+NGXZv0V0NJQfZ9+3+ZG+p6d7LdRbIAtKEaJd8zwy0=
+	t=1750306797; cv=none; b=Su6zcMvxXHlr14pqwi/T+3oAMu18NNqCWyCFVyGDFmzelGw1dvjG9Eum3Afrx2UC4p3UVVA911+m9Vz/mVXa8UpQGvqUoBLQl/qR/jVlbjFTQMCWJfhJ/olG+l46eumwvmVmfY3XKIHoxkdhkROaoQ/Jz3/8Uz/KmjMYMOCNKtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750305082; c=relaxed/simple;
-	bh=VpNyW0ROWgfUYLE5WLLIP0usn2NYLRidluOWP+fdkZQ=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Yt906NXhP0mK0JhcsvkfGqwsQx0/DxPh3/TEt7ahx/w6MaXMi+OJ2XwKKUZvDgKOm0Cz4nIc6SntcxGu2ScK6IZ5hJJ2f61HX8YgIU90GB82Lr073UkWXvfAfrKOEbF7+l0GyHneb9mdlFEW3mS20buxURHO3HW7Ekj3GexkURk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--yuyanghuang.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wp/wHoUl; arc=none smtp.client-ip=209.85.216.73
+	s=arc-20240116; t=1750306797; c=relaxed/simple;
+	bh=42+ZcWihADi6feelct3b85p6eGrRRLvD+RD7THwAKIY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kciJiyRv67aeUjxHDFiuwpqHsidpJCj43Y3CSL3ikZEv8YwPrI4juytR4kYmLe8p0AVgyVuHpIPpvUJD4kAqEqOGwQe8HX+x48c9mUi2r6sxY7Yi6kp45VNmIXktGZZTWMCsB4u9N5Hb8Krm4BlqREoeaDhb7uLoVh+1Gez6/UU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lh1HfRYm; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--yuyanghuang.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-313ff01d2a6so276560a91.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Jun 2025 20:51:21 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2348ac8e0b4so67495ad.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Jun 2025 21:19:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1750305080; x=1750909880; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XGFmtrSOLZS5chqBC2J4MeJGoAaFVE8hTVr40c3kU0c=;
-        b=wp/wHoUlLGqB/5VwqbixVu7v69a8iMdnJd+5cLLB6ZMVzgh1DjHrSszdBOGXgoUGtG
-         TJNtN08V5XBzvfMIpDs3L8ibTRzNW/7sLl0pA6FewvfdhawVfkyEF9FVU7gQX8KtC38a
-         eHDvxGCfSjbg9IensjwxsXC43L2PJAs5q+T527a5/U23CA71AzfyGJEEFdDu0xSsu1H6
-         U+hEPnICJfyjVOXFRY6iEIL841jjplMaTkbgOm2GdSLoISyh7WEwFZgLSLLI2pPdVy02
-         oK1P1vntKBYJG5okJNzmqlIBuCTU+EMhwbkc7YToYvX4aA3PotD0kaRoKQDFkhNdHdGt
-         hwYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750305080; x=1750909880;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1750306795; x=1750911595; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XGFmtrSOLZS5chqBC2J4MeJGoAaFVE8hTVr40c3kU0c=;
-        b=sROiNE9f3wmrAd0LyTRbpaq1Wf4vxX3+zSFFQpVpeu0l9URXn8XxLRYNRwsoicXc28
-         vOYnTf10W97V8uSYj/TQsnDLi91OkYoAIuV4u0XOzwHXRwZNrG6kG7JnsgGAbFzp7Zv4
-         G726EZxYmhRvhRQBrYd41nEof5T/V+gFVQmnPe84tN7TNkFjlg1QvgQFnpwNNYBgQdcL
-         XfW5TPKc6Ootka0OA/80fTSTO9zGALWMAXuAsMbNmJ/27oyGGiRQ9NvTpr8gguWTZFyf
-         eEw2p6QzhbgSq6D1jQX5xfKGepEtjNl+IoOsfq9FMCGRAic4HBwoEbEllmCqiw3zJ8kj
-         vxKg==
-X-Forwarded-Encrypted: i=1; AJvYcCWOt4FQB9NJRFi4vgNJX3e6ZCXGQooI7OQ/yh2Gtl9leRSIht4TAKcXwCT+Jy50RKmwdp+IxpsYZEUeuTRytpE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwKoXkYNx9KXT68Z+aiA9IHoHQ6tERqE+7ef4R4EsknpkuM349g
-	fSdMebv9R9u0+qkgiypP3bq6xMRHsVR/vdQAyelU6VG3jjYGEQMZdmc3OdgpGkI6KCiHYHx0D1W
-	2ssBAmjjFfLq4vTpwQ1IXwLWCMA==
-X-Google-Smtp-Source: AGHT+IGwHFGjFUNh199bLDHACwbMp86uGWnYQdiUa3Y7XA1SzRiRfsE0FPtlC2echswDJTSrh8srQKkV2amRC6Ze5w==
-X-Received: from pja15.prod.google.com ([2002:a17:90b:548f:b0:312:fb53:41c0])
- (user=yuyanghuang job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90a:c107:b0:311:ad7f:3281 with SMTP id 98e67ed59e1d1-313f1ca70acmr35957972a91.12.1750305080597;
- Wed, 18 Jun 2025 20:51:20 -0700 (PDT)
-Date: Thu, 19 Jun 2025 12:51:16 +0900
+        bh=IdPPLCnOw1JLV4SAcVZKzEB7UTqx2yTdOYlcY0aplos=;
+        b=lh1HfRYmZOM7QoSsVjJssw7UGIlzRCqGywIXld6UFxwME6B+JaMhB3KyPP0RxWBP8u
+         FqvbGul5cJyTmDTTCCmcpa1Hk091H0GbzLDlrgiBqkCbV769ozj35bjGyRkYmX2iWL5u
+         7e+oTA3ghvmJQF4MK3GGHOt7GCjYqICINowCUBBOtpl5ZQib4JhIEJ+rRKLvdSnBlTI9
+         +Dp1n6Xf6G8tU38uUi9f2MelY/xSXgfcTXW3Y+Fai1y/FlGoFxnyKFvHfL7AQxDzTxDP
+         asHjKzumuPpOyAyW6oW6kzNt0D8QjqBcVsSx8v90HPvJ1oLoinVh4lTTH++PkmcM08G8
+         WyDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750306795; x=1750911595;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IdPPLCnOw1JLV4SAcVZKzEB7UTqx2yTdOYlcY0aplos=;
+        b=D4jEVX0IqSGut0NjNAVvDPa+k/aq2ZH5CIEg8TTwVE58GRQpsoIitkx09bkVTtSvbz
+         1kUwh79GdF0kj6peagvovgUKTLwZu7YBaSsW6iOJB/wmvr6n26jOeMZV5b0HZqIE0CVP
+         RWyaqPbBaA5z7SK/K0E7Blx6rGoEqy9zRSpfBXdtS3vLzC/dBbPZHO9zezl6P5Px8SJH
+         u5hVQt6zZg/0LwC8B9yKdZzoJyIXdmvkl2cKlck+Tu3Yo6+FM9Eo+G7JPYY7w8CSqtTY
+         mqXsxnAResL4RzEKyczBQrDI9HbliaJTNG0nLZXaNJxO4FTO8ba0i8Djzdq+jKKQYsPw
+         CeaQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVeKQNt3Cpz9p+07iGJT6juBLbdnKSemxp8sr7wxpV9BT2H2bYFisykPugAsL1ToASNMV6ibpuBrgQ2ozdZvQE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyjUAMIr0RjfX6+riSwLPnyXzH28Zk2kE7o+udo3dCvHGeRlpRP
+	feyTMI3dKuuWpN8CsONzNXpqdEl8OAGWBDnt5kL9dpAbwe3dYqmAHP7LGPO/JQtbsgs8gKWqL24
+	Ecp8mTm+icU5ON6JZp5tjEDWxN7poni26eD+gYVMK
+X-Gm-Gg: ASbGncvNBd/Jcp652wxQosXOVrTC8UVD5x2+aMdo6AqBH00jCJoC6EF/1jvdroIF7QW
+	mOOcrn+iFg3lIGhvM4VrYUpplW5InLiiDMtSTQ+diNJiEoRvtLI9XZ9scdY7RnlXa5uvmEHYofd
+	yRgYJIRSqJl8muuBCPm92WGnHIe+Lf/pnhzuRWL9iHHyAr
+X-Google-Smtp-Source: AGHT+IG4/KdYP+fN9Tz4EPFqPl59lyfp5z5oElErmQ39hgdiqIKMNL14Yst10Fryuqu/ixWcQkhafk8e9lBxMFD/+CA=
+X-Received: by 2002:a17:902:d484:b0:234:b441:4d4c with SMTP id
+ d9443c01a7336-237cdfe93c4mr1247815ad.5.1750306794932; Wed, 18 Jun 2025
+ 21:19:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.50.0.rc2.701.gf1e915cc24-goog
-Message-ID: <20250619035116.3761921-1-yuyanghuang@google.com>
-Subject: [PATCH net-next, v2] selftest: add selftest for anycast notifications
-From: Yuyang Huang <yuyanghuang@google.com>
-To: Yuyang Huang <yuyanghuang@google.com>
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, 
-	"=?UTF-8?q?Maciej=20=C5=BBenczykowski?=" <maze@google.com>, Lorenzo Colitti <lorenzo@google.com>
+MIME-Version: 1.0
+References: <20250615205914.835368-1-almasrymina@google.com>
+ <c126182c-8f26-41e2-a20d-ceefc2ced886@kernel.org> <CAHS8izPyzJvchqFNrRjY95D=41nya8Tmvx1eS9n0ijtHcUUETA@mail.gmail.com>
+ <f445633e-b72c-4b5d-bb18-acda1c1d4de6@kernel.org>
+In-Reply-To: <f445633e-b72c-4b5d-bb18-acda1c1d4de6@kernel.org>
+From: Mina Almasry <almasrymina@google.com>
+Date: Wed, 18 Jun 2025 21:19:41 -0700
+X-Gm-Features: AX0GCFvx-B1b2Dd3L5vrSsW0UL1IAM66_kMPRqHS2OPCt7MkBpentxKfBxCiSAk
+Message-ID: <CAHS8izOhNRNXyAgfuKW1xKb8PTernfer6tJfxG5FZmq7pePjwA@mail.gmail.com>
+Subject: Re: [PATCH net-next v4] page_pool: import Jesper's page_pool benchmark
+To: Jesper Dangaard Brouer <hawk@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>, 
+	Ignat Korchagin <ignat@cloudflare.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-This commit adds a new kernel selftest to verify RTNLGRP_IPV6_ACADDR
-notifications. The test works by adding/removing a dummy interface,
-enabling packet forwarding, and then confirming that user space can
-correctly receive anycast notifications.
+On Wed, Jun 18, 2025 at 5:46=E2=80=AFAM Jesper Dangaard Brouer <hawk@kernel=
+.org> wrote:
+> >> Something is off with benchmark numbers compared to the OOT version.
+> >>
+> >
+> > I assume you're comparing my results (my kernel config + my hardware +
+> > upstream benchmark) with your results (your kernel config + your
+> > hardware + OOT version). The problem may be in OOT vs upstream but it
+> > may be just different code/config/hardware.
+>
+> True I used OOT version.
+>
+> Just applied this patch, but I get compile error. Because Makefile tries
+> to get kernel headers (net/page_pool/helpers.h) from local Linux
+> installation instead of git tree.  This need to be adjusted for patch,
+> such that it builds with src-local/git tree provided headers.
+>
 
-The test relies on the iproute2 version to be 6.13+.
+I believe the fix to that is to do:
 
-Tested by the following command:
-$ vng -v --user root --cpus 16 -- \
-make -C tools/testing/selftests TARGETS=3Dnet
-TEST_PROGS=3Drtnetlink_notification.sh \
-TEST_GEN_PROGS=3D"" run_tests
+make KDIR=3D$(pwd) -C ./tools/testing/selftests/net/bench
 
-Cc: Maciej =C5=BBenczykowski <maze@google.com>
-Cc: Lorenzo Colitti <lorenzo@google.com>
-Signed-off-by: Yuyang Huang <yuyanghuang@google.com>
----
+I.e. the build files assume you're building the test to run it on the
+current machine, to cross compile it for a different machine under
+test, we need to pass explicit KDIR. I've kinda copy-pasted what other
+TEST_GEN_MODS_DIR=3D makefiles do. In theory we could do something else
+but I am guessing the way current TEST_GEN_MODS_DIR does it is the way
+to go. Does it work for you if you do that?
 
-Changelog since v1:
-- Remote unrelated clean up code.
+[...]
+> >
+> > Yeah, I actually just checked and I have CONFIG_DEBUG_NET on in my
+> > build, and a lot of other debug configs are turned on.
+> >
+>
+> The CONFIG_DEBUG_NET should be low overhead, so I don't expect this to
+> be the root-cause.  Other CONFIG options are more likely the issue.
+>
 
- .../selftests/net/rtnetlink_notification.sh   | 44 ++++++++++++++++++-
- 1 file changed, 43 insertions(+), 1 deletion(-)
+Thank you very much for the tips. Perf report showed the locking was
+taking forever on my kernel... I had locking debug configs enabled in
+my build... sorry... with those disabled, I get much more sane
+results:
 
-diff --git a/tools/testing/selftests/net/rtnetlink_notification.sh b/tools/=
-testing/selftests/net/rtnetlink_notification.sh
-index 39c1b815bbe4..3f9780232bd6 100755
---- a/tools/testing/selftests/net/rtnetlink_notification.sh
-+++ b/tools/testing/selftests/net/rtnetlink_notification.sh
-@@ -8,9 +8,11 @@
-=20
- ALL_TESTS=3D"
- 	kci_test_mcast_addr_notification
-+	kci_test_anycast_addr_notification
- "
-=20
- source lib.sh
-+test_dev=3D"test-dummy1"
-=20
- kci_test_mcast_addr_notification()
- {
-@@ -18,7 +20,6 @@ kci_test_mcast_addr_notification()
- 	local tmpfile
- 	local monitor_pid
- 	local match_result
--	local test_dev=3D"test-dummy1"
-=20
- 	tmpfile=3D$(mktemp)
- 	defer rm "$tmpfile"
-@@ -56,6 +57,47 @@ kci_test_mcast_addr_notification()
- 	return $RET
- }
-=20
-+kci_test_anycast_addr_notification()
-+{
-+	RET=3D0
-+	local tmpfile
-+	local monitor_pid
-+	local match_result
-+
-+	tmpfile=3D$(mktemp)
-+	defer rm "$tmpfile"
-+
-+	ip monitor acaddress > "$tmpfile" &
-+	monitor_pid=3D$!
-+	defer kill_process "$monitor_pid"
-+	sleep 1
-+
-+	if [ ! -e "/proc/$monitor_pid" ]; then
-+		RET=3D$ksft_skip
-+		log_test "anycast addr notification: iproute2 too old"
-+		return "$RET"
-+	fi
-+
-+	ip link add name "$test_dev" type dummy
-+	check_err $? "failed to add dummy interface"
-+	ip link set "$test_dev" up
-+	check_err $? "failed to set dummy interface up"
-+	sysctl -qw net.ipv6.conf."$test_dev".forwarding=3D1
-+	ip link del dev "$test_dev"
-+	check_err $? "Failed to delete dummy interface"
-+	sleep 1
-+
-+	# There should be 2 line matches as follows.
-+	# 9: dummy2    inet6 any fe80:: scope global
-+	# Deleted 9: dummy2    inet6 any fe80:: scope global
-+	match_result=3D$(grep -cE "$test_dev.*(fe80::)" "$tmpfile")
-+	if [ "$match_result" -ne 2 ]; then
-+		RET=3D$ksft_fail
-+	fi
-+	log_test "anycast addr notification: Expected 2 matches, got $match_resul=
-t"
-+	return "$RET"
-+}
-+
- #check for needed privileges
- if [ "$(id -u)" -ne 0 ];then
- 	RET=3D$ksft_skip
+[  185.557293] bench_page_pool: time_bench_page_pool01_fast_path():
+Cannot use page_pool fast-path
+[  185.607873] bench_page_pool: Type:no-softirq-page_pool01 Per elem:
+11 cycles(tsc) 4.177 ns (step:0) - (measurement period
+time:0.041772642 sec time_interval:41772642) - (invoke count:10000000
+tsc_interval:112778487)
+[  185.627090] bench_page_pool: time_bench_page_pool02_ptr_ring():
+Cannot use page_pool fast-path
+[  185.826991] bench_page_pool: Type:no-softirq-page_pool02 Per elem:
+51 cycles(tsc) 19.117 ns (step:0) - (measurement period
+time:0.191178107 sec time_interval:191178107) - (invoke count:10000000
+tsc_interval:516173586)
+[  185.846380] bench_page_pool: time_bench_page_pool03_slow(): Cannot
+use page_pool fast-path
+[  186.479432] bench_page_pool: Type:no-softirq-page_pool03 Per elem:
+168 cycles(tsc) 62.469 ns (step:0) - (measurement period
+time:0.624690697 sec time_interval:624690697) - (invoke count:10000000
+tsc_interval:1686656879)
+
+Does this alleviate your concern? Or do you still see an issue here?
+There is still a delta between our results, on different
+hardware/configs but results are in a sane range now.
+
 --=20
-2.50.0.rc2.701.gf1e915cc24-goog
-
+Thanks,
+Mina
 
