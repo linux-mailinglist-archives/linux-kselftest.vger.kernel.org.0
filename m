@@ -1,119 +1,92 @@
-Return-Path: <linux-kselftest+bounces-35427-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35428-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D76DAE1983
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Jun 2025 13:03:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 505FBAE19BB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Jun 2025 13:13:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 561FD17D490
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Jun 2025 11:03:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7C3983B416F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Jun 2025 11:11:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F1982853F1;
-	Fri, 20 Jun 2025 11:03:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="1UYH/jTm";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="y4ReoX7H"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 321D8289E1F;
+	Fri, 20 Jun 2025 11:12:00 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4521283FEE;
-	Fri, 20 Jun 2025 11:03:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84680288CBF;
+	Fri, 20 Jun 2025 11:11:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750417385; cv=none; b=anVLUP/yThPWaJJq+1/hffJt/x1w9XIKfLShfQjlyljfzV0qdSowFpKdvWFpbvXcPFun4XxZ0hIryu1Miwfli1B7cLI6X4sqUYBYmyt2VvVT5vPEXWeaeJ73fm87T4QsYsn3DTcbU/m3xKgtys7joB04JljK15B92Kd9WM1aYgY=
+	t=1750417920; cv=none; b=rwTRH6iHM4aNczs1JoWDaaRvs2Gr/ipjmx+pORtQvCoEtOIDMXIaq9WZJDX66x+1FqW6F/cn/FOWkKMt7S18flpOYXmnKaeW16QvziXMlZj4gJ4Isu4DMCUBLV8oprRbSPTRo+67O2QMv9/RvhTKSzmcfRY+4UST0HHT6fahiS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750417385; c=relaxed/simple;
-	bh=VyKy7ZblJIux9A8nr4UKOBkLEzekMiA4P1J54fnWw9I=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=e6zIATmspK97F5GwzCAInHx1yodyjZKAHdY3c5ZaUaeTLXukRDT7hPBB4uI6YgZIqy86M0X9ykEEC1RKr9DkIDxXnqpxNnDeMn7XGNU6fXnL0SzqPwxivmwnlolcDxm+Hwi70mLGnEGGZrArDmiOjMxBbJHe7VLwRQXKu3lgbMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=1UYH/jTm; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=y4ReoX7H; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Nam Cao <namcao@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1750417379;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=oGBO/Bsd9Ek7GSchB/P0tD6LqkXEF7CldRyZjA/Vzn4=;
-	b=1UYH/jTmoqNtisk0sd6H+kx4BMUL36RaQo3TE7OpOaUw0b5Na7GpkCvL2ZRMCBOKTvmGy9
-	YZukfkqX1aUw05oJkVzmgo27Rq6CTXb7upgl81qsHiJ3Xd2kNGTPsJGTU3aJP+SnICrE0e
-	A/LK6ZQaulEAv9qIhaF7MI7ZGvmvIItWtRwaTfbewMmGqzWF7phhDOZA75R2qFq2L1xbJ0
-	Y99zE2Zv5/3w8PAqaTC1rEtk0Ej2tg4I3y+yL6krKXqxCCGWJnpUusoacDIkyQJ4nQ85T5
-	vD3bD72YqPd/bV1Rb5rRDC/qnq8Etk18fUGY/H/JpWRtsEdoLRREClNoDBWGag==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1750417379;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=oGBO/Bsd9Ek7GSchB/P0tD6LqkXEF7CldRyZjA/Vzn4=;
-	b=y4ReoX7HpOtcCFEmySKh4pv1Io1/H2aWd803okTb2PyIjrrl4hheYhuxdiRInoT8Q803gQ
-	a8LinyR3edIM5UBA==
-To: Christian Brauner <brauner@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Jan Kara <jack@suse.cz>,
-	Shuah Khan <shuah@kernel.org>,
-	Luca Boccassi <luca.boccassi@gmail.com>,
-	Alexander Mikhalitsyn <alexander@mihalicyn.com>,
-	linux-kselftest@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Nam Cao <namcao@linutronix.de>
-Subject: [PATCH] selftests/coredump: Fix "socket_detect_userspace_client" test failure
-Date: Fri, 20 Jun 2025 13:02:52 +0200
-Message-Id: <20250620110252.1640391-1-namcao@linutronix.de>
+	s=arc-20240116; t=1750417920; c=relaxed/simple;
+	bh=C3sH3mhSfvedE6q+7+YDcLAOXFJCWeiEUkujc6ssmgU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=f2R8G9XQNkrqgG/SHHTVzgALAMaU+YZx5nTWWZ03gGvKQISzeQQMhmcM5bzgoW3gIDjcm5V83SuV98pOB++LwaoEmABRHeMKdWQG7LJ7gYfIBvZ8QPeMWaIsTDHHIfkoM9JVGJPkSib5v4rETXKZDc6qo/S0r3F9oWHnlDow8rQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 45776176A;
+	Fri, 20 Jun 2025 04:11:38 -0700 (PDT)
+Received: from MacBook-Pro.blr.arm.com (MacBook-Pro.blr.arm.com [10.164.18.46])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 952DD3F673;
+	Fri, 20 Jun 2025 04:11:54 -0700 (PDT)
+From: Dev Jain <dev.jain@arm.com>
+To: akpm@linux-foundation.org,
+	shuah@kernel.org
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	anshuman.khandual@arm.com,
+	ryan.roberts@arm.com,
+	lorenzo.stoakes@oracle.com,
+	david@redhat.com,
+	donettom@linux.ibm.com,
+	Dev Jain <dev.jain@arm.com>
+Subject: [PATCH] selftests/mm: Fix validate_addr helper
+Date: Fri, 20 Jun 2025 16:41:50 +0530
+Message-Id: <20250620111150.50344-1-dev.jain@arm.com>
+X-Mailer: git-send-email 2.39.3 (Apple Git-146)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-The coredump.socket_detect_userspace_client test occasionally fails:
-    #  RUN           coredump.socket_detect_userspace_client ...
-    # stackdump_test.c:500:socket_detect_userspace_client:Expected 0 (0) !=
-=3D WIFEXITED(status) (0)
-    # socket_detect_userspace_client: Test terminated by assertion
-    #          FAIL  coredump.socket_detect_userspace_client
-    not ok 3 coredump.socket_detect_userspace_client
+validate_addr() function checks whether the address returned by mmap()
+lies in the low or high VA space, according to whether a high addr hint
+was passed or not. The fix commit mentioned below changed the code in
+such a way that this function will always return failure when passed
+high_addr == 1; addr will be >= HIGH_ADDR_MARK always, we will fall
+down to "if (addr < HIGH_ADDR_MARK)" and return failure. Fix this.
 
-because there is no guarantee that client's write() happens before server's
-close(). The client gets terminated SIGPIPE, and thus the test fails.
-
-Add a read() to server to make sure server's close() doesn't happen before
-client's write().
-
-Fixes: 7b6724fe9a6b ("selftests/coredump: add tests for AF_UNIX coredumps")
-Signed-off-by: Nam Cao <namcao@linutronix.de>
+Fixes: d1d86ce28d0f ("selftests/mm: virtual_address_range: conform to TAP format output")
+Signed-off-by: Dev Jain <dev.jain@arm.com>
 ---
- tools/testing/selftests/coredump/stackdump_test.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ tools/testing/selftests/mm/virtual_address_range.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/coredump/stackdump_test.c b/tools/test=
-ing/selftests/coredump/stackdump_test.c
-index 9984413be9f06..68f8e479ac368 100644
---- a/tools/testing/selftests/coredump/stackdump_test.c
-+++ b/tools/testing/selftests/coredump/stackdump_test.c
-@@ -461,10 +461,15 @@ TEST_F(coredump, socket_detect_userspace_client)
- 			_exit(EXIT_FAILURE);
- 		}
-=20
-+		ret =3D read(fd_coredump, &c, 1);
-+
- 		close(fd_coredump);
- 		close(fd_server);
- 		close(fd_peer_pidfd);
- 		close(fd_core_file);
-+
-+		if (ret < 1)
-+			_exit(EXIT_FAILURE);
- 		_exit(EXIT_SUCCESS);
- 	}
- 	self->pid_coredump_server =3D pid_coredump_server;
---=20
-2.39.5
+diff --git a/tools/testing/selftests/mm/virtual_address_range.c b/tools/testing/selftests/mm/virtual_address_range.c
+index b380e102b22f..169dbd692bf5 100644
+--- a/tools/testing/selftests/mm/virtual_address_range.c
++++ b/tools/testing/selftests/mm/virtual_address_range.c
+@@ -77,8 +77,11 @@ static void validate_addr(char *ptr, int high_addr)
+ {
+ 	unsigned long addr = (unsigned long) ptr;
+ 
+-	if (high_addr && addr < HIGH_ADDR_MARK)
+-		ksft_exit_fail_msg("Bad address %lx\n", addr);
++	if (high_addr) {
++		if (addr < HIGH_ADDR_MARK)
++			ksft_exit_fail_msg("Bad address %lx\n", addr);
++		return;
++	}
+ 
+ 	if (addr > HIGH_ADDR_MARK)
+ 		ksft_exit_fail_msg("Bad address %lx\n", addr);
+-- 
+2.30.2
 
 
