@@ -1,176 +1,320 @@
-Return-Path: <linux-kselftest+bounces-35394-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35395-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDDC2AE10EC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Jun 2025 04:07:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C11EEAE10FB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Jun 2025 04:16:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB5BB3BE1E7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Jun 2025 02:07:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5A5C14A1E8C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Jun 2025 02:16:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 272CA15574E;
-	Fri, 20 Jun 2025 02:07:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79A8534CF5;
+	Fri, 20 Jun 2025 02:16:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="dBy+VZn3"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="XplCFzea"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD5A514F9EB;
-	Fri, 20 Jun 2025 02:07:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.243.244.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E2A935950
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Jun 2025 02:16:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750385233; cv=none; b=iGVXabIPlEuUskDif25pccjiVGG1nsU38vFAtDLCiWutpAOiGZZmz9YH8/7xWWwoDZZZPPUPF3zbfV/Lby5hyHJzM1t6VGzv3xA/zlHec6Ut+2OUQa8JTNOqM7HNM8Cyi2kM2ST4chBSkkVPB4qRX9pufZCoOJuuKbf+in6fRbE=
+	t=1750385788; cv=none; b=UJfyVHHuE/T62cpNIHcT6vR4hQw6Kyf32Kyoy1bnqAux1vYJZYfe0FxNinpETtKwTRh+KNR3csoi9PM4FXgcsk+SjNjjZBG5W0J4OmR+lUMxpaMjfMRcvyGl+WDldz6Al+G1ev/eZz5RbqXZWgF0u4ZIujwxljE3KEPUi1XnAXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750385233; c=relaxed/simple;
-	bh=kYNKNmk6YJhkY5ahWJHqPWl9frwIrTQY4JiPKuXITvo=;
+	s=arc-20240116; t=1750385788; c=relaxed/simple;
+	bh=g5OW8tuvyxUA+t6pLcKEEoc1EraU6/LLk2G3G1r0G+8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CyzunNmL6/uqqFdx6hsELjzwTWVf/mJhO0AxPShnf+rsHY0CJhHaCTBvRWX5W9LCqga6LNye1xpTi5hzYz0nVSZs9+w2yv283/vuRRaw1mHtLPHGk7SVth1J+2032XYzVqji9MzvfYNVt3C3zz6BhfnZhI1uZMKE6aXhKfruzmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=dBy+VZn3; arc=none smtp.client-ip=54.243.244.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1750385214;
-	bh=b7wJ/bqV+s097aiwL/uQ42PKXT60gGGw54i379c/L/k=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To;
-	b=dBy+VZn3r+Ap8LvUthCh5zC1u41b+a8by+32IFtte6g6Z4ooi44XHUmpX8f+XWPYP
-	 6f+MzX2mu8y5Wg5L5VMNFsW53BbKMp+p68BGcmBWBd6BSD86NrYPeqeMy68BIeMfEI
-	 5DtCYSuBhfVILkuIX2AhbEpY+yMbMnxn0/svAq8E=
-X-QQ-mid: zesmtpsz9t1750385208t3897f19b
-X-QQ-Originating-IP: cg7FGxWJmLEfZWjIyhD73nBa2uYPvIjGl0K+HayZnYA=
-Received: from mail-yw1-f172.google.com ( [209.85.128.172])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Fri, 20 Jun 2025 10:06:47 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 10565298664502637221
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-70e302191a3so13114227b3.2;
-        Thu, 19 Jun 2025 19:06:48 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUZ7wIDPLB9jKHGcg6s9zlIqmiVK3QJHDpVOTfBwCyRPsp8Ziu66eZpNEcl++KgBn46PbY/V4+rkitXcOg8FHOC@vger.kernel.org, AJvYcCXxv59aiLZqXOqJR5NohAluVNRTjhKpqLPjzFLwapKffdPrJytP4O1zbL00cNumSI7k57rA3uA/vXeE8lg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxUTb/Pr1wmtfx1SQfF9SYfazoNgDbSyuxpWo6j3OUzI295Rri8
-	jq5k+AbHIN/q5W8aH0mi5F2F58UkoZwOBuhegbL+LnKO9igKphbRnUiWPkSTd65arAkXyKRAyeZ
-	hckXwgrzb6MiX4VGWgfUFJaOncF0nkHw=
-X-Google-Smtp-Source: AGHT+IEuCT0NfTStQwX1w1oAE43j3dpE6iffgZEEN2Sc4FCect6ZxQcJb+R0nE1Iql9bHLN19lLPDxtazvv569ESkhw=
-X-Received: by 2002:a05:690c:7447:b0:70c:b882:305 with SMTP id
- 00721157ae682-712c68d0bdcmr17286227b3.36.1750385206198; Thu, 19 Jun 2025
- 19:06:46 -0700 (PDT)
+	 To:Cc:Content-Type; b=l3LuBuo5cwT1Tc9NQ3bl3MFUsWiCxtinrerXIgTc4VGbDuB+CO72mfQwMmMBsiMn+KYneWz25GQpzOL3jiF+Bn3YNYjDKnLA9DnhWStBhSxuv1KDpszUFaXdx/iZnb05KEbLYNycyVFI31irkNqta6evzKUmhEjJxxOtkJKR/ZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=XplCFzea; arc=none smtp.client-ip=209.85.166.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+Received: by mail-io1-f51.google.com with SMTP id ca18e2360f4ac-875dd57d63bso44209739f.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Jun 2025 19:16:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1750385784; x=1750990584; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=x6VzlhRVh//x5/bp+2ihBVL31M01Rg7PAdE9X0/n0so=;
+        b=XplCFzeaT0UI3xYRmaARyqEdD97XMne1e3DHmUxq4ajv1NXr3mZN6+HpBn8+p4y2vC
+         ZIffVKiUiG6KqmOdRuglV8AMpVVmK4nQTkuQSjZlY1bJ3tlTIJtJsnRVEpwYPO8bF9ZX
+         giodreBA5Y6kd9L+peqjqAaxHRKKBPHIrTMEqj5/1zVehCA4H5ioBfnGCDoUjl1btvGI
+         JJSJ5VgF+p49cEhlNOYrOoebp+TLtvBmv8rMIAvDfPLEKH8iJ4gBUk+BkE/JCwXSq42/
+         t/oyEI5d6twFBpd+vHXXEusMArMv3k+DWtDse9duVqJ/nAclXbHwBvjmkeTMQd910xpN
+         opeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750385784; x=1750990584;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=x6VzlhRVh//x5/bp+2ihBVL31M01Rg7PAdE9X0/n0so=;
+        b=pvRU4NKHsAtbtrPluJUvESlrbgsdboBALiDUWJZdf11GR43+xskw8sqZznknKALXyK
+         44LIW/GM9hs4GfrCljI7vZS6YD8pvB7b/OfbBYDD2SD5X8PyXV3YHvfRhYzVegzpoyyM
+         exEA/Z/q1RWujXocXZwR5Fsra1LGAl+vYFaiVFznaOYM+SxvgRHJutB8WK5qGIvH35IM
+         jFkxwhs6RNIm3bjmSVpjeRhBTe4we+qDHtdOcUMJR/XVBpNZHqgFb8pw/rjiU2QiNeI+
+         7MOIhMJ7rw4UCvRnxQ5n8a6ShgybqZv4SX79uWPmcuqUuLbQu8HIgd8hdhhFrOh5yLMW
+         AYdg==
+X-Forwarded-Encrypted: i=1; AJvYcCVL9da8x6FGP0I3NWz9Ty/l/oFB7jmsqTiIPq1wQPZdQNu0Ak/T8YwNizqjZE1/xNPsAGOut8MDaoQMLpilgh0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxQUk/2XRAReK/PHvkNgVHeC0YEuM9KwmtZnpbUvAFYP0Hnkygx
+	RSfPCP4kLatemv/3/pAF4rTb4a4raPGYUvJFkkWRqJ9Z67Owz55auQ1Ab8579EICMeFn59BkHgR
+	ookHjpHNs9+Z3ZD6VrH3ZE6Gr/5Ucnxpssv8HyXEiQg==
+X-Gm-Gg: ASbGnct3LTXR6Nl/AgY0nzbdpy1Tf+rfY5pKWW7BHwZqyMhw8NnP9UozmYv4k1jupDx
+	470kt0tAAvX8N2jwAZAbr5DzqKewnNagkyJ6dGxuT+8e6lDsCDPnopEvOFkKEAMkI9HuOmntobn
+	tVANsmVDf3R90Q47x/EwmVum0yB5tAXUR9AkYiV+OYx5g3Og==
+X-Google-Smtp-Source: AGHT+IFMb9mI6JMrDwTDWGg+EBY6yLgAqHEKa1UTY7olo+luMJ+3DWC5EwQujeTUmlUkh6NOSS/MWljD6rFkZYVc5ek=
+X-Received: by 2002:a05:6602:8303:b0:867:15a5:d16 with SMTP id
+ ca18e2360f4ac-8762e7372bemr28998539f.8.1750385784285; Thu, 19 Jun 2025
+ 19:16:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250610020758.2798787-2-chenlinxuan@uniontech.com>
- <6972404e-0237-47b9-8e3e-15551bea3440@linuxfoundation.org>
- <CAC1kPDPg0AN9Ft3SNM6JDcZf=XD1oinqeAMzuRpZF3nzemZ=Kg@mail.gmail.com>
- <265ebc1f-b0c0-4c57-92b2-41714469c7f5@linuxfoundation.org>
- <91817e12-54c4-4241-b895-2e452a00e0c4@nvidia.com> <f73fa51e-87e5-4805-bbbc-a7af9b50a1d8@linuxfoundation.org>
-In-Reply-To: <f73fa51e-87e5-4805-bbbc-a7af9b50a1d8@linuxfoundation.org>
-From: Chen Linxuan <chenlinxuan@uniontech.com>
-Date: Fri, 20 Jun 2025 10:06:34 +0800
-X-Gmail-Original-Message-ID: <9BB87B5BE7E0A790+CAC1kPDMW=htR_4EHCz6T=GVTOvfq6urqzUWDGev9MEfi26deWg@mail.gmail.com>
-X-Gm-Features: AX0GCFumwtCnOIIPi8b0T3Xu7a243MLsXhutl7Hmd9KazaB5QGtU_DEXeoliyo4
-Message-ID: <CAC1kPDMW=htR_4EHCz6T=GVTOvfq6urqzUWDGev9MEfi26deWg@mail.gmail.com>
-Subject: Re: [PATCH RESEND] selftests: Suppress unused variable warning
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: John Hubbard <jhubbard@nvidia.com>, Chen Linxuan <chenlinxuan@uniontech.com>, 
-	Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>, 
-	Amir Goldstein <amir73il@gmail.com>, Miklos Szeredi <mszeredi@redhat.com>, Jan Kara <jack@suse.cz>, 
-	zhanjun@uniontech.com, niecheng1@uniontech.com, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250604-v5_user_cfi_series-v17-0-4565c2cf869f@rivosinc.com>
+ <20250604-v5_user_cfi_series-v17-15-4565c2cf869f@rivosinc.com> <CANXhq0pRXX_OMW2g2ui-k7Z_ZT+5a8Sra8oE28nBh5B9K2L5bQ@mail.gmail.com>
+In-Reply-To: <CANXhq0pRXX_OMW2g2ui-k7Z_ZT+5a8Sra8oE28nBh5B9K2L5bQ@mail.gmail.com>
+From: Zong Li <zong.li@sifive.com>
+Date: Fri, 20 Jun 2025 10:16:12 +0800
+X-Gm-Features: AX0GCFudFSxSRELkYOW_7RRTcSiKTWMBH5CUlpZzl260C95QwRIsmCDm3_hQ72g
+Message-ID: <CANXhq0p3MVLMsr_r0RWMti476pT0EMx61PQArjo2fUauTdpXaQ@mail.gmail.com>
+Subject: Re: [PATCH v17 15/27] riscv/traps: Introduce software check exception
+ and uprobe handling
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Christian Brauner <brauner@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Oleg Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, Jann Horn <jannh@google.com>, 
+	Conor Dooley <conor+dt@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, alistair.francis@wdc.com, 
+	richard.henderson@linaro.org, jim.shu@sifive.com, andybnac@gmail.com, 
+	kito.cheng@sifive.com, charlie@rivosinc.com, atishp@rivosinc.com, 
+	evan@rivosinc.com, cleger@rivosinc.com, alexghiti@rivosinc.com, 
+	samitolvanen@google.com, broonie@kernel.org, rick.p.edgecombe@intel.com, 
+	rust-for-linux@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpsz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-QQ-XMAILINFO: NCjYbQ0FTrEVuaYYI+06ZdbCxVC6SvtE5cuf+bjIPthEUcFsy4YAwW5j
-	B1paOYneLLAnHvv3YFJoZ218IZ3UyegDBeDl5srbxeY/poBxYam1fq+V+LYAak8ghJY2iHQ
-	neHbQVjx0UQ45acrkq44zcC28ncIf6K1SgeQhlI1Le+97ptl10e9AstkXrEOpGTUrHkeFAp
-	JDRdYnUaj2o4muCXmuKnpybjxRXbS9GY+Dw+q3RZZ3JDRkAuRix0qdWhZB5KazctZ8Vbg0/
-	HnflBDhOI5wnADCoDvejd7JGnjWauGgViJd1VISDWMNCrqOmpYCtJbtvhTW1X112UvFRIDH
-	IUFjExWPxJmjAjDLyZufy6StfWGRHQ/c55r2xMsx7CVnI98QeBRVpFi1SR4oL5zno1zRGMB
-	Ew9kdkzRgq5hxTX8z5c9yMw9tq+Y96AQ8vptIyjJ0TyR5oyZYnKlMe284FBzP87u6B5tHOO
-	bNkR2qwzjq8iPzZLDgOEXYGZYyFcD83kEOPI48V0k1xT7f2OxQGSFRpJqFB0rwXbx8Uflq7
-	wqTgEPMjqDiJwscdfCNOhywrWUMFIr03rh50OrrL87yA7vFUVXCv0frBccqzWj/MD0WzD4d
-	irfjkvCf0Qaa94xW1dCGvBtdZivnCb46+StSQ2z8/GLdbTy7JOIzMBoYTDy7H1yb29y+lLE
-	H5lwIlGroUze9wnv8/W2qKY9FtNR1awoT2PyYTQkYf6TaMi2CWzvMCZ04FuBwWfKpcrrolm
-	6aaX9YY9ZiQ/hBauJGmsVNAPqL0LE5Bk5lWA1lnJuVjCY5zf3JbtrbOE8yzPKINJMQpnFa+
-	46jxWmRlloqZDx3D7RsGtyk86P30Y8h5M5sfELWZ2W2Ia/XQkDU8Ta2PlOUi03DKSlP3tZP
-	BUHVyZwkNHROs+bQl7j5mFBWrIOUheiDxrwWsXRePh8Fz3azYCw/aL/Gk40jSbzzN7OOcnQ
-	c706L44STa/ekM5nxAj5NizztNqymkwVcK/SKW5UAAoHukk2L+hch0+oWWnNWLzc2km6uEP
-	WMzzMMmhKU8NKSmvqlNTIClB+rcowj3Cs9V/wO0WxGyQUsmP4iyW6N8ODq/dHErKdgyx/RR
-	A==
-X-QQ-XMRINFO: MSVp+SPm3vtS1Vd6Y4Mggwc=
-X-QQ-RECHKSPAM: 0
 
-On Fri, Jun 20, 2025 at 5:41=E2=80=AFAM Shuah Khan <skhan@linuxfoundation.o=
-rg> wrote:
+On Mon, Jun 16, 2025 at 3:31=E2=80=AFPM Zong Li <zong.li@sifive.com> wrote:
 >
-> On 6/19/25 13:00, John Hubbard wrote:
-> > On 6/19/25 10:00 AM, Shuah Khan wrote:
-> >> On 6/19/25 01:46, Chen Linxuan wrote:
-> >>> On Thu, Jun 19, 2025 at 5:23=E2=80=AFAM Shuah Khan <skhan@linuxfounda=
-tion.org> wrote:
-> >>>> On 6/9/25 20:07, Chen Linxuan wrote:
-> > ...
-> >>>>> diff --git a/tools/testing/selftests/filesystems/mount-notify/mount=
-- notify_test.c b/tools/testing/selftests/filesystems/mount-notify/ mount-n=
-otify_test.c
-> >>>>> index 63ce708d93ed0..34afe27b7978f 100644
-> >>>>> --- a/tools/testing/selftests/filesystems/mount-notify/mount- notif=
-y_test.c
-> >>>>> +++ b/tools/testing/selftests/filesystems/mount-notify/mount- notif=
-y_test.c
-> >>>>> @@ -465,7 +465,9 @@ TEST_F(fanotify, rmdir)
-> >>>>>        ASSERT_GE(ret, 0);
-> >>>>>
-> >>>>>        if (ret =3D=3D 0) {
-> >>>>> -             chdir("/");
-> >>>>> +             // Suppress -Wunused-result
-> >>>>> +             // Ref: https://gcc.gnu.org/bugzilla/show_bug.cgi? id=
-=3D66425#c34
-> >>>>> +             (void) !chdir("/");
+> On Thu, Jun 5, 2025 at 1:17=E2=80=AFAM Deepak Gupta <debug@rivosinc.com> =
+wrote:
 > >
-> > This is quite ugly. :)
+> > zicfiss / zicfilp introduces a new exception to priv isa `software chec=
+k
+> > exception` with cause code =3D 18. This patch implements software check
+> > exception.
+> >
+> > Additionally it implements a cfi violation handler which checks for cod=
+e
+> > in xtval. If xtval=3D2, it means that sw check exception happened becau=
+se of
+> > an indirect branch not landing on 4 byte aligned PC or not landing on
+> > `lpad` instruction or label value embedded in `lpad` not matching label
+> > value setup in `x7`. If xtval=3D3, it means that sw check exception hap=
+pened
+> > because of mismatch between link register (x1 or x5) and top of shadow
+> > stack (on execution of `sspopchk`).
+> >
+> > In case of cfi violation, SIGSEGV is raised with code=3DSEGV_CPERR.
+> > SEGV_CPERR was introduced by x86 shadow stack patches.
+> >
+> > To keep uprobes working, handle the uprobe event first before reporting
+> > the CFI violation in software-check exception handler. Because when the
+> > landing pad is activated, if the uprobe point is set at the lpad
+> > instruction at the beginning of a function, the system triggers a softw=
+are
+> > -check exception instead of an ebreak exception due to the exception
+> > priority, then uprobe can't work successfully.
+> >
+> > Co-developed-by: Zong Li <zong.li@sifive.com>
+> > Reviewed-by: Zong Li <zong.li@sifive.com>
+> > Signed-off-by: Zong Li <zong.li@sifive.com>
+> > Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+> > ---
+> >  arch/riscv/include/asm/asm-prototypes.h |  1 +
+> >  arch/riscv/include/asm/entry-common.h   |  2 ++
+> >  arch/riscv/kernel/entry.S               |  3 ++
+> >  arch/riscv/kernel/traps.c               | 51 +++++++++++++++++++++++++=
+++++++++
+> >  4 files changed, 57 insertions(+)
+> >
+> > diff --git a/arch/riscv/include/asm/asm-prototypes.h b/arch/riscv/inclu=
+de/asm/asm-prototypes.h
+> > index cd627ec289f1..5a27cefd7805 100644
+> > --- a/arch/riscv/include/asm/asm-prototypes.h
+> > +++ b/arch/riscv/include/asm/asm-prototypes.h
+> > @@ -51,6 +51,7 @@ DECLARE_DO_ERROR_INFO(do_trap_ecall_u);
+> >  DECLARE_DO_ERROR_INFO(do_trap_ecall_s);
+> >  DECLARE_DO_ERROR_INFO(do_trap_ecall_m);
+> >  DECLARE_DO_ERROR_INFO(do_trap_break);
+> > +DECLARE_DO_ERROR_INFO(do_trap_software_check);
+> >
+> >  asmlinkage void handle_bad_stack(struct pt_regs *regs);
+> >  asmlinkage void do_page_fault(struct pt_regs *regs);
+> > diff --git a/arch/riscv/include/asm/entry-common.h b/arch/riscv/include=
+/asm/entry-common.h
+> > index b28ccc6cdeea..34ed149af5d1 100644
+> > --- a/arch/riscv/include/asm/entry-common.h
+> > +++ b/arch/riscv/include/asm/entry-common.h
+> > @@ -40,4 +40,6 @@ static inline int handle_misaligned_store(struct pt_r=
+egs *regs)
+> >  }
+> >  #endif
+> >
+> > +bool handle_user_cfi_violation(struct pt_regs *regs);
+> > +
+> >  #endif /* _ASM_RISCV_ENTRY_COMMON_H */
+> > diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> > index 978115567bca..8d25837a9384 100644
+> > --- a/arch/riscv/kernel/entry.S
+> > +++ b/arch/riscv/kernel/entry.S
+> > @@ -474,6 +474,9 @@ SYM_DATA_START_LOCAL(excp_vect_table)
+> >         RISCV_PTR do_page_fault   /* load page fault */
+> >         RISCV_PTR do_trap_unknown
+> >         RISCV_PTR do_page_fault   /* store page fault */
+> > +       RISCV_PTR do_trap_unknown /* cause=3D16 */
+> > +       RISCV_PTR do_trap_unknown /* cause=3D17 */
+> > +       RISCV_PTR do_trap_software_check /* cause=3D18 is sw check exce=
+ption */
+> >  SYM_DATA_END_LABEL(excp_vect_table, SYM_L_LOCAL, excp_vect_table_end)
+> >
+> >  #ifndef CONFIG_MMU
+> > diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+> > index 8ff8e8b36524..64388370e1ad 100644
+> > --- a/arch/riscv/kernel/traps.c
+> > +++ b/arch/riscv/kernel/traps.c
+> > @@ -354,6 +354,57 @@ void do_trap_ecall_u(struct pt_regs *regs)
+> >
+> >  }
+> >
+> > +#define CFI_TVAL_FCFI_CODE     2
+> > +#define CFI_TVAL_BCFI_CODE     3
+> > +/* handle cfi violations */
+> > +bool handle_user_cfi_violation(struct pt_regs *regs)
+> > +{
+> > +       unsigned long tval =3D csr_read(CSR_TVAL);
+> > +       bool is_fcfi =3D (tval =3D=3D CFI_TVAL_FCFI_CODE && cpu_support=
+s_indirect_br_lp_instr());
+> > +       bool is_bcfi =3D (tval =3D=3D CFI_TVAL_BCFI_CODE && cpu_support=
+s_shadow_stack());
+> > +
+> > +       /*
+> > +        * Handle uprobe event first. The probe point can be a valid ta=
+rget
+> > +        * of indirect jumps or calls, in this case, forward cfi violat=
+ion
+> > +        * will be triggered instead of breakpoint exception.
+> > +        */
+> > +       if (is_fcfi && probe_breakpoint_handler(regs))
+> > +               return true;
+>
+> Hi  Deepak,
+> Sorry for missing something earlier. I think we would like to clear
+> sstatus.SPELP in the uprobe handling case. For example:
+>
+> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+> index c2ea999c1167..e8492bb57e09 100644
+> --- a/arch/riscv/kernel/traps.c
+> +++ b/arch/riscv/kernel/traps.c
+> @@ -349,8 +349,10 @@ bool handle_user_cfi_violation(struct pt_regs *regs)
+>         bool is_fcfi =3D (tval =3D=3D CFI_TVAL_FCFI_CODE &&
+> cpu_supports_indirect_br_lp_instr());
+>         bool is_bcfi =3D (tval =3D=3D CFI_TVAL_BCFI_CODE &&
+> cpu_supports_shadow_stack());
+>
+> -       if (is_fcfi && probe_breakpoint_handler(regs))
+> +       if (is_fcfi && probe_breakpoint_handler(regs)) {
+> +               regs->status =3D regs->status & ~SR_ELP;
+>                 return true;
+> +       }
+>
+>         if (is_fcfi || is_bcfi) {
+>                 do_trap_error(regs, SIGSEGV, SEGV_CPERR, regs->epc,
+>
+>
+> When a user mode CFI violation occurs, the ELP state should be 1, and
+> the system traps into supervisor mode. During this trap, sstatus.SPELP
+> is set to 1, and the ELP state is reset to 0. If we don=E2=80=99t clear
+> sstatus.SPELP, the ELP state will become 1 again after executing the
+> sret instruction. As a result, the system might trigger another
+> forward CFI violation upon executing the next instruction in the user
+> program, unless it happens to be a lpad instruction.
+>
+> The previous patch was tested on QEMU, but QEMU does not set the
+> sstatus.SPELP bit to 1 when a forward CFI violation occurs. Therefore,
+> I suspect that QEMU might also require some fixes.
 
-I agree with you. :)
+Hi Deepak,
+The issue with QEMU was that the sw-check exception bit in medeleg
+couldn't be set. This has been fixed in the latest QEMU mainline. I
+have re-tested the latest QEMU version, and it works.
 
+>
+> Thanks
+>
+> > +
+> > +       if (is_fcfi || is_bcfi) {
+> > +               do_trap_error(regs, SIGSEGV, SEGV_CPERR, regs->epc,
+> > +                             "Oops - control flow violation");
+> > +               return true;
+> > +       }
+> > +
+> > +       return false;
+> > +}
+> > +
+> > +/*
+> > + * software check exception is defined with risc-v cfi spec. Software =
+check
+> > + * exception is raised when:-
+> > + * a) An indirect branch doesn't land on 4 byte aligned PC or `lpad`
+> > + *    instruction or `label` value programmed in `lpad` instr doesn't
+> > + *    match with value setup in `x7`. reported code in `xtval` is 2.
+> > + * b) `sspopchk` instruction finds a mismatch between top of shadow st=
+ack (ssp)
+> > + *    and x1/x5. reported code in `xtval` is 3.
+> > + */
+> > +asmlinkage __visible __trap_section void do_trap_software_check(struct=
+ pt_regs *regs)
+> > +{
+> > +       if (user_mode(regs)) {
+> > +               irqentry_enter_from_user_mode(regs);
+> > +
+> > +               /* not a cfi violation, then merge into flow of unknown=
+ trap handler */
+> > +               if (!handle_user_cfi_violation(regs))
+> > +                       do_trap_unknown(regs);
+> > +
+> > +               irqentry_exit_to_user_mode(regs);
+> > +       } else {
+> > +               /* sw check exception coming from kernel is a bug in ke=
+rnel */
+> > +               die(regs, "Kernel BUG");
+> > +       }
+> > +}
+> > +
+> >  #ifdef CONFIG_MMU
+> >  asmlinkage __visible noinstr void do_page_fault(struct pt_regs *regs)
+> >  {
 > >
-> >>>>>> Why not fix the problem the right way by checking the return value=
-.
-> >>>> Suppressing the error isn't useful.
-> >>>
-> >>> The code is already handling cleanup in error cases,
-> >>> and I don't think checking the result of chdir would be useful here.
-
-I think I was mistaken earlier. Here we are in the child process after
-a fork, not handling an error case.
-I think simply calling exit(-1) here when chdir failed should be
-enough to make the test fail in the parent process.
-Maybe we should do the same for other similar calls as well. I will
-send a v2 soon.
-
-> >>
+> > --
+> > 2.43.0
 > >
-> > Why not just fail with the appropriate test result, if chdir() fails
-> > here, instead of making a bit of a mess with odd void casts to a
-> > negated return value, and a reference to a compiler bug report?
-> >
-> > Really, Shuah is putting you on the right path here.
->
-> Ha. I didn't ask to suppress the error with the cast. I asked
-> to check the return and fail.
->
-> >
-> >> We check for chdir() in several tools in the kernel. Add a check for
-> >> it instead of suppressing the [-Wunused-result] - suppressing doesn't
-> >> do any good.
->
-> This is what I said.
->
-> thanks,
-> -- Shuah
->
->
 
