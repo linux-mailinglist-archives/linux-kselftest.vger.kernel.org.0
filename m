@@ -1,662 +1,760 @@
-Return-Path: <linux-kselftest+bounces-35449-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35446-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E4CAAE1F97
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Jun 2025 17:57:53 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DF8DAE1E64
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Jun 2025 17:21:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E82EE1730BF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Jun 2025 15:57:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 627D97AE9A0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Jun 2025 15:20:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8B83291891;
-	Fri, 20 Jun 2025 15:57:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 253892BFC66;
+	Fri, 20 Jun 2025 15:21:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="zNxFCktr"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GJTM9D/e"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE68619A297;
-	Fri, 20 Jun 2025 15:57:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.148.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D6FC28A724
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Jun 2025 15:21:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750435059; cv=none; b=D0ZMeaWbXsEiktK3D+uEWr+GEsmAAYNJosZ0R+UHjWVHhK38TryWdhpvwAaxyyRnNONJrQUlqoGhjqNNCOf0OxzBTaqvwFQF7yaguU0bXDYhwZ0LxGIZ+JowwH0adrGuqntzLQX8WJ41+TKjjoSbEHKR0YDiU9aTMvHvHuGNyJA=
+	t=1750432895; cv=none; b=I3PS7jnkVRb7ka3NUiioDXcB3EiI5vAyypcRZ5ffDTD+sUGs5qbFpA7i2BTKFN6PzNphvBEmqRqDbG0+yLgbEOBIiO/oEu1QXmpgvL77rDc1umIm8pDzxfoac705Sv7Dir3S3oH6NBpChnqw5SxLIhyB5+RG3N1GQrK6Gw59gdY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750435059; c=relaxed/simple;
-	bh=qa0rrOdpsSC559tsn64v6725XodtZapjnqpbnrPSbVE=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dKh1tcZGzvWr3KCM7qvL4aKBPmnrZmgTYYZg+pV1xMZ1Xs6RF3n9sOFXOXgxbyWmYWzmEElior7x7uyxfKAgitd9UcY5nip6rvy9ykxDTvkXNinfYXgZOb6l752qPch+ix0AxASpk7EbzBwD+g4QuI97YPgukR0U0lx2uO4Bfh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=zNxFCktr; arc=none smtp.client-ip=148.163.148.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
-Received: from pps.filterd (m0354650.ppops.net [127.0.0.1])
-	by mx0a-00206402.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55KEj5tq014122;
-	Fri, 20 Jun 2025 15:18:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=sJqYjQhkqQF20vmSi9gldlfzoXBT9olYGZPRPVuqTLc=; b=zNxF
-	CktrT+cI2srgB05VmY50yskBZL/aSJAvJRPMdBvULzmD1qwchSAt4eCJCBN69Lbn
-	FN0MFJxtttzwrW4EM211m8z5cqFNrgzI0klxuRpwMiphzacroXBJCAzC7vO9Bzcs
-	E6jprsLWc6OSo8cuUKrSiX8VZHmg3ssL6qbI2K77/ZKEf1SW2wnOQ13zt+EV+P1B
-	rDDpVc6qfcx1UPK0W/ZrvTwFiuguA6vn8GfRrqfP1N06wsoopAKI8pTBhdatSGfx
-	rB96zjdfkfAMblsaJggBEdSv5PKeaIs/VIyjxb4qbntFQPkSVweke1wJXDoyB13L
-	NVnPrbeqjcaXLtk0+g==
-Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 47cjauc8a6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 20 Jun 2025 15:18:33 +0000 (GMT)
-Received: from ML-CTVHTF21DX.crowdstrike.sys (10.100.11.122) by
- 04WPEXCH007.crowdstrike.sys (10.100.11.74) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Fri, 20 Jun 2025 15:18:27 +0000
-From: Slava Imameev <slava.imameev@crowdstrike.com>
-To: <qmo@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <andrii@kernel.org>, <shuah@kernel.org>, <bpf@vger.kernel.org>
-CC: <martin.lau@linux.dev>, <eddyz87@gmail.com>, <song@kernel.org>,
-        <yonghong.song@linux.dev>, <john.fastabend@gmail.com>,
-        <kpsingh@kernel.org>, <sdf@fomichev.me>, <haoluo@google.com>,
-        <jolsa@kernel.org>, <mykolal@fb.com>, <slava.imameev@crowdstrike.com>,
-        <justin.deschamp@crowdstrike.com>, <mark.fontana@crowdstrike.com>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: [PATCH bpf-next v4 2/2] selftests/bpf: Add test for bpftool access to read-only protected maps
-Date: Sat, 21 Jun 2025 01:18:12 +1000
-Message-ID: <20250620151812.13952-2-slava.imameev@crowdstrike.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <20250620151812.13952-1-slava.imameev@crowdstrike.com>
-References: <20250620151812.13952-1-slava.imameev@crowdstrike.com>
+	s=arc-20240116; t=1750432895; c=relaxed/simple;
+	bh=ZNWN/AxMaZjDkqYItb81+abo5OAMF8kgmVW0rCZAtm4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qs+CPbKb1mXuXAxwxxcgzO5sVszssrk1YWpcekjc4XaR/xM5u3CjNi5oZctr/dXZMFy2ICMqLB7wZIAf8FYgzfpzJauGLNmO7naGcBZvoL0Vcj8LXHdMzVvbOF9p+Hr+k/X8tUdKpTt8vwaFV6oXM+50jWNpZTxF/IdauMYDBwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GJTM9D/e; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1750432891;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1piPOxakbi96QGxUT4kGXjaUgIRXevFIE11NPL1+hPc=;
+	b=GJTM9D/eT91FBW941idrb7JywpwUi4HPkPXdzirQlxa6hvBsa+Dpijonfr3quPYdtXzkqY
+	do4qIpfVu6W73mQqjiLHfoke05IZEH6H9i//oHYUrMwU/km24IiUoiBv8dZFRuqU5heatD
+	WFLe+V9/NYIKvqfV8UFDQev0vpxLSXE=
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
+ [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-44-JBOYn3PmMkij7E0yCHeCog-1; Fri, 20 Jun 2025 11:21:29 -0400
+X-MC-Unique: JBOYn3PmMkij7E0yCHeCog-1
+X-Mimecast-MFC-AGG-ID: JBOYn3PmMkij7E0yCHeCog_1750432888
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-234fedd3e51so19860265ad.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Jun 2025 08:21:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750432888; x=1751037688;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1piPOxakbi96QGxUT4kGXjaUgIRXevFIE11NPL1+hPc=;
+        b=ADUtfpeS3U73eN3o0s/iuLvZlWQtkH18qqFK7Rf4hp/bMcTunwRtYZCRSsZdXgK18Q
+         OUuhcZU/mFEtD2nq2Yo90Ap3VyG4O71pZu1o7DQfze9VkiVYlrasoYojnWQIn/HfhGpA
+         mY5ERz45jVlvfTYcfIt++9KYs42Wb8H+7PWbslTs644ezbP+kVXbNFi/OPivct4q4iLQ
+         dcBFU6BXdlHvkSGoxwxHp6yKx9XfWg0tZuBkHhBy3bn9bKHGJBPgk7AhA8aAMExjuMN+
+         paRVnJ+ow79AJxroDGQrJ/pCvD8kCPEzLGxXm1B9P02Q//SGCuLWroHeKz4sntHNSKjy
+         TC+A==
+X-Forwarded-Encrypted: i=1; AJvYcCUbPpC0ZAf9Gn3e7TuRsFJ9dQe5hOlG+NAlRzGJQbG+3ZfyXKMOSNrOXanWelIxAIBF6gAs8Suw3lOScdDGEq4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxX5AswSkAxbSg1RgCVWcYry72EKv0RS+KjzhNYLJEJn9ktvGLN
+	xNplPQs+/7P314mpYX698V127uLro312BEaRnfiSEEkGB93LNxW7a/qs+OWdxygLGsgk3+LKIyq
+	EAC1siyIiiZ29Hc1UguQCmuMWLc5CPSH1UjqxH8XffUE6vmrMcdW/bbCKtZpfpsNqGufRtw==
+X-Gm-Gg: ASbGnct8NikU1RplwruGPmDXcVIh4eUhM8yo/r3YJl8fhWbsnwMxPfb24lkiMHD2xVe
+	3F+fD4XL7FbFhm9B5z88jqWGh5N888O0tF2Ao1ZFPO80IgfQNpMTOyuztTKXwJQaS2ppZfszxxp
+	aouqmUzMGUAGOxMRtaDnAqS79NyoUY0dqJ5Ch2wAHQpv4gQXftW8aXwnOOboOTAxOFdkznZoLw7
+	+zq2wmTPoDZvolN5ZQyrwLVg/j38ugnAd7EM+cdLA1N06UoBd3oONJ7cLgJ5ur1jf25556wNqAr
+	t5kGocXPFj0FNg==
+X-Received: by 2002:a17:903:190:b0:234:a139:11ec with SMTP id d9443c01a7336-237d984a18fmr50957615ad.20.1750432888051;
+        Fri, 20 Jun 2025 08:21:28 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFHMf9ipqas4ZoIOxL+ed9Gpq19+KmR3P+/FSP36axXmOC4aoNGQ0v43oHa0/JQOyNO6xRu2A==
+X-Received: by 2002:a17:903:190:b0:234:a139:11ec with SMTP id d9443c01a7336-237d984a18fmr50956885ad.20.1750432887366;
+        Fri, 20 Jun 2025 08:21:27 -0700 (PDT)
+Received: from x1.local ([85.131.185.92])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b31f118ea01sm1932013a12.5.2025.06.20.08.21.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jun 2025 08:21:26 -0700 (PDT)
+Date: Fri, 20 Jun 2025 11:21:19 -0400
+From: Peter Xu <peterx@redhat.com>
+To: Nikita Kalyazin <kalyazin@amazon.com>
+Cc: akpm@linux-foundation.org, pbonzini@redhat.com, shuah@kernel.org,
+	viro@zeniv.linux.org.uk, brauner@kernel.org, muchun.song@linux.dev,
+	hughd@google.com, kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, jack@suse.cz,
+	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com,
+	jannh@google.com, ryan.roberts@arm.com, david@redhat.com,
+	jthoughton@google.com, graf@amazon.de, jgowans@amazon.com,
+	roypat@amazon.co.uk, derekmn@amazon.com, nsaenz@amazon.es,
+	xmarcalx@amazon.com
+Subject: Re: [PATCH v3 1/6] mm: userfaultfd: generic continue for non
+ hugetlbfs
+Message-ID: <aFV8bz0GjPVe-IeZ@x1.local>
+References: <20250404154352.23078-1-kalyazin@amazon.com>
+ <20250404154352.23078-2-kalyazin@amazon.com>
+ <aEiwHjl4tsUt98sh@x1.local>
+ <36d96316-fd9b-4755-bb35-d1a2cea7bb7e@amazon.com>
+ <aEl9CNGLY0Sil7nq@x1.local>
+ <2097f155-c459-40e1-93e8-3d501ae66b42@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: 04WPEXCH012.crowdstrike.sys (10.100.11.82) To
- 04WPEXCH007.crowdstrike.sys (10.100.11.74)
-X-Disclaimer: USA
-X-Authority-Analysis: v=2.4 cv=Ft0F/3rq c=1 sm=1 tr=0 ts=68557bc9 cx=c_pps
- a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
- a=EjBHVkixTFsA:10 a=6IFa9wvqVegA:10 a=pl6vuDidAAAA:8 a=YgL1---z7VIkemqWQkwA:9
- a=7HHEhtPpuDgorT_d:21
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjIwMDEwNyBTYWx0ZWRfXwOq7JIE4vDBv
- rLQ9pmRgcLeVHXsnyL8Rs2z0dXsjWG3rLSlUla3riXWRqpZcMd5gz59ccgSF7+uOn6q73j8RYmy
- 7I39ZHyRMizMbAjNIN+TdIV770bgrFlvi68VgXJeVh7QhCnyb3en4xCZBFIw9vpsSRofjpsbYcJ
- L5tMR9h1eIgAvojHY4fOPxfszV1zECiJfhA2E+7trNbSvyzE5eGOUrEQ8+Jw0NCoxDn2G2rFvyW
- /jIFqE/MtUIjk3PRb5ro6qHqNU+lMDnCbOtBzEiDOEhTnxrYWabM/gquD8R23kn3WNKvn02emYI
- vIAg9F0Znf1LkazBumbR2wRS3wwwbnKpkXOuXg/ZImLBjGSJzMO+LccFntPmm9sGnVfjYjgK16T
- LTfgcc7w5IzgjLZ+60t1g/V0R1/Vi/8tgk3JosdyTtAa/U46Iw4iWAzl6DJIPGD5hsvbEwc5
-X-Proofpoint-ORIG-GUID: mDJs9iBF85o6DgDD-gQbH8vyJArNZidx
-X-Proofpoint-GUID: mDJs9iBF85o6DgDD-gQbH8vyJArNZidx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-20_06,2025-06-20_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 adultscore=0 spamscore=0 impostorscore=0 clxscore=1015
- phishscore=0 priorityscore=1501 mlxlogscore=999 suspectscore=0 mlxscore=0
- bulkscore=0 lowpriorityscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2506200107
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <2097f155-c459-40e1-93e8-3d501ae66b42@amazon.com>
 
-Add selftest cases that validate bpftool's expected behavior when
-accessing maps protected from modification via security_bpf_map.
+Hi, Nikita,
 
-The test includes a BPF program attached to security_bpf_map with two maps:
-- A protected map that only allows read-only access
-- An unprotected map that allows full access
+On Fri, Jun 20, 2025 at 01:00:24PM +0100, Nikita Kalyazin wrote:
+> Thanks for explaining that.  I played a bit with it myself and it appears to
+> be working for the MISSING mode for both shmem and guest_memfd.  Attaching
 
-The test script attaches the BPF program to security_bpf_map and
-verifies that for the bpftool map command:
-- Read access works on both maps
-- Write access fails on the protected map
-- Write access succeeds on the unprotected map
-- These behaviors remain consistent when the maps are pinned
+[1]
 
-Signed-off-by: Slava Imameev <slava.imameev@crowdstrike.com>
+> my sketch below.  Please let me know if this is how you see it.
+> 
+> I found that arguments and return values are significantly different between
+> the two request types, which may be a bit confusing, although we do not
+> expect many callers of those.
+
+Indeed.  Actually since I didn't yet get your reply, early this week I gave
+it a shot, and then I found the same thing that it'll be nice to keep the
+type checks all over the places.  It'll also be awkward if we want to add
+MISSING into the picture with the current req() interface (btw, IIUC you
+meant MINOR above, not MISSING).
+
+Please have a look at what I came up with.  I didn't yet got a chance to
+post it, but it did compile all fine and pass the smoke tests here.  Feel
+free to take it over if you think that makes sense to you, or I can also
+post it officially after some more tests.
+
+So, ultimately I introduced a vm_uffd_ops to keep all the type checks.  I
+don't think I like the uffd_copy() interfacing too much, but it should
+still be the minimum changeset I can think of to generalize shmem as an
+userfault user / module, and finally drop "linux/shmem_fs.h" inclusion in
+the last patch.
+
+It's also unfortunate that hugetlb won't be able to already use the API,
+similar to why we have hugetlb's fault() to BUG() and hard-coded it in
+handle_mm_fault().  However it'll at least start to use the rest API all
+fine, so as to generalize some hugetlb checks.
+
+The shmem definition looks like this:
+
+static const vm_uffd_ops shmem_uffd_ops = {
+	.uffd_features	= 	__VM_UFFD_FLAGS,
+	.uffd_ioctls	= 	BIT(_UFFDIO_COPY) |
+				BIT(_UFFDIO_ZEROPAGE) |
+				BIT(_UFFDIO_WRITEPROTECT) |
+				BIT(_UFFDIO_CONTINUE) |
+				BIT(_UFFDIO_POISON),
+	.uffd_get_folio	=	shmem_uffd_get_folio,
+	.uffd_copy	=	shmem_mfill_atomic_pte,
+};
+
+Then guest-memfd can set (1) VM_UFFD_MINOR, (2) _UFFDIO_CONTINUE and
+provide uffd_get_folio() for supporting MINOR.
+
+Let me know what do you think.
+
+Thanks,
+
+===8<===
+From ca500177de122d32194f8bf4589faceeaaae2c0c Mon Sep 17 00:00:00 2001
+From: Peter Xu <peterx@redhat.com>
+Date: Thu, 12 Jun 2025 11:51:58 -0400
+Subject: [PATCH 1/4] mm: Introduce vm_uffd_ops API
+
+Introduce a generic userfaultfd API for vm_operations_struct, so that one
+vma, especially when as a module, can support userfaults without modifying
+the core files.  More importantly, when the module can be compiled out of
+the kernel.
+
+So, instead of having core mm referencing modules that may not ever exist,
+we need to have modules opt-in on core mm hooks instead.
+
+After this API applied, if a module wants to support userfaultfd, the
+module should only need to touch its own file and properly define
+vm_uffd_ops, instead of changing anything in core mm.
+
+Note that such API will not work for anonymous. Core mm will process
+anonymous memory separately for userfault operations like before.
+
+This patch only introduces the API alone so that we can start to move
+existing users over but without breaking them.
+
+Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
-Changes in v2:
-- fix for a test compilation error: "conflicting types for 'bpf_fentry_test1'"
-Changes in v3:
-- Addressed review feedback
-- Added tests for map iterator, map and map-of-maps creation, deletion
-- Cleaned up excessive output logging
-Changes in v4:
-- Added a test for the btf list command to verify read only access to maps
-- Added a test for map's btf data access with the btf dump command
----
----
- tools/testing/selftests/bpf/Makefile          |   1 +
- .../selftests/bpf/progs/bpf_iter_map_elem.c   |  22 +
- .../selftests/bpf/progs/security_bpf_map.c    |  69 +++
- .../testing/selftests/bpf/test_bpftool_map.sh | 398 ++++++++++++++++++
- 4 files changed, 490 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_map_elem.c
- create mode 100644 tools/testing/selftests/bpf/progs/security_bpf_map.c
- create mode 100755 tools/testing/selftests/bpf/test_bpftool_map.sh
+ include/linux/mm.h            | 71 +++++++++++++++++++++++++++++++++++
+ include/linux/userfaultfd_k.h | 12 ------
+ 2 files changed, 71 insertions(+), 12 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 97013c49920b..da868bb8c421 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -109,6 +109,7 @@ TEST_PROGS := test_kmod.sh \
- 	test_xdping.sh \
- 	test_bpftool_build.sh \
- 	test_bpftool.sh \
-+	test_bpftool_map.sh \
- 	test_bpftool_metadata.sh \
- 	test_doc_build.sh \
- 	test_xsk.sh \
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_map_elem.c b/tools/testing/selftests/bpf/progs/bpf_iter_map_elem.c
-new file mode 100644
-index 000000000000..2f20485e0de3
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_map_elem.c
-@@ -0,0 +1,22 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_helpers.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+__u32 value_sum = 0;
-+
-+SEC("iter/bpf_map_elem")
-+int dump_bpf_map_values(struct bpf_iter__bpf_map_elem *ctx)
-+{
-+	__u32 value = 0;
-+
-+	if (ctx->value == (void *)0)
-+		return 0;
-+
-+	bpf_probe_read_kernel(&value, sizeof(value), ctx->value);
-+	value_sum += value;
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/security_bpf_map.c b/tools/testing/selftests/bpf/progs/security_bpf_map.c
-new file mode 100644
-index 000000000000..7216b3450e96
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/security_bpf_map.c
-@@ -0,0 +1,69 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_helpers.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+#define EPERM 1 /* Operation not permitted */
-+
-+/* From include/linux/mm.h. */
-+#define FMODE_WRITE	0x2
-+
-+struct map;
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+	__uint(max_entries, 1);
-+} prot_status_map SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+	__uint(max_entries, 3);
-+} prot_map SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+	__uint(max_entries, 3);
-+} not_prot_map SEC(".maps");
-+
-+SEC("fmod_ret/security_bpf_map")
-+int BPF_PROG(fmod_bpf_map, struct bpf_map *map, int fmode)
-+{
-+	__u32 key = 0;
-+	__u32 *status_ptr = bpf_map_lookup_elem(&prot_status_map, &key);
-+
-+	if (!status_ptr || !*status_ptr)
-+		return 0;
-+
-+	if (map == &prot_map) {
-+		/* Allow read-only access */
-+		if (fmode & FMODE_WRITE)
-+			return -EPERM;
-+	}
-+
-+	return 0;
-+}
-+
-+/*
-+ * This program keeps references to maps. This is needed to prevent
-+ * optimizing them out.
-+ */
-+SEC("fentry/bpf_fentry_test1")
-+int BPF_PROG(fentry_dummy1, int a)
-+{
-+	__u32 key = 0;
-+	__u32 val1 = a;
-+	__u32 val2 = a + 1;
-+
-+	bpf_map_update_elem(&prot_map, &key, &val1, BPF_ANY);
-+	bpf_map_update_elem(&not_prot_map, &key, &val2, BPF_ANY);
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/test_bpftool_map.sh b/tools/testing/selftests/bpf/test_bpftool_map.sh
-new file mode 100755
-index 000000000000..515b1df0501e
---- /dev/null
-+++ b/tools/testing/selftests/bpf/test_bpftool_map.sh
-@@ -0,0 +1,398 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
-+TESTNAME="bpftool_map"
-+BPF_FILE="security_bpf_map.bpf.o"
-+BPF_ITER_FILE="bpf_iter_map_elem.bpf.o"
-+PROTECTED_MAP_NAME="prot_map"
-+NOT_PROTECTED_MAP_NAME="not_prot_map"
-+BPF_FS_TMP_PARENT="/tmp"
-+BPF_FS_PARENT=$(awk '$3 == "bpf" {print $2; exit}' /proc/mounts)
-+BPF_FS_PARENT=${BPF_FS_PARENT:-$BPF_FS_TMP_PARENT}
-+# bpftool will mount bpf file system under BPF_DIR if it is not mounted
-+# under BPF_FS_PARENT.
-+BPF_DIR="$BPF_FS_PARENT/test_$TESTNAME"
-+SCRIPT_DIR=$(dirname $(realpath "$0"))
-+BPF_FILE_PATH="$SCRIPT_DIR/$BPF_FILE"
-+BPF_ITER_FILE_PATH="$SCRIPT_DIR/$BPF_ITER_FILE"
-+BPFTOOL_PATH="bpftool"
-+# Assume the script is located under tools/testing/selftests/bpf/
-+KDIR_ROOT_DIR=$(realpath "$SCRIPT_DIR"/../../../../)
-+
-+_cleanup()
-+{
-+	set +eu
-+
-+	# If BPF_DIR is a mount point this will not remove the mount point itself.
-+	[ -d "$BPF_DIR" ] && rm -rf "$BPF_DIR" 2> /dev/null
-+
-+	# Unmount if BPF filesystem was temporarily created.
-+	if [ "$BPF_FS_PARENT" = "$BPF_FS_TMP_PARENT" ]; then
-+		# A loop and recursive unmount are required as bpftool might
-+		# create multiple mounts. For example, a bind mount of the directory
-+		# to itself. The bind mount is created to change mount propagation
-+		# flags on an actual mount point.
-+		max_attempts=3
-+		attempt=0
-+		while mountpoint -q "$BPF_DIR" && [ $attempt -lt $max_attempts ]; do
-+			umount -R "$BPF_DIR" 2>/dev/null
-+			attempt=$((attempt+1))
-+		done
-+
-+		# The directory still exists. Remove it now.
-+		[ -d "$BPF_DIR" ] && rm -rf "$BPF_DIR" 2>/dev/null
-+	fi
-+}
-+
-+cleanup_skip()
-+{
-+	echo "selftests: $TESTNAME [SKIP]"
-+	_cleanup
-+
-+	exit $ksft_skip
-+}
-+
-+cleanup()
-+{
-+	if [ "$?" = 0 ]; then
-+		echo "selftests: $TESTNAME [PASS]"
-+	else
-+		echo "selftests: $TESTNAME [FAILED]"
-+	fi
-+	_cleanup
-+}
-+
-+check_root_privileges() {
-+	if [ $(id -u) -ne 0 ]; then
-+		echo "Need root privileges"
-+		exit $ksft_skip
-+	fi
-+}
-+
-+# Function to verify bpftool path.
-+# Parameters:
-+#   $1: bpftool path
-+verify_bpftool_path() {
-+	local bpftool_path="$1"
-+	if ! "$bpftool_path" version > /dev/null 2>&1; then
-+		echo "Could not run test without bpftool"
-+		exit $ksft_skip
-+	fi
-+}
-+
-+# Function to verify BTF support.
-+# The test requires BTF support for fmod_ret programs.
-+verify_btf_support() {
-+	if [ ! -f /sys/kernel/btf/vmlinux ]; then
-+		echo "Could not run test without BTF support"
-+		exit $ksft_skip
-+	fi
-+}
-+
-+# Function to initialize map entries with keys [0..2] and values set to 0.
-+# Parameters:
-+#  $1: Map name
-+#  $2: bpftool path
-+initialize_map_entries() {
-+	local map_name="$1"
-+	local bpftool_path="$2"
-+
-+	for key in 0 1 2; do
-+		"$bpftool_path" map update name "$map_name" key $key 0 0 0 value 0 0 0 $key
-+	done
-+}
-+
-+# Test read access to the map.
-+# Parameters:
-+#   $1: Name command (name/pinned)
-+#   $2: Map name
-+#   $3: bpftool path
-+#   $4: key
-+access_for_read() {
-+	local name_cmd="$1"
-+	local map_name="$2"
-+	local bpftool_path="$3"
-+	local key="$4"
-+
-+	# Test read access to the map.
-+	if ! "$bpftool_path" map lookup "$name_cmd" "$map_name" key $key 1>/dev/null; then
-+		echo " Read access to $key in $map_name failed"
-+		exit 1
-+	fi
-+
-+	# Test read access to map's BTF data.
-+	if ! "$bpftool_path" btf dump map "$name_cmd" "$map_name" 1>/dev/null; then
-+		echo " Read access to $map_name for BTF data failed"
-+		exit 1
-+	fi
-+}
-+
-+# Test write access to the map.
-+# Parameters:
-+#   $1: Name command (name/pinned)
-+#   $2: Map name
-+#   $3: bpftool path
-+#   $4: key
-+#   $5: Whether write should succeed (true/false)
-+access_for_write() {
-+	local name_cmd="$1"
-+	local map_name="$2"
-+	local bpftool_path="$3"
-+	local key="$4"
-+	local write_should_succeed="$5"
-+	local value="1 1 1 1"
-+
-+	if "$bpftool_path" map update "$name_cmd" "$map_name" key $key value \
-+			$value 2>/dev/null; then
-+		if [ "$write_should_succeed" = "false" ]; then
-+			echo " Write access to $key in $map_name succeeded but should have failed"
-+			exit 1
-+		fi
-+	else
-+		if [ "$write_should_succeed" = "true" ]; then
-+			echo " Write access to $key in $map_name failed but should have succeeded"
-+			exit 1
-+		fi
-+	fi
-+}
-+
-+# Test entry deletion for the map.
-+# Parameters:
-+#   $1: Name command (name/pinned)
-+#   $2: Map name
-+#   $3: bpftool path
-+#   $4: key
-+#   $5: Whether write should succeed (true/false)
-+access_for_deletion() {
-+	local name_cmd="$1"
-+	local map_name="$2"
-+	local bpftool_path="$3"
-+	local key="$4"
-+	local write_should_succeed="$5"
-+	local value="1 1 1 1"
-+
-+	# Test deletion by key for the map.
-+	# Before deleting, check the key exists.
-+	if ! "$bpftool_path" map lookup "$name_cmd" "$map_name" key $key 1>/dev/null; then
-+		echo " Key $key does not exist in $map_name"
-+		exit 1
-+	fi
-+
-+	# Delete by key.
-+	if "$bpftool_path" map delete "$name_cmd" "$map_name" key $key 2>/dev/null; then
-+		if [ "$write_should_succeed" = "false" ]; then
-+			echo " Deletion for $key in $map_name succeeded but should have failed"
-+			exit 1
-+		fi
-+	else
-+		if [ "$write_should_succeed" = "true" ]; then
-+			echo " Deletion for $key in $map_name failed but should have succeeded"
-+			exit 1
-+		fi
-+	fi
-+
-+	# After deleting, check the entry existence according to the expected status.
-+	if "$bpftool_path" map lookup "$name_cmd" "$map_name" key $key 1>/dev/null; then
-+		if [ "$write_should_succeed" = "true" ]; then
-+			echo " Key $key for $map_name was not deleted but should have been deleted"
-+			exit 1
-+		fi
-+	else
-+		if [ "$write_should_succeed" = "false" ]; then
-+			echo "Key $key for $map_name was deleted but should have not been deleted"
-+			exit 1
-+		fi
-+	fi
-+
-+	# Test creation of map's deleted entry, if deletion was successful.
-+	# Otherwise, the entry exists.
-+	if "$bpftool_path" map update "$name_cmd" "$map_name" key $key value \
-+				$value 2>/dev/null; then
-+		if [ "$write_should_succeed" = "false" ]; then
-+			echo " Write access to $key in $map_name succeeded after deletion attempt but should have failed"
-+			exit 1
-+		fi
-+	else
-+		if [ "$write_should_succeed" = "true" ]; then
-+			echo " Write access to $key in $map_name failed after deletion attempt but should have succeeded"
-+			exit 1
-+		fi
-+	fi
-+}
-+
-+# Test map elements iterator.
-+# Parameters:
-+#   $1: Name command (name/pinned)
-+#   $2: Map name
-+#   $3: bpftool path
-+#   $4: BPF_DIR
-+#   $5: bpf iterator object file path
-+iterate_map_elem() {
-+	local name_cmd="$1"
-+	local map_name="$2"
-+	local bpftool_path="$3"
-+	local bpf_dir="$4"
-+	local bpf_file="$5"
-+	local pin_path="$bpf_dir/map_iterator"
-+
-+	"$bpftool_path" iter pin "$bpf_file" "$pin_path" map "$name_cmd" "$map_name"
-+	if [ ! -f "$pin_path" ]; then
-+		echo " Failed to pin iterator to $pin_path"
-+		exit 1
-+	fi
-+
-+	cat "$pin_path" 1>/dev/null
-+	rm "$pin_path" 2>/dev/null
-+}
-+
-+# Function to test map access with configurable write expectations
-+# Parameters:
-+#   $1: Name command (name/pinned)
-+#   $2: Map name
-+#   $3: bpftool path
-+#   $4: key for rw
-+#   $5: key to delete
-+#   $6: Whether write should succeed (true/false)
-+#   $7: BPF_DIR
-+#   $8: bpf iterator object file path
-+access_map() {
-+	local name_cmd="$1"
-+	local map_name="$2"
-+	local bpftool_path="$3"
-+	local key_for_rw="$4"
-+	local key_to_del="$5"
-+	local write_should_succeed="$6"
-+	local bpf_dir="$7"
-+	local bpf_iter_file_path="$8"
-+
-+	access_for_read "$name_cmd" "$map_name" "$bpftool_path" "$key_for_rw"
-+	access_for_write "$name_cmd" "$map_name" "$bpftool_path" "$key_for_rw" \
-+		"$write_should_succeed"
-+	access_for_deletion "$name_cmd" "$map_name" "$bpftool_path" "$key_to_del" \
-+		"$write_should_succeed"
-+	iterate_map_elem "$name_cmd" "$map_name" "$bpftool_path" "$bpf_dir" \
-+		"$bpf_iter_file_path"
-+}
-+
-+# Function to test map access with configurable write expectations
-+# Parameters:
-+#   $1: Map name
-+#   $2: bpftool path
-+#   $3: BPF_DIR
-+#   $4: Whether write should succeed (true/false)
-+#   $5: bpf iterator object file path
-+test_map_access() {
-+	local map_name="$1"
-+	local bpftool_path="$2"
-+	local bpf_dir="$3"
-+	local pin_path="$bpf_dir/${map_name}_pinned"
-+	local write_should_succeed="$4"
-+	local bpf_iter_file_path="$5"
-+
-+	# Test access to the map by name.
-+	access_map "name" "$map_name" "$bpftool_path" "0 0 0 0" "1 0 0 0" \
-+		"$write_should_succeed" "$bpf_dir" "$bpf_iter_file_path"
-+
-+	# Pin the map to the BPF filesystem
-+	"$bpftool_path" map pin name "$map_name" "$pin_path"
-+	if [ ! -e "$pin_path" ]; then
-+		echo " Failed to pin $map_name"
-+		exit 1
-+	fi
-+
-+	# Test access to the pinned map.
-+	access_map "pinned" "$pin_path" "$bpftool_path" "0 0 0 0" "2 0 0 0" \
-+		"$write_should_succeed" "$bpf_dir" "$bpf_iter_file_path"
-+}
-+
-+# Function to test map creation and map-of-maps
-+# Parameters:
-+#   $1: bpftool path
-+#   $2: BPF_DIR
-+test_map_creation_and_map_of_maps() {
-+	local bpftool_path="$1"
-+	local bpf_dir="$2"
-+	local outer_map_name="outer_map_tt"
-+	local inner_map_name="inner_map_tt"
-+
-+	"$bpftool_path" map create "$bpf_dir/$inner_map_name" type array key 4 \
-+		value 4 entries 4 name "$inner_map_name"
-+	if [ ! -f "$bpf_dir/$inner_map_name" ]; then
-+		echo " Failed to create inner map file at $bpf_dir/$outer_map_name"
-+		return 1
-+	fi
-+
-+	"$bpftool_path" map create "$bpf_dir/$outer_map_name" type hash_of_maps \
-+		key 4 value 4 entries 2 name "$outer_map_name" inner_map name "$inner_map_name"
-+	if [ ! -f "$bpf_dir/$outer_map_name" ]; then
-+		echo " Failed to create outer map file at $bpf_dir/$outer_map_name"
-+		return 1
-+	fi
-+
-+	# Add entries to the outer map by name and by pinned path.
-+	"$bpftool_path" map update pinned "$bpf_dir/$outer_map_name" key 0 0 0 0 \
-+		value pinned "$bpf_dir/$inner_map_name"
-+	"$bpftool_path" map update name "$outer_map_name" key 1 0 0 0 value \
-+		name "$inner_map_name"
-+
-+	# The outer map should be full by now.
-+	# The following map update command is expected to fail.
-+	if "$bpftool_path" map update name "$outer_map_name" key 2 0 0 0 value name \
-+		"$inner_map_name" 2>/dev/null; then
-+		echo " Update for $outer_map_name succeeded but should have failed"
-+		exit 1
-+	fi
-+}
-+
-+# Function to test map access with the btf list command
-+# Parameters:
-+#   $1: bpftool path
-+test_map_access_with_btf_list() {
-+	local bpftool_path="$1"
-+
-+	# The btf list command iterates over maps for
-+	# loaded BPF programs.
-+	if ! "$bpftool_path" btf list 1>/dev/null; then
-+		echo " Failed to access btf data"
-+		exit 1
-+	fi
-+}
-+
-+set -eu
-+
-+trap cleanup_skip EXIT
-+
-+check_root_privileges
-+
-+verify_bpftool_path "$BPFTOOL_PATH"
-+
-+verify_btf_support
-+
-+trap cleanup EXIT
-+
-+# Load and attach the BPF programs to control maps access.
-+"$BPFTOOL_PATH" prog loadall "$BPF_FILE_PATH" "$BPF_DIR" autoattach
-+
-+initialize_map_entries "$PROTECTED_MAP_NAME" "$BPFTOOL_PATH"
-+initialize_map_entries "$NOT_PROTECTED_MAP_NAME" "$BPFTOOL_PATH"
-+
-+# Activate the map protection mechanism. Protection status is controlled
-+# by a value stored in the prot_status_map at index 0.
-+"$BPFTOOL_PATH" map update name prot_status_map key 0 0 0 0 value 1 0 0 0
-+
-+# Test protected map (write should fail).
-+test_map_access "$PROTECTED_MAP_NAME" "$BPFTOOL_PATH" "$BPF_DIR" "false" \
-+ "$BPF_ITER_FILE_PATH"
-+
-+# Test not protected map (write should succeed).
-+test_map_access "$NOT_PROTECTED_MAP_NAME" "$BPFTOOL_PATH" "$BPF_DIR" "true" \
-+ "$BPF_ITER_FILE_PATH"
-+
-+test_map_creation_and_map_of_maps "$BPFTOOL_PATH" "$BPF_DIR"
-+
-+test_map_access_with_btf_list "$BPFTOOL_PATH"
-+
-+exit 0
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 98a606908307..8dfd83f01d3d 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -576,6 +576,70 @@ struct vm_fault {
+ 					 */
+ };
+ 
++#ifdef CONFIG_USERFAULTFD
++/* A combined operation mode + behavior flags. */
++typedef unsigned int __bitwise uffd_flags_t;
++
++enum mfill_atomic_mode {
++	MFILL_ATOMIC_COPY,
++	MFILL_ATOMIC_ZEROPAGE,
++	MFILL_ATOMIC_CONTINUE,
++	MFILL_ATOMIC_POISON,
++	NR_MFILL_ATOMIC_MODES,
++};
++
++/* VMA userfaultfd operations */
++typedef struct {
++	/**
++	 * @uffd_features: features supported in bitmask.
++	 *
++	 * When the ops is defined, the driver must set non-zero features
++	 * to be a subset (or all) of: VM_UFFD_MISSING|WP|MINOR.
++	 */
++	unsigned long uffd_features;
++	/**
++	 * @uffd_ioctls: ioctls supported in bitmask.
++	 *
++	 * Userfaultfd ioctls supported by the module.  Below will always
++	 * be supported by default whenever a module provides vm_uffd_ops:
++	 *
++	 *   _UFFDIO_API, _UFFDIO_REGISTER, _UFFDIO_UNREGISTER, _UFFDIO_WAKE
++	 *
++	 * The module needs to provide all the rest optionally supported
++	 * ioctls.  For example, when VM_UFFD_MISSING was supported,
++	 * _UFFDIO_COPY must be supported as ioctl, while _UFFDIO_ZEROPAGE
++	 * is optional.
++	 */
++	unsigned long uffd_ioctls;
++	/**
++	 * uffd_get_folio: Handler to resolve UFFDIO_CONTINUE request.
++	 *
++	 * @inode: the inode for folio lookup
++	 * @pgoff: the pgoff of the folio
++	 * @folio: returned folio pointer
++	 *
++	 * Return: zero if succeeded, negative for errors.
++	 */
++	int (*uffd_get_folio)(struct inode *inode, pgoff_t pgoff,
++			      struct folio **folio);
++	/**
++	 * uffd_copy: Handler to resolve UFFDIO_COPY|ZEROPAGE request.
++	 *
++	 * @dst_pmd: target pmd to resolve page fault
++	 * @dst_vma: target vma
++	 * @dst_addr: target virtual address
++	 * @src_addr: source address to copy from
++	 * @flags: userfaultfd request flags
++	 * @foliop: previously allocated folio
++	 *
++	 * Return: zero if succeeded, negative for errors.
++	 */
++	int (*uffd_copy)(pmd_t *dst_pmd, struct vm_area_struct *dst_vma,
++			 unsigned long dst_addr, unsigned long src_addr,
++			 uffd_flags_t flags, struct folio **foliop);
++} vm_uffd_ops;
++#endif
++
+ /*
+  * These are the virtual MM functions - opening of an area, closing and
+  * unmapping it (needed to keep files on disk up-to-date etc), pointer
+@@ -653,6 +717,13 @@ struct vm_operations_struct {
+ 	 */
+ 	struct page *(*find_special_page)(struct vm_area_struct *vma,
+ 					  unsigned long addr);
++#ifdef CONFIG_USERFAULTFD
++	/*
++	 * Userfaultfd related ops.  Modules need to define this to support
++	 * userfaultfd.
++	 */
++	const vm_uffd_ops *userfaultfd_ops;
++#endif
+ };
+ 
+ #ifdef CONFIG_NUMA_BALANCING
+diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
+index ccad58602846..e79c724b3b95 100644
+--- a/include/linux/userfaultfd_k.h
++++ b/include/linux/userfaultfd_k.h
+@@ -80,18 +80,6 @@ struct userfaultfd_ctx {
+ 
+ extern vm_fault_t handle_userfault(struct vm_fault *vmf, unsigned long reason);
+ 
+-/* A combined operation mode + behavior flags. */
+-typedef unsigned int __bitwise uffd_flags_t;
+-
+-/* Mutually exclusive modes of operation. */
+-enum mfill_atomic_mode {
+-	MFILL_ATOMIC_COPY,
+-	MFILL_ATOMIC_ZEROPAGE,
+-	MFILL_ATOMIC_CONTINUE,
+-	MFILL_ATOMIC_POISON,
+-	NR_MFILL_ATOMIC_MODES,
+-};
+-
+ #define MFILL_ATOMIC_MODE_BITS (const_ilog2(NR_MFILL_ATOMIC_MODES - 1) + 1)
+ #define MFILL_ATOMIC_BIT(nr) BIT(MFILL_ATOMIC_MODE_BITS + (nr))
+ #define MFILL_ATOMIC_FLAG(nr) ((__force uffd_flags_t) MFILL_ATOMIC_BIT(nr))
 -- 
-2.34.1
+2.49.0
+
+
+From a7094b86d3308e91ac7ab785b7d71ae6cc4739f4 Mon Sep 17 00:00:00 2001
+From: Peter Xu <peterx@redhat.com>
+Date: Wed, 11 Jun 2025 10:18:23 -0400
+Subject: [PATCH 2/4] mm/shmem: Support vm_uffd_ops API
+
+Add support for the new vm_uffd_ops API for shmem.  Note that this only
+introduces the support, the API is not yet used by core mm.
+
+Cc: Hugh Dickins <hughd@google.com>
+Signed-off-by: Peter Xu <peterx@redhat.com>
+---
+ mm/shmem.c | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+
+diff --git a/mm/shmem.c b/mm/shmem.c
+index 0bc30dafad90..bd0a29000318 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -3151,6 +3151,13 @@ static inline struct inode *shmem_get_inode(struct mnt_idmap *idmap,
+ #endif /* CONFIG_TMPFS_QUOTA */
+ 
+ #ifdef CONFIG_USERFAULTFD
++
++static int shmem_uffd_get_folio(struct inode *inode, pgoff_t pgoff,
++				struct folio **folio)
++{
++	return shmem_get_folio(inode, pgoff, 0, folio, SGP_NOALLOC);
++}
++
+ int shmem_mfill_atomic_pte(pmd_t *dst_pmd,
+ 			   struct vm_area_struct *dst_vma,
+ 			   unsigned long dst_addr,
+@@ -5194,6 +5201,19 @@ static int shmem_error_remove_folio(struct address_space *mapping,
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_USERFAULTFD
++static const vm_uffd_ops shmem_uffd_ops = {
++	.uffd_features	= 	__VM_UFFD_FLAGS,
++	.uffd_ioctls	= 	BIT(_UFFDIO_COPY) |
++				BIT(_UFFDIO_ZEROPAGE) |
++				BIT(_UFFDIO_WRITEPROTECT) |
++				BIT(_UFFDIO_CONTINUE) |
++				BIT(_UFFDIO_POISON),
++	.uffd_get_folio	=	shmem_uffd_get_folio,
++	.uffd_copy	=	shmem_mfill_atomic_pte,
++};
++#endif
++
+ static const struct address_space_operations shmem_aops = {
+ 	.dirty_folio	= noop_dirty_folio,
+ #ifdef CONFIG_TMPFS
+@@ -5296,6 +5316,9 @@ static const struct vm_operations_struct shmem_vm_ops = {
+ 	.set_policy     = shmem_set_policy,
+ 	.get_policy     = shmem_get_policy,
+ #endif
++#ifdef CONFIG_USERFAULTFD
++	.userfaultfd_ops = &shmem_uffd_ops,
++#endif
+ };
+ 
+ static const struct vm_operations_struct shmem_anon_vm_ops = {
+@@ -5305,6 +5328,9 @@ static const struct vm_operations_struct shmem_anon_vm_ops = {
+ 	.set_policy     = shmem_set_policy,
+ 	.get_policy     = shmem_get_policy,
+ #endif
++#ifdef CONFIG_USERFAULTFD
++	.userfaultfd_ops = &shmem_uffd_ops,
++#endif
+ };
+ 
+ int shmem_init_fs_context(struct fs_context *fc)
+-- 
+2.49.0
+
+
+From fab8f8312982619ca80299d6cf35d5661cf61911 Mon Sep 17 00:00:00 2001
+From: Peter Xu <peterx@redhat.com>
+Date: Wed, 11 Jun 2025 10:18:40 -0400
+Subject: [PATCH 3/4] mm/hugetlb: Support vm_uffd_ops API
+
+Add support for the new vm_uffd_ops API for hugetlb.  Note that this only
+introduces the support, the API is not yet used by core mm.
+
+Cc: Muchun Song <muchun.song@linux.dev>
+Cc: Oscar Salvador <osalvador@suse.de>
+Signed-off-by: Peter Xu <peterx@redhat.com>
+---
+ mm/hugetlb.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 3d61ec17c15a..b9e473fab871 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -5459,6 +5459,22 @@ static vm_fault_t hugetlb_vm_op_fault(struct vm_fault *vmf)
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_USERFAULTFD
++static const vm_uffd_ops hugetlb_uffd_ops = {
++	.uffd_features	= 	__VM_UFFD_FLAGS,
++	/* _UFFDIO_ZEROPAGE not supported */
++	.uffd_ioctls	= 	BIT(_UFFDIO_COPY) |
++				BIT(_UFFDIO_WRITEPROTECT) |
++				BIT(_UFFDIO_CONTINUE) |
++				BIT(_UFFDIO_POISON),
++	/*
++	 * Hugetlbfs still has its own hard-coded handler in userfaultfd,
++	 * due to limitations similar to vm_operations_struct.fault().
++	 * TODO: generalize it to use the API functions.
++	 */
++};
++#endif
++
+ /*
+  * When a new function is introduced to vm_operations_struct and added
+  * to hugetlb_vm_ops, please consider adding the function to shm_vm_ops.
+@@ -5472,6 +5488,9 @@ const struct vm_operations_struct hugetlb_vm_ops = {
+ 	.close = hugetlb_vm_op_close,
+ 	.may_split = hugetlb_vm_op_split,
+ 	.pagesize = hugetlb_vm_op_pagesize,
++#ifdef CONFIG_USERFAULTFD
++	.userfaultfd_ops = &hugetlb_uffd_ops,
++#endif
+ };
+ 
+ static pte_t make_huge_pte(struct vm_area_struct *vma, struct folio *folio,
+-- 
+2.49.0
+
+
+From de6ac50b189dc16b2d5759f67b32d528a6c9ccde Mon Sep 17 00:00:00 2001
+From: Peter Xu <peterx@redhat.com>
+Date: Thu, 12 Jun 2025 11:55:08 -0400
+Subject: [PATCH 4/4] mm: Apply vm_uffd_ops API to core mm
+
+This patch completely moves the old userfaultfd core to use the new
+vm_uffd_ops API.  After this change, existing file systems will start to
+use the new API for userfault operations.
+
+When at it, moving vma_can_userfault() into mm/userfaultfd.c instead,
+because it's getting too big.  It's only used in slow paths so it shouldn't
+be an issue.
+
+This will also remove quite some hard-coded checks for either shmem or
+hugetlbfs.  Now all the old checks should still work but with vm_uffd_ops.
+
+Signed-off-by: Peter Xu <peterx@redhat.com>
+---
+ include/linux/shmem_fs.h      |  14 -----
+ include/linux/userfaultfd_k.h |  46 ++++----------
+ mm/shmem.c                    |   2 +-
+ mm/userfaultfd.c              | 115 +++++++++++++++++++++++++---------
+ 4 files changed, 101 insertions(+), 76 deletions(-)
+
+diff --git a/include/linux/shmem_fs.h b/include/linux/shmem_fs.h
+index 6d0f9c599ff7..2f5b7b295cf6 100644
+--- a/include/linux/shmem_fs.h
++++ b/include/linux/shmem_fs.h
+@@ -195,20 +195,6 @@ static inline pgoff_t shmem_fallocend(struct inode *inode, pgoff_t eof)
+ extern bool shmem_charge(struct inode *inode, long pages);
+ extern void shmem_uncharge(struct inode *inode, long pages);
+ 
+-#ifdef CONFIG_USERFAULTFD
+-#ifdef CONFIG_SHMEM
+-extern int shmem_mfill_atomic_pte(pmd_t *dst_pmd,
+-				  struct vm_area_struct *dst_vma,
+-				  unsigned long dst_addr,
+-				  unsigned long src_addr,
+-				  uffd_flags_t flags,
+-				  struct folio **foliop);
+-#else /* !CONFIG_SHMEM */
+-#define shmem_mfill_atomic_pte(dst_pmd, dst_vma, dst_addr, \
+-			       src_addr, flags, foliop) ({ BUG(); 0; })
+-#endif /* CONFIG_SHMEM */
+-#endif /* CONFIG_USERFAULTFD */
+-
+ /*
+  * Used space is stored as unsigned 64-bit value in bytes but
+  * quota core supports only signed 64-bit values so use that
+diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
+index e79c724b3b95..4e56ad423a4a 100644
+--- a/include/linux/userfaultfd_k.h
++++ b/include/linux/userfaultfd_k.h
+@@ -85,9 +85,14 @@ extern vm_fault_t handle_userfault(struct vm_fault *vmf, unsigned long reason);
+ #define MFILL_ATOMIC_FLAG(nr) ((__force uffd_flags_t) MFILL_ATOMIC_BIT(nr))
+ #define MFILL_ATOMIC_MODE_MASK ((__force uffd_flags_t) (MFILL_ATOMIC_BIT(0) - 1))
+ 
++static inline enum mfill_atomic_mode uffd_flags_get_mode(uffd_flags_t flags)
++{
++	return (enum mfill_atomic_mode)(flags & MFILL_ATOMIC_MODE_MASK);
++}
++
+ static inline bool uffd_flags_mode_is(uffd_flags_t flags, enum mfill_atomic_mode expected)
+ {
+-	return (flags & MFILL_ATOMIC_MODE_MASK) == ((__force uffd_flags_t) expected);
++	return uffd_flags_get_mode(flags) == expected;
+ }
+ 
+ static inline uffd_flags_t uffd_flags_set_mode(uffd_flags_t flags, enum mfill_atomic_mode mode)
+@@ -196,41 +201,16 @@ static inline bool userfaultfd_armed(struct vm_area_struct *vma)
+ 	return vma->vm_flags & __VM_UFFD_FLAGS;
+ }
+ 
+-static inline bool vma_can_userfault(struct vm_area_struct *vma,
+-				     unsigned long vm_flags,
+-				     bool wp_async)
++static inline const vm_uffd_ops *vma_get_uffd_ops(struct vm_area_struct *vma)
+ {
+-	vm_flags &= __VM_UFFD_FLAGS;
+-
+-	if (vma->vm_flags & VM_DROPPABLE)
+-		return false;
+-
+-	if ((vm_flags & VM_UFFD_MINOR) &&
+-	    (!is_vm_hugetlb_page(vma) && !vma_is_shmem(vma)))
+-		return false;
+-
+-	/*
+-	 * If wp async enabled, and WP is the only mode enabled, allow any
+-	 * memory type.
+-	 */
+-	if (wp_async && (vm_flags == VM_UFFD_WP))
+-		return true;
+-
+-#ifndef CONFIG_PTE_MARKER_UFFD_WP
+-	/*
+-	 * If user requested uffd-wp but not enabled pte markers for
+-	 * uffd-wp, then shmem & hugetlbfs are not supported but only
+-	 * anonymous.
+-	 */
+-	if ((vm_flags & VM_UFFD_WP) && !vma_is_anonymous(vma))
+-		return false;
+-#endif
+-
+-	/* By default, allow any of anon|shmem|hugetlb */
+-	return vma_is_anonymous(vma) || is_vm_hugetlb_page(vma) ||
+-	    vma_is_shmem(vma);
++	if (vma->vm_ops && vma->vm_ops->userfaultfd_ops)
++		return vma->vm_ops->userfaultfd_ops;
++	return NULL;
+ }
+ 
++bool vma_can_userfault(struct vm_area_struct *vma,
++		       unsigned long vm_flags, bool wp_async);
++
+ static inline bool vma_has_uffd_without_event_remap(struct vm_area_struct *vma)
+ {
+ 	struct userfaultfd_ctx *uffd_ctx = vma->vm_userfaultfd_ctx.ctx;
+diff --git a/mm/shmem.c b/mm/shmem.c
+index bd0a29000318..4d71fc7be358 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -3158,7 +3158,7 @@ static int shmem_uffd_get_folio(struct inode *inode, pgoff_t pgoff,
+ 	return shmem_get_folio(inode, pgoff, 0, folio, SGP_NOALLOC);
+ }
+ 
+-int shmem_mfill_atomic_pte(pmd_t *dst_pmd,
++static int shmem_mfill_atomic_pte(pmd_t *dst_pmd,
+ 			   struct vm_area_struct *dst_vma,
+ 			   unsigned long dst_addr,
+ 			   unsigned long src_addr,
+diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+index 879505c6996f..61783ff2d335 100644
+--- a/mm/userfaultfd.c
++++ b/mm/userfaultfd.c
+@@ -14,12 +14,48 @@
+ #include <linux/userfaultfd_k.h>
+ #include <linux/mmu_notifier.h>
+ #include <linux/hugetlb.h>
+-#include <linux/shmem_fs.h>
+ #include <asm/tlbflush.h>
+ #include <asm/tlb.h>
+ #include "internal.h"
+ #include "swap.h"
+ 
++bool vma_can_userfault(struct vm_area_struct *vma,
++		       unsigned long vm_flags, bool wp_async)
++{
++	unsigned long supported;
++
++	if (vma->vm_flags & VM_DROPPABLE)
++		return false;
++
++	vm_flags &= __VM_UFFD_FLAGS;
++
++#ifndef CONFIG_PTE_MARKER_UFFD_WP
++	/*
++	 * If user requested uffd-wp but not enabled pte markers for
++	 * uffd-wp, then any file system (like shmem or hugetlbfs) are not
++	 * supported but only anonymous.
++	 */
++	if ((vm_flags & VM_UFFD_WP) && !vma_is_anonymous(vma))
++		return false;
++#endif
++	/*
++	 * If wp async enabled, and WP is the only mode enabled, allow any
++	 * memory type.
++	 */
++	if (wp_async && (vm_flags == VM_UFFD_WP))
++		return true;
++
++	if (vma_is_anonymous(vma))
++		/* Anonymous has no page cache, MINOR not supported */
++		supported = VM_UFFD_MISSING | VM_UFFD_WP;
++	else if (vma_get_uffd_ops(vma))
++		supported = vma_get_uffd_ops(vma)->uffd_features;
++	else
++		return false;
++
++	return !(vm_flags & (~supported));
++}
++
+ static __always_inline
+ bool validate_dst_vma(struct vm_area_struct *dst_vma, unsigned long dst_end)
+ {
+@@ -384,11 +420,15 @@ static int mfill_atomic_pte_continue(pmd_t *dst_pmd,
+ {
+ 	struct inode *inode = file_inode(dst_vma->vm_file);
+ 	pgoff_t pgoff = linear_page_index(dst_vma, dst_addr);
++	const vm_uffd_ops *uffd_ops = vma_get_uffd_ops(dst_vma);
+ 	struct folio *folio;
+ 	struct page *page;
+ 	int ret;
+ 
+-	ret = shmem_get_folio(inode, pgoff, 0, &folio, SGP_NOALLOC);
++	if (WARN_ON_ONCE(!uffd_ops || !uffd_ops->uffd_get_folio))
++		return -EINVAL;
++
++	ret = uffd_ops->uffd_get_folio(inode, pgoff, &folio);
+ 	/* Our caller expects us to return -EFAULT if we failed to find folio */
+ 	if (ret == -ENOENT)
+ 		ret = -EFAULT;
+@@ -504,18 +544,6 @@ static __always_inline ssize_t mfill_atomic_hugetlb(
+ 	u32 hash;
+ 	struct address_space *mapping;
+ 
+-	/*
+-	 * There is no default zero huge page for all huge page sizes as
+-	 * supported by hugetlb.  A PMD_SIZE huge pages may exist as used
+-	 * by THP.  Since we can not reliably insert a zero page, this
+-	 * feature is not supported.
+-	 */
+-	if (uffd_flags_mode_is(flags, MFILL_ATOMIC_ZEROPAGE)) {
+-		up_read(&ctx->map_changing_lock);
+-		uffd_mfill_unlock(dst_vma);
+-		return -EINVAL;
+-	}
+-
+ 	src_addr = src_start;
+ 	dst_addr = dst_start;
+ 	copied = 0;
+@@ -686,14 +714,55 @@ static __always_inline ssize_t mfill_atomic_pte(pmd_t *dst_pmd,
+ 			err = mfill_atomic_pte_zeropage(dst_pmd,
+ 						 dst_vma, dst_addr);
+ 	} else {
+-		err = shmem_mfill_atomic_pte(dst_pmd, dst_vma,
+-					     dst_addr, src_addr,
+-					     flags, foliop);
++		const vm_uffd_ops *uffd_ops = vma_get_uffd_ops(dst_vma);
++
++		if (WARN_ON_ONCE(!uffd_ops || !uffd_ops->uffd_copy)) {
++			err = -EINVAL;
++		} else {
++			err = uffd_ops->uffd_copy(dst_pmd, dst_vma,
++						  dst_addr, src_addr,
++						  flags, foliop);
++		}
+ 	}
+ 
+ 	return err;
+ }
+ 
++static inline bool
++vma_uffd_ops_supported(struct vm_area_struct *vma, uffd_flags_t flags)
++{
++	enum mfill_atomic_mode mode = uffd_flags_get_mode(flags);
++	const vm_uffd_ops *uffd_ops;
++	unsigned long uffd_ioctls;
++
++	if ((flags & MFILL_ATOMIC_WP) && !(vma->vm_flags & VM_UFFD_WP))
++		return false;
++
++	/* Anonymous supports everything except CONTINUE */
++	if (vma_is_anonymous(vma))
++		return mode != MFILL_ATOMIC_CONTINUE;
++
++	uffd_ops = vma_get_uffd_ops(vma);
++	if (!uffd_ops)
++		return false;
++
++	uffd_ioctls = uffd_ops->uffd_ioctls;
++	switch (mode) {
++	case MFILL_ATOMIC_COPY:
++		return uffd_ioctls & BIT(_UFFDIO_COPY);
++	case MFILL_ATOMIC_ZEROPAGE:
++		return uffd_ioctls & BIT(_UFFDIO_ZEROPAGE);
++	case MFILL_ATOMIC_CONTINUE:
++		if (!(vma->vm_flags & VM_SHARED))
++			return false;
++		return uffd_ioctls & BIT(_UFFDIO_CONTINUE);
++	case MFILL_ATOMIC_POISON:
++		return uffd_ioctls & BIT(_UFFDIO_POISON);
++	default:
++		return false;
++	}
++}
++
+ static __always_inline ssize_t mfill_atomic(struct userfaultfd_ctx *ctx,
+ 					    unsigned long dst_start,
+ 					    unsigned long src_start,
+@@ -752,11 +821,7 @@ static __always_inline ssize_t mfill_atomic(struct userfaultfd_ctx *ctx,
+ 	    dst_vma->vm_flags & VM_SHARED))
+ 		goto out_unlock;
+ 
+-	/*
+-	 * validate 'mode' now that we know the dst_vma: don't allow
+-	 * a wrprotect copy if the userfaultfd didn't register as WP.
+-	 */
+-	if ((flags & MFILL_ATOMIC_WP) && !(dst_vma->vm_flags & VM_UFFD_WP))
++	if (!vma_uffd_ops_supported(dst_vma, flags))
+ 		goto out_unlock;
+ 
+ 	/*
+@@ -766,12 +831,6 @@ static __always_inline ssize_t mfill_atomic(struct userfaultfd_ctx *ctx,
+ 		return  mfill_atomic_hugetlb(ctx, dst_vma, dst_start,
+ 					     src_start, len, flags);
+ 
+-	if (!vma_is_anonymous(dst_vma) && !vma_is_shmem(dst_vma))
+-		goto out_unlock;
+-	if (!vma_is_shmem(dst_vma) &&
+-	    uffd_flags_mode_is(flags, MFILL_ATOMIC_CONTINUE))
+-		goto out_unlock;
+-
+ 	while (src_addr < src_start + len) {
+ 		pmd_t dst_pmdval;
+ 
+-- 
+2.49.0
+
+
+-- 
+Peter Xu
 
 
