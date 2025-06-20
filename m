@@ -1,250 +1,394 @@
-Return-Path: <linux-kselftest+bounces-35419-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35420-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72FC9AE17C6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Jun 2025 11:39:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 952EEAE17CB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Jun 2025 11:39:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 176893ABFA1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Jun 2025 09:38:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2BAC316A3BA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Jun 2025 09:39:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0366A286D5C;
-	Fri, 20 Jun 2025 09:38:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bO9U8GrP"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92B4A283FEE;
+	Fri, 20 Jun 2025 09:38:43 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 410EA2868AF
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Jun 2025 09:38:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4154E280A5A;
+	Fri, 20 Jun 2025 09:38:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750412293; cv=none; b=lD+B0QKe7LLXLORROm3OFTyZtUPZ0TYCdjC93FeVl4zYrJVNJghSldthAUpPbO5hP40QubrGSml2M8eKOHOaER9/tp9MI2gbaLuBjgGlLzIegFlyktq6uM0OZDX/+NNXs2lEg67TGB1h7FiixSvvR+QUPjuES/urS4PAtbyITPE=
+	t=1750412323; cv=none; b=Ow8Kkw3Y6Yq4mfztG7pDSyqazHAkJtKw4hxmEmToupdlqUlQFrQbc07negB4yAq1vKWiCi0m374fNIUdh7poMAWv5ZgmDwM9B1wSYNWmQG6hufVJqwbYVhJlPrxh6nYZB8t6wsNHA0DruaZSwi4kt8T5ZVUK2FEIHCXSzSguwVQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750412293; c=relaxed/simple;
-	bh=Ix/mmU5cA8e9eFWYgjMW0mWb0+GeOYSTQMI7Q24rUjA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aYf4OKKF16eAU44SDNR2GpDS+wCnNHZDiopxc5fFvxNFcHAnCFUHHVldyzAPnFxyGSdtCthwp8GxWS4EB5SIp8MPeVqVE+sC5xypEnyHPbKQOMRCmo7nvQ4ajEIi0mhomFI5RteyrL5U6MBrXyzPqXtL7XCNO9vspbHS5JI+rQ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bO9U8GrP; arc=none smtp.client-ip=209.85.219.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6faf66905baso23453166d6.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Jun 2025 02:38:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1750412291; x=1751017091; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=iLH3Hm/Fv+gGvC35H8XTLyXfMYnU+6W3SOC+HFGujCo=;
-        b=bO9U8GrPvBBbyzD9gvDSisaExP4IhNKWBjBLcMFHeXmyrPyUBCfyOT1V8I6Jr/RjO6
-         1QxwOem+aAcsU6qboYVTH94BkGxJj0SsqeszgEoPYdL2hxpl0lOXCaaqhYBiu8siRwXK
-         rdXqx+bbrWi2pJyUMXPHq4OtAsm1G0PIYI6tCYjvzuqeh6Rl5R7rwfTkqmTaXcgRmFJK
-         HaY5u0GEC4EIZomlfY9eKO6PH21W4PC60TSJuHDxTFYPpZFkmu7zimovMXYv9iEYxo9H
-         abZOz0jzKYuInIApdgRKNuYDvROC+9D16LLiOnln+yPRvAXPpIe4K3p3erkwfGM28Jp6
-         tH8A==
+	s=arc-20240116; t=1750412323; c=relaxed/simple;
+	bh=WSlXw0/bOIG6mT81w9Z8EW/mjBZOHoPkLYZ3TW3VflA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Jl0RktlNkVEpC/eG5hP9RAKJawy4PDY/zQSpwSNQEmrM31r4CN1rj26zGHaD4xGBtq08M396033ZSKjZZ9rAQvPvPUXracDKSgStTX8apahfskfgexDg3PNGVhKiU1LQiQ2oJ1tx9eg40W+6MwwQZcsbaZMvc7Pt4jspRoOyxfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-ade48b24c97so270087666b.2;
+        Fri, 20 Jun 2025 02:38:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750412291; x=1751017091;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1750412319; x=1751017119;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=iLH3Hm/Fv+gGvC35H8XTLyXfMYnU+6W3SOC+HFGujCo=;
-        b=iCoRfwVmE/Fp4lQvbO+lrcC1mCDHMHDpFNCvb5MdwYLVIcW9Yl5Ryt4v9Af3XPj00J
-         IOvyek8E8AMNWTbGgCtwEA+Zn9rceU11uL4KKwd5hbnQSgg2Q+V+6jiy1PQsDTpZ4VLm
-         XJMnUklz0qdPb5xoqBrumcGKty11xHRx4Gbej8lauGoJbSBPTtl95l/dfghVyxjkpxW3
-         gm5ycrBZFwpTHICh8brcv4rao+Kf4TMJcvec9OBa9pdvhyyOuqcoxU6ImGVVe/+ykaYH
-         AG74OBfqCMTIYZ08qJxdu5TwDtK2SwUenIdY3lc7NWE8MbOkiFohbg9lIl7ipSU0tc1N
-         OysQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUzXiDTHSN6JT0vGhxE6fyoSie/Iz9VOkMCb+RJjmqllNHdEV5uRu8eUNK6k7bbIxbuo0y9kYsW3yMEcEtdgEU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzV6HJTCwXmr3i2JKI7RflCC6u64+0XKcqQy+0uAYmB+AYD5Ux5
-	V9Bc+BqHwcblzeHMASBy3QGw4aFTvHBlufBBHupHM2fdSDLg5kTTGbYBLYkpPRSCtEY1IiWiLDp
-	cjfX9l2mLykq4UOB0vTkQjxquqm/IAvpqZCYMg/j1
-X-Gm-Gg: ASbGncvipeVzn536bxFhN5wYp6W6RR4mDGd23dzKB0IbIUr9v+HSyLDyWNqjz6/T5ja
-	WPGbk/XplTudG9Q8xsaDCCrsKyzf57eGMJFZ/aWEXR6ZCCf2aw6D8oJJigCfNVgmFz1GhzEQ9fh
-	zw69FT6W4MmY4xumweYDcEyjCzozOnfGyy9JXAEmUEOQCddc/v4PNomGumPIpAtAkFXafucfMF1
-	Yd4Kg==
-X-Google-Smtp-Source: AGHT+IHQRmOnbKSBIf89VSyNKtPGCMRQ0h0fC5YdqXOzj+9IApycf43fjMllrY7wV8xe0r/PlJS92AO/kHnetzmEzO8=
-X-Received: by 2002:a05:6214:4885:b0:6fa:9f9b:8df0 with SMTP id
- 6a1803df08f44-6fd0a534772mr34873236d6.20.1750412291053; Fri, 20 Jun 2025
- 02:38:11 -0700 (PDT)
+        bh=Xr3dINH6U6XhF2MbphhQXLOTE3yd3JTsZEXI/iXG/Bk=;
+        b=uwf9cCjqBxzL+yaYc08MFJn/rv5Qw9MjZMx2UcPJl4pVtFXX5AXFx8H2hmb8fGnqpS
+         Na3wDm06klJ0JsvdCtwzkYhqfAnE09Decw533IUbrerRl8u2FhcLxGrDIoFXhY/VgzyQ
+         9PILImCstqeBuEG4jZI81jIS8cRlFe/huqbwxl1ROXErA/gsTXhYPC+25bPNNu/Y3Aoc
+         4/W8a1co6OLnodhZp0Q4WbGjUV6w31sFcUKgWEZjmkMaOy1wUfPyjAXgnfZ7cFGAWfiC
+         iPej8r7mrHGjwSvrXQM8ttHr5sq30wbzzEDyJQJp92XLc5qEKE03MZz/s2VC7qgRIAeg
+         V3yg==
+X-Forwarded-Encrypted: i=1; AJvYcCUfH6DerjOZtCjbjFFmbRaHX2oRPXirlsfhUz6MWVLnutf3/ZWSac2DrT0FsPPsXLWBXrxjQ8Sq@vger.kernel.org, AJvYcCW5JbKvAa7X6r5ui4ZmJGZJaUlv82ANvmB/wCHT+OmCAwOYSHaXZls2W51CkPL87c3HIRTDuNzZgdNKGlqVsPE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzmv94lJHLycQQZD+Dv5hvJ7Pk+yzWv0YvDCU6JgnDovaOTjlCU
+	uuE+Ae+zfbNRB6ETHF5oWmT5k+fI/+s60i3IbXQmuQoPAdNApzhJqTYfPomOaQ==
+X-Gm-Gg: ASbGncs0z/GI/d3XneS5nKzHq0/dsQVu/o9XWNAQrPABR3HM/H4XlkRDxvuTLGVMOnI
+	5QZfVQIJI14EdA13gVgOJ9o6sAO6RvVRp2P8Rnx61MGY9qETOGklfZaNIom9iSDgrsOsG/dWioX
+	Eu2H8bXhOpYRFqERLV3u4/leuH7xHsmWQJiIs3ikwBqHhltsHhbO17tiL5XixFRgY2ALKI+kvbE
+	06Co/BI3klf/tOuLJQ12bZkCbzdc87WIin/PMIW1nF6xogEyrFxoau1I+4Y154AIGrSKtK0ouDV
+	eGyjgvxIxGOOTZCsU1HrSd/JXKi9T6/VZDcWtiQoAKbUPzWAUSGILQ==
+X-Google-Smtp-Source: AGHT+IFp7sK2lfL/U46VEqnX6czUADvPChgpES2TxJ1tI8Zud3mkIjd7GGew8GZVFAWCZsuI4cXR/Q==
+X-Received: by 2002:a17:907:9404:b0:ade:4593:d7cd with SMTP id a640c23a62f3a-ae0579bc240mr218208566b.13.1750412318857;
+        Fri, 20 Jun 2025 02:38:38 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:73::])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae054209ad2sm135111166b.148.2025.06.20.02.38.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jun 2025 02:38:38 -0700 (PDT)
+From: Breno Leitao <leitao@debian.org>
+Date: Fri, 20 Jun 2025 02:38:31 -0700
+Subject: [PATCH net-next] selftests: net: add netpoll basic functionality
+ test
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250611-kunit-kselftests-v3-0-55e3d148cbc6@linutronix.de> <20250611-kunit-kselftests-v3-12-55e3d148cbc6@linutronix.de>
-In-Reply-To: <20250611-kunit-kselftests-v3-12-55e3d148cbc6@linutronix.de>
-From: David Gow <davidgow@google.com>
-Date: Fri, 20 Jun 2025 17:37:57 +0800
-X-Gm-Features: Ac12FXyFoljdSZ7ABL78oDq9rw_5mltpFUvMzADHo2O_rdx82VoZtEQLIK4MFWw
-Message-ID: <CABVgOSkgOgjiZf56RzmaP0Uc5Q4A3-1FEXCJMYM8wBDs4xv1_A@mail.gmail.com>
-Subject: Re: [PATCH v3 12/16] kunit: qemu_configs: loongarch: Enable LSX/LSAX
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>, 
-	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, 
-	Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Nicolas Schier <nicolas.schier@linux.dev>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Alexandre Ghiti <alex@ghiti.fr>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	workflows@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000d983960637fd9e03"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250620-netpoll_test-v1-1-5068832f72fc@debian.org>
+X-B4-Tracking: v=1; b=H4sIABcsVWgC/23NQQqDMBRF0a2ENzbFxKRWR91HkWLNVz9IIkkQi
+ 7j3guOOL5x7IFFkSmjFgUgbJw4erVCFwDD3fiLJDq2ALrUt70pLT3kNy/LOlLLsVaWN06Wthwc
+ KgTXSyPvFveApS097RlcIzJxyiN/rs6mr/yc3JZU0dW1G19imqsanow/3/hbihO48zx+4KNK/s
+ wAAAA==
+X-Change-ID: 20250612-netpoll_test-a1324d2057c8
+To: Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, gustavold@gmail.com, 
+ Breno Leitao <leitao@debian.org>
+X-Mailer: b4 0.15-dev-dd21f
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10258; i=leitao@debian.org;
+ h=from:subject:message-id; bh=WSlXw0/bOIG6mT81w9Z8EW/mjBZOHoPkLYZ3TW3VflA=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBoVSwdm1Gy7bW7UHuGDg8GObI8K+9SmrmE0rsBz
+ ryQ8pETyZaJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaFUsHQAKCRA1o5Of/Hh3
+ bXM3D/93rQlEixpiUNMGYeZaL13ulABHViIOkFFC6CwEoW8hE++lY8Yft5/2X6YPAD8mVV4vXbU
+ yw4iUgfiTzxQ3rMpPM3msc6zlqjlp8KLr/b2k5pRZMCu5YQwBMARpp3BAA8kSOGjboWauvpQCg7
+ Bml80j2g6sPnDXYEPaWTLSlxFOIzN5wstB6FUeIhNdSqIdscPxsCoueuxi1Z5r4jXu65Whr2YJl
+ vgxNBb+GR8FuO7gkOiDAECyjFYQO/VS4bWrpvMEtHX+VCfA+hXCFcjseGFl6/xIfw+VYk4o8iGN
+ mbGKvhlFmot4NlLpNJAcNAPsyEg3cFpXkUlHU0w5Is26njPqK6k2+zTw88M/LM3ZuDPUUPbs9IM
+ UBZFhN8yAZ+vK8XW1bD0aj1SWEO2Zov8CCbfY2zDyv9c9Xn650TDS1mGNAOBdW/ivAkROdSUbFD
+ 8KMiqBTtS/YvNuIdCDmLZDwMuyUBmJvyEkU1OvW00tGfaTQM+BTcpvfr/2W4tjejBA0pGkohgv/
+ HfLRePovpXCuHKIvpwYscGnNvJieKm7FSpcStNeHCh9RxvFfxrBKRiXP0zUrWn9JE+lsHjB1Fr1
+ ZCOV29ZmuJuhU7xKX7TEYwsH8kT7iQqWf0V35dk4rnuGEvp4uz5vFj5Cyx2DvJIgBc1W9wKRO6V
+ 8p4YjKZx+J3Oblg==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
---000000000000d983960637fd9e03
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Add a basic selftest for the netpoll polling mechanism, specifically
+targeting the netpoll poll() side.
 
-On Wed, 11 Jun 2025 at 15:38, Thomas Wei=C3=9Fschuh
-<thomas.weissschuh@linutronix.de> wrote:
->
-> The upcoming kunit UAPI framework will run userspace executables as part =
-of
-> kunit. These may use the LSX or LASX instructions.
->
-> Make sure the kunit kernel can handle these instructions.
->
-> Signed-off-by: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
-> ---
+The test creates a scenario where network transmission is running at
+maximum speed, and netpoll needs to poll the NIC. This is achieved by:
 
-Looks fine to me. I confess to not knowing much about the details of
-Loongarch CPUs, though, so while it hasn't broken anything here, I
-make no further guarantees.
+  1. Configuring a single RX/TX queue to create contention
+  2. Generating background traffic to saturate the interface
+  3. Sending netconsole messages to trigger netpoll polling
+  4. Using dynamic netconsole targets via configfs
+  5. Delete and create new netconsole targets after 5 iterations
 
-Reviewed-by: David Gow <davidgow@google.com>
+The test validates a critical netpoll code path by monitoring traffic
+flow and ensuring netpoll_poll_dev() is called when the normal TX path
+is blocked. Perf probing confirms this test successfully triggers
+netpoll_poll_dev() in typical test runs.
 
-Cheers,
--- David
+This addresses a gap in netpoll test coverage for a path that is
+tricky for the network stack.
 
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+Changes since RFC:
+- Toggle the netconsole interfaces up and down after 5 iterations.
+- Moved the traffic check under DEBUG (Willem de Bruijn).
+- Bumped the iterations to 20 given it runs faster now.
+- Link to the RFC: https://lore.kernel.org/r/20250612-netpoll_test-v1-1-4774fd95933f@debian.org
+---
+ tools/testing/selftests/drivers/net/Makefile       |   1 +
+ .../testing/selftests/drivers/net/netpoll_basic.py | 231 +++++++++++++++++++++
+ 2 files changed, 232 insertions(+)
 
->  tools/testing/kunit/qemu_configs/loongarch.py | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/tools/testing/kunit/qemu_configs/loongarch.py b/tools/testin=
-g/kunit/qemu_configs/loongarch.py
-> index a92422967d1da9f1658ef1e80d0d7365ddbae307..1dba755284f11ffc94d894610=
-5b0cfa49cb6f604 100644
-> --- a/tools/testing/kunit/qemu_configs/loongarch.py
-> +++ b/tools/testing/kunit/qemu_configs/loongarch.py
-> @@ -11,6 +11,8 @@ CONFIG_PVPANIC_PCI=3Dy
->  CONFIG_SERIAL_8250=3Dy
->  CONFIG_SERIAL_8250_CONSOLE=3Dy
->  CONFIG_SERIAL_OF_PLATFORM=3Dy
-> +CONFIG_CPU_HAS_LSX=3Dy
-> +CONFIG_CPU_HAS_LASX=3Dy
->  ''',
->                            qemu_arch=3D'loongarch64',
->                            kernel_path=3D'arch/loongarch/boot/vmlinux.elf=
-',
->
-> --
-> 2.49.0
->
+diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
+index bd309b2d39095..9bd84d6b542e5 100644
+--- a/tools/testing/selftests/drivers/net/Makefile
++++ b/tools/testing/selftests/drivers/net/Makefile
+@@ -16,6 +16,7 @@ TEST_PROGS := \
+ 	netcons_fragmented_msg.sh \
+ 	netcons_overflow.sh \
+ 	netcons_sysdata.sh \
++	netpoll_basic.py \
+ 	ping.py \
+ 	queues.py \
+ 	stats.py \
+diff --git a/tools/testing/selftests/drivers/net/netpoll_basic.py b/tools/testing/selftests/drivers/net/netpoll_basic.py
+new file mode 100755
+index 0000000000000..2a81926169262
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/netpoll_basic.py
+@@ -0,0 +1,231 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
++
++# This test aims to evaluate the netpoll polling mechanism (as in
++# netpoll_poll_dev()). It presents a complex scenario where the network
++# attempts to send a packet but fails, prompting it to poll the NIC from within
++# the netpoll TX side.
++#
++# This has been a crucial path in netpoll that was previously untested. Jakub
++# suggested using a single RX/TX queue, pushing traffic to the NIC, and then
++# sending netpoll messages (via netconsole) to trigger the poll. `perf` probing
++# of netpoll_poll_dev() showed that this test indeed triggers
++# netpoll_poll_dev() once or twice in 10 iterations.
++
++# Author: Breno Leitao <leitao@debian.org>
++
++import errno
++import os
++import random
++import string
++import time
++
++from lib.py import (
++    ethtool,
++    GenerateTraffic,
++    ksft_exit,
++    ksft_pr,
++    ksft_run,
++    KsftFailEx,
++    KsftSkipEx,
++    NetdevFamily,
++    NetDrvEpEnv,
++)
++
++NETCONSOLE_CONFIGFS_PATH = "/sys/kernel/config/netconsole"
++REMOTE_PORT = 6666
++LOCAL_PORT = 1514
++# Number of netcons messages to send. I usually see netpoll_poll_dev()
++# being called at least once in 10 iterations. Having 20 to have some buffers
++ITERATIONS = 20
++DEBUG = False
++
++
++def generate_random_netcons_name() -> str:
++    """Generate a random target name starting with 'netcons'"""
++    random_suffix = "".join(random.choices(string.ascii_lowercase + string.digits, k=8))
++    return f"netcons_{random_suffix}"
++
++
++def get_stats(cfg: NetDrvEpEnv, netdevnl: NetdevFamily) -> dict[str, int]:
++    """Get the statistics for the interface"""
++    return netdevnl.qstats_get({"ifindex": cfg.ifindex}, dump=True)[0]
++
++
++def set_single_rx_tx_queue(interface_name: str) -> None:
++    """Set the number of RX and TX queues to 1 using ethtool"""
++    try:
++        # This don't need to be reverted, since interfaces will be deleted after test
++        ethtool(f"-G {interface_name} rx 1 tx 1")
++    except Exception as e:
++        raise KsftSkipEx(
++            f"Failed to configure RX/TX queues: {e}. Ethtool not available?"
++        )
++
++
++def create_netconsole_target(
++    config_data: dict[str, str],
++    target_name: str,
++) -> None:
++    """Create a netconsole dynamic target against the interfaces"""
++    ksft_pr(f"Using netconsole name: {target_name}")
++    try:
++        os.makedirs(f"{NETCONSOLE_CONFIGFS_PATH}/{target_name}", exist_ok=True)
++        ksft_pr(f"Created target directory: {NETCONSOLE_CONFIGFS_PATH}/{target_name}")
++    except OSError as e:
++        if e.errno != errno.EEXIST:
++            raise KsftFailEx(f"Failed to create netconsole target directory: {e}")
++
++    try:
++        for key, value in config_data.items():
++            if DEBUG:
++                ksft_pr(f"Setting {key} to {value}")
++            with open(
++                f"{NETCONSOLE_CONFIGFS_PATH}/{target_name}/{key}",
++                "w",
++                encoding="utf-8",
++            ) as f:
++                # Always convert to string to write to file
++                f.write(str(value))
++                f.close()
++
++        if DEBUG:
++            # Read all configuration values for debugging
++            for debug_key in config_data.keys():
++                with open(
++                    f"{NETCONSOLE_CONFIGFS_PATH}/{target_name}/{debug_key}",
++                    "r",
++                    encoding="utf-8",
++                ) as f:
++                    content = f.read()
++                    ksft_pr(
++                        f"{NETCONSOLE_CONFIGFS_PATH}/{target_name}/{debug_key} {content}"
++                    )
++
++    except Exception as e:
++        raise KsftFailEx(f"Failed to configure netconsole target: {e}")
++
++
++def set_netconsole(cfg: NetDrvEpEnv, interface_name: str, target_name: str) -> None:
++    """Configure netconsole on the interface with the given target name"""
++    config_data = {
++        "extended": "1",
++        "dev_name": interface_name,
++        "local_port": LOCAL_PORT,
++        "remote_port": REMOTE_PORT,
++        "local_ip": cfg.addr_v["4"] if cfg.addr_ipver == "4" else cfg.addr_v["6"],
++        "remote_ip": (
++            cfg.remote_addr_v["4"] if cfg.addr_ipver == "4" else cfg.remote_addr_v["6"]
++        ),
++        "remote_mac": "00:00:00:00:00:00",  # Not important for this test
++        "enabled": "1",
++    }
++
++    create_netconsole_target(config_data, target_name)
++    ksft_pr(f"Created netconsole target: {target_name} on interface {interface_name}")
++
++
++def delete_netconsole_target(name: str) -> None:
++    """Delete a netconsole dynamic target"""
++    target_path = f"{NETCONSOLE_CONFIGFS_PATH}/{name}"
++    try:
++        if os.path.exists(target_path):
++            os.rmdir(target_path)
++    except OSError as e:
++        raise KsftFailEx(f"Failed to delete netconsole target: {e}")
++
++
++def check_traffic_flowing(cfg: NetDrvEpEnv, netdevnl: NetdevFamily) -> int:
++    """Check if traffic is flowing on the interface"""
++    stat1 = get_stats(cfg, netdevnl)
++    time.sleep(1)
++    stat2 = get_stats(cfg, netdevnl)
++    pkts_per_sec = stat2["rx-packets"] - stat1["rx-packets"]
++    # Just make sure this will not fail even in slow/debug kernels
++    if pkts_per_sec < 10:
++        raise KsftFailEx(f"Traffic seems low: {pkts_per_sec}")
++    if DEBUG:
++        ksft_pr(f"Traffic per second {pkts_per_sec}")
++
++    return pkts_per_sec
++
++
++def do_netpoll_flush(
++    cfg: NetDrvEpEnv, netdevnl: NetdevFamily, ifname: str, target_name: str
++) -> None:
++    """Print messages to the console, trying to trigger a netpoll poll"""
++
++    set_netconsole(cfg, ifname, target_name)
++    for i in range(int(ITERATIONS)):
++        msg = f"netcons test #{i}."
++
++        if DEBUG:
++            pkts_per_s = check_traffic_flowing(cfg, netdevnl)
++            msg += f" ({pkts_per_s} packets/s)"
++
++        with open("/dev/kmsg", "w", encoding="utf-8") as kmsg:
++            kmsg.write(msg)
++
++        if not i % 5:
++            # Every 5 iterations, toggle netconsole
++            delete_netconsole_target(target_name)
++            set_netconsole(cfg, ifname, target_name)
++
++
++def test_netpoll(cfg: NetDrvEpEnv, netdevnl: NetdevFamily) -> None:
++    """
++    Test netpoll by sending traffic to the interface and then sending
++    netconsole messages to trigger a poll
++    """
++
++    target_name = generate_random_netcons_name()
++    ifname = cfg.dev["ifname"]
++    traffic = None
++
++    try:
++        set_single_rx_tx_queue(ifname)
++        traffic = GenerateTraffic(cfg)
++        check_traffic_flowing(cfg, netdevnl)
++        do_netpoll_flush(cfg, netdevnl, ifname, target_name)
++    finally:
++        if traffic:
++            traffic.stop()
++        delete_netconsole_target(target_name)
++
++
++def check_dependencies() -> None:
++    """Check if the dependencies are met"""
++    if not os.path.exists(NETCONSOLE_CONFIGFS_PATH):
++        raise KsftSkipEx(
++            f"Directory {NETCONSOLE_CONFIGFS_PATH} does not exist. CONFIG_NETCONSOLE_DYNAMIC might not be set."
++        )
++
++
++def load_netconsole_module() -> None:
++    """Try to load the netconsole module"""
++    try:
++        os.system("modprobe netconsole")
++    except Exception:
++        # It is fine if we fail to load the module, it will fail later
++        # at check_dependencies()
++        pass
++
++
++def main() -> None:
++    """Main function to run the test"""
++    load_netconsole_module()
++    check_dependencies()
++    netdevnl = NetdevFamily()
++    with NetDrvEpEnv(__file__, nsim_test=True) as cfg:
++        ksft_run(
++            [test_netpoll],
++            args=(
++                cfg,
++                netdevnl,
++            ),
++        )
++    ksft_exit()
++
++
++if __name__ == "__main__":
++    main()
 
---000000000000d983960637fd9e03
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+---
+base-commit: 4f4040ea5d3e4bebebbef9379f88085c8b99221c
+change-id: 20250612-netpoll_test-a1324d2057c8
 
-MIIUnQYJKoZIhvcNAQcCoIIUjjCCFIoCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ghIEMIIGkTCCBHmgAwIBAgIQfofDAVIq0iZG5Ok+mZCT2TANBgkqhkiG9w0BAQwFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSNjETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMzA0MTkwMzUzNDdaFw0zMjA0MTkwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFI2IFNNSU1FIENBIDIwMjMwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDYydcdmKyg
-4IBqVjT4XMf6SR2Ix+1ChW2efX6LpapgGIl63csmTdJQw8EcbwU9C691spkltzTASK2Ayi4aeosB
-mk63SPrdVjJNNTkSbTowej3xVVGnYwAjZ6/qcrIgRUNtd/mbtG7j9W80JoP6o2Szu6/mdjb/yxRM
-KaCDlloE9vID2jSNB5qOGkKKvN0x6I5e/B1Y6tidYDHemkW4Qv9mfE3xtDAoe5ygUvKA4KHQTOIy
-VQEFpd/ZAu1yvrEeA/egkcmdJs6o47sxfo9p/fGNsLm/TOOZg5aj5RHJbZlc0zQ3yZt1wh+NEe3x
-ewU5ZoFnETCjjTKz16eJ5RE21EmnCtLb3kU1s+t/L0RUU3XUAzMeBVYBEsEmNnbo1UiiuwUZBWiJ
-vMBxd9LeIodDzz3ULIN5Q84oYBOeWGI2ILvplRe9Fx/WBjHhl9rJgAXs2h9dAMVeEYIYkvW+9mpt
-BIU9cXUiO0bky1lumSRRg11fOgRzIJQsphStaOq5OPTb3pBiNpwWvYpvv5kCG2X58GfdR8SWA+fm
-OLXHcb5lRljrS4rT9MROG/QkZgNtoFLBo/r7qANrtlyAwPx5zPsQSwG9r8SFdgMTHnA2eWCZPOmN
-1Tt4xU4v9mQIHNqQBuNJLjlxvalUOdTRgw21OJAFt6Ncx5j/20Qw9FECnP+B3EPVmQIDAQABo4IB
-ZTCCAWEwDgYDVR0PAQH/BAQDAgGGMDMGA1UdJQQsMCoGCCsGAQUFBwMCBggrBgEFBQcDBAYJKwYB
-BAGCNxUGBgkrBgEEAYI3FQUwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQUM7q+o9Q5TSoZ
-18hmkmiB/cHGycYwHwYDVR0jBBgwFoAUrmwFo5MT4qLn4tcc1sfwf8hnU6AwewYIKwYBBQUHAQEE
-bzBtMC4GCCsGAQUFBzABhiJodHRwOi8vb2NzcDIuZ2xvYmFsc2lnbi5jb20vcm9vdHI2MDsGCCsG
-AQUFBzAChi9odHRwOi8vc2VjdXJlLmdsb2JhbHNpZ24uY29tL2NhY2VydC9yb290LXI2LmNydDA2
-BgNVHR8ELzAtMCugKaAnhiVodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL3Jvb3QtcjYuY3JsMBEG
-A1UdIAQKMAgwBgYEVR0gADANBgkqhkiG9w0BAQwFAAOCAgEAVc4mpSLg9A6QpSq1JNO6tURZ4rBI
-MkwhqdLrEsKs8z40RyxMURo+B2ZljZmFLcEVxyNt7zwpZ2IDfk4URESmfDTiy95jf856Hcwzdxfy
-jdwx0k7n4/0WK9ElybN4J95sgeGRcqd4pji6171bREVt0UlHrIRkftIMFK1bzU0dgpgLMu+ykJSE
-0Bog41D9T6Swl2RTuKYYO4UAl9nSjWN6CVP8rZQotJv8Kl2llpe83n6ULzNfe2QT67IB5sJdsrNk
-jIxSwaWjOUNddWvCk/b5qsVUROOuctPyYnAFTU5KY5qhyuiFTvvVlOMArFkStNlVKIufop5EQh6p
-jqDGT6rp4ANDoEWbHKd4mwrMtvrh51/8UzaJrLzj3GjdkJ/sPWkDbn+AIt6lrO8hbYSD8L7RQDqK
-C28FheVr4ynpkrWkT7Rl6npWhyumaCbjR+8bo9gs7rto9SPDhWhgPSR9R1//WF3mdHt8SKERhvtd
-NFkE3zf36V9Vnu0EO1ay2n5imrOfLkOVF3vtAjleJnesM/R7v5tMS0tWoIr39KaQNURwI//WVuR+
-zjqIQVx5s7Ta1GgEL56z0C5GJoNE1LvGXnQDyvDO6QeJVThFNgwkossyvmMAaPOJYnYCrYXiXXle
-A6TpL63Gu8foNftUO0T83JbV/e6J8iCOnGZwZDrubOtYn1QwggWDMIIDa6ADAgECAg5F5rsDgzPD
-hWVI5v9FUTANBgkqhkiG9w0BAQwFADBMMSAwHgYDVQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBS
-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
-jmkLAgMBAAGjggHgMIIB3DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1UdDwEB
-/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFBp5bTxrTm/d
-WMmRETO8lNkA4c7fMFgGA1UdIARRME8wCQYHZ4EMAQUBAjBCBgorBgEEAaAyCgMDMDQwMgYIKwYB
-BQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQC
-MAAwgZoGCCsGAQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWdu
-LmNvbS9jYS9nc2F0bGFzcjZzbWltZWNhMjAyMzBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5n
-bG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3J0MB8GA1UdIwQYMBaA
-FDO6vqPUOU0qGdfIZpJogf3BxsnGMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFs
-c2lnbi5jb20vY2EvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3JsMA0GCSqGSIb3DQEBCwUAA4ICAQBF
-tO3/N2l9hTaij/K0xCpLwIlrqpNo0nMAvvG5LPQQjSeHnTh06tWTgsPCOJ65GX+bqWRDwGTu8WTq
-c5ihCNOikBs25j82yeLkfdbeN/tzRGUb2RD+8n9I3CnyMSG49U2s0ZdncsrIVFh47KW2TpHTF7R8
-N1dri01wPg8hw4u0+XoczR2TiBrBOISKmAlkAi+P9ivT31gSHdbopoL4x0V2Ow9IOp0chrQQUZtP
-KBytLhzUzd9wIsE0QMNDbw6jeG8+a4sd17zpXSbBywIGw7sEvPtnBjMaf5ib3kznlOne6tuDVx4y
-QFExTCSrP3OTMUkNbpIdgzg2CHQ2aB8i8YsTZ8Q8Q8ztPJ+xDNsqBUeYxILLjTjxQQovToqipB3f
-6IMyk+lWCdDS+iCLYZULV1BTHSdwp1NM3t4jZ8TMlV+JzAyRqz4lzSl8ptkFhKBJ7w2tDrZ3BEXB
-8ASUByRxeh+pC1Z5/HhqfiWMVPjaWmlRRJVlRk+ObKIv2CblwxMYlo2Mn8rrbEDyfum1RTMW55Z6
-Vumvw5QTHe29TYxSiusovM6OD5y0I+4zaIaYDx/AtF0mMOFXb1MDyynf1CDxhtkgnrBUseHSOU2e
-MYs7IqzRap5xsgpJS+t7cp/P8fdlCNvsXss9zZa279tKwaxR0U2IzGxRGsWKGxDysn1HT6pqMDGC
-Al0wggJZAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
-BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAUXA7LnOuRz2DvkWTeMc
-0TANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQgdmRkn+roJnIRM7dOmFoKnCUuDTOA
-BI5IB+0ZaM0EHxswGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUw
-NjIwMDkzODExWjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
-YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcN
-AQEBBQAEggEAe2+hv7Z6q94sXBjDeyL5nFRNzuM7CGCciGs8J8Xe6Aid7xz9X+nog1oSN2J553o5
-dKPTqhGxSiaD4a+xQEwEg2jHMCPboHd4eGihQB0XjcQnp5rgpQZZ8qQXFVa2QjSPOyVvM4BVXucO
-+1LUJCanqUZUhPrshXj+EKgAM6VKqxv2JXKg3ZgHAJY3OzxI4+f14PNkHkAS8SM5OQVgzBcKoNHc
-2XWRgTf0xF4Qkj3SqFrZj7CuluU3yOJaHJnkFY1CZoLy2hcub0MTfvz7Ylqgt7fygj3d6j9TOdgo
-B/bLq10X0vzGvuQI5McgNMY4YpEs0hXE4U8pBGB5f+THcAzD4g==
---000000000000d983960637fd9e03--
+Best regards,
+--  
+Breno Leitao <leitao@debian.org>
+
 
