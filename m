@@ -1,372 +1,476 @@
-Return-Path: <linux-kselftest+bounces-35543-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35545-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3ECFFAE2AE2
-	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Jun 2025 19:56:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26785AE2B7E
+	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Jun 2025 21:33:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 608403BAB08
-	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Jun 2025 17:55:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 86158172E43
+	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Jun 2025 19:33:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24EAD22F767;
-	Sat, 21 Jun 2025 17:56:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D8A726FA5B;
+	Sat, 21 Jun 2025 19:33:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="N7DFUikO"
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="mxog6Z7C"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013068.outbound.protection.outlook.com [40.107.159.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8DCB21480C;
-	Sat, 21 Jun 2025 17:56:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750528572; cv=none; b=I5QNTWZcoDi38IEL0vZJV96v4hjvkn2a9VeizbRxESuN8BzajBn0tn1OU39xGXwrjfIun2bRqFFKg5itQnEhs3mGEKf+ndRQsdYQ/3Zrk0zrBhP3SPwXxGXT0ufz6ZjviniaKxi1yIwpkSmngAqBb5fskXrGHE+EhWhGlEtUaD4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750528572; c=relaxed/simple;
-	bh=eyI5u6J2o4/7qDOz4rlLDDSIwLXzDfWGrbyHoZzHNFU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E5AdRqkt/DkQzceKgXvac2sDjMvUu2uoBrRpis7sjAZm0rDPiOgPKf6Dzu6ToT5c2GtLHQwZ/wTE5yq5QUE+bQ1PMcUYg/PKuvRAJB6mcyFbDArqzskikarsVDbuCsspr0RBKzDnKeAdEhHT0Vdd0cnPsjniHaJG65VCW1ppFKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=N7DFUikO; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55L31B97012718;
-	Sat, 21 Jun 2025 17:55:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=S6vqhG
-	5G1JSydGNxvG1OfuFimsaHOrEmy285Hilc3vE=; b=N7DFUikO0PIG5Il7MpCZI7
-	LRQDDRpdBkHF1vnKOswGPzMd+WY0nVXCsboBL+trG0Ed5Bi3HL/lKID/Gbu+mf4V
-	IsjN0DKMw1T2jwLYDDqdeh8saYSRIJ52jVp22Qc4kafNok0Tlg5BfKnn1A40VRxd
-	Nj52T2PtaHauFjhhrxPRA6ZV6mhjKIHauc4IonAaBusSYDLTfV2C7a1Kn+DqpwWz
-	hESxpGyDGPFGqSFP25kMIofPGONC+OF/3eubhYBijwCZD7Yby3m5TNOis4vTh53k
-	JiMVwIaCWycAoAsyrufjmuOt5QXna/h15/9gtBdEGOLEECxAsDqAoPGUFH7YD3hg
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47dmf2j5j1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 21 Jun 2025 17:55:46 +0000 (GMT)
-Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 55LHtjvb030450;
-	Sat, 21 Jun 2025 17:55:45 GMT
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47dmf2j5hy-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 21 Jun 2025 17:55:45 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 55LEWBd9016454;
-	Sat, 21 Jun 2025 17:55:44 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 47dnmttafq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 21 Jun 2025 17:55:44 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 55LHtgBs43450712
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sat, 21 Jun 2025 17:55:42 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A268020043;
-	Sat, 21 Jun 2025 17:55:42 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C951520040;
-	Sat, 21 Jun 2025 17:55:38 +0000 (GMT)
-Received: from li-06431bcc-2712-11b2-a85c-a6fe68df28f9.ibm.com (unknown [9.39.19.74])
-	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Sat, 21 Jun 2025 17:55:38 +0000 (GMT)
-Date: Sat, 21 Jun 2025 23:25:32 +0530
-From: Donet Tom <donettom@linux.ibm.com>
-To: Dev Jain <dev.jain@arm.com>
-Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-        Aboorva Devarajan <aboorvad@linux.ibm.com>, akpm@linux-foundation.org,
-        Liam.Howlett@oracle.com, shuah@kernel.org, pfalcato@suse.de,
-        david@redhat.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
-        npache@redhat.com, ryan.roberts@arm.com, baohua@kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ritesh.list@gmail.com
-Subject: Re: [PATCH 1/6] mm/selftests: Fix virtual_address_range test issues.
-Message-ID: <aFbyFMjVs9F3KMex@li-06431bcc-2712-11b2-a85c-a6fe68df28f9.ibm.com>
-References: <79bdd993-0e9c-4d7d-b42c-4b5750eff140@lucifer.local>
- <aaddfd0b-216e-48fe-b48f-35c78eabcf9a@arm.com>
- <8e23c5d3-6ce3-4fe8-b6fe-69658d5d0727@lucifer.local>
- <fc5c8193-2642-49f7-9f2a-00ad33353773@arm.com>
- <c93110a4-19e4-4a1d-b044-6b7f521eaa0d@lucifer.local>
- <815793f1-6800-4b9a-852e-f13d6308f50f@arm.com>
- <2756fa2b-e8bf-4c66-bf9b-c85dc63dfc33@lucifer.local>
- <41d9a70d-9791-4212-af23-5b13d8e4a47d@arm.com>
- <aFPI_blZGhvKSbNJ@li-06431bcc-2712-11b2-a85c-a6fe68df28f9.ibm.com>
- <546d7aa5-9ea3-4fce-a604-b1676a61d6cd@arm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F5B930E841;
+	Sat, 21 Jun 2025 19:33:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.68
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750534427; cv=fail; b=sq+xtI3TIeCD3bf+ST215KP6GKF07b5ErMU8yykzNinToSyJLWcB9+EqViT7v9XbJcj7a498pScmxR7NfBvTy6MY3veTbiJ8RqVmBR8cfIP9w/vab2BXEMxCzDLlmXnzBHFGuq+K7+sAztEdGBJ+RD0KvAxAQ/nJh2lNjrvCRjw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750534427; c=relaxed/simple;
+	bh=Ym8RbWXjUiikEFgjfAp+Dbeq4CBlWIPTVocEfhQJfBc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=E0ni2iYJxyD+q4ZNoYRRn1g80bZNpTvIiaWk+oi+jTFogUmtIUa/X1/Cj8+H8PxH8hOdSmVtJ8Ah1U22ZoL4MUAXm87Pa2uC/pkWIx1D4Dc4nyv45IL/+sChwNeK+YiK7AqYWT/syUWRsfV5yZ8ld1XGGJ/ZfXpQTFyXLYknsuw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=mxog6Z7C; arc=fail smtp.client-ip=40.107.159.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=QIOU2gk4CIQ+6iub+A7hUJcTQwb0mjr1moNIzKRQTOugPgyuQokVvzslgXLIVzj3hLsQfnF1QOGQ7FeEIA1XFFje/R+idzwDnJ+PNXxxTOJFOewCd6W4Yz/cT98t6tOrt+6t54q34mQ9PL7o3Ef88rb8qSWqYQW+M4UR8ho5jX30miBiOY6pCcYo21xULgVD252QNcZ+zF0a6u7bsHjFHfPj7xv1Klz4KWjKYDkyFQ4pnRjNkq4AaCMxEtBi+tJ76gf7YMB7RBbJkLa2EdNxpNRmRzQQSwhasd7JdGy7ghqkH9yyQxDqJk6xIEKsCzsr6Li5AS1JpzbpsSeN42vGeg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6JIU9Zqe66C8o5h0vDeD3wjUZnX8D9m394s0xnFXKXg=;
+ b=D5S122ADu3dlASQu/GL+tht2JsMPLh5MrFiDpThk9YqAXqljw4J870SWwks1pw9prB+C68tBn6PZNnZB4o/YtyEX+MddS7BMlfoN32K958GT9qNvOiPADILFepzDIL7kSDBPUpmCzmYbTkkFMx4FPLa3e4V8RuD4NogvTuFEXgZkDoaZuIZIZoytkNm5GLfq5Kz7Jm7Yrp2zPWQ8KMKQhMPgopFJI/6F3Iz2PHbPg6ndKvKxvZ336PkReykL1UDRQ1kbn+rkKGeI9VZn1X1FgnLAt91ndpJl5uHnCKtd1C19vKPyKQQmP55g/kNqIDmCv/w+yToTwvCxeOAXaiCbbA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 131.228.6.100) smtp.rcpttodomain=apple.com smtp.mailfrom=nokia-bell-labs.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nokia-bell-labs.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6JIU9Zqe66C8o5h0vDeD3wjUZnX8D9m394s0xnFXKXg=;
+ b=mxog6Z7C3qOUT1nyRt88hr/ap9hf9UsHgEfOshVsq96rMgJSq+8zppCSoTsnsAaUSqvnrF9SCr12b2kbaj2mMJP3GbvHwJV3z2pmSKMAVjy7oPA+4iDNU21aKkzvnX9SmdiTZH/9/DIsnwV/oZZ7WQu1RLFVZn1jFjt1i9eb7a79tjQQpFKxINsx0IrrGSYgk+RRwUtdLhFwT5CIoS/pvg280blFzaWDDeT+V06zhJqE1w3ZoPvpNeIK8B4kvGa3uL3+DDcmu+NzkAORgEOC9vF9TUFBk/PUTJ5nbqrY/0YWlxIwtC/SRfADuAHqUDK+8Amkfirhwb4aQeolrSP9NA==
+Received: from AS9PR06CA0348.eurprd06.prod.outlook.com (2603:10a6:20b:466::8)
+ by DB9PR07MB7292.eurprd07.prod.outlook.com (2603:10a6:10:217::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8857.26; Sat, 21 Jun
+ 2025 19:33:35 +0000
+Received: from AM2PEPF0001C70B.eurprd05.prod.outlook.com
+ (2603:10a6:20b:466:cafe::c) by AS9PR06CA0348.outlook.office365.com
+ (2603:10a6:20b:466::8) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8857.27 via Frontend Transport; Sat,
+ 21 Jun 2025 19:33:35 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.6.100)
+ smtp.mailfrom=nokia-bell-labs.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nokia-bell-labs.com;
+Received-SPF: Pass (protection.outlook.com: domain of nokia-bell-labs.com
+ designates 131.228.6.100 as permitted sender)
+ receiver=protection.outlook.com; client-ip=131.228.6.100;
+ helo=fr711usmtp2.zeu.alcatel-lucent.com; pr=C
+Received: from fr711usmtp2.zeu.alcatel-lucent.com (131.228.6.100) by
+ AM2PEPF0001C70B.mail.protection.outlook.com (10.167.16.199) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.8880.14
+ via Frontend Transport; Sat, 21 Jun 2025 19:33:34 +0000
+Received: from sarah.nbl.nsn-rdnet.net (sarah.nbl.nsn-rdnet.net [10.0.73.150])
+	by fr711usmtp2.zeu.alcatel-lucent.com (Postfix) with ESMTP id 68ED1680030;
+	Sat, 21 Jun 2025 22:33:33 +0300 (EEST)
+From: chia-yu.chang@nokia-bell-labs.com
+To: alok.a.tiwari@oracle.com,
+	pctammela@mojatatu.com,
+	horms@kernel.org,
+	donald.hunter@gmail.com,
+	xandfury@gmail.com,
+	netdev@vger.kernel.org,
+	dave.taht@gmail.com,
+	pabeni@redhat.com,
+	jhs@mojatatu.com,
+	kuba@kernel.org,
+	stephen@networkplumber.org,
+	xiyou.wangcong@gmail.com,
+	jiri@resnulli.us,
+	davem@davemloft.net,
+	edumazet@google.com,
+	andrew+netdev@lunn.ch,
+	ast@fiberby.net,
+	liuhangbin@gmail.com,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	ij@kernel.org,
+	ncardwell@google.com,
+	koen.de_schepper@nokia-bell-labs.com,
+	g.white@cablelabs.com,
+	ingemar.s.johansson@ericsson.com,
+	mirja.kuehlewind@ericsson.com,
+	cheshire@apple.com,
+	rs.ietf@gmx.at,
+	Jason_Livingood@comcast.com,
+	vidhi_goel@apple.com
+Cc: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+Subject: [PATCH v20 net-next 0/6] DUALPI2 patch
+Date: Sat, 21 Jun 2025 21:33:25 +0200
+Message-Id: <20250621193331.16421-1-chia-yu.chang@nokia-bell-labs.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <546d7aa5-9ea3-4fce-a604-b1676a61d6cd@arm.com>
-X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=M5FNKzws c=1 sm=1 tr=0 ts=6856f222 cx=c_pps a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17 a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=JtdZ57Qmit2b2QAxn08A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjIxMDExMiBTYWx0ZWRfX+8ATTUM9wAQU 7JfMu5h7goBSlcxsH2BMea9GFzetD9sK3IV7WtPMcVfMIZ20fMYVdEtS94/kE0Pi/aOifL1WqQb WUrpXlOZ//Pqw3J/k2GYqmy44XNcIaU4+rIY/SNtj5d+JqydIM83XmIQkbnYmTqRBLRKuBcg++L
- IeCXC+dO3qgbd02LZ3qSbZaeZ+yQZQ91s9i9W4pbTA2mNgr5FWgR36vK2qjcyzeehfIhXfsWxil fGVydNvuUjTeQI+aQwt3U1TdvSAwXkWfgfJQSZcyZAWYdYqvRAct9hvXIFHhQstYMbxGmIns2Ur EOhwxAqL1DUhrUBsPM8tznoRJD2FXYhidjunmF7hCY5eFssxedCdbu04690Y/2uTdaqZfBcLJ+P
- 6wo4qE7tclZy6IFE9FsJXXNB9fNV4cfU/3SsOY/v0T4ePy5sjKJg7/qfVBF3kUbTXB38zEKR
-X-Proofpoint-GUID: ukINjQB-lGGfj2CMS7OoxHew3IYA_m3N
-X-Proofpoint-ORIG-GUID: cfcNXgqtgTRHpqFGbFJ3eZFKoCGPw0yb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-21_05,2025-06-20_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 malwarescore=0 impostorscore=0 suspectscore=0
- priorityscore=1501 phishscore=0 spamscore=0 clxscore=1015 adultscore=0
- mlxscore=0 mlxlogscore=999 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2506210112
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM2PEPF0001C70B:EE_|DB9PR07MB7292:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2e9f7649-d515-49cb-38ae-08ddb0fa8372
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|82310400026|36860700013|1800799024|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?SElZUGNMcjF1V0dmajhEb3R6T1U2YzNvM1hyMFdKUGU0bm9odFF4SWl2VjVG?=
+ =?utf-8?B?Y29kMDJXa0pNb3VJa2ozNzluVE1lRzZvQlc2ZWJMVVk2R3RFTlI5THVEWUx2?=
+ =?utf-8?B?b0dWNGdvTjRJeURtZDkrOHg2WTJnYk81NE81am9KdnNHeEcwLzJXMytjUTRv?=
+ =?utf-8?B?RDNoa0JWbjhLWW16NnVzM2hUNEcrNjdVUDZTUTBQb2YzdFErM0N6a0VnNXlG?=
+ =?utf-8?B?eFF5NWFBcklLTTFvb2lkUXBLQVg2QTZZczlSYnNmcXpkWVE4S2FCeWx6dUpT?=
+ =?utf-8?B?cjBScFl0UTk2VHdTalhoY3h1b0dMdkNmbDI0ZXpZdFpJdXFRU1FzcUtCbU5W?=
+ =?utf-8?B?Ym1vVnQ3TDRaT3FIdjkwUVNjcEZ1RCttSHNyS0d3YzUzeE1kVzhhMkNEVWNK?=
+ =?utf-8?B?WTIrVlp5Vy9xSk0rdVJ3TFd6MjQvNFNZQVN4MFpyQ1ordWdlcmprVzVDM1Mx?=
+ =?utf-8?B?UHdhR1ZjMlExTStoZUh2TEV1dloxbWdIR1JUL2hZdDJQc3hnLzkzY2hCQWYz?=
+ =?utf-8?B?RHJBREdVeXFjdVppVHBZUmFEdWNQZm5oTE1LWUdmOTNoWTRhWS82MndHNUlZ?=
+ =?utf-8?B?UkpDVnpHK3Q2ZUdtbEIvVCtERVJHbWhjRTVKOU9odlp3c1N3Ynp6QW5aTDI4?=
+ =?utf-8?B?YkwrVHdxUCtZRXRpcVFsVEVBZElIQ0dETlpmVnduK3pWa0ZWQjA5RWVUSG9O?=
+ =?utf-8?B?U21Jd0FyTDFvSkp0OEZUVkd1Z3hMaXlRQ1BJZWo4QzRGVDEyem5ZL2F1TExK?=
+ =?utf-8?B?ZlQ4OGxJZ05jOXFBa1JRVTZhREwrM0JqV2EwMnZFSGZPa3dzcnVLV1JiTGVy?=
+ =?utf-8?B?aUlnaXJ0b1FNQTZqRDd5b1FYalduRExTZ3h1dU10SkhINzlZS0hGTlZ5enEy?=
+ =?utf-8?B?S3pwVG9RR01yc1N5cGNjK3pMUzBtc1lmdHVBNGpTdGdTMEJnODlXZHVJOUsr?=
+ =?utf-8?B?d2ZJeUIvb0VBN0xBeDhzc05lWUNLWWJybGYwYTB3MGl4RlppcW1vZ0l2SHVJ?=
+ =?utf-8?B?NUhJUmJCNFNCWmdkRTRDTE8xUmc4bVRKV0hzdWdXb2NHNW9oU3dhNS9TREhZ?=
+ =?utf-8?B?WVZIRlEwV0tSMEV4YTJvMWp6enpTeDVEWk4weTBzMDE0WldnYUt6WW9jUW5p?=
+ =?utf-8?B?aWtQSktLNjhyMVZRRlQ3c0IwQTFUZ1UrdG4rbUVrZFdlSnZMeFFIbnRQVU1V?=
+ =?utf-8?B?cTUwMDUxa2h0L2o5SW52SDdFb0pWOWh4bzNEQnpVdEEzUDZod3p3d0RkYjNY?=
+ =?utf-8?B?MHNnckhReUwrRDE3T1h1VFFYTy9pZDhmKzkzSERkV3dlOGpoOGhEYnJrZ1B0?=
+ =?utf-8?B?T3dHM1U0VStoMitIais2bEFjcXlFNm5ZemdISlh5S01nQXZTb2NLY1A2YnNV?=
+ =?utf-8?B?U0RlaTF1bGtuMUxJRjVYelRoYngvRnVSMG02UnlFRGQ4Y1NCV2NzN0hERmpD?=
+ =?utf-8?B?TE12VHJ0Z0VySm9CZ2c0bE5qbFR6Q2hTblVwbUlTejdaVXBpLzcrOVRsM1hC?=
+ =?utf-8?B?eXgxV1ZBMWhRdGxkcHJhNStsNzZlNmFaYzNIeTJRSXJiQkFKQ2tUem9mNXF2?=
+ =?utf-8?B?NjRkM1N6cFVUMEhHdjduNklQRXF1VkYyZ2lPOHNxc0RFWXpkWHZCOWpWaVR0?=
+ =?utf-8?B?U2d2c2FyTkd1VnZiUERDVUtubzRJV1MrYkhQNlVWNFRRV2tvZ1cxV3FlRllo?=
+ =?utf-8?B?VUNzMDJtWTlOaTc1WlhJYlNpQndrdnZLb0lUNzBqQ3hQcU5jZmJzWXdmZmt2?=
+ =?utf-8?B?R3ZpblZVKzJUWXU0SkhmRTU4RUYwOWUzYmVFQ0swWkJiVXNHU1FZb1NDMXVq?=
+ =?utf-8?B?bG9hdU5PRktkakd1NHFxb3NFdGF3MEtUTEpabWtPaUZLYmJJeEJtSVJSd2xY?=
+ =?utf-8?B?V05iczh0ZDUxc2k4UHVWZ3NGcmxqdjlsekYzZzhhRGRRdXhkWGF4WkJ2Sklm?=
+ =?utf-8?B?Z2pjd0VUTzROa1NJUStrRkVqSjlQUGw1U3dRQkNza044bndEenJxVU80Yi9C?=
+ =?utf-8?B?bU4rWngxY2x6NTBmYUVzNHcyT1NYRzQvazRYcHh5ODVmMzBPMjBvMTJsNmVO?=
+ =?utf-8?B?eXJEN0dnRDg0NzY0dWxPTG9raFREZnZvRks4UT09?=
+X-Forefront-Antispam-Report:
+	CIP:131.228.6.100;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fr711usmtp2.zeu.alcatel-lucent.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(7416014)(82310400026)(36860700013)(1800799024)(921020);DIR:OUT;SFP:1101;
+X-OriginatorOrg: nokia-bell-labs.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2025 19:33:34.9422
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2e9f7649-d515-49cb-38ae-08ddb0fa8372
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.6.100];Helo=[fr711usmtp2.zeu.alcatel-lucent.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AM2PEPF0001C70B.eurprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR07MB7292
 
-On Fri, Jun 20, 2025 at 08:15:25PM +0530, Dev Jain wrote:
-> 
-> On 19/06/25 1:53 pm, Donet Tom wrote:
-> > On Wed, Jun 18, 2025 at 08:13:54PM +0530, Dev Jain wrote:
-> > > On 18/06/25 8:05 pm, Lorenzo Stoakes wrote:
-> > > > On Wed, Jun 18, 2025 at 07:47:18PM +0530, Dev Jain wrote:
-> > > > > On 18/06/25 7:37 pm, Lorenzo Stoakes wrote:
-> > > > > > On Wed, Jun 18, 2025 at 07:28:16PM +0530, Dev Jain wrote:
-> > > > > > > On 18/06/25 5:27 pm, Lorenzo Stoakes wrote:
-> > > > > > > > On Wed, Jun 18, 2025 at 05:15:50PM +0530, Dev Jain wrote:
-> > > > > > > > Are you accounting for sys.max_map_count? If not, then you'll be hitting that
-> > > > > > > > first.
-> > > > > > > run_vmtests.sh will run the test in overcommit mode so that won't be an issue.
-> > > > > > Umm, what? You mean overcommit all mode, and that has no bearing on the max
-> > > > > > mapping count check.
-> > > > > > 
-> > > > > > In do_mmap():
-> > > > > > 
-> > > > > > 	/* Too many mappings? */
-> > > > > > 	if (mm->map_count > sysctl_max_map_count)
-> > > > > > 		return -ENOMEM;
-> > > > > > 
-> > > > > > 
-> > > > > > As well as numerous other checks in mm/vma.c.
-> > > > > Ah sorry, didn't look at the code properly just assumed that overcommit_always meant overriding
-> > > > > this.
-> > > > No problem! It's hard to be aware of everything in mm :)
-> > > > 
-> > > > > > I'm not sure why an overcommit toggle is even necessary when you could use
-> > > > > > MAP_NORESERVE or simply map PROT_NONE to avoid the OVERCOMMIT_GUESS limits?
-> > > > > > 
-> > > > > > I'm pretty confused as to what this test is really achieving honestly. This
-> > > > > > isn't a useful way of asserting mmap() behaviour as far as I can tell.
-> > > > > Well, seems like a useful way to me at least : ) Not sure if you are in the mood
-> > > > > to discuss that but if you'd like me to explain from start to end what the test
-> > > > > is doing, I can do that : )
-> > > > > 
-> > > > I just don't have time right now, I guess I'll have to come back to it
-> > > > later... it's not the end of the world for it to be iffy in my view as long as
-> > > > it passes, but it might just not be of great value.
-> > > > 
-> > > > Philosophically I'd rather we didn't assert internal implementation details like
-> > > > where we place mappings in userland memory. At no point do we promise to not
-> > > > leave larger gaps if we feel like it :)
-> > > You have a fair point. Anyhow a debate for another day.
-> > > 
-> > > > I'm guessing, reading more, the _real_ test here is some mathematical assertion
-> > > > about layout from HIGH_ADDR_SHIFT -> end of address space when using hints.
-> > > > 
-> > > > But again I'm not sure that achieves much and again also is asserting internal
-> > > > implementation details.
-> > > > 
-> > > > Correct behaviour of this kind of thing probably better belongs to tests in the
-> > > > userland VMA testing I'd say.
-> > > > 
-> > > > Sorry I don't mean to do down work you've done before, just giving an honest
-> > > > technical appraisal!
-> > > Nah, it will be rather hilarious to see it all go down the drain xD
-> > > 
-> > > > Anyway don't let this block work to fix the test if it's failing. We can revisit
-> > > > this later.
-> > > Sure. @Aboorva and Donet, I still believe that the correct approach is to elide
-> > > the gap check at the crossing boundary. What do you think?
-> > > 
-> > One problem I am seeing with this approach is that, since the hint address
-> > is generated randomly, the VMAs are also being created at randomly based on
-> > the hint address.So, for the VMAs created at high addresses, we cannot guarantee
-> > that the gaps between them will be aligned to MAP_CHUNK_SIZE.
-> > 
-> > High address VMAs
-> > -----------------
-> > 1000000000000-1000040000000 r--p 00000000 00:00 0
-> > 2000000000000-2000040000000 r--p 00000000 00:00 0
-> > 4000000000000-4000040000000 r--p 00000000 00:00 0
-> > 8000000000000-8000040000000 r--p 00000000 00:00 0
-> > e80009d260000-fffff9d260000 r--p 00000000 00:00 0
-> > 
-> > I have a different approach to solve this issue.
-> 
-> It is really weird that such a large amount of VA space
-> is left between the two VMAs yet mmap is failing.
-> 
-> 
-> 
-> Can you please do the following:
-> set /proc/sys/vm/max_map_count to the highest value possible.
-> If running without run_vmtests.sh, set /proc/sys/vm/overcommit_memory to 1.
-> In validate_complete_va_space:
-> 
-> if (start_addr >= HIGH_ADDR_MARK && found == false) {
-> 	found = true;
-> 	continue;
-> }
+From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 
+Hello,
 
-Thanks Dev for the suggestion. I set max_map_count and set overcommit
-memory to 1, added this code change as well, and then tried. Still, the
-test is failing
+  Please find the DualPI2 patch v20.
 
-> 
-> where found is initialized to false. This will skip the check
-> for the boundary.
-> 
-> After this can you tell whether the test is still failing.
-> 
-> Also can you give me the complete output of proc/pid/maps
-> after putting a sleep at the end of the test.
-> 
+  This patch serise adds DualPI Improved with a Square (DualPI2) with following features:
+* Supports congestion controls that comply with the Prague requirements in RFC9331 (e.g. TCP-Prague)
+* Coupled dual-queue that separates the L4S traffic in a low latency queue (L-queue), without harming remaining traffic that is scheduled in classic queue (C-queue) due to congestion-coupling using PI2 as defined in RFC9332
+* Configurable overload strategies
+* Use of sojourn time to reliably estimate queue delay
+* Supports ECN L4S-identifier (IP.ECN==0b*1) to classify traffic into respective queues
+
+For more details of DualPI2, please refer IETF RFC9332 (https://datatracker.ietf.org/doc/html/rfc9332).
+
+Best regards,
+Chia-Yu
+
+---
+v20 (21-Jun-2025)
+- Add one more commit to fix warning and style check on tdc.sh reported by shellcheck
+- Remove double-prefixed of "tc_tc_dualpi2_attrs" in tc-user.h (Donald Hunter <donald.hunter@gmail.com>)
+
+v19 (14-Jun-2025)
+- Fix one typo in the comment of #1 (ALOK TIWARI <alok.a.tiwari@oracle.com>)
+- Update commit message of #4 (ALOK TIWARI <alok.a.tiwari@oracle.com>)
+- Wrap long lines of Documentation/netlink/specs/tc.yaml to within 80 characters (Jakub Kicinski <kuba@kernel.org>)
+
+v18 (13-Jun-2025)
+- Add the num of enum used by DualPI2 and fix name and name-prefix of DualPI2 enum and attribute
+- Replace from_timer() with timer_container_of() (Pedro Tammela <pctammela@mojatatu.com>)
+
+v17 (25-May-2025, Resent at 11-Jun-2025)
+- Replace 0xffffffff with U32_MAX (Paolo Abeni <pabeni@redhat.com>)
+- Use helper function qdisc_dequeue_internal() and add new helper function skb_apply_step() (Paolo Abeni <pabeni@redhat.com>)
+- Add s64 casting when calculating the delta of the PI controller (Paolo Abeni <pabeni@redhat.com>)
+- Change the drop reason into SKB_DROP_REASON_QDISC_CONGESTED for drop_early (Paolo Abeni <pabeni@redhat.com>)
+- Modify the condition to remove the original skb when enqueuing multiple GSO segments (Paolo Abeni <pabeni@redhat.com>)
+- Add READ_ONCE() in dualpi2_dump_stat() (Paolo Abeni <pabeni@redhat.com>)
+- Add comments, brackets, and brackets for readability (Paolo Abeni <pabeni@redhat.com>)
+
+v16 (16-MAy-2025)
+- Add qdisc_lock() to dualpi2_timer() in dualpi2_timer (Paolo Abeni <pabeni@redhat.com>)
+- Introduce convert_ns_to_usec() to convert usec to nsec without overflow in #1 (Paolo Abeni <pabeni@redhat.com>)
+- Update convert_us_tonsec() to convert nsec to usec without overflow in #2 (Paolo Abeni <pabeni@redhat.com>)
+- Add more descriptions with respect to DualPI2 in the cover ltter and add changelog in each patch (Paolo Abeni <pabeni@redhat.com>)
+
+v15 (09-May-2025)
+- Add enum of TCA_DUALPI2_ECN_MASK_CLA_ECT to remove potential leakeage in #1 (Simon Horman <horms@kernel.org>)
+- Fix one typo in comment of #2
+- Update tc.yaml in #5 to aligh with the updated enum of pkt_sched.h
+
+v14 (05-May-2025)
+- Modify tc.yaml: (1) Replace flags with enum and remove enum-as-flags, (2) Remove credit-queue in xstats, and (3) Change attribute types (Donald Hunter <donald.hun
+- Add enum and fix the ordering of variables in pkt_sched.h to align with the modified tc.yaml (Donald Hunter <donald.hunter@gmail.com>)
+- Add validators for DROP_OVERLOAD, DROP_EARLY, ECN_MASK, and SPLIT_GSO in sch_dualpi2.c (Donald Hunter <donald.hunter@gmail.com>)
+- Update dualpi2.json to align with the updated variable order in pkt_sched.h
+- Reorder patches (Donald Hunter <donald.hunter@gmail.com>)
+
+v13 (26-Apr-2025)
+- Use dashes in member names to follow YNL conventions in tc.yaml (Donald Hunter <donald.hunter@gmail.com>)
+- Define enumerations separately for flags of drop-early, drop-overload, ecn-mask, credit-queue in tc.yaml (Donald Hunter <donald.hunter@gmail.com>)
+- Change the types of split-gso and step-packets into flag in tc.yaml (Donald Hunter <donald.hunter@gmail.com>)
+- Revert to u32/u8 types for tc-dualpi2-xstats members in tc.yaml (Donald Hunter <donald.hunter@gmail.com>)
+- Add new test cases in tc-tests/qdiscs/dualpi2.json to cover all dualpi2 parameters (Donald Hunter <donald.hunter@gmail.com>)
+- Change the type of TCA_DUALPI2_STEP_PACKETS into NLA_FLAG (Donald Hunter <donald.hunter@gmail.com>)
 
 
-on powerpc support DEFAULT_MAP_WINDOW is 128TB and with
-total address space size is 4PB With hint it can map upto
-4PB. Since the hint addres is random in this test random hing VMAs
-are getting created. IIUC this is expected only.
+v12 (22-Apr-2025)
+- Remove anonymous struct in sch_dualpi2.c (Paolo Abeni <pabeni@redhat.com>)
+- Replace u32/u8 with uint and s32 with int in tc spec document (Paolo Abeni <pabeni@redhat.com>)
+- Introduce get_memory_limit function to handle potential overflow when multipling limit with MTU (Paolo Abeni <pabeni@redhat.com>)
+- Double the packet length to further include packet overhead in memory_limit (Paolo Abeni <pabeni@redhat.com>)
+- Remove the check of qdisc_qlen(sch) when calling qdisc_tree_reduce_backlog (Paolo Abeni <pabeni@redhat.com>)
+
+v11 (15-Apr-2025)
+- Replace hstimer_init with hstimer_setup in sch_dualpi2.c
+
+v10 (25-Mar-2025)
+- Remove leftover include in include/linux/netdevice.h and anonymous struct in sch_dualpi2.c (Paolo Abeni <pabeni@redhat.com>)
+- Use kfree_skb_reason() and add SKB_DROP_REASON_DUALPI2_STEP_DROP drop reason (Paolo Abeni <pabeni@redhat.com>)
+- Split sch_dualpi2.c into 3 patches (and overall 5 patches): Struct definition & parsing, Dump stats & configuration, Enqueue/Dequeue (Paolo Abeni <pabeni@redhat.com>)
+
+v9 (16-Mar-2025)
+- Fix mem_usage error in previous version
+- Add min_qlen_step to the dualpi2 attribute as the minimum queue length in number of packets in the L-queue to start step threshold marking.
+  In previous versions, this value was fixed to 2, so the step threshold was applied to mark packets in the L queue only when the queue length of the L queue was greater than or equal to 2 packets.
+  This will cause larger queuing delays for L4S traffic at low rates (<20Mbps). So we parameterize it and change the default value to 0.
+  Comparison of tcp_1down run 'HTB 20Mbit + DUALPI2 + 10ms base delay'
+    Old versions:
+                           avg       median          # data pts
+ Ping (ms) ICMP :        11.55        11.70 ms              350
+ TCP upload avg :        18.96          N/A Mbits/s         350
+ TCP upload sum :        18.96          N/A Mbits/s         350
+
+    New version (v9):
+                           avg       median          # data pts
+ Ping (ms) ICMP :        10.81        10.70 ms              350
+ TCP upload avg :        18.91          N/A Mbits/s         350
+ TCP upload sum :        18.91          N/A Mbits/s         350
 
 
-10000000-10010000 r-xp 00000000 fd:05 134226638                          /home/donet/linux/tools/testing/selftests/mm/virtual_address_range
-10010000-10020000 r--p 00000000 fd:05 134226638                          /home/donet/linux/tools/testing/selftests/mm/virtual_address_range
-10020000-10030000 rw-p 00010000 fd:05 134226638                          /home/donet/linux/tools/testing/selftests/mm/virtual_address_range
-30000000-10030000000 r--p 00000000 00:00 0                               [anon:virtual_address_range]
-10030770000-100307a0000 rw-p 00000000 00:00 0                            [heap]
-1004f000000-7fff8f000000 r--p 00000000 00:00 0                           [anon:virtual_address_range]
-7fff8faf0000-7fff8fe00000 rw-p 00000000 00:00 0
-7fff8fe00000-7fff90030000 r-xp 00000000 fd:00 792355                     /usr/lib64/libc.so.6
-7fff90030000-7fff90040000 r--p 00230000 fd:00 792355                     /usr/lib64/libc.so.6
-7fff90040000-7fff90050000 rw-p 00240000 fd:00 792355                     /usr/lib64/libc.so.6
-7fff90050000-7fff90130000 r-xp 00000000 fd:00 792358                     /usr/lib64/libm.so.6
-7fff90130000-7fff90140000 r--p 000d0000 fd:00 792358                     /usr/lib64/libm.so.6
-7fff90140000-7fff90150000 rw-p 000e0000 fd:00 792358                     /usr/lib64/libm.so.6
-7fff90160000-7fff901a0000 r--p 00000000 00:00 0                          [vvar]
-7fff901a0000-7fff901b0000 r-xp 00000000 00:00 0                          [vdso]
-7fff901b0000-7fff90200000 r-xp 00000000 fd:00 792351                     /usr/lib64/ld64.so.2
-7fff90200000-7fff90210000 r--p 00040000 fd:00 792351                     /usr/lib64/ld64.so.2
-7fff90210000-7fff90220000 rw-p 00050000 fd:00 792351                     /usr/lib64/ld64.so.2
-7fffc9770000-7fffc9880000 rw-p 00000000 00:00 0                          [stack]
-1000000000000-1000040000000 r--p 00000000 00:00 0                        [anon:virtual_address_range]
-2000000000000-2000040000000 r--p 00000000 00:00 0                        [anon:virtual_address_range]
-4000000000000-4000040000000 r--p 00000000 00:00 0                        [anon:virtual_address_range]
-8000000000000-8000040000000 r--p 00000000 00:00 0                        [anon:virtual_address_range]
-eb95410220000-fffff90220000 r--p 00000000 00:00 0                        [anon:virtual_address_range]
+  Comparison of tcp_1down run 'HTB 10Mbit + DUALPI2 + 10ms base delay'
+    Old versions:
+                           avg       median          # data pts
+ Ping (ms) ICMP :        12.61        12.80 ms              350
+ TCP upload avg :         9.48          N/A Mbits/s         350
+ TCP upload sum :         9.48          N/A Mbits/s         350
+
+    New version (v9):
+                           avg       median          # data pts
+ Ping (ms) ICMP :        11.06        10.80 ms              350
+ TCP upload avg :         9.43          N/A Mbits/s         350
+ TCP upload sum :         9.43          N/A Mbits/s         350
 
 
+  Comparison of tcp_1down run 'HTB 10Mbit + DUALPI2 + 10ms base delay'
+    Old versions:
+                           avg       median          # data pts
+ Ping (ms) ICMP :        40.86        37.45 ms              350
+ TCP upload avg :         0.88          N/A Mbits/s         350
+ TCP upload sum :         0.88          N/A Mbits/s         350
+ TCP upload::1  :         0.88         0.97 Mbits/s         350
+
+    New version (v9):
+                           avg       median          # data pts
+ Ping (ms) ICMP :        11.07        10.40 ms              350
+ TCP upload avg :         0.55          N/A Mbits/s         350
+ TCP upload sum :         0.55          N/A Mbits/s         350
+ TCP upload::1  :         0.55         0.59 Mbits/s         350
+
+v8 (11-Mar-2025)
+- Fix warning messages in v7
+
+v7 (07-Mar-2025)
+- Separate into 3 patches to avoid mixing changes of documentation, selftest, and code. (Cong Wang <xiyou.wangcong@gmail.com>)
+
+v6 (04-Mar-2025)
+- Add modprobe for dulapi2 in tc-testing script tc-testing/tdc.sh (Jakub Kicinski <kuba@kernel.org>)
+- Update test cases in dualpi2.json
+- Update commit message
+
+v5 (22-Feb-2025)
+- A comparison was done between MQ + DUALPI2, MQ + FQ_PIE, MQ + FQ_CODEL:
+  Unshaped 1gigE with 4 download streams test:
+   - Summary of tcp_4down run 'MQ + FQ_CODEL':
+                             avg       median       # data pts
+      Ping (ms) ICMP :       1.19     1.34 ms          349
+      TCP download avg :   235.42      N/A Mbits/s     349
+      TCP download sum :   941.68      N/A Mbits/s     349
+      TCP download::1  :   235.19   235.39 Mbits/s     349
+      TCP download::2  :   235.03   235.35 Mbits/s     349
+      TCP download::3  :   236.89   235.44 Mbits/s     349
+      TCP download::4  :   234.57   235.19 Mbits/s     349
+
+   - Summary of tcp_4down run 'MQ + FQ_PIE'
+                             avg       median        # data pts
+      Ping (ms) ICMP :       1.21     1.37 ms          350
+      TCP download avg :   235.42      N/A Mbits/s     350
+      TCP download sum :   941.61     N/A Mbits/s      350
+      TCP download::1  :   232.54  233.13 Mbits/s      350
+      TCP download::2  :   232.52  232.80 Mbits/s      350
+      TCP download::3  :   233.14  233.78 Mbits/s      350
+      TCP download::4  :   243.41  241.48 Mbits/s      350
+
+   - Summary of tcp_4down run 'MQ + DUALPI2'
+                             avg       median        # data pts
+      Ping (ms) ICMP :       1.19     1.34 ms          349
+      TCP download avg :   235.42      N/A Mbits/s     349
+      TCP download sum :   941.68      N/A Mbits/s     349
+      TCP download::1  :   235.19   235.39 Mbits/s     349
+      TCP download::2  :   235.03   235.35 Mbits/s     349
+      TCP download::3  :   236.89   235.44 Mbits/s     349
+      TCP download::4  :   234.57   235.19 Mbits/s     349
 
 
-If I give the hint address serially from 128TB then the address 
-space is contigous and gap is also MAP_SIZE, the test is passing.
+  Unshaped 1gigE with 128 download streams test:
+   - Summary of tcp_128down run 'MQ + FQ_CODEL':
+                             avg       median       # data pts
+      Ping (ms) ICMP   :     1.88     1.86 ms          350
+      TCP download avg :     7.39      N/A Mbits/s     350
+      TCP download sum :   946.47      N/A Mbits/s     350
 
-10000000-10010000 r-xp 00000000 fd:05 134226638                          /home/donet/linux/tools/testing/selftests/mm/virtual_address_range
-10010000-10020000 r--p 00000000 fd:05 134226638                          /home/donet/linux/tools/testing/selftests/mm/virtual_address_range
-10020000-10030000 rw-p 00010000 fd:05 134226638                          /home/donet/linux/tools/testing/selftests/mm/virtual_address_range
-33000000-10033000000 r--p 00000000 00:00 0                               [anon:virtual_address_range]
-10033380000-100333b0000 rw-p 00000000 00:00 0                            [heap]
-1006f0f0000-10071000000 rw-p 00000000 00:00 0
-10071000000-7fffb1000000 r--p 00000000 00:00 0                           [anon:virtual_address_range]
-7fffb15d0000-7fffb1800000 r-xp 00000000 fd:00 792355                     /usr/lib64/libc.so.6
-7fffb1800000-7fffb1810000 r--p 00230000 fd:00 792355                     /usr/lib64/libc.so.6
-7fffb1810000-7fffb1820000 rw-p 00240000 fd:00 792355                     /usr/lib64/libc.so.6
-7fffb1820000-7fffb1900000 r-xp 00000000 fd:00 792358                     /usr/lib64/libm.so.6
-7fffb1900000-7fffb1910000 r--p 000d0000 fd:00 792358                     /usr/lib64/libm.so.6
-7fffb1910000-7fffb1920000 rw-p 000e0000 fd:00 792358                     /usr/lib64/libm.so.6
-7fffb1930000-7fffb1970000 r--p 00000000 00:00 0                          [vvar]
-7fffb1970000-7fffb1980000 r-xp 00000000 00:00 0                          [vdso]
-7fffb1980000-7fffb19d0000 r-xp 00000000 fd:00 792351                     /usr/lib64/ld64.so.2
-7fffb19d0000-7fffb19e0000 r--p 00040000 fd:00 792351                     /usr/lib64/ld64.so.2
-7fffb19e0000-7fffb19f0000 rw-p 00050000 fd:00 792351                     /usr/lib64/ld64.so.2
-7fffc5470000-7fffc5580000 rw-p 00000000 00:00 0                          [stack]
-800000000000-2aab000000000 r--p 00000000 00:00 0                         [anon:virtual_address_range]
+   - Summary of tcp_128down run 'MQ + FQ_PIE':
+                             avg       median       # data pts
+      Ping (ms) ICMP   :     1.88     1.86 ms          350
+      TCP download avg :     7.39      N/A Mbits/s     350
+      TCP download sum :   946.47      N/A Mbits/s     350
+
+   - Summary of tcp_128down run 'MQ + DUALPI2':
+                             avg       median       # data pts
+      Ping (ms) ICMP   :     1.88     1.86 ms          350
+      TCP download avg :     7.39      N/A Mbits/s     350
+      TCP download sum :   946.47      N/A Mbits/s     350
 
 
+  Unshaped 10gigE with 4 download streams test:
+   - Summary of tcp_4down run 'MQ + FQ_CODEL':
+                             avg       median       # data pts
+      Ping (ms) ICMP :       0.22     0.23 ms          350
+      TCP download avg :  2354.08      N/A Mbits/s     350
+      TCP download sum :  9416.31      N/A Mbits/s     350
+      TCP download::1  :  2353.65  2352.81 Mbits/s     350
+      TCP download::2  :  2354.54  2354.21 Mbits/s     350
+      TCP download::3  :  2353.56  2353.78 Mbits/s     350
+      TCP download::4  :  2354.56  2354.45 Mbits/s     350
+
+  - Summary of tcp_4down run 'MQ + FQ_PIE':
+                             avg       median      # data pts
+      Ping (ms) ICMP :       0.20     0.19 ms          350
+      TCP download avg :  2354.76      N/A Mbits/s     350
+      TCP download sum :  9419.04      N/A Mbits/s     350
+      TCP download::1  :  2354.77  2353.89 Mbits/s     350
+      TCP download::2  :  2353.41  2354.29 Mbits/s     350
+      TCP download::3  :  2356.18  2354.19 Mbits/s     350
+      TCP download::4  :  2354.68  2353.15 Mbits/s     350
+
+   - Summary of tcp_4down run 'MQ + DUALPI2':
+                             avg       median      # data pts
+      Ping (ms) ICMP :       0.24     0.24 ms          350
+      TCP download avg :  2354.11      N/A Mbits/s     350
+      TCP download sum :  9416.43      N/A Mbits/s     350
+      TCP download::1  :  2354.75  2353.93 Mbits/s     350
+      TCP download::2  :  2353.15  2353.75 Mbits/s     350
+      TCP download::3  :  2353.49  2353.72 Mbits/s     350
+      TCP download::4  :  2355.04  2353.73 Mbits/s     350
 
 
-> > 
-> >  From 0 to 128TB, we map memory directly without using any hint. For the range above
-> > 256TB up to 512TB, we perform the mapping using hint addresses. In the current test,
-> > we use random hint addresses, but I have modified it to generate hint addresses linearly
-> > starting from 128TB.
-> > 
-> > With this change:
-> > 
-> > The 0–128TB range is mapped without hints and verified accordingly.
-> > 
-> > The 128TB–512TB range is mapped using linear hint addresses and then verified.
-> > 
-> > Below are the VMAs obtained with this approach:
-> > 
-> > 10000000-10010000 r-xp 00000000 fd:05 135019531
-> > 10010000-10020000 r--p 00000000 fd:05 135019531
-> > 10020000-10030000 rw-p 00010000 fd:05 135019531
-> > 20000000-10020000000 r--p 00000000 00:00 0
-> > 10020800000-10020830000 rw-p 00000000 00:00 0
-> > 1004bcf0000-1004c000000 rw-p 00000000 00:00 0
-> > 1004c000000-7fff8c000000 r--p 00000000 00:00 0
-> > 7fff8c130000-7fff8c360000 r-xp 00000000 fd:00 792355
-> > 7fff8c360000-7fff8c370000 r--p 00230000 fd:00 792355
-> > 7fff8c370000-7fff8c380000 rw-p 00240000 fd:00 792355
-> > 7fff8c380000-7fff8c460000 r-xp 00000000 fd:00 792358
-> > 7fff8c460000-7fff8c470000 r--p 000d0000 fd:00 792358
-> > 7fff8c470000-7fff8c480000 rw-p 000e0000 fd:00 792358
-> > 7fff8c490000-7fff8c4d0000 r--p 00000000 00:00 0
-> > 7fff8c4d0000-7fff8c4e0000 r-xp 00000000 00:00 0
-> > 7fff8c4e0000-7fff8c530000 r-xp 00000000 fd:00 792351
-> > 7fff8c530000-7fff8c540000 r--p 00040000 fd:00 792351
-> > 7fff8c540000-7fff8c550000 rw-p 00050000 fd:00 792351
-> > 7fff8d000000-7fffcd000000 r--p 00000000 00:00 0
-> > 7fffe9c80000-7fffe9d90000 rw-p 00000000 00:00 0
-> > 800000000000-2000000000000 r--p 00000000 00:00 0    -> High Address (128TB to 512TB)
-> > 
-> > diff --git a/tools/testing/selftests/mm/virtual_address_range.c b/tools/testing/selftests/mm/virtual_address_range.c
-> > index 4c4c35eac15e..0be008cba4b0 100644
-> > --- a/tools/testing/selftests/mm/virtual_address_range.c
-> > +++ b/tools/testing/selftests/mm/virtual_address_range.c
-> > @@ -56,21 +56,21 @@
-> >   #ifdef __aarch64__
-> >   #define HIGH_ADDR_MARK  ADDR_MARK_256TB
-> > -#define HIGH_ADDR_SHIFT 49
-> > +#define HIGH_ADDR_SHIFT 48
-> >   #define NR_CHUNKS_LOW   NR_CHUNKS_256TB
-> >   #define NR_CHUNKS_HIGH  NR_CHUNKS_3840TB
-> >   #else
-> >   #define HIGH_ADDR_MARK  ADDR_MARK_128TB
-> > -#define HIGH_ADDR_SHIFT 48
-> > +#define HIGH_ADDR_SHIFT 47
-> >   #define NR_CHUNKS_LOW   NR_CHUNKS_128TB
-> >   #define NR_CHUNKS_HIGH  NR_CHUNKS_384TB
-> >   #endif
-> > -static char *hint_addr(void)
-> > +static char *hint_addr(int hint)
-> >   {
-> > -       int bits = HIGH_ADDR_SHIFT + rand() % (63 - HIGH_ADDR_SHIFT);
-> > +       unsigned long addr = ((1UL << HIGH_ADDR_SHIFT) + (hint * MAP_CHUNK_SIZE));
-> > -       return (char *) (1UL << bits);
-> > +       return (char *) (addr);
-> >   }
-> >   static void validate_addr(char *ptr, int high_addr)
-> > @@ -217,7 +217,7 @@ int main(int argc, char *argv[])
-> >          }
-> >          for (i = 0; i < NR_CHUNKS_HIGH; i++) {
-> > -               hint = hint_addr();
-> > +               hint = hint_addr(i);
-> >                  hptr[i] = mmap(hint, MAP_CHUNK_SIZE, PROT_READ,
-> >                                 MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-> > 
-> > 
-> > 
-> > Can we fix it this way?
+  Unshaped 10gigE with 128 download streams test:
+   - Summary of tcp_128down run 'MQ + FQ_CODEL':
+                             avg       median       # data pts
+      Ping (ms) ICMP   :     7.57     8.69 ms          350
+      TCP download avg :    73.97      N/A Mbits/s     350
+      TCP download sum :  9467.82      N/A Mbits/s     350
+
+   - Summary of tcp_128down run 'MQ + FQ_PIE':
+                             avg       median       # data pts
+      Ping (ms) ICMP   :     7.82     8.91 ms          350
+      TCP download avg :    73.97      N/A Mbits/s     350
+      TCP download sum :  9468.42      N/A Mbits/s     350
+
+   - Summary of tcp_128down run 'MQ + DUALPI2':
+                             avg       median       # data pts
+      Ping (ms) ICMP   :     6.87     7.93 ms          350
+      TCP download avg :    73.95      N/A Mbits/s     350
+      TCP download sum :  9465.87      N/A Mbits/s     350
+
+   From the results shown above, we see small differences between combinations.
+- Update commit message to include results of no_split_gso and split_gso (Dave Taht <dave.taht@gmail.com> and Paolo Abeni <pabeni@redhat.com>)
+- Add memlimit in the dualpi2 attribute, and add memory_used, max_memory_used, memory_limit in dualpi2 stats (Dave Taht <dave.taht@gmail.com>)
+- Update note in sch_dualpi2.c related to BBRv3 status (Dave Taht <dave.taht@gmail.com>)
+- Update license identifier (Dave Taht <dave.taht@gmail.com>)
+- Add selftest in tools/testing/selftests/tc-testing (Cong Wang <xiyou.wangcong@gmail.com>)
+- Use netlink policies for parameter checks (Jamal Hadi Salim <jhs@mojatatu.com>)
+- Modify texts & fix typos in Documentation/netlink/specs/tc.yaml (Dave Taht <dave.taht@gmail.com>)
+- Add descriptions of packet counter statistics and the reset function of sch_dualpi2.c
+- Fix step_thresh in packets
+- Update code comments in sch_dualpi2.c
+
+v4 (22-Oct-2024)
+- Update statement in Kconfig for DualPI2 (Stephen Hemminger <stephen@networkplumber.org>)
+- Put a blank line after #define in sch_dualpi2.c (Stephen Hemminger <stephen@networkplumber.org>)
+- Fix line length warning.
+
+v3 (19-Oct-2024)
+- Fix compilaiton error
+- Update Documentation/netlink/specs/tc.yaml (Jakub Kicinski <kuba@kernel.org>)
+
+v2 (18-Oct-2024)
+- Add Documentation/netlink/specs/tc.yaml (Jakub Kicinski <kuba@kernel.org>)
+- Use dualpi2 instead of skb prefix (Jamal Hadi Salim <jhs@mojatatu.com>)
+- Replace nla_parse_nested_deprecated with nla_parse_nested (Jamal Hadi Salim <jhs@mojatatu.com>)
+- Fix line length warning
+
+---
+Chia-Yu Chang (5):
+  sched: Struct definition and parsing of dualpi2 qdisc
+  sched: Dump configuration and statistics of dualpi2 qdisc
+  selftests/tc-testing: Fix warning and style check on tdc.sh
+  selftests/tc-testing: Add selftests for qdisc DualPI2
+  Documentation: netlink: specs: tc: Add DualPI2 specification
+
+Koen De Schepper (1):
+  sched: Add enqueue/dequeue of dualpi2 qdisc
+
+ Documentation/netlink/specs/tc.yaml           |  166 +++
+ include/net/dropreason-core.h                 |    6 +
+ include/uapi/linux/pkt_sched.h                |   70 +-
+ net/sched/Kconfig                             |   12 +
+ net/sched/Makefile                            |    1 +
+ net/sched/sch_dualpi2.c                       | 1146 +++++++++++++++++
+ tools/testing/selftests/tc-testing/config     |    1 +
+ .../tc-testing/tc-tests/qdiscs/dualpi2.json   |  254 ++++
+ tools/testing/selftests/tc-testing/tdc.sh     |    6 +-
+ 9 files changed, 1658 insertions(+), 4 deletions(-)
+ create mode 100644 net/sched/sch_dualpi2.c
+ create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/dualpi2.json
+
+-- 
+2.34.1
+
 
