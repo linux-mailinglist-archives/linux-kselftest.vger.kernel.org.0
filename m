@@ -1,298 +1,208 @@
-Return-Path: <linux-kselftest+bounces-35531-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35532-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CECD7AE26BD
-	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Jun 2025 02:48:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83A4DAE26CE
+	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Jun 2025 03:07:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 85C7C17350A
-	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Jun 2025 00:48:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 405443BCAFC
+	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Jun 2025 01:07:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16F75101EE;
-	Sat, 21 Jun 2025 00:48:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE86F282FA;
+	Sat, 21 Jun 2025 01:07:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QKHZpPnV"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lcs+3a2Z"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75CC1946F
-	for <linux-kselftest@vger.kernel.org>; Sat, 21 Jun 2025 00:48:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D644F1F5E6
+	for <linux-kselftest@vger.kernel.org>; Sat, 21 Jun 2025 01:07:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750466912; cv=none; b=O2fcdqXEVpL+N3yJeLvsqRW6LrLISadTn7kfdxU4WaPn+l20uE6yVVRAb2xt2smUkWhFu9ZspZNQqBpBugy/dNEvuUbQrQnDlbZUWz+590ap7PhUasCDFD3TqvhsM8U+PYEZXQ9LILlFD5x7FcMz3W0p5XpoUiHtWOiOWwLjN7k=
+	t=1750468033; cv=none; b=SUGWQth8PByuooJ3H3UgHSQrU85BJuU8Oh1u2Oz2ai9TrXCRtrISX5mgcr/Itv/DrUhhdwhCzNXQRIWc4UhKRvKNmzeVtdaEr+Tgm2PjN52IuCQL2SZhRUup2gjpIuvUlUNjpiNqwBf5VvlFP2QymelXM2kzGpgAXGdk4VBMLhU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750466912; c=relaxed/simple;
-	bh=U0JwxxIfwXvGo6vMahD+cNcGsEiy9pwPwz5Y3tqlH2M=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NmoTbYs+dd4Aiw1o/Zegfh3qLw12FPmR7G2st/N90YpjWw7MavQ3R5JZK1yyZbdPWrdf6XQF7T/PxO4wdqWDpR3tw30vqF3MW+NyL6eX/gL1Jdw/DdnNHYEAgQfXbgLyqogjbTjWK7zECIlwvQTyp2E42jol4JMZ+V4nVYiWjLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QKHZpPnV; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1750466907;
+	s=arc-20240116; t=1750468033; c=relaxed/simple;
+	bh=pzLOXtwqX+R5ZkDJnNjc7FQ6HyDYUogvPcm4PoBIA2Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MVFer1sILjLus58raqElskBPBP/7ZhhlpdqknTJW8zA6fY+fTtHJ4k+HHfL/OpIiM6AAK9GKPxlyfl5Sq7EyTGDokR33/m0Rw16i8E6AXOPA/eaCXaekYvGMLU5DhUXa8P+k5rIyverfdzoA+XxdtVEgIXAq39WFbNW2mC/mIJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lcs+3a2Z; arc=none smtp.client-ip=95.215.58.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Fri, 20 Jun 2025 18:06:50 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1750468018;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=FkU+gPOIhbeinrV8TQvkcE3b9DDKVV+TZ4jA0J9V37s=;
-	b=QKHZpPnV/uKWsLaHUJp7wbohnOt14HWbcf65wavpKlnZKk9PA3xxKDN9UDqvYFMn9qMqfP
-	h4KPzNrYrKkkqwgWTg1J6tXNlVrL0wzzjwT5nvnNfOrk+XR8EasSlJsIB1/xfXYYPhSZVy
-	7QiR8Nd+ImZeHRX6MqA71wldx3yjTK8=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-610-PSBpcU_WONG57eYCaXboZg-1; Fri,
- 20 Jun 2025 20:48:23 -0400
-X-MC-Unique: PSBpcU_WONG57eYCaXboZg-1
-X-Mimecast-MFC-AGG-ID: PSBpcU_WONG57eYCaXboZg_1750466902
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0186E19560AD;
-	Sat, 21 Jun 2025 00:48:21 +0000 (UTC)
-Received: from dell-per7425-02.rhts.eng.pek2.redhat.com (dell-per7425-02.rhts.eng.pek2.redhat.com [10.73.116.18])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 05352180045B;
-	Sat, 21 Jun 2025 00:48:13 +0000 (UTC)
-From: Li Wang <liwang@redhat.com>
-To: akpm@linux-foundation.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org
-Cc: Aruna Ramakrishna <aruna.ramakrishna@oracle.com>,
-	Bagas Sanjaya <bagasdotme@gmail.com>,
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=x9bGMpSO4WqiAydjTYI1BvmIFHA6ViKMaNDWLEKT1C0=;
+	b=lcs+3a2ZLhflGQHKJ+gTgO7tBN917ZPbJW/VqGm5qDtkba9vGMlVsl2g4UsIib1GPpDr4G
+	Qz0ka4yuqWFfIVF8ZG1dVxusdCKjloC/kN1XPEVs7C6tPFt7GQ6bMeuvijVPunIWZecPoH
+	tkaZ/VVRFsn3eo+FUkZ0KJuGDM0AJ7I=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Oliver Upton <oliver.upton@linux.dev>
+To: Colton Lewis <coltonlewis@google.com>
+Cc: kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Russell King <linux@armlinux.org.uk>,
 	Catalin Marinas <catalin.marinas@arm.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	David Hildenbrand <david@redhat.com>,
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
 	Joey Gouly <joey.gouly@arm.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Keith Lucas <keith.lucas@oracle.com>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Shuah Khan <shuah@kernel.org>
-Subject: [PATCH] ksm_tests: Skip hugepage test when Transparent Hugepages are disabled
-Date: Sat, 21 Jun 2025 08:48:08 +0800
-Message-ID: <20250621004808.368878-1-liwang@redhat.com>
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Mark Rutland <mark.rutland@arm.com>, Shuah Khan <shuah@kernel.org>,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 07/23] perf: arm_pmuv3: Introduce method to partition
+ the PMU
+Message-ID: <aFYFqrYRsmCi6oii@linux.dev>
+References: <20250620221326.1261128-1-coltonlewis@google.com>
+ <20250620221326.1261128-8-coltonlewis@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250620221326.1261128-8-coltonlewis@google.com>
+X-Migadu-Flow: FLOW_OUT
 
-Some systems (e.g. minimal or real-time kernels) may not enable
-Transparent Hugepages (THP), causing MADV_HUGEPAGE to return EINVAL.
-This patch introduces a runtime check using the existing THP sysfs
-interface and skips the hugepage merging test (`-H`) when THP is
-not available.
+On Fri, Jun 20, 2025 at 10:13:07PM +0000, Colton Lewis wrote:
+> For PMUv3, the register field MDCR_EL2.HPMN partitiones the PMU
+> counters into two ranges where counters 0..HPMN-1 are accessible by
+> EL1 and, if allowed, EL0 while counters HPMN..N are only accessible by
+> EL2.
+> 
+> Create module parameters partition_pmu and reserved_guest_counters to
+> reserve a number of counters for the guest. These numbers are set at
+> boot because the perf subsystem assumes the number of counters will
+> not change after the PMU is probed.
+> 
+> Introduce the function armv8pmu_partition() to modify the PMU driver's
+> cntr_mask of available counters to exclude the counters being reserved
+> for the guest and record reserved_guest_counters as the maximum
+> allowable value for HPMN.
+> 
+> Due to the difficulty this feature would create for the driver running
+> at EL1 on the host, partitioning is only allowed in VHE mode. Working
+> on nVHE mode would require a hypercall for every counter access in the
+> driver because the counters reserved for the host by HPMN are only
+> accessible to EL2.
+> 
+> Signed-off-by: Colton Lewis <coltonlewis@google.com>
+> ---
+>  arch/arm/include/asm/arm_pmuv3.h   | 10 ++++
+>  arch/arm64/include/asm/arm_pmuv3.h |  5 ++
+>  drivers/perf/arm_pmuv3.c           | 95 +++++++++++++++++++++++++++++-
+>  include/linux/perf/arm_pmu.h       |  1 +
+>  4 files changed, 109 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm/include/asm/arm_pmuv3.h b/arch/arm/include/asm/arm_pmuv3.h
+> index 2ec0e5e83fc9..9dc43242538c 100644
+> --- a/arch/arm/include/asm/arm_pmuv3.h
+> +++ b/arch/arm/include/asm/arm_pmuv3.h
+> @@ -228,6 +228,11 @@ static inline bool kvm_set_pmuserenr(u64 val)
+>  
+>  static inline void kvm_vcpu_pmu_resync_el0(void) {}
+>  
+> +static inline bool has_vhe(void)
+> +{
+> +	return false;
+> +}
+> +
 
-To avoid those failures:
+This has nothing to do with PMUv3, I'm a bit surprised to see you're
+touching 32-bit ARM. Can you just gate the whole partitioning thing on
+arm64?
 
-  # -----------------------------
-  # running ./ksm_tests -H -s 100
-  # -----------------------------
-  # ksm_tests: MADV_HUGEPAGE: Invalid argument
-  # [FAIL]
-  not ok 1 ksm_tests -H -s 100 # exit=2
+> +static bool partition_pmu __read_mostly;
+> +static u8 reserved_guest_counters __read_mostly;
+> +
+> +module_param(partition_pmu, bool, 0);
+> +MODULE_PARM_DESC(partition_pmu,
+> +		 "Partition the PMU into host and guest VM counters [y/n]");
+> +
+> +module_param(reserved_guest_counters, byte, 0);
+> +MODULE_PARM_DESC(reserved_guest_counters,
+> +		 "How many counters to reserve for guest VMs [0-$NR_COUNTERS]");
+> +
 
-  # --------------------
-  # running ./khugepaged
-  # --------------------
-  # Reading PMD pagesize failed# [FAIL]
-  not ok 1 khugepaged # exit=1
+This is confusing and not what we discussed offline.
 
-  # --------------------
-  # running ./soft-dirty
-  # --------------------
-  # TAP version 13
-  # 1..15
-  # ok 1 Test test_simple
-  # ok 2 Test test_vma_reuse dirty bit of allocated page
-  # ok 3 Test test_vma_reuse dirty bit of reused address page
-  # Bail out! Reading PMD pagesize failed# Planned tests != run tests (15 != 3)
-  # # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
-  # [FAIL]
-  not ok 1 soft-dirty # exit=1
-  # SUMMARY: PASS=0 SKIP=0 FAIL=1
+Please use a single parameter that describes the number of counters used
+by the *host*. This affects the *host* PMU driver, KVM can discover (and
+use) the leftovers.
 
-  # -------------------
-  # running ./migration
-  # -------------------
-  # TAP version 13
-  # 1..3
-  # # Starting 3 tests from 1 test cases.
-  # #  RUN           migration.private_anon ...
-  # #            OK  migration.private_anon
-  # ok 1 migration.private_anon
-  # #  RUN           migration.shared_anon ...
-  # #            OK  migration.shared_anon
-  # ok 2 migration.shared_anon
-  # #  RUN           migration.private_anon_thp ...
-  # # migration.c:196:private_anon_thp:Expected madvise(ptr, TWOMEG, MADV_HUGEPAGE) (-1) == 0 (0)
-  # # private_anon_thp: Test terminated by assertion
-  # #          FAIL  migration.private_anon_thp
-  # not ok 3 migration.private_anon_thp
-  # # FAILED: 2 / 3 tests passed.
-  # # Totals: pass:2 fail:1 xfail:0 xpass:0 skip:0 error:0
-  # [FAIL]
-  not ok 1 migration # exit=1
+If the single module parameter goes unspecified the user did not ask for
+PMU partitioning.
 
-Signed-off-by: Li Wang <liwang@redhat.com>
-Cc: Aruna Ramakrishna <aruna.ramakrishna@oracle.com>
-Cc: Bagas Sanjaya <bagasdotme@gmail.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: David Hildenbrand <david@redhat.com>
-Cc: Joey Gouly <joey.gouly@arm.com>
-Cc: Johannes Weiner <hannes@cmpxchg.org>
-Cc: Keith Lucas <keith.lucas@oracle.com>
-Cc: Ryan Roberts <ryan.roberts@arm.com>
-Cc: Shuah Khan <shuah@kernel.org>
----
- tools/testing/selftests/mm/khugepaged.c   |  5 +++++
- tools/testing/selftests/mm/ksm_tests.c    |  6 ++++++
- tools/testing/selftests/mm/migration.c    |  8 ++++++++
- tools/testing/selftests/mm/soft-dirty.c   |  9 ++++++++-
- tools/testing/selftests/mm/thp_settings.c | 11 +++++++++++
- tools/testing/selftests/mm/thp_settings.h |  2 ++
- 6 files changed, 40 insertions(+), 1 deletion(-)
+> +/**
+> + * armv8pmu_reservation_is_valid() - Determine if reservation is allowed
+> + * @guest_counters: Number of host counters to reserve
+> + *
+> + * Determine if the number of host counters in the argument is
+> + * allowed. It is allowed if it will produce a valid value for
+> + * register field MDCR_EL2.HPMN.
+> + *
+> + * Return: True if reservation allowed, false otherwise
+> + */
+> +static bool armv8pmu_reservation_is_valid(u8 guest_counters)
+> +{
+> +	return guest_counters <= armv8pmu_pmcr_n_read();
+> +}
+> +
+> +/**
+> + * armv8pmu_partition_supported() - Determine if partitioning is possible
+> + *
+> + * Partitioning is only supported in VHE mode (with PMUv3, assumed
+> + * since we are in the PMUv3 driver)
+> + *
+> + * Return: True if partitioning is possible, false otherwise
+> + */
+> +static bool armv8pmu_partition_supported(void)
+> +{
+> +	return has_vhe();
+> +}
+> +
+> +/**
+> + * armv8pmu_partition() - Partition the PMU
+> + * @pmu: Pointer to pmu being partitioned
+> + * @guest_counters: Number of host counters to reserve
+> + *
+> + * Partition the given PMU by taking a number of host counters to
+> + * reserve and, if it is a valid reservation, recording the
+> + * corresponding HPMN value in the hpmn field of the PMU and clearing
+> + * the guest-reserved counters from the counter mask.
+> + *
+> + * Passing 0 for @guest_counters has the effect of disabling partitioning.
+> + *
+> + * Return: 0 on success, -ERROR otherwise
+> + */
+> +static int armv8pmu_partition(struct arm_pmu *pmu, u8 guest_counters)
+> +{
+> +	u8 nr_counters;
+> +	u8 hpmn;
+> +
+> +	if (!armv8pmu_reservation_is_valid(guest_counters))
+> +		return -EINVAL;
+> +
+> +	nr_counters = armv8pmu_pmcr_n_read();
+> +	hpmn = guest_counters;
+> +
+> +	pmu->hpmn_max = hpmn;
 
-diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
-index 8a4d34cce36b..6822eb7ea58e 100644
---- a/tools/testing/selftests/mm/khugepaged.c
-+++ b/tools/testing/selftests/mm/khugepaged.c
-@@ -1190,6 +1190,11 @@ int main(int argc, char **argv)
- 		.read_ahead_kb = 0,
- 	};
- 
-+	if (!thp_is_enabled()) {
-+		printf("Transparent Hugepages not available\n");
-+		return KSFT_SKIP;
-+	}
-+
- 	parse_test_type(argc, argv);
- 
- 	setbuf(stdout, NULL);
-diff --git a/tools/testing/selftests/mm/ksm_tests.c b/tools/testing/selftests/mm/ksm_tests.c
-index dcdd5bb20f3d..1fb2263faa8d 100644
---- a/tools/testing/selftests/mm/ksm_tests.c
-+++ b/tools/testing/selftests/mm/ksm_tests.c
-@@ -15,6 +15,7 @@
- #include "../kselftest.h"
- #include <include/vdso/time64.h>
- #include "vm_util.h"
-+#include "thp_settings.h"
- 
- #define KSM_SYSFS_PATH "/sys/kernel/mm/ksm/"
- #define KSM_FP(s) (KSM_SYSFS_PATH s)
-@@ -555,6 +556,11 @@ static int ksm_merge_hugepages_time(int merge_type, int mapping, int prot,
- 	unsigned long scan_time_ns;
- 	int pagemap_fd, n_normal_pages, n_huge_pages;
- 
-+	if (!thp_is_enabled()) {
-+		printf("Transparent Hugepages not available\n");
-+		return KSFT_SKIP;
-+	}
-+
- 	map_size *= MB;
- 	size_t len = map_size;
- 
-diff --git a/tools/testing/selftests/mm/migration.c b/tools/testing/selftests/mm/migration.c
-index 1e3a595fbf01..a306f8bab087 100644
---- a/tools/testing/selftests/mm/migration.c
-+++ b/tools/testing/selftests/mm/migration.c
-@@ -5,6 +5,8 @@
-  */
- 
- #include "../kselftest_harness.h"
-+#include "thp_settings.h"
-+
- #include <strings.h>
- #include <pthread.h>
- #include <numa.h>
-@@ -185,6 +187,9 @@ TEST_F_TIMEOUT(migration, private_anon_thp, 2*RUNTIME)
- 	uint64_t *ptr;
- 	int i;
- 
-+	if (!thp_is_enabled())
-+		SKIP(return, "Transparent Hugepages not available");
-+
- 	if (self->nthreads < 2 || self->n1 < 0 || self->n2 < 0)
- 		SKIP(return, "Not enough threads or NUMA nodes available");
- 
-@@ -214,6 +219,9 @@ TEST_F_TIMEOUT(migration, shared_anon_thp, 2*RUNTIME)
- 	uint64_t *ptr;
- 	int i;
- 
-+	if (!thp_is_enabled())
-+		SKIP(return, "Transparent Hugepages not available");
-+
- 	if (self->nthreads < 2 || self->n1 < 0 || self->n2 < 0)
- 		SKIP(return, "Not enough threads or NUMA nodes available");
- 
-diff --git a/tools/testing/selftests/mm/soft-dirty.c b/tools/testing/selftests/mm/soft-dirty.c
-index 8e1462ce0532..72d8ded87756 100644
---- a/tools/testing/selftests/mm/soft-dirty.c
-+++ b/tools/testing/selftests/mm/soft-dirty.c
-@@ -6,8 +6,10 @@
- #include <stdint.h>
- #include <malloc.h>
- #include <sys/mman.h>
-+
- #include "../kselftest.h"
- #include "vm_util.h"
-+#include "thp_settings.h"
- 
- #define PAGEMAP_FILE_PATH "/proc/self/pagemap"
- #define TEST_ITERATIONS 10000
-@@ -78,8 +80,13 @@ static void test_hugepage(int pagemap_fd, int pagesize)
- {
- 	char *map;
- 	int i, ret;
--	size_t hpage_len = read_pmd_pagesize();
- 
-+	if (!thp_is_enabled()) {
-+		printf("Skipping test: Transparent Hugepages not available\n");
-+		return KSFT_SKIP;
-+	}
-+
-+	size_t hpage_len = read_pmd_pagesize();
- 	if (!hpage_len)
- 		ksft_exit_fail_msg("Reading PMD pagesize failed");
- 
-diff --git a/tools/testing/selftests/mm/thp_settings.c b/tools/testing/selftests/mm/thp_settings.c
-index ad872af1c81a..bad60ac52874 100644
---- a/tools/testing/selftests/mm/thp_settings.c
-+++ b/tools/testing/selftests/mm/thp_settings.c
-@@ -381,3 +381,14 @@ unsigned long thp_shmem_supported_orders(void)
- {
- 	return __thp_supported_orders(true);
- }
-+
-+bool thp_is_enabled(void)
-+{
-+	if (access(THP_SYSFS, F_OK) != 0)
-+		return false;
-+
-+	int mode = thp_read_string("enabled", thp_enabled_strings);
-+
-+	/* THP is considered enabled if it's either "always" or "madvise" */
-+	return mode == 1 || mode == 3;
-+}
-diff --git a/tools/testing/selftests/mm/thp_settings.h b/tools/testing/selftests/mm/thp_settings.h
-index fc131d23d593..6c07f70beee9 100644
---- a/tools/testing/selftests/mm/thp_settings.h
-+++ b/tools/testing/selftests/mm/thp_settings.h
-@@ -84,4 +84,6 @@ void thp_set_read_ahead_path(char *path);
- unsigned long thp_supported_orders(void);
- unsigned long thp_shmem_supported_orders(void);
- 
-+bool thp_is_enabled(void);
-+
- #endif /* __THP_SETTINGS_H__ */
--- 
-2.49.0
+I'm not sure the host driver needs this for anything, KVM just needs to
+know what's potentially in use by the host.
 
+> +	/* Inform host driver of available counters */
+
+... said the driver to itself :)
+
+Thanks,
+Oliver
 
