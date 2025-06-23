@@ -1,98 +1,142 @@
-Return-Path: <linux-kselftest+bounces-35632-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35633-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2ABC6AE4B4C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Jun 2025 18:46:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFAFAAE4B89
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Jun 2025 19:01:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DDFBD189E4F8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Jun 2025 16:40:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE4933A4303
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Jun 2025 17:01:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E09D26D4FC;
-	Mon, 23 Jun 2025 16:39:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AD3A24DCE8;
+	Mon, 23 Jun 2025 17:01:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L6t3/gDL"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PP5hhr3w"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2DAF2566;
-	Mon, 23 Jun 2025 16:39:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 127821B4242
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Jun 2025 17:01:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750696780; cv=none; b=FzWgCaajgnin0VWUIJ97mZqzyEB8SQAzupNB82N6sECICZlBwAcswqWBlmCO+TqxnyMfEJpr5z2sIjtvn9IN4NetyRZyz3xoryPEgHY/5CQuAb1gBZXAgWV7fFSEkiWQRaZBazhcoEm0RQtLVU7H3DgdyStIFzuNCUwLx4JLKB4=
+	t=1750698084; cv=none; b=U4UyqCbKabu4C5qFAQElw/hQRR2bKZ9thWKR3wXhwuxUbOK3iVcIhWI7N3jqAIqOwn0zE7X9z48dsZdFY8/gxRhPBb1dT0FLOA245UqMGg/8P4n1qBm7J4qUtL4h7TedJbJ6rMDTrMirBN+t3yUCJAXpmM7845uQiWZUZA9MMd0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750696780; c=relaxed/simple;
-	bh=dezCiGqU5e28sywJ5KEaFI5ZLmyLKkXZkSwVklp0HN0=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=IcMgNW3ZUQ2HAWPxWMTz1eTa5T4hqlvcDxs9PATLdv7K69l38s6eJo/RzykTa0UaLP3/WGULqBsVDE4WzyDixE83EfGE53bP4t8ajPAFGhC9/9D/rKBvxgwXyTRUMWH3Yyqag7XdzmSebtbKJOYF5bvknqpABOmxMISgwVTFSeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L6t3/gDL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 637E3C4CEED;
-	Mon, 23 Jun 2025 16:39:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750696779;
-	bh=dezCiGqU5e28sywJ5KEaFI5ZLmyLKkXZkSwVklp0HN0=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=L6t3/gDLxFc4hRb60+WeoSgQi84l9+DwQYQYTknZUQRqSmADFtvSfOxlWmAhFwTae
-	 XJHF95vmMPa7oP8/nnCU5QBwI8qT5dOQvfjOzD+O787IPFoF5dSMUun8E5qEd3qfgY
-	 y5KPw5AZSoEEq/yMCUU6sUwVyEKkR5yuj3IHxjjPX4gPyPIXjLXKY8Tx3+VRRz6xU3
-	 RqfzsU9ZADNi5YcolEDA5jFK/JGFJW0tvCmVuLFAbxYnN9kre0KH9OWcElI9pd196T
-	 Qmn27UiB+xZ0Xg9xcTZ0qPd6cekJbtX/XLi+PG83awJLI04MPrPLr1q07KKzKtxZtk
-	 rrBt8kxiU3NMg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE05C38111DD;
-	Mon, 23 Jun 2025 16:40:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1750698084; c=relaxed/simple;
+	bh=rVjZlLZQ279KxL8vUzwjbUdQ9GXdGuGGWoZ+ZFn26Dc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Yt5Rs3i1tz3jNT0L0MMMPFZ/gcLqMJBmiKArL6KHvRC/5WbghjjaIpZkviaxEifn7dCF/TZucbK3o17vt0u+zRsnz+oYBw7ACj0Sx76pi3UdRgCQ19na5kqf6yup4RHaOU0xB1M4ahQ6Kn0fGIxve7Sa/NErLj7fKRYIuhRjP8k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PP5hhr3w; arc=none smtp.client-ip=95.215.58.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Mon, 23 Jun 2025 19:01:01 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1750698069;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=tTE7I/KO8H35amQtJL/anmk4SKSD+jA1F2S0AsyESUo=;
+	b=PP5hhr3wB6JmmQ6qEiog3eYoJv/oEWsi8ERj4nQhYPItLzopEtHk7ouTbsJOIe9xoYVLZH
+	sUDUwU4xmxtfmziuV2KTrmCmf/EuxwER3jwPvNrtudOmXW7kBzwzRnAzfQxerGmjGy2ajg
+	ixxQ8F1gc5Sl7TmBKqK6jlSPCflOLSk=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Andrew Jones <andrew.jones@linux.dev>
+To: Jesse Taube <jesse@rivosinc.com>
+Cc: kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
+	linux-kselftest@vger.kernel.org, =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>, 
+	Charlie Jenkins <charlie@rivosinc.com>, James Raphael Tiovalen <jamestiotio@gmail.com>, 
+	Sean Christopherson <seanjc@google.com>, Cade Richard <cade.richard@gmail.com>
+Subject: Re: [kvm-unit-tests PATCH] riscv: lib: sbi_shutdown add exit code.
+Message-ID: <20250623-c4c3115e6402176024bac6ea@orel>
+References: <20250620155051.68377-1-jesse@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] selftests/bpf: Support ppc64el in vmtest
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <175069680651.3229526.12855856215912953909.git-patchwork-notify@kernel.org>
-Date: Mon, 23 Jun 2025 16:40:06 +0000
-References: <20250619140854.2135283-1-luis.gerhorst@fau.de>
-In-Reply-To: <20250619140854.2135283-1-luis.gerhorst@fau.de>
-To: Luis Gerhorst <luis.gerhorst@fau.de>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
- shuah@kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, hbathini@linux.ibm.com,
- christophe.leroy@csgroup.eu, naveen@kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250620155051.68377-1-jesse@rivosinc.com>
+X-Migadu-Flow: FLOW_OUT
 
-Hello:
-
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Thu, 19 Jun 2025 16:08:53 +0200 you wrote:
-> With a rootfs built using libbpf's BPF CI [1], we can run specific tests
-> as follows:
+On Fri, Jun 20, 2025 at 08:50:51AM -0700, Jesse Taube wrote:
+> When exiting it may be useful for the sbi implementation to know the
+> exit code.
+> Add exit code to sbi_shutdown, and use it in exit().
 > 
-> $ ../libbpf-ci/rootfs/mkrootfs_debian.sh --arch ppc64el --distro noble
-> $ PLATFORM=ppc64el CROSS_COMPILE=powerpc64le-linux-gnu- \
->     tools/testing/selftests/bpf/vmtest.sh \
->     -l libbpf-vmtest-rootfs-*-noble-ppc64el.tar.zst \
->     -- ./test_progs -t verifier_array_access
+> Signed-off-by: Jesse Taube <jesse@rivosinc.com>
+> ---
+>  lib/riscv/asm/sbi.h | 2 +-
+>  lib/riscv/io.c      | 2 +-
+>  lib/riscv/sbi.c     | 4 ++--
+>  3 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> [...]
+> diff --git a/lib/riscv/asm/sbi.h b/lib/riscv/asm/sbi.h
+> index a5738a5c..de11c109 100644
+> --- a/lib/riscv/asm/sbi.h
+> +++ b/lib/riscv/asm/sbi.h
+> @@ -250,7 +250,7 @@ struct sbiret sbi_ecall(int ext, int fid, unsigned long arg0,
+>  			unsigned long arg3, unsigned long arg4,
+>  			unsigned long arg5);
+>  
+> -void sbi_shutdown(void);
+> +void sbi_shutdown(unsigned int code);
+>  struct sbiret sbi_hart_start(unsigned long hartid, unsigned long entry, unsigned long sp);
+>  struct sbiret sbi_hart_stop(void);
+>  struct sbiret sbi_hart_get_status(unsigned long hartid);
+> diff --git a/lib/riscv/io.c b/lib/riscv/io.c
+> index fb40adb7..02231268 100644
+> --- a/lib/riscv/io.c
+> +++ b/lib/riscv/io.c
+> @@ -150,7 +150,7 @@ void halt(int code);
+>  void exit(int code)
+>  {
+>  	printf("\nEXIT: STATUS=%d\n", ((code) << 1) | 1);
+> -	sbi_shutdown();
+> +	sbi_shutdown(code & 1);
+>  	halt(code);
+>  	__builtin_unreachable();
+>  }
+> diff --git a/lib/riscv/sbi.c b/lib/riscv/sbi.c
+> index 2959378f..9dd11e9d 100644
+> --- a/lib/riscv/sbi.c
+> +++ b/lib/riscv/sbi.c
+> @@ -107,9 +107,9 @@ struct sbiret sbi_sse_inject(unsigned long event_id, unsigned long hart_id)
+>  	return sbi_ecall(SBI_EXT_SSE, SBI_EXT_SSE_INJECT, event_id, hart_id, 0, 0, 0, 0);
+>  }
+>  
+> -void sbi_shutdown(void)
+> +void sbi_shutdown(unsigned int code)
+>  {
+> -	sbi_ecall(SBI_EXT_SRST, 0, 0, 0, 0, 0, 0, 0);
+> +	sbi_ecall(SBI_EXT_SRST, 0, 0, code, 0, 0, 0, 0);
 
-Here is the summary with links:
-  - [bpf-next] selftests/bpf: Support ppc64el in vmtest
-    https://git.kernel.org/bpf/bpf-next/c/3ce7cdde66e6
+We can't do this because a kvm-unit-tests exit code is not an
+SRST::reset_reason[1]. This could result in the SBI implementation
+returning an error, or doing something else, rather than shutting
+down.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+If this is a custom kvm-unit-tests-specific SBI implementation, then
+we could pass in a reset_reason in the 0xE0000000 - 0xEFFFFFFF range.
 
+[1] https://github.com/riscv-non-isa/riscv-sbi-doc/blob/master/src/ext-sys-reset.adoc#table_srst_system_reset_reasons
 
+Thanks,
+drew
+ 
+
+>  	puts("SBI shutdown failed!\n");
+>  }
+>  
+> -- 
+> 2.43.0
+> 
+> 
+> -- 
+> kvm-riscv mailing list
+> kvm-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/kvm-riscv
 
