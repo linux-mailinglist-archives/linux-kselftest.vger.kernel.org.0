@@ -1,151 +1,153 @@
-Return-Path: <linux-kselftest+bounces-35630-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35631-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED148AE486D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Jun 2025 17:26:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA344AE4AB1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Jun 2025 18:25:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6CE2F1B61A43
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Jun 2025 15:18:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E8470441299
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Jun 2025 16:22:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2175299A90;
-	Mon, 23 Jun 2025 15:15:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C1E729CB2B;
+	Mon, 23 Jun 2025 16:14:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="EKYe+ogk"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gvvWkioS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15219283C82
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Jun 2025 15:15:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93642145B3E
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Jun 2025 16:14:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750691754; cv=none; b=BQYanMnyow9sjOJZTHo/iRPyHTfxOjewbF2nhUCeUt9AbFRRTFlQ2ny+eEqb6Xy/gaVHvCj631bm08QxmZ8yeubfpa1KBhGrZYHCZC5IrLAIvEv0bIRu0to4xhBL6NvgYoMXo7g2oMqXp6LmaDUPIQ4/9CUx05ctVNTHrTyip0E=
+	t=1750695253; cv=none; b=kfNqvnAPX3qcuU1jQIqYlI0dRmdsXtWaP2qyvzHF0+pJP1JdAMnG/v6O7XtTy05TIJlb4PtHgiricpsnjS+7/T92txCeCoipkgHu47ilb6aGwHzy09C2C86FcET+bXvb3HtMlTnH6hIt3ch2C09e8k9Xlv33ueIhvTOKrs3gjMY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750691754; c=relaxed/simple;
-	bh=bqmkafwxydyORUt50Ur58Kwuhlign7ZQjhD916NZCSY=;
+	s=arc-20240116; t=1750695253; c=relaxed/simple;
+	bh=Tz+moTFStFX1YX39jWCVWhxsp1nVbvbMEnciDuWFgg4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=R98uE6XAbCSXxbQvoSwOfjy3qyf/vtGIVhCYr6e8O5+4hv1TQvIpG8JnLnUmnbTRIg9b4h1NoAYz2/HVtRQ/dGBow2BiyoLFiICRlCHm5ws+WlMYCYxI5Dkh9pdWqHjHeeTlgUEFD+1ljhtPmr/hCHiAj9x9D+01eWfqxIWieZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=EKYe+ogk; arc=none smtp.client-ip=209.85.219.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-e81877c1ed6so3434808276.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Jun 2025 08:15:51 -0700 (PDT)
+	 To:Cc:Content-Type; b=gBJyqBWQVwlBZd7h03vRND5kINEh2Dd7xNplaI4ItwQ9m7GvZuJLsQch6nVF89vPvwwl5ZjO+ds3R+E9SWHDClCr2KYSX78Dl/TDlbQUeYxdEEBIIY4+53jH6T5m2YOwvskBEOSL3BP/qakZC0RHLVBhOWCCYrS4Yvmbm8j627U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gvvWkioS; arc=none smtp.client-ip=209.85.160.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-4a58ba6c945so74275881cf.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Jun 2025 09:14:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1750691751; x=1751296551; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1750695250; x=1751300050; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/cEM3zQRxkyeF8QlajSb8sKwoIOz06mgwPF6H5WCdJ0=;
-        b=EKYe+ogkX/OG1HhZRLqatx3ccfj/tYIE4kgYG87jUjQcRjccTjocq1jB1lMNhHPGRq
-         HVvhKW2AzCeUA37+5GN9cy7gNkL304wcUDb4vveYgRHcavzhBj0zzTNsPzVgzkN9w/Qr
-         9rP7KeS5zvw3CcE/F3eFpK2ztzdW9dtH1C5wQqIBGxvtEY16BLCU7Hd4xNH1G4sF/UDP
-         Nd4/trrkWCsA1EDmITaNhWWuu7U9kcyNbL0Fa1157ez8R0mLwRXlQo3mxf650uauZowL
-         X2mE0QhSiFnr2geIFqOLp1ReIMqydYNmSEM01NEihxVhk4uHmjOEzwe2dFYzOT8gT/KD
-         Ex2w==
+        bh=wN+RSCnSaEyeOJOV22jB+Ns6YfYfbuKVTQFf93dpJN8=;
+        b=gvvWkioSl67jjGr10PTQQbIlXYXFSOz+Z6BtomHgsf5xPkkU/kGiapFMoBfZUN+U+Z
+         PmKLO+iCoRzYV+tRxsXYCbrKhyAa1hdTqOH09Hl4u0xClAtggzbulu0ZRR7kzldIpDvE
+         IwUMIZ5OTZawrkly0Dh1AcIANi1TWz5FjW9vPINoUGfMEbsrcNdIS2XQQShLb/nxi2Mc
+         uUtzKrWqqLBNt14ACAOTgcBlZW5vSthVqcUdQXYPKfoMR8iTGATIR9MJO6l+HG2j3KFK
+         XadtpyQk6YSNilylWwOUrTJbFS10f/Icks5jOR77h3zDvY5TAiF+pkPNiPdYPAMCO+6I
+         7U8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750691751; x=1751296551;
+        d=1e100.net; s=20230601; t=1750695250; x=1751300050;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/cEM3zQRxkyeF8QlajSb8sKwoIOz06mgwPF6H5WCdJ0=;
-        b=k54tVfqvgers8gCzl3QZFHUVhXjnOTsWkqi0ty0ZHqIPkhS0TEvlEZgYQ0sUS7CFok
-         XO9ull5E4KUPAF9aUmr+LGhAiwV+OW7cHeGyBckZsYt9BG25AJavrIMa/iuYMJ0Ve064
-         iH+dTMZFKnSe14DNGqx/5j5YQyxVvOKEGVAgLkFr5kr2kHXspAuXw4XqGBoMnodbei4x
-         ye00BGk890bWJpRThxAJXb0vPzKqvUBBZZmzdjvWFbMchcUhQEx7C7293eeE4C7bQNln
-         f4yfXwpr22jEZEy5sYN/+BCl/5VEa1lHw3gK6EMqQmLjDpM17sYiqlJr99KTAMcBO23x
-         +uzA==
-X-Forwarded-Encrypted: i=1; AJvYcCVRHzdyaqWMDgLACsboIVNfSm/acT//6V6ExiOXIw6bPbApzoDL/OVd/v3prXvAJ48uue03G3PXq41ikT4Mn0Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWeDd1h+16Dz4GDHvvtPx+3AjQ61vhLew3e/J5Szv6uAqCpnLr
-	vFs4B0YRePbLQC4ey927EAxXpltq0OEU9gRobvR1BEXeJO8K6+wfSwCuFboTT9x8HLf3vucjWQO
-	qWkJcfNGa7akRmAN7bPeekR4xqwCO+WOIt7Em41AM
-X-Gm-Gg: ASbGncsqakeSNpn4hgQg1Zq5HgCDNVGQRzErIeKWjDvz1nGLak/JF2uC3tehWrV58pH
-	NCaWQ+hN4D6WtojfvFzASLnuinQ1DGlEyi9iVkEJ8edPFxc9BbhegoiTjrqTLapq7EnB5rRXwyN
-	NDKWnlBS5CpwF9tIWRH0j8DJegW5oYD0gOzIyGcGcpeRE=
-X-Google-Smtp-Source: AGHT+IFZQzn3+JMIyejKC2+W29AQd1WwouaHlQDxuqJsYDQVdOYz9u2SoStqSDrpqsqEky4EPBlD56TODEPQ9GFR58M=
-X-Received: by 2002:a05:690c:9683:b0:6f9:4c00:53ae with SMTP id
- 00721157ae682-712ca356122mr174541157b3.8.1750691751048; Mon, 23 Jun 2025
- 08:15:51 -0700 (PDT)
+        bh=wN+RSCnSaEyeOJOV22jB+Ns6YfYfbuKVTQFf93dpJN8=;
+        b=o8cafxqOgWIusElo7OIkcuiNnAewSj3CSqSACDLufUWSpjzzqkvry6mtHxPNXV8fum
+         cp5v7B6dSO6RG4L0F04ktX47Mg7ZOBzswx+A7xmMSxiAyPTu/B6WtF2imvcSUhI26cCP
+         oR5Kgkn9OGF+HR5gjcMlHzd4misOk910nQaCgJormQSD6aRD3eoc1eR27B1EQGwcIG4m
+         kgNAwSnobz7PWQie2ZSu2UoYAtiCnZsDXg5c4X00EurtE90RfwRTqIak5EqhAsUQfTFz
+         SDIZCNTcNSIDGELXoXi64EO1l06Rq/9qthZLHxU325kb+hlVbmCL1ETuayptDaFB6K3r
+         kh4g==
+X-Forwarded-Encrypted: i=1; AJvYcCVhXTekrziIZMl+yzKW4Mrai65OlEKODGsGDEsdffZn8t8mhD+jEcMdWB1LPx39TAALeOV+FZ91QfFT66oHgoA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYg2hQO7pAbuzGqxYxHEu1T0SqmBr2SV5Khw0HIUB4sPDtvjFO
+	Cn3obtyej9wBt2045BAojJZVAksD/ODCj65pIjIE5iGbbf1jybsViT73QkxLBIN8LvBm8OmAC5x
+	e+6SsNmbDsamjWbDCE73WzDISyo1OD0k9BBMu8xYu
+X-Gm-Gg: ASbGnctt8M5jYw6LV6QdBP/SO43IYOIdL6qJweNi28nU3u+0evJG5pehIaYPD4wo50d
+	4ydmEVIfvF+XdzEB3wQArxUXL5g7lvb03+7uU56PMRRz9+zYbSiZSNSQX7U4cnRIy6MHFgMs1eB
+	Tpq905HoFMlPsvqmfIRNX7QzAdl2L9xZ4s/TBmu8noZ2k=
+X-Google-Smtp-Source: AGHT+IEobn0And7X+FnotCoZ870DRkq0dQIwi5clxpS4xb+1xJRmqq200eOqBXI6G1dwNYsWyv6mWhZ2d1yR0qDuYeA=
+X-Received: by 2002:a05:622a:610e:b0:4a4:3a34:ee71 with SMTP id
+ d75a77b69052e-4a77a2b6514mr178869141cf.29.1750695250190; Mon, 23 Jun 2025
+ 09:14:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250622-toicsti-bug-v1-0-f374373b04b2@gmail.com>
- <20250622-toicsti-bug-v1-2-f374373b04b2@gmail.com> <CAEjxPJ6v12nLFx-x4-=esuPMp7L8UBvTzoj1kkTPcD2mDKKW8w@mail.gmail.com>
-In-Reply-To: <CAEjxPJ6v12nLFx-x4-=esuPMp7L8UBvTzoj1kkTPcD2mDKKW8w@mail.gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 23 Jun 2025 11:15:39 -0400
-X-Gm-Features: Ac12FXw75VZJClzZmRv1umOqFnfnvmDMNU_jKRuRdLW4QXd6DpSXCOL2kXN21Os
-Message-ID: <CAHC9VhS8gPQwgesV_0VbUuqxGrADm5uDofM3m=wZuAEgkWi5Hw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] selinux: add capability checks for TIOCSTI ioctl
-To: Stephen Smalley <stephen.smalley.work@gmail.com>
-Cc: xandfury@gmail.com, Shuah Khan <shuah@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Ondrej Mosnacek <omosnace@redhat.com>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, 
-	selinux@vger.kernel.org, kees@kernel.org, linux-hardening@vger.kernel.org
+References: <20250621193737.16593-1-chia-yu.chang@nokia-bell-labs.com> <20250621193737.16593-5-chia-yu.chang@nokia-bell-labs.com>
+In-Reply-To: <20250621193737.16593-5-chia-yu.chang@nokia-bell-labs.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Mon, 23 Jun 2025 09:13:59 -0700
+X-Gm-Features: AX0GCFsz5JzbRrh0-kqOwf2TSk7Ef6ZqFtN_ZPJc01ldHoBLtqqmmWiHN33x0qI
+Message-ID: <CANn89iKLKzvkLkPY67286+dKC4fGS3VtP_YhL00BmS6-0yXKxQ@mail.gmail.com>
+Subject: Re: [PATCH v9 net-next 04/15] tcp: AccECN core
+To: chia-yu.chang@nokia-bell-labs.com
+Cc: pabeni@redhat.com, linux-doc@vger.kernel.org, corbet@lwn.net, 
+	horms@kernel.org, dsahern@kernel.org, kuniyu@amazon.com, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org, dave.taht@gmail.com, jhs@mojatatu.com, 
+	kuba@kernel.org, stephen@networkplumber.org, xiyou.wangcong@gmail.com, 
+	jiri@resnulli.us, davem@davemloft.net, andrew+netdev@lunn.ch, 
+	donald.hunter@gmail.com, ast@fiberby.net, liuhangbin@gmail.com, 
+	shuah@kernel.org, linux-kselftest@vger.kernel.org, ij@kernel.org, 
+	ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com, 
+	g.white@cablelabs.com, ingemar.s.johansson@ericsson.com, 
+	mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at, 
+	Jason_Livingood@comcast.com, vidhi_goel@apple.com, 
+	Olivier Tilmans <olivier.tilmans@nokia.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 23, 2025 at 8:39=E2=80=AFAM Stephen Smalley
-<stephen.smalley.work@gmail.com> wrote:
-> On Sun, Jun 22, 2025 at 9:41=E2=80=AFPM Abhinav Saxena via B4 Relay
-> <devnull+xandfury.gmail.com@kernel.org> wrote:
-> >
-> > From: Abhinav Saxena <xandfury@gmail.com>
-> >
-> > The TIOCSTI ioctl currently only checks the current process's
-> > credentials, creating a TOCTOU vulnerability where an unprivileged
-> > process can open a TTY fd and pass it to a privileged process via
-> > SCM_RIGHTS.
-> >
-> > Fix by requiring BOTH the file opener (file->f_cred) AND the current
-> > process to have CAP_SYS_ADMIN. This prevents privilege escalation
-> > while ensuring legitimate use cases continue to work.
-> >
-> > Link: https://github.com/KSPP/linux/issues/156
-> >
-> > Signed-off-by: Abhinav Saxena <xandfury@gmail.com>
-> > ---
-> >  security/selinux/hooks.c | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> >
-> > diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-> > index 595ceb314aeb..a628551873ab 100644
-> > --- a/security/selinux/hooks.c
-> > +++ b/security/selinux/hooks.c
-> > @@ -3847,6 +3847,12 @@ static int selinux_file_ioctl(struct file *file,=
- unsigned int cmd,
-> >                                             CAP_OPT_NONE, true);
-> >                 break;
-> >
-> > +       case TIOCSTI:
-> > +               if (!file_ns_capable(file, &init_user_ns, CAP_SYS_ADMIN=
-) ||
-> > +                   !capable(CAP_SYS_ADMIN))
-> > +                       error =3D -EPERM;
-> > +               break;
-> > +
+On Sat, Jun 21, 2025 at 12:37=E2=80=AFPM <chia-yu.chang@nokia-bell-labs.com=
+> wrote:
 >
-> So, aside from what I said previously, this also will break any
-> existing policies currently controlling TIOCSTI
-> via the selinux ioctl checking in the default case, so at the very
-> least, this would need to be gated by a new
-> SELinux policy capability for compatibility purposes. But I'm still
-> unconvinced that this is the right approach.
+> From: Ilpo J=C3=A4rvinen <ij@kernel.org>
+>
+> This change implements Accurate ECN without negotiation and
+> AccECN Option (that will be added by later changes). Based on
+> AccECN specifications:
+>   https://tools.ietf.org/id/draft-ietf-tcpm-accurate-ecn-28.txt
+>
+> Accurate ECN allows feeding back the number of CE (congestion
+> experienced) marks accurately to the sender in contrast to
+> RFC3168 ECN that can only signal one marks-seen-yes/no per RTT.
+> Congestion control algorithms can take advantage of the accurate
+> ECN information to fine-tune their congestion response to avoid
+> drastic rate reduction when only mild congestion is encountered.
+>
+> With Accurate ECN, tp->received_ce (r.cep in AccECN spec) keeps
+> track of how many segments have arrived with a CE mark. Accurate
+> ECN uses ACE field (ECE, CWR, AE) to communicate the value back
+> to the sender which updates tp->delivered_ce (s.cep) based on the
+> feedback. This signalling channel is lossy when ACE field overflow
+> occurs.
+>
+> Conservative strategy is selected here to deal with the ACE
+> overflow, however, some strategies using the AccECN option later
+> in the overall patchset mitigate against false overflows detected.
+>
+> The ACE field values on the wire are offset by
+> TCP_ACCECN_CEP_INIT_OFFSET. Delivered_ce/received_ce count the
+> real CE marks rather than forcing all downstream users to adapt
+> to the wire offset.
+>
+> This patch uses the first 1-byte hole and the last 4-byte hole of
+> the tcp_sock_write_txrx for 'received_ce_pending' and 'received_ce'.
+> Also, the group size of tcp_sock_write_txrx is increased from
+> 91 + 4 to 95 + 4 due to the new u32 received_ce member. Below are
+> the trimmed pahole outcomes before and after this patch.
+>
 
-I want to add my voice to the other comments that adding these
-capability checks to the SELinux code and not the main TIOCSTI kernel
-code is not an approach we want to support.  Beyond that, as others
-have already pointed out, I think some additional inspection and
-testing is needed to ensure that the additional capability checks do
-not break existing, valid use cases.
+> Signed-off-by: Ilpo J=C3=A4rvinen <ij@kernel.org>
+> Co-developed-by: Olivier Tilmans <olivier.tilmans@nokia.com>
+> Signed-off-by: Olivier Tilmans <olivier.tilmans@nokia.com>
+> Co-developed-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+> Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+>
+> ---
+> v9:
+> - Use tcp_data_ecn_check() to set TCP_ECN_SEE flag only for RFC3168 ECN
+> - Add comments about setting TCP_ECN_SEEN flag for RFC3168 and Accruate E=
+CN
 
---=20
-paul-moore.com
+Reviewed-by: Eric Dumazet <edumazet@google.com>
 
