@@ -1,142 +1,84 @@
-Return-Path: <linux-kselftest+bounces-35633-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35634-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFAFAAE4B89
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Jun 2025 19:01:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8538AE4BE2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Jun 2025 19:30:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE4933A4303
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Jun 2025 17:01:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A2DA8189E1B7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Jun 2025 17:30:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AD3A24DCE8;
-	Mon, 23 Jun 2025 17:01:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D87A2BD023;
+	Mon, 23 Jun 2025 17:29:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PP5hhr3w"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q9KUbU3J"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 127821B4242
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Jun 2025 17:01:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 618CC29DB84;
+	Mon, 23 Jun 2025 17:29:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750698084; cv=none; b=U4UyqCbKabu4C5qFAQElw/hQRR2bKZ9thWKR3wXhwuxUbOK3iVcIhWI7N3jqAIqOwn0zE7X9z48dsZdFY8/gxRhPBb1dT0FLOA245UqMGg/8P4n1qBm7J4qUtL4h7TedJbJ6rMDTrMirBN+t3yUCJAXpmM7845uQiWZUZA9MMd0=
+	t=1750699745; cv=none; b=WRMh9HwgLVpjqZEvs93Q/RrY6i700KdxI0XUeFO1y4NsWC4FOiSxld8AUwr8kM3Z9c0FH+hDIwIeAYIwAv4nD+cyvnhACWoAsSEjPSCptzoMMRY8UaDKlPpy2Eo9VxBzOzjXglTGZrw3PdF02/tMeo4blNzmj4JSGMV9FvNe6n4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750698084; c=relaxed/simple;
-	bh=rVjZlLZQ279KxL8vUzwjbUdQ9GXdGuGGWoZ+ZFn26Dc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Yt5Rs3i1tz3jNT0L0MMMPFZ/gcLqMJBmiKArL6KHvRC/5WbghjjaIpZkviaxEifn7dCF/TZucbK3o17vt0u+zRsnz+oYBw7ACj0Sx76pi3UdRgCQ19na5kqf6yup4RHaOU0xB1M4ahQ6Kn0fGIxve7Sa/NErLj7fKRYIuhRjP8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PP5hhr3w; arc=none smtp.client-ip=95.215.58.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Mon, 23 Jun 2025 19:01:01 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1750698069;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=tTE7I/KO8H35amQtJL/anmk4SKSD+jA1F2S0AsyESUo=;
-	b=PP5hhr3wB6JmmQ6qEiog3eYoJv/oEWsi8ERj4nQhYPItLzopEtHk7ouTbsJOIe9xoYVLZH
-	sUDUwU4xmxtfmziuV2KTrmCmf/EuxwER3jwPvNrtudOmXW7kBzwzRnAzfQxerGmjGy2ajg
-	ixxQ8F1gc5Sl7TmBKqK6jlSPCflOLSk=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Andrew Jones <andrew.jones@linux.dev>
-To: Jesse Taube <jesse@rivosinc.com>
-Cc: kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
-	linux-kselftest@vger.kernel.org, =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>, 
-	Charlie Jenkins <charlie@rivosinc.com>, James Raphael Tiovalen <jamestiotio@gmail.com>, 
-	Sean Christopherson <seanjc@google.com>, Cade Richard <cade.richard@gmail.com>
-Subject: Re: [kvm-unit-tests PATCH] riscv: lib: sbi_shutdown add exit code.
-Message-ID: <20250623-c4c3115e6402176024bac6ea@orel>
-References: <20250620155051.68377-1-jesse@rivosinc.com>
+	s=arc-20240116; t=1750699745; c=relaxed/simple;
+	bh=a/YjtocPnqP5cP6lzPFnDmdMokR12VJ4uig4PEQI2Is=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=s6muTjdzr6q6V2kDLA8BAAOTUi8SECtaWkYTb/3Nu+VkDPTLokhsh5teJAYU29I5hnydAR/sAAMeSufn1vy6gH2rekO0rIaJBhC5YUpmEkLgF2Qukc6i1AlS9cZe0PYxScD7AJe7pNwBphu33y9Ac/SahwsILQyZv0PBa8wowrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q9KUbU3J; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8528CC4CEEA;
+	Mon, 23 Jun 2025 17:29:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750699744;
+	bh=a/YjtocPnqP5cP6lzPFnDmdMokR12VJ4uig4PEQI2Is=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Q9KUbU3JUzJftUazF3rR0KxqPigegrvt7IVdwW8rJMYaZTfpe+hFnYKpR1m2l169R
+	 QZ0acbY1kXhJxzB/ZSx7AVfH30djPpxItMTZLYXsyrtDiTO3NUQSshA9f5CAeoi+33
+	 wGNjjDcTeM5opLNC/LgkKatnWzNGD2gugxw8pAsvshRTnFbqckuRiAMeHmZAYMWc/4
+	 V6XyHIgswkrmWaJjPb2YXTGIngnEugzbvZWv1Vd+xIxpQWlGIh3/HxKHiXZkHVqKrW
+	 YUluJGBLY9/xoMJQxlFStcPCxNti7nnXe4/Wc8oP6Rsf1zg/j7K/MkfZs31jM4fMaT
+	 fUOsPUg41F5Fg==
+Date: Mon, 23 Jun 2025 10:29:03 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
+ <shuah@kernel.org>, linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, ast@kernel.org
+Subject: Re: [PATCH net-next RFC] selftests: net: add netpoll basic
+ functionality test
+Message-ID: <20250623102903.3a58842d@kernel.org>
+In-Reply-To: <aFkbXFvOKeMALwBg@gmail.com>
+References: <20250612-netpoll_test-v1-1-4774fd95933f@debian.org>
+	<684b8e8abb874_dcc45294a5@willemb.c.googlers.com.notmuch>
+	<aEwd9oLRnxna97JK@gmail.com>
+	<20250613174233.0dd5e7c1@kernel.org>
+	<aFUeT8HSPYiDyALB@gmail.com>
+	<20250621065121.78701641@kernel.org>
+	<aFkbXFvOKeMALwBg@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250620155051.68377-1-jesse@rivosinc.com>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Fri, Jun 20, 2025 at 08:50:51AM -0700, Jesse Taube wrote:
-> When exiting it may be useful for the sbi implementation to know the
-> exit code.
-> Add exit code to sbi_shutdown, and use it in exit().
+On Mon, 23 Jun 2025 02:16:12 -0700 Breno Leitao wrote:
+> So, the selftest for netpoll is already in the mailing list[1], so, we
+> have two options, now:
 > 
-> Signed-off-by: Jesse Taube <jesse@rivosinc.com>
-> ---
->  lib/riscv/asm/sbi.h | 2 +-
->  lib/riscv/io.c      | 2 +-
->  lib/riscv/sbi.c     | 4 ++--
->  3 files changed, 4 insertions(+), 4 deletions(-)
+>   1) Steal your patch and make [1] depend on it.
+>   2) Merge the selftest [1] and, then, steal your patch by adding the
+>      bpftrace support in it.
 > 
-> diff --git a/lib/riscv/asm/sbi.h b/lib/riscv/asm/sbi.h
-> index a5738a5c..de11c109 100644
-> --- a/lib/riscv/asm/sbi.h
-> +++ b/lib/riscv/asm/sbi.h
-> @@ -250,7 +250,7 @@ struct sbiret sbi_ecall(int ext, int fid, unsigned long arg0,
->  			unsigned long arg3, unsigned long arg4,
->  			unsigned long arg5);
->  
-> -void sbi_shutdown(void);
-> +void sbi_shutdown(unsigned int code);
->  struct sbiret sbi_hart_start(unsigned long hartid, unsigned long entry, unsigned long sp);
->  struct sbiret sbi_hart_stop(void);
->  struct sbiret sbi_hart_get_status(unsigned long hartid);
-> diff --git a/lib/riscv/io.c b/lib/riscv/io.c
-> index fb40adb7..02231268 100644
-> --- a/lib/riscv/io.c
-> +++ b/lib/riscv/io.c
-> @@ -150,7 +150,7 @@ void halt(int code);
->  void exit(int code)
->  {
->  	printf("\nEXIT: STATUS=%d\n", ((code) << 1) | 1);
-> -	sbi_shutdown();
-> +	sbi_shutdown(code & 1);
->  	halt(code);
->  	__builtin_unreachable();
->  }
-> diff --git a/lib/riscv/sbi.c b/lib/riscv/sbi.c
-> index 2959378f..9dd11e9d 100644
-> --- a/lib/riscv/sbi.c
-> +++ b/lib/riscv/sbi.c
-> @@ -107,9 +107,9 @@ struct sbiret sbi_sse_inject(unsigned long event_id, unsigned long hart_id)
->  	return sbi_ecall(SBI_EXT_SSE, SBI_EXT_SSE_INJECT, event_id, hart_id, 0, 0, 0, 0);
->  }
->  
-> -void sbi_shutdown(void)
-> +void sbi_shutdown(unsigned int code)
->  {
-> -	sbi_ecall(SBI_EXT_SRST, 0, 0, 0, 0, 0, 0, 0);
-> +	sbi_ecall(SBI_EXT_SRST, 0, 0, code, 0, 0, 0, 0);
+> What is your recommendation?
 
-We can't do this because a kvm-unit-tests exit code is not an
-SRST::reset_reason[1]. This could result in the SBI implementation
-returning an error, or doing something else, rather than shutting
-down.
-
-If this is a custom kvm-unit-tests-specific SBI implementation, then
-we could pass in a reset_reason in the 0xE0000000 - 0xEFFFFFFF range.
-
-[1] https://github.com/riscv-non-isa/riscv-sbi-doc/blob/master/src/ext-sys-reset.adoc#table_srst_system_reset_reasons
-
-Thanks,
-drew
- 
-
->  	puts("SBI shutdown failed!\n");
->  }
->  
-> -- 
-> 2.43.0
-> 
-> 
-> -- 
-> kvm-riscv mailing list
-> kvm-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/kvm-riscv
+Let's see if [1] gets merged as is, if we need a v2 let's add the
+bpftrace patch?
 
