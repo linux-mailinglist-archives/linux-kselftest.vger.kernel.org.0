@@ -1,188 +1,193 @@
-Return-Path: <linux-kselftest+bounces-35655-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35656-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DDD4AE558D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 00:12:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 28D28AE5791
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 00:46:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C85834C45F9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Jun 2025 22:11:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BE9B94E192C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Jun 2025 22:46:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6D9A22A1E6;
-	Mon, 23 Jun 2025 22:11:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5288226CF3;
+	Mon, 23 Jun 2025 22:46:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bGB61CYI"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="kP5iaZ3Y"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f74.google.com (mail-io1-f74.google.com [209.85.166.74])
+Received: from mail-ua1-f51.google.com (mail-ua1-f51.google.com [209.85.222.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56D56226533
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Jun 2025 22:11:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42667219301
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Jun 2025 22:46:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750716680; cv=none; b=bttEaPOSZXNGWHQ4LI3z/abKi1+Xcm1/gayOx1UEwyp/gArGGbb/IWNLiGfGxSTDzsw2Xo6uLUv4WhzflcNiLMSfeYfbFJ5UXFFSR1quHjnE8csRkzqE/4Cli0+VAL9MxCr0bTB15144DwlrnYG1dFs3pNhJwOJjVMuYRzRRPW4=
+	t=1750718807; cv=none; b=Pyn6RQ7grkU6bPsuNCKR9E6/1u9OxbV6aO40kB5n7j3Ut1saMIKiWEqf09hTCmwGd+HlQHsTaJrPVmXkY1ooE2y3HdGBEqmLBmUW2oHVB7o/WacaVf60uUuFNfjvIL7fZQ1wjReniPTSIjbdO5DjKtDq/u9pGNkzV965IaYpK+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750716680; c=relaxed/simple;
-	bh=D7atcKrsikBtKn+dkIVbHfHd96Aa/xzh+Jcn54xGazo=;
-	h=Date:In-Reply-To:Mime-Version:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=ugkIT3/ExJKnazI0KwqsG/dSqpHvOTUu6FXm/mufW4POciEW6OaN210KiMjTiQxuSOgJp9cOqIkH3NewDTa8AvfHOoXRdcao2OC1xCpmn0Rr/N/W1aHy/8TF/j5LzQnQqEq5VDNi/2woQjFMEePVYnbS9+Q3l4fJlT5M5ExWSAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bGB61CYI; arc=none smtp.client-ip=209.85.166.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com
-Received: by mail-io1-f74.google.com with SMTP id ca18e2360f4ac-86d1218df67so394051339f.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Jun 2025 15:11:17 -0700 (PDT)
+	s=arc-20240116; t=1750718807; c=relaxed/simple;
+	bh=aB8q6uQ5QYvHj+vZzXwzH1v84Y6Pcwj3l0cxll3CiDo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ng7gl5BisDdJbq41mQ3tGOK0Ymhk2jARfkpi6wOYSy0Oe3IqzQ/Meyvk9+FZ512HqVHJ7OdJpOMaUfK8p3MMd2AZmWtCiqVW3hdwQoA8B+dlLmDGhXta43tNUp+AJ3blG41YkdUNgFhd6DW4VjudVZmIVr7DpfjDvJ+EY6j/7ec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=kP5iaZ3Y; arc=none smtp.client-ip=209.85.222.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-ua1-f51.google.com with SMTP id a1e0cc1a2514c-87f2aed4092so996532241.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Jun 2025 15:46:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1750716676; x=1751321476; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=tGQz+pPj9rguv78Mk1DG88zZ+C5YYmZS8y1NwOe8IHE=;
-        b=bGB61CYIjxiMMk7ExweFZl8ed1XFA+qc2eVHDL3x5ZRWn1R1Un/K0VgUbQBLoJdVIp
-         n6Avm+KftNSah/p6+BgsIU2/B0gqwcJ6QUvKoAVWaOKSaLJEiyQmvW+hRlMjdjk45n2z
-         mnQUCqmNQweTCMH7v2qKRig7xCPJLbZoYQUrlE/V7bDXIgCo36WTTkymnWE6qvlRpftg
-         6g+LdfgYQ5idNPutdjrTEsVMclwjWNJ+PnXpllN+/wUzUItACTtd1Q7p4NAYm2tdl/ru
-         j/vpp+TsWHfWohs2h/FviZz6AC2kmRP4KhV3KCmNFlmTH9UIfxcN7b9n6SApFthdiD4C
-         8tCQ==
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1750718803; x=1751323603; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ym0HxdMynda5jpDn6I4eu6hPVQjdVA1rMVxf5FN/Ffs=;
+        b=kP5iaZ3YVlMqB6c4yGPGsyAfPaqDoe1wfZChxvG3nogGZ+vEOoFYg+zuD3w2uDI3zw
+         tnuR2sqAfbu037i2GZlm0dVwAwN8w0jRv/1kxF20+8Fxei2vNe2E00oIbcq9Eo68lcB5
+         JViJIKWEVPHzcQeeyw+VjzdDM+AHwfLEck6MC9NRtuIQXi7ezVn+OXvnrMQbSmrz1QjJ
+         YrgFvStBlBlIv3zhD0TV5A6qczs573cIpX8qhYBHD47MptJ6Q/XQRQWqvxVleVeJekhf
+         RffanWtS2tLymAFTvBoXXM6eZdjBrzjJWOZ0iCSei5Da/fvGfRCOfctYxKGhXBgNs/Oi
+         swTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750716676; x=1751321476;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tGQz+pPj9rguv78Mk1DG88zZ+C5YYmZS8y1NwOe8IHE=;
-        b=jSPDh+XDk5LaAeEpWW85+7ejkuPFcEe8rZbtv+xDou5s0C3Tc3S/tQg8dsdIowTMMP
-         1UthjJCx0FDwh330wEi5KpKLcR9pZOIrg/WT9GThzoo8h8C6+DcVtKeYxX2SP6rkXex0
-         7fCtFGa2QMk64zqkX/OW/TrneEF0EiVnVUmqG0D4bKuh9eU7rkyxy8tY3ImtojFlxYjZ
-         egHZXjuF0jTASOwHAy4ZeiKqBc1STloLshqFEODkeKVPNEVoP2QzhjI8anQl5YYd+0ix
-         witP90BwiID5InJdW9xDsw+0NK66n30WbqktuMxadqQyyQCDjW8xUOR5KdPowE/EWPop
-         Tcgg==
-X-Forwarded-Encrypted: i=1; AJvYcCXa9JuywwpvnWLYXwnOnAYjaaEJaENYw8oEI9G3boZP3u+Qcuv/kOsvu+ydhhmKxsBb9ts6yqNsm7T8h3D+oJs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxf0dXi2z9HtrezsKA5AJ7AwP5kVT22B7xoczIAflr6Hcbrp4PK
-	hi6YW5BkF3MdXPdAf8+/pvYAqWi2EF5cUuFzFiUgETOAv31Uyc9iJ44SOfWJ7POiVo5jwY+J3U/
-	ITimX9nPaxB9uEl4QK/Qa8om49g==
-X-Google-Smtp-Source: AGHT+IFROh/q8Un43k3KAN6/Y7TN0oBqMJ1o65GnORb3dUVRyme5Qfos+kVCSSkafOZNJv6Ve5iTj9GtWD2hqiOqYQ==
-X-Received: from ilbdr12.prod.google.com ([2002:a05:6e02:3f0c:b0:3dd:b580:4100])
- (user=coltonlewis job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6e02:3499:b0:3de:119f:5261 with SMTP id e9e14a558f8ab-3de38c1c019mr212245545ab.3.1750716676655;
- Mon, 23 Jun 2025 15:11:16 -0700 (PDT)
-Date: Mon, 23 Jun 2025 22:11:15 +0000
-In-Reply-To: <202506221711.tFNGpzj4-lkp@intel.com> (message from kernel test
- robot on Sun, 22 Jun 2025 17:32:31 +0800)
+        d=1e100.net; s=20230601; t=1750718803; x=1751323603;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ym0HxdMynda5jpDn6I4eu6hPVQjdVA1rMVxf5FN/Ffs=;
+        b=MnsCOrmE5brl7xD8RCPrZvh+ZkPme0qCfeMMevyQX+xCGVYhuZaCRSbDS2SggFU2vZ
+         4erM++AGr12kSd6IlDR/rH4AAL7PRkw9VgPT6bJU0Yoy5NX23K2kKaDbI5gUOfVFjTB9
+         wJz/ZG1MQUenAGf7MlC9ec8J8BAkWI5vA8qzjE+v7EnJST4L42xKCQoPGWMkBMTZvaPd
+         28OKRhbw0D75vB7WdoytRqk0hgCOhmypCX7rTo7GE13JEAbcEyDE4mRHCM6LhHFbHaf0
+         HIOemS7lUqu96G74TGtbbIq5A8rKBP25MERHyQwkBQ2pVpet4Bqc7yppRrbi6G1XrAXO
+         9QsQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXh1J81kjaxVCF+k+aRy3U57rcSua/YhpStuUGM7jSKXTF35PYKB3OLm3Cm0FRgKcRu758UwGZHLrqi/IycADU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7nf1C2ArTbNwL4aBTtj2sItt8HMf0rBnyaK3Q4cExYdFTSg9n
+	q4ujIdZv0bT8vzYvxXqjM0vseHNaU2hNdSUGthJSIhequAohzuWlk+S1KbhKOB6i14JjO/UzGkd
+	KbZl3Tp/taZwNNAM+Ys5k/AoYFetRTvr61F5+BWSjvg==
+X-Gm-Gg: ASbGncvwk4ska9waaoh7tkO/y1J8ul57M7agK9yr7QGBOf9thDYSB+0qSp1pI3yQcsZ
+	xE9UTK+pZ6kfQQTJSUgTrukRc0275GryXnEMyvLUoTQLyTEmfVDDF5HQ6unumBprVPSWUhsVYt1
+	Nqj4EI385F37KphJ1AbQ5E/RiKNMVhlatWjPxLsZKzOPte
+X-Google-Smtp-Source: AGHT+IFFi5eDNgPmLRk5B8kDGRwTLx842aYBtGrbpiDH5LOZp5sY2aVIe4JANq3ZFJwGeg3PELwobnK+RDfeH6qpX80=
+X-Received: by 2002:a05:6102:6ca:b0:4e9:94a3:1a34 with SMTP id
+ ada2fe7eead31-4e9c299dff9mr7875257137.16.1750718803142; Mon, 23 Jun 2025
+ 15:46:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Message-ID: <gsntikkm9kho.fsf@coltonlewis-kvm.c.googlers.com>
-Subject: Re: [PATCH v2 17/23] KVM: arm64: Account for partitioning in PMCR_EL0 access
-From: Colton Lewis <coltonlewis@google.com>
-To: kernel test robot <lkp@intel.com>
-Cc: kvm@vger.kernel.org, oe-kbuild-all@lists.linux.dev, pbonzini@redhat.com, 
-	corbet@lwn.net, linux@armlinux.org.uk, catalin.marinas@arm.com, 
-	will@kernel.org, maz@kernel.org, oliver.upton@linux.dev, joey.gouly@arm.com, 
-	suzuki.poulose@arm.com, yuzenghui@huawei.com, mark.rutland@arm.com, 
-	skhan@linuxfoundation.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev, linux-perf-users@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+MIME-Version: 1.0
+References: <20250620155051.68377-1-jesse@rivosinc.com> <20250623-c4c3115e6402176024bac6ea@orel>
+In-Reply-To: <20250623-c4c3115e6402176024bac6ea@orel>
+From: Jesse Taube <jesse@rivosinc.com>
+Date: Mon, 23 Jun 2025 15:46:31 -0700
+X-Gm-Features: Ac12FXzOlaSm8467YuophwGI70NXmcwcBfhPWLQv-KNC7l7Ri6aKh7MVt_taL8w
+Message-ID: <CALSpo=YQun4owTSkCULpgSu386nHK4q8kuU--oif4Wtw2S_V1w@mail.gmail.com>
+Subject: Re: [kvm-unit-tests PATCH] riscv: lib: sbi_shutdown add exit code.
+To: Andrew Jones <andrew.jones@linux.dev>
+Cc: kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
+	linux-kselftest@vger.kernel.org, =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>, 
+	Charlie Jenkins <charlie@rivosinc.com>, James Raphael Tiovalen <jamestiotio@gmail.com>, 
+	Sean Christopherson <seanjc@google.com>, Cade Richard <cade.richard@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-kernel test robot <lkp@intel.com> writes:
+On Mon, Jun 23, 2025 at 10:01=E2=80=AFAM Andrew Jones <andrew.jones@linux.d=
+ev> wrote:
+>
+> On Fri, Jun 20, 2025 at 08:50:51AM -0700, Jesse Taube wrote:
+> > When exiting it may be useful for the sbi implementation to know the
+> > exit code.
+> > Add exit code to sbi_shutdown, and use it in exit().
+> >
+> > Signed-off-by: Jesse Taube <jesse@rivosinc.com>
+> > ---
+> >  lib/riscv/asm/sbi.h | 2 +-
+> >  lib/riscv/io.c      | 2 +-
+> >  lib/riscv/sbi.c     | 4 ++--
+> >  3 files changed, 4 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/lib/riscv/asm/sbi.h b/lib/riscv/asm/sbi.h
+> > index a5738a5c..de11c109 100644
+> > --- a/lib/riscv/asm/sbi.h
+> > +++ b/lib/riscv/asm/sbi.h
+> > @@ -250,7 +250,7 @@ struct sbiret sbi_ecall(int ext, int fid, unsigned =
+long arg0,
+> >                       unsigned long arg3, unsigned long arg4,
+> >                       unsigned long arg5);
+> >
+> > -void sbi_shutdown(void);
+> > +void sbi_shutdown(unsigned int code);
+> >  struct sbiret sbi_hart_start(unsigned long hartid, unsigned long entry=
+, unsigned long sp);
+> >  struct sbiret sbi_hart_stop(void);
+> >  struct sbiret sbi_hart_get_status(unsigned long hartid);
+> > diff --git a/lib/riscv/io.c b/lib/riscv/io.c
+> > index fb40adb7..02231268 100644
+> > --- a/lib/riscv/io.c
+> > +++ b/lib/riscv/io.c
+> > @@ -150,7 +150,7 @@ void halt(int code);
+> >  void exit(int code)
+> >  {
+> >       printf("\nEXIT: STATUS=3D%d\n", ((code) << 1) | 1);
+> > -     sbi_shutdown();
+> > +     sbi_shutdown(code & 1);
+> >       halt(code);
+> >       __builtin_unreachable();
+> >  }
+> > diff --git a/lib/riscv/sbi.c b/lib/riscv/sbi.c
+> > index 2959378f..9dd11e9d 100644
+> > --- a/lib/riscv/sbi.c
+> > +++ b/lib/riscv/sbi.c
+> > @@ -107,9 +107,9 @@ struct sbiret sbi_sse_inject(unsigned long event_id=
+, unsigned long hart_id)
+> >       return sbi_ecall(SBI_EXT_SSE, SBI_EXT_SSE_INJECT, event_id, hart_=
+id, 0, 0, 0, 0);
+> >  }
+> >
+> > -void sbi_shutdown(void)
+> > +void sbi_shutdown(unsigned int code)
+> >  {
+> > -     sbi_ecall(SBI_EXT_SRST, 0, 0, 0, 0, 0, 0, 0);
+> > +     sbi_ecall(SBI_EXT_SRST, 0, 0, code, 0, 0, 0, 0);
+>
+> We can't do this because a kvm-unit-tests exit code is not an
+> SRST::reset_reason[1]. This could result in the SBI implementation
+> returning an error, or doing something else, rather than shutting
+> down.
 
->     In file included from arch/arm64/include/asm/kvm_host.h:32,
->                      from include/linux/kvm_host.h:45,
->                      from arch/arm64/kvm/sys_regs.c:16:
->     arch/arm64/include/asm/kvm_pmu.h:236:50: warning: 'struct arm_pmu'  
-> declared inside parameter list will not be visible outside of this  
-> definition or declaration
->      static inline bool kvm_pmu_is_partitioned(struct arm_pmu *pmu)
->                                                       ^~~~~~~
->     arch/arm64/include/asm/kvm_pmu.h:241:52: warning: 'struct arm_pmu'  
-> declared inside parameter list will not be visible outside of this  
-> definition or declaration
->      static inline u64 kvm_pmu_host_counter_mask(struct arm_pmu *pmu)
->                                                         ^~~~~~~
->     arch/arm64/include/asm/kvm_pmu.h:246:53: warning: 'struct arm_pmu'  
-> declared inside parameter list will not be visible outside of this  
-> definition or declaration
->      static inline u64 kvm_pmu_guest_counter_mask(struct arm_pmu *pmu)
->                                                          ^~~~~~~
->     arch/arm64/kvm/sys_regs.c:856:6: warning: no previous prototype  
-> for 'pmu_access_el0_disabled' [-Wmissing-prototypes]
->      bool pmu_access_el0_disabled(struct kvm_vcpu *vcpu)
->           ^~~~~~~~~~~~~~~~~~~~~~~
->     arch/arm64/kvm/sys_regs.c: In function 'access_pmu_evtyper':
->     arch/arm64/kvm/sys_regs.c:1076:7: error: implicit declaration of  
-> function 'kvm_vcpu_pmu_is_partitioned'; did you  
-> mean 'kvm_pmu_is_partitioned'? [-Werror=implicit-function-declaration]
->        if (kvm_vcpu_pmu_is_partitioned(vcpu))
->            ^~~~~~~~~~~~~~~~~~~~~~~~~~~
->            kvm_pmu_is_partitioned
->     arch/arm64/kvm/sys_regs.c: In function 'set_pmcr':
->>> arch/arm64/kvm/sys_regs.c:1271:33: error: dereferencing pointer to  
->>> incomplete type 'struct arm_pmu'
->            new_n <= kvm->arch.arm_pmu->hpmn_max))
->                                      ^~
->     cc1: some warnings being treated as errors
+Yes that's why there is:
++sbi_shutdown(code & 1);
+Admittedly it should probably be:
++sbi_shutdown(!!code);
 
-Looks like the main problem here is struct arm_pmu is not defined if we
-don't have CONFIG_ARM_PMU. I'll provide a dummy definition for that case
-and swap out the field reference for a function call.
+>
+> If this is a custom kvm-unit-tests-specific SBI implementation, then
+> we could pass in a reset_reason in the 0xE0000000 - 0xEFFFFFFF range.
 
-Secondary problem is making sure there is a prototype for
-pmu_access_el0_disabled in that instance.
+That still doesn't guarantee it to succeed.
+In the exit function we can add a fallback like `sbi_shutdown(0);`,
+but reason code 1 (System failure) should always work.
+If anyone wants to use it for SBI specific codes, that's fine,
+but I only added it for the No reason and System failure exit codes.
 
-> vim +1271 arch/arm64/kvm/sys_regs.c
+Thanks,
+Jesse Taube.
 
->    1253
->    1254	static int set_pmcr(struct kvm_vcpu *vcpu, const struct  
-> sys_reg_desc *r,
->    1255			    u64 val)
->    1256	{
->    1257		u8 new_n = FIELD_GET(ARMV8_PMU_PMCR_N, val);
->    1258		struct kvm *kvm = vcpu->kvm;
->    1259
->    1260		mutex_lock(&kvm->arch.config_lock);
->    1261
->    1262		/*
->    1263		 * The vCPU can't have more counters than the PMU hardware
->    1264		 * implements. Ignore this error to maintain compatibility
->    1265		 * with the existing KVM behavior.
->    1266		 */
->    1267		if (!kvm_vm_has_ran_once(kvm) &&
->    1268		    !vcpu_has_nv(vcpu)	      &&
->    1269		    new_n <= kvm_arm_pmu_get_max_counters(kvm) &&
->    1270		    (!kvm_vcpu_pmu_is_partitioned(vcpu) ||
->> 1271		     new_n <= kvm->arch.arm_pmu->hpmn_max))
->    1272			kvm->arch.nr_pmu_counters = new_n;
->    1273
->    1274		mutex_unlock(&kvm->arch.config_lock);
->    1275
->    1276		/*
->    1277		 * Ignore writes to RES0 bits, read only bits that are cleared on
->    1278		 * vCPU reset, and writable bits that KVM doesn't support yet.
->    1279		 * (i.e. only PMCR.N and bits [7:0] are mutable from userspace)
->    1280		 * The LP bit is RES0 when FEAT_PMUv3p5 is not supported on the  
-> vCPU.
->    1281		 * But, we leave the bit as it is here, as the vCPU's PMUver might
->    1282		 * be changed later (NOTE: the bit will be cleared on first vCPU  
-> run
->    1283		 * if necessary).
->    1284		 */
->    1285		val &= ARMV8_PMU_PMCR_MASK;
->    1286
->    1287		/* The LC bit is RES1 when AArch32 is not supported */
->    1288		if (!kvm_supports_32bit_el0())
->    1289			val |= ARMV8_PMU_PMCR_LC;
->    1290
->    1291		__vcpu_assign_sys_reg(vcpu, r->reg, val);
->    1292		kvm_make_request(KVM_REQ_RELOAD_PMU, vcpu);
->    1293
->    1294		return 0;
->    1295	}
->    1296
-
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+>
+> [1] https://github.com/riscv-non-isa/riscv-sbi-doc/blob/master/src/ext-sy=
+s-reset.adoc#table_srst_system_reset_reasons
+>
+> Thanks,
+> drew
+>
+>
+> >       puts("SBI shutdown failed!\n");
+> >  }
+> >
+> > --
+> > 2.43.0
+> >
+> >
+> > --
+> > kvm-riscv mailing list
+> > kvm-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/kvm-riscv
 
