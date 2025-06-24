@@ -1,80 +1,156 @@
-Return-Path: <linux-kselftest+bounces-35720-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35721-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15A5CAE72EE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jun 2025 01:15:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9336EAE72FC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jun 2025 01:19:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 10EFB7AF981
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 23:13:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1FD8717B04F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 23:20:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70D5F26056C;
-	Tue, 24 Jun 2025 23:14:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9743D26A0FD;
+	Tue, 24 Jun 2025 23:19:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dpx2yDtQ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fqbWlrV+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46BB721771B;
-	Tue, 24 Jun 2025 23:14:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06F6525C70D
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Jun 2025 23:19:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750806898; cv=none; b=i6mjFbqTA12OsDO+TPtV6pORlvG9fX2GuXq7igNvzuaBRnnXduBkJjHYtiCBTqu9WtbxzN8ZWrs3HSoyMTnxGxX/ZM8In0fCzALEe80zQyKkbwhQqqyXL8OB+HIfQkoBv198bcq1XDCtPumKgaQYciboElotySyHUp34M7eIZTw=
+	t=1750807174; cv=none; b=oc8J8sNjGZ3uM0BuOF+gfZrBZv7cReYlWeXp/7NXvlmH8oFX3IV6FbuJ5yPM9n8YRCZqM5qBAYYabjxy/lIzaCOrCi6okmJ66HjyGeMPogiGGA/umGEzdMdV6jQPBeOQqIfiDbhoRomxw67N6PwcAXNkmPtqrNgQ/5vF6inNhl8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750806898; c=relaxed/simple;
-	bh=tpA+8+gYwATgyNOXC3jMo4G2JYGwzWB3fYC5UYtpeVo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OaVEpQppHYUXV/UHrRly/oo7iy9/yddFUJ17llbi6Ja6pxFV2hwOFjvQdLqdffqmLz2yKRGi6yXGrAPMsPjioaghHqCwMopEVSyTDx54GlOJC72o9drSK1NeT87AWCxOJ+w6NuuBq/7AP4RaACDySzBp5LApq0k3sOoGma30HWo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dpx2yDtQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F46FC4CEE3;
-	Tue, 24 Jun 2025 23:14:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750806898;
-	bh=tpA+8+gYwATgyNOXC3jMo4G2JYGwzWB3fYC5UYtpeVo=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Dpx2yDtQd/vJlfWF1B4S/88rEQNCiCn6u2/4pZxv8DYZkoJVedg63uwhUDMalXuVf
-	 WkGbo4tkO3gmRKfVSESZADWEA4pm+x1UPSWqetkwJk0nhp2nJICFZ3cl9S2+jIY5XL
-	 rMpc9aCdIPfr99IuiWZwBg+YzwV7TKxaWFA2z5L/fJjpfanbiAmIwHymN+8zFB+Wjk
-	 AGnVwJ+sMH7p+UBcqR5J62u8n8XsCLS3HTsj818qc2x1n7HEaPqvJEBmaB4/9jNLEh
-	 g01b048nhxNBjfM2iAi2rz7onZsBLcf3/EJ+hZ3m0nx3w8ENOpgmASD3Hk/Z/jVxDb
-	 ZlpcBWJkCBT/A==
-Date: Tue, 24 Jun 2025 16:14:55 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Kory Maincent <kory.maincent@bootlin.com>
-Cc: davem@davemloft.net, donald.hunter@gmail.com, netdev@vger.kernel.org,
- edumazet@google.com, pabeni@redhat.com, andrew+netdev@lunn.ch,
- horms@kernel.org, andrew@lunn.ch, shuah@kernel.org, sdf@fomichev.me,
- gal@nvidia.com, noren@nvidia.com, ahmed.zaki@intel.com,
- wojciech.drewek@intel.com, petrm@nvidia.com, danieller@nvidia.com,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net 03/10] netlink: specs: ethtool: replace underscores
- with dashes in names
-Message-ID: <20250624161455.49077638@kernel.org>
-In-Reply-To: <20250625010715.4cbcae07@kmaincent-XPS-13-7390>
-References: <20250624211002.3475021-1-kuba@kernel.org>
-	<20250624211002.3475021-4-kuba@kernel.org>
-	<20250625010715.4cbcae07@kmaincent-XPS-13-7390>
+	s=arc-20240116; t=1750807174; c=relaxed/simple;
+	bh=OxLNyC//bkj0XORJ9A66+tceeOcN6KoRszvC1wPGHZw=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=buaPZf7DqEUj8dfxGAI8AZ3yHKc+CoS57OFn9fC3xzQIAeQj5vKRIwxtalxmbI5iUJZUI2cHY4AtROCEHf6+NrCgelmk83425lIeAMQYGwPdldbVM5p6kHN8WY1qgWdnLVfv6DO0jKNs5Ww36kC8VlheKgYuh0UDpWkvhN5DiKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fqbWlrV+; arc=none smtp.client-ip=209.85.215.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-b34abbcdcf3so440726a12.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Jun 2025 16:19:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1750807172; x=1751411972; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=p1zI7Q0nLPv1eQnNCYffc5pUolE0Wqa7/b4IWfH+ITo=;
+        b=fqbWlrV+F0FCcq0/AKTkDqMkBAiv5TfiJ1Qx4xewT5qKZPg6k4KX8XAIp6FQzxEjOA
+         pHIctwRSeuy+wo6/FYpsxcCd90jjNII36KLNF/smc56sOqXVqOkIl/KNSQ9sCzpCIGry
+         yx4HbuyvI2J1mcKgiCsC5+6xm+PbIIOLmRuKOhfT9b3WN/Cer/1cpKpYlpW7DmW3Lsv0
+         dIlv/gNYdx54uWBsyZX2Fk9OqlNTcvOWnVGcMV5HpuwKI83M+2vMuhLpEKaES+Vm//Yj
+         o0EJ7qbicXnxo6kD88fEd5WnPT4YChSDSEHQsd2Zovs3EkUTSYhHxvtTqkMmVEDZBGFx
+         Ws2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750807172; x=1751411972;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=p1zI7Q0nLPv1eQnNCYffc5pUolE0Wqa7/b4IWfH+ITo=;
+        b=Ht9ibsvsHyb8atdbVwiNpq31CkN5CDk2GIrpxFSjxskK9iN0RlxPOJT3IRSNxFRTN/
+         WnwowzeiLN9yL7LVYbA+qWI+8dW9l55Bu6Yd8fUKqB+dqBXTRDnUzQ2IBMHUx2sZqf+B
+         oKU1UK93cnEjfbd0sZ06LA+DMfG/7mdzFgnkeNgb2zaT6pms/ndR4tS/EN8FbwOVQliy
+         1LoIpYTW+0AILsJwHKQWTU2BynrMIU66P/3b9RLWEe96ceVKtVVcRIuKMliHy5YXiNhf
+         +ZaafIlZonlIAJH3j/kf9FBhJRYubYDmnZOlnJD/XesrGXrK/yWSGYwqxH73xTU2Yuen
+         WpTg==
+X-Gm-Message-State: AOJu0YxubwsQep8t+qrI63i9iQLrxq2JoJ7eYelfOQ7i58XnpHsFL/tz
+	oqhM7D/AQz98/5qqwkVA8OYbWxluw43ZYXb9cxjZi8lwLkuY9shUFFON0zpjc2IDNtIC/ngzotX
+	XGHZ+mA==
+X-Google-Smtp-Source: AGHT+IE23nOiBQ3/n1/Gt0pA9demZ4Iii2r83PTmEqXZz+eFfW86Nbh+5GyodHjhmYDzoXwsG8jf3L55akY=
+X-Received: from pgcp27.prod.google.com ([2002:a63:741b:0:b0:b2f:64e5:602a])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:7350:b0:21c:faa4:9ab8
+ with SMTP id adf61e73a8af0-2207f1ba673mr1146817637.10.1750807172381; Tue, 24
+ Jun 2025 16:19:32 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date: Tue, 24 Jun 2025 16:19:30 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.50.0.714.g196bf9f422-goog
+Message-ID: <20250624231930.583689-1-seanjc@google.com>
+Subject: [PATCH] selftests: harness: Rework is_signed_type() to avoid
+ collision with overflow.h
+From: Sean Christopherson <seanjc@google.com>
+To: Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, Arnaldo Carvalho de Melo <acme@redhat.com>, 
+	Sean Christopherson <seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 25 Jun 2025 01:07:15 +0200 Kory Maincent wrote:
-> > Fixes: 13e59344fb9d ("net: ethtool: add support for symmetric-xor RSS hash")
-> > Fixes: 46fb3ba95b93 ("ethtool: Add an interface for flashing transceiver
-> > modules' firmware")   
-> 
-> Why do you use fixes tag? You are not fixing something broken but standardizing
-> the python naming.
+Rename is_signed_type() to is_signed_var() to avoid colliding with a macro
+of the same name defined by linux/overflow.h.  Note, overflow.h's version
+takes a type as the input, whereas the harness's version takes a variable!
 
-To direct them within stable releases. I think it's worth pushing
-this change into 6.12 LTS in case someone packages YNL out of there.
-One could argue this is a breaking change for Python users.
+This fixes warnings (and presumably potential test failures) in tests
+that utilize the selftests harness and happen to (indirectly) include
+overflow.h.
+
+  In file included from tools/include/linux/bits.h:34,
+                   from tools/include/linux/bitops.h:14,
+                   from tools/include/linux/hashtable.h:13,
+                   from include/kvm_util.h:11,
+                   from x86/userspace_msr_exit_test.c:11:
+  tools/include/linux/overflow.h:31:9: error: "is_signed_type" redefined [-Werror]
+     31 | #define is_signed_type(type)       (((type)(-1)) < (type)1)
+        |         ^~~~~~~~~~~~~~
+  In file included from include/kvm_test_harness.h:11,
+                   from x86/userspace_msr_exit_test.c:9:
+  ../kselftest_harness.h:754:9: note: this is the location of the previous definition
+    754 | #define is_signed_type(var)       (!!(((__typeof__(var))(-1)) < (__typeof__(var))1))
+        |         ^~~~~~~~~~~~~~
+
+Opportunistically use is_signed_type() to implement is_signed_var() so
+that the relationship and differences are obvious.
+
+Fixes: fc92099902fb ("tools headers: Synchronize linux/bits.h with the kernel sources")
+Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+
+This is probably compile-tested only, I don't think any of the KVM selftests
+utilize the harness's EXPECT macros.
+
+ tools/testing/selftests/kselftest_harness.h | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+index 2925e47db995..f3e7a46345db 100644
+--- a/tools/testing/selftests/kselftest_harness.h
++++ b/tools/testing/selftests/kselftest_harness.h
+@@ -56,6 +56,7 @@
+ #include <asm/types.h>
+ #include <ctype.h>
+ #include <errno.h>
++#include <linux/overflow.h>
+ #include <linux/unistd.h>
+ #include <poll.h>
+ #include <stdbool.h>
+@@ -751,7 +752,7 @@
+ 	for (; _metadata->trigger; _metadata->trigger = \
+ 			__bail(_assert, _metadata))
+ 
+-#define is_signed_type(var)       (!!(((__typeof__(var))(-1)) < (__typeof__(var))1))
++#define is_signed_var(var)	is_signed_type(__typeof__(var))
+ 
+ #define __EXPECT(_expected, _expected_str, _seen, _seen_str, _t, _assert) do { \
+ 	/* Avoid multiple evaluation of the cases */ \
+@@ -759,7 +760,7 @@
+ 	__typeof__(_seen) __seen = (_seen); \
+ 	if (!(__exp _t __seen)) { \
+ 		/* Report with actual signedness to avoid weird output. */ \
+-		switch (is_signed_type(__exp) * 2 + is_signed_type(__seen)) { \
++		switch (is_signed_var(__exp) * 2 + is_signed_var(__seen)) { \
+ 		case 0: { \
+ 			uintmax_t __exp_print = (uintmax_t)__exp; \
+ 			uintmax_t __seen_print = (uintmax_t)__seen; \
+
+base-commit: 78f4e737a53e1163ded2687a922fce138aee73f5
+-- 
+2.50.0.714.g196bf9f422-goog
+
 
