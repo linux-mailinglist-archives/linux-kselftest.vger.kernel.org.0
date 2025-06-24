@@ -1,200 +1,216 @@
-Return-Path: <linux-kselftest+bounces-35664-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35665-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4AFFAE5B74
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 06:17:14 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2696CAE5B7D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 06:24:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 79A833ACB93
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 04:16:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E15867AA5B3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 04:23:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF8402222C2;
-	Tue, 24 Jun 2025 04:16:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB0502253E9;
+	Tue, 24 Jun 2025 04:24:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="IOL4zxnU"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NjnSynLh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8116F21B9F6;
-	Tue, 24 Jun 2025 04:16:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8D0A1DB148
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Jun 2025 04:24:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750738583; cv=none; b=EbIgIrY0Nc7zqbgYdAfNI0ZZWlC7tK6gMv4l5bDfzxbxX2bw8FqlB5TLTQByF8an0VQRG5kG7kkLKZNnpUlgg5n1Vc9LHYflsTWaXpITBAazcih6B9Ph0Jy810/s0W/btYyVvIJJGzK1J/TE3Jetyue3VGOYoM5bQPbyO+8k5kg=
+	t=1750739077; cv=none; b=YTAHZ483YPqfCyKtDLobQV0R0jkFE2vXDvtdhXOmy2yoG/sOq0MVGiPVagRPdGO10Drjg32R3qjzPQ1Vj2odUL6q2s1v5RbMDdWpZ6t2xoKzxFFAjrwY+IAFUnpD2qCY7zFDkyrazz/o9S7Sf4XzvkRw7caY7GIETy5F+G7qgrw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750738583; c=relaxed/simple;
-	bh=5G65DW5QVEJiCP6BevqgcMH4BJprL0i7tiSazmp4+XU=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=TxqnssdI9dhQ2FRis+EHfFp4Hm3bJrZos2lz1w9aOektwHqqzg5iL2cA6lUkk3ZviLHjZj9fooZrWi9KqCQw1t6qsgx0a2cOIFtii83e7v7nFq3lGhurxhsz7wmQUoefRl+qB6Iho25uDiNdBWh4QTLJ4gBUtsc/C5RXbccjtCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=IOL4zxnU; arc=none smtp.client-ip=115.124.30.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1750738571; h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-	bh=rax2iaNWOHCKSTHeRONdpsloXVAQJACyDqlDlmBHKYA=;
-	b=IOL4zxnUhxUMIfdtwOPU4ubp9N+hGmb4m52ei0x5WEB8nWp4ESIgh4FpP/qRvd+Gf9WxzgGyBn/T2Rfemf9tsCa+MQBD4fHFyUR3LTmz8LYh6XtqtMf8unx5DFn0ZALwXJCkFcNuvC+1mn1d2l/idKvXWY/enCK4rSeZOI9ZjBY=
-Received: from DESKTOP-5N7EMDA(mailfrom:ying.huang@linux.alibaba.com fp:SMTPD_---0Wef2ct8_1750738566 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Tue, 24 Jun 2025 12:16:08 +0800
-From: "Huang, Ying" <ying.huang@linux.alibaba.com>
-To: Shivank Garg <shivankg@amd.com>
-Cc: <seanjc@google.com>,  <david@redhat.com>,  <vbabka@suse.cz>,
-  <willy@infradead.org>,  <akpm@linux-foundation.org>,  <shuah@kernel.org>,
-  <pbonzini@redhat.com>,  <brauner@kernel.org>,  <viro@zeniv.linux.org.uk>,
-  <ackerleytng@google.com>,  <paul@paul-moore.com>,  <jmorris@namei.org>,
-  <serge@hallyn.com>,  <pvorel@suse.cz>,  <bfoster@redhat.com>,
-  <tabba@google.com>,  <vannapurve@google.com>,  <chao.gao@intel.com>,
-  <bharata@amd.com>,  <nikunj@amd.com>,  <michael.day@amd.com>,
-  <yan.y.zhao@intel.com>,  <Neeraj.Upadhyay@amd.com>,
-  <thomas.lendacky@amd.com>,  <michael.roth@amd.com>,  <aik@amd.com>,
-  <jgg@nvidia.com>,  <kalyazin@amazon.com>,  <peterx@redhat.com>,
-  <jack@suse.cz>,  <rppt@kernel.org>,  <hch@infradead.org>,
-  <cgzones@googlemail.com>,  <ira.weiny@intel.com>,  <rientjes@google.com>,
-  <roypat@amazon.co.uk>,  <ziy@nvidia.com>,  <matthew.brost@intel.com>,
-  <joshua.hahnjy@gmail.com>,  <rakie.kim@sk.com>,  <byungchul@sk.com>,
-  <gourry@gourry.net>,  <kent.overstreet@linux.dev>,  <apopple@nvidia.com>,
-  <chao.p.peng@intel.com>,  <amit@infradead.org>,  <ddutile@redhat.com>,
-  <dan.j.williams@intel.com>,  <ashish.kalra@amd.com>,  <gshan@redhat.com>,
-  <jgowans@amazon.com>,  <pankaj.gupta@amd.com>,  <papaluri@amd.com>,
-  <yuzhao@google.com>,  <suzuki.poulose@arm.com>,
-  <quic_eberman@quicinc.com>,  <aneeshkumar.kizhakeveetil@arm.com>,
-  <linux-fsdevel@vger.kernel.org>,  <linux-mm@kvack.org>,
-  <linux-kernel@vger.kernel.org>,  <linux-security-module@vger.kernel.org>,
-  <kvm@vger.kernel.org>,  <linux-kselftest@vger.kernel.org>,
-  <linux-coco@lists.linux.dev>
-Subject: Re: [RFC PATCH v8 5/7] KVM: guest_memfd: Add slab-allocated inode
- cache
-In-Reply-To: <20250618112935.7629-6-shivankg@amd.com> (Shivank Garg's message
-	of "Wed, 18 Jun 2025 11:29:33 +0000")
-References: <20250618112935.7629-1-shivankg@amd.com>
-	<20250618112935.7629-6-shivankg@amd.com>
-Date: Tue, 24 Jun 2025 12:16:06 +0800
-Message-ID: <87ecv9ojuh.fsf@DESKTOP-5N7EMDA>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=arc-20240116; t=1750739077; c=relaxed/simple;
+	bh=SdZAFXCVCSUefO2MM2Pu2MJdZLg2ZXG8KCxW3oEqo+s=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=SgHMjirnMj5D5jX8XDf3mnozcitrBP+Ys/GYhf8SWzB8PdZpkx1vA0fU+FHqS0XnLMdOqqVBoaaB87Yq6A2bey1O5tTvOIfbPN2cq5bxEysypRC6ZG8+LljXGqM6lPUPNLHHWJmJSKrBzS4T9tqdirn5bH/uZTvSTMpEE3270ls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NjnSynLh; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1750739074;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xPBeA/mE6tOBwRnlyiHyMiUuyxIPQVV8SBssXad99gU=;
+	b=NjnSynLhpx2+kNvrhUaeA6tPonuuYtr8T5ehHB77R55VLzJYvZn1kPUSic7vpjAXL981j4
+	p9SIHZpSoVvvr5zqz1rBq5OXKtROPHWo3DSBGapXYOGi5TXEnGfOnr4C74KA4b0ntvJyLU
+	wdfUNY1rHKAEKCLGe9SOwfgEsNYWvM8=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-39-X91ThBiuNuuWH4MFPuSUfg-1; Tue,
+ 24 Jun 2025 00:24:27 -0400
+X-MC-Unique: X91ThBiuNuuWH4MFPuSUfg-1
+X-Mimecast-MFC-AGG-ID: X91ThBiuNuuWH4MFPuSUfg_1750739065
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2E6DA180034E;
+	Tue, 24 Jun 2025 04:24:24 +0000 (UTC)
+Received: from dell-per7425-02.rhts.eng.pek2.redhat.com (dell-per7425-02.rhts.eng.pek2.redhat.com [10.73.116.18])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0084B18003FC;
+	Tue, 24 Jun 2025 04:24:16 +0000 (UTC)
+From: Li Wang <liwang@redhat.com>
+To: akpm@linux-foundation.org,
+	david@redhat.com,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org
+Cc: Aruna Ramakrishna <aruna.ramakrishna@oracle.com>,
+	Bagas Sanjaya <bagasdotme@gmail.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Keith Lucas <keith.lucas@oracle.com>,
+	Ryan Roberts <ryan.roberts@arm.com>,
+	Shuah Khan <shuah@kernel.org>
+Subject: [PATCH v2] selftests/mm: Fix UFFDIO_API usage with proper two-step feature negotiation
+Date: Tue, 24 Jun 2025 12:24:11 +0800
+Message-ID: <20250624042411.395285-1-liwang@redhat.com>
+In-Reply-To: <20250622081035.378164-1-liwang@redhat.com>
+References: <20250622081035.378164-1-liwang@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-Shivank Garg <shivankg@amd.com> writes:
+The current implementation of test_unmerge_uffd_wp() explicitly sets
+`uffdio_api.features = UFFD_FEATURE_PAGEFAULT_FLAG_WP` before calling
+UFFDIO_API. This can cause the ioctl() call to fail with EINVAL on kernels
+that do not support UFFD-WP, leading the test to fail unnecessarily:
 
-> Add dedicated inode structure (kvm_gmem_inode_info) and slab-allocated
-> inode cache for guest memory backing, similar to how shmem handles inodes.
->
-> This adds the necessary allocation/destruction functions and prepares
-> for upcoming guest_memfd NUMA policy support changes.
->
-> Signed-off-by: Shivank Garg <shivankg@amd.com>
-> ---
->  virt/kvm/guest_memfd.c | 51 ++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 51 insertions(+)
->
-> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
-> index 159df462d193..5a1ce6f5e287 100644
-> --- a/virt/kvm/guest_memfd.c
-> +++ b/virt/kvm/guest_memfd.c
-> @@ -17,6 +17,15 @@ struct kvm_gmem {
->  	struct list_head entry;
->  };
->  
-> +struct kvm_gmem_inode_info {
-> +	struct inode vfs_inode;
-> +};
-> +
-> +static inline struct kvm_gmem_inode_info *KVM_GMEM_I(struct inode *inode)
-> +{
-> +	return container_of(inode, struct kvm_gmem_inode_info, vfs_inode);
-> +}
-> +
->  /**
->   * folio_file_pfn - like folio_file_page, but return a pfn.
->   * @folio: The folio which contains this index.
-> @@ -392,8 +401,33 @@ static struct file_operations kvm_gmem_fops = {
->  	.fallocate	= kvm_gmem_fallocate,
->  };
->  
-> +static struct kmem_cache *kvm_gmem_inode_cachep;
-> +
-> +static struct inode *kvm_gmem_alloc_inode(struct super_block *sb)
-> +{
-> +	struct kvm_gmem_inode_info *info;
-> +
-> +	info = alloc_inode_sb(sb, kvm_gmem_inode_cachep, GFP_KERNEL);
-> +	if (!info)
-> +		return NULL;
-> +
-> +	return &info->vfs_inode;
-> +}
-> +
-> +static void kvm_gmem_destroy_inode(struct inode *inode)
-> +{
-> +}
-> +
-> +static void kvm_gmem_free_inode(struct inode *inode)
-> +{
-> +	kmem_cache_free(kvm_gmem_inode_cachep, KVM_GMEM_I(inode));
-> +}
-> +
->  static const struct super_operations kvm_gmem_super_operations = {
->  	.statfs		= simple_statfs,
-> +	.alloc_inode	= kvm_gmem_alloc_inode,
-> +	.destroy_inode	= kvm_gmem_destroy_inode,
-> +	.free_inode	= kvm_gmem_free_inode,
->  };
->  
->  static int kvm_gmem_init_fs_context(struct fs_context *fc)
-> @@ -426,10 +460,26 @@ static int kvm_gmem_init_mount(void)
->  	return 0;
->  }
->  
-> +static void kvm_gmem_init_inode(void *foo)
-> +{
-> +	struct kvm_gmem_inode_info *info = foo;
-> +
-> +	inode_init_once(&info->vfs_inode);
-> +}
-> +
-> +static void kvm_gmem_init_inodecache(void)
-> +{
-> +	kvm_gmem_inode_cachep = kmem_cache_create("kvm_gmem_inode_cache",
-> +						  sizeof(struct kvm_gmem_inode_info),
-> +						  0, SLAB_ACCOUNT,
-> +						  kvm_gmem_init_inode);
+  # ------------------------------
+  # running ./ksm_functional_tests
+  # ------------------------------
+  # TAP version 13
+  # 1..9
+  # # [RUN] test_unmerge
+  # ok 1 Pages were unmerged
+  # # [RUN] test_unmerge_zero_pages
+  # ok 2 KSM zero pages were unmerged
+  # # [RUN] test_unmerge_discarded
+  # ok 3 Pages were unmerged
+  # # [RUN] test_unmerge_uffd_wp
+  # not ok 4 UFFDIO_API failed     <-----
+  # # [RUN] test_prot_none
+  # ok 5 Pages were unmerged
+  # # [RUN] test_prctl
+  # ok 6 Setting/clearing PR_SET_MEMORY_MERGE works
+  # # [RUN] test_prctl_fork
+  # # No pages got merged
+  # # [RUN] test_prctl_fork_exec
+  # ok 7 PR_SET_MEMORY_MERGE value is inherited
+  # # [RUN] test_prctl_unmerge
+  # ok 8 Pages were unmerged
+  # Bail out! 1 out of 8 tests failed
+  # # Planned tests != run tests (9 != 8)
+  # # Totals: pass:7 fail:1 xfail:0 xpass:0 skip:0 error:0
+  # [FAIL]
 
-Check the return value?
+This patch improves compatibility and robustness of the UFFD-WP test
+(test_unmerge_uffd_wp) by correctly implementing the UFFDIO_API
+two-step handshake as recommended by the userfaultfd(2) man page.
 
-And, I'm not a big fan of (logically) one line function encapsulation.
+Key changes:
 
-> +}
-> +
->  int kvm_gmem_init(struct module *module)
->  {
->  	kvm_gmem_fops.owner = module;
->  
-> +	kvm_gmem_init_inodecache();
->  	return kvm_gmem_init_mount();
+1. Use features=0 in the initial UFFDIO_API call to query supported
+   feature bits, rather than immediately requesting WP support.
 
-kmem_cache_destroy(kvm_gmem_inode_cachep) if kvm_gmem_init_mount()
-return with error?
+2. Skip the test gracefully if:
+   - UFFDIO_API fails with EINVAL (e.g. unsupported API version), or
+   - UFFD_FEATURE_PAGEFAULT_FLAG_WP is not advertised by the kernel.
 
->  }
->  
-> @@ -437,6 +487,7 @@ void kvm_gmem_exit(void)
->  {
->  	kern_unmount(kvm_gmem_mnt);
->  	kvm_gmem_mnt = NULL;
-> +	kmem_cache_destroy(kvm_gmem_inode_cachep);
->  }
->  
->  static int kvm_gmem_migrate_folio(struct address_space *mapping,
+3. Close the initial userfaultfd and create a new one before enabling
+   the required feature, since UFFDIO_API can only be called once per fd.
 
+4. Improve diagnostics by distinguishing between expected and unexpected
+   failures, using strerror() to report errors.
+
+This ensures the test behaves correctly across a wider range of kernel
+versions and configurations, while preserving the intended behavior on
+kernels that support UFFD-WP.
+
+Suggestted-by: David Hildenbrand <david@redhat.com>
+Signed-off-by: Li Wang <liwang@redhat.com>
+Cc: Aruna Ramakrishna <aruna.ramakrishna@oracle.com>
+Cc: Bagas Sanjaya <bagasdotme@gmail.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Joey Gouly <joey.gouly@arm.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Keith Lucas <keith.lucas@oracle.com>
+Cc: Ryan Roberts <ryan.roberts@arm.com>
+Cc: Shuah Khan <shuah@kernel.org>
 ---
-Best Regards,
-Huang, Ying
+
+Notes:
+    v1 --> v2:
+    	* Close the original userfaultfd and open a new one before enabling features
+    	* Reworked UFFDIO_API negotiation to follow the official two-step handshake
+
+ .../selftests/mm/ksm_functional_tests.c       | 28 +++++++++++++++++--
+ 1 file changed, 26 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/mm/ksm_functional_tests.c b/tools/testing/selftests/mm/ksm_functional_tests.c
+index b61803e36d1c..19e5b741893a 100644
+--- a/tools/testing/selftests/mm/ksm_functional_tests.c
++++ b/tools/testing/selftests/mm/ksm_functional_tests.c
+@@ -393,9 +393,13 @@ static void test_unmerge_uffd_wp(void)
+ 
+ 	/* See if UFFD-WP is around. */
+ 	uffdio_api.api = UFFD_API;
+-	uffdio_api.features = UFFD_FEATURE_PAGEFAULT_FLAG_WP;
++	uffdio_api.features = 0;
+ 	if (ioctl(uffd, UFFDIO_API, &uffdio_api) < 0) {
+-		ksft_test_result_fail("UFFDIO_API failed\n");
++		if (errno == EINVAL)
++			ksft_test_result_skip("The API version requested is not supported\n");
++		else
++			ksft_test_result_fail("UFFDIO_API failed: %s\n", strerror(errno));
++
+ 		goto close_uffd;
+ 	}
+ 	if (!(uffdio_api.features & UFFD_FEATURE_PAGEFAULT_FLAG_WP)) {
+@@ -403,6 +407,26 @@ static void test_unmerge_uffd_wp(void)
+ 		goto close_uffd;
+ 	}
+ 
++	/*
++	 * UFFDIO_API must only be called once to enable features.
++	 * So we close the old userfaultfd and create a new one to
++	 * actually enable UFFD_FEATURE_PAGEFAULT_FLAG_WP.
++	 */
++	close(uffd);
++	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
++	if (uffd < 0) {
++		ksft_test_result_skip("__NR_userfaultfd failed\n");
++		goto unmap;
++	}
++
++	/* Now, enable it ("two-step handshake") */
++	uffdio_api.api = UFFD_API;
++	uffdio_api.features = UFFD_FEATURE_PAGEFAULT_FLAG_WP;
++	if (ioctl(uffd, UFFDIO_API, &uffdio_api) < 0) {
++		ksft_test_result_fail("UFFDIO_API failed: %s\n", strerror(errno));
++		goto close_uffd;
++	}
++
+ 	/* Register UFFD-WP, no need for an actual handler. */
+ 	if (uffd_register(uffd, map, size, false, true, false)) {
+ 		ksft_test_result_fail("UFFDIO_REGISTER_MODE_WP failed\n");
+-- 
+2.49.0
+
 
