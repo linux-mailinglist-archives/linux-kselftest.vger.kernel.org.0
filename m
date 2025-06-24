@@ -1,252 +1,188 @@
-Return-Path: <linux-kselftest+bounces-35685-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35686-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFE97AE63D8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 13:49:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B385AE6508
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 14:32:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB1A3188C1B8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 11:49:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EDF1F4A4ED6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 12:32:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D608286D4E;
-	Tue, 24 Jun 2025 11:48:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7CB7291C31;
+	Tue, 24 Jun 2025 12:31:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EEd0+qEI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eu9htEvB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5E7D27AC3C
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Jun 2025 11:48:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DD9F289E1B;
+	Tue, 24 Jun 2025 12:31:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750765738; cv=none; b=qUFGSg+novWU7mxksZFsBLLRkaM4FleVsWVOMInk1xhNxCbccFE+R+xNjQLwDil3TUKvU9SPq6FTJxuBLlAysqjvIiAPlHEFOQOd0qBiACZdMMJ1Xp2bwvzkYmmVwYopuua+C+FhIXEwF4SbD2x5Iw2/chRLX3ykUZE9RfKzPPc=
+	t=1750768286; cv=none; b=CF91aJM9eoAtj7S5DwK8poP9aWiO2G0Jm2Eo1n2OGwAZKgtCaggTejQ5IVRhQRQVrC0CI/bRs/uPlwM45xhdre195LNxAyHYJ1r4zuZcSpPrT8H++5Xg6B0eaNVpt2yFUbz9JJwwM3XLSgtEuo215tDsMwKoYHqKSpRzYGhR990=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750765738; c=relaxed/simple;
-	bh=14u+W+cQcCXUs9xJ9ptflndPkrK5G2sfasI5M9OUgug=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=GlIkn5tti9T6iepAC4MGWqCL/vKZqlSkawx29H8sYKKAEfB7BHxArPUtk6rVXwa642+l/FwpoYLcUJpkDPBXcuuVvSR7v27CPQyZJjosDRJQ134jpRKp32IuSXrKuRHMXvVpSvwQG5o9/fF7JNmZgkrH2kwyqjhN1bxZlC9vEyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EEd0+qEI; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1750765736;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=BjJpxF1LECO1PRi8kqM/ATCIsmTz38nbps9nkRr6Q/o=;
-	b=EEd0+qEIsEftbBqHYfnd/BBvt0UggScheOe4dwDI08E4sHWHSN7tgBzSgjVqTNR1nyXGWM
-	wKoMhQ7+7m9yyT1z9gHp9r6pD6GBVpZ4OGYH7dXoJtF0fO9TKoGWpf8dcgfln1XLUuVF0m
-	aSOD44J/gs2hra8phMTWLHVZ7j4L734=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-142-7CyZ3EUONWWiq9m-TkeQYw-1; Tue, 24 Jun 2025 07:48:54 -0400
-X-MC-Unique: 7CyZ3EUONWWiq9m-TkeQYw-1
-X-Mimecast-MFC-AGG-ID: 7CyZ3EUONWWiq9m-TkeQYw_1750765733
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-3a3696a0d3aso2365832f8f.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Jun 2025 04:48:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750765733; x=1751370533;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:from:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=BjJpxF1LECO1PRi8kqM/ATCIsmTz38nbps9nkRr6Q/o=;
-        b=EX5FkDTWaIoDetA93WA5J64PIZvDzxKc3689aZk4moPH/FTeEMyS0u17173ZLEDZB3
-         du98vR3e/nXMj7lJVKAapaSQXuwc20eDA4xFqpFPZXfC2cLlFghEBuDVbRwUEW0u8A4g
-         vnavI7HZGeJYCerJmQASf6IFMoG7ty6kxpUxlCbGX+OaqtzMU9Lvm66XgwVm+uDguyuS
-         JtHUbGE7nrVwP2sh0yMjPVKRyxSucJzRtOvXDynhwl2w8qxA7pSGlJUzl0sq0umgWEuh
-         hbVmAb6qgyjJG65R47xUZ27qTv2ZdWZjaRqjW3rx9XY9BaSYjIkCk402ZA+0liGmNPtv
-         BDcQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU75xjdPFD6E78lB8O9SRGalwAwJ+TMu0VtAFl8vp93MIHRJ4diabtQdoG98rYwG2gxSoya/Gm/rkyH43e5WNg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9Su1eVjXmRicwnXMBshhrcWZcuxhOkhPUYb3wDH++00lv+Fkl
-	0Ecx95r0KZqkrMq/1tzP0uUofxvUJxQ9f5bZUWWb3C5ca8Poz1mrZ24zKmhAMSyGvKYwQOv9cmC
-	oWF4G3cT9QiGIrlVZ69PY2kHCPGhoEt3euC8cybe2mbjgcjqBn4P/+iUMMGPgLyjfNcL30g==
-X-Gm-Gg: ASbGncseJAGBDxzJ848qKgThJODV8FRMWzp+8u86bkftoVu6jXSr5jy6XrCq46koAES
-	z2hWd27Y6in9afcLhuNwPRkaJ1tOrBJ7ipnxTjVU/3wn0otAYWk2Pr04XLhrjawWGRdWgYOAKkw
-	qSAo2DPWiIuRnKnBXeRfHUkmN9tI5nBsXIBZjrWYnbAjg6c3Fc9Gv5HXbxSNH0TOPDOTlmLatKA
-	OAzFmkbM0QCjH9l4jTyXKdadY1pC+wAkn81pxyD1wA5FG/lurxa8yqUpAqiJZBVUlEwebnt26EF
-	Z2Rk87pnQ2ovX0k1zlIqYSaw8/hv699mQs+Zdcy+06HAX7tDTptBjC8=
-X-Received: by 2002:a05:6000:3103:b0:3a4:f7af:b41 with SMTP id ffacd0b85a97d-3a6d128db06mr13100281f8f.15.1750765733455;
-        Tue, 24 Jun 2025 04:48:53 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHkmLPYuaxXT2XxgaacTu86F8qbQot0I4+8jm38oh1duDAsrGuV6aY8E5RgTpgxNjpCM1xP1w==
-X-Received: by 2002:a05:6000:3103:b0:3a4:f7af:b41 with SMTP id ffacd0b85a97d-3a6d128db06mr13100242f8f.15.1750765732964;
-        Tue, 24 Jun 2025 04:48:52 -0700 (PDT)
-Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-453646d156esm141814525e9.11.2025.06.24.04.48.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jun 2025 04:48:51 -0700 (PDT)
-Message-ID: <495dc88a-c0b2-4090-a89c-00f000b62a2f@redhat.com>
-Date: Tue, 24 Jun 2025 13:48:50 +0200
+	s=arc-20240116; t=1750768286; c=relaxed/simple;
+	bh=A1vlO/L1VKH8WOeSv/ouj3ncracjwzpEiurRYiS/ALg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EHpbbJp1/bWy7Kw08U3o1KmEOGioMOByrf7E1WLg1Mnk327tQ2rRBfuuW2Qn7vTzcdO2oFn7NUucwjZdiAtkbsGKy3JgE0OO8lS5l7wLL6zbirQaV3HUYtHxH+MooueTQBBst0HzFOIxujZiYMqvOz8s5zsZXTXx+3e6vEBCCNg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eu9htEvB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19B39C4CEF3;
+	Tue, 24 Jun 2025 12:31:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750768286;
+	bh=A1vlO/L1VKH8WOeSv/ouj3ncracjwzpEiurRYiS/ALg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=eu9htEvBiVbL44j/hDA/XL5IHMVRkTjREoK+yoJofVs3i2H7zYeWM4nuOEa8lvA1q
+	 draOJBWRmasaODlA4846qtfnrHoWcfrlpN7SdkOAt9CRDuKgz+Jijdfb0hME3v4zjT
+	 vySbdesGJCidQHCf0M229vamBtjKXpnwatmAh49jUKp+nVNq+/QlhEUFGI/3hC6dpM
+	 MBpiZpEieyvMUEHttV5HVCNFcwOz97BYbHpUnESxPT0XUV2ac4VY/kC4HNi3iT2U1C
+	 nndDqpkUc6Rj2nldXF12iLWnmS6e5StbWpsEaS9jarXC/+el4cuLLpnkbs9yytEYsC
+	 jjsFUJ19nZmUg==
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-607ec30df2bso769442a12.1;
+        Tue, 24 Jun 2025 05:31:25 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUIcBidubsUjr6GvP7f8421F8eC99nNi6qungSKTQM8pINmHk0ZFQw9RZuYj1FBx0HXJrFF3WY3Rotkx7e7@vger.kernel.org, AJvYcCUQZWnOTjCK2ItJvAeXFGpEn1wxgj+j7S3FaXb6FQWYwU4dhdbpvxOzHlLl1i2fpKNkBz0CHKkYXuM=@vger.kernel.org, AJvYcCVSnuJEYLz/GTL/Zt2wX6i8PbgDhcFQMKVvxqYQ9uKexcFTe4i2J5X9OE+QgjnqUXcCZ4Kr6BRLz/+w@vger.kernel.org, AJvYcCWfiTkex+f0MQn2Z3APHWJVp4HQPyHwHt4AGxv8/eCTD/Wh1tFfHarKKtWaIToUdgxBNH2xPZeVU+3DSQ==@vger.kernel.org, AJvYcCWioFj6dnpN+JivFYoas3pOlccQAJKDOtuz5crs2yTlM1t+seJTOz1ZTStM7uqQuJe3SwUJfStDO/trpVnwdOVG@vger.kernel.org, AJvYcCWjTrlomDwlBvZDpD+VWRgwmHhauJOez08kLDWR4/qlguDkO5nrNIV/nfXepGNh0ToK7Hez1v1ORB4YQQ==@vger.kernel.org, AJvYcCWkytK29gf2ZbYEOocH8bXuAPQ/UqBhE3WfKgyHkJCw6Bx1pmxGYIRJmSGiOfFXKWjatwVCMqjN1iruvkoSA2qz@vger.kernel.org, AJvYcCWwjMBDeub9j3awBbNGpJtyGIYzMVCfPwbN2Qb/7+cx5Pr16kamrB+C4ldq33XDCUihDqLrQVsWyCfqWvHQ@vger.kernel.org, AJvYcCXeEP3m9siA10DxTLOpTz8vc5wuJKop878SjR+iKM+WruZTu8Go8JcteBM33w5C6Oj8RMYc8u0iVfd4p07d+JQLfF/WEmsR@vger.kernel.org
+X-Gm-Message-State: AOJu0YwpG8YkBHYF8id6pnhc+2Rp05WERXknvveD5uYetID7V6bxhC+N
+	Ua0WPE2J9qre0HTAgZiSjYgdnmdP8M5x1lTQ9Vh5Rd6razi/cuq/AcCKQfndyTcPCVm7Il4K96q
+	gutnGDt0/tyS+RYnSVUVTaKVcGSIANGE=
+X-Google-Smtp-Source: AGHT+IG78TOJtNBgPo6KUbppTtQyUVPXosqjkC+mjKzFM6GuMzZpIE/4mn6DMDsxVG8gc/mo29CZZDSg4K3moyGLako=
+X-Received: by 2002:a50:9e07:0:b0:607:5987:5ba1 with SMTP id
+ 4fb4d7f45d1cf-60a1d1676eamr10402408a12.20.1750768284578; Tue, 24 Jun 2025
+ 05:31:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests/mm: Fix UFFDIO_API usage with proper
- two-step feature negotiation
-From: David Hildenbrand <david@redhat.com>
-To: Nadav Amit <nadav.amit@gmail.com>,
- Axel Rasmussen <axelrasmussen@google.com>
-Cc: Li Wang <liwang@redhat.com>, Andrew Morton <akpm@linux-foundation.org>,
- linux-kselftest@vger.kernel.org,
- "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
- Peter Xu <peterx@redhat.com>,
- Aruna Ramakrishna <aruna.ramakrishna@oracle.com>,
- Bagas Sanjaya <bagasdotme@gmail.com>,
- Catalin Marinas <catalin.marinas@arm.com>,
- Dave Hansen <dave.hansen@linux.intel.com>, Joey Gouly <joey.gouly@arm.com>,
- Johannes Weiner <hannes@cmpxchg.org>, Keith Lucas <keith.lucas@oracle.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Shuah Khan <shuah@kernel.org>,
- Mike Rapoport <rppt@kernel.org>
-References: <20250622081035.378164-1-liwang@redhat.com>
- <20250624042411.395285-1-liwang@redhat.com>
- <dfd7650d-1154-467d-ae70-c126610413f6@redhat.com>
- <4fd18a1c-aba2-468a-881f-0507953f2904@redhat.com>
- <611F9598-A1A4-47B6-B37E-09BF7B4D17D0@gmail.com>
- <239f75e4-1868-4ac9-882f-664a8863b781@redhat.com>
-Content-Language: en-US
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <239f75e4-1868-4ac9-882f-664a8863b781@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20250523043251.it.550-kees@kernel.org> <20250523043935.2009972-10-kees@kernel.org>
+ <CAAhV-H4WxAwXTYVFOnphgHN80-_6jt77YZ_rw-sOBoBjjiN-yQ@mail.gmail.com>
+In-Reply-To: <CAAhV-H4WxAwXTYVFOnphgHN80-_6jt77YZ_rw-sOBoBjjiN-yQ@mail.gmail.com>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Tue, 24 Jun 2025 20:31:12 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5oHPG+etNawAmVwyDtg80iKUrAM_m3Vj57bBO0scHqvQ@mail.gmail.com>
+X-Gm-Features: AX0GCFsgXJm0uAqj4ZcBCmgCp5XFBS8cfA5fjKZVFWrLP2ySZYpAIUKeGDxIJgs
+Message-ID: <CAAhV-H5oHPG+etNawAmVwyDtg80iKUrAM_m3Vj57bBO0scHqvQ@mail.gmail.com>
+Subject: Re: [PATCH v2 10/14] loongarch: Handle KCOV __init vs inline mismatches
+To: Kees Cook <kees@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, WANG Xuerui <kernel@xen0n.name>, 
+	Thomas Gleixner <tglx@linutronix.de>, Tianyang Zhang <zhangtianyang@loongson.cn>, 
+	Bibo Mao <maobibo@loongson.cn>, Jiaxun Yang <jiaxun.yang@flygoat.com>, loongarch@lists.linux.dev, 
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Christoph Hellwig <hch@lst.de>, Marco Elver <elver@google.com>, 
+	Andrey Konovalov <andreyknvl@gmail.com>, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
+	Ard Biesheuvel <ardb@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, x86@kernel.org, 
+	kasan-dev@googlegroups.com, linux-doc@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
+	linux-efi@vger.kernel.org, linux-hardening@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, sparclinux@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 24.06.25 13:39, David Hildenbrand wrote:
-> On 24.06.25 13:29, Nadav Amit wrote:
->>
->>
->>> On 24 Jun 2025, at 11:22, David Hildenbrand <david@redhat.com> wrote:
->>>
->>> On 24.06.25 10:07, David Hildenbrand wrote:
->>>>>
->>>> Is that actually required?
->>>> The man page explicitly documents:
->>>> "       EINVAL A  previous  UFFDIO_API  call already enabled one or more
->>>> features for this userfaultfd.  Calling UFF‐
->>>>                  DIO_API twice, the first time with no features set, is
->>>> explicitly allowed as per the two-step  feature
->>>>                  detection handshake.
->>>> "
->>>> So if that doesn't work, something might be broken.
->>>
->>> CCing Nadav and Peter:
->>>
->>> Could it be that
->>>
->>> commit 22e5fe2a2a279d9a6fcbdfb4dffe73821bef1c90
->>> Author: Nadav Amit <nadav.amit@gmail.com>
->>> Date:   Thu Sep 2 14:58:59 2021 -0700
->>>
->>>      userfaultfd: prevent concurrent API initialization
->>>          userfaultfd assumes that the enabled features are set once and never
->>>      changed after UFFDIO_API ioctl succeeded.
->>>          However, currently, UFFDIO_API can be called concurrently from two
->>>      different threads, succeed on both threads and leave userfaultfd's
->>>      features in non-deterministic state.  Theoretically, other uffd operations
->>>      (ioctl's and page-faults) can be dispatched while adversely affected by
->>>      such changes of features.
->>>          Moreover, the writes to ctx->state and ctx->features are not ordered,
->>>      which can - theoretically, again - let userfaultfd_ioctl() think that
->>>      userfaultfd API completed, while the features are still not initialized.
->>>          To avoid races, it is arguably best to get rid of ctx->state.  Since there
->>>      are only 2 states, record the API initialization in ctx->features as the
->>>      uppermost bit and remove ctx->state.
->>>
->>> Accidentally broke the documented two-step handshake in the man page where we
->>> can avoid closing + reopening the fd?
->>
->> I agree the code is not correct (and my patch didn’t address this issue),
->> but I don’t see it broke it either.
->>
->> Unless I’m missing something the code before my patch, when
->> uffdio_api.features == 0, also set ctx->state to UFFD_STATE_RUNNING, which
->> meant another invocation would see (ctx->state != UFFD_STATE_WAIT_API) and
->> fail.
-> 
-> You might be right, I only checked the cmpxchg, assuming it was working
-> before that.
-> 
-> ... but staring at the history of the "ctx->state =
-> UFFD_STATE_RUNNING;", I am not sure if it ever behaved that way.
-> 
-> Do maybe, the man page is simply wrong (although I wonder why that case
-> was described that detailed)
+Hi, Kees,
 
-The man page was updated with
+On Thu, Jun 19, 2025 at 4:55=E2=80=AFPM Huacai Chen <chenhuacai@kernel.org>=
+ wrote:
+>
+> Hi, Kees,
+>
+> On Fri, May 23, 2025 at 12:39=E2=80=AFPM Kees Cook <kees@kernel.org> wrot=
+e:
+> >
+> > When KCOV is enabled all functions get instrumented, unless
+> > the __no_sanitize_coverage attribute is used. To prepare for
+> > __no_sanitize_coverage being applied to __init functions, we have to
+> > handle differences in how GCC's inline optimizations get resolved. For
+> > loongarch this exposed several places where __init annotations were
+> > missing but ended up being "accidentally correct". Fix these cases and
+> > force one function to be inline with __always_inline.
+> >
+> > Signed-off-by: Kees Cook <kees@kernel.org>
+> > ---
+> > Cc: Huacai Chen <chenhuacai@kernel.org>
+> > Cc: WANG Xuerui <kernel@xen0n.name>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Tianyang Zhang <zhangtianyang@loongson.cn>
+> > Cc: Bibo Mao <maobibo@loongson.cn>
+> > Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> > Cc: <loongarch@lists.linux.dev>
+> > ---
+> >  arch/loongarch/include/asm/smp.h | 2 +-
+> >  arch/loongarch/kernel/time.c     | 2 +-
+> >  arch/loongarch/mm/ioremap.c      | 4 ++--
+> >  3 files changed, 4 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/arch/loongarch/include/asm/smp.h b/arch/loongarch/include/=
+asm/smp.h
+> > index ad0bd234a0f1..88e19d8a11f4 100644
+> > --- a/arch/loongarch/include/asm/smp.h
+> > +++ b/arch/loongarch/include/asm/smp.h
+> > @@ -39,7 +39,7 @@ int loongson_cpu_disable(void);
+> >  void loongson_cpu_die(unsigned int cpu);
+> >  #endif
+> >
+> > -static inline void plat_smp_setup(void)
+> > +static __always_inline void plat_smp_setup(void)
+> Similar to x86 and arm, I prefer to mark it as __init rather than
+> __always_inline.
+If you have no objections, I will apply this patch with the above modificat=
+ion.
 
-commit db3d5cc1a17b0ace008ebe1eaf0ac4d96b4b519a
-Author: Axel Rasmussen <axelrasmussen@google.com>
-Date:   Tue Oct 3 12:45:44 2023 -0700
 
-     ioctl_userfaultfd.2: Correct and update UFFDIO_API ioctl error codes
-     
-     First, it is not correct that repeated UFFDIO_API calls result in
-     EINVAL.  This is true *if both calls enable features*, but in the case
-     where we're doing a two-step feature detection handshake, the kernel
-     explicitly expects 2 calls (one with no features set).  So, correct this
-     description.
-     
-     Then, some new error cases have been added to the kernel recently, and
-     the man page wasn't updated to note these.  So, add in descriptions of
-     these new error cases.
+Huacai
 
-@Axel, did you ignore the automatically-set UFFD_FEATURE_INITIALIZED and the
-repeated calls never worked, or was there actually a time where repeated
-UFFDIO_API calls would not result in EINVAL?
-
--- 
-Cheers,
-
-David / dhildenb
-
+>
+> Huacai
+>
+> >  {
+> >         loongson_smp_setup();
+> >  }
+> > diff --git a/arch/loongarch/kernel/time.c b/arch/loongarch/kernel/time.=
+c
+> > index bc75a3a69fc8..367906b10f81 100644
+> > --- a/arch/loongarch/kernel/time.c
+> > +++ b/arch/loongarch/kernel/time.c
+> > @@ -102,7 +102,7 @@ static int constant_timer_next_event(unsigned long =
+delta, struct clock_event_dev
+> >         return 0;
+> >  }
+> >
+> > -static unsigned long __init get_loops_per_jiffy(void)
+> > +static unsigned long get_loops_per_jiffy(void)
+> >  {
+> >         unsigned long lpj =3D (unsigned long)const_clock_freq;
+> >
+> > diff --git a/arch/loongarch/mm/ioremap.c b/arch/loongarch/mm/ioremap.c
+> > index 70ca73019811..df949a3d0f34 100644
+> > --- a/arch/loongarch/mm/ioremap.c
+> > +++ b/arch/loongarch/mm/ioremap.c
+> > @@ -16,12 +16,12 @@ void __init early_iounmap(void __iomem *addr, unsig=
+ned long size)
+> >
+> >  }
+> >
+> > -void *early_memremap_ro(resource_size_t phys_addr, unsigned long size)
+> > +void * __init early_memremap_ro(resource_size_t phys_addr, unsigned lo=
+ng size)
+> >  {
+> >         return early_memremap(phys_addr, size);
+> >  }
+> >
+> > -void *early_memremap_prot(resource_size_t phys_addr, unsigned long siz=
+e,
+> > +void * __init early_memremap_prot(resource_size_t phys_addr, unsigned =
+long size,
+> >                     unsigned long prot_val)
+> >  {
+> >         return early_memremap(phys_addr, size);
+> > --
+> > 2.34.1
+> >
 
