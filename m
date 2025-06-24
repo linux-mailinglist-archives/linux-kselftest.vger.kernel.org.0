@@ -1,87 +1,87 @@
-Return-Path: <linux-kselftest+bounces-35694-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35695-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9B10AE6B49
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 17:37:42 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC495AE6B1D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 17:33:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 30D221C40DF8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 15:30:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 52ACE7B1825
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 15:29:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 896912E0B7D;
-	Tue, 24 Jun 2025 15:17:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAC0F2E1732;
+	Tue, 24 Jun 2025 15:18:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="K5gFFZjk"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HK5/Evzr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0BA52D879D
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Jun 2025 15:17:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1576204C36
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Jun 2025 15:18:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750778230; cv=none; b=iPNzJ54zR6U50Jj4k2Nwum9kiwXYDgoJE5XdG6hg6kN4gIiXBsEAJj+26hEnu0R1vNqEBRDlmCm9aCDiEDoHe82oNk9GAPOUozSYXHQZpBqw/Mm2dAv5UevbfK6vZ1gn1HCFZxp0hCoNWAB6BxGUhbdHWSHVYI/r4DfdAzj1ZFc=
+	t=1750778287; cv=none; b=TJ/mUEIkSVJwih1oxjJbHzc2BTyDgck0SG2hQdk3PAp3iZXRsstVJ3r3oSjfJWsK2alMOjepSudX1VfoVeIuAw7zfMxuDbZEKb+osePWdkFT8FbWGnS3U7s2oSPp1+o76uuLKaQqMa+pgFnfJclzKbFE4okZBWSdIJAIvXeJun0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750778230; c=relaxed/simple;
-	bh=/t4AUoydJ3jOkriY2x6fx+wQFZcnsKlRKuN5oo690hI=;
+	s=arc-20240116; t=1750778287; c=relaxed/simple;
+	bh=N18KGY4BLp916Z3SRne8IVfZJ8cqLU6VeFodMn0C2co=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WG5+mF17aV0iQDE7fSXF1VixVrsaoG+df+ZnWDnus5ktM7Ow7kdVtPssQPKEkJyWB7BdiVJcJqb0xgeMg+VNQ+8ZN6QEhwhcwJAm+/fRDpqKOz/FZV/w23NrQZRH/gKnY4HuBNavwBL6VSixBiwKXsoQCcPb0Edk1dzhSgvxBbU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=K5gFFZjk; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:Content-Type; b=Ikhq7KvCki8JH/e6iQ9lrEqdJ00JdqKvWbX0lUwLgH8IIozGGLbPFGfAolfWGZS2E9Fr/fCuU+5QMih7QaG/WmrPZKw5LS6qGdHWIUgHq7/cMXg47Y/DdsNPOUNl76pMC/LIuJGv6hkY5Si3K+/wlTs6vPJgvo7PWv7jR+yxlw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HK5/Evzr; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1750778227;
+	s=mimecast20190719; t=1750778285;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=VS7WT/Myda/TmCCBpV0MVboU7jS+MnjU+H4FMQ/YZGE=;
-	b=K5gFFZjkQIDbIJfuiXA+EUt60Ql6DEcHbBuhxyb+9TaBvTL4ghqSZ80+emq2lzIXH8uGuz
-	uWzco2fi0mkgfNT1AnSyp3tC41RbkK5g4b4/cpXslLHHSb6Rkqqa1I/8fYHwqU9ViypL1A
-	l4JN4bKmrYYK0wPwYPpvY3jRMtjmyV8=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=q+7lFe9tak1S55lSf6KbkmFxWnNY365i39+/ULPdIiA=;
+	b=HK5/EvzrwHS3gCEPYcyCcbAb2T8tXWvAmAGfN+TSsUoDo2WvradKj9fRYW1ZncZ3UFc9VA
+	87Me5Gm3dn9aUsxVE06acmccm7w8d/A0HDk9B5mdD9dE8oeoJe4/ONGoFHejZ/sOVU0Ivp
+	ni6HeAwbaGl2duI7LaShgANHJF3j7yw=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-10-q2Bl-CdiOH-9_BYGArTBmQ-1; Tue, 24 Jun 2025 11:17:06 -0400
-X-MC-Unique: q2Bl-CdiOH-9_BYGArTBmQ-1
-X-Mimecast-MFC-AGG-ID: q2Bl-CdiOH-9_BYGArTBmQ_1750778225
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-3a579058758so2362889f8f.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Jun 2025 08:17:05 -0700 (PDT)
+ us-mta-633-LitAPTnBM5mJ9wYlV_v6xQ-1; Tue, 24 Jun 2025 11:18:03 -0400
+X-MC-Unique: LitAPTnBM5mJ9wYlV_v6xQ-1
+X-Mimecast-MFC-AGG-ID: LitAPTnBM5mJ9wYlV_v6xQ_1750778282
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-453018b4ddeso4534725e9.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Jun 2025 08:18:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750778225; x=1751383025;
+        d=1e100.net; s=20230601; t=1750778282; x=1751383082;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=VS7WT/Myda/TmCCBpV0MVboU7jS+MnjU+H4FMQ/YZGE=;
-        b=pByTnpCsLotLussOWTnOR6nMkQ3sURxb+zID2WbonXu9ZsQBiWJHhhqBKHFhgB1v9w
-         s4H7oC5b7Cx/Alza2NHYuIHFuTUn+TFuQ97PEY16kYzHvDMZgyN34r5u2efG2s2OMsWL
-         MxLva6+KZBDBRzsFCBYPgdxxyhX+uE7LjOl+de2kWRZeVeaO8iiXNzmT1WImWV9+FvqW
-         DBKt/eX+BkAs39ac+xFIYcS2uaEOQodx4XnBDgKYYfCDEr4BY+tZoC/dbn2x/ts1MMJy
-         INpxkHUhjKrh/Q6ufC6dr4iGAiCCXMdQ6Zpp+/mgcr1Fz/muSoCtwPqWdjOnx2rKNLO2
-         HVnA==
-X-Forwarded-Encrypted: i=1; AJvYcCV7/jo3yorjI9+106wsX3UjqYPEynHn1SQHT5FbqeWMNNb45sMZD3Ujw6clpJElN/ZXOt6Iy9XbLNWxKCXwHec=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzcb2oyFPMQTrzvpQ2Gb/TAppVIv8S4gWpF2qbuZ8jA2fNAFpaB
-	ivXOUVkR4uNhmjvxuTz01HjcMwgqxOTSU2UB1ch8tFddHsIO9W7DfCrNSvV7XGF4NSIhIJw9gwe
-	4n8ZmQ33+429lvjgxE2YNHWu5CgXdWVjyJkSI1Q7UWOEtcCadSZSvFC7OfLS1Yi+D9ujePA==
-X-Gm-Gg: ASbGnctGcaMCazBcHaqQBjbLd/VwiJyb34cU8hyDOvz0Xdq5t7219S7XTI75N2SMevV
-	Oann0sg02DCihoYBrWdKtcg9IaQCwbStP2Dffdwhx/09VnQjzUeGGVzBOXEN9zGt8zhpu4HLFC7
-	az4/zaY4iBi5mScfIbObPCfAOJzTPvNy/b3yzBqmeud88gH4XYyAHTwshFr/HfrtXjmGtYH8Sbh
-	8Wg84jEh+CwGLVpYi9nLJ2bf9s/KxbvvtL45xhUnYGzHTF4UHkVFB93j00ndGM05E2uaCWXm7J7
-	3x0lP5SdGo80Nj/kD5zd2/BwopH7lEWKVyy0wzs8n5cnhcWtdyr7RIg=
-X-Received: by 2002:a05:6000:658:b0:3a6:d967:380c with SMTP id ffacd0b85a97d-3a6d9673f9bmr9519384f8f.36.1750778224781;
-        Tue, 24 Jun 2025 08:17:04 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGSv/IC3WnCIKLIezWORbCvAwDH9oA+fiyrjemvNBVXt77tG6qvLLNil4gzlrJ9PXRneuaYQQ==
-X-Received: by 2002:a05:6000:658:b0:3a6:d967:380c with SMTP id ffacd0b85a97d-3a6d9673f9bmr9519353f8f.36.1750778224422;
-        Tue, 24 Jun 2025 08:17:04 -0700 (PDT)
+        bh=q+7lFe9tak1S55lSf6KbkmFxWnNY365i39+/ULPdIiA=;
+        b=ueHCkBNn7zxLSrYRJ7N0za5W58/28aZqipG7Ry/bM3tJu4AP4PLCHAHWiXWSGXvYQl
+         BUkyPF47c+I6e/nlhis0JjeXmCIESX6aRTsaQA67Ni98e7qDL2cGjNbUSQv3rX+3x03t
+         ar3+zXkKpuSdky8F8s2JUmyARlLqUbSwUNaTpqiXE8zcvGyrcSnWOq3xnO0FyRde5DHP
+         lfqbHp510TyB/OQ27fSExHRLlGNHKn66aT45g5FOfTWf3LudA32W9Bs1o+FsuKA6YmvU
+         m9UYW9dJKHYNcPYB0LDMK6clxTE4FbFguLmPfAcKijRPQQm7HRH5aNrVpwBLMkyCtjkT
+         NPNg==
+X-Forwarded-Encrypted: i=1; AJvYcCXNdazeaV2uQKrN1BHpaw2Xohdee7tgCPl8Rgr2NuDhybLE10uW03S6W2a4elj7Bx5vQTKrw7KCuTucbhvYc3c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyUDFbCzOYt9Fr151L40/uHrtPDDbsdiVYv10ZSNkhYyPWYcEHC
+	MG/nN6ZSz0eOOMuIcr4ctmlwToC2vRkvbJHrfmjXcByMLyqTQb50GaTKw+RwZECUSB5MuXwujR5
+	XZ1KFiobeo6zl9dSb65jrhYbFKPx93grFpdNbbQMjwzNoneHh+H8954S5FO2NVIgQE07GjQ==
+X-Gm-Gg: ASbGncvx5ww7WEUEVR4gXrP969I5xwh68EWpOyoSNhJqmKfwFZGfvzcqHjDOshtLtKg
+	RuHn5k/YUQ6nkRc3qgFuFpRTk3PNrD0ZoK/0cKJTVgGoSB4xFycwdUvK472mfENM2aq86MH47gU
+	dRN7++ejQZIkX1VZy/kAbR5K3fyU7cPEM1TXoQn6+sC/BMI2fj5lL6bTjBfCeshzMK8XQF//VjD
+	Le5U9A+q/rlsSaFoQCwqD/5z2fRHTDmIc8/f7Q+K0/AhwDdjylXglh0RQQlmI/I+l7aBgg0E911
+	DySsxb8wp4i6goSEZiRkO1SjnNF88cUsVGnlu8lLtSYiLxtGHykUEFo=
+X-Received: by 2002:a05:600c:a07:b0:453:5c30:a1fd with SMTP id 5b1f17b1804b1-4536539bbb4mr155540865e9.8.1750778281582;
+        Tue, 24 Jun 2025 08:18:01 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFo4ikZswkww+dn7JTuY0rwNVm/HzJMg9w02hj7iz/Xal+GdGtH+Hqg6eW1jWXP8as49Xxerw==
+X-Received: by 2002:a05:600c:a07:b0:453:5c30:a1fd with SMTP id 5b1f17b1804b1-4536539bbb4mr155539475e9.8.1750778279533;
+        Tue, 24 Jun 2025 08:17:59 -0700 (PDT)
 Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a6e8050fd6sm2232351f8f.17.2025.06.24.08.17.03
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4537ab293d8sm37125695e9.28.2025.06.24.08.17.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jun 2025 08:17:03 -0700 (PDT)
-Message-ID: <59788375-4010-48f9-b783-2d4c51c8d546@redhat.com>
-Date: Tue, 24 Jun 2025 17:17:02 +0200
+        Tue, 24 Jun 2025 08:17:59 -0700 (PDT)
+Message-ID: <4bea7e61-b9d6-4855-bbdf-489020c9167a@redhat.com>
+Date: Tue, 24 Jun 2025 17:17:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -91,25 +91,17 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2] selftests/mm: Fix UFFDIO_API usage with proper
  two-step feature negotiation
-To: Peter Xu <peterx@redhat.com>
-Cc: Nadav Amit <nadav.amit@gmail.com>,
- Axel Rasmussen <axelrasmussen@google.com>, Li Wang <liwang@redhat.com>,
- Andrew Morton <akpm@linux-foundation.org>, linux-kselftest@vger.kernel.org,
- "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
- Aruna Ramakrishna <aruna.ramakrishna@oracle.com>,
+To: Li Wang <liwang@redhat.com>, akpm@linux-foundation.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org
+Cc: Aruna Ramakrishna <aruna.ramakrishna@oracle.com>,
  Bagas Sanjaya <bagasdotme@gmail.com>,
  Catalin Marinas <catalin.marinas@arm.com>,
  Dave Hansen <dave.hansen@linux.intel.com>, Joey Gouly <joey.gouly@arm.com>,
  Johannes Weiner <hannes@cmpxchg.org>, Keith Lucas <keith.lucas@oracle.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Shuah Khan <shuah@kernel.org>,
- Mike Rapoport <rppt@kernel.org>
+ Ryan Roberts <ryan.roberts@arm.com>, Shuah Khan <shuah@kernel.org>
 References: <20250622081035.378164-1-liwang@redhat.com>
  <20250624042411.395285-1-liwang@redhat.com>
- <dfd7650d-1154-467d-ae70-c126610413f6@redhat.com>
- <4fd18a1c-aba2-468a-881f-0507953f2904@redhat.com>
- <611F9598-A1A4-47B6-B37E-09BF7B4D17D0@gmail.com>
- <239f75e4-1868-4ac9-882f-664a8863b781@redhat.com>
- <495dc88a-c0b2-4090-a89c-00f000b62a2f@redhat.com> <aFq-SAFB3eWdwwwf@x1.local>
 From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
@@ -157,36 +149,128 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <aFq-SAFB3eWdwwwf@x1.local>
+In-Reply-To: <20250624042411.395285-1-liwang@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 24.06.25 17:03, Peter Xu wrote:
-> On Tue, Jun 24, 2025 at 01:48:50PM +0200, David Hildenbrand wrote:
->> The man page was updated with
->>
->> commit db3d5cc1a17b0ace008ebe1eaf0ac4d96b4b519a
->> Author: Axel Rasmussen <axelrasmussen@google.com>
->> Date:   Tue Oct 3 12:45:44 2023 -0700
->>
->>      ioctl_userfaultfd.2: Correct and update UFFDIO_API ioctl error codes
->>      First, it is not correct that repeated UFFDIO_API calls result in
->>      EINVAL.  This is true *if both calls enable features*, but in the case
->>      where we're doing a two-step feature detection handshake, the kernel
->>      explicitly expects 2 calls (one with no features set).  So, correct this
->>      description.
->>      Then, some new error cases have been added to the kernel recently, and
->>      the man page wasn't updated to note these.  So, add in descriptions of
->>      these new error cases.
->>
->> @Axel, did you ignore the automatically-set UFFD_FEATURE_INITIALIZED and the
->> repeated calls never worked, or was there actually a time where repeated
->> UFFDIO_API calls would not result in EINVAL?
+On 24.06.25 06:24, Li Wang wrote:
+> The current implementation of test_unmerge_uffd_wp() explicitly sets
+> `uffdio_api.features = UFFD_FEATURE_PAGEFAULT_FLAG_WP` before calling
+> UFFDIO_API. This can cause the ioctl() call to fail with EINVAL on kernels
+> that do not support UFFD-WP, leading the test to fail unnecessarily:
 > 
-> The man-pages was inaccurate before. It got updated recently after Kyle
-> asking similar questions, see:
+>    # ------------------------------
+>    # running ./ksm_functional_tests
+>    # ------------------------------
+>    # TAP version 13
+>    # 1..9
+>    # # [RUN] test_unmerge
+>    # ok 1 Pages were unmerged
+>    # # [RUN] test_unmerge_zero_pages
+>    # ok 2 KSM zero pages were unmerged
+>    # # [RUN] test_unmerge_discarded
+>    # ok 3 Pages were unmerged
+>    # # [RUN] test_unmerge_uffd_wp
+>    # not ok 4 UFFDIO_API failed     <-----
+>    # # [RUN] test_prot_none
+>    # ok 5 Pages were unmerged
+>    # # [RUN] test_prctl
+>    # ok 6 Setting/clearing PR_SET_MEMORY_MERGE works
+>    # # [RUN] test_prctl_fork
+>    # # No pages got merged
+>    # # [RUN] test_prctl_fork_exec
+>    # ok 7 PR_SET_MEMORY_MERGE value is inherited
+>    # # [RUN] test_prctl_unmerge
+>    # ok 8 Pages were unmerged
+>    # Bail out! 1 out of 8 tests failed
+>    # # Planned tests != run tests (9 != 8)
+>    # # Totals: pass:7 fail:1 xfail:0 xpass:0 skip:0 error:0
+>    # [FAIL]
+> 
+> This patch improves compatibility and robustness of the UFFD-WP test
+> (test_unmerge_uffd_wp) by correctly implementing the UFFDIO_API
+> two-step handshake as recommended by the userfaultfd(2) man page.
+> 
+> Key changes:
+> 
+> 1. Use features=0 in the initial UFFDIO_API call to query supported
+>     feature bits, rather than immediately requesting WP support.
+> 
+> 2. Skip the test gracefully if:
+>     - UFFDIO_API fails with EINVAL (e.g. unsupported API version), or
+>     - UFFD_FEATURE_PAGEFAULT_FLAG_WP is not advertised by the kernel.
+> 
+> 3. Close the initial userfaultfd and create a new one before enabling
+>     the required feature, since UFFDIO_API can only be called once per fd.
+> 
+> 4. Improve diagnostics by distinguishing between expected and unexpected
+>     failures, using strerror() to report errors.
+> 
+> This ensures the test behaves correctly across a wider range of kernel
+> versions and configurations, while preserving the intended behavior on
+> kernels that support UFFD-WP.
+> 
+> Suggestted-by: David Hildenbrand <david@redhat.com>
+> Signed-off-by: Li Wang <liwang@redhat.com>
+> Cc: Aruna Ramakrishna <aruna.ramakrishna@oracle.com>
+> Cc: Bagas Sanjaya <bagasdotme@gmail.com>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: Joey Gouly <joey.gouly@arm.com>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: Keith Lucas <keith.lucas@oracle.com>
+> Cc: Ryan Roberts <ryan.roberts@arm.com>
+> Cc: Shuah Khan <shuah@kernel.org>
+> ---
+> 
+> Notes:
+>      v1 --> v2:
+>      	* Close the original userfaultfd and open a new one before enabling features
+>      	* Reworked UFFDIO_API negotiation to follow the official two-step handshake
+> 
+>   .../selftests/mm/ksm_functional_tests.c       | 28 +++++++++++++++++--
+>   1 file changed, 26 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/ksm_functional_tests.c b/tools/testing/selftests/mm/ksm_functional_tests.c
+> index b61803e36d1c..19e5b741893a 100644
+> --- a/tools/testing/selftests/mm/ksm_functional_tests.c
+> +++ b/tools/testing/selftests/mm/ksm_functional_tests.c
+> @@ -393,9 +393,13 @@ static void test_unmerge_uffd_wp(void)
+>   
+>   	/* See if UFFD-WP is around. */
+>   	uffdio_api.api = UFFD_API;
+> -	uffdio_api.features = UFFD_FEATURE_PAGEFAULT_FLAG_WP;
+> +	uffdio_api.features = 0;
+>   	if (ioctl(uffd, UFFDIO_API, &uffdio_api) < 0) {
+> -		ksft_test_result_fail("UFFDIO_API failed\n");
+> +		if (errno == EINVAL)
+> +			ksft_test_result_skip("The API version requested is not supported\n");
+> +		else
+> +			ksft_test_result_fail("UFFDIO_API failed: %s\n", strerror(errno));
+> +
+>   		goto close_uffd;
+>   	}
+>   	if (!(uffdio_api.features & UFFD_FEATURE_PAGEFAULT_FLAG_WP)) {
+> @@ -403,6 +407,26 @@ static void test_unmerge_uffd_wp(void)
+>   		goto close_uffd;
+>   	}
+>   
+> +	/*
+> +	 * UFFDIO_API must only be called once to enable features.
+> +	 * So we close the old userfaultfd and create a new one to
+> +	 * actually enable UFFD_FEATURE_PAGEFAULT_FLAG_WP.
+> +	 */
+> +	close(uffd);
+> +	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
+> +	if (uffd < 0) {
+> +		ksft_test_result_skip("__NR_userfaultfd failed\n");
 
-Ah, great, thanks!
+If it now suddenly fails (after it working above), this sure is a fail, 
+right?
+
+Apart from that
+
+Acked-by: David Hildenbrand <david@redhat.com>
 
 -- 
 Cheers,
