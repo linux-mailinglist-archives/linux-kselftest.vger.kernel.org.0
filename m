@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-35707-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35708-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBCF4AE6FAF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 21:35:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E0F85AE6FB2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 21:35:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2397517AC42
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 19:35:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 503C717B10E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 19:35:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8B7A2EBB8A;
-	Tue, 24 Jun 2025 19:34:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26E272EBBAF;
+	Tue, 24 Jun 2025 19:34:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AbwDHTy4"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wMlJ5NDK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0B0A2EAB77
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Jun 2025 19:34:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC6B72EBB8D
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Jun 2025 19:34:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750793653; cv=none; b=LCq68V6oPAr+wujj70ydOcuzkVaAz9Qgm5qvr5NPkyUF4fW5XH0Uo29WysR4rzAGgUz9YCQlLTSWM4KQxBmz0BRfXPXNzNhYGz6p9fj0kAmO3T5hkSrzwAERpfE1mMTVjKHk1g+bpI4azn2E187zZZwn0oqQhEJpE8NDJ8PAhfA=
+	t=1750793655; cv=none; b=BsxAOdFDFE0zll0ZwF/qOXwKUDXKuIspWhw/SSxT3LAVLdhJXYQeuIdKdL8QxjVSYuT/jZfiL0P6iv0PxWr2KqmYvBYJ9W2Q39RIVswxqRBQfozS3IDZN3ILZhEb6X0rvgGvecE121n6fd1tGfMUN2+ewzXyJw/gloTpgRJRGtw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750793653; c=relaxed/simple;
-	bh=F9xHDiW8Uqm2cMSKOBqvwqb70yMRUXd6tMFuQWLlKP4=;
+	s=arc-20240116; t=1750793655; c=relaxed/simple;
+	bh=GzCQk+svK77W7hPvspovzKVXyJYt48gsWkTARhc2Ylc=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=nrOchTEoTALUB8Pvrbb6sfeGTt2uPvmCejLOPUa7uNo1BvSE4H8GrvzWEOY5ZOU3XNeAr+8x8h6lvJwphKrvOuxQxAXhh3xkq0lcrzYFTm8vn/pt2iQCgeG8QrPEmZP4eHkHikqRdogz+0RVRORDFXqRIDfeYlO+cOwJ/u8Ene4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AbwDHTy4; arc=none smtp.client-ip=209.85.215.201
+	 To:Cc:Content-Type; b=YUXlCfS6UNuxxHKPC/ghWER2m05WRt7qW8Q40kQF2sSoH7HRCqSPg3zkEeyUQzOGo67j7ij3aj8vFrYRyZAL2g8ZGtOiMfzr7LCJIT4OAOoe3kUvmslxa4Y+nYcdN6ZZpPXFInI+doqCRKDwbUWNljpZkoJTXBMCA7mxGKsxISI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wMlJ5NDK; arc=none smtp.client-ip=209.85.216.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-b34abbcdcf3so332675a12.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Jun 2025 12:34:11 -0700 (PDT)
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-3138e671316so167584a91.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Jun 2025 12:34:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1750793651; x=1751398451; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1750793653; x=1751398453; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yLtEbRv6QyxPjsf9LVAPVV2LoLwOWyeMLnVsJ44IjdU=;
-        b=AbwDHTy4bZnt0JWMsRnTvU9Eok/Y74F983dSPXWbA/8swgF3GX/Uq0SefP1ma6Mu8j
-         QxN+pNUIcwodjVgXYIdUGmtUcR/gqr8JYh7XKW8KNrNYQG0xRrmhAy5rfsDVlnY370qQ
-         OM/gtsIdKdWFqqycBJlSHSOX+1JeisRJ7Gv07WfDfcIKKkQ9qYvrIp0gXVczXkgxqlRy
-         dbUJCkGkaKF5ieYthimCOzCnefv55YecppSbIGjX71AQ9HQ2T68Gv2pvq0HjgH00Kk0B
-         Z+emEUSNiV4uLSCKqT3v954cZOZKLkqbCPnUvbaSFA5kIIy0slXnmhtYzkwHkW+5VzPI
-         URVQ==
+        bh=5L5H3FNoajNf/UELmS1eaZLiPr7GIJ0ppwDkwKzX2RM=;
+        b=wMlJ5NDK4tJi5bn+CrMTfQVjz9AaKFywv3IjFU0+EDB4/W2/7+S2NdFnFAqu047zgC
+         CWnlY/IOUzwL2uGbVnr8p0pGruujlewhUM3wUzh6xyVuSHqcl+ndVvnzDiKx9ldziV5C
+         GCPkhu1iVNbaACA61t7fanQZedtwi8jtdTBj35/2j2s9LufJUKgLzVRsU5+yGxyL8t8n
+         RC+YUXcbFCzTjIbo+85uAmEHBfwQg3mC6LYkd2adHBMyJ08xgN9t0nrlbmGJxcrNc1m7
+         ItsReA3fINv0Q5NdXMtUVQcf84bNcFf6tWPzHH1z3wjbbWRR1zmz6G0ESIKCtE6z4XgF
+         e40w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750793651; x=1751398451;
+        d=1e100.net; s=20230601; t=1750793653; x=1751398453;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yLtEbRv6QyxPjsf9LVAPVV2LoLwOWyeMLnVsJ44IjdU=;
-        b=sTO1lyv698Qdg0WJK+YzuM+PoXKulgyuzBrJV33xJCOW9qNEm6VAWtDEkC6eTHPNMo
-         7OO8LZBnGLRLO007+yl+E7pLZTdrlV6eNAmDD0R3oSutN394Nz33fAyaurFag5Pd7522
-         TeEAyZB6FhBqnCQEziRQ5IkGVkykOvfZ0sTksCCwosUCLkc+XzUQUo99Ub2ucRuRe/Xr
-         P01SDHgU1er1cFdz278htMsLJkquuZ6+nugIGK1isLZVEZxmirQGId0EPeDXOzRC3AIE
-         MPCfpOh545gU5OQadIu7wRHdp02nbuEvv6am2nTJSqW6RY9HXmZPx8O4h7eYmxCHHl3X
-         iHZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVIDzJMS1y+CU3npWHXmG6XWmlll9rsdxBDdNng6lkZ9ktXUcRmw7Llv9Ub10m7j/4ScyiFnZdPmSDcHRk04A4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy+fius42Kdpu8/GDGfxrTe3TK2MchiPpySaRYRp3QWVky1PIam
-	8yeV41Ld1AhcFGCAfHWmel5XXYUEyMjCzr6eoRe7wDcq/ZUWx2KYwFCf2KQqSR0VZZ9NIEQvGRF
-	3JBy+Dw==
-X-Google-Smtp-Source: AGHT+IHClWuGmDdB+MsMxoQpT43VMdFBAo96rsx+K87NYCqHXT7J+KynqmIRFatckh9qdl8zl/G773J5x/U=
-X-Received: from pgww20.prod.google.com ([2002:a05:6a02:2c94:b0:b2c:3d70:9c1])
- (user=surenb job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:9d8e:b0:215:e43a:29b9
- with SMTP id adf61e73a8af0-2207f2a49ddmr205722637.33.1750793651161; Tue, 24
- Jun 2025 12:34:11 -0700 (PDT)
-Date: Tue, 24 Jun 2025 12:33:56 -0700
+        bh=5L5H3FNoajNf/UELmS1eaZLiPr7GIJ0ppwDkwKzX2RM=;
+        b=LROi2N3zARClTnJc/t0Q9ZQCH4DspV9zjiLPrHuKv1kw+nUEk6FYFVDH8JnYVHZOj0
+         Pildi2xAEIB3jM+GiFDVyUwbWWfCkM6uv81KiiMLlTs8iUsr3Gz+pQ7ve/DflUylcDCD
+         phMIvyrnmGDSuvDWPXGwvtrw34eMjwZzNJjfKaXScgag6i3nGtJff/nxBVwO72mLltma
+         X5lSlbAwG3E06UPlqGcDy9PsjSP703Ui/kRMX9yggCEbvPRwx7mkI5v/JCNOkUq2D0kj
+         72EncmkBgZpNNp+F+xHl3hb68I1NRlH0xBzlySrQ842xRKQ5FlQxlExK8wj4XGQ7NBLU
+         YpDQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVs595OpLbCqF5Qkq6uglUo80QhEZcH+lWqJy69SVuF8sO6Q2Ogc5LtWiO6QdCLtUPsEEb7pdz9XvdxF/pRwTQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxTDMRzqIpaU8iiJ175fOurtdqUqK3N1YL0nR0Ae09/by+YSneG
+	YyWcY8+EFm5UWjbTMpySrSCJGX9EJ7kTx2liLz3ZBk05nBRi8brUsVMMdpr5GdjyxIBBuJsIowu
+	YzpxdAA==
+X-Google-Smtp-Source: AGHT+IGv6JeXyWyTe30WOyPpkx12eoNk+GrPmkwRBZ04YyBIZv26IDRNFd+s3FgwEXmVVNDLoZsKfuuItlg=
+X-Received: from pjq6.prod.google.com ([2002:a17:90b:5606:b0:313:285a:5547])
+ (user=surenb job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:1f8d:b0:30a:9feb:1e15
+ with SMTP id 98e67ed59e1d1-315ccc4da71mr7233133a91.8.1750793653167; Tue, 24
+ Jun 2025 12:34:13 -0700 (PDT)
+Date: Tue, 24 Jun 2025 12:33:57 -0700
 In-Reply-To: <20250624193359.3865351-1-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,9 +74,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250624193359.3865351-1-surenb@google.com>
 X-Mailer: git-send-email 2.50.0.714.g196bf9f422-goog
-Message-ID: <20250624193359.3865351-5-surenb@google.com>
-Subject: [PATCH v5 4/7] selftests/proc: test PROCMAP_QUERY ioctl while vma is
- concurrently modified
+Message-ID: <20250624193359.3865351-6-surenb@google.com>
+Subject: [PATCH v5 5/7] selftests/proc: add verbose more for tests to
+ facilitate debugging
 From: Suren Baghdasaryan <surenb@google.com>
 To: akpm@linux-foundation.org
 Cc: Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, david@redhat.com, 
@@ -90,127 +90,314 @@ Cc: Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, david@redhat.com,
 	linux-kselftest@vger.kernel.org, surenb@google.com
 Content-Type: text/plain; charset="UTF-8"
 
-Extend /proc/pid/maps tearing test to verify PROCMAP_QUERY ioctl operation
-correctness while the vma is being concurrently modified.
+Add verbose mode to the proc tests to print debugging information.
+Usage: proc-pid-vm -v
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- tools/testing/selftests/proc/proc-pid-vm.c | 60 ++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
+ tools/testing/selftests/proc/proc-pid-vm.c | 154 +++++++++++++++++++--
+ 1 file changed, 141 insertions(+), 13 deletions(-)
 
 diff --git a/tools/testing/selftests/proc/proc-pid-vm.c b/tools/testing/selftests/proc/proc-pid-vm.c
-index 1aef2db7e893..b582f40851fb 100644
+index b582f40851fb..97017f48cd70 100644
 --- a/tools/testing/selftests/proc/proc-pid-vm.c
 +++ b/tools/testing/selftests/proc/proc-pid-vm.c
-@@ -486,6 +486,21 @@ static void capture_mod_pattern(int maps_fd,
- 	assert(strcmp(restored_first_line->text, first_line->text) == 0);
+@@ -73,6 +73,7 @@ static void make_private_tmp(void)
  }
  
-+static void query_addr_at(int maps_fd, void *addr,
-+			  unsigned long *vma_start, unsigned long *vma_end)
+ static unsigned long test_duration_sec = 5UL;
++static bool verbose;
+ static int page_size;
+ static pid_t pid = -1;
+ static void ate(void)
+@@ -452,6 +453,99 @@ static void stop_vma_modifier(struct vma_modifier_info *mod_info)
+ 	signal_state(mod_info, SETUP_MODIFY_MAPS);
+ }
+ 
++static void print_first_lines(char *text, int nr)
 +{
-+	struct procmap_query q;
++	const char *end = text;
 +
-+	memset(&q, 0, sizeof(q));
-+	q.size = sizeof(q);
-+	/* Find the VMA at the split address */
-+	q.query_addr = (unsigned long long)addr;
-+	q.query_flags = 0;
-+	assert(!ioctl(maps_fd, PROCMAP_QUERY, &q));
-+	*vma_start = q.vma_start;
-+	*vma_end = q.vma_end;
++	while (nr && (end = strchr(end, '\n')) != NULL) {
++		nr--;
++		end++;
++	}
++
++	if (end) {
++		int offs = end - text;
++
++		text[offs] = '\0';
++		printf(text);
++		text[offs] = '\n';
++		printf("\n");
++	} else {
++		printf(text);
++	}
 +}
 +
- static inline void split_vma(const struct vma_modifier_info *mod_info)
++static void print_last_lines(char *text, int nr)
++{
++	const char *start = text + strlen(text);
++
++	nr++; /* to ignore the last newline */
++	while (nr) {
++		while (start > text && *start != '\n')
++			start--;
++		nr--;
++		start--;
++	}
++	printf(start);
++}
++
++static void print_boundaries(const char *title,
++			     struct page_content *page1,
++			     struct page_content *page2)
++{
++	if (!verbose)
++		return;
++
++	printf("%s", title);
++	/* Print 3 boundary lines from each page */
++	print_last_lines(page1->data, 3);
++	printf("-----------------page boundary-----------------\n");
++	print_first_lines(page2->data, 3);
++}
++
++static bool print_boundaries_on(bool condition, const char *title,
++				struct page_content *page1,
++				struct page_content *page2)
++{
++	if (verbose && condition)
++		print_boundaries(title, page1, page2);
++
++	return condition;
++}
++
++static void report_test_start(const char *name)
++{
++	if (verbose)
++		printf("==== %s ====\n", name);
++}
++
++static struct timespec print_ts;
++
++static void start_test_loop(struct timespec *ts)
++{
++	if (verbose)
++		print_ts.tv_sec = ts->tv_sec;
++}
++
++static void end_test_iteration(struct timespec *ts)
++{
++	if (!verbose)
++		return;
++
++	/* Update every second */
++	if (print_ts.tv_sec == ts->tv_sec)
++		return;
++
++	printf(".");
++	fflush(stdout);
++	print_ts.tv_sec = ts->tv_sec;
++}
++
++static void end_test_loop(void)
++{
++	if (verbose)
++		printf("\n");
++}
++
+ static void capture_mod_pattern(int maps_fd,
+ 				struct vma_modifier_info *mod_info,
+ 				struct page_content *page1,
+@@ -463,18 +557,24 @@ static void capture_mod_pattern(int maps_fd,
+ 				struct line_content *restored_last_line,
+ 				struct line_content *restored_first_line)
  {
- 	assert(mmap(mod_info->addr, page_size, mod_info->prot | PROT_EXEC,
-@@ -546,6 +561,8 @@ static void test_maps_tearing_from_split(int maps_fd,
++	print_boundaries("Before modification", page1, page2);
++
+ 	signal_state(mod_info, SETUP_MODIFY_MAPS);
+ 	wait_for_state(mod_info, SETUP_MAPS_MODIFIED);
+ 
+ 	/* Copy last line of the first page and first line of the last page */
+ 	read_boundary_lines(maps_fd, page1, page2, mod_last_line, mod_first_line);
+ 
++	print_boundaries("After modification", page1, page2);
++
+ 	signal_state(mod_info, SETUP_RESTORE_MAPS);
+ 	wait_for_state(mod_info, SETUP_MAPS_RESTORED);
+ 
+ 	/* Copy last line of the first page and first line of the last page */
+ 	read_boundary_lines(maps_fd, page1, page2, restored_last_line, restored_first_line);
+ 
++	print_boundaries("After restore", page1, page2);
++
+ 	mod_info->vma_mod_check(mod_last_line, mod_first_line,
+ 				restored_last_line, restored_first_line);
+ 
+@@ -546,6 +646,7 @@ static void test_maps_tearing_from_split(int maps_fd,
+ 	mod_info->vma_restore = merge_vma;
+ 	mod_info->vma_mod_check = check_split_result;
+ 
++	report_test_start("Tearing from split");
+ 	capture_mod_pattern(maps_fd, mod_info, page1, page2, last_line, first_line,
+ 			    &split_last_line, &split_first_line,
+ 			    &restored_last_line, &restored_first_line);
+@@ -558,6 +659,7 @@ static void test_maps_tearing_from_split(int maps_fd,
+ 	struct timespec start_ts, end_ts;
+ 
+ 	clock_gettime(CLOCK_MONOTONIC_COARSE, &start_ts);
++	start_test_loop(&start_ts);
  	do {
  		bool last_line_changed;
  		bool first_line_changed;
-+		unsigned long vma_start;
-+		unsigned long vma_end;
- 
- 		read_boundary_lines(maps_fd, page1, page2, &new_last_line, &new_first_line);
- 
-@@ -576,6 +593,19 @@ static void test_maps_tearing_from_split(int maps_fd,
- 		first_line_changed = strcmp(new_first_line.text, first_line->text) != 0;
- 		assert(last_line_changed == first_line_changed);
- 
-+		/* Check if PROCMAP_QUERY ioclt() finds the right VMA */
-+		query_addr_at(maps_fd, mod_info->addr + page_size,
-+			      &vma_start, &vma_end);
-+		/*
-+		 * The vma at the split address can be either the same as
-+		 * original one (if read before the split) or the same as the
-+		 * first line in the second page (if read after the split).
-+		 */
-+		assert((vma_start == last_line->start_addr &&
-+			vma_end == last_line->end_addr) ||
-+		       (vma_start == split_first_line.start_addr &&
-+			vma_end == split_first_line.end_addr));
+@@ -577,12 +679,17 @@ static void test_maps_tearing_from_split(int maps_fd,
+ 			 * In that case new first line will be the same as the
+ 			 * last restored line.
+ 			 */
+-			assert(!strcmp(new_first_line.text, split_first_line.text) ||
+-			       !strcmp(new_first_line.text, restored_last_line.text));
++			assert(!print_boundaries_on(
++					strcmp(new_first_line.text, split_first_line.text) &&
++					strcmp(new_first_line.text, restored_last_line.text),
++					"Split result invalid", page1, page2));
 +
- 		clock_gettime(CLOCK_MONOTONIC_COARSE, &end_ts);
- 	} while (end_ts.tv_sec - start_ts.tv_sec < test_duration_sec);
+ 		} else {
+ 			/* The vmas should be consistent with merge results */
+-			assert(!strcmp(new_last_line.text, restored_last_line.text) &&
+-			       !strcmp(new_first_line.text, restored_first_line.text));
++			assert(!print_boundaries_on(
++					strcmp(new_last_line.text, restored_last_line.text) ||
++					strcmp(new_first_line.text, restored_first_line.text),
++					"Merge result invalid", page1, page2));
+ 		}
+ 		/*
+ 		 * First and last lines should change in unison. If the last
+@@ -607,7 +714,9 @@ static void test_maps_tearing_from_split(int maps_fd,
+ 			vma_end == split_first_line.end_addr));
  
-@@ -637,6 +667,9 @@ static void test_maps_tearing_from_resize(int maps_fd,
+ 		clock_gettime(CLOCK_MONOTONIC_COARSE, &end_ts);
++		end_test_iteration(&end_ts);
+ 	} while (end_ts.tv_sec - start_ts.tv_sec < test_duration_sec);
++	end_test_loop();
+ 
+ 	/* Signal the modifyer thread to stop and wait until it exits */
+ 	signal_state(mod_info, TEST_DONE);
+@@ -654,6 +763,7 @@ static void test_maps_tearing_from_resize(int maps_fd,
+ 	mod_info->vma_restore = expand_vma;
+ 	mod_info->vma_mod_check = check_shrink_result;
+ 
++	report_test_start("Tearing from resize");
+ 	capture_mod_pattern(maps_fd, mod_info, page1, page2, last_line, first_line,
+ 			    &shrunk_last_line, &shrunk_first_line,
+ 			    &restored_last_line, &restored_first_line);
+@@ -666,6 +776,7 @@ static void test_maps_tearing_from_resize(int maps_fd,
+ 	struct timespec start_ts, end_ts;
  
  	clock_gettime(CLOCK_MONOTONIC_COARSE, &start_ts);
++	start_test_loop(&start_ts);
  	do {
-+		unsigned long vma_start;
-+		unsigned long vma_end;
-+
- 		read_boundary_lines(maps_fd, page1, page2, &new_last_line, &new_first_line);
- 
- 		/* Check if we read vmas after shrinking it */
-@@ -656,6 +689,17 @@ static void test_maps_tearing_from_resize(int maps_fd,
- 			assert(!strcmp(new_last_line.text, restored_last_line.text) &&
- 			       !strcmp(new_first_line.text, restored_first_line.text));
+ 		unsigned long vma_start;
+ 		unsigned long vma_end;
+@@ -682,12 +793,16 @@ static void test_maps_tearing_from_resize(int maps_fd,
+ 			 * again. In that case new first line will be the same
+ 			 * as the last restored line.
+ 			 */
+-			assert(!strcmp(new_first_line.text, shrunk_first_line.text) ||
+-			       !strcmp(new_first_line.text, restored_last_line.text));
++			assert(!print_boundaries_on(
++					strcmp(new_first_line.text, shrunk_first_line.text) &&
++					strcmp(new_first_line.text, restored_last_line.text),
++					"Shrink result invalid", page1, page2));
+ 		} else {
+ 			/* The vmas should be consistent with the original/resored state */
+-			assert(!strcmp(new_last_line.text, restored_last_line.text) &&
+-			       !strcmp(new_first_line.text, restored_first_line.text));
++			assert(!print_boundaries_on(
++					strcmp(new_last_line.text, restored_last_line.text) ||
++					strcmp(new_first_line.text, restored_first_line.text),
++					"Expand result invalid", page1, page2));
  		}
-+
-+		/* Check if PROCMAP_QUERY ioclt() finds the right VMA */
-+		query_addr_at(maps_fd, mod_info->addr, &vma_start, &vma_end);
-+		/*
-+		 * The vma should stay at the same address and have either the
-+		 * original size of 3 pages or 1 page if read after shrinking.
-+		 */
-+		assert(vma_start == last_line->start_addr &&
-+		       (vma_end - vma_start == page_size * 3 ||
-+			vma_end - vma_start == page_size));
-+
- 		clock_gettime(CLOCK_MONOTONIC_COARSE, &end_ts);
- 	} while (end_ts.tv_sec - start_ts.tv_sec < test_duration_sec);
  
-@@ -726,6 +770,9 @@ static void test_maps_tearing_from_remap(int maps_fd,
+ 		/* Check if PROCMAP_QUERY ioclt() finds the right VMA */
+@@ -701,7 +816,9 @@ static void test_maps_tearing_from_resize(int maps_fd,
+ 			vma_end - vma_start == page_size));
+ 
+ 		clock_gettime(CLOCK_MONOTONIC_COARSE, &end_ts);
++		end_test_iteration(&end_ts);
+ 	} while (end_ts.tv_sec - start_ts.tv_sec < test_duration_sec);
++	end_test_loop();
+ 
+ 	/* Signal the modifyer thread to stop and wait until it exits */
+ 	signal_state(mod_info, TEST_DONE);
+@@ -757,6 +874,7 @@ static void test_maps_tearing_from_remap(int maps_fd,
+ 	mod_info->vma_restore = patch_vma;
+ 	mod_info->vma_mod_check = check_remap_result;
+ 
++	report_test_start("Tearing from remap");
+ 	capture_mod_pattern(maps_fd, mod_info, page1, page2, last_line, first_line,
+ 			    &remapped_last_line, &remapped_first_line,
+ 			    &restored_last_line, &restored_first_line);
+@@ -769,6 +887,7 @@ static void test_maps_tearing_from_remap(int maps_fd,
+ 	struct timespec start_ts, end_ts;
  
  	clock_gettime(CLOCK_MONOTONIC_COARSE, &start_ts);
++	start_test_loop(&start_ts);
  	do {
-+		unsigned long vma_start;
-+		unsigned long vma_end;
-+
- 		read_boundary_lines(maps_fd, page1, page2, &new_last_line, &new_first_line);
- 
- 		/* Check if we read vmas after remapping it */
-@@ -745,6 +792,19 @@ static void test_maps_tearing_from_remap(int maps_fd,
- 			assert(!strcmp(new_last_line.text, restored_last_line.text) &&
- 			       !strcmp(new_first_line.text, restored_first_line.text));
+ 		unsigned long vma_start;
+ 		unsigned long vma_end;
+@@ -785,12 +904,16 @@ static void test_maps_tearing_from_remap(int maps_fd,
+ 			 * again. In that case new first line will be the same
+ 			 * as the last restored line.
+ 			 */
+-			assert(!strcmp(new_first_line.text, remapped_first_line.text) ||
+-			       !strcmp(new_first_line.text, restored_last_line.text));
++			assert(!print_boundaries_on(
++					strcmp(new_first_line.text, remapped_first_line.text) &&
++					strcmp(new_first_line.text, restored_last_line.text),
++					"Remap result invalid", page1, page2));
+ 		} else {
+ 			/* The vmas should be consistent with the original/resored state */
+-			assert(!strcmp(new_last_line.text, restored_last_line.text) &&
+-			       !strcmp(new_first_line.text, restored_first_line.text));
++			assert(!print_boundaries_on(
++					strcmp(new_last_line.text, restored_last_line.text) ||
++					strcmp(new_first_line.text, restored_first_line.text),
++					"Remap restore result invalid", page1, page2));
  		}
-+
-+		/* Check if PROCMAP_QUERY ioclt() finds the right VMA */
-+		query_addr_at(maps_fd, mod_info->addr + page_size, &vma_start, &vma_end);
-+		/*
-+		 * The vma should either stay at the same address and have the
-+		 * original size of 3 pages or we should find the remapped vma
-+		 * at the remap destination address with size of 1 page.
-+		 */
-+		assert((vma_start == last_line->start_addr &&
-+			vma_end - vma_start == page_size * 3) ||
-+		       (vma_start == last_line->start_addr + page_size &&
-+			vma_end - vma_start == page_size));
-+
- 		clock_gettime(CLOCK_MONOTONIC_COARSE, &end_ts);
- 	} while (end_ts.tv_sec - start_ts.tv_sec < test_duration_sec);
  
+ 		/* Check if PROCMAP_QUERY ioclt() finds the right VMA */
+@@ -806,7 +929,9 @@ static void test_maps_tearing_from_remap(int maps_fd,
+ 			vma_end - vma_start == page_size));
+ 
+ 		clock_gettime(CLOCK_MONOTONIC_COARSE, &end_ts);
++		end_test_iteration(&end_ts);
+ 	} while (end_ts.tv_sec - start_ts.tv_sec < test_duration_sec);
++	end_test_loop();
+ 
+ 	/* Signal the modifyer thread to stop and wait until it exits */
+ 	signal_state(mod_info, TEST_DONE);
+@@ -927,6 +1052,7 @@ int usage(void)
+ {
+ 	fprintf(stderr, "Userland /proc/pid/{s}maps test cases\n");
+ 	fprintf(stderr, "  -d: Duration for time-consuming tests\n");
++	fprintf(stderr, "  -v: Verbose mode\n");
+ 	fprintf(stderr, "  -h: Help screen\n");
+ 	exit(-1);
+ }
+@@ -937,9 +1063,11 @@ int main(int argc, char **argv)
+ 	int exec_fd;
+ 	int opt;
+ 
+-	while ((opt = getopt(argc, argv, "d:h")) != -1) {
++	while ((opt = getopt(argc, argv, "d:vh")) != -1) {
+ 		if (opt == 'd')
+ 			test_duration_sec = strtoul(optarg, NULL, 0);
++		else if (opt == 'v')
++			verbose = true;
+ 		else if (opt == 'h')
+ 			usage();
+ 	}
 -- 
 2.50.0.714.g196bf9f422-goog
 
