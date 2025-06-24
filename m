@@ -1,87 +1,87 @@
-Return-Path: <linux-kselftest+bounces-35684-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35685-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74EC4AE63B9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 13:39:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EFE97AE63D8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 13:49:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7586B404FBC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 11:38:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB1A3188C1B8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 11:49:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35B2B283FF4;
-	Tue, 24 Jun 2025 11:39:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D608286D4E;
+	Tue, 24 Jun 2025 11:48:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Us4UPVMx"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EEd0+qEI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3130A1F3B9E
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Jun 2025 11:39:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5E7D27AC3C
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Jun 2025 11:48:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750765159; cv=none; b=rIqnV5jmHtpyFjnUPEhv+wu0TcY55RCaCk4tjAB0B86kuzCtKUdTZpWx76D7LS9bXD0UKpsY4zwIOoK09fjqguzhqbtUAs3XsGOF3mBjGx8Npc8x65Ud1VxXDeKnOjLkYe0mP1rjpePGOXioLWQZ88kTUWbIKyppfzEa4OAmfKU=
+	t=1750765738; cv=none; b=qUFGSg+novWU7mxksZFsBLLRkaM4FleVsWVOMInk1xhNxCbccFE+R+xNjQLwDil3TUKvU9SPq6FTJxuBLlAysqjvIiAPlHEFOQOd0qBiACZdMMJ1Xp2bwvzkYmmVwYopuua+C+FhIXEwF4SbD2x5Iw2/chRLX3ykUZE9RfKzPPc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750765159; c=relaxed/simple;
-	bh=3IYqA6zz18wVwbxDcdlFAV35wjek5Niz57+vKGJeRT0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cksvUOcshHeqRJePmPazzft+e3gQ/L5XQ5FhHHG1m6AFaFieb/JESckGD0/QgSD9d1fUHJ40Q4k/kHiV5MR6f/gdXvQFpfzPix8jd5luKEXJBMfO/CwAsvzds6s/BvSWcjgWh+9U2A2HNNgmxBVsVp5nO6xkeX96g4rvT3pVePQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Us4UPVMx; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1750765738; c=relaxed/simple;
+	bh=14u+W+cQcCXUs9xJ9ptflndPkrK5G2sfasI5M9OUgug=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=GlIkn5tti9T6iepAC4MGWqCL/vKZqlSkawx29H8sYKKAEfB7BHxArPUtk6rVXwa642+l/FwpoYLcUJpkDPBXcuuVvSR7v27CPQyZJjosDRJQ134jpRKp32IuSXrKuRHMXvVpSvwQG5o9/fF7JNmZgkrH2kwyqjhN1bxZlC9vEyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EEd0+qEI; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1750765155;
+	s=mimecast20190719; t=1750765736;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=AXIga1bkzrBMFrY8HFgs7axgfA9Z09Pf3kfYJmY6hOo=;
-	b=Us4UPVMxA5NpQGLLAlgQmQBe1IarLddIDZOl9lRKANih6/FMxAwbrUw+EXu11FzINICIMD
-	AkVKh0c7gYDFCipKqptn9QbY/MBwgj/3Zreh32nykj7XAiYNN4J8v+D6OvCVdAKurWDKYk
-	3lNNpeyZJEmAYH63KjDwL8xqBEdtd1U=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=BjJpxF1LECO1PRi8kqM/ATCIsmTz38nbps9nkRr6Q/o=;
+	b=EEd0+qEIsEftbBqHYfnd/BBvt0UggScheOe4dwDI08E4sHWHSN7tgBzSgjVqTNR1nyXGWM
+	wKoMhQ7+7m9yyT1z9gHp9r6pD6GBVpZ4OGYH7dXoJtF0fO9TKoGWpf8dcgfln1XLUuVF0m
+	aSOD44J/gs2hra8phMTWLHVZ7j4L734=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-151-qCQuImKNP7qLNJjLE1FfeA-1; Tue, 24 Jun 2025 07:39:13 -0400
-X-MC-Unique: qCQuImKNP7qLNJjLE1FfeA-1
-X-Mimecast-MFC-AGG-ID: qCQuImKNP7qLNJjLE1FfeA_1750765152
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-451d7de4ae3so2494305e9.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Jun 2025 04:39:13 -0700 (PDT)
+ us-mta-142-7CyZ3EUONWWiq9m-TkeQYw-1; Tue, 24 Jun 2025 07:48:54 -0400
+X-MC-Unique: 7CyZ3EUONWWiq9m-TkeQYw-1
+X-Mimecast-MFC-AGG-ID: 7CyZ3EUONWWiq9m-TkeQYw_1750765733
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-3a3696a0d3aso2365832f8f.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Jun 2025 04:48:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750765152; x=1751369952;
+        d=1e100.net; s=20230601; t=1750765733; x=1751370533;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:user-agent
+         :content-language:references:cc:to:from:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=AXIga1bkzrBMFrY8HFgs7axgfA9Z09Pf3kfYJmY6hOo=;
-        b=URcZnB3vbyXnSwlbgIkQbVJQTAIrNvrbIR4Ciyk0f/EYc2aYx5odm8vDsrQxetYmT/
-         fhZr1360ufkCvJQ+kjrlhIaRSRjRtqKtfkyaXpQW3dNz+eyBSh3raYeAxKjKoFqDKSX/
-         BCHqWvmIA3bOWfp+n2DGjjBAqI4c88dtkSBNW3kzCMqVCAEeYp+szcPxY9/NzPkHAFae
-         3Q95H3voRn9cXBvikYTHOT+aOGWX27azq66/5t8EKTYN/n05DkHrgPt0cedTD0iLZvUH
-         9JPoCUBgRoITGliqStkVrZGySzrmfKldsedeLQsREWsyTJ/z6xXSpZCjnc0Z3irf+gUZ
-         QuCQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVRZxdC99puEocMz7K8H5KNbVFarRgPBfl+dS9o1ZpCgie0pbphB/QqKsWHBVlL49rMfO4kuLdFrhD8L680DZM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz98gxlfST267kXmPoBLj3/VYlTWBkd9VFUnOl6l62gR/3/o5DS
-	Or4hoYvrwe4KLG+FaAIUmis740fWFKcaYQUzA14gyfp1uNpbee7v4fpjdjx+NyoDoIqgN6pSGOo
-	ZsSLzl1Tp3i0ZYr7B5PFh+SFNxjS3GVsvpGZQTuvrBvMon7DWN4PgrH+OX4eqU/NIxK3QDA==
-X-Gm-Gg: ASbGncuuNsgYk2kGF/ziSnRXZBMFYIL7rZ6C+x/64yI3viAsKsCk38YEheoG6Szh7vi
-	ctDH0M8CXF3YwFi/QTpbHvEcOWvEk2Jryj6+Jr8pVFPnkyDwhU1R1mI3aOzW8w8trZVJ3Zo1dEZ
-	VVZu8fI3T75MM4Tbg1Ebs1LyRv7Oy2X4rNP3AhvOuaVIvTLBDydjSaRvKgbp3G0ijjNSBeS4Db+
-	Kb0aq+T8dpx1WcXwQJgtxMk0+wqjyJQkYJwm4bT7WuauIFvFk7IsXgNOXZvj10ZMUr7HhI1Y8Z5
-	wSZvQ5Y0nnxmXAWOfM5wc4k4Sc+ItePmfW0sQjjqp6BKoZ8TsYu8Ja0=
-X-Received: by 2002:a05:600c:1f14:b0:453:5d8d:d1b8 with SMTP id 5b1f17b1804b1-453659c4169mr165567225e9.30.1750765152078;
-        Tue, 24 Jun 2025 04:39:12 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IErMOyF7WaU24rVgpkQqumxg1Yg3KftcabGR+eBnLPstGAHmjKS0ym0uqBvGrttUZVbn2hA9w==
-X-Received: by 2002:a05:600c:1f14:b0:453:5d8d:d1b8 with SMTP id 5b1f17b1804b1-453659c4169mr165566765e9.30.1750765151613;
-        Tue, 24 Jun 2025 04:39:11 -0700 (PDT)
+        bh=BjJpxF1LECO1PRi8kqM/ATCIsmTz38nbps9nkRr6Q/o=;
+        b=EX5FkDTWaIoDetA93WA5J64PIZvDzxKc3689aZk4moPH/FTeEMyS0u17173ZLEDZB3
+         du98vR3e/nXMj7lJVKAapaSQXuwc20eDA4xFqpFPZXfC2cLlFghEBuDVbRwUEW0u8A4g
+         vnavI7HZGeJYCerJmQASf6IFMoG7ty6kxpUxlCbGX+OaqtzMU9Lvm66XgwVm+uDguyuS
+         JtHUbGE7nrVwP2sh0yMjPVKRyxSucJzRtOvXDynhwl2w8qxA7pSGlJUzl0sq0umgWEuh
+         hbVmAb6qgyjJG65R47xUZ27qTv2ZdWZjaRqjW3rx9XY9BaSYjIkCk402ZA+0liGmNPtv
+         BDcQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU75xjdPFD6E78lB8O9SRGalwAwJ+TMu0VtAFl8vp93MIHRJ4diabtQdoG98rYwG2gxSoya/Gm/rkyH43e5WNg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz9Su1eVjXmRicwnXMBshhrcWZcuxhOkhPUYb3wDH++00lv+Fkl
+	0Ecx95r0KZqkrMq/1tzP0uUofxvUJxQ9f5bZUWWb3C5ca8Poz1mrZ24zKmhAMSyGvKYwQOv9cmC
+	oWF4G3cT9QiGIrlVZ69PY2kHCPGhoEt3euC8cybe2mbjgcjqBn4P/+iUMMGPgLyjfNcL30g==
+X-Gm-Gg: ASbGncseJAGBDxzJ848qKgThJODV8FRMWzp+8u86bkftoVu6jXSr5jy6XrCq46koAES
+	z2hWd27Y6in9afcLhuNwPRkaJ1tOrBJ7ipnxTjVU/3wn0otAYWk2Pr04XLhrjawWGRdWgYOAKkw
+	qSAo2DPWiIuRnKnBXeRfHUkmN9tI5nBsXIBZjrWYnbAjg6c3Fc9Gv5HXbxSNH0TOPDOTlmLatKA
+	OAzFmkbM0QCjH9l4jTyXKdadY1pC+wAkn81pxyD1wA5FG/lurxa8yqUpAqiJZBVUlEwebnt26EF
+	Z2Rk87pnQ2ovX0k1zlIqYSaw8/hv699mQs+Zdcy+06HAX7tDTptBjC8=
+X-Received: by 2002:a05:6000:3103:b0:3a4:f7af:b41 with SMTP id ffacd0b85a97d-3a6d128db06mr13100281f8f.15.1750765733455;
+        Tue, 24 Jun 2025 04:48:53 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHkmLPYuaxXT2XxgaacTu86F8qbQot0I4+8jm38oh1duDAsrGuV6aY8E5RgTpgxNjpCM1xP1w==
+X-Received: by 2002:a05:6000:3103:b0:3a4:f7af:b41 with SMTP id ffacd0b85a97d-3a6d128db06mr13100242f8f.15.1750765732964;
+        Tue, 24 Jun 2025 04:48:52 -0700 (PDT)
 Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4535e98b48asm174446585e9.16.2025.06.24.04.39.10
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-453646d156esm141814525e9.11.2025.06.24.04.48.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jun 2025 04:39:10 -0700 (PDT)
-Message-ID: <239f75e4-1868-4ac9-882f-664a8863b781@redhat.com>
-Date: Tue, 24 Jun 2025 13:39:09 +0200
+        Tue, 24 Jun 2025 04:48:51 -0700 (PDT)
+Message-ID: <495dc88a-c0b2-4090-a89c-00f000b62a2f@redhat.com>
+Date: Tue, 24 Jun 2025 13:48:50 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -91,7 +91,9 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2] selftests/mm: Fix UFFDIO_API usage with proper
  two-step feature negotiation
-To: Nadav Amit <nadav.amit@gmail.com>
+From: David Hildenbrand <david@redhat.com>
+To: Nadav Amit <nadav.amit@gmail.com>,
+ Axel Rasmussen <axelrasmussen@google.com>
 Cc: Li Wang <liwang@redhat.com>, Andrew Morton <akpm@linux-foundation.org>,
  linux-kselftest@vger.kernel.org,
  "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
@@ -101,13 +103,14 @@ Cc: Li Wang <liwang@redhat.com>, Andrew Morton <akpm@linux-foundation.org>,
  Catalin Marinas <catalin.marinas@arm.com>,
  Dave Hansen <dave.hansen@linux.intel.com>, Joey Gouly <joey.gouly@arm.com>,
  Johannes Weiner <hannes@cmpxchg.org>, Keith Lucas <keith.lucas@oracle.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Shuah Khan <shuah@kernel.org>
+ Ryan Roberts <ryan.roberts@arm.com>, Shuah Khan <shuah@kernel.org>,
+ Mike Rapoport <rppt@kernel.org>
 References: <20250622081035.378164-1-liwang@redhat.com>
  <20250624042411.395285-1-liwang@redhat.com>
  <dfd7650d-1154-467d-ae70-c126610413f6@redhat.com>
  <4fd18a1c-aba2-468a-881f-0507953f2904@redhat.com>
  <611F9598-A1A4-47B6-B37E-09BF7B4D17D0@gmail.com>
-From: David Hildenbrand <david@redhat.com>
+ <239f75e4-1868-4ac9-882f-664a8863b781@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
  xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
@@ -154,120 +157,92 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <611F9598-A1A4-47B6-B37E-09BF7B4D17D0@gmail.com>
+In-Reply-To: <239f75e4-1868-4ac9-882f-664a8863b781@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 24.06.25 13:29, Nadav Amit wrote:
+On 24.06.25 13:39, David Hildenbrand wrote:
+> On 24.06.25 13:29, Nadav Amit wrote:
+>>
+>>
+>>> On 24 Jun 2025, at 11:22, David Hildenbrand <david@redhat.com> wrote:
+>>>
+>>> On 24.06.25 10:07, David Hildenbrand wrote:
+>>>>>
+>>>> Is that actually required?
+>>>> The man page explicitly documents:
+>>>> "       EINVAL A  previous  UFFDIO_API  call already enabled one or more
+>>>> features for this userfaultfd.  Calling UFF‐
+>>>>                  DIO_API twice, the first time with no features set, is
+>>>> explicitly allowed as per the two-step  feature
+>>>>                  detection handshake.
+>>>> "
+>>>> So if that doesn't work, something might be broken.
+>>>
+>>> CCing Nadav and Peter:
+>>>
+>>> Could it be that
+>>>
+>>> commit 22e5fe2a2a279d9a6fcbdfb4dffe73821bef1c90
+>>> Author: Nadav Amit <nadav.amit@gmail.com>
+>>> Date:   Thu Sep 2 14:58:59 2021 -0700
+>>>
+>>>      userfaultfd: prevent concurrent API initialization
+>>>          userfaultfd assumes that the enabled features are set once and never
+>>>      changed after UFFDIO_API ioctl succeeded.
+>>>          However, currently, UFFDIO_API can be called concurrently from two
+>>>      different threads, succeed on both threads and leave userfaultfd's
+>>>      features in non-deterministic state.  Theoretically, other uffd operations
+>>>      (ioctl's and page-faults) can be dispatched while adversely affected by
+>>>      such changes of features.
+>>>          Moreover, the writes to ctx->state and ctx->features are not ordered,
+>>>      which can - theoretically, again - let userfaultfd_ioctl() think that
+>>>      userfaultfd API completed, while the features are still not initialized.
+>>>          To avoid races, it is arguably best to get rid of ctx->state.  Since there
+>>>      are only 2 states, record the API initialization in ctx->features as the
+>>>      uppermost bit and remove ctx->state.
+>>>
+>>> Accidentally broke the documented two-step handshake in the man page where we
+>>> can avoid closing + reopening the fd?
+>>
+>> I agree the code is not correct (and my patch didn’t address this issue),
+>> but I don’t see it broke it either.
+>>
+>> Unless I’m missing something the code before my patch, when
+>> uffdio_api.features == 0, also set ctx->state to UFFD_STATE_RUNNING, which
+>> meant another invocation would see (ctx->state != UFFD_STATE_WAIT_API) and
+>> fail.
 > 
+> You might be right, I only checked the cmpxchg, assuming it was working
+> before that.
 > 
->> On 24 Jun 2025, at 11:22, David Hildenbrand <david@redhat.com> wrote:
->>
->> On 24.06.25 10:07, David Hildenbrand wrote:
->>>>
->>> Is that actually required?
->>> The man page explicitly documents:
->>> "       EINVAL A  previous  UFFDIO_API  call already enabled one or more
->>> features for this userfaultfd.  Calling UFF‐
->>>                 DIO_API twice, the first time with no features set, is
->>> explicitly allowed as per the two-step  feature
->>>                 detection handshake.
->>> "
->>> So if that doesn't work, something might be broken.
->>
->> CCing Nadav and Peter:
->>
->> Could it be that
->>
->> commit 22e5fe2a2a279d9a6fcbdfb4dffe73821bef1c90
->> Author: Nadav Amit <nadav.amit@gmail.com>
->> Date:   Thu Sep 2 14:58:59 2021 -0700
->>
->>     userfaultfd: prevent concurrent API initialization
->>         userfaultfd assumes that the enabled features are set once and never
->>     changed after UFFDIO_API ioctl succeeded.
->>         However, currently, UFFDIO_API can be called concurrently from two
->>     different threads, succeed on both threads and leave userfaultfd's
->>     features in non-deterministic state.  Theoretically, other uffd operations
->>     (ioctl's and page-faults) can be dispatched while adversely affected by
->>     such changes of features.
->>         Moreover, the writes to ctx->state and ctx->features are not ordered,
->>     which can - theoretically, again - let userfaultfd_ioctl() think that
->>     userfaultfd API completed, while the features are still not initialized.
->>         To avoid races, it is arguably best to get rid of ctx->state.  Since there
->>     are only 2 states, record the API initialization in ctx->features as the
->>     uppermost bit and remove ctx->state.
->>
->> Accidentally broke the documented two-step handshake in the man page where we
->> can avoid closing + reopening the fd?
+> ... but staring at the history of the "ctx->state =
+> UFFD_STATE_RUNNING;", I am not sure if it ever behaved that way.
 > 
-> I agree the code is not correct (and my patch didn’t address this issue),
-> but I don’t see it broke it either.
-> 
-> Unless I’m missing something the code before my patch, when
-> uffdio_api.features == 0, also set ctx->state to UFFD_STATE_RUNNING, which
-> meant another invocation would see (ctx->state != UFFD_STATE_WAIT_API) and
-> fail.
+> Do maybe, the man page is simply wrong (although I wonder why that case
+> was described that detailed)
 
-You might be right, I only checked the cmpxchg, assuming it was working 
-before that.
+The man page was updated with
 
-... but staring at the history of the "ctx->state = 
-UFFD_STATE_RUNNING;", I am not sure if it ever behaved that way.
+commit db3d5cc1a17b0ace008ebe1eaf0ac4d96b4b519a
+Author: Axel Rasmussen <axelrasmussen@google.com>
+Date:   Tue Oct 3 12:45:44 2023 -0700
 
-Do maybe, the man page is simply wrong (although I wonder why that case 
-was described that detailed)
+     ioctl_userfaultfd.2: Correct and update UFFDIO_API ioctl error codes
+     
+     First, it is not correct that repeated UFFDIO_API calls result in
+     EINVAL.  This is true *if both calls enable features*, but in the case
+     where we're doing a two-step feature detection handshake, the kernel
+     explicitly expects 2 calls (one with no features set).  So, correct this
+     description.
+     
+     Then, some new error cases have been added to the kernel recently, and
+     the man page wasn't updated to note these.  So, add in descriptions of
+     these new error cases.
 
-> 
->>
->> Without testing, the following might fix it if I am right:
->>
->> diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
->> index 22f4bf956ba1c..f03e7c980e1c5 100644
->> --- a/fs/userfaultfd.c
->> +++ b/fs/userfaultfd.c
->> @@ -1944,9 +1944,9 @@ static int userfaultfd_move(struct userfaultfd_ctx *ctx,
->> static int userfaultfd_api(struct userfaultfd_ctx *ctx,
->>                            unsigned long arg)
->> {
->> +       unsigned int new_features, old_features = 0;
->>         struct uffdio_api uffdio_api;
->>         void __user *buf = (void __user *)arg;
->> -       unsigned int ctx_features;
->>         int ret;
->>         __u64 features;
->> @@ -1990,9 +1990,12 @@ static int userfaultfd_api(struct userfaultfd_ctx *ctx,
->>                 goto out;
->>          /* only enable the requested features for this uffd context */
->> -       ctx_features = uffd_ctx_features(features);
->> +       new_features = uffd_ctx_features(features);
->> +       /* allow two-step handshake */
->> +       if (userfaultfd_is_initialized(ctx))
->> +               old_features = UFFD_FEATURE_INITIALIZED;
->>         ret = -EINVAL;
->> -       if (cmpxchg(&ctx->features, 0, ctx_features) != 0)
->> +       if (cmpxchg(&ctx->features, old_features, new_features) != old_features)
->>                 goto err_out;
->>          ret = 0;
-> 
-> I am not sure it is right since you would return EINVAL in this case.
-> It also looks a bit overly complicated - are you concerned about a race?
-
-Yes.
-
-> My whole concern about race was that somebody would exploit it to
-> overcome non-cooperative UFFD (IIRC).
-> 
-> So perhaps just add a check for the case features if 0 and be done with
-> it? Something like adding:
-> 
-> 	ret = 0;
-> 	if (ctx->features == 0 && features == 0)
-> 		goto err_out; 		/* no error but copying of uffdio_api required */
-
-Probably would also work. But let's find out first if we even want to 
-fix this, given that it never seemed to have behaved that way from a 
-quick glimpse.
+@Axel, did you ignore the automatically-set UFFD_FEATURE_INITIALIZED and the
+repeated calls never worked, or was there actually a time where repeated
+UFFDIO_API calls would not result in EINVAL?
 
 -- 
 Cheers,
