@@ -1,351 +1,288 @@
-Return-Path: <linux-kselftest+bounces-35671-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35672-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 165CFAE5DBC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 09:30:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DD91AE5EB9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 10:08:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A5C0400B49
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 07:29:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A18B03AE4E1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 08:07:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F70B2566D3;
-	Tue, 24 Jun 2025 07:29:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 035382550D2;
+	Tue, 24 Jun 2025 08:07:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="g7RhFYcE"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fYjuRPZH"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 030B3255E53
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Jun 2025 07:29:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 104E5190664
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Jun 2025 08:07:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750750185; cv=none; b=uxwuWqoY/B/ZHD2g0WYvwmhEunuicyyEfyixhh0IaMxJRyWGbXfIcMVxKxZs3FSp7VxzXXRN/Wwa0ldc+327/Gzx2dEsxbniuKlxrAa4EzagNzGA6P6chdXJ8YvQczkApF1W8waHxRdZkNNAWlHGe4hX3//72JOc5NOMaHfoyTY=
+	t=1750752456; cv=none; b=pemujVkPbQNuSRCyXbfpTRu9oSw0znZInQAh6oj3nk0Wa0gFN29Oa9HkStCmm5U/JtSeonQCJ7XahTixKqA26VyQgT3jno720v2dbc1oaPGyqWWp4zZs65x3qew35PB/kmctFaopg6yjMTVed41qDOQ4JXkIQ6J5i0ShfhZP8dg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750750185; c=relaxed/simple;
-	bh=Wyq1CNHwEFonTvgEGs3phKEvj+/XcFZS7wIpql7BYKQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qRJjnyFio+keMcp3wnHniXoBYUrw4qSmDgaf8QB66WRzMAnjBOkCEoJJ2DKO1SoXnv0ZbefVa6pE9pE1ClU0KAp5RaVwngZdZKch7ld9/cjYzrLZnZc58OqBRA8kxjR5DZ1xU6yxH64DeDOV++2Es+yBJc1d8OVLdPL3oIFULGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=g7RhFYcE; arc=none smtp.client-ip=209.85.166.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
-Received: by mail-il1-f180.google.com with SMTP id e9e14a558f8ab-3df2e7cdc64so49975ab.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Jun 2025 00:29:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1750750182; x=1751354982; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bCAx15zg9RW4K8KXkbEJeib3OebKP7rlI+yhk9VbeJ8=;
-        b=g7RhFYcETIITTAYrvlhLzgtlg7o1L+MKGm6irxR1dB5I1zWQXSU78DRvKf9dnybGKW
-         W5VhVey+okW4hkNVH6RkYnvFAnb7MDcU1WVa+rQx8pHHnmtZKW8mfYOEPTWjGySAD/5m
-         Zno6UAUJRZt6di18Le2mUCgNxJuT6GxCNbzT/xkdEduakjQ5y+qeRljEhj6QxBiaLeJ3
-         iWoHRa+icwrizZpxSfrh2bmbM93x/jN1ulSr1zEdzaH5blSqXi1/lOXTdX8FC5WFz5jc
-         IduRX0M8FnpVZ8wy24vxwsDN5Al8XMvfo0KDx60ZuckOd/4d9ScPoRtDQOqBJOdXlHCh
-         k9QA==
+	s=arc-20240116; t=1750752456; c=relaxed/simple;
+	bh=JgsSBvTnznR09eGd2OJLwNRNa2+FEOtjHzluUypwdYk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sCiE1UVDzm+GhyknTvdidlaXaa7oYeE9ueYB5/1LhM9Kk2OIHXlzPsKmTEp5xF3abZxdEoGYHaD/RrrVerntQhcLOHnpI2tgRMv0eFfSoXUbWcTV2cnKdnZXVxV1s8cBvWDoZYrZkt2KhqTVSRmsvZNrccy7eXJaTkGJPf1k4LA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fYjuRPZH; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1750752454;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=GM43lz0QpDgErZ/vodO3xCp9zFB0TdFSlvRYH8M5tN0=;
+	b=fYjuRPZH69zzAwXy14mU4haHmYZVfftNR8lrFXeJwBWuEkbnc+tpKsivsRCGetqNgVgQjM
+	cUvsp0rzWlxEUDMqYIv8D4wyS7sbjF4xOcTo4NFKq6ju2XrnPzq1paDZmDm13pHexwpwLT
+	utDB/QUKe/8EYk4MeVBZlBvmfOxWqU8=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-657-zT4hYMeuPWGaJQUK-crwPA-1; Tue, 24 Jun 2025 04:07:32 -0400
+X-MC-Unique: zT4hYMeuPWGaJQUK-crwPA-1
+X-Mimecast-MFC-AGG-ID: zT4hYMeuPWGaJQUK-crwPA_1750752451
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3a579058758so2151426f8f.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Jun 2025 01:07:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750750182; x=1751354982;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bCAx15zg9RW4K8KXkbEJeib3OebKP7rlI+yhk9VbeJ8=;
-        b=csnGdAt72SEDEdWImN3WuJG4ashtvN62svbNRVlTVrexf3LNplW9iLk/S9BlF+35fC
-         q12C6Lmsw2Hl9LDYU25+23nxybivoYh2j3uil0z9OpT4bvmc7oqjHf+6XOt9+cbBUF1B
-         QKS6/SxxU0Dp8pmdTijIex4K5v5jI3EFX/mlK3XBU9bKqqE07SYaNkEV/+736Ix2I4wA
-         X2iKZ63RaQCd+K0jLWNfOnIpyCXP5n2ZcufVu1chjVfD/9LFPNthLi03hpLCtJr8+8Xq
-         Ek3jTsAxBDm9Uq7SYfaejpk/eOGu4s4YES9pdzeX4124VXRlJ3RyRrS+C0llhluhzmg6
-         OeBA==
-X-Forwarded-Encrypted: i=1; AJvYcCWETUfUm4pJU83SbaNo9ZGtDlZvGiDaJEALTSMmHrXlCAuzjNx1fM0K3OdCoxTQTIeldBXt7LIEVpkgzXqy4Ao=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwuQ/M3qUfN8cHOjl0Lgn8yIvs2+NMmNquHQDoa88xkqbz4FCXw
-	vNnhe6IAM8vJtWP2vCAOpAixKbJimbvLd+fszwVFVtYEB/0NophuY3KHsdNDHjk9svNutWsXCxu
-	yDQ0tcCSgC4IJ4qWynHf8h/toqLZkTn6trb7xltEXvA==
-X-Gm-Gg: ASbGncsxNn6LriBtrM69g+b4lG8BxIpz7kZr2YHj55VedD+4pCgImjKOI+3Z3zWMeS7
-	smX8Z/kyzjK8nWWqNp0BzyuifJJgFMHK6dlY3kf4Wv2TXJcRcM0R1N1ISuCkMZofqV54teQiPm3
-	3Q+WGaFjoCZ6vZ6DX0A3OJ+CtWYxsGsBoCsVvcwJ9dvwIb8A==
-X-Google-Smtp-Source: AGHT+IH6hRbPz4KJd4uHusg55uzqEZNbIEEtPoBg2Di8b55LbLqgN3m0kaio6V1nAiVuXSaR5cp2kjghUWOHqxTA20U=
-X-Received: by 2002:a05:6e02:19c8:b0:3dd:a3e4:2def with SMTP id
- e9e14a558f8ab-3de38cbfe5cmr169073095ab.16.1750750181761; Tue, 24 Jun 2025
- 00:29:41 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1750752451; x=1751357251;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=GM43lz0QpDgErZ/vodO3xCp9zFB0TdFSlvRYH8M5tN0=;
+        b=JEl713pzhQ1mjyp9ildb1Xd7wWb0XPZ1C9CT4vS2G6jZ7lKTjFSgC1nJ8a1BWODKX+
+         EOSD+qEYWCGdieLOekMBDIUmg/YDRnel8aQ2u5Ep/yxPP5GZIBD7xmS9+/vSQVawWJkS
+         MTEAuKYRfMRJdTEh3n6SJb+3QD4ImaKLAIL9S+zoaoijw+0Kt5z0lk2es86gvU7Loiov
+         Jjr2m2MlibKZzju9XESJzT2FhhlmIc4RdHq6TlC+s7l/oqu0+/rK/HjoMMkukNtAKutE
+         4i/QQinhwht+6ya4/EYhMdBwhJCnFfhHfMh/WhDT4Y/LUZe/cpOuMAfRJqg8L/6Hro60
+         kM2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVR5m9rnPW/+YWHsOMOm4pHxIr7H0tahrYzs2Vvg1KjBCQLGV00Dvn6tKSXAZ56IVY2sC7oFZRfuR2TgdRd5Z0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzcomXqmSMxgS9giabbFuDyV/W/i5NfolsA8jB/rRcAYM6TWRmL
+	xqOS7gocIJHz067V8Pw1meXucL7v2nyFK0ngwD2unYc01u1R7gEZs3HERRP3zRvWIiQXHx+jvX3
+	kjFscnXfL3a3H4/YAbqKD1sU9yriEPxt85cqx+DjE4l5nBiLQypuGy/+RhW3UAF/m7ZQB9A==
+X-Gm-Gg: ASbGncviwvU2RMKqI+EmW0vYr13Hsb69w7Y5NznKgUPqBOO110PLwfO49DAIxoue0JT
+	jULu2zQTICuZcDnjnzEfMf0w1pdvIMOzLOtziCrnC0tDdnpchxtlD2LDP16MBXibtL0aNdXdix5
+	XWHIA/NFY+3P33CtbtCa6z5e17XLmqRV9kH+FzJ1FyhCfzlFpI7wPDSjneKZz1R9IlTcVfc+/Wt
+	5RUo+Zqtyd9ttDjRwmBVbsrdbCkU9L/E2A7AakH7939koWQ5owUgrnQ08NLGnYyKCkcDch5tczu
+	rdt9ypTOC7GneO2idboNvli6C1yKFWYczT3W
+X-Received: by 2002:a05:6000:20c1:b0:3a6:d93e:5282 with SMTP id ffacd0b85a97d-3a6d93e56fdmr6158550f8f.59.1750752450837;
+        Tue, 24 Jun 2025 01:07:30 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IF5D9U8DXo9QlBSJgRT7e5NhRpK+cBv0LT+I7AaevAPYPmS1KrfSBpaAuJgjXp8k1Kqwnjs6w==
+X-Received: by 2002:a05:6000:20c1:b0:3a6:d93e:5282 with SMTP id ffacd0b85a97d-3a6d93e56fdmr6158516f8f.59.1750752450393;
+        Tue, 24 Jun 2025 01:07:30 -0700 (PDT)
+Received: from ?IPV6:2a09:80c0:84::108? (mischulz23.caps.cit.tum.de. [2a09:80c0:84::108])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a6e8113b00sm1283411f8f.96.2025.06.24.01.07.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Jun 2025 01:07:29 -0700 (PDT)
+Message-ID: <dfd7650d-1154-467d-ae70-c126610413f6@redhat.com>
+Date: Tue, 24 Jun 2025 10:07:29 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250604-v5_user_cfi_series-v17-0-4565c2cf869f@rivosinc.com> <20250604-v5_user_cfi_series-v17-23-4565c2cf869f@rivosinc.com>
-In-Reply-To: <20250604-v5_user_cfi_series-v17-23-4565c2cf869f@rivosinc.com>
-From: Zong Li <zong.li@sifive.com>
-Date: Tue, 24 Jun 2025 15:29:23 +0800
-X-Gm-Features: AX0GCFtqo33kUwQ41tFem8GGyjdAkGeTRdsf_5aqfLZF6MkgxmnaqyzxPU27Aco
-Message-ID: <CANXhq0qy_0Lth1a-aZ+dd5p+HXKRpbgsc522v9_kqP1Ve67J2w@mail.gmail.com>
-Subject: Re: [PATCH v17 23/27] arch/riscv: compile vdso with landing pad
-To: Deepak Gupta <debug@rivosinc.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Christian Brauner <brauner@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Oleg Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, Jann Horn <jannh@google.com>, 
-	Conor Dooley <conor+dt@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, alistair.francis@wdc.com, 
-	richard.henderson@linaro.org, jim.shu@sifive.com, andybnac@gmail.com, 
-	kito.cheng@sifive.com, charlie@rivosinc.com, atishp@rivosinc.com, 
-	evan@rivosinc.com, cleger@rivosinc.com, alexghiti@rivosinc.com, 
-	samitolvanen@google.com, broonie@kernel.org, rick.p.edgecombe@intel.com, 
-	rust-for-linux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] selftests/mm: Fix UFFDIO_API usage with proper
+ two-step feature negotiation
+To: Li Wang <liwang@redhat.com>, akpm@linux-foundation.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org
+Cc: Aruna Ramakrishna <aruna.ramakrishna@oracle.com>,
+ Bagas Sanjaya <bagasdotme@gmail.com>,
+ Catalin Marinas <catalin.marinas@arm.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>, Joey Gouly <joey.gouly@arm.com>,
+ Johannes Weiner <hannes@cmpxchg.org>, Keith Lucas <keith.lucas@oracle.com>,
+ Ryan Roberts <ryan.roberts@arm.com>, Shuah Khan <shuah@kernel.org>
+References: <20250622081035.378164-1-liwang@redhat.com>
+ <20250624042411.395285-1-liwang@redhat.com>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <20250624042411.395285-1-liwang@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jun 5, 2025 at 1:17=E2=80=AFAM Deepak Gupta <debug@rivosinc.com> wr=
-ote:
->
-> From: Jim Shu <jim.shu@sifive.com>
->
-> user mode tasks compiled with zicfilp may call indirectly into vdso (like
-> hwprobe indirect calls). Add landing pad compile support in vdso. vdso
-> with landing pad in it will be nop for tasks which have not enabled
-> landing pad.
-> This patch allows to run user mode tasks with cfi eanbled and do no harm.
->
-> Future work can be done on this to do below
->  - labeled landing pad on vdso functions (whenever labeling support shows
->    up in gnu-toolchain)
->  - emit shadow stack instructions only in vdso compiled objects as part o=
-f
->    kernel compile.
->
-> Signed-off-by: Jim Shu <jim.shu@sifive.com>
-> Reviewed-by: Zong Li <zong.li@sifive.com>
-> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+On 24.06.25 06:24, Li Wang wrote:
+> The current implementation of test_unmerge_uffd_wp() explicitly sets
+> `uffdio_api.features = UFFD_FEATURE_PAGEFAULT_FLAG_WP` before calling
+> UFFDIO_API. This can cause the ioctl() call to fail with EINVAL on kernels
+> that do not support UFFD-WP, leading the test to fail unnecessarily:
+> 
+>    # ------------------------------
+>    # running ./ksm_functional_tests
+>    # ------------------------------
+>    # TAP version 13
+>    # 1..9
+>    # # [RUN] test_unmerge
+>    # ok 1 Pages were unmerged
+>    # # [RUN] test_unmerge_zero_pages
+>    # ok 2 KSM zero pages were unmerged
+>    # # [RUN] test_unmerge_discarded
+>    # ok 3 Pages were unmerged
+>    # # [RUN] test_unmerge_uffd_wp
+>    # not ok 4 UFFDIO_API failed     <-----
+>    # # [RUN] test_prot_none
+>    # ok 5 Pages were unmerged
+>    # # [RUN] test_prctl
+>    # ok 6 Setting/clearing PR_SET_MEMORY_MERGE works
+>    # # [RUN] test_prctl_fork
+>    # # No pages got merged
+>    # # [RUN] test_prctl_fork_exec
+>    # ok 7 PR_SET_MEMORY_MERGE value is inherited
+>    # # [RUN] test_prctl_unmerge
+>    # ok 8 Pages were unmerged
+>    # Bail out! 1 out of 8 tests failed
+>    # # Planned tests != run tests (9 != 8)
+>    # # Totals: pass:7 fail:1 xfail:0 xpass:0 skip:0 error:0
+>    # [FAIL]
+> 
+> This patch improves compatibility and robustness of the UFFD-WP test
+> (test_unmerge_uffd_wp) by correctly implementing the UFFDIO_API
+> two-step handshake as recommended by the userfaultfd(2) man page.
+> 
+> Key changes:
+> 
+> 1. Use features=0 in the initial UFFDIO_API call to query supported
+>     feature bits, rather than immediately requesting WP support.
+> 
+> 2. Skip the test gracefully if:
+>     - UFFDIO_API fails with EINVAL (e.g. unsupported API version), or
+>     - UFFD_FEATURE_PAGEFAULT_FLAG_WP is not advertised by the kernel.
+> 
+> 3. Close the initial userfaultfd and create a new one before enabling
+>     the required feature, since UFFDIO_API can only be called once per fd.
+> 
+> 4. Improve diagnostics by distinguishing between expected and unexpected
+>     failures, using strerror() to report errors.
+> 
+> This ensures the test behaves correctly across a wider range of kernel
+> versions and configurations, while preserving the intended behavior on
+> kernels that support UFFD-WP.
+> 
+> Suggestted-by: David Hildenbrand <david@redhat.com>
+> Signed-off-by: Li Wang <liwang@redhat.com>
+> Cc: Aruna Ramakrishna <aruna.ramakrishna@oracle.com>
+> Cc: Bagas Sanjaya <bagasdotme@gmail.com>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: Joey Gouly <joey.gouly@arm.com>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: Keith Lucas <keith.lucas@oracle.com>
+> Cc: Ryan Roberts <ryan.roberts@arm.com>
+> Cc: Shuah Khan <shuah@kernel.org>
 > ---
->  arch/riscv/Makefile                   |  5 +++-
->  arch/riscv/include/asm/assembler.h    | 44 +++++++++++++++++++++++++++++=
-++++++
->  arch/riscv/kernel/vdso/Makefile       |  6 +++++
->  arch/riscv/kernel/vdso/flush_icache.S |  4 ++++
->  arch/riscv/kernel/vdso/getcpu.S       |  4 ++++
->  arch/riscv/kernel/vdso/rt_sigreturn.S |  4 ++++
->  arch/riscv/kernel/vdso/sys_hwprobe.S  |  4 ++++
->  7 files changed, 70 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-> index 539d2aef5cab..c2dd09bb9db3 100644
-> --- a/arch/riscv/Makefile
-> +++ b/arch/riscv/Makefile
-> @@ -88,9 +88,12 @@ riscv-march-$(CONFIG_TOOLCHAIN_HAS_ZACAS) :=3D $(riscv=
--march-y)_zacas
->  # Check if the toolchain supports Zabha
->  riscv-march-$(CONFIG_TOOLCHAIN_HAS_ZABHA) :=3D $(riscv-march-y)_zabha
->
-> +KBUILD_BASE_ISA =3D -march=3D$(shell echo $(riscv-march-y) | sed -E 's/(=
-rv32ima|rv64ima)fd([^v_]*)v?/\1\2/')
-> +export KBUILD_BASE_ISA
+> 
+> Notes:
+>      v1 --> v2:
+>      	* Close the original userfaultfd and open a new one before enabling features
+>      	* Reworked UFFDIO_API negotiation to follow the official two-step handshake
+> 
+>   .../selftests/mm/ksm_functional_tests.c       | 28 +++++++++++++++++--
+>   1 file changed, 26 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/ksm_functional_tests.c b/tools/testing/selftests/mm/ksm_functional_tests.c
+> index b61803e36d1c..19e5b741893a 100644
+> --- a/tools/testing/selftests/mm/ksm_functional_tests.c
+> +++ b/tools/testing/selftests/mm/ksm_functional_tests.c
+> @@ -393,9 +393,13 @@ static void test_unmerge_uffd_wp(void)
+>   
+>   	/* See if UFFD-WP is around. */
+>   	uffdio_api.api = UFFD_API;
+> -	uffdio_api.features = UFFD_FEATURE_PAGEFAULT_FLAG_WP;
+> +	uffdio_api.features = 0;
+>   	if (ioctl(uffd, UFFDIO_API, &uffdio_api) < 0) {
+> -		ksft_test_result_fail("UFFDIO_API failed\n");
+> +		if (errno == EINVAL)
+> +			ksft_test_result_skip("The API version requested is not supported\n");
+> +		else
+> +			ksft_test_result_fail("UFFDIO_API failed: %s\n", strerror(errno));
 > +
->  # Remove F,D,V from isa string for all. Keep extensions between "fd" and=
- "v" by
->  # matching non-v and non-multi-letter extensions out with the filter ([^=
-v_]*)
-> -KBUILD_CFLAGS +=3D -march=3D$(shell echo $(riscv-march-y) | sed -E 's/(r=
-v32ima|rv64ima)fd([^v_]*)v?/\1\2/')
-> +KBUILD_CFLAGS +=3D $(KBUILD_BASE_ISA)
->
->  KBUILD_AFLAGS +=3D -march=3D$(riscv-march-y)
->
-> diff --git a/arch/riscv/include/asm/assembler.h b/arch/riscv/include/asm/=
-assembler.h
-> index 44b1457d3e95..a058ea5e9c58 100644
-> --- a/arch/riscv/include/asm/assembler.h
-> +++ b/arch/riscv/include/asm/assembler.h
-> @@ -80,3 +80,47 @@
->         .endm
->
->  #endif /* __ASM_ASSEMBLER_H */
-> +
-> +#if defined(CONFIG_RISCV_USER_CFI) && (__riscv_xlen =3D=3D 64)
-> +.macro vdso_lpad
-> +lpad 0
-> +.endm
-> +#else
-> +.macro vdso_lpad
-> +.endm
-> +#endif
-> +
-> +/*
-> + * This macro emits a program property note section identifying
-> + * architecture features which require special handling, mainly for
-> + * use in assembly files included in the VDSO.
-> + */
-> +#define NT_GNU_PROPERTY_TYPE_0  5
-> +#define GNU_PROPERTY_RISCV_FEATURE_1_AND 0xc0000000
-> +
-> +#define GNU_PROPERTY_RISCV_FEATURE_1_ZICFILP      (1U << 0)
-> +#define GNU_PROPERTY_RISCV_FEATURE_1_ZICFISS      (1U << 1)
-> +
-> +#if defined(CONFIG_RISCV_USER_CFI) && (__riscv_xlen =3D=3D 64)
-> +#define GNU_PROPERTY_RISCV_FEATURE_1_DEFAULT \
-> +       (GNU_PROPERTY_RISCV_FEATURE_1_ZICFILP)
-> +#endif
-> +
-> +#ifdef GNU_PROPERTY_RISCV_FEATURE_1_DEFAULT
-> +.macro emit_riscv_feature_1_and, feat =3D GNU_PROPERTY_RISCV_FEATURE_1_D=
-EFAULT
-> +       .pushsection .note.gnu.property, "a"
-> +       .p2align        3
-> +       .word           4
-> +       .word           16
-> +       .word           NT_GNU_PROPERTY_TYPE_0
-> +       .asciz          "GNU"
-> +       .word           GNU_PROPERTY_RISCV_FEATURE_1_AND
-> +       .word           4
-> +       .word           \feat
-> +       .word           0
-> +       .popsection
-> +.endm
-> +#else
-> +.macro emit_riscv_feature_1_and, feat =3D 0
-> +.endm
-> +#endif
-> diff --git a/arch/riscv/kernel/vdso/Makefile b/arch/riscv/kernel/vdso/Mak=
-efile
-> index ad73607abc28..441c5431d27e 100644
-> --- a/arch/riscv/kernel/vdso/Makefile
-> +++ b/arch/riscv/kernel/vdso/Makefile
-> @@ -13,12 +13,18 @@ vdso-syms +=3D flush_icache
->  vdso-syms +=3D hwprobe
->  vdso-syms +=3D sys_hwprobe
->
-> +ifdef CONFIG_RISCV_USER_CFI
-> +LPAD_MARCH =3D _zicfilp_zicfiss -fcf-protection=3Dfull
 
-Hi Deepak,
-I guess we only want to generate landing pad instructions in vdso, if
-so, the -fcf-protection should be set to branch instead of full.
-(i.e., -fcf-protection=3Dbranch).
+Not sure if that is really required. If UFFDIO_API failed after 
+__NR_userfaultfd worked something unexpected is happening.
 
-> +endif
-> +
->  # Files to link into the vdso
->  obj-vdso =3D $(patsubst %, %.o, $(vdso-syms)) note.o
->
->  ccflags-y :=3D -fno-stack-protector
->  ccflags-y +=3D -DDISABLE_BRANCH_PROFILING
->  ccflags-y +=3D -fno-builtin
-> +ccflags-y +=3D $(KBUILD_BASE_ISA)$(LPAD_MARCH)
-> +asflags-y +=3D $(KBUILD_BASE_ISA)$(LPAD_MARCH)
->
->  ifneq ($(c-gettimeofday-y),)
->    CFLAGS_vgettimeofday.o +=3D -fPIC -include $(c-gettimeofday-y)
-> diff --git a/arch/riscv/kernel/vdso/flush_icache.S b/arch/riscv/kernel/vd=
-so/flush_icache.S
-> index 8f884227e8bc..e4c56970905e 100644
-> --- a/arch/riscv/kernel/vdso/flush_icache.S
-> +++ b/arch/riscv/kernel/vdso/flush_icache.S
-> @@ -5,11 +5,13 @@
->
->  #include <linux/linkage.h>
->  #include <asm/unistd.h>
-> +#include <asm/assembler.h>
->
->         .text
->  /* int __vdso_flush_icache(void *start, void *end, unsigned long flags);=
- */
->  SYM_FUNC_START(__vdso_flush_icache)
->         .cfi_startproc
-> +       vdso_lpad
->  #ifdef CONFIG_SMP
->         li a7, __NR_riscv_flush_icache
->         ecall
-> @@ -20,3 +22,5 @@ SYM_FUNC_START(__vdso_flush_icache)
->         ret
->         .cfi_endproc
->  SYM_FUNC_END(__vdso_flush_icache)
-> +
-> +emit_riscv_feature_1_and
-> diff --git a/arch/riscv/kernel/vdso/getcpu.S b/arch/riscv/kernel/vdso/get=
-cpu.S
-> index 9c1bd531907f..5c1ecc4e1465 100644
-> --- a/arch/riscv/kernel/vdso/getcpu.S
-> +++ b/arch/riscv/kernel/vdso/getcpu.S
-> @@ -5,14 +5,18 @@
->
->  #include <linux/linkage.h>
->  #include <asm/unistd.h>
-> +#include <asm/assembler.h>
->
->         .text
->  /* int __vdso_getcpu(unsigned *cpu, unsigned *node, void *unused); */
->  SYM_FUNC_START(__vdso_getcpu)
->         .cfi_startproc
-> +       vdso_lpad
->         /* For now, just do the syscall. */
->         li a7, __NR_getcpu
->         ecall
->         ret
->         .cfi_endproc
->  SYM_FUNC_END(__vdso_getcpu)
-> +
-> +emit_riscv_feature_1_and
-> diff --git a/arch/riscv/kernel/vdso/rt_sigreturn.S b/arch/riscv/kernel/vd=
-so/rt_sigreturn.S
-> index 3dc022aa8931..e82987dc3739 100644
-> --- a/arch/riscv/kernel/vdso/rt_sigreturn.S
-> +++ b/arch/riscv/kernel/vdso/rt_sigreturn.S
-> @@ -5,12 +5,16 @@
->
->  #include <linux/linkage.h>
->  #include <asm/unistd.h>
-> +#include <asm/assembler.h>
->
->         .text
->  SYM_FUNC_START(__vdso_rt_sigreturn)
->         .cfi_startproc
->         .cfi_signal_frame
-> +       vdso_lpad
->         li a7, __NR_rt_sigreturn
->         ecall
->         .cfi_endproc
->  SYM_FUNC_END(__vdso_rt_sigreturn)
-> +
-> +emit_riscv_feature_1_and
-> diff --git a/arch/riscv/kernel/vdso/sys_hwprobe.S b/arch/riscv/kernel/vds=
-o/sys_hwprobe.S
-> index 77e57f830521..f1694451a60c 100644
-> --- a/arch/riscv/kernel/vdso/sys_hwprobe.S
-> +++ b/arch/riscv/kernel/vdso/sys_hwprobe.S
-> @@ -3,13 +3,17 @@
->
->  #include <linux/linkage.h>
->  #include <asm/unistd.h>
-> +#include <asm/assembler.h>
->
->  .text
->  SYM_FUNC_START(riscv_hwprobe)
->         .cfi_startproc
-> +       vdso_lpad
->         li a7, __NR_riscv_hwprobe
->         ecall
->         ret
->
->         .cfi_endproc
->  SYM_FUNC_END(riscv_hwprobe)
-> +
-> +emit_riscv_feature_1_and
->
-> --
-> 2.43.0
->
+>   		goto close_uffd;
+>   	}
+>   	if (!(uffdio_api.features & UFFD_FEATURE_PAGEFAULT_FLAG_WP)) {
+> @@ -403,6 +407,26 @@ static void test_unmerge_uffd_wp(void)
+>   		goto close_uffd;
+>   	}
+>   
+> +	/*
+> +	 * UFFDIO_API must only be called once to enable features.
+> +	 * So we close the old userfaultfd and create a new one to
+> +	 * actually enable UFFD_FEATURE_PAGEFAULT_FLAG_WP.
+> +	 */
+> +	close(uffd);
+
+Is that actually required?
+
+The man page explicitly documents:
+
+"       EINVAL A  previous  UFFDIO_API  call already enabled one or more 
+features for this userfaultfd.  Calling UFF‐
+               DIO_API twice, the first time with no features set, is 
+explicitly allowed as per the two-step  feature
+               detection handshake.
+"
+
+So if that doesn't work, something might be broken.
+
+
+-- 
+Cheers,
+
+David / dhildenb
+
 
