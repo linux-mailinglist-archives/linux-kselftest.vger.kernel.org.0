@@ -1,115 +1,130 @@
-Return-Path: <linux-kselftest+bounces-35677-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35678-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6750DAE6006
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 10:56:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FE3FAE62D2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 12:47:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E17BD4C02C2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 08:56:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0477017BA75
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 10:47:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE40E279DAA;
-	Tue, 24 Jun 2025 08:56:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CED51285CAC;
+	Tue, 24 Jun 2025 10:47:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E8beRxSP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B7D32798E5;
-	Tue, 24 Jun 2025 08:56:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.154.21.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6326A283CA0;
+	Tue, 24 Jun 2025 10:47:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750755383; cv=none; b=HysM0D0LCfH0/P83ayyhs3/7C4CfsScVIMlx3yZhUPN8pV/e0s/7nsjvRVPyFy5HJx1N5X52p6v/4+ReVXdVoYSETKC0qGxvCVTO3SCFTQLGuvZZJdo1GW13+GXOT6bxCnzhnUYTmdinCY4INc0D4/XhFpSrsHHBKV6d4qhNoZA=
+	t=1750762032; cv=none; b=sn02BOuYrpMiRp4fNaFeT0lN875H8sM9bLjzkMIe9bkqUJSYyDDrsxsygNBRrcdAk0j/8gmc9a08WtqEcaaGiFNFSDrclH3BrA3cbUq4amEoyz6UJMotuwdBOgDiCY1FJWmnh45m8KapKMuZy2Zxl1RVIuPbknzY3pf5JTVMqzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750755383; c=relaxed/simple;
-	bh=4/2mDbpEcmUAamYK6r1mQJlE6J3XAy0ImGOMNDLNOL4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=E+jXX/NqOCghPz+bbWatCbYL0JQokLrlRCduKMS4+n8F5h/gBoqFb8Zo08cL/CzzXyhwyLg66G4xAM7vOtxeDFJHA24h5K5/Rg6czVrKvl3ZGMTjpsjxYtYBomH1ijy2SSeNuvCcM49ZBhY/rU22ZB3udVLmNuiFkIU4JuoFt0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru; spf=pass smtp.mailfrom=omp.ru; arc=none smtp.client-ip=90.154.21.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=omp.ru
-Received: from [192.168.2.102] (213.87.157.108) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1258.12; Tue, 24 Jun
- 2025 11:56:15 +0300
-Message-ID: <af7b93bf-6f9c-4d4b-85fd-ccf93769d346@omp.ru>
-Date: Tue, 24 Jun 2025 11:56:14 +0300
+	s=arc-20240116; t=1750762032; c=relaxed/simple;
+	bh=q9YNLRyxz8U7WyFP8P37wvG+tQymx7Vu2sHvl8qoV8A=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=PO+4GxrBcy4eo0Uhoj9zvB9vltYbUH4SWVpv8S6TFUaQi9rBauhOgtw0KBPX7qQfOA7hF0t5HL2P9SulQ8sg7Y3b82dSHO9hLEiV6P0jPLnSsO9V++xLSOfxINFuTU5FMFcx8w0a9Sq+2wnGzDSdo+ShJf6FDgRVUqvYwxXDZvI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E8beRxSP; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-234bfe37cccso3195515ad.0;
+        Tue, 24 Jun 2025 03:47:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750762030; x=1751366830; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q9YNLRyxz8U7WyFP8P37wvG+tQymx7Vu2sHvl8qoV8A=;
+        b=E8beRxSPQ6d2P9yLyUkbMginVI2cNla0l72mrBuipYASdmVRhYAar5NyyFi4xm1+BY
+         EI37OHtbXETIa7oQ8PK1at4mDQPjlWFAL3/a7TqlyAn6Xz2uSv1RQD8/o+KJt3Iilbix
+         Q4DVyKdaZTBmQiAxC3fj0J4aME5jmTbxrGb72OXyIIcDx2GrljvT3yMq1arNhZQsFh9K
+         jadIUczfObseyY0ggoKiBqd6OGMpOE2ilnDmCufoG0sj/ayZ0RJYPZu5tIJ152Xv9El8
+         1dHD+QAWenhnZL10PsMX1sNIwwL1yKwivXE+Cp08ZZljSgnkTzDkkuZ1pa8qHnKl9nCZ
+         OmtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750762030; x=1751366830;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=q9YNLRyxz8U7WyFP8P37wvG+tQymx7Vu2sHvl8qoV8A=;
+        b=fGe/QbB9srdX9D0RG2XoNZb0+j9XfJN21TDqDvzitd/vYf0CHR9z/XOiqlV1aoSjRx
+         KPVU84PgF7MDNJPKZ2b853mfU25GPooGl9+xeDwCxOv1WODkIa13jO4t7O7+wrE5dqsP
+         7HHz6pMV9c8sgdBufy21/J+yDG3qzskoVFTL/NaHEmFEdyrHhG8kLknLl1my3nLfBaxo
+         XfbPNTjSUNaZwkAqbVMnY/u2frRUbcxERZbIz1tjFO8ibDyaP8adpuCDHYD1OT1zQ+pu
+         jwegR9L135WA4cn9gsOf3KJyaKHcRS8ziTEOset93wGzLWhTeR11dWjtgQJSfH8rwLOo
+         fLjA==
+X-Forwarded-Encrypted: i=1; AJvYcCUOFjFbyH5+B4bUK/Qzf9t+e9DkURSp2vxX79zjWOtteSrxJQylimS/3rA7pXm7mnL9AsG5fttl2m61Pv4=@vger.kernel.org, AJvYcCUiW+Ah6bkkjsbXCbG33VnYDMFb2z9fCiIsDrtIddv/l4hC+Fjdi/dyKl3cKmwKTR9L67a/pUTKbJaasoMaDCWl@vger.kernel.org
+X-Gm-Message-State: AOJu0YwwyG+U7wR9qQcUZcecazrvtwBcD4F6KDsznKiQftEUHw1A01gQ
+	+IUdz6EzINkwiaML1s7rTGQzMtD+aScOaqPbYx+kkzq0jfae2iv8NApc
+X-Gm-Gg: ASbGncvSJ8OS3u7+yK4gIUNqvT8T+qcwhsU+PEz5nNfE8BHYvnP8k4oJzQ34O0NX2Oi
+	ezhcQ94xpHS0KhGvrDqYVxw+sfbGdWZAV3KtbGGilqJhldhHoJSuB7RdCqMYhDt+nB90EhWDlJr
+	gsG0bULzRdchkarSSzeWIFIZwc1bwBIkGMdEx3fg1NecCr3YEAzeIC0UAjG534ykkZLey+FchFa
+	SXlw5X1GEZertsW8bcKkYR7Z04QZadkFjl0HAh7UuZLU79vjPuYofjurJFI6RBbQgnsOLc72wi1
+	TGdwW22BmzyVY/VnpPWuKWou2UJWaV5D9S9VObkUdcumFN/yb1hEs5pV3VxqkHbwLBUGYNtPgx7
+	NJzoN5A==
+X-Google-Smtp-Source: AGHT+IEAuZlnLUM/Oq3ydavrFM6HAFPj4rQDIaVo8ArRUvugCEeLHAbS8fik1d5nYG9tGqisHGfz/g==
+X-Received: by 2002:a17:902:e54a:b0:234:f6ba:e681 with SMTP id d9443c01a7336-237d97628bfmr283468345ad.5.1750762030536;
+        Tue, 24 Jun 2025 03:47:10 -0700 (PDT)
+Received: from DESKTOP-GIED850.localdomain ([111.202.167.6])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-237d860fb58sm102904785ad.99.2025.06.24.03.47.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jun 2025 03:47:10 -0700 (PDT)
+From: wang lian <lianux.mm@gmail.com>
+To: lorenzo.stoakes@oracle.com
+Cc: Liam.Howlett@oracle.com,
+	akpm@linux-foundation.org,
+	brauner@kernel.org,
+	david@redhat.com,
+	gkwang@linx-info.com,
+	jannh@google.com,
+	lianux.mm@gmail.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	p1ucky0923@gmail.com,
+	ryncsn@gmail.com,
+	shuah@kernel.org,
+	sj@kernel.org,
+	vbabka@suse.cz,
+	zijing.zhang@proton.me
+Subject: Re: [PATCH] selftests: add basic test for MADV_POPULATE_(READ|WRITE)
+Date: Tue, 24 Jun 2025 18:46:54 +0800
+Message-ID: <20250624104654.4418-1-lianux.mm@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <4af59ef8-bbea-48f7-a207-8a92284fc34d@lucifer.local>
+References: <4af59ef8-bbea-48f7-a207-8a92284fc34d@lucifer.local>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/3] selftests/nolibc: use file driver for QEMU serial
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, Yoshinori Sato
-	<ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, John Paul Adrian
- Glaubitz <glaubitz@physik.fu-berlin.de>, Willy Tarreau <w@1wt.eu>, Shuah Khan
-	<shuah@kernel.org>
-CC: <linux-sh@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-References: <20250623-nolibc-sh-v2-0-0f5b4b303025@weissschuh.net>
- <20250623-nolibc-sh-v2-2-0f5b4b303025@weissschuh.net>
-Content-Language: en-US
-From: Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-In-Reply-To: <20250623-nolibc-sh-v2-2-0f5b4b303025@weissschuh.net>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 6.1.1, Database issued on: 06/24/2025 08:35:40
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 0
-X-KSE-AntiSpam-Info: Lua profiles 194289 [Jun 24 2025]
-X-KSE-AntiSpam-Info: Version: 6.1.1.11
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 62 0.3.62
- e2af3448995f5f8a7fe71abf21bb23519d0f38c3
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_uf_ne_domains}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info:
-	omp.ru:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
-X-KSE-AntiSpam-Info: {Tracking_ip_hunter}
-X-KSE-AntiSpam-Info: FromAlignment: s
-X-KSE-AntiSpam-Info: ApMailHostAddress: 213.87.157.108
-X-KSE-AntiSpam-Info: Rate: 0
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 06/24/2025 08:37:00
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 6/24/2025 7:08:00 AM
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
 
-On 6/24/25 12:15 AM, Thomas Weißschuh wrote:
+On Mon, Jun 24, 2025 at 00:00:00 +0000, Lorenzo Stoakes wrote:
+> Sorry if it seemed harsh, I appreciate the first patch can be difficult
+> (I still remember mine!) but hopefully it's clear the focus is on
+> getting things right technically and this is all :)
+>
+> Overall I think something more like a generalised test of
+> process_madvise() behaviour would be most valuable, as David suggested?
 
-> For the test implementation of the SuperH architecture a second serial
-> serial port needs to be used. Unfortunately the currently used 'stdio'
+Thank you for your helpful and constructive feedback.
 
-   "Serial" typed twice? :-)
+I understand that getting things right technically is critical, and I
+really appreciate your guidance and encouragement as I work on my
+first patch.
 
-> driver does not support multiple serial ports at the same time.
-> 
-> Switch to the 'file' driver which does support multiple ports and is
-> sufficient for the nolibc-test usecase.
-> 
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> Acked-by: Willy Tarreau <w@1wt.eu>
+I will revise the patch based on the suggestion to generalize the test
+for `process_madvise()` behavior, as David proposed.
 
-[...]
+Thanks again to everyone for the insightful comments and support!
 
-MBR, Sergey
+Best regards,
+wang lian
 
 
