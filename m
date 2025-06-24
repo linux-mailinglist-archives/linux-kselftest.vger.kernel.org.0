@@ -1,130 +1,142 @@
-Return-Path: <linux-kselftest+bounces-35678-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35679-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FE3FAE62D2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 12:47:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABE32AE632D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 13:02:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0477017BA75
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 10:47:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2BEC13AF92D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 11:01:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CED51285CAC;
-	Tue, 24 Jun 2025 10:47:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A287E2777F1;
+	Tue, 24 Jun 2025 11:01:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E8beRxSP"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TSnSoQAm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6326A283CA0;
-	Tue, 24 Jun 2025 10:47:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 277F0221F17
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Jun 2025 11:01:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750762032; cv=none; b=sn02BOuYrpMiRp4fNaFeT0lN875H8sM9bLjzkMIe9bkqUJSYyDDrsxsygNBRrcdAk0j/8gmc9a08WtqEcaaGiFNFSDrclH3BrA3cbUq4amEoyz6UJMotuwdBOgDiCY1FJWmnh45m8KapKMuZy2Zxl1RVIuPbknzY3pf5JTVMqzg=
+	t=1750762917; cv=none; b=FEfzG2fooRcTw6p5JxGZssCa45xnoPahHHPdb7ZXd+/KYyb2GPyvSTUUeywZFRFjz72Kp2xBARXsrENrN/BvgXaYqoc7aey8lC9lPpjBF8a6jjC43xGpvU+Oz/06wWB5GC4tBtCTXVWLrRiyyKHPu1v0eeBt2r6PKcxZKVS2/Ic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750762032; c=relaxed/simple;
-	bh=q9YNLRyxz8U7WyFP8P37wvG+tQymx7Vu2sHvl8qoV8A=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PO+4GxrBcy4eo0Uhoj9zvB9vltYbUH4SWVpv8S6TFUaQi9rBauhOgtw0KBPX7qQfOA7hF0t5HL2P9SulQ8sg7Y3b82dSHO9hLEiV6P0jPLnSsO9V++xLSOfxINFuTU5FMFcx8w0a9Sq+2wnGzDSdo+ShJf6FDgRVUqvYwxXDZvI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E8beRxSP; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-234bfe37cccso3195515ad.0;
-        Tue, 24 Jun 2025 03:47:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750762030; x=1751366830; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=q9YNLRyxz8U7WyFP8P37wvG+tQymx7Vu2sHvl8qoV8A=;
-        b=E8beRxSPQ6d2P9yLyUkbMginVI2cNla0l72mrBuipYASdmVRhYAar5NyyFi4xm1+BY
-         EI37OHtbXETIa7oQ8PK1at4mDQPjlWFAL3/a7TqlyAn6Xz2uSv1RQD8/o+KJt3Iilbix
-         Q4DVyKdaZTBmQiAxC3fj0J4aME5jmTbxrGb72OXyIIcDx2GrljvT3yMq1arNhZQsFh9K
-         jadIUczfObseyY0ggoKiBqd6OGMpOE2ilnDmCufoG0sj/ayZ0RJYPZu5tIJ152Xv9El8
-         1dHD+QAWenhnZL10PsMX1sNIwwL1yKwivXE+Cp08ZZljSgnkTzDkkuZ1pa8qHnKl9nCZ
-         OmtQ==
+	s=arc-20240116; t=1750762917; c=relaxed/simple;
+	bh=GI7a4iR+LCdE9iTrNoclJaOJLfBAij5Trf5KhJb+XAY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=P4nnZ1IsLEqGB4ayC8xzKXap0Ai6snAnc6GH59qHu5VgrCuOXqnkAxbi/RrijWYucEgA0MWCvXopunRbI7Swgz+BJMmtURjPN+z5VEecNi2c9icrN73FcHA4ULwssz0cE3CXMyu5dses8tAnxcoeAqWJT0gZAJBS7MScs5HBj2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TSnSoQAm; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1750762915;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5WrfMksOxB0G9GSe2G8W4zx4JfvBQpVqOPDOrmuF3RE=;
+	b=TSnSoQAmtMcK/0B9MzYJMrf7TR7PNW9ghgceq6NsM0+idMR3KdWp2pzwyyxFF/1F8BzyF5
+	QBb8meqOgx3UiT7kIRE3FDX4RHodEE19PscL4VgIdmIzd01nrZtZa+CmhZm9Zdg8nIUGcx
+	4JFKai45G3NUl7MKWha1LRDMiSz0tyI=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-601-KBX4wGAZOKOfkxUCpImQwA-1; Tue, 24 Jun 2025 07:01:53 -0400
+X-MC-Unique: KBX4wGAZOKOfkxUCpImQwA-1
+X-Mimecast-MFC-AGG-ID: KBX4wGAZOKOfkxUCpImQwA_1750762913
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-3a4f6ff23ccso207041f8f.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Jun 2025 04:01:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750762030; x=1751366830;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=q9YNLRyxz8U7WyFP8P37wvG+tQymx7Vu2sHvl8qoV8A=;
-        b=fGe/QbB9srdX9D0RG2XoNZb0+j9XfJN21TDqDvzitd/vYf0CHR9z/XOiqlV1aoSjRx
-         KPVU84PgF7MDNJPKZ2b853mfU25GPooGl9+xeDwCxOv1WODkIa13jO4t7O7+wrE5dqsP
-         7HHz6pMV9c8sgdBufy21/J+yDG3qzskoVFTL/NaHEmFEdyrHhG8kLknLl1my3nLfBaxo
-         XfbPNTjSUNaZwkAqbVMnY/u2frRUbcxERZbIz1tjFO8ibDyaP8adpuCDHYD1OT1zQ+pu
-         jwegR9L135WA4cn9gsOf3KJyaKHcRS8ziTEOset93wGzLWhTeR11dWjtgQJSfH8rwLOo
-         fLjA==
-X-Forwarded-Encrypted: i=1; AJvYcCUOFjFbyH5+B4bUK/Qzf9t+e9DkURSp2vxX79zjWOtteSrxJQylimS/3rA7pXm7mnL9AsG5fttl2m61Pv4=@vger.kernel.org, AJvYcCUiW+Ah6bkkjsbXCbG33VnYDMFb2z9fCiIsDrtIddv/l4hC+Fjdi/dyKl3cKmwKTR9L67a/pUTKbJaasoMaDCWl@vger.kernel.org
-X-Gm-Message-State: AOJu0YwwyG+U7wR9qQcUZcecazrvtwBcD4F6KDsznKiQftEUHw1A01gQ
-	+IUdz6EzINkwiaML1s7rTGQzMtD+aScOaqPbYx+kkzq0jfae2iv8NApc
-X-Gm-Gg: ASbGncvSJ8OS3u7+yK4gIUNqvT8T+qcwhsU+PEz5nNfE8BHYvnP8k4oJzQ34O0NX2Oi
-	ezhcQ94xpHS0KhGvrDqYVxw+sfbGdWZAV3KtbGGilqJhldhHoJSuB7RdCqMYhDt+nB90EhWDlJr
-	gsG0bULzRdchkarSSzeWIFIZwc1bwBIkGMdEx3fg1NecCr3YEAzeIC0UAjG534ykkZLey+FchFa
-	SXlw5X1GEZertsW8bcKkYR7Z04QZadkFjl0HAh7UuZLU79vjPuYofjurJFI6RBbQgnsOLc72wi1
-	TGdwW22BmzyVY/VnpPWuKWou2UJWaV5D9S9VObkUdcumFN/yb1hEs5pV3VxqkHbwLBUGYNtPgx7
-	NJzoN5A==
-X-Google-Smtp-Source: AGHT+IEAuZlnLUM/Oq3ydavrFM6HAFPj4rQDIaVo8ArRUvugCEeLHAbS8fik1d5nYG9tGqisHGfz/g==
-X-Received: by 2002:a17:902:e54a:b0:234:f6ba:e681 with SMTP id d9443c01a7336-237d97628bfmr283468345ad.5.1750762030536;
-        Tue, 24 Jun 2025 03:47:10 -0700 (PDT)
-Received: from DESKTOP-GIED850.localdomain ([111.202.167.6])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-237d860fb58sm102904785ad.99.2025.06.24.03.47.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jun 2025 03:47:10 -0700 (PDT)
-From: wang lian <lianux.mm@gmail.com>
-To: lorenzo.stoakes@oracle.com
-Cc: Liam.Howlett@oracle.com,
-	akpm@linux-foundation.org,
-	brauner@kernel.org,
-	david@redhat.com,
-	gkwang@linx-info.com,
-	jannh@google.com,
-	lianux.mm@gmail.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	p1ucky0923@gmail.com,
-	ryncsn@gmail.com,
-	shuah@kernel.org,
-	sj@kernel.org,
-	vbabka@suse.cz,
-	zijing.zhang@proton.me
-Subject: Re: [PATCH] selftests: add basic test for MADV_POPULATE_(READ|WRITE)
-Date: Tue, 24 Jun 2025 18:46:54 +0800
-Message-ID: <20250624104654.4418-1-lianux.mm@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <4af59ef8-bbea-48f7-a207-8a92284fc34d@lucifer.local>
-References: <4af59ef8-bbea-48f7-a207-8a92284fc34d@lucifer.local>
+        d=1e100.net; s=20230601; t=1750762913; x=1751367713;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5WrfMksOxB0G9GSe2G8W4zx4JfvBQpVqOPDOrmuF3RE=;
+        b=N3SVo3BQl6h15B5AbyOHdqANDeUWvan9Pt8WIqqSEvf7gr/Zc1+gAQzh9oymxB3PxI
+         TYCtaZKvT5mHgX2X9cNZ5sB+FMxDqyZzmRTCQ19/vAQR1ORF4fmo6zJNGj46CQ7Q2qiL
+         NzId4ldDm+qP3CXYAdOyjKDOxZ9mTsNRXE1G/AulnGLGVvGTnYETFFEBtdbuD6n+gfqA
+         QmBmSGbgflVgCmSFEcXZBL0bBUaVqescY4tLfilVZct0P0RHSlqYAYYpPp8a3i3WGa5y
+         Ow5Uy1FWgzfj1B5c62OFC6+8u6wdbIaEudzmm1tmGmRsj1ZtZ8sUyFPFTiw7Qt0JV8bf
+         Dtsg==
+X-Forwarded-Encrypted: i=1; AJvYcCUbm7ioeq0npuauSD6KUDEzo4PFE7PYrPfxCpu0Fa1rvYqpVsLJ6UcXB/w2iu3a4OGjZzhncP9sEr/vbZumqsg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwLFDBZmC8ScVAWhb3duWSglmpGkHIOuYaxKHRPRxyqepANMI5l
+	nM8WZtXYtMphzWZEMppxQbd//ro9lEI/46Wnh32Kgxx1Dqv6g/ZaFxvZkHljvbEEcad5OhbJXNu
+	XYOY/l2XUzgUv/YknSUrFe5a76awZGWyV6wUXIe/vR+04O38KiSzmSGGTpiS5HEGIFYCHAQ==
+X-Gm-Gg: ASbGncv1pclztWbT7h36RVhJZwdOYaqLGlO9Azv5hIhCTWGN+RhAYbUJaAj7AjTsccp
+	h4lNRknLQIFzIVtcueuX7i/ojfMm0wbM1D8HKOoI+WFJQ9gooNXsTkAzYCyGoivbUjJQvU9JsrT
+	K7Y72/lf1CnOqhSSMuiVO7oc7AmuDqBgCCGMH//bPaz9YK3hDbKTbAhcFhQJ2MaMcu8f4VEUGAo
+	x37YscRKQpcjoArSBPLoZOXyKy00AP+wuxp1X8Ospxo0kMjlQ1SZspTZcr+S9FLkNnM8qXafCrk
+	wIxOt9F8EXceyVoQxdi9BifldHPBHw==
+X-Received: by 2002:a5d:5f82:0:b0:3a4:f7e6:2b29 with SMTP id ffacd0b85a97d-3a6d12bb560mr13887373f8f.5.1750762912305;
+        Tue, 24 Jun 2025 04:01:52 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGbc3G2xwmW0Oe4vryhFRrLeFBAo0H3LJ7tnjE/h1ipMaX9PHwE4uPVzYLosVI0SGtoOOvt4A==
+X-Received: by 2002:a5d:5f82:0:b0:3a4:f7e6:2b29 with SMTP id ffacd0b85a97d-3a6d12bb560mr13887269f8f.5.1750762911445;
+        Tue, 24 Jun 2025 04:01:51 -0700 (PDT)
+Received: from ?IPV6:2a0d:3344:2445:d510::f39? ([2a0d:3344:2445:d510::f39])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a6e805174fsm1665923f8f.6.2025.06.24.04.01.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Jun 2025 04:01:50 -0700 (PDT)
+Message-ID: <926fd938-700e-45a6-928a-34a81d0c231d@redhat.com>
+Date: Tue, 24 Jun 2025 13:01:48 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v20 net-next 1/6] sched: Struct definition and parsing of
+ dualpi2 qdisc
+To: chia-yu.chang@nokia-bell-labs.com, alok.a.tiwari@oracle.com,
+ pctammela@mojatatu.com, horms@kernel.org, donald.hunter@gmail.com,
+ xandfury@gmail.com, netdev@vger.kernel.org, dave.taht@gmail.com,
+ jhs@mojatatu.com, kuba@kernel.org, stephen@networkplumber.org,
+ xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net,
+ edumazet@google.com, andrew+netdev@lunn.ch, ast@fiberby.net,
+ liuhangbin@gmail.com, shuah@kernel.org, linux-kselftest@vger.kernel.org,
+ ij@kernel.org, ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com,
+ g.white@cablelabs.com, ingemar.s.johansson@ericsson.com,
+ mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at,
+ Jason_Livingood@comcast.com, vidhi_goel@apple.com
+References: <20250621193331.16421-1-chia-yu.chang@nokia-bell-labs.com>
+ <20250621193331.16421-2-chia-yu.chang@nokia-bell-labs.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20250621193331.16421-2-chia-yu.chang@nokia-bell-labs.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Jun 24, 2025 at 00:00:00 +0000, Lorenzo Stoakes wrote:
-> Sorry if it seemed harsh, I appreciate the first patch can be difficult
-> (I still remember mine!) but hopefully it's clear the focus is on
-> getting things right technically and this is all :)
->
-> Overall I think something more like a generalised test of
-> process_madvise() behaviour would be most valuable, as David suggested?
+On 6/21/25 9:33 PM, chia-yu.chang@nokia-bell-labs.com wrote:
+> +static u32 get_memory_limit(struct Qdisc *sch, u32 limit)
+> +{
+> +	/* Apply rule of thumb, i.e., doubling the packet length,
+> +	 * to further include per packet overhead in memory_limit.
+> +	 */
+> +	u64 memlim = mul_u32_u32(limit, 2 * psched_mtu(qdisc_dev(sch)));
+> +
+> +	if (upper_32_bits(memlim))
+> +		return U32_MAX;
+> +	else
+> +		return lower_32_bits(memlim);
+> +}
+> +
+> +static u32 convert_us_to_nsec(u32 us)
+> +{
+> +	u64 ns = mul_u32_u32(us, NSEC_PER_USEC);
+> +
+> +	if (upper_32_bits(ns))
+> +		return U32_MAX;
+> +	else
+> +		return lower_32_bits(ns);
+> +}
 
-Thank you for your helpful and constructive feedback.
+Minor nit not intended to block this series. If you have to repost for
+other reasons, please consider dropping the 'else' statement;  the
+alternative is IMHO more readable.
 
-I understand that getting things right technically is critical, and I
-really appreciate your guidance and encouragement as I work on my
-first patch.
-
-I will revise the patch based on the suggestion to generalize the test
-for `process_madvise()` behavior, as David proposed.
-
-Thanks again to everyone for the insightful comments and support!
-
-Best regards,
-wang lian
+/P
 
 
