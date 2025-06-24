@@ -1,151 +1,152 @@
-Return-Path: <linux-kselftest+bounces-35692-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35693-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F744AE68D3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 16:33:38 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3168FAE6A0C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 17:05:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BC6921C21B40
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 14:28:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 52F107B3AEB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jun 2025 15:02:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BF472D3202;
-	Tue, 24 Jun 2025 14:27:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A160A2D4B59;
+	Tue, 24 Jun 2025 15:03:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="f0eX3oQm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 454BF291C37;
-	Tue, 24 Jun 2025 14:27:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD1552D3A8C
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Jun 2025 15:03:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750775258; cv=none; b=UKLVwmIHBMFXBTCZGpSAXVyBRTvAI5kvra+YWN6bWtjee7/D3vOb1VorcIG7yEM6bkKJgR4c32Q/kr6zN+Kkjp74PXEKmdFKvQ0MubG9yvAjVAqqA+Qb1eA2jlABFeif2nSvIY0CIK4za7YQTmqWaoKdc780LrlainnZ8NRduKI=
+	t=1750777435; cv=none; b=QgUllCsRc74IjK0IVEmU0/ILEhbAUq0Md7aHdOojp1sagWI4Cz8lXzBX/tUpAUJRj3jZUJKn9jR/ViMSOwBc0O7cHqHMLmmbsXxP2PB39NU7lUOk/sP+WIEy6blC3aeBYsUaK404M4/f3arJf11WvNrtqXm9ZF7FbsHuJ0HFfF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750775258; c=relaxed/simple;
-	bh=1szUNF6KnsTqMQCfgfpq3RpcrkDvF5/wYVTUYcZrL9k=;
+	s=arc-20240116; t=1750777435; c=relaxed/simple;
+	bh=jMqEhYynkcennr8wKmYeLHiF+FQLXfcZxEhCzpHjGlo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tBdCq/PP2FXVa2QM/I241OmWVxVLdGzTnHlxe+h1/mTqIh2lT9tNJrZNvLk9iYex9llmznvyyn+HsuVJTVdqfuoRjFO/ivDO1ddeYxMemekkM+0V0kuBDDEkyy17L8YZEZBQ9p3EinCGjeBdUke4zS2um8pKTDCTGrELdTaALMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-ae0a420431bso212275566b.2;
-        Tue, 24 Jun 2025 07:27:34 -0700 (PDT)
+	 Content-Type:Content-Disposition:In-Reply-To; b=LsyQJ2cnhId3WhHGfjTEGXIJewtHAX1NBtdptlJp4aJQaMpLKnYObvl3BR1Jl4S5UsbylzekBpgJcb9qKPWp2TEYkiWqiXy8k322dL6UM2GzXMTqCdy3oEXRaICNXT2Lh9th7Qt+FXlKc/de2dJ1LqeymV8wdMEraZdWq8XnKGc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=f0eX3oQm; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1750777432;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=AxFy/UyM/AcfaqdQA8jEfmKS1INzzcTgEZ1ohuEg38M=;
+	b=f0eX3oQmF2Ju63tb1GA5G97H5aseefTznYhD+/r2/1UMcVCoBobZnDdf6qvDmZCqp3VsY/
+	rZXnSGQLUQ7w0WXFqTkY1AaJZsKxgwVk26sJ+ffoB0IyH/eunFwyoF5HJmfA0EPDWug4gd
+	1SZjzZCDHU869i9pzbcoE2UFUB0Q3Z8=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-313-0Dvf_VhoMsOK8Wo2dU2v1A-1; Tue, 24 Jun 2025 11:03:50 -0400
+X-MC-Unique: 0Dvf_VhoMsOK8Wo2dU2v1A-1
+X-Mimecast-MFC-AGG-ID: 0Dvf_VhoMsOK8Wo2dU2v1A_1750777430
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-7d09bc05b77so890740685a.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Jun 2025 08:03:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750775253; x=1751380053;
+        d=1e100.net; s=20230601; t=1750777430; x=1751382230;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CLCaCaOTb4cF+Wte6sm9P0O2OKEItr0RiopbN7xQeu0=;
-        b=gdCQEaLWtOmN56uvQgODWP0Kcx7lqdrYvP7Ua9vM9FSauHKSejcQIjNxq7y5xMr+dG
-         +LviM1N11ESJ30Knt8vNr+7dhR3bGgUNPosd0F0/RTZ7cpI23wBymOXGRUmXumNg1dAg
-         CjRWy8+bOuptFZMKvdsh0xrzII7d28EnPfKeezaJqSLD4JLQeNtx2obrBpa5N71TDtq0
-         JzEItEQNSHWeRkdFAH5Hxghk+aIPn3qc7SFncVgo4VVoo0ZZnw/An/wEfnp/hjq+rSZm
-         2rpnPg5TbbNfbWjJbGgsCfrAWeJw7o9Hz+YZO2mu4R8cjr3NvQQKHUleZSSh5o8mxfpQ
-         GUNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWKK1xfXsjRBXi+Zhk/g/INuNyyMkfkEfARTwq0Da214kfYT3ufdrtxA6asnVoOFaBNwDwwkrjd@vger.kernel.org, AJvYcCWUjelTT2kG4YB/AKqn9GdiSu3qfPgEUtDthSaGLMyrc9lYBvKh8B3SYRX6iG9ilCi/2Dpio2+HarCaigY=@vger.kernel.org, AJvYcCWeocTrfGIwPWA7uloJx5G2+LjDu/4k+8YYiz/Q6G0uDQU0i41UGuQOlIphN5FJDxsOQDb4UXkf6ocBA9nlPUA8@vger.kernel.org
-X-Gm-Message-State: AOJu0YyGes26eHmW9C/QvDtGsJlhnHL43yBhDLqWYNazC0ElIqzFTt3V
-	GyibmhRiCzEh8WSgK5PM5WohzD4OOv4QOuQKC55XZWRGpPTrxCY+UPpy
-X-Gm-Gg: ASbGncuw903eiWcJ7245WJPAgYCragmcu385LkQK29wilcQChc2Jqb4k47GKEt/7dpq
-	FMVefQr+mxV2FzR7r371MJl2gMIOZcU85fqZSySEyxwf3g4Qg3obagNP3u3m/9uFv2wCCrR5Ct6
-	RcT9VimYNyVVFlGSVWrZ9fUkfObYT168GVffrBKcMaUvSExGDNgxY5hfG1dS9wkccou1yoy+yq2
-	nAuy6+ceJgB8iE7QfEJCj30Cs8MltkkRiiFeGO5Mn650drgnoPMBdViqBTdy7PETWBEBUH2/fDP
-	jVpVo+QvOWO8aTtFB+KRlE+mw2B6/9a0iGmzr8GuPsLVvG5VkRXoyVqxLVY=
-X-Google-Smtp-Source: AGHT+IFILPyMtwDOx7dYBC+cw+ruDb8Y3KGn15RJ43QElepTSN4zsNDHc469pKVmkARFZbwmhHvr+g==
-X-Received: by 2002:a17:906:fd83:b0:ade:3b84:8ef6 with SMTP id a640c23a62f3a-ae057abdef2mr1619028966b.23.1750775253066;
-        Tue, 24 Jun 2025 07:27:33 -0700 (PDT)
-Received: from gmail.com ([2620:10d:c092:500::7:6c51])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae053e7f534sm878164866b.9.2025.06.24.07.27.32
+        bh=AxFy/UyM/AcfaqdQA8jEfmKS1INzzcTgEZ1ohuEg38M=;
+        b=BRgGotFVsz1NFGlFrRNKu+hmGkHtZCh5LlMbmF98THzHEMjEoL7H3WKSL8cdvaWHas
+         oaruiac4jWLddN3vIL3N2pePSinaA3knqvYpCQlJ+HVSeRQZRP/KUXWKMnCtx5GW+jiJ
+         RWIgwpxUQGGu6IxtXZ1pxfB2XoE7ELdU6Thx+EYTuFbkikIsMOa0v1gEN4QEfir+5JRg
+         O5NtAt6vxffLDGdnIRpFJWtn2Ps2L27RW3INkILRkRXJlLmd5vDCbfHH0hhoAWw5ZkZa
+         fEgUxZpo1vyG40/Fp3UIpsIfeDA1pqdvw2vKtf5U2aB4lpPGQOrsEe+wup1JMCVcpbKq
+         XQpg==
+X-Forwarded-Encrypted: i=1; AJvYcCWGD3EQgym247GT0VAgxXPoecSy4XjHtxcLO96I3ebrnzzBpxFZN4maIahJTGoOrM7ExyCbWf+quhRrqBubWoU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzlHj5WCCly5qc2gUWgk87HK0mAYizmJIfwHnrdxEBiErETUXbi
+	5wFo+b0ZRT349I83OIyiuoIBlw5lWBGv52cJlIwjajSzrr4a+BQANyBDGg/LON8rkLAP+wJ5JO9
+	qoafznxRcSwua+gDIHkq1dcnAQtodVyczz7ibLe87rEExvBcrPunIMjZEugahWnEkIwOgVg==
+X-Gm-Gg: ASbGnctKjaYJAh5eYfXqxuTQYBNPnaVJmvOh0j8V/g19SbIZQD6PUHhNE0P73cEPE/7
+	KDJBfoqNpjr/RHkHKUvQmWc9xdELf8I10xcwvWqSs+eCy7voEGhNF7ZRF0/JWs+/Tx1DLEcxIZV
+	xceVCNlyRlbb6LRuIXLQDKlgzRbDNShI+lWTlhAbs3t7TXBFp6y5pusRPC03rfIxOykVlehtjYj
+	cYfOrsS4a/87/9IveMhubi8rWk89mi1X3t4nNjaTjkBYpsPfOrQfGLXy4QKVti/mLWnb2Mudzzx
+	IdHf2GYoQ6XWQA==
+X-Received: by 2002:a05:620a:3726:b0:7c3:d7ef:f7f5 with SMTP id af79cd13be357-7d3f98e8ce4mr2496898785a.18.1750777425302;
+        Tue, 24 Jun 2025 08:03:45 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHxt6W2DfGa+HmFsUHcXkovy7hDYYpKWKE9TlINSHExnbk0f2RIUiJOZpDemdOGrRyZaI6fZA==
+X-Received: by 2002:a05:620a:3726:b0:7c3:d7ef:f7f5 with SMTP id af79cd13be357-7d3f98e8ce4mr2496847285a.18.1750777420052;
+        Tue, 24 Jun 2025 08:03:40 -0700 (PDT)
+Received: from x1.local ([85.131.185.92])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7d3f999a10fsm507225485a.23.2025.06.24.08.03.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jun 2025 07:27:32 -0700 (PDT)
-Date: Tue, 24 Jun 2025 15:27:27 +0100
-From: Breno Leitao <leitao@debian.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	gustavold@gmail.com
-Subject: Re: [PATCH net-next] selftests: net: add netpoll basic functionality
- test
-Message-ID: <aFq1z0BS6RCUCNwa@gmail.com>
-References: <20250620-netpoll_test-v1-1-5068832f72fc@debian.org>
- <20250623183006.7c1c0cfc@kernel.org>
+        Tue, 24 Jun 2025 08:03:39 -0700 (PDT)
+Date: Tue, 24 Jun 2025 11:03:36 -0400
+From: Peter Xu <peterx@redhat.com>
+To: David Hildenbrand <david@redhat.com>
+Cc: Nadav Amit <nadav.amit@gmail.com>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Li Wang <liwang@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linux-kselftest@vger.kernel.org,
+	"open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+	Aruna Ramakrishna <aruna.ramakrishna@oracle.com>,
+	Bagas Sanjaya <bagasdotme@gmail.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Keith Lucas <keith.lucas@oracle.com>,
+	Ryan Roberts <ryan.roberts@arm.com>, Shuah Khan <shuah@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>
+Subject: Re: [PATCH v2] selftests/mm: Fix UFFDIO_API usage with proper
+ two-step feature negotiation
+Message-ID: <aFq-SAFB3eWdwwwf@x1.local>
+References: <20250622081035.378164-1-liwang@redhat.com>
+ <20250624042411.395285-1-liwang@redhat.com>
+ <dfd7650d-1154-467d-ae70-c126610413f6@redhat.com>
+ <4fd18a1c-aba2-468a-881f-0507953f2904@redhat.com>
+ <611F9598-A1A4-47B6-B37E-09BF7B4D17D0@gmail.com>
+ <239f75e4-1868-4ac9-882f-664a8863b781@redhat.com>
+ <495dc88a-c0b2-4090-a89c-00f000b62a2f@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250623183006.7c1c0cfc@kernel.org>
+In-Reply-To: <495dc88a-c0b2-4090-a89c-00f000b62a2f@redhat.com>
 
-On Mon, Jun 23, 2025 at 06:30:06PM -0700, Jakub Kicinski wrote:
-> Could you turn this into a docstring?
-
-<snip>
-
-Sure, I will fix all of them except C0301, which is a error message
-string and I prefer not to truncate.
-
-> > +def set_single_rx_tx_queue(interface_name: str) -> None:
-> > +    """Set the number of RX and TX queues to 1 using ethtool"""
-> > +    try:
-> > +        # This don't need to be reverted, since interfaces will be deleted after test
-> > +        ethtool(f"-G {interface_name} rx 1 tx 1")
+On Tue, Jun 24, 2025 at 01:48:50PM +0200, David Hildenbrand wrote:
+> The man page was updated with
 > 
-> Would be nice to be able to run this test on real HW too.
-> Can you add appropriate defer() calls to undo the configuration changes?
-
-Ack!
-
-> > +    try:
-> > +        for key, value in config_data.items():
-> > +            if DEBUG:
-> > +                ksft_pr(f"Setting {key} to {value}")
-> > +            with open(
-> > +                f"{NETCONSOLE_CONFIGFS_PATH}/{target_name}/{key}",
+> commit db3d5cc1a17b0ace008ebe1eaf0ac4d96b4b519a
+> Author: Axel Rasmussen <axelrasmussen@google.com>
+> Date:   Tue Oct 3 12:45:44 2023 -0700
 > 
-> Could be personal preference but I think that using temp variable to
-> store the argument looks better than breaking out the function call
-> over 5 lines..
-
-I was not able to get what you mean here, sorry.
-
-We have config_data, which is a dictionary that stores the netconsole
-keys (as in configfs) and their value, which will be set in the code below.
-
-What would this temp variable look like, and how it would look like?
-
-> > +def test_netpoll(cfg: NetDrvEpEnv, netdevnl: NetdevFamily) -> None:
-> > +    """
-> > +    Test netpoll by sending traffic to the interface and then sending
-> > +    netconsole messages to trigger a poll
-> > +    """
-> > +
-> > +    target_name = generate_random_netcons_name()
-> > +    ifname = cfg.dev["ifname"]
-> > +    traffic = None
-> > +
-> > +    try:
-> > +        set_single_rx_tx_queue(ifname)
-> > +        traffic = GenerateTraffic(cfg)
-> > +        check_traffic_flowing(cfg, netdevnl)
+>     ioctl_userfaultfd.2: Correct and update UFFDIO_API ioctl error codes
+>     First, it is not correct that repeated UFFDIO_API calls result in
+>     EINVAL.  This is true *if both calls enable features*, but in the case
+>     where we're doing a two-step feature detection handshake, the kernel
+>     explicitly expects 2 calls (one with no features set).  So, correct this
+>     description.
+>     Then, some new error cases have been added to the kernel recently, and
+>     the man page wasn't updated to note these.  So, add in descriptions of
+>     these new error cases.
 > 
-> Any reason to perform this check? GenerateTraffic() already waits for
-> traffic to ramp up. Do we need to adjust the logic there, or make some
-> methods public?
+> @Axel, did you ignore the automatically-set UFFD_FEATURE_INITIALIZED and the
+> repeated calls never worked, or was there actually a time where repeated
+> UFFDIO_API calls would not result in EINVAL?
 
-Not really. I can just remove this code, in fact, given
-GenerateTraffic() already waits for the code. Or, I can add under DEBUG.
+The man-pages was inaccurate before. It got updated recently after Kyle
+asking similar questions, see:
 
-As we discussed in the RFC thread, I will add support for bpftrace in
-the v2.
+http://www.alejandro-colomar.es/src/alx/linux/man-pages/man-pages.git/commit/?id=6a949e9b08fd1ad4e77584276b9566e45fc07a93
 
-Thanks for the review,
---breno
+Li's v2 change on using the temp fd looks correct.
+
+Thanks,
+
+-- 
+Peter Xu
 
 
