@@ -1,66 +1,67 @@
-Return-Path: <linux-kselftest+bounces-35772-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35773-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C772CAE8198
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jun 2025 13:41:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 52CC0AE81A0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jun 2025 13:41:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 057FA169983
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jun 2025 11:40:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 82CCE16D60D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jun 2025 11:40:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7537525D1E3;
-	Wed, 25 Jun 2025 11:40:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9D0925DAE7;
+	Wed, 25 Jun 2025 11:40:01 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FE7425CC57;
-	Wed, 25 Jun 2025 11:39:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D22A0282E1;
+	Wed, 25 Jun 2025 11:39:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750851600; cv=none; b=OVR0/yyo+uC1W8WuFPZxKCTc0NMEwTyjDujN9yLGGdm02SGILyTg+/UJLiLTJb7KoYhR5E6iTBLW5KwZk3YjtUM6319bMC7UNFXXgHzg2fhbyIPyIJVfknSq5qt7XBbTQLNX2uDQGzxUSdNPONfeZvnhJb5IyYI8Sy6nUu1uiac=
+	t=1750851601; cv=none; b=pxsrnPVhNX0SNtJ3NJNAA8CsxV/tw4mp5vwl/5VU+Yck2NfsQ9qUJTdtbFOeHlFx8TpK1MFOahATVVn0Sg03DewDTrOBeHAPkuD1Pvf6P4hL7s9YIsNBq13TUHymwGn7+e6Cy6f9ji9I1jvxebt+6WOtlVdK7aJt9LbaioNPOwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750851600; c=relaxed/simple;
-	bh=JueEE3DvsRlhzkgHYcrS6DntXEIcD7ppBnuSS6iweH8=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=EOzmW4e+GEALrjxywcNsSye/4LJ7Zkx7xPZqAuIm9F8C1Bg8yxUg9OL9xqE1zbR1tcpPZrS+f2LqX8Z3v9v5ODwB9AzqZm/zoLL0k1Lt0tYcBl8WmUGIPTI0sXU8yJ8sYISNs9xgRGG36zrwq5FBwm6S5NcPg0wssXiT1TvfGwI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.48
+	s=arc-20240116; t=1750851601; c=relaxed/simple;
+	bh=W1EexkswfPcZNr3iUS31AuS5Kgo2ZSIFjOO3bhsqMzY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=l7lKYP/aZTAnaTbXLJLoS2ws6Pkg6SGkeiR4DBPxdFn4fIDX9ie90hDAGhR86JPyGRVbE6JUffxfpPkYzYu7vIKIjwlexUrbwktgMVyLnUqNJuzn3/9xD9wElsRuW2c5VfAnIhCgze0G+TJEgu2RdQfxHnlxQ62gbTUIYO0nxzA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-ae0bde4d5c9so160076866b.3;
-        Wed, 25 Jun 2025 04:39:58 -0700 (PDT)
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-6077d0b9bbeso10896571a12.3;
+        Wed, 25 Jun 2025 04:39:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750851597; x=1751456397;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tke9wHtMirrgZTrW46kxPtXcVfyckiAgBOslrizVckQ=;
-        b=XjKg3gXt/noIdtKx+0j4xzDVglfnYfTjBwxHOhJ9YkjRdSnMOe4QhSbgi7BjyOsY6B
-         QnE/IX4GV66uIeNbh6h73ir8j9qbUPn4Z6P6F/RT5oNAwSX+wf+ygyF7mjz7EkURrK3c
-         Li3PY3yH8tqB2Aeq47n3wIy4dC5L340odR20dAscwu6wENdkzI9Ft7o6UfJGB69XShFA
-         4NhpTtdm0olIn2U7prDSZc19J3+QdInpTExhS3/XqacsPCYWpFiOx/YDT9HiKMtzhEUp
-         W5v/xRv2upP1/fGqh7iZ0NiDClTcvwqxDRzeCjQ3ctAH4ZdcRlCGEGQdIRtN8oNqPr5d
-         BOOQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUv7WWodm63dbuGJF+Jqf7KpxyrEDh/hw97B9lKM2tN70I5Rgb4I4JBGvJBlv6Zsbxua3M=@vger.kernel.org, AJvYcCVD7nToB6sstvvnuBJfu1ubVCVBybeQKkBinQfVNCFvOkk0ZpM9prJI4Rj/hxN6ZyeBmxs39ig5@vger.kernel.org, AJvYcCVqFqwlU8H1BKsujdaue8qmsWjHdWohYrJ70Bc3nQwPQuuoH+NjQm54RhnRsoW/UDbP52j6KpxQEeDQ6wnyStqg@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbT2Kms5qJNlXWfdtwCUNPF8WBpmvlmA0v3QEpLeLiMEQmwWJx
-	ZLoGgTYXdbNm1oOg+7JYAPtK67po7ugPmcqoBsqIQDzU93rt22Aj5yiX
-X-Gm-Gg: ASbGncsJQ/RNXyYnp7BAn1c8IkrzMEq/LxpkLqJo2/1WiuvfoqoPJh+ihaAnE+3U+p2
-	Aj0VkeyMDov/1b6UZNHww6IySILA1Ra5M/WZi/jnPbehCo5GUj2ujwKDvg/cuQ4Xvvv212vb2g9
-	lbynJEMn5FQk+KJcfZWwkTc9y0RSoJQOnNhs046ZS4wOjVhoJee1X617/TX2RLb+Rjr5f+i2BpG
-	Rjl2gWkyg3JNidVtOnJFFvqqvO/jvOmIYw2GdLxxpEoW3LOr7Alm6PnhxOfjM5uNmi99myBtZ3q
-	Ohtc5ju7r1UrBKCmQXHF6XNYmHyqwTqBe9jhiFa+GGOMmrXe4Lew
-X-Google-Smtp-Source: AGHT+IGZ0XGE56v7BJE/3UHKyOECHehXbeb/ARdCR/GegdkD3+9DI8Bp+zDWzUBcx8AnigpH4wx5YQ==
-X-Received: by 2002:a17:906:b218:b0:ad4:d00f:b4ca with SMTP id a640c23a62f3a-ae0bea5247dmr219952966b.50.1750851596458;
-        Wed, 25 Jun 2025 04:39:56 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:9::])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae0541b742dsm1036234666b.132.2025.06.25.04.39.55
+        d=1e100.net; s=20230601; t=1750851598; x=1751456398;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ePm0T0zc663ZbGV340DcndG+7KFVs4xq2cA81VLyDoA=;
+        b=W1M0Ll05G65NQRnPtpyVYG7bvne+Nb8qcaBY5xwRzJuXBn9JYspEdTADYdz9otNB98
+         /tK6sqWt6cjQjtamRuITs5XEKwnC3V2DuzDkRtW5fRFJ/Wyk6FrGwTqWLXx7OULB34c8
+         IBg3C+k9V0SHpnGrEXZCn8rqxC/Zez0LtO1GUs3vYraf1ar5ocTrja25Z8nNnMTONgZA
+         cQekGoCufmLaH9HV7DyB9oGJ7sv4ZVwL8xWFAHtf7k6URRBgXgMGWmptgpIm4Ig2aEhm
+         lFbZ6Rm0jBf+7c2Hn5m/aYh/sS7o0umLIlcq9i4JJC+w+UjGkLMO2/pC70G8/t9JOC8/
+         T1tQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUNhhw0xcQY4tiiXJplnJu5e5FIMHpz2R7ZgoBO1Aym9ZFRRF75yrMtMgjCMY6jOusCrTRmIJ5qMuC5O5txy9Ie@vger.kernel.org, AJvYcCWG8a75F76W34W1f2kTlcQaiMHJJbwMI5hDZCeX6i5fpjhIi8ORP3m+JNNwMg/oLYtR7NP5+liU@vger.kernel.org, AJvYcCX44QYxPT0NzFtvz45lP2fVEEuZWcyues70sQnON0uFiFwt40VxMN+hjJXDhJ5o7uqjwNc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx9TkMub5JtliSjoC3ByB37UqhMhiaaGKFwh8b35Byn7osER/zZ
+	kPGsX8s+p0O5mzT/HKi591bW9TzaJ/4PuyMgVxWWkKYJOm5hrIRoWFVI3wYXoGIc
+X-Gm-Gg: ASbGncuhfCfpCkbhzOS440KSByiQSfDqI16ciaHybKR3qiun5fHRenfbQp3Yr3dgtTi
+	xAbJRz0CpJqrLE4S166OrQjhWyt8548Q8vuZ9HOHnCWs1u4yUrGzRRX22mdgH03lFnIbJPaMxYP
+	4LBBAgNf2cyFs2spY6gLgBN5yzP9HqNxm5S6lY5moncIuDdCsXId5t1dkrhNIJdj2kjadPDCsU3
+	oZoGotwcQO2KAWHc5CkJeM9HL2wEMWJynKha4M4//DAWYUz0KUxrNe2AbaDhTU2ZBz5z3YEibzA
+	QX/KsfcE8ywaxWqlF3BejXy+v1+L9Fu1z0+Csrx+9GPAhHEN9MKs
+X-Google-Smtp-Source: AGHT+IG2xM6ZRiOvuC+JX5cT+LVYS5zYJbG8CqIQXBQAYe1GC+M1/IFtpm8JgzlLbYyeTrhFQyM/KA==
+X-Received: by 2002:a05:6402:26d1:b0:60b:fb2c:b7b3 with SMTP id 4fb4d7f45d1cf-60c4d21597cmr1904705a12.0.1750851597930;
+        Wed, 25 Jun 2025 04:39:57 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:1::])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-60c2f4683cesm2413673a12.37.2025.06.25.04.39.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jun 2025 04:39:55 -0700 (PDT)
+        Wed, 25 Jun 2025 04:39:57 -0700 (PDT)
 From: Breno Leitao <leitao@debian.org>
-Subject: [PATCH net-next v2 0/4] selftest: net: Add selftest for netpoll
-Date: Wed, 25 Jun 2025 04:39:45 -0700
-Message-Id: <20250625-netpoll_test-v2-0-47d27775222c@debian.org>
+Date: Wed, 25 Jun 2025 04:39:46 -0700
+Subject: [PATCH net-next v2 1/4] selftests: drv-net: add helper/wrapper for
+ bpftrace
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -69,11 +70,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAHgW2gC/22NQQqDMBAAvxL2bEqyUaOe+o8ixZqNBiRKEsQi/
- r3UXnrwPMzMDpGCowgN2yHQ6qKbPTQMMwb92PmBuDPQMECBhSglck9pmafpmSgm3kmFuUFR6L6
- CjMESyLrtzD3AU+KetgRtxmB0Mc3hfX5WefLr5Cq55LnWuTV1UStl74ZervO3OQzfxc9CcWEVo
- qwqhVaj7f+t9jiODzkU2S/pAAAA
-X-Change-ID: 20250612-netpoll_test-a1324d2057c8
+Message-Id: <20250625-netpoll_test-v2-1-47d27775222c@debian.org>
+References: <20250625-netpoll_test-v2-0-47d27775222c@debian.org>
+In-Reply-To: <20250625-netpoll_test-v2-0-47d27775222c@debian.org>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
@@ -83,90 +82,86 @@ Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
  Willem de Bruijn <willemdebruijn.kernel@gmail.com>, bpf@vger.kernel.org, 
  gustavold@gmail.com, Breno Leitao <leitao@debian.org>
 X-Mailer: b4 0.15-dev-dd21f
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2688; i=leitao@debian.org;
- h=from:subject:message-id; bh=JueEE3DvsRlhzkgHYcrS6DntXEIcD7ppBnuSS6iweH8=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBoW+AK55EFUm8sEunfZvyXeiRnAjOaFs836CxmX
- Ls9DeQ9zkCJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaFvgCgAKCRA1o5Of/Hh3
- bfL1D/9YAwJcn5Dvs8NppODXm/5QfmP4drwRgJDqiWYS1AcVfprHPC1LXT5GEOPVa74miWa5QD4
- 4IwfBFvUP63a/RF1PlQX814VMSGaCdJ67uivXFdBmWIyy+UyAzuqGLyc8aIQwDRIDNzuBjQFL0L
- 7zvQsElRbLpzJie0wnFujxlKHpHA3iewXyzT52yB6konhNBQcmJj1o5Sgkc696PH1jv2sSccrhw
- kQ14zpfYQvumsgP6PgbL78WJqRa6jEliADfsdgOTrt8bJhak6ZLK/TkEbni0Zzof5w/hKjvzbmg
- iS0+WOL2qad75NvSvRhbblirp2+OcThahIq5wwrluP+6iwuVnf27tHxKJ+M8goVUOIavTEjJcTc
- iLro6WgiYnqicQjozp9s+JJAMZKkqLKsj/39yefVgM6unSRjrJZPyTf5mVCMAdZ9McZn5r3GGWj
- 01vkUiUOg1X7YQ/7W0/G+bUurCiYrHcQEVFNiGzI7NF5QBiWmILwhNN6dbPXIeMF0XK9EqS9sN8
- QuvC95m55jh0RLDC2eTPndgY2lVofmwZw2sCAqrBokXHtXAk+BN96DcY3n9og4PKKa1YYaRTcBk
- VHDWjIEw5njYfImFZwtpjTPtllogLiJgnu9csc9ZGHkC9qwK9fij/PMzffaMMVSybIhkpTvcoQ/
- In3Ma/7HL1H9Bug==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2232; i=leitao@debian.org;
+ h=from:subject:message-id; bh=I+lAo+Qac5MqwIlBjg9aGwL745T5u3BmIKWuOzlXpBI=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBoW+AKljp+1xHgL9H3RniDgez8LxrtISQB1ECzf
+ Zd3UTWObvaJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaFvgCgAKCRA1o5Of/Hh3
+ belmD/4o2CfKPSLtgU1BvN0QtjpwO+kigo2dbR5hS60Bz5AI1LTwuIQs4lIBL2s5EZJpAiln6vL
+ 2J5kZFFs2UxgdZ8UtUYdN5ftR1e0AFDc87QthmyHMgE0JiGWH+fUJqIxoVFuyK1qswfeXI4mtq1
+ AXg9H4jS3FsTOZJ3NG+QKFiBXgDVm8AhlCVn5iUjBDvK7bypaTUONOAgDh1ECnN555EInVZWirC
+ 9HN5PTjG2GQMteA+0RgeMSyhWKo/AwA7Pymc9TfFOOKfKaChs/hhlETm/ORJRzA3GKNss0Hi3Ax
+ xyxUVyvPtJvGy6jA38rd2/VK3RGZ2oKAzqOs/cIcOlp26xlVmxomKfAh6daBI5NZ14hwuYD4Gm1
+ h8SWVWWZ18BVPLv260BKi2BrquTT0X2CKH53GDjhwNlgn6+cpKN25zHCFATdGEu+VkOLbcsL/Oo
+ krZdgzfrRhheXh2OFxS4OegXlCL0SEHXNOlhOYfuMF8+f/5r/EnbMs75pH4c0ilZOkqpdIpoR8X
+ 4JScaEgvSkzeLhiEdt4PXfD5HJ0vquQ8r+XPTiNiWokyI9xBKgAqY5F5Q+5HQgyIhvq+FXbv2N2
+ g+xAN4xLjjDfrR9X2C4lFTmzEawkl4/LQN8DJIepSMKQWO0zz8353hczMo62GkxeExgVXqHz5IZ
+ eqdPl4mYoM+Pu0Q==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
-I am submitting a new selftest for the netpoll subsystem specifically
-targeting the case where the RX is polling in the TX path, which is
-a case that we don't have any test in the tree today. This is done when
-netpoll_poll_dev() called, and this test creates a scenario when that is
-probably.
+From: Jakub Kicinski <kuba@kernel.org>
 
-The test does the following:
+bpftrace is very useful for low level driver testing. perf or trace-cmd
+would also do for collecting data from tracepoints, but they require
+much more post-processing.
 
-1) Configuring a single RX/TX queue to increase contention on the
-   interface.
-2) Generating background traffic to saturate the network, mimicking
-   real-world congestion.
-3) Sending netconsole messages to trigger netpoll polling and monitor
-   its behavior.
-4) Using dynamic netconsole targets via configfs, with the ability to
-   delete and recreate targets during the test.
-5) Running bpftrace in parallel to verify that netpoll_poll_dev() is
-   called when expected. If it is called, then the test passes,
-   otherwise the test is marked as skipped.
+Add a wrapper for running bpftrace and sanitizing its output.
+bpftrace has JSON output, which is great, but it prints loose objects
+and in a slightly inconvenient format. We have to read the objects
+line by line, and while at it return them indexed by the map name.
 
-In order to achieve it, I stole Jakub's bpftrace helper from [1], and
-did some small changes that I found useful to use the helper.
-
-So, this patchset basically contains:
-
-1) The code stolen from Jakub
-2) Improvements on bpftrace() helper
-3) The selftest itself
-
-Link: https://lore.kernel.org/all/20250421222827.283737-22-kuba@kernel.org/ [1]
-
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
-Changes in v1 (from RFC):
-- Toggle the netconsole interfaces up and down after 5 iterations.
-- Moved the traffic check under DEBUG (Willem de Bruijn).
-- Bumped the iterations to 20 given it runs faster now.
-- Link to the RFC: https://lore.kernel.org/r/20250612-netpoll_test-v1-1-4774fd95933f@debian.org
+ tools/testing/selftests/net/lib/py/utils.py | 33 +++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
----
-Changes in v2:
-- Stole Jakub's helper to run bpftrace
-- Removed the DEBUG option and moved logs to logging
-- Change the code to have a higher chance of calling netpoll_poll_dev().
-  In my current configuration, it is hitting multiple times during the
-  test.
-- Save and restore TX/RX queue size (Jakub)
-- Link to v1: https://lore.kernel.org/r/20250620-netpoll_test-v1-1-5068832f72fc@debian.org
+diff --git a/tools/testing/selftests/net/lib/py/utils.py b/tools/testing/selftests/net/lib/py/utils.py
+index 34470d65d871a..760ccf6fccccc 100644
+--- a/tools/testing/selftests/net/lib/py/utils.py
++++ b/tools/testing/selftests/net/lib/py/utils.py
+@@ -185,6 +185,39 @@ def ethtool(args, json=None, ns=None, host=None):
+     return tool('ethtool', args, json=json, ns=ns, host=host)
+ 
+ 
++def bpftrace(expr, json=None, ns=None, host=None, timeout=None):
++    """
++    Run bpftrace and return map data (if json=True).
++    The output of bpftrace is inconvenient, so the helper converts
++    to a dict indexed by map name, e.g.:
++     {
++       "@":     { ... },
++       "@map2": { ... },
++     }
++    """
++    cmd_arr = ['bpftrace']
++    # Throw in --quiet if json, otherwise the output has two objects
++    if json:
++        cmd_arr += ['-f', 'json', '-q']
++    if timeout:
++        expr += ' interval:s:' + str(timeout) + ' { exit(); }'
++    cmd_arr += ['-e', expr]
++    cmd_obj = cmd(cmd_arr, ns=ns, host=host, shell=False)
++    if json:
++        # bpftrace prints objects as lines
++        ret = {}
++        for l in cmd_obj.stdout.split('\n'):
++            if not l.strip():
++                continue
++            one = _json.loads(l)
++            if one.get('type') != 'map':
++                continue
++            for k, v in one["data"].items():
++                ret[k] = v
++        return ret
++    return cmd_obj
++
++
+ def rand_port(type=socket.SOCK_STREAM):
+     """
+     Get a random unprivileged port.
 
----
-Breno Leitao (3):
-      selftests: drv-net: Improve bpftrace utility error handling
-      selftests: drv-net: Strip '@' prefix from bpftrace map keys
-      selftests: net: add netpoll basic functionality test
-
-Jakub Kicinski (1):
-      selftests: drv-net: add helper/wrapper for bpftrace
-
- tools/testing/selftests/drivers/net/Makefile       |   1 +
- .../testing/selftests/drivers/net/netpoll_basic.py | 344 +++++++++++++++++++++
- tools/testing/selftests/net/lib/py/utils.py        |  38 +++
- 3 files changed, 383 insertions(+)
----
-base-commit: eb4c27edb4d8dbfbdcc7bc03e0394a0fab8af7d5
-change-id: 20250612-netpoll_test-a1324d2057c8
-
-Best regards,
---  
-Breno Leitao <leitao@debian.org>
+-- 
+2.47.1
 
 
