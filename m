@@ -1,67 +1,67 @@
-Return-Path: <linux-kselftest+bounces-35774-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35775-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F930AE81AE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jun 2025 13:41:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52C64AE81A9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jun 2025 13:41:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1796F1889709
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jun 2025 11:41:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3E9D316940F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jun 2025 11:41:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C777D25E83C;
-	Wed, 25 Jun 2025 11:40:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9729125F7AC;
+	Wed, 25 Jun 2025 11:40:04 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48EF125D8F7;
-	Wed, 25 Jun 2025 11:40:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB03825E80E;
+	Wed, 25 Jun 2025 11:40:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750851603; cv=none; b=hSdhf9LXi6J31Dp0HY1WkiIDL2YvNB9t/Ijt3lzeQYJxWivdOYCIzjYZVvrl0I9z20qFsEeP/3MACazXiP/4o3iVLq1MH1zKD+bhrCKs8/Ow6dy6VHTcF4RoMLU/A7reccPct4Y2vUyjJrSKm/7V9T4Ohg+pyCOQCi7kzj4u+tI=
+	t=1750851604; cv=none; b=SQaEPeYnVLgck0mtNYvLbDwQEzb40+XjqEj7HTzum0ryIecso/A2iDbLjlS6eLakMbPQkDnFDZbun2uEyQWPJAP4gVec67uI9g45yZtSaoDr5YVU0LK3xf5alCjnaV+astSQkOt65hrF7mbOW/0blG83c0M+YxIqQLdUqX1SnR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750851603; c=relaxed/simple;
-	bh=l/nda0XltKPv0ZkUvAchmFcqXkIO0WFjK5teLGJzfFE=;
+	s=arc-20240116; t=1750851604; c=relaxed/simple;
+	bh=XNs8x8ajNJh0fetiIm2YiGOf+JuBt4IW4h9OB4WhzIE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=SuZM54jVmySn1X/TwRwZu79F+7KjCAYXRWa4IApo4qBohA6cB+Q0Qq4e1eDVSKguy4oRCjy1V06+Aw7iM+ViyfmAB5M+jKNMC3UtGu0g8yE7diEtVMiCkyaF6ScU0WbtR12WkYSVUsuJv/itV1jiT40mvHmJ/u6xMa7ao5hV2m8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.46
+	 In-Reply-To:To:Cc; b=FBjXp7xxsqJpcFg6uNeYFtIMXiH6rN0tg/fqZoGf/oQqpxlUVRccQfdtoE/5nbRAbuTcHRDA6Z8kRiTC16V4nOXwRvc+6gNRwh+6QI25Xfd/CfxQIK/t95QQOSpApoctvuycgCrkkkVzRcpZhIcljKeuYHKeKRgU23I6gyeOvKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-60c5b7cae8bso539894a12.1;
-        Wed, 25 Jun 2025 04:40:00 -0700 (PDT)
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-ade4679fba7so263301766b.2;
+        Wed, 25 Jun 2025 04:40:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750851599; x=1751456399;
+        d=1e100.net; s=20230601; t=1750851601; x=1751456401;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qT3VxGjg5ZOgOxiB0n/oc2JG8GkxQUHlqVHQBSwcuUw=;
-        b=MlYuyJA2tHEcLm2xVBr0/LfXCw3/6FoyDzChDL38N3HoG8oyhVV5rQr9wsgiJrCV0O
-         CdaS/V+i4kMm6he8w5/1DuUaARbDN4C6drwO8UAMPB93hwOrmZcPaOUuMhvRruBxkPip
-         ULLnm7KFKt6OSM1SLHW+TCDl4ciseiB+Ci7xewREldl1o0r7j6ocmtAu4d2cO1hQDtrG
-         01yIq6zq5jIg+X1X6Jup8YUHHUmBwMCqV87b58i3bi+/vr6ulJPvJkK0Dfxbg83NzE/e
-         NLQUzr+y7s5Haddq9/ahzr0dtHJylLL7rWpg/H+4WWi5Vxy5M36WCQi52kWXGTLFoen7
-         w0jg==
-X-Forwarded-Encrypted: i=1; AJvYcCUGeZVrOChJo+Zxpnt6+i4ImLXoZ1xZSl5rQLtYE8sqOx3NdvP41TVZCh+l9flyuQQS7jg=@vger.kernel.org, AJvYcCUe76iAQqRkp9XRQ1vdnl4xg+8AaN1n7GEVunigPFxVLNYWYF7Sg2y91ABMTO5bzvYisLsZXm6e@vger.kernel.org, AJvYcCWZRk67/KWt5a9Nxot40eD+8S5Fqux3cbHNo33g24AfpdeOCGV8fOllQJfyBv30/yEnE6Y+pp69GbmGqE5BfY50@vger.kernel.org
-X-Gm-Message-State: AOJu0YwN/jD0zjEFQtjFZtMzvq6sjHzWkeIA8No3Usk6ADstqG/QCP2D
-	wM4MVU7gEFCw72spyR/nUhZP36BGZPgsoAX9k+sjKhrJ0w8I4ZrKuurH
-X-Gm-Gg: ASbGnctaMX8M1bhymwhF7g68a7zjQekaUQrLAmgirgrXlBx5kfwGCbQc2iIrCbdRp0/
-	Srn2Iuw9mslhJv7YLwQxRmObVPU6wTkO2QWMZ4+KOpklVX1ge3CU8bSBrJDs8rC7Rn1PEdf7wPr
-	pxLyhhRVvwmDDEgcN/MxJ6ZOyQ6vLgkj9dBJvj25Vsikjh+LOjG+TT6J7Wav20bzU8VB3yy7WuZ
-	PxdQGPeE8Kb8Sv+v8S2+v16lDMep07cQGq/FobXuoy1gWEiZAPX/wrJdtG2oU/FReskdfAj5MUA
-	ySKktRP7B8LTmIwvLKpBT1FYQPJh1QiL+oanLcuiAjH0Ap9fE57i0g==
-X-Google-Smtp-Source: AGHT+IGwyL4vIDC3UIoBolr9zLc3zbc81T3CSXzzZXAeGlrkeaZuN/J4iuyZ/NpTJWt3hDAIK81XqQ==
-X-Received: by 2002:a17:907:7e9d:b0:ad2:425c:27ce with SMTP id a640c23a62f3a-ae0be90f2eemr281661166b.2.1750851599255;
-        Wed, 25 Jun 2025 04:39:59 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:72::])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae0541b74cesm1051024466b.142.2025.06.25.04.39.58
+        bh=XBluJOszNCTRK8dAY0/F78ijOirMy7nuGhXV+efUFY0=;
+        b=aE0DvOqIa2/tIzLY6dv1Mzhqtqgw54OCVqlKZ1Lhv4Y3cAMXPx3v2QJV+zdoYkPhfB
+         DiTOfKPTX4TCQX1hKq6NiGGlg2Z7i1QmY2eoT6oKy8DDhCvvu21IbnknKIE0xLeZoywp
+         +C+NRKWL8Zhv4WZG7mcJRmvZLvNqCuv+8w3sROGWa1vkRJtSAwM2Hoe+Bn1j+Mumk8Vu
+         vR1YMHn8uVhPIBHvPkFoe5Gj1gpXUb12DA0Bag7g0Oy41dQyINUpsJTqJLpXw979KqBd
+         rmT23q9K40tgwk4RsYzFwe51vUwyFIcAjS8k32E+pooh7rmdiAOgtqyt9t5zLu6BkuN8
+         n99g==
+X-Forwarded-Encrypted: i=1; AJvYcCUWOtjqS3YC+T2paT4ZGStNkptFH3WSRlCBeqmc0QwoVtA1E0j1quo/iWbv3Fho9re2IxB6C9IAJMAhNiuB/wg5@vger.kernel.org, AJvYcCW0Val+2CSvvks4kGSrkufZlVCrQxt8BvTPRlXJWeRhUQcm0r2p5W4VJEKdRredl5FyE9ZJ5HK/@vger.kernel.org, AJvYcCWqPcIQCkkFCyT7oUTYx3NzbmnL8x3E102JP28D5uVyGZGJEubcb4WDIRWYd2S2oYh+gs8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx22iMF/lNaPRMW99vr7kQMivp3jpEA48cCbph3vTNNjt7vJjOv
+	NGBQJgXMwwNFHORxtWvpie+3dPS2eHLIZVfqgntBvBNDV9GpHNw359Ki
+X-Gm-Gg: ASbGncsv9n74C6Q+mi6nSoThKSveT1ACrfSfKbUjlPPe8Aix1kE8fv1GPKcU2EcvJJH
+	v5d+mHe6OOyPB/cJZIIrALwajwyKvdpfTLqwARps2PxiIivyOHu/eCelsnYv/ls1EVAqVYJAzgl
+	NAEM5/IO4yDkeTrh+Qqwbdsc5NS+u9yzfx8hvuCxTUi4XG5j+dChMkCQ87aO/pI9StTIw51WXcy
+	nO31WvH15RYGkxjb+HOWcwuXQTAWNu8l/AG9/E3e/ordc3Nb+mzzTb2fl5bbZmZe21FAFq/MVNQ
+	E0wXW3tA02W+p4jP1XrFqxMYG8CyPpJwbql0ERxtlrLoY9U0Jw7K
+X-Google-Smtp-Source: AGHT+IHpNTp1W7tJfq4L4KfthhwdbcUMxxT1qFXk9AO0VZ5Xmv20HUmqkjjmbnLK3RPqlKFIixNxPg==
+X-Received: by 2002:a17:907:d24:b0:adf:f3c5:c858 with SMTP id a640c23a62f3a-ae0bf018b47mr264620566b.15.1750851600679;
+        Wed, 25 Jun 2025 04:40:00 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:1::])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae054209b81sm1049408566b.171.2025.06.25.04.40.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jun 2025 04:39:58 -0700 (PDT)
+        Wed, 25 Jun 2025 04:40:00 -0700 (PDT)
 From: Breno Leitao <leitao@debian.org>
-Date: Wed, 25 Jun 2025 04:39:47 -0700
-Subject: [PATCH net-next v2 2/4] selftests: drv-net: Improve bpftrace
- utility error handling
+Date: Wed, 25 Jun 2025 04:39:48 -0700
+Subject: [PATCH net-next v2 3/4] selftests: drv-net: Strip '@' prefix from
+ bpftrace map keys
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250625-netpoll_test-v2-2-47d27775222c@debian.org>
+Message-Id: <20250625-netpoll_test-v2-3-47d27775222c@debian.org>
 References: <20250625-netpoll_test-v2-0-47d27775222c@debian.org>
 In-Reply-To: <20250625-netpoll_test-v2-0-47d27775222c@debian.org>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
@@ -82,47 +82,46 @@ Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
  Willem de Bruijn <willemdebruijn.kernel@gmail.com>, bpf@vger.kernel.org, 
  gustavold@gmail.com, Breno Leitao <leitao@debian.org>
 X-Mailer: b4 0.15-dev-dd21f
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1094; i=leitao@debian.org;
- h=from:subject:message-id; bh=l/nda0XltKPv0ZkUvAchmFcqXkIO0WFjK5teLGJzfFE=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBoW+AKJtUozNMIskVSr3fnFpO0qK1UhqbTQYG2r
- 5CnlBIX7CmJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaFvgCgAKCRA1o5Of/Hh3
- betsD/0dDiB8Vne1O00F+BDRbJfQVeifkj9vq8hxwdlkxQ1yHsmzGrzJv10TVdOQXF3E2VpxOZH
- BFqJg8usEEcctRDXhcbCBUCRSdr4lbSHY/sxx8BhvQzhMy9bmsBSbEcrxvmyJjsiuhGtbtoS0s2
- FDyt0/g/XikNLixQjXjjekqOrx3IZpurVScf7pjG+SuKeG6f27jjp/8Nn5atsYTqjVZzH1axqxV
- yLOD4LSFaTpiUuo4H3Fk5cELz3TvQkEGdgH4gC2MJ8/oM4W0lfFeRj9i3hAwi+BCU7ZgyQyDqgP
- HO3PLWejTgKiGBfOEU/ojQ5WNe5NbwV5OaAUD9AfpW2v1/lZpUx0Kyi96J84gAK4LOLgT+kzg8m
- XUgYSg07eKpS0a/9eVXiT8JsHMz7v6iLbvTXmtWtngwEvCFZMzL5IqWe5U8/xGlZF+Kmng1HB3e
- dDhOOcaSwbyDIX2u+7zyd6opkV2EPTpwX4ac+052D1DoE8fGP8uVmCwhuqM8/FJYgw7Lyr63nKM
- GziA33LM66RB0NLjrl4fcdnhx/GVeRblUTK6PKx18dzhItbeW8nrsT+d7LrZeE1UUbUWUOxEne4
- j70jocMX3sma+vfH7Bv/PYJXV47Zot751TfhLnuhEHRQddFKNHdQy92PNhNAgrmjt1EI8Nz/lcw
- Eb9AZJ3752thyMQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1053; i=leitao@debian.org;
+ h=from:subject:message-id; bh=XNs8x8ajNJh0fetiIm2YiGOf+JuBt4IW4h9OB4WhzIE=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBoW+AKh0+jsKLXI3AbZ4DZBx1prGQzTY0cOOwSR
+ +rkK0YH/BSJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaFvgCgAKCRA1o5Of/Hh3
+ bU5oD/95q5BM8Sr+/mJTE4kLrtVtHnpMdYsy+kVaSn+Q56G33qiiAaxHOOuwCOh1zQ/g1DtoYn+
+ 1t9CRBo8caWK7E4W3gTZ/p4xj9mzacSN4InF2PR/AzPUkSNswXPgHXqKKBKsHqqhZzbkZq7lL/7
+ iX8VhcHi+j3gUZEVOwU8L5k06DNRr1WOGP39pvGIeeZywM+DKGwI9FnWYKTwt2rgGthJujk3M6W
+ 5fTTuN6BZuX7LcHFlgMrocmhX459FiYI2SY5VhGA1YG+vfRF0dXAxxIyeXaYVfOvvrCT8/RT39B
+ hxUxAPelYRk3tocZgn9n2eHGyrhiJDdkUPJfToVkF9Ukoa3QCe6P68FQoKO1IEDMAfqVivKtOGH
+ 2k95KzqJz60FcyYQPIvPFmxYNQTDc7zMqT8hHNXlwg2vKG3xR9TZ01OHnHqmKmU0N5USNF6D0p8
+ 4+3FADzczgjJLhnEAaKzpTH+j/6FasG7wSpFY7AInadPC4znJnyRCjiM5xPaa/SG2EeaFSXLmMZ
+ LJ/FAgVb0XZwSWpgyjavhTqQgzZigPMrZtdkNyXNZ4YXJHk27DPa5NnP5ltsEWPfOPg6/GmpnWQ
+ t0bEb3fOJXCV2ANzemPwXTLq3QdIuzTblQKSTwvTQ8JLBIVNEewqwsN9vFpsLsBmTNju44TYd9E
+ J5DCgwQ/su8812A==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
-Enhance the bpftrace function to raise an exception if the underlying
-bpftrace command returns a non-zero exit code. This helps detect and
-surface errors from bpftrace execution in test scripts, improving
-robustness and debugging capabilities.
+The '@' prefix in bpftrace map keys is specific to bpftrace and can be
+safely removed when processing results. This patch modifies the bpftrace
+utility to strip the '@' from map keys before storing them in the result
+dictionary, making the keys more consistent with Python conventions.
 
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
- tools/testing/selftests/net/lib/py/utils.py | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/testing/selftests/net/lib/py/utils.py | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/tools/testing/selftests/net/lib/py/utils.py b/tools/testing/selftests/net/lib/py/utils.py
-index 760ccf6fccccc..c4e26567ee6fb 100644
+index c4e26567ee6fb..31d4d63621c5f 100644
 --- a/tools/testing/selftests/net/lib/py/utils.py
 +++ b/tools/testing/selftests/net/lib/py/utils.py
-@@ -203,6 +203,9 @@ def bpftrace(expr, json=None, ns=None, host=None, timeout=None):
-         expr += ' interval:s:' + str(timeout) + ' { exit(); }'
-     cmd_arr += ['-e', expr]
-     cmd_obj = cmd(cmd_arr, ns=ns, host=host, shell=False)
-+    if cmd_obj.ret != 0:
-+        raise Exception("Warning: bpftrace command returned a non-zero exit code.")
-+
-     if json:
-         # bpftrace prints objects as lines
-         ret = {}
+@@ -216,6 +216,8 @@ def bpftrace(expr, json=None, ns=None, host=None, timeout=None):
+             if one.get('type') != 'map':
+                 continue
+             for k, v in one["data"].items():
++                if k.startswith('@'):
++                    k = k.lstrip('@')
+                 ret[k] = v
+         return ret
+     return cmd_obj
 
 -- 
 2.47.1
