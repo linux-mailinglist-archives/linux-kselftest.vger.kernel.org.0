@@ -1,82 +1,83 @@
-Return-Path: <linux-kselftest+bounces-35790-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35789-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2ED98AE8C65
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jun 2025 20:31:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76BA8AE8C61
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jun 2025 20:31:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C047C1BC61DC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jun 2025 18:31:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC06A1BC5D06
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jun 2025 18:31:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20A6F2DA759;
-	Wed, 25 Jun 2025 18:31:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D24952D878E;
+	Wed, 25 Jun 2025 18:30:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="VcTLptKK"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="FSv7LzpL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2069.outbound.protection.outlook.com [40.107.236.69])
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2085.outbound.protection.outlook.com [40.107.92.85])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18DCB2D8DBD;
-	Wed, 25 Jun 2025 18:30:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFB571A38F9;
+	Wed, 25 Jun 2025 18:30:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.85
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750876260; cv=fail; b=o/35ovdJyt843AfpWEKQXIz3a7NggedrfaXepC0siQCcEpTQBorPmzRYIjHSOqzLlqhdBYMy+CSB0QU98cdi3YXc4eQP5sgTT4enpQxnz1e4olO7XQ5n9i8C622PGtomw/cLggN0CCr6adEs9d9i7gW2aK7Lo41OIOY5jxQb4vU=
+	t=1750876257; cv=fail; b=U0ly2+m/B9s6gTc3UR0pHtyf1f4p34+u/NFbCiVq8DwbBjTZwqWbpWPJ9uEORUs8Ej61vFr6xWV9VJ9cJUj+JvT/6Jo7+EQWc5Q/2otldu51TYZ+7zBM/Y5tN9u6KNjUYkNuCaI2FzrQFn/tP6wccOa8ohrqxtCl/BT9OsAr/B4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750876260; c=relaxed/simple;
-	bh=5LIJVIBurrFXH9Xqp8gZBvl0Y9J6Up9soWxc5yghu4g=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=SZEu9P0TxgW/8e+kZiNV+KFyRH7rLF70XPA8GMpyE+iysqjwc6kMuzAAjShg1zmht7h7vWCr1C1IY2WYcaQTDk6gLLF4xirAmG4vXlH0Hw54RvS87I2YtZHaI5GgE0FbrCyvWyFfPEed5hEmo/dy4xALyNIU7Ev6HKq7pyjd/9o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=VcTLptKK; arc=fail smtp.client-ip=40.107.236.69
+	s=arc-20240116; t=1750876257; c=relaxed/simple;
+	bh=cIkFRDfdjDCIQL6yP2Tkj3QMdNZ956VFLKh6zJbPIVY=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=k462JL65l0cEXUU9k7fBxeOBv9f2Paez8mkCvTQSYPj4MnmvcIs2b1+BtUGq6JmItbhCy6lka0EduK1pRdXmdeNu9ia+WjIGgyBgvLjNXigIct8HiK2mchlvRW0lzLu+eVbh5wbpBSQBbeXnWCDFFMjD0nvLfm5p30CJ2KD2bvo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=FSv7LzpL; arc=fail smtp.client-ip=40.107.92.85
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=jAqD+FohXFL04UK6TT6cUvkOCGj6tk3GhNXPoSsmpFZ3f/EePGcdDl08VAgfHpL/4HTVekMEfHQ1Khe0tPNIGNEyGumP3DysemMI1bb9rwrscgSLjI+FFrI3/c6DInJo10tBKYDQN5ZF5hah7Xvw04zh9W6ptWknIICMZMJZwJDJqtk6HiMCDTMTJP/PX1mrr6VDYm0smr0CpJe9125J4bv2ftsSuJEV1LYEu4e5Q7AZutWlxSwzrKB12D4IRd5Lu+xAEa7ui0Huz24m634xyRre8Vmbs85usfcAoxO9SJYaOZi3ZzhW8wHcQqM8ICFXX4UGpM0hDxCkRC77iOKeVw==
+ b=vboxoBXrPqtDdQqHm0eDvfgmJ2KclRKyPGWIrMWB5e4BskRsqaLJF1lTTv1a34oV1S/b2pcaSPs67ObcWmFqxTeP4D/aaUUHBbPnxTEbhmnP0XHV8g7996pn2jHj8FGgbPRXRkhjbzcxPxALzagYq9NFxougOzjpXdLoTfue1lnpbrv2F6a5+BgBgK4FtsQ9u8d9yJhjuQYdjguaivl7+yLJAYKyPUwGg8eeb6hi353lrtG+2tsCpnIPUfKnUk3m4E3ZsjsKLKqeqVWjYbCRW5r7jEvsMJCaaO7LaxJldNlF7cAgWWsNotrchSTJ7uxePH//Yk4LmymILgoeKUy06g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YbzXMkpouc+mIYHMIF0trCD5Z4uJyghcl44Ay0BWKt4=;
- b=G8GMbYXYgYTjESz/+tc/DjQZD/v0BJ5AvYETCGWwjAzOhwhNiRSLUScYKUKW0q6Xlvby5uh/9pqtFnjPdX3FjddIUamEc4aGIL3PQKlK2db4KkjxuDCVVsmq23PQa0rFWw+b10gIfiLKJSJmiZQ0KI5+x/N4DA9bGbOZYzCIjfsuyOqW2Jy2GYQUsvlitQXKNkTONNB7Jmh6lRZ+T+ly9vYNrgNhxMTOzvWcjLafLpxH+WhiM3A2DxD4E0UcbsBBTHsVkeJOFI0SC4N/MC0ZNGuL28oRyfyhP6k5to77fYINkp34oUPe07SJd29pj1K/yCgpMhc1H3MD0MgXAr+M+w==
+ bh=hsOoUnNyXuyEKIN16p4Mt1R9D8lUHvTANLjcb55U+0I=;
+ b=wgzrBKVuGWado2NB/JW4gMi0wSG0fUvmRjTdvTOT1Uo3kuRh4pnOeOZXrj+gtcpRIQy+mqzEj65SPInLjZi0s98BpgDOR30oCGoQZ/zRTC7A37T3s13d25hSr57ZkpO0KJiX0/ljX+tmAj9gdE7oNN7lOL13glCYK51BeBaZf3A39woajXQXr0Ugp3hkRJ8PjzXKwu6PskBVbxL3pxknb4DlzCd8E7lqzQPHWdK6tANlSB+bafuwNv8KXUbRcRdorqRxuPiKZ43u1rkhkH5EiyZ0KVt5BCZay6bY0zDC5CAmFgK94Y9y6ylx6cVi2hm68IAdcPjq0BexLK+kFWrKVA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
+ 216.228.117.161) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YbzXMkpouc+mIYHMIF0trCD5Z4uJyghcl44Ay0BWKt4=;
- b=VcTLptKKDFNkfWBrXqfSZx3Srg5eXZoI8a0Jj5fwwn4cMAYVVMSakaS4B5Z65ETrHRoAOYAiTHyKEzo85tFYRGCE1dp0y9YLlpp9wgRKxK8N3W6YalnGNnSu8xpauTCSoJWRLBT8K+vD4lnymPyf7Ce3ujQQnutpp2FfhaY4O5SFZk7K35JH/TksP5In0UGLJHA1dUFZx2EBl/P6d2BwQ5oeMDkB9kAtarvHwLhQcIeDgGeueq6jAspZZwbpa7Hdx7dhT6eixAxXChpToQ+rs3A/2Ajk+8MnN+Kv8+IVKe6v3sHSGZpZrHu7RxOLVSlPSARcF6BVl94YqCJHEiDrPg==
-Received: from SJ0PR13CA0201.namprd13.prod.outlook.com (2603:10b6:a03:2c3::26)
- by DS5PPF23E22D637.namprd12.prod.outlook.com (2603:10b6:f:fc00::647) with
+ bh=hsOoUnNyXuyEKIN16p4Mt1R9D8lUHvTANLjcb55U+0I=;
+ b=FSv7LzpLE6wncySr+Qok8gBBUHdgtAAtO3SsnIre7Xu3InyEpg+uQSxJNzSxi+KJ7ciIhfSmgsAOgNK3r8VRIVQcF7olJGDLz6A++hwcT4kwjzfqcKAPpzbW5PkJu/+XY95cIR6dT3b1iS+iPz9rE/VvwnRiFBwLLU+j196dIpJtqLX0IKu4SIVqqSZygg4SJliRFLj+NlK4TwzfBs62OYDcW0Of7a9JXJw7R2QBJFVR1RYOBSfXmYJXdqnb8/BTcm91EqFsD98CrRWyHIap6EhOv2uQPo7s2yakL6FeQqdX31Yx+SEseqHssrNkBsifleRxkYmjdxxiwV3eyh/l6w==
+Received: from BY3PR04CA0009.namprd04.prod.outlook.com (2603:10b6:a03:217::14)
+ by DM4PR12MB8557.namprd12.prod.outlook.com (2603:10b6:8:18b::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8678.31; Wed, 25 Jun
- 2025 18:30:54 +0000
-Received: from SJ5PEPF000001F0.namprd05.prod.outlook.com
- (2603:10b6:a03:2c3:cafe::41) by SJ0PR13CA0201.outlook.office365.com
- (2603:10b6:a03:2c3::26) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8901.6 via Frontend Transport; Wed,
- 25 Jun 2025 18:30:54 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8880.17; Wed, 25 Jun
+ 2025 18:30:53 +0000
+Received: from SJ5PEPF000001F7.namprd05.prod.outlook.com
+ (2603:10b6:a03:217:cafe::78) by BY3PR04CA0009.outlook.office365.com
+ (2603:10b6:a03:217::14) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8857.30 via Frontend Transport; Wed,
+ 25 Jun 2025 18:30:52 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- SJ5PEPF000001F0.mail.protection.outlook.com (10.167.242.68) with Microsoft
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ SJ5PEPF000001F7.mail.protection.outlook.com (10.167.242.75) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
  15.20.8880.14 via Frontend Transport; Wed, 25 Jun 2025 18:30:52 +0000
 Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 25 Jun
- 2025 11:30:27 -0700
+ 2025 11:30:34 -0700
 Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail202.nvidia.com
  (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Wed, 25 Jun
- 2025 11:30:27 -0700
+ 2025 11:30:34 -0700
 Received: from vdi.nvidia.com (10.127.8.10) by mail.nvidia.com (10.129.68.8)
  with Microsoft SMTP Server id 15.2.1544.14 via Frontend Transport; Wed, 25
- Jun 2025 11:30:21 -0700
+ Jun 2025 11:30:28 -0700
 From: Mark Bloch <mbloch@nvidia.com>
 To: "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
 	Paolo Abeni <pabeni@redhat.com>, Eric Dumazet <edumazet@google.com>, "Andrew
@@ -90,279 +91,232 @@ CC: <saeedm@nvidia.com>, <gal@nvidia.com>, <leonro@nvidia.com>,
 	<tom@talpey.com>, Shuah Khan <shuah@kernel.org>, <netdev@vger.kernel.org>,
 	<linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
 	<linux-rdma@vger.kernel.org>, <linux-nfs@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, Mark Bloch <mbloch@nvidia.com>
-Subject: [PATCH net-next v11 0/8] Support rate management on traffic classes in devlink and mlx5
-Date: Wed, 25 Jun 2025 21:30:10 +0300
-Message-ID: <20250625183018.87065-1-mbloch@nvidia.com>
+	<linux-kselftest@vger.kernel.org>, Carolina Jubran <cjubran@nvidia.com>,
+	"Mark Bloch" <mbloch@nvidia.com>
+Subject: [PATCH net-next v11 1/8] netlink: introduce type-checking attribute iteration for nlmsg
+Date: Wed, 25 Jun 2025 21:30:11 +0300
+Message-ID: <20250625183018.87065-2-mbloch@nvidia.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250625183018.87065-1-mbloch@nvidia.com>
+References: <20250625183018.87065-1-mbloch@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-NV-OnPremToCloud: AnonymousSubmission
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ5PEPF000001F0:EE_|DS5PPF23E22D637:EE_
-X-MS-Office365-Filtering-Correlation-Id: 120ca019-7131-4397-0bbe-08ddb4166ad4
+X-MS-TrafficTypeDiagnostic: SJ5PEPF000001F7:EE_|DM4PR12MB8557:EE_
+X-MS-Office365-Filtering-Correlation-Id: 43705ef3-c1ec-4e51-4d5e-08ddb4166a9d
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|1800799024|376014|7416014|82310400026|36860700013;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?aWJrQWFmRHk0VDFKMkU4aWFWUnl3dTYyTFE0WWVWaDh4dnkyS3BoRDRqNlgr?=
- =?utf-8?B?Q1gzdXJ0dkp5UkVqcWZ3RHgzajdYcWNzUy83QllOaGlQQ2o1Y1FpNWFFNk4z?=
- =?utf-8?B?bzhZUVVUZTZaT09GYUpRL1Z0aEFKYXRWNWdYMitHcjErOGkzVXJUY25jNklm?=
- =?utf-8?B?cEI1UTkzWHdwZU9LeVZuaEZpUHgwYTFNdTRMUlFtbkdlT2JES014SkNQYSt5?=
- =?utf-8?B?T2JQdk5ScXJhNHpDYnhJVENWWHpyVXFrcFdVTVZLZGRBeTVBMUdXL04rcWp3?=
- =?utf-8?B?UGUxTDIrSmsyM2RjeHJhTEhMSU4vdmwvd1pTTUhhWEtpa2xobmk2eVN4V1F5?=
- =?utf-8?B?OTZzMWxPTkVxMTFwSEhidFR6SmoyYjJST2tEYW5taHhyTUZkanFnVDBrZk5E?=
- =?utf-8?B?Y0o5ZGNrM3dMSHkwaEJHWU9Nbk5sYk1kR2tscmhWNmxUV0VyWW5TNnVUUUtt?=
- =?utf-8?B?MGNUNkkxNmR1dytpYmtqSWNlZHlnejFNTzhZRGk3U3hyUS9ua2JuTjBRc28x?=
- =?utf-8?B?Y2gyYlZoeHVrSHdpZXpZakpVSnRwSlBnK3lVWUVkU2xyZmF1aFRZTUZNZVhG?=
- =?utf-8?B?bHpzTUNjWVJLY3JYb2U3eU1qTEY1ME05c0VleTI1Njd4RENnRXhHTkJQMSsw?=
- =?utf-8?B?RzlDbmEvUmpSWmRNRCtTY3B3N0JDOHNpZDd4Q0JvMzVTWTdQY1R0eThzR2pP?=
- =?utf-8?B?UFVlTHZJSkZsSFpIVzRJNTNXWUwzWGljZjVpVGF5Um1ORThpeVcxMUEyd3g1?=
- =?utf-8?B?TUVOVGhBcGg4dGRGb0VZL3dSN1JTWklpeXZFbWlZTDBJSGxXZ3FHd2JoT0JC?=
- =?utf-8?B?UC9sbmhtVkx5cjVhVDF3L3NpUFAyNUphRW0yUU9ZdmZjWVh0YzlLdHVFYnRi?=
- =?utf-8?B?Y2l4Ry9wZzk0bURxSGVGcVArTlArMGExR3hpSkl5QlFKSEZBV1cwRmliNDJj?=
- =?utf-8?B?V0Q5OEdrMmozcW9CM3RSUmU0ZnBLVVlBWGh2Wjc0NUtTZWxQdlJVY1B5ZDR0?=
- =?utf-8?B?OExQRFRackplTDlPVlhuWWlYc1VGUWZrV0QwdnpMeHNZSWdCMXMxYWpIWFVI?=
- =?utf-8?B?eTI0eUl4dkRVdDF3RXZBR1k4WWI5T1I2Q2RMclc5a0kvZ1JUVEF5eStRQWxX?=
- =?utf-8?B?ZUhiMkFsWll5NWZHbTVzb053Y1NwemxyOEZDaXpLTm9YQUFlZjNJWjBQOTZi?=
- =?utf-8?B?Vy9XQzFMZ2kzR0krS0d5aGtndGFsMzdDbVZDWVlyRHZoRlo1ZGt2eWIzbXFk?=
- =?utf-8?B?K01nMU1zRUZTMXhlc0tLNW4xMytlREViMEt0KzRNRzZNdm1wQ1k3SVFnbkFC?=
- =?utf-8?B?c05vVEQzeGVSeWZxcTZ6NnRsY0RjbzhnbElNN1hVQXZFZ3NJQThYbGtWeEtO?=
- =?utf-8?B?ekZ4Qy9GSjZKUHpibWFDRnVuWGJ6WnFOY0Ruak0zZ1hGQm11djFnNTg1N2dq?=
- =?utf-8?B?L3RUNy9iY1E1T0M0ZmJvUzAyNHlXMjNQa0oycnhVbHlvMXIzWEVyTU9XdFYr?=
- =?utf-8?B?bWZpcjByeHRkNzhTT1ZlTW53Q0RqT0xRTWlncDN2Mk5MVmxGbFQwZnFISytB?=
- =?utf-8?B?UjkrVnJhTzMwNGtnRnRqcU1WVTZvM3BWVTVRSWZqNnNjdkJoZVhtWEhMU0RB?=
- =?utf-8?B?UXlSSHI5UCtmelRwOGdmcnFvY2JENldTY3dGKzdzVjM3ZCs0NFl3NE50L3JL?=
- =?utf-8?B?bkNsY1VsWTNGNGg2cDdpeFVEa2pKQXBtUlZXMEM4OUJ5NlMzYXUxOHl1bzhJ?=
- =?utf-8?B?alhhMnhKRm1WRUw3Vk9JVUdycElDemJieVlweHNNVjNNMENmeTZvUmMrNDlw?=
- =?utf-8?B?QlFKK2h3Z3JYTTVOQ0kzbUlzVHg2eDZXaEpIdWRCZnBGWitBU1A4cjRsa2pK?=
- =?utf-8?B?R1FteTBWV2lTcGQ5V0JpS2liVVdwcjRGUUJsSGVtb3c0SGdBb21JOTE2VlNn?=
- =?utf-8?B?ZENneVVCWW14WXQ0SUhIZGYzY1YzWXprcTVSbE5aWkVKazhkWXQ0bjFTUkJ2?=
- =?utf-8?B?VGlHSjc5SVowR1J1S2pOZDJhcmVCZ0dNUW4rbnZaSkY5SkNaL29TenEwWU5n?=
- =?utf-8?B?alNaVklaWGZ3dEFhNkIzQUZXNCtmL3hFbCtuQT09?=
+	=?us-ascii?Q?49G6RgOZJBrzAAwS+2tUvxxz1FLRxdttiK7asSeAN5j8fb1OMwFDTZLf0Won?=
+ =?us-ascii?Q?prGlbipG3qZSie/dGPSoNLtydDDLaGA78KR3MNZ3rv7ElWuOze2XsTpY0Rr7?=
+ =?us-ascii?Q?QcEc1lhSD1hEun3SXl3ebELmKinb4CVPzdjV6QD/xZRB35RHPs7sZ2BPiU/B?=
+ =?us-ascii?Q?B2BMzD0KT5jdhxHkxRKHQfNWwwnvVznUIHfkVP5aMs6gJP/y6eVDiEGsTS8a?=
+ =?us-ascii?Q?9ljX6785qBNsmXw0/o6P93SCeBNJut0SEkDWM/J1JWPTQ/OYhg4OjC5ksIQ0?=
+ =?us-ascii?Q?iv7BbAYq1IPC1sC60P0DDrwILv2AHOtDqRtGMTrvFMEcF1nrTq7Uc+szeKue?=
+ =?us-ascii?Q?/MS2L0mvEylU38deA90+Vyg6JKhoXeFF9l0nXTeD4EZISffmdmi8MFiEfSOv?=
+ =?us-ascii?Q?zC3pW0df4zwwa+kNxd3MIiPZ+GBzXBea8be7syZBXG8AKj8nIe54TNCggHNu?=
+ =?us-ascii?Q?qCVIkyfSwTeJH+s2+Oju7rVRpo7g7NepjcudruhEhNbedFh0Ixt7Qeaz2LBc?=
+ =?us-ascii?Q?HVg/mr1Ddawftkr06qoQY6dV2s6OogrFgusDKdorPNLa4/huWs6NEzPCQw7f?=
+ =?us-ascii?Q?N2rCPSfZbRg/Ix7nKl6SHF2L5RF28Wr6rFZxNYiSBHIlk0NKSOKKg2sYP191?=
+ =?us-ascii?Q?Q6q1pCVH6Rpm1Xh/f9GSnrtp1x6CasfOb5Zx2xBcB54VhA7bwdvBwlGK2B96?=
+ =?us-ascii?Q?aX/rt1SsSC8WpqARiQ79lmfnEes/knTEOMfX8tawLHbrvvKI37lm92xdVnUd?=
+ =?us-ascii?Q?lqopuvrMUtBA4DYHOQHym6RqwqSZOiUTxRxfN08drRlamyFSzI3d1Cv6wG+t?=
+ =?us-ascii?Q?V9M9yJaPfDfTKijmfCdHJ3PBPIsc/0NG7na5PBJ/dg+YoqXXh8CiFjQSNXqy?=
+ =?us-ascii?Q?8xIMZctM5T9hpvyYQTWUryWorRoyyJ+/na1cnuzO202rJq1xa+8lobvottVi?=
+ =?us-ascii?Q?tBasqQ4TJ4JP9LhtEugRszHyYob1V/r3chRtY2DbmJz6ybDMcs9b79BZU103?=
+ =?us-ascii?Q?uuFYZPwrDhweJnBpcSHYaICKnYbGipoAEF3HqBHEhyrkD3ArzAI0il+khWmB?=
+ =?us-ascii?Q?Y6PdbiI1w63S+XCumZuGIt2xqOZMhZC/tfhfpT4Q4z5CIzKYJjTK9RYcD5jZ?=
+ =?us-ascii?Q?H/HXz9UJ0PotlrNyiV0XTjiW7vfGKPDYVZqj2FEQ6u+lEC66Ja3cqsNk/FBF?=
+ =?us-ascii?Q?fUmB8SxJMEp/htJPJxGqUiNMm43QJXevrrv4WOKfdMMbb+pWjtzktO+jx6ak?=
+ =?us-ascii?Q?ydeo99FdlMbdGDBKZ2oBXwAOiLXoTLhbhhgyHXEyPOiP0qj1ZDbFfMg6SBK3?=
+ =?us-ascii?Q?oDzK4d46jMFexcJQOlk3HOgJnSuFbJhA5Nm2zo8rRx2SuXpzsJRqP3QGLbJT?=
+ =?us-ascii?Q?mrMq8yoF2q8xhmAqRcILIzJ8M6t/BuKrBi883zsTwSdgDL6hKxFux/4uWBPT?=
+ =?us-ascii?Q?DOa0+KVg5cEr7026zdjcD1sCn+/6z3/RvksSLgOsKqUR8hMRP65yZcBGUXKY?=
+ =?us-ascii?Q?KhcWEXeZC4utner/jdiu35LsYejZrmRZNLUG?=
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(82310400026)(36860700013);DIR:OUT;SFP:1101;
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(82310400026)(36860700013);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jun 2025 18:30:52.9433
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jun 2025 18:30:52.7092
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 120ca019-7131-4397-0bbe-08ddb4166ad4
+X-MS-Exchange-CrossTenant-Network-Message-Id: 43705ef3-c1ec-4e51-4d5e-08ddb4166a9d
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	SJ5PEPF000001F0.namprd05.prod.outlook.com
+	SJ5PEPF000001F7.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS5PPF23E22D637
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB8557
 
-V11:
-- Refactored the devlink code to accept relative TC bandwidth share
-  values instead of percentages.
-- Updated documentation to clarify that values are interpreted as
-  relative shares.
-- Refactored the logic in mlx5 to support proportional scaling for
-  tc-bw values.
-- Switched to `nlmsg_for_each_attr_type()` for cleaner attribute
-  parsing.
-- Added a hardware selftest to validate TC bandwidth behavior.
-- Refactored esw_qos_is_node_empty for readability.
+From: Carolina Jubran <cjubran@nvidia.com>
 
-V10:
-- Added netdevsim selftest for tc-bw ops.
-- Dropped header: field as it’s unnecessary for local constants in
-  devlink.yaml.
+Add the nlmsg_for_each_attr_type() macro to simplify iteration over
+attributes of a specific type in a Netlink message.
 
-V9:
-- Defined DEVLINK_RATE_TCS_MAX as 8 in uapi/linux/devlink.h.
-- Replaced IEEE_8021QAZ_MAX_TCS with DEVLINK_RATE_TCS_MAX throughout
-  the code.
-- Updated devlink-rate-tc-index-max spec to reference the correct UAPI
-  header.
+Convert existing users in vxlan and nfsd to use the new macro.
 
-V8:
-- Limit line width to 80 characters in mlx5 changes instead of 100.
-- Increase the scheduling node levels to support TC arbitration.
-- Ensure parent nodes are set correctly in all code paths that extend
-  the hierarchy depth for TC arbitration.
-- Extended the cover letter with the ongoing discussion on devlink-rate
-  and net-shapers.
-- Extended the cover letter with the Netdev talk link on this series.
+Suggested-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Carolina Jubran <cjubran@nvidia.com>
+Signed-off-by: Mark Bloch <mbloch@nvidia.com>
+---
+ drivers/net/vxlan/vxlan_vnifilter.c | 13 ++++-------
+ fs/nfsd/nfsctl.c                    | 36 +++++++++++------------------
+ include/net/netlink.h               | 14 +++++++++++
+ 3 files changed, 32 insertions(+), 31 deletions(-)
 
-V7:
-- Fixed disabling tc-bw on leaf nodes that did not have tc-bw
-  configured.
-- Fixed an issue where tc-bw was disabled on a node with assigned
-  vports, ensuring that vport->qos.sched_node->parent is correctly
-  updated with the cloned node.
-- Declared a constant for the maximum allowed Traffic Class index in
-  devlink rate.
-- Added a range check to validate rate-tc-index.
-- Added documentation for the tc-bw argument.
-- Add a validation check to ensure that the total bandwidth assigned to
-  all traffic classes sums to 100.
-
-V6:
-- Addressed comments on devlink patch #3.
-- Removed first 4 IFC patches, to be pulled from mlx5-next.
-
-V5:
-- Fix warning in devlink_nl_rate_tc_bw_set().
-- Fix target branch of patch #4.
-
-V4:
-- Renamed the nested attribute for traffic class bandwidth to
-  DEVLINK_ATTR_RATE_TC_BWS.
-- Changed the order of the attributes in `devlink.h`.
-- Refactored the initialization tc-bw array in
-  devlink_nl_rate_tc_bw_set().
-- Added extack messages to provide clear feedback on issues with tc-bw
-  arguments.
-- Updated `rate-tc-bws` to support a multi-attr set, where each
-  attribute includes an index and the corresponding bandwidth for that
-  traffic class.
-- Handled the issue where the user could provide
-  DEVLINK_ATTR_RATE_TC_BWS with duplicate indices.
-- Provided ynl exmaples in patch [1/5] commit message.
-- Take IFC patches to beginning of the series, targeted for mlx5-next.
-
-V3:
-- Dropped rate-tc-index, using tc-bw array index instead.
-- Renamed rate-bw to rate-tc-bw.
-- Documneted what the rate-tc-bw represents and added a range check for
-  validation.
-- Intorduced devlink_nl_rate_tc_bw_set() to parse and set the TC
-  bandwidth values.
-- Updated the user API in the commit message of patch 1/6 to ensure
-  bandwidths sum equals 100.
-- Fixed missing filling of rate-parent in devlink_nl_rate_fill().
-
-V2:
-- Included <linux/dcbnl.h> in devlink.h to resolve missing
-  IEEE_8021QAZ_MAX_TCS definition.
-- Refactored the rate-tc-bw attribute structure to use a separate
-  rate-tc-index.
-- Updated patch 2/6 title.
-
-This patch series extends the devlink-rate API to support traffic class
-(TC) bandwidth management, enabling more granular control over traffic
-shaping and rate limiting across multiple TCs. The API now allows users
-to specify bandwidth proportions for different traffic classes in a
-single command. This is particularly useful for managing Enhanced
-Transmission Selection (ETS) for groups of Virtual Functions (VFs),
-allowing precise bandwidth allocation across traffic classes.
-
-Additionally the series refines the QoS handling in net/mlx5 to support
-TC arbitration and bandwidth management on vports and rate nodes.
-
-Discussions on traffic class shaping in net-shapers began in V5 [1],
-where we discussed with maintainers whether net-shapers should support
-traffic classes and how this could be implemented.
-
-Later, after further conversations with Paolo Abeni and Simon Horman,
-Cosmin provided an update [2], confirming that net-shapers' tree-based
-hierarchy aligns well with traffic classes when treated as distinct
-subsets of netdev queues. Since mlx5 enforces a 1:1 mapping between TX
-queues and traffic classes, this approach seems feasible, though some
-open questions remain regarding queue reconfiguration and certain mlx5
-scheduling behaviors.
-
-Building on that discussion, Cosmin has now shared a concrete
-implementation plan on the netdev mailing list [3]. The plan, developed
-in collaboration with Paolo and Simon, outlines how net-shapers can be
-extended to support the same use cases currently covered by
-devlink-rate, with the eventual goal of aligning both and simplifying
-the shaping infrastructure in the kernel.
-
-This work was presented at Netdev 0x19 in Zagreb [4].
-There we presented how TC scheduling is enforced in mlx5 hardware,
-which led to discussions on the mailing list.
-
-A summary of how things work:
-
-Classification means labeling a packet with a traffic class based on
-the packet's DSCP or VLAN PCP field, then treating packets with
-different traffic classes differently during transmit processing.
-
-In a virtualized setup, VFs are untrusted and do not control
-classification or shaping. Classification is done by the hardware using
-a prio-to-TC mapping set by the hypervisor. VFs only select which send
-queue to use and are expected to respect the classification logic by
-sending each traffic class on its dedicated queue. As stated in the
-net-shapers plan [3], each transmit queue should carry only a single
-traffic class. Mixing classes in a single queue can lead to HOL
-blocking.
-
-In the mlx5 implementation, if the queue used does not match the
-classified traffic class, the hardware moves the queue to the correct
-TC scheduler. This movement is not a reclassification; it’s a necessary
-enforcement step to ensure traffic class isolation is maintained.
-
-Extend devlink-rate API to support rate management on TCs:
-- devlink: Extend the devlink rate API to support traffic class
-  bandwidth management
-
-Introduce a no-op implementation:
-- net/mlx5: Add no-op implementation for setting tc-bw on rate objects
-
-Add support for enabling and disabling TC QoS on vports and nodes:
-- net/mlx5: Add support for setting tc-bw on nodes
-- net/mlx5: Add traffic class scheduling support for vport QoS
-
-Support for setting tc-bw on rate objects:
-- net/mlx5: Manage TC arbiter nodes and implement full support for
-  tc-bw
-
-[1]
-https://lore.kernel.org/netdev/20241204220931.254964-1-tariqt@nvidia.com/
-[2]
-https://lore.kernel.org/netdev/67df1a562614b553dcab043f347a0d7c5393ff83.camel@nvidia.com/
-[3]
-https://lore.kernel.org/netdev/d9831d0c940a7b77419abe7c7330e822bbfd1cfb.camel@nvidia.com/T/
-[4]
-https://netdevconf.info/0x19/sessions/talk/optimizing-bandwidth-allocation-with-ets-and-traffic-classes.html
-
-Carolina Jubran (8):
-  netlink: introduce type-checking attribute iteration for nlmsg
-  devlink: Extend devlink rate API with traffic classes bandwidth management
-  selftest: netdevsim: Add devlink rate tc-bw test
-  net/mlx5: Add no-op implementation for setting tc-bw on rate objects
-  net/mlx5: Add support for setting tc-bw on nodes
-  net/mlx5: Add traffic class scheduling support for vport QoS
-  net/mlx5: Manage TC arbiter nodes and implement full support for tc-bw
-  selftests: drv-net: Add test for devlink-rate traffic class bandwidth distribution
-
- Documentation/netlink/specs/devlink.yaml      |   32 +-
- .../networking/devlink/devlink-port.rst       |    8 +
- .../net/ethernet/mellanox/mlx5/core/devlink.c |    2 +
- .../net/ethernet/mellanox/mlx5/core/esw/qos.c | 1037 ++++++++++++++++-
- .../net/ethernet/mellanox/mlx5/core/esw/qos.h |    8 +
- .../net/ethernet/mellanox/mlx5/core/eswitch.h |   14 +-
- drivers/net/netdevsim/dev.c                   |   43 +
- drivers/net/netdevsim/netdevsim.h             |    1 +
- drivers/net/vxlan/vxlan_vnifilter.c           |   13 +-
- fs/nfsd/nfsctl.c                              |   36 +-
- include/net/devlink.h                         |    8 +
- include/net/netlink.h                         |   14 +
- include/uapi/linux/devlink.h                  |    9 +
- net/devlink/netlink_gen.c                     |   15 +-
- net/devlink/netlink_gen.h                     |    1 +
- net/devlink/rate.c                            |  129 ++
- .../drivers/net/hw/devlink_rate_tc_bw.py      |  466 ++++++++
- .../drivers/net/netdevsim/devlink.sh          |   51 +
- .../testing/selftests/net/lib/py/__init__.py  |    2 +-
- tools/testing/selftests/net/lib/py/ynl.py     |    5 +
- 20 files changed, 1823 insertions(+), 71 deletions(-)
- create mode 100755 tools/testing/selftests/drivers/net/hw/devlink_rate_tc_bw.py
-
-
-base-commit: 8dacfd92dbefee829ca555a860e86108fdd1d55b
+diff --git a/drivers/net/vxlan/vxlan_vnifilter.c b/drivers/net/vxlan/vxlan_vnifilter.c
+index 4ff56d9f8f28..adc89e651e27 100644
+--- a/drivers/net/vxlan/vxlan_vnifilter.c
++++ b/drivers/net/vxlan/vxlan_vnifilter.c
+@@ -971,15 +971,10 @@ static int vxlan_vnifilter_process(struct sk_buff *skb, struct nlmsghdr *nlh,
+ 	if (!(vxlan->cfg.flags & VXLAN_F_VNIFILTER))
+ 		return -EOPNOTSUPP;
+ 
+-	nlmsg_for_each_attr(attr, nlh, sizeof(*tmsg), rem) {
+-		switch (nla_type(attr)) {
+-		case VXLAN_VNIFILTER_ENTRY:
+-			err = vxlan_process_vni_filter(vxlan, attr,
+-						       nlh->nlmsg_type, extack);
+-			break;
+-		default:
+-			continue;
+-		}
++	nlmsg_for_each_attr_type(attr, VXLAN_VNIFILTER_ENTRY, nlh,
++				 sizeof(*tmsg), rem) {
++		err = vxlan_process_vni_filter(vxlan, attr, nlh->nlmsg_type,
++					       extack);
+ 		vnis++;
+ 		if (err)
+ 			break;
+diff --git a/fs/nfsd/nfsctl.c b/fs/nfsd/nfsctl.c
+index 3f3e9f6c4250..786dbba0d7aa 100644
+--- a/fs/nfsd/nfsctl.c
++++ b/fs/nfsd/nfsctl.c
+@@ -1621,10 +1621,9 @@ int nfsd_nl_threads_set_doit(struct sk_buff *skb, struct genl_info *info)
+ 		return -EINVAL;
+ 
+ 	/* count number of SERVER_THREADS values */
+-	nlmsg_for_each_attr(attr, info->nlhdr, GENL_HDRLEN, rem) {
+-		if (nla_type(attr) == NFSD_A_SERVER_THREADS)
+-			count++;
+-	}
++	nlmsg_for_each_attr_type(attr, NFSD_A_SERVER_THREADS, info->nlhdr,
++				 GENL_HDRLEN, rem)
++		count++;
+ 
+ 	mutex_lock(&nfsd_mutex);
+ 
+@@ -1636,12 +1635,11 @@ int nfsd_nl_threads_set_doit(struct sk_buff *skb, struct genl_info *info)
+ 	}
+ 
+ 	i = 0;
+-	nlmsg_for_each_attr(attr, info->nlhdr, GENL_HDRLEN, rem) {
+-		if (nla_type(attr) == NFSD_A_SERVER_THREADS) {
+-			nthreads[i++] = nla_get_u32(attr);
+-			if (i >= nrpools)
+-				break;
+-		}
++	nlmsg_for_each_attr_type(attr, NFSD_A_SERVER_THREADS, info->nlhdr,
++				 GENL_HDRLEN, rem) {
++		nthreads[i++] = nla_get_u32(attr);
++		if (i >= nrpools)
++			break;
+ 	}
+ 
+ 	if (info->attrs[NFSD_A_SERVER_GRACETIME] ||
+@@ -1782,14 +1780,12 @@ int nfsd_nl_version_set_doit(struct sk_buff *skb, struct genl_info *info)
+ 	for (i = 0; i <= NFSD_SUPPORTED_MINOR_VERSION; i++)
+ 		nfsd_minorversion(nn, i, NFSD_CLEAR);
+ 
+-	nlmsg_for_each_attr(attr, info->nlhdr, GENL_HDRLEN, rem) {
++	nlmsg_for_each_attr_type(attr, NFSD_A_SERVER_PROTO_VERSION, info->nlhdr,
++				 GENL_HDRLEN, rem) {
+ 		struct nlattr *tb[NFSD_A_VERSION_MAX + 1];
+ 		u32 major, minor = 0;
+ 		bool enabled;
+ 
+-		if (nla_type(attr) != NFSD_A_SERVER_PROTO_VERSION)
+-			continue;
+-
+ 		if (nla_parse_nested(tb, NFSD_A_VERSION_MAX, attr,
+ 				     nfsd_version_nl_policy, info->extack) < 0)
+ 			continue;
+@@ -1940,14 +1936,12 @@ int nfsd_nl_listener_set_doit(struct sk_buff *skb, struct genl_info *info)
+ 	 * Walk the list of server_socks from userland and move any that match
+ 	 * back to sv_permsocks
+ 	 */
+-	nlmsg_for_each_attr(attr, info->nlhdr, GENL_HDRLEN, rem) {
++	nlmsg_for_each_attr_type(attr, NFSD_A_SERVER_SOCK_ADDR, info->nlhdr,
++				 GENL_HDRLEN, rem) {
+ 		struct nlattr *tb[NFSD_A_SOCK_MAX + 1];
+ 		const char *xcl_name;
+ 		struct sockaddr *sa;
+ 
+-		if (nla_type(attr) != NFSD_A_SERVER_SOCK_ADDR)
+-			continue;
+-
+ 		if (nla_parse_nested(tb, NFSD_A_SOCK_MAX, attr,
+ 				     nfsd_sock_nl_policy, info->extack) < 0)
+ 			continue;
+@@ -2002,15 +1996,13 @@ int nfsd_nl_listener_set_doit(struct sk_buff *skb, struct genl_info *info)
+ 		svc_xprt_destroy_all(serv, net);
+ 
+ 	/* walk list of addrs again, open any that still don't exist */
+-	nlmsg_for_each_attr(attr, info->nlhdr, GENL_HDRLEN, rem) {
++	nlmsg_for_each_attr_type(attr, NFSD_A_SERVER_SOCK_ADDR, info->nlhdr,
++				 GENL_HDRLEN, rem) {
+ 		struct nlattr *tb[NFSD_A_SOCK_MAX + 1];
+ 		const char *xcl_name;
+ 		struct sockaddr *sa;
+ 		int ret;
+ 
+-		if (nla_type(attr) != NFSD_A_SERVER_SOCK_ADDR)
+-			continue;
+-
+ 		if (nla_parse_nested(tb, NFSD_A_SOCK_MAX, attr,
+ 				     nfsd_sock_nl_policy, info->extack) < 0)
+ 			continue;
+diff --git a/include/net/netlink.h b/include/net/netlink.h
+index 90a560dc167a..1a8356ca4b78 100644
+--- a/include/net/netlink.h
++++ b/include/net/netlink.h
+@@ -68,6 +68,8 @@
+  *   nlmsg_for_each_msg()		loop over all messages
+  *   nlmsg_validate()			validate netlink message incl. attrs
+  *   nlmsg_for_each_attr()		loop over all attributes
++ *   nlmsg_for_each_attr_type()		loop over all attributes with the
++ *					given type
+  *
+  * Misc:
+  *   nlmsg_report()			report back to application?
+@@ -966,6 +968,18 @@ static inline u32 nlmsg_seq(const struct nlmsghdr *nlh)
+ 	nla_for_each_attr(pos, nlmsg_attrdata(nlh, hdrlen), \
+ 			  nlmsg_attrlen(nlh, hdrlen), rem)
+ 
++/**
++ * nlmsg_for_each_attr_type - iterate over a stream of attributes
++ * @pos: loop counter, set to the current attribute
++ * @type: required attribute type for @pos
++ * @nlh: netlink message header
++ * @hdrlen: length of the family specific header
++ * @rem: initialized to len, holds bytes currently remaining in stream
++ */
++#define nlmsg_for_each_attr_type(pos, type, nlh, hdrlen, rem) \
++	nlmsg_for_each_attr(pos, nlh, hdrlen, rem) \
++		if (nla_type(pos) == type)
++
+ /**
+  * nlmsg_put - Add a new netlink message to an skb
+  * @skb: socket buffer to store message in
 -- 
 2.34.1
 
