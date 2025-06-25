@@ -1,449 +1,437 @@
-Return-Path: <linux-kselftest+bounces-35736-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35737-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 152CBAE7DDA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jun 2025 11:48:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF283AE7DFE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jun 2025 11:51:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B744E188BD74
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jun 2025 09:44:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 78BC616D43C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jun 2025 09:49:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC305270554;
-	Wed, 25 Jun 2025 09:37:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE2AC29A9F5;
+	Wed, 25 Jun 2025 09:47:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ol/Y0rap"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="HedyouSZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB40C273D67;
-	Wed, 25 Jun 2025 09:37:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E604429A32A;
+	Wed, 25 Jun 2025 09:47:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750844244; cv=none; b=sz2IBMG9siloMEj9ykGkpkDm3svMndVtkUoQwqP86W2nVrf5Cgxf/GfWHg/Hfse4sUfMwRH37X7vcR6S2t0PbejPoL4K+FJpN4gTfDBGpFy7p7sI29rVjSh/5SeD0SB/qDBYJRSNNJ1gtH8TuAQCvEXeA+CJdHi2E0DSGeS5nMA=
+	t=1750844835; cv=none; b=MqO5xgupc/8+ajA4F+d8IlZPZGAwD/Q1NsHRUDvAINqQKmXPpL6KrVB6nnhhE1t+0LNZNCplUsm/lK02h0moDltSbG4T6BG735rQWvjuuqiSRyZHG0f1Uf8OKpW1xb6kJRFoM2qJdcZJ+H/HzisCdQ/H96g8D2EWA8u9oJ5aYI8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750844244; c=relaxed/simple;
-	bh=QAAw8lHoQe88LywfWFJxKDuVBFv6U47HaKF8hR18sao=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qfcqAQ9DdM76BqGwrE+lODPgUxyJuwm7mK/W+vtddikcnz5y4yp+Qi6Mh8xuuv56IBFq6RI98kVgTqclwT7Iqf5TqAMIfta7HUPvhubw3HfcBczHq4ZU98IgdviAW6ne0CUuRPm6yI/okAeRLCGCzwVwsRyAXZW39Pg6xNnWyNI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ol/Y0rap; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55P7VHJ3016009;
-	Wed, 25 Jun 2025 09:37:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=duIT7v
-	YThX9XWpWOLWRNfP/IrShB8W5j2qBMdKOPyRA=; b=ol/Y0rapTnRtY/ETlbu7JY
-	Ww6HEywCSzIYs2R5GVbPdm/Dd39AJJp3zB3TvzfTsQrIn1xmSziC2Uk5QQFaa9yh
-	QYBZeeR+X/DboLaAN2VqWJbgnYRtL78GDfcw0GAgO8G/75pcmS9TLQfrKqjJitwL
-	r8PHtrbXYkXHALSVHJmrjOTp5ztHSEPRSknu1SkPXvKQ4FnlqwsECvk835DtX7g+
-	AKNK38HwkSRC6kuIx0tTGVUt6gkbD0iPoJ/O4wlRZVFeKeU1L8gMNGuFuG0s9v2z
-	TraKml9ZmjY0wBBJataik3Rjlwxu1guzqqzN7ed+4ypL98wOTn5zbezKqdmFCcEg
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47dm8jefss-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 25 Jun 2025 09:37:05 +0000 (GMT)
-Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 55P9UZG1027503;
-	Wed, 25 Jun 2025 09:37:04 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47dm8jefsd-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 25 Jun 2025 09:37:04 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 55P7SM4h014710;
-	Wed, 25 Jun 2025 09:37:01 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 47e9s2gb4q-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 25 Jun 2025 09:37:01 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 55P9b0CG53084626
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 25 Jun 2025 09:37:00 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0E4B020043;
-	Wed, 25 Jun 2025 09:37:00 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C66F420040;
-	Wed, 25 Jun 2025 09:36:55 +0000 (GMT)
-Received: from li-06431bcc-2712-11b2-a85c-a6fe68df28f9.ibm.com (unknown [9.124.208.75])
-	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Wed, 25 Jun 2025 09:36:55 +0000 (GMT)
-Date: Wed, 25 Jun 2025 15:06:52 +0530
-From: Donet Tom <donettom@linux.ibm.com>
-To: Dev Jain <dev.jain@arm.com>
-Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-        Aboorva Devarajan <aboorvad@linux.ibm.com>, akpm@linux-foundation.org,
-        Liam.Howlett@oracle.com, shuah@kernel.org, pfalcato@suse.de,
-        david@redhat.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
-        npache@redhat.com, ryan.roberts@arm.com, baohua@kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ritesh.list@gmail.com
-Subject: Re: [PATCH 1/6] mm/selftests: Fix virtual_address_range test issues.
-Message-ID: <aFvDNPZWs2CA_MoU@li-06431bcc-2712-11b2-a85c-a6fe68df28f9.ibm.com>
-References: <c93110a4-19e4-4a1d-b044-6b7f521eaa0d@lucifer.local>
- <815793f1-6800-4b9a-852e-f13d6308f50f@arm.com>
- <2756fa2b-e8bf-4c66-bf9b-c85dc63dfc33@lucifer.local>
- <41d9a70d-9791-4212-af23-5b13d8e4a47d@arm.com>
- <aFPI_blZGhvKSbNJ@li-06431bcc-2712-11b2-a85c-a6fe68df28f9.ibm.com>
- <546d7aa5-9ea3-4fce-a604-b1676a61d6cd@arm.com>
- <aFbyFMjVs9F3KMex@li-06431bcc-2712-11b2-a85c-a6fe68df28f9.ibm.com>
- <2fc32719-1e38-4bf0-8ec5-5bcb452d939f@arm.com>
- <aFmPliw773p1VvAY@li-06431bcc-2712-11b2-a85c-a6fe68df28f9.ibm.com>
- <673c9442-7d69-408b-a2c4-2baa696a7e86@arm.com>
+	s=arc-20240116; t=1750844835; c=relaxed/simple;
+	bh=IUNbPvytI6sSxYjGdH/2+FKF4YqW598gM5WxCp1EFCc=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=CxzS/th3Q+X02UOfU5zCtr4B80b2PxFLxPAaGmVYELZyYjrwgzT/Po4hUOpMv6p7oIBesHYnMnu8EybQjyzmpMHdR+1Z6SP7AZExiGPcqT2v3LLdDoC/LTJYbMrhMFRWXFZRAGGP7j8R2DB7zESxAYAMb/6yhCHYJ4FFBWRFE4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=HedyouSZ; arc=none smtp.client-ip=130.133.4.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=t4ZysQSFBfxYo16LI7Y4EY1oY84ZVNOVcKgo85fJhqs=; t=1750844832; x=1751449632; 
+	b=HedyouSZQ5tJq2OJ4VloDbFER7mfpYJONwVw+w9IBHEQpXHal2SQ+AViMuRc/2UY4kqMhnWrf9G
+	xOzYIiOXycN79y0gLyoHZ7gkUU/hz3V9Kb+LM8QMMlt9cQ9bVkuijBjWzDxHFMVI6SQxSq+j8/vN/
+	M3ZFiFboaezBrVcMkPOIXNlgyYb2/N9Sixw8bmYaN5eSVtFhjcvN/4p0Z8eQDHqijh59xnjUuQlEE
+	ORRpHYrDn/WfF6CsiWYU08QNY+KlYuXF43GgolEzJH0zScfYcyswMJmegd/Nl2djeUv5hJ3jn+HMc
+	Vpmg4PUsXhmoK9QrIoU2T5SxC2QUVTxo4K8g==;
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.98)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1uUMic-000000000rq-14l5; Wed, 25 Jun 2025 11:47:02 +0200
+Received: from p57bd96d0.dip0.t-ipconnect.de ([87.189.150.208] helo=[192.168.178.61])
+          by inpost2.zedat.fu-berlin.de (Exim 4.98)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1uUMib-00000001QAV-420T; Wed, 25 Jun 2025 11:47:02 +0200
+Message-ID: <ff44b8bb790c9ff2997ea0a280eb4e2445675ab8.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH v2 0/3] tools/nolibc: add support for SuperH
+From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To: Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>, Yoshinori
+ Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, Willy
+ Tarreau <w@1wt.eu>,  Shuah Khan <shuah@kernel.org>
+Cc: linux-sh@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Date: Wed, 25 Jun 2025 11:47:01 +0200
+In-Reply-To: <20250623-nolibc-sh-v2-0-0f5b4b303025@weissschuh.net>
+References: <20250623-nolibc-sh-v2-0-0f5b4b303025@weissschuh.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <673c9442-7d69-408b-a2c4-2baa696a7e86@arm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjI1MDA2OSBTYWx0ZWRfX0iJZbH4RZkZK u0t2Zi/7WypS2huIG4OwOXtScs4HMFEvh2ZN5BOVuZKALBJBROM1uecgePSLKgn+uVDVWJAX20L ok4yRD+KKfuN5Rhg2bo3SnxOPykto1ALr64JeraenWVmqk6su3AMhOCNZejPcp3nylQuPkiUYiA
- SWpoNLRskT3W1YJH1qt0yik5z1CDl3LDguqS5hb5CM+rPNJW3pgVMJUb73CqOJW32aLw9Pre75C TunpOwtkSfjgM0d8SvzfaRFpKaTHOiddcKFwfHg+ucZmuxzuA3xJCqRuUD96Bw3XcXgjIGtA/72 F4mdHfhACEYN/oH1etHgrTsf6VjqCjxg6jKGuHVNfOSVk5lyLlVuBAGhPQDLQJEhaL4SqZ6RgEw
- XDRY8JNpOn4idAmfmay4z/otASuq6XzfSZg2QUHRns9a4jOr8kDEW1OQsk9cZ0DBFnJ38KsY
-X-Proofpoint-GUID: Z5r55ByDizHJ-aXph3TfBfNKCoelqRP3
-X-Proofpoint-ORIG-GUID: GITBJs78SYYz-Zab8GAvxJcLabiTrtcu
-X-Authority-Analysis: v=2.4 cv=combk04i c=1 sm=1 tr=0 ts=685bc341 cx=c_pps a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17 a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=CpnFgls9S9_tUT08MQ0A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-06-25_02,2025-06-23_07,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 spamscore=0 adultscore=0 mlxlogscore=999 clxscore=1015
- impostorscore=0 suspectscore=0 mlxscore=0 phishscore=0 lowpriorityscore=0
- bulkscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2506250069
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-ZEDAT-Hint: PO
 
-eOn Tue, Jun 24, 2025 at 11:45:09AM +0530, Dev Jain wrote:
-> 
-> On 23/06/25 11:02 pm, Donet Tom wrote:
-> > On Mon, Jun 23, 2025 at 10:23:02AM +0530, Dev Jain wrote:
-> > > On 21/06/25 11:25 pm, Donet Tom wrote:
-> > > > On Fri, Jun 20, 2025 at 08:15:25PM +0530, Dev Jain wrote:
-> > > > > On 19/06/25 1:53 pm, Donet Tom wrote:
-> > > > > > On Wed, Jun 18, 2025 at 08:13:54PM +0530, Dev Jain wrote:
-> > > > > > > On 18/06/25 8:05 pm, Lorenzo Stoakes wrote:
-> > > > > > > > On Wed, Jun 18, 2025 at 07:47:18PM +0530, Dev Jain wrote:
-> > > > > > > > > On 18/06/25 7:37 pm, Lorenzo Stoakes wrote:
-> > > > > > > > > > On Wed, Jun 18, 2025 at 07:28:16PM +0530, Dev Jain wrote:
-> > > > > > > > > > > On 18/06/25 5:27 pm, Lorenzo Stoakes wrote:
-> > > > > > > > > > > > On Wed, Jun 18, 2025 at 05:15:50PM +0530, Dev Jain wrote:
-> > > > > > > > > > > > Are you accounting for sys.max_map_count? If not, then you'll be hitting that
-> > > > > > > > > > > > first.
-> > > > > > > > > > > run_vmtests.sh will run the test in overcommit mode so that won't be an issue.
-> > > > > > > > > > Umm, what? You mean overcommit all mode, and that has no bearing on the max
-> > > > > > > > > > mapping count check.
-> > > > > > > > > > 
-> > > > > > > > > > In do_mmap():
-> > > > > > > > > > 
-> > > > > > > > > > 	/* Too many mappings? */
-> > > > > > > > > > 	if (mm->map_count > sysctl_max_map_count)
-> > > > > > > > > > 		return -ENOMEM;
-> > > > > > > > > > 
-> > > > > > > > > > 
-> > > > > > > > > > As well as numerous other checks in mm/vma.c.
-> > > > > > > > > Ah sorry, didn't look at the code properly just assumed that overcommit_always meant overriding
-> > > > > > > > > this.
-> > > > > > > > No problem! It's hard to be aware of everything in mm :)
-> > > > > > > > 
-> > > > > > > > > > I'm not sure why an overcommit toggle is even necessary when you could use
-> > > > > > > > > > MAP_NORESERVE or simply map PROT_NONE to avoid the OVERCOMMIT_GUESS limits?
-> > > > > > > > > > 
-> > > > > > > > > > I'm pretty confused as to what this test is really achieving honestly. This
-> > > > > > > > > > isn't a useful way of asserting mmap() behaviour as far as I can tell.
-> > > > > > > > > Well, seems like a useful way to me at least : ) Not sure if you are in the mood
-> > > > > > > > > to discuss that but if you'd like me to explain from start to end what the test
-> > > > > > > > > is doing, I can do that : )
-> > > > > > > > > 
-> > > > > > > > I just don't have time right now, I guess I'll have to come back to it
-> > > > > > > > later... it's not the end of the world for it to be iffy in my view as long as
-> > > > > > > > it passes, but it might just not be of great value.
-> > > > > > > > 
-> > > > > > > > Philosophically I'd rather we didn't assert internal implementation details like
-> > > > > > > > where we place mappings in userland memory. At no point do we promise to not
-> > > > > > > > leave larger gaps if we feel like it :)
-> > > > > > > You have a fair point. Anyhow a debate for another day.
-> > > > > > > 
-> > > > > > > > I'm guessing, reading more, the _real_ test here is some mathematical assertion
-> > > > > > > > about layout from HIGH_ADDR_SHIFT -> end of address space when using hints.
-> > > > > > > > 
-> > > > > > > > But again I'm not sure that achieves much and again also is asserting internal
-> > > > > > > > implementation details.
-> > > > > > > > 
-> > > > > > > > Correct behaviour of this kind of thing probably better belongs to tests in the
-> > > > > > > > userland VMA testing I'd say.
-> > > > > > > > 
-> > > > > > > > Sorry I don't mean to do down work you've done before, just giving an honest
-> > > > > > > > technical appraisal!
-> > > > > > > Nah, it will be rather hilarious to see it all go down the drain xD
-> > > > > > > 
-> > > > > > > > Anyway don't let this block work to fix the test if it's failing. We can revisit
-> > > > > > > > this later.
-> > > > > > > Sure. @Aboorva and Donet, I still believe that the correct approach is to elide
-> > > > > > > the gap check at the crossing boundary. What do you think?
-> > > > > > > 
-> > > > > > One problem I am seeing with this approach is that, since the hint address
-> > > > > > is generated randomly, the VMAs are also being created at randomly based on
-> > > > > > the hint address.So, for the VMAs created at high addresses, we cannot guarantee
-> > > > > > that the gaps between them will be aligned to MAP_CHUNK_SIZE.
-> > > > > > 
-> > > > > > High address VMAs
-> > > > > > -----------------
-> > > > > > 1000000000000-1000040000000 r--p 00000000 00:00 0
-> > > > > > 2000000000000-2000040000000 r--p 00000000 00:00 0
-> > > > > > 4000000000000-4000040000000 r--p 00000000 00:00 0
-> > > > > > 8000000000000-8000040000000 r--p 00000000 00:00 0
-> > > > > > e80009d260000-fffff9d260000 r--p 00000000 00:00 0
-> > > > > > 
-> > > > > > I have a different approach to solve this issue.
-> > > > > It is really weird that such a large amount of VA space
-> > > > > is left between the two VMAs yet mmap is failing.
-> > > > > 
-> > > > > 
-> > > > > 
-> > > > > Can you please do the following:
-> > > > > set /proc/sys/vm/max_map_count to the highest value possible.
-> > > > > If running without run_vmtests.sh, set /proc/sys/vm/overcommit_memory to 1.
-> > > > > In validate_complete_va_space:
-> > > > > 
-> > > > > if (start_addr >= HIGH_ADDR_MARK && found == false) {
-> > > > > 	found = true;
-> > > > > 	continue;
-> > > > > }
-> > > > Thanks Dev for the suggestion. I set max_map_count and set overcommit
-> > > > memory to 1, added this code change as well, and then tried. Still, the
-> > > > test is failing
-> > > > 
-> > > > > where found is initialized to false. This will skip the check
-> > > > > for the boundary.
-> > > > > 
-> > > > > After this can you tell whether the test is still failing.
-> > > > > 
-> > > > > Also can you give me the complete output of proc/pid/maps
-> > > > > after putting a sleep at the end of the test.
-> > > > > 
-> > > > on powerpc support DEFAULT_MAP_WINDOW is 128TB and with
-> > > > total address space size is 4PB With hint it can map upto
-> > > > 4PB. Since the hint addres is random in this test random hing VMAs
-> > > > are getting created. IIUC this is expected only.
-> > > > 
-> > > > 
-> > > > 10000000-10010000 r-xp 00000000 fd:05 134226638                          /home/donet/linux/tools/testing/selftests/mm/virtual_address_range
-> > > > 10010000-10020000 r--p 00000000 fd:05 134226638                          /home/donet/linux/tools/testing/selftests/mm/virtual_address_range
-> > > > 10020000-10030000 rw-p 00010000 fd:05 134226638                          /home/donet/linux/tools/testing/selftests/mm/virtual_address_range
-> > > > 30000000-10030000000 r--p 00000000 00:00 0                               [anon:virtual_address_range]
-> > > > 10030770000-100307a0000 rw-p 00000000 00:00 0                            [heap]
-> > > > 1004f000000-7fff8f000000 r--p 00000000 00:00 0                           [anon:virtual_address_range]
-> > > > 7fff8faf0000-7fff8fe00000 rw-p 00000000 00:00 0
-> > > > 7fff8fe00000-7fff90030000 r-xp 00000000 fd:00 792355                     /usr/lib64/libc.so.6
-> > > > 7fff90030000-7fff90040000 r--p 00230000 fd:00 792355                     /usr/lib64/libc.so.6
-> > > > 7fff90040000-7fff90050000 rw-p 00240000 fd:00 792355                     /usr/lib64/libc.so.6
-> > > > 7fff90050000-7fff90130000 r-xp 00000000 fd:00 792358                     /usr/lib64/libm.so.6
-> > > > 7fff90130000-7fff90140000 r--p 000d0000 fd:00 792358                     /usr/lib64/libm.so.6
-> > > > 7fff90140000-7fff90150000 rw-p 000e0000 fd:00 792358                     /usr/lib64/libm.so.6
-> > > > 7fff90160000-7fff901a0000 r--p 00000000 00:00 0                          [vvar]
-> > > > 7fff901a0000-7fff901b0000 r-xp 00000000 00:00 0                          [vdso]
-> > > > 7fff901b0000-7fff90200000 r-xp 00000000 fd:00 792351                     /usr/lib64/ld64.so.2
-> > > > 7fff90200000-7fff90210000 r--p 00040000 fd:00 792351                     /usr/lib64/ld64.so.2
-> > > > 7fff90210000-7fff90220000 rw-p 00050000 fd:00 792351                     /usr/lib64/ld64.so.2
-> > > > 7fffc9770000-7fffc9880000 rw-p 00000000 00:00 0                          [stack]
-> > > > 1000000000000-1000040000000 r--p 00000000 00:00 0                        [anon:virtual_address_range]
-> > > > 2000000000000-2000040000000 r--p 00000000 00:00 0                        [anon:virtual_address_range]
-> > > > 4000000000000-4000040000000 r--p 00000000 00:00 0                        [anon:virtual_address_range]
-> > > > 8000000000000-8000040000000 r--p 00000000 00:00 0                        [anon:virtual_address_range]
-> > > > eb95410220000-fffff90220000 r--p 00000000 00:00 0                        [anon:virtual_address_range]
-> > > > 
-> > > > 
-> > > > 
-> > > > 
-> > > > If I give the hint address serially from 128TB then the address
-> > > > space is contigous and gap is also MAP_SIZE, the test is passing.
-> > > > 
-> > > > 10000000-10010000 r-xp 00000000 fd:05 134226638                          /home/donet/linux/tools/testing/selftests/mm/virtual_address_range
-> > > > 10010000-10020000 r--p 00000000 fd:05 134226638                          /home/donet/linux/tools/testing/selftests/mm/virtual_address_range
-> > > > 10020000-10030000 rw-p 00010000 fd:05 134226638                          /home/donet/linux/tools/testing/selftests/mm/virtual_address_range
-> > > > 33000000-10033000000 r--p 00000000 00:00 0                               [anon:virtual_address_range]
-> > > > 10033380000-100333b0000 rw-p 00000000 00:00 0                            [heap]
-> > > > 1006f0f0000-10071000000 rw-p 00000000 00:00 0
-> > > > 10071000000-7fffb1000000 r--p 00000000 00:00 0                           [anon:virtual_address_range]
-> > > > 7fffb15d0000-7fffb1800000 r-xp 00000000 fd:00 792355                     /usr/lib64/libc.so.6
-> > > > 7fffb1800000-7fffb1810000 r--p 00230000 fd:00 792355                     /usr/lib64/libc.so.6
-> > > > 7fffb1810000-7fffb1820000 rw-p 00240000 fd:00 792355                     /usr/lib64/libc.so.6
-> > > > 7fffb1820000-7fffb1900000 r-xp 00000000 fd:00 792358                     /usr/lib64/libm.so.6
-> > > > 7fffb1900000-7fffb1910000 r--p 000d0000 fd:00 792358                     /usr/lib64/libm.so.6
-> > > > 7fffb1910000-7fffb1920000 rw-p 000e0000 fd:00 792358                     /usr/lib64/libm.so.6
-> > > > 7fffb1930000-7fffb1970000 r--p 00000000 00:00 0                          [vvar]
-> > > > 7fffb1970000-7fffb1980000 r-xp 00000000 00:00 0                          [vdso]
-> > > > 7fffb1980000-7fffb19d0000 r-xp 00000000 fd:00 792351                     /usr/lib64/ld64.so.2
-> > > > 7fffb19d0000-7fffb19e0000 r--p 00040000 fd:00 792351                     /usr/lib64/ld64.so.2
-> > > > 7fffb19e0000-7fffb19f0000 rw-p 00050000 fd:00 792351                     /usr/lib64/ld64.so.2
-> > > > 7fffc5470000-7fffc5580000 rw-p 00000000 00:00 0                          [stack]
-> > > > 800000000000-2aab000000000 r--p 00000000 00:00 0                         [anon:virtual_address_range]
-> > > > 
-> > > > 
-> > > Thank you for this output. I can't wrap my head around why this behaviour changes
-> > > when you generate the hint sequentially. The mmap() syscall is supposed to do the
-> > > following (irrespective of high VA space or not) - if the allocation at the hint
-> > Yes, it is working as expected. On PowerPC, the DEFAULT_MAP_WINDOW is
-> > 128TB, and the system can map up to 4PB.
-> > 
-> > In the test, the first mmap call maps memory up to 128TB without any
-> > hint, so the VMAs are created below the 128TB boundary.
-> > 
-> > In the second mmap call, we provide a hint starting from 256TB, and
-> > the hint address is generated randomly above 256TB. The mappings are
-> > correctly created at these hint addresses. Since the hint addresses
-> > are random, the resulting VMAs are also created at random locations.
-> > 
-> > So, what I tried is: mapping from 0 to 128TB without any hint, and
-> > then for the second mmap, instead of starting the hint from 256TB, I
-> > started from 128TB. Instead of using random hint addresses, I used
-> > sequential hint addresses from 128TB up to 512TB. With this change,
-> > the VMAs are created in order, and the test passes.
-> > 
-> > 800000000000-2aab000000000 r--p 00000000 00:00 0    128TB to 512TB VMA
-> > 
-> > I think we will see same behaviour on x86 with X86_FEATURE_LA57.
-> > 
-> > I will send the updated patch in V2.
-> 
-> Since you say it fails on both radix and hash, it means that the generic
-> code path is failing. I see that on my system, when I run the test with
-> LPA2 config, write() fails with errno set to -ENOMEM. Can you apply
-> the following diff and check whether the test fails still. Doing this
-> fixed it for arm64.
-> 
-> diff --git a/tools/testing/selftests/mm/virtual_address_range.c b/tools/testing/selftests/mm/virtual_address_range.c
-> 
-> index b380e102b22f..3032902d01f2 100644
-> 
-> --- a/tools/testing/selftests/mm/virtual_address_range.c
-> 
-> +++ b/tools/testing/selftests/mm/virtual_address_range.c
-> 
-> @@ -173,10 +173,6 @@ static int validate_complete_va_space(void)
-> 
->                  */
-> 
->                 hop = 0;
-> 
->                 while (start_addr + hop < end_addr) {
-> 
-> -                       if (write(fd, (void *)(start_addr + hop), 1) != 1)
-> 
-> -                               return 1;
-> 
-> -                       lseek(fd, 0, SEEK_SET);
-> 
-> -
-> 
->                         if (is_marked_vma(vma_name))
-> 
->                                 munmap((char *)(start_addr + hop), MAP_CHUNK_SIZE);
->
+Hi Thomas,
 
-Even with this change, the test is still failing. In this case,
-we are allocating physical memory and writing into it, but our
-issue seems to be with the gap between VMAs, so I believe this
-might not be directly related.
+On Mon, 2025-06-23 at 23:15 +0200, Thomas Wei=C3=9Fschuh wrote:
+> Add support for SuperH/"sh" to nolibc.
+> Only sh4 is tested for now.
+>=20
+> This is only tested on QEMU so far.
+> Additional testing would be very welcome.
+> Test instructions:
+> $ cd tools/testings/selftests/nolibc/
+> $ make -f Makefile.nolibc ARCH=3Dsh CROSS_COMPILE=3Dsh4-linux- nolibc-tes=
+t
+> $ file nolibc-test
+> nolibc-test: ELF 32-bit LSB executable, Renesas SH, version 1 (SYSV), sta=
+tically linked, not stripped
+> $ ./nolibc-test
+> Running test 'startup'
+> 0 argc =3D 1                                                        [OK]
+> ...
+> Total number of errors: 0
+> Exiting with status 0
 
-I will send the next revision where the test passes and no
-issues are observed
+Here is the testrun of the nolibc-test on my SH7785LCR evaluation board:
 
-Just curious — with LPA2, is the second mmap() call successful?
-And are the VMAs being created at the hint address as expected?
- 
-> > 
-> > > addr succeeds, then all is well, otherwise, do a top-down search for a large
-> > > enough gap. I am not aware of the nuances in powerpc but I really am suspecting
-> > > a bug in powerpc mmap code. Can you try to do some tracing - which function
-> > > eventually fails to find the empty gap?
-> > > 
-> > > Through my limited code tracing - we should end up in slice_find_area_topdown,
-> > > then we ask the generic code to find the gap using vm_unmapped_area. So I
-> > > suspect something is happening between this, probably slice_scan_available().
-> > > 
-> > > > > >    From 0 to 128TB, we map memory directly without using any hint. For the range above
-> > > > > > 256TB up to 512TB, we perform the mapping using hint addresses. In the current test,
-> > > > > > we use random hint addresses, but I have modified it to generate hint addresses linearly
-> > > > > > starting from 128TB.
-> > > > > > 
-> > > > > > With this change:
-> > > > > > 
-> > > > > > The 0–128TB range is mapped without hints and verified accordingly.
-> > > > > > 
-> > > > > > The 128TB–512TB range is mapped using linear hint addresses and then verified.
-> > > > > > 
-> > > > > > Below are the VMAs obtained with this approach:
-> > > > > > 
-> > > > > > 10000000-10010000 r-xp 00000000 fd:05 135019531
-> > > > > > 10010000-10020000 r--p 00000000 fd:05 135019531
-> > > > > > 10020000-10030000 rw-p 00010000 fd:05 135019531
-> > > > > > 20000000-10020000000 r--p 00000000 00:00 0
-> > > > > > 10020800000-10020830000 rw-p 00000000 00:00 0
-> > > > > > 1004bcf0000-1004c000000 rw-p 00000000 00:00 0
-> > > > > > 1004c000000-7fff8c000000 r--p 00000000 00:00 0
-> > > > > > 7fff8c130000-7fff8c360000 r-xp 00000000 fd:00 792355
-> > > > > > 7fff8c360000-7fff8c370000 r--p 00230000 fd:00 792355
-> > > > > > 7fff8c370000-7fff8c380000 rw-p 00240000 fd:00 792355
-> > > > > > 7fff8c380000-7fff8c460000 r-xp 00000000 fd:00 792358
-> > > > > > 7fff8c460000-7fff8c470000 r--p 000d0000 fd:00 792358
-> > > > > > 7fff8c470000-7fff8c480000 rw-p 000e0000 fd:00 792358
-> > > > > > 7fff8c490000-7fff8c4d0000 r--p 00000000 00:00 0
-> > > > > > 7fff8c4d0000-7fff8c4e0000 r-xp 00000000 00:00 0
-> > > > > > 7fff8c4e0000-7fff8c530000 r-xp 00000000 fd:00 792351
-> > > > > > 7fff8c530000-7fff8c540000 r--p 00040000 fd:00 792351
-> > > > > > 7fff8c540000-7fff8c550000 rw-p 00050000 fd:00 792351
-> > > > > > 7fff8d000000-7fffcd000000 r--p 00000000 00:00 0
-> > > > > > 7fffe9c80000-7fffe9d90000 rw-p 00000000 00:00 0
-> > > > > > 800000000000-2000000000000 r--p 00000000 00:00 0    -> High Address (128TB to 512TB)
-> > > > > > 
-> > > > > > diff --git a/tools/testing/selftests/mm/virtual_address_range.c b/tools/testing/selftests/mm/virtual_address_range.c
-> > > > > > index 4c4c35eac15e..0be008cba4b0 100644
-> > > > > > --- a/tools/testing/selftests/mm/virtual_address_range.c
-> > > > > > +++ b/tools/testing/selftests/mm/virtual_address_range.c
-> > > > > > @@ -56,21 +56,21 @@
-> > > > > >     #ifdef __aarch64__
-> > > > > >     #define HIGH_ADDR_MARK  ADDR_MARK_256TB
-> > > > > > -#define HIGH_ADDR_SHIFT 49
-> > > > > > +#define HIGH_ADDR_SHIFT 48
-> > > > > >     #define NR_CHUNKS_LOW   NR_CHUNKS_256TB
-> > > > > >     #define NR_CHUNKS_HIGH  NR_CHUNKS_3840TB
-> > > > > >     #else
-> > > > > >     #define HIGH_ADDR_MARK  ADDR_MARK_128TB
-> > > > > > -#define HIGH_ADDR_SHIFT 48
-> > > > > > +#define HIGH_ADDR_SHIFT 47
-> > > > > >     #define NR_CHUNKS_LOW   NR_CHUNKS_128TB
-> > > > > >     #define NR_CHUNKS_HIGH  NR_CHUNKS_384TB
-> > > > > >     #endif
-> > > > > > -static char *hint_addr(void)
-> > > > > > +static char *hint_addr(int hint)
-> > > > > >     {
-> > > > > > -       int bits = HIGH_ADDR_SHIFT + rand() % (63 - HIGH_ADDR_SHIFT);
-> > > > > > +       unsigned long addr = ((1UL << HIGH_ADDR_SHIFT) + (hint * MAP_CHUNK_SIZE));
-> > > > > > -       return (char *) (1UL << bits);
-> > > > > > +       return (char *) (addr);
-> > > > > >     }
-> > > > > >     static void validate_addr(char *ptr, int high_addr)
-> > > > > > @@ -217,7 +217,7 @@ int main(int argc, char *argv[])
-> > > > > >            }
-> > > > > >            for (i = 0; i < NR_CHUNKS_HIGH; i++) {
-> > > > > > -               hint = hint_addr();
-> > > > > > +               hint = hint_addr(i);
-> > > > > >                    hptr[i] = mmap(hint, MAP_CHUNK_SIZE, PROT_READ,
-> > > > > >                                   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-> > > > > > 
-> > > > > > 
-> > > > > > 
-> > > > > > Can we fix it this way?
+glaubitz@tirpitz:/srv/glaubitz/linux-nolibc$ cat /proc/cpuinfo=20
+machine         : SH7785LCR
+processor       : 0
+cpu family      : sh4a
+cpu type        : SH7785
+cut             : 7.x
+cpu flags       : fpu perfctr llsc
+cache type      : split (harvard)
+icache size     : 32KiB (4-way)
+dcache size     : 32KiB (4-way)
+address sizes   : 32 bits physical
+bogomips        : 599.99
+glaubitz@tirpitz:/srv/glaubitz/linux-nolibc$ uname -a
+Linux tirpitz.buildd.org 6.5.0-rc2 #1 PREEMPT Mon Jul 17 14:17:32 UTC 2023 =
+sh4a GNU/Linux
+glaubitz@tirpitz:/srv/glaubitz/linux-nolibc$ cd tools/testing/selftests/nol=
+ibc/
+glaubitz@tirpitz:/srv/glaubitz/linux-nolibc/tools/testing/selftests/nolibc$=
+ make -f Makefile.nolibc ARCH=3Dsh nolibc-test
+  MKDIR   sysroot/sh/include
+make[1]: Entering directory '/srv/glaubitz/linux-nolibc'
+make[2]: Nothing to be done for 'outputmakefile'.
+make[1]: Leaving directory '/srv/glaubitz/linux-nolibc'
+make[1]: Entering directory '/srv/glaubitz/linux-nolibc/tools/include/nolib=
+c'
+make[2]: Entering directory '/srv/glaubitz/linux-nolibc'
+  UPD     include/generated/uapi/linux/version.h
+  HOSTCC  scripts/basic/fixdep
+  HOSTCC  scripts/unifdef
+  WRAP    arch/sh/include/generated/uapi/asm/ucontext.h
+  WRAP    arch/sh/include/generated/uapi/asm/bitsperlong.h
+  WRAP    arch/sh/include/generated/uapi/asm/bpf_perf_event.h
+  WRAP    arch/sh/include/generated/uapi/asm/errno.h
+  WRAP    arch/sh/include/generated/uapi/asm/fcntl.h
+  WRAP    arch/sh/include/generated/uapi/asm/ioctl.h
+  WRAP    arch/sh/include/generated/uapi/asm/ipcbuf.h
+  WRAP    arch/sh/include/generated/uapi/asm/mman.h
+(...)
+  HDRINST usr/include/asm/statfs.h
+  HDRINST usr/include/asm/types.h
+  HDRINST usr/include/asm/setup.h
+  HDRINST usr/include/asm/resource.h
+  HDRINST usr/include/asm/termios.h
+  HDRINST usr/include/asm/poll.h
+make[2]: Leaving directory '/srv/glaubitz/linux-nolibc'
+make[2]: Entering directory '/srv/glaubitz/linux-nolibc'
+  INSTALL /srv/glaubitz/linux-nolibc/tools/testing/selftests/nolibc/sysroot=
+/sysroot/include
+make[2]: Leaving directory '/srv/glaubitz/linux-nolibc'
+make[1]: Leaving directory '/srv/glaubitz/linux-nolibc/tools/include/nolibc=
+'
+  CC      nolibc-test
+In file included from sysroot/sh/include/arch.h:11,
+                 from sysroot/sh/include/nolibc.h:96,
+                 from sysroot/sh/include/stdio.h:8,
+                 from nolibc-test.c:12:
+sysroot/sh/include/crt.h:34:1: warning: =E2=80=98function=E2=80=99 attribut=
+e directive ignored [-Wattributes]
+   34 | {
+      | ^
+In file included from sysroot/sh/include/arch.h:11,
+                 from sysroot/sh/include/nolibc.h:96,
+                 from sysroot/sh/include/errno.h:8,
+                 from nolibc-test-linkage.c:5:
+sysroot/sh/include/crt.h:34:1: warning: =E2=80=98function=E2=80=99 attribut=
+e directive ignored [-Wattributes]
+   34 | {
+      | ^
+glaubitz@tirpitz:/srv/glaubitz/linux-nolibc/tools/testing/selftests/nolibc$
+glaubitz@tirpitz:/srv/glaubitz/linux-nolibc/tools/testing/selftests/nolibc$=
+ file ./nolibc-test
+./nolibc-test: ELF 32-bit LSB executable, Renesas SH, version 1 (SYSV), sta=
+tically linked, BuildID[sha1]=3Db23b591a8deeb8b746636128821be1b577f3266b, n=
+ot stripped
+glaubitz@tirpitz:/srv/glaubitz/linux-nolibc/tools/testing/selftests/nolibc$=
+ ./nolibc-test
+Running test 'startup'
+0 argc =3D 1                                                        [OK]
+1 argv_addr =3D <0x7bd4b074>                                        [OK]
+2 argv_environ =3D <0x7bd4b074>                                     [OK]
+3 argv_total =3D 1                                                  [OK]
+4 argv0_addr =3D <0x7bd4b1c2>                                       [OK]
+5 argv0_str =3D <./nolibc-test>                                     [OK]
+6 argv0_len =3D 13                                                  [OK]
+7 environ_addr =3D <0x7bd4b07c>                                     [OK]
+8 environ_envp =3D <0x7bd4b07c>                                     [OK]
+9 environ_auxv =3D <0x7bd4b07c>                                     [OK]
+10 environ_total =3D 111                                            [OK]
+11 environ_HOME =3D <0x7bd4b672>                                    [OK]
+12 auxv_addr =3D <0x7bd4b0ec>                                       [OK]
+13 auxv_AT_UID =3D 1000                                             [OK]
+14 constructor =3D 3                                                [OK]
+15 linkage_errno =3D <0x42003c>                                     [OK]
+16 linkage_constr =3D 3                                             [OK]
+Errors during this test: 0
+
+Running test 'syscall'
+0 access =3D 0                                                      [OK]
+1 access_bad =3D -1 EPERM                                           [OK]
+2 clock_getres =3D 0                                                [OK]
+3 clock_gettime =3D 0                                               [OK]
+4 clock_settime =3D -1 EINVAL                                       [OK]
+5 getpid =3D 24641                                                  [OK]
+6 getppid =3D 17166                                                 [OK]
+7 gettid =3D 24641                                                  [OK]
+8 getpgid_self =3D 24641                                            [OK]
+9 getpgid_bad =3D -1 ESRCH                                          [OK]
+10 kill_0 =3D 0                                                     [OK]
+11 kill_CONT =3D 0                                                  [OK]
+12 kill_BADPID =3D -1 ESRCH                                         [OK]
+13 sbrk_0 =3D <0x421000>                                            [OK]
+14 sbrk =3D 0                                                       [OK]
+15 brk =3D 0                                                        [OK]
+16 chdir_root =3D 0                                                 [OK]
+17 chdir_dot =3D 0                                                  [OK]
+18 chdir_blah =3D -1 ENOENT                                         [OK]
+19 chmod_argv0 =3D 0                                                [OK]
+20 chmod_self =3D -1 EPERM                                          [OK]
+21 chown_self =3D -1 EPERM                                          [OK]
+22 chroot_root                                                  [SKIPPED]  =
+=20
+23 chroot_blah =3D -1 ENOENT                                        [OK]
+24 chroot_exe =3D -1 ENOTDIR                                        [OK]
+25 close_m1 =3D -1 EBADF                                            [OK]
+26 close_dup =3D 0                                                  [OK]
+27 dup_0 =3D 3                                                      [OK]
+28 dup_m1 =3D -1 EBADF                                              [OK]
+29 dup2_0 =3D 100                                                   [OK]
+30 dup2_m1 =3D -1 EBADF                                             [OK]
+31 dup3_0 =3D 100                                                   [OK]
+32 dup3_m1 =3D -1 EBADF                                             [OK]
+33 execve_root =3D -1 EACCES                                        [OK]
+34 file_stream =3D 0                                                [OK]
+35 fork =3D 0                                                       [OK]
+36 getdents64_root =3D 944                                          [OK]
+37 getdents64_null =3D -1 ENOTDIR                                   [OK]
+38 directories =3D 0                                                [OK]
+39 getrandom =3D 0                                                  [OK]
+40 gettimeofday_tv =3D 0                                            [OK]
+41 gettimeofday_tv_tz =3D 0                                         [OK]
+42 getpagesize =3D 0                                                [OK]
+43 ioctl_tiocinq =3D 0                                              [OK]
+44 link_root1 =3D -1 EEXIST                                         [OK]
+45 link_blah =3D -1 ENOENT                                          [OK]
+46 link_dir                                                     [SKIPPED]  =
+=20
+47 link_cross =3D -1 EXDEV                                          [OK]
+48 lseek_m1 =3D -1 EBADF                                            [OK]
+49 lseek_0 =3D -1 ESPIPE                                            [OK]
+50 mkdir_root =3D -1 EEXIST                                         [OK]
+51 mmap_bad =3D <0xffffffff> EINVAL                                 [OK]
+52 munmap_bad =3D -1 EINVAL                                         [OK]
+53 mmap_munmap_good =3D 0                                           [OK]
+54 open_tty =3D 3                                                   [OK]
+55 open_blah =3D -1 ENOENT                                          [OK]
+56 openat_dir =3D 0                                                 [OK]
+57 pipe =3D 0                                                       [OK]
+58 poll_null =3D 0                                                  [OK]
+59 poll_stdout =3D 1                                                [OK]
+60 poll_fault =3D -1 EFAULT                                         [OK]
+61 prctl =3D -1 EFAULT                                              [OK]
+62 read_badf =3D -1 EBADF                                           [OK]
+63 rlimit =3D 0                                                     [OK]
+64 rmdir_blah =3D -1 ENOENT                                         [OK]
+65 sched_yield =3D 0                                                [OK]
+66 select_null =3D 0                                                [OK]
+67 select_stdout =3D 1                                              [OK]
+68 select_fault =3D -1 EFAULT                                       [OK]
+69 stat_blah =3D -1 ENOENT                                          [OK]
+70 stat_fault =3D -1 EFAULT                                         [OK]
+71 stat_timestamps =3D 0                                            [OK]
+72 symlink_root =3D -1 EEXIST                                       [OK]
+73 timer =3D 0                                                      [OK]
+74 timerfd =3D 0                                                    [OK]
+75 uname =3D 0                                                      [OK]
+76 uname_fault =3D -1 EFAULT                                        [OK]
+77 unlink_root =3D -1 EISDIR                                        [OK]
+78 unlink_blah =3D -1 ENOENT                                        [OK]
+79 wait_child =3D -1 ECHILD                                         [OK]
+80 waitpid_min =3D -1 ESRCH                                         [OK]
+81 waitpid_child =3D -1 ECHILD                                      [OK]
+82 write_badf =3D -1 EBADF                                          [OK]
+83 write_zero =3D 0                                                 [OK]
+84 syscall_noargs =3D 24641                                         [OK]
+85 syscall_args =3D -1 EFAULT                                       [OK]
+86 namespace                                                    [SKIPPED]  =
+=20
+Errors during this test: 0
+
+Running test 'stdlib'
+0 getenv_TERM =3D <screen.xterm-256color>                           [OK]
+1 getenv_blah =3D <(null)>                                          [OK]
+2 setcmp_blah_blah =3D 0                                            [OK]
+3 setcmp_blah_blah2 =3D -50                                         [OK]
+4 setncmp_blah_blah =3D 0                                           [OK]
+5 setncmp_blah_blah4 =3D 0                                          [OK]
+6 setncmp_blah_blah5 =3D -53                                        [OK]
+7 setncmp_blah_blah6 =3D -54                                        [OK]
+8 strchr_foobar_o =3D <oobar>                                       [OK]
+9 strchr_foobar_z =3D <(null)>                                      [OK]
+10 strrchr_foobar_o =3D <obar>                                      [OK]
+11 strrchr_foobar_z =3D <(null)>                                    [OK]
+12 strlcat_0 =3D 3 <test>                                           [OK]
+13 strlcat_1 =3D 4 <test>                                           [OK]
+14 strlcat_5 =3D 7 <test>                                           [OK]
+15 strlcat_6 =3D 7 <testb>                                          [OK]
+16 strlcat_7 =3D 7 <testba>                                         [OK]
+17 strlcat_8 =3D 7 <testbar>                                        [OK]
+18 strlcpy_0 =3D 3 <test>                                           [OK]
+19 strlcpy_1 =3D 3 <>                                               [OK]
+20 strlcpy_2 =3D 3 <b>                                              [OK]
+21 strlcpy_3 =3D 3 <ba>                                             [OK]
+22 strlcpy_4 =3D 3 <bar>                                            [OK]
+23 strstr_foobar_foo =3D <foobar>                                   [OK]
+24 strstr_foobar_bar =3D <bar>                                      [OK]
+25 strstr_foobar_baz =3D <0x0>                                      [OK]
+26 memcmp_20_20 =3D 0                                               [OK]
+27 memcmp_20_60 =3D -64                                             [OK]
+28 memcmp_60_20 =3D 64                                              [OK]
+29 memcmp_20_e0 =3D -192                                            [OK]
+30 memcmp_e0_20 =3D 192                                             [OK]
+31 memcmp_80_e0 =3D -96                                             [OK]
+32 memcmp_e0_80 =3D 96                                              [OK]
+33 limit_int8_max =3D 127                                           [OK]
+34 limit_int8_min =3D -128                                          [OK]
+35 limit_uint8_max =3D 255                                          [OK]
+36 limit_int16_max =3D 32767                                        [OK]
+37 limit_int16_min =3D -32768                                       [OK]
+38 limit_uint16_max =3D 65535                                       [OK]
+39 limit_int32_max =3D 2147483647                                   [OK]
+40 limit_int32_min =3D -2147483648                                  [OK]
+41 limit_uint32_max =3D 4294967295                                  [OK]
+42 limit_int64_max =3D 9223372036854775807                          [OK]
+43 limit_int64_min =3D -9223372036854775808                         [OK]
+44 limit_uint64_max =3D -1                                          [OK]
+45 limit_int_least8_max =3D 127                                     [OK]
+46 limit_int_least8_min =3D -128                                    [OK]
+47 limit_uint_least8_max =3D 255                                    [OK]
+48 limit_int_least16_max =3D 32767                                  [OK]
+49 limit_int_least16_min =3D -32768                                 [OK]
+50 limit_uint_least16_max =3D 65535                                 [OK]
+51 limit_int_least32_max =3D 2147483647                             [OK]
+52 limit_int_least32_min =3D -2147483648                            [OK]
+53 limit_uint_least32_max =3D 4294967295                            [OK]
+54 limit_int_least64_min =3D -9223372036854775808                   [OK]
+55 limit_int_least64_max =3D 9223372036854775807                    [OK]
+56 limit_uint_least64_max =3D -1                                    [OK]
+57 limit_int_fast8_max =3D 127                                      [OK]
+58 limit_int_fast8_min =3D -128                                     [OK]
+59 limit_uint_fast8_max =3D 255                                     [OK]
+60 limit_int_fast16_min =3D -2147483648                             [OK]
+61 limit_int_fast16_max =3D 2147483647                              [OK]
+62 limit_uint_fast16_max =3D 4294967295                             [OK]
+63 limit_int_fast32_min =3D -2147483648                             [OK]
+64 limit_int_fast32_max =3D 2147483647                              [OK]
+65 limit_uint_fast32_max =3D 4294967295                             [OK]
+66 limit_int_fast64_min =3D -9223372036854775808                    [OK]
+67 limit_int_fast64_max =3D 9223372036854775807                     [OK]
+68 limit_uint_fast64_max =3D -1                                     [OK]
+69 sizeof_long_sane =3D 1                                           [OK]
+70 limit_intptr_min =3D -2147483648                                 [OK]
+71 limit_intptr_max =3D 2147483647                                  [OK]
+72 limit_uintptr_max =3D 4294967295                                 [OK]
+73 limit_ptrdiff_min =3D -2147483648                                [OK]
+74 limit_ptrdiff_max =3D 2147483647                                 [OK]
+75 limit_size_max =3D 4294967295                                    [OK]
+76 strtol_simple 35 =3D 35                                          [OK]
+77 strtol_positive 35 =3D 35                                        [OK]
+78 strtol_negative -35 =3D -35                                      [OK]
+79 strtol_hex_auto 255 =3D 255                                      [OK]
+80 strtol_base36 50507 =3D 50507                                    [OK]
+81 strtol_cutoff 342391 =3D 342391                                  [OK]
+82 strtol_octal_auto 9 =3D 9                                        [OK]
+83 strtol_hex_00 0 =3D 0                                            [OK]
+84 strtol_hex_FF 255 =3D 255                                        [OK]
+85 strtol_hex_ff 255 =3D 255                                        [OK]
+86 strtol_hex_prefix 255 =3D 255                                    [OK]
+87 strtol_trailer 35 =3D 35                                         [OK]
+88 strtol_overflow 2147483647 =3D 2147483647                        [OK]
+89 strtol_underflow -2147483648 =3D -2147483648                     [OK]
+90 strtoul_negative 4294967295 =3D 4294967295                       [OK]
+91 strtoul_overflow 4294967295 =3D 4294967295                       [OK]
+92 strerror_success =3D <errno=3D0>                                   [OK]
+93 strerror_EINVAL =3D <errno=3D22>                                   [OK]
+94 strerror_int_max =3D <errno=3D2147483647>                          [OK]
+95 strerror_int_min =3D <errno=3D-2147483648>                         [OK]
+96 tolower =3D 97                                                   [OK]
+97 tolower_noop =3D 97                                              [OK]
+98 toupper =3D 65                                                   [OK]
+99 toupper_noop =3D 65                                              [OK]
+100 abs =3D 10                                                      [OK]
+101 abs_noop =3D 10                                                 [OK]
+102 difftime =3D 0                                                  [OK]
+Errors during this test: 0
+
+Running test 'printf'
+0 empty "" =3D ""                                                   [OK]
+1 simple "foo" =3D "foo"                                            [OK]
+2 string "foo" =3D "foo"                                            [OK]
+3 number "1234" =3D "1234"                                          [OK]
+4 negnumber "-1234" =3D "-1234"                                     [OK]
+5 unsigned "12345" =3D "12345"                                      [OK]
+6 char "c" =3D "c"                                                  [OK]
+7 hex "f" =3D "f"                                                   [OK]
+8 pointer "0x1" =3D "0x1"                                           [OK]
+9 uintmax_t "18446744073709551615" =3D "18446744073709551615"       [OK]
+10 intmax_t "-9223372036854775807" =3D "-9223372036854775807"       [OK]
+11 truncation "01234567890123456789" =3D "01234567890123456789"     [OK]
+12 string_width "         1" =3D "         1"                       [OK]
+13 number_width "         1" =3D "         1"                       [OK]
+14 width_trunc "                    " =3D "                    "    [OK]
+15 scanf =3D 0                                                      [OK]
+16 strerror =3D 0                                                   [OK]
+Errors during this test: 0
+
+Running test 'protection'
+0 -fstackprotector                                                [OK]
+Errors during this test: 0
+
+Total number of errors: 0
+Exiting with status 0
+glaubitz@tirpitz:/srv/glaubitz/linux-nolibc/tools/testing/selftests/nolibc$
+
+Tested-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+
+Adrian
+
+--=20
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
 
