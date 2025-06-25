@@ -1,226 +1,290 @@
-Return-Path: <linux-kselftest+bounces-35786-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35787-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DE3CAE8A08
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jun 2025 18:38:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8DC5AE8B61
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jun 2025 19:18:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF1945A6344
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jun 2025 16:37:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5C7A418854D9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jun 2025 17:18:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69CD02D12ED;
-	Wed, 25 Jun 2025 16:37:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96E0F269B01;
+	Wed, 25 Jun 2025 17:18:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="aKZhS38X"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Hu8R2TwE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2077.outbound.protection.outlook.com [40.107.92.77])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEA451B042E;
-	Wed, 25 Jun 2025 16:37:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.77
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750869469; cv=fail; b=RGlNlI/fBLaq9475RFzhZkIG2fYj9tyW3rqejGyReqoGwjGZ8E31RDjwxYfjYYuxX53AXkghWnC6n+CMZyEggd2s6m5gHUtn4Aha7RyCOKRaTq8pX5UlwajlOM8M5OVWuloBZ9Ji9oRG8c6E5VkO3eAD9q6SEhYsElB2FXDgl/w=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750869469; c=relaxed/simple;
-	bh=lkqIu0r73iSw3SQbTtDPSwYMeK12QzVEy+bSuOUDxOw=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tEU4U2BMQPRl6I6NDLxqRpgbWU4/AaDu9rw+I5tNtiy8qaq6BCuJc437DgxX1EvnOiSV/oD3nyA5hEorNSRbMpsvnyJmNK90h7hSMZQ3uTEXzUk9+67PB1UACM1jfhV9HjW/WuGZQ5BXnTXqj9Znyq0yX0Wy+ts8zetS3en0Ys8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=aKZhS38X; arc=fail smtp.client-ip=40.107.92.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=TKsYDRCO9bLzG2z5QeZIw3QrrDrkyWGDtYiY37bbToZP9fybdhcP3vxk/uaYXxvQl2Vv6o94j7yNBa/DfTH/GoWJQtQj67wfR9J1akulYuha91THc7SvC6hugzs80KR/uvI7urG6PXgYE23U0Lc1Z6Tye7srUUMCvm3vkEK1X1L0ARg1OJpWPVi4/LW1F9aO8/r3Qfuj1SHZN8WeCV654IquzI9Eh5HBHDk9iUIo8Jvjb+vxA7scrrqOSqQ+ognadHmpJ2Yzti9tliKdTcWfvuxsxPqT/cgKyr9nGmRtujYcZClzwMtTu4CdFN2U1anDU/NnNdtlBdes+Et8cwU1/Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2FRdDfW53Pgtbfa+hoVwW0XlohWae4tQ9e4EtEpfn1g=;
- b=QNSp4ZKuWUdOVbY3k4p6qrsNMAocewgstX6Gla2Hfna2oVrie71vuz2+32tyK3YnjijhBNFGwJZdap8YpN9dkmjsykwmb3chktYFm9KaHPksnLz+y7oPR3lciQ210tqXmtk5Jmv4zadt9ugeXQbs+wTcG+mNdM11sy71i+DVxm5jD4ERu320l1ivkOEtEapmG6pVHF+V9AtI0L1tie26yKQJjUvFhS2VK2/RkFw9ra1XV8r85iP1jmFtOtfzg1SsZVegldPdRq8VDpfZ/Xl4cQqBX+Dpys1aOivVtHdcuXPHowpR7fLUlFYXxlHE91w7HAoLGpEIHDvTqgS59zLV1A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2FRdDfW53Pgtbfa+hoVwW0XlohWae4tQ9e4EtEpfn1g=;
- b=aKZhS38Xs2i7TB5xikyrmYnSJ4YK3B5/KhWLz81GQZ7gTo0j1lkH1OdI35TOHKqP1vcPpW94XRqH93N/pL8IeTrvL0ot9F1UKTTr3QnMFStiNhrg185/Vlb4eQYpd7Zjq02rmQzeWsDfaA2xknhU01sC//J7UYodJEOfHoZPOumwbyC9kmYNy7Qa1pMh2TyKubq7YTY/xz518wkvO8J4NWqi1N+1tdQYBPcqYNJMyrvZ0W2Moa+e8/zWiDxsUHnYUy48rI1+ebSHDuu3vPHqP4zmuzrBuxv9edMmDpsqjBFuBRMh832YDTbffycsVaErPfyB39rrUmdItRbcSC6E4Q==
-Received: from BN1PR14CA0020.namprd14.prod.outlook.com (2603:10b6:408:e3::25)
- by MW6PR12MB8734.namprd12.prod.outlook.com (2603:10b6:303:249::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8857.22; Wed, 25 Jun
- 2025 16:37:42 +0000
-Received: from BN1PEPF00006003.namprd05.prod.outlook.com
- (2603:10b6:408:e3:cafe::d) by BN1PR14CA0020.outlook.office365.com
- (2603:10b6:408:e3::25) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8857.29 via Frontend Transport; Wed,
- 25 Jun 2025 16:37:40 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BN1PEPF00006003.mail.protection.outlook.com (10.167.243.235) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8880.14 via Frontend Transport; Wed, 25 Jun 2025 16:37:40 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 25 Jun
- 2025 09:37:18 -0700
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Wed, 25 Jun
- 2025 09:37:18 -0700
-Received: from Asurada-Nvidia (10.127.8.13) by mail.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14 via Frontend
- Transport; Wed, 25 Jun 2025 09:37:16 -0700
-Date: Wed, 25 Jun 2025 09:37:15 -0700
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: "Tian, Kevin" <kevin.tian@intel.com>
-CC: "jgg@nvidia.com" <jgg@nvidia.com>, "corbet@lwn.net" <corbet@lwn.net>,
-	"will@kernel.org" <will@kernel.org>, "bagasdotme@gmail.com"
-	<bagasdotme@gmail.com>, "robin.murphy@arm.com" <robin.murphy@arm.com>,
-	"joro@8bytes.org" <joro@8bytes.org>, "thierry.reding@gmail.com"
-	<thierry.reding@gmail.com>, "vdumpa@nvidia.com" <vdumpa@nvidia.com>,
-	"jonathanh@nvidia.com" <jonathanh@nvidia.com>, "shuah@kernel.org"
-	<shuah@kernel.org>, "jsnitsel@redhat.com" <jsnitsel@redhat.com>,
-	"nathan@kernel.org" <nathan@kernel.org>, "peterz@infradead.org"
-	<peterz@infradead.org>, "Liu, Yi L" <yi.l.liu@intel.com>,
-	"mshavit@google.com" <mshavit@google.com>, "praan@google.com"
-	<praan@google.com>, "zhangzekun11@huawei.com" <zhangzekun11@huawei.com>,
-	"iommu@lists.linux.dev" <iommu@lists.linux.dev>, "linux-doc@vger.kernel.org"
-	<linux-doc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-tegra@vger.kernel.org"
-	<linux-tegra@vger.kernel.org>, "linux-kselftest@vger.kernel.org"
-	<linux-kselftest@vger.kernel.org>, "patches@lists.linux.dev"
-	<patches@lists.linux.dev>, "mochs@nvidia.com" <mochs@nvidia.com>,
-	"alok.a.tiwari@oracle.com" <alok.a.tiwari@oracle.com>, "vasant.hegde@amd.com"
-	<vasant.hegde@amd.com>, "dwmw2@infradead.org" <dwmw2@infradead.org>,
-	"baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
-Subject: Re: [PATCH v6 06/25] iommufd/access: Allow access->ops to be NULL
- for internal use
-Message-ID: <aFwlu7FlfIP85gko@Asurada-Nvidia>
-References: <cover.1749884998.git.nicolinc@nvidia.com>
- <e6a989c4dd9cb94aa4a98d46ed56a2afcb41b70d.1749884998.git.nicolinc@nvidia.com>
- <BN9PR11MB52766D0C0B12F1F10A6BE7548C7BA@BN9PR11MB5276.namprd11.prod.outlook.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5EF43074AC;
+	Wed, 25 Jun 2025 17:18:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750871899; cv=none; b=gbVgDq59h59o4ghxd3AEGyWEN5pJ9itQRAFCaDEsoEmUe8FMOoukozMD76h0/lsEyhgriO1S7WNDQI8+ADW8VBpL9atoBe6KtruGUR5t4wHdZ6Sh9UhBSLGYiAMYesiRhWFk7MUgG//n2dx9LOH4CGCjuDTz4OrJ+MfKwZ8STnc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750871899; c=relaxed/simple;
+	bh=WH+67ETG60FO49tyVub/emz9wTANfE4oZLyJ99hWlVE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=W9MM3s3BxcSKdj5D6eR7pozRq4+6B0h/uWpBGLz1J5rpR6Y1VY724K94BrcrTWD4hcce2WZhN9oGH30JVYVQe04k6RvhNwJDWiYtDhgoNcRhQWD+CV1Mefvffk7d8AsHxaZW875d1cJzAOtDqC5S77K8zBHKg0RsnW3B/VA7aZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Hu8R2TwE; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55PFUIrI003394;
+	Wed, 25 Jun 2025 17:18:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=hJmiqI
+	GVi9jYz2XV2RDTUFNp29tnqRL83h4+ynhToF0=; b=Hu8R2TwE+A8WyFG1N5BlSK
+	wMQo3nhEMe5EbAwT4IiewOzMG+gtt+l/D8epBEZVektbDqDWNH6N0KoZ00258HhP
+	yNiVyX7+WZkeWt6RBefwfhFibmbNG4ET6neyu6N9IdPwL8dZyIGwfUAub3gFtJa+
+	5ZTr/+T39bsaFTpWrymI2IiSk8s6CE96c3/w7m5s5lrXSSeSB8m1nybYlpme08eY
+	qNE48LFW0n4PZO+dUP+FYf3o4tG2RzOu9fz2C02aU7ks6PFQIA2mULaS3hZp+NAG
+	KFNj3KOv+TXx33hZcWbhCxjJUXeq/sMlcCLqlBgWhb0AlnDenV4zd8ypTSvnv88A
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47dj5u0w7n-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 25 Jun 2025 17:18:01 +0000 (GMT)
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 55PHI00j030154;
+	Wed, 25 Jun 2025 17:18:01 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47dj5u0w7f-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 25 Jun 2025 17:18:00 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 55PF1Uub004643;
+	Wed, 25 Jun 2025 17:17:59 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 47e99kt8nw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 25 Jun 2025 17:17:59 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 55PHHvkH44827114
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 25 Jun 2025 17:17:57 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9A56820043;
+	Wed, 25 Jun 2025 17:17:57 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id AE6F220040;
+	Wed, 25 Jun 2025 17:17:53 +0000 (GMT)
+Received: from li-06431bcc-2712-11b2-a85c-a6fe68df28f9.ibm.com (unknown [9.124.208.75])
+	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Wed, 25 Jun 2025 17:17:53 +0000 (GMT)
+Date: Wed, 25 Jun 2025 22:47:50 +0530
+From: Donet Tom <donettom@linux.ibm.com>
+To: Dev Jain <dev.jain@arm.com>
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+        Aboorva Devarajan <aboorvad@linux.ibm.com>, akpm@linux-foundation.org,
+        Liam.Howlett@oracle.com, shuah@kernel.org, pfalcato@suse.de,
+        david@redhat.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
+        npache@redhat.com, ryan.roberts@arm.com, baohua@kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ritesh.list@gmail.com
+Subject: Re: [PATCH 1/6] mm/selftests: Fix virtual_address_range test issues.
+Message-ID: <aFwvPj5AlCgTZsh2@li-06431bcc-2712-11b2-a85c-a6fe68df28f9.ibm.com>
+References: <79bdd993-0e9c-4d7d-b42c-4b5750eff140@lucifer.local>
+ <aaddfd0b-216e-48fe-b48f-35c78eabcf9a@arm.com>
+ <8e23c5d3-6ce3-4fe8-b6fe-69658d5d0727@lucifer.local>
+ <fc5c8193-2642-49f7-9f2a-00ad33353773@arm.com>
+ <c93110a4-19e4-4a1d-b044-6b7f521eaa0d@lucifer.local>
+ <815793f1-6800-4b9a-852e-f13d6308f50f@arm.com>
+ <2756fa2b-e8bf-4c66-bf9b-c85dc63dfc33@lucifer.local>
+ <41d9a70d-9791-4212-af23-5b13d8e4a47d@arm.com>
+ <aFPI_blZGhvKSbNJ@li-06431bcc-2712-11b2-a85c-a6fe68df28f9.ibm.com>
+ <16fff6e9-98f5-4004-9906-feac49f0bbb4@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <BN9PR11MB52766D0C0B12F1F10A6BE7548C7BA@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-NV-OnPremToCloud: AnonymousSubmission
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN1PEPF00006003:EE_|MW6PR12MB8734:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4eefc242-9aff-4b28-deec-08ddb40699fa
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|36860700013|1800799024|376014|82310400026;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?zBMI1Yx5F8fjJKh8M2EynXwgt9uMyjR9J03J5MlRJX7doRRRownlvueoXFDm?=
- =?us-ascii?Q?doANt+Qn4VabCqt7kBwBjFhFtM2cJ6qZ5BjwLzYJwmoeywanXf1uNRpGWS9+?=
- =?us-ascii?Q?fjyEyTO8b3k/rPwtRqyQXG3Qrvtk0oDn/HGMSYO5kdFIIRYlH9yhwvWWHLRX?=
- =?us-ascii?Q?2MFgi+jZMovnIItx960h9cPnOm/qXyrX52A91WWtNuljUNjA7kX8uHNrHCPp?=
- =?us-ascii?Q?bmxGuqpUaCOQ80geMlHeVM7cIkD1GQkY2AT1PnsRolhFWnhPCHEjBa8fnKgx?=
- =?us-ascii?Q?zJD+HSN9idjS+MmCTAus5zy7VUVDl5x+7kHSVWQKE+wAM0At7YyhzLhYYwpG?=
- =?us-ascii?Q?Fl8LCvmwk29w/5Efe+bjuJu9g3Z6HnIoJjFquyYFZWq72PML/3NZdmybeaLh?=
- =?us-ascii?Q?pzn3gv8bSYQqnjwbilPcRO0098c9B6Z685h6go6hGSYnlisILk0lo1LQRaJ6?=
- =?us-ascii?Q?Wf7CiR9x3y8wqEpGOVpbFuAKGY2MvPuMQaC1o4pDXXQ+tHqlPGnIr8waMqpp?=
- =?us-ascii?Q?ndWwE3r4itxWVoZitWVzYS2rL/sZ6XJZ45aAp4nHm/Iqky60RdzhB6qKxul+?=
- =?us-ascii?Q?+1inMxecXRrAzDOsOf230oDsCqyIP72ViBamEBY4OGcmscLasqRVni4tMULJ?=
- =?us-ascii?Q?Hqqu+jkQDQfH5T7GjN442W/4hFVLIsDOdGlFjOw3poz/+FOq9ir+4hz/xU7n?=
- =?us-ascii?Q?yd/vcAgb/dEAuKeRiW6TXyPBNCbr155UBOL1vDf6lXGnmJ8ssML+DJt+CDiD?=
- =?us-ascii?Q?CR+wMnqtbuX1lzZyYKZGpp9w5EeLP3cz1pJBytOCoZ3wS2L3dYFeXwlS3UmY?=
- =?us-ascii?Q?NwqjZciCW0OJF4oMxvsq2AxKuiaJUkysv9hBCdeAWdD5GAtvMuJewqZ3YITJ?=
- =?us-ascii?Q?kVsPZ8OkIvq6uUA+4Kt4vbojS9ureLHmdIvTKQJ+iwZvmdbBbH9lcrmqFU88?=
- =?us-ascii?Q?nW9kwmulFn+HWFdm2ppN4NQ4X4HTeAM6pxggffOUajlGkVt7BtriKwx6ZY/B?=
- =?us-ascii?Q?+vpAV6hNeX8eeFh45K/mYF80sGkbQovWLWqQ6sJaOSW78PRsOL3n+WnzU3a5?=
- =?us-ascii?Q?I4tBFhiZ7oEhG9MxrJXJg6W+5dTVjLQ5o7jfIcEbkFZTN7z9F2DzFzU/5xlb?=
- =?us-ascii?Q?+9woYA8AORUCa+5DlwW0knBXBUsy3AbC0iArft7fJzhbLQPWVKENORhJsnXI?=
- =?us-ascii?Q?AicKerpDKMEbg4gf7sW0DQ1jWHUat5/RsoMafIAJiszPwEZq5RggxCjtPYsw?=
- =?us-ascii?Q?2MvsuNFMEbMfesqHx/SPjlhi1dlIps3QhvTfv3cHcoOfwCOYQXhe5/hcnEyz?=
- =?us-ascii?Q?U24kftwRueap/ft3HAHf47eUxfZ/XudT1wwk2/s1ZdR9djksaXJVHlMnek5r?=
- =?us-ascii?Q?AWBuS+m6EJER2zQh4+bBkVwjkf4C7HkwsRherBlKeL9K6qiPmEe/qan1r6Hi?=
- =?us-ascii?Q?5Uf/yMt147HziCdbeS56ZlU1TVBlNmPCkq/UsHM8M9I8iwKqzHOAapjEwAmN?=
- =?us-ascii?Q?3R8jWW4v0B5NHbbiSkiPN+MOA6YF2hDyWyCr?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(7416014)(36860700013)(1800799024)(376014)(82310400026);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jun 2025 16:37:40.0726
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4eefc242-9aff-4b28-deec-08ddb40699fa
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN1PEPF00006003.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB8734
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <16fff6e9-98f5-4004-9906-feac49f0bbb4@arm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: GwdDxKWbBi4q9Rqmr219TkpxO9foB5-d
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjI1MDEyOCBTYWx0ZWRfX+cC+8RLbZJWH wEP3loW+cj4DbnfX/wab4EtH45pdwH1Szs+gPGN7IFRsblju3yLjvMky1sFDpzHRbD1ZvKXjChc EkGDIS4/ygaDFkPxq8yFu3X4cSWUcgs3zke4ronSLVNmR1YnD+CiDCobzAP1PNt/Sp+6wjyJ+44
+ YN2JwUE9qDkqar9MC3N3k1NQQjKqAl5oDt3GcvUARZCaz0SaOx5JYYSUN4AmrF2l8T2MqFDv46x pDwXvEjERfnGHcmvIZwx3BkU2gL0HDz8xATGsuY6C5nXZNVBHjVok71/5DqO2eifX79G5Nwkw+D c2NRN2bOQ2NytKK4jxpkN4oVGa2QIKURLzEA4iQfPWyTQm0o5Qpw5ghyVc5C2pCsk2+5k2Josqp
+ slm8qUidDYRz/clr7OHjf5pJqOTSPEnaOiGnKPJ6vgF7CTK3UkCSs1Ou9mX2tzVAPBf+0D0H
+X-Authority-Analysis: v=2.4 cv=MshS63ae c=1 sm=1 tr=0 ts=685c2f49 cx=c_pps a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17 a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=BaPsrneplRJP-Z4xSb0A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: ai7n1ObA81d7M5cF_SeK_zdL-urTLJWf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
+ definitions=2025-06-25_05,2025-06-25_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ lowpriorityscore=0 spamscore=0 mlxlogscore=999 impostorscore=0
+ clxscore=1015 phishscore=0 malwarescore=0 suspectscore=0 adultscore=0
+ priorityscore=1501 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2506250128
 
-On Wed, Jun 25, 2025 at 03:38:19AM +0000, Tian, Kevin wrote:
-> > From: Nicolin Chen <nicolinc@nvidia.com>
-> > Sent: Saturday, June 14, 2025 3:15 PM
+On Wed, Jun 25, 2025 at 06:22:53PM +0530, Dev Jain wrote:
+> 
+> On 19/06/25 1:53 pm, Donet Tom wrote:
+> > On Wed, Jun 18, 2025 at 08:13:54PM +0530, Dev Jain wrote:
+> > > On 18/06/25 8:05 pm, Lorenzo Stoakes wrote:
+> > > > On Wed, Jun 18, 2025 at 07:47:18PM +0530, Dev Jain wrote:
+> > > > > On 18/06/25 7:37 pm, Lorenzo Stoakes wrote:
+> > > > > > On Wed, Jun 18, 2025 at 07:28:16PM +0530, Dev Jain wrote:
+> > > > > > > On 18/06/25 5:27 pm, Lorenzo Stoakes wrote:
+> > > > > > > > On Wed, Jun 18, 2025 at 05:15:50PM +0530, Dev Jain wrote:
+> > > > > > > > Are you accounting for sys.max_map_count? If not, then you'll be hitting that
+> > > > > > > > first.
+> > > > > > > run_vmtests.sh will run the test in overcommit mode so that won't be an issue.
+> > > > > > Umm, what? You mean overcommit all mode, and that has no bearing on the max
+> > > > > > mapping count check.
+> > > > > > 
+> > > > > > In do_mmap():
+> > > > > > 
+> > > > > > 	/* Too many mappings? */
+> > > > > > 	if (mm->map_count > sysctl_max_map_count)
+> > > > > > 		return -ENOMEM;
+> > > > > > 
+> > > > > > 
+> > > > > > As well as numerous other checks in mm/vma.c.
+> > > > > Ah sorry, didn't look at the code properly just assumed that overcommit_always meant overriding
+> > > > > this.
+> > > > No problem! It's hard to be aware of everything in mm :)
+> > > > 
+> > > > > > I'm not sure why an overcommit toggle is even necessary when you could use
+> > > > > > MAP_NORESERVE or simply map PROT_NONE to avoid the OVERCOMMIT_GUESS limits?
+> > > > > > 
+> > > > > > I'm pretty confused as to what this test is really achieving honestly. This
+> > > > > > isn't a useful way of asserting mmap() behaviour as far as I can tell.
+> > > > > Well, seems like a useful way to me at least : ) Not sure if you are in the mood
+> > > > > to discuss that but if you'd like me to explain from start to end what the test
+> > > > > is doing, I can do that : )
+> > > > > 
+> > > > I just don't have time right now, I guess I'll have to come back to it
+> > > > later... it's not the end of the world for it to be iffy in my view as long as
+> > > > it passes, but it might just not be of great value.
+> > > > 
+> > > > Philosophically I'd rather we didn't assert internal implementation details like
+> > > > where we place mappings in userland memory. At no point do we promise to not
+> > > > leave larger gaps if we feel like it :)
+> > > You have a fair point. Anyhow a debate for another day.
+> > > 
+> > > > I'm guessing, reading more, the _real_ test here is some mathematical assertion
+> > > > about layout from HIGH_ADDR_SHIFT -> end of address space when using hints.
+> > > > 
+> > > > But again I'm not sure that achieves much and again also is asserting internal
+> > > > implementation details.
+> > > > 
+> > > > Correct behaviour of this kind of thing probably better belongs to tests in the
+> > > > userland VMA testing I'd say.
+> > > > 
+> > > > Sorry I don't mean to do down work you've done before, just giving an honest
+> > > > technical appraisal!
+> > > Nah, it will be rather hilarious to see it all go down the drain xD
+> > > 
+> > > > Anyway don't let this block work to fix the test if it's failing. We can revisit
+> > > > this later.
+> > > Sure. @Aboorva and Donet, I still believe that the correct approach is to elide
+> > > the gap check at the crossing boundary. What do you think?
+> > > 
+> > One problem I am seeing with this approach is that, since the hint address
+> > is generated randomly, the VMAs are also being created at randomly based on
+> > the hint address.So, for the VMAs created at high addresses, we cannot guarantee
+> > that the gaps between them will be aligned to MAP_CHUNK_SIZE.
 > > 
-> > +int iommufd_access_notify_unmap(struct io_pagetable *iopt, unsigned long
-> > iova,
-> > +				unsigned long length)
-> >  {
-> >  	struct iommufd_ioas *ioas =
-> >  		container_of(iopt, struct iommufd_ioas, iopt);
-> >  	struct iommufd_access *access;
-> >  	unsigned long index;
-> > +	int ret = 0;
+> > High address VMAs
+> > -----------------
+> > 1000000000000-1000040000000 r--p 00000000 00:00 0
+> > 2000000000000-2000040000000 r--p 00000000 00:00 0
+> > 4000000000000-4000040000000 r--p 00000000 00:00 0
+> > 8000000000000-8000040000000 r--p 00000000 00:00 0
+> > e80009d260000-fffff9d260000 r--p 00000000 00:00 0
 > > 
-> >  	xa_lock(&ioas->iopt.access_list);
-> >  	xa_for_each(&ioas->iopt.access_list, index, access) {
-> > +		if (!access->ops || !access->ops->unmap) {
-> > +			ret = -EBUSY;
-> > +			goto unlock;
-> > +		}
+> > I have a different approach to solve this issue.
+> > 
+> >  From 0 to 128TB, we map memory directly without using any hint. For the range above
+> > 256TB up to 512TB, we perform the mapping using hint addresses. In the current test,
+> > we use random hint addresses, but I have modified it to generate hint addresses linearly
+> > starting from 128TB.
+> > 
+> > With this change:
+> > 
+> > The 0–128TB range is mapped without hints and verified accordingly.
+> > 
+> > The 128TB–512TB range is mapped using linear hint addresses and then verified.
+> > 
+> > Below are the VMAs obtained with this approach:
+> > 
+> > 10000000-10010000 r-xp 00000000 fd:05 135019531
+> > 10010000-10020000 r--p 00000000 fd:05 135019531
+> > 10020000-10030000 rw-p 00010000 fd:05 135019531
+> > 20000000-10020000000 r--p 00000000 00:00 0
+> > 10020800000-10020830000 rw-p 00000000 00:00 0
+> > 1004bcf0000-1004c000000 rw-p 00000000 00:00 0
+> > 1004c000000-7fff8c000000 r--p 00000000 00:00 0
+> > 7fff8c130000-7fff8c360000 r-xp 00000000 fd:00 792355
+> > 7fff8c360000-7fff8c370000 r--p 00230000 fd:00 792355
+> > 7fff8c370000-7fff8c380000 rw-p 00240000 fd:00 792355
+> > 7fff8c380000-7fff8c460000 r-xp 00000000 fd:00 792358
+> > 7fff8c460000-7fff8c470000 r--p 000d0000 fd:00 792358
+> > 7fff8c470000-7fff8c480000 rw-p 000e0000 fd:00 792358
+> > 7fff8c490000-7fff8c4d0000 r--p 00000000 00:00 0
+> > 7fff8c4d0000-7fff8c4e0000 r-xp 00000000 00:00 0
+> > 7fff8c4e0000-7fff8c530000 r-xp 00000000 fd:00 792351
+> > 7fff8c530000-7fff8c540000 r--p 00040000 fd:00 792351
+> > 7fff8c540000-7fff8c550000 rw-p 00050000 fd:00 792351
+> > 7fff8d000000-7fffcd000000 r--p 00000000 00:00 0
+> > 7fffe9c80000-7fffe9d90000 rw-p 00000000 00:00 0
+> > 800000000000-2000000000000 r--p 00000000 00:00 0    -> High Address (128TB to 512TB)
+> > 
+> > diff --git a/tools/testing/selftests/mm/virtual_address_range.c b/tools/testing/selftests/mm/virtual_address_range.c
+> > index 4c4c35eac15e..0be008cba4b0 100644
+> > --- a/tools/testing/selftests/mm/virtual_address_range.c
+> > +++ b/tools/testing/selftests/mm/virtual_address_range.c
+> > @@ -56,21 +56,21 @@
+> >   #ifdef __aarch64__
+> >   #define HIGH_ADDR_MARK  ADDR_MARK_256TB
+> > -#define HIGH_ADDR_SHIFT 49
+> > +#define HIGH_ADDR_SHIFT 48
+> >   #define NR_CHUNKS_LOW   NR_CHUNKS_256TB
+> >   #define NR_CHUNKS_HIGH  NR_CHUNKS_3840TB
+> >   #else
+> >   #define HIGH_ADDR_MARK  ADDR_MARK_128TB
+> > -#define HIGH_ADDR_SHIFT 48
+> > +#define HIGH_ADDR_SHIFT 47
+> >   #define NR_CHUNKS_LOW   NR_CHUNKS_128TB
+> >   #define NR_CHUNKS_HIGH  NR_CHUNKS_384TB
+> >   #endif
+> > -static char *hint_addr(void)
+> > +static char *hint_addr(int hint)
+> >   {
+> > -       int bits = HIGH_ADDR_SHIFT + rand() % (63 - HIGH_ADDR_SHIFT);
+> > +       unsigned long addr = ((1UL << HIGH_ADDR_SHIFT) + (hint * MAP_CHUNK_SIZE));
+> > -       return (char *) (1UL << bits);
+> > +       return (char *) (addr);
+> >   }
+> >   static void validate_addr(char *ptr, int high_addr)
+> > @@ -217,7 +217,7 @@ int main(int argc, char *argv[])
+> >          }
+> >          for (i = 0; i < NR_CHUNKS_HIGH; i++) {
+> > -               hint = hint_addr();
+> > +               hint = hint_addr(i);
+> >                  hptr[i] = mmap(hint, MAP_CHUNK_SIZE, PROT_READ,
+> >                                 MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 > 
-> then accesses before this one have been notified to unpin the area
-> while accesses afterwards are left unnotified.
+> Ah you sent it here, thanks. This is fine really, but the mystery is
+> something else.
+>
+
+Thanks Dev
+
+I can send out v2 with this patch included, right?
+
+ 
 > 
-> in the end the unmap fails but with some side-effect incurred.
+> > 
+> > 
+> > Can we fix it this way?
 > 
-> I'm not sure whether this intermediate state may lead to any undesired
-> effect later. Just raise it in case you or Jason already thought about it.
-
-That's a good point. When an access blocks the unmap, there is no
-unmap happening so no point in notifying devices for ops->unmap.
-
-And, when the function is re-entered, there could be a duplicated
-ops->unmap call for those devices that are already notified once?
-
-So, if we play safe, there can be a standalone xa_for_each to dig
-for !access->ops->unmap. And it could be a bit cleaner to add an
-iommufd_access_has_internal_use() to be called under those rwsems.
-
-> >  			/* Something is not responding to unmap requests.
-> > */
-> >  			tries++;
-> > -			if (WARN_ON(tries > 100))
-> > -				return -EDEADLOCK;
-> > +			if (WARN_ON(tries > 100)) {
-> > +				rc = -EDEADLOCK;
-> > +				goto out_unmapped;
-> > +			}
-> 
-> this looks an unrelated fix?
-
-Yea.. let me separate it out.
-
-Thanks
-Nicolin
 
