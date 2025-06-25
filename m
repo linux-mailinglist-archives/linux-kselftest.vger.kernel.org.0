@@ -1,117 +1,148 @@
-Return-Path: <linux-kselftest+bounces-35732-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35733-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7EC90AE798D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jun 2025 10:08:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3953AAE7A58
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jun 2025 10:35:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F18485A1B6F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jun 2025 08:08:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3255C1705BD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jun 2025 08:34:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2693A20FA8B;
-	Wed, 25 Jun 2025 08:08:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 954E421B1B9;
+	Wed, 25 Jun 2025 08:33:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cDli5+K8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="H0nVjQMO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D6D020E011
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Jun 2025 08:08:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E46720C46D
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Jun 2025 08:33:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750838915; cv=none; b=YhUgy+JaGDbtFYFiO9tuwhEF9wiP0RK24eC3zr5ZLRQX5BXKSAsg70nt4mDj3rjCfKH1/pfic0ZO+bAn0zVIVzbVMw9dU8krMK/o+e0SFOk9+x29wsivOl96fOqkm5RJLWmOqjCqERbtzAqUEQHUkmItTjTeQ32h6tS7HqTjM+4=
+	t=1750840391; cv=none; b=EBBd255bVGWRIx89y3qDamw4+jG3OlLoNsQ5hZkqousHJPx8oEWszCV1r1YI7rqef1Qc0VR/fxzYxihT4UhSAQIlFOvEIAEzMX8DqfplERL0ZDLM/fYT1vtHqqhX12rAM9SUB2N21Gb0lc2UzZcLLfgpb6gc5sNxU9WW4/FmIcA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750838915; c=relaxed/simple;
-	bh=zpwNDepzoTzzaxm0I9H9fOZHI8MES0vs8xLBUSVMd94=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FOJfTmNqQabRSqK1Vs9PT4Pk0FxQc3kxGiblhizUdQLS7LFubEZDxOJCva68GSts0TbXGa+PgAjawV4UrI3d8yqpsF45lThetC7SiVXKoQnR/hb/CywqajyXO/16H1mmSvWYKJyhP1S9Y9USiHloCX2IgJVGVmu6sOIwmQ5yv/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cDli5+K8; arc=none smtp.client-ip=209.85.160.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-4a752944794so14185081cf.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Jun 2025 01:08:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1750838912; x=1751443712; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0nJWUBaRn+NFbAiZsctR9Sk0rJwoQVmEaF8vNrJMha0=;
-        b=cDli5+K8H0157CJRrliEULCG1ImmT23LgRW9zs5uWTXWtjR3MYfnR6xfWJFBUKFqa8
-         yFuL75yfM5pBJoFxGGO9nwl0kX4KjyCwoQ53xO4uGltcKKPS9APMbI1mzCOx534VLYI2
-         RkJUsUYykepxGLVgoyRrglOAao8bxwgILqL5Pwc2BpWyP4FRDXPAoqpOCoH0x/D/swOx
-         ZtCgRXV7sRapZwB6/ExxromsmV+tv6EeO7xcw2sbVJ4+8WB1VHecDXDxj/GcZM9YRdi8
-         uUa90ntT9APYjRQMWodVc/WSqy4YOF/baC3lEyoxm7GRkywTkVOrpofltvF/KU1Ox7eg
-         tEeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750838912; x=1751443712;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0nJWUBaRn+NFbAiZsctR9Sk0rJwoQVmEaF8vNrJMha0=;
-        b=hGBHZV0cYmphjCENHCADjq0JX/1F5/sDVS1VL3UCBQ7Dqbn2i/Wn6LP5rWp96BT3jV
-         XQ/FGGSoc9NbNm6XnfI0E66aO+hAlGH4aaAsU391bgpj/NmoHfZg1aqpmHeUKqtvMZV4
-         lO5hPou3NSYxhFB07UVCl+uBYiv2cg14Y/XmP5ELXdSqNwgDuXInBHwSX3xCTrk4YjsK
-         RWmw0O19RNkMTejPVItv4EDIdGRiMYQdnGVh+NoygGTXcskFgk0ViyGLtKTQJpSNrE8D
-         uMeDlpdhAprGztgvhi5JkkZWqCnl5JuKEULDLXUriCw1xPw8cmSlG8FMHT/ZlsPLm+Yl
-         VT0g==
-X-Forwarded-Encrypted: i=1; AJvYcCUUBDMPM2ccpOh3xpzK1V2rt9iBpc01xsEl47JzNCcPHEPc0gYGSDbcabi5+v5fQMAxB2ftGaHxohlQNMVFMrA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYvrs2a1llvJt6n2T1/jtTWO4R6OQQ3rSIQYG5C/QNysbCGZmU
-	UdTA3cJx1R/qyaT0LYvcvPlzgJRMO66CE9uEmUNzX/RJ+xjGWCPknciBXbJLkBK71ZmHwnYGYI4
-	6hcXz3+/Ubj4PptBDMV6uIlZQiMVHRe/x2ytYiQOy
-X-Gm-Gg: ASbGncvP9SAziV5iwVdk5L0+jeZnCucKHjdO/qHXtdWvRQ8sq6zL9lkKfS8Wp5plWEG
-	6+syWv5Jd/769HSCRV2BB5VdUJH1lhvsD3F/nowTLagQs9V1KJR2llNkffJfB6X1XDm1vD8m/+Z
-	W6Ph8hAeo3rM2r/OGtJ/ecZ9Z43sA/vnNumj2aUQOhRhpoBvpy9ggM
-X-Google-Smtp-Source: AGHT+IH2l04goDte8C6MTfBkwicdcfLuBSPT0rwaeShXKmoGSohwlRGdRNtjkixcZ5WnAvB15y3GdC/wXCD1WKJl+GM=
-X-Received: by 2002:ac8:5a55:0:b0:4a4:369c:7635 with SMTP id
- d75a77b69052e-4a7c0699e85mr36557401cf.19.1750838911907; Wed, 25 Jun 2025
- 01:08:31 -0700 (PDT)
+	s=arc-20240116; t=1750840391; c=relaxed/simple;
+	bh=7HyHTivDjUk5L/aMX6QjOKJ0k+am7AT9bX7/LBE5A0o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mZUjEj+MCZ6NwAm90LQVqOnYJ3ya/2Q6rK9ym7MXt3zNJkdbt+S20yr5icAzYkq5IXtRTi/RaTfWvarMUDFUXjW1zJ34F2Ujbot8Z7EtQGW/8Qve6dTAGz7TSTjFJiJNb6biu8wlvhLWKsuJBTPMfaroZcumkX3+FWcWMRZy/Lo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=H0nVjQMO; arc=none smtp.client-ip=95.215.58.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Wed, 25 Jun 2025 10:33:02 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1750840386;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+RdDpK0Q/BrscCsHE2b67l2XshKAMI4QDH//eQ76vYQ=;
+	b=H0nVjQMOiY4+H4PxAmGP2EbqofC0puApMp7X2a9Zc6REb298iwGRlvJJPjAgLypCPTWsNp
+	7f7QvRn072mqsSsfxCtCtbFY7L0BXhf5bJByuEGW2xchIdFou7NKdBDNHgPFG30/Em4iCN
+	BpYP7Dq1na3uBlU/rHsPuz/ti47HgSw=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Andrew Jones <andrew.jones@linux.dev>
+To: Jesse Taube <jesse@rivosinc.com>
+Cc: kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
+	linux-kselftest@vger.kernel.org, =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>, 
+	Charlie Jenkins <charlie@rivosinc.com>, James Raphael Tiovalen <jamestiotio@gmail.com>, 
+	Sean Christopherson <seanjc@google.com>, Cade Richard <cade.richard@gmail.com>
+Subject: Re: [kvm-unit-tests PATCH v2] riscv: lib: sbi_shutdown add pass/fail
+ exit code.
+Message-ID: <20250625-fc81fec2cf6d7ee195c0eb6c@orel>
+References: <20250624192317.278437-1-jesse@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250621193737.16593-1-chia-yu.chang@nokia-bell-labs.com> <20250621193737.16593-9-chia-yu.chang@nokia-bell-labs.com>
-In-Reply-To: <20250621193737.16593-9-chia-yu.chang@nokia-bell-labs.com>
-From: Eric Dumazet <edumazet@google.com>
-Date: Wed, 25 Jun 2025 01:08:21 -0700
-X-Gm-Features: AX0GCFtvmPCOCoMB53ZiS7lNiinqU-Ptn3ytwDVPBB0CYTmRz2Bl-m-tFudAibs
-Message-ID: <CANn89iLmLeUxBh8kU-RgLZ764QsKUqb_4NiwpwhryPi=7RiZ8w@mail.gmail.com>
-Subject: Re: [PATCH v9 net-next 08/15] tcp: sack option handling improvements
-To: chia-yu.chang@nokia-bell-labs.com
-Cc: pabeni@redhat.com, linux-doc@vger.kernel.org, corbet@lwn.net, 
-	horms@kernel.org, dsahern@kernel.org, kuniyu@amazon.com, bpf@vger.kernel.org, 
-	netdev@vger.kernel.org, dave.taht@gmail.com, jhs@mojatatu.com, 
-	kuba@kernel.org, stephen@networkplumber.org, xiyou.wangcong@gmail.com, 
-	jiri@resnulli.us, davem@davemloft.net, andrew+netdev@lunn.ch, 
-	donald.hunter@gmail.com, ast@fiberby.net, liuhangbin@gmail.com, 
-	shuah@kernel.org, linux-kselftest@vger.kernel.org, ij@kernel.org, 
-	ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com, 
-	g.white@cablelabs.com, ingemar.s.johansson@ericsson.com, 
-	mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at, 
-	Jason_Livingood@comcast.com, vidhi_goel@apple.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250624192317.278437-1-jesse@rivosinc.com>
+X-Migadu-Flow: FLOW_OUT
 
-On Sat, Jun 21, 2025 at 12:38=E2=80=AFPM <chia-yu.chang@nokia-bell-labs.com=
-> wrote:
+On Tue, Jun 24, 2025 at 12:23:17PM -0700, Jesse Taube wrote:
+> When exiting it may be useful for the sbi implementation to know if
+> kvm-unit-tests passed or failed.
+> Add exit code to sbi_shutdown, and use it in exit() to pass
+> success/failure (0/1) to sbi.
+> 
+> Signed-off-by: Jesse Taube <jesse@rivosinc.com>
+> ---
+>  lib/riscv/asm/sbi.h | 2 +-
+>  lib/riscv/io.c      | 2 +-
+>  lib/riscv/sbi.c     | 4 ++--
+>  3 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/lib/riscv/asm/sbi.h b/lib/riscv/asm/sbi.h
+> index a5738a5c..de11c109 100644
+> --- a/lib/riscv/asm/sbi.h
+> +++ b/lib/riscv/asm/sbi.h
+> @@ -250,7 +250,7 @@ struct sbiret sbi_ecall(int ext, int fid, unsigned long arg0,
+>  			unsigned long arg3, unsigned long arg4,
+>  			unsigned long arg5);
+>  
+> -void sbi_shutdown(void);
+> +void sbi_shutdown(unsigned int code);
+>  struct sbiret sbi_hart_start(unsigned long hartid, unsigned long entry, unsigned long sp);
+>  struct sbiret sbi_hart_stop(void);
+>  struct sbiret sbi_hart_get_status(unsigned long hartid);
+> diff --git a/lib/riscv/io.c b/lib/riscv/io.c
+> index fb40adb7..0bde25d4 100644
+> --- a/lib/riscv/io.c
+> +++ b/lib/riscv/io.c
+> @@ -150,7 +150,7 @@ void halt(int code);
+>  void exit(int code)
+>  {
+>  	printf("\nEXIT: STATUS=%d\n", ((code) << 1) | 1);
+> -	sbi_shutdown();
+> +	sbi_shutdown(!!code);
+>  	halt(code);
+>  	__builtin_unreachable();
+>  }
+> diff --git a/lib/riscv/sbi.c b/lib/riscv/sbi.c
+> index 2959378f..9dd11e9d 100644
+> --- a/lib/riscv/sbi.c
+> +++ b/lib/riscv/sbi.c
+> @@ -107,9 +107,9 @@ struct sbiret sbi_sse_inject(unsigned long event_id, unsigned long hart_id)
+>  	return sbi_ecall(SBI_EXT_SSE, SBI_EXT_SSE_INJECT, event_id, hart_id, 0, 0, 0, 0);
+>  }
+>  
+> -void sbi_shutdown(void)
+> +void sbi_shutdown(unsigned int code)
+>  {
+> -	sbi_ecall(SBI_EXT_SRST, 0, 0, 0, 0, 0, 0, 0);
+> +	sbi_ecall(SBI_EXT_SRST, 0, 0, code, 0, 0, 0, 0);
+>  	puts("SBI shutdown failed!\n");
+>  }
+>  
+> -- 
+> 2.43.0
 >
-> From: Ilpo J=C3=A4rvinen <ij@kernel.org>
->
-> 1) Don't early return when sack doesn't fit. AccECN code will be
->    placed after this fragment so no early returns please.
->
-> 2) Make sure opts->num_sack_blocks is not left undefined. E.g.,
->    tcp_current_mss() does not memset its opts struct to zero.
->    AccECN code checks if SACK option is present and may even
->    alter it to make room for AccECN option when many SACK blocks
->    are present. Thus, num_sack_blocks needs to be always valid.
->
-> Signed-off-by: Ilpo J=C3=A4rvinen <ij@kernel.org>
-> Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+I enhanced the commit message, changed the parameter to a boolean, and
+applied to riscv/sbi
+
+https://gitlab.com/jones-drew/kvm-unit-tests/-/commits/riscv/sbi
+
+but I'm having some second thoughts on it. It looks like opensbi and the
+two KVM VMMs I looked at (QEMU and kvmtool) all currently ignore this
+parameter and we don't know what they might choose to do if they stop
+ignoring it. For example, they could choose to hang, rather than complete
+the shutdown when they see a "system failure" reason. It may make sense
+to indicate system failure if the test aborts, since, in those cases,
+something unexpected with the testing occurred. However, successfully
+running tests which find and report failures isn't unexpected, so it
+shouldn't raise an alarm to the SBI implementation in those cases.
+
+Do you already have a usecase for this in mind? If so, we could make
+the behavior optional to enable that use case and use cases like it
+but we'd keep that behavior off by default to avoid problems with SBI
+implementations that do things with the "system failure" information we'd
+rather they not do.
+
+Thanks,
+drew
 
