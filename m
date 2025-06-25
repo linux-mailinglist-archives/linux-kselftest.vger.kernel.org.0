@@ -1,49 +1,50 @@
-Return-Path: <linux-kselftest+bounces-35743-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35744-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 223C3AE80E1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jun 2025 13:24:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E06B3AE80E4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jun 2025 13:25:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2A0A77A6771
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jun 2025 11:23:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 71F585A5244
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jun 2025 11:24:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C61482BEC25;
-	Wed, 25 Jun 2025 11:24:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6610D2C1599;
+	Wed, 25 Jun 2025 11:24:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j/xSwY+/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P1Wxkd7G"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 890F425B677;
-	Wed, 25 Jun 2025 11:24:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D5CA2C08BD;
+	Wed, 25 Jun 2025 11:24:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750850687; cv=none; b=njn3xUGq1n6YHovvc8xjAL7njVgv6e5mhMyP28JRzZBysM+1WzSQ4UdlQC0ij/beU0yr1R4wRoRuBPjCq9nh3T/2sdotPSbKXRHhD9jBU1PO7Sa1Dx5wvSMhN1uHEhld7qoaQk2B1G9a4/E7vFIMrA4LXmMpEWQHQSz6/639n4I=
+	t=1750850691; cv=none; b=uMUij+CnCBHrsqpJRRY8+0sHAnRwJfjqamsXiF6p/Aaoc1qUiIW47v7nC9GRboFJXAbWr47L7K4Ytr3IQ1cHarqGat6OS6DZB+wC2myBq1BwzUdDionE8gXNkkwbONxxfWKzEaDucTb4FEG2Kn1gWTEBOcAfXjThZl086E0zHZQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750850687; c=relaxed/simple;
-	bh=WyjPlzEckQK2AsiUXQqAYWbsE3Q3tZ56mU/lgBXCQu8=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=mzygKZT8Bp8Z/cLuybjo2OnZNbCbonSoz4PYkhorAHOTJT2+6Rkx0cAF/I2uV6e+VxuyX1Yx4ekRbGzujo0TOBLrquxsGB1BxbOVmrFCgMyoAhAQwclmiRygAfDIpuethihT1LIs3C/t8Wib0z2c7y8D7wWIscFJwR7oi4sGW94=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j/xSwY+/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF8F5C4CEEA;
-	Wed, 25 Jun 2025 11:24:43 +0000 (UTC)
+	s=arc-20240116; t=1750850691; c=relaxed/simple;
+	bh=tAV6xipp2Cccsjel/OuGPLD/NSdXCwSY4dbfZYzvIiY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=RIENpDhUgRTvqIN3ser73crIcNUekxfGizwlxWXTpECO1LYnvrLjNGKvS/fCkz7aiWGByBiofZRewGKRlj7P+LTwyCIYj0GPhuNISGRWpl5AywNBTMdqOtHi9KVeMTMXoN3XOh7SoLvuG/weTT3Fh7dE4ShzOqLp/5QGqGgDJLo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P1Wxkd7G; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F5F6C4CEF0;
+	Wed, 25 Jun 2025 11:24:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750850687;
-	bh=WyjPlzEckQK2AsiUXQqAYWbsE3Q3tZ56mU/lgBXCQu8=;
-	h=From:Subject:Date:To:Cc:From;
-	b=j/xSwY+/YguU+QdpVUl4ep3qM71MYwW+MswIyvFRaP9pl6v3rE/97dhMN8ChqZTF1
-	 j0fJ53I5aD9SBnZJb1fPfDpv0uMT1+F3qI9sZ+m6IccKD2leXyM3a/wV+yXn9jZZH2
-	 UNxZHBuqPl2KVqjHLVKBxaqCIpMtCuCpNWTOzhDOSoUi9XwhJ5YKkBS3+jPfPBuadU
-	 /m6riUXP3s1KKI0bdsINpD22XrWGgGyOlO+qcCInX7AZotukZPYSoVAEZyvlJqMj3N
-	 L9j3gp6e9SJBj/i6BhSmJl2QvtjSrrtB5Yw8bdXY0xvpm1F6QgqKn4MvZ0XYEhPKsU
-	 oCoiLwRG3071w==
+	s=k20201202; t=1750850690;
+	bh=tAV6xipp2Cccsjel/OuGPLD/NSdXCwSY4dbfZYzvIiY=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=P1Wxkd7GeNTD2Lq0QyzHMK/Pq0Jlmb9HoQ0/Atur5/VYuBvdtZOrPcrtqIuSbCLzv
+	 KJtLVVzvJgtzh2cmQD9dyF3uxijIPojS8GJLebZjemd1W5xQsVn8jmBBiUnWlND9ti
+	 rvMoSLijnYkcSa2j1Jb1wKShnLzDE5oIsWKwCkj/RvJkaO5dAr59hFS8/DBDLtSQ7A
+	 SMqhgwro3PjnhVdm5utAD59nyMg826gkPYy5Wt7WOvvGSyaQ7m+7uzy5Zls9R2227P
+	 /9vpSl9hjkeOGoZqgn59CMeNHObVuNdAEADAL02LFc/4TpaPuK1SXKZ6yBA9TGW+yC
+	 mSDW57gaREUiA==
 From: Mark Brown <broonie@kernel.org>
-Subject: [PATCH v6 00/28] KVM: arm64: Implement support for SME
-Date: Wed, 25 Jun 2025 11:47:51 +0100
-Message-Id: <20250625-kvm-arm64-sme-v6-0-114cff4ffe04@kernel.org>
+Date: Wed, 25 Jun 2025 11:47:52 +0100
+Subject: [PATCH v6 01/28] arm64/fpsimd: Update FA64 and ZT0 enables when
+ loading SME state
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,13 +53,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIANjTW2gC/2XRS26DMBAG4Ksgr+vIM34AWfUeVRd+BisFEkNRq
- yh3rx2UVoXljPzNyP/cyORT9BM5VjeS/BKnOA65UC8VsZ0eTp5Gl2uCDDnjDOh56alOvRJ06j1
- lSgMK5bjiimRj9OSpSXqwXVFzfyndS/Ihfj22vL3nuovTPKbvx9IFSned3yJu5i9AGQ0BGlcLg
- 613r2efBv9xGNOJlFEL/nLAPcfMnUZU1kDDjNlx/uQic7blPHMmDYPGQgh+z8WTS4YgtlyU7Up
- o1YB21uKOyz8uoN5yWf4uVKvRySBr8Y/f11yTv37mo81ruGv+duz7OB+rRR1A0WR5fn3/AejH/
- n3qAQAA
-X-Change-ID: 20230301-kvm-arm64-sme-06a1246d3636
+Message-Id: <20250625-kvm-arm64-sme-v6-1-114cff4ffe04@kernel.org>
+References: <20250625-kvm-arm64-sme-v6-0-114cff4ffe04@kernel.org>
+In-Reply-To: <20250625-kvm-arm64-sme-v6-0-114cff4ffe04@kernel.org>
 To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
  Joey Gouly <joey.gouly@arm.com>, Catalin Marinas <catalin.marinas@arm.com>, 
  Suzuki K Poulose <suzuki.poulose@arm.com>, Will Deacon <will@kernel.org>, 
@@ -70,201 +67,182 @@ Cc: Dave Martin <Dave.Martin@arm.com>, Fuad Tabba <tabba@google.com>,
  linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.15-dev-08c49
-X-Developer-Signature: v=1; a=openpgp-sha256; l=9496; i=broonie@kernel.org;
- h=from:subject:message-id; bh=WyjPlzEckQK2AsiUXQqAYWbsE3Q3tZ56mU/lgBXCQu8=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBoW9xkzQxYIgAGrougDvfgpfufkhPrD66hFs/CK
- 35t3+AA226JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaFvcZAAKCRAk1otyXVSH
- 0FgeB/sHUc9EaNlDwvkIdk29jGlqiCtgeTHwGoEtYAgZhS/2bMZFl+uXH4kiQElWjdJ4AkrqFWW
- Hwm1Sj4FtDFn+ovlrn+jb5oYfTCk6YO9lMLJkuSgOn5PshFGnj0/CV3LeeC8UMZAGNxesYJsQw5
- 1+NitCaZgnQ8ZzsGFPtxsFyw3JSn5OPdkOsDBYaK54/uKb+d/NrkZ7BShM5h41by/4mGo5DxgQL
- Ce59pXCjjsSkWDFzxSFltyuA5H1yYg1PrJb1Jch6nbZvX+ldXFKy9ErD+odWS1W3qsCmDMMnJ5Y
- yW2Vf3MQIJfL+W/oDvxNpIjDJS7Atjy5R0syNHu4E+7E+Jle
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5763; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=tAV6xipp2Cccsjel/OuGPLD/NSdXCwSY4dbfZYzvIiY=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBoW9xlBkzR8GNctp0kn0pzBj+3OpnDqbUW6KWCW
+ BzwjXfN9NWJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaFvcZQAKCRAk1otyXVSH
+ 0NF+B/9e53wpct6Lpjq4Yj8r9MgVZg84GjL/Opay6bY8KDyzkxf+ZcJzS7v/HLmS/sDx4fRXL4A
+ JkHe/epgdF2V/NuAy/nWxZuiN/fkka+9zY78rdL+lemzk4Yv9mCPFMkID4y39I8ySpqW00X8AbM
+ v1EYrRaOfwBu2VEq2oDesHYvoXZ0rkyL5iUOLyhUtnOfZoUgv4ajujiv6vcXq9jbyPb+xrV3slM
+ 4xtUnEgYSuB9ABy3rQxgSQe2+dhGCqXeq2E/aj8+ue0k41WMobd+gy99bX8Sw8Qx0TQ+N25ryYx
+ Ufqumwq0nMaJv4dePDthglq78wYFzaMTn8V/4kVGdCu7CMFX
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-I've removed the RFC tag from this version of the series, but the items
-that I'm looking for feedback on remains the same:
+Currently we enable EL0 and EL1 access to FA64 and ZT0 at boot and leave
+them enabled throughout the runtime of the system. When we add KVM support
+we will need to make this configuration dynamic, these features may be
+disabled for some KVM guests. Since the host kernel saves the floating
+point state for non-protected guests and we wish to avoid KVM having to
+reload the floating point state needlessly on guest reentry let's move the
+configuration of these enables to the floating point state reload.
 
- - The userspace ABI, in particular:
-  - The vector length used for the SVE registers, access to the SVE
-    registers and access to ZA and (if available) ZT0 depending on
-    the current state of PSTATE.{SM,ZA}.
-  - The use of a single finalisation for both SVE and SME.
-
- - The addition of control for enabling fine grained traps in a similar
-   manner to FGU but without the UNDEF, I'm not clear if this is desired
-   at all and at present this requires symmetric read and write traps like
-   FGU. That seemed like it might be desired from an implementation
-   point of view but we already have one case where we enable an
-   asymmetric trap (for ARM64_WORKAROUND_AMPERE_AC03_CPU_38) and it
-   seems generally useful to enable asymmetrically.
-
-This series implements support for SME use in non-protected KVM guests.
-Much of this is very similar to SVE, the main additional challenge that
-SME presents is that it introduces a new vector length similar to the
-SVE vector length and two new controls which change the registers seen
-by guests:
-
- - PSTATE.ZA enables the ZA matrix register and, if SME2 is supported,
-   the ZT0 LUT register.
- - PSTATE.SM enables streaming mode, a new floating point mode which
-   uses the SVE register set with the separately configured SME vector
-   length.  In streaming mode implementation of the FFR register is
-   optional.
-
-It is also permitted to build systems which support SME without SVE, in
-this case when not in streaming mode no SVE registers or instructions
-are available.  Further, there is no requirement that there be any
-overlap in the set of vector lengths supported by SVE and SME in a
-system, this is expected to be a common situation in practical systems.
-
-Since there is a new vector length to configure we introduce a new
-feature parallel to the existing SVE one with a new pseudo register for
-the streaming mode vector length.  Due to the overlap with SVE caused by
-streaming mode rather than finalising SME as a separate feature we use
-the existing SVE finalisation to also finalise SME, a new define
-KVM_ARM_VCPU_VEC is provided to help make user code clearer.  Finalising
-SVE and SME separately would introduce complication with register access
-since finalising SVE makes the SVE registers writeable by userspace and
-doing multiple finalisations results in an error being reported.
-Dealing with a state where the SVE registers are writeable due to one of
-SVE or SME being finalised but may have their VL changed by the other
-being finalised seems like needless complexity with minimal practical
-utility, it seems clearer to just express directly that only one
-finalisation can be done in the ABI.
-
-Access to the floating point registers follows the architecture:
-
- - When both SVE and SME are present:
-   - If PSTATE.SM == 0 the vector length used for the Z and P registers
-     is the SVE vector length.
-   - If PSTATE.SM == 1 the vector length used for the Z and P registers
-     is the SME vector length.
- - If only SME is present:
-   - If PSTATE.SM == 0 the Z and P registers are inaccessible and the
-     floating point state accessed via the encodings for the V registers.
-   - If PSTATE.SM == 1 the vector length used for the Z and P registers
- - The SME specific ZA and ZT0 registers are only accessible if SVCR.ZA is 1.
-
-The VMM must understand this, in particular when loading state SVCR
-should be configured before other state.  It should be noted that while
-the architecture refers to PSTATE.SM and PSTATE.ZA these PSTATE bits are
-not preserved in SPSR_ELx, they are only accessible via SVCR.
-
-There are a large number of subfeatures for SME, most of which only
-offer additional instructions but some of which (SME2 and FA64) add
-architectural state. These are configured via the ID registers as per
-usual.
-
-Protected KVM supported, with the implementation maintaining the
-existing restriction that the hypervisor will refuse to run if streaming
-mode or ZA is enabled.  This both simplfies the code and avoids the need
-to allocate storage for host ZA and ZT0 state, there seems to be little
-practical use case for supporting this and the memory usage would be
-non-trivial.
-
-The new KVM_ARM_VCPU_VEC feature and ZA and ZT0 registers have not been
-added to the get-reg-list selftest, the idea of supporting additional
-features there without restructuring the program to generate all
-possible feature combinations has been rejected.  I will post a separate
-series which does that restructuring.
+We provide a helper which does the configuration as part of a
+read/modify/write operation along with the configuration of the task VL,
+then update the floating point state load and SME access trap to use it.
+We also remove the setting of the enable bits from the CPU feature
+identification and resume paths.  There will be a small overhead from
+setting the enables one at a time but this should be negligable in the
+context of the state load or access trap.  In order to avoid compiler
+warnings due to unused variables in !CONFIG_ARM64_SME cases we avoid
+storing the vector length in temporary variables.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
+
+df
 ---
-Changes in v6:
-- Rebase onto v6.16-rc3.
-- Link to v5: https://lore.kernel.org/r/20250417-kvm-arm64-sme-v5-0-f469a2d5f574@kernel.org
+ arch/arm64/include/asm/fpsimd.h | 14 ++++++++++++
+ arch/arm64/kernel/cpufeature.c  |  2 --
+ arch/arm64/kernel/fpsimd.c      | 47 +++++++++++------------------------------
+ 3 files changed, 26 insertions(+), 37 deletions(-)
 
-Changes in v5:
-- Rebase onto v6.15-rc2.
-- Add pKVM guest support.
-- Always restore SVCR.
-- Link to v4: https://lore.kernel.org/r/20250214-kvm-arm64-sme-v4-0-d64a681adcc2@kernel.org
+diff --git a/arch/arm64/include/asm/fpsimd.h b/arch/arm64/include/asm/fpsimd.h
+index b8cf0ea43cc0..b4359f942621 100644
+--- a/arch/arm64/include/asm/fpsimd.h
++++ b/arch/arm64/include/asm/fpsimd.h
+@@ -428,6 +428,18 @@ static inline size_t sme_state_size(struct task_struct const *task)
+ 	return __sme_state_size(task_get_sme_vl(task));
+ }
+ 
++#define sme_cond_update_smcr(vl, fa64, zt0, reg)		\
++	do {							\
++		u64 __old = read_sysreg_s((reg));		\
++		u64 __new = vl;					\
++		if (fa64)			\
++			__new |= SMCR_ELx_FA64;			\
++		if (zt0)					\
++			__new |= SMCR_ELx_EZT0;			\
++		if (__old != __new)				\
++			write_sysreg_s(__new, (reg));		\
++	} while (0)
++
+ #else
+ 
+ static inline void sme_user_disable(void) { BUILD_BUG(); }
+@@ -456,6 +468,8 @@ static inline size_t sme_state_size(struct task_struct const *task)
+ 	return 0;
+ }
+ 
++#define sme_cond_update_smcr(val, fa64, zt0, reg) do { } while (0)
++
+ #endif /* ! CONFIG_ARM64_SME */
+ 
+ /* For use by EFI runtime services calls only */
+diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+index b34044e20128..397ef8693f5f 100644
+--- a/arch/arm64/kernel/cpufeature.c
++++ b/arch/arm64/kernel/cpufeature.c
+@@ -2911,7 +2911,6 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
+ 		.capability = ARM64_SME_FA64,
+ 		.matches = has_cpuid_feature,
+-		.cpu_enable = cpu_enable_fa64,
+ 		ARM64_CPUID_FIELDS(ID_AA64SMFR0_EL1, FA64, IMP)
+ 	},
+ 	{
+@@ -2919,7 +2918,6 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
+ 		.capability = ARM64_SME2,
+ 		.matches = has_cpuid_feature,
+-		.cpu_enable = cpu_enable_sme2,
+ 		ARM64_CPUID_FIELDS(ID_AA64PFR1_EL1, SME, SME2)
+ 	},
+ #endif /* CONFIG_ARM64_SME */
+diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
+index c37f02d7194e..653c0dec6b18 100644
+--- a/arch/arm64/kernel/fpsimd.c
++++ b/arch/arm64/kernel/fpsimd.c
+@@ -392,11 +392,15 @@ static void task_fpsimd_load(void)
+ 
+ 	/* Restore SME, override SVE register configuration if needed */
+ 	if (system_supports_sme()) {
+-		unsigned long sme_vl = task_get_sme_vl(current);
+-
+-		/* Ensure VL is set up for restoring data */
++		/*
++		 * Ensure VL is set up for restoring data.  KVM might
++		 * disable subfeatures so we reset them each time.
++		 */
+ 		if (test_thread_flag(TIF_SME))
+-			sme_set_vq(sve_vq_from_vl(sme_vl) - 1);
++			sme_cond_update_smcr(sve_vq_from_vl(task_get_sme_vl(current)) - 1,
++					     system_supports_fa64(),
++					     system_supports_sme2(),
++					     SYS_SMCR_EL1);
+ 
+ 		write_sysreg_s(current->thread.svcr, SYS_SVCR);
+ 
+@@ -1237,26 +1241,6 @@ void cpu_enable_sme(const struct arm64_cpu_capabilities *__always_unused p)
+ 	isb();
+ }
+ 
+-void cpu_enable_sme2(const struct arm64_cpu_capabilities *__always_unused p)
+-{
+-	/* This must be enabled after SME */
+-	BUILD_BUG_ON(ARM64_SME2 <= ARM64_SME);
+-
+-	/* Allow use of ZT0 */
+-	write_sysreg_s(read_sysreg_s(SYS_SMCR_EL1) | SMCR_ELx_EZT0_MASK,
+-		       SYS_SMCR_EL1);
+-}
+-
+-void cpu_enable_fa64(const struct arm64_cpu_capabilities *__always_unused p)
+-{
+-	/* This must be enabled after SME */
+-	BUILD_BUG_ON(ARM64_SME_FA64 <= ARM64_SME);
+-
+-	/* Allow use of FA64 */
+-	write_sysreg_s(read_sysreg_s(SYS_SMCR_EL1) | SMCR_ELx_FA64_MASK,
+-		       SYS_SMCR_EL1);
+-}
+-
+ void __init sme_setup(void)
+ {
+ 	struct vl_info *info = &vl_info[ARM64_VEC_SME];
+@@ -1300,17 +1284,9 @@ void __init sme_setup(void)
+ 
+ void sme_suspend_exit(void)
+ {
+-	u64 smcr = 0;
+-
+ 	if (!system_supports_sme())
+ 		return;
+ 
+-	if (system_supports_fa64())
+-		smcr |= SMCR_ELx_FA64;
+-	if (system_supports_sme2())
+-		smcr |= SMCR_ELx_EZT0;
+-
+-	write_sysreg_s(smcr, SYS_SMCR_EL1);
+ 	write_sysreg_s(0, SYS_SMPRI_EL1);
+ }
+ 
+@@ -1425,9 +1401,10 @@ void do_sme_acc(unsigned long esr, struct pt_regs *regs)
+ 		WARN_ON(1);
+ 
+ 	if (!test_thread_flag(TIF_FOREIGN_FPSTATE)) {
+-		unsigned long vq_minus_one =
+-			sve_vq_from_vl(task_get_sme_vl(current)) - 1;
+-		sme_set_vq(vq_minus_one);
++		sme_cond_update_smcr(sve_vq_from_vl(task_get_sme_vl(current)) - 1,
++				     system_supports_fa64(),
++				     system_supports_sme2(),
++				     SYS_SMCR_EL1);
+ 
+ 		fpsimd_bind_task_to_cpu();
+ 	} else {
 
-Changes in v4:
-- Rebase onto v6.14-rc2 and Mark Rutland's fixes.
-- Expose SME to nested guests.
-- Additional cleanups and test fixes following on from the rebase.
-- Flush register state on VMM PSTATE.{SM,ZA}.
-- Link to v3: https://lore.kernel.org/r/20241220-kvm-arm64-sme-v3-0-05b018c1ffeb@kernel.org
-
-Changes in v3:
-- Rebase onto v6.12-rc2.
-- Link to v2: https://lore.kernel.org/r/20231222-kvm-arm64-sme-v2-0-da226cb180bb@kernel.org
-
-Changes in v2:
-- Rebase onto v6.7-rc3.
-- Configure subfeatures based on host system only.
-- Complete nVHE support.
-- There was some snafu with sending v1 out, it didn't make it to the
-  lists but in case it hit people's inboxes I'm sending as v2.
-
----
-Mark Brown (28):
-      arm64/fpsimd: Update FA64 and ZT0 enables when loading SME state
-      arm64/fpsimd: Decide to save ZT0 and streaming mode FFR at bind time
-      arm64/fpsimd: Check enable bit for FA64 when saving EFI state
-      arm64/fpsimd: Determine maximum virtualisable SME vector length
-      KVM: arm64: Introduce non-UNDEF FGT control
-      KVM: arm64: Pay attention to FFR parameter in SVE save and load
-      KVM: arm64: Pull ctxt_has_ helpers to start of sysreg-sr.h
-      KVM: arm64: Move SVE state access macros after feature test macros
-      KVM: arm64: Rename SVE finalization constants to be more general
-      KVM: arm64: Document the KVM ABI for SME
-      KVM: arm64: Define internal features for SME
-      KVM: arm64: Rename sve_state_reg_region
-      KVM: arm64: Store vector lengths in an array
-      KVM: arm64: Implement SME vector length configuration
-      KVM: arm64: Support SME control registers
-      KVM: arm64: Support TPIDR2_EL0
-      KVM: arm64: Support SME identification registers for guests
-      KVM: arm64: Support SME priority registers
-      KVM: arm64: Provide assembly for SME register access
-      KVM: arm64: Support userspace access to streaming mode Z and P registers
-      KVM: arm64: Flush register state on writes to SVCR.SM and SVCR.ZA
-      KVM: arm64: Expose SME specific state to userspace
-      KVM: arm64: Context switch SME state for guests
-      KVM: arm64: Handle SME exceptions
-      KVM: arm64: Expose SME to nested guests
-      KVM: arm64: Provide interface for configuring and enabling SME for guests
-      KVM: arm64: selftests: Add SME system registers to get-reg-list
-      KVM: arm64: selftests: Add SME to set_id_regs test
-
- Documentation/virt/kvm/api.rst                   | 117 +++++++----
- arch/arm64/include/asm/fpsimd.h                  |  26 +++
- arch/arm64/include/asm/kvm_emulate.h             |   6 +
- arch/arm64/include/asm/kvm_host.h                | 168 ++++++++++++---
- arch/arm64/include/asm/kvm_hyp.h                 |   5 +-
- arch/arm64/include/asm/kvm_pkvm.h                |   2 +-
- arch/arm64/include/asm/vncr_mapping.h            |   2 +
- arch/arm64/include/uapi/asm/kvm.h                |  33 +++
- arch/arm64/kernel/cpufeature.c                   |   2 -
- arch/arm64/kernel/fpsimd.c                       |  89 ++++----
- arch/arm64/kvm/arm.c                             |  10 +
- arch/arm64/kvm/fpsimd.c                          |  28 ++-
- arch/arm64/kvm/guest.c                           | 252 ++++++++++++++++++++---
- arch/arm64/kvm/handle_exit.c                     |  14 ++
- arch/arm64/kvm/hyp/fpsimd.S                      |  28 ++-
- arch/arm64/kvm/hyp/include/hyp/switch.h          | 175 ++++++++++++++--
- arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h       |  97 +++++----
- arch/arm64/kvm/hyp/nvhe/hyp-main.c               |  86 ++++++--
- arch/arm64/kvm/hyp/nvhe/pkvm.c                   |  81 ++++++--
- arch/arm64/kvm/hyp/nvhe/switch.c                 |   4 +-
- arch/arm64/kvm/hyp/nvhe/sys_regs.c               |   6 +
- arch/arm64/kvm/hyp/vhe/switch.c                  |  17 +-
- arch/arm64/kvm/nested.c                          |   3 +-
- arch/arm64/kvm/reset.c                           | 156 ++++++++++----
- arch/arm64/kvm/sys_regs.c                        | 140 ++++++++++++-
- include/uapi/linux/kvm.h                         |   1 +
- tools/testing/selftests/kvm/arm64/get-reg-list.c |  32 ++-
- tools/testing/selftests/kvm/arm64/set_id_regs.c  |  29 ++-
- 28 files changed, 1315 insertions(+), 294 deletions(-)
----
-base-commit: 7204503c922cfdb4fcfce4a4ab61f4558a01a73b
-change-id: 20230301-kvm-arm64-sme-06a1246d3636
-
-Best regards,
---  
-Mark Brown <broonie@kernel.org>
+-- 
+2.39.5
 
 
