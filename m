@@ -1,331 +1,162 @@
-Return-Path: <linux-kselftest+bounces-35880-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35881-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E5BAAEA43C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jun 2025 19:15:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E10B9AEA44C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jun 2025 19:17:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 86E7B177AF1
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jun 2025 17:14:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2DF22177D21
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jun 2025 17:17:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C0FB2EF2B2;
-	Thu, 26 Jun 2025 17:13:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2233919CD1D;
+	Thu, 26 Jun 2025 17:17:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="SYUJYT4w"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZJ+tFYuQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f201.google.com (mail-qk1-f201.google.com [209.85.222.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8759E2EF29D;
-	Thu, 26 Jun 2025 17:13:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8105BD2FF
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Jun 2025 17:17:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750958002; cv=none; b=Cfapwwv2crBxhKY1jTlbsZlDG9Y01tvPta2SkIvKvpD3mB8xnDfsziyEGl7I7f5IOYWbFsjLE1X7JkIVZJq5fL+Ppt/4277eCV1CCaiPIxP6uZtoDhc9aW0JGxWjwRZKXHeANfiWPYWRKNmWLvPkFsG/oqcG/ow9OpoOIIKEj0Y=
+	t=1750958266; cv=none; b=Lp9npEgNiyOo5zTO6Mj4Eo6jQZGCD1lSgyp9DnXNwVDrBgF0VUW6ym9F67N38DJAP5ySugVWkq6R3t9Ph6oifV04vVbLNpop7lp4SO3kYjphDgshBLJCtsgdyBG9H+CRf5/rc9aYHLf5rhAqBV/Bd+EIO8P/4HqoqDJ9sD23apM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750958002; c=relaxed/simple;
-	bh=PecueBhb3qx1RHFBN98VuO4lhdtWIZM9jToHkTc/HLE=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=PvjkFNlZvC1ynEu+mst71gfJb22jUl28Eb94WpOF13H6++rbuxbAhr+mWZ/pTy1SB2h0/S7RqcHI29yjYwHkCRIRq0sFL49Nrtfcj7ecAWmwhS1n/edxQn6sELhFdgXE8CkX6YPReifvbrT9je067Zvdq5Ii6VjDcH2K6NIKulg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=SYUJYT4w; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Cc:To:In-Reply-To:References:Message-Id:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:Sender:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=N5VA/SwJ6w5fExHAtI2s26hUsQkblQRmCfj6Ybce2s4=; b=SYUJYT4w+W5Lcn7hPJKEodcBzq
-	Bpeizrv3pA0LNvG3q6pNk4jh0KfyK8d56GoyS1or17M/ram/QU3ShKB4pVWvrC28Zi3s6/F1SWSEm
-	4MTPxKwH1+QSUZM/ZyoPCi+RW1cEvVB7TvccRlDtTgF5vsWT7jRZsyNMsCSnIGVg/PUpE1FaBrkKs
-	CaxQvM8Ecs8JaOtpt4co892aJSrJc1GAVnLnB3SGw5eIPT3nEPScUp3qdVPltoSJU0MtoBQqBUtzK
-	uiDYx53Sg016QOmKVgIBISbd39jsNqlrGimtgpN/azAI13SErdAHuIunQr/Jw+95fb2z3idV6W/YM
-	N9+f57lw==;
-Received: from [191.204.192.64] (helo=[192.168.15.100])
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1uUqA1-009491-9G; Thu, 26 Jun 2025 19:13:17 +0200
-From: =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
-Date: Thu, 26 Jun 2025 14:11:31 -0300
-Subject: [PATCH v5 7/7] selftests: futex: Expand robust list test for the
- new interface
+	s=arc-20240116; t=1750958266; c=relaxed/simple;
+	bh=wraxF92E5UMplfHdosxwPoePMfHDlZiunci84xKy9ow=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=qf+aaAkK9EwBxjzeoWv5BLUFNwhhVncT23p4MOxJhduzITXyFEIQ3I+buBELpugOoNYPz+DJyP5CFiQqFQ/7n/p0FXXBkg2cFLdSoBjKHaei5xQeN8o0l7a+Q3yQp98mOY+dgyojGjUXzPuLORM4Ph+mRP2QshdcusPViY5lT/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--marievic.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZJ+tFYuQ; arc=none smtp.client-ip=209.85.222.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--marievic.bounces.google.com
+Received: by mail-qk1-f201.google.com with SMTP id af79cd13be357-7c5f3b8b1a1so178582085a.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Jun 2025 10:17:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1750958263; x=1751563063; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=9bhxg3fOhJ4ocdPhUszxgKjahNAxF1eH+RBCnIZYJrA=;
+        b=ZJ+tFYuQb4WApiasmLYmXbcWJaM0x2p9zZpZUs+uuySUD5MBhhFXrHMfbd8NWMc6XY
+         n45Khb8YfqScW6Bjv9lT4i7HP7i0se3fltNqqq39npxMWURb8GAO/+iY+mqIgGs9blM/
+         VHHA+c6JL/pBc8d9eubEMGiZ3e0DmvBIhXq9j/uM8EgldVjDiDFBNYOyuEjquM2gGP9L
+         mg7bJDOxP5hBV6dBgOArKzxQgiU9xphpCTvmms3Off+unJRpx6X8DevQjGbmmhott6WJ
+         nw/xUxCW42gn+OME/cv6aUTEYwt53+eK+9aLkNUhVJilTKKzQ/SZo++qLddzsAZ6d3wr
+         VFKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750958263; x=1751563063;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9bhxg3fOhJ4ocdPhUszxgKjahNAxF1eH+RBCnIZYJrA=;
+        b=uIPE701eBSzd5BDzgLi7EVUgGmtyx7AImbavL5LMMoTrD2FADC94lFKuQLaYeH8xvx
+         msMHuElOvYK32G7H0gD85TnexcqOQZ1HEE6mOI2RPSH8p4w5G0JTIsiSt5fJJNhX3eOM
+         35NaQNJ14Wh6cXszGir3UBxW+dOM3wumboh9P+vGBo/O6BYGm1maWOCggKrCmO93Ho4f
+         XkknAMJg8bZrmXo84E0FNBnsaZeq39GhvJOCOuRvLyD4YtOmmlrTSEugm64QWVbGQlQN
+         VpkJgm1GEWr5+7Er9dPhxo5XO0ZBb5I1ZfqfyHeHz0gTYkBq18cLACMRfi5uwtjqgDi3
+         wX2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXcexAsuCbLDeGq7X4h43yj/5p0PNcsh6ZjCc2QvdXMsK1hhskCpEUv3Qg3aCWq75rDogy5ttHQasaA6/NPcaM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YylECxyT+FT2qoHXuLrGHqeo9+4ifKX/OJMGTa7ketjUo9rmOK+
+	cvl7hK6KJdadzVhjT7n8XGtRp5ZWojbwNuDmSymiGMmtvi77kUs9zOnaW+AxSwFcfJjg4g8fhet
+	QhVRFpB6mRSCaaw==
+X-Google-Smtp-Source: AGHT+IGW3Lb93nR97g0YhaLSp+vwVF5TL23ka7gRWZ1ay34aGEsUXZwqal+m1lyEpUN6FXWehUOPpulZf4i3rA==
+X-Received: from qkis20.prod.google.com ([2002:a05:620a:bd4:b0:7ce:c215:7cab])
+ (user=marievic job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:620a:2b87:b0:7d3:8ee7:ca10 with SMTP id af79cd13be357-7d443935786mr51080385a.2.1750958262975;
+ Thu, 26 Jun 2025 10:17:42 -0700 (PDT)
+Date: Thu, 26 Jun 2025 17:17:29 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250626-tonyk-robust_futex-v5-7-179194dbde8f@igalia.com>
-References: <20250626-tonyk-robust_futex-v5-0-179194dbde8f@igalia.com>
-In-Reply-To: <20250626-tonyk-robust_futex-v5-0-179194dbde8f@igalia.com>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
- Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>, 
- Davidlohr Bueso <dave@stgolabs.net>, Shuah Khan <shuah@kernel.org>, 
- Arnd Bergmann <arnd@arndb.de>, 
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
- Waiman Long <longman@redhat.com>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-api@vger.kernel.org, kernel-dev@igalia.com, 
- =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
-X-Mailer: b4 0.14.2
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.50.0.727.gbf7dc18ff4-goog
+Message-ID: <20250626171730.1765004-1-marievic@google.com>
+Subject: [PATCH] kunit: Make default kunit_test timeout configurable via both
+ a module parameter and a Kconfig option
+From: Marie Zhussupova <marievic@google.com>
+To: rmoar@google.com, shuah@kernel.org, davidgow@google.com
+Cc: geert@linux-m68k.org, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
+	Marie Zhussupova <marievic@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Expand the current robust list test for the new set_robust_list2
-syscall. Create an option to make it possible to run the same tests
-using the new syscall, and also add two new relevant test: test long
-lists (bigger than ROBUST_LIST_LIMIT) and for unaligned addresses.
+To accommodate varying hardware performance and use cases,
+the default kunit test case timeout (currently 300 seconds)
+is now configurable. Users can adjust the timeout by
+either setting the 'timeout' module parameter or the
+KUNIT_DEFAULT_TIMEOUT Kconfig option to their desired
+timeout in seconds.
 
-Signed-off-by: André Almeida <andrealmeid@igalia.com>
+Signed-off-by: Marie Zhussupova <marievic@google.com>
 ---
- .../selftests/futex/functional/robust_list.c       | 160 ++++++++++++++++++++-
- 1 file changed, 156 insertions(+), 4 deletions(-)
+ lib/kunit/Kconfig | 13 +++++++++++++
+ lib/kunit/test.c  | 15 ++++++++-------
+ 2 files changed, 21 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/futex/functional/robust_list.c b/tools/testing/selftests/futex/functional/robust_list.c
-index 42690b2440fd29a9b12c46f67f9645ccc93d1147..004ad79ff6171c411fd47e699e3c38889544218e 100644
---- a/tools/testing/selftests/futex/functional/robust_list.c
-+++ b/tools/testing/selftests/futex/functional/robust_list.c
-@@ -35,16 +35,45 @@
- #include <stddef.h>
- #include <sys/mman.h>
- #include <sys/wait.h>
-+#include <stdint.h>
+diff --git a/lib/kunit/Kconfig b/lib/kunit/Kconfig
+index a97897edd964..c10ede4b1d22 100644
+--- a/lib/kunit/Kconfig
++++ b/lib/kunit/Kconfig
+@@ -93,4 +93,17 @@ config KUNIT_AUTORUN_ENABLED
+ 	  In most cases this should be left as Y. Only if additional opt-in
+ 	  behavior is needed should this be set to N.
  
- #define STACK_SIZE (1024 * 1024)
++config KUNIT_DEFAULT_TIMEOUT
++	int "Default value of the timeout module parameter"
++	default 300
++	help
++	  Sets the default timeout, in seconds, for Kunit test cases. This value
++	  is further multiplied by a factor determined by the assigned speed
++	  setting: 1x for `DEFAULT`, 3x for `KUNIT_SPEED_SLOW`, and 12x for
++	  `KUNIT_SPEED_VERY_SLOW`. This allows slower tests on slower machines
++	  sufficient time to complete.
++
++	  If unsure, the default timeout of 300 seconds is suitable for most
++	  cases.
++
+ endif # KUNIT
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index 002121675605..f3c6b11f12b8 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -69,6 +69,13 @@ static bool enable_param;
+ module_param_named(enable, enable_param, bool, 0);
+ MODULE_PARM_DESC(enable, "Enable KUnit tests");
  
- #define FUTEX_TIMEOUT 3
- 
-+#define SYS_set_robust_list2 468
-+
-+enum robust_list2_type {
-+        ROBUST_LIST_32BIT,
-+        ROBUST_LIST_64BIT,
-+};
-+
- static pthread_barrier_t barrier, barrier2;
- 
-+bool robust2 = false;
-+
- int set_robust_list(struct robust_list_head *head, size_t len)
- {
--	return syscall(SYS_set_robust_list, head, len);
-+	int ret, flags;
-+
-+	if (!robust2) {
-+		return syscall(SYS_set_robust_list, head, len);
-+	}
-+
-+	if (sizeof(head) == 8)
-+		flags = ROBUST_LIST_64BIT;
-+	else
-+		flags = ROBUST_LIST_32BIT;
-+
-+	/*
-+	 * We act as we have just one list here. We try to use the first slot,
-+	 * but if it hasn't been alocated yet we allocate it.
-+	 */
-+	ret = syscall(SYS_set_robust_list2, head, 0, flags);
-+	if (ret == -1 && errno == ENOENT)
-+		ret = syscall(SYS_set_robust_list2, head, -1, flags);
-+
-+	return ret;
- }
- 
- int get_robust_list(int pid, struct robust_list_head **head, size_t *len_ptr)
-@@ -246,6 +275,11 @@ static void test_set_robust_list_invalid_size(void)
- 	size_t head_size = sizeof(struct robust_list_head);
- 	int ret;
- 
-+	if (robust2) {
-+		ksft_test_result_skip("This test is only for old robust interface\n");
-+		return;
-+	}
-+
- 	ret = set_robust_list(&head, head_size);
- 	ASSERT_EQ(ret, 0);
- 
-@@ -321,6 +355,11 @@ static void test_get_robust_list_child(void)
- 	struct robust_list_head head, *get_head;
- 	size_t len_ptr;
- 
-+	if (robust2) {
-+		ksft_test_result_skip("Not implemented in the new robust interface\n");
-+		return;
-+	}
-+
- 	ret = pthread_barrier_init(&barrier, NULL, 2);
- 	ret = pthread_barrier_init(&barrier2, NULL, 2);
- 	ASSERT_EQ(ret, 0);
-@@ -332,7 +371,7 @@ static void test_get_robust_list_child(void)
- 
- 	ret = get_robust_list(tid, &get_head, &len_ptr);
- 	ASSERT_EQ(ret, 0);
--	ASSERT_EQ(&head, get_head);
-+	ASSERT_EQ(get_head, &head);
- 
- 	pthread_barrier_wait(&barrier2);
- 
-@@ -507,11 +546,119 @@ static void test_circular_list(void)
- 	ksft_test_result_pass("%s\n", __func__);
- }
- 
-+#define ROBUST_LIST_LIMIT	2048
-+#define CHILD_LIST_LIMIT (ROBUST_LIST_LIMIT + 10)
-+
-+static int child_robust_list_limit(void *arg)
-+{
-+	struct lock_struct *locks;
-+	struct robust_list *list;
-+	struct robust_list_head head;
-+	int ret, i;
-+
-+	locks = (struct lock_struct *) arg;
-+
-+	ret = set_list(&head);
-+	if (ret)
-+		ksft_test_result_fail("set_list error\n");
-+
-+	/*
-+	 * Create a very long list of locks
-+	 */
-+	head.list.next = &locks[0].list;
-+
-+	list = head.list.next;
-+	for (i = 0; i < CHILD_LIST_LIMIT - 1; i++) {
-+		list->next = &locks[i+1].list;
-+		list = list->next;
-+	}
-+	list->next = &head.list;
-+
-+	/*
-+	 * Grab the lock in the last one, and die without releasing it
-+	 */
-+	mutex_lock(&locks[CHILD_LIST_LIMIT], &head, false);
-+	pthread_barrier_wait(&barrier);
-+
-+	sleep(1);
-+
-+	return 0;
-+}
-+
 +/*
-+ * The old robust list used to have a limit of 2048 items from the kernel side.
-+ * After this limit the kernel stops walking the list and ignore the other
-+ * futexes, causing deadlocks.
-+ *
-+ * For the new interface, test if we can wait for a list of more than 2048
-+ * elements.
++ * Configure the base timeout.
 + */
-+static void test_robust_list_limit(void)
-+{
-+	struct lock_struct locks[CHILD_LIST_LIMIT + 1];
-+	_Atomic(unsigned int) *futex = &locks[CHILD_LIST_LIMIT].futex;
-+	struct robust_list_head head;
-+	int ret;
++static unsigned long kunit_base_timeout = CONFIG_KUNIT_DEFAULT_TIMEOUT;
++module_param_named(timeout, kunit_base_timeout, ulong, 0644);
++MODULE_PARM_DESC(timeout, "Set the base timeout for Kunit test cases");
 +
-+	if (!robust2) {
-+		ksft_test_result_skip("This test is only for new robust interface\n");
-+		return;
-+	}
-+
-+	*futex = 0;
-+
-+	ret = set_list(&head);
-+	ASSERT_EQ(ret, 0);
-+
-+	ret = pthread_barrier_init(&barrier, NULL, 2);
-+	ASSERT_EQ(ret, 0);
-+
-+	create_child(child_robust_list_limit, locks);
-+
-+	/*
-+	 * After the child thread creates the very long list of locks, wait on
-+	 * the last one.
-+	 */
-+	pthread_barrier_wait(&barrier);
-+	ret = mutex_lock(&locks[CHILD_LIST_LIMIT], &head, false);
-+
-+	if (ret != 0)
-+		printf("futex wait returned %d\n", errno);
-+	ASSERT_EQ(ret, 0);
-+
-+	ASSERT_TRUE(*futex | FUTEX_OWNER_DIED);
-+
-+	wait(NULL);
-+	pthread_barrier_destroy(&barrier);
-+
-+	ksft_test_result_pass("%s\n", __func__);
-+}
-+
-+/*
-+ * The kernel should refuse an unaligned head pointer
-+ */
-+static void test_unaligned_address(void)
-+{
-+	struct robust_list_head head, *h;
-+	int ret;
-+
-+	if (!robust2) {
-+		ksft_test_result_skip("This test is only for new robust interface\n");
-+		return;
-+	}
-+
-+	h = (struct robust_list_head *) ((uintptr_t) &head + 1);
-+	ret = set_list(h);
-+	ASSERT_EQ(ret, -1);
-+	ASSERT_EQ(errno, EINVAL);
-+}
-+
- void usage(char *prog)
+ /*
+  * KUnit statistic mode:
+  * 0 - disabled
+@@ -393,12 +400,6 @@ static int kunit_timeout_mult(enum kunit_speed speed)
+ static unsigned long kunit_test_timeout(struct kunit_suite *suite, struct kunit_case *test_case)
  {
- 	printf("Usage: %s\n", prog);
- 	printf("  -c	Use color\n");
- 	printf("  -h	Display this help message\n");
-+	printf("  -n	Use robust2 syscall\n");
- 	printf("  -v L	Verbosity level: %d=QUIET %d=CRITICAL %d=INFO\n",
- 	       VQUIET, VCRITICAL, VINFO);
+ 	int mult = 1;
+-	/*
+-	 * TODO: Make the default (base) timeout configurable, so that users with
+-	 * particularly slow or fast machines can successfully run tests, while
+-	 * still taking advantage of the relative speed.
+-	 */
+-	unsigned long default_timeout = 300;
+ 
+ 	/*
+ 	 * The default test timeout is 300 seconds and will be adjusted by mult
+@@ -409,7 +410,7 @@ static unsigned long kunit_test_timeout(struct kunit_suite *suite, struct kunit_
+ 		mult = kunit_timeout_mult(suite->attr.speed);
+ 	if (test_case->attr.speed != KUNIT_SPEED_UNSET)
+ 		mult = kunit_timeout_mult(test_case->attr.speed);
+-	return mult * default_timeout * msecs_to_jiffies(MSEC_PER_SEC);
++	return mult * kunit_base_timeout * msecs_to_jiffies(MSEC_PER_SEC);
  }
-@@ -520,7 +667,7 @@ int main(int argc, char *argv[])
- {
- 	int c;
  
--	while ((c = getopt(argc, argv, "cht:v:")) != -1) {
-+	while ((c = getopt(argc, argv, "chnt:v:")) != -1) {
- 		switch (c) {
- 		case 'c':
- 			log_color(1);
-@@ -531,6 +678,9 @@ int main(int argc, char *argv[])
- 		case 'v':
- 			log_verbosity(atoi(optarg));
- 			break;
-+		case 'n':
-+			robust2 = true;
-+			break;
- 		default:
- 			usage(basename(argv[0]));
- 			exit(1);
-@@ -538,7 +688,7 @@ int main(int argc, char *argv[])
- 	}
  
- 	ksft_print_header();
--	ksft_set_plan(7);
-+	ksft_set_plan(8);
- 
- 	test_robustness();
- 
-@@ -548,6 +698,8 @@ int main(int argc, char *argv[])
- 	test_set_list_op_pending();
- 	test_robust_list_multiple_elements();
- 	test_circular_list();
-+	test_robust_list_limit();
-+	test_unaligned_address();
- 
- 	ksft_print_cnts();
- 	return 0;
-
 -- 
-2.49.0
+2.50.0.rc2.761.g2dc52ea45b-goog
 
 
