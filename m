@@ -1,198 +1,117 @@
-Return-Path: <linux-kselftest+bounces-35847-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35848-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7667AE98FD
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jun 2025 10:51:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0585AE9ACD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jun 2025 12:07:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8F5C67A7B3E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jun 2025 08:50:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1CA2A3B4409
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jun 2025 10:06:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3671293C69;
-	Thu, 26 Jun 2025 08:51:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D2DA21ABA4;
+	Thu, 26 Jun 2025 10:05:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TLTfbXkY"
+	dkim=pass (1024-bit key) header.d=onurozkan.dev header.i=@onurozkan.dev header.b="kz/m0gKr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from forward103b.mail.yandex.net (forward103b.mail.yandex.net [178.154.239.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8BFE2264CA;
-	Thu, 26 Jun 2025 08:51:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B582821A436;
+	Thu, 26 Jun 2025 10:05:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750927912; cv=none; b=fnRCsa/QiOQY+byfibsD8WqucCoHWXvbb765m7UlE+HZeYyx54JcFu9vjzjU8FZQMeDksdLrAqcKq3b9K3/7htksg5fTqnvp7IfRGJ8oh/cW5xpPYzf/hpQuwcqHWKYcbwoDTeRzw5mZdLNQtbM24vXc3JBRMp6w0DunKzGS1z4=
+	t=1750932359; cv=none; b=aSx6ng8RvdlROdS9/7J6v7swn8WIgTlPm2lTCIbqpdg1a/5LmKp3WCmSlviJFlpBtd9kFoVr8qt69nigDMjFOgBiVjgKO8ZI5Mrzz3iSC44btPy7hhSC7MYSpdcOf/dquglh2FUUo8Lw3287m2KWvCuo06EbvlSyw62w0fmVOBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750927912; c=relaxed/simple;
-	bh=pBNC6xuADDTG4z2aS7a2aYMm4dIJFtmyV4HDKTIYrVQ=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hgWjMvAAGlwoC8NKtB/gz06a33ijB5JLlioX1aczgR05uENE+cW210mhj03oH2SwqhxLV1A0ArmPOX2aUGR31CAaY5Yrt7Ooo9eWTQCoQUzzMyt9UCfhx/VqC63iZi4anh3oQwFmi4QrCQpgXqDSn3JsrtaADG+GL64Q1Rh7We4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TLTfbXkY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CEFBC4CEEB;
-	Thu, 26 Jun 2025 08:51:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750927912;
-	bh=pBNC6xuADDTG4z2aS7a2aYMm4dIJFtmyV4HDKTIYrVQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=TLTfbXkYtLR2rhuZ/b/xG0aHxkpUEPmHzTt9eyqxYUL+wdNtdSryvIIXWPpZdKNph
-	 xdUgxy9CRkf/M1UCxEXI0Pb65nBI4jJ9m8DV14Vux95EZPIE9+sPdQS7msv1NltIqH
-	 os7lLdW5CXVsDiUw0kuL2RE28YdWbGH/sdjx8ZamLySZrSqItX8dbV8WND9FgMJry5
-	 WDO23fbsQdagmx0rPEhtW7UV9tdYiqS/HVsURQ2c3G/QeyIxubPDrs3mwrfH87a/sy
-	 dr5Xb7hXDZqe8RoXq0oX6XjpQRivBjGAolQZ6ggeu+DWJYs8xsLnG0jykANXg7Goly
-	 rHUfDq0OlbAYg==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1uUiKj-00AA6Z-Sa;
-	Thu, 26 Jun 2025 09:51:50 +0100
-Date: Thu, 26 Jun 2025 09:51:49 +0100
-Message-ID: <86zfduc2ca.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Yicong Yang <yangyicong@huawei.com>
-Cc: <catalin.marinas@arm.com>,
-	<will@kernel.org>,
-	<oliver.upton@linux.dev>,
-	<corbet@lwn.net>,
-	<linux-arm-kernel@lists.infradead.org>,
-	<kvmarm@lists.linux.dev>,
-	<linux-kselftest@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>,
-	<joey.gouly@arm.com>,
-	<suzuki.poulose@arm.com>,
-	<yuzenghui@huawei.com>,
-	<shuah@kernel.org>,
-	<jonathan.cameron@huawei.com>,
-	<shameerali.kolothum.thodi@huawei.com>,
-	<linuxarm@huawei.com>,
-	<prime.zeng@hisilicon.com>,
-	<xuwei5@huawei.com>,
-	<yangyicong@hisilicon.com>,
-	<tangchengchang@huawei.com>,
-	<wangzhou1@hisilicon.com>
-Subject: Re: [PATCH v3 3/7] KVM: arm64: Handle DABT caused by LS64* instructions on unsupported memory
-In-Reply-To: <20250626080906.64230-4-yangyicong@huawei.com>
-References: <20250626080906.64230-1-yangyicong@huawei.com>
-	<20250626080906.64230-4-yangyicong@huawei.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=arc-20240116; t=1750932359; c=relaxed/simple;
+	bh=V6YTCqv8OIOxtQZzDkzntC0e9vI7/sizjp0ssSxqBHU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=m2sstFymibEY4uNRf1cuZeR5bxbV9Y4QkKCHPGeo0TIdS1FMkA+8eJx6ox0eD8aDCxZUtHPPl0d+MDY0YfaJmRI8rxpHi4xR2MqxPSGBUTlLpqilbiqh24QtUZtbyDGk25v1rpTZopP4b8HJ0nHT1iYfkDL1kBuuPwV9/HsvRbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=onurozkan.dev; spf=pass smtp.mailfrom=onurozkan.dev; dkim=pass (1024-bit key) header.d=onurozkan.dev header.i=@onurozkan.dev header.b=kz/m0gKr; arc=none smtp.client-ip=178.154.239.150
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=onurozkan.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=onurozkan.dev
+Received: from mail-nwsmtp-smtp-production-main-74.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-74.sas.yp-c.yandex.net [IPv6:2a02:6b8:c1e:299f:0:640:8fbe:0])
+	by forward103b.mail.yandex.net (Yandex) with ESMTPS id A664D60AA7;
+	Thu, 26 Jun 2025 13:05:47 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-74.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id R5SeXwKLg8c0-n27nJIN2;
+	Thu, 26 Jun 2025 13:05:46 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=onurozkan.dev;
+	s=mail; t=1750932346;
+	bh=WeJBx0hJf3pn1EIeBpOe1QyfcrmywlGvQz5HjI9T2zE=;
+	h=Message-ID:Date:Cc:Subject:To:From;
+	b=kz/m0gKrsnjeD3B6iCkAl+9lyItvXwCyrZLx4uRdVeELuq13+BaW1YEOjdVEMcEHO
+	 sfAJ/p5ulnJm0tm6EdlDJoM6rndflY5n3n2N0agrD1wqzragA4IVE/NVxR67Yo1Rvm
+	 FdYycab5X+vB2hpv6Id8YiW/sA7egct7kRF7/qlw=
+Authentication-Results: mail-nwsmtp-smtp-production-main-74.sas.yp-c.yandex.net; dkim=pass header.i=@onurozkan.dev
+From: =?UTF-8?q?Onur=20=C3=96zkan?= <work@onurozkan.dev>
+To: linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com
+Cc: airlied@gmail.com,
+	simona@ffwll.ch,
+	ojeda@kernel.org,
+	alex.gaynor@gmail.com,
+	boqun.feng@gmail.com,
+	gary@garyguo.net,
+	bjorn3_gh@protonmail.com,
+	lossin@kernel.org,
+	a.hindborg@kernel.org,
+	aliceryhl@google.com,
+	tmgross@umich.edu,
+	rafael@kernel.org,
+	viresh.kumar@linaro.org,
+	gregkh@linuxfoundation.org,
+	maarten.lankhorst@linux.intel.com,
+	mripard@kernel.org,
+	tzimmermann@suse.de,
+	davidgow@google.com,
+	nm@ti.com,
+	=?UTF-8?q?Onur=20=C3=96zkan?= <work@onurozkan.dev>
+Subject: [PATCH 0/2] rust: replace `allow(...)` with `expect(...)`
+Date: Thu, 26 Jun 2025 13:04:46 +0300
+Message-ID: <20250626100448.27921-1-work@onurozkan.dev>
+X-Mailer: git-send-email 2.50.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: yangyicong@huawei.com, catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, corbet@lwn.net, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, shuah@kernel.org, jonathan.cameron@huawei.com, shameerali.kolothum.thodi@huawei.com, linuxarm@huawei.com, prime.zeng@hisilicon.com, xuwei5@huawei.com, yangyicong@hisilicon.com, tangchengchang@huawei.com, wangzhou1@hisilicon.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, 26 Jun 2025 09:09:02 +0100,
-Yicong Yang <yangyicong@huawei.com> wrote:
-> 
-> From: Yicong Yang <yangyicong@hisilicon.com>
-> 
-> If FEAT_LS64WB not supported, FEAT_LS64* instructions only support
-> to access Device/Uncacheable memory, otherwise a data abort for
-> unsupported Exclusive or atomic access (0x35) is generated per spec.
-> It's implementation defined whether the target exception level is
-> routed and is possible to implemented as route to EL2 on a VHE VM
-> according to DDI0487K.a Section C3.2.12.2 Single-copy atomic 64-byte
-> load/store.
+Replaces various `#[allow(...)]` with `#[expect(...)]` as suggested
+in the kernel coding guidelines: [link]
 
-Nit: in DDI0487L.b (the latest as I write), this is in C3.2.6.
+[link]: https://docs.kernel.org/rust/coding-guidelines.html#lints
 
-> 
-> If it's implemented as generate the DABT to the final enabled stage
-> (stage-2), since no valid ISV indicated in the ESR, it's better for
-> the userspace to decide how to handle it. Reuse the
-> NISV_IO_ABORT_TO_USER path with exit reason KVM_EXIT_ARM_LDST64B.
-> 
-> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-> ---
->  arch/arm64/include/asm/esr.h |  8 ++++++++
->  arch/arm64/kvm/mmu.c         | 21 ++++++++++++++++++++-
->  2 files changed, 28 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/include/asm/esr.h b/arch/arm64/include/asm/esr.h
-> index e1deed824464..63cd17f830da 100644
-> --- a/arch/arm64/include/asm/esr.h
-> +++ b/arch/arm64/include/asm/esr.h
-> @@ -124,6 +124,7 @@
->  #define ESR_ELx_FSC_SEA_TTW(n)	(0x14 + (n))
->  #define ESR_ELx_FSC_SECC	(0x18)
->  #define ESR_ELx_FSC_SECC_TTW(n)	(0x1c + (n))
-> +#define ESR_ELx_FSC_EXCL_ATOMIC	(0x35)
->  #define ESR_ELx_FSC_ADDRSZ	(0x00)
->  
->  /*
-> @@ -488,6 +489,13 @@ static inline bool esr_fsc_is_access_flag_fault(unsigned long esr)
->  	       (esr == ESR_ELx_FSC_ACCESS_L(0));
->  }
->  
-> +static inline bool esr_fsc_is_excl_atomic_fault(unsigned long esr)
-> +{
-> +	esr = esr & ESR_ELx_FSC;
-> +
-> +	return esr == ESR_ELx_FSC_EXCL_ATOMIC;
-> +}
-> +
->  static inline bool esr_fsc_is_addr_sz_fault(unsigned long esr)
->  {
->  	esr &= ESR_ELx_FSC;
-> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-> index 2942ec92c5a4..5f05d1c4b5a2 100644
-> --- a/arch/arm64/kvm/mmu.c
-> +++ b/arch/arm64/kvm/mmu.c
-> @@ -1665,6 +1665,24 @@ static int user_mem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa,
->  	if (exec_fault && device)
->  		return -ENOEXEC;
->  
-> +	/*
-> +	 * Target address is normal memory on the Host. We come here
-> +	 * because:
-> +	 * 1) Guest map it as device memory and perform LS64 operations
-> +	 * 2) VMM report it as device memory mistakenly
-> +	 * Hand it to the userspace.
-> +	 */
-> +	if (esr_fsc_is_excl_atomic_fault(kvm_vcpu_get_esr(vcpu))) {
-> +		struct kvm_run *run = vcpu->run;
-> +
-> +		run->exit_reason = KVM_EXIT_ARM_LDST64B;
-> +		run->arm_nisv.esr_iss = kvm_vcpu_dabt_iss_nisv_sanitized(vcpu);
-> +		run->arm_nisv.fault_ipa = fault_ipa |
-> +			(kvm_vcpu_get_hfar(vcpu) & (vma_pagesize - 1));
-> +
-> +		return -EAGAIN;
-> +	}
+After switching to `#[expect(...)]`, I found some dead linting rules
+that are no longer needed which are removed in the second patch.
 
-I'm not sure that's the right thing to do.
+Onur Özkan (1):
+  replace `#[allow(...)]` with `#[expect(...)]`
 
-If:
+onur-ozkan (1):
+  rust: drop unnecessary lints caught by `#[expect(...)]`
 
-- the guest was told it doesn't have LS64WB,
-
-- it was told that some range is memory,
-
-- it uses that range as device,
-
-- thanks to FWB the resulting memory type is "Normal-Cacheable"
-
-- which results in an Unsupported Atomic exception
-
-why would we involve the VMM at all? The VMM clearly said it didn't
-want to be involved in this (we have a memslot).
-
-I think we should simply inject the corresponding S1 fault back into
-the guest.
-
-Thanks,
-
-	M.
+ drivers/gpu/nova-core/regs.rs       | 2 +-
+ rust/compiler_builtins.rs           | 2 +-
+ rust/kernel/alloc/allocator_test.rs | 2 +-
+ rust/kernel/cpufreq.rs              | 1 -
+ rust/kernel/devres.rs               | 2 +-
+ rust/kernel/driver.rs               | 2 +-
+ rust/kernel/drm/ioctl.rs            | 8 ++++----
+ rust/kernel/error.rs                | 3 +--
+ rust/kernel/init.rs                 | 6 +++---
+ rust/kernel/kunit.rs                | 2 +-
+ rust/kernel/opp.rs                  | 4 ++--
+ rust/kernel/types.rs                | 2 +-
+ rust/macros/helpers.rs              | 2 +-
+ 13 files changed, 18 insertions(+), 20 deletions(-)
 
 -- 
-Without deviation from the norm, progress is not possible.
+2.50.0
+
 
