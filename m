@@ -1,307 +1,229 @@
-Return-Path: <linux-kselftest+bounces-35867-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35868-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16226AEA304
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jun 2025 17:53:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 791B9AEA330
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jun 2025 18:07:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2E7A71C443F3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jun 2025 15:54:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 185A41C44C46
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jun 2025 16:07:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D9BA2ED14C;
-	Thu, 26 Jun 2025 15:53:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 646111E7C03;
+	Thu, 26 Jun 2025 16:07:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mT8pD8kz"
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="Dd6kQ3Yx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CAN01-YT3-obe.outbound.protection.outlook.com (mail-yt3can01on2131.outbound.protection.outlook.com [40.107.115.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56FA42ECD18;
-	Thu, 26 Jun 2025 15:53:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750953206; cv=none; b=Bn2mMW+yVKIxvKTZbBJuauimvrtgvNadCDkGh3ojeKx9T0j7Kvuyoo7/mvD2xHM5yTM0zBMEUwag8S0J+yuP15LKRNaKNatUFK94E4OOCcFtOFuzJBxHuUUKxhqQpJzDObgCM6xX2yjAGNROFROgJngcBvjRoIYUhtPTxIgA7fk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750953206; c=relaxed/simple;
-	bh=t7j2zfKYQtnOwWS12vNjvBooNT+a9X6VXD0LhZ5ESmU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Vh02As5huQdYTKovnSSr7M2pP46GzN1wA5JnpdwLCnlS9Sz0ASHUVf1FTPgQlJzfZLoC89996NLQIQMhEGeLAXACmeLC5/uBkwYRc1meBIrE+uCLvzjt17W5ymHscO7LdxQyBY1ahqj17HTJCIOlGFBXTIQDNEPG5Zgmsa4yUd4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mT8pD8kz; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-451d7b50815so9186705e9.2;
-        Thu, 26 Jun 2025 08:53:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750953202; x=1751558002; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=avFe0uCPAlGUsBDkTrAMoArX5v2saGyLPFhmXQ2cVg0=;
-        b=mT8pD8kzB68yHc7yNVGEVFvPc/GAOFAgvM9MS7i9FktGCXKm48zeJd8t4DiP79og3z
-         sB0WIYwNDpkZRBLsqEcJzdUSYfAhUXywAhdJh3DArFucXEeJgN3383TPcSAXExjJgloH
-         eKe4DvyN+xURNRt8VGBLkUGUsnuaem+NeXRkBREN+CruEQbV/M+vAiDqWlixJb4sSBEe
-         ngoBeXwwu7fE8i2QdmThvJsQ2iJfmXiyG1v0NQSazx7DKrJ9tGjU8GUnGJk54QwWsfsP
-         Npc6bGuwtlWdhpIpHss3ClOKNy1yb0rySLdMoEMsHVeOMgh/3HNSR60y/JR8ozaAAFfr
-         Geug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750953202; x=1751558002;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=avFe0uCPAlGUsBDkTrAMoArX5v2saGyLPFhmXQ2cVg0=;
-        b=wpBdN+rIYxVbCjz28EFP4zS+MVmr28O88H+oJDCWknCfoOdojfzaQomeq+UUEz2f9D
-         yYf8iVV0pQwyzldaJe4lTvk8pLu0kGBGiiZt04VeQaG8OCNgS9JpHv871ZJu6OYdgSiQ
-         eiOdHkpA3abJCbUZihNyNI5iMniAr0pTAg526qYnrUF6+E8JwkC6Wtec8NCMySNuhvAk
-         z7ct/j12OtuoQwM0ild+KUG/8ocKESP+MvwdBADOLrYj0OlWsRLpCtMjUYkzPMThPn/0
-         7v50fRDMsE957p2JuAdHh+gm1rwwC2eV8YobgAQ+B/D1NAsXWR3DDGFtMwTkkEXNu7D0
-         c4Rw==
-X-Forwarded-Encrypted: i=1; AJvYcCUitKuo/20inNgolbeCivH4cXazCSNpmv8Er2NxpZ7QCc6IbiCYXULvjMKtvI9akvOi7KUDbsuXI+asYtw=@vger.kernel.org, AJvYcCVq+/CWjWA0lp21IYPh9YqMmZgEG0Vgif4yOijMR4VKyTHXNW/HY2V7qiloDHdamzLOFU4s6DvTz7Dt0uXTKy/2@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6WIkolFnWRMSGJpANPMZ9gYKCIL+wX+sIrNqbyyfjcrUYnsPg
-	KO86xOzPu0VjN5Zw6Wyt3quXVHNKFPCL8tXjf1WwqUGKrq5LohD229km
-X-Gm-Gg: ASbGncv6inqgQnIzvdk/3hbglceyA+gmujFBFfUlK/LWTmZdLD/GE0WP1chRl78UKdE
-	HRpqZbxAdpSribDhW1JnWVehe2zuExU6wO+jO6OerVwtQPlqqfBC70h46hMoIKbWSzkOsw8nqXC
-	nrDuf9PEm1x3ZhpVqXUeV2rFKmYhl8TMYcJRqvnstvqOted1iChB7tQ7GKZ+3/1MmdIN0kIsh8o
-	icJnCUsQ418l1jBNVMeBTR8sf/KjliI6s6pEAgBCwNBe7DEZEcYSX1fc+QeKIyOGqQkBuECrDPQ
-	D+yEtDeR2BdLxw6n/PpdCpt+bQN4mARTW1RVEIAha6/+qvIs0nBlu4Ph7IPGWxcrEBUU3JXSFff
-	1wjsAqaV4VxO+nv35CWBQVGIMC3MKdj0E84apv4x3iA==
-X-Google-Smtp-Source: AGHT+IGRKscdnd27cxZAcZV/moc6/jQHPLiIak2xe+ZqUvI8F9Nbn7YdJ7PBCPT+k/TB5QFUb7LEnQ==
-X-Received: by 2002:a05:600c:c4a3:b0:440:6a79:6df0 with SMTP id 5b1f17b1804b1-45381aeba44mr67564275e9.22.1750953202265;
-        Thu, 26 Jun 2025 08:53:22 -0700 (PDT)
-Received: from puck.. (watf-12-b2-v4wan-169542-cust1006.vm45.cable.virginm.net. [81.98.219.239])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45380705351sm51727455e9.0.2025.06.26.08.53.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jun 2025 08:53:21 -0700 (PDT)
-From: Dylan Yudaken <dyudaken@gmail.com>
-To: mathieu.desnoyers@efficios.com,
-	paulmck@kernel.org
-Cc: mingo@redhat.com,
-	peterz@infradead.org,
-	juri.lelli@redhat.com,
-	vincent.guittot@linaro.org,
-	dietmar.eggemann@arm.com,
-	rostedt@goodmis.org,
-	bsegall@google.com,
-	mgorman@suse.de,
-	vschneid@redhat.com,
-	shuah@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Dylan Yudaken <dyudaken@gmail.com>
-Subject: [PATCH 2/2] membarrier: self test for cpu specific calls
-Date: Thu, 26 Jun 2025 16:52:57 +0100
-Message-ID: <20250626155257.81256-3-dyudaken@gmail.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250626155257.81256-1-dyudaken@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64D4A8632C;
+	Thu, 26 Jun 2025 16:07:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.115.131
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750954035; cv=fail; b=moxm3XT0MYkDnz0y+0VEi1Ca0B4dji1ODwm2942fSsvOvXJD8T2phaT+ZNx8H0t49PGXQ3EGJoRNi3hJmo6n8T2MUrXCaXb5CXik0uIqfR6+zZKsgnb4Cs7qR4h9ruNQk5fT0yPelaXPhmM9NFHRTrcQdZ0Uo96sW42K9bradRk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750954035; c=relaxed/simple;
+	bh=f8CaSw26KdFadEElkDvhfsPF2GjT8Hvh2nH8Xk/pi3U=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=n7iaLcZ0J5Jqf67wWiJcCwIvIgwpnuShFMcFrce5N3yK8n1mxgv1FD6iZ00Te5p0cjpcahH6b+Z/4yacKKMXa+IW/WMO7zCKoUschlkfVizQAYTnWjL5He0mtNG74hOzXtG0H0nJh/uBMjQIRr4OGgDnjRk0UkDqFYW2tsye7nI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=Dd6kQ3Yx; arc=fail smtp.client-ip=40.107.115.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=c7Rn3JUorqbBUZEYDCuF6tYsHcnFwMxa6AJK/EK5GHhmLKRqS7cfzaxq4dXKenZHlj4hDY30MvZEfc2NPXI9PfmnkvF/HzOwhUg2P7W3Ko3p45G0eobgX3bS1qkMezCS6acO3bQzhAvZTH+mXvo0G9yXKKaD6rCdNxon3sGCkoxTFywpFJTuGP4Hd0jZoRc9vt5WT9urb7yjpf9r4ZQmrv32HhSWcBVIjs14/UZswZwd5pMwgEGrwEHYtHxgNNpOFTX9uEC0WOIdLg85+QAx0nSs9nIoW1aDUyNhNwqR3O4a0N3DRCvw2h3+5KUoyRpZ/9gYwKOiuWA2dHAp9rwAlw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VxzXLX6sHA7VbFXsCloODxzidSUq/+Qfq98JTvI42U0=;
+ b=HyYxMe/FCXWEZM9USy0d2/JJ9ovnufwlz139H3yQdORa+5q4O5lHeUNSUUor0Bvq93tS/5qWkcxnrw/yceR7s7S0K/P3H2iTu/eTkPNRO0/bFs+9yrEZt2lAuRmFC44tQimpDCGv8fhTnQNrLZtlkSsRwEythOSE4Ez6DXqyZL+klHmnB75sbOzoJ7koPac1bc6PBO/QbKkYjTNnJRc7r7Tsch1ozLPn+GfQUj5eNYy/icOuoVBgaY/S1Yf8n0uIYPIxGJhhNUHAp6ATa1xZl72xMjydkxlm98Fcqx5AgboI9jjg0LAjpDYKOHDJBHRd1bGzffVN2+o7A7SEZy7jhg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VxzXLX6sHA7VbFXsCloODxzidSUq/+Qfq98JTvI42U0=;
+ b=Dd6kQ3YxYAwiFTg9m8cavVjWFtiGCajiKp/0Ue1UUDI7Ffl19V/jPnFij5I7l4VYKzSb3uQC/fyJcrlXyFV02wmvdQaYr18nZcpQBv4bKU06en5xTDyllbwe/cy6oWnOh1TW1OBt/gwnQj7VCYJ9XjWAkoTzyyRdsu00Cofp5gg3OWupvGAb/L1yqiJypnY2eDcTmOTdq+pFMt1PzQRGNQ5DisDMauyJvCEQ2gw4E2Le3aIgstCmin+IeAIiAw392JmXlyTceCSVwzAyYNYmvSlWOMAboyaMPAPTRzlSn0zwNGYcdrHV8kxrxFLSGEjaJUcJnc6wMNUGRGK4uRDrbw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=efficios.com;
+Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:be::5)
+ by YT1PPF1CC8935A1.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b08::510) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8857.30; Thu, 26 Jun
+ 2025 16:07:09 +0000
+Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::50f1:2e3f:a5dd:5b4]) by YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::50f1:2e3f:a5dd:5b4%3]) with mapi id 15.20.8880.021; Thu, 26 Jun 2025
+ 16:07:08 +0000
+Message-ID: <4db5be54-7c27-4aed-b70f-3722a890904a@efficios.com>
+Date: Thu, 26 Jun 2025 12:07:07 -0400
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] membarrier: allow cpu_id to be set on more commands
+To: Dylan Yudaken <dyudaken@gmail.com>, paulmck@kernel.org
+Cc: mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+ vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
+ bsegall@google.com, mgorman@suse.de, vschneid@redhat.com, shuah@kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 References: <20250626155257.81256-1-dyudaken@gmail.com>
+ <20250626155257.81256-2-dyudaken@gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Language: en-US
+In-Reply-To: <20250626155257.81256-2-dyudaken@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YQBPR0101CA0156.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:e::29) To YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:be::5)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YT2PR01MB9175:EE_|YT1PPF1CC8935A1:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7b544b47-0046-4764-92b4-08ddb4cb809b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|376014|1800799024|7416014|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?bWludTVYY0RBZGZONVNHVUU5a1lsTVVTRW1hNGtwTGtMYmhvaFRLUXBJN2Rt?=
+ =?utf-8?B?amFkVy91RTN3eUZiaVd0U0JLa2lYdEhDclpFNm1Vbnh1emRqYmhzVWxncENC?=
+ =?utf-8?B?V1RZV005cUJPRzdmSkJ2SFpFckZaTkdYMXZ4M0IzZHhlcXgrMVh1ZFRtTFBX?=
+ =?utf-8?B?ZEllK2s5d0QxOEM0L3ZYenl3UStHU3c0bW4rb2pwOXpjSlFCeithMlNueWps?=
+ =?utf-8?B?NExpaGFQaTRLbys2d2M5NlNVZmJ2V25WWlpxazlBMFBZSE5YUHZ4VVV1bEF1?=
+ =?utf-8?B?cmh0Qk8rRE5XVi9VNlo0QWRYSHlmWXdZWUtOZjhHaXNMRy9kWXJxOXpNQ2Ey?=
+ =?utf-8?B?MURFT1QxSmhuUlRUd0x4NVZsQTVQNzFEZVJLZ1RVa09qSTh1OHJSbGR6eWdO?=
+ =?utf-8?B?WVU0SlpaUlJpREM3N1BUOWdEeTdnYis2TWlOYUdrODJFV0c0WEZ3eWw3aE9M?=
+ =?utf-8?B?MlJ1RzgvcEJseGhOY1BvNTVCR2w5eVBrT3pwSXBGQ0R1aFNXR1hoaVZEaXIw?=
+ =?utf-8?B?ZnpDaytGSW5aVU9CZ0laWU01UUtvdUNQT01XNnJkelorbzZHL0VXc091MVhB?=
+ =?utf-8?B?TzdWamdYNXVYVm9BTlVEbFd2L0hIMTF4WEtwd2dybko3MTF0Z2lrbmcwbjJL?=
+ =?utf-8?B?b1NTUWlNbS85eHRKNTBZU0hqQ05JZUZSUVJBTmo3eHZaUG1FK2dKajkzSVJn?=
+ =?utf-8?B?STI2YmJHbDZyT0J1cC94R1BNM3U1MC9RbFo4QStQUm9SWitNRnRTREJxbjV1?=
+ =?utf-8?B?N3hFcGhVWEMvN3EvUzJxNUhQeGtGdVpmR1ZiZmRzNVpHWHg2cXFFbVlhMFl4?=
+ =?utf-8?B?S1NjSGg4OGFvVWxESHU1ZTl1Z3FmN3E1MUMyTEFWcDhlZVF0WWFCc1hhWUxN?=
+ =?utf-8?B?QmNnN254Y2FPTlN6Sk9kTEQvY0NBdWZ3NVJUb3NaRUJMK2tpMEkwMDZPdTM0?=
+ =?utf-8?B?WDdTR2FuYVJGTVR4dDJxNTdTWnFFUWFCYmFFNytxN3QyY21mQ1cyelhFK0tH?=
+ =?utf-8?B?bVRyY0xRbEZaWEhjSWV5a3U5RmdvNFF3ZFVja01sVHZnbXRLUWdGUGhPalVy?=
+ =?utf-8?B?Nmc1RmdnRFFJdGh4dWhjT3N6ZXM4QTZYMjVRbjRsOU1MNWU3NElJdjYwTFhy?=
+ =?utf-8?B?MHBEeWcwQ09LNHVmRDVJNy9ZbWJsY2RUSHFVMW9qR09IOTJkdHRKbWJPV0la?=
+ =?utf-8?B?eHIxNnJFZmE4dGJXUWw2Q0ZjaFBmZ0phc3pCT3c3SEpGVzFuNFpkdUVVeE1t?=
+ =?utf-8?B?bllkQWtsMDVNQngwQ2xHdUsrTmMwSnlkcXVDSW5KUTFPL1EwRy9Zc0pQUTdP?=
+ =?utf-8?B?U091WW4zLy9tQnpneTVpK0h3MTBHSWYzQjIvZml2aTlDa3dvTTJpalBWZ20y?=
+ =?utf-8?B?MXlvVGlkeGttTkRRNmRLS0p1S3UxR2lLZWF1R01KZGY5UmljcHVUVi9IYVZm?=
+ =?utf-8?B?eVRDUTNkcW1hL1ltS214QzdQWFpMMzZFMGNiSHZQK2s2MGZMQ3lzNjEzYkNm?=
+ =?utf-8?B?NVZGSHhGWTExV3RpUE9kVWpsVUIyK2VmMTZHb2p5Smc2MHU4MFFrZG1laVJN?=
+ =?utf-8?B?UmZJRlIrbXBldzlBR2Flc0hRakpsRmpFbExyOGVlVlpZMU5PSW8yK0RBUEdH?=
+ =?utf-8?B?WUZ4Tyt4QUNEM1ltR1ovSmNtTlVFaS94c0NJbTdRbWdzUjYrcUZnQXdOQzdY?=
+ =?utf-8?B?d3h1aVdGLzFBcXZmNEY5cmNoUjNyaXowMGx3NHZrREdQU002SlFxSDNLTGFo?=
+ =?utf-8?B?QzdLb1o3UFhFQVF6VTlZUXBoM3FmaHdqRWN5QmZ1bUlxSlhuZzdYTFBDNGV3?=
+ =?utf-8?Q?BsXOF5I0vZMtTBQbPCV0n6MaQ9xflb3fcJdTk=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(7416014)(7053199007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?QzZFOHlXRmJFTHZzQjZkMExjYnM0amFDN21leXZMcWNBOXZJOE96d1N2MEVa?=
+ =?utf-8?B?MzVwYmRSZlBSYnVMLzh3cjd3ZlpGNGJTUEhiODBGRDdmbHpIRmhLZFVEODRC?=
+ =?utf-8?B?UHJHRHREMUhOT2pVS2JGWXNOa2s4RkZEL3Y2OStmU0wrdEU4SXRuM0JGUnpa?=
+ =?utf-8?B?QWF0T0tCbG5ya2FLelJwTVRRWTYwa2pBZlF3VW0xWFAreU1CNEExNndXaVJF?=
+ =?utf-8?B?SmhWVkN1VEt2eHBTUjhlQk1NeCtETmt5RFFFdzg1aDJZOHh2N1NGeWwvOVN6?=
+ =?utf-8?B?V2ZTODhmL0w5NGlkSzFGaWNkNmhPUlJsRDJaRlpLL0lXZktUVkhnL1lJbGRY?=
+ =?utf-8?B?cnJuWDlFV29LZ2sySzBhT0JZSHZkWWMyVmxxcDd5b00vNENXdkxPRGNBWnpM?=
+ =?utf-8?B?R0dDZFlneWgycTk4MGxOTmYycFVCU0JVNVpzRlhjVW8raUIrYVNETjBqNExs?=
+ =?utf-8?B?Sm83aHY2K0RIUkVJekZFVnRoZU9NMEFBT1VCbUdGZFJOMHZyR3p2OFVmd2xY?=
+ =?utf-8?B?eW03czFmaEVTNVE0RFpTUVhBK2wxbzhFdCtkbGJJOXdlOG45Qmg0ZGxyOFZO?=
+ =?utf-8?B?TUpkaXJSeGw4ZXdQMzRsYlBieG9yYVZLRkwxekVuUGJqS1R0OG9GdHdoUSsw?=
+ =?utf-8?B?UWNhU29aMk52dVJvbjhhWmF3VXJmd2R5RnJIZm9NTzk4V01UUFhZRjIyY042?=
+ =?utf-8?B?NEE3ditIWGpPVXhBQ053R0xZbGNSd3QwR0o3aDh6OHNTMTZScEhRQXU2WmxI?=
+ =?utf-8?B?aWptYzhSWnNGNTRHakQ4bDdLYWZqbWtkNS9lSjZKM2ZKS1VsSVZLZjJZK2sz?=
+ =?utf-8?B?YlBrRHhjYWJmdUVVQ1p1alkzTjdYNnBTUjFsRXZnL3NKQjZTdmlXUWQzK1lp?=
+ =?utf-8?B?N0NDcldqRENkTkNESk04WTQxR2w4K1FYQW9tazlPMVJrNURZOHFkRkpQa240?=
+ =?utf-8?B?bFVnVDMySDVuNis3QWFlNVg5b1Z4bFdVV1Z3TjRGKy9UZVdQVEFJUGVhb2Q0?=
+ =?utf-8?B?WktnME96QytJeE5wa3pSeUh3MjZzczIwV1gySHdLY2o1UWxFdVF1RmZtOFo5?=
+ =?utf-8?B?TW5GWlFJb1VyUWtwaVFoRWtWZDhUNjZCWTVIMFZoS09zUGR4Z25XU25JQ094?=
+ =?utf-8?B?dGF2K3QxREx4aHhKSjNuR0pKamN3d3RiV2lJb1p3WUNHVHA2OXV6OFhuS1Fk?=
+ =?utf-8?B?ekVtVU1TWkg0Wll2Z3VQZWQ2SmpLQlpqQTVqYXVla2Yza3RPUCtNRVQ3UEFM?=
+ =?utf-8?B?aXgwSHNVOEdKRExOSmVyckwwNlBVYmN3Q3NWVDlRejI4WTFQVVRVRjJENXdy?=
+ =?utf-8?B?WGN3b0NKZlQ4Z2ZHeVJmL2FSQ0hYeGdqdEZSb0hnMERQRGxybWN3c1JpMmxr?=
+ =?utf-8?B?cHYxQzR3dlVmRWUxZTQwL0hDYTZWVEpWOFJoUXBXa3NCRUdTeTArMVFWNVND?=
+ =?utf-8?B?L05jakpISzJDMG9xbW5Rd1lhWUl3MlpEa0owTWdkaUM2Vnpsb1lmOXpzT2pE?=
+ =?utf-8?B?Z08zVFFGNzREcVVGV3N3WTlHUWRwNHdYeFREVVJZbUwwZ2hTVVQ2Y1dkOUpR?=
+ =?utf-8?B?V0k0Ty9ZMG1ZZXpwNGtVQk8xdlI2SUt5ZVczTkVTdDFHS0xkU2ppV2tjQldI?=
+ =?utf-8?B?V0FlUkd5MEdRaVB2Sy9Jc2dEaVhaUmRWV1grc2orVzM1NXlXTGM0L1N1QlhB?=
+ =?utf-8?B?TWJKMm5iMGN5ODg5bVZiZVpqdXVZK3lxbEtUbHV5NWt0dmNoNkJnc2tMenpS?=
+ =?utf-8?B?U3dvMC9IQnExVlkrdjc2ZzIwOU5GVkdPZUlsNU5WRjhEdFBEQjdvWm1LUkF6?=
+ =?utf-8?B?cmxXS1JTZTBUV2lIL3B5ZFpUaWpNSmFSQWt1bzI1KzdJVnBFcnBCbGtJN2pv?=
+ =?utf-8?B?ZW5NRDNRaFdLRXBoazJNMmNITGFZdFVoQWo5eWo2aXkydUZJbW9jY1FMb2Yv?=
+ =?utf-8?B?MXJWdElzYmJCb0hPZUtRVDJQdHBXanExbWpGK0xlR0w1TVVVZzFZR2VhblVq?=
+ =?utf-8?B?UWlwenFxRHRIVzIraWVRa3hUUXM2YnFuS3RQY0gwS1VDNWNRNm9vby9nMlow?=
+ =?utf-8?B?WlpSS1FscjJXM3NLRDVTcmdCS09rOXRvdXpZWTBOQnBqMmljUE4xRzNja2Zp?=
+ =?utf-8?B?K2NUOHpaMmpPSmhDQ0RMaTY0VXJUbUlKeWlHM2NOTzI2Q1gwaVc3bUlVSGg5?=
+ =?utf-8?Q?4krR05uwDX8V+iTGi+X9KpM=3D?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7b544b47-0046-4764-92b4-08ddb4cb809b
+X-MS-Exchange-CrossTenant-AuthSource: YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jun 2025 16:07:08.6847
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: VGxpxE3CwkkKLTuV1BfSWOvkNMeQFFf6FTKq8SjEZWD62ZJHkwqHJRk8zwF4Adx0jRA04SPgZjhyqguoxnBhdX7QFt798PCG1aYUe2EALf8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT1PPF1CC8935A1
 
-Add a self test for the cpu specific calls to membarrier.
+On 2025-06-26 11:52, Dylan Yudaken wrote:
+> No reason to not allow MEMBARRIER_CMD_FLAG_CPU on
+> MEMBARRIER_CMD_PRIVATE_EXPEDITED or
+> MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE.
+> 
+> If it is known specifically what cpu you want to interrupt then there
+> is a decent efficiency saving in not interrupting all the other ones.
+> 
+> Also - the code already works as is for them.
 
-This works by figuring out the number of interrupts on a given core
-before/after calling membarrier(2) to assert that at least some
-interrupts have happened.
-This feels like it might be a bit flaky if for example the worker
-thread was switched out. To mitigate this there are some checks such
-as making sure it stays on one core, and also it asserts only 1
-interrupt for every 2 calls to membarrier(2)
+Can you elaborate on a concrete use-case justifying adding this ?
 
-Signed-off-by: Dylan Yudaken <dyudaken@gmail.com>
----
- tools/testing/selftests/membarrier/.gitignore |   1 +
- tools/testing/selftests/membarrier/Makefile   |   3 +-
- .../membarrier/membarrier_test_expedited.c    | 135 ++++++++++++++++++
- .../membarrier/membarrier_test_impl.h         |   5 +
- 4 files changed, 143 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/membarrier/membarrier_test_expedited.c
+Thanks,
 
-diff --git a/tools/testing/selftests/membarrier/.gitignore b/tools/testing/selftests/membarrier/.gitignore
-index f2fbba178601..39cdadb11c01 100644
---- a/tools/testing/selftests/membarrier/.gitignore
-+++ b/tools/testing/selftests/membarrier/.gitignore
-@@ -1,3 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0-only
- membarrier_test_multi_thread
- membarrier_test_single_thread
-+membarrier_test_expedited
-diff --git a/tools/testing/selftests/membarrier/Makefile b/tools/testing/selftests/membarrier/Makefile
-index fc840e06ff56..f3e7920a900c 100644
---- a/tools/testing/selftests/membarrier/Makefile
-+++ b/tools/testing/selftests/membarrier/Makefile
-@@ -3,6 +3,7 @@ CFLAGS += -g $(KHDR_INCLUDES)
- LDLIBS += -lpthread
- 
- TEST_GEN_PROGS := membarrier_test_single_thread \
--		membarrier_test_multi_thread
-+		membarrier_test_multi_thread \
-+		membarrier_test_expedited
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/membarrier/membarrier_test_expedited.c b/tools/testing/selftests/membarrier/membarrier_test_expedited.c
-new file mode 100644
-index 000000000000..aaea36381282
---- /dev/null
-+++ b/tools/testing/selftests/membarrier/membarrier_test_expedited.c
-@@ -0,0 +1,135 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+#include <linux/membarrier.h>
-+#include <syscall.h>
-+#include <stdio.h>
-+#include <string.h>
-+#include <pthread.h>
-+#include <stdatomic.h>
-+
-+#include "membarrier_test_impl.h"
-+
-+struct thread_state {
-+	atomic_int thread_cpu;
-+	atomic_bool end_thread;
-+	pthread_mutex_t mutex;
-+};
-+
-+void *test_membarrier_thread(void *arg)
-+{
-+	struct thread_state *ts = (struct thread_state *)arg;
-+
-+	ts->thread_cpu = sched_getcpu();
-+	pthread_mutex_unlock(&ts->mutex);
-+	if (ts->thread_cpu < 0)
-+		return 0;
-+	while (!ts->end_thread)
-+		ts->thread_cpu = sched_getcpu();
-+	return NULL;
-+}
-+
-+static long read_interrupts(int cpu)
-+{
-+	char line[4096];
-+	FILE *fp = fopen("/proc/interrupts", "r");
-+	long res = 0;
-+
-+	if (!fp)
-+		ksft_exit_fail_msg("unable to open /proc/interrupts\n");
-+
-+	fgets(line, sizeof(line), fp); /* skip first line */
-+	while (fgets(line, sizeof(line), fp) != NULL) {
-+		char *save;
-+		int next_cpu = 0;
-+
-+		for (char *token = strtok_r(line, " ", &save); token;
-+		     token = strtok_r(NULL, " ", &save)) {
-+			if (*token < '0' || *token > '9')
-+				continue;
-+			if (next_cpu++ == cpu)
-+				res += atol(token);
-+		}
-+	}
-+	fclose(fp);
-+	return res;
-+}
-+
-+static int test_membarrier(const char *name, int cmd, int register_cmd)
-+{
-+	int runs = 0;
-+	long irq = 0;
-+	pthread_t test_thread;
-+	int ret = 0;
-+
-+	struct thread_state ts = { .thread_cpu = -1,
-+				   .end_thread = 0,
-+				   .mutex = PTHREAD_MUTEX_INITIALIZER };
-+	if (sys_membarrier_cpu(cmd, 0) == 0)
-+		ksft_exit_fail_msg("%s: expected failure before register\n",
-+				   name);
-+	if (sys_membarrier(register_cmd, 0) != 0)
-+		ksft_exit_fail_msg("%s: unable to register\n", name);
-+
-+	/* nothing interesting in single processor machines */
-+	if (sysconf(_SC_NPROCESSORS_ONLN) == 1)
-+		goto success;
-+
-+	pthread_mutex_lock(&ts.mutex);
-+	pthread_create(&test_thread, NULL, test_membarrier_thread, &ts);
-+
-+	/* wait for thread to start */
-+	pthread_mutex_lock(&ts.mutex);
-+	pthread_mutex_unlock(&ts.mutex);
-+
-+	for (int i = 0; i < 1000; i++) {
-+		int cpu_start, cpu_end, cpu_this;
-+		long irq_start, irq_end;
-+
-+		cpu_start = ts.thread_cpu;
-+		if (cpu_start < 0)
-+			ksft_exit_fail_msg("sched_getcpu() failed\n");
-+
-+		irq_start = read_interrupts(cpu_start);
-+		if (sys_membarrier_cpu(cmd, cpu_start))
-+			ksft_exit_fail_msg("%s: sys_membarrier failed\n", name);
-+		cpu_end = ts.thread_cpu;
-+		cpu_this = sched_getcpu();
-+
-+		/* maybe it was moved to a different cpu, so we cannot trust the irq count */
-+		/* If we are on the same cpu we wouldnt expect an interrupt */
-+		if (cpu_end != cpu_start || cpu_this == cpu_end)
-+			continue;
-+		irq_end = read_interrupts(cpu_end);
-+		irq += (irq_end - irq_start);
-+		runs++;
-+	}
-+	ts.end_thread = 1;
-+	pthread_join(test_thread, NULL);
-+
-+	if (!runs)
-+		ksft_exit_fail_msg("%s: no successful runs\n", name);
-+
-+	/* Every run should probably have had an interrupt, but use at least half
-+	 * to be safe.
-+	 */
-+	if (irq < runs / 2)
-+		ksft_exit_fail_msg("%s: only had %d / %d irqs\n", name, irq,
-+				   runs);
-+success:
-+	ksft_test_result_pass("expedited %s\n", name);
-+	return 0;
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	ksft_print_header();
-+	ksft_set_plan(3);
-+
-+	test_membarrier("EXPEDITED", MEMBARRIER_CMD_PRIVATE_EXPEDITED,
-+			MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED);
-+	test_membarrier("RSEQ", MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ,
-+			MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ);
-+	test_membarrier("SYNC_CORE", MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE,
-+			MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE);
-+	ksft_exit_pass();
-+}
-diff --git a/tools/testing/selftests/membarrier/membarrier_test_impl.h b/tools/testing/selftests/membarrier/membarrier_test_impl.h
-index af89855adb7b..c10a8af4612e 100644
---- a/tools/testing/selftests/membarrier/membarrier_test_impl.h
-+++ b/tools/testing/selftests/membarrier/membarrier_test_impl.h
-@@ -16,6 +16,11 @@ static int sys_membarrier(int cmd, int flags)
- 	return syscall(__NR_membarrier, cmd, flags);
- }
- 
-+static int sys_membarrier_cpu(int cmd, int cpu)
-+{
-+	return syscall(__NR_membarrier, cmd, MEMBARRIER_CMD_FLAG_CPU, cpu);
-+}
-+
- static int test_membarrier_get_registrations(int cmd)
- {
- 	int ret, flags = 0;
+Mathieu
+
+> 
+> Signed-off-by: Dylan Yudaken <dyudaken@gmail.com>
+> ---
+>   kernel/sched/membarrier.c | 6 +++++-
+>   1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/sched/membarrier.c b/kernel/sched/membarrier.c
+> index 809194cd779f..def6d4094ad6 100644
+> --- a/kernel/sched/membarrier.c
+> +++ b/kernel/sched/membarrier.c
+> @@ -595,7 +595,9 @@ static int membarrier_get_registrations(void)
+>    *          contains the CPU on which to interrupt (= restart)
+>    *          the RSEQ critical section.
+>    * @cpu_id: if @flags == MEMBARRIER_CMD_FLAG_CPU, indicates the cpu on which
+> - *          RSEQ CS should be interrupted (@cmd must be
+> + *          RSEQ CS should be interrupted (@cmd must be one of
+> + *          MEMBARRIER_CMD_PRIVATE_EXPEDITED,
+> + *          MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE,
+>    *          MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ).
+>    *
+>    * If this system call is not implemented, -ENOSYS is returned. If the
+> @@ -625,6 +627,8 @@ static int membarrier_get_registrations(void)
+>   SYSCALL_DEFINE3(membarrier, int, cmd, unsigned int, flags, int, cpu_id)
+>   {
+>   	switch (cmd) {
+> +	case MEMBARRIER_CMD_PRIVATE_EXPEDITED:
+> +	case MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE:
+>   	case MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ:
+>   		if (unlikely(flags && flags != MEMBARRIER_CMD_FLAG_CPU))
+>   			return -EINVAL;
+
+
 -- 
-2.49.0
-
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
 
