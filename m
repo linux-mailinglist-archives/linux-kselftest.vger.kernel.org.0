@@ -1,141 +1,128 @@
-Return-Path: <linux-kselftest+bounces-35808-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35809-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 157D9AE935C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jun 2025 02:23:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF0E7AE93E1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jun 2025 04:08:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D1B983BB4F6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jun 2025 00:22:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3AA251C41DA0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jun 2025 02:08:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF03615A864;
-	Thu, 26 Jun 2025 00:23:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0133155C88;
+	Thu, 26 Jun 2025 02:08:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qKmktj46"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ddwrAKAv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B2973FBB3
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Jun 2025 00:23:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5449E126C17;
+	Thu, 26 Jun 2025 02:08:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750897392; cv=none; b=lbJ3bbm/4HOG8fvctFZgqGbsFglkbIBYauQNDbfbn50Q9P1FsIgltuFEAoVAyImL9UvWAIgrrt0CHAnZHc6IusExw0utUzA9cFbEByBhWMRQ5ZuiyY4qg1SPbWUxUfc/Y/Ec1zku/WZvK96x31FzHuLta8LMSw8eLsogf47iX9g=
+	t=1750903682; cv=none; b=mnyIijm9MfAkeECLcZ7QUrLUhrifLO9F5FZFOZaZdSSv8mpq+pw/K7yxYtpEkoDL8t7XZRczFF66aVmuRfE9aI5BkPQ4NOOGo9qU8j6M2a9bPTy59QSIhd7tNVUsYa6E9fwmlWILyU5Ha+aiA9DlANjEybmjqsy7BxVA/SH08vM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750897392; c=relaxed/simple;
-	bh=NCsrN+HdfSuoPmwKEfBglZgoIH5ku20D9mJrTlOeaBw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OdALvrjsUzJMW1WsiXjISdrM1IiNQghWzXzzV4gJgIxYCInBxuVU0BwMDX3ZpgmL3HEdCaMebpTDnjtFJE4bd5yTKLziI3FLOcsSy/ejv2o0Zc6+lGmDeBNyB1cUcwYgv42kuP8yDlYxrbYnOZEN0lle01VFofNPSBqJh6HGlGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qKmktj46; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-237f18108d2so77395ad.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Jun 2025 17:23:10 -0700 (PDT)
+	s=arc-20240116; t=1750903682; c=relaxed/simple;
+	bh=fGBdLx43ZNKtIbzyx9QYwr/HXAxnuOX+RmyAX3dJ02Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UaQZg0FQk5eE8XNqtyXS0IFwDYLwFkogo2w7EctrvKOdJA72mTd+byX9OdoIxCAcohmG0TSGMqSSfl9skhKWWbsEIHzX+9AOVTTlIdchw/5fQO/4kqvyiy7IVOQuQ8JZTEw83uLIkhcMhb6zxzhWXlKbs7JRidsmOzTKNCv7d5w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ddwrAKAv; arc=none smtp.client-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-b34c068faf8so506333a12.2;
+        Wed, 25 Jun 2025 19:08:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1750897390; x=1751502190; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NCsrN+HdfSuoPmwKEfBglZgoIH5ku20D9mJrTlOeaBw=;
-        b=qKmktj46XZqkCXdDVtADec0Zec3dj35JZwRCtZdCuPecri1j7eaizdKepXoSNYYriY
-         QtjJrIyn0f3GadAc1rYJ3wTF1u7FmntBQ7NTBsFS8pPGDf97LCC7plnJ0WVTxTOcL3kB
-         KmH5GuGuW5QOfdXZUAadNejFYNzEkoxs9t9rGCjXQFDxtymf8I3pWhorP1X8N9aUgcX1
-         gyvQGp2uMbAEdXnlWIwcUVx0gGP7AA04ojInqUZ1Ny9mYhNIuBKeuGUEb9tCE+K4f58X
-         9gp4Jdd3spATmhTqD3qgfL3wxmBUHfMgSwW+4UXRTvHdpJOfw6AltXnj0lMI3Fn9uI2/
-         yOHw==
+        d=gmail.com; s=20230601; t=1750903680; x=1751508480; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2QqGYjD8NV1Lz9h53E/xb2YOnYvPPC++UyYL3ZPC24Q=;
+        b=ddwrAKAvdzYtRaE6wP6cG1rdAJbNTymqS4v80hSHcX5wY7Tt+3PsVLGjTNb6Pspsnq
+         LJS2zbSVvhxav3Aoof1J+AUs+VWBUH2Z12UbyYc7txbZz3501u7g7REjYDMVIBp1p7TJ
+         PJuqyeYOaQpmkQSPYNivVgT5hENHEjJofhpvua7EfcmDwewejWCK/zTunxDKnGZXmt9H
+         AEWpcGZx0RoZZLMcAvd7z+qPuAzONOdJ4OeUI84U13FZR4W60p+XTgPynjwQCWBEg9/V
+         LjH0oYGN1o8kiCXy21uyN1lO9mjYdl5rpycxpFSFTm5CmLc0I09Ztgt3hRXUOaOK+C/h
+         HUNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750897390; x=1751502190;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NCsrN+HdfSuoPmwKEfBglZgoIH5ku20D9mJrTlOeaBw=;
-        b=GxJvCkxqgAke/ChVtU0IBrrGihBR3ogBvdMHYFkuKr4yesIS6EDs4VOlKWKkX45lvH
-         vAwBMRimcVPK5izcyLWSiUlz/Z+ScN1oVECejpsa91M1SIfvbhFbj56jAcI42pmSomyv
-         dcxlcFJeA8zl+qq326qOmwmRaluF8vr9bZRc9zje9IjdprTaqzukHUZ3rl/IuN5yKp9J
-         xscpNNPx17xhOcyBXOtywAa+dzKV6Am7MXNmHNVGH6mu9hZYrFfFUqRAUmEPwSza6nQE
-         vnntdclYT+ksNOk+ZYpY3HIaCMM6GN7JdSqNaLN+hqdpnFXAfl+nKnuZPXd69Mei76dQ
-         G4mw==
-X-Forwarded-Encrypted: i=1; AJvYcCWPIQ79T3vj72EMnOP1bnhH66PNvpNxZrlNITZLYY4eQUhkRGPQagDj9aTOQcKAblY/tPhBDIbluhKMY4Rt37E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyC2MItCIGAuQYQpt8BRHR4eTSQWaEGZMH3T7hsLzPa+QFIqYz6
-	Fhcx6DryXIOX6dz7cMulLgXmnrdAn7x5cb7jwPVUky759ajVL/g+FAEnnWKp8ZEiDH83syYcFa4
-	SaTR0+A33oJ8EMPPUwpGxp9uLfNAyjFlYtxuEFECV
-X-Gm-Gg: ASbGncvUQbY3BBLKlx3BDV1leY2+v6QVLUDvHPYERqQGd6eeiJzEdWJaJrEp7Cks3hc
-	oFRJDcyyr/fhFn52Sgl1PeI/yNWol4RTZr1R8GO/1tyBDR3M1DI7EjL3nv1xSiPbZiSQrRk5Vqu
-	RMW9lp+/QAs8RlimxBv+Pgu8r9sQsGZjhQm+Adzgj1/n8O3ng7SW0/hv4j0o5uvMrKu9MukFHmY
-	Q==
-X-Google-Smtp-Source: AGHT+IEwuIRJz2GnuYFakjvLvwNdDT0PhaAO+MJrfxFtHd/bqcmj1964+AMMsw9hZf+b6bYiVMNzPCB9JCe4G7It6W0=
-X-Received: by 2002:a17:903:1b2d:b0:22c:3cda:df11 with SMTP id
- d9443c01a7336-239785df083mr1424685ad.10.1750897389164; Wed, 25 Jun 2025
- 17:23:09 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1750903680; x=1751508480;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2QqGYjD8NV1Lz9h53E/xb2YOnYvPPC++UyYL3ZPC24Q=;
+        b=bMYlFMwq5btE1PrixT1S2BrCkv68ABUKJeG51800e66O11NsFdyzOMMl1+e1PwqJPH
+         GDZJhWEOuOg2gxI2b4Cx8DMQ+iqrOwW6pXKOGdNJNj+rAGd5aU0QbHvrb2UJa8FsJBwG
+         yGLc2+ku8TfgnbGKkiUKK2RdcuNlDd4ZLgrsJDYADQMO5VS75yH6tXI6riIptIYICTtu
+         usQqp5oKWN5yj0mpFqXBtMRvR3fm8OXlRG3NMD8eG6/350OJtE/sHb1sG873Q3uMaeke
+         EOdzFFWFCEJqy2LZ2DvN4AahPi3X06daNLh8AiKiZJt4hpVEZ6BS0UL9BLOG9ldIEnCp
+         Hjdg==
+X-Forwarded-Encrypted: i=1; AJvYcCW06jcdlw5MG2O9C2w/6HEqgkVzritDErMqLZ1JKWcyveWBU/OSKzeYn7ZtSW8CMCqSKNbrHvw66gQTc/A=@vger.kernel.org, AJvYcCXjNM3snd3+9/qIDxoatnbg92NDzt7oALp3vV6NOc+7as5DEj8i/rviAVjAYbCNvfP2o3qr+u57J6ZKjqbSFgZa@vger.kernel.org
+X-Gm-Message-State: AOJu0YzXXT6i5Z8GnKFG+iyy/H2wMEGxCjZxBhS3SXq/DkhaOYP20c8F
+	CaLYhjCD89hCc/7k3luWn1ooFDlwozNQJUB+7asMjlr1ZTddTOqnV37K
+X-Gm-Gg: ASbGncu6Cv3nRh7wcXqFs+stf/R53U9DyQ5BaXSLnrQkgPpH+M3LpojVqv0RgSE493/
+	t73pN/k7uz7fHvUO1TGgS75zh9e2rGIZDH8fXtZza+jjwOczExnTdv8xzVKtbdPHeCc3Jzgh2EL
+	dr9ewKAbpVaajiqA8kNoj3GBX3yqX7WLTFsyoG31XRjcEW6bgKsxBOYxIhBjZRGUuOWDC4Tiz/G
+	BJiNUgWZYu22yz74DnrSLQTUNsWNv/aFWZ4ksRho+L7J8aGXmonlOlOj24U8iPs2opM5CTUihdw
+	nULd52tBefAR/fY5pGiXNznbFz9U/H04DxX/rCRu493SGtkpyDk2cI34C0fLr1d1jzJIld5uBLY
+	=
+X-Google-Smtp-Source: AGHT+IFw3FQlZnA+EvUsNN1IOB3BlWRZTtCRZlRlVSj2VO/QZ0xMVRH5KO8rzFZ0phgpRnx8AufnAQ==
+X-Received: by 2002:a17:903:2bcc:b0:235:5a9:976f with SMTP id d9443c01a7336-23824030ccdmr110775315ad.24.1750903680502;
+        Wed, 25 Jun 2025 19:08:00 -0700 (PDT)
+Received: from p920.. ([2001:569:799a:1600:cc0b:584a:7d31:4a04])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b34c4318a27sm388110a12.28.2025.06.25.19.08.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jun 2025 19:08:00 -0700 (PDT)
+From: Moon Hee Lee <moonhee.lee.ca@gmail.com>
+To: akpm@linux-foundation.org,
+	shuah@kernel.org
+Cc: linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kernel-mentees@lists.linux.dev,
+	Moon Hee Lee <moonhee.lee.ca@gmail.com>
+Subject: [PATCH] selftests/mm: remove duplicate .gitignore entries
+Date: Wed, 25 Jun 2025 19:07:58 -0700
+Message-ID: <20250626020758.163243-1-moonhee.lee.ca@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250619181519.3102426-1-almasrymina@google.com>
- <175072801301.3355543.12713890018845780288.git-patchwork-notify@kernel.org>
- <CAHS8izMPWjmxLWJr+BSqd5jamsFHDOm71NkG7fmm-78SkLxQTg@mail.gmail.com> <20250625170305.40d8c27a@kernel.org>
-In-Reply-To: <20250625170305.40d8c27a@kernel.org>
-From: Mina Almasry <almasrymina@google.com>
-Date: Wed, 25 Jun 2025 17:22:56 -0700
-X-Gm-Features: Ac12FXyiBMisv4tGfeRxSMIrkn6bU28R4i4OvLr3C7LRcHrlkuJntc45GbrMbFU
-Message-ID: <CAHS8izO9=Q3W9zvq4Qtoi_NGTo6QShV7=rGOjxz3HiAB+6rZyw@mail.gmail.com>
-Subject: Re: [PATCH net-next v5] page_pool: import Jesper's page_pool benchmark
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: patchwork-bot+netdevbpf@kernel.org, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	hawk@kernel.org, davem@davemloft.net, edumazet@google.com, pabeni@redhat.com, 
-	horms@kernel.org, shuah@kernel.org, ilias.apalodimas@linaro.org, toke@toke.dk
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jun 25, 2025 at 5:03=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
-ote:
->
-> On Wed, 25 Jun 2025 16:45:49 -0700 Mina Almasry wrote:
-> > Thank you for merging this. Kinda of a noob question: does this merge
-> > mean that nipa will run this on new submitted patches already? Or do
-> > I/someone need to do something to enable that? I've been clicking on
-> > the contest for new patches like so:
-> >
-> > https://netdev.bots.linux.dev/contest.html?pw-n=3D0&branch=3Dnet-next-2=
-025-06-25--21-00
-> >
-> > But I don't see this benchmark being run anywhere. I looked for docs
-> > that already cover this but I couldn't find any.
->
-> Right now to add a new TARGET one needs to have SSH access to the
-> systems that run the tests :( The process of adding a runner is not
-> automated. But this will probably need even more work because it's
-> a performance test. We'd need some way of tracking numerical values
-> and detecting regressions?
->
+Remove redundant entries in .gitignore confirmed by:
 
-I actually did what you suggested earlier, I have the test report the
-perf numbers but succeed always.
+$ sort tools/testing/selftests/mm/.gitignore | uniq -d
+hugetlb_dio
+pkey_sighandler_tests_32
+pkey_sighandler_tests_64
 
-What I'm hoping to do is:
+These entries were originally added by [1], and later duplicated by [2].
 
-1. Have nipa run the benchmark always (or at least on patches that
-touch pp code, if that's possible), and always succeed.
-2. The pp reviewers can always check the contest results to manually
-see if there is a regression. That's still great because it saves us
-the time of cherry-pick series and running the tests ourselves (or
-asking submitters to do that).
-3. If we notice that the results between runs are stable, then we can
-change the test to actually fail/warn if it detects a regression (if
-fast path is > # of instructions, fail).
-4. If we notice that the results have too much noise, then we can
-improve the now merged benchmark to somehow make it more consistent.
+[1] https://lore.kernel.org/all/20240924185911.117937-1-lorenzo.stoakes@oracle.com/
+[2] https://lore.kernel.org/all/20241125064036.413536-1-lizhijian@fujitsu.com/
 
-FWIW, when I run the benchmark, I get very repeatable results across
-runs, especially when measuring the fast path, but nipa's mileage may
-vary.
+Signed-off-by: Moon Hee Lee <moonhee.lee.ca@gmail.com>
+---
+ tools/testing/selftests/mm/.gitignore | 3 ---
+ 1 file changed, 3 deletions(-)
 
---=20
-Thanks,
-Mina
+diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
+index 824266982aa3..f2dafa0b700b 100644
+--- a/tools/testing/selftests/mm/.gitignore
++++ b/tools/testing/selftests/mm/.gitignore
+@@ -38,9 +38,6 @@ map_fixed_noreplace
+ write_to_hugetlbfs
+ hmm-tests
+ memfd_secret
+-hugetlb_dio
+-pkey_sighandler_tests_32
+-pkey_sighandler_tests_64
+ soft-dirty
+ split_huge_page_test
+ ksm_tests
+-- 
+2.43.0
+
 
