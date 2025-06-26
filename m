@@ -1,379 +1,286 @@
-Return-Path: <linux-kselftest+bounces-35832-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35833-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17611AE9681
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jun 2025 08:52:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06D46AE977B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jun 2025 10:06:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 519F717DD88
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jun 2025 06:52:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63CDF3A6558
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jun 2025 08:05:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4060D236A79;
-	Thu, 26 Jun 2025 06:52:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65D9C25B30F;
+	Thu, 26 Jun 2025 08:06:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="oF0tJV/Y"
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="Sip4cZp5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from AS8PR03CU001.outbound.protection.outlook.com (mail-westeuropeazon11012012.outbound.protection.outlook.com [52.101.71.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B212219E0;
-	Thu, 26 Jun 2025 06:52:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750920761; cv=none; b=EuOSNR05n88WOiWuPJulx0SG7KjPuTYtyz9NeW6w+e8dOnYMue5hpGicvvWurcwV06dffpSzwkZyAtEhsc8JO8aYpCnjn2ruIiTcNsFygIoVrU8jcoH/aqp2z6MtfV8DfzpCBrVeH2IvIinhk2GY/DSYGsekmU5qeO8cajhaA/w=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750920761; c=relaxed/simple;
-	bh=93XROQxiGQHCKlPRwvuS45z/TicKFi6RuE8Dbot702c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LZ8f7AUkJXjFs3/yl8WW2aJsKgEa0XrWbpYiGjPcSf4OLaOuDroS9pRaRrq1DoTBGkIIDSHqg12aLi/WfbYfM6igpjv0qS7sNDUSSXGUdv4vEbDikEeCm61Gjrsf4o+/hEczSQPYg/BXS6Xj9pFH/0cGXkpIbhw3WhjmZXBpRrM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=oF0tJV/Y; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55Q4AQad010332;
-	Thu, 26 Jun 2025 06:52:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=IeZtDq
-	wmz1khSscO8YzuYvN2wcU8GpIM6bDlf82eRaU=; b=oF0tJV/Y9gpoo4qiP4FVg4
-	mkF6s7XNy6SkB6RyGRQkq5WGA4CXwRfEnXtmkUrrVvTJD814DQAGuTNYbzM9zwSb
-	vGhYobRoDp7dj78E9WV2Ad4Q+551JNkSholmeEr1/Ni5h+ahii8QgHuH+cbaD1Ra
-	DeZm1sp4Ldb4sS7bUVaEhos9++qD2ha94m+7xvVkGoBk73ymzwSkEodlGOEga3Vd
-	H4cRHwYs7UggGK0WvxbL98iDfOJKxO6aOtwAMxzkGbyO9WGlmeqs5Ab8lQ6HkmHg
-	PFJxKAqoixsnIgnV3QZEHoOE0SkqIV8vOuWEZ5OHxQsIQb7QGxUD2bXBk8UOMKfQ
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47gsphjdy0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 26 Jun 2025 06:52:19 +0000 (GMT)
-Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 55Q6iBkH017987;
-	Thu, 26 Jun 2025 06:52:19 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47gsphjdxw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 26 Jun 2025 06:52:19 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 55Q4T0tt006513;
-	Thu, 26 Jun 2025 06:52:17 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 47e82pdm4k-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 26 Jun 2025 06:52:17 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 55Q6qFp642271202
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 26 Jun 2025 06:52:15 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id AFCDE20043;
-	Thu, 26 Jun 2025 06:52:15 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C0AA020040;
-	Thu, 26 Jun 2025 06:52:11 +0000 (GMT)
-Received: from li-06431bcc-2712-11b2-a85c-a6fe68df28f9.ibm.com (unknown [9.39.20.202])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Thu, 26 Jun 2025 06:52:11 +0000 (GMT)
-Date: Thu, 26 Jun 2025 12:22:09 +0530
-From: Donet Tom <donettom@linux.ibm.com>
-To: Dev Jain <dev.jain@arm.com>
-Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-        Aboorva Devarajan <aboorvad@linux.ibm.com>, akpm@linux-foundation.org,
-        Liam.Howlett@oracle.com, shuah@kernel.org, pfalcato@suse.de,
-        david@redhat.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
-        npache@redhat.com, ryan.roberts@arm.com, baohua@kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ritesh.list@gmail.com
-Subject: Re: [PATCH 1/6] mm/selftests: Fix virtual_address_range test issues.
-Message-ID: <aFzuGQqM4zQIM0wF@li-06431bcc-2712-11b2-a85c-a6fe68df28f9.ibm.com>
-References: <c93110a4-19e4-4a1d-b044-6b7f521eaa0d@lucifer.local>
- <815793f1-6800-4b9a-852e-f13d6308f50f@arm.com>
- <2756fa2b-e8bf-4c66-bf9b-c85dc63dfc33@lucifer.local>
- <41d9a70d-9791-4212-af23-5b13d8e4a47d@arm.com>
- <aFPI_blZGhvKSbNJ@li-06431bcc-2712-11b2-a85c-a6fe68df28f9.ibm.com>
- <16fff6e9-98f5-4004-9906-feac49f0bbb4@arm.com>
- <aFwvPj5AlCgTZsh2@li-06431bcc-2712-11b2-a85c-a6fe68df28f9.ibm.com>
- <3bc08930-06f3-443e-a267-ff02c2c053f6@arm.com>
- <aFzdu8YGN_jDxV1u@li-06431bcc-2712-11b2-a85c-a6fe68df28f9.ibm.com>
- <f9b4f688-f498-48cf-b08c-25477bd7fc7d@arm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93DFF20013A;
+	Thu, 26 Jun 2025 08:06:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.71.12
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750925170; cv=fail; b=W167OzthRdXYiTVHpG3kkTuljT0CpJ2kxOHE8z8uCBXCJjoedft2d7mQ7XQA6gj2E/Id6F8eIF++mFx3UT72CRiqMD85T55XeBiYoSiRuRsokVqwvmBjTZOTEFQHjni/TxZ9agcwvRjY3SX+YPorEy2dVX1lgvRDjrvJDySrMhY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750925170; c=relaxed/simple;
+	bh=yHF6nK6LXNhTMbdLJfgKfjJTweMj5j7i6eXBCWOTvbg=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=RJVNhyeMJAvRW+m5zRqR2ThvORNdWA4o99qCb1hhPK0sbxxGS8Wl4AxbWYlJ+v/UZ71sibvxaBWwma6/ElUSurBx3WjozUYeA15Nm1rnjdbzWCSVLMcBBsaAsgV1v+RCq9V4o4YXHVixJLRe5z18mBPTe7D2JyyzZ7xejNWfYME=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=Sip4cZp5; arc=fail smtp.client-ip=52.101.71.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=lzPVYwogL8Ql47FZIg1NgqaYV+NAauH4mQs7Fe/SwxRMgt4wNgkqZeOo7ZmB1WklFqbXzXpZeuw1gVbbf7nf2r4Adjgq1wvRuQzivPUHeSGQWfA1gJ2SWMJCwNlF5nl7IPa94zgKXAMnFCbK5jctmiiC7MTZrSrSDj5DnADjpG7Ylp6rsqIm4mZ7kvBngqTyGYLRsOe3X+yFRVDuG8pvgcBkDmUB12smCFdnqRWUV46lRE1qduN5tZa9rObXHXtTdfUq1Kf2DPj20iGs6x1CjATwx92gOsrXecMd+tBe+BJ6YH4SeDMSFAdA5OfKD/CgTH7tC/kWRcPlgRhSjK/CZg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yHF6nK6LXNhTMbdLJfgKfjJTweMj5j7i6eXBCWOTvbg=;
+ b=Bd+FespJEy0HZ93N3Yf5o5/iLQEebwAwEKE3/oEwsemnqpQWA3Dss2A5cOL7vrKI+obMI7MmaitUpvz4U35OaMLq8WJPPnbnIuZXDa7KfLUIV1XKPnGXwSU6o1r/Yve/VVyhgWfsHWeqfyRVh/0Fn8GQdOZx3JYB1YTaqEqS5sYY7KgLXcxYiuVttxDmgZu3/zM4GZwZFB6R+e9MZmT5AW4lKpwz27ehD3yEKn0qyN756mLt/3QrPM/zqgCntix6PaOes5JR2LM9BPhA9gvSPF9lPmGnS64wuYJ6rs6PeP6pTSy/WEM9Nk/jqWhkyQByMCPf0xSx+L5t8VLWC4B+tg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nokia-bell-labs.com; dmarc=pass action=none
+ header.from=nokia-bell-labs.com; dkim=pass header.d=nokia-bell-labs.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yHF6nK6LXNhTMbdLJfgKfjJTweMj5j7i6eXBCWOTvbg=;
+ b=Sip4cZp5uFBKxkcbf5mKtUJ2V8deVHtsJ/9CO+8tKYnpBtQaEclPmAvkGYzTBFiLpn1AFjGZX5cOpsj8A/F6sO/R9tDrJD5GH5xFl2KOYjJyTrqZXpA/gTi1WTOQPJRTyfFoXA+tdNVo02fxPZ5dNFYgarpxhupLZjQ2+Ven0YKxDZgnkFPrOVDfI/dQjUEmpZtoV5EhPl6HTdnQiQY+GPn4PVU2gVqC5HhFBI2lkLyanE/0Ns9wuaL2/jPEoGwqNY7Bg8y9r82jKoGwRybKHpxvq28qhLbvUrUICE36Gf4/zrU9MuMQTBwWamhrkiD0iHQfP+xi4b2C+//WIYnHgQ==
+Received: from PAXPR07MB7984.eurprd07.prod.outlook.com (2603:10a6:102:133::12)
+ by VI1PR07MB10043.eurprd07.prod.outlook.com (2603:10a6:800:1e2::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8857.30; Thu, 26 Jun
+ 2025 08:06:03 +0000
+Received: from PAXPR07MB7984.eurprd07.prod.outlook.com
+ ([fe80::b7f8:dc0a:7e8d:56]) by PAXPR07MB7984.eurprd07.prod.outlook.com
+ ([fe80::b7f8:dc0a:7e8d:56%6]) with mapi id 15.20.8857.026; Thu, 26 Jun 2025
+ 08:06:03 +0000
+From: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>
+To: Eric Dumazet <edumazet@google.com>
+CC: "pabeni@redhat.com" <pabeni@redhat.com>, "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>, "corbet@lwn.net" <corbet@lwn.net>,
+	"horms@kernel.org" <horms@kernel.org>, "dsahern@kernel.org"
+	<dsahern@kernel.org>, "kuniyu@amazon.com" <kuniyu@amazon.com>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, "netdev@vger.kernel.org"
+	<netdev@vger.kernel.org>, "jhs@mojatatu.com" <jhs@mojatatu.com>,
+	"kuba@kernel.org" <kuba@kernel.org>, "stephen@networkplumber.org"
+	<stephen@networkplumber.org>, "xiyou.wangcong@gmail.com"
+	<xiyou.wangcong@gmail.com>, "jiri@resnulli.us" <jiri@resnulli.us>,
+	"davem@davemloft.net" <davem@davemloft.net>, "andrew+netdev@lunn.ch"
+	<andrew+netdev@lunn.ch>, "donald.hunter@gmail.com" <donald.hunter@gmail.com>,
+	"ast@fiberby.net" <ast@fiberby.net>, "liuhangbin@gmail.com"
+	<liuhangbin@gmail.com>, "shuah@kernel.org" <shuah@kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"ij@kernel.org" <ij@kernel.org>, "ncardwell@google.com"
+	<ncardwell@google.com>, "Koen De Schepper (Nokia)"
+	<koen.de_schepper@nokia-bell-labs.com>, "g.white@cablelabs.com"
+	<g.white@cablelabs.com>, "ingemar.s.johansson@ericsson.com"
+	<ingemar.s.johansson@ericsson.com>, "mirja.kuehlewind@ericsson.com"
+	<mirja.kuehlewind@ericsson.com>, "cheshire@apple.com" <cheshire@apple.com>,
+	"rs.ietf@gmx.at" <rs.ietf@gmx.at>, "Jason_Livingood@comcast.com"
+	<Jason_Livingood@comcast.com>, "vidhi_goel@apple.com" <vidhi_goel@apple.com>,
+	"Olivier Tilmans (Nokia)" <olivier.tilmans@nokia.com>
+Subject: RE: [PATCH v9 net-next 05/15] tcp: accecn: AccECN negotiation
+Thread-Topic: [PATCH v9 net-next 05/15] tcp: accecn: AccECN negotiation
+Thread-Index: AQHb4uP+gZGxoMvnTEiRRZLAeJpFUbQTh+OAgAGQ6/A=
+Date: Thu, 26 Jun 2025 08:06:03 +0000
+Message-ID:
+ <PAXPR07MB7984D9FE47565621DA52E377A37AA@PAXPR07MB7984.eurprd07.prod.outlook.com>
+References: <20250621193737.16593-1-chia-yu.chang@nokia-bell-labs.com>
+ <20250621193737.16593-6-chia-yu.chang@nokia-bell-labs.com>
+ <CANn89iKX+DxvcM6t8KjanRofdz8ksMkcHj_V0w_LAoredq2gZw@mail.gmail.com>
+In-Reply-To:
+ <CANn89iKX+DxvcM6t8KjanRofdz8ksMkcHj_V0w_LAoredq2gZw@mail.gmail.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nokia-bell-labs.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PAXPR07MB7984:EE_|VI1PR07MB10043:EE_
+x-ms-office365-filtering-correlation-id: 0eda356e-2888-4151-6e55-08ddb4884b87
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|7416014|376014|1800799024|366016|38070700018;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?elQzWXc3eHJqOGtWV1drTmtIUVV5L2JlYkprWUk3RmtGRVBUYi9CR0xEc3RP?=
+ =?utf-8?B?WGNPZ01wSE8xTEtJL09kdVJ2UFcvQXVBbHpMOHhqU3RoUGExRW1VQ1dodnJ6?=
+ =?utf-8?B?aVc3cXR4NzNpeEtYaFhFZDhUb0NOb3o1Yyt3MzVVOWJ1R0wrakNDdURSNUZB?=
+ =?utf-8?B?UFJMZ1VaQk91N25iYUkxVEhueE0vVXdtT3JtUDA0NmJMV1RUZGljM09UNi8w?=
+ =?utf-8?B?Q0xPSHVqMVRGVDloOWFFbmxGeElVaUV1WVhuMnU1WmxWV2tGQkdJZmZtMVNT?=
+ =?utf-8?B?OWxiTmRMTGxQR3VuVE5VN016a1FBKy9GTmt3OWdGZ0xFWTh3M3lUQ0xpZUxR?=
+ =?utf-8?B?K0NJTlhzLzVrSzgxdWFUT05MME1kQ01TeXJZMnBXdzZEOTV6Rm1KeFVxMFNq?=
+ =?utf-8?B?ajkrT0tsRW5Lbys4dVI2M2x0ZGtuQzFhR0hPeWd6bEZZeTA0VVRvUDU5UGJZ?=
+ =?utf-8?B?UWxiTGtBK0VLL1NXd0IxZlRRVzFLcnJPcGpaMHE0M3REb3hvYkZ6M3NkbVo2?=
+ =?utf-8?B?OXZORmdDTE9xSVJOMG5JUU4zeGhwUnk1TDVsanZNak5ybS95SEtFY2xpYUNw?=
+ =?utf-8?B?TmduVTlabytEdkxFYkVJeTVxTHVhb3FDWVY3UmFUZitPWTFJVnE2MWl2MUhN?=
+ =?utf-8?B?T1MrSEs3SDJKemhVUTQ4bTJtVUlUdVNEUVg0T3lydjljSXdNMmRNdWNxZ1gr?=
+ =?utf-8?B?MHF3L1JPQUdDR0xSY1ZRRHhmQmEzbzV1VmRSMk9sQTBTK3ZYNlIzVHFzUWFh?=
+ =?utf-8?B?anFGc2xqODdYNldsL3RsZzBUVCtRdzlSWXcrM2RaRjFmRTYralo4SWVXNGFQ?=
+ =?utf-8?B?RXZpNHB6OTdvWC9VbjIrMS8xSEpRdkx6cWJ4bDdVUStsOHlUL2lzR0U3UTRq?=
+ =?utf-8?B?OEFrQXY4a2N0cWp5cnVydlB2aTdVY1hESTYxaGwzb0hoSEhBTkN6NmdRWHk2?=
+ =?utf-8?B?d3RZeThielFpbnl2L3lrRnBUcW5tb2g2MHArZHJlK1pXemZMenZMdC9FOWZV?=
+ =?utf-8?B?clhwaU8wOGJNeGVBV1dGUDRESUVIdGdPek1CYlhzL2NYZTZ0akcrZnQvVEFK?=
+ =?utf-8?B?RXRVSFRQc3hiaW0zeE9jalZJRHQyM0J4N3N0NzRYQk5mYndqVXNySlhSRTFL?=
+ =?utf-8?B?My9WUmcyVDFTOENRd2Eyc3NKVVdXRXk1dkI3SDhybGpkRmgzVlYzckNsOG9N?=
+ =?utf-8?B?cHVpUFlBa3BRZS9jQkJYNnFvOXExTnZ1UFFoN2xZVVR0UmJ2ZnRLMTNsTnh3?=
+ =?utf-8?B?WGd2RlhPeTVMcHE2QUVpb2ZKT25iejRyN3VOcGt6YitZVGM5a3gzZ1dYb0tR?=
+ =?utf-8?B?S2hMKzA4eTRLb1JFbk1GdFc1MXh0ajlSYmlYWlhlK0VFVEpEdndRUlZ5YlNE?=
+ =?utf-8?B?aUNraFJVZjZOeU0xQXY0U1NYM2k5YnhjTWFUR0tscFQrajFEZWt0WXdRdUhp?=
+ =?utf-8?B?WVFXYXlMRHg0SEZ2dE5jcmpJM2pvY1k3b2xtZE5yYi9DQlNyUVA5Q21BMTBZ?=
+ =?utf-8?B?Nk0zZmRqN2NDcjFxbXI3RnplWmtyV0Q5cUR1UERTVjI4TEwrcnFaK0dadjNq?=
+ =?utf-8?B?UzZ6WGl2WDh5Yy9wYVhBczJkL0tOdXZQOGsvVVF2ZGluWXRtMmlkcWRySUln?=
+ =?utf-8?B?RGR5NnhwdE5GOGRRZENab2V0SjVpUHd1SG40M0hLWFBtc0hRejRIM0NzZ1ZS?=
+ =?utf-8?B?bnRnUHVSTTBZNzV6dE5IRjl5MlJoaHRkYUJoa0ZiQWtOZU9vbWRVdmNoUGxi?=
+ =?utf-8?B?Ymxib3Z6VzE0U0JieTZOMTY5NWNNcjJVRGEwNnJzZ1pFbTZBVnB4bW5PUmtT?=
+ =?utf-8?B?aTRpTlVDbVpVRDdCVEwxYjhVNTAxWmp2aDN4S20vTk1VOVhaMFNRek9VbjVi?=
+ =?utf-8?B?NkJwdFV1cjZhRHFMVFh5cnI3TjV3anFLZ0k2RXJlOTVVVXJEbTV2L1VjVG8w?=
+ =?utf-8?B?N2xWWjByRFc3WGU5aVhNT2p1a2pGRHM5Q2FJNytSV2hQNER0cjROL3pXOGE5?=
+ =?utf-8?Q?u7FLwgNIeu72Yp2JBCWZoBhnMVuRoQ=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR07MB7984.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?WnR0N2ZocjN6ZjZ2QzlhSjVpT3BlL2cxdEx4UHlWOGI0MFE2aXJ0R2cyVndQ?=
+ =?utf-8?B?dW9QMnJUT1JWODZ3UDFMMGp4NnNybC9kUEFlblBjTjdCUlFyLzRYd3k2VCsw?=
+ =?utf-8?B?NU5lN3l4SFpBL2dyVitFTmJRdDd1MVBNRmN2eUs5WFg2dTNNbjlLdU45a2ts?=
+ =?utf-8?B?WUVWMU91S1NsN3NDSVpTSlhqeHh5NFJSUmZNWldQSmZLUlE2UGRLVTF5MU5S?=
+ =?utf-8?B?ZmRYWTNNSEZjaFpkVnpmMllOdG9waDVPeE1ZSkl2czMyaUtDTm1WTjdTVFg1?=
+ =?utf-8?B?U2NwV0dkT012VWExcmI3WVUyM3RSdjlaT2RnVk44YmRnTXg4RkE0Vm9MRkV1?=
+ =?utf-8?B?dWVSbnhqOFRCSmg2dzJUdlNxYUt3c0MyUS9vWlhmMjZ4ODF6RGlmMVdDM3RM?=
+ =?utf-8?B?MjZXSnMyZzZTdnNuRXFpNUR6RFZGRkV3ODZWU2M0Q2JOQlpHVERKMFBJc0sw?=
+ =?utf-8?B?NWd3Umo5blJFTmMvVFZGdncrOVQ4bGpOUk1MNFZ1NEs5NnRyb0ZhcTExSFoy?=
+ =?utf-8?B?ZDZHd050SWZSZjV3ZVhpNjNnSHl6a2RDSGlqMXdFTGZmc0FZOEN1OE1kZnly?=
+ =?utf-8?B?KzRNZG5sTlFkc1JrR25ydmJNUFBpaDdDdVVGeTZHeGxTUzVGSkJnZC8wcWZy?=
+ =?utf-8?B?cFNwVUFEMzd6Z2VQK1JITjBJQlI0REtvQkx1R0svVWlLUG5ic3JqQlEvY0dW?=
+ =?utf-8?B?dHM0eGZqZUVRVXJTazRMbGUrU1VWSGF0dVRSeFIvNklsSFByaDk3cGJOY3RF?=
+ =?utf-8?B?dzhKVGJpMjJJaDF6aTNvQmRWQlRwRG94VmRmVGRXTWhUdjVMNG5nMmZDSzda?=
+ =?utf-8?B?NEk2RlBINWFhNGs5b2J0WlVleUw2VVJ6cTFIYjVtVjNYNW4zbnFCVW1wRVFN?=
+ =?utf-8?B?TnN5b0xqUHNxVGIzWGt4RTVJaHNIZlRuTS9qd05nczVHVUl2QnBqdHpiRmZx?=
+ =?utf-8?B?aFd1UlluZFVtZm53R0ltL21OdklpN3oweTUxUFVtdmsrWld6aWp5T1NNUkFJ?=
+ =?utf-8?B?UVIwdXNJOGFJRjBueFRhWHNZcHpVczdUWjl4OFNOSzE0aVJQSGU5Z1BIMUtr?=
+ =?utf-8?B?dVM1UlorZTRCaUdHMVI4TFlVcFVSSWhCS2EzOE04SU9sV1Y0cDU3ZGsrUUR4?=
+ =?utf-8?B?UlpUbmVlOGE5QUIxNkp3NU9lRHFSL3F4dUN0a21FOGZaZTBKYXRYN2NpSTBJ?=
+ =?utf-8?B?elFlTmVISGx3OTBRMkxTb2xJN28xRWdwUDZkRTVycVJlTWd1RlFYMVNvaHQy?=
+ =?utf-8?B?bDltQ25HaXNvZWE2cGdUT0hNQnFpNzVQa21NTjl3NEhYek9pWndiTy9MT2ZT?=
+ =?utf-8?B?SVF1TWltNVhQNkhoMzFDNWJvd2s1SGQxczFYNTQ5QVNaRnRYMTJIdkxFZE1F?=
+ =?utf-8?B?c3VRRHZZTG5tejdqV1czVTVVMUN5dGxtbyt6Z0lsdThtV1pZN1ZMQWNhdmlJ?=
+ =?utf-8?B?aUxyNmZldWdHeXZlV2tiTDZTUThZSmcwR3BGZ0JKTGF2ZVB3MW9DeUVlRGQ4?=
+ =?utf-8?B?UjVYM3J1MFFkdFBOdmxYQXNGeHkrQjhEVUhvbzd1cDRaSUxMSWpPY3RteGc5?=
+ =?utf-8?B?dkRoVmRzdmlhbHhUTVB2VWxZdmg5NHJFWm8zUFhHMG90OWx0b1E1VDVwSkxy?=
+ =?utf-8?B?dnVaRnQ4QmNCSjlOdFRENkxnRlU3SzI2Q0h2K0k5NWhjT3lqcm5UMGVkbUJH?=
+ =?utf-8?B?OFlBQnFTVFdzQk1EeEdhY0lKNnlnTmkvbDAzWThCK1VYbUhmRnUrMmw2VGZ0?=
+ =?utf-8?B?UXNZZ0N1YjUzUERuQnRabHhVVGJJTFZ5Y2dicGowUHFRRWxwZHBFR0REMlhr?=
+ =?utf-8?B?SGMzT1ZsNk5XbEZLU0FDUEpjVDdubmsyNU5yVXpXS0ppallQc1d6OEc0UVhq?=
+ =?utf-8?B?MFBLa1lWcWpBOVQ4ekJyWWlQTlUyY3V3N2xtaUJwS3RFR3padEpvb0F0c3Ns?=
+ =?utf-8?B?ZWlmQVRXbS9rVDZyNjk4WGM0OEYxU0hLd0RMVTVWTUM0cVZFNk9PQTkzV1Rr?=
+ =?utf-8?B?ejV3ODNac0preDh2N2tOSnU2bzJyRVRuOWFFOWlNNjFrU0pOL1lpT1dHUWha?=
+ =?utf-8?B?MkJRYnRjS20rNi9iSmxBMDBUQlBLeWNmbGdkWVNMNWNOWkFmVFVITHFsQWc5?=
+ =?utf-8?B?Y21hcCtLMUsxNCtieHNic2ZXelFxN2xlM3doN0htTUxMUEdVTUxLbVIxZEty?=
+ =?utf-8?B?YXc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f9b4f688-f498-48cf-b08c-25477bd7fc7d@arm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: fyKqlAs7kRepZgT4KWwEd2vRHKZh_qpi
-X-Proofpoint-ORIG-GUID: xjo9p56mQA51R81vGFWdIeAW4WB9lUIz
-X-Authority-Analysis: v=2.4 cv=Hul2G1TS c=1 sm=1 tr=0 ts=685cee24 cx=c_pps a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17 a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=yRzeS63Ns0XtCOZXxIcA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjI2MDA1NCBTYWx0ZWRfX8kGszTSPju7U WYsiv3J538aky1D1AjNGIbsAuOFw6yoZDUEhMzY4rixtMpXN8mi7jeetNnA1gshGDadZ4HLgMOU O69ydE+wbojfppwI6VTVgKurHblF4n7WXEXHikH/T6g/WldhXTwjOySdnJe/WhkW9x9mQt9Fi/5
- +jUlajdKSOuwvKFbVLhJPAMEmXjZ8DPw3cftDcyXjhhIcG8q9bufiEDPbbIeJCuWrpESoDIjxMF srNpmU7clZwpfrC3BNFVj1aVX94Ht+dIx7cUGZrhYCbcfrgsN7g3x15jMdVIIfDnQSzfvA06N/C qBLg/vZucLAyixy61z3L+kEd7fznzj0dBltT/Tah64iydyLAfOa+twb6qvzd/b/1qqZYH5EaCe1
- vFZJH5LyUBLceWT6ZDueJAcBtlL9pFHiugNyjEvG5oCWJrVXt89ip5w+U8gyjMXdaLYHpWf0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-06-26_03,2025-06-25_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- mlxlogscore=999 bulkscore=0 mlxscore=0 adultscore=0 spamscore=0
- impostorscore=0 clxscore=1015 priorityscore=1501 lowpriorityscore=0
- suspectscore=0 phishscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2506260054
+X-OriginatorOrg: nokia-bell-labs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR07MB7984.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0eda356e-2888-4151-6e55-08ddb4884b87
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jun 2025 08:06:03.1974
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: cuvR7DM1ziCwOznPKXNuelYqEEkaXITKOZLY/cfzBcphURrshLWjvyPsZxIMO/8IEVWAHwnTHb4VotxrN8OM5vA5SLTjWvajs5ydhtqqViJ3yV02r57GlGePUXjEJ4j6
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR07MB10043
 
-On Thu, Jun 26, 2025 at 12:05:11PM +0530, Dev Jain wrote:
-> 
-> On 26/06/25 11:12 am, Donet Tom wrote:
-> > On Thu, Jun 26, 2025 at 09:27:30AM +0530, Dev Jain wrote:
-> > > On 25/06/25 10:47 pm, Donet Tom wrote:
-> > > > On Wed, Jun 25, 2025 at 06:22:53PM +0530, Dev Jain wrote:
-> > > > > On 19/06/25 1:53 pm, Donet Tom wrote:
-> > > > > > On Wed, Jun 18, 2025 at 08:13:54PM +0530, Dev Jain wrote:
-> > > > > > > On 18/06/25 8:05 pm, Lorenzo Stoakes wrote:
-> > > > > > > > On Wed, Jun 18, 2025 at 07:47:18PM +0530, Dev Jain wrote:
-> > > > > > > > > On 18/06/25 7:37 pm, Lorenzo Stoakes wrote:
-> > > > > > > > > > On Wed, Jun 18, 2025 at 07:28:16PM +0530, Dev Jain wrote:
-> > > > > > > > > > > On 18/06/25 5:27 pm, Lorenzo Stoakes wrote:
-> > > > > > > > > > > > On Wed, Jun 18, 2025 at 05:15:50PM +0530, Dev Jain wrote:
-> > > > > > > > > > > > Are you accounting for sys.max_map_count? If not, then you'll be hitting that
-> > > > > > > > > > > > first.
-> > > > > > > > > > > run_vmtests.sh will run the test in overcommit mode so that won't be an issue.
-> > > > > > > > > > Umm, what? You mean overcommit all mode, and that has no bearing on the max
-> > > > > > > > > > mapping count check.
-> > > > > > > > > > 
-> > > > > > > > > > In do_mmap():
-> > > > > > > > > > 
-> > > > > > > > > > 	/* Too many mappings? */
-> > > > > > > > > > 	if (mm->map_count > sysctl_max_map_count)
-> > > > > > > > > > 		return -ENOMEM;
-> > > > > > > > > > 
-> > > > > > > > > > 
-> > > > > > > > > > As well as numerous other checks in mm/vma.c.
-> > > > > > > > > Ah sorry, didn't look at the code properly just assumed that overcommit_always meant overriding
-> > > > > > > > > this.
-> > > > > > > > No problem! It's hard to be aware of everything in mm :)
-> > > > > > > > 
-> > > > > > > > > > I'm not sure why an overcommit toggle is even necessary when you could use
-> > > > > > > > > > MAP_NORESERVE or simply map PROT_NONE to avoid the OVERCOMMIT_GUESS limits?
-> > > > > > > > > > 
-> > > > > > > > > > I'm pretty confused as to what this test is really achieving honestly. This
-> > > > > > > > > > isn't a useful way of asserting mmap() behaviour as far as I can tell.
-> > > > > > > > > Well, seems like a useful way to me at least : ) Not sure if you are in the mood
-> > > > > > > > > to discuss that but if you'd like me to explain from start to end what the test
-> > > > > > > > > is doing, I can do that : )
-> > > > > > > > > 
-> > > > > > > > I just don't have time right now, I guess I'll have to come back to it
-> > > > > > > > later... it's not the end of the world for it to be iffy in my view as long as
-> > > > > > > > it passes, but it might just not be of great value.
-> > > > > > > > 
-> > > > > > > > Philosophically I'd rather we didn't assert internal implementation details like
-> > > > > > > > where we place mappings in userland memory. At no point do we promise to not
-> > > > > > > > leave larger gaps if we feel like it :)
-> > > > > > > You have a fair point. Anyhow a debate for another day.
-> > > > > > > 
-> > > > > > > > I'm guessing, reading more, the _real_ test here is some mathematical assertion
-> > > > > > > > about layout from HIGH_ADDR_SHIFT -> end of address space when using hints.
-> > > > > > > > 
-> > > > > > > > But again I'm not sure that achieves much and again also is asserting internal
-> > > > > > > > implementation details.
-> > > > > > > > 
-> > > > > > > > Correct behaviour of this kind of thing probably better belongs to tests in the
-> > > > > > > > userland VMA testing I'd say.
-> > > > > > > > 
-> > > > > > > > Sorry I don't mean to do down work you've done before, just giving an honest
-> > > > > > > > technical appraisal!
-> > > > > > > Nah, it will be rather hilarious to see it all go down the drain xD
-> > > > > > > 
-> > > > > > > > Anyway don't let this block work to fix the test if it's failing. We can revisit
-> > > > > > > > this later.
-> > > > > > > Sure. @Aboorva and Donet, I still believe that the correct approach is to elide
-> > > > > > > the gap check at the crossing boundary. What do you think?
-> > > > > > > 
-> > > > > > One problem I am seeing with this approach is that, since the hint address
-> > > > > > is generated randomly, the VMAs are also being created at randomly based on
-> > > > > > the hint address.So, for the VMAs created at high addresses, we cannot guarantee
-> > > > > > that the gaps between them will be aligned to MAP_CHUNK_SIZE.
-> > > > > > 
-> > > > > > High address VMAs
-> > > > > > -----------------
-> > > > > > 1000000000000-1000040000000 r--p 00000000 00:00 0
-> > > > > > 2000000000000-2000040000000 r--p 00000000 00:00 0
-> > > > > > 4000000000000-4000040000000 r--p 00000000 00:00 0
-> > > > > > 8000000000000-8000040000000 r--p 00000000 00:00 0
-> > > > > > e80009d260000-fffff9d260000 r--p 00000000 00:00 0
-> > > > > > 
-> > > > > > I have a different approach to solve this issue.
-> > > > > > 
-> > > > > >    From 0 to 128TB, we map memory directly without using any hint. For the range above
-> > > > > > 256TB up to 512TB, we perform the mapping using hint addresses. In the current test,
-> > > > > > we use random hint addresses, but I have modified it to generate hint addresses linearly
-> > > > > > starting from 128TB.
-> > > > > > 
-> > > > > > With this change:
-> > > > > > 
-> > > > > > The 0–128TB range is mapped without hints and verified accordingly.
-> > > > > > 
-> > > > > > The 128TB–512TB range is mapped using linear hint addresses and then verified.
-> > > > > > 
-> > > > > > Below are the VMAs obtained with this approach:
-> > > > > > 
-> > > > > > 10000000-10010000 r-xp 00000000 fd:05 135019531
-> > > > > > 10010000-10020000 r--p 00000000 fd:05 135019531
-> > > > > > 10020000-10030000 rw-p 00010000 fd:05 135019531
-> > > > > > 20000000-10020000000 r--p 00000000 00:00 0
-> > > > > > 10020800000-10020830000 rw-p 00000000 00:00 0
-> > > > > > 1004bcf0000-1004c000000 rw-p 00000000 00:00 0
-> > > > > > 1004c000000-7fff8c000000 r--p 00000000 00:00 0
-> > > > > > 7fff8c130000-7fff8c360000 r-xp 00000000 fd:00 792355
-> > > > > > 7fff8c360000-7fff8c370000 r--p 00230000 fd:00 792355
-> > > > > > 7fff8c370000-7fff8c380000 rw-p 00240000 fd:00 792355
-> > > > > > 7fff8c380000-7fff8c460000 r-xp 00000000 fd:00 792358
-> > > > > > 7fff8c460000-7fff8c470000 r--p 000d0000 fd:00 792358
-> > > > > > 7fff8c470000-7fff8c480000 rw-p 000e0000 fd:00 792358
-> > > > > > 7fff8c490000-7fff8c4d0000 r--p 00000000 00:00 0
-> > > > > > 7fff8c4d0000-7fff8c4e0000 r-xp 00000000 00:00 0
-> > > > > > 7fff8c4e0000-7fff8c530000 r-xp 00000000 fd:00 792351
-> > > > > > 7fff8c530000-7fff8c540000 r--p 00040000 fd:00 792351
-> > > > > > 7fff8c540000-7fff8c550000 rw-p 00050000 fd:00 792351
-> > > > > > 7fff8d000000-7fffcd000000 r--p 00000000 00:00 0
-> > > > > > 7fffe9c80000-7fffe9d90000 rw-p 00000000 00:00 0
-> > > > > > 800000000000-2000000000000 r--p 00000000 00:00 0    -> High Address (128TB to 512TB)
-> > > > > > 
-> > > > > > diff --git a/tools/testing/selftests/mm/virtual_address_range.c b/tools/testing/selftests/mm/virtual_address_range.c
-> > > > > > index 4c4c35eac15e..0be008cba4b0 100644
-> > > > > > --- a/tools/testing/selftests/mm/virtual_address_range.c
-> > > > > > +++ b/tools/testing/selftests/mm/virtual_address_range.c
-> > > > > > @@ -56,21 +56,21 @@
-> > > > > >     #ifdef __aarch64__
-> > > > > >     #define HIGH_ADDR_MARK  ADDR_MARK_256TB
-> > > > > > -#define HIGH_ADDR_SHIFT 49
-> > > > > > +#define HIGH_ADDR_SHIFT 48
-> > > > > >     #define NR_CHUNKS_LOW   NR_CHUNKS_256TB
-> > > > > >     #define NR_CHUNKS_HIGH  NR_CHUNKS_3840TB
-> > > > > >     #else
-> > > > > >     #define HIGH_ADDR_MARK  ADDR_MARK_128TB
-> > > > > > -#define HIGH_ADDR_SHIFT 48
-> > > > > > +#define HIGH_ADDR_SHIFT 47
-> > > > > >     #define NR_CHUNKS_LOW   NR_CHUNKS_128TB
-> > > > > >     #define NR_CHUNKS_HIGH  NR_CHUNKS_384TB
-> > > > > >     #endif
-> > > > > > -static char *hint_addr(void)
-> > > > > > +static char *hint_addr(int hint)
-> > > > > >     {
-> > > > > > -       int bits = HIGH_ADDR_SHIFT + rand() % (63 - HIGH_ADDR_SHIFT);
-> > > > > > +       unsigned long addr = ((1UL << HIGH_ADDR_SHIFT) + (hint * MAP_CHUNK_SIZE));
-> > > > > > -       return (char *) (1UL << bits);
-> > > > > > +       return (char *) (addr);
-> > > > > >     }
-> > > > > >     static void validate_addr(char *ptr, int high_addr)
-> > > > > > @@ -217,7 +217,7 @@ int main(int argc, char *argv[])
-> > > > > >            }
-> > > > > >            for (i = 0; i < NR_CHUNKS_HIGH; i++) {
-> > > > > > -               hint = hint_addr();
-> > > > > > +               hint = hint_addr(i);
-> > > > > >                    hptr[i] = mmap(hint, MAP_CHUNK_SIZE, PROT_READ,
-> > > > > >                                   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-> > > > > Ah you sent it here, thanks. This is fine really, but the mystery is
-> > > > > something else.
-> > > > > 
-> > > > Thanks Dev
-> > > > 
-> > > > I can send out v2 with this patch included, right?
-> > > Sorry not yet :) this patch will just hide the real problem, which
-> > > is, after the hint addresses get exhausted, why on ppc the kernel
-> > > cannot find a VMA to install despite having such large gaps between
-> > > VMAs.
-> > 
-> > I think there is some confusion here, so let me clarify.
-> > 
-> > On PowerPC, mmap is able to find VMAs both with and without a hint.
-> > There is no issue there. If you look at the test, from 0 to 128TB we
-> > are mapping without any hint, and the VMAs are getting created as
-> > expected.
-> > 
-> > Above 256TB, we are mapping with random hint addresses, and with
-> > those hints, all VMAs are being created above 258TB. No mmap call
-> > is failing in this case.
-> > 
-> > The problem is with the test itself: since we are providing random
-> > hint addresses, the VMAs are also being created at random locations.
-> > 
-> > Below is the VMAs created with hint addreess
-> > 
-> > 1. 256TB hint address
-> > 
-> > 1000000000000-1000040000000 r--p 00000000 00:00 0                        [anon:virtual_address_range]
-> > 
-> > 2. 512TB hint address
-> > 2000000000000-2000040000000 r--p 00000000 00:00 0                        [anon:virtual_address_range]
-> > 
-> > 3. 1024TB Hint address
-> > 4000000000000-4000040000000 r--p 00000000 00:00 0                        [anon:virtual_address_range]
-> > 
-> > 4. 2048TB hint Address
-> > 8000000000000-8000040000000 r--p 00000000 00:00 0                        [anon:virtual_address_range]
-> > 
-> > 5. above 3096 Hint address
-> > eb95410220000-fffff90220000 r--p 00000000 00:00 0                        [anon:virtual_address_range].
-> > 
-> > 
-> > We support up to 4PB, and since the hint addresses are random,
-> > the VMAs are created at random locations.
-> > 
-> > With sequential hint addresses from 128TB to 512TB, we provide the
-> > hint addresses in order, and the VMAs are created at the hinted
-> > addresses.
-> > 
-> > Within 512TB, we were able to test both high and low addresses, so
-> > I thought sequential hinting would be a good approach. Since there
-> > has been a lot of confusion, I’m considering adding a complete 4PB
-> > allocation test — from 0 to 128TB we allocate without any hint, and
-> > from 128TB onward we use sequential hint addresses.
-> > 
-> > diff --git a/tools/testing/selftests/mm/virtual_address_range.c b/tools/testing/selftests/mm/virtual_address_range.c
-> > index e24c36a39f22..f2009d23f8b2 100644
-> > --- a/tools/testing/selftests/mm/virtual_address_range.c
-> > +++ b/tools/testing/selftests/mm/virtual_address_range.c
-> > @@ -50,6 +50,7 @@
-> >   #define NR_CHUNKS_256TB   (NR_CHUNKS_128TB * 2UL)
-> >   #define NR_CHUNKS_384TB   (NR_CHUNKS_128TB * 3UL)
-> >   #define NR_CHUNKS_3840TB  (NR_CHUNKS_128TB * 30UL)
-> > +#define NR_CHUNKS_3968TB  (NR_CHUNKS_128TB * 31UL)
-> >   #define ADDR_MARK_128TB  (1UL << 47) /* First address beyond 128TB */
-> >   #define ADDR_MARK_256TB  (1UL << 48) /* First address beyond 256TB */
-> > @@ -59,6 +60,11 @@
-> >   #define HIGH_ADDR_SHIFT 49
-> >   #define NR_CHUNKS_LOW   NR_CHUNKS_256TB
-> >   #define NR_CHUNKS_HIGH  NR_CHUNKS_3840TB
-> > +#elif defined(__PPC64__)
-> > +#define HIGH_ADDR_MARK  ADDR_MARK_128TB
-> > +#define HIGH_ADDR_SHIFT 47
-> > +#define NR_CHUNKS_LOW   NR_CHUNKS_128TB
-> > +#define NR_CHUNKS_HIGH  NR_CHUNKS_3968TB
-> >   #else
-> >   #define HIGH_ADDR_MARK  ADDR_MARK_128TB
-> >   #define HIGH_ADDR_SHIFT 48
-> > 
-> > 
-> > With this the test is passing.
-> 
-> Ah okay this was the problem, PPC got extended for 52 bits and the
-> test was not updated. This is the correct fix, you can go ahead
-> with this one.
-
-
-Thanks Dev
- 
-> > 
-> > 
-> > 
-> > > It should be quite easy to trace which function is failing. Can you
-> > > please do some debugging for me? Otherwise I will have to go ahead
-> > > with setting up a PPC VM and testing myself :)
-> > > 
-> > > > > > Can we fix it this way?
-> 
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBFcmljIER1bWF6ZXQgPGVkdW1h
+emV0QGdvb2dsZS5jb20+IA0KPiBTZW50OiBXZWRuZXNkYXksIEp1bmUgMjUsIDIwMjUgOTo1OCBB
+TQ0KPiBUbzogQ2hpYS1ZdSBDaGFuZyAoTm9raWEpIDxjaGlhLXl1LmNoYW5nQG5va2lhLWJlbGwt
+bGFicy5jb20+DQo+IENjOiBwYWJlbmlAcmVkaGF0LmNvbTsgbGludXgtZG9jQHZnZXIua2VybmVs
+Lm9yZzsgY29yYmV0QGx3bi5uZXQ7IGhvcm1zQGtlcm5lbC5vcmc7IGRzYWhlcm5Aa2VybmVsLm9y
+Zzsga3VuaXl1QGFtYXpvbi5jb207IGJwZkB2Z2VyLmtlcm5lbC5vcmc7IG5ldGRldkB2Z2VyLmtl
+cm5lbC5vcmc7IGpoc0Btb2phdGF0dS5jb207IGt1YmFAa2VybmVsLm9yZzsgc3RlcGhlbkBuZXR3
+b3JrcGx1bWJlci5vcmc7IHhpeW91Lndhbmdjb25nQGdtYWlsLmNvbTsgamlyaUByZXNudWxsaS51
+czsgZGF2ZW1AZGF2ZW1sb2Z0Lm5ldDsgYW5kcmV3K25ldGRldkBsdW5uLmNoOyBkb25hbGQuaHVu
+dGVyQGdtYWlsLmNvbTsgYXN0QGZpYmVyYnkubmV0OyBsaXVoYW5nYmluQGdtYWlsLmNvbTsgc2h1
+YWhAa2VybmVsLm9yZzsgbGludXgta3NlbGZ0ZXN0QHZnZXIua2VybmVsLm9yZzsgaWpAa2VybmVs
+Lm9yZzsgbmNhcmR3ZWxsQGdvb2dsZS5jb207IEtvZW4gRGUgU2NoZXBwZXIgKE5va2lhKSA8a29l
+bi5kZV9zY2hlcHBlckBub2tpYS1iZWxsLWxhYnMuY29tPjsgZy53aGl0ZUBjYWJsZWxhYnMuY29t
+OyBpbmdlbWFyLnMuam9oYW5zc29uQGVyaWNzc29uLmNvbTsgbWlyamEua3VlaGxld2luZEBlcmlj
+c3Nvbi5jb207IGNoZXNoaXJlQGFwcGxlLmNvbTsgcnMuaWV0ZkBnbXguYXQ7IEphc29uX0xpdmlu
+Z29vZEBjb21jYXN0LmNvbTsgdmlkaGlfZ29lbEBhcHBsZS5jb207IE9saXZpZXIgVGlsbWFucyAo
+Tm9raWEpIDxvbGl2aWVyLnRpbG1hbnNAbm9raWEuY29tPg0KPiBTdWJqZWN0OiBSZTogW1BBVENI
+IHY5IG5ldC1uZXh0IDA1LzE1XSB0Y3A6IGFjY2VjbjogQWNjRUNOIG5lZ290aWF0aW9uDQo+IA0K
+PiANCj4gQ0FVVElPTjogVGhpcyBpcyBhbiBleHRlcm5hbCBlbWFpbC4gUGxlYXNlIGJlIHZlcnkg
+Y2FyZWZ1bCB3aGVuIGNsaWNraW5nIGxpbmtzIG9yIG9wZW5pbmcgYXR0YWNobWVudHMuIFNlZSB0
+aGUgVVJMIG5vay5pdC9leHQgZm9yIGFkZGl0aW9uYWwgaW5mb3JtYXRpb24uDQo+IA0KPiANCj4g
+DQo+IE9uIFNhdCwgSnVuIDIxLCAyMDI1IGF0IDEyOjM34oCvUE0gPGNoaWEteXUuY2hhbmdAbm9r
+aWEtYmVsbC1sYWJzLmNvbT4gd3JvdGU6DQo+ID4NCj4gPiBGcm9tOiBJbHBvIErDpHJ2aW5lbiA8
+aWpAa2VybmVsLm9yZz4NCj4gPg0KPiA+IEFjY3VyYXRlIEVDTiBuZWdvdGlhdGlvbiBwYXJ0cyBi
+YXNlZCBvbiB0aGUgc3BlY2lmaWNhdGlvbjoNCj4gPiAgIGh0dHBzOi8vdG9vbHMuaWV0Zi5vcmcv
+aWQvZHJhZnQtaWV0Zi10Y3BtLWFjY3VyYXRlLWVjbi0yOC50eHQNCj4gPg0KWy4uLl0NCj4gPg0K
+PiA+IGRpZmYgLS1naXQgYS9pbmNsdWRlL25ldC90Y3AuaCBiL2luY2x1ZGUvbmV0L3RjcC5oIGlu
+ZGV4IA0KPiA+IDZjZjVjZWE5OTJlMy4uNGQ2MzI1ZmEzZjY3IDEwMDY0NA0KPiA+IC0tLSBhL2lu
+Y2x1ZGUvbmV0L3RjcC5oDQo+ID4gKysrIGIvaW5jbHVkZS9uZXQvdGNwLmgNClsuLi5dDQo+ID4g
+QEAgLTEwNTEsNiArMTEyMywxNSBAQCBzdHJ1Y3QgdGNwX3NrYl9jYiB7DQo+ID4NCj4gPiAgI2Rl
+ZmluZSBUQ1BfU0tCX0NCKF9fc2tiKSAgICAgICgoc3RydWN0IHRjcF9za2JfY2IgKikmKChfX3Nr
+YiktPmNiWzBdKSkNCj4gPg0KPiA+ICtzdGF0aWMgaW5saW5lIHUxNiB0Y3BfYWNjZWNuX3JlZmxl
+Y3Rvcl9mbGFncyh1OCBlY3QpDQo+ID4gK3sNCj4gPiArICAgICAgIHUzMiBmbGFncyA9IGVjdCAr
+IDI7DQo+ID4gKw0KPiA+ICsgICAgICAgaWYgKGVjdCA9PSAzKQ0KPiA+ICsgICAgICAgICAgICAg
+ICBmbGFncysrOw0KPiANCj4gQSBjb21tZW50IG1pZ2h0IGhlbHAsIEkgaGF2ZSBubyBpZGVhIG9m
+IHdoYXQgaXMgZ29pbmcgb24gaGVyZS4NCg0KSGkgRXJpYywNCg0KU3VyZSwgY29tbWVudHMgd2ls
+bCBiZSBhZGRlZCBpbiB0aGUgbmV4dCB2ZXJzaW9uLg0KDQo+IA0KPiA+ICsgICAgICAgcmV0dXJu
+IEZJRUxEX1BSRVAoVENQSERSX0FDRSwgZmxhZ3MpOw0KPiA+ICt9DQo+ID4gKw0KPiA+ICBleHRl
+cm4gY29uc3Qgc3RydWN0IGluZXRfY29ubmVjdGlvbl9zb2NrX2FmX29wcyBpcHY0X3NwZWNpZmlj
+Ow0KPiA+DQo+ID4gICNpZiBJU19FTkFCTEVEKENPTkZJR19JUFY2KQ0KWy4uLl0NCj4gPiBkaWZm
+IC0tZ2l0IGEvbmV0L2lwdjQvc3lzY3RsX25ldF9pcHY0LmMgYi9uZXQvaXB2NC9zeXNjdGxfbmV0
+X2lwdjQuYw0KPiA+IGluZGV4IDNhNDMwMTBkNzI2Zi4uNzVlYzFhNTk5YjUyIDEwMDY0NA0KPiA+
+IC0tLSBhL25ldC9pcHY0L3N5c2N0bF9uZXRfaXB2NC5jDQo+ID4gKysrIGIvbmV0L2lwdjQvc3lz
+Y3RsX25ldF9pcHY0LmMNCj4gPiBAQCAtNDcsNiArNDcsNyBAQCBzdGF0aWMgdW5zaWduZWQgaW50
+IHVkcF9jaGlsZF9oYXNoX2VudHJpZXNfbWF4ID0gVURQX0hUQUJMRV9TSVpFX01BWDsNCj4gPiAg
+c3RhdGljIGludCB0Y3BfcGxiX21heF9yb3VuZHMgPSAzMTsNCj4gPiAgc3RhdGljIGludCB0Y3Bf
+cGxiX21heF9jb25nX3RocmVzaCA9IDI1NjsNCj4gPiAgc3RhdGljIHVuc2lnbmVkIGludCB0Y3Bf
+dHdfcmV1c2VfZGVsYXlfbWF4ID0gVENQX1BBV1NfTVNMICogTVNFQ19QRVJfU0VDOw0KPiA+ICtz
+dGF0aWMgaW50IHRjcF9lY25fbW9kZV9tYXggPSA1Ow0KPiA+DQo+ID4gIC8qIG9ic29sZXRlICov
+DQo+ID4gIHN0YXRpYyBpbnQgc3lzY3RsX3RjcF9sb3dfbGF0ZW5jeSBfX3JlYWRfbW9zdGx5Ow0K
+PiA+IEBAIC03MjgsNyArNzI5LDcgQEAgc3RhdGljIHN0cnVjdCBjdGxfdGFibGUgaXB2NF9uZXRf
+dGFibGVbXSA9IHsNCj4gPiAgICAgICAgICAgICAgICAgLm1vZGUgICAgICAgICAgID0gMDY0NCwN
+Cj4gPiAgICAgICAgICAgICAgICAgLnByb2NfaGFuZGxlciAgID0gcHJvY19kb3U4dmVjX21pbm1h
+eCwNCj4gPiAgICAgICAgICAgICAgICAgLmV4dHJhMSAgICAgICAgID0gU1lTQ1RMX1pFUk8sDQo+
+ID4gLSAgICAgICAgICAgICAgIC5leHRyYTIgICAgICAgICA9IFNZU0NUTF9UV08sDQo+ID4gKyAg
+ICAgICAgICAgICAgIC5leHRyYTIgICAgICAgICA9ICZ0Y3BfZWNuX21vZGVfbWF4LA0KPiANCj4g
+UGxlYXNlIGNoYW5nZSBEb2N1bWVudGF0aW9uL25ldHdvcmtpbmcvaXAtc3lzY3RsLnJzdCB0Y3Bf
+ZWNuIGFjY29yZGluZ2x5ID8NCj4gDQoNCk9LLCBJIHdpbGwgYnJlYWsgdGhlIHBhdGNoIG9mIERv
+Y3VtZW50YXRpb24vbmV0d29ya2luZy9pcC1zeXNjdGwucnN0IGluIHRoaXMgcGF0Y2guDQoNCj4g
+PiAgICAgICAgIH0sDQo+ID4gICAgICAgICB7DQo+ID4gICAgICAgICAgICAgICAgIC5wcm9jbmFt
+ZSAgICAgICA9ICJ0Y3BfZWNuX2ZhbGxiYWNrIiwNCj4gPiBkaWZmIC0tZ2l0IGEvbmV0L2lwdjQv
+dGNwLmMgYi9uZXQvaXB2NC90Y3AuYw0KPiA+IGluZGV4IDhlMGU4ZDc4NGIxYy4uZTZkN2I1NDIw
+Yzg4IDEwMDY0NA0KPiA+IC0tLSBhL25ldC9pcHY0L3RjcC5jDQo+ID4gKysrIGIvbmV0L2lwdjQv
+dGNwLmMNCj4gPiBAQCAtMzM5Miw2ICszMzkyLDggQEAgaW50IHRjcF9kaXNjb25uZWN0KHN0cnVj
+dCBzb2NrICpzaywgaW50IGZsYWdzKQ0KPiA+ICAgICAgICAgdHAtPndpbmRvd19jbGFtcCA9IDA7
+DQo+ID4gICAgICAgICB0cC0+ZGVsaXZlcmVkID0gMDsNCj4gPiAgICAgICAgIHRwLT5kZWxpdmVy
+ZWRfY2UgPSAwOw0KPiA+ICsgICAgICAgdHAtPndhaXRfdGhpcmRfYWNrID0gMDsNCj4gPiArICAg
+ICAgIHRwLT5hY2NlY25fZmFpbF9tb2RlID0gMDsNCj4gPiAgICAgICAgIHRjcF9hY2NlY25faW5p
+dF9jb3VudGVycyh0cCk7DQo+ID4gICAgICAgICBpZiAoaWNzay0+aWNza19jYV9pbml0aWFsaXpl
+ZCAmJiBpY3NrLT5pY3NrX2NhX29wcy0+cmVsZWFzZSkNCj4gPiAgICAgICAgICAgICAgICAgaWNz
+ay0+aWNza19jYV9vcHMtPnJlbGVhc2Uoc2spOw0KPiA+IGRpZmYgLS1naXQgYS9uZXQvaXB2NC90
+Y3BfaW5wdXQuYyBiL25ldC9pcHY0L3RjcF9pbnB1dC5jDQo+ID4gaW5kZXggMGZhMzgwM2IzNTNk
+Li5jOTg2NDUyMzAyY2IgMTAwNjQ0DQo+ID4gLS0tIGEvbmV0L2lwdjQvdGNwX2lucHV0LmMNCj4g
+PiArKysgYi9uZXQvaXB2NC90Y3BfaW5wdXQuYw0KPiA+IEBAIC00MTEsMTQgKzQxMSwxMTQgQEAg
+c3RhdGljIHZvaWQgdGNwX2RhdGFfZWNuX2NoZWNrKHN0cnVjdCBzb2NrICpzaywgY29uc3Qgc3Ry
+dWN0IHNrX2J1ZmYgKnNrYikNCj4gPiAgICAgICAgIH0NCj4gPiAgfQ0KPiANCj4gSSBkbyB0aGlu
+ayB0aGlzIHBhdGNoIGlzIHRvbyBiaWcgYW5kIHNob3VsZCBiZSBzcGxpdC4NCg0KSSB3aWxsIHJl
+bW92ZSB0aGUgZm9sbG93aW5nIHR3byBwYXJ0cyBmcm9tIHRoaXMgcGF0Y2ggaW50byBvdGhlciBw
+YXRjaGVzOg0KKDEpIEVDTiBuZWdvdGlhdGlvbiBpbiBzaW11bHRhbmVvdXMgY29ubmVjdCwgYW5k
+DQooMikgQ0EgbW9kdWxlIGZsYWcgKFRDUF9DT05HX05FRURTX0FDQ0VDTikgZGVmaW5lcyB0aGF0
+IHRoZSBDQSBleHBlY3RzIHRvIG5lZ290aWF0ZSBBY2NFQ04gZnVuY3Rpb25hbGl0eS4NCg0KQmVz
+dCByZWdhcmRzLA0KQ2hpYS1ZdQ0K
 
