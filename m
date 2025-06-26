@@ -1,140 +1,218 @@
-Return-Path: <linux-kselftest+bounces-35884-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35885-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E43AAEA571
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jun 2025 20:30:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61A4FAEA5D2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jun 2025 20:52:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2DF4A4E0ADE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jun 2025 18:30:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6A383ADEE7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jun 2025 18:51:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 104301FDA9E;
-	Thu, 26 Jun 2025 18:30:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 440732EF655;
+	Thu, 26 Jun 2025 18:51:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FqhUMM8I"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Ly6si8sA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2084.outbound.protection.outlook.com [40.107.95.84])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 714DB1FFC49;
-	Thu, 26 Jun 2025 18:30:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750962636; cv=none; b=nNjQF8Ov8UXRa/1a9sJd9EwcPbi5FHao5xhU9vmlNhnbXgfeb88G1HNhMIw7Zj+gLSWYKwDLQUZ4uHOrAFFjAjHsbF+6ef3nwm6r0TYm3fAoiYZNApyrckYxHoAcO73hDWRxxPBAoMGLtxSqPF/R1D5BXx+G8rKmqIJEq7WdMgk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750962636; c=relaxed/simple;
-	bh=FCUG9zjOkigdBABYb9d8usbeYPE7bC+MAcocZNF4Ge8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WLMMH2aMYJRgTlERT9Ny0Ob1wGuNNmEfg+semBvznuH2tCfsKGts7Xsuaaawr6SEdq5W5ja2njBLp2/zXf2PKk5/Ozsp1th6btEAciosrquZKyUFjm7IgNbhdTdA2jysfXd8gF6EUMputOXPibw+mWs/5PlkSd43moCvLnRNodU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FqhUMM8I; arc=none smtp.client-ip=209.85.219.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e82278e3889so858562276.2;
-        Thu, 26 Jun 2025 11:30:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750962634; x=1751567434; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rd4xp5ck/mMW/6UhTNDLZDgYLTJ/5t8DPE8i/DpKm9E=;
-        b=FqhUMM8IBlevV88G1zuQrg1boLDv5n/Rn9I5xMVRhNwI0V7RmDxVc6fthHRxxepzaE
-         8S4uUGRB5XokP/4gFW3Zztvqo5YKRPL0RBX7vRsrjuWUZVWpyhU6KUbH/M8ou3pYnrjk
-         xUx2VTdepbx2b3/MxNesnSgCiyCcSPENeNufA52l88MDQyWr5V2JVmzUzFTbFt7db5Vy
-         8ID+YOd9MxjVsZ6nVA7BmGx/wx7P3KnxfGJzHw4nuGQ1gb8r3J3v7rrcc/wTGHGdHHPq
-         Wf/I8aGQx03kT1Cb4fKvdaBZQbwCYP0hzpPXXCqzjMqn5EFIqHZr21//kS8ispZyLXY+
-         sutw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750962634; x=1751567434;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rd4xp5ck/mMW/6UhTNDLZDgYLTJ/5t8DPE8i/DpKm9E=;
-        b=T8+P62YxAkkJyWUfWnN4KwsfKvX5Zv6TzX91D4WiHhfmogVccy31eCu3OniIXmYAKX
-         ZOb4FGIv9rAJU9P3fgUEdbmYbx8KK7kCdhP04UJal4Hq96gUsH+scMRCe+DAtKjOCqHv
-         3eD3icHr2WIvRUtzDTXJ5FcRHl47qMvh/p6JsXjFpLOBl1nH2YzVqYXj7x7qu8qPTxm0
-         U5EhjH5mF/jFNCDWILDeUwgtePMYUSKYqORoSCGS0BnbF+N9YGNXH47/ggFjr5NtMluL
-         0EPgSiE6S9dnJA8JgHrGl/vPlxBvX6b51WUvqCSs3p5quY0Nl43NDPhfXpe5vtzF8nSo
-         /8SA==
-X-Forwarded-Encrypted: i=1; AJvYcCUTs91j1gJTItMVVXgNJBkg1fU+ad0iB+gAC6mn7HTxSRXC3pa9RHlMNVNSCFNMIJz33S6RqtTb9K1IM08=@vger.kernel.org, AJvYcCWabsAPrrCSqbhu+P9AxWPHpFAEk8+uyxkxMTH8zrodHcbZdJ7UaArxcDNv/lrCOWMztTR6R2OXWR3ZoLWLYJs1@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMYpLDksQWbdrg35Lls1zYaVRfhfY8oQGYG3hArU0hB4l+t4bf
-	aGWc5LFgDKs87p7b6VljZfBfI0B7CowqQpV8W5VpIU33ru5LunurscoXoHfR0Wn1R75YCPzdEze
-	lguF+TF1dE3nOMSBF7A89aRgCLMaPr0A=
-X-Gm-Gg: ASbGnctlcMbjh2xsEzjBwprbKFiNxsWM8RJXnScbpTVvwNp8jYqUaU9wlP1A9cMJxB/
-	40JjeXnOoA4z+1PMcEsL/rX2VSR8C/rAyaa1nQKcSHai3ACAFaoVCobF5z3Dh0tyhkr69UFdwXp
-	SIMqEfmJN8N2EM8cc8bMi/pECqZBh37JUntu5o+MTpv/I=
-X-Google-Smtp-Source: AGHT+IEoL/7a9ToHVejkfgZ4pk2rxazxc4nJ0u+6Rz1GbncTCYcGX5V0GwROxFy1YqTb2Z+e6Bu8XuNUhAa93RBIJUg=
-X-Received: by 2002:a05:6902:450d:b0:e85:fa4c:7759 with SMTP id
- 3f1490d57ef6-e87a7c02aa1mr416330276.44.1750962634215; Thu, 26 Jun 2025
- 11:30:34 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A73C32EF2B7;
+	Thu, 26 Jun 2025 18:51:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.95.84
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750963894; cv=fail; b=XlPq3+jieDI0LM8LDj8j/X57rm7WtxhYsGQDvTIJXuLAbALkvlMkpYYfccKgqxR9ZpApjojHsvJZuoIW73IVwCuvM5F5jpwKeTS/92XY+wx3DuG6F4KLnN7j6jLsJSfxXCiyiBeDIvd4v1/zclfB38edbvwTEWKT85SjSbW1+G8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750963894; c=relaxed/simple;
+	bh=MQBYYfFBYc0icLNa+m4vTEd1OauDVVYR5oCNE6HdISU=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kUjwKCgZKMWF8cwi3tFZRySzUGdEdZxKzzx2XGn/AjShJs7m4uJGEdlwJjop8u0Kd04oE3VFm5iLk6UjdDJ4gHN9cbykldy24WLXFV1mFuuOZFWuD988pFr+SgDIGFZplKFBbl3sGhh4FgL/I7O5LNT32hGE7x3LZi41XcX/M6o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Ly6si8sA; arc=fail smtp.client-ip=40.107.95.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=jXJAxzTZjsw8+6Z56j/ElJ1lWlq5LVgEXvm/X/2sWCmUaIhJ9kOfsupzwy9DA5C5xICoPDXzet7gRgin0OZvpmcs2eolqq27RbTTYB6ayycHX/79UI94Qdqsg1c758HpIJw+JAFverJFo9khneB/tCUk1GgrkL960kCIxhMiao5WuTxRz7c+W+lvXZnddboLKOjHsrVGvG5lF2NIoj0YyK7WEtC6m2hVRLcEEVJ3tqS19+6+/CqNSskfj5sKW4DtpPkeqHp9xRNyZ/aFrgDzykCGLultut0IUe9fiqqq1DQjqgOtaULpCiNh3QaM6PSDDlkvoCxAbmGsz7qXiaJimA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=c72Z9O9saelQ2PiTas1hlBTIi4z5XrASYFmkl69P1b8=;
+ b=P87uEi7A/7JboegqCLf5uDuZdWf/02OwOt4Y+WQ05e8mcNETgbDufqn2VuvqDQO6pNdobS6g50kQKFge6/gyLq+LfIuyVuYP2x9CiQKIghl9xPj5rjYkpGYRXOdO6y9nJ4MrBG0F5CahLQLVi3OgR6KAqbGPYJpUGiC/T/YeWt1avsJd3R5nRtiUVvMM0N3rlEzWlDBF2INjEbtYcD8Ga8TiHxCUxiUWxR1cYiwqzkbF3aC/cRlllE96KS/n6eEbMqx30WpdNDd8brutE+W1W0sXXnxPBUB2K93ONS7xX3wXAWarCMWL+My9ReqZnAYD6KbuHfegAlW/ItIy+icQJA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=amd.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=c72Z9O9saelQ2PiTas1hlBTIi4z5XrASYFmkl69P1b8=;
+ b=Ly6si8sAZWy4NLqovXIlNwBvTpw7CwI5xA8xPLu5u+KZ3kphq1eJ29OW62pmoDsALEneUoRQzCTwA7PBoqy/f9fhqzj+UkR10RCLsOSms6ZcdGnBZC2S5dK0ZjHl0uyT3ZQ99xzlJyoLKBvNBU88gX0lgA4mFT0BCp2v9OAIaiUGLCIejZx7zR5bGOgOOTBZVDnnA3wRh/lbzz2P7AvIer1sSY4hgmIDM4twm+zJun7Z0Zf2p7Sj5dn7Aq4122IXk+Z2HrPJ5lk8Pm+WX3vL9ohtschVlaYXcaMWDIp+M6KWtBh3sGSdQcyz6FqG9xWqiReT6kYaqzfMXIdyzUo2rQ==
+Received: from DS7PR03CA0083.namprd03.prod.outlook.com (2603:10b6:5:3bb::28)
+ by PH8PR12MB7181.namprd12.prod.outlook.com (2603:10b6:510:22a::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8857.33; Thu, 26 Jun
+ 2025 18:51:29 +0000
+Received: from CY4PEPF0000E9CF.namprd03.prod.outlook.com
+ (2603:10b6:5:3bb:cafe::3b) by DS7PR03CA0083.outlook.office365.com
+ (2603:10b6:5:3bb::28) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8880.17 via Frontend Transport; Thu,
+ 26 Jun 2025 18:51:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ CY4PEPF0000E9CF.mail.protection.outlook.com (10.167.241.134) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8880.14 via Frontend Transport; Thu, 26 Jun 2025 18:51:29 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 26 Jun
+ 2025 11:51:16 -0700
+Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14; Thu, 26 Jun 2025 11:51:15 -0700
+Received: from Asurada-Nvidia (10.127.8.13) by mail.nvidia.com
+ (10.126.190.181) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14 via Frontend
+ Transport; Thu, 26 Jun 2025 11:51:14 -0700
+Date: Thu, 26 Jun 2025 11:51:13 -0700
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: <jgg@nvidia.com>, <kevin.tian@intel.com>, <corbet@lwn.net>,
+	<will@kernel.org>
+CC: <bagasdotme@gmail.com>, <robin.murphy@arm.com>, <joro@8bytes.org>,
+	<thierry.reding@gmail.com>, <vdumpa@nvidia.com>, <jonathanh@nvidia.com>,
+	<shuah@kernel.org>, <jsnitsel@redhat.com>, <nathan@kernel.org>,
+	<peterz@infradead.org>, <yi.l.liu@intel.com>, <mshavit@google.com>,
+	<praan@google.com>, <zhangzekun11@huawei.com>, <iommu@lists.linux.dev>,
+	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-tegra@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <patches@lists.linux.dev>,
+	<mochs@nvidia.com>, <alok.a.tiwari@oracle.com>, <vasant.hegde@amd.com>,
+	<dwmw2@infradead.org>, <baolu.lu@linux.intel.com>
+Subject: Re: [PATCH v6 24/25] iommu/tegra241-cmdqv: Add user-space use support
+Message-ID: <aF2WoRtkhCMw4Nut@Asurada-Nvidia>
+References: <cover.1749884998.git.nicolinc@nvidia.com>
+ <f13ad49a67774edd3578b8dccb9f363faa2f1df8.1749884998.git.nicolinc@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250626155257.81256-1-dyudaken@gmail.com> <20250626155257.81256-2-dyudaken@gmail.com>
- <4db5be54-7c27-4aed-b70f-3722a890904a@efficios.com>
-In-Reply-To: <4db5be54-7c27-4aed-b70f-3722a890904a@efficios.com>
-From: Dylan <dyudaken@gmail.com>
-Date: Thu, 26 Jun 2025 19:30:23 +0100
-X-Gm-Features: Ac12FXwklyRv0zhsHmUM7JkmQPBrfauC7cdN3bzxxt5GsmMQwl0mOpYoKcVKfM4
-Message-ID: <CAO_YeogikhpZjg4Nhcdd0AKjRFCtZ4ohvVN5Y9DZgqmNiP8FRg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] membarrier: allow cpu_id to be set on more commands
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: paulmck@kernel.org, mingo@redhat.com, peterz@infradead.org, 
-	juri.lelli@redhat.com, vincent.guittot@linaro.org, dietmar.eggemann@arm.com, 
-	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de, vschneid@redhat.com, 
-	shuah@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <f13ad49a67774edd3578b8dccb9f363faa2f1df8.1749884998.git.nicolinc@nvidia.com>
+X-NV-OnPremToCloud: AnonymousSubmission
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9CF:EE_|PH8PR12MB7181:EE_
+X-MS-Office365-Filtering-Correlation-Id: a518ae83-7768-4082-46c3-08ddb4e2761e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|376014|7416014|82310400026|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?cQtAq2u/2m5DzWtVIrjppZq4S29bDmQhdJidlFnXp1s0xBtjEwLNCfteCg4X?=
+ =?us-ascii?Q?gUytKLph04XIWkhFLn2DgL1VQrOBYcL6AgGk0T34hDozQa5SDOd6w1vSPo7e?=
+ =?us-ascii?Q?fGSMqi65LyEtEub4VbRSN7Py0S2kk81A6ycfa5a+ROUz85EgGRbtRQXj0M51?=
+ =?us-ascii?Q?bHP02/y4VbBKP/ERAIg2/nR7kUWkSIWWZz/UBFGqo6yCwXGgz+UcQg53+UGZ?=
+ =?us-ascii?Q?c4sYZ0SInCKTDUwtwXbMkNZKv37gohq2SvW6uJAkCTxGfsQY/ERoNQmsvRve?=
+ =?us-ascii?Q?khx/CGXz4ewWdaxA+WuQYwni4bt7gVXAcZndgmnjJA1l/VNKOTnWyi0Ji5+i?=
+ =?us-ascii?Q?wTNbDQUe7s0j8GCXsnbA6ZLCQ5qvR1bNhr0WP/WVv39Z5KASW8qQJKvYmFMF?=
+ =?us-ascii?Q?g21u0UnMX1AIhrYyscFNcv4pHU9US3NVfEGv4KZEZVuMyPhQR1s7xkv6K1x1?=
+ =?us-ascii?Q?HDWc1I6m+S3FQUhKEX0IvEmSKd+CG+0mB6CyxXE20iJu8QH3VqLs8fCVS5b0?=
+ =?us-ascii?Q?yiCDTCoq0h6sPIgjR8x3j64gfWhE33f1aT6JOCA/1rD4vXacuhFZeiL32KAB?=
+ =?us-ascii?Q?XSSC6elhHf0tuAnBU9IG4PHzJp89/0d/lHNllWC60vxLKEgrq0rZG+2RuSKD?=
+ =?us-ascii?Q?kcgr6fUoexQTeBxnd6cdkbPvQBifCmWAIF3/sSwGkRsKmENW6J9IGsKx/L0q?=
+ =?us-ascii?Q?Py+HYhJPFmUUcDwpJaBhlgLZgWZ0cU2E6jjidN2rvH916U8JwiHwfYJ9hSnt?=
+ =?us-ascii?Q?HkcbpqTrSF8xQaQiCrWz1gYC/N2SE6vajPTezeo8xlL01Nzsb/oPGh1erYVp?=
+ =?us-ascii?Q?yL46DXTC37CsKHuNQVDOPRcdyJwPLmbiSJBgpVjDvPCYRCwryHX6WJdP8dvg?=
+ =?us-ascii?Q?l0GR3MY8EdHe1OB9HPTjOqq4EE/Kd5Itf0JXqLzQ7Nhj8+1i2Gy9DmZXX1L7?=
+ =?us-ascii?Q?xIPOE7Llku0ekQm8ceZhXEs0HYUtX7d4NhGcZfkDLrwWn9KzTy9yCzJNLcwd?=
+ =?us-ascii?Q?ZjWmc760gU1tiqbVrBxAaQb+LGdg0WfD1TKF++NcXt7AAo7OadKXDsjTYStE?=
+ =?us-ascii?Q?946x6GVH4HoeRdykeWWhInA7RNE10t83YG5v+EkUfjXAmgLGcyOt7EnKHiaF?=
+ =?us-ascii?Q?u8lk0U1vF4AE1qo1rJI8/pzLAItBNMrnp5IJ9KfnIWRzH+zmqphr951VjLJG?=
+ =?us-ascii?Q?vGkGgs6cTzp0wTEr89WUUNwjpvFUua29kYlGnVZ2swEpcWyWIjoOMsNpx3N/?=
+ =?us-ascii?Q?ZC3I81COxWJzj9DtqT3U34cU3vubgf2Q6E7pM4x1pNoNaQ2X/tSCA7IIK+ba?=
+ =?us-ascii?Q?iTnV3ZidKYhpj8vD1en3uL5T8CxLtq0XWAR6Sr7dk4xM9GN+hZHGv9PZXEsD?=
+ =?us-ascii?Q?225F5TmgjtWrW9qe33cjo2DwoH84KP2PSTNNkMj3xWYfTbhv1a/s8BLMdTKs?=
+ =?us-ascii?Q?6UmoliutnF8gQj/efEuUxDr+kYw+ZVYbd9LcmpSIWZECMsOraSRfbLR2J8zq?=
+ =?us-ascii?Q?l2qzbLB5YW3e/m/Oh5wzuDUMREnSMp+OYuCd?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(376014)(7416014)(82310400026)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jun 2025 18:51:29.2763
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a518ae83-7768-4082-46c3-08ddb4e2761e
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY4PEPF0000E9CF.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7181
 
-On Thu, Jun 26, 2025 at 5:07=E2=80=AFPM Mathieu Desnoyers
-<mathieu.desnoyers@efficios.com> wrote:
->
-> On 2025-06-26 11:52, Dylan Yudaken wrote:
-> > No reason to not allow MEMBARRIER_CMD_FLAG_CPU on
-> > MEMBARRIER_CMD_PRIVATE_EXPEDITED or
-> > MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE.
-> >
-> > If it is known specifically what cpu you want to interrupt then there
-> > is a decent efficiency saving in not interrupting all the other ones.
-> >
-> > Also - the code already works as is for them.
->
-> Can you elaborate on a concrete use-case justifying adding this ?
->
-> Thanks,
->
-> Mathieu
->
+On Sat, Jun 14, 2025 at 12:14:49AM -0700, Nicolin Chen wrote:
 
-So my use case is for core-local data such as performance counters.
+I made some small changes:
 
-I have a library that allows a fast thread to  "lock" a core -> do
-some work (probably incrementing some performance counters) -> unlock.
-The "lock" uses restartable sequences (ie no serializing
-instructions), and the unlock just writes a 0 to memory (again, no
-serializing instructions).
+>  /**
+>   * struct tegra241_vintf - Virtual Interface
+> + * @vsmmu: Embedded arm_vsmmu structure
+>   * @idx: Global index in the CMDQV
+>   * @enabled: Enable status
+>   * @hyp_own: Owned by hypervisor (in-kernel)
+>   * @cmdqv: Parent CMDQV pointer
+>   * @lvcmdqs: List of logical VCMDQ pointers
 
-A slow thread will occasionally (say every few minutes) try and read
-data computed in the work section.
-It does this by disabling locking and firing off a membarrier(RSEQ) on
-that core to be sure that the core is either "locked" or "unlocked".
-It then spins waiting for it to be unlocked.
-At this point my understanding is a bit fuzzy - but I believe you need
-that core to have a memory barrier since there is no serializing
-instruction and the processor would happily reorder some "work" after
-the "unlock" instruction.
+Added:
++ * @lvcmdq_mutex: Lock to serialize user-allocated lvcmdq
 
-That serializing instruction is what I want from this. But since I
-know the cpu_id that I am working with I don't need to do a barrier on
-_all_ the cores.
+for the following change:
 
-To be clear: (1) I don't have a current real world use case, and (2)
-my library/design/understanding might be buggy.
-(3) I don't have a use case for the SYNC_CORE part, but again it
-seemed easy enough to add and I presume others might have a use case.
+> @@ -154,19 +172,41 @@ struct tegra241_vintf {
+>  
+>  	struct tegra241_cmdqv *cmdqv;
+>  	struct tegra241_vcmdq **lvcmdqs;
+> +	struct mutex lvcmdq_mutex; /* user space race */
+[...]
+
+> +static void
+> +tegra241_vintf_destroy_lvcmdq_user(struct iommufd_hw_queue *hw_queue)
+> +{
+> +	struct tegra241_vcmdq *vcmdq = hw_queue_to_vcmdq(hw_queue);
+> +
+> +	tegra241_vcmdq_hw_deinit(vcmdq);
+> +	tegra241_vcmdq_unmap_lvcmdq(vcmdq);
+> +	tegra241_vintf_free_lvcmdq(vcmdq->vintf, vcmdq->lidx);
+> +	if (vcmdq->prev)
+> +		iommufd_hw_queue_undepend(vcmdq, vcmdq->prev, core);
+
+Added mutex to pair with tegra241_vintf_alloc_lvcmdq_user():
+
+mutex_lock(&vcmdq->vintf->lvcmdq_mutex);
+...
+mutex_unlock(&vcmdq->vintf->lvcmdq_mutex);
+
+> +	/*
+> +	 * Initialize the user-owned VINTF without a LVCMDQ, because it has to
+> +	 * wait for the allocation of a user-owned LVCMDQ, for security reason.
+> +	 * It is different than the kernel-owned VINTF0, which had pre-assigned
+> +	 * and pre-allocated global VCMDQs that would be mapped to the LVCMDQs
+> +	 * by the tegra241_vintf_hw_init() call.
+> +	 */
+> +	ret = tegra241_vintf_hw_init(vintf, false);
+
+Revised a bit:
++	/*                                                                                                                                                                              
++	 * Initialize the user-owned VINTF without a LVCMDQ, as it cannot pre-                                                                                                          
++	 * allocate a LVCMDQ until user space wants one, for security reasons.                                                                                                          
+[...]
+
+Thanks
+Nicolin
 
