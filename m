@@ -1,146 +1,243 @@
-Return-Path: <linux-kselftest+bounces-35872-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35873-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9882AEA409
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jun 2025 19:11:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35A26AEA422
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jun 2025 19:13:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5CCCB1C439E3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jun 2025 17:11:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC4053ACB49
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jun 2025 17:12:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB9492ED164;
-	Thu, 26 Jun 2025 17:10:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4604B2E763F;
+	Thu, 26 Jun 2025 17:13:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="qHOs8wga"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 111652ECE88;
-	Thu, 26 Jun 2025 17:10:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6041928ECF2;
+	Thu, 26 Jun 2025 17:12:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750957819; cv=none; b=dvwdlQHzi6bJS+sCsQ8M+kbLFGYrbU66dfSUxtFH2n/sX8711bQo4swnsUb58DCBmR8N2fpzSELsI0kfgT83QYYkmO7Szgmw4Vk3mkPBnpY51EQSbhH7AkzaNRNX6wXWUyJrva2W5gp1AnM6xvC87CU9+9YKywB/xjduQMEf97M=
+	t=1750957984; cv=none; b=CZkXQCqaKOa3IBAJ2AWqrzGpD315SxXxxtK1tPaXA32FSL9N5tw/8ARKkf6Ml311efiOJqUMDIOpsfmXseqdPGC+MgvNITm7Es5oS76RuyXvWLVch5f2ird6wbKxICskYNy2kATMYOJBosEyZKp6nPNYPOVJQfOXqk/T3o4+C6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750957819; c=relaxed/simple;
-	bh=dFE7wN6V0AnDyFE1cvo/wrWMzfKaPnVu9t9IoU0obTI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oMfTw35iSm6HQ2JAQ24C3efx9ReUNBP32EGWhp6FAnZqrj200ybT6mi/dZdci6BsOyxEmDWJdEDs4WhfaNkMy5wOnZNUgcJKv6UFzRwoBsahZj1Jd5XyGe+Wo53AQw9Gn17wT2Pe648Y8SukvePGcdWL4+TXG3AYq3/W2vd0kAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-601dfef6a8dso1946542a12.1;
-        Thu, 26 Jun 2025 10:10:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750957816; x=1751562616;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MuOcGODFJxLIsNTIxNnE68hhtwcbQnl8mVcIvSCtqqs=;
-        b=jspNK6mfshrc+9k3R63m1h2U4n+y1ijSu8GWC5X80iUcKba55TEnaEDtA3WgrH9hB1
-         jtzHqGMidsy+rwQGK0EadWa7g7eexXgTQX6G3Rv3r2iBPkgyBFRTBubwSlJRfoxaNuWU
-         ggcNt9HkltAX2c/eEHCy2WrhJFyuXgw7ftIDQvNk1epJTtcVtuRGpZw12khQoODxmeCl
-         fCw8scpJdJ9XtQKgupp+DYmIb37vD6OVC0i6s0TuTxUm/SpFvfi3Vp6+oOe8BkhapmAh
-         D3EPv3JF7ugnJbfvwedSiCg4VuZhMTB/zPC90Qr7QMI5VXNQEbcfoSL4k1XIGShM60L8
-         rzfw==
-X-Forwarded-Encrypted: i=1; AJvYcCU3wxzY2mclXt8qkYbUvYBDifto2nC1Jg38CCEYt9WJxGmLVW5NitC6PcI9GtklYF7FRElhnE1/P75MqNHbn2hx@vger.kernel.org, AJvYcCVNeEB0NUouwcVmxU+IYoKYLkCP3D0SOIjBnzUqMJDcCC67UlasVdV6TQexT3o13PIAij3qSanj@vger.kernel.org, AJvYcCVUB4fn3Oz8ieD9ek1/NxK1WhcCrDCklQhEOugE3Hv1e2EyFbysTUX++0w0X8jOT2fNpq4=@vger.kernel.org, AJvYcCXc/imh6KtJ4dboyEBxRPjhd6jYBXoMAsW0jBgqWC8SdoLbNRTptgEuneonYDvtyBsG7C7wMiWZv7UCPtQv@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQ59nZ6nq8VyLoCuv3JMUT1agb6ytEDyenTJ5i3P22WVSs2SeX
-	k2awnD+S/HhQJT6+Zt3fzgOw4gVZ0HEcHZkxfIpgywXA60lhodtzvRrgasIwkA==
-X-Gm-Gg: ASbGnctLi/PgdI/2qMxLmM7LZAWhdXT0BjDUwYEX6FqZRHusqxilcPNqUlKXt75mYIu
-	+uA0jO1Jyoa3ogmdx6BYowmQd1dywgRSJIpJTK1gIu5djgP7NUUKpuUL+sff2D01y50UqkxX+Wq
-	1Uf72WBgnGCXVxzwbJV/n7ba1LwjoRCrPZ15QCAoYgu1mwg4wS1nc2QipyRg9vYjEOV69hI8kks
-	LbQMg41v4yCej/NKipydqn7JpB8ZvarhbVvmQD2eUqaelmzekEx07Z7aQx1D6LJn9m75HTcJGRD
-	ZHvk/bZaECWx6FhY1IApRCtRN0vTFOIrkYzYfD3AnLUoqHAH/9Ys
-X-Google-Smtp-Source: AGHT+IEwLDfOp5oX/3SNm58CDYQiNOY0hlTx9tedUeDwZqfaqJg+QqJC2Nvn58GQUJIoGBLUCj341w==
-X-Received: by 2002:a05:6402:42c1:b0:5f8:357e:bb1 with SMTP id 4fb4d7f45d1cf-60c4dd426aemr7706601a12.22.1750957816002;
-        Thu, 26 Jun 2025 10:10:16 -0700 (PDT)
-Received: from gmail.com ([2a03:2880:30ff:7::])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-60c826f6788sm255272a12.0.2025.06.26.10.10.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jun 2025 10:10:15 -0700 (PDT)
-Date: Thu, 26 Jun 2025 10:10:13 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
-	gustavold@gmail.com
-Subject: Re: [PATCH net-next v2 4/4] selftests: net: add netpoll basic
- functionality test
-Message-ID: <aF1+9YlFUF8vWH4P@gmail.com>
-References: <20250625-netpoll_test-v2-0-47d27775222c@debian.org>
- <20250625-netpoll_test-v2-4-47d27775222c@debian.org>
- <685d75ceb113c_2e676c294d1@willemb.c.googlers.com.notmuch>
+	s=arc-20240116; t=1750957984; c=relaxed/simple;
+	bh=PZ64vcfSCZ8kGfrft6iRzoYAnaxFqTpVYZfK1MVHDN4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=unx9miyAetl8mMNsDqEgbojrseNuCbHbH9XqO4iYPkNCoc0mzRmCbDQQQlmcX/dKQLm2OC1teAOuOHUaifKPIpeNcR7uc8CSrk8CoEsYFFJZr2fmSMXI3+tbOkiDs1jkKkfpKntUOo0lu3f4UbQJL8fEL+QcdDjopqrXtwocSIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=qHOs8wga; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Cc:To:Content-Transfer-Encoding:Content-Type:MIME-Version:
+	Message-Id:Date:Subject:From:Sender:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=dZfz9FobQPiHhtSxuHD0U7ueVmdFTx7WPSFT/2ywkLo=; b=qHOs8wganBv+K7LfMa2Mx8I3gy
+	KH2MvhkgzaBn28bZKHYKF1ZUlEHqjMoPYAtCG1FpaV05jHSkkGmvdba/HixPwSZb7gfLtfjA3FCx4
+	kJGNdBL0OOji2sLkkDm3lzAqYkizqihnhs6FelWHGwpguFDS6GxO4VYs1/1eyGw7fLFEvLovmTtKK
+	5VgnYoAeiSAZt0it1jEDFiUzy6FCFLsWe3bvEJUKlTF33lw7epJ0pYDrKll+Ah/O3mZ+hiFUYKFp1
+	H4W5sX6jGe3bU2TZcGWq2zMX/N3tUWk5d7Dc94ApjtihQK6wBvtn8b17wcvly3mTAlk9FgcoBfGFh
+	pqFud57w==;
+Received: from [191.204.192.64] (helo=[192.168.15.100])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1uUq9e-009491-KM; Thu, 26 Jun 2025 19:12:54 +0200
+From: =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
+Subject: [PATCH v5 0/7] futex: Create set_robust_list2
+Date: Thu, 26 Jun 2025 14:11:24 -0300
+Message-Id: <20250626-tonyk-robust_futex-v5-0-179194dbde8f@igalia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <685d75ceb113c_2e676c294d1@willemb.c.googlers.com.notmuch>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIADx/XWgC/22NwQ6CMBAFf4Xs2ZpSKAme/A9DTG0X2KiUtKWBk
+ P67Fa8eZ5I3bwePjtDDpdjBYSRPdsogTwXoUU0DMjKZQXAhuRCSBTttT+bsY/Hh3i8BV9ZwZRC
+ N0k0rIQ9nhz2tR/TWZR7JB+u24yPWX/vLScH/5WLNOCtLUfG2QtkavNKgXqTO2r6hSyl9ADj6+
+ HG1AAAA
+X-Change-ID: 20250225-tonyk-robust_futex-60adeedac695
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+ Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>, 
+ Davidlohr Bueso <dave@stgolabs.net>, Shuah Khan <shuah@kernel.org>, 
+ Arnd Bergmann <arnd@arndb.de>, 
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
+ Waiman Long <longman@redhat.com>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-api@vger.kernel.org, kernel-dev@igalia.com, 
+ =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
+X-Mailer: b4 0.14.2
 
-On Thu, Jun 26, 2025 at 12:31:10PM -0400, Willem de Bruijn wrote:
-> Breno Leitao wrote:
-> > Add a basic selftest for the netpoll polling mechanism, specifically
-> > targeting the netpoll poll() side.
-> > 
-> > The test creates a scenario where network transmission is running at
-> > maximum speed, and netpoll needs to poll the NIC. This is achieved by:
-> > 
-> >   1. Configuring a single RX/TX queue to create contention
-> >   2. Generating background traffic to saturate the interface
-> >   3. Sending netconsole messages to trigger netpoll polling
-> >   4. Using dynamic netconsole targets via configfs
-> >   5. Delete and create new netconsole targets after some messages
-> >   6. Start a bpftrace in parallel to make sure netpoll_poll_dev() is
-> >      called
-> >   7. If bpftrace exists and netpoll_poll_dev() was called, stop.
-> > 
-> > The test validates a critical netpoll code path by monitoring traffic
-> > flow and ensuring netpoll_poll_dev() is called when the normal TX path
-> > is blocked.
-> > 
-> > This addresses a gap in netpoll test coverage for a path that is
-> > tricky for the network stack.
-> > 
-> > Signed-off-by: Breno Leitao <leitao@debian.org>
-> 
-> > +def bpftrace_call() -> None:
-> > +    """Call bpftrace to find how many times netpoll_poll_dev() is called.
-> > +    Output is saved in the global variable `maps`"""
-> > +
-> > +    # This is going to update the global variable, that will be seen by the
-> > +    # main function
-> > +    global MAPS  # pylint: disable=W0603
-> > +
-> > +    # This will be passed to bpftrace as in bpftrace -e "expr"
-> > +    expr = "BEGIN{ @hits = 0;} kprobe:netpoll_poll_dev { @hits += 1; }"
-> 
-> Is that BEGIN statement needed? I generally just use count().
+This patch adds a new robust_list() syscall. The current syscall
+can't be expanded to cover the following use case, so a new one is
+needed. This new syscall allows users to set multiple robust lists per
+process and to have either 32bit or 64bit pointers in the list.
 
-If I use `hits += 1` then yes, but, I've learned that I don't need it if
-I use `count()`. So, I will see something like:
+* Use case
 
-kprobe:netpoll_poll_dev { @hits = count(); }
+FEX-Emu[1] is an application that runs x86 and x86-64 binaries on an
+AArch64 Linux host. One of the tasks of FEX-Emu is to translate syscalls
+from one platform to another. Existing set_robust_list() can't be easily
+translated because of two limitations:
 
-> > +
-> > +    MAPS = bpftrace(expr, timeout=BPFTRACE_TIMEOUT, json=True)
-> > +    logging.debug("BPFtrace output: %s", MAPS)
-> > +
-> > +
-> > +def bpftrace_start():
-> > +    """Start a thread to call `call_bpf` in parallel for 2 seconds."""
-> 
-> Stale comment? BPFTRACE_TIMEOUT is set to 15.
+1) x86 apps can have 32bit pointers robust lists. For a x86-64 kernel
+   this is not a problem, because of the compat entry point. But there's
+   no such compat entry point for AArch64, so the kernel would do the
+   pointer arithmetic wrongly. Is also unviable to userspace to keep
+   track every addition/removal to the robust list and keep a 64bit
+   version of it somewhere else to feed the kernel. Thus, the new
+   interface has an option of telling the kernel if the list is filled
+   with 32bit or 64bit pointers.
 
-Yes. I will remove it.
+2) Apps can set just one robust list (in theory, x86-64 can set two if
+   they also use the compat entry point). That means that when a x86 app
+   asks FEX-Emu to call set_robust_list(), FEX have two options: to
+   overwrite their own robust list pointer and make the app robust, or
+   to ignore the app robust list and keep the emulator robust. The new
+   interface allows for multiple robust lists per application, solving
+   this.
 
-Thanks for the review,
---breno
+* Interface
+
+This is the proposed interface:
+
+	long set_robust_list2(void *head, int index, unsigned int flags)
+
+`head` is the head of the userspace struct robust_list_head, just as old
+set_robust_list(). It needs to be a void pointer since it can point to a normal
+robust_list_head or a compat_robust_list_head.
+
+`flags` can be used for defining the list type:
+
+	enum robust_list_type {
+	 	ROBUST_LIST_32BIT,
+		ROBUST_LIST_64BIT,
+	 };
+
+`index` is the index in the internal robust_list's linked list (the naming
+starts to get confusing, I reckon). If `index == -1`, that means that user wants
+to set a new robust_list, and the kernel will append it in the end of the list,
+assign a new index and return this index to the user. If `index >= 0`, that
+means that user wants to re-set `*head` of an already existing list (similarly
+to what happens when you call set_robust_list() twice with different `*head`).
+
+If `index` is out of range, or it points to a non-existing robust_list, or if
+the internal list is full, an error is returned.
+
+* Implementation
+
+The implementation re-uses most of the existing robust list interface as
+possible. The new task_struct member `struct list_head robust_list2` is just a
+linked list where new lists are appended as the user requests more lists, and by
+futex_cleanup(), the kernel walks through the internal list feeding
+exit_robust_list() with the robust_list's.
+
+This implementation supports up to 10 lists (defined at ROBUST_LISTS_PER_TASK),
+but it was an arbitrary number for this RFC. For the described use case above, 4
+should be enough, I'm not sure which should be the limit.
+
+It doesn't support list removal (should it support?). It doesn't have a proper
+get_robust_list2() yet as well, but I can add it in a next revision. We could
+also have a generic robust_list() syscall that can be used to set/get and be
+controlled by flags.
+
+The new interface has a `unsigned int flags` argument, making it
+extensible for future use cases as well.
+
+It refuses unaligned `head` addresses. It doesn't have a limit for elements in a
+single list (like ROBUST_LIST_LIMIT), it destroys the list as it is parsed to be
+safe against circular lists.
+
+* Testing
+
+This patcheset has a selftest patch that expands this one:
+https://lore.kernel.org/lkml/20250212131123.37431-1-andrealmeid@igalia.com/
+
+Also, FEX-Emu added support for this interface to validate it:
+https://github.com/FEX-Emu/FEX/pull/3966
+
+Feedback is very welcomed!
+
+Thanks,
+	André
+
+[1] https://github.com/FEX-Emu/FEX
+
+Changelog:
+- Fixed compilation issues when CONFIG_COMPAT or CONFIG_FUTEX are not
+  set
+- Rebased on top of new futex work (private hash)
+v4: https://lore.kernel.org/lkml/20250225183531.682556-1-andrealmeid@igalia.com/
+
+- Refuse unaligned head pointers
+- Ignore ROBUST_LIST_LIMIT for lists created with this interface and make it
+  robust against circular lists
+- Fix a get_robust_list() syscall bug for getting the list from another thread
+- Adapt selftest to use the new interface
+v3: https://lore.kernel.org/lkml/20241217174958.477692-1-andrealmeid@igalia.com/
+
+- Old syscall set_robust_list() adds new head to the internal linked list of
+  robust lists pointers, instead of having a field just for them. Remove
+  tsk->robust_list and use only tsk->robust_list2
+v2: https://lore.kernel.org/lkml/20241101162147.284993-1-andrealmeid@igalia.com/
+
+- Added a patch to properly deal with exit_robust_list() in 64bit vs 32bit
+- Wired-up syscall for all archs
+- Added more of the cover letter to the commit message
+v1: https://lore.kernel.org/lkml/20241024145735.162090-1-andrealmeid@igalia.com/
+
+---
+André Almeida (7):
+      selftests/futex: Add ASSERT_ macros
+      selftests/futex: Create test for robust list
+      futex: Use explicit sizes for compat_exit_robust_list
+      futex: Create set_robust_list2
+      futex: Remove the limit of elements for sys_set_robust_list2 lists
+      futex: Wire up set_robust_list2 syscall
+      selftests: futex: Expand robust list test for the new interface
+
+ arch/alpha/kernel/syscalls/syscall.tbl             |   1 +
+ arch/arm/tools/syscall.tbl                         |   1 +
+ arch/m68k/kernel/syscalls/syscall.tbl              |   1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl        |   1 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl          |   1 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl          |   1 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl          |   1 +
+ arch/parisc/kernel/syscalls/syscall.tbl            |   1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl           |   1 +
+ arch/s390/kernel/syscalls/syscall.tbl              |   1 +
+ arch/sh/kernel/syscalls/syscall.tbl                |   1 +
+ arch/sparc/kernel/syscalls/syscall.tbl             |   1 +
+ arch/x86/entry/syscalls/syscall_32.tbl             |   1 +
+ arch/x86/entry/syscalls/syscall_64.tbl             |   1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl            |   1 +
+ include/linux/compat.h                             |  12 +-
+ include/linux/futex.h                              |  30 +-
+ include/linux/sched.h                              |   5 +-
+ include/uapi/asm-generic/unistd.h                  |   2 +
+ include/uapi/linux/futex.h                         |  10 +
+ kernel/futex/core.c                                | 156 ++++-
+ kernel/futex/futex.h                               |   5 +
+ kernel/futex/syscalls.c                            |  85 ++-
+ kernel/sys_ni.c                                    |   1 +
+ scripts/syscall.tbl                                |   1 +
+ .../testing/selftests/futex/functional/.gitignore  |   1 +
+ tools/testing/selftests/futex/functional/Makefile  |   3 +-
+ .../selftests/futex/functional/robust_list.c       | 706 +++++++++++++++++++++
+ tools/testing/selftests/futex/include/logging.h    |  38 ++
+ 29 files changed, 1021 insertions(+), 49 deletions(-)
+---
+base-commit: a24cc6ce1933eade12aa2b9859de0fcd2dac2c06
+change-id: 20250225-tonyk-robust_futex-60adeedac695
+
+Best regards,
+-- 
+André Almeida <andrealmeid@igalia.com>
+
 
