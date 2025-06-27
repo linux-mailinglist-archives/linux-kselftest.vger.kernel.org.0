@@ -1,144 +1,99 @@
-Return-Path: <linux-kselftest+bounces-36003-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36004-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B842FAEC098
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 22:06:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E46E0AEC0CF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 22:23:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3300E1C45CEF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 20:06:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 25C60564F43
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 20:23:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6753F2ECE97;
-	Fri, 27 Jun 2025 20:05:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34FEA21ADA3;
+	Fri, 27 Jun 2025 20:23:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TTPV8XGC"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="PgigF6B0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0EC42EBDD6
-	for <linux-kselftest@vger.kernel.org>; Fri, 27 Jun 2025 20:05:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 103C8C2FB;
+	Fri, 27 Jun 2025 20:23:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751054747; cv=none; b=jXsV5t3/3/dITySqi79yyJ3hW61rfnzYS8fApuCBu61BsYwZjk1nUV2WFLAcxdkHW+OCCskmPbtlGV8kUnIwWpgSyETEEkYebmj95hpjLElPvk/HBj9GBOm0mXPQnCOxOoAdSoAxqVinMpp/lPxSsp3aI+TEuxz577yKdTl0hR0=
+	t=1751055817; cv=none; b=HZjInVjr0UHBK0/zB7Qo2DzCHPKATZ8zCuTOIHuA90r5qoLfNk+eFgDUHIuWBfZ2dRcZt7hdL7unoGatbTWjFSHJV9847UGVxxSyFlSOUSRJofR8eXyWSch6qwLDSVMWfLtUijGoGy8C6cGdxj3iXafi46M08OT/TT74ba6v7Os=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751054747; c=relaxed/simple;
-	bh=LR3FEYO4lseRQoD8fNl9kELElxWTZ4qSpuPKRqnou5E=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=BnCH2t0u2gaodWwGJ9feQ6VNvzB0HqfguwnyH0lkyaRS23ukKSrchjzyckkHutNTk7+b6i0tPEWrEo5HnbGScdZ4Kj9xid9V+gw0ir7qGXAnyy39ZIZ+WbDr3x4bQVOBAuJ6S9o2UugLqNGg+5cWoVT2WQWMU7B1X3dHcwK6hnw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TTPV8XGC; arc=none smtp.client-ip=209.85.210.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-748764d84feso635838b3a.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jun 2025 13:05:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1751054745; x=1751659545; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZsCnLtPUB1WW+niTlrUm0KWXpbsHYBTnip7qlkFxEqw=;
-        b=TTPV8XGC5LnjKfGOB32kPx6d0GcrGWH1saQhsQ37V89C+j0aW0TypZebJwxwwSU+oG
-         fEohcWwm7o2ofP/+TSLgy12+XFz38B6gygeDe4zPf1x40N3NM9Tf4ohn9qGjzlfCpEoz
-         CMkusz2kBZrf+B7WGoYAMSQUpluBtD7QVZohQWenXiZVZXPufvMP26UJvwdHD8K1PewH
-         RvjgIs6fyFSwBfzyjVuDlx/dQMycJAO+RKRVLQHD0EZgvLIL9IoIIKxVCe6ypvF0bMj0
-         Affzq/y+kzXrMBLPKDyDiSBFdS9dUrXM5V6y+jTngfyKYev7Hptfgq5Fq96t+AYOoVpg
-         eLMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751054745; x=1751659545;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZsCnLtPUB1WW+niTlrUm0KWXpbsHYBTnip7qlkFxEqw=;
-        b=hSvUmzzOBHlVULGDYLxVoZtRwfMP7s3mry7izWPwJqv0UkZITkGjV790CZBPDzDlBg
-         cEwV7xwzRTeZSe82maenXhuyEakcdHlo+r+YcQWrHReCs7OiOHsqAEhwIHOgmHVwMMrH
-         e+9qzvUVvODELJdqRzf2rtTj4m9D5mlMnty9c4pHQhBMDkmw2rKdWoORjX1UijRXnS/r
-         Uf25AicevVqy5enxNBfQ4su3Z8hdYSSZGgxopVAaZYuFMRS5txgim/O/+aG+n1A4Dc7Z
-         g2sAz7wBFAP4+eU0hU3nrMucyH2vBRCZGx6BTbLr1mwvQj9NiN4tl11xwJO/jYmqh7CV
-         HT/w==
-X-Forwarded-Encrypted: i=1; AJvYcCWJXaIL/fqvYpc4I8u77598f1HBWxcEuFk2h/IQMnAIWb9lm9APEtdL6rq3rf+GnMhdcOSbPtK9wVid3ZEhO/s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwBmAawvM3IW8DNLA2hLwpOEEgRXH94yv1w5gfnVnEHYzBOKs6o
-	DRxLctC+jzliAjL8GP03gG2kBtBBJG5nrCIJitAkOM2QoltEzAXhDd9JjH5P54U/+NM4cLtUFA1
-	fKyLpKhICAvbTXBS/st1RCyb+kw==
-X-Google-Smtp-Source: AGHT+IG/oOX4Ds24NX7C8OYmI3C+kJZrnfuJT15/L/7jauTWcRcnnLkHUgGCREUfwknTXT4g7yRM1bwd9m2A7brqUg==
-X-Received: from pgbfq27.prod.google.com ([2002:a05:6a02:299b:b0:b31:cc05:3c03])
- (user=almasrymina job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a20:c704:b0:220:63bd:2bdb with SMTP id adf61e73a8af0-220a16ca7famr7000010637.40.1751054745372;
- Fri, 27 Jun 2025 13:05:45 -0700 (PDT)
-Date: Fri, 27 Jun 2025 20:04:52 +0000
-In-Reply-To: <20250627200501.1712389-1-almasrymina@google.com>
+	s=arc-20240116; t=1751055817; c=relaxed/simple;
+	bh=8LRAvUFeTwmz4rDd900x+Z+XteT5wGFcJVnT+hGaLP4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=h3ReBkcaFyx0OS0n5PUmlfN73VlbtJEdBYwYPObiIYOtaVXVFEzNJyYyhJCV2JasNXRz5eW3TrWcCcgX+40c6mMe1a40YL+cOZNowhmeUb1ZYAmCfFvjmOTn32M5DaVI1gFx6GrjZryyoPU1rSbW15hNJI3v1ZAwPAWXH1fCFgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=PgigF6B0; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=LNuHdZp1p8Oowbp9pqTlemJ4dhvpEIex6NkU/PUOyGM=; b=PgigF6B0mR7Bk3asa15fereY3a
+	LPqE/FIBEXopIv4s9QCLrpfaYUBgKU1u89vGKeK1muVH7XyHMxbqcQsGG2tS2YrSlQ1uHKiFWBQEz
+	Lr/2r9vFkbEvN0Xv/FYTMn4jCq9aCt2/oLa6gNJjtS2ZChMJNe8/S8m2QWzBrou4fAH4Ckyq127dp
+	tj0V8qFApRZZcxf5YQn2Q9uV1KnKj47ndCt9zpnmIylfOSfIRxx/LNeoDzL/a+dLMHTexTdZsIBNd
+	+4NjBh6x0TVn5T3yxmTcpMY8SqOr555P/xg7x87szaSOqTug4SXO2VZua01RaYpX5c5RbgEUHUhO6
+	4JV762+g==;
+Received: from [191.204.192.64] (helo=[192.168.15.100])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+	id 1uVFbI-009XtB-C6; Fri, 27 Jun 2025 22:23:08 +0200
+Message-ID: <96b3d0fa-7fd2-4d2b-a6d6-cc91ed1dca4e@igalia.com>
+Date: Fri, 27 Jun 2025 17:23:03 -0300
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250627200501.1712389-1-almasrymina@google.com>
-X-Mailer: git-send-email 2.50.0.727.gbf7dc18ff4-goog
-Message-ID: <20250627200501.1712389-2-almasrymina@google.com>
-Subject: [PATCH net-next v1 2/2] selftests: pp-bench: remove
- page_pool_put_page wrapper
-From: Mina Almasry <almasrymina@google.com>
-To: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Cc: Mina Almasry <almasrymina@google.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	"=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?=" <toke@redhat.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 1/7] selftests/futex: Add ASSERT_ macros
+To: Thomas Gleixner <tglx@linutronix.de>, Shuah Khan <shuah@kernel.org>
+Cc: Davidlohr Bueso <dave@stgolabs.net>, Peter Zijlstra
+ <peterz@infradead.org>, Arnd Bergmann <arnd@arndb.de>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ linux-api@vger.kernel.org, kernel-dev@igalia.com,
+ Darren Hart <dvhart@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Waiman Long <longman@redhat.com>
+References: <20250626-tonyk-robust_futex-v5-0-179194dbde8f@igalia.com>
+ <20250626-tonyk-robust_futex-v5-1-179194dbde8f@igalia.com>
+ <87ecv6p364.ffs@tglx>
+Content-Language: en-US
+From: =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
+In-Reply-To: <87ecv6p364.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Minor cleanup: remove the pointless looking _ wrapper around
-page_pool_put_page, and just do the call directly.
+Em 26/06/2025 19:07, Thomas Gleixner escreveu:
+> On Thu, Jun 26 2025 at 14:11, André Almeida wrote:
+> 
+>> Create ASSERT_{EQ, NE, TRUE, FALSE} macros to make test creation easier.
+> 
+> What's so futex special about this that it can't use the same muck in
+> 
+> tools/testing/selftests/kselftest_harness.h
+> 
 
-Signed-off-by: Mina Almasry <almasrymina@google.com>
----
- .../net/bench/page_pool/bench_page_pool_simple.c     | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+My previous version of this test used kselftest_harness.h, but Shuah 
+request to keep consistency and don't use this header, giving that the 
+rest of futex test doesn't use it:
 
-diff --git a/tools/testing/selftests/net/bench/page_pool/bench_page_pool_simple.c b/tools/testing/selftests/net/bench/page_pool/bench_page_pool_simple.c
-index 1cd3157fb6a9..cb6468adbda4 100644
---- a/tools/testing/selftests/net/bench/page_pool/bench_page_pool_simple.c
-+++ b/tools/testing/selftests/net/bench/page_pool/bench_page_pool_simple.c
-@@ -16,12 +16,6 @@
- static int verbose = 1;
- #define MY_POOL_SIZE 1024
- 
--static void _page_pool_put_page(struct page_pool *pool, struct page *page,
--				bool allow_direct)
--{
--	page_pool_put_page(pool, page, -1, allow_direct);
--}
--
- /* Makes tests selectable. Useful for perf-record to analyze a single test.
-  * Hint: Bash shells support writing binary number like: $((2#101010)
-  *
-@@ -121,7 +115,7 @@ static void pp_fill_ptr_ring(struct page_pool *pp, int elems)
- 	for (i = 0; i < elems; i++)
- 		array[i] = page_pool_alloc_pages(pp, gfp_mask);
- 	for (i = 0; i < elems; i++)
--		_page_pool_put_page(pp, array[i], false);
-+		page_pool_put_page(pp, array[i], -1, false);
- 
- 	kfree(array);
- }
-@@ -180,14 +174,14 @@ static int time_bench_page_pool(struct time_bench_record *rec, void *data,
- 
- 		} else if (type == type_ptr_ring) {
- 			/* Normal return path */
--			_page_pool_put_page(pp, page, false);
-+			page_pool_put_page(pp, page, -1, false);
- 
- 		} else if (type == type_page_allocator) {
- 			/* Test if not pages are recycled, but instead
- 			 * returned back into systems page allocator
- 			 */
- 			get_page(page); /* cause no-recycling */
--			_page_pool_put_page(pp, page, false);
-+			page_pool_put_page(pp, page, -1, false);
- 			put_page(page);
- 		} else {
- 			BUILD_BUG();
--- 
-2.50.0.727.gbf7dc18ff4-goog
+https://lore.kernel.org/lkml/fe02f42b-7ba8-4a3b-a86c-2a4a7942fd3b@linuxfoundation.org/
+
+> or at least share the implementation in some way?
+> 
+> Thanks,
+> 
+>          tglx
 
 
