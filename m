@@ -1,54 +1,54 @@
-Return-Path: <linux-kselftest+bounces-35974-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35975-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 326C7AEB8FE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 15:31:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16732AEB90F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 15:36:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 87A113BDC47
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 13:30:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9CDAA1C428BE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 13:36:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3535622578D;
-	Fri, 27 Jun 2025 13:31:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88B082D9798;
+	Fri, 27 Jun 2025 13:36:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BibA/YEh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AJDDw55M"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2FBC8460;
-	Fri, 27 Jun 2025 13:31:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AF9F2F1FDF;
+	Fri, 27 Jun 2025 13:36:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751031069; cv=none; b=IJtTX9yRD8F+sLJmhYi6Zeqv07QxjBIcChYJ17i3g9LZMnPVVgq0NpTcKXBKg4GPA3XbXngNMqtg/W0CR5FcjV2AaVA46Eh74FGbBNRI3J3Vd+e2gurAqhKfLBL1C9kwtBvBi+Uz+I+6cH9eLiqqE1GJQeC8CCBQ6VhbHfiitoE=
+	t=1751031373; cv=none; b=Ux+pjzNsvCCG6qobpvgUcpfd8/AKksmUCw8p9z8N9bz3q0zZ4a0xHnZ39h+/I6q1LdVhYOq5Y1rlqHKhqX3dhpHuc+cRyXDsNL5RD3Kh9a1JJ/P7i+M/sWqvB2pKE7/N7hJ4Hf8bW6mUCJ8p/j8xbXjp6bztH0g2iRn7mjkpH3w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751031069; c=relaxed/simple;
-	bh=kokEDiINvuUFaynPitaSpNI5LxY/Pe4ILkwR63ddPkc=;
+	s=arc-20240116; t=1751031373; c=relaxed/simple;
+	bh=b+AqKL/t2Y57F7SFIeF2uOilMxYgh+4DSlllHo4mbfo=;
 	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KWXf4mlZcefopuoKljHktSZ9xgIRHT4uZAs+MZPvNazEQfKm0VxjpPkjbYyLDv1i99oxLFO2KeuJC7vAVTOPNxs8JvXVSQmtV1ancwZLyMJk22d5M9pzgp2oamy6oX/80vsHPK4WEgNf7Du6c0qip427D3rFs7zMZRwyK6xk2Gw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BibA/YEh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E37CC4CEE3;
-	Fri, 27 Jun 2025 13:31:08 +0000 (UTC)
+	 MIME-Version:Content-Type; b=mV83OEHy2NTsaAwbWwOtNlk3bwZkl6iyEL1aMCa5ugbbyOKAKDH8hUUv2ZjS/TBaRH9Bi2Hxt0kvVNs477lnNcW7GYXYP38ZhiyCVMfKKi9E8F6hCD4PWhG6PlfIub7ce0C0QKTNjLCcipahkA0YzUa2GCWI0TTvMIXuRHHrTHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AJDDw55M; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E2F3C4CEE3;
+	Fri, 27 Jun 2025 13:36:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751031068;
-	bh=kokEDiINvuUFaynPitaSpNI5LxY/Pe4ILkwR63ddPkc=;
+	s=k20201202; t=1751031373;
+	bh=b+AqKL/t2Y57F7SFIeF2uOilMxYgh+4DSlllHo4mbfo=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=BibA/YEh2AeqD4S8YXr5p4aivahoY4IJa7w1Dq7LOwJv1faJXHOEDMOmKIUtHSpln
-	 F0c+9MrHEIl68ZFm0enGhAsRI934nS+8NAvRFnkwSBWE0Djh2dlkWHuCgUhKEHut9U
-	 oYhGbcGS44hjE1NUgQ/sn8QEaR4j3ZEBLDxc/zibUNM42GAupJ+/woPaAzdw6gtea8
-	 78Y4+XMbmOBVVlVw9dEjUXTV3wBOmJJHgQardb9oMoT4l3jXIt1hBfe+qmnSwMuHLT
-	 5zWkSgJt20xGY08P08G1u7swBwJQlYHq8zIxdrDt7AMNMitTi23rC67bEac1Csswva
-	 XLgAnyBaJTkgg==
+	b=AJDDw55MJlOCVvTFjNTI1frKXCVh8blcEuVXrNyCokvJAG1kOtlsiSCic2uxm/G58
+	 BrO+Bxxc3pu2lbtt/kDFxhoI3I/Jayc9I8UXOt/zVMasJmI7ZSMEvccLpRS3W2ftKz
+	 vMjX5+nOFC+dlKksOVew1jaDQGTANoYxW54i4uqYAtJAOpT/QPU8bkfmFRKyvO5Z82
+	 OBVExL/AQvGJPwrZmOfv/uLSLHjfEP9SnTogY6JSz7a6Mof3pQ1ypdnBiFhJl5xYqZ
+	 K5yUAUals6BoMVo6oBjiZj6o8Fd79QHkP4M1Nsw6w8w00SrbjZM77B1tghvy3iPl3S
+	 QddlGxg2/VoWg==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
 	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.95)
 	(envelope-from <maz@kernel.org>)
-	id 1uV9AY-00AZkC-8u;
-	Fri, 27 Jun 2025 14:31:06 +0100
-Date: Fri, 27 Jun 2025 14:31:05 +0100
-Message-ID: <86sejlb9ba.wl-maz@kernel.org>
+	id 1uV9FS-00AZpT-Nm;
+	Fri, 27 Jun 2025 14:36:11 +0100
+Date: Fri, 27 Jun 2025 14:36:10 +0100
+Message-ID: <86qzz5b92t.wl-maz@kernel.org>
 From: Marc Zyngier <maz@kernel.org>
 To: Colton Lewis <coltonlewis@google.com>
 Cc: kvm@vger.kernel.org,
@@ -70,10 +70,10 @@ Cc: kvm@vger.kernel.org,
 	kvmarm@lists.linux.dev,
 	linux-perf-users@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 03/22] KVM: arm64: Define PMI{CNTR,FILTR}_EL0 as undef_access
-In-Reply-To: <20250626200459.1153955-4-coltonlewis@google.com>
+Subject: Re: [PATCH v3 09/22] KVM: arm64: Correct kvm_arm_pmu_get_max_counters()
+In-Reply-To: <20250626200459.1153955-10-coltonlewis@google.com>
 References: <20250626200459.1153955-1-coltonlewis@google.com>
-	<20250626200459.1153955-4-coltonlewis@google.com>
+	<20250626200459.1153955-10-coltonlewis@google.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
  (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -89,46 +89,55 @@ X-SA-Exim-Rcpt-To: coltonlewis@google.com, kvm@vger.kernel.org, pbonzini@redhat.
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Thu, 26 Jun 2025 21:04:39 +0100,
+On Thu, 26 Jun 2025 21:04:45 +0100,
 Colton Lewis <coltonlewis@google.com> wrote:
 > 
-> Because KVM isn't fully prepared to support these yet even though the
-> host PMUv3 driver does, define them as undef_access for now.
+> Since cntr_mask is modified when the PMU is partitioned to remove some
+> bits, make sure the missing counters are added back to get the right
+> total.
+
+Please fix the subject of the patch to be more descriptive. It is
+worded like a bug fix, while it really is only a step in the patch
+series.
+
+Something like "Take partitioning into account for max number of
+counters" would go a long way.
+
 > 
 > Signed-off-by: Colton Lewis <coltonlewis@google.com>
 > ---
->  arch/arm64/kvm/sys_regs.c | 3 +++
->  1 file changed, 3 insertions(+)
+>  arch/arm64/kvm/pmu.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
 > 
-> diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
-> index 76c2f0da821f..99fdbe174202 100644
-> --- a/arch/arm64/kvm/sys_regs.c
-> +++ b/arch/arm64/kvm/sys_regs.c
-> @@ -3092,6 +3092,9 @@ static const struct sys_reg_desc sys_reg_descs[] = {
->  	{ SYS_DESC(SYS_SVCR), undef_access, reset_val, SVCR, 0, .visibility = sme_visibility  },
->  	{ SYS_DESC(SYS_FPMR), undef_access, reset_val, FPMR, 0, .visibility = fp8_visibility },
->  
-> +	{ SYS_DESC(SYS_PMICNTR_EL0), undef_access },
-
-$ jq -r --arg FEAT "FEAT_PMUv3_ICNTR" -f ./dumpfeat.jq Features.json
-(FEAT_PMUv3_ICNTR --> v8Ap8)
-(FEAT_PMUv3_ICNTR --> FEAT_PMUv3p9)
-((FEAT_PMUv3_ICNTR && FEAT_AA64EL2) --> FEAT_FGT2)
-
-If you have FEAT_PMUv3_ICNTR, then you have FEAT_FGT2. If you have
-FEAT_FGT2, then we already trap and UNDEF PMICNTR_EL0 without any
-further handling since 4bc0fe0898406 ("KVM: arm64: Add sanitisation
-for FEAT_FGT2 registers").
-
-> +	{ SYS_DESC(SYS_PMICFILTR_EL0), undef_access },
-
-Same thing.
+> diff --git a/arch/arm64/kvm/pmu.c b/arch/arm64/kvm/pmu.c
+> index 79b7ea037153..67216451b8ce 100644
+> --- a/arch/arm64/kvm/pmu.c
+> +++ b/arch/arm64/kvm/pmu.c
+> @@ -533,6 +533,8 @@ static bool pmu_irq_is_valid(struct kvm *kvm, int irq)
+>  u8 kvm_arm_pmu_get_max_counters(struct kvm *kvm)
+>  {
+>  	struct arm_pmu *arm_pmu = kvm->arch.arm_pmu;
+> +	u8 counters;
 > +
->  	{ PMU_SYS_REG(PMCR_EL0), .access = access_pmcr, .reset = reset_pmcr,
->  	  .reg = PMCR_EL0, .get_user = get_pmcr, .set_user = set_pmcr },
->  	{ PMU_SYS_REG(PMCNTENSET_EL0),
 
-So none of this is actually required.
+nit: superfluous blank line.
+>  
+>  	/*
+>  	 * PMUv3 requires that all event counters are capable of counting any
+> @@ -545,7 +547,12 @@ u8 kvm_arm_pmu_get_max_counters(struct kvm *kvm)
+>  	 * The arm_pmu->cntr_mask considers the fixed counter(s) as well.
+>  	 * Ignore those and return only the general-purpose counters.
+>  	 */
+> -	return bitmap_weight(arm_pmu->cntr_mask, ARMV8_PMU_MAX_GENERAL_COUNTERS);
+> +	counters = bitmap_weight(arm_pmu->cntr_mask, ARMV8_PMU_MAX_GENERAL_COUNTERS);
+> +
+> +	if (kvm_pmu_is_partitioned(arm_pmu))
+> +		counters += arm_pmu->hpmn_max;
+
+Why the check? Why can't we rely on hpmn_max to always give us the
+correct value?
+
+Thanks,
 
 	M.
 
