@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-36018-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36019-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8721AEC2F7
-	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 01:20:40 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18CEAAEC2FC
+	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 01:25:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2AB604A816D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 23:20:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 329A77A7160
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 23:23:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7909B291C0A;
-	Fri, 27 Jun 2025 23:19:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99FA72900A4;
+	Fri, 27 Jun 2025 23:25:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="itKzoUOu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pNyXAkF6"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FBE0291C02;
-	Fri, 27 Jun 2025 23:19:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F6E428F93E;
+	Fri, 27 Jun 2025 23:25:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751066372; cv=none; b=fvsfmo4du5/erlSBLLT5LbdLxdkatXpYkapqB11m77xMpXkpWQ7OBH0aM/CfU3gK/wIi0Mz/d7bAuBRgiyeIGogjqtLnBCoL1732i58NFYVp48ehEDruiocBJW00C6++gV+WacsALNWLEaDWYoHvBWeOvsX3Lg9D4Hb0bJtaOVU=
+	t=1751066704; cv=none; b=QtAN14/aIo+AMCgIwldf4k67eWSvk06Zzdfq2v7UEIZz6zRaS6DeIvarBQf2Nb07z0cg9OoHjKVZiC+L+EJFRDydSZX0nfu+1DZW6ZRSU5fnz6eDOYEeFoNoX561CN4A6JKFCjMUemqj+lGgt8KQv4DK2LgOvn2cxfg5hrYUNvM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751066372; c=relaxed/simple;
-	bh=v56BmeYKzQBOPdOvlOJjHAE5S3lY/mnOHTfpwMRrjbY=;
+	s=arc-20240116; t=1751066704; c=relaxed/simple;
+	bh=DfSQpv9BuNSk64qvvBNZUTv3g4SIIiQk09oIHwENVY8=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kAZtnZm0peY62rte/+OkfQgve+VrLvOJNrhKxylp32E+PM6YdZyd9CM3lGXlZUpY2B47sI+1PCfXxOkcJeYlzOT7tEGTkh2PycTISSaFL0AnnwJYu6KJkX24UQogMuqIEHHOyXCsI81Ngf4Oja4ngiTL/p5kpuT++XlFstli1GE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=itKzoUOu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6F75C4CEE3;
-	Fri, 27 Jun 2025 23:19:30 +0000 (UTC)
+	 MIME-Version:Content-Type; b=npT5egd1HQkgNxLAPgqTeVzsB+CSLAno1MT9lyqguhW3pDev0REuHhQ3wfYd+epSwUZL+qYk0wFMWVi2ElB4GkUNrS7STl6hZ/wqMALoohdcigTjm8d9Rled6Xj8ybxMd3LDQ21dDA47jqcPzf4sOqX3E/tm+uYsF29lJrIJ6Hg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pNyXAkF6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39D5EC4CEE3;
+	Fri, 27 Jun 2025 23:25:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751066371;
-	bh=v56BmeYKzQBOPdOvlOJjHAE5S3lY/mnOHTfpwMRrjbY=;
+	s=k20201202; t=1751066704;
+	bh=DfSQpv9BuNSk64qvvBNZUTv3g4SIIiQk09oIHwENVY8=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=itKzoUOuJcOyXipAorUlxcybjBWcdrpz+1G4DG2f9LeW2IiZSOseCgU1ZyQgc0C6G
-	 qkxAMMQnLsWfglppJwS3PjnoBd5crPhqQU08uq/AGU7mw6i6qQ4kW+BBTZEGYAkbe4
-	 5MUrRbMOP7RxYPbHtsjvwt1uTgxp5ReFKrAHb8Y/P8+VhFqTd25Etajevt9iy2ojiU
-	 yqUTTP+ZCbY3PIxjez1qyCHfcyiRBPCsbJcde8Etc85v+z1XiSQ2m6S6ixiT1VFlPQ
-	 C3rUbCWr/G9E0zHQeiXvvGvWr04DG4Nw0BCvBNsMmade8CVM2vDGhgO6Q0SAujVY6C
-	 8nT1TC4eBCR8w==
-Date: Fri, 27 Jun 2025 16:19:30 -0700
+	b=pNyXAkF6cZWOvWn90iksGtmuCHGJmD7csiIPE0tIt6mQjftEKe3iwEF06C9i6/wUu
+	 MuXPrLqqqzQBTJodh0PXlvDA+BnTC8BsdsL87qZNvLhsfdZ4OjFKTPu4hSteamQ32D
+	 c5c79SfoKN4SbQ6vXXpPNc09h6/FerH7z8ajBJMfGtZQs9JHdFLrVj3JnDWl8CGhEK
+	 bauUvgsBAw0q1xUk+vxFhi51EOOPu3BZB2plvXtCc17sa/RmTNdEMW77IQSAy1NsP3
+	 N+nfEEpAuoG7CvKDIiRwcW+E+hE0kYYsS8MWqAp8x9X9/qgIE+pVCU+nlBfC8FHAZW
+	 Qq/i4gZI0qQcw==
+Date: Fri, 27 Jun 2025 16:25:02 -0700
 From: Jakub Kicinski <kuba@kernel.org>
 To: chia-yu.chang@nokia-bell-labs.com
 Cc: alok.a.tiwari@oracle.com, pctammela@mojatatu.com, horms@kernel.org,
@@ -55,12 +55,12 @@ Cc: alok.a.tiwari@oracle.com, pctammela@mojatatu.com, horms@kernel.org,
  ingemar.s.johansson@ericsson.com, mirja.kuehlewind@ericsson.com,
  cheshire@apple.com, rs.ietf@gmx.at, Jason_Livingood@comcast.com,
  vidhi_goel@apple.com
-Subject: Re: [PATCH v20 net-next 6/6] Documentation: netlink: specs: tc: Add
- DualPI2 specification
-Message-ID: <20250627161930.385554c0@kernel.org>
-In-Reply-To: <20250621193331.16421-7-chia-yu.chang@nokia-bell-labs.com>
+Subject: Re: [PATCH v20 net-next 1/6] sched: Struct definition and parsing
+ of dualpi2 qdisc
+Message-ID: <20250627162502.0a82accf@kernel.org>
+In-Reply-To: <20250621193331.16421-2-chia-yu.chang@nokia-bell-labs.com>
 References: <20250621193331.16421-1-chia-yu.chang@nokia-bell-labs.com>
-	<20250621193331.16421-7-chia-yu.chang@nokia-bell-labs.com>
+	<20250621193331.16421-2-chia-yu.chang@nokia-bell-labs.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,148 +70,123 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Sat, 21 Jun 2025 21:33:31 +0200 chia-yu.chang@nokia-bell-labs.com
+On Sat, 21 Jun 2025 21:33:26 +0200 chia-yu.chang@nokia-bell-labs.com
 wrote:
-> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-> 
-> Introduce the specification of tc qdisc DualPI2 stats and attributes,
-> which is the reference implementation of IETF RFC9332 DualQ Coupled AQM
-> (https://datatracker.ietf.org/doc/html/rfc9332) providing two different
-> queues: low latency queue (L-queue) and classic queue (C-queue).
+> +static struct netlink_range_validation dualpi2_alpha_beta_range = {
+> +	.min = 1,
+> +	.max = ALPHA_BETA_MAX,
+> +};
+> +
+> +static struct netlink_range_validation dualpi2_wc_range = {
+> +	.min = 0,
+> +	.max = MAX_WC,
+> +};
+> +
+> +static struct netlink_range_validation dualpi2_ecn_mask_range = {
+> +	.min = TCA_DUALPI2_ECN_MASK_L4S_ECT,
+> +	.max = TCA_DUALPI2_ECN_MASK_MAX,
+> +};
 
-> diff --git a/Documentation/netlink/specs/tc.yaml b/Documentation/netlink/specs/tc.yaml
-> index 4cc1f6a45001..8a183799dceb 100644
-> --- a/Documentation/netlink/specs/tc.yaml
-> +++ b/Documentation/netlink/specs/tc.yaml
-> @@ -56,6 +56,41 @@ definitions:
->        - tundf
->        - tunoam
->        - tuncrit
-> +  -
-> +    name: dualpi2-drop-overload
-> +    name-prefix: tca-dualpi2-drop-overload-
+ranges which fit in s16 can be expressed directly with
+NLA_POLICY_RANGE(), you don't need the out-of-line struct.
 
-As far as I understand tca / TCA stands for TC Attribute.
-This is an enum for values, not for netlink attribute IDs,
-tc-dualpi2-drop-overload- would be less confusing here
+> +static const struct nla_policy dualpi2_policy[TCA_DUALPI2_MAX + 1] = {
+> +	[TCA_DUALPI2_LIMIT]		= NLA_POLICY_MIN(NLA_U32, 1),
+> +	[TCA_DUALPI2_MEMORY_LIMIT]	= NLA_POLICY_MIN(NLA_U32, 1),
+> +	[TCA_DUALPI2_TARGET]		= {.type = NLA_U32},
 
-Which may in fact mean that you don't need name-prefix,
-because I think that's what the default name would be.
+nit: spaces around {} brackets 		= { .type = NLA_U32 },
 
-same thing for other value enums
+> +	[TCA_DUALPI2_TUPDATE]		= NLA_POLICY_MIN(NLA_U32, 1),
+> +	[TCA_DUALPI2_ALPHA]		=
+> +		NLA_POLICY_FULL_RANGE(NLA_U32, &dualpi2_alpha_beta_range),
+> +	[TCA_DUALPI2_BETA]		=
+> +		NLA_POLICY_FULL_RANGE(NLA_U32, &dualpi2_alpha_beta_range),
+> +	[TCA_DUALPI2_STEP_THRESH]	= {.type = NLA_U32},
+> +	[TCA_DUALPI2_STEP_PACKETS]	= {.type = NLA_FLAG},
+> +	[TCA_DUALPI2_MIN_QLEN_STEP]	= {.type = NLA_U32},
+> +	[TCA_DUALPI2_COUPLING]		= NLA_POLICY_MIN(NLA_U8, 1),
+> +	[TCA_DUALPI2_DROP_OVERLOAD]	=
+> +		NLA_POLICY_MAX(NLA_U8, TCA_DUALPI2_DROP_OVERLOAD_MAX),
+> +	[TCA_DUALPI2_DROP_EARLY]	=
+> +		NLA_POLICY_MAX(NLA_U8, TCA_DUALPI2_DROP_EARLY_MAX),
+> +	[TCA_DUALPI2_C_PROTECTION]	=
+> +		NLA_POLICY_FULL_RANGE(NLA_U8, &dualpi2_wc_range),
+> +	[TCA_DUALPI2_ECN_MASK]		=
+> +		NLA_POLICY_FULL_RANGE(NLA_U8, &dualpi2_ecn_mask_range),
+> +	[TCA_DUALPI2_SPLIT_GSO]		=
+> +		NLA_POLICY_MAX(NLA_U8, TCA_DUALPI2_SPLIT_GSO_MAX),
+> +};
+> +
+> +static int dualpi2_change(struct Qdisc *sch, struct nlattr *opt,
+> +			  struct netlink_ext_ack *extack)
+> +{
+> +	struct nlattr *tb[TCA_DUALPI2_MAX + 1];
+> +	struct dualpi2_sched_data *q;
+> +	int old_backlog;
+> +	int old_qlen;
+> +	int err;
+> +
+> +	if (!opt)
 
-> +    type: enum
-> +    entries:
+should there be an extack message here?
 
-FWIW if you don't document you can use the shorter notation:
+> +		return -EINVAL;
+> +	err = nla_parse_nested(tb, TCA_DUALPI2_MAX, opt, dualpi2_policy,
+> +			       extack);
+> +	if (err < 0)
+> +		return err;
+> +
+> +	q = qdisc_priv(sch);
+> +	sch_tree_lock(sch);
+> +
+> +	if (tb[TCA_DUALPI2_LIMIT]) {
+> +		u32 limit = nla_get_u32(tb[TCA_DUALPI2_LIMIT]);
+> +
+> +		WRITE_ONCE(sch->limit, limit);
+> +		WRITE_ONCE(q->memory_limit, get_memory_limit(sch, limit));
+> +	}
+> +
+> +	if (tb[TCA_DUALPI2_MEMORY_LIMIT])
+> +		WRITE_ONCE(q->memory_limit,
+> +			   nla_get_u32(tb[TCA_DUALPI2_MEMORY_LIMIT]));
+> +
+> +	if (tb[TCA_DUALPI2_TARGET]) {
+> +		u64 target = nla_get_u32(tb[TCA_DUALPI2_TARGET]);
+> +
+> +		WRITE_ONCE(q->pi2_target, target * NSEC_PER_USEC);
+> +	}
+> +
+> +	if (tb[TCA_DUALPI2_TUPDATE]) {
+> +		u64 tupdate = nla_get_u32(tb[TCA_DUALPI2_TUPDATE]);
+> +
+> +		WRITE_ONCE(q->pi2_tupdate, convert_us_to_nsec(tupdate));
+> +	}
+> +
+> +	if (tb[TCA_DUALPI2_ALPHA]) {
+> +		u32 alpha = nla_get_u32(tb[TCA_DUALPI2_ALPHA]);
+> +
+> +		WRITE_ONCE(q->pi2_alpha, dualpi2_scale_alpha_beta(alpha));
+> +	}
+> +
+> +	if (tb[TCA_DUALPI2_BETA]) {
+> +		u32 beta = nla_get_u32(tb[TCA_DUALPI2_BETA]);
+> +
+> +		WRITE_ONCE(q->pi2_beta, dualpi2_scale_alpha_beta(beta));
+> +	}
+> +
+> +	if (tb[TCA_DUALPI2_STEP_THRESH]) {
+> +		u32 step_th = nla_get_u32(tb[TCA_DUALPI2_STEP_THRESH]);
+> +		bool step_pkt = nla_get_flag(tb[TCA_DUALPI2_STEP_PACKETS]);
+> +
+> +		WRITE_ONCE(q->step_in_packets, step_pkt);
+> +		WRITE_ONCE(q->step_thresh,
+> +			   step_pkt ? step_th : convert_us_to_nsec(step_th));
+> +	}
 
-	entries: [overflow, drop]
-
-> +      - overflow
-> +      - drop
-> +  -
-> +    name: dualpi2-drop-early
-> +    name-prefix: tca-dualpi2-drop-early-
-> +    type: enum
-> +    entries:
-> +      - drop-dequeue
-> +      - drop-enqueue
-> +  -
-> +    name: dualpi2-ecn-mask
-> +    name-prefix: tca-dualpi2-ecn-mask-
-> +    type: enum
-
-you can use
-
-	value-start: 1
-	entries: [l4s..
-
-or just drop the values for entries other than first.
-in enums the next value takes the previuos value + 1 by default
-
-> +    entries:
-> +      -
-> +        name: l4s-ect
-> +        value: 1
-> +      -
-> +        name: cla-ect
-> +        value: 2
-> +      -
-> +        name: any-ect
-> +        value: 3
-
-> +  -
-> +    name: tc-dualpi2-xstats
-> +    type: struct
-> +    members:
-> +      -
-> +        name: prob
-> +        type: u32
-> +        doc: Current probability
-
-what's the probability of ?
-
-> +      -
-> +        name: ecn-mark
-> +        type: u32
-> +        doc: All packets marked with ecn
-
-ECN
-
-> +      -
-> +        name: step-thresh
-> +        type: u32
-> +        doc: L4S step marking threshold (see also step-packets)
-> +      -
-> +        name: step-packets
-> +        type: flag
-> +        doc: L4S Step marking threshold unit in packets
-> +             (otherwise is in microseconds)
-
-Why mux two distinct values in one attr and carry another attr for the
-unit? IMO it'd be more idiomatic for Netlink to define two attributes,
-one for threshold in packets and one in time. And enforce that only one
-can be sent in a message (probably using an explicit check in the code).
-Conversely only report one in GET / DUMP.
-
-> +      -
-> +        name: min-qlen-step
-> +        type: u32
-> +        doc: Packets enqueued to the L-queue can apply the step threshold
-> +             when the queue length of L-queue is larger than this value.
-> +             (0 is recommended)
-> +      -
-> +        name: coupling
-> +        type: u8
-> +        doc: Probability coupling factor between Classic and L4S
-> +             (2 is recommended)
-> +      -
-> +        name: drop-overload
-> +        type: u8
-> +        doc: Control the overload strategy (drop to preserve latency or
-> +             let the queue overflow)
-> +        enum: dualpi2-drop-overload
-> +      -
-> +        name: drop-early
-> +        type: u8
-> +        doc: Decide where the Classic packets are PI-based dropped or marked
-> +        enum: dualpi2-drop-early
-> +      -
-> +        name: c-protection
-> +        type: u8
-> +        doc: Classic WRR weight in percentage (from 0 to 100)
-> +      -
-> +        name: ecn-mask
-> +        type: u8
-> +        doc: Configure the L-queue ECN classifier
-> +        enum: dualpi2-ecn-mask
-> +      -
-> +        name: split-gso
-> +        type: u8
-> +        doc: Split aggregated skb or not
-> +        enum: dualpi2-split-gso
-
-Keep in mind that values in netlink are in 4B granularity, so all these
-will be carried as 1B + 3B of padding. If there's any chance you may
-need more bits in the future u32 is a safer default choice.
+I don't get the reason for all these WRITE_ONCE()s.
+You lock the qdisc to make modifications, right?
+And the block under which I'm responding is performing two dependent
+writes, one to ->step_in_packets and the other to ->step_thresh
+a change which is definitely not atomic..
 
