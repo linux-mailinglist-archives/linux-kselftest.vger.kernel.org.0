@@ -1,110 +1,109 @@
-Return-Path: <linux-kselftest+bounces-35955-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35956-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 048F1AEB1F7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 11:05:00 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9BC37AEB29C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 11:20:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7323864039E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 09:04:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 31C087AA3D2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 09:19:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9969293C66;
-	Fri, 27 Jun 2025 09:04:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B431E296169;
+	Fri, 27 Jun 2025 09:18:11 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E586293C48;
-	Fri, 27 Jun 2025 09:04:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net [60.248.80.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 756C4293C78
+	for <linux-kselftest@vger.kernel.org>; Fri, 27 Jun 2025 09:18:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.248.80.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751015069; cv=none; b=bkbJb3V4wbvE7lpLAz+TaxvOH9tiUC7LDEA4zZ9tJRpJumqF2w7agpXoW8FkRPv28zNDMtIpHKEdpKMReF43Ccr00lJaT4v6nXN9msCTLgTH0LWUVEZOmnhCNTsyE4m2hJHi34Vi4R0lX2GDIudq1hFRXNcsIqweNkVUS8QTPqc=
+	t=1751015891; cv=none; b=S+PtobG3GysAdLWk8MU26j/D2bvatVqwZGeAbZeP4QfYRK3jybLZOgs4yyOiLss6ZR7ET9Poq19FE6iYJDlqQJzZeKdrrJ7TQPpJFQM/rMCDlzsftQCkKYLgXR6NDYsJz/NpwPYAnJpxUy9bUM3IGaVzir6XP8Cbe5iKKKo1PAY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751015069; c=relaxed/simple;
-	bh=WK6qQPO9YtNDQ0NAVtBK294K4n0DYb70ujFjHoVezxo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UbR/J9kUcr9s9gRLw2+N7Q21tyey5mdZur2MevJDKQvvDBCTAvt3pNQeshLmAbfNU7g3sz85RbE3t7xvmAzcNk8XGelFjXC77651N8GHG0+O8kWgeiJCo6aKDLl6Cei55cV6tTxxyGN+FToDQ7KPMZBQeIIpYRxJAQiQM//ZIsQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1FDAA1A00;
-	Fri, 27 Jun 2025 02:04:09 -0700 (PDT)
-Received: from [10.1.196.46] (e134344.arm.com [10.1.196.46])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2F7633F762;
-	Fri, 27 Jun 2025 02:04:23 -0700 (PDT)
-Message-ID: <603eb4c7-5570-438c-b747-cdcc67b09ea6@arm.com>
-Date: Fri, 27 Jun 2025 10:04:21 +0100
+	s=arc-20240116; t=1751015891; c=relaxed/simple;
+	bh=Izm8MqI7uCMyrD97oNc/Jc+iWnkGXHI/bYDqMxEzfW4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=p1lEHLFarJTPd0TRb2znEjWj+XZos+syNCwU4Kd3frnIpSBRfSO67mpYQoEIypFVrZ1ZkhVEUar5nrJgDKuPbPt+dDWBqtsuDdfPyEJeGGZEDcWZ9JDtpi/aVW7E2aohz2PYfXM49TYNBN2jw/QWsI3ZsaE7pDrS1ynCUoqkja0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=andestech.com; spf=pass smtp.mailfrom=andestech.com; arc=none smtp.client-ip=60.248.80.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=andestech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=andestech.com
+Received: from Atcsqr.andestech.com (localhost [127.0.0.2] (may be forged))
+	by Atcsqr.andestech.com with ESMTP id 55R98Ta9013106
+	for <linux-kselftest@vger.kernel.org>; Fri, 27 Jun 2025 17:08:29 +0800 (+08)
+	(envelope-from ben717@andestech.com)
+Received: from mail.andestech.com (ATCPCS31.andestech.com [10.0.1.89])
+	by Atcsqr.andestech.com with ESMTPS id 55R98EZA012876
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 27 Jun 2025 17:08:14 +0800 (+08)
+	(envelope-from ben717@andestech.com)
+Received: from swlinux02.andestech.com (10.0.15.183) by ATCPCS31.andestech.com
+ (10.0.1.89) with Microsoft SMTP Server id 14.3.498.0; Fri, 27 Jun 2025
+ 17:08:14 +0800
+From: Ben Zong-You Xie <ben717@andestech.com>
+To:
+CC: <tglx@linutronix.de>, <mingo@redhat.com>, <peterz@infradead.org>,
+        <dvhart@infradead.org>, <dave@stgolabs.net>, <andrealmeid@igalia.com>,
+        <shuah@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <tim609@andestech.com>,
+        Ben Zong-You Xie
+	<ben717@andestech.com>,
+        Cynthia Huang <cynthia@andestech.com>
+Subject: [PATCH v2] selftests: futex: define SYS_futex on 32-bit architectures with 64-bit time_t
+Date: Fri, 27 Jun 2025 17:08:12 +0800
+Message-ID: <20250627090812.937939-1-ben717@andestech.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 02/22] arm64: Generate sign macro for sysreg Enums
-To: Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
- Russell King <linux@armlinux.org.uk>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>,
- Mingwei Zhang <mizhang@google.com>, Joey Gouly <joey.gouly@arm.com>,
- Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu
- <yuzenghui@huawei.com>, Mark Rutland <mark.rutland@arm.com>,
- Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- kvmarm@lists.linux.dev, linux-perf-users@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20250626200459.1153955-1-coltonlewis@google.com>
- <20250626200459.1153955-3-coltonlewis@google.com>
-Content-Language: en-US
-From: Ben Horgan <ben.horgan@arm.com>
-In-Reply-To: <20250626200459.1153955-3-coltonlewis@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-DKIM-Results: atcpcs31.andestech.com; dkim=none;
+X-DNSRBL: 
+X-SPAM-SOURCE-CHECK: pass
+X-MAIL:Atcsqr.andestech.com 55R98Ta9013106
 
-Hi Colton,
+glibc does not define SYS_futex for 32-bit architectures using 64-bit
+time_t e.g. riscv32, therefore this test fails to compile since it does not
+find SYS_futex in C library headers. Define SYS_futex as SYS_futex_time64
+in this situation to ensure successful compilation and compatibility.
 
-On 6/26/25 21:04, Colton Lewis wrote:
-> There's no reason Enums shouldn't be equivalent to UnsignedEnums and
-> explicitly specify they are unsigned. This will avoid the annoyance I
-> had with HPMN0.
-An Enum can be annotated with the field's sign by updating it to 
-UnsignedEnum or SignedEnum. This is explained in [1].
+Signed-off-by: Cynthia Huang <cynthia@andestech.com>
+Signed-off-by: Ben Zong-You Xie <ben717@andestech.com>
+---
+Changes since v1:
+  - Fix the SOB chain
 
-With this change ID_AA64PFR1_EL1.MTE_frac would be marked as unsigned 
-when it should really be considered signed.
+v1 : https://lore.kernel.org/all/20250527093536.3646143-1-ben717@andestech.com/
+---
+ tools/testing/selftests/futex/include/futextest.h | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-Enum	43:40	MTE_frac
-	0b0000	ASYNC
-	0b1111	NI
-EndEnum
+diff --git a/tools/testing/selftests/futex/include/futextest.h b/tools/testing/selftests/futex/include/futextest.h
+index ddbcfc9b7bac..7a5fd1d5355e 100644
+--- a/tools/testing/selftests/futex/include/futextest.h
++++ b/tools/testing/selftests/futex/include/futextest.h
+@@ -47,6 +47,17 @@ typedef volatile u_int32_t futex_t;
+ 					 FUTEX_PRIVATE_FLAG)
+ #endif
 
-
-> 
-> Signed-off-by: Colton Lewis <coltonlewis@google.com>
-> ---
->   arch/arm64/tools/gen-sysreg.awk | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm64/tools/gen-sysreg.awk b/arch/arm64/tools/gen-sysreg.awk
-> index f2a1732cb1f6..fa21a632d9b7 100755
-> --- a/arch/arm64/tools/gen-sysreg.awk
-> +++ b/arch/arm64/tools/gen-sysreg.awk
-> @@ -308,6 +308,7 @@ $1 == "Enum" && (block_current() == "Sysreg" || block_current() == "SysregFields
->   	parse_bitdef(reg, field, $2)
->   
->   	define_field(reg, field, msb, lsb)
-> +	define_field_sign(reg, field, "false")
->   
->   	next
->   }
-
-Thanks,
-
-Ben
-
-[1] 
-https://lore.kernel.org/all/20221207-arm64-sysreg-helpers-v4-1-25b6b3fb9d18@kernel.org/
-
++/*
++ * SYS_futex is expected from system C library, in glibc some 32-bit
++ * architectures (e.g. RV32) are using 64-bit time_t, therefore it doesn't have
++ * SYS_futex defined but just SYS_futex_time64. Define SYS_futex as
++ * SYS_futex_time64 in this situation to ensure the compilation and the
++ * compatibility.
++ */
++#if !defined(SYS_futex) && defined(SYS_futex_time64)
++#define SYS_futex SYS_futex_time64
++#endif
++
+ /**
+  * futex() - SYS_futex syscall wrapper
+  * @uaddr:	address of first futex
+--
+2.34.1
 
