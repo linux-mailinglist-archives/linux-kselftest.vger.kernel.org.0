@@ -1,54 +1,54 @@
-Return-Path: <linux-kselftest+bounces-35973-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35974-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F7BBAEB8C6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 15:23:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 326C7AEB8FE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 15:31:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D6CC1C6070E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 13:23:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 87A113BDC47
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 13:30:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 416BB2D9ED3;
-	Fri, 27 Jun 2025 13:23:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3535622578D;
+	Fri, 27 Jun 2025 13:31:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vOYFNiTv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BibA/YEh"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03B3E2D3EFC;
-	Fri, 27 Jun 2025 13:23:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2FBC8460;
+	Fri, 27 Jun 2025 13:31:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751030594; cv=none; b=OsJrhv0KxuEXD0KF7QsUKsx+T8CdyNdMztZr4GbihcY1lxpEmAbS46BewQzCLxw4FenRcp2j7VrT5ETj39SLoX4rqPXcm2lB5WhObnAb8aIDTqug74AKq+JzJX2TIR7yVwJ2IRJusOKn7WMRlpJUBU6HK1hFyudicUbMiDFNhzg=
+	t=1751031069; cv=none; b=IJtTX9yRD8F+sLJmhYi6Zeqv07QxjBIcChYJ17i3g9LZMnPVVgq0NpTcKXBKg4GPA3XbXngNMqtg/W0CR5FcjV2AaVA46Eh74FGbBNRI3J3Vd+e2gurAqhKfLBL1C9kwtBvBi+Uz+I+6cH9eLiqqE1GJQeC8CCBQ6VhbHfiitoE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751030594; c=relaxed/simple;
-	bh=JIWvjEsAlcLjXPQ5Hbwf/8w/8yueo94WJUdb35S5Oec=;
+	s=arc-20240116; t=1751031069; c=relaxed/simple;
+	bh=kokEDiINvuUFaynPitaSpNI5LxY/Pe4ILkwR63ddPkc=;
 	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rie078NN9vnOpV+qFzpgcBwJ8qIce6hfgRkc3lKGjOfvhIBs4GNjqtwYDZ/wljdjvw9bFOF0YjHqtabeIra5NNEpjU9NBUqe+CEcPtJvyHpvkoKJr35TjRwHLgVx35Htg0ylycOmgYeiLZFyRt5DbcTarMYZbHYAFM1RQwtRP3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vOYFNiTv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F526C4CEE3;
-	Fri, 27 Jun 2025 13:23:13 +0000 (UTC)
+	 MIME-Version:Content-Type; b=KWXf4mlZcefopuoKljHktSZ9xgIRHT4uZAs+MZPvNazEQfKm0VxjpPkjbYyLDv1i99oxLFO2KeuJC7vAVTOPNxs8JvXVSQmtV1ancwZLyMJk22d5M9pzgp2oamy6oX/80vsHPK4WEgNf7Du6c0qip427D3rFs7zMZRwyK6xk2Gw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BibA/YEh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E37CC4CEE3;
+	Fri, 27 Jun 2025 13:31:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751030593;
-	bh=JIWvjEsAlcLjXPQ5Hbwf/8w/8yueo94WJUdb35S5Oec=;
+	s=k20201202; t=1751031068;
+	bh=kokEDiINvuUFaynPitaSpNI5LxY/Pe4ILkwR63ddPkc=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=vOYFNiTvT+uN16eqP2YsWAm8KNoGDrAGRnGCZQ6k3cO3wSmWrl36/2ZlQcLJQwrRv
-	 x0ukPV/wQEOdYQ2i6vAzxBPDpSXvXf3bfojfbaXAGUi/zOjkFrXqpF4lL5XnmLTOA8
-	 JVICb6C+MRm1Siz8dIurqz6weeho1YZXN5VTyqQEoGulA/8dV9I2M2O6Lh80RiFBlv
-	 a8PqNGgBVGPdfZSr5Bsa2an5D5s9mwpT/qmHwp6N2Dnb8r+rq0pfYtC4MB++kkgB64
-	 exk69s0EgLMe7xEvIINLL9QNOlx2iQzFmmNXVv1jZa2st1kUxL05Mes900+mRzbxlL
-	 UwcCAULbWT0Qw==
+	b=BibA/YEh2AeqD4S8YXr5p4aivahoY4IJa7w1Dq7LOwJv1faJXHOEDMOmKIUtHSpln
+	 F0c+9MrHEIl68ZFm0enGhAsRI934nS+8NAvRFnkwSBWE0Djh2dlkWHuCgUhKEHut9U
+	 oYhGbcGS44hjE1NUgQ/sn8QEaR4j3ZEBLDxc/zibUNM42GAupJ+/woPaAzdw6gtea8
+	 78Y4+XMbmOBVVlVw9dEjUXTV3wBOmJJHgQardb9oMoT4l3jXIt1hBfe+qmnSwMuHLT
+	 5zWkSgJt20xGY08P08G1u7swBwJQlYHq8zIxdrDt7AMNMitTi23rC67bEac1Csswva
+	 XLgAnyBaJTkgg==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
 	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.95)
 	(envelope-from <maz@kernel.org>)
-	id 1uV92s-00AZW6-S1;
-	Fri, 27 Jun 2025 14:23:10 +0100
-Date: Fri, 27 Jun 2025 14:23:10 +0100
-Message-ID: <86tt41b9oh.wl-maz@kernel.org>
+	id 1uV9AY-00AZkC-8u;
+	Fri, 27 Jun 2025 14:31:06 +0100
+Date: Fri, 27 Jun 2025 14:31:05 +0100
+Message-ID: <86sejlb9ba.wl-maz@kernel.org>
 From: Marc Zyngier <maz@kernel.org>
 To: Colton Lewis <coltonlewis@google.com>
 Cc: kvm@vger.kernel.org,
@@ -70,10 +70,10 @@ Cc: kvm@vger.kernel.org,
 	kvmarm@lists.linux.dev,
 	linux-perf-users@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 02/22] arm64: Generate sign macro for sysreg Enums
-In-Reply-To: <20250626200459.1153955-3-coltonlewis@google.com>
+Subject: Re: [PATCH v3 03/22] KVM: arm64: Define PMI{CNTR,FILTR}_EL0 as undef_access
+In-Reply-To: <20250626200459.1153955-4-coltonlewis@google.com>
 References: <20250626200459.1153955-1-coltonlewis@google.com>
-	<20250626200459.1153955-3-coltonlewis@google.com>
+	<20250626200459.1153955-4-coltonlewis@google.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
  (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -89,18 +89,46 @@ X-SA-Exim-Rcpt-To: coltonlewis@google.com, kvm@vger.kernel.org, pbonzini@redhat.
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Thu, 26 Jun 2025 21:04:38 +0100,
+On Thu, 26 Jun 2025 21:04:39 +0100,
 Colton Lewis <coltonlewis@google.com> wrote:
 > 
-> There's no reason Enums shouldn't be equivalent to UnsignedEnums and
-> explicitly specify they are unsigned. This will avoid the annoyance I
-> had with HPMN0.
+> Because KVM isn't fully prepared to support these yet even though the
+> host PMUv3 driver does, define them as undef_access for now.
+> 
+> Signed-off-by: Colton Lewis <coltonlewis@google.com>
+> ---
+>  arch/arm64/kvm/sys_regs.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
+> index 76c2f0da821f..99fdbe174202 100644
+> --- a/arch/arm64/kvm/sys_regs.c
+> +++ b/arch/arm64/kvm/sys_regs.c
+> @@ -3092,6 +3092,9 @@ static const struct sys_reg_desc sys_reg_descs[] = {
+>  	{ SYS_DESC(SYS_SVCR), undef_access, reset_val, SVCR, 0, .visibility = sme_visibility  },
+>  	{ SYS_DESC(SYS_FPMR), undef_access, reset_val, FPMR, 0, .visibility = fp8_visibility },
+>  
+> +	{ SYS_DESC(SYS_PMICNTR_EL0), undef_access },
 
-And randomly break unsuspecting cases for which a value is neither
-signed not unsigned, but an actual *enumeration*.
+$ jq -r --arg FEAT "FEAT_PMUv3_ICNTR" -f ./dumpfeat.jq Features.json
+(FEAT_PMUv3_ICNTR --> v8Ap8)
+(FEAT_PMUv3_ICNTR --> FEAT_PMUv3p9)
+((FEAT_PMUv3_ICNTR && FEAT_AA64EL2) --> FEAT_FGT2)
 
-If you have issues with HPMN0, start by explaining those, because
-ranting in a commit message doesn't help much.
+If you have FEAT_PMUv3_ICNTR, then you have FEAT_FGT2. If you have
+FEAT_FGT2, then we already trap and UNDEF PMICNTR_EL0 without any
+further handling since 4bc0fe0898406 ("KVM: arm64: Add sanitisation
+for FEAT_FGT2 registers").
+
+> +	{ SYS_DESC(SYS_PMICFILTR_EL0), undef_access },
+
+Same thing.
+> +
+>  	{ PMU_SYS_REG(PMCR_EL0), .access = access_pmcr, .reset = reset_pmcr,
+>  	  .reg = PMCR_EL0, .get_user = get_pmcr, .set_user = set_pmcr },
+>  	{ PMU_SYS_REG(PMCNTENSET_EL0),
+
+So none of this is actually required.
 
 	M.
 
