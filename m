@@ -1,67 +1,67 @@
-Return-Path: <linux-kselftest+bounces-35995-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35996-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC173AEBEB5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 19:57:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90225AEBEBF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 19:58:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1EAA8645665
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 17:56:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC6E61C624BA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 17:57:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2831E2EE288;
-	Fri, 27 Jun 2025 17:56:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39A862EE607;
+	Fri, 27 Jun 2025 17:56:02 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AE112ED175;
-	Fri, 27 Jun 2025 17:55:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66EFA2EE27C;
+	Fri, 27 Jun 2025 17:56:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751046961; cv=none; b=kOvf26BfyV6zjHXO5FXTZhl7QQ5Mlawoe+Emrz4nDhAn5nq+WFV5AcN94xe4ur4EkISS0CMnYU6zz4kGOBbbpN/iAn4av2c4Rtc4YQm7KiQSlriYBFBm/dE1Jrk680849ukCFjVkBKo/2yaq9A1/dlVY8H5eAGnHRQWlhsTuPbY=
+	t=1751046962; cv=none; b=p3uU53l7IO9xHfblxYgpQAkOqPxPOnTfLggCW0ZYWtLtKaz9Hlo8IGHCHzj/0sxOBWQzdXI6ekMjRsS02FMR2I0/1Sf4rfsKiWyfo0DaGDqu6eaBThEJiTiQRHHUMId5brasEEbWhbnuQoUOx1w3w0m61JD85AdXvAHWXhaS5P8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751046961; c=relaxed/simple;
-	bh=pcZpkL8/Vo5GDdA9GSNr5ZwCPZLTyJlooFlI1HTfP/A=;
+	s=arc-20240116; t=1751046962; c=relaxed/simple;
+	bh=oMOUjvb17dkMjNgn7pjR5NW3PcafE7gyNJxjq175LMk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=BnLe22hYq+b/Kq1ugaZvHLKQQ1GK6ufeWflaZiZ/8AB2owkBtQlgmWUt9pLB4ffnR1Qa6ecr+Y/XGOXZEQXfYFk/Rbfy4te4ZPajjr/BEiHQ+B4804QqK63Naj7kA2L7RAjFAJjRm/3q4YqbUPF+sRk6O6ddDPs2HU0MMufXReQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.45
+	 In-Reply-To:To:Cc; b=g1frpkS1K/ZF8QHY1pMBl7yT0dNmfBSxkZo6slWqg+7xf2OajSn3ETQ3fMDxNLaRgXHox4dDckPObjGEns3QBnbDtuAJO+hKeSx1z3Cvcc7Es+0PmgMSViFYNSIMnAKYpbUTcY7X2ifkqUsVyrQ0Llr1C01TkwZPZmhOX6ApWvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-60c4521ae2cso4504757a12.0;
-        Fri, 27 Jun 2025 10:55:58 -0700 (PDT)
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-60c4521ae2cso4504783a12.0;
+        Fri, 27 Jun 2025 10:56:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751046957; x=1751651757;
+        d=1e100.net; s=20230601; t=1751046959; x=1751651759;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ClXLLoPFou/Zs3D5ISq3qOrdQw3SSzyGRonA8OwAUwc=;
-        b=gxrvtbrXQdkFIvvWiJdeUdn4c68OPmtVlKdD+P/HSGcKswigGI4gu+tpzA4abTYVwB
-         hpKOiTSjy0n3RfbwRdSx7tJ5u5QFj4Fyvt/IRCj5Z7XcI9cTXl6wsimzS+GZ2FVXLyjD
-         3KLt5xzRh8DOHaEnenq5w5UleoimYMByUR72+pLJjNWyhtmoDsnpMzNYYjuOuNp8eFba
-         6TzUAY+rAcIaqXuDAIHXmh06ThnGOugV1goudHa1ju0YJqWznZJGO5EdpnHqHSVnIDot
-         pUJhtQt9Abf/lkQHWm6Umji67WWb8QXiYAH5dWeGaECgO8qcfB3hoiHpxysL9x3E44ax
-         qt6g==
-X-Forwarded-Encrypted: i=1; AJvYcCWN4fi4D0as+tNnXTHCOXZtrK6ilCc2PuDcvZu7Ho0HaXvbDb4IKigWr9XPD675HggYYy4SAPv9Xi5xZKA=@vger.kernel.org, AJvYcCWylobvY8lTQGHXPboSbHMzOgUPoIxN9t9Wul49GBjJIYKnYxaWO7k+mfns/lRuhjHjyfoporXEe8/XdiFxtCso@vger.kernel.org
-X-Gm-Message-State: AOJu0YzfxhwnEUg+wYQGowCfKSZ+cLZNv/235KvYd6thtOCQUil4Eu3/
-	nae35jEfZfcnuZ5FfDFkUDhq2JkGIw1elC0Z52Jy7/jlFXOI0Lv0hD76
-X-Gm-Gg: ASbGnctzyK1+t0oGyYNsvN9kYbFoXMhE9BmHchHtupVUTXjNb3NSiUwiRvYsHe5JUmf
-	PJuJZQbV1P+xOs33umCRnnorMQTPSMMAlD3xgSfRNPfr6FKnhRqYPCmVgcKWZln91HzTO+kjOZH
-	gv5z6rYje4pqYXkPdb+dnB5JnmkWIV4ZCLBe0yKOZonQ6x9sqpJtCgMCMkH5GNoB9DzR8ZO3WQ0
-	1wWC4FIH8f4kXVLUlBqBYXdAxvDg9Sjc+VXiR0cu3+a0oleBDjltQ9j+fxHUKwFHTY/Yypb+jSe
-	WK56oTzeAroOm1qOeyNlu3m8FmRJswzHZ0AYdSAa18HqnFDI7xtm
-X-Google-Smtp-Source: AGHT+IGL04zs6hP3O1ukERCqbY/aQnu4iEblvY6W6NTE2uJj/3CMybdWq1mxRT2Q6XIgZB3mik06rA==
-X-Received: by 2002:a17:907:d16:b0:ae0:c6e5:9738 with SMTP id a640c23a62f3a-ae3501fc1edmr401143566b.55.1751046957147;
-        Fri, 27 Jun 2025 10:55:57 -0700 (PDT)
+        bh=RYDZVXt1K3tFXA7SAWfw+XZ1JpA27F2JTM3+wG8ec70=;
+        b=PL+/BbyNyfXPVkQLh85mKRBP6erMfxcEbBDoGEQaeYxjM3SBWk1ISBAxAldJPOW17C
+         ebCFK0oU6V168iPhwwYqiBJTH26Ya1xSEHP43vIkOezVeFP/dZJguuf7fZ4olUboisyw
+         akjgbJxpRF+ROC4KD+tATy2d5AXHjMQCIzast/XNhgBV2eZA36ZgTKTWf4VhPBVVgcsd
+         dGJPLotkrO+Mjdw2SMMi+vPuakZi0FvPsa7pDlMM53jb/pYLd7Mip0FKghRC4bMnda69
+         6iEt+vhA+1viVRh3EpmY1ROzyqU5mVzuTELx8SFbxRFQkDJr6sN99fpcJmDInXaOyNRS
+         IDMA==
+X-Forwarded-Encrypted: i=1; AJvYcCVGd8rvZdxyivEnnK4+r4QvZc3ofY7XEBpH9+UqnfnlgIzzODsPlr4pWlvQVNyzWoWruvXHq8fDNvn13qa1HDCv@vger.kernel.org, AJvYcCVwPnly0BycKjnkfsP4t8crsNtEJjJFlGsiNJ5aePZeox7Rg0LlYzRWYCvYPnKtuYrA1wMYZAOvKa62G1A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxN+NVAS113MPUN2WayA7W+ejo7wbI9ZUXRkQoW3vATN7AOSK7j
+	wwzUpbSwRarEZ3Ek/CtAvvmGY2HNwzOcAkOt8/g4LJiX/htsYfzPd/X9
+X-Gm-Gg: ASbGnctdWef4O3jEyNN+FBf7MmJFJAQBcA/lcF2W5mo8yN0X7OM7399I1ep2BdrbfHd
+	LyMqrN4vjcyhFVVkV4EHy4oZPe1X2ppK/ffg71pSChqNJQMizZjgblP2cE+SwyJ+sN0wn7ReR5n
+	w2tLwZ6SPww5LTgxA3Rqk36oq5FmfvejXmXo52E+TnRmhl2E5WqUk79GcGJYAX+07rP35wL2zyv
+	kO5CoepwVfMVZSkz90PiWHzRcaC0avvsE43Bsfe+q1ad0Nitxb66OztzKnZqjCZLylY9a51U9Sr
+	QPkIVCU5o2kD8A+FVuKPeFoh4oVc1rTLkJK+LeK3zsYlMKu7Xh7sSrZrj+Oa9vo=
+X-Google-Smtp-Source: AGHT+IGPMfxBFzdVtmU6aO7sJzDek40Zxc8CFLGTkaONoG0scZ4/v3uLaSR8KfrkjV+J42HjmwVJHQ==
+X-Received: by 2002:a05:6402:350c:b0:607:ea0c:65b2 with SMTP id 4fb4d7f45d1cf-60c88e64bfbmr3638601a12.31.1751046958559;
+        Fri, 27 Jun 2025 10:55:58 -0700 (PDT)
 Received: from localhost ([2a03:2880:30ff:9::])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae353c6bdafsm162009566b.143.2025.06.27.10.55.56
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-60c8319b333sm1774197a12.40.2025.06.27.10.55.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jun 2025 10:55:56 -0700 (PDT)
+        Fri, 27 Jun 2025 10:55:58 -0700 (PDT)
 From: Breno Leitao <leitao@debian.org>
-Date: Fri, 27 Jun 2025 10:55:50 -0700
-Subject: [PATCH net-next 4/7] netpoll: factor out IPv4 header setup into
- push_ipv4() helper
+Date: Fri, 27 Jun 2025 10:55:51 -0700
+Subject: [PATCH net-next 5/7] netpoll: factor out UDP header setup into
+ push_udp() helper
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250627-netpoll_untagle_ip-v1-4-61a21692f84a@debian.org>
+Message-Id: <20250627-netpoll_untagle_ip-v1-5-61a21692f84a@debian.org>
 References: <20250627-netpoll_untagle_ip-v1-0-61a21692f84a@debian.org>
 In-Reply-To: <20250627-netpoll_untagle_ip-v1-0-61a21692f84a@debian.org>
 To: "David S. Miller" <davem@davemloft.net>, 
@@ -81,129 +81,92 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, Breno Leitao <leitao@debian.org>, 
  gustavold@gmail.com
 X-Mailer: b4 0.15-dev-dd21f
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3390; i=leitao@debian.org;
- h=from:subject:message-id; bh=pcZpkL8/Vo5GDdA9GSNr5ZwCPZLTyJlooFlI1HTfP/A=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBoXtslgIbwZAltg6AAIY6pwiupMhATLK1D/ITh7
- rvhcXszEv2JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaF7bJQAKCRA1o5Of/Hh3
- bXh7D/9RjnmmaQLFxg0BW5FdR9GZM0U54oEEC0evGxZAPHT0ZPGp2zXkQHsU1r1oUnKDYI6IfT8
- Wf7b4cIOrbteN89wLjSLt2TPQtQulwvU8FbLOQi/J21UlSR6VTiSqYaIA+ysvU06jLaIXQCBfCB
- V081FFKt8S3d4sd4hxM4vMDdw2364JF+SozmxxIFy6dTABJMNdtR4KnYARCiQ4GoiJfqy0xpiZS
- FZVuFcbhSSXcvauilQ9M0uMaQ+NEGNWXrhHc8J8x25vEzq8zBtMFP3p056t5S+J2asMAoYAtFLt
- nGJ9jk4IijBO6VoJBCaTy2+BbVglxRy9zBpjs5E6atkhcl98o1s0QhYde65hphZBrtAHpJDC3G+
- tZwgh/zUGEY1ZrSjP5NmkCesY0SP8aZtv6w3Nyk4/LKTdTPKR1m4asr7zYMGZTfoty5oHa9jLID
- CrlvCoKbeVd7Rh63g+gSq2E7egb+M4kLHEwgZkT/+0tiAxkK6f7lJcdk54+XWMz8b0b+gypxQkn
- i09xsAaCYVuutJ8G3flhEnArK3iRhudCDVQwJMP/3N8KcxgiGAJaXBziJeyd06jOOkIfC+zoxzZ
- oykeuGl2IeOQk4xck0ozTGKZ7BzDQf5ufbeCsAvgBXmGLD3XNpNCvdELHGpsst6EqDwqiEWY+Rx
- HYvKDy7YZw8QGLA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2123; i=leitao@debian.org;
+ h=from:subject:message-id; bh=oMOUjvb17dkMjNgn7pjR5NW3PcafE7gyNJxjq175LMk=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBoXtslxabGqvLOoJi0qm6WxO4hE9T21yO8n1ukf
+ faiLPw4UuOJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaF7bJQAKCRA1o5Of/Hh3
+ beCRD/0cMNoa6KRm++iPV10N41fFdDxCu8dmG/Wf0Zt8yOGcvaPOmi23B0L7em9uZycjGGokSgO
+ cHiwhkj8DSBW3YTrlj1w11MLdlWD4ig4LH2tLK7wxE3gf4NFGwCJ29hDd/RVx+u0ocZymZNPHdw
+ 5N0qi5Xcin6rCDTN2dYFjf+r6cfLZSudmYRiCCHAl1eYb6QVrHDu3f0ObmJ5KzYgDgTEvxbVDHc
+ q5xzfCi9mTI2FJUFFAEmaPjNeEUhuLGljZ7oCs1REJqfaId9xzwhqQHk8v7DZf+D5HT1cldFAvR
+ qGtaXIVTuth7UfU6/3IveAMsHsZfCGO73cWjNGbRV29knLDE1ETv4f43AjFQGrlkfLt97QAVENy
+ IJYtxWsayXZW3BZqViKwJ9OMEB0/mw8XuoX0/CXWB8XTyG4En9+tqKLEHfESLh77ed5/VWbk0Vq
+ p65Kwkm8W7R6QqaX2cNZ+cvuUlKzhUx/gkQLWi5MvwvljRJ+491K79ATbhd3QpA+4TRRUDZoI0e
+ 88P/22SOO1MjNgoz9EvrJKVyOosyxq4hKg8hQJWMyvzcTQ870zXA2cZUx0ralFL29tb+LOLj9p+
+ z3eF8qx6TfuQkxu5FY7FGcW82tt+VZxmrFBLk0c3L+HQQOl4krZaZDB8tafZxegk5+aLZc1ICvn
+ D9xn5Ur1w26tqYQ==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
-Move IPv4 header construction from netpoll_send_udp() into a new
-static helper function push_ipv4(). This completes the refactoring
-started with IPv6 header handling, creating symmetric helper functions
-for both IP versions.
+Move UDP header construction from netpoll_send_udp() into a new
+static helper function push_udp(). This completes the protocol
+layer refactoring by:
 
-Changes include:
-1. Extracting IPv4 header setup logic into push_ipv4()
-2. Replacing inline IPv4 code with helper call
-3. Moving eth assignment after helper calls for consistency
+1. Creating a dedicated helper for UDP header assembly
+2. Removing UDP-specific logic from the main send function
+3. Establishing a consistent pattern with existing IPv4/IPv6 helpers:
+   - push_udp()
+   - push_ipv4()
+   - push_ipv6()
 
-The refactoring reduces code duplication and improves maintainability
-by isolating IP version-specific logic.
+The change improves code organization and maintains the encapsulation
+pattern established in previous refactorings.
 
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
- net/core/netpoll.c | 62 +++++++++++++++++++++++++++++++-----------------------
- 1 file changed, 36 insertions(+), 26 deletions(-)
+ net/core/netpoll.c | 28 +++++++++++++++++++---------
+ 1 file changed, 19 insertions(+), 9 deletions(-)
 
 diff --git a/net/core/netpoll.c b/net/core/netpoll.c
-index 247a73762fc2c..ff64e94df5351 100644
+index ff64e94df5351..70035e27d91cc 100644
 --- a/net/core/netpoll.c
 +++ b/net/core/netpoll.c
-@@ -441,14 +441,44 @@ static void push_ipv6(struct netpoll *np, struct sk_buff *skb, int len)
- 	eth->h_proto = htons(ETH_P_IPV6);
+@@ -473,11 +473,28 @@ static void push_ipv4(struct netpoll *np, struct sk_buff *skb, int len)
+ 	eth->h_proto = htons(ETH_P_IP);
  }
  
-+static void push_ipv4(struct netpoll *np, struct sk_buff *skb, int len)
++static void push_udp(struct netpoll *np, struct sk_buff *skb, int len)
 +{
-+	static atomic_t ip_ident;
-+	struct ethhdr *eth;
-+	struct iphdr *iph;
-+	int ip_len;
++	struct udphdr *udph;
++	int udp_len;
 +
-+	ip_len = len + sizeof(struct udphdr) + sizeof(struct iphdr);
++	udp_len = len + sizeof(struct udphdr);
 +
-+	skb_push(skb, sizeof(struct iphdr));
-+	skb_reset_network_header(skb);
-+	iph = ip_hdr(skb);
++	skb_push(skb, sizeof(struct udphdr));
++	skb_reset_transport_header(skb);
 +
-+	/* iph->version = 4; iph->ihl = 5; */
-+	*(unsigned char *)iph = 0x45;
-+	iph->tos = 0;
-+	put_unaligned(htons(ip_len), &iph->tot_len);
-+	iph->id = htons(atomic_inc_return(&ip_ident));
-+	iph->frag_off = 0;
-+	iph->ttl = 64;
-+	iph->protocol = IPPROTO_UDP;
-+	iph->check = 0;
-+	put_unaligned(np->local_ip.ip, &iph->saddr);
-+	put_unaligned(np->remote_ip.ip, &iph->daddr);
-+	iph->check = ip_fast_csum((unsigned char *)iph, iph->ihl);
++	udph = udp_hdr(skb);
++	udph->source = htons(np->local_port);
++	udph->dest = htons(np->remote_port);
++	udph->len = htons(udp_len);
 +
-+	eth = skb_push(skb, ETH_HLEN);
-+	skb_reset_mac_header(skb);
-+	skb->protocol = htons(ETH_P_IP);
-+	eth->h_proto = htons(ETH_P_IP);
++	netpoll_udp_checksum(np, skb, len);
 +}
 +
  int netpoll_send_udp(struct netpoll *np, const char *msg, int len)
  {
  	int total_len, ip_len, udp_len;
  	struct sk_buff *skb;
- 	struct udphdr *udph;
--	struct iphdr *iph;
+-	struct udphdr *udph;
  	struct ethhdr *eth;
--	static atomic_t ip_ident;
  
  	if (!IS_ENABLED(CONFIG_PREEMPT_RT))
- 		WARN_ON_ONCE(!irqs_disabled());
-@@ -477,32 +507,12 @@ int netpoll_send_udp(struct netpoll *np, const char *msg, int len)
- 	udph->len = htons(udp_len);
+@@ -499,14 +516,7 @@ int netpoll_send_udp(struct netpoll *np, const char *msg, int len)
+ 	skb_copy_to_linear_data(skb, msg, len);
+ 	skb_put(skb, len);
  
- 	netpoll_udp_checksum(np, skb, len);
--	if (np->ipv6) {
-+	if (np->ipv6)
+-	skb_push(skb, sizeof(struct udphdr));
+-	skb_reset_transport_header(skb);
+-	udph = udp_hdr(skb);
+-	udph->source = htons(np->local_port);
+-	udph->dest = htons(np->remote_port);
+-	udph->len = htons(udp_len);
+-
+-	netpoll_udp_checksum(np, skb, len);
++	push_udp(np, skb, len);
+ 	if (np->ipv6)
  		push_ipv6(np, skb, len);
--		eth = eth_hdr(skb);
--	} else {
--		skb_push(skb, sizeof(struct iphdr));
--		skb_reset_network_header(skb);
--		iph = ip_hdr(skb);
--
--		/* iph->version = 4; iph->ihl = 5; */
--		*(unsigned char *)iph = 0x45;
--		iph->tos      = 0;
--		put_unaligned(htons(ip_len), &(iph->tot_len));
--		iph->id       = htons(atomic_inc_return(&ip_ident));
--		iph->frag_off = 0;
--		iph->ttl      = 64;
--		iph->protocol = IPPROTO_UDP;
--		iph->check    = 0;
--		put_unaligned(np->local_ip.ip, &(iph->saddr));
--		put_unaligned(np->remote_ip.ip, &(iph->daddr));
--		iph->check    = ip_fast_csum((unsigned char *)iph, iph->ihl);
--
--		eth = skb_push(skb, ETH_HLEN);
--		skb_reset_mac_header(skb);
--		skb->protocol = eth->h_proto = htons(ETH_P_IP);
--	}
-+	else
-+		push_ipv4(np, skb, len);
- 
-+	eth = eth_hdr(skb);
- 	ether_addr_copy(eth->h_source, np->dev->dev_addr);
- 	ether_addr_copy(eth->h_dest, np->remote_mac);
- 
+ 	else
 
 -- 
 2.47.1
