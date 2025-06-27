@@ -1,67 +1,67 @@
-Return-Path: <linux-kselftest+bounces-35992-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35993-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 041C2AEBEAD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 19:56:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49B27AEBEB1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 19:56:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B6BD565DD5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 17:56:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 732D33AEA23
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 17:56:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE42C2EBDD6;
-	Fri, 27 Jun 2025 17:55:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B3732ECE98;
+	Fri, 27 Jun 2025 17:55:58 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D54ED2EACEE;
-	Fri, 27 Jun 2025 17:55:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E9872EBBBC;
+	Fri, 27 Jun 2025 17:55:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751046956; cv=none; b=jlZmNElxQIVb7eS85oNHJedYQE9DhoBPytVjZ92P9jFNOqIMl3SaFIOjmq5OrVFZ1qLCC4opWzUuS7HGZLlB8lSzr1oI4ROeRIo9nszjR3ayL3XSh87bZFAN0tZoUZOu8ivziQha05LFa6HOAgXlde738LdQZc4WQbvPDZA6Iiw=
+	t=1751046958; cv=none; b=QjV2avjbGrXZhZy1kDg+JOlXdsHHOBYxQWLMLPjlT+KDbei9SKwNpjXXL48xZKrueNIpMF9A/2Hjo6LAxWN68P3K7DuKpMw+uGAQ++PoANxi5igkaHLDSBGPmh50f010djrdRddyr3eM6s9zD+qAU4ieRego1norxTo0m0wT/Yo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751046956; c=relaxed/simple;
-	bh=jbCjWV/h7n2SHM7aPePgMluwf8TLq/orMZ98gJOmxn8=;
+	s=arc-20240116; t=1751046958; c=relaxed/simple;
+	bh=z6ZyZPgKMyV5y5bQXJoqji7LE1KbrdDAaxyolHnuv6Y=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=b1SY7MKMAUioKpRuKL6PB3D6GEUlpY9scuXDwgaoidBXfzY87LeOX5DU0AYO42uCl0NBvOmRunkuHiwixwVWjxi3EG1deNEmnV+ZlZldBHSYhOBAbvSMkgErP3k1khCd6IZDwNPsJCV3/xTlIS3Sr7+RbpSKtkN0vVnMH8cXWxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.50
+	 In-Reply-To:To:Cc; b=SkE2N0f2VJFMt1ZvXZ7qs+AGHFFIz76f/g2mAsYMFkbAjELXSsXyY0zL8bJHS+lW1363azHiiRHtElwNgAaXHlhNZZiBWSaPfWFoeAD2H84u5BMmNTY6L6XiEjFGocQUlDWOyIB8Z+VYWOhaiPhhpxH3BVeZKfP11G7/q2SmEIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-607b59b447bso163856a12.1;
-        Fri, 27 Jun 2025 10:55:54 -0700 (PDT)
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-60c93c23b08so175812a12.3;
+        Fri, 27 Jun 2025 10:55:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751046953; x=1751651753;
+        d=1e100.net; s=20230601; t=1751046955; x=1751651755;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BdAqTjFNYTelvz4grTCp7T82BdTogW49IVN7Iv0xIeg=;
-        b=QX04v4xjtAn0oG4rdBB+F6EUklbhmdJKaUUhfZWOTzBz0N9hDrrTQd7Ef96XyWuw3d
-         En3LNnR35GoofDitKL1M8LGtZt9PNYLwrUCd9Zt3XTVenJXglSTczPOIMom9QzDfoevW
-         1cdyI/xmg27CmwJlFtPQUZC4yRWCYqKNDpyRKTlyMB98RnHeY3FPuiWj8ttW0WFeH1yx
-         Fb+3a1yWaQtyHlKD/UkPdmmdnFm0cbUGvlv5VnCNf8RORLz1y/EN2Qg+HdW4OKW2ob34
-         PmROalnm6fKF1Bc5P7MGibnrTSakNmFyhErqz5Zx2iT3osDiyV2m+9HXtryO+uwV0Klx
-         JZeA==
-X-Forwarded-Encrypted: i=1; AJvYcCUn+LLVauE8lcpokO7hrSzaUbf8ybJ2KCp0xY/Frgca//Zr5YV3qhyP1qcfF65HAIpMKByFFWqz+o2/NZE2lIyu@vger.kernel.org, AJvYcCV23uLXcks/bX67RY3TMQF5D2jZ4jTsAVYFxxAPVMtIYQDW8B2NJDaM10NCNR+Tk/t4oYwNFqWQr3uKjbg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxrmYguiF9ZveGqLp/0JGcqrt8hBb5cQPFsksKkuNHRrkEn7mgX
-	IGVKctn2X7zr+59zgjxZhloNec2CfIoadOAztOhbjG90mD0EY6ge4HfN
-X-Gm-Gg: ASbGnctfppDSr+invxuWyE6I3NwX/fltWiYdSb/ofgZPRqewrQb7DnFhra0ujJ3v+0p
-	/7wx0Wu1L5DvkCxbTk6YM7X1O0x0bP8m5woDQ5MELjP41GtNxfbPKPsDROOD++JrYYwBl7J24kZ
-	LXU0eM8l25mB8NOSkkRC7i0hlK6R4QIPpdvCbnS8cxJwz5fMZ3Bu4uyokRNufIp+zdIe02YoS1a
-	tL08TVLhs6YmtR3JQGcTuCh4nvLnOUcENgcabAyaOecazuj9Cn7rXDVDMjWQuFWxEI9Xajt6L3m
-	wdmvL6b3mAFx/wDUu/Gxc5e/yYHzFPSC5H4G5KfBFHRbLZL7Ulb2
-X-Google-Smtp-Source: AGHT+IHscVx//xOJEJlpDsWzjwH1+b1+1wS2JE2Cjxc1bD4rSPBviqLSG885/ydsRTnSkUL0jLTryA==
-X-Received: by 2002:a17:906:4fc7:b0:ae3:6390:6ad3 with SMTP id a640c23a62f3a-ae363907084mr218911766b.22.1751046952999;
-        Fri, 27 Jun 2025 10:55:52 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:1::])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae353c6bcedsm165603166b.133.2025.06.27.10.55.52
+        bh=7qUEhiAZpONXJUUW9QytxIAnMQmTyOeLbTuh7J5BUSs=;
+        b=PljvCDtqhGQr1FQqm6LbK+evDK/RyhwwT4j03EC87frWo654nbesi9YyvmdFA5C8ZR
+         UY4+Xi2K5FSPLE8p/SpFwNBe+En+euVqUrynXq/DpUU5vmKVG4NBFACsmFrPjix9jUUV
+         eKZrOa4qTvysoc+fjTNlEExyMO7aPl1/EOcogw7o1sBqiBmpZVK4u8ZLT9EsIKSN3bM5
+         iGFJ10ADMzjEbsI0YKrlOOQ/fUrsFkS1TbBnhsb37xxURAxmSPTXWAR6g0m3//f1Bn9V
+         UR200Bun0gR5Djhx/NyAJudhaGbuoq4HOK0lmeHH2BXcUsZRY/KvyFyjvIw+Iotb/4+9
+         9K2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUjzKC+qskvLIonJGGYsE++NDu3UZE/xu45wA2lOSQ2N56QpXe1VFWCkzuBrfikADOhjp/KTBZIt9r0sGw69R6x@vger.kernel.org, AJvYcCXtq+Lowa8cnJ992R4xsGgRd2NQumuz4Ge90pEnUJ7zNdPPJhng24HBDV5TRni0o/21WHnUMBd27I8L5Qo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzAvePV85RTpZRle+3l8N2VrNfKm4qASfnrDEUd7yqGVQpU6ZfB
+	Rd1drL196G6C38RkXQkhp5qaiAj8GmZPOQiSTN/nr4lGM7RpMmoMudgSCe4/0g==
+X-Gm-Gg: ASbGncv0UUQ1Kgq9fgVoAr9e+Wxh7Utti5fcfc/0qEkGiLwHB2I0/ZSXuZCR1nu19y7
+	lvV3vi6XqF7fw0eUrPrQvNCgrjIs/Zd3dnd1O6VDsr7oB+kCRKe0PqtvFDaWPh7kMtSP4neUdPa
+	O/PaOeHQRq+XnfZx7BNfAdgJnb06ypwV0dLOClTInV5ZIRD7XBii5JuI4YpPNiF9RujRTGwMUZA
+	78GICSoPQ+ANGWHNc6YJcJQSJeqgJOyGwQlE7uE42ZVq+ajcIfFzC9argvaAzDgW7ZgkCso139+
+	ua3cqwF1Jg4CKBmu/hSMlY0UH/yZ+wmitqcq2s/toUn5OjVQ4HxNhVElf9IcQgfF
+X-Google-Smtp-Source: AGHT+IGNWtFfexKYAG6FZcn39pGTc3OLycGN6dxns+/+zG5bybQtNGUpDZWMCvpTFQRN2rJq91KImg==
+X-Received: by 2002:a17:907:7f14:b0:ae0:c561:b806 with SMTP id a640c23a62f3a-ae3500f276fmr398235366b.37.1751046954380;
+        Fri, 27 Jun 2025 10:55:54 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:74::])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae360e6ce54sm108646066b.37.2025.06.27.10.55.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jun 2025 10:55:52 -0700 (PDT)
+        Fri, 27 Jun 2025 10:55:53 -0700 (PDT)
 From: Breno Leitao <leitao@debian.org>
-Date: Fri, 27 Jun 2025 10:55:47 -0700
-Subject: [PATCH net-next 1/7] netpoll: Improve code clarity with explicit
- struct size calculations
+Date: Fri, 27 Jun 2025 10:55:48 -0700
+Subject: [PATCH net-next 2/7] netpoll: factor out UDP checksum calculation
+ into helper
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250627-netpoll_untagle_ip-v1-1-61a21692f84a@debian.org>
+Message-Id: <20250627-netpoll_untagle_ip-v1-2-61a21692f84a@debian.org>
 References: <20250627-netpoll_untagle_ip-v1-0-61a21692f84a@debian.org>
 In-Reply-To: <20250627-netpoll_untagle_ip-v1-0-61a21692f84a@debian.org>
 To: "David S. Miller" <davem@davemloft.net>, 
@@ -81,85 +81,102 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, Breno Leitao <leitao@debian.org>, 
  gustavold@gmail.com
 X-Mailer: b4 0.15-dev-dd21f
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2146; i=leitao@debian.org;
- h=from:subject:message-id; bh=jbCjWV/h7n2SHM7aPePgMluwf8TLq/orMZ98gJOmxn8=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBoXtslurJE24JlCTTK6aAUL62RGQwEwDEUPhVPS
- iyLMnv+qq2JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaF7bJQAKCRA1o5Of/Hh3
- bVOyD/0Wyr6x5W73Q58nAyfPEj+M7Vbjt9FHIfElBUu5ZUdcQZNf6e5RLqV9NCWNnBP7+C7vdKG
- yCWRwU7aMQe0im1dPBFmO1Dto/KpYmhx0ELyhFp4Ff7d0kC+pSWt3ZqnaDcywiYh0bz3y0ZwCBB
- nk8pmoOI7aodEHCIFCBTz2/4qiSBnzo0MzqCVvOtbET5RTMfta2vNgSxoT/696e9jABSArgaWT4
- ZQqCNDzFG09V6PiI5jUcHOCJ0zgJIj4aOPzdiWWr03caeogFXe6evzAAiLJlqjRS/EcEyWgoR19
- tJq44n1Mds9twGhRaxQuBBfVk7XQTgmsBUwqCmPvf3YigTSqOOgAFQhmPS5RQ1sIt3aHUq4OWZh
- 7J1C75rP7GRfbM5lTp8CQ1vE57qYplzUmnp48tOANuYVbdedr6Hq25UK/RoEgqRrj//11PzQhg6
- BUtaleVHdXrpF2Y49D2qQCES83OdCP/aY9GtTNqDiziUiCEFeiNeGzRR8eBbpnO+WvhlJLb1PqI
- d/HK1mmNGDN1wo/D8Q3Ma02ilv7INoj9242MIAbcbJeo2rB08vU0NGDEuB/y1giC/5tK5not/3N
- BmKbZhVlN5d29AkHfwq1boDu4VUBPvWaAWPY1ceTPIws62NODNSwG91zz/4UEgytv+gjqJShTEZ
- 3o3tCPTF9iwPK6g==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2594; i=leitao@debian.org;
+ h=from:subject:message-id; bh=z6ZyZPgKMyV5y5bQXJoqji7LE1KbrdDAaxyolHnuv6Y=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBoXtslVEuPoOCcrE4gQ+5/idXTrnhBg2GM1tKgP
+ nFYRVb9zaeJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaF7bJQAKCRA1o5Of/Hh3
+ bSiAD/0ZPLuRf/HOdCFM0OqmJQ5MwsWT/X8oMNnCWSe4utM75IVmJwtzyFHZTfkS+/BKmIq/rgT
+ LIg85XStfawMmpELEtXaBcDo/I9Ai1YVVXS6c7N5MZ9KHKuOKJB90GQ9QTC8cJLlBZjsCIf6f19
+ mFuStCOzD0tsX0EbzeQFEf2K7HsDUWfOiW2HEUADv2btvVKzGkcoY9MyLQUXO5AyX7UIO6gw0jh
+ K6z/nkNYbykoH7Iv9ei01yav6JXb/n1C3upbZBbyPyn3ksHyndvg+PUpL5UV5BPV2q0STNIB/Ds
+ weMMvzuXg+4OCjE+PEP03dQSyATvG8c5U7PRAAZ0VY126I5zjqNIjdS2hDYhf3I4083V9ZpeKDT
+ gBLc1L3lfIELNta6yX60L6c9WowDkpfHWD+xD31z6J2xX+xkcThdZuq+Wg6nWquVsPQnyWt90DJ
+ rSBa7rwla46hD0ss0rY8K5h3nzK8r3Qhu0O+cf/O8LwP18UO+NLPZxxSugmKmjvqagxlXmYQ+u1
+ mnTqDic2ql8R2NiIkSZTDL2Hn8d4wnNcDr/245wdVojMPmH9KffuN4ss/3gKmHEQrto8a7u9IjU
+ cr9v1a5qe+pgjE5ydWbs+J5gUHdCdOY8KbVEsLtFTePuGdN8y79hTPhShYvU5mhMEoBCbjI1G6D
+ EIphQgeXTRuL/Qg==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
-Replace pointer-dereference sizeof() operations with explicit struct names
-for improved readability and maintainability. This change:
+Extract UDP checksum calculation logic from netpoll_send_udp()
+into a new static helper function netpoll_udp_checksum(). This
+reduces code duplication and improves readability for both IPv4
+and IPv6 cases.
 
-1. Replaces `sizeof(*udph)` with `sizeof(struct udphdr)`
-2. Replaces `sizeof(*ip6h)` with `sizeof(struct ipv6hdr)`
-3. Replaces `sizeof(*iph)` with `sizeof(struct iphdr)`
-
-This will make it easy to move code in the upcoming patches.
-
-No functional changes are introduced by this patch.
+No functional change intended.
 
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
- net/core/netpoll.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ net/core/netpoll.c | 41 ++++++++++++++++++++++++++---------------
+ 1 file changed, 26 insertions(+), 15 deletions(-)
 
 diff --git a/net/core/netpoll.c b/net/core/netpoll.c
-index 54f9d505895f6..ac0ae9630654a 100644
+index ac0ae9630654a..24e6ad2da8096 100644
 --- a/net/core/netpoll.c
 +++ b/net/core/netpoll.c
-@@ -402,11 +402,11 @@ int netpoll_send_udp(struct netpoll *np, const char *msg, int len)
- 	if (!IS_ENABLED(CONFIG_PREEMPT_RT))
- 		WARN_ON_ONCE(!irqs_disabled());
+@@ -372,6 +372,31 @@ static netdev_tx_t __netpoll_send_skb(struct netpoll *np, struct sk_buff *skb)
+ 	return ret;
+ }
  
--	udp_len = len + sizeof(*udph);
++static void netpoll_udp_checksum(struct netpoll *np, struct sk_buff *skb,
++				 int len)
++{
++	struct udphdr *udph;
++	int udp_len;
++
 +	udp_len = len + sizeof(struct udphdr);
- 	if (np->ipv6)
--		ip_len = udp_len + sizeof(*ip6h);
-+		ip_len = udp_len + sizeof(struct ipv6hdr);
- 	else
--		ip_len = udp_len + sizeof(*iph);
-+		ip_len = udp_len + sizeof(struct iphdr);
++	udph = udp_hdr(skb);
++
++	/* check needs to be set, since it will be consumed in csum_partial */
++	udph->check = 0;
++	if (np->ipv6)
++		udph->check = csum_ipv6_magic(&np->local_ip.in6,
++					      &np->remote_ip.in6,
++					      udp_len, IPPROTO_UDP,
++					      csum_partial(udph, udp_len, 0));
++	else
++		udph->check = csum_tcpudp_magic(np->local_ip.ip,
++						np->remote_ip.ip,
++						udp_len, IPPROTO_UDP,
++						csum_partial(udph, udp_len, 0));
++	if (udph->check == 0)
++		udph->check = CSUM_MANGLED_0;
++}
++
+ netdev_tx_t netpoll_send_skb(struct netpoll *np, struct sk_buff *skb)
+ {
+ 	unsigned long flags;
+@@ -425,15 +450,8 @@ int netpoll_send_udp(struct netpoll *np, const char *msg, int len)
+ 	udph->dest = htons(np->remote_port);
+ 	udph->len = htons(udp_len);
  
- 	total_len = ip_len + LL_RESERVED_SPACE(np->dev);
- 
-@@ -418,7 +418,7 @@ int netpoll_send_udp(struct netpoll *np, const char *msg, int len)
- 	skb_copy_to_linear_data(skb, msg, len);
- 	skb_put(skb, len);
- 
--	skb_push(skb, sizeof(*udph));
-+	skb_push(skb, sizeof(struct udphdr));
- 	skb_reset_transport_header(skb);
- 	udph = udp_hdr(skb);
- 	udph->source = htons(np->local_port);
-@@ -434,7 +434,7 @@ int netpoll_send_udp(struct netpoll *np, const char *msg, int len)
- 		if (udph->check == 0)
- 			udph->check = CSUM_MANGLED_0;
- 
--		skb_push(skb, sizeof(*ip6h));
-+		skb_push(skb, sizeof(struct ipv6hdr));
+-	udph->check = 0;
++	netpoll_udp_checksum(np, skb, len);
+ 	if (np->ipv6) {
+-		udph->check = csum_ipv6_magic(&np->local_ip.in6,
+-					      &np->remote_ip.in6,
+-					      udp_len, IPPROTO_UDP,
+-					      csum_partial(udph, udp_len, 0));
+-		if (udph->check == 0)
+-			udph->check = CSUM_MANGLED_0;
+-
+ 		skb_push(skb, sizeof(struct ipv6hdr));
  		skb_reset_network_header(skb);
  		ip6h = ipv6_hdr(skb);
- 
-@@ -461,7 +461,7 @@ int netpoll_send_udp(struct netpoll *np, const char *msg, int len)
- 		if (udph->check == 0)
- 			udph->check = CSUM_MANGLED_0;
- 
--		skb_push(skb, sizeof(*iph));
-+		skb_push(skb, sizeof(struct iphdr));
+@@ -454,13 +472,6 @@ int netpoll_send_udp(struct netpoll *np, const char *msg, int len)
+ 		skb_reset_mac_header(skb);
+ 		skb->protocol = eth->h_proto = htons(ETH_P_IPV6);
+ 	} else {
+-		udph->check = csum_tcpudp_magic(np->local_ip.ip,
+-						np->remote_ip.ip,
+-						udp_len, IPPROTO_UDP,
+-						csum_partial(udph, udp_len, 0));
+-		if (udph->check == 0)
+-			udph->check = CSUM_MANGLED_0;
+-
+ 		skb_push(skb, sizeof(struct iphdr));
  		skb_reset_network_header(skb);
  		iph = ip_hdr(skb);
- 
 
 -- 
 2.47.1
