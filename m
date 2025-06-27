@@ -1,198 +1,192 @@
-Return-Path: <linux-kselftest+bounces-36016-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36017-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25E68AEC20F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 23:31:20 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 497B0AEC2E3
+	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 01:08:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 15DE31BC2642
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 21:31:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C37407B572F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 23:07:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D38128689B;
-	Fri, 27 Jun 2025 21:31:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 913AE28C024;
+	Fri, 27 Jun 2025 23:08:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ulTQ0PDY"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PX0DqBZo"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00D5428688D;
-	Fri, 27 Jun 2025 21:31:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97B78230BCE
+	for <linux-kselftest@vger.kernel.org>; Fri, 27 Jun 2025 23:08:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751059877; cv=none; b=FgBTMirkZ62IDARmRbWGHK4kO6xkUk52y62zQE91ocuK68rNGQi1/ODprfCEGKPwZlITvQLP1Ryt/yWnibvsOeJthkejZ7tM56urpg7jfOaGZ4ZIdJzgV4zkzJI3sauflRoYL5jctkmpVqEI3ju5NLRzKubI66YMWN68xY9nY1A=
+	t=1751065713; cv=none; b=q13xPN1kDGH1Ygk8H0S1I//Lj3sFCPjxL14KHjEG4eYuEsbg81yHJ9vuLnAOsuzUREmqlEoC5xDX/lBG1KXMDgg4grCpBRLOkDF2Z8Gs6rGaiqua6ODEVu4Rm10CJVMKE2GJpxlicUUAMtnu0K4WoWX+1caKc9gbrGVXgjn8FGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751059877; c=relaxed/simple;
-	bh=YLXV8EixeUReXW5ZLTeMWikhsalQi3MACoUyTuNGqz4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QoAh5A1spShOA0I3Nt2m9t2MP7L7lr0ri2Mz7T/XRKvq86CS+GQbbvAI4jDv0AqmEjxpeunPmfAuETQQSzi9Z+fDmqK4hijRw2bjff26xzuLQg4l9RQ7UwjfStRUyRsAhAg27OxTVYbn6aApDHE9HX4aD+SYWWUf+tThciwJD7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ulTQ0PDY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24421C4CEE3;
-	Fri, 27 Jun 2025 21:31:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751059876;
-	bh=YLXV8EixeUReXW5ZLTeMWikhsalQi3MACoUyTuNGqz4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ulTQ0PDYilia4lKDRwJPu2ZtsqAJmLrrmFeA3ncmWPCu0uNCylWiIMhXujRtZYFX5
-	 i6N1zKT31M6wi7g5eTaQMsK/8up0dyNs/ma6PTWVEYichOeDToYhbkpa3E8nv4C149
-	 3p7JdGcTRkesEbC1z07vXA3dNBPKWpQV5cW5iUKmtnVv9lYNt1TvMYC8EBFwJfWE/V
-	 pFhcisB+U8S6BWD4aq2PUTw16uXiM/pQR2hutXGoGfO5gUXAsNxajOU8SucRSTGKEd
-	 YUlnuNs8vORjy1kyfMru4pq+rBfngF+BliDaJkTGJhNlCEpBidaQc/zMtvxCBMCXHu
-	 My99x6XeaLl0w==
-Date: Fri, 27 Jun 2025 22:31:05 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-	Deepak Gupta <debug@rivosinc.com>,
-	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-	"H.J. Lu" <hjl.tools@gmail.com>,
-	Florian Weimer <fweimer@redhat.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-	Will Deacon <will@kernel.org>, jannh@google.com,
-	Yury Khrustalev <yury.khrustalev@arm.com>,
-	Wilco Dijkstra <wilco.dijkstra@arm.com>,
-	linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org,
-	Kees Cook <kees@kernel.org>
-Subject: Re: [PATCH RFT v17 4/8] fork: Add shadow stack support to clone3()
-Message-ID: <97702623-0a1e-4231-9550-79aaa9d41fac@sirena.org.uk>
-References: <20250609-clone3-shadow-stack-v17-0-8840ed97ff6f@kernel.org>
- <20250609-clone3-shadow-stack-v17-4-8840ed97ff6f@kernel.org>
- <aF7SpWSKfjEFTHBk@arm.com>
+	s=arc-20240116; t=1751065713; c=relaxed/simple;
+	bh=c/Of0xutA+Kk8MDQftdKz5UrDWZnct4kULqWe9XInJ0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZmNCXPncXce9FS+sAxGMaTWdt6rxzG/wOU8U0ZivnJ4VwB+YX6A7PCBpzIc4bQyPjIXcbmHAFeZM5E0GjeZt4Q4zUDDcWKmnXPZjyKPXz4rRPeYI3uL6pLPQMIvo+w6PpORQwd45i6QsHt9qzZtcQm8phROqBudfrtdn2taQ9go=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PX0DqBZo; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5532a30ac45so2409129e87.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jun 2025 16:08:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1751065710; x=1751670510; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HCmg79c12dA4cXhbdn+5ySYQM1Q/m3EZoakXslQDFMQ=;
+        b=PX0DqBZoY5I+KaNfCc+Gm3izoHzxObSak1pD3+7fuISeigqm3DO3G4uXiquTOlnzFK
+         ZzSYJgNGb8AsnXrVhL4xiwkJwjNAc4KRhK9qpLrDw+oRNoUIJ7RwF9OGIr9BW4yObr8j
+         3y5XyaGQB1yi3E0TLjiw1f7lYIjLTtvMX0HlzG8dgyL/lNSN7e/joVINg+Nd1eDC5sYw
+         B3uZ4fiqN2qz9zoFwNj6QVfrd0vi/iod9SvVOtvZnx8ESrwydSYDrxv6k4RgXFo8ioMo
+         jjvqKG2B7eb6SUSTVFRnQvYhBYE97QWUhXmz7VI+tqiygoBThdx/UgfXfxMvnajGT5ri
+         Godg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751065710; x=1751670510;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HCmg79c12dA4cXhbdn+5ySYQM1Q/m3EZoakXslQDFMQ=;
+        b=VJMKWu03o+dibky/TjgPeX5QzJ7hxvJDTC+o/54joGuHT9l5OPBSWjYTCJh0511Pzk
+         uMWUOJXuOqyg54Ek9NUUP1rfBmnTWjtsWnTOQpuR8wzlcBW0i7pYxRtYJHf8ciKBnbEV
+         rhX6CVrA2/tzcW8Sybw3TwndFsEyiiybCWRE0v2dj+CpfqWGaNyNcyeRLuKIRasoF1Lq
+         7alzPnvF3/uvlQPcpXqiTeheC6IM2rQdQTsmbr+v9Ov3xZaLj7PazYWpOB52Mpl2q5K0
+         MNNPLGDWj0aF96e/bfwGEMWH1sAwjrt19iQnixi3aUeKEQGHSt6GUarMzeXkleOm3khj
+         bXjw==
+X-Forwarded-Encrypted: i=1; AJvYcCWBeVk4QIUhQhxmQ3Tw0+SnjD8Lo7ZIX5gVu4qPyj0/Za8gVwp/on0M21wVi0PiyFxWzIlgu3rwXgSZ7O6iWF8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQHeUFutsutfwhioyie6oQKJM9ZkkJRBMnumJIlP7R2pjiW/vp
+	5mlNodF8z1/sdirQVak0k8kfAjRbHxbB7Skixwy5d/1xgG4ozu3SWlcMh/dhIetp51oHUsa+hfg
+	vIGWSGjG3exRYWcfxVsHEUHcRUjYt/QgCtAMTOjS7
+X-Gm-Gg: ASbGncvzkjwjR3HNp1MCT6uZ2z7YWBaZE70Q8uVZUtrpPDEXG5nzbNwqlyKB+4B1MEf
+	mtGIsGvm9DuhC0smHM7u5PCuJWPVhrp9uqfsq1CvYDVR8+25pRuYJUsQtughr2xheVX/88QSeS9
+	uq1TB66B3GT3JnlRiREfenNQolxNBJwaK7CGDFvFAAnNw=
+X-Google-Smtp-Source: AGHT+IGyz5q0RhPpn/ScF6uUOqoExc8ghpVJZBd8nzvZju8riiCqw0LWDRBGrMxS92sf/w55QchtXypcuYtqc+wZVE0=
+X-Received: by 2002:a05:6512:3503:b0:553:2308:1ac5 with SMTP id
+ 2adb3069b0e04-5550c2bfcc3mr1620682e87.4.1751065709349; Fri, 27 Jun 2025
+ 16:08:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="t93JckxzxlRIaiLJ"
-Content-Disposition: inline
-In-Reply-To: <aF7SpWSKfjEFTHBk@arm.com>
-X-Cookie: Avoid contact with eyes.
+References: <20250620232031.2705638-1-dmatlack@google.com> <20250620232031.2705638-4-dmatlack@google.com>
+ <fe4b1d31-e910-40a1-ab83-d9fd936d1493@amd.com> <4aef95a0-a0de-4bd5-b4ec-5289f0bc0ab1@amd.com>
+ <CALzav=fZcLpQ+9J=XOZ-=Cr1UA8qKa5NHXB1dJpqhCp7pee7Ow@mail.gmail.com> <62734f4d-8883-4145-a483-5bf2c462fad5@amd.com>
+In-Reply-To: <62734f4d-8883-4145-a483-5bf2c462fad5@amd.com>
+From: David Matlack <dmatlack@google.com>
+Date: Fri, 27 Jun 2025 16:08:02 -0700
+X-Gm-Features: Ac12FXyTcrgDJdVB_77mHHx-sYwBV57IJqE7J_O2KVHhqynIMx5PWakjwvLcb0w
+Message-ID: <CALzav=eYD85ydnpAwYsTArDHbxOLd+D-BtYWaiYQxeJ1tGGp7A@mail.gmail.com>
+Subject: Re: [PATCH 03/33] vfio: selftests: Introduce vfio_pci_device_test
+To: Sairaj Kodilkar <sarunkod@amd.com>
+Cc: Alex Williamson <alex.williamson@redhat.com>, Aaron Lewis <aaronlewis@google.com>, 
+	Adhemerval Zanella <adhemerval.zanella@linaro.org>, 
+	Adithya Jayachandran <ajayachandra@nvidia.com>, Andrew Jones <ajones@ventanamicro.com>, 
+	Ard Biesheuvel <ardb@kernel.org>, Arnaldo Carvalho de Melo <acme@redhat.com>, Bibo Mao <maobibo@loongson.cn>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, Dan Williams <dan.j.williams@intel.com>, 
+	Dave Jiang <dave.jiang@intel.com>, dmaengine@vger.kernel.org, 
+	Huacai Chen <chenhuacai@kernel.org>, James Houghton <jthoughton@google.com>, 
+	Jason Gunthorpe <jgg@nvidia.com>, Joel Granados <joel.granados@kernel.org>, 
+	Josh Hilke <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, 
+	"Mike Rapoport (Microsoft)" <rppt@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Pasha Tatashin <pasha.tatashin@soleen.com>, "Pratik R. Sampat" <prsampat@amd.com>, 
+	Saeed Mahameed <saeedm@nvidia.com>, Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>, 
+	Vinicius Costa Gomes <vinicius.gomes@intel.com>, Vipin Sharma <vipinsh@google.com>, 
+	Wei Yang <richard.weiyang@gmail.com>, "Yury Norov [NVIDIA]" <yury.norov@gmail.com>, 
+	Santosh Shukla <santosh.shukla@amd.com>, Vasant Hegde <vasant.hegde@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Jun 26, 2025 at 9:57=E2=80=AFPM Sairaj Kodilkar <sarunkod@amd.com> =
+wrote:
+>
+>
+>
+> On 6/26/2025 9:59 PM, David Matlack wrote:
+> > On Thu, Jun 26, 2025 at 4:44=E2=80=AFAM Sairaj Kodilkar <sarunkod@amd.c=
+om> wrote:
+> >> On 6/26/2025 4:57 PM, Sairaj Kodilkar wrote:
+> >>> On 6/21/2025 4:50 AM, David Matlack wrote:
+> >>>> +/*
+> >>>> + * Limit the number of MSIs enabled/disabled by the test regardless
+> >>>> of the
+> >>>> + * number of MSIs the device itself supports, e.g. to avoid hitting
+> >>>> IRTE limits.
+> >>>> + */
+> >>>> +#define MAX_TEST_MSI 16U
+> >>>> +
+> >>>
+> >>> Now that AMD IOMMU supports upto 2048 IRTEs per device, I wonder if w=
+e
+> >>> can include a test with max MSIs 2048.
+> >
+> > That sounds worth doing. I originally added this because I was hitting
+> > IRTE limits on an Intel host and a ~6.6 kernel.
+> >
+> > Is there some way the test can detect from userspace that the IOMMU
+> > supports 2048 IRTEs that we could key off to decide what value of
+> > MAX_TEST_MSI to use?
+> >
+>
+> The feature is published to userspace through
+>
+> $ cat /sys/class/iommu/ivhd0/amd-iommu/features
+> 25bf732fa2295afe:53d
+>
+> The output is in format "efr1:efr2". The Bit 9-8 of efr2 shows the
+> support for 2048 interrupts (efr2 & 0x300).
+>
+> Please refer 3.4.13 Extended Feature 2 Register of IOMMU specs [1] for
+> more details.
+>
+> [1]
+> https://www.amd.com/content/dam/amd/en/documents/processor-tech-docs/spec=
+ifications/48882_IOMMU.pdf
+>
+> Note that, when device is behind PCIe-PCI bridge the IOMMU may hit IRTE
+> limit early as multiple devices share same IRTE table. (But this is a
+> corner case and I doubt that 2K capable device is kept behind the
+> bridge).
 
---t93JckxzxlRIaiLJ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Thanks. We could definitely read that and allow up to 2048 MSIs in
+this test. Would you be ok if we defer that to a future commit though?
+This series is already quite big :)
 
-On Fri, Jun 27, 2025 at 06:19:33PM +0100, Catalin Marinas wrote:
-> On Mon, Jun 09, 2025 at 01:54:05PM +0100, Mark Brown wrote:
+>
+> >>>> +
+> >>>> +    vfio_pci_dma_map(self->device, iova, size, mem);
+> >>>> +    printf("Mapped HVA %p (size 0x%lx) at IOVA 0x%lx\n", mem, size,
+> >>>> iova);
+> >>>> +    vfio_pci_dma_unmap(self->device, iova, size);
+> >>>
+> >>>
+> >>> I am slightly confused here. Because You are having an assert on munm=
+ap
+> >>> and not on any of the vfio_pci_dma_(map/unmap). This test case is not
+> >>> testing VFIO.
+> >>
+> >> I missed to see ioctl_assert. Please ignore this :) Sorry about that.
+> >
+> > No worries, it's not very obvious :)
+> >
+> > vfio_pci_dma_map() and vfio_pci_dma_unmap() both return void right now
+> > and perform internal asserts since all current users of those
+> > functions want to assert success.
+> >
+> > If and when we have a use-case to assert that map or unmap fails
+> > (which I think we'll definitely have) we can add __vfio_pci_dma_map()
+> > and __vfio_pci_dma_unmap() variants that return int instead of void.
+>
+> Yep we can. Another question, why do we need assert on mmunmap ? If
+> mmunmap fails then its not really a fault of VFIO.
 
-> > +	/* Ensure that a token written as a result of a pivot is visible */
-> > +	gcsb_dsync();
-> > +	gcspr_el0 = args->shadow_stack_token;
-> > +	if (!gcs_consume_token(vma, page, gcspr_el0))
-> > +		return -EINVAL;
-> > +
-> > +	tsk->thread.gcspr_el0 = gcspr_el0 + sizeof(u64);
-> > +
-> > +	/* Ensure that our token consumption visible */
-> > +	gcsb_dsync();
-
-> What are the scenarios where we need the barriers? We have one via
-> map_shadow_stack() that would cover the first one. IIUC, GCSSS2 also
-> generates a GCSB event (or maybe I got it all wrong; I need to read the
-> spec).
-
-I think now that gcs_consume_token() does a cmpxchg they're redundant,
-your analysis covers the first one (anything that puts a valid token
-in memory should have a barrier) and now gcs_consume_token() does a
-cmpxchg the second one should also be redundant thanks to R_FZRGP.  It
-would be good if someone double checked though.
-
-Originally gcs_consume_token() was using regular accesses as for the
-example in DDI0487 L.a K3.3 and was tried on two addresses, I missed
-dropping the barriers when changing to a cmpxchg.
-
-> > +static int shstk_validate_clone(struct task_struct *p,
-> > +				struct kernel_clone_args *args)
-> > +{
-
-> > +	mmap_read_lock(mm);
-
-> > +	addr = untagged_addr_remote(mm, args->shadow_stack_token);
-
-> I think down the line, get_user_page_vma_remote() already does an
-> untagged_addr_remote(). But it does it after the vma look-up, so we
-> still need the untagging early.
-
-> That said, would we ever allowed a tagged pointer for the shadow stack?
-
-For arm64 you can architecturally use tags as per G_HMJHM.  I_WBHHX says
-that GCS accesses are tag unchecked, but tags are used on GCSSS1 as per
-I_MGLTC and I_MBHFS.  We'll need new ABI to allow userspace to get a
-PROT_MTE GCS though, I'd planned on extending map_shadow_stack() for
-that, and adding handling in the token validation here.
-
-There's also the fact that the untagging should be very cheap in the
-context of what we're doing so it seems sensible to just have it,
-especially generic code which applies to all arches.
-
-> > +static inline bool clone3_shadow_stack_valid(struct kernel_clone_args *kargs)
-> > +{
-> > +	if (!kargs->shadow_stack_token)
-> > +		return true;
-> > +
-> > +	if (!IS_ALIGNED(kargs->shadow_stack_token, sizeof(void *)))
-> > +		return false;
-> > +
-> > +	/*
-> > +	 * The architecture must check support on the specific
-> > +	 * machine.
-> > +	 */
-> > +	return IS_ENABLED(CONFIG_ARCH_HAS_USER_SHADOW_STACK);
-
-> I don't understand the comment here. It implies some kind of fallback
-> for further arch checks but it's just a return.
-
-Here we're just doing initial triage that a shadow stack could possibly
-be valid, the check here is there to fail if there's one specified but
-there is no support in the kernel (eg, for architectures that don't have
-the feature at all like arm32).  The comment is trying to say that we're
-not attempting to validate that we can actually use shadow stacks on the
-current system, just that the support exists in the kernel.  I'll reword
-the comment, it's not clear.
-
-> BTW, clone3_stack_valid() has an access_ok() check as well. Shall we add
-> it here? That's where the size would have come in handy but IIUC the
-> decision was to drop it (fine by me, just validate that the token is
-> accessible).
-
-AIUI the main reason for doing that for the normal stack is to report an
-error before we actually start the thread and have it fault trying to
-access an invalid stack since we don't otherwise look at the memory,
-like you say with shadow stacks we'll consume the token before we start
-the new thread so we get the equivalent error reporting as part of that.
-I don't think the extra check would buy us much.
-
---t93JckxzxlRIaiLJ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmhfDZgACgkQJNaLcl1U
-h9AmCQf9GAuPYyxk3xlRAPgt+lX60Z35ksp4eSnu/4Xa4MYPBSDLG9LH2n9UqtQB
-UJIwRXXfTTx7Lxj+Zf5IFD1HmvVLLj0rWRNABpL9NaeA2QuIrrTFSTw/G9rUOMGS
-8M/84Pshg7rvan+iWGkWq7MiHO3v0hp88q1SdeCgBoJkotb6+w6xEX5E+J1Muves
-JuBHZBpQJG4CMg/eqR90jUi+lZO57x2WEGXMSsv+R0NehA+bIH9mU3FvjepVXu4n
-VvBwsxnsH28MxcSQ+yHy89tSIYQ4NsECqFLpDMq+Ts4uFVrZ7zRKfq3hzsdIEe6b
-rM5vtRy2vC77grYez0CfjWPyYva5Ag==
-=373H
------END PGP SIGNATURE-----
-
---t93JckxzxlRIaiLJ--
+You're right, it's very unlikely (almost impossible) to be VFIO's
+fault if munmap() fails. But it would be a sign of a bug in the test,
+so it is still good to detect so we can fix it.
 
