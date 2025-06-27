@@ -1,170 +1,90 @@
-Return-Path: <linux-kselftest+bounces-35961-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35963-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DA6DAEB2E2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 11:30:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C313AEB53E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 12:45:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 406614A18C0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 09:30:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 891B83AE0DF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 10:44:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26134293C64;
-	Fri, 27 Jun 2025 09:29:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e//iFiMP"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5473298CAC;
+	Fri, 27 Jun 2025 10:45:20 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2201293C71;
-	Fri, 27 Jun 2025 09:29:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5534226D4C7;
+	Fri, 27 Jun 2025 10:45:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751016590; cv=none; b=mSxBnAYQFydPYplhdhYH7sC3SrzwJVMW/SE0C5XJXO2L5diYZ6/e3PwT6iNSQiu/Zf1p+Ax5Up+0tDRq4zYtZ3EwuWBImH8rEoegXCFrWxQz7c7j2MwPk2oem6kjDz+tMJZi6v68KN8ua13113HREX1UjI3H2Nwabz5LKQxyq1c=
+	t=1751021120; cv=none; b=jOPw3eQhvG2e+HoxH2Gd6YEXwAobyfD796Hrzg3LUFJXrHPAkKsKbQGwOfh2zMtYPOafE0PGPH3XD4j0gVCTkONOzoFN+FwdyWZj9HB7pO0FjqJyaULBEJ4OWgUmEbNaeaC6ILsbrtWAE2y8wcgo219bq3fAxYg4dOUBoOMsBg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751016590; c=relaxed/simple;
-	bh=hgTq3HJakHDLAQL9R275nXbuleoJE/PtptKFtlOZlIs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=etaz7QroIdq0KMnV1GVVX8odozbLf1wpS5DQltenh7mqPBvnczvWmAgrNzjLyVD0id1IobH3zs6dovwP9pt2hS7ehHGG/IgGrGfDufXKSbNSsGbv/cM0imgbLTywuho4eysba8yYXq3AjcrX9Tyj+0g4eB3GKdd1bp0m4wMud0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e//iFiMP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8DBBEC4CEF5;
-	Fri, 27 Jun 2025 09:29:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751016589;
-	bh=hgTq3HJakHDLAQL9R275nXbuleoJE/PtptKFtlOZlIs=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=e//iFiMPG+kIkeO00iAQNxm07FQ6j2M1qk0oKOOKOLL3oSeAAPYsGvpgzDVoYsZwi
-	 0+DKO0BGz+UO3uRTIZJTD894Xo5vUWEO2MleVFIaoklqTbNrp78OdpbZDY8c0YL4Ce
-	 eXcLvcNi5CKzu31hSFcdleggATqu/i/OK2TeEU8O1hTO9yquSoxDNvfwpzckWiEtF5
-	 /6ApimCDO9x/WIZ6qFbhVxuuFB/WnqxUzDLSMQrtwnoz20ANfBl4iRlhB216WVXtCS
-	 X52ZltH9rkhF253xXEhfIkA1xLDncoZVIT4c1oFH4dOoTpRUf7Enan/7R/1vUBAs9B
-	 ZaujDl2Q1qkug==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 856E6C83000;
-	Fri, 27 Jun 2025 09:29:49 +0000 (UTC)
-From: Joel Granados <joel.granados@kernel.org>
-Date: Fri, 27 Jun 2025 11:27:29 +0200
-Subject: [PATCH 5/5] sysctl: rename kern_table -> sysctl_subsys_table
+	s=arc-20240116; t=1751021120; c=relaxed/simple;
+	bh=rOC3ZN61YB87VOjCKjWidgsmHChsG4gpfO2vqW9HwGM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YS8axdIdm/Thpc6nCxxMhjwgtPRH0ZgequvY4x5V42LRTw7GUSZXzoTHxhsLtwNUJkq+TakeABnOUcQvIF5ujsWJaNbHeJL4mZIv/WXJEz8tTylCvkqVI/F5H33o1WGsi9YS7ydlHY3YPUzH0xwIRiq99UJaISVHybjrEXOwnpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5D31A1A00;
+	Fri, 27 Jun 2025 03:45:00 -0700 (PDT)
+Received: from [10.163.36.129] (unknown [10.163.36.129])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1A64A3F58B;
+	Fri, 27 Jun 2025 03:45:14 -0700 (PDT)
+Message-ID: <af5cbd48-6312-481d-8e91-7739612493c1@arm.com>
+Date: Fri, 27 Jun 2025 16:15:09 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/arm64: Prevent build warnings from
+ -Wmaybe-uninitialized
+To: Mark Brown <broonie@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250625020138.3777454-1-anshuman.khandual@arm.com>
+ <dd3dee5a-b030-4658-8cef-c777928368d4@sirena.org.uk>
+Content-Language: en-US
+From: Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <dd3dee5a-b030-4658-8cef-c777928368d4@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250627-jag-sysctl-v1-5-20dd9801420b@kernel.org>
-References: <20250627-jag-sysctl-v1-0-20dd9801420b@kernel.org>
-In-Reply-To: <20250627-jag-sysctl-v1-0-20dd9801420b@kernel.org>
-To: Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
- Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Joel Granados <joel.granados@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2432;
- i=joel.granados@kernel.org; h=from:subject:message-id;
- bh=hgTq3HJakHDLAQL9R275nXbuleoJE/PtptKFtlOZlIs=;
- b=owJ4nAHtARL+kA0DAAoBupfNUreWQU8ByyZiAGheZItRvg7iUt/llY0jbi3S8p4tXdqPpP3ES
- PH4SAld/qySPIkBswQAAQoAHRYhBK5HCVcl5jElzssnkLqXzVK3lkFPBQJoXmSLAAoJELqXzVK3
- lkFPkkcL/0kQbR1sj7lbluFeCpSjtNkpKm+jLiXZcrRmAe9K4iSgODeEZRXR7j+6fu9IqphE3Gm
- Z5lm4OhRmxF/P21L5oBXMHdsBsmEyFU5qQVQTGTCq+qZIHJSm7p+XsvQ04r/vBDcVjWHiSVDnOH
- 4fF+pPRuoPm2EQP/q2zT4tYvaajLN/8mBOVDxiokci+6K8PDk/O6dn97UYlQIS4gX8qj6CFHE1H
- N5dz1iSBTb5coUDKVmuBbaqEL8r1MXo4fiVeVtX3qvha4mEB4QdwZhL0U/DtNXzu0KGhEhtu0vB
- ZdautBKdIG/ui5nC7p5HUam91iIVu0bnfrHmZ1VNuFkk5nSSGEV/APDcz5AbIpzAWhzYTfore0h
- 6erbmuF00MVdrGY9W/T+rFU6pYYy6q/ftmH8yZzRds0H30FAjmj/CEIxlxv74C53FXR+TQvcwEK
- OrCAqwpvdhNlacaC3dvBEwF8mPBZ7cR+czVEYERECXdd+RYsqgyPDgsjPCc3Cq+9eZFI4Ujo3f6
- fE=
-X-Developer-Key: i=joel.granados@kernel.org; a=openpgp;
- fpr=F1F8E46D30F0F6C4A45FF4465895FAAC338C6E77
-X-Endpoint-Received: by B4 Relay for joel.granados@kernel.org/default with
- auth_id=239
 
-Renamed sysctl table from kern_table to sysctl_subsys_table and grouped
-the two arch specific ctls to the end of the array.
 
-This is part of a greater effort to move ctl tables into their
-respective subsystems which will reduce the merge conflicts in
-kernel/sysctl.c.
 
-Signed-off-by: Joel Granados <joel.granados@kernel.org>
----
- kernel/sys.c    |  1 -
- kernel/sysctl.c | 22 +++++++++++-----------
- 2 files changed, 11 insertions(+), 12 deletions(-)
+On 25/06/25 3:54 PM, Mark Brown wrote:
+> On Wed, Jun 25, 2025 at 03:01:38AM +0100, Anshuman Khandual wrote:
+> 
+>> @@ -96,7 +96,7 @@ static int write_sleep_read(void)
+>>  static int write_fork_read(void)
+>>  {
+>>  	pid_t newpid, waiting, oldpid;
+>> -	int status;
+>> +	int status = 0;
+>>  
+>>  	set_tpidr2(getpid());
+>>  
+> 
+> This will shut the warnings up, but it's a bit of a heavy hammer that
+> means that the warning can never trigger warnings for that variable
+> being unused.  Is it possible to fix this by updating the control flow
+> such that the compiler can tell that the initialisation follows the use?
 
-diff --git a/kernel/sys.c b/kernel/sys.c
-index bbeee62f9abcdf18cdf5cdb06271476b048357ae..18a037cc6f61a339f1f21af9c26b25ecca1ae43c 100644
---- a/kernel/sys.c
-+++ b/kernel/sys.c
-@@ -210,7 +210,6 @@ static int __init init_overflow_sysctl(void)
- 
- postcore_initcall(init_overflow_sysctl);
- 
--
- /*
-  * Returns true if current's euid is same as p's uid or euid,
-  * or has CAP_SYS_NICE to p's user_ns.
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index 21b70443aea75ae3212f70e5ce7efbfdf8a4f75b..cb6196e3fa993daa21704d190baf366084e014f7 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -1454,7 +1454,7 @@ int proc_do_static_key(const struct ctl_table *table, int write,
- 	return ret;
- }
- 
--static const struct ctl_table kern_table[] = {
-+static const struct ctl_table sysctl_subsys_table[] = {
- #ifdef CONFIG_PROC_SYSCTL
- 	{
- 		.procname	= "sysctl_writes_strict",
-@@ -1465,15 +1465,6 @@ static const struct ctl_table kern_table[] = {
- 		.extra1		= SYSCTL_NEG_ONE,
- 		.extra2		= SYSCTL_ONE,
- 	},
--#endif
--#ifdef CONFIG_SYSCTL_ARCH_UNALIGN_ALLOW
--	{
--		.procname	= "unaligned-trap",
--		.data		= &unaligned_enabled,
--		.maxlen		= sizeof (int),
--		.mode		= 0644,
--		.proc_handler	= proc_dointvec,
--	},
- #endif
- 	{
- 		.procname	= "ngroups_max",
-@@ -1489,6 +1480,15 @@ static const struct ctl_table kern_table[] = {
- 		.mode		= 0444,
- 		.proc_handler	= proc_dointvec,
- 	},
-+#ifdef CONFIG_SYSCTL_ARCH_UNALIGN_ALLOW
-+	{
-+		.procname	= "unaligned-trap",
-+		.data		= &unaligned_enabled,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec,
-+	},
-+#endif
- #ifdef CONFIG_SYSCTL_ARCH_UNALIGN_NO_WARN
- 	{
- 		.procname	= "ignore-unaligned-usertrap",
-@@ -1502,7 +1502,7 @@ static const struct ctl_table kern_table[] = {
- 
- int __init sysctl_init_bases(void)
- {
--	register_sysctl_init("kernel", kern_table);
-+	register_sysctl_init("kernel", sysctl_subsys_table);
- 
- 	return 0;
- }
+The problem might not exist in reality. In the test function test_fork()
+in the file tools/testing/selftests/arm64/gcs/basic-gcs.c there does not
+seem to be a path where WIFEXITED(status) might get called when 'status'
+has not been initialized as there is a preceding waitpid() which would
+ensure 'status' gets set. Similar scenarios are present in fork_test_c()
+and write_fork_read() as well. 
 
--- 
-2.47.2
-
+But the compiler still throws these build warnings. Seems to be false
+positives and this fix just works around that.
 
 
