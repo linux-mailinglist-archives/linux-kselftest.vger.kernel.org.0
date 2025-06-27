@@ -1,81 +1,79 @@
-Return-Path: <linux-kselftest+bounces-35972-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35973-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3069AEB894
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 15:12:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F7BBAEB8C6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 15:23:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BDB911C253FD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 13:12:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D6CC1C6070E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 13:23:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33DF62D97A6;
-	Fri, 27 Jun 2025 13:12:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 416BB2D9ED3;
+	Fri, 27 Jun 2025 13:23:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SyxSP074"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vOYFNiTv"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 058821DFE1;
-	Fri, 27 Jun 2025 13:12:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03B3E2D3EFC;
+	Fri, 27 Jun 2025 13:23:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751029953; cv=none; b=o0xoDAi0Kfl4ummYP+C+zSAUCFOVRzx4TGjcq1womL+ZzWmUlzha+Mj0/PaTert/lX6G1gZ1tbCtRY6zwm0ZFWJ2gujctG4zFtrPRGhR6jM8ubTv1TMfu8HUaTp/QkbVp7K/PP4ebEux5ubnagvF8pBMEFskPgd0AALosrXKxtM=
+	t=1751030594; cv=none; b=OsJrhv0KxuEXD0KF7QsUKsx+T8CdyNdMztZr4GbihcY1lxpEmAbS46BewQzCLxw4FenRcp2j7VrT5ETj39SLoX4rqPXcm2lB5WhObnAb8aIDTqug74AKq+JzJX2TIR7yVwJ2IRJusOKn7WMRlpJUBU6HK1hFyudicUbMiDFNhzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751029953; c=relaxed/simple;
-	bh=Q6l1BxiwXFJKVXwA6TiA3L7Wf54iRrkNwkTuo2v5rJo=;
+	s=arc-20240116; t=1751030594; c=relaxed/simple;
+	bh=JIWvjEsAlcLjXPQ5Hbwf/8w/8yueo94WJUdb35S5Oec=;
 	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=exSIYv3qR0FylJJQp0CeNccSNFvkmlSlxtKoNktJ/+6srk62ndJwkMLniQ/cBp1bmxQ7ySBoxb2ciXsHk5DdN18GiT/iCH4F1Q55WAekUkhx78KTrNVkbWuHTSElwn7aQvg9RuJl4kbpIGXJSWHlZAPLPOpsBHwN7DbX1mvJ1QU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SyxSP074; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A07ECC4CEE3;
-	Fri, 27 Jun 2025 13:12:32 +0000 (UTC)
+	 MIME-Version:Content-Type; b=rie078NN9vnOpV+qFzpgcBwJ8qIce6hfgRkc3lKGjOfvhIBs4GNjqtwYDZ/wljdjvw9bFOF0YjHqtabeIra5NNEpjU9NBUqe+CEcPtJvyHpvkoKJr35TjRwHLgVx35Htg0ylycOmgYeiLZFyRt5DbcTarMYZbHYAFM1RQwtRP3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vOYFNiTv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F526C4CEE3;
+	Fri, 27 Jun 2025 13:23:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751029952;
-	bh=Q6l1BxiwXFJKVXwA6TiA3L7Wf54iRrkNwkTuo2v5rJo=;
+	s=k20201202; t=1751030593;
+	bh=JIWvjEsAlcLjXPQ5Hbwf/8w/8yueo94WJUdb35S5Oec=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=SyxSP074QoZcLTurytGAT4H9kzsOKMb6JhCvcMlKX4gwoPYlWBro+g8Vxdnrez6fS
-	 kRiHcTukK7xhlhSLD1z5fRXgfAPBmR+aolbdZ928nb0z3DE9kwpbPA8K9yUNph4dMA
-	 dV+jS1fD248e2GrFEBQbn+LG7GwNDempn63G92ZwflvZiDHuwuvhYFPXzub+0HwxaF
-	 5897rGDwtPwmAbJ1fhQQWwe7P1WKGoI3Uu5EKSwcLZE/5h1Xyx5Jw9lTIpYxPcMMSz
-	 8c6EcDYOgOxVIK2A52aqI0+xt38dznPiX0JFl8KENbUqi3d9MUjFhTArFC7WxhNc0J
-	 DZhakMlatKyiw==
+	b=vOYFNiTvT+uN16eqP2YsWAm8KNoGDrAGRnGCZQ6k3cO3wSmWrl36/2ZlQcLJQwrRv
+	 x0ukPV/wQEOdYQ2i6vAzxBPDpSXvXf3bfojfbaXAGUi/zOjkFrXqpF4lL5XnmLTOA8
+	 JVICb6C+MRm1Siz8dIurqz6weeho1YZXN5VTyqQEoGulA/8dV9I2M2O6Lh80RiFBlv
+	 a8PqNGgBVGPdfZSr5Bsa2an5D5s9mwpT/qmHwp6N2Dnb8r+rq0pfYtC4MB++kkgB64
+	 exk69s0EgLMe7xEvIINLL9QNOlx2iQzFmmNXVv1jZa2st1kUxL05Mes900+mRzbxlL
+	 UwcCAULbWT0Qw==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
 	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.95)
 	(envelope-from <maz@kernel.org>)
-	id 1uV8sY-00AZLe-8g;
-	Fri, 27 Jun 2025 14:12:30 +0100
-Date: Fri, 27 Jun 2025 14:12:29 +0100
-Message-ID: <86v7ohba6a.wl-maz@kernel.org>
+	id 1uV92s-00AZW6-S1;
+	Fri, 27 Jun 2025 14:23:10 +0100
+Date: Fri, 27 Jun 2025 14:23:10 +0100
+Message-ID: <86tt41b9oh.wl-maz@kernel.org>
 From: Marc Zyngier <maz@kernel.org>
-To: <oliver.upton@linux.dev>, Yicong Yang <yangyicong@huawei.com>
-Cc: 	<yangyicong@hisilicon.com>,
-	<catalin.marinas@arm.com>,
-	<will@kernel.org>,
-	<corbet@lwn.net>,
-	<linux-arm-kernel@lists.infradead.org>,
-	<kvmarm@lists.linux.dev>,
-	<linux-kselftest@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>,
-	<joey.gouly@arm.com>,
-	<suzuki.poulose@arm.com>,
-	<yuzenghui@huawei.com>,
-	<shuah@kernel.org>,
-	<jonathan.cameron@huawei.com>,
-	<shameerali.kolothum.thodi@huawei.com>,
-	<linuxarm@huawei.com>,
-	<prime.zeng@hisilicon.com>,
-	<xuwei5@huawei.com>,
-	<tangchengchang@huawei.com>,
-	<wangzhou1@hisilicon.com>
-Subject: Re: [PATCH v3 3/7] KVM: arm64: Handle DABT caused by LS64* instructions on unsupported memory
-In-Reply-To: <44993060-7eb1-400c-9887-3d438aeb8ee9@huawei.com>
-References: <20250626080906.64230-1-yangyicong@huawei.com>
-	<20250626080906.64230-4-yangyicong@huawei.com>
-	<86zfduc2ca.wl-maz@kernel.org>
-	<44993060-7eb1-400c-9887-3d438aeb8ee9@huawei.com>
+To: Colton Lewis <coltonlewis@google.com>
+Cc: kvm@vger.kernel.org,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Mingwei Zhang <mizhang@google.com>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	linux-perf-users@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 02/22] arm64: Generate sign macro for sysreg Enums
+In-Reply-To: <20250626200459.1153955-3-coltonlewis@google.com>
+References: <20250626200459.1153955-1-coltonlewis@google.com>
+	<20250626200459.1153955-3-coltonlewis@google.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
  (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -87,96 +85,22 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
 X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: oliver.upton@linux.dev, yangyicong@huawei.com, yangyicong@hisilicon.com, catalin.marinas@arm.com, will@kernel.org, corbet@lwn.net, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, shuah@kernel.org, jonathan.cameron@huawei.com, shameerali.kolothum.thodi@huawei.com, linuxarm@huawei.com, prime.zeng@hisilicon.com, xuwei5@huawei.com, tangchengchang@huawei.com, wangzhou1@hisilicon.com
+X-SA-Exim-Rcpt-To: coltonlewis@google.com, kvm@vger.kernel.org, pbonzini@redhat.com, corbet@lwn.net, linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, mizhang@google.com, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, mark.rutland@arm.com, shuah@kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Thu, 26 Jun 2025 12:39:41 +0100,
-Yicong Yang <yangyicong@huawei.com> wrote:
+On Thu, 26 Jun 2025 21:04:38 +0100,
+Colton Lewis <coltonlewis@google.com> wrote:
 > 
-> On 2025/6/26 16:51, Marc Zyngier wrote:
-> > On Thu, 26 Jun 2025 09:09:02 +0100,
-> > Yicong Yang <yangyicong@huawei.com> wrote:
+> There's no reason Enums shouldn't be equivalent to UnsignedEnums and
+> explicitly specify they are unsigned. This will avoid the annoyance I
+> had with HPMN0.
 
-[...]
+And randomly break unsuspecting cases for which a value is neither
+signed not unsigned, but an actual *enumeration*.
 
-> >>
-> >> +	/*
-> >> +	 * Target address is normal memory on the Host. We come here
-> >> +	 * because:
-> >> +	 * 1) Guest map it as device memory and perform LS64 operations
-> >> +	 * 2) VMM report it as device memory mistakenly
-> >> +	 * Hand it to the userspace.
-> >> +	 */
-> >> +	if (esr_fsc_is_excl_atomic_fault(kvm_vcpu_get_esr(vcpu))) {
-> >> +		struct kvm_run *run = vcpu->run;
-> >> +
-> >> +		run->exit_reason = KVM_EXIT_ARM_LDST64B;
-> >> +		run->arm_nisv.esr_iss = kvm_vcpu_dabt_iss_nisv_sanitized(vcpu);
-> >> +		run->arm_nisv.fault_ipa = fault_ipa |
-> >> +			(kvm_vcpu_get_hfar(vcpu) & (vma_pagesize - 1));
-> >> +
-> >> +		return -EAGAIN;
-> >> +	}
-> > 
-> > I'm not sure that's the right thing to do.
-> > 
-> > If:
-> > 
-> > - the guest was told it doesn't have LS64WB,
-> > 
-> > - it was told that some range is memory,
-> > 
-> > - it uses that range as device,
-> > 
-> > - thanks to FWB the resulting memory type is "Normal-Cacheable"
-> > 
-> > - which results in an Unsupported Atomic exception
-> > 
-> > why would we involve the VMM at all? The VMM clearly said it didn't
-> > want to be involved in this (we have a memslot).
-> > 
-> 
-> ok I thought we should make VMM do the decision in all the cases(both
-> here and emulated MMIO) based on the last discussion[*], I may
-> misunderstand it. If this is the case...
-> 
-> > I think we should simply inject the corresponding S1 fault back into
-> > the guest.
-> > 
-> 
-> let's simply inject a corresponding DABT back here and only make the VMM
-> handle the emulated MMIO case. will update if no further comment.
-
-A permission fault at S2 for a R/O memslot should definitely be
-relayed to userspace. But the question is whether the HW would report
-a permission fault or an unsupported atomic or exclusive fault (UAoEF
-for short).
-
-If the HW supports LS64WB, I'd fully expect to get a permission fault,
-not an UAoEF, and we can perfectly report this to userspace with full
-decode information (though this doesn't fit in the KVM_EXIT_MMIO
-structure -- that's "only" an ABI problem).
-
-If it doesn't, then we have a much bigger issue, and I don't think we
-can realistically triage the exception in a meaningful way -- we just
-can't know the reason why we failed, and we don't even know whether
-this was a load or store.
-
-Overall, I can see two options here:
-
-- we limit the LS64 support to HW that supports LS64WB (too bad for
-  the other implementations, which is 100% of them). We can always
-  triage the exception correctly, and we're unlikely to ever take an
-  UAoEF in this context.
-
-- we define that R/O memslots do not support LS64 accesses at all,
-  which is always a valid implementation -- the architecture makes no
-  provision of which pieces of addressable memory supports an access
-  type or another. With that, we can always inject the UAoEF back into
-  the guest without any further triaging.
-
-Oliver, what do you think?
+If you have issues with HPMN0, start by explaining those, because
+ranting in a commit message doesn't help much.
 
 	M.
 
