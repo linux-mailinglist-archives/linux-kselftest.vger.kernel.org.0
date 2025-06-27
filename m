@@ -1,78 +1,82 @@
-Return-Path: <linux-kselftest+bounces-36002-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36003-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CFC0AEC094
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 22:05:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B842FAEC098
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 22:06:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D94763B13E2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 20:05:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3300E1C45CEF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 20:06:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFCB32EBDC8;
-	Fri, 27 Jun 2025 20:05:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6753F2ECE97;
+	Fri, 27 Jun 2025 20:05:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dKh/KZGT"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TTPV8XGC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61A4B2EBBA8
-	for <linux-kselftest@vger.kernel.org>; Fri, 27 Jun 2025 20:05:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0EC42EBDD6
+	for <linux-kselftest@vger.kernel.org>; Fri, 27 Jun 2025 20:05:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751054745; cv=none; b=ZKytcr1jZlHv1bfxZj0i/tLbJecSityKUdALEOn9qH/auQ9xdMoMyt93zTDZuR/BRpSs4aUHnW+rhZnd+Gi+ZCcYtLW+aFq7tap+bI+jZGFjJG+cYW2EfZn/r952jQX77+u20vNHOJig2BkOF1knEgC+qzlrydIBYLZumxN0ZYs=
+	t=1751054747; cv=none; b=jXsV5t3/3/dITySqi79yyJ3hW61rfnzYS8fApuCBu61BsYwZjk1nUV2WFLAcxdkHW+OCCskmPbtlGV8kUnIwWpgSyETEEkYebmj95hpjLElPvk/HBj9GBOm0mXPQnCOxOoAdSoAxqVinMpp/lPxSsp3aI+TEuxz577yKdTl0hR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751054745; c=relaxed/simple;
-	bh=58VetzeaoTTUO6xje0ZO9jyJyh/pGGsMiDy6XnPNWFI=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=lR/sdJroTKfaPujnfZQMO5Lx4XUK5poSCCf0mys3/A7Jvpo9Q/GuWMq2z0/DSJAptJ/VTm718tUCc3Gr5XJMRjNhg8XUpdubH9XBjmtFb17p7uWTJTCxyRjyFEJQTDYPAlW0UjpVYf9G0CTU4dflSTl8VRPUYapcyZKE2az2sWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dKh/KZGT; arc=none smtp.client-ip=209.85.215.202
+	s=arc-20240116; t=1751054747; c=relaxed/simple;
+	bh=LR3FEYO4lseRQoD8fNl9kELElxWTZ4qSpuPKRqnou5E=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=BnCH2t0u2gaodWwGJ9feQ6VNvzB0HqfguwnyH0lkyaRS23ukKSrchjzyckkHutNTk7+b6i0tPEWrEo5HnbGScdZ4Kj9xid9V+gw0ir7qGXAnyy39ZIZ+WbDr3x4bQVOBAuJ6S9o2UugLqNGg+5cWoVT2WQWMU7B1X3dHcwK6hnw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TTPV8XGC; arc=none smtp.client-ip=209.85.210.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-b31f4a9f67cso468659a12.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jun 2025 13:05:44 -0700 (PDT)
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-748764d84feso635838b3a.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jun 2025 13:05:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1751054744; x=1751659544; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=vF3w72k6M2FJsnp0yQuYIlc0wWajODBZmfeD8ZMb3YY=;
-        b=dKh/KZGTJJmmyZVnLiXJt6/T/jXdsjmoeSKouw2rnvrwgoui/FoqpND1oeCoX9KnRy
-         yYxiOOw1lMUnaKVN00CExAQ12AlU8kl0qEqyvKi4VduQSx7Xoe55NJNLCbwjnMDgEY/4
-         R5w8o6UBzwXPWyQI9FPJDcOokiMIj27kgLXjqfBadhVmW4o93AMAo6CsfLngSmowdKK/
-         NGn842CF7seV+gnkvEzAco4tFHxRawItzMtg7kO6vXHhQ5Mxxsj4Sctsi8ubwO/yJkJt
-         3FmuktSXFwtCqmLeXdpacWSmeOptXW3vJgCLiCmr/1oP9A3cI6limxXysgj2kS26Tl+p
-         ZxGQ==
+        d=google.com; s=20230601; t=1751054745; x=1751659545; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZsCnLtPUB1WW+niTlrUm0KWXpbsHYBTnip7qlkFxEqw=;
+        b=TTPV8XGC5LnjKfGOB32kPx6d0GcrGWH1saQhsQ37V89C+j0aW0TypZebJwxwwSU+oG
+         fEohcWwm7o2ofP/+TSLgy12+XFz38B6gygeDe4zPf1x40N3NM9Tf4ohn9qGjzlfCpEoz
+         CMkusz2kBZrf+B7WGoYAMSQUpluBtD7QVZohQWenXiZVZXPufvMP26UJvwdHD8K1PewH
+         RvjgIs6fyFSwBfzyjVuDlx/dQMycJAO+RKRVLQHD0EZgvLIL9IoIIKxVCe6ypvF0bMj0
+         Affzq/y+kzXrMBLPKDyDiSBFdS9dUrXM5V6y+jTngfyKYev7Hptfgq5Fq96t+AYOoVpg
+         eLMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751054744; x=1751659544;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vF3w72k6M2FJsnp0yQuYIlc0wWajODBZmfeD8ZMb3YY=;
-        b=AhIooHZ+RxU3/sU3vy3qTHSDlaWl1J9+FYrS70UsNxVRzlqk7X5TFGCf08WuCuRewR
-         buTehs2M6Q9n+kZ8xICCK3IngY9cCI8lEhNbKwsaACLXSg51h8GaPqn+B3FFzvuXPoCk
-         /HIEMNwjYKlAhbrGq3OKgeV265y9rMnckF79FyY+jWfgsptKSI8pW/HEjg0PJCrPCEiA
-         hlmiyqZLY5V20AThVZ0wzmlWx0vUL6Yajpk9T8TWHnMoz/laJATbYWfWYP3z2yOmw4c/
-         Lw5sHy9s/N8D/uK9qn/1B0p86ZA7UNcX8Oo/MaJmshE4lcnx5ZQaq9iBne/VNaVPlQq1
-         0DWA==
-X-Forwarded-Encrypted: i=1; AJvYcCXHCpH4oJV6absFLmwKozzNB8ecne67D6suPXKEcP8uuePLBZ3kg9OZEbQmmyIWMkQfYvt+l2kroQWgf9icNiw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzX0mAim7SpT5NZQdSB+l3QzrQLewGTU2U3AQVOFm6QvZDPc7iE
-	oT5ajFIun9BLZEctwXshK75LA7c9IQGoR03u4d4n7ivd5uw5oEWW2hCsEAAIdgOfx5AximA69sT
-	nT5bXo04iRA8ZXx8coi05Qk6fjA==
-X-Google-Smtp-Source: AGHT+IGgA2AyrASEeQalRWqmeezLlku7J3nX7jKNCFbgJ5auTtUg89qGUZ4YgwmCCUCUy/MWeJoqjGwBDkr/pL380g==
-X-Received: from pjbnb6.prod.google.com ([2002:a17:90b:35c6:b0:311:8076:14f1])
+        d=1e100.net; s=20230601; t=1751054745; x=1751659545;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZsCnLtPUB1WW+niTlrUm0KWXpbsHYBTnip7qlkFxEqw=;
+        b=hSvUmzzOBHlVULGDYLxVoZtRwfMP7s3mry7izWPwJqv0UkZITkGjV790CZBPDzDlBg
+         cEwV7xwzRTeZSe82maenXhuyEakcdHlo+r+YcQWrHReCs7OiOHsqAEhwIHOgmHVwMMrH
+         e+9qzvUVvODELJdqRzf2rtTj4m9D5mlMnty9c4pHQhBMDkmw2rKdWoORjX1UijRXnS/r
+         Uf25AicevVqy5enxNBfQ4su3Z8hdYSSZGgxopVAaZYuFMRS5txgim/O/+aG+n1A4Dc7Z
+         g2sAz7wBFAP4+eU0hU3nrMucyH2vBRCZGx6BTbLr1mwvQj9NiN4tl11xwJO/jYmqh7CV
+         HT/w==
+X-Forwarded-Encrypted: i=1; AJvYcCWJXaIL/fqvYpc4I8u77598f1HBWxcEuFk2h/IQMnAIWb9lm9APEtdL6rq3rf+GnMhdcOSbPtK9wVid3ZEhO/s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBmAawvM3IW8DNLA2hLwpOEEgRXH94yv1w5gfnVnEHYzBOKs6o
+	DRxLctC+jzliAjL8GP03gG2kBtBBJG5nrCIJitAkOM2QoltEzAXhDd9JjH5P54U/+NM4cLtUFA1
+	fKyLpKhICAvbTXBS/st1RCyb+kw==
+X-Google-Smtp-Source: AGHT+IG/oOX4Ds24NX7C8OYmI3C+kJZrnfuJT15/L/7jauTWcRcnnLkHUgGCREUfwknTXT4g7yRM1bwd9m2A7brqUg==
+X-Received: from pgbfq27.prod.google.com ([2002:a05:6a02:299b:b0:b31:cc05:3c03])
  (user=almasrymina job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:5683:b0:313:23ed:6ff with SMTP id 98e67ed59e1d1-318c8ff234emr5811759a91.1.1751054743828;
- Fri, 27 Jun 2025 13:05:43 -0700 (PDT)
-Date: Fri, 27 Jun 2025 20:04:51 +0000
+ 2002:a05:6a20:c704:b0:220:63bd:2bdb with SMTP id adf61e73a8af0-220a16ca7famr7000010637.40.1751054745372;
+ Fri, 27 Jun 2025 13:05:45 -0700 (PDT)
+Date: Fri, 27 Jun 2025 20:04:52 +0000
+In-Reply-To: <20250627200501.1712389-1-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20250627200501.1712389-1-almasrymina@google.com>
 X-Mailer: git-send-email 2.50.0.727.gbf7dc18ff4-goog
-Message-ID: <20250627200501.1712389-1-almasrymina@google.com>
-Subject: [PATCH net-next v1 1/2] selftests: pp-bench: remove unneeded linux/version.h
+Message-ID: <20250627200501.1712389-2-almasrymina@google.com>
+Subject: [PATCH net-next v1 2/2] selftests: pp-bench: remove
+ page_pool_put_page wrapper
 From: Mina Almasry <almasrymina@google.com>
 To: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
 	linux-kernel@vger.kernel.org
@@ -83,42 +87,57 @@ Cc: Mina Almasry <almasrymina@google.com>, "David S. Miller" <davem@davemloft.ne
 	Ilias Apalodimas <ilias.apalodimas@linaro.org>, kernel test robot <lkp@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 
-linux/version.h was used by the out-of-tree version, but not needed in
-the upstream one anymore.
+Minor cleanup: remove the pointless looking _ wrapper around
+page_pool_put_page, and just do the call directly.
 
-While I'm at it, sort the includes.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202506271434.Gk0epC9H-lkp@intel.com/
 Signed-off-by: Mina Almasry <almasrymina@google.com>
 ---
- .../selftests/net/bench/page_pool/bench_page_pool_simple.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ .../net/bench/page_pool/bench_page_pool_simple.c     | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
 
 diff --git a/tools/testing/selftests/net/bench/page_pool/bench_page_pool_simple.c b/tools/testing/selftests/net/bench/page_pool/bench_page_pool_simple.c
-index f183d5e30dc6..1cd3157fb6a9 100644
+index 1cd3157fb6a9..cb6468adbda4 100644
 --- a/tools/testing/selftests/net/bench/page_pool/bench_page_pool_simple.c
 +++ b/tools/testing/selftests/net/bench/page_pool/bench_page_pool_simple.c
-@@ -5,15 +5,12 @@
-  */
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
-+#include <linux/interrupt.h>
-+#include <linux/limits.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
--
--#include <linux/version.h>
- #include <net/page_pool/helpers.h>
- 
--#include <linux/interrupt.h>
--#include <linux/limits.h>
--
- #include "time_bench.h"
- 
+@@ -16,12 +16,6 @@
  static int verbose = 1;
-
-base-commit: 8efa26fcbf8a7f783fd1ce7dd2a409e9b7758df0
+ #define MY_POOL_SIZE 1024
+ 
+-static void _page_pool_put_page(struct page_pool *pool, struct page *page,
+-				bool allow_direct)
+-{
+-	page_pool_put_page(pool, page, -1, allow_direct);
+-}
+-
+ /* Makes tests selectable. Useful for perf-record to analyze a single test.
+  * Hint: Bash shells support writing binary number like: $((2#101010)
+  *
+@@ -121,7 +115,7 @@ static void pp_fill_ptr_ring(struct page_pool *pp, int elems)
+ 	for (i = 0; i < elems; i++)
+ 		array[i] = page_pool_alloc_pages(pp, gfp_mask);
+ 	for (i = 0; i < elems; i++)
+-		_page_pool_put_page(pp, array[i], false);
++		page_pool_put_page(pp, array[i], -1, false);
+ 
+ 	kfree(array);
+ }
+@@ -180,14 +174,14 @@ static int time_bench_page_pool(struct time_bench_record *rec, void *data,
+ 
+ 		} else if (type == type_ptr_ring) {
+ 			/* Normal return path */
+-			_page_pool_put_page(pp, page, false);
++			page_pool_put_page(pp, page, -1, false);
+ 
+ 		} else if (type == type_page_allocator) {
+ 			/* Test if not pages are recycled, but instead
+ 			 * returned back into systems page allocator
+ 			 */
+ 			get_page(page); /* cause no-recycling */
+-			_page_pool_put_page(pp, page, false);
++			page_pool_put_page(pp, page, -1, false);
+ 			put_page(page);
+ 		} else {
+ 			BUILD_BUG();
 -- 
 2.50.0.727.gbf7dc18ff4-goog
 
