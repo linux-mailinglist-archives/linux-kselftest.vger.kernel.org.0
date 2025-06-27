@@ -1,397 +1,1070 @@
-Return-Path: <linux-kselftest+bounces-35970-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-35971-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9655AEB819
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 14:49:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6243DAEB861
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 15:02:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7D9D9189670E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 12:49:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A4AD07B252A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 13:01:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F049B2D879C;
-	Fri, 27 Jun 2025 12:48:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A27FF2D6600;
+	Fri, 27 Jun 2025 13:02:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="lqmuzra6";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="NeYoApK1"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mOvMlx8A"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37C762980BF;
-	Fri, 27 Jun 2025 12:48:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAE3D264FBB
+	for <linux-kselftest@vger.kernel.org>; Fri, 27 Jun 2025 13:02:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751028538; cv=none; b=VFdPq0amJSCOcEkw/ns9LjkL89OIaAH5LCgp8Gp9yqYiqh9vPnFQOXqcrxy1/aRCKEh0oK/knz/ESz62Yf++YJ54qBpnuT6AbaqxQoYeiLbOShJFgjEgXSSnYysNlTvplP/p8dZHxv3CSd4Gc+IesvIg5YsOcWiTyhEp3Kcq0I0=
+	t=1751029360; cv=none; b=ZiKEg3b7xyzwyN2LmLxBLuF0XGUv+FZs7ANTooUM0WvZ8u+ed0+XE/UdSSZtio9suUXrWackqrxZxrTMb4Lvk4AM/8K1CBQ5IX6m/4ABWL5gL8dWAmlvmWA8dzSE9Z57d2FXdNhdWJkFtwRwZdXYshgPc5WNOaTjR6ro+RTU2Wk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751028538; c=relaxed/simple;
-	bh=91g/Z0XKaGrm4enQreIzabrBw3Lf4UpDZ4SRKzVP1xo=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=t8ccilJz6NrPEt8+PcA4shkbgEgU+8nJfSGdUB45A3oetuUh0c+jTsruGC8xLF1AeQtTamxBO0VS72GFOoEf1GCMxPSSxF+cN1l2Wt43WdqeNEC3mj6z6WIj1I15zluU2BHLx8aKDLoBR2QNOYOEwi+ydRfw/TnifRwAJl6z2Jc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=lqmuzra6; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=NeYoApK1; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1751028535;
+	s=arc-20240116; t=1751029360; c=relaxed/simple;
+	bh=4/pfgc7QxYlfrd0fidKTfZkPkt+nonIp/SXj3Jh+1+4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=P+ZSg1hATsadBnoVmsOYkhvt+ypv68Tuk104hI3kw0x1Dcm8uWPpyw/3/Qydq9VCOQ3Ygb8SpCqQUxmpJEHwi05U8iKtKDcsQxMvLFMP1TEFyvBe+bMu5JnzfYN8D2cSsaziNELwjpB7wNzOoA1TcNUPehwZJsRBWGDXHCow9dw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mOvMlx8A; arc=none smtp.client-ip=91.218.175.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Fri, 27 Jun 2025 15:02:31 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1751029354;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=dahXu2LEDMAp26RbUOIDlGEe7yKn2tw8fEfvF1ZcJHA=;
-	b=lqmuzra6pRShzul0BKepI1sehWdXlq7GRY6s+aWJmehnFXVc2um1nmpnw+W5PC8U/NJeed
-	TEp78/NSPC28NRo1WAnF7CP31PZSGfJCFwRRRmVxySvvoNr7eOeWopOGLQ+THKJif4FlV+
-	bTctGp317l7qkQ2finUivmro66xG6b/ZBMLIGTS5xw8I191KKuTsfVoIuaj84tqSx4zCiQ
-	ADsG/VUW8/pakI+zv8Kj19k5AACZitEYI5Odea9pMasohs1ubkb8yNKkEAtaOJGhBL/cvE
-	7gbDuepex8RX2NJDmvuRJ19u7jAaMVdzOqWe6k75Q5Ha7rz8NUQ4EBnJY6owZA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1751028535;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dahXu2LEDMAp26RbUOIDlGEe7yKn2tw8fEfvF1ZcJHA=;
-	b=NeYoApK17LDa2m/ATlT2S+xXuEP1obxvXvQ2rZS4JhKRPbPkEy91xRAqFifQEHFCgw3wnx
-	irF2m56Q1/vYN5Ag==
-To: =?utf-8?Q?Andr=C3=A9?= Almeida <andrealmeid@igalia.com>, Ingo Molnar
- <mingo@redhat.com>,
- Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>,
- Davidlohr Bueso <dave@stgolabs.net>, Shuah Khan <shuah@kernel.org>, Arnd
- Bergmann <arnd@arndb.de>, Sebastian Andrzej Siewior
- <bigeasy@linutronix.de>, Waiman Long <longman@redhat.com>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-api@vger.kernel.org, kernel-dev@igalia.com, =?utf-8?Q?Andr=C3=A9?=
- Almeida
- <andrealmeid@igalia.com>
-Subject: Re: [PATCH v5 7/7] selftests: futex: Expand robust list test for
- the new interface
-In-Reply-To: <20250626-tonyk-robust_futex-v5-7-179194dbde8f@igalia.com>
-References: <20250626-tonyk-robust_futex-v5-0-179194dbde8f@igalia.com>
- <20250626-tonyk-robust_futex-v5-7-179194dbde8f@igalia.com>
-Date: Fri, 27 Jun 2025 14:48:54 +0200
-Message-ID: <87tt41nydl.ffs@tglx>
+	bh=zC3YpsI2juIFXpYJGTYCRpgoPv/M4d1AB2F3L9vAJMM=;
+	b=mOvMlx8AApg2eDBnNY3ZMLXBz9RFGjwYdomZeaOoBlF8ekke5F8p3uCXj0XQyRi7FERQgF
+	pAezaNotOv61/mdFZNw/XmY99IPVD9DuZcpX85D6swVbArznNpH8ZiG3HRwEbDQMUsWpXZ
+	NiL9eOIhK4BEVI/dMwg3iJMpWBdzsZI=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Andrew Jones <andrew.jones@linux.dev>
+To: Jesse Taube <jesse@rivosinc.com>
+Cc: kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
+	linux-kselftest@vger.kernel.org, Atish Patra <atish.patra@linux.dev>, 
+	Anup Patel <anup@brainfault.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	=?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>, Himanshu Chauhan <hchauhan@ventanamicro.com>, 
+	Charlie Jenkins <charlie@rivosinc.com>
+Subject: Re: [kvm-unit-tests PATCH v6] riscv: sbi: Add SBI Debug Triggers
+ Extension tests
+Message-ID: <20250627-c6a984395c94f8281954ab21@orel>
+References: <20250618154452.2136345-1-jesse@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250618154452.2136345-1-jesse@rivosinc.com>
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Jun 26 2025 at 14:11, Andr=C3=A9 Almeida wrote:
-
-> Expand the current robust list test for the new set_robust_list2
-> syscall. Create an option to make it possible to run the same tests
-> using the new syscall, and also add two new relevant test: test long
-> lists (bigger than ROBUST_LIST_LIMIT) and for unaligned addresses.
->
-> Signed-off-by: Andr=C3=A9 Almeida <andrealmeid@igalia.com>
+On Wed, Jun 18, 2025 at 08:44:52AM -0700, Jesse Taube wrote:
+> Add tests for the DBTR SBI extension.
+> 
+> Signed-off-by: Jesse Taube <jesse@rivosinc.com>
+> Reviewed-by: Charlie Jenkins <charlie@rivosinc.com>
+> Tested-by: Charlie Jenkins <charlie@rivosinc.com>
 > ---
->  .../selftests/futex/functional/robust_list.c       | 160 +++++++++++++++=
-+++++-
->  1 file changed, 156 insertions(+), 4 deletions(-)
->
-> diff --git a/tools/testing/selftests/futex/functional/robust_list.c b/too=
-ls/testing/selftests/futex/functional/robust_list.c
-> index 42690b2440fd29a9b12c46f67f9645ccc93d1147..004ad79ff6171c411fd47e699=
-e3c38889544218e 100644
-> --- a/tools/testing/selftests/futex/functional/robust_list.c
-> +++ b/tools/testing/selftests/futex/functional/robust_list.c
-> @@ -35,16 +35,45 @@
->  #include <stddef.h>
->  #include <sys/mman.h>
->  #include <sys/wait.h>
-> +#include <stdint.h>
->=20=20
->  #define STACK_SIZE (1024 * 1024)
->=20=20
->  #define FUTEX_TIMEOUT 3
->=20=20
-> +#define SYS_set_robust_list2 468
-> +
-> +enum robust_list2_type {
-> +        ROBUST_LIST_32BIT,
-> +        ROBUST_LIST_64BIT,
-> +};
+> V1 -> V2:
+>  - Call report_prefix_pop before returning
+>  - Disable compressed instructions in exec_call, update related comment
+>  - Remove extra "| 1" in dbtr_test_load
+>  - Remove extra newlines
+>  - Remove extra tabs in check_exec
+>  - Remove typedefs from enums
+>  - Return when dbtr_install_trigger fails
+>  - s/avalible/available/g
+>  - s/unistall/uninstall/g
+> V2 -> V3:
+>  - Change SBI_DBTR_SHMEM_INVALID_ADDR to -1UL
+>  - Move all dbtr functions to sbi-dbtr.c
+>  - Move INSN_LEN to processor.h
+>  - Update include list
+>  - Use C-style comments
+> V3 -> V4:
+>  - Include libcflat.h
+>  - Remove #define SBI_DBTR_SHMEM_INVALID_ADDR
+> V4 -> V5:
+>  - Sort includes
+>  - Add kfail for update triggers
+> V5 -> V6:
+>  - Add assert in gen_tdata1
+>  - Add prefix to dbtr_test_type
+>  - Add TRIG_STATE_DMODE
+>  - Add TRIG_STATE_RESERVED
+>  - Align function paramaters with opening parenthesis
+>  - Change OpenSBI < v1.7 to < v1.5
+>  - Constantly use spaces in prefix rather than _
+>  - Export split_phys_addr
+>  - Fix MCONTROL_U and MCONTROL_M mix up
+>  - Fix swapped VU and VS
+>  - Move /* to own line
+>  - Print type in dbtr_test_type
+>  - Remove _BIT suffix from macros
+>  - Remove duplicate MODE_S
+>  - Remove spaces before include
+>  - Rename tdata1,2 to trigger and control in dbtr_install_trigger
+>  - Report skip in dbtr_test_multiple
+>  - Report variables in info not pass or fail
+>  - s/save/store/g
+>  - sbi_debug_set_shmem use split_phys_addr
+>  - Use if (!report(... in dbtr_test_disable_enable
+> ---
+>  lib/riscv/asm/sbi.h |   1 +
+>  riscv/Makefile      |   1 +
+>  riscv/sbi-dbtr.c    | 839 ++++++++++++++++++++++++++++++++++++++++++++
+>  riscv/sbi-tests.h   |   2 +
+>  riscv/sbi.c         |   3 +-
+>  5 files changed, 845 insertions(+), 1 deletion(-)
+>  create mode 100644 riscv/sbi-dbtr.c
+> 
+> diff --git a/lib/riscv/asm/sbi.h b/lib/riscv/asm/sbi.h
+> index a5738a5c..78fd6e2a 100644
+> --- a/lib/riscv/asm/sbi.h
+> +++ b/lib/riscv/asm/sbi.h
+> @@ -51,6 +51,7 @@ enum sbi_ext_id {
+>  	SBI_EXT_SUSP = 0x53555350,
+>  	SBI_EXT_FWFT = 0x46574654,
+>  	SBI_EXT_SSE = 0x535345,
+> +	SBI_EXT_DBTR = 0x44425452,
+>  };
+>  
+>  enum sbi_ext_base_fid {
+> diff --git a/riscv/Makefile b/riscv/Makefile
+> index 11e68eae..55c7ac93 100644
+> --- a/riscv/Makefile
+> +++ b/riscv/Makefile
+> @@ -20,6 +20,7 @@ all: $(tests)
+>  $(TEST_DIR)/sbi-deps += $(TEST_DIR)/sbi-asm.o
+>  $(TEST_DIR)/sbi-deps += $(TEST_DIR)/sbi-fwft.o
+>  $(TEST_DIR)/sbi-deps += $(TEST_DIR)/sbi-sse.o
+> +$(TEST_DIR)/sbi-deps += $(TEST_DIR)/sbi-dbtr.o
 
-Why can't this use an updated header?
+My OCD says this should come after the sbi-asm to be alphabetical.
 
-> +
->  static pthread_barrier_t barrier, barrier2;
->=20=20
-> +bool robust2 =3D false;
-
-global because ....
-
->  int set_robust_list(struct robust_list_head *head, size_t len)
->  {
-> -	return syscall(SYS_set_robust_list, head, len);
-> +	int ret, flags;
-> +
-> +	if (!robust2) {
-> +		return syscall(SYS_set_robust_list, head, len);
-> +	}
-
-Pointless brackets.
-
-> +	if (sizeof(head) =3D=3D 8)
-> +		flags =3D ROBUST_LIST_64BIT;
-> +	else
-> +		flags =3D ROBUST_LIST_32BIT;
-> +
-> +	/*
-> +	 * We act as we have just one list here. We try to use the first slot,
-> +	 * but if it hasn't been alocated yet we allocate it.
-> +	 */
-> +	ret =3D syscall(SYS_set_robust_list2, head, 0, flags);
-> +	if (ret =3D=3D -1 && errno =3D=3D ENOENT)
-> +		ret =3D syscall(SYS_set_robust_list2, head, -1, flags);
-
-What the heck is this?
-
-> +	return ret;
->  }
->=20=20
->  int get_robust_list(int pid, struct robust_list_head **head, size_t *len=
-_ptr)
-> @@ -246,6 +275,11 @@ static void test_set_robust_list_invalid_size(void)
->  	size_t head_size =3D sizeof(struct robust_list_head);
->  	int ret;
->=20=20
-> +	if (robust2) {
-> +		ksft_test_result_skip("This test is only for old robust interface\n");
-
-Why is it invoked in the first place?
-
-> +		return;
-> +	}
-> +
->  	ret =3D set_robust_list(&head, head_size);
->  	ASSERT_EQ(ret, 0);
->=20=20
-> @@ -321,6 +355,11 @@ static void test_get_robust_list_child(void)
->  	struct robust_list_head head, *get_head;
->  	size_t len_ptr;
->=20=20
-> +	if (robust2) {
-> +		ksft_test_result_skip("Not implemented in the new robust interface\n");
-
-For the very wrong reasons.
-
-> +		return;
-> +	}
-> +
->  	ret =3D pthread_barrier_init(&barrier, NULL, 2);
->  	ret =3D pthread_barrier_init(&barrier2, NULL, 2);
->  	ASSERT_EQ(ret, 0);
-> @@ -332,7 +371,7 @@ static void test_get_robust_list_child(void)
->=20=20
->  	ret =3D get_robust_list(tid, &get_head, &len_ptr);
->  	ASSERT_EQ(ret, 0);
-> -	ASSERT_EQ(&head, get_head);
-> +	ASSERT_EQ(get_head, &head);
-
-ROTFL
-
->=20=20
->  	pthread_barrier_wait(&barrier2);
->=20=20
-> @@ -507,11 +546,119 @@ static void test_circular_list(void)
->  	ksft_test_result_pass("%s\n", __func__);
->  }
->=20=20
-> +#define ROBUST_LIST_LIMIT	2048
-> +#define CHILD_LIST_LIMIT (ROBUST_LIST_LIMIT + 10)
-> +
-> +static int child_robust_list_limit(void *arg)
-> +{
-> +	struct lock_struct *locks;
-> +	struct robust_list *list;
-> +	struct robust_list_head head;
-> +	int ret, i;
-> +
-> +	locks =3D (struct lock_struct *) arg;
-> +
-> +	ret =3D set_list(&head);
-> +	if (ret)
-> +		ksft_test_result_fail("set_list error\n");
-
-Yet again the same broken crap.
-
-> +	/*
-> +	 * Create a very long list of locks
-> +	 */
-> +	head.list.next =3D &locks[0].list;
-> +
-> +	list =3D head.list.next;
-> +	for (i =3D 0; i < CHILD_LIST_LIMIT - 1; i++) {
-> +		list->next =3D &locks[i+1].list;
-> +		list =3D list->next;
-> +	}
-> +	list->next =3D &head.list;
-> +
-> +	/*
-> +	 * Grab the lock in the last one, and die without releasing it
-> +	 */
-> +	mutex_lock(&locks[CHILD_LIST_LIMIT], &head, false);
-> +	pthread_barrier_wait(&barrier);
-> +
-> +	sleep(1);
-> +
-> +	return 0;
-> +}
-> +
+>  
+>  all_deps += $($(TEST_DIR)/sbi-deps)
+>  
+> diff --git a/riscv/sbi-dbtr.c b/riscv/sbi-dbtr.c
+> new file mode 100644
+> index 00000000..7837553f
+> --- /dev/null
+> +++ b/riscv/sbi-dbtr.c
+> @@ -0,0 +1,839 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
 > +/*
-> + * The old robust list used to have a limit of 2048 items from the kerne=
-l side.
-> + * After this limit the kernel stops walking the list and ignore the oth=
-er
-
-ignores
-
-> + * futexes, causing deadlocks.
+> + * SBI DBTR testsuite
 > + *
-> + * For the new interface, test if we can wait for a list of more than 20=
-48
-> + * elements.
+> + * Copyright (C) 2025, Rivos Inc., Jesse Taube <jesse@rivosinc.com>
 > + */
-> +static void test_robust_list_limit(void)
-> +{
-> +	struct lock_struct locks[CHILD_LIST_LIMIT + 1];
-> +	_Atomic(unsigned int) *futex =3D &locks[CHILD_LIST_LIMIT].futex;
-> +	struct robust_list_head head;
-> +	int ret;
 > +
-> +	if (!robust2) {
-> +		ksft_test_result_skip("This test is only for new robust interface\n");
+> +#include <libcflat.h>
+> +#include <bitops.h>
+> +
+> +#include <asm/io.h>
+> +#include <asm/processor.h>
+> +
+> +#include "sbi-tests.h"
+> +
+> +#define RV_MAX_TRIGGERS			32
+> +
+> +#define SBI_DBTR_TRIG_STATE_MAPPED		BIT(0)
+> +#define SBI_DBTR_TRIG_STATE_U			BIT(1)
+> +#define SBI_DBTR_TRIG_STATE_S			BIT(2)
+> +#define SBI_DBTR_TRIG_STATE_VU			BIT(3)
+> +#define SBI_DBTR_TRIG_STATE_VS			BIT(4)
+> +#define SBI_DBTR_TRIG_STATE_HAVE_HW_TRIG	BIT(5)
+> +#define SBI_DBTR_TRIG_STATE_RESERVED		GENMASK(7, 6)
+> +
+> +#define SBI_DBTR_TRIG_STATE_HW_TRIG_IDX_SHIFT		8
+> +#define SBI_DBTR_TRIG_STATE_HW_TRIG_IDX(trig_state)	(trig_state >> SBI_DBTR_TRIG_STATE_HW_TRIG_IDX_SHIFT)
+> +
+> +#define SBI_DBTR_TDATA1_TYPE_SHIFT		(__riscv_xlen - 4)
+> +#define SBI_DBTR_TDATA1_DMODE			BIT_UL(__riscv_xlen - 5)
+> +
+> +#define SBI_DBTR_TDATA1_MCONTROL6_LOAD		BIT(0)
+> +#define SBI_DBTR_TDATA1_MCONTROL6_STORE		BIT(1)
+> +#define SBI_DBTR_TDATA1_MCONTROL6_EXECUTE	BIT(2)
+> +#define SBI_DBTR_TDATA1_MCONTROL6_U		BIT(3)
+> +#define SBI_DBTR_TDATA1_MCONTROL6_S		BIT(4)
+> +#define SBI_DBTR_TDATA1_MCONTROL6_M		BIT(6)
+> +#define SBI_DBTR_TDATA1_MCONTROL6_SELECT	BIT(21)
+> +#define SBI_DBTR_TDATA1_MCONTROL6_VU		BIT(23)
+> +#define SBI_DBTR_TDATA1_MCONTROL6_VS		BIT(24)
+> +
+> +#define SBI_DBTR_TDATA1_MCONTROL_LOAD		BIT(0)
+> +#define SBI_DBTR_TDATA1_MCONTROL_STORE		BIT(1)
+> +#define SBI_DBTR_TDATA1_MCONTROL_EXECUTE	BIT(2)
+> +#define SBI_DBTR_TDATA1_MCONTROL_U		BIT(3)
+> +#define SBI_DBTR_TDATA1_MCONTROL_S		BIT(4)
+> +#define SBI_DBTR_TDATA1_MCONTROL_M		BIT(6)
+> +#define SBI_DBTR_TDATA1_MCONTROL_SELECT		BIT(19)
+> +
+> +enum McontrolType {
+> +	SBI_DBTR_TDATA1_TYPE_NONE =		(0UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
+> +	SBI_DBTR_TDATA1_TYPE_LEGACY =		(1UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
+> +	SBI_DBTR_TDATA1_TYPE_MCONTROL =		(2UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
+> +	SBI_DBTR_TDATA1_TYPE_ICOUNT =		(3UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
+> +	SBI_DBTR_TDATA1_TYPE_ITRIGGER =		(4UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
+> +	SBI_DBTR_TDATA1_TYPE_ETRIGGER =		(5UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
+> +	SBI_DBTR_TDATA1_TYPE_MCONTROL6 =	(6UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
+> +	SBI_DBTR_TDATA1_TYPE_TMEXTTRIGGER =	(7UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
+> +	SBI_DBTR_TDATA1_TYPE_RESERVED0 =	(8UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
+> +	SBI_DBTR_TDATA1_TYPE_RESERVED1 =	(9UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
+> +	SBI_DBTR_TDATA1_TYPE_RESERVED2 =	(10UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
+> +	SBI_DBTR_TDATA1_TYPE_RESERVED3 =	(11UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
+> +	SBI_DBTR_TDATA1_TYPE_CUSTOM0 =		(12UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
+> +	SBI_DBTR_TDATA1_TYPE_CUSTOM1 =		(13UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
+> +	SBI_DBTR_TDATA1_TYPE_CUSTOM2 =		(14UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
+> +	SBI_DBTR_TDATA1_TYPE_DISABLED =		(15UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
+> +};
+> +
+> +enum Tdata1Value {
+> +	VALUE_NONE =	0,
+> +	VALUE_LOAD =	BIT(0),
+> +	VALUE_STORE =	BIT(1),
+> +	VALUE_EXECUTE =	BIT(2),
+> +};
+> +
+> +enum Tdata1Mode {
+> +	MODE_NONE =	0,
+> +	MODE_M =	BIT(0),
+> +	MODE_U =	BIT(1),
+> +	MODE_S =	BIT(2),
+> +	MODE_VU =	BIT(3),
+> +	MODE_VS =	BIT(4),
+> +};
+> +
+> +enum sbi_ext_dbtr_fid {
+> +	SBI_EXT_DBTR_NUM_TRIGGERS = 0,
+> +	SBI_EXT_DBTR_SETUP_SHMEM,
+> +	SBI_EXT_DBTR_TRIGGER_READ,
+> +	SBI_EXT_DBTR_TRIGGER_INSTALL,
+> +	SBI_EXT_DBTR_TRIGGER_UPDATE,
+> +	SBI_EXT_DBTR_TRIGGER_UNINSTALL,
+> +	SBI_EXT_DBTR_TRIGGER_ENABLE,
+> +	SBI_EXT_DBTR_TRIGGER_DISABLE,
+> +};
+> +
+> +struct sbi_dbtr_data_msg {
+> +	unsigned long tstate;
+> +	unsigned long tdata1;
+> +	unsigned long tdata2;
+> +	unsigned long tdata3;
+> +};
+> +
+> +struct sbi_dbtr_id_msg {
+> +	unsigned long idx;
+> +};
+> +
+> +/* SBI shared mem messages layout */
+> +struct sbi_dbtr_shmem_entry {
+> +	union {
+> +		struct sbi_dbtr_data_msg data;
+> +		struct sbi_dbtr_id_msg id;
+> +	};
+> +};
+> +
+> +static bool dbtr_handled;
+> +
+> +/* Expected to be leaf function as not to disrupt frame-pointer */
+> +static __attribute__((naked)) void exec_call(void)
+> +{
+> +	/* skip over nop when triggered instead of ret. */
+> +	asm volatile (".option push\n"
+> +		      ".option arch, -c\n"
+> +		      "nop\n"
+> +		      "ret\n"
+> +		      ".option pop\n");
+> +}
+> +
+> +static void dbtr_exception_handler(struct pt_regs *regs)
+> +{
+> +	dbtr_handled = true;
+> +
+> +	/* Reading *epc may cause a fault, skip over nop */
+> +	if ((void *)regs->epc == exec_call) {
+> +		regs->epc += 4;
 > +		return;
 > +	}
 > +
-> +	*futex =3D 0;
+> +	/* WARNING: Skips over the trapped intruction */
+> +	regs->epc += RV_INSN_LEN(readw((void *)regs->epc));
+> +}
 > +
-> +	ret =3D set_list(&head);
-> +	ASSERT_EQ(ret, 0);
+> +static bool do_store(void *tdata2)
+> +{
+> +	bool ret;
 > +
-> +	ret =3D pthread_barrier_init(&barrier, NULL, 2);
-> +	ASSERT_EQ(ret, 0);
+> +	writel(0, tdata2);
 > +
-> +	create_child(child_robust_list_limit, locks);
+> +	ret = dbtr_handled;
+> +	dbtr_handled = false;
+> +
+> +	return ret;
+> +}
+> +
+> +static bool do_load(void *tdata2)
+> +{
+> +	bool ret;
+> +
+> +	readl(tdata2);
+> +
+> +	ret = dbtr_handled;
+> +	dbtr_handled = false;
+> +
+> +	return ret;
+> +}
+> +
+> +static bool do_exec(void)
+> +{
+> +	bool ret;
+> +
+> +	exec_call();
+> +
+> +	ret = dbtr_handled;
+> +	dbtr_handled = false;
+> +
+> +	return ret;
+> +}
+> +
+> +static unsigned long gen_tdata1_mcontrol(enum Tdata1Mode mode, enum Tdata1Value value)
+> +{
+> +	unsigned long tdata1 = SBI_DBTR_TDATA1_TYPE_MCONTROL;
+> +
+> +	if (value & VALUE_LOAD)
+> +		tdata1 |= SBI_DBTR_TDATA1_MCONTROL_LOAD;
+> +
+> +	if (value & VALUE_STORE)
+> +		tdata1 |= SBI_DBTR_TDATA1_MCONTROL_STORE;
+> +
+> +	if (value & VALUE_EXECUTE)
+> +		tdata1 |= SBI_DBTR_TDATA1_MCONTROL_EXECUTE;
+> +
+> +	if (mode & MODE_M)
+> +		tdata1 |= SBI_DBTR_TDATA1_MCONTROL_M;
+> +
+> +	if (mode & MODE_U)
+> +		tdata1 |= SBI_DBTR_TDATA1_MCONTROL_U;
+> +
+> +	if (mode & MODE_S)
+> +		tdata1 |= SBI_DBTR_TDATA1_MCONTROL_S;
+> +
+> +	return tdata1;
+> +}
+> +
+> +static unsigned long gen_tdata1_mcontrol6(enum Tdata1Mode mode, enum Tdata1Value value)
+> +{
+> +	unsigned long tdata1 = SBI_DBTR_TDATA1_TYPE_MCONTROL6;
+> +
+> +	if (value & VALUE_LOAD)
+> +		tdata1 |= SBI_DBTR_TDATA1_MCONTROL6_LOAD;
+> +
+> +	if (value & VALUE_STORE)
+> +		tdata1 |= SBI_DBTR_TDATA1_MCONTROL6_STORE;
+> +
+> +	if (value & VALUE_EXECUTE)
+> +		tdata1 |= SBI_DBTR_TDATA1_MCONTROL6_EXECUTE;
+> +
+> +	if (mode & MODE_M)
+> +		tdata1 |= SBI_DBTR_TDATA1_MCONTROL6_M;
+> +
+> +	if (mode & MODE_U)
+> +		tdata1 |= SBI_DBTR_TDATA1_MCONTROL6_U;
+> +
+> +	if (mode & MODE_S)
+> +		tdata1 |= SBI_DBTR_TDATA1_MCONTROL6_S;
+> +
+> +	if (mode & MODE_VU)
+> +		tdata1 |= SBI_DBTR_TDATA1_MCONTROL6_VU;
+> +
+> +	if (mode & MODE_VS)
+> +		tdata1 |= SBI_DBTR_TDATA1_MCONTROL6_VS;
+> +
+> +	return tdata1;
+> +}
+> +
+> +static unsigned long gen_tdata1(enum McontrolType type, enum Tdata1Value value, enum Tdata1Mode mode)
+> +{
+> +	switch (type) {
+> +	case SBI_DBTR_TDATA1_TYPE_MCONTROL:
+> +		return gen_tdata1_mcontrol(mode, value);
+> +	case SBI_DBTR_TDATA1_TYPE_MCONTROL6:
+> +		return gen_tdata1_mcontrol6(mode, value);
+> +	default:
+> +		assert_msg(false, "Invalid mcontrol type: %lu", type);
+> +		return 0;
+
+Can drop the 'return 0' line now that there's an unconditional assert.
+
+> +	}
+> +}
+> +
+> +static struct sbiret sbi_debug_num_triggers(unsigned long trig_tdata1)
+> +{
+> +	return sbi_ecall(SBI_EXT_DBTR, SBI_EXT_DBTR_NUM_TRIGGERS, trig_tdata1, 0, 0, 0, 0, 0);
+> +}
+> +
+> +static struct sbiret sbi_debug_set_shmem_raw(unsigned long shmem_phys_lo,
+> +					     unsigned long shmem_phys_hi,
+> +					     unsigned long flags)
+> +{
+> +	return sbi_ecall(SBI_EXT_DBTR, SBI_EXT_DBTR_SETUP_SHMEM, shmem_phys_lo,
+> +			 shmem_phys_hi, flags, 0, 0, 0);
+> +}
+> +
+> +static struct sbiret sbi_debug_set_shmem(void *shmem)
+> +{
+> +	unsigned long base_addr_lo, base_addr_hi;
+> +
+> +	split_phys_addr(virt_to_phys(shmem), &base_addr_hi, &base_addr_lo);
+> +	return sbi_debug_set_shmem_raw(base_addr_lo, base_addr_hi, 0);
+> +}
+> +
+> +static struct sbiret sbi_debug_read_triggers(unsigned long trig_idx_base,
+> +					     unsigned long trig_count)
+> +{
+> +	return sbi_ecall(SBI_EXT_DBTR, SBI_EXT_DBTR_TRIGGER_READ, trig_idx_base,
+> +			 trig_count, 0, 0, 0, 0);
+> +}
+> +
+> +static struct sbiret sbi_debug_install_triggers(unsigned long trig_count)
+> +{
+> +	return sbi_ecall(SBI_EXT_DBTR, SBI_EXT_DBTR_TRIGGER_INSTALL, trig_count, 0, 0, 0, 0, 0);
+> +}
+> +
+> +static struct sbiret sbi_debug_update_triggers(unsigned long trig_count)
+> +{
+> +	return sbi_ecall(SBI_EXT_DBTR, SBI_EXT_DBTR_TRIGGER_UPDATE, trig_count, 0, 0, 0, 0, 0);
+> +}
+> +
+> +static struct sbiret sbi_debug_uninstall_triggers(unsigned long trig_idx_base,
+> +						  unsigned long trig_idx_mask)
+> +{
+> +	return sbi_ecall(SBI_EXT_DBTR, SBI_EXT_DBTR_TRIGGER_UNINSTALL, trig_idx_base,
+> +			 trig_idx_mask, 0, 0, 0, 0);
+> +}
+> +
+> +static struct sbiret sbi_debug_enable_triggers(unsigned long trig_idx_base,
+> +					       unsigned long trig_idx_mask)
+> +{
+> +	return sbi_ecall(SBI_EXT_DBTR, SBI_EXT_DBTR_TRIGGER_ENABLE, trig_idx_base,
+> +			 trig_idx_mask, 0, 0, 0, 0);
+> +}
+> +
+> +static struct sbiret sbi_debug_disable_triggers(unsigned long trig_idx_base,
+> +						unsigned long trig_idx_mask)
+> +{
+> +	return sbi_ecall(SBI_EXT_DBTR, SBI_EXT_DBTR_TRIGGER_DISABLE, trig_idx_base,
+> +			 trig_idx_mask, 0, 0, 0, 0);
+> +}
+> +
+> +static bool dbtr_install_trigger(struct sbi_dbtr_shmem_entry *shmem, void *trigger,
+> +				 unsigned long control)
+> +{
+> +	struct sbiret sbi_ret;
+> +	bool ret;
+> +
+> +	shmem->data.tdata1 = control;
+> +	shmem->data.tdata2 = (unsigned long)trigger;
+> +
+> +	sbi_ret = sbi_debug_install_triggers(1);
+> +	ret = sbiret_report_error(&sbi_ret, SBI_SUCCESS, "sbi_debug_install_triggers");
+> +	if (ret)
+> +		install_exception_handler(EXC_BREAKPOINT, dbtr_exception_handler);
+> +
+> +	return ret;
+> +}
+> +
+> +static bool dbtr_uninstall_trigger(void)
+> +{
+> +	struct sbiret ret;
+> +
+> +	install_exception_handler(EXC_BREAKPOINT, NULL);
+> +
+> +	ret = sbi_debug_uninstall_triggers(0, 1);
+> +	return sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_uninstall_triggers");
+> +}
+> +
+> +static unsigned long dbtr_test_num_triggers(void)
+> +{
+> +	struct sbiret ret;
+> +	unsigned long tdata1 = 0;
+> +	/* sbi_debug_num_triggers will return trig_max in sbiret.value when trig_tdata1 == 0 */
+> +
+> +	/* should be at least one trigger. */
+> +	ret = sbi_debug_num_triggers(tdata1);
+> +	sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_num_triggers");
+> +
+> +	if (ret.value == 0) {
+> +		report_fail("sbi_debug_num_triggers: Returned 0 triggers available");
+> +	} else {
+> +		report_pass("sbi_debug_num_triggers: Returned triggers available");
+> +		report_info("sbi_debug_num_triggers: Returned %lu triggers available", ret.value);
+
+Rather than put the sbi_debug_num_triggers prefix in each report call, we
+can just push it.
+
+> +	}
+> +
+> +	return ret.value;
+> +}
+> +
+> +static enum McontrolType dbtr_test_type(unsigned long *num_trig)
+> +{
+> +	struct sbiret ret;
+> +	unsigned long tdata1 = SBI_DBTR_TDATA1_TYPE_MCONTROL6;
+> +
+> +	report_prefix_push("test type");
+> +
+> +	ret = sbi_debug_num_triggers(tdata1);
+> +	sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_num_triggers: mcontrol6");
+> +	*num_trig = ret.value;
+> +	if (ret.value > 0) {
+> +		report_pass("sbi_debug_num_triggers: Returned mcontrol6 triggers available");
+> +		report_info("sbi_debug_num_triggers: Returned %lu mcontrol6 triggers available",
+
+Same comment about pushing "sbi_debug_num_triggers".
+
+> +			    ret.value);
+> +		report_prefix_pop();
+
+If we push sbi_debug_num_triggers, then this can be a report_prefix_popn(2).
+
+> +		return tdata1;
+> +	}
+> +
+> +	tdata1 = SBI_DBTR_TDATA1_TYPE_MCONTROL;
+> +
+> +	ret = sbi_debug_num_triggers(tdata1);
+> +	sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_num_triggers: mcontrol");
+> +	*num_trig = ret.value;
+> +	if (ret.value > 0) {
+> +		report_pass("sbi_debug_num_triggers: Returned mcontrol triggers available");
+> +		report_info("sbi_debug_num_triggers: Returned %lu mcontrol triggers available",
+> +			    ret.value);
+> +		report_prefix_pop();
+> +		return tdata1;
+> +	}
+> +
+> +	report_fail("sbi_debug_num_triggers: Returned 0 mcontrol(6) triggers available");
+> +	report_prefix_pop();
+> +
+> +	return SBI_DBTR_TDATA1_TYPE_NONE;
+> +}
+> +
+> +static struct sbiret dbtr_test_store_install_uninstall(struct sbi_dbtr_shmem_entry *shmem,
+> +						      enum McontrolType type)
+> +{
+> +	static unsigned long test;
+> +	struct sbiret ret;
+> +
+> +	report_prefix_push("store trigger");
+> +
+> +	shmem->data.tdata1 = gen_tdata1(type, VALUE_STORE, MODE_S);
+> +	shmem->data.tdata2 = (unsigned long)&test;
+> +
+> +	ret = sbi_debug_install_triggers(1);
+> +	if (!sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_install_triggers")) {
+> +		report_prefix_pop();
+> +		return ret;
+> +	}
+> +
+> +	install_exception_handler(EXC_BREAKPOINT, dbtr_exception_handler);
+> +
+> +	report(do_store(&test), "triggered");
+> +
+> +	if (do_load(&test))
+> +		report_fail("triggered by load");
+> +
+> +	ret = sbi_debug_uninstall_triggers(0, 1);
+> +	sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_uninstall_triggers");
+> +
+> +	if (do_store(&test))
+> +		report_fail("triggered after uninstall");
+> +
+> +	install_exception_handler(EXC_BREAKPOINT, NULL);
+> +	report_prefix_pop();
+> +
+> +	return ret;
+> +}
+> +
+> +static void dbtr_test_update(struct sbi_dbtr_shmem_entry *shmem, enum McontrolType type)
+> +{
+> +	static unsigned long test;
+> +	struct sbiret ret;
+> +	bool kfail;
+> +
+> +	report_prefix_push("update trigger");
+> +
+> +	if (!dbtr_install_trigger(shmem, NULL, gen_tdata1(type, VALUE_NONE, MODE_NONE))) {
+> +		report_prefix_pop();
+> +		return;
+> +	}
+> +
+> +	shmem->id.idx = 0;
+> +	shmem->data.tdata1 = gen_tdata1(type, VALUE_STORE, MODE_S);
+> +	shmem->data.tdata2 = (unsigned long)&test;
+> +
+> +	ret = sbi_debug_update_triggers(1);
+> +	sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_update_triggers");
 > +
 > +	/*
-> +	 * After the child thread creates the very long list of locks, wait on
-> +	 * the last one.
+> +	 * Known broken update_triggers.
+> +	 * https://lore.kernel.org/opensbi/aDdp1UeUh7GugeHp@ghost/T/#t
 > +	 */
-> +	pthread_barrier_wait(&barrier);
-> +	ret =3D mutex_lock(&locks[CHILD_LIST_LIMIT], &head, false);
+> +	kfail = __sbi_get_imp_id() == SBI_IMPL_OPENSBI &&
+> +		__sbi_get_imp_version() < sbi_impl_opensbi_mk_version(1, 7);
+> +	report_kfail(kfail, do_store(&test), "triggered");
 > +
-> +	if (ret !=3D 0)
-> +		printf("futex wait returned %d\n", errno);
-> +	ASSERT_EQ(ret, 0);
-
-lalala.
-
-> +
-> +	ASSERT_TRUE(*futex | FUTEX_OWNER_DIED);
-
-Copy and pasta does not make it more correct.
-
-> +	wait(NULL);
-> +	pthread_barrier_destroy(&barrier);
-> +
-> +	ksft_test_result_pass("%s\n", __func__);
+> +	dbtr_uninstall_trigger();
+> +	report_prefix_pop();
 > +}
 > +
-> +/*
-> + * The kernel should refuse an unaligned head pointer
-> + */
-> +static void test_unaligned_address(void)
+> +static void dbtr_test_load(struct sbi_dbtr_shmem_entry *shmem, enum McontrolType type)
 > +{
-> +	struct robust_list_head head, *h;
-> +	int ret;
+> +	static unsigned long test;
 > +
-> +	if (!robust2) {
-> +		ksft_test_result_skip("This test is only for new robust interface\n");
+> +	report_prefix_push("load trigger");
+> +	if (!dbtr_install_trigger(shmem, &test, gen_tdata1(type, VALUE_LOAD, MODE_S))) {
+> +		report_prefix_pop();
 > +		return;
 > +	}
 > +
-> +	h =3D (struct robust_list_head *) ((uintptr_t) &head + 1);
-> +	ret =3D set_list(h);
-> +	ASSERT_EQ(ret, -1);
-> +	ASSERT_EQ(errno, EINVAL);
+> +	report(do_load(&test), "triggered");
+> +
+> +	if (do_store(&test))
+> +		report_fail("triggered by store");
+> +
+> +	dbtr_uninstall_trigger();
+> +	report_prefix_pop();
 > +}
 > +
->  void usage(char *prog)
->  {
->  	printf("Usage: %s\n", prog);
->  	printf("  -c	Use color\n");
->  	printf("  -h	Display this help message\n");
-> +	printf("  -n	Use robust2 syscall\n");
+> +static void dbtr_test_disable_enable(struct sbi_dbtr_shmem_entry *shmem, enum McontrolType type)
+> +{
+> +	static unsigned long test;
+> +	struct sbiret ret;
+> +
+> +	report_prefix_push("disable trigger");
+> +	if (!dbtr_install_trigger(shmem, &test, gen_tdata1(type, VALUE_STORE, MODE_S))) {
+> +		report_prefix_pop();
+> +		return;
+> +	}
+> +
+> +	ret = sbi_debug_disable_triggers(0, 1);
+> +	sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_disable_triggers");
+> +
+> +	if (!report(!do_store(&test), "should not trigger")) {
+> +		dbtr_uninstall_trigger();
+> +		report_prefix_pop();
+> +		report_skip("enable trigger: no disable");
+> +
+> +		return;
+> +	}
+> +
+> +	report_prefix_pop();
+> +	report_prefix_push("enable trigger");
+> +
+> +	ret = sbi_debug_enable_triggers(0, 1);
+> +	sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_enable_triggers");
+> +
+> +	report(do_store(&test), "triggered");
+> +
+> +	dbtr_uninstall_trigger();
+> +	report_prefix_pop();
+> +}
+> +
+> +static void dbtr_test_exec(struct sbi_dbtr_shmem_entry *shmem, enum McontrolType type)
+> +{
+> +	static unsigned long test;
+> +
+> +	report_prefix_push("exec trigger");
+> +	/* check if loads and stores trigger exec */
+> +	if (!dbtr_install_trigger(shmem, &test, gen_tdata1(type, VALUE_EXECUTE, MODE_S))) {
+> +		report_prefix_pop();
+> +		return;
+> +	}
+> +
+> +	if (do_load(&test))
+> +		report_fail("triggered by load");
+> +
+> +	if (do_store(&test))
+> +		report_fail("triggered by store");
+> +
+> +	dbtr_uninstall_trigger();
+> +
+> +	/* Check if exec works */
+> +	if (!dbtr_install_trigger(shmem, exec_call, gen_tdata1(type, VALUE_EXECUTE, MODE_S))) {
+> +		report_prefix_pop();
+> +		return;
+> +	}
+> +	report(do_exec(), "triggered");
+> +
+> +	dbtr_uninstall_trigger();
+> +	report_prefix_pop();
+> +}
+> +
+> +static void dbtr_test_read(struct sbi_dbtr_shmem_entry *shmem, enum McontrolType type)
+> +{
+> +	const unsigned long tstatus_expected = SBI_DBTR_TRIG_STATE_S | SBI_DBTR_TRIG_STATE_MAPPED;
+> +	const unsigned long tdata1 = gen_tdata1(type, VALUE_STORE, MODE_S);
+> +	static unsigned long test;
+> +	struct sbiret ret;
+> +
+> +	report_prefix_push("read trigger");
+> +	if (!dbtr_install_trigger(shmem, &test, tdata1)) {
+> +		report_prefix_pop();
+> +		return;
+> +	}
+> +
+> +	ret = sbi_debug_read_triggers(0, 1);
+> +	sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_read_triggers");
+> +
+> +	report(shmem->data.tdata1 == tdata1, "tdata1 expected: 0x%016lx", tdata1);
+> +	report_info("tdata1 found: 0x%016lx", shmem->data.tdata1);
+> +	report(shmem->data.tdata2 == ((unsigned long)&test), "tdata2 expected: 0x%016lx",
+> +	       (unsigned long)&test);
+> +	report_info("tdata2 found: 0x%016lx", shmem->data.tdata2);
+> +	report(shmem->data.tstate == tstatus_expected, "tstate expected: 0x%016lx", tstatus_expected);
+> +	report_info("tstate found: 0x%016lx", shmem->data.tstate);
 
-Right. We need a command line option to guarantee that the test is not
-executed by bots...
+These don't need to be split into report/report_info pairs because the
+report is checking for a specific value. We only split when report is
+checking for some nonzero value and we also want to output what that
+specific value was for informational purposes.
 
->  	printf("  -v L	Verbosity level: %d=3DQUIET %d=3DCRITICAL %d=3DINFO\n",
->  	       VQUIET, VCRITICAL, VINFO);
+> +
+> +	dbtr_uninstall_trigger();
+> +	report_prefix_pop();
+> +}
+> +
+> +static void check_exec(unsigned long base)
+> +{
+> +	struct sbiret ret;
+> +
+> +	report(do_exec(), "exec triggered");
+> +
+> +	ret = sbi_debug_uninstall_triggers(base, 1);
+> +	sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_uninstall_triggers");
+> +}
+> +
+> +static void dbtr_test_multiple(struct sbi_dbtr_shmem_entry *shmem, enum McontrolType type,
+> +			       unsigned long num_trigs)
+> +{
+> +	static unsigned long test[2];
+> +	struct sbiret ret;
+> +	bool have_three = num_trigs > 2;
+> +
+> +	if (num_trigs < 2) {
+> +		report_skip("test multiple");
+> +		return;
+> +	}
+> +
+> +	report_prefix_push("test multiple");
+> +
+> +	if (!dbtr_install_trigger(shmem, &test[0], gen_tdata1(type, VALUE_STORE, MODE_S))) {
+> +		report_prefix_pop();
+> +		return;
+> +	}
+> +	if (!dbtr_install_trigger(shmem, &test[1], gen_tdata1(type, VALUE_LOAD, MODE_S)))
+> +		goto error;
+> +	if (have_three &&
+> +	    !dbtr_install_trigger(shmem, exec_call, gen_tdata1(type, VALUE_EXECUTE, MODE_S))) {
+> +		ret = sbi_debug_uninstall_triggers(1, 1);
+> +		sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_uninstall_triggers");
+> +		goto error;
+> +	}
+> +
+> +	report(do_store(&test[0]), "store triggered");
+> +
+> +	if (do_load(&test[0]))
+> +		report_fail("store triggered by load");
+> +
+> +	report(do_load(&test[1]), "load triggered");
+> +
+> +	if (do_store(&test[1]))
+> +		report_fail("load triggered by store");
+> +
+> +	if (have_three)
+> +		check_exec(2);
+> +
+> +	ret = sbi_debug_uninstall_triggers(1, 1);
+> +	sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_uninstall_triggers");
+> +
+> +	if (do_load(&test[1]))
+> +		report_fail("load triggered after uninstall");
+> +
+> +	report(do_store(&test[0]), "store triggered");
+> +
+> +	if (!have_three &&
+> +	    dbtr_install_trigger(shmem, exec_call, gen_tdata1(type, VALUE_EXECUTE, MODE_S)))
+> +		check_exec(1);
+> +
+> +error:
+> +	ret = sbi_debug_uninstall_triggers(0, 1);
+> +	sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_uninstall_triggers");
+> +
+> +	install_exception_handler(EXC_BREAKPOINT, NULL);
+> +	report_prefix_pop();
+> +}
+> +
+> +static void dbtr_test_multiple_types(struct sbi_dbtr_shmem_entry *shmem, unsigned long type)
+> +{
+> +	static unsigned long test;
+> +
+> +	report_prefix_push("test multiple types");
+> +
+> +	/* check if loads and stores trigger exec */
+> +	if (!dbtr_install_trigger(shmem, &test,
+> +			     gen_tdata1(type, VALUE_EXECUTE | VALUE_LOAD | VALUE_STORE, MODE_S))) {
+> +		report_prefix_pop();
+> +		return;
+> +	}
+> +
+> +	report(do_load(&test), "load triggered");
+> +
+> +	report(do_store(&test), "store triggered");
+> +
+> +	dbtr_uninstall_trigger();
+> +
+> +	/* Check if exec works */
+> +	if (!dbtr_install_trigger(shmem, exec_call,
+> +			     gen_tdata1(type, VALUE_EXECUTE | VALUE_LOAD | VALUE_STORE, MODE_S))) {
+> +		report_prefix_pop();
+> +		return;
+> +	}
+> +
+> +	report(do_exec(), "exec triggered");
+> +
+> +	dbtr_uninstall_trigger();
+> +	report_prefix_pop();
+> +}
+> +
+> +static void dbtr_test_disable_uninstall(struct sbi_dbtr_shmem_entry *shmem, enum McontrolType type)
+> +{
+> +	static unsigned long test;
+> +	struct sbiret ret;
+> +
+> +	report_prefix_push("disable uninstall");
+> +	if (!dbtr_install_trigger(shmem, &test, gen_tdata1(type, VALUE_STORE, MODE_S))) {
+> +		report_prefix_pop();
+> +		return;
+> +	}
+> +
+> +	ret = sbi_debug_disable_triggers(0, 1);
+> +	sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_disable_triggers");
+> +
+> +	dbtr_uninstall_trigger();
+> +
+> +	if (!dbtr_install_trigger(shmem, &test, gen_tdata1(type, VALUE_STORE, MODE_S))) {
+> +		report_prefix_pop();
+> +		return;
+> +	}
+> +
+> +	report(do_store(&test), "triggered");
+> +
+> +	dbtr_uninstall_trigger();
+> +	report_prefix_pop();
+> +}
+> +
+> +static void dbtr_test_uninstall_enable(struct sbi_dbtr_shmem_entry *shmem, enum McontrolType type)
+> +{
+> +	static unsigned long test;
+> +	struct sbiret ret;
+> +
+> +	report_prefix_push("uninstall enable");
+> +	if (!dbtr_install_trigger(shmem, &test, gen_tdata1(type, VALUE_STORE, MODE_S))) {
+> +		report_prefix_pop();
+> +		return;
+> +	}
+> +	dbtr_uninstall_trigger();
+> +
+> +	ret = sbi_debug_enable_triggers(0, 1);
+> +	sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_enable_triggers");
+> +
+> +	install_exception_handler(EXC_BREAKPOINT, dbtr_exception_handler);
+> +
+> +	report(!do_store(&test), "should not trigger");
+> +
+> +	install_exception_handler(EXC_BREAKPOINT, NULL);
+> +	report_prefix_pop();
+> +}
+> +
+> +static void dbtr_test_uninstall_update(struct sbi_dbtr_shmem_entry *shmem, enum McontrolType type)
+> +{
+> +	static unsigned long test;
+> +	struct sbiret ret;
+> +	bool kfail;
+> +
+> +	report_prefix_push("uninstall update");
+> +	if (!dbtr_install_trigger(shmem, NULL, gen_tdata1(type, VALUE_NONE, MODE_NONE))) {
+> +		report_prefix_pop();
+> +		return;
+> +	}
+> +
+> +	dbtr_uninstall_trigger();
+> +
+> +	shmem->id.idx = 0;
+> +	shmem->data.tdata1 = gen_tdata1(type, VALUE_STORE, MODE_S);
+> +	shmem->data.tdata2 = (unsigned long)&test;
+> +
+> +	/*
+> +	 * Known broken update_triggers.
+> +	 * https://lore.kernel.org/opensbi/aDdp1UeUh7GugeHp@ghost/T/#t
+> +	 */
+> +	kfail = __sbi_get_imp_id() == SBI_IMPL_OPENSBI &&
+> +		__sbi_get_imp_version() < sbi_impl_opensbi_mk_version(1, 7);
+> +	ret = sbi_debug_update_triggers(1);
+> +	sbiret_kfail_error(kfail, &ret, SBI_ERR_FAILURE, "sbi_debug_update_triggers");
+> +
+> +	install_exception_handler(EXC_BREAKPOINT, dbtr_exception_handler);
+> +
+> +	report(!do_store(&test), "should not trigger");
+> +
+> +	install_exception_handler(EXC_BREAKPOINT, NULL);
+> +	report_prefix_pop();
+> +}
+> +
+> +static void dbtr_test_disable_read(struct sbi_dbtr_shmem_entry *shmem, enum McontrolType type)
+> +{
+> +	const unsigned long tstatus_expected = SBI_DBTR_TRIG_STATE_S | SBI_DBTR_TRIG_STATE_MAPPED;
+> +	const unsigned long tdata1 = gen_tdata1(type, VALUE_STORE, MODE_NONE);
+> +	static unsigned long test;
+> +	struct sbiret ret;
+> +
+> +	report_prefix_push("disable read");
+> +	if (!dbtr_install_trigger(shmem, &test, gen_tdata1(type, VALUE_STORE, MODE_S))) {
+> +		report_prefix_pop();
+> +		return;
+> +	}
+> +
+> +	ret = sbi_debug_disable_triggers(0, 1);
+> +	sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_disable_triggers");
+> +
+> +	ret = sbi_debug_read_triggers(0, 1);
+> +	sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_read_triggers");
+> +
+> +	report(shmem->data.tdata1 == tdata1, "tdata1 expected: 0x%016lx", tdata1);
+> +	report_info("tdata1 found: 0x%016lx", shmem->data.tdata1);
+> +	report(shmem->data.tdata2 == ((unsigned long)&test), "tdata2 expected: 0x%016lx",
+> +	       (unsigned long)&test);
+> +	report_info("tdata2 found: 0x%016lx", shmem->data.tdata2);
+> +	report(shmem->data.tstate == tstatus_expected, "tstate expected: 0x%016lx", tstatus_expected);
+> +	report_info("tstate found: 0x%016lx", shmem->data.tstate);
+
+Same comment about not needing to split this.
+
+> +
+> +	dbtr_uninstall_trigger();
+> +	report_prefix_pop();
+> +}
+> +
+> +void check_dbtr(void)
+> +{
+> +	static struct sbi_dbtr_shmem_entry shmem[RV_MAX_TRIGGERS] = {};
+> +	unsigned long num_trigs;
+> +	enum McontrolType trig_type;
+> +	struct sbiret ret;
+> +
+> +	report_prefix_push("dbtr");
+> +
+> +	if (!sbi_probe(SBI_EXT_DBTR)) {
+> +		report_skip("extension not available");
+> +		report_prefix_pop();
+> +		return;
+
+Could rename the 'error' label to something else and goto it from here
+too.
+
+> +	}
+> +
+> +	if (__sbi_get_imp_id() == SBI_IMPL_OPENSBI &&
+> +	    __sbi_get_imp_version() < sbi_impl_opensbi_mk_version(1, 5)) {
+> +		report_skip("OpenSBI < v1.5 detected, skipping tests");
+> +		report_prefix_pop();
+> +		return;
+
+Why do we need to do this? Isn't the DBTR probe above enough?
+
+> +	}
+> +
+> +	num_trigs = dbtr_test_num_triggers();
+> +	if (!num_trigs)
+> +		goto error;
+> +
+> +	trig_type = dbtr_test_type(&num_trigs);
+> +	if (trig_type == SBI_DBTR_TDATA1_TYPE_NONE)
+> +		goto error;
+> +
+> +	ret = sbi_debug_set_shmem(shmem);
+> +	sbiret_report_error(&ret, SBI_SUCCESS, "sbi_debug_set_shmem");
+> +
+> +	ret = dbtr_test_store_install_uninstall(&shmem[0], trig_type);
+> +	/* install or uninstall failed */
+> +	if (ret.error != SBI_SUCCESS)
+> +		goto error;
+> +
+> +	dbtr_test_load(&shmem[0], trig_type);
+> +	dbtr_test_exec(&shmem[0], trig_type);
+> +	dbtr_test_read(&shmem[0], trig_type);
+> +	dbtr_test_disable_enable(&shmem[0], trig_type);
+> +	dbtr_test_update(&shmem[0], trig_type);
+> +	dbtr_test_multiple_types(&shmem[0], trig_type);
+> +	dbtr_test_multiple(shmem, trig_type, num_trigs);
+> +	dbtr_test_disable_uninstall(&shmem[0], trig_type);
+> +	dbtr_test_uninstall_enable(&shmem[0], trig_type);
+> +	dbtr_test_uninstall_update(&shmem[0], trig_type);
+> +	dbtr_test_disable_read(&shmem[0], trig_type);
+> +
+> +error:
+> +	report_prefix_pop();
+> +}
+> diff --git a/riscv/sbi-tests.h b/riscv/sbi-tests.h
+> index d5c4ae70..c1ebf016 100644
+> --- a/riscv/sbi-tests.h
+> +++ b/riscv/sbi-tests.h
+> @@ -97,8 +97,10 @@ static inline bool env_enabled(const char *env)
+>  	return s && (*s == '1' || *s == 'y' || *s == 'Y');
 >  }
-> @@ -520,7 +667,7 @@ int main(int argc, char *argv[])
+>  
+> +void split_phys_addr(phys_addr_t paddr, unsigned long *hi, unsigned long *lo);
+>  void sbi_bad_fid(int ext);
+>  void check_sse(void);
+> +void check_dbtr(void);
+>  
+>  #endif /* __ASSEMBLER__ */
+>  #endif /* _RISCV_SBI_TESTS_H_ */
+> diff --git a/riscv/sbi.c b/riscv/sbi.c
+> index edb1a6be..3b8aadce 100644
+> --- a/riscv/sbi.c
+> +++ b/riscv/sbi.c
+> @@ -105,7 +105,7 @@ static int rand_online_cpu(prng_state *ps)
+>  	return cpu;
+>  }
+>  
+> -static void split_phys_addr(phys_addr_t paddr, unsigned long *hi, unsigned long *lo)
+> +void split_phys_addr(phys_addr_t paddr, unsigned long *hi, unsigned long *lo)
 >  {
->  	int c;
->=20=20
-> -	while ((c =3D getopt(argc, argv, "cht:v:")) !=3D -1) {
-> +	while ((c =3D getopt(argc, argv, "chnt:v:")) !=3D -1) {
->  		switch (c) {
->  		case 'c':
->  			log_color(1);
-> @@ -531,6 +678,9 @@ int main(int argc, char *argv[])
->  		case 'v':
->  			log_verbosity(atoi(optarg));
->  			break;
-> +		case 'n':
-> +			robust2 =3D true;
-> +			break;
->  		default:
->  			usage(basename(argv[0]));
->  			exit(1);
-> @@ -538,7 +688,7 @@ int main(int argc, char *argv[])
->  	}
->=20=20
->  	ksft_print_header();
-> -	ksft_set_plan(7);
-> +	ksft_set_plan(8);
+>  	*lo = (unsigned long)paddr;
+>  	*hi = 0;
+> @@ -1561,6 +1561,7 @@ int main(int argc, char **argv)
+>  	check_susp();
+>  	check_sse();
+>  	check_fwft();
+> +	check_dbtr();
+>  
+>  	return report_summary();
+>  }
+> -- 
+> 2.43.0
 >
 
-Just check whether the new syscall is implemented and then set the
-number of tests accordingly.
-
->  	test_robustness();
->=20=20
-> @@ -548,6 +698,8 @@ int main(int argc, char *argv[])
->  	test_set_list_op_pending();
->  	test_robust_list_multiple_elements();
->  	test_circular_list();
-> +	test_robust_list_limit();
-> +	test_unaligned_address();
-
-and then do:
-
-	test_robustness();
-        ....
-	test_circular_list();
-
-        if (has_robust) {
-        	robust2 =3D true;
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20
-                test_robustness();
-                ...
-                test_circular_list();
-		test_robust_list_limit();
-		test_unaligned_address();
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20
-        }=20=20=20=20=20=20=20=20
-
-or something like that.
-
-Time for a stiff drink....
+Thanks,
+drew
 
