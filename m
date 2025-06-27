@@ -1,99 +1,129 @@
-Return-Path: <linux-kselftest+bounces-36004-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36005-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E46E0AEC0CF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 22:23:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 969C3AEC11D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 22:38:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 25C60564F43
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 20:23:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 311DF162F18
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jun 2025 20:38:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34FEA21ADA3;
-	Fri, 27 Jun 2025 20:23:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2F0622D781;
+	Fri, 27 Jun 2025 20:37:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="PgigF6B0"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZWZBKHma"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 103C8C2FB;
-	Fri, 27 Jun 2025 20:23:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD4D522A813
+	for <linux-kselftest@vger.kernel.org>; Fri, 27 Jun 2025 20:37:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751055817; cv=none; b=HZjInVjr0UHBK0/zB7Qo2DzCHPKATZ8zCuTOIHuA90r5qoLfNk+eFgDUHIuWBfZ2dRcZt7hdL7unoGatbTWjFSHJV9847UGVxxSyFlSOUSRJofR8eXyWSch6qwLDSVMWfLtUijGoGy8C6cGdxj3iXafi46M08OT/TT74ba6v7Os=
+	t=1751056676; cv=none; b=Ww0KxF+EWaF2Pe3gVMikHDYpnOsJ9/ROAKGROfame/0EhU6u9J2cjBEHhhM4aTWVkH4U0W9cfFOCI5W43JJA3cIBQqKZ4Z/E1kMO9gHBfE0fZMPUMPfmHdCT4TC9urN5mxXTCI0ArVVWN3rxubNHGMrW/PW/WbLS68llq57nq94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751055817; c=relaxed/simple;
-	bh=8LRAvUFeTwmz4rDd900x+Z+XteT5wGFcJVnT+hGaLP4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=h3ReBkcaFyx0OS0n5PUmlfN73VlbtJEdBYwYPObiIYOtaVXVFEzNJyYyhJCV2JasNXRz5eW3TrWcCcgX+40c6mMe1a40YL+cOZNowhmeUb1ZYAmCfFvjmOTn32M5DaVI1gFx6GrjZryyoPU1rSbW15hNJI3v1ZAwPAWXH1fCFgQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=PgigF6B0; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=LNuHdZp1p8Oowbp9pqTlemJ4dhvpEIex6NkU/PUOyGM=; b=PgigF6B0mR7Bk3asa15fereY3a
-	LPqE/FIBEXopIv4s9QCLrpfaYUBgKU1u89vGKeK1muVH7XyHMxbqcQsGG2tS2YrSlQ1uHKiFWBQEz
-	Lr/2r9vFkbEvN0Xv/FYTMn4jCq9aCt2/oLa6gNJjtS2ZChMJNe8/S8m2QWzBrou4fAH4Ckyq127dp
-	tj0V8qFApRZZcxf5YQn2Q9uV1KnKj47ndCt9zpnmIylfOSfIRxx/LNeoDzL/a+dLMHTexTdZsIBNd
-	+4NjBh6x0TVn5T3yxmTcpMY8SqOr555P/xg7x87szaSOqTug4SXO2VZua01RaYpX5c5RbgEUHUhO6
-	4JV762+g==;
-Received: from [191.204.192.64] (helo=[192.168.15.100])
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-	id 1uVFbI-009XtB-C6; Fri, 27 Jun 2025 22:23:08 +0200
-Message-ID: <96b3d0fa-7fd2-4d2b-a6d6-cc91ed1dca4e@igalia.com>
-Date: Fri, 27 Jun 2025 17:23:03 -0300
+	s=arc-20240116; t=1751056676; c=relaxed/simple;
+	bh=jVCnSgKgTBaALIL5kswG283XAlndIy4N1hK9vcUxt+M=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=RMGG45/FEQrwaAHKjGG14Qj7BFcUCMaQUxn1Ov5DIeB0I2uwHRELIiK1gEJwNAs6P/A03umqk2vhVE3OxW54Vv3WwsodmQS6KN3BEqqhW6W15MfwktBeVAH2r24rhNovV46d0HXWOM8l98BafukgMEim76yVuxjJ1DHDXMnj0K0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ynaffit.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZWZBKHma; arc=none smtp.client-ip=209.85.215.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ynaffit.bounces.google.com
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-b31bc3128fcso760990a12.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jun 2025 13:37:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1751056674; x=1751661474; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=KNNvKIHZytjNLKER5B5vXrvdNfJHgheLSxitrBAGU4I=;
+        b=ZWZBKHmaK5wk/zCcm449atcmiRiZ5iBkLYwQUhRf//jWZ97rFcD8eZj5aJEADQppvc
+         cWt05VHRyOj/pD6rgY2WVYm3gtISa/HVIY65zetcMsme9DBzzHanIHyo1E5E7UVYlvWo
+         dFn9iO8lqjDVB9NPStf0jB7E1qtJhv3/+mcZR977v8eMK8b3klnPNj+X4Ux/WysWh0Dl
+         7HqHWL5f5+gEr92ZKZA1Y10N4ef/Z28sHyl4FrHUEMA56Pomt4wGYr29ZxPdWjJo1Cz0
+         DsRr6Ucx772Bk/or7nXCZr9D8zhsJE/8x5EzqAff3404eZpnjopEFgLoGd4kfLy1od7v
+         yrHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751056674; x=1751661474;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KNNvKIHZytjNLKER5B5vXrvdNfJHgheLSxitrBAGU4I=;
+        b=MSCvOIsDaxeGV89hiPIL5scQJ63kRUpTnbHqw5oArwMRenppMySjKoHzqs44CHV08b
+         zVlf6NvKMwpHaRw5peomqZG1s0gIni/er7UvKtj/qXLi4Ga6h1+6kNTWvclUmGhZ6hLh
+         rEgzKpRHnDo4oLktybqDkdfL/MRhY3pzE7WWzc3vCWSUqiutfHYB8ZpZ6Guaiapj7B80
+         MmyN5kxtqR8IL31WADj6ZxNVCBNBBCGkSIqZ6sL60Z2N95pB77Kv0l0ES9H2y/z3DFLv
+         yQAP3zJriX1CFrNUgoiWYyaeFAYEvPjeK5gj/ZEOVkIRuQhrcQ/CttILwkOFAvKaaZdk
+         ISTg==
+X-Forwarded-Encrypted: i=1; AJvYcCXOnN96q9FrWM0z4SSAm40B6/Xbc2YXzqT/VwpLT3ldsYc8xCZtGGikMpWfJwO3dMtzBGafL6zF/er0ajaXr4U=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz+h2lacdDZ30m/v5NYueTJ9zA6EZrOtfoBoNHI30sTODmBI8bV
+	uk07+YmwgPlQMRUNCPMnA15ubezhlqK9i1TQcPaCY+si4nxicEruJX/IwC6bzyA2AON0VHoqlis
+	RdMyFjQlkzQ==
+X-Google-Smtp-Source: AGHT+IEQQPKAxqNl0ciLgZyXlCg61DjKjjnF3AS+cRg0GMCYoGzXmaiv9R+XlDrGhMU44WAuOC72MBc+TqmK
+X-Received: from pjn8.prod.google.com ([2002:a17:90b:5708:b0:312:151d:c818])
+ (user=ynaffit job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:278e:b0:311:ffe8:20e6
+ with SMTP id 98e67ed59e1d1-318c8ecd20cmr6632918a91.3.1751056673987; Fri, 27
+ Jun 2025 13:37:53 -0700 (PDT)
+Date: Fri, 27 Jun 2025 13:37:41 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/7] selftests/futex: Add ASSERT_ macros
-To: Thomas Gleixner <tglx@linutronix.de>, Shuah Khan <shuah@kernel.org>
-Cc: Davidlohr Bueso <dave@stgolabs.net>, Peter Zijlstra
- <peterz@infradead.org>, Arnd Bergmann <arnd@arndb.de>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- linux-api@vger.kernel.org, kernel-dev@igalia.com,
- Darren Hart <dvhart@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Waiman Long <longman@redhat.com>
-References: <20250626-tonyk-robust_futex-v5-0-179194dbde8f@igalia.com>
- <20250626-tonyk-robust_futex-v5-1-179194dbde8f@igalia.com>
- <87ecv6p364.ffs@tglx>
-Content-Language: en-US
-From: =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
-In-Reply-To: <87ecv6p364.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.50.0.727.gbf7dc18ff4-goog
+Message-ID: <20250627203748.881022-1-ynaffit@google.com>
+Subject: [PATCH 0/5] binder: Set up KUnit tests for alloc
+From: Tiffany Yang <ynaffit@google.com>
+To: linux-kernel@vger.kernel.org
+Cc: keescook@google.com, kernel-team@android.com, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	"=?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?=" <arve@android.com>, Todd Kjos <tkjos@android.com>, Martijn Coenen <maco@android.com>, 
+	Joel Fernandes <joelagnelf@nvidia.com>, Christian Brauner <brauner@kernel.org>, 
+	Carlos Llamas <cmllamas@google.com>, Suren Baghdasaryan <surenb@google.com>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
+	Rae Moar <rmoar@google.com>, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-Em 26/06/2025 19:07, Thomas Gleixner escreveu:
-> On Thu, Jun 26 2025 at 14:11, André Almeida wrote:
-> 
->> Create ASSERT_{EQ, NE, TRUE, FALSE} macros to make test creation easier.
-> 
-> What's so futex special about this that it can't use the same muck in
-> 
-> tools/testing/selftests/kselftest_harness.h
-> 
+Hello,
 
-My previous version of this test used kselftest_harness.h, but Shuah 
-request to keep consistency and don't use this header, giving that the 
-rest of futex test doesn't use it:
+binder_alloc_selftest provides a robust set of checks for the binder allocator,
+but it rarely runs because it must hook into a running binder process and block
+all other binder threads until it completes. The test itself is a good candidate
+for conversion to KUnit, and it can be further isolated from user processes by
+using a test-specific lru freelist instead of the global one. This series
+converts the selftest to KUnit to make it less burdensome to run and to set up a
+foundation for testing future binder_alloc changes.
 
-https://lore.kernel.org/lkml/fe02f42b-7ba8-4a3b-a86c-2a4a7942fd3b@linuxfoundation.org/
+Thanks,
+Tiffany
 
-> or at least share the implementation in some way?
-> 
-> Thanks,
-> 
->          tglx
+Tiffany Yang (5):
+  binder: Fix selftest page indexing
+  binder: Store lru freelist in binder_alloc
+  binder: Scaffolding for binder_alloc KUnit tests
+  binder: Convert binder_alloc selftests to KUnit
+  binder: encapsulate individual alloc test cases
+
+ drivers/android/Kconfig                    |  15 +-
+ drivers/android/Makefile                   |   2 +-
+ drivers/android/binder.c                   |  10 +-
+ drivers/android/binder_alloc.c             |  39 +-
+ drivers/android/binder_alloc.h             |  14 +-
+ drivers/android/binder_alloc_selftest.c    | 306 -----------
+ drivers/android/binder_internal.h          |   4 +
+ drivers/android/tests/.kunitconfig         |   3 +
+ drivers/android/tests/Makefile             |   3 +
+ drivers/android/tests/binder_alloc_kunit.c | 572 +++++++++++++++++++++
+ include/kunit/test.h                       |  12 +
+ lib/kunit/user_alloc.c                     |   4 +-
+ 12 files changed, 644 insertions(+), 340 deletions(-)
+ delete mode 100644 drivers/android/binder_alloc_selftest.c
+ create mode 100644 drivers/android/tests/.kunitconfig
+ create mode 100644 drivers/android/tests/Makefile
+ create mode 100644 drivers/android/tests/binder_alloc_kunit.c
+
+-- 
+2.50.0.727.gbf7dc18ff4-goog
 
 
