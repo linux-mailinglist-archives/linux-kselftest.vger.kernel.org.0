@@ -1,129 +1,114 @@
-Return-Path: <linux-kselftest+bounces-36050-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36051-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03E29AEC771
-	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 15:38:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5091AEC774
+	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 15:42:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 266873BFFAC
-	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 13:37:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 267DF1BC0A37
+	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 13:43:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BC72246782;
-	Sat, 28 Jun 2025 13:38:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE2EC1A5B9E;
+	Sat, 28 Jun 2025 13:42:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cNGbf5Xt"
+	dkim=pass (1024-bit key) header.d=onurozkan.dev header.i=@onurozkan.dev header.b="ZXWIbWvL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from forward502a.mail.yandex.net (forward502a.mail.yandex.net [178.154.239.82])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD9C74A3C;
-	Sat, 28 Jun 2025 13:38:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCEB255E69;
+	Sat, 28 Jun 2025 13:42:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.82
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751117892; cv=none; b=fQvV1/aOYTIeMMAd53y9L3LH7qqc/hAGevNbqOmLuv9x3b5FI4M6R0gG5Drj+jP4TbcDHxCLIV5LvZwF99hH8udZjmK3C3vEvMx8wqFYtTHfwXTFp9jA33pyjqdcctvb2qY+DHP4fLHzvCDaT7cUMMu6/Cjo7hY1TFmewAOVmPE=
+	t=1751118173; cv=none; b=Insxp2Z+siqFCr7iODyEmwCd0dJG7knjMjKmb8imsSwVHaZ41tXNWE3nn2wMaEkUmtXGQm5BbEucLPwWdVTlhibHRgX49Hy0m+PTahvrqxDh8hWxSiROgSN6Dg0vSWYDO+gcFecr2dEWZc1GDuFM5UYV6trgmjEfyDyutjQWcBc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751117892; c=relaxed/simple;
-	bh=vIf44i+VyFnPM1VkIxmX0r4UR1zNeK8yVY2SxBYnyZg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=e0aS9ubRNGvg5G4nGe3th1KDvJeVv6JQ7UkrilMmWvjGXkq7/LgHxhcmqmpn32goDEldz68SU0g0TLmHJ1UJirLWK/1EWJ/vPxVH53jJV33DFWKLZT7ebNzkowYszOTuPPFTBECTDk+5B5jUgykWDtrm510TnSbCi7rnt3vumc4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cNGbf5Xt; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3138e64fc73so422748a91.2;
-        Sat, 28 Jun 2025 06:38:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751117890; x=1751722690; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vIf44i+VyFnPM1VkIxmX0r4UR1zNeK8yVY2SxBYnyZg=;
-        b=cNGbf5Xt9RAx0CmsgKVu/XgVZ26o5gTma9upfH47E3gcY1hkJdiQK0UZGTaanVYcL8
-         E0WRHUvlVR3N7YCKtg2g1kPLhXioChwNJru4Ha+IgcMtryc/D5iQAEmY25FkmqEKkNT9
-         1iS1UUpCHeugP8XkOiAo1foNqL9zc7E52AT8E+Br8meO7zRHRvJEAAgOV/TZntIi9ejl
-         opFzF71H4Nqs/4qW3IPivirAmg3E5N4A0macU92IlPVPS6wANLY3X2XJehPTjnKXMxfd
-         GvLX9d6HzaT8iU+NpOVVcwDKfnGp5v1BYy78bQj5hFxQ8bkrqnnrPXiSdKojl9CaxJNt
-         TXyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751117890; x=1751722690;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vIf44i+VyFnPM1VkIxmX0r4UR1zNeK8yVY2SxBYnyZg=;
-        b=XMDixJ7hN68qZIWFZFRT8d2mSqduQZLznV4DJrORpmcTadAb+JMZH7W+CgWxlUCDmV
-         BRQD0i1gsXvCsG8NzbepwhgUTggOrYrit8uWwEsDc9C2Ik46ENkBwwEcMKTdpUtl82cp
-         fulc9QRatFwzQigZul+8WlHBF2jh9LsGxYXsiDZy3iXm5hm7TkSdnupR7nDcwo7QDhdB
-         XVeUN/kcOSMfQhnZx4FsEoMB1vV3zXEaf27ImTD8eYxsdnt+3YcGWR5aENS2XU5tqZ5B
-         esVBHCowxOM3qihuSpKJ/9GP52s+hPqbQtPhxDgFXFtwND4t17IBolFx1Oqy5RBmJBng
-         aGLw==
-X-Forwarded-Encrypted: i=1; AJvYcCUsJXK2oMKv0GPFYFDE1xMWvInp1NTjLGjtB0TqGpmGqqjUvGgluUJy3VSalQea5zuqpEZm7NdIT01QngHbld8=@vger.kernel.org, AJvYcCVKib/TQ2VwnWS0+nEOOomn+3u/sU59Hsev6zhpKzRgpmIC/M07hNj0Z1dj3jUpwQhfUMmVyepW/Ji3kmGzmhfC@vger.kernel.org, AJvYcCX9fz95beJ75GWwpiB82nvusVdPsuV1fOdp+ZFcSPP0YqgzVnKxlT82ozeEbZZl+2BNg6k3qdkj9xY=@vger.kernel.org, AJvYcCXae38TvtW4zxiDv/6f/uoQN+10BwKdg1o7lFEdXD+KqGdhdc9bgYZG5mZRsyraZIpYbwqDLWbqGNcQvqY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwLXA3AKoVAD49aXoXy5uP0k3bszawmhvT0nCdk/XZLPJ4E0rLI
-	0j+Zaj2wX9uh1W+HAq30K1LyGK9iuosewhB3o6+faW7AIaQLetnhvOmoohgd4UOem8LKzmjnOT4
-	qN1x8ZGutyje0VouA16EGUpBhZZ8duOM=
-X-Gm-Gg: ASbGncuA5bAQexWVtf6dw5W3rUpdS7HEMJ9jgUmy/ryJLkgQT4AFZRRNi1mMmjjwyNa
-	Yp8Z1FgrfL3O3MLIgqCDgsx989RY2rOLMpgK3HaK9LSgARhejt/aqKP6KsqC8N05BbmPH5Sja49
-	wl+LOLOqBm7qrY8xJkfeGYAIFt/Om/N0bqmsuwbraEnDw=
-X-Google-Smtp-Source: AGHT+IEgTHUXZm8aCKw8gdJX5bX0wwKKRYcrzHQLkm0UPRW/oqr62CWwCcw4F2siFcvRbdmLcajx0brfOaBHI+bBeY0=
-X-Received: by 2002:a17:90b:1c0a:b0:313:f9fc:7214 with SMTP id
- 98e67ed59e1d1-318ec33ecadmr1834619a91.1.1751117890021; Sat, 28 Jun 2025
- 06:38:10 -0700 (PDT)
+	s=arc-20240116; t=1751118173; c=relaxed/simple;
+	bh=VAee6+av5JH/i3C6FNByMYKYP7UNkqbQVjdUMroatfU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=MfvCMULerd+9OW/amKOJD0ItFsUdQ2b6vKnjVev9+s18oV9u+Kq87z/P+MxJc7azVf4yodrPmUiknR5rhZCLdoleStBia0RIsUBWons6ni9JtztHl8ycOtiEETFZaLr2kOKPyeSa0XIa5qas4MyXK5O8GrXS1zVsB4xWIcCB0m8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=onurozkan.dev; spf=pass smtp.mailfrom=onurozkan.dev; dkim=pass (1024-bit key) header.d=onurozkan.dev header.i=@onurozkan.dev header.b=ZXWIbWvL; arc=none smtp.client-ip=178.154.239.82
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=onurozkan.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=onurozkan.dev
+Received: from mail-nwsmtp-smtp-production-main-92.vla.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-92.vla.yp-c.yandex.net [IPv6:2a02:6b8:c15:2ea0:0:640:5268:0])
+	by forward502a.mail.yandex.net (Yandex) with ESMTPS id 6CE0461414;
+	Sat, 28 Jun 2025 16:42:42 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-92.vla.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id ZgXqp0LLu0U0-6beYeotD;
+	Sat, 28 Jun 2025 16:42:41 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=onurozkan.dev;
+	s=mail; t=1751118161;
+	bh=VAee6+av5JH/i3C6FNByMYKYP7UNkqbQVjdUMroatfU=;
+	h=Cc:Message-ID:Subject:Date:References:To:From:In-Reply-To;
+	b=ZXWIbWvLFBkekQbsXfRUhZj3n8Cyds4+TE0bo9VWS7xaQr4qys+rL3XXS12oHbrjD
+	 EL9Fqk9MBTV1RGMStTCZOwvgT1reA7xz6iGtRX3868GtXWgNsFSYHa6TCzL3SkOwxf
+	 aS8phWfzvWrm8WzO2c4WWedFmCW1iX6bV80yqYZA=
+Authentication-Results: mail-nwsmtp-smtp-production-main-92.vla.yp-c.yandex.net; dkim=pass header.i=@onurozkan.dev
+Date: Sat, 28 Jun 2025 16:42:35 +0300
+From: Onur <work@onurozkan.dev>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: viresh.kumar@linaro.org, rust-for-linux@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+ airlied@gmail.com, simona@ffwll.ch, ojeda@kernel.org,
+ alex.gaynor@gmail.com, boqun.feng@gmail.com, gary@garyguo.net,
+ bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org,
+ aliceryhl@google.com, tmgross@umich.edu, rafael@kernel.org,
+ gregkh@linuxfoundation.org, maarten.lankhorst@linux.intel.com,
+ mripard@kernel.org, tzimmermann@suse.de, davidgow@google.com, nm@ti.com
+Subject: Re: [PATCH v3 3/3] rust: remove
+ `#[allow(clippy::non_send_fields_in_send_ty)]`
+Message-ID: <20250628164235.1376ab5f@nimda.home>
+In-Reply-To: <CANiq72kgB6gQ3+etQOYLLDqWt4EQhiDfN3dcwHBOpZh9USt3iA@mail.gmail.com>
+References: <20250628040956.2181-1-work@onurozkan.dev>
+	<20250628040956.2181-4-work@onurozkan.dev>
+	<CANiq72kjdj4KbDhfnTbm8jZpLC1+WPB3E6M8D8M2NLnphMs5vg@mail.gmail.com>
+	<20250628133013.703461c8@nimda.home>
+	<CANiq72kY9DA_JD_XkF01ZSmXbD8iaFthVZ66X+9N5aa_WObt+A@mail.gmail.com>
+	<20250628154237.0f367cee@nimda.home>
+	<CANiq72mxJM-7WAP8xVDukmiXq=ntThyFESFLs1+dmZJSS2q60Q@mail.gmail.com>
+	<20250628161117.7786b3a4@nimda.home>
+	<CANiq72kgB6gQ3+etQOYLLDqWt4EQhiDfN3dcwHBOpZh9USt3iA@mail.gmail.com>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-unknown-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250628040956.2181-1-work@onurozkan.dev> <20250628040956.2181-4-work@onurozkan.dev>
- <CANiq72kjdj4KbDhfnTbm8jZpLC1+WPB3E6M8D8M2NLnphMs5vg@mail.gmail.com>
- <20250628133013.703461c8@nimda.home> <CANiq72kY9DA_JD_XkF01ZSmXbD8iaFthVZ66X+9N5aa_WObt+A@mail.gmail.com>
- <20250628154835.4e2e4a92@nimda.home>
-In-Reply-To: <20250628154835.4e2e4a92@nimda.home>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sat, 28 Jun 2025 15:37:57 +0200
-X-Gm-Features: Ac12FXxAcGE-hs8I2L5vAQYkCC-37OvNogUlsuWHP5RbPdtbwCtWMcOUSWAGNlY
-Message-ID: <CANiq72mDJTOwVNOdaWOtJk+O2JFu-RGYHnSLTwDrWu352pRYAA@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] rust: remove `#[allow(clippy::non_send_fields_in_send_ty)]`
-To: Onur <work@onurozkan.dev>
-Cc: viresh.kumar@linaro.org, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	airlied@gmail.com, simona@ffwll.ch, ojeda@kernel.org, alex.gaynor@gmail.com, 
-	boqun.feng@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com, 
-	lossin@kernel.org, a.hindborg@kernel.org, aliceryhl@google.com, 
-	tmgross@umich.edu, rafael@kernel.org, gregkh@linuxfoundation.org, 
-	maarten.lankhorst@linux.intel.com, mripard@kernel.org, tzimmermann@suse.de, 
-	davidgow@google.com, nm@ti.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jun 28, 2025 at 3:04=E2=80=AFPM Onur <work@onurozkan.dev> wrote:
->
-> Yeah, I meant that it't taking more effort than it should, like digging
-> through historical changes in the relevant parts of the source code,
-> trying to figuring out whether it was just a false positive or if there
-> was a specific reason behind it, etc.
+On Sat, 28 Jun 2025 15:28:29 +0200
+Miguel Ojeda <miguel.ojeda.sandonis@gmail.com> wrote:
 
-Yeah, that is a big part of kernel development, especially on the
-maintenance side :)
+> On Sat, Jun 28, 2025 at 3:11=E2=80=AFPM Onur <work@onurozkan.dev> wrote:
+> >
+> > Aha, I see. I missed that. I guess `allow` was added when the author
+> > had this lint enabled on their checkout, but their work was merged
+> > when lint removal was merged before that.
+>=20
+> Yeah, some of the code going around was written years ago, so
+> sometimes this sort of thing happens. :)
+>=20
+> > Do you want me to update the patch description by including
+> > 5e7c9b84ad08 ref and send v4?
+>=20
+> Sure -- maybe wait a few days, to see if anyone says anything else.
+> Then we will need to wait for Acked-bys from other maintainers.
+>=20
+> Or, actually, if you are sending a new version and you are willing to
+> do it, then it would be easier to land if you split the first patch
+> also by subsystem -- that way each maintainer can take their patches
+> on their own time instead. Since each patch is independent, you can
+> send them in independent patch series, that makes it even easier for
+> maintainers to track.
 
-I definitely agree that a good comment in the source code is better
-than going through Git history, and the kernel sometimes has had some
-things documented in the Git log that should have been in the source
-code instead. It happens.
+I don't have enough time to do it right now, but I would be happy
+to do it in ~3 days during the week (assuming it's still not being
+reviewed by the maintainers by then).
 
-However, in some cases like this one it is not clear it would help.
-For instance, here the lint reason message could have been something
-that made sense back then when the lint was enabled, and yet we would
-still have had to notice the lint got disabled later on, so we would
-end up still going into the Git log.
-
-`expect` is great to mitigate some of that -- sadly we cannot use it
-as much as we would like due to sometimes being conditional to an arch
-or the kernel config or the Rust version. (And your first patch may
-have some cases that perhaps we cannot convert due to that -- I didn't
-check)
-
-Cheers,
-Miguel
+Regards,
+Onur
 
