@@ -1,73 +1,73 @@
-Return-Path: <linux-kselftest+bounces-36049-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36050-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92BDAAEC769
-	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 15:28:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03E29AEC771
+	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 15:38:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D078E3BE7CC
-	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 13:28:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 266873BFFAC
+	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 13:37:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6316C245028;
-	Sat, 28 Jun 2025 13:28:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BC72246782;
+	Sat, 28 Jun 2025 13:38:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j2oXXtkB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cNGbf5Xt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAD6A16EB42;
-	Sat, 28 Jun 2025 13:28:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD9C74A3C;
+	Sat, 28 Jun 2025 13:38:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751117324; cv=none; b=vD58jd2pFiC3CT2U+sfFXUpUOIR/+qROhJ143eRdcnXxomPbmacvCmC31IfZmpkvYkFddAf1BmWH0CTvt5wLWwKvdcwiJ5hdIPbJgjPJWZHxcJAdJdioN/NW6Qa1VAAwEJFFJnpLjFd4nOVrLp6Fa6lYF+dziNalDHZQ8MPwYtI=
+	t=1751117892; cv=none; b=fQvV1/aOYTIeMMAd53y9L3LH7qqc/hAGevNbqOmLuv9x3b5FI4M6R0gG5Drj+jP4TbcDHxCLIV5LvZwF99hH8udZjmK3C3vEvMx8wqFYtTHfwXTFp9jA33pyjqdcctvb2qY+DHP4fLHzvCDaT7cUMMu6/Cjo7hY1TFmewAOVmPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751117324; c=relaxed/simple;
-	bh=T/j8U9rdyUQILkZZOO6YDvdjlKeeHE2rOYeTpHYUXZs=;
+	s=arc-20240116; t=1751117892; c=relaxed/simple;
+	bh=vIf44i+VyFnPM1VkIxmX0r4UR1zNeK8yVY2SxBYnyZg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iI6SqYyT9Pa2xTdsrZWr4fWs8/Bsnuw0Q010BnNCmXkTdki64VtRM25i4B2WBFf9c8nVrl+YnE/8A/WQf4MQHx5evkFY5ctU98jYzsc5wXGYN1r4of8UKNsqUSZgeky0ntC5FGSis46pv2A/NvmZH5Zq++AD3fy30a+FZxG9FSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j2oXXtkB; arc=none smtp.client-ip=209.85.216.49
+	 To:Cc:Content-Type; b=e0aS9ubRNGvg5G4nGe3th1KDvJeVv6JQ7UkrilMmWvjGXkq7/LgHxhcmqmpn32goDEldz68SU0g0TLmHJ1UJirLWK/1EWJ/vPxVH53jJV33DFWKLZT7ebNzkowYszOTuPPFTBECTDk+5B5jUgykWDtrm510TnSbCi7rnt3vumc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cNGbf5Xt; arc=none smtp.client-ip=209.85.216.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-313336f8438so715274a91.0;
-        Sat, 28 Jun 2025 06:28:42 -0700 (PDT)
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3138e64fc73so422748a91.2;
+        Sat, 28 Jun 2025 06:38:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751117322; x=1751722122; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1751117890; x=1751722690; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7WL3lDKYi2M4QM/WmNCuiZEoDjKzJbZf9w3+SaIZN3M=;
-        b=j2oXXtkBF1J2M8lX0u0z0QI68jY4uo9SBhVKsP1uXf7sUN1BKTzhzNfjNaICe5E0do
-         OizzUUufesIHzgtuA/zdQfomnUOR1O7k1wISbcTzXJAt3yVXhDajjk7szqfwX5pFS7xv
-         HX3QfWk2e4E5ZKNXjv7ZcKH+eEfYLvwTGfDyhEhUZT/ZSaZzRrr/WPEfsv7BLB3xX5ZR
-         bSCyO3Fzqe85n6+vWHE4FTUUenfs7tgokWINGXN/MVbAkzqW2txlzbNQzdXg5ke3KzaS
-         tm84T/Erh+aILI8URUqLU4HwuYVl5FWAjHXZxLmi5uQxPufJVBQ+0uWfjsYKOUPApIVN
-         qgyw==
+        bh=vIf44i+VyFnPM1VkIxmX0r4UR1zNeK8yVY2SxBYnyZg=;
+        b=cNGbf5Xt9RAx0CmsgKVu/XgVZ26o5gTma9upfH47E3gcY1hkJdiQK0UZGTaanVYcL8
+         E0WRHUvlVR3N7YCKtg2g1kPLhXioChwNJru4Ha+IgcMtryc/D5iQAEmY25FkmqEKkNT9
+         1iS1UUpCHeugP8XkOiAo1foNqL9zc7E52AT8E+Br8meO7zRHRvJEAAgOV/TZntIi9ejl
+         opFzF71H4Nqs/4qW3IPivirAmg3E5N4A0macU92IlPVPS6wANLY3X2XJehPTjnKXMxfd
+         GvLX9d6HzaT8iU+NpOVVcwDKfnGp5v1BYy78bQj5hFxQ8bkrqnnrPXiSdKojl9CaxJNt
+         TXyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751117322; x=1751722122;
+        d=1e100.net; s=20230601; t=1751117890; x=1751722690;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7WL3lDKYi2M4QM/WmNCuiZEoDjKzJbZf9w3+SaIZN3M=;
-        b=TSn8bUNDSkZCSERSOesRGyMe87fPlSfW5FnNRv7z/pbdm6jHtmru/P1TYYbKVPALtx
-         bc4yEjpQrii/TGwj7Lgds6CF3+aZgN2dJ92ozEQoAKZ037Z1HDRvyNb5k5K66HRYBS5O
-         2+BKMgTZ426CoIUGfKcnkIbs8IyMLaK7BjrXrn73w9qJ21bwU80H9J5qlz2B+5Xj4s2K
-         BsLIDK9pQ2Vxmmd7kWQSsGOHQaukUkpqc0ndkTT5YdZFywFLAFORqO6lbCK6LvgF5qH6
-         NzRxSfcqrtLLPOx3dgylsCrYc845bqoLBcwuMAHSY+eLF/zc5vJ9GFmkErxuUxzxFYUu
-         +hdw==
-X-Forwarded-Encrypted: i=1; AJvYcCUDWwMxXrd9kFsn943FdjXd2IKlWJsJUPFnxCZfS1JKFrxJ0rVsjvO9xZCBM+uuDpe7tu2xGsIem28KiDk=@vger.kernel.org, AJvYcCUfPvmwp4EG4ipcqFUuncYqGsljENXMZSy+ol+U9eB93uNYHj98oEpb1Gf/up+7QCRIrwt+lAdpeLU=@vger.kernel.org, AJvYcCWU28B/dX4oPMrgQypL1WykBCosRaDof73igSqlv9gYjkAZF2epDnCYICvyBmjsz/YJT2VYbz1EQuCGZJe3ZSQ=@vger.kernel.org, AJvYcCXF6SHMcL50SwJ7hJ3Xi+zrAbNOx348dsCi0jt+FU1AF4+M0PZIc7HizY0tYD7+JssWS2F1nD2IF22nfR5uGmUF@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw1DaT8CfuTRfTepsKzyCku6J4vbrLH6aw3CG30Kly6LXXroYBU
-	strxNPQ/O2rFvkiQV9WP4D1i0CtBERgKZ0eJDLxZ/Y2UhvHiffuG0dZ/QbT7iGntRgSkszhcSor
-	YI77MeXRuA0v6Ajj1222xhrvIMPE8i60=
-X-Gm-Gg: ASbGncsy7Jt8MF0IUFCKxZfC/Zou6o4kH++KCFPM3IPgYAYM2xPsscN3xHgtlvnrrXW
-	Vri5X0RymG0xsQv1TUSUgSXshlEm8op5/KOi9lhYd+eD/7/N5VV4OarmMvUge2CufkJPGtS2Mks
-	3L0UPhLV6tkumyWjLEowLMwOAL7u6e1M1/VPvvoB4Ier4=
-X-Google-Smtp-Source: AGHT+IHc6wdHVj6IpZsm+aHQxHlCim58v6/HcwGkhWy25SGPfViHk3Es9U5eM3IItHwndHObtV3frrARCnNb42IPH6w=
-X-Received: by 2002:a17:90b:3f50:b0:311:fde5:c4ae with SMTP id
- 98e67ed59e1d1-318ec431932mr1841270a91.6.1751117321888; Sat, 28 Jun 2025
- 06:28:41 -0700 (PDT)
+        bh=vIf44i+VyFnPM1VkIxmX0r4UR1zNeK8yVY2SxBYnyZg=;
+        b=XMDixJ7hN68qZIWFZFRT8d2mSqduQZLznV4DJrORpmcTadAb+JMZH7W+CgWxlUCDmV
+         BRQD0i1gsXvCsG8NzbepwhgUTggOrYrit8uWwEsDc9C2Ik46ENkBwwEcMKTdpUtl82cp
+         fulc9QRatFwzQigZul+8WlHBF2jh9LsGxYXsiDZy3iXm5hm7TkSdnupR7nDcwo7QDhdB
+         XVeUN/kcOSMfQhnZx4FsEoMB1vV3zXEaf27ImTD8eYxsdnt+3YcGWR5aENS2XU5tqZ5B
+         esVBHCowxOM3qihuSpKJ/9GP52s+hPqbQtPhxDgFXFtwND4t17IBolFx1Oqy5RBmJBng
+         aGLw==
+X-Forwarded-Encrypted: i=1; AJvYcCUsJXK2oMKv0GPFYFDE1xMWvInp1NTjLGjtB0TqGpmGqqjUvGgluUJy3VSalQea5zuqpEZm7NdIT01QngHbld8=@vger.kernel.org, AJvYcCVKib/TQ2VwnWS0+nEOOomn+3u/sU59Hsev6zhpKzRgpmIC/M07hNj0Z1dj3jUpwQhfUMmVyepW/Ji3kmGzmhfC@vger.kernel.org, AJvYcCX9fz95beJ75GWwpiB82nvusVdPsuV1fOdp+ZFcSPP0YqgzVnKxlT82ozeEbZZl+2BNg6k3qdkj9xY=@vger.kernel.org, AJvYcCXae38TvtW4zxiDv/6f/uoQN+10BwKdg1o7lFEdXD+KqGdhdc9bgYZG5mZRsyraZIpYbwqDLWbqGNcQvqY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwLXA3AKoVAD49aXoXy5uP0k3bszawmhvT0nCdk/XZLPJ4E0rLI
+	0j+Zaj2wX9uh1W+HAq30K1LyGK9iuosewhB3o6+faW7AIaQLetnhvOmoohgd4UOem8LKzmjnOT4
+	qN1x8ZGutyje0VouA16EGUpBhZZ8duOM=
+X-Gm-Gg: ASbGncuA5bAQexWVtf6dw5W3rUpdS7HEMJ9jgUmy/ryJLkgQT4AFZRRNi1mMmjjwyNa
+	Yp8Z1FgrfL3O3MLIgqCDgsx989RY2rOLMpgK3HaK9LSgARhejt/aqKP6KsqC8N05BbmPH5Sja49
+	wl+LOLOqBm7qrY8xJkfeGYAIFt/Om/N0bqmsuwbraEnDw=
+X-Google-Smtp-Source: AGHT+IEgTHUXZm8aCKw8gdJX5bX0wwKKRYcrzHQLkm0UPRW/oqr62CWwCcw4F2siFcvRbdmLcajx0brfOaBHI+bBeY0=
+X-Received: by 2002:a17:90b:1c0a:b0:313:f9fc:7214 with SMTP id
+ 98e67ed59e1d1-318ec33ecadmr1834619a91.1.1751117890021; Sat, 28 Jun 2025
+ 06:38:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -77,13 +77,12 @@ MIME-Version: 1.0
 References: <20250628040956.2181-1-work@onurozkan.dev> <20250628040956.2181-4-work@onurozkan.dev>
  <CANiq72kjdj4KbDhfnTbm8jZpLC1+WPB3E6M8D8M2NLnphMs5vg@mail.gmail.com>
  <20250628133013.703461c8@nimda.home> <CANiq72kY9DA_JD_XkF01ZSmXbD8iaFthVZ66X+9N5aa_WObt+A@mail.gmail.com>
- <20250628154237.0f367cee@nimda.home> <CANiq72mxJM-7WAP8xVDukmiXq=ntThyFESFLs1+dmZJSS2q60Q@mail.gmail.com>
- <20250628161117.7786b3a4@nimda.home>
-In-Reply-To: <20250628161117.7786b3a4@nimda.home>
+ <20250628154835.4e2e4a92@nimda.home>
+In-Reply-To: <20250628154835.4e2e4a92@nimda.home>
 From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sat, 28 Jun 2025 15:28:29 +0200
-X-Gm-Features: Ac12FXzaVuWKO4aWMseA1ihBqRgJ54vOY07I6pfAHsieZ7gtsGYmuexr3j1wmCo
-Message-ID: <CANiq72kgB6gQ3+etQOYLLDqWt4EQhiDfN3dcwHBOpZh9USt3iA@mail.gmail.com>
+Date: Sat, 28 Jun 2025 15:37:57 +0200
+X-Gm-Features: Ac12FXxAcGE-hs8I2L5vAQYkCC-37OvNogUlsuWHP5RbPdtbwCtWMcOUSWAGNlY
+Message-ID: <CANiq72mDJTOwVNOdaWOtJk+O2JFu-RGYHnSLTwDrWu352pRYAA@mail.gmail.com>
 Subject: Re: [PATCH v3 3/3] rust: remove `#[allow(clippy::non_send_fields_in_send_ty)]`
 To: Onur <work@onurozkan.dev>
 Cc: viresh.kumar@linaro.org, rust-for-linux@vger.kernel.org, 
@@ -98,58 +97,32 @@ Cc: viresh.kumar@linaro.org, rust-for-linux@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jun 28, 2025 at 3:11=E2=80=AFPM Onur <work@onurozkan.dev> wrote:
+On Sat, Jun 28, 2025 at 3:04=E2=80=AFPM Onur <work@onurozkan.dev> wrote:
 >
-> Aha, I see. I missed that. I guess `allow` was added when the author
-> had this lint enabled on their checkout, but their work was merged when
-> lint removal was merged before that.
+> Yeah, I meant that it't taking more effort than it should, like digging
+> through historical changes in the relevant parts of the source code,
+> trying to figuring out whether it was just a false positive or if there
+> was a specific reason behind it, etc.
 
-Yeah, some of the code going around was written years ago, so
-sometimes this sort of thing happens. :)
+Yeah, that is a big part of kernel development, especially on the
+maintenance side :)
 
-> Do you want me to update the patch description by including
-> 5e7c9b84ad08 ref and send v4?
+I definitely agree that a good comment in the source code is better
+than going through Git history, and the kernel sometimes has had some
+things documented in the Git log that should have been in the source
+code instead. It happens.
 
-Sure -- maybe wait a few days, to see if anyone says anything else.
-Then we will need to wait for Acked-bys from other maintainers.
+However, in some cases like this one it is not clear it would help.
+For instance, here the lint reason message could have been something
+that made sense back then when the lint was enabled, and yet we would
+still have had to notice the lint got disabled later on, so we would
+end up still going into the Git log.
 
-Or, actually, if you are sending a new version and you are willing to
-do it, then it would be easier to land if you split the first patch
-also by subsystem -- that way each maintainer can take their patches
-on their own time instead. Since each patch is independent, you can
-send them in independent patch series, that makes it even easier for
-maintainers to track.
-
-For instance, you could do this grouping:
-
-     rust/kernel/error.rs                | 2 +-
-     rust/kernel/types.rs                | 2 +-
-     rust/macros/helpers.rs              | 2 +-
-     (+ this patch #2)
-
-     rust/kernel/init.rs                 | 6 +++---
-
-     rust/kernel/kunit.rs                | 2 +-
-
-     drivers/gpu/nova-core/regs.rs       | 2 +-
-     rust/kernel/drm/ioctl.rs            | 8 ++++----
-
-     rust/kernel/devres.rs               | 2 +-
-     rust/kernel/driver.rs               | 2 +-
-
-     rust/kernel/alloc/allocator_test.rs | 2 +-
-
-     rust/kernel/opp.rs                  | 4 ++--
-     (+ this patch #3)
-
-So e.g. the top one (Rust) would be a series of 2 patches, then the
-next one (pin-init) a single independent patch, and so on.
-
-> Sorry for misunderstanding by the way!
-
-No worries at all! It happens :)
-
-And thanks for doing these cleanups! They are appreciated.
+`expect` is great to mitigate some of that -- sadly we cannot use it
+as much as we would like due to sometimes being conditional to an arch
+or the kernel config or the Rust version. (And your first patch may
+have some cases that perhaps we cannot convert due to that -- I didn't
+check)
 
 Cheers,
 Miguel
