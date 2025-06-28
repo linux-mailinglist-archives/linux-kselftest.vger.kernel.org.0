@@ -1,114 +1,123 @@
-Return-Path: <linux-kselftest+bounces-36036-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36037-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0910AEC691
-	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 12:30:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB5B4AEC69B
+	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 13:00:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE7496A69DD
-	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 10:30:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B07E617C2E4
+	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 11:00:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC34B1FBE80;
-	Sat, 28 Jun 2025 10:30:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F112D2459E0;
+	Sat, 28 Jun 2025 10:59:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=onurozkan.dev header.i=@onurozkan.dev header.b="NhjXIQ2b"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZaWk2fyB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from forward501d.mail.yandex.net (forward501d.mail.yandex.net [178.154.239.209])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D98E14A3C;
-	Sat, 28 Jun 2025 10:30:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.209
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 858301C6FE1;
+	Sat, 28 Jun 2025 10:59:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751106633; cv=none; b=RKl2tAc7KTHxv4VxYBVNWAifr7IytNmoX/7mhd1XyKfU4t/jnyXwhKein0kbsxeR3IBHDZsxp+75wM+HYXP8qz4281hpobnIU/I7rNd9SGM1RbTn0WjLRw7L12nE/Kf1uC9Ai8Li2EEGrlUFRUzxBPd5rJKTqSM+QdQV2KLv3rg=
+	t=1751108397; cv=none; b=dIrOs9ZB0hm8Gp95zujZrWiFlOzuVvFcv+MIdC1iq07QPWdvUIhsTOGAliyqH010nk0Iq/N2AFQajlqwKElsbI+BV0RRkTfmYz197IyohYn4Cw8R0BT+w8NbBbVKeqIi5NjM76qgcyi5rlYO7PKli2Rj0FV50TIaOUIbW8FPjx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751106633; c=relaxed/simple;
-	bh=uQhRKDxK2mabMgCqoieFovOw4kdCdDL7hqMmNvBVq1w=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hESvwOd4OC7h5GNXqJpXC82a+G+NE9IGAI7wrACh7XKAsPNwvsIpKEIPOcWPfGEICJF84rmONNhCFJjHSBYXMVg2jkp9yD0GfMjhTgZdbsKnAS8pYoAyTD4vahR0QIsRZK+1qqhLEojF/OKnsX9/ICJwb9QrLYtVwMnMvo8il2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=onurozkan.dev; spf=pass smtp.mailfrom=onurozkan.dev; dkim=pass (1024-bit key) header.d=onurozkan.dev header.i=@onurozkan.dev header.b=NhjXIQ2b; arc=none smtp.client-ip=178.154.239.209
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=onurozkan.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=onurozkan.dev
-Received: from mail-nwsmtp-smtp-production-main-59.klg.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-59.klg.yp-c.yandex.net [IPv6:2a02:6b8:c42:82a4:0:640:9cc1:0])
-	by forward501d.mail.yandex.net (Yandex) with ESMTPS id 847CA6140A;
-	Sat, 28 Jun 2025 13:30:21 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-59.klg.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id FUUIxAMLliE0-iaB20H8x;
-	Sat, 28 Jun 2025 13:30:20 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=onurozkan.dev;
-	s=mail; t=1751106620;
-	bh=uQhRKDxK2mabMgCqoieFovOw4kdCdDL7hqMmNvBVq1w=;
-	h=Cc:Message-ID:Subject:Date:References:To:From:In-Reply-To;
-	b=NhjXIQ2bggrzxKaYhfubQknCHqyk6QZICObr3m6HDPo2sRSdLba6UHytf1es05UqC
-	 CxHrGU8uV2M9ExsJ+PPeniwqeZ9iHt0rKjI+3C58JHDfFrRDXFkRDW3zhEaLLqE2sU
-	 443MrhPJZzvVknbVSGMghG2CUeD4qzdzSWgpkJQE=
-Authentication-Results: mail-nwsmtp-smtp-production-main-59.klg.yp-c.yandex.net; dkim=pass header.i=@onurozkan.dev
-Date: Sat, 28 Jun 2025 13:30:13 +0300
-From: Onur <work@onurozkan.dev>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com, airlied@gmail.com, simona@ffwll.ch,
- ojeda@kernel.org, alex.gaynor@gmail.com, boqun.feng@gmail.com,
- gary@garyguo.net, bjorn3_gh@protonmail.com, lossin@kernel.org,
- a.hindborg@kernel.org, aliceryhl@google.com, tmgross@umich.edu,
- rafael@kernel.org, viresh.kumar@linaro.org, gregkh@linuxfoundation.org,
- maarten.lankhorst@linux.intel.com, mripard@kernel.org, tzimmermann@suse.de,
- davidgow@google.com, nm@ti.com
-Subject: Re: [PATCH v3 3/3] rust: remove
- `#[allow(clippy::non_send_fields_in_send_ty)]`
-Message-ID: <20250628133013.703461c8@nimda.home>
-In-Reply-To: <CANiq72kjdj4KbDhfnTbm8jZpLC1+WPB3E6M8D8M2NLnphMs5vg@mail.gmail.com>
-References: <20250628040956.2181-1-work@onurozkan.dev>
-	<20250628040956.2181-4-work@onurozkan.dev>
-	<CANiq72kjdj4KbDhfnTbm8jZpLC1+WPB3E6M8D8M2NLnphMs5vg@mail.gmail.com>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-unknown-linux-gnu)
+	s=arc-20240116; t=1751108397; c=relaxed/simple;
+	bh=PyS8+QY/Xp3+/7gWrQEE7t6DJx4VoFwvrUEY7A9l/GI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HJhVWQxXHYo99cmXF8t0M7OKgtXp0sg3kdSRXvFk5vTdLntzn3qlH/rPCwAs8OJrDol/bucY0s1xQk9+9J1pumePUtA3w/10Yi9DAPTC87GNUKhRXVGiUXeArKiS2jYddlkUuC+B6aURslj7i6sxDkwsTdE0cwHDeeCkmoOrUFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZaWk2fyB; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751108395; x=1782644395;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PyS8+QY/Xp3+/7gWrQEE7t6DJx4VoFwvrUEY7A9l/GI=;
+  b=ZaWk2fyBkeOAE1nNiiSUVUUqSiHgTg86oK+fsRhxKnHwPDlQwASk9Rms
+   JnXfTpJK6n1Oz5VD4csBoXX7crawzKlJjBedv4W4hWu5cmEtNCp2UzlTt
+   BlsWNw/gXyRnAj8CtPbYE78rT0yNpKDb1c5hfRxgpvaNlqZl7e7v89Qj/
+   58QvL7eg7tZ+c7Zlvw7cEdcvJ4RKn4/veBzWvbIm3aoVw+4peW4n1OD7h
+   oaZNFu8xxAwSitc2ppbp7VqVwV8w1EJg9p9rN55FMpSztNeLW9YHMcnZk
+   0PQ0Cna9z8B/ANIhuQ5W4Bykn4BP/AGZIsPYtfsDd7nt31ivik9zbDHzu
+   A==;
+X-CSE-ConnectionGUID: 43P9aotRSZCQ11IvybAtbw==
+X-CSE-MsgGUID: h+ZrgN41S12QaUp5voNOQA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11477"; a="57084628"
+X-IronPort-AV: E=Sophos;i="6.16,272,1744095600"; 
+   d="scan'208";a="57084628"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2025 03:59:54 -0700
+X-CSE-ConnectionGUID: Xskm3iphRuGr/JSLtxvKCg==
+X-CSE-MsgGUID: FzYXCsYPR720uxl4LGMD/w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,272,1744095600"; 
+   d="scan'208";a="152750678"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 28 Jun 2025 03:59:50 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uVTHf-000Wzi-1z;
+	Sat, 28 Jun 2025 10:59:47 +0000
+Date: Sat, 28 Jun 2025 18:59:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tiffany Yang <ynaffit@google.com>, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	keescook@google.com, kernel-team@android.com,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
+	Todd Kjos <tkjos@android.com>, Martijn Coenen <maco@android.com>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Carlos Llamas <cmllamas@google.com>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Subject: Re: [PATCH 4/5] binder: Convert binder_alloc selftests to KUnit
+Message-ID: <202506281837.hReNHJjO-lkp@intel.com>
+References: <20250627203748.881022-5-ynaffit@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250627203748.881022-5-ynaffit@google.com>
 
-On Sat, 28 Jun 2025 09:13:50 +0200
-Miguel Ojeda <miguel.ojeda.sandonis@gmail.com> wrote:
+Hi Tiffany,
 
-> On Sat, Jun 28, 2025 at 6:10=E2=80=AFAM Onur =C3=96zkan <work@onurozkan.d=
-ev> wrote:
-> >
-> > Clippy no longer complains about this lint.
->=20
-> Do you have more context? For instance, do you know since when it no
-> longer complains, or why was the reason for the change? i.e. why we
-> had the `allow` in the first place, so that we know we don't need it
-> anymore?
->=20
-> For instance, please how I reasoned about it in commit 5e7c9b84ad08
-> ("rust: sync: remove unneeded
-> `#[allow(clippy::non_send_fields_in_send_ty)]`").
->=20
-> (It may happen to be the same reason, or not.)
->=20
-> Thanks!
->=20
-> Cheers,
-> Miguel
+kernel test robot noticed the following build warnings:
 
-It doesn't seem to be the same reason. I rebased over
-c6af9a1191d042839e56abff69e8b0302d117988 (the exact commit where that
-lint was added) but still Clippy did not complain about it on the
-MSRV. So it was either a leftover, or there is a version between
-1.78 and the current stable where Clippy did complain. I can dig into it
-more during the week if you would like.
+[auto build test WARNING on staging/staging-testing]
+[also build test WARNING on staging/staging-next staging/staging-linus shuah-kselftest/kunit shuah-kselftest/kunit-fixes linus/master v6.16-rc3 next-20250627]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-IMO, we should require people to add a comment explaining the reason
-for adding these lint rules to the codebase. It would make both reading
-and modifying the code much simpler and clearer.
+url:    https://github.com/intel-lab-lkp/linux/commits/Tiffany-Yang/binder-Fix-selftest-page-indexing/20250628-044044
+base:   staging/staging-testing
+patch link:    https://lore.kernel.org/r/20250627203748.881022-5-ynaffit%40google.com
+patch subject: [PATCH 4/5] binder: Convert binder_alloc selftests to KUnit
+config: x86_64-buildonly-randconfig-002-20250628 (https://download.01.org/0day-ci/archive/20250628/202506281837.hReNHJjO-lkp@intel.com/config)
+compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250628/202506281837.hReNHJjO-lkp@intel.com/reproduce)
 
-Regards,
-Onur
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506281837.hReNHJjO-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> Warning: drivers/android/tests/binder_alloc_kunit.c:326 function parameter 'test' not described in 'binder_alloc_exhaustive_test'
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
