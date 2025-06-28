@@ -1,50 +1,51 @@
-Return-Path: <linux-kselftest+bounces-36044-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36045-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9EA4EAEC745
-	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 15:00:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28B81AEC748
+	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 15:03:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C0466E2D4B
-	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 12:59:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4FC6317C583
+	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 13:03:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D100D19ABB6;
-	Sat, 28 Jun 2025 13:00:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8421C19DFA2;
+	Sat, 28 Jun 2025 13:03:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="B0DG5Dwi"
+	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="zFRYrxu0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx-rz-1.rrze.uni-erlangen.de (mx-rz-1.rrze.uni-erlangen.de [131.188.11.20])
+Received: from mx-rz-2.rrze.uni-erlangen.de (mx-rz-2.rrze.uni-erlangen.de [131.188.11.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9C6724A063;
-	Sat, 28 Jun 2025 13:00:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.188.11.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12D032AEF5;
+	Sat, 28 Jun 2025 13:03:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.188.11.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751115612; cv=none; b=ff/chGf8btSQ+Cq3cE3SdaOvu3X724l/3WpVk+VeGigBqfPVnt1FC984d3j2Zk/7BHLZSmE1V602o9r7vtf3gaQ/DH+5qOCyOTJtlGmi/6C/mekmREOTU4uKTjtxCjoaKyIcyr46cLUrEQDIH1F+/6xSXJJ+t1ajCIhjKZkDGqM=
+	t=1751115807; cv=none; b=j1fA5jsqUaesFXEn3uOxBUyw8o6YImLHYExu5ql02fLIKtmJ4fRUNrDaRqAibk17kjQ+uKTXZV2NIkXVMY15ehkB7DEXBECD51evsUr159tvOgegTsQ2qK5CP7kBrYZyTk/YWnr9b4eceyzaPux1Zuerjvbcwkv0Oau6eWJfv1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751115612; c=relaxed/simple;
-	bh=cQqh4d0YAJXtJthh04L/xkoB8b8oBejLppRDkrOGXJI=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=rzyytlKXLX4WGZMikA+PkLSTntK+hHmRMXjuYcoYMWPHKdeKVGoNhGfOhpPdmPQiLO2VqH4oOtxvVIdW2UENLZ9o4meOmtv1DFvzD0IcPE5Hi0q5laobPn4nVmYyPEXFimJ+2qd63QQyglcsn1nww5nY3cPpY3odRi7Lws0yVIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=B0DG5Dwi; arc=none smtp.client-ip=131.188.11.20
+	s=arc-20240116; t=1751115807; c=relaxed/simple;
+	bh=xyV9PrEkChx8Zuhp0VYoI5m8qmN9njhEZzvsANRN3XQ=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=YvZGTFDbHSVHLKbv04rW0UyCVcfvK3tffISxXmW6k1d7ywNggQBbLUXSyIeYONdtlmDxp8Ej3na2YN34YkNV2FyeTfAl164Xt8KbXhUZiHNSWNmHqY2iSir6AIMcSGAPuMgay6ifGcSoVKT1BOQoHH7EYxKwXwxk3NpgbwWUPRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=zFRYrxu0; arc=none smtp.client-ip=131.188.11.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fau.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fau.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fau.de; s=fau-2021;
-	t=1751115600; bh=oB81lEB+hjj+fyMybBi5rWn/3uMgT2vikvW1lNSLCfM=;
-	h=From:To:Subject:Date:From:To:CC:Subject;
-	b=B0DG5DwiWW6IzKjXOU/VLqjnDOR75cUPQPo2YZbVbW2SlnUjRAwRxgSFu9/5VL9V/
-	 GGW9bpqigjTW4bM4hAwW/ulhmeE4XmsVS+h+kaHBdAEHKHNbUFxjKA6IVRo99sYFQN
-	 KtRKJxP68UqfUA1OykPppjLDOltxie6RdhTXaQnEDsUrCt/Y6jdbNlMbarDhsHtjKs
-	 KWD+bAlFjecYzfyuTVzlfnAt6E+pDMik0pxY1sTXphmIlRNhC1vct2vzg4Cgnb7TyV
-	 qDARnGg6TK9Don4lfDR5H6iWYxVqHhNZ4TnUirYbjWekOrysTGgrdUyudGyJH47mqL
-	 MgipuZ21+3DKw==
+	t=1751115796; bh=7NT6u0farQjC6MtkYhEsEhxf1wp4bjNnhfZ4WdJV7e0=;
+	h=From:To:Subject:Date:In-Reply-To:References:From:To:CC:Subject;
+	b=zFRYrxu0qJD5hDEou0Uvs4DniXrN4mfFHJfY0UvCRJGi+MTjuXuoudNHxQ8RCsDan
+	 PAIbdqUrh+Y3/aU6RCzZn4RNKDJxkYvz3asJ5M+c9KkBnN/9nmCXdDUV7Sr0+oHcy+
+	 gGJksaBQwlTOJsARnL+9N01yk3oSUO0rh6KAPXoqwyF0P4dOqVfqKE2Lt13IIX591l
+	 ef95VNKGPHoeoP11ZX/QrPUh5hNBVEUIaeYdQU1sXc+yOPoeYpIezE8G/1USb0xMAg
+	 J8FRGD6QzA7xh7cmnoTcZ08fGKhC1ZVOLh+QEfmaE+hZgnBtCgJ9W/1ggUgJjOo0Zf
+	 pki9QidWk273w==
 Received: from mx-rz-smart.rrze.uni-erlangen.de (mx-rz-smart.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1e])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-rz-1.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4bTsw05857z8sjY;
-	Sat, 28 Jun 2025 15:00:00 +0200 (CEST)
+	by mx-rz-2.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4bTszm3Qk0zPkDR;
+	Sat, 28 Jun 2025 15:03:16 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at boeck2.rrze.uni-erlangen.de (RRZE)
 X-RRZE-Flag: Not-Spam
 X-RRZE-Submit-IP: 2001:9e8:3601:f400:3a2b:2f7e:18b0:5ef9
@@ -52,9 +53,9 @@ Received: from luis-tp.fritz.box (unknown [IPv6:2001:9e8:3601:f400:3a2b:2f7e:18b
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	(Authenticated sender: U2FsdGVkX1+c2pGUPmdXo6K7E8lEWtTa9cm2lpFP5B4=)
-	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4bTsvx3TV4z8v9h;
-	Sat, 28 Jun 2025 14:59:57 +0200 (CEST)
+	(Authenticated sender: U2FsdGVkX1+xrBe4l3F5XgNMbSaI1SfgkghV8rNGL5Y=)
+	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4bTszj1KjgzPkbn;
+	Sat, 28 Jun 2025 15:03:13 +0200 (CEST)
 From: Luis Gerhorst <luis.gerhorst@fau.de>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -81,10 +82,12 @@ To: Andrii Nakryiko <andrii@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Paul Chaignon <paul.chaignon@gmail.com>
-Subject: [PATCH bpf-next 0/3] bpf: Fix and test aux usage after do_check_insn()
-Date: Sat, 28 Jun 2025 14:59:24 +0200
-Message-ID: <20250628125927.763088-1-luis.gerhorst@fau.de>
+Subject: [PATCH bpf-next 1/3] bpf: Update env->prev_insn_idx after do_check_insn()
+Date: Sat, 28 Jun 2025 14:59:25 +0200
+Message-ID: <20250628125927.763088-2-luis.gerhorst@fau.de>
 X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250628125927.763088-1-luis.gerhorst@fau.de>
+References: <20250628125927.763088-1-luis.gerhorst@fau.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -93,47 +96,76 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Fix cur_aux()->nospec_result test after do_check_insn() referring to the
-to-be-analyzed (potentially unsafe) instruction, not the
-already-analyzed (safe) instruction. This might allow a unsafe insn to
-slip through on a speculative path. Create some tests from the
-reproducer [1].
+To introduce prev_aux(env), env->prev_insn_idx must be up-to-date
+directly after do_check_insn(). To achieve this, replace prev_insn_idx
+with a tmp variable (to discourage use) and update env->prev_insn_idx
+directly after do_check_insn().
 
-Commit d6f1c85f2253 ("bpf: Fall back to nospec for Spectre v1") should
-not be in any stable kernel yet, therefore bpf-next should suffice.
+A concern would be that some code relied on env->prev_insn_idx still
+having the old value between do_check_insn() and the old
+update-assignment. However, outside the do_check() function it is only
+used through push_jmp_history()/do_check_insn()/is_state_visisted()
+which are not called in-between the old and new assignment location.
+This can also be seen from the -O0 call graph for push_jmp_history()
+[1].
 
-[1] https://lore.kernel.org/bpf/685b3c1b.050a0220.2303ee.0010.GAE@google.com/
+[1] https://sys.cs.fau.de/extern/person/gerhorst/25-06_d69baf_push_jmp_history_O0_callgraph.png
 
-Changes since RFC:
-- Introduce prev_aux() as suggested by Alexei. For this, we must move
-  the env->prev_insn_idx assignment to happen directly after
-  do_check_insn(), for which I have created a separate commit. This
-  patch could be simplified by using a local prev_aux variable as
-  sugested by Eduard, but I figured one might find the new
-  assignment-strategy easier to understand (before, prev_insn_idx and
-  env->prev_insn_idx were out-of-sync for the latter part of the loop).
-  Also, like this we do not have an additional prev_* variable that must
-  be kept in-sync and the local variable's usage (old prev_insn_idx, new
-  tmp) is much more local. If you think it would be better to not take
-  the risk and keep the fix simple by just introducing the prev_aux
-  variable, let me know.
-- Change WARN_ON_ONCE() to verifier_bug_if() as suggested by Alexei
-- Change assertion to check instruction is BPF_JMP[32] as suggested by
-  Eduard
-- RFC: https://lore.kernel.org/bpf/8734bmoemx.fsf@fau.de/
+Signed-off-by: Luis Gerhorst <luis.gerhorst@fau.de>
+---
+ kernel/bpf/verifier.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Luis Gerhorst (3):
-  bpf: Update env->prev_insn_idx after do_check_insn()
-  bpf: Fix aux usage after do_check_insn()
-  selftests/bpf: Add Spectre v4 tests
-
- kernel/bpf/verifier.c                         |  30 ++--
- tools/testing/selftests/bpf/progs/bpf_misc.h  |   4 +
- .../selftests/bpf/progs/verifier_unpriv.c     | 149 ++++++++++++++++++
- 3 files changed, 174 insertions(+), 9 deletions(-)
-
-
-base-commit: d69bafe6ee2b5eff6099fa26626ecc2963f0f363
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index f403524bd215..3b24055117bc 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -19854,16 +19854,15 @@ static int do_check(struct bpf_verifier_env *env)
+ 	struct bpf_insn *insns = env->prog->insnsi;
+ 	int insn_cnt = env->prog->len;
+ 	bool do_print_state = false;
+-	int prev_insn_idx = -1;
+ 
++	env->prev_insn_idx = -1;
+ 	for (;;) {
+ 		struct bpf_insn *insn;
+-		int err;
++		int err, tmp;
+ 
+ 		/* reset current history entry on each new instruction */
+ 		env->cur_hist_ent = NULL;
+ 
+-		env->prev_insn_idx = prev_insn_idx;
+ 		if (env->insn_idx >= insn_cnt) {
+ 			verbose(env, "invalid insn idx %d insn_cnt %d\n",
+ 				env->insn_idx, insn_cnt);
+@@ -19942,7 +19941,6 @@ static int do_check(struct bpf_verifier_env *env)
+ 		}
+ 
+ 		sanitize_mark_insn_seen(env);
+-		prev_insn_idx = env->insn_idx;
+ 
+ 		/* Reduce verification complexity by stopping speculative path
+ 		 * verification when a nospec is encountered.
+@@ -19950,7 +19948,9 @@ static int do_check(struct bpf_verifier_env *env)
+ 		if (state->speculative && cur_aux(env)->nospec)
+ 			goto process_bpf_exit;
+ 
++		tmp = env->insn_idx;
+ 		err = do_check_insn(env, &do_print_state);
++		env->prev_insn_idx = tmp;
+ 		if (error_recoverable_with_nospec(err) && state->speculative) {
+ 			/* Prevent this speculative path from ever reaching the
+ 			 * insn that would have been unsafe to execute.
+@@ -19984,7 +19984,7 @@ static int do_check(struct bpf_verifier_env *env)
+ 			err = update_branch_counts(env, env->cur_state);
+ 			if (err)
+ 				return err;
+-			err = pop_stack(env, &prev_insn_idx, &env->insn_idx,
++			err = pop_stack(env, &env->prev_insn_idx, &env->insn_idx,
+ 					pop_log);
+ 			if (err < 0) {
+ 				if (err != -ENOENT)
 -- 
 2.49.0
 
