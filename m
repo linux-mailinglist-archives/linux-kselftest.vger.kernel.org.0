@@ -1,73 +1,73 @@
-Return-Path: <linux-kselftest+bounces-36031-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36032-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EEC0AEC5E6
-	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 10:45:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EADFAEC611
+	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 11:10:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1FB5B1BC37C3
-	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 08:45:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6FDD717F961
+	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 09:10:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B112C22577D;
-	Sat, 28 Jun 2025 08:45:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE994224AF7;
+	Sat, 28 Jun 2025 09:10:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="B08+/v2f"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iyYtXU0D"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA38E221725
-	for <linux-kselftest@vger.kernel.org>; Sat, 28 Jun 2025 08:45:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FB911EDA3C;
+	Sat, 28 Jun 2025 09:10:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751100304; cv=none; b=okKyvRtQG7m/3NJOmykmryQvH9JJSBcm4ggtw5JCH2SjZsPOgxvHhDpGlLX0eDR9UvBuJxtOtOW8k+uarNwrdumL1NCRoKWpSXF/lV1HaSrvwcG6Hp4xxIy89az7eL7lZ08LdY62GhyvMzSEUzoPhpc00aptrQ0Aai2R8kfjBQ0=
+	t=1751101812; cv=none; b=WOuFTKwx0YWZoDgUapIqXI4qNWlc9hIgiH6yZcCcSl1TKopJkrEpb0yvNQyj35m4kA0fHKXxf0e3AN4bT+jq+UDuh/IBDOQnBduUcimxHU/D4MDkuHGdF3azZ1U8PsDunP3/wMevgf0kAcGHB8qxsxHnGj1EZrqsBgbbecqat1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751100304; c=relaxed/simple;
-	bh=f3o9OoZUEbBDeBbUxOB3GnLGKqZpAG8HFhx3v3nlo/s=;
+	s=arc-20240116; t=1751101812; c=relaxed/simple;
+	bh=LKhb5YM9QO3TGejJNvRHxeALdyLIxKEE/eOariXAOVA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZC8vKCOl7ahsrpFqAQN1PryDSPecAyEwXtVArU3PbGeE8O2DugqXj/BQRMHB7f3pnCvWo0wYfqM1Ky1DjxFwYFKGF62CPV1Yt/+fza2csa6un7N5YYr0WhK9TBEt3qJKRsYHqof60VTFe5lszm4bRFB3f50CQlf2VVcdpy44fWk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=B08+/v2f; arc=none smtp.client-ip=209.85.160.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-4a43972dcd7so7879511cf.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 28 Jun 2025 01:45:01 -0700 (PDT)
+	 To:Cc:Content-Type; b=VmS1svkKhKDPtFean5uG9JdfOa4bPNq2bE4658uEWPdzgIxjE+jEKrNxgh4tEGesuonmazXcsBj4ysoKXyfOhWWKb7/AXeNac0LHo5jhn0d7vjhj9FCRE+whDAWMwS4jys4YBl15YrbdmsQBQxklCD/iJrFKQxTKaPTMwhYcpdo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iyYtXU0D; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-ae361e8ec32so211514666b.3;
+        Sat, 28 Jun 2025 02:10:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1751100301; x=1751705101; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1751101809; x=1751706609; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/nmnfrusCNXdjpYHJ43O4MY52XtsNNDAe7B32gXZR/A=;
-        b=B08+/v2fGg+9DMi96O5lWHnkIwL9hBfG/wZVW11A3dfylVQAL7PBgRCbPFXewsYolW
-         TBOPcyswj4KZIA3xmvaUE3mScm81a1s1Xg3IkUvcShQSgi10WLhImnOKPbKQP+0c9kN+
-         NA/19wHB6OkvJYnmEH1Olmu3rsHPSbCsOxJ2dYdPWM8IO9p3NLF6phfpO1TjYKiR9qlz
-         Gf6JBgLNnYVnsO1okmSa9xLVtEOOG4yMg/tn7QMq2oixJch0oRuiagCEDZEuvLUW5NbU
-         8Ik5rbUzyAbfojkRH2WYm+HS8X6Zq8+dWOr36Gslq5o8wuN4aPC8wZNS9xW0OVoTo9W+
-         zQxg==
+        bh=eEHPoLzs6KMhxMJaJoJ20bFAcQbB2rDrdd+idOQqY/M=;
+        b=iyYtXU0DO9X4bkU9a4YDoDB8d1Fp/FUzKu+syXdhMc/jbqBcLlsstot6SRS8kWBAwL
+         VLQCNKnHtrPLxUhzzozjA7fGCkYhKtiWBeg7f2zu76q0ViP761hrISOPCEm6AiaTktC+
+         sJbCZEpPwysHzl3S7klLrXAOCeE4W9PzMdJIfCei6cg7eH+VUw+2JlOle5yMw13UIvsH
+         3UZUGBIX8i+FFcI37j5jr9NG82DSjJeL1+WBDbj6bee1QFDFK7/pELWEVMtkbvk6mPxK
+         lSjeDkgg5hiE2zTT2awpmUvwoLOf7XFWoJlC5iPHX0Wikyc3PFaV7/tgwrVhKzA01P/5
+         qalQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751100301; x=1751705101;
+        d=1e100.net; s=20230601; t=1751101809; x=1751706609;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/nmnfrusCNXdjpYHJ43O4MY52XtsNNDAe7B32gXZR/A=;
-        b=jlX1qv2ONUHOMcaFB5EG8ztwxyB4EXfbGw0OwWGHA1hfXf/CmjcBh9RLzRafdCYLXw
-         UvqQJNTR0mENEWk1BqLanCZBUZPHBVA4gie9W0znuNkoj3s0SngmiGRd4sgwSMFsi4kK
-         h+FNLMcQJHuFajF4S8u5nBjdwusbPeiKSOnTT92h87U0TE5DB01MZHXwtvwxzxKZklJ2
-         r6igbzm7WullwMh8tGMBP98psDuZzNnyy4SM9nOR3v/3uzTgdXIYTZ4f+Li6B/GCi3u3
-         OiuAINLWI/iVLHcNYJGD38Fjy30u9B58rZBf/bdIFVyPb2oyOH4kUKTCs6prHuG3pJ9Y
-         iOsg==
-X-Forwarded-Encrypted: i=1; AJvYcCVYE7C+jxPY9fqDaWjS6jnzdVl/di61ZwypUscYlQVNgQaqxqia/kE3cYC7ikEfyGEA/4VMSEZzYVxZrfb96pY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YznlumXp1CFWW7JwHWaZfHd869krzik/cxWXiq6+kvNHa50ikTg
-	zYQRdo8gzR5tQmDD94M8nGX7lveVuJAFng/YmRmSUSSDr+TiLfVJF5guZe/gaX2JqdG43JY/eVH
-	hL6w1+Bt39WE7KaI3J2VIUp6MRwBE9+CAib/WVzUd
-X-Gm-Gg: ASbGncuyVWDyZLOZi6T0JLFnlTneyfcNAPnd57ASRZ5PuJNjmQXrQEZ7c2Vc0Exdzhg
-	tzVaum/FSB8FhCtCtK/qXsfNENpFlDoYrn0l+HfTvrJdPLjKlgFY6Q3aUG6DD5tD9q6rCDl0wm5
-	Sqz6+oGIC0lcOpnXO8iTQbd+d9iTCuJbVsNtsCy4ZGnrED
-X-Google-Smtp-Source: AGHT+IEOmVnyFajIJ8a0GhgPX2/JYD/n70Gv15+Urivpy9ZmnV3HQI05bvkqKXfOyYfw16w5ldtEaRL1UFR0A99MQpw=
-X-Received: by 2002:a05:622a:1a27:b0:494:993d:ec2f with SMTP id
- d75a77b69052e-4a7fcab93bcmr96209851cf.12.1751100300350; Sat, 28 Jun 2025
- 01:45:00 -0700 (PDT)
+        bh=eEHPoLzs6KMhxMJaJoJ20bFAcQbB2rDrdd+idOQqY/M=;
+        b=cIayN/RWFx3r8ENY3daqqJcDscKj/5TKfytrk4NULUQCCbfOsh/xhM3mjYmobfPpxQ
+         KXFEBZDXMjI/PJqVuAZ+S+1V5/ulUU2om6eJEM8gkpUQOX6MOsOJaGtGTRWhoAcRJjnM
+         YNqHyY89+GjqJ2p4TpqQ5WJz6sTbnzyo4sjOKYCzcEuaCsF6EBRKF2ujyGoPSwTLf83j
+         f4jU+rijWoYHGEwgpvWR0iAqJJnE+UMkCdYSnjEaG4nYtDEzfQlcpMNTug8qVbuOwq3J
+         Y8YWSndyReUx7Vm0t3ZluaMfyxfJnioMCYfsvYtUlA7+heOAaKtP7l/8ot5aV5ei+fq6
+         sxrg==
+X-Forwarded-Encrypted: i=1; AJvYcCUu/zlGa+FCcVvyb/FoSLYCIt0qazIfUVLR8egVL2SRktLNAZZjao8MXqFPbdZQeMlEVjTnLIVvYFL6GWc=@vger.kernel.org, AJvYcCVKuOa7Gx/a+vbGfoHjcus5FQkuSNcWJY/NBwaQG86OHLUGNQuQiNtidE/XbWnMBEoz+Khoxf1xrHARPnDm1T/6@vger.kernel.org, AJvYcCWCqjZHj9pn5FgWi578NrCBktOFaKrLALoPMVX8CY+RN+F+PTFzAh3Cea4/qh/dWTjmJdI2VBmK@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzon1NTEM535Kx2FCVhav8B7qi+jSBlO/gDf67Vs2nOOHWn9dJa
+	k3Dz3LfSb8d125Yh6g+HSOti/1wAobOOp5ypDR/YdMTAJ6DxZUgS9MPpGSU4X0ZDxBb8aD0jTZy
+	XrCu4Jnj9+KvI/7m4+1UaDHtLNAjh4RtMjG3Yqc8=
+X-Gm-Gg: ASbGnctWkpgoimUGeT85BMU4nZRX2F31+OlaCWIndSuubi/WUwnvPBEch5XXCnEYYt6
+	Xq1qmq07XGeJTTnjDJkEI7R4xffSRG3y9UBJ/VbkNtEU3MOEBQDuiEU24YhxjDHKasfaSgcG1pZ
+	8a6Xf0NSuQhJpKmfSQD0wEJOkNX85+YOjfrfOObTWbrU7Cfw==
+X-Google-Smtp-Source: AGHT+IEDK5Fe2UcoKbA9nlA8sV8V339+TMPazLs3l3+Ro56k1U+VATna31dBqLeNouv7HbHfgb8gugQJfcqr7VdMJP4=
+X-Received: by 2002:a17:907:94c4:b0:ae0:a483:7b29 with SMTP id
+ a640c23a62f3a-ae350192135mr551229966b.49.1751101809169; Sat, 28 Jun 2025
+ 02:10:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -75,13 +75,14 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20250626083512.GT1562@horms.kernel.org> <20250628081918.523857-1-malayarout91@gmail.com>
-In-Reply-To: <20250628081918.523857-1-malayarout91@gmail.com>
-From: Eric Dumazet <edumazet@google.com>
-Date: Sat, 28 Jun 2025 01:44:49 -0700
-X-Gm-Features: Ac12FXx7HbqsaSi67Ecn8j0W_HA9gHLw_rRrRWO3BQVTSD-WwmLZmje0U1gXKqQ
-Message-ID: <CANn89iJUz2EXu_h-YbiNswixHo6z1EwcmQrfSk6o-MmBznWfWA@mail.gmail.com>
+ <CANn89iJUz2EXu_h-YbiNswixHo6z1EwcmQrfSk6o-MmBznWfWA@mail.gmail.com>
+In-Reply-To: <CANn89iJUz2EXu_h-YbiNswixHo6z1EwcmQrfSk6o-MmBznWfWA@mail.gmail.com>
+From: malaya kumar rout <malayarout91@gmail.com>
+Date: Sat, 28 Jun 2025 14:39:57 +0530
+X-Gm-Features: Ac12FXwXbpJLEZDHIn737zf3EnCP1LtBDwjYB6L9cIZwam4QZtP2xbJ1HElGugY
+Message-ID: <CAE2+fR_eG=eY+N9nE=Eh6Lip4nwWir2dRQq8Z-adOme3JNe06Q@mail.gmail.com>
 Subject: Re: [PATCH v2] selftests: net: fix resource leak in napi_id_helper.c
-To: Malaya Kumar Rout <malayarout91@gmail.com>
+To: Eric Dumazet <edumazet@google.com>
 Cc: horms@kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>, 
 	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
 	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
@@ -89,45 +90,53 @@ Cc: horms@kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jun 28, 2025 at 1:19=E2=80=AFAM Malaya Kumar Rout
-<malayarout91@gmail.com> wrote:
+On Sat, Jun 28, 2025 at 2:15=E2=80=AFPM Eric Dumazet <edumazet@google.com> =
+wrote:
 >
-> Resolve minor resource leaks reported by cppcheck in napi_id_helper.c
+> On Sat, Jun 28, 2025 at 1:19=E2=80=AFAM Malaya Kumar Rout
+> <malayarout91@gmail.com> wrote:
+> >
+> > Resolve minor resource leaks reported by cppcheck in napi_id_helper.c
+> >
+> > cppcheck output before this patch:
+> > tools/testing/selftests/drivers/net/napi_id_helper.c:37:3: error: Resou=
+rce leak: server [resourceLeak]
+> > tools/testing/selftests/drivers/net/napi_id_helper.c:46:3: error: Resou=
+rce leak: server [resourceLeak]
+> > tools/testing/selftests/drivers/net/napi_id_helper.c:51:3: error: Resou=
+rce leak: server [resourceLeak]
+> > tools/testing/selftests/drivers/net/napi_id_helper.c:59:3: error: Resou=
+rce leak: server [resourceLeak]
+> > tools/testing/selftests/drivers/net/napi_id_helper.c:67:3: error: Resou=
+rce leak: server [resourceLeak]
+> > tools/testing/selftests/drivers/net/napi_id_helper.c:76:3: error: Resou=
+rce leak: server [resourceLeak]
+> >
+> > cppcheck output after this patch:
+> > No resource leaks found
+> >
+> > Signed-off-by: Malaya Kumar Rout <malayarout91@gmail.com>
+> > ---
+> >  .../selftests/drivers/net/napi_id_helper.c    | 19 +++++++++++++------
+> >  1 file changed, 13 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/drivers/net/napi_id_helper.c b/too=
+ls/testing/selftests/drivers/net/napi_id_helper.c
+> > index eecd610c2109..47dd3291bd55 100644
+> > --- a/tools/testing/selftests/drivers/net/napi_id_helper.c
+> > +++ b/tools/testing/selftests/drivers/net/napi_id_helper.c
+> > @@ -34,7 +34,7 @@ int main(int argc, char *argv[])
+> >
+> >         if (setsockopt(server, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(o=
+pt))) {
+> >                 perror("setsockopt");
+> > -               return 1;
+> > +               goto failure;
 >
-> cppcheck output before this patch:
-> tools/testing/selftests/drivers/net/napi_id_helper.c:37:3: error: Resourc=
-e leak: server [resourceLeak]
-> tools/testing/selftests/drivers/net/napi_id_helper.c:46:3: error: Resourc=
-e leak: server [resourceLeak]
-> tools/testing/selftests/drivers/net/napi_id_helper.c:51:3: error: Resourc=
-e leak: server [resourceLeak]
-> tools/testing/selftests/drivers/net/napi_id_helper.c:59:3: error: Resourc=
-e leak: server [resourceLeak]
-> tools/testing/selftests/drivers/net/napi_id_helper.c:67:3: error: Resourc=
-e leak: server [resourceLeak]
-> tools/testing/selftests/drivers/net/napi_id_helper.c:76:3: error: Resourc=
-e leak: server [resourceLeak]
->
-> cppcheck output after this patch:
-> No resource leaks found
->
-> Signed-off-by: Malaya Kumar Rout <malayarout91@gmail.com>
-> ---
->  .../selftests/drivers/net/napi_id_helper.c    | 19 +++++++++++++------
->  1 file changed, 13 insertions(+), 6 deletions(-)
->
-> diff --git a/tools/testing/selftests/drivers/net/napi_id_helper.c b/tools=
-/testing/selftests/drivers/net/napi_id_helper.c
-> index eecd610c2109..47dd3291bd55 100644
-> --- a/tools/testing/selftests/drivers/net/napi_id_helper.c
-> +++ b/tools/testing/selftests/drivers/net/napi_id_helper.c
-> @@ -34,7 +34,7 @@ int main(int argc, char *argv[])
->
->         if (setsockopt(server, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt=
-))) {
->                 perror("setsockopt");
-> -               return 1;
-> +               goto failure;
+> client variable is uninitialized at this point.
 
-client variable is uninitialized at this point.
+I sincerely appreciate your prompt review and for identifying the
+variable initialization issue. If you are agreeable to initializing
+both the server and client to -1, I will proceed to share the updated
+patch.
 
