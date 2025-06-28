@@ -1,601 +1,323 @@
-Return-Path: <linux-kselftest+bounces-36038-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36039-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8F2FAEC6C0
-	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 13:40:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E44A5AEC6CF
+	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 13:53:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9D2107A19E2
-	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 11:38:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A17F51695DA
+	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 11:53:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9078220F41;
-	Sat, 28 Jun 2025 11:40:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F31AA24167C;
+	Sat, 28 Jun 2025 11:53:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IBeSiFIf"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i+q6bJId"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D3D521C9E4;
-	Sat, 28 Jun 2025 11:40:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E168F21D3F0;
+	Sat, 28 Jun 2025 11:52:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751110804; cv=none; b=Q23b9Xwq2XDwwe5YwfMyybrrULXQCqEpNMtmH4ZKUu9D4sTnHumMP0vg1cDx+6cYEcvg3+L7Pxck4Zd3oP7xtjA5KeAuhMtswr3365vqFXTI7grRtp5bxQ5nq2nXgqjyhXqZtXm/TWAOU7rb3VPZ3btaoWei0mwnKCV/iwGDEdY=
+	t=1751111581; cv=none; b=Tjuws+akklFkOPuQ+L5xpiZAGwSepzW4/DPIgSNnzIJjH5rxy4XvG3jRnePSAu/lWw7TM44XRlSBoZ4y1vuMhQgfyhOXfIoiBv/e7OMIDH5iDk/Peb/Uf1gnTlzAlPMeevzO2lyIdUSfkABYyUhHN4bbpPfaloDi1ccZj9zdnjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751110804; c=relaxed/simple;
-	bh=7GEEpOeNMcTbPLlhzMv8Jyx7KZuUFgw5+Q4FxL0PlHw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jfNf9Pq+zgzROb0DJjMeGmrRiBJEl+3lp2CCyeP7XUEYfCnwRTZF/4g9HQIQUU0LQmYCvAos68qSACCE1kyVnLF+AEg/1AyceTYk0G/1EKhZH5iPFonqtAfmKkDY+uxBpQPICdTEYSnX4C48S8TpA3BysEbj6dptfj0aNanfUR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IBeSiFIf; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-237311f5a54so3184175ad.2;
-        Sat, 28 Jun 2025 04:40:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751110802; x=1751715602; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N6y9Dw+jgZJo4xJlbwrL/3OQAq0W5zElj1YXcefANK4=;
-        b=IBeSiFIfj+akJe5J+39kTp8CEwlS+Vjj3IJfPRUaYlD2WwGIzsqhNJ0Jptgeqb7066
-         Q3OfyWw95/Q6NwB6eCJ7DWxbQR6X4caHFOHFdGkq7m6+hDgDwCbRd3727BzAKbNb2BiT
-         KUOv+zmh6uNIey8hPw1uQ2nMB7iwhbFHpM19xrkB5Si88sC3WSKDkscfKBbDgMKSeqFZ
-         yAVNTsNO45Og+I1laKTJ0wfPHEN7aGjlMzIWUqz+7Y+2Y9mwXnujCmfTxj8oTT+5M2uD
-         tMbiS/0k+yzcOcZvVFd/O/A+Oaf4YtQ1g0AO1K5SWxE1pcX1/5ZiaIp0GONgMGmTJwTu
-         JsgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751110802; x=1751715602;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N6y9Dw+jgZJo4xJlbwrL/3OQAq0W5zElj1YXcefANK4=;
-        b=SOgCGZUEdkmtq+1XyTPwQfKCsWtaK9B1gxIwJYMTEkyBTb3sXOimH7FesiIM2pMgHg
-         ZzgpvgE4m4IT97sKOXyPmZB0T+2RwpYX3KabRlJgYMcOyI4gyQdgkCmI/41g5IHB1Jlk
-         e6IfvfvvOfy8jZVKYgFBB30A8CcJ7E0AwXrNKEoCKonxlYkPhTQIraijYwoa4/ySVep+
-         Kjt1u/JW5uXhI43lMgMgPs20wREVR0OopFFLBpd8t5ZhjqXPVvh047V3e/OqKQH2iVCy
-         zrvPIMztYHikB40TSP1xYC5hBmMhOhIlqUESWhcCxdiuhhrDBl+RiQ3QTqb7G/3jTlx8
-         581A==
-X-Forwarded-Encrypted: i=1; AJvYcCViVHfZSfVLwfGwk0mLrdAxuSW9p/vC4V6rqxQOYEUqrqliCAZCCDQv9TCfylxSgDglKklX0wUICLqbNlAAZAIQ@vger.kernel.org, AJvYcCWrcS0QEPTTa/E2q3LygySGPD195JZjyUXxYCWMoYClgxuVb5c0VRp0Lvltf6nJhZfSypeblUogLwoqNA8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+j2lfqAZ2LKZCPVkqYXFA3upnzD1JeGDpM1q9dwA3OzkkJT5f
-	nYFRwy3plCd83M2VBZUgd4wBXuKhSxgGs+192ZibAZUPqbeajbPdqYA3
-X-Gm-Gg: ASbGncuZHB7u+BUV8ItzpmQQ81y1iVJw8vOdzrcEeSlHpzndiDlXoC0ErZ9Iwvb/Lbv
-	9wZ62zmxaRA/Sfhmlrh/ND7acjBcj59qQBJ/fKynctsXrQNjjG2hQ5Jf4KWfi5WGGklrxES3a/p
-	DSVHea+863gPiIpcAcVlGbSDyfbWcbBxZbZfw4DPMy2LY5nrkv79TbyOEHhjc9MiAnYSKRZBB7p
-	+OsJxOB2YvhcV7jx5blWpHFN3UD4VRSHnfIt5oRiWFptLAgFAE/Xj+BK8ozDi+NIES9UcMzAOaG
-	1vCt9ZXT+dZO0Rb8Sn9tUbOix9qkVjYT2/xNUeQ0cCRv5tTjXki+PpvzyUnVAjxtVf6SYFDRImk
-	WDEESjq1TrtNiEQYE
-X-Google-Smtp-Source: AGHT+IG/DmUME3XbmifZP4XmUZlQ8KnKZYhZROLCSr4UX8yivfQ+99IqRK81G0jjZGl4uUqUWhK8QA==
-X-Received: by 2002:a17:903:2452:b0:235:f45f:ed41 with SMTP id d9443c01a7336-23ac3afdaadmr107838625ad.19.1751110801639;
-        Sat, 28 Jun 2025 04:40:01 -0700 (PDT)
-Received: from DESKTOP-GIED850.localdomain ([111.202.167.6])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23acb2f2239sm38710135ad.81.2025.06.28.04.39.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Jun 2025 04:40:01 -0700 (PDT)
-From: wang lian <lianux.mm@gmail.com>
-To: david@redhat.com,
-	linux-mm@kvack.org,
-	akpm@linux-foundation.org,
-	lorenzo.stoakes@oracle.com
-Cc: lianux.mm@gmail.com,
-	Liam.Howlett@oracle.com,
-	brauner@kernel.org,
-	gkwang@linx-info.com,
-	jannh@google.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	p1ucky0923@gmail.com,
-	ryncsn@gmail.com,
-	shuah@kernel.org,
-	sj@kernel.org,
-	vbabka@suse.cz,
-	zijing.zhang@proton.me
-Subject: [PATCH] selftests/mm: Add process_madvise() tests
-Date: Sat, 28 Jun 2025 19:39:45 +0800
-Message-ID: <20250628113945.145588-1-lianux.mm@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250624104654.4418-1-lianux.mm@gmail.com>
-References: <20250624104654.4418-1-lianux.mm@gmail.com>
+	s=arc-20240116; t=1751111581; c=relaxed/simple;
+	bh=h/SU3jsa28hvi5Fs3KZQKyZnmzMBWeZGmESAC1iqtnY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LNW0oeI/cH/JMeXx5/hBrEcdSck/eISEd0TzscxHXLNq2CG9Yyv01cMpXPK4ZIft6OzmFYSW+EL24rAT2rBX7RXsjIQ6cIvRFljMRnL1cf9XkZcktBz6qJhD5VBGuSMXzoPTBzqeuSNHOOK+jg9gV/K/5Ih59J9PHCICJshDuJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i+q6bJId; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751111580; x=1782647580;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=h/SU3jsa28hvi5Fs3KZQKyZnmzMBWeZGmESAC1iqtnY=;
+  b=i+q6bJIdict5YS7xSf5VL/Ii4WIreIagITp04D4CUvcgwH6QLW9piTr6
+   74/qAS50IbtpR0klxcnN8nNmoctnp4iTewF5Hsk4kFILCNVO78k0j0Go+
+   fhBtpgTPrPiKiN+tHI/VlO6m8OvAOftj6J3LDXQgJy8L1vVjHCLCKMrCX
+   o3TpZL2ZlRVmt5IP9pQz9UynLiOkWO3p8rNDoLPf0sD5oN5MGC5zE+/74
+   owvikDY1qUShaKwn+A5mZH1+xc4Id3cGGI9ZHe5XsyhrN7fuKugSzOAHT
+   DOg7B/Ob19IQfc5E00zLQZBeoIEBU4m5saE5T75x5RKt8e8TUDifh4EzW
+   A==;
+X-CSE-ConnectionGUID: 0PqdyLBGSLSwM5kqgifPEQ==
+X-CSE-MsgGUID: 6QDrJmpNSause9liPviGUg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11477"; a="64097037"
+X-IronPort-AV: E=Sophos;i="6.16,273,1744095600"; 
+   d="scan'208";a="64097037"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2025 04:52:59 -0700
+X-CSE-ConnectionGUID: S1+Ys8t7R4yIAjMP72BteA==
+X-CSE-MsgGUID: ZUr28zSaSQ+Y8n2Nb6cKtg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,273,1744095600"; 
+   d="scan'208";a="157563459"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 28 Jun 2025 04:52:55 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uVU72-000X1S-0n;
+	Sat, 28 Jun 2025 11:52:52 +0000
+Date: Sat, 28 Jun 2025 19:52:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tiffany Yang <ynaffit@google.com>, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	keescook@google.com, kernel-team@android.com,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
+	Todd Kjos <tkjos@android.com>, Martijn Coenen <maco@android.com>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Carlos Llamas <cmllamas@google.com>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Subject: Re: [PATCH 5/5] binder: encapsulate individual alloc test cases
+Message-ID: <202506281959.hfOTIUjS-lkp@intel.com>
+References: <20250627203748.881022-6-ynaffit@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250627203748.881022-6-ynaffit@google.com>
 
-This patch adds tests for the process_madvise(), focusing on
-verifying behavior under various conditions including valid
-usage and error cases.
+Hi Tiffany,
 
-Changelog v2:
-- Drop MADV_DONTNEED tests based on feedback
-- Focus solely on process_madvise() syscall
-- Improve error handling and structure
-- Add future-proof flag test
-- Style and comment cleanups
+kernel test robot noticed the following build warnings:
 
-Signed-off-by: wang lian<lianux.mm@gmail.com>
-Suggested-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Suggested-by: David Hildenbrand <david@redhat.com>
----
- tools/testing/selftests/mm/.gitignore     |   1 +
- tools/testing/selftests/mm/Makefile       |   1 +
- tools/testing/selftests/mm/process_madv.c | 414 ++++++++++++++++++++++
- tools/testing/selftests/mm/run_vmtests.sh |   5 +
- 4 files changed, 421 insertions(+)
- create mode 100644 tools/testing/selftests/mm/process_madv.c
+[auto build test WARNING on staging/staging-testing]
+[also build test WARNING on staging/staging-next staging/staging-linus shuah-kselftest/kunit shuah-kselftest/kunit-fixes linus/master v6.16-rc3 next-20250627]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
-index 911f39d634be..a8c3be02188c 100644
---- a/tools/testing/selftests/mm/.gitignore
-+++ b/tools/testing/selftests/mm/.gitignore
-@@ -42,6 +42,7 @@ memfd_secret
- hugetlb_dio
- pkey_sighandler_tests_32
- pkey_sighandler_tests_64
-+process_madv
- soft-dirty
- split_huge_page_test
- ksm_tests
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index 2352252f3914..725612e09582 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -86,6 +86,7 @@ TEST_GEN_FILES += mseal_test
- TEST_GEN_FILES += on-fault-limit
- TEST_GEN_FILES += pagemap_ioctl
- TEST_GEN_FILES += pfnmap
-+TEST_GEN_FILES += process_madv
- TEST_GEN_FILES += thuge-gen
- TEST_GEN_FILES += transhuge-stress
- TEST_GEN_FILES += uffd-stress
-diff --git a/tools/testing/selftests/mm/process_madv.c b/tools/testing/selftests/mm/process_madv.c
-new file mode 100644
-index 000000000000..73999c8e3570
---- /dev/null
-+++ b/tools/testing/selftests/mm/process_madv.c
-@@ -0,0 +1,414 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+
-+#define _GNU_SOURCE
-+#include "../kselftest_harness.h"
-+#include <errno.h>
-+#include <setjmp.h>
-+#include <signal.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/mman.h>
-+#include <sys/syscall.h>
-+#include <unistd.h>
-+#include <sched.h>
-+#include <sys/pidfd.h>
-+#include "vm_util.h"
-+
-+#include "../pidfd/pidfd.h"
-+
-+/*
-+ * Ignore the checkpatch warning, as per the C99 standard, section 7.14.1.1:
-+ *
-+ * "If the signal occurs other than as the result of calling the abort or raise
-+ *  function, the behavior is undefined if the signal handler refers to any
-+ *  object with static storage duration other than by assigning a value to an
-+ *  object declared as volatile sig_atomic_t"
-+ */
-+static volatile sig_atomic_t signal_jump_set;
-+static sigjmp_buf signal_jmp_buf;
-+
-+/*
-+ * Ignore the checkpatch warning, we must read from x but don't want to do
-+ * anything with it in order to trigger a read page fault. We therefore must use
-+ * volatile to stop the compiler from optimising this away.
-+ */
-+#define FORCE_READ(x) (*(volatile typeof(x) *)x)
-+
-+static void handle_fatal(int c)
-+{
-+	if (!signal_jump_set)
-+		return;
-+
-+	siglongjmp(signal_jmp_buf, c);
-+}
-+
-+FIXTURE(process_madvise)
-+{
-+	int pidfd;
-+	int flag;
-+};
-+
-+static void setup_sighandler(void)
-+{
-+	struct sigaction act = {
-+		.sa_handler = &handle_fatal,
-+		.sa_flags = SA_NODEFER,
-+	};
-+
-+	sigemptyset(&act.sa_mask);
-+	if (sigaction(SIGSEGV, &act, NULL))
-+		ksft_exit_fail_perror("sigaction");
-+}
-+
-+static void teardown_sighandler(void)
-+{
-+	struct sigaction act = {
-+		.sa_handler = SIG_DFL,
-+		.sa_flags = SA_NODEFER,
-+	};
-+
-+	sigemptyset(&act.sa_mask);
-+	sigaction(SIGSEGV, &act, NULL);
-+}
-+
-+FIXTURE_SETUP(process_madvise)
-+{
-+	self->pidfd = PIDFD_SELF;
-+	self->flag = 0;
-+	setup_sighandler();
-+};
-+
-+FIXTURE_TEARDOWN_PARENT(process_madvise)
-+{
-+	teardown_sighandler();
-+}
-+
-+static ssize_t sys_process_madvise(int pidfd, const struct iovec *iovec,
-+				   size_t vlen, int advice, unsigned int flags)
-+{
-+	return syscall(__NR_process_madvise, pidfd, iovec, vlen, advice, flags);
-+}
-+
-+/*
-+ * Enable our signal catcher and try to read/write the specified buffer. The
-+ * return value indicates whether the read/write succeeds without a fatal
-+ * signal.
-+ */
-+static bool try_access_buf(char *ptr, bool write)
-+{
-+	bool failed;
-+
-+	/* Tell signal handler to jump back here on fatal signal. */
-+	signal_jump_set = true;
-+	/* If a fatal signal arose, we will jump back here and failed is set. */
-+	failed = sigsetjmp(signal_jmp_buf, 0) != 0;
-+
-+	if (!failed) {
-+		if (write)
-+			*ptr = 'x';
-+		else
-+			FORCE_READ(ptr);
-+	}
-+
-+	signal_jump_set = false;
-+	return !failed;
-+}
-+
-+/* Try and read from a buffer, return true if no fatal signal. */
-+static bool try_read_buf(char *ptr)
-+{
-+	return try_access_buf(ptr, false);
-+}
-+
-+TEST_F(process_madvise, basic)
-+{
-+	const unsigned long pagesize = (unsigned long)sysconf(_SC_PAGESIZE);
-+	const int madvise_pages = 4;
-+	char *map;
-+	ssize_t ret;
-+	struct iovec vec[madvise_pages];
-+
-+	/*
-+	 * Create a single large mapping. We will pick pages from this
-+	 * mapping to advise on. This ensures we test non-contiguous iovecs.
-+	 */
-+	map = mmap(NULL, pagesize * 10, PROT_READ | PROT_WRITE,
-+		   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	ASSERT_NE(map, MAP_FAILED);
-+
-+	/* Fill the entire region with a known pattern. */
-+	memset(map, 'A', pagesize * 10);
-+
-+	/*
-+	 * Setup the iovec to point to 4 non-contiguous pages
-+	 * within the mapping.
-+	 */
-+	vec[0].iov_base = &map[0 * pagesize];
-+	vec[0].iov_len = pagesize;
-+	vec[1].iov_base = &map[3 * pagesize];
-+	vec[1].iov_len = pagesize;
-+	vec[2].iov_base = &map[5 * pagesize];
-+	vec[2].iov_len = pagesize;
-+	vec[3].iov_base = &map[8 * pagesize];
-+	vec[3].iov_len = pagesize;
-+
-+	ret = sys_process_madvise(PIDFD_SELF, vec, madvise_pages, MADV_DONTNEED,
-+				  0);
-+	if (ret == -1 && errno == EPERM)
-+		ksft_exit_skip(
-+			"process_madvise() unsupported or permission denied, try running as root.\n");
-+	else if (errno == EINVAL)
-+		ksft_exit_skip(
-+			"process_madvise() unsupported or parameter invalid, please check arguments.\n");
-+
-+	/* The call should succeed and report the total bytes processed. */
-+	ASSERT_EQ(ret, madvise_pages * pagesize);
-+
-+	/* Check that advised pages are now zero. */
-+	for (int i = 0; i < madvise_pages; i++) {
-+		char *advised_page = (char *)vec[i].iov_base;
-+
-+		/* Access should be successful (kernel provides a new page). */
-+		ASSERT_TRUE(try_read_buf(advised_page));
-+		/* Content must be 0, not 'A'. */
-+		ASSERT_EQ(*advised_page, 0);
-+	}
-+
-+	/* Check that an un-advised page in between is still 'A'. */
-+	char *unadvised_page = &map[1 * pagesize];
-+
-+	ASSERT_TRUE(try_read_buf(unadvised_page));
-+	ASSERT_EQ(*unadvised_page, 'A');
-+
-+	/* Cleanup. */
-+	ASSERT_EQ(munmap(map, pagesize * 10), 0);
-+}
-+
-+static long get_smaps_anon_huge_pages(pid_t pid, void *addr)
-+{
-+	char smaps_path[64];
-+	char *line = NULL;
-+	unsigned long start, end;
-+	long anon_huge_kb;
-+	size_t len;
-+	FILE *f;
-+	bool in_vma;
-+
-+	in_vma = false;
-+	sprintf(smaps_path, "/proc/%d/smaps", pid);
-+	f = fopen(smaps_path, "r");
-+	if (!f)
-+		return -1;
-+
-+	while (getline(&line, &len, f) != -1) {
-+		/* Check if the line describes a VMA range */
-+		if (sscanf(line, "%lx-%lx", &start, &end) == 2) {
-+			if ((unsigned long)addr >= start &&
-+			    (unsigned long)addr < end)
-+				in_vma = true;
-+			else
-+				in_vma = false;
-+			continue;
-+		}
-+
-+		/* If we are in the correct VMA, look for the AnonHugePages field */
-+		if (in_vma &&
-+		    sscanf(line, "AnonHugePages: %ld kB", &anon_huge_kb) == 1)
-+			break;
-+	}
-+
-+	free(line);
-+	fclose(f);
-+
-+	return (anon_huge_kb > 0) ? (anon_huge_kb * 1024) : 0;
-+}
-+
-+/**
-+ * TEST_F(process_madvise, remote_collapse)
-+ *
-+ * This test deterministically validates process_madvise() with MADV_COLLAPSE
-+ * on a remote process, other advices are difficult to verify reliably.
-+ *
-+ * The test verifies that a memory region in a child process, initially
-+ * backed by small pages, can be collapsed into a Transparent Huge Page by a
-+ * request from the parent. The result is verified by parsing the child's
-+ * /proc/<pid>/smaps file.
-+ */
-+TEST_F(process_madvise, remote_collapse)
-+{
-+	const unsigned long pagesize = (unsigned long)sysconf(_SC_PAGESIZE);
-+	pid_t child_pid;
-+	int pidfd;
-+	long huge_page_size;
-+	int pipe_info[2];
-+	ssize_t ret;
-+	struct iovec vec;
-+
-+	struct child_info {
-+		pid_t pid;
-+		void *map_addr;
-+	} info;
-+
-+	huge_page_size = default_huge_page_size();
-+	if (huge_page_size <= 0)
-+		ksft_exit_skip("Could not determine a valid huge page size.\n");
-+
-+	ASSERT_EQ(pipe(pipe_info), 0);
-+
-+	child_pid = fork();
-+	ASSERT_NE(child_pid, -1);
-+
-+	if (child_pid == 0) {
-+		char *map;
-+		size_t map_size = 2 * huge_page_size;
-+
-+		close(pipe_info[0]);
-+
-+		map = mmap(NULL, map_size, PROT_READ | PROT_WRITE,
-+			   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+		ASSERT_NE(map, MAP_FAILED);
-+
-+		/* Fault in as small pages */
-+		for (size_t i = 0; i < map_size; i += pagesize)
-+			map[i] = 'A';
-+
-+		/* Send info and pause */
-+		info.pid = getpid();
-+		info.map_addr = map;
-+		ret = write(pipe_info[1], &info, sizeof(info));
-+		ASSERT_EQ(ret, sizeof(info));
-+		close(pipe_info[1]);
-+
-+		pause();
-+		exit(0);
-+	}
-+
-+	close(pipe_info[1]);
-+
-+	/* Receive child info */
-+	ret = read(pipe_info[0], &info, sizeof(info));
-+	if (ret <= 0) {
-+		waitpid(child_pid, NULL, 0);
-+		ksft_exit_skip("Failed to read child info from pipe.\n");
-+	}
-+	ASSERT_EQ(ret, sizeof(info));
-+	close(pipe_info[0]);
-+	child_pid = info.pid;
-+
-+	pidfd = pidfd_open(child_pid, 0);
-+	ASSERT_GE(pidfd, 0);
-+
-+	/* Baseline Check from Parent's perspective */
-+	ASSERT_EQ(get_smaps_anon_huge_pages(child_pid, info.map_addr), 0);
-+
-+	vec.iov_base = info.map_addr;
-+	vec.iov_len = huge_page_size;
-+	ret = sys_process_madvise(pidfd, &vec, 1, MADV_COLLAPSE, 0);
-+	if (ret == -1) {
-+		if (errno == EINVAL)
-+			ksft_exit_skip(
-+				"PROCESS_MADV_ADVISE is not supported.\n");
-+		else if (errno == EPERM)
-+			ksft_exit_skip(
-+				"No process_madvise() permissions, try running as root.\n");
-+		goto cleanup;
-+	}
-+	ASSERT_EQ(ret, huge_page_size);
-+
-+	ASSERT_EQ(get_smaps_anon_huge_pages(child_pid, info.map_addr),
-+		  huge_page_size);
-+
-+	ksft_test_result_pass(
-+		"MADV_COLLAPSE successfully verified via smaps.\n");
-+
-+cleanup:
-+	/* Cleanup */
-+	kill(child_pid, SIGKILL);
-+	waitpid(child_pid, NULL, 0);
-+	if (pidfd >= 0)
-+		close(pidfd);
-+}
-+
-+/*
-+ * Test process_madvise() with various invalid pidfds to ensure correct error
-+ * handling. This includes negative fds, non-pidfd fds, and pidfds for
-+ * processes that no longer exist.
-+ */
-+TEST_F(process_madvise, invalid_pidfd)
-+{
-+	struct iovec vec;
-+	pid_t child_pid;
-+	ssize_t ret;
-+	int pidfd;
-+
-+	vec.iov_base = (void *)0x1234;
-+	vec.iov_len = 4096;
-+
-+	/* Using an invalid fd number (-1) should fail with EBADF. */
-+	ret = sys_process_madvise(-1, &vec, 1, MADV_DONTNEED, 0);
-+	ASSERT_EQ(ret, -1);
-+	ASSERT_EQ(errno, EBADF);
-+
-+	/*
-+	 * Using a valid fd that is not a pidfd (e.g. stdin) should fail
-+	 * with EBADF.
-+	 */
-+	ret = sys_process_madvise(STDIN_FILENO, &vec, 1, MADV_DONTNEED, 0);
-+	ASSERT_EQ(ret, -1);
-+	ASSERT_EQ(errno, EBADF);
-+
-+	/*
-+	 * Using a pidfd for a process that has already exited should fail
-+	 * with ESRCH.
-+	 */
-+	child_pid = fork();
-+	ASSERT_NE(child_pid, -1);
-+
-+	if (child_pid == 0)
-+		exit(0);
-+
-+	pidfd = pidfd_open(child_pid, 0);
-+	ASSERT_GE(pidfd, 0);
-+
-+	/* Wait for the child to ensure it has terminated. */
-+	waitpid(child_pid, NULL, 0);
-+
-+	ret = sys_process_madvise(pidfd, &vec, 1, MADV_DONTNEED, 0);
-+	ASSERT_EQ(ret, -1);
-+	ASSERT_EQ(errno, ESRCH);
-+	close(pidfd);
-+}
-+
-+/*
-+ * Test process_madvise() with an invalid flag value. Now we only support flag=0
-+ * future we will use it support sync so reserve this test.
-+ */
-+TEST_F(process_madvise, flag)
-+{
-+	const unsigned long pagesize = (unsigned long)sysconf(_SC_PAGESIZE);
-+	unsigned int invalid_flag;
-+	struct iovec vec;
-+	char *map;
-+	ssize_t ret;
-+
-+	map = mmap(NULL, pagesize, PROT_READ, MAP_PRIVATE | MAP_ANONYMOUS, -1,
-+		   0);
-+	ASSERT_NE(map, MAP_FAILED);
-+
-+	vec.iov_base = map;
-+	vec.iov_len = pagesize;
-+
-+	invalid_flag = 0x80000000;
-+
-+	ret = sys_process_madvise(PIDFD_SELF, &vec, 1, MADV_DONTNEED,
-+				  invalid_flag);
-+	ASSERT_EQ(ret, -1);
-+	ASSERT_EQ(errno, EINVAL);
-+
-+	/* Cleanup. */
-+	ASSERT_EQ(munmap(map, pagesize), 0);
-+}
-+
-+TEST_HARNESS_MAIN
-\ No newline at end of file
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index f96d43153fc0..5c28ebcf1ea9 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -61,6 +61,8 @@ separated by spaces:
- 	ksm tests that require >=2 NUMA nodes
- - pkey
- 	memory protection key tests
-+- process_madvise
-+	test process_madvise
- - soft_dirty
- 	test soft dirty page bit semantics
- - pagemap
-@@ -424,6 +426,9 @@ CATEGORY="hmm" run_test bash ./test_hmm.sh smoke
- # MADV_GUARD_INSTALL and MADV_GUARD_REMOVE tests
- CATEGORY="madv_guard" run_test ./guard-regions
- 
-+# PROCESS_MADVISE TEST
-+CATEGORY="process_madv" run_test ./process_madv
-+
- # MADV_DONTNEED and PROCESS_DONTNEED tests
- CATEGORY="madv_dontneed" run_test ./madv_dontneed
- 
+url:    https://github.com/intel-lab-lkp/linux/commits/Tiffany-Yang/binder-Fix-selftest-page-indexing/20250628-044044
+base:   staging/staging-testing
+patch link:    https://lore.kernel.org/r/20250627203748.881022-6-ynaffit%40google.com
+patch subject: [PATCH 5/5] binder: encapsulate individual alloc test cases
+config: i386-buildonly-randconfig-001-20250628 (https://download.01.org/0day-ci/archive/20250628/202506281959.hfOTIUjS-lkp@intel.com/config)
+compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250628/202506281959.hfOTIUjS-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506281959.hfOTIUjS-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/android/tests/binder_alloc_kunit.c:256:18: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+     255 |                             "Initial buffers not freed correctly: %lu/%lu pages not on lru list",
+         |                                                                       ~~~
+         |                                                                       %zu
+     256 |                             failures, pages);
+         |                                       ^~~~~
+   include/kunit/test.h:987:11: note: expanded from macro 'KUNIT_EXPECT_EQ_MSG'
+     986 |                                    fmt,                                        \
+         |                                    ~~~
+     987 |                                     ##__VA_ARGS__)
+         |                                       ^~~~~~~~~~~
+   include/kunit/test.h:823:11: note: expanded from macro 'KUNIT_BINARY_INT_ASSERTION'
+     822 |                                     fmt,                                       \
+         |                                     ~~~
+     823 |                                     ##__VA_ARGS__)
+         |                                       ^~~~~~~~~~~
+   include/kunit/test.h:807:11: note: expanded from macro 'KUNIT_BASE_BINARY_ASSERTION'
+     806 |                       fmt,                                                     \
+         |                       ~~~
+     807 |                       ##__VA_ARGS__);                                          \
+         |                         ^~~~~~~~~~~
+   include/kunit/test.h:689:11: note: expanded from macro '_KUNIT_FAILED'
+     688 |                                     fmt,                                       \
+         |                                     ~~~
+     689 |                                     ##__VA_ARGS__);                            \
+         |                                       ^~~~~~~~~~~
+   drivers/android/tests/binder_alloc_kunit.c:279:18: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+     278 |                             "Reallocated buffers not freed correctly: %lu/%lu pages not on lru list",
+         |                                                                           ~~~
+         |                                                                           %zu
+     279 |                             failures, pages);
+         |                                       ^~~~~
+   include/kunit/test.h:987:11: note: expanded from macro 'KUNIT_EXPECT_EQ_MSG'
+     986 |                                    fmt,                                        \
+         |                                    ~~~
+     987 |                                     ##__VA_ARGS__)
+         |                                       ^~~~~~~~~~~
+   include/kunit/test.h:823:11: note: expanded from macro 'KUNIT_BINARY_INT_ASSERTION'
+     822 |                                     fmt,                                       \
+         |                                     ~~~
+     823 |                                     ##__VA_ARGS__)
+         |                                       ^~~~~~~~~~~
+   include/kunit/test.h:807:11: note: expanded from macro 'KUNIT_BASE_BINARY_ASSERTION'
+     806 |                       fmt,                                                     \
+         |                       ~~~
+     807 |                       ##__VA_ARGS__);                                          \
+         |                         ^~~~~~~~~~~
+   include/kunit/test.h:689:11: note: expanded from macro '_KUNIT_FAILED'
+     688 |                                     fmt,                                       \
+         |                                     ~~~
+     689 |                                     ##__VA_ARGS__);                            \
+         |                                       ^~~~~~~~~~~
+>> drivers/android/tests/binder_alloc_kunit.c:320:53: warning: format specifies type 'ssize_t' (aka 'int') but the argument has type 'unsigned long' [-Wformat]
+     320 |                         kunit_err(test, "case %zd: [%s] | %s - %s - %s", *runs,
+         |                                               ~~~                        ^~~~~
+         |                                               %lu
+   include/kunit/test.h:650:38: note: expanded from macro 'kunit_err'
+     650 |         kunit_printk(KERN_ERR, test, fmt, ##__VA_ARGS__)
+         |                                      ~~~    ^~~~~~~~~~~
+   include/kunit/test.h:616:21: note: expanded from macro 'kunit_printk'
+     615 |         kunit_log(lvl, test, KUNIT_SUBTEST_INDENT "# %s: " fmt,         \
+         |                                                            ~~~
+     616 |                   (test)->name, ##__VA_ARGS__)
+         |                                   ^~~~~~~~~~~
+   include/kunit/test.h:609:21: note: expanded from macro 'kunit_log'
+     609 |                 printk(lvl fmt, ##__VA_ARGS__);                         \
+         |                            ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:507:60: note: expanded from macro 'printk'
+     507 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                                                     ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:479:19: note: expanded from macro 'printk_index_wrap'
+     479 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ~~~~    ^~~~~~~~~~~
+>> drivers/android/tests/binder_alloc_kunit.c:320:53: warning: format specifies type 'ssize_t' (aka 'int') but the argument has type 'unsigned long' [-Wformat]
+     320 |                         kunit_err(test, "case %zd: [%s] | %s - %s - %s", *runs,
+         |                                               ~~~                        ^~~~~
+         |                                               %lu
+   include/kunit/test.h:650:38: note: expanded from macro 'kunit_err'
+     650 |         kunit_printk(KERN_ERR, test, fmt, ##__VA_ARGS__)
+         |                                      ~~~    ^~~~~~~~~~~
+   include/kunit/test.h:616:21: note: expanded from macro 'kunit_printk'
+     615 |         kunit_log(lvl, test, KUNIT_SUBTEST_INDENT "# %s: " fmt,         \
+         |                                                            ~~~
+     616 |                   (test)->name, ##__VA_ARGS__)
+         |                                   ^~~~~~~~~~~
+   include/kunit/test.h:611:8: note: expanded from macro 'kunit_log'
+     610 |                 kunit_log_append((test_or_suite)->log,  fmt,            \
+         |                                                         ~~~
+     611 |                                  ##__VA_ARGS__);                        \
+         |                                    ^~~~~~~~~~~
+   4 warnings generated.
+
+
+vim +256 drivers/android/tests/binder_alloc_kunit.c
+
+   230	
+   231	/* Executes one full test run for the given test case. */
+   232	static bool binder_alloc_test_alloc_free(struct kunit *test,
+   233						 struct binder_alloc *alloc,
+   234						 struct binder_alloc_test_case_info *tc,
+   235						 size_t end)
+   236	{
+   237		size_t pages = PAGE_ALIGN(end) / PAGE_SIZE;
+   238		struct binder_buffer *buffers[BUFFER_NUM];
+   239		unsigned long failures;
+   240		bool failed = false;
+   241	
+   242		failures = binder_alloc_test_alloc_buf(test, alloc, buffers,
+   243						       tc->buffer_sizes,
+   244						       tc->free_sequence);
+   245		failed = failed || failures;
+   246		KUNIT_EXPECT_EQ_MSG(test, failures, 0,
+   247				    "Initial allocation failed: %lu/%u buffers with errors",
+   248				    failures, BUFFER_NUM);
+   249	
+   250		failures = binder_alloc_test_free_buf(test, alloc, buffers,
+   251						      tc->buffer_sizes,
+   252						      tc->free_sequence, end);
+   253		failed = failed || failures;
+   254		KUNIT_EXPECT_EQ_MSG(test, failures, 0,
+   255				    "Initial buffers not freed correctly: %lu/%lu pages not on lru list",
+ > 256				    failures, pages);
+   257	
+   258		/* Allocate from lru. */
+   259		failures = binder_alloc_test_alloc_buf(test, alloc, buffers,
+   260						       tc->buffer_sizes,
+   261						       tc->free_sequence);
+   262		failed = failed || failures;
+   263		KUNIT_EXPECT_EQ_MSG(test, failures, 0,
+   264				    "Reallocation failed: %lu/%u buffers with errors",
+   265				    failures, BUFFER_NUM);
+   266	
+   267		failures = list_lru_count(alloc->freelist);
+   268		failed = failed || failures;
+   269		KUNIT_EXPECT_EQ_MSG(test, failures, 0,
+   270				    "lru list should be empty after reallocation but still has %lu pages",
+   271				    failures);
+   272	
+   273		failures = binder_alloc_test_free_buf(test, alloc, buffers,
+   274						      tc->buffer_sizes,
+   275						      tc->free_sequence, end);
+   276		failed = failed || failures;
+   277		KUNIT_EXPECT_EQ_MSG(test, failures, 0,
+   278				    "Reallocated buffers not freed correctly: %lu/%lu pages not on lru list",
+   279				    failures, pages);
+   280	
+   281		failures = binder_alloc_test_free_page(test, alloc);
+   282		failed = failed || failures;
+   283		KUNIT_EXPECT_EQ_MSG(test, failures, 0,
+   284				    "Failed to clean up allocated pages: %lu/%lu pages still installed",
+   285				    failures, (alloc->buffer_size / PAGE_SIZE));
+   286	
+   287		return failed;
+   288	}
+   289	
+   290	static bool is_dup(int *seq, int index, int val)
+   291	{
+   292		int i;
+   293	
+   294		for (i = 0; i < index; i++) {
+   295			if (seq[i] == val)
+   296				return true;
+   297		}
+   298		return false;
+   299	}
+   300	
+   301	/* Generate BUFFER_NUM factorial free orders. */
+   302	static void permute_frees(struct kunit *test, struct binder_alloc *alloc,
+   303				  struct binder_alloc_test_case_info *tc,
+   304				  unsigned long *runs, unsigned long *failures,
+   305				  int index, size_t end)
+   306	{
+   307		bool case_failed;
+   308		int i;
+   309	
+   310		if (index == BUFFER_NUM) {
+   311			char freeseq_buf[FREESEQ_BUFLEN];
+   312	
+   313			case_failed = binder_alloc_test_alloc_free(test, alloc, tc, end);
+   314			*runs += 1;
+   315			*failures += case_failed;
+   316	
+   317			if (case_failed || PRINT_ALL_CASES) {
+   318				stringify_free_seq(test, tc->free_sequence, freeseq_buf,
+   319						   FREESEQ_BUFLEN);
+ > 320				kunit_err(test, "case %zd: [%s] | %s - %s - %s", *runs,
+   321					  case_failed ? "FAILED" : "PASSED",
+   322					  tc->front_pages ? "front" : "back ",
+   323					  tc->alignments, freeseq_buf);
+   324			}
+   325	
+   326			return;
+   327		}
+   328		for (i = 0; i < BUFFER_NUM; i++) {
+   329			if (is_dup(tc->free_sequence, index, i))
+   330				continue;
+   331			tc->free_sequence[index] = i;
+   332			permute_frees(test, alloc, tc, runs, failures, index + 1, end);
+   333		}
+   334	}
+   335	
+
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
