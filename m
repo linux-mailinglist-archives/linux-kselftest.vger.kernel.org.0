@@ -1,132 +1,154 @@
-Return-Path: <linux-kselftest+bounces-36040-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36041-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B332AEC70A
-	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 14:19:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1209AEC732
+	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 14:43:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ACC6F16F4E5
-	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 12:19:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8FC9A1BC2F9A
+	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 12:43:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 356562459F8;
-	Sat, 28 Jun 2025 12:19:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A24C248F51;
+	Sat, 28 Jun 2025 12:42:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yprr9nQ6"
+	dkim=pass (1024-bit key) header.d=onurozkan.dev header.i=@onurozkan.dev header.b="kO4zj33U"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from forward501b.mail.yandex.net (forward501b.mail.yandex.net [178.154.239.145])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA379220F41;
-	Sat, 28 Jun 2025 12:19:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA66B247295;
+	Sat, 28 Jun 2025 12:42:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751113148; cv=none; b=moEEJ0bSZgbsXeBBo27BUpoiNXBr+wpixeV/XOjBl+jmTD1qNYdO/T0ZMOxNaWkjfMNIVx8FaEKbN8g9z4Zfn8W3HflTDjxHqEb9Ewhz+CPNeofZOE19Pf+QFWuvzTMnA2xS1MgldNkW3Tbw9jhAD1pKKwZgaaF8DsoKK/Pfcv8=
+	t=1751114579; cv=none; b=eT+RfpyABUAJBny9vyoCandoytZ1PQLYgNmXvwqDhIlv6GDEBzTSnWFXeAOCOByT7XnV2za7l+X50XSJ+CI7HbJd82zvRPjOTvtobTMsmTuvqFui/sTFU1bNurejxjkJouPaFfoyH8WT9c84Dx8qa9esnSX2A9klZwyooNfG0u0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751113148; c=relaxed/simple;
-	bh=SzdKukWgBhdmdV1afJ4LoBiWW5gP6MVZ4xof9rPG9mA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CynyFzdbxjw+lGNZAg183Mvtu0VpDKp6rDUaYCOaTowiUuYQQfy+b5/tCTpKL9LXwFwSlNvRWK5PGUCIjpHQ+sP/MhRoAwi0Ol2+O7sFW5IFMz426ScPXX99h+DFMfEDYExQlbm78D8x2YyMgoAyLCJTlUI9TX88v7FhmcYljl4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yprr9nQ6; arc=none smtp.client-ip=209.85.216.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-31306794b30so417585a91.2;
-        Sat, 28 Jun 2025 05:19:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751113146; x=1751717946; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SzdKukWgBhdmdV1afJ4LoBiWW5gP6MVZ4xof9rPG9mA=;
-        b=Yprr9nQ6Dr2Y7QGYzjtUZfwcvZ64VIK3sxVsF7MTD2vCnu9CAcjzyK/YpptOc75HCT
-         ln2ryBEUWMXpJot66DjJly7ahbe3Y0oqzjSm1ewrFJlYd7/cPTLj9Rk+onwRRj71Fqju
-         PF7Y/2MVRMml1WoJy/ssNxu3sE8G91srKSalX2L1dbGfg5T63LwBagb1Y2lN/SDv2muv
-         Lp23uGkr2AdtjYS4OVr4iloJ+8hkUcL1AqaaJa2rE9tw1BNBfVSUTa932d2reE8WdNBF
-         tlwreS+e4D9m245AxCo4Vy/K8GUgpm44AAyTVMDPjITMC2hMphdvmzJ2bUAG/ttpBALl
-         OwHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751113146; x=1751717946;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SzdKukWgBhdmdV1afJ4LoBiWW5gP6MVZ4xof9rPG9mA=;
-        b=xAQpk093MgACncpEb8rb9Od/3oMEeoTKFysO5bqaY4ksg7KrH1eIAyris5PKLLVmxs
-         AoOm4v9FGVQa/EG89SWc+LtJlBnkqbz/ZOoSZdrFVW5tLk0GRr9sAV/A+HJ5yFpEzrSO
-         awOVbiVgLWMtHxj1F6suCytzY8wzCDb4UrUecckoUFjqm9unsJsPf02EqWk3gI3djbac
-         INNmc35eLMg/hyCL/ZsoslIUrmFJv2ZOWUCnByHabItlL8CQj7ADhDaeaI1c2A8aqCZo
-         CorDAkgM0kHfhB/TgKESEmemYClaLdV09Ao9wJY1+zdS9YPjkJNrZfMaWfYNDAgSL1XV
-         543g==
-X-Forwarded-Encrypted: i=1; AJvYcCV4g46FTntD0NYELu5IkjVB+iXrHyyO5qrP2axQdeC9lDqPAkstj0VAeaQQzrefyYR+5PzF+NOiIlA=@vger.kernel.org, AJvYcCVfxrIme3z0zHAlVvxbX/R10EauMUs6R24v4nQEeR65baal1Hc8W/+8JzyuSqcDJhqjAIoWbxqa0JWuTrM=@vger.kernel.org, AJvYcCWURrTluT//ahWEr+hhkASd4Yqxf4gRgcXOEA0BefXGTCdT0LzIzvuJhW5DAFtWmKblkKrHcLX+QiRmc/O1Dulf@vger.kernel.org
-X-Gm-Message-State: AOJu0YwEpP9gAgBls/pa0TLuwFz0uSgpkrakWk5OEcQ+BZkF3XqAXmmd
-	xgZhynmn6sAKU0YJPHo7qEvUTIVBqFyA0HsjrRna/skPaIQ1Gb01cFOFnQT3lfynSwxhMNZzqWA
-	s7qtqjDZDUSsOHMPo6aC8dY422SgWvJukDfEC86k+UA==
-X-Gm-Gg: ASbGnct8/7R0X77DEM6Sz8aaKraybBaSd7aaiMP4r83y6IFiwAzoz1DfMPdKuf1DFn8
-	gcKGxGeja9lVXofTFbTalXlYCtXvnKZDdMXBP2X0+MMAWpueL262x3PBH4JAg6e0lasbRRdjsDI
-	+bFTZohTfH5a+loOY0unz3XahjExK7ZH0mY1419utdMlQ=
-X-Google-Smtp-Source: AGHT+IGgOIPOSWcI4SyHL/P/nImiGOwt6QITJk5YEphAa0NrYbuKsNiPSt631d7/8lZfIvKm4XE3s49XsmhW3bUKW18=
-X-Received: by 2002:a17:90b:390b:b0:30a:80bc:ad4 with SMTP id
- 98e67ed59e1d1-318edd3da95mr1366705a91.0.1751113145945; Sat, 28 Jun 2025
- 05:19:05 -0700 (PDT)
+	s=arc-20240116; t=1751114579; c=relaxed/simple;
+	bh=s/WZnLwH3tHwxZ/2hCc6hHoR41MuA7BSIsnaMlHFV2Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=VeyM6KO9rsuGY7ZIvbjBP0vqis5y8oAi4TUd4jXNd7aqpoGFCfdLS6mb5tILHlIg2sQh3rUWLDG6scWQlRcNf9C9pXKN6ulADsvXLwLxRyjqFBx+dpy9RP6kLhofqlYhHq1ZwNejgYsbYrv4dbgLPonNqUqiR8QsB8GwezdI0hY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=onurozkan.dev; spf=pass smtp.mailfrom=onurozkan.dev; dkim=pass (1024-bit key) header.d=onurozkan.dev header.i=@onurozkan.dev header.b=kO4zj33U; arc=none smtp.client-ip=178.154.239.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=onurozkan.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=onurozkan.dev
+Received: from mail-nwsmtp-smtp-production-main-89.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-89.sas.yp-c.yandex.net [IPv6:2a02:6b8:c11:c1e:0:640:507e:0])
+	by forward501b.mail.yandex.net (Yandex) with ESMTPS id 2E0436166C;
+	Sat, 28 Jun 2025 15:42:47 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-89.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id cgWMKGFLu0U0-cPlMrCZa;
+	Sat, 28 Jun 2025 15:42:45 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=onurozkan.dev;
+	s=mail; t=1751114565;
+	bh=l9sqUa1BCO8G9s1UQoEHxXQzb1nfW17lDgk2JjFmzCw=;
+	h=Cc:Message-ID:Subject:Date:References:To:From:In-Reply-To;
+	b=kO4zj33U4BUJWRq7uO+H5s9Fg1NfZTZLABQkmN8D8eND+h1LgxQEFvO6shgQEze4Y
+	 bnMBgsFDeWJa4E/1JT4mVk1Gjw4An/QAQh944aZD5f7zGuVWXInPMWF+UJlJAb/Pje
+	 61etcJ5bnEGOixDGzM2ljCzJAJnVv50u6pvj/uNs=
+Authentication-Results: mail-nwsmtp-smtp-production-main-89.sas.yp-c.yandex.net; dkim=pass header.i=@onurozkan.dev
+Date: Sat, 28 Jun 2025 15:42:37 +0300
+From: Onur <work@onurozkan.dev>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: viresh.kumar@linaro.org, rust-for-linux@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+ airlied@gmail.com, simona@ffwll.ch, ojeda@kernel.org,
+ alex.gaynor@gmail.com, boqun.feng@gmail.com, gary@garyguo.net,
+ bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org,
+ aliceryhl@google.com, tmgross@umich.edu, rafael@kernel.org,
+ gregkh@linuxfoundation.org, maarten.lankhorst@linux.intel.com,
+ mripard@kernel.org, tzimmermann@suse.de, davidgow@google.com, nm@ti.com
+Subject: Re: [PATCH v3 3/3] rust: remove
+ `#[allow(clippy::non_send_fields_in_send_ty)]`
+Message-ID: <20250628154237.0f367cee@nimda.home>
+In-Reply-To: <CANiq72kY9DA_JD_XkF01ZSmXbD8iaFthVZ66X+9N5aa_WObt+A@mail.gmail.com>
+References: <20250628040956.2181-1-work@onurozkan.dev>
+	<20250628040956.2181-4-work@onurozkan.dev>
+	<CANiq72kjdj4KbDhfnTbm8jZpLC1+WPB3E6M8D8M2NLnphMs5vg@mail.gmail.com>
+	<20250628133013.703461c8@nimda.home>
+	<CANiq72kY9DA_JD_XkF01ZSmXbD8iaFthVZ66X+9N5aa_WObt+A@mail.gmail.com>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-unknown-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250628040956.2181-1-work@onurozkan.dev> <20250628040956.2181-4-work@onurozkan.dev>
- <CANiq72kjdj4KbDhfnTbm8jZpLC1+WPB3E6M8D8M2NLnphMs5vg@mail.gmail.com> <20250628133013.703461c8@nimda.home>
-In-Reply-To: <20250628133013.703461c8@nimda.home>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sat, 28 Jun 2025 14:18:53 +0200
-X-Gm-Features: Ac12FXy8IZuX4C_aGR3lTNf1m2yaOzD8uNrtbrbCmNNocjT9FjWir7FB3_SiMBY
-Message-ID: <CANiq72kY9DA_JD_XkF01ZSmXbD8iaFthVZ66X+9N5aa_WObt+A@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] rust: remove `#[allow(clippy::non_send_fields_in_send_ty)]`
-To: Onur <work@onurozkan.dev>, viresh.kumar@linaro.org
-Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, airlied@gmail.com, simona@ffwll.ch, 
-	ojeda@kernel.org, alex.gaynor@gmail.com, boqun.feng@gmail.com, 
-	gary@garyguo.net, bjorn3_gh@protonmail.com, lossin@kernel.org, 
-	a.hindborg@kernel.org, aliceryhl@google.com, tmgross@umich.edu, 
-	rafael@kernel.org, gregkh@linuxfoundation.org, 
-	maarten.lankhorst@linux.intel.com, mripard@kernel.org, tzimmermann@suse.de, 
-	davidgow@google.com, nm@ti.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jun 28, 2025 at 12:30=E2=80=AFPM Onur <work@onurozkan.dev> wrote:
->
-> It doesn't seem to be the same reason. I rebased over
-> c6af9a1191d042839e56abff69e8b0302d117988 (the exact commit where that
-> lint was added) but still Clippy did not complain about it on the
-> MSRV. So it was either a leftover, or there is a version between
-> 1.78 and the current stable where Clippy did complain. I can dig into it
-> more during the week if you would like.
+On Sat, 28 Jun 2025 14:18:53 +0200
+Miguel Ojeda <miguel.ojeda.sandonis@gmail.com> wrote:
 
-Are you sure? The lint is actually disabled, as I mention in 5e7c9b84ad08.
+> On Sat, Jun 28, 2025 at 12:30=E2=80=AFPM Onur <work@onurozkan.dev> wrote:
+> >
+> > It doesn't seem to be the same reason. I rebased over
+> > c6af9a1191d042839e56abff69e8b0302d117988 (the exact commit where
+> > that lint was added) but still Clippy did not complain about it on
+> > the MSRV. So it was either a leftover, or there is a version between
+> > 1.78 and the current stable where Clippy did complain. I can dig
+> > into it more during the week if you would like.
+>=20
+> Are you sure? The lint is actually disabled, as I mention in
+> 5e7c9b84ad08.
+>=20
+> From a quick test, I enabled it in that file, and I get the warning.
+>=20
+> Thus it seems to me Clippy would still complain about it just fine.
 
-From a quick test, I enabled it in that file, and I get the warning.
+Yes, I am sure. Just to clarify, I am not testing 5e7c9b84ad08. I am
+testing c6af9a1191d042839e56abff69e8b0302d117988 where
+`#[allow(clippy::non_send_fields_in_send_ty)]` was added on
+`unsafe impl<T: Driver> Send for Registration<T> {}`.
 
-Thus it seems to me Clippy would still complain about it just fine.
+Switching from `allow` to `expect` produced the following result on my
+end:
 
-It doesn't mean we shouldn't remove it, though.
+```
+$ make LLVM=3D1 -j $(nproc)
+CLIPPY=3D1 DESCEND objtool
+  CALL    scripts/checksyscalls.sh
+  INSTALL libsubcmd_headers
+  CLIPPY L rust/kernel.o
+error: this lint expectation is unfulfilled
+   --> rust/kernel/cpufreq.rs:908:10
+    |
+908 | #[expect(clippy::non_send_fields_in_send_ty)]
+    |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    =3D note: `-D unfulfilled-lint-expectations` implied by `-D warnings`
+    =3D help: to override `-D warnings` add
+`#[allow(unfulfilled_lint_expectations)]`
 
-> IMO, we should require people to add a comment explaining the reason
-> for adding these lint rules to the codebase. It would make both reading
-> and modifying the code much simpler and clearer.
+error: aborting due to 1 previous error
 
-Do you mean using the lint reasons feature? IIRC we discussed at some
-point doing that when the feature was added (we enabled it for the
-`expect` side of things).
+make[2]: *** [rust/Makefile:534: rust/kernel.o] Error 1
+make[1]: *** [/home/nimda/devspace/onur-ozkan/linux/Makefile:1283:
+prepare] Error 2 make: *** [Makefile:248: __sub-make] Error 2
 
-For non-obvious cases or uncommon lints, it would be definitely nice
-(a comment is also OK). I am not sure if it is worth enforcing it for
-every single case, though.
+$ git log -1
+commit c6af9a1191d042839e56abff69e8b0302d117988 (HEAD -> master)
+Author: Viresh Kumar <viresh.kumar@linaro.org>
+Date:   Wed Jan 24 12:36:33 2024 +0530
 
-It would be nice if `clippy::allow_attributes_without_reason` could be
-enabled just for `allow`, or ignore it for certain lints.
+    rust: cpufreq: Extend abstractions for driver registration
 
-Cheers,
-Miguel
+    Extend the cpufreq abstractions to support driver registration from
+    Rust.
+
+    Reviewed-by: Danilo Krummrich <dakr@kernel.org>
+    Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+
+$ rustc --version --verbose
+rustc 1.78.0 (9b00956e5 2024-04-29)
+binary: rustc
+commit-hash: 9b00956e56009bab2aa15d7bff10916599e3d6d6
+commit-date: 2024-04-29
+host: x86_64-unknown-linux-gnu
+release: 1.78.0
+LLVM version: 18.1.2
+```
+
+Regards,
+Onur
+
 
