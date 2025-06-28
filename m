@@ -1,62 +1,61 @@
-Return-Path: <linux-kselftest+bounces-36046-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36047-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 520D2AEC750
-	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 15:06:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E5D8EAEC753
+	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 15:10:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7B2684A1246
-	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 13:06:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 019624A159A
+	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jun 2025 13:10:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C9E5245025;
-	Sat, 28 Jun 2025 13:06:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E88BA1F0E32;
+	Sat, 28 Jun 2025 13:10:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="At7s5wva"
+	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="VwLEdX2R"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mx-rz-1.rrze.uni-erlangen.de (mx-rz-1.rrze.uni-erlangen.de [131.188.11.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C5EF1A23BE;
-	Sat, 28 Jun 2025 13:06:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C139175D53;
+	Sat, 28 Jun 2025 13:10:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.188.11.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751115992; cv=none; b=N9DhqFu6OXBKYWmRKmfcY0PgRuBfOfonlXIJY3unuzQsJvsF3+IZMLpzoz3AGPjhRtA4anh6bp8HGjTsQcNXm0TeYI/KNEzQeiqtAU+07LmjQb4kLr6xDMwM3Gvh8pHCSQEVnslR8+QnKA+vEZoWxtgyX5Z+elUCdbplkjNp+RM=
+	t=1751116206; cv=none; b=nohxleIHbXgCLm+4f4Kq25yAcs1VEvcEyxKH3EYsew9RgbfNmrRMnlqBDYBYrMNLoCzIAZavvnL0J5Saoz4Zis6KRfbTh2evCeeqntug+XLMmGiRA9p2fVbNzDAoJ8m4t+MRDdggbTB0XEr5Ka4PkHpFgd43DPaPgTSFucwR/jk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751115992; c=relaxed/simple;
-	bh=aUVG3prtEM2rOF1bfAlJuX4gXP3Jq80Zv5Fpc285sAI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sVhTdImtkwfNUXlzHA5Az9CjZHLQ77fcZpg0g6HDWAZ0UBocQX/5lNNQ55V3KJoUztzz85AADBQzUtWbMphJgQEsoAttL3CYX18DaprYNdrgcrUyIegY3IEE+0wHL2rJgGRs5gnzMRQ/DtMVbEjIBAvSk6rpz7YSXK6Y4HcwX68=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=At7s5wva; arc=none smtp.client-ip=131.188.11.20
+	s=arc-20240116; t=1751116206; c=relaxed/simple;
+	bh=JYSr+4axxHIotvpxTe4hIWmAX2B/c5uvK0LSS2w+C3Q=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=uTt65byYDaeqadEl3rmWETPJmYBW6jUa2uNY+tmcfnKEJmgqT7O31KiHl/ossWWkJMJMP6abOxMnKOp2h0logCvVUjZdEyJTMc/ggwKX5tre9rMZ5BqCi8QeSFQh59pgzJywbib8bhy80Q792VyBig6q6PL8zcOtVpmvtQgKqME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=VwLEdX2R; arc=none smtp.client-ip=131.188.11.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fau.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fau.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fau.de; s=fau-2021;
-	t=1751115987; bh=NflfzwOiGknZ0XJf4MjQoVhBfoQz9txDYStNDD42xe8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From:To:CC:
-	 Subject;
-	b=At7s5wvaOlWTnKRb1mBW+Xdwhq+s775ZjVh/xl+tApyL0D3OV/zg9wA2hJkbpMMDR
-	 Qn4caiFU37C4uJLHv4lwd1491J49FTsOU7E2rQs7wbvWIj8W/JXn+s2wCX2qG6tzNW
-	 kpiHQqGb/dVS6J+6ikEMuWLBzlbFvP87IO9xmhUSCAg2YfMHBVZtcCrF8jPLTiB1fS
-	 X0/jNchN3yF4sw9lZaeIBAWdA8i2vSX+uv+z98Qh0a2C2VzB0Pev2CrRicckCA/u+6
-	 9lONav1uICg0YCl434ds2PzRaP+FITpy0tq9kUOvDqID1lkNDb+OiDur4yromg3npz
-	 dx2YoJZDXX5+Q==
+	t=1751116202; bh=rcqvB24Pyxx9S4coBRICiUhH7Jgty3vrOBOTtW7/DS4=;
+	h=From:To:Subject:Date:In-Reply-To:References:From:To:CC:Subject;
+	b=VwLEdX2RYmHpKIZfqb5fk8JnTN/V/iD71nMk90kWsbt6ZrXAEupufFX9i1EQj21Fg
+	 BnaNokjGMvfqNLXeaXl+r/FB4EXRBHiHf4r+M1W/54P1iOniyCTonBLhkcyPSlDc08
+	 ka+kDr2X36Oxt217foM+XyVXHI6Qi+EdYpQrIgjzWft8NNZC0tO89YElqO2Ts4h41k
+	 8dIDveTZNgo7yF+4Cr+i13J2jexaawmyh1kAMQVH7IAonUj8j0BTT0It0yCq/Jco1j
+	 nHHT1dGzZBOJWxmzx89pjC8/xE7eaUEYGRuHlWE/mBG+DDPUSFsRsMZZu8UxEVkfhp
+	 c/hffYF+4gBqQ==
 Received: from mx-rz-smart.rrze.uni-erlangen.de (mx-rz-smart.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1e])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-rz-1.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4bTt3R4G5Kz8t53;
-	Sat, 28 Jun 2025 15:06:27 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at boeck1.rrze.uni-erlangen.de (RRZE)
+	by mx-rz-1.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4bTt7Z6CXqz8vkf;
+	Sat, 28 Jun 2025 15:10:02 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at boeck5.rrze.uni-erlangen.de (RRZE)
 X-RRZE-Flag: Not-Spam
 X-RRZE-Submit-IP: 2001:9e8:3601:f400:3a2b:2f7e:18b0:5ef9
 Received: from luis-tp.fritz.box (unknown [IPv6:2001:9e8:3601:f400:3a2b:2f7e:18b0:5ef9])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	(Authenticated sender: U2FsdGVkX18cPy3NMRd8IsnH/BHB5syLv8uatFMQrjA=)
-	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4bTt3N2vcRz8sjP;
-	Sat, 28 Jun 2025 15:06:24 +0200 (CEST)
+	(Authenticated sender: U2FsdGVkX19DeMpgeYeJNqK3FfOHNd/M6h7yXUoShWA=)
+	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4bTt7W1G9Gz8t53;
+	Sat, 28 Jun 2025 15:09:59 +0200 (CEST)
 From: Luis Gerhorst <luis.gerhorst@fau.de>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -83,10 +82,9 @@ To: Andrii Nakryiko <andrii@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Paul Chaignon <paul.chaignon@gmail.com>
-Cc: syzbot+dc27c5fb8388e38d2d37@syzkaller.appspotmail.com
-Subject: [PATCH bpf-next 2/3] bpf: Fix aux usage after do_check_insn()
-Date: Sat, 28 Jun 2025 14:59:26 +0200
-Message-ID: <20250628125927.763088-3-luis.gerhorst@fau.de>
+Subject: [PATCH bpf-next 3/3] selftests/bpf: Add Spectre v4 tests
+Date: Sat, 28 Jun 2025 14:59:27 +0200
+Message-ID: <20250628125927.763088-4-luis.gerhorst@fau.de>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250628125927.763088-1-luis.gerhorst@fau.de>
 References: <20250628125927.763088-1-luis.gerhorst@fau.de>
@@ -98,85 +96,202 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-We must terminate the speculative analysis if the just-analyzed insn had
-nospec_result set. Using cur_aux() here is wrong because insn_idx might
-have been incremented by do_check_insn(). Therefore, introduce and use
-prev_aux().
+Add the following tests:
 
-Also change cur_aux(env)->nospec in case do_check_insn() ever manages to
-increment insn_idx but still fail.
+1. A test with an (unimportant) ldimm64 (16 byte insn) and a
+   Spectre-v4--induced nospec that clarifies and serves as a basic
+   Spectre v4 test.
 
-Change the warning to check the insn class (which prevents it from
-triggering for ldimm64, for which nospec_result would not be
-problematic) and use verifier_bug_if().
+2. Make sure a Spectre v4 nospec_result does not prevent a Spectre v1
+   nospec from being added before the dangerous instruction (tests that
+   [1] is fixed).
 
-Fixes: d6f1c85f2253 ("bpf: Fall back to nospec for Spectre v1")
-Reported-by: Paul Chaignon <paul.chaignon@gmail.com>
-Reported-by: Eduard Zingerman <eddyz87@gmail.com>
-Reported-by: syzbot+dc27c5fb8388e38d2d37@syzkaller.appspotmail.com
-Link: https://lore.kernel.org/bpf/685b3c1b.050a0220.2303ee.0010.GAE@google.com/
-Link: https://lore.kernel.org/bpf/4266fd5de04092aa4971cbef14f1b4b96961f432.camel@gmail.com/
+3. Combine the two, which is the combination that triggers the warning
+   in [2]. This is because the unanalyzed stack write has nospec_result
+   set, but the ldimm64 (which was just analyzed) had incremented
+   insn_idx by 2. That violates the assertion that nospec_result is only
+   used after insns that increment insn_idx by 1 (i.e., stack writes).
+
+[1] https://lore.kernel.org/bpf/4266fd5de04092aa4971cbef14f1b4b96961f432.camel@gmail.com/
+[2] https://lore.kernel.org/bpf/685b3c1b.050a0220.2303ee.0010.GAE@google.com/
+
 Signed-off-by: Luis Gerhorst <luis.gerhorst@fau.de>
 ---
- kernel/bpf/verifier.c | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/progs/bpf_misc.h  |   4 +
+ .../selftests/bpf/progs/verifier_unpriv.c     | 149 ++++++++++++++++++
+ 2 files changed, 153 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 3b24055117bc..9d066e4b8248 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -11216,6 +11216,11 @@ static struct bpf_insn_aux_data *cur_aux(const struct bpf_verifier_env *env)
- 	return &env->insn_aux_data[env->insn_idx];
+diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
+index a678463e972c..be7d9bfa8390 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_misc.h
++++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
+@@ -235,4 +235,8 @@
+ #define SPEC_V1
+ #endif
+ 
++#if defined(__TARGET_ARCH_x86)
++#define SPEC_V4
++#endif
++
+ #endif
+diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv.c b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
+index 4470541b5e71..28b4f7035ceb 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_unpriv.c
++++ b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
+@@ -801,4 +801,153 @@ l2_%=:							\
+ 	: __clobber_all);
  }
  
-+static struct bpf_insn_aux_data *prev_aux(const struct bpf_verifier_env *env)
++SEC("socket")
++__description("unpriv: ldimm64 before Spectre v4 barrier")
++__success __success_unpriv
++__retval(0)
++#ifdef SPEC_V4
++__xlated_unpriv("r1 = 0x2020200005642020") /* should not matter */
++__xlated_unpriv("*(u64 *)(r10 -8) = r1")
++__xlated_unpriv("nospec")
++#endif
++__naked void unpriv_ldimm64_spectre_v4(void)
 +{
-+	return &env->insn_aux_data[env->prev_insn_idx];
++	asm volatile ("					\
++	r1 = 0x2020200005642020 ll;			\
++	*(u64 *)(r10 -8) = r1;				\
++	r0 = 0;						\
++	exit;						\
++"	::: __clobber_all);
 +}
 +
- static bool loop_flag_is_zero(struct bpf_verifier_env *env)
- {
- 	struct bpf_reg_state *regs = cur_regs(env);
-@@ -19955,11 +19960,11 @@ static int do_check(struct bpf_verifier_env *env)
- 			/* Prevent this speculative path from ever reaching the
- 			 * insn that would have been unsafe to execute.
- 			 */
--			cur_aux(env)->nospec = true;
-+			prev_aux(env)->nospec = true;
- 			/* If it was an ADD/SUB insn, potentially remove any
- 			 * markings for alu sanitization.
- 			 */
--			cur_aux(env)->alu_state = 0;
-+			prev_aux(env)->alu_state = 0;
- 			goto process_bpf_exit;
- 		} else if (err < 0) {
- 			return err;
-@@ -19968,7 +19973,7 @@ static int do_check(struct bpf_verifier_env *env)
- 		}
- 		WARN_ON_ONCE(err);
- 
--		if (state->speculative && cur_aux(env)->nospec_result) {
-+		if (state->speculative && prev_aux(env)->nospec_result) {
- 			/* If we are on a path that performed a jump-op, this
- 			 * may skip a nospec patched-in after the jump. This can
- 			 * currently never happen because nospec_result is only
-@@ -19977,8 +19982,15 @@ static int do_check(struct bpf_verifier_env *env)
- 			 * never skip the following insn. Still, add a warning
- 			 * to document this in case nospec_result is used
- 			 * elsewhere in the future.
-+			 *
-+			 * All non-branch instructions have a single
-+			 * fall-through edge. For these, nospec_result should
-+			 * already work.
- 			 */
--			WARN_ON_ONCE(env->insn_idx != prev_insn_idx + 1);
-+			if (verifier_bug_if(BPF_CLASS(insn->code) == BPF_JMP ||
-+					    BPF_CLASS(insn->code) == BPF_JMP32, env,
-+					    "speculation barrier after jump instruction may not have the desired effect"))
-+				return -EFAULT;
- process_bpf_exit:
- 			mark_verifier_state_scratched(env);
- 			err = update_branch_counts(env, env->cur_state);
++SEC("socket")
++__description("unpriv: Spectre v1 and v4 barrier")
++__success __success_unpriv
++__retval(0)
++#ifdef SPEC_V1
++#ifdef SPEC_V4
++/* starts with r0 == r8 == r9 == 0 */
++__xlated_unpriv("if r8 != 0x0 goto pc+1")
++__xlated_unpriv("goto pc+2")
++__xlated_unpriv("if r9 == 0x0 goto pc+4")
++__xlated_unpriv("r2 = r0")
++/* Following nospec required to prevent following dangerous `*(u64 *)(NOT_FP -64)
++ * = r1` iff `if r9 == 0 goto pc+4` was mispredicted because of Spectre v1. The
++ * test therefore ensures the Spectre-v4--induced nospec does not prevent the
++ * Spectre-v1--induced speculative path from being fully analyzed.
++ */
++__xlated_unpriv("nospec") /* Spectre v1 */
++__xlated_unpriv("*(u64 *)(r2 -64) = r1") /* could be used to leak r2 */
++__xlated_unpriv("nospec") /* Spectre v4 */
++#endif
++#endif
++__naked void unpriv_spectre_v1_and_v4(void)
++{
++	asm volatile ("					\
++	r1 = 0;						\
++	*(u64*)(r10 - 8) = r1;				\
++	r2 = r10;					\
++	r2 += -8;					\
++	r1 = %[map_hash_8b] ll;				\
++	call %[bpf_map_lookup_elem];			\
++	r8 = r0;					\
++	r2 = r10;					\
++	r2 += -8;					\
++	r1 = %[map_hash_8b] ll;				\
++	call %[bpf_map_lookup_elem];			\
++	r9 = r0;					\
++	r0 = r10;					\
++	r1 = 0;						\
++	r2 = r10;					\
++	if r8 != 0 goto l0_%=;				\
++	if r9 != 0 goto l0_%=;				\
++	r0 = 0;						\
++l0_%=:	if r8 != 0 goto l1_%=;				\
++	goto l2_%=;					\
++l1_%=:	if r9 == 0 goto l3_%=;				\
++	r2 = r0;					\
++l2_%=:	*(u64 *)(r2 -64) = r1;				\
++l3_%=:	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_hash_8b)
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("unpriv: Spectre v1 and v4 barrier (simple)")
++__success __success_unpriv
++__retval(0)
++#ifdef SPEC_V1
++#ifdef SPEC_V4
++__xlated_unpriv("if r8 != 0x0 goto pc+1")
++__xlated_unpriv("goto pc+2")
++__xlated_unpriv("goto pc-1") /* if r9 == 0 goto l3_%= */
++__xlated_unpriv("goto pc-1") /* r2 = r0 */
++__xlated_unpriv("nospec")
++__xlated_unpriv("*(u64 *)(r2 -64) = r1")
++__xlated_unpriv("nospec")
++#endif
++#endif
++__naked void unpriv_spectre_v1_and_v4_simple(void)
++{
++	asm volatile ("					\
++	r8 = 0;						\
++	r9 = 0;						\
++	r0 = r10;					\
++	r1 = 0;						\
++	r2 = r10;					\
++	if r8 != 0 goto l0_%=;				\
++	if r9 != 0 goto l0_%=;				\
++	r0 = 0;						\
++l0_%=:	if r8 != 0 goto l1_%=;				\
++	goto l2_%=;					\
++l1_%=:	if r9 == 0 goto l3_%=;				\
++	r2 = r0;					\
++l2_%=:	*(u64 *)(r2 -64) = r1;				\
++l3_%=:	r0 = 0;						\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("unpriv: ldimm64 before Spectre v1 and v4 barrier (simple)")
++__success __success_unpriv
++__retval(0)
++#ifdef SPEC_V1
++#ifdef SPEC_V4
++__xlated_unpriv("if r8 != 0x0 goto pc+1")
++__xlated_unpriv("goto pc+4")
++__xlated_unpriv("goto pc-1") /* if r9 == 0 goto l3_%= */
++__xlated_unpriv("goto pc-1") /* r2 = r0 */
++__xlated_unpriv("goto pc-1") /* r1 = 0x2020200005642020 ll */
++__xlated_unpriv("goto pc-1") /* second part of ldimm64 */
++__xlated_unpriv("nospec")
++__xlated_unpriv("*(u64 *)(r2 -64) = r1")
++__xlated_unpriv("nospec")
++#endif
++#endif
++__naked void unpriv_ldimm64_spectre_v1_and_v4_simple(void)
++{
++	asm volatile ("					\
++	r8 = 0;						\
++	r9 = 0;						\
++	r0 = r10;					\
++	r1 = 0;						\
++	r2 = r10;					\
++	if r8 != 0 goto l0_%=;				\
++	if r9 != 0 goto l0_%=;				\
++	r0 = 0;						\
++l0_%=:	if r8 != 0 goto l1_%=;				\
++	goto l2_%=;					\
++l1_%=:	if r9 == 0 goto l3_%=;				\
++	r2 = r0;					\
++	r1 = 0x2020200005642020 ll;			\
++l2_%=:	*(u64 *)(r2 -64) = r1;				\
++l3_%=:	r0 = 0;						\
++	exit;						\
++"	::: __clobber_all);
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.49.0
 
