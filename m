@@ -1,171 +1,101 @@
-Return-Path: <linux-kselftest+bounces-36127-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36128-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 619A8AEE886
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jun 2025 22:47:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76CA7AEE99C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jun 2025 23:50:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B5CB817D189
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jun 2025 20:47:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 840243B73DB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jun 2025 21:50:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFAB21E32D6;
-	Mon, 30 Jun 2025 20:47:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59393236431;
+	Mon, 30 Jun 2025 21:50:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WJNalNJp"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DdWV4fcB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31F2449620;
-	Mon, 30 Jun 2025 20:47:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED20D4A23;
+	Mon, 30 Jun 2025 21:50:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751316470; cv=none; b=WNWJwjLXyhZZAgQfQVSFsu9MHMUAUt1R9Eq8Vp/Dhpep0QsSxYf2Pi0mpdnaTPXWEajRkT897mAGKwK2qJ5yENPnpT1aMyaxKU9kw58WFUQnADFdsc36fPhJ2v82+XVpO2tObXVBkEA3uriPHZJcLwm0bwUPpjJUc9xM9OzmHuQ=
+	t=1751320228; cv=none; b=bzGu0uafK6Wnan7PQXp+hplHbe4wfJFJImmI534yZwNQIMW2duwGVnC+iB/GLoJtRtgRhneGhyshZuZPFC/K3gxydjNCkeJZqQbgDwBKa9Tg4pCr4EvlSBX0OAtcosnxDXcQ4m1mHKYeqEoBMoH11yLel/7MqUxbrOvpSnDAkjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751316470; c=relaxed/simple;
-	bh=GEaL8rcdBdjMqjq9nsz7JSU5+s6+Xa55AiDvV1Tu7mU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RMFpkzBnZ0EqJ8GhkSU6Ev2j0q83XmyWv9DfFr0lnzwd0vTDm3j4jEHhcySbT6crphl2Qr9BrhF3e7qWMwh/XwBSsTyPAsKBGogo/cQanY0TijjTjl+gP/fFy/Uf6jrMcMZHpD+fi4dGv6y41yEcWaH5cbT3MHCKDE1wtZxXKYs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WJNalNJp; arc=none smtp.client-ip=209.85.219.171
+	s=arc-20240116; t=1751320228; c=relaxed/simple;
+	bh=0RkMeCh2hbGmZrtpA9D/x8eJHKdGugLcbLSzPvl7xto=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZjWhUuH8ACVFGVtwJ7INsPFS17fCDf9kpV+qWU0IgFhST4X44tdxcgCfN0sZdQnGVqJqSNX/pB7jTdRBFSAsTpuVHtQNEmSZthMg7lkfzCXrto949DWHsoS6Dpa9qCidYWTN10KsdwnOfWMUPMwknG4npavAcFjNyz+JbD8EY6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DdWV4fcB; arc=none smtp.client-ip=209.85.215.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-e73e9e18556so4923988276.0;
-        Mon, 30 Jun 2025 13:47:48 -0700 (PDT)
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-b3220c39cffso2907519a12.0;
+        Mon, 30 Jun 2025 14:50:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751316468; x=1751921268; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=luntcRknwz6cxo7wxJHZIgNu/w/o1CsgItFUyxf5d4Q=;
-        b=WJNalNJpgiSwyC2rw07lyPQnUnG3Vkur2hXUUgZ8kmEYbr2Qv4+hUKwD+g3nnUAmWM
-         a9/Q8yTM68+m4LcJfNJM/dmGP7OEZhhNNqFAkP844K6DwmG1dM7OfE+NdSCzZxSgU2qH
-         pV9pB8d5CpbX7y9GaIy+0/IwAMlUci1FyMnTNuOowYTn+LlRAiaS/ulfDjOU5Q9ifQRu
-         qQMbqARyhNHdxmZM+qbz/xFNTEVwQx9ES/+LCbUuGchOerJj71+vJ/3qy3FavtAcD00a
-         S8SzoiaSqo2jDurCBbo8jrWC05NOcVZ++AO6aCkZaxeeXbRVh5g5LQRWOU4uMYu5nCql
-         0ocw==
+        d=gmail.com; s=20230601; t=1751320226; x=1751925026; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0RkMeCh2hbGmZrtpA9D/x8eJHKdGugLcbLSzPvl7xto=;
+        b=DdWV4fcB8EhmnIAsTMuaRWg7unTjBQuYvJD3vy4Yer6rl57M4UWXoY+EX2Nlj/Ahst
+         EW/qaN+OzlAnp84noC1ubjIGjrh4xsTjOS7q0KptSP24RGqCy6HAPWxyR/bBVsQn9lFM
+         ebonj9E3m7xAgBxUV08ZZ40yXhEMLtN9CpUFv1pEt435nnk37p3Haao8UijzImbi4maB
+         2gXu1aSYJQGQecu0JFJzOHcqac/lkPXdyuoLBfK/nf7S3Pfl6i9agaZimfu/MyBhFpDH
+         xZXZhmHDI6xza5XCvtAsCreG0Qcy8geX6P2PnwK8+kFF4CyDf3osK2c8olhsYYpwHiip
+         15Pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751316468; x=1751921268;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=luntcRknwz6cxo7wxJHZIgNu/w/o1CsgItFUyxf5d4Q=;
-        b=CO+wUHPuRahoCbw0adH6eZIZfsDEHwBi+m64ejWxuDzrZikIfEcSOhErfVoq35IWtd
-         JV+J/JKNL/GRksvJtcmypXtKoO0Kvvtwp7I62wy0+dYCOG7891tJTrm4kB1HacWQuNKo
-         3NgSfcI4FtK8EJWQQBWRxa3+9RKt4Pbo9crZmVdHYaDgav9ySprcxvgOGdkA63xoDGZM
-         BgKvk80L9MxxDw7u5Ri6BmI6deeO1YmimToX3fRpKdEabfdUXpciqqM+vRd3ZU2TJXa2
-         lb32iL8Jj5JaXmCC/sqSzxZONx6U0+MYX4j8OK9kp4gASzC4RWkEIZM3F9Q/TR5WDWYZ
-         P4xQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVv/zeQ8b67yiMpml6+so25Rj+ReqZcM1CO92W5kbK91KLaSXG3K01TuToMw6/vt/pUSgSnOXz4QlDzNBW1VVJB@vger.kernel.org, AJvYcCW5hlMdI3PrPF0IXBZwFjmQnltQq8p8E0vJNA5eCAItfxp3ReFxArEoI5aLxHbu4K2KLjni/rUCLWUX61Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwOATCaFPDbW0lXrJ8aS5xNFy7XVfirRiSBCqqJV62qRtJPxbS3
-	TVWFQKVCz7NelLRJQ797TfMW9D+d/wQKQn6/FJJeFcqd/Wq5G8MeI1/u
-X-Gm-Gg: ASbGncu4flgly/V0SFlH7dWrtx7sDGxy5kuKx2HVNoxhssg9Saezd1LTxPfZOhwwhPv
-	AmQl262lKhu6PPSooczXAzF9baIzP/GmiPCivqNcnZP2GGtFEtvfCsIhZECDh1IYWa3DqNzf5K/
-	ekSRTRmhKGdJBKhpOD2s3KEliN9uQO0LB4APwRZq1uGVB2Utx2ZdHsk30BIOjmqZD/1Oba0JWV2
-	Oo7+rmiD4ONgKr3Vg5Zgg8DCM0LTaAtULJTI+GcPPP8eWpP8bk1HyR+hvwX3s0FWf7SBG0US7nB
-	dzgu7GQqLpaPWdaysOLH2X4k2dKdfZrQHWgvj/Rkwj9kn0EOnUTZNLDr1Z/eFg==
-X-Google-Smtp-Source: AGHT+IHquH1SFomNj3I5uzYfR2v3NP5BKEXajHPCZ5A3PFOxIUkmSJNhnAqoanz5VhUyME4mdqYpxw==
-X-Received: by 2002:a05:6902:18d0:b0:e87:aa7f:6e15 with SMTP id 3f1490d57ef6-e896ee91671mr1733295276.4.1751316466280;
-        Mon, 30 Jun 2025 13:47:46 -0700 (PDT)
-Received: from localhost ([2a03:2880:25ff:5b::])
-        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e87a6be3ce5sm2560516276.38.2025.06.30.13.47.45
+        d=1e100.net; s=20230601; t=1751320226; x=1751925026;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0RkMeCh2hbGmZrtpA9D/x8eJHKdGugLcbLSzPvl7xto=;
+        b=I0OhXNHYZgjTaZdryc975St3IfT2oSaeo2vgXjfHcNB3rTSgRjOiNSRUucNoI2vhr7
+         OrTzR5oJWVUvPBY0kuAzaMAZ+8T3fdli/DYYJdwPk2Fxx9eufgtn+CgE6lWQxGIutWwa
+         4Pms82y/cTwPd0jUgXsN8HVxDDcgxU06bVMXoVHY3ketAxgAwO6dFEp5kOyL7iBHh6tV
+         YrI7H7DWOIW4hUjWumIf6oSdQKTUBuBEIQqxFvGNNawK8bbRSvebdwwuUDP7qqJ9nkhC
+         1A34xZlw0qayjrJ3W8eyZQ+VbnRK0XEvJiIs6HjgpSiIfvcCp3AsXwfLIsACQqe4Ei43
+         5FUw==
+X-Forwarded-Encrypted: i=1; AJvYcCVNQgkFGATw7kk7jlOhtl8mjczU6JVXjgOCGKrxt3+z24RbhB4bppKykA+tziQYPMkBlz1Be5E+o49at6WJjw0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZfDp97gCgW9P+dl34gDC9cO0YJbmQNcstpT5WPOz/jJhGR2GX
+	Xt7Hnhg7sYszvWOVPp/9NAI/9HaJTddncQPpGXxl0EU8xcKJcKG1FlwW9KyQCQ==
+X-Gm-Gg: ASbGnctEZmLMTJRaX8tTn6pLKiGv3KdBE48XpoypyuoedEmRiLN3TTxfU4H3hBFXTGH
+	fHL8nGzzNYg3R/cog1RaafeygdjXu2I00sxjxb6KfZgrwcmA8KgX7TUEMsFux8qo+57THfzO1cM
+	RknV8k+ymSHByuri4Z92AwtC6+rHqIyxGgfZC5nQdUj3uhD54k81vEVl6tsCASg8ORO5uLKjntP
+	Ia2k4Nl8ptiPMLN2yOHUcpEnBSza2Shkmtf1XOVv3nEHc3ZcKWlKdXB9wLt7RgNbLrfWoZA26dz
+	AhWyT2Seop4WJUtPMh1mTLdW/42Ucje5ia/encWRvtq07kSZqZGLlBJGWqSvrEfJUg==
+X-Google-Smtp-Source: AGHT+IEOwulVDAvC2fDl27Xyy6tM9twH63GOMNcYh3xf8cPJ6z6aA7P9o8/LiUVpB8GzqtCW9mEJ3A==
+X-Received: by 2002:a17:90b:5708:b0:311:ffe8:20e2 with SMTP id 98e67ed59e1d1-318c8ff2388mr19490313a91.4.1751320226208;
+        Mon, 30 Jun 2025 14:50:26 -0700 (PDT)
+Received: from localhost ([129.210.115.104])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-315f53bc247sm14507336a91.21.2025.06.30.14.50.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jun 2025 13:47:45 -0700 (PDT)
-From: Joshua Hahn <joshua.hahnjy@gmail.com>
-To: Suresh K C <suresh.k.chandrappa@gmail.com>
-Cc: nphamcs@gmail.com,
-	hannes@cmpxchg.org,
-	shuah@kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: cachestat: add tests for mmap
-Date: Mon, 30 Jun 2025 13:47:43 -0700
-Message-ID: <20250630204744.1581380-1-joshua.hahnjy@gmail.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20250630180803.12866-1-suresh.k.chandrappa@gmail.com>
-References: 
+        Mon, 30 Jun 2025 14:50:25 -0700 (PDT)
+Date: Mon, 30 Jun 2025 14:50:24 -0700
+From: Cong Wang <xiyou.wangcong@gmail.com>
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Jamal Hadi Salim <jhs@mojatatu.com>, Jiri Pirko <jiri@resnulli.us>,
+	Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH net-next] selftests/tc-testing: Enable CONFIG_IP_SET
+Message-ID: <aGMGoICSLZerw5CM@pop-os.localdomain>
+References: <20250630153341.Wgh3SzGi@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250630153341.Wgh3SzGi@linutronix.de>
 
-On Mon, 30 Jun 2025 23:38:03 +0530 Suresh K C <suresh.k.chandrappa@gmail.com> wrote:
+On Mon, Jun 30, 2025 at 05:33:41PM +0200, Sebastian Andrzej Siewior wrote:
+> The config snippet specifies CONFIG_NET_EMATCH_IPSET. This option
+> depends on CONFIG_IP_SET.
 
-> From: Suresh K C <suresh.k.chandrappa@gmail.com>
-> 
-> Add a test case to verify cachestat behavior with memory-mapped files
-> using mmap(). This ensures that pages accessed via mmap are correctly
-> accounted for in the page cache.
-> 
-> Tested on x86_64 with default kernel config
+So it should be set automatically when running `make` ? IOW, why do we
+have to set it explicitly?
 
-Hi Suresh,
-
-Thank you for writing this patch! I'll let Nhat or Johannes comment more on the
-patch, but just had a few thoughts. Before going into the code, I wanted to
-note that it would be helpful in the future to note where this patch comes
-from. I saw there were a few iterations of this before, so it would help
-reviewers track what changed between the versions and what the motivation
-for new versions are. 
-
-[...snip...]
-
-> -		ksft_print_msg("Unable to create shmem file.\n");
-> +		ksft_print_msg("Unable to create file.\n");
->  		ret = false;
->  		goto out;
-
-Maybe we don't want to lose information about this -- it would be helpful
-to see why the test failed. It doesn't seem like there are any other
-indicators that would let users know if it was shmem or mmap that failed, so
-users would basically be guessing as to which of these two test failed.
-(And the same feedback aplies to the next two print statements)
-
->  	}
->  
->  	if (ftruncate(fd, filesize)) {
-> -		ksft_print_msg("Unable to truncate shmem file.\n");
-> +		ksft_print_msg("Unable to truncate file.\n");
->  		ret = false;
->  		goto close_fd;
->  	}
->  
->  	if (!write_exactly(fd, filesize)) {
-> -		ksft_print_msg("Unable to write to shmem file.\n");
-> +		ksft_print_msg("Unable to write to file.\n");
->  		ret = false;
->  		goto close_fd;
->  	}
-
-I'm curious if we need this part down below. It seems like we already call
-write_exactly above, which should fill the file descriptor with random
-things up to filesize. Maybe it makes more sense to have these two options
-(write_exactly vs. directly modifying the contents) in a switch statement?
-It seems a bit redundant to do both for FILE_MMAP.
-
-> +	if (type == FILE_MMAP){
-> +		char *map = mmap(NULL, filesize, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-> +		if (map == MAP_FAILED) {
-> +			ksft_print_msg("mmap failed.\n");
-> +			ret = false;
-> +			goto close_fd;
-> +		}
-> +		for (int i = 0; i < filesize; i++) {
-> +			map[i] = 'A';
-> +		}
-> +		map[filesize - 1] = 'X';
-
-I'm also curious what the point of having the last character be different
-here. It doesn't seem like there is any validation code to check the contents
-of the file, so it seems a bit redundant to me as well. 
-
-Have a great day!
-Joshua
-
-Sent using hkml (https://github.com/sjp38/hackermail)
+Thanks.
 
