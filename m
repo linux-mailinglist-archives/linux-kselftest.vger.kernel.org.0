@@ -1,101 +1,188 @@
-Return-Path: <linux-kselftest+bounces-36128-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36129-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76CA7AEE99C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jun 2025 23:50:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94AF6AEEA62
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jul 2025 00:32:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 840243B73DB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jun 2025 21:50:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8F4047AC22E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jun 2025 22:30:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59393236431;
-	Mon, 30 Jun 2025 21:50:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 660C8299957;
+	Mon, 30 Jun 2025 22:30:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DdWV4fcB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d37JAXtr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED20D4A23;
-	Mon, 30 Jun 2025 21:50:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B481E292908;
+	Mon, 30 Jun 2025 22:30:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751320228; cv=none; b=bzGu0uafK6Wnan7PQXp+hplHbe4wfJFJImmI534yZwNQIMW2duwGVnC+iB/GLoJtRtgRhneGhyshZuZPFC/K3gxydjNCkeJZqQbgDwBKa9Tg4pCr4EvlSBX0OAtcosnxDXcQ4m1mHKYeqEoBMoH11yLel/7MqUxbrOvpSnDAkjY=
+	t=1751322646; cv=none; b=gXSxsoIh4w+z+qNQIcKMUfWAEVjcfuo5UUlw//UBQ0zGkFK5lOrji6CXRvi3sLH4jZCs7mkgL4TJJsbf3T7Pq2dC2Z8yXq98uwuj25VZ9woLMr6t1s4jvTIA2El29WUc5KOJc+8ZT3afwgObLFKKtZ05ib6rTEeOz3QWlsYOpQc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751320228; c=relaxed/simple;
-	bh=0RkMeCh2hbGmZrtpA9D/x8eJHKdGugLcbLSzPvl7xto=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZjWhUuH8ACVFGVtwJ7INsPFS17fCDf9kpV+qWU0IgFhST4X44tdxcgCfN0sZdQnGVqJqSNX/pB7jTdRBFSAsTpuVHtQNEmSZthMg7lkfzCXrto949DWHsoS6Dpa9qCidYWTN10KsdwnOfWMUPMwknG4npavAcFjNyz+JbD8EY6Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DdWV4fcB; arc=none smtp.client-ip=209.85.215.175
+	s=arc-20240116; t=1751322646; c=relaxed/simple;
+	bh=OjuwjnPigupGETd25+YFG96asjLqZRDL9oiRjkxVrfI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UVNy+O6ZlRjC6u3TY5L8XV6+9+WfSlIRsUemSz5QjI86mynXsQ1G+5Z9uqPRDr2wdIpJHWETXL3sCSZectJpTuF1ODzyH++pd/i270nMh9Pz2FGjF/k36JZfyxE2RiKO5VgnmDDtD+ihxbLPNo4UFiv7R8ZFgynKv2euY7tjl28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d37JAXtr; arc=none smtp.client-ip=209.85.219.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-b3220c39cffso2907519a12.0;
-        Mon, 30 Jun 2025 14:50:26 -0700 (PDT)
+Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-6fd0a3cd326so31537546d6.1;
+        Mon, 30 Jun 2025 15:30:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751320226; x=1751925026; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0RkMeCh2hbGmZrtpA9D/x8eJHKdGugLcbLSzPvl7xto=;
-        b=DdWV4fcB8EhmnIAsTMuaRWg7unTjBQuYvJD3vy4Yer6rl57M4UWXoY+EX2Nlj/Ahst
-         EW/qaN+OzlAnp84noC1ubjIGjrh4xsTjOS7q0KptSP24RGqCy6HAPWxyR/bBVsQn9lFM
-         ebonj9E3m7xAgBxUV08ZZ40yXhEMLtN9CpUFv1pEt435nnk37p3Haao8UijzImbi4maB
-         2gXu1aSYJQGQecu0JFJzOHcqac/lkPXdyuoLBfK/nf7S3Pfl6i9agaZimfu/MyBhFpDH
-         xZXZhmHDI6xza5XCvtAsCreG0Qcy8geX6P2PnwK8+kFF4CyDf3osK2c8olhsYYpwHiip
-         15Pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751320226; x=1751925026;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1751322643; x=1751927443; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0RkMeCh2hbGmZrtpA9D/x8eJHKdGugLcbLSzPvl7xto=;
-        b=I0OhXNHYZgjTaZdryc975St3IfT2oSaeo2vgXjfHcNB3rTSgRjOiNSRUucNoI2vhr7
-         OrTzR5oJWVUvPBY0kuAzaMAZ+8T3fdli/DYYJdwPk2Fxx9eufgtn+CgE6lWQxGIutWwa
-         4Pms82y/cTwPd0jUgXsN8HVxDDcgxU06bVMXoVHY3ketAxgAwO6dFEp5kOyL7iBHh6tV
-         YrI7H7DWOIW4hUjWumIf6oSdQKTUBuBEIQqxFvGNNawK8bbRSvebdwwuUDP7qqJ9nkhC
-         1A34xZlw0qayjrJ3W8eyZQ+VbnRK0XEvJiIs6HjgpSiIfvcCp3AsXwfLIsACQqe4Ei43
-         5FUw==
-X-Forwarded-Encrypted: i=1; AJvYcCVNQgkFGATw7kk7jlOhtl8mjczU6JVXjgOCGKrxt3+z24RbhB4bppKykA+tziQYPMkBlz1Be5E+o49at6WJjw0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZfDp97gCgW9P+dl34gDC9cO0YJbmQNcstpT5WPOz/jJhGR2GX
-	Xt7Hnhg7sYszvWOVPp/9NAI/9HaJTddncQPpGXxl0EU8xcKJcKG1FlwW9KyQCQ==
-X-Gm-Gg: ASbGnctEZmLMTJRaX8tTn6pLKiGv3KdBE48XpoypyuoedEmRiLN3TTxfU4H3hBFXTGH
-	fHL8nGzzNYg3R/cog1RaafeygdjXu2I00sxjxb6KfZgrwcmA8KgX7TUEMsFux8qo+57THfzO1cM
-	RknV8k+ymSHByuri4Z92AwtC6+rHqIyxGgfZC5nQdUj3uhD54k81vEVl6tsCASg8ORO5uLKjntP
-	Ia2k4Nl8ptiPMLN2yOHUcpEnBSza2Shkmtf1XOVv3nEHc3ZcKWlKdXB9wLt7RgNbLrfWoZA26dz
-	AhWyT2Seop4WJUtPMh1mTLdW/42Ucje5ia/encWRvtq07kSZqZGLlBJGWqSvrEfJUg==
-X-Google-Smtp-Source: AGHT+IEOwulVDAvC2fDl27Xyy6tM9twH63GOMNcYh3xf8cPJ6z6aA7P9o8/LiUVpB8GzqtCW9mEJ3A==
-X-Received: by 2002:a17:90b:5708:b0:311:ffe8:20e2 with SMTP id 98e67ed59e1d1-318c8ff2388mr19490313a91.4.1751320226208;
-        Mon, 30 Jun 2025 14:50:26 -0700 (PDT)
-Received: from localhost ([129.210.115.104])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-315f53bc247sm14507336a91.21.2025.06.30.14.50.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jun 2025 14:50:25 -0700 (PDT)
-Date: Mon, 30 Jun 2025 14:50:24 -0700
-From: Cong Wang <xiyou.wangcong@gmail.com>
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Jamal Hadi Salim <jhs@mojatatu.com>, Jiri Pirko <jiri@resnulli.us>,
-	Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH net-next] selftests/tc-testing: Enable CONFIG_IP_SET
-Message-ID: <aGMGoICSLZerw5CM@pop-os.localdomain>
-References: <20250630153341.Wgh3SzGi@linutronix.de>
+        bh=ai192T8zNk4t68iyaDXYtFbddTpkDSzsYqRpmCFuNrY=;
+        b=d37JAXtrpzRhW6fjuafnW5/ZatLJcv+IxsJ3gAE2Gq5XBLt08HeXaKGCZ3y8LHwt+I
+         hj+7dKawM33kagJyOsig5dcSLRCebl8ekzaLFL3duivOLwMuGZQqv+DN8+9OVVuxv0eo
+         7d2XoIRfY0FOfliYNLnIl/aYLdDC0WILswbPC24LtcjmczCn63w6SpJNE4uczUNuLNHi
+         gIpwJXt8MDcBNrK2WOM40ay6ULh6eVNCuN1MwinnDiw0F+mT/VNBKR6t04pyhSbSYQuc
+         JQp2fDOnp6L0EZHLYDUfPUyU+oTk7WFH4Q8MdtRB9D4QMguKqP4WKhkk3Hl883egwjnM
+         FH4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751322643; x=1751927443;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ai192T8zNk4t68iyaDXYtFbddTpkDSzsYqRpmCFuNrY=;
+        b=p4uSQMi0wiY1krS6/CkUNVDgL4cixrLp8ePxOTTzkHcGloxn+CCzKfuauwVRsm0A5w
+         yEEM3Dr4RyQbZyPabPdXV5epyZKI1hcTQiWq33vdnQ+als6KkV8iDXniZw8aS1o25zZo
+         EuaR8AReW4LLoHl/feIYAMHhdH73ecxULXFI0GLEt5/6oKef/n/dKtmwG1nliuJReajv
+         lvHQ9JWw7i/LepmcXMZn84OEWooiVIloDYz8/vArQIPOfbGFie3QYWYcmn+gKXF5DM66
+         9YVcG6MtbdalEQdJItYatBqDBIjRwQtgBPDtsGGIVnb2CRfb+c3soNuR3qYbx/HWuXOJ
+         QOnA==
+X-Forwarded-Encrypted: i=1; AJvYcCVJRa44A/gxxZwlMBc9dmr+OBeYRvH0IzL2CcfunSm24ElMxf7cHap/097HeigUAZy7Qj6uRcM9jUK87RSgbNca@vger.kernel.org, AJvYcCXv8RQ7gfodO7H6M0kxNG3nljk5eBCH4qrUNiBFx2rO4HAAMxYCcYZPZQOs5HHun5sL1/81yi5Y61rnyOM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YynMcgUsJ1wF5AcyyqpMhHJ0OfRAti/lkFb1DMUpsr6HclXpUn7
+	Wzqv8Dzvf368nqcdpx2N9xzHyJdCGIC35H7x2TGgHxvcKmOrqYiX+wBaGMf1aV6ygeC/A6MDO2N
+	PqwM2g0FxNIHa8SHPH7vk9iAce/nOKtI=
+X-Gm-Gg: ASbGncsOkpDaK0cKvHRYTqenALdxzhVKBMXLThRvI8/mTaxcUnabR4ysSL2Oqd8vRHR
+	EPtL2lupf+/TAQHYWPskiJNpsBqWxIxkWFg4OlXqJcuod3ke1rqP4lXGxyCCJAumT8+oUpWmdDp
+	Cv+7sR2OPGGqAP9lBPX3KtEk05l4FuhfjOVyTVrAxh0+Y=
+X-Google-Smtp-Source: AGHT+IG14HrVwN4QZgDMflUz/jurLDXjApULHqz/YtoTmowsLIAXSuzPC2YLeQElYTxerNAAglKDOGJaDVlm1AVCvP0=
+X-Received: by 2002:a05:6214:5c04:b0:6fa:c054:1628 with SMTP id
+ 6a1803df08f44-7000214ff6amr253828816d6.23.1751322643335; Mon, 30 Jun 2025
+ 15:30:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250630153341.Wgh3SzGi@linutronix.de>
+References: <20250630180803.12866-1-suresh.k.chandrappa@gmail.com>
+In-Reply-To: <20250630180803.12866-1-suresh.k.chandrappa@gmail.com>
+From: Nhat Pham <nphamcs@gmail.com>
+Date: Mon, 30 Jun 2025 15:30:32 -0700
+X-Gm-Features: Ac12FXyjCYGreweB0bkFxQ-UDbnU0CajEdwIFsh56FbrAVpbzdoYdkJzqo4ZDjs
+Message-ID: <CAKEwX=PRdkDEmP5N3t70qg7ugreLvyNHVxR0SGwU8pwasgqG4A@mail.gmail.com>
+Subject: Re: [PATCH] selftests: cachestat: add tests for mmap
+To: Suresh K C <suresh.k.chandrappa@gmail.com>
+Cc: hannes@cmpxchg.org, shuah@kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 30, 2025 at 05:33:41PM +0200, Sebastian Andrzej Siewior wrote:
-> The config snippet specifies CONFIG_NET_EMATCH_IPSET. This option
-> depends on CONFIG_IP_SET.
+On Mon, Jun 30, 2025 at 11:08=E2=80=AFAM Suresh K C
+<suresh.k.chandrappa@gmail.com> wrote:
+>
+> From: Suresh K C <suresh.k.chandrappa@gmail.com>
+>
+> Add a test case to verify cachestat behavior with memory-mapped files
+> using mmap(). This ensures that pages accessed via mmap are correctly
+> accounted for in the page cache.
+>
+> Tested on x86_64 with default kernel config
+>
+> Signed-off-by: Suresh K C <suresh.k.chandrappa@gmail.com>
 
-So it should be set automatically when running `make` ? IOW, why do we
-have to set it explicitly?
+FWIW, the tests passed :)
 
-Thanks.
+> ---
+>  .../selftests/cachestat/test_cachestat.c      | 39 ++++++++++++++++---
+>  1 file changed, 33 insertions(+), 6 deletions(-)
+>
+> diff --git a/tools/testing/selftests/cachestat/test_cachestat.c b/tools/t=
+esting/selftests/cachestat/test_cachestat.c
+> index 632ab44737ec..b6452978dae0 100644
+> --- a/tools/testing/selftests/cachestat/test_cachestat.c
+> +++ b/tools/testing/selftests/cachestat/test_cachestat.c
+> @@ -33,6 +33,11 @@ void print_cachestat(struct cachestat *cs)
+>         cs->nr_evicted, cs->nr_recently_evicted);
+>  }
+>
+> +enum file_type {
+> +       FILE_MMAP,
+> +       FILE_SHMEM
+> +};
+> +
+>  bool write_exactly(int fd, size_t filesize)
+>  {
+>         int random_fd =3D open("/dev/urandom", O_RDONLY);
+> @@ -202,7 +207,7 @@ static int test_cachestat(const char *filename, bool =
+write_random, bool create,
+>         return ret;
+>  }
+>
+> -bool test_cachestat_shmem(void)
+> +bool run_cachestat_test(enum file_type type)
+>  {
+>         size_t PS =3D sysconf(_SC_PAGESIZE);
+>         size_t filesize =3D PS * 512 * 2; /* 2 2MB huge pages */
+> @@ -212,27 +217,43 @@ bool test_cachestat_shmem(void)
+>         char *filename =3D "tmpshmcstat";
+>         struct cachestat cs;
+>         bool ret =3D true;
+> +       int fd;
+>         unsigned long num_pages =3D compute_len / PS;
+> -       int fd =3D shm_open(filename, O_CREAT | O_RDWR, 0600);
+> +       if (type =3D=3D FILE_SHMEM)
+> +               fd =3D shm_open(filename, O_CREAT | O_RDWR, 0600);
+> +       else
+> +               fd =3D open(filename, O_RDWR | O_CREAT | O_TRUNC, 0666);
+>
+>         if (fd < 0) {
+> -               ksft_print_msg("Unable to create shmem file.\n");
+> +               ksft_print_msg("Unable to create file.\n");
+>                 ret =3D false;
+>                 goto out;
+>         }
+>
+>         if (ftruncate(fd, filesize)) {
+> -               ksft_print_msg("Unable to truncate shmem file.\n");
+> +               ksft_print_msg("Unable to truncate file.\n");
+>                 ret =3D false;
+>                 goto close_fd;
+>         }
+>
+>         if (!write_exactly(fd, filesize)) {
+> -               ksft_print_msg("Unable to write to shmem file.\n");
+> +               ksft_print_msg("Unable to write to file.\n");
+>                 ret =3D false;
+>                 goto close_fd;
+>         }
+>
+> +       if (type =3D=3D FILE_MMAP){
+> +               char *map =3D mmap(NULL, filesize, PROT_READ | PROT_WRITE=
+, MAP_SHARED, fd, 0);
+> +               if (map =3D=3D MAP_FAILED) {
+> +                       ksft_print_msg("mmap failed.\n");
+> +                       ret =3D false;
+> +                       goto close_fd;
+> +               }
+> +               for (int i =3D 0; i < filesize; i++) {
+> +                       map[i] =3D 'A';
+> +               }
+> +               map[filesize - 1] =3D 'X';
+> +       }
+
+Joshua is right. We're already doing the write_exactly() for both
+cases? Let's write_exactly() (i.e using the file descriptor-based
+write syscall) only for FILE_SHMEM.
+
+And why do we need the 'X' at the end?
 
