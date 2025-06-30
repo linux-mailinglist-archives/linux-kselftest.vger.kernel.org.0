@@ -1,95 +1,91 @@
-Return-Path: <linux-kselftest+bounces-36126-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36127-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61532AEE6E1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jun 2025 20:38:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 619A8AEE886
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jun 2025 22:47:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 987423E0470
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jun 2025 18:38:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B5CB817D189
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jun 2025 20:47:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 578372E6130;
-	Mon, 30 Jun 2025 18:36:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFAB21E32D6;
+	Mon, 30 Jun 2025 20:47:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gtcmrmQb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WJNalNJp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C63DE28DB67;
-	Mon, 30 Jun 2025 18:36:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31F2449620;
+	Mon, 30 Jun 2025 20:47:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751308592; cv=none; b=YkegyEnAC+4L+cfwTXdXnlYU5/gf/BbDDiwtorXnJaLoejqP6o6tdIctyOIbCEEXkeon0ndhM7n6v5NhIhW/W16l4zFra27dT3fkDRbRhBxKKmWaRjbwu1SskpHrWiSgzuE+3YvD2m87pTF8Q0PUjk93mekrKsgVGJ25fYNz/FU=
+	t=1751316470; cv=none; b=WNWJwjLXyhZZAgQfQVSFsu9MHMUAUt1R9Eq8Vp/Dhpep0QsSxYf2Pi0mpdnaTPXWEajRkT897mAGKwK2qJ5yENPnpT1aMyaxKU9kw58WFUQnADFdsc36fPhJ2v82+XVpO2tObXVBkEA3uriPHZJcLwm0bwUPpjJUc9xM9OzmHuQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751308592; c=relaxed/simple;
-	bh=5CGAuaHckqx/eNjnkLbHA3Vo6lu6wNyLq3v61h7I4hM=;
+	s=arc-20240116; t=1751316470; c=relaxed/simple;
+	bh=GEaL8rcdBdjMqjq9nsz7JSU5+s6+Xa55AiDvV1Tu7mU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KZdjMS1nZ7MPaiTSjhtxuac6LeWI5xjVZslCpxVrfWa61aEIa7Vi9Z7CrMzNdSCn5yZW/grfuHhKDRGOPY1yNOlEZbJs0bUqgPGclgjYQ528wSczDRwIp2nSRWCSq7bgbpc6YouG2FMT03PRrcjLStd/eF8eTCuMvq1r5d9phHc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gtcmrmQb; arc=none smtp.client-ip=209.85.214.177
+	 MIME-Version; b=RMFpkzBnZ0EqJ8GhkSU6Ev2j0q83XmyWv9DfFr0lnzwd0vTDm3j4jEHhcySbT6crphl2Qr9BrhF3e7qWMwh/XwBSsTyPAsKBGogo/cQanY0TijjTjl+gP/fFy/Uf6jrMcMZHpD+fi4dGv6y41yEcWaH5cbT3MHCKDE1wtZxXKYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WJNalNJp; arc=none smtp.client-ip=209.85.219.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-23508d30142so30933315ad.0;
-        Mon, 30 Jun 2025 11:36:30 -0700 (PDT)
+Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-e73e9e18556so4923988276.0;
+        Mon, 30 Jun 2025 13:47:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751308590; x=1751913390; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1751316468; x=1751921268; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=biWLBiH8zreqRPHmI3WiQocvMTd6+R4XuwJA5na6cOU=;
-        b=gtcmrmQbqnPuvd0jQi12yg9V+ncs25M/ki2TzqlOnheSRDxBDjjZvWJqr97mUZAUd/
-         PXNgDiW36xN7PH+/7BqxA9kxYOLxj6jjMKPvu6fbrsvMmrzxAORffE8zo2kaPtX3hMqL
-         wK1S6q5GXJ3+2WlLbgbDQQJ8V7vNjUfCn7JwzSZBh2W6OzQVt8ZKeFk+iUvyGaqhNcPK
-         aVQzYSaB8A47anKyv6D0sHOOz5djTzLr/y4FWFl9CPiNjl1uIHpHFmwX2M3i++yeD/m3
-         3JuAliKFYgLoTASbsU+wDTaJakweXux5Q8GYbcc7VGBmB28UuqXQHlYMjwAFxE3Hgsaa
-         zG/A==
+        bh=luntcRknwz6cxo7wxJHZIgNu/w/o1CsgItFUyxf5d4Q=;
+        b=WJNalNJpgiSwyC2rw07lyPQnUnG3Vkur2hXUUgZ8kmEYbr2Qv4+hUKwD+g3nnUAmWM
+         a9/Q8yTM68+m4LcJfNJM/dmGP7OEZhhNNqFAkP844K6DwmG1dM7OfE+NdSCzZxSgU2qH
+         pV9pB8d5CpbX7y9GaIy+0/IwAMlUci1FyMnTNuOowYTn+LlRAiaS/ulfDjOU5Q9ifQRu
+         qQMbqARyhNHdxmZM+qbz/xFNTEVwQx9ES/+LCbUuGchOerJj71+vJ/3qy3FavtAcD00a
+         S8SzoiaSqo2jDurCBbo8jrWC05NOcVZ++AO6aCkZaxeeXbRVh5g5LQRWOU4uMYu5nCql
+         0ocw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751308590; x=1751913390;
+        d=1e100.net; s=20230601; t=1751316468; x=1751921268;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=biWLBiH8zreqRPHmI3WiQocvMTd6+R4XuwJA5na6cOU=;
-        b=axri/rrJP899TWMqJJixrxhHlasBkKjBqRu+n/9aEElwax2u6eaFBe0dFn6Cvx/8bE
-         R45CMbgZ+JzjzG9DuQv4IOmj9HweSpCrOKzacWI/Mh2f41CEUVnLjYeshoyPqNnn81eA
-         4cn1aE9lKWKjKGQ0c0J0tMbenGzN5TP4hVWZm8jTeqS+phiLqSEllZVXxDPdDa+AGOOC
-         HPUSq4gAwVdhELUFEXkIUNUZBt06Hpe8jsSLh3+PGH5L6EdFTS+6ETXj2nGJNPIm3nGJ
-         hedpaNZfz1JPsX8uy68Kl+5xyIL9Zz3j4jlbsAZmzDpf69yq5OioOG97OuPFLkZdXdrl
-         GgFg==
-X-Forwarded-Encrypted: i=1; AJvYcCU90WYXMtcQg4/SfhIfgmERTJ5ltCnJ2rAdT+MUaidOaAnHOZ2QgQC4nRiLpKtC7LaZDd72zuYB/5tSuQE=@vger.kernel.org, AJvYcCVZEFiiUppWCFUjHHkpmElwE2V2zvNRve29fSkElxV5cLyAhr1nleUNWqaytjMWI/D9ifJIdN/8@vger.kernel.org, AJvYcCXaRx6sSDn1PjH7xjlreqgpdirX3spfA8dPgIUzAXn4aAq2b2PkINI7prXbv3tJEqDA7OFbUVr59YqoEgKWkUGl@vger.kernel.org
-X-Gm-Message-State: AOJu0YyXL+7KZ8PQKQt3hur/GQABrB1318ntxvnWDkPR5O8NDE/p9kDl
-	CcAbUpp2jf/WfGYSwF7LR3wmJqAYTQDaqMBgf79KJa/LIgP79Cr4Ohu/
-X-Gm-Gg: ASbGncu6WAYWB+ODEaEsDmddgUStl2PjvoSm8RRvgp2BdMGBZN2muMwYeqUTqpcVX8M
-	lZVGkvzjbohlknE2t5an4wphG/vwzygVcToeOoG4JMupxTjl1WIMt2Txs+UBebLNAVwpoQmDbth
-	nkFNF1K7ymPls0XyDGed/XYQGPzbmnIugrryEVl3Q5Dd2fbNDtHTtYcqtXhGIEDNBWv2JuJk7bS
-	KoDQXprS8rpUUTxaIedwodiA7eZIFfO/1DbE76bU+/66SeKgPw0UENcxvausOEfWMv8mJbhNJNG
-	jK+LjAFeXYETWuIpW6uaN9kZTbeqOPQi1N0t11Ywa1sN7tVBlBpOs6uvjjtEDi+JKEXgq2f1R1J
-	VlOz1+TK5dA1MmC6PfuWxiQTfrSczk9ET8Q==
-X-Google-Smtp-Source: AGHT+IGG+JD+4jJa0l57hBVjJA/4baaPokV5plbyfQtScN34gGySrND6hRXlSSbUb8qDQYLT4HHYsA==
-X-Received: by 2002:a17:902:e54a:b0:235:e942:cb9c with SMTP id d9443c01a7336-23ac381b1aamr261600055ad.5.1751308590075;
-        Mon, 30 Jun 2025 11:36:30 -0700 (PDT)
-Received: from malayaVM.mrout-thinkpadp16vgen1.punetw6.csb ([103.133.229.223])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23acb39c0b8sm92008485ad.138.2025.06.30.11.36.25
+        bh=luntcRknwz6cxo7wxJHZIgNu/w/o1CsgItFUyxf5d4Q=;
+        b=CO+wUHPuRahoCbw0adH6eZIZfsDEHwBi+m64ejWxuDzrZikIfEcSOhErfVoq35IWtd
+         JV+J/JKNL/GRksvJtcmypXtKoO0Kvvtwp7I62wy0+dYCOG7891tJTrm4kB1HacWQuNKo
+         3NgSfcI4FtK8EJWQQBWRxa3+9RKt4Pbo9crZmVdHYaDgav9ySprcxvgOGdkA63xoDGZM
+         BgKvk80L9MxxDw7u5Ri6BmI6deeO1YmimToX3fRpKdEabfdUXpciqqM+vRd3ZU2TJXa2
+         lb32iL8Jj5JaXmCC/sqSzxZONx6U0+MYX4j8OK9kp4gASzC4RWkEIZM3F9Q/TR5WDWYZ
+         P4xQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVv/zeQ8b67yiMpml6+so25Rj+ReqZcM1CO92W5kbK91KLaSXG3K01TuToMw6/vt/pUSgSnOXz4QlDzNBW1VVJB@vger.kernel.org, AJvYcCW5hlMdI3PrPF0IXBZwFjmQnltQq8p8E0vJNA5eCAItfxp3ReFxArEoI5aLxHbu4K2KLjni/rUCLWUX61Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwOATCaFPDbW0lXrJ8aS5xNFy7XVfirRiSBCqqJV62qRtJPxbS3
+	TVWFQKVCz7NelLRJQ797TfMW9D+d/wQKQn6/FJJeFcqd/Wq5G8MeI1/u
+X-Gm-Gg: ASbGncu4flgly/V0SFlH7dWrtx7sDGxy5kuKx2HVNoxhssg9Saezd1LTxPfZOhwwhPv
+	AmQl262lKhu6PPSooczXAzF9baIzP/GmiPCivqNcnZP2GGtFEtvfCsIhZECDh1IYWa3DqNzf5K/
+	ekSRTRmhKGdJBKhpOD2s3KEliN9uQO0LB4APwRZq1uGVB2Utx2ZdHsk30BIOjmqZD/1Oba0JWV2
+	Oo7+rmiD4ONgKr3Vg5Zgg8DCM0LTaAtULJTI+GcPPP8eWpP8bk1HyR+hvwX3s0FWf7SBG0US7nB
+	dzgu7GQqLpaPWdaysOLH2X4k2dKdfZrQHWgvj/Rkwj9kn0EOnUTZNLDr1Z/eFg==
+X-Google-Smtp-Source: AGHT+IHquH1SFomNj3I5uzYfR2v3NP5BKEXajHPCZ5A3PFOxIUkmSJNhnAqoanz5VhUyME4mdqYpxw==
+X-Received: by 2002:a05:6902:18d0:b0:e87:aa7f:6e15 with SMTP id 3f1490d57ef6-e896ee91671mr1733295276.4.1751316466280;
+        Mon, 30 Jun 2025 13:47:46 -0700 (PDT)
+Received: from localhost ([2a03:2880:25ff:5b::])
+        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e87a6be3ce5sm2560516276.38.2025.06.30.13.47.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jun 2025 11:36:29 -0700 (PDT)
-From: Malaya Kumar Rout <malayarout91@gmail.com>
-To: edumazet@google.com
-Cc: Malaya Kumar Rout <malayarout91@gmail.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org,
+        Mon, 30 Jun 2025 13:47:45 -0700 (PDT)
+From: Joshua Hahn <joshua.hahnjy@gmail.com>
+To: Suresh K C <suresh.k.chandrappa@gmail.com>
+Cc: nphamcs@gmail.com,
+	hannes@cmpxchg.org,
+	shuah@kernel.org,
+	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v3] selftests: net: fix resource leak  in napi_id_helper.c
-Date: Tue,  1 Jul 2025 00:06:16 +0530
-Message-ID: <20250630183619.566259-1-malayarout91@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <CAE2+fR_eG=eY+N9nE=Eh6Lip4nwWir2dRQq8Z-adOme3JNe06Q@mail.gmail.com>
-References: <CAE2+fR_eG=eY+N9nE=Eh6Lip4nwWir2dRQq8Z-adOme3JNe06Q@mail.gmail.com>
+Subject: Re: [PATCH] selftests: cachestat: add tests for mmap
+Date: Mon, 30 Jun 2025 13:47:43 -0700
+Message-ID: <20250630204744.1581380-1-joshua.hahnjy@gmail.com>
+X-Mailer: git-send-email 2.47.1
+In-Reply-To: <20250630180803.12866-1-suresh.k.chandrappa@gmail.com>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -98,102 +94,78 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Resolve minor resource leaks reported by cppcheck in napi_id_helper.c
+On Mon, 30 Jun 2025 23:38:03 +0530 Suresh K C <suresh.k.chandrappa@gmail.com> wrote:
 
-cppcheck output before this patch:
-tools/testing/selftests/drivers/net/napi_id_helper.c:37:3: error: Resource leak: server [resourceLeak]
-tools/testing/selftests/drivers/net/napi_id_helper.c:46:3: error: Resource leak: server [resourceLeak]
-tools/testing/selftests/drivers/net/napi_id_helper.c:51:3: error: Resource leak: server [resourceLeak]
-tools/testing/selftests/drivers/net/napi_id_helper.c:59:3: error: Resource leak: server [resourceLeak]
-tools/testing/selftests/drivers/net/napi_id_helper.c:67:3: error: Resource leak: server [resourceLeak]
-tools/testing/selftests/drivers/net/napi_id_helper.c:76:3: error: Resource leak: server [resourceLeak]
+> From: Suresh K C <suresh.k.chandrappa@gmail.com>
+> 
+> Add a test case to verify cachestat behavior with memory-mapped files
+> using mmap(). This ensures that pages accessed via mmap are correctly
+> accounted for in the page cache.
+> 
+> Tested on x86_64 with default kernel config
 
-cppcheck output after this patch:
-No resource leaks found
+Hi Suresh,
 
-Signed-off-by: Malaya Kumar Rout <malayarout91@gmail.com>
----
- .../selftests/drivers/net/napi_id_helper.c    | 23 ++++++++++++-------
- 1 file changed, 15 insertions(+), 8 deletions(-)
+Thank you for writing this patch! I'll let Nhat or Johannes comment more on the
+patch, but just had a few thoughts. Before going into the code, I wanted to
+note that it would be helpful in the future to note where this patch comes
+from. I saw there were a few iterations of this before, so it would help
+reviewers track what changed between the versions and what the motivation
+for new versions are. 
 
-diff --git a/tools/testing/selftests/drivers/net/napi_id_helper.c b/tools/testing/selftests/drivers/net/napi_id_helper.c
-index eecd610c2109..5581d04e180f 100644
---- a/tools/testing/selftests/drivers/net/napi_id_helper.c
-+++ b/tools/testing/selftests/drivers/net/napi_id_helper.c
-@@ -18,8 +18,8 @@ int main(int argc, char *argv[])
- 	socklen_t optlen;
- 	char buf[1024];
- 	int opt = 1;
--	int server;
--	int client;
-+	int server = -1;
-+	int client = -1;
- 	int ret;
- 
- 	server = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
- 
- 	if (setsockopt(server, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt))) {
- 		perror("setsockopt");
--		return 1;
-+		goto failure;
- 	}
- 
- 	address.sin_family = AF_INET;
-@@ -43,12 +43,12 @@ int main(int argc, char *argv[])
- 
- 	if (bind(server, (struct sockaddr *)&address, sizeof(address)) < 0) {
- 		perror("bind failed");
--		return 1;
-+		goto failure;
- 	}
- 
- 	if (listen(server, 1) < 0) {
- 		perror("listen");
--		return 1;
-+		goto failure;
- 	}
- 
- 	ksft_ready();
-@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
- 	client = accept(server, NULL, 0);
- 	if (client < 0) {
- 		perror("accept");
--		return 1;
-+		goto failure;
- 	}
- 
- 	optlen = sizeof(napi_id);
-@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
- 			 &optlen);
- 	if (ret != 0) {
- 		perror("getsockopt");
--		return 1;
-+		goto failure;
- 	}
- 
- 	read(client, buf, 1024);
-@@ -73,11 +73,18 @@ int main(int argc, char *argv[])
- 
- 	if (napi_id == 0) {
- 		fprintf(stderr, "napi ID is 0\n");
--		return 1;
-+		goto failure;
- 	}
- 
- 	close(client);
- 	close(server);
- 
- 	return 0;
-+
-+failure:
-+	if (client >= 0)
-+		close(client);
-+	if (server >= 0)
-+		close(server);
-+	return 1;
- }
--- 
-2.43.0
+[...snip...]
 
+> -		ksft_print_msg("Unable to create shmem file.\n");
+> +		ksft_print_msg("Unable to create file.\n");
+>  		ret = false;
+>  		goto out;
+
+Maybe we don't want to lose information about this -- it would be helpful
+to see why the test failed. It doesn't seem like there are any other
+indicators that would let users know if it was shmem or mmap that failed, so
+users would basically be guessing as to which of these two test failed.
+(And the same feedback aplies to the next two print statements)
+
+>  	}
+>  
+>  	if (ftruncate(fd, filesize)) {
+> -		ksft_print_msg("Unable to truncate shmem file.\n");
+> +		ksft_print_msg("Unable to truncate file.\n");
+>  		ret = false;
+>  		goto close_fd;
+>  	}
+>  
+>  	if (!write_exactly(fd, filesize)) {
+> -		ksft_print_msg("Unable to write to shmem file.\n");
+> +		ksft_print_msg("Unable to write to file.\n");
+>  		ret = false;
+>  		goto close_fd;
+>  	}
+
+I'm curious if we need this part down below. It seems like we already call
+write_exactly above, which should fill the file descriptor with random
+things up to filesize. Maybe it makes more sense to have these two options
+(write_exactly vs. directly modifying the contents) in a switch statement?
+It seems a bit redundant to do both for FILE_MMAP.
+
+> +	if (type == FILE_MMAP){
+> +		char *map = mmap(NULL, filesize, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+> +		if (map == MAP_FAILED) {
+> +			ksft_print_msg("mmap failed.\n");
+> +			ret = false;
+> +			goto close_fd;
+> +		}
+> +		for (int i = 0; i < filesize; i++) {
+> +			map[i] = 'A';
+> +		}
+> +		map[filesize - 1] = 'X';
+
+I'm also curious what the point of having the last character be different
+here. It doesn't seem like there is any validation code to check the contents
+of the file, so it seems a bit redundant to me as well. 
+
+Have a great day!
+Joshua
+
+Sent using hkml (https://github.com/sjp38/hackermail)
 
