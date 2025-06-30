@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-36116-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36117-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D858AEE47C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jun 2025 18:27:13 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4B7FAEE46E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jun 2025 18:25:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8B3FB440CC2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jun 2025 16:23:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 194777A9E89
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jun 2025 16:22:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAE7628FFD2;
-	Mon, 30 Jun 2025 16:23:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D79DC28FFD2;
+	Mon, 30 Jun 2025 16:23:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WPkMwsUP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lMqOArnH"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90FC121D3D2;
-	Mon, 30 Jun 2025 16:23:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEE9C1BD9CE;
+	Mon, 30 Jun 2025 16:23:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751300598; cv=none; b=m/xO8QO1W3LCG0XRIuvsUp/dmnI1OVFu8J9ybFQzzP/4ZEmsuzGAOh6qB15uexmWYoVI+sJsrhhURfTzW/XrK1D6WSIQWo/3OoFLJ7OBgXoz9GOC+nNQUZWUn1XsVk2ZS96sNLKTpse/aPxmpm/vScM908Emge1UL2dJyjAEyhc=
+	t=1751300629; cv=none; b=igYy5Enopuyjcm4banJ+nHwmcPGiffkIhDUVhA3EcrGk30yN5VdEK7VmQ8OF2R9uyBwP2pVUvTT34GYVis60VXB4/iM/x6+ZBaEmqyMehE7AB+TTcBcq4KhQPWYvtM252YPScccmJi/Q7419WSA8WkNmZ2cgnoJ6PRLKrrlooh4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751300598; c=relaxed/simple;
-	bh=kQ1SiFVfFedINnEo+Jo+aRMbJjKdNp+MrAhRtYlIOR8=;
+	s=arc-20240116; t=1751300629; c=relaxed/simple;
+	bh=306MnK3zdBbANH2fTCykMEEBXsRSy2zxEHJaHAHXWUg=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=InjEZxsq1/lXWTZ4YYEJ6RThHmqlbH7FO+0G8zj9xMHBnaJK73Jh+cEmNC2q2zyqlkncn8+BUeL9CGP9wcGF0PY2plyCKGmV/K2fhlj6u5IZpXcdoclJR6M/ZGPpo9oAkOgBTAP+hXFk3PmEjyn7BZemmL7kzGGjT+NFvGPvp5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WPkMwsUP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EE55C4CEE3;
-	Mon, 30 Jun 2025 16:23:17 +0000 (UTC)
+	 MIME-Version:Content-Type; b=BneJkzw1ynL8avzARcrGRAZdv//Y6Di2v/hbk4zF+WYHN4EuadssKi/C+IvhPKelEg4hVzExeE94URfUqM+XlvHPiJJVoxwE4zuXOkJedUq9anJ5nTWZ9WHMLpScpiazI7QWiEx+eTFE1Qo21an8CqosseBIi2KSr4WtNUaC3Mc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lMqOArnH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 796ECC4CEE3;
+	Mon, 30 Jun 2025 16:23:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751300598;
-	bh=kQ1SiFVfFedINnEo+Jo+aRMbJjKdNp+MrAhRtYlIOR8=;
+	s=k20201202; t=1751300629;
+	bh=306MnK3zdBbANH2fTCykMEEBXsRSy2zxEHJaHAHXWUg=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=WPkMwsUP1sca8xIJbRXsWaCBBuWarcgjSDldQoZUuxtXrVqz4OvJKMeJDDdyL97RW
-	 CrBVVxetFkFcFU4PqkpOaSb6RlTYz1A9AkY71PaJgD+OpiyaKkIsyCRqkVGioJT/j0
-	 WwdTlmlMHFIODj4O/STfeqtqSuAkHwhT4FyFimhJfF3xGh0P7AimcSnwzFZZ3RfNQU
-	 i9bSymgYp48YGJQZgQoNAAfRFZsCRFrWQ1nedUOJmbKHq5NKHK3w7zPbLKcPHra8fu
-	 OSppi4AnzHX1Hnlb/04WkiRRgQchX+a8rW4C7oz9bg8KrH2QmaNjNGqlkrng7jJ72G
-	 CcA6aksrKJtng==
-Date: Mon, 30 Jun 2025 09:23:16 -0700
+	b=lMqOArnHDT1Zqjc27gRtI+rMslF3ARhezsl+jbML64oTsW9i6HrWF24X6vwYrIS2y
+	 csmCTKx55lslwO2BfYVjnmqUiZohlkcN2euYmxajv5tR/Hhghz2lxc9Vd8kqGYDWlw
+	 q6vZXkRlpKJbGbve5tQOZkiY4R8SnHjOoV5eEF3gdXGyuDl2xG0/WupggNPRSTgE5D
+	 iocMSTAADzQarQOT72fcsdImtnnubC84wInuYiNjiqKW7UZQp8O2tYt5KhtcJMV4Bk
+	 B9s01u/FQgb8SiSbKQ3PgNQpIuZXEnejqYgTwGsGfEAwFAO6fVxbQarKNDaUrqcVKu
+	 rzavW79tic8YA==
+Date: Mon, 30 Jun 2025 09:23:47 -0700
 From: Jakub Kicinski <kuba@kernel.org>
 To: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>
 Cc: "alok.a.tiwari@oracle.com" <alok.a.tiwari@oracle.com>,
@@ -67,16 +67,16 @@ Cc: "alok.a.tiwari@oracle.com" <alok.a.tiwari@oracle.com>,
  "rs.ietf@gmx.at" <rs.ietf@gmx.at>, "Jason_Livingood@comcast.com"
  <Jason_Livingood@comcast.com>, "vidhi_goel@apple.com"
  <vidhi_goel@apple.com>
-Subject: Re: [PATCH v20 net-next 1/6] sched: Struct definition and parsing
- of dualpi2 qdisc
-Message-ID: <20250630092316.031b29d8@kernel.org>
-In-Reply-To: <PAXPR07MB7984F85A786D9B35898ECEBDA346A@PAXPR07MB7984.eurprd07.prod.outlook.com>
+Subject: Re: [PATCH v20 net-next 6/6] Documentation: netlink: specs: tc: Add
+ DualPI2 specification
+Message-ID: <20250630092347.7377b463@kernel.org>
+In-Reply-To: <PAXPR07MB7984777E0A2438D287B4A3DBA346A@PAXPR07MB7984.eurprd07.prod.outlook.com>
 References: <20250621193331.16421-1-chia-yu.chang@nokia-bell-labs.com>
-	<20250621193331.16421-2-chia-yu.chang@nokia-bell-labs.com>
-	<20250627162502.0a82accf@kernel.org>
-	<PAXPR07MB79849FDC079A2ECB144D75D1A347A@PAXPR07MB7984.eurprd07.prod.outlook.com>
-	<20250630081349.4c9d7976@kernel.org>
-	<PAXPR07MB7984F85A786D9B35898ECEBDA346A@PAXPR07MB7984.eurprd07.prod.outlook.com>
+	<20250621193331.16421-7-chia-yu.chang@nokia-bell-labs.com>
+	<20250627161930.385554c0@kernel.org>
+	<PAXPR07MB79842E86F802F227C79C05F6A347A@PAXPR07MB7984.eurprd07.prod.outlook.com>
+	<20250630081222.528202d5@kernel.org>
+	<PAXPR07MB7984777E0A2438D287B4A3DBA346A@PAXPR07MB7984.eurprd07.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -86,24 +86,18 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Mon, 30 Jun 2025 15:51:11 +0000 Chia-Yu Chang (Nokia) wrote:
-> > > Thanks again for other comments again, and I will take actions in the next version.
-> > >
-> > > As there is only one step marking in L-queue, so we still need two 
-> > > WRITE_ONCE even two attributes (one for threshold in packets and one 
-> > > in time) are used.
-> > >
-> > > When applying the step marking, we need to know either the computation 
-> > > is based on the sojourn time or queue length.  
+On Mon, 30 Jun 2025 15:27:52 +0000 Chia-Yu Chang (Nokia) wrote:
+> > On Sun, 29 Jun 2025 22:32:15 +0000 Chia-Yu Chang (Nokia) wrote:  
+> > > I was thinking could we keep the same strucutre? As we already have 
+> > > several rounds of review for both net-next and iproute2-next.  
 > > 
-> > Let me ask again - why do you use WRITE_ONCE() at all if the
-> > modification takes the qdisc lock? Which reader are you afraid of
-> > racing with?  
+> > Not a valid argument, uAPI is forever.  
 > 
-> This still needs 2 WRITE_ONCE even "step_thresh" (NLA_U32) and
-> "step_in_packtes" (NLA_FLAG) are replaced with "step_pkt_thresh"
-> (NLA_U32) and "step_time_thresh" (NLA_U32) - which was proposed in my
-> another email.
+> OK, then I will replace "step_thresh" (NLA_U32) and "step_in_packtes"
+> (NLA_FLAG) with "step_pkt_thresh" (NLA_U32) and "step_time_thresh"
+> (NLA_U32).
+> 
+> Does it make more sense yo you?
 
-If you don't understand the question - ask for clarifications :/
+yes
 
