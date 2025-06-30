@@ -1,40 +1,40 @@
-Return-Path: <linux-kselftest+bounces-36093-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36094-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52E14AED961
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jun 2025 12:08:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7EEF0AED9B0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jun 2025 12:21:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 05A731743AC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jun 2025 10:08:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B3D73A631E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jun 2025 10:21:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B70D0251782;
-	Mon, 30 Jun 2025 10:08:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0F112571BA;
+	Mon, 30 Jun 2025 10:21:20 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5420D2512E6;
-	Mon, 30 Jun 2025 10:08:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8337834CF5;
+	Mon, 30 Jun 2025 10:21:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751278100; cv=none; b=nmQtr8FBIt7CvchNXlRJuduqD9koPDvgEmrQugpFyTApUodcbGHKg7YwCYvIBbTvoFNQlddKo9wT6zyCctMmnld82S7iBwlTK3qfGfhxlLMnwKoJIQzKEInrq+WzSRcDPnup7ub4WzDed97LF9BvrVqacXGVLBrhItBI2mcIGyc=
+	t=1751278880; cv=none; b=osh/t4AZqzplHRQCI+jzPwI4zRG4R/TjCdMDF2WURK0/mYFRiBfWKvyWbRsgSrk7DdyX2/4S1YdxH+slOM7mMMWFXHTVDH7Kr56aEfC7acNJGrDjy6egvgyurtuXyhJ1VegcqE00idajoppFUBpqPeIP9HWZXd1noRDfv5PgoYk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751278100; c=relaxed/simple;
-	bh=Kx1sq/TMs8Va/BAWm9D+o8ft7JdS1Igx+utqfJ184I8=;
+	s=arc-20240116; t=1751278880; c=relaxed/simple;
+	bh=gd5ly1mJwxfTxHVXTiDXU1nAFy8ObA7vyFEsPg04wrk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cYO2WBJXhnKs8OxxQrCythcp6T6VbSJ/nCSnhEJinV5KV+1lqIa9LwkHWe76cp2EH/9SlIPWBXFvXEKRRnizSEeTLRVSlo/qdQ+ei00Vux4E8hycy4P3IXbJdXfaz9dkvjFVCFYEsomJkSBDWDNAgkN+27Qx4jfkOq0xPxN9Y04=
+	 In-Reply-To:Content-Type; b=hhIHytJNvSKlhr6Rqh5kGAmY0FrHNCuA5JTpZK3GVcGHOuP0uJX2HRwDTANcZsEdUo6ccjsIe/acPtY0rbozWCa3eascg6sdVGDnIVBu/nwWzVXZ9/2y21fLzDCDM2xd4pJRczwUlL/WCiCbDxbgU3TR7wOACQqzjdMaHsySaJA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EB3251D34;
-	Mon, 30 Jun 2025 03:08:02 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 20C931D34;
+	Mon, 30 Jun 2025 03:21:02 -0700 (PDT)
 Received: from [10.1.196.46] (e134344.arm.com [10.1.196.46])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 974EE3F58B;
-	Mon, 30 Jun 2025 03:08:16 -0700 (PDT)
-Message-ID: <1d825680-4275-42cb-9e3c-dc49f828f7a8@arm.com>
-Date: Mon, 30 Jun 2025 11:08:15 +0100
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BD3323F58B;
+	Mon, 30 Jun 2025 03:21:15 -0700 (PDT)
+Message-ID: <ee89d23e-db04-4646-a556-27117e94b5ed@arm.com>
+Date: Mon, 30 Jun 2025 11:21:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -42,7 +42,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] kselftest/arm64: Add lsfe to the hwcaps test
+Subject: Re: [PATCH 0/3] arm64: Support FEAT_LSFE (Large System Float
+ Extension)
 To: Mark Brown <broonie@kernel.org>, Catalin Marinas
  <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
  Jonathan Corbet <corbet@lwn.net>, Marc Zyngier <maz@kernel.org>,
@@ -52,71 +53,54 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
  linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
  linux-kselftest@vger.kernel.org
 References: <20250627-arm64-lsfe-v1-0-68351c4bf741@kernel.org>
- <20250627-arm64-lsfe-v1-3-68351c4bf741@kernel.org>
 Content-Language: en-US
 From: Ben Horgan <ben.horgan@arm.com>
-In-Reply-To: <20250627-arm64-lsfe-v1-3-68351c4bf741@kernel.org>
+In-Reply-To: <20250627-arm64-lsfe-v1-0-68351c4bf741@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 Hi Mark,
 
 On 6/27/25 18:20, Mark Brown wrote:
-> This feature has no traps associated with it so the SIGILL is not reliable.
+> FEAT_LSFE is optional from v9.5, it adds new instructions for atomic
+> memory operations with floating point values.  We have no immediate use
+> for it in kernel, provide a hwcap so userspace can discover it and allow
+> the ID register field to be exposed to KVM guests.
 > 
 > Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
+> Mark Brown (3):
+>        arm64/hwcap: Add hwcap for FEAT_LSFE
+>        KVM: arm64: Expose FEAT_LSFE to guests
+>        kselftest/arm64: Add lsfe to the hwcaps test
+> 
+>   Documentation/arch/arm64/elf_hwcaps.rst   |  4 ++++
+>   arch/arm64/include/asm/hwcap.h            |  1 +
+>   arch/arm64/include/uapi/asm/hwcap.h       |  1 +
+>   arch/arm64/kernel/cpufeature.c            |  2 ++
+>   arch/arm64/kernel/cpuinfo.c               |  1 +
+>   arch/arm64/kvm/sys_regs.c                 |  4 +++-
 >   tools/testing/selftests/arm64/abi/hwcap.c | 21 +++++++++++++++++++++
->   1 file changed, 21 insertions(+)
+>   7 files changed, 33 insertions(+), 1 deletion(-)
+
+
+I have looked through the series and it looks good to me modulo a couple 
+of minor comments left on the patches. Bare in mind fairly new here and 
+this is the first use of hwcap3 so I expect more experienced review is 
+required.
+
+Reviewed-by: Ben Horgan <ben.horgan@arm.com>
+
+> ---
+> base-commit: 86731a2a651e58953fc949573895f2fa6d456841
+> change-id: 20250625-arm64-lsfe-0810cf98adc2
 > 
-> diff --git a/tools/testing/selftests/arm64/abi/hwcap.c b/tools/testing/selftests/arm64/abi/hwcap.c
-> index 35f521e5f41c..9dfca2eb7c41 100644
-> --- a/tools/testing/selftests/arm64/abi/hwcap.c
-> +++ b/tools/testing/selftests/arm64/abi/hwcap.c
-> @@ -17,6 +17,8 @@
->   #include <asm/sigcontext.h>
->   #include <asm/unistd.h>
->   
-> +#include <linux/auxvec.h>
-> +
->   #include "../../kselftest.h"
->   
->   #define TESTS_PER_HWCAP 3
-> @@ -165,6 +167,18 @@ static void lse128_sigill(void)
->   		     : "cc", "memory");
->   }
->   
-> +static void lsfe_sigill(void)
-> +{
-> +	float __attribute__ ((aligned (16))) mem = 0;
-> +	register float *memp asm ("x0") = &mem;
-> +
-> +	/* LDFADD H0, H0, [X0] */
-> +	asm volatile(".inst 0x7c600000"
-Same effect, but isn't this the release variant, LDFADDL?
-> +		     : "+r" (memp)
-> +		     :
-> +		     : "cc", "memory");
-> +}
-> +
->   static void lut_sigill(void)
->   {
->   	/* LUTI2 V0.16B, { V0.16B }, V[0] */
-> @@ -758,6 +772,13 @@ static const struct hwcap_data {
->   		.cpuinfo = "lse128",
->   		.sigill_fn = lse128_sigill,
->   	},
-> +	{
-> +		.name = "LSFE",
-> +		.at_hwcap = AT_HWCAP3,
-> +		.hwcap_bit = HWCAP3_LSFE,
-> +		.cpuinfo = "lsfe",
-> +		.sigill_fn = lsfe_sigill,
-> +	},
->   	{
->   		.name = "LUT",
->   		.at_hwcap = AT_HWCAP2,
+> Best regards,
+> --
+> Mark Brown <broonie@kernel.org>
 > 
+> 
+
 
 Thanks,
 
