@@ -1,188 +1,266 @@
-Return-Path: <linux-kselftest+bounces-36085-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36086-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09ABEAED21D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jun 2025 03:06:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1169AED463
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jun 2025 08:18:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 247813B47E1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jun 2025 01:05:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B4EDD1891A9D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jun 2025 06:18:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75D0E28382;
-	Mon, 30 Jun 2025 01:05:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 914A21AA1DB;
+	Mon, 30 Jun 2025 06:18:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VgmG6aHK"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="gbh2xKHq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2073.outbound.protection.outlook.com [40.107.244.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDDBC8479;
-	Mon, 30 Jun 2025 01:05:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751245556; cv=none; b=CMtm/SsOL59fFpLkPIhZhQrEhVFxJj8aBv0lichilb9Ctz9IVdiJ9kDb/Z5bVXpUdV+aw6hX9zhEgY9SAD3yf8FivQenCVmrluEYeFZO83vV4gLGTVP3piuXDvQbpEOcjHZYcDcdtXd0BjTz+CtzhCGA3OUv1PVG/XD+Pl4uK2M=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751245556; c=relaxed/simple;
-	bh=V5Wd72GZB031iFqt8kuZQzmYdO2l3n2il+57WOcxn8E=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=APa8NaN5vUT77z5E4MQj+f9iKOBta+X5o4t9k8+EelGixFYbWmVw7A0g0eq/O9ayr3szab1lXPPMen+t1SdHh7r6hHf7ihAwGwsxZNpqen72px1yI6ZACU/h6B3MPzAoWTP72fUmdQzI3PNv3xjEMxcg7QmJBTxLx2fgBDxIFYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VgmG6aHK; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-748fe69a7baso4125000b3a.3;
-        Sun, 29 Jun 2025 18:05:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751245553; x=1751850353; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=tnhen2Rw1k5JsQ/lARRo8Ino0meN+pohOW9LsCInMVM=;
-        b=VgmG6aHK0SI8VcST02LPsPZ94O5bR2yM7EMmt3CeHwOFJnAAfxgKnaVv7MgL8rtJQH
-         6pO6wx+jKCDUXLhhxvqXXCMvuCEJyag+4+TictBeeFFQF8BMa8/G5FQouiCU5SZdCnif
-         kb8hwrcPpdhILgyrZESc2JofULYLBREDrvEFDLIYOV2BQuZLZgnv2T7CSWexWERYxKGC
-         DaUqrVyiRa139/26hlhfGJYUYRQ5lEysnV1beqM0RcoDeKuHE4LK/hggVeWWgH37zMCO
-         xw1oTZ83J150RCPYC5uejJFsmnls5w6ETwrIhFReccseuMDn0ERyaQFPTbSMPHY66t9Q
-         rOIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751245553; x=1751850353;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tnhen2Rw1k5JsQ/lARRo8Ino0meN+pohOW9LsCInMVM=;
-        b=MQBtULLKs1aVUpZEASFlwi75ZUuoaPKtawILmcnxQlXel5jvNAsIZkOFtF5NMGzGS1
-         jijiPDiQjLNFC94Zds4u7Q/+spmKQRjW0/RJ78NZLgEe6BwhtSpWI360a/4+e5wDONwM
-         5+z97P3p1aqfrj1K2vzzJGKFoHOvB57vn4vGTb4Gf2UhT9ObGWJxevyJy31r3TxsbeJQ
-         xJ7Mvrk0DG3k/HkHbY/1lkUFYUGAF/4/VvMlVS4gyzE57ioh64koMgSLlw9QVBw6cVnN
-         h9+61xV2Jy6Aw5OIW9BPosLGSoWutADWulG0QX337Hvsa7dHck5PIiMc07mN8Ps0Z1oY
-         ZgSQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU5BC+fhV+GKM3pw8CG5Xw2/6JJBfK0/pvPFeQGsiCMlCqCrj5uZWNiOhq3V3V7Tl7w9iqs8BhhGeV8km8LT+VE@vger.kernel.org, AJvYcCVI0AMri2zdZVq8Py+PkMQ0BWxCYAkKQdYoPkFkJ1110gjrjw6q4ThZa3LKJZvTEXkD8AuiGPitBqZNz9YJ@vger.kernel.org, AJvYcCX9Nc0KECV/N3Kg9/ncqxmTKRC+PxbMx+0C1JYqtOKQzar1SotJYPjWTWycRK/0ipfwd8Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy/xsXN5dXi/bIa/M5n9OyKDTR6ICtRzfZ6WCZDmp51oFb60soW
-	q9sfIkrQl3x6jd8/KXS3TAGMwrqVmFGtlw7DlezkqugBkjrUEGlXBMjV
-X-Gm-Gg: ASbGncvCV8Zke8LPm5pDARTVdOlz8krCub5ORrSpImlkq2XsKwdY7W+vvfdsi0f8fmu
-	/PwVE/7hwE6BEeKx3JLn180LyMywZeQ7poAOt4WAvmoXUN3ZZEzyO0CiUxciSmTdezblO4Eftlc
-	3fm53tEkT807HfrFoFrsWmpNKcLngiag1BmZ5uBhqnL+nkV7AzSGcrm+7HRm5/8Dx/Yg5iTTilm
-	LCqT4LI1MNrfm0CAAlK9ZGJmxsyXMb49vTMvlbLi+ynFiLwR46SKEm3DwUezJ/zTHX1+LhZ3hZT
-	pJEBxNYpAbTaCm7+IW4fJojxOkylBbKWmcfbYwCTxGRZB7+KKAcQrDcVDg==
-X-Google-Smtp-Source: AGHT+IHj/+Q0HzChyZILMS4ZuNN2bb9vE1x2v8Syb0cINVrL1gK4PsaIyi5Oe+AltudjhrnZ+KsR8w==
-X-Received: by 2002:a05:6a00:1389:b0:749:9c2:e154 with SMTP id d2e1a72fcca58-74af6e63144mr15581244b3a.4.1751245553134;
-        Sun, 29 Jun 2025 18:05:53 -0700 (PDT)
-Received: from [192.168.0.56] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74af56d0002sm7942287b3a.136.2025.06.29.18.05.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Jun 2025 18:05:52 -0700 (PDT)
-Message-ID: <34cb9cb46df58e118f7fe488ff40fd7a5cf7f224.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/3] bpf: Fix aux usage after do_check_insn()
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Luis Gerhorst <luis.gerhorst@fau.de>, Andrii Nakryiko
- <andrii@kernel.org>,  Mykola Lysenko	 <mykolal@fb.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann	 <daniel@iogearbox.net>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu	 <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, John Fastabend	 <john.fastabend@gmail.com>, KP
- Singh <kpsingh@kernel.org>, Stanislav Fomichev	 <sdf@fomichev.me>, Hao Luo
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,  Shuah Khan
- <shuah@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Peilin Ye
- <yepeilin@google.com>,  Jiayuan Chen	 <mrpre@163.com>, Saket Kumar Bhaskar
- <skb99@linux.ibm.com>, Ihor Solodrai	 <isolodrai@meta.com>, Daniel Xu
- <dxu@dxuuu.xyz>, bpf@vger.kernel.org, 	linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Paul Chaignon	 <paul.chaignon@gmail.com>
-Cc: syzbot+dc27c5fb8388e38d2d37@syzkaller.appspotmail.com
-Date: Sun, 29 Jun 2025 18:05:50 -0700
-In-Reply-To: <20250628145016.784256-3-luis.gerhorst@fau.de>
-References: <20250628145016.784256-1-luis.gerhorst@fau.de>
-	 <20250628145016.784256-3-luis.gerhorst@fau.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E104417BD3;
+	Mon, 30 Jun 2025 06:18:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.73
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751264301; cv=fail; b=oSLyKIcgAw6gmPoNZM6cVitdo7NbvjgeMhv2DOYoB4Nlxmhn7N7Z/54LiZLW5KOO0j1d8B8i6XpudGygAZCndsrEIj2Clgi33AuNilZRDKO7MQbEnvLgb2rt0pkbcsy47vEZqg3h7oW+BlJvt5vxNyDeHcBzZ9DR+L+oyKPi50E=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751264301; c=relaxed/simple;
+	bh=DlWegF9TlJz9gcP5bKm5NVBM7UtpPLNmdPmNdvleeyU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=aHystE4W/VOlg/0Yz5Cf+COVuMYfCFoYT5+aoq/tFpNsVLZ4GeEm2Dj1+RAWGi0lpz1AnKAuM23cO94hTe2WL0f73ej8yoV4dCcvwQZNPvRz1rMt9tMGXpRRnpmb4i1/UxqBEI4efuFtq8gdtjizUvGXIaJghDoAICdB/iGloUg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=gbh2xKHq; arc=fail smtp.client-ip=40.107.244.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=JqILkA4V/1p89exW95l3IFVMgd0q3QHCiVaO9pw+6vEml79bAWunsmgGa7K6TdBNEoJvfC1wk+6QXkE7zcD1HFbYRwHE6uLsJ0OQioVLlrDYDnc1Byftg8deGWyol3+aguxTr9CQJDugdlfjbvU1SjVXHK5gP5ymuVuvorQ3XhPltKXrYVGsKzDiC8/MFxfbyPmL1MH2wd15IZyYOt+mPC4Q3OuI+etRF5D5JCWWOVvJSxF7Ma6Gimyrkd/ZGzFWxIfSoEDh2MYCEXgpEevHnCZKhr45GYp4nJZoxsznLvyfDxUoTwtr6cpxVN+asXY1upbhzLjkCUj1I/+iZinnkw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nBbT1EJx3gXqHfaCyA4n6Sa0wFrHXKVqBn6ZCRwH+ro=;
+ b=ECP8bfFOGjaDSQM5QkgvE5mkeaf8LXfvkQuP85oV3KH5O4AGmNW1fLTHspeBaYk99G4/JptzZQ8oHERkPkx2jJ+Ov/5P2ylIpXWvpBWXjzP6zFOJBIZos7/1I+cNoEt7nq8EWFzO60Lu3wdpIqa7SfUv3ZlwbN5skPc+zLxgB+oJlHn+8ytt2xZDudtyxpHRzXI0VcR0G2L+t2z46DoHCdyTmcSRX5dPQV1bgwSqRIfNKhpDvEqC5ibiPJ06ZPYRsQEr4ke7O+IWlhtugV9cQti7CJtKrXnarX/0SAk6kIVGYV7CjvuJERNl8Epz0Dw0S5n8LFft23GIJsKa7kbgBQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nBbT1EJx3gXqHfaCyA4n6Sa0wFrHXKVqBn6ZCRwH+ro=;
+ b=gbh2xKHqJ63W7qlZWYJM5d2kgAep2E4/7sJBPXEV9nDZdovHvEe9aNWnjr/okrEPai8dLbHDwn4TVWr6qs2WLws2VqG06pZQXgidDyuOPhHfYCSifxNRaF8QbNfea4cp3F6P9UshIOY5NRzaPO9vc0MxFnHR823jHI2658gw/dE=
+Received: from MW4P222CA0019.NAMP222.PROD.OUTLOOK.COM (2603:10b6:303:114::24)
+ by IA0PPFAF883AE17.namprd12.prod.outlook.com (2603:10b6:20f:fc04::be1) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8835.26; Mon, 30 Jun
+ 2025 06:18:16 +0000
+Received: from SJ1PEPF00002323.namprd03.prod.outlook.com
+ (2603:10b6:303:114:cafe::43) by MW4P222CA0019.outlook.office365.com
+ (2603:10b6:303:114::24) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8880.28 via Frontend Transport; Mon,
+ 30 Jun 2025 06:18:15 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ SJ1PEPF00002323.mail.protection.outlook.com (10.167.242.85) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8901.15 via Frontend Transport; Mon, 30 Jun 2025 06:18:15 +0000
+Received: from [10.85.36.84] (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 30 Jun
+ 2025 01:18:02 -0500
+Message-ID: <d112f9fd-5ccc-4b77-a670-4a2f3a443dbe@amd.com>
+Date: Mon, 30 Jun 2025 11:48:00 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 03/33] vfio: selftests: Introduce vfio_pci_device_test
+To: David Matlack <dmatlack@google.com>
+CC: Alex Williamson <alex.williamson@redhat.com>, Aaron Lewis
+	<aaronlewis@google.com>, Adhemerval Zanella <adhemerval.zanella@linaro.org>,
+	Adithya Jayachandran <ajayachandra@nvidia.com>, Andrew Jones
+	<ajones@ventanamicro.com>, Ard Biesheuvel <ardb@kernel.org>, "Arnaldo
+ Carvalho de Melo" <acme@redhat.com>, Bibo Mao <maobibo@loongson.cn>, Claudio
+ Imbrenda <imbrenda@linux.ibm.com>, Dan Williams <dan.j.williams@intel.com>,
+	Dave Jiang <dave.jiang@intel.com>, <dmaengine@vger.kernel.org>, Huacai Chen
+	<chenhuacai@kernel.org>, James Houghton <jthoughton@google.com>, "Jason
+ Gunthorpe" <jgg@nvidia.com>, Joel Granados <joel.granados@kernel.org>, "Josh
+ Hilke" <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>,
+	<kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>, "Mike Rapoport
+ (Microsoft)" <rppt@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, "Pasha
+ Tatashin" <pasha.tatashin@soleen.com>, "Pratik R. Sampat" <prsampat@amd.com>,
+	Saeed Mahameed <saeedm@nvidia.com>, Sean Christopherson <seanjc@google.com>,
+	Shuah Khan <shuah@kernel.org>, Vinicius Costa Gomes
+	<vinicius.gomes@intel.com>, Vipin Sharma <vipinsh@google.com>, Wei Yang
+	<richard.weiyang@gmail.com>, "Yury Norov [NVIDIA]" <yury.norov@gmail.com>,
+	Santosh Shukla <santosh.shukla@amd.com>, Vasant Hegde <vasant.hegde@amd.com>
+References: <20250620232031.2705638-1-dmatlack@google.com>
+ <20250620232031.2705638-4-dmatlack@google.com>
+ <fe4b1d31-e910-40a1-ab83-d9fd936d1493@amd.com>
+ <4aef95a0-a0de-4bd5-b4ec-5289f0bc0ab1@amd.com>
+ <CALzav=fZcLpQ+9J=XOZ-=Cr1UA8qKa5NHXB1dJpqhCp7pee7Ow@mail.gmail.com>
+ <62734f4d-8883-4145-a483-5bf2c462fad5@amd.com>
+ <CALzav=eYD85ydnpAwYsTArDHbxOLd+D-BtYWaiYQxeJ1tGGp7A@mail.gmail.com>
+Content-Language: en-US
+From: Sairaj Kodilkar <sarunkod@amd.com>
+In-Reply-To: <CALzav=eYD85ydnpAwYsTArDHbxOLd+D-BtYWaiYQxeJ1tGGp7A@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PEPF00002323:EE_|IA0PPFAF883AE17:EE_
+X-MS-Office365-Filtering-Correlation-Id: 49b024be-c56d-4b8c-b393-08ddb79de5fc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|36860700013|82310400026|1800799024|13003099007;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?NThtdERWQnlRS2FrVWl1aG5vZm13VWNBU0hjNEN0YzN5ZEtNSWMzL09PWXcr?=
+ =?utf-8?B?ZWdJdDBZQXNZc2VDVXl5NzdlUS9OSC85aG5ZSHJNM2d5U0hIaGxXTjYxbXo1?=
+ =?utf-8?B?M3RySy84WEc4QlNTb0h1RERrV1l0YytjUXVxeDVmS0k2SXB0RExBWmg4VDEw?=
+ =?utf-8?B?TUszV0I1dVVLcHlHTFhZMWM0M29uK0Y2QWlyN1hIMVZGZDFISDh2QS85TjBu?=
+ =?utf-8?B?MExEZE51cGQ4Ty9pNXJpZVdYL21GUTBuNitBVUxJaGM3WWh1Sk1HL09WYS9r?=
+ =?utf-8?B?R05LcWdnMHlSQ0ZUekZCQnMwcmFpeEtZalBJUDRBS1hTZmtuQXN5VEFhOW5s?=
+ =?utf-8?B?SU1HaFp1aWp1cXkrRWN3anZmT3cwZytobWhqcThLZ3pLd2l1R3I3SmthOTFK?=
+ =?utf-8?B?dFRpV2d6Y056dWtwSHcrUkliSTVpQ3QrV0dVcHBSZ1NQM1hiaVlzdVJPSnov?=
+ =?utf-8?B?MlBNZXdjSHBaRmJjaFk1RTF2WEY3d08yTXdxWk5mTmxRRkFBZTFvcFdPTmtF?=
+ =?utf-8?B?YUwzVnZPWExMejVoNVRjN0UzcGwwQjlScHFDRFhSSmxQcW9zMC9VNHFxRFNT?=
+ =?utf-8?B?ODdTZkpNUHdrMXVCblRDSll6SUx5QjRtcENYTzh4Rk5OaU91VUlXZFNGbHZa?=
+ =?utf-8?B?amY3WnR0ZUN4dEJiQ0ExSGNvYUtBaGFtSHI4NUlzdmRDMEh2U1lRNXJ1ampE?=
+ =?utf-8?B?bGdKc2x1ZUR0Z0tDY1k5b3R0OGp3NnhjUzVqekh5VWlrTTd1RjNmSnpiTk9X?=
+ =?utf-8?B?aFlUb2QwV2g4cURZV05JaXJQdWZzSnM5OXhkcXUxZUJQaGYzOE5PZDdNZEg1?=
+ =?utf-8?B?WndRSnpBdWE3VlFoN0VOMmN3WFk2RU1DTWk1TTlUOGRPN043cThOZHVaL1dW?=
+ =?utf-8?B?cGJIMTdJeVovUm5LQ2ZTV2Yrc00rWTNEN1haQjNWUC9TM2JWZHJkektEK3BV?=
+ =?utf-8?B?dU9SWUZZMEFLekR2aGE1S29sdEMxYnFrMndQcmZqS1dQYXVRcXVtdDMyaCtU?=
+ =?utf-8?B?bytFSXlWQWlYWnBUNTQzcVlwOGppS216UkFJYTNCRC9YYXlQSktWdTVmakta?=
+ =?utf-8?B?SzNmbTg3VnNSRVZEc3o4cnNNeHNhanNpV1JmTWxIaStEb0hqUXhlU2lYS2Ux?=
+ =?utf-8?B?ZktZeUYwa0s3dTFnZk1welU1WkUwTWUzdXJXZmQ0Mi9NbHJCa3JXcW11MUty?=
+ =?utf-8?B?VTZsd2RTK3hpb01ETE5YZTRqRkw2NG9VSDFzUEpORHZyWWl2SHJySEd4K1VO?=
+ =?utf-8?B?TWVlaDJDOWdkQXM4QTJRclc3UjN5RmViMmVIU3ExOVhHMXRHd0ZyOHNtZEkr?=
+ =?utf-8?B?c3FyNmhzUE85a0hqMitKYWcxYWpuR3luTW83dVhOcW93MEp1NUNGTVdGMGdO?=
+ =?utf-8?B?QU9waFhuQkVKbENnK3o2c21SYmlZWnAwb2gvV2JBQnBRazFscDZKSlEweVhJ?=
+ =?utf-8?B?YjlDSUdLRHgvOGtvd3crR0RSUnhaOFRyVlI5Q0Npb0lMbmkxb1c5dW5KTXVN?=
+ =?utf-8?B?YkRva3RBUFc4S1huazlac3ZRb2tZVisvUFBKcjM3T013cDIwWm9qYnFLOWRW?=
+ =?utf-8?B?MlFUL3puSnpWYnNSdUhSSUQxMUhrcCt6b3RVaGlzd0FTNHdEanVZTG1UVlY4?=
+ =?utf-8?B?VUhmSFcwenRJR2cwVlMxSE1uUDA5T1VxUlVoVks3L2F3eVFhbHBTV1FiVVNp?=
+ =?utf-8?B?NVh6ZEZJOUFsY3U0eXZlUGljcVpVVVBadkFjWEt5cGFFdEpMbzlWTlo0aGFi?=
+ =?utf-8?B?dWtUVm5OakNvdnNZaWc3ZkxxSUZmSXU3SUdxZXprVkczYnFHdmpaQkxJSTIz?=
+ =?utf-8?B?OS9QMUoxNHd3SkZDdmg4cHptVlRmQ3ozei9oSDBCT2REbzYxR2lYaFNTNENV?=
+ =?utf-8?B?SHpPRTA5eFpiTXoraG1OSWhVOGJ0d25XTXQrV09Cc016OHZGUDJlbEZSOUdI?=
+ =?utf-8?B?UTVNODNkMVJYTXdTR3ZURmhGcGQvV2VZOUNjVnp1VGtwNEt0TWJ3ZG96YjVs?=
+ =?utf-8?B?V0IzQkx4QjZlUG13MnBESS82RUk4WGl0dDU1ejRJYXJ6YW1ORGpuQjZFeDIr?=
+ =?utf-8?B?RjdaQjZwcyt0YjVxMVZmajArL3gzeWFIeUZtUT09?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(7416014)(376014)(36860700013)(82310400026)(1800799024)(13003099007);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2025 06:18:15.1430
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 49b024be-c56d-4b8c-b393-08ddb79de5fc
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ1PEPF00002323.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PPFAF883AE17
 
-On Sat, 2025-06-28 at 16:50 +0200, Luis Gerhorst wrote:
 
-[...]
 
-> @@ -19955,11 +19960,11 @@ static int do_check(struct bpf_verifier_env *en=
-v)
->  			/* Prevent this speculative path from ever reaching the
->  			 * insn that would have been unsafe to execute.
->  			 */
-> -			cur_aux(env)->nospec =3D true;
-> +			prev_aux(env)->nospec =3D true;
+On 6/28/2025 4:38 AM, David Matlack wrote:
+> On Thu, Jun 26, 2025 at 9:57 PM Sairaj Kodilkar <sarunkod@amd.com> wrote:
+>>
+>>
+>>
+>> On 6/26/2025 9:59 PM, David Matlack wrote:
+>>> On Thu, Jun 26, 2025 at 4:44 AM Sairaj Kodilkar <sarunkod@amd.com> wrote:
+>>>> On 6/26/2025 4:57 PM, Sairaj Kodilkar wrote:
+>>>>> On 6/21/2025 4:50 AM, David Matlack wrote:
+>>>>>> +/*
+>>>>>> + * Limit the number of MSIs enabled/disabled by the test regardless
+>>>>>> of the
+>>>>>> + * number of MSIs the device itself supports, e.g. to avoid hitting
+>>>>>> IRTE limits.
+>>>>>> + */
+>>>>>> +#define MAX_TEST_MSI 16U
+>>>>>> +
+>>>>>
+>>>>> Now that AMD IOMMU supports upto 2048 IRTEs per device, I wonder if we
+>>>>> can include a test with max MSIs 2048.
+>>>
+>>> That sounds worth doing. I originally added this because I was hitting
+>>> IRTE limits on an Intel host and a ~6.6 kernel.
+>>>
+>>> Is there some way the test can detect from userspace that the IOMMU
+>>> supports 2048 IRTEs that we could key off to decide what value of
+>>> MAX_TEST_MSI to use?
+>>>
+>>
+>> The feature is published to userspace through
+>>
+>> $ cat /sys/class/iommu/ivhd0/amd-iommu/features
+>> 25bf732fa2295afe:53d
+>>
+>> The output is in format "efr1:efr2". The Bit 9-8 of efr2 shows the
+>> support for 2048 interrupts (efr2 & 0x300).
+>>
+>> Please refer 3.4.13 Extended Feature 2 Register of IOMMU specs [1] for
+>> more details.
+>>
+>> [1]
+>> https://www.amd.com/content/dam/amd/en/documents/processor-tech-docs/specifications/48882_IOMMU.pdf
+>>
+>> Note that, when device is behind PCIe-PCI bridge the IOMMU may hit IRTE
+>> limit early as multiple devices share same IRTE table. (But this is a
+>> corner case and I doubt that 2K capable device is kept behind the
+>> bridge).
+> 
+> Thanks. We could definitely read that and allow up to 2048 MSIs in
+> this test. Would you be ok if we defer that to a future commit though?
+> This series is already quite big :)
+> 
 
-I don't like the prev_aux() call in this position, as one needs to
-understand that after do_check_insn() call what was current became
-previous. This at-least requires a comment. Implementation with a
-temporary variable (as at the bottom of this email), imo, is less
-cognitive load.
+Sure ! no problem.
 
->  			/* IF it was an ADD/SUB insn, potentially remove any
->  			 * markings for alu sanitization.
->  			 */
-> -			cur_aux(env)->alu_state =3D 0;
-> +			prev_aux(env)->alu_state =3D 0;
->  			goto process_bpf_exit;
->  		} else if (err < 0) {
->  			return err;
+>>
+>>>>>> +
+>>>>>> +    vfio_pci_dma_map(self->device, iova, size, mem);
+>>>>>> +    printf("Mapped HVA %p (size 0x%lx) at IOVA 0x%lx\n", mem, size,
+>>>>>> iova);
+>>>>>> +    vfio_pci_dma_unmap(self->device, iova, size);
+>>>>>
+>>>>>
+>>>>> I am slightly confused here. Because You are having an assert on munmap
+>>>>> and not on any of the vfio_pci_dma_(map/unmap). This test case is not
+>>>>> testing VFIO.
+>>>>
+>>>> I missed to see ioctl_assert. Please ignore this :) Sorry about that.
+>>>
+>>> No worries, it's not very obvious :)
+>>>
+>>> vfio_pci_dma_map() and vfio_pci_dma_unmap() both return void right now
+>>> and perform internal asserts since all current users of those
+>>> functions want to assert success.
+>>>
+>>> If and when we have a use-case to assert that map or unmap fails
+>>> (which I think we'll definitely have) we can add __vfio_pci_dma_map()
+>>> and __vfio_pci_dma_unmap() variants that return int instead of void.
+>>
+>> Yep we can. Another question, why do we need assert on mmunmap ? If
+>> mmunmap fails then its not really a fault of VFIO.
+> 
+> You're right, it's very unlikely (almost impossible) to be VFIO's
+> fault if munmap() fails. But it would be a sign of a bug in the test,
+> so it is still good to detect so we can fix it.
 
-[...]
+Understood. Thanks !
 
----
+-Sairaj
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index a136d9b1b25f..a923614b7104 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -19953,6 +19953,7 @@ static int do_check(struct bpf_verifier_env *env)
- 	bool pop_log =3D !(env->log.level & BPF_LOG_LEVEL2);
- 	struct bpf_verifier_state *state =3D env->cur_state;
- 	struct bpf_insn *insns =3D env->prog->insnsi;
-+	struct bpf_insn_aux_data *insn_aux;
- 	int insn_cnt =3D env->prog->len;
- 	bool do_print_state =3D false;
- 	int prev_insn_idx =3D -1;
-@@ -19972,6 +19973,7 @@ static int do_check(struct bpf_verifier_env *env)
- 		}
-=20
- 		insn =3D &insns[env->insn_idx];
-+		insn_aux =3D &env->insn_aux_data[env->insn_idx];
-=20
- 		if (++env->insn_processed > BPF_COMPLEXITY_LIMIT_INSNS) {
- 			verbose(env,
-@@ -20048,7 +20050,7 @@ static int do_check(struct bpf_verifier_env *env)
- 		/* Reduce verification complexity by stopping speculative path
- 		 * verification when a nospec is encountered.
- 		 */
--		if (state->speculative && cur_aux(env)->nospec)
-+		if (state->speculative && insn_aux->nospec)
- 			goto process_bpf_exit;
-=20
- 		err =3D do_check_insn(env, &do_print_state);
-@@ -20056,11 +20058,11 @@ static int do_check(struct bpf_verifier_env *env)
- 			/* Prevent this speculative path from ever reaching the
- 			 * insn that would have been unsafe to execute.
- 			 */
--			cur_aux(env)->nospec =3D true;
-+			insn_aux->nospec =3D true;
- 			/* If it was an ADD/SUB insn, potentially remove any
- 			 * markings for alu sanitization.
- 			 */
--			cur_aux(env)->alu_state =3D 0;
-+			insn_aux->alu_state =3D 0;
- 			goto process_bpf_exit;
- 		} else if (err < 0) {
- 			return err;
-@@ -20069,7 +20071,7 @@ static int do_check(struct bpf_verifier_env *env)
- 		}
- 		WARN_ON_ONCE(err);
-=20
--		if (state->speculative && cur_aux(env)->nospec_result) {
-+		if (state->speculative && insn_aux->nospec_result) {
- 			/* If we are on a path that performed a jump-op, this
- 			 * may skip a nospec patched-in after the jump. This can
- 			 * currently never happen because nospec_result is only
 
