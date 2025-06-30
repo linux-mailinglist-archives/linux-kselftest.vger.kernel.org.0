@@ -1,223 +1,123 @@
-Return-Path: <linux-kselftest+bounces-36097-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36098-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B736AEDCAC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jun 2025 14:25:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3556BAEDCDB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jun 2025 14:34:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 916E11897652
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jun 2025 12:25:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 205CD3AC502
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jun 2025 12:33:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4725B289820;
-	Mon, 30 Jun 2025 12:24:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1977286D62;
+	Mon, 30 Jun 2025 12:33:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="HcXg2QtP"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Rf795Doa"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2040.outbound.protection.outlook.com [40.107.102.40])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D7E01DFCE;
-	Mon, 30 Jun 2025 12:24:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.102.40
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751286291; cv=fail; b=aypyTQ3cLrrc7MDfGN5evoIAM597BpBq6Cyp7G0lXePdz4tu2RDhRnYhcdvuEuz49shS7pnh4juVC+jG0D7mwQ7qNrqjl3n7Kc0cZ9mtyrvMxLf5lOy59bOhm2Hqg6/rItBlPaX9Wks+Rkoe2r3XgfayrvL6t6KshilcLTBUdlw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751286291; c=relaxed/simple;
-	bh=CpPvCSG455W6iq09cjpwjr9KNzoudK0hAcu8xzf7dgs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=TUyorZzOo9Tgkyev8PKIvBf/09750768lKPTRdht6X9fwnf9GUR4CEo+AUGNfH1rEZfE34BBCvUh4IT3zyGpq8HoUZ57YtX8IrS3L94AoGJczxy1RePm2ba1rnvUXk3ngYJi3909KeCUF70M0GmeE8Em0g1hKbDdOv2dILzxpOM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=HcXg2QtP; arc=fail smtp.client-ip=40.107.102.40
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Y6tbdJo73NomOr8t9bhg6mk5iHcfV5uGYXlw8RqODUI/SioSLs5r/eNadhussTZQa5ZtTnbHLgpHSejfHMMgjIc4Ny7YKPECQmjVeEPyVbk24bTZwQX7247iDOWSY+4ZZOD/ewKQplqgEs0tQhPq4vgoG+jDC2122eKQLGcOjypqCgtPLeq7fwwpnG3TAKBtnWc3wfFQ5SKM4Cp2lynDQ/7asABiOnTm4ICWbclEYi11NDs9/E9dLaxqBuXsQsQyoOlhQ7/pgkavpIv5bmyVKcY6ho9qXZnU2Fm/zzUxnBTViqPsqZSQ41+Aj0KthscaCE+ZStFZEka9SadsVMRfeA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gZ3KOkygRsV0hDvV8q8UHK4O4ZiQ9wTodkoWlsFq4/E=;
- b=cdkNR4seXEB6vLR/d6KnhyOQujkq/5ptexYS5PGppA+nu1BLeQBF6dABQRJAUehoSiTpmtuH0M3u7hk0IheQ961Fb+KgJ1qEaIPGAkyhw7qAkhvOyJWNMjc1GsQiBZqBcxsb0bHaUnJpzmKYasG+Ec021b7iXNBGdsKRyaB+auUjqwXxbxPfxFf9GITJFVbLkhRdy4QRblyCn8KkFQlFKGjFFUnihZixCXiWmBkz4aHC1Nl9vxfdUsfD51h45DOXXKRBIE+I8pOjl9be4cNnwC8YVwChzvscNPVYUOCWv5mrbBOo1sQUqHzjYD3wA4eNoCrVf/ja2JiKOIVy7Q4EUg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gZ3KOkygRsV0hDvV8q8UHK4O4ZiQ9wTodkoWlsFq4/E=;
- b=HcXg2QtPfnu8/QJ4JtM+A+OsaZaZ2bA0PmW4tg3mkDYE4FL5MF9MCWMnGTkfAHOlLTCv2e0OxZccNWGqIduUfieE/CWAw3m7ApEWLeiTDs673CsCrBfEgI4Ke4TL/aj+f4qt3SYf4AvW7aTB1scux+oNPEtgHa9s1Fc586nRzg8=
-Received: from MN2PR08CA0025.namprd08.prod.outlook.com (2603:10b6:208:239::30)
- by CH8PR12MB9768.namprd12.prod.outlook.com (2603:10b6:610:260::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8880.26; Mon, 30 Jun
- 2025 12:24:46 +0000
-Received: from BL02EPF00021F6A.namprd02.prod.outlook.com
- (2603:10b6:208:239:cafe::34) by MN2PR08CA0025.outlook.office365.com
- (2603:10b6:208:239::30) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8880.30 via Frontend Transport; Mon,
- 30 Jun 2025 12:24:46 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BL02EPF00021F6A.mail.protection.outlook.com (10.167.249.6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8901.15 via Frontend Transport; Mon, 30 Jun 2025 12:24:46 +0000
-Received: from [10.85.36.84] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 30 Jun
- 2025 07:24:38 -0500
-Message-ID: <97cb1442-97f6-4ec3-a11f-17469355a937@amd.com>
-Date: Mon, 30 Jun 2025 17:54:30 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06599272E7E
+	for <linux-kselftest@vger.kernel.org>; Mon, 30 Jun 2025 12:33:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751286837; cv=none; b=Gvrek653qMo3XbXLGlTBzznrcOTyPeO+gVq7+dZDp9tQxvSbXjyavcP36VmVl82/8gYCqy3m2HGGCAK96XcmzeRO/wmUMOF/VfTwbrPYdcU16RZN6iar7OKDWdE96PCkCwE0EFyCbD5yzYhwC1IVjWzJCLdXDJw6rHhvU8q8d54=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751286837; c=relaxed/simple;
+	bh=gJ0wiD3rWl8CogZdAiED/KOkAPi3Q/uO3S+KjMDCmBY=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=r2Ong24xBT0WyrNY8zsKkD2pRvuk/DrlvYmS17frveM265RNK4mI5FiiC4ZkQQ/rH75x/s0j82KAUTyIvuy2N/ywGGQNZR1PcLGRf8Br9qCgnW0Ln8gKqztc+Xbwu7iq2bahgjPPPXVuZthftnNsWyqfhfJpPmn7FrkQJvOdm8o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Rf795Doa; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1751286835;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gJ0wiD3rWl8CogZdAiED/KOkAPi3Q/uO3S+KjMDCmBY=;
+	b=Rf795Doa4okwsmeuQYg4LADxRBqEQKaSmtTR0mqfXj6zjA954NGYn7HcrllBMAXzwCcaKS
+	3/ELOsVCAl5cG2tV1kTDHZ4mav/SE7g6Ax3P922z0giglL9VuDNplJGSrQToruhIJ4pFz3
+	IWzQMXEqR4MNOapWHin7P3/b3leigG4=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-663-7P681oNjPZGPZ8sVuf-XWg-1; Mon, 30 Jun 2025 08:33:53 -0400
+X-MC-Unique: 7P681oNjPZGPZ8sVuf-XWg-1
+X-Mimecast-MFC-AGG-ID: 7P681oNjPZGPZ8sVuf-XWg_1751286832
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-ad56a52edc5so377242466b.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jun 2025 05:33:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751286832; x=1751891632;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gJ0wiD3rWl8CogZdAiED/KOkAPi3Q/uO3S+KjMDCmBY=;
+        b=dQIN4AYhuS4gglkFGNWFdyzyKtDyCE/cShEThgDidjml3E+BwSqWRgK/Zp+N+05ilb
+         5EHNzyigl+F2hTes4Kq5QInukF/XGZMhqvK6gyUxVzBxJrVeGX31OTeYZ3zEd2aKFZnJ
+         BpYOXcBCRpctMpJISNJV/Rm4yvX5uPbzv3V3AWMksJvPYkq/7UnNZQHqxhDOZum5S0bC
+         BYj71YDqMMpUxNEpmnwSnXC67kzcpjhP+Onn/ZkZ3cEZFW0CjmXazamGBW9tLoQHV8oi
+         q13d0JOddt5kM6pp1Yszm894f9MJR3DAc+/mIUT18wyPpm4Axd7pSwAAWQD7V0Gk8vUo
+         Vddw==
+X-Forwarded-Encrypted: i=1; AJvYcCVMZfrv0pfLhRUrJv+mwbyoU8B5sEjviArvAnWz/36VWlrL7D2YHD+fwNeTcC2/WBXBsezTtzKD8LE5bkKrzUw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwGFIXL2DD3Kh9Pa0sr6f9irAPBEHjq1fKoeFxVgrVtH0D27nhs
+	l3408525i6+ez4XQRwM0pxKbwVhUV8VKd1Qj9MWbNqkXDnqO34XGcsp7NOwmgXpEVh9SiT2f9Rx
+	jihgwFGlGGMGNUp5esHQpBrMlA7BMp6l0431OtQHGsdWL1G3eaitG6forvwIo7xStZjTkiA==
+X-Gm-Gg: ASbGncvJuOpmkrK6f13koK/OXMDGQOXCkn4mURBTGDKkbrVI167wfCQ1looxtSdw2YM
+	jhqcZXTShoDoVnmkXePuBHSSCsBTw6sF4fwrHt9P9vZkNd8V8bFw0M6tlBHLZKvdPuzAlnEH0aN
+	rQyZvQV3EYgYhwgfZ5xm+ui3Hr5Xl0ZXtjRlz0YGGVLGiSGDAkat1IGEvEddrKCjWVCFW/UyxIt
+	JD2lsH4CRxlApiSpdoTdQYdaY+yj3WQSSkAdD3XtheRNPN9td/24dc2ZXPy57NOF/rlkZdXakjp
+	MTe7lnC/zhj3C2S7z9s=
+X-Received: by 2002:a17:907:608e:b0:ae0:a351:49b with SMTP id a640c23a62f3a-ae3500e02a9mr1046996366b.34.1751286832237;
+        Mon, 30 Jun 2025 05:33:52 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGcjceK9RvEHC88OQB5r6+jBRwjCnSu1XO6IF/59hEXlyuOAfoc1Cs5C8c3NNtvik13ennRiw==
+X-Received: by 2002:a17:907:608e:b0:ae0:a351:49b with SMTP id a640c23a62f3a-ae3500e02a9mr1046993066b.34.1751286831785;
+        Mon, 30 Jun 2025 05:33:51 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae353c01237sm678103266b.98.2025.06.30.05.33.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jun 2025 05:33:51 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id 14A7B1B37D1B; Mon, 30 Jun 2025 14:33:50 +0200 (CEST)
+From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Mina Almasry <almasrymina@google.com>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+ <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+ <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Jesper Dangaard Brouer
+ <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, kernel
+ test robot <lkp@intel.com>
+Subject: Re: [PATCH net-next v1 1/2] selftests: pp-bench: remove unneeded
+ linux/version.h
+In-Reply-To: <20250627200501.1712389-1-almasrymina@google.com>
+References: <20250627200501.1712389-1-almasrymina@google.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date: Mon, 30 Jun 2025 14:33:49 +0200
+Message-ID: <877c0th0ia.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 17/33] vfio: selftests: Enable asserting MSI eventfds
- not firing
-To: David Matlack <dmatlack@google.com>, Alex Williamson
-	<alex.williamson@redhat.com>
-CC: Shuah Khan <shuah@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, Vinod
- Koul <vkoul@kernel.org>, Fenghua Yu <fenghua.yu@intel.com>, "Masami Hiramatsu
- (Google)" <mhiramat@kernel.org>, Adhemerval Zanella
-	<adhemerval.zanella@linaro.org>, Jiri Olsa <jolsa@kernel.org>, Andrii
- Nakryiko <andrii@kernel.org>, Wei Yang <richard.weiyang@gmail.com>, Bjorn
- Helgaas <bhelgaas@google.com>, Takashi Iwai <tiwai@suse.de>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, Pierre-Louis Bossart
-	<pierre-louis.bossart@linux.dev>, Andy Shevchenko
-	<andriy.shevchenko@linux.intel.com>, FUJITA Tomonori
-	<fujita.tomonori@gmail.com>, WangYuli <wangyuli@uniontech.com>, Sean
- Christopherson <seanjc@google.com>, Andrew Jones <ajones@ventanamicro.com>,
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, Eric Auger
-	<eric.auger@redhat.com>, Josh Hilke <jrhilke@google.com>,
-	<linux-kselftest@vger.kernel.org>, <kvm@vger.kernel.org>, Jason Gunthorpe
-	<jgg@nvidia.com>, Kevin Tian <kevin.tian@intel.com>, Vipin Sharma
-	<vipinsh@google.com>, Pasha Tatashin <pasha.tatashin@soleen.com>, Saeed
- Mahameed <saeedm@nvidia.com>, Adithya Jayachandran <ajayachandra@nvidia.com>,
-	Parav Pandit <parav@nvidia.com>, Leon Romanovsky <leonro@nvidia.com>,
-	Vinicius Costa Gomes <vinicius.gomes@intel.com>, Dave Jiang
-	<dave.jiang@intel.com>, Dan Williams <dan.j.williams@intel.com>
-References: <20250523233018.1702151-1-dmatlack@google.com>
- <20250523233018.1702151-18-dmatlack@google.com>
-Content-Language: en-US
-From: Sairaj Kodilkar <sarunkod@amd.com>
-In-Reply-To: <20250523233018.1702151-18-dmatlack@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF00021F6A:EE_|CH8PR12MB9768:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5984b145-1037-4985-346d-08ddb7d11a04
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|1800799024|36860700013|376014|7416014|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?cFkvWGExRmJVMXdMM0pXL3pycm9RZmZOaGpzNHBDejRabjFva2FhU2FUaTNW?=
- =?utf-8?B?ZG43UzBjK0xZYzFNWk01R0lPQnBlVlRZM0FTWGFNMkNoOUllZmpwcXdHUHps?=
- =?utf-8?B?Z2hORUJtNFc5Qkp1amVvb29oczRIaHkxVWo0ZFVEOUtPMEluZTBEWWJGYnJC?=
- =?utf-8?B?SkZpRFgrNWpUMHJMeUZqbzQzSUdzelBZcHFvZmRPNlhvL3h1Ym8rbmpoMkxy?=
- =?utf-8?B?bjJ4dlNmb04vakpRUVFrRzc0VCs5RFRCLzVvTktWNWRzbXQ2eVdhUW1Va0xk?=
- =?utf-8?B?WkYySDlJL0FlWWh3V25nYU1sb25QcndjenF2Zlo4MlJweXFEdVNDZXVnUktE?=
- =?utf-8?B?Y1Q0QlEvRklidEpVNDQ1M3hGaE1nTmNGRTZxWnRvaWorYnVUUTVHSmZOTHpD?=
- =?utf-8?B?bXk1bVc2Z1JzUjVTUEZrVmx5S1NTVHdnWmhrdjFVUTFUb3B4Q29JZWhOVExE?=
- =?utf-8?B?ekIweGVIbnpxcDZHbDFYemVuVmJvTFBZUWFKQW9sTUh2TllKSFd3MFhLNzll?=
- =?utf-8?B?REF5ZU96ZXltZUFZczBoOHRDZFhhRXRtcE9GRW4wYmR0UzNaY3JZeFpNR1BS?=
- =?utf-8?B?YUx1dk5BNktPN3BnUWlhanNWYVIzeG5HWm53Rmh6QndqR1VkcVp6RFhZNzcr?=
- =?utf-8?B?N0hpRFh3NXJsc2hqSlEvcDJaRFBmcHVWOGh6ZHNTaU0vQ3pJeWhGS2w5Rncv?=
- =?utf-8?B?NmZRczJCZ2lWYkJaeEVvQ0ltczVTeUI0bFFEaTBjR0dvQy9Yblh6N1BkT212?=
- =?utf-8?B?cEFsMnUzVFdub1p0L3BlQ0NLRHVIRCtXOGlKSFRFWnNCREpwbFNFYkYwWEpq?=
- =?utf-8?B?T0EzS0NHK0thM1IyUXdjN0ZVRElRMDZEU085SUdGL0Nsa1p2cUNadGNPSHF5?=
- =?utf-8?B?N3JjQi9PVGNsd3BDc0M4cHc3SnZVdUNjd2RaT3lNZ0RQOGlBTkJBT1lWSlRr?=
- =?utf-8?B?dFh3VGpyaHhZL01jY0g4d3dwL1pyT0RLNmVud1ZUTEJQZkJaWVY3Y2w4YmxV?=
- =?utf-8?B?cEpveFplU1BGNmIwaGpXWWpUWXZCY1hVeUpwUlBpZnYwdWxNNFlEeU9PZHZr?=
- =?utf-8?B?OEFuWjB5RUJRaTVOSi9rU094Zm9HVzZ0NEc3aDFaT21pdnVJOWd3QlpXd1ly?=
- =?utf-8?B?SXlDSjRta3RZbFlQekk3c1NteVl1RFR3Mm10Zm1nMmQzTGl2ZlNPRDgwanI5?=
- =?utf-8?B?TGpzbUxFRlpIZmR0MlFacWJidkdQYmhwKzhuTDFjbFMya1Riayt1elBrMHN5?=
- =?utf-8?B?U1hKaXVmMys1RkQ2enpwaUtlV3kwbDVtSnhtbHpVTFJnanFRRzc2eCtIcTNo?=
- =?utf-8?B?aEdvekdwaXBRZkwrcTlkYXVuVFozeUVHcmZWR0R1Y3haZndzQUJNaUtGWENl?=
- =?utf-8?B?eHVuYmNwOFBMeVlEb2lXZEluSnpNZit3SE5FVlM5VlQ5VU0xazhVTHcyZHph?=
- =?utf-8?B?ZUl3ZHlBRVlGdnlKRmhIL1Fld1ZDQWpJcm9qNEdpL3greENISEFaL3hlTUdu?=
- =?utf-8?B?V0VUSWU0R0kyZ0xuN20vaTVYY08rN052ay9qV2VmeTloTThnMU0vK1dzY0g4?=
- =?utf-8?B?K3Z0ZTM4RDlaZjJBWmtsR3lpN2dBNTdFWnp6RVFzdUFEdGxtazBZZWRXdmcz?=
- =?utf-8?B?bjJxcUJIT1BGak5jeXI2OFZBYTZsUFJQaEVmelkxK2xOdXYyOHQvSE1wUG1V?=
- =?utf-8?B?cjVwTU1tZnlSYjhpZENscVR4Wk5aZTBIYlMyTGxEZDBGUEc4L1A0TTNJbllX?=
- =?utf-8?B?cHFONVVNN3B4dGV4c0xmcjlyeVVnRUNoL25jSGRWbU8vZUp3VUhRb1Z5cWx0?=
- =?utf-8?B?ZHd5ZXc5bXphUnEvbERoTU5MWmhoamlzUThqb2VOaCtadkVIWmsxdElvNXZC?=
- =?utf-8?B?UCt5MmlKYXljRWtsbVNOaHUvMnd3WWRkb3IvQVVoelBsT1RRVmJLL29vYm9M?=
- =?utf-8?B?bjRKRDVOVXNyY1ZOYmdSNmVyV1ZMeDdWZlhzYmM3V3lUUU5LY2xlQ29OY29Q?=
- =?utf-8?B?QmQzOGk5WmpTSDYvMGVKNVBpaGNXR3ZqVmhWWEtQZERrdkNMdmhWSG9hSXZs?=
- =?utf-8?Q?XmO6jC?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(36860700013)(376014)(7416014)(7053199007);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2025 12:24:46.8574
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5984b145-1037-4985-346d-08ddb7d11a04
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL02EPF00021F6A.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH8PR12MB9768
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
+Mina Almasry <almasrymina@google.com> writes:
 
+> linux/version.h was used by the out-of-tree version, but not needed in
+> the upstream one anymore.
+>
+> While I'm at it, sort the includes.
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202506271434.Gk0epC9H-lkp@i=
+ntel.com/
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
 
-On 5/24/2025 5:00 AM, David Matlack wrote:
-> Make it possible to assert that a given MSI eventfd did _not_ fire by
-> adding a helper to mark an eventfd non-blocking. Demonstrate this in
-> vfio_pci_device_test by asserting the MSI eventfd did not fire before
-> vfio_pci_irq_trigger().
-> 
-> Signed-off-by: David Matlack <dmatlack@google.com>
-> ---
->   tools/testing/selftests/vfio/lib/include/vfio_util.h | 12 ++++++++++++
->   tools/testing/selftests/vfio/vfio_pci_device_test.c  | 10 +++++++++-
->   2 files changed, 21 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/vfio/lib/include/vfio_util.h b/tools/testing/selftests/vfio/lib/include/vfio_util.h
-> index ab96a6628f0e..2b96be07f182 100644
-> --- a/tools/testing/selftests/vfio/lib/include/vfio_util.h
-> +++ b/tools/testing/selftests/vfio/lib/include/vfio_util.h
-> @@ -2,6 +2,7 @@
->   #ifndef SELFTESTS_VFIO_LIB_INCLUDE_VFIO_UTIL_H
->   #define SELFTESTS_VFIO_LIB_INCLUDE_VFIO_UTIL_H
->   
-> +#include <fcntl.h>
->   #include <string.h>
->   #include <linux/vfio.h>
->   #include <linux/list.h>
-> @@ -116,6 +117,17 @@ void vfio_pci_irq_enable(struct vfio_pci_device *device, u32 index,
->   void vfio_pci_irq_disable(struct vfio_pci_device *device, u32 index);
->   void vfio_pci_irq_trigger(struct vfio_pci_device *device, u32 index, u32 vector);
->   
-> +static inline void fcntl_set_nonblock(int fd)
-> +{
-> +	int r;
-> +
-> +	r = fcntl(fd, F_GETFL, 0);
+Reviewed-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
 
-fcntl F_GETFL does not expect argument
-
-> +	VFIO_ASSERT_NE(r, -1, "F_GETFL failed for fd %d\n", fd);
-
-May be print errno as well  ?
-
-> +
-> +	r = fcntl(fd, F_SETFL, r | O_NONBLOCK);
-> +	VFIO_ASSERT_NE(r, -1, "F_SETFL O_NONBLOCK failed for fd %d\n", fd);
-> +}
-> +
-
-Thanks
-Sairaj
 
