@@ -1,159 +1,165 @@
-Return-Path: <linux-kselftest+bounces-36121-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36122-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00759AEE60F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jun 2025 19:43:22 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81D09AEE620
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jun 2025 19:54:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6013F3B6C45
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jun 2025 17:42:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3048A7A1AA1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jun 2025 17:52:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DF132E6113;
-	Mon, 30 Jun 2025 17:42:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7953F292B50;
+	Mon, 30 Jun 2025 17:54:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LCAHmmTL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ly3gIhns"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f202.google.com (mail-il1-f202.google.com [209.85.166.202])
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF39C291C30
-	for <linux-kselftest@vger.kernel.org>; Mon, 30 Jun 2025 17:42:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4DEF242D76;
+	Mon, 30 Jun 2025 17:54:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751305376; cv=none; b=OmCRcXGWVQLicUkD7LGEyNptoUqsNtI3N2TmbfWKxSiZEOKkaRZftBc1ICeaDsHCjLG1Jx82C48qx09UoZNXMbEmvqVRyMw1ZHcRP6qxtdhu73ZmNyb2brqNCRYt0ecMYp57B+VpvSJmyCv3UogZnlIdQE2CFTR+sZmfQqUu4k4=
+	t=1751306042; cv=none; b=HncPjvdJzA+KPK0wb5fcdH14b/0VN/5Phn0VYOdSp7pvwn2jsLb0r+DRCipejQ5eIsCsZQwv4ZquqqNQdd/b0LYGtnoZoVtCW/12plz2WWrGckFOSKpLQi4VoL3yoFoOVfWKo+FyAC9jK3ZPKT/VNOTyhwghFtWgwOX4Z+wL1SA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751305376; c=relaxed/simple;
-	bh=p9QHb3/hnKvWZKIXq5Fvg8ndjho6Otu5IGRMFihrTnE=;
-	h=Date:In-Reply-To:Mime-Version:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=chvkjw4+8UMfqpdY0FJGZG9mHwmFTFl5BjHmTzuz2L6kXbLMxH9ofq6zVF68XB68NGZfWRCdWT/wWtcyRDg6R1FAX7mAikfVlgYmYpH/e155i3o8sGFMGOjXfQByuZwRs6k0VDWKKfs3N77erC9uzXxIuaU8rxoQQ+PlQ7oFpGg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LCAHmmTL; arc=none smtp.client-ip=209.85.166.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com
-Received: by mail-il1-f202.google.com with SMTP id e9e14a558f8ab-3df2e89fd03so23374505ab.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jun 2025 10:42:53 -0700 (PDT)
+	s=arc-20240116; t=1751306042; c=relaxed/simple;
+	bh=x+YSlI7VytRXhxbdrep65VDqbh/BQdR9Q3jWy4WuTeE=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=T2Vl0Wn7eMVr75FQHTwkqAqEI/0Ob/IyATzs0sYCTx3T0Sb8hXBNJGfYcMrnRl+Kk+VhdxfEo8bHfJBrBCvPh5BJFfbdYKFLE4a/ciHZyLP91o2l0G+Tq48bTMazvcTSEyhmWS3ecnhqojN9GIH3spUYVGX/V6jCZx76PEMIXFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ly3gIhns; arc=none smtp.client-ip=209.85.128.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-710bbd7a9e2so24228727b3.0;
+        Mon, 30 Jun 2025 10:54:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1751305373; x=1751910173; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ImVsekYPJx+C4taW0n4SjIxS/mjgVChiR4QEyhkYP6w=;
-        b=LCAHmmTLlc7LAL9IhX3jzPcQ2WgcZGwwRiWm0xZqvthjUhf9xOGL3xxTV0q5Y15+3z
-         jvgDdqoloX97kyUqiC114rGfNYt8i8hYUDZsVOg44g8zsers9SA7WItxZdcuQAMTeBS8
-         caDBoOK9ePCqQ8SaACgl9PKgpCMdYcFwllcxDTdXHRyzNmJCLPdEa+jqYPV41FJ7LHDH
-         udAsChdeeY+kG61aHeWfqL8rjP9rZOlLinOxZoYqK49gI56wiJ/vGsSJYU+Ciqy+Y9KX
-         sOSgF29NYSEpQNpjqG0VUYPAbY0XrVNKCufua4aislkVEu69wRl8MF1qPmEEzSTnFcuQ
-         tuGg==
+        d=gmail.com; s=20230601; t=1751306040; x=1751910840; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tzKVoMY2Tti8DrCv+qU2/jwZeY1NQ0avwn4qkKdjcUs=;
+        b=ly3gIhnsqrUmjKxCmjafC5C9naWbHKazrEv9Vj79YkFr1cxINcKlmCD9GlWrMtpDxC
+         7qesUWRFEpX7WGP0sgSpZ2LP3OGKlYwBt/NylNRtD+x65Z3govS/9Aq9eo6ajQngnJ9e
+         5O2JFqw4q0KVoC3EilPmFG7TNN0luIuCeCMiTSwqNZms9MyE5KtOagTqnz5G09HthL70
+         VRxAGP4meEq0VLcI9+W72kU6OQI087ChHcRmaws52KPWN2+KKmDfDsk13duhPLnO+41N
+         S3LrGemrP1DuLI35i8FKa8Uq4Nb25T8cKUJzXwB6MpKMnhDI050o/k3BUl9v2FeY9ziF
+         2yVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751305373; x=1751910173;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ImVsekYPJx+C4taW0n4SjIxS/mjgVChiR4QEyhkYP6w=;
-        b=gJImIWd7zVb/RsYAAsCbCPIlzp2YPJIRXF6Zkg5c+z9veiK8mZVLsc9zixpE1nWx5q
-         vVOqbg2zugdzSDgstN2/lUQv1kMFgXlLzHdozvgBkj2ahT6+gS3oBwlWQOLHDQqBK/Ar
-         cZmLEnBXNEds4PgklOR8/a0E4u94X7ajxyj/CESjvIV9sP1gwafG2Ai0Uk37wpa+Xv7J
-         VdX9Y2cMOzRIszEBpxBf/VrIpkFVEfZ81Afmgyzn2xblQ0nktp8YNnN9LEVCyX41DhMz
-         0j18xGNHH1alCq1gg2pgAK2Qc5VUXqBCOu4BlaJ3dZ1/skQHUKciacY+ma3jJCHTVdRV
-         nN7g==
-X-Forwarded-Encrypted: i=1; AJvYcCWbjCdQhMmmNCD9pKPTO4kkeMVmbD707OdqFwFfwkXg8+S1ylUyNdvAwXC3zllqZ0pAIi1EhxFv1Sdmw1eScr4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwNnQY9H/NkqMffBvybGuhKbeqmXB7XUNlbwVc0vQ/pjM+BU0nB
-	dhxChgmihutQJeoHnIyjlhle97IWD7vJoylkiD1nqme7N+mrw/LjQ03g93X7jZHXUN+A0jiKbhS
-	nMB+Tqbzq8/2uRk9tnk7BZa7MlA==
-X-Google-Smtp-Source: AGHT+IF9nPhO3RxMhccQIRyozfA0RZ1o/n5EUvH0ZvYssIkGUujSgAHo5a6XMuPc/RTrNVL6l8tA4e7hfnuN+vQINg==
-X-Received: from ilbbc5.prod.google.com ([2002:a05:6e02:85:b0:3df:2ece:7197])
- (user=coltonlewis job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6e02:3c85:b0:3dd:b808:be59 with SMTP id e9e14a558f8ab-3df4acc61ecmr180573955ab.21.1751305372798;
- Mon, 30 Jun 2025 10:42:52 -0700 (PDT)
-Date: Mon, 30 Jun 2025 17:42:52 +0000
-In-Reply-To: <aF8FPTupC_VnAldN@linux.dev> (message from Oliver Upton on Fri,
- 27 Jun 2025 13:55:25 -0700)
+        d=1e100.net; s=20230601; t=1751306040; x=1751910840;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=tzKVoMY2Tti8DrCv+qU2/jwZeY1NQ0avwn4qkKdjcUs=;
+        b=TGlazjmrAKLld0w8k1R4XWCmz0bEMmlbTs6z7vP+NzAwifohe5QKnq4ieXBEyBbPi3
+         QcC32ca1gYuMRjU/L58fV5QxIfIDLYUP9nnWOMu8CEb3HShXXWBzFZxVcJFb616XOWX+
+         RHucriYItBfHYVZmn1VElRc2ZPQFe+Fa2cG0hKk21v82Ggd8R251nb6fPGVgF+EylX3K
+         DCUthyTJTrywikvOxqNQ3FkVSPruxJurnhigF402/n69NYKxNBWg/1L/MmlVm1Dt/7QD
+         Iq0zXu96DMgENrhZcOqEo772GbhQvLslXd53RMXwILw30XS8XM5diLPxyKH8T/zWZUJ8
+         PJog==
+X-Forwarded-Encrypted: i=1; AJvYcCUwQYgA8AkMRQtFDJemJr9Ycpz3PFQdQGFF3+r5ZgAT5Kr/6BNbZlcIvfgGSLbXq4C/T3pg1cr+rJvyR7p0@vger.kernel.org, AJvYcCVhpi+4JkZrsf9TzR6MEM7zUAoWEiQ8qIHB8V9hjdvW0Ztqej9jBt1Y1smfb1vGsEy0RS+VepHN@vger.kernel.org, AJvYcCVqSyEVSB+JnN0Tcx2jOCDO4XVCOoCkLBJhPOW51cl/YfPHYdcNkemvlNQwSqyqQ1IJvrcSOsA8rT5KnwjA8atz@vger.kernel.org, AJvYcCX+A/hp9j4sxJQqkGgdCArrD1y58XrUDNDZLPmZvOeBYR0Wtfc5XD6pRQqaQ+wNGUZ9WGY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwGv/Rq0YoOko2PvX1ShuUH5q+ZGEW/ytXz4X/sJ5AEmOMXwwjz
+	lRnHTnw4uRYhzcx9eCHhEYyeD3cEZakBdLASi8MvLyX4mZtOp5U0mxbU
+X-Gm-Gg: ASbGncufP4IzyoBlOfJJQvHCqhaw0js/s7XAEz3ECkrOukwJsOsEpp/W0CeQYa5ASAv
+	If8Uo5MntTSma6TQ6u4JaWbI9ZQs8kjObFvEnuGL7XT6ZwTT4x6NIkMdDsDlD2L2uMe+gRt7kli
+	vRL8LwLLmud3cVNKv2/Nq2DkSPt2dRqMFmHsOGIgvueU6/sHotijVoe4uybxvADr2QjuicTy+gS
+	277fN9Qc7PQQ/bSEAHHJZPW6WxXStjd+7tIMRcbDj/bcTQApAFkPdvKYTjUDwcr+yKZr53/kpSq
+	4krwSL903yi7tr3tnQZRb8d0HVF7PMNm2BFat/VTeJpiZ7N34xdL/3D5dLjg7PvAvqFcwfxvzyq
+	ZSh/xaqEIF2WObBq9XPwPlC0j9mJR0+cHB7hNLS8=
+X-Google-Smtp-Source: AGHT+IECTL3RoUV2TcnuP7TkMjm+s+TzIbFnBWoR5EqNlbGHSjor4CVYrDzKwwQkr41xGvXtTTaM5A==
+X-Received: by 2002:a05:690c:4a12:b0:712:d70b:45d5 with SMTP id 00721157ae682-715171af5cemr209495367b3.33.1751306039784;
+        Mon, 30 Jun 2025 10:53:59 -0700 (PDT)
+Received: from localhost (234.207.85.34.bc.googleusercontent.com. [34.85.207.234])
+        by smtp.gmail.com with UTF8SMTPSA id 00721157ae682-71515bf09cesm16493027b3.24.2025.06.30.10.53.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jun 2025 10:53:59 -0700 (PDT)
+Date: Mon, 30 Jun 2025 13:53:58 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Breno Leitao <leitao@debian.org>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ Shuah Khan <shuah@kernel.org>, 
+ Simon Horman <horms@kernel.org>, 
+ linux-kernel@vger.kernel.org, 
+ netdev@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ bpf@vger.kernel.org, 
+ ast@kernel.org
+Message-ID: <6862cf369fbcd_162c24294b@willemb.c.googlers.com.notmuch>
+In-Reply-To: <aGKgG+uE+UXEIIbf@gmail.com>
+References: <20250627-netpoll_test-v3-0-575bd200c8a9@debian.org>
+ <20250627-netpoll_test-v3-3-575bd200c8a9@debian.org>
+ <686002d028f_a131d29458@willemb.c.googlers.com.notmuch>
+ <aGKgG+uE+UXEIIbf@gmail.com>
+Subject: Re: [PATCH net-next v3 3/3] selftests: net: add netpoll basic
+ functionality test
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Message-ID: <gsnt4ivx86sj.fsf@coltonlewis-kvm.c.googlers.com>
-Subject: Re: [PATCH v3 02/22] arm64: Generate sign macro for sysreg Enums
-From: Colton Lewis <coltonlewis@google.com>
-To: Oliver Upton <oliver.upton@linux.dev>
-Cc: ben.horgan@arm.com, kvm@vger.kernel.org, pbonzini@redhat.com, 
-	corbet@lwn.net, linux@armlinux.org.uk, catalin.marinas@arm.com, 
-	will@kernel.org, maz@kernel.org, mizhang@google.com, joey.gouly@arm.com, 
-	suzuki.poulose@arm.com, yuzenghui@huawei.com, mark.rutland@arm.com, 
-	shuah@kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-Oliver Upton <oliver.upton@linux.dev> writes:
+Breno Leitao wrote:
+> Hello Willem,
+> 
+> On Sat, Jun 28, 2025 at 10:57:20AM -0400, Willem de Bruijn wrote:
+> > Breno Leitao wrote:
+> > > +NETCONSOLE_CONFIGFS_PATH: str = "/sys/kernel/config/netconsole"
+> > > +NETCONS_REMOTE_PORT: int = 6666
+> > > +NETCONS_LOCAL_PORT: int = 1514
+> > > +# Max number of netcons messages to send. Each iteration will setup
+> > > +# netconsole and send 10 messages
+> > > +ITERATIONS: int = 20
+> > > +# MAPS contains the information coming from bpftrace
+> > > +# it will have only one key: @hits, which tells the number of times
+> > > +# netpoll_poll_dev() was called
+> > 
+> > nit: no longer has ampersand prefix
+> 
+> Good catch. I will update.
+> 
+> > > +def ethtool_read_rx_tx_queue(interface_name: str) -> tuple[int, int]:
+> > > +    """
+> > > +    Read the number of RX and TX queues using ethtool. This will be used
+> > > +    to restore it after the test
+> > > +    """
+> > > +    rx_queue = 0
+> > > +    tx_queue = 0
+> > > +
+> > > +    try:
+> > > +        ethtool_result = ethtool(f"-g {interface_name}").stdout
+> > > +        for line in ethtool_result.splitlines():
+> > > +            if line.startswith("RX:"):
+> > > +                rx_queue = int(line.split()[1])
+> > > +            if line.startswith("TX:"):
+> > > +                tx_queue = int(line.split()[1])
+> > 
+> > Does this work on devices that use combined?
+> 
+> Not sure. This is suppossed to work mostly on netdevsim (for now).
 
-> On Fri, Jun 27, 2025 at 08:45:38PM +0000, Colton Lewis wrote:
->> Hi Ben. Thanks for the review.
+Okay. Given that the test targets that. LGTM.
+ 
+> Since I am not familiar with combined TX/RX, I've looked at ethtool
+> code, and it seems RX and TX wil always be printed?
+> 
+> This is what I found when `-g` is passed to ethtool.
 
->> Ben Horgan <ben.horgan@arm.com> writes:
+I'm also a bit confused about how combined is supposed to work. This
+was discussed or documented somewhere recently, but I can't seem to
+find an authoritative reference.
 
->> > Hi Colton,
+To my intuition, "tx N rx M" is equivalent to "combined min(N, M)"
+plus the remainder of the larger ones. So "tx 1 rx 1" is equivalent
+to "combined 1". But not sure if this is true for all drivers.
 
->> > On 6/26/25 21:04, Colton Lewis wrote:
->> > > There's no reason Enums shouldn't be equivalent to UnsignedEnums and
->> > > explicitly specify they are unsigned. This will avoid the annoyance I
->> > > had with HPMN0.
->> > An Enum can be annotated with the field's sign by updating it to
->> > UnsignedEnum or SignedEnum. This is explained in [1].
-
->> > With this change ID_AA64PFR1_EL1.MTE_frac would be marked as unsigned
->> > when it should really be considered signed.
-
->> > Enum	43:40	MTE_frac
->> > 	0b0000	ASYNC
->> > 	0b1111	NI
->> > EndEnum
-
->> Thanks for the explanation. I made this a separate commit because I
->> considered people might object and HPMN0 is already an UnsignedEnum in
->> my previous commit.
-
->> Do you think it would be a good idea to make plain Enums signed by
->> default or should I just remove this commit from the series?
-
-> It is presumptive to associate a sign with an enumeration. Generally
-> speaking, the only fields that can do signed / unsigned comparisons are
-> the Feature ID register fields.
-
-> So please drop this and only keep the change for HPMN0.
-
-Done.
-
-
-> Thanks,
-> Oliver
-
->> > > Signed-off-by: Colton Lewis <coltonlewis@google.com>
->> > > ---
->> > >    arch/arm64/tools/gen-sysreg.awk | 1 +
->> > >    1 file changed, 1 insertion(+)
-
->> > > diff --git a/arch/arm64/tools/gen-sysreg.awk
->> > > b/arch/arm64/tools/gen-sysreg.awk
->> > > index f2a1732cb1f6..fa21a632d9b7 100755
->> > > --- a/arch/arm64/tools/gen-sysreg.awk
->> > > +++ b/arch/arm64/tools/gen-sysreg.awk
->> > > @@ -308,6 +308,7 @@ $1 == "Enum" && (block_current() == "Sysreg" ||
->> > > block_current() == "SysregFields
->> > >    	parse_bitdef(reg, field, $2)
-
->> > >    	define_field(reg, field, msb, lsb)
->> > > +	define_field_sign(reg, field, "false")
-
->> > >    	next
->> > >    }
-
->> > Thanks,
-
->> > Ben
-
->> > [1]
->> >  
->> https://lore.kernel.org/all/20221207-arm64-sysreg-helpers-v4-1-25b6b3fb9d18@kernel.org/
+Anyway, as said, targeting netdevsim, so can leave out of scope.
 
