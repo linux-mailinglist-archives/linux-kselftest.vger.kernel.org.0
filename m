@@ -1,135 +1,166 @@
-Return-Path: <linux-kselftest+bounces-36176-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36177-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4723DAEF82E
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jul 2025 14:20:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 90736AEF868
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jul 2025 14:28:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B0B5A188CD81
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jul 2025 12:20:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1CF501C01159
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jul 2025 12:28:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DE0C273D76;
-	Tue,  1 Jul 2025 12:20:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA1A6277CB6;
+	Tue,  1 Jul 2025 12:24:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OoUQMvg8"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="S3MMrcT5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F348227381E;
-	Tue,  1 Jul 2025 12:20:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28646273D8D
+	for <linux-kselftest@vger.kernel.org>; Tue,  1 Jul 2025 12:24:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751372418; cv=none; b=lD+i0uvlSrRgTpYtsC4WErYKymTvZRf8X47Pm04Lxgj33jGjlBD0JkSz3GMfprkWVoueoXXLPZ+B8nTtAsdIXEqFsDwGdu3m1eNyKXKh8xOTMjv9Q+CUq4A7I4nLbT1rds7f2TMLqXazsbkGORmSM1NLhDuAaoeNck9xD6Dc+b0=
+	t=1751372665; cv=none; b=RHoCnvanxjnvnap3NoTTe40gC1nqOY6fbj8DLjgvm/svYo0QO5A3kOpxKBQL3XBJejpap35EL5mECCdwgirrxoQTgsOX91A6ne0jeoEqcVm4HxscZBR4cesK8NsKDc4s6gIY4eFo2vdNtbsFl7jbVSLhd4V5vU3G5qh1/RhZppw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751372418; c=relaxed/simple;
-	bh=0WOvPMu1XqES/onds8PjGHDXOKh6epjdI3Hxbgaf7X8=;
+	s=arc-20240116; t=1751372665; c=relaxed/simple;
+	bh=n8ZZkcIMTZ4oqwXL8cuzmbKEBEW4c7SvXxR443L664I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OH+wKVw6cDnomnCXxDvcQ4bYkjGcsPAfvMPHaF/zeN3+iMmzl2Ul7dQbvmtvv08bGVhW4SfPeLd+/+4AJlU7o8MkokoDJOjyXPJn9Byo7PJ55L6wLgUW2cXYGcNf8U6vwu6Qo2A2zKtPz9T53YGBpEZlT7diOHyXRAF0R7FxLZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OoUQMvg8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 948E6C4CEF1;
-	Tue,  1 Jul 2025 12:20:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751372417;
-	bh=0WOvPMu1XqES/onds8PjGHDXOKh6epjdI3Hxbgaf7X8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OoUQMvg8bm2iNTnLq8GecvcuKJPvNhlMucnbAWYE7rOlhbgsf1I+ZI1apgCDa62Tm
-	 uFkjw7i+WoI61+nVEe49o99umhCKxGI1lIjJnTTUTO+jqeXhKu5NpPbu605u6HreGk
-	 0NY62NuiRkg7MDiNu37e22Eg/SQ1iD1xAWAF0ZqFeO6GIY35AQJSkXwmn+2riIu5xb
-	 ehOEtRK1EYw23vgWyMkWwvx/0CA7qotRIWQNeh0Ha0nzUkq/ioQhn7Is7Xera3jBPM
-	 08a1OyzHZhC/3q3msCHWws70R3Wtd+RxwzszkHHqvlQgYr2p+ZiNRwq+npcT1KP0Z3
-	 YGU/C4lr3r83A==
-Date: Tue, 1 Jul 2025 12:20:13 +0000
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: Daniel Latypov <dlatypov@google.com>
-Cc: bleung@chromium.org, brendan.higgins@linux.dev, davidgow@google.com,
-	rmoar@google.com, rostedt@goodmis.org, mhiramat@kernel.org,
-	naveen@kernel.org, anil.s.keshavamurthy@intel.com,
-	davem@davemloft.net, chrome-platform@lists.linux.dev,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-	linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/7] platform/chrome: Add Kunit tests for protocol
- device drivers
-Message-ID: <aGPSfaC1AohSV3_H@google.com>
-References: <20250520082435.2255639-1-tzungbi@kernel.org>
- <CAGS_qxrcH0+mJTO4nJqXnk2Bh7oO_PEur=ytcxL8wxJNCu20Tw@mail.gmail.com>
- <aGIvjrrSRPJQpNy7@google.com>
- <CAGS_qxpqQ1Z5QOxmXoXQyFBygdfW+1R=g9f=bbJo54Ex8LA7Kw@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=H+XCWoEuYqmu54hDbYMQ47k7JkzOyMmeOhwtS+B4115RZrzRQsaUWku0siSJOJe4mQvUpPbsOneLO40hmAMNx6CzuuwUcCwwFbchuk4j4GPjP/I9FbBAGJSBNOaGV44UNBDHWwLUFcfzR+qgndgll9/FWdQafu/jra4H/mHthxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=S3MMrcT5; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-235e389599fso205255ad.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Jul 2025 05:24:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1751372663; x=1751977463; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=K7vYU5IpUGkedTKGsOw7fqDjAvdD4uWcycZwbigztzQ=;
+        b=S3MMrcT5ZWO9uq4/Bajo9gsztQdWuZcpeR+2K87z4qLctuYNjN6NGdoWUJyLolBUdr
+         7+WA5f/R1/UHwjdqr073f1fGge50hVU2PKZB88lfHu3iSgTre/FcFxjj7i5pKA/Wklc5
+         ZL0km8NpTkRaI0ugS7ih3veW4sxzVvLuo7mXPRRtyD6dZeD5GivODa0Y6z+5Rlem9bjn
+         uUxz8HltjWSy4PB8avVqsa9bw3K8z1DnjbBFn9dXOjmt246oeb+jh0qFdbfwRGUzC7Bb
+         K+/SIUFWqg0UhLfWvxX3JJSRPFMnsx7SV9gM+4oKyem5X2g8y4lrCu9+8eJ2dqWU2nIu
+         I3WQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751372663; x=1751977463;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=K7vYU5IpUGkedTKGsOw7fqDjAvdD4uWcycZwbigztzQ=;
+        b=i5orSoG7y2EwvozG6P9E8yY6gUr1nKTfIYaNueRjVAd3U5V0Tvwx9evdFdzZE4h4T1
+         m3sCTGt6Z7WhQr18OA0gTkKmn6NIVKoNWDcVbqzs9qac80gbWqR6VsJFF0077sl5ci2u
+         Cm5nBwBJKHGazfvheiHbCr8xz9bCnrIRkUmsjw0uynKhw8X7tOk6GIwLLG+s4jr2q/lD
+         6zbkPgKFeTMtZs1KzU+/96TnjNNap3OwpAtRt34sc9zpZSvCZlgnqIFsIZVnztvwvgRE
+         wb9ml/XrmWUUE/hC8Q1ZZFr8b54WpRkwVd2XybRsiac7J3B3EN+51xpZHQ7dkCQZPcPD
+         bM0w==
+X-Forwarded-Encrypted: i=1; AJvYcCUoPSPmqH+Xq46SKAO+3MvgDXWoKpvUTbqZaJUqqrsvwGFDizURcelTIYr1x3Z4qsP+K/T/fYvE5cOz5FStAZw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxtOz81a4cc3NGI92qUc25E4vVMSdVl85gOYucf099mWjGlfEnf
+	c2lpF98ctaeV6FD/VoCcJmXfvWUWPDOFClkjOJ6t9gFi+Hc2lg6rGpkClTKSagX4aA==
+X-Gm-Gg: ASbGncvCHre6iKr7tReXEz1KoO2lmcBphk484iE6Zm4weHBWlvKEZLN0pTO2FQEM4KL
+	34Hu4p4YS6/EMjzW0ZrZUJEjnoNr2CvCekpzfgE9wIPU52tBtGyWF/b1I7FUFTTNtqYU3GB6ztf
+	0zOZKbtkbKijEyQ4CgZjQhNEVG3xwwC2zUFq2PVY3FrjqOfnkvvclBDVb+2Io1pAs0+nu1/8UsP
+	Hi0+aeKA5KJwiC3TxUH8/2rhdtZB9He30zg69hrV5XC63l3yhtQjOjUru0oztTl3jQmA4LPMjlU
+	wYZBIpJj/cy+tqs13SSP5EV9KK+3wrpkLC3jVp3jsKBJVm6svZlF9Vtb5K2hwOa4LUUeTW+vN1a
+	t6hhnPVZ7qoQ/9LsBD4f3
+X-Google-Smtp-Source: AGHT+IH4JQ2MdaL4TQHuSEKzEVU+2Jy2z1P1pCYvzTGLNdSVTsldrYDv/hBtBO4QCMRhsGfAvLyPYg==
+X-Received: by 2002:a17:902:e54e:b0:235:e1e4:efc4 with SMTP id d9443c01a7336-23c60105131mr2451315ad.14.1751372662789;
+        Tue, 01 Jul 2025 05:24:22 -0700 (PDT)
+Received: from google.com (232.98.126.34.bc.googleusercontent.com. [34.126.98.232])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-315f5437b40sm15776317a91.37.2025.07.01.05.24.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Jul 2025 05:24:21 -0700 (PDT)
+Date: Tue, 1 Jul 2025 12:24:07 +0000
+From: Pranjal Shrivastava <praan@google.com>
+To: Nicolin Chen <nicolinc@nvidia.com>
+Cc: jgg@nvidia.com, kevin.tian@intel.com, corbet@lwn.net, will@kernel.org,
+	bagasdotme@gmail.com, robin.murphy@arm.com, joro@8bytes.org,
+	thierry.reding@gmail.com, vdumpa@nvidia.com, jonathanh@nvidia.com,
+	shuah@kernel.org, jsnitsel@redhat.com, nathan@kernel.org,
+	peterz@infradead.org, yi.l.liu@intel.com, mshavit@google.com,
+	zhangzekun11@huawei.com, iommu@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, patches@lists.linux.dev,
+	mochs@nvidia.com, alok.a.tiwari@oracle.com, vasant.hegde@amd.com,
+	dwmw2@infradead.org, baolu.lu@linux.intel.com
+Subject: Re: [PATCH v7 23/28] iommu/arm-smmu-v3-iommufd: Add hw_info to
+ impl_ops
+Message-ID: <aGPTZ3uHRIIRMF4c@google.com>
+References: <cover.1750966133.git.nicolinc@nvidia.com>
+ <205f234c05d6b09de52124a72a6978b74d832cfb.1750966133.git.nicolinc@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGS_qxpqQ1Z5QOxmXoXQyFBygdfW+1R=g9f=bbJo54Ex8LA7Kw@mail.gmail.com>
+In-Reply-To: <205f234c05d6b09de52124a72a6978b74d832cfb.1750966133.git.nicolinc@nvidia.com>
 
-On Tue, Jul 01, 2025 at 02:22:40PM +0900, Daniel Latypov wrote:
-> On Mon, Jun 30, 2025 at 3:32 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
-> > On Tue, May 20, 2025 at 09:04:53AM -0700, Daniel Latypov wrote:
-> > > You mention you don't like how static stubs requires modifying the
-> > > code-under-test.
-> > > Since it gets eliminated by the preprocessor unless you're compiling
-> > > for KUnit, is the concern more so about how it conceptually feels
-> > > wrong to do so?
-> > > For the Android GKI kernel, they have (or had) KUnit enabled so there
-> > > is potentially concern about real runtime cost there, not sure if you
-> > > have something similar in mind.
-> >
-> > Not exactly. Ideally, I think we shouldn't modify the CUT. I'm wondering
-> > if there is a way to not change the CUT but also break the external
-> > dependencies.
-> >
-> > > But stepping back, ftrace_stubs technically require modifying the code
-> > > to make sure funcs are marked as `noinline`, which this patch series
-> > > does not do.
-> ...
-> > They could be partially inlined even though they are exported symbols.
+On Thu, Jun 26, 2025 at 12:34:54PM -0700, Nicolin Chen wrote:
+> This will be used by Tegra241 CMDQV implementation to report a non-default
+> HW info data.
 > 
-> So to summarize, right now we're stuck with having to modify the code.
-> (Unless someone can come up with something really clever, but not too clever)
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> ---
+>  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h         | 7 +++++++
+>  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c | 8 ++++++--
+>  2 files changed, 13 insertions(+), 2 deletions(-)
 > 
-> To make it concrete, the current approach would look like:
-> 
-> int func(char* arg1, int arg2) {
->   KUNIT_STATIC_STUB_REDIRECT(func, arg1, arg2);
->   ... // unchanged
-> }
-> 
-> vs an ftrace/kprobe approach that needs a conditional `noinline`
-> 
-> KUNIT_STUBBABLE int func(char* arg1, int arg2) {
->   ... // unchanged
-> }
-> 
-> The latter is definitely simpler and less burdensome.
-> But I don't know if it's simpler enough to warrant a second
-> implementation existing for me personally.
+> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
+> index 07589350b2a1..836d5556008e 100644
+> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
+> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
+> @@ -721,6 +721,13 @@ struct arm_smmu_impl_ops {
+>  	int (*init_structures)(struct arm_smmu_device *smmu);
+>  	struct arm_smmu_cmdq *(*get_secondary_cmdq)(
+>  		struct arm_smmu_device *smmu, struct arm_smmu_cmdq_ent *ent);
+> +	/*
+> +	 * An implementation should define its own type other than the default
+> +	 * IOMMU_HW_INFO_TYPE_ARM_SMMUV3. And it must validate the input @type
+> +	 * to return its own structure.
+> +	 */
+> +	void *(*hw_info)(struct arm_smmu_device *smmu, u32 *length,
+> +			 enum iommu_hw_info_type *type);
 
-Instead of KUNIT_STUBBABLE macros, I was thinking of:
+Thanks for adding the comment, this looks good.
 
-diff --git a/Makefile b/Makefile
-index 35e6e5240c61..40319083f58b 100644
---- a/Makefile
-+++ b/Makefile
-@@ -979,6 +979,10 @@ ifdef CONFIG_DEBUG_SECTION_MISMATCH
- KBUILD_CFLAGS += -fno-inline-functions-called-once
- endif
- 
-+ifdef CONFIG_KUNIT_KPROBE_STUBS
-+KBUILD_CFLAGS += -fno-inline
-+endif
-+
- # `rustc`'s `-Zfunction-sections` applies to data too (as of 1.59.0).
- ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
- KBUILD_CFLAGS_KERNEL += -ffunction-sections -fdata-sections
+>  	const size_t vsmmu_size;
+>  	const enum iommu_viommu_type vsmmu_type;
+>  	int (*vsmmu_init)(struct arm_vsmmu *vsmmu,
+> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c
+> index 2ab1c6cf4aac..1cf9646e776f 100644
+> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c
+> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c
+> @@ -11,13 +11,17 @@ void *arm_smmu_hw_info(struct device *dev, u32 *length,
+>  		       enum iommu_hw_info_type *type)
+>  {
+>  	struct arm_smmu_master *master = dev_iommu_priv_get(dev);
+> +	const struct arm_smmu_impl_ops *impl_ops = master->smmu->impl_ops;
+>  	struct iommu_hw_info_arm_smmuv3 *info;
+>  	u32 __iomem *base_idr;
+>  	unsigned int i;
+>  
+>  	if (*type != IOMMU_HW_INFO_TYPE_DEFAULT &&
+> -	    *type != IOMMU_HW_INFO_TYPE_ARM_SMMUV3)
+> -		return ERR_PTR(-EOPNOTSUPP);
+> +	    *type != IOMMU_HW_INFO_TYPE_ARM_SMMUV3) {
+> +		if (!impl_ops || !impl_ops->hw_info)
+> +			return ERR_PTR(-EOPNOTSUPP);
+> +		return impl_ops->hw_info(master->smmu, length, type);
+> +	}
+>  
+>  	info = kzalloc(sizeof(*info), GFP_KERNEL);
+>  	if (!info)
 
+Reviewed-by: Pranjal Shrivastava <praan@google.com>
 
-I don't know what are most people's usages. I always run KUnit tests in qemu
-or at least in some real devices that I less care about the performance.
-Thus, turning inline off globally in such environments is totally acceptable.
+> -- 
+> 2.43.0
+> 
 
