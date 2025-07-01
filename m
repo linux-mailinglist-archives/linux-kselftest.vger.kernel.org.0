@@ -1,88 +1,87 @@
-Return-Path: <linux-kselftest+bounces-36220-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36221-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E68E8AF0578
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jul 2025 23:12:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4442CAF0587
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jul 2025 23:22:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C30A47AF4D3
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jul 2025 21:10:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 395944816DF
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jul 2025 21:21:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29DB5302066;
-	Tue,  1 Jul 2025 21:12:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AF6326B766;
+	Tue,  1 Jul 2025 21:22:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AcpR2GyF"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dwelXPZw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B5072EE5FD
-	for <linux-kselftest@vger.kernel.org>; Tue,  1 Jul 2025 21:12:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98CCB263892
+	for <linux-kselftest@vger.kernel.org>; Tue,  1 Jul 2025 21:22:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751404334; cv=none; b=PSihkUmq7kiyYjaCvT//QlUy1RHHdRzyQFc1z4u8+AYYNNYGKvdGN8C7IWvmQ8dr6NVLzU9Me4+UinzTsfcTgAxcwyybkjma6UdALZKz3xZzqNJ8urCTpzVqefI26DajZKaK6/wfLheCe+JdWNiLJwPB0a4jNrGabY9m5y4na7c=
+	t=1751404941; cv=none; b=HNsl4i//hoJapPHjzz3A+zse4wvhUo+DEYaZX30uXkgSktthc3f1M844KUWGZFM1AKy7UdGYce0mGChjFAvLsono40c8koLWUuVQ3bp+OAzBK/kbip60GT0PErhQcyvFqDxPTJDZr9Wrk0+sEiEudyL3exDnAZEulL6XAZ6yPmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751404334; c=relaxed/simple;
-	bh=qBtZSmm2R4iCXjvzCaQg+eHFsA8g7clWudabrggPz4E=;
+	s=arc-20240116; t=1751404941; c=relaxed/simple;
+	bh=IQsUpICLC0Qn6KFzSllS3OJTDp11NskuLuL9MVU2vEQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iqNcqUIjNEwg6LRR2aODGfRV1Bx6yAihY8hX7Rm8G+55tqwHr/Oe5IVKLJTqYsFtPCgqJ0AhyNPxuYnlnRgiwdV2AqCe8ggjNPjuOMHxOJZJZt0eREeAFlhEbnI2a92foLtsg2B6S0Jei29IgFUY0SsBF5FMe7Vp02c5dVGj46c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AcpR2GyF; arc=none smtp.client-ip=209.85.219.45
+	 To:Cc:Content-Type; b=MMcxeIVBcJTA1j8bry+32EXGEQ+IgJmeo3HXU+O4qP2Y+WmQIXYN0F8/ws15bOeQwHKVe48lMs6jdyhZPOguinGbp34pBWxX7XHOAewV1gU+PKcL96WeKVHh/MPwdlH9CHNI2PCmHKzc4b2uUCWxru6NeTNoQfOZ2qkRlCD46JM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dwelXPZw; arc=none smtp.client-ip=209.85.222.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-70109af5f70so17438266d6.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 01 Jul 2025 14:12:12 -0700 (PDT)
+Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-7d425fc4e5fso508042885a.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Jul 2025 14:22:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1751404331; x=1752009131; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1751404938; x=1752009738; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fjs28VW5+FZErUTPed61OdD+0y2hdWgedPzyPoSbu9Q=;
-        b=AcpR2GyF4B1TfsNOcdqbdDzSpFuDSHgo254Y4BMYjwBaK0ZKYDyzAzyWxfvO9Ca+XC
-         v2yYMChhmz2HPUWeYtNKz+4DDbubfvQXy61jR5gU9OIbwWlVQSmuV5hiOeRnlnCP0uKU
-         ukX7XIhFEllCaGIkAs3FdJtSPgJWMtU6w+1Y9TvY/bch/YIPEcfYg9gzD55ie9Aa/Yp8
-         WkL526LRWILl01YCytX8lzTFYkP5Yq3D/A0jaK5wQ/tw4gtEsNP0HdDbtwadNeNQj8ou
-         WP+ERx5BciWFhZ5lKwIeVKm1TSRc3jOP37hW37I/DVGN+0nmVVhBmZlvUckBF585yP9t
-         I8pQ==
+        bh=EHboM4UpkCkMBxv0QKQdIr00wQYxWyHLFiPmTEgGje8=;
+        b=dwelXPZwdzxdNgkLjbtauFbzh8zsySzD1594E1GDlKTEYIQsS3Oq0quNbhNhD2+PtK
+         3XYN2VT5s9Z5d2l1kmsc4Aw5SLlX2bkKhum77I0T3lIQ6KmcgAWobHNMkYJr9S5xEFL7
+         r6NaTKyXX6q2R3/vtzv0nn8uU1eqYXvuvrzMGFzxMkKkPAdoSUTfZcwOxGZkE5jfdXj6
+         xN255gy61s0cT/FEn9pK3CXEx7WAaK/V6lNHJTne1qjj5e4RYTRUUXR3su3Yhi/ZNrxb
+         fV1d2R1o+rs6WKBXcVN4Z6oJfgJVbUZRlLRIfehwzGoptU0pan0AuRFgZHvLS7Sh0898
+         aBmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751404331; x=1752009131;
+        d=1e100.net; s=20230601; t=1751404938; x=1752009738;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fjs28VW5+FZErUTPed61OdD+0y2hdWgedPzyPoSbu9Q=;
-        b=WtxNy/7pIoaId8WHa5+SkaVyT5WN83CFEN35rEfLtOTr8d4oU5tKPDj8/pZF4XCBbz
-         LaWhuYRusIS8Odgnr4kuDZX+toKA75WvUdcw7Ykq1wWpLS4Sw05hy8ZBR1oky3RTfxQY
-         J3/bGQiRy/LGm4pcr88fGrvZusiNtBFMtf40D4OtJkbj61j/9pm9m8/z6SQMjELhviIW
-         6gyhkqZkVGWXQWQ3byTNFv+ooB0aB7Anwb5EsoNLeQDD6zLty1jFlvsP6t/SfoSSmCVb
-         caI8vzRm3qR1Nn6ENDa1aRE3OSf2BFpKyrrz9VYTP8tizYzt5P63oartT6IQHUWFjDB0
-         9o4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVpgB+M+NUm8/4gkZJ3lRqbiZdymOJ/wonam1tyQDreYJpilvsF5eDgot51rMe8cIckEb6KMxpJBmSdy6ghBa8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGlLSdg0ZjYyTc9HLzZmXC0af2iweDqGv5KOLAHt2kfEnkCqVb
-	m03ckrruqcAkGYnjJG7Orv22hDCOXgCJIpJ9ScFjnUqrrH2YdAverphwHdFPUyPk0+3zS/QVMyc
-	UqcNHHKR3Glc8yBUnaAGPLbJ0XTaM5TVnT8G6Fp6y
-X-Gm-Gg: ASbGnctOItlZzPQ0J8Cxntc2ROWzAMBczmoMUOW284CxteFgwulfi02FCG1qWmMv6Ok
-	vgG1gIdTyO7alBBi0fpmxx+iL2O8N7hVJcNio4QoEoNcwJuzwETlWKy39VuHh7y9sm+nP+soxdB
-	W1bPXfXHybmnQOBs/V2AEkbAKVM4tKR8cRkX0Vcl5UU8/riBK2uNJo0owkjry/usNThtkZwJQop
-	g==
-X-Google-Smtp-Source: AGHT+IGTbnT2z3OUimiYbvvSRJZHyO7+NTUm+CPbvwarqnp3tnVnFXsJiBtY1W/8vqhPCZSa3CP2wtLxEfAWF5KoW3c=
-X-Received: by 2002:a05:6214:5f02:b0:6fd:7298:a36f with SMTP id
- 6a1803df08f44-702b1b3c530mr1824386d6.21.1751404330971; Tue, 01 Jul 2025
- 14:12:10 -0700 (PDT)
+        bh=EHboM4UpkCkMBxv0QKQdIr00wQYxWyHLFiPmTEgGje8=;
+        b=SsLrxMcacQflu0drfn/87FgSErTbpIm65zND0yHRp7OcvGEm/MQ6sV3fc0c70edqq8
+         V6Ew+PKAh9n5q1QywX3jnu7YjATrRtsmmIph1iAcBKaWvatSmfsIANhcsns0J2H3hMFs
+         GFDJf3vRGJmU7Mps+Ag7Nq5+lhS5QRPBZBFgmwIoPHHCSVmTYGOX3TbFPgS1ELNbl8xS
+         gxDvsvZNhiHrir3IeP3I9A0S3mlHn3OIYTxiK2XT7fASycH44V8GTT5AVY1CjNfWQt4T
+         4EFLTnezluE6RxdPRvbkSP9exqUv7/rkosRNaqh7e19+8ZjdDuUViwbcYCsWCdQ+2iqE
+         lZgQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWm8vUiJyNmmQtZB75/emG+cHTh5PIazRj5SdqGmqXlowwbKbCHJu7XDDxGKGKdGRVKdw4v+sMbay8BF9nHWRc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwqMkD/5FnAxqOc1qfbv0r7gHmboke6OQfyQ7pIi7jv9/C2Aeyc
+	5mfGEGzLoiuSK340ViGCcJyqJ3sz1aqwewgf9+fshY5crkHnTG8qBu7xtVPq0kv2TniwZcLhrZs
+	pM/CjwWVdnNO1X6xlM7FX+LSQg2pen3nvc+sweoWq
+X-Gm-Gg: ASbGncsPClqhd/MgOdReQIE/A6I8tH0KXobnX/d1ycplcw9I3TVB+FFdLFLloOINASr
+	zvvhmGX72ZzQcAieNat8FQyTAUv6qiQ2/5Ayju/hnPYYcaB6OMPehOVKajQQNpYb58A0RQFiBa4
+	eyqhYGorLRqXejWq93JdfZ1Vljb4X+SOUn9Xyp8uaB62FJmNouZ6bVzTd8QrALFKR7tQASUeCMZ
+	IZRbIk82srb
+X-Google-Smtp-Source: AGHT+IEISF1QT4Q3DhFyDLlEp2grcYtzw1GO9CPfuuylOwB608K+J/Xck3XOEu6IYHeQRTW4WmPjWPyLFdsrU12p1QI=
+X-Received: by 2002:a05:620a:d86:b0:7ce:e010:88b9 with SMTP id
+ af79cd13be357-7d5c4687e50mr74973985a.13.1751404938244; Tue, 01 Jul 2025
+ 14:22:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250626-kunit-kselftests-v4-0-48760534fef5@linutronix.de> <20250626-kunit-kselftests-v4-8-48760534fef5@linutronix.de>
-In-Reply-To: <20250626-kunit-kselftests-v4-8-48760534fef5@linutronix.de>
+References: <20250626-kunit-kselftests-v4-0-48760534fef5@linutronix.de> <20250626-kunit-kselftests-v4-9-48760534fef5@linutronix.de>
+In-Reply-To: <20250626-kunit-kselftests-v4-9-48760534fef5@linutronix.de>
 From: Rae Moar <rmoar@google.com>
-Date: Tue, 1 Jul 2025 17:11:59 -0400
-X-Gm-Features: Ac12FXz7A5rV9E83a27nT7mq-MXVyxBMZkeIzUekc3ETv1a6ZI2Tbu3oWaYgD3I
-Message-ID: <CA+GJov45CF67nKJ7AC=g0fPL68pLdJbvJBwG8ecn9OUZ7hCewA@mail.gmail.com>
-Subject: Re: [PATCH v4 08/15] kunit: tool: Don't overwrite test status based
- on subtest counts
+Date: Tue, 1 Jul 2025 17:22:07 -0400
+X-Gm-Features: Ac12FXwuhX6Y-a6woLFeyYnBFFiy1ubYG3C7qlWEGs2OnKsfK-jEArzFm1EN8hs
+Message-ID: <CA+GJov7HN_HTVOygyF6SW12DeghW6BYc4KxEz8Ktub=QBqv0oQ@mail.gmail.com>
+Subject: Re: [PATCH v4 09/15] kunit: tool: Parse skipped tests from kselftest.h
 To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
 	Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>, 
@@ -99,80 +98,22 @@ Content-Transfer-Encoding: quoted-printable
 On Thu, Jun 26, 2025 at 2:10=E2=80=AFAM Thomas Wei=C3=9Fschuh
 <thomas.weissschuh@linutronix.de> wrote:
 >
-> If a subtest itself reports success, but the outer testcase fails,
-> the whole testcase should be reported as a failure.
-> However the status is recalculated based on the test counts,
-> overwriting the outer test result.
-> Synthesize a failed test in this case to make sure the failure is not
-> swallowed.
+> Skipped tests reported by kselftest.h use a different format than KTAP,
+> there is no explicit test name. Normally the test name is part of the
+> free-form string after the SKIP keyword:
+>
+>         ok 3 # SKIP test: some reason
+>
+> Extend the parser to handle those correctly. Use the free-form string as
+> test name instead.
 
 Hello!
 
-This is a very exciting patch series! However, I have a few concerns
-with this patch.
+I am happy to see that the kunit_parser will be used to parse
+kselftest.h patches!
 
-When I parse the following KTAP with this change:
-
-KTAP version 1
-1..2
-    KTAP version 1
-    1..2
-        ok 1 test 1
-        not ok 2 test 2
-not ok 1 subtest 1
-    KTAP version 1
-    1..1
-        not ok 1 subsubtest 1
-not ok 2 subtest 2
-
-The output is:
-
-[20:54:12] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[20:54:12] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D (2 subtests) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-[20:54:12] [PASSED] test 1
-[20:54:12] [FAILED] test 2
-[20:54:12] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [FA=
-ILED] subtest 1 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D
-[20:54:12] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D (1 subtest) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
-[20:54:12] [FAILED] subsubtest 1
-[20:54:12] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [FA=
-ILED] subtest 2 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D
-[20:54:12] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[20:54:12] Testing complete. Ran 6 tests: passed: 1, failed: 5
-
-This reports a total of 6 tests, which is not equivalent to the three
-subtests plus the two suites. I believe this is because the change to
-bubble_up_test_results below double counts the failed test case.
-
-Historically, the KUnit parser only counts the results of test cases,
-not the suites. I would like to stay as close to this as possible so
-as to not inflate existing testing numbers. However, I believe the
-main concern here is the case where if there is a suite reporting
-failure but all subtests pass, it will not appear in the summary line.
-For example,
-
-KTAP version 1
-1..1
-    KTAP version 1
-    1..1
-        ok 1 test 1
-not ok 1 subtest 1
-
-Reporting: All passing: Tests run: 1, passed: 1
-
-This is absolutely an important edge case to cover. Therefore, we
-should add 1 failure count to the suite count if the bubbled up
-results indicate it should instead pass.
+This patch looks pretty good to me! However, I do have one concern
+where it does cause the parser to break.
 
 Thanks!
 -Rae
@@ -181,88 +122,86 @@ Thanks!
 > Signed-off-by: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
 > Reviewed-by: David Gow <davidgow@google.com>
 > ---
->  tools/testing/kunit/kunit_parser.py                                  | 5=
- +++++
->  tools/testing/kunit/kunit_tool_test.py                               | 3=
- ++-
->  tools/testing/kunit/test_data/test_is_test_passed-failure-nested.log | 3=
- +++
->  3 files changed, 10 insertions(+), 1 deletion(-)
+>  tools/testing/kunit/kunit_parser.py                             | 8 ++++=
++---
+>  tools/testing/kunit/test_data/test_is_test_passed-kselftest.log | 3 ++-
+>  2 files changed, 7 insertions(+), 4 deletions(-)
 >
 > diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/ku=
 nit_parser.py
-> index c176487356e6c94882046b19ea696d750905b8d5..2478beb28fc3db825855ad462=
-00340e884da7df1 100644
+> index 2478beb28fc3db825855ad46200340e884da7df1..4599d23c79b79f0e219d655c7=
+053c8c3b34f8152 100644
 > --- a/tools/testing/kunit/kunit_parser.py
 > +++ b/tools/testing/kunit/kunit_parser.py
-> @@ -686,6 +686,11 @@ def bubble_up_test_results(test: Test) -> None:
->                 counts.add_status(status)
->         elif test.counts.get_status() =3D=3D TestStatus.TEST_CRASHED:
->                 test.status =3D TestStatus.TEST_CRASHED
-> +       if not test.ok_status():
-> +               for t in subtests:
-> +                       if not t.ok_status():
-> +                               counts.add_status(t.status)
-> +                               break
+> @@ -352,9 +352,9 @@ def parse_test_plan(lines: LineStream, test: Test) ->=
+ bool:
+>         lines.pop()
+>         return True
+>
+> -TEST_RESULT =3D re.compile(r'^\s*(ok|not ok) ([0-9]+) (- )?([^#]*)( # .*=
+)?$')
+> +TEST_RESULT =3D re.compile(r'^\s*(ok|not ok) ([0-9]+)? ?(- )?([^#]*)( # =
+.*)?$')
+>
+> -TEST_RESULT_SKIP =3D re.compile(r'^\s*(ok|not ok) ([0-9]+) (- )?(.*) # S=
+KIP(.*)$')
+> +TEST_RESULT_SKIP =3D re.compile(r'^\s*(ok|not ok) ([0-9]+)? ?(- )?(.*) #=
+ SKIP ?(.*)$')
 
-Here instead I recommend checking if not test.ok_status() and
-test.counts.get_status() =3D=3D TestStatus.SUCCESS and if so
-counts.add_status(status)
+My concern with this patch is that this makes the test number optional
+([0-9]+) -> ([0-9]+)? for both the test result regex matches. But if I
+do pass in KTAP containing a line where the test number is missing, it
+causes the parser to crash because other lines of the code rely on the
+match with the test number.
+
+I would prefer if we keep the test number as required. This is
+integral to the KTAP specification and seems to be largely shared by
+different frameworks test output.
 
 >
->  def parse_test(lines: LineStream, expected_num: int, log: List[str], is_=
-subtest: bool, printer: Printer) -> Test:
+>  def peek_test_name_match(lines: LineStream, test: Test) -> bool:
 >         """
-> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit=
-/kunit_tool_test.py
-> index b74dc05fc2fe5b3ff629172fc7aafeb5c3d29fb3..48a0dd0f9c87caf9f018aade1=
-61db90a613fc407 100755
-> --- a/tools/testing/kunit/kunit_tool_test.py
-> +++ b/tools/testing/kunit/kunit_tool_test.py
-> @@ -170,8 +170,9 @@ class KUnitParserTest(unittest.TestCase):
->                 with open(nested_log) as file:
->                         result =3D kunit_parser.parse_run_tests(file.read=
-lines(), stdout)
->                 self.assertEqual(kunit_parser.TestStatus.FAILURE, result.=
-status)
-> -               self.assertEqual(result.counts.failed, 2)
-> +               self.assertEqual(result.counts.failed, 3)
->                 self.assertEqual(kunit_parser.TestStatus.FAILURE, result.=
-subtests[0].status)
-> +               self.assertEqual(kunit_parser.TestStatus.SUCCESS, result.=
-subtests[0].subtests[0].status)
->                 self.assertEqual(kunit_parser.TestStatus.FAILURE, result.=
-subtests[1].status)
->                 self.assertEqual(kunit_parser.TestStatus.FAILURE, result.=
-subtests[1].subtests[0].status)
+> @@ -379,6 +379,8 @@ def peek_test_name_match(lines: LineStream, test: Tes=
+t) -> bool:
+>         if not match:
+>                 return False
+>         name =3D match.group(4)
+> +       if not name:
+> +               return False
+>         return name =3D=3D test.name
 >
-> diff --git a/tools/testing/kunit/test_data/test_is_test_passed-failure-ne=
-sted.log b/tools/testing/kunit/test_data/test_is_test_passed-failure-nested=
-.log
-> index 2e528da39ab5b2be0fca6cf9160c10929fba3c9e..5498dfd0b0db24663e1a1e9bf=
-78c587de6746522 100644
-> --- a/tools/testing/kunit/test_data/test_is_test_passed-failure-nested.lo=
-g
-> +++ b/tools/testing/kunit/test_data/test_is_test_passed-failure-nested.lo=
-g
-> @@ -1,5 +1,8 @@
->  KTAP version 1
->  1..2
-> +    KTAP version 1
-> +    1..1
-> +        ok 1 test 1
->  not ok 1 subtest 1
->      KTAP version 1
->      1..1
+>  def parse_test_result(lines: LineStream, test: Test,
+> @@ -416,7 +418,7 @@ def parse_test_result(lines: LineStream, test: Test,
+>
+>         # Set name of test object
+>         if skip_match:
+> -               test.name =3D skip_match.group(4)
+> +               test.name =3D skip_match.group(4) or skip_match.group(5)
+>         else:
+>                 test.name =3D match.group(4)
+>
+> diff --git a/tools/testing/kunit/test_data/test_is_test_passed-kselftest.=
+log b/tools/testing/kunit/test_data/test_is_test_passed-kselftest.log
+> index 65d3f27feaf22a3f47ed831c4c24f6f11c625a92..30d9ef18bcec177067288d524=
+2771236f29b7d56 100644
+> --- a/tools/testing/kunit/test_data/test_is_test_passed-kselftest.log
+> +++ b/tools/testing/kunit/test_data/test_is_test_passed-kselftest.log
+> @@ -1,5 +1,5 @@
+>  TAP version 13
+> -1..2
+> +1..3
+>  # selftests: membarrier: membarrier_test_single_thread
+>  # TAP version 13
+>  # 1..2
+> @@ -12,3 +12,4 @@ ok 1 selftests: membarrier: membarrier_test_single_thre=
+ad
+>  # ok 1 sys_membarrier available
+>  # ok 2 sys membarrier invalid command test: command =3D -1, flags =3D 0,=
+ errno =3D 22. Failed as expected
+>  ok 2 selftests: membarrier: membarrier_test_multi_thread
+> +ok 3 # SKIP selftests: membarrier: membarrier_test_multi_thread
 >
 > --
 > 2.50.0
 >
-> --
-> You received this message because you are subscribed to the Google Groups=
- "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion visit https://groups.google.com/d/msgid/kunit-dev=
-/20250626-kunit-kselftests-v4-8-48760534fef5%40linutronix.de.
 
