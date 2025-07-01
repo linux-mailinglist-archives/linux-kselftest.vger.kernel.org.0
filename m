@@ -1,76 +1,77 @@
-Return-Path: <linux-kselftest+bounces-36207-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36208-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C50EAF0325
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jul 2025 20:49:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04237AF0326
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jul 2025 20:49:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C39FE7A9064
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jul 2025 18:48:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 337B84A4F26
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jul 2025 18:49:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 386D823AB8B;
-	Tue,  1 Jul 2025 18:49:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CB4F2797B2;
+	Tue,  1 Jul 2025 18:49:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dIPCFHIW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iavTYV90"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99B7721CC40;
-	Tue,  1 Jul 2025 18:49:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D74A5258CE8;
+	Tue,  1 Jul 2025 18:49:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751395757; cv=none; b=Ty1JeEjONqScOK8ICG1RfpN2UEK3embWg9AXY5cS8zSlaQmCM8WNozq9vHzRsACnpAF/a3p/Xl4phbC66q3pjxszMUWWgDVmtwqmnntxQvAm6Ajbe5ZZVf3MG14m/88J+bMwq6Nlnfz9aXsHz0uLTfGQwIO8kxltVtX1FKX/aeA=
+	t=1751395763; cv=none; b=FBGqvzSdxjowIwgMYEE+TXyICK6G4hn51aei7RqlNqGbbY+lHKAU6S/kgZzm7wUMHBFOHqf2CZeJ7r+RVW4fICanThujfNiXvf2GWkcWzlN0rCH3huotPjvjhmwLq0gB4HE4PWn2Nnhf8N9hdNCjUnuY65j1R98C8brfI97ByJk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751395757; c=relaxed/simple;
-	bh=1vjBYMQeftqWi7FZi8y1ssVtN6H/J3kGxcSJ0LgdVFo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZO02payclt4Z7frK3B7TaR6tO8xLtJIa372SeLyc3RuAdNFYlNneFiJRjzz/CHE4VXALXzTyHZABfLSRF1b4J7bsFVWFTdrMNmjSJpRw+VoQO070z5jHXJVz4SOTyAHLHeKf/WymRC6TCxI+87rYDsp8EDAro8iPU/1Y2w4hg8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dIPCFHIW; arc=none smtp.client-ip=209.85.160.49
+	s=arc-20240116; t=1751395763; c=relaxed/simple;
+	bh=auft5QMJz3JBw8guzVy3fSYxhiMqLYHXCpyih2sdaFc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=RRRvYHtZGS1wXI3g5WfqwWLkW5rn73rrEWtkzAEAfx3AGmHGNK0tUmUyoy0gfFrrG0bL0aPZTrqhCtwPzf+BeDDD4mKK1mKQITQ5A5gwxKFj9D213yFt4y65mW55hHbrYmhWp279el7FrnDvb1nN8CGkijN9xoWQwvVbxGAh45Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iavTYV90; arc=none smtp.client-ip=209.85.210.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-2e95ab2704fso2423781fac.3;
-        Tue, 01 Jul 2025 11:49:15 -0700 (PDT)
+Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-72c172f1de1so1902680a34.3;
+        Tue, 01 Jul 2025 11:49:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751395754; x=1752000554; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6T6ShIaDgYa+eLDzLK1Z4CLo4u4A8Rd31tmUlpMfZZg=;
-        b=dIPCFHIWILQAlDPI9UIb6G1iCUTqRZE+9yKurYAI9WHthFIWt9gVoNZQStyp17yvye
-         ItpLopGBOMjQbLgH50ZK6MBQyDOjokbErvnC1SMGIxS2KKjghTSFOXX510oPBfH/aC9U
-         UEFwNIG3/R/xCVZNB6EHYbpoHnlSpc863B1LrBN+yzubvJe/Ejzgw/DPwD4y2GahHnKT
-         ZUAt5dtpx/xDGbR/EnYYdrlv+JDKmlmfcCwlkiQtndcPV+oyaGKtBm9vYWUlqsyZc7XD
-         fWJZGyM5kiBs8kedAJKSh05g5buH94L4T7gJQv2j7bt6pfHjcKxvL/e6jhf4OCpsVxT3
-         C6oQ==
+        d=gmail.com; s=20230601; t=1751395761; x=1752000561; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Dlocpt7CECBU87LrrF2s/X5hZPUr9DDE65AWKyn7Ey8=;
+        b=iavTYV90wDtVeBYmZxACRPhxDPbA6mK/2l08fjCavI6Bj/3z4OV+WbgOTcgEi3OqEd
+         PlN9s8JEZbhldeU9GudffHKp2rB0jHP9VnGwCUNkWAc+5CKO09tNV7a/xgGoagsYQ7da
+         OVnJKBRNsDKGfHfViisxKjO8OBwEbQ0KY3gnDel/BNR6OeTpHlKkqIIDVtEoXWMasjTV
+         MyU1lDjMKwwBC6FH6HAMwI9IuE2HYItroolPtkEIj67uyiDOoHJ04jQMeYDTEGmq83U/
+         HOF1xUueRke3aT3n8ujU9FCPDGEyhNCBxBCmBDsre3IAs4rnk7W1lf0nLCPNbF+VxCHl
+         oolw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751395754; x=1752000554;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6T6ShIaDgYa+eLDzLK1Z4CLo4u4A8Rd31tmUlpMfZZg=;
-        b=Vj0oJ3SihKswL2cTCc5SmjeYBHv5e4uyi35A1/09cvRNEtuXyEieu3LMyKFxW6tH2d
-         R8Hgcn0foiYIKdj3a6PQFrTkjGdqwXeJi9esihR7Z5jAMeb5FPxofiD+58iICLoX4wWo
-         fj3SMbaJXBndiV1Yz7szRt7zPXzCFBKUj8KfYTRJeiEZOvraLb+cOINKZ44MvumnxdVj
-         LAlpE9Asz8BEV7KrB3OFKmfR9f3QzuW9VCpUXcUomqNj47+za7C0GTDo+WwzsUQHrMlu
-         b/Yq7//tmqnZsnoCtdbNPJxL9QtIzoPSNJYqhU/kgL3XJpiOPzGuFlYCsoKhU7NmtdCV
-         ANXQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX+cQcBna+QRn9Gb7xDrQXRWq8Z0nWR/XxyAmxcYLVtQ0oQdKOIOeLETL1HfZVLgTT5/mf/SIot5PlWJLh7EnBj@vger.kernel.org, AJvYcCXK/eCQBMPKMfjEJptUop+fkFvT3a87pFo4M/OfalaskqhxOo8S/KGByAVD4a0jad8IZDkH7qB/9TcWCGo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzw94FUpItsAJoDiotsuTkdzyqP/p8McBdBP3H4kkXOanFbd/UL
-	HAlH02vo5b5BokHnks0ApDIIshjwzWq4mX5TbAnleO+qcJUBy5m2ghdg
-X-Gm-Gg: ASbGncsGKhig1tr4zKOhE97LGtKQ6qg8tHnD9JyJ8ak5RPzTer5rFpxGBHcdsX2FAQe
-	k8DGZTgFULufa4LxoQTuuNXiXwNwIayi83UhteX3eBsf/B5jVfZsj92ZARZ25T3+U0isjJKLw7A
-	R/FOo6a7CBzAcKHZLOqsX2riEZwPUnvRSePDGEI8E15HYBgBNEpREpdRGttbYqFEkYzAlY2sExM
-	SEgRAug14vc0MDrCBgNio/9VkxzX7JGWx4w9/jqGFXOvk24xV+QMnm1VRo9Elg6q+i6Y1PsxunD
-	aLb5vNFucYvmmIRTxz3r0GWIzS+D6ot00Ytp0RumrEtRkpUJN1DmjfklFbY5K55gV8nEUgLSGg=
-	=
-X-Google-Smtp-Source: AGHT+IFQar7eRKIGXm/cAgR40K7ZQCBU6V/9cWUE3jHqi9PpFBjVeAa5Z08aoxBYmDlj+ul5E6tD3g==
-X-Received: by 2002:a05:6871:3748:b0:2d6:2a40:fb9d with SMTP id 586e51a60fabf-2efed81d50cmr14218187fac.28.1751395754357;
-        Tue, 01 Jul 2025 11:49:14 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1751395761; x=1752000561;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Dlocpt7CECBU87LrrF2s/X5hZPUr9DDE65AWKyn7Ey8=;
+        b=JXZ+iVA0SSKQh9NGAmPkoqusxoS+yyywFutrfyIanbQo+wseZIj+X2tBBI4HyoNnw+
+         HHUwuxjNGaJdhcLckvhTKoZzrTXWc7eaz2i0kfgCU3yW6DyyoeuSvFe3KwYUZhwgzWx8
+         76trZuMKHRQeq9kXD1Ucs5OCuYngEKa9l6j8RyBlNZj6dHtgoh/D1Uq+oaUE40Tj9Bxt
+         eds+l3t866eBg8cUtd1p9RRWSgBxzT/yHuqpcBjpZdqvGiMdRkceWCmyQvUzqAtDVc/s
+         zjXOZ/KkYJ33DjlCk8o3lCBvDtlL9zPE1wRNjSIWF2nn3tJxgaBuNeVrCoHe9tAL9H4Q
+         V5IQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVsEsTvXPorNe3Hl8a0UcXoo61ZLhQedsXV3Alu7jUI4nlPZ2zZUMu6nHz1r3I4yMozXY39dtORBtNY6hd/TVQY@vger.kernel.org, AJvYcCWZTZFTAkqCQwJShjlqeBi3wG3wX4Mu9R1VULwLaAg6JMNR53WlKNuUMdmg7GteTyDaqhniRmZ4EafE9Go=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyfj8IImwztRifpGhynNzxJ4LVxAZkZSnw4aVUB60nOxIYXYpiJ
+	1frjKXsXVyJf6ti4jjIfMegBSKgqDfVWey4+np1mpOu4E2t9LgQWLMpLooZhVM6Hd+Y=
+X-Gm-Gg: ASbGncs41EFCiObRVWt48H/lJ46dsKIAexy3wUQaVhQXl9H3TLsx1DTFydpSqXf/k7b
+	lHUBbpK3+4tJq/6dL931nNBF1lqJRAB87p4eT2sX0bSPGCJNCUeU6OiiH1COV2kZgtJbjTdJOhu
+	9Vq9oGjW+Xzhvw2PsHws2vZGqlZjDZ9DgfT35XMsrlMvYJH9qMMIL/eKcDnaOZJ5la7ecBmeroj
+	2fMyPmefBJA4pVFDSHhpQYxlFXjv4H+sTja5oEGN1FqL9ZA9qsNRWTQxvLofy2kJFxeyVzFVfAB
+	5ZExgQLJslomSGcik7JJCnljjVeGHpmOuL/m4FUFqPwyT4VecdXQJiR1kRECPDw=
+X-Google-Smtp-Source: AGHT+IGD6GYhV0TyC/EZGQWTN/JNDfKd7qgK/xYCQH+qgaNeT3VqCslC9FibejmA5HPhSxwD102TRw==
+X-Received: by 2002:a05:6830:91e:b0:72b:8fd3:e2dc with SMTP id 46e09a7af769-73b4cbe37a2mr82752a34.21.1751395760847;
+        Tue, 01 Jul 2025 11:49:20 -0700 (PDT)
 Received: from skc-Dell-Pro-16-Plus-PB16250.. ([132.237.156.254])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-73afb0e3160sm2213242a34.44.2025.07.01.11.49.10
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-73afb0e3160sm2213242a34.44.2025.07.01.11.49.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Jul 2025 11:49:13 -0700 (PDT)
+        Tue, 01 Jul 2025 11:49:20 -0700 (PDT)
 From: Suresh K C <suresh.k.chandrappa@gmail.com>
 X-Google-Original-From: Suresh K C
 To: nphamcs@gmail.com,
@@ -81,10 +82,12 @@ Cc: linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Suresh K C <suresh.k.chandrappa@gmail.com>
-Subject: [PATCH v2 1/2] selftests: cachestat: add tests for mmap
-Date: Wed,  2 Jul 2025 00:19:01 +0530
-Message-ID: <20250701184902.8927-1-suresh.k.chandrappa@gmail.com>
+Subject: [PATCH v2 2/2] selftest: improve mmap test clarity
+Date: Wed,  2 Jul 2025 00:19:02 +0530
+Message-ID: <20250701184902.8927-2-suresh.k.chandrappa@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250701184902.8927-1-suresh.k.chandrappa@gmail.com>
+References: <20250701184902.8927-1-suresh.k.chandrappa@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -95,110 +98,102 @@ Content-Transfer-Encoding: 8bit
 
 From: Suresh K C <suresh.k.chandrappa@gmail.com>
 
-Add a test case to verify cachestat behavior with memory-mapped files
-using mmap(). This ensures that pages accessed via mmap are correctly
-accounted for in the page cache.
+This patch refactors the mmap test logic to remove redundancy and improve
+error reporting. It also removes leftover test code that is no longer needed.
 
-Tested on x86_64 with default kernel config
+Changes since v1:
+- Refactored mmap logic into a switch statement as suggested
+- Removed the last-character difference, which was only used for testing
+- Added clearer error messages to indicate whether shmem or mmap failed
+- Combined patches into a series for better context
+- Addressed feedback on patch origin and versioning
 
 Signed-off-by: Suresh K C <suresh.k.chandrappa@gmail.com>
 ---
- .../selftests/cachestat/test_cachestat.c      | 39 ++++++++++++++++---
- 1 file changed, 33 insertions(+), 6 deletions(-)
+ .../selftests/cachestat/test_cachestat.c      | 52 +++++++++++++------
+ 1 file changed, 35 insertions(+), 17 deletions(-)
 
 diff --git a/tools/testing/selftests/cachestat/test_cachestat.c b/tools/testing/selftests/cachestat/test_cachestat.c
-index 632ab44737ec..b6452978dae0 100644
+index b6452978dae0..0549b7224ba1 100644
 --- a/tools/testing/selftests/cachestat/test_cachestat.c
 +++ b/tools/testing/selftests/cachestat/test_cachestat.c
-@@ -33,6 +33,11 @@ void print_cachestat(struct cachestat *cs)
- 	cs->nr_evicted, cs->nr_recently_evicted);
- }
- 
-+enum file_type {
-+	FILE_MMAP,
-+	FILE_SHMEM
-+};
-+
- bool write_exactly(int fd, size_t filesize)
- {
- 	int random_fd = open("/dev/urandom", O_RDONLY);
-@@ -202,7 +207,7 @@ static int test_cachestat(const char *filename, bool write_random, bool create,
+@@ -206,6 +206,17 @@ static int test_cachestat(const char *filename, bool write_random, bool create,
+ out:
  	return ret;
  }
++const char* file_type_str(enum file_type type) {
++	switch (type) {
++		case FILE_SHMEM:
++			return "shmem";
++		case FILE_MMAP:
++			return "mmap";
++		default:
++			return "unknown";
++	}
++}
++
  
--bool test_cachestat_shmem(void)
-+bool run_cachestat_test(enum file_type type)
+ bool run_cachestat_test(enum file_type type)
  {
- 	size_t PS = sysconf(_SC_PAGESIZE);
- 	size_t filesize = PS * 512 * 2; /* 2 2MB huge pages */
-@@ -212,27 +217,43 @@ bool test_cachestat_shmem(void)
- 	char *filename = "tmpshmcstat";
- 	struct cachestat cs;
- 	bool ret = true;
-+	int fd;
- 	unsigned long num_pages = compute_len / PS;
--	int fd = shm_open(filename, O_CREAT | O_RDWR, 0600);
-+	if (type == FILE_SHMEM)
-+		fd = shm_open(filename, O_CREAT | O_RDWR, 0600);
-+	else
-+		fd = open(filename, O_RDWR | O_CREAT | O_TRUNC, 0666);
+@@ -225,34 +236,41 @@ bool run_cachestat_test(enum file_type type)
+ 		fd = open(filename, O_RDWR | O_CREAT | O_TRUNC, 0666);
  
  	if (fd < 0) {
--		ksft_print_msg("Unable to create shmem file.\n");
-+		ksft_print_msg("Unable to create file.\n");
+-		ksft_print_msg("Unable to create file.\n");
++		ksft_print_msg("Unable to create %s file.\n",file_type_str(type));
  		ret = false;
  		goto out;
  	}
  
  	if (ftruncate(fd, filesize)) {
--		ksft_print_msg("Unable to truncate shmem file.\n");
-+		ksft_print_msg("Unable to truncate file.\n");
+-		ksft_print_msg("Unable to truncate file.\n");
+-		ret = false;
+-		goto close_fd;
+-	}
+-
+-	if (!write_exactly(fd, filesize)) {
+-		ksft_print_msg("Unable to write to file.\n");
++		ksft_print_msg("Unable to truncate %s file.\n",file_type_str(type));
  		ret = false;
  		goto close_fd;
  	}
  
- 	if (!write_exactly(fd, filesize)) {
--		ksft_print_msg("Unable to write to shmem file.\n");
-+		ksft_print_msg("Unable to write to file.\n");
- 		ret = false;
- 		goto close_fd;
+-	if (type == FILE_MMAP){
+-		char *map = mmap(NULL, filesize, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+-		if (map == MAP_FAILED) {
+-			ksft_print_msg("mmap failed.\n");
++	switch (type){
++		case FILE_SHMEM:
++			if (!write_exactly(fd, filesize)) {
++				ksft_print_msg("Unable to write to file.\n");
++				ret = false;
++				goto close_fd;
++			}
++			break;
++		case FILE_MMAP:
++			char *map = mmap(NULL, filesize, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
++			if (map == MAP_FAILED) {
++				ksft_print_msg("mmap failed.\n");
++				ret = false;
++				goto close_fd;
++			}
++			for (int i = 0; i < filesize; i++) {
++				map[i] = 'A';
++			}
++			break;
++		default:
++			ksft_print_msg("Unsupported file type.\n");
+ 			ret = false;
+ 			goto close_fd;
+-		}
+-		for (int i = 0; i < filesize; i++) {
+-			map[i] = 'A';
+-		}
+-		map[filesize - 1] = 'X';
++			break;
  	}
- 
-+	if (type == FILE_MMAP){
-+		char *map = mmap(NULL, filesize, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-+		if (map == MAP_FAILED) {
-+			ksft_print_msg("mmap failed.\n");
-+			ret = false;
-+			goto close_fd;
-+		}
-+		for (int i = 0; i < filesize; i++) {
-+			map[i] = 'A';
-+		}
-+		map[filesize - 1] = 'X';
-+	}
  	syscall_ret = syscall(__NR_cachestat, fd, &cs_range, &cs, 0);
  
- 	if (syscall_ret) {
-@@ -308,12 +329,18 @@ int main(void)
- 		break;
- 	}
- 
--	if (test_cachestat_shmem())
-+	if (run_cachestat_test(FILE_SHMEM))
- 		ksft_test_result_pass("cachestat works with a shmem file\n");
- 	else {
- 		ksft_test_result_fail("cachestat fails with a shmem file\n");
- 		ret = 1;
- 	}
- 
-+	if (run_cachestat_test(FILE_MMAP))
-+		ksft_test_result_pass("cachestat works with a mmap file\n");
-+	else {
-+		ksft_test_result_fail("cachestat fails with a mmap file\n");
-+		ret = 1;
-+	}
- 	return ret;
- }
 -- 
 2.43.0
 
