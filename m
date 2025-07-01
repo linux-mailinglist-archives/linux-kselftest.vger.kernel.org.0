@@ -1,180 +1,503 @@
-Return-Path: <linux-kselftest+bounces-36222-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36223-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6298AAF059A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jul 2025 23:27:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 501AFAF062B
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 00:05:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 515F63BAC98
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jul 2025 21:26:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EFF2916D957
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jul 2025 22:05:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C7F530206D;
-	Tue,  1 Jul 2025 21:27:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9113F2701BF;
+	Tue,  1 Jul 2025 22:04:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jbbWtmaa"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="GmJ3rJea"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1CC21C84C5
-	for <linux-kselftest@vger.kernel.org>; Tue,  1 Jul 2025 21:27:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6946239573
+	for <linux-kselftest@vger.kernel.org>; Tue,  1 Jul 2025 22:04:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751405230; cv=none; b=X6oUB7wKpEDcXaewwxL9wQzaoVg/982sYlKnKpOPkW9PFhCZYsQ79wGQ37eTcq6gN4lo5e4EwR5UZrMEN35NyXsHZLrMTTVNrRwrDie3XgwXhaAoo3VA1fUB/uBN9LbwVbVSwyktV67ebWnii99FnPbGv2wEltFnW0Rn1jOwe0s=
+	t=1751407499; cv=none; b=KXrVnmiWoTeWrFcg7jDf6YOse2j6nEliGzMM4NF5NX1TNFlCL9dM2FZzA9bjVUrSs0VVV8Fv0zMGDqkpl+1EKX5guK1uVJwNRB6FGSR8Ke560O/rFAPsWSbp3g4VEUfrPx14kM29DlJzlrb8Gsfwbogdv2ySsinZX3J+JUZDEco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751405230; c=relaxed/simple;
-	bh=DzHFQiPQddZhawDVWcu2zeji/HBrjV6FWP4sfK+uAb8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sq/nXKJPU+y+vxyjygJ+PCIdqbtg6zkwheOG6ztarVkLyGsgcgKFj3Z1E0B887imLpqxeP8nYM2Jv6wiDcHYQ179g7wQan7sl5nybJ+ccnv+woYSByXqlWvlkuPJZnK1cbxTpfro8LogZo1C1ZxZhYaWqMwDuOflpXv7fP92To0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jbbWtmaa; arc=none smtp.client-ip=209.85.219.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-6fd0a91ae98so25366016d6.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 01 Jul 2025 14:27:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1751405226; x=1752010026; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EAN/JX9tNQneTS1/E3rAZ4/N5hA30DPl50YRPjyH77Q=;
-        b=jbbWtmaaxDd9mQN/PxhcFTzvDn7DKdLjnzIMt8F0kQ+EfdxQhZ6DgvEn4EhV0Vge1S
-         /JYUFLoG5juJIOt9Y6qLizF8DpyOj4xwj7D1pjTcvTudut0NoTHhELUFOKwQ5V6TOO0/
-         oZuqaQ+bRPSxHC6TROatcOlD50nAfiAiMcuJDmW5mmGHSgCmJTFMLOGsUNQE5zIijT5I
-         hla+1Hj7j1wj+3ICnUa2A6lssz7Fqyrp7Ov3UKeBgRdINZPnr4LntIGjFm7y6vtUOkJx
-         l1eg8TINbS5ppK8xmiRc3iDO+pIDGsI7lPmEu5GOd+5eQGzSZ2mWrB2ukX0zvFwUJKv5
-         B79g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751405226; x=1752010026;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EAN/JX9tNQneTS1/E3rAZ4/N5hA30DPl50YRPjyH77Q=;
-        b=g4sw1FqsS2RdyC5lUtlES9YKiX2/khhe1U6YlrmkxVgKTZpgErv+YiqqsYHgQRzMAY
-         4SQZonxWLq6/Og0bRY4LlkOu/UIeDTQjGuganV+z/LVhgJOHYrfruDay8hKbK+FSqVQG
-         BGzsiUjKwgfy8rXg8/4o2x89iyEq0lluVfwY3vyDZJ18VxyMw4t89T5G6wpZHVvjEqOT
-         eAATCtLm3c23s/4yGbqM94ClAOevHSKhVp2JjNjBbDb2OEYEptOHwleaxNNVWkkTSCpJ
-         nocRMFbU8SyMKICTplw0OR0j+ulW6WHqYDswTcOoH7awaH5hs5jryrQCwvzKSVd2BIAA
-         ks4A==
-X-Forwarded-Encrypted: i=1; AJvYcCX/vGmuwX7HHHHSbHnHJc/u3/i0ehqu2gmnUPJIZ6hcRMjPk37Aisgq161GnN4cHqqgXmW0ULqTGbW0Ejk1pA8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJaE84tWfrzvqW7l6QLCFeiEuCATK2o4o3puEND7XmVjNcMH9e
-	J2a8oojWwHVq6N/OGUwcxY6/oY1TRq6RUU0iU96MId4O2WH1s07/v4HmXde5ZmvNcojdV8Nfmhm
-	DIiYa3XMQQtxpulctE/xMcCwZtPoh2ePv9BNb42s6
-X-Gm-Gg: ASbGncunbd1VF7P7UUKfvBqYFYq5IHMQDr2DnyjxGe2b0bTc0qa892JmP9KHI78T158
-	wodNy7+SJXcj9+r42QhBb8L78wUkt/o7x5dMDTp9zY3nWhiKwzx8pi9VljwhlHtg+GLDimk2Z4F
-	74Vx7Wild5E9isK+k50d9Tu8wME3wu2ZOTugbqacLsdw6QiQIyJGOIkjTUxipwMTisFXcaOk8sT
-	g==
-X-Google-Smtp-Source: AGHT+IGA7WQ+e3XksnB6m51usyyvNfN+MXcxbddeJ/9KeHNUIOLXzuYXqSKDJLS8QQzczdjQx/nSEiEiD6ZJ/P7pVhw=
-X-Received: by 2002:a05:6214:c22:b0:6fa:cb9b:a793 with SMTP id
- 6a1803df08f44-702b1aef861mr2025266d6.26.1751405226231; Tue, 01 Jul 2025
- 14:27:06 -0700 (PDT)
+	s=arc-20240116; t=1751407499; c=relaxed/simple;
+	bh=to0L7CAI3+dDwrvdS9zgWGoRL9Tdff5CNJR1VIiKfyc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qOCLAOnr0HrMd69CEQRHM99OsVt7ohmLvYbcAJ0U4pxN3Spb8TEQgQlx6lBlqqvF8S22FwhWR5Osf+qXxAcarg/eQaKIEJjV2UUE20+a+KrKjk7npPWA8la4axqZROnleXaE/G0QXdUA2+xsycnKsA8Cp/CXhGB0BWdTBD8hjEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=GmJ3rJea; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1751407488;
+	bh=to0L7CAI3+dDwrvdS9zgWGoRL9Tdff5CNJR1VIiKfyc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GmJ3rJeabW1IXX20LcEIMLVA/Qs7nEGl4tAJZMt5r0pL5ZkIQD0M0JpTtNj9vqNoL
+	 9ZC2RQlj+8zoTHVeJcnWCegsKM9XjMdirElh9zh1sSqgzt8dZiWtFUYICe24I/WgrT
+	 pOUJqNr0f6VgoZUV71fc9rZCA8IZdtdlpc7vOro4=
+Date: Wed, 2 Jul 2025 00:04:47 +0200
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Benjamin Berg <benjamin@sipsolutions.net>
+Cc: Willy Tarreau <w@1wt.eu>, linux-kselftest@vger.kernel.org, 
+	Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, Benjamin Berg <benjamin.berg@intel.com>
+Subject: Re: [RFC v2] tools/nolibc: add sigaction()
+Message-ID: <21cf1fee-21ce-43b2-95cc-18aa58adcd87@t-8ch.de>
+References: <20250701122910.45823-1-benjamin@sipsolutions.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250626-kunit-kselftests-v4-0-48760534fef5@linutronix.de> <20250626-kunit-kselftests-v4-7-48760534fef5@linutronix.de>
-In-Reply-To: <20250626-kunit-kselftests-v4-7-48760534fef5@linutronix.de>
-From: Rae Moar <rmoar@google.com>
-Date: Tue, 1 Jul 2025 17:26:55 -0400
-X-Gm-Features: Ac12FXwG0XmNtlAv7hUPU9jHLcT8Tyd4GL9zm8DXnJELkX1C01cyvv9A2Y6Bosg
-Message-ID: <CA+GJov6boJrF25-3RXJHzSUvdX49J-UtmMaLTzeV8uLB3LY8og@mail.gmail.com>
-Subject: Re: [PATCH v4 07/15] kunit: tool: Add test for nested test result reporting
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>, 
-	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
-	Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Nicolas Schier <nicolas.schier@linux.dev>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-doc@vger.kernel.org, workflows@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250701122910.45823-1-benjamin@sipsolutions.net>
 
-On Thu, Jun 26, 2025 at 2:10=E2=80=AFAM Thomas Wei=C3=9Fschuh
-<thomas.weissschuh@linutronix.de> wrote:
->
-> Currently there is no test validating the result reporting from nested
-> tests. Add one, it will also be used to validate upcoming changes to the
-> nested test parsing.
+Hi Benjamin,
 
-Hello!
+Thanks for your patch!
 
-This patch looks good to me! However, most of the tests in
-kunit-tool-test do check nested test output but we do lack checks for
-failing tests. Could we change this commit description to be something
-like: "Currently there is a lack of tests validating failed results
-reporting from nested tests."?
+On 2025-07-01 14:29:10+0200, Benjamin Berg wrote:
+> From: Benjamin Berg <benjamin.berg@intel.com>
 
-Reviewed-by: Rae Moar <rmoar@google.com>
+Please send the next revisions to the nolibc maintainers from the
+MAINTAINERS file. Willy and my @weissschuh.net address.
 
-Thanks!
--Rae
+> In preparation to add tests that use it.
 
->
-> Signed-off-by: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
-> Reviewed-by: David Gow <davidgow@google.com>
+Here "tests" is not clear about its meaning.
+
+> Note that some architectures do not have a usable linux/signal.h include
+> file. However, in those cases we can use asm-generic/signal.h instead.
+
+This should explain what "unusable" means.
+
+> Signed-off-by: Benjamin Berg <benjamin.berg@intel.com>
+> 
 > ---
->  tools/testing/kunit/kunit_tool_test.py                         | 10 ++++=
-++++++
->  .../kunit/test_data/test_is_test_passed-failure-nested.log     |  7 ++++=
-+++
->  2 files changed, 17 insertions(+)
->
-> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit=
-/kunit_tool_test.py
-> index bbba921e0eacb18663abfcabb2bccf330d8666f5..b74dc05fc2fe5b3ff629172fc=
-7aafeb5c3d29fb3 100755
-> --- a/tools/testing/kunit/kunit_tool_test.py
-> +++ b/tools/testing/kunit/kunit_tool_test.py
-> @@ -165,6 +165,16 @@ class KUnitParserTest(unittest.TestCase):
->                 self.assertEqual(kunit_parser.TestStatus.FAILURE, result.=
-status)
->                 self.assertEqual(result.counts.errors, 0)
->
-> +       def test_parse_failed_nested_tests_log(self):
-> +               nested_log =3D test_data_path('test_is_test_passed-failur=
-e-nested.log')
-> +               with open(nested_log) as file:
-> +                       result =3D kunit_parser.parse_run_tests(file.read=
-lines(), stdout)
-> +               self.assertEqual(kunit_parser.TestStatus.FAILURE, result.=
-status)
-> +               self.assertEqual(result.counts.failed, 2)
-> +               self.assertEqual(kunit_parser.TestStatus.FAILURE, result.=
-subtests[0].status)
-> +               self.assertEqual(kunit_parser.TestStatus.FAILURE, result.=
-subtests[1].status)
-> +               self.assertEqual(kunit_parser.TestStatus.FAILURE, result.=
-subtests[1].subtests[0].status)
+> 
+> Another attempt at signal handling for nolibc which should actually be
+> working. Some trickery is needed to get the right definition, but I feel
+> it is sufficiently clean this way.
+> 
+> Submitting this as RFC mostly because I do not yet have a proper patch
+> to add a test that uses the feature.
+
+We do pick up new features in nolibc without them having in-kernel users.
+So if you want to get this in already you can drop the RFC state.
+
+> Benjamin
+> ---
+>  tools/include/nolibc/arch-aarch64.h          |  3 +
+
+In nolibc/for-next, arch-aarch64.h is now called arch-arm64.h.
+
+https://git.kernel.org/pub/scm/linux/kernel/git/nolibc/linux-nolibc.git/log/?h=for-next
+
+>  tools/include/nolibc/arch-arm.h              |  7 ++
+>  tools/include/nolibc/arch-i386.h             | 13 +++
+
+... and arch-i386.h was renamed to arch-x86.h
+
+>  tools/include/nolibc/arch-loongarch.h        |  3 +
+>  tools/include/nolibc/arch-m68k.h             | 10 ++
+>  tools/include/nolibc/arch-mips.h             |  3 +
+>  tools/include/nolibc/arch-powerpc.h          |  8 ++
+>  tools/include/nolibc/arch-riscv.h            |  3 +
+>  tools/include/nolibc/arch-s390.h             |  8 +-
+>  tools/include/nolibc/arch-sparc.h            | 43 +++++++++
+>  tools/include/nolibc/arch-x86_64.h           | 10 ++
+
+same for arch-x86_64.h, Unlucky timing.
+
+>  tools/include/nolibc/signal.h                | 97 ++++++++++++++++++++
+>  tools/include/nolibc/sys.h                   |  2 +-
+>  tools/include/nolibc/time.h                  |  3 +-
+>  tools/testing/selftests/nolibc/nolibc-test.c | 52 +++++++++++
+>  15 files changed, 261 insertions(+), 4 deletions(-)
+
+<snip>
+
+> --- a/tools/include/nolibc/arch-i386.h
+> +++ b/tools/include/nolibc/arch-i386.h
+> @@ -10,6 +10,19 @@
+>  #include "compiler.h"
+>  #include "crt.h"
+>  
+> +/* Needed to get the correct struct sigaction definition */
+> +#define SA_RESTORER	0x04000000
 > +
->         def test_no_header(self):
->                 empty_log =3D test_data_path('test_is_test_passed-no_test=
-s_run_no_header.log')
->                 with open(empty_log) as file:
-> diff --git a/tools/testing/kunit/test_data/test_is_test_passed-failure-ne=
-sted.log b/tools/testing/kunit/test_data/test_is_test_passed-failure-nested=
-.log
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..2e528da39ab5b2be0fca6cf91=
-60c10929fba3c9e
-> --- /dev/null
-> +++ b/tools/testing/kunit/test_data/test_is_test_passed-failure-nested.lo=
-g
-> @@ -0,0 +1,7 @@
-> +KTAP version 1
-> +1..2
-> +not ok 1 subtest 1
-> +    KTAP version 1
-> +    1..1
-> +        not ok 1 subsubtest 1
-> +not ok 2 subtest 2
->
-> --
+> +/* Restorer must be set on i386 */
+> +#define _NOLIBC_ARCH_NEEDS_SA_RESTORER
+> +
+> +/* Otherwise we would need to use sigreturn instead of rt_sigreturn */
+> +#define _NOLIBC_ARCH_FORCE_SIG_FLAGS SA_SIGINFO
+> +
+> +/* Avoid linux/signal.h, it has an incorrect _NSIG and sigset_t */
+> +#include <asm-generic/signal.h>
+> +#include <asm-generic/siginfo.h>
+
+This doesn't work if the user already has <linux/signal.h> included for
+some other reason. The symbol names will conflict.
+
+Can we do something like this:
+
+#include <linux/signal.h>
+
+/* lifted from asm-generic/signal.h */
+struct __nolibc_sigaction {
+	__sighandler_t sa_handler;
+	unsigned long sa_flags;
+#ifdef SA_RESTORER
+	__sigrestore_t sa_restorer;
+#endif
+	__nolibc_sigset_t sa_mask;
+};
+
+int sys_rt_sigaction(int signum, const struct sigaction *act, struct sigaction *oldact)
+{
+	struct __nolibc_sigaction nolibc_act, nolibc_oldact;
+	int ret;
+
+	/* Convert whatever gunk we got from linux/signal.h to what the
+	 * kernel actually expects. If it is the same structure,
+	 * hopefully the compiler manages to optimize it away.
+	 * See __nolibc_user_timespec_to_kernel() et al.
+	 * (Comment not meant to be copied verbatim)
+	 */
+	__nolibc_sigaction_user_to_kernel(act, &nolibc_act);
+
+#if defined(_NOLIBC_ARCH_NEEDS_SA_RESTORER)
+...
+#endif
+
+	ret = my_syscall4(__NR_rt_sigaction, signum, &nolibc_act, &nolibc_oldact, sizeof(nolibc_act->sa_mask));
+
+	__nolibc_sigaction_kernel_to_user(&nolibc_oldact, oldact);
+
+	return ret;
+}
+
+Or am I missing something?
+
+> +
+>  /* Syscalls for i386 :
+>   *   - mostly similar to x86_64
+>   *   - registers are 32-bit
+
+<snip>
+
+> --- a/tools/include/nolibc/arch-sparc.h
+> +++ b/tools/include/nolibc/arch-sparc.h
+> @@ -12,6 +12,19 @@
+>  #include "compiler.h"
+>  #include "crt.h"
+>  
+> +/* Otherwise we would need to use sigreturn instead of rt_sigreturn */
+> +#define _NOLIBC_ARCH_FORCE_SIG_FLAGS SA_SIGINFO
+> +
+> +/* The includes are sane, if one sets __WANT_POSIX1B_SIGNALS__ */
+> +#define __WANT_POSIX1B_SIGNALS__
+> +#include <linux/signal.h>
+
+This also assumes the user did not already include <linux/signal.h>
+before including nolibc.
+
+> +
+> +/*
+> + * sparc has ODD_RT_SIGACTION, we always pass our restorer as an argument
+> + * to rt_sigaction. The restorer is implemented in this file.
+> + */
+> +#define _NOLIBC_RT_SIGACTION_PASSES_RESTORER
+> +
+>  /*
+>   * Syscalls for SPARC:
+>   *   - registers are native word size
+> @@ -188,4 +201,34 @@ pid_t sys_fork(void)
+>  }
+>  #define sys_fork sys_fork
+>  
+> +#define __nolibc_stringify_1(x...)     #x
+> +#define __nolibc_stringify(x...)       __stringify_1(x)
+
+If we need this, IMO it belongs into compiler.h.
+
+> +
+> +/* The compiler insists on adding a SAVE call to the start of every function */
+> +#define __nolibc_sa_restorer __nolibc_sa_restorer
+> +void __nolibc_sa_restorer (void);
+> +#ifdef __arch64__
+> +__asm__(                                                        \
+
+We are avoiding bare toplevel asm calls.
+You could use the same trick as my SuperH _start() function and use
+asm() inside a function.
+
+https://lore.kernel.org/lkml/20250623-nolibc-sh-v2-3-0f5b4b303025@weissschuh.net/
+
+> +	".section .text\n"                                      \
+> +	".align  4 \n"                                          \
+> +	"__nolibc_sa_restorer:\n"                               \
+> +	"nop\n"                                                 \
+> +	"nop\n"                                                 \
+> +	"mov     " __stringify(__NR_rt_sigreturn) ", %g1 \n"    \
+> +	"t       0x6d \n");
+> +#else
+> +__asm__(                                                        \
+> +	".section .text\n"                                      \
+> +	".align  4 \n"                                          \
+> +	"__nolibc_sa_restorer:\n"                               \
+> +	"nop\n"                                                 \
+> +	"nop\n"                                                 \
+> +	"mov     " __stringify(__NR_rt_sigreturn) ", %g1 \n"    \
+> +	"t       0x10 \n"                                       \
+
+Only one line differs. I'd prefer the #ifdef around that.
+
+> +	);
+> +#endif
+> +
+> +#undef __nolibc_stringify_1(x...)
+> +#undef __nolibc_stringify
+
+And there is no need to undef it again.
+
+> +
+>  #endif /* _NOLIBC_ARCH_SPARC_H */
+> diff --git a/tools/include/nolibc/arch-x86_64.h b/tools/include/nolibc/arch-x86_64.h
+> index 67305e24dbef..9f13a2205876 100644
+
+<snip>
+
+> --- a/tools/include/nolibc/signal.h
+> +++ b/tools/include/nolibc/signal.h
+> @@ -14,6 +14,8 @@
+>  #include "arch.h"
+>  #include "types.h"
+>  #include "sys.h"
+> +#include "string.h"
+> +/* signal definitions are included by arch.h */
+>  
+>  /* This one is not marked static as it's needed by libgcc for divide by zero */
+>  int raise(int signal);
+> @@ -23,4 +25,99 @@ int raise(int signal)
+>  	return sys_kill(sys_getpid(), signal);
+>  }
+>  
+> +/*
+> + * sigaction(int signum, const struct sigaction *act, struct sigaction *oldact)
+> + */
+> +#if defined(_NOLIBC_ARCH_NEEDS_SA_RESTORER) && !defined(__nolibc_sa_restorer)
+> +static __attribute__((noreturn)) __nolibc_entrypoint __no_stack_protector
+
+__attribute__((noreturn)) is not always available and should be behind
+__nolibc_has_attribute(). 
+I'm a bit unhappy about reusing the entrypoint machinery, but I guess
+it's necessary.
+
+> +void __nolibc_sa_restorer(void)
+> +{
+> +	my_syscall0(__NR_rt_sigreturn);
+> +	__nolibc_entrypoint_epilogue();
+> +}
+> +#endif
+> +
+> +static __attribute__((unused))
+> +int sys_rt_sigaction(int signum, const struct sigaction *act, struct sigaction *oldact)
+> +{
+> +	struct sigaction real_act = *act;
+> +#if defined(SA_RESTORER) && defined(_NOLIBC_ARCH_NEEDS_SA_RESTORER)
+
+If _NOLIBC_ARCH_NEEDS_SA_RESTORER is set then SA_RESTORER should also be
+present. SA_RESTORER doesn't need to be checked also.
+Are there cases where SA_RESTORER is defined but not needed?
+
+> +	if (!(real_act.sa_flags & SA_RESTORER)) {
+> +		real_act.sa_flags |= SA_RESTORER;
+> +		real_act.sa_restorer = __nolibc_sa_restorer;
+> +	}
+> +#endif
+> +#ifdef _NOLIBC_ARCH_FORCE_SIG_FLAGS
+> +	real_act.sa_flags |= _NOLIBC_ARCH_FORCE_SIG_FLAGS;
+> +#endif
+> +
+> +#ifndef _NOLIBC_RT_SIGACTION_PASSES_RESTORER
+> +	return my_syscall4(__NR_rt_sigaction, signum, &real_act, oldact,
+> +			   sizeof(act->sa_mask));
+> +#else
+> +	return my_syscall5(__NR_rt_sigaction, signum, &real_act, oldact,
+> +			   __nolibc_sa_restorer, sizeof(act->sa_mask));
+
+This calling convention is specific to SPARC, so I prefer it to be in
+arch-sparc.h. Alpha also uses 5 arguments for the syscall, but of course
+in a different order... (I do have nearly done patches for alpha
+support).
+
+Also if a user specified their custom sa_restorer in 'act', that one
+should be used, no?
+
+> +#endif
+> +}
+> +
+> +static __attribute__((unused))
+> +int sigaction(int signum, const struct sigaction *act, struct sigaction *oldact)
+> +{
+> +	return __sysret(sys_rt_sigaction(signum, act, oldact));
+> +}
+> +
+> +/*
+> + * int sigemptyset(sigset_t *set)
+> + */
+> +static __attribute__((unused))
+> +int sigemptyset(sigset_t *set)
+> +{
+> +	memset(set, 0, sizeof(*set));
+> +	return 0;
+> +}
+> +
+> +/*
+> + * int sigfillset(sigset_t *set)
+> + */
+> +static __attribute__((unused))
+> +int sigfillset(sigset_t *set)
+> +{
+> +	memset(set, 0xff, sizeof(*set));
+> +	return 0;
+> +}
+> +
+> +/*
+> + * int sigaddset(sigset_t *set, int signum)
+> + */
+> +static __attribute__((unused))
+> +int sigaddset(sigset_t *set, int signum)
+> +{
+> +	set->sig[(signum - 1) / (8 * sizeof(set->sig[0]))] |=
+> +		1UL << ((signum - 1) % (8 * sizeof(set->sig[0])));
+> +	return 0;
+
+This is documented to return EINVAL for an invalid signum.
+
+> +}
+> +
+> +/*
+> + * int sigdelset(sigset_t *set, int signum)
+> + */
+> +static __attribute__((unused))
+> +int sigdelset(sigset_t *set, int signum)
+> +{
+> +	set->sig[(signum - 1) / (8 * sizeof(set->sig[0]))] &=
+> +		~(1UL << ((signum - 1) % (8 * sizeof(set->sig[0]))));
+> +	return 0;
+> +}
+> +
+> +/*
+> + * int sigismember(sigset_t *set, int signum)
+> + */
+> +static __attribute__((unused))
+> +int sigismember(sigset_t *set, int signum)
+> +{
+> +	unsigned long res =
+> +		set->sig[(signum - 1) / (8 * sizeof(set->sig[0]))] &
+> +			(1UL << ((signum - 1) % (8 * sizeof(set->sig[0]))));
+> +	return !!res;
+> +}
+
+These are similar to FD_CLR()/FD_SET() etc, no?
+Moving both sets of functions to common inline helpers would be nice.
+
+> +
+>  #endif /* _NOLIBC_SIGNAL_H */
+
+<snip>
+
+> diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+> index dbe13000fb1a..af66b739ea18 100644
+> --- a/tools/testing/selftests/nolibc/nolibc-test.c
+> +++ b/tools/testing/selftests/nolibc/nolibc-test.c
+> @@ -1750,6 +1750,57 @@ static int run_protection(int min __attribute__((unused)),
+>  	}
+>  }
+>  
+> +volatile int signal_check;
+
+Technically this should be sig_atomic_t.
+Which can be a typedef to int.
+
+> +void test_sighandler(int signum)
+> +{
+> +	if (signum == SIGUSR1) {
+> +		kill(getpid(), SIGUSR2);
+> +		signal_check = 1;
+> +	} else {
+> +		signal_check++;
+> +	}
+> +}
+> +
+> +int run_signal(int min, int max)
+> +{
+> +	struct sigaction sa = {
+> +		.sa_flags = 0,
+> +		.sa_handler = test_sighandler,
+> +	};
+> +	int llen; /* line length */
+> +	int ret = 0;
+> +	int res;
+> +
+> +	(void)min;
+> +	(void)max;
+> +
+> +	signal_check = 0;
+> +
+> +	sigemptyset(&sa.sa_mask);
+> +	sigaddset(&sa.sa_mask, SIGUSR2);
+
+It would be good to do some assertions after sigemptyset() and
+sigaddset() to validate the bitfiddling.
+
+> +
+> +	res = sigaction(SIGUSR1, &sa, NULL);
+> +	llen = printf("register SIGUSR1: %d", res);
+> +	EXPECT_EQ(1, 0, res);
+> +	res = sigaction(SIGUSR2, &sa, NULL);
+> +	llen = printf("register SIGUSR2: %d", res);
+> +	EXPECT_EQ(1, 0, res);
+
+Here it would be nice to validate the old action.
+
+> +
+> +	/* Trigger the first signal. */
+> +	kill(getpid(), SIGUSR1);
+> +
+> +	/* If signal_check is 1 or higher, then signal emission worked */
+> +	llen = printf("signal emission: 1 <= signal_check");
+> +	EXPECT_GE(1, signal_check, 1);
+> +
+> +	/* If it is 2, then signal masking worked */
+> +	llen = printf("signal masking: 2 == signal_check");
+> +	EXPECT_EQ(1, signal_check, 2);
+> +
+> +	return ret;
+> +}
+> +
+>  /* prepare what needs to be prepared for pid 1 (stdio, /dev, /proc, etc) */
+>  int prepare(void)
+>  {
+> @@ -1815,6 +1866,7 @@ static const struct test test_names[] = {
+>  	{ .name = "stdlib",     .func = run_stdlib     },
+>  	{ .name = "printf",     .func = run_printf     },
+>  	{ .name = "protection", .func = run_protection },
+> +	{ .name = "signal",     .func = run_signal },
+
+These 'struct test's are really more test suites.
+This testcase can be part of the syscall suite.
+
+>  	{ 0 }
+>  };
+>  
+> -- 
 > 2.50.0
->
+> 
 
