@@ -1,109 +1,135 @@
-Return-Path: <linux-kselftest+bounces-36175-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36176-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F8E1AEF6EE
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jul 2025 13:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4723DAEF82E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jul 2025 14:20:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8BA2C1BC2FAE
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jul 2025 11:45:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B0B5A188CD81
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jul 2025 12:20:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 913A322DFA3;
-	Tue,  1 Jul 2025 11:45:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DE0C273D76;
+	Tue,  1 Jul 2025 12:20:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=pwned.life header.i=@pwned.life header.b="p5jRpfyY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OoUQMvg8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx.nixnet.email (mx.nixnet.email [5.161.67.119])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFF88259C83;
-	Tue,  1 Jul 2025 11:45:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.161.67.119
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F348227381E;
+	Tue,  1 Jul 2025 12:20:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751370317; cv=none; b=XFLjgGn1nKvODFkyOcmQn5PGtha2eqYhBTGNDlFeutL9quH05S+/zCHEBGLcAuFHyzH0QVPy+T7KAr2vlEMPGvBGR82jNCaVasjp/+eh18wu75nOOAE0scodA1e0E6HXz91yI5oqzibPYMXe1cesWxFtV6k+Xc9YDbrFo7as0PI=
+	t=1751372418; cv=none; b=lD+i0uvlSrRgTpYtsC4WErYKymTvZRf8X47Pm04Lxgj33jGjlBD0JkSz3GMfprkWVoueoXXLPZ+B8nTtAsdIXEqFsDwGdu3m1eNyKXKh8xOTMjv9Q+CUq4A7I4nLbT1rds7f2TMLqXazsbkGORmSM1NLhDuAaoeNck9xD6Dc+b0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751370317; c=relaxed/simple;
-	bh=sVovuMTF5tAHPiCPKHLjhZPgKA8N730V48hVE+q9Zs8=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=fwiHX5mpr/y1uUH8lH/swgbhLfuFifN/WKCIl48twq782pHUYKcKFTSDMOyT3WCoUQBmVu+o1DKVDfAEoFdjbInvzPKlmtJdRAKulBN9IIwCoxECsqEK6p3nc+AwqpY+q/ckXaArssAaqSuv0zr/hBzJ4OK3VcxfHsuXlPEgs4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=pwned.life; spf=pass smtp.mailfrom=pwned.life; dkim=pass (1024-bit key) header.d=pwned.life header.i=@pwned.life header.b=p5jRpfyY; arc=none smtp.client-ip=5.161.67.119
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=pwned.life
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pwned.life
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-	by mx.nixnet.email (Postfix) with ESMTPSA id 43C547D3B8;
-	Tue,  1 Jul 2025 13:37:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pwned.life; s=202002021149;
-	t=1751369861;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=QVgDAEpVfCK2rfSTwfo8zjZAUpXMr5uBg9i9X14EHcs=;
-	b=p5jRpfyY83dkXaHxaCJPcaV4zjMzuqIdqo5Xi1qvNeRy+2poIk1vHlYxIPRYO5+A0GpbnR
-	9A94O3kpaBmg9kOMld4bQiLBiY1rLu+6kV/3pTOn9p3nyRShzXeLmr+Bpj9PKFaGHejkQT
-	m4tYZD4+qySJM1eJoIl/UE0RfDg/iL8=
+	s=arc-20240116; t=1751372418; c=relaxed/simple;
+	bh=0WOvPMu1XqES/onds8PjGHDXOKh6epjdI3Hxbgaf7X8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OH+wKVw6cDnomnCXxDvcQ4bYkjGcsPAfvMPHaF/zeN3+iMmzl2Ul7dQbvmtvv08bGVhW4SfPeLd+/+4AJlU7o8MkokoDJOjyXPJn9Byo7PJ55L6wLgUW2cXYGcNf8U6vwu6Qo2A2zKtPz9T53YGBpEZlT7diOHyXRAF0R7FxLZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OoUQMvg8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 948E6C4CEF1;
+	Tue,  1 Jul 2025 12:20:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751372417;
+	bh=0WOvPMu1XqES/onds8PjGHDXOKh6epjdI3Hxbgaf7X8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OoUQMvg8bm2iNTnLq8GecvcuKJPvNhlMucnbAWYE7rOlhbgsf1I+ZI1apgCDa62Tm
+	 uFkjw7i+WoI61+nVEe49o99umhCKxGI1lIjJnTTUTO+jqeXhKu5NpPbu605u6HreGk
+	 0NY62NuiRkg7MDiNu37e22Eg/SQ1iD1xAWAF0ZqFeO6GIY35AQJSkXwmn+2riIu5xb
+	 ehOEtRK1EYw23vgWyMkWwvx/0CA7qotRIWQNeh0Ha0nzUkq/ioQhn7Is7Xera3jBPM
+	 08a1OyzHZhC/3q3msCHWws70R3Wtd+RxwzszkHHqvlQgYr2p+ZiNRwq+npcT1KP0Z3
+	 YGU/C4lr3r83A==
+Date: Tue, 1 Jul 2025 12:20:13 +0000
+From: Tzung-Bi Shih <tzungbi@kernel.org>
+To: Daniel Latypov <dlatypov@google.com>
+Cc: bleung@chromium.org, brendan.higgins@linux.dev, davidgow@google.com,
+	rmoar@google.com, rostedt@goodmis.org, mhiramat@kernel.org,
+	naveen@kernel.org, anil.s.keshavamurthy@intel.com,
+	davem@davemloft.net, chrome-platform@lists.linux.dev,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+	linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/7] platform/chrome: Add Kunit tests for protocol
+ device drivers
+Message-ID: <aGPSfaC1AohSV3_H@google.com>
+References: <20250520082435.2255639-1-tzungbi@kernel.org>
+ <CAGS_qxrcH0+mJTO4nJqXnk2Bh7oO_PEur=ytcxL8wxJNCu20Tw@mail.gmail.com>
+ <aGIvjrrSRPJQpNy7@google.com>
+ <CAGS_qxpqQ1Z5QOxmXoXQyFBygdfW+1R=g9f=bbJo54Ex8LA7Kw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 01 Jul 2025 13:37:37 +0200
-Message-Id: <DB0OSTC6N4TL.2NK75K2CWE9JV@pwned.life>
-Cc: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Linus Torvalds"
- <torvalds@linux-foundation.org>, "Shuah Khan" <skhan@linuxfoundation.org>,
- <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <stable@vger.kernel.org>, "Achill Gilgenast" <fossdd@pwned.life>
-Subject: Re: [RESEND PATCH v2] kallsyms: fix build without execinfo
-From: "Achill Gilgenast" <fossdd@pwned.life>
-To: "Andrew Morton" <akpm@linux-foundation.org>
-X-Greeting: Hi mom! Look, I'm in somebodys mail client!
-X-Mailer: aerc 0.20.1-0-g2ecb8770224a-dirty
-References: <20250622014608.448718-1-fossdd@pwned.life>
- <20250622113602.48092b368afc5f1729b45cb6@linux-foundation.org>
- <DATW4DAU81FO.388H7H1WSUKAB@pwned.life>
-In-Reply-To: <DATW4DAU81FO.388H7H1WSUKAB@pwned.life>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAGS_qxpqQ1Z5QOxmXoXQyFBygdfW+1R=g9f=bbJo54Ex8LA7Kw@mail.gmail.com>
 
-On Mon Jun 23, 2025 at 1:53 PM CEST, Achill Gilgenast wrote:
-> On Sun Jun 22, 2025 at 8:36 PM CEST, Andrew Morton wrote:
->> On Sun, 22 Jun 2025 03:45:49 +0200 Achill Gilgenast <fossdd@pwned.life> =
-wrote:
->>
->>> Some libc's like musl libc don't provide execinfo.h since it's not part
->>> of POSIX. In order to fix compilation on musl, only include execinfo.h
->>> if available (HAVE_BACKTRACE_SUPPORT)
->>>=20
->>> This was discovered with c104c16073b7 ("Kunit to check the longest symb=
-ol length")
->>> which starts to include linux/kallsyms.h with Alpine Linux' configs.
->>>=20
->>> ...
->>>
->>> --- a/tools/include/linux/kallsyms.h
->>> +++ b/tools/include/linux/kallsyms.h
->>> @@ -18,6 +18,7 @@ static inline const char *kallsyms_lookup(unsigned lo=
-ng addr,
->>>  	return NULL;
->>>  }
->>> =20
->>> +#ifdef HAVE_BACKTRACE_SUPPORT
->>>  #include <execinfo.h>
->>>  #include <stdlib.h>
->>>  static inline void print_ip_sym(const char *loglvl, unsigned long ip)
->>
->> I'm not seeing anything in there which needs execinfo.h.  Can we simply
->> remove the inclusion?
->
-> No, since backtrace_symbols is provided by execinfo.h.
+On Tue, Jul 01, 2025 at 02:22:40PM +0900, Daniel Latypov wrote:
+> On Mon, Jun 30, 2025 at 3:32 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
+> > On Tue, May 20, 2025 at 09:04:53AM -0700, Daniel Latypov wrote:
+> > > You mention you don't like how static stubs requires modifying the
+> > > code-under-test.
+> > > Since it gets eliminated by the preprocessor unless you're compiling
+> > > for KUnit, is the concern more so about how it conceptually feels
+> > > wrong to do so?
+> > > For the Android GKI kernel, they have (or had) KUnit enabled so there
+> > > is potentially concern about real runtime cost there, not sure if you
+> > > have something similar in mind.
+> >
+> > Not exactly. Ideally, I think we shouldn't modify the CUT. I'm wondering
+> > if there is a way to not change the CUT but also break the external
+> > dependencies.
+> >
+> > > But stepping back, ftrace_stubs technically require modifying the code
+> > > to make sure funcs are marked as `noinline`, which this patch series
+> > > does not do.
+> ...
+> > They could be partially inlined even though they are exported symbols.
+> 
+> So to summarize, right now we're stuck with having to modify the code.
+> (Unless someone can come up with something really clever, but not too clever)
+> 
+> To make it concrete, the current approach would look like:
+> 
+> int func(char* arg1, int arg2) {
+>   KUNIT_STATIC_STUB_REDIRECT(func, arg1, arg2);
+>   ... // unchanged
+> }
+> 
+> vs an ftrace/kprobe approach that needs a conditional `noinline`
+> 
+> KUNIT_STUBBABLE int func(char* arg1, int arg2) {
+>   ... // unchanged
+> }
+> 
+> The latter is definitely simpler and less burdensome.
+> But I don't know if it's simpler enough to warrant a second
+> implementation existing for me personally.
 
-Is there some status on it? I saw you picked it in mm-hotfixes-unstable,
-but it got dropped out again.
+Instead of KUNIT_STUBBABLE macros, I was thinking of:
 
-Is there something I can do to push it?
+diff --git a/Makefile b/Makefile
+index 35e6e5240c61..40319083f58b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -979,6 +979,10 @@ ifdef CONFIG_DEBUG_SECTION_MISMATCH
+ KBUILD_CFLAGS += -fno-inline-functions-called-once
+ endif
+ 
++ifdef CONFIG_KUNIT_KPROBE_STUBS
++KBUILD_CFLAGS += -fno-inline
++endif
++
+ # `rustc`'s `-Zfunction-sections` applies to data too (as of 1.59.0).
+ ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
+ KBUILD_CFLAGS_KERNEL += -ffunction-sections -fdata-sections
 
-Thanks!
+
+I don't know what are most people's usages. I always run KUnit tests in qemu
+or at least in some real devices that I less care about the performance.
+Thus, turning inline off globally in such environments is totally acceptable.
 
