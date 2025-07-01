@@ -1,214 +1,268 @@
-Return-Path: <linux-kselftest+bounces-36219-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36220-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35588AF0511
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jul 2025 22:43:53 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E68E8AF0578
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jul 2025 23:12:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1271C485098
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jul 2025 20:43:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C30A47AF4D3
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jul 2025 21:10:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F27CD302044;
-	Tue,  1 Jul 2025 20:43:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29DB5302066;
+	Tue,  1 Jul 2025 21:12:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tDpRt3cO"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AcpR2GyF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46AC22F236D
-	for <linux-kselftest@vger.kernel.org>; Tue,  1 Jul 2025 20:43:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B5072EE5FD
+	for <linux-kselftest@vger.kernel.org>; Tue,  1 Jul 2025 21:12:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751402621; cv=none; b=AB21Gr+/X59L4VaAFt7qHm7tNt69L9+DL7Pp8XzLccNu05Q9MPTZBpQA5HZF4Pj09KtmdNDpA64NDGENElR8nhWt/6CAYHQ86gc8kBOntRUq0CLJ0ynn7InGMENGJ4/t/Q9/9kprzsxwhSAPYCwfMaDpAtKnJzcQB7vii0GUaPg=
+	t=1751404334; cv=none; b=PSihkUmq7kiyYjaCvT//QlUy1RHHdRzyQFc1z4u8+AYYNNYGKvdGN8C7IWvmQ8dr6NVLzU9Me4+UinzTsfcTgAxcwyybkjma6UdALZKz3xZzqNJ8urCTpzVqefI26DajZKaK6/wfLheCe+JdWNiLJwPB0a4jNrGabY9m5y4na7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751402621; c=relaxed/simple;
-	bh=t6w6HZ3d39NHLiwdzdaqKTFFJH+mBfnQBGoBzloEzXs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f9x9TGNEKh0P9PujAUIIjIcX0M7aEGZ4zMC8GWSnoqh7UAW+cDn4GmKmPMcW06hbcrNQC3UT/OfNWL7QGEAGt4qFi2yWSB+Y8KHYBgXMKF6riP0yQfjJamutt1IKagS9kDofhAG2e/iYklNF0tq1zWJ0w31gjqKvEENDBYj8zJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tDpRt3cO; arc=none smtp.client-ip=209.85.214.175
+	s=arc-20240116; t=1751404334; c=relaxed/simple;
+	bh=qBtZSmm2R4iCXjvzCaQg+eHFsA8g7clWudabrggPz4E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iqNcqUIjNEwg6LRR2aODGfRV1Bx6yAihY8hX7Rm8G+55tqwHr/Oe5IVKLJTqYsFtPCgqJ0AhyNPxuYnlnRgiwdV2AqCe8ggjNPjuOMHxOJZJZt0eREeAFlhEbnI2a92foLtsg2B6S0Jei29IgFUY0SsBF5FMe7Vp02c5dVGj46c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AcpR2GyF; arc=none smtp.client-ip=209.85.219.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-235e389599fso326015ad.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 01 Jul 2025 13:43:40 -0700 (PDT)
+Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-70109af5f70so17438266d6.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Jul 2025 14:12:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1751402619; x=1752007419; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gp4ARI8yx8eK5+ZYKJ4V0qAwq8T5VmfMZEWG24JsVtU=;
-        b=tDpRt3cOlJV+0eYx3cpvFlgyFkuAy70sDvbRT8UUSM/hdogqjjLUMhCc4DGgn8F/ly
-         g4XyQLBApGchqcqnUuyzf4YCQlXhYFIiM1zatFRfpc3rPYOVU1xoPEZcfilf/bvhUCYH
-         uTGT+CbAnxpwSRZvfUGXbb5TUFtu3+Vz7e1zhFf9jCE7cZVQte/+iI5czrdcS1mRrjQE
-         8JAM5RTOZDtWCzwYl6smx0oPKN48GhcM/jIcj0aq0MOH8/+QeWw7VL2j1uP9TSY6O03D
-         eiIrlm5hUd2mqDeRDrfsu1q9EMftSDckGVd5n1RPbXi3lGUAY1wY15z+mT1GeUuy+xos
-         MBGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751402619; x=1752007419;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1751404331; x=1752009131; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Gp4ARI8yx8eK5+ZYKJ4V0qAwq8T5VmfMZEWG24JsVtU=;
-        b=T9e8LZSYCu0qx5MqgGO0in2KRnkBIvJkL2lAnz46IzYtpHOsgk5Ltra6EAPlSkDWR2
-         8wNbyxfIQrBwTHeksQHaRnoRYXGjz4Z9KrH3DgBSVUZOMPJGDmJyMaeI3jhuqB5vxWmr
-         8heNd9L5ePOGi5fkXLGYkRtR986lOtMEOvF4YGK/JK/DcSeCje1zG2otU9mv157jL7zf
-         KNtvC+6emHoeN81O7mP/ROkZjEfze9cFHwiDEaEz0lzzzPfsSisEd8BF/JuzS0AtTo+L
-         a7n1LJ0CnIpMRCr3XyfSuWkzNzWmGi5wTu3g2wsZv100HtQj6jdcmlZ9/TZghfe7gKoO
-         EptQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXCjBRqGg6//zjYwsaUTIRtoeMM3jTYj5HlxG0/HgKUIMPmXkXS55xohXY1AUMffd28WnXyGbqD7G7BgKdfuZU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6xvqED5+x38wA++qzy9nBjyAliK4npPcMFbFJNQUPW3DIKCEk
-	ID7S4B9tSrjk4bLBTzcMEgQscHWXCFkNdX6u8Sz7YVo4MgIJy3TwynV79CnZaU3wZA==
-X-Gm-Gg: ASbGncvYC631Q1QyjRCVAxLxtr7Mxj0eQjQP+Yna3aaW+ZVkwjQYB+cVp2OXO18msXM
-	y1+5Bz0hxwMquPkKhO1XFeR4xaz4e+nR2jya9YC/B28QiTlGTbG8eCnrUVQczzd82f2+IAp+Tjj
-	EEz/x54SdFrB+MesNS4EpGMVkyGMzGbYVO5Anb0f7I0tIHcwH5c4EOFhCgu4ek7lGEDVCIj5cO3
-	yztICGHM6S8VjhR1UivoadlUcnqofqI4mnrvdmmAzE6X9z27V8LPZ3OT3hi9nXVgj32b7tZ2gcw
-	5OD71TARIjvG8qql1mAk2kIGTSZzUEuRMUjEGUME3h5imKYZU3FsDMiya7WwLp4ozONMgrUampa
-	WVvY11U16rkNdDufSXD1V
-X-Google-Smtp-Source: AGHT+IEgQNF03gTMPFMuZ5i4oqeFgT9l/mftJxCXd5iV8tzIDEl3pR9lFMVTJeBzdy2r/6gfVZ+O7w==
-X-Received: by 2002:a17:902:e54e:b0:231:d0ef:e8ff with SMTP id d9443c01a7336-23c5ff29f9dmr4133295ad.8.1751402619181;
-        Tue, 01 Jul 2025 13:43:39 -0700 (PDT)
-Received: from google.com (232.98.126.34.bc.googleusercontent.com. [34.126.98.232])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74af541bdeasm12778586b3a.53.2025.07.01.13.43.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Jul 2025 13:43:38 -0700 (PDT)
-Date: Tue, 1 Jul 2025 20:43:30 +0000
-From: Pranjal Shrivastava <praan@google.com>
-To: Nicolin Chen <nicolinc@nvidia.com>
-Cc: jgg@nvidia.com, kevin.tian@intel.com, corbet@lwn.net, will@kernel.org,
-	bagasdotme@gmail.com, robin.murphy@arm.com, joro@8bytes.org,
-	thierry.reding@gmail.com, vdumpa@nvidia.com, jonathanh@nvidia.com,
-	shuah@kernel.org, jsnitsel@redhat.com, nathan@kernel.org,
-	peterz@infradead.org, yi.l.liu@intel.com, mshavit@google.com,
-	zhangzekun11@huawei.com, iommu@lists.linux.dev,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, patches@lists.linux.dev,
-	mochs@nvidia.com, alok.a.tiwari@oracle.com, vasant.hegde@amd.com,
-	dwmw2@infradead.org, baolu.lu@linux.intel.com
-Subject: Re: [PATCH v7 27/28] iommu/tegra241-cmdqv: Add user-space use support
-Message-ID: <aGRIctg4T6cQECx4@google.com>
-References: <cover.1750966133.git.nicolinc@nvidia.com>
- <539ee2ec112162abdba511574e2205a77b425059.1750966133.git.nicolinc@nvidia.com>
- <aGQGm1-i4M75b9Qp@google.com>
- <aGQ6KCI9OZEwHdxS@Asurada-Nvidia>
- <aGQ_F7Qx3scbbA-J@google.com>
- <aGRDtYRXFLoT+PrI@Asurada-Nvidia>
+        bh=fjs28VW5+FZErUTPed61OdD+0y2hdWgedPzyPoSbu9Q=;
+        b=AcpR2GyF4B1TfsNOcdqbdDzSpFuDSHgo254Y4BMYjwBaK0ZKYDyzAzyWxfvO9Ca+XC
+         v2yYMChhmz2HPUWeYtNKz+4DDbubfvQXy61jR5gU9OIbwWlVQSmuV5hiOeRnlnCP0uKU
+         ukX7XIhFEllCaGIkAs3FdJtSPgJWMtU6w+1Y9TvY/bch/YIPEcfYg9gzD55ie9Aa/Yp8
+         WkL526LRWILl01YCytX8lzTFYkP5Yq3D/A0jaK5wQ/tw4gtEsNP0HdDbtwadNeNQj8ou
+         WP+ERx5BciWFhZ5lKwIeVKm1TSRc3jOP37hW37I/DVGN+0nmVVhBmZlvUckBF585yP9t
+         I8pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751404331; x=1752009131;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fjs28VW5+FZErUTPed61OdD+0y2hdWgedPzyPoSbu9Q=;
+        b=WtxNy/7pIoaId8WHa5+SkaVyT5WN83CFEN35rEfLtOTr8d4oU5tKPDj8/pZF4XCBbz
+         LaWhuYRusIS8Odgnr4kuDZX+toKA75WvUdcw7Ykq1wWpLS4Sw05hy8ZBR1oky3RTfxQY
+         J3/bGQiRy/LGm4pcr88fGrvZusiNtBFMtf40D4OtJkbj61j/9pm9m8/z6SQMjELhviIW
+         6gyhkqZkVGWXQWQ3byTNFv+ooB0aB7Anwb5EsoNLeQDD6zLty1jFlvsP6t/SfoSSmCVb
+         caI8vzRm3qR1Nn6ENDa1aRE3OSf2BFpKyrrz9VYTP8tizYzt5P63oartT6IQHUWFjDB0
+         9o4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVpgB+M+NUm8/4gkZJ3lRqbiZdymOJ/wonam1tyQDreYJpilvsF5eDgot51rMe8cIckEb6KMxpJBmSdy6ghBa8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGlLSdg0ZjYyTc9HLzZmXC0af2iweDqGv5KOLAHt2kfEnkCqVb
+	m03ckrruqcAkGYnjJG7Orv22hDCOXgCJIpJ9ScFjnUqrrH2YdAverphwHdFPUyPk0+3zS/QVMyc
+	UqcNHHKR3Glc8yBUnaAGPLbJ0XTaM5TVnT8G6Fp6y
+X-Gm-Gg: ASbGnctOItlZzPQ0J8Cxntc2ROWzAMBczmoMUOW284CxteFgwulfi02FCG1qWmMv6Ok
+	vgG1gIdTyO7alBBi0fpmxx+iL2O8N7hVJcNio4QoEoNcwJuzwETlWKy39VuHh7y9sm+nP+soxdB
+	W1bPXfXHybmnQOBs/V2AEkbAKVM4tKR8cRkX0Vcl5UU8/riBK2uNJo0owkjry/usNThtkZwJQop
+	g==
+X-Google-Smtp-Source: AGHT+IGTbnT2z3OUimiYbvvSRJZHyO7+NTUm+CPbvwarqnp3tnVnFXsJiBtY1W/8vqhPCZSa3CP2wtLxEfAWF5KoW3c=
+X-Received: by 2002:a05:6214:5f02:b0:6fd:7298:a36f with SMTP id
+ 6a1803df08f44-702b1b3c530mr1824386d6.21.1751404330971; Tue, 01 Jul 2025
+ 14:12:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aGRDtYRXFLoT+PrI@Asurada-Nvidia>
+References: <20250626-kunit-kselftests-v4-0-48760534fef5@linutronix.de> <20250626-kunit-kselftests-v4-8-48760534fef5@linutronix.de>
+In-Reply-To: <20250626-kunit-kselftests-v4-8-48760534fef5@linutronix.de>
+From: Rae Moar <rmoar@google.com>
+Date: Tue, 1 Jul 2025 17:11:59 -0400
+X-Gm-Features: Ac12FXz7A5rV9E83a27nT7mq-MXVyxBMZkeIzUekc3ETv1a6ZI2Tbu3oWaYgD3I
+Message-ID: <CA+GJov45CF67nKJ7AC=g0fPL68pLdJbvJBwG8ecn9OUZ7hCewA@mail.gmail.com>
+Subject: Re: [PATCH v4 08/15] kunit: tool: Don't overwrite test status based
+ on subtest counts
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>, 
+	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
+	Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Nicolas Schier <nicolas.schier@linux.dev>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-doc@vger.kernel.org, workflows@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 01, 2025 at 01:23:17PM -0700, Nicolin Chen wrote:
-> On Tue, Jul 01, 2025 at 08:03:35PM +0000, Pranjal Shrivastava wrote:
-> > On Tue, Jul 01, 2025 at 12:42:32PM -0700, Nicolin Chen wrote:
-> > > On Tue, Jul 01, 2025 at 04:02:35PM +0000, Pranjal Shrivastava wrote:
-> > > > On Thu, Jun 26, 2025 at 12:34:58PM -0700, Nicolin Chen wrote:
-> > > > > +/**
-> > > > > + * struct tegra241_vintf_sid - Virtual Interface Stream ID Replacement
-> > > > > + * @core: Embedded iommufd_vdevice structure, holding virtual Stream ID
-> > > > > + * @vintf: Parent VINTF pointer
-> > > > > + * @sid: Physical Stream ID
-> > > > > + * @idx: Replacement index in the VINTF
-> > > > > + */
-> > > > > +struct tegra241_vintf_sid {
-> > > > > +	struct iommufd_vdevice core;
-> > > > > +	struct tegra241_vintf *vintf;
-> > > > > +	u32 sid;
-> > > > > +	u8 idx;
-> > > > >  };
-> > > > 
-> > > > AFAIU, This seems to be a handle for sid -> vintf mapping.. it yes, then
-> > > > I'm not sure if "Virtual Interface Stream ID Replacement" clarifies that?
-> > > 
-> > > No. It's for vSID to pSID mappings. I had it explained in commit log:
-> > > 
-> > 
-> > I get that, it's for vSID -> pSID mapping which also "happens to" point
-> > to the vintf.. all I wanted to say was that the description is unclear..
-> > We could've described it as "Vintf SID map" or something, but I guess
-> > it's fine the way it is too.. your call.
-> 
-> The "replace" word is borrowed from the "SID_REPLACE" HW register.
-> 
-> But I think it's okay to call it just "mapping", if that makes it
-> clearer.
-> 
+On Thu, Jun 26, 2025 at 2:10=E2=80=AFAM Thomas Wei=C3=9Fschuh
+<thomas.weissschuh@linutronix.de> wrote:
+>
+> If a subtest itself reports success, but the outer testcase fails,
+> the whole testcase should be reported as a failure.
+> However the status is recalculated based on the test counts,
+> overwriting the outer test result.
+> Synthesize a failed test in this case to make sure the failure is not
+> swallowed.
 
-Anything works. Maybe let it be as is.
+Hello!
 
-> > > > > +static struct iommufd_viommu_ops tegra241_cmdqv_viommu_ops = {
-> > > > > +	.destroy = tegra241_cmdqv_destroy_vintf_user,
-> > > > > +	.alloc_domain_nested = arm_vsmmu_alloc_domain_nested,
-> > > > > +	.cache_invalidate = arm_vsmmu_cache_invalidate,
-> > > > 
-> > > > I see that we currently use the main cmdq to issue these cache
-> > > > invalidations (there's a FIXME in arm_vsmmu_cache_invalidate). I was
-> > > > hoping for this series to change that but I'm assuming there's another
-> > > > series coming for that?
-> > > > 
-> > > > Meanwhile, I guess it'd be good to call that out for folks who have
-> > > > Grace and start trying out this feature.. I'm assuming they won't see
-> > > > as much perf improvement with this series alone since we're still using
-> > > > the main CMDQ in the upstream code?
-> > > 
-> > > VCMDQ only accelerates invalidation commands.
-> > > 
-> > 
-> > I get that.. but I see we're using `arm_vsmmu_cache_invalidate` here
-> > from arm-smmu-v3-iommufd.c which seems to issue all commands to
-> > smmu->cmdq as of now (the code has a FIXME as well), per the code:
-> > 
-> > 	/* FIXME always uses the main cmdq rather than trying to group by type */
-> >         ret = arm_smmu_cmdq_issue_cmdlist(smmu, &smmu->cmdq, last->cmd,
-> > 					  cur - last, true);
-> > 
-> > I was hoping this FIXME to be addressed in this series..
-> 
-> Oh, that's not related.
-> 
-> The main goal of this series is to route all invalidation commands
-> to the VCMDQ HW. And this is where Grace users can see perf gains
-> mentioned in the cover letter or commit log, from eliminating the
-> VM Exits at those most frequently used commands.
-> 
-> Any non-invalidation commands will just reuse what we have with the
-> standard SMMU nesting. And even if we did something to that FIXME,
-> there is no significant perf gain as it's going down the trapping
-> pathway, i.e. the VM Exits are always there.
-> 
-> > > That is for non-invalidation commands that VCMDQ doesn't support,
-> > > so they still have to go in the standard nesting pathway.
-> > > 
-> > > Let's add a line:
-> > > 	/* for non-invalidation commands use */
-> > 
-> > Umm.. I was talking about the cache_invalidate op? I think there's some
-> > misunderstanding here? What am I missing?
-> 
-> That line is exactly for cache_invalidate. All the non-invalidation
-> commands will be sent to he arm_vsmmu_cache_invalidate() by VMM, as
-> it means.
-> 
-> Or perhaps calling them "non-accelerated commands" would be nicer.
+This is a very exciting patch series! However, I have a few concerns
+with this patch.
 
-Uhh okay, so there'll be a separate driver in the VM issuing invalidation
-commands directly to the CMDQV thus we don't see any of it's part here?
+When I parse the following KTAP with this change:
 
-AND for non-invalidation commands, we trap out and the VMM ends up
-calling the `cache_invalidate` op of the viommu?
+KTAP version 1
+1..2
+    KTAP version 1
+    1..2
+        ok 1 test 1
+        not ok 2 test 2
+not ok 1 subtest 1
+    KTAP version 1
+    1..1
+        not ok 1 subsubtest 1
+not ok 2 subtest 2
 
-Is that understanding correct?
+The output is:
 
-> 
-> Thanks
-> Nicolin
+[20:54:12] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+[20:54:12] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D (2 subtests) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+[20:54:12] [PASSED] test 1
+[20:54:12] [FAILED] test 2
+[20:54:12] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [FA=
+ILED] subtest 1 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D
+[20:54:12] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D (1 subtest) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+[20:54:12] [FAILED] subsubtest 1
+[20:54:12] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [FA=
+ILED] subtest 2 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D
+[20:54:12] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+[20:54:12] Testing complete. Ran 6 tests: passed: 1, failed: 5
 
-Thanks
-Praan
+This reports a total of 6 tests, which is not equivalent to the three
+subtests plus the two suites. I believe this is because the change to
+bubble_up_test_results below double counts the failed test case.
+
+Historically, the KUnit parser only counts the results of test cases,
+not the suites. I would like to stay as close to this as possible so
+as to not inflate existing testing numbers. However, I believe the
+main concern here is the case where if there is a suite reporting
+failure but all subtests pass, it will not appear in the summary line.
+For example,
+
+KTAP version 1
+1..1
+    KTAP version 1
+    1..1
+        ok 1 test 1
+not ok 1 subtest 1
+
+Reporting: All passing: Tests run: 1, passed: 1
+
+This is absolutely an important edge case to cover. Therefore, we
+should add 1 failure count to the suite count if the bubbled up
+results indicate it should instead pass.
+
+Thanks!
+-Rae
+
+>
+> Signed-off-by: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
+> Reviewed-by: David Gow <davidgow@google.com>
+> ---
+>  tools/testing/kunit/kunit_parser.py                                  | 5=
+ +++++
+>  tools/testing/kunit/kunit_tool_test.py                               | 3=
+ ++-
+>  tools/testing/kunit/test_data/test_is_test_passed-failure-nested.log | 3=
+ +++
+>  3 files changed, 10 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/ku=
+nit_parser.py
+> index c176487356e6c94882046b19ea696d750905b8d5..2478beb28fc3db825855ad462=
+00340e884da7df1 100644
+> --- a/tools/testing/kunit/kunit_parser.py
+> +++ b/tools/testing/kunit/kunit_parser.py
+> @@ -686,6 +686,11 @@ def bubble_up_test_results(test: Test) -> None:
+>                 counts.add_status(status)
+>         elif test.counts.get_status() =3D=3D TestStatus.TEST_CRASHED:
+>                 test.status =3D TestStatus.TEST_CRASHED
+> +       if not test.ok_status():
+> +               for t in subtests:
+> +                       if not t.ok_status():
+> +                               counts.add_status(t.status)
+> +                               break
+
+Here instead I recommend checking if not test.ok_status() and
+test.counts.get_status() =3D=3D TestStatus.SUCCESS and if so
+counts.add_status(status)
+
+>
+>  def parse_test(lines: LineStream, expected_num: int, log: List[str], is_=
+subtest: bool, printer: Printer) -> Test:
+>         """
+> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit=
+/kunit_tool_test.py
+> index b74dc05fc2fe5b3ff629172fc7aafeb5c3d29fb3..48a0dd0f9c87caf9f018aade1=
+61db90a613fc407 100755
+> --- a/tools/testing/kunit/kunit_tool_test.py
+> +++ b/tools/testing/kunit/kunit_tool_test.py
+> @@ -170,8 +170,9 @@ class KUnitParserTest(unittest.TestCase):
+>                 with open(nested_log) as file:
+>                         result =3D kunit_parser.parse_run_tests(file.read=
+lines(), stdout)
+>                 self.assertEqual(kunit_parser.TestStatus.FAILURE, result.=
+status)
+> -               self.assertEqual(result.counts.failed, 2)
+> +               self.assertEqual(result.counts.failed, 3)
+>                 self.assertEqual(kunit_parser.TestStatus.FAILURE, result.=
+subtests[0].status)
+> +               self.assertEqual(kunit_parser.TestStatus.SUCCESS, result.=
+subtests[0].subtests[0].status)
+>                 self.assertEqual(kunit_parser.TestStatus.FAILURE, result.=
+subtests[1].status)
+>                 self.assertEqual(kunit_parser.TestStatus.FAILURE, result.=
+subtests[1].subtests[0].status)
+>
+> diff --git a/tools/testing/kunit/test_data/test_is_test_passed-failure-ne=
+sted.log b/tools/testing/kunit/test_data/test_is_test_passed-failure-nested=
+.log
+> index 2e528da39ab5b2be0fca6cf9160c10929fba3c9e..5498dfd0b0db24663e1a1e9bf=
+78c587de6746522 100644
+> --- a/tools/testing/kunit/test_data/test_is_test_passed-failure-nested.lo=
+g
+> +++ b/tools/testing/kunit/test_data/test_is_test_passed-failure-nested.lo=
+g
+> @@ -1,5 +1,8 @@
+>  KTAP version 1
+>  1..2
+> +    KTAP version 1
+> +    1..1
+> +        ok 1 test 1
+>  not ok 1 subtest 1
+>      KTAP version 1
+>      1..1
+>
+> --
+> 2.50.0
+>
+> --
+> You received this message because you are subscribed to the Google Groups=
+ "KUnit Development" group.
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to kunit-dev+unsubscribe@googlegroups.com.
+> To view this discussion visit https://groups.google.com/d/msgid/kunit-dev=
+/20250626-kunit-kselftests-v4-8-48760534fef5%40linutronix.de.
 
