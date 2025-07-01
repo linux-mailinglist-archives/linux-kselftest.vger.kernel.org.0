@@ -1,224 +1,191 @@
-Return-Path: <linux-kselftest+bounces-36138-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36139-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74DFEAEED48
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jul 2025 06:31:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F620AEED8B
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jul 2025 07:23:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 198B27AD2D9
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jul 2025 04:30:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5131B189FB8B
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jul 2025 05:23:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 164A423E335;
-	Tue,  1 Jul 2025 04:30:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 591681F3D58;
+	Tue,  1 Jul 2025 05:23:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HEuaWSUe"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZRt744pc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FC541F30A4;
-	Tue,  1 Jul 2025 04:30:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1B2C2153E1
+	for <linux-kselftest@vger.kernel.org>; Tue,  1 Jul 2025 05:22:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751344236; cv=none; b=aBCZ5CfqU9sqqJAbIp2AHWCW7E7j9TdKGMcYYtuJzV1Yn40cICnb4YeJ9e/uqp02YSXz8A/dDDSL1fAKETZkUOHZdDvh/TxayOo+7RfniM7n2goUQcQg0WA7Y4LKow/K4eubw9kf+FAcPIaXpU68/4MwClPDIdNu4SsbjsrD9qE=
+	t=1751347381; cv=none; b=KeFr2py1Z3qD5DekHmwOccKhDOcwhjiu7UhheG5wdaTxRe6X0NUSbKqUUXnc8LOSLs0VEZHliVWTRX+5N2zWmM2nNSeThEtqh8b2UkQ0hrXRDS9dJFtcbDOIyNKljT3WwgIv9N0DX2RCDshJ68WjTA6AKb3tSCy4Lta+qh/NHqU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751344236; c=relaxed/simple;
-	bh=yUhVeNxdkmKD+O9VsLaYb0eZmmOxIaA8qvBCe1VT2GA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ifObpOO8hVmWILpA/c+Zw8PW9aycoeuexUOQtp785R7Z0uYxoK6ODfwwFE6PDqKNdYPkXpffLsEXqtU9zekaupSMZL/ruCGHk77a7DwerS85rJRH4Bie+TtJmwLFp1FKB98p8LKuUHSAUw0f7Sus8/TPy0bsILcIwTalOaF3dtY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HEuaWSUe; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751344234; x=1782880234;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=yUhVeNxdkmKD+O9VsLaYb0eZmmOxIaA8qvBCe1VT2GA=;
-  b=HEuaWSUelAnnfkdmxbhB6DzzHtLpzj125th7proGw7RqPauhQxJKU613
-   VNjxlrIa95hSrzvMqtIJEdm7IUFidgLua5wX3tquUySaAN6pLnJSWAmPR
-   YoE21hsM+ghj1Fezchess8ByMSsNCR+2LiU5IhJ7lM8ebBKNfqbejRpkH
-   KNpigsQftH4Km3w5xNZqOEPqGENjsjFmU+jZI9NeHC7mQqn5yzVy6F4iD
-   O0zKL2t9Ac3SiHBnQHiQSP7Rwb337PmstLzmpbkrWO4gmRaf2ZeLHxaJZ
-   WyrJqKk/PGgKacOtGgItspzur61TPprjx3Sj6OqOcIn46N3dH4NDTUewI
-   g==;
-X-CSE-ConnectionGUID: WoHD9zB3TMykQDQ2Cxs24Q==
-X-CSE-MsgGUID: VXktZWvGT/yzd6Z6GT7mvg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11480"; a="56210258"
-X-IronPort-AV: E=Sophos;i="6.16,279,1744095600"; 
-   d="scan'208";a="56210258"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2025 21:30:33 -0700
-X-CSE-ConnectionGUID: 1GVvgBZ+Q46TnzFyc3frmQ==
-X-CSE-MsgGUID: 5XpjMaIaSZGPuyI+9+LpCQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,279,1744095600"; 
-   d="scan'208";a="177309029"
-Received: from p12ill20yoongsia.png.intel.com ([10.88.227.38])
-  by fmviesa002.fm.intel.com with ESMTP; 30 Jun 2025 21:30:28 -0700
-From: Song Yoong Siang <yoong.siang.song@intel.com>
-To: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Enhance XDP Rx Metadata Handling
-Date: Tue,  1 Jul 2025 12:29:40 +0800
-Message-Id: <20250701042940.3272325-3-yoong.siang.song@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250701042940.3272325-1-yoong.siang.song@intel.com>
-References: <20250701042940.3272325-1-yoong.siang.song@intel.com>
+	s=arc-20240116; t=1751347381; c=relaxed/simple;
+	bh=5/JwVEuz/UpsEESScBGzFxUIa7q8yQbIgcrUrStPkRI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KGPO89o2c0J/KfNutpw8X0B3AhYksz9N/HFFdvtbbhD6saEwBWuVWRT3Qp5sy/R3kUQ+k+x/f4Nxw6CPFrCAJjNSigd6YJr9u288Z/R2XOVnN+16Q3+aypDTCvhT/O5HSuIRG4J2pJtLTSiixugz/GB6B5kZnCCeDLfHms4b1uc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZRt744pc; arc=none smtp.client-ip=209.85.219.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-6facacf521eso49928586d6.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jun 2025 22:22:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1751347378; x=1751952178; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FWbnuDQEG4ZG51rhVoXd9l74zp2+Y+DpuK1YGU3B97M=;
+        b=ZRt744pcl4cIp0OhwuCoWnWtgOoj978q9Yq42k9MWwr4kVDCOFYf4Au5JWfOmG9woQ
+         WL08stfcNsTA1U70uZxP03HJ84dtE8wp2MrH+ZMco7qQ4F+mz9pHThFnps/915TL+5Y+
+         97U6IbJ2EkAR5y4FQNTcugwmCcZMhnPNUU77OBiwWJ5XMTPxeLl4+W6TdRDDfV2ztFfP
+         7Ivwexpkxwra2rsaKf/YeNVj+cVOcNEBdnlcxZElF7GyxosaQwXngicj9Fy+3ZEcveEw
+         XOUaOcjaaAUqsCfWIJK9NbV9heIcLCA8wG2E2yRmJo+0avDOHSBtr45thTcsxVl/pE0h
+         AJYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751347378; x=1751952178;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FWbnuDQEG4ZG51rhVoXd9l74zp2+Y+DpuK1YGU3B97M=;
+        b=c6zIK1fp3YMgl/J7U8aolqvSGtixFxjjt3MvHuTZJN/IJMMQ/Mh3N4G2csqRBGmC9u
+         8Ubt3F/RpEWpHg2NKDnketXvXzBem+WFrujKoXhlZmgaijN5TT1p+c7ezrwgRVRhKl8a
+         Iqm01UZhpF5D6zgGX6TXiQwJXUE4+FoPMG5YqvKeblxPAZyPNz3u2v8QH1PuE/CZTmBK
+         /dxGSy5E/WGCYlwU14TdM66loYcw7I2NbtZJF4+JHggORzFsBggovgB+fjz2WGK3IMYf
+         BdPSspGzqGgW9Sx3kkHR1PkoW2GdPQqsAJSA607dE+BIDuhHHJXTANPSvwpw3u7RZzva
+         2WXg==
+X-Forwarded-Encrypted: i=1; AJvYcCVUm76Em6ArIG4CriQm7DbGUsvUBZTJbhoeGK4pd6GsWYn02VtSB+tXMPWUniZA3LMkQ2kh48yy1Mj5Jrs+1fY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzSe+u0kSbo/0mOmIW519QB1HnsBl5VLoRTRkwbX+rw2ZYJZJZr
+	Ppcu1x2Zap5HNqn31uDmNAf5EJ1O9Hujoi2mlCTyZOIeuzAZISLOQeUZYfqYXttGfzXnrrH4PtS
+	dFIWDR6nMGyLDNSOE03XbVhFthF0hS0QJRKMqUgux
+X-Gm-Gg: ASbGncsj2V7wwepu4UREDjrWmqqKB8wtlNtTvBzKQwy83njS57fdwapuzwMNNFJZOOf
+	0zEL3ax23OEZj+GJWoL9sSxBkym7N5tJB4umgwgG3d3M5bISM0a6hpRmtBHN+0QoIEtxpQ8zKrS
+	XO/H3OBOqzro/04STOi1ngdwuvMnK2LvpqN2DC+jpvbN2s
+X-Google-Smtp-Source: AGHT+IGpzxDBrBogoKoyLkPPHM6iDSYvJhIuC7y6ZVpwiIprRtjwSBjJSKv3onzP0yROztlsN5fAxejSDBAAeoyetgE=
+X-Received: by 2002:a05:6214:5007:b0:6fd:ace:4cf8 with SMTP id
+ 6a1803df08f44-700035b781dmr234492016d6.30.1751347373427; Mon, 30 Jun 2025
+ 22:22:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250520082435.2255639-1-tzungbi@kernel.org> <CAGS_qxrcH0+mJTO4nJqXnk2Bh7oO_PEur=ytcxL8wxJNCu20Tw@mail.gmail.com>
+ <aGIvjrrSRPJQpNy7@google.com>
+In-Reply-To: <aGIvjrrSRPJQpNy7@google.com>
+From: Daniel Latypov <dlatypov@google.com>
+Date: Tue, 1 Jul 2025 14:22:40 +0900
+X-Gm-Features: Ac12FXxgYKxYb9vyVEWPlAfSA3bOrsnLZpveKjlL5T8zEbkPuStK5k7jGoQ6Uo0
+Message-ID: <CAGS_qxpqQ1Z5QOxmXoXQyFBygdfW+1R=g9f=bbJo54Ex8LA7Kw@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/7] platform/chrome: Add Kunit tests for protocol
+ device drivers
+To: Tzung-Bi Shih <tzungbi@kernel.org>
+Cc: bleung@chromium.org, brendan.higgins@linux.dev, davidgow@google.com, 
+	rmoar@google.com, rostedt@goodmis.org, mhiramat@kernel.org, naveen@kernel.org, 
+	anil.s.keshavamurthy@intel.com, davem@davemloft.net, 
+	chrome-platform@lists.linux.dev, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, linux-trace-kernel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Introduce the XDP_METADATA_SIZE macro to ensure that user applications can
-consistently retrieve the correct location of struct xdp_meta.
+On Mon, Jun 30, 2025 at 3:32=E2=80=AFPM Tzung-Bi Shih <tzungbi@kernel.org> =
+wrote:
+>
+> On Tue, May 20, 2025 at 09:04:53AM -0700, Daniel Latypov wrote:
 
-Prior to this commit, the XDP program adjusted the data_meta backward by
-the size of struct xdp_meta, while the user application retrieved the data
-by calculating backward from the data pointer. This approach only worked if
-xdp_buff->data_meta was equal to xdp_buff->data before calling
-bpf_xdp_adjust_meta.
+(snip)
 
-With the introduction of XDP_METADATA_SIZE, both the XDP program and user
-application now calculate and identify the location of struct xdp_meta from
-the data pointer. This ensures the implementation remains functional even
-when there is device-reserved metadata, making the tests more portable
-across different NICs.
+>
+> > We have these drawbacks with the current ftrace stubs:
+> > * doesn't compile on all arches
+> > * silently doesn't work on inlined functions <=3D=3D scariest one to me
+>
+> I see. I did some experiments and realized that kprobe stubs also share
+> the same concern. Thus I'm wondering if there is a way that kprobe stub
+> detects the redirection may fail, at least it can skip the test case
+> (e.g. register_kprobe() returns -ENOENT when it can't find the symbol
+> via kprobe_lookup_name()). But it seems no way if the target function
+> is partially inlined.
 
-Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
----
- tools/testing/selftests/bpf/prog_tests/xdp_metadata.c |  2 +-
- tools/testing/selftests/bpf/progs/xdp_hw_metadata.c   | 10 +++++++++-
- tools/testing/selftests/bpf/progs/xdp_metadata.c      |  8 +++++++-
- tools/testing/selftests/bpf/xdp_hw_metadata.c         |  2 +-
- tools/testing/selftests/bpf/xdp_metadata.h            |  7 +++++++
- 5 files changed, 25 insertions(+), 4 deletions(-)
+Yeah, any such approach will need to be cautious of inlining, so
+they'd have to always be "for power users only: only use this if you
+understand the risk"
+Skipping when we can detect the user is obviously doing the wrong
+thing makes that a *bit* more palatable.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
-index 19f92affc2da..8d6c2633698b 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
-@@ -302,7 +302,7 @@ static int verify_xsk_metadata(struct xsk *xsk, bool sent_from_af_xdp)
- 
- 	/* custom metadata */
- 
--	meta = data - sizeof(struct xdp_meta);
-+	meta = data - XDP_METADATA_SIZE;
- 
- 	if (!ASSERT_NEQ(meta->rx_timestamp, 0, "rx_timestamp"))
- 		return -1;
-diff --git a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-index 330ece2eabdb..72242ac1cdcd 100644
---- a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-+++ b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-@@ -27,6 +27,7 @@ extern int bpf_xdp_metadata_rx_vlan_tag(const struct xdp_md *ctx,
- SEC("xdp.frags")
- int rx(struct xdp_md *ctx)
- {
-+	int metalen_used, metalen_to_adjust;
- 	void *data, *data_meta, *data_end;
- 	struct ipv6hdr *ip6h = NULL;
- 	struct udphdr *udp = NULL;
-@@ -72,7 +73,14 @@ int rx(struct xdp_md *ctx)
- 		return XDP_PASS;
- 	}
- 
--	err = bpf_xdp_adjust_meta(ctx, -(int)sizeof(struct xdp_meta));
-+	metalen_used = ctx->data - ctx->data_meta;
-+	metalen_to_adjust = XDP_METADATA_SIZE - metalen_used;
-+	if (metalen_to_adjust < (int)sizeof(struct xdp_meta)) {
-+		__sync_add_and_fetch(&pkts_skip, 1);
-+		return XDP_PASS;
-+	}
-+
-+	err = bpf_xdp_adjust_meta(ctx, -metalen_to_adjust);
- 	if (err) {
- 		__sync_add_and_fetch(&pkts_fail, 1);
- 		return XDP_PASS;
-diff --git a/tools/testing/selftests/bpf/progs/xdp_metadata.c b/tools/testing/selftests/bpf/progs/xdp_metadata.c
-index 09bb8a038d52..a0ba4ef4bbd8 100644
---- a/tools/testing/selftests/bpf/progs/xdp_metadata.c
-+++ b/tools/testing/selftests/bpf/progs/xdp_metadata.c
-@@ -37,6 +37,7 @@ extern int bpf_xdp_metadata_rx_vlan_tag(const struct xdp_md *ctx,
- SEC("xdp")
- int rx(struct xdp_md *ctx)
- {
-+	int metalen_used, metalen_to_adjust;
- 	void *data, *data_meta, *data_end;
- 	struct ipv6hdr *ip6h = NULL;
- 	struct ethhdr *eth = NULL;
-@@ -73,7 +74,12 @@ int rx(struct xdp_md *ctx)
- 
- 	/* Reserve enough for all custom metadata. */
- 
--	ret = bpf_xdp_adjust_meta(ctx, -(int)sizeof(struct xdp_meta));
-+	metalen_used = ctx->data - ctx->data_meta;
-+	metalen_to_adjust = XDP_METADATA_SIZE - metalen_used;
-+	if (metalen_to_adjust < (int)sizeof(struct xdp_meta))
-+		return XDP_DROP;
-+
-+	ret = bpf_xdp_adjust_meta(ctx, -metalen_to_adjust);
- 	if (ret != 0)
- 		return XDP_DROP;
- 
-diff --git a/tools/testing/selftests/bpf/xdp_hw_metadata.c b/tools/testing/selftests/bpf/xdp_hw_metadata.c
-index 3d8de0d4c96a..a529d55d4ff4 100644
---- a/tools/testing/selftests/bpf/xdp_hw_metadata.c
-+++ b/tools/testing/selftests/bpf/xdp_hw_metadata.c
-@@ -223,7 +223,7 @@ static void verify_xdp_metadata(void *data, clockid_t clock_id)
- {
- 	struct xdp_meta *meta;
- 
--	meta = data - sizeof(*meta);
-+	meta = data - XDP_METADATA_SIZE;
- 
- 	if (meta->hint_valid & XDP_META_FIELD_RSS)
- 		printf("rx_hash: 0x%X with RSS type:0x%X\n",
-diff --git a/tools/testing/selftests/bpf/xdp_metadata.h b/tools/testing/selftests/bpf/xdp_metadata.h
-index 87318ad1117a..2dfd3bf5e7bb 100644
---- a/tools/testing/selftests/bpf/xdp_metadata.h
-+++ b/tools/testing/selftests/bpf/xdp_metadata.h
-@@ -50,3 +50,10 @@ struct xdp_meta {
- 	};
- 	enum xdp_meta_field hint_valid;
- };
-+
-+/* XDP_METADATA_SIZE must be at least the size of struct xdp_meta. An additional
-+ * 32 bytes of padding is included as a conservative measure to accommodate any
-+ * metadata areas reserved by Ethernet devices. If the device-reserved metadata
-+ * exceeds 32 bytes, this value will need adjustment.
-+ */
-+#define XDP_METADATA_SIZE	(sizeof(struct xdp_meta) + 32)
--- 
-2.34.1
+It's not like static stubs can detect at runtime if you've failed to
+add the necessary corresponding KUNIT_STATIC_STUB_REDIRECT() either,
+for example.
 
+But I still personally lean slightly against adding either kprobe or
+ftrace stubs, see below.
+
+>
+> > You mention you don't like how static stubs requires modifying the
+> > code-under-test.
+> > Since it gets eliminated by the preprocessor unless you're compiling
+> > for KUnit, is the concern more so about how it conceptually feels
+> > wrong to do so?
+> > For the Android GKI kernel, they have (or had) KUnit enabled so there
+> > is potentially concern about real runtime cost there, not sure if you
+> > have something similar in mind.
+>
+> Not exactly. Ideally, I think we shouldn't modify the CUT. I'm wondering
+> if there is a way to not change the CUT but also break the external
+> dependencies.
+>
+> > But stepping back, ftrace_stubs technically require modifying the code
+> > to make sure funcs are marked as `noinline`, which this patch series
+> > does not do.
+...
+> They could be partially inlined even though they are exported symbols.
+
+So to summarize, right now we're stuck with having to modify the code.
+(Unless someone can come up with something really clever, but not too cleve=
+r)
+
+To make it concrete, the current approach would look like:
+
+int func(char* arg1, int arg2) {
+  KUNIT_STATIC_STUB_REDIRECT(func, arg1, arg2);
+  ... // unchanged
+}
+
+vs an ftrace/kprobe approach that needs a conditional `noinline`
+
+KUNIT_STUBBABLE int func(char* arg1, int arg2) {
+  ... // unchanged
+}
+
+The latter is definitely simpler and less burdensome.
+But I don't know if it's simpler enough to warrant a second
+implementation existing for me personally.
+
+E.g. we already have some people who justifiably say it's too hard to
+figure out KUnit, so this is another decision point where a user might
+get stuck with "how should I know which one I should use?" and give
+up.
+
+Compatibility tangent:
+A smaller annoyance is KUNIT_STATIC_STUB_REDIRECT and KUNIT_STUBBABLE
+are incompatible (and always will be?)
+
+E.g. imagine a func has KUNIT_STUBBABLE on it, but a person authoring
+a new test wants needs to run without kprobe support, so they must add
+KUNIT_STATIC_STUB_REDIRECT.
+I can imagine an author deciding to make the func have *both* macros on it.=
+..
+That feels like a worst case outcome from the perspective of "we
+shouldn't modify the CUT just for the sake of tests" :\
+
+To be clear, the right approach in this scenario is to 1) swap to
+KUNIT_STATIC_STUB_REDIRECT and update the previous tests to use static
+stubs, 2) then add your new tests.
+But I can imagine that won't always happen, esp. if it crosses
+maintainer boundaries.
 
