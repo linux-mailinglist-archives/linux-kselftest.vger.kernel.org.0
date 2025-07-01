@@ -1,173 +1,173 @@
-Return-Path: <linux-kselftest+bounces-36179-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36180-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9704AAEF890
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jul 2025 14:31:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9C68AEF898
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jul 2025 14:32:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 50978483D61
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jul 2025 12:30:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C1863188220F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Jul 2025 12:32:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC90E2727E3;
-	Tue,  1 Jul 2025 12:30:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WKbn0Nnm"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2A2D1DA60D;
+	Tue,  1 Jul 2025 12:31:59 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga06-in.huawei.com (szxga06-in.huawei.com [45.249.212.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7C3378F26
-	for <linux-kselftest@vger.kernel.org>; Tue,  1 Jul 2025 12:30:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B91C11E515;
+	Tue,  1 Jul 2025 12:31:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751373054; cv=none; b=FCsLThwbFu8loKZY+VpaRpd7ItKlOnP44elL9RpPpR80IBs2d00tcaNxdEk3nnXgCT2f5nYzkUJNDblUrxcYRSVOlKTtGJkRtsabBmXDAX5yelz9bFAnF7WRTxGFgKfuZDuSanm/1KHMIQM9zuWPaovY6slqUD2rZyFO0Kf8v+Q=
+	t=1751373119; cv=none; b=Loi+0LKn2i1NbqkBKKuDKWjm+I+aFOtAlTFONbzf1w3QGvJVW43f+ILE9z5tkf8p7Djm4UBbj+OotxETPy1MhfYG45dIMuwlQmv/mecG3IQX2whuylp91TJtgOwhe++23VAz1p9IJyDv8hTlVFLasdTyxTYEILqKK5Syw3jS1bs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751373054; c=relaxed/simple;
-	bh=oNWtBTfARcQCwaHYGLs5aIj0PBvFVGGFyKJg1UjJTYM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KOAYgDIY0gFopnQXTLboc9lt+vg/PBH05ysrcBeepBD9G473x92/fR+oE76m1ykLQy+03OEhIHcwrWgikZhJUYcjuPC8QjHo6v8Fb2UHzRLzbKcw0oPc8KunV/p63YTyvyGH+ITiIgnf2GqUNJHRSm+JIgmT3HMe4FAjjX0ixKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WKbn0Nnm; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-237f270513bso137235ad.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 01 Jul 2025 05:30:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1751373052; x=1751977852; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5G5J3LAQCME/FJ/aVZc/0ZWGlfQeuCDS4lOhsOKRFGs=;
-        b=WKbn0NnmgkzxUsdcaqhQqraPMyrURXHKnri5ElSn1Vkd6BoqcdJ+BpbWZHRjOlYZzm
-         NbP4xOICMR07Egga4/fajji1H5YeNz8LkRGRQVi97jr8gxwK03VAeI/v76ao5vcEth2/
-         I7qCPu1lO+z90lkSnZD9P1Bq2LYvwRcu+Jt8/iNmhfKNQf4oQTo7RZ3Ppc0QvlX3n31u
-         zd5zLWVizh5Ixst6JzcJxBp8j0nExn9Cnhgd9KuYQIpBsfjHvJF50X+gLlRo7wpe4x+B
-         iuwMl6EycXVvvzBFEXVjcmCHNaGj/of7MPz3Bvvxz7M7DeNs0ch+lolEIsPjbZaLjtJl
-         YtUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751373052; x=1751977852;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5G5J3LAQCME/FJ/aVZc/0ZWGlfQeuCDS4lOhsOKRFGs=;
-        b=An/TaUzAoba0GCD4yI/ZMXgWkC/HGGBRE5Ho5Equ6BuZwEi8WmYsvZUPrU5K5GNR1B
-         3rDySOwh7/S0rmZEX5Ln3w2wq+ys0XCe7Rln78Uktum6aMcmBRAHub282BrqxLRIEXSB
-         Z0Jgm26wHTsHBRx2uNvoQvEh79dQM88Nsjc8Y3oKWclnJmZ9ZQDs/85XF0BX/HbjcZxg
-         WPNIdoNuBQvUnvD0RZOTh+PSN/2cQatAW3eN8dbiuIZVkiPzusFIcrxpEq512jEUD7yF
-         z35+4QOZkkrF/3zyjZk9WbU/YqrjWSXDlRjJGvR+HfTaLmJfkYmi6m0v84iXI3k0gpgV
-         uaqA==
-X-Forwarded-Encrypted: i=1; AJvYcCV42iVNVTRBhToUvemkRFT0iFOM0CgKCLFbjTL3YDLZi3tCZWphl/L3eRdPed7FhUXMTG/HE0kwc7GzE1BPSb4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxz18+dGi8irxUiwqb6TTlpwphU5Xc4BhpXWtu3VRwDoZKtTM63
-	VfiA/94xbhggGP/AElZNtmimbgUOQNbwAsAAFO6P0b2SveW9/jxn9b7e0xPcFfGVXA==
-X-Gm-Gg: ASbGnctF6INl15Ih8H/arruBgPbFX74uIrgtqlf00RIOiqzxMwjzo9yR1Pzm5XKyaqv
-	b5JGX1JJEHKV6Z8HgYxjak93WbHVn1wviHc/Bru/X8oQqYXcrxsgd8OijgkeksjxhKjkl2KCmj5
-	NDIkoDabYNmeX5KEzmx5zyqkGUKddbflAG4fSr5+eXucHbdLNaHg7/NXdP/KTCvvT1PgCnC8yCs
-	ZAAAcc0xmmlzt9n1L4Z79OmNRMM18QWxt7YSGOp3wEwX2F3Ezj7aFsd8fv1mTfZUwiACXH0hy44
-	Lc4s/4SqUuDFNEMP+P9D12WU9CEJzplbcxMqRwKqH9dtGtp3zhNadIdC7LGU+jNRBCj//NKbs+4
-	l4LemN0bhvaegae+zOMXz
-X-Google-Smtp-Source: AGHT+IGYS+ky70yGGbfgecWTu3WMn+4HvkqtKADO91HI0LqScQKuEGTHZn38lZjYqivfuwsxMW7HzQ==
-X-Received: by 2002:a17:902:ce89:b0:235:f10a:ad0 with SMTP id d9443c01a7336-23c601a7645mr2227915ad.28.1751373051941;
-        Tue, 01 Jul 2025 05:30:51 -0700 (PDT)
-Received: from google.com (232.98.126.34.bc.googleusercontent.com. [34.126.98.232])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b34e31da818sm9319671a12.61.2025.07.01.05.30.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Jul 2025 05:30:51 -0700 (PDT)
-Date: Tue, 1 Jul 2025 12:30:42 +0000
-From: Pranjal Shrivastava <praan@google.com>
-To: Nicolin Chen <nicolinc@nvidia.com>
-Cc: jgg@nvidia.com, kevin.tian@intel.com, corbet@lwn.net, will@kernel.org,
-	bagasdotme@gmail.com, robin.murphy@arm.com, joro@8bytes.org,
-	thierry.reding@gmail.com, vdumpa@nvidia.com, jonathanh@nvidia.com,
-	shuah@kernel.org, jsnitsel@redhat.com, nathan@kernel.org,
-	peterz@infradead.org, yi.l.liu@intel.com, mshavit@google.com,
-	zhangzekun11@huawei.com, iommu@lists.linux.dev,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, patches@lists.linux.dev,
-	mochs@nvidia.com, alok.a.tiwari@oracle.com, vasant.hegde@amd.com,
-	dwmw2@infradead.org, baolu.lu@linux.intel.com
-Subject: Re: [PATCH v7 02/28] iommufd/viommu: Explicitly define vdev->virt_id
-Message-ID: <aGPU8qgfsa816eQ1@google.com>
-References: <cover.1750966133.git.nicolinc@nvidia.com>
- <cc7a558bfcdce5c2ea0d53b0c9c382f944df33ce.1750966133.git.nicolinc@nvidia.com>
+	s=arc-20240116; t=1751373119; c=relaxed/simple;
+	bh=zI4zaCsknmrGVjcy1jUzBAXE5CMQe6Jzw6o7GoAKO6E=;
+	h=CC:Subject:To:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=Jv8TpvisSUs8qJpzPGj7fwkdTEo5hXQ+R4iEQkdpbsmdNjnvfAu0duAqgIr8t7htOCvbMdr4AhLrWgiJa/GKXMEJJQ7TUENt3iXGO2kCbflod6En9GhZ68eyaGFwJ1NDJ1dPAIfkducGJIicgvD7iZyr7/80DTefeFGUN8efAmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.17])
+	by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4bWj9F60Qmz27hvW;
+	Tue,  1 Jul 2025 20:32:49 +0800 (CST)
+Received: from dggemv705-chm.china.huawei.com (unknown [10.3.19.32])
+	by mail.maildlp.com (Postfix) with ESMTPS id 8F1EB1A0188;
+	Tue,  1 Jul 2025 20:31:53 +0800 (CST)
+Received: from kwepemq200018.china.huawei.com (7.202.195.108) by
+ dggemv705-chm.china.huawei.com (10.3.19.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Tue, 1 Jul 2025 20:31:53 +0800
+Received: from [10.67.121.177] (10.67.121.177) by
+ kwepemq200018.china.huawei.com (7.202.195.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Tue, 1 Jul 2025 20:31:52 +0800
+CC: <yangyicong@hisilicon.com>, <catalin.marinas@arm.com>, <will@kernel.org>,
+	<corbet@lwn.net>, <linux-arm-kernel@lists.infradead.org>,
+	<kvmarm@lists.linux.dev>, <linux-kselftest@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <joey.gouly@arm.com>, <suzuki.poulose@arm.com>,
+	<yuzenghui@huawei.com>, <shuah@kernel.org>, <jonathan.cameron@huawei.com>,
+	<shameerali.kolothum.thodi@huawei.com>, <linuxarm@huawei.com>,
+	<prime.zeng@hisilicon.com>, <xuwei5@huawei.com>, <tangchengchang@huawei.com>,
+	<wangzhou1@hisilicon.com>
+Subject: Re: [PATCH v3 3/7] KVM: arm64: Handle DABT caused by LS64*
+ instructions on unsupported memory
+To: Marc Zyngier <maz@kernel.org>, <oliver.upton@linux.dev>
+References: <20250626080906.64230-1-yangyicong@huawei.com>
+ <20250626080906.64230-4-yangyicong@huawei.com> <86zfduc2ca.wl-maz@kernel.org>
+ <44993060-7eb1-400c-9887-3d438aeb8ee9@huawei.com>
+ <86v7ohba6a.wl-maz@kernel.org>
+From: Yicong Yang <yangyicong@huawei.com>
+Message-ID: <c87852dd-98d5-311f-9760-ea0b7c8b27a1@huawei.com>
+Date: Tue, 1 Jul 2025 20:31:52 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cc7a558bfcdce5c2ea0d53b0c9c382f944df33ce.1750966133.git.nicolinc@nvidia.com>
+In-Reply-To: <86v7ohba6a.wl-maz@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
+ kwepemq200018.china.huawei.com (7.202.195.108)
 
-On Thu, Jun 26, 2025 at 12:34:33PM -0700, Nicolin Chen wrote:
-> The "id" is too genernal to get its meaning easily. Rename it explicitly to
-> "virt_id" and update the kdocs for readability. No functional changes.
+On 2025/6/27 21:12, Marc Zyngier wrote:
+> On Thu, 26 Jun 2025 12:39:41 +0100,
+> Yicong Yang <yangyicong@huawei.com> wrote:
+>>
+>> On 2025/6/26 16:51, Marc Zyngier wrote:
+>>> On Thu, 26 Jun 2025 09:09:02 +0100,
+>>> Yicong Yang <yangyicong@huawei.com> wrote:
 > 
-> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-> ---
->  drivers/iommu/iommufd/iommufd_private.h | 7 ++++++-
->  drivers/iommu/iommufd/driver.c          | 2 +-
->  drivers/iommu/iommufd/viommu.c          | 4 ++--
->  3 files changed, 9 insertions(+), 4 deletions(-)
+> [...]
 > 
-> diff --git a/drivers/iommu/iommufd/iommufd_private.h b/drivers/iommu/iommufd/iommufd_private.h
-> index 4f5e8cd99c96..09f895638f68 100644
-> --- a/drivers/iommu/iommufd/iommufd_private.h
-> +++ b/drivers/iommu/iommufd/iommufd_private.h
-> @@ -634,7 +634,12 @@ struct iommufd_vdevice {
->  	struct iommufd_object obj;
->  	struct iommufd_viommu *viommu;
->  	struct device *dev;
-> -	u64 id; /* per-vIOMMU virtual ID */
-> +
-> +	/*
-> +	 * Virtual device ID per vIOMMU, e.g. vSID of ARM SMMUv3, vDeviceID of
-> +	 * AMD IOMMU, and vRID of a nested Intel VT-d to a Context Table
-> +	 */
-> +	u64 virt_id;
->  };
->  
->  #ifdef CONFIG_IOMMUFD_TEST
-> diff --git a/drivers/iommu/iommufd/driver.c b/drivers/iommu/iommufd/driver.c
-> index 2fee399a148e..887719016804 100644
-> --- a/drivers/iommu/iommufd/driver.c
-> +++ b/drivers/iommu/iommufd/driver.c
-> @@ -30,7 +30,7 @@ int iommufd_viommu_get_vdev_id(struct iommufd_viommu *viommu,
->  	xa_lock(&viommu->vdevs);
->  	xa_for_each(&viommu->vdevs, index, vdev) {
->  		if (vdev->dev == dev) {
-> -			*vdev_id = vdev->id;
-> +			*vdev_id = vdev->virt_id;
->  			rc = 0;
->  			break;
->  		}
-> diff --git a/drivers/iommu/iommufd/viommu.c b/drivers/iommu/iommufd/viommu.c
-> index 25ac08fbb52a..bc8796e6684e 100644
-> --- a/drivers/iommu/iommufd/viommu.c
-> +++ b/drivers/iommu/iommufd/viommu.c
-> @@ -111,7 +111,7 @@ void iommufd_vdevice_destroy(struct iommufd_object *obj)
->  	struct iommufd_viommu *viommu = vdev->viommu;
->  
->  	/* xa_cmpxchg is okay to fail if alloc failed xa_cmpxchg previously */
-> -	xa_cmpxchg(&viommu->vdevs, vdev->id, vdev, NULL, GFP_KERNEL);
-> +	xa_cmpxchg(&viommu->vdevs, vdev->virt_id, vdev, NULL, GFP_KERNEL);
->  	refcount_dec(&viommu->obj.users);
->  	put_device(vdev->dev);
->  }
-> @@ -150,7 +150,7 @@ int iommufd_vdevice_alloc_ioctl(struct iommufd_ucmd *ucmd)
->  		goto out_put_idev;
->  	}
->  
-> -	vdev->id = virt_id;
-> +	vdev->virt_id = virt_id;
->  	vdev->dev = idev->dev;
->  	get_device(idev->dev);
->  	vdev->viommu = viommu;
+>>>>
+>>>> +	/*
+>>>> +	 * Target address is normal memory on the Host. We come here
+>>>> +	 * because:
+>>>> +	 * 1) Guest map it as device memory and perform LS64 operations
+>>>> +	 * 2) VMM report it as device memory mistakenly
+>>>> +	 * Hand it to the userspace.
+>>>> +	 */
+>>>> +	if (esr_fsc_is_excl_atomic_fault(kvm_vcpu_get_esr(vcpu))) {
+>>>> +		struct kvm_run *run = vcpu->run;
+>>>> +
+>>>> +		run->exit_reason = KVM_EXIT_ARM_LDST64B;
+>>>> +		run->arm_nisv.esr_iss = kvm_vcpu_dabt_iss_nisv_sanitized(vcpu);
+>>>> +		run->arm_nisv.fault_ipa = fault_ipa |
+>>>> +			(kvm_vcpu_get_hfar(vcpu) & (vma_pagesize - 1));
+>>>> +
+>>>> +		return -EAGAIN;
+>>>> +	}
+>>>
+>>> I'm not sure that's the right thing to do.
+>>>
+>>> If:
+>>>
+>>> - the guest was told it doesn't have LS64WB,
+>>>
+>>> - it was told that some range is memory,
+>>>
+>>> - it uses that range as device,
+>>>
+>>> - thanks to FWB the resulting memory type is "Normal-Cacheable"
+>>>
+>>> - which results in an Unsupported Atomic exception
+>>>
+>>> why would we involve the VMM at all? The VMM clearly said it didn't
+>>> want to be involved in this (we have a memslot).
+>>>
+>>
+>> ok I thought we should make VMM do the decision in all the cases(both
+>> here and emulated MMIO) based on the last discussion[*], I may
+>> misunderstand it. If this is the case...
+>>
+>>> I think we should simply inject the corresponding S1 fault back into
+>>> the guest.
+>>>
+>>
+>> let's simply inject a corresponding DABT back here and only make the VMM
+>> handle the emulated MMIO case. will update if no further comment.
+> 
+> A permission fault at S2 for a R/O memslot should definitely be
+> relayed to userspace. But the question is whether the HW would report
+> a permission fault or an unsupported atomic or exclusive fault (UAoEF
+> for short).
+> 
+> If the HW supports LS64WB, I'd fully expect to get a permission fault,
+> not an UAoEF, and we can perfectly report this to userspace with full
+> decode information (though this doesn't fit in the KVM_EXIT_MMIO
+> structure -- that's "only" an ABI problem).
+> 
+> If it doesn't, then we have a much bigger issue, and I don't think we
+> can realistically triage the exception in a meaningful way -- we just
+> can't know the reason why we failed, and we don't even know whether
+> this was a load or store.
+> 
+> Overall, I can see two options here:
+> 
+> - we limit the LS64 support to HW that supports LS64WB (too bad for
+>   the other implementations, which is 100% of them). We can always
+>   triage the exception correctly, and we're unlikely to ever take an
+>   UAoEF in this context.
+> 
+> - we define that R/O memslots do not support LS64 accesses at all,
+>   which is always a valid implementation -- the architecture makes no
+>   provision of which pieces of addressable memory supports an access
+>   type or another. With that, we can always inject the UAoEF back into
+>   the guest without any further triaging.
+> 
 
-Reviewed-by: Pranjal Shrivastava <praan@google.com>
+I'd vote for 2nd solution. this is only the exception case unless trigger it
+purposely, the instructions are used for device memory in the normal
+cases. It's unfair to forbid the use of it on LS64WB lacked platforms and we
+do support LS64 but no LS64WB.
 
-> -- 
-> 2.43.0
-> 
+Injecting the UAoEF back will make the handling consistent with host.
+
+thanks.
 
