@@ -1,159 +1,277 @@
-Return-Path: <linux-kselftest+bounces-36318-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36319-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7A08AF15C2
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 14:34:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 471A2AF4D04
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 15:08:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4E91C7A51C6
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 12:33:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2CA191C4368A
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 13:08:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F6F12701C4;
-	Wed,  2 Jul 2025 12:34:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D37AE279DC9;
+	Wed,  2 Jul 2025 13:07:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="OfaPKYw2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CHF+p8ac"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1009D266B72
-	for <linux-kselftest@vger.kernel.org>; Wed,  2 Jul 2025 12:34:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F7B224BCF5;
+	Wed,  2 Jul 2025 13:07:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751459676; cv=none; b=iDhKg3VJokZlCwKoZzntikJT49yLWoW3R3TkilzhWLSKFzMkSVRH76v0M0g02IghFElkclTpvmeZ/KDYHNj0tS9N6kCfm5sdf/UbFOxWHypQg6E+yLj8nFmt+Xefedn86EvnFzVvUA2V3ff+DiD1YvNnTookgNiWYNXiQv9lXQo=
+	t=1751461632; cv=none; b=o3TnbhWDi0X7co/R5vhb11m/OD1SpXofFj5jU4xKqeWDFGxJ0Pixn7hXs3ppMu7QIbB0g+Fsrbo23H4QANOHhX/XTeAKs/kcJOleqdILCC64VZXkJkxX4/BHXi8MXAUHA5PbACFtRtVb4rV5WtJ1dzeCT3E7lie4uq2xu3ue+jE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751459676; c=relaxed/simple;
-	bh=w4Nwr3rzBU8oAkSw6PUTnXCWYhJ7PZRyve2lIpVTSKU=;
+	s=arc-20240116; t=1751461632; c=relaxed/simple;
+	bh=gf2sQbHcLAupqATPVKtpgXGyK+779f5rPVv4yhPoP3I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aRZ12VTORxL1Kqtwhz7sQNxGnkwDYJprJO8TeCeJ/ksjTRh3XDShEOph9ZPClE6z6W6mN/SJODmrCkanKz8SxYNTueP4mFirqaXaCaYzEHkj1ru1jEzWXoDxeKwX4UhiGExgmGW/HAw1EJQsLKLWW/+YYu+eGokuVtccvcNQfA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=OfaPKYw2; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3a6e8b1fa37so3792002f8f.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Jul 2025 05:34:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1751459672; x=1752064472; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xYauURT58UhCHylTptKqbdFltvK7gtU+BWTcrPEHD/Y=;
-        b=OfaPKYw2cYcn/F5xoa+WPeE5QukO7X43r4yI/zGjhIlRFVN1/WcVa4CaKMdHRCW5wn
-         NU7ILLUzmQPzN8yZ7QcGCFftv9uxl8qvVvqgDUH55Hh/HgKHEkYirh1SNfvbOMVTNpuE
-         05Irdjn1+XK2Br63ppVnMjra6aXvCtVg3rCfq9PYfIaQaRyAH67FHaMm6oPBx8HtPZsu
-         oWFl7mwrstoIwbajC9Gi2fRdoQhyHkzWjjVVscqEgl+w/zXrXBPnKrXbawdNh8LoNgRY
-         e4s+6oo4KX9irznTFMh9QjDbILRcz/+VS9FUGNMX6oxnFw36Zbo+1qHUZnl3gLhgeXDL
-         ALlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751459672; x=1752064472;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xYauURT58UhCHylTptKqbdFltvK7gtU+BWTcrPEHD/Y=;
-        b=CT5STCpVX0sUhjjoZ5TkvvAFsxr2DAdKdoecfVlCLtno2wxWY8suW8XrrP6Cl7yxr3
-         B4yFz96xTgAS4KnfWO+qZL85dQf5QxKLEL7Rqic8vwyEJ8AfUUiADxhGWSacq8No+oCV
-         MPcwa3J7kuuKQmjwNF5P1fYooOluicV2GP8H7l7eoldwYX9w2dpeJY4qbH27NO0YQDw/
-         aohDSQFh9shzJhv/Cdb3pilBFdRSMaC/W/oW/1UFVuwo0Ki0ETPvIAmRne8zg22G2C9U
-         /LbHEQOFWCIFgzvSIVGaiYvH2MszMf0QmJeDbCvqlIsdT0olK35SgoJ2HLnijs4g/iW1
-         rAkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVfNqejvl9X6/Znbj4MEfyPXpQcOnmBv1YMtPDgW/YvBSBPNXum5fsW5hpwPN8rM8BzKIX+EGui3TSBO/eknG0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7baedGeo35o6n7oXaJynwAy34lH1Qrtp1lxsg/vIVvXLj3hSd
-	L1Rn5Z7UzWpPk7QX2jXqpVNXcrtKDyEShhNKdVfFqG7Ojmb9Q8KW9l/SCe8XR1gkIOI=
-X-Gm-Gg: ASbGncuWHiC37xxk0A6qNnGnj0q3/Zbje9M2PIpHYlNi8LaBqg5VHK+mGGKUiv6OX5u
-	JwKe0zUMuP34dBGrNAyOWik74lnaxIw8bM/GiL+4ipkYY2GBTAUkHLhOviT14GCAHX8qKKLNLNY
-	/H/Wsxx8oj3VQ8j2JXp0NDmiI4mVtQcAGk05o4XXeMGzEaTd1aPI/wn3wSq8s4TMP/FCtB51Brh
-	kNNJXQR1HP505V3Mwn2r9VbLCmqKn8k5AcO1JGXaq2HaCCUETnHZwByAMl79bDWzBwPEex7m3rO
-	/C4WSdPDh9KH6uYdydGg8/jvePAazf7n77M7BddjHQV+i661+2wA5YA/7652WJ+w
-X-Google-Smtp-Source: AGHT+IHpmwTSHq0ZYz8lQTm5DuVgf5H+LAptA4zeTr6a+ZP5dC8xfupiDfgs6zU9Ea25L7XoigSn+A==
-X-Received: by 2002:a05:6000:26c7:b0:3a4:fbaf:3f99 with SMTP id ffacd0b85a97d-3b1fe4c8d71mr2056593f8f.13.1751459672276;
-        Wed, 02 Jul 2025 05:34:32 -0700 (PDT)
-Received: from blackdock.suse.cz ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a88c80b5a3sm15800036f8f.40.2025.07.02.05.34.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Jul 2025 05:34:31 -0700 (PDT)
-Date: Wed, 2 Jul 2025 14:34:29 +0200
-From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To: Shashank Balaji <shashank.mahadasyam@sony.com>
-Cc: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Shinya Takumi <shinya.takumi@sony.com>
-Subject: Re: [PATCH 0/2] selftests/cgroup: better bound for cpu.max tests
-Message-ID: <4bqk62cqsv3b4sid76zf3jwvyswdym7bl5wf7r6ouwqvmmvsfv@qztfmjdd7nvc>
-References: <20250701-kselftest-cgroup-fix-cpu-max-v1-0-049507ad6832@sony.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=n2tz/gkkuz/GuqwbYec9QPxB1c9OF0nIoHUxgohdoyNvF0njjzm2bo7I5nLNmvncatRrNoV6NwDNy6dMCa98lXTq8vyszApRUmqMdnf2L7b7Z5mTo91CNErW57zjSmlaFv1QfqvWNHR8rvID8Jl1cBFQ8qTE2M5HPjHh8Lb+gNw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CHF+p8ac; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E7AEC4CEED;
+	Wed,  2 Jul 2025 13:07:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751461632;
+	bh=gf2sQbHcLAupqATPVKtpgXGyK+779f5rPVv4yhPoP3I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CHF+p8acu21kpFfa5z6AeaF7zGgAsr39mm4n3xlsl5wUuJ79NVHx2Oe/kutY+WUIQ
+	 1zF6CA6DLLvbtpi9yAGn2+bb8AuUpOhoxr7Kcyhh/4gsgTGZxTQsvyVRmXE1fuEiER
+	 PHL8sZdkO1nBlT95ybIDoRAuXZoauuvxOFZl+ybl/URXhuy3/OxJFdPKIsMbwDV1B9
+	 5Q29UpAe6G4B9HTThjaMnddlgSM+O8oMwI+wGdrkeWWY7Y9yBa/SbBANwtM2gpqUc7
+	 Q3bqS7HFZFsXLXlzXCBcETCRdzbPaDEa/eyuDKvU1fbcKfGRAm8FV+TrLb1uYa3L/X
+	 GK9ee/icUL3Ww==
+Date: Wed, 2 Jul 2025 18:36:52 +0530
+From: Manivannan Sadhasivam <mani@kernel.org>
+To: Frank Li <Frank.Li@nxp.com>
+Cc: Kishon Vijay Abraham I <kishon@kernel.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Anup Patel <apatel@ventanamicro.com>, Marc Zyngier <maz@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>, 
+	Richard Zhu <hongxing.zhu@nxp.com>, Lucas Stach <l.stach@pengutronix.de>, 
+	Lorenzo Pieralisi <lpieralisi@kernel.org>, Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+	Niklas Cassel <cassel@kernel.org>, dlemoal@kernel.org, jdmason@kudzu.us, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, imx@lists.linux.dev, devicetree@vger.kernel.org
+Subject: Re: [PATCH v19 05/10] PCI: endpoint: pci-epf-test: Add doorbell test
+ support
+Message-ID: <357zznvglssmaemq4j3v3s4atrkljq3o6ivx35h3ztw64iml3d@hauozlcoaaog>
+References: <20250609-ep-msi-v19-0-77362eaa48fa@nxp.com>
+ <20250609-ep-msi-v19-5-77362eaa48fa@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="smuhsidh4jj2dmo5"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250701-kselftest-cgroup-fix-cpu-max-v1-0-049507ad6832@sony.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250609-ep-msi-v19-5-77362eaa48fa@nxp.com>
 
+On Mon, Jun 09, 2025 at 12:34:17PM GMT, Frank Li wrote:
 
---smuhsidh4jj2dmo5
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 0/2] selftests/cgroup: better bound for cpu.max tests
-MIME-Version: 1.0
+[...]
 
-Hello Shashank.
+> +static irqreturn_t pci_epf_test_doorbell_handler(int irq, void *data)
+> +{
+> +	struct pci_epf_test *epf_test = data;
+> +	enum pci_barno test_reg_bar = epf_test->test_reg_bar;
+> +	struct pci_epf_test_reg *reg = epf_test->reg[test_reg_bar];
+> +	u32 status = le32_to_cpu(reg->status);
+> +
+> +	status |= STATUS_DOORBELL_SUCCESS;
+> +	reg->status = cpu_to_le32(status);
+> +	pci_epf_test_raise_irq(epf_test, reg);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static void pci_epf_test_doorbell_cleanup(struct pci_epf_test *epf_test)
+> +{
+> +	struct pci_epf_test_reg *reg = epf_test->reg[epf_test->test_reg_bar];
+> +	struct pci_epf *epf = epf_test->epf;
+> +
+> +	if (le32_to_cpu(reg->doorbell_bar) > 0) {
 
-On Tue, Jul 01, 2025 at 11:13:54PM +0900, Shashank Balaji <shashank.mahadas=
-yam@sony.com> wrote:
-> cpu.max selftests (both the normal one and the nested one) test the
-> working of throttling by setting up cpu.max, running a cpu hog process
-> for a specified duration, and comparing usage_usec as reported by
-> cpu.stat with the duration of the cpu hog: they should be far enough.
->=20
-> Currently, this is done by using values_close, which has two problems:
->=20
-> 1. Semantic: values_close is used with an error percentage of 95%, which
->    one will not expect on seeing "values close". The intent it's
-> actually going for is "values far".
->=20
-> 2. Accuracy: the tests can pass even if usage_usec is upto around double
->    the expected amount. That's too high of a margin for usage_usec.
->=20
-> Overall, this patchset improves the readability and accuracy of the
-> cpu.max tests.
->=20
-> Signed-off-by: Shashank Balaji <shashank.mahadasyam@sony.com>
+Is this check necessary?
 
-I think you're getting at an actual bug in the test definition.=20
+> +		free_irq(epf->db_msg[0].virq, epf_test);
+> +		reg->doorbell_bar = cpu_to_le32(NO_BAR);
+> +	}
+> +
+> +	if (epf->db_msg)
 
-I think that the test_cpucg_max should either run hog_cpus_timed with
-CPU_HOG_CLOCK_PROCESS instead of CPU_HOG_CLOCK_WALL to make sense or the
-expected_usage_usec should be defined with the configured quota in mind
-(i.e. 1/100).  (The latter seems to make the test more natural.)
+Same here.
 
-With such defined metrics, the asserted expression could be
-	values_close(usage_usec, expected_usage_usec, 10)
-based on your numbers, error is around 20% so our helper's argument is
-roughly half of that. (I'd be fine even with err=3D20 to prevent some
-false positives.)
+> +		pci_epf_free_doorbell(epf);
+> +}
+> +
+> +static void pci_epf_test_enable_doorbell(struct pci_epf_test *epf_test,
+> +					 struct pci_epf_test_reg *reg)
+> +{
+> +	u32 status = le32_to_cpu(reg->status);
+> +	struct pci_epf *epf = epf_test->epf;
+> +	struct pci_epc *epc = epf->epc;
+> +	struct msi_msg *msg;
+> +	enum pci_barno bar;
+> +	size_t offset;
+> +	int ret;
+> +
+> +	ret = pci_epf_alloc_doorbell(epf, 1);
+> +	if (ret) {
+> +		status |= STATUS_DOORBELL_ENABLE_FAIL;
+> +		goto set_status;
 
-I think those changes could even be in one patch but I leave that up to
-you. My comment to your 2nd patch is that I'd like to stick to relative
-errors and keep positive values_close() predicate that's used in other
-selftests too. (But those 95% in the current code are clumsy given two
-different qualities are compared.)
+I think you can just set the failure status directly in err path:
 
-Thanks,
-Michal
+	if (ret)
+		goto set_err_status;
 
---smuhsidh4jj2dmo5
-Content-Type: application/pgp-signature; name="signature.asc"
+> +	}
+> +
+> +	msg = &epf->db_msg[0].msg;
+> +	bar = pci_epc_get_next_free_bar(epf_test->epc_features, epf_test->test_reg_bar + 1);
+> +	if (bar < BAR_0 || bar == epf_test->test_reg_bar || !epf->db_msg) {
 
------BEGIN PGP SIGNATURE-----
+Can 'bar' really be 'epf_test->test_reg_bar' here? You just need to check for
+NO_BAR, that's it.
 
-iHUEABYKAB0WIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCaGUnSQAKCRB+PQLnlNv4
-CK12AQC617NY4Bgg95KOUtRUliBbD467q6iN7i8UX5uw1TDHPQD/YDZ9YQbLmR8s
-aaGAL35x9nFcbe50VlfD5NyVDwbVugI=
-=ntIR
------END PGP SIGNATURE-----
+Also 'epf->db_msg' can't be NULL here. You were already dereferencing above, so
+this check is pointless.
 
---smuhsidh4jj2dmo5--
+> +		status |= STATUS_DOORBELL_ENABLE_FAIL;
+> +		goto set_status;
+> +	}
+> +
+> +	ret = request_irq(epf->db_msg[0].virq, pci_epf_test_doorbell_handler, 0,
+> +			  "pci-test-doorbell", epf_test);
+
+'pci-ep-test-doorbell'
+
+> +	if (ret) {
+> +		dev_err(&epf->dev,
+> +			"Failed to request irq %d, doorbell feature is not supported\n",
+
+'Failed to request doorbell IRQ: %d\n'
+
+> +			epf->db_msg[0].virq);
+> +		status |= STATUS_DOORBELL_ENABLE_FAIL;
+> +		pci_epf_test_doorbell_cleanup(epf_test);
+
+this can be moved to a err label:
+
+		goto cleanup_doorbell;
+
+> +		goto set_status;
+> +	}
+> +
+> +	reg->doorbell_data = cpu_to_le32(msg->data);
+> +	reg->doorbell_bar = cpu_to_le32(bar);
+> +
+> +	msg = &epf->db_msg[0].msg;
+> +	ret = pci_epf_align_inbound_addr(epf, bar, ((u64)msg->address_hi << 32) | msg->address_lo,
+> +					 &epf_test->db_bar.phys_addr, &offset);
+> +
+> +	if (ret) {
+> +		status |= STATUS_DOORBELL_ENABLE_FAIL;
+> +		pci_epf_test_doorbell_cleanup(epf_test);
+> +		goto set_status;
+> +	}
+> +
+> +	reg->doorbell_offset = cpu_to_le32(offset);
+> +
+> +	epf_test->db_bar.barno = bar;
+> +	epf_test->db_bar.size = epf->bar[bar].size;
+> +	epf_test->db_bar.flags = epf->bar[bar].flags;
+> +
+> +	ret = pci_epc_set_bar(epc, epf->func_no, epf->vfunc_no, &epf_test->db_bar);
+> +	if (ret) {
+> +		status |= STATUS_DOORBELL_ENABLE_FAIL;
+> +		pci_epf_test_doorbell_cleanup(epf_test);
+> +	} else {
+> +		status |= STATUS_DOORBELL_ENABLE_SUCCESS;
+> +	}
+> +
+
+Set the success status directly here:
+
+	status |= STATUS_DOORBELL_ENABLE_SUCCESS;
+	reg->status = cpu_to_le32(status);
+
+	return;
+
+cleanup_doorbell:
+	pci_epf_test_doorbell_cleanup(epf_test);
+set_err_status:
+	status |= STATUS_DOORBELL_ENABLE_FAIL;
+	reg->status = cpu_to_le32(status);
+
+> +set_status:
+> +	reg->status = cpu_to_le32(status);
+> +}
+> +
+> +static void pci_epf_test_disable_doorbell(struct pci_epf_test *epf_test,
+> +					  struct pci_epf_test_reg *reg)
+> +{
+> +	enum pci_barno bar = le32_to_cpu(reg->doorbell_bar);
+> +	u32 status = le32_to_cpu(reg->status);
+> +	struct pci_epf *epf = epf_test->epf;
+> +	struct pci_epc *epc = epf->epc;
+> +	int ret;
+> +
+> +	if (bar < BAR_0 || bar == epf_test->test_reg_bar || !epf->db_msg) {
+
+Same comment about as above for these checks.
+
+> +		status |= STATUS_DOORBELL_DISABLE_FAIL;
+> +		goto set_status;
+> +	}
+> +
+> +	ret = pci_epc_set_bar(epc, epf->func_no, epf->vfunc_no, &epf->bar[bar]);
+> +	if (ret)
+> +		status |= STATUS_DOORBELL_DISABLE_FAIL;
+> +	else
+> +		status |= STATUS_DOORBELL_DISABLE_SUCCESS;
+> +
+> +	pci_epf_test_doorbell_cleanup(epf_test);
+> +
+> +set_status:
+> +	reg->status = cpu_to_le32(status);
+> +}
+> +
+>  static void pci_epf_test_cmd_handler(struct work_struct *work)
+>  {
+>  	u32 command;
+> @@ -714,6 +847,14 @@ static void pci_epf_test_cmd_handler(struct work_struct *work)
+>  		pci_epf_test_copy(epf_test, reg);
+>  		pci_epf_test_raise_irq(epf_test, reg);
+>  		break;
+> +	case COMMAND_ENABLE_DOORBELL:
+> +		pci_epf_test_enable_doorbell(epf_test, reg);
+> +		pci_epf_test_raise_irq(epf_test, reg);
+> +		break;
+> +	case COMMAND_DISABLE_DOORBELL:
+> +		pci_epf_test_disable_doorbell(epf_test, reg);
+> +		pci_epf_test_raise_irq(epf_test, reg);
+> +		break;
+>  	default:
+>  		dev_err(dev, "Invalid command 0x%x\n", command);
+>  		break;
+> @@ -987,6 +1128,7 @@ static void pci_epf_test_unbind(struct pci_epf *epf)
+>  		pci_epf_test_clean_dma_chan(epf_test);
+>  		pci_epf_test_clear_bar(epf);
+>  	}
+> +	pci_epf_test_doorbell_cleanup(epf_test);
+
+Why is this necessary?
+
+- Mani
+
+-- 
+மணிவண்ணன் சதாசிவம்
 
