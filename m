@@ -1,211 +1,286 @@
-Return-Path: <linux-kselftest+bounces-36277-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36278-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F0B9AF0E01
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 10:29:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9378AF0E05
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 10:30:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 07518487C9E
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 08:28:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C5B2A1C262AD
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 08:29:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17D9923BCF7;
-	Wed,  2 Jul 2025 08:28:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A364D23957D;
+	Wed,  2 Jul 2025 08:29:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="LNodZ4nY"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QardYkIL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay15.mail.gandi.net (relay15.mail.gandi.net [217.70.178.235])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89799238C16;
-	Wed,  2 Jul 2025 08:28:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.235
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C53A239086
+	for <linux-kselftest@vger.kernel.org>; Wed,  2 Jul 2025 08:28:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751444906; cv=none; b=Vn26NhkSxOEoJv9QL1Xu+lchCF++Y+VrvQk3HXOjWBtvjnztElhznQYRWBnqTCsonV2u2+JV4VfOtxqCvUpfsOpFUBS0Rmxi5PGu/ERhM+nb6kHtzXQgPGf0f+4hrn4D4PnjOot7wHohJQgcQhnThcikaKUgktIfSE0f8JvXPQo=
+	t=1751444941; cv=none; b=oft84CSjHo927a7CONxWO9Mdmh0ghWJTu9J9gieEvWGBZLols9u0MM+rq02j6zW04jVjMS61aWKhn2TLypeAwiIAe0aXasyr44K1aTBiOoupOaKGyZcxF5gxlJmh/n1uV72tq5eFA2EV2QrTbnuAfNP9Sv3LDM/VDdQdIao3mxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751444906; c=relaxed/simple;
-	bh=qHk9m++LBoQx3yiAbc9n1ih8ke/7OTNO0TG9b0fRLmg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qAXsEaF+gz1Z2mmNW0zA4FDNh/szBqpBtIlTyyhXU4f6kkBf2nuGqnxdQNJ9ui+npLkUkuv6e7APsXTIz0LmhMcM3SFqoUqZ6vc1AkgrvxVG/rR4IZ5komPHOhMn1DX8EIiwXVNAUQ2ylSWfqsavttDqtr5nzImAE3RmLB6dIVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=LNodZ4nY; arc=none smtp.client-ip=217.70.178.235
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BE9A443184;
-	Wed,  2 Jul 2025 08:28:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1751444895;
+	s=arc-20240116; t=1751444941; c=relaxed/simple;
+	bh=TpUiGwitXPaVtboFPC1JiMhrIkd+/KdYZg8MhTrKKlM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jDvC3zkgHGX0DSRZh+P38AQSVRgoZL4MxoCf2kdy12z45LO+Ncr4vQUcWss2W+tU347rJWlkbOyfVuhyOvWW6ImZcHpE5Xqmbg2bmG6J7SaOm8k0gBwzi0VRRSipYBnpdWQV83kbzApjZpgAVZYtP/FKOxwyugXCotKlB/rt0+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QardYkIL; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1751444938;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Tj6eZS5+WFS158/nz+Vj1Mv/y1Y7UeIf31eukYPIixI=;
-	b=LNodZ4nYYCUz4vO99K3G5/Cmr5ybFCmpiOy0Jc23cyvaeK9ygWD1kTx30M+LZ5M0m4lx0x
-	lNoTTvr8Q/4TXRSgFhDen7kfv4xJJnSaiuL11bvIVL54Lzwaje3lT4Pkt8rNBiFhYn+GYk
-	nWLR+ngRCeuz19zN/P+YcnvAbn5v8U89ZUjcoxU8UiFaxjDp4mDli1n/OQruLgglV91jyA
-	xMxrcWHC9ovBMVjzx7n/wNTkMi5ik1phKh4Kd109SCLEUqNPtDzHpUT086/iyqbPlOZFBx
-	x6YLiDnhlA6YNs95nUd7sPdIqusr+LkYmxlS3l0Xaj0R9sF7hsc1JY74tBMgIw==
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-To: davem@davemloft.net
-Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	thomas.petazzoni@bootlin.com,
-	Andrew Lunn <andrew@lunn.ch>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Vladimir Oltean <vladimir.oltean@nxp.com>,
-	=?UTF-8?q?K=C3=B6ry=20Maincent?= <kory.maincent@bootlin.com>,
-	Oleksij Rempel <o.rempel@pengutronix.de>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next 3/3] selftests: ethtool: Introduce ethernet PHY selftests on netdevsim
-Date: Wed,  2 Jul 2025 10:28:05 +0200
-Message-ID: <20250702082806.706973-4-maxime.chevallier@bootlin.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250702082806.706973-1-maxime.chevallier@bootlin.com>
-References: <20250702082806.706973-1-maxime.chevallier@bootlin.com>
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=HzbQFqLIkZ4mMZ8AYNo+jHz+PQn+lq0iEDVgmGYyPOM=;
+	b=QardYkILCV6a8OE0Xy5Ej6buEgM3AMoekuKD2uJrFPlIDpqOidOMm3YGklM/+a7eqAxa+Z
+	1aUUGpPxfnuxatMhg+V24TncxeRhOsJMywtIxb/JwP1qs6bPuGOBB5GgC1sgNRTWiyJMzR
+	RCvvuJMHgjsF6Gz9rcwco7zmIgw/+C4=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-573-8eLOjEJIOr6NmSrApbRVdQ-1; Wed, 02 Jul 2025 04:28:54 -0400
+X-MC-Unique: 8eLOjEJIOr6NmSrApbRVdQ-1
+X-Mimecast-MFC-AGG-ID: 8eLOjEJIOr6NmSrApbRVdQ_1751444934
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-3a4f8192e2cso2593074f8f.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Jul 2025 01:28:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751444934; x=1752049734;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=HzbQFqLIkZ4mMZ8AYNo+jHz+PQn+lq0iEDVgmGYyPOM=;
+        b=p8nGO8dy9zfR5ytd+wYXZmTi+vWF8H9He5DBYj3E43BezWXC7Yk+MjX1Op46GaCJu9
+         6imASH4OOtMqxcmmGEAwDFMMsPgG786B7l2fdqhTRzrPVPEdOBXiSH4OOf/YPM1G22KP
+         6tbG04QwW04L/QOO3X66aij3P89Lqt4Kte5bi8yLYDFJgafpoRSpOpKvqSVSHT3UXTFx
+         T8/7buaCza4PGMMO8SWyJIGxehTZ0iQi5rrYyPwDz6fNP6HuVHfwa4QBnraS1LrI4CtX
+         KkWTXGJEtHuEMw7tBc6jVynByEMETB4/A1hdMmvQRxWTu+4ixnAzzMjTAZyiZSDGBwgh
+         NWYw==
+X-Forwarded-Encrypted: i=1; AJvYcCUuUhM30LH7fjGyJ3rtUKZydn1HiulVOlCerSbcWv61ZduV8+zt6S0COEVssJWwf6/4zxGOvq6pmHVEc4cPehg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwtVlXWiAfqfI0hVVArwul3YuQ22s5KJONUlIHCqCCl+WpfHCoB
+	HnH0xD+PfSEf9Jl7IHmrUgUC0kt2z416CQ0j8ln1s71CO+uBLL4YCNUfJPZe6O5vzhgn0+DnWuQ
+	6CbfLwe64F1wjF2GEJnpXBqQeS0g6C5gu1edcI9dON1dU8PwdHhkA3PguJnoHBUVX1TWH0g==
+X-Gm-Gg: ASbGncs5zIuzuEah/ZyjjRXCjvFPDa6WTnrzQOML02hkNxGuXetZV3Kw+8mZS53x/Sz
+	gbP5TjhY9bmjafoQhoGk7WGVdB8olkJnVN7xlrCGJmZ9I+uljiV482+zPXxKvs5I89n+wLvY4e4
+	b1Z33Z38YcxFRn06+sUysPwQw51K3rJAjobQcEeJXYDB9qxqja4AZl/qm+BdWl2vqP668eP/48E
+	/tN05R76Y8gxLw8kQnJZlt7SgqNCp6cdmBCwa8Yz4bSnODbXD97kvCnkcSgkGatdsVwhkZGgkBA
+	CL/g55eGVWLMAiljdTc3ujNPqyedIkMvKYIkbhie9M/w51nPbIWcMKs=
+X-Received: by 2002:a05:6000:703:b0:3a4:f6ba:51c8 with SMTP id ffacd0b85a97d-3b1fe5c082fmr1259456f8f.14.1751444933503;
+        Wed, 02 Jul 2025 01:28:53 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHU4GPCoUJnaI5KrpPRxbohExSM4p/V+1hC5zWtpV0MmAymkrtexckqli/iTlrYjgsiXsuFcw==
+X-Received: by 2002:a05:6000:703:b0:3a4:f6ba:51c8 with SMTP id ffacd0b85a97d-3b1fe5c082fmr1259424f8f.14.1751444932931;
+        Wed, 02 Jul 2025 01:28:52 -0700 (PDT)
+Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4538234b382sm222400965e9.9.2025.07.02.01.28.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Jul 2025 01:28:52 -0700 (PDT)
+Message-ID: <f474ef7b-71f3-4169-ba30-74f4afbaeee6@redhat.com>
+Date: Wed, 2 Jul 2025 10:28:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/mm: pagemap_scan ioctl: add PFN ZERO test cases
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
+Cc: kernel@collabora.com, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250630102443.137809-1-usama.anjum@collabora.com>
+ <20027e0c-f43b-4d10-a4d6-41dcc38145bd@redhat.com>
+ <6846faf7-20b5-4f08-a8f0-9946f993b0e9@collabora.com>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <6846faf7-20b5-4f08-a8f0-9946f993b0e9@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduieelvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepofgrgihimhgvucevhhgvvhgrlhhlihgvrhcuoehmrgigihhmvgdrtghhvghvrghllhhivghrsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeevgedtffelffelveeuleelgfejfeevvdejhfehgeefgfffvdefteegvedutefftdenucfkphepvdgrtddumegtsgduleemkegugeehmeegledttdemieehieekmedvlegsudemlegvfhehmegvkegtjeenucevlhhushhtvghrufhiiigvpedvnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudelmeekugegheemgeeltddtmeeiheeikeemvdelsgdumeelvghfheemvgektgejpdhhvghlohepfhgvughorhgrrdhhohhmvgdpmhgrihhlfhhrohhmpehmrgigihhmvgdrtghhvghvrghllhhivghrsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedukedprhgtphhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhrtghpthhtohepmhgrgihimhgvrdgthhgvvhgrlhhlihgvrhessghoohhtlhhinhdrtghomhdprhgtphhtthhopehnvghtuggvvhesvhhgvghrrdhkv
- ghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopegrnhgurhgvfieslhhunhhnrdgthhdprhgtphhtthhopehkuhgsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtghomh
 
-Now that netdevsim supports PHY device simulation, we can start writing
-some tests to cover a little bit all PHY-related ethtool commands.
+On 02.07.25 09:39, Muhammad Usama Anjum wrote:
+> On 7/1/25 7:51 PM, David Hildenbrand wrote:
+>> On 30.06.25 12:24, Muhammad Usama Anjum wrote:
+>>> Add test cases to test the correctness of PFN ZERO flag of pagemap_scan
+>>> ioctl. Test with normal pages backed memory and huge pages backed
+>>> memory.
+>>
+>> Just to verify: would this trigger on kernels before my fix?
+> Yes, it does trigger the bug without the fix.
+> 
+>>
+>>>
+>>> Cc: David Hildenbrand <david@redhat.com>
+>>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>>> ---
+>>> The bug has been fixed [1].
+>>>
+>>> [1] https://lore.kernel.org/all/20250617143532.2375383-1-david@redhat.com
+>>> ---
+>>>    tools/testing/selftests/mm/pagemap_ioctl.c | 57 +++++++++++++++++++++-
+>>>    1 file changed, 56 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/
+>>> testing/selftests/mm/pagemap_ioctl.c
+>>> index 57b4bba2b45f3..6138de0087edf 100644
+>>> --- a/tools/testing/selftests/mm/pagemap_ioctl.c
+>>> +++ b/tools/testing/selftests/mm/pagemap_ioctl.c
+>>> @@ -1,4 +1,5 @@
+>>>    // SPDX-License-Identifier: GPL-2.0
+>>> +
+>>>    #define _GNU_SOURCE
+>>>    #include <stdio.h>
+>>>    #include <fcntl.h>
+>>> @@ -1480,6 +1481,57 @@ static void transact_test(int page_size)
+>>>                      extra_thread_faults);
+>>>    }
+>>>    +void zeropfn_tests(void)
+>>> +{
+>>> +    unsigned long long mem_size;
+>>> +    struct page_region vec;
+>>> +    int i, ret;
+>>> +    char *mem;
+>>> +
+>>> +    /* Test with page backed memory */
+>>
+>> What is "page backed memory" ? :)
+> I mean, normal memory which isn't huge page backed. I've renamed it to
+> Test with normal memory.
+> 
+>>
+>>> +    mem_size = 10 * page_size;
+>>> +    mem = mmap(NULL, mem_size, PROT_READ, MAP_PRIVATE | MAP_ANON, -1,
+>>> 0);
+>>> +    if (mem == MAP_FAILED)
+>>> +        ksft_exit_fail_msg("error nomem\n");
+>>> +
+>>> +    /* Touch each page to ensure it's mapped */
+>>> +    for (i = 0; i < mem_size; i += page_size)
+>>> +        (void)((volatile char *)mem)[i];
+>>> +
+>>> +    ret = pagemap_ioctl(mem, mem_size, &vec, 1, 0,
+>>> +                (mem_size / page_size), PAGE_IS_PFNZERO, 0, 0,
+>>> PAGE_IS_PFNZERO);
+>>> +    if (ret < 0)
+>>> +        ksft_exit_fail_msg("error %d %d %s\n", ret, errno,
+>>> strerror(errno));
+>>> +
+>>> +    ksft_test_result(ret == 1 && LEN(vec) == (mem_size / page_size),
+>>> +             "%s all pages must have PFNZERO set\n", __func__);
+>>> +
+>>> +    munmap(mem, mem_size);
+>>> +
+>>> +    /* Test with huge page */
+>>> +    mem_size = 10 * hpage_size;
+>>> +    mem = memalign(hpage_size, mem_size);
+>>> +    if (!mem)
+>>> +        ksft_exit_fail_msg("error nomem\n");
+>>> +
+>>> +    ret = madvise(mem, mem_size, MADV_HUGEPAGE);
+>>> +    if (ret)
+>>> +        ksft_exit_fail_msg("madvise failed %d %s\n", errno,
+>>> strerror(errno));
+>>
+>> Might fail on older kernels, so we usually treat this as a skip.
+> I'll skip it in next version.
+> 
+>>
+>>> +
+>>> +    for (i = 0; i < mem_size; i += hpage_size)
+>>> +        (void)((volatile char *)mem)[i];
+>>> +
+>>> +    ret = pagemap_ioctl(mem, mem_size, &vec, 1, 0,
+>>> +                (mem_size / page_size), PAGE_IS_PFNZERO, 0, 0,
+>>> PAGE_IS_PFNZERO);
+>>> +    if (ret < 0)
+>>> +        ksft_exit_fail_msg("error %d %d %s\n", ret, errno,
+>>> strerror(errno));
+>>> +
+>>> +    ksft_test_result(ret == 1 && LEN(vec) == (mem_size / page_size),
+>>> +             "%s all huge pages must have PFNZERO set\n", __func__);
+>>
+>> Wouldn't this be able to fail if /sys/kernel/mm/transparent_hugepage/
+>> use_zero_page is set to false,
+> I wasn't aware of it. I'll check user_zero_page first as initial condition.
+> 
+>> or if mmap() gave us a suboptimally-
+>> aligned range?
+> mem = memalign(hpage_size, mem_size) is being used to allocate this. So
+> aligment should be correct.
+> 
+>>
+>> You'd have to read each and every page to get the ordinary shared
+>> zeropage in these configs instead without making the test too complicated.
+> In the above for loop, we are reading each new page already. Let's
+> resolve this and then I'll post the v2 which is ready.
+> 
+>>
+>>> +
+>>> +    free(mem);
+>>
+>>
+>> Shouldn't this be an munmap() ?
+> free() is being used to free memory allocated by memalign().
 
-So far we only test the basic use of "ethtool --show-phys", with :
- - A simple command to get a PHY we just added
- - A DUMP command listing PHYs on multiple netdevsim instances
- - A Filtered DUMP command listing all PHYs on a netdevsim
+Oh, I missed that detail.
 
-Introduce some helpers to create netdevsim PHYs, and a new test file.
+I'm afraid memalign+free that might not be what you want: there is no 
+guarantee that what you are getting hasn't been used before and is not 
+already filled with other pages?
 
-Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
----
- .../selftests/drivers/net/netdevsim/config    |  1 +
- .../drivers/net/netdevsim/ethtool-common.sh   | 15 +++++
- .../drivers/net/netdevsim/ethtool-phy.sh      | 64 +++++++++++++++++++
- 3 files changed, 80 insertions(+)
- create mode 100755 tools/testing/selftests/drivers/net/netdevsim/ethtool-phy.sh
-
-diff --git a/tools/testing/selftests/drivers/net/netdevsim/config b/tools/testing/selftests/drivers/net/netdevsim/config
-index 5117c78ddf0a..223e82cb7759 100644
---- a/tools/testing/selftests/drivers/net/netdevsim/config
-+++ b/tools/testing/selftests/drivers/net/netdevsim/config
-@@ -6,6 +6,7 @@ CONFIG_NETDEVSIM=m
- CONFIG_NET_SCH_MQPRIO=y
- CONFIG_NET_SCH_MULTIQ=y
- CONFIG_NET_SCH_PRIO=y
-+CONFIG_PHYLIB=m
- CONFIG_PSAMPLE=y
- CONFIG_PTP_1588_CLOCK_MOCK=y
- CONFIG_VXLAN=m
-diff --git a/tools/testing/selftests/drivers/net/netdevsim/ethtool-common.sh b/tools/testing/selftests/drivers/net/netdevsim/ethtool-common.sh
-index d9c7a3d397a9..1bd0ac5e7bba 100644
---- a/tools/testing/selftests/drivers/net/netdevsim/ethtool-common.sh
-+++ b/tools/testing/selftests/drivers/net/netdevsim/ethtool-common.sh
-@@ -53,3 +53,18 @@ function make_netdev {
-     # get new device name
-     ls /sys/bus/netdevsim/devices/netdevsim${NSIM_ID}/net/
- }
-+
-+function make_phydev_on_netdev {
-+    local parent_ndev_nsim_id=$1
-+    local parent=$2
-+
-+    local ndev_dfs=/sys/kernel/debug/netdevsim/netdevsim$parent_ndev_nsim_id/ports/0
-+
-+    old_dev_dfs=$(find $ndev_dfs -type d)
-+    echo $parent > $ndev_dfs/phy_add
-+    new_dev_dfs=$(find $ndev_dfs -type d)
-+
-+    # The new phydev name corresponds to the new file that was created. Its
-+    # name isn't predictable.
-+    echo $old_dev_dfs $new_dev_dfs | xargs -n1 | sort  | uniq -u
-+}
-diff --git a/tools/testing/selftests/drivers/net/netdevsim/ethtool-phy.sh b/tools/testing/selftests/drivers/net/netdevsim/ethtool-phy.sh
-new file mode 100755
-index 000000000000..7b740a3fda1d
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/netdevsim/ethtool-phy.sh
-@@ -0,0 +1,64 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+source ethtool-common.sh
-+
-+# Bail if ethtool is too old
-+if ! ethtool -h | grep show-phys 2>&1 >/dev/null; then
-+    echo "SKIP: No --show-phys support in ethtool"
-+    exit 4
-+fi
-+
-+function make_netdev_from_id {
-+    local new_nsim_id="$1"
-+    # Make a netdevsim
-+    echo $new_nsim_id > /sys/bus/netdevsim/new_device
-+    udevadm settle
-+    # get new device name
-+    ls /sys/bus/netdevsim/devices/netdevsim${new_nsim_id}/net/
-+}
-+
-+function cleanup_netdev_from_id {
-+    local to_del_nsim_id="$1"
-+    echo $to_del_nsim_id > /sys/bus/netdevsim/del_device
-+}
-+
-+NSIM_NETDEV=$(make_netdev)
-+
-+set -o pipefail
-+
-+# Check simple PHY addition and listing
-+
-+# Parent == 0 means that the PHY's parent is the netdev
-+PHY_DFS=$(make_phydev_on_netdev $NSIM_ID 0)
-+
-+# First PHY gets index 1
-+index=$(ethtool --show-phys $NSIM_NETDEV | grep "PHY index" | cut -d ' ' -f 3)
-+check $? "$index" "1"
-+
-+# Insert a second PHY, same parent. It gets index 2.
-+PHY2_DFS=$(make_phydev_on_netdev $NSIM_ID 0)
-+
-+# Create another netdev
-+NSIM_ID2=$((RANDOM % 1024))
-+NSIM_NETDEV_2=$(make_netdev_from_id "$NSIM_ID2")
-+
-+PHY3_DFS=$(make_phydev_on_netdev $NSIM_ID2 0);
-+
-+# Check unfiltered PHY Dump
-+n_phy=$(ethtool --show-phys '*' | grep "PHY index" | wc -l)
-+check $? "$n_phy" "3"
-+
-+# Check filtered Dump
-+n_phy=$(ethtool --show-phys $NSIM_NETDEV | grep "PHY index" | wc -l)
-+check $? "$n_phy" "2"
-+
-+cleanup_netdev_from_id $NSIM_ID2
-+
-+if [ $num_errors -eq 0 ]; then
-+    echo "PASSED all $((num_passes)) checks"
-+    exit 0
-+else
-+    echo "FAILED $num_errors/$((num_errors+num_passes)) checks"
-+    exit 1
-+fi
 -- 
-2.49.0
+Cheers,
+
+David / dhildenb
 
 
