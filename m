@@ -1,212 +1,309 @@
-Return-Path: <linux-kselftest+bounces-36328-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36329-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DAC2EAF5AFD
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 16:21:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08827AF5B53
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 16:41:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9FA033BBB0F
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 14:21:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5268252032E
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 14:41:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 586AC2F4A12;
-	Wed,  2 Jul 2025 14:21:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CCAF3093AF;
+	Wed,  2 Jul 2025 14:41:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b="P0SRCvrM"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="fkijzwUg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11012053.outbound.protection.outlook.com [52.101.66.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 734A128A725;
-	Wed,  2 Jul 2025 14:21:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA8B23093A1;
+	Wed,  2 Jul 2025 14:41:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.53
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751466098; cv=pass; b=NANORY3Bq3GCB5StX7XVWU2iZVzBVmGVKZTn73mzS1Ta+ECQGc9PuAMYVMJEtEHsv4ij5jBU8h7HlI3iF7BrnG/2IChjqCwCANmb85PIwaNhaZjmHsebEe85Flqykjym5RvOksIW/JtNvjzpys5hR9hZGmOX8yT77PpRdtyD4L8=
+	t=1751467266; cv=fail; b=Q8N6e071lGsluEvEerRRELXJ9XZLJJeq2QUNpYBRRlwBowlgL7QCfU4kDi2S+mvJXqb7p7h4lOLjnBy4qodYMc78xn5xv0TdRu/M4XOP+sxZkoOGv66q9MO+JbNVrdbvKCiBn+d/sXJFXyX0T8iRi0bDv/JIz0gQrv6QKJskO2s=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751466098; c=relaxed/simple;
-	bh=JPYsE1H9x9ALSEZAE4peMOPJnkOXnIORtP4J63kxwPs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=H0o9NU7Afze0bLqQnoHX+6UI+t58qqehKW3hQyhr4zNGIOD5kUZpqEJMnPOvlbHUJeTovwFhg+iJTsCgtMjLVdHdf7N4t4uiaTImqOG5SZkpJY157/B4Bu4MwQgWZoZ9XPztkgj0HXyhXKnQB3asXKfoYMXxjAUySv76Elt3h34=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b=P0SRCvrM; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1751466079; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=JjFU/wTd7C2n15LaDCtVw4c5SLp4fYQqW6KjugfaTRu/jrmZUzM7J1qZEA5663zmu2VMSmqqPWfgFHC/G5zg8zG00gmgYt6fuulxDF7929o8jETu/Yi1Y1WhP/56M8bYWX/A6c6xlLDQaLbQ/GpVVn668HTpb2DNsduuG1EyR9A=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1751466079; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=2/PLCRDX5zQwb9vO9glSCFCybgO+wL+GFj+YcKmCwxY=; 
-	b=jw62NL3OcEjtChqVcuhIwONQ4/RJoR3PkVG8VXFYPHRdI2zHk7NE5BiXDxudPZlf9ucTTYJ6ChV2EMnmPiWjvGEBnsk8tWIitCoqvTdS7ILlteRDTqzOIk+qvzEttwVisP2xi5FXTESHTDmXiUSxjZH2Skx2GjewoYJ5IFMNq1A=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=usama.anjum@collabora.com;
-	dmarc=pass header.from=<usama.anjum@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1751466079;
-	s=zohomail; d=collabora.com; i=usama.anjum@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=2/PLCRDX5zQwb9vO9glSCFCybgO+wL+GFj+YcKmCwxY=;
-	b=P0SRCvrMW8to+PMLKnzJMzI7zPfWcLYGtY2c80g3CSvPjZlBCZhPbCSkNPTbRjks
-	i2g+VeY3blhZx3RiCgPNMNULw9hjGdTTPkEm56Mv9Z5Ap0J3UgXkVI5UFi9q0qJCTgi
-	hlgvEaL4lqwXkNTwF/A02GAlIYAoMJiFO6XeP+Q8=
-Received: by mx.zohomail.com with SMTPS id 1751466077488209.397213001875;
-	Wed, 2 Jul 2025 07:21:17 -0700 (PDT)
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	kernel@collabora.com,
-	David Hildenbrand <david@redhat.com>,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] selftests/mm: pagemap_scan ioctl: add PFN ZERO test cases
-Date: Wed,  2 Jul 2025 19:20:51 +0500
-Message-ID: <20250702142052.45116-1-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1751467266; c=relaxed/simple;
+	bh=YxC82tL1E4DJB/3vs4w4SFCHjE4ulRqhfUum5bE3dwg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=ry4kak0bSVwWcRJKwinMKizCriVS6jD24wkSASsdupC3zXa+jonXufvrC2/ZQVeOCHvuraDq0LPoK/K5lpFeWQWXaFoUE28Zy5kvnDs/TP2OqMGyH166Sbat2D5CbZXyehJ2hMrrdN+9ePFD0UVoPIhxyWeUP9w9XEZ9YOOGMIQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=fkijzwUg; arc=fail smtp.client-ip=52.101.66.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=BAIGKF6BG7r87XhDp0BhrRoYtK2vwLKQuRbu2yAoS0MW4VDg7IsfoKkRK8z/ANXrH7ECEFb+6L7lSDLouQDlqvVSspqVwTAOxMwkh8gGJ8i5WLOswJIn5vtXKYH6N6AiV216vSGHsDW8pFhvagD5owZJ3tuf1FWlxRkjREgyawCQWawpu5nu78PsDweUX5eIJrQPFS2ZcXrePc6W274s7WH5bL1ttv3SUm8E0GKI/HrBmdRpWPnGa6m0u9JzXH+REKNkYjke/0zzfLnqLDKeNHqH1fOuuA9282454AmpBXVlh5CQfFOH9nSTDuee5UXNeTvrPJlfqLcy+GX7Wt/RKg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Dt8hIUqyOge39P67f9sAop0Vs88HgwEgpniDi851Mvw=;
+ b=knSPFEffgZxIwL/Pp5uOBuSIo0uKfGLGow1KUQRwdLQmRFlCyuhmZoFAcISuXcWoAJKpDOvhxAGXmzWzq325wnjSUEsBD9B3fm3cyBIC4EhVqdia1h6/WJq5JNo5ceKWv+rB2VTs6UVYCyN3EG6SEe1OiVT4jVLe+LR8YfC29FKtCwpF/SpT9vC4pNi+gDm0QPjhFM0Xg1d3QDkwoiW4YIgfZ0/DH7j9KXhOn+D+ywZTXfb+Zrsd35n+iojIYNGqF37hVsDqAXGSZ/3C2L4RlWKWskbNKqQmIFx6eajSVjPokZPWxamAc3DCEcJvzn7HQqJc9D4ZZPXLbzAbLiXfpw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Dt8hIUqyOge39P67f9sAop0Vs88HgwEgpniDi851Mvw=;
+ b=fkijzwUgQDPwUYUwp9uObldjTlFMuN5qfQ2SIqEVUDzw5GJiQ8a1Q8Oqgn666m2+OV+dgeGNKujz+r1MK+QryLbRGnmKQ1FiZA5HOUDet02Dml+QvMac27CZEB/kl8M673Zwt2SAgxYK5EamyG5/H4n6WcsF4UA4xK/64J+mifxknqDr6LeNTVlAproK2/LqUMViccucQlG17op6RWty2UdxAZR6xeE5DFnqY1+w6o5oWTmQo0MBnb5nx4j1/BQsqdTytK0cHX4BM6s1PwzmAerwCw+nHHEZccVMx3MAX3J4uYQYk5o0Xq68SDWdKpCShqbBLrWZaZGvqHWB4Ff3Bg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
+ by AM8PR04MB7907.eurprd04.prod.outlook.com (2603:10a6:20b:237::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8880.31; Wed, 2 Jul
+ 2025 14:41:01 +0000
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06%7]) with mapi id 15.20.8880.029; Wed, 2 Jul 2025
+ 14:41:01 +0000
+Date: Wed, 2 Jul 2025 10:40:53 -0400
+From: Frank Li <Frank.li@nxp.com>
+To: Manivannan Sadhasivam <mani@kernel.org>
+Cc: Kishon Vijay Abraham I <kishon@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Anup Patel <apatel@ventanamicro.com>, Marc Zyngier <maz@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>,
+	Shuah Khan <shuah@kernel.org>, Richard Zhu <hongxing.zhu@nxp.com>,
+	Lucas Stach <l.stach@pengutronix.de>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Niklas Cassel <cassel@kernel.org>, dlemoal@kernel.org,
+	jdmason@kudzu.us, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, imx@lists.linux.dev,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH v19 01/10] PCI: endpoint: Set ID and of_node for function
+ driver
+Message-ID: <aGVE6veZm3bL0mVJ@lizhi-Precision-Tower-5810>
+References: <20250609-ep-msi-v19-0-77362eaa48fa@nxp.com>
+ <20250609-ep-msi-v19-1-77362eaa48fa@nxp.com>
+ <ne5yrjtdevmndqds4uwo2ppq6gay2wuwjouyf33lqr5g3nfkwr@lkwqlwqjqbmx>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ne5yrjtdevmndqds4uwo2ppq6gay2wuwjouyf33lqr5g3nfkwr@lkwqlwqjqbmx>
+X-ClientProxiedBy: AS4P192CA0010.EURP192.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5da::17) To PAXPR04MB9642.eurprd04.prod.outlook.com
+ (2603:10a6:102:240::14)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|AM8PR04MB7907:EE_
+X-MS-Office365-Filtering-Correlation-Id: c45412c8-e8a9-4a4d-32dc-08ddb97676c4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|19092799006|366016|52116014|7416014|376014|1800799024|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?cUwveVNNbnRFWkg4NUhWUEVFWFU4YXNvWEw3MUNMaWo4STdYbVRjaXEvNHhu?=
+ =?utf-8?B?NjlEZXd1K3FzdjNGNjlnWjNkdXIzYkFTa1cxQ0FRbzNYbTZ1QmloaUJNWGdP?=
+ =?utf-8?B?VE1FeFIxTXFxK01UQUNsZ3ExWjhLSmE1b0loa0ZXVEJCSnZjbmcwc2FVSU5N?=
+ =?utf-8?B?NjdkYTBKMVN4SDFaV1luRzVETHpDNVZ0M1krYXlaV1BOYmNKMnBPTnl1OXZ2?=
+ =?utf-8?B?Q1JzL2xIeFpnWjhUNXhMcDVkSHRIamVvOFk3Q1ZkQjJ5Z2U2TmVMdGc0Qlgx?=
+ =?utf-8?B?WEVnU0trdEc2YkF5LzVFSllmWFlPak1FbUpWOFV1ZXlmbUg2aUI2dzFSTzRz?=
+ =?utf-8?B?ZHZqT1U0SU4zVUhJbWpoSUl4V3M0MmdwQ1FIakVVTmU5MU95eUtvK0FqNkZ3?=
+ =?utf-8?B?WU9jL1BjVEZJWkx1ZXlpKzdqS0NBbEJUTXlsZ01HK2hhQzd6Z1lrelJoSnpz?=
+ =?utf-8?B?bUltdWxmV2E3TG5wQXM2aGl3d0F2VWJVOWZnVTF3ai9ML1k1VGdpM3Y4OFgy?=
+ =?utf-8?B?UFkremVGYnA0aHcyMnl3bW0zbmZQUGx0bmVmcXIvelZ6eVdETFlaa21iVFpZ?=
+ =?utf-8?B?TkRKcmRPVXliT0JvY3Y4cFNQYVU0L2dqbG5pVmdvQlJIS0UyME9VZE1JSnk4?=
+ =?utf-8?B?YkhpTjdLeTZKR3RNMFdOektqWUg2cWtxSUNRMk5pYTN5WldUK2UxRUNBNDh6?=
+ =?utf-8?B?YTdlRHRRZ2NYc0RVSnp6ekEzMEZHdXFYOHlITVBvK2ZJQUhHU3l5WHpxdm83?=
+ =?utf-8?B?MlhYZk1vM04xaWlwVnFUUUYrWTZGcW9pbzVxSmlyL2NmZ0g0UzEwTzByN3E4?=
+ =?utf-8?B?eHAxWm5aN2RiWjZUNzNyenBmYWJxRWI0cUh0MUpuY3RLWnFOQjVmN0tOQ1Rq?=
+ =?utf-8?B?RkRwdHRWUVc1WXhKWFJ2SWNOckd4dkxPSkJRemxLQ29JeHU1czEyQTRLa3l1?=
+ =?utf-8?B?RElUQndYNHd5dHpFU2NhMTFhSFU4ekw0d0YvdmVlaDNuZ1JicXFLSzM4cmdV?=
+ =?utf-8?B?S0lIZFpTSzFNL0ZlRysxUGt2SWRlOS9ZSjlCTUQvdWN3WGF3TmhUSTZBMnhH?=
+ =?utf-8?B?QXFPSkxBcHdDL0VvbkE3TVg2Z1V3OHFpLzZGeHFzSWdPTjQwZ0d3RzA5TElQ?=
+ =?utf-8?B?V1BrWGprUGNtUVpTTFdGVE52Q3Fsa0d3YTR2WVJIVGJLTUczZkxzK2F3QmE3?=
+ =?utf-8?B?aVV5YWhCSkdacXlwcDV6dFBHRC9vS1NsRGJ4WUdEUmJuK1NBV1BPY2gyaVdM?=
+ =?utf-8?B?b2xyeHA5N0dBV1pudTI1QW81cUxGOWhXODA5NGFoMHNKekNYV2krTVhveDZ0?=
+ =?utf-8?B?VG5nRlNIQ1NHYk5pNlpkTHdIU2NBem1CVjM1ZjBFR0wxNEFmU2ZjTzRVd25Z?=
+ =?utf-8?B?ZFQvblBZclk3bURncDdCRy9ZQm9XeFhwbTNkbXQ4OVl3NWV3WURZZ3cwWlFQ?=
+ =?utf-8?B?ZkdkeTcwZVZHM3lDc0FRWUpEUjJTazFoZEJNeGxsNjJZMWNHWmVIbXk1eFJv?=
+ =?utf-8?B?bVlGT1IrWWhDa2JyajJmcTVndDFXZ1dLWkcyTHV1WjgvNyttc2NpdWYveDlk?=
+ =?utf-8?B?dGlYSkhuVVZCYTFNcHp1UFUyd25hc3paMzcyQUVRWVJiNmZPL1VVazlOTElo?=
+ =?utf-8?B?d0dpTnJyY0FnMXoySXVJbWVpZ0FuejB1RXVPSitJdDRNNU9GbDk1bmtUYzRS?=
+ =?utf-8?B?dHpKMU9QZjJwSFFQSmNITzVxZVlZOXVrQThCMzVKK3EwTEJ5dWYvR0NkVjZo?=
+ =?utf-8?B?WUdCbTB2ZlkwZ3p3cm5JWitLL296THcyN2F2c3lJUmdUSjlQSWVrNSsyNUFH?=
+ =?utf-8?B?VXlPVlpFbVRnTkN0R1RXTHU5ZGlKKzVJNkNXbHppMno3VmprK3QwQldleUtV?=
+ =?utf-8?B?WklLSzFYQVRaQ3NnN2JZQzBzMFlaRVU4WWVHKzhPNWU5Szh5MlpqUEFvWmp3?=
+ =?utf-8?B?SThmdUxmM0lnSVc3bXFrSUxkUFlKdjg5TFJac2x2c0FVMlNTZmFqQ1FmS3Ry?=
+ =?utf-8?B?Z3VXRDV4bE93PT0=?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(19092799006)(366016)(52116014)(7416014)(376014)(1800799024)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?b0g0dFliSE1XeUZDUy9ybFZZYXUyaDl3UnRlSE5EeFNNUnBaSXVPd3hVV2h6?=
+ =?utf-8?B?NFBJNXkrTGNIRk5HTU1kMHhKSjhwZm14V0tMWEZXanBqRExmQXNrYjlpQXJr?=
+ =?utf-8?B?ZmJMaE5aOW9uNDA4OGtVRXVDWDZQZHRsWm9iVkwva2VCd1dyNVJmZVNXSGFo?=
+ =?utf-8?B?MjZZK1pFK21iSGVYUnlPZ0dQcFBKNzNmeTByVElvSW9UVFUrbS9BY08rWmFX?=
+ =?utf-8?B?SWttQXN4RXZuZ3lPZUN4cTM2QzdGM0k5OU9JeTJUYVVocUhrSmtLOTY0aUxp?=
+ =?utf-8?B?ODJyWm9DT056Q2xXbWN3Z3FqYUJFNmk2Q0w5bkU5RnFSbldCNk5uR0hicFVo?=
+ =?utf-8?B?N3pTQXhiRHZJd3hvOHI4NXhRV2NMUjhRa1ZBSXFPRnkwNnFPQy9CaGtmQ1Yx?=
+ =?utf-8?B?Z3BEZGpycGFqcXlpLzVZT0EyT21WTXhMTXZkMW1XTTdTbGFOZkplTytvOFpv?=
+ =?utf-8?B?alY1NlhqSkNxT0tLYjJuMFhic1BzYjQxb2JkYVYxUi9sajFnWE5kN0loeU53?=
+ =?utf-8?B?OU93UmxQNEVQaVlxRkNlV3g4akQvK09sK1dDZnlBOVB0WG1OVHRua2FCWmlm?=
+ =?utf-8?B?eWM5djRUWDJVWFp6dUdmL3RaV0Z5L3RPSWdSLzIwTmlZbVQ4YzFtUVhXQkJS?=
+ =?utf-8?B?MHIxQXZJQ2pHL0lXUFoxMk44d0NUMXBqVTRKNFRFaFcySHMxRWNydTQvMUJH?=
+ =?utf-8?B?dGVkSEpCTjI0NTJ2R29QZ1ZDM3JsTnpLL2N3RFpQdlFtKzhlRmVBY3lwdG1F?=
+ =?utf-8?B?NXkzQzFKdkE1b2dzMUo0U1BEd0hZSnV1Qm9yVmx2aTI4c25UTlZiU1M0Rm0v?=
+ =?utf-8?B?N2UwUEkvWm9pam0xcDFCanVJcm1HY0tzZkZkVlZtbHVrOS9QTWhtWDVzOFpt?=
+ =?utf-8?B?MjBCdWFMK1YrQzkvSTRIRC9mVjJCdlV5N0IzMENPVERubXBiVHhLVjlZVENK?=
+ =?utf-8?B?WWMxYllBS3Q2YUw0c0RMRENCUXRyUmhwbEFxcnVKeHJSS2ZJbWk1bzExbG9i?=
+ =?utf-8?B?ZjVod0JtQnplSGhXdWdvd0hsbVlHL25aN3JUT3JRRjlSNlluRXdvWnJORVhl?=
+ =?utf-8?B?cXRWV0hGRWxyYk5OT3Z4Yk9nQnVoVFpybHdmZDlIdi9nMDJjN3hXMjF1cDVD?=
+ =?utf-8?B?UHFkaW41R3pjeHBHQngzL283UnQzQUNmV2taZnVrbjlQLzZTd3JqaUZoQ1Bp?=
+ =?utf-8?B?RSt0eHRFVjcvc3FZb1U0TlNLQVB6aC85KzV5SXVtRFVRWWhEbWY4TitzMTBp?=
+ =?utf-8?B?c0RVb2cxYTdJaVMzbzVWcjBpTFhvOTEvVzNDd2hsZ3VrTDROdU9kWXVqY2xy?=
+ =?utf-8?B?c3hzS0FHa1RheHBYT3ZSSGNFTGRHTENvWHo3QU1EZks2YnlscUJMS2FtMnFD?=
+ =?utf-8?B?enpuTlJoU2gxU20wZEkwemVDN1dRbTJTWkdSVGhhVE4xdTJsQ2FXVEpLWm5H?=
+ =?utf-8?B?dDgrSm9ONDhOU1M2T0JjNXJQT0hHMnZIM01RYmhwTTMvUHl6ZXNSM3dkekMr?=
+ =?utf-8?B?MytydTRFOXB1VmJYK1pISkowdFB3MjgweHlkMVFyWlpKclhUVUFhSVFkZ1l0?=
+ =?utf-8?B?NEtEaVVudlJjOVFIOHMvV3hHRThYclJGN1RyZ085UVl1U3UzVUZXYlRoQ3NW?=
+ =?utf-8?B?ejhuaEhxVmo4eEw0VjJxMWlvY25QaDRBNnJ5SW5uZHVPTTVYN1ZUZzU0WTMw?=
+ =?utf-8?B?M3IvdmN4Vm9UUTZXdWM2Y1lWa2FIcFlrb0dFVGFGdVN3SmpybldwSFJjeFZq?=
+ =?utf-8?B?eGRiSUtra0lad2c4dGdyNG52RmliV1AvWENMRHJhbEpXSFlRQzlqZTg5Y3Vr?=
+ =?utf-8?B?ZEZFWXN2ckI0cTYvb3NZbzgwRWpzczA5UFpEZHlCUWE4TXVTSnRleUhhdklh?=
+ =?utf-8?B?d2VQa0N3Mlk4cXRrb0RQUUZ1WVlRMGJ4RW9lNC9udGE1QzBWZ1VMeTNWMDc5?=
+ =?utf-8?B?aWVZUlE1OS8veEF1a29EVXJLTVhsbjE0TDFXb1UzSHFKZll3cHdRTnN5MzZ5?=
+ =?utf-8?B?b1ZTRWZJVmdLV3lrVnhsUUxCK0FiWG15K2hMbldWS0NVa2x0Ti9McmRrVzJV?=
+ =?utf-8?B?N3RHejBTQkFHS1V2cUxuRGYwbXZ5NVJXcUNKQVBSNEV4WVRVVHpsdjN4YTV4?=
+ =?utf-8?Q?2/hthnkhlSuTVCVank55KXfpf?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c45412c8-e8a9-4a4d-32dc-08ddb97676c4
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jul 2025 14:41:00.9648
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jQPvLs3O6X4H7c0LVDOu2fW/uR0JBn+lzxfS+PI9sPTx5Kq3Ptdspps6upm1bVEIXhMp5N383oIqn61K9vNPTg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7907
 
-Add test cases to test the correctness of PFN ZERO flag of pagemap_scan
-ioctl. Test with normal pages backed memory and huge pages backed
-memory.
+On Wed, Jul 02, 2025 at 04:30:48PM +0530, Manivannan Sadhasivam wrote:
+> On Mon, Jun 09, 2025 at 12:34:13PM GMT, Frank Li wrote:
+> > Set device ID as 'vfunc_no << 3 | func_no' and use
+> > 'device_set_of_node_from_dev()' to set 'of_node' the same as the EPC parent
+> > device.
+> >
+> > Currently, EPF 'of_node' is NULL, but many functions depend on 'of_node'
+> > settings, such as DMA, IOMMU, and MSI. At present, all DMA allocation
+> > functions use the EPC's device node, but they should use the EPF one.
+> > For multiple function drivers, IOMMU/MSI should be different for each
+> > function driver.
+> >
+>
+> We don't define OF node for any function, so device_set_of_node_from_dev() also
+> ends up reusing the EPC node. So how can you make use of it in multi EPF setup?
 
-Cc: David Hildenbrand <david@redhat.com>
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
-The bug has been fixed [1].
+In mfd devices, children devices reuse parent's of_node
+drivers/gpio/gpio-adp5585.c
+drivers/input/keyboard/adp5589-keys.c
+drivers/pwm/pwm-adp5585.c
 
-[1] https://lore.kernel.org/all/20250617143532.2375383-1-david@redhat.com
-Changes since v1:
-- Skip if madvise() fails
-- Skip test if use_zero_page isn't set to 1
-- Keep on using memalign()+free() to allocate huge pages
----
- tools/testing/selftests/mm/pagemap_ioctl.c | 86 +++++++++++++++++++++-
- 1 file changed, 85 insertions(+), 1 deletion(-)
+multi EPF should be similar to create multi children devices of mfd.
 
-diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/testing/selftests/mm/pagemap_ioctl.c
-index 57b4bba2b45f3..976ab357f4651 100644
---- a/tools/testing/selftests/mm/pagemap_ioctl.c
-+++ b/tools/testing/selftests/mm/pagemap_ioctl.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+
- #define _GNU_SOURCE
- #include <stdio.h>
- #include <fcntl.h>
-@@ -1480,6 +1481,86 @@ static void transact_test(int page_size)
- 			      extra_thread_faults);
- }
- 
-+bool is_use_zero_page_set(void)
-+{
-+	ssize_t bytes_read;
-+	char buffer[2];
-+	int fd;
-+
-+	fd = open("/sys/kernel/mm/transparent_hugepage/use_zero_page", O_RDONLY);
-+	if (fd < 0)
-+		return 0;
-+
-+	bytes_read = read(fd, buffer, sizeof(buffer) - 1);
-+	if (bytes_read <= 0) {
-+		close(fd);
-+		return 0;
-+	}
-+
-+	close(fd);
-+	if (atoi(buffer) != 1)
-+		return 0;
-+
-+	return 1;
-+}
-+
-+void zeropfn_tests(void)
-+{
-+	unsigned long long mem_size;
-+	struct page_region vec;
-+	int i, ret;
-+	char *mem;
-+
-+	/* Test with normal memory */
-+	mem_size = 10 * page_size;
-+	mem = mmap(NULL, mem_size, PROT_READ, MAP_PRIVATE | MAP_ANON, -1, 0);
-+	if (mem == MAP_FAILED)
-+		ksft_exit_fail_msg("error nomem\n");
-+
-+	/* Touch each page to ensure it's mapped */
-+	for (i = 0; i < mem_size; i += page_size)
-+		(void)((volatile char *)mem)[i];
-+
-+	ret = pagemap_ioctl(mem, mem_size, &vec, 1, 0,
-+			    (mem_size / page_size), PAGE_IS_PFNZERO, 0, 0, PAGE_IS_PFNZERO);
-+	if (ret < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+	ksft_test_result(ret == 1 && LEN(vec) == (mem_size / page_size),
-+			 "%s all pages must have PFNZERO set\n", __func__);
-+
-+	munmap(mem, mem_size);
-+
-+	/* Test with huge page if user_zero_page is set to 1 */
-+	if (!is_use_zero_page_set()) {
-+		ksft_test_result_skip("%s use_zero_page not supported or set to 1\n", __func__);
-+		return;
-+	}
-+
-+	mem_size = 10 * hpage_size;
-+	mem = memalign(hpage_size, mem_size);
-+	if (!mem)
-+		ksft_exit_fail_msg("error nomem\n");
-+
-+	ret = madvise(mem, mem_size, MADV_HUGEPAGE);
-+	if (!ret) {
-+		for (i = 0; i < mem_size; i += hpage_size)
-+			(void)((volatile char *)mem)[i];
-+
-+		ret = pagemap_ioctl(mem, mem_size, &vec, 1, 0,
-+				    (mem_size / page_size), PAGE_IS_PFNZERO, 0, 0, PAGE_IS_PFNZERO);
-+		if (ret < 0)
-+			ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+		ksft_test_result(ret == 1 && LEN(vec) == (mem_size / page_size),
-+				 "%s all huge pages must have PFNZERO set\n", __func__);
-+
-+		free(mem);
-+	} else {
-+		ksft_test_result_skip("%s huge page not supported\n", __func__);
-+	}
-+}
-+
- int main(int __attribute__((unused)) argc, char *argv[])
- {
- 	int shmid, buf_size, fd, i, ret;
-@@ -1494,7 +1575,7 @@ int main(int __attribute__((unused)) argc, char *argv[])
- 	if (init_uffd())
- 		ksft_exit_pass();
- 
--	ksft_set_plan(115);
-+	ksft_set_plan(117);
- 
- 	page_size = getpagesize();
- 	hpage_size = read_pmd_pagesize();
-@@ -1669,6 +1750,9 @@ int main(int __attribute__((unused)) argc, char *argv[])
- 	/* 16. Userfaultfd tests */
- 	userfaultfd_tests();
- 
-+	/* 17. ZEROPFN tests */
-+	zeropfn_tests();
-+
- 	close(pagemap_fd);
- 	ksft_exit_pass();
- }
--- 
-2.43.0
+> I don't understand.
 
+>
+> > If multiple function devices share the same EPC device, there will be
+> > no isolation between them. Setting the ID and 'of_node' prepares for
+> > proper support.
+
+Only share the same of_node.
+
+Actually pci host bridge have similar situation, all pci ep devices reuse
+bridge's of node. framework use rid to distringuish it. EPF can use device::id
+to do similar things.
+
+Actually iommu face the similar problem. So far, there are not EP device enable
+iommu yet, because it needs special mapping.
+
+Prevously, I consider create dymatic of_node for each EPF and copy iommu/msi
+information to each children. But when I see adp5585 case, I think direct
+use parent's of_node should be simple and good enough.
+
+In future, I suggest add children dt binding for it. For example: EPF provide
+a mailbox interface. how other dts node to refer to this mailbox's phandle?
+
+
+> >
+>
+> I don't know who you can provide *isolation* by reusing the EPC OF node. It is
+> same as using the EPC node directly.
+
+why it is same?
+
+Frank
+>
+> - Mani
+>
+> > Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> > ---
+> > change from v14 to v16
+> > - none
+> >
+> > change from v13 to v14
+> > new patch
+> > ---
+> >  drivers/pci/endpoint/pci-epf-core.c | 4 ++++
+> >  include/linux/pci-epf.h             | 2 ++
+> >  2 files changed, 6 insertions(+)
+> >
+> > diff --git a/drivers/pci/endpoint/pci-epf-core.c b/drivers/pci/endpoint/pci-epf-core.c
+> > index 577a9e490115c..95fb3d7c1d45e 100644
+> > --- a/drivers/pci/endpoint/pci-epf-core.c
+> > +++ b/drivers/pci/endpoint/pci-epf-core.c
+> > @@ -120,12 +120,16 @@ int pci_epf_bind(struct pci_epf *epf)
+> >  		epf_vf->sec_epc_func_no = epf->sec_epc_func_no;
+> >  		epf_vf->epc = epf->epc;
+> >  		epf_vf->sec_epc = epf->sec_epc;
+> > +		epf_vf->dev.id = PCI_EPF_DEVID(epf->func_no, vfunc_no);
+> > +		device_set_of_node_from_dev(&epf_vf->dev, epc->dev.parent);
+> >  		ret = epf_vf->driver->ops->bind(epf_vf);
+> >  		if (ret)
+> >  			goto ret;
+> >  		epf_vf->is_bound = true;
+> >  	}
+> >
+> > +	epf->dev.id = PCI_EPF_DEVID(epf->func_no, 0);
+> > +	device_set_of_node_from_dev(&epf->dev, epc->dev.parent);
+> >  	ret = epf->driver->ops->bind(epf);
+> >  	if (ret)
+> >  		goto ret;
+> > diff --git a/include/linux/pci-epf.h b/include/linux/pci-epf.h
+> > index 749cee0bcf2cc..c0864935c6864 100644
+> > --- a/include/linux/pci-epf.h
+> > +++ b/include/linux/pci-epf.h
+> > @@ -216,6 +216,8 @@ static inline void *epf_get_drvdata(struct pci_epf *epf)
+> >  	return dev_get_drvdata(&epf->dev);
+> >  }
+> >
+> > +#define PCI_EPF_DEVID(func_no, vfunc_no) ((vfunc_no) << 3 | (func_no))
+> > +
+> >  struct pci_epf *pci_epf_create(const char *name);
+> >  void pci_epf_destroy(struct pci_epf *epf);
+> >  int __pci_epf_register_driver(struct pci_epf_driver *driver,
+> >
+> > --
+> > 2.34.1
+> >
+> >
+>
+> --
+> மணிவண்ணன் சதாசிவம்
 
