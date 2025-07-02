@@ -1,63 +1,63 @@
-Return-Path: <linux-kselftest+bounces-36244-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36245-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 619A8AF08E4
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 05:05:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B12F0AF08E8
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 05:05:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7877A1C071C4
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 03:05:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8DC034E2CDA
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 03:05:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BF151D6DA9;
-	Wed,  2 Jul 2025 03:04:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4397C1C3C1F;
+	Wed,  2 Jul 2025 03:04:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="itN7fcnY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q96mLj3j"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B14322770B;
-	Wed,  2 Jul 2025 03:04:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 951071DE2A8;
+	Wed,  2 Jul 2025 03:04:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751425476; cv=none; b=RBUNlh6up//ikvpUDsHvRdFF781+WWJ01S4c93MdDhHSSttyJo3AS4qEhyJ5/luBCvfwLXNthFZQumQP8WXfzedSYhTf2kTCeAEE8Z9LuNF9UdDGqX3DhG2NREbn7jQBt7qxvD0iq6DtNBueP/RjOK6FP7UjMsxXYzyiEYdrWbs=
+	t=1751425481; cv=none; b=f59r7sC1UaN456dyZTS9wmPnzBpfPLzJp2Wty/y+yJ9Oi+Xb9axlwabrP4Kj+wsCYB6KYm2EaSnjrj2odXZHCIgmxkN9tb88cz5KiBg1lethGU/xDr/0rHnf0ZcdjYvk4/WuwAqJjEsZIFJdOrHwsYqo8q91abEQx0pmvri1q1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751425476; c=relaxed/simple;
-	bh=6VzUIVl7rOqTKTEIjM22aIEwtpdRzAbHjfEmET9YvGU=;
+	s=arc-20240116; t=1751425481; c=relaxed/simple;
+	bh=N/Ju9CTx2ChR+SLX12GIxOTP4pPLBnK+s0QZSnEJQR0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=bBV/XTTnXTy1bL3xft1+cNhItDED2wY4XwZkBccQTMgv540IvEs6WD5X/e9ewFQoucqUwaAgXNCpHdVbgPlhXC/CR68wGOTXAz8anyc9kezJFWJxOIpk7DNBn527QWh/aO4rnMNXjUEpUHK9F0uYmNunfUEYtLcRUf9zW1WGL+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=itN7fcnY; arc=none smtp.client-ip=198.175.65.10
+	 MIME-Version; b=otWKRJEE93kNsz0v1NWcjnyvB47LK+RvWpttCSJgDkLwA9edKQG2umpzOxH0Vd+ASyJmpdbp01pXLY0cIlGyEc7ke+aQKZGdVB0PmQdvlVSEGnO/S52EFJjqfYBDzJTPxtHcpKQv3b4T5xVsFrAAW0PkiyWXUieEY5jHuELB+qo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q96mLj3j; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751425474; x=1782961474;
+  t=1751425479; x=1782961479;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=6VzUIVl7rOqTKTEIjM22aIEwtpdRzAbHjfEmET9YvGU=;
-  b=itN7fcnYf5hmA7xvzstfkLtheUfPzIy0ZA1LcpsFKEXQ3gRVLm9nCtG8
-   RDThYRsmwTjMJRcgoypAnzJmfU/OeNVvoCcHZQDd484+LvS7/7NdIXut3
-   6+PHmSlZ6EvX7/nRrBeNMAQLzkhbYR/ULGdpxN+oU2ck99wxP7xtBi3ud
-   VmiCNmGq4FxKW2dzLm5LHnnU6y5u0SIM+QXJ6ZJKsLtHBRsQLVIoNDPzF
-   XTrCMK7iI41szzKAzWJvN/7cqFDzDHugNr1NWZjyQ63arkaieiWEDdpFm
-   JIcl7T68xh7Ms9fBrtC83owct3DgZ4ndU39+vuM3yM0TSMmpVVDB44IfO
-   w==;
-X-CSE-ConnectionGUID: mg33RTtWRoKo5NcbgyJktw==
-X-CSE-MsgGUID: Bn5WnCJiToeCNSVSPKyd8w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11481"; a="71132800"
+  bh=N/Ju9CTx2ChR+SLX12GIxOTP4pPLBnK+s0QZSnEJQR0=;
+  b=Q96mLj3jWqZebQilcAze2g6pj3Pw3CbYDFxPEVmX8Naqmj9+JQK+MZYU
+   r3+ukP68cq0x8yej1pP7j0F0/mot9hdC79lzrhdxCFYgICDOZT3QskF/y
+   UG/jNwDlsjKte6Kd1YOSQDEWHwxdRjgakp8YAZd35UPQa87/1Oot6ysIJ
+   xC95TDyndhR9m1dHlE6j6sCRVdnylaT8SXPA4HQqtmIkWeDmVBcdhb7Ly
+   HHKmFC9hAXpH6GCtO1/NvWnoAifujTInJzAg3IADO8AVlvUz/LKCErRbQ
+   vjyarRAJng6XEFwJ+ilF/v6pxEbvm+RuEYAwh2Swj9KpFISjcBQfLFzDk
+   g==;
+X-CSE-ConnectionGUID: JZJ8RwbZShekUO+NQ6kVnw==
+X-CSE-MsgGUID: Gm2OtYstRQmqv/RaM4xwuw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11481"; a="71132823"
 X-IronPort-AV: E=Sophos;i="6.16,280,1744095600"; 
-   d="scan'208";a="71132800"
+   d="scan'208";a="71132823"
 Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2025 20:04:33 -0700
-X-CSE-ConnectionGUID: 2tMagG+lR4aGZm6aEv6yQg==
-X-CSE-MsgGUID: q0EbIHsITgu3t6MdqPfdCw==
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2025 20:04:39 -0700
+X-CSE-ConnectionGUID: g3knVLkyTzulmTRFrLkusw==
+X-CSE-MsgGUID: UeiYLr6bTeu55Zvc68NCQw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,280,1744095600"; 
-   d="scan'208";a="153407664"
+   d="scan'208";a="153407683"
 Received: from p12ill20yoongsia.png.intel.com ([10.88.227.38])
-  by orviesa006.jf.intel.com with ESMTP; 01 Jul 2025 20:04:27 -0700
+  by orviesa006.jf.intel.com with ESMTP; 01 Jul 2025 20:04:33 -0700
 From: Song Yoong Siang <yoong.siang.song@intel.com>
 To: "David S . Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
@@ -85,9 +85,9 @@ Cc: netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next,v2 1/2] doc: clarify XDP Rx metadata layout and bpf_xdp_adjust_meta usage
-Date: Wed,  2 Jul 2025 11:03:48 +0800
-Message-Id: <20250702030349.3275368-2-yoong.siang.song@intel.com>
+Subject: [PATCH bpf-next,v2 2/2] selftests/bpf: Enhance XDP Rx Metadata Handling
+Date: Wed,  2 Jul 2025 11:03:49 +0800
+Message-Id: <20250702030349.3275368-3-yoong.siang.song@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250702030349.3275368-1-yoong.siang.song@intel.com>
 References: <20250702030349.3275368-1-yoong.siang.song@intel.com>
@@ -99,75 +99,97 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Expand the explanation of how METADATA_SIZE should be chosen to accommodate
-both device-reserved and custom metadata. Additionally, add a diagram to
-illustrate the calculation of the delta parameter for bpf_xdp_adjust_meta,
-including alignment and size constraints.
+Introduce the XDP_METADATA_SIZE macro to ensure that user applications can
+consistently retrieve the correct location of struct xdp_meta.
 
-These changes help users correctly allocate and access metadata in AF_XDP
-use cases.
+Prior to this commit, the XDP program adjusted the data_meta backward by
+the size of struct xdp_meta, while the user application retrieved the data
+by calculating backward from the data pointer. This approach only worked if
+xdp_buff->data_meta was equal to xdp_buff->data before calling
+bpf_xdp_adjust_meta.
+
+With the introduction of XDP_METADATA_SIZE, both the XDP program and user
+application now calculate and identify the location of struct xdp_meta from
+the data pointer. This ensures the implementation remains functional even
+when there is device-reserved metadata, making the tests more portable
+across different NICs.
 
 Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
 ---
- Documentation/networking/xdp-rx-metadata.rst | 38 ++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ tools/testing/selftests/bpf/prog_tests/xdp_metadata.c | 2 +-
+ tools/testing/selftests/bpf/progs/xdp_hw_metadata.c   | 2 +-
+ tools/testing/selftests/bpf/progs/xdp_metadata.c      | 2 +-
+ tools/testing/selftests/bpf/xdp_hw_metadata.c         | 2 +-
+ tools/testing/selftests/bpf/xdp_metadata.h            | 7 +++++++
+ 5 files changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/networking/xdp-rx-metadata.rst b/Documentation/networking/xdp-rx-metadata.rst
-index a6e0ece18be5..61418f533e0e 100644
---- a/Documentation/networking/xdp-rx-metadata.rst
-+++ b/Documentation/networking/xdp-rx-metadata.rst
-@@ -54,6 +54,19 @@ area in whichever format it chooses. Later consumers of the metadata
- will have to agree on the format by some out of band contract (like for
- the AF_XDP use case, see below).
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
+index 19f92affc2da..8d6c2633698b 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
+@@ -302,7 +302,7 @@ static int verify_xsk_metadata(struct xsk *xsk, bool sent_from_af_xdp)
  
-+It is important to note that some devices may utilize the ``data_meta`` area for
-+their own purposes. For example, the IGC device utilizes ``IGC_TS_HDR_LEN``
-+bytes of the ``data_meta`` area for receiving hardware timestamps. Therefore,
-+the XDP program should ensure that it does not overwrite any existing metadata.
-+The metadata layout of such device is depicted below::
-+
-+  +----------+-----------------+--------------------------+------+
-+  | headroom | custom metadata | device-reserved metadata | data |
-+  +----------+-----------------+--------------------------+------+
-+             ^                                            ^
-+             |                                            |
-+   xdp_buff->data_meta                              xdp_buff->data
-+
- AF_XDP
- ======
+ 	/* custom metadata */
  
-@@ -76,6 +89,31 @@ Here is the ``AF_XDP`` consumer layout (note missing ``data_meta`` pointer)::
-                                |
-                         rx_desc->address
+-	meta = data - sizeof(struct xdp_meta);
++	meta = data - XDP_METADATA_SIZE;
  
-+It is crucial that the agreed ``METADATA_SIZE`` between the BPF program and the
-+final consumer is sufficient to accommodate both device-reserved metadata and
-+the data the BPF program needs to populate. When calling
-+``bpf_xdp_adjust_meta``, the input parameter ``delta`` should be calculated as
-+``METADATA_SIZE - (xdp_buff->data - xdp_buff->data_meta)``.
-+
-+The diagram below provides a visual representation of the calculation of
-+``delta`` and the overall metadata layout::
-+
-+             |<-------------------METADATA_SIZE------------------->|
-+  +----------+--------------------------+--------------------------+------+
-+  | headroom |      custom metadata     | device-reserved metadata | data |
-+  +----------+--------------------------+--------------------------+------+
-+             ^                          ^                          ^
-+             |                          |                          |
-+  new xdp_buff->data_meta    old xdp_buff->data_meta        xdp_buff->data
-+             |                          |
-+             |<----------delta--------->|
-+
-+``bpf_xdp_adjust_meta`` ensures that ``METADATA_SIZE`` is aligned to 4 bytes,
-+does not exceed 252 bytes, and leaves sufficient space for building the
-+xdp_frame. If these conditions are not met, it returns a negative error. In this
-+case, the BPF program should not proceed to populate data into the ``data_meta``
-+area.
-+
- XDP_PASS
- ========
+ 	if (!ASSERT_NEQ(meta->rx_timestamp, 0, "rx_timestamp"))
+ 		return -1;
+diff --git a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
+index 330ece2eabdb..3766f58d3486 100644
+--- a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
++++ b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
+@@ -72,7 +72,7 @@ int rx(struct xdp_md *ctx)
+ 		return XDP_PASS;
+ 	}
  
+-	err = bpf_xdp_adjust_meta(ctx, -(int)sizeof(struct xdp_meta));
++	err = bpf_xdp_adjust_meta(ctx, -(int)XDP_METADATA_SIZE);
+ 	if (err) {
+ 		__sync_add_and_fetch(&pkts_fail, 1);
+ 		return XDP_PASS;
+diff --git a/tools/testing/selftests/bpf/progs/xdp_metadata.c b/tools/testing/selftests/bpf/progs/xdp_metadata.c
+index 09bb8a038d52..5cada85fe0f4 100644
+--- a/tools/testing/selftests/bpf/progs/xdp_metadata.c
++++ b/tools/testing/selftests/bpf/progs/xdp_metadata.c
+@@ -73,7 +73,7 @@ int rx(struct xdp_md *ctx)
+ 
+ 	/* Reserve enough for all custom metadata. */
+ 
+-	ret = bpf_xdp_adjust_meta(ctx, -(int)sizeof(struct xdp_meta));
++	ret = bpf_xdp_adjust_meta(ctx, -(int)XDP_METADATA_SIZE);
+ 	if (ret != 0)
+ 		return XDP_DROP;
+ 
+diff --git a/tools/testing/selftests/bpf/xdp_hw_metadata.c b/tools/testing/selftests/bpf/xdp_hw_metadata.c
+index 3d8de0d4c96a..a529d55d4ff4 100644
+--- a/tools/testing/selftests/bpf/xdp_hw_metadata.c
++++ b/tools/testing/selftests/bpf/xdp_hw_metadata.c
+@@ -223,7 +223,7 @@ static void verify_xdp_metadata(void *data, clockid_t clock_id)
+ {
+ 	struct xdp_meta *meta;
+ 
+-	meta = data - sizeof(*meta);
++	meta = data - XDP_METADATA_SIZE;
+ 
+ 	if (meta->hint_valid & XDP_META_FIELD_RSS)
+ 		printf("rx_hash: 0x%X with RSS type:0x%X\n",
+diff --git a/tools/testing/selftests/bpf/xdp_metadata.h b/tools/testing/selftests/bpf/xdp_metadata.h
+index 87318ad1117a..2dfd3bf5e7bb 100644
+--- a/tools/testing/selftests/bpf/xdp_metadata.h
++++ b/tools/testing/selftests/bpf/xdp_metadata.h
+@@ -50,3 +50,10 @@ struct xdp_meta {
+ 	};
+ 	enum xdp_meta_field hint_valid;
+ };
++
++/* XDP_METADATA_SIZE must be at least the size of struct xdp_meta. An additional
++ * 32 bytes of padding is included as a conservative measure to accommodate any
++ * metadata areas reserved by Ethernet devices. If the device-reserved metadata
++ * exceeds 32 bytes, this value will need adjustment.
++ */
++#define XDP_METADATA_SIZE	(sizeof(struct xdp_meta) + 32)
 -- 
 2.34.1
 
