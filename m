@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-36337-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36338-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CADB1AF5BD4
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 16:55:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39B8EAF5C0E
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 17:03:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0E6BC177FBC
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 14:55:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 32169522EEF
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 15:01:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E543330AACC;
-	Wed,  2 Jul 2025 14:55:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 730B11531E3;
+	Wed,  2 Jul 2025 15:01:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X4dOc7rR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mFPz1ekK"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B108017A316;
-	Wed,  2 Jul 2025 14:55:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FCF72D0C61;
+	Wed,  2 Jul 2025 15:01:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751468137; cv=none; b=eUZyFWGTQRH1Z97lryY/PXKEDiH32n0ZxTPyVWN+VOcizz5Kx+zATt6U5AF2dFPxlYWv3ApbEBNbCjwZqNF9LevB6u59kspDJkXTn4qPw/22ZUgdW360ywvSESwyDEoNJTJEcZyjWaN870J9iPS9Ydq/ZaCQPxvBTlZu+TRr8Rk=
+	t=1751468504; cv=none; b=K5tTxEw6fO+XgTQYcRcfVpi+S+x28oQbIfmAriuooZF9gYoByZECwqladuOwv6bHijJFE3ZFBVLbY60CHjcLh1cGHusjsQYUD6W3I5Aq4wJVv9WX5ZNFPO2WA0phKVw4TrhsjYu6g83UyJozNTWzvxfoe6q2Qqose1r9g57t50A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751468137; c=relaxed/simple;
-	bh=odc42PZm0xJO0diX1K58N47iddxW3a0F4HZfOHM34QQ=;
+	s=arc-20240116; t=1751468504; c=relaxed/simple;
+	bh=SaHDZ4wIBsKxb9s+1iRJfvfGTvCsTriRDi+uhUgl3qs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mhmtbFsk30+RmabzEz3wqq1ScH147T2X8n47JiyojZVeoZRRbXhvJ0qxja9sg48C3Jkzm53y9EdpxYlI+wk9iiTXc4GZpNlu4UMP24Xg2K6po+Wa5voeJRF0JjtpmVJVfDIAb/mnM1yOXZaCvLrTdnGbLpIbX3NTR40micnw85I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X4dOc7rR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7004C4CEE7;
-	Wed,  2 Jul 2025 14:55:27 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=IeEN72xbTZF9XQarSUSZGsOt1E+ZAKaTLbWdgRCaZ8nYAkM7ZzK6RCcD8r/FfWIzYGUtC6zuMozOneWegmGcmhMRGxNap8yGDJXF5ANIR11y2lDHp0+vajB+WVVNWQORP1/RUkCuNZ7PIWe1SXgG7s8TgHjA6pmcAr55/4XFsAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mFPz1ekK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D895C4CEE7;
+	Wed,  2 Jul 2025 15:01:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751468137;
-	bh=odc42PZm0xJO0diX1K58N47iddxW3a0F4HZfOHM34QQ=;
+	s=k20201202; t=1751468503;
+	bh=SaHDZ4wIBsKxb9s+1iRJfvfGTvCsTriRDi+uhUgl3qs=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=X4dOc7rRMoTUrPqkvoVH5KlxVpdU6iDMm2rDEi+KlTjIIDv+7QNH9XaqWCWQj4OoT
-	 zbzjAWxc3IYGTwZrkS3cvU9VHATYI/yGlBu2sn96cJrffqibdZeCa/0G4jjmoziguF
-	 GlZ3vbYwRHql8BA9Q4SCt1HgQ7URRolg7gqp0ShtPK2P37mdoegDMOHpDzVqW/vTRa
-	 BrrmyEINlk52COqWZhKyeTsDkIsaKHvntPkZmJYEYD533pltwZ5NWi8gTlrABTWN5V
-	 Yucf/dcJQpMPS0K9YHh5kyNeSkz9kiXrM1c4UZgPuQrVSMQEwf4s4UXaij+akTO8KS
-	 jFhyFmMdklDiA==
-Date: Wed, 2 Jul 2025 20:25:17 +0530
+	b=mFPz1ekKdZbVNAz4rJGd5xyY5sZ4nqGJ+5hipsT580I38dRu8oiRtgERhYUGL17Dw
+	 OLLSrukOiRKQqk1QszwYYUfSyffBrcBmdkpPPNk722l6XE4DDnPXgt9jnW+IsfOyWg
+	 6nk2yLMejqVFloDl7E6PNxNapikx72jx4TufUVvI/x/j6wsdr9dRdnfmkOQmQH5XC5
+	 9Rcyq+yh2Q9iNexx2zcOy7LZXMM6pb5OQoWn+Bq4f6vfz1n8To/nIOmhdfdvQ+DrGT
+	 egmcTbxiUt3JJ413o+IYnU53CQrO2X3C1AeROg3WY7ywthUO4zhjGX8Z9udVC3wkXp
+	 Kr8PhJFJNpprQ==
+Date: Wed, 2 Jul 2025 20:31:25 +0530
 From: Manivannan Sadhasivam <mani@kernel.org>
 To: Frank Li <Frank.li@nxp.com>
 Cc: Kishon Vijay Abraham I <kishon@kernel.org>, 
@@ -57,13 +57,13 @@ Cc: Kishon Vijay Abraham I <kishon@kernel.org>,
 	Niklas Cassel <cassel@kernel.org>, dlemoal@kernel.org, jdmason@kudzu.us, 
 	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org, 
 	linux-kselftest@vger.kernel.org, imx@lists.linux.dev, devicetree@vger.kernel.org
-Subject: Re: [PATCH v19 01/10] PCI: endpoint: Set ID and of_node for function
- driver
-Message-ID: <75opnvi46fbmsnmykjwn3gmir7r3uqhzp7tfoua42cado6aopu@dmos2v2qd3jn>
+Subject: Re: [PATCH v19 03/10] PCI: endpoint: pci-ep-msi: Add MSI
+ address/data pair mutable check
+Message-ID: <tkamojjbdfrwhvgyufcncikl6fkndedfyzm5ebo7qof66s4gmu@mjsgrcfdkms5>
 References: <20250609-ep-msi-v19-0-77362eaa48fa@nxp.com>
- <20250609-ep-msi-v19-1-77362eaa48fa@nxp.com>
- <ne5yrjtdevmndqds4uwo2ppq6gay2wuwjouyf33lqr5g3nfkwr@lkwqlwqjqbmx>
- <aGVE6veZm3bL0mVJ@lizhi-Precision-Tower-5810>
+ <20250609-ep-msi-v19-3-77362eaa48fa@nxp.com>
+ <5axgxbtyqbwwncimjiiedvkm3ap7at553vgj72bht4kynke5cd@xfghwfmp6cy7>
+ <aGVFWgnAIwWOnLjK@lizhi-Precision-Tower-5810>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,63 +73,65 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <aGVE6veZm3bL0mVJ@lizhi-Precision-Tower-5810>
+In-Reply-To: <aGVFWgnAIwWOnLjK@lizhi-Precision-Tower-5810>
 
-On Wed, Jul 02, 2025 at 10:40:53AM GMT, Frank Li wrote:
-> On Wed, Jul 02, 2025 at 04:30:48PM +0530, Manivannan Sadhasivam wrote:
-> > On Mon, Jun 09, 2025 at 12:34:13PM GMT, Frank Li wrote:
-> > > Set device ID as 'vfunc_no << 3 | func_no' and use
-> > > 'device_set_of_node_from_dev()' to set 'of_node' the same as the EPC parent
-> > > device.
+On Wed, Jul 02, 2025 at 10:42:43AM GMT, Frank Li wrote:
+> On Wed, Jul 02, 2025 at 05:00:23PM +0530, Manivannan Sadhasivam wrote:
+> > On Mon, Jun 09, 2025 at 12:34:15PM GMT, Frank Li wrote:
+> > > Some MSI controller change address/data pair when irq_set_affinity().
+> > > Current PCI endpoint can't support this type MSI controller. Call
+> > > irq_domain_is_msi_immutable() check if address/data pair immutable.
 > > >
-> > > Currently, EPF 'of_node' is NULL, but many functions depend on 'of_node'
-> > > settings, such as DMA, IOMMU, and MSI. At present, all DMA allocation
-> > > functions use the EPC's device node, but they should use the EPF one.
-> > > For multiple function drivers, IOMMU/MSI should be different for each
-> > > function driver.
+> > > Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> > > ---
+> > > change in v18
+> > > - update commit message. remove 'include/linux/msi.h' part.
 > > >
+> > > change from v14 to v17
+> > > - none
+> > >
+> > > change from  v13 to v14
+> > > - bring v10 back
+> > >
+> > > Change from v9 to v10
+> > > - new patch
+> > > ---
+> > >  drivers/pci/endpoint/pci-ep-msi.c | 8 ++++++++
+> > >  1 file changed, 8 insertions(+)
+> > >
+> > > diff --git a/drivers/pci/endpoint/pci-ep-msi.c b/drivers/pci/endpoint/pci-ep-msi.c
+> > > index 549b55b864d0e..c0e2d806ee658 100644
+> > > --- a/drivers/pci/endpoint/pci-ep-msi.c
+> > > +++ b/drivers/pci/endpoint/pci-ep-msi.c
+> > > @@ -44,6 +44,14 @@ int pci_epf_alloc_doorbell(struct pci_epf *epf, u16 num_db)
+> > >
+> > >  	dev_set_msi_domain(dev, dom);
+> > >
+> > > +	if (!irq_domain_is_msi_parent(dom))
+> > > +		return -EINVAL;
 > >
-> > We don't define OF node for any function, so device_set_of_node_from_dev() also
-> > ends up reusing the EPC node. So how can you make use of it in multi EPF setup?
-> 
-> In mfd devices, children devices reuse parent's of_node
-> drivers/gpio/gpio-adp5585.c
-> drivers/input/keyboard/adp5589-keys.c
-> drivers/pwm/pwm-adp5585.c
-> 
-> multi EPF should be similar to create multi children devices of mfd.
-> 
-
-No, they are not similar. MFD are real physical devices, but EPFs are (so far)
-software based entities.
-
-> > I don't understand.
-> 
+> > This check is not justified in commit message.
 > >
-> > > If multiple function devices share the same EPC device, there will be
-> > > no isolation between them. Setting the ID and 'of_node' prepares for
-> > > proper support.
+> > > +
+> > > +	if (!irq_domain_is_msi_immutable(dom)) {
+> > > +		dev_err(dev, "Can't support mutable address/data pair MSI controller\n");
+> > > +		return -EINVAL;
+> >
+> > GICv3 ITS is an immutable MSI controller. From the earlier patches, I could see
+> > that you have tested this series with ITS. How did that happen if it errors out
+> > here?
 > 
-> Only share the same of_node.
-> 
-> Actually pci host bridge have similar situation, all pci ep devices reuse
-> bridge's of node. framework use rid to distringuish it. EPF can use device::id
-> to do similar things.
-> 
-> Actually iommu face the similar problem. So far, there are not EP device enable
-> iommu yet, because it needs special mapping.
-> 
-> Prevously, I consider create dymatic of_node for each EPF and copy iommu/msi
-> information to each children. But when I see adp5585 case, I think direct
-> use parent's of_node should be simple and good enough.
-> 
-> In future, I suggest add children dt binding for it. For example: EPF provide
-> a mailbox interface. how other dts node to refer to this mailbox's phandle?
+> I removed IMMUTASBLE flags in ITS driver to check if go to this error branch.
 > 
 
-As I said above, EPFs are not real devices. There is currently only one
-exception, MHI, which is backed by a hardware entity. So we cannot add
-devicetree nodes for EPF, unless each EPF is a hardware entity.
+Sorry, I misread the check and got confused by the error message. Presence of
+IMMUTABLE flag is required by this driver, which is fine. Please reword the
+error message to,
+
+	"MSI controller not supported\n"
+
+If one bothers to check why, the !irq_domain_is_msi_immutable() check is self
+explanatory.
 
 - Mani
 
