@@ -1,111 +1,110 @@
-Return-Path: <linux-kselftest+bounces-36295-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36296-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F40BCAF116F
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 12:17:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CD19AF119D
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 12:21:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6BFDA1C2558F
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 10:17:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E8D34A2711
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 10:20:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E44D2472B1;
-	Wed,  2 Jul 2025 10:17:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ABBB219A86;
+	Wed,  2 Jul 2025 10:19:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PncWELkh"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="f3EfSGv4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C40681DF27E
-	for <linux-kselftest@vger.kernel.org>; Wed,  2 Jul 2025 10:17:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B261C238C1D
+	for <linux-kselftest@vger.kernel.org>; Wed,  2 Jul 2025 10:19:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751451440; cv=none; b=HwTB8xxVJYmNPRL4RX4tWeg9acYbW2eCvlo6xl4v8QpTo1+CjB88yxRpDMxrpWMjxlCyiLrp/AEkYjEYtvbrRi5C5+b5+w+GtnhaSfrcIES8wziOaUgwOC0jsKYFmjrv+/WAb50LftmxxaN5oNHX2XCn/h64ck3KksH8BINkSyU=
+	t=1751451598; cv=none; b=UAuqnjTQySiljSk641l1yx2OVSLRPyOqCGOm+meVHP8NT3DTtTgazV/DZ3FHXMqEzuDA8NwjkMikqPNQnDjTH7NnB0LCWSBh9qFG2uRTf63Fq8mZFqr91+ITtS8CsP3pydlnouMrNNHs1AE9KvsH2GsP5oPFAsbtDLWiIf01cNk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751451440; c=relaxed/simple;
-	bh=OQXKIEV7E/i3m2568pnhNxUhnfzOk+xoGPAzZX26p2g=;
+	s=arc-20240116; t=1751451598; c=relaxed/simple;
+	bh=QMSg+H9E85nSP8AMVhfKPz+3Q4Lbs/NOUsOvvYe5PHE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=b5u8YUHPubrFd34MO98usxDbY6bndQQojjzmtAk8Gm2TkBP+P1gQevo5SYG9uCIcvL0TegYDnOxHvHRuqambz0r/ySa1jWCxgeUG/wvDAtTRlBe+JNF24OhpRp+tQ8MxXvWyD8BrtmQvT+wYR7bpB5lZ4AiAcwshniz3mlHrJlM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PncWELkh; arc=none smtp.client-ip=209.85.128.172
+	 To:Cc:Content-Type; b=eKUgRfjGRFFQlKRjFV3roaJI02Zbs8mzKzlHedNnOXAnmWvoUKg3sIWoVyKXoEPpCsn/9L5Zg3ncywY46oPnVT3q+4gcUYv4qLHL2ooA2KDCfC+iBc3VsOy9ROPLv9TDSlbsWoSKwsV3FjdvUnNwfUqToAz9oBCz7c5SMvaaIE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=f3EfSGv4; arc=none smtp.client-ip=209.85.128.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-711a3dda147so72151567b3.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Jul 2025 03:17:18 -0700 (PDT)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-70e77831d68so45035367b3.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Jul 2025 03:19:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1751451438; x=1752056238; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1751451596; x=1752056396; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=OQXKIEV7E/i3m2568pnhNxUhnfzOk+xoGPAzZX26p2g=;
-        b=PncWELkhYStIDYvpkt+cmLi7ceI/MofG9FKaUWvhVtX9ofMSsD5BZAujzKYZeVgJVs
-         t5HSNQhofqMPKHNfIeXWEvkAyYA0U9XM9KatJuTxoN0yDgyWnpndEdlu6LNMQQ9VMcqv
-         PM2TTpOvd9+Elb+lkD/ben5swF79YAN7A0oxo0KEqxzpgA4c7kqm/IxPUbTGrz+0JFQE
-         +N7Pb+kniaZcR9XiyO+hJjbksJ4dRskhEJ2qZ6kwndynMBfX0bdB2s/BNeUkGWgInv8g
-         XAy/UbR9lmPv9+hTiPwuXkgHbjS05hVg7h5BZaPizZUWt7ael40h08qsla7QkOxMnRXW
-         rKuA==
+        bh=QMSg+H9E85nSP8AMVhfKPz+3Q4Lbs/NOUsOvvYe5PHE=;
+        b=f3EfSGv4GqYgqO4MpVUaeaCURwtltoNVPUFLJDWZKbvKM2wwvfXRTI6Ucg3x4Iftu/
+         VhyTnD7eFf/M+kEnoCsCNUGV9T53rUo0iXT/qTa+cVmegjUE/8McUYQWu5oeh7M1xJyo
+         G7qwbb3wXv6/l4bIA8oxKnxJY9tX3r+5q5FhXPvZCsQ9/vV9p08GYahxrKRp10NhXcGY
+         TiASsYjaqAhwzWruG2q//MeDhnfIkBLYkLFEsXH3vjM5wfMZX46sND6KROsim3SLlKY+
+         VC9fmMQWqC1ViRILbAlaT2QzGxEG/+TPakDm1UGFaSwu+BMnKevPadk4nXgxa2vx57HU
+         L3wA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751451438; x=1752056238;
+        d=1e100.net; s=20230601; t=1751451596; x=1752056396;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=OQXKIEV7E/i3m2568pnhNxUhnfzOk+xoGPAzZX26p2g=;
-        b=NhUhD/dFoNkUkVDcSnnpYg9r/78MYEMmTIFF1GI0KKBXXvnlvOh5yQMls8EfmM4Vfd
-         o92uU9SyRsBkkMcXQ6Y45+iAC0khnqOjR9b40RQFpTwCQOW2SbSI+qnh6/ec6SbsMqDe
-         5EQf/yE6es7qapIC4ixIoIZ3XVLCswjXIlUGRhSjFqn2ZFgoFQPeDVpYUMn/Zl+R0aC7
-         FCaY5fJCRizdxCWREW1tGJ9ufNryvPM2HL4I7hRfVNZgq+NAwtNoCarIFVydbAPTQFmT
-         XJ3EUkdsqsIGYXoZFDZeMOZpokm+s/H4I+IS6AZxkMZoBOPI/WMoSEApudMIAVOwGtZV
-         pAUA==
-X-Forwarded-Encrypted: i=1; AJvYcCXLhnqhpyvrxgc9cfhujVxZvqqx6nhUXW1FfqBsb6nnbxIPHVIZ6745R1KN/x6yRNFgayEntZKBaVH7NsGKgw4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxrDJyIQXFEce/wP/kzW7qLyickLUXXljmhlf2ZzYRjZcLImySk
-	fQq5RgdFIwA6jbFdJGBcHDqDQ32peiN9RGUdxlbBwMNgrS1dkfGa7t31nbe0/VxYeG1Cq38UgzK
-	yGAEsOKoKglbMx0eVSf/CF0D1PNH13OrR32bkiFwHBg==
-X-Gm-Gg: ASbGncseafGhUAj85ZrT9Q8WOPT9rJGyNAmLBaAfyPSQG9cIIFDI2LL3VVIiLGqzvi1
-	TjL99sKfZ18S3YfTFAVbg4/RuONetY9Iz5Ya/W+tgPynPJAl2bcfF+gKE02ucGilmKmg3V5T4h4
-	WapZxWuUdBU2r024o932AJon550ZazSz9X51IDz6lj93868yxEUrKuBA==
-X-Google-Smtp-Source: AGHT+IFkxNQMKBmmJ9CHpNmpP2Eu7W4sPO7KthCl2z1kt7FCPHBJbjsCw8uI9+EZQUZEtSbd0EqItRiyQR16Ssqrmf4=
-X-Received: by 2002:a05:690c:4a0b:b0:6fb:a696:b23b with SMTP id
- 00721157ae682-7164d571f91mr29995547b3.33.1751451437681; Wed, 02 Jul 2025
- 03:17:17 -0700 (PDT)
+        bh=QMSg+H9E85nSP8AMVhfKPz+3Q4Lbs/NOUsOvvYe5PHE=;
+        b=MO9P5nskDpkgnlIJKrPgbVXTJN5W+FzQEu8vpC0jxSxHPS3O+IJvaPc3itL4mgwvGJ
+         TzJqNyVUmyxO7QGmo5Qrp2q1BaYUhgDDGanezpeyRKw5kD5AKN/qpH74IyFMAHgdAtCh
+         c5aObOlBTgzC1k3dZHLjBYJs0Ov+72BVqdJ93RGpGy8rLNE4v+4hyNclmpxGJVN9jdSS
+         75vsgwjvkdLPgsEuvgqURSJPvYkCzbfPgGvb8toOCiykjBFBCDs3aito94tHYB90nAeM
+         UdDib5yliGaTCbat783xtwhHeVVwMkSbmvQ7pTTCoiXkF+B+9+z3A6dr9a1yHbqQKOpw
+         Pz1w==
+X-Forwarded-Encrypted: i=1; AJvYcCUznLhoieI/d2FHrZ+U8CELgUSxhJdYM6OPS6/uxN2Su3I93wLNhHOl1vWWW7dv6Ns0AYLWQCg8pndqeqcEkK8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyxBJjF79ewkPOMYLaaoZjheRVYvG7PGIC4O6arTmi9CuLPlmxH
+	SSfepbndTtRde9ilpsCk2zQBKBv7/G1IuforH90ihfH7gk01v65xAqbjpRW6cU6edEybOSUlUpU
+	TbPdaYWOb6K0Byx3SAD5/xNtIFlkkRQCQyaq1GhhXAQ==
+X-Gm-Gg: ASbGncsaV//EiuSkyT0gS3X07d24dd0HwVjAGpTsMxL3rTE9IHHt2ppB0c7n0DSxLhv
+	SO4kKXEw9ZLmDMqZpko19TixgAgqpNmxC60itkbMqgLq38qJxDLSnO5IZSDT64/H8uvjchpZDhv
+	PCIFeOIL1Rs6KE8ZddAbhx9ajgfkXz7EMx+omX1mMcQFA=
+X-Google-Smtp-Source: AGHT+IHG/1GissPVmpknsYzFHMpB6ytPy9MhshgzbgoGfNZ2rCgq5NLTEQSFfMSr0XJegByETigg6aj5tsl8WILZc8k=
+X-Received: by 2002:a05:690c:6802:b0:70c:d256:e7fc with SMTP id
+ 00721157ae682-7164d3f9161mr27758297b3.21.1751451595695; Wed, 02 Jul 2025
+ 03:19:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250701142313.9880-1-terry.tritton@linaro.org> <87ikkblkff.ffs@tglx>
-In-Reply-To: <87ikkblkff.ffs@tglx>
+References: <20250701142313.9880-1-terry.tritton@linaro.org>
+ <87ikkblkff.ffs@tglx> <aGUggwe_gJon_2E3@MiWiFi-CR6608-srv>
+In-Reply-To: <aGUggwe_gJon_2E3@MiWiFi-CR6608-srv>
 From: Terry Tritton <terry.tritton@linaro.org>
-Date: Wed, 2 Jul 2025 11:17:06 +0100
-X-Gm-Features: Ac12FXzqBxkveVShIhOUpDdDjk97AbKpwZ2ofDUlNcnP0hGUSjlvZVzO9wDFzKE
-Message-ID: <CABeuJB3voQYT0FZ2ETBL_OVW6Lec6bOntLfKQd_J-huJJOyzHA@mail.gmail.com>
+Date: Wed, 2 Jul 2025 11:19:44 +0100
+X-Gm-Features: Ac12FXyuLh0QFcbaVWbl5yokqfl7teNpNT1gidQEcqC-rhZCYHiTlieQ4JcBwVo
+Message-ID: <CABeuJB15QXyxSgB60VokSRFVGBRQJfcTNcwuX_wMzrNqmSz0PQ@mail.gmail.com>
 Subject: Re: [PATCH v2] selftests/futex: Convert 32bit timespec struct to
  64bit version for 32bit compatibility mode
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+To: Wei Gao <wegao@suse.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
 	Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>, 
 	Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
 	ttritton@google.com, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Wei Gao <wegao@suse.com>
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-> > Signed-off-by: Wei Gao <wegao@suse.com>
-> > Signed-off-by: Terry Tritton <terry.tritton@linaro.org>
+> > > Signed-off-by: Wei Gao <wegao@suse.com>
+> > > Signed-off-by: Terry Tritton <terry.tritton@linaro.org>
+> >
+> > This is still wrong.
+> >
+> > If it is based on someone else work, then you need to attribute it
+> > Originally-by and omit the Signed-off-by of the original author.
+> >
+> > If you just picked it up and adopted it to a later kernel version then
+> > you need to add 'From: Original Author' and preserve his Signed-off-by.
 >
-> This is still wrong.
->
-> If it is based on someone else work, then you need to attribute it
-> Originally-by and omit the Signed-off-by of the original author.
->
-> If you just picked it up and adopted it to a later kernel version then
-> you need to add 'From: Original Author' and preserve his Signed-off-by.
->
-> If you collaborated with him, then you want to use Co-developed-by.
->
-> All of this is documented in Documentation/process/
->
+> @Terry @Thomas, Thank you both for the mention in the commit. I appreciate being included.
+> I guess above options both good.
 
-Ah sorry, I thought it was just the order that was wrong.
-
-Thanks for pointing me in the right direction!
+No problem!
+Not sure how often this situation comes up where an ltp patch is also
+needed in kselftest.
 
