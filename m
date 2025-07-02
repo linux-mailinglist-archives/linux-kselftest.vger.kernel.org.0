@@ -1,128 +1,95 @@
-Return-Path: <linux-kselftest+bounces-36228-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36322-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FE44AF0728
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 02:06:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6341FAF58A8
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 15:25:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 77BD41C0698C
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 00:06:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DBD1B4E1DB4
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 13:22:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9154410F2;
-	Wed,  2 Jul 2025 00:06:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="CVNb94Iv"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CC9628750D;
+	Wed,  2 Jul 2025 13:19:38 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EB6B184
-	for <linux-kselftest@vger.kernel.org>; Wed,  2 Jul 2025 00:06:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 292ED2874E0;
+	Wed,  2 Jul 2025 13:19:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751414766; cv=none; b=tMEfFQK+HVDZfIdrPFxXGWC22C6njhEMhBRGUxDBxl1t/vjqazp1LUxUScvWnRhj14dy7YWmtGXp46kxO4d7lZtr/TDyegM5jJihSP1ICAKkFzkSyjLdE6xlPOlivi8C+QWtPFKM+gp59hxbzW1Aw3EsJ7FYGn5NmEPuEfjldn0=
+	t=1751462378; cv=none; b=PdsOgiZgXI568l8YZV30QBAUadedVCcRmCYTa/cDGAUU8AVd9rrbAYBXgCzgab5181noG8ZLlVz1NAqT3G70HlpBLfGTQH1Zod8h7fGKydUIpSpGEIEUsxfAwZwp+/eQvo1H51bDaE5x/FsjgY0ytljH+sFC5DlLpy+0KI6B1zY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751414766; c=relaxed/simple;
-	bh=bIMTi4MWsgaUbmZu8ndOxvFLqagge7bVFXfE8u72634=;
+	s=arc-20240116; t=1751462378; c=relaxed/simple;
+	bh=tuVAUH59+l/O8UCrXTZ5Z+cA00nPP9nSSO/OIl+MgdQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HLQTqnwVDan1zgKaRnvxXOnOIMsow+chh2q9piFx3EtlmVYvjIxwp6OYQAXeeQvMT+wqvbLj9TQbOTiregFq51jkeMGBsA8M9dEFi3BBOWbD19TvXMP+VAj21jlxpQ1W9l8Hx3cXFp8DuXmeZ0x/k8A0GalgY7WMnx9s0gs8nuM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=CVNb94Iv; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3a548a73ff2so5556609f8f.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 01 Jul 2025 17:06:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1751414760; x=1752019560; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ce3zDRJVoRRIoVuOih+y1uZIYHn+OOhDiG27OLlb9rE=;
-        b=CVNb94IvQLjV3Kc0WC6Ibs+Hn96TZhMGBiKW0BKCKqBQ/sFqmF8HLm7AQUDUtwqAF5
-         P4svXkkMAxLVTWrrF7uLZUjdace7iRHzoET/dR+5G9BMn64vwp8OcDUU2h81O41g8kV+
-         RDHL7G9RcMRjTwfBpDBDQi2QDm0w/RyiptwPLehfdv7Y0yXGeRNwCMwvx4cnngNMO4lc
-         mVg8pEanOfRbrUKOmPkQFIIBAk6mqV7Q1BUjBaNQMGET9F/atmK+hTYylh5hOTa7VBbz
-         MAFBmwvN5C46Shv1i+iv7K07DHXgxLZWHFPygr6k1W6aVQcR0neULyutljOw5NvQ3kgL
-         JboA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751414760; x=1752019560;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ce3zDRJVoRRIoVuOih+y1uZIYHn+OOhDiG27OLlb9rE=;
-        b=DsP9aL1Gv+AxswR+/6/5Q2dxZlcI6X6tEyJMnAb943Y5sMVl/hUkGTC9Nsmz7s/DOf
-         F+WW0upMSFXoE1a/TQis1AlqQ8U7B646Caz/DHFify07mBIbzdiGb/QH6Kzh6oZNIMoA
-         qwnSppzkIPfDj9LA9DF63whag2vgXVR5Esn1U8QVjzXoNZ3Iimn45jFFcK18kgnuhxCU
-         tp1J8fx+OCPsbdPrvjGRlhe+I7SrPLwVEa3ytAz0NDi/R3+PnZ00TgZ/VrUJbO+NOAzc
-         u0t67V2V9Zz8YXVP8yJGGcYZBwo+omvYMgKk+r4REnqjDdf1mRjOqk7+qxXxbCo7Bwl4
-         HHWg==
-X-Forwarded-Encrypted: i=1; AJvYcCW+9eqWwjeL77UjXL500jH23a8uhQGbwQyDfMaELaxSI42mwLWS7Ss7x28pDwla8pQCoBw9BSbjtpu/Bjg49GY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YybjcjVKlFP7BFuOjpmE5dezZBCdbh8U1/MJcCaSjNW15pZ90Gb
-	lVugcUH0hONaPEQgQ4vLdk0BxD8W+g/u95kIp8QNSYLnX5mDBRIT5+IajehKBZvqUA==
-X-Gm-Gg: ASbGncucepCrl29OVfNPKIcc3Oz0RtLT6GUbFX/ts02AuPTnOwzfUyuVlx0AEgWLqVd
-	m5tlCKKfR+aF6BzTWN8bXo/GZbWNhdkppldBQd7BFjnlxrD3dI57Lk8pogE4/UiZ23cSPUdevAx
-	fb6by0mfZ/LEZxbfwtjj2fmGjGu7cO8co3ulMQMHzN9F9fIVmzBhC7eamIsBepxjNCVvBHDav1m
-	eIjEQW/8gJh3JNGA+7WMSYhaKNJMkTfDqaoddxDUpMr3MLA+YqrxCnRd/ulYHdZtuTq0o2qAfg/
-	9pB09XeCHNdnBnW/KuWI6ydKwoBOF52oNBbb/G15W7zfbfpYW9KXJNLJnEjjQA==
-X-Google-Smtp-Source: AGHT+IHgFK+x5iOOCR7s+Jwca4C328dxRJPFWJLVCE70nVrrFL6mJkkvUSJeMxzZnHxSrAYyY3US1Q==
-X-Received: by 2002:a05:6000:2dc1:b0:3a4:d83a:eb4c with SMTP id ffacd0b85a97d-3b2013f8c90mr292003f8f.57.1751414760277;
-        Tue, 01 Jul 2025 17:06:00 -0700 (PDT)
-Received: from MiWiFi-CR6608-srv ([202.127.77.110])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-318c14fd6b5sm12475850a91.35.2025.07.01.17.05.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Jul 2025 17:05:59 -0700 (PDT)
-Date: Wed, 2 Jul 2025 08:05:23 -0400
-From: Wei Gao <wegao@suse.com>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: Terry Tritton <terry.tritton@linaro.org>, Shuah Khan <shuah@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Darren Hart <dvhart@infradead.org>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	=?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
-	ttritton@google.com, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] selftests/futex: Convert 32bit timespec struct to
- 64bit version for 32bit compatibility mode
-Message-ID: <aGUggwe_gJon_2E3@MiWiFi-CR6608-srv>
-References: <20250701142313.9880-1-terry.tritton@linaro.org>
- <87ikkblkff.ffs@tglx>
+	 Content-Type:Content-Disposition:In-Reply-To; b=VBCIy0Bb0mRHwFneiz8vMCvdQlJfftWVJE6amIukS7E8Bliha8ubTOecT4oxXWMdR1lGzFEQ2WMJTPpuKuyeUwGgV/+BZzpgr+fmvb7H91Iskjb2N1/Iwuy0kGgKhQ+UI9FHqZskANI3C6aWMdg05mUng0usblpZwp3LNgGgbMw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1uWwab-00058l-00; Wed, 02 Jul 2025 14:29:25 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id 9F5D4C0C86; Wed,  2 Jul 2025 14:28:58 +0200 (CEST)
+Date: Wed, 2 Jul 2025 14:28:58 +0200
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	Huacai Chen <chenhuacai@kernel.org>, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com
+Subject: Re: [PATCH v4 1/2] MIPS: Don't crash in stack_top() for tasks
+ without ABI or vDSO
+Message-ID: <aGUmClZQXMIQAIif@alpha.franken.de>
+References: <20250611-kunit-mips-v4-0-1d8997fb2ae4@linutronix.de>
+ <20250611-kunit-mips-v4-1-1d8997fb2ae4@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <87ikkblkff.ffs@tglx>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250611-kunit-mips-v4-1-1d8997fb2ae4@linutronix.de>
 
-On Tue, Jul 01, 2025 at 10:34:28PM +0200, Thomas Gleixner wrote:
-> On Tue, Jul 01 2025 at 15:23, Terry Tritton wrote:
-> > Futex_waitv can not accept old_timespec32 struct, so userspace should
-> > convert it from 32bit to 64bit before syscall in 32bit compatible mode.
-> >
-> > This fix is based off [1]
-> >
-> > Link: https://lore.kernel.org/all/20231203235117.29677-1-wegao@suse.com/ [1]
-> >
-> > Signed-off-by: Wei Gao <wegao@suse.com>
-> > Signed-off-by: Terry Tritton <terry.tritton@linaro.org>
+On Wed, Jun 11, 2025 at 01:28:26PM +0200, Thomas Weiﬂschuh wrote:
+> Not all tasks have an ABI associated or vDSO mapped,
+> for example kthreads never do.
+> If such a task ever ends up calling stack_top(), it will derefence the
+> NULL ABI pointer and crash.
 > 
-> This is still wrong.
+> This can for example happen when using kunit:
 > 
-> If it is based on someone else work, then you need to attribute it
-> Originally-by and omit the Signed-off-by of the original author.
+>     mips_stack_top+0x28/0xc0
+>     arch_pick_mmap_layout+0x190/0x220
+>     kunit_vm_mmap_init+0xf8/0x138
+>     __kunit_add_resource+0x40/0xa8
+>     kunit_vm_mmap+0x88/0xd8
+>     usercopy_test_init+0xb8/0x240
+>     kunit_try_run_case+0x5c/0x1a8
+>     kunit_generic_run_threadfn_adapter+0x28/0x50
+>     kthread+0x118/0x240
+>     ret_from_kernel_thread+0x14/0x1c
 > 
-> If you just picked it up and adopted it to a later kernel version then
-> you need to add 'From: Original Author' and preserve his Signed-off-by.
+> Only dereference the ABI point if it is set.
+> 
+> The GIC page is also included as it is specific to the vDSO.
+> Also move the randomization adjustment into the same conditional.
+> 
+> Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
+> Reviewed-by: David Gow <davidgow@google.com>
+> ---
+>  arch/mips/kernel/process.c | 16 +++++++++-------
+>  1 file changed, 9 insertions(+), 7 deletions(-)
 
-@Terry @Thomas, Thank you both for the mention in the commit. I appreciate being included.
-I guess above options both good.
+applied to mips-next.
 
-> 
-> If you collaborated with him, then you want to use Co-developed-by.
-> 
-> All of this is documented in Documentation/process/
-> 
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
