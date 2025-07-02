@@ -1,138 +1,109 @@
-Return-Path: <linux-kselftest+bounces-36353-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36354-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 929D7AF5FBE
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 19:17:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 315F4AF601D
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 19:37:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 916F13AE176
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 17:17:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6B9964A8179
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 17:37:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04AFC301137;
-	Wed,  2 Jul 2025 17:17:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51DBF2DCF5D;
+	Wed,  2 Jul 2025 17:37:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R62Ug5R3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xv4t9T92"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A791301129;
-	Wed,  2 Jul 2025 17:17:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D56751E633C;
+	Wed,  2 Jul 2025 17:37:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751476638; cv=none; b=Ff4uk2qP94eHz3k8qbT7aJJgQi0I238P7HGwAlQlFXWz44mFy9F8cOTb1bZKU6eyTpNuZOgxkxzJgbvH/GexJPX+bO7Hz1NYEKGoMTz9F3tKKjb7yH0Baccs0E9yd6YniKbpWqULUlN94bkGRBsHZwLT6p6pQwWTE7r9+QvG5K8=
+	t=1751477837; cv=none; b=lGdYDPbbsSIvdv9qFj54CjYyrZMJu2Z/4qoFHegrZPhKUyLX5QU4JtDbvrNM5Ntv4hiaKhQ2eatHs4Rq7Ze+TuZ63xDGQkCd0rcDarRZd0acPZivoOOCbN6k/gEVj0xmakq1MGVmtbPmzDqUawxtIfbr0vtc5b0XAUK/yKvdt00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751476638; c=relaxed/simple;
-	bh=eysMrIQ62IHEN1IrnTH/RbeWmSOOIErti0LPAnDPqpU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Nxwzu7E9rZCmjzBZgff2+oRsmH+hEPG9iaPkeqiWSMmpX7p5rjPwnCUtsUXNOVnUJzLdKfQFGE4aCzXl/Er2SYLYyyFwSEifDOH2jMUnd44NScVa41LfhQb1p1uxkwx5VQZU3xvCK+WA8mxmC3EFfM0jstze+Sm0sH7bRZFW8g4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R62Ug5R3; arc=none smtp.client-ip=209.85.214.182
+	s=arc-20240116; t=1751477837; c=relaxed/simple;
+	bh=+3iu10ARXrli6aYGeWMSd0G/SI4ynrsF78F10CwdKD8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fYd/Ix2ZmHR5UR06Uo7FoYInEwurN0FUxC1TJIJIfIwJx0Dek+ehAPfPAl+cd5BiEtltyGoKWQkWIsd+IQOQazGisaCBzX4HE8eVxjnLtXJmPGlsvvLioYsE11iMBYmhgNB4AiRpIo10W2s1pYB8pJ3E5FKhwZ0I1pYy5iyT1Kg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xv4t9T92; arc=none smtp.client-ip=209.85.219.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2352400344aso67813675ad.2;
-        Wed, 02 Jul 2025 10:17:16 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-e8276224c65so6286536276.0;
+        Wed, 02 Jul 2025 10:37:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751476636; x=1752081436; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wcCtm9f7p6jwuZ0do6mGaH16Y08BotVqwa8c/wAtMks=;
-        b=R62Ug5R3deGOmRfvcuDHFYCnGHV6EGPratAvUvj+AW0YrjpBpZzeMDSmQcIhOw14Dk
-         jf8E8zugoiyXeFTQCNBroCCO5eZzFErsF07JoqIrhj10GDWOx5itlMKqC1EetYLhsAy9
-         QZt1g+fo+5u2ENjAovxJuq0gTWH0LVi9CkTbsh+NL61oJQlWqimGYJLv3/MkvGHeEp5S
-         1vbEKpi/VkyxoZPZeVb44tV3utm9UD3ODm3MDPW48eNi4P2Mrr7+XcZmdl1d7+As6Cdk
-         jPtC22Fm4P92xe1Ys1/e8QkacqnYaztAOWte9PmHZuPHYVQxs1rsLBlyLEGsfN35Fnma
-         3gcw==
+        d=gmail.com; s=20230601; t=1751477835; x=1752082635; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+3iu10ARXrli6aYGeWMSd0G/SI4ynrsF78F10CwdKD8=;
+        b=Xv4t9T92UPQNgMKyWg+UGwLUUfQ/W1/TiJlt8BROqImgwFN7yxCFw8n6dMRtFn4r9b
+         U0uKfE0MkBmQU0S2MWY6Y6DimRqYlddKEZn43S+fW1c864qNZ66F5DXfh2hNd6vZ7lzO
+         HqM20c6UFOiFBveQro6ebibefKxr9rTGNT7Muj5U/pjfKyj8zhHb0QBOecju9jA6vnHk
+         pT/gCVURa4xY0HRfTFFI2Y6FZ+P2MoAOkYot04HK76kZaF7HqDQStfGd2Xg8/50FeVxM
+         TYSUEbJzFGlTfdScujz0dfXWAkt9tvvnHPFJyJhItdUfjbUnEpJ7Hdzr1088O2AMMsJm
+         zs1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751476636; x=1752081436;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wcCtm9f7p6jwuZ0do6mGaH16Y08BotVqwa8c/wAtMks=;
-        b=GVMLi80RRLeEeNN4vA0nG8zPu19rIKJ4uZxdvTTlE5qKbjqG2eO9X7J2JgG0ReD58v
-         Vn+zvSRyVIrs2rmtlGMdmSnIHdUbmFPYp4hkbaxIzWnhmXEJnncHo2mhVnVeWXcM+fk7
-         8vTZIaEdLaIKFSr1b9VFMFerljbzu0HIpE0dThpBh/WrA/Vs6oG4LPa9xCtBU6i667uA
-         WEayHxt6HrPUmJagTNh6V8Dfma4DuhP7O9Tmkw0v7JInQaGTw6xjrDxsmuVXuY5RYqkl
-         5TK/j32r0xlUDeXAxkEXMvj9oohswDqbOWGwZbJ+stB3+8UKkyr/7y7TKAZHtbt3PDRK
-         s4Cg==
-X-Forwarded-Encrypted: i=1; AJvYcCWWQr9//w3pKWztlvosKP2mRZL0004h+lv3wnhoEu4J2jpbsswiWGF4g3ikaQpJe/BafVNq758B9/Z6BIwzsNG1@vger.kernel.org, AJvYcCX9tZYSWVOYCEnYYR8pIfl3luHsphWYT0N+DS0ECLUHRz9s7aUAXK0pk+sQoS86n5v16d6S/JeOzG/1yRc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzxwupn8xRcgqkMnsu6FYryFWNXnrL5YLtP1D4VZepQ/ctk0caW
-	E+woMiTAhHS8TWEFrz31h1ZuRdWvNyxjkWqLc4FD2188v6ACHohthuyf
-X-Gm-Gg: ASbGnctvMiZDp3RIWnIptux2VDW7uaIGcu9levH5GYvCnuWH/VFBwPTnwdPtj1u14/y
-	cn1LcIKSqr3bbC3J/jLffQr1yqldUzqCprnBhqL5ENRuugcPKb+XWH8YwWW/4wv4WDOMANhrJS9
-	QgYSQTIJX1qu6LEFi7ufHKPzD0gOfVdc+l/7F962ZNfT5zoDscKNNz2BPvxY0EeMV3syycxjPTW
-	Kt+ER7vBLxFGW0E/cub9Hrma8I1C+EuT42CXwGinh2+UZeP+JKO1aEYGOYaskI2VsxL26gMeLbh
-	ECKUfHn57gVI/2SHM+jWQau73+wTcYnjeHZ5cx0G/QaPl0EoTvAKTzQb4GeOLkpi
-X-Google-Smtp-Source: AGHT+IGoqFyrVCn6Y1nY8V1kqw3Ktn3Uz+x2Fn28RGNMIDJoOM2Rf1r7mTP7AxkaWXBBJ0Gt2fEGnw==
-X-Received: by 2002:a17:903:1b67:b0:236:15b7:62e4 with SMTP id d9443c01a7336-23c6e511dc5mr70706755ad.38.1751476635539;
-        Wed, 02 Jul 2025 10:17:15 -0700 (PDT)
-Received: from p920.. ([2001:569:799a:1600:a36d:9d50:6dc7:23e0])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23acb3b7a47sm138699745ad.166.2025.07.02.10.17.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Jul 2025 10:17:15 -0700 (PDT)
-From: Moon Hee Lee <moonhee.lee.ca@gmail.com>
-To: khan@linuxfoundation.org
-Cc: kexec@lists.infradead.org,
-	dwmw@amazon.co.uk,
-	mingo@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kernel-mentees@lists.linux.dev,
-	shuah@kernel.org,
-	Moon Hee Lee <moonhee.lee.ca@gmail.com>,
-	Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH v2] selftests/kexec: fix test_kexec_jump build
-Date: Wed,  2 Jul 2025 10:17:05 -0700
-Message-ID: <20250702171704.22559-2-moonhee.lee.ca@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20230601; t=1751477835; x=1752082635;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+3iu10ARXrli6aYGeWMSd0G/SI4ynrsF78F10CwdKD8=;
+        b=nd42mbpl3PSd8NvJH07cLY/yH3jF8gD646S1UD9SEE7zyDmyeywm/I1n6Pmsc7igDM
+         IbxoVKE2YIbv8eigLnf60vIKkhERWPoA1CQxFlPH6akDqgWnSZWuqGVd/KbMcuCPbY2M
+         73y9kpX86uJzq1oGAw5z7o7SASL1e4qm2JoIS8EEY9sib+lzUffnyg4f+R5VeXDBFXGq
+         Wk9Sw/Zb0jgdnePuQjWp7j6fo7ggGLJt6CXetkyBalqyBXaFLqYEEtaj6M6gH5SlN88/
+         O/f2cPVjKDdMETVQcIdhKG8+s9rqb11905MB1ngRecpIA7IVumwgLa+w1+T4y9YKgndt
+         bSlA==
+X-Forwarded-Encrypted: i=1; AJvYcCVqk/Orp5VuB1ZvT4A95WZYhaedhn8dBHhY1W+FAR+N9yFm0ZYXjWDW4awtnl9xn4evaYjMKYCixRFsvT1t8pod@vger.kernel.org, AJvYcCW5V6MiA3ALUw/YD3E0w036p6vGMAgGNk14TNih1xehRW0ijwSNmE5/c50uTfCi8KKnTUzCS2VEaRElSVQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4saYm/m4lAfQ39NguE++ixMzN0TucdZnhtJvIsKXl0PbVY/zC
+	S3YMP7S0jAwE+jtVijQo19C4r0Z1KLZOgIGKx5+UcQ5CHwkj1lCXwW55Tn8FwObhaeHklIYiCMk
+	vzLC6Vcr2PNnlgNjLrCtoSabkZadrXbTDHQNBRUM=
+X-Gm-Gg: ASbGncv6lSTXp+kyesWDC8RWTEt6EzgUcNTHJnudWG4SA3D3wDE+TBWxbFX5dzXSkMW
+	D4heicoeCiVO3SS5t2s9NaLOdVUsuE7dsW40n20oHlDc0NOIbmOC6GmFTw99XBo6MGaJ3k02dV0
+	p23/5er6S3ygqdGskp2VLmRBFUyqlncpdM39AnC4itberj4b6NTbRtO1+b+uPFl2GqcuZ9OC83W
+	V0d
+X-Google-Smtp-Source: AGHT+IG65yWaIH+GMe5uFx9j4slTz+xcfrbtnzt86UHGCPNc2S++CK6rMAk8qWiyENa3BvDVqurWq+l2oPlvEZC1Mro=
+X-Received: by 2002:a05:690c:6886:b0:714:3e9:dd3 with SMTP id
+ 00721157ae682-71658fbcc71mr7959357b3.6.1751477834545; Wed, 02 Jul 2025
+ 10:37:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250702171704.22559-2-moonhee.lee.ca@gmail.com>
+In-Reply-To: <20250702171704.22559-2-moonhee.lee.ca@gmail.com>
+From: Moonhee Lee <moonhee.lee.ca@gmail.com>
+Date: Wed, 2 Jul 2025 10:37:03 -0700
+X-Gm-Features: Ac12FXxSvmf-vd0t6RoDD8VwiJfrWPOWXyAk3_FBBMmpe3i4cdXWTYiNc4YjfZE
+Message-ID: <CAF3JpA7q6WRMNar-EqOd6afTogyiUoRq+GnWp0sdv5rakLpsYw@mail.gmail.com>
+Subject: Re: [PATCH v2] selftests/kexec: fix test_kexec_jump build
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: kexec@lists.infradead.org, dwmw@amazon.co.uk, mingo@kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kernel-mentees@lists.linux.dev, shuah@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The test_kexec_jump program builds correctly when invoked from the top-level
-selftests/Makefile, which explicitly sets the OUTPUT variable. However,
-building directly in tools/testing/selftests/kexec fails with:
+On Wed, Jul 2, 2025 at 10:17=E2=80=AFAM Moon Hee Lee <moonhee.lee.ca@gmail.=
+com> wrote:
+> ---
+> Changes in v2:
+> - Dropped the .gitignore addition, as it is already handled in [1]
+>
+> [1] https://lore.kernel.org/r/20250623232549.3263273-1-dyudaken@gmail.com
 
-  make: *** No rule to make target '/test_kexec_jump', needed by 'test_kexec_jump.sh'.  Stop.
+Just noticed I had the wrong address in the To field =E2=80=94 the correct =
+one
+(skhan@linuxfoundation.org) was already in Cc, but sending this to fix it
+properly.
 
-This failure occurs because the Makefile rule relies on $(OUTPUT), which is
-undefined in direct builds.
+No changes to the patch.
 
-Fix this by listing test_kexec_jump in TEST_GEN_PROGS, the standard way to
-declare generated test binaries in the kselftest framework. This ensures the
-binary is built regardless of invocation context and properly removed by
-make clean.
-
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Moon Hee Lee <moonhee.lee.ca@gmail.com>
----
-Changes in v2:
-- Dropped the .gitignore addition, as it is already handled in [1]
-
-[1] https://lore.kernel.org/r/20250623232549.3263273-1-dyudaken@gmail.com
-
-
- tools/testing/selftests/kexec/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/kexec/Makefile b/tools/testing/selftests/kexec/Makefile
-index e3000ccb9a5d..874cfdd3b75b 100644
---- a/tools/testing/selftests/kexec/Makefile
-+++ b/tools/testing/selftests/kexec/Makefile
-@@ -12,7 +12,7 @@ include ../../../scripts/Makefile.arch
- 
- ifeq ($(IS_64_BIT)$(ARCH_PROCESSED),1x86)
- TEST_PROGS += test_kexec_jump.sh
--test_kexec_jump.sh: $(OUTPUT)/test_kexec_jump
-+TEST_GEN_PROGS := test_kexec_jump
- endif
- 
- include ../lib.mk
--- 
-2.43.0
-
+Thanks,
+Moonhee
 
