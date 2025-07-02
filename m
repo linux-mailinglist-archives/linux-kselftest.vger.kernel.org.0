@@ -1,76 +1,100 @@
-Return-Path: <linux-kselftest+bounces-36356-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36357-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 395BDAF6180
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 20:40:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DAACAF61C7
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 20:47:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6E293177B3B
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 18:40:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF994176D9B
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 18:47:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0981F3196BC;
-	Wed,  2 Jul 2025 18:39:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FB621E492D;
+	Wed,  2 Jul 2025 18:47:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iuqXrhsf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NtTnCluC"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5D1731550C;
-	Wed,  2 Jul 2025 18:39:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3BCD2F7D07;
+	Wed,  2 Jul 2025 18:47:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751481571; cv=none; b=eh/JQXBxedyd39Cy7ir8j1Nnaf2y9RgJxEndfOERHnauae5liZBz73F5ERy0OZk3Wdoo9w15Qyqk2SR2/F1adLJQgeEGcVKY5aF1YJ5kUAWeQGexoq9pD4pAyzM97znssaKtcaN2Ek+aecyuyAfcJk1EHVC3w9OVa4LntMgVPPQ=
+	t=1751482052; cv=none; b=E78aSVv7X4GuiZEtbWln0Y637ofBaXq9pK9cQ7owPRiPWyGjwx66FVDZj7dMIG3186YM75VE33ktbngzAL23Q+nC5bKMT1a5GJJf80mWIfsEeGlPfuaNhDBtxzi+5BRxDWN2Jh3mVRNV0NaE+fZKPg4JhhpH+Dcny50D5rT5sp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751481571; c=relaxed/simple;
-	bh=Hk/yMndM8BuCC8/IHGbpmThZz1wOCyYlk9OLaRYNimU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=X3ZpdnW2n4thACwUaMtLieu/OimW8HBEMpohTRjOwqPaqyvRqSMSAMWJxid1klgLyTzbVCvveBSLCdtD5pSTpDxSekXYa65ZUC6HOr5xn3FVEeEmZONJhsrv/vc9JdArYwIatcl3NGNd6H+eWMd3U59d9q+4QPKMBjaCIfyJ+h0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iuqXrhsf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0B41C4CEEF;
-	Wed,  2 Jul 2025 18:39:30 +0000 (UTC)
+	s=arc-20240116; t=1751482052; c=relaxed/simple;
+	bh=urZtsqWwOJhSQf6BJio6DtJ58Ptki5mkWpBNQK5au1g=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=I+d6KESvvQN0s3+k1tT8bm2HZIheWkoO0f6KH06qIhuraTs2xpMcz+B+3ldE/XkP3aQLKel2+Mzt8kcB39vQyEC1efEXcmrTHHP63gv3fV25KApdI8f4VLFwOami9mUZy3julNy0daA7a3QVjyHe+LrJmIB1D3nGT6FPRLtbxFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NtTnCluC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01742C4CEE7;
+	Wed,  2 Jul 2025 18:47:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751481571;
-	bh=Hk/yMndM8BuCC8/IHGbpmThZz1wOCyYlk9OLaRYNimU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=iuqXrhsfisQQcE6YWOd9I2+dJrXlIAy1mO7fgv4ppnyhseqU+Y+zzyDcX5Y6D+eLh
-	 ukfY8PakZhgfbNYmQ49BgBhDyqK/Yf9VM2JDCiiIUPckzT8pGbi3mTUxzoCRC4pJzM
-	 d1L5aOWRJngeo0lgy87xtLPe7k1b89RBEZpg7cC7jZ/Xy2wKcOTd6jo0stjmMpv+KV
-	 fVNn7cxcuPilgatTlZnPIduWLZ5oSw02YuTiKSSF247/t67uumHVx5dZvIbE9RuBxD
-	 CZWypwRnANILBTJgWkVEtqVpiU3z5a56gL+8ZFGz1IJ6kPOCKYeoWmJ2t6ShtAtbzB
-	 0CbsiVK0O5znA==
-Date: Wed, 2 Jul 2025 11:39:30 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Taehee Yoo <ap420073@gmail.com>
-Cc: davem@davemloft.net, pabeni@redhat.com, edumazet@google.com,
- andrew+netdev@lunn.ch, shuah@kernel.org, almasrymina@google.com,
- sdf@fomichev.me, jdamato@fastly.com, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 net-next] selftests: devmem: configure HDS threshold
-Message-ID: <20250702113930.79a9f060@kernel.org>
-In-Reply-To: <20250702104249.1665034-1-ap420073@gmail.com>
-References: <20250702104249.1665034-1-ap420073@gmail.com>
+	s=k20201202; t=1751482051;
+	bh=urZtsqWwOJhSQf6BJio6DtJ58Ptki5mkWpBNQK5au1g=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=NtTnCluCW6K3OmHZvzLAR9+57BQhXtTHx/AVdwGAUf2iuo1Aerne5Kdbd15ViaIu6
+	 8FpzUqcwykIQEg687Hubs/pyPP++v9SWXn3TIHy9dMa1sPMzvQegm1Nr9z87QUky+W
+	 3ny0Ica0XI+4/XEyeEgik6IUkHoJIYUVQxeqXqR/cgsfKZbnAWMySc6MSUQBO6Gb/Z
+	 tx0NkXSY9HtmIec3CZEZgIpbVmGMeYA2B/UEycJLjehmsP7v6RuOw7MREBDQFakeff
+	 AGWgzgikNi/c6VYojooPLjQ4N0PNBGFQ6QeToVBYR53NoAHT4qt3b/bpa1DdJdNzWi
+	 5ALCrQ/0Af5ig==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 02 Jul 2025 20:47:25 +0200
+Message-Id: <DB1SKFOR9W3I.1MBT3C6FGBWH7@kernel.org>
+Cc: <airlied@gmail.com>, <simona@ffwll.ch>, <ojeda@kernel.org>,
+ <alex.gaynor@gmail.com>, <boqun.feng@gmail.com>, <gary@garyguo.net>,
+ <bjorn3_gh@protonmail.com>, <a.hindborg@kernel.org>,
+ <aliceryhl@google.com>, <tmgross@umich.edu>, <rafael@kernel.org>,
+ <viresh.kumar@linaro.org>, <gregkh@linuxfoundation.org>,
+ <maarten.lankhorst@linux.intel.com>, <mripard@kernel.org>,
+ <tzimmermann@suse.de>, <davidgow@google.com>, <nm@ti.com>
+Subject: Re: [PATCH v4 2/6] rust: switch to `#[expect(...)]` in init and
+ kunit
+From: "Benno Lossin" <lossin@kernel.org>
+To: =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>,
+ <rust-for-linux@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-pm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <kunit-dev@googlegroups.com>
+X-Mailer: aerc 0.20.1
+References: <20250701053557.20859-1-work@onurozkan.dev>
+ <20250701053557.20859-3-work@onurozkan.dev>
+In-Reply-To: <20250701053557.20859-3-work@onurozkan.dev>
 
-On Wed,  2 Jul 2025 10:42:49 +0000 Taehee Yoo wrote:
-> The devmem TCP requires the hds-thresh value to be 0, but it doesn't
-> change it automatically.
-> Therefore, make configure_headersplit() sets hds-thresh value to 0.
+	=20
+On Tue Jul 1, 2025 at 7:35 AM CEST, Onur =C3=96zkan wrote:
+> This makes it clear that the warning is expected not just
+> ignored, so we don't end up having various unnecessary
+> linting rules in the codebase.
+>
+> Some parts of the codebase already use this approach, this
+> patch just applies it more broadly.
+>
+> No functional changes.
+>
+> Signed-off-by: Onur =C3=96zkan <work@onurozkan.dev>
+> ---
+>  rust/kernel/init.rs  | 6 +++---
+>  rust/kernel/kunit.rs | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-I don't see any undoing of the configuration :(
-The selftest should leave the system in the state that it started.
-We should either add some code to undo at shutdown or (preferably)
-move the logic to the Python script where we can handle this more
-cleanly with defer().
--- 
-pw-bot: cr
+@Miguel are you going to pick this eventually, or do you think it should=20
+have a new version with the right splitting?=09
+
+---
+Cheers,
+Benno
+
+
+
+
 
