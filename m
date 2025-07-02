@@ -1,66 +1,67 @@
-Return-Path: <linux-kselftest+bounces-36310-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36311-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD2BBAF13A0
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 13:21:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 189B6AF13A9
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 13:22:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4AFB83A8DB5
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 11:21:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ABDCD3B056F
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 11:21:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF73F26658A;
-	Wed,  2 Jul 2025 11:21:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37140267B68;
+	Wed,  2 Jul 2025 11:21:13 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C935E265CB6;
-	Wed,  2 Jul 2025 11:21:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AE6326656D;
+	Wed,  2 Jul 2025 11:21:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751455271; cv=none; b=Qzkia5Cl+lKMYMtoDK5oM4rHmkgUjgmkcdUi2tjqLTofw/Jb5zXQve3jvc5OzWbAJMsxAwTeFthZ9XUz1Ve7sz/2zKhnzncOx7VNxayXOz1FL8BW9AApBg6pe3uXXrhOwxzX3ItdLGpN80KSFNGQPIM0PrOB+jfopZwYnfWKVNE=
+	t=1751455273; cv=none; b=si6Zq76ONo4K07DA+qc1kPSqCGb9m5D3jPyMnvBhsO8Mu5U6/u5sRk7gxpzvikW0eW5XXT5vY+Wd70K5F+tTsI6KXP2gESd69KZ8oZfOYdEtHkDcF7Hd92p4zaqa1LyfEXAU6F5Aepl2nvBQvwEjGfLCrZsN+EID2ecckGW6jn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751455271; c=relaxed/simple;
-	bh=Oa6I4J+3EiaoitoMqlxxWZcodweGnrQkOFGVcWo9wc4=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=fToS4eztKgFi34u3jI8X3WlYi95BhmkRZEcUXlovbl2zk0XAyGoBpQEvv4sYF58s/HXJmLzlptps0Hgs0U/uYeOeKI1VwZQzRU8x3pMLd0z5pS7BKZjuTaUCCrpV+qYMPgI2laRWSbLQf8MHxMa+b+2MOfkPQe170edKG9ODh+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.46
+	s=arc-20240116; t=1751455273; c=relaxed/simple;
+	bh=kmhreOsqeuqBCdj6XPPUE3ZSy4x+7B5KtJ0GKNZmy+E=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=S99t5vHupaQSFcPoWvDVsmHrAHTW0LY0+ljAe90gxip3CE9Y4NSXebe0bPwZPC47fSTb8o6QgFULMrTs9c9pRncpcMeZE2hCssT7B4ugbxHPCKd5T4LxGfKHC7oCxq53DUgP6rBW6YH3QG6mQJdL/jcq0YrIxRa9b2tRvilpVSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-60bf5a08729so8851259a12.0;
-        Wed, 02 Jul 2025 04:21:09 -0700 (PDT)
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-60c01f70092so11102875a12.3;
+        Wed, 02 Jul 2025 04:21:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751455268; x=1752060068;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FwOadImlG8DTWZnqLfHAUYeQtgglNV2hsUFUVDivTSA=;
-        b=NIgs67d3N16U1C1rXBouemb4jVh5nGGKi9fEPif8Llcgh5N+tnfgvFiPFIFRwOWeeG
-         p9Tw468AKzFvzWTFt3snKKXCXNTEAM2HdGQIRdpFo6FJSEBr4eZE6kWSJg793jJzl8cL
-         L12rasS0OYg23IHQ57HSofIptOSH2X2DKMnZLjQHStCXIvTyH2tSu+XgZqmYy94QB7tx
-         N12mhyp5mNL54IkCxPL1vZzaOhj8/DohM9KaA/A41OkzXcMC5y/7EDeDoJxA5Hdf+Ove
-         IvbIGO2g/BBTiKy8v6uz/9fMa0JmTH/S14SfetsfTwa2Q31k9aGSSzqqqTA4um0kNEmC
-         K8XQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUFHevD70wEh+FnNoGcMm3jzTVJA2v3U07t5s2E7JaiItBWrvfmWwDO84wwtTtiKnKTsh0//lbGMix52gOGUhdL@vger.kernel.org, AJvYcCVTWYfBFD2XLWVYVAdHulIdSOjE79gOTOm7fQvaDhtoXWHRORUGbio7jNWPwRXUB/Tv0ew=@vger.kernel.org, AJvYcCWKdlPjYPdkpMqJwToogfJrVlo4+kDnw5K1qjrs67YbGf50uXn65CCtAMqeVwlULfc1/XLa84uo@vger.kernel.org
-X-Gm-Message-State: AOJu0YzzUF6trvOgZ6D/AZ53MDccW0aQ5t4BfqbGfTp5czD+MSZDdABL
-	6MgO95KLK/G/eCPZzG/0ZIhjRMAl02aGLU0m7XIQOLZF2hi7Et8ElC4D
-X-Gm-Gg: ASbGncuc+txEzgN8V5RzwmgqUKOn+2GG3dQYKsEdn1yXRWBMFziPG9o6ituHLppHQeL
-	NHf/XVPxSVvLGH01kWL0xe6wiw1uYKC0VCDyhdmLTtmeJctKFur9B9VH7ckew1s6Hy2LSqcRJas
-	oNbk7Wt+4vWF/bqQzhUO7h9wY1pkfVZZmTAPk4+DKL0LWCyQZOz1rcETWZGhMVZLjhKVZPsBGdP
-	XQjJP+8Zqnn1Ov+El7jKjVYKt9MOFxgrD2XVsrDYrX5oxVF+767aqfRF3JA/orZbtLOIKPZ/z4g
-	gNdb+kBGOtDrCWcbp0Nc5UyhgA29Rbe6Y+Bd46N9UxkvrFwOb0CL
-X-Google-Smtp-Source: AGHT+IFvAijHC5To3z3TZw8XM7+z0rJfgERCs2qkqWCxTbZD6N1lkZgCDi9PpgZtH0wfmFxOoiXqxg==
-X-Received: by 2002:a05:6402:3550:b0:609:aa85:8d78 with SMTP id 4fb4d7f45d1cf-60e52cc4800mr2040323a12.8.1751455267772;
-        Wed, 02 Jul 2025 04:21:07 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:5::])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-60c831aa9d0sm9333912a12.46.2025.07.02.04.21.07
+        d=1e100.net; s=20230601; t=1751455269; x=1752060069;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=snLCftmRv45xZk+dYhFYTETXXx2kQ2Ytw2HV/igRrFU=;
+        b=gmKDxtx232WL07A2xSu4AXrJf+PeYpcVT5h7wGOf8wTSgCJrdj61CsuS+ysdhJGuO2
+         vZMoQ1xFQSMZASDu2SondAEPn4TCDH3p1S7fKcTq1BNre/hAv90O3L/fy3pyb2DjoQ6w
+         T6j+Q157AnfR4RCsgrgko+FVyqZmbfB77SQvWre6Qey0MlCHNY6oHv7b7qpL9/a8n3bd
+         7twAvUHtsUw1xAORiFyTJfm2jcZHNxL0YDJjo8TbuDoAKgh7n11WOWkreS4ln/bK9V/5
+         4ID0zAlT2SMk+LoWbOPlUcmhCAzTDk5YIxJmqq8xVTR9wheUid6mCvAx+X4y/pHcVexb
+         k2xw==
+X-Forwarded-Encrypted: i=1; AJvYcCV5w4y+ElkdJ4KhPqViqG2ExrQEbBMLHpYmy09B/lB9gyf87takuoZ/uwJgEgp15fW6XU5Glyg21SRIHtuDtEh3@vger.kernel.org, AJvYcCVxlm5Ur0ADr6OYAvCYxh7dHl+BssHSOVYVmExInfFUzi6PSqLNeIt9Y3NE1eX6QPiZnbz6UQGc@vger.kernel.org, AJvYcCWDiw4knyQ2sxqTLPSDpKP6rOvGP4G9YZwu9rqn3yhEdWc6vWmXyYezu2fUaeAKFFYxsKw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwdD4Tg7Mq29cfXQu1MfIK0AQ6RkUFX6Ry/gdLAqpz28RturSX3
+	xQVe57jp+gbyeqBTWmlDYkowcO4LHoNHJML/0h9njO0yqqOUN1058Ccu
+X-Gm-Gg: ASbGncto1kQEytjq2R648dMgiYDwKV9gqUhUm/yRg7o0/78xX3rbcB7+vsPitmLl30c
+	fJWE6vT9ZvlL2L70faoMKC88lzVMm5icaCvITDQ0V1uoFe6aiMf6aVWLy+Gr7Df4eus34uGbwsl
+	MhcD/YCKKqqLtckAKg0gwyNm+wzZXmYxDLh6rxU7uwU7F+mM1EQC6Z9M4mHeNJcx6DTaVbmmlnl
+	gqrMyxdW/zlC+mIfB8q2lPN4l2SP+Hh2cU3WFm0LlK9cIDz9ZkRSaNlw1AmapSdXjlGJXkbnUau
+	qMv9R1U/nQ51mp5RwFI8zwhttlBk63aR60RsvI1kKtaHTbDzM1SDhA==
+X-Google-Smtp-Source: AGHT+IHSXVJ+zv8OK3ZIb6xoLC+yCdDOg+t6pGtX89QkSDHD9cmdKEk7CjPhmivk4Ehy2d+SJpCUaw==
+X-Received: by 2002:a05:6402:2755:b0:606:c48c:fb8e with SMTP id 4fb4d7f45d1cf-60e52cd2cf9mr2278833a12.11.1751455269238;
+        Wed, 02 Jul 2025 04:21:09 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:73::])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-60c831ad416sm8825448a12.39.2025.07.02.04.21.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Jul 2025 04:21:07 -0700 (PDT)
+        Wed, 02 Jul 2025 04:21:08 -0700 (PDT)
 From: Breno Leitao <leitao@debian.org>
-Subject: [PATCH net-next v4 0/3] selftest: net: Add selftest for netpoll
-Date: Wed, 02 Jul 2025 04:20:59 -0700
-Message-Id: <20250702-netpoll_test-v4-0-cec227e85639@debian.org>
+Date: Wed, 02 Jul 2025 04:21:00 -0700
+Subject: [PATCH net-next v4 1/3] selftests: drv-net: add helper/wrapper for
+ bpftrace
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -69,12 +70,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIABsWZWgC/23NQWrDMBCF4auIWXuKPJIytle9RynFsUaJIMhBE
- iYl+O4l7sZNs358779DkRylwKDukGWJJc4JBmUbBdN5TCfB6GFQQJqcPrSESep1vly+qpSKY2v
- IetKOpw4aBdcsId62uw9IUjHJrcJno+AcS53z99ZZ2m1/fbm02KJltsH3rjcmvHs5xjG9zfn0S
- Pwq0i+U04euMxSYwrRXj/5Cuya5J02o0bInZnZE9F+bveYnbVCjY3f0pPXUjf0fva7rD6DotUt
- lAQAA
-X-Change-ID: 20250612-netpoll_test-a1324d2057c8
+Message-Id: <20250702-netpoll_test-v4-1-cec227e85639@debian.org>
+References: <20250702-netpoll_test-v4-0-cec227e85639@debian.org>
+In-Reply-To: <20250702-netpoll_test-v4-0-cec227e85639@debian.org>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
@@ -84,101 +82,102 @@ Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
  Willem de Bruijn <willemdebruijn.kernel@gmail.com>, bpf@vger.kernel.org, 
  kernel-team@meta.com, Breno Leitao <leitao@debian.org>
 X-Mailer: b4 0.15-dev-dd21f
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3228; i=leitao@debian.org;
- h=from:subject:message-id; bh=Oa6I4J+3EiaoitoMqlxxWZcodweGnrQkOFGVcWo9wc4=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBoZRYiCCzdTww05PHSPGEQ3RsBQGB1aNhF4dwTQ
- O8dDRUldtaJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaGUWIgAKCRA1o5Of/Hh3
- bVNKEACIjYWP/95e6ctiGaabivMqrcbUw4TRMCHeKwFUpED6VJRSaldn/4Ie6mkfq9UUuasCmk3
- kkX8ETD9PqYdHVWa5nb5bSPhc7yDc3VQolvRu5hu97HDadZWRqVxdOjIAB3xYavnmQ2GXG4XDms
- rX5+ABYkWJ8dXzXdoatuKngk3g38FAMk4In9erUNCAL9UMmpSmhQ0lpFISBmhJFB/tweXfVkhZG
- 4a5nZ+KpGnS3s996/tJKdJlMiVARwXrRr7CYH2pdlfawa5zlAMFz4k8C0Sxj0M2c7kf+d5/iWKg
- qCYAvxMA4RsXf9vJFm/96ued6abvQMxoY2qhWvxz6pPoOv8JjWl3bxUJ71at69kvt2pGcYYo3zQ
- 0KSyP68Sqz6fmGfqkXCElOTt7XZ5NUV/DHICNxUpQnoGVS15ON+C2u283YnEbXhQd+WGwQLGHkT
- a58sBHC9aL8TLmgngE14foDYbu9E13d/VA+AAwH5Sq+1DvK5apBFU+L+ohPozT65PB1uqsOX7pR
- olI6ucsXl4ERZyAMcfy0UMw0DAs6vgrT8msv8thKy3F39WcY8yfrx8C8Nzn4zzoWFcOplrz5Bjb
- GBLdbuHCU2W1B942cmH9DeNMMwnPOFy5acVPJ8Q6IooT1oQ5ZiVuXZzRCxS32DqXqOJVzhWyCBx
- jSMjIlowG+1Oo2w==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3156; i=leitao@debian.org;
+ h=from:subject:message-id; bh=WGfCbot+9pyl//CXCduVntkS6/EWBvdoFOZZ//nP+P8=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBoZRYiV8zzTzkaKwX1zLm2LU8xus3S4e/Plrqpp
+ VW1o9oHcH6JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaGUWIgAKCRA1o5Of/Hh3
+ bbSYD/4oo99IbSaIg8X8K7EkchnmepT5VL9YdQKqL6vHq3TWkkPLW9Ber2TH659Oj9Sj44kGWxa
+ GAYlE5U7Pe+lEaDbo5Iw1uYFpCYv03dzPQ+fB6oR3bpbyv1hau3+mNNBrrP2jknOxfnxbI5odwu
+ czHJV83HLOnz2iRUPt4Y9gk4pOYxo34QxV7uPc07aVyXQmTf3KbTUlfjaFyPlecpVrxDvSVHBoO
+ Mx8Ier9eNxyCOQ6ZGVsRHO0t2fwRUXjdvh3XmEy28jRa1hN7GqFJmDzimBcfIFl6JVj5Jb+rC/B
+ nO4lJbdX6KtXCZIGIIAxXnRCwPk0aDFCrFr/3vVLT96Pf8mwFTbDf+g1mLhcoJKxua3HOV2RJp5
+ L7iq+uc+O0L0o5NWdlNGTq9jvdUREBH7jDGtswOBiY+XcjHVbNyWvicAEHCQKzd1C6AxtiD5wdD
+ pDhq+mZhIJhWbutVOB7T3nbP8Qhq7y6pfWhy8e4TI9NdcB3O0ZVuV58mVJcAwDufMgIKA1K5JDP
+ Tgf3hS9pmlZNfrF3atfEh/j3vqHasKgSI03tYIe1DFkK+tjaACW36sf9P7cxNxk85oF675x4YRx
+ fTK7Qj26nlPdFciZR4Z5Lhyavds6w8i2cElOq8+YhHTC6OSB2gk849slvnFTtaWC0T3BRA1cNAF
+ XxcuvSfeaDzkIZA==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
-I am submitting a new selftest for the netpoll subsystem specifically
-targeting the case where the RX is polling in the TX path, which is
-a case that we don't have any test in the tree today. This is done when
-netpoll_poll_dev() called, and this test creates a scenario when that is
-probably.
+From: Jakub Kicinski <kuba@kernel.org>
 
-The test does the following:
+bpftrace is very useful for low level driver testing. perf or trace-cmd
+would also do for collecting data from tracepoints, but they require
+much more post-processing.
 
- 1) Configuring a single RX/TX queue to increase contention on the
-    interface.
- 2) Generating background traffic to saturate the network, mimicking
-    real-world congestion.
- 3) Sending netconsole messages to trigger netpoll polling and monitor
-    its behavior.
- 4) Using dynamic netconsole targets via configfs, with the ability to
-    delete and recreate targets during the test.
- 5) Running bpftrace in parallel to verify that netpoll_poll_dev() is
-    called when expected. If it is called, then the test passes,
-    otherwise the test is marked as skipped.
+Add a wrapper for running bpftrace and sanitizing its output.
+bpftrace has JSON output, which is great, but it prints loose objects
+and in a slightly inconvenient format. We have to read the objects
+line by line, and while at it return them indexed by the map name.
 
-In order to achieve it, I stole Jakub's bpftrace helper from [1], and
-did some small changes that I found useful to use the helper.
-
-So, this patchset basically contains:
-
- 1) The code stolen from Jakub
- 2) Improvements on bpftrace() helper 
- 3) The selftest itself
-
-Link: https://lore.kernel.org/all/20250421222827.283737-22-kuba@kernel.org/ [1]
-
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Reviewed-by: Breno Leitao <leitao@debian.org>
+Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
-Changes in v4:
-- Make the test XFail if it doesn't hit the function we are looking for
-- Toggle the interface while the traffic is flowing.
-- Bumped the number of messages from 10 to 40 per iterations.
-   * This is hitting ~15 times per run on my vng test.
-- Decreased the time from 15 seconds to 10 seconds, given that if
-  it didn't hit the function in 10 seconds, 5 seconds extra will not
-  help.
-- Link to v3: https://lore.kernel.org/r/20250627-netpoll_test-v3-0-575bd200c8a9@debian.org
+ .../selftests/drivers/net/lib/py/__init__.py       |  3 +-
+ tools/testing/selftests/net/lib/py/utils.py        | 33 ++++++++++++++++++++++
+ 2 files changed, 35 insertions(+), 1 deletion(-)
 
-Changes in v3:
-- Make pylint happy (Simon)
-- Remove the unnecessary patch in bpftrace to raise an exception when it
-  fails. (Jakub)
-- Improved the bpftrace code (Willem)
-- Stop sending messages if bpftrace is not alive anymore.
-- Link to v2: https://lore.kernel.org/r/20250625-netpoll_test-v2-0-47d27775222c@debian.org
+diff --git a/tools/testing/selftests/drivers/net/lib/py/__init__.py b/tools/testing/selftests/drivers/net/lib/py/__init__.py
+index 9ed1d8f70524a..98829a0f7a02c 100644
+--- a/tools/testing/selftests/drivers/net/lib/py/__init__.py
++++ b/tools/testing/selftests/drivers/net/lib/py/__init__.py
+@@ -14,7 +14,8 @@ try:
+     from net.lib.py import EthtoolFamily, NetdevFamily, NetshaperFamily, \
+         NlError, RtnlFamily
+     from net.lib.py import CmdExitFailure
+-    from net.lib.py import bkg, cmd, defer, ethtool, fd_read_timeout, ip, \
++    from net.lib.py import bkg, cmd, bpftrace, defer, ethtool, \
++        fd_read_timeout, ip, \
+         rand_port, tool, wait_port_listen
+     from net.lib.py import fd_read_timeout
+     from net.lib.py import KsftSkipEx, KsftFailEx, KsftXfailEx
+diff --git a/tools/testing/selftests/net/lib/py/utils.py b/tools/testing/selftests/net/lib/py/utils.py
+index 34470d65d871a..760ccf6fccccc 100644
+--- a/tools/testing/selftests/net/lib/py/utils.py
++++ b/tools/testing/selftests/net/lib/py/utils.py
+@@ -185,6 +185,39 @@ def ethtool(args, json=None, ns=None, host=None):
+     return tool('ethtool', args, json=json, ns=ns, host=host)
+ 
+ 
++def bpftrace(expr, json=None, ns=None, host=None, timeout=None):
++    """
++    Run bpftrace and return map data (if json=True).
++    The output of bpftrace is inconvenient, so the helper converts
++    to a dict indexed by map name, e.g.:
++     {
++       "@":     { ... },
++       "@map2": { ... },
++     }
++    """
++    cmd_arr = ['bpftrace']
++    # Throw in --quiet if json, otherwise the output has two objects
++    if json:
++        cmd_arr += ['-f', 'json', '-q']
++    if timeout:
++        expr += ' interval:s:' + str(timeout) + ' { exit(); }'
++    cmd_arr += ['-e', expr]
++    cmd_obj = cmd(cmd_arr, ns=ns, host=host, shell=False)
++    if json:
++        # bpftrace prints objects as lines
++        ret = {}
++        for l in cmd_obj.stdout.split('\n'):
++            if not l.strip():
++                continue
++            one = _json.loads(l)
++            if one.get('type') != 'map':
++                continue
++            for k, v in one["data"].items():
++                ret[k] = v
++        return ret
++    return cmd_obj
++
++
+ def rand_port(type=socket.SOCK_STREAM):
+     """
+     Get a random unprivileged port.
 
-Changes in v2:
-- Stole Jakub's helper to run bpftrace
-- Removed the DEBUG option and moved logs to logging
-- Change the code to have a higher chance of calling netpoll_poll_dev().
-  In my current configuration, it is hitting multiple times during the
-  test.
-- Save and restore TX/RX queue size (Jakub)
-- Link to v1: https://lore.kernel.org/r/20250620-netpoll_test-v1-1-5068832f72fc@debian.org
-
----
-Breno Leitao (2):
-      selftests: drv-net: Strip '@' prefix from bpftrace map keys
-      selftests: net: add netpoll basic functionality test
-
-Jakub Kicinski (1):
-      selftests: drv-net: add helper/wrapper for bpftrace
-
- tools/testing/selftests/drivers/net/Makefile       |   1 +
- .../selftests/drivers/net/lib/py/__init__.py       |   3 +-
- .../testing/selftests/drivers/net/netpoll_basic.py | 365 +++++++++++++++++++++
- tools/testing/selftests/net/lib/py/utils.py        |  35 ++
- 4 files changed, 403 insertions(+), 1 deletion(-)
----
-base-commit: 22e1cfda0f612556f116560d2b7e9c3315636bfb
-change-id: 20250612-netpoll_test-a1324d2057c8
-
-Best regards,
---  
-Breno Leitao <leitao@debian.org>
+-- 
+2.47.1
 
 
