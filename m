@@ -1,323 +1,194 @@
-Return-Path: <linux-kselftest+bounces-36358-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36359-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D91ABAF62C3
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 21:40:28 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5E9DAF62EE
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 22:00:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8AB884A524C
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 19:40:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4675B7A3085
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 19:58:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 672B12E4990;
-	Wed,  2 Jul 2025 19:40:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C72A2F5C2F;
+	Wed,  2 Jul 2025 20:00:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nabijaczleweli.xyz header.i=@nabijaczleweli.xyz header.b="QeWC5bpI"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="d2sbH4OX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from tarta.nabijaczleweli.xyz (tarta.nabijaczleweli.xyz [139.28.40.42])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2072.outbound.protection.outlook.com [40.107.94.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1397224B01;
-	Wed,  2 Jul 2025 19:40:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=139.28.40.42
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751485224; cv=none; b=QunG3RL47zJG6Uhz01CnJHEghGDDnkwP1slJ1kJScYgXZzl8lVJvos6Xs6IyYxAtOLJIdAoR1NJfha7pMDH6gODTQQe3KJbCleoIyhHUjTVATFEJLe952bPbiBw8E9mc1iSXCqJBhRcNXFhLHYfUrw2HpVy6puAjdm2fS0hfhgI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751485224; c=relaxed/simple;
-	bh=mqTQoihTCIvuzKDNVihAlNO+Z3+bSvYgDiE8xFogLFg=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=dPsZPyf0E3SpNWhTZlvSl8vcBcusDFk1hTDO1HmoR9SM/6zxTPXx8bSpbCKLPB7uiyxg5P5+CqohnbJgEl5lsyXgD0nPUU4hxZzglVCXAFzORABYYoAlmAHCyfxoLkEKMXoZjKclYpzpWqB5uzLDZEGtJf9vZV4Xb4NIABwoLoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nabijaczleweli.xyz; spf=pass smtp.mailfrom=nabijaczleweli.xyz; dkim=pass (2048-bit key) header.d=nabijaczleweli.xyz header.i=@nabijaczleweli.xyz header.b=QeWC5bpI; arc=none smtp.client-ip=139.28.40.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nabijaczleweli.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nabijaczleweli.xyz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
-	s=202505; t=1751484765;
-	bh=mqTQoihTCIvuzKDNVihAlNO+Z3+bSvYgDiE8xFogLFg=;
-	h=Date:From:Cc:Subject:From;
-	b=QeWC5bpIFMZA/QSzmGOa72YIhdmADCQcnuUtJEKvzr1n7BK1NkdSz8dI5J5Qm6XQB
-	 w2LlWmtfzawVvimSBQj10R0qYJd+G+GvpdVePpxXkpnI9vXWsiR/VCJuJt1ji8LAnN
-	 AVZi43ovZpWL+XV9xBOlrgMDmdVXfyiY0fconOpFimqwYXscsrvJYJcwAXo3ukZHpe
-	 hyfSeGqU60PLGr68YIw3rTcJYPFEHNW8Urq1+da8UCpyOXdSsalrD/4U2OwNh/V7JQ
-	 kU/0TV94RpGTK4M3TE+iXP9EB2Z/jLdhjSFWKdBeMiaZ8O7pdENTlTi5CDQQ8yWRO5
-	 iYN3Z3RQ36NdA==
-Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
-	by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 586B641A;
-	Wed,  2 Jul 2025 21:32:45 +0200 (CEST)
-Date: Wed, 2 Jul 2025 21:32:45 +0200
-From: 
-	Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= <nabijaczleweli@nabijaczleweli.xyz>
-Cc: Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Chas Williams <3chas3@gmail.com>, Coly Li <colyli@kernel.org>, 
-	Kent Overstreet <kent.overstreet@linux.dev>, Jeroen de Borst <jeroendb@google.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Don Brace <don.brace@microchip.com>, "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	"Martin K. Petersen" <martin.petersen@oracle.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, Mark Fasheh <mark@fasheh.com>, Joel Becker <jlbec@evilplan.org>, 
-	Joseph Qi <joseph.qi@linux.alibaba.com>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-sh@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-bcache@vger.kernel.org, storagedev@microchip.com, linux-scsi@vger.kernel.org, 
-	linux-serial@vger.kernel.org, ocfs2-devel@lists.linux.dev, linux-sound@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org, 
-	linux-atm-general@lists.sourceforge.net
-Subject: [PATCH] global: fix misapplications of "awhile"
-Message-ID: <h2ieddqja5jfrnuh3mvlxt6njrvp352t5rfzp2cvnrufop6tch@tarta.nabijaczleweli.xyz>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CB5D22578A;
+	Wed,  2 Jul 2025 19:59:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.72
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751486401; cv=fail; b=WUtuXwViSGtxnXScjkGKC76oyMQzIjk/vSzacfEilQBrDWiZkaEW/WkHosYlpeifgY0celGtzosQ0uK1w/lUhFX44DX0QhonQQL7KyQEruXse7efc5nqyffyD5qVLI86L2xtpM9qErPcx4bFf0doERAbWHq37eL8l3CRppPgOG0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751486401; c=relaxed/simple;
+	bh=A2161jCx+rHlYh1SqWBiufkR5fUCJckjYtPibxoKbvg=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=f5sq8tgwADsQtwrQf8FSSl8xhuZayR0gDdBWnDITOtIhCVK7cwYUhzFLqRstA7H2/gr24ulqhjwXQYw40daA9NtvhPQzq9Y3c62ySwQF94umFJ1xOXJclP+95bRhuXrsEnBvxAu40mpyPY4w/LQcSVeT1KjWDwqjrrsxvdFyDls=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=d2sbH4OX; arc=fail smtp.client-ip=40.107.94.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=IQnSrEDT9Msa+i5D4U56FfPg/EvmBkx2NHY3iQ2Hp5ftPG6ycMvRqHkO/FGL5tbJ3e9AVb8NX025Cof1ZUkUnPHkRlbFMZtzCUyk30bOnldRZVqOuFjj74non3YDphlyMvfygwz8F8ilpNwbB0I74es1bMDMhEQ5QIYX8s5t+1CWelHLHmhajC46P6AF5mxal85Uypd4ImlZVuDxNQUpJYuSwCqiLgbNgRrRPoZVvrJUiX4bhpDTrFpOqe8zwAyZ51cW+68rsV2C1MK4fHU8IsUWntgo+ebkxK1NYMJahe8Djx1epfDtS7FGFg5j69oh2mXdpGi0DzYDoX3tCh3+dg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eQlbAaO2/24slCTjg4NQFYj3zkSgI583kd7LCwPUJBI=;
+ b=y8oaunn5AyOvrh+4oHdnH9AvkTv+c/YjVUEVh+Bwa5kFzt5UtUJ0pzSCsOwdxGwQlMwBtzj2wSIQ74Tqka6PPgqHc5EFG9rO5ndeKb/NFscYQZLtGpSR5dxyDoBIYjoQz6pGIRALny7waWOZr5jiuMp/E+ylj0fVWkx7EskdEkOHndncblNQHqrpkI1dNKoCBf+egdJwFZSUilnyZ8JspjT01z2I692smfCBSYd1StSnSvP7xL7CI4vtjA1bQw7oLzWajWbmBoqBGB8OlG6+HKUFIkktZk6dKmebJYmtNeszqQwTX5ZedK818XsEoLwlr5XANNSgcD0kdz5Sak0vjg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eQlbAaO2/24slCTjg4NQFYj3zkSgI583kd7LCwPUJBI=;
+ b=d2sbH4OX73ODV81s+HEx8DgBwumN5IbrBh0mOyPIGlZncF42vZJ71lpXh5X5E+c+v0BylpAd5FUTnr24hzcnxJg5HEDi5FlQyx/7sGkdOMKi/dL0FMc8mKg4AUb5SX9KdqCEYeO2Je32+k92Rweo4j+hQAVYI1pI2lI7vuZjfWP3MhgcSTz/cxlW5l9WbULY33hZ5EmkhB6Osaz0JgLtiCtQhYJkJSmOhq8NINiyflbqBihxfBSb4Y95zj+CMt3Tn4Pgfg/z/u7Fpes5Pk+3Z0wp3AOWepO4sb1xpNPGXfYo35AnHSogh+lBDhoye1Cy7zP/WdQd2PiuEFs0rpZw3w==
+Received: from SA1P222CA0146.NAMP222.PROD.OUTLOOK.COM (2603:10b6:806:3c2::28)
+ by IA4PR12MB9763.namprd12.prod.outlook.com (2603:10b6:208:55a::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8880.26; Wed, 2 Jul
+ 2025 19:59:56 +0000
+Received: from SA2PEPF00003F62.namprd04.prod.outlook.com
+ (2603:10b6:806:3c2:cafe::33) by SA1P222CA0146.outlook.office365.com
+ (2603:10b6:806:3c2::28) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8901.21 via Frontend Transport; Wed,
+ 2 Jul 2025 19:59:56 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ SA2PEPF00003F62.mail.protection.outlook.com (10.167.248.37) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8901.15 via Frontend Transport; Wed, 2 Jul 2025 19:59:56 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 2 Jul 2025
+ 12:59:48 -0700
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Wed, 2 Jul
+ 2025 12:59:47 -0700
+Received: from Asurada-Nvidia (10.127.8.12) by mail.nvidia.com (10.129.68.6)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14 via Frontend
+ Transport; Wed, 2 Jul 2025 12:59:46 -0700
+Date: Wed, 2 Jul 2025 12:59:44 -0700
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: "Tian, Kevin" <kevin.tian@intel.com>
+CC: "jgg@nvidia.com" <jgg@nvidia.com>, "corbet@lwn.net" <corbet@lwn.net>,
+	"will@kernel.org" <will@kernel.org>, "bagasdotme@gmail.com"
+	<bagasdotme@gmail.com>, "robin.murphy@arm.com" <robin.murphy@arm.com>,
+	"joro@8bytes.org" <joro@8bytes.org>, "thierry.reding@gmail.com"
+	<thierry.reding@gmail.com>, "vdumpa@nvidia.com" <vdumpa@nvidia.com>,
+	"jonathanh@nvidia.com" <jonathanh@nvidia.com>, "shuah@kernel.org"
+	<shuah@kernel.org>, "jsnitsel@redhat.com" <jsnitsel@redhat.com>,
+	"nathan@kernel.org" <nathan@kernel.org>, "peterz@infradead.org"
+	<peterz@infradead.org>, "Liu, Yi L" <yi.l.liu@intel.com>,
+	"mshavit@google.com" <mshavit@google.com>, "praan@google.com"
+	<praan@google.com>, "zhangzekun11@huawei.com" <zhangzekun11@huawei.com>,
+	"iommu@lists.linux.dev" <iommu@lists.linux.dev>, "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-tegra@vger.kernel.org"
+	<linux-tegra@vger.kernel.org>, "linux-kselftest@vger.kernel.org"
+	<linux-kselftest@vger.kernel.org>, "patches@lists.linux.dev"
+	<patches@lists.linux.dev>, "mochs@nvidia.com" <mochs@nvidia.com>,
+	"alok.a.tiwari@oracle.com" <alok.a.tiwari@oracle.com>, "vasant.hegde@amd.com"
+	<vasant.hegde@amd.com>, "dwmw2@infradead.org" <dwmw2@infradead.org>,
+	"baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
+Subject: Re: [PATCH v7 02/28] iommufd/viommu: Explicitly define vdev->virt_id
+Message-ID: <aGWPsGEg3kFeX52k@Asurada-Nvidia>
+References: <cover.1750966133.git.nicolinc@nvidia.com>
+ <cc7a558bfcdce5c2ea0d53b0c9c382f944df33ce.1750966133.git.nicolinc@nvidia.com>
+ <BN9PR11MB5276E7F8A69CAC8F4B0E416F8C40A@BN9PR11MB5276.namprd11.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="b64xojk44rmwat7t"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-User-Agent: NeoMutt/20231221-2-4202cf-dirty
+In-Reply-To: <BN9PR11MB5276E7F8A69CAC8F4B0E416F8C40A@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-NV-OnPremToCloud: AnonymousSubmission
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA2PEPF00003F62:EE_|IA4PR12MB9763:EE_
+X-MS-Office365-Filtering-Correlation-Id: f9da97c9-55d6-4704-a2e5-08ddb9a30491
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|7416014|376014|1800799024|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?h2IbRa2YqvUHBezvEwJOYRLsgG+ytR69T3x+noPj21yPwdrLWAUh47XWM9zo?=
+ =?us-ascii?Q?iZavD5szVg17hdDX7ufhGqAlOOqdbhiegCS3Tn2Za3SlnD0isfbCLpzgb9e+?=
+ =?us-ascii?Q?AHHWHHAp9VSckYPDOT2mFx0hUKbte+W5kJcB0VMpq97jyBLgHbCT63wW1baz?=
+ =?us-ascii?Q?LBh85O1orYz0SBg6TNIza8sNojVBkPh4XmdvibyB/S4jiWrz/U0JwVcZAy3a?=
+ =?us-ascii?Q?jjvaTuxY2R4XUeVcfPSAjteieLsbsD/YDCB9YjBbYhV/ZYtdxwPQppGtlkm0?=
+ =?us-ascii?Q?FZjui7rsLUTATJlIw2t9mXWhSyzmS5peaP3shmjZc7BUdRczbjR7+FGsf/+T?=
+ =?us-ascii?Q?fAuhDifvVPqK0hbf7LeG9Qfxb9sQaG1Z4PpvLEs0L2OadHA6UPeJeyYMmwG6?=
+ =?us-ascii?Q?eXyGIExDS1dVUk7FW1YgDe2GbMtDwtqa31mNazVukEXNE5dMx1jigsVsL8Kc?=
+ =?us-ascii?Q?szYQbLFAIhVk+afhQtoRI4wLcdj197Fk3LPZm4HO2htpLIvy5R9XZ8lX4VIJ?=
+ =?us-ascii?Q?oInKRJEDMuAAdWpMlJFsKIcgzp2TFHcA0/paak+OFBFB99C94/YclwiQg2+B?=
+ =?us-ascii?Q?ohi8zKvuxPa2JX4IN+xJiEFtP1V4weEO6h5OgxyI/jTjl8SxehTMAO21lddR?=
+ =?us-ascii?Q?pTm+75G4XCfzCLnDLIP/lcFAKFYBbPyDbvBHiQzjNRSQqR+TASTNbz3olHQD?=
+ =?us-ascii?Q?G9cGs44vy5NFWtm15wLNFcWq8d2a06IuKO0hJpn6qqi6JPvlkr8hRBQ/Ka5r?=
+ =?us-ascii?Q?ApG8lOzCrDLei+Vjay8z6j+jPRgm47oTuuoOJyfnaX8iz3rEydZwX7gcQAXQ?=
+ =?us-ascii?Q?o7d3ZlCJNm8gV172twZGXTUgoaiC8en/3Ufze4IOvWKrTiVYFEguThMZssAP?=
+ =?us-ascii?Q?86B6XdpPWoKw8q2KRrAHeya+Ugz/r3s3hfx9Kk7MfcRuKTrrpWZeAotWBX1e?=
+ =?us-ascii?Q?QEW4PROJBKOTW3EzJWYop2XJnlxtDo48eA2hmo5I+Hu9t0hQ6nAew0eUsI7l?=
+ =?us-ascii?Q?3Gg0S6W8L/TNLyijHdqJt9/gYSVtVNAbGnffmyQSJmWAb/EqK2pZOuvYmDvQ?=
+ =?us-ascii?Q?hUlhS+XLCNmfXXoympqC7SMohil3r0rCaLn+tFyZ6RYqZAFGNfLCUvIJKc5D?=
+ =?us-ascii?Q?M7cDg/YIM9vnSwJifqbqp63xB33IXDjLnukwh/v8qd5bfdxhnHvD+oY7J1hn?=
+ =?us-ascii?Q?rbFnD/ckzv0IW1SDOSur5AwUCiZPIchmUj0fTWKluiK3yLqPl48Dp4rwFMvS?=
+ =?us-ascii?Q?Qi3/GtLvTogT7+twVu/r+q59usf85ZMTBAJr6k7Dux8w36mazlTZBk6WnyGT?=
+ =?us-ascii?Q?NTUhRTYmivp5Rch0S66jCLw/mu6BBpV48uCDgm6WLPb+iLj3h4ajP7ulMgIn?=
+ =?us-ascii?Q?0bG8r5BQegX4O5RGidwI0xOVNkGNC+Wg8cR8b2NkZg9sutx/rRLB+n+h5P1i?=
+ =?us-ascii?Q?wfhcD94ARhC/wKSRFCFNWAGg/BMzvT7O3ibFCmgEA8aLy5C+zVh/b63lVzW6?=
+ =?us-ascii?Q?HBycYjMfsLMNlUmX7ThMCFxawfDblqCYlNBp?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(7416014)(376014)(1800799024)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jul 2025 19:59:56.2574
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f9da97c9-55d6-4704-a2e5-08ddb9a30491
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SA2PEPF00003F62.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA4PR12MB9763
 
+On Wed, Jul 02, 2025 at 09:40:50AM +0000, Tian, Kevin wrote:
+> > From: Nicolin Chen <nicolinc@nvidia.com>
+> > Sent: Friday, June 27, 2025 3:35 AM
+> > +
+> > +	/*
+> > +	 * Virtual device ID per vIOMMU, e.g. vSID of ARM SMMUv3,
+> > vDeviceID of
+> > +	 * AMD IOMMU, and vRID of a nested Intel VT-d to a Context Table
+> > +	 */
+> > +	u64 virt_id;
+> 
+> Just "vRID of Intel VT-d"? the current description is not very clear
+> to me.
 
---b64xojk44rmwat7t
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Looks like we use "vRID of Intel VT-d to a Context Table" in the
+Documentation/userspace-api/iommufd.rst, but forgot to change in
+the uAPI header:
+ * @virt_id: Virtual device ID per vIOMMU, e.g. vSID of ARM SMMUv3, vDeviceID
+ *           of AMD IOMMU, and vRID of a nested Intel VT-d to a Context Table
 
-Of these:
-  7 "for a while" typos
-  5 "take a while" typos
-  1 misreading of "once in a while"?
+Let me correct both of them.
 
-3 awhiles used correctly remain in the tree
-
-Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
----
- Documentation/trace/histogram.rst             | 2 +-
- arch/sh/drivers/pci/common.c                  | 2 +-
- arch/sh/drivers/pci/pci-sh7780.c              | 2 +-
- drivers/atm/lanai.c                           | 2 +-
- drivers/md/bcache/bcache.h                    | 2 +-
- drivers/md/bcache/request.c                   | 2 +-
- drivers/net/ethernet/google/gve/gve_rx_dqo.c  | 2 +-
- drivers/scsi/hpsa.c                           | 2 +-
- drivers/tty/serial/jsm/jsm_neo.c              | 2 +-
- fs/ocfs2/dlm/dlmrecovery.c                    | 2 +-
- sound/pci/emu10k1/emu10k1_main.c              | 2 +-
- sound/pci/emu10k1/emupcm.c                    | 2 +-
- tools/testing/selftests/powerpc/tm/tm-tmspr.c | 2 +-
- 13 files changed, 13 insertions(+), 13 deletions(-)
-
-diff --git a/Documentation/trace/histogram.rst b/Documentation/trace/histog=
-ram.rst
-index 0aada18c38c6..2b98c1720a54 100644
---- a/Documentation/trace/histogram.rst
-+++ b/Documentation/trace/histogram.rst
-@@ -249,7 +249,7 @@ Extended error information
-   table, it should keep a running total of the number of bytes
-   requested by that call_site.
-=20
--  We'll let it run for awhile and then dump the contents of the 'hist'
-+  We'll let it run for a while and then dump the contents of the 'hist'
-   file in the kmalloc event's subdirectory (for readability, a number
-   of entries have been omitted)::
-=20
-diff --git a/arch/sh/drivers/pci/common.c b/arch/sh/drivers/pci/common.c
-index 9633b6147a05..f95004c67e6c 100644
---- a/arch/sh/drivers/pci/common.c
-+++ b/arch/sh/drivers/pci/common.c
-@@ -148,7 +148,7 @@ unsigned int pcibios_handle_status_errors(unsigned long=
- addr,
-=20
- 		cmd |=3D PCI_STATUS_PARITY | PCI_STATUS_DETECTED_PARITY;
-=20
--		/* Now back off of the IRQ for awhile */
-+		/* Now back off of the IRQ for a while */
- 		if (hose->err_irq) {
- 			disable_irq_nosync(hose->err_irq);
- 			hose->err_timer.expires =3D jiffies + HZ;
-diff --git a/arch/sh/drivers/pci/pci-sh7780.c b/arch/sh/drivers/pci/pci-sh7=
-780.c
-index 9a624a6ee354..f41d6939a3d9 100644
---- a/arch/sh/drivers/pci/pci-sh7780.c
-+++ b/arch/sh/drivers/pci/pci-sh7780.c
-@@ -153,7 +153,7 @@ static irqreturn_t sh7780_pci_serr_irq(int irq, void *d=
-ev_id)
- 	/* Deassert SERR */
- 	__raw_writel(SH4_PCIINTM_SDIM, hose->reg_base + SH4_PCIINTM);
-=20
--	/* Back off the IRQ for awhile */
-+	/* Back off the IRQ for a while */
- 	disable_irq_nosync(irq);
- 	hose->serr_timer.expires =3D jiffies + HZ;
- 	add_timer(&hose->serr_timer);
-diff --git a/drivers/atm/lanai.c b/drivers/atm/lanai.c
-index 2a1fe3080712..0dfa2cdc897c 100644
---- a/drivers/atm/lanai.c
-+++ b/drivers/atm/lanai.c
-@@ -755,7 +755,7 @@ static void lanai_shutdown_rx_vci(const struct lanai_vc=
-c *lvcc)
- /* Shutdown transmitting on card.
-  * Unfortunately the lanai needs us to wait until all the data
-  * drains out of the buffer before we can dealloc it, so this
-- * can take awhile -- up to 370ms for a full 128KB buffer
-+ * can take a while -- up to 370ms for a full 128KB buffer
-  * assuming everone else is quiet.  In theory the time is
-  * boundless if there's a CBR VCC holding things up.
-  */
-diff --git a/drivers/md/bcache/bcache.h b/drivers/md/bcache/bcache.h
-index 1d33e40d26ea..7318d9800370 100644
---- a/drivers/md/bcache/bcache.h
-+++ b/drivers/md/bcache/bcache.h
-@@ -499,7 +499,7 @@ struct gc_stat {
-  * won't automatically reattach).
-  *
-  * CACHE_SET_STOPPING always gets set first when we're closing down a cach=
-e set;
-- * we'll continue to run normally for awhile with CACHE_SET_STOPPING set (=
-i.e.
-+ * we'll continue to run normally for a while with CACHE_SET_STOPPING set =
-(i.e.
-  * flushing dirty data).
-  *
-  * CACHE_SET_RUNNING means all cache devices have been registered and jour=
-nal
-diff --git a/drivers/md/bcache/request.c b/drivers/md/bcache/request.c
-index af345dc6fde1..87b4341cb42c 100644
---- a/drivers/md/bcache/request.c
-+++ b/drivers/md/bcache/request.c
-@@ -257,7 +257,7 @@ static CLOSURE_CALLBACK(bch_data_insert_start)
-=20
- 	/*
- 	 * But if it's not a writeback write we'd rather just bail out if
--	 * there aren't any buckets ready to write to - it might take awhile and
-+	 * there aren't any buckets ready to write to - it might take a while and
- 	 * we might be starving btree writes for gc or something.
- 	 */
-=20
-diff --git a/drivers/net/ethernet/google/gve/gve_rx_dqo.c b/drivers/net/eth=
-ernet/google/gve/gve_rx_dqo.c
-index dcb0545baa50..6a0be54f1c81 100644
---- a/drivers/net/ethernet/google/gve/gve_rx_dqo.c
-+++ b/drivers/net/ethernet/google/gve/gve_rx_dqo.c
-@@ -608,7 +608,7 @@ static int gve_rx_dqo(struct napi_struct *napi, struct =
-gve_rx_ring *rx,
- 	buf_len =3D compl_desc->packet_len;
- 	hdr_len =3D compl_desc->header_len;
-=20
--	/* Page might have not been used for awhile and was likely last written
-+	/* Page might have not been used for a while and was likely last written
- 	 * by a different thread.
- 	 */
- 	if (rx->dqo.page_pool) {
-diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
-index c73a71ac3c29..0066f15153a7 100644
---- a/drivers/scsi/hpsa.c
-+++ b/drivers/scsi/hpsa.c
-@@ -7795,7 +7795,7 @@ static int hpsa_wait_for_mode_change_ack(struct ctlr_=
-info *h)
- 	u32 doorbell_value;
- 	unsigned long flags;
-=20
--	/* under certain very rare conditions, this can take awhile.
-+	/* under certain very rare conditions, this can take a while.
- 	 * (e.g.: hot replace a failed 144GB drive in a RAID 5 set right
- 	 * as we enter this code.)
- 	 */
-diff --git a/drivers/tty/serial/jsm/jsm_neo.c b/drivers/tty/serial/jsm/jsm_=
-neo.c
-index e8e13bf056e2..2eb9ff26d6e8 100644
---- a/drivers/tty/serial/jsm/jsm_neo.c
-+++ b/drivers/tty/serial/jsm/jsm_neo.c
-@@ -1189,7 +1189,7 @@ static irqreturn_t neo_intr(int irq, void *voidbrd)
- 			/*
- 			 * The UART triggered us with a bogus interrupt type.
- 			 * It appears the Exar chip, when REALLY bogged down, will throw
--			 * these once and awhile.
-+			 * these periodically.
- 			 * Its harmless, just ignore it and move on.
- 			 */
- 			jsm_dbg(INTR, &brd->pci_dev,
-diff --git a/fs/ocfs2/dlm/dlmrecovery.c b/fs/ocfs2/dlm/dlmrecovery.c
-index 67fc62a49a76..00f52812dbb0 100644
---- a/fs/ocfs2/dlm/dlmrecovery.c
-+++ b/fs/ocfs2/dlm/dlmrecovery.c
-@@ -2632,7 +2632,7 @@ static int dlm_pick_recovery_master(struct dlm_ctxt *=
-dlm)
- 					 dlm_reco_master_ready(dlm),
- 					 msecs_to_jiffies(1000));
- 		if (!dlm_reco_master_ready(dlm)) {
--			mlog(0, "%s: reco master taking awhile\n",
-+			mlog(0, "%s: reco master taking a while\n",
- 			     dlm->name);
- 			goto again;
- 		}
-diff --git a/sound/pci/emu10k1/emu10k1_main.c b/sound/pci/emu10k1/emu10k1_m=
-ain.c
-index bbe252b8916c..6050201851b1 100644
---- a/sound/pci/emu10k1/emu10k1_main.c
-+++ b/sound/pci/emu10k1/emu10k1_main.c
-@@ -606,7 +606,7 @@ static int snd_emu10k1_ecard_init(struct snd_emu10k1 *e=
-mu)
- 	/* Step 2: Calibrate the ADC and DAC */
- 	snd_emu10k1_ecard_write(emu, EC_DACCAL | EC_LEDN | EC_TRIM_CSN);
-=20
--	/* Step 3: Wait for awhile;   XXX We can't get away with this
-+	/* Step 3: Wait for a while;   XXX We can't get away with this
- 	 * under a real operating system; we'll need to block and wait that
- 	 * way. */
- 	snd_emu10k1_wait(emu, 48000);
-diff --git a/sound/pci/emu10k1/emupcm.c b/sound/pci/emu10k1/emupcm.c
-index 1bf6e3d652f8..ca4b03317539 100644
---- a/sound/pci/emu10k1/emupcm.c
-+++ b/sound/pci/emu10k1/emupcm.c
-@@ -991,7 +991,7 @@ static snd_pcm_uframes_t snd_emu10k1_capture_pointer(st=
-ruct snd_pcm_substream *s
- 	if (!epcm->running)
- 		return 0;
- 	if (epcm->first_ptr) {
--		udelay(50);	/* hack, it takes awhile until capture is started */
-+		udelay(50);	/* hack, it takes a while until capture is started */
- 		epcm->first_ptr =3D 0;
- 	}
- 	ptr =3D snd_emu10k1_ptr_read(emu, epcm->capture_idx_reg, 0) & 0x0000ffff;
-diff --git a/tools/testing/selftests/powerpc/tm/tm-tmspr.c b/tools/testing/=
-selftests/powerpc/tm/tm-tmspr.c
-index dd5ddffa28b7..0d64988ffb40 100644
---- a/tools/testing/selftests/powerpc/tm/tm-tmspr.c
-+++ b/tools/testing/selftests/powerpc/tm/tm-tmspr.c
-@@ -14,7 +14,7 @@
-  * (1) create more threads than cpus
-  * (2) in each thread:
-  * 	(a) set TFIAR and TFHAR a unique value
-- * 	(b) loop for awhile, continually checking to see if
-+ * 	(b) loop for a while, continually checking to see if
-  * 	either register has been corrupted.
-  *
-  * (3) Loop:
---=20
-2.39.5
-
---b64xojk44rmwat7t
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmhliVoACgkQvP0LAY0m
-WPGFEQ/8DbYwNy7U1qf5X+siSkqv8Zb3esOfRNF9i9YUDMZ1GdhK4suKYpWFrOZz
-dw7FGbgwwgl1BNsKAmQoG23kglIQuB54tFwWN487hlkk4CvpeBQDHlQ8+0W2riUX
-fYawEukQC2kZ7+Abxe2ZOYlJGhJJxbTxbDT2oaKRKN/bh87QXXgTK777Y1eYLJkt
-sI7zzKwEsRFpaR2qJaoig54fePOyM50gK+U/MxyMjmoXheCWepLndly0/aZKyvjk
-Hypk+7p1f2nHMk39vwjeFc4U6nmUa1tCy7iEEOnQNqUV9Uds3Uy9NDqGI2xY0hit
-vh/gidHYpTKPKMJFJVuumVVWIrMrqIGxE6sdCFY7Arv5pERKUhPIh8xVtsaBUpmc
-kQwh87srq5PHjvtCrFIcJDSmiJlB132lokYcq0vwHOy8mp6Q7UNSFhEP15zzq75C
-xQ1aeR1SOQ3inWywOAkSZjv80iIdbnQsLZPNeSu5G7/BUZMg2Th5Pvz2h+LSEX2G
-adcgBklNOUu+hpsZzlphdKsiyMoPsf4Og/W0sBd+1SYBBd8fLmIpChGPVGxiaqyW
-+OqGHWqtAJHFtK5o+xZreq0tD/WiMgfkU4rObLg1aEfhSP6ILf8YacYYXuTgnQPb
-BHOD8IgLIY1uuG6tB/t5XqoG2JTUxGsxkZZ84kovSpLGkpEdN1A=
-=4j77
------END PGP SIGNATURE-----
-
---b64xojk44rmwat7t--
+Thanks
+Nicolin
 
