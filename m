@@ -1,146 +1,113 @@
-Return-Path: <linux-kselftest+bounces-36298-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36299-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2660AF122B
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 12:43:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28DC7AF1242
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 12:47:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 87474175D00
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 10:43:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 400561C40175
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 10:47:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 222F12580EC;
-	Wed,  2 Jul 2025 10:43:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E06E124EF76;
+	Wed,  2 Jul 2025 10:47:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q8oFkd6g"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="q53ARjP+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACCCF4C6E;
-	Wed,  2 Jul 2025 10:43:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F91F2571DF
+	for <linux-kselftest@vger.kernel.org>; Wed,  2 Jul 2025 10:47:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751452999; cv=none; b=bx8Ip8R8BFxriCByQB+jS+p7MoNVuqWrmNW4RV5QecYLgwOsZXc2Vb0wa0HSSDaEV0YC4+hrEBPzvrk4U8sX6UK/pn30RngkkU2GSlRMUKDi6ZfuO8tR8w3NNBbhypitludwNBc0NkSre+1BXD6rf9/wamFs8YX+wdPIyIwKsGE=
+	t=1751453237; cv=none; b=J0CRJySZLFswAGT5H4HDlXCXiCv8tbCWnJaqwDldVj4aplJd/CwIEI8OeofLk5Oz2AreqzgFTn/+e+63q54mzxVi9N+R1+0n0khK+6ubioZmWrU4gdqk/aCLqhy7giODhEwmn5A0HW6XOjwqDPcOdmRcbFuuxBD7W/00HUJfXN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751452999; c=relaxed/simple;
-	bh=RHLJ9D48DllsGUWCN1uoEd21Mm8wSzcmeliizhoLpy4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=bhncK0RyPPm74ClZgX75qC1rAF0Euqt67pcKvppeoihQe4T/J0quGgHMPvcG6PyBjD4+CoDrp+uixOobVQgzNpfMhBpR8zhnjLcO83AYKJUVhXSFQP6wp1olStjRYGVouNl/xiJjpjTstHhCdlIczB9IGlRVYPEwqnhvOPHafcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q8oFkd6g; arc=none smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-747fc77bb2aso4044144b3a.3;
-        Wed, 02 Jul 2025 03:43:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751452997; x=1752057797; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zdPAwwrb4QJU2IWSSlyaWAnqCnTmtH2bZk+NO2oHIiA=;
-        b=Q8oFkd6g03X6+RJo05Oae/BwHM4IqRUWtDU9EXA4UEK/Txbv73ZOpzOTf/jH9yLQ29
-         QYVgY3VRNI+8QWPbRmE2drNQV9QJhhGwtbDmPrjiUl7yHpTp5JimZEV7nIAsR4t+WHq7
-         UAupONbSUc/ErwBawa6cMS3RztwM+ZO53E/S2k0l62JyTOJpatvDIK066VbAhkrS2Y0A
-         REmaIQHJmGpddE+JUP1g8WXEE50Z0Yu213Ml1jQiwog3QrpNTiKo3Ci14B/LdjPfWuZ2
-         UCoYe+3KuUipUd/RF+wr14K3VeK7OdA+FZ3yKoUypxgF/n7ehuLCgVAgs+gttSSGpWzG
-         StxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751452997; x=1752057797;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zdPAwwrb4QJU2IWSSlyaWAnqCnTmtH2bZk+NO2oHIiA=;
-        b=OF4/7pT4M1MR6iAboIK58hceMYFV+Ok82G46FVFoTE+hDhyFiOziJUSk9MhXBcPIiW
-         wCi7WKJz9z/tAPDMigDz0rqTh/L+NNeYc0hWcZtS/e5DtxOxJIKlGUnq+dxYrtkGuqSP
-         Y6o/at6g58zCiC4zmRm5h3GuH6JY8/LxlmGhrHxt1JBkLXjdjdffm0nrDPhxF9p9tgX+
-         vLSziH207QD0UN4vi5+xehGb19kGEM1wPey2fg941LS/YX8xRD2kZFJcQY6N5rfQJ2sz
-         s1NYGesNSB0upnDhC2XV6ooFAPN5nM63MlH11ZbHAdhlCzgDde5KYdSvLZPxAPlPwRZK
-         I+lA==
-X-Forwarded-Encrypted: i=1; AJvYcCUKpUShm5E8lgmIIMPNn/tUG6aWvqK2UbugzdPuWppZR3f9rfYyuwIXYtuomichmWNW15M3GvwAxNsN5QCdTQM=@vger.kernel.org, AJvYcCUcSddts3HLE/BDmDXYwnBVbmhVDglQlB61G6RlUoYM5JJjvjSH27HGnWLZ7NXHnpJX0EVYAxHY@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy5AGIyvPXm2fsK2yNIHI+x/XdzQO2491m/QZcOz7oWMGe7h91l
-	U7E+pAPJZVYMHWKw8OX+p/+4okXSGeGtxUkU4Fz1vly6CuHTU8kXbrez
-X-Gm-Gg: ASbGncvu04x1jra8JC9al47BsCTelL6b35sxwPreuGx/OFdk1fbbtJ2vdrGPBTRBO01
-	h547Y+m+CyHdt83lkORZtXYcZXNVELCt0hm8p5+qFTyEcMDzc7I4fLajUZoTm8Sq6OV3WsNU4r4
-	m5S0h2kU6abnlHaZHETXNNsXgeQSRf/Il/TzNY73V4ZL/29SvSA31teiO8hy4aagg5jhzbrc63s
-	ftaJaMDHxcZO2Fl5KVgzN0BdM2oF0KrlReA48x4ao8ma7gOcDTq5V0wBJOfz1P2SQkR5XkRUFc0
-	d1NHFSShNjd9UDQ6/TYKMrEJMH2/JRudzYQ+LXhkihBUNFZv29g=
-X-Google-Smtp-Source: AGHT+IEeiHFvgdgKJjn0wBnclG5KXDNWT8Pp2yzRR3R/ETtmSUop97FYezDUkFO3sL3XSJBZmVb8HA==
-X-Received: by 2002:a05:6a20:3ca3:b0:222:1802:2ddb with SMTP id adf61e73a8af0-222d7dc4e64mr5025821637.8.1751452996777;
-        Wed, 02 Jul 2025 03:43:16 -0700 (PDT)
-Received: from ap.. ([182.213.254.91])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74af54099besm14064227b3a.9.2025.07.02.03.43.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Jul 2025 03:43:16 -0700 (PDT)
-From: Taehee Yoo <ap420073@gmail.com>
-To: davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	andrew+netdev@lunn.ch,
-	shuah@kernel.org,
-	almasrymina@google.com,
-	sdf@fomichev.me,
-	jdamato@fastly.com,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: ap420073@gmail.com
-Subject: [PATCH v2 net-next] selftests: devmem: configure HDS threshold
-Date: Wed,  2 Jul 2025 10:42:49 +0000
-Message-Id: <20250702104249.1665034-1-ap420073@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1751453237; c=relaxed/simple;
+	bh=f0nEfOeks7bqbPH5rffZLucmuh4U6XESCjXUVcEd+9Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kgN5kptoGNnpztxiwyuXdWNf5sVLp/SVMqm7Dz1uuUZ26iFvKRS+D30D1jjwQaNbJ8IZHVQ/5h0bFWmLCdycUk2UJ4pWI3o0P3yKfkMw9cp/1YJk1hfoyAOW1UPD84V3RhcJrkSLPYdVKgRTsNZzSwEuqtDzZIkuzJnRFFBqO6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=q53ARjP+; arc=none smtp.client-ip=95.215.58.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Wed, 2 Jul 2025 12:46:55 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1751453223;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lGt6az+NvJ14ljwTTt5to9cmtNUkKbD4VgZIkyAJvCs=;
+	b=q53ARjP+zZ09C7DsmED/JE5lQEtVYZqhbaHZ7PPf01CV+97+OnO7//+Qbc/YmT9kloXRU/
+	MLSMjEUVNqRmvO6TV0VoYncC+bEMWnqkZGlZtwU3E0WhiPTtqTtsA7qIKbHJrmwLIWVC2Q
+	UpubvSNopJSX4IBuMkbaLuszmCWfeDE=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Andrew Jones <andrew.jones@linux.dev>
+To: Jesse Taube <jesse@rivosinc.com>
+Cc: kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
+	linux-kselftest@vger.kernel.org, Atish Patra <atish.patra@linux.dev>, 
+	Anup Patel <anup@brainfault.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	=?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>, Himanshu Chauhan <hchauhan@ventanamicro.com>, 
+	Charlie Jenkins <charlie@rivosinc.com>
+Subject: Re: [kvm-unit-tests PATCH v8] riscv: sbi: Add SBI Debug Triggers
+ Extension tests
+Message-ID: <20250702-f6f3fde8cfecdb6901edfc76@orel>
+References: <20250701200047.1367077-1-jesse@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250701200047.1367077-1-jesse@rivosinc.com>
+X-Migadu-Flow: FLOW_OUT
 
-The devmem TCP requires the hds-thresh value to be 0, but it doesn't
-change it automatically.
-Therefore, make configure_headersplit() sets hds-thresh value to 0.
+On Tue, Jul 01, 2025 at 01:00:47PM -0700, Jesse Taube wrote:
+> +#define SBI_DBTR_TDATA1_TYPE_SHIFT		(__riscv_xlen - 4)
 
-Signed-off-by: Taehee Yoo <ap420073@gmail.com>
----
+I just double checked and see that this shift is 4 less than xlen, so...
 
-v2:
- - Do not implement configure_hds_thresh().
- - Make configure_headersplit() sets hds-thresh to 0.
+> +enum McontrolType {
+> +	SBI_DBTR_TDATA1_TYPE_NONE =		(0UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
+> +	SBI_DBTR_TDATA1_TYPE_LEGACY =		(1UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
+> +	SBI_DBTR_TDATA1_TYPE_MCONTROL =		(2UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
+> +	SBI_DBTR_TDATA1_TYPE_ICOUNT =		(3UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
+> +	SBI_DBTR_TDATA1_TYPE_ITRIGGER =		(4UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
+> +	SBI_DBTR_TDATA1_TYPE_ETRIGGER =		(5UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
+> +	SBI_DBTR_TDATA1_TYPE_MCONTROL6 =	(6UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
+> +	SBI_DBTR_TDATA1_TYPE_TMEXTTRIGGER =	(7UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
+> +	SBI_DBTR_TDATA1_TYPE_RESERVED0 =	(8UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
+> +	SBI_DBTR_TDATA1_TYPE_RESERVED1 =	(9UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
+> +	SBI_DBTR_TDATA1_TYPE_RESERVED2 =	(10UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
+> +	SBI_DBTR_TDATA1_TYPE_RESERVED3 =	(11UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
+> +	SBI_DBTR_TDATA1_TYPE_CUSTOM0 =		(12UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
+> +	SBI_DBTR_TDATA1_TYPE_CUSTOM1 =		(13UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
+> +	SBI_DBTR_TDATA1_TYPE_CUSTOM2 =		(14UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
+> +	SBI_DBTR_TDATA1_TYPE_DISABLED =		(15UL << SBI_DBTR_TDATA1_TYPE_SHIFT),
 
- tools/testing/selftests/drivers/net/hw/ncdevmem.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+...all these will require unsigned long (as the UL's provide), but that
+means...
 
-diff --git a/tools/testing/selftests/drivers/net/hw/ncdevmem.c b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
-index cc9b40d9c5d5..52b72de11e3b 100644
---- a/tools/testing/selftests/drivers/net/hw/ncdevmem.c
-+++ b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
-@@ -331,6 +331,12 @@ static int configure_headersplit(bool on)
- 	ret = ethtool_rings_set(ys, req);
- 	if (ret < 0)
- 		fprintf(stderr, "YNL failed: %s\n", ys->err.msg);
-+	if (on) {
-+		ethtool_rings_set_req_set_hds_thresh(req, 0);
-+		ret = ethtool_rings_set(ys, req);
-+		if (ret < 0)
-+			fprintf(stderr, "YNL failed: %s\n", ys->err.msg);
-+	}
- 	ethtool_rings_set_req_free(req);
- 
- 	if (ret == 0) {
-@@ -338,9 +344,12 @@ static int configure_headersplit(bool on)
- 		ethtool_rings_get_req_set_header_dev_index(get_req, ifindex);
- 		get_rsp = ethtool_rings_get(ys, get_req);
- 		ethtool_rings_get_req_free(get_req);
--		if (get_rsp)
-+		if (get_rsp) {
- 			fprintf(stderr, "TCP header split: %s\n",
- 				tcp_data_split_str(get_rsp->tcp_data_split));
-+			fprintf(stderr, "HDS threshold: %u\n",
-+				get_rsp->hds_thresh);
-+		}
- 		ethtool_rings_get_rsp_free(get_rsp);
- 	}
- 
--- 
-2.34.1
+> +static unsigned long gen_tdata1(enum McontrolType type, enum Tdata1Value value, enum Tdata1Mode mode)
+> +{
+> +	switch (type) {
+> +	case SBI_DBTR_TDATA1_TYPE_MCONTROL:
+> +		return gen_tdata1_mcontrol(mode, value) | mcontrol_size(SIZE_32BIT);
+> +	case SBI_DBTR_TDATA1_TYPE_MCONTROL6:
+> +		return gen_tdata1_mcontrol6(mode, value) | mcontrol6_size(SIZE_32BIT);
+> +	default:
+> +		assert_msg(false, "Invalid mcontrol type: %u", (int)type);
 
+...my suggestion here was wrong for rv64. We need
+
+  assert_msg(false, "Invalid mcontrol type: %lu", (unsigned long)type);
+
+I've fixed it up while applying to riscv/sbi
+
+https://gitlab.com/jones-drew/kvm-unit-tests/-/commits/riscv/sbi
+
+Thanks,
+drew
 
