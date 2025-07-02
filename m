@@ -1,62 +1,62 @@
-Return-Path: <linux-kselftest+bounces-36364-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36365-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E5C0AF6643
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 01:32:28 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B6A0AF6645
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 01:32:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BDF8E48683E
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 23:31:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BA6C17B2CCA
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Jul 2025 23:31:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 452C03093CA;
-	Wed,  2 Jul 2025 23:30:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D07E5315511;
+	Wed,  2 Jul 2025 23:30:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="e9jD+oAz"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="MMVSaFbV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2084.outbound.protection.outlook.com [40.107.223.84])
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2064.outbound.protection.outlook.com [40.107.220.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FA252F0C68;
-	Wed,  2 Jul 2025 23:30:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F0A230E856;
+	Wed,  2 Jul 2025 23:30:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.64
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751499025; cv=fail; b=SI5gpfAWjLF1KkLLCuqXnnGDbvGmgVYfHmBhDjp3ruWksd9I720b+f8oUAtq1oVSr46gUBfLvPCFCZ8zJcs1gkBLXge/SyARIxubakO9vNpUxVmHkogTQWhXhf3DMxZn6p40XKuAYAYmMSmNvmTY6JINAVRg0MceDa0qCAvtS+s=
+	t=1751499029; cv=fail; b=Yt9Gs5vz41d+i+AWm8K1rO9XK752/lGmwCGLybxQXAnTECgy5wZnXJr+dbJA7TWb5OnqXwRTcHEnS5Vg3E3brN7ylBe2SNMNal2vKl6Og2L7ZS9uT0q0TtB96iWXlVgeLrgnVmQdhs8kSC8z8qidkzy/NFMz0XqJFIcQ9gPrq3Y=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751499025; c=relaxed/simple;
-	bh=Ebev+Z60KYQfu49sWa+QTYaf7qEFeHBbLA8GNlPJ1g0=;
+	s=arc-20240116; t=1751499029; c=relaxed/simple;
+	bh=s2iGh051VPmnMAPt36ZVSB97PIVoTNR7PMctiD3K5Bc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=YskYBlTOg5HfNegGtqbljOcHV1DjHytNqIMdUu5S0CqYRk0Dpw58aZ6VaCHFC/BFEtrgO8Yuo21khfN+6QdbkkTJPDkTSYKm7wMfkDO0v1NX/HeuuiotyL4yWXf+PcL62XUChbrqT8dtc+0QNOyABGBIF8RMNDp9cNJY4FW967w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=e9jD+oAz; arc=fail smtp.client-ip=40.107.223.84
+	 Content-Type:MIME-Version; b=DzL4lLH0H4apaKfmDSkSB9nR+jVd36GU13Radj2z6ZghsxWGhv6LWiJS2lp/o/T8lSvW4xPon85K4kf4w0Agk4eczB3dKx9eiBHOEPKZ1kKTQhCrv5GnZXBMddG2MlqeI8C6cTREi0w8F+d+W6pSpYfQxbQgrO0llR3o/L30q8g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=MMVSaFbV; arc=fail smtp.client-ip=40.107.220.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=sUm31FZc9XQqdXv8CGeexqrMbUaTt5iOsvo+AUwgqJbuqKqBHlgLPc52ulTGr0jixU5r6334HGltwDlRMExmxwmZ66PlKlkeWN1WJZJ3zPdL3cKH8LMsY/Hn5j8TKT3C6MDiB8DjMntq1VCjGAWOb3O3m8zumhuItTVxQZgkern3JqF973ko8tkFlGAm0MEzWjLme/K1CuHFHTmKJbiBkKiuM+ytZ8DLt9m5/AeHBixot8NtakcC36ZqjB7yw9v1sLwvyhpct4AxKZwGGw5oo4TzmALqkMBxKY/f10qnhRfK6smIHMEl/cDs64U1si1GvcOV/fE3P+MN5cakmj/9RA==
+ b=Ui1ZY8hPilgPqToRlQRXH0TinTbMdf44uPJ/pR0+pW2KnGt1P1sHAP9pTLLK15Cd0DPsI/Rx4a5RLUcQtNM7Q+tRmE1O4lk5XyMvVIJYTTm9YQUy0S52EAH+sRPVRZC97Uc4SFYgl6LfifNfx/2Z8+1tLQbAAdB2LhGvlDPOd/INE+7yY+1XWgRYki20byzEsH3dKM7TLOdnzDEDhpDkQGy9WuLhlrk2cerN5nravECidzWU21i6bRK9X+dCnQuef1fe0vizkmcSkAwUApsDjUjiRFj/30ZxlTWbWC17rGDQaovuXrhMgwrAHcWBlisbG0wQzroIXjbUuSkH2c2Hvw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=M5WUGDKZ/pwPNdpsepCF7GR1khVjxjyfRTqSzHam+eA=;
- b=jlx8TxZybtwT8SJqlkyM6AFEAFHg+CKmKM80D7uuVFWpNEhd69VvKiW4UV+8hfxViWRYCetM/POEEGAP0ARU9T/4eGJ/wVOrfib6XO0QlI/ruhbmgpbRSRBVGACaHUMxETW1Pz52LxsMXS+QawZ1PXESyadT9o2HmeQ1BWHxyEi+rulc8NcZFFDMPXxcEQzFVXo3Yy5h6Y5FYGdgTeWVuCka1kFh8T4i1QZrajlDNfAEP6OCie/YaU68nO5N8ZAYHlBXvVfLErMV2pqGyVUlF3nCKlD8IvmF60xsv/ZIm4N/phkw7loLxYne0kijAheBsBpD4qwO5xDmWokaKuCe4w==
+ bh=x0XBiVdDdejACUoRwTBbTqmBQiMyfVXdmEGwrW93d0U=;
+ b=dzwl2m7YH3LHgulocMrG4Bp3X2v25UUCKm2ne2jICoqt86fI95k2hz1437PzRbCNy8jwFGgHiqbAq8O6QDfHLLTnwQ3VcLUA/KSU0qexY3zO5WfQto8xjeoXSyhGRhRVv+9K8hDGtHszTjtYuPkN82CRAgxz7NxdOORSCNAi/35/fuF6IUb/DBSIezbEoJTe5NUqfND4u6nRp8qs8y5Sc2wKCP5DAdlDWF/qS+sdfoTp3HvXLZY3wpuiFgsFJn0ApZARQ48nzceGBqF3Pn8Hp5+KoEifFImPFe7YlNC7pdGX2G8tGCqB5VH7nx1OytnI/zeBwizedLYJFfYuapDU8g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M5WUGDKZ/pwPNdpsepCF7GR1khVjxjyfRTqSzHam+eA=;
- b=e9jD+oAzGtiE6C5/qTFcQoG8GkOdK7LoqqgH0hOGazH6SgJ3U43WORShTcu7bH5Zy+LfP6Sfj2EFateWnjWDJpqcxr6loJhWnw4lObEiwDMsTG9WhvJWGjNffio6qMSGV18+92ny86pk0mnlIjfqCsNukGBaK4oWueWJl3t9ozHHCtetYQsrBpIYygd4+b2qOzLDE7nn3w2ZrgC/kmGCDEFi7KRIU4UgOhAZzwiGN6HObWqEKQux1y5zPN134zToDqQCRpZZ0em3hvu4RiGnHd9NauRtoC4hys3WmGVa91+C/0SmdNucxUjx9L0/0/KeZHRVPcNxy6abIyBvdlSv+w==
+ bh=x0XBiVdDdejACUoRwTBbTqmBQiMyfVXdmEGwrW93d0U=;
+ b=MMVSaFbVjeOD6Hvh//QrePedG/ddCutOXkkihc7lIQma5wvoNuMi5mBn+E5Mh+ySn2h4bSoRu44gcewW5ho5Sm4qDkujh2RA/IPLXvavZVE8FEIfrIjV3r2rSL9y9475dndsfmb9lAY7CSjlJ1GNaimEpTO65O6mIF31bKFfDqQj+aFeD/7bKaSrM5PA1wzEPEZ2/xLNph/t1mtcqTfUFxwkK72L0ZPo9LqwFOmZm10pLZBR9MC8slFTB0BnfGwLvJXHtMB7oUcLA8kcVlcP2xzRQmb2Q9FaWKzl8JjYSk2G01l/yFlHotKHGdUClJDtV3BAEYL6q9hRkzN/fRxBkg==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from SN7PR12MB8059.namprd12.prod.outlook.com (2603:10b6:806:32b::7)
  by MW6PR12MB7069.namprd12.prod.outlook.com (2603:10b6:303:238::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.20; Wed, 2 Jul
- 2025 23:30:19 +0000
+ 2025 23:30:25 +0000
 Received: from SN7PR12MB8059.namprd12.prod.outlook.com
  ([fe80::4ee2:654e:1fe8:4b91]) by SN7PR12MB8059.namprd12.prod.outlook.com
  ([fe80::4ee2:654e:1fe8:4b91%7]) with mapi id 15.20.8901.018; Wed, 2 Jul 2025
- 23:30:19 +0000
+ 23:30:24 +0000
 From: Joel Fernandes <joelagnelf@nvidia.com>
 To: linux-kernel@vger.kernel.org,
 	Tejun Heo <tj@kernel.org>,
@@ -77,16 +77,16 @@ Cc: Joel Fernandes <joelagnelf@nvidia.com>,
 	sched-ext@lists.linux.dev,
 	linux-kselftest@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH v6 12/14] selftests/sched_ext: Add test for sched_ext dl_server
-Date: Wed,  2 Jul 2025 19:29:37 -0400
-Message-ID: <20250702232944.3221001-13-joelagnelf@nvidia.com>
+Subject: [PATCH v6 14/14] selftests/sched_ext: Add test for DL server total_bw consistency
+Date: Wed,  2 Jul 2025 19:29:39 -0400
+Message-ID: <20250702232944.3221001-15-joelagnelf@nvidia.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250702232944.3221001-1-joelagnelf@nvidia.com>
 References: <20250702232944.3221001-1-joelagnelf@nvidia.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: MN2PR05CA0020.namprd05.prod.outlook.com
- (2603:10b6:208:c0::33) To SN7PR12MB8059.namprd12.prod.outlook.com
+X-ClientProxiedBy: BLAPR03CA0140.namprd03.prod.outlook.com
+ (2603:10b6:208:32e::25) To SN7PR12MB8059.namprd12.prod.outlook.com
  (2603:10b6:806:32b::7)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -96,356 +96,403 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: SN7PR12MB8059:EE_|MW6PR12MB7069:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0c7dfe72-a494-474b-cdd8-08ddb9c068a4
+X-MS-Office365-Filtering-Correlation-Id: 47697c36-0f51-4ed1-770e-08ddb9c06b4c
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|366016|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?AI3E1+B6qmLpiYSZbIQ/kXejybGmJDx0U3ZOEiT0fUTg6YegrbYHywNIpTvA?=
- =?us-ascii?Q?YthSkclNhlKuYgovWJPGqxFGSVlTN3TnuQtCLjFuV/p92YGWHWJKmTCxPoRH?=
- =?us-ascii?Q?03XjiKUbIZ8k0/sPfvG4cZPnxNXR4U9sZTa0PO4/bC7TXoz2F1Sdp74pAZAh?=
- =?us-ascii?Q?QH7jXSNT1q3+4R+SZgsgAh9QgqbB5yC3bEegvBkE8VbNcKoDgV63SHSEwFsr?=
- =?us-ascii?Q?o+2YVEPI7WV9ZiLntXhZhWhmfcMWf3F2Aq5Fhgg5dgrIVwY9cSRmUzrxCxGL?=
- =?us-ascii?Q?jGqF2tS9xsxokP8GSdhN6CBZg4DajNpKy6E1SWHT3HhUAujG0JG+xQYPHgLU?=
- =?us-ascii?Q?yudNUJoAaa1v2huptdy/iRErA+n5g/uFqknaAG9asWRv+2jJOjkLX412Iirc?=
- =?us-ascii?Q?HHF6XGUTfbqDfzyMDIyzc5Xw9Tacce4KpNS1lR3k5v3CRIMKpY6bPNpdzCJL?=
- =?us-ascii?Q?PJ76vfz01rjTpb5DISGtTc+rNVffOkeRdoMBX6qyTT+sMTjrS+vrUQwnlmYA?=
- =?us-ascii?Q?T1eJ6wezzZVgjse91fLlGXzmbUyXkaxioFQ25Ed7mYpYxhi0bPTc3jjuR3iE?=
- =?us-ascii?Q?ZJwvLgNWx3skGB0seiGYYIPAmCd1lV9hkHYWHisHo7V6DVb31+CkycoYERrT?=
- =?us-ascii?Q?hoM6GuqYckMKVHKHR1vWzGy6PmtL3rdNQGaJtspiKZMDPD9l9wncJg+RkA++?=
- =?us-ascii?Q?6I1ng9nd6oKfr7nZOtzFtp54JBoY+dCdHCFvMfI+O8T5AbymSwntb+zjAYte?=
- =?us-ascii?Q?i7uFWfPuuBBMdLD922A+Xp2ea94EzQlNKYVYaRIa808RA00tnKXoig4AloWz?=
- =?us-ascii?Q?ph5/scLiujv5zfv3XRvujMLKtJdZfF9QhdlJaaRbNdQILwWfSU4T3vJcBu3R?=
- =?us-ascii?Q?futWM31pGRQOXbgFSokKtUPiUMIT1yT/WB6PDnCLFAKXqo13XDE9am1S13yV?=
- =?us-ascii?Q?s5QLIkGyAlViID5SW98h5Ky+9waI8ttuqz6/d4fVcukY3c2uPjkn8lXIH3gs?=
- =?us-ascii?Q?jeIRpAk757LNGnE3B02keyeBRYdU499sk5ggqtbNxe5VpdjEcattfKJ6tTL3?=
- =?us-ascii?Q?oLtAwlinnsAK1drQ4+ixpWtylWmxlCrIKDwC1QVCfHgesZVkMZ6Gv1fyirNb?=
- =?us-ascii?Q?TCM3wj5HS3Av014n5AtNuU0XAIFtj5Q0u3AoGeOhqedkErTPS9DoLQACL87V?=
- =?us-ascii?Q?bQHXmA+6h7kWgJVgmFqEAe0DRBM1gX8sxR+qu/1lhJoVEu0Of272uBmzB8Oc?=
- =?us-ascii?Q?iP87jop9WyjHyLWOtA28oUvTUHKWFu3A07c0jWFzBg/oScu8biGmFLg+CjcD?=
- =?us-ascii?Q?DKYbIf8bZkTr4zya2MPOpY3HWceLapK+Qoa/KjFl7cJW/R/RU+0qlGayrULv?=
- =?us-ascii?Q?Ss7Ukq6r8l9vI0rF+5z8JUexeWHH2MDFnlBgrQtCt0DOe1Oeo9uBQNfLNpQq?=
- =?us-ascii?Q?nVQ0TWSewrk=3D?=
+	=?us-ascii?Q?T31xltPyPyp1dznhZiEnHfvbMSuNzUEREti0mp0VylAbOCGkMWUjIQUcWcQN?=
+ =?us-ascii?Q?L78oGUlebfSc4m7ibyv+FD0lcRa8/An/RVMZlLoWc20AuYMiSdn8UlBvnkv1?=
+ =?us-ascii?Q?KnLoIdbJggZQxmiQerEUll0XaNzMRCNm9/J+CuqGduBjFYYGdUOzE26+Brup?=
+ =?us-ascii?Q?92h50Kk5O2scyGfx2a3e7UZ0PX+OVkCCEFNa2qdqNd2FrWhC13qG5b28UumQ?=
+ =?us-ascii?Q?oKby+0vb4uViED9d6cbP7dHgprwe8PnxIoVo4UopW9j5nPEDrA8IDIhKqTaA?=
+ =?us-ascii?Q?JhD3LVxf52wwA+LWdJ3YGHMXHPYRvNPzHItCev81C/XbRIU/WBgi9Ww4n0P8?=
+ =?us-ascii?Q?NaSYqCQNKF52fFt73a8z0hi1vXmLIZicmvT6v0EvYPMciXGYWGXXyg1vr9c/?=
+ =?us-ascii?Q?nsGGRaFBc7SPlIRIEaCTuOoyku0dSV2aIy98gZbJq5GYWOmGjCK70hQUrg+Q?=
+ =?us-ascii?Q?l9P8qUEEtVLpQp2kV8X0GMXz16hmu3MnlE9gJ6g3haIIYejPuA/FqJXLSQsT?=
+ =?us-ascii?Q?n4ekDJRRXARegYKqHZ3e1WxR4sxwHxDZ5HoID0wk5/ay5euD0cmIce0mwl6+?=
+ =?us-ascii?Q?KWdksdgskqCUbaNo+euxkdLi0APb9o0pqrAlrZrgUnwAbaWvBrlpxtIFUcXF?=
+ =?us-ascii?Q?CrqUAycHimn6rRfaj8YvvbJQQ4Uszqv+CPcsIokqIyuxS6Kd/OCuVIECdZRC?=
+ =?us-ascii?Q?MXG5jwHEUW/ll9gfekR/6TalBN5h2FKPkPyDhDQJmKoYYIvJnrwvaxZ1a/tT?=
+ =?us-ascii?Q?koZZTJnXZulald6kukgrgInZWnCuUsUfBlkRk4EeTp1WBLOv9KKJgAlzaZQe?=
+ =?us-ascii?Q?TwL7EojNA/Ssj3EOiiz3wNxY7+iW+g0jfvAvPv/Ooq38uWIVyoqw5F29Bj89?=
+ =?us-ascii?Q?AgVJ+SWNSXrEjl8y1wEvR+N7Mws8dKNFdqHiYiED+uj5svL4TJf2cIc3NA3y?=
+ =?us-ascii?Q?UD4nL1fMidIoW1no7gJRV5nnDX6yEpPkXTJzaWY/cVVDwdGaezwUCgXWO72d?=
+ =?us-ascii?Q?11ywePviV2t3vokHt/Rbj4tMRJo58O6c65AQU6oDmCzgK4J5J3Xf7OqvbG/a?=
+ =?us-ascii?Q?IIS6iB+TiEMeke/WN/Se2tHP2VvUaQFZTcfiiVLfAKrFyfk6o76d5Zlc9t1i?=
+ =?us-ascii?Q?SsevIXki3lyvrkxUHf7lUSfg3ckXU5LbNba0upSRH4SavCGCfS37jiIpyBkK?=
+ =?us-ascii?Q?eoCCGzYlq8oBHZBRN0tHgvfWtN0JGa9GPebmhb7Gt3w089BKTtSaB2nGpcAw?=
+ =?us-ascii?Q?q6nPehFPDHklDRlAsjnhO9lJZz1Z2JkU3Er2SabwOv3bBP2Nw8pcVFIX2uM1?=
+ =?us-ascii?Q?9b8+9WY3ecu3dF/K+t1BklsTJxUuvtzoHRtjXCN3FzWX/S0WnOx+orP+hXvx?=
+ =?us-ascii?Q?+J3HiRivgiQS2wJDBq9Vz+GHBPZw+wuLGMnBHkxiNGGsgRnbDCWX7Rte7d9m?=
+ =?us-ascii?Q?JVkm7/krRPU=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN7PR12MB8059.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?mqj82+qr8t4v+WalzYUlfVF8+w3NArKhjmWPiBymvCwTroEd2PlWmUxIyTV+?=
- =?us-ascii?Q?jnTRMLmH/T5jOEMMDNxCql+F6lCbhJk7tlDqp4kMcbgjcXFEoaSZIaOORcLd?=
- =?us-ascii?Q?me0mYzQHRhLypHJGwTnO+M23EIgIAFdHFFfZPANCChFKIaQ35CiYmYcMD4mf?=
- =?us-ascii?Q?MhukpDzHCl1NxZUlJdW7QUoS3r018B3wx8/LYS4UBhRRw8Tg0r0yfcxX7qHr?=
- =?us-ascii?Q?U49lm6czeLbB2zh6fJ9DgbwgvSODXfuSnHT/eowRsgvws6knlNygWD1lm67/?=
- =?us-ascii?Q?tvEG6NHlfXxQqPXabQN6VDZBbblUXxtcg24wNhcIjco58Hx2wNpt9vjzK56c?=
- =?us-ascii?Q?/J8b/Kqy2ZNr1++mBAcHL3ZqvQTQQ59m8mJxaJazBXjk9zGj8tZoMkf+rBy0?=
- =?us-ascii?Q?EvT+qZMNXdph/v/rN7cTMn2hTmz5yP8pyT7V7zJsCQRCNk9c3bg7qSdkpeFY?=
- =?us-ascii?Q?Dnc7IUOLoQvBXgxP0Hs5K9bQe7Uth+QFSMiGcgQbRv62C2Rf2U4BGVg80bf8?=
- =?us-ascii?Q?I4q8F+tmSy39KBp+Aq1G4xOinVkwPE26G1yJeTTY8lqO4PYIsTp1xS9TXpoe?=
- =?us-ascii?Q?170oD9Ke1WQiIQSYBzoD1shse0cbdQbOOT5oOBNbHWYVih3tpZMdJF3QPxFG?=
- =?us-ascii?Q?DXQ8z6iiTITG0CuLvcZPKITOLCG9QTHwQeTsO7r6lVqS9cw0yB4hsvMyKoEI?=
- =?us-ascii?Q?YbvvNfAo9FlwsPdFbOAkxwkIdp5f7/Ta0cIWiGdjfaMR2UL3tEeZhUijItQH?=
- =?us-ascii?Q?iMVj+gE9v4BSi2yY2KnpB3Jji8T1XzYCPRAiy2jhyRXTxe/tqLhq3VQBKc2j?=
- =?us-ascii?Q?tkEUeZwkc4ioWK2MhtNADxCDp86/I1mHX1j5XxvHNgWgLvqPIiiL5Nh0pa2Q?=
- =?us-ascii?Q?XeDJBXQjYiQJWQDU8chFKPYQXuWQ/6FYpZ1rRGDTN6VaXJmyhfp50s1ekEg5?=
- =?us-ascii?Q?Pr8gP7FWcglltpY9PSDYPBihr2wK4CVLo8BKSbRFZrBgkEVQaXREzuh/dyqh?=
- =?us-ascii?Q?TMV+DivoOfsBm1JHSF1NfJXiUHBjm/2zB3Nshge0Ba5MKxRlU4FIWyaCZl/A?=
- =?us-ascii?Q?owsHLyetVZRb8ti9eC14xCuMu5/dI7gJ8NftbbjRQNn/zm20d89TNxYfLn5f?=
- =?us-ascii?Q?+WIM4/Uv6m2I2HL3NZtO82poVWNVf8DjJZc/nAMoidSxr+l8/2K9hgUd/pHZ?=
- =?us-ascii?Q?zkRBzToCZa/6TVxcPdkTAPaocukfqYj2NrqUBgkXnea71F8lfWp8maq3yjlm?=
- =?us-ascii?Q?bThxxuK28K0bmgp+ZA6FXkIEt0HrB+OyMAyzCHUEDHTBWOlVyBBI1rf6reK+?=
- =?us-ascii?Q?ol3rubB3v69FS+9y7GL0fanUv5ss684teImnlxQ/J8jLykBjU/vv77WQalhx?=
- =?us-ascii?Q?iNCC4G2ObrEEyc7WDbvOA9UBDAAdkv0hwWG5l27Q/a7REDiPCpd19M7tM9Sb?=
- =?us-ascii?Q?bCMv1gbSl5fhdp4Pgm8blBauAMupUWbsyQ556ka2YxVjOXpO+hwV6tFFEjB0?=
- =?us-ascii?Q?fY67a//+7rRVrJsReiLBs/tJduhk217cVKbuvm6H6dGm+LxEHQ+P/fGM/HZQ?=
- =?us-ascii?Q?OTz7qSFT3HPVoLoCgbpJfSAqn+xEXCU4IjBiN2Iu?=
+	=?us-ascii?Q?6b+jBBLtLhrdhHqUk4lWELF+SEHrpIVRtlOeiGZAVX9lqJPiS6AgocXOQrbg?=
+ =?us-ascii?Q?WodwyDWr2yLRdt2uKjlwtJUDpXdNBgglAmbGypTApNQKDvv60UowFFl7u9YA?=
+ =?us-ascii?Q?/Z4EihD8K/Ewpy1b7aAe/I4jjvniNnLHAdnTc3PkFExI1Who58zdjDffO0rI?=
+ =?us-ascii?Q?GK62hMi32vonIuJo8sbmOKGX7e3g+ub6u/ECE5wBgPaQR8JIdW3elcwOS8fn?=
+ =?us-ascii?Q?tnuZ2eMjw+boWe3TG5lxDUAe9G8F03xzOrnQzXtiBw3IDAACXmRzEvvOuSii?=
+ =?us-ascii?Q?UocFbxDB0aDdCWSMWEHdBPKS0VbKvBp/FqYfmjx3JDpBzWSR7uDHMKFO81C/?=
+ =?us-ascii?Q?Y2TQGWBFOgjY89fPI/egzA3j/3ZkVXjXT2cj0J/dFuttuaEoNdP+ZBWG+6mN?=
+ =?us-ascii?Q?uzWvFICHQcS96x+7fDyjvgomjp38pIrxPhtlAPvMpS8unjD29aMn9kO638MY?=
+ =?us-ascii?Q?MHQpLl+U0mhqxyS4UMXiIGIL460AOSaHAuUiCLPvCj2Ti6mqjI/wjMbivFCN?=
+ =?us-ascii?Q?eNwM3R1JAgTP9+v6dchO7OeujimONB+KZ2pP0akj2/3V8l4hYmd+dRI2+2zm?=
+ =?us-ascii?Q?bni8P/sJPAx6hS9CmvBTxWJsbDqPyDjDspOBH1JTN8ttQU4W/QrymeFFkkQU?=
+ =?us-ascii?Q?SJK/b5oRrNdNcAbEoR5LwY7XqX8nLEfYeVxvW4e5FtcCccv5AOoxL/ixUy/c?=
+ =?us-ascii?Q?xpxqxT59blTZQLQOu/4nzAfxKtERFZVKDyaoWWVgqvqrCCh/D8yZ8+oDKo30?=
+ =?us-ascii?Q?boGRvYq8CAio2qmpIuFBD5fhx8VC/9WJeqK7rXzvsF83PrxrTMtThmGsYP0O?=
+ =?us-ascii?Q?SrEbs1mRfPxApd/VOR+YJ+3ESRGBndBwS+beX8OXIzMa9beewZcbgJVaxsPE?=
+ =?us-ascii?Q?JYeBgOwKg3nvUIsrOaMo52pzGIjhjoHQyWGsY2a1CDcRVtjUFXTA+gjn3ZWv?=
+ =?us-ascii?Q?by38j6FdaUEciuqqfN1VlA8PD3mwVxhNLltngjMNHy71LoKs6q/rNlqTYjcj?=
+ =?us-ascii?Q?SdasZZLtdfUXX4mYygpHvzc8lQLEikaZJJy2+PklDCrzas8CjFAPMvy9o79D?=
+ =?us-ascii?Q?6aMZ7hPo8d+ub7+6eVOT83jwhit4wvJuWr4+mZLg0uhOafcBJotPeoH2BRZE?=
+ =?us-ascii?Q?9aYSHolyphi3fHprpoeCPz8oDtHWJKysxcdXO2cQabJHQrLGusXqwrtVpJR+?=
+ =?us-ascii?Q?/yr3j3wKiBSebrH8PEgxU1/bvIwziTSAKKQWhftINrt/aesE/pkjLVkDAjvn?=
+ =?us-ascii?Q?26u7EPoSICEAo6HRSSjjRbbOcq/N75zofzwtYF/QwjCYvFp3Im8pU9w9IPu7?=
+ =?us-ascii?Q?7mi3wp/1+bTc38WJH6TkkCcONifhgsJ2hWYwFLPKMy9QpvCrEt0//paYgB5J?=
+ =?us-ascii?Q?Otmm1SjyyuzY9Rw4XmlUvryB9uxUOTe1MBqMHKCwaOkBsaBYetWGBPl3BzMj?=
+ =?us-ascii?Q?iRLIahvdMoAIvkzYlGDQU/c7ZAU8HuxosskV3jNPehE0KiWGz+4M3jwAuYRY?=
+ =?us-ascii?Q?bQNQJjmK8+ihtyNhCzhGngC0Azf9v4X4BPYRBPiQpWOud5kdVSaX84S5Pkjt?=
+ =?us-ascii?Q?L6bIjIKuIcRJer9GEzEUk27HCnHxZAU2zLsH4U8j?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0c7dfe72-a494-474b-cdd8-08ddb9c068a4
+X-MS-Exchange-CrossTenant-Network-Message-Id: 47697c36-0f51-4ed1-770e-08ddb9c06b4c
 X-MS-Exchange-CrossTenant-AuthSource: SN7PR12MB8059.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jul 2025 23:30:19.8516
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jul 2025 23:30:24.2816
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 89BqPTLDezi6bPe8yZ1nwCf85Lt47snHT4Uo+N6oOA8ssd7gYLZLJAzPnXicjEH4dhuWWgCEtCPojgSNWw8HYg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: XG3pYPqcfqxKlfIJNi2dT5yEbrxi/Syzci1shw/ggor2GEcp4qOJiyEXUrbsLaF2brELaYaMNJhUeYuk0todBQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB7069
 
-From: Andrea Righi <arighi@nvidia.com>
+Add a new kselftest to verify that the total_bw value in
+/sys/kernel/debug/sched/debug remains consistent across all CPUs
+under different sched_ext BPF program states:
 
-Add a selftest to validate the correct behavior of the deadline server
-for the ext_sched_class.
+1. Before a BPF scheduler is loaded
+2. While a BPF scheduler is loaded and active
+3. After a BPF scheduler is unloaded
 
-[ Joel: Replaced occurences of CFS in the test with EXT. ]
+The test runs CPU stress threads to ensure DL server bandwidth
+values stabilize before checking consistency. This helps catch
+potential issues with DL server bandwidth accounting during
+sched_ext transitions.
 
 Signed-off-by: Joel Fernandes <joelagnelf@nvidia.com>
-Signed-off-by: Andrea Righi <arighi@nvidia.com>
 ---
- tools/testing/selftests/sched_ext/Makefile    |   1 +
- .../selftests/sched_ext/rt_stall.bpf.c        |  23 ++
- tools/testing/selftests/sched_ext/rt_stall.c  | 213 ++++++++++++++++++
- 3 files changed, 237 insertions(+)
- create mode 100644 tools/testing/selftests/sched_ext/rt_stall.bpf.c
- create mode 100644 tools/testing/selftests/sched_ext/rt_stall.c
+ tools/testing/selftests/sched_ext/Makefile   |   1 +
+ tools/testing/selftests/sched_ext/total_bw.c | 286 +++++++++++++++++++
+ 2 files changed, 287 insertions(+)
+ create mode 100644 tools/testing/selftests/sched_ext/total_bw.c
 
 diff --git a/tools/testing/selftests/sched_ext/Makefile b/tools/testing/selftests/sched_ext/Makefile
-index 9d9d6b4c38b0..f0a8cba3a99f 100644
+index f0a8cba3a99f..d48be158b0a1 100644
 --- a/tools/testing/selftests/sched_ext/Makefile
 +++ b/tools/testing/selftests/sched_ext/Makefile
-@@ -182,6 +182,7 @@ auto-test-targets :=			\
- 	select_cpu_dispatch_bad_dsq	\
- 	select_cpu_dispatch_dbl_dsp	\
+@@ -184,6 +184,7 @@ auto-test-targets :=			\
  	select_cpu_vtime		\
-+	rt_stall			\
+ 	rt_stall			\
  	test_example			\
++	total_bw			\
  
  testcase-targets := $(addsuffix .o,$(addprefix $(SCXOBJ_DIR)/,$(auto-test-targets)))
-diff --git a/tools/testing/selftests/sched_ext/rt_stall.bpf.c b/tools/testing/selftests/sched_ext/rt_stall.bpf.c
+ 
+diff --git a/tools/testing/selftests/sched_ext/total_bw.c b/tools/testing/selftests/sched_ext/total_bw.c
 new file mode 100644
-index 000000000000..80086779dd1e
+index 000000000000..6b81d6c51054
 --- /dev/null
-+++ b/tools/testing/selftests/sched_ext/rt_stall.bpf.c
-@@ -0,0 +1,23 @@
++++ b/tools/testing/selftests/sched_ext/total_bw.c
+@@ -0,0 +1,286 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * A scheduler that verified if RT tasks can stall SCHED_EXT tasks.
++ * Test to verify that total_bw value remains consistent across all CPUs
++ * in different BPF program states.
 + *
-+ * Copyright (c) 2025 NVIDIA Corporation.
++ * Copyright (C) 2025 Nvidia Corporation.
 + */
-+
-+#include <scx/common.bpf.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+UEI_DEFINE(uei);
-+
-+void BPF_STRUCT_OPS(rt_stall_exit, struct scx_exit_info *ei)
-+{
-+	UEI_RECORD(uei, ei);
-+}
-+
-+SEC(".struct_ops.link")
-+struct sched_ext_ops rt_stall_ops = {
-+	.exit			= (void *)rt_stall_exit,
-+	.name			= "rt_stall",
-+};
-diff --git a/tools/testing/selftests/sched_ext/rt_stall.c b/tools/testing/selftests/sched_ext/rt_stall.c
-new file mode 100644
-index 000000000000..d4cb545ebfd8
---- /dev/null
-+++ b/tools/testing/selftests/sched_ext/rt_stall.c
-@@ -0,0 +1,213 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2025 NVIDIA Corporation.
-+ */
-+#define _GNU_SOURCE
++#include <bpf/bpf.h>
++#include <errno.h>
++#include <pthread.h>
++#include <scx/common.h>
 +#include <stdio.h>
 +#include <stdlib.h>
-+#include <unistd.h>
-+#include <sched.h>
-+#include <sys/prctl.h>
-+#include <sys/types.h>
-+#include <sys/wait.h>
-+#include <time.h>
-+#include <linux/sched.h>
-+#include <signal.h>
-+#include <bpf/bpf.h>
-+#include <scx/common.h>
++#include <string.h>
 +#include <sys/wait.h>
 +#include <unistd.h>
-+#include "rt_stall.bpf.skel.h"
++#include "minimal.bpf.skel.h"
 +#include "scx_test.h"
-+#include "../kselftest.h"
 +
-+#define CORE_ID		0	/* CPU to pin tasks to */
-+#define RUN_TIME        5	/* How long to run the test in seconds */
++#define MAX_CPUS 512
++#define STABILIZATION_TIME_SEC 5
++#define STRESS_DURATION_SEC 5
 +
-+/* Simple busy-wait function for test tasks */
-+static void process_func(void)
++struct total_bw_ctx {
++	struct minimal *skel;
++	long baseline_bw[MAX_CPUS];
++	int nr_cpus;
++};
++
++static void *cpu_stress_thread(void *arg)
 +{
-+	while (1) {
-+		/* Busy wait */
-+		for (volatile unsigned long i = 0; i < 10000000UL; i++);
++	volatile int i;
++	time_t end_time = time(NULL) + STRESS_DURATION_SEC;
++
++	while (time(NULL) < end_time) {
++		for (i = 0; i < 1000000; i++);
 +	}
++
++	return NULL;
 +}
 +
-+/* Set CPU affinity to a specific core */
-+static void set_affinity(int cpu)
++/*
++ * The first enqueue on a CPU causes the DL server to start, for that
++ * reason run stressor threads in the hopes it schedules on all CPUs.
++ */
++static int run_cpu_stress(int nr_cpus)
 +{
-+	cpu_set_t mask;
++	pthread_t *threads;
++	int i, ret = 0;
 +
-+	CPU_ZERO(&mask);
-+	CPU_SET(cpu, &mask);
-+	if (sched_setaffinity(0, sizeof(mask), &mask) != 0) {
-+		perror("sched_setaffinity");
-+		exit(EXIT_FAILURE);
++	threads = calloc(nr_cpus, sizeof(pthread_t));
++	if (!threads)
++		return -ENOMEM;
++
++	/* Create threads to run on each CPU */
++	for (i = 0; i < nr_cpus; i++) {
++		if (pthread_create(&threads[i], NULL, cpu_stress_thread, NULL)) {
++			ret = -errno;
++			fprintf(stderr, "Failed to create thread %d: %s\n", i, strerror(-ret));
++			break;
++		}
 +	}
++
++	/* Wait for all threads to complete */
++	for (i = 0; i < nr_cpus; i++) {
++		if (threads[i])
++			pthread_join(threads[i], NULL);
++	}
++
++	free(threads);
++	return ret;
 +}
 +
-+/* Set task scheduling policy and priority */
-+static void set_sched(int policy, int priority)
++static int read_total_bw_values(long *bw_values, int max_cpus)
 +{
-+	struct sched_param param;
++	FILE *fp;
++	char line[256];
++	int cpu_count = 0;
 +
-+	param.sched_priority = priority;
-+	if (sched_setscheduler(0, policy, &param) != 0) {
-+		perror("sched_setscheduler");
-+		exit(EXIT_FAILURE);
-+	}
-+}
-+
-+/* Get process runtime from /proc/<pid>/stat */
-+static float get_process_runtime(int pid)
-+{
-+	char path[256];
-+	FILE *file;
-+	long utime, stime;
-+	int fields;
-+
-+	snprintf(path, sizeof(path), "/proc/%d/stat", pid);
-+	file = fopen(path, "r");
-+	if (file == NULL) {
-+		perror("Failed to open stat file");
++	fp = fopen("/sys/kernel/debug/sched/debug", "r");
++	if (!fp) {
++		SCX_ERR("Failed to open debug file");
 +		return -1;
 +	}
 +
-+	/* Skip the first 13 fields and read the 14th and 15th */
-+	fields = fscanf(file,
-+			"%*d %*s %*c %*d %*d %*d %*d %*d %*u %*u %*u %*u %*u %lu %lu",
-+			&utime, &stime);
-+	fclose(file);
++	while (fgets(line, sizeof(line), fp)) {
++		char *bw_str = strstr(line, "total_bw");
++		if (bw_str) {
++			bw_str = strchr(bw_str, ':');
++			if (bw_str) {
++				/* Only store up to max_cpus values */
++				if (cpu_count < max_cpus) {
++					bw_values[cpu_count] = atol(bw_str + 1);
++				}
++				cpu_count++;
++			}
++		}
++	}
 +
-+	if (fields != 2) {
-+		fprintf(stderr, "Failed to read stat file\n");
++	fclose(fp);
++	return cpu_count;
++}
++
++static bool verify_total_bw_consistency(long *bw_values, int count)
++{
++	int i;
++	long first_value;
++
++	if (count <= 0)
++		return false;
++
++	first_value = bw_values[0];
++
++	for (i = 1; i < count; i++) {
++		if (bw_values[i] != first_value) {
++			SCX_ERR("Inconsistent total_bw: CPU0=%ld, CPU%d=%ld",
++				first_value, i, bw_values[i]);
++			return false;
++		}
++	}
++
++	return true;
++}
++
++static int fetch_verify_total_bw(long *bw_values, int nr_cpus)
++{
++	int attempts = 0;
++	int max_attempts = 10;
++	int count;
++
++	/*
++	 * The first enqueue on a CPU causes the DL server to start, for that
++	 * reason run stressor threads in the hopes it schedules on all CPUs.
++	 */
++	if (run_cpu_stress(nr_cpus) < 0) {
++		SCX_ERR("Failed to run CPU stress");
 +		return -1;
 +	}
 +
-+	/* Calculate the total time spent in the process */
-+	long total_time = utime + stime;
-+	long ticks_per_second = sysconf(_SC_CLK_TCK);
-+	float runtime_seconds = total_time * 1.0 / ticks_per_second;
++	/* Let things settle down */
++	sleep(STABILIZATION_TIME_SEC);
 +
-+	return runtime_seconds;
++	/* Try multiple times to get stable values */
++	while (attempts < max_attempts) {
++		count = read_total_bw_values(bw_values, nr_cpus);
++		fprintf(stderr, "Read %d total_bw values (testing %d CPUs)\n", count, nr_cpus);
++		/* If system has more CPUs than we're testing, that's OK */
++		if (count < nr_cpus) {
++			SCX_ERR("Expected at least %d CPUs, got %d", nr_cpus, count);
++			attempts++;
++			sleep(1);
++			continue;
++		}
++
++		/* Only verify the CPUs we're testing */
++		if (verify_total_bw_consistency(bw_values, nr_cpus)) {
++			fprintf(stderr, "Values are consistent: %ld\n", bw_values[0]);
++			return 0;
++		}
++
++		attempts++;
++		sleep(1);
++	}
++
++	return -1;
 +}
 +
 +static enum scx_test_status setup(void **ctx)
 +{
-+	struct rt_stall *skel;
++	struct total_bw_ctx *test_ctx;
 +
-+	skel = rt_stall__open();
-+	SCX_FAIL_IF(!skel, "Failed to open");
-+	SCX_ENUM_INIT(skel);
-+	SCX_FAIL_IF(rt_stall__load(skel), "Failed to load skel");
++	if (access("/sys/kernel/debug/sched/debug", R_OK) != 0) {
++		fprintf(stderr, "Skipping test: debugfs sched/debug not accessible\n");
++		return SCX_TEST_SKIP;
++	}
 +
-+	*ctx = skel;
++	test_ctx = calloc(1, sizeof(*test_ctx));
++	if (!test_ctx)
++		return SCX_TEST_FAIL;
 +
++	test_ctx->nr_cpus = sysconf(_SC_NPROCESSORS_ONLN);
++	if (test_ctx->nr_cpus <= 0) {
++		free(test_ctx);
++		return SCX_TEST_FAIL;
++	}
++
++	/* If system has more CPUs than MAX_CPUS, just test the first MAX_CPUS */
++	if (test_ctx->nr_cpus > MAX_CPUS) {
++		test_ctx->nr_cpus = MAX_CPUS;
++	}
++
++	/* Test scenario 1: BPF program not loaded */
++	/* Read and verify baseline total_bw before loading BPF program */
++	fprintf(stderr, "BPF prog initially not loaded, reading total_bw values\n");
++	if (fetch_verify_total_bw(test_ctx->baseline_bw, test_ctx->nr_cpus) < 0) {
++		SCX_ERR("Failed to get stable baseline values");
++		free(test_ctx);
++		return SCX_TEST_FAIL;
++	}
++
++	/* Load the BPF skeleton */
++	test_ctx->skel = minimal__open();
++	if (!test_ctx->skel) {
++		free(test_ctx);
++		return SCX_TEST_FAIL;
++	}
++
++	SCX_ENUM_INIT(test_ctx->skel);
++	if (minimal__load(test_ctx->skel)) {
++		minimal__destroy(test_ctx->skel);
++		free(test_ctx);
++		return SCX_TEST_FAIL;
++	}
++
++	*ctx = test_ctx;
 +	return SCX_TEST_PASS;
-+}
-+
-+static bool sched_stress_test(void)
-+{
-+	float cfs_runtime, rt_runtime;
-+	int cfs_pid, rt_pid;
-+	float expected_min_ratio = 0.04; /* 4% */
-+
-+	ksft_print_header();
-+	ksft_set_plan(1);
-+
-+	/* Create and set up a EXT task */
-+	cfs_pid = fork();
-+	if (cfs_pid == 0) {
-+		set_affinity(CORE_ID);
-+		process_func();
-+		exit(0);
-+	} else if (cfs_pid < 0) {
-+		perror("fork for EXT task");
-+		ksft_exit_fail();
-+	}
-+
-+	/* Create an RT task */
-+	rt_pid = fork();
-+	if (rt_pid == 0) {
-+		set_affinity(CORE_ID);
-+		set_sched(SCHED_FIFO, 50);
-+		process_func();
-+		exit(0);
-+	} else if (rt_pid < 0) {
-+		perror("fork for RT task");
-+		ksft_exit_fail();
-+	}
-+
-+	/* Let the processes run for the specified time */
-+	sleep(RUN_TIME);
-+
-+	/* Get runtime for the EXT task */
-+	cfs_runtime = get_process_runtime(cfs_pid);
-+	if (cfs_runtime != -1)
-+		ksft_print_msg("Runtime of EXT task (PID %d) is %f seconds\n", cfs_pid, cfs_runtime);
-+	else
-+		ksft_exit_fail_msg("Error getting runtime for EXT task (PID %d)\n", cfs_pid);
-+
-+	/* Get runtime for the RT task */
-+	rt_runtime = get_process_runtime(rt_pid);
-+	if (rt_runtime != -1)
-+		ksft_print_msg("Runtime of RT task (PID %d) is %f seconds\n", rt_pid, rt_runtime);
-+	else
-+		ksft_exit_fail_msg("Error getting runtime for RT task (PID %d)\n", rt_pid);
-+
-+	/* Kill the processes */
-+	kill(cfs_pid, SIGKILL);
-+	kill(rt_pid, SIGKILL);
-+	waitpid(cfs_pid, NULL, 0);
-+	waitpid(rt_pid, NULL, 0);
-+
-+	/* Verify that the scx task got enough runtime */
-+	float actual_ratio = cfs_runtime / (cfs_runtime + rt_runtime);
-+	ksft_print_msg("EXT task got %.2f%% of total runtime\n", actual_ratio * 100);
-+
-+	if (actual_ratio >= expected_min_ratio) {
-+		ksft_test_result_pass("PASS: EXT task got more than %.2f%% of runtime\n",
-+				      expected_min_ratio * 100);
-+		return true;
-+	} else {
-+		ksft_test_result_fail("FAIL: EXT task got less than %.2f%% of runtime\n",
-+				      expected_min_ratio * 100);
-+		return false;
-+	}
 +}
 +
 +static enum scx_test_status run(void *ctx)
 +{
-+	struct rt_stall *skel = ctx;
++	struct total_bw_ctx *test_ctx = ctx;
 +	struct bpf_link *link;
-+	bool res;
++	long loaded_bw[MAX_CPUS];
++	long unloaded_bw[MAX_CPUS];
++	int i;
 +
-+	link = bpf_map__attach_struct_ops(skel->maps.rt_stall_ops);
-+	SCX_FAIL_IF(!link, "Failed to attach scheduler");
++	/* Test scenario 2: BPF program loaded */
++	link = bpf_map__attach_struct_ops(test_ctx->skel->maps.minimal_ops);
++	if (!link) {
++		SCX_ERR("Failed to attach scheduler");
++		return SCX_TEST_FAIL;
++	}
 +
-+	res = sched_stress_test();
-+
-+	SCX_EQ(skel->data->uei.kind, EXIT_KIND(SCX_EXIT_NONE));
++	fprintf(stderr, "BPF program loaded, reading total_bw values\n");
++	if (fetch_verify_total_bw(loaded_bw, test_ctx->nr_cpus) < 0) {
++		SCX_ERR("Failed to get stable values with BPF loaded");
++		bpf_link__destroy(link);
++		return SCX_TEST_FAIL;
++	}
 +	bpf_link__destroy(link);
 +
-+	if (!res)
-+		ksft_exit_fail();
++	/* Test scenario 3: BPF program unloaded */
++	fprintf(stderr, "BPF program unloaded, reading total_bw values\n");
++	if (fetch_verify_total_bw(unloaded_bw, test_ctx->nr_cpus) < 0) {
++		SCX_ERR("Failed to get stable values after BPF unload");
++		return SCX_TEST_FAIL;
++	}
 +
++	/* Verify all three scenarios have the same total_bw values */
++	for (i = 0; i < test_ctx->nr_cpus; i++) {
++		if (test_ctx->baseline_bw[i] != loaded_bw[i]) {
++			SCX_ERR("CPU%d: baseline_bw=%ld != loaded_bw=%ld",
++				i, test_ctx->baseline_bw[i], loaded_bw[i]);
++			return SCX_TEST_FAIL;
++		}
++
++		if (test_ctx->baseline_bw[i] != unloaded_bw[i]) {
++			SCX_ERR("CPU%d: baseline_bw=%ld != unloaded_bw=%ld",
++				i, test_ctx->baseline_bw[i], unloaded_bw[i]);
++			return SCX_TEST_FAIL;
++		}
++	}
++
++	fprintf(stderr, "All total_bw values are consistent across all scenarios\n");
 +	return SCX_TEST_PASS;
 +}
 +
 +static void cleanup(void *ctx)
 +{
-+	struct rt_stall *skel = ctx;
++	struct total_bw_ctx *test_ctx = ctx;
 +
-+	rt_stall__destroy(skel);
++	if (test_ctx) {
++		if (test_ctx->skel)
++			minimal__destroy(test_ctx->skel);
++		free(test_ctx);
++	}
 +}
 +
-+struct scx_test rt_stall = {
-+	.name = "rt_stall",
-+	.description = "Verify that RT tasks cannot stall SCHED_EXT tasks",
++struct scx_test total_bw = {
++	.name = "total_bw",
++	.description = "Verify total_bw consistency across BPF program states",
 +	.setup = setup,
 +	.run = run,
 +	.cleanup = cleanup,
 +};
-+REGISTER_SCX_TEST(&rt_stall)
++REGISTER_SCX_TEST(&total_bw)
 -- 
 2.34.1
 
