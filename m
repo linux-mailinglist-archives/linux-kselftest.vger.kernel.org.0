@@ -1,129 +1,100 @@
-Return-Path: <linux-kselftest+bounces-36431-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36434-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A1CAAF7689
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 16:03:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56AA2AF7711
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 16:19:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C09E8176913
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 14:03:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4D4EA1887323
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 14:17:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A4CA2E7F03;
-	Thu,  3 Jul 2025 14:01:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1C962E7F0E;
+	Thu,  3 Jul 2025 14:16:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rk7U+xLi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail.avm.de (mail.avm.de [212.42.244.94])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6D081AF0B4;
-	Thu,  3 Jul 2025 14:01:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.42.244.94
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 943BE2E6D25;
+	Thu,  3 Jul 2025 14:16:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751551275; cv=none; b=L0LWjlcZWo7E9s4KxYpupDWLlal/A0Pwi9WHPHqfnNWdnZKOJXeCO6QBkjizebMNGwRE6dQ2JnjosSjQSnf1o7qC1JFNoECijG52X7hVv6sSEqSZ+biDWuqhAHbRcYVCXGRfrNG9GrxGL0qYfxsyIDTxHt10lnoxMAAkqERQeNM=
+	t=1751552210; cv=none; b=EC+fD9i7FxvuLpRrNOoesn2aMzn6lZcqnI6JfRSTWekEtl1v7IgIstonB4FGyiKI+RGNA31hyfjbno/P/4+2s/GbFui8mzOazbXD7PcvaoBXUiPUK6IZ3h4nwLT3JoxQ4F/ypdOimkSHG+dYTjTdLau9pvhZw6wfMAFWKS/t/vg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751551275; c=relaxed/simple;
-	bh=8brsHwtSTaNLq6fMC0iUgwrP4mTJYfb9zKLAKdrhOnQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F/fLAtXti517oORE0fQKgy1CyXKhVEQaaWwYJ0LiILkovy3zgfB1i0IAhDqirTOMPr6m5m59ZhUQ/Fmro3bnMeWKeleXVL2VQrNoKmKm6o5nD1+L48w3rn+zpLZgwEkv63ldHnaQlDjNAnjpH6g5MZPMn1tmGfPSqOoBanBU7Cs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=avm.de; arc=none smtp.client-ip=212.42.244.94
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=avm.de
-Received: from [212.42.244.71] (helo=mail.avm.de)
-	by mail.avm.de with ESMTP (eXpurgate 4.53.4)
-	(envelope-from <n.schier@avm.de>)
-	id 68668d27-962e-7f0000032729-7f000001b922-1
-	for <multiple-recipients>; Thu, 03 Jul 2025 16:01:11 +0200
-Received: from mail-auth.avm.de (dovecot-mx-01.avm.de [212.42.244.71])
-	by mail.avm.de (Postfix) with ESMTPS;
-	Thu,  3 Jul 2025 16:01:11 +0200 (CEST)
-Received: from buildd.core.avm.de (buildd-sv-01.avm.de [172.16.0.225])
-	by mail-auth.avm.de (Postfix) with ESMTPA id C10D3806C8;
-	Thu,  3 Jul 2025 16:01:11 +0200 (CEST)
-Received: from l-nschier-aarch64.ads.avm.de (unknown [IPv6:fde4:4c1b:acd5:6472::1])
-	by buildd.core.avm.de (Postfix) with ESMTPS id 6D933180C1B;
-	Thu,  3 Jul 2025 16:01:11 +0200 (CEST)
-Date: Thu, 3 Jul 2025 16:01:10 +0200
-From: Nicolas Schier <nicolas.schier@linux.dev>
-To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>,
-	Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
-	Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-	linux-doc@vger.kernel.org, workflows@vger.kernel.org
-Subject: Re: [PATCH v4 05/15] init: add nolibc build support
-Message-ID: <20250703-able-benevolent-gharial-ecbfd2@l-nschier-aarch64>
-References: <20250626-kunit-kselftests-v4-0-48760534fef5@linutronix.de>
- <20250626-kunit-kselftests-v4-5-48760534fef5@linutronix.de>
+	s=arc-20240116; t=1751552210; c=relaxed/simple;
+	bh=wXouOklJeBivQWdES6pjn3jOZtbrOCwxeeLmtYfMl8Y=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=f6gH+qQsFaTxifrAYML3mbtBX5OiM6B1RY81UuYXJmGTkMqKHkbaSzY5rktIvlLcKz5pnC8BaZJo5pvVF9ca6HtF9NI4fWM4vecuhyR6Grq5g2vQxP3RL2TzL6Uf0fXUNpHXBTdzGLEkDy6olJgqxZl2wJiHT6aGJBsJGM0e0Mg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rk7U+xLi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C17D6C4CEED;
+	Thu,  3 Jul 2025 14:16:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751552210;
+	bh=wXouOklJeBivQWdES6pjn3jOZtbrOCwxeeLmtYfMl8Y=;
+	h=From:Subject:Date:To:Cc:From;
+	b=Rk7U+xLitFLACPo3XjuMn6GsN1VYTLstnShTzRqMqCsuoZ4Ca/WRz/jYSd5mOnvpa
+	 y7WnDRophJwcvtfaVlxHoLmCrxOSkWBa7pnIXjVVYBY6mMOac+1RIDZfGfjaeqKcGT
+	 kKpPWRs03SC75JLma6VT6ox63UF0QGX7u3mtPZi7tRnb6nZHODxnW8vCvnylVlvJhf
+	 0JdvWxc7svWBSPZRZBFJ8ubrXqhZNE766wUas0gOlpJ1mqjqhN8OOpYuHPP8VKDUcA
+	 Vh1f8i8afRVILHOUs7SPYA3Rt8xvv/LsHcm5lsD/pnucOdMmUZtsxtCotqTz/vkabV
+	 m9HO+yaNmbHQQ==
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+Subject: [PATCH nf-next v3 0/2] Add IPIP flowtable SW acceleratio
+Date: Thu, 03 Jul 2025 16:16:01 +0200
+Message-Id: <20250703-nf-flowtable-ipip-v3-0-880afd319b9f@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="uRa5i4kMRLweURev"
-Content-Disposition: inline
-In-Reply-To: <20250626-kunit-kselftests-v4-5-48760534fef5@linutronix.de>
-Organization: AVM GmbH
-X-purgate-ID: 149429::1751551271-39CA0861-C9667BA0/0/0
-X-purgate-type: clean
-X-purgate-size: 1915
-X-purgate-Ad: Categorized by eleven eXpurgate (R) https://www.eleven.de
-X-purgate: This mail is considered clean (visit https://www.eleven.de for further information)
-X-purgate: clean
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAKGQZmgC/33NTQ6CMBAF4KuYWTumP0LBlfcwLigM0Eha0pKKI
+ dzdpitNjMuXN++bDQJ5QwEuhw08RROMsynI4wHasbEDoelSBsFEwUoh0fbYT+65NHpK3Wxm5Fp
+ 2SrOqY6WCtJs99WbN5g3SuaV1gXsqRhMW51/5V+S5/sNGjhxFVciiLknWZ359kLc0nZwfMhfFJ
+ 6F+EQIZtopLxmRLqtBfxL7vb46ffSD/AAAA
+X-Change-ID: 20250623-nf-flowtable-ipip-1b3d7b08d067
+To: "David S. Miller" <davem@davemloft.net>, 
+ David Ahern <dsahern@kernel.org>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Pablo Neira Ayuso <pablo@netfilter.org>, 
+ Jozsef Kadlecsik <kadlec@netfilter.org>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, netfilter-devel@vger.kernel.org, 
+ coreteam@netfilter.org, linux-kselftest@vger.kernel.org, 
+ Lorenzo Bianconi <lorenzo@kernel.org>
+X-Mailer: b4 0.14.2
 
+Introduce SW acceleration for IPIP tunnels in the netfilter flowtable
+infrastructure.
 
---uRa5i4kMRLweURev
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+---
+Changes in v3:
+- Add outer IP header sanity checks
+- target nf-next tree instead of net-next
+- Link to v2: https://lore.kernel.org/r/20250627-nf-flowtable-ipip-v2-0-c713003ce75b@kernel.org
 
-On Thu, Jun 26, 2025 at 08:10:13AM +0200, Thomas Wei=C3=9Fschuh wrote:
-> Building userspace applications through the kbuild "userprogs" framework
-> requires a libc. Kernel toolchains often do not contain a libc.
-> In this case it is useful to use the nolibc library from the kernel tree.
-> Nolibc does not support all architectures and requires compiler flags.
->=20
-> Add a kconfig option, so users can know where it is available and provide=
- a
-> variable for common options.
->=20
-> Signed-off-by: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
-> ---
->  MAINTAINERS          |  2 ++
->  init/Kconfig         |  2 ++
->  init/Kconfig.nolibc  | 15 +++++++++++++++
->  init/Makefile.nolibc | 13 +++++++++++++
->  4 files changed, 32 insertions(+)
+Changes in v2:
+- Introduce IPIP flowtable selftest
+- Link to v1: https://lore.kernel.org/r/20250623-nf-flowtable-ipip-v1-1-2853596e3941@kernel.org
 
-Reviewed-by: Nicolas Schier <n.schier@avm.de>
+---
+Lorenzo Bianconi (2):
+      net: netfilter: Add IPIP flowtable SW acceleration
+      selftests: netfilter: nft_flowtable.sh: Add IPIP flowtable selftest
 
---uRa5i4kMRLweURev
-Content-Type: application/pgp-signature; name="signature.asc"
+ net/ipv4/ipip.c                                    | 21 ++++++++++++
+ net/netfilter/nf_flow_table_ip.c                   | 34 ++++++++++++++++--
+ .../selftests/net/netfilter/nft_flowtable.sh       | 40 ++++++++++++++++++++++
+ 3 files changed, 93 insertions(+), 2 deletions(-)
+---
+base-commit: 8b98f34ce1d8c520403362cb785231f9898eb3ff
+change-id: 20250623-nf-flowtable-ipip-1b3d7b08d067
 
------BEGIN PGP SIGNATURE-----
+Best regards,
+-- 
+Lorenzo Bianconi <lorenzo@kernel.org>
 
-iQIzBAABCAAdFiEEDv+Fiet06YHnC6RpiMa8nIiabbgFAmhmjSIACgkQiMa8nIia
-bbgQvBAAhbd3BYyTpH1jAbERpaLT8y1+JRuWEpMgVrzf4Djuoe+7wlP8bRrB7LJ/
-OqN5olbRO0+fdEueDlqKynurfMr5jgreGIKHuBw7PSsiEJNiG4VFIZ837ui96W8Y
-pXZ6dtM7PveKEajuLyClQaSWlB3NudHYuYgTNt5iFdpUSdJEhvZ+OJ2dTsws7alz
-59/O6jThF2OaL0xsIkyGZba5Ly+TBnIQ11oXZh+6fi1ITplaWz3syGinTLNScTG+
-S8zaX53+qKaAf+taHUq99Xfy68LH3sXUFIu0IivsRFUmRYvYyc52Hxc/ZzAXlnSI
-4vpj6Ha1utStwKqTyd7+3azqF1NmBtMsxF0CiKnO4ptWMW3qJBf3qTqmBPF6BmTX
-d4QuKiLekGdFlxxu8o6O8TtCDyjxNnitZgfD4r8he1zoID4TcLGW6Wx8k9RRX+AS
-eFc2Dxklb79R1RvKDduUV9Y2Np7BuAIKfc2xEjMHsvjXlN6DDda9Zbx7dV2clvSd
-dVBbOG1arsyCHVprloS89n2oWdZsEow3ZIGUfNvhGGEYivdhD5qluB94X4zssOhA
-j9BcEVnlpEaVxe7C7S5WjaJMTMhrpK69jW4mSn2PqilR5ulcwrDknrYSKlqAzU6j
-O/snNwQjPpeyc44xgMra7eKUkCq4qALaPxCZSifhj9N28pJ6cdY=
-=TLb6
------END PGP SIGNATURE-----
-
---uRa5i4kMRLweURev--
 
