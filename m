@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-36466-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36467-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6861FAF7D62
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 18:09:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25D40AF7D69
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 18:10:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CAE715811CE
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 16:07:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 07C8E4E76E3
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 16:07:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDA6B2F0057;
-	Thu,  3 Jul 2025 16:06:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7695E2F0E28;
+	Thu,  3 Jul 2025 16:06:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AkPCTteM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sZlNlyTt"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A80FC2F004C;
-	Thu,  3 Jul 2025 16:06:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F0892F0C72;
+	Thu,  3 Jul 2025 16:06:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751558775; cv=none; b=cQWsVixuFCbuIQCLRRaDvnLf6B7IUJM0KeKJfK8ha40dtnfolGpGNxDN/+TB+lvLJnSFWzcl2pJNHQbJKItUh6OnIo/HwIfumQcta6Aw3voJbtDyST+l2gPFdHHAeUspCEBP7+gDpXGEDNrPb5JeugFKv+vPT1DGa6Yq1uDlpRw=
+	t=1751558778; cv=none; b=bb3yg2BEBeZXXBPZ4YylKjPqRt87lDNdenjBBnhR/YafTzOj9Hivr/NEXtXftsPmWbuxOHSYVWZQsoMXp31Ch8pQ37HJk3l/B4VIUUXPmg6Nt4G50A9kyzq80smr6WTGtoB+m7/RJO3kJSzAGxHdbtSSu0YsUfpGBjOwrR9Y6G4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751558775; c=relaxed/simple;
-	bh=JqVBI6zD71hSTx5yFb78+uxctGMkoxR2pJgkc2W8UzQ=;
+	s=arc-20240116; t=1751558778; c=relaxed/simple;
+	bh=k95pgC8uYho6a+kXi0z4LRYhCqPs5d/JUrw8wGO3J2U=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=kkB3HD2FwtzuTfi/zGAYKwoA/Zl8K1f3AfPVLN3ncSr1Xo0phl+MDE7PBfvZxPSN3+YHnePNT/AC2rw+sgS1FWIXFkmNVVWzg5rS15jQXr4ndVq0iLu8GJysGc/kiO671JURMAvt1rteo+H8qwkvY4uXVZPP21vmyA52xP18AXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AkPCTteM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57B52C4CEE3;
-	Thu,  3 Jul 2025 16:06:13 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=h9UiBBWeov7NEyFEqPt9YNC0oFJ9EBoihBIBO3jgA2gydMp0DJ1oGaZeYr0uKL2jjJv75SHLditSl+je+2Bldld7fNeoIo930CvLJzJkbim1CXBFek+A6jib9sDZ5uYVLNdFG+SwwFVZ89JoCs4alTMeG8tLrtex2BACcmJV3Uc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sZlNlyTt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1670C4CEEE;
+	Thu,  3 Jul 2025 16:06:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751558775;
-	bh=JqVBI6zD71hSTx5yFb78+uxctGMkoxR2pJgkc2W8UzQ=;
+	s=k20201202; t=1751558777;
+	bh=k95pgC8uYho6a+kXi0z4LRYhCqPs5d/JUrw8wGO3J2U=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=AkPCTteMy81OpE3Mi26WPe1/iz9nJQ48IWOz3etCp8VLyWjeJcPoJeFuwa/7M5SgQ
-	 FsehYh6aWSwv3z5RMRCAJ0IdSR4g2w23B0PW0xhkrehHTEK6D/oYSj66r/2KmK8u0o
-	 5hd0pjGe3ubSEzs8Iiz976lEXahx1fU+/dGADjjh253rYgbCFIz95VIKUV5rkBlpKu
-	 RXrZD9B3F2kgjPH2waWt5YLV1AZv07/eWX7GpqMMxmRTDaVbepFiBBEjMHPQpslCzj
-	 lu9aEbULrwFMKD/lU30BUovod8bq7WVba9kgK3j3y1cErcQwFYUyJugVSHrRB30jgi
-	 92RWrld9xZbpA==
+	b=sZlNlyTttCKjCKDEo8ZvK65gLEsZunjGIXsP5gHiBfqrFJbIFhcXTs6X3P5LOtxPm
+	 VgDQNJD4JdNzbPL5OWGyWLWFHmAiHV21mBI5VjqiTGkAUqk9sY/78KWKK+ONvC+onB
+	 k5QMMuBXcSqpvs5xjg+qLQJz3mhhev98wO6GUX1ueaxXDNmPorRoJxboxe9rDVIRqG
+	 gnNoiMcD42iPK6tG+fBR78lcSX/alafSN/bFlvYAgpUaMrn5Uflmo+Q5KEeLyivCe5
+	 7pybOZVPCUmJcKKYOkEoucLTz2QQ86DBvfgZENH/0EJzTUBUMTP/tyQIeNF6ThXJVf
+	 AysWdl4zV3alQ==
 From: Mark Brown <broonie@kernel.org>
-Date: Thu, 03 Jul 2025 17:00:17 +0100
-Subject: [PATCH v3 3/4] kselftest/arm64: Add a test for vfork() with GCS
+Date: Thu, 03 Jul 2025 17:00:18 +0100
+Subject: [PATCH v3 4/4] selftests/nolibc: Add coverage of vfork()
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,7 +52,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250703-arm64-gcs-vfork-exit-v3-3-1e9a9d2ddbbe@kernel.org>
+Message-Id: <20250703-arm64-gcs-vfork-exit-v3-4-1e9a9d2ddbbe@kernel.org>
 References: <20250703-arm64-gcs-vfork-exit-v3-0-1e9a9d2ddbbe@kernel.org>
 In-Reply-To: <20250703-arm64-gcs-vfork-exit-v3-0-1e9a9d2ddbbe@kernel.org>
 To: Willy Tarreau <w@1wt.eu>, 
@@ -63,109 +63,87 @@ To: Willy Tarreau <w@1wt.eu>,
 Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
  linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.15-dev-cff91
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2448; i=broonie@kernel.org;
- h=from:subject:message-id; bh=JqVBI6zD71hSTx5yFb78+uxctGMkoxR2pJgkc2W8UzQ=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBoZqpoRTfqCavfvOeI6HiW0fO9+7QniM8meqnva
- KfwmnOt5gKJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaGaqaAAKCRAk1otyXVSH
- 0BjAB/4x6C2kGb8P+uyoBFDtAItZkZ+dJBICIFrZzPMjdrZr4zbvUc5btpxrBDbB9ZtDFwSKXUG
- TsU8WJwomcs7GYmNStpckecKrA56vDlSJxQFETIBkONQGgCb+JTKMWo1fW9CKZG4Q7Nc9zI1opC
- ZeYK72T8ZQPxyECGphNjLo5PSnwoJ2kC2MuHNKoSZ4QCdGQ9WXL9KngRKaRWg5iqzZDhKHLZNrL
- F+rZIkIfpViRFvnW98R24jkrIckOfM518Ni0A53po5NSWNRk/Huqkgw2wHxN4gIJHKU1gqFIrGs
- CGYxvbME5UfD4P6v+2i7jOmpeSoIIdW70acTy31OJpwpPDSz
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2649; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=k95pgC8uYho6a+kXi0z4LRYhCqPs5d/JUrw8wGO3J2U=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBoZqpp3i92RBIH/xgX25THZxzWR1YIDTNkbJkXN
+ aX0+ZotRh2JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaGaqaQAKCRAk1otyXVSH
+ 0EP3B/9g2ihNKWqWkt4iW9QbyCgKDPCPqf+nZBPeEOOS7APQmwzTyQnuCfYmcEBB1fqKDN8wgss
+ gBxNEKi9+ZtR4twbwAqnOr4+44Tq1oU1/hyBKt/6gFP0NkojKMOuKDVt1Z9b9Ac8qjGW/Z+zqcT
+ tnnAFa5iY2+8MSMd8cO04Jc9FYZ8IeF+oKwfXfHL/1e6gpvSKS7cY7pcgil6Fiqx4TdYahvBdmq
+ S2t4AeIyE5WcHgJdxol0nkzHlXry4UMz0tYsWsdlnkrzwovKBSTGtbkAqBjRrqoYTKuvoMvdz8t
+ LKTVIDb5ETcI1KEUqCcSbZBVeXpDSJeYAS80FxSbHyKQAoxN
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-Ensure that we've got at least some coverage of the special cases around
-vfork() by adding a test case in basic-gcs doing the same thing as the
-plain fork() one - vfork(), do a few checks and then return to the parent.
+Generalise the existing fork() test to also cover the newly added vfork()
+implementation.
 
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/arm64/gcs/basic-gcs.c | 63 +++++++++++++++++++++++++++
- 1 file changed, 63 insertions(+)
+ tools/testing/selftests/nolibc/nolibc-test.c | 23 +++++++++++++++++++----
+ 1 file changed, 19 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/arm64/gcs/basic-gcs.c b/tools/testing/selftests/arm64/gcs/basic-gcs.c
-index 3fb9742342a3..54f9c888249d 100644
---- a/tools/testing/selftests/arm64/gcs/basic-gcs.c
-+++ b/tools/testing/selftests/arm64/gcs/basic-gcs.c
-@@ -298,6 +298,68 @@ static bool test_fork(void)
- 	return pass;
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index dbe13000fb1a..d682434c6442 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -877,7 +877,12 @@ int test_file_stream(void)
+ 	return 0;
  }
  
-+/* A vfork()ed process can run and exit */
-+static bool test_vfork(void)
-+{
-+	unsigned long child_mode;
-+	int ret, status;
-+	pid_t pid;
-+	bool pass = true;
+-int test_fork(void)
++enum fork_type {
++	FORK_STANDARD,
++	FORK_VFORK,
++};
 +
-+	pid = vfork();
-+	if (pid == -1) {
-+		ksft_print_msg("vfork() failed: %d\n", errno);
-+		pass = false;
-+		goto out;
-+	}
-+	if (pid == 0) {
-+		/*
-+		 * In child, make sure we can call a function, read
-+		 * the GCS pointer and status and then exit.
-+		 */
-+		valid_gcs_function();
-+		get_gcspr();
-+
-+		ret = my_syscall5(__NR_prctl, PR_GET_SHADOW_STACK_STATUS,
-+				  &child_mode, 0, 0, 0);
-+		if (ret == 0 && !(child_mode & PR_SHADOW_STACK_ENABLE)) {
-+			ksft_print_msg("GCS not enabled in child\n");
-+			ret = EXIT_FAILURE;
-+		}
-+
-+		_exit(ret);
-+	}
-+
-+	/*
-+	 * In parent, check we can still do function calls then check
-+	 * on the child.
-+	 */
-+	valid_gcs_function();
-+
-+	ksft_print_msg("Waiting for child %d\n", pid);
-+
-+	ret = waitpid(pid, &status, 0);
-+	if (ret == -1) {
-+		ksft_print_msg("Failed to wait for child: %d\n",
-+			       errno);
-+		return false;
-+	}
-+
-+	if (!WIFEXITED(status)) {
-+		ksft_print_msg("Child exited due to signal %d\n",
-+			       WTERMSIG(status));
-+		pass = false;
-+	} else if (WEXITSTATUS(status)) {
-+		ksft_print_msg("Child exited with status %d\n",
-+			       WEXITSTATUS(status));
-+		pass = false;
-+	}
-+
-+out:
-+
-+	return pass;
-+}
-+
- typedef bool (*gcs_test)(void);
++int test_fork(enum fork_type type)
+ {
+ 	int status;
+ 	pid_t pid;
+@@ -886,14 +891,23 @@ int test_fork(void)
+ 	fflush(stdout);
+ 	fflush(stderr);
  
- static struct {
-@@ -314,6 +376,7 @@ static struct {
- 	{ "enable_invalid", enable_invalid, true },
- 	{ "map_guarded_stack", map_guarded_stack },
- 	{ "fork", test_fork },
-+	{ "vfork", test_vfork },
- };
+-	pid = fork();
++	switch (type) {
++	case FORK_STANDARD:
++		pid = fork();
++		break;
++	case FORK_VFORK:
++		pid = vfork();
++		break;
++	default:
++		return 1;
++	}
  
- int main(void)
+ 	switch (pid) {
+ 	case -1:
+ 		return 1;
+ 
+ 	case 0:
+-		exit(123);
++		_exit(123);
+ 
+ 	default:
+ 		pid = waitpid(pid, &status, 0);
+@@ -1330,7 +1344,7 @@ int run_syscall(int min, int max)
+ 		CASE_TEST(dup3_m1);           tmp = dup3(-1, 100, 0); EXPECT_SYSER(1, tmp, -1, EBADF); if (tmp != -1) close(tmp); break;
+ 		CASE_TEST(execve_root);       EXPECT_SYSER(1, execve("/", (char*[]){ [0] = "/", [1] = NULL }, NULL), -1, EACCES); break;
+ 		CASE_TEST(file_stream);       EXPECT_SYSZR(1, test_file_stream()); break;
+-		CASE_TEST(fork);              EXPECT_SYSZR(1, test_fork()); break;
++		CASE_TEST(fork);              EXPECT_SYSZR(1, test_fork(FORK_STANDARD)); break;
+ 		CASE_TEST(getdents64_root);   EXPECT_SYSNE(1, test_getdents64("/"), -1); break;
+ 		CASE_TEST(getdents64_null);   EXPECT_SYSER(1, test_getdents64("/dev/null"), -1, ENOTDIR); break;
+ 		CASE_TEST(directories);       EXPECT_SYSZR(proc, test_dirent()); break;
+@@ -1374,6 +1388,7 @@ int run_syscall(int min, int max)
+ 		CASE_TEST(uname_fault);       EXPECT_SYSER(1, uname(NULL), -1, EFAULT); break;
+ 		CASE_TEST(unlink_root);       EXPECT_SYSER(1, unlink("/"), -1, EISDIR); break;
+ 		CASE_TEST(unlink_blah);       EXPECT_SYSER(1, unlink("/proc/self/blah"), -1, ENOENT); break;
++		CASE_TEST(vfork);             EXPECT_SYSZR(1, test_fork(FORK_VFORK)); break;
+ 		CASE_TEST(wait_child);        EXPECT_SYSER(1, wait(&tmp), -1, ECHILD); break;
+ 		CASE_TEST(waitpid_min);       EXPECT_SYSER(1, waitpid(INT_MIN, &tmp, WNOHANG), -1, ESRCH); break;
+ 		CASE_TEST(waitpid_child);     EXPECT_SYSER(1, waitpid(getpid(), &tmp, WNOHANG), -1, ECHILD); break;
 
 -- 
 2.39.5
