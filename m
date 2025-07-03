@@ -1,45 +1,46 @@
-Return-Path: <linux-kselftest+bounces-36368-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36369-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F6B1AF691B
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 06:26:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCE08AF691D
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 06:26:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 724BC1889960
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 04:26:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0BA253AD385
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 04:26:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85E9828D8CB;
-	Thu,  3 Jul 2025 04:26:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7249028D8E8;
+	Thu,  3 Jul 2025 04:26:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bOZnA5jX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XMa1bckc"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 568B5289E16;
-	Thu,  3 Jul 2025 04:26:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43A3E28D8CD;
+	Thu,  3 Jul 2025 04:26:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751516790; cv=none; b=Dh5ma6OkFjqePvCSgUGR5KpgGyXknYD6lWAh2vNa+LYxXnnVANe1DDV2u8vVnAD2J5Bs7Yq8CUWfiBxl0NcMqKmBOmwOlewC7gbtso/LSwVJaUsvwuMVxay5V/6h4spuGOKO2an6s1eRhZmj7Xbo3mAG7i11UHXgBJ8dViZM0S4=
+	t=1751516799; cv=none; b=rd9QGPzghwU/I00YraF0EVzCCnuokNUgdfdOPCmPpysSyOl9WsWKkGuNUk+6aMGn+zUaao1xU+FiR58DeNH+uIydG9Lxb0LTUsV5mdxMGHMFP0ouStzxIzp9+4gkY3pPf3cwupheVKy+aqqgrXAQDIDGfHpTWCqpHZmEpzH0CYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751516790; c=relaxed/simple;
-	bh=s2ZxLGzwoxGD/jOJK3uRfwiCV5DjvnjPAwkn2CNF2EY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=q6qn6EhfeSkfpx+llIfqfXUAhDdHYFNSbIKAnbtvN3vz4CJN6BK+hXGelhR+8e8qmVRpfaOk2uQngKiTR1YgGTzyDhzZET5z8CkbNiEdwnm+OzTCT6oBPMimaIixjvaYnj9buOs8SV9oao2YYU0e2TXWIrLBLAfkJLEnx6ltm6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bOZnA5jX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBF35C4CEE3;
-	Thu,  3 Jul 2025 04:26:28 +0000 (UTC)
+	s=arc-20240116; t=1751516799; c=relaxed/simple;
+	bh=ud3jbqpPAFs8XFMfTuppk4oboUathRxwfWwTzzIxV74=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=WfznYRd1rPlOSrps5WSnYx5hBXdHOZ8bj5SflJuyvqpM6TnTGVY9YokLHNorF0GlnCTsCz5Iis4XKJMdF98tXybd18hXtf7CpkLlEp98uLvc4pvs4tzrtEV0bwzZexR0sayB8/Ppw2kbOv+hlAbGkSN9stgX+0RnWW2y7uZBOHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XMa1bckc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC40EC4CEE3;
+	Thu,  3 Jul 2025 04:26:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751516789;
-	bh=s2ZxLGzwoxGD/jOJK3uRfwiCV5DjvnjPAwkn2CNF2EY=;
-	h=From:To:Cc:Subject:Date:From;
-	b=bOZnA5jX3uAlXlky23KBVcoGGUEesAK3/cERxdUWg0zXDcx6AAflqTHRkwPqqCQS+
-	 e0LXZ6k5Fn2af3sx/dxy9bMi8a//HE9NETu7/1vFsYD0lwQBJXBYtZlKB/loiz5GFa
-	 8BwuVVqP81tc8HewlJJtMz9WJx3rGzz+kwB1o7A3xMlIuDvZ3ysM4L2atWxttrYWO4
-	 2J9IU7o6z3Z60UDOdR2A5q1XOtSdePyl3FoPtaApu/hHhLkMlN8yvZpo87vehYw+jy
-	 zKcg6E1UZZNVbRByiaNuIkoSb3n4zgHJWulmzfPD5yHRLixUP0+xDW/KMdEgZgFgvU
-	 GkyoWvIGkf/5g==
+	s=k20201202; t=1751516797;
+	bh=ud3jbqpPAFs8XFMfTuppk4oboUathRxwfWwTzzIxV74=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=XMa1bckcXAKLy4mpP8qTFSqg7ic9NkkYaSOJ4oVEHUdUP7m51upqLiNUbz7v3zoR2
+	 sHMa1d/0tFQYaV2g/RaY88qOpo6UwmvN1/rk2MvGkv5jAV6bkAFJLIEvat0AKe+9lu
+	 LUG/ey6ajFH6XCER9G13gcHCtAhBG3pji/A1h1oYbwNaQYeH3x9S8bxdqDtLeQlxQG
+	 BE0PCoWy0rmy5uVKsVl8Fs5qkHDBlOwPnlh2lK7osZsNtC2FPqvuV9lLwpOQuU0916
+	 2Kej5lgSye4RaId3sC3mxfMuAjZ68Q3Bh5FmVDX9DmtwsSksZmcMyCTf4Ebz2n3D7C
+	 MGXUm8Lju447w==
 From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 To: Steven Rostedt <rostedt@goodmis.org>,
 	Shuah Khan <shuah@kernel.org>
@@ -48,10 +49,12 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH 0/2] tracing: Fixes for filter
-Date: Thu,  3 Jul 2025 13:26:26 +0900
-Message-ID:  <175151678585.2149615.8702513393985992418.stgit@mhiramat.tok.corp.google.com>
+Subject: [PATCH 1/2] tracing: Handle "(const) char __attribute() *" as string ptr type
+Date: Thu,  3 Jul 2025 13:26:35 +0900
+Message-ID:  <175151679513.2149615.16646841903099858271.stgit@mhiramat.tok.corp.google.com>
 X-Mailer: git-send-email 2.50.0.727.gbf7dc18ff4-goog
+In-Reply-To:  <175151678585.2149615.8702513393985992418.stgit@mhiramat.tok.corp.google.com>
+References:  <175151678585.2149615.8702513393985992418.stgit@mhiramat.tok.corp.google.com>
 User-Agent: StGit/0.19
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -62,28 +65,60 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Hi,
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Here is a patch series to fix some issues on the trace event
-and function filters.
+With CONFIG_DEBUG_INFO_BTF=y and PAHOLE_HAS_BTF_TAG=y, `__user` is
+converted to `__attribute((btf_type_tag("user")))`. In this case,
+some syscall events have `const char __attribute(...) *` for __user
+string, like below;
 
-The first patch fixes an issue that the event filter can not
-handle the string pointer with BTF attribute tag. This happens
-with CONFIG_DEBUG_INFO_BTF=y and PAHOLE_HAS_BTF_TAG=y.
+/sys/kernel/tracing # cat events/syscalls/sys_enter_openat/format
+name: sys_enter_openat
+ID: 720
+format:
+	field:unsigned short common_type;	offset:0;	size:2;	signed:0;
+	field:unsigned char common_flags;	offset:2;	size:1;	signed:0;
+	field:unsigned char common_preempt_count;	offset:3;	size:1;	signed:0;
+	field:int common_pid;	offset:4;	size:4;	signed:1;
 
-The second patch fixes a selftest issue on the function glob
-filter. Since mutex_trylock() can be an inline function, it
-is not a good example for ftrace. This replaces it with
-mutex_unlock().
+	field:int __syscall_nr;	offset:8;	size:4;	signed:1;
+	field:int dfd;	offset:16;	size:8;	signed:0;
+	field:const char __attribute__((btf_type_tag("user"))) * filename;	offset:24;	size:8;	signed:0;
+	field:int flags;	offset:32;	size:8;	signed:0;
+	field:umode_t mode;	offset:40;	size:8;	signed:0;
 
-Thank you,
 
+Then the trace event filter failes to set string acceptable flag
+(FILTER_PTR_STRING) and rejects setting string filter;
+
+# echo 'filename.ustring ~ "*ftracetest-dir.wbx24v*"' >> events/syscalls/sys_enter_openat/filter
+sh: write error: Invalid argument
+ # cat error_log
+[  723.743637] event filter parse error: error: Expecting numeric field
+  Command: filename.ustring ~ "*ftracetest-dir.wbx24v*"
+
+Handle "(const) char __attribute() *" also as string ptr type.
+
+Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 ---
-Masami Hiramatsu (Google) (2):
-      tracing: Handle "(const) char __attribute() *" as string ptr type
-      selftests: tracing: Use mutex_unlock for testing glob filter
+ kernel/trace/trace_events_filter.c |    5 +++++
+ 1 file changed, 5 insertions(+)
 
- kernel/trace/trace_events_filter.c                         | 5 +++++
- tools/testing/selftests/ftrace/test.d/ftrace/func-filter-glob.tc | 2 +-
- 2 files changed, 6 insertions(+), 1 deletion(-)
+diff --git a/kernel/trace/trace_events_filter.c b/kernel/trace/trace_events_filter.c
+index 3885aadc434d..5e27190a0377 100644
+--- a/kernel/trace/trace_events_filter.c
++++ b/kernel/trace/trace_events_filter.c
+@@ -1488,6 +1488,11 @@ int filter_assign_type(const char *type)
+ 	if (strcmp(type, "char *") == 0 || strcmp(type, "const char *") == 0)
+ 		return FILTER_PTR_STRING;
+ 
++	/* Ignore attributes */
++	if (glob_match("char __attribute(*) \\*", type) ||
++	    glob_match("const char __attribute(*) \\*", type))
++		return FILTER_PTR_STRING;
++
+ 	return FILTER_OTHER;
+ }
+ 
+
 
