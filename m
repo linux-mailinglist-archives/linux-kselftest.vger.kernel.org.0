@@ -1,140 +1,118 @@
-Return-Path: <linux-kselftest+bounces-36366-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36367-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39794AF6744
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 03:41:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A713AF68DA
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 05:52:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 878524A7EA6
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 01:41:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F26F04E0503
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 03:52:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7965D15853B;
-	Thu,  3 Jul 2025 01:41:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEF38228CB8;
+	Thu,  3 Jul 2025 03:52:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b="r6Iy0lyY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k3pV2vBS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from jpms-ob02-os7.noc.sony.co.jp (jpms-ob02-os7.noc.sony.co.jp [211.125.139.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22EC724B26;
-	Thu,  3 Jul 2025 01:41:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.125.139.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DCE9225D6;
+	Thu,  3 Jul 2025 03:52:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751506891; cv=none; b=PoIX/QYCyGAls1yzkY/+G00f57KpcjkpnHR190fD5wjUYoQuRTaCqaBpTtLChnF9Z1yFAhBIzK34ffvI35aOUWdnRphIIl4eH0bOXpCw94WNHfeF+YGYXOs8bBl0bHIt77n6qfEnNNyduOjNu/mJGtD39CjOqpNBf/ApFDOT7fg=
+	t=1751514728; cv=none; b=uMNroSrTcExQ/HhdgE6Sstu8P3rc5HuDpz222+Tj15tLQjm4YpsQoPigkUqGP3wrvdMVHfNDA5VSoHxqGVPNC4aJ9xuPdgpIOz2SlM1B4pfB7IFOeHSrbVrvO3zRvEosEeqJTrcE8dFO5+kBtCKzYxwp6Qhug5v+hCNDeRsxD3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751506891; c=relaxed/simple;
-	bh=2EceiW0EBoYu3OMAf0fB5Q4prjSjyExozqB+r6b+7U0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kVUTJmIG9VrDPaeR2W7JXlp9GCr/A62viL4G2gWDOudI+zijhDCwaaF3y8j1Yuc68J0u7Lm2ELTbuZkVm0bOUK121UjhOmk7M3zh8K4iKV9iDTD1z35brVx0z5Z1rfSH4/JtOtES0zpL33/gjkuGgVageeEMo86OCyw3eAUK+ZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com; spf=fail smtp.mailfrom=sony.com; dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b=r6Iy0lyY; arc=none smtp.client-ip=211.125.139.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=sony.com
+	s=arc-20240116; t=1751514728; c=relaxed/simple;
+	bh=9L3OxoFJhj2X6mmDuLUW7hIWdOK8GGMg/eog1zKbTbY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jsTgZwoyRs7sSqf2NxAr1CU+5f+/+74geMDIKs8nqhxZ90WKEQaEAtMqt9v+ltB8pgG6Le4dxlx04iYWxbWiQyKvUSjShXkVQUL3PvjZfNrPVHPCAcURgSyy+NxLRhfrQdq/T2IOlNXXL647lYFv8fl2D0l0d2XTIwsg/i4KmvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k3pV2vBS; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-608acb0a27fso8116006a12.0;
+        Wed, 02 Jul 2025 20:52:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=sony.com; s=s1jp; t=1751506888; x=1783042888;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=BCu3mx1TAsqBn24Mp2CrmUIIO7P1rfXinDh/8nC5uu8=;
-  b=r6Iy0lyY+NtmiQJkIdhiS5tNGC6ZHUlaNGbxsGncN6N5Xc8Hdci3u8Jw
-   wS4KvHT8a9R3w/z01+v3+ao5/zYw4oCLBYRfIP0Hcud1+eIzC1nmpRsLx
-   FwmEb7ubvtYbpB4c7x8JwCwjQvMflNnZA8CuS5xzKSvYmzUBL3/JDOvVm
-   tDZmHAUNdH9B0eqjUN5mDwvDuUKwU4+voXTH6dZuR7Wk55J06778tby/r
-   ZW6uK3g+iCFz2dNBl1pskx8JMJ42CMWihAA72JrMUjonT7IOtKBlHPFME
-   2iZ6/ilzsm/ZXDnCEe7FJpBomQ1T87SLRmH1e7Ev/Xg19OMW0ndYDfvjO
-   g==;
-Received: from unknown (HELO jpmta-ob02-os7.noc.sony.co.jp) ([IPv6:2001:cf8:acf:1104::7])
-  by jpms-ob02-os7.noc.sony.co.jp with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2025 10:41:21 +0900
-X-IronPort-AV: E=Sophos;i="6.16,282,1744038000"; 
-   d="scan'208";a="4014289"
-Received: from unknown (HELO JPC00244420) ([IPv6:2001:cf8:1:573:0:dddd:eb3e:119e])
-  by jpmta-ob02-os7.noc.sony.co.jp with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2025 10:41:21 +0900
-Date: Thu, 3 Jul 2025 10:41:17 +0900
-From: Shashank Balaji <shashank.mahadasyam@sony.com>
-To: Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Cc: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
-	Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Shinya Takumi <shinya.takumi@sony.com>
-Subject: Re: [PATCH 0/2] selftests/cgroup: better bound for cpu.max tests
-Message-ID: <aGXfvfKOjWlH3d0q@JPC00244420>
-References: <20250701-kselftest-cgroup-fix-cpu-max-v1-0-049507ad6832@sony.com>
- <4bqk62cqsv3b4sid76zf3jwvyswdym7bl5wf7r6ouwqvmmvsfv@qztfmjdd7nvc>
+        d=gmail.com; s=20230601; t=1751514725; x=1752119525; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=b02Al31mOHYf9mmDMFXOknGM6+JzXhM/g5/Uo2Yhy4E=;
+        b=k3pV2vBSsWIi4cvg8yJzauDmU97vbaCDNJthNGmynjsHbKPvzRgmKsWQIik126BnpX
+         fy5ax1NUgeHhJVcVlNDhsq7b/cY++lh6bExLDV9q2bVAoSLXw9XYRdihM5ILNRFLyTPb
+         j9Wz01xbcmZqJj3TeY4YulnbCqe5Ac5v3mgme1lRG0Tz3wlafWvps3T1ANl5aM5rCL98
+         QFMMoDwaQCswWShGNXK9ZQlWsK01O3nCdDYa0SrL46sKmP3zuyDMmK+AK/fl6RTN7Xau
+         6PXvX5XF4leXDKCGPynZPTP0JdZTmlHeVbhh6lE5DInFzHrAAATP0XdOLUcMJLQV3iE8
+         XKVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751514725; x=1752119525;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=b02Al31mOHYf9mmDMFXOknGM6+JzXhM/g5/Uo2Yhy4E=;
+        b=VESjkQlue0gCMX1QMA0RmtVslf3rIxO4ZoEeaGpLaR4+Sp79an1yUxOA3LKZ4Aht4j
+         9HdMhO8WixA/57/bpXljzH6PT5jey/meebWAJw8Yf2JfcsQHmrJXqEVoBshO+v70egws
+         SJrU83J4V+9QlhHBUfZLgqz4JT1Oyf1JykEnPultG8/R10ekLdstYgpN5Mgi+VDyLr+p
+         /jaM6RO5RwLY5X90ACaxoWofmqo2/iSgbNzUTjoKT/y6fyIr1EXqJt1OG07RaQxlyCiS
+         SaEDhrNMARuTLenbfPz4cD2ljdEjZI+nRT7/x/EE9oFuYwAdjQMFMueiMrrH+4t7KANI
+         0D4g==
+X-Forwarded-Encrypted: i=1; AJvYcCWJqI63n0OG00/RLlVRItGDAqqc3DyC7tguzbNF8Eo4bWBWMQp6e6PG+sWJ+he/y+TMq3qOG6LkOFqMXjhlcks=@vger.kernel.org, AJvYcCWpNALlALUn6fMMip4G9hy6nbpI9K+gqXt2By5O9QTf0WyT8caCxcCqaOnBL048nFpYmlGh0IW6@vger.kernel.org
+X-Gm-Message-State: AOJu0YxGbYomwSviLx1jfTG1qO01HSD8+QzJ2IDZmyt98WZ6mZCGysUn
+	WG1UB1q+ItFAOrCqpAP/iz2Y6kwUDGO4M4fEKPE+QlNcZ8RBotFJkhWbrv3Me2UVIG9OMmCJ9ww
+	O+eNTDTrLT66rW9i7IHtukO0jOU/UG2s=
+X-Gm-Gg: ASbGnctzxUJI8g0H2JOQxHNWMUNqCl9KLYiSZpm3j6NGajTtrwsZ5TSpAnId7HplGO2
+	Ye8xcNBmB66DtuB+Z0VBir2esyfONHs0/BEF4EplDCqv36Z2GZwJImW79lH8jTQIw6OmC/zyjzu
+	3oKmzjZrcrHM+92vRdboXpiD0sdS07HHM2NmWUqqdwVCtWYA==
+X-Google-Smtp-Source: AGHT+IEW1jWDQ7cVWvWC+xl6RFuTx5QAXvi9aUUrYkVftaVUM78GsPULsQVqhnNZ0iUGuPRWaPs2zIbQsJRCAYxiySo=
+X-Received: by 2002:a17:906:c14e:b0:ae0:ab3f:36b5 with SMTP id
+ a640c23a62f3a-ae3c2a6c748mr583244966b.4.1751514724973; Wed, 02 Jul 2025
+ 20:52:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4bqk62cqsv3b4sid76zf3jwvyswdym7bl5wf7r6ouwqvmmvsfv@qztfmjdd7nvc>
+References: <20250702104249.1665034-1-ap420073@gmail.com> <20250702113930.79a9f060@kernel.org>
+In-Reply-To: <20250702113930.79a9f060@kernel.org>
+From: Taehee Yoo <ap420073@gmail.com>
+Date: Thu, 3 Jul 2025 12:51:53 +0900
+X-Gm-Features: Ac12FXzO98GaAsaJAVUoLTm5FA7ipupBexnpOgJODdq4yTy4ZCtkvHc8QYIFgrw
+Message-ID: <CAMArcTVqsD_sbXTM9JLDWgALNpYdj=V_Xyp6Lr3dpWqc93P+iQ@mail.gmail.com>
+Subject: Re: [PATCH v2 net-next] selftests: devmem: configure HDS threshold
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, pabeni@redhat.com, edumazet@google.com, 
+	andrew+netdev@lunn.ch, shuah@kernel.org, almasrymina@google.com, 
+	sdf@fomichev.me, jdamato@fastly.com, netdev@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Michal, 
+On Thu, Jul 3, 2025 at 3:39=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> wro=
+te:
+>
 
-Thanks for the reply!
+Hi Jakub,
+Thanks a lot for your review!
 
-On Wed, Jul 02, 2025 at 02:34:29PM +0200, Michal Koutný wrote:
-> Hello Shashank.
-> 
-> On Tue, Jul 01, 2025 at 11:13:54PM +0900, Shashank Balaji <shashank.mahadasyam@sony.com> wrote:
-> > cpu.max selftests (both the normal one and the nested one) test the
-> > working of throttling by setting up cpu.max, running a cpu hog process
-> > for a specified duration, and comparing usage_usec as reported by
-> > cpu.stat with the duration of the cpu hog: they should be far enough.
-> > 
-> > Currently, this is done by using values_close, which has two problems:
-> > 
-> > 1. Semantic: values_close is used with an error percentage of 95%, which
-> >    one will not expect on seeing "values close". The intent it's
-> > actually going for is "values far".
-> > 
-> > 2. Accuracy: the tests can pass even if usage_usec is upto around double
-> >    the expected amount. That's too high of a margin for usage_usec.
-> > 
-> > Overall, this patchset improves the readability and accuracy of the
-> > cpu.max tests.
-> > 
-> > Signed-off-by: Shashank Balaji <shashank.mahadasyam@sony.com>
-> 
-> I think you're getting at an actual bug in the test definition. 
-> 
-> I think that the test_cpucg_max should either run hog_cpus_timed with
-> CPU_HOG_CLOCK_PROCESS instead of CPU_HOG_CLOCK_WALL to make sense or the
-> expected_usage_usec should be defined with the configured quota in mind
-> (i.e. 1/100).  (The latter seems to make the test more natural.)
+> On Wed,  2 Jul 2025 10:42:49 +0000 Taehee Yoo wrote:
+> > The devmem TCP requires the hds-thresh value to be 0, but it doesn't
+> > change it automatically.
+> > Therefore, make configure_headersplit() sets hds-thresh value to 0.
+>
+> I don't see any undoing of the configuration :(
+> The selftest should leave the system in the state that it started.
+> We should either add some code to undo at shutdown or (preferably)
+> move the logic to the Python script where we can handle this more
+> cleanly with defer().
 
-Going with the more natural way of sticking to CPU_HOG_CLOCK_WALL, the
-second patch does calculate expected_usage_usec based on the configured
-quota, as the code comment explains. So I'm guessesing we're on the same page
-about this?
+Okay, I understand it.
+I will fix this in the next version.
 
-> With such defined metrics, the asserted expression could be
-> 	values_close(usage_usec, expected_usage_usec, 10)
-> based on your numbers, error is around 20% so our helper's argument is
-> roughly half of that. (I'd be fine even with err=20 to prevent some
-> false positives.)
-> 
-> I think those changes could even be in one patch but I leave that up to
-> you. My comment to your 2nd patch is that I'd like to stick to relative
-> errors and keep positive values_close() predicate that's used in other
-> selftests too. (But those 95% in the current code are clumsy given two
-> different qualities are compared.)
+Thanks a lot!
+Taehee Yoo
 
-Do you mean something like,
-
-	if (values_close(usage_usec, expected_usage_usec, 10))
-			goto cleanup;
-
-using the positive values_close() predicate. If so, I'm not sure I
-understand because if usage_usec and expected_usage_usec _are_ close,
-then we want the test to pass! We should be using the negative
-predicate.
-
-And sure, I'll send v2 as a single patch.
-
-Thanks
-
-Shashank
+> --
+> pw-bot: cr
 
