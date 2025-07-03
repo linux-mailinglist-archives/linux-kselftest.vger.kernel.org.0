@@ -1,287 +1,200 @@
-Return-Path: <linux-kselftest+bounces-36443-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36444-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82BF8AF778E
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 16:32:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8881AF7798
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 16:33:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6C0B3162A11
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 14:32:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C1AA71C4046F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 14:34:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57ABE2EBDF8;
-	Thu,  3 Jul 2025 14:32:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 324792ECE92;
+	Thu,  3 Jul 2025 14:33:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="olvR6EZ1"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ir2EjZvc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2058.outbound.protection.outlook.com [40.107.101.58])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD4762EACFF;
-	Thu,  3 Jul 2025 14:32:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751553133; cv=none; b=bBZsR73a0rFJpIIa5VyXdLeNNUfFy8DfYxyAw5E/Ej2WmuWjG90A8arOu57FTfVE2IA1dsQ7hMP2y6nYJCePtFk8qd+Lt9HBJ3t9Plf2eR6+WqK/LC8LB7Ktkw8vXcmE+LaA76Yo+1Gz1fZ5Iln/NOjGAeqDkFc/+I0XxIOGiX4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751553133; c=relaxed/simple;
-	bh=CcCcAs1S/wHwTfAHyx0ixW/Dl3hzosnHUjJLp3j1LlE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ADHu/Hki6UEtbH9B+fNukbx3HbjPX3NqgKFLa/D22oP5aQrjwQ/vXl1NzER+Yv9g0oDQTBSzhfkCQQ5gidrg3v0UNDG3KMAZRyeJeCD7sFcNUJGvQgWXGh/ygjHHFSqj5tcd7HYyaucR/PJ5MV2P4BBIU6QKGxyqFkQ9Tf5yHbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=olvR6EZ1; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 563BMWSQ028339;
-	Thu, 3 Jul 2025 14:31:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=eRsY50
-	z3YQA/nIb5B7MZxVRcf3v888DImdHoogzEoUQ=; b=olvR6EZ1PllwopurFL2+/8
-	dR6wYnsRvXeR85ieEdT4QRwMgXmQcY06rtq9noa2M59NrPqMUI2vlsOUDv8b5ANP
-	dqmS9FAQRK2fR0cLI7kwDohOyY58cdhmZXOI0JRi4r2mpEs9qvAXAv8+Xl9NRoG3
-	4lS/qr31alc4o7UAOU4yKPbuIz/f59Rki8OFA1VDzMKh4QKEaYueYzuuQC9lOwGi
-	Sx5LD7HNOrmeklleMV5nC2pjSlq4TbcnYqa3EjhAUje64+cBb0q+9FhCLlaX4igq
-	jDW3F7zs1eR5dUBMRlmEAaneMKTpFJQ64JQVUgWp4CplG9H7kqErYApWPrbxtODQ
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47j84dmf88-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 03 Jul 2025 14:31:54 +0000 (GMT)
-Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 563ELTeZ013840;
-	Thu, 3 Jul 2025 14:31:53 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47j84dmf85-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 03 Jul 2025 14:31:53 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 563BZBHI021354;
-	Thu, 3 Jul 2025 14:31:52 GMT
-Received: from smtprelay04.dal12v.mail.ibm.com ([172.16.1.6])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 47jwe3n28u-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 03 Jul 2025 14:31:52 +0000
-Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
-	by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 563EVqoC25952908
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 3 Jul 2025 14:31:52 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2BC5358043;
-	Thu,  3 Jul 2025 14:31:52 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id DBAE758059;
-	Thu,  3 Jul 2025 14:31:46 +0000 (GMT)
-Received: from [9.109.245.113] (unknown [9.109.245.113])
-	by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Thu,  3 Jul 2025 14:31:46 +0000 (GMT)
-Message-ID: <1b6e8526-59cb-4de0-bd82-8b0964cb6233@linux.ibm.com>
-Date: Thu, 3 Jul 2025 20:01:45 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AEF12ECEBB;
+	Thu,  3 Jul 2025 14:33:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.101.58
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751553213; cv=fail; b=tFNlogI5jDzgpqBGxmXusz4BbYOxk/6ZOByOeHMJsygayTfehfjHFKQMUUEZuobL0xejEUKZsxG76zLTief31Os2zukj5uP9wUqGw5AXDumPaAxwQcf5FmURxfgESauIJ+prml6//034w1c+SO9UkPXFZKnbMk59uou8ck49tdI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751553213; c=relaxed/simple;
+	bh=e4tvTaNacUzDy4RR66ct90gHwTnyThuNpUggALFUuO4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=EsP0YxkK9oLkyIe1GXLlauxFklEZ3e1y/JzFM+iMm+vyvW32wOv730SNNpH9GRMa0M8SSi/xB5tHW/Q8N78pVnwHqd7kGp8OtVUzBCcAgap3QuojKimLjaUdubLhm0znyaNvS20d6t36mny9gwhO8Kjy8FgXWImnwox8LP3CnAI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ir2EjZvc; arc=fail smtp.client-ip=40.107.101.58
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=OQ3PXkSTVgApS8CfHEg+8Onk5iyzBokN2jj+2rLnUZprEV4BxGKxPbVR2mJjgjWZNWipTiGwMP5ZklIxyzly2KtI8P5y5Z+L6lYCk9LuVp2ll0HzASYGcs6rxVBHLU+4NpD5QdYMRTOa3rqzKIhgO7UUkamsKgeC++6amYduu31EUfhDH+ScdF34q0sDg7G4DkGhyAOsQnIclQTXQbhlB2i3PK/+QlbwDv38H3VPFYgMlNHTtBGQuwsbu6zGXghx6IjO9KuGvLYhWVUeU0MtTNhEXH83T/TerDI0uWfRM/YJwR/D9pv8rF/laLfnZn2PaiXN9ZWXc1iumDsUUuwJAg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8z1uMZElHJ1FEORnr2kz+U5yrmY0ZBGxUG9upS4Rx0E=;
+ b=u/G2DDvq5VcOUQptK4KU5cEjkzurm/GoBtUHnd8N+k6PW5agKcCCCQIkSkrdG3X4pAV5iL34IJj9dg2y6EcNOpqBpfoJGiTJ9W8WjlIUwo8GyYx1SAvEuhzsv4N1e/IfTWM/xi6t8Ze2CblRc8Ywm/6sRY0FQ3t//GLWPlnXCXns7UamXGU4564DMWT6Tkgz6el7D4xi6s1GLX+BplDvvmeHvc17zPsBQXwbIP3B0W4le0+jiipXVDXWxwr4tuSH/TkvbRm6CRVwxMszsrwjrf4J50DJAN02lNUJNPOQm5/06kAFKZ1ppgQQ5Bj4Kvr9KJPsR1WmX3UuFWMn99+Aeg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8z1uMZElHJ1FEORnr2kz+U5yrmY0ZBGxUG9upS4Rx0E=;
+ b=ir2EjZvcwPkbnUAHNEnbyOARVcz2Ad3AY3TiHDD4qLvl+YRCdOF7hToaFUSfGpddyC6cmvA0c32yqaEcZ0SKCyB1zF6wR1ZMqXCDzJCYF61fku/cxJ/RdrIpzzQrvtRW+GNCRKVhTm1gkF57x/nxZRFMREEuw5tu65SGgqofl/UmeZdKp8YdRIBb6wNkc6SdnUQaxTWlbkoni+OpUkaedTVnoUznFnjPgUfiLJY4kZW+D+nNVdPtUlGtc+cphzY7YKN30cqjjokM6kLSoOMZobz4JK5vUNmFufIRsrFFJM3Jl/jWinu+1NaAyrzCZb73FUIR8dw5vFTf927/pBdgMg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
+ SA1PR12MB7126.namprd12.prod.outlook.com (2603:10b6:806:2b0::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8880.27; Thu, 3 Jul
+ 2025 14:33:26 +0000
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::5189:ecec:d84a:133a]) by DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::5189:ecec:d84a:133a%4]) with mapi id 15.20.8901.021; Thu, 3 Jul 2025
+ 14:33:26 +0000
+From: Zi Yan <ziy@nvidia.com>
+To: Aboorva Devarajan <aboorvad@linux.ibm.com>
+Cc: akpm@linux-foundation.org, Liam.Howlett@oracle.com,
+ lorenzo.stoakes@oracle.com, shuah@kernel.org, pfalcato@suse.de,
+ david@redhat.com, baolin.wang@linux.alibaba.com, npache@redhat.com,
+ ryan.roberts@arm.com, dev.jain@arm.com, baohua@kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, donettom@linux.ibm.com, ritesh.list@gmail.com
+Subject: Re: [PATCH v2 1/7] mm/selftests: Fix incorrect pointer being passed
+ to mark_range()
+Date: Thu, 03 Jul 2025 10:33:23 -0400
+X-Mailer: MailMate (2.0r6272)
+Message-ID: <D34D3DEC-996F-4ABC-A5ED-0EB1C7AF99ED@nvidia.com>
+In-Reply-To: <20250703060656.54345-2-aboorvad@linux.ibm.com>
+References: <20250703060656.54345-1-aboorvad@linux.ibm.com>
+ <20250703060656.54345-2-aboorvad@linux.ibm.com>
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: MN2PR17CA0012.namprd17.prod.outlook.com
+ (2603:10b6:208:15e::25) To DS7PR12MB9473.namprd12.prod.outlook.com
+ (2603:10b6:8:252::5)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 5/7] selftests/mm: Fix child process exit codes in
- ksm_functional_tests
-To: David Hildenbrand <david@redhat.com>,
-        Aboorva Devarajan <aboorvad@linux.ibm.com>, akpm@linux-foundation.org,
-        Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, shuah@kernel.org,
-        pfalcato@suse.de, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
-        npache@redhat.com, ryan.roberts@arm.com, dev.jain@arm.com,
-        baohua@kernel.org
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ritesh.list@gmail.com
-References: <20250703060656.54345-1-aboorvad@linux.ibm.com>
- <20250703060656.54345-6-aboorvad@linux.ibm.com>
- <9586f8ff-3b34-4613-853b-0c808fcbb9d2@redhat.com>
- <7b78974b-6841-4280-89c1-01bd835d4f27@linux.ibm.com>
- <42c0135a-dbd9-47e1-9b9e-c36c147a2315@redhat.com>
-Content-Language: en-US
-From: Donet Tom <donettom@linux.ibm.com>
-In-Reply-To: <42c0135a-dbd9-47e1-9b9e-c36c147a2315@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: mlj0ZM2IlX8Yno1D-kOeHnHdVJh9pEwN
-X-Proofpoint-GUID: jKPDFIyjEgTEYq_-UPmCyt1NWA0zHq5I
-X-Authority-Analysis: v=2.4 cv=Ib6HWXqa c=1 sm=1 tr=0 ts=6866945a cx=c_pps a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17 a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=VnNF1IyMAAAA:8 a=wdEVuivgXQAh7QcTvTEA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzAzMDEyMCBTYWx0ZWRfX3u28tBnifZBA NgQcSJcGDE5fQh1ikDPw0BVHJVirVRARwJXc7caBlMeSOKmcQLYTXpFcEajWhW/eYGxViOl8tr5 tXyJh1Pv+M0MopBB8Qd0l7SF/mEkkXctLVFZ/SjLu6aFtpr/uZfm6fOsnCBeRHFRrRI5T8rs20n
- F0Vz1owkzLQWEcaK37zlDeHo8eHuxS7T5jc9G2LCwcynPbqgtN6HLRWSPzuNDHI36XBVP+LWvL9 X8pOB9Sp4m3HMvMZ3GO1hipcfoQaUPQ3i3uTLpw8iIPvKLW1Y4u3W1iyufk+XdZWGTEBBCnRxex 5o704DHbL5dIDV7kUpoBxAKKmQN49HiQQVdgwCUFoaqC0pF8SszqR/XqztC3reZWYkLpyPZEpik
- VXPPvI4zLl4QRee6TgisnNk6Dm+xeTJHT/xMcIVrql4kyh+exUeRvd5/4inOhvi0ljMT+oWY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-07-03_04,2025-07-02_04,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
- clxscore=1015 mlxlogscore=999 lowpriorityscore=0 impostorscore=0
- mlxscore=0 malwarescore=0 spamscore=0 priorityscore=1501 adultscore=0
- bulkscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2507030120
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|SA1PR12MB7126:EE_
+X-MS-Office365-Filtering-Correlation-Id: dbe267c5-72ed-4a99-d81c-08ddba3e926b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|7416014|376014|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?Kz5/CjWVVOtsPDjLs/gmR5f7LD3OPfOur1NC2yW9WP/DHCckaYYyv48fp+aY?=
+ =?us-ascii?Q?Z1DubVQLRDupMoBm2fkbi3ZfnPDmabe3+5gL0k2GCYgVyTovW8fdYl093jFZ?=
+ =?us-ascii?Q?nLotFVrpsk4iApXPOcDyldC0Q+Phbh4uhWI2RubsbopM7nr92hGaI0kOGnCi?=
+ =?us-ascii?Q?Uc9sBJ2EjtpJu6L7g0AVKHy3WA21AG80zvaF3LWJhdY0rN5k36uh2ssuB81a?=
+ =?us-ascii?Q?XS+kITaT1XhC/wn4RmFvtT1mQ6WdsstNKC1IRXnTdawh85fCBVTosJTvAU8L?=
+ =?us-ascii?Q?t/6DkUhVa5x3bIl7gxIbNolC9Rqvoh8Tp0tVYtKjc+rA7T9dBtWRAkHh297s?=
+ =?us-ascii?Q?gAnZ26b7I+ucIemeHnOrlqtxWnOMErE7koOq8cTX4n3O3CiPs8i6PLJQ8zHI?=
+ =?us-ascii?Q?xRWEqC4fDNvKp6jMVF5VTQdNTV5MJQyLjr5Xiabkyl7Bcxuu8e2yhrdxLPDG?=
+ =?us-ascii?Q?nWnvgMsSCSVzC3mwBNd3VvDP5TXsLZkrjINjFrLLiBgzxPqKCRznozeQ1Vpi?=
+ =?us-ascii?Q?HWb3AbTiemXX9OkZMQdHoew6rNJEGMVH0qt3kFi+hX/5+lQcw8PsErk16vJi?=
+ =?us-ascii?Q?3Nko/3xX9qPnSjzpC5CmnUMdsf7UqYWrkfOpFhbItyltFLNt7lfAEsfHypWl?=
+ =?us-ascii?Q?3wcbnCwWa96XMXE6VdI7S9G8+luFoE1GJ25CVXcYltFwrQ7atfjfm1eSm2g0?=
+ =?us-ascii?Q?GeRkFrYjeJ53fo6EhbKGC/GPSq9iD2exo+iPb/tjDBg14GAK0AZu9MM/Ud9l?=
+ =?us-ascii?Q?9IMkrGlJLkBUnTsv2OSWjY8IGlrcRl2+qVtnrGbCabkT7r/HfMXVPwfume8g?=
+ =?us-ascii?Q?Glyzvhho6gQWNU2zGN6ZaCa7r+IgzExVPYKZWobLATOKT+bjmFNbr8YT0dxo?=
+ =?us-ascii?Q?XViJ2cWOgk1gaSqM+Ho5TtLVWgodeZt/7bh6e3umHzYPYQ00/X9Noxjymvkw?=
+ =?us-ascii?Q?FC5Y27DscVjOPveZ0CTZ0CZ1x3rzoK6hxg9O1ALKRF45GO92L6RTAKe9tE8Y?=
+ =?us-ascii?Q?eYeOoHi4asY791DD3D0d3FMvQC3PiHPrcumtdWk1JhKjrTJwy5dKrjbktTu2?=
+ =?us-ascii?Q?ybfZnU9OZCTXW93j9LtbxKqn4VNK/ax+ZJd7oJF/VTAXQsMQrrRwzw7kfbsF?=
+ =?us-ascii?Q?OPZ+s/Iof0o2ybnB85sPD8yjJU3op6cqEnrPT5okF7v25Td8kYubrI1nDZox?=
+ =?us-ascii?Q?VB9kzu3lNcSwWdap9rxK4L7FjsEf5+9lBKvuxcDL1XZteOD0sGhnV67uVWf2?=
+ =?us-ascii?Q?LV6RkdX/Q2JnQVJDvuuX7xMYyynerOXNmqnVQGFjkHIs2/AGiyzSmhi1b8pT?=
+ =?us-ascii?Q?VBakuXHXOxFkt/y0IcbcRHHylDJCpJ2ogobabAB47OGc4G6NlHb8OxUYEgzx?=
+ =?us-ascii?Q?D9M1yzeamxrQ2qYJdZdQB1JSlRE2KKQYNZzuQs+uyGgKN9Ar7t1q3MrOrhne?=
+ =?us-ascii?Q?V/nHIjGU4X4=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?L7uLe1qpPYT0yZuK8HVs4hn9eXd+KiOzUl6JAIWsKCWh0DwEUwjRYlIPgbF5?=
+ =?us-ascii?Q?sM0KCZOsx6/vjgbC5TXg1YtWeLHioEmXOO0dzhu3RWkH+seZo3BV4AbYbyDl?=
+ =?us-ascii?Q?ZfYO3dKFpZIO4T8w77Oh1jxg4BXUMfSTBI1lGphEQIETWea8BKgavHHo1e9U?=
+ =?us-ascii?Q?ORPq2FOR76/gFPjdh51Im4q6fAjdqDcLkW2qh4WDsKpoJ6ulNbeKDTH3Ehmd?=
+ =?us-ascii?Q?fdVCXLXSWNlTe+m7WCVmoovmPCyNe/vADbF76ClzJ4+70Xez0wo8CU535Y6v?=
+ =?us-ascii?Q?5Hs3fTbQJQvVkNoqTLLDBzE8BT7twqW5wX4L8yMVOO3Eqmt9weMe1yYVjRGX?=
+ =?us-ascii?Q?oSIazLxyrDIa1i/eW5o5hA6eEHmL3dTAhGMG8NGBevT7kKSBSrpsU9tvX4d7?=
+ =?us-ascii?Q?L3j1wX6O2zxm6Bm8MKLNnUZkte16gJZvFZqQa4TMr0D01PxzIoANnr+EWeZn?=
+ =?us-ascii?Q?BT8INQvSEBWJsPqXt2DLmbJ+f0v6Hy5eRWUVeDv/o9PLxl8fM9mxOcuXQ65p?=
+ =?us-ascii?Q?r9Chro1lftpZySuine7exI1R8QQg2/PP4ZtQPJLT3s8cyx0A22R1chm5K7b3?=
+ =?us-ascii?Q?jlFt0xao0uBy2GXOkvKDm5rRup3sPm3KyRrlSXhjXmVW+2WlmRFc5vBWp30y?=
+ =?us-ascii?Q?8tioL69xcCfPNIlac/d6BwiIMpxGNAqJvvjajzp8UW6CekkQKr0KuqZLp3xe?=
+ =?us-ascii?Q?jD2a//uG7FIekI8BUbYiZv1D3ziAzMdMTYWO9Yjp+KIJCgDztntYz/NE5qWM?=
+ =?us-ascii?Q?81Nsrm8QcShwE+YeL22FeUyamc+/byEnyl7VOCNeEvkOlWWSA7wsfWNFCu/M?=
+ =?us-ascii?Q?TdXRT/67nfSzMg+JBIt8orIyJIYrWWxmW6Jpl2dCfP5jwLxDdMjxCwXLHkgQ?=
+ =?us-ascii?Q?LzePyy+T9pjYqT1ViwFe743Ool4cWmhEzfafusZfqf5ia4x22GcNygnZCgzM?=
+ =?us-ascii?Q?h7M+Lb4jqNqEyNHFIYuwwgGFxqhOk3XX6ejdu9I1hUJblZafbGn2aqlGR2TF?=
+ =?us-ascii?Q?86WxJa5+JuWlRhbWLfzfCqWrgtqn3t5s3UXANGZQBrmozXDAXQNIfvQS9iEJ?=
+ =?us-ascii?Q?QLIF2U2XiGyE7/f9iKvE7Rb1TNvj+uoJzo16rkjBTtgZcYbKrHqfz8fdn0yK?=
+ =?us-ascii?Q?E1wJ2jr45s1h3irL6CJxtAty5pPamlNTcTE8nS0vMbG/ZjsLtjxt73rfJwnY?=
+ =?us-ascii?Q?vgnRpZuXhuN7w7Qb5vAtgNPEAsmMfY/p1MyxL64PyTmDLdoVVTqXdsjLadvb?=
+ =?us-ascii?Q?u3wjsZobkIDA7K4LEOyfvwJFd+ir+6OFGtvT6pVcWFEmjO0XiqVrdbFndnEy?=
+ =?us-ascii?Q?hWSnu0V+hUYuc8/l0PPsKlVyXQr9mc1JD2y3Nf7TS4Hw24AE4UyuN8A+WjUX?=
+ =?us-ascii?Q?wn6oVzNPRxgzvLG+OTYjxh0AJrhHfWsLrwpTsT5EUIOwV6PdQHY4m1EABNuf?=
+ =?us-ascii?Q?4PvJ00pKQRDOt8LK8UE6nVdom9WpT1Xeoh3iyywKlI8bp3Z6bRFODsqSEEPA?=
+ =?us-ascii?Q?xZwLEiTPuXDjij/q7QtsSvLdC4Gru0facpcuUBrGq6SZa2wt0BdnJBeEDy5/?=
+ =?us-ascii?Q?x41Eb/jc1YimQykxRAyRLBdERHFuUUOB+d5LeSym?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dbe267c5-72ed-4a99-d81c-08ddba3e926b
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jul 2025 14:33:26.4699
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: n+UX7Ae6MmRN4IleUsj6atdP1Lf1UMRLhmqT4Ws51gImM2Rt5qC4804WEueszBT1
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7126
 
+On 3 Jul 2025, at 2:06, Aboorva Devarajan wrote:
 
-On 7/3/25 2:44 PM, David Hildenbrand wrote:
-> On 03.07.25 10:51, Donet Tom wrote:
->> Hi David
->>
->> On 7/3/25 2:03 PM, David Hildenbrand wrote:
->>> On 03.07.25 08:06, Aboorva Devarajan wrote:
->>>> In ksm_functional_tests, test_child_ksm() returned negative values
->>>> to indicate errors. However, when passed to exit(), these were
->>>> interpreted as large unsigned values (e.g, -2 became 254), leading to
->>>> incorrect handling in the parent process. As a result, some tests
->>>> appeared to be skipped or silently failed.
->>>>
->>>> This patch changes test_child_ksm() to return positive error codes
->>>> (1, 2, 3) and updates test_child_ksm_err() to interpret them 
->>>> correctly.
->>>> This ensures the parent accurately detects and reports child process
->>>> failures.
->>>>
->>>> --------------
->>>> Before patch:
->>>> --------------
->>>> - [RUN] test_unmerge
->>>> ok 1 Pages were unmerged
->>>> ...
->>>> - [RUN] test_prctl_fork
->>>> - No pages got merged
->>>> - [RUN] test_prctl_fork_exec
->>>> ok 7 PR_SET_MEMORY_MERGE value is inherited
->>>> ...
->>>> Bail out! 1 out of 8 tests failed
->>>> - Planned tests != run tests (9 != 8)
->>>> - Totals: pass:7 fail:1 xfail:0 xpass:0 skip:0 error:0
->>>>
->>>> --------------
->>>> After patch:
->>>> --------------
->>>> - [RUN] test_unmerge
->>>> ok 1 Pages were unmerged
->>>> ...
->>>> - [RUN] test_prctl_fork
->>>> - No pages got merged
->>>> not ok 7 Merge in child failed
->>>> - [RUN] test_prctl_fork_exec
->>>> ok 8 PR_SET_MEMORY_MERGE value is inherited
->>>> ...
->>>> Bail out! 2 out of 9 tests failed
->>>> - Totals: pass:7 fail:2 xfail:0 xpass:0 skip:0 error:0
->>>>
->>>> Fixes: 6c47de3be3a0 ("selftest/mm: ksm_functional_tests: extend test
->>>> case for ksm fork/exec")
->>>> Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
->>>
->>> BTW, when I run the test, I get this weird output
->>>
->>> TAP version 13
->>> 1..9
->>> # [RUN] test_unmerge
->>> ok 1 Pages were unmerged
->>> # [RUN] test_unmerge_zero_pages
->>> ok 2 KSM zero pages were unmerged
->>> # [RUN] test_unmerge_discarded
->>> ok 3 Pages were unmerged
->>> # [RUN] test_unmerge_uffd_wp
->>> ok 4 Pages were unmerged
->>> # [RUN] test_prot_none
->>> ok 5 Pages were unmerged
->>> # [RUN] test_prctl
->>> ok 6 Setting/clearing PR_SET_MEMORY_MERGE works
->>> # [RUN] test_prctl_fork
->>> ok 7 PR_SET_MEMORY_MERGE value is inherited
->>> # [RUN] test_prctl_fork_exec
->>>
->>> ^ where is the test?
->>>
->>> # [RUN] test_prctl_unmerge
->>> ok 8 Pages were unmerged
->>> # Planned tests != run tests (9 != 8)
->>> # Totals: pass:8 fail:0 xfail:0 xpass:0 skip:0 error:0
->>>
->>> ^ what?
->>>
->>> ok 8 PR_SET_MEMORY_MERGE value is inherited
->>> # [RUN] test_prctl_unmerge
->>> ok 9 Pages were unmerged
->>> # Totals: pass:9 fail:0 xfail:0 xpass:0 skip:0 error:0
->>>
->>> ^ huh, what now?
->>>
->>
->> The problem with the exec test is that it uses its own binary to exec.
->>
->>           } else if (child_pid == 0) {
->>                   char *prg_name = "./ksm_functional_tests";
->>                   char *argv_for_program[] = { prg_name,
->> FORK_EXEC_CHILD_PRG_NAME, NULL };
->>
->>                   execv(prg_name, argv_for_program);
->>                   return;
->>           }
-> > > So we should run it on the same directory where the binary present.
+> From: Donet Tom <donettom@linux.ibm.com>
 >
-> So, I assume the execv fails. We should handle that, and figure out 
-> why it fails.
+> In main(), the high address is stored in hptr, but for mark_range(),
+> the address passed is ptr, not hptr. Fixed this by changing ptr[i] to
+> hptr[i] in mark_range() function call.
 >
-> diff --git a/tools/testing/selftests/mm/ksm_functional_tests.c 
-> b/tools/testing/selftests/mm/ksm_functional_tests.c
-> index d8bd1911dfc0a..0ddbb390df33b 100644
-> --- a/tools/testing/selftests/mm/ksm_functional_tests.c
-> +++ b/tools/testing/selftests/mm/ksm_functional_tests.c
-> @@ -527,6 +527,8 @@ static void test_child_ksm_err(int status)
->                 ksft_test_result_fail("Merge in child failed\n");
->         else if (status == -3)
->                 ksft_test_result_skip("Merge in child skipped\n");
-> +       else if (status == 4)
-> +               ksft_test_result_fail("Binary not found\n");
->  }
+> Fixes: b2a79f62133a ("selftests/mm: virtual_address_range: unmap chunks=
+ after validation")
+> Signed-off-by: Donet Tom <donettom@linux.ibm.com>
+> Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
+> ---
+>  tools/testing/selftests/mm/virtual_address_range.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
->  /* Verify that prctl ksm flag is inherited. */
-> @@ -598,7 +600,7 @@ static void test_prctl_fork_exec(void)
->                 char *argv_for_program[] = { prg_name, 
-> FORK_EXEC_CHILD_PRG_NAME };
+> diff --git a/tools/testing/selftests/mm/virtual_address_range.c b/tools=
+/testing/selftests/mm/virtual_address_range.c
+> index 169dbd692bf5..e24c36a39f22 100644
+> --- a/tools/testing/selftests/mm/virtual_address_range.c
+> +++ b/tools/testing/selftests/mm/virtual_address_range.c
+> @@ -227,7 +227,7 @@ int main(int argc, char *argv[])
+>  		if (hptr[i] =3D=3D MAP_FAILED)
+>  			break;
 >
->                 execv(prg_name, argv_for_program);
-> -               return;
-> +               exit(4);
->         }
->
->         if (waitpid(child_pid, &status, 0) > 0) {
->
-> results in
->
-> TAP version 13
-> 1..9
-> # [RUN] test_unmerge
-> ok 1 Pages were unmerged
-> # [RUN] test_unmerge_zero_pages
-> ok 2 KSM zero pages were unmerged
-> # [RUN] test_unmerge_discarded
-> ok 3 Pages were unmerged
-> # [RUN] test_unmerge_uffd_wp
-> ok 4 Pages were unmerged
-> # [RUN] test_prot_none
-> ok 5 Pages were unmerged
-> # [RUN] test_prctl
-> ok 6 Setting/clearing PR_SET_MEMORY_MERGE works
-> # [RUN] test_prctl_fork
-> ok 7 PR_SET_MEMORY_MERGE value is inherited
-> # [RUN] test_prctl_fork_exec
-> not ok 8 Binary not found
-> # [RUN] test_prctl_unmerge
-> ok 9 Pages were unmerged
-> Bail out! 1 out of 9 tests failed
-> # Totals: pass:8 fail:1 xfail:0 xpass:0 skip:0 error:0
+> -		mark_range(ptr[i], MAP_CHUNK_SIZE);
+> +		mark_range(hptr[i], MAP_CHUNK_SIZE);
+>  		validate_addr(hptr[i], 1);
+>  	}
+>  	hchunks =3D i;
 
+It looks like it was a copy-paste error. Thank you for fixing it.
 
-Thanks David.
+Reviewed-by: Zi Yan <ziy@nvidia.com>
 
-We will add this in next version.
-
-
->
->
+Best Regards,
+Yan, Zi
 
