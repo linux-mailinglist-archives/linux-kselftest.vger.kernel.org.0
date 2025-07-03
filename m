@@ -1,136 +1,137 @@
-Return-Path: <linux-kselftest+bounces-36472-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36468-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4508AF7DD1
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 18:28:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E724CAF7DC6
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 18:26:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 263207A818F
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 16:26:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 721B854185F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 16:26:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89DDF25743D;
-	Thu,  3 Jul 2025 16:26:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 818F624EAAB;
+	Thu,  3 Jul 2025 16:26:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F9xYnMul"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g3sTY+eu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DBB02550BA;
-	Thu,  3 Jul 2025 16:26:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED3D8230D14;
+	Thu,  3 Jul 2025 16:26:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751560017; cv=none; b=nnlsyNGcjzqmPlowdHZDGfiGMwjmJDH1cJvBbp6PCNTB7uaB1biXYhHIZajfFbMc0TDnXO9c9w1w9ovPGHdsbxLnyI3wNlqMoqb77fqZQQj6rqKhaUbWtrF2abhUQ/vOqwKg+sXVR12mQJ6jkJACB4qHPSGLk3XvuSL1LIqIk7o=
+	t=1751559985; cv=none; b=DKfr1fPZ5JLRm4gr9rynPLRDLf4cRWdpyY4fYq3Tb2osG4+jyC+VQFTU3sH7zfCQvnfo+VRf1JDkJBl+nLjkl23Xb6haJiv4V7ZGPu5vmYvy6IFxKuBMvjlLFhMBevniyr842ea/dvBBok2pb6CcFA22BHy3EqO1AA08OIf9P70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751560017; c=relaxed/simple;
-	bh=0se/eq+gWDDz/zPGLfe64NetxynymgwpyPlKXYP8XIU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=TRcCSWFJybUQIbCzOy3ZrmrDXtqxlSbUs/QRebW9ATKsjNU5UVoLXsaEamHlRhaQE52jJ+F/UaxUl/SEhUZNZJhk0jB2iuM+7PjVSuBgP8L9HcoCzZppBykxQvJ/ZalbbOsqtimh46AtfyFDLurVZUBb/AMHCOb4KAeGY0TID+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F9xYnMul; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57858C4CEE3;
-	Thu,  3 Jul 2025 16:26:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751560015;
-	bh=0se/eq+gWDDz/zPGLfe64NetxynymgwpyPlKXYP8XIU=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=F9xYnMulVuNGNvAGTBMpLlkUdOXV29MzVXEe033VuqVu/tGe+RWsJngzdz4IffUZF
-	 TlFfr0OzdjCXXzY5GuscScdCqMN4WdRq00y7yQ79g33zU0CeoS7fDu5zmWPpovhul5
-	 ZpqA/v/ijUwmYLGzJmt8RMJ2UuKToISDuzKDPkyqtBjsZ0ev9agFlQ4yyBi80TBfV+
-	 c9pcjON/ohz7/AITWDxJYIcAcipay9tALB0V3775LUsr27Z0zso2ElZBpm547GWVvL
-	 /Seqd/LMJsI+P9t4/SG/wnc32xVf9Rwn8YlZIaCiUv6D0bP+sqI5ZeiRE+LEbZPRwp
-	 cUgjf2kBSiWFA==
-From: Mark Brown <broonie@kernel.org>
-Date: Thu, 03 Jul 2025 17:23:24 +0100
-Subject: [PATCH v2 3/3] kselftest/arm64: Add lsfe to the hwcaps test
+	s=arc-20240116; t=1751559985; c=relaxed/simple;
+	bh=rSyt4WnF+qHRwEMJ5395X7EAvgdTWUY/zMhaiamm5RI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XVC2h1s7nUxxGwV0yn+xms37AYNIAzrpqHpuakdc+t66nGlgg2O0bS40KAHgiOkdqveNY380mM4Hy9alXOiqgHS9QCxZi+pcl+Ni7JuRDDSkfEQ0kXNdVC9WjMR0DPk5Q9VcVPkJJl8ud7M9GhG/EnkTZbu4VI1pckSX6gCPCh0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g3sTY+eu; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2355360ea88so128595ad.2;
+        Thu, 03 Jul 2025 09:26:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751559983; x=1752164783; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rSyt4WnF+qHRwEMJ5395X7EAvgdTWUY/zMhaiamm5RI=;
+        b=g3sTY+euO3GvTdVZ8f0/AIpvIM3PPPLGpOLLt7qMJhCZpZx4qtwAj5qaV1C5j64VWd
+         9GYqDMsg60tYlHvviG85u4Ww/WYvch3EaYPIe1Cb1PTqlIQOWglSixKljpSq3o0SsRYu
+         zRkVVskX8i3S1b4J+MnUbpUqa3b3E6MWWMMgh033WQIVn/r2t2dhOl5UFZLf/C0CcTQu
+         xbYMeISan4ioanBy6UtKgk8pqaCv4IYE3b5eiWxqueB9wuMKSusV7SGPT/iD1myxVfWL
+         aWtjsZ8d+ptWhbxnPK2dnH7pG7vz3rZSMffgBeKOmg6p9qtd+ABVfb5JYI9ZnoYjEM5+
+         OGdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751559983; x=1752164783;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rSyt4WnF+qHRwEMJ5395X7EAvgdTWUY/zMhaiamm5RI=;
+        b=cO0G34mIElQphWEBFCx5WPGW0ROHDJbu75a4s/BU8D94cKvCsGPsrwgen+o3RRoFw4
+         69uIBr+Q8joxDpp/ziohQxDXa3KokH4GXtEZrcE48GwGz6xV5ED5mEGZlYf8TSxy6/hn
+         tmWBoxqrYCvCygvwS0QmPyUoyBUo7ClaSKQKNuKPyX2DeOajLVhdW06hA6FOyTiVGF0N
+         8k9aj/vg2cxw8E7ouRORWRadLSpDEtapPhN1+2g1t5vL1a8wC2qxLP3zkuGJMrYN8LSp
+         1TA+GQFWb/ybbGBxl5pX2Mv43Vx+sDTkBn+yhrcwcpksXZcRuXB00IQoHOCB0lkDuLM8
+         mfIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU+pHe6VHHgmmuUbhOimV5itDneHlMbEjFQfN6m6xztjScc+o8S6ficzTNlodpXjiD375pnCuBcDuk1REFlrY9a@vger.kernel.org, AJvYcCUtYvhmCzdO9PpoXeSD3XAunsCmNpuHJzCQBUchnDqpxJeGlr6PdspRhKCpNnfCkhhdIN2kF/1BQBhG@vger.kernel.org, AJvYcCVe+hgrz61eq1UlJSA2eykJk21xWwvUWlmrImepYeAiyYkNbMmn7vjkPtSB+mQyVF7K8BOlXzwcyffl@vger.kernel.org, AJvYcCVpitAWol/gOZfK6FfPHRS+n1aRWViDgJoD22OXyEnMYEd72vXXgz9SBWYFXYj40hVsIvprNWM4q92F5kE=@vger.kernel.org, AJvYcCWdBLcvOf7eL6EsyLOJ8i9qjJ3CxV9WZxz3jRTRmRVCWW4h+ibT+LgInauq05BzcNCXddyJmTGR@vger.kernel.org, AJvYcCWlDbzXekGXS3AOJieIdqkZdvsAnMkXlF0qWjv66aNFapouOYzRBDWQB9McZFy0e5L9Fh6Vud3vfSNB@vger.kernel.org, AJvYcCWlgSqyRp5WSRVv0+5W6c/pGqRekVJgYfeZd2z8qs+HIqdsHY0/JOo60PWEKS30u32JjQFXT6eGj1w8yq87@vger.kernel.org, AJvYcCWp7siMtuYNbrzpdRc1hKn6Wyu3fr09yNsmnulH8hBDdbVoetBs49KuXddg5f3QIl1TmVg988MPg1Ha0ZiF0eU=@vger.kernel.org, AJvYcCX08kByfDL5ec+P4zBbyQvNQ5ueSMKXswFTOy0pkd1CPMlrwkHWgz8j88Qb9lYqDIM23JjlzmXK/t8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzofDK51ZYbATHuFb2uW/IRLi9TvLKi+CFTCD0hxxwjsCHl1pj0
+	yl++iggY0A66EuTXW2XI7NV/7h9kQDrLxwlwLVi/Y0UZy4DQ5Gv8PKSmI2nW99sAeXJCNBjJ0Ru
+	E7DFg27jHqAjwSpEwbysyL2qx8vHqd54=
+X-Gm-Gg: ASbGncszFfX6DWMo1cZPqQL/Ylv8YZ8cbpazdK+JrI4gs4OhcG2oxXpbGfyukCek5w7
+	uluCQONxpZQJzk2V8X57IATzIAtnBAQ4IGs/1Q2f/NbQkz5XCT7YWlrgAZmHSxdohohWP2Vkc0g
+	KI4ukOhApuTwD5+8AOWYge5LVTOuksFqh796qfUdTOParaGoZ9zvbBNQ==
+X-Google-Smtp-Source: AGHT+IE2AsrunGhRqAPTssN0vu1pH9T/puSPtq1EYmN/wZ3G149WG6FCC+weBXEH09090+WjrZpEYCR5WVBab3y8bBw=
+X-Received: by 2002:a17:902:d50c:b0:234:cb4a:bc1c with SMTP id
+ d9443c01a7336-23c7b2c48abmr14508535ad.6.1751559983011; Thu, 03 Jul 2025
+ 09:26:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250703-arm64-lsfe-v2-3-eced80999cb4@kernel.org>
-References: <20250703-arm64-lsfe-v2-0-eced80999cb4@kernel.org>
-In-Reply-To: <20250703-arm64-lsfe-v2-0-eced80999cb4@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
- Joey Gouly <joey.gouly@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
- linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, 
- linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.15-dev-cff91
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1403; i=broonie@kernel.org;
- h=from:subject:message-id; bh=0se/eq+gWDDz/zPGLfe64NetxynymgwpyPlKXYP8XIU=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBoZq9DrX1z69CleuGaYuiPYfm4x17/sToCyk2zP
- Nm99VorSU2JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaGavQwAKCRAk1otyXVSH
- 0LtRB/45/MTmfubRL3pBtMgXgWZMq82PR/jkn5ACdHwS7IGViT7FD2ZmgEzsylFTLDfTmP4bjqb
- pbVkdOsCSZJylYyOKBy6J9aDXd7tjwVYbfLr1jFUylvwqe2j5aZ27QCwhe1PC+DOzTvNkqEzvEB
- UIUPledQkbmnZJXMySkE4RVNqUaTB8ws5T8BGrQjz+ncH0gVf+yZfXpkdxiXetLZ4QTqNj1FjDR
- ip9vM1mAiEyMlpLqJeNt0L/XcFLEWNFVgOO78k+oVlAMlESket+6r99C6oAxaBjOv9nmGxTRVCw
- 0i3NukLDRtFDCW/v6+sTv43stjBooDOAlxzXewZLYPF/ko5z
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+References: <20250701-cstr-core-v13-0-29f7d3eb97a6@gmail.com>
+ <20250701-cstr-core-v13-2-29f7d3eb97a6@gmail.com> <DB2BDSN1JH51.14ZZPETJORBC6@kernel.org>
+ <CAJ-ks9nC=AyBPXRY3nJ0NuZvjFskzMcOkVNrBEfXD2hZ5uRntQ@mail.gmail.com>
+In-Reply-To: <CAJ-ks9nC=AyBPXRY3nJ0NuZvjFskzMcOkVNrBEfXD2hZ5uRntQ@mail.gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Thu, 3 Jul 2025 18:26:09 +0200
+X-Gm-Features: Ac12FXyK3yF1o66pvRj95wQBg--_tN8783HmS0ZULfxKl6rLdQ-EP0UVIzak-4s
+Message-ID: <CANiq72=61JhEf97JTkineo+FX+JG+Q9x9x86MC_hukSa9YSX3g@mail.gmail.com>
+Subject: Re: [PATCH v13 2/5] rust: support formatting of foreign types
+To: Tamir Duberstein <tamird@gmail.com>
+Cc: Benno Lossin <lossin@kernel.org>, Michal Rostecki <vadorovsky@protonmail.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	Trevor Gross <tmgross@umich.edu>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
+	Danilo Krummrich <dakr@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
+	FUJITA Tomonori <fujita.tomonori@gmail.com>, Rob Herring <robh@kernel.org>, 
+	Saravana Kannan <saravanak@google.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Andrew Lunn <andrew@lunn.ch>, 
+	Heiner Kallweit <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Jens Axboe <axboe@kernel.dk>, 
+	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+	Dave Ertman <david.m.ertman@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
+	Leon Romanovsky <leon@kernel.org>, Breno Leitao <leitao@debian.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org, 
+	netdev@vger.kernel.org, devicetree@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-pci@vger.kernel.org, nouveau@lists.freedesktop.org, 
+	linux-block@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This feature has no traps associated with it so the SIGILL is not reliable.
+On Thu, Jul 3, 2025 at 3:56=E2=80=AFPM Tamir Duberstein <tamird@gmail.com> =
+wrote:
+>
+> Can you help me understand why? The changes you ask to be separated
+> would all be in different files, so why would separate commits make it
+> easier to review?
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/arm64/abi/hwcap.c | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+By the way, if we are talking about splitting, it is easier to land
+patches that can go independently into different subsystems and
+avoiding flag day changes (or making those as small as possible), i.e.
+ideally being able to land big changes across more than one kernel
+cycle.
 
-diff --git a/tools/testing/selftests/arm64/abi/hwcap.c b/tools/testing/selftests/arm64/abi/hwcap.c
-index 35f521e5f41c..faa0f82f27e0 100644
---- a/tools/testing/selftests/arm64/abi/hwcap.c
-+++ b/tools/testing/selftests/arm64/abi/hwcap.c
-@@ -17,6 +17,8 @@
- #include <asm/sigcontext.h>
- #include <asm/unistd.h>
- 
-+#include <linux/auxvec.h>
-+
- #include "../../kselftest.h"
- 
- #define TESTS_PER_HWCAP 3
-@@ -165,6 +167,18 @@ static void lse128_sigill(void)
- 		     : "cc", "memory");
- }
- 
-+static void lsfe_sigill(void)
-+{
-+	float __attribute__ ((aligned (16))) mem = 0;
-+	register float *memp asm ("x0") = &mem;
-+
-+	/* LDFADD H0, H0, [X0] */
-+	asm volatile(".inst 0x7c200000"
-+		     : "+r" (memp)
-+		     :
-+		     : "cc", "memory");
-+}
-+
- static void lut_sigill(void)
- {
- 	/* LUTI2 V0.16B, { V0.16B }, V[0] */
-@@ -758,6 +772,13 @@ static const struct hwcap_data {
- 		.cpuinfo = "lse128",
- 		.sigill_fn = lse128_sigill,
- 	},
-+	{
-+		.name = "LSFE",
-+		.at_hwcap = AT_HWCAP3,
-+		.hwcap_bit = HWCAP3_LSFE,
-+		.cpuinfo = "lsfe",
-+		.sigill_fn = lsfe_sigill,
-+	},
- 	{
- 		.name = "LUT",
- 		.at_hwcap = AT_HWCAP2,
-
--- 
-2.39.5
-
+Cheers,
+Miguel
 
