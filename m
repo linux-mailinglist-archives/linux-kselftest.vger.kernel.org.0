@@ -1,157 +1,188 @@
-Return-Path: <linux-kselftest+bounces-36459-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36460-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E336EAF7CF5
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 17:57:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2200EAF7D23
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 18:03:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 449D2565C4A
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 15:57:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 14ECF1C84A0A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 15:59:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C407223315A;
-	Thu,  3 Jul 2025 15:57:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C760F23BCE7;
+	Thu,  3 Jul 2025 15:58:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="nyWtzxKN"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="TPvsPcQB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A13C20EB;
-	Thu,  3 Jul 2025 15:57:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85F1623A99D
+	for <linux-kselftest@vger.kernel.org>; Thu,  3 Jul 2025 15:58:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751558268; cv=none; b=YveUw9Nj9LtwTGHXpSrMZ2+drpjJ1YetPUynfX3jluGEX133jZMGy6n364AH4hQ6+aUjE+kZS8uB3e4wLitSRkhNPtKAvDknw+IXgf4ZT7LA/UaXZEJjYLPZuqrDDNfhnZ81OJmnbDTe7mM8EFJVpMPNh1c9K0cys1vSGfP0jAM=
+	t=1751558334; cv=none; b=ZRzfmzwyjf7BYcCRDgBH0rS4/C0u0nYgLOzRClrnPqwO2FtVIViN73MQ8bBnT92KWSHjEZaSxRlbuWz1seKZ/xQGLX1JrD2R1KY++HcakSqJkIglEz4DxxsPfFfF51LhGzIC+H6gWYtSJLgMH4cUJtsreiX6oZ5XWBw10y1Uxak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751558268; c=relaxed/simple;
-	bh=akapa2OZe2l9ShuqIpRhvIotGer2WoeBX8DYOzHXqvQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CkECIpeNxyPn0DnOj41qqTDT9wKe1mF7VfjAl5yac6CCqp1C6PqENSrfOZeJpt1rS42EGWhJ0Xc2UgdtpfV9TAS47MtB8S0SNzdZL5ZaUup3HNEZUZXadp6lKxy3WcnHlGj95mS7ESQ7h9fYnPhwx+vT519p9wQTMS5P8GkJKqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=nyWtzxKN; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=Gu9nIxgVWr8Z2zOG7Mz+Z8zM09oUvFn3JZwxNBQ7UGg=; b=nyWtzxKNw0Tcw78QUJ8bPdceiq
-	FNCwSieaGk0bdx8Szv9QZO3EAekMZWucqsPOHaEPvlYTn6bR2IUyYoMPEhIVaX9NLwGjAvGPCYfTh
-	hCWpd6DH7XbPoi8PWjNBSJwFr/MmwkWzQ2Hmsb5fEpF2ykdZftd0ggVShNdNRCr2Pym7NRPmTK/1s
-	2p3TMDtZq+OhuwnulZDOVbQzpxMLNVDXec9+dSsUKytFCf1ErF2CmpnqErY9gr4gnWurvJywiPsAB
-	o2EXwwnnfBwqmmLIjh7Aw2wITBvRzbCAZ+9kiPeJcIz1ffvZNv0r9VJlinA28NGR19T0XHPvct0l8
-	P+vlD/iQ==;
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1uXMJa-000K8b-2T;
-	Thu, 03 Jul 2025 17:57:34 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy06.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1uXMJZ-000C9j-1X;
-	Thu, 03 Jul 2025 17:57:33 +0200
-Message-ID: <6d147702-d9be-458a-b79c-9b4269817d43@iogearbox.net>
-Date: Thu, 3 Jul 2025 17:57:32 +0200
+	s=arc-20240116; t=1751558334; c=relaxed/simple;
+	bh=6TojZ78eEbxhRsuBRUuBMZf6SEaQ1t+9yVSxoCPVVQk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dGo7zdlPNSkGn3R5vHcpJsZTtTTsqAjjR6AvOWccl+Jo7toGhblEHKtTCq7OnqKQfjOtiFBJypnuZ+tklAGTIcVt2AiiXABZQD19Ygyoak2Bl2gqlLiN/UoffURLnUeEnX5lDJx/sspZB8p81jdUtlf4595wcmpXTV0XZdFc1j0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=TPvsPcQB; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4530921461aso246725e9.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 03 Jul 2025 08:58:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1751558331; x=1752163131; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CJaN7nbaO6lmM2Mxzm86rsAdldbhCFrvDwkgjL03x1A=;
+        b=TPvsPcQBtsQ/mbEPgBEIzslCmWo230SVP/NmsQNJz+otsARABUPjGwzNMu4ONh1Off
+         EjrcP58YtOg/8W9znosD54jKFb212u3Viv1NjYeL4ExzXpn4SEfKPNlVx8LOYUK2wWSF
+         ofvz6Dlx/MMaOGtDmcBrqH60iCn88qW76sSkmF1bHyE9ulCdplj0zDDJgq9Kp44jwKbz
+         7fKAjNWPY0ZdS8uSZLvcrg2ry5uJmxJdz38beSMc+KzaF1gcqI1xeTq87ikFKe8eIOGi
+         hZUcDZlJHgA8hp+A5oubB916oBAv/L8i3FztnlQHLKsATbAL23kHJcXkd9hFBv3jLkvB
+         0CaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751558331; x=1752163131;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CJaN7nbaO6lmM2Mxzm86rsAdldbhCFrvDwkgjL03x1A=;
+        b=oCnd3fQuHvEglhFx+v2FFNv6xnwtTKgCz5uDbKlfD1udM68RfUKphGZoHUpWIJh26+
+         yN7E2Gp0gscKUbFqOr/CFK1Ur08TuHKu/FgPFNJgx7rX4kkSD0/Hb9FXBOpsgASOxKW/
+         CEcGAliD2CvNgoYH8w8TQC6dprQlBjwaU03b2uwOsY3CmnKpKH9XgYdflGE/+FV+saSA
+         O8LC/uf6ROc7da+THcMObaMCIIDiHH5KDTts50Tuv62ozkQsBtC+htHL/PWvz9Bpb+n9
+         PfkDJ1tu8vWXGgPpKAwrWuTLC4Muz66N+2d5RDtVFuRSY9tkctfxM+ktegnVPXLkUfCw
+         g04Q==
+X-Forwarded-Encrypted: i=1; AJvYcCX5+G0AQcRxmm0xU8YGOEpvzK5EoUmLoUqIc7+NesGlgB0+7A+4bpXBOBXXEsTZZMyarrFcXWTE1RLMLXkR99o=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx9aTatDG6CQaICcupHLAedOe6R6V6oYvLA3Mw0vQbjjQu8Hbxx
+	0SEephOMI6S9bpAhh4BiS71Up5jgwY6znLRMmigYoaY7KCl3AeeRWUlfll0J8uFtBO0=
+X-Gm-Gg: ASbGncvTsdZRkBYc7/etWqKhtVXQQEMUmkDBmJ0w9Sa8fITmhnB5hqJ7D70a6UxxumK
+	1K/gh5c5vA/9DLHt8BIEKtewmzMIW1mYBrdhso1Q0nrQHLLH/cPXBH23ctnsb1j+UKCGkffy6iY
+	PtERbFFqwK600aWeCCU85lAc26NuZo9lN5vxGr2MkJscRdd6RDgbqQVEfZOdUqngbwZ/cXErkhh
+	yZ7k6g8kv9xTUdtgZmGHebIOike3+sDdkFilf92taB5IkgZ9FRc/qhLic9sxB3/nBc47y+SBJzT
+	vmAZaI/eiSHZbkV/VgORB21POgVoXrtcEA5muOkRCUlMkKMpFug3OriNs1EbSznW
+X-Google-Smtp-Source: AGHT+IGOdqwh+prx1CMvKrozB3yHTxkvomqeSkFHf9OzqxVK+h2PONAOl4dn1TVwcAb/HP3myCfYHA==
+X-Received: by 2002:a05:600c:820d:b0:442:f4a3:b5f2 with SMTP id 5b1f17b1804b1-454ab368d5dmr35870815e9.6.1751558330555;
+        Thu, 03 Jul 2025 08:58:50 -0700 (PDT)
+Received: from blackdock.suse.cz ([193.86.92.181])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-454a9be5bbfsm29835925e9.34.2025.07.03.08.58.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Jul 2025 08:58:50 -0700 (PDT)
+Date: Thu, 3 Jul 2025 17:58:48 +0200
+From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To: Shashank Balaji <shashank.mahadasyam@sony.com>
+Cc: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Shinya Takumi <shinya.takumi@sony.com>
+Subject: Re: [PATCH v2] selftests/cgroup: improve the accuracy of cpu.max
+ tests
+Message-ID: <l3sal6zkvo4lqnfs6fepxytnrmqmqwfvtxudnjm53oigtuatpd@7czfeursgwyh>
+References: <20250701-kselftest-cgroup-fix-cpu-max-v1-0-049507ad6832@sony.com>
+ <20250703120325.2905314-1-shashank.mahadasyam@sony.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next,v3 1/2] doc: enhance explanation of XDP Rx
- metadata layout and METADATA_SIZE
-To: Song Yoong Siang <yoong.siang.song@intel.com>,
- "David S . Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Alexei Starovoitov <ast@kernel.org>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20250702165757.3278625-1-yoong.siang.song@intel.com>
- <20250702165757.3278625-2-yoong.siang.song@intel.com>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <20250702165757.3278625-2-yoong.siang.song@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.0.7/27688/Thu Jul  3 10:56:38 2025)
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ctwb4begphfg7q3l"
+Content-Disposition: inline
+In-Reply-To: <20250703120325.2905314-1-shashank.mahadasyam@sony.com>
 
-On 7/2/25 6:57 PM, Song Yoong Siang wrote:
-[...]
-> +It is important to note that some devices may utilize the ``data_meta`` area for
-> +their own purposes. For example, the IGC device utilizes ``IGC_TS_HDR_LEN``
-> +bytes of the ``data_meta`` area for receiving hardware timestamps. Therefore,
-> +the XDP program should ensure that it does not overwrite any existing metadata.
-> +The metadata layout of such device is depicted below::
-> +
-> +  +----------+-----------------+--------------------------+------+
-> +  | headroom | custom metadata | device-reserved metadata | data |
-> +  +----------+-----------------+--------------------------+------+
-> +             ^                                            ^
-> +             |                                            |
-> +   xdp_buff->data_meta                              xdp_buff->data
 
-Imho, this section is misleading to developers. Suppose you're a XDP program writer
-and you want to implement a generic native BPF program (independent of the underlying
-NIC). Does this mean, the expectation is to dig into driver code to gather whether
-or not a driver is prepopulating and how much of it? What are the implications if the
-data is overwritten? For example, in Cilium today we use the buffer described here
-as device-reserved metadata and override it. How will users know what breaks?
+--ctwb4begphfg7q3l
+Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2] selftests/cgroup: improve the accuracy of cpu.max
+ tests
+MIME-Version: 1.0
+
+On Thu, Jul 03, 2025 at 09:03:20PM +0900, Shashank Balaji <shashank.mahadas=
+yam@sony.com> wrote:
+> Current cpu.max tests (both the normal one and the nested one) are inaccu=
+rate.
+>=20
+> They setup cpu.max with 1000 us quota and the default period (100,000 us).
+> A cpu hog is run for a duration of 1s as per wall clock time. This corres=
+ponds
+> to 10 periods, hence an expected usage of 10,000 us. We want the measured
+> usage (as per cpu.stat) to be close to 10,000 us.
+>=20
+> Previously, this approximate equality test was done by
+> `!values_close(usage_usec, duration_usec, 95)`: if the absolute
+> difference between usage_usec and duration_usec is greater than 95% of
+> their sum, then we pass. This is problematic for two reasons:
+>=20
+> 1. Semantics: When one sees `values_close` they expect the error
+>    percentage to be some small number, not 95. The intent behind using
+> `values_close` is lost by using a high error percent such as 95. The
+> intent it's actually going for is "values far".
+>=20
+> 2. Bound too wide: The condition translates to the following expression:
+>=20
+> 	|usage_usec - duration_usec| > (usage_usec + duration_usec)*0.95
+>=20
+>   	0.05*duration_usec > 1.95*usage_usec (usage < duration)
+>=20
+> 	usage_usec < 0.0257*duration_usec =3D 25,641 us
+>=20
+>    So, this condition passes as long as usage_usec is lower than 25,641
+> us, while all we want is for it to be close to 10,000 us.
+>=20
+> Fix this by explicitly calcuating the expected usage duration based on the
+> configured quota, default period, and the duration, and compare usage_usec
+> and expected_usage_usec using values_close() with a 10% error margin.
+>=20
+> Also, use snprintf to get the quota string to write to cpu.max instead of
+> hardcoding the quota, ensuring a single source of truth.
+>=20
+> Signed-off-by: Shashank Balaji <shashank.mahadasyam@sony.com>
+>=20
+> ---
+>=20
+> Changes in v2:
+> - Incorporate Michal's suggestions:
+> 	- Merge two patches into one
+> 	- Generate the quota string from the variable instead of hardcoding it
+> 	- Use values_close() instead of labs()
+> 	- Explicitly calculate expected_usage_usec
+> - v1: https://lore.kernel.org/all/20250701-kselftest-cgroup-fix-cpu-max-v=
+1-0-049507ad6832@sony.com/
+> ---
+>  tools/testing/selftests/cgroup/test_cpu.c | 63 ++++++++++++++++-------
+>  1 file changed, 43 insertions(+), 20 deletions(-)
+
+
+> -	user_usec =3D cg_read_key_long(cpucg, "cpu.stat", "user_usec");
+> -	if (user_usec <=3D 0)
+> +	if (usage_usec <=3D 0)
+>  		goto cleanup;
+> =20
+> -	if (user_usec >=3D expected_usage_usec)
+> -		goto cleanup;
+
+I think this was a meaningful check. Not sure if dropped accidentally or
+on purpose w/out explanation.
+
+After that's addressed, feel free to add
+Acked-by: Michal Koutn=FD <mkoutny@suse.com>
+
+
+--ctwb4begphfg7q3l
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCaGaotgAKCRB+PQLnlNv4
+CEdaAP0XHWsChnbaP5kR0bs2fgV1QmnWmul24yC8kEn2cDlzUAD8C2S+dXKJJUMt
+We9vCI1hRxJLPl7E7xFaqmhjWJ8dxQo=
+=xHRi
+-----END PGP SIGNATURE-----
+
+--ctwb4begphfg7q3l--
 
