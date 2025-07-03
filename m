@@ -1,110 +1,119 @@
-Return-Path: <linux-kselftest+bounces-36461-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36463-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D7C6AF7D17
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 18:02:02 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BED4CAF7D46
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 18:07:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 915F94E6F82
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 16:00:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 86CBB7BC127
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 16:05:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C88F52D3A86;
-	Thu,  3 Jul 2025 16:00:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EC0D2EF66D;
+	Thu,  3 Jul 2025 16:06:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="gNolMbEw";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="+PJjqBcy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A/Af3uuJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ACCD236A70;
-	Thu,  3 Jul 2025 16:00:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6667119DF4A;
+	Thu,  3 Jul 2025 16:06:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751558405; cv=none; b=DsnpmzbX/wSam+8MgUlwxlReGaRnqTLbkYu0N6HMDVCK+hyJlFs4BdHHSRUgfcct6ZMB+trxLxS2s1jmhmmg2V7oHA1k9enBlhUY+Htbx25ut3hT0yH/Xo54qKMolBxz1RjVOXnMsVJOiQ85zwn3ADZ6jxdyQqCMYjEGmz9T9CE=
+	t=1751558766; cv=none; b=qXURDVvbogwuG+PUCb9ek0q3QmETvkl8lYlV/bczd9G36WzBXgD29/+KUhFi6UUGnUvg/CvYwKkHRGahAl6tpnyYm/VpgUOYCKCwnWQRTte8y4vWgLiKdAPostNshNkGI2ILfWfohNK1KJsvlFtjB5XWXv54BVDJl1K2Xbtk6IM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751558405; c=relaxed/simple;
-	bh=3Pj0427xdMZ4I26tk/jkLsUjXBeSTMEAHLv8oOJqYuA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qKgl8vlhfxghCelZTp2jNnLrsYpqsT0Z4ZcIIPpyKccstlGVp1D/uDZMmAovHbrCfUVs2P5z4bS4Lxm+heq/My2VcHQXaty16gs8ZJxNx/80rnO5Ao9QfdbKbHVc7Th8D2dYoBO1zYo+4o8z1wodmVOalTXqupGjzVND6p/yyik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=gNolMbEw; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=+PJjqBcy; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Thu, 3 Jul 2025 17:59:53 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1751558401;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zfHdGhts9p3gqu5lIIaqmscwxy1s8kWHcDGpikLQ3tA=;
-	b=gNolMbEwCOCl4yMfeC/iBYFgUXptyQPBLssa09PXqJz2RbbIcf/S6akhWNaqPgdhm1V6Ul
-	DX4ollftygERDLdRi0iunHcisvZi0sfLuc8mZoQ75Yx/SSqog2VTR7gMfkAQmhjtmS5JUH
-	uTjp3iOMwnk8f/y3S8jz9M85OEF7yMKJQOQuEKJmyFcuRcRsaQ/n5/buUuYnLW5kGUqwbO
-	/scb/zQT6O/4Ty8dIb98gWkUFqiKKKLNu9qLkufDN1Wg2LqLb8NuDkso2aOLFDzHpWQS0h
-	3qoyvFzruOC4bKi4VIy++09MULhWe3GlnAzKoTbqRlAeO/oyVuZExImtGIUCPw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1751558401;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zfHdGhts9p3gqu5lIIaqmscwxy1s8kWHcDGpikLQ3tA=;
-	b=+PJjqBcyqg/NfQCEreDNyHdRcqK4bgObWbiIPBry2m5lO9Y6u/e7h1bFDLZGgHc3b//iej
-	BKTJKyZ7ULEMq+Dw==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Rae Moar <rmoar@google.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Willy Tarreau <w@1wt.eu>, Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Shuah Khan <shuah@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Nicolas Schier <nicolas.schier@linux.dev>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, linux-doc@vger.kernel.org, 
-	workflows@vger.kernel.org
-Subject: Re: [PATCH v4 09/15] kunit: tool: Parse skipped tests from
- kselftest.h
-Message-ID: <20250703175819-09e1d46a-ab23-40bf-a7cb-de191d81b154@linutronix.de>
-References: <20250626-kunit-kselftests-v4-0-48760534fef5@linutronix.de>
- <20250626-kunit-kselftests-v4-9-48760534fef5@linutronix.de>
- <CA+GJov7HN_HTVOygyF6SW12DeghW6BYc4KxEz8Ktub=QBqv0oQ@mail.gmail.com>
+	s=arc-20240116; t=1751558766; c=relaxed/simple;
+	bh=jscWpusFJ8+GtruSvYfX4sZd6NM08wNAfoGwbX7hARg=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=mVS0Z5/qm3Sn3pJKC4itiDegRGAwlERnV/WkGkFEihSJ0c/AjG5Y4U03MhvAU8whxbcNicKYd8p6uBb58LBE2xBIRVJ5MB1OMSQtLuzjK7yooYY/xA5y7MEf7XD11JPk1T6u/W4NCLkcIoA1haU7waeQLNH1pDtf6YZz0LiWD+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A/Af3uuJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7C7EC4CEE3;
+	Thu,  3 Jul 2025 16:06:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751558766;
+	bh=jscWpusFJ8+GtruSvYfX4sZd6NM08wNAfoGwbX7hARg=;
+	h=From:Subject:Date:To:Cc:From;
+	b=A/Af3uuJ9Rb75VKRKFSZpo60tgELsxvze3GiO+tvgALR45Oc5FnwaW/s3gWVHnHno
+	 wtAnMK7Pkra9/9GYykEEyE8V+UhVKgcP7+V4M2CWr1dFcEB5CVRThgoG2K1lZKOGIP
+	 JuHT2Sgx4tuhuRZ4rp9yGtzYDfd0NprhQJE3DZBz0Hma+AkkBMWtdAcMlWybx1EXwf
+	 i1rB2XIUb8705skRmHvXftKvYcB8wmtO2LUGtO0FtWBCvRdHV8VsYVSZJmz1D/j6gG
+	 5CjIkOlGam5P3PrDGrs5MlMX2pPniYTBI8x7oiJFTUZ3GAYPUNqWKyozoY6wp8tjLU
+	 KWxeyDdIUnV2g==
+From: Mark Brown <broonie@kernel.org>
+Subject: [PATCH v3 0/4] kselftest/arm64: Add coverage for the interaction
+ of vfork() and GCS
+Date: Thu, 03 Jul 2025 17:00:14 +0100
+Message-Id: <20250703-arm64-gcs-vfork-exit-v3-0-1e9a9d2ddbbe@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+GJov7HN_HTVOygyF6SW12DeghW6BYc4KxEz8Ktub=QBqv0oQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAA+pZmgC/3XNTQ6CMBCG4auYrq0pQ8uPK+9hXFQ6hQalZkoaD
+ OHuFtxoosv3S+aZmQUkh4EddzMjjC44P6TI9zvWdHpokTuTmoEAJRRUXNO9kLxtAo/WU89xciO
+ XujTaloUCRJZOH4TWTRt7vqTuXBg9PbcvMVvXN1iI+jcYMy74VWsjrKhUKctTjzTg7eCpZasY4
+ UPJxB8FklJDLWVubGMr+FKWZXkB/NBjL/8AAAA=
+X-Change-ID: 20250528-arm64-gcs-vfork-exit-4a7daf7652ee
+To: Willy Tarreau <w@1wt.eu>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+ Christian Brauner <brauner@kernel.org>, 
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.15-dev-cff91
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1520; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=jscWpusFJ8+GtruSvYfX4sZd6NM08wNAfoGwbX7hARg=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBoZqpmO/tREkuh6QDv6tS66hUZmiy2srI0RMbDv
+ H6NfA3zhpuJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaGaqZgAKCRAk1otyXVSH
+ 0M82B/9IWr8jKeogcUOCsJ29Xy4yksQCrWaixdsv+ivWdPhePEkOF9in+1wur5EfZ+l2qgCdWnn
+ 8lactjzxDDZuFpkZe0h1SMXCtoObhDKFuM31t8VM6KNYLWabWIlXEMPU5htK8AbqSvo1d++HisJ
+ 7kLjvw+KTyve9tcNgFDQfngnC1Alzo+W09LmmJgwB7ec08acaKrt4OXMAjVuuhLOxtlsgyMp+7M
+ W+u2R9eWldITBx70d4VkUHHNhhItxoeLqKCEowCoV9KBQyaFArUms2R3RkrOzKuN9T/8sGPWKUV
+ sjwz9ZOtVwG0eB+L21KEsnsEhxjdV8s50e0yNhmiuEyGEDfM
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-On Tue, Jul 01, 2025 at 05:22:07PM -0400, Rae Moar wrote:
-> On Thu, Jun 26, 2025 at 2:10 AM Thomas Weißschuh
-> <thomas.weissschuh@linutronix.de> wrote:
+I had cause to look at the vfork() support for GCS and realised that we
+don't have any direct test coverage, this series does so by adding
+vfork() to nolibc and then using that in basic-gcs to provide some
+simple vfork() coverage.
 
-<snip>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Changes in v3:
+- Stylistic nits in the GCS vfork() test.
+- SPARC has a non-standard vfork() ABI which needs handling.
+- Link to v2: https://lore.kernel.org/r/20250610-arm64-gcs-vfork-exit-v2-0-929443dfcf82@kernel.org
 
-> > -TEST_RESULT = re.compile(r'^\s*(ok|not ok) ([0-9]+) (- )?([^#]*)( # .*)?$')
-> > +TEST_RESULT = re.compile(r'^\s*(ok|not ok) ([0-9]+)? ?(- )?([^#]*)( # .*)?$')
-> >
-> > -TEST_RESULT_SKIP = re.compile(r'^\s*(ok|not ok) ([0-9]+) (- )?(.*) # SKIP(.*)$')
-> > +TEST_RESULT_SKIP = re.compile(r'^\s*(ok|not ok) ([0-9]+)? ?(- )?(.*) # SKIP ?(.*)$')
-> 
-> My concern with this patch is that this makes the test number optional
-> ([0-9]+) -> ([0-9]+)? for both the test result regex matches. But if I
-> do pass in KTAP containing a line where the test number is missing, it
-> causes the parser to crash because other lines of the code rely on the
-> match with the test number.
-> 
-> I would prefer if we keep the test number as required. This is
-> integral to the KTAP specification and seems to be largely shared by
-> different frameworks test output.
+Changes in v2:
+- Add replacement of ifdef with if defined() in nolibc since the code
+  doesn't reflect the coding style.
+- Remove check for arch specific vfork().
+- Link to v1: https://lore.kernel.org/r/20250609-arm64-gcs-vfork-exit-v1-0-baad0f085747@kernel.org
 
-This part of the patch was actually unnecessary, so I dropped it.
-Good catch, thanks.
+---
+Mark Brown (4):
+      tools/nolibc: Replace ifdef with if defined() in sys.h
+      tools/nolibc: Provide vfork()
+      kselftest/arm64: Add a test for vfork() with GCS
+      selftests/nolibc: Add coverage of vfork()
 
-<snip>
+ tools/include/nolibc/arch-sparc.h             | 16 +++++++
+ tools/include/nolibc/sys.h                    | 59 ++++++++++++++++++-------
+ tools/testing/selftests/arm64/gcs/basic-gcs.c | 63 +++++++++++++++++++++++++++
+ tools/testing/selftests/nolibc/nolibc-test.c  | 23 ++++++++--
+ 4 files changed, 142 insertions(+), 19 deletions(-)
+---
+base-commit: 86731a2a651e58953fc949573895f2fa6d456841
+change-id: 20250528-arm64-gcs-vfork-exit-4a7daf7652ee
+
+Best regards,
+--  
+Mark Brown <broonie@kernel.org>
+
 
