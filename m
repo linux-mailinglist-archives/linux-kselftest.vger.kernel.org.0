@@ -1,263 +1,272 @@
-Return-Path: <linux-kselftest+bounces-36404-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36405-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25F60AF6CB2
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 10:21:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4502CAF6CB7
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 10:23:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 295381C41203
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 08:22:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E19811C41191
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 08:23:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 716A5298CBC;
-	Thu,  3 Jul 2025 08:21:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FFC62C326C;
+	Thu,  3 Jul 2025 08:23:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="KweBcNeK";
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="KweBcNeK"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="h3lgy6jH"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010012.outbound.protection.outlook.com [52.101.84.12])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 753E1295523;
-	Thu,  3 Jul 2025 08:21:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.12
-ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751530911; cv=fail; b=WmDl/Mq1Q8bdtfZZWG5b9n6zztiPx5MOHtdr55dUs+M1dmrGxXDfh5GFvnhRu2zh127ExdDUQoU8ZiVaPTZyCyp6g2obTIazlQ0MCYpVkStEu7NlADVvNhoJUQBoEcXIaEZyRKZgzUq9QtXI6Ap8bjvwZRs4S8if3FiXmyrNytY=
-ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751530911; c=relaxed/simple;
-	bh=UuJi/0kPEySdS/YVxQyAntAs3txgqH/Apo7EvjVtjmY=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=V4aKdp8IgXLwj9AnXs3EknstIQOAYGuONd/RjuaC80OcMmGM+SboPe8fO3SJhsbXTGoGzTueRNf6BtgA3IGT5PrO8GEXizgPiOE6bIS+Xlft5s+T17F9YUoZG+H/hNhrFsTvr3an3+ys/KtDEAA39yuQ+NW8IIAR3aRrPY5j4Pc=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=KweBcNeK; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=KweBcNeK; arc=fail smtp.client-ip=52.101.84.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
- b=uZb946F9WluF8/PczYT+LBAgrt3sz6FxOASVkZkTxUEjeFADrF0A07z9+9/grodeGWQch5stl937vQbDoZMa/PvV0wtkypiEBUG4btQht8uSq0booWbFOUafjiJPrXe+f2U5AdIEwpwNlJgvFASpr+Pmdt1aziXfSA7NTYhiWojw9fpdBeh1bUuybDRnhrzuwddwFi5a32Y98dWj8wtTwVq+rYIK0jpMx1K8Ax/8lgGr5ehovmD5UOI1aSwtdsgizyGsBV+UrHVFU6c64flTm59zNocYACaaIoeNDUw7b6VjTmxM8oJzCzJn6XBogt8UvZmiru4Tt5Ci+0+gGQQYgA==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UuJi/0kPEySdS/YVxQyAntAs3txgqH/Apo7EvjVtjmY=;
- b=DUu3Adw6zUOtEkrcsMprhbAmnUDq7cPemGGGqzRBFxv1mYuoAzDfLuyCYkxGcIhddtX2vHeYWdVFkgcpiyq2B3Krdd8aniEnApT6RO5rL1Ah5ZyxuSL+9llW+kx+ra4PG+qyPorMVZYbjEshfx0H9IYH2VC0ZAZoilF8AYd9z8nehJQwCamXdNeF2bzzq2SvvxJQP0KAua4breGPLIiPykvfaRgxMontCd5hXV0xqrRSUxLWuK7n2AVdJyrqTbVDfdCzlnA96EZXoX04sPoCTv/Z87OgVx8mAf0T/LREQ1UunL3AOUMvL4mKIetsOCg3f2C/h4SVkWA+EWCudx4CIg==
-ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 4.158.2.129) smtp.rcpttodomain=linux.ibm.com smtp.mailfrom=arm.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=arm.com;
- dkim=pass (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
- spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
- dmarc=[1,1,header.from=arm.com])
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UuJi/0kPEySdS/YVxQyAntAs3txgqH/Apo7EvjVtjmY=;
- b=KweBcNeKKU4tQ8eRJNYlvHpsDgo4/qhXSUTx3Ojn5Tb8djmy6crZc05mdXSQcXVovwrD/p9hwpLXo1wiFA8LeVQ+FKnrtajb5g1VbzLc4AOPa5soqcHRfV7wu833MzSqzv/zAASU7CFzj7dX84XgbHO118/R/xR9iqHb7YKN2iA=
-Received: from DU7P251CA0026.EURP251.PROD.OUTLOOK.COM (2603:10a6:10:551::30)
- by DU0PR08MB9420.eurprd08.prod.outlook.com (2603:10a6:10:423::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.20; Thu, 3 Jul
- 2025 08:21:45 +0000
-Received: from DU2PEPF0001E9C2.eurprd03.prod.outlook.com
- (2603:10a6:10:551:cafe::65) by DU7P251CA0026.outlook.office365.com
- (2603:10a6:10:551::30) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8901.22 via Frontend Transport; Thu,
- 3 Jul 2025 08:21:45 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=arm.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
- client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
-Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
- DU2PEPF0001E9C2.mail.protection.outlook.com (10.167.8.71) with Microsoft SMTP
- Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.8901.15 via
- Frontend Transport; Thu, 3 Jul 2025 08:21:44 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=LabAs4v5tWSvD1tZRoV+NX/epyECQdoV1ZMIQSGDauCf6R8/aqIJXdeSSo6pXL1oaym+2lSEi29MErHyd/Q8uIO7kcrqsNoyCnEe2/A2YjYI6rjVh4YIRa+wEWvU+1uULREiAhyVKi/A5mIxZPmqvjr4zo1g/KcgmpqXfmCosz6BosK+pm/L2FdrF8bR1Hiefx7dC1HmQ2m2gA6ljo/+xuH1jBkDjVW/a12zMncOvhP4Tkl/QDR/al97ffRyjNQpmRsfGdJcBYLrwfNcOa1TXL9E2HKu5ESVMXdBbZTIs4ML58xtEZ1nBlQMrqooyTfWUzmThofdR6s6U+h0cRMnUw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UuJi/0kPEySdS/YVxQyAntAs3txgqH/Apo7EvjVtjmY=;
- b=iVS/yiUl8ArjLD9108pjmSa3Wj0TE9tZZ+u4PpugTwWktVXu5XVeDBDJ2SXYUUqV3fvFIQIVtFqhSq/GoVFLzEgLr066xC+SOygZvdZeinmGFY0sD74n1zFw2RIl3kdlsxGdR/D4U2QTJxqZ98ZnMbvfNlGkkdt7eXWjD2vloME9ubdToQDeZ7z29RiMshfXEJoY/ryoI+bytzeNkJ/FvhX0seD2cVDymSX5BXKRMxx04X/NWJi4Fm7+0uIrdVKOXrus8/lZt3zlSEd9VZSza+whQCuxSjDbIupd6D67Raz2Yhz6dNpRFcPBnDUg6IjbwqegdRGLtMFLTrQp54m3HQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UuJi/0kPEySdS/YVxQyAntAs3txgqH/Apo7EvjVtjmY=;
- b=KweBcNeKKU4tQ8eRJNYlvHpsDgo4/qhXSUTx3Ojn5Tb8djmy6crZc05mdXSQcXVovwrD/p9hwpLXo1wiFA8LeVQ+FKnrtajb5g1VbzLc4AOPa5soqcHRfV7wu833MzSqzv/zAASU7CFzj7dX84XgbHO118/R/xR9iqHb7YKN2iA=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from AM9PR08MB7120.eurprd08.prod.outlook.com (2603:10a6:20b:3dc::22)
- by DU0PR08MB8301.eurprd08.prod.outlook.com (2603:10a6:10:40f::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.20; Thu, 3 Jul
- 2025 08:21:11 +0000
-Received: from AM9PR08MB7120.eurprd08.prod.outlook.com
- ([fe80::2933:29aa:2693:d12e]) by AM9PR08MB7120.eurprd08.prod.outlook.com
- ([fe80::2933:29aa:2693:d12e%3]) with mapi id 15.20.8901.021; Thu, 3 Jul 2025
- 08:21:11 +0000
-Message-ID: <d0628e02-f7cd-4303-af5e-9348840134cb@arm.com>
-Date: Thu, 3 Jul 2025 13:51:05 +0530
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 6/7] selftests/mm: Skip thuge-gen if shmmax is too
- small or no 1G huge pages
-To: Aboorva Devarajan <aboorvad@linux.ibm.com>, akpm@linux-foundation.org,
- Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, shuah@kernel.org,
- pfalcato@suse.de, david@redhat.com, ziy@nvidia.com,
- baolin.wang@linux.alibaba.com, npache@redhat.com, ryan.roberts@arm.com,
- baohua@kernel.org
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, donettom@linux.ibm.com, ritesh.list@gmail.com
-References: <20250703060656.54345-1-aboorvad@linux.ibm.com>
- <20250703060656.54345-7-aboorvad@linux.ibm.com>
-Content-Language: en-US
-From: Dev Jain <dev.jain@arm.com>
-In-Reply-To: <20250703060656.54345-7-aboorvad@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MA0PR01CA0001.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:80::14) To AM9PR08MB7120.eurprd08.prod.outlook.com
- (2603:10a6:20b:3dc::22)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B276E2D0C63
+	for <linux-kselftest@vger.kernel.org>; Thu,  3 Jul 2025 08:22:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751530980; cv=none; b=lbtJEkWRIK2CDuBVL35UtoXzo5exRU9Q+5448wPmDM+yP+3s9otfFqK3n8lJRnSrvOCVde+lAHgbQ3QjGhX1VE7d0kkZ6ZBN3YM4CqOdx6VNgpMCf5R41nenRL+ITsB1V+i8Rkz3ZpTV/YJZIccria9z/+xbxK0cGVhaEUWVOaE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751530980; c=relaxed/simple;
+	bh=fkApeLoHJlSPDyrpIaiq+irh9GDIbCiY6N9OZ8gvgjk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VRq1ClVMJTMWB/8BNtLVXLV4TGquoIy8szwyzasOvGNhR3svu8EbzMBHLrTZ8Rh4nOISxAUcYESRPzSdoocE0r2LOFSC4Twthyps3u/me79PLMUrzutTnFEJOpOiVHKXwl9Eh0q0mCHmjYwljItX3CzbqKtylEL545OHi82p6HY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=h3lgy6jH; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1751530977;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=KYpFfvKW2RercEZQpg1SNT5BfLo7zmWLgpj+5gTTpN8=;
+	b=h3lgy6jHTjt6frZbDu1RLtlKE0TRVfEeWMWNyHBCO0QsklJPpXoQaQzWw7ThojpAhzi+oX
+	1vZEdqqHTwZ1ffeFPTSP+54zAPqAea/7ggE/Kk8KHvysiQXpxQihRUsXokpGhs4/eg4rp+
+	++bUzHtgRua70CxYJUWanm9P5B4KVRM=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-32-ggv5r3hbPci40EMozhyV7A-1; Thu, 03 Jul 2025 04:22:51 -0400
+X-MC-Unique: ggv5r3hbPci40EMozhyV7A-1
+X-Mimecast-MFC-AGG-ID: ggv5r3hbPci40EMozhyV7A_1751530970
+Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-6090274dd37so5143204a12.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 03 Jul 2025 01:22:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751530970; x=1752135770;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=KYpFfvKW2RercEZQpg1SNT5BfLo7zmWLgpj+5gTTpN8=;
+        b=DcasrrmlrYCuISFwe9wjnW8sxMXG9JyIE0+GKSiio6wFsOv+Matt11NdzcNBq036na
+         ucT0QTOxJP+5yLvm+/RKxBaJQ+305fNzfW5pWLupGk6kykVYFUE3Qhcj2cBANCOgjIP5
+         N2qSKruddv/4WaJ0wNi7lPuUvtZ2X+p5dJKllcKV448K+BORO9AGUYVEcj1B7xn/+U23
+         uPBAYTcH5ZwQEDAlXPcltWXdIlf81erH0sCevzI+11JpJ6mrgqgikSf9OzxURTE35dl7
+         1jE/3IYCsBXSUauUIpYaVPYRGRZqsaV7iZUD85r6r2qbg3tBUikLuzkZhZwPTrJfgSz6
+         mAPg==
+X-Forwarded-Encrypted: i=1; AJvYcCULWd7HaQqix/5vhPP5LWl2+VXwpn9dqNlCasO9E04taL0JIlgIoe7Fbkeg6Csl5raF6nxV93rYGmjowrMKE74=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwnQq5cVouuD7EnpXnbxSOqtIc1hnWd1t+z2Z6Ky4eFgKcDkxc
+	8V7WwQFecnwdyT7ZZc9qN+tL35RzAoxeZNOG8VtUM/0tjID2JLfc6s86p5/sB6iUPazaSznUAXj
+	e7Q/PK/5HKw4HLtv+Wk+qccjkPkhE85lRqmkGDnXDhMMRxsqB542JNtXwHbItyqzSOrGJUQ==
+X-Gm-Gg: ASbGnctvqapPkOWOVdHZ80bGMnRqZfjb2mtXnLJW3cchmKyPTtSAPwWZvQ+YPnIpvmY
+	noHJULwYEOJ2OmXQnsX4kTxGpJdQ+GPmNRRa9QHoHA9CJPK3qwXLDPdZUue712aPtNSVY/fNtmD
+	kmoKOuP/Xddxz4+gorgOxrOxrWPV9lG7Bb+kuyLRULoxlS/qHDG95yjV+UGxEX2jBtq3ATQgHcy
+	bjhm8UaqGITV1WIkLd2seQb8G2WTvBmCMWuhMUnev5bjl9QqJapvdr3uZ4FwRlZvAD4GC9pATKu
+	NUtk+CK/qL3kUdXeA8tpDrwn35U9sfKBoQi4UlnCB+d8
+X-Received: by 2002:a50:8e06:0:b0:5f3:26bb:8858 with SMTP id 4fb4d7f45d1cf-60e53501392mr4145183a12.34.1751530969972;
+        Thu, 03 Jul 2025 01:22:49 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFYBLPgAFvDtBC/I1fllFZ9rSog1RbY0fvUJDtRq94F3z27LoabcavFxet7p3CYLH6sIuCqCw==
+X-Received: by 2002:a50:8e06:0:b0:5f3:26bb:8858 with SMTP id 4fb4d7f45d1cf-60e53501392mr4145162a12.34.1751530969452;
+        Thu, 03 Jul 2025 01:22:49 -0700 (PDT)
+Received: from [10.32.64.156] (nat-pool-muc-t.redhat.com. [149.14.88.26])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-60c8292076csm10002557a12.32.2025.07.03.01.22.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Jul 2025 01:22:48 -0700 (PDT)
+Message-ID: <d73f0591-e407-4350-9ddd-dc05ff571a8d@redhat.com>
+Date: Thu, 3 Jul 2025 10:22:46 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic:
-	AM9PR08MB7120:EE_|DU0PR08MB8301:EE_|DU2PEPF0001E9C2:EE_|DU0PR08MB9420:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0926544c-c47d-496a-5983-08ddba0aa57d
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted:
- BCL:0;ARA:13230040|7416014|376014|1800799024|366016|921020|7053199007;
-X-Microsoft-Antispam-Message-Info-Original:
- =?utf-8?B?dFZvZTZSTHBkcWZ1VEtDNTJ3elVkUHljOTluZlQwRFpoUXQwVHpNNXBoV1Z1?=
- =?utf-8?B?dmViWEVFQnJJS1ZGWWNvc1BMTm9BWldBaU04M2pvTzU4Y0NmR21kdTlNeE9j?=
- =?utf-8?B?U2pkL1hEYnBSNHR5VFdxSDlGUUVYLzNqRU5sWFNYOC9PWE5LblRtTjRtT0xj?=
- =?utf-8?B?bEt2anZMR2drRVFPNmtBTzJYWlpiNkNoVXM5VEtvdFp4T2hnbFdjOXVRVGVV?=
- =?utf-8?B?djNhTng1YVY1ODVZdWhpeFd5T0xFeUU5QStvaXcxQlc0SVl0RzF5V1lyMWYv?=
- =?utf-8?B?NGZkM1BWZE5Ld3g1ai95VVc1SzBzYzhVenp0Ujd6aVV4V0RiVm5Kb0d2RWxZ?=
- =?utf-8?B?SFdMQk81cGxaWG9Jd2lVYUtUWTZiaDBWTlRNRGFQSmFaQVRrRWh1ejF2R0py?=
- =?utf-8?B?c1BGa21qWG5MeldZd0NvWWJiTWJZdWxjMGRIbzFXeUM0RlNyUW8xbkxWN0RL?=
- =?utf-8?B?RXpkMXBDZVZTSFNJYU93YWp5am5UZGxFNlNQOHdQQlVNRVl1WHdoTlNrYkdH?=
- =?utf-8?B?a1hHZWZFTUR6RWJoTitFMlJBUUdFNzZFcXEvbjRGMFZYUFc0dzZJaHdtakgx?=
- =?utf-8?B?eHlDTm9rSU9hSjZpRWFoRnkzSlFlcE9UTVQ2WjRBbXlEU0ZmNU5DdWh3RUEy?=
- =?utf-8?B?R3ZUK21aUzA5VXNDaTI1c0pzaElPNHRLSzVubDNlT0lTRFNyd0tsWmRWcDNP?=
- =?utf-8?B?a3BHQ1Brd1drbGtXRnZuTW1OQnFRQ1ZNSXpyU1BFdVhjVmV1VURHL2YyaTRU?=
- =?utf-8?B?cy9XdkxQbCt2M0lkbFV5U1FIYjhiYzNGNEZnK1YrREZhRnhETHFTODdHc2RC?=
- =?utf-8?B?Z01oVmU5QlhpUjRqSXVOMkY3NVdNcGY5dFFwMFh6NXRqQTc5NWthdFVraVg3?=
- =?utf-8?B?eHZTZW13eWdMZlVJQWxRMUdKZFlWa1Bqck8yeXRwSTFBdkhIY2U1aVpScy9i?=
- =?utf-8?B?TVNWV1ZGY3g5QmVHVHp6cDdMY1lQczZvOENyam5KekEyMWoxb05uS2pCbGIw?=
- =?utf-8?B?aTZMeERKZWdtM0trWm9wZlQ0Wjl5eTdXeVoxd0VQdnoxQU4xMjJCSTBTRVph?=
- =?utf-8?B?NzJpUVFiSys4d0wzM3plb0NHWXBzL2dkdDJUUmVBQWNaUjcvdnJ3NlR6SWdU?=
- =?utf-8?B?SDN3cllicVI0dHN4N3ZZUExOVlRYT0FOamliZTAxV2dzVExTSWNxY0tvRjZu?=
- =?utf-8?B?NGtuUGJ1c1ZPbnlyRmVXazRnRnFuajRXU292c3hFOU0xUUYzMkRWbFAxWUxi?=
- =?utf-8?B?QSt2RFBvbzd4RDNVRldKeUcrdWFVZStrMXpPQVBSY2gyU1o5bmtwUm1PU0lS?=
- =?utf-8?B?OWYwMWhFalFRVms3eHVVRVdvOFZSYjNCMVFVTDdaSXdWQTJ5bkdJRkY1dVJT?=
- =?utf-8?B?SXRGUS9LZk9vNHpzcVY1VStoZGZNRitCV2t6bUxjUCtZcWx3VnlMSEFQczRD?=
- =?utf-8?B?eUFwUGMrbXY0UDlyVElOa1p1VGY1V1UrS1lzRngyZlZBdnZkUWFLZ2s2VEhD?=
- =?utf-8?B?WnZZYlNCbHh4NnJOejRPL0xnUGhGZEZZOXN4cVdPNGh6WTdsRzc2dUMyWDRW?=
- =?utf-8?B?YktGNG0wQ2Q3SGhWdncxdHFDZDRVbUpyalozRmFnYVpicXg2a2dOSzdzUjh5?=
- =?utf-8?B?eHZ0blZtb1dXUE1ZaERhT2VvWGV0MVE3RFcrUkJKcW82QUJWL3krVmtGZHRJ?=
- =?utf-8?B?MW8wQ3JpQkRiY0Fld0JyakRCNHhxMXQ2WVpleEoxWFduVk91MGRTc2hNT0J3?=
- =?utf-8?B?ZXB3QVhsTnRFSk1LbjNYT0NzUm44amI2L3JPaEhHZ0R0VTZ5b3pJeHlSRlFM?=
- =?utf-8?B?MWRxVTJ1d0Zkdll2QXg1eHBHTzZSZURJaGdWR285MzM4aEhOeTFxNWF0NE5Y?=
- =?utf-8?B?eTJPeU92NWNxTjFyZDJ4UGRmSjBlOVhlU00rYklJQnlCRFpvK24zYmttcWZS?=
- =?utf-8?B?NFdNbzNrVzJmN2o4aGtjRjE5cVRSTk5Vb01aYXQzWGFqK2lWaUpNZ2Y0czcv?=
- =?utf-8?B?VERvOERHc3NnPT0=?=
-X-Forefront-Antispam-Report-Untrusted:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR08MB7120.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(921020)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR08MB8301
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped:
- DU2PEPF0001E9C2.eurprd03.prod.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	f9ed5fbf-9029-4208-fcea-08ddba0a91b7
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|35042699022|82310400026|14060799003|1800799024|36860700013|921020|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?VTBacXVuUGNnclVtYitDeW1ldnR1Ti9BbUo2dzdGSCtjTDRUVU04ZmRIM2hz?=
- =?utf-8?B?Rk5QL1ZVRHNubmVGYVJ3cGxnUTk0emtYaDFERFQ4c0hUVFZuR09JNjYwS2hx?=
- =?utf-8?B?N1lpUTJabnN4MkMzemFzV0xiR0lTWncxS29HZ1hjSXZhOXNQcitKNjI3S21z?=
- =?utf-8?B?SDkwUm40MmQ1cGVtanpVLytkWHhENEFoR0JrTU1xVmJ2MEhRb3NGcWdoUzRE?=
- =?utf-8?B?SCtsaEJkZkVEdy9pL3NCY1VyVFFHOXpwYmdTNitYaUtZNnZLblI2OGhocEhn?=
- =?utf-8?B?YWNTeHMwMHlBWVBvampodFA4UWRWN1N6WDZWT282S1dSb2hnYS9JVUNuZTBp?=
- =?utf-8?B?UW1YWUdZNVkyc2prdC9TQ0FlR2t3M01xcjd6aHk3MllSY3dEM0YreVdURmNn?=
- =?utf-8?B?TS91bGdvaEMwbTRRSVlSMU9iMFd1SlBpSlJRSjdzWkRsY3RTd1hMbUZjd2hR?=
- =?utf-8?B?dFUzNTRWbkFtNEV3bDIrZjVTOE9sUkVsZTJhQjZDUVJQczFhdDl1TnE0Sm0y?=
- =?utf-8?B?U3VMLzVIMG54UzZYT0d0MFV2c0N1VVUydTJrcHU1bFJyY2gvUGtDMVRSdjJ6?=
- =?utf-8?B?U2pISUJOb1dCbGNvTTRyZi9DVEgrQmxiNHowazlvYUFtOHBEcGg3bmI0OUNm?=
- =?utf-8?B?Um1JYWhDbVR1Q0ZPaHFXYmxCQU9ZYkVQQjJndGd3cFhzYUVwK2Z2T2RZcUZp?=
- =?utf-8?B?Z0V0eWJnL1NwektQZnVja1pzdU5vVXVkMlpwc3B2OU9hUjZlSDVudmJ6UGQv?=
- =?utf-8?B?N3ZUd09tN3NkT09kT2lwVWJDMHduS3pHNDlCbWVIVEs2WFZ2SmZ5MmluWXpw?=
- =?utf-8?B?TWRrTjZYcC8xZWh4VXRzMGY3emlPOFNpb2ZNSmw2REVsZGI2cFk3UXVEOTFM?=
- =?utf-8?B?bmtSL3c2RndFRHk5VkFSL3NnYitsdU1SOHRVVDZrdEpIOXlvWXpqWUlSeUNn?=
- =?utf-8?B?SnZyMU0xSGVZdVo1TVVIb1dJd0Vmcmx6RzZzODFJclNjQWRxNW8vUTRMZWlk?=
- =?utf-8?B?MXJZY0I5RGFJN1Z2NllPaHFHRUkzYlQ3ODgzWGx4ZFI0OERWYWIwRnBzL3Ji?=
- =?utf-8?B?S2ZBRzY5RkRIOFI3aVExTEtmZVVjTHgvelFvblJXbVlDRGR4ZlRhZnlYU0RL?=
- =?utf-8?B?elVFb2luTW00UE5lTndaTm5wRjRHRmZKN2xpcmVTZGMrLy9XYlVEaUZWMlJB?=
- =?utf-8?B?U1NNN0JhUzVCVzNYWDNuSUV1dkxtSnllSXc3WXNaNHVKT3c3V2F1dzRhK2hY?=
- =?utf-8?B?UWRWbjdMWTZiRmVHTlhFemdOWVJrbEtZK09RR3JvY2dEajZ5a2FpYXNjTHho?=
- =?utf-8?B?M1RIT1J2OHBCSkt6NTdSdWFNREE4VDFjRnB0am5nR1hyVitqOFZYeU83Sk42?=
- =?utf-8?B?ODNEQjhJMHJnMXQ2RWJHSk4xcjlocWJEdFp4YlBvcS94M0hnd2pSTHlyRlVS?=
- =?utf-8?B?UnBPRUI5ZkhOV3BWU1I5K3VkanJQdDFDak9DWnlBcSt5QkxrMThTU2NTTmtS?=
- =?utf-8?B?MFdxY1hDb3QvOWluRnY2RWIvdWJwNXI1dDJNS2VzaVBCdURNU1NtMm1sbWFq?=
- =?utf-8?B?Tk9mYUN0cmJ3bTU4OGhUQVY0ZGlCSGxpVlNoQlpaYjRaR01HYTI1U1daZVIx?=
- =?utf-8?B?T0lEMGxReG1IMDdyNWx0eVFuUUJTR1ZhczJZYjU1ckwxNG9aNzY2bmlqcUFw?=
- =?utf-8?B?TlcySXJXM0l0U0taTlhLbEI1bm9Qd2NpNGlpU0FDV052YVBkTEZlWWJuQlEw?=
- =?utf-8?B?UFBLdkdIbjBCN3g3SFllT1hQem8rSUpIUGN6NkY2NUlaZzRUdGpydG40YVlE?=
- =?utf-8?B?ZS81UWdoYUhIdEt6cEZCQWtvcUtBNXdJSVVtV3hLelAvbjRlZGorRGU2QWpk?=
- =?utf-8?B?VkcxMFBrVVl2VjlqcDc0cDFkeFBqbUc0QWVTSHd1dzFxNUNkZUkzN044bVVE?=
- =?utf-8?B?bG9rdnFSOFB0ZFptY01lVmlNNm9LbVZzeEtXZnZSNHMxRWpNRzdhTnlXcldw?=
- =?utf-8?B?SFFiTDNjYUxWeTJlQnllZUpUcHo4VUdDaDY3TUc3aURJQWUxcGpBbkNNWWVR?=
- =?utf-8?B?M0Q2RWovSFJoN2tOQ2Y3ZEFMenJxbnVoVGQ1Zz09?=
-X-Forefront-Antispam-Report:
-	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(7416014)(376014)(35042699022)(82310400026)(14060799003)(1800799024)(36860700013)(921020)(7053199007);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jul 2025 08:21:44.4305
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0926544c-c47d-496a-5983-08ddba0aa57d
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DU2PEPF0001E9C2.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR08MB9420
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 4/7] mm/selftests: Fix split_huge_page_test failure on
+ systems with 64KB page size
+To: Aboorva Devarajan <aboorvad@linux.ibm.com>, akpm@linux-foundation.org,
+ Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, shuah@kernel.org,
+ pfalcato@suse.de, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
+ npache@redhat.com, ryan.roberts@arm.com, dev.jain@arm.com, baohua@kernel.org
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, donettom@linux.ibm.com, ritesh.list@gmail.com
+References: <20250703060656.54345-1-aboorvad@linux.ibm.com>
+ <20250703060656.54345-5-aboorvad@linux.ibm.com>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <20250703060656.54345-5-aboorvad@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-
-On 03/07/25 11:36 am, Aboorva Devarajan wrote:
-> Make thuge-gen skip instead of fail when it can't run due to system
-> settings. If shmmax is too small or no 1G huge pages are available,
-> the test now prints a warning and is marked as skipped.
->
-> -------------------
-> Before Patch:
-> -------------------
-> ~ running ./thuge-gen
-> ~ Bail out! Please do echo 262144 > /proc/sys/kernel/shmmax
-> ~ Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
-> ~ [FAIL]
-> not ok 28 thuge-gen ~ exit=1
->
-> -------------------
-> After Patch:
-> -------------------
-> ~ running ./thuge-gen
-> ~ ~ WARNING: shmmax is too small to run this test.
-> ~ ~ Please run the following command to increase shmmax:
-> ~ ~ echo 262144 > /proc/sys/kernel/shmmax
-> ~ 1..0 ~ SKIP Test skipped due to insufficient shmmax value.
-> ~ [SKIP]
-> ok 29 thuge-gen ~ SKIP
->
+On 03.07.25 08:06, Aboorva Devarajan wrote:
+> From: Donet Tom <donettom@linux.ibm.com>
+> 
+> The split_huge_page_test fails on systems with a 64KB base page size.
+> This is because the order of a 2MB huge page is different:
+> 
+> On 64KB systems, the order is 5.
+> 
+> On 4KB systems, it's 9.
+> 
+> The test currently assumes a maximum huge page order of 9, which is only
+> valid for 4KB base page systems. On systems with 64KB pages, attempting
+> to split huge pages beyond their actual order (5) causes the test to fail.
+> 
+> In this patch, we calculate the huge page order based on the system's base
+> page size. With this change, the tests now run successfully on both 64KB
+> and 4KB page size systems.
+> 
+> Fixes: fa6c02315f745 ("mm: huge_memory: a new debugfs interface for splitting THP tests")
+> Signed-off-by: Donet Tom <donettom@linux.ibm.com>
 > Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
 > ---
+>   .../selftests/mm/split_huge_page_test.c       | 23 ++++++++++++++-----
+>   1 file changed, 17 insertions(+), 6 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+> index aa7400ed0e99..38296a758330 100644
+> --- a/tools/testing/selftests/mm/split_huge_page_test.c
+> +++ b/tools/testing/selftests/mm/split_huge_page_test.c
+> @@ -514,6 +514,15 @@ void split_thp_in_pagecache_to_order_at(size_t fd_size, const char *fs_loc,
+>   	}
+>   }
+>   
+> +static unsigned int get_order(unsigned int pages)
+> +{
+> +	unsigned int order = 0;
+> +
+> +	while ((1U << order) < pages)
+> +		order++;
+> +	return order;
+> +}
 
-LGTM
+I think this can simply be
 
-Reviewed-by: Dev Jain <dev.jain@arm.com>
+return 32 - __builtin_clz(pages - 1);
+
+That mimics what get_order() in the kernel does for BITS_PER_LONG == 32
+
+or simpler
+
+return 31 - __builtin_clz(pages);
+
+E.g., if pages=512, you get 31-22=9
+
+> +
+>   int main(int argc, char **argv)
+>   {
+>   	int i;
+> @@ -523,6 +532,7 @@ int main(int argc, char **argv)
+>   	const char *fs_loc;
+>   	bool created_tmp;
+>   	int offset;
+> +	unsigned int max_order;
+>   
+>   	ksft_print_header();
+>   
+> @@ -534,32 +544,33 @@ int main(int argc, char **argv)
+>   	if (argc > 1)
+>   		optional_xfs_path = argv[1];
+>   
+> -	ksft_set_plan(1+8+1+9+9+8*4+2);
+> -
+>   	pagesize = getpagesize();
+>   	pageshift = ffs(pagesize) - 1;
+>   	pmd_pagesize = read_pmd_pagesize();
+>   	if (!pmd_pagesize)
+>   		ksft_exit_fail_msg("Reading PMD pagesize failed\n");
+>   
+> +	max_order = get_order(pmd_pagesize/pagesize);
+> +	ksft_set_plan(1+(max_order-1)+1+max_order+max_order+(max_order-1)*4+2);
+
+Wow. Can we simplify that in any sane way?
+
+> +
+>   	fd_size = 2 * pmd_pagesize;
+>   
+>   	split_pmd_zero_pages();
+>   
+> -	for (i = 0; i < 9; i++)
+> +	for (i = 0; i < max_order; i++)
+>   		if (i != 1)
+>   			split_pmd_thp_to_order(i);
+>   
+>   	split_pte_mapped_thp();
+> -	for (i = 0; i < 9; i++)
+> +	for (i = 0; i < max_order; i++)
+>   		split_file_backed_thp(i);
+>   
+>   	created_tmp = prepare_thp_fs(optional_xfs_path, fs_loc_template,
+>   			&fs_loc);
+> -	for (i = 8; i >= 0; i--)
+> +	for (i = (max_order-1); i >= 0; i--)
+
+"i = max_order - 1"
+
+>   		split_thp_in_pagecache_to_order_at(fd_size, fs_loc, i, -1);
+>   
+> -	for (i = 0; i < 9; i++)
+> +	for (i = 0; i < max_order; i++)
+>   		for (offset = 0;
+>   		     offset < pmd_pagesize / pagesize;
+>   		     offset += MAX(pmd_pagesize / pagesize / 4, 1 << i))
+
+
+-- 
+Cheers,
+
+David / dhildenb
 
 
