@@ -1,229 +1,253 @@
-Return-Path: <linux-kselftest+bounces-36452-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36451-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE3EDAF78F6
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 16:56:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0038FAF78C6
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 16:54:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 44A9C1CA22E7
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 14:53:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2CD3E4871A7
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 14:52:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 759742EFD80;
-	Thu,  3 Jul 2025 14:52:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 072BE2EE996;
+	Thu,  3 Jul 2025 14:52:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="E6euIqWd"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="atBALGZ+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2083.outbound.protection.outlook.com [40.107.212.83])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9F6E2EE978;
-	Thu,  3 Jul 2025 14:52:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751554368; cv=none; b=O/cM2Vj+p6EgV4Tk+QUo6u/jsWZ1GTnK5xtSNDcEgfErtRwKKVKklBYlzjmSc7+xPxl+22G2zgXRqZMSgAgJFznHm77n+1BDpm9DESktZXRgoX0hzcgTcy/WSrvJ+NTYE11D/bPmWf5nl01oHmyTD5G/1+omEjDWLjT3Lyc3msc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751554368; c=relaxed/simple;
-	bh=4uiQOKq9+dOU2EcBfhGx9y6ZSanJJ4mEnzeEmB9WfUI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MbtNx3pG7tx3NxH7vgXyi0vyuLXg8xv0dYrRs7U05l12DsNNgNYE9fuI0UI3iOqM5LtpDfVAf7gMojSqoXp9LS1/oRHoYaHl2FzAVvUbGO3CIHDbn7+hUYyPf3KGgHfD/8AQef+QE20KkxQ6HvohksWDvMTXV+GCgOpo5kopaNk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=E6euIqWd; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 563CP5oV024412;
-	Thu, 3 Jul 2025 14:52:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=mY6ftB
-	pphXMErXOxTNW++Rpsp6EmBFPcZptcpuH9lvw=; b=E6euIqWdMY08dmWJoF5HaJ
-	3m7B0anHbdKsqL9tlZvrAP7nXEvYL18V502kjwqHE9C7vckTDj6yJHIVv0uoC0nV
-	9RCy6DSo16yO8776TtDdf3XLes+/UCz1kNdjCj7tfH4TplKmDx5RsH5PJt/9ce9A
-	1I5VCfBg5o4NYLrr8ZagT7vWIp4ls0l6VzRkE4s6kgQv3WIHBzWdWg5Vp/z84rUn
-	CuGvM/CLbxsdL/6ajXqHJm3797r+wiVbfZjpRPmybTfY2deATmCy91DjC/Zh+SB3
-	KPiklGXZT3qesVBaWBmLSa47MyYMc9P4L/QTNFWql6lzPLK/4hWeJgy0a8elowYQ
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47j82g41gy-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 03 Jul 2025 14:52:33 +0000 (GMT)
-Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 563Edv0S029184;
-	Thu, 3 Jul 2025 14:52:32 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47j82g41gt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 03 Jul 2025 14:52:32 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 563D6pGe021109;
-	Thu, 3 Jul 2025 14:52:32 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 47jtqunm17-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 03 Jul 2025 14:52:31 +0000
-Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
-	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 563EqV2a57409824
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 3 Jul 2025 14:52:31 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id EC4BD5805D;
-	Thu,  3 Jul 2025 14:52:30 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id AB7CC5805E;
-	Thu,  3 Jul 2025 14:52:25 +0000 (GMT)
-Received: from [9.109.245.113] (unknown [9.109.245.113])
-	by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Thu,  3 Jul 2025 14:52:25 +0000 (GMT)
-Message-ID: <5bc95d56-0b2e-404a-9740-cd68facf7f55@linux.ibm.com>
-Date: Thu, 3 Jul 2025 20:22:24 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33F522E7BBF;
+	Thu,  3 Jul 2025 14:52:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.212.83
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751554360; cv=fail; b=Qbc8qDD/daach2w1XYG5Q+4qq09z9pXFTR5fHT2LnRxWn+c0GtzZfjn9TZ15o+4n9qn4AJhOWBWiq9+LW2hX14jXMcsCvRlTSHF53jOCY9Z75lqLwcDR8qR2ZipHBrG0314Jrq3Oq30Gn2mOj8QRAxksAzii5edS1j7AcpkblpY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751554360; c=relaxed/simple;
+	bh=BX614zNm/ZxvET97otfBIoJBLziOLwvRcoWXDYMFAns=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=t+EUo4E3y1CvZugsP5PMA+T5H+zg71AeustQ+qjgHNwSkAX0xYx7Qx6tzTlSGdI1ogFXEw4F17aA+nNYiD281KJnnGPhucfmopAW3d64aKm8Ev7oosF3PKQjPY1BaaX5wgFJR/cPX/DmZ8ve/CG31cBixR3Pf56GwFvOc7VdXpM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=atBALGZ+; arc=fail smtp.client-ip=40.107.212.83
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Q6Y+wgFIuemcv1nls9DZENolykC5CLBENM+6Dz2CCe96ImiXwrsDod1dAuZUKGy1QamIJyYTsVqREijIFuQNIJn03mbheindk0SqMpkSB9rRvIdYgChqqNj4iXtVA7Wsv2zsHALdvzXmEc60wehZVxr9+gu6KALDpW5nHFj8bCAHpUGXXtf3MNkxdak5pqwWi3y7xP0Dq0USEMY+mDTufdZsqsAycPLPcQcUr+r6lEz9P1BGdwTfqBvv+gMkQWVW77zNjmF3W1zLB9VYYJ6f0FWfo+jN8Go+hEFpJjWvEOQcB7Whl/qeT8+tsLnC9STSRTo8mE6zwx05Iv+kYLT4wg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8MU8mG7qC+mz9cA1WhCyaxGJM9JDklOwSIVijGPGkd4=;
+ b=cZGxYQskCLPF61Hjzzo/tqglxtM3Cu7nNWHVf0E6oIaMaymz5bGQ53ARPDM2ST9D0OdUEiyXdNZH38606Y1+/npwg1yCBWw58wSKottBMSu03g/w+5M8ahJlcDVZ/nFvD9gO1QGax7Ta9Ae/KCngyat2cgTnWnGFfuYqX+W3cAiRTzbpHRrXZIUFqlE7n2lBbNjlyLIUWG8GVkCI3DVnymhKHWSu6yZuh+buBxQcozgF+Y14XHWUFUjs0AFkx2CjJdcYQy+crVfa0fTw8RAadUgEmaEr3IAgiWG2NQdAOID+RU7lF+9nQyPZWI5UKk9j7RSS+V5lwjCGJEsqdpKk2A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8MU8mG7qC+mz9cA1WhCyaxGJM9JDklOwSIVijGPGkd4=;
+ b=atBALGZ+OsprpmGmmBCkGP8TdwI4GqnZA6JXTi07wwb2mvxcN6It12b+DTH68O1b2q1nTmCc4LZUEdI8LAF9ot/asD57RJkZcdFxD02mV1vHPPDN3IOi+jMB1Z5zuhLU5P1RWqubzRelLHmW637xpPkxXjnusAxOS7UM7KYE+BB5HYf5c9z/tf/8GSCMxgJcDlRjlqK3UratZiiAVufyVFoyJfG+hCyMR9jQpjM2RivLv2pu7Q4OUdeoUqyAH2JDndI9VPnB1UKHhoO57MJLBuz3uPhAyppl/UPptufjGablYokU+uTmO5f3bXZgcGMcwg9YO1Sic69fN9454f3+/w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
+ CY8PR12MB7170.namprd12.prod.outlook.com (2603:10b6:930:5a::18) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8880.21; Thu, 3 Jul 2025 14:52:34 +0000
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::5189:ecec:d84a:133a]) by DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::5189:ecec:d84a:133a%4]) with mapi id 15.20.8901.021; Thu, 3 Jul 2025
+ 14:52:34 +0000
+From: Zi Yan <ziy@nvidia.com>
+To: David Hildenbrand <david@redhat.com>
+Cc: Aboorva Devarajan <aboorvad@linux.ibm.com>, akpm@linux-foundation.org,
+ Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, shuah@kernel.org,
+ pfalcato@suse.de, baolin.wang@linux.alibaba.com, npache@redhat.com,
+ ryan.roberts@arm.com, dev.jain@arm.com, baohua@kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, donettom@linux.ibm.com, ritesh.list@gmail.com
+Subject: Re: [PATCH v2 7/7] selftests/mm: Skip hugepage-mremap test if
+ userfaultfd unavailable
+Date: Thu, 03 Jul 2025 10:52:31 -0400
+X-Mailer: MailMate (2.0r6272)
+Message-ID: <4D78BC13-74C9-4570-A81B-B7094B16A336@nvidia.com>
+In-Reply-To: <d6ded113-2fab-45a1-94dc-5cde0c9f9006@redhat.com>
+References: <20250703060656.54345-1-aboorvad@linux.ibm.com>
+ <20250703060656.54345-8-aboorvad@linux.ibm.com>
+ <d6ded113-2fab-45a1-94dc-5cde0c9f9006@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: BLAPR05CA0046.namprd05.prod.outlook.com
+ (2603:10b6:208:335::26) To DS7PR12MB9473.namprd12.prod.outlook.com
+ (2603:10b6:8:252::5)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/7] mm/selftests: Fix split_huge_page_test failure on
- systems with 64KB page size
-To: Zi Yan <ziy@nvidia.com>, Aboorva Devarajan <aboorvad@linux.ibm.com>
-Cc: akpm@linux-foundation.org, Liam.Howlett@oracle.com,
-        lorenzo.stoakes@oracle.com, shuah@kernel.org, pfalcato@suse.de,
-        david@redhat.com, baolin.wang@linux.alibaba.com, npache@redhat.com,
-        ryan.roberts@arm.com, dev.jain@arm.com, baohua@kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ritesh.list@gmail.com
-References: <20250703060656.54345-1-aboorvad@linux.ibm.com>
- <20250703060656.54345-5-aboorvad@linux.ibm.com>
- <9440CBF1-AE4E-4C9F-ABC6-EBCB74316CF8@nvidia.com>
-Content-Language: en-US
-From: Donet Tom <donettom@linux.ibm.com>
-In-Reply-To: <9440CBF1-AE4E-4C9F-ABC6-EBCB74316CF8@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: d0MVYya5BfnavZQNhVrX68n-pB7xF2_V
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzAzMDEyNSBTYWx0ZWRfX2KpBx84o+vm3 o7HdbLkpVFllA85JI4orbVlwW+5vNaZA2Tc0KRFiA1K/PmHJyvfQ0/vgitNLDBjvK0w+FkWNxTp 1lPNqU7kOczbJZnvT6OsqQ+z0pA5ZtrEkWRK72PIAy42X4SlmFTy2EQ7JuoGJkXcfv5jqr5OZ8f
- yAt9YiRuryQbFm8ItvRyF75KeTxzhjZqhFGzQpcb03+BGCw7n67du2grUgMLYRXH1q49y1X/f1a vhzJOf7TP8g/KLpOFauWICjqyMUTdVNynAyDIujG87ZGWyObkBvFGJf4RQgEVwr7Ix/fXaoirDV 8GTLO9ugq2gA9gV/KgZ5u5kOrzKGdADx8cY9JYe7sL/+iBpXK7+CYDwrMq6Z7radsxZJgiGm22v
- eawR+gztivcwiVyaBdKKFJ4Xx0ykUHrRGmFfP8vGTt4BXqjCyPDYtHW+cr/3rtO0/eR9xBFg
-X-Authority-Analysis: v=2.4 cv=LpeSymdc c=1 sm=1 tr=0 ts=68669931 cx=c_pps a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17 a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=VnNF1IyMAAAA:8 a=Ikd4Dj_1AAAA:8 a=g9tEA885WHVDQ8z4Vf4A:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: d_E1IoYl_87F0af97llEgVPfKcNbJ4DN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-07-03_04,2025-07-02_04,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 bulkscore=0 lowpriorityscore=0 adultscore=0 clxscore=1015
- impostorscore=0 mlxscore=0 mlxlogscore=999 phishscore=0 suspectscore=0
- malwarescore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2507030125
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|CY8PR12MB7170:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2947e06d-4794-4906-8494-08ddba413ebb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?ZThsRlBaNW85WEwyNWZ6TnBkOUdUUVIrL3hFa01ZL0krVWF1dExSK3V2Ymtn?=
+ =?utf-8?B?TjIzNkxvNHVlRTFiUjc2YXY5dUhmRVArT0tvQVJIRzF1dHNzQmM2ZlZraUYv?=
+ =?utf-8?B?em1ZVWdoem1ybm84NmdORVFWSi9ER3VhK21jb3Vvb2pkd1NkekxrbUJwRWds?=
+ =?utf-8?B?cFF5ams4QVZ2TkJ1OTQyTC9wQk42OUNUc2pqUEV6RHNhMElPMk1Ya3RSeWkz?=
+ =?utf-8?B?eERrUGhVcVN2UHp6aW50SnNNSzNYRWVxa09NcWdZeC9WVDVrbzFtUURIeVFH?=
+ =?utf-8?B?Nmg0aFNVQUMyZjdZR1dpWitGWmhGL0d0QTFVMkpTNC9HWkx6OEc4eTFrYnQz?=
+ =?utf-8?B?d3c2UW9wQWwwSUd5UGZDYkJNa1o4SXBhWVBLWFdTclVQb0wyaFViNVZjZzhY?=
+ =?utf-8?B?MVg0MkpmNHE0ckxjZmZMWGVpM3QrbElqT2E0bkNKRDNhaktiUjcwOHZyWXhs?=
+ =?utf-8?B?WktnUE1YYnJ5NTBpZG9MNzVVakFGMjRyVDNORncwZjdQOXU2VUsxUFZwUkx1?=
+ =?utf-8?B?WHVSZm5tN3dNNk4rMlBwaEdPMFkvb3FHbG5FNFVNOEltWVpma1dBOWdHcmU1?=
+ =?utf-8?B?c2Z5WGZnRndsTWM0bXRHdkZHUEttMkFUTW1mWWpGbDJXSFFGdk1zQ1o1TjJy?=
+ =?utf-8?B?VEw1Yml3UjNXWGMxWGUzYnM0dDNtMUM5TFo5VkZFSzhSTlcyZFNuLzhiWEh2?=
+ =?utf-8?B?dHRCb25XSXJKdVpmM05uZGNYV3l0Y3pWRXZBejR2MmxhKytlTHBRSjZVN3Mw?=
+ =?utf-8?B?TUc3ZGYrM2M5SFk5Z0F5c3A0T0xuWnNjY3ltVFYwZEtIdzVzT2pIcVFVZEMz?=
+ =?utf-8?B?TXo1ektxMEtYNzhRQXNDM2hzU3FiUGMyZGdYZWc0U0xJYjBRd29Vc2tXMDh0?=
+ =?utf-8?B?NzlmNGE4ZHpXU2x5UFBEcDF5UnZHWDNsSzM4UVI2dDhZK25rOWRuZ1lpNGlN?=
+ =?utf-8?B?RWFNdUgxcWJ2UzhwZWx6STM2REl5ZVlHTFk1L3VqcjhWM1JMc09JS2ZoYUN5?=
+ =?utf-8?B?aUlGdU94WDdMSU44eS9jditub0VHbWROc2VnQWxIME1vVmhpTURCczdGTXZl?=
+ =?utf-8?B?a0lvc0k4dVFHZXRraHJPWERDdlBFdEZsUGJXZFRXQ2pPYkh4SzRuQ0RVdU9p?=
+ =?utf-8?B?QjFIYVo3emwrdmhNcW9qRjBXczlBRFFWbGxsK0pCM0RKRlQrbUwyd0IwZjEr?=
+ =?utf-8?B?OUZsZXhCWmxCOUREVFc0WTJaZlZRTXh4ODVYdmp1UmZHNzI2cmZsZVVGYmpq?=
+ =?utf-8?B?UXdjYndXZkJzenZyT3pJZ21IcWZkc2lJY1lUMkZaaSs3T3BGYUhsZEVNYXNn?=
+ =?utf-8?B?bW1Cb3pQbFJyVFhUeVFQTzFMcDFaT1FyeDRKNUxCdTlOTC9LYTE5emdZVjdV?=
+ =?utf-8?B?TmVMWHl2WDJzOVgwWFo4c2xhbVNYUGNCRGNDWVJrNWtuSitCOENvMUxtMmZz?=
+ =?utf-8?B?Z3loTm85Y2xiOERoS09tMlVvdTlpMTlMbmlpK2JuNjlvNkRaS0NkVGJPR0hB?=
+ =?utf-8?B?cTE3WjV5WWJVQk4xL3JmMXh3WWtyUlVaVmlVL2l1TUE0U2VjMFNvcmZlMEt0?=
+ =?utf-8?B?akFsOVVZbURrZmZxMWxGK2V6UjNHMTZueXMvRUtSdUVLYkNGMHliK0duOWlB?=
+ =?utf-8?B?YW1RRmE4dVgySHAzRHZvRG1pRzJJK3drUUkvaWR5S2ZRWmtUTVI4elE5QVVl?=
+ =?utf-8?B?R3UyUjEvK2krUytIaFpwWXlTZVRmWFBFdEJ5T3dQSzZoa2MvTCtVcllkQUll?=
+ =?utf-8?B?L01XTWwySFRvcnUzblVra25VdlRNRGJoS1M3dHNjZlIzUUU1ekZRSmpIN1cr?=
+ =?utf-8?B?K3BkN2QyQnpGU0xsOVBMR1JIV0ZLeVdCa0Vrd0NvN1BaNzBqYTcvdUFQdWRQ?=
+ =?utf-8?B?N2hBeUUvVlJzdnBTWG5TV25oOTJ5SXJNaUlKc3hUbkErTXc9PQ==?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?VHFOcm1rZVhneUphMFdFZWwyb0FuaFBKa0k3a0FWR2I3c0tQaGk1bkJhSHVs?=
+ =?utf-8?B?M29GWXVTdW5jVmxnYUFWNHhHNUNqQVdKL3R1eDBnemVvL1Ixc0E2SFl2bTNU?=
+ =?utf-8?B?WUN1TjdYUDVqQitDWHNsbHdCYmhReC90cmxqbUtDbU1lcngxczkzVVo3R2dZ?=
+ =?utf-8?B?MCtLTG5XSGJHNHVXeTkybEZBK2xOeHUvRlc1TkIwTEZ0ci81OCt1MnZBNVVx?=
+ =?utf-8?B?Y1k0ZjRwWkVXUWNsdDhEL21Nb29BZnRLb0FSWlBzQ0JnWDFhUEJBKzV0NXZp?=
+ =?utf-8?B?a2h6ZG1mSjlzbElaaFNmYTRhMW5mR0xqQytKanNyRXhzWXJlRHE0WU4xMEFH?=
+ =?utf-8?B?ZHNXcERkV2RPTEhmNHd0alIwRG0wZXVNMEcvYzU0aWg5c3M4RVNHL1ZhVktt?=
+ =?utf-8?B?eHh0eUhJa1F1ekZ0ZFh4UlNXQ1VrRUxVM3JnYytJN0dZS1l6T2NWRHNKN2ZQ?=
+ =?utf-8?B?QlcxWTMrSkk2UG90UWNCNmhtcFYvMG1GM1I0aFUxaURoMHpYT005aVlEK0pj?=
+ =?utf-8?B?b2dqTGJNOHBkbUFKdmhsRFJHT0J3ZlpaWDVoczZta09ZSFl0WkRjTXRXUzBK?=
+ =?utf-8?B?MmNlN2xYR1pOd1NFVjVyc3Y4TjBpdFpuMVd3ajA0b2hXWnJMYnU3Qy96YWU2?=
+ =?utf-8?B?TTZWbXFCYlpxWTVXdGpQeWs1bGdONllIa3NxcW1GdVFFdlNIMWpnRFhXZCsx?=
+ =?utf-8?B?USt1a3VjSDI3WG52QkZic0RWQ2oyVTdKU3V5VVJzOTdjNk5xbEFyd25YT29X?=
+ =?utf-8?B?SitEcnJyMWVBcEw4cHFXejljSGFGdU40S1J4TkNva1hPRDNQYTRqNlRLT2Q2?=
+ =?utf-8?B?UEFnQmNvUFh3V085Nk0zTW9iWkk0ZWVQcnBSV0M3bDFtRG1yZmJMMklXSkNY?=
+ =?utf-8?B?ZTE5eTZib1EvZzdnN1Q2NVpoS0JQQlozUmgyTElQRE10Szh2YktYc0orTzdU?=
+ =?utf-8?B?K3d6MXpZYUpaWVI5bDZ0ak1xbjBablJJUXRCRUpYeEJCekN5NE8wSkFiUXRS?=
+ =?utf-8?B?cWpuN1A2QmV1OFFzSVVZYjlYR1VjVEFEeEs0MW5SYVFOQWxRYmxGOStaUTdZ?=
+ =?utf-8?B?ZHVLeEh1YzJMUFNtcC8vTGlJNXJWTjcxUjlUdE5VWjYyUHRyazJxWFRWSlBU?=
+ =?utf-8?B?TFFuM08xMHhYWm82Qm9wZ2tXQ1hCeGZjY2M5dkhRQmpWODVIRmErZ0duWldv?=
+ =?utf-8?B?MWdWK0hQbGxQc3BQRTVEd0xOWEdhSCtvS3d3aloyczczdmswb3BxbnBiWXpD?=
+ =?utf-8?B?Q0FSZXhnVk9xMkhMUCt0ZWt0UVQvcUtaVFVRSzVNWk83S0ZLR1RRcHFjSldw?=
+ =?utf-8?B?TjRhNDhrOGgyeWtqMDEzZGJYNklZUjdQVEphUmh2bW04QlhtVEllNURmNlBo?=
+ =?utf-8?B?RDJqdTdqYU5ZRk1yNzJoNVRQT1REenNqblBHMW9DeUgwbnd1c2xIMUM2MHBG?=
+ =?utf-8?B?bmE4UkxVbEJ1c3V0ZnZ3MVhBR0NnZGczcGVEWHJTc0svbC9kU21pWjFCdUlH?=
+ =?utf-8?B?RXpsRG4zVFVtNlJwVTMvcHhvU2E4SzRDVXBmT0RUR3loVldDc1BRNlZySXkw?=
+ =?utf-8?B?OUFhb0dPUS9iOThUVVAvRlBzeGFUTjJQc1h2VEttZG9JZ09heHdkT1c2QkVy?=
+ =?utf-8?B?WENjTTZablZkMnR1U1RQb291MkNGZW4zY2xGZDhLOHlGNlY3SmtwZ0RlU2gv?=
+ =?utf-8?B?VlRnK1NYdS8vcnBKWGlRYXVlOXpTZ2IybmxXcDFwRGRIQWF5dzZhU05HLzdK?=
+ =?utf-8?B?YXd5ZmIrNUJLTUwrVUp3TkdkcWxCbDRDTEpzTjRtMDVDK0o0UThicWV0UjFu?=
+ =?utf-8?B?N1RRMDIyNXhNY2R1VG1NeURxeE5hZWlOdEZzdTJNdm8xbFgyc0FlOVZsT0s3?=
+ =?utf-8?B?NzRhV3VHckF5NWxBbTVsRjJ0WEdhRS9pck5ycUFFSTZYazRBb2NZcXp5azZS?=
+ =?utf-8?B?RTNDczE1Rm1VcEphWWVOQUNNMVlGbVE4YzhRMG9Wdkcvd1htOE5PY3YzZ3gv?=
+ =?utf-8?B?dkdOVmdIWDY0M0RybTFnZXhhUnRYbGZVL20zRndwUFoxdysvY01pWURtVys3?=
+ =?utf-8?B?RFYrWXNmc2VZSTEvdmU5cjVYUjVkTzdXN0gyMUpzWVhzUFNOdnJyV1U3bjJF?=
+ =?utf-8?Q?HVLC1ldb0QMGR4iOkI4zyTmj/?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2947e06d-4794-4906-8494-08ddba413ebb
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jul 2025 14:52:34.5524
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 02506+4Ib0zrh8W8SDqGpObvzDPdkgxWYy+ozzB4hPxK8+KsXKMxVuzAeaEbtvjj
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7170
 
+On 3 Jul 2025, at 4:38, David Hildenbrand wrote:
 
-On 7/3/25 8:00 PM, Zi Yan wrote:
-> On 3 Jul 2025, at 2:06, Aboorva Devarajan wrote:
->
->> From: Donet Tom <donettom@linux.ibm.com>
+> On 03.07.25 08:06, Aboorva Devarajan wrote:
+>> Gracefully skip test if userfaultfd is not supported (ENOSYS) or not
+>> permitted (EPERM), instead of failing. This avoids misleading failures
+>> with clear skip messages.
+>> --------------
+>> Before Patch
+>> --------------
+>> ~ running ./hugepage-mremap
+>> ...
+>> ~ Bail out! userfaultfd: Function not implemented
+>> ~ Planned tests !=3D run tests (1 !=3D 0)
+>> ~ Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
+>> ~ [FAIL]
+>> not ok 4 hugepage-mremap # exit=3D1
 >>
->> The split_huge_page_test fails on systems with a 64KB base page size.
->> This is because the order of a 2MB huge page is different:
+>> --------------
+>> After Patch
+>> --------------
+>> ~ running ./hugepage-mremap
+>> ...
+>> ~ ok 2 # SKIP userfaultfd is not supported/not enabled.
+>> ~ 1 skipped test(s) detected.
+>> ~ Totals: pass:0 fail:0 xfail:0 xpass:0 skip:1 error:0
+>> ~ [SKIP]
+>> ok 4 hugepage-mremap # SKIP
 >>
->> On 64KB systems, the order is 5.
->>
->> On 4KB systems, it's 9.
->>
->> The test currently assumes a maximum huge page order of 9, which is only
->> valid for 4KB base page systems. On systems with 64KB pages, attempting
->> to split huge pages beyond their actual order (5) causes the test to fail.
->>
->> In this patch, we calculate the huge page order based on the system's base
->> page size. With this change, the tests now run successfully on both 64KB
->> and 4KB page size systems.
->>
->> Fixes: fa6c02315f745 ("mm: huge_memory: a new debugfs interface for splitting THP tests")
->> Signed-off-by: Donet Tom <donettom@linux.ibm.com>
 >> Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
 >> ---
->>   .../selftests/mm/split_huge_page_test.c       | 23 ++++++++++++++-----
->>   1 file changed, 17 insertions(+), 6 deletions(-)
+>>   tools/testing/selftests/mm/hugepage-mremap.c | 16 +++++++++++++---
+>>   1 file changed, 13 insertions(+), 3 deletions(-)
 >>
->> diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
->> index aa7400ed0e99..38296a758330 100644
->> --- a/tools/testing/selftests/mm/split_huge_page_test.c
->> +++ b/tools/testing/selftests/mm/split_huge_page_test.c
->> @@ -514,6 +514,15 @@ void split_thp_in_pagecache_to_order_at(size_t fd_size, const char *fs_loc,
->>   	}
->>   }
->>
->> +static unsigned int get_order(unsigned int pages)
->> +{
->> +	unsigned int order = 0;
->> +
->> +	while ((1U << order) < pages)
->> +		order++;
->> +	return order;
->> +}
->> +
->>   int main(int argc, char **argv)
->>   {
->>   	int i;
->> @@ -523,6 +532,7 @@ int main(int argc, char **argv)
->>   	const char *fs_loc;
->>   	bool created_tmp;
->>   	int offset;
->> +	unsigned int max_order;
->>
->>   	ksft_print_header();
->>
->> @@ -534,32 +544,33 @@ int main(int argc, char **argv)
->>   	if (argc > 1)
->>   		optional_xfs_path = argv[1];
->>
->> -	ksft_set_plan(1+8+1+9+9+8*4+2);
+>> diff --git a/tools/testing/selftests/mm/hugepage-mremap.c b/tools/testin=
+g/selftests/mm/hugepage-mremap.c
+>> index c463d1c09c9b..1a0e6dd87578 100644
+>> --- a/tools/testing/selftests/mm/hugepage-mremap.c
+>> +++ b/tools/testing/selftests/mm/hugepage-mremap.c
+>> @@ -65,10 +65,20 @@ static void register_region_with_uffd(char *addr, si=
+ze_t len)
+>>   	struct uffdio_api uffdio_api;
+>>    	/* Create and enable userfaultfd object. */
 >> -
->>   	pagesize = getpagesize();
->>   	pageshift = ffs(pagesize) - 1;
->>   	pmd_pagesize = read_pmd_pagesize();
->>   	if (!pmd_pagesize)
->>   		ksft_exit_fail_msg("Reading PMD pagesize failed\n");
->>
->> +	max_order = get_order(pmd_pagesize/pagesize);
-> pmd_pagesize/pagesize is reused below, a tmp variable would be good.
-
-
-Thank you. I will add it in next version.
-
-
+>>   	uffd =3D syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
+>> -	if (uffd =3D=3D -1)
+>> -		ksft_exit_fail_msg("userfaultfd: %s\n", strerror(errno));
+>> +	if (uffd =3D=3D -1) {
+>> +		switch (errno) {
+>> +		case EPERM:
+>> +			ksft_exit_skip("No userfaultfd permissions, try running as root.\n")=
+;
 >
->> +	ksft_set_plan(1+(max_order-1)+1+max_order+max_order+(max_order-1)*4+2);
->> +
->>   	fd_size = 2 * pmd_pagesize;
->>
->>   	split_pmd_zero_pages();
->>
->> -	for (i = 0; i < 9; i++)
->> +	for (i = 0; i < max_order; i++)
->>   		if (i != 1)
->>   			split_pmd_thp_to_order(i);
->>
->>   	split_pte_mapped_thp();
->> -	for (i = 0; i < 9; i++)
->> +	for (i = 0; i < max_order; i++)
->>   		split_file_backed_thp(i);
->>
->>   	created_tmp = prepare_thp_fs(optional_xfs_path, fs_loc_template,
->>   			&fs_loc);
->> -	for (i = 8; i >= 0; i--)
->> +	for (i = (max_order-1); i >= 0; i--)
->>   		split_thp_in_pagecache_to_order_at(fd_size, fs_loc, i, -1);
->>
->> -	for (i = 0; i < 9; i++)
->> +	for (i = 0; i < max_order; i++)
->>   		for (offset = 0;
->>   		     offset < pmd_pagesize / pagesize;
->>   		     offset += MAX(pmd_pagesize / pagesize / 4, 1 << i))
-> With the change to get_order() proposed by David and ksft_set_plan()
-> simplification, Reviewed-by: Zi Yan <ziy@nvidia.com>
+> "Insufficient permissions, try ..." ?
 >
-> Best Regards,
-> Yan, Zi
+>> +			break;
+>> +		case ENOSYS:
+>> +			ksft_exit_skip("userfaultfd is not supported/not enabled.\n");
+>> +			break;
+>
+> Note that we have in tools/testing/selftests/mm/config
+>
+> 	CONFIG_USERFAULTFD=3Dy
+
+I added the same fix to guard-regions.c since I did not know the config
+file existed.
+
+And from git history, I learnt that I could use the command below to merge
+these config to my local config:
+=E2=80=9C./scripts/kconfig/merge_config.sh .config tools/testing/selftests/=
+xxx/config=E2=80=9D
+
+Reviewed-by: Zi Yan <ziy@nvidia.com>
+
+Best Regards,
+Yan, Zi
 
