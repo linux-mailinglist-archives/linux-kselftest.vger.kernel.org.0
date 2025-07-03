@@ -1,730 +1,272 @@
-Return-Path: <linux-kselftest+bounces-36371-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36372-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38B78AF6928
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 06:43:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 178FDAF6947
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 06:58:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D98834A7E98
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 04:43:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 504E04E053A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 04:57:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79D0F28D8F2;
-	Thu,  3 Jul 2025 04:43:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA11328EBE5;
+	Thu,  3 Jul 2025 04:57:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X6C3JLa2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jq77rba1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56BFE28DB78;
-	Thu,  3 Jul 2025 04:43:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751517825; cv=none; b=Fo8KgTXt+X3/qofzl052zUoS7S6EJpa+2sz9SE3dBdv4vuhyilgZMzmC31Gb95h7Lbtfb/PzYt9fjI5tMX6CAVTU6u1sUrPzYOpTYZGYvNWwH2hZxZZ+oqOyCtWyUd50KrRLE/LIlcfqyxUyd6tPsjtJL53C90xhhbnC8XFsp18=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751517825; c=relaxed/simple;
-	bh=VY+0TYRfcLraGGG9rN1Aven9nMFE0pVch9FY/P/cbM4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YwN/hEa4lUfwctBjqUpKnALUys5VVOTof0awC/4ShaGoVulkCR5goAh+Cdb2iGSocg3RLIto2m/po5G0PjRqEKv5x/WbN94QFU8OwyA40Q9onYDGjkIYyGUDBtv8dPZR73NbbSCwyi/SuzyedYXeaTn82KMAz6XlNjgOiJGjUoE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X6C3JLa2; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-74931666cbcso7381985b3a.0;
-        Wed, 02 Jul 2025 21:43:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751517822; x=1752122622; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WXldkWDEkYnYJNsn5NfZyc2qZO9PdVoeEfpjWJ1ZRqI=;
-        b=X6C3JLa28OdgfaTY1Wls3qcbDSaLZaErFOGGIgQ0+24Tx2qPjVTDHhklEAI+yDRYLl
-         ksYNvYVKX1lzEoib17d+dQ2Aet0VVdXgyww072LZKYe8Ldzdu/bgPuf6hz2ZPDlksNG+
-         qY34vWvtZ+qgwg70adWA0Y2Qx4+aMixYZk6Qzw6WQSZ6/tOdT7EkdqmdtLGdIRx9rdWd
-         nuM3rvRGkbebwd76NkbYfSta8HPh0qYf7b7Y8EJZJDFpUt+b3W5NJgxhnrVGItAgBsAw
-         CGJkeKw7MtLj0VCjjyBXC2WpQKMM8Qy8jxped+Lf/MdJ7uA8v/blR1KTzp4Qia6VDNvt
-         PJoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751517822; x=1752122622;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WXldkWDEkYnYJNsn5NfZyc2qZO9PdVoeEfpjWJ1ZRqI=;
-        b=QsXH2ZmDFXU8rPeWheKrjrNF5QpDx2g8bdOwSc0cUXSI5F5SP+DAYRu+4PEKru3z/h
-         FSoxXM0KYlKmlE/6konrP9WrnEp466EFX8XdU4bhPxMPO/+PuNoshIw3o40fN+0SLpF/
-         EEA+TmtbI8UNyJKvPQ7miHiWTK93Cmc8W5Sw3rEomUhVOnzThGce8jkc0MQ8jcIYIl+A
-         c1UmK4rr42mlZJRzezIcYEeWfX566h+mTpslKi8Bt+mHRjbcsO5PFWvIObtlS3OM4y4R
-         qP5KBRHICEPx+FtWcN0vPkNgIlaHoBaVXaytCoZmHRjoErPo+HfMAEr9nLxEbWJrSORz
-         xQ3g==
-X-Forwarded-Encrypted: i=1; AJvYcCUmfDgBqdKpnWLobi5SJLQ+irPWUp8A19jZ3ogDY27jvah0R1zDUEsYKePYavmiywSibSegCJikbzIXiCLxjBuK@vger.kernel.org, AJvYcCVMEZXVpQwIPngUrtPqN8kcNfrt66hYf0JGHcFwlezlL2qLboCVG7NEHfS/wgZmHI+9tCl5rhsto2qptwg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz45UQWznJ5mJiuVm6gFcwI/gxw5Zk2IspPUNS66+y2WbpBBS0g
-	7UTUEBVslbl9n6YgkG8ROSISjat2YMaj4dyimwyOuG9GxmhXARPl5ZJa
-X-Gm-Gg: ASbGncu97WASpMlXABf/Lz62Df8l4SGZfn/1Viq6q+AJ0oympOe9bpmXeEu0IfrOMtQ
-	YgYwRuwN23UbemRELu7IO+csuNbonZGwDjrt/pqVBBwYk2L0UyItF5X+lW1aJX+EOYNmYvXhJc0
-	tjhkzvMkcrku4e0NM5hmtyINbBJp96byqa6Vy/v1JUAiCwMVfz1pZe9gEfDeRR+siqWQZ1M/7kv
-	DWoDDPwohQsKk8sKxoBfE7OV1RzT7m7uEznQu812VOy/z/l5i0pZ2zapfBsC23V+dI2jPwafZ00
-	zvmeXFsLh2EB6+opL4f2hXpzTKP62LblXUw5RF55L2Kdqkj1c9NmCAVnKqJgBdNY9QBvF/l6pjm
-	23XEfqmE0
-X-Google-Smtp-Source: AGHT+IG0qqitmM6CNkwk6Gi4sKFFcYnUpFEm1e5xWG7LHgYyoeL9bKztS5cWyXYgKNGtMCZIh6nRCg==
-X-Received: by 2002:a05:6a00:1490:b0:742:b3a6:db09 with SMTP id d2e1a72fcca58-74b5126b7ffmr7233321b3a.16.1751517822389;
-        Wed, 02 Jul 2025 21:43:42 -0700 (PDT)
-Received: from DESKTOP-GIED850.localdomain ([114.255.249.132])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74af541cdd1sm15833193b3a.44.2025.07.02.21.43.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Jul 2025 21:43:42 -0700 (PDT)
-From: wang lian <lianux.mm@gmail.com>
-To: david@redhat.com,
-	linux-mm@kvack.org,
-	akpm@linux-foundation.org,
-	lorenzo.stoakes@oracle.com,
-	sj@kernel.org
-Cc: lianux.mm@gmail.com,
-	Liam.Howlett@oracle.com,
-	brauner@kernel.org,
-	gkwang@linx-info.com,
-	jannh@google.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	p1ucky0923@gmail.com,
-	ryncsn@gmail.com,
-	shuah@kernel.org,
-	vbabka@suse.cz,
-	zijing.zhang@proton.me
-Subject: [PATCH v3] selftests/mm: add process_madvise() tests
-Date: Thu,  3 Jul 2025 12:43:26 +0800
-Message-ID: <20250703044326.65061-1-lianux.mm@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01A4E28DF46;
+	Thu,  3 Jul 2025 04:57:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.13
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751518674; cv=fail; b=kPrrDjnXWDTUOYQGaWf0mFIc5EIIKtVXVLmV5EoHq6Wsj4rKEHbdGhvBdQuw3QgzkUnoAhWApYQow4bEXxiogs9evrC9wgZmkgWCdFm+ach8jyhjpMvEtSbKGUgSSxTdsO9nqFxz+Az4B6OrD6HF9MknKFhchRl0JJFZIBQ6IOA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751518674; c=relaxed/simple;
+	bh=Kf6qlfqmYsI5FK8/BIPHya48Slr2/LcvkGx9akd7ExA=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=mzJgA8ARg/u5lX2HoGS3ngvkMJ3oxz+GngUgXaWatdSnPUEb1/YFi9+aJhNJb/0WQsJ/obPwZMiXlhWXTQ70+1dEJVmMWp50XOoqGiOkC80QoF5e0xnGQdn3Y8tfAdOoY6hxolIIFXOW1JoGk07CCuMUezWDkm1YH8r0y0xCGcM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jq77rba1; arc=fail smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751518673; x=1783054673;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=Kf6qlfqmYsI5FK8/BIPHya48Slr2/LcvkGx9akd7ExA=;
+  b=Jq77rba1aDqGcd8eFKLwYqMMnmmvJRiEvswX9n0iK7ffkQDKJUVFvZW9
+   YORCtSx+HVcA5k34W2pukSn/zt98CJE/d2K0Gi5qOFjY5ORs9XeXRrRzf
+   ur8wA7bxqwDONgCKExHZ6Z+Fyg6psMI2slMeA8aPlmmwYni9XVrTt83oz
+   cm0pFjbHXnEoWaApaNgMFeBGveEDEqVzTi6MhrcRe9Xjb/+5+2OfVBvq+
+   Xvw3aXAfpWEt+EpLab2WIx62zsIICB/b2kiren1BHA7CMJxA/n+kNxqVN
+   PDhLP9HHXJ1Ks40Nn7DzIiq/lSvsrYvgMJ+dtLbUip5RuZy5LCVwdJmCT
+   w==;
+X-CSE-ConnectionGUID: ZgATuFIuRWedS/wV62g2lQ==
+X-CSE-MsgGUID: 6qJPa54TT0mzdiEcegoeFQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11482"; a="64879844"
+X-IronPort-AV: E=Sophos;i="6.16,283,1744095600"; 
+   d="scan'208";a="64879844"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2025 21:57:52 -0700
+X-CSE-ConnectionGUID: aE/d+kC6R4WsviDuZ0g1zg==
+X-CSE-MsgGUID: lrsrbHVWQ26TjnPZ9XzECA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,283,1744095600"; 
+   d="scan'208";a="153674195"
+Received: from orsmsx901.amr.corp.intel.com ([10.22.229.23])
+  by orviesa010.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2025 21:57:52 -0700
+Received: from ORSMSX902.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.25; Wed, 2 Jul 2025 21:57:51 -0700
+Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.25 via Frontend Transport; Wed, 2 Jul 2025 21:57:51 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (40.107.236.56)
+ by edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.25; Wed, 2 Jul 2025 21:57:50 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=g8YUcZDrFv/kK36pSoqdl0p1JsY7mMFiWguMfegJ2nvv7LFVLFYz7yM51tbur1WP6+zxZ/6y3vJk5dgG8ojbtermxrS84gieRD8/cd2qULpfB3fO/eHa9sNDJ3Oc3IehMRJlz5PLsiVAItW+ZV7VRnGT5LptxNkOHnvZAgzevy9pOMJJZsyD4rJjdObkWApBq4J8IQ4H8kr8AB+sroif4dLG+YfcTz8PPTg4D7vmKiB5QTlZ8VJKuxO3+eW3DoxGWbz7RdYzFnhb/lkAoVY3LGdP1eU73c/nCHaB+xv2xlKzyZISfxygk5+q6t91lGtWm5+ymQNfPHOGjvFVm0AMQg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Kf6qlfqmYsI5FK8/BIPHya48Slr2/LcvkGx9akd7ExA=;
+ b=NLdzaUnUyAEnR9wOjL/GkCOXr4SleNIXpk7+f7K11hoqRRYsHf8xqIU4I9dyaSG4goTcreMoZYuQLZ9mMalx7BPTlCdIha/boJ7g7+wiQkcJEhb26NHZdwhUOPATLcpMFCJHTUywrAyPuqHQ6oBiOZKvEFZAb/wDc2q2lC0pxJBQcwgL7NHY0u40h2vBvRbEcmeqmvFPq4ljWuuSP+O3DR9aoGyiwVIq5vlfI1m7hXTvjVVNdIwtOMN6lBwWTyvI3LTvSw8R0cF7lfYrvXCzuHJb0WINC+iWv1c1u+VYJzW8CFOxvJUyWpRTWjI2RQ2X8CDq0qcZ+A2d6/5Ze1yK5g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by LV2PR11MB6045.namprd11.prod.outlook.com (2603:10b6:408:17b::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8880.32; Thu, 3 Jul
+ 2025 04:57:35 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::b576:d3bd:c8e0:4bc1]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::b576:d3bd:c8e0:4bc1%4]) with mapi id 15.20.8880.029; Thu, 3 Jul 2025
+ 04:57:34 +0000
+From: "Tian, Kevin" <kevin.tian@intel.com>
+To: Nicolin Chen <nicolinc@nvidia.com>
+CC: "jgg@nvidia.com" <jgg@nvidia.com>, "corbet@lwn.net" <corbet@lwn.net>,
+	"will@kernel.org" <will@kernel.org>, "bagasdotme@gmail.com"
+	<bagasdotme@gmail.com>, "robin.murphy@arm.com" <robin.murphy@arm.com>,
+	"joro@8bytes.org" <joro@8bytes.org>, "thierry.reding@gmail.com"
+	<thierry.reding@gmail.com>, "vdumpa@nvidia.com" <vdumpa@nvidia.com>,
+	"jonathanh@nvidia.com" <jonathanh@nvidia.com>, "shuah@kernel.org"
+	<shuah@kernel.org>, "jsnitsel@redhat.com" <jsnitsel@redhat.com>,
+	"nathan@kernel.org" <nathan@kernel.org>, "peterz@infradead.org"
+	<peterz@infradead.org>, "Liu, Yi L" <yi.l.liu@intel.com>,
+	"mshavit@google.com" <mshavit@google.com>, "praan@google.com"
+	<praan@google.com>, "zhangzekun11@huawei.com" <zhangzekun11@huawei.com>,
+	"iommu@lists.linux.dev" <iommu@lists.linux.dev>, "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-tegra@vger.kernel.org"
+	<linux-tegra@vger.kernel.org>, "linux-kselftest@vger.kernel.org"
+	<linux-kselftest@vger.kernel.org>, "patches@lists.linux.dev"
+	<patches@lists.linux.dev>, "mochs@nvidia.com" <mochs@nvidia.com>,
+	"alok.a.tiwari@oracle.com" <alok.a.tiwari@oracle.com>, "vasant.hegde@amd.com"
+	<vasant.hegde@amd.com>, "dwmw2@infradead.org" <dwmw2@infradead.org>,
+	"baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
+Subject: RE: [PATCH v7 10/28] iommufd/access: Bypass access->ops->unmap for
+ internal use
+Thread-Topic: [PATCH v7 10/28] iommufd/access: Bypass access->ops->unmap for
+ internal use
+Thread-Index: AQHb5tGEgdXsGNB3/0a+rixMD5qoAbQenbIggACvzoCAAJBL0A==
+Date: Thu, 3 Jul 2025 04:57:34 +0000
+Message-ID: <BN9PR11MB5276BED9EC2F89E805F6BA678C43A@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <cover.1750966133.git.nicolinc@nvidia.com>
+ <a2b2a9704d7efff717448cbb76695e83f2fe67c9.1750966133.git.nicolinc@nvidia.com>
+ <BN9PR11MB5276F03CF1E97173E711A5288C40A@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <aGWSkRX4yUuuOVZ8@Asurada-Nvidia>
+In-Reply-To: <aGWSkRX4yUuuOVZ8@Asurada-Nvidia>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|LV2PR11MB6045:EE_
+x-ms-office365-filtering-correlation-id: 0e686636-a42d-490f-c791-08ddb9ee2026
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|366016|1800799024|376014|7416014|38070700018;
+x-microsoft-antispam-message-info: =?utf-8?B?Y24rYTlwOFQyN0xLSnB3RnpkTDVXc3BVOTVlSi84WkdqK3VSMnY4MmtCQzl2?=
+ =?utf-8?B?bHZVOU1XWjJRRWxOQUJkZFNwQ3p4Skh3cFZFQk9WMFdhcUZWa2ZIYWdicC9k?=
+ =?utf-8?B?c2tzMXdtQjdrRlE3L2E0MkdocnpjNHZJZG5hVFp5bWZTUEVjOVg4em1FQTI3?=
+ =?utf-8?B?WmlaZC9DZUUvK3grbXlwbFJ5SWptNzY1SG5uMjdRWlpZZ1NwU0FvdVU3cmU4?=
+ =?utf-8?B?Y0pHUEZ3TVI4N01Pcjl5bnlXQW9TN3hqZC8xOWdDMEJzeE9yQWdQNnI2U2l4?=
+ =?utf-8?B?S2hkU1NsanIxcUJERW02a2s5cXFWa0dXZkxqbGRDcUtPdWttZVpsa3hoVVJS?=
+ =?utf-8?B?NW4rOVVvU1pybVM1L05YRWtPWFgwclV3b0RPb1QxZ2xvUnpvWnBMUWJlMnRn?=
+ =?utf-8?B?NDQwWk9yN0FOaXUzbGJVUmRLNk5qNVRRZUhrWVQzNTBVaWw0K0hDTm9nR1Yz?=
+ =?utf-8?B?azVOTmQrelFpSGtUMU53U1k2aGRURTF4cWcvSEdWU0FHZytBdkZzanZ2Wjh0?=
+ =?utf-8?B?eUZWc25Qa2dCUGJwaGVxcUFKbXBNeVFqenhDNWNBRmxnT2pMK3NSL1Ftd0hM?=
+ =?utf-8?B?YVFXNzloMm0xU2dvVGs5bWFheDJ4TS9nM2lPeGowdWpHWDVpYW44bUhsRjA5?=
+ =?utf-8?B?Zng4aFlOOWF5V2RzajYzdTc1Z0E2cU5WY1RGOVN4UnB5aDMzQ1dCNmVnckRB?=
+ =?utf-8?B?anA5M3haUktDQk5SOEpOanZuY2tkUnBHZ01VRmFZV0pOZE1CMTVTSllMT1Bm?=
+ =?utf-8?B?ZjJvTWNKQ2VucTlUVmZtYTlBdlN3QnE1eFE1NVFLZWs2WWxJSGtVSE5TbjVR?=
+ =?utf-8?B?WjFDMTIzd0xCYkdKM0QyaDR0dysrdG9HUlo3TG13YUhJMUgzaDVxd05ZbHp6?=
+ =?utf-8?B?ZjNDRzJUSzlHWE5mTFcvWUUvWFRudFBpS1JUQ0EwWWdnSG10cHFoTW9CazRi?=
+ =?utf-8?B?UmxTbEdBZnNJSDhLRGY5d1l1eFdqWnh2TG02UHAxVTFrdGVnUVdHTjlGeWRX?=
+ =?utf-8?B?aU9YNTRCdExhenJ3RHhmMkVvK3dYT2JEeGM4TGYrc1g4RDVEczNLY1ZjRHV6?=
+ =?utf-8?B?UGl1UnBkQUVWVS9UY2pxRXpQSXl3ZTNqakcwSHhScS94Zi8ySm9aUnJZWVl5?=
+ =?utf-8?B?c1ZVY21WTW1aVkNGQ0s4V2g5QTN1RTNvQzlhZHBxUW8waldzejJibWVDK2hI?=
+ =?utf-8?B?c2Fyam9DTlgyWFJpbENCYVJ1YjY0ZEowMW1DQ2tsNVpJdnBzSmZwOVBwZVc5?=
+ =?utf-8?B?aUJRdFEvL1cvUVg5T3diOGEvMURVSU8yY3d6SFhmYkE1eGdNWnZZSUZxOElI?=
+ =?utf-8?B?am95cW1Qc2VTVVBpN1J6UUZyZFJxUFRIbk5QekhUem13aDRvVnNGZzhEM0Zx?=
+ =?utf-8?B?cVdSRjNENmtVTkxHT3I5WXoyZ0QyQTlUd010VEZYM05CKzBmWUhJUGRVcCtO?=
+ =?utf-8?B?TU9YeE5TNE5GL2xTOFN0UDBzSXJ2YTRBWUZ6K2hKZWVmZGxLd2F0a3E1blNz?=
+ =?utf-8?B?d1VGcCtJSDVERHBiR3FjR0h1cmF1eGUxWm16Q2pGMVhxek02WUR0bEIxMEs5?=
+ =?utf-8?B?OUE4RGQ0OXdnQjhsZ0E5ZllVY0ZmbUcrckhOcWRvOWo1dVVGTmg5ZFJ3Vmxj?=
+ =?utf-8?B?S0t0MkJHbEo3Vy9HQ0ZqS0N6TmZDanR2WDZTNnk0cmhUa1FZK3MrSVcrRlNw?=
+ =?utf-8?B?enY3cmFIWWswZHkwdURha1l2bDhGSXNMT1FuTUd2RDJCVUJ5TkE3WGNTcmNQ?=
+ =?utf-8?B?dithcU9hcXZvdWZ5WC9FZW1RaTFlRWIrMzhtWGo0bTdDR3RzLzA2ZEUwcWtP?=
+ =?utf-8?B?WldZSDZGM1JVT0RTQnNqdW94LzZ2WjYyczFYZ2owOHZ2eHYxYlByenIwdTZQ?=
+ =?utf-8?B?aGNwb1h5WG1lRlczQ1dmSG91VUxEYXlnTW1WSzZlczVNa2MwVExGUUR1aDJC?=
+ =?utf-8?B?SXdub3V3TGhabGdPNEJNVHdIck44UnhvYnEzOFhPdFM1WC9zTHFMV2xGTE5C?=
+ =?utf-8?B?bmU1SXl6SXZ3PT0=?=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dkVqdDc0Z3lPeWo2dUNza0V0Z1NDd2hubmRkVUl0NGhQWXp3aEJ3NWt6eWpH?=
+ =?utf-8?B?OGF0VW1UM1QybUpXSG11dTRHdUtTTVZ0MW9HemQ3bGJ5RTlBTVNQcm45Y2Zt?=
+ =?utf-8?B?R1ZqaTlUcmJjbnlSeGJtUmIvdnlYSmNqbGltS2JzM0oxaHErY0h0Vmo4K1Ir?=
+ =?utf-8?B?SHZCeVE2S3lmRFFxTTNhWFhBWVo2d2JqTUVFbk9vdHB5UGNMUmJTTXBxQVpG?=
+ =?utf-8?B?eG9uV0Izc2RaZnA3dWc5eG1BZE9MeitsWUZXOVZDL0ovcW1ZYmR3V0NRT2RW?=
+ =?utf-8?B?cDkwb0Q5WXhQWUQ5UDFaNitCNVhYc1l5V2lSUUpxOGFqUlpoM2FmcHE0NG84?=
+ =?utf-8?B?UWl0T0dSemlMNGNKVUVDVmRWZFJaVHRNajYrdzFTNklUQmcvdHFsdSs2bVEv?=
+ =?utf-8?B?aHlyQU9UMzE2VHl1V0FmQ21kaHhjOGs4QnNRN3RMaWdnbGhYUDVBSzBiQnZ0?=
+ =?utf-8?B?THZ1U25zMjluWUFWL1RCbXlkUVBDNUhWVWpzNlAyY1NsLzlTeHZ2ZWlaY2s3?=
+ =?utf-8?B?OTBhQUdKREVGMEhlMUxKTlpsa1gxOG9lRFlqUUg5VXVRdk5LRE1aK3R1QzAr?=
+ =?utf-8?B?eDlFdEQzZkJPK3dUbXFsOEpFR2N2Z2ZiSTVUWGZPeHJDdkJHakhReEZ5L3Nt?=
+ =?utf-8?B?QlUyMkYxbFJlYVQzRXM5U3lBYkRUSXNkd2xDd0dxQXJwMlF4R2V6RlVVYXBR?=
+ =?utf-8?B?Nm9meHdOMThKMlgweEVRcmFobnlNekg0clpEYlNsbGhVRjdObGlFTGdBYUxY?=
+ =?utf-8?B?SkJWbzQ2T2VHalRWbXhCNVF6TlUxWnFDdm0vQzM1T3ZRTFZmR3FNUEZ2OG5j?=
+ =?utf-8?B?UWhDQ3c1SDRiV1FQcFFFV1pPaEFnYXVrbmR4Unh4aWhUSDd4dk5GY3hSanp1?=
+ =?utf-8?B?c3lqSk5LNDJvZFY2Mk1YVEx2bXVSY3dhZWtWdkRDVHlrUXY2dDQrWjcrZ1o2?=
+ =?utf-8?B?Mm5oQmFVbS9odTJmSnd3dGhrbVZ0SHhkeXV1bHBod3g5U2VyeDY2ZFNHUGJ1?=
+ =?utf-8?B?WTM2cXVjMTNYUXJ0TjN1eVVNZzRtcysxS3g4MldVSmFMc2tqMmZUTWN2SXRF?=
+ =?utf-8?B?VGxkc1pjbVZBc1BxRDMvRzFqTHgzbm9pOEdFWkxCeHpPSC94bkV3cGtDNGhl?=
+ =?utf-8?B?WHVFRy9TazNoWnlIVnZVcWxKMHdyM0ZHL3lhN0liaGc2eDBkQTc5SHMySUFj?=
+ =?utf-8?B?YzA2ZUtJeWpRL2wvWnBBbDduamhqOGJuMXlwNGxLRGFqd3JUSnJVamt2S2Rr?=
+ =?utf-8?B?ZVpteXJlaVlhNzFGZzhEbkg1d09SU1JoWXdPZTQ0UzdxdEZiVDErZnc2aGZh?=
+ =?utf-8?B?U2F2Vzgzbk9UQWZoUWxjd0R0cXhabjdaVStYNFR1MHRnWFVUelZzekpnV1g3?=
+ =?utf-8?B?MDVtcTQyVXRaUkpLL0ZPMXQ5RnRlNGg3RUl6RTRuWFBQSVh6RDF4N2hleith?=
+ =?utf-8?B?TTZDYm1Ecm5BOWlIWCtMNE1OTTlGcXY5eFZUaFVhVUVPSmlCTllsRDVKcDVj?=
+ =?utf-8?B?U09YRUpDb0dRN3l5ak5oUktpakd5QllnQ1ByQzNlbzZwWm81SDc4S0dEMFNn?=
+ =?utf-8?B?NE5qMDB1YlRTYzRWSnYxbHhWZ3hqVTZuWFAzZ2xjRGl0eUgvdk1XR0prMkpV?=
+ =?utf-8?B?V3AvU04wYlNLbXFOak1iN0pQNml4WUsxR0xHY1hSMXU5dm1QTm5IdHV1U2F4?=
+ =?utf-8?B?MVd5S1VvanBMSm9vVCtEUW92akV3ZE1Wb0ZSdFVHd004UzZhcU9rVEVOc3I3?=
+ =?utf-8?B?bytYRDRJcXlyVDQ2VkZyNU80ZVpsVXlxQzNRdHhWVG41WklrVjNMSzEzSlRT?=
+ =?utf-8?B?NkJheUNvSVhTQTFsUDZHTGxMWFVBdlVlNFRHNFlaUHFaUkxOR0ZEOFczNWxB?=
+ =?utf-8?B?WjhYQlJXc3FZcGo2OThGTWQ1dThsakJJMDNYY2F5Uzl6S3A2Q0FkS2hsMXE5?=
+ =?utf-8?B?NFVZM3lFT2dnVlJRNVBsdXVxdkNOc2tiQUlzWTBhL3Zjb2R5VlVTZnlyek8v?=
+ =?utf-8?B?am5MaHV6TWRSaktLZ1hwcWIyWkI4SnJDejFLbEdlbmg1OGU0dkRiNEM4VWRR?=
+ =?utf-8?B?QnR2Y2Z4OXg2d0xmM0U2VFB3anFoRGNaZ2VCTG1HaTZOa0VHY3RFZ2ZYWXY4?=
+ =?utf-8?Q?Xpj3tbeOW1L+uuHD/9GVZy1xt?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0e686636-a42d-490f-c791-08ddb9ee2026
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jul 2025 04:57:34.8750
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 7lXNx3aNRLitXrjiOSa3opdAKSIcjMHFDFkG0ikkU1ePpgmU5MueaheHLXJL1D1m6v15h0jTt2ECJxN8f1mDKQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR11MB6045
+X-OriginatorOrg: intel.com
 
-Add tests for process_madvise(), focusing on verifying behavior under
-various conditions including valid usage and error cases.
-
-Signed-off-by: wang lian <lianux.mm@gmail.com>
-Suggested-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Suggested-by: David Hildenbrand <david@redhat.com>
-Acked-by: SeongJae Park <sj@kernel.org>
----
-
-Changelog v3:
-- Rebased onto the latest mm-stable branch to ensure clean application.
-- Refactor common signal handling logic into vm_util to reduce code duplication.
-- Improve test robustness and diagnostics based on community feedback.
-- Address minor code style and script corrections.
-
-Changelog v2:
-- Drop MADV_DONTNEED tests based on feedback.
-- Focus solely on process_madvise() syscall.
-- Improve error handling and structure.
-- Add future-proof flag test.
-- Style and comment cleanups.
-
- tools/testing/selftests/mm/.gitignore      |   1 +
- tools/testing/selftests/mm/Makefile        |   1 +
- tools/testing/selftests/mm/guard-regions.c |  51 ---
- tools/testing/selftests/mm/process_madv.c  | 358 +++++++++++++++++++++
- tools/testing/selftests/mm/run_vmtests.sh  |   5 +
- tools/testing/selftests/mm/vm_util.c       |  35 ++
- tools/testing/selftests/mm/vm_util.h       |  22 ++
- 7 files changed, 422 insertions(+), 51 deletions(-)
- create mode 100644 tools/testing/selftests/mm/process_madv.c
-
-diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
-index 824266982aa3..95bd9c6ead9e 100644
---- a/tools/testing/selftests/mm/.gitignore
-+++ b/tools/testing/selftests/mm/.gitignore
-@@ -25,6 +25,7 @@ pfnmap
- protection_keys
- protection_keys_32
- protection_keys_64
-+process_madv
- madv_populate
- uffd-stress
- uffd-unit-tests
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index ae6f994d3add..d13b3cef2a2b 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -85,6 +85,7 @@ TEST_GEN_FILES += mseal_test
- TEST_GEN_FILES += on-fault-limit
- TEST_GEN_FILES += pagemap_ioctl
- TEST_GEN_FILES += pfnmap
-+TEST_GEN_FILES += process_madv
- TEST_GEN_FILES += thuge-gen
- TEST_GEN_FILES += transhuge-stress
- TEST_GEN_FILES += uffd-stress
-diff --git a/tools/testing/selftests/mm/guard-regions.c b/tools/testing/selftests/mm/guard-regions.c
-index 93af3d3760f9..4cf101b0fe5e 100644
---- a/tools/testing/selftests/mm/guard-regions.c
-+++ b/tools/testing/selftests/mm/guard-regions.c
-@@ -9,8 +9,6 @@
- #include <linux/limits.h>
- #include <linux/userfaultfd.h>
- #include <linux/fs.h>
--#include <setjmp.h>
--#include <signal.h>
- #include <stdbool.h>
- #include <stdio.h>
- #include <stdlib.h>
-@@ -24,24 +22,6 @@
- 
- #include "../pidfd/pidfd.h"
- 
--/*
-- * Ignore the checkpatch warning, as per the C99 standard, section 7.14.1.1:
-- *
-- * "If the signal occurs other than as the result of calling the abort or raise
-- *  function, the behavior is undefined if the signal handler refers to any
-- *  object with static storage duration other than by assigning a value to an
-- *  object declared as volatile sig_atomic_t"
-- */
--static volatile sig_atomic_t signal_jump_set;
--static sigjmp_buf signal_jmp_buf;
--
--/*
-- * Ignore the checkpatch warning, we must read from x but don't want to do
-- * anything with it in order to trigger a read page fault. We therefore must use
-- * volatile to stop the compiler from optimising this away.
-- */
--#define FORCE_READ(x) (*(volatile typeof(x) *)x)
--
- /*
-  * How is the test backing the mapping being tested?
-  */
-@@ -120,14 +100,6 @@ static int userfaultfd(int flags)
- 	return syscall(SYS_userfaultfd, flags);
- }
- 
--static void handle_fatal(int c)
--{
--	if (!signal_jump_set)
--		return;
--
--	siglongjmp(signal_jmp_buf, c);
--}
--
- static ssize_t sys_process_madvise(int pidfd, const struct iovec *iovec,
- 				   size_t n, int advice, unsigned int flags)
- {
-@@ -180,29 +152,6 @@ static bool try_read_write_buf(char *ptr)
- 	return try_read_buf(ptr) && try_write_buf(ptr);
- }
- 
--static void setup_sighandler(void)
--{
--	struct sigaction act = {
--		.sa_handler = &handle_fatal,
--		.sa_flags = SA_NODEFER,
--	};
--
--	sigemptyset(&act.sa_mask);
--	if (sigaction(SIGSEGV, &act, NULL))
--		ksft_exit_fail_perror("sigaction");
--}
--
--static void teardown_sighandler(void)
--{
--	struct sigaction act = {
--		.sa_handler = SIG_DFL,
--		.sa_flags = SA_NODEFER,
--	};
--
--	sigemptyset(&act.sa_mask);
--	sigaction(SIGSEGV, &act, NULL);
--}
--
- static int open_file(const char *prefix, char *path)
- {
- 	int fd;
-diff --git a/tools/testing/selftests/mm/process_madv.c b/tools/testing/selftests/mm/process_madv.c
-new file mode 100644
-index 000000000000..3d26105b4781
---- /dev/null
-+++ b/tools/testing/selftests/mm/process_madv.c
-@@ -0,0 +1,358 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+
-+#define _GNU_SOURCE
-+#include "../kselftest_harness.h"
-+#include <errno.h>
-+#include <setjmp.h>
-+#include <signal.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/mman.h>
-+#include <sys/syscall.h>
-+#include <unistd.h>
-+#include <sched.h>
-+#include <sys/pidfd.h>
-+#include "vm_util.h"
-+
-+#include "../pidfd/pidfd.h"
-+
-+FIXTURE(process_madvise)
-+{
-+	int pidfd;
-+	int flag;
-+};
-+
-+FIXTURE_SETUP(process_madvise)
-+{
-+	self->pidfd = PIDFD_SELF;
-+	self->flag = 0;
-+	setup_sighandler();
-+};
-+
-+FIXTURE_TEARDOWN(process_madvise)
-+{
-+	teardown_sighandler();
-+}
-+
-+static ssize_t sys_process_madvise(int pidfd, const struct iovec *iovec,
-+				   size_t vlen, int advice, unsigned int flags)
-+{
-+	return syscall(__NR_process_madvise, pidfd, iovec, vlen, advice, flags);
-+}
-+
-+/*
-+ * Enable our signal catcher and try to read the specified buffer. The
-+ * return value indicates whether the read succeeds without a fatal
-+ * signal.
-+ */
-+static bool try_read_buf(char *ptr)
-+{
-+	bool failed;
-+
-+	/* Tell signal handler to jump back here on fatal signal. */
-+	signal_jump_set = true;
-+	/* If a fatal signal arose, we will jump back here and failed is set. */
-+	failed = sigsetjmp(signal_jmp_buf, 0) != 0;
-+
-+	if (!failed)
-+		FORCE_READ(ptr);
-+
-+	signal_jump_set = false;
-+	return !failed;
-+}
-+
-+TEST_F(process_madvise, basic)
-+{
-+	const unsigned long pagesize = (unsigned long)sysconf(_SC_PAGESIZE);
-+	const int madvise_pages = 4;
-+	char *map;
-+	ssize_t ret;
-+	struct iovec vec[madvise_pages];
-+
-+	/*
-+	 * Create a single large mapping. We will pick pages from this
-+	 * mapping to advise on. This ensures we test non-contiguous iovecs.
-+	 */
-+	map = mmap(NULL, pagesize * 10, PROT_READ | PROT_WRITE,
-+		   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	if (map == MAP_FAILED)
-+		ksft_exit_skip("mmap failed, not enough memory.\n");
-+
-+	/* Fill the entire region with a known pattern. */
-+	memset(map, 'A', pagesize * 10);
-+
-+	/*
-+	 * Setup the iovec to point to 4 non-contiguous pages
-+	 * within the mapping.
-+	 */
-+	vec[0].iov_base = &map[0 * pagesize];
-+	vec[0].iov_len = pagesize;
-+	vec[1].iov_base = &map[3 * pagesize];
-+	vec[1].iov_len = pagesize;
-+	vec[2].iov_base = &map[5 * pagesize];
-+	vec[2].iov_len = pagesize;
-+	vec[3].iov_base = &map[8 * pagesize];
-+	vec[3].iov_len = pagesize;
-+
-+	ret = sys_process_madvise(PIDFD_SELF, vec, madvise_pages, MADV_DONTNEED,
-+				  0);
-+	if (ret == -1 && errno == EPERM)
-+		ksft_exit_skip(
-+			"process_madvise() unsupported or permission denied, try running as root.\n");
-+	else if (errno == EINVAL)
-+		ksft_exit_skip(
-+			"process_madvise() unsupported or parameter invalid, please check arguments.\n");
-+
-+	/* The call should succeed and report the total bytes processed. */
-+	ASSERT_EQ(ret, madvise_pages * pagesize);
-+
-+	/* Check that advised pages are now zero. */
-+	for (int i = 0; i < madvise_pages; i++) {
-+		char *advised_page = (char *)vec[i].iov_base;
-+
-+		/* Access should be successful (kernel provides a new page). */
-+		ASSERT_TRUE(try_read_buf(advised_page));
-+		/* Content must be 0, not 'A'. */
-+		ASSERT_EQ(*advised_page, 0);
-+	}
-+
-+	/* Check that an un-advised page in between is still 'A'. */
-+	char *unadvised_page = &map[1 * pagesize];
-+
-+	ASSERT_TRUE(try_read_buf(unadvised_page));
-+	for (int i = 0; i < pagesize; i++)
-+		ASSERT_EQ(unadvised_page[i], 'A');
-+
-+	/* Cleanup. */
-+	ASSERT_EQ(munmap(map, pagesize * 10), 0);
-+}
-+
-+static long get_smaps_anon_huge_pages(pid_t pid, void *addr)
-+{
-+	char smaps_path[64];
-+	char *line = NULL;
-+	unsigned long start, end;
-+	long anon_huge_kb;
-+	size_t len;
-+	FILE *f;
-+	bool in_vma;
-+
-+	in_vma = false;
-+	snprintf(smaps_path, sizeof(smaps_path), "/proc/%d/smaps", pid);
-+	f = fopen(smaps_path, "r");
-+	if (!f)
-+		return -1;
-+
-+	while (getline(&line, &len, f) != -1) {
-+		/* Check if the line describes a VMA range */
-+		if (sscanf(line, "%lx-%lx", &start, &end) == 2) {
-+			if ((unsigned long)addr >= start &&
-+			    (unsigned long)addr < end)
-+				in_vma = true;
-+			else
-+				in_vma = false;
-+			continue;
-+		}
-+
-+		/* If we are in the correct VMA, look for the AnonHugePages field */
-+		if (in_vma &&
-+		    sscanf(line, "AnonHugePages: %ld kB", &anon_huge_kb) == 1)
-+			break;
-+	}
-+
-+	free(line);
-+	fclose(f);
-+
-+	return (anon_huge_kb > 0) ? (anon_huge_kb * 1024) : 0;
-+}
-+
-+/**
-+ * TEST_F(process_madvise, remote_collapse)
-+ *
-+ * This test deterministically validates process_madvise() with MADV_COLLAPSE
-+ * on a remote process, other advices are difficult to verify reliably.
-+ *
-+ * The test verifies that a memory region in a child process, initially
-+ * backed by small pages, can be collapsed into a Transparent Huge Page by a
-+ * request from the parent. The result is verified by parsing the child's
-+ * /proc/<pid>/smaps file.
-+ */
-+TEST_F(process_madvise, remote_collapse)
-+{
-+	const unsigned long pagesize = (unsigned long)sysconf(_SC_PAGESIZE);
-+	pid_t child_pid;
-+	int pidfd;
-+	long huge_page_size;
-+	int pipe_info[2];
-+	ssize_t ret;
-+	struct iovec vec;
-+
-+	struct child_info {
-+		pid_t pid;
-+		void *map_addr;
-+	} info;
-+
-+	huge_page_size = default_huge_page_size();
-+	if (huge_page_size <= 0)
-+		ksft_exit_skip("Could not determine a valid huge page size.\n");
-+
-+	ASSERT_EQ(pipe(pipe_info), 0);
-+
-+	child_pid = fork();
-+	ASSERT_NE(child_pid, -1);
-+
-+	if (child_pid == 0) {
-+		char *map;
-+		size_t map_size = 2 * huge_page_size;
-+
-+		close(pipe_info[0]);
-+
-+		map = mmap(NULL, map_size, PROT_READ | PROT_WRITE,
-+			   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+		ASSERT_NE(map, MAP_FAILED);
-+
-+		/* Fault in as small pages */
-+		for (size_t i = 0; i < map_size; i += pagesize)
-+			map[i] = 'A';
-+
-+		/* Send info and pause */
-+		info.pid = getpid();
-+		info.map_addr = map;
-+		ret = write(pipe_info[1], &info, sizeof(info));
-+		ASSERT_EQ(ret, sizeof(info));
-+		close(pipe_info[1]);
-+
-+		pause();
-+		exit(0);
-+	}
-+
-+	close(pipe_info[1]);
-+
-+	/* Receive child info */
-+	ret = read(pipe_info[0], &info, sizeof(info));
-+	if (ret <= 0) {
-+		waitpid(child_pid, NULL, 0);
-+		ksft_exit_skip("Failed to read child info from pipe.\n");
-+	}
-+	ASSERT_EQ(ret, sizeof(info));
-+	close(pipe_info[0]);
-+	child_pid = info.pid;
-+
-+	pidfd = pidfd_open(child_pid, 0);
-+	ASSERT_GE(pidfd, 0);
-+
-+	/* Baseline Check from Parent's perspective */
-+	ASSERT_EQ(get_smaps_anon_huge_pages(child_pid, info.map_addr), 0);
-+
-+	vec.iov_base = info.map_addr;
-+	vec.iov_len = huge_page_size;
-+	ret = sys_process_madvise(pidfd, &vec, 1, MADV_COLLAPSE, 0);
-+	if (ret == -1) {
-+		if (errno == EINVAL)
-+			ksft_exit_skip(
-+				"PROCESS_MADV_ADVISE is not supported.\n");
-+		else if (errno == EPERM)
-+			ksft_exit_skip(
-+				"No process_madvise() permissions, try running as root.\n");
-+		goto cleanup;
-+	}
-+	ASSERT_EQ(ret, huge_page_size);
-+
-+	ASSERT_EQ(get_smaps_anon_huge_pages(child_pid, info.map_addr),
-+		  huge_page_size);
-+
-+	ksft_test_result_pass(
-+		"MADV_COLLAPSE successfully verified via smaps.\n");
-+
-+cleanup:
-+	/* Cleanup */
-+	kill(child_pid, SIGKILL);
-+	waitpid(child_pid, NULL, 0);
-+	if (pidfd >= 0)
-+		close(pidfd);
-+}
-+
-+/*
-+ * Test process_madvise() with various invalid pidfds to ensure correct error
-+ * handling. This includes negative fds, non-pidfd fds, and pidfds for
-+ * processes that no longer exist.
-+ */
-+TEST_F(process_madvise, invalid_pidfd)
-+{
-+	struct iovec vec;
-+	pid_t child_pid;
-+	ssize_t ret;
-+	int pidfd;
-+
-+	vec.iov_base = (void *)0x1234;
-+	vec.iov_len = 4096;
-+
-+	/* Using an invalid fd number (-1) should fail with EBADF. */
-+	ret = sys_process_madvise(-1, &vec, 1, MADV_DONTNEED, 0);
-+	ASSERT_EQ(ret, -1);
-+	ASSERT_EQ(errno, EBADF);
-+
-+	/*
-+	 * Using a valid fd that is not a pidfd (e.g. stdin) should fail
-+	 * with EBADF.
-+	 */
-+	ret = sys_process_madvise(STDIN_FILENO, &vec, 1, MADV_DONTNEED, 0);
-+	ASSERT_EQ(ret, -1);
-+	ASSERT_EQ(errno, EBADF);
-+
-+	/*
-+	 * Using a pidfd for a process that has already exited should fail
-+	 * with ESRCH.
-+	 */
-+	child_pid = fork();
-+	ASSERT_NE(child_pid, -1);
-+
-+	if (child_pid == 0)
-+		exit(0);
-+
-+	pidfd = pidfd_open(child_pid, 0);
-+	ASSERT_GE(pidfd, 0);
-+
-+	/* Wait for the child to ensure it has terminated. */
-+	waitpid(child_pid, NULL, 0);
-+
-+	ret = sys_process_madvise(pidfd, &vec, 1, MADV_DONTNEED, 0);
-+	ASSERT_EQ(ret, -1);
-+	ASSERT_EQ(errno, ESRCH);
-+	close(pidfd);
-+}
-+
-+/*
-+ * Test process_madvise() with an invalid flag value. Now we only support flag=0
-+ * future we will use it support sync so reserve this test.
-+ */
-+TEST_F(process_madvise, flag)
-+{
-+	const unsigned long pagesize = (unsigned long)sysconf(_SC_PAGESIZE);
-+	unsigned int invalid_flag;
-+	struct iovec vec;
-+	char *map;
-+	ssize_t ret;
-+
-+	map = mmap(NULL, pagesize, PROT_READ, MAP_PRIVATE | MAP_ANONYMOUS, -1,
-+		   0);
-+	if (map == MAP_FAILED)
-+		ksft_exit_skip("mmap failed, not enough memory.\n");
-+
-+	vec.iov_base = map;
-+	vec.iov_len = pagesize;
-+
-+	invalid_flag = 0x80000000;
-+
-+	ret = sys_process_madvise(PIDFD_SELF, &vec, 1, MADV_DONTNEED,
-+				  invalid_flag);
-+	ASSERT_EQ(ret, -1);
-+	ASSERT_EQ(errno, EINVAL);
-+
-+	/* Cleanup. */
-+	ASSERT_EQ(munmap(map, pagesize), 0);
-+}
-+
-+TEST_HARNESS_MAIN
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index dddd1dd8af14..84fb51902c3e 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -65,6 +65,8 @@ separated by spaces:
- 	test pagemap_scan IOCTL
- - pfnmap
- 	tests for VM_PFNMAP handling
-+- process_madv
-+	test process_madvise
- - cow
- 	test copy-on-write semantics
- - thp
-@@ -422,6 +424,9 @@ CATEGORY="hmm" run_test bash ./test_hmm.sh smoke
- # MADV_GUARD_INSTALL and MADV_GUARD_REMOVE tests
- CATEGORY="madv_guard" run_test ./guard-regions
- 
-+# PROCESS_MADVISE TEST
-+CATEGORY="process_madv" run_test ./process_madv
-+
- # MADV_POPULATE_READ and MADV_POPULATE_WRITE tests
- CATEGORY="madv_populate" run_test ./madv_populate
- 
-diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-index 5492e3f784df..85b209260e5a 100644
---- a/tools/testing/selftests/mm/vm_util.c
-+++ b/tools/testing/selftests/mm/vm_util.c
-@@ -20,6 +20,9 @@
- unsigned int __page_size;
- unsigned int __page_shift;
- 
-+volatile sig_atomic_t signal_jump_set;
-+sigjmp_buf signal_jmp_buf;
-+
- uint64_t pagemap_get_entry(int fd, char *start)
- {
- 	const unsigned long pfn = (unsigned long)start / getpagesize();
-@@ -524,3 +527,35 @@ int read_sysfs(const char *file_path, unsigned long *val)
- 
- 	return 0;
- }
-+
-+static void handle_fatal(int c)
-+{
-+	if (!signal_jump_set)
-+		return;
-+
-+	siglongjmp(signal_jmp_buf, c);
-+}
-+
-+void setup_sighandler(void)
-+{
-+	struct sigaction act = {
-+		.sa_handler = &handle_fatal,
-+		.sa_flags = SA_NODEFER,
-+	};
-+
-+	sigemptyset(&act.sa_mask);
-+	if (sigaction(SIGSEGV, &act, NULL))
-+		ksft_exit_fail_perror("sigaction in setup");
-+}
-+
-+void teardown_sighandler(void)
-+{
-+	struct sigaction act = {
-+		.sa_handler = SIG_DFL,
-+		.sa_flags = SA_NODEFER,
-+	};
-+
-+	sigemptyset(&act.sa_mask);
-+	if (sigaction(SIGSEGV, &act, NULL))
-+		ksft_exit_fail_perror("sigaction in teardown");
-+}
-diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-index b8136d12a0f8..6bc4177a2807 100644
---- a/tools/testing/selftests/mm/vm_util.h
-+++ b/tools/testing/selftests/mm/vm_util.h
-@@ -8,6 +8,8 @@
- #include <unistd.h> /* _SC_PAGESIZE */
- #include "../kselftest.h"
- #include <linux/fs.h>
-+#include <setjmp.h>
-+#include <signal.h>
- 
- #define BIT_ULL(nr)                   (1ULL << (nr))
- #define PM_SOFT_DIRTY                 BIT_ULL(55)
-@@ -61,6 +63,24 @@ static inline void skip_test_dodgy_fs(const char *op_name)
- 	ksft_test_result_skip("%s failed with ENOENT. Filesystem might be buggy (9pfs?)\n", op_name);
- }
- 
-+/*
-+ * Ignore the checkpatch warning, as per the C99 standard, section 7.14.1.1:
-+ *
-+ * "If the signal occurs other than as the result of calling the abort or raise
-+ *  function, the behavior is undefined if the signal handler refers to any
-+ *  object with static storage duration other than by assigning a value to an
-+ *  object declared as volatile sig_atomic_t"
-+ */
-+extern volatile sig_atomic_t signal_jump_set;
-+extern sigjmp_buf signal_jmp_buf;
-+
-+/*
-+ * Ignore the checkpatch warning, we must read from x but don't want to do
-+ * anything with it in order to trigger a read page fault. We therefore must use
-+ * volatile to stop the compiler from optimising this away.
-+ */
-+#define FORCE_READ(x) (*(volatile typeof(x) *)x)
-+
- uint64_t pagemap_get_entry(int fd, char *start);
- bool pagemap_is_softdirty(int fd, char *start);
- bool pagemap_is_swapped(int fd, char *start);
-@@ -90,6 +110,8 @@ bool find_vma_procmap(struct procmap_fd *procmap, void *address);
- int close_procmap(struct procmap_fd *procmap);
- int write_sysfs(const char *file_path, unsigned long val);
- int read_sysfs(const char *file_path, unsigned long *val);
-+void setup_sighandler(void);
-+void teardown_sighandler(void);
- 
- static inline int open_self_procmap(struct procmap_fd *procmap_out)
- {
--- 
-2.43.0
-
+PiBGcm9tOiBOaWNvbGluIENoZW4gPG5pY29saW5jQG52aWRpYS5jb20+DQo+IFNlbnQ6IFRodXJz
+ZGF5LCBKdWx5IDMsIDIwMjUgNDoxMiBBTQ0KPiANCj4gT24gV2VkLCBKdWwgMDIsIDIwMjUgYXQg
+MDk6NDU6MjZBTSArMDAwMCwgVGlhbiwgS2V2aW4gd3JvdGU6DQo+ID4gPiBGcm9tOiBOaWNvbGlu
+IENoZW4gPG5pY29saW5jQG52aWRpYS5jb20+DQo+ID4gPiBTZW50OiBGcmlkYXksIEp1bmUgMjcs
+IDIwMjUgMzozNSBBTQ0KPiA+ID4NCj4gPiA+ICtpbnQgaW9tbXVmZF9hY2Nlc3Nfbm90aWZ5X3Vu
+bWFwKHN0cnVjdCBpb19wYWdldGFibGUgKmlvcHQsIHVuc2lnbmVkDQo+IGxvbmcNCj4gPiA+IGlv
+dmEsDQo+ID4gPiArCQkJCXVuc2lnbmVkIGxvbmcgbGVuZ3RoKQ0KPiA+ID4gIHsNCj4gPiA+ICAJ
+c3RydWN0IGlvbW11ZmRfaW9hcyAqaW9hcyA9DQo+ID4gPiAgCQljb250YWluZXJfb2YoaW9wdCwg
+c3RydWN0IGlvbW11ZmRfaW9hcywgaW9wdCk7DQo+ID4gPiAgCXN0cnVjdCBpb21tdWZkX2FjY2Vz
+cyAqYWNjZXNzOw0KPiA+ID4gIAl1bnNpZ25lZCBsb25nIGluZGV4Ow0KPiA+ID4gKwlpbnQgcmV0
+ID0gMDsNCj4gPiA+DQo+ID4gPiAgCXhhX2xvY2soJmlvYXMtPmlvcHQuYWNjZXNzX2xpc3QpOw0K
+PiA+ID4gKwkvKiBCeXBhc3MgYW55IHVubWFwIGlmIHRoZXJlIGlzIGFuIGludGVybmFsIGFjY2Vz
+cyAqLw0KPiA+ID4gKwl4YV9mb3JfZWFjaCgmaW9hcy0+aW9wdC5hY2Nlc3NfbGlzdCwgaW5kZXgs
+IGFjY2Vzcykgew0KPiA+ID4gKwkJaWYgKGlvbW11ZmRfYWNjZXNzX2lzX2ludGVybmFsKGFjY2Vz
+cykpIHsNCj4gPiA+ICsJCQlyZXQgPSAtRUJVU1k7DQo+ID4gPiArCQkJZ290byB1bmxvY2s7DQo+
+ID4gPiArCQl9DQo+ID4gPiArCX0NCj4gPiA+ICsNCj4gPg0KPiA+IGhtbSBhbGwgdGhvc2UgY2hl
+Y2tzIGFyZSBwZXIgaW9wdC4gQ291bGQgZG8gb25lLW9mZiBjaGVjayBpbg0KPiA+IGlvcHRfdW5t
+YXBfaW92YV9yYW5nZSgpIGFuZCBzdG9yZSB0aGUgcmVzdWx0IGluIGEgbG9jYWwgZmxhZy4NCj4g
+Pg0KPiA+IFRoZW4gdXNlIHRoYXQgZmxhZyB0byBkZWNpZGUgd2hldGhlciB0byByZXR1cm4gLUVC
+VVNZIGlmDQo+ID4gYXJlYS0+bnVtX2FjY2Vzc2VzIGlzIHRydWUgaW4gdGhlIGxvb3AuDQo+IA0K
+PiBJIGRvbid0IHF1aXRlIGZvbGxvdyB0aGlzLi4uDQo+IA0KPiBEbyB5b3Ugc3VnZ2VzdCB0byBt
+b3ZlIHRoaXMgeGFfZm9yX2VhY2ggdG8gaW9wdF91bm1hcF9pb3ZhX3JhbmdlPw0KDQp5ZXMNCg0K
+PiANCj4gV2hhdCdzIHRoYXQgbG9jYWwgZmxhZyB1c2VkIGZvcj8NCj4gDQoNCkkgbWVhbnQgc29t
+ZXRoaW5nIGxpa2UgYmVsb3c6DQoNCmlvcHRfdW5tYXBfaW92YV9yYW5nZSgpDQp7DQoJYm9vbCBp
+bnRlcm5hbF9hY2Nlc3MgPSBmYWxzZTsNCg0KCWRvd25fcmVhZCgmaW9wdC0+ZG9tYWluc19yd3Nl
+bSk7DQoJZG93bl93cml0ZSgmaW9wdC0+aW92YV9yd3NlbSk7DQoJLyogQnlwYXNzIGFueSB1bm1h
+cCBpZiB0aGVyZSBpcyBhbiBpbnRlcm5hbCBhY2Nlc3MgKi8NCgl4YV9mb3JfZWFjaCgmaW9wdC0+
+YWNjZXNzX2xpc3QsIGluZGV4LCBhY2Nlc3MpIHsNCgkJaWYgKGlvbW11ZmRfYWNjZXNzX2lzX2lu
+dGVybmFsKGFjY2VzcykpIHsNCgkJCWludGVybmFsX2FjY2VzcyA9IHRydWU7DQoJCQlicmVhazsN
+CgkJfQ0KCX0NCg0KCXdoaWxlICgoYXJlYSA9IGlvcHRfYXJlYV9pdGVyX2ZpcnN0KGlvcHQsIHN0
+YXJ0LCBsYXN0KSkpIHsNCgkJaWYgKGFyZWEtPm51bV9hY2Nlc3MpIHsNCgkJCWlmIChpbnRlcm5h
+bF9hY2Nlc3MpIHsNCgkJCQlyYyA9IC1FQlVTWTsNCgkJCQlnb3RvIG91dF91bmxvY2tfaW92YTsN
+CgkJCX0NCgkJCXVwX3dyaXRlKCZpb3B0LT5pb3ZhX3J3c2VtKTsNCgkJCXVwX3JlYWQoJmlvcHQt
+PmRvbWFpbnNfcndzZW0pOw0KCQkJaW9tbXVmZF9hY2Nlc3Nfbm90aWZ5X3VubWFwKGlvcHQsIGFy
+ZWFfZmlyc3QsIGxlbmd0aCk7CQ0KCQl9DQoJfQ0KfQ0KDQppdCBjaGVja3MgdGhlIGFjY2Vzc19s
+aXN0IGluIHRoZSBjb21tb24gcGF0aCwgYnV0IHRoZSBjb3N0IHNob3VsZCBiZQ0KbmVnbGlnaWJs
+ZSB3aGVuIHRoZXJlIGlzIG5vIGFjY2VzcyBhdHRhY2hlZCB0byB0aGlzIGlvcHQuIFRoZSB1cHNp
+ZGUNCmlzIHRoYXQgbm93IHVubWFwIGlzIGRlbmllZCBleHBsaWNpdGx5IGluIHRoZSBhcmVhIGxv
+b3AgaW5zdGVhZCBvZiANCnN0aWxsIHRyeWluZyB0byB1bm1hcCBhbmQgdGhlbiBoYW5kbGluZyBl
+cnJvcnMuDQoNCmJ1dCB0aGUgY3VycmVudCB3YXkgaXMgYWxzbyBmaW5lLiBBZnRlciBhbm90aGVy
+IHRob3VnaHQgSSdtIG5ldXRyYWwNCnRvIGl0LiDwn5iKDQo=
 
