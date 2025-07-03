@@ -1,139 +1,183 @@
-Return-Path: <linux-kselftest+bounces-36436-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36437-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 473D3AF7718
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 16:19:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 730BFAF7710
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 16:19:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E69001CA077A
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 14:17:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C753C3B6173
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Jul 2025 14:17:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39A922E9ED7;
-	Thu,  3 Jul 2025 14:16:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 733A22E62C4;
+	Thu,  3 Jul 2025 14:18:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KhOJVEuz"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="OGq5NsqU";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="St5ttD5l"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fhigh-a7-smtp.messagingengine.com (fhigh-a7-smtp.messagingengine.com [103.168.172.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B1A22E7F05;
-	Thu,  3 Jul 2025 14:16:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A43091AF0B4
+	for <linux-kselftest@vger.kernel.org>; Thu,  3 Jul 2025 14:17:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751552216; cv=none; b=HRecLmNVjtwgPvzvs1U6OM4+6YpZ6jd3eOGXoReERBIfT9VOFfsjQjhAN/cH4YMxtTw/YqsyCQLwY4ALayZueDD5wtoBQdogE6xofMAkW74SReA/vb1HThW90Q+/kq1ktZLdybMDz9MBo3UUHeR8HC8gNOtYMe4bAfOsC50VtIA=
+	t=1751552282; cv=none; b=r6pj+XaGQXVXKfgOsVQW78rg2ffvIpWRIjxYwHzjRV1r8eRSFVzd4IG3nAYShQCfCdbtB/OE4CgXjhMVhjhruWI5VekzklxMssjaSRKdWsQ9p/gm1JeBic1kGOemSm1rY8DimbuZoGW9Bc21NKeFwhTO7QmjET3PnBirGwppWOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751552216; c=relaxed/simple;
-	bh=Z+KvS/dxZP26cr6F6SDuJm7LA9twCDJWcy1WXdpB8xU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Bq+7K5Oh2111d1MsH6/pL0obG/TqZdvhoximO3S7m8KSysxxWD86uWjLV411rAsT5/g0/IlootyfPwEeQ5mwq5RMlDkCb8kfydwdoJD+KcIwdsGDJC8BprSxiuFk5enrm2bIAxGQXOP3ZjcfX67yrgABs9SleLf6wMp3Uvidd0M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KhOJVEuz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43913C4CEED;
-	Thu,  3 Jul 2025 14:16:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751552215;
-	bh=Z+KvS/dxZP26cr6F6SDuJm7LA9twCDJWcy1WXdpB8xU=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=KhOJVEuznJ1wqT+0SQw4lmkmZ+tr7yk8JaHHmApuIzFPOGyFmlx4ApXr7i7475qdY
-	 k41e3tbCK/y9gSQQJmTl5emyt0WnAS5YgdmB8TLELBu8nJkNL0AEKNZOXR2ZPPl/B8
-	 Gili6xy3GUAbUSbG7scQsC5rQUEQkl+7UUUdw3zKw6AT0Ah2R2/YqJB9nQySOikhyZ
-	 AFSZhN1VlJv3hFthIZg5EbmMrhzrASheUWh+W3Xrd7hQEaRIhMqx6DUSQJPo3pL+W7
-	 8Ko4J0faOZVi2eeVr7abvmHOAj3O7NADOByvtH5BXvoHetvpRgS6q5l86JtMfwoUqB
-	 lUC49pJ7E3dIw==
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-Date: Thu, 03 Jul 2025 16:16:03 +0200
-Subject: [PATCH nf-next v3 2/2] selftests: netfilter: nft_flowtable.sh: Add
- IPIP flowtable selftest
+	s=arc-20240116; t=1751552282; c=relaxed/simple;
+	bh=PzJce5OoLWe5IraYqyecvTvi9P6R84EsEG5rOMs/IYs=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=NQs7gDMRL0xTVmz0+QltvWEXALIcKtIdVN3/wV9fI5j+wuHtHMNsp9p9E0raUMeF4qRnGVz18hNvrzdlZRjvpezUg2sjQfFw+KyxhPpBjwV/Qh7jdjMMZqaNeblHgAXE5SUdIuSKRan+TnUW92D2maNJUDTV3fuuYUQ/XM+KypY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=OGq5NsqU; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=St5ttD5l; arc=none smtp.client-ip=103.168.172.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 82284140025B;
+	Thu,  3 Jul 2025 10:17:58 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Thu, 03 Jul 2025 10:17:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1751552278;
+	 x=1751638678; bh=ELCjAt/SQjWiLxFaoE+JA5BBE4/Ck0GCWWDaqcUeh0I=; b=
+	OGq5NsqUjbvwQUp3jXfP/VhUv9L0Zv8mVx1gfFsb97HuCKdrzGEi7mOvANqRkSuh
+	By1v5kBRSYwr0PcgyvckLfBc4VnEw703oCRlTiz7S1PRRxZtU7n8nkV2JyfE68bm
+	gD/Jmbvu87r5afVjk79b4f11loDBAaSgGdhn5TE/BnNiC3xwfyMfXkibijQdQKfH
+	evBv6kaRJM9XSuJCMz7zo7Ne1EHzuEP5xDFOySQMovFWorp+HRLXSnjuYRYCITr9
+	796wyifi4KTy/Mqbq23gpKdvtjJGdKcC9GlzknejT13M40QjkNBY2xeSZmTkFNwF
+	5CiA05Up1XH9nYqJXKGLDw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1751552278; x=
+	1751638678; bh=ELCjAt/SQjWiLxFaoE+JA5BBE4/Ck0GCWWDaqcUeh0I=; b=S
+	t5ttD5lG6oy9bmYeAuYxR6XzfgrgGFNiH8TXGuRwa74uqR45wk+nBWP1FWocfEVe
+	smdNtWXfeaveUDf0fZkn3sFpQAYGsIZtb5jV584YjHKx6kOTvBZhkwepkAVMWBGY
+	+Sa+UKZZTBDEuz0klklpwR9GptmVI6Y6YzcaSIGTxAmnVZdm92S3zCtuI8Q7V6xf
+	9LWvYIuE3Yr+7KqzI+xdTra4ncDNC9go7PgTpgQJpjdStI79YcL5ebL87qZCrqKu
+	NH0bK8+WYxWhcAfHGnpQ7cL4l6iG0XyAq7BUxzb/l2msB58eU9aEMmaT7cUbzeir
+	dKLh46wFYwNBlKDrC6IPQ==
+X-ME-Sender: <xms:FZFmaIVBDFSS6YWEvqAIES-J0lUknGFuVds09p-xXbhMMO0h_g4VfQ>
+    <xme:FZFmaMl_p9Avmch4AV-4yNVPmYh1PNqBc_dRs54rpa-ZwKG4GH9ecFco8vPTdJyM-
+    bCvGsfyXwFWxavkcq0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddvtdeglecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpefhtdfhvddtfeehudekteeggffghfejgeegteefgffgvedugeduveelvdekhfdvieen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
+    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeekpdhmohguvgepshhmthhpohhuthdp
+    rhgtphhtthhopegrnhguvghrshdrrhhogigvlhhlsehlihhnrghrohdrohhrghdprhgtph
+    htthhopegurghnrdgtrghrphgvnhhtvghrsehlihhnrghrohdrohhrghdprhgtphhtthho
+    pehnrghrvghshhdrkhgrmhgsohhjuheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplh
+    htpheslhhishhtshdrlhhinhhugidrihhtpdhrtghpthhtoheplhhifigrnhhgsehrvggu
+    hhgrthdrtghomhdprhgtphhtthhopegthhhruhgsihhssehsuhhsvgdrtgiipdhrtghpth
+    htohepphhvohhrvghlsehsuhhsvgdrtgiipdhrtghpthhtoheplhhinhhugidqkhhsvghl
+    fhhtvghsthesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:FZFmaMZWzGb93E1bKyalCazjYS2yec3eP_BRZurVKVcb62OySSfSaQ>
+    <xmx:FZFmaHVCYlJXuQElBfP6NHHIfhaciteV393AR-Vh6cZDAQTf2aV6xw>
+    <xmx:FZFmaCkuq1FHhz8xDE8owbJh4lTIExVs7DtWA1EuPZTg6NQI6ugK_w>
+    <xmx:FZFmaMcZDi4kKmt5d37reVBXuw8zO7K6SjTiwRF5CE_GGKOi5WD3_A>
+    <xmx:FpFmaNLnn1XFE78JkCVpoE-Gd3bQ5ywX2lbmN9m_phGFjuEjcGHK9zfw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id CC865700065; Thu,  3 Jul 2025 10:17:57 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+X-ThreadId: Tb53dd688bc639d41
+Date: Thu, 03 Jul 2025 16:17:37 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Naresh Kamboju" <naresh.kamboju@linaro.org>,
+ "LTP List" <ltp@lists.linux.it>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Cc: "Anders Roxell" <anders.roxell@linaro.org>,
+ "Dan Carpenter" <dan.carpenter@linaro.org>, chrubis <chrubis@suse.cz>,
+ "Li Wang" <liwang@redhat.com>, "Petr Vorel" <pvorel@suse.cz>
+Message-Id: <c9ba86f6-dea8-47bd-88e1-edf49e4bf9fd@app.fastmail.com>
+In-Reply-To: 
+ <CA+G9fYvD1A12WE36NjELe5cD-LbPsmwJnH5aUAcufBZ7ndt2Hw@mail.gmail.com>
+References: 
+ <CA+G9fYvD1A12WE36NjELe5cD-LbPsmwJnH5aUAcufBZ7ndt2Hw@mail.gmail.com>
+Subject: Re: LTP syscalls mseal02 and shmctl03 fails on compat mode 64-bit kernel on
+ 32-bit rootfs
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250703-nf-flowtable-ipip-v3-2-880afd319b9f@kernel.org>
-References: <20250703-nf-flowtable-ipip-v3-0-880afd319b9f@kernel.org>
-In-Reply-To: <20250703-nf-flowtable-ipip-v3-0-880afd319b9f@kernel.org>
-To: "David S. Miller" <davem@davemloft.net>, 
- David Ahern <dsahern@kernel.org>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Pablo Neira Ayuso <pablo@netfilter.org>, 
- Jozsef Kadlecsik <kadlec@netfilter.org>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, netfilter-devel@vger.kernel.org, 
- coreteam@netfilter.org, linux-kselftest@vger.kernel.org, 
- Lorenzo Bianconi <lorenzo@kernel.org>
-X-Mailer: b4 0.14.2
 
-Introduce specific selftest for IPIP flowtable SW acceleration in
-nft_flowtable.sh
+On Thu, Jul 3, 2025, at 15:47, Naresh Kamboju wrote:
+> The LTP syscalls mseal02 and shmctl03 failed only with compat mode testing
+> with 64-bit kernel with 32-bit rootfs combination.
+>
+> Would it be possible to detect compat mode test environment and handle the test
+> expectation in LTP test development ?
 
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
----
- .../selftests/net/netfilter/nft_flowtable.sh       | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+I think we should either make the kernel behave the same way in
+both environments, or accept either behavior as correct in LTP.
+NVAL (22)
+> mseal02.c:45: TPASS: mseal(0xf7a8e001, 4096, 0) : EINVAL (22)
+> mseal02.c:45: TFAIL: mseal(0xf7a8e000, 4294963201, 0) expected EINVAL:
+> ENOMEM (12)
 
-diff --git a/tools/testing/selftests/net/netfilter/nft_flowtable.sh b/tools/testing/selftests/net/netfilter/nft_flowtable.sh
-index a4ee5496f2a17cedf1ee71214397012c7906650f..d1c9d3eeda2c9874008f9d6de6cabaabea79b9fb 100755
---- a/tools/testing/selftests/net/netfilter/nft_flowtable.sh
-+++ b/tools/testing/selftests/net/netfilter/nft_flowtable.sh
-@@ -519,6 +519,44 @@ if ! test_tcp_forwarding_nat "$ns1" "$ns2" 1 ""; then
- 	ip netns exec "$nsr1" nft list ruleset
- fi
+This is "length=ULONG_MAX-page_size+2", which overflows on 32-bit
+but not on 64-bit.
+
+How about this?
+
+--- a/mm/mseal.c
++++ b/mm/mseal.c
+@@ -234,6 +234,9 @@ int do_mseal(unsigned long start, size_t len_in, unsigned long flags)
+        if (end < start)
+                return -EINVAL;
  
-+# IPIP tunnel test:
-+# Add IPIP tunnel interfaces and check flowtable acceleration.
-+test_ipip() {
-+if ! ip -net "$nsr1" link add name tun0 type ipip \
-+     local 192.168.10.1 remote 192.168.10.2 >/dev/null;then
-+	echo "SKIP: could not add ipip tunnel"
-+	[ "$ret" -eq 0 ] && ret=$ksft_skip
-+	return
-+fi
-+ip -net "$nsr1" link set tun0 up
-+ip -net "$nsr1" addr add 192.168.100.1/24 dev tun0
-+ip netns exec "$nsr1" sysctl net.ipv4.conf.tun0.forwarding=1 > /dev/null
++       if (end > TASK_SIZE)
++               return -EINVAL;
 +
-+ip -net "$nsr2" link add name tun0 type ipip local 192.168.10.2 remote 192.168.10.1
-+ip -net "$nsr2" link set tun0 up
-+ip -net "$nsr2" addr add 192.168.100.2/24 dev tun0
-+ip netns exec "$nsr2" sysctl net.ipv4.conf.tun0.forwarding=1 > /dev/null
-+
-+ip -net "$nsr1" route change default via 192.168.100.2
-+ip -net "$nsr2" route change default via 192.168.100.1
-+ip -net "$ns2" route add default via 10.0.2.1
-+
-+ip netns exec "$nsr1" nft -a insert rule inet filter forward 'meta oif tun0 accept'
-+ip netns exec "$nsr1" nft -a insert rule inet filter forward \
-+	'meta oif "veth0" tcp sport 12345 ct mark set 1 flow add @f1 counter name routed_repl accept'
-+
-+if ! test_tcp_forwarding_nat "$ns1" "$ns2" 1 "IPIP tunnel"; then
-+	echo "FAIL: flow offload for ns1/ns2 with IPIP tunnel" 1>&2
-+	ip netns exec "$nsr1" nft list ruleset
-+	ret=1
-+fi
-+
-+# Restore the previous configuration
-+ip -net "$nsr1" route change default via 192.168.10.2
-+ip -net "$nsr2" route change default via 192.168.10.1
-+ip -net "$ns2" route del default via 10.0.2.1
-+}
-+
- # Another test:
- # Add bridge interface br0 to Router1, with NAT enabled.
- test_bridge() {
-@@ -604,6 +642,8 @@ ip -net "$nsr1" addr add dead:1::1/64 dev veth0 nodad
- ip -net "$nsr1" link set up dev veth0
- }
+        if (end == start)
+                return 0;
  
-+test_ipip
-+
- test_bridge
- 
- KEY_SHA="0x"$(ps -af | sha1sum | cut -d " " -f 1)
+Since TASK_SIZE is smaller for 32-bit tasks, it would detect
+the overflow in the same way.
 
--- 
-2.50.0
+> tst_test.c:1774: TINFO: Overall timeout per run is 0h 21m 36s
+> shmctl03.c:31: TPASS: shmmin = 1
+> shmctl03.c:33: TFAIL: /proc/sys/kernel/shmmax != 2147483647 got 4294967295
 
+I see this is being intentionally truncated to INT_MAX:
+
+static int copy_compat_shminfo_to_user(void __user *buf, struct shminfo64 *in,
+                                        int version)
+{
+        if (in->shmmax > INT_MAX)
+                in->shmmax = INT_MAX;
+        ...
+}
+
+> shmctl03.c:35: TFAIL: /proc/sys/kernel/shmall != 4278190079 got 4294967295
+
+Here the value from /proc is defined in the kernel as
+"#define SHMALL (ULONG_MAX - (1UL << 24))"
+
+On a 64-bit machine this is 0xfffffffffeffffff.
+
+However the 32-bit ltp tst_assert_ulong() truncates it
+to 0xfeffffff, which happens to be the exact same value
+that it would see on a 32-bit kernel.
+
+The second one is 0xffffffff, and I don't know how that gets
+computed, as it is derived from the same number in
+info.shmall = in->shmall;
+
+Are you running this inside of a container that its own ipc
+namespace?
+
+     Arnd
 
