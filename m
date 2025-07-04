@@ -1,153 +1,154 @@
-Return-Path: <linux-kselftest+bounces-36494-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36495-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4ACEDAF855E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 03:58:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E7C9AF85CA
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 04:54:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E633580684
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 01:58:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 305875473BE
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 02:53:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1D541D7E5C;
-	Fri,  4 Jul 2025 01:58:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 025871DBB13;
+	Fri,  4 Jul 2025 02:54:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="E8s9xIPa"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="lYZKoGAj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9242B1D6DB6
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Jul 2025 01:58:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 847931FC3;
+	Fri,  4 Jul 2025 02:53:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751594321; cv=none; b=A09SgRzF7CbXCuEAXjZaoCNUg3iu9icF5VipQamnDXwdg8E/h6s1Y8npOBFZWZaF6WRuVC7ZDSex2CcP3vo9s2OmAsmFvMGBwVfryJJK95eoMPpbWGAf2eJUvHmwZ0sjD4MKAH9z+jZ1d6Eg3QglZHKpa3dBrCM1ogcvpR/tvV4=
+	t=1751597640; cv=none; b=GRFKp+jwcBbiKpFFkuUudueW6TnM7o3+ikyLA3/C5zm8iNfRKQ5z/XUpuMo9mjLjKxW8E1S575NQrVQ2780a7sYOjxiKSwO3u2YRJcIO7/YdJ9J4g95TPDHwscu/Un20CmbW1hM42z0/kcOjJXu2qxD9xqpEMRrqvjbIrJCH91M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751594321; c=relaxed/simple;
-	bh=MEYakmUKLHnF3WCekXxwTM657RRlyZwoI6/HTrtAUdQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=MLuleEYdLYpq8nPU8//2wM7mcoSamTvU3XQiFW8KqZKFtSo08Cx3yWd51SKE3LjtTaoAbyQpTzRncKbW38l4/WrWdIG/wQHwLWQuSWGgr6yFd0Q7IxRorc9Y9O9PIl+WQ0WMqSF27q8pq+lTlmCq5r79ylFUqEURJOQSLOdbTJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=E8s9xIPa; arc=none smtp.client-ip=209.85.219.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-6fd1b2a57a0so5497156d6.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Jul 2025 18:58:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1751594318; x=1752199118; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=QnLXVWExKoNZiJLIxtursHY+uAzhVs7mpFreujfZRkc=;
-        b=E8s9xIPaszufggYHV2jiN0GUc++dd6QdoQzdYE/f6WMIvjo22mPILkUR8rNYPITyqI
-         l7w+beXVgJvBwxRBQpFdQrl5eBKN8t9l7S7QH9/EOVg8wXR3BE1S7pslneppQqP2+Zyt
-         BxVCi4LgBqaQWFrAyYMGKIPrDzxQ3W+2g98goZN5XXpGVNR1v97+gZrcCDDZTQM/t+xj
-         /PMD2rBD1GanOh9+5U1ZW+MpxkO4JX4Mk/EVp3e9JGsIkQag0PiiRZOLbYY2O/PVVatG
-         OTRo/JEsVZvykAnYEFfeeiuMaKkQ13/BmtdlAaLdvOmrb+27fczyj6P+NXl6ZQte9pb+
-         v+uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751594318; x=1752199118;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QnLXVWExKoNZiJLIxtursHY+uAzhVs7mpFreujfZRkc=;
-        b=a9b8wYj4V2cKKPDxJfDYIf0/OL8Wlm7OSZJdJ4w87mUdBl4CJtmwX1XHoEWwdEr2nF
-         cAuZu5YAnNcnCu1VVGt29dvHNQ2m1Z2YGP7NevuS/tTIBzP5DogwA5lFEuRVFAlW6dl7
-         lfPKdZqVS6qtF7QdZuKkJlCIcXyxv/bjoKqLobWXEeXTPry1KLIXOGqd4fgm0J6x2JAj
-         VnEly4cAx4zRyDDDwHTqA47QdVJsZWpAc+eIxAX63TiuW7WFypALXnfQL0Reoy6Zlh4W
-         uJgtq7dfNJnu5EyVGigoIDDpYWmosRRD83Bd7JZ9ukgzsjjV0zG4sa3yVlGgGx7Cjiu8
-         JB4w==
-X-Forwarded-Encrypted: i=1; AJvYcCUI8KPNZK55UC43Ko5kTXWkR4Na/32nu63d8/Ag9BzbScA/jWvRFLIrC1kde704MwxB5mmZBUGkCJS1YBIVXew=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7cOf7coFwst65CuWavmvnPuEgxkaPRUp+swBijWk7z4P/Nw9b
-	DH0kD8jBeE4hJz7Kfv+tJ7FUHYlrPms7tuSRZZ5f3KE74sIoEhtRHtOy5r1ZH6zguue6HU3F1GF
-	oaeCw
-X-Gm-Gg: ASbGncufzraouT0coH/VnMc/c1hUTB09tEAGTtLbldhEvsqfiopERVqTjxwjHpx6RLx
-	vUn/+N0LTqd/ElHzWt8dO2uK15jUDbomNxlWKj9M99RSJDw4v2qjyZ84h5mQpFx8gyxH9A7QDSi
-	ir2lxA9zA/ktQjtxluq7UafUT6e/fNM/gxUtqKO2SBV8wiRYGra4GR2bD5FhtGPrmE1OL3FPQmv
-	D1YK9T7nc/gRmO+xIeZ1QvAE391IkQ2mWTU6865F3z+4sIO4coSs/iHEjrDpdF9Wd8soq30pQPO
-	zUCU0lqT3EmtevsKFYWY7DId0JKxvzqm5i7uVJZASPY18nTCca9yliUwLpQDD39IqMNh/SkEVx4
-	1tZlnj/5A1w==
-X-Google-Smtp-Source: AGHT+IFjxkaBEImztNDgLRUCPF9Hxz9tbtkMiO4rL8Aov5ucKBXPKeNdTk/a5C14X/9WkJXb6dZhzw==
-X-Received: by 2002:a05:6214:4291:b0:6e8:fcde:58d5 with SMTP id 6a1803df08f44-702c6dedfa8mr10308586d6.42.1751594318341;
-        Thu, 03 Jul 2025 18:58:38 -0700 (PDT)
-Received: from jesse-lt.ba.rivosinc.com ([96.224.57.66])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-702c4d601a7sm5842446d6.107.2025.07.03.18.58.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Jul 2025 18:58:38 -0700 (PDT)
-From: Jesse Taube <jesse@rivosinc.com>
-To: kvm@vger.kernel.org,
-	kvm-riscv@lists.infradead.org,
-	linux-kselftest@vger.kernel.org
-Cc: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>,
-	Charlie Jenkins <charlie@rivosinc.com>,
-	Jesse Taube <jesse@rivosinc.com>,
-	Andrew Jones <andrew.jones@linux.dev>
-Subject: [kvm-unit-tests PATCH] riscv: Use norvc over arch, -c
-Date: Thu,  3 Jul 2025 18:58:37 -0700
-Message-ID: <20250704015837.1700249-1-jesse@rivosinc.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1751597640; c=relaxed/simple;
+	bh=THX26/jXeFAoW2ksOlvzrvGU5g863BgeG42sCpCIRd0=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=NmD4G5RY56UvAW17uQH7zQmMIqCv2nLnbW9LJ1l80DOktKYz1k1KhfaQD0OdIyhCbZhVGQTQMwKDJVEd+Qr4z9JdwLaS9xf+1nCTCjxh/Sp2Q7ldlScUccicGL476xM3CGd28ncvgeLtB39NXlFd65h570l47CJT3kM3Zj4l9hM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=lYZKoGAj; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description;
+	bh=yZ+/4POeJ+yHT/+h9d2KsWJy9/hmIi0Y9xqqcxUt7NA=; b=lYZKoGAjIA8YcYimrooC4eIto6
+	yak5x8tiy/5dKOdmpBS560TOTQWUHdLKm83CAe0U5xkYVlEBdOpL9R3QjQpLMNdPeg0VwTnNeuAmT
+	BCLEUwnSwDAmoKySqQf3lta43duK9cv3NePg1QHC+4ykyte5HJ/0KnPEff9Hbcdc3vI6MYa74minu
+	xRE+8vUNZ0Uj+RvFXEHxP5xnkS5A5rhElxQ1YeeNLo90tfvQrPSfogHv7pH+xX/35L3hBr7ysIAnP
+	SuHrc4U6/njOEDycTiduitUhudaHmb6khWMKIvVdjtlv1RPpHbhVE6zp0mVAkK2ZSrPRVPKDLWSGd
+	lNG2sh7A==;
+Received: from [50.53.25.54] (helo=[192.168.254.17])
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1uXWYj-0000000FKfH-3ZeZ;
+	Fri, 04 Jul 2025 02:53:54 +0000
+Message-ID: <2cc85345-3350-494d-beea-0fc568d162a7@infradead.org>
+Date: Thu, 3 Jul 2025 19:53:47 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] kunit: fix longest symbol length test
+From: Randy Dunlap <rdunlap@infradead.org>
+To: =?UTF-8?Q?Sergio_Gonz=C3=A1lez_Collado?= <sergio.collado@gmail.com>,
+ David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+ Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Arnd Bergmann <arnd@arndb.de>
+Cc: rust-for-linux@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Peter Zijlstra <peterz@infradead.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ David Laight <david.laight.linux@gmail.com>,
+ Shuah Khan <skhan@linuxfoundation.org>,
+ Martin Rodriguez Reboredo <yakoyoku@gmail.com>, x86@kernel.org,
+ linux-kbuild@vger.kernel.org
+References: <20250514192416.12635-1-sergio.collado@gmail.com>
+ <30b8e7c2-3a70-4728-b633-b24c99a8d025@infradead.org>
+Content-Language: en-US
+In-Reply-To: <30b8e7c2-3a70-4728-b633-b24c99a8d025@infradead.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The Linux kernel main tree uses "norvc" over
-"arch, -c" change to match this.
 
-GCC 15 started to add _zca_zcd to the assembler flags causing a bug
-which made "arch, -c" generate a compressed instruction.
 
-Link: https://sourceware.org/bugzilla/show_bug.cgi?id=33128
-Cc: Clément Léger <cleger@rivosinc.com>
-Signed-off-by: Jesse Taube <jesse@rivosinc.com>
----
- riscv/isa-dbltrp.c | 2 +-
- riscv/sbi-dbtr.c   | 2 +-
- riscv/sbi-fwft.c   | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+On 5/14/25 2:00 PM, Randy Dunlap wrote:
+> 
+> 
+> On 5/14/25 12:24 PM, Sergio González Collado wrote:
+>> The kunit test that checks the longests symbol length [1], has triggered
+>> warnings in some pilelines when symbol prefixes are used [2][3]. The test
+>> will to depend on !PREFIX_SYMBOLS and !CFI_CLANG as sujested in [4] and
+>> on !GCOV_KERNEL.
+>>
+>> [1] https://lore.kernel.org/rust-for-linux/CABVgOSm=5Q0fM6neBhxSbOUHBgNzmwf2V22vsYC10YRBT=kN1g@mail.gmail.com/T/#t
+>> [2] https://lore.kernel.org/all/20250328112156.2614513-1-arnd@kernel.org/T/#u
+>> [3] https://lore.kernel.org/rust-for-linux/bbd03b37-c4d9-4a92-9be2-75aaf8c19815@infradead.org/T/#t
+>> [4] https://lore.kernel.org/linux-kselftest/20250427200916.GA1661412@ax162/T/#t
+>>
+>> Reviewed-by: Rae Moar <rmoar@google.com>
+>> Signed-off-by: Sergio González Collado <sergio.collado@gmail.com>
+> 
+> 
+> Works for me. Thanks.
+> 
+> Acked-by: Randy Dunlap <rdunlap@infradead.org>
+> Tested-by: Randy Dunlap <rdunlap@infradead.org>
+> 
+> 
+>> ---
+>> v2 -> v3: added dependency on !GCOV_KERNEL (to avoid __gcov_ prefix)
+>> ---
+>> v1 -> v2: added dependency on !CFI_CLANG as suggested in [3], removed
+>> 	CONFIG_ prefix
+>> ---
+>>  lib/Kconfig.debug                | 1 +
+>>  lib/tests/longest_symbol_kunit.c | 3 +--
+>>  2 files changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+>> index f9051ab610d5..e55c761eae20 100644
+>> --- a/lib/Kconfig.debug
+>> +++ b/lib/Kconfig.debug
+>> @@ -2886,6 +2886,7 @@ config FORTIFY_KUNIT_TEST
+>>  config LONGEST_SYM_KUNIT_TEST
+>>  	tristate "Test the longest symbol possible" if !KUNIT_ALL_TESTS
+>>  	depends on KUNIT && KPROBES
+>> +	depends on !PREFIX_SYMBOLS && !CFI_CLANG && !GCOV_KERNEL
+>>  	default KUNIT_ALL_TESTS
+>>  	help
+>>  	  Tests the longest symbol possible
+>> diff --git a/lib/tests/longest_symbol_kunit.c b/lib/tests/longest_symbol_kunit.c
+>> index e3c28ff1807f..9b4de3050ba7 100644
+>> --- a/lib/tests/longest_symbol_kunit.c
+>> +++ b/lib/tests/longest_symbol_kunit.c
+>> @@ -3,8 +3,7 @@
+>>   * Test the longest symbol length. Execute with:
+>>   *  ./tools/testing/kunit/kunit.py run longest-symbol
+>>   *  --arch=x86_64 --kconfig_add CONFIG_KPROBES=y --kconfig_add CONFIG_MODULES=y
+>> - *  --kconfig_add CONFIG_RETPOLINE=n --kconfig_add CONFIG_CFI_CLANG=n
+>> - *  --kconfig_add CONFIG_MITIGATION_RETPOLINE=n
+>> + *  --kconfig_add CONFIG_CPU_MITIGATIONS=n --kconfig_add CONFIG_GCOV_KERNEL=n
+>>   */
+>>  
+>>  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+>>
+>> base-commit: 1a80a098c606b285fb0a13aa992af4f86da1ff06
+> 
 
-diff --git a/riscv/isa-dbltrp.c b/riscv/isa-dbltrp.c
-index b7e21589..af12860c 100644
---- a/riscv/isa-dbltrp.c
-+++ b/riscv/isa-dbltrp.c
-@@ -26,7 +26,7 @@ do {										\
- 	unsigned long value = 0;						\
- 	asm volatile(								\
- 	"	.option push\n"							\
--	"	.option arch,-c\n"						\
-+	"	.option norvc\n"						\
- 	"	sw %0, 0(%1)\n"							\
- 	"	.option pop\n"							\
- 	: : "r" (value), "r" (ptr) : "memory");					\
-diff --git a/riscv/sbi-dbtr.c b/riscv/sbi-dbtr.c
-index c4ccd81d..129f79b8 100644
---- a/riscv/sbi-dbtr.c
-+++ b/riscv/sbi-dbtr.c
-@@ -134,7 +134,7 @@ static __attribute__((naked)) void exec_call(void)
- {
- 	/* skip over nop when triggered instead of ret. */
- 	asm volatile (".option push\n"
--		      ".option arch, -c\n"
-+		      ".option norvc\n"
- 		      "nop\n"
- 		      "ret\n"
- 		      ".option pop\n");
-diff --git a/riscv/sbi-fwft.c b/riscv/sbi-fwft.c
-index 8920bcb5..fda7eb52 100644
---- a/riscv/sbi-fwft.c
-+++ b/riscv/sbi-fwft.c
-@@ -174,7 +174,7 @@ static void fwft_check_misaligned_exc_deleg(void)
- 		 * Disable compression so the lw takes exactly 4 bytes and thus
- 		 * can be skipped reliably from the exception handler.
- 		 */
--		".option arch,-c\n"
-+		".option norvc\n"
- 		"lw %[val], 1(%[val_addr])\n"
- 		".option pop\n"
- 		: [val] "+r" (ret.value)
+Hi,
+
+I'm still seeing this issue in linux-next 20250703.
+
+Any merge plans for this patch?
+
+Thanks.
 -- 
-2.43.0
+~Randy
 
 
