@@ -1,109 +1,96 @@
-Return-Path: <linux-kselftest+bounces-36599-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36600-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B7BCAF9A4F
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 20:08:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 06088AF9AEF
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 20:55:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 86E5F4A2F92
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 18:08:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52E0258685B
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 18:55:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16FF820D4F8;
-	Fri,  4 Jul 2025 18:08:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A47701DE8A3;
+	Fri,  4 Jul 2025 18:55:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qlbNSIXe"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mxVdEJlj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EC7320297B
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Jul 2025 18:08:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 139181DE3B5
+	for <linux-kselftest@vger.kernel.org>; Fri,  4 Jul 2025 18:55:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751652502; cv=none; b=VXrh86HOtBnUT5LtA0zoM3a2bI5hQu0H+xq1jHMMw3FCA1ytdaNFbghSLdY1xir0d/RQcY65md5b+PJRLVFFU5EpzijBKt1+88d7/MgaJ7FoJPY2pBqihnWLprSU4bVj3lfWUARONx3aQPx2QUpMMPTZV7IXM9SCR0MMhnMbPxk=
+	t=1751655343; cv=none; b=Ph+fbiITtyNpRmDMLwQqlxm1nkVjAzA+ydG2rDy6xhTgbokfzW9E3/zqmxWH+pF+TJoXyrFWHJSt+k0WN45CjSBJiYfPQEMp+iBuKGTCPl67Y1n7QzSIxYJvdS9ONttGi7xy73u7KeJTN2/NQitBRIGkq2eDTfEIJfdDuhh15Q0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751652502; c=relaxed/simple;
-	bh=zZOG+6kEYPWNmTSbahRP8Yg09LRZxuvbzgHqdu8qA1g=;
+	s=arc-20240116; t=1751655343; c=relaxed/simple;
+	bh=i5UrnJioarzHLByYSLycjk6gxtQARLu2d2F8hbNdkaQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=ngl3xBFHZiTe66C2mZUACSFAjGEAWzGIOgCix1RPgDw2H5MwEdSbjbeYitXLSCKq8F/0ovgpV8GXQ7/fsDJs1hCMuzEwNBCw9dLtNBMcb3q/77IwAdoJsC3wShg8pAiNgiQ0UggYMBnkoYGUn8kkrtfuaVxeXH1fJSKPwzbDNXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qlbNSIXe; arc=none smtp.client-ip=209.85.215.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-b3507b63c6fso1208005a12.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 04 Jul 2025 11:08:20 -0700 (PDT)
+	 To:Cc:Content-Type; b=dtVAwbvLtXoMgaUVIiD88RDVjJQrKUzu4d+4AciOtw+/lBMs9fEXfUXL8EvdO+dQM1EYc/DthD2TqybM9KIjuPBZVWFuZbaeWF5Jc0S2w48m+xZU8X9dEke2npjPP5KO5KDqLseDsbxi7xZ8N2veuj0WYy+vVyI9xBAzL6NNqAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mxVdEJlj; arc=none smtp.client-ip=209.85.219.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-e812c817de0so915803276.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 04 Jul 2025 11:55:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1751652500; x=1752257300; darn=vger.kernel.org;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1RfRwO9ZuuX8vmXNtGlWGYF03IZb5qXeEdozJPnkCAQ=;
-        b=qlbNSIXeggW6gkFJ+tpw8ypz8EFB+toeQYYvrjy25mBLgiusTYz6OVSRl1+HbDlCsx
-         GcOpXjH7VC/VZQiw1vq2vzO+6TVCgHGY4pzc/cSluJpmd5fLsYfDqLcXMXiBpVxIdlMQ
-         CDR6K7T7fxB54Wi0R8AEB/J/8mjbF5n2oFQhAns3PUFrIBODSbUu5DoFUch1JQCEO0tL
-         qaqpO/DHOet4MKI3+aMzfDRAGF598tx2kbNbWYDArr/J2yFsa0+7Z00xLMkfYNjKj+/U
-         MW+p4/wfy22TXDncYX/cv5HtNi9Bn2oC00enRW5njnJXYCpTR7lqLUJ6ffo+ifBo31lt
-         ANnA==
+        d=linaro.org; s=google; t=1751655341; x=1752260141; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=i5UrnJioarzHLByYSLycjk6gxtQARLu2d2F8hbNdkaQ=;
+        b=mxVdEJljmD3oWeYcmSC6hY5ucxGQQeNi94/WSgMotvQXiqpBQHq0xqOiAWb+RmqnJh
+         ygBvRKuIST5dEJcAjBABjh+SOXijS+yM8dFlJ2rnQWADCT6U6+Wwf1Of9TAdep5yMHjP
+         5lbNZWccN3YaHxq37GNoSaCYWh1Q2fnUVmHufXerL5+yCRnS2xRVxfBYAId3qTj6qmcq
+         TT+IKaHiNL1g4waxfmCCeJ62EEIr7ogYOHj/BTJdFX7n7RKs/ZgFPqLNgPT14gPN+9Zo
+         tGkI6Z9sJPxcVMM5BmYUbibdTgUR8IIuWOYaVObnQJLtB0TjU8Jmm/aUX/7CeJ0NTXfc
+         Zu5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751652500; x=1752257300;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1RfRwO9ZuuX8vmXNtGlWGYF03IZb5qXeEdozJPnkCAQ=;
-        b=PsliMkKTtNNIuZwl1D4tuTF/ma9E3yr901/FVQ25VoBr47xOEyIjXKxYzU3ZscMVUP
-         K6IUcwAsX/Cf1djUgEkkYBAYqoMStdb52J5gT/RJJZdmiCmQVBgSqPQxU/WeF7AQOJlV
-         AWgWH1mJyj0aIfG9mH8BAQWdTbBB2ihiv7ndiZhAX3BuHqezBCJLoZjWXJ8/0ZCIYTcV
-         bi0iqMFpa5owYekvWBA7EyrMjDWogydy9qu76rcNdBUCvCeF5BHGDBeDG/0YqpVW6e79
-         tHac3mCG3LBZGcE2kCT+9bdJaKRnGissOR/m2+9pq/mOoaB8zMe3saJ/Q/tgIcDraoMq
-         6ZBg==
-X-Forwarded-Encrypted: i=1; AJvYcCU9oPvOMk5RmOp7JqLVYm6MF0TRbGFFweU4FiUac8uEy9bFhIf1anVYGKGc371TfE1RzijDLpH/U6PI6FLpsf0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwAcya7JEdfdylBwTeKDy2ylwpe3jUSVlgSOFaOuSGLG8KURvSG
-	nR17+BR/JfREUL4AcMrdqSKhXQsouZM8FvSba3aaywRN1/+ih+/PEw7xsHchm1TQRnv2EMD9UL5
-	efb+I96xeWCKpt4f4r4TgeLh+ELY8W7OUzlwJWb3t
-X-Gm-Gg: ASbGncvJxx1JUYwCVDQ9bA8qm0NI4QdLf24wk2NcqsITEyEoZ7nq7ZSPV7sTYHjl49M
-	mRtek44xzELfAdR3Vq/YLhd0McVRknE95eqaajoDNpqT0OPdMmAqVR278xDNjTsHaEFHhxKScr0
-	FgMPRrNWzDCB3Jd0Kl6WKf3KydF6PZ+yvm2QV7sfJ0J2OjGJBwOxF8aUeEj7YHnA4aVTcQbi8t/
-	A==
-X-Google-Smtp-Source: AGHT+IF5gPzuVm/wp6gH8G5aVgrvTuxINflU0Wvrt9OQjylDdhaRjtr+zBERt/R7CmrrpnMu9R+f3+ixB+/Ii1d7bpE=
-X-Received: by 2002:a17:90b:1fc3:b0:313:23ed:6ff with SMTP id
- 98e67ed59e1d1-31aadcf4979mr3531611a91.1.1751652499978; Fri, 04 Jul 2025
- 11:08:19 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1751655341; x=1752260141;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=i5UrnJioarzHLByYSLycjk6gxtQARLu2d2F8hbNdkaQ=;
+        b=NtbRsYPICr4sytPOM8IeyhSyMd6yiPzwGIdhqm67TfemHdDQeZyP/DUJoOB0xXVOw2
+         Fnm+95lHt0TysoNfXkSikiM1pFhxR180/kFB2DxeqWI7bc6CWfAhu113DxBhP6477dgw
+         zzfocFW3su17zjZzO+XeIxsdNb4aJlBpTrIAcIPkRW6hVG0jRteHVzJ/s4eOoyUbCxdH
+         Ag7yDRB06ftIfH4vaDCYXjtHnobdRJEV79XttYOdSE80Eta+qVNMQX8+5p40tgt8j5Lt
+         JlmYP/uRiC9PSyEidu9etw3hTz33OjN6zDakQKCZ6j4FJFn/ztRJtj8x87667dwFQIA8
+         5zZg==
+X-Forwarded-Encrypted: i=1; AJvYcCUNAMIUWt8UNPZCG2usaswypikM/vHGK5hW4XSkGDm2GngoEDekPXYcICFN9Qf13K9rYduAEFGOIlRs7c48LSQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx1TJG+6wSOIC3xDTG+1Xv8TMg292GaPyHOwy+ZlWXcdQ718Nh+
+	EqLGWsJy3A9yLa5UDSTgnubYvuTy8LMTQO80mCRcYsIcRimHkpt+3q/YWo/feRyGlzckCsON41e
+	iJr/efPyDCliN26BLZvzroodQOyP3FsKaETmHiaYOyQ==
+X-Gm-Gg: ASbGnctbO3samp1PchMta2fMs3PSDo7mmcn9QELSXpaHKh2BE8+I1A4UezR5VtyreV8
+	1xxrBiBpfdC9nOMuhOHM0xWKfg2I6GxXOBLFQ+67byBi6sTb4+ud55zjbqSt023ktBOhx8KpxfM
+	ax2IVM9SgwoRhKdoCyzjGRSb0enOSdOWDMCW9HHNQe3Mo=
+X-Google-Smtp-Source: AGHT+IE8YU8yP6esqnqUnZk9RLXSToml0bj4v9nH7DrJYcsEUr7XQwY4dJ3lhgYdPf76EoZr+KTAoSLIcBsb+9QtwDA=
+X-Received: by 2002:a05:690c:d0b:b0:70d:f338:8333 with SMTP id
+ 00721157ae682-7166b6cdd09mr39558687b3.22.1751655341084; Fri, 04 Jul 2025
+ 11:55:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250703160154.560239-1-g.goller@proxmox.com> <20250704080101.1659504-1-kuniyu@google.com>
- <4f6ti2orkpa2c5upawpaj63jyhdx3uxeobaxjhd2tjnuzgucqz@odfw5wacuwjt>
-In-Reply-To: <4f6ti2orkpa2c5upawpaj63jyhdx3uxeobaxjhd2tjnuzgucqz@odfw5wacuwjt>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Fri, 4 Jul 2025 11:08:08 -0700
-X-Gm-Features: Ac12FXwFoBf500m9nUVc_9wqMSgyrDzQU6Bg9-YJeQl99hoXRh7Oas8Dc5hmpLw
-Message-ID: <CAAVpQUDxYarDv2OySLxazZqEqnu=XnSoZv9NVThdTc5Z5N7PNw@mail.gmail.com>
-Subject: Re: [PATCH net-next v4] ipv6: add `force_forwarding` sysctl to enable
- per-interface forwarding
-To: Kuniyuki Iwashima <kuniyu@google.com>, corbet@lwn.net, davem@davemloft.net, 
-	dsahern@kernel.org, edumazet@google.com, horms@kernel.org, kuba@kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, 
-	nicolas.dichtel@6wind.com, pabeni@redhat.com, shuah@kernel.org
+References: <20250704103521.10124-1-terry.tritton@linaro.org> <61f90ebf-3cb4-4e81-a7d7-cfffe41d9d47@igalia.com>
+In-Reply-To: <61f90ebf-3cb4-4e81-a7d7-cfffe41d9d47@igalia.com>
+From: Terry Tritton <terry.tritton@linaro.org>
+Date: Fri, 4 Jul 2025 19:55:30 +0100
+X-Gm-Features: Ac12FXzsS18VRi1-qE0dpcrfnADu66E0lCMTJzxKRd3EQs1pCzZ2Ghi0HmE4GGM
+Message-ID: <CABeuJB1QxwBHn+_6cZP9WJXG+gh1x5HWYW9CGVEajqHL6GSEbQ@mail.gmail.com>
+Subject: Re: [PATCH v4] selftests/futex: Convert 32bit timespec struct to
+ 64bit version for 32bit compatibility mode
+To: =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
+Cc: ttritton@google.com, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, linux-kselftest@vger.kernel.org, 
+	Thomas Gleixner <tglx@linutronix.de>, Darren Hart <dvhart@infradead.org>, linux-kernel@vger.kernel.org, 
+	Wei Gao <wegao@suse.com>, Davidlohr Bueso <dave@stgolabs.net>, Shuah Khan <shuah@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 4, 2025 at 2:37=E2=80=AFAM Gabriel Goller <g.goller@proxmox.com=
-> wrote:
-[...]
-> >> +
-> >> +    tmp_ctl.extra1 =3D SYSCTL_ZERO;
-> >> +    tmp_ctl.extra2 =3D SYSCTL_ONE;
-> >
-> >As you are copying *ctl, please specify this in addrconf_sysctl[].
->
-> Umm how would I do that? Do you want me to add a comment explaining it?
-> I need extra1 and extra2 to be the network device so that I can set
-> NETCONFA_FORCE_FORWARDING but I also want to use proc_douintvec_minmax.
+> However, please check the results ./scripts/checkpatch.pl, there are a
+> lot of codestyle errors:
 
-Ah, I simply missed the net/idev use, please ignore my comment here.
+Whoops! Can't believe I forgot to run check patch!
+Thanks for letting me know.
 
