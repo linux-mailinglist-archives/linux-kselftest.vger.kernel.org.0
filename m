@@ -1,214 +1,186 @@
-Return-Path: <linux-kselftest+bounces-36545-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36546-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5AB7CAF91AB
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 13:38:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41997AF91FA
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 13:59:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD80E544CE7
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 11:37:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CD3CF1C41102
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 11:59:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 307392D0C77;
-	Fri,  4 Jul 2025 11:38:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C0922D5C6F;
+	Fri,  4 Jul 2025 11:59:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="E/JO7/9f"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J8Q8TmlB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D7DA34CF5;
-	Fri,  4 Jul 2025 11:38:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0657F2D46B7;
+	Fri,  4 Jul 2025 11:59:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751629095; cv=none; b=m08f0o31tPWz4i6Zetlnd3KDKM1fXT+ZXj1ELZU4QWfqOauouhuFbMTO89jEn+UssLRJ2KkefNsz3O4bVCS4RBmWUZs1lTkeOhhnugAtZ8ww5SJzHT/A6WwfIIJAUUF+jUUbyNPk53e2fVwupFD5mwPYwLWGbdVXSH4ko5Cj1yw=
+	t=1751630347; cv=none; b=TYSykJYeVJWIWVSk99WEGlSOGaOMfL+s8TPxMgKRaQ7FRpz4SyJJ1OJ6vykP2qjYOcS+KnEyIO590mXJLeASOYSf3qamT+i68PKHVKq6I6rzFbuGKgMRQsqNSkwbhlg7eeAKxS5z1yMbZZzOLUrQ1Z9qqi927X6OVE1ZQMOhAdI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751629095; c=relaxed/simple;
-	bh=YJP28q7Ucuh5+7BaGONOkzuEJ3W9tO+RZPWtLfGChOQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MyoYvv4sbwv9ho/gXOyZ2IvLHIkt0oQUQ7l7uzfZFk5KS37lqRqxeW9ALB1NABOsqyEgJkhW6ASXCRW0oW53aSk7gDlnJ2MT/z9gFNZNyOhqrVhDJzqWbJWAYIOl/CbmhpVwBRabBF8Ee3HnsPZEh+kbTOm5O/8JCM68a7CZA24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=E/JO7/9f; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=ynC92e4rjsZv78cTw8oxuNAOqH35c/SFBFFQS7G9ITc=; b=E/JO7/9fAmFdO1eN4H2Q43FGZn
-	4ShIr/TC33BfEuNNGiQnlyf4jEJTaJ9+pf9h3MnkoB7eSetIN8ZhjFYmWq6Iv8A65Woc7u6bIay7k
-	NqKDUe0niYCFjXpSt87C2aYckfzzQ/jq2iSGipNs56IVU4bA8XmzH9JvE7clqVIV+ONIG6Z6Y/cQs
-	S8qPcygYw0TOAJZZdWMFNl02/zNb0pwqYs23nUGAZv+v0DMGNrvDvacS6a3lGjNUJ8e6driZHEPBj
-	eQmW+TY9fG8evl5IneDSEI/7+YQKtKJTvostwB41z1Siysa3NgW1T5WNbzSp5w+IXMDJl8F3k8P04
-	C2QDdK9w==;
-Received: from sslproxy08.your-server.de ([78.47.166.52])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1uXek2-0004GS-1e;
-	Fri, 04 Jul 2025 13:38:06 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy08.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1uXek1-0006BS-2J;
-	Fri, 04 Jul 2025 13:38:05 +0200
-Message-ID: <f5d724ab-0eb6-41a1-b694-8aea566e99ab@iogearbox.net>
-Date: Fri, 4 Jul 2025 13:38:04 +0200
+	s=arc-20240116; t=1751630347; c=relaxed/simple;
+	bh=mKUAfa6GAdUfi2Bvssbgn4xEiZsMisIFcKKgtP5vijk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=P+6pSwIttWZtlm/vyngKdt/aKt0MwvdJ2Wcg53iWJLfa2XFkvt8lO6HpkgJ3CNnBXqID5w3NqVkUhHer8cajBPioozc/FlfH0XBnMT6OD/rIxjEpsLSauWYw1/gUvDRDPAiASKmUCNcZmXug18AWPOsTMKacFXHWihwD1bh0x5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J8Q8TmlB; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-553d771435fso789019e87.3;
+        Fri, 04 Jul 2025 04:59:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751630344; x=1752235144; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AX2ezheHMTwCnwKIKFQeSSolcoT52guQ9m4zT7OdyqQ=;
+        b=J8Q8TmlBsCAnNvuLXd+nap/CgBFWqpDBEP+BQFK8kfJVt/SG7pq54DDshk6MoHesgU
+         rS9VfbAkXbDt2N7xXhU38UoN7BO0ZBek9f7XZUIGzwuYf5Di2jNfuHSDAAnT4TfWIhcs
+         2gWA1XrcA/6r7UB9qmojI2uJnr9j9R90j3PxqWshV7utJVFDgpMQuyJ6amiTfPYxun3D
+         Pe1XP3CbCC63EVN5mBL1/fCOVJY8hKcRrbWBz4upM3yPtwO9KVt+8AhnshRN2CfHrxvs
+         Lbt5CX0sOKU7CedjMBu2KTqXc3F0cz8RdqYzFrzaKGd5+OcOiLSzMCAJAl4AZwkGll63
+         lrPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751630344; x=1752235144;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AX2ezheHMTwCnwKIKFQeSSolcoT52guQ9m4zT7OdyqQ=;
+        b=GrJOHzdRUuwodT5uwbxzJvv5XmFBA/HZVmjpxEDOnCMLqq9KVYs5HbXkXsSTeAPQSs
+         qDugqM2DVtrQikleNpJSiMah825CoBpbdeRd5y+FziesbMa4isQmbUSpm8CDqn5qJPlJ
+         fS/ng2Bw0jP9iNlatvreupVKCOVgX0LfJ+1lDHfi5BMGNNF9MeuqllpZgGXZnuKR2w4c
+         YYKaWU4GPTi7RVuqWjnZEjhPdloNMPazIA9IPktAw9ni2LQE56vMXBAdJicTV1OBq3lf
+         QwS6XyTyK/E4f4yP+Lq1+cURwhrGgCgRyRQ4hlI7M75XyZKrJUs0bOzRFwsHYegWwirg
+         EiYg==
+X-Forwarded-Encrypted: i=1; AJvYcCU/xd6Mz7mx8bF8/3Cqqb+nKuh57hu3c9Hf23AfawPmfSH525LGqIBNffzCDkPCPlwvUHvJbfMXvF5a4L9QHrrz@vger.kernel.org, AJvYcCU3tdV2S/RiI759OTqYBhQdPn/oHXoqB7iYzCsVpVLLza9cYkiGRSHTStFNyD7thhwJTwtQ4M+p@vger.kernel.org, AJvYcCUUsCf88rrXXnKhvyymItrsyROOl65AZr9g3+freHphQDkR4Hb45h5EeI/8NFkQIFZUiV4zr+aJ2ahazovR@vger.kernel.org, AJvYcCW3Uc2/96AgEBtZYlgBj/bFFhpclOB/1jMIgMJlUDt1NrMTW+HzVwtWPohbyYygUbH+HVAArHyge8QQ@vger.kernel.org, AJvYcCWGzo5Io1lAy2bZ0A4l1hzEMkQkC80kB7n3Oorrsq5kEzu5w5J1H8TmGHCK88CFluxZfDUdhVU2bF5l@vger.kernel.org, AJvYcCX4h36/cAOeUvtqEGw7G5upkRJF13s70pmQgbinL7T0dyTLrMFCzC0c2aBfTrQkXgoD4sCEoQEf6kS7@vger.kernel.org, AJvYcCXC/vZdZJTQRJz3DQl3LDcAeJ7pI5grAtBxFuxEcKlv0eCynBvi+jX9E7c2MaRBpy0jTfqQCwcZ/1I=@vger.kernel.org, AJvYcCXYz+s26BOgYVlQis0ehY0FFS9hJ7LhdFueciGkGH7Pl76HGlMwZOXfm5zVfNDMwbRMGsMZwhHxEFdTOM11uL8=@vger.kernel.org, AJvYcCXcdmdE8a7w/Q6NGLNH5phgPPn7iviKvvfA+ss/LXbBIGeZMyjVXhSai2AmirG0i8O2xAbhm3lA7FawWnM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzBaT7HMo3b2Zg56BiRTlg8Fbx6vpMkv5BTlDXnH2C5X6Jn3M2x
+	dmm248BcHVItzCWnDz6eHyWCIG6I5fdQpo8Q8Eluh0Q01ROco7fQ8FSDx5A5HWpztCZCO4tqrkB
+	zVC+OhCTna7HHdYJam4DBK0cwl+XP5+w=
+X-Gm-Gg: ASbGnctTj8nlyefRwWrRTsIgz3JYgQlXaXHk46wVBVv3NFAFwox9JrMC5eQTDi7s6nt
+	8jWCcTUwyrlevDFa+YiUgTRkSRlyU+JgDgIQzIGpMITLpkwa+6QsTjSC/wF/m4FNo6BGw4d2Xyp
+	qlLpgvnqy30G+2Nv67ZNogi7BGASEHkcCKNpM/oN5mX+4a2LN88YCdh3DAaSGGQvQKurG/J9msX
+	IQwfA==
+X-Google-Smtp-Source: AGHT+IFprJqElpi5vcjeJ23fLLN3WMzZLZ0CrkVny13pfXY112X2yXfPm/SOjbYZcibT+i59JoBTBmJ65qELc434iFo=
+X-Received: by 2002:a05:6512:2528:b0:553:2868:635c with SMTP id
+ 2adb3069b0e04-556e60879d0mr712367e87.48.1751630343665; Fri, 04 Jul 2025
+ 04:59:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next,v3 2/2] selftests/bpf: Enhance XDP Rx metadata
- handling
-To: Jesper Dangaard Brouer <hawk@kernel.org>,
- "Song, Yoong Siang" <yoong.siang.song@intel.com>,
- "David S . Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Alexei Starovoitov <ast@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
- Magnus Karlsson <magnus.karlsson@gmail.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
- <bjorn@kernel.org>, Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
- Jonathan Lemon <jonathan.lemon@gmail.com>
-Cc: "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-References: <20250702165757.3278625-1-yoong.siang.song@intel.com>
- <20250702165757.3278625-3-yoong.siang.song@intel.com>
- <77463344-1b1a-443a-97be-a7ef8a88b8af@kernel.org>
- <IA3PR11MB92546301B67FB3A9FDCD716DD842A@IA3PR11MB9254.namprd11.prod.outlook.com>
- <88a64a65-bd8c-4b73-af19-6764054d4572@kernel.org>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <88a64a65-bd8c-4b73-af19-6764054d4572@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.0.7/27689/Fri Jul  4 10:42:55 2025)
+References: <20250701-cstr-core-v13-0-29f7d3eb97a6@gmail.com>
+ <20250701-cstr-core-v13-2-29f7d3eb97a6@gmail.com> <DB2BDSN1JH51.14ZZPETJORBC6@kernel.org>
+ <CAJ-ks9nC=AyBPXRY3nJ0NuZvjFskzMcOkVNrBEfXD2hZ5uRntQ@mail.gmail.com>
+ <DB2IJ9HBIM0W.3N0JVGKX558QI@kernel.org> <CAJ-ks9nF5+m+_bn0Pzi9yU0pw0TyN7Fs4x--mQ4ygyHz4A6hzg@mail.gmail.com>
+ <DB2PIGAQHCJR.3BF8ZHECYH3KB@kernel.org> <CAJ-ks9=WmuXLJ6KkMEOP2jTvM_YBJO10SNsq0DU2J+_d4jp7qw@mail.gmail.com>
+ <CAJ-ks9kNiOgPO7FF3cAbaSNtTWs0_PzQ4k4W0AxjHNFuMJnDcQ@mail.gmail.com> <DB36T5JWBL10.2F56EDJ1XKAD0@kernel.org>
+In-Reply-To: <DB36T5JWBL10.2F56EDJ1XKAD0@kernel.org>
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Fri, 4 Jul 2025 07:58:27 -0400
+X-Gm-Features: Ac12FXwwR0QTbVNjts9p85kYh4knK1uvCt11R29enEo0nBiKI492OfZj839T-II
+Message-ID: <CAJ-ks9=Jutg+UAwCVER_X91BGxWzmVq=OdStDgLZjTyMQSEX6Q@mail.gmail.com>
+Subject: Re: [PATCH v13 2/5] rust: support formatting of foreign types
+To: Benno Lossin <lossin@kernel.org>
+Cc: Michal Rostecki <vadorovsky@protonmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	Trevor Gross <tmgross@umich.edu>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
+	Danilo Krummrich <dakr@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
+	FUJITA Tomonori <fujita.tomonori@gmail.com>, Rob Herring <robh@kernel.org>, 
+	Saravana Kannan <saravanak@google.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Andrew Lunn <andrew@lunn.ch>, 
+	Heiner Kallweit <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Jens Axboe <axboe@kernel.dk>, 
+	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+	Dave Ertman <david.m.ertman@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
+	Leon Romanovsky <leon@kernel.org>, Breno Leitao <leitao@debian.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org, 
+	netdev@vger.kernel.org, devicetree@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-pci@vger.kernel.org, nouveau@lists.freedesktop.org, 
+	linux-block@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 7/4/25 11:58 AM, Jesper Dangaard Brouer wrote:
-> On 04/07/2025 03.17, Song, Yoong Siang wrote:
->> On Friday, July 4, 2025 1:05 AM, Jesper Dangaard Brouer <hawk@kernel.org> wrote:
->>> On 02/07/2025 18.57, Song Yoong Siang wrote:
->>>> Introduce the XDP_METADATA_SIZE macro as a conservative measure to
->>>> accommodate any metadata areas reserved by Ethernet devices.
->>>
->>> This seems like a sloppy workaround :-(
->>>
->>> To me, the problem arise because AF_XDP is lacking the ability to
->>> communicate the size of the data_meta area.  If we had this capability,
->>> then we could allow the IGC driver to take some of the space, have the
->>> BPF-prog expand it futher (bpf_xdp_adjust_meta) and then userspace
->>> AF_XDP would simply be able to see the size of the data_meta area, and
->>> apply the struct xdp_meta at right offset.
->>>
->> Thanks for your input.
->>
->> I agree with you that the implementation will be simple if user application
->> able to get the size of data_meta area. The intention of this patch set is to let
->> developer aware of such limitations before we have a perfect solution.
->>
->> Btw, do you got any suggestion on how to expose the metadata length?
->> I not sure whether xdp_desc.options is a simple and good idea or not?
-> 
-> That is a question to the AF_XDP maintainers... added them to this email.
-> 
-> /* Rx/Tx descriptor */
-> struct xdp_desc {
->      __u64 addr;
->      __u32 len;
->      __u32 options;
-> };
-> 
-> As far as I know, the xdp_desc.options field isn't used, right?
+On Fri, Jul 4, 2025 at 6:09=E2=80=AFAM Benno Lossin <lossin@kernel.org> wro=
+te:
+>
+> On Fri Jul 4, 2025 at 1:23 AM CEST, Tamir Duberstein wrote:
+> > On Thu, Jul 3, 2025 at 6:41=E2=80=AFPM Tamir Duberstein <tamird@gmail.c=
+om> wrote:
+> >> On Thu, Jul 3, 2025 at 4:36=E2=80=AFPM Benno Lossin <lossin@kernel.org=
+> wrote:
+> >> >
+> >> > I don't understand, can't you just do:
+> >> >
+> >> > * add `rust/kernel/fmt.rs`,
+> >> > * add `rust/macros/fmt.rs`,
+> >> > * change all occurrences of `core::fmt` to `kernel::fmt` and
+> >> >   `format_args!` to `fmt!`.
+> >>
+> >> Yes, such a split could be done - I will do so in the next spin
+> >>
+> >>
+> >> > The last one could be split by subsystem, no? Some subsystems might
+> >> > interact and thus need simultaneous splitting, but there should be s=
+ome
+> >> > independent ones.
+> >>
+> >> Yes, it probably can. As you say, some subsystems might interact - the
+> >> claimed benefit of doing this subsystem-by-subsystem split is that it
+> >> avoids conflicts with ongoing work that will conflict with a large
+> >> patch, but this is also the downside; if ongoing work changes the set
+> >> of interactions between subsystems then a maintainer may find
+> >> themselves unable to emit the log message they want (because one
+> >> subsystem is using kernel::fmt while another is still on core::fmt).
+> >
+> > I gave this a try. I ran into the problem that `format_args!` (and,
+> > after this patch, `fmt!`) is at the center of `print_macro!`, which
+> > itself underpins various other formatting macros. This means we'd have
+> > to bifurcate the formatting infrastructure to support an incremental
+> > migration. That's quite a bit of code, and likely quite a mess in the
+> > resulting git history -- and that's setting aside the toil required to
+> > figure out the correct combinations of subsystems that must migrate
+> > together.
+>
+> So here is what we can do without duplicating the logic, though it
+> requires multiple cycles:
+>
+> 1. We merge the two `fmt.rs` files & each subsystem merges an
+>    implementation of `kernel::fmt::Display` for their types, but keeps
+>    the `core::fmt::Display` impl around.
+> 2. After all subsystems have merged the previous step, we change the
+>    implementations of `print_macro!` to use `fmt!` instead of
+>    `format_args!`.
+> 3. We remove all occurrences of `core::fmt` (& replace them with
+>    `kernel::fmt`), removing the `core::fmt::Display` impls.
 
-The options holds flags, see also XDP_PKT_CONTD and XDP_TX_METADATA.
+That would probably work. We will probably see regressions because we
+can't just replace `core::fmt` imports with `kernel::fmt`, so new code
+may appear that uses the former.
 
-> (Please AF_XDP experts, please verify below statements:)
-> Something else we likely want to document: The available headroom in the
-> AF_XDP frame.  When accessing the metadata in userspace AF_XDP we do a
-> negative offset from the UMEM packet pointer.  IIRC on RX the available
-> headroom will be either 255 or 192 bytes (depending on NIC drivers).
-> 
-> Slightly confusing when AF_XDP transmitting from userspace the UMEM
-> headroom is default zero (XSK_UMEM__DEFAULT_FRAME_HEADROOM is zero).
-> This is configurable via xsk_umem_config.frame_headroom, like I did in
-> this example[1].
-> 
-> Maybe I did something wrong in[1], because I see that the new method is
-> setting xsk_umem_config.tx_metadata_len + flag XDP_UMEM_TX_METADATA_LEN.
-> This is nicely documented in [2]. How does this interact with setting
-> xsk_umem_config.frame_headroom ?
-
-If you request XDP_UMEM_TX_METADATA_LEN then on TX side you can fill
-struct xsk_tx_metadata before the start of packet data, that is,
-meta = data - sizeof(struct xsk_tx_metadata). The validity of the
-latter is indicated via desc->options |= XDP_TX_METADATA and then
-you fill meta->flags with things like XDP_TXMD_FLAGS_CHECKSUM to
-tell that the related fields are valid (ex. request.csum_start,
-request.csum_offset) and that you expect the driver to do the
-offload with this info. This is also what I mentioned in the other
-thread some time ago that imho it would make sense to have this also
-on RX side somewhat similar to virtio_net_hdr..
-
-> [1] https://github.com/xdp-project/bpf-examples/blob/3f365af4be1fe6a0ef77e751ff9b12c912810453/AF_XDP-interaction/af_xdp_user.c#L423-L424
-> [2] https://www.kernel.org/doc/html/v6.12/networking/xsk-tx-metadata.html
-> 
-> --Jesper
-
+I think this discussion would be productive on the next spin. The
+changes in other subsystems are now almost entirely changing of import
+paths -- perhaps that would be sufficiently uncontroversial for folks
+to give their Acked-bys.
 
