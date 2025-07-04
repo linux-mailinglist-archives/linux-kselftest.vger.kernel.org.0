@@ -1,113 +1,109 @@
-Return-Path: <linux-kselftest+bounces-36598-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36599-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87642AF9953
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 18:51:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B7BCAF9A4F
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 20:08:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 17B703A3823
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 16:50:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 86E5F4A2F92
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 18:08:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A69241E5B7B;
-	Fri,  4 Jul 2025 16:50:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16FF820D4F8;
+	Fri,  4 Jul 2025 18:08:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gRwFBx/f"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qlbNSIXe"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7926219BBA;
-	Fri,  4 Jul 2025 16:50:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EC7320297B
+	for <linux-kselftest@vger.kernel.org>; Fri,  4 Jul 2025 18:08:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751647852; cv=none; b=IHq5eCqMYZFx9kopCEho0QqjTfBPCIDmwVSG1/73aRpHeqQx5x2Q5IP2NllX1FFiHocEtmY02Dhegdjlx59cmB3aTv71zhpLnzIwiqDuietzYq5N/hes+zBFHQgCmXC9b7k1Qkb94pj+c8sJKCPeL3htiO9J+G9Jz463d07N/xU=
+	t=1751652502; cv=none; b=VXrh86HOtBnUT5LtA0zoM3a2bI5hQu0H+xq1jHMMw3FCA1ytdaNFbghSLdY1xir0d/RQcY65md5b+PJRLVFFU5EpzijBKt1+88d7/MgaJ7FoJPY2pBqihnWLprSU4bVj3lfWUARONx3aQPx2QUpMMPTZV7IXM9SCR0MMhnMbPxk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751647852; c=relaxed/simple;
-	bh=z4xIqrxnxJb/VU6+2ATYNGE+j9z5mnmSIDSJ+6cCgqk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F4imdZmg52FFhX0sj/F0/Y7SvOSBoEtQs0hZokt5eIhZ5g9Y/HVtoJ+UjZFdBWFRMqan2qwddYKsMiN3vJgnCuXpoYCCRPfiCRoPHTywptBcZhQinhjz7dnxfkncQe8Rb4Y7AeZDwVeRUYFCB8i5tcK9cjCTshVZlmDqAzJHAzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gRwFBx/f; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D703C4CEEE;
-	Fri,  4 Jul 2025 16:50:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751647852;
-	bh=z4xIqrxnxJb/VU6+2ATYNGE+j9z5mnmSIDSJ+6cCgqk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gRwFBx/fCbHOJNhDgzF1CP7cSmMOD7AvI/ezevCzbNVkhRRjSPw8g7a7PRiip3Ws5
-	 xKmheH2WV6Gj+hWPcYucHPVvW5qL0i4ezRA+VvCvNWthfrhrK40QBq3YUkLF5lntFN
-	 Lg61CB0wkVLdJ769VegGGteZSVpU1Ab4VN1FYDu+OO4CmJRTVKPqT1L25L4ROYlFiJ
-	 DN5d5hWNZboc8wc22pc/3Zg5SAdg+NfXzBA17p6Sf8gKTHJwubaqY9IdfPlkfgKwzZ
-	 X9+YxcVXNLzIJ3K2wOFLTgL6ezZz/WvhJgz7UI3AjKqB9D94i4sfWFnVN700Fdl04Y
-	 CgDDxvg66qIPg==
-Date: Fri, 4 Jul 2025 17:50:45 +0100
-From: Simon Horman <horms@kernel.org>
-To: Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc: davem@davemloft.net, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
-	Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Vladimir Oltean <vladimir.oltean@nxp.com>,
-	=?utf-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>,
-	Oleksij Rempel <o.rempel@pengutronix.de>,
-	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 3/3] selftests: ethtool: Introduce ethernet PHY
- selftests on netdevsim
-Message-ID: <20250704165045.GL41770@horms.kernel.org>
-References: <20250702082806.706973-1-maxime.chevallier@bootlin.com>
- <20250702082806.706973-4-maxime.chevallier@bootlin.com>
- <20250704132019.GM41770@horms.kernel.org>
- <20250704153250.6ec18427@fedora.home>
+	s=arc-20240116; t=1751652502; c=relaxed/simple;
+	bh=zZOG+6kEYPWNmTSbahRP8Yg09LRZxuvbzgHqdu8qA1g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Content-Type; b=ngl3xBFHZiTe66C2mZUACSFAjGEAWzGIOgCix1RPgDw2H5MwEdSbjbeYitXLSCKq8F/0ovgpV8GXQ7/fsDJs1hCMuzEwNBCw9dLtNBMcb3q/77IwAdoJsC3wShg8pAiNgiQ0UggYMBnkoYGUn8kkrtfuaVxeXH1fJSKPwzbDNXI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qlbNSIXe; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-b3507b63c6fso1208005a12.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 04 Jul 2025 11:08:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1751652500; x=1752257300; darn=vger.kernel.org;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1RfRwO9ZuuX8vmXNtGlWGYF03IZb5qXeEdozJPnkCAQ=;
+        b=qlbNSIXeggW6gkFJ+tpw8ypz8EFB+toeQYYvrjy25mBLgiusTYz6OVSRl1+HbDlCsx
+         GcOpXjH7VC/VZQiw1vq2vzO+6TVCgHGY4pzc/cSluJpmd5fLsYfDqLcXMXiBpVxIdlMQ
+         CDR6K7T7fxB54Wi0R8AEB/J/8mjbF5n2oFQhAns3PUFrIBODSbUu5DoFUch1JQCEO0tL
+         qaqpO/DHOet4MKI3+aMzfDRAGF598tx2kbNbWYDArr/J2yFsa0+7Z00xLMkfYNjKj+/U
+         MW+p4/wfy22TXDncYX/cv5HtNi9Bn2oC00enRW5njnJXYCpTR7lqLUJ6ffo+ifBo31lt
+         ANnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751652500; x=1752257300;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1RfRwO9ZuuX8vmXNtGlWGYF03IZb5qXeEdozJPnkCAQ=;
+        b=PsliMkKTtNNIuZwl1D4tuTF/ma9E3yr901/FVQ25VoBr47xOEyIjXKxYzU3ZscMVUP
+         K6IUcwAsX/Cf1djUgEkkYBAYqoMStdb52J5gT/RJJZdmiCmQVBgSqPQxU/WeF7AQOJlV
+         AWgWH1mJyj0aIfG9mH8BAQWdTbBB2ihiv7ndiZhAX3BuHqezBCJLoZjWXJ8/0ZCIYTcV
+         bi0iqMFpa5owYekvWBA7EyrMjDWogydy9qu76rcNdBUCvCeF5BHGDBeDG/0YqpVW6e79
+         tHac3mCG3LBZGcE2kCT+9bdJaKRnGissOR/m2+9pq/mOoaB8zMe3saJ/Q/tgIcDraoMq
+         6ZBg==
+X-Forwarded-Encrypted: i=1; AJvYcCU9oPvOMk5RmOp7JqLVYm6MF0TRbGFFweU4FiUac8uEy9bFhIf1anVYGKGc371TfE1RzijDLpH/U6PI6FLpsf0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAcya7JEdfdylBwTeKDy2ylwpe3jUSVlgSOFaOuSGLG8KURvSG
+	nR17+BR/JfREUL4AcMrdqSKhXQsouZM8FvSba3aaywRN1/+ih+/PEw7xsHchm1TQRnv2EMD9UL5
+	efb+I96xeWCKpt4f4r4TgeLh+ELY8W7OUzlwJWb3t
+X-Gm-Gg: ASbGncvJxx1JUYwCVDQ9bA8qm0NI4QdLf24wk2NcqsITEyEoZ7nq7ZSPV7sTYHjl49M
+	mRtek44xzELfAdR3Vq/YLhd0McVRknE95eqaajoDNpqT0OPdMmAqVR278xDNjTsHaEFHhxKScr0
+	FgMPRrNWzDCB3Jd0Kl6WKf3KydF6PZ+yvm2QV7sfJ0J2OjGJBwOxF8aUeEj7YHnA4aVTcQbi8t/
+	A==
+X-Google-Smtp-Source: AGHT+IF5gPzuVm/wp6gH8G5aVgrvTuxINflU0Wvrt9OQjylDdhaRjtr+zBERt/R7CmrrpnMu9R+f3+ixB+/Ii1d7bpE=
+X-Received: by 2002:a17:90b:1fc3:b0:313:23ed:6ff with SMTP id
+ 98e67ed59e1d1-31aadcf4979mr3531611a91.1.1751652499978; Fri, 04 Jul 2025
+ 11:08:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250704153250.6ec18427@fedora.home>
+References: <20250703160154.560239-1-g.goller@proxmox.com> <20250704080101.1659504-1-kuniyu@google.com>
+ <4f6ti2orkpa2c5upawpaj63jyhdx3uxeobaxjhd2tjnuzgucqz@odfw5wacuwjt>
+In-Reply-To: <4f6ti2orkpa2c5upawpaj63jyhdx3uxeobaxjhd2tjnuzgucqz@odfw5wacuwjt>
+From: Kuniyuki Iwashima <kuniyu@google.com>
+Date: Fri, 4 Jul 2025 11:08:08 -0700
+X-Gm-Features: Ac12FXwFoBf500m9nUVc_9wqMSgyrDzQU6Bg9-YJeQl99hoXRh7Oas8Dc5hmpLw
+Message-ID: <CAAVpQUDxYarDv2OySLxazZqEqnu=XnSoZv9NVThdTc5Z5N7PNw@mail.gmail.com>
+Subject: Re: [PATCH net-next v4] ipv6: add `force_forwarding` sysctl to enable
+ per-interface forwarding
+To: Kuniyuki Iwashima <kuniyu@google.com>, corbet@lwn.net, davem@davemloft.net, 
+	dsahern@kernel.org, edumazet@google.com, horms@kernel.org, kuba@kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, 
+	nicolas.dichtel@6wind.com, pabeni@redhat.com, shuah@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 04, 2025 at 03:32:50PM +0200, Maxime Chevallier wrote:
-> On Fri, 4 Jul 2025 14:20:19 +0100
-> Simon Horman <horms@kernel.org> wrote:
-> 
-> > On Wed, Jul 02, 2025 at 10:28:05AM +0200, Maxime Chevallier wrote:
-> > > Now that netdevsim supports PHY device simulation, we can start writing
-> > > some tests to cover a little bit all PHY-related ethtool commands.
-> > > 
-> > > So far we only test the basic use of "ethtool --show-phys", with :
-> > >  - A simple command to get a PHY we just added
-> > >  - A DUMP command listing PHYs on multiple netdevsim instances
-> > >  - A Filtered DUMP command listing all PHYs on a netdevsim
-> > > 
-> > > Introduce some helpers to create netdevsim PHYs, and a new test file.
-> > > 
-> > > Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>  
-> > 
-> > Hi Maxime,
-> > 
-> > We have recently started running shellcheck as part of our CI (NIPA).
-> > Could you do so for the scripts added and modified by this patch?
-> 
-> Sure thing, I'll do that :)
+On Fri, Jul 4, 2025 at 2:37=E2=80=AFAM Gabriel Goller <g.goller@proxmox.com=
+> wrote:
+[...]
+> >> +
+> >> +    tmp_ctl.extra1 =3D SYSCTL_ZERO;
+> >> +    tmp_ctl.extra2 =3D SYSCTL_ONE;
+> >
+> >As you are copying *ctl, please specify this in addrconf_sysctl[].
+>
+> Umm how would I do that? Do you want me to add a comment explaining it?
+> I need extra1 and extra2 to be the network device so that I can set
+> NETCONFA_FORCE_FORWARDING but I also want to use proc_douintvec_minmax.
 
-Thanks.
-
-> > > ---
-> > >  .../selftests/drivers/net/netdevsim/config    |  1 +
-> > >  .../drivers/net/netdevsim/ethtool-common.sh   | 15 +++++
-> > >  .../drivers/net/netdevsim/ethtool-phy.sh      | 64 +++++++++++++++++++  
-> > 
-> > Should ethtool-phy.sh be added to TEST_PROGS the Makefile in
-> > the same directory?
-> 
-> Ah yes I forgot that. So any file in that TEST_PROGS list will end-up
-> being run in NAPI tests ?
-
-I assume so.
+Ah, I simply missed the net/idev use, please ignore my comment here.
 
