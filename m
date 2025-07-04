@@ -1,34 +1,34 @@
-Return-Path: <linux-kselftest+bounces-36589-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36590-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB52DAF9648
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 17:08:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C934AF9649
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 17:08:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E9F51CA7E22
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 15:08:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C9264A5AEF
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 15:07:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 118EE30AABC;
-	Fri,  4 Jul 2025 15:05:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55BCD30B9A8;
+	Fri,  4 Jul 2025 15:05:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="gueOyhD+"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="VIqSpHEW"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56154309DD9;
-	Fri,  4 Jul 2025 15:05:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11A6E30B989;
+	Fri,  4 Jul 2025 15:05:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751641556; cv=none; b=qjl0+aHgeetVqoVlGVUCuthQHvbPVmokCN3NRZzibBZKcwFfyBX5n+ctQiTPtA8jrP7ITViPTWhlFNO9LO9OxTuvkmlm3Acf/q7r+j2i9Ya4ti1jKrzx6iGWaqJ5RxS7Q4zkI0vebetkp8dP/HU6D+SBi1QHDRYnGHWRhtdR2lY=
+	t=1751641559; cv=none; b=j6nMpNCg0Lj1hGWHFmm3SiloMR5eJ9J9Ih24Y5WuwM2mFAEqC5yeVDYX3Eo3EoWMbHihL+ymBWzeL8UaC9xUQGk/9PBovigINY0jO/gYKwYFJ/9nEvoZkMO/WnW9nzUJ6EAWWV+GOrrn8hYK53/z3fVr2O86lIunGmbasWk7PzU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751641556; c=relaxed/simple;
-	bh=a2WsffCtMjrOr3eN7sgJUtVLrxo/37LsvsGcPypTyJY=;
+	s=arc-20240116; t=1751641559; c=relaxed/simple;
+	bh=qYXwK2YGQZqip896SrJHiyTGRpexJhyk0g/culYDl1g=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=K355KAPXcrSPh/m2YCGsPuneQHeSo6T1fp7l9dwQJAwND2zYnr8rVz0t7m1Sk69iDSkwuVBKlz7FnI5kTqfcQMlh8idlSnvw3SElct61R07C7l2Gc2XapLF/UD1gDtbq145ZntoLhe3f0OY5Q0vUS88XCaXs3I4Cov71KEfQVtU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=gueOyhD+; arc=none smtp.client-ip=213.97.179.56
+	 In-Reply-To:To:Cc; b=VJPsQFxyfjx1BvAgPpvN7ykA0MgFkXoblQbvOqJX2v4SIMYGsWKUDJorT5wThf2z2JMQrr8cBjKIh1KJLf292hq+GPvbuk72BPuNs0+nVcyU1w4hhhAw2nlL+7qoHmcWxIQorOupazMGt85GdoVvRLiwnyvvcXvPvEtvK4fFTF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=VIqSpHEW; arc=none smtp.client-ip=213.97.179.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
@@ -37,19 +37,19 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
 	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
 	:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
 	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=hDJnfoXLRCbu8K4cHIiQu4FkSAttrXT2oWxF07oKpXs=; b=gueOyhD+SHa5wkoBFMtEdsemeu
-	8R91OqMFuCfvHQKgLa70U4CupTiFKFVKP32+GooC2SS/FOGgCeBvRVOz0XbWSb65rK3vp1D6SeP/m
-	bsG4u3aqZuoMgH8liTfHQwICreI8g8CTSWhjXffv1+FBu4iwsa2zvYo9LozCdbtlh83meXsBnxIm2
-	aRVuZU66w+/fkUYQEIYzqkFqStzCeBS0d6kFyQQtcb8ZmlNz+SIoYnc9h5Ldrob8D5fmoHC2M/H7Z
-	LkLL01jVHrTehU9ZaJ8R1D9xELUed5iEKVupNkKsgdh7NzgDjLvegfisStPuO/TqQJmc7gk+wyl+7
-	+z06dPfA==;
+	bh=OYN5jYCYnRMuaZ05Z/No4kCfDRRyEiAgDtvFVDOFf9k=; b=VIqSpHEWX1yZQWJhVyTAUqia/7
+	Xpwf0FuM1Ub4TIDvJb+57LQTOATSHd4bC1Pq2W/fFEvcAjHIusaVTB6JzbcDnSoXdPjo1P8zHgRnP
+	zi//4h68yGEaECSUi2Imjak+LUNaeMURtkAQmpIrYPk+z+dX4v9C5/9h1fwrfVomjNidpXIePD8xD
+	wzoIRm5wOWc2l688meNBjDQTZP+mBBhpFysjJBoK8RAKIi4ulsAAz9R3cX8Az59K8BqX/v3tBhXSR
+	FQivzCRPXYuzKU+4kSQk3NYnYFvVlJ2JNaR+QiEuGWJLW/lgwxiatFH5V/c7hVG5vB+W9rsX8/18k
+	EF1C4nyw==;
 Received: from [179.100.5.63] (helo=[192.168.15.100])
 	by fanzine2.igalia.com with esmtpsa 
 	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1uXhz6-00CTWt-5n; Fri, 04 Jul 2025 17:05:52 +0200
+	id 1uXhz8-00CTWt-Rs; Fri, 04 Jul 2025 17:05:55 +0200
 From: =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
-Date: Fri, 04 Jul 2025 12:05:14 -0300
-Subject: [PATCH 10/15] selftests/futex: Refactor futex_requeue with
+Date: Fri, 04 Jul 2025 12:05:15 -0300
+Subject: [PATCH 11/15] selftests/futex: Refactor futex_waitv with
  kselftest_harness.h
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -59,7 +59,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250704-tonyk-robust_test_cleanup-v1-10-c0ff4f24c4e1@igalia.com>
+Message-Id: <20250704-tonyk-robust_test_cleanup-v1-11-c0ff4f24c4e1@igalia.com>
 References: <20250704-tonyk-robust_test_cleanup-v1-0-c0ff4f24c4e1@igalia.com>
 In-Reply-To: <20250704-tonyk-robust_test_cleanup-v1-0-c0ff4f24c4e1@igalia.com>
 To: Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
@@ -71,33 +71,34 @@ Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
  =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
 X-Mailer: b4 0.14.2
 
-To reduce the boilerplate code, refactor futex_requeue test to use
+To reduce the boilerplate code, refactor futex_waitv test to use
 kselftest_harness header instead of futex's logging header.
 
 Signed-off-by: André Almeida <andrealmeid@igalia.com>
 ---
- .../selftests/futex/functional/futex_requeue.c     | 76 +++++++---------------
+ .../selftests/futex/functional/futex_waitv.c       | 98 ++++++++++------------
  tools/testing/selftests/futex/functional/run.sh    |  2 +-
- 2 files changed, 24 insertions(+), 54 deletions(-)
+ 2 files changed, 44 insertions(+), 56 deletions(-)
 
-diff --git a/tools/testing/selftests/futex/functional/futex_requeue.c b/tools/testing/selftests/futex/functional/futex_requeue.c
-index 51485be6eb2f1be6d0e30bc26c116515a0e5e7cc..69e2555b60399174a16ee1316b0b7d2e10419989 100644
---- a/tools/testing/selftests/futex/functional/futex_requeue.c
-+++ b/tools/testing/selftests/futex/functional/futex_requeue.c
-@@ -7,24 +7,15 @@
- 
+diff --git a/tools/testing/selftests/futex/functional/futex_waitv.c b/tools/testing/selftests/futex/functional/futex_waitv.c
+index a94337f677e181544992efd53891ccca02787adb..8ceaa372b2524fe243400c50382a142a30e61159 100644
+--- a/tools/testing/selftests/futex/functional/futex_waitv.c
++++ b/tools/testing/selftests/futex/functional/futex_waitv.c
+@@ -15,25 +15,16 @@
  #include <pthread.h>
- #include <limits.h>
--#include "logging.h"
+ #include <stdint.h>
+ #include <sys/shm.h>
 +
  #include "futextest.h"
+ #include "futex2test.h"
+-#include "logging.h"
 +#include "../../kselftest_harness.h"
  
--#define TEST_NAME "futex-requeue"
- #define timeout_ns  30000000
+-#define TEST_NAME "futex-wait"
  #define WAKE_WAIT_US 10000
- 
- volatile futex_t *f1;
+ #define NR_FUTEXES 30
+ static struct futex_waitv waitv[NR_FUTEXES];
+ u_int32_t futexes[NR_FUTEXES] = {0};
  
 -void usage(char *prog)
 -{
@@ -111,23 +112,27 @@ index 51485be6eb2f1be6d0e30bc26c116515a0e5e7cc..69e2555b60399174a16ee1316b0b7d2e
  void *waiterfn(void *arg)
  {
  	struct timespec to;
-@@ -38,67 +29,49 @@ void *waiterfn(void *arg)
+@@ -41,7 +32,7 @@ void *waiterfn(void *arg)
+ 
+ 	/* setting absolute timeout for futex2 */
+ 	if (clock_gettime(CLOCK_MONOTONIC, &to))
+-		error("gettime64 failed\n", errno);
++		ksft_exit_fail_msg("gettime64 failed\n");
+ 
+ 	to.tv_sec++;
+ 
+@@ -57,34 +48,10 @@ void *waiterfn(void *arg)
  	return NULL;
  }
  
 -int main(int argc, char *argv[])
-+TEST(requeue_single)
++TEST(private_waitv)
  {
--	pthread_t waiter[10];
+ 	pthread_t waiter;
 -	int res, ret = RET_PASS;
+-	struct timespec to;
 -	int c, i;
- 	volatile futex_t _f1 = 0;
- 	volatile futex_t f2 = 0;
-+	pthread_t waiter[10];
-+	int res;
- 
- 	f1 = &_f1;
- 
+-
 -	while ((c = getopt(argc, argv, "cht:v:")) != -1) {
 -		switch (c) {
 -		case 'c':
@@ -146,85 +151,168 @@ index 51485be6eb2f1be6d0e30bc26c116515a0e5e7cc..69e2555b60399174a16ee1316b0b7d2e
 -	}
 -
 -	ksft_print_header();
--	ksft_set_plan(2);
--	ksft_print_msg("%s: Test futex_requeue\n",
+-	ksft_set_plan(7);
+-	ksft_print_msg("%s: Test FUTEX_WAITV\n",
 -		       basename(argv[0]));
--
- 	/*
- 	 * Requeue a waiter from f1 to f2, and wake f2.
- 	 */
- 	if (pthread_create(&waiter[0], NULL, waiterfn, NULL))
++	int res, i;
+ 
+ 	for (i = 0; i < NR_FUTEXES; i++) {
+ 		waitv[i].uaddr = (uintptr_t)&futexes[i];
+@@ -95,7 +62,7 @@ int main(int argc, char *argv[])
+ 
+ 	/* Private waitv */
+ 	if (pthread_create(&waiter, NULL, waiterfn, NULL))
 -		error("pthread_create failed\n", errno);
 +		ksft_exit_fail_msg("pthread_create failed\n");
  
  	usleep(WAKE_WAIT_US);
  
--	info("Requeuing 1 futex from f1 to f2\n");
-+	ksft_print_dbg_msg("Requeuing 1 futex from f1 to f2\n");
- 	res = futex_cmp_requeue(f1, 0, &f2, 0, 1, 0);
--	if (res != 1) {
-+	if (res != 1)
- 		ksft_test_result_fail("futex_requeue simple returned: %d %s\n",
- 				      res ? errno : res,
- 				      res ? strerror(errno) : "");
--		ret = RET_FAIL;
--	}
- 
--
--	info("Waking 1 futex at f2\n");
-+	ksft_print_dbg_msg("Waking 1 futex at f2\n");
- 	res = futex_wake(&f2, 1, 0);
- 	if (res != 1) {
- 		ksft_test_result_fail("futex_requeue simple returned: %d %s\n",
+@@ -104,10 +71,15 @@ int main(int argc, char *argv[])
+ 		ksft_test_result_fail("futex_wake private returned: %d %s\n",
  				      res ? errno : res,
  				      res ? strerror(errno) : "");
 -		ret = RET_FAIL;
  	} else {
- 		ksft_test_result_pass("futex_requeue simple succeeds\n");
+ 		ksft_test_result_pass("futex_waitv private\n");
  	}
 +}
 +
-+TEST(requeue_multiple)
++TEST(shared_waitv)
 +{
-+	volatile futex_t _f1 = 0;
-+	volatile futex_t f2 = 0;
-+	pthread_t waiter[10];
++	pthread_t waiter;
 +	int res, i;
  
-+	f1 = &_f1;
- 
- 	/*
- 	 * Create 10 waiters at f1. At futex_requeue, wake 3 and requeue 7.
-@@ -106,31 +79,28 @@ int main(int argc, char *argv[])
- 	 */
- 	for (i = 0; i < 10; i++) {
- 		if (pthread_create(&waiter[i], NULL, waiterfn, NULL))
--			error("pthread_create failed\n", errno);
-+			ksft_exit_fail_msg("pthread_create failed\n");
+ 	/* Shared waitv */
+ 	for (i = 0; i < NR_FUTEXES; i++) {
+@@ -128,7 +100,7 @@ int main(int argc, char *argv[])
  	}
+ 
+ 	if (pthread_create(&waiter, NULL, waiterfn, NULL))
+-		error("pthread_create failed\n", errno);
++		ksft_exit_fail_msg("pthread_create failed\n");
  
  	usleep(WAKE_WAIT_US);
  
--	info("Waking 3 futexes at f1 and requeuing 7 futexes from f1 to f2\n");
-+	ksft_print_dbg_msg("Waking 3 futexes at f1 and requeuing 7 futexes from f1 to f2\n");
- 	res = futex_cmp_requeue(f1, 0, &f2, 3, 7, 0);
- 	if (res != 10) {
- 		ksft_test_result_fail("futex_requeue many returned: %d %s\n",
- 				      res ? errno : res,
- 				      res ? strerror(errno) : "");
--		ret = RET_FAIL;
- 	}
- 
--	info("Waking INT_MAX futexes at f2\n");
-+	ksft_print_dbg_msg("Waking INT_MAX futexes at f2\n");
- 	res = futex_wake(&f2, INT_MAX, 0);
- 	if (res != 7) {
- 		ksft_test_result_fail("futex_requeue many returned: %d %s\n",
+@@ -137,19 +109,24 @@ int main(int argc, char *argv[])
+ 		ksft_test_result_fail("futex_wake shared returned: %d %s\n",
  				      res ? errno : res,
  				      res ? strerror(errno) : "");
 -		ret = RET_FAIL;
  	} else {
- 		ksft_test_result_pass("futex_requeue many succeeds\n");
+ 		ksft_test_result_pass("futex_waitv shared\n");
+ 	}
+ 
+ 	for (i = 0; i < NR_FUTEXES; i++)
+ 		shmdt(u64_to_ptr(waitv[i].uaddr));
++}
++
++TEST(invalid_flag)
++{
++	struct timespec to;
++	int res;
+ 
+ 	/* Testing a waiter without FUTEX_32 flag */
+ 	waitv[0].flags = FUTEX_PRIVATE_FLAG;
+ 
+ 	if (clock_gettime(CLOCK_MONOTONIC, &to))
+-		error("gettime64 failed\n", errno);
++		ksft_exit_fail_msg("gettime64 failed\n");
+ 
+ 	to.tv_sec++;
+ 
+@@ -158,17 +135,21 @@ int main(int argc, char *argv[])
+ 		ksft_test_result_fail("futex_waitv private returned: %d %s\n",
+ 				      res ? errno : res,
+ 				      res ? strerror(errno) : "");
+-		ret = RET_FAIL;
+ 	} else {
+ 		ksft_test_result_pass("futex_waitv without FUTEX_32\n");
+ 	}
++}
+ 
++TEST(unaligned_address)
++{
++	struct timespec to;
++	int res;
+ 	/* Testing a waiter with an unaligned address */
+ 	waitv[0].flags = FUTEX_PRIVATE_FLAG | FUTEX_32;
+ 	waitv[0].uaddr = 1;
+ 
+ 	if (clock_gettime(CLOCK_MONOTONIC, &to))
+-		error("gettime64 failed\n", errno);
++		ksft_exit_fail_msg("gettime64 failed\n");
+ 
+ 	to.tv_sec++;
+ 
+@@ -177,16 +158,21 @@ int main(int argc, char *argv[])
+ 		ksft_test_result_fail("futex_wake private returned: %d %s\n",
+ 				      res ? errno : res,
+ 				      res ? strerror(errno) : "");
+-		ret = RET_FAIL;
+ 	} else {
+ 		ksft_test_result_pass("futex_waitv with an unaligned address\n");
+ 	}
++}
++
++TEST(null_address)
++{
++	struct timespec to;
++	int res;
+ 
+ 	/* Testing a NULL address for waiters.uaddr */
+ 	waitv[0].uaddr = 0x00000000;
+ 
+ 	if (clock_gettime(CLOCK_MONOTONIC, &to))
+-		error("gettime64 failed\n", errno);
++		ksft_exit_fail_msg("gettime64 failed\n");
+ 
+ 	to.tv_sec++;
+ 
+@@ -195,14 +181,13 @@ int main(int argc, char *argv[])
+ 		ksft_test_result_fail("futex_waitv private returned: %d %s\n",
+ 				      res ? errno : res,
+ 				      res ? strerror(errno) : "");
+-		ret = RET_FAIL;
+ 	} else {
+ 		ksft_test_result_pass("futex_waitv NULL address in waitv.uaddr\n");
+ 	}
+ 
+ 	/* Testing a NULL address for *waiters */
+ 	if (clock_gettime(CLOCK_MONOTONIC, &to))
+-		error("gettime64 failed\n", errno);
++		ksft_exit_fail_msg("gettime64 failed\n");
+ 
+ 	to.tv_sec++;
+ 
+@@ -211,14 +196,19 @@ int main(int argc, char *argv[])
+ 		ksft_test_result_fail("futex_waitv private returned: %d %s\n",
+ 				      res ? errno : res,
+ 				      res ? strerror(errno) : "");
+-		ret = RET_FAIL;
+ 	} else {
+ 		ksft_test_result_pass("futex_waitv NULL address in *waiters\n");
+ 	}
++}
++
++TEST(invalid_clockid)
++{
++	struct timespec to;
++	int res;
+ 
+ 	/* Testing an invalid clockid */
+ 	if (clock_gettime(CLOCK_MONOTONIC, &to))
+-		error("gettime64 failed\n", errno);
++		ksft_exit_fail_msg("gettime64 failed\n");
+ 
+ 	to.tv_sec++;
+ 
+@@ -227,11 +217,9 @@ int main(int argc, char *argv[])
+ 		ksft_test_result_fail("futex_waitv private returned: %d %s\n",
+ 				      res ? errno : res,
+ 				      res ? strerror(errno) : "");
+-		ret = RET_FAIL;
+ 	} else {
+ 		ksft_test_result_pass("futex_waitv invalid clockid\n");
  	}
 -
 -	ksft_print_cnts();
@@ -233,18 +321,18 @@ index 51485be6eb2f1be6d0e30bc26c116515a0e5e7cc..69e2555b60399174a16ee1316b0b7d2e
 +
 +TEST_HARNESS_MAIN
 diff --git a/tools/testing/selftests/futex/functional/run.sh b/tools/testing/selftests/futex/functional/run.sh
-index b461a0a075a2ae526d37a1fcd09e196e48c2d4ff..af32695cfaded4f834c7c07c24908b8a3e32fe28 100755
+index af32695cfaded4f834c7c07c24908b8a3e32fe28..6086b5652687af3cd2d4e4bd56159149d5bb5fea 100755
 --- a/tools/testing/selftests/futex/functional/run.sh
 +++ b/tools/testing/selftests/futex/functional/run.sh
-@@ -54,7 +54,7 @@ echo
- ./futex_wait
+@@ -57,7 +57,7 @@ echo
+ ./futex_requeue
  
  echo
--./futex_requeue $COLOR
-+./futex_requeue
+-./futex_waitv $COLOR
++./futex_waitv
  
  echo
- ./futex_waitv $COLOR
+ ./futex_priv_hash $COLOR
 
 -- 
 2.49.0
