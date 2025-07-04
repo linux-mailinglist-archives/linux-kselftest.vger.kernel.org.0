@@ -1,216 +1,175 @@
-Return-Path: <linux-kselftest+bounces-36511-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36512-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6ACE6AF8B74
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 10:27:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BD0EAF8BB9
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 10:32:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 78CC87602BF
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 08:23:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5E341892AB5
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 08:30:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B091302CDB;
-	Fri,  4 Jul 2025 08:07:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85BE5246BBA;
+	Fri,  4 Jul 2025 08:17:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b="AlPchl/o"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DOepv9ob"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54999302CBB
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Jul 2025 08:07:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DDB21EF1D
+	for <linux-kselftest@vger.kernel.org>; Fri,  4 Jul 2025 08:17:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751616449; cv=none; b=Wxcr4pWeEf0RdU/3FIK4n/cIMCa0Lbq5j+f4zKQS/dFE4o4L02IScplYvDVj/haNvScwFWIUeZlcQ27PsAHIuLH0IDu7HNGSA2mqUIExOA5dxBJGzLyvg2wFDL1v3+dyW3Kqz3vH/1CXaTDwutXAfrhpxlx8fnJt4u/On2UzVY8=
+	t=1751617075; cv=none; b=Er1pUYjsqvRhNUNKcKSetsB5h+qyyVWV/RtcK2M/c2DnwYMGJAF7Acm4kZNEOhOhIEO2siauouEYW8w/pMvepkSARePTjML7XPgNy11xG7176QHhxVx65zwL/DWGYzJA3s4q6l/4i82y19fpsxRsyUvWYecZKbu2N0noOI7g4js=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751616449; c=relaxed/simple;
-	bh=1eBuMV7zUvgYp+Jj+PhCixLDDt2JcUjDRStB4ZXGl+I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Cp1s1hMzmZkt2ncQQcRXLQ6sNgEAW/1BpQCDengNrcR2k1CSNn7FYEkPKat99mt2GNjYSh+hE/9TCWMZm5TPLFSqQLnh1fcrn90MOhZuIrv8m1NqkIACP3ofk2ve5F/RBS4LH8lZ0/+5Sl0g64xkyrJvK5nWzTJI2MDaHBCA7/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com; spf=pass smtp.mailfrom=6wind.com; dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b=AlPchl/o; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=6wind.com
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3a4e749d7b2so102187f8f.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 04 Jul 2025 01:07:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=6wind.com; s=google; t=1751616445; x=1752221245; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:content-language
-         :from:references:cc:to:subject:reply-to:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=YahY59i4thK0MbaLm0aeNNACEbj0hyyZrO3XNw7pxsg=;
-        b=AlPchl/oF0LsBV1CCvgRwVSXrS3+NtZyAfVaDuVj2pGChw+gSIrJnLecNZ0aoYsE3D
-         h9ExPuAWMco9k+Aoma0Wv7hzfgJwz1gVUrgKd3+SqB/yHaknWBEvHq3DnR2a+lDkic7s
-         dC7WctkdldbEp5GQiKL9FXZ3zwC+JyIdK/4LMDKR/Ff+r3K4uuhumzuRELVDtqUkIL7H
-         1vQmUPuybk+WfwwsjFVGNFCU4MEQQbxsrePIJnYvvaqPR+480soQK2jEzl9G0cLkIAAE
-         XsXWDyxIVs9S67oyYgeg2hjZ0B+D7eSVgAlzqUaguIrCI2wL7EIbAtNmdUjHyYm1vEHP
-         7ByQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751616445; x=1752221245;
-        h=content-transfer-encoding:in-reply-to:organization:content-language
-         :from:references:cc:to:subject:reply-to:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YahY59i4thK0MbaLm0aeNNACEbj0hyyZrO3XNw7pxsg=;
-        b=ZFMIWKAjjsA3gVmK94EajZ6aKZjw4vTH1oJv4uwxVmN55GKiv1KXi+z1FAugMi1Ird
-         KWvCFirsfPd8QFPYuEzLHmtcmqY7elOtRVtxTe9bkHgXcx8l++OzD8GfY/K5aasGKP1o
-         tX2eIbXtXnEfFb1ViKia4/jkqpLYm0nYna1sSBwy6kVvq6Ftbkr7kC9c/fysf9vCm/x8
-         3vzC1i82H/Akb5zrsbPqW6+EZdndL52t/a8SyUKhKUEXABIZf+Rp5gNGVAhJttd1n5iQ
-         cYIG0KFuXrDFYvkfPMLIx37LdqvkDVpW6Tp1YIz3q1kGnBvtmufstjv+GLQFh5vEFj8O
-         4ryg==
-X-Forwarded-Encrypted: i=1; AJvYcCWntc9WLE5WF6N/6BxVZjgRFAgqId2vGCnkWGhngjZXQeWiuBhpRNNKzxgZAyR6POkY+z7km66tSns+cQXJ/qE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxIiYQ2BaFBWheF91s+0LBffKTaJimwZmfq4eN9jrm4hFDkBQB
-	qfftYfbxuD69u4OSgEE8W7QyGc6bJujLigLHZn1M364oxbcLJ/VSvszbtU4tVm/MpfI=
-X-Gm-Gg: ASbGncskaCP6x2wzXHzozIk6Oj+ZVyXXUBD1fjF/sl/lgluKjqHBxKU1FNNUe/Pf/u5
-	3S3xUFMYub4Gb/d3CaxBfQP394YILgeOv43mtdfDtqxuvm+JZRaNSslDTg/cCmZ5wxnwUwYRUGT
-	GcClNeQEXp9uDyu7uV3nh/tR03qCnsCyGAbFhLLze4pOxXZyJV+vJQk2mIMTRdtBHiD9SQBMPvz
-	RuowuZHsv6h5s2gEkeaEhx/AH72pNayNhlREFt+M3aVMoqJtnVxMyldVf/5NHKxPm/d6SSAzT/S
-	ju773qvXlcwp5EKUne7AxTx0UQxKD63abJ0ttZAbudYYnxq5PifVJ/Vz2UOWuYEO9XfDba5GjOk
-	tbyEW3Yfl8YDck6pHe+2rTLsN4kbPNVVKjwBmiCHHnhBlth0Xkw==
-X-Google-Smtp-Source: AGHT+IGvUqPJX2/oHRKeJh/R8BYxlgLvHF4L6wym82Yd1DLkPZ1EOKWB3QM//ysJ2Jz9iHdPHU3s2w==
-X-Received: by 2002:a05:6000:2d07:b0:3a5:8b43:2c19 with SMTP id ffacd0b85a97d-3b4964fdc81mr281711f8f.4.1751616445437;
-        Fri, 04 Jul 2025 01:07:25 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:b41:c160:33aa:1948:72fc:be83? ([2a01:e0a:b41:c160:33aa:1948:72fc:be83])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-454a9be5bbfsm47515335e9.34.2025.07.04.01.07.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Jul 2025 01:07:24 -0700 (PDT)
-Message-ID: <d90c29af-d614-43ea-8bcd-f2c8ced779df@6wind.com>
-Date: Fri, 4 Jul 2025 10:07:24 +0200
+	s=arc-20240116; t=1751617075; c=relaxed/simple;
+	bh=0lqAuo6UHKIcEVdcAhQ0RFFWEYzjNGi1bzBgpaylOuo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=i0a5VhoA14FvL/NU71UtYjq0a7W37GBAdEj0bUtZggmyAXaLOwsGF70Iybk6tuuHJbDkGuYjmSw5iY6SGHGCEoyNzajZ0qQHWhg4EQ9XeIeOg/gvmxf7jlK0IUsIzxyYUSc2HX5azZUpw/oDzy4DyQK5QRO+56fMhF4U6oUVVSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DOepv9ob; arc=none smtp.client-ip=95.215.58.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Fri, 4 Jul 2025 10:17:36 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1751617061;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ASASzrlKQboUIkLWluBZCrMel/BU8gIUIO5M+yGTLBA=;
+	b=DOepv9ob4oyEgjlwBbB1vq7+7jS4+iMelHgcPgmwT+0LSL9PngbsDS1WFEIz7g4iXTIm+h
+	CFrbZdLKyj25uRPSu+SLUGfRvUj1rC8DDIzz0Ts5LjZT+kFlTd5/M3CDq6L6LiazYQ/G8B
+	iPQxH8ltXx5yJQYujzO5OLz2R9awH1w=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Andrew Jones <andrew.jones@linux.dev>
+To: Jesse Taube <jesse@rivosinc.com>
+Cc: kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
+	linux-kselftest@vger.kernel.org, =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>, 
+	Charlie Jenkins <charlie@rivosinc.com>, James Raphael Tiovalen <jamestiotio@gmail.com>, 
+	Sean Christopherson <seanjc@google.com>, Cade Richard <cade.richard@gmail.com>
+Subject: Re: [kvm-unit-tests PATCH] riscv: lib: Add sbi-exit-code to
+ configure and environment
+Message-ID: <20250704-d2ca01be799a71427b5163f9@orel>
+References: <20250703133601.1396848-1-jesse@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: nicolas.dichtel@6wind.com
-Subject: Re: [PATCH net-next v4] ipv6: add `force_forwarding` sysctl to enable
- per-interface forwarding
-To: Gabriel Goller <g.goller@proxmox.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20250703160154.560239-1-g.goller@proxmox.com>
-From: Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Content-Language: en-US
-Organization: 6WIND
-In-Reply-To: <20250703160154.560239-1-g.goller@proxmox.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250703133601.1396848-1-jesse@rivosinc.com>
+X-Migadu-Flow: FLOW_OUT
 
-Le 03/07/2025 à 18:01, Gabriel Goller a écrit :
-> It is currently impossible to enable ipv6 forwarding on a per-interface
-> basis like in ipv4. To enable forwarding on an ipv6 interface we need to
-> enable it on all interfaces and disable it on the other interfaces using
-> a netfilter rule. This is especially cumbersome if you have lots of
-> interface and only want to enable forwarding on a few. According to the
-> sysctl docs [0] the `net.ipv6.conf.all.forwarding` enables forwarding
-> for all interfaces, while the interface-specific
-> `net.ipv6.conf.<interface>.forwarding` configures the interface
-> Host/Router configuration.
+On Thu, Jul 03, 2025 at 06:36:00AM -0700, Jesse Taube wrote:
+> Add --[enable|disable]-sbi-exit-code to configure script.
+> With the default value disabled.
+> Add a check for SBI_PASS_EXIT_CODE in the environment, so that passing
+> of the test status is configurable from both the
+> environment and the configure script
 > 
-> Introduce a new sysctl flag `force_forwarding`, which can be set on every
-> interface. The ip6_forwarding function will then check if the global
-> forwarding flag OR the force_forwarding flag is active and forward the
-> packet.
-> 
-> To preserver backwards-compatibility reset the flag (on all interfaces)
-> to 0 if the net.ipv6.conf.all.forwarding flag is set to 0.
-> 
-> Add a short selftest that checks if a packet gets forwarded with and
-> without `force_forwarding`.
-> 
-> [0]: https://www.kernel.org/doc/Documentation/networking/ip-sysctl.txt
-> 
-> Signed-off-by: Gabriel Goller <g.goller@proxmox.com>
+> Signed-off-by: Jesse Taube <jesse@rivosinc.com>
 > ---
+>  configure      | 11 +++++++++++
+>  lib/riscv/io.c | 12 +++++++++++-
+>  2 files changed, 22 insertions(+), 1 deletion(-)
 > 
-
-[snip]
-
-> @@ -6747,6 +6759,78 @@ static int addrconf_sysctl_disable_policy(const struct ctl_table *ctl, int write
->  	return ret;
->  }
+> diff --git a/configure b/configure
+> index 20bf5042..7c949bdc 100755
+> --- a/configure
+> +++ b/configure
+> @@ -67,6 +67,7 @@ earlycon=
+>  console=
+>  efi=
+>  efi_direct=
+> +sbi_exit_code=0
+>  target_cpu=
 >  
-> +static void addrconf_force_forward_change(struct net *net, __s32 newf)
-> +{
-> +	ASSERT_RTNL();
-> +	struct net_device *dev;
-> +	struct inet6_dev *idev;
-> +
+>  # Enable -Werror by default for git repositories only (i.e. developer builds)
+> @@ -141,6 +142,9 @@ usage() {
+>  	                           system and run from the UEFI shell. Ignored when efi isn't enabled
+>  	                           and defaults to enabled when efi is enabled for riscv64.
+>  	                           (arm64 and riscv64 only)
+> +	    --[enable|disable]-sbi-exit-code
+> +	                           Enable or disable sending pass/fail exit code to SBI SRST.
+> +	                           (disabled by default, riscv only)
+>  EOF
+>      exit 1
+>  }
+> @@ -236,6 +240,12 @@ while [[ $optno -le $argc ]]; do
+>  	--disable-efi-direct)
+>  	    efi_direct=n
+>  	    ;;
+> +	--enable-sbi-exit-code)
+> +	    sbi_exit_code=1
+> +	    ;;
+> +	--disable-sbi-exit-code)
+> +	    sbi_exit_code=0
+> +	    ;;
+>  	--enable-werror)
+>  	    werror=-Werror
+>  	    ;;
+> @@ -551,6 +561,7 @@ EOF
+>  elif [ "$arch" = "riscv32" ] || [ "$arch" = "riscv64" ]; then
+>      echo "#define CONFIG_UART_EARLY_BASE ${uart_early_addr}" >> lib/config.h
+>      [ "$console" = "sbi" ] && echo "#define CONFIG_SBI_CONSOLE" >> lib/config.h
+> +    echo "#define CONFIG_SBI_EXIT_CODE ${sbi_exit_code}" >> lib/config.h
+>      echo >> lib/config.h
+>  fi
+>  echo "#endif" >> lib/config.h
+> diff --git a/lib/riscv/io.c b/lib/riscv/io.c
+> index b1163404..0e666009 100644
+> --- a/lib/riscv/io.c
+> +++ b/lib/riscv/io.c
+> @@ -162,8 +162,18 @@ void halt(int code);
+>  
+>  void exit(int code)
+>  {
+> +	char *s = getenv("SBI_PASS_EXIT_CODE");
+> +	bool pass_exit = CONFIG_SBI_EXIT_CODE;
 
-ASSERT_RTNL() is always put after variables declaration.
-
-
-> +	for_each_netdev(net, dev) {
-> +		idev = __in6_dev_get_rtnl_net(dev);
-> +		if (idev) {
-> +			int changed = (!idev->cnf.force_forwarding) ^ (!newf);
-> +
-> +			WRITE_ONCE(idev->cnf.force_forwarding, newf);
-> +			if (changed) {
-> +				inet6_netconf_notify_devconf(dev_net(dev), RTM_NEWNETCONF,
-> +							     NETCONFA_FORCE_FORWARDING,
-> +							     dev->ifindex, &idev->cnf);
-> +			}
-> +		}
-> +	}
-> +}
-> +
-> +static int addrconf_sysctl_force_forwarding(const struct ctl_table *ctl, int write,
-> +					    void *buffer, size_t *lenp, loff_t *ppos)
-> +{
-> +	struct inet6_dev *idev = ctl->extra1;
-> +	struct net *net = ctl->extra2;
-> +	int *valp = ctl->data;
-> +	loff_t pos = *ppos;
-> +	int new_val = *valp;
-> +	int old_val = *valp;
-> +	int ret;
-> +
-> +	struct ctl_table tmp_ctl = *ctl;
-This declaration should be put with other declarations.
+This is the first case of what may become more common - a config variable
+which also has an env override. I think it may be good convention to
+name them the same, i.e. the env name would also be CONFIG_SBI_EXIT_CODE,
+unless you think that would be confusing for some reason?
 
 > +
-> +	tmp_ctl.extra1 = SYSCTL_ZERO;
-> +	tmp_ctl.extra2 = SYSCTL_ONE;
-> +	tmp_ctl.data = &new_val;
+>  	printf("\nEXIT: STATUS=%d\n", ((code) << 1) | 1);
+> -	sbi_shutdown(code == 0);
 > +
-> +	ret = proc_douintvec_minmax(&tmp_ctl, write, buffer, lenp, ppos);
-> +
-> +	if (write && old_val != new_val) {
-> +		if (!rtnl_net_trylock(net))
-> +			return restart_syscall();
-> +
-> +		if (valp == &net->ipv6.devconf_dflt->force_forwarding) {
-> +			inet6_netconf_notify_devconf(net, RTM_NEWNETCONF,
-> +						     NETCONFA_FORCE_FORWARDING,
-> +						     NETCONFA_IFINDEX_DEFAULT,
-> +						     net->ipv6.devconf_dflt);
-> +		} else if (valp == &net->ipv6.devconf_all->force_forwarding) {
-> +			inet6_netconf_notify_devconf(net, RTM_NEWNETCONF,
-> +						     NETCONFA_FORCE_FORWARDING,
-> +						     NETCONFA_IFINDEX_ALL,
-> +						     net->ipv6.devconf_all);
-> +
-> +			addrconf_force_forward_change(net, new_val);
-> +		} else {
-> +			inet6_netconf_notify_devconf(net, RTM_NEWNETCONF,
-> +						     NETCONFA_FORCE_FORWARDING,
-> +						     idev->dev->ifindex,
-> +						     &idev->cnf);
-> +		}
-> +		rtnl_net_unlock(net);
-> +	}
-> +
-> +	if (write)
-> +		WRITE_ONCE(*valp, new_val);
-Why not putting this in the above block?
-And maybe under the rtnl_lock to avoid race if two users change the value at the
-same time.
+> +	if (s)
+> +		pass_exit = (*s == '1' || *s == 'y' || *s == 'Y');
 
-Nicolas
+We now have this logic in four places[1]. I think it's time we factor it,
+and it's counterpart "!(s && (*s == '0' || *s == 'n' || *s == 'N'))"
+into a couple helper macros. I'm not sure where the best place for
+those macros to live is, though. I guess libcflat.h, but we really
+ought to split that thing apart someday...
+
+[1]
+ - twice in lib/errata.h
+ - once in riscv/sbi-tests.ha
+ - and now here
+
+> +
+> +	if (pass_exit)
+> +		sbi_shutdown(code == 0);
+> +	else
+> +		sbi_shutdown(true);
+
+nit: can be written more concisely as
+
+ sbi_shutdown(pass_exit ? code == 0 : true)
+
+>  	halt(code);
+>  	__builtin_unreachable();
+>  }
+> -- 
+> 2.43.0
+>
+
+Thanks,
+drew
 
