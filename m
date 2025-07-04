@@ -1,98 +1,280 @@
-Return-Path: <linux-kselftest+bounces-36497-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36498-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E737DAF878E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 08:04:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BC77AF8798
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 08:07:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4ED93560337
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 06:04:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7E298561796
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 06:07:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 859A2213237;
-	Fri,  4 Jul 2025 06:04:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D02E0221DB7;
+	Fri,  4 Jul 2025 06:07:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EmYAThTu"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ku6U8Nbh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A5D9143C69;
-	Fri,  4 Jul 2025 06:04:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20161143C69
+	for <linux-kselftest@vger.kernel.org>; Fri,  4 Jul 2025 06:07:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751609068; cv=none; b=GjPIfq7IrJVqghYHdHKzVdvw5JHPJU6H1HqdlRlkAuzdNDbGvWDYl3uEHRD0294HvBT2JrOvZ/MjO+B6bD3Yx0f6nBvREjMDUIFF5q6STwyeIWChAS95oF6HYGYMyU4G6yResZMI/3uVU4eea7OOlTSeVjBsLlD1lUnf9p8e4Io=
+	t=1751609253; cv=none; b=aJatOKgAkFoS5s3IfHsFqjnMAbkbPSbKzHF3XE6H772WKm9Z8T5E6TYNIWh787P1EnWi8kHuZPVhOYIe61kB5Nu5CE+8kZ9LMSFVc/YhbM7b0+GFl6foWGrui1nbuziX2NTmBPrN6NL85YZw3nPsH23O/4IBwhaS01hcoaQeC78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751609068; c=relaxed/simple;
-	bh=MbmmL2t8dsm71Q6onEmIu1cU/JkCOwof0cSGAukp3K8=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=KB1HyUoljLu97mcXZAPwN2xz5sZFm1Ssx0LYyg9sFMzgFffQdoyzz+ScSUt806xLTLuNU4r6w3Ufr0UR6GFKEi+STK/fE4a+eFTVnxxH+tHX+sFVVA/wyZn8Xbdzv9Ha9R3i8IfzzR2StajIxbjuq1cc694Om/kqBTP+oNFeW9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EmYAThTu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C87F1C4CEE3;
-	Fri,  4 Jul 2025 06:04:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751609067;
-	bh=MbmmL2t8dsm71Q6onEmIu1cU/JkCOwof0cSGAukp3K8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=EmYAThTudppLgEq8+urhoX0wAoNDHQVmzlh5lAz8kQ2ScmdvFZdWnlzTrB9qBEs3w
-	 LsP3vQICexL1d5VPGyva9PlH313TUMawGjRh/b5mc3eyJVvBTXqEoQkQj2tJLKW7o3
-	 1uQmDxZTL1/VBsQW6FFZPWm/0KB7ndHY+aiU9LyhDVWhtBRUwJ07kvQktCQYXNpMVa
-	 q10bSBoC/lbMPUDlAZ4IOg6yrAMCSliGBI3iKt/ge8UZOcsEFL5n7oPmt9h655ZPwt
-	 w+4Z7WWjtASUOfem+5Ne+dksLzOiYVVWtbisMOefuZ6WOKmrY15ZX1K1ffJM4sY4iU
-	 0LCcbJkRT1vDA==
-Date: Fri, 4 Jul 2025 15:04:25 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Shuah Khan <shuah@kernel.org>, Steven Rostedt <rostedt@goodmis.org>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/2] selftests: tracing: Use mutex_unlock for testing
- glob filter
-Message-Id: <20250704150425.a8a82c7768e1c99ee272e585@kernel.org>
-In-Reply-To: <20250703103039.3559a7e1@batman.local.home>
-References: <175151678585.2149615.8702513393985992418.stgit@mhiramat.tok.corp.google.com>
-	<175151680309.2149615.9795104805153538717.stgit@mhiramat.tok.corp.google.com>
-	<20250703103039.3559a7e1@batman.local.home>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1751609253; c=relaxed/simple;
+	bh=num7ZwJGxm2xcwzgmExP91PNehpZ10zz5brwKdCfm2M=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=iQV7hYR1zS67aWTkOsSRmJuRJ9sSCJ6NlSsYwVoyJj4lwp/XbH+mn/aJJHdUaTph1sban3cNIRh9cXw/CoNvmQFx8G8EcNm+OqSKao5/FJjLynoJnWhLd7VCi59tBVlbyw6S3cIX/glxGMSHtlNPgnypZLY3aiDrRzsmGSpChvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ku6U8Nbh; arc=none smtp.client-ip=209.85.210.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-74927be2ec0so1069109b3a.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 03 Jul 2025 23:07:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1751609251; x=1752214051; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ZEckqv9KvWhwhlMKe66GULnS7cfmA5oovNSgnKfWkgg=;
+        b=Ku6U8NbhocuLryxZx7e8eSojI9A0Yhjfq/trr3pXNvKIdbg5yV9MuC0NlYDhSXG50x
+         IFlwVtsR1Ga0VtJIdrMWi3QBT9gF2pw4pgRDVGtSRMaTvjTeDYCreF8JuMJq7K4D6mPm
+         UgXVGNnI8SxEBM0xSBFHLX8iE5KH+ixhIKV2MLxW5LuL8mtjakYPdn9n9sulie+YHNvf
+         LZEqygr1Boo4RBvtBGY/nh1t+Q9xgz7cUX9gWDY4qSAnJyTcZQ5RkZeHaEYX1cU9napK
+         iv9N/scn+DWXMUOczQ4o6F2xx/4h9wDOvFZ0gjbE8D5WdKjwJEcgV83m2alMkBPJOhJv
+         pzHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751609251; x=1752214051;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZEckqv9KvWhwhlMKe66GULnS7cfmA5oovNSgnKfWkgg=;
+        b=HovpjRb/uoPe5N9dVJA8HhW01H9f6REgCFVb4ESUxNKeQZVyhGFX52GREgnH0/VT5g
+         vIJ6mJi9Xj3wkHKl5WcEkJ5HC4k3gnpswsH/6OKMvLAIg9a18+zHZh8hEyF3dcAQd+qb
+         bmz/7RrWO9JbY1ywD+NrQIHGKBQhWznM1t1DBsHyvMC58lZpIMjy1JQgByqTF8z1s8qw
+         w0NIdvlPM5IlQO16Er9RDTdKt9XlxaOXJeG3Rto5B6taOESSqh/2YYDU4VaJJ3x/pyqb
+         Er3gfjBBmmeDqOfBkXlLwklj/2EKlHmxdpXDB2QaQM2Q/I7+JdDYz1rCbqJfAuz4cfHL
+         3LHg==
+X-Forwarded-Encrypted: i=1; AJvYcCUZ3bPv+dOgjPWSrOtmWu9ZC3ealZsdHCJo5aEtywoccIZ8PKkmKbFI9UkbZRVwcvL8HCaz6VYG3L71fdqbN8E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwvMlGBhPDfDdIKusTgKX67CTNNxyFS0YCPpxDH/jU0ctz0iJCo
+	MEqF+2+CYGvksMAfY+CfSbuEjlMnSOLkqSkdm4dabuUSqCzMBeBE26shLpT3ckzlG24E+2kT06X
+	C/rQ+vw==
+X-Google-Smtp-Source: AGHT+IFG67ZnYijnEmrANJ862qby4lfyUrmXgaBAHJy2D7Sq0PQ1+KEFSXZY6Nd+epUGRR6aiPOLz1kauiE=
+X-Received: from pfbhs5.prod.google.com ([2002:a05:6a00:6905:b0:747:af58:72ca])
+ (user=surenb job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:84c:b0:748:2d1d:f7b7
+ with SMTP id d2e1a72fcca58-74ce8af2ae5mr1489520b3a.21.1751609250767; Thu, 03
+ Jul 2025 23:07:30 -0700 (PDT)
+Date: Thu,  3 Jul 2025 23:07:18 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-Mailer: git-send-email 2.50.0.727.gbf7dc18ff4-goog
+Message-ID: <20250704060727.724817-1-surenb@google.com>
+Subject: [PATCH v6 0/8] use per-vma locks for /proc/pid/maps reads and PROCMAP_QUERY
+From: Suren Baghdasaryan <surenb@google.com>
+To: akpm@linux-foundation.org
+Cc: Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, david@redhat.com, 
+	vbabka@suse.cz, peterx@redhat.com, jannh@google.com, hannes@cmpxchg.org, 
+	mhocko@kernel.org, paulmck@kernel.org, shuah@kernel.org, adobriyan@gmail.com, 
+	brauner@kernel.org, josef@toxicpanda.com, yebin10@huawei.com, 
+	linux@weissschuh.net, willy@infradead.org, osalvador@suse.de, 
+	andrii@kernel.org, ryan.roberts@arm.com, christophe.leroy@csgroup.eu, 
+	tjmercier@google.com, kaleshsingh@google.com, aha310510@gmail.com, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, surenb@google.com
+Content-Type: text/plain; charset="UTF-8"
 
-Shuah,
+Reading /proc/pid/maps requires read-locking mmap_lock which prevents any
+other task from concurrently modifying the address space. This guarantees
+coherent reporting of virtual address ranges, however it can block
+important updates from happening. Oftentimes /proc/pid/maps readers are
+low priority monitoring tasks and them blocking high priority tasks
+results in priority inversion.
 
-Can you take this patch (fix) to your tree since this is
-a fix for the selftest?
+Locking the entire address space is required to present fully coherent
+picture of the address space, however even current implementation does not
+strictly guarantee that by outputting vmas in page-size chunks and
+dropping mmap_lock in between each chunk. Address space modifications are
+possible while mmap_lock is dropped and userspace reading the content is
+expected to deal with possible concurrent address space modifications.
+Considering these relaxed rules, holding mmap_lock is not strictly needed
+as long as we can guarantee that a concurrently modified vma is reported
+either in its original form or after it was modified.
 
-Thank you,
+This patchset switches from holding mmap_lock while reading /proc/pid/maps
+to taking per-vma locks as we walk the vma tree. This reduces the
+contention with tasks modifying the address space because they would have
+to contend for the same vma as opposed to the entire address space. Same
+is done for PROCMAP_QUERY ioctl which locks only the vma that fell into
+the requested range instead of the entire address space. Previous version
+of this patchset [1] tried to perform /proc/pid/maps reading under RCU,
+however its implementation is quite complex and the results are worse than
+the new version because it still relied on mmap_lock speculation which
+retries if any part of the address space gets modified. New implementaion
+is both simpler and results in less contention. Note that similar approach
+would not work for /proc/pid/smaps reading as it also walks the page table
+and that's not RCU-safe.
 
-On Thu, 3 Jul 2025 10:30:39 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+Paul McKenney's designed a test [2] to measure mmap/munmap latencies while
+concurrently reading /proc/pid/maps. The test has a pair of processes
+scanning /proc/PID/maps, and another process unmapping and remapping 4K
+pages from a 128MB range of anonymous memory.  At the end of each 10
+second run, the latency of each mmap() or munmap() operation is measured,
+and for each run the maximum and mean latency is printed. The map/unmap
+process is started first, its PID is passed to the scanners, and then the
+map/unmap process waits until both scanners are running before starting
+its timed test.  The scanners keep scanning until the specified
+/proc/PID/maps file disappears. This test registered close to 10x
+improvement in update latencies:
 
-> On Thu,  3 Jul 2025 13:26:43 +0900
-> "Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
-> 
-> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > 
-> > Since commit c5b6ababd21a ("locking/mutex: implement
-> > mutex_trylock_nested") makes mutex_trylock() as an inlined
-> > function if CONFIG_DEBUG_LOCK_ALLOC=y, we can not use
-> > mutex_trylock() for testing the glob filter of ftrace.
-> > 
-> > Use mutex_unlock instead.
-> > 
-> > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> 
-> -- Steve
+Before the change:
+./run-proc-vs-map.sh --nsamples 100 --rawdata -- --busyduration 2
+    0.011     0.008     0.455
+    0.011     0.008     0.472
+    0.011     0.008     0.535
+    0.011     0.009     0.545
+    ...
+    0.011     0.014     2.875
+    0.011     0.014     2.913
+    0.011     0.014     3.007
+    0.011     0.015     3.018
 
+After the change:
+./run-proc-vs-map.sh --nsamples 100 --rawdata -- --busyduration 2
+    0.006     0.005     0.036
+    0.006     0.005     0.039
+    0.006     0.005     0.039
+    0.006     0.005     0.039
+    ...
+    0.006     0.006     0.403
+    0.006     0.006     0.474
+    0.006     0.006     0.479
+    0.006     0.006     0.498
+
+The patchset also adds a number of tests to check for /proc/pid/maps data
+coherency. They are designed to detect any unexpected data tearing while
+performing some common address space modifications (vma split, resize and
+remap). Even before these changes, reading /proc/pid/maps might have
+inconsistent data because the file is read page-by-page with mmap_lock
+being dropped between the pages. An example of user-visible inconsistency
+can be that the same vma is printed twice: once before it was modified and
+then after the modifications. For example if vma was extended, it might be
+found and reported twice. What is not expected is to see a gap where there
+should have been a vma both before and after modification. This patchset
+increases the chances of such tearing, therefore it's even more important
+now to test for unexpected inconsistencies.
+
+In [3] Lorenzo identified the following possible vma merging/splitting
+scenarios:
+
+Merges with changes to existing vmas:
+1 Merge both - mapping a vma over another one and between two vmas which
+can be merged after this replacement;
+2. Merge left full - mapping a vma at the end of an existing one and
+completely over its right neighbor;
+3. Merge left partial - mapping a vma at the end of an existing one and
+partially over its right neighbor;
+4. Merge right full - mapping a vma before the start of an existing one
+and completely over its left neighbor;
+5. Merge right partial - mapping a vma before the start of an existing one
+and partially over its left neighbor;
+
+Merges without changes to existing vmas:
+6. Merge both - mapping a vma into a gap between two vmas which can be
+merged after the insertion;
+7. Merge left - mapping a vma at the end of an existing one;
+8. Merge right - mapping a vma before the start end of an existing one;
+
+Splits
+9. Split with new vma at the lower address;
+10. Split with new vma at the higher address;
+
+If such merges or splits happen concurrently with the /proc/maps reading
+we might report a vma twice, once before the modification and once after
+it is modified:
+
+Case 1 might report overwritten and previous vma along with the final
+merged vma;
+Case 2 might report previous and the final merged vma;
+Case 3 might cause us to retry once we detect the temporary gap caused by
+shrinking of the right neighbor;
+Case 4 might report overritten and the final merged vma;
+Case 5 might cause us to retry once we detect the temporary gap caused by
+shrinking of the left neighbor;
+Case 6 might report previous vma and the gap along with the final marged
+vma;
+Case 7 might report previous and the final merged vma;
+Case 8 might report the original gap and the final merged vma covering the
+gap;
+Case 9 might cause us to retry once we detect the temporary gap caused by
+shrinking of the original vma at the vma start;
+Case 10 might cause us to retry once we detect the temporary gap caused by
+shrinking of the original vma at the vma end;
+
+In all these cases the retry mechanism prevents us from reporting possible
+temporary gaps.
+
+Changes since v5 [4]:
+- Made /proc/pid/maps tearing test a separate selftest,
+per Alexey Dobriyan
+- Changed asserts with or'ed conditions into separate ones,
+per Alexey Dobriyan
+- Added a small cleanup patch [6/8] to avoid unnecessary seq_file position
+type casting
+- Removed unnecessary is_sentinel_pos() helper
+- Changed titles to use fs/proc/task_mmu instead of mm/maps prefix,
+per David Hildenbrand
+- Included Lorenzo's fix for mmap lock assertion in anon_vma_name()
+- Reworked the last patch to avoid allocation in the rcu read section,
+which replaces Jeongjun Park's fix
+
+!!! NOTES FOR APPLYING THE PATCHSET !!!
+
+Applies cleanly over mm-unstable after reverting old version with fixes.
+The following patches should be reverted before applyng this patchset:
+
+b33ce1be8a40 ("selftests/proc: add /proc/pid/maps tearing from vma split test")
+b538e0580fd6 ("selftests/proc: extend /proc/pid/maps tearing test to include vma resizing")
+4996b4409cc6 ("selftests/proc: extend /proc/pid/maps tearing test to include vma remapping")
+c39471f78d5e ("selftests/proc: test PROCMAP_QUERY ioctl while vma is concurrently modified")
+487570f548f3 ("selftests/proc: add verbose more for tests to facilitate debugging")
+e1ba4969cba1 ("mm/maps: read proc/pid/maps under per-vma lock")
+ecb110179e77 ("mm/madvise: fixup stray mmap lock assert in anon_vma_name()")
+6772c457a865 ("fs/proc/task_mmu:: execute PROCMAP_QUERY ioctl under per-vma locks")
+d5c67bb2c5fb ("mm/maps: move kmalloc() call location in do_procmap_query() out of RCU critical section")
+
+[1] https://lore.kernel.org/all/20250418174959.1431962-1-surenb@google.com/
+[2] https://github.com/paulmckrcu/proc-mmap_sem-test
+[3] https://lore.kernel.org/all/e1863f40-39ab-4e5b-984a-c48765ffde1c@lucifer.local/
+[4] https://lore.kernel.org/all/20250624193359.3865351-1-surenb@google.com/
+
+Suren Baghdasaryan (8):
+  selftests/proc: add /proc/pid/maps tearing from vma split test
+  selftests/proc: extend /proc/pid/maps tearing test to include vma
+    resizing
+  selftests/proc: extend /proc/pid/maps tearing test to include vma
+    remapping
+  selftests/proc: test PROCMAP_QUERY ioctl while vma is concurrently
+    modified
+  selftests/proc: add verbose more for tests to facilitate debugging
+  fs/proc/task_mmu: remove conversion of seq_file position to unsigned
+  fs/proc/task_mmu: read proc/pid/maps under per-vma lock
+  fs/proc/task_mmu: execute PROCMAP_QUERY ioctl under per-vma locks
+
+ fs/proc/internal.h                            |   5 +
+ fs/proc/task_mmu.c                            | 188 +++-
+ include/linux/mmap_lock.h                     |  11 +
+ mm/madvise.c                                  |   3 +-
+ mm/mmap_lock.c                                |  88 ++
+ tools/testing/selftests/proc/.gitignore       |   1 +
+ tools/testing/selftests/proc/Makefile         |   1 +
+ tools/testing/selftests/proc/proc-maps-race.c | 829 ++++++++++++++++++
+ 8 files changed, 1098 insertions(+), 28 deletions(-)
+ create mode 100644 tools/testing/selftests/proc/proc-maps-race.c
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2.50.0.727.gbf7dc18ff4-goog
+
 
