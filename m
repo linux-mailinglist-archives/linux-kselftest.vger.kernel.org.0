@@ -1,122 +1,109 @@
-Return-Path: <linux-kselftest+bounces-36541-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36542-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23AA8AF90C0
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 12:38:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FF77AF90ED
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 12:50:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C7F6D3B4AFE
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 10:37:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DAD11564426
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 10:50:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E38AB29A310;
-	Fri,  4 Jul 2025 10:38:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D100C2DA77B;
+	Fri,  4 Jul 2025 10:50:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="bufaLox4"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="MqNHx/Qw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F58F244686
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Jul 2025 10:38:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 310361F419B
+	for <linux-kselftest@vger.kernel.org>; Fri,  4 Jul 2025 10:50:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751625482; cv=none; b=mHokrIjeA9O/VUIEiKS2FRipAXBoAPmRo5jl5LpB6pEh/Nm0a4H0NnTJI8zUUSvuA3C3mmrddx/5uVLAqA1MkQXkUkwVpJCxfsX/67xeS5wJbb0pgWmjVEaoqBI6iCoy0uROT1TUcKzxd+ZwWqNGT0dI+geB6ObuhHO+/dbnTJI=
+	t=1751626251; cv=none; b=WveJTi38twRrRX7QQSv78kpX6zy/9Qg+H3V+rjlCIeNk6qJQQEEhB+VjCIBVVdUi22DBZ41nfyhMnio108o4oy0G/aJfmjzTxJcPQU71jKfbLafejsPG9pSYx05iT5zBQokYurOnOK5BgvpoGNBcoH733g6+8536/vVXwE3aC/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751625482; c=relaxed/simple;
-	bh=R61rp45Losycq8UAnzdMkZ9UbrztK6ZBfROjKO/3BnM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=IvakAOnNypdmjuQqhIhgg/V/4xoswKfoCjaKvrigx2MhJRKPY+8F3MuPVxMC9CC69BSe7ELqBUTZigd2GqckZHpyc1FxIhXqK1vMBEYICVEnHKAb79QqKHd3JY2VqVzv9/6C14e3RnTObNbSytRYgEAz5Trh5LPg+Z/7EYHeV9s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=bufaLox4; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3a53359dea5so360209f8f.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 04 Jul 2025 03:37:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1751625478; x=1752230278; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RU8fatJd1cv2n5jtAJadSkr7OYYXJbPJFcsa+TWXM6M=;
-        b=bufaLox4mNtFs5mAZLmF1H/sk+Wx4TLbrnRhwGqJd1ovivYFFAhYUmXmyVjTKKjTDH
-         HYFBch2DKFTu2WH7YO7Jkef/XGwffwU8PA5Tih/y5IAuO0P5uDBXJyGscXXW6HeD64fn
-         ESwPk0XXBKQ6L83dj0FK+EzWIhJC/Ea1nLHCfknyJ8LveDB4iYgzlbDhafM+PNuaSfoL
-         zvoDXURZqwr/Jsmi9twpVxKAETsfmLh0zkfEiGB3MWZ7VIVu4T1u6HZgb3/VjdpKez5G
-         o+xv7QNKR5itubm9rlPE50incRk93SW93si2Hwux8aK+m95KKWDHNLvCxYtpYsVB5Eay
-         b2Uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751625478; x=1752230278;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RU8fatJd1cv2n5jtAJadSkr7OYYXJbPJFcsa+TWXM6M=;
-        b=WU8O66TUwCKNnafA3x2pKTilITbP/IgRPhGZAQYF7t/DGfJn2mmuhChecb4LfRLQPO
-         JkVQ1R10MS6HWHXVPJNEUZn4IhPGkPNLe7i/RJ5RovgGrl9mowjy/kZOX1ZsSnGc9gwk
-         cJUAjsVK7W3gypnRg3vP+39tThM3QzU0gNzBK6VqUC702L95RBIP60RY+SlAz8xKjaH1
-         eg9Tw6ghPng2QtDdQKKmojWeiIfzzWL4fndTvKf6DI3LgpzKSc9WvJlXFxvve0SMVwco
-         YK4Ah0fQhxPLywbLdtUqao953qvjQUjNlGSo64xF48PUyuzV81wT0/2k+qhKC+bXSFHr
-         T6Wg==
-X-Forwarded-Encrypted: i=1; AJvYcCXYIlTikelzHSMKGdjl0IUxdoXJ+t437SxcDPYFCla+3TP0uDqI0j5laW8TgGDdrrUH6mePL4xAWnF0mTf4njI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxdP0zDSX1Lj3mZhG23wfSovDimkV+5AjU/p4qTH02RfAOEFJeO
-	lAGCQ4aIS60Q04XRXZ4p3U+iSixk4KwBKazZbKLooSo1UntasTMRxRJP+Sv3u6Yr42M=
-X-Gm-Gg: ASbGncuHXb/gXAl85lVkT+Fbb390n5YSrqBhusyBEKuwCSWePLRdQcYEfivMZ2DYUF+
-	+TbwZHuV064o7K/azEgOLC3t4LLy7a91njVtYz6TiSvLlVrutG3aarpbew+34yt2twP7zqW7Jav
-	Z2ZX1gJ/orOcS1uu5hLl8268OR3Lnl19xqWxpLrUATnrpzxdY4XcY1B/WJ6jPeJS/DFRAJTzNEM
-	Zy16IoQPpMhqIQ4mG8GehS3GLa2Zp68dVJdcU13lPM11rgvp91+N7FLxUW9FGXovHQRM4SWn5zw
-	GXeCZi8DXfFCS8sWQ1eNz6tMYUyYY/b1jCRuSZpZ4+WhCwI8DlLWf65daVLIR9wWRDdwKEkQU8O
-	DB4Xdy9Qbk/v86gIhg09nK0Ik4m5repAvDbn5IaBVDAxeCLMpXDHAdqQHewPop8XnM7w0P6s=
-X-Google-Smtp-Source: AGHT+IGhNXKIGZoogvnG+XHZowEEyeBRsxNYAJfEhbfMb8zexJp6A1Fk4F4oOcLnx7xw+eCnIsD0Yw==
-X-Received: by 2002:a5d:5f92:0:b0:3a4:d0ed:257b with SMTP id ffacd0b85a97d-3b497020597mr1215816f8f.22.1751625478006;
-        Fri, 04 Jul 2025 03:37:58 -0700 (PDT)
-Received: from green.cable.virginm.net (nail-04-b2-v4wan-166353-cust693.vm26.cable.virginm.net. [82.35.130.182])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b47030ba77sm2187132f8f.17.2025.07.04.03.37.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Jul 2025 03:37:57 -0700 (PDT)
-From: Terry Tritton <terry.tritton@linaro.org>
-To: Thomas Gleixner <tglx@linutronix.de>,
-	Shuah Khan <shuah@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Darren Hart <dvhart@infradead.org>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	=?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>
-Cc: ttritton@google.com,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Terry Tritton <terry.tritton@linaro.org>
-Subject: [PATCH v2] selftests/futex: Add futex_numa to .gitignore
-Date: Fri,  4 Jul 2025 11:37:49 +0100
-Message-Id: <20250704103749.10341-1-terry.tritton@linaro.org>
-X-Mailer: git-send-email 2.39.5
+	s=arc-20240116; t=1751626251; c=relaxed/simple;
+	bh=vDm4PlOetYgrRJSB4GfGALzaBygRMzpTDzjUyFWTfOo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tpfl4E+1BceU/a4KdMhaTGxGT6g1JH7tUMSBccpJDUX/2meCusDU5zXKxqTbhe+lh+p7GpH3xcFbJ2DN+olrWRY3a4r9pmQngfMZRzLkL+A+xXC2gE6MvTU83MIUcOtrNKwPuejsNwaRocu9csrAo4paNe6hQQzCjM/dTy23EZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=MqNHx/Qw; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1751626240;
+	bh=vDm4PlOetYgrRJSB4GfGALzaBygRMzpTDzjUyFWTfOo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MqNHx/QwHmTAGfsHel8KT/iKKV3AM2sEaiSMYO3fZy02WFC+b+eB8ul87AzSfmW7j
+	 biA/0Uzk9yzK2nyrDS09BvxwdYvQfVAwx3pl5Z++BfGrMszCDSkLqW24UDUf5Gt7hs
+	 C2EM2XNdnfHiyJQPy9cNpwxRNl7vA9WyTo8Pa8gI=
+Date: Fri, 4 Jul 2025 12:50:32 +0200
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Benjamin Berg <benjamin@sipsolutions.net>
+Cc: Willy Tarreau <w@1wt.eu>, linux-kselftest@vger.kernel.org, 
+	Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Subject: Re: [RFC v2] tools/nolibc: add sigaction()
+Message-ID: <81dc0649-9abe-421d-a372-a346c329d3af@t-8ch.de>
+References: <20250701122910.45823-1-benjamin@sipsolutions.net>
+ <21cf1fee-21ce-43b2-95cc-18aa58adcd87@t-8ch.de>
+ <c870d823e686c4b4ef6928d9ca0162d72e484339.camel@sipsolutions.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <c870d823e686c4b4ef6928d9ca0162d72e484339.camel@sipsolutions.net>
 
-futex_numa was never added to the .gitignore file.
-Add it.
+On 2025-07-02 17:33:24+0200, Benjamin Berg wrote:
+> On Wed, 2025-07-02 at 00:04 +0200, Thomas Weißschuh wrote:
+> > [SNIP]
+> > > --- a/tools/include/nolibc/arch-i386.h
+> > > +++ b/tools/include/nolibc/arch-i386.h
+> > > @@ -10,6 +10,19 @@
+> > >  #include "compiler.h"
+> > >  #include "crt.h"
+> > >  
+> > > +/* Needed to get the correct struct sigaction definition */
+> > > +#define SA_RESTORER	0x04000000
+> > > +
+> > > +/* Restorer must be set on i386 */
+> > > +#define _NOLIBC_ARCH_NEEDS_SA_RESTORER
+> > > +
+> > > +/* Otherwise we would need to use sigreturn instead of rt_sigreturn */
+> > > +#define _NOLIBC_ARCH_FORCE_SIG_FLAGS SA_SIGINFO
+> > > +
+> > > +/* Avoid linux/signal.h, it has an incorrect _NSIG and sigset_t */
+> > > +#include <asm-generic/signal.h>
+> > > +#include <asm-generic/siginfo.h>
+> > 
+> > This doesn't work if the user already has <linux/signal.h> included for
+> > some other reason. The symbol names will conflict.
+> 
+> I was thinking this is fine. Such a conflict already exists between the
+> normal glibc <signal.h> and <linux/signal.h>.
 
-Fixes: 9140f57c1c13 ("futex,selftests: Add another FUTEX2_NUMA selftest")
-Signed-off-by: Terry Tritton <terry.tritton@linaro.org>
----
-Changes in v2:
-- Add Fixes tag
+It would be enough to keep compatibility with glibc.
+But personally I'd like to make it work generally.
 
- tools/testing/selftests/futex/functional/.gitignore | 1 +
- 1 file changed, 1 insertion(+)
+> So there would only be a
+> problem if the user is explicitly not including <signal.h> to then use
+> <linux/signal.h>. I doubt that makes sense.
 
-diff --git a/tools/testing/selftests/futex/functional/.gitignore b/tools/testing/selftests/futex/functional/.gitignore
-index 7b24ae89594a..776ad658f75e 100644
---- a/tools/testing/selftests/futex/functional/.gitignore
-+++ b/tools/testing/selftests/futex/functional/.gitignore
-@@ -11,3 +11,4 @@ futex_wait_timeout
- futex_wait_uninitialized_heap
- futex_wait_wouldblock
- futex_waitv
-+futex_numa
--- 
-2.39.5
+Technically nolibc is always included as a whole, so any application
+using it would be prevented from using linux/signal.h.
 
+Maybe Willy has some strong opinions.
+Otherwise I'm also fine if we keep this part as is for now.
+Then if everything else is addressed I'll try to actually implement my
+proposal on top.
+
+Does this sound reasonable?
+
+
+Thomas
 
