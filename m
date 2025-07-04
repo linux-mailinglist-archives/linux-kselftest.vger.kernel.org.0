@@ -1,102 +1,171 @@
-Return-Path: <linux-kselftest+bounces-36577-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36578-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95551AF9515
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 16:11:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 35715AF9548
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 16:20:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 254753BE3DD
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 14:11:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CCBE454303D
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 14:19:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C7B317A30A;
-	Fri,  4 Jul 2025 14:11:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0ACB18DB37;
+	Fri,  4 Jul 2025 14:19:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="j9+hoyxu";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="NZtn3R83"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6242C1684A4;
-	Fri,  4 Jul 2025 14:11:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27B8D43AA9;
+	Fri,  4 Jul 2025 14:19:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751638305; cv=none; b=W4pk6LRjDBBs64bpbfMaB39DUJvxv4t2+mOnh1W/EJm+E2Vlp6p+zVrbZT137mmsslqvQ/sbGSa0NlVqxdWq6JE4ANC1kE86hXU36wrmULGGgrzECf51dFn84+emfjkgAIMLbbCDl1gt1tUy5Q3AFFXKtU09kPRnZnt0QGkLBuQ=
+	t=1751638797; cv=none; b=g+69fk6lo7YUWmQhFlotYuoLaZqNIRHeiw1wPl9bO8MryBh8eOaqI9M3RNPh4hlcjaduWfsls9+5BcagMY6bKFW9698LJzW2QQR8PlPW06GM/ztQzBe8B8QHsJ9+rvBlQgd31QVT6aco7ClKgqzsuoowGjjKu5z1jdcjO89NmfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751638305; c=relaxed/simple;
-	bh=CmkVX/AlHdUGF7EU/UxJmy6pvZPFn5DsGlx8vOgCsfQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AFmup4ypfzsd3dBwsV1/RlPKsCVU/L6tZq76QfBPzmE4TI2HpOGU3EFcnlHhCiSHWLPMU5FIa/FilPgRWuVPjybrAybc43uBMwXQBw8vFfXz+0jN6385uN+xMVQsaqfjzTAZVVcMB41302LKxWfSCk0WPnhnJjf+nnf5o8v82C4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-ae3be3eabd8so203629566b.1;
-        Fri, 04 Jul 2025 07:11:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751638303; x=1752243103;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HRAa0g9PO15koKX/YxHxS7CQNRrTGUND0RW5OSavxc8=;
-        b=P5QHo03HVA2D22SFmfL6Ox0sBqXyvAVQji00KXhCdBe8gDG/eunE12x21X5Q8ZopZH
-         9LgIkDRfZIz0DLaQMXimVYQ1qowEedCLY9oRKk7UVrF5H/NzEBLa8653kda3Mzx3Ch+F
-         KP7JqaVNjyjKWZ3L0Lpvjw+UWxYPVQUEpf15Am7Mxk0YOcl881W2nj/GB/dqqhh1OFQ6
-         T1gmnI3bKLitToj3iVKBdxHLh+H20T0bnDZ8GFZgWMxRQSDGa/u6tExOGtZjlpR0wTO1
-         FSyC054bCUrcx99hwm5lj/iGf+bghF2yHRpv8CD52KLsSYoS01yI/IdpMFuH2E8MjrRN
-         eyLQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU+lDJZrBfomu6HCyXZEFJf+F8+TzxlX8eTNQ/01neUINwsJhX9EDnMXOu4uhgm97zIwh8jpjX0@vger.kernel.org, AJvYcCUTRvyc8w2BfsfMmpJqAU9jqf4b37k0lNefBP0Tv4Ky7oVGdsbbpnjjlLk5DODJQjp/ZXcwFpb3u+67zjwDoRF6@vger.kernel.org, AJvYcCUecceFV6FN8kCTLaw/c96mp7RCHWwJ+Zye8ZhtIJh+VFuksEP8Eygy7RveIu2Ha0yHQ+BoezltuAK4WM4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw1ZuqhbWem/TeHibbn6YjaE/pKI/PUhNG4CcjuxjyGxq8Hkhff
-	rSDTorKU2/YYcDFpWzJgwzzxd+vmd0H1GLf15RPKhy/oQPB5bMJUXPyB
-X-Gm-Gg: ASbGncsZzPFdgl8wHdsHIAZ5pdGqHXy2yfH8Ihf7j72kWWxyZ2XSpEjQqHBKI3/j5zc
-	hjnCTk6TW3GhzLLBNgBtOONT/bUSMe5093cotH88o1gHW0zbQu1FqdcrM5ush/Eerbsnbw5pDYF
-	u4xKV7VYsXM7dw4jt2K2i4jsN9J+3ocvXh/YOenRwzJMrZxbaJL4/e3QisNKNQ+Z5KHMg07ee3N
-	jm+yp7KnEp+EkdoXNLZFYNlJF9f3i4GmZk+bH+1DTEaqYnhAjSDRz92b1Fk2FGPVEEcfsTXpfct
-	93sasiqgwFiN/XC02IZFsE7PDXaD/BtX5drhxPl9wJYWHJc3E40Y9GP4NoQ=
-X-Google-Smtp-Source: AGHT+IEQFkFVCz/lGhudJIPIvzROBvQcXZd+oF2zG6r2GV2a5CpOncQy6IOY96+a7ZBK9i5iZBHZKw==
-X-Received: by 2002:a17:907:72c4:b0:ad8:e448:6c64 with SMTP id a640c23a62f3a-ae3f833e2a3mr318002266b.24.1751638302274;
-        Fri, 04 Jul 2025 07:11:42 -0700 (PDT)
-Received: from gmail.com ([2620:10d:c092:400::5:c915])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-60fca6640e9sm1411534a12.2.2025.07.04.07.11.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Jul 2025 07:11:41 -0700 (PDT)
-Date: Fri, 4 Jul 2025 15:11:39 +0100
-From: Breno Leitao <leitao@debian.org>
-To: Simon Horman <horms@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH net-next v2 6/7] netpoll: move Ethernet setup to
- push_eth() helper
-Message-ID: <aGfhG_E0Mxk8zPdB@gmail.com>
-References: <20250702-netpoll_untagle_ip-v2-0-13cf3db24e2b@debian.org>
- <20250702-netpoll_untagle_ip-v2-6-13cf3db24e2b@debian.org>
- <20250704135450.GT41770@horms.kernel.org>
+	s=arc-20240116; t=1751638797; c=relaxed/simple;
+	bh=l7W6ZxQ4jKQo69pkYn+br4lSJr8H67loghEexq0jha8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=VFjtV4r4W74N5z6tJNVk8OIueDXtZ5U/9+eYHmbUkSphSWCQ3yJLduh/XDDszM3udq1E19mDBV7XppcG9RRzEVh6CsQlfLr6IvOwy/WHK+/EwRmX6/T8O/aPGdDXN6VlERjNmXgrCFqkPlKymMDSGx4nHSp/j/KZrt5hkhDdyEU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=j9+hoyxu; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=NZtn3R83; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1751638793;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=hcqlyRHzFS9/EhHIhTt/9QEidEGBoMUNXPAiM3doLfU=;
+	b=j9+hoyxuFGCBLZ2XQX7Ykt2gaTDPQYGzVdX4IkH73SHRXlH3Izkj9+tSkMD5/FamzlxRBv
+	TtNb1+kSoIW1lVpVIjCENYPiJoKWWBBMx+/EFbJ/G6ztBaziBeqzYSX3mpNIOsZrl0sIhQ
+	tqZq+iQb3o3FgaB82cP2PQs9B2NKbSS4qslpCXErWw+CTjHok8cANgexVXwVSHuqpF31cV
+	ESK+XFsy17T7tNvl95qIrH6aUPAXiPELlrCd2FJ3qdMeckje7LJWmvGAC5/3ekw7cASyt7
+	1bDDK0H9tzzWMGr+xzDPc2sSnwFdaUIpzR5h1TEp5ZzkGZqK39MWCvKUjKiP+Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1751638793;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=hcqlyRHzFS9/EhHIhTt/9QEidEGBoMUNXPAiM3doLfU=;
+	b=NZtn3R83fPMWqdWFNGAez3Q2DFxe8dk3aSJgMAtKss5XnbQ+uvJ3IYU2peSe78vs1O9hUu
+	kMnB1TdyA4nnjzCg==
+Date: Fri, 04 Jul 2025 16:19:48 +0200
+Subject: [PATCH] tools/nolibc: add support for clock_nanosleep() and
+ nanosleep()
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250704135450.GT41770@horms.kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250704-nolibc-nanosleep-v1-1-d79c19701952@linutronix.de>
+X-B4-Tracking: v=1; b=H4sIAAPjZ2gC/x3MQQqAIBBA0avErBMm0YyuEi2yphqQMRQikO6et
+ HyL/wtkSkwZxqZAopszR6no2gbWc5GDFG/VoFFbdGiUxMB+VbJIzIHoUtq43g/Ye9ws1OxKtPP
+ zL6f5fT+emRmqYgAAAA==
+X-Change-ID: 20250704-nolibc-nanosleep-2476b806b0d5
+To: Willy Tarreau <w@1wt.eu>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1751638791; l=3678;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=l7W6ZxQ4jKQo69pkYn+br4lSJr8H67loghEexq0jha8=;
+ b=Ce9K79g7ypAu00HrEoK1fBjlzB6qcJlI1U/88HqUiSERlhDbAsrrdwUiuXfhYZ7gjPa7VPtFe
+ Hv0pXRFsJQZCOtQ80PDTdrJfMnPaJ86kYckm6Yv21BKoZj6RMdmjS9b
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-On Fri, Jul 04, 2025 at 02:54:50PM +0100, Simon Horman wrote:
-> On Wed, Jul 02, 2025 at 03:06:38AM -0700, Breno Leitao wrote:
-> > Refactor Ethernet header population into dedicated function, completing
-> > the layered abstraction with:
-> > 
-> > - push_eth() for link layer
-> > - push_udp() for transport
-> > - push_ipv4()/push_ipv6() for network
-> > 
-> > Signed-off-by: Breno Leitao <leitao@debian.org>
-> 
-> I note that Jakub's review of v1 has been addressed here.
+Also add some tests.
 
-Thanks for the whole review, Simon. I appreciate it!
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+ tools/include/nolibc/time.h                  | 34 ++++++++++++++++++++++++++++
+ tools/testing/selftests/nolibc/nolibc-test.c |  1 +
+ 2 files changed, 35 insertions(+)
 
---breno
+diff --git a/tools/include/nolibc/time.h b/tools/include/nolibc/time.h
+index fc387940d51f389d4233bd5712588dced31ae6e5..d02bc44d2643a5e39afa808841f7175bfab5ff7e 100644
+--- a/tools/include/nolibc/time.h
++++ b/tools/include/nolibc/time.h
+@@ -36,6 +36,8 @@ void __nolibc_timespec_kernel_to_user(const struct __kernel_timespec *kts, struc
+  * int clock_getres(clockid_t clockid, struct timespec *res);
+  * int clock_gettime(clockid_t clockid, struct timespec *tp);
+  * int clock_settime(clockid_t clockid, const struct timespec *tp);
++ * int clock_nanosleep(clockid_t clockid, int flags, const struct timespec *rqtp,
++ *                     struct timespec *rmtp)
+  */
+ 
+ static __attribute__((unused))
+@@ -107,6 +109,32 @@ int clock_settime(clockid_t clockid, struct timespec *tp)
+ 	return __sysret(sys_clock_settime(clockid, tp));
+ }
+ 
++static __attribute__((unused))
++int sys_clock_nanosleep(clockid_t clockid, int flags, const struct timespec *rqtp,
++			struct timespec *rmtp)
++{
++#if defined(__NR_clock_nanosleep)
++	return my_syscall4(__NR_clock_nanosleep, clockid, flags, rqtp, rmtp);
++#elif defined(__NR_clock_nanosleep_time64)
++	struct __kernel_timespec krqtp, krmtp;
++	int ret;
++
++	__nolibc_timespec_user_to_kernel(rqtp, &krqtp);
++	ret = my_syscall4(__NR_clock_nanosleep_time64, clockid, flags, &krqtp, &krmtp);
++	if (rmtp)
++		__nolibc_timespec_kernel_to_user(&krmtp, rmtp);
++	return ret;
++#else
++	return __nolibc_enosys(__func__, clockid, flags, rqtp, rmtp);
++#endif
++}
++
++static __attribute__((unused))
++int clock_nanosleep(clockid_t clockid, int flags, const struct timespec *rqtp,
++		    struct timespec *rmtp)
++{
++	return __sysret(sys_clock_nanosleep(clockid, flags, rqtp, rmtp));
++}
+ 
+ static __inline__
+ double difftime(time_t time1, time_t time2)
+@@ -114,6 +142,12 @@ double difftime(time_t time1, time_t time2)
+ 	return time1 - time2;
+ }
+ 
++static __inline__
++int nanosleep(const struct timespec *rqtp, struct timespec *rmtp)
++{
++	return clock_nanosleep(CLOCK_REALTIME, 0, rqtp, rmtp);
++}
++
+ 
+ static __attribute__((unused))
+ time_t time(time_t *tptr)
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index b5bca1dcf36e95a576ca9ffba4f7c213978a3f35..315229233930265501296dfeb9bc2838bb6fef84 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -1363,6 +1363,7 @@ int run_syscall(int min, int max)
+ 		CASE_TEST(mmap_bad);          EXPECT_PTRER(1, mmap(NULL, 0, PROT_READ, MAP_PRIVATE, 0, 0), MAP_FAILED, EINVAL); break;
+ 		CASE_TEST(munmap_bad);        EXPECT_SYSER(1, munmap(NULL, 0), -1, EINVAL); break;
+ 		CASE_TEST(mmap_munmap_good);  EXPECT_SYSZR(1, test_mmap_munmap()); break;
++		CASE_TEST(nanosleep);         ts.tv_nsec = -1; EXPECT_SYSER(1, nanosleep(&ts, NULL), -1, EINVAL); break;
+ 		CASE_TEST(open_tty);          EXPECT_SYSNE(1, tmp = open("/dev/null", O_RDONLY), -1); if (tmp != -1) close(tmp); break;
+ 		CASE_TEST(open_blah);         EXPECT_SYSER(1, tmp = open("/proc/self/blah", O_RDONLY), -1, ENOENT); if (tmp != -1) close(tmp); break;
+ 		CASE_TEST(openat_dir);        EXPECT_SYSZR(1, test_openat()); break;
+
+---
+base-commit: 1536aa0fb1e09cb50f401ec4852c60f38173d751
+change-id: 20250704-nolibc-nanosleep-2476b806b0d5
+
+Best regards,
+-- 
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+
 
