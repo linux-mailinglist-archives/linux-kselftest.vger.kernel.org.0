@@ -1,107 +1,214 @@
-Return-Path: <linux-kselftest+bounces-36544-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36545-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6794AF918B
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 13:27:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5AB7CAF91AB
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 13:38:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 51C8B1CA4C10
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 11:28:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD80E544CE7
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 11:37:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E23952C15B3;
-	Fri,  4 Jul 2025 11:27:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 307392D0C77;
+	Fri,  4 Jul 2025 11:38:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="rhE5MU9C"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="E/JO7/9f"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDF882C15AE;
-	Fri,  4 Jul 2025 11:27:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D7DA34CF5;
+	Fri,  4 Jul 2025 11:38:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751628459; cv=none; b=K3sRgGwxkE1ulahD/cZOVhAl4BCPZfAk81wkaGtAnaxZI1e4xxDUqMacH84WLqacYUqphG9//NmVaU2WvgpOAfU1IyrNC2RoUTOGSiWLG5M/fihH9ztsca3LVJvM/qGqffVj8cBLnWwP7+wCB9G59i4MV7ozU/Eii/ML0LY77A4=
+	t=1751629095; cv=none; b=m08f0o31tPWz4i6Zetlnd3KDKM1fXT+ZXj1ELZU4QWfqOauouhuFbMTO89jEn+UssLRJ2KkefNsz3O4bVCS4RBmWUZs1lTkeOhhnugAtZ8ww5SJzHT/A6WwfIIJAUUF+jUUbyNPk53e2fVwupFD5mwPYwLWGbdVXSH4ko5Cj1yw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751628459; c=relaxed/simple;
-	bh=t3/010+HIox3JcYzNG1vFfxeAMvyLUTNHCTRTUHcYI0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Th45zGvbh5RYq11tLNLAKxsEM8U3Kwe+BGgaK77UJsHxDYo0Xqu3rTwwPzSn+5fvGKjw5b2oBbIJgepNI0Djr/ISU/ZyGMSx1GmjbDIz168CwILYtByAkBLRCyStRTgb8lNH9mILS+ien+X0G4kCewGx9r5pDUoBZfOm1XBBw30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=rhE5MU9C; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1751628455;
-	bh=t3/010+HIox3JcYzNG1vFfxeAMvyLUTNHCTRTUHcYI0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rhE5MU9C4JMbn2IuFIChkriZ9OjuVEsKflh0Ab57PM34Bxis505hH1WSc60KxFhGC
-	 N2b39HaX2lDEnVWdo/pCozB1WW/mrZRfEbrf3CV1yff0MsfJ8VMZs4/klEzeG0oNhu
-	 xaVgVm7N2JeuQ2s/VlIndFiCzt9Ajs2pIeHOxWlY=
-Date: Fri, 4 Jul 2025 13:27:28 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Mark Brown <broonie@kernel.org>
-Cc: Willy Tarreau <w@1wt.eu>, Christian Brauner <brauner@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 0/4] kselftest/arm64: Add coverage for the interaction
- of vfork() and GCS
-Message-ID: <f438fc60-e602-4301-a7dd-bee43c020720@t-8ch.de>
-References: <20250703-arm64-gcs-vfork-exit-v3-0-1e9a9d2ddbbe@kernel.org>
+	s=arc-20240116; t=1751629095; c=relaxed/simple;
+	bh=YJP28q7Ucuh5+7BaGONOkzuEJ3W9tO+RZPWtLfGChOQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MyoYvv4sbwv9ho/gXOyZ2IvLHIkt0oQUQ7l7uzfZFk5KS37lqRqxeW9ALB1NABOsqyEgJkhW6ASXCRW0oW53aSk7gDlnJ2MT/z9gFNZNyOhqrVhDJzqWbJWAYIOl/CbmhpVwBRabBF8Ee3HnsPZEh+kbTOm5O/8JCM68a7CZA24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=E/JO7/9f; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=ynC92e4rjsZv78cTw8oxuNAOqH35c/SFBFFQS7G9ITc=; b=E/JO7/9fAmFdO1eN4H2Q43FGZn
+	4ShIr/TC33BfEuNNGiQnlyf4jEJTaJ9+pf9h3MnkoB7eSetIN8ZhjFYmWq6Iv8A65Woc7u6bIay7k
+	NqKDUe0niYCFjXpSt87C2aYckfzzQ/jq2iSGipNs56IVU4bA8XmzH9JvE7clqVIV+ONIG6Z6Y/cQs
+	S8qPcygYw0TOAJZZdWMFNl02/zNb0pwqYs23nUGAZv+v0DMGNrvDvacS6a3lGjNUJ8e6driZHEPBj
+	eQmW+TY9fG8evl5IneDSEI/7+YQKtKJTvostwB41z1Siysa3NgW1T5WNbzSp5w+IXMDJl8F3k8P04
+	C2QDdK9w==;
+Received: from sslproxy08.your-server.de ([78.47.166.52])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1uXek2-0004GS-1e;
+	Fri, 04 Jul 2025 13:38:06 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy08.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1uXek1-0006BS-2J;
+	Fri, 04 Jul 2025 13:38:05 +0200
+Message-ID: <f5d724ab-0eb6-41a1-b694-8aea566e99ab@iogearbox.net>
+Date: Fri, 4 Jul 2025 13:38:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250703-arm64-gcs-vfork-exit-v3-0-1e9a9d2ddbbe@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next,v3 2/2] selftests/bpf: Enhance XDP Rx metadata
+ handling
+To: Jesper Dangaard Brouer <hawk@kernel.org>,
+ "Song, Yoong Siang" <yoong.siang.song@intel.com>,
+ "David S . Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Alexei Starovoitov <ast@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+ Magnus Karlsson <magnus.karlsson@gmail.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+ <bjorn@kernel.org>, Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+ Jonathan Lemon <jonathan.lemon@gmail.com>
+Cc: "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+ "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+References: <20250702165757.3278625-1-yoong.siang.song@intel.com>
+ <20250702165757.3278625-3-yoong.siang.song@intel.com>
+ <77463344-1b1a-443a-97be-a7ef8a88b8af@kernel.org>
+ <IA3PR11MB92546301B67FB3A9FDCD716DD842A@IA3PR11MB9254.namprd11.prod.outlook.com>
+ <88a64a65-bd8c-4b73-af19-6764054d4572@kernel.org>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <88a64a65-bd8c-4b73-af19-6764054d4572@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: Clear (ClamAV 1.0.7/27689/Fri Jul  4 10:42:55 2025)
 
-On 2025-07-03 17:00:14+0100, Mark Brown wrote:
-> I had cause to look at the vfork() support for GCS and realised that we
-> don't have any direct test coverage, this series does so by adding
-> vfork() to nolibc and then using that in basic-gcs to provide some
-> simple vfork() coverage.
+On 7/4/25 11:58 AM, Jesper Dangaard Brouer wrote:
+> On 04/07/2025 03.17, Song, Yoong Siang wrote:
+>> On Friday, July 4, 2025 1:05 AM, Jesper Dangaard Brouer <hawk@kernel.org> wrote:
+>>> On 02/07/2025 18.57, Song Yoong Siang wrote:
+>>>> Introduce the XDP_METADATA_SIZE macro as a conservative measure to
+>>>> accommodate any metadata areas reserved by Ethernet devices.
+>>>
+>>> This seems like a sloppy workaround :-(
+>>>
+>>> To me, the problem arise because AF_XDP is lacking the ability to
+>>> communicate the size of the data_meta area.  If we had this capability,
+>>> then we could allow the IGC driver to take some of the space, have the
+>>> BPF-prog expand it futher (bpf_xdp_adjust_meta) and then userspace
+>>> AF_XDP would simply be able to see the size of the data_meta area, and
+>>> apply the struct xdp_meta at right offset.
+>>>
+>> Thanks for your input.
+>>
+>> I agree with you that the implementation will be simple if user application
+>> able to get the size of data_meta area. The intention of this patch set is to let
+>> developer aware of such limitations before we have a perfect solution.
+>>
+>> Btw, do you got any suggestion on how to expose the metadata length?
+>> I not sure whether xdp_desc.options is a simple and good idea or not?
+> 
+> That is a question to the AF_XDP maintainers... added them to this email.
+> 
+> /* Rx/Tx descriptor */
+> struct xdp_desc {
+>      __u64 addr;
+>      __u32 len;
+>      __u32 options;
+> };
+> 
+> As far as I know, the xdp_desc.options field isn't used, right?
 
-Thanks. I applied the patches, but moved the arm64 selftest patch to be
-the last one.
+The options holds flags, see also XDP_PKT_CONTD and XDP_TX_METADATA.
 
-FYI nolibc now has a proper prctl() implementation you might want to use.
-Also your vfork() selftest uncovered a bug in the brandnew SuperH support.
+> (Please AF_XDP experts, please verify below statements:)
+> Something else we likely want to document: The available headroom in the
+> AF_XDP frame.  When accessing the metadata in userspace AF_XDP we do a
+> negative offset from the UMEM packet pointer.  IIRC on RX the available
+> headroom will be either 255 or 192 bytes (depending on NIC drivers).
+> 
+> Slightly confusing when AF_XDP transmitting from userspace the UMEM
+> headroom is default zero (XSK_UMEM__DEFAULT_FRAME_HEADROOM is zero).
+> This is configurable via xsk_umem_config.frame_headroom, like I did in
+> this example[1].
+> 
+> Maybe I did something wrong in[1], because I see that the new method is
+> setting xsk_umem_config.tx_metadata_len + flag XDP_UMEM_TX_METADATA_LEN.
+> This is nicely documented in [2]. How does this interact with setting
+> xsk_umem_config.frame_headroom ?
 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
-> Changes in v3:
-> - Stylistic nits in the GCS vfork() test.
-> - SPARC has a non-standard vfork() ABI which needs handling.
-> - Link to v2: https://lore.kernel.org/r/20250610-arm64-gcs-vfork-exit-v2-0-929443dfcf82@kernel.org
+If you request XDP_UMEM_TX_METADATA_LEN then on TX side you can fill
+struct xsk_tx_metadata before the start of packet data, that is,
+meta = data - sizeof(struct xsk_tx_metadata). The validity of the
+latter is indicated via desc->options |= XDP_TX_METADATA and then
+you fill meta->flags with things like XDP_TXMD_FLAGS_CHECKSUM to
+tell that the related fields are valid (ex. request.csum_start,
+request.csum_offset) and that you expect the driver to do the
+offload with this info. This is also what I mentioned in the other
+thread some time ago that imho it would make sense to have this also
+on RX side somewhat similar to virtio_net_hdr..
+
+> [1] https://github.com/xdp-project/bpf-examples/blob/3f365af4be1fe6a0ef77e751ff9b12c912810453/AF_XDP-interaction/af_xdp_user.c#L423-L424
+> [2] https://www.kernel.org/doc/html/v6.12/networking/xsk-tx-metadata.html
 > 
-> Changes in v2:
-> - Add replacement of ifdef with if defined() in nolibc since the code
->   doesn't reflect the coding style.
-> - Remove check for arch specific vfork().
-> - Link to v1: https://lore.kernel.org/r/20250609-arm64-gcs-vfork-exit-v1-0-baad0f085747@kernel.org
-> 
-> ---
-> Mark Brown (4):
->       tools/nolibc: Replace ifdef with if defined() in sys.h
->       tools/nolibc: Provide vfork()
->       kselftest/arm64: Add a test for vfork() with GCS
->       selftests/nolibc: Add coverage of vfork()
-> 
->  tools/include/nolibc/arch-sparc.h             | 16 +++++++
->  tools/include/nolibc/sys.h                    | 59 ++++++++++++++++++-------
->  tools/testing/selftests/arm64/gcs/basic-gcs.c | 63 +++++++++++++++++++++++++++
->  tools/testing/selftests/nolibc/nolibc-test.c  | 23 ++++++++--
->  4 files changed, 142 insertions(+), 19 deletions(-)
-> ---
-> base-commit: 86731a2a651e58953fc949573895f2fa6d456841
-> change-id: 20250528-arm64-gcs-vfork-exit-4a7daf7652ee
-> 
-> Best regards,
-> --  
-> Mark Brown <broonie@kernel.org>
-> 
+> --Jesper
+
 
