@@ -1,119 +1,126 @@
-Return-Path: <linux-kselftest+bounces-36564-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36566-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E9AAAF943F
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 15:33:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BDD5AAF9449
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 15:34:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9865E1693AC
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 13:33:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C15EF5A4DEC
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 13:33:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45B312F85FC;
-	Fri,  4 Jul 2025 13:33:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="pF54Zabe"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9C23302051;
+	Fri,  4 Jul 2025 13:33:39 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D5932D5C67;
-	Fri,  4 Jul 2025 13:32:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAF872FC000
+	for <linux-kselftest@vger.kernel.org>; Fri,  4 Jul 2025 13:33:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=163.172.96.212
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751635981; cv=none; b=IB6eT4BtngqRee824OHQ/fd9oXzmF4ZZJ8QxM2f5K9kVyhq8knWD1JUPbwWcYWiAwJwWksP/+/WsKTcr6Om0lUwFs6ZL9w+xLKUrEYk3HaBVNAsd6ehdQmjUnnm3r4j8NjkIytAf1ORTbRKXccVNBDWNI5CNRyy7eRB4ahbg4LA=
+	t=1751636019; cv=none; b=M3kSVvQbNDkWbJTQMSZkPs2OmYFF4EGUjveoog5wBNHkhstsELPpueezlqm+eODCU37aINjQLBWvU3nEsSJtlYhm8oYSAuQBUMoRCe+no8TBvo83HZ5vPSRiFGV1BFTWBwYB7YI4FhPcs1uNfToY60x5PeIOQEeNUdyjTMU6gOI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751635981; c=relaxed/simple;
-	bh=ZNiYpFPz0MTrBUKkxiacvU3OH5FaFqbvURFWrhZVIQI=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mwlkSBnSrqmUKSml1Ba05G9r8tpF89zJGtbavRk4tDYMC7TB4alGcdtXnzvSXJyYjp+PdIdQGmL3sixUwCxn6TSOw/vfXDxwejsNUAAlOuv0ibVzQSFj16NVAe93dIEeusw4ymjWnAMFbstShwxp/2x+7J+xcqw+exyCYI3O1QY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=pF54Zabe; arc=none smtp.client-ip=217.70.183.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id F351444304;
-	Fri,  4 Jul 2025 13:32:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1751635975;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=LQdyVc1Nt+DZCPgyJ1ee7bBq0GR3KHn8pgte7or1P7M=;
-	b=pF54ZabevbwtFQ9u5lw2mSb54vxexY219ycj27JXahiwYZJIv2n4ZL3PsbGcaL8+MbkkwU
-	ja2Y5jRFA16V/TjQJ44OHiAZJHN5Hcvui+i521GiPSTh2fWrBWNakm/hiuSnu4BElPCeLq
-	UktrEQnVSq30LvKj0OjEosYrBdkUQrct+ibaf7IopgqdDM86fQChPr44Mefjwg0RBZ6Lmz
-	LhTEw9vQ9FKH2++5Bbck8TzNA+WV2l4oMRdd9PjYI1bfXlUWzV572EJbsO9asjL9GUZoHP
-	9mDHBH79D7KpgU56nV2NR8adtvYDHS5ovZaMw1bNehubuaYlugfGguvOKZxnlg==
-Date: Fri, 4 Jul 2025 15:32:50 +0200
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-To: Simon Horman <horms@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com, Andrew Lunn
- <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Russell King
- <linux@armlinux.org.uk>, Florian Fainelli <f.fainelli@gmail.com>, Heiner
- Kallweit <hkallweit1@gmail.com>, Vladimir Oltean <vladimir.oltean@nxp.com>,
- =?UTF-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>, Oleksij Rempel
- <o.rempel@pengutronix.de>, Shuah Khan <shuah@kernel.org>,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 3/3] selftests: ethtool: Introduce ethernet PHY
- selftests on netdevsim
-Message-ID: <20250704153250.6ec18427@fedora.home>
-In-Reply-To: <20250704132019.GM41770@horms.kernel.org>
-References: <20250702082806.706973-1-maxime.chevallier@bootlin.com>
-	<20250702082806.706973-4-maxime.chevallier@bootlin.com>
-	<20250704132019.GM41770@horms.kernel.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1751636019; c=relaxed/simple;
+	bh=MXbicf/CN8RsEsRNgUbQUrnMIhrP14zCOu9f6J6vtIE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FmwKEc5AlsNAefjSjkqlzn/D97koVPQq4G7C6EMwx6W8P81NqoGykTiKFa0IR2cQMcH5pNK7hGuRrPaKiP+90DeGR1vHj7ohyqbVhdlkX7tHVQlpRaA61eed7r2eIEe8k8hSaORvfM7DZKR22TTembs8fugYPp/roxco8IAvjNg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; arc=none smtp.client-ip=163.172.96.212
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
+Received: (from willy@localhost)
+	by pcw.home.local (8.15.2/8.15.2/Submit) id 564DX9v6024345;
+	Fri, 4 Jul 2025 15:33:09 +0200
+Date: Fri, 4 Jul 2025 15:33:09 +0200
+From: Willy Tarreau <w@1wt.eu>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc: Benjamin Berg <benjamin@sipsolutions.net>, linux-kselftest@vger.kernel.org,
+        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Subject: Re: [RFC v2] tools/nolibc: add sigaction()
+Message-ID: <20250704133309.GA23995@1wt.eu>
+References: <20250701122910.45823-1-benjamin@sipsolutions.net>
+ <21cf1fee-21ce-43b2-95cc-18aa58adcd87@t-8ch.de>
+ <c870d823e686c4b4ef6928d9ca0162d72e484339.camel@sipsolutions.net>
+ <81dc0649-9abe-421d-a372-a346c329d3af@t-8ch.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddvfedvlecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepofgrgihimhgvucevhhgvvhgrlhhlihgvrhcuoehmrgigihhmvgdrtghhvghvrghllhhivghrsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeegveeltddvveeuhefhvefhlefhkeevfedtgfeiudefffeiledttdfgfeeuhfeukeenucfkphepvdgrtddumegtsgduleemkegugeehmeegledttdemieehieekmedvlegsudemlegvfhehmegvkegtjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudelmeekugegheemgeeltddtmeeiheeikeemvdelsgdumeelvghfheemvgektgejpdhhvghlohepfhgvughorhgrrdhhohhmvgdpmhgrihhlfhhrohhmpehmrgigihhmvgdrtghhvghvrghllhhivghrsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedujedprhgtphhtthhopehhohhrmhhssehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhrtghpthhtohepnhgvthguvghvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrt
- ghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtoheprghnughrvgifsehluhhnnhdrtghhpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrdgtohhm
-X-GND-Sasl: maxime.chevallier@bootlin.com
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <81dc0649-9abe-421d-a372-a346c329d3af@t-8ch.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri, 4 Jul 2025 14:20:19 +0100
-Simon Horman <horms@kernel.org> wrote:
-
-> On Wed, Jul 02, 2025 at 10:28:05AM +0200, Maxime Chevallier wrote:
-> > Now that netdevsim supports PHY device simulation, we can start writing
-> > some tests to cover a little bit all PHY-related ethtool commands.
+On Fri, Jul 04, 2025 at 12:50:32PM +0200, Thomas Weißschuh wrote:
+> On 2025-07-02 17:33:24+0200, Benjamin Berg wrote:
+> > On Wed, 2025-07-02 at 00:04 +0200, Thomas Weißschuh wrote:
+> > > [SNIP]
+> > > > --- a/tools/include/nolibc/arch-i386.h
+> > > > +++ b/tools/include/nolibc/arch-i386.h
+> > > > @@ -10,6 +10,19 @@
+> > > >  #include "compiler.h"
+> > > >  #include "crt.h"
+> > > >  
+> > > > +/* Needed to get the correct struct sigaction definition */
+> > > > +#define SA_RESTORER	0x04000000
+> > > > +
+> > > > +/* Restorer must be set on i386 */
+> > > > +#define _NOLIBC_ARCH_NEEDS_SA_RESTORER
+> > > > +
+> > > > +/* Otherwise we would need to use sigreturn instead of rt_sigreturn */
+> > > > +#define _NOLIBC_ARCH_FORCE_SIG_FLAGS SA_SIGINFO
+> > > > +
+> > > > +/* Avoid linux/signal.h, it has an incorrect _NSIG and sigset_t */
+> > > > +#include <asm-generic/signal.h>
+> > > > +#include <asm-generic/siginfo.h>
+> > > 
+> > > This doesn't work if the user already has <linux/signal.h> included for
+> > > some other reason. The symbol names will conflict.
 > > 
-> > So far we only test the basic use of "ethtool --show-phys", with :
-> >  - A simple command to get a PHY we just added
-> >  - A DUMP command listing PHYs on multiple netdevsim instances
-> >  - A Filtered DUMP command listing all PHYs on a netdevsim
-> > 
-> > Introduce some helpers to create netdevsim PHYs, and a new test file.
-> > 
-> > Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>  
+> > I was thinking this is fine. Such a conflict already exists between the
+> > normal glibc <signal.h> and <linux/signal.h>.
 > 
-> Hi Maxime,
+> It would be enough to keep compatibility with glibc.
+> But personally I'd like to make it work generally.
 > 
-> We have recently started running shellcheck as part of our CI (NIPA).
-> Could you do so for the scripts added and modified by this patch?
-
-Sure thing, I'll do that :)
-
+> > So there would only be a
+> > problem if the user is explicitly not including <signal.h> to then use
+> > <linux/signal.h>. I doubt that makes sense.
 > 
-> > ---
-> >  .../selftests/drivers/net/netdevsim/config    |  1 +
-> >  .../drivers/net/netdevsim/ethtool-common.sh   | 15 +++++
-> >  .../drivers/net/netdevsim/ethtool-phy.sh      | 64 +++++++++++++++++++  
+> Technically nolibc is always included as a whole, so any application
+> using it would be prevented from using linux/signal.h.
 > 
-> Should ethtool-phy.sh be added to TEST_PROGS the Makefile in
-> the same directory?
+> Maybe Willy has some strong opinions.
+> Otherwise I'm also fine if we keep this part as is for now.
+> Then if everything else is addressed I'll try to actually implement my
+> proposal on top.
+> 
+> Does this sound reasonable?
 
-Ah yes I forgot that. So any file in that TEST_PROGS list will end-up
-being run in NAPI tests ?
+I think that userland application writers are used to seeing random
+failures here and there when they start using linux/ without being invited
+to do so. Of course it's never fun to deal with build failures, but the
+effort spent overengineering solutions is often not worth being spent
+when you figure that sometimes the next application you try will blatantly
+fail again. I'd suggest that we stay on the pragmatic side of things: if
+we find a solution that works fine for the common case, that may break for
+rare cases that already break with glibc, I think we're already fine. That
+doesn't mean we don't need to think about it, but it's not something urgent
+nor that warrants taking more risks either.
 
-Maxime
+I personally also think that we'll face an increasing amount of build
+issue reports due to our attempt at being more compatible. Indeed, in the
+past, one had to #ifdef all includes and pass -include nolibc on the gcc
+command line. Nowadays by supporting a larger number of functions and
+include file names, we encourage developers to try to simply switch their
+libc for nolibc. We do know that the coverage remains low, and reports
+will come proportionally to the ratio of apparent ease of use to feature
+coverage. That's expected and we should try to resist feeling bad about
+it. I don't think we'll ever aim at competing with glibc/musl for example,
+so a little bit of application adaptation is expected from time to time.
+
+Cheers,
+Willy
 
