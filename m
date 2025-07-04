@@ -1,194 +1,135 @@
-Return-Path: <linux-kselftest+bounces-36507-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36508-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FB32AF884A
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 08:50:34 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B940AF89F2
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 09:48:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF5734A791C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 06:50:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DB34E7B9BCE
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 07:46:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F08B22620CB;
-	Fri,  4 Jul 2025 06:50:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBCD7285C9F;
+	Fri,  4 Jul 2025 07:47:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b="J2RaqS1z"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="s7b8gHjl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from jpms-ob01-os7.noc.sony.co.jp (jpms-ob01-os7.noc.sony.co.jp [211.125.139.71])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA56E1FDA;
-	Fri,  4 Jul 2025 06:50:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.125.139.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB8F62857FA;
+	Fri,  4 Jul 2025 07:47:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751611828; cv=none; b=LNJsCZ53iN5AnU/gKn/q+njtvQVloTH+ethPPAZZe94tvOhpDDue8UnXlBWGMuhW+cliUSdf9lgUjv8Bh+zcGTH/FsbeH4+LU/1jKW7FK92RKh1AowkRtsBZVompzceLBIRu9VK2mS4RHE2vR/SwjD7ZnLbybSiIrD+yFVmnS9k=
+	t=1751615236; cv=none; b=urDJincCOqg36IldaJIJHfOI7099astX/6wi49t+5ES69vtnuqrjg9r2vcK0u/w5/g0D9Hlr+rknQAZTYEnXhT2HexlypjduVUT27RO+usfYOCgk8H2cn6Lm2+8wLAeYWjF6l0HKF6tC2Wc0ohvwP7rLgvMRWnuHdrYXHhEY240=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751611828; c=relaxed/simple;
-	bh=NLVQJy7XmMi2i+Aam1tLzS56P12ixeAmwTmXI0IprDg=;
+	s=arc-20240116; t=1751615236; c=relaxed/simple;
+	bh=8gB+AO68oAYcL/RcwfcXX8F3VEcyUkNlDhqHsTYg8h4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m8ffMdLz5M375SOq9yzAXABREv2npVUHsJrs8syQmYvkfhGgdFdrjVCwQNPZXKFl3CQ6cKZqzcNXa6EHl8KE+MyJzZKk6Pilg72IhvYgHVLoSAFuEuvPRnAMxFD/Xz8ugG2mYD10Uzd55UjePDM71scFOTYHAqIkJPLe1g8eXEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com; spf=fail smtp.mailfrom=sony.com; dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b=J2RaqS1z; arc=none smtp.client-ip=211.125.139.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=sony.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=sony.com; s=s1jp; t=1751611824; x=1783147824;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=wdmGAeV1gxh9QGTBIPnqXDaIxBsTlpQBDSJxrd2znmY=;
-  b=J2RaqS1zbf7L2oUIakWruewEBiN1Az5J9TMEQf/CZBSEAtRH+LnVmtsE
-   VsG1unVxsI3jGLZ4XYY7J5mFAOjAYRXskhrS2uG6e9xzRFB7U1jFTh++X
-   v0j6LWaotMT9BhxZBtn4/K9eMpTgjdjy7sK+Rk+aSKjRP6f1oIeoBROxC
-   UQYdum6dEVjGDXqtxzr4GCGfWSoX8SJGb7Rdy6ot8xWud1EBbG1QqZzf2
-   1DfXl+lSTAmm0ew2UpITbKYYEY1nFk1xOg4TszpFBLnRmo7jIZlCzkHq3
-   6Lrs0InNV9ehvU/7xomoD7PyN9K0Omim0VcAkTXA9feErpT7zBsNssZEY
-   A==;
-Received: from unknown (HELO jpmta-ob02-os7.noc.sony.co.jp) ([IPv6:2001:cf8:acf:1104::7])
-  by jpms-ob01-os7.noc.sony.co.jp with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2025 15:50:16 +0900
-X-IronPort-AV: E=Sophos;i="6.16,286,1744038000"; 
-   d="scan'208";a="4627854"
-Received: from unknown (HELO JPC00244420) ([IPv6:2001:cf8:1:573:0:dddd:eb3e:119e])
-  by jpmta-ob02-os7.noc.sony.co.jp with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2025 15:50:16 +0900
-Date: Fri, 4 Jul 2025 15:49:58 +0900
-From: Shashank Balaji <shashank.mahadasyam@sony.com>
-To: Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Cc: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
-	Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Shinya Takumi <shinya.takumi@sony.com>
-Subject: Re: [PATCH v2] selftests/cgroup: improve the accuracy of cpu.max
- tests
-Message-ID: <aGd5lrUvm9Bhh-b8@JPC00244420>
-References: <20250701-kselftest-cgroup-fix-cpu-max-v1-0-049507ad6832@sony.com>
- <20250703120325.2905314-1-shashank.mahadasyam@sony.com>
- <l3sal6zkvo4lqnfs6fepxytnrmqmqwfvtxudnjm53oigtuatpd@7czfeursgwyh>
- <aGcf0Prl-hVX2j4Q@JPC00244420>
+	 Content-Type:Content-Disposition:In-Reply-To; b=DcNPGJhB8nWy0p/8vuHuFAx9f/OaNeC5w16RBEBXto/KVM4cjFDsA/MM2Lt+ET+4sNXToLytGJ8BrrmKVCQLVtZLIcrSDn4A/xKzS5FO7AlYsLuQlYzfgF1tvxXm73q3WAvfbu3KSjNNqWkN4pw90DKuBS6b+Llwh2kXit9gHH0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=s7b8gHjl; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=lLeBr9v7iWnmJB5WR8E+Qdx4chL/QEo8kPrObOm2XBg=; b=s7b8gHjlLshr/s6aHjDwESkoZv
+	9xldLQc20XR4fF5OqxXWznCzk91go6X0+1hokaiCtTzgcvzRs3qRiKtfsqTUJE7KKzeAgCKHREsra
+	kvnr9afUyBdWT23H0Pp+eDaPiqOZEqx4FXHdDlmRumtj22gq0Q3GoFqjbkWKDBxQn6m8=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1uXb7w-000B5q-N9; Fri, 04 Jul 2025 09:46:32 +0200
+Date: Fri, 4 Jul 2025 09:46:32 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Tamir Duberstein <tamird@gmail.com>
+Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Michal Rostecki <vadorovsky@protonmail.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Russ Weight <russ.weight@linux.dev>,
+	FUJITA Tomonori <fujita.tomonori@gmail.com>,
+	Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>,
+	Jens Axboe <axboe@kernel.dk>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Dave Ertman <david.m.ertman@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>, Leon Romanovsky <leon@kernel.org>,
+	Breno Leitao <leitao@debian.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org,
+	netdev@vger.kernel.org, devicetree@vger.kernel.org,
+	llvm@lists.linux.dev, linux-pci@vger.kernel.org,
+	nouveau@lists.freedesktop.org, linux-block@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v13 2/5] rust: support formatting of foreign types
+Message-ID: <307d7547-b8da-4a82-9ae6-c95f66a283d2@lunn.ch>
+References: <20250701-cstr-core-v13-0-29f7d3eb97a6@gmail.com>
+ <20250701-cstr-core-v13-2-29f7d3eb97a6@gmail.com>
+ <DB2BDSN1JH51.14ZZPETJORBC6@kernel.org>
+ <CAJ-ks9nC=AyBPXRY3nJ0NuZvjFskzMcOkVNrBEfXD2hZ5uRntQ@mail.gmail.com>
+ <DB2IJ9HBIM0W.3N0JVGKX558QI@kernel.org>
+ <CAJ-ks9nF5+m+_bn0Pzi9yU0pw0TyN7Fs4x--mQ4ygyHz4A6hzg@mail.gmail.com>
+ <34c00dfa-8302-45ee-8d80-58b97a08e52e@lunn.ch>
+ <CANiq72ksOG10vc36UDdBytsM-LT7PdgjcZ9B0dkqSETH6a0ezA@mail.gmail.com>
+ <CAJ-ks9mkC3ncTeTiJo54p2nAgoBgTKdRsAwEEwZE2CtwbAS7BA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aGcf0Prl-hVX2j4Q@JPC00244420>
+In-Reply-To: <CAJ-ks9mkC3ncTeTiJo54p2nAgoBgTKdRsAwEEwZE2CtwbAS7BA@mail.gmail.com>
 
-On Fri, Jul 04, 2025 at 09:26:56AM +0900, Shashank Balaji wrote:
-> > >  tools/testing/selftests/cgroup/test_cpu.c | 63 ++++++++++++++++-------
-> > >  1 file changed, 43 insertions(+), 20 deletions(-)
-> > 
-> > 
-> > > -	user_usec = cg_read_key_long(cpucg, "cpu.stat", "user_usec");
-> > > -	if (user_usec <= 0)
-> > > +	if (usage_usec <= 0)
-> > >  		goto cleanup;
-> > >  
-> > > -	if (user_usec >= expected_usage_usec)
-> > > -		goto cleanup;
-> > 
-> > I think this was a meaningful check. Not sure if dropped accidentally or
-> > on purpose w/out explanation.
-> > 
-> > After that's addressed, feel free to add
-> > Acked-by: Michal Koutný <mkoutny@suse.com>
-> 
-> Sorry about that. I dropped it accidentally. This check should be okay,
-> right?
-> 
-> 	if (usage_usec > expected_usage_usec)
-> 		goto cleanup;
-> 
-> 1. We don't need to separately check user_usec because it'll always be
-> less than user_usec, and usage_usec is what's directly affected by
-> throttling.
-> 2. I changed the >= to > because, not that it'll ever happen, but we can
-> let usage_usec = expected_usage_usec pass. Afterall, it's called
-> "expected" for a reason.
+> There's also a tactical question about splitting by subsystem: are
+> there any tools that would assist in doing this, or is it a matter of
+> manually consulting MAINTAINERS to figure out file groupings?
 
-Hmm, here is something interesting. The following patch adds printfs to the
-existing code to see what user_usec, usage_usec, the expected_usage_usec used in
-the code, and the theoretical expected_usage_usec are. On running the modified test
-a couple of times, here is the output:
+You can run ./scripts/get_maintainer -f path/to/file.c
 
-	$ sudo ./test_cpu
-	user: 10485, usage: 10485, used expected: 1000000, theoretical expected: 10000
-	ok 1 test_cpucg_max
-	user: 11127, usage: 11127, used expected: 1000000, theoretical expected: 10000
-	ok 2 test_cpucg_max_nested
-	$ sudo ./test_cpu
-	user: 10286, usage: 10286, used expected: 1000000, theoretical expected: 10000
-	ok 1 test_cpucg_max
-	user: 10404, usage: 11271, used expected: 1000000, theoretical expected: 10000
-	ok 2 test_cpucg_max_nested
-	$ sudo ./test_cpu
-	user: 10490, usage: 10490, used expected: 1000000, theoretical expected: 10000
-	ok 1 test_cpucg_max
-	user: 9326, usage: 9326, used expected: 1000000, theoretical expected: 10000
-	ok 2 test_cpucg_max_nested
-	$ sudo ./test_cpu
-	user: 10368, usage: 10368, used expected: 1000000, theoretical expected: 10000
-	ok 1 test_cpucg_max
-	user: 10026, usage: 10026, used expected: 1000000, theoretical expected: 10000
-	ok 2 test_cpucg_max_nested
-	$ sudo ./test_cpu
-	user: 10541, usage: 10541, used expected: 1000000, theoretical expected: 10000
-	ok 1 test_cpucg_max
-	user: 11040, usage: 11040, used expected: 1000000, theoretical expected: 10000
-	ok 2 test_cpucg_max_nested
+and it will give you the Maintainers for that file. From that you can
+imply the subsystem.
 
-So, both user_usec and usage_usec exceeding the theoretical expected_usage_usec
-is not uncommon. The "fail if usage_usec >= expected_usage_usec" check in the
-existing code only really works because of the (wrong) large expected_usage_usec
-used.
+It might be possible to do one tree wide patchset, since Rust is still
+small at the moment. But you will need to get Reviewed-by: or
+Acked-by: from each subsystem Maintainer for the patches. That is not
+always easy, since some subsystems have CI systems, and will want the
+patch to pass their CI tests before giving an Reviewed-by.
 
-So I think the best we can do is check if usage_usec is close to expected_usage_usec
-or not, and not require usage_usec to be less than expected_usage_usec.
-
-diff --git i/tools/testing/selftests/cgroup/test_cpu.c w/tools/testing/selftests/cgroup/test_cpu.c
-index a2b50af8e9ee..14c8c7b49214 100644
---- i/tools/testing/selftests/cgroup/test_cpu.c
-+++ w/tools/testing/selftests/cgroup/test_cpu.c
-@@ -679,6 +679,9 @@ static int test_cpucg_max(const char *root)
-        if (user_usec >= expected_usage_usec)
-                goto cleanup;
- 
-+       printf("user: %ld, usage: %ld, used expected: %ld, theoretical expected: 10000\n",
-+               user_usec, usage_usec, expected_usage_usec);
-+
-        if (values_close(usage_usec, expected_usage_usec, 95))
-                goto cleanup;
- 
-@@ -739,6 +742,9 @@ static int test_cpucg_max_nested(const char *root)
-        if (user_usec >= expected_usage_usec)
-                goto cleanup;
- 
-+       printf("user: %ld, usage: %ld, used expected: %ld, theoretical expected: 10000\n",
-+               user_usec, usage_usec, expected_usage_usec);
-+
-        if (values_close(usage_usec, expected_usage_usec, 95))
-                goto cleanup;
- 
-@@ -758,13 +764,13 @@ struct cpucg_test {
-        int (*fn)(const char *root);
-        const char *name;
- } tests[] = {
--       T(test_cpucg_subtree_control),
--       T(test_cpucg_stats),
--       T(test_cpucg_nice),
--       T(test_cpucg_weight_overprovisioned),
--       T(test_cpucg_weight_underprovisioned),
--       T(test_cpucg_nested_weight_overprovisioned),
--       T(test_cpucg_nested_weight_underprovisioned),
-+       // T(test_cpucg_subtree_control),
-+       // T(test_cpucg_stats),
-+       // T(test_cpucg_nice),
-+       // T(test_cpucg_weight_overprovisioned),
-+       // T(test_cpucg_weight_underprovisioned),
-+       // T(test_cpucg_nested_weight_overprovisioned),
-+       // T(test_cpucg_nested_weight_underprovisioned),
-        T(test_cpucg_max),
-        T(test_cpucg_max_nested),
- };
-
+	Andrew
 
