@@ -1,34 +1,34 @@
-Return-Path: <linux-kselftest+bounces-36588-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36589-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CEBBAF9646
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 17:07:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BB52DAF9648
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 17:08:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C3411CA80C3
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 15:07:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E9F51CA7E22
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Jul 2025 15:08:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7C41309DD0;
-	Fri,  4 Jul 2025 15:05:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 118EE30AABC;
+	Fri,  4 Jul 2025 15:05:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="JJUifL6C"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="gueOyhD+"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0E9C309DB9;
-	Fri,  4 Jul 2025 15:05:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56154309DD9;
+	Fri,  4 Jul 2025 15:05:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751641553; cv=none; b=WBej1wBKArbTIfL/ho+CFDEUaGukZypHpGXjZutAHyE9PY8FfP9C93q+HmQTu3ykIsIYpH0lI1+IK4UsqSWqbKycWitOJaW6/hW48WpEzcSkmA8DcauH04T/uPQY7XpKmHAOggrnOoHBEgcPh6uenDx2NOLdSMZI/bBd/gVKnCQ=
+	t=1751641556; cv=none; b=qjl0+aHgeetVqoVlGVUCuthQHvbPVmokCN3NRZzibBZKcwFfyBX5n+ctQiTPtA8jrP7ITViPTWhlFNO9LO9OxTuvkmlm3Acf/q7r+j2i9Ya4ti1jKrzx6iGWaqJ5RxS7Q4zkI0vebetkp8dP/HU6D+SBi1QHDRYnGHWRhtdR2lY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751641553; c=relaxed/simple;
-	bh=8RzRZSLDMjobrezoZPjBrKTp5EQRctaBkvLREMCWMVo=;
+	s=arc-20240116; t=1751641556; c=relaxed/simple;
+	bh=a2WsffCtMjrOr3eN7sgJUtVLrxo/37LsvsGcPypTyJY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=O7LN5GkpS8GtXgu/8v10c8q9Zu1wXVizHmWYO/ljIo5EuiEdFCHQYVcNUa72bpSQtkv2V5+BmSQgq2Tp+6Rc/D2FE0HSr1Kc0jwsExkoM+Zn1FTZvOMf9pHbH0BdwAK0EXA0xm7OFTnpyoauneNz8vy/OjG3YWNA/Ci1cgW2pmY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=JJUifL6C; arc=none smtp.client-ip=213.97.179.56
+	 In-Reply-To:To:Cc; b=K355KAPXcrSPh/m2YCGsPuneQHeSo6T1fp7l9dwQJAwND2zYnr8rVz0t7m1Sk69iDSkwuVBKlz7FnI5kTqfcQMlh8idlSnvw3SElct61R07C7l2Gc2XapLF/UD1gDtbq145ZntoLhe3f0OY5Q0vUS88XCaXs3I4Cov71KEfQVtU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=gueOyhD+; arc=none smtp.client-ip=213.97.179.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
@@ -37,19 +37,19 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
 	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
 	:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
 	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=byWJufBHF2TZ6Av5c14+Z5l9xUJ+8KykWZvC68i3/FY=; b=JJUifL6CXzSUOEnDvCAqHwzyCf
-	rWRQipugqAN1DT+omUjGJ1KhXVF17oiLYgupArwyYU89Eo6ttfxAGvqV6M/9EF+3xuySQGIBFtGdR
-	iHyZGwctLjoJNnQq5KtAkGPi7mYhmHvGFai6eGk15jFLlnGfHhbNtmKZjNJmSXgPTYixohO7Z+K18
-	SqS3Yo2V6/Wgz7lh1mLBhgbulIUcnq6sAf//Kih+AC7/E3R7/kjo78FNmMcGFSeSEgyRSwCMBtgY8
-	OYYp1byX1XsgSDR2KBvoQ6SIN4L/c9lylUgnY1RpvNGq86xeYvp5bqO3v3pr3G1avbMBp3nxgUzsp
-	+JU0T31g==;
+	bh=hDJnfoXLRCbu8K4cHIiQu4FkSAttrXT2oWxF07oKpXs=; b=gueOyhD+SHa5wkoBFMtEdsemeu
+	8R91OqMFuCfvHQKgLa70U4CupTiFKFVKP32+GooC2SS/FOGgCeBvRVOz0XbWSb65rK3vp1D6SeP/m
+	bsG4u3aqZuoMgH8liTfHQwICreI8g8CTSWhjXffv1+FBu4iwsa2zvYo9LozCdbtlh83meXsBnxIm2
+	aRVuZU66w+/fkUYQEIYzqkFqStzCeBS0d6kFyQQtcb8ZmlNz+SIoYnc9h5Ldrob8D5fmoHC2M/H7Z
+	LkLL01jVHrTehU9ZaJ8R1D9xELUed5iEKVupNkKsgdh7NzgDjLvegfisStPuO/TqQJmc7gk+wyl+7
+	+z06dPfA==;
 Received: from [179.100.5.63] (helo=[192.168.15.100])
 	by fanzine2.igalia.com with esmtpsa 
 	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1uXhz3-00CTWt-GJ; Fri, 04 Jul 2025 17:05:49 +0200
+	id 1uXhz6-00CTWt-5n; Fri, 04 Jul 2025 17:05:52 +0200
 From: =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
-Date: Fri, 04 Jul 2025 12:05:13 -0300
-Subject: [PATCH 09/15] selftests/futex: Refactor futex_wait with
+Date: Fri, 04 Jul 2025 12:05:14 -0300
+Subject: [PATCH 10/15] selftests/futex: Refactor futex_requeue with
  kselftest_harness.h
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -59,7 +59,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250704-tonyk-robust_test_cleanup-v1-9-c0ff4f24c4e1@igalia.com>
+Message-Id: <20250704-tonyk-robust_test_cleanup-v1-10-c0ff4f24c4e1@igalia.com>
 References: <20250704-tonyk-robust_test_cleanup-v1-0-c0ff4f24c4e1@igalia.com>
 In-Reply-To: <20250704-tonyk-robust_test_cleanup-v1-0-c0ff4f24c4e1@igalia.com>
 To: Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
@@ -71,34 +71,33 @@ Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
  =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
 X-Mailer: b4 0.14.2
 
-To reduce the boilerplate code, refactor futex_wait test to use
+To reduce the boilerplate code, refactor futex_requeue test to use
 kselftest_harness header instead of futex's logging header.
 
 Signed-off-by: André Almeida <andrealmeid@igalia.com>
 ---
- .../selftests/futex/functional/futex_wait.c        | 103 ++++++++-------------
- tools/testing/selftests/futex/functional/run.sh    |   2 +-
- 2 files changed, 39 insertions(+), 66 deletions(-)
+ .../selftests/futex/functional/futex_requeue.c     | 76 +++++++---------------
+ tools/testing/selftests/futex/functional/run.sh    |  2 +-
+ 2 files changed, 24 insertions(+), 54 deletions(-)
 
-diff --git a/tools/testing/selftests/futex/functional/futex_wait.c b/tools/testing/selftests/futex/functional/futex_wait.c
-index 685140d9b93d2f71f7f1d9f07c29bfd38adfd059..5a772a7e6831b13c3d63084c7759560825b93628 100644
---- a/tools/testing/selftests/futex/functional/futex_wait.c
-+++ b/tools/testing/selftests/futex/functional/futex_wait.c
-@@ -9,25 +9,16 @@
- #include <sys/shm.h>
- #include <sys/mman.h>
- #include <fcntl.h>
+diff --git a/tools/testing/selftests/futex/functional/futex_requeue.c b/tools/testing/selftests/futex/functional/futex_requeue.c
+index 51485be6eb2f1be6d0e30bc26c116515a0e5e7cc..69e2555b60399174a16ee1316b0b7d2e10419989 100644
+--- a/tools/testing/selftests/futex/functional/futex_requeue.c
++++ b/tools/testing/selftests/futex/functional/futex_requeue.c
+@@ -7,24 +7,15 @@
+ 
+ #include <pthread.h>
+ #include <limits.h>
 -#include "logging.h"
 +
  #include "futextest.h"
 +#include "../../kselftest_harness.h"
  
--#define TEST_NAME "futex-wait"
+-#define TEST_NAME "futex-requeue"
  #define timeout_ns  30000000
  #define WAKE_WAIT_US 10000
- #define SHM_PATH "futex_shm_file"
  
- void *futex;
+ volatile futex_t *f1;
  
 -void usage(char *prog)
 -{
@@ -109,25 +108,25 @@ index 685140d9b93d2f71f7f1d9f07c29bfd38adfd059..5a772a7e6831b13c3d63084c77595608
 -	       VQUIET, VCRITICAL, VINFO);
 -}
 -
- static void *waiterfn(void *arg)
+ void *waiterfn(void *arg)
  {
  	struct timespec to;
-@@ -45,53 +36,37 @@ static void *waiterfn(void *arg)
+@@ -38,67 +29,49 @@ void *waiterfn(void *arg)
  	return NULL;
  }
  
 -int main(int argc, char *argv[])
-+TEST(private_futex)
++TEST(requeue_single)
  {
--	int res, ret = RET_PASS, fd, c, shm_id;
--	u_int32_t f_private = 0, *shared_data;
+-	pthread_t waiter[10];
+-	int res, ret = RET_PASS;
+-	int c, i;
+ 	volatile futex_t _f1 = 0;
+ 	volatile futex_t f2 = 0;
++	pthread_t waiter[10];
 +	int res;
-+	u_int32_t f_private = 0;
- 	unsigned int flags = FUTEX_PRIVATE_FLAG;
- 	pthread_t waiter;
--	void *shm;
  
- 	futex = &f_private;
+ 	f1 = &_f1;
  
 -	while ((c = getopt(argc, argv, "cht:v:")) != -1) {
 -		switch (c) {
@@ -147,123 +146,86 @@ index 685140d9b93d2f71f7f1d9f07c29bfd38adfd059..5a772a7e6831b13c3d63084c77595608
 -	}
 -
 -	ksft_print_header();
--	ksft_set_plan(3);
--	ksft_print_msg("%s: Test futex_wait\n", basename(argv[0]));
+-	ksft_set_plan(2);
+-	ksft_print_msg("%s: Test futex_requeue\n",
+-		       basename(argv[0]));
 -
- 	/* Testing a private futex */
--	info("Calling private futex_wait on futex: %p\n", futex);
-+	ksft_print_dbg_msg("Calling private futex_wait on futex: %p\n", futex);
- 	if (pthread_create(&waiter, NULL, waiterfn, (void *) &flags))
+ 	/*
+ 	 * Requeue a waiter from f1 to f2, and wake f2.
+ 	 */
+ 	if (pthread_create(&waiter[0], NULL, waiterfn, NULL))
 -		error("pthread_create failed\n", errno);
 +		ksft_exit_fail_msg("pthread_create failed\n");
  
  	usleep(WAKE_WAIT_US);
  
--	info("Calling private futex_wake on futex: %p\n", futex);
-+	ksft_print_dbg_msg("Calling private futex_wake on futex: %p\n", futex);
- 	res = futex_wake(futex, 1, FUTEX_PRIVATE_FLAG);
+-	info("Requeuing 1 futex from f1 to f2\n");
++	ksft_print_dbg_msg("Requeuing 1 futex from f1 to f2\n");
+ 	res = futex_cmp_requeue(f1, 0, &f2, 0, 1, 0);
+-	if (res != 1) {
++	if (res != 1)
+ 		ksft_test_result_fail("futex_requeue simple returned: %d %s\n",
+ 				      res ? errno : res,
+ 				      res ? strerror(errno) : "");
+-		ret = RET_FAIL;
+-	}
+ 
+-
+-	info("Waking 1 futex at f2\n");
++	ksft_print_dbg_msg("Waking 1 futex at f2\n");
+ 	res = futex_wake(&f2, 1, 0);
  	if (res != 1) {
- 		ksft_test_result_fail("futex_wake private returned: %d %s\n",
- 				      errno, strerror(errno));
+ 		ksft_test_result_fail("futex_requeue simple returned: %d %s\n",
+ 				      res ? errno : res,
+ 				      res ? strerror(errno) : "");
 -		ret = RET_FAIL;
  	} else {
- 		ksft_test_result_pass("futex_wake private succeeds\n");
+ 		ksft_test_result_pass("futex_requeue simple succeeds\n");
  	}
 +}
 +
-+TEST(anon_page)
++TEST(requeue_multiple)
 +{
-+	u_int32_t *shared_data;
-+	pthread_t waiter;
-+	int res, shm_id;
++	volatile futex_t _f1 = 0;
++	volatile futex_t f2 = 0;
++	pthread_t waiter[10];
++	int res, i;
  
- 	/* Testing an anon page shared memory */
- 	shm_id = shmget(IPC_PRIVATE, 4096, IPC_CREAT | 0666);
-@@ -105,67 +80,65 @@ int main(int argc, char *argv[])
- 	*shared_data = 0;
- 	futex = shared_data;
++	f1 = &_f1;
  
--	info("Calling shared (page anon) futex_wait on futex: %p\n", futex);
-+	ksft_print_dbg_msg("Calling shared (page anon) futex_wait on futex: %p\n", futex);
- 	if (pthread_create(&waiter, NULL, waiterfn, NULL))
--		error("pthread_create failed\n", errno);
-+		ksft_exit_fail_msg("pthread_create failed\n");
+ 	/*
+ 	 * Create 10 waiters at f1. At futex_requeue, wake 3 and requeue 7.
+@@ -106,31 +79,28 @@ int main(int argc, char *argv[])
+ 	 */
+ 	for (i = 0; i < 10; i++) {
+ 		if (pthread_create(&waiter[i], NULL, waiterfn, NULL))
+-			error("pthread_create failed\n", errno);
++			ksft_exit_fail_msg("pthread_create failed\n");
+ 	}
  
  	usleep(WAKE_WAIT_US);
  
--	info("Calling shared (page anon) futex_wake on futex: %p\n", futex);
-+	ksft_print_dbg_msg("Calling shared (page anon) futex_wake on futex: %p\n", futex);
- 	res = futex_wake(futex, 1, 0);
- 	if (res != 1) {
- 		ksft_test_result_fail("futex_wake shared (page anon) returned: %d %s\n",
- 				      errno, strerror(errno));
+-	info("Waking 3 futexes at f1 and requeuing 7 futexes from f1 to f2\n");
++	ksft_print_dbg_msg("Waking 3 futexes at f1 and requeuing 7 futexes from f1 to f2\n");
+ 	res = futex_cmp_requeue(f1, 0, &f2, 3, 7, 0);
+ 	if (res != 10) {
+ 		ksft_test_result_fail("futex_requeue many returned: %d %s\n",
+ 				      res ? errno : res,
+ 				      res ? strerror(errno) : "");
 -		ret = RET_FAIL;
- 	} else {
- 		ksft_test_result_pass("futex_wake shared (page anon) succeeds\n");
  	}
  
-+	shmdt(shared_data);
-+}
-+
-+TEST(file_backed)
-+{
-+	u_int32_t f_private = 0;
-+	pthread_t waiter;
-+	int res, fd;
-+	void *shm;
- 
- 	/* Testing a file backed shared memory */
- 	fd = open(SHM_PATH, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
--	if (fd < 0) {
--		perror("open");
--		exit(1);
--	}
-+	if (fd < 0)
-+		ksft_exit_fail_msg("open");
- 
--	if (ftruncate(fd, sizeof(f_private))) {
--		perror("ftruncate");
--		exit(1);
--	}
-+	if (ftruncate(fd, sizeof(f_private)))
-+		ksft_exit_fail_msg("ftruncate");
- 
- 	shm = mmap(NULL, sizeof(f_private), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
--	if (shm == MAP_FAILED) {
--		perror("mmap");
--		exit(1);
--	}
-+	if (shm == MAP_FAILED)
-+		ksft_exit_fail_msg("mmap");
- 
- 	memcpy(shm, &f_private, sizeof(f_private));
- 
- 	futex = shm;
- 
--	info("Calling shared (file backed) futex_wait on futex: %p\n", futex);
-+	ksft_print_dbg_msg("Calling shared (file backed) futex_wait on futex: %p\n", futex);
- 	if (pthread_create(&waiter, NULL, waiterfn, NULL))
--		error("pthread_create failed\n", errno);
-+		ksft_exit_fail_msg("pthread_create failed\n");
- 
- 	usleep(WAKE_WAIT_US);
- 
--	info("Calling shared (file backed) futex_wake on futex: %p\n", futex);
-+	ksft_print_dbg_msg("Calling shared (file backed) futex_wake on futex: %p\n", futex);
- 	res = futex_wake(shm, 1, 0);
- 	if (res != 1) {
- 		ksft_test_result_fail("futex_wake shared (file backed) returned: %d %s\n",
- 				      errno, strerror(errno));
+-	info("Waking INT_MAX futexes at f2\n");
++	ksft_print_dbg_msg("Waking INT_MAX futexes at f2\n");
+ 	res = futex_wake(&f2, INT_MAX, 0);
+ 	if (res != 7) {
+ 		ksft_test_result_fail("futex_requeue many returned: %d %s\n",
+ 				      res ? errno : res,
+ 				      res ? strerror(errno) : "");
 -		ret = RET_FAIL;
  	} else {
- 		ksft_test_result_pass("futex_wake shared (file backed) succeeds\n");
+ 		ksft_test_result_pass("futex_requeue many succeeds\n");
  	}
- 
--	/* Freeing resources */
--	shmdt(shared_data);
- 	munmap(shm, sizeof(f_private));
- 	remove(SHM_PATH);
- 	close(fd);
 -
 -	ksft_print_cnts();
 -	return ret;
@@ -271,18 +233,18 @@ index 685140d9b93d2f71f7f1d9f07c29bfd38adfd059..5a772a7e6831b13c3d63084c77595608
 +
 +TEST_HARNESS_MAIN
 diff --git a/tools/testing/selftests/futex/functional/run.sh b/tools/testing/selftests/futex/functional/run.sh
-index 2b3409d2513ea6b2c29efbcbdedfedd525f64151..b461a0a075a2ae526d37a1fcd09e196e48c2d4ff 100755
+index b461a0a075a2ae526d37a1fcd09e196e48c2d4ff..af32695cfaded4f834c7c07c24908b8a3e32fe28 100755
 --- a/tools/testing/selftests/futex/functional/run.sh
 +++ b/tools/testing/selftests/futex/functional/run.sh
-@@ -51,7 +51,7 @@ echo
- ./futex_wait_private_mapped_file
+@@ -54,7 +54,7 @@ echo
+ ./futex_wait
  
  echo
--./futex_wait $COLOR
-+./futex_wait
+-./futex_requeue $COLOR
++./futex_requeue
  
  echo
- ./futex_requeue $COLOR
+ ./futex_waitv $COLOR
 
 -- 
 2.49.0
