@@ -1,59 +1,67 @@
-Return-Path: <linux-kselftest+bounces-36728-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36729-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CA50AFBC50
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Jul 2025 22:11:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 768A9AFBCF1
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Jul 2025 22:55:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D79923B993F
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Jul 2025 20:10:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 80CAC17DA2E
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Jul 2025 20:55:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1D8E217701;
-	Mon,  7 Jul 2025 20:10:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C9CF26E703;
+	Mon,  7 Jul 2025 20:55:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R2AVmvJm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uF07XEBu"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DD9C215F48;
-	Mon,  7 Jul 2025 20:10:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2787426E6E9;
+	Mon,  7 Jul 2025 20:55:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751919058; cv=none; b=KElsXBiWkfulC+6gkQFz16Hid0bnxA3BBtoASLu1qThZiV76pxfs2Qm+N/ROtjHgRHRMp+YxMaXWvkNSgkfq2kurPF4vtCBzxxj1oYco3JFzDsBuOu0/gnAzMBzgh9yHk5iOBriX6lBOYbSMqzkLr0YvQx6uLUqW+6d0kdxNm1w=
+	t=1751921709; cv=none; b=G0flIIJM17BXYsjZzj+25CCqmswY+D5kLcy84lb+lvzxO2ADMccoe5MzNv3BqMrozhauF7pQg+PD5nmQ7hEpJKPewJ4uev6UIBsrlCkgVB5ZKeWqTJbQr3KgtLiEZlA2pQwOa2V6mVAb2d5s2rLRPCoxPTKwWSP91Iv5kUK0dS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751919058; c=relaxed/simple;
-	bh=yUmnhHtSXefGDv9A7H+00RO52EpPa5m3zD+x8bBJpoQ=;
+	s=arc-20240116; t=1751921709; c=relaxed/simple;
+	bh=0jxuX3ETarqAfuwfV1mmeo6yur/8SCAhFLaEndL8th8=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cFxWnsnseT2UutcirJQb8+PnYja62XeprEUuPVBFtf+ZA6aw0JfjejkWYtHR5v2OXsNbRXmNmUJEyeSVSdKcoEwGa8g1pnB+Z9TYRrm9Zn/YGLoE8SQeeZ7Mlp6P5y5VQHEi0Qsf/FrVKQtSDSH6XHHMkIHc1vyIv2rKsiAT6IM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R2AVmvJm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9DA4C4CEE3;
-	Mon,  7 Jul 2025 20:10:57 +0000 (UTC)
+	 MIME-Version:Content-Type; b=K3CmpveqD/b4HVg3Cl4HkZODcusBq6ZA6Hh4XzgodrlQIohCi5j53hQ1+hsFQOsPz/59Ykuw9VoT6VDjqoCSaTwxRU+NAuqhBi1Pej0pjnnrjXTK1yXcO+W0KP8wYEcQbA+JF0T1ay3qGYYq8sUfGI4GS13uSPE7FNKjHtaZAEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uF07XEBu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E828EC4CEE3;
+	Mon,  7 Jul 2025 20:55:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751919058;
-	bh=yUmnhHtSXefGDv9A7H+00RO52EpPa5m3zD+x8bBJpoQ=;
+	s=k20201202; t=1751921708;
+	bh=0jxuX3ETarqAfuwfV1mmeo6yur/8SCAhFLaEndL8th8=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=R2AVmvJm9YMQkqfvdI/wGcLCo+JKRJJEFvPVii73/DDETfNEO4onHfVs26lAPxj/E
-	 1Vqi0Srz6Mp/Qu9wWYb7wbBuiykC6dymIeAeU2Wf4/f6Uz/UnXBEzLfog45jH6Pd08
-	 jzInsT6muDJJk81coPddTWmtVBRddpJELvE6DWaoOFflEzHtsXnz62P2HHezM56kOY
-	 RtgQsJIFQmNajlRjuR21HIEhw4h9IG4cezwNH4Tj/GI+8Ua0ws3YH29hETqw3wwUH0
-	 73JfRg9gDBCWLmpD9soaYN75rYpB8kGjyxYHEwehQcw2qLIEZIjSmb0P+CoFk08uvx
-	 Dnh576rA8/ozQ==
-Date: Mon, 7 Jul 2025 13:10:56 -0700
+	b=uF07XEBucRV/vaHkfTH0cj5XxSmgFEvnPX0H7218Qup4BYKVm/YnIYAkHjKu9gky7
+	 OP8vAO7LI+PM1itArtsorrcUJZ03sJpYksshwJW7qE+eK5qX//lxKVwFiuMitB9JjV
+	 15Mzahx873msG90F4jMxaBivjf6DzhnuO6sJVULFqZ9OsQvqG0fQuwz6m9IIfWnB08
+	 4YN2E868e+Uk4PogV7LyVSssWBMMbGv3PH9NShRJR3k7K50FgLo3rYFMmhjlAFGgML
+	 hsF9pLumh7MDHhKaeVgfSBLdjih+yyRv0J/LeS68PNPuz8v+ZdGmCLy8DjAuBNRJVA
+	 WGQ6N++ObgWkw==
+Date: Mon, 7 Jul 2025 13:55:07 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: Taehee Yoo <ap420073@gmail.com>, davem@davemloft.net, pabeni@redhat.com,
- edumazet@google.com, andrew+netdev@lunn.ch, shuah@kernel.org,
- sdf@fomichev.me, jdamato@fastly.com, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 net-next] selftests: devmem: configure HDS threshold
-Message-ID: <20250707131056.2d7971bd@kernel.org>
-In-Reply-To: <CAHS8izPug-bFu3Tqc_sanCO-gip_e-pPY2Xx7qTAUV0+cKySXg@mail.gmail.com>
-References: <20250702104249.1665034-1-ap420073@gmail.com>
-	<20250702113930.79a9f060@kernel.org>
-	<CAHS8izPug-bFu3Tqc_sanCO-gip_e-pPY2Xx7qTAUV0+cKySXg@mail.gmail.com>
+To: Song Yoong Siang <yoong.siang.song@intel.com>
+Cc: "David S . Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+ <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard
+ Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Hao Luo
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko
+ <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next 0/2] Clarify and Enhance XDP Rx Metadata
+ Handling
+Message-ID: <20250707135507.29cb55be@kernel.org>
+In-Reply-To: <20250701042940.3272325-1-yoong.siang.song@intel.com>
+References: <20250701042940.3272325-1-yoong.siang.song@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -63,38 +71,25 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Mon, 7 Jul 2025 11:48:53 -0700 Mina Almasry wrote:
-> > On Wed,  2 Jul 2025 10:42:49 +0000 Taehee Yoo wrote:  
-> > > The devmem TCP requires the hds-thresh value to be 0, but it doesn't
-> > > change it automatically.
-> > > Therefore, make configure_headersplit() sets hds-thresh value to 0.  
-> >
-> > I don't see any undoing of the configuration :(
-> > The selftest should leave the system in the state that it started.
-> > We should either add some code to undo at shutdown or (preferably)
-> > move the logic to the Python script where we can handle this more
-> > cleanly with defer().  
-> 
-> I'm sure you're aware but this test in general doesn't aim to undo any
-> of it's configuration AFAIR :( that includes ethtool tcp-data-split,
-> -X, -N and -L. Sorry about that.
-> 
-> I wonder if you want this series to clean that up completely such that
-> all configurations are cleaned up, or if you're asking Taehee to only
-> clean up the hds-thres configuration for now.
+On Tue,  1 Jul 2025 12:29:38 +0800 Song Yoong Siang wrote:
+>                         |<---sizeof(xdp_meta)--|
+>                         |                      |
+>                  struct xdp_meta               rx_desc->address
+>                         ^                      ^
+>                         |                      |
+> +----------+----------------------+------------+------+
+> | headroom |    custom metadata   |  reserved  | data |
+> +----------+----------------------+------------+------+
+>            ^                      ^            ^
+>            |                      |            |
+>     struct xdp_meta     xdp_buff->data_meta    xdp_buff->data
+>            |                      |
+>            |<---sizeof(xdp_meta)--|
 
-Just the hds-thrs config for now. Avoid adding more problems.
+Huh. Did AF_XDP maintainers explicitly sign off on this or it's just how
+IGC implementation works and nobody noticed?
 
-> Also, sorry for the late reply, but FWIW, I prefer the configuration
-> cleanup to be in ncdevmem itself. We use it outside of the ksft to run
-> stress tests, and folks are going to copy-paste ncdevmem for their
-> applications, so having it be as nice as possible is a plus. But if
-> you feel strongly about doing this outside of ncdevmem.c itself I
-> don't mind that much.
-
-Stan & Bobby added devmem support to kperf I think that's a better
-choice for stress testing: https://github.com/facebookexperimental/kperf
-selftests are for testing the kernel, in the context of upstream CIs.
-The experience with netdevsim teaches me that having "out of tree"
-use cases as an explicit goal is a road to nowhere.
+For normal XDP my understanding is that its the driver's responsibility
+to move the "reserved" stuff out of place before presenting the frame to
+program.
 
