@@ -1,149 +1,134 @@
-Return-Path: <linux-kselftest+bounces-36731-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36732-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3506EAFBD76
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Jul 2025 23:26:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB689AFBD94
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Jul 2025 23:36:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 695623BEAE6
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Jul 2025 21:25:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B7163BC9C4
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Jul 2025 21:35:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D816C26F461;
-	Mon,  7 Jul 2025 21:26:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0D5A2877FE;
+	Mon,  7 Jul 2025 21:36:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OtjLlmNq"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ZuhSX/Rm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44FF5194C96;
-	Mon,  7 Jul 2025 21:26:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2A2D2877EC
+	for <linux-kselftest@vger.kernel.org>; Mon,  7 Jul 2025 21:36:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751923567; cv=none; b=gaZIimANPQbozNeD5I6E8VgMlAXbGRv/mVc22DZUVVngwqCO6+MFOTbbAJYP5nYnar07en5KEqLXHob2BlvUFy8Szhv1xNUmXGDpO6nIravptX6TtYWX7dxOtC54QsDKPYF4Jc+PNcBDg/3kOi4KqMkbgRdpSJNpUxZU/VsKpCA=
+	t=1751924171; cv=none; b=G091R1vL+RSHzikmRWrXRGOPxRL9oNKW9kuOI73TG/xaKvqxFDXkToxSTHOXaggzAFL7bdpOkEfC80q5/tisTAKfPuyjlsDieO6WCkYeCSq/t2RRGGolv0G2ynVr61yElQlt5mIcW/gR3hWjouv9aKTMPXKTCsPquUrh02jywuE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751923567; c=relaxed/simple;
-	bh=+JTpunOdTtURSzuON291S4b9xZO9qRanbPz4zXJad7E=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ql1rmCeRd1OKeALsJ99guopeWiYPffgZ24VEP7HPNScUAVrYXuDSjwsq1AJpWI9TEm3mSATCFiKKVmq/TrQUqJ91fQlUJ8RSYEsg55Njwqwg2nJSzk+4HvQCfhFEDd3Sr3o38qmnR+RRSUsE4H0fFJcjNjixkchiZ9nldlc0cjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OtjLlmNq; arc=none smtp.client-ip=209.85.219.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-e73e9e18556so3412036276.0;
-        Mon, 07 Jul 2025 14:26:05 -0700 (PDT)
+	s=arc-20240116; t=1751924171; c=relaxed/simple;
+	bh=FoE1yw4PinF8aLsqwiVP49aNTfhL5YfYRDuew1h9slM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QyNSCs3KVdVysl81d7Km8QpQ9UCvwvIhGeeKp+e8xj38X7bAlNvUKV7NFTxRnf5pj/JxVlMbNVbAH8xNo7hKOmJAaS3v+9Fm9Yx06Nh0/yzbJ/AHBs9y+VcTL4MK4mfrB8hlOd7drNMy/6XGLF1/jciGk/zrdTfciLQ9mvlPcoA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ZuhSX/Rm; arc=none smtp.client-ip=209.85.166.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f48.google.com with SMTP id ca18e2360f4ac-86d00ae076dso153839539f.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Jul 2025 14:36:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751923565; x=1752528365; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SbbSL2gnYP1ZOYPT+NaWp7SxmNH2oSTM3KI/P52qhN4=;
-        b=OtjLlmNq24z5Ux3LCvaUQgrc7hgSUlO2IOF7mcGJmbCI8NE7poOVPypKWQ8j4yQXPh
-         z8uc/SGzj4ZYdLb/Of1ETl2ZLlRbFQW7eDdzPHLT+RCWAokNPOhY/rnbE7t1BoFYcFcK
-         127fnAs2+hshz9xqJ97MMhwfWaTHmtZpkvUjYtwzmuxAIosFdYVPqmSx1E9tnZz82gyR
-         4WcETKBCw6xH/16UKteZ1KaqzXlcjABIfx0U8yEfmftqRbf3E/gBIiQWN/DTEowuH30u
-         qVsrtn8Po3hWV38j/m+rwUtkJwsI4ALYuq4CiZBN0JQ+wqBVfNlhZzfz9p5YyN2larD0
-         SUfw==
+        d=linuxfoundation.org; s=google; t=1751924169; x=1752528969; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5Y+/uCDo8Ap/hlxb/YHfGaplN840tpeb83kN5x/Y9MM=;
+        b=ZuhSX/RmBiY/WSTlomwxELJK18RRt8o2YaBsq19C+h/8M7Zlqcm88ZN0Z1pWZkUEYq
+         x36BN9F9Uqnj0NJTqeXjifoLpCdcuX3wNcM5sEIn3rP+xv2DvJL+0WsfJDD5+pVM191V
+         apGnv0fE5VlNtfme18Nc7ZCRU26+jGOppG8CE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751923565; x=1752528365;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SbbSL2gnYP1ZOYPT+NaWp7SxmNH2oSTM3KI/P52qhN4=;
-        b=tU0B9N0bg3T6caQ5lYPklRaxWx5aeIvkY2YolQ0vNZ18gDt1cSjtqKN75+lrgS5UIJ
-         YYtO3jlq10sUSOC0BPFg6c+iLzoqaoWLmltOeWkrdM0cZLxrWxU8h+zyhopRPYcc0JoJ
-         K9kreVKQlgqfFBz/DoLal2zRxYVx91R3baSuUpG0mh+t26AFvNkJiEihQt3kNAst4hKD
-         Wk0yFrjAri+evGolmH1Q2QJETBBYGXFsiwza9wazg9TMU1AwxCdmWK2HaWkJZwkab+Bt
-         ErvYWQ3+OW8l02cZqtylEiOAZ+WYgUbuB3mkZj8u0st1NXRr4eTf0eL7TThtSghgmn8N
-         sLig==
-X-Forwarded-Encrypted: i=1; AJvYcCVMEGKMOoys6GDSO57wtYzlwQWjRPvVpgu+LgzTr5MOfdASPrG2nPAC5jmrjArQhwm9BxGd5YFyQfcCt5w=@vger.kernel.org, AJvYcCXqn9KGq6b4bap519SxedW+yedTSy2atUnL98q0Yv8OY9KeUZBWsCvOg90N1pPO3idUmThhzbSdSWjLiYW0wTTY@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyf2pK/icmlJQev6fGil+jCP4jZoP6fnu48EATTMu5vwfGx21PI
-	vsBOCx/RjNXO7DK3KluIeTamjJZIQ4ROwI04iCwLh8VkNfHkMJFcd+M4
-X-Gm-Gg: ASbGncvOlKsRAawdS7MYIKF7yMWa9lmiG94VDvTsD30c8Q0fro23iEf6ew+v7HLoiyw
-	uAuSLnWarroQmK0fronp5SpDTf7bfKjeVjNdgwES2DpO74tG+5M3t4fKEUUSJutdtN+NgQeTzgX
-	I6kpo/6MFP2b2s6NpjaFAjyMsPL65ipYv2akzCBtyZs4RlutFVmTbkmVHgA2WIr3YARsPUhQqZp
-	RWkcoLNtRQ6SqUXBoT6LZR9tqhi4DoTxMgqj/dfXDu34Uo+hNWUxdIkHHvxjISkIRdFsNm0S35l
-	bHOjmKbLEWCVwt3sZF3mhXGCNndKIhOi37H8eohHWOcUtlqYciEFpCWNPvQtIQ==
-X-Google-Smtp-Source: AGHT+IE1rRBv9SKsXDVizGCcX/MQw3UTZ5ltGVPismkBhKYtdERManKJQ/zdQSzimtEoGONGeK3DIw==
-X-Received: by 2002:a05:6902:c06:b0:e82:3cdb:7e9e with SMTP id 3f1490d57ef6-e8b62a13970mr319297276.3.1751923564967;
-        Mon, 07 Jul 2025 14:26:04 -0700 (PDT)
-Received: from localhost ([2a03:2880:25ff:54::])
-        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e899c4b782dsm2890852276.57.2025.07.07.14.26.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Jul 2025 14:26:04 -0700 (PDT)
-From: Joshua Hahn <joshua.hahnjy@gmail.com>
-To: Suresh K C <suresh.k.chandrappa@gmail.com>
-Cc: nphamcs@gmail.com,
-	hannes@cmpxchg.org,
-	joshua.hahnjy@gmail.com,
-	shuah@kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] selftests: cachestat: add tests for mmap
-Date: Mon,  7 Jul 2025 14:26:02 -0700
-Message-ID: <20250707212603.992104-1-joshua.hahnjy@gmail.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20250707152557.49877-1-suresh.k.chandrappa@gmail.com>
-References: 
+        d=1e100.net; s=20230601; t=1751924169; x=1752528969;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5Y+/uCDo8Ap/hlxb/YHfGaplN840tpeb83kN5x/Y9MM=;
+        b=PB+yrByT4QV59lRIiUkcnmPl/Wcg5mXQ4Jmr6B2lDHnpPO5PL67pzKEMORsvE9OrtB
+         l9BEUddYCxqOURUTOB/0I3ph+YlI7tFrkVNmsbyrFMJmchoOfdGU1SiAjND0+7pLg/Ri
+         pyP93NMEoJlkv3rr6Reo6E6YgaeZQj5+LcieVptLMaGiHwPBeV7bS5emL/snf1PHX6ik
+         V/vTgjdIsYSK06vrI7WUW6/Frc/KgNvmqL2+A5Y96K4S9Z+8MxR7fPnZRAYL02bQHlgy
+         Wc+NPPDXs2n9tpLB0du00+hEiGaxh+7urENYo/jrznC4hPvN+zWZbY1okc+J+hlMnPMG
+         WFjA==
+X-Forwarded-Encrypted: i=1; AJvYcCXFCWdZxQ+5oYCxt2GoRgswiwEwUvH2pNFU8RSQ0mPIZK/9rUpcuhH4Ab4iTSvJ7HDdsj6zj/ko2skZHU2n+m8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywn611IF1Iw2frCNVUB1BZ7WzlSRMecv0Eo5ik6gfVIL7ean46t
+	8RqvKoPW4NjYqY5QrKw4gbp9W/gCPkn9D3kVYj0kHFjACeJpAZUJaGguu40815/gTs4=
+X-Gm-Gg: ASbGncuG9PDUJYyr/gUrwz39VnAQZ3WjmsyQ7cGrUSmDcn/tFr+/MuPgVd7EwXCXc0a
+	rfGS+pU1EtkrOlwdrjVNmK4cAZgPb9RgmjblX5/GWWUykRA+jFrhCUyWIJ1NcpLbD/T5SRqrRa1
+	jGEBe0b7xCxCpvfJKx6EkrvfFSomxrZJqzZZ1hqTbaxaTd1yl/vxqhysjKJVWInjJ50BFMp5Jl0
+	SWS2cET0wvcn8SNYZONrxINOn4o/TI7YMNR+xPKYdnul3ks59XiE9L91JhtvjZHV31r3TOMHnC4
+	um8i4EA5NHTB1EvHReDCth8QTV5GZ7ULD3Y/P5sivBS2DKsfxL2oLgDvGobHKmcYT51nu9IOFiy
+	MY16o/KH+
+X-Google-Smtp-Source: AGHT+IF53byRaWgnL2/6PRGJxd7DTJKFA1T8Wjv6k5cGUjcY6U6GoMsR0lJgobtuehyYtbBQa4iQiA==
+X-Received: by 2002:a05:6e02:522:b0:3e1:433e:2605 with SMTP id e9e14a558f8ab-3e154e63815mr2132085ab.9.1751924168902;
+        Mon, 07 Jul 2025 14:36:08 -0700 (PDT)
+Received: from [192.168.1.14] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-503b59c6d77sm1911718173.32.2025.07.07.14.36.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Jul 2025 14:36:08 -0700 (PDT)
+Message-ID: <57f72a27-10b0-49d4-8bd3-39b35f422a95@linuxfoundation.org>
+Date: Mon, 7 Jul 2025 15:36:07 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] selftests: tracing: Use mutex_unlock for testing glob
+ filter
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Steven Rostedt <rostedt@goodmis.org>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <175151678585.2149615.8702513393985992418.stgit@mhiramat.tok.corp.google.com>
+ <175151680309.2149615.9795104805153538717.stgit@mhiramat.tok.corp.google.com>
+ <20250703103039.3559a7e1@batman.local.home>
+ <20250704150425.a8a82c7768e1c99ee272e585@kernel.org>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20250704150425.a8a82c7768e1c99ee272e585@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon,  7 Jul 2025 20:55:56 +0530 Suresh K C <suresh.k.chandrappa@gmail.com> wrote:
-
-> From: Suresh K C <suresh.k.chandrappa@gmail.com>
+On 7/4/25 00:04, Masami Hiramatsu (Google) wrote:
+> Shuah,
 > 
-> Add a test case to verify cachestat behavior with memory-mapped files
-> using mmap(). This ensures that pages accessed via mmap are correctly
-> accounted for in the page cache.
+> Can you take this patch (fix) to your tree since this is
+> a fix for the selftest?
 > 
-> Tested on x86_64 with default kernel config
+> Thank you,
+> 
+> On Thu, 3 Jul 2025 10:30:39 -0400
+> Steven Rostedt <rostedt@goodmis.org> wrote:
+> 
+>> On Thu,  3 Jul 2025 13:26:43 +0900
+>> "Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+>>
+>>> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+>>>
+>>> Since commit c5b6ababd21a ("locking/mutex: implement
+>>> mutex_trylock_nested") makes mutex_trylock() as an inlined
+>>> function if CONFIG_DEBUG_LOCK_ALLOC=y, we can not use
+>>> mutex_trylock() for testing the glob filter of ftrace.
+>>>
+>>> Use mutex_unlock instead.
+>>>
+>>> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+>>
+>> Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+>>
+>> -- Steve
+> 
+> 
 
-Hey Suresh,
+Applied to linux-kselftest next
 
-Thanks for the second version with the updates, sorry that I missed the
-first time you sent this patch.
-
-[...snip...]
-
->  	if (fd < 0) {
-> -		ksft_print_msg("Unable to create shmem file.\n");
-> +		ksft_print_msg("Unable to create file.\n");
-
-NIT: I saw that you change this in the second part of the patch. However, why
-not just include it in this patch? I feel that it would be good practice
-to keep the kerenl in a "correct" state, even in between patches belonging
-to the same series. If someone were to just apply this patch but not the
-next (however unlikely that is), then they will not see the description of
-what file type they failed to create. Just my 2c, no need to change this if
-you don't think this is important.
-
-[...snip...]
-
-> +	if (type == FILE_MMAP){
-> +		char *map = mmap(NULL, filesize, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-> +		if (map == MAP_FAILED) {
-> +			ksft_print_msg("mmap failed.\n");
-> +			ret = false;
-> +			goto close_fd;
-> +		}
-> +		for (int i = 0; i < filesize; i++) {
-> +			map[i] = 'A';
-> +		}
-> +		map[filesize - 1] = 'X';
-
-NIT: Likewise, I don't know if there is a good reason to include this, only to
-remove it in the second patch. Perhaps it would be best to just remove it
-in this patch, so you don't have to delete it later?
-
-Please let me know what you think. Have a great day!
-Joshua
-
-Sent using hkml (https://github.com/sjp38/hackermail)
+thanks,
+-- Shuah
 
