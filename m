@@ -1,133 +1,119 @@
-Return-Path: <linux-kselftest+bounces-36717-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36718-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D94AAFB960
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Jul 2025 19:00:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FF3EAFB9AD
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Jul 2025 19:09:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2818B165038
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Jul 2025 16:58:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 687AD3A4AE4
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Jul 2025 17:09:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25FE023C8CE;
-	Mon,  7 Jul 2025 16:58:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 283E62882D4;
+	Mon,  7 Jul 2025 17:09:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aMwSnvLg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EDA922F14C;
-	Mon,  7 Jul 2025 16:58:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 793212417C2;
+	Mon,  7 Jul 2025 17:09:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751907527; cv=none; b=L/KDoV7w+FKCENjbGcY4qm4dt5ROtjI3xVAyJgURkPuEVy6kjhYrkdyvQfXkm+zKhzNWyA+aRi/e7yDjloKFOnWJdhZzb0f04UrnzcI8KQdUCoGvqc/3PyT64n5W+4NLb8fUXLgnf4l0/MsWfMkmOsbKHEE46ArQ+1FXasDW/r4=
+	t=1751908197; cv=none; b=cFyGOwtuvnRTxJm0GBuT5Z2STZ6WQV1vOQ3wfV5EzPUWP2KZ1kFkKOLACZJjTsi91JKhCksHlBZEoK4SEElxBSw3GxQFnlDUBdbGtOOf3skjlohFb20WfZxijuApIttsp4OL85Br7bpQIgJmMLl7zRfdwGXsKYYIi4VOU1xIWzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751907527; c=relaxed/simple;
-	bh=lY8irBtYxVyHLKyGJiGCmG2opDnFdh+FVadST8BlZQQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y9qEnBkmBICLba01InyRfnsQy+uf79kyAM8PfOhSOEiCCbu+65F7gkACZXaerHIqE7C2t5tFQtZ3ByM1M3OWEoYOyt76YUiAG/h/xupqdsAxAzMPZ+QuxBv9PA3an57zlNAFw+7lgotj1+ajNoEwz4qbYwe1l0L0OZf2Qy+SEyo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 405C6168F;
-	Mon,  7 Jul 2025 09:58:32 -0700 (PDT)
-Received: from J2N7QTR9R3 (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 093CC3F66E;
-	Mon,  7 Jul 2025 09:58:40 -0700 (PDT)
-Date: Mon, 7 Jul 2025 17:58:38 +0100
-From: Mark Rutland <mark.rutland@arm.com>
-To: Colton Lewis <coltonlewis@google.com>
-Cc: kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Mingwei Zhang <mizhang@google.com>, Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>, Shuah Khan <shuah@kernel.org>,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 07/22] perf: arm_pmuv3: Generalize counter bitmasks
-Message-ID: <aGv8vgrZTET0aXjQ@J2N7QTR9R3>
-References: <20250626200459.1153955-1-coltonlewis@google.com>
- <20250626200459.1153955-8-coltonlewis@google.com>
+	s=arc-20240116; t=1751908197; c=relaxed/simple;
+	bh=0HdMLmITIOrRNDoFBZd+CMGUd8SVnkRZvs65pQNjUpI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cjO1Eyh8pMwX2sqE5Q1FZUXxWQi2tQDCps3INfJv+pfdqWOKUcsu+wr4dLSZqsvaunJyQJLEzFVlqeAqtc11FfpP5vzI5ii026bLTYduNPDc6cqLjplgcKH8zIjaYdjtkXkIJilPnDL2gcM8L/XL1biSQqp3hjknzJ4ausijIbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aMwSnvLg; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-553dceb342aso3016538e87.1;
+        Mon, 07 Jul 2025 10:09:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751908194; x=1752512994; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RFm8eveawNsx96R40m6TGSfuSzG4In7syDIMdfZZEOQ=;
+        b=aMwSnvLgq9oxfeOquJwXBOZUHe3/+ArSRGBy/6S/N8WuWletHjqmMWOce5qJnvATFJ
+         S7Q5utq9Hx9HdR00io95BIMkQdG9ixsLdj2vE+lfoLQn1SBHD8ReQZCFUnwJMTMunBUI
+         7Lxf4HN/qgty091UyayMPJ9nqU0LlSjHJJgEZAB4a2SuKlpp0kX73dceVUAqwcxx+ihc
+         jScHZyTHfpzmpXINSdPwvNW72mlYn/jyJ7XVULScex8c+BBeJa4LufA3ndnbW4yeCS/s
+         T5edDnpcFmLqxk6nMds3HQLGPEIGjBCFmnwx4j4T/bx6VxjYqWe/YmcxhTqnXPzI7an7
+         5GGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751908194; x=1752512994;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RFm8eveawNsx96R40m6TGSfuSzG4In7syDIMdfZZEOQ=;
+        b=OHU+TYZgk6H/s3ABEscXLv71f0ME5UwCGi1QuT6ThNlZCJ6gho4MAQC3tGLHpi9L14
+         pt89+xiE8GOzXerLymw/1h+c9eiUgRY9dbwRT3e/FMgcXnjgxBUiuZ30bMIO4K9xPww0
+         1nE81PMnhdtV6SDxNfNqrtAmJFUdYRjDcFEecRtQCeaExea0uL1s8CIB64gO71Qc9FMe
+         QXCZyRMZEAZWN18jtStiMYZu16EhJ3RvC3fn/yFYds8fwBdKDFhaCLdoLSbBrFqEuZRt
+         eE36m8l6OOo69ESD53q5Yf5fnyP4NIsbHtpdiYqbkA9TJAosuFpEqxxtPJaAi4c1dwLr
+         km4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCU9MoR8ts8J96n/u2UAnUaOHVkLwenfsbfXjgMzvcvgtCRA0YbURQBiM2fG7tkT305fJz+PCttpxBaN5Jc=@vger.kernel.org, AJvYcCVPqww+yT7JfXgZdumqJisW7HPwq5xnGb5rNOOhi2IY74038+N4S792w6H4yQ05q7D5EmeSGuVNbGANaQCwzEtr@vger.kernel.org, AJvYcCXCZxwsWzazGTaTfNujMw6l3+5d1LLjiXbHhf77N75KFz2MfN7cF/0BAqYvqL+tPPRNBYaw3Li7lOEd541i0xc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQAziC3Ozp7rkT/kWM05jG+NQRaW4SREGs9M7mUBFGnFpf2OX8
+	OHhNXW8m1NVZAc22k9Dm29r1FfDubieBapKUyFCMkbl+1J6R9us5d61vfKvXK24KsmrlWLQ6rL5
+	gP6lvnnA2C0kCKHNtjEUZ83tyc8YGVtk=
+X-Gm-Gg: ASbGnctOMvOqpCNCn0Cff5tQaQJqiXHs/fyI6P8NlLilBqX05dsuM25NOurEf0I+ZjA
+	FzKgn0U5dMhSvcI8Qru+uxwpsjx1R+9PXdcd9Dnq0FW9ooSJHbKxeJ97vShQ4jAYU0NosT+KSDK
+	3S5G2iTrU0+XlAU/ZiW9dWv9lHT0Qg3IJpgXDpN2gWzTo=
+X-Google-Smtp-Source: AGHT+IFgUI0RcckL84spjIXz0YFyQCOKX7+Yy/++IUVFouwWTkBCSMU9koQPZosfgDdQ2IOKdM0uG4yxdPGJIswyGLU=
+X-Received: by 2002:a05:6512:2c90:b0:553:2c65:f1ca with SMTP id
+ 2adb3069b0e04-556e701d248mr5128771e87.19.1751908193283; Mon, 07 Jul 2025
+ 10:09:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250626200459.1153955-8-coltonlewis@google.com>
+References: <20250706201855.232451-1-sergio.collado@gmail.com> <20250707093836.GC1099709@noisy.programming.kicks-ass.net>
+In-Reply-To: <20250707093836.GC1099709@noisy.programming.kicks-ass.net>
+From: =?UTF-8?Q?Sergio_Gonz=C3=A1lez_Collado?= <sergio.collado@gmail.com>
+Date: Mon, 7 Jul 2025 19:09:16 +0200
+X-Gm-Features: Ac12FXzmFrOduSMY2DKFPoPKqRTHecH9BEHt1cRsHjmGbm2JBEI1B1DVL3fyEQI
+Message-ID: <CAA76j90WCAm0Zm5vcv5S3mBkZVzSUCC4S5N2F9G20G5WUsFirg@mail.gmail.com>
+Subject: Re: [PATCH v3 RESEND] kunit: fix longest symbol length test
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Randy Dunlap <rdunlap@infradead.org>, rust-for-linux@vger.kernel.org, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Nathan Chancellor <nathan@kernel.org>, David Laight <david.laight.linux@gmail.com>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Martin Rodriguez Reboredo <yakoyoku@gmail.com>, x86@kernel.org, 
+	linux-kbuild@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Jun 26, 2025 at 08:04:43PM +0000, Colton Lewis wrote:
-> The OVSR bitmasks are valid for enable and interrupt registers as well as
-> overflow registers. Generalize the names.
-> 
-> Signed-off-by: Colton Lewis <coltonlewis@google.com>
+Hello,
 
-FWIW, this looks fine to me, so:
+  The initial goal was to verify that a KSYM_NAME_LEN of 512 was
+working as expected. It also fixed an issue in
+/x86/tools/insn_decoder_test.c.
 
-Acked-by: Mark Rutland <mark.rutland@arm.com>
+  This fix is indeed quite trivial, I just implemented the suggested
+ideas. Amend the test using KSYM_NAME_LEN-8 doesn't really seem to me
+to fix the underlying problem (I also don't know if there is any magic
+value).
 
-Mark.
+  Take into account that he actual warnings that have been reported in
+the CI ("Please increase KSYM_NAME_LEN both in kernel and kallsyms.c")
+ are not from this test, but from
+https://elixir.bootlin.com/linux/v6.15/source/scripts/kallsyms.c#L146,
+the test has just make that warning evident. Would removing that
+comment be a better solution?
 
-> ---
->  drivers/perf/arm_pmuv3.c       |  4 ++--
->  include/linux/perf/arm_pmuv3.h | 14 +++++++-------
->  2 files changed, 9 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/perf/arm_pmuv3.c b/drivers/perf/arm_pmuv3.c
-> index 6358de6c9fab..3bc016afea34 100644
-> --- a/drivers/perf/arm_pmuv3.c
-> +++ b/drivers/perf/arm_pmuv3.c
-> @@ -513,7 +513,7 @@ static u64 armv8pmu_pmcr_n_read(void)
->  
->  static int armv8pmu_has_overflowed(u64 pmovsr)
->  {
-> -	return !!(pmovsr & ARMV8_PMU_OVERFLOWED_MASK);
-> +	return !!(pmovsr & ARMV8_PMU_CNT_MASK_ALL);
->  }
->  
->  static int armv8pmu_counter_has_overflowed(u64 pmnc, int idx)
-> @@ -749,7 +749,7 @@ static u64 armv8pmu_getreset_flags(void)
->  	value = read_pmovsclr();
->  
->  	/* Write to clear flags */
-> -	value &= ARMV8_PMU_OVERFLOWED_MASK;
-> +	value &= ARMV8_PMU_CNT_MASK_ALL;
->  	write_pmovsclr(value);
->  
->  	return value;
-> diff --git a/include/linux/perf/arm_pmuv3.h b/include/linux/perf/arm_pmuv3.h
-> index d698efba28a2..fd2a34b4a64d 100644
-> --- a/include/linux/perf/arm_pmuv3.h
-> +++ b/include/linux/perf/arm_pmuv3.h
-> @@ -224,14 +224,14 @@
->  				 ARMV8_PMU_PMCR_LC | ARMV8_PMU_PMCR_LP)
->  
->  /*
-> - * PMOVSR: counters overflow flag status reg
-> + * Counter bitmask layouts for overflow, enable, and interrupts
->   */
-> -#define ARMV8_PMU_OVSR_P		GENMASK(30, 0)
-> -#define ARMV8_PMU_OVSR_C		BIT(31)
-> -#define ARMV8_PMU_OVSR_F		BIT_ULL(32) /* arm64 only */
-> -/* Mask for writable bits is both P and C fields */
-> -#define ARMV8_PMU_OVERFLOWED_MASK	(ARMV8_PMU_OVSR_P | ARMV8_PMU_OVSR_C | \
-> -					ARMV8_PMU_OVSR_F)
-> +#define ARMV8_PMU_CNT_MASK_P		GENMASK(30, 0)
-> +#define ARMV8_PMU_CNT_MASK_C		BIT(31)
-> +#define ARMV8_PMU_CNT_MASK_F		BIT_ULL(32) /* arm64 only */
-> +#define ARMV8_PMU_CNT_MASK_ALL		(ARMV8_PMU_CNT_MASK_P | \
-> +					 ARMV8_PMU_CNT_MASK_C | \
-> +					 ARMV8_PMU_CNT_MASK_F)
->  
->  /*
->   * PMXEVTYPER: Event selection reg
-> -- 
-> 2.50.0.727.gbf7dc18ff4-goog
-> 
+  Nevertheless, acknowledging that we don't have full control over the
+symbols' names, is also an interesting insight.
+
+  I will be happy to address the issue in one way or another, no problem there.
+
+Regards,
+ Sergio
 
