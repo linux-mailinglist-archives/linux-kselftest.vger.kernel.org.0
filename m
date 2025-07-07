@@ -1,167 +1,147 @@
-Return-Path: <linux-kselftest+bounces-36684-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36685-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0651AFB260
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Jul 2025 13:35:27 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67B23AFB34F
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Jul 2025 14:32:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A53D1AA2FF3
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Jul 2025 11:35:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 43F597A9FD3
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Jul 2025 12:30:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06EA9296158;
-	Mon,  7 Jul 2025 11:35:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8638929A308;
+	Mon,  7 Jul 2025 12:31:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="DBhmpZn7";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="apoLr9eR"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="B5yWjzj0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh-b2-smtp.messagingengine.com (fhigh-b2-smtp.messagingengine.com [202.12.124.153])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61BEE26057F;
-	Mon,  7 Jul 2025 11:35:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4FF413635C;
+	Mon,  7 Jul 2025 12:31:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751888115; cv=none; b=bKR/FPuzKJZXub+LxNfTNkj82O/3nAiQsgd6D438F4ZRYXqNnczwv0BviPLznY+VF9zs9XbK0Qqe79UXu01rV8W3rEiGpDsAkOT2mkS8ilWpPYik1J0+1/ltTA7Gzvjy6hBbTfzHHp3ag+AquKVhrWoZqV1ozAiCyCk8P/PM450=
+	t=1751891518; cv=none; b=IzLz0iAXcw6tHJxWGhOVUULDotrYKhdLvrf7ZUmBjqjF1qUbaM+LH25S/d5CA0wkCZLn4OiKkvODTeR4wu59rF32SNeX1wZoKfZPe5znQmf9bXhgwdz8h5G57JZStxHagipwMFwE5QHPGyoeGwmg/uZCvEWm9AR2OY+jpIsDCCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751888115; c=relaxed/simple;
-	bh=xsounmBckqXT0I3aHzOjw9zrEEH/ZiLn1RjzAXk2HR0=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=mFDZqz2raFkLlfJ2JYQD2ItUqqlJQAhB3L8VBG2Rt/OV+5drxl6wnvNK067mWbt8wI/j09C5On0yt2e45HMazJGF3RHy38sW28Bh0FVxr27Vo4ZscC76jLF0CG7hwqeH0ixqRz4z79vp0L+Oe9EvVILpjQkpc0MNDGnj4oP18Qo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=DBhmpZn7; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=apoLr9eR; arc=none smtp.client-ip=202.12.124.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id B20927A024A;
-	Mon,  7 Jul 2025 07:35:11 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Mon, 07 Jul 2025 07:35:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1751888111;
-	 x=1751974511; bh=PCGPfsy1pxa191INMAVM66YRgrGVVyJxnFps2kupCoc=; b=
-	DBhmpZn73HaS/+kZdc3rSSgFh+wA0Vfq/rg1YJNZjXKGgA68xeXfA2Fd6PAtG1Sq
-	lj2A41evxwcSoO5TSzUZ7DZb0Pa/p4+xOZGJgVVEyfrSNdcBkb47PdrV4rGTKcWv
-	CQrpZmTfhNL9Av6OTNGe4+h2WBzF5VRsVtTeaD3dPmVQXtbZqEFn5oRic1Vkwi++
-	GAlLflf+jVFDzw9op+/Z0DJJgcqvBRkOo1KG5m15yPAv3W7qwqrTC+nTZAThRVoj
-	Uy6WahQCnUkPWB3W+KQaIBtvI2bCF+eg4kKUGOaHbZ2bN4QAbUL82N3QgekVxJq5
-	AYm2IDbHKW9GbJBq9Gk/ng==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1751888111; x=
-	1751974511; bh=PCGPfsy1pxa191INMAVM66YRgrGVVyJxnFps2kupCoc=; b=a
-	poLr9eRr+YKPz6oEdEOyX5EEGjYyI78gb8EGsaBl+PqHfsxAF0Nbu4n+waXYEvrL
-	6Mp2GgYx3cuDRUSnmj9QoTwQdlSwPhehknnzhfzRm7NlS8N3lvpSZP3sGWry8zVW
-	XLbLXoMqY8Osqkpkq9xmVrKhQ9YuKWh4b8eMqmVGemmFxekr98e3ub098koiLKwX
-	6KfH4tWosBxxjh1XHTnIzJW6OU1MIDYk99vk61cUZUzJ1t8bjopHfN8ves7eYZkD
-	TTss9xLcjrURWG35OyxTqRcmQidHozYTuVwzU+wa2xGPPZt3zPsYdv6uo1rgo815
-	ccpiBDiPJxArwdu4wMLOw==
-X-ME-Sender: <xms:7rBraKUhB51fkfyZCEJ3Ze7F0jpWpd2EI8pDLE8Y4J9btd52DcAy3w>
-    <xme:7rBraGmtVabI68dRoZEJBvKDpoeIiLSyCndHAOEZ8XTEvefWRsbBzyJeew6ixi2PT
-    K56vB0t2HoM3o_FLlE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdefudeilecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefoggffhffvvefkjghfufgtgfesthhqredtredtjeenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpedvhfdvkeeuudevfffftefgvdevfedvleehvddvgeejvdefhedtgeegveehfeeljeen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
-    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopedvfedpmhhouggvpehsmhhtphhouhht
-    pdhrtghpthhtoheptggrthgrlhhinhdrmhgrrhhinhgrshesrghrmhdrtghomhdprhgtph
-    htthhopehvihhntggvnhiiohdrfhhrrghstghinhhosegrrhhmrdgtohhmpdhrtghpthht
-    oheprhhitghhrghruggtohgthhhrrghnsehgmhgrihhlrdgtohhmpdhrtghpthhtohepjh
-    hsthhulhhtiiesghhoohhglhgvrdgtohhmpdhrtghpthhtohepugifmhifvdesihhnfhhr
-    rgguvggrugdrohhrghdprhgtphhtthhopegthhhrihhsthhophhhvghrrdhsrdhhrghllh
-    esihhnthgvlhdrtghomhdprhgtphhtthhopegrthgvnhgrrhhtsehkvghrnhgvlhdrohhr
-    ghdprhgtphhtthhopehfrhgvuggvrhhitgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoh
-    eplhhuthhosehkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:7rBraKau-agsLHnE-ISJfm9OKPvCc2yOQSSoXw-1p2J6vq9fUmpiRA>
-    <xmx:7rBraIKRbJIuvwXrMoKkYRH2aQyXtO1Q8vbKoQuWxtrBlyjpisv75w>
-    <xmx:7rBraD2Qb89NZ1yPl_xTDhDDK_Dy0pt_IpCVfJGZxjTATEIj6AYykg>
-    <xmx:7rBraDaRmwjUh7CYm2YLtLcwwHBrFyg3Sp7gqwFTxkNWL7qhqiCz_g>
-    <xmx:77BraIT7QpWds9bsUn4Mt-kQAHxyZ-gfaH1BcIC2-YDZH9V662UWZJvI>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 7C283700065; Mon,  7 Jul 2025 07:35:10 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1751891518; c=relaxed/simple;
+	bh=wvly/6V0VhTLw5qhV1M0kl22++EJC0qJq/oWdAgapQY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Pt+Nyuv0scFaDXFlIGRieLMqGOUCGDY7C0ivVYBj7EV2oqB0NAzOJK9Y8ecbJ+KoPPT2Cs3sK2M3rRDeoFLkNOTIPz3GiMHsxJfWG3m0N6+FXNlz9RNj/0hizzcjTavc1jTZTCAAmFk6GssJMLid/94+yvkklwSMl1xSkdD8kh4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=B5yWjzj0; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=u+p92K+WF5x52aje9i/LpkCJfE+P3HIQKZfRO6Uc4pc=; b=B5yWjzj0u62lJ8SIrqAQ3ddPkL
+	IXQJN0FgsdkRkgKMXgQxNWl5DXdybQG+LJ+ONxnTY4LxFWD+aNw5LmV7/9tCLbxI4HogN7M/HrfrT
+	5KdtGKU3udFZ41m3tIBWb3Xi5m3ZS9+Hjha2M2/B4G49UT0oyfBPHfv4pKlH/1kL+M7EGLcUl15bb
+	QE00i5MVhZrI4l8fyr8OICjoJ81fpZ764LSPwHrXgu3JoRC6IWeanTWuYcfxX/WjxW3lqMXTjIfwE
+	H7hkMX4v/BA3yA3eYzkMdxGJiRwnU7VMFE8pw8PHUbDaHySKtmUW0pUWbkmQB8bT7SGhsPRojn6wu
+	foHxYxrw==;
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1uYl0Q-000FEO-2A;
+	Mon, 07 Jul 2025 14:31:36 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy06.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1uYl0P-0004Qg-2E;
+	Mon, 07 Jul 2025 14:31:33 +0200
+Message-ID: <98f27ecc-a69f-4bcb-a2d7-6fff91383225@iogearbox.net>
+Date: Mon, 7 Jul 2025 14:31:32 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: T22a9fd8a498db8e8
-Date: Mon, 07 Jul 2025 13:34:40 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Thomas Gleixner" <tglx@linutronix.de>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
- "Andy Lutomirski" <luto@kernel.org>,
- "Vincenzo Frascino" <vincenzo.frascino@arm.com>, shuah <shuah@kernel.org>,
- "Anna-Maria Gleixner" <anna-maria@linutronix.de>,
- "Frederic Weisbecker" <frederic@kernel.org>,
- "John Stultz" <jstultz@google.com>, "Stephen Boyd" <sboyd@kernel.org>,
- "Catalin Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,
- Linux-Arch <linux-arch@vger.kernel.org>,
- "Richard Cochran" <richardcochran@gmail.com>,
- "Christopher Hall" <christopher.s.hall@intel.com>,
- "Miroslav Lichvar" <mlichvar@redhat.com>,
- "Werner Abt" <werner.abt@meinberg-usa.com>,
- "David Woodhouse" <dwmw2@infradead.org>,
- "Kurt Kanzenbach" <kurt@linutronix.de>, "Nam Cao" <namcao@linutronix.de>,
- "Antoine Tenart" <atenart@kernel.org>
-Message-Id: <2078551b-c0b0-4201-b8d7-1faafa3647e6@app.fastmail.com>
-In-Reply-To: <877c0ksd1p.ffs@tglx>
-References: <20250701-vdso-auxclock-v1-0-df7d9f87b9b8@linutronix.de>
- <20250701-vdso-auxclock-v1-11-df7d9f87b9b8@linutronix.de>
- <877c0ksd1p.ffs@tglx>
-Subject: Re: [PATCH 11/14] vdso/vsyscall: Update auxiliary clock data in the datapage
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/bpf: Set CONFIG_PACKET=y for selftests
+To: Saket Kumar Bhaskar <skb99@linux.ibm.com>, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: hbathini@linux.ibm.com, sachinpb@linux.ibm.com, andrii@kernel.org,
+ eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
+ kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+ shuah@kernel.org
+References: <20250707071735.705137-1-skb99@linux.ibm.com>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <20250707071735.705137-1-skb99@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.0.7/27692/Mon Jul  7 10:35:53 2025)
 
-On Mon, Jul 7, 2025, at 08:57, Thomas Gleixner wrote:
-> On Tue, Jul 01 2025 at 10:58, Thomas Wei=C3=9Fschuh wrote:
->> =20
->> +#if defined(CONFIG_GENERIC_TIME_VSYSCALL) && defined(CONFIG_GENERIC_=
-GETTIMEOFDAY) && \
->> +	defined(CONFIG_POSIX_AUX_CLOCKS)
->
-> CONFIG_GENERIC_GETTIMEOFDAY requires CONFIG_GENERIC_TIME_VSYSCALL, but
-> that's not expressed anywhere. This stuff has grown too many config
-> options over time:
->
-> GENERIC_TIME_VSYSCALL, HAVE_GENERIC_VDSO, GENERIC_VDSO_DATA_STORE
->
-> All architectures except SPARC64 use the generic code and the generic
-> VDSO data store implementation. That config maze wants to be
-> consolidated.
+On 7/7/25 9:17 AM, Saket Kumar Bhaskar wrote:
+> BPF selftest fails to build with below error:
+> 
+>    CLNG-BPF [test_progs] lsm_cgroup.bpf.o
+> progs/lsm_cgroup.c:105:21: error: variable has incomplete type 'struct sockaddr_ll'
+>    105 |         struct sockaddr_ll sa = {};
+>        |                            ^
+> progs/lsm_cgroup.c:105:9: note: forward declaration of 'struct sockaddr_ll'
+>    105 |         struct sockaddr_ll sa = {};
+>        |                ^
+> 1 error generated.
+> 
+> lsm_cgroup selftest requires sockaddr_ll structure which is not there
+> in vmlinux.h when the kernel is built with CONFIG_PACKET=m.
+> 
+> Enabling CONFIG_PACKET=y ensures that sockaddr_ll is available in vmlinux,
+> allowing it to be captured in the generated vmlinux.h for bpf selftests.
+> 
+> Reported-by: Sachin P Bappalige <sachinpb@linux.ibm.com>
+> Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
 
-Would it help to replace the custom sparc64 vdso with the
-thing that parisc does and call the fallback directly?
-
-I doubt anyone still cares about the clock_gettime() performance
-on sparc64, and removing it would remove all those special cases:
-
- arch/sparc/Kconfig                  |   1 -
- arch/sparc/include/asm/vvar.h       |  75 --------
- arch/sparc/kernel/Makefile          |   1 -
- arch/sparc/kernel/vdso.c            |  69 --------
- arch/sparc/vdso/Makefile            |   2 +-
- arch/sparc/vdso/vclock_gettime.c    | 340 +++--------------------------=
--------
- arch/sparc/vdso/vdso.lds.S          |   2 -
- arch/sparc/vdso/vdso32/vdso32.lds.S |   3 +-
- arch/sparc/vdso/vma.c               | 265 +---------------------------
- 9 files changed, 28 insertions(+), 730 deletions(-)
-
-(the added lines here also fix the missing clock_gettime64,
-which was equally blocked on the sparc64 oddities)
-
-      Arnd
+Acked-by: Daniel Borkmann <daniel@iogearbox.net>
 
