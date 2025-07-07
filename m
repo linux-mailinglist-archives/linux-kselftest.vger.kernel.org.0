@@ -1,471 +1,264 @@
-Return-Path: <linux-kselftest+bounces-36679-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36680-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EA1FAFB000
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Jul 2025 11:43:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B631AFB0E7
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Jul 2025 12:14:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 820113BCF37
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Jul 2025 09:43:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2167D188A8E7
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Jul 2025 10:14:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58B4528ECC0;
-	Mon,  7 Jul 2025 09:43:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98570292B51;
+	Mon,  7 Jul 2025 10:14:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="WnkyoAJa";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="bxJqjBxX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from proxmox-new.maurer-it.com (proxmox-new.maurer-it.com [94.136.29.106])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB56B7B3E1;
-	Mon,  7 Jul 2025 09:43:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.136.29.106
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751881408; cv=none; b=C7B9LJfhPJMdmaycv/p5P7NY4fTIRHxLwa0Us/gNV4V/z6zj4RvmurdBe1Vd4Ty3L0HaQtpgaIFXrYS7rOdby37Xnhw3XG3SK0ic/5SlzGC+FChBAZnUow16uuyeniZLU2eIUIDVj5w3Ea4+tglqYiThwDLc5pKPlK4+7IrGbaI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751881408; c=relaxed/simple;
-	bh=zlw72HEbJ9DUjkZdnauZrma/7L2BeiaA3ocpXYWW2so=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Pidk8Xi8nUx1gzWkMwnOXMPWLHXMP0QJebpI3FGT8zlKVfqKLq+b5AjCVKsyrcCX0gG3Z1V6Lp/2W6sC9v5ktf/yxuFpDxjpzc0OLLNcTvR3ExBrphn8IJ1VF0LBkRED4B07cx+9Pn4Am1GMC7OMil9okjR9Uztgjjbu+8FyoKg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=proxmox.com; spf=pass smtp.mailfrom=proxmox.com; arc=none smtp.client-ip=94.136.29.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=proxmox.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proxmox.com
-Received: from proxmox-new.maurer-it.com (localhost.localdomain [127.0.0.1])
-	by proxmox-new.maurer-it.com (Proxmox) with ESMTP id 381FD41FCC;
-	Mon,  7 Jul 2025 11:43:17 +0200 (CEST)
-From: Gabriel Goller <g.goller@proxmox.com>
-To: Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	David Ahern <dsahern@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next v5] ipv6: add `force_forwarding` sysctl to enable per-interface forwarding
-Date: Mon,  7 Jul 2025 11:43:05 +0200
-Message-Id: <20250707094307.223975-1-g.goller@proxmox.com>
-X-Mailer: git-send-email 2.39.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1DC5262FF5;
+	Mon,  7 Jul 2025 10:14:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751883271; cv=fail; b=pzacug20etPel2XQ09DK+L2SE9WbornpRCvlWNmSmnPtpc9mtAXvhID14tM0A+RfyF46wXMf1BfnfEfCHZBs1mi/ZgTx/mAVss3dU4G+CF952tAXg18QO8VoOEeQLapGuXa+/6e7AneQjRmpRt2UB3IDmd5kH+eNtyd65tvLuhY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751883271; c=relaxed/simple;
+	bh=1CUU9Y57gi1QenFIj6nsuCvEYqDzdr2tJ4H8fyCkKcg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=GnaJ7j40mCfJ9+DDZ9qElWnGVzoAPrb5WCBpqhnsg1qa7Q1G08nO8pYKrnvef5qOPJ1UbTFIh55S4cxelcxl0xw7i/BsK5igjivGxYBwWm41hkrDBVXsSydizV0AkTtC8P+suPPgYzziQ3fFG6SrkfdFWh0CrRDdl25WhJmSp84=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=WnkyoAJa; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=bxJqjBxX; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5679r4QY004666;
+	Mon, 7 Jul 2025 10:13:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=corp-2025-04-25; bh=HA0EBpqNYrV2AryXwv
+	8FMhidEAXp6SZ2ElHc2m0MFQ4=; b=WnkyoAJaMt5lZgkLAuSTVMApMCNSnlCL6T
+	oIkB5V0/Sk49ybn4Oj+qECzhs7DsjlN+xGePAIdUEyzXtrtUiGNor71oRQhxlPkC
+	2YPSxIeltRhGfDcjN36hs2BKUUYaxLkfgLEHAa9xA2VBzey2CoW3r+DmEVdbadUV
+	zS63z3FsKUAOLvXmIflJsZTp9DNdg6RyayuhNqhpztm9u3/mwI3PX4wU4oUcT1WG
+	lyusDwmNACSgD8SvUtD4ATmLAeJ8gG++jdegeRTeSjNjJRPeZ8S3bgmZPfAZF5yZ
+	Lvk9xtrLagrX+HmhUDWXKOV0kRYZkxLzFIx3qcuiWqAHfrLHJGbA==
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 47rbyqr199-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 07 Jul 2025 10:13:50 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 56787824040477;
+	Mon, 7 Jul 2025 10:13:49 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12on2047.outbound.protection.outlook.com [40.107.237.47])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 47ptg8a5m8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 07 Jul 2025 10:13:49 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=HhHK6v6RhAi0yfYapESAR/sdIqNlj/GbNneHoV4wBrENfyIE7Q5MJwdTt36K0EvFNEM1Py9Flsoibz08MYoSn8149caEnjYKRD5uvqQCuTXxbxUpscq/HMcqDqw81/7z8446VaLgmawH5gAUaUvSQwSFLGvkFHeDHZ8X40n0kuuvXwP+6zNxUpQhUW6C9t5hZ992K4VRV62dNZFqv8M+wPYIBm37WONpF2tJspMEoMNKQYYf86cEf2btXbMQo07OzdqBqV4hKTRoMD+pwkxQcn+lvEdkm4hwt1uaUrkAUZ5cz+O7UsS9wUg9rAlDN4rRxQf9/2veEMoMebLlJax1+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HA0EBpqNYrV2AryXwv8FMhidEAXp6SZ2ElHc2m0MFQ4=;
+ b=NzC77dYRBK8UNboj2qUdQ0aSgGxeoORaKMs2Bm99dMZrB3qA6cv+mXqMrijaZ5GcrP4Kzyy5EHtcmnqv/wCBKHkmDAV3BBXg27gNMy1oVDdIXo6B/ZGckg0gw3qSZUGJh/mhuvYGbaJJxZRQ+MfswRf32egBkOTBQW8OPiS5wN2i124D+SY9h4elLA0zb0lxEwsBWl1K0yxYTa/B+0Wuy1eBfqZKPJlkP6sGfaZkQFz+u8koE8D1ru3KOE91rK2Ts3HffzumJZjdUSaSdQbBFdEOh4a8tTqw7jN2KLdC00Gt7WCI78TqvmOA0hKZuZo0Bkpn8XdF9CfAUO6jWQLvpw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HA0EBpqNYrV2AryXwv8FMhidEAXp6SZ2ElHc2m0MFQ4=;
+ b=bxJqjBxXP55aX25oArtcAIa5vkRl0sMubCFglcBbex/8ctgn6cCRTp4da1YFGvjcGge+NojSIwb+hmUX4yqvGC8O1B/KmUyjnd+hCwlsN9fTo+N9s6n9xEh/yB8GU25H7ywApa7TXiTIBVrWZyocIMyiZiD60uHKWC/0lrDHN8k=
+Received: from BL4PR10MB8229.namprd10.prod.outlook.com (2603:10b6:208:4e6::14)
+ by DS4PPF3689F8B17.namprd10.prod.outlook.com (2603:10b6:f:fc00::d12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8880.29; Mon, 7 Jul
+ 2025 10:13:17 +0000
+Received: from BL4PR10MB8229.namprd10.prod.outlook.com
+ ([fe80::552b:16d2:af:c582]) by BL4PR10MB8229.namprd10.prod.outlook.com
+ ([fe80::552b:16d2:af:c582%4]) with mapi id 15.20.8901.024; Mon, 7 Jul 2025
+ 10:13:17 +0000
+Date: Mon, 7 Jul 2025 11:13:12 +0100
+From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+To: kernel test robot <lkp@intel.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev,
+        oe-kbuild-all@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Peter Xu <peterx@redhat.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Pedro Falcato <pfalcato@suse.de>, Rik van Riel <riel@surriel.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 05/10] mm/mremap: use an explicit uffd failure path for
+ mremap
+Message-ID: <3dadd329-484e-40c8-b04c-4c4ffab24957@lucifer.local>
+References: <be3e068c77107d385d89eae634317cb59e04e5ba.1751865330.git.lorenzo.stoakes@oracle.com>
+ <202507071505.e2HFMCH2-lkp@intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202507071505.e2HFMCH2-lkp@intel.com>
+X-ClientProxiedBy: LO2P265CA0070.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:60::34) To DM4PR10MB8218.namprd10.prod.outlook.com
+ (2603:10b6:8:1cc::16)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL4PR10MB8229:EE_|DS4PPF3689F8B17:EE_
+X-MS-Office365-Filtering-Correlation-Id: d43dee3e-079f-41b4-9824-08ddbd3ee3cf
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?NmeJTdLOiVTOpYvPoNIULnFxNb9xJs4U4E58rzbR+XOU0eZCrPDLYlKXk+aW?=
+ =?us-ascii?Q?Nxisa41Ms0TmA31ncbLPFHJ28tarGPH+gmA8BKfVXQn3FEhvpCR26Co9iE1P?=
+ =?us-ascii?Q?W7BlB2u29nq/lYKdgrmUPMRAt+zvhG59JgkfEc420lYikwIiTS7GAlVl4vwm?=
+ =?us-ascii?Q?P/5k3zCTM2odmgRXQMCwBAYjL12So9RDZmvT7CQlykJ7wP58avxJXRdiAc05?=
+ =?us-ascii?Q?6OpXiKkJrTHz2pUarbLsiKkcHrK6wi92fMd/H8pQ9UdpjLjxZzELxYzcWSqO?=
+ =?us-ascii?Q?rA7jBwFsac7AzVS++8x1xNXSV+fHEw6ITlCEXebrVgoCIynmPrNeXYE3E1bs?=
+ =?us-ascii?Q?zzzEPuIO9mt+eMABbmrhqrrRNGTkFhosZ2uebZKxlQsoXx8m/RLBEuxWiBjy?=
+ =?us-ascii?Q?TBUYNJAV5cXggCOjSgLEpxlCYLHKWid9clOL0BDDOAwkm6zN84nK45AAuFnO?=
+ =?us-ascii?Q?TT6U95465AO9boIiCW1ipxHESUylteinbAw9306MTqPYp/o6GEbp5CpF0WZL?=
+ =?us-ascii?Q?j7uclZ1u5IMtBUMc5Ujczra7EZpsky2l3vlVcJ30mRLdzcjw9sggMo/zs4Ek?=
+ =?us-ascii?Q?9YNliekQGDOoUa8AEkVCM52jY42oJO0fpdM3nCZhh3j8O9z+j+o9wMbMn5Tn?=
+ =?us-ascii?Q?XqN0eesh+214SgQu/LuXSd+ARcvYGVW8fkc8Bp1Q+jGjPJVkldXKO1OaTeq6?=
+ =?us-ascii?Q?cmNlisf1JDYtS7kiVOrAxEE06AcAMpZMtaaGAvAuc/SsDY1tZse1M+Nqpfcs?=
+ =?us-ascii?Q?pAYPn07k1J4Z3DpkOOnjM1SI/LMcczaVy6ZvCrdNmIZjDMJIFcxlREyKrsRL?=
+ =?us-ascii?Q?8lG1R5yuHaNOVcIpYJf56fMr2fa7iIPyBCGkU1z0I4ez0bvHll544IaWt2du?=
+ =?us-ascii?Q?hwEJrwp69VrBnnY4KdVee5HhhnalyG6e+CpyUVAbcAeqk4AexZQ5jezTHf2P?=
+ =?us-ascii?Q?VP+SgO7vV6ZOcUhXa+kXiFCjOt9oZcLACmUDBTkr13VMh8+imBm6dPWHvI+s?=
+ =?us-ascii?Q?a2XRIBpg77kP90MXg/c2NG6p++YmemwUWVCUBBFLs3VOLNpEjIUAUMma+nEm?=
+ =?us-ascii?Q?S+k14X4K7HX9n2fng9S87Db27uKJEiwhg2BGjlKlaXeUP7MbGIsn5fR6zaw4?=
+ =?us-ascii?Q?M36znByaqDULfaJX/E+8/ElYhHFfl8B9Uw+OQjHY9QRzQrID+w+IexbuBo7B?=
+ =?us-ascii?Q?XFvW0iOGiQrhTOlObQm1qhl+jZJL4SIDThrleVhOH6H1HFfJ85RZ0ZZlRDI3?=
+ =?us-ascii?Q?IRBBG/gvaRPAXFZVOeLXWe/CsvDfsM1V7Dcu7J0p0Yc6+wPPpLFKC5yL3Pov?=
+ =?us-ascii?Q?myYxt76MzkHdkyEBuuEUn8/Bv4Sj88F3jlOlFIBcFWCdIj6TC4oIQxXloYZr?=
+ =?us-ascii?Q?agE+NKEKdFXG/GfkOjnzagAsv2NM?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL4PR10MB8229.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?2pEkujz2duH3gPv24a6NOwHio5tTbWO85S9hPwz36SUFDGBKNA7B0BGy8lQQ?=
+ =?us-ascii?Q?+Q9hF9Yli2CO7/xMj8DNS+Kp4r9Kl22mLWPOcouC6eIPMPjXAC0sXjBDc8vv?=
+ =?us-ascii?Q?zjz0I4xW843s1X2G9cwIbChl6m6kqEZ6MLcDt94oH8Pqd3TUJVQDsLWss8mk?=
+ =?us-ascii?Q?gJOr0L74WoHKKCKou/8ZB2URqBk/SZ2CALW/P2vyv7AwuEexp/AnsnGnTL2j?=
+ =?us-ascii?Q?rnLcrXFzHQebEVtgvfCjrEn1FjHjz+5mt67RSdn4KAqGTs8ERPT7A44YIJVD?=
+ =?us-ascii?Q?w2wn34dIvkg/oZI1pWrh1ZbJ/GueP0cZJw+KK5NdJaPldGxRbDVOLl19dBhb?=
+ =?us-ascii?Q?fpdCNVv1tp2WwZ8+EMyPsLQTJuwQeTh2rQzO8lheysRLqtpyWNUvhB4lENWe?=
+ =?us-ascii?Q?U37gX2B8wJS+zXep1kkDn+3K9XGLRDwtImnojO84nfOMlc1USnoSvNxpGWo/?=
+ =?us-ascii?Q?mv5JU8c947rmoFrTjeTsbyRGO0y1v7e8Zj7APm+dJh2yTlM66YaBKscjtB3O?=
+ =?us-ascii?Q?apzTT0YUCD8y5MYLBZCxeyE7vY3L0F5NraLW5x1AzX/x2HcUcoqPM650YTK6?=
+ =?us-ascii?Q?x2QV2HAAAJ3G3edT0fNer5HrYOZ5CYCHN0K9erdXtNNP5URHgT4i0Gu+gIJb?=
+ =?us-ascii?Q?lWFIm6STOLGzRh54Wqmm4No1g9t5PR8y0t5USbny0HZjCv4jTvX5KvE+eoqt?=
+ =?us-ascii?Q?JJC5WwVp6DUfYT/VM15sjEkrWIPHJpGtSeZgfiGqadADr6pfW5h2cmBthJkh?=
+ =?us-ascii?Q?meqNWTIn2bnVTljd28i+eRgOny1Be5rUT/UKYzoJxoILTygkYkgA8x+NeLJt?=
+ =?us-ascii?Q?2Eww9A++uQoCnz5qZSY8ZYrwwRIdP5n5jkxEWyaLUt9IHQ9C3O/xgjCbpY5q?=
+ =?us-ascii?Q?0+vio1D3GQydSSJuQ61IpPWNZ2ps93rHKgIKDRErsdLCpmrJLrWhDr63mw50?=
+ =?us-ascii?Q?fJtYaOzmHdSqdx/3xBtuJhUks0+OQhyR7/SbXpywVGLa3szGuDa8R89BQoE+?=
+ =?us-ascii?Q?9z8jsT7CRkegzHAWK6AnVEfK4TKGZ5+kTxpELG06aaA7AC/L9Q6l0GC9d9b5?=
+ =?us-ascii?Q?esm52zV772kqGehOa6jRmdmFv7us1ky2Z8yHO3R8cI+018l1yKgtlMIg/Iag?=
+ =?us-ascii?Q?So0GdX2l9snit9BXoNViawf7WxEVwPejZC0hj5si5X7YKlUJXUjYEmHf9gCV?=
+ =?us-ascii?Q?uCYvHypetI1ZCvHa6hAdqy0svzOI3ybZ4XFLpYXUjT2gkTg29OiuYYqrj80K?=
+ =?us-ascii?Q?IqfZGMCLix5mrJyhVQFZGGj6i3d0DzbpLurGB9CwF7kM1A4dmBNFBDnUUlcD?=
+ =?us-ascii?Q?4dM5JywZpNiV/HVDKg9ZdOmnUKMHKNeM1hcjo/+UFCwAXnogi9pXn9o0hFty?=
+ =?us-ascii?Q?j+xt/d5NypCj3VDWaXuTDhV5gxEaQx3vw2br8Z7KepsL1klQ/4dA/wQNK4ZW?=
+ =?us-ascii?Q?IUSgnJ/jOT75541WLRw+9gaOzJ8kGf0q8LBNk1Jn6Ocq7SVCDXU05uyaS9oj?=
+ =?us-ascii?Q?9cKd/eizCoKUhwfjZM/LiWXwzTjlVxmIo82TuTxfHjgD9sL/Lmg4nbhT6ER/?=
+ =?us-ascii?Q?pOOcXcltpAoNC3T0kNRydZ6VfcRPm+e+0ZI87jMY1oxEW750obRCnSkcp3Fj?=
+ =?us-ascii?Q?/Q=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	JCZyAOna4lSfZZ8pzSBCo+5auhG3IMsxPhdEuXFz0nsV6hKbdXWx7M1HYIiLPqLSdkzpI/runBJ8FamUsGntZ64w9zULbHgxIBykxq4b+OoGv8ypQsRgpA9UtoIfOJIa4XnNFr2sLPzvh4Dxzl2cNa3p18Mb0h1KJsvy0kGkHlz4MVzAJNTFrfmG6+a51gFyD6Ylop95rOMn0zgsw7gqF1njbPS1sPjrZC047yUjLsarnnE39gucISGYraza9yF2v4S9pQzmrZrfNoiGb7m53VCpyipvlaHRYFC+j9mMCgSG2MG17FlolKBz4AcxaHo0AqYMKqKHEMt+/B0x+KtbrOfFErqII39rMzQqX2cHBgszgksCBw6xB8Pq04PVR8zv3j1ufPV4JcxZUEgkWIYRlNw0ch35gUJDaQOeWqS+506ZRfDdkLa7YmB3D0CeghsX5Fz45Roolt9T02qD0JI7DlDi93vpR/a0L671BXhoWvb2z6h2j8SDX6ZtUpQB9vsur7f4AOy/s1rkOZr56RL+8g/h1FvabPo1fYVC5k84dgF8SRQagI1jNUFy2QQtESbS/MDqbiInlnCmBAu2p6lizvOt1WHUVrkBUXRIERKp0ec=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d43dee3e-079f-41b4-9824-08ddbd3ee3cf
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR10MB8218.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2025 10:13:17.5210
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: QJCy7G3punwpGxrmo074l4RezZWgWmwCfgPFwT2mNxASvgjh9E/nCFLti0668agbFgwgiRlwcNQdBp7fJ+NYngEk/nYLIPh2+t5nQtuFR1c=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS4PPF3689F8B17
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
+ definitions=2025-07-07_02,2025-07-07_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 bulkscore=0 malwarescore=0
+ mlxlogscore=999 spamscore=0 phishscore=0 mlxscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2505160000
+ definitions=main-2507070059
+X-Proofpoint-GUID: oNZF32Lv1TakOzQ9Gsur1PWqJLDRZl7O
+X-Proofpoint-ORIG-GUID: oNZF32Lv1TakOzQ9Gsur1PWqJLDRZl7O
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzA3MDA1OSBTYWx0ZWRfXw0ACv3LeGjAc ZZrku8vqH54X2oOzLyOSOj1ioC/G6nuq7xX6Wpov2pozJ76T8XigPKteRdlV4HAVlEVn2zJvU2q HV6bPTcQUvJpBWo2Hvo/e5CEzA+cpn/7ldqQbCfrur1p00zrz+eL8jCkM60oNWLB+vLO4XY7lGv
+ Bbw+EsxhnUOa+Dpp8mGKR/saAQh3T4OIBui9ZaykIZvTK4OaxPzADzjJouUGpGgI9wOQ9/tFUCW 5pI4I2Mkh4eIXzWKylL9kVWUdgF3RZ4iBY98fh2JwMg1laeFD9xGjQk6kh2OB3USC4Q0c5r2zJI xKhtTRnvE/oMA2YaKAF7GLGEVsWJ6pUM0Wokg8eRSdH/bk+PBXi2JYFpjZm6wKKlRCOjtZqe9Dh
+ eqTKyugl6QgCdOGFojfJkJ8/A6krWnzBFXNkyH7+C3+l0L+Gz3oM1fKoZPYuTQgktQ+skrt/
+X-Authority-Analysis: v=2.4 cv=ZOXXmW7b c=1 sm=1 tr=0 ts=686b9dde cx=c_pps a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17 a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19
+ a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10 a=Wb1JkmetP80A:10 a=GoEa3M9JfhUA:10 a=NEAV23lmAAAA:8 a=VwQbUJbxAAAA:8 a=yPCof4ZbAAAA:8 a=i3X5FwGiAAAA:8 a=QyXUC8HyAAAA:8 a=XtbzWmrbHnPqotb3VYQA:9 a=CjuIK1q_8ugA:10
+ a=mmqRlSCDY2ywfjPLJ4af:22
 
-It is currently impossible to enable ipv6 forwarding on a per-interface
-basis like in ipv4. To enable forwarding on an ipv6 interface we need to
-enable it on all interfaces and disable it on the other interfaces using
-a netfilter rule. This is especially cumbersome if you have lots of
-interface and only want to enable forwarding on a few. According to the
-sysctl docs [0] the `net.ipv6.conf.all.forwarding` enables forwarding
-for all interfaces, while the interface-specific
-`net.ipv6.conf.<interface>.forwarding` configures the interface
-Host/Router configuration.
+On Mon, Jul 07, 2025 at 03:56:53PM +0800, kernel test robot wrote:
+> Hi Lorenzo,
+>
+> kernel test robot noticed the following build errors:
+>
+> [auto build test ERROR on akpm-mm/mm-everything]
 
-Introduce a new sysctl flag `force_forwarding`, which can be set on every
-interface. The ip6_forwarding function will then check if the global
-forwarding flag OR the force_forwarding flag is active and forward the
-packet.
+Thanks for the report, I just need to add a stub for this, will send a fix-patch!
 
-To preserver backwards-compatibility reset the flag (on all interfaces)
-to 0 if the net.ipv6.conf.all.forwarding flag is set to 0.
+Cheers, Lorenzo
 
-Add a short selftest that checks if a packet gets forwarded with and
-without `force_forwarding`.
-
-[0]: https://www.kernel.org/doc/Documentation/networking/ip-sysctl.txt
-
-Signed-off-by: Gabriel Goller <g.goller@proxmox.com>
----
-
-v5:
-    * update conf/all/forwarding docs
-    * simplified backwards-compat comment
-    * remove ASSERT_RTNL as it's guaranteed by __in6_dev_get_rtnl_net()
-      already
-    * cange ip6_forward logic so that it doesn't depend on the idev
-      existing
-    * move WRITE_ONCE inside device lock
-v4: https://lore.kernel.org/netdev/20250703160154.560239-1-g.goller@proxmox.com/
-    * actually write the sysctl value to the table
-    * use ASSERT_RTNL() when forwarding the sysctl change
-    * remove useless comments in function body
-    * simplify forwarding and force_forwarding check in ip6_output.c
-    * fix code backticks in Documentation (double instead of single)
-    * add selftests
-v3: https://lore.kernel.org/netdev/20250702074619.139031-1-g.goller@proxmox.com/
-    * remove forwarding=0 setting force_forwarding=0 globally.
-    * add min and max (0 and 1) value to sysctl.
-v2: https://lore.kernel.org/netdev/20250701140423.487411-1-g.goller@proxmox.com/
-    * rename from `do_forwarding` to `force_forwarding`.
-    * add global `force_forwarding` flag which will enable
-      `force_forwarding` on every interface like the
-      `ipv4.all.forwarding` flag.
-    * `forwarding`=0 will disable global and per-interface
-      `force_forwarding`.
-    * export option as NETCONFA_FORCE_FORWARDING.
-v1: https://lore.kernel.org/netdev/20250702074619.139031-1-g.goller@proxmox.com/
-
- Documentation/networking/ip-sysctl.rst        |   9 +-
- include/linux/ipv6.h                          |   1 +
- include/uapi/linux/ipv6.h                     |   1 +
- include/uapi/linux/netconf.h                  |   1 +
- include/uapi/linux/sysctl.h                   |   1 +
- net/ipv6/addrconf.c                           |  83 ++++++++++++++
- net/ipv6/ip6_output.c                         |   3 +-
- tools/testing/selftests/net/Makefile          |   1 +
- .../selftests/net/ipv6_force_forwarding.sh    | 105 ++++++++++++++++++
- 9 files changed, 202 insertions(+), 3 deletions(-)
- create mode 100644 tools/testing/selftests/net/ipv6_force_forwarding.sh
-
-diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
-index 0f1251cce314..6d92bae0257a 100644
---- a/Documentation/networking/ip-sysctl.rst
-+++ b/Documentation/networking/ip-sysctl.rst
-@@ -2281,8 +2281,8 @@ conf/all/disable_ipv6 - BOOLEAN
- conf/all/forwarding - BOOLEAN
- 	Enable global IPv6 forwarding between all interfaces.
- 
--	IPv4 and IPv6 work differently here; e.g. netfilter must be used
--	to control which interfaces may forward packets and which not.
-+	IPv4 and IPv6 work differently here; the ``force_forwarding`` flag must
-+	be used to control which interfaces may forward packets.
- 
- 	This also sets all interfaces' Host/Router setting
- 	'forwarding' to the specified value.  See below for details.
-@@ -2292,6 +2292,11 @@ conf/all/forwarding - BOOLEAN
- proxy_ndp - BOOLEAN
- 	Do proxy ndp.
- 
-+force_forwarding - BOOLEAN
-+	Enable forwarding on this interface only -- regardless of the setting on
-+	``conf/all/forwarding``. When setting ``conf.all.forwarding`` to 0,
-+	the ``force_forwarding`` flag will be reset on all interfaces.
-+
- fwmark_reflect - BOOLEAN
- 	Controls the fwmark of kernel-generated IPv6 reply packets that are not
- 	associated with a socket for example, TCP RSTs or ICMPv6 echo replies).
-diff --git a/include/linux/ipv6.h b/include/linux/ipv6.h
-index 5aeeed22f35b..d975a86f29be 100644
---- a/include/linux/ipv6.h
-+++ b/include/linux/ipv6.h
-@@ -17,6 +17,7 @@ struct ipv6_devconf {
- 	__s32		hop_limit;
- 	__s32		mtu6;
- 	__s32		forwarding;
-+	__s32		force_forwarding;
- 	__s32		disable_policy;
- 	__s32		proxy_ndp;
- 	__cacheline_group_end(ipv6_devconf_read_txrx);
-diff --git a/include/uapi/linux/ipv6.h b/include/uapi/linux/ipv6.h
-index cf592d7b630f..d4d3ae774b26 100644
---- a/include/uapi/linux/ipv6.h
-+++ b/include/uapi/linux/ipv6.h
-@@ -199,6 +199,7 @@ enum {
- 	DEVCONF_NDISC_EVICT_NOCARRIER,
- 	DEVCONF_ACCEPT_UNTRACKED_NA,
- 	DEVCONF_ACCEPT_RA_MIN_LFT,
-+	DEVCONF_FORCE_FORWARDING,
- 	DEVCONF_MAX
- };
- 
-diff --git a/include/uapi/linux/netconf.h b/include/uapi/linux/netconf.h
-index fac4edd55379..1c8c84d65ae3 100644
---- a/include/uapi/linux/netconf.h
-+++ b/include/uapi/linux/netconf.h
-@@ -19,6 +19,7 @@ enum {
- 	NETCONFA_IGNORE_ROUTES_WITH_LINKDOWN,
- 	NETCONFA_INPUT,
- 	NETCONFA_BC_FORWARDING,
-+	NETCONFA_FORCE_FORWARDING,
- 	__NETCONFA_MAX
- };
- #define NETCONFA_MAX	(__NETCONFA_MAX - 1)
-diff --git a/include/uapi/linux/sysctl.h b/include/uapi/linux/sysctl.h
-index 8981f00204db..63d1464cb71c 100644
---- a/include/uapi/linux/sysctl.h
-+++ b/include/uapi/linux/sysctl.h
-@@ -573,6 +573,7 @@ enum {
- 	NET_IPV6_ACCEPT_RA_FROM_LOCAL=26,
- 	NET_IPV6_ACCEPT_RA_RT_INFO_MIN_PLEN=27,
- 	NET_IPV6_RA_DEFRTR_METRIC=28,
-+	NET_IPV6_FORCE_FORWARDING=29,
- 	__NET_IPV6_MAX
- };
- 
-diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
-index ba2ec7c870cc..92acf44febd1 100644
---- a/net/ipv6/addrconf.c
-+++ b/net/ipv6/addrconf.c
-@@ -239,6 +239,7 @@ static struct ipv6_devconf ipv6_devconf __read_mostly = {
- 	.ndisc_evict_nocarrier	= 1,
- 	.ra_honor_pio_life	= 0,
- 	.ra_honor_pio_pflag	= 0,
-+	.force_forwarding	= 0,
- };
- 
- static struct ipv6_devconf ipv6_devconf_dflt __read_mostly = {
-@@ -303,6 +304,7 @@ static struct ipv6_devconf ipv6_devconf_dflt __read_mostly = {
- 	.ndisc_evict_nocarrier	= 1,
- 	.ra_honor_pio_life	= 0,
- 	.ra_honor_pio_pflag	= 0,
-+	.force_forwarding	= 0,
- };
- 
- /* Check if link is ready: is it up and is a valid qdisc available */
-@@ -857,6 +859,9 @@ static void addrconf_forward_change(struct net *net, __s32 newf)
- 		idev = __in6_dev_get_rtnl_net(dev);
- 		if (idev) {
- 			int changed = (!idev->cnf.forwarding) ^ (!newf);
-+			/* Disabling all.forwarding sets 0 to force_forwarding for all interfaces */
-+			if (newf == 0)
-+				WRITE_ONCE(idev->cnf.force_forwarding, newf);
- 
- 			WRITE_ONCE(idev->cnf.forwarding, newf);
- 			if (changed)
-@@ -5719,6 +5724,7 @@ static void ipv6_store_devconf(const struct ipv6_devconf *cnf,
- 	array[DEVCONF_ACCEPT_UNTRACKED_NA] =
- 		READ_ONCE(cnf->accept_untracked_na);
- 	array[DEVCONF_ACCEPT_RA_MIN_LFT] = READ_ONCE(cnf->accept_ra_min_lft);
-+	array[DEVCONF_FORCE_FORWARDING] = READ_ONCE(cnf->force_forwarding);
- }
- 
- static inline size_t inet6_ifla6_size(void)
-@@ -6747,6 +6753,76 @@ static int addrconf_sysctl_disable_policy(const struct ctl_table *ctl, int write
- 	return ret;
- }
- 
-+static void addrconf_force_forward_change(struct net *net, __s32 newf)
-+{
-+	struct net_device *dev;
-+	struct inet6_dev *idev;
-+
-+	for_each_netdev(net, dev) {
-+		idev = __in6_dev_get_rtnl_net(dev);
-+		if (idev) {
-+			int changed = (!idev->cnf.force_forwarding) ^ (!newf);
-+
-+			WRITE_ONCE(idev->cnf.force_forwarding, newf);
-+			if (changed) {
-+				inet6_netconf_notify_devconf(dev_net(dev), RTM_NEWNETCONF,
-+							     NETCONFA_FORCE_FORWARDING,
-+							     dev->ifindex, &idev->cnf);
-+			}
-+		}
-+	}
-+}
-+
-+static int addrconf_sysctl_force_forwarding(const struct ctl_table *ctl, int write,
-+					    void *buffer, size_t *lenp, loff_t *ppos)
-+{
-+	struct inet6_dev *idev = ctl->extra1;
-+	struct ctl_table tmp_ctl = *ctl;
-+	struct net *net = ctl->extra2;
-+	int *valp = ctl->data;
-+	int new_val = *valp;
-+	int old_val = *valp;
-+	loff_t pos = *ppos;
-+	int ret;
-+
-+	tmp_ctl.extra1 = SYSCTL_ZERO;
-+	tmp_ctl.extra2 = SYSCTL_ONE;
-+	tmp_ctl.data = &new_val;
-+
-+	ret = proc_douintvec_minmax(&tmp_ctl, write, buffer, lenp, ppos);
-+
-+	if (write && old_val != new_val) {
-+		if (!rtnl_net_trylock(net))
-+			return restart_syscall();
-+
-+		WRITE_ONCE(*valp, new_val);
-+
-+		if (valp == &net->ipv6.devconf_dflt->force_forwarding) {
-+			inet6_netconf_notify_devconf(net, RTM_NEWNETCONF,
-+						     NETCONFA_FORCE_FORWARDING,
-+						     NETCONFA_IFINDEX_DEFAULT,
-+						     net->ipv6.devconf_dflt);
-+		} else if (valp == &net->ipv6.devconf_all->force_forwarding) {
-+			inet6_netconf_notify_devconf(net, RTM_NEWNETCONF,
-+						     NETCONFA_FORCE_FORWARDING,
-+						     NETCONFA_IFINDEX_ALL,
-+						     net->ipv6.devconf_all);
-+
-+			addrconf_force_forward_change(net, new_val);
-+		} else {
-+			inet6_netconf_notify_devconf(net, RTM_NEWNETCONF,
-+						     NETCONFA_FORCE_FORWARDING,
-+						     idev->dev->ifindex,
-+						     &idev->cnf);
-+		}
-+		rtnl_net_unlock(net);
-+	}
-+
-+	if (ret)
-+		*ppos = pos;
-+	return ret;
-+}
-+
- static int minus_one = -1;
- static const int two_five_five = 255;
- static u32 ioam6_if_id_max = U16_MAX;
-@@ -7217,6 +7293,13 @@ static const struct ctl_table addrconf_sysctl[] = {
- 		.extra1		= SYSCTL_ZERO,
- 		.extra2		= SYSCTL_TWO,
- 	},
-+	{
-+		.procname	= "force_forwarding",
-+		.data		= &ipv6_devconf.force_forwarding,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler	= addrconf_sysctl_force_forwarding,
-+	},
- };
- 
- static int __addrconf_sysctl_register(struct net *net, char *dev_name,
-diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
-index 7bd29a9ff0db..3853090d7282 100644
---- a/net/ipv6/ip6_output.c
-+++ b/net/ipv6/ip6_output.c
-@@ -509,7 +509,8 @@ int ip6_forward(struct sk_buff *skb)
- 	u32 mtu;
- 
- 	idev = __in6_dev_get_safely(dev_get_by_index_rcu(net, IP6CB(skb)->iif));
--	if (READ_ONCE(net->ipv6.devconf_all->forwarding) == 0)
-+	if (!READ_ONCE(net->ipv6.devconf_all->forwarding) &&
-+	    (!idev || !READ_ONCE(idev->cnf.force_forwarding)))
- 		goto error;
- 
- 	if (skb->pkt_type != PACKET_HOST)
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 332f387615d7..f64ec8a15a77 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -112,6 +112,7 @@ TEST_PROGS += skf_net_off.sh
- TEST_GEN_FILES += skf_net_off
- TEST_GEN_FILES += tfo
- TEST_PROGS += tfo_passive.sh
-+TEST_PROGS += ipv6_force_forwarding.sh
- 
- # YNL files, must be before "include ..lib.mk"
- YNL_GEN_FILES := busy_poller netlink-dumps
-diff --git a/tools/testing/selftests/net/ipv6_force_forwarding.sh b/tools/testing/selftests/net/ipv6_force_forwarding.sh
-new file mode 100644
-index 000000000000..62adc9d4afc9
---- /dev/null
-+++ b/tools/testing/selftests/net/ipv6_force_forwarding.sh
-@@ -0,0 +1,105 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Test IPv6 force_forwarding interface property
-+#
-+# This test verifies that the force_forwarding property works correctly:
-+# - When global forwarding is disabled, packets are not forwarded normally
-+# - When force_forwarding is enabled on an interface, packets are forwarded
-+#   regardless of the global forwarding setting
-+
-+source lib.sh
-+
-+cleanup() {
-+    cleanup_ns $ns1 $ns2 $ns3
-+}
-+
-+trap cleanup EXIT
-+
-+setup_test() {
-+    # Create three namespaces: sender, router, receiver
-+    setup_ns ns1 ns2 ns3
-+
-+    # Create veth pairs: ns1 <-> ns2 <-> ns3
-+    ip link add name veth12 type veth peer name veth21
-+    ip link add name veth23 type veth peer name veth32
-+
-+    # Move interfaces to namespaces
-+    ip link set veth12 netns $ns1
-+    ip link set veth21 netns $ns2
-+    ip link set veth23 netns $ns2
-+    ip link set veth32 netns $ns3
-+
-+    # Configure interfaces
-+    ip -n $ns1 addr add 2001:db8:1::1/64 dev veth12
-+    ip -n $ns2 addr add 2001:db8:1::2/64 dev veth21
-+    ip -n $ns2 addr add 2001:db8:2::1/64 dev veth23
-+    ip -n $ns3 addr add 2001:db8:2::2/64 dev veth32
-+
-+    # Bring up interfaces
-+    ip -n $ns1 link set veth12 up
-+    ip -n $ns2 link set veth21 up
-+    ip -n $ns2 link set veth23 up
-+    ip -n $ns3 link set veth32 up
-+
-+    # Add routes
-+    ip -n $ns1 route add 2001:db8:2::/64 via 2001:db8:1::2
-+    ip -n $ns3 route add 2001:db8:1::/64 via 2001:db8:2::1
-+
-+    # Disable global forwarding
-+    ip netns exec $ns2 sysctl -qw net.ipv6.conf.all.forwarding=0
-+}
-+
-+test_force_forwarding() {
-+    local ret=0
-+
-+    echo "TEST: force_forwarding functionality"
-+
-+    # Check if force_forwarding sysctl exists
-+    if ! ip netns exec $ns2 test -f /proc/sys/net/ipv6/conf/veth21/force_forwarding; then
-+        echo "SKIP: force_forwarding not available"
-+        return $ksft_skip
-+    fi
-+
-+    # Test 1: Without force_forwarding, ping should fail
-+    ip netns exec $ns2 sysctl -qw net.ipv6.conf.veth21.force_forwarding=0
-+    ip netns exec $ns2 sysctl -qw net.ipv6.conf.veth23.force_forwarding=0
-+
-+    if ip netns exec $ns1 ping -6 -c 1 -W 2 2001:db8:2::2 &>/dev/null; then
-+        echo "FAIL: ping succeeded when forwarding disabled"
-+        ret=1
-+    else
-+        echo "PASS: forwarding disabled correctly"
-+    fi
-+
-+    # Test 2: With force_forwarding enabled, ping should succeed
-+    ip netns exec $ns2 sysctl -qw net.ipv6.conf.veth21.force_forwarding=1
-+    ip netns exec $ns2 sysctl -qw net.ipv6.conf.veth23.force_forwarding=1
-+
-+    if ip netns exec $ns1 ping -6 -c 1 -W 2 2001:db8:2::2 &>/dev/null; then
-+        echo "PASS: force_forwarding enabled forwarding"
-+    else
-+        echo "FAIL: ping failed with force_forwarding enabled"
-+        ret=1
-+    fi
-+
-+    return $ret
-+}
-+
-+echo "IPv6 force_forwarding test"
-+echo "=========================="
-+
-+setup_test
-+test_force_forwarding
-+ret=$?
-+
-+if [ $ret -eq 0 ]; then
-+    echo "OK"
-+    exit 0
-+elif [ $ret -eq $ksft_skip ]; then
-+    echo "SKIP"
-+    exit $ksft_skip
-+else
-+    echo "FAIL"
-+    exit 1
-+fi
--- 
-2.39.5
-
-
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Lorenzo-Stoakes/mm-mremap-perform-some-simple-cleanups/20250707-133132
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+> patch link:    https://lore.kernel.org/r/be3e068c77107d385d89eae634317cb59e04e5ba.1751865330.git.lorenzo.stoakes%40oracle.com
+> patch subject: [PATCH 05/10] mm/mremap: use an explicit uffd failure path for mremap
+> config: i386-buildonly-randconfig-002-20250707 (https://download.01.org/0day-ci/archive/20250707/202507071505.e2HFMCH2-lkp@intel.com/config)
+> compiler: clang version 20.1.7 (https://github.com/llvm/llvm-project 6146a88f60492b520a36f8f8f3231e15f3cc6082)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250707/202507071505.e2HFMCH2-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202507071505.e2HFMCH2-lkp@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+> >> mm/mremap.c:1739:3: error: call to undeclared function 'mremap_userfaultfd_fail'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>     1739 |                 mremap_userfaultfd_fail(vrm->uf);
+>          |                 ^
+>    mm/mremap.c:1739:3: note: did you mean 'mremap_userfaultfd_prep'?
+>    include/linux/userfaultfd_k.h:363:20: note: 'mremap_userfaultfd_prep' declared here
+>      363 | static inline void mremap_userfaultfd_prep(struct vm_area_struct *vma,
+>          |                    ^
+>    1 error generated.
+>
+>
+> vim +/mremap_userfaultfd_fail +1739 mm/mremap.c
+>
+>   1731
+>   1732	static void notify_uffd(struct vma_remap_struct *vrm, bool failed)
+>   1733	{
+>   1734		struct mm_struct *mm = current->mm;
+>   1735
+>   1736		/* Regardless of success/failure, we always notify of any unmaps. */
+>   1737		userfaultfd_unmap_complete(mm, vrm->uf_unmap_early);
+>   1738		if (failed)
+> > 1739			mremap_userfaultfd_fail(vrm->uf);
+>   1740		else
+>   1741			mremap_userfaultfd_complete(vrm->uf, vrm->addr,
+>   1742				vrm->new_addr, vrm->old_len);
+>   1743		userfaultfd_unmap_complete(mm, vrm->uf_unmap);
+>   1744	}
+>   1745
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
 
