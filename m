@@ -1,173 +1,186 @@
-Return-Path: <linux-kselftest+bounces-36719-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36720-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D1BAAFBA0F
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Jul 2025 19:43:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24D6FAFBA25
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Jul 2025 19:53:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 545E84A0D60
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Jul 2025 17:43:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 797BB4A39D4
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Jul 2025 17:53:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9BDD23534D;
-	Mon,  7 Jul 2025 17:43:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D332B2620FC;
+	Mon,  7 Jul 2025 17:53:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NCg9wNQY"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RI5Nhayh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 155B7188006
-	for <linux-kselftest@vger.kernel.org>; Mon,  7 Jul 2025 17:43:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 994E3188006
+	for <linux-kselftest@vger.kernel.org>; Mon,  7 Jul 2025 17:53:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751910228; cv=none; b=FJ1SXWgvjZW6hvo8NtqCqGRN/FPh1yBBqS31wlXjtVDmx8lAS/lEDnL2NqzAlQRD1hLR/dQdzm00xaQl6c6jF0ZJ2bsQPqDDCYsG12rQxN+Cna7GNaBNOZOWB9r7gaAnjXl8b7N5NL7BDDzf80Jx7sNroLk6Ey1USv/01D7aJfw=
+	t=1751910814; cv=none; b=FjVKGoBb64tK3knUbvl9eTNqmzvFXxoJHEPZX8iATc+qepfdfvCb6OzDSut3MYS1bCaRyMHSi0alFiR6/ADNn0OUKZ9Qp3Ki2x/gkDWfU9VSk6aRWEB/ID5DU289zEeEZWZJhbkkL8w5NYq7c/VyrzXb7B/tyAtH8jxJfz9J3i4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751910228; c=relaxed/simple;
-	bh=6WL7P90l1zk4qe9y23uE7CFZJnUvHQ8dtMU17K5oHZ8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oIi2U+7H0YlRqezJizAMzlPX92izWnqfT3cBkyTClq39XxAE/IQCsY+hRKyUbUmY6PwPc9IcCrhdWJ6e9ADGu8AtEYOfLXiUSyCutF16kt2YBn9Wxg8DZZd8X/zYqYSG1I7FqMK2TPAXrG/L75WA25REfbTLcOuK1VU5TXMf1ls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NCg9wNQY; arc=none smtp.client-ip=209.85.208.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-32b7f41d3e6so41543721fa.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Jul 2025 10:43:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1751910225; x=1752515025; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mNTmsp6IOfSThnweAThs4GZywF+oxXMKH6rk4VRTRPw=;
-        b=NCg9wNQYZVqjmHnqOXb1v7qp/7fqWknKJL/QRyZYovKQs/myMc4j2AUajQMrS+dP4D
-         udSkhVsxUcL0ncRsQcQoUD7oxCxp4Dzj4HsCY4ie58pzH5ogyNozQbJI+P2a6zB2MMTr
-         4oifuwvOvaRWJ+HPHuCPmSaX3tqn1rHvwngLP5e6vV7DsYZOtmz3UarXX8mnm2GHfXdT
-         073OZK/ICwou+8FOCfyTxIT2AEkS8iViU9HmDTOaiu5IdAQK/O2Z2FazAiZZ+49vMxez
-         u36b89EPWyC21KY4U5OS/o2d/wS5fIKtbzwEuDXmqG18AlurdQ0qq9sI8Zx3ifYs7uYo
-         fk1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751910225; x=1752515025;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mNTmsp6IOfSThnweAThs4GZywF+oxXMKH6rk4VRTRPw=;
-        b=xGimcSLlJsLb3XT3pn36+Z6K7jcJk88VeE734yQNW+eBTGXpe2ZEIX+c5LKsgEexQ+
-         UjvPfmQQf+uMCARkDZIveQj89Zn58msK0jxckvIJ33BbGbEmcoWseeZr7Htst5xgxfAm
-         ryQqII6ZN7+KvGc5nNyPVOOKabvXrV6ldDjin0IaqgZTW2yu2KvogrvO7mG3ZMOdljmD
-         jhPDw7KMfRfWQOte4gV/s/tO7rHEJ3DG2ZEioMCZ8EwzbB6uPN5fKIOQWvOm/2zlbIYR
-         VqYBTTIjiGTrrPqB9ir93DFFMGoceKVui00zGA1tO63MeMalYgujN6NHuolzzmKkFSD+
-         n8dw==
-X-Forwarded-Encrypted: i=1; AJvYcCUB0OyKZIAoTKm3ToXpYJusc6DIXM0dBate16lFJ4jNoCFu1NQ9WYz5/Sq20qkzSU/yzbGf0wJKWY4j/k9/b6I=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+59s5Ex1NUOnJIM8zL4IzCAFyyQX/2zfdA4CMclOyJVW2EhoU
-	ilJpP0yuQxfzyI+kmY2a6mJav297L6s+sCksMiouTPvp3uyiY+y82LFRPClq2oHC509RKrsX+h4
-	oJXpTg7x5LRlwj3k4WXQap5jTq91fgNkJ8d3hK/LM
-X-Gm-Gg: ASbGncsZngiMuwkMzy8v0pDC7heCiTLr8qZn88GbYJX7FKbSjoO6mPgdmDAnEt1k/31
-	xnpT2BvoGHPt9ESc3V37pRDXhSV9Xzsny3Oe9mFL8REhX/XaYm70ttE6lDqlPWA3ND17h77fj0T
-	94/sqKhZWnPUxahRdUnS9rGgosbbgjtscQYQJ0XoXgx7s=
-X-Google-Smtp-Source: AGHT+IFxRUUAZ3Xaq5S5eJcrS9+Mh+VeOfWYh4AgvwBPepuUuEP/LquhHfhcsDZhanLW79FGlVyFtLGTYE+GzJGoEUQ=
-X-Received: by 2002:a2e:84cd:0:b0:30d:c4c3:eafa with SMTP id
- 38308e7fff4ca-32f37eaca8amr1108661fa.7.1751910224859; Mon, 07 Jul 2025
- 10:43:44 -0700 (PDT)
+	s=arc-20240116; t=1751910814; c=relaxed/simple;
+	bh=FstgiVezS+Cw4bDkM5mjMlSN7kCGC2v6i5mmTGG3mIw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S0KFLr+FxUvoNYFlUU6zAMJmtA7gE4lOsSozwxdlpmZEWvYWZoYPMrkEduay75LU8IarfqHZLiN/LOvFxBKuMcxFikF6PDzPOwGPaWszFQareM7COd92RxdcEMjFxsJJjt2OeIbFQYXEgLmJ49x+F0Sub5QiGcyiC6kj8C9EOR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RI5Nhayh; arc=none smtp.client-ip=91.218.175.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Mon, 7 Jul 2025 19:53:26 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1751910809;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VX5mOV2ECOy6u103HTCnW/J+6b4n2WBzehnt0d4S7Wg=;
+	b=RI5Nhayh8Fr9nxe3pak2axqXExcuDOeR7ka7nKly+UZdcMtGZAek5Ps+eNublCjABLL+yv
+	t8kOCa5SO2GHLb6bCcM14Gbb8ClYDKYAtI4uFFaE51GMjfMoUGkHDqtzLfhvUiXlsk8f5w
+	kT4r/kWyk18GHvUoNBVr/Dg82P+A7kw=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Andrew Jones <andrew.jones@linux.dev>
+To: Jesse Taube <jesse@rivosinc.com>
+Cc: kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
+	linux-kselftest@vger.kernel.org, =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>, 
+	Charlie Jenkins <charlie@rivosinc.com>, James Raphael Tiovalen <jamestiotio@gmail.com>, 
+	Sean Christopherson <seanjc@google.com>, Cade Richard <cade.richard@gmail.com>
+Subject: Re: [kvm-unit-tests PATCH] riscv: lib: Add sbi-exit-code to
+ configure and environment
+Message-ID: <20250707-b3aab15f7951255daaf14671@orel>
+References: <20250703133601.1396848-1-jesse@rivosinc.com>
+ <20250704-d2ca01be799a71427b5163f9@orel>
+ <CALSpo=bieq=T8DZR9u=MeEs4w+6_fAshYcpVj4zC-zRhKkc6OA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250523233018.1702151-1-dmatlack@google.com> <20250523233018.1702151-18-dmatlack@google.com>
- <97cb1442-97f6-4ec3-a11f-17469355a937@amd.com>
-In-Reply-To: <97cb1442-97f6-4ec3-a11f-17469355a937@amd.com>
-From: David Matlack <dmatlack@google.com>
-Date: Mon, 7 Jul 2025 10:43:17 -0700
-X-Gm-Features: Ac12FXxCEPEo11jkTQ83GJB2ghGPApHXMozxc4-Zv8TsmCBpYJBiejbyDudmz-4
-Message-ID: <CALzav=f1=TvT8cS++x06mtxvrNRJWpKLdKvQ75iHVM673s2ubg@mail.gmail.com>
-Subject: Re: [PATCH RFC 17/33] vfio: selftests: Enable asserting MSI eventfds
- not firing
-To: Sairaj Kodilkar <sarunkod@amd.com>
-Cc: Alex Williamson <alex.williamson@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Vinod Koul <vkoul@kernel.org>, 
-	Fenghua Yu <fenghua.yu@intel.com>, "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, 
-	Adhemerval Zanella <adhemerval.zanella@linaro.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Wei Yang <richard.weiyang@gmail.com>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Takashi Iwai <tiwai@suse.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Pierre-Louis Bossart <pierre-louis.bossart@linux.dev>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	FUJITA Tomonori <fujita.tomonori@gmail.com>, WangYuli <wangyuli@uniontech.com>, 
-	Sean Christopherson <seanjc@google.com>, Andrew Jones <ajones@ventanamicro.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, Eric Auger <eric.auger@redhat.com>, 
-	Josh Hilke <jrhilke@google.com>, linux-kselftest@vger.kernel.org, kvm@vger.kernel.org, 
-	Jason Gunthorpe <jgg@nvidia.com>, Kevin Tian <kevin.tian@intel.com>, Vipin Sharma <vipinsh@google.com>, 
-	Pasha Tatashin <pasha.tatashin@soleen.com>, Saeed Mahameed <saeedm@nvidia.com>, 
-	Adithya Jayachandran <ajayachandra@nvidia.com>, Parav Pandit <parav@nvidia.com>, 
-	Leon Romanovsky <leonro@nvidia.com>, Vinicius Costa Gomes <vinicius.gomes@intel.com>, 
-	Dave Jiang <dave.jiang@intel.com>, Dan Williams <dan.j.williams@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALSpo=bieq=T8DZR9u=MeEs4w+6_fAshYcpVj4zC-zRhKkc6OA@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, Jun 30, 2025 at 5:24=E2=80=AFAM Sairaj Kodilkar <sarunkod@amd.com> =
-wrote:
->
-> On 5/24/2025 5:00 AM, David Matlack wrote:
-> > Make it possible to assert that a given MSI eventfd did _not_ fire by
-> > adding a helper to mark an eventfd non-blocking. Demonstrate this in
-> > vfio_pci_device_test by asserting the MSI eventfd did not fire before
-> > vfio_pci_irq_trigger().
+On Mon, Jul 07, 2025 at 08:57:37AM -0700, Jesse Taube wrote:
+> On Fri, Jul 4, 2025 at 1:17 AM Andrew Jones <andrew.jones@linux.dev> wrote:
 > >
-> > Signed-off-by: David Matlack <dmatlack@google.com>
-> > ---
-> >   tools/testing/selftests/vfio/lib/include/vfio_util.h | 12 +++++++++++=
-+
-> >   tools/testing/selftests/vfio/vfio_pci_device_test.c  | 10 +++++++++-
-> >   2 files changed, 21 insertions(+), 1 deletion(-)
+> > On Thu, Jul 03, 2025 at 06:36:00AM -0700, Jesse Taube wrote:
+> > > Add --[enable|disable]-sbi-exit-code to configure script.
+> > > With the default value disabled.
+> > > Add a check for SBI_PASS_EXIT_CODE in the environment, so that passing
+> > > of the test status is configurable from both the
+> > > environment and the configure script
+> > >
+> > > Signed-off-by: Jesse Taube <jesse@rivosinc.com>
+> > > ---
+> > >  configure      | 11 +++++++++++
+> > >  lib/riscv/io.c | 12 +++++++++++-
+> > >  2 files changed, 22 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/configure b/configure
+> > > index 20bf5042..7c949bdc 100755
+> > > --- a/configure
+> > > +++ b/configure
+> > > @@ -67,6 +67,7 @@ earlycon=
+> > >  console=
+> > >  efi=
+> > >  efi_direct=
+> > > +sbi_exit_code=0
+> > >  target_cpu=
+> > >
+> > >  # Enable -Werror by default for git repositories only (i.e. developer builds)
+> > > @@ -141,6 +142,9 @@ usage() {
+> > >                                  system and run from the UEFI shell. Ignored when efi isn't enabled
+> > >                                  and defaults to enabled when efi is enabled for riscv64.
+> > >                                  (arm64 and riscv64 only)
+> > > +         --[enable|disable]-sbi-exit-code
+> > > +                                Enable or disable sending pass/fail exit code to SBI SRST.
+> > > +                                (disabled by default, riscv only)
+> > >  EOF
+> > >      exit 1
+> > >  }
+> > > @@ -236,6 +240,12 @@ while [[ $optno -le $argc ]]; do
+> > >       --disable-efi-direct)
+> > >           efi_direct=n
+> > >           ;;
+> > > +     --enable-sbi-exit-code)
+> > > +         sbi_exit_code=1
+> > > +         ;;
+> > > +     --disable-sbi-exit-code)
+> > > +         sbi_exit_code=0
+> > > +         ;;
+> > >       --enable-werror)
+> > >           werror=-Werror
+> > >           ;;
+> > > @@ -551,6 +561,7 @@ EOF
+> > >  elif [ "$arch" = "riscv32" ] || [ "$arch" = "riscv64" ]; then
+> > >      echo "#define CONFIG_UART_EARLY_BASE ${uart_early_addr}" >> lib/config.h
+> > >      [ "$console" = "sbi" ] && echo "#define CONFIG_SBI_CONSOLE" >> lib/config.h
+> > > +    echo "#define CONFIG_SBI_EXIT_CODE ${sbi_exit_code}" >> lib/config.h
+> > >      echo >> lib/config.h
+> > >  fi
+> > >  echo "#endif" >> lib/config.h
+> > > diff --git a/lib/riscv/io.c b/lib/riscv/io.c
+> > > index b1163404..0e666009 100644
+> > > --- a/lib/riscv/io.c
+> > > +++ b/lib/riscv/io.c
+> > > @@ -162,8 +162,18 @@ void halt(int code);
+> > >
+> > >  void exit(int code)
+> > >  {
+> > > +     char *s = getenv("SBI_PASS_EXIT_CODE");
+> > > +     bool pass_exit = CONFIG_SBI_EXIT_CODE;
 > >
-> > diff --git a/tools/testing/selftests/vfio/lib/include/vfio_util.h b/too=
-ls/testing/selftests/vfio/lib/include/vfio_util.h
-> > index ab96a6628f0e..2b96be07f182 100644
-> > --- a/tools/testing/selftests/vfio/lib/include/vfio_util.h
-> > +++ b/tools/testing/selftests/vfio/lib/include/vfio_util.h
-> > @@ -2,6 +2,7 @@
-> >   #ifndef SELFTESTS_VFIO_LIB_INCLUDE_VFIO_UTIL_H
-> >   #define SELFTESTS_VFIO_LIB_INCLUDE_VFIO_UTIL_H
+> > This is the first case of what may become more common - a config variable
+> > which also has an env override. I think it may be good convention to
+> > name them the same, i.e. the env name would also be CONFIG_SBI_EXIT_CODE,
+> > unless you think that would be confusing for some reason?
+> 
+> I changed the name because the configure option seemed very long.
+> I will make them both SBI_EXIT_CODE.
+
+We need the CONFIG_ part on the config name in order keep it consistent
+with other configs, so I think we just need a long name for both.
+
+> Should I add a macro to simplify
+> future uses
+> of a config variable which also has an env override.
+
+Sounds good to me.
+
+> 
 > >
-> > +#include <fcntl.h>
-> >   #include <string.h>
-> >   #include <linux/vfio.h>
-> >   #include <linux/list.h>
-> > @@ -116,6 +117,17 @@ void vfio_pci_irq_enable(struct vfio_pci_device *d=
-evice, u32 index,
-> >   void vfio_pci_irq_disable(struct vfio_pci_device *device, u32 index);
-> >   void vfio_pci_irq_trigger(struct vfio_pci_device *device, u32 index, =
-u32 vector);
+> > > +
+> > >       printf("\nEXIT: STATUS=%d\n", ((code) << 1) | 1);
+> > > -     sbi_shutdown(code == 0);
+> > > +
+> > > +     if (s)
+> > > +             pass_exit = (*s == '1' || *s == 'y' || *s == 'Y');
 > >
-> > +static inline void fcntl_set_nonblock(int fd)
-> > +{
-> > +     int r;
-> > +
-> > +     r =3D fcntl(fd, F_GETFL, 0);
->
-> fcntl F_GETFL does not expect argument
+> > We now have this logic in four places[1]. I think it's time we factor it,
+> > and it's counterpart "!(s && (*s == '0' || *s == 'n' || *s == 'N'))"
+> > into a couple helper macros. I'm not sure where the best place for
+> > those macros to live is, though. I guess libcflat.h, but we really
+> > ought to split that thing apart someday...
+> 
+> Is lib/argv.h an ok place?
 
-Good point, this could simply be:
+That could work.
 
-  r =3D fcntl(fd, F_GETFL);
+> getenv is defined in lib/string.c which is interesting. I wonder if it
+> could be moved to lib/argv.c?
 
->
-> > +     VFIO_ASSERT_NE(r, -1, "F_GETFL failed for fd %d\n", fd);
->
-> May be print errno as well  ?
+getenv is libc and in lives in stdlib in libc, so we should move our
+prototype to lib/stdlib.h from libcflat.h, but we don't have a stdlib.c
+file so string.c and argv.c are both "wrong", but at least string.c
+also has all the functions getenv depends on locally...
 
-All of the VFIO_ASSERT*() macros print errno by default [1], since
-it's relevant often enough.
-
-The idea to print errno by default came from the KVM selftests [2]. In
-a future series I'd like to find a way to share the assert code
-between the KVM and VFIO selftests since there's a lot of overlap and
-the KVM selftests also support useful things like backtraces on
-assertion failures that I'd love to have in VFIO selftests.
-
-[1] https://github.com/dmatlack/linux/blob/44c8e1e805698286e43cf2a471f540ee=
-e75e94a1/tools/testing/selftests/vfio/lib/include/vfio_util.h#L30
-[2] https://github.com/dmatlack/linux/blob/44c8e1e805698286e43cf2a471f540ee=
-e75e94a1/tools/testing/selftests/kvm/lib/assert.c#L79
+Thanks,
+drew
 
