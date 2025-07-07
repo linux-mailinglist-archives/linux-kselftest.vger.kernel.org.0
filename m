@@ -1,168 +1,132 @@
-Return-Path: <linux-kselftest+bounces-36677-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36678-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D090AFAED2
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Jul 2025 10:43:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E653CAFAFE8
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Jul 2025 11:38:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 30CF77A395B
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Jul 2025 08:42:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A3D416B046
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Jul 2025 09:38:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60BF6944F;
-	Mon,  7 Jul 2025 08:43:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9B4C28C2B6;
+	Mon,  7 Jul 2025 09:38:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Qe8SYpIS"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="VOKYxamp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1CBD2264C8
-	for <linux-kselftest@vger.kernel.org>; Mon,  7 Jul 2025 08:43:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BB7428A3F7;
+	Mon,  7 Jul 2025 09:38:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751877811; cv=none; b=ftfenjRnq1Ejl+VyjEc8etcB85mOR4Hq8uH0/ffjLkYe0lKCaCfDQfQRUdJ1vnSuT9/hMTzCk3X1Y6EEoKrH/vmDZZhmofTwgaH/N6IWm9SuhOklNx4W3kuMGKOHN7Owoftrf23BajYgOpRhCbEaNpRx2JsfRb5BNG7EpCEI71A=
+	t=1751881125; cv=none; b=nMXfzyPYMHrJDVg2E/MySyk3JhPmaX2gfeFXzrpWX0JrN5NY2cDDUF48XNtnmAd+sDcOzfG7DSj3qkRllw159FGnOtfqpNiDy+gHi3w7XrLFeqmH5PiJL2WV1tvL0nE81Ww0nUJp71GGZNjoJoq3xrg24TxalKZyxEAZqOSQHS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751877811; c=relaxed/simple;
-	bh=kQHEDU+QSHvdBHKt5+PAg7nOWxj219yOY2ZaoTu5u68=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UrsdYpmzA6ilSflWggtkoFjwdPFqTQtuuVJQ0r55IJWgVHe+HLbFSX6ldIlV7bjTpv6suHs7OW0LolvJ223CmzJph+FXPpyPMP3Hr3kIyyHsO7U79TT4lB3Y0zmLz+ym2DoRYi/UU6G1Wv199Czl27z39IEmXD70MgiQQ2m5YbE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Qe8SYpIS; arc=none smtp.client-ip=209.85.215.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-b350704f506so1992111a12.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Jul 2025 01:43:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1751877809; x=1752482609; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LklowgplYENw1i7IrjdnHI57VuSnPOYFZ+BKhHkshBI=;
-        b=Qe8SYpISzN8dgNO/ZvVD7EBnY0S/ExAAXCsQazdSdkvdaOTsg5F4pKQthiL+uv2jjR
-         d/lkKidZF9mYbWuLOHPQjX3lexhAdc/2gaAoJwcmZRnTToh1URrwm824p/NMYZKPd1lX
-         Cj5N5NlFwia2cGKiDVVEuxvJmKsDJxkVFgaNksXqVcawzDG1KKejNiqPdGAz5X0jr1z/
-         5tg6DIpQCdByfUSMF58CP1O7nP4zcyIpgKdynOtf7jqHaz9pXZCw2qPZO6bssEjGRJw1
-         Hlf7iin3mCTa99L/Q0mjKJ8uyGCfsyGr95RqqDTDvkIoVOJgTDcXQiNkRk/qgh+dyuzg
-         qv3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751877809; x=1752482609;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LklowgplYENw1i7IrjdnHI57VuSnPOYFZ+BKhHkshBI=;
-        b=jUXb7VXyF6wHnXSVoOTWOTrKwl3evk8NwVtqie8AlchAGSbV0cry+btH0PnhLm0G1a
-         mRM3qHH8DzEwh1+GD3FaY3qjq3w+RqvEIP07MG96NvML/1ZG/Kx2fJZRguw5ruWKciZq
-         ICYqA3froMyZcbSN9qhnjN5yYNL+x+SgfnRZV44rkqSW5M0zamrFWvRqWNWTLBXwtXvS
-         h5yh6mAZQ6o7Y0g1ZDqUfR5tO3Lq1gmZ6zDf3f4/0mon2Ki4ftOyhM66ky33Klysemxm
-         xTFwWW2naMlyMZsgfFO+n/+IaGWz9S7gTHIK8TbUuE+hJhp6JdCedh4PrCYT1NRs2SPh
-         JJ9Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU72nMN0AdCOg1YNPAxedc8xWuFAn8rNpglHabpk3l6GQCbFCyf+LFWaRhgvexw+PhT8i0h7UJd7G7do5iBPIw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyyDdlnE439sg3JtHVMbJRXSxdDcgDpujQkPsKSfVjdnhcc1Htw
-	yKIDTO4u6hITP5pb8IDGGIAZVrU5FxVt/r7pvIpK0sRDS2Uqhbo4I928XlQ6oIf2ygMBkmvP9bP
-	QOl/Iq20IwIb+rLO+rUV8q1YbIAlv6ZqlltoxgiDZfg==
-X-Gm-Gg: ASbGncuPaK91TxhnnKla+iimv+iSk6h48cM9pczX/E+CTzLYXyABqRSj0/Yeri+ofuK
-	xQL6LvTvfqDZZ3bsgqnXUZgmSN72DbnIIVmRt8aGWAJClnv+rCge8PQ7ZBtxm+rX1bYvDc8Ixqq
-	N/wbN+eKp+whcem+eFKeQRfr30Jc1S73VvL3lJDliSwKkyWMwJ6Cn56i9UavzFOYLBPssrcHbEP
-	M9T
-X-Google-Smtp-Source: AGHT+IHukxRqvzepVhYBRpt+PLlMQ3SlnLL5W6s2lImeMWjf2sMY2i4Bu4SdjhsaHOmFNGgSz7dhys43qu/uU2e4sN8=
-X-Received: by 2002:a17:90b:33d1:b0:30e:3737:7c87 with SMTP id
- 98e67ed59e1d1-31aab854dadmr18730822a91.5.1751877808741; Mon, 07 Jul 2025
- 01:43:28 -0700 (PDT)
+	s=arc-20240116; t=1751881125; c=relaxed/simple;
+	bh=eGMGtY8ZcvE6kdxR6zf4DXyrCWsxcR1zoU1mF8oQHX4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DjFEgNXx7dnngEVE+PIIW+YSWWzo9BNselKW/PDoba4XBh+k1bDVtt9aBJ3Tt17ozU4IPF4OoJpeXXDbgSL82p2HtpM7BGlOaI+ixvGwhRyUhe+8b4G0M3kxLl5jzkqc9FSbrUeo2MWwSytk+GWJaDB+NtD6ipJi88KJ8ZloJtE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=VOKYxamp; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=bnHKyhC36yAuLX6uSscvM/f8yvBTgryKRaB9hZf72J0=; b=VOKYxampysmmx2FpOmvFeZFZXE
+	XcNrfBP8l94SJG34Dudptd7RmDgg37N4vlfUEQib8MprbM9hkVELnKTysNyRPiBPOjvM+DTEH/N6T
+	nfvaueNhTRCbMKthYwv7UlRPJcwmGOPr6x8eGOTCI8cUTr8E1t/l5dmnSg54clW0O+Ly8jO4wHNet
+	lXxAXneCdBKL6B5tbqTGgbK2dKchFD8x5NsIXnDTawEj9SD2J0zJjIK5C3v4kYQg5q1dRzrBbEzme
+	C2LYaSPsFWP3CPkbFdC3jiw0lHFsHzq1UL/4s85SZju3E0a5iErt128zyI5yEFDZeFOXVadcqDM1e
+	IF0X/RtQ==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1uYiJ2-00000008Rd3-3z0o;
+	Mon, 07 Jul 2025 09:38:37 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 689DD300399; Mon, 07 Jul 2025 11:38:36 +0200 (CEST)
+Date: Mon, 7 Jul 2025 11:38:36 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Sergio =?iso-8859-1?Q?Gonz=E1lez?= Collado <sergio.collado@gmail.com>
+Cc: David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>, Randy Dunlap <rdunlap@infradead.org>,
+	rust-for-linux@vger.kernel.org,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	David Laight <david.laight.linux@gmail.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Martin Rodriguez Reboredo <yakoyoku@gmail.com>, x86@kernel.org,
+	linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH v3 RESEND] kunit: fix longest symbol length test
+Message-ID: <20250707093836.GC1099709@noisy.programming.kicks-ass.net>
+References: <20250706201855.232451-1-sergio.collado@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CA+G9fYvD1A12WE36NjELe5cD-LbPsmwJnH5aUAcufBZ7ndt2Hw@mail.gmail.com>
- <c9ba86f6-dea8-47bd-88e1-edf49e4bf9fd@app.fastmail.com>
-In-Reply-To: <c9ba86f6-dea8-47bd-88e1-edf49e4bf9fd@app.fastmail.com>
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Mon, 7 Jul 2025 14:13:17 +0530
-X-Gm-Features: Ac12FXw-G_lNwP97raxqWFOZUtf2EluymJriGyENT10NUGjfSc__f9FGW09O5J8
-Message-ID: <CA+G9fYtuh0FwKfjadb7c+jr=ZZ-wXjmkbcPA4sp8OqzARBV1Dg@mail.gmail.com>
-Subject: Re: LTP syscalls mseal02 and shmctl03 fails on compat mode 64-bit
- kernel on 32-bit rootfs
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: LTP List <ltp@lists.linux.it>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Anders Roxell <anders.roxell@linaro.org>, 
-	Dan Carpenter <dan.carpenter@linaro.org>, chrubis <chrubis@suse.cz>, Li Wang <liwang@redhat.com>, 
-	Petr Vorel <pvorel@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250706201855.232451-1-sergio.collado@gmail.com>
 
-On Thu, 3 Jul 2025 at 19:47, Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Thu, Jul 3, 2025, at 15:47, Naresh Kamboju wrote:
-> > The LTP syscalls mseal02 and shmctl03 failed only with compat mode testing
-> > with 64-bit kernel with 32-bit rootfs combination.
-> >
-> > Would it be possible to detect compat mode test environment and handle the test
-> > expectation in LTP test development ?
->
-> I think we should either make the kernel behave the same way in
-> both environments, or accept either behavior as correct in LTP.
-> NVAL (22)
-> > mseal02.c:45: TPASS: mseal(0xf7a8e001, 4096, 0) : EINVAL (22)
-> > mseal02.c:45: TFAIL: mseal(0xf7a8e000, 4294963201, 0) expected EINVAL:
-> > ENOMEM (12)
->
-> This is "length=ULONG_MAX-page_size+2", which overflows on 32-bit
-> but not on 64-bit.
->
-> How about this?
->
-> --- a/mm/mseal.c
-> +++ b/mm/mseal.c
-> @@ -234,6 +234,9 @@ int do_mseal(unsigned long start, size_t len_in, unsigned long flags)
->         if (end < start)
->                 return -EINVAL;
->
-> +       if (end > TASK_SIZE)
-> +               return -EINVAL;
-> +
->         if (end == start)
->                 return 0;
->
-> Since TASK_SIZE is smaller for 32-bit tasks, it would detect
-> the overflow in the same way.
->
-> > tst_test.c:1774: TINFO: Overall timeout per run is 0h 21m 36s
-> > shmctl03.c:31: TPASS: shmmin = 1
-> > shmctl03.c:33: TFAIL: /proc/sys/kernel/shmmax != 2147483647 got 4294967295
->
-> I see this is being intentionally truncated to INT_MAX:
->
-> static int copy_compat_shminfo_to_user(void __user *buf, struct shminfo64 *in,
->                                         int version)
-> {
->         if (in->shmmax > INT_MAX)
->                 in->shmmax = INT_MAX;
->         ...
-> }
->
-> > shmctl03.c:35: TFAIL: /proc/sys/kernel/shmall != 4278190079 got 4294967295
->
-> Here the value from /proc is defined in the kernel as
-> "#define SHMALL (ULONG_MAX - (1UL << 24))"
->
-> On a 64-bit machine this is 0xfffffffffeffffff.
->
-> However the 32-bit ltp tst_assert_ulong() truncates it
-> to 0xfeffffff, which happens to be the exact same value
-> that it would see on a 32-bit kernel.
->
-> The second one is 0xffffffff, and I don't know how that gets
-> computed, as it is derived from the same number in
-> info.shmall = in->shmall;
->
-> Are you running this inside of a container that its own ipc
-> namespace?
+On Sun, Jul 06, 2025 at 10:18:55PM +0200, Sergio González Collado wrote:
+> The kunit test that checks the longests symbol length [1], has triggered
+> warnings in some pilelines when symbol prefixes are used [2][3]. The test
+> will to depend on !PREFIX_SYMBOLS and !CFI_CLANG as sujested in [4] and
+> on !GCOV_KERNEL.
+> 
+> [1] https://lore.kernel.org/rust-for-linux/CABVgOSm=5Q0fM6neBhxSbOUHBgNzmwf2V22vsYC10YRBT=kN1g@mail.gmail.com/T/#t
+> [2] https://lore.kernel.org/all/20250328112156.2614513-1-arnd@kernel.org/T/#u
+> [3] https://lore.kernel.org/rust-for-linux/bbd03b37-c4d9-4a92-9be2-75aaf8c19815@infradead.org/T/#t
+> [4] https://lore.kernel.org/linux-kselftest/20250427200916.GA1661412@ax162/T/#t
+> 
+> Reviewed-by: Rae Moar <rmoar@google.com>
+> Signed-off-by: Sergio González Collado <sergio.collado@gmail.com>
+> Acked-by: Randy Dunlap <rdunlap@infradead.org>
+> Tested-by: Randy Dunlap <rdunlap@infradead.org>
+> ---
+>  lib/Kconfig.debug                | 1 +
+>  lib/tests/longest_symbol_kunit.c | 3 +--
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index ebe33181b6e6..4a75a52803b6 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -2885,6 +2885,7 @@ config FORTIFY_KUNIT_TEST
+>  config LONGEST_SYM_KUNIT_TEST
+>  	tristate "Test the longest symbol possible" if !KUNIT_ALL_TESTS
+>  	depends on KUNIT && KPROBES
+> +	depends on !PREFIX_SYMBOLS && !CFI_CLANG && !GCOV_KERNEL
+>  	default KUNIT_ALL_TESTS
+>  	help
+>  	  Tests the longest symbol possible
+> diff --git a/lib/tests/longest_symbol_kunit.c b/lib/tests/longest_symbol_kunit.c
+> index e3c28ff1807f..9b4de3050ba7 100644
+> --- a/lib/tests/longest_symbol_kunit.c
+> +++ b/lib/tests/longest_symbol_kunit.c
+> @@ -3,8 +3,7 @@
+>   * Test the longest symbol length. Execute with:
+>   *  ./tools/testing/kunit/kunit.py run longest-symbol
+>   *  --arch=x86_64 --kconfig_add CONFIG_KPROBES=y --kconfig_add CONFIG_MODULES=y
+> - *  --kconfig_add CONFIG_RETPOLINE=n --kconfig_add CONFIG_CFI_CLANG=n
+> - *  --kconfig_add CONFIG_MITIGATION_RETPOLINE=n
+> + *  --kconfig_add CONFIG_CPU_MITIGATIONS=n --kconfig_add CONFIG_GCOV_KERNEL=n
+>   */
+>  
+>  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> 
+> base-commit: 772b78c2abd85586bb90b23adff89f7303c704c7
 
-No.
-Running on the real x86_64 machine.
-
-- Naresh
-
->
->      Arnd
+So this will obviously 'work'. But what I don't understand is the
+purpose of this test. Why can't we amend the test itself to use
+KSYM_NAME_LEN-8 (or whatever the actual magic value is) and recognise
+that we don't have full control over the symbol names; despite using C.
 
