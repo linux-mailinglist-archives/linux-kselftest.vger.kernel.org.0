@@ -1,289 +1,135 @@
-Return-Path: <linux-kselftest+bounces-36761-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36762-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 423FFAFCEDA
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 17:17:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69138AFCF32
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 17:28:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B5C6D1896EEA
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 15:17:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 02EBC4E0D58
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 15:25:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 899492E11A5;
-	Tue,  8 Jul 2025 15:17:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="fXOqPdFw"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28FDF2E336F;
+	Tue,  8 Jul 2025 15:25:52 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DCA82E0B72
-	for <linux-kselftest@vger.kernel.org>; Tue,  8 Jul 2025 15:17:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 427A22E2653;
+	Tue,  8 Jul 2025 15:25:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751987846; cv=none; b=g4oFSWwYJX6SKLDJrbiD0/ygLjwTrKIQsUQHQDzSQ8p/hOY0VtthYTil/IBm1OVC3Ear6ODLWnGJ62CN071DLK5T1MgF1ykdaQWvB1OuY0glGiwZTy/3iCt340run6xj/mHgZSspxubTuUN2vvyvrrv3A4N3kgOV5oQpAeTwME8=
+	t=1751988352; cv=none; b=gHwrdu7MRzd1ewMEsSa0lw+BIa+qY9NOgwgcXrlrSCEZ+cjJG2GfpLpwdxGy12NAawKunKWceUYb6gibyOvu+qVN6nKmglB5PxVyiDU8qnxjxGIOEo9X4kHSgxAx2ZyOwoKPPGhcYNiX87g8tEnEJh78XpqnAI/7thwlecA4qDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751987846; c=relaxed/simple;
-	bh=AHNCCG5Tf5jpa/S+PhVW9zo376122RPdsJOEN6MRlrs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=ipAnejA/sYxnqWN9xVBDTd5+wGeT/wSx5Doc502kRyMtOhbwynn6u2/Xf3uesA/xrnLGtGb49jOO0be5C4kuJGb58V0luGf5tFQQEYgmCXau1nxOiv4VVuqEcn7hX73kfhJp/Qx8UwUZilAY5v76uQ+/2jhxw1j9NkKwUry6zsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=fXOqPdFw; arc=none smtp.client-ip=210.118.77.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20250708151721euoutp026b25f46f593b116dda119a4ce894233d~QT6jBgZxS0374403744euoutp02I
-	for <linux-kselftest@vger.kernel.org>; Tue,  8 Jul 2025 15:17:21 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20250708151721euoutp026b25f46f593b116dda119a4ce894233d~QT6jBgZxS0374403744euoutp02I
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1751987841;
-	bh=yaTLIoaKytTb1Jem3YqYe98mw9JwFlUpJPDA2tKD898=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=fXOqPdFwqMbLXYSJm7Di2upblR2Tsgr1Trx7197+vRwt5Pdc5/zRWXqN0QRFhZrun
-	 VVH57VAHLUm2Ytt/wpez3Y3vhPkBUg8FXf747xPsIhpvJeTwq6445TrELjgQG/ogZk
-	 1OB8tRI2SDQnT/n7bc0/lyyjF8FkWzyWYo+KguIs=
-Received: from eusmtip2.samsung.com (unknown [203.254.199.222]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20250708151720eucas1p260f984fd95d3460d3e9f6c9b48e0e25c~QT6iepPcr1882718827eucas1p2A;
-	Tue,  8 Jul 2025 15:17:20 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20250708151718eusmtip2dcd49f64a9e9889791acd662135310b6~QT6gkeBFF2780927809eusmtip22;
-	Tue,  8 Jul 2025 15:17:18 +0000 (GMT)
-Message-ID: <02bcd954-5323-4663-a766-f53c67c5a18f@samsung.com>
-Date: Tue, 8 Jul 2025 17:17:18 +0200
+	s=arc-20240116; t=1751988352; c=relaxed/simple;
+	bh=uGgX3GJd4mYElheRctbkZiUbQcWMpUgRQRqQiEn8HzM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z5ebym1HpN5XmP1TlHcQeElY9oqOvZJyjIfkKpAawBZXzQMNQdoeKZ0askdRXQpha6gEYXSGPlIVABrnx/mxTO63tIvqFJkM4OP+jIIalbKvFW2yCJ3j5idRhbwpfps3s67ajz0oePADHvYzh+WoIOw/QbWnpd/E6QMuaB1IuAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-ae04d3d63e6so754887266b.2;
+        Tue, 08 Jul 2025 08:25:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751988348; x=1752593148;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OHdiudIvhlbsgKzAlTM7QB3ITrST0Cb2niiN+w8u02c=;
+        b=tuRE5PJt+++77tm01MNN+9oa8yoEswPo22GH67Pbul5le2m95HR1PnS0Q1EDAK5TQZ
+         KKzmEsdJ42tVvzUdPhPMziEVa/h8C6YA42hMN2kI+3gnxOBNF4TnnaDaSmWZJ/1bJZdt
+         7GrzVPFAvPK/3sqo3C9Vb6xu1/GkmaAIbHaJfJ2tok5lm0X9X7xCyL2OSy0gL+mngZXS
+         h4W61Hi2RCvOwjFN6NKh3CjaGz6TUie2zXENAlqquDdSFjcNFxQeOhCQYZJi3gzAFzR2
+         3z/80a9xnaPdPj5tND9B7X19J4QrX+QTqPOoRAZLAptKU0Qj5CVq/XYTPe9dSeWKwq6w
+         HMGg==
+X-Forwarded-Encrypted: i=1; AJvYcCUye+XpxnhsSgZlo2E8eGMfykZAUv2NcnbPSfYM7cUVGyr73qNHZ+1yyf1YS09a+cgH9IIQFbmPB6F1Gi/Q@vger.kernel.org, AJvYcCVz6Cmmntg0TWr8ZpIqAdVv5CzpqIoC32zJITzhXjPcjgoOhC+1zUYKzUyAm4kLngJP1rQ=@vger.kernel.org, AJvYcCWA+MFh/e2zQI+o0I8TGoNuCnSh/z2Jfnzj6MtKgMVW4TzYrooXa5VQhEARYrUQfh/SbqBdOWia@vger.kernel.org, AJvYcCXTGNZUHwYmjacCq2mn7nyxRXD1/lbhH8oKwqGOCzYFjqRCwfuucSHZOkcbuypzLKoeghklx0bYtMJ+2lujVr9S@vger.kernel.org
+X-Gm-Message-State: AOJu0YxbAb7wSFCIHuGRXm0xV+5fLAfYph/rBMwyPYKod1QHD+jeyMQb
+	UIYN/fNABGTwjR1z71A+miH8B/ZbE3PoONgOG1hTzm7LQOWOfU8G+/hI
+X-Gm-Gg: ASbGncsgbg7deqaa1kv6+VY9ozjHE8UqlaNGjwea/dlFlkp5SAnAFLuF8mQM6ZZbFb1
+	yCyrG28qcxh+ROhx1Jf+dny3FAg4vuS9M3qf0IgWzgbwDaFgKznSe9wwHm0xPrR6QzSxjkJqCtQ
+	PibMu0KL3+fU9/MunvrlVv4hsuSI6CiV0uTY5ViHx3sEnn4czbdFRLOLf84s5NPM3/ThSP048sn
+	LjPed9xvfohQv+EgLDEL34ueuumJzPtzlYwG04s1/ryba3ySE7AMs8QS+PiDyxB1QOhoVXsiuVx
+	yWHE2c240Qbuxo27Q7f+089RP5PDLVfRzzd++t6nEOasIytthz72YQ==
+X-Google-Smtp-Source: AGHT+IEA+QZGmBo8k4QMmJoLm/1b04TQE9pmYlrZApkhUSPJ2o4Gc1WfGzMhLET8/ETifijZH+Wpmw==
+X-Received: by 2002:a17:907:d582:b0:ae0:bff9:98de with SMTP id a640c23a62f3a-ae3fbd50f78mr1862989866b.40.1751988348225;
+        Tue, 08 Jul 2025 08:25:48 -0700 (PDT)
+Received: from gmail.com ([2a03:2880:30ff:74::])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae3f6b5e757sm909637266b.156.2025.07.08.08.25.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Jul 2025 08:25:47 -0700 (PDT)
+Date: Tue, 8 Jul 2025 08:25:45 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+	kernel-team@meta.com
+Subject: Re: [PATCH net-next v4 3/3] selftests: net: add netpoll basic
+ functionality test
+Message-ID: <aG04ece5RWJCpMmA@gmail.com>
+References: <20250702-netpoll_test-v4-0-cec227e85639@debian.org>
+ <20250702-netpoll_test-v4-3-cec227e85639@debian.org>
+ <686c88e0283_29b0d29422@willemb.c.googlers.com.notmuch>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 06/14] vdso/gettimeofday: Return bool from
- clock_gettime() helpers
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
-	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Shuah Khan
-	<shuah@kernel.org>, Anna-Maria Behnsen <anna-maria@linutronix.de>, Frederic
-	Weisbecker <frederic@kernel.org>, John Stultz <jstultz@google.com>, Stephen
-	Boyd <sboyd@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, Will
-	Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org, Richard
-	Cochran <richardcochran@gmail.com>, Christopher Hall
-	<christopher.s.hall@intel.com>, Miroslav Lichvar <mlichvar@redhat.com>,
-	Werner Abt <werner.abt@meinberg-usa.com>, David Woodhouse
-	<dwmw2@infradead.org>, Kurt Kanzenbach <kurt@linutronix.de>, Nam Cao
-	<namcao@linutronix.de>, Antoine Tenart <atenart@kernel.org>
-Content-Language: en-US
-From: Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20250701-vdso-auxclock-v1-6-df7d9f87b9b8@linutronix.de>
-Content-Transfer-Encoding: 8bit
-X-CMS-MailID: 20250708151720eucas1p260f984fd95d3460d3e9f6c9b48e0e25c
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20250708151720eucas1p260f984fd95d3460d3e9f6c9b48e0e25c
-X-EPHeader: CA
-X-CMS-RootMailID: 20250708151720eucas1p260f984fd95d3460d3e9f6c9b48e0e25c
-References: <20250701-vdso-auxclock-v1-0-df7d9f87b9b8@linutronix.de>
-	<20250701-vdso-auxclock-v1-6-df7d9f87b9b8@linutronix.de>
-	<CGME20250708151720eucas1p260f984fd95d3460d3e9f6c9b48e0e25c@eucas1p2.samsung.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <686c88e0283_29b0d29422@willemb.c.googlers.com.notmuch>
 
-On 01.07.2025 10:58, Thomas Weißschuh wrote:
-> The internal helpers are effectively using boolean results,
-> while pretending to use error numbers.
->
-> Switch the return type to bool for more clarity.
->
-> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-> ---
->   lib/vdso/gettimeofday.c | 58 +++++++++++++++++++++++++------------------------
->   1 file changed, 30 insertions(+), 28 deletions(-)
+Hello Willem,
 
-This patch landed in today's linux-next as commit fcc8e46f768f 
-("vdso/gettimeofday: Return bool from clock_gettime() helpers"). In my 
-tests I found that it causes serious problem with hwclock operation on 
-some of my ARM 32bit test boards. I observe that calling "hwclock -w -f 
-/dev/rtc0" never ends on those boards. Disabling vdso support (by 
-removing ARM architected timer) fixes this issue.
+On Mon, Jul 07, 2025 at 10:56:32PM -0400, Willem de Bruijn wrote:
+> > +def test_netpoll(cfg: NetDrvEpEnv) -> None:
 
+<snip>
 
-> diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
-> index 9b77f23566f6a35887d4c9aaefc61a971131b499..c5266532a097c06f33d12e345c695357d75abf42 100644
-> --- a/lib/vdso/gettimeofday.c
-> +++ b/lib/vdso/gettimeofday.c
-> @@ -82,8 +82,8 @@ const struct vdso_time_data *__arch_get_vdso_u_timens_data(const struct vdso_tim
->   #endif /* CONFIG_GENERIC_VDSO_DATA_STORE */
->   
->   static __always_inline
-> -int do_hres_timens(const struct vdso_time_data *vdns, const struct vdso_clock *vcns,
-> -		   clockid_t clk, struct __kernel_timespec *ts)
-> +bool do_hres_timens(const struct vdso_time_data *vdns, const struct vdso_clock *vcns,
-> +		    clockid_t clk, struct __kernel_timespec *ts)
->   {
->   	const struct vdso_time_data *vd = __arch_get_vdso_u_timens_data(vdns);
->   	const struct timens_offset *offs = &vcns->offset[clk];
-> @@ -103,11 +103,11 @@ int do_hres_timens(const struct vdso_time_data *vdns, const struct vdso_clock *v
->   		seq = vdso_read_begin(vc);
->   
->   		if (unlikely(!vdso_clocksource_ok(vc)))
-> -			return -1;
-> +			return false;
->   
->   		cycles = __arch_get_hw_counter(vc->clock_mode, vd);
->   		if (unlikely(!vdso_cycles_ok(cycles)))
-> -			return -1;
-> +			return false;
->   		ns = vdso_calc_ns(vc, cycles, vdso_ts->nsec);
->   		sec = vdso_ts->sec;
->   	} while (unlikely(vdso_read_retry(vc, seq)));
-> @@ -123,7 +123,7 @@ int do_hres_timens(const struct vdso_time_data *vdns, const struct vdso_clock *v
->   	ts->tv_sec = sec + __iter_div_u64_rem(ns, NSEC_PER_SEC, &ns);
->   	ts->tv_nsec = ns;
->   
-> -	return 0;
-> +	return true;
->   }
->   #else
->   static __always_inline
-> @@ -133,16 +133,16 @@ const struct vdso_time_data *__arch_get_vdso_u_timens_data(const struct vdso_tim
->   }
->   
->   static __always_inline
-> -int do_hres_timens(const struct vdso_time_data *vdns, const struct vdso_clock *vcns,
-> -		   clockid_t clk, struct __kernel_timespec *ts)
-> +bool do_hres_timens(const struct vdso_time_data *vdns, const struct vdso_clock *vcns,
-> +		    clockid_t clk, struct __kernel_timespec *ts)
->   {
-> -	return -EINVAL;
-> +	return false;
->   }
->   #endif
->   
->   static __always_inline
-> -int do_hres(const struct vdso_time_data *vd, const struct vdso_clock *vc,
-> -	    clockid_t clk, struct __kernel_timespec *ts)
-> +bool do_hres(const struct vdso_time_data *vd, const struct vdso_clock *vc,
-> +	     clockid_t clk, struct __kernel_timespec *ts)
->   {
->   	const struct vdso_timestamp *vdso_ts = &vc->basetime[clk];
->   	u64 cycles, sec, ns;
-> @@ -150,7 +150,7 @@ int do_hres(const struct vdso_time_data *vd, const struct vdso_clock *vc,
->   
->   	/* Allows to compile the high resolution parts out */
->   	if (!__arch_vdso_hres_capable())
-> -		return -1;
-> +		return false;
->   
->   	do {
->   		/*
-> @@ -173,11 +173,11 @@ int do_hres(const struct vdso_time_data *vd, const struct vdso_clock *vc,
->   		smp_rmb();
->   
->   		if (unlikely(!vdso_clocksource_ok(vc)))
-> -			return -1;
-> +			return false;
->   
->   		cycles = __arch_get_hw_counter(vc->clock_mode, vd);
->   		if (unlikely(!vdso_cycles_ok(cycles)))
-> -			return -1;
-> +			return false;
->   		ns = vdso_calc_ns(vc, cycles, vdso_ts->nsec);
->   		sec = vdso_ts->sec;
->   	} while (unlikely(vdso_read_retry(vc, seq)));
-> @@ -189,13 +189,13 @@ int do_hres(const struct vdso_time_data *vd, const struct vdso_clock *vc,
->   	ts->tv_sec = sec + __iter_div_u64_rem(ns, NSEC_PER_SEC, &ns);
->   	ts->tv_nsec = ns;
->   
-> -	return 0;
-> +	return true;
->   }
->   
->   #ifdef CONFIG_TIME_NS
->   static __always_inline
-> -int do_coarse_timens(const struct vdso_time_data *vdns, const struct vdso_clock *vcns,
-> -		     clockid_t clk, struct __kernel_timespec *ts)
-> +bool do_coarse_timens(const struct vdso_time_data *vdns, const struct vdso_clock *vcns,
-> +		      clockid_t clk, struct __kernel_timespec *ts)
->   {
->   	const struct vdso_time_data *vd = __arch_get_vdso_u_timens_data(vdns);
->   	const struct timens_offset *offs = &vcns->offset[clk];
-> @@ -223,20 +223,20 @@ int do_coarse_timens(const struct vdso_time_data *vdns, const struct vdso_clock
->   	 */
->   	ts->tv_sec = sec + __iter_div_u64_rem(nsec, NSEC_PER_SEC, &nsec);
->   	ts->tv_nsec = nsec;
-> -	return 0;
-> +	return true;
->   }
->   #else
->   static __always_inline
-> -int do_coarse_timens(const struct vdso_time_data *vdns, const struct vdso_clock *vcns,
-> -		     clockid_t clk, struct __kernel_timespec *ts)
-> +bool do_coarse_timens(const struct vdso_time_data *vdns, const struct vdso_clock *vcns,
-> +		      clockid_t clk, struct __kernel_timespec *ts)
->   {
-> -	return -1;
-> +	return false;
->   }
->   #endif
->   
->   static __always_inline
-> -int do_coarse(const struct vdso_time_data *vd, const struct vdso_clock *vc,
-> -	      clockid_t clk, struct __kernel_timespec *ts)
-> +bool do_coarse(const struct vdso_time_data *vd, const struct vdso_clock *vc,
-> +	       clockid_t clk, struct __kernel_timespec *ts)
->   {
->   	const struct vdso_timestamp *vdso_ts = &vc->basetime[clk];
->   	u32 seq;
-> @@ -258,10 +258,10 @@ int do_coarse(const struct vdso_time_data *vd, const struct vdso_clock *vc,
->   		ts->tv_nsec = vdso_ts->nsec;
->   	} while (unlikely(vdso_read_retry(vc, seq)));
->   
-> -	return 0;
-> +	return true;
->   }
->   
-> -static __always_inline int
-> +static __always_inline bool
->   __cvdso_clock_gettime_common(const struct vdso_time_data *vd, clockid_t clock,
->   			     struct __kernel_timespec *ts)
->   {
-> @@ -270,7 +270,7 @@ __cvdso_clock_gettime_common(const struct vdso_time_data *vd, clockid_t clock,
->   
->   	/* Check for negative values or invalid clocks */
->   	if (unlikely((u32) clock >= MAX_CLOCKS))
-> -		return -1;
-> +		return false;
->   
->   	/*
->   	 * Convert the clockid to a bitmask and use it to check which
-> @@ -284,7 +284,7 @@ __cvdso_clock_gettime_common(const struct vdso_time_data *vd, clockid_t clock,
->   	else if (msk & VDSO_RAW)
->   		vc = &vc[CS_RAW];
->   	else
-> -		return -1;
-> +		return false;
->   
->   	return do_hres(vd, vc, clock, ts);
->   }
-> @@ -293,9 +293,11 @@ static __maybe_unused int
->   __cvdso_clock_gettime_data(const struct vdso_time_data *vd, clockid_t clock,
->   			   struct __kernel_timespec *ts)
->   {
-> -	int ret = __cvdso_clock_gettime_common(vd, clock, ts);
-> +	bool ok;
->   
-> -	if (unlikely(ret))
-> +	ok = __cvdso_clock_gettime_common(vd, clock, ts);
-> +
-> +	if (unlikely(!ok))
->   		return clock_gettime_fallback(clock, ts);
->   	return 0;
->   }
->
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+> > +        bpftrace_stop()
+> 
+> One risk with stateful tests is that the state is not reset if the
+> test exists (or crashes) before reaching the cleanup logic. There
+> are ways around it. Jakub added defer for this purpose, for one.
 
+Agree. Jakub suggested about "defer" a while ago, but I didn't realize
+we had a "defer" helper in our test framework. For a second I though
+Jakub was talking calling the stop later, my bad.
+
+Now that you raised it, I found that we have "defer" as a helper, and we
+definitely should use it. How about something as simple as:
+
+	diff --git a/tools/testing/selftests/drivers/net/netpoll_basic.py b/tools/testing/selftests/drivers/net/netpoll_basic.py
+	index 398ac959151b3..6017b71f154b2 100755
+	--- a/tools/testing/selftests/drivers/net/netpoll_basic.py
+	+++ b/tools/testing/selftests/drivers/net/netpoll_basic.py
+	@@ -27,6 +27,7 @@ from typing import Optional
+
+	from lib.py import (
+	bpftrace,
+	+    defer,
+	ip,
+	ethtool,
+	GenerateTraffic,
+	@@ -251,6 +252,7 @@ def do_netpoll_flush_monitored(cfg: NetDrvEpEnv, ifname: str, target_name: str)
+	# Start bpftrace in parallel, so, it is watching
+	# netpoll_poll_dev() while we are sending netconsole messages
+	bpftrace_start()
+	+    defer(bpftrace_stop)
+
+	do_netpoll_flush(cfg, ifname, target_name)
+
+	@@ -338,7 +340,6 @@ def test_netpoll(cfg: NetDrvEpEnv) -> None:
+		# Revert RX/TX queues
+		ethtool_set_rx_tx_queue(ifname, original_queues[0], original_queues[1])
+		netcons_delete_target(target_name)
+
+Thanks for th heads-up and review,
+--breno
 
