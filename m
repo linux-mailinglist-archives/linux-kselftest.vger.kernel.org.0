@@ -1,165 +1,112 @@
-Return-Path: <linux-kselftest+bounces-36742-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36743-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C7E3AFC110
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 04:56:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00CB4AFC241
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 07:51:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CE15716A248
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 02:56:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 285B9426C53
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 05:50:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F392D226CFE;
-	Tue,  8 Jul 2025 02:56:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 987D0218585;
+	Tue,  8 Jul 2025 05:51:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LM5vCsSP"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="n8n0lnY/";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="INR+2vDk"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59C0A225A32;
-	Tue,  8 Jul 2025 02:56:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0952A645;
+	Tue,  8 Jul 2025 05:51:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751943395; cv=none; b=IXhdAN4ZVc6lsFfne2GhNyBB8EI90LFTsO/BsIj+hppc9HnnZi0BZiBMLEefIkwEx6U/gt66bsp9ivKEfpgR2JLhaGGBzMDjw3xjvO6KnGzMS9l5LkyJF2g/x6Oy2/NXpEeMxUEM/lPDsWZlBPpTSevGNyaL18jctBBijoQSMqg=
+	t=1751953870; cv=none; b=q/KWeTWTbMXB8Y/SI6N4Jm8AWcduWy3l2nrgiL4hfrpa+fAbUJz0sf0Oqh4JXCgQ2WgapygpvSpHp2/c6uQfmWx4IKWnOUZhTmXFFkcavfVkGbQYY32N8ynLU+xImO0/soPOfXX+a144SlnffKBdyQz9q5r2aYshBrnQJ4qwpJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751943395; c=relaxed/simple;
-	bh=9ZTeoXsYlOG2Lm0VDPZA1m20VzIMr7P1sL3fBI04xvc=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=KL+ktN130lKiBOGpWmpoV9dgfSqm11PobqisXG3X28hbnMCqVzAOW8CcIBkfrKVp8rBO+BqlH+o3p+stX4yddFasHEGfJr9xslaFPFXCPAA/mIGw/6X8RBB8l+Wa7YVo0M08ddybzWwvrNJ4ih7q0lMJrqHePPiJnqSkfhg6gwI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LM5vCsSP; arc=none smtp.client-ip=209.85.128.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-71173646662so34141137b3.2;
-        Mon, 07 Jul 2025 19:56:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751943393; x=1752548193; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JxMX/xJxzy2hJc4qqxOWGP0PpMg37pMea6Q0wamjJr4=;
-        b=LM5vCsSPmnyZHrq4BZZ/luJ2EnIijsk0T9o1NxuEkDs6ux+THXDsf+t/0JnaX4Qvdu
-         0Qlih3bCUqrOk4ojA57Ll7szbuL1s9qXhju106dMYhAxrzOe6TZWpiJWWdbrEnm7vWjp
-         yWBIOX/W12VwgZ1ZyrfliHFWiMeqLww0Ac4VWcOmWDqOy+e3khQyG0YCcTOvblhnCvXa
-         bXvk5LVILh3PQD9VL9Bq2J7ZJAmGx7bvAVuQENV5mvnZp9UeKwMurkMxjRzPd3561ANM
-         1oxcvrLEXKDKxHCSpe9wcd2IGToaNLHb+miRRpqhupcF7Lr4rQaynrl5ljbt3QjR/dAb
-         e9cA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751943393; x=1752548193;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=JxMX/xJxzy2hJc4qqxOWGP0PpMg37pMea6Q0wamjJr4=;
-        b=Ll0bEANr+sWq1NAhRUI7iYpZH0zmM1vABs/xvR2yvEztKVTtkSRBLmcqP+TS5rdv2r
-         9z2k3KPJ6K17WA8w//FdtJ+8d5JqOCsnaAK6GFjgL+ytcLy5ldrfz/I3W3FHCiU7EBld
-         kYBe/1GkBPKzVowBGi3mfjzZ/iUrU92tDU93YZn0n5BtrIv5D7I8aQtDjExscWnVMEwc
-         VrjDFbFgzP8HKyPKSmEWjg2Mn2dBAiXyOud7BJM0AKNDRJ982fYwxIGDrSYHnDBEPRy6
-         i1lhWiTlWeQw91JQ+oBljYhBOkCgdGksq+X/PkcxSVPAj0vae5s95VFvMxRqE0nPV0PZ
-         FTYg==
-X-Forwarded-Encrypted: i=1; AJvYcCUBkzGt3quxaFMlVYC89rFAmDZxDk9eULhvHUnvotAIqjl0RE/Vztjql8oBHMrS7BujUAOL31SL4PUWCfyuc+aY@vger.kernel.org, AJvYcCUjSfR9UibUF3dne5mHvgoQejmgW+5A2zhoLBPByJsXv+IK/0YB7iJ+7bJ37T+VMgFhxq0=@vger.kernel.org, AJvYcCXmiIxTlZGp/PbaKxshKhZFzLnQM4eqLspZ7xkmXVVJz39gIdD643P/dqueLNRPmTcA5BnNyuT5@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx75w5sG3YVdAY98MslUcaF4nUb3pZEeC+zqCD1B8jmyG7x8F9z
-	Rz5N4078VzjGTS0XGgA90W6FkHtpgy5Cm/Dv5gjTk7S7+iRbGiJT9wUm
-X-Gm-Gg: ASbGncvZ/SZprGWOxYITDxIz2VTQMezaZwc3iM6S0h1mMW6uo5lnvNAet+KijjQrIgW
-	aA5+JlnYM05D4Zrx30zGa9ycIi9K0PlNQRaoxfecga8kwhhXWdcTUBcfIjGqqCRwmX0KeGYCiun
-	sQbPVq5PJbIxTj4oAnQ8ZPWYWamqTg+iiDOOFIMmsmoSONWHMfDam9JFf6Ozxfsl1dbLIOPAlTq
-	97RJR8PHUHFV749I6jcUPIoVDK5H3qN/tmgIn+15qpOWGab1C5VD05I2uGR20CYp/nrMQo3ieui
-	eUkvzUeQSmSBfYRMDv1XNaEvutDR7Ksn48Zmj3yWoZnPdjfxaFMJ/QRo20zOJqHIpZVnLOXp2Ds
-	KH32vGmbLjuTZL9DlrxSCOCV+ml6rKZ7SzvXVQkE=
-X-Google-Smtp-Source: AGHT+IGbyc1ivKnu4Md1jd3PRtXFprZzrt10RDAYU25UxhegDOAebXcSzzdd+a4hHyIKQsluIr5PFw==
-X-Received: by 2002:a05:690c:7012:b0:714:268:a9f8 with SMTP id 00721157ae682-71668e22b3fmr206639087b3.27.1751943393255;
-        Mon, 07 Jul 2025 19:56:33 -0700 (PDT)
-Received: from localhost (234.207.85.34.bc.googleusercontent.com. [34.85.207.234])
-        by smtp.gmail.com with UTF8SMTPSA id 00721157ae682-716659a1440sm19459037b3.35.2025.07.07.19.56.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Jul 2025 19:56:32 -0700 (PDT)
-Date: Mon, 07 Jul 2025 22:56:32 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Breno Leitao <leitao@debian.org>, 
- Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
- Shuah Khan <shuah@kernel.org>, 
- Simon Horman <horms@kernel.org>
-Cc: linux-kernel@vger.kernel.org, 
- netdev@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- bpf@vger.kernel.org, 
- kernel-team@meta.com, 
- Breno Leitao <leitao@debian.org>
-Message-ID: <686c88e0283_29b0d29422@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20250702-netpoll_test-v4-3-cec227e85639@debian.org>
-References: <20250702-netpoll_test-v4-0-cec227e85639@debian.org>
- <20250702-netpoll_test-v4-3-cec227e85639@debian.org>
-Subject: Re: [PATCH net-next v4 3/3] selftests: net: add netpoll basic
- functionality test
+	s=arc-20240116; t=1751953870; c=relaxed/simple;
+	bh=JNXE1M1GfAKMAx2fUOYQYN/tMN4M5F8WF2dNBw1efi4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SXq9ic/8B6chehkwdabvQKrRMPUbCX+mnG/NRwLa2dXXN8XNtJrHp4t7wRqJNmp9y//5oteC/U5+h1Om2CNC89QJ17uOZHMiNgTXmMaUhmy6m2toJPqzJSs8pPpXWjpVnmClFU9WO5b2m3sdzfx9g08ZMLB/MABVaXfeRvua9lY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=n8n0lnY/; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=INR+2vDk; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Tue, 8 Jul 2025 07:51:06 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1751953867;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1yXuyD2y1tDDXkXTAWSlgEy9p6IqbbB6Wt8X6nTw+yw=;
+	b=n8n0lnY/41yNWuVFmE+/ybyOP7pjLAwdANsDu25x71x2iLUxcY2j98kP0F8IoS9FeO7nIB
+	IuiHyWSc18jAP1if6ai8eCvUJoqp6CvshYC8CvvYwGDJa/9Lus7SuGLTN3VaxQED5YS/Ex
+	VH0w/KUQm1QaF+ubfS0VOA/r/kxzFMCpcKkme3lLmILlBhEaFfgQEMrJgudahurUvcDd32
+	plT7rsth56Fi+OXvHRJqFLgcpYBS+JVcRwVJHZfrnPsmrZCaQJ+LHIAfbXV0D72IsEmGQC
+	c2dZgSOa1FTNz121Sb7dtf1zTY16SqPNYIvjpINbMX6TtDWuODLeHDozG8UaZA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1751953867;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1yXuyD2y1tDDXkXTAWSlgEy9p6IqbbB6Wt8X6nTw+yw=;
+	b=INR+2vDkhbgRjXvWu5PX2SOpL4900BafsvNCjtbJR9vEisIi3Sh4QioImKSLts6+T+8tX3
+	bWVpeAke5ucjk+Dg==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: Jonathan Corbet <corbet@lwn.net>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Willy Tarreau <w@1wt.eu>, Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
+	Shuah Khan <shuah@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, linux-doc@vger.kernel.org, 
+	workflows@vger.kernel.org, Kees Cook <kees@kernel.org>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v4 00/15] kunit: Introduce UAPI testing framework
+Message-ID: <20250708073940-c2e9ee11-549b-4ef0-a480-942d86821f41@linutronix.de>
+References: <20250626-kunit-kselftests-v4-0-48760534fef5@linutronix.de>
+ <87qzyr7tly.fsf@trenco.lwn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87qzyr7tly.fsf@trenco.lwn.net>
 
-Breno Leitao wrote:
-> Add a basic selftest for the netpoll polling mechanism, specifically
-> targeting the netpoll poll() side.
+On Mon, Jul 07, 2025 at 12:18:01PM -0600, Jonathan Corbet wrote:
+> Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de> writes:
 > 
-> The test creates a scenario where network transmission is running at
-> maximum speed, and netpoll needs to poll the NIC. This is achieved by:
+> > This series aims to combine kselftests and kunit, avoiding both their
+> > limitations. It works by compiling the userspace kselftests as part of
+> > the regular kernel build, embedding them into the kunit kernel or module
+> > and executing them from there.
 > 
->   1. Configuring a single RX/TX queue to create contention
->   2. Generating background traffic to saturate the interface
->   3. Sending netconsole messages to trigger netpoll polling
->   4. Using dynamic netconsole targets via configfs
->   5. Delete and create new netconsole targets after some messages
->   6. Start a bpftrace in parallel to make sure netpoll_poll_dev() is
->      called
->   7. If bpftrace exists and netpoll_poll_dev() was called, stop.
-> 
-> The test validates a critical netpoll code path by monitoring traffic
-> flow and ensuring netpoll_poll_dev() is called when the normal TX path
-> is blocked.
-> 
-> This addresses a gap in netpoll test coverage for a path that is
-> tricky for the network stack.
-> 
-> Signed-off-by: Breno Leitao <leitao@debian.org>
+> Please forgive the possibly dumb question but ... this series sets up
+> the framework, but doesn't actually integrate the kselftests, right?
 
-Reviewed-by: Willem de Bruijn <willemb@google.com>
+Correct.
 
-> +def test_netpoll(cfg: NetDrvEpEnv) -> None:
-> +    """
-> +    Test netpoll by sending traffic to the interface and then sending
-> +    netconsole messages to trigger a poll
-> +    """
-> +
-> +    target_name = netcons_generate_random_target_name()
-> +    ifname = cfg.dev["ifname"]
-> +    traffic = None
-> +    original_queues = ethtool_read_rx_tx_queue(ifname)
-> +
-> +    try:
-> +        # Set RX/TX queues to 1 to force congestion
-> +        ethtool_set_rx_tx_queue(ifname, 1, 1)
-> +
-> +        traffic = GenerateTraffic(cfg)
-> +        do_netpoll_flush_monitored(cfg, ifname, target_name)
-> +    finally:
-> +        if traffic:
-> +            traffic.stop()
-> +
-> +        # Revert RX/TX queues
-> +        ethtool_set_rx_tx_queue(ifname, original_queues[0], original_queues[1])
-> +        netcons_delete_target(target_name)
-> +        bpftrace_stop()
+> Will it be necessary to write a little KUnit glue function for each
+> kselftest, or is there some other scheme in mind here?
 
-One risk with stateful tests is that the state is not reset if the
-test exists (or crashes) before reaching the cleanup logic. There
-are ways around it. Jakub added defer for this purpose, for one.
+With the current framework it is necessary to write some glue code:
+* A stub .c file which #includes the existing kselftest source
+* A kbuild userprog Makefile
+* A custom KUnit function which calls kunit_uapi_run_kselftest()
+
+A more high-level scheme may come later, but so far I have not worked on that.
+It would be nice for example to build and run the tests for all ABIs supported
+by a kernel without a lot of manual code duplication.
+And maybe have some higher level helpers around declaring the tests.
+
+
+Thomas
 
