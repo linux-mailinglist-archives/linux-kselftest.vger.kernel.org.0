@@ -1,76 +1,78 @@
-Return-Path: <linux-kselftest+bounces-36764-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36765-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF115AFCF9E
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 17:48:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61368AFCFA0
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 17:48:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B27341BC7E2A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 15:48:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 413E9482846
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 15:48:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4515C2E03FE;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D41852E3374;
 	Tue,  8 Jul 2025 15:48:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="d2HOgvdF"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="AaV51Lfe"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04D1E2E2672
-	for <linux-kselftest@vger.kernel.org>; Tue,  8 Jul 2025 15:48:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB7B72E336F
+	for <linux-kselftest@vger.kernel.org>; Tue,  8 Jul 2025 15:48:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751989696; cv=none; b=IbSjZaV19BmRuTomLbvtK7AH18l/UhV/Nzd5eKmVV19c3pZTlEZEJQ3VH0Ldp+rxa7rsTUED55a7iVqclOkgVS4oIXQtPCrODCxMtC8xhoUbcP8XdI4cpWdXm04ibiwyqJGHDDQ58BQ8pognRaEtm13OiBem1EljPBnau2QXTWY=
+	t=1751989696; cv=none; b=DS4zmYqiZsKRV6mwIp5ycCsSOfDom0imCddYFaAIbjUMOUXOdUirK9Su/gIW5ADrrtzLA9IvJ7xeGTR9KChv7ZGKv6xWm0qkeOR8ADLvWX1PKOEu3tWGcSrpwzG/GKgoL1Vx6H+IMNZt/A7K1apmxNl4HsOZ4Yv1OAcJFaPeENg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1751989696; c=relaxed/simple;
-	bh=SuJWuCF7OAV/GlOZ9B+iIodl+kxg17EuYp8KipNEP/Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GszPVahd+7UUPKVabzDVOnMpCoZDkXqb+CuDgkeUk/ytMvb981jwAyxUDbe0GqEn1bG/ohKzed05zaFbKSYbX1iv8blLnxQB714N9eKIjLInY7YEqyI0EUFrXhcPSyGqakanVY60r6KFinMxAmyMyBUKcgejLMAEj5wGBkz/phE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=d2HOgvdF; arc=none smtp.client-ip=209.85.219.53
+	bh=ds5SN/ud6IreyNpgodB7PP6useD2H+9ogieo60SRHek=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=oasIETqwP6HqHkAeN7B42e1nSC+/l406gjUFZh/J2rqebkpf7kzm2WhZP8tP8x4mfyOL8MlAZ8RPj9gk3I3+VQhtuJWthENQpk1HXYUu0ianx48jtTZX0J4M1zoTuSjzzfSb/8QmYca5OBlQQ81WIa/pzHmfUFP/ibsGRfHiKZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=AaV51Lfe; arc=none smtp.client-ip=209.85.222.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-700fee04941so43698626d6.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 08 Jul 2025 08:48:13 -0700 (PDT)
+Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-7d3f192a64eso462456085a.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 08 Jul 2025 08:48:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1751989693; x=1752594493; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jdccv8r6kG2HcBolVBSqhEyDLxi/NJUpMCqQXxW/BNg=;
-        b=d2HOgvdFsWXRkzzKjPKPUmPlhg7XbUEM87uf2k4wojLdmDICOjVrSXku8OQ0+OrYpI
-         1AAYOUomyHAp1Y6lBhtLsnQ61luept/IjX9WvrMPUlnlKr3EUiQVpj086PRPJhjGg6H4
-         E1iCEl1hE4HjhwPjrPlouke3W9rjxYgYIH+qjCjoryPy5Vi1SggA8zqBL/ScyJcJ5QhE
-         vP4UuHmreWGZcvjwZRXVr/cH96TjdUgz48Be46+Fsj36r6lj6D4WhTeRTKjnSOdbX91X
-         MxNMkXr8+Ohj9quagL5H0uJBC/fAWKfR8pZeKgKRQ0ygpCSg3kCDCTXrirvYLQAIPzRg
-         JFvA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iH04xoC4HJJjcr3JF880EHmqHS1N+xsYoFSsuwlbdaQ=;
+        b=AaV51Lfev6Qp8tdyZv2g7NRGgMs+qZodiXVapmdyH8iFqJ+iIDC+s+LzViHZwizJzx
+         k/WNcT5UxTnQKCFgAfTjnYG8pUlYWmm2le122Hy98pXgFkShftt5SuM1F61jvdXFS1GK
+         NvT04frwRN4DtwjIffQhsWvb0Vqh2gQ+VmxGFAjx5+kWMSWRotNdQj66IsQsujsxyf3C
+         wzxpwbsgiayNBU2f6qm0s9EhS/3ACCJRbp/q4GCkWy275yTVz2PTAmWtN2jHrkdF11xX
+         UaXRjpdi8cVcG8yLJ8/Qj8cuKDwKSIxuKotnPi8T1kZw9+agVv2GY2p9duPkjoACNgFn
+         XCfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1751989693; x=1752594493;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jdccv8r6kG2HcBolVBSqhEyDLxi/NJUpMCqQXxW/BNg=;
-        b=nR4jTytO8UyKl0WDkZgtJHWA9wkd8NbhPljVNXWKcZfQ/vbumsMYNi+amAYZZnyyRY
-         FD6gGUxur0xdtdu79J6yUqtkCFWLbya5IPEdBuuqAnQDkMV+tvwYP7X3ltchYKs+BHcr
-         Zn39mNNoQCFLGKWsJG96lk09La6hcosyZMN514g4AcP2+uy+jM9yVGrp3XSGEKu8pvT9
-         utIrPigOvPxb5k1mmYwDCMMMI/5q+er8ImULIyaq03hlTeKsTNdCr156Dhp4KupYDrja
-         zxXVnIv4T3b4YVWIGvkscn5cbyolaE/ap4FEyCdqt+WFqebWx2FDjtiJoWnRxk1zW0ZY
-         MxOQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUryYYvkJOhaH1ZgYV0C56JiiQ23AwGsgk+AprxMWG24I0p+/sDJMl/D1ZFfGA9dYrEDjDT1NcH0TEkgXVvzWY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwIF1QHSSzec6VlF9w0o2fa7xSpzSuLGRBMGCgydcxoUTymUjI5
-	O0BKll8ZWYTSPjfiK6wYkJwznnwJ8e+HXYjFQTBuXE6DpSsQlGuVeln1/M2zDFj92Hk=
-X-Gm-Gg: ASbGncuAMKWHQ6Huyrlp/GV9IK2hPR2G7dcZMOBz4V1Nz89umXy3PuNkVEp8evA9jSK
-	kcWMcHtBrAV+a4nqemlESCisUYEpst+r7iGo376tfZU5D8PdkgjeepafU38khxGhE+/zvDnsWYC
-	ifaZWv3hNXewobKhbQK4PlzFT+ZL4J01yjXw2y2GnugPgKHdvNQk4xxZcP/vTr3KjRaY4dUV6pR
-	VZTfXbaX+Cwmjqe3EBkOu9WErNIcPeZCRrzDUvK3QYIanZxdPypDX8cHRq6yE+/ptGUiFV/GwQ4
-	xBuxOqW4K7kSB9NtzrBuBnHDEGaoVVQfuwpQ7DsLd7l2yKVJhuJ8UESF9lk8ze6wFIbFRr480cC
-	SmItOYiNO1DTbUeWS1V+4HwdklkOF8VJ23bPNxLOJazOBrlIbpf4=
-X-Google-Smtp-Source: AGHT+IE10mwZp93cedil7BBoyf7eRyBi7gEfNMAHy9LlTfGe5O2WZp+UKFVlKh4/QpyDqG/ZjLpyWQ==
-X-Received: by 2002:ad4:5ba3:0:b0:6f8:d223:3c32 with SMTP id 6a1803df08f44-7047d96feaamr62114746d6.10.1751989692807;
-        Tue, 08 Jul 2025 08:48:12 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iH04xoC4HJJjcr3JF880EHmqHS1N+xsYoFSsuwlbdaQ=;
+        b=DrmNPKAb69Q4PaKbhGhxDbO7JKw5Hu8VLrMlYqM3QOmQ5jm2git8YrWjBDRBktmUP/
+         mGyjqAo8dA3qj3RyudeYLkx/Bpowj6sbyRK5o4flctz4Wend2JvZHS+xFjLdKzpKWlpW
+         3Mx4nSTC6vgaEk7gJFLsdsb8VynY0E11iODp1VePeEblqrFDTyCXCbaqlfoEoIKPLWDZ
+         lPLD2SC9JpQY2hrcgZFhYfWZlmOTvBxKG+9Dc34Sel49yr8Bjpsv1ClFY4i4und0qtNr
+         vw6i1HHSvzbm85N+etzQnN52pnECB5taFoS2eAv4G2HyNLJ0e+tiJvnDZOzTAucmT1Ss
+         1Gxw==
+X-Forwarded-Encrypted: i=1; AJvYcCVRcSLPg0U/8weyxAVUwtszsrh7tp0AdBGObjLTcCrRrj1ZqCVOAQmvHIJjSbzLqlQ06Z+2deduHH0+qPcNC9g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZaEsYuooULLDP9ARpnuP5k6G6PuIO7U3DuY29T+lOo8Grs0If
+	xr2TUrmNVri4OyUwX22vaEQoISPHS7NcziuO8jCoU18We0h0hB6R1C5TS3IGGpdC+TI=
+X-Gm-Gg: ASbGncsVz+rE9KNrJ+s1AoTkfjnKJd7Uw4heR9Q2KNmpvFC7A7QQf4aW9FouFycsuLQ
+	NXlgjJBoD59W26fhptSUdiUpX5F4+NJ4v2SPbjsuuYKsmU1VVFh/KVChnttg2gRB78GbIq24rG8
+	kauULki+/VQumZ4bEjtVYJ+e3lhATFCKAuUTby0LgN8AIrpmOc/V/m4oD6z9zJ/dRrUMFba4/m+
+	73r0ljA0Xi0ZfEsoTXXje2C6w4V2PGm15XCsQ31fZADDOE6lECd3bMBZn/cfty2Y5/RjHIf7ZVv
+	OkP4xEM9Z6oW/3N1m5f3mPgzKhgw0LvMH6jPePp1dLh8kON/JhD8mCbGqXoAu7l7NsEJD/sWKVC
+	jbfxpE13L/YUdTfWjMiMoIp14b8M5FATCyFfch0q2zumVOhN2sl+FNvOpc/ro5w==
+X-Google-Smtp-Source: AGHT+IGUQo5EBx/tNY5n3ZATmL3uaoM4iK61VNEuctuQHFnVd7lY/jZGvovGvruOSz6T58HuyGkltw==
+X-Received: by 2002:a05:6214:5b81:b0:6fb:3d7:71bb with SMTP id 6a1803df08f44-7047d931790mr46736666d6.1.1751989693532;
+        Tue, 08 Jul 2025 08:48:13 -0700 (PDT)
 Received: from jesse-lt.ba.rivosinc.com (pool-108-26-215-125.bstnma.fios.verizon.net. [108.26.215.125])
         by smtp.gmail.com with ESMTPSA id 6a1803df08f44-702c4d5ab9csm78453346d6.87.2025.07.08.08.48.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Jul 2025 08:48:12 -0700 (PDT)
+        Tue, 08 Jul 2025 08:48:13 -0700 (PDT)
 From: Jesse Taube <jesse@rivosinc.com>
 To: kvm@vger.kernel.org,
 	kvm-riscv@lists.infradead.org,
@@ -82,10 +84,12 @@ Cc: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>,
 	James Raphael Tiovalen <jamestiotio@gmail.com>,
 	Sean Christopherson <seanjc@google.com>,
 	Cade Richard <cade.richard@gmail.com>
-Subject: [kvm-unit-tests PATCH v2 1/2] lib: Add STR_IS_Y and STR_IS_N for checking env vars
-Date: Tue,  8 Jul 2025 08:48:10 -0700
-Message-ID: <20250708154811.1888319-1-jesse@rivosinc.com>
+Subject: [kvm-unit-tests PATCH v2 2/2] riscv: lib: Add sbi-exit-code to configure and environment
+Date: Tue,  8 Jul 2025 08:48:11 -0700
+Message-ID: <20250708154811.1888319-2-jesse@rivosinc.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250708154811.1888319-1-jesse@rivosinc.com>
+References: <20250708154811.1888319-1-jesse@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -94,102 +98,83 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-the line:
-(s && (*s == '1' || *s == 'y' || *s == 'Y'))
-is used in a few places add a macro for it and it's 'n' counterpart.
-
-Add GET_CONFIG_OR_ENV for CONFIG values which can be overridden by
-the environment.
+Add --[enable|disable]-sbi-exit-code to configure script.
+With the default value as disabled.
+Add a check for SBI_EXIT_CODE in the environment, so that passing
+of the test status is configurable from both the
+environment and the configure script
 
 Signed-off-by: Jesse Taube <jesse@rivosinc.com>
 ---
- lib/argv.h        | 13 +++++++++++++
- lib/errata.h      |  7 ++++---
- riscv/sbi-tests.h |  3 ++-
- 3 files changed, 19 insertions(+), 4 deletions(-)
+ configure      | 11 +++++++++++
+ lib/riscv/io.c |  4 +++-
+ 2 files changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/lib/argv.h b/lib/argv.h
-index 0fa77725..ecbb40d7 100644
---- a/lib/argv.h
-+++ b/lib/argv.h
-@@ -14,4 +14,17 @@ extern void setup_args_progname(const char *args);
- extern void setup_env(char *env, int size);
- extern void add_setup_arg(const char *arg);
+diff --git a/configure b/configure
+index 20bf5042..7c949bdc 100755
+--- a/configure
++++ b/configure
+@@ -67,6 +67,7 @@ earlycon=
+ console=
+ efi=
+ efi_direct=
++sbi_exit_code=0
+ target_cpu=
  
-+#define STR_IS_Y(s) (s && (*s == '1' || *s == 'y' || *s == 'Y'))
-+#define STR_IS_N(s) (s && (*s == '0' || *s == 'n' || *s == 'N'))
-+
-+/*
-+ * Get the boolean value of CONFIG_{name}
-+ * which can be overridden by the {name}
-+ * variable in the environment if present.
-+ */
-+#define GET_CONFIG_OR_ENV(name) ({		\
-+	const char *s = getenv(#name);		\
-+	s ? STR_IS_Y(s) : CONFIG_##name;	\
-+})
-+
- #endif
-diff --git a/lib/errata.h b/lib/errata.h
-index de8205d8..78007243 100644
---- a/lib/errata.h
-+++ b/lib/errata.h
-@@ -7,6 +7,7 @@
- #ifndef _ERRATA_H_
- #define _ERRATA_H_
+ # Enable -Werror by default for git repositories only (i.e. developer builds)
+@@ -141,6 +142,9 @@ usage() {
+ 	                           system and run from the UEFI shell. Ignored when efi isn't enabled
+ 	                           and defaults to enabled when efi is enabled for riscv64.
+ 	                           (arm64 and riscv64 only)
++	    --[enable|disable]-sbi-exit-code
++	                           Enable or disable sending pass/fail exit code to SBI SRST.
++	                           (disabled by default, riscv only)
+ EOF
+     exit 1
+ }
+@@ -236,6 +240,12 @@ while [[ $optno -le $argc ]]; do
+ 	--disable-efi-direct)
+ 	    efi_direct=n
+ 	    ;;
++	--enable-sbi-exit-code)
++	    sbi_exit_code=1
++	    ;;
++	--disable-sbi-exit-code)
++	    sbi_exit_code=0
++	    ;;
+ 	--enable-werror)
+ 	    werror=-Werror
+ 	    ;;
+@@ -551,6 +561,7 @@ EOF
+ elif [ "$arch" = "riscv32" ] || [ "$arch" = "riscv64" ]; then
+     echo "#define CONFIG_UART_EARLY_BASE ${uart_early_addr}" >> lib/config.h
+     [ "$console" = "sbi" ] && echo "#define CONFIG_SBI_CONSOLE" >> lib/config.h
++    echo "#define CONFIG_SBI_EXIT_CODE ${sbi_exit_code}" >> lib/config.h
+     echo >> lib/config.h
+ fi
+ echo "#endif" >> lib/config.h
+diff --git a/lib/riscv/io.c b/lib/riscv/io.c
+index b1163404..c46845de 100644
+--- a/lib/riscv/io.c
++++ b/lib/riscv/io.c
+@@ -6,6 +6,7 @@
+  * Copyright (C) 2023, Ventana Micro Systems Inc., Andrew Jones <ajones@ventanamicro.com>
+  */
  #include <libcflat.h>
 +#include <argv.h>
- 
- #include "config.h"
- 
-@@ -28,7 +29,7 @@ static inline bool errata_force(void)
- 		return true;
- 
- 	s = getenv("ERRATA_FORCE");
--	return s && (*s == '1' || *s == 'y' || *s == 'Y');
-+	return STR_IS_Y(s);
- }
- 
- static inline bool errata(const char *erratum)
-@@ -40,7 +41,7 @@ static inline bool errata(const char *erratum)
- 
- 	s = getenv(erratum);
- 
--	return s && (*s == '1' || *s == 'y' || *s == 'Y');
-+	return STR_IS_Y(s);
- }
- 
- static inline bool errata_relaxed(const char *erratum)
-@@ -52,7 +53,7 @@ static inline bool errata_relaxed(const char *erratum)
- 
- 	s = getenv(erratum);
- 
--	return !(s && (*s == '0' || *s == 'n' || *s == 'N'));
-+	return !STR_IS_N(s);
- }
- 
- #endif
-diff --git a/riscv/sbi-tests.h b/riscv/sbi-tests.h
-index c1ebf016..4e051dca 100644
---- a/riscv/sbi-tests.h
-+++ b/riscv/sbi-tests.h
-@@ -37,6 +37,7 @@
- 
- #ifndef __ASSEMBLER__
- #include <libcflat.h>
-+#include <argv.h>
- #include <asm/sbi.h>
- 
- #define __sbiret_report(kfail, ret, expected_error, expected_value,						\
-@@ -94,7 +95,7 @@ static inline bool env_enabled(const char *env)
+ #include <bitops.h>
+ #include <config.h>
+ #include <devicetree.h>
+@@ -163,7 +164,8 @@ void halt(int code);
+ void exit(int code)
  {
- 	char *s = getenv(env);
- 
--	return s && (*s == '1' || *s == 'y' || *s == 'Y');
-+	return STR_IS_Y(s);
+ 	printf("\nEXIT: STATUS=%d\n", ((code) << 1) | 1);
+-	sbi_shutdown(code == 0);
++
++	sbi_shutdown(GET_CONFIG_OR_ENV(SBI_EXIT_CODE) ? code == 0 : true);
+ 	halt(code);
+ 	__builtin_unreachable();
  }
- 
- void split_phys_addr(phys_addr_t paddr, unsigned long *hi, unsigned long *lo);
 -- 
 2.43.0
 
