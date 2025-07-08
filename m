@@ -1,267 +1,250 @@
-Return-Path: <linux-kselftest+bounces-36767-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36768-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54FB5AFD58A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 19:38:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6421CAFD59D
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 19:44:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1A6CD1BC7C06
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 17:38:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 757B248538E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 17:44:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EEDA2E5B08;
-	Tue,  8 Jul 2025 17:37:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2399D2E5B0F;
+	Tue,  8 Jul 2025 17:44:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="qZA+P/A2";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="2K1Ev5W/";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="ZnALy4Dj";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="0Tmsowne"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="RA5la3Lq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2076.outbound.protection.outlook.com [40.107.102.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E93EC2E5B21
-	for <linux-kselftest@vger.kernel.org>; Tue,  8 Jul 2025 17:37:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751996226; cv=none; b=AzEbmlAK+Mk5cIOOGOlXKg78GSSozq9VAwgavWYB6cQXOfM5VkD9ENXcz8vrEYzjnzSQHckr+jA7CIZ+uyXYqL5BhgPRRBVb9C8U+YKaL7lYqmZ8AKlnL2JXkW7eKhcLdd7VNzGaDKE1DjdYkFDo1Jd0fYpWboefWHLlVBHNCds=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751996226; c=relaxed/simple;
-	bh=3ETbXfuDiIb1rIVsKs72/RN/EWQ8Fs3xt1oJEov4Oos=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jLXj5GOzeYgFiPM8bBScz5SxddcoU6YTagj/qSgD+55jyoZwJf9/7k3gXBq49ldLeghSKLWNutzMshqetj1w5ycYh3Tl3sTRAXXa3oTiJidkzUgv+1vKjiVyqOM/aE6yLNCSlRy1xaS48IFD8MXVDo9F4XSnIMCRJWI2M9DcJKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=qZA+P/A2; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=2K1Ev5W/; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=ZnALy4Dj; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=0Tmsowne; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id E01E02111F;
-	Tue,  8 Jul 2025 17:37:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1751996222; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=tH+4qrLbFoh951omgyvvpr8ql1pn4Evyfl1gUPKbjaI=;
-	b=qZA+P/A2RdecqvTOlciyC6KN7axCUlYSQPG2qhRvxoYtO55RTu9DxXWWmAzw9fKZRqPOs6
-	HErbR84LTwKdnzxntSmH5Pe7q1Kl6iYgLWWC3T3m2ATmeHcxFdi7ncr5plYGULqALPX6Zy
-	jSLOsDRlas+u7BwUnXDmqSrg2p5UO1w=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1751996222;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=tH+4qrLbFoh951omgyvvpr8ql1pn4Evyfl1gUPKbjaI=;
-	b=2K1Ev5W/Bta06tEANRaOF89d5Za6W09a/yHiWtGFAN3aIva8HQehA8atJ2relPR7ST4N6/
-	Dr7d2MgkWV1XMICA==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1751996221; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=tH+4qrLbFoh951omgyvvpr8ql1pn4Evyfl1gUPKbjaI=;
-	b=ZnALy4DjQVwUJLSIAn0dOy+Hz4ezfzu7bZk/oFKSTPr/rqGkNnN/amIetP5Of1BmRKzFjP
-	vYfCsiAzIakSbmmGZfRd24Yt7t6RdFtvGfvygMTDhDWGnMPidb3AHfNIXxlWP/57Z3OLev
-	22tzeIAhrswJgEbyVBUm3w04QCqHoCQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1751996221;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=tH+4qrLbFoh951omgyvvpr8ql1pn4Evyfl1gUPKbjaI=;
-	b=0TmsowneyCfM2N0mNSL/Ne+cG/n8uIkuBz3s2PBsyjjhOLYiX0eFW70dGJ9MuAUHrNehHk
-	JfYokWamikkoMyDw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id A3F6313A54;
-	Tue,  8 Jul 2025 17:37:01 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id ko5pJz1XbWjoAwAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Tue, 08 Jul 2025 17:37:01 +0000
-Message-ID: <0e0312c9-9a89-4a1b-a135-4425ea95d6f6@suse.cz>
-Date: Tue, 8 Jul 2025 19:37:01 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 579BF21CFFD;
+	Tue,  8 Jul 2025 17:44:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.102.76
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751996677; cv=fail; b=ikgKCW7CUYosxE4vuT+bDF56TR9O8CocLqG68OVNajBbU7EHYrbrPgw0pg3N/OXENnURqydTxK5ASfTLY4gBCQ80nnKoYYtVwWm0XUFVNiF6KHRsW4fugUtSnham5x2dApgNUtN+F5qDRtBo9Y3YbodFjMfKVgF3Wo4KH+B+3ag=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751996677; c=relaxed/simple;
+	bh=Pnj29fXGdtDfdFlIXwKEGzopAgTOxnrZPTz3hfkhgwo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=D3KYFy/qPl3ewbjas3+Cksrhenue1hTYZWPgxmBPDU0HcmA0zSNsh3VkLF+j2xhAZSUrG6j6AA1AvN4IV+mdhVBnpEcERQjqleIk12vYZg2P1LEJF1aJ2fpuG2JCx2fr2YkMn3bh0fSN4Xv5xsIxynSq3sK8eLfsB0dTpPBvY7o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=RA5la3Lq; arc=fail smtp.client-ip=40.107.102.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=rFPR3ThmV8I4cNZFe1V8jFKMSjpQvQUMB2uI4YFW6LNcyHfZIPhGdMYEkX1SG5PyeSmwUptuB79DO20JOgxErZkYRdaOY52V26j++Dow0dvd27VTYWeQ7rfkxiapcCYqxOQB5+rr4/dzB/iAUrXSwPmjvKS/7XQ8qAZXX+VVPmPNF7aAIZm+mIfVt4zE/Cd4MRELcpZPBv4+PypgFfXGooYC9eXUMPQLVqi/LU4Yh9BQO6Md0d0LTAB9zqmf1r8LXEM/9ym4NEWzOVaj0uKKuz3JjHC9bcG5pFQiwsWxhk7weBHUqe14j2Bwn1Jn6L+HT6YV4xaQPIBmLmq67Tf0Rg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NU4co67gsUyH7vjOJAXo9r6G0M/qOJbLzzAsuS2qPVY=;
+ b=G2Q3ZfAH+4QVUyjNXIW5FpQjnfRtqxLMWH7BB11FUDP0bj22Vxul/qGtElYAQ3rJ54XzSs9N7l0KdcMKdGs5heH9F30M/Qd1jaNxYdmazRVNoOjOm6DZGVzJhLT6A8lWbHg69C0QZUz76DRUlhXqRTAozZ5r/9kLtqebGxkHpsltklGQDYuRO8Gk+ydB00r4K2CicIT3dTz/1oWFOBW/DBLPHdoO8gY02RILenEjP3FacOJlGoovIMtr+0DBIobdJN15A4l4G9aJnDOt8CyPWd5rjsUfZcYWqKci2kP4wH2n6wrMesefcRS0/3T5XHSM7qeGCwoxHM3Y95hjJOl50Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NU4co67gsUyH7vjOJAXo9r6G0M/qOJbLzzAsuS2qPVY=;
+ b=RA5la3Lqb/YJy64Vt88SU1MjxqwXfVfyRUJ8hXm0deh3GzNcrehxeW8aDUa45hvrqxJkwweJd6fioEaTZV3gi8wV932lo7ASZr1wmLxDGZcJ0mmiP0Tc8llNMH9Ku0oTKZeArygC/ANr+bukq43VonVo2SpscNq3GDn5/FqWVMHvTcpi2LnXmJSHiE9mWHi3NQsh2oxWtYu/Ko4fwa6Yn/FS5fe7BtdcQP9l7l+cV0HFiX57soAeWwh/3EuZKbh5zt5uRrOirrEPLq1GWl2qovhqm6Ak+GyoWKNAiVwun7swFTF3AKgulDneFc1Tdrz2ruQcOzldWZqaBPgnK7x4Ug==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
+ LV9PR12MB9807.namprd12.prod.outlook.com (2603:10b6:408:2eb::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.25; Tue, 8 Jul
+ 2025 17:44:32 +0000
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::5189:ecec:d84a:133a]) by DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::5189:ecec:d84a:133a%6]) with mapi id 15.20.8901.024; Tue, 8 Jul 2025
+ 17:44:32 +0000
+From: Zi Yan <ziy@nvidia.com>
+To: wang lian <lianux.mm@gmail.com>
+Cc: david@redhat.com, linux-mm@kvack.org, akpm@linux-foundation.org,
+ lorenzo.stoakes@oracle.com, sj@kernel.org, Liam.Howlett@oracle.com,
+ brauner@kernel.org, gkwang@linx-info.com, jannh@google.com,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ p1ucky0923@gmail.com, ryncsn@gmail.com, shuah@kernel.org, vbabka@suse.cz,
+ zijing.zhang@proton.me
+Subject: Re: [PATCH v3] selftests/mm: add process_madvise() tests
+Date: Tue, 08 Jul 2025 13:44:28 -0400
+X-Mailer: MailMate (2.0r6272)
+Message-ID: <48D7AAD0-07C9-4E2D-9171-081A503B47AF@nvidia.com>
+In-Reply-To: <20250703044326.65061-1-lianux.mm@gmail.com>
+References: <20250703044326.65061-1-lianux.mm@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: BL1P223CA0015.NAMP223.PROD.OUTLOOK.COM
+ (2603:10b6:208:2c4::20) To DS7PR12MB9473.namprd12.prod.outlook.com
+ (2603:10b6:8:252::5)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 6/8] fs/proc/task_mmu: remove conversion of seq_file
- position to unsigned
-To: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
-Cc: Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, david@redhat.com,
- peterx@redhat.com, jannh@google.com, hannes@cmpxchg.org, mhocko@kernel.org,
- paulmck@kernel.org, shuah@kernel.org, adobriyan@gmail.com,
- brauner@kernel.org, josef@toxicpanda.com, yebin10@huawei.com,
- linux@weissschuh.net, willy@infradead.org, osalvador@suse.de,
- andrii@kernel.org, ryan.roberts@arm.com, christophe.leroy@csgroup.eu,
- tjmercier@google.com, kaleshsingh@google.com, aha310510@gmail.com,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-References: <20250704060727.724817-1-surenb@google.com>
- <20250704060727.724817-7-surenb@google.com>
-Content-Language: en-US
-From: Vlastimil Babka <vbabka@suse.cz>
-Autocrypt: addr=vbabka@suse.cz; keydata=
- xsFNBFZdmxYBEADsw/SiUSjB0dM+vSh95UkgcHjzEVBlby/Fg+g42O7LAEkCYXi/vvq31JTB
- KxRWDHX0R2tgpFDXHnzZcQywawu8eSq0LxzxFNYMvtB7sV1pxYwej2qx9B75qW2plBs+7+YB
- 87tMFA+u+L4Z5xAzIimfLD5EKC56kJ1CsXlM8S/LHcmdD9Ctkn3trYDNnat0eoAcfPIP2OZ+
- 9oe9IF/R28zmh0ifLXyJQQz5ofdj4bPf8ecEW0rhcqHfTD8k4yK0xxt3xW+6Exqp9n9bydiy
- tcSAw/TahjW6yrA+6JhSBv1v2tIm+itQc073zjSX8OFL51qQVzRFr7H2UQG33lw2QrvHRXqD
- Ot7ViKam7v0Ho9wEWiQOOZlHItOOXFphWb2yq3nzrKe45oWoSgkxKb97MVsQ+q2SYjJRBBH4
- 8qKhphADYxkIP6yut/eaj9ImvRUZZRi0DTc8xfnvHGTjKbJzC2xpFcY0DQbZzuwsIZ8OPJCc
- LM4S7mT25NE5kUTG/TKQCk922vRdGVMoLA7dIQrgXnRXtyT61sg8PG4wcfOnuWf8577aXP1x
- 6mzw3/jh3F+oSBHb/GcLC7mvWreJifUL2gEdssGfXhGWBo6zLS3qhgtwjay0Jl+kza1lo+Cv
- BB2T79D4WGdDuVa4eOrQ02TxqGN7G0Biz5ZLRSFzQSQwLn8fbwARAQABzSBWbGFzdGltaWwg
- QmFia2EgPHZiYWJrYUBzdXNlLmN6PsLBlAQTAQoAPgIbAwULCQgHAwUVCgkICwUWAgMBAAIe
- AQIXgBYhBKlA1DSZLC6OmRA9UCJPp+fMgqZkBQJnyBr8BQka0IFQAAoJECJPp+fMgqZkqmMQ
- AIbGN95ptUMUvo6aAdhxaOCHXp1DfIBuIOK/zpx8ylY4pOwu3GRe4dQ8u4XS9gaZ96Gj4bC+
- jwWcSmn+TjtKW3rH1dRKopvC07tSJIGGVyw7ieV/5cbFffA8NL0ILowzVg8w1ipnz1VTkWDr
- 2zcfslxJsJ6vhXw5/npcY0ldeC1E8f6UUoa4eyoskd70vO0wOAoGd02ZkJoox3F5ODM0kjHu
- Y97VLOa3GG66lh+ZEelVZEujHfKceCw9G3PMvEzyLFbXvSOigZQMdKzQ8D/OChwqig8wFBmV
- QCPS4yDdmZP3oeDHRjJ9jvMUKoYODiNKsl2F+xXwyRM2qoKRqFlhCn4usVd1+wmv9iLV8nPs
- 2Db1ZIa49fJet3Sk3PN4bV1rAPuWvtbuTBN39Q/6MgkLTYHb84HyFKw14Rqe5YorrBLbF3rl
- M51Dpf6Egu1yTJDHCTEwePWug4XI11FT8lK0LNnHNpbhTCYRjX73iWOnFraJNcURld1jL1nV
- r/LRD+/e2gNtSTPK0Qkon6HcOBZnxRoqtazTU6YQRmGlT0v+rukj/cn5sToYibWLn+RoV1CE
- Qj6tApOiHBkpEsCzHGu+iDQ1WT0Idtdynst738f/uCeCMkdRu4WMZjteQaqvARFwCy3P/jpK
- uvzMtves5HvZw33ZwOtMCgbpce00DaET4y/UzsBNBFsZNTUBCACfQfpSsWJZyi+SHoRdVyX5
- J6rI7okc4+b571a7RXD5UhS9dlVRVVAtrU9ANSLqPTQKGVxHrqD39XSw8hxK61pw8p90pg4G
- /N3iuWEvyt+t0SxDDkClnGsDyRhlUyEWYFEoBrrCizbmahOUwqkJbNMfzj5Y7n7OIJOxNRkB
- IBOjPdF26dMP69BwePQao1M8Acrrex9sAHYjQGyVmReRjVEtv9iG4DoTsnIR3amKVk6si4Ea
- X/mrapJqSCcBUVYUFH8M7bsm4CSxier5ofy8jTEa/CfvkqpKThTMCQPNZKY7hke5qEq1CBk2
- wxhX48ZrJEFf1v3NuV3OimgsF2odzieNABEBAAHCwXwEGAEKACYCGwwWIQSpQNQ0mSwujpkQ
- PVAiT6fnzIKmZAUCZ8gcVAUJFhTonwAKCRAiT6fnzIKmZLY8D/9uo3Ut9yi2YCuASWxr7QQZ
- lJCViArjymbxYB5NdOeC50/0gnhK4pgdHlE2MdwF6o34x7TPFGpjNFvycZqccSQPJ/gibwNA
- zx3q9vJT4Vw+YbiyS53iSBLXMweeVV1Jd9IjAoL+EqB0cbxoFXvnjkvP1foiiF5r73jCd4PR
- rD+GoX5BZ7AZmFYmuJYBm28STM2NA6LhT0X+2su16f/HtummENKcMwom0hNu3MBNPUOrujtW
- khQrWcJNAAsy4yMoJ2Lw51T/5X5Hc7jQ9da9fyqu+phqlVtn70qpPvgWy4HRhr25fCAEXZDp
- xG4RNmTm+pqorHOqhBkI7wA7P/nyPo7ZEc3L+ZkQ37u0nlOyrjbNUniPGxPxv1imVq8IyycG
- AN5FaFxtiELK22gvudghLJaDiRBhn8/AhXc642/Z/yIpizE2xG4KU4AXzb6C+o7LX/WmmsWP
- Ly6jamSg6tvrdo4/e87lUedEqCtrp2o1xpn5zongf6cQkaLZKQcBQnPmgHO5OG8+50u88D9I
- rywqgzTUhHFKKF6/9L/lYtrNcHU8Z6Y4Ju/MLUiNYkmtrGIMnkjKCiRqlRrZE/v5YFHbayRD
- dJKXobXTtCBYpLJM4ZYRpGZXne/FAtWNe4KbNJJqxMvrTOrnIatPj8NhBVI0RSJRsbilh6TE
- m6M14QORSWTLRg==
-In-Reply-To: <20250704060727.724817-7-surenb@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-0.999];
-	MIME_GOOD(-0.10)[text/plain];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[28];
-	FREEMAIL_CC(0.00)[oracle.com,redhat.com,google.com,cmpxchg.org,kernel.org,gmail.com,toxicpanda.com,huawei.com,weissschuh.net,infradead.org,suse.de,arm.com,csgroup.eu,vger.kernel.org,kvack.org];
-	RCVD_TLS_ALL(0.00)[];
-	R_RATELIMIT(0.00)[to_ip_from(RLqwhhqik4qyk5i1fk54co8f1o)];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
-X-Spam-Flag: NO
-X-Spam-Level: 
-X-Spam-Score: -4.30
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|LV9PR12MB9807:EE_
+X-MS-Office365-Filtering-Correlation-Id: a2c6578f-5e20-493f-f1cb-08ddbe4718bc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|7416014|376014|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Ti9OQzF4eG1JaXNRaWFEMUc0VFdkdzFrR3p1UmcyVGNtc3hMYXdzNHNYTDlV?=
+ =?utf-8?B?WW9OTXc4UWVNTzBjRUhsTDRCbGovaTRpa3hiRmNsRmh5WEF5UHRFWGUzbFEw?=
+ =?utf-8?B?c1dmQkZaNjFtU2I3aVVnQ1kwS00rMk50dkJ6MGxBbHFaOFZDWVFLTXp5SFNr?=
+ =?utf-8?B?eC91ckVCTkJaRW9CVEhCTTU4MXZUQVpKMU9HWmZwSnFldVA3L3B1SkQ0ZWo1?=
+ =?utf-8?B?dk9RY2VlKzMrd3B3T0U0VkhHU0FrWEVJM1BJZmIvR0kwbmlEaFZJelJiRHJY?=
+ =?utf-8?B?WXYvTkliWWlpL0R6dEZOekVvbWY0Mm83TjMzSzByM1JHTTFBbHdZUDM5cEVU?=
+ =?utf-8?B?NENoY3R5VVNUVGxrQWxUb3ZTVGdKZTlDaWU5ZXpGTDJZNzZubXlxVlJmUGdv?=
+ =?utf-8?B?K0RsNnRMZEs3VUczWXVuNmE3eFVIREdmUllUMWZiVFNkZ0M3MXA5K0kyMkts?=
+ =?utf-8?B?N0tKZC9qSjZjMTlaUjcwdUtxVzNnelcweXRMblhVMGdGU3BweXVCdTVGWnI4?=
+ =?utf-8?B?bEY5bVhjRVBPdjlTQm1FNVFwWkI4SVIybmVFUDZ0d29SZjdodUNyLzZNVUd2?=
+ =?utf-8?B?N1d1WDZPdjNKeUFrZkNaL1hzd1lISmQ2dVNEemJKZm5lZDBIdkJ0Sk5lakVE?=
+ =?utf-8?B?QVZVd1dVQWpCZ3ZYUUR0bEdocDZ2bCt0aGZ3WVlSUElBcU1FYWVXK3lGS1Ix?=
+ =?utf-8?B?VjE3VkhHdGt6LzhMaG5MVUJZclA4VU1Ib1ZLNTBhVmNSWVdGT0lHTkVBYjZ0?=
+ =?utf-8?B?UWVySmxTSTVuODdLUGRSNE95ZjNDSzIrMU0vZVZBVzJhYkxNS3M3VEZBNk9n?=
+ =?utf-8?B?bnk0RGR2YjF3N1lLamFjeVV6WGFyTEtQVlJlYWVLbW9TN3Y4YXNiUDFoTkhJ?=
+ =?utf-8?B?T1V1ME4wWjFYN3hOd1lCcFNoMElKN2Y3U1J4OWhKdnoyT1IwVmZYcHJLUEVY?=
+ =?utf-8?B?WWRMSk1aT0FqVFRGU0lLSndoeVFxMDNjQVExYm5jRGVqUW9Wb2JCOEFLcnZL?=
+ =?utf-8?B?aWhLeTY4YVA0Mk15Rk51QUw4M25ldnBoUERJUzhPOTRjbVZndFJaUmlGSnpG?=
+ =?utf-8?B?c3pSVFQ0V0FzaFVHeWkyTGI3QWRCZzJZU05FVTV2NWJjVFdiemNRQUhhS3E2?=
+ =?utf-8?B?SXkyNmtQNkV4Zlp3bXk4TnJkR1pldnp1ck9iTDcvMkozTVFlbVNNa0hOem12?=
+ =?utf-8?B?SnhOZTNZOTlXUVgxeEFVOXhZT2hPa2krN0xkdEY4RTFpSElhTW1Sc3MxakR5?=
+ =?utf-8?B?VXNUSUNOT3dxa1hNMDRsck9XN0xUckh3ZnBxVitLZXB3VHBSZ05JYi9wR2o1?=
+ =?utf-8?B?V01SeEFXY1ZzcUdWYlNHT0F3bG5TeVFUYTFIQmdZd0dWSGlURUZObnlrRk9W?=
+ =?utf-8?B?elpGSFZWeUREWnlBWWxCaWMxYVdMZ0Q2WDJxR0JTWFEvUmswaEoxa3pGMHdk?=
+ =?utf-8?B?bFpaRU1WcE1TVDN6TVFQYkhId3lpZDNibStCeGl6WWJCNGpzMU82NFFqUGhR?=
+ =?utf-8?B?UGk5bnZ3YUJ3RGRJd3o0RU9aL2U3U2ZEQVZocG1PeTFEUVVDNzJ4MklhN2lJ?=
+ =?utf-8?B?UFo5dUhVczA3QSsrN01WRXJwMTdlY2VqRWZFTVVWVllaNENrclFKYjFMeHkv?=
+ =?utf-8?B?bGVWYUxxTVQwZnFZUFpjS29wdnFuYnNzNVJUbjN3aG53cHVjUG5ZSEc1WVhQ?=
+ =?utf-8?B?dDR0elIxNFkrOGJlTWFlRDVtRHFFL0xmcEJXN0dHSjF6YmwvcDg0OXNzVFhv?=
+ =?utf-8?B?VGE1U3V0WWhjNGY3ekNrR3B6eWdWTWlDQWFGOUZ1RzdZWFJuejRDUWhjMll6?=
+ =?utf-8?B?UkJjOUZ4OGJWa1ZiYmVpdXUvejNnbGk3YXgrMkdQNFNuQmlJNUU5d1hxK3hS?=
+ =?utf-8?B?OTBpQU83cmh0Rm9mOEEvUXI4UldyZDRxVk1YZ1dMeXJaamozM2I3d29IZXZ5?=
+ =?utf-8?Q?Quq+VjHU8rw=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?Q0FFNFFxS1doN2ZVNnMzRER0SmNxc2pJZXNnY25UdWdYcFZVa2dueUZNVkQv?=
+ =?utf-8?B?MHlzTzBpcnFBQmpCeWNyWWhEd3JuaXF3c1VkNkxCOVFpSjNnTlZpMThyY0Rj?=
+ =?utf-8?B?cjhGc2taaWoxd2E4WlNoQkV6WXJyNldjc2Rxajc2RlExdmRaU1FqOVc3cGlk?=
+ =?utf-8?B?Vis0cUE2VVNqNUpIV1ZBbkpuL2QzNStBWk5XT3VQSXdkeFB5SU82TEltVks1?=
+ =?utf-8?B?WWQwUXZ4NGIyN2dCQVVhekI1amp2WDM5NWpWK1NxNU03UHYxRDgycEhKOTQw?=
+ =?utf-8?B?bXQ1OFNwTnltSmwxWU91WnBabkwrVXEzaFNaajdEb1gvWUdVTitPY0V3RXQ4?=
+ =?utf-8?B?M1ltNkt2cUk2L1BtazhpSC82UEExdTF1Mm5IVU9aTnB0M1RtUTN1bElwTXVL?=
+ =?utf-8?B?enpLN203MVNieVFaQUFjaFlHSlFzNHBIZE9VNXd1cUtSditYcW1oSFJpQXpr?=
+ =?utf-8?B?UGhKM2p3ZUhQKzJ2dGtlRlNXdkxSQm9HZ0o5ZlZ5aWtuMkFGaXFMaHExVDdJ?=
+ =?utf-8?B?NmhYM1lOc3dCRE52dEhHUlBqTkczTTVYQmN5WVNocmVVWDdiMVNFdzNWMnlX?=
+ =?utf-8?B?QWRJdmx0eGgwZnI3aG9Nc2Q5aWZqM2xSZ3VBUmVBeExpcUs0ZkFwaWdOZW1S?=
+ =?utf-8?B?K29QS0VYZURZbHQ3d3BpYklIUGhQU3g4VE1VSktXVTBYT3dNZ2I1QnZ1ZUs3?=
+ =?utf-8?B?N1hhNmNhaWliT2Yzc0l6dVdWb0NVRVhsbHRTQTBzejIvUCtIMVMvckVqUG16?=
+ =?utf-8?B?cjJLNVg3U0RDdm8wVm9GRUNyT3pnaVZwWjd2ZEN3K1dBVnFGUUd6QW9MaGRn?=
+ =?utf-8?B?VzlOaFUrZXZpOTdGc0g0TjFqZW1PNUd2ZDRUYWN3aVJFL3VMd2h4UUcwQTF4?=
+ =?utf-8?B?R05WSUh1Y2NSR0FySCtPU2pmTGh1cGRHakxSWjZOT29SQmt2QW03VDFVOXZV?=
+ =?utf-8?B?YjdwZnNWRm5taFdrcndGN3grVisva3JESmsyYlpBQjl4RG0ydGFnNVE4VHhz?=
+ =?utf-8?B?dVRmMnh0SUw1Z1B5bUM3MkFNS3p6eXRNRTFjYWlXbzZhTldLTDZUSlMyaUdx?=
+ =?utf-8?B?emRCU3ZzSzd3eWR2cG04L2Frbms3VVkrL0k1MmdVTHdqRTdYWjhaMmZweGJX?=
+ =?utf-8?B?czF2MWNsNndxdS9qdHZNUk5BV0tRclhwdkF1a2doZVBYSjhsbFFzWDhGamlB?=
+ =?utf-8?B?VWxWK3JpTEJTamRlYm0yOU5mRmQzR0JlWmI5NjVPODV1cGIrS09EYTdhbDA2?=
+ =?utf-8?B?WkFSeXppSVVwMEdtUWthTHhkbHZjQmFJVi9xQVdMVGdXbmZZMlZtQUE2UW9T?=
+ =?utf-8?B?MGRxTFE5M3BTRDRCSmQzNG9QTFgyMENsQUUrOGJGTmtVZWZvRzFZWVo0aHN0?=
+ =?utf-8?B?aWk3UU9KajNIajlBbVZONnV0SmtNaWYralBJWTQ3b2dJaXZhUVhIVWhSTTJR?=
+ =?utf-8?B?L3dYQW5GNldLbURVenl2di8wbENXbEJ2UGhSUmdSU2Y4bUorRVlUVEhMdWM2?=
+ =?utf-8?B?TVI1eEpKTG8rZHRGd0ttZjQwWFpLR2Q1STY3Q0hYYkFPN0ZpZlFFa2Q5elEx?=
+ =?utf-8?B?QUxWVnVNRUsvRXJCY0dGM2d3MVFPN0RKUXdqMGtQNmFQN0h2K21RY2pzZ2lh?=
+ =?utf-8?B?MWVYMjJ3OEZreXIzUnR5aldxTnhKaDhrT0p6bHpDVWU2SEZ1aEFmamVEUmVI?=
+ =?utf-8?B?NzlKUTRuM1pIMXBMVnVwbkRrZi9OOUZsa1FCeGc0SG54dVMrTHhld0NkemFR?=
+ =?utf-8?B?dk9xL1VaVnBOTHZXRk1PVVdBZ2RpcWw4ck0xR0JxRHh2L3VqOGs4dWRzSnVl?=
+ =?utf-8?B?NzFBc0poUm91K3RUN3pqL21mQmV4Z0g5Qm12TXpwZUtheGIydW5uNFB3ZzRQ?=
+ =?utf-8?B?UFpwUmhZZ0wwOUczRkRYdjlieHdOUkpyY0RrVm9PdTBFdUVObzlUNkhPaUhT?=
+ =?utf-8?B?bFR2QllKeklDNTcvYW4zZkZPY2txcXpGSjY0dXRZRXMwdGg1RlNGbWZSLzc4?=
+ =?utf-8?B?UmFFSUY1NzdDeVFma3R6NUhsam51UUptSHVUMERlcXg4UVZoYmNJdFFvdnE2?=
+ =?utf-8?B?dXhHSTJDOUM5K3Rmb1o2djN6V0lUNmZmV0luY3dIckZNaVN4bWxvOS9qQkMx?=
+ =?utf-8?Q?foBJpn6LZgstnqgX0y6mcExGM?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a2c6578f-5e20-493f-f1cb-08ddbe4718bc
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jul 2025 17:44:32.5960
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 90Hz+rnZojvj5wB2FivsGxM2pal/Y9inBhdalpHb0SmT1hE7inUTzGXLHxTR6hx6
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV9PR12MB9807
 
-On 7/4/25 08:07, Suren Baghdasaryan wrote:
-> Back in 2.6 era, last_addr used to be stored in seq_file->version
-> variable, which was unsigned long. As a result, sentinels to represent
-> gate vma and end of all vmas used unsigned values. In more recent
-> kernels we don't used seq_file->version anymore and therefore conversion
-> from loff_t into unsigned type is not needed. Similarly, sentinel values
-> don't need to be unsigned. Remove type conversion for set_file position
-> and change sentinel values to signed.
-> 
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+On 3 Jul 2025, at 0:43, wang lian wrote:
 
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
-
-Some stuff in the code gave me a pause but it's out of scope here so just in
-case someone wants to do some extra churn...
-
+> Add tests for process_madvise(), focusing on verifying behavior under
+> various conditions including valid usage and error cases.
+>
+> Signed-off-by: wang lian <lianux.mm@gmail.com>
+> Suggested-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> Suggested-by: David Hildenbrand <david@redhat.com>
+> Acked-by: SeongJae Park <sj@kernel.org>
 > ---
->  fs/proc/task_mmu.c | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
-> 
-> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-> index 751479eb128f..b8bc06d05a72 100644
-> --- a/fs/proc/task_mmu.c
-> +++ b/fs/proc/task_mmu.c
-> @@ -135,7 +135,7 @@ static struct vm_area_struct *proc_get_vma(struct proc_maps_private *priv,
->  	if (vma) {
->  		*ppos = vma->vm_start;
->  	} else {
-> -		*ppos = -2UL;
-> +		*ppos = -2;
->  		vma = get_gate_vma(priv->mm);
->  	}
->  
-> @@ -145,11 +145,11 @@ static struct vm_area_struct *proc_get_vma(struct proc_maps_private *priv,
->  static void *m_start(struct seq_file *m, loff_t *ppos)
->  {
->  	struct proc_maps_private *priv = m->private;
-> -	unsigned long last_addr = *ppos;
-> +	loff_t last_addr = *ppos;
->  	struct mm_struct *mm;
->  
->  	/* See m_next(). Zero at the start or after lseek. */
-> -	if (last_addr == -1UL)
-> +	if (last_addr == -1)
->  		return NULL;
->  
->  	priv->task = get_proc_task(priv->inode);
-> @@ -170,9 +170,9 @@ static void *m_start(struct seq_file *m, loff_t *ppos)
->  		return ERR_PTR(-EINTR);
->  	}
->  
-> -	vma_iter_init(&priv->iter, mm, last_addr);
-> +	vma_iter_init(&priv->iter, mm, (unsigned long)last_addr);
+>
+> Changelog v3:
+> - Rebased onto the latest mm-stable branch to ensure clean application.
+> - Refactor common signal handling logic into vm_util to reduce code dupli=
+cation.
+> - Improve test robustness and diagnostics based on community feedback.
+> - Address minor code style and script corrections.
+>
+> Changelog v2:
+> - Drop MADV_DONTNEED tests based on feedback.
+> - Focus solely on process_madvise() syscall.
+> - Improve error handling and structure.
+> - Add future-proof flag test.
+> - Style and comment cleanups.
+>
+>  tools/testing/selftests/mm/.gitignore      |   1 +
+>  tools/testing/selftests/mm/Makefile        |   1 +
+>  tools/testing/selftests/mm/guard-regions.c |  51 ---
+>  tools/testing/selftests/mm/process_madv.c  | 358 +++++++++++++++++++++
+>  tools/testing/selftests/mm/run_vmtests.sh  |   5 +
+>  tools/testing/selftests/mm/vm_util.c       |  35 ++
+>  tools/testing/selftests/mm/vm_util.h       |  22 ++
+>  7 files changed, 422 insertions(+), 51 deletions(-)
+>  create mode 100644 tools/testing/selftests/mm/process_madv.c
+>
 
-I wonder if this should rather be done only after dealing with the -2 case
-below. It seems wrong to init the iterator with a bogus address. What if it
-acquires some sanity checks?
+<snip>
 
->  	hold_task_mempolicy(priv);
+> diff --git a/tools/testing/selftests/mm/process_madv.c b/tools/testing/se=
+lftests/mm/process_madv.c
+> new file mode 100644
+> index 000000000000..3d26105b4781
+> --- /dev/null
+> +++ b/tools/testing/selftests/mm/process_madv.c
+> @@ -0,0 +1,358 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +
+> +#define _GNU_SOURCE
+> +#include "../kselftest_harness.h"
+> +#include <errno.h>
+> +#include <setjmp.h>
+> +#include <signal.h>
+> +#include <stdbool.h>
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <string.h>
+> +#include <sys/mman.h>
+> +#include <sys/syscall.h>
+> +#include <unistd.h>
+> +#include <sched.h>
+> +#include <sys/pidfd.h>
 
-It seems suboptimal to do that mempolicy refcount dance for numa_maps sake
-even if we're reading a different /proc file... maybe priv could have a flag
-to determine?
+When I was compiling it on arm64, I got the error below.
+=E2=80=9Cfatal error: sys/pidfd.h: No such file or directory=E2=80=9D
 
-> -	if (last_addr == -2UL)
-> +	if (last_addr == -2)
->  		return get_gate_vma(mm);
+I ran =E2=80=9Cmake headers_install=E2=80=9D before the compilation,
+but still got the error.
 
-I think only after the above it makes sense to init the iterator?
+It works fine with x86_64. I am not sure what I am missing.
 
->  	return proc_get_vma(priv, ppos);
-> @@ -180,8 +180,8 @@ static void *m_start(struct seq_file *m, loff_t *ppos)
->  
->  static void *m_next(struct seq_file *m, void *v, loff_t *ppos)
->  {
-> -	if (*ppos == -2UL) {
-> -		*ppos = -1UL;
-> +	if (*ppos == -2) {
-> +		*ppos = -1;
->  		return NULL;
->  	}
->  	return proc_get_vma(m->private, ppos);
-
+Best Regards,
+Yan, Zi
 
