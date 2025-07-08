@@ -1,270 +1,278 @@
-Return-Path: <linux-kselftest+bounces-36746-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36745-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53CDDAFC513
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 10:08:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F0F8AFC4D8
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 09:59:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 64491179323
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 08:08:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6917F480830
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 07:58:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9667029B8E6;
-	Tue,  8 Jul 2025 08:08:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26E8129C352;
+	Tue,  8 Jul 2025 07:58:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.co.uk header.i=@amazon.co.uk header.b="ABp6lS8L"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R+8qDZLW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-fw-52004.amazon.com (smtp-fw-52004.amazon.com [52.119.213.154])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B50F925771;
-	Tue,  8 Jul 2025 08:08:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.119.213.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC5E629B201;
+	Tue,  8 Jul 2025 07:58:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751962122; cv=none; b=I577Th8/efJOtvg3nocXotVQXfg8wCqrqMIoyrzuI3mwxq5hS3aE8fqUhbhCVa9r8V9Y2Rd3ljW2451Cd7s7vEG5YfCEhQas4v85XVlmUDnWXu6EDw/DwBo36IBAo08Yji05/+klFk777U/ZYn0TzNyi25pv37EhnKHnm/UYBH0=
+	t=1751961508; cv=none; b=Nx8zhmywL/QstbF83QC6TEQMWY2yloqoJfewD3kQee+WRLWzYQ9VIV8+bxDtj52u/fcZG8Pk8bPXPtD+BCkrnbIHGEpt0z2+rcXLND7aikR/JGnKauzwQ7odITN5sgzSGIwfqBOKxF8CkmT9yJGIA5az2Qg7+vG42OaAJHSJuI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751962122; c=relaxed/simple;
-	bh=9C0Iso2Ml9KaD8exYHGUlmuP/Fb0opCo66hviQlCxHU=;
-	h=Subject:Content-Type:MIME-Version:From:To:CC:Date:Message-ID:
-	 References:In-Reply-To:MIME-Version; b=dHqpsniJ6Sr3QWhvGhvCC2LewXNxL8QU1OLc/HCmeA6GE4g4wDBBMABTaGsuMNQA5CBUWep5ew+1wTL6CPCt2WkRo5EEonoMnV0yij5PnUew3fEeo8XxKbR4+Si8tZoMbeJTSPs0ocB3jzm6WcFpqPnbdxigSf7z6y1ScvNS0qo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.co.uk; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.co.uk header.i=@amazon.co.uk header.b=ABp6lS8L; arc=none smtp.client-ip=52.119.213.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.co.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.co.uk; i=@amazon.co.uk; q=dns/txt;
-  s=amazoncorp2; t=1751962121; x=1783498121;
-  h=from:to:cc:date:message-id:references:in-reply-to:
-   subject;
-  bh=y7ay/zpUOJKAEmSnovC/kDgtrtSXsIKlTGWYwmSpfxU=;
-  b=ABp6lS8LQFLPtH2WIdlVdcKkUYSZzuC+ugy00cpMNbZ0r3Y3ac90WFXc
-   D8MJXftiNI+646m16lyRcQBa8ic1LedCGdmdn0Ye7h0OlfKq68i8l1N+x
-   Y4Nv0/G+HbNJa/+lXirdz0uVCCq/W6at9XyZ5jG+iDU/dJh2hVJF9nA6O
-   y0SPEIx4ihii9lVSXgemd1sTOAfLB7Opcz5zfTNXOZNWnaB6oYJlOD2nU
-   pfWD7VYlKeBRT+RbsF32ImZz9VreIzq1SPUqA9kjiJ8FJHGc6kz9d/4+C
-   gmuypzxdxTSiAaOq2Qxu3lMNpF/5i+ljWS32edVhxc6wTMooG/vn+lTJy
-   Q==;
-X-Amazon-filename: smime.p7s
-X-IronPort-AV: E=Sophos;i="6.16,296,1744070400"; 
-   d="p7s'346?scan'346,208,346";a="315585636"
-Subject: Re: [PATCH v2] selftests/kexec: fix test_kexec_jump build
-Thread-Topic: [PATCH v2] selftests/kexec: fix test_kexec_jump build
-Content-Type: multipart/mixed; boundary="===============1995965109367093102=="
+	s=arc-20240116; t=1751961508; c=relaxed/simple;
+	bh=uE5MlteM8/gqfvbo7CDXi1yeE6bRnNqClJpOH7U1InQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gL4o5Oug1LXS5AYJc6Dp5JOCyyvEQcUxuSP9RocO6yrqXYPTbrHdRAqdz6ksWjGfqVMCus+ekWB6x88+WWtLebT+BRQEPuo+WPn9U/ncyxyZUrS85B0PuT1z9+a4GZGUE/PDh6fZwqL01FbyZ9tDZrNQVU+Gy0EuBLc8GU6xFV0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R+8qDZLW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8524C4CEED;
+	Tue,  8 Jul 2025 07:58:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751961507;
+	bh=uE5MlteM8/gqfvbo7CDXi1yeE6bRnNqClJpOH7U1InQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=R+8qDZLWpOt2R5ZFZROnfKpVPl84XQjA6c9sV990pr8e2RO6PDyC9DdBA8sKbtpo9
+	 OGYQ5XhaTG+kMWgox9wqkzDkwpNK0Y6RnhCSAlHsWQQAWGsHErxA+mYIXIhfW9kG3y
+	 8TL10jy5azbo4EUvviEdaFKcAY0o7j3Qv5dX5GLsjSDpMTF5zSG2AzhRj2OEaevovs
+	 LYrXFypqSuk1zoFZ0LH6kUXXs13BVbNaMUWx4BeqgsaO760gKfAF2dRB9qs7chnQpe
+	 a9kbJtmNzDGf8XVCZ3z9UcqKbiLesxHTf9A+U+83zJ3U7dgNXuoLMRV9agyjsAXogL
+	 7tZSaTPWPptxg==
+Date: Tue, 8 Jul 2025 09:58:24 +0200
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+To: Pablo Neira Ayuso <pablo@netfilter.org>
+Cc: Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Jozsef Kadlecsik <kadlec@netfilter.org>,
+	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+	netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH nf-next v3 1/2] net: netfilter: Add IPIP flowtable SW
+ acceleration
+Message-ID: <aGzPoAKjq8mZGOn2@lore-desk>
+References: <20250703-nf-flowtable-ipip-v3-0-880afd319b9f@kernel.org>
+ <20250703-nf-flowtable-ipip-v3-1-880afd319b9f@kernel.org>
+ <aGaVKWKOKj1a-eG1@calendula>
+ <aGfQeF_6c2W1ecrX@lore-desk>
+ <aGwm7XrM4YaJREru@calendula>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO smtpout.prod.us-east-1.prod.farcaster.email.amazon.dev) ([10.43.8.2])
-  by smtp-border-fw-52004.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2025 08:08:37 +0000
-Received: from EX19MTAUEA001.ant.amazon.com [10.0.0.204:26320]
- by smtpin.naws.us-east-1.prod.farcaster.email.amazon.dev [10.0.56.22:2525] with esmtp (Farcaster)
- id d28a9477-1200-49ff-9e27-42b3df5e4ff0; Tue, 8 Jul 2025 08:08:37 +0000 (UTC)
-X-Farcaster-Flow-ID: d28a9477-1200-49ff-9e27-42b3df5e4ff0
-Received: from EX19D008UEC002.ant.amazon.com (10.252.135.242) by
- EX19MTAUEA001.ant.amazon.com (10.252.134.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
- Tue, 8 Jul 2025 07:18:37 +0000
-Received: from EX19D008UEC001.ant.amazon.com (10.252.135.232) by
- EX19D008UEC002.ant.amazon.com (10.252.135.242) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
- Tue, 8 Jul 2025 07:18:37 +0000
-Received: from EX19D008UEC001.ant.amazon.com ([fe80::4702:5d1a:c556:797]) by
- EX19D008UEC001.ant.amazon.com ([fe80::4702:5d1a:c556:797%3]) with mapi id
- 15.02.1544.014; Tue, 8 Jul 2025 07:18:36 +0000
-From: "Woodhouse, David" <dwmw@amazon.co.uk>
-To: "moonhee.lee.ca@gmail.com" <moonhee.lee.ca@gmail.com>, "bhe@redhat.com"
-	<bhe@redhat.com>
-CC: "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
-	"mingo@kernel.org" <mingo@kernel.org>, "linux-kselftest@vger.kernel.org"
-	<linux-kselftest@vger.kernel.org>, "khan@linuxfoundation.org"
-	<khan@linuxfoundation.org>, "linux-kernel-mentees@lists.linux.dev"
-	<linux-kernel-mentees@lists.linux.dev>, "shuah@kernel.org"
-	<shuah@kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "skhan@linuxfoundation.org"
-	<skhan@linuxfoundation.org>
-Thread-Index: AQHb63U4SXjltZSNekimGD12UH17V7Qf9PcAgAflIQA=
-Date: Tue, 8 Jul 2025 07:18:36 +0000
-Message-ID: <d89f3d4ca5a938a93e1f1b761f7749c88f051dfb.camel@amazon.co.uk>
-References: <20250702171704.22559-2-moonhee.lee.ca@gmail.com>
-	 <aGYm1BARlztCoCLT@MiWiFi-R3L-srv>
-In-Reply-To: <aGYm1BARlztCoCLT@MiWiFi-R3L-srv>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: yes
-X-MS-TNEF-Correlator: 
-MIME-Version: 1.0
-
---===============1995965109367093102==
-Content-Language: en-US
-Content-Type: multipart/signed; micalg=sha-256;
-	protocol="application/pkcs7-signature"; boundary="=-AVEB1z3UnmfLXQH4Arb/"
-
---=-AVEB1z3UnmfLXQH4Arb/
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, 2025-07-03 at 14:44 +0800, Baoquan He wrote:
-> On 07/02/25 at 10:17am, Moon Hee Lee wrote:
-> > The test_kexec_jump program builds correctly when invoked from the
-> > top-level
-> > selftests/Makefile, which explicitly sets the OUTPUT variable.
-> > However,
-> > building directly in tools/testing/selftests/kexec fails with:
-> >=20
-> > =C2=A0 make: *** No rule to make target '/test_kexec_jump', needed by
-> > 'test_kexec_jump.sh'.=C2=A0 Stop.
->=20
-> I can reproduce this, and this patch fixes it. Thanks.
->=20
-> Acked-by: Baoquan He <bhe@redhat.com>
-
-Acked-by: David Woodhouse <dwmw@amazon.co.uk>
-
-Thanks.
-
---=-AVEB1z3UnmfLXQH4Arb/
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
-
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkYw
-ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
-EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
-FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
-aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
-EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
-VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
-aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
-AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
-ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
-QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
-rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
-ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
-U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
-DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
-BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
-dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
-BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
-QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
-CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
-xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
-IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
-kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
-eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
-KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
-1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
-OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
-x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
-5ZgtwCLXgAIe5W8mybM2JzCCBhUwggT9oAMCAQICEFQru/eJkU7BxeS7T6sWKmYwDQYJKoZIhvcN
-AQELBQAwgZYxCzAJBgNVBAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNV
-BAcTB1NhbGZvcmQxGDAWBgNVBAoTD1NlY3RpZ28gTGltaXRlZDE+MDwGA1UEAxM1U2VjdGlnbyBS
-U0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0EwHhcNMjQxMjE1MDAw
-MDAwWhcNMjYxMjE1MjM1OTU5WjAiMSAwHgYJKoZIhvcNAQkBFhFkd213QGFtYXpvbi5jby51azCC
-AiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBANhjs6T4tJ0lcw4+6sawEn2FowmhunUBsnSV
-ccB+aA7s3Zd9PZV46CU6phAlCWpKk1yFVcD1Rnc4ux17o4LbUgFXiKrORS0jiF/5Oa0rXG3FISG1
-Xdjt8oPKIq+9Z1s2e7Ipi5WWj4AG/xlkH/YMMctL9O8CCRHSrhiChbE/gR57x9PAnt5aeZZ2YWza
-GOOeceaZe+u6vHCHITRmknSAnAX/aNoNJNsQCGcfrE83y9iHmP8BFrSRZqajBKlKq8tyJd5FnSwP
-H3kSUcQlHOwiIfCRFXP4rpXSZ7nKOEZr3SXH06ADY9gZtrSpwBbuzKWDPGWMRuRnz8ogj/Y6DeU4
-2zB/ZAIi5b0BzWf4u0rBEQD5xtpOCxYHc2nXQaFSWu36kP1JaNqElE51OQ92EyVKfW3N6qZcKiBr
-VijXY2EtR+/5W9ixRFnEs4nIeb94Sf92UMEeG9ew2yVvcYXXNPaicGnrkESNC19/a8YXxQEZfrmB
-eAPT9viQJhn3O+sD4pP0Ss3SjVZc6EO7vfoP07bt2n9YE08XSPkxcyb1J/4t/+AskkKeYFBGdpjg
-xd+iLFxjSwBytZuh3+7DuHUfg876WA44ieQDrhHSjuvuAZ1Wb8WUsrpzrcLoYjqFmb/bf6/yyoxl
-t31mdgPC+FLc+Yu1BQwXC3JMbrvbFBVTtn5X2EKDAgMBAAGjggHQMIIBzDAfBgNVHSMEGDAWgBQJ
-wPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUWvtA1XsSV8xjgfFQL/DUTNIbJu4wDgYDVR0P
-AQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwEwYDVR0lBAwwCgYIKwYBBQUHAwQwUAYDVR0gBEkwRzA6
-BgwrBgEEAbIxAQIBCgIwKjAoBggrBgEFBQcCARYcaHR0cHM6Ly9zZWN0aWdvLmNvbS9TTUlNRUNQ
-UzAJBgdngQwBBQEDMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2Vj
-dGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUF
-BwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xp
-ZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDov
-L29jc3Auc2VjdGlnby5jb20wHAYDVR0RBBUwE4ERZHdtd0BhbWF6b24uY28udWswDQYJKoZIhvcN
-AQELBQADggEBAED6T+rfP2XPdLfHoCd5n1iGIcYauWfPHRdZN2Tw7a7NEXIkm2yZNizOSpp3NrMi
-WOBN13XgqnYLsqdpxJhbjwKczKX50/qfhhkOHtrQ0GRkucybK447Aaul80cZT8T3WG9U9dhl3Ct/
-MuyKBWQg3MYlbUT6u4kC9Pk8rd+cR14ttYRUWDKTS2BrL7e8jpNmtCoEakDkMY4MrpoMwM1f4ANV
-qZ8cnDntwXq5ormZIksN2DqxsKLmrFyVAONhqSST72ImBfIVWhFRTCF9tTcI5wE/0Skl25FZmSsB
-B2LUgecgK7MZyw9Do/b0sYS+8YmA/ujUCqNb0fPJBE/B9vBomhswggYVMIIE/aADAgECAhBUK7v3
-iZFOwcXku0+rFipmMA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
-YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
-ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
-IEVtYWlsIENBMB4XDTI0MTIxNTAwMDAwMFoXDTI2MTIxNTIzNTk1OVowIjEgMB4GCSqGSIb3DQEJ
-ARYRZHdtd0BhbWF6b24uY28udWswggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDYY7Ok
-+LSdJXMOPurGsBJ9haMJobp1AbJ0lXHAfmgO7N2XfT2VeOglOqYQJQlqSpNchVXA9UZ3OLsde6OC
-21IBV4iqzkUtI4hf+TmtK1xtxSEhtV3Y7fKDyiKvvWdbNnuyKYuVlo+ABv8ZZB/2DDHLS/TvAgkR
-0q4YgoWxP4Eee8fTwJ7eWnmWdmFs2hjjnnHmmXvrurxwhyE0ZpJ0gJwF/2jaDSTbEAhnH6xPN8vY
-h5j/ARa0kWamowSpSqvLciXeRZ0sDx95ElHEJRzsIiHwkRVz+K6V0me5yjhGa90lx9OgA2PYGba0
-qcAW7sylgzxljEbkZ8/KII/2Og3lONswf2QCIuW9Ac1n+LtKwREA+cbaTgsWB3Np10GhUlrt+pD9
-SWjahJROdTkPdhMlSn1tzeqmXCoga1Yo12NhLUfv+VvYsURZxLOJyHm/eEn/dlDBHhvXsNslb3GF
-1zT2onBp65BEjQtff2vGF8UBGX65gXgD0/b4kCYZ9zvrA+KT9ErN0o1WXOhDu736D9O27dp/WBNP
-F0j5MXMm9Sf+Lf/gLJJCnmBQRnaY4MXfoixcY0sAcrWbod/uw7h1H4PO+lgOOInkA64R0o7r7gGd
-Vm/FlLK6c63C6GI6hZm/23+v8sqMZbd9ZnYDwvhS3PmLtQUMFwtyTG672xQVU7Z+V9hCgwIDAQAB
-o4IB0DCCAcwwHwYDVR0jBBgwFoAUCcDy/AvalNtf/ivfqJlCz8ngrQAwHQYDVR0OBBYEFFr7QNV7
-ElfMY4HxUC/w1EzSGybuMA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAAMBMGA1UdJQQMMAoG
-CCsGAQUFBwMEMFAGA1UdIARJMEcwOgYMKwYBBAGyMQECAQoCMCowKAYIKwYBBQUHAgEWHGh0dHBz
-Oi8vc2VjdGlnby5jb20vU01JTUVDUFMwCQYHZ4EMAQUBAzBaBgNVHR8EUzBRME+gTaBLhklodHRw
-Oi8vY3JsLnNlY3RpZ28uY29tL1NlY3RpZ29SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3Vy
-ZUVtYWlsQ0EuY3JsMIGKBggrBgEFBQcBAQR+MHwwVQYIKwYBBQUHMAKGSWh0dHA6Ly9jcnQuc2Vj
-dGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5j
-cnQwIwYIKwYBBQUHMAGGF2h0dHA6Ly9vY3NwLnNlY3RpZ28uY29tMBwGA1UdEQQVMBOBEWR3bXdA
-YW1hem9uLmNvLnVrMA0GCSqGSIb3DQEBCwUAA4IBAQBA+k/q3z9lz3S3x6AneZ9YhiHGGrlnzx0X
-WTdk8O2uzRFyJJtsmTYszkqadzazIljgTdd14Kp2C7KnacSYW48CnMyl+dP6n4YZDh7a0NBkZLnM
-myuOOwGrpfNHGU/E91hvVPXYZdwrfzLsigVkINzGJW1E+ruJAvT5PK3fnEdeLbWEVFgyk0tgay+3
-vI6TZrQqBGpA5DGODK6aDMDNX+ADVamfHJw57cF6uaK5mSJLDdg6sbCi5qxclQDjYakkk+9iJgXy
-FVoRUUwhfbU3COcBP9EpJduRWZkrAQdi1IHnICuzGcsPQ6P29LGEvvGJgP7o1AqjW9HzyQRPwfbw
-aJobMYIExDCCBMACAQEwgaswgZYxCzAJBgNVBAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNo
-ZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGDAWBgNVBAoTD1NlY3RpZ28gTGltaXRlZDE+MDwGA1UE
-AxM1U2VjdGlnbyBSU0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0EC
-EFQru/eJkU7BxeS7T6sWKmYwDQYJYIZIAWUDBAIBBQCgggHpMBgGCSqGSIb3DQEJAzELBgkqhkiG
-9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI1MDcwODA3MTgzMFowLwYJKoZIhvcNAQkEMSIEIGAaGKcC
-AHV69KxTvIiyPnA1LRXwVKfz4kQlLi92YirBMIG8BgkrBgEEAYI3EAQxga4wgaswgZYxCzAJBgNV
-BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGDAW
-BgNVBAoTD1NlY3RpZ28gTGltaXRlZDE+MDwGA1UEAxM1U2VjdGlnbyBSU0EgQ2xpZW50IEF1dGhl
-bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0ECEFQru/eJkU7BxeS7T6sWKmYwgb4GCyqGSIb3
-DQEJEAILMYGuoIGrMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
-MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
-Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhBUK7v3
-iZFOwcXku0+rFipmMA0GCSqGSIb3DQEBAQUABIICACv6wwGy+PfBeO8fYmcH/Vh6m5rZBCxCXceN
-K8ygs3yLQk+kY9iptdogQIAfJYBZWmoL1pZNkfjro7e1m1bF3pRUKR18wjFQeXh6N9V88TGVgwm7
-qtxFrl5jJjbYWiKY7QzUYVcjhiiQf7aF6N+GqDc6zUpvonQiy7sQMgNkBvad48ZZzapSOmstXeSY
-/JilB7SI/ywPzCsPZYWv/NH9cbQ9JPQsQxi9UyN2PYfdliMP5PorVx6QTMUkaNBHiVArdDzQdDQt
-flM8I6lKeTt2tYIBeZCyyC4wI6HY/QdHYSZjq3Lx6MHhhhW/91pHYWEwRqF0nc8sot22Txe60hCb
-l2ibWNIyIMIAFr0ZC157czojof6r4YiE7IM3FCvRgZNgGnRju1X8Q4st/OCwfLuhnk0+W4mxyke8
-osxWJH1MeyGKSyV8loSrhDIrQNmtC5rbTAMH+k3bxo0SH4ptkTOEH3oh1HNngXVlvERKF0jqHeIN
-fqRm1bEsneacF2xCdJaRAnaXUV1f5oosQ4AyC3yVCcIGxbBjn2OAlyaaTWhkEyzw89o/Qwo0Qmpf
-6r8R2+PjsSKtIVEUMzH5vMjJV8Omoa3Ph2aWIeOmVaIf8OSrPI64zvuzvlUQAYn1bHnQY4f/uHcc
-Cd2njtYTqttDaGVrd2nixiDKdhC68e7sMHANQrhiAAAAAAAA
-
-
---=-AVEB1z3UnmfLXQH4Arb/--
-
---===============1995965109367093102==
-Content-Type: multipart/alternative; boundary="===============8187833562819341360=="
-MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="heBi9EOYhaWjRcX5"
 Content-Disposition: inline
+In-Reply-To: <aGwm7XrM4YaJREru@calendula>
 
---===============8187833562819341360==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
+
+--heBi9EOYhaWjRcX5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
+On Jul 07, Pablo Neira Ayuso wrote:
+> On Fri, Jul 04, 2025 at 03:00:40PM +0200, Lorenzo Bianconi wrote:
+> > > On Thu, Jul 03, 2025 at 04:16:02PM +0200, Lorenzo Bianconi wrote:
+> > > > Introduce SW acceleration for IPIP tunnels in the netfilter flowtab=
+le
+> > > > infrastructure.
+> > > > IPIP SW acceleration can be tested running the following scenario w=
+here
+> > > > the traffic is forwarded between two NICs (eth0 and eth1) and an IP=
+IP
+> > > > tunnel is used to access a remote site (using eth1 as the underlay =
+device):
+> > >=20
+> > > Question below.
+> > >=20
+> > > > ETH0 -- TUN0 <=3D=3D> ETH1 -- [IP network] -- TUN1 (192.168.100.2)
+> > > >=20
+> > > > $ip addr show
+> > > > 6: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue s=
+tate UP group default qlen 1000
+> > > >     link/ether 00:00:22:33:11:55 brd ff:ff:ff:ff:ff:ff
+> > > >     inet 192.168.0.2/24 scope global eth0
+> > > >        valid_lft forever preferred_lft forever
+> > > > 7: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue s=
+tate UP group default qlen 1000
+> > > >     link/ether 00:11:22:33:11:55 brd ff:ff:ff:ff:ff:ff
+> > > >     inet 192.168.1.1/24 scope global eth1
+> > > >        valid_lft forever preferred_lft forever
+> > > > 8: tun0@NONE: <POINTOPOINT,NOARP,UP,LOWER_UP> mtu 1480 qdisc noqueu=
+e state UNKNOWN group default qlen 1000
+> > > >     link/ipip 192.168.1.1 peer 192.168.1.2
+> > > >     inet 192.168.100.1/24 scope global tun0
+> > > >        valid_lft forever preferred_lft forever
+> > > >=20
+> > > > $ip route show
+> > > > default via 192.168.100.2 dev tun0
+> > > > 192.168.0.0/24 dev eth0 proto kernel scope link src 192.168.0.2
+> > > > 192.168.1.0/24 dev eth1 proto kernel scope link src 192.168.1.1
+> > > > 192.168.100.0/24 dev tun0 proto kernel scope link src 192.168.100.1
+> > > >=20
+> > > > $nft list ruleset
+> > > > table inet filter {
+> > > >         flowtable ft {
+> > > >                 hook ingress priority filter
+> > > >                 devices =3D { eth0, eth1 }
+> > > >         }
+> > > >=20
+> > > >         chain forward {
+> > > >                 type filter hook forward priority filter; policy ac=
+cept;
+> > > >                 meta l4proto { tcp, udp } flow add @ft
+> > > >         }
+> > > > }
+> > > >=20
+> > > > Reproducing the scenario described above using veths I got the foll=
+owing
+> > > > results:
+> > > > - TCP stream transmitted into the IPIP tunnel:
+> > > >   - net-next:				~41Gbps
+> > > >   - net-next + IPIP flowtbale support:	~40Gbps
+> > >                       ^^^^^^^^^
+> > > no gain on tx side.
+> >=20
+> > In this case the IPIP flowtable acceleration is effective just on the A=
+CKs
+> > packets so I guess it is expected we have ~ the same results. The real =
+gain is
+> > when the TCP stream is from the tunnel net_device to the NIC one.
+>=20
+> That is, only rx side follows the flowtable datapath.
+>=20
+> > > > - TCP stream received from the IPIP tunnel:
+> > > >   - net-next:				~35Gbps
+> > > >   - net-next + IPIP flowtbale support:	~49Gbps
+> > > >=20
+> > > > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> > > > ---
+> > > >  net/ipv4/ipip.c                  | 21 +++++++++++++++++++++
+> > > >  net/netfilter/nf_flow_table_ip.c | 34 ++++++++++++++++++++++++++++=
+++++--
+> > > >  2 files changed, 53 insertions(+), 2 deletions(-)
+> > > >=20
+> > > > diff --git a/net/ipv4/ipip.c b/net/ipv4/ipip.c
+> > > > index 3e03af073a1ccc3d7597a998a515b6cfdded40b5..05fb1c859170d74009d=
+693bc8513183bdec3ff90 100644
+> > > > --- a/net/ipv4/ipip.c
+> > > > +++ b/net/ipv4/ipip.c
+> > > > @@ -353,6 +353,26 @@ ipip_tunnel_ctl(struct net_device *dev, struct=
+ ip_tunnel_parm_kern *p, int cmd)
+> > > >  	return ip_tunnel_ctl(dev, p, cmd);
+> > > >  }
+> > > > =20
+> > > > +static int ipip_fill_forward_path(struct net_device_path_ctx *ctx,
+> > > > +				  struct net_device_path *path)
+> > > > +{
+> > > > +	struct ip_tunnel *tunnel =3D netdev_priv(ctx->dev);
+> > > > +	const struct iphdr *tiph =3D &tunnel->parms.iph;
+> > > > +	struct rtable *rt;
+> > > > +
+> > > > +	rt =3D ip_route_output(dev_net(ctx->dev), tiph->daddr, 0, 0, 0,
+> > > > +			     RT_SCOPE_UNIVERSE);
+> > > > +	if (IS_ERR(rt))
+> > > > +		return PTR_ERR(rt);
+> > > > +
+> > > > +	path->type =3D DEV_PATH_ETHERNET;
+> > > > +	path->dev =3D ctx->dev;
+> > > > +	ctx->dev =3D rt->dst.dev;
+> > > > +	ip_rt_put(rt);
+> > > > +
+> > > > +	return 0;
+> > > > +}
+> > > > +
+> > > >  static const struct net_device_ops ipip_netdev_ops =3D {
+> > > >  	.ndo_init       =3D ipip_tunnel_init,
+> > > >  	.ndo_uninit     =3D ip_tunnel_uninit,
+> > > > @@ -362,6 +382,7 @@ static const struct net_device_ops ipip_netdev_=
+ops =3D {
+> > > >  	.ndo_get_stats64 =3D dev_get_tstats64,
+> > > >  	.ndo_get_iflink =3D ip_tunnel_get_iflink,
+> > > >  	.ndo_tunnel_ctl	=3D ipip_tunnel_ctl,
+> > > > +	.ndo_fill_forward_path =3D ipip_fill_forward_path,
+> > > >  };
+> > > > =20
+> > > >  #define IPIP_FEATURES (NETIF_F_SG |		\
+> > > > diff --git a/net/netfilter/nf_flow_table_ip.c b/net/netfilter/nf_fl=
+ow_table_ip.c
+> > > > index 8cd4cf7ae21120f1057c4fce5aaca4e3152ae76d..6b55e00b1022f0a2b02=
+d9bfd1bd34bb55c1b83f7 100644
+> > > > --- a/net/netfilter/nf_flow_table_ip.c
+> > > > +++ b/net/netfilter/nf_flow_table_ip.c
+> > > > @@ -277,13 +277,37 @@ static unsigned int nf_flow_xmit_xfrm(struct =
+sk_buff *skb,
+> > > >  	return NF_STOLEN;
+> > > >  }
+> > > > =20
+> > > > +static bool nf_flow_ip4_encap_proto(struct sk_buff *skb, u16 *size)
+> > > > +{
+> > > > +	struct iphdr *iph;
+> > > > +
+> > > > +	if (!pskb_may_pull(skb, sizeof(*iph)))
+> > > > +		return false;
+> > > > +
+> > > > +	iph =3D (struct iphdr *)skb_network_header(skb);
+> > > > +	*size =3D iph->ihl << 2;
+> > > > +
+> > > > +	if (ip_is_fragment(iph) || unlikely(ip_has_options(*size)))
+> > > > +		return false;
+> > > > +
+> > > > +	if (iph->ttl <=3D 1)
+> > > > +		return false;
+> > > > +
+> > > > +	return iph->protocol =3D=3D IPPROTO_IPIP;
+> > >=20
+> >=20
+> > what kind of sanity checks are we supposed to perform? Something simila=
+r to
+> > what we have in ip_rcv_core()?
+>=20
+> I am not referring to sanity checks.
+>=20
+> VLAN/PPP ID (layer 2 encapsulation) is part of the lookup in the
+> flowtable, why IPIP (layer 3 tunnel) does not get the same handling?
 
+ack, right. Do you have any suggestion about what field (or combination
+of fields) we can use from the outer IP header similar to the VLAN/PPP
+encapsulation?
 
+>=20
+> > > Once the flow is in the flowtable, it is possible to inject traffic
+> > > with forged outer IP header, this is only looking at the inner IP
+> > > header.
+> >=20
+> > what is the difference with the plain IP/TCP use-case?
+>=20
+> Not referring to the generic packet forging scenario. I refer to the
+> scenario that would allow to forward packets for any IPIP outer header
+> given the inner header finds a matching in the flowtable. I think that
+> needs to be sorted out.
 
-Amazon Development Centre (London) Ltd. Registered in England and Wales wit=
-h registration number 04543232 with its registered office at 1 Principal Pl=
-ace, Worship Street, London EC2A 2FA, United Kingdom.
+ack.
 
+Regards,
+Lorenzo
 
+--heBi9EOYhaWjRcX5
+Content-Type: application/pgp-signature; name=signature.asc
 
---===============8187833562819341360==
-Content-Type: text/html; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+-----BEGIN PGP SIGNATURE-----
 
-<br><br><br>Amazon Development Centre (London) Ltd.Registered in England an=
-d Wales with registration number 04543232 with its registered office at 1 P=
-rincipal Place, Worship Street, London EC2A 2FA, United Kingdom.<br><br><br>
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCaGzPoAAKCRA6cBh0uS2t
+rI/WAQDzIxwDuAnYbFygdncqXI698TcePfJGEsoicgF9XLelPAD/SH7UGxjjnFss
+s4b+TWT49Xp89aT2sRdVNG9IxOPWTwY=
+=6tTR
+-----END PGP SIGNATURE-----
 
---===============8187833562819341360==--
---===============1995965109367093102==--
+--heBi9EOYhaWjRcX5--
 
