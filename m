@@ -1,57 +1,95 @@
-Return-Path: <linux-kselftest+bounces-36766-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36767-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30CD4AFCFB2
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 17:50:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54FB5AFD58A
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 19:38:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DF43B5680CE
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 15:50:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1A6CD1BC7C06
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 17:38:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 064582E265E;
-	Tue,  8 Jul 2025 15:49:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EEDA2E5B08;
+	Tue,  8 Jul 2025 17:37:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="TxCY/fXj"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="qZA+P/A2";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="2K1Ev5W/";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="ZnALy4Dj";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="0Tmsowne"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6163A2E2656
-	for <linux-kselftest@vger.kernel.org>; Tue,  8 Jul 2025 15:49:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E93EC2E5B21
+	for <linux-kselftest@vger.kernel.org>; Tue,  8 Jul 2025 17:37:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751989766; cv=none; b=CngRkcda5ZLTJYxLdQ1DItkJOsL3ozzH4rq4X1XQhJpR4c5fPVptTIwabjEdsh45wguwvGTzocnY+Bw/3LXjtVQE8kDA6I6t3/yMWUTi/JhVUC0u8INl69b1fksG/d7ZoBAoN0VVqPi3gE9SaRd/o/6cciEV5m6O6aNAsZ2D1Tg=
+	t=1751996226; cv=none; b=AzEbmlAK+Mk5cIOOGOlXKg78GSSozq9VAwgavWYB6cQXOfM5VkD9ENXcz8vrEYzjnzSQHckr+jA7CIZ+uyXYqL5BhgPRRBVb9C8U+YKaL7lYqmZ8AKlnL2JXkW7eKhcLdd7VNzGaDKE1DjdYkFDo1Jd0fYpWboefWHLlVBHNCds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751989766; c=relaxed/simple;
-	bh=pQdw43cZlIGFHIeFZqhgvxVUgYpdCqXdfhp7IuQUQf8=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:In-Reply-To:
-	 Content-Type:References; b=NmtD6wu5JRfGMXVBXCYY2NsJTudf0q7prvXlXvbSMs5Rx5Wq2xnAjchAUKJGilOIniusgubKR6Sx8O80TjHQMmrs3Ud+1tH/v7xyVWYnZ0Nb13Onr0N9t6NoJTHH01/ahtqnHGZEnmOyUTNukKzarEKMQ2qxVGUoDJwMj6YK4CE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=TxCY/fXj; arc=none smtp.client-ip=210.118.77.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20250708154921euoutp02a9805bbad411ab56a3e24a7906966ec9~QUWfoEDnQ0960109601euoutp02R
-	for <linux-kselftest@vger.kernel.org>; Tue,  8 Jul 2025 15:49:21 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20250708154921euoutp02a9805bbad411ab56a3e24a7906966ec9~QUWfoEDnQ0960109601euoutp02R
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1751989761;
-	bh=YRQojeNIh/c0xVNMyFi0Xa2+y4Z8KdXoOS6org20cU4=;
-	h=Date:Subject:From:To:Cc:In-Reply-To:References:From;
-	b=TxCY/fXjMSTRUtkeE+3B64GRtRQoj0oYT5vp2iVPT8uzLd70mhnLYLWJKog5/oL8x
-	 pQ5+1ihOBzXFYaJEVo6B8406M4K2Oaq3v+sel5G0+6z2Mbjwd/5SG3LTebbJ6G9rx8
-	 tRI5InYwfaqgXj+440nF3P2oYYxrQF6gOa1drY8E=
-Received: from eusmtip2.samsung.com (unknown [203.254.199.222]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20250708154921eucas1p1fd8fa4374610a991ca5c67bd612ca0c2~QUWfJfUIN1114111141eucas1p1G;
-	Tue,  8 Jul 2025 15:49:21 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20250708154919eusmtip2ef36a1a3bcb9c35cd5efc533f7040c90~QUWdgPcdj1707117071eusmtip2d;
-	Tue,  8 Jul 2025 15:49:19 +0000 (GMT)
-Message-ID: <e8c6b9a7-eaa6-4947-98e1-9d6fecc958d4@samsung.com>
-Date: Tue, 8 Jul 2025 17:49:18 +0200
+	s=arc-20240116; t=1751996226; c=relaxed/simple;
+	bh=3ETbXfuDiIb1rIVsKs72/RN/EWQ8Fs3xt1oJEov4Oos=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jLXj5GOzeYgFiPM8bBScz5SxddcoU6YTagj/qSgD+55jyoZwJf9/7k3gXBq49ldLeghSKLWNutzMshqetj1w5ycYh3Tl3sTRAXXa3oTiJidkzUgv+1vKjiVyqOM/aE6yLNCSlRy1xaS48IFD8MXVDo9F4XSnIMCRJWI2M9DcJKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=qZA+P/A2; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=2K1Ev5W/; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=ZnALy4Dj; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=0Tmsowne; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id E01E02111F;
+	Tue,  8 Jul 2025 17:37:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1751996222; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=tH+4qrLbFoh951omgyvvpr8ql1pn4Evyfl1gUPKbjaI=;
+	b=qZA+P/A2RdecqvTOlciyC6KN7axCUlYSQPG2qhRvxoYtO55RTu9DxXWWmAzw9fKZRqPOs6
+	HErbR84LTwKdnzxntSmH5Pe7q1Kl6iYgLWWC3T3m2ATmeHcxFdi7ncr5plYGULqALPX6Zy
+	jSLOsDRlas+u7BwUnXDmqSrg2p5UO1w=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1751996222;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=tH+4qrLbFoh951omgyvvpr8ql1pn4Evyfl1gUPKbjaI=;
+	b=2K1Ev5W/Bta06tEANRaOF89d5Za6W09a/yHiWtGFAN3aIva8HQehA8atJ2relPR7ST4N6/
+	Dr7d2MgkWV1XMICA==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1751996221; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=tH+4qrLbFoh951omgyvvpr8ql1pn4Evyfl1gUPKbjaI=;
+	b=ZnALy4DjQVwUJLSIAn0dOy+Hz4ezfzu7bZk/oFKSTPr/rqGkNnN/amIetP5Of1BmRKzFjP
+	vYfCsiAzIakSbmmGZfRd24Yt7t6RdFtvGfvygMTDhDWGnMPidb3AHfNIXxlWP/57Z3OLev
+	22tzeIAhrswJgEbyVBUm3w04QCqHoCQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1751996221;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=tH+4qrLbFoh951omgyvvpr8ql1pn4Evyfl1gUPKbjaI=;
+	b=0TmsowneyCfM2N0mNSL/Ne+cG/n8uIkuBz3s2PBsyjjhOLYiX0eFW70dGJ9MuAUHrNehHk
+	JfYokWamikkoMyDw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id A3F6313A54;
+	Tue,  8 Jul 2025 17:37:01 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id ko5pJz1XbWjoAwAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Tue, 08 Jul 2025 17:37:01 +0000
+Message-ID: <0e0312c9-9a89-4a1b-a135-4425ea95d6f6@suse.cz>
+Date: Tue, 8 Jul 2025 19:37:01 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -59,267 +97,171 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 06/14] vdso/gettimeofday: Return bool from
- clock_gettime() helpers
-From: Marek Szyprowski <m.szyprowski@samsung.com>
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
-	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Shuah Khan
-	<shuah@kernel.org>, Anna-Maria Behnsen <anna-maria@linutronix.de>, Frederic
-	Weisbecker <frederic@kernel.org>, John Stultz <jstultz@google.com>, Stephen
-	Boyd <sboyd@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, Will
-	Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org, Richard
-	Cochran <richardcochran@gmail.com>, Christopher Hall
-	<christopher.s.hall@intel.com>, Miroslav Lichvar <mlichvar@redhat.com>,
-	Werner Abt <werner.abt@meinberg-usa.com>, David Woodhouse
-	<dwmw2@infradead.org>, Kurt Kanzenbach <kurt@linutronix.de>, Nam Cao
-	<namcao@linutronix.de>, Antoine Tenart <atenart@kernel.org>
+Subject: Re: [PATCH v6 6/8] fs/proc/task_mmu: remove conversion of seq_file
+ position to unsigned
+To: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
+Cc: Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, david@redhat.com,
+ peterx@redhat.com, jannh@google.com, hannes@cmpxchg.org, mhocko@kernel.org,
+ paulmck@kernel.org, shuah@kernel.org, adobriyan@gmail.com,
+ brauner@kernel.org, josef@toxicpanda.com, yebin10@huawei.com,
+ linux@weissschuh.net, willy@infradead.org, osalvador@suse.de,
+ andrii@kernel.org, ryan.roberts@arm.com, christophe.leroy@csgroup.eu,
+ tjmercier@google.com, kaleshsingh@google.com, aha310510@gmail.com,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+References: <20250704060727.724817-1-surenb@google.com>
+ <20250704060727.724817-7-surenb@google.com>
 Content-Language: en-US
-In-Reply-To: <02bcd954-5323-4663-a766-f53c67c5a18f@samsung.com>
-Content-Transfer-Encoding: 8bit
-X-CMS-MailID: 20250708154921eucas1p1fd8fa4374610a991ca5c67bd612ca0c2
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20250708154921eucas1p1fd8fa4374610a991ca5c67bd612ca0c2
-X-EPHeader: CA
-X-CMS-RootMailID: 20250708154921eucas1p1fd8fa4374610a991ca5c67bd612ca0c2
-References: <20250701-vdso-auxclock-v1-0-df7d9f87b9b8@linutronix.de>
-	<20250701-vdso-auxclock-v1-6-df7d9f87b9b8@linutronix.de>
-	<02bcd954-5323-4663-a766-f53c67c5a18f@samsung.com>
-	<CGME20250708154921eucas1p1fd8fa4374610a991ca5c67bd612ca0c2@eucas1p1.samsung.com>
+From: Vlastimil Babka <vbabka@suse.cz>
+Autocrypt: addr=vbabka@suse.cz; keydata=
+ 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
+ m6M14QORSWTLRg==
+In-Reply-To: <20250704060727.724817-7-surenb@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-0.999];
+	MIME_GOOD(-0.10)[text/plain];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[28];
+	FREEMAIL_CC(0.00)[oracle.com,redhat.com,google.com,cmpxchg.org,kernel.org,gmail.com,toxicpanda.com,huawei.com,weissschuh.net,infradead.org,suse.de,arm.com,csgroup.eu,vger.kernel.org,kvack.org];
+	RCVD_TLS_ALL(0.00)[];
+	R_RATELIMIT(0.00)[to_ip_from(RLqwhhqik4qyk5i1fk54co8f1o)];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
+X-Spam-Flag: NO
+X-Spam-Level: 
+X-Spam-Score: -4.30
 
-On 08.07.2025 17:17, Marek Szyprowski wrote:
-> On 01.07.2025 10:58, Thomas Weißschuh wrote:
->> The internal helpers are effectively using boolean results,
->> while pretending to use error numbers.
->>
->> Switch the return type to bool for more clarity.
->>
->> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
->> ---
->>   lib/vdso/gettimeofday.c | 58 
->> +++++++++++++++++++++++++------------------------
->>   1 file changed, 30 insertions(+), 28 deletions(-)
->
-> This patch landed in today's linux-next as commit fcc8e46f768f 
-> ("vdso/gettimeofday: Return bool from clock_gettime() helpers"). In my 
-> tests I found that it causes serious problem with hwclock operation on 
-> some of my ARM 32bit test boards. I observe that calling "hwclock -w 
-> -f /dev/rtc0" never ends on those boards. Disabling vdso support (by 
-> removing ARM architected timer) fixes this issue.
+On 7/4/25 08:07, Suren Baghdasaryan wrote:
+> Back in 2.6 era, last_addr used to be stored in seq_file->version
+> variable, which was unsigned long. As a result, sentinels to represent
+> gate vma and end of all vmas used unsigned values. In more recent
+> kernels we don't used seq_file->version anymore and therefore conversion
+> from loff_t into unsigned type is not needed. Similarly, sentinel values
+> don't need to be unsigned. Remove type conversion for set_file position
+> and change sentinel values to signed.
+> 
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 
-I spent some time analyzing the code refactored in this patch and it 
-looks that the following change is missing:
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 
-diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
-index c5266532a097..7e79b02839b0 100644
---- a/lib/vdso/gettimeofday.c
-+++ b/lib/vdso/gettimeofday.c
-@@ -344,7 +344,7 @@ __cvdso_gettimeofday_data(const struct 
-vdso_time_data *vd,
-         if (likely(tv != NULL)) {
-                 struct __kernel_timespec ts;
+Some stuff in the code gave me a pause but it's out of scope here so just in
+case someone wants to do some extra churn...
 
--               if (do_hres(vd, &vc[CS_HRES_COARSE], CLOCK_REALTIME, &ts))
-+               if (!do_hres(vd, &vc[CS_HRES_COARSE], CLOCK_REALTIME, &ts))
-                         return gettimeofday_fallback(tv, tz);
+> ---
+>  fs/proc/task_mmu.c | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
+> 
+> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> index 751479eb128f..b8bc06d05a72 100644
+> --- a/fs/proc/task_mmu.c
+> +++ b/fs/proc/task_mmu.c
+> @@ -135,7 +135,7 @@ static struct vm_area_struct *proc_get_vma(struct proc_maps_private *priv,
+>  	if (vma) {
+>  		*ppos = vma->vm_start;
+>  	} else {
+> -		*ppos = -2UL;
+> +		*ppos = -2;
+>  		vma = get_gate_vma(priv->mm);
+>  	}
+>  
+> @@ -145,11 +145,11 @@ static struct vm_area_struct *proc_get_vma(struct proc_maps_private *priv,
+>  static void *m_start(struct seq_file *m, loff_t *ppos)
+>  {
+>  	struct proc_maps_private *priv = m->private;
+> -	unsigned long last_addr = *ppos;
+> +	loff_t last_addr = *ppos;
+>  	struct mm_struct *mm;
+>  
+>  	/* See m_next(). Zero at the start or after lseek. */
+> -	if (last_addr == -1UL)
+> +	if (last_addr == -1)
+>  		return NULL;
+>  
+>  	priv->task = get_proc_task(priv->inode);
+> @@ -170,9 +170,9 @@ static void *m_start(struct seq_file *m, loff_t *ppos)
+>  		return ERR_PTR(-EINTR);
+>  	}
+>  
+> -	vma_iter_init(&priv->iter, mm, last_addr);
+> +	vma_iter_init(&priv->iter, mm, (unsigned long)last_addr);
 
-                 tv->tv_sec = ts.tv_sec;
+I wonder if this should rather be done only after dealing with the -2 case
+below. It seems wrong to init the iterator with a bogus address. What if it
+acquires some sanity checks?
 
+>  	hold_task_mempolicy(priv);
 
-In my tests this fixed the hwclock issue on the mentioned boards.
+It seems suboptimal to do that mempolicy refcount dance for numa_maps sake
+even if we're reading a different /proc file... maybe priv could have a flag
+to determine?
 
->
->> diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
->> index 
->> 9b77f23566f6a35887d4c9aaefc61a971131b499..c5266532a097c06f33d12e345c695357d75abf42 
->> 100644
->> --- a/lib/vdso/gettimeofday.c
->> +++ b/lib/vdso/gettimeofday.c
->> @@ -82,8 +82,8 @@ const struct vdso_time_data 
->> *__arch_get_vdso_u_timens_data(const struct vdso_tim
->>   #endif /* CONFIG_GENERIC_VDSO_DATA_STORE */
->>     static __always_inline
->> -int do_hres_timens(const struct vdso_time_data *vdns, const struct 
->> vdso_clock *vcns,
->> -           clockid_t clk, struct __kernel_timespec *ts)
->> +bool do_hres_timens(const struct vdso_time_data *vdns, const struct 
->> vdso_clock *vcns,
->> +            clockid_t clk, struct __kernel_timespec *ts)
->>   {
->>       const struct vdso_time_data *vd = 
->> __arch_get_vdso_u_timens_data(vdns);
->>       const struct timens_offset *offs = &vcns->offset[clk];
->> @@ -103,11 +103,11 @@ int do_hres_timens(const struct vdso_time_data 
->> *vdns, const struct vdso_clock *v
->>           seq = vdso_read_begin(vc);
->>             if (unlikely(!vdso_clocksource_ok(vc)))
->> -            return -1;
->> +            return false;
->>             cycles = __arch_get_hw_counter(vc->clock_mode, vd);
->>           if (unlikely(!vdso_cycles_ok(cycles)))
->> -            return -1;
->> +            return false;
->>           ns = vdso_calc_ns(vc, cycles, vdso_ts->nsec);
->>           sec = vdso_ts->sec;
->>       } while (unlikely(vdso_read_retry(vc, seq)));
->> @@ -123,7 +123,7 @@ int do_hres_timens(const struct vdso_time_data 
->> *vdns, const struct vdso_clock *v
->>       ts->tv_sec = sec + __iter_div_u64_rem(ns, NSEC_PER_SEC, &ns);
->>       ts->tv_nsec = ns;
->>   -    return 0;
->> +    return true;
->>   }
->>   #else
->>   static __always_inline
->> @@ -133,16 +133,16 @@ const struct vdso_time_data 
->> *__arch_get_vdso_u_timens_data(const struct vdso_tim
->>   }
->>     static __always_inline
->> -int do_hres_timens(const struct vdso_time_data *vdns, const struct 
->> vdso_clock *vcns,
->> -           clockid_t clk, struct __kernel_timespec *ts)
->> +bool do_hres_timens(const struct vdso_time_data *vdns, const struct 
->> vdso_clock *vcns,
->> +            clockid_t clk, struct __kernel_timespec *ts)
->>   {
->> -    return -EINVAL;
->> +    return false;
->>   }
->>   #endif
->>     static __always_inline
->> -int do_hres(const struct vdso_time_data *vd, const struct vdso_clock 
->> *vc,
->> -        clockid_t clk, struct __kernel_timespec *ts)
->> +bool do_hres(const struct vdso_time_data *vd, const struct 
->> vdso_clock *vc,
->> +         clockid_t clk, struct __kernel_timespec *ts)
->>   {
->>       const struct vdso_timestamp *vdso_ts = &vc->basetime[clk];
->>       u64 cycles, sec, ns;
->> @@ -150,7 +150,7 @@ int do_hres(const struct vdso_time_data *vd, 
->> const struct vdso_clock *vc,
->>         /* Allows to compile the high resolution parts out */
->>       if (!__arch_vdso_hres_capable())
->> -        return -1;
->> +        return false;
->>         do {
->>           /*
->> @@ -173,11 +173,11 @@ int do_hres(const struct vdso_time_data *vd, 
->> const struct vdso_clock *vc,
->>           smp_rmb();
->>             if (unlikely(!vdso_clocksource_ok(vc)))
->> -            return -1;
->> +            return false;
->>             cycles = __arch_get_hw_counter(vc->clock_mode, vd);
->>           if (unlikely(!vdso_cycles_ok(cycles)))
->> -            return -1;
->> +            return false;
->>           ns = vdso_calc_ns(vc, cycles, vdso_ts->nsec);
->>           sec = vdso_ts->sec;
->>       } while (unlikely(vdso_read_retry(vc, seq)));
->> @@ -189,13 +189,13 @@ int do_hres(const struct vdso_time_data *vd, 
->> const struct vdso_clock *vc,
->>       ts->tv_sec = sec + __iter_div_u64_rem(ns, NSEC_PER_SEC, &ns);
->>       ts->tv_nsec = ns;
->>   -    return 0;
->> +    return true;
->>   }
->>     #ifdef CONFIG_TIME_NS
->>   static __always_inline
->> -int do_coarse_timens(const struct vdso_time_data *vdns, const struct 
->> vdso_clock *vcns,
->> -             clockid_t clk, struct __kernel_timespec *ts)
->> +bool do_coarse_timens(const struct vdso_time_data *vdns, const 
->> struct vdso_clock *vcns,
->> +              clockid_t clk, struct __kernel_timespec *ts)
->>   {
->>       const struct vdso_time_data *vd = 
->> __arch_get_vdso_u_timens_data(vdns);
->>       const struct timens_offset *offs = &vcns->offset[clk];
->> @@ -223,20 +223,20 @@ int do_coarse_timens(const struct 
->> vdso_time_data *vdns, const struct vdso_clock
->>        */
->>       ts->tv_sec = sec + __iter_div_u64_rem(nsec, NSEC_PER_SEC, &nsec);
->>       ts->tv_nsec = nsec;
->> -    return 0;
->> +    return true;
->>   }
->>   #else
->>   static __always_inline
->> -int do_coarse_timens(const struct vdso_time_data *vdns, const struct 
->> vdso_clock *vcns,
->> -             clockid_t clk, struct __kernel_timespec *ts)
->> +bool do_coarse_timens(const struct vdso_time_data *vdns, const 
->> struct vdso_clock *vcns,
->> +              clockid_t clk, struct __kernel_timespec *ts)
->>   {
->> -    return -1;
->> +    return false;
->>   }
->>   #endif
->>     static __always_inline
->> -int do_coarse(const struct vdso_time_data *vd, const struct 
->> vdso_clock *vc,
->> -          clockid_t clk, struct __kernel_timespec *ts)
->> +bool do_coarse(const struct vdso_time_data *vd, const struct 
->> vdso_clock *vc,
->> +           clockid_t clk, struct __kernel_timespec *ts)
->>   {
->>       const struct vdso_timestamp *vdso_ts = &vc->basetime[clk];
->>       u32 seq;
->> @@ -258,10 +258,10 @@ int do_coarse(const struct vdso_time_data *vd, 
->> const struct vdso_clock *vc,
->>           ts->tv_nsec = vdso_ts->nsec;
->>       } while (unlikely(vdso_read_retry(vc, seq)));
->>   -    return 0;
->> +    return true;
->>   }
->>   -static __always_inline int
->> +static __always_inline bool
->>   __cvdso_clock_gettime_common(const struct vdso_time_data *vd, 
->> clockid_t clock,
->>                    struct __kernel_timespec *ts)
->>   {
->> @@ -270,7 +270,7 @@ __cvdso_clock_gettime_common(const struct 
->> vdso_time_data *vd, clockid_t clock,
->>         /* Check for negative values or invalid clocks */
->>       if (unlikely((u32) clock >= MAX_CLOCKS))
->> -        return -1;
->> +        return false;
->>         /*
->>        * Convert the clockid to a bitmask and use it to check which
->> @@ -284,7 +284,7 @@ __cvdso_clock_gettime_common(const struct 
->> vdso_time_data *vd, clockid_t clock,
->>       else if (msk & VDSO_RAW)
->>           vc = &vc[CS_RAW];
->>       else
->> -        return -1;
->> +        return false;
->>         return do_hres(vd, vc, clock, ts);
->>   }
->> @@ -293,9 +293,11 @@ static __maybe_unused int
->>   __cvdso_clock_gettime_data(const struct vdso_time_data *vd, 
->> clockid_t clock,
->>                  struct __kernel_timespec *ts)
->>   {
->> -    int ret = __cvdso_clock_gettime_common(vd, clock, ts);
->> +    bool ok;
->>   -    if (unlikely(ret))
->> +    ok = __cvdso_clock_gettime_common(vd, clock, ts);
->> +
->> +    if (unlikely(!ok))
->>           return clock_gettime_fallback(clock, ts);
->>       return 0;
->>   }
->>
-> Best regards
+> -	if (last_addr == -2UL)
+> +	if (last_addr == -2)
+>  		return get_gate_vma(mm);
 
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+I think only after the above it makes sense to init the iterator?
+
+>  	return proc_get_vma(priv, ppos);
+> @@ -180,8 +180,8 @@ static void *m_start(struct seq_file *m, loff_t *ppos)
+>  
+>  static void *m_next(struct seq_file *m, void *v, loff_t *ppos)
+>  {
+> -	if (*ppos == -2UL) {
+> -		*ppos = -1UL;
+> +	if (*ppos == -2) {
+> +		*ppos = -1;
+>  		return NULL;
+>  	}
+>  	return proc_get_vma(m->private, ppos);
 
 
