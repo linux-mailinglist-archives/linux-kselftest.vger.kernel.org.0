@@ -1,139 +1,177 @@
-Return-Path: <linux-kselftest+bounces-36749-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36750-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0522CAFC876
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 12:30:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47297AFC942
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 13:12:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C022F177911
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 10:29:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D28B5424594
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 11:11:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F17D12853EB;
-	Tue,  8 Jul 2025 10:29:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6D312D323D;
+	Tue,  8 Jul 2025 11:12:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PTqd8RUq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uMvJNSSX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DFBF230274
-	for <linux-kselftest@vger.kernel.org>; Tue,  8 Jul 2025 10:29:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B22BD1E9B2D;
+	Tue,  8 Jul 2025 11:12:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751970562; cv=none; b=Wjasq+Ym66DuViGXxw4dSOiAMTdmXKKelt/M6ecgx7lrgh4Xjb0oJgunnwKYCJ9or4dOCKU8N6LXfEJ64I5RzCZ96nmtJOZHEwZ6sj/fIqCRuIr6Sz9UwHeeQ0rXT/q+m2+JxtCWonh0dk/WXz6axwfkCqZczjwDSqSP4n5diPU=
+	t=1751973131; cv=none; b=iCOE6GgJUueYc6UV6SmhgAsh93ABHI04CdjO0t6ln+ZV8yHjwdxTkaOAlp1ugB7veROSA5LUbna2dY9oVh00Pb7HQvzRda+c5/tdeLfHdCX0xvskW0Rw48ksohTL/CY3Eh2pQrebpu7q6t6o6q5McgIZ88dN3F1/ILjDTixnFCk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751970562; c=relaxed/simple;
-	bh=nDKaw5wp3wPv6Su7DJn1ZlaCFO+KFc/YaXghu5EPCUI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=fFpp/sknF7nvrrB0Nx2YE3+Tw7QpJ4aAhE+RWLt2NGgugvIDxihiqXFvueOmaFtx85++1UhBpdGozI8xKglOMvKkunZdjvIp7E/du5YzRq2fs81RI4fJK17xjgo9xKYQv2qHV72E0SEuYecDeoTzLRhtNK4TV44pcMqM0o6Agek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PTqd8RUq; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1751970560;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5CzUCEXFgRnyn/r8sZIiHWX26XZZ+a95NsXDWMh+fb0=;
-	b=PTqd8RUqV42xSmKqd20wsvLKA91UxeAi7S6q4pyl/N6xeEjvNGG8U9VWUckdK61Nlu8x1f
-	vWGlDt6rwAqs7FHTacpsft8wL0nS1oOpH3oookvBJNWgww/7+16IKDKJ15QqtLng8Db3vh
-	y45Of+ePZiVTa8XAKGVpzSfkX3OWS+Q=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-691-lvvrXgj9Mc-sWzycktMZ0g-1; Tue, 08 Jul 2025 06:29:19 -0400
-X-MC-Unique: lvvrXgj9Mc-sWzycktMZ0g-1
-X-Mimecast-MFC-AGG-ID: lvvrXgj9Mc-sWzycktMZ0g_1751970558
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-4538f375e86so34198675e9.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 08 Jul 2025 03:29:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751970558; x=1752575358;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5CzUCEXFgRnyn/r8sZIiHWX26XZZ+a95NsXDWMh+fb0=;
-        b=heHHi+LHqLhv66fusJxbf/8m92QCx/UghSwbJyKzF3TjS68v2G16jJUI4uUnoGADy7
-         KxgnyZHyc74NIOP7ifHHBCOleJeXh4KE0llQOCQHlZcEvxFMa0EHISXJYKh2CQ96djeH
-         3xKHIoQxcItq5elTRLixkI09kIy4Jf5t7KLcQsYpa+NSRDZulRueHKR5GiTW/E0CjNrH
-         X7t2FH1PXO7b+aVyYxdTFvSqAvrj3lsHss82UpmPUW15aHzMS5MUjbcyQDnJ2GIPLuvB
-         WrJr8gKWb9Wv0rLqQbNuxJpo7gT1pU0hJnad/95cVlh4eXRMOHUH6UycOwSnPMmsUiIS
-         7Flw==
-X-Forwarded-Encrypted: i=1; AJvYcCUOE5OE0Lm5jCOAqpZ3gcw9kGuEUL66BnPV+YFUgeXzVekMB1zOcH5lQKHBrAzFeGoI9sVdHSI4Tb5oz2M6zVI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzl1i1CRJYWaFx+WfmF920ld9eCOG3D/uWCcMU2k5ufZ89wnguj
-	v49d46PcEy32VoKxEAjW6lcSO76/9q1NN23TAlhQSSWo4j+7UPPh/Oa8mjuV/dhm4ptYXjoBR1i
-	ql5H6+VvmHVKWIDFfDtnXKE0qAuVPcAMqCEQi4hWCKPStNYD4d3ZKQ9I0PQqy74fqR6aLFA==
-X-Gm-Gg: ASbGncsi5ZF0HUcKfyBi7vp8zxBeSw94MYNcZViJ8kc0Dcl7BJRMIKCQ6ZWSyiPf+oO
-	XtlRw1T0QpKrx9+Cpb8PkUOOMIPg8vwecT2UxLlMB1t230QYvLGVpgrwgKe0ZHZu8kFRV48DWE4
-	OA7jCaq4T32FBbHcfXrQc2/9vZ+7V7XGeogRWETrENkV0ds4cQQE4JLgqW6QPljvn0ZKt/jl9KD
-	cjxN03kGIHTjcAD6f4uGafUgSjJO+5qwbU1r0UADdocVX98SFG2GZmoIlL6JkX6a3d6nAGYIpMV
-	ws4NYCOZa/2Murw3TTsbOBfgQWNjHBIifuuD6xZ7Rzk8k4JVjH++LYwWIcnBKufeLAY9Gw==
-X-Received: by 2002:a05:600c:1551:b0:451:df07:f437 with SMTP id 5b1f17b1804b1-454cd523b5amr27866885e9.30.1751970557694;
-        Tue, 08 Jul 2025 03:29:17 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFV0sIn/btpu+R8moG7ALddhsgbp///BKMaHji+kT+s2LKs30wzMAiPIvbc826P3wci6D5VQA==
-X-Received: by 2002:a05:600c:1551:b0:451:df07:f437 with SMTP id 5b1f17b1804b1-454cd523b5amr27866375e9.30.1751970557268;
-        Tue, 08 Jul 2025 03:29:17 -0700 (PDT)
-Received: from ?IPV6:2a0d:3344:2717:8910:b663:3b86:247e:dba2? ([2a0d:3344:2717:8910:b663:3b86:247e:dba2])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-454cd44ef0dsm18172565e9.13.2025.07.08.03.29.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Jul 2025 03:29:16 -0700 (PDT)
-Message-ID: <13b00d4f-ad0a-409a-b9c1-0f4e195450a9@redhat.com>
-Date: Tue, 8 Jul 2025 12:29:13 +0200
+	s=arc-20240116; t=1751973131; c=relaxed/simple;
+	bh=qYlJIQBZZw0QX7Jkhi3+cl9CFM1ZAaSQYY9DTNGZLoI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=W3iP7VsSLRl8AidoIXyh1foWJdurSU4UomGIQXYMhJkgOQPJ9FaLxm6Zzm4E4i0BZi72WqUPuTpTOR8uo2mCrUJ4Ihh+wNSGR9I+Gc1Qjk18Xd+sc9LFjeJ3F8Yl6zh/WSjIJ961cmumboEvdN+/PjeOzO4BfFaBoIOzirRrUsQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uMvJNSSX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A4C9C4CEED;
+	Tue,  8 Jul 2025 11:12:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751973131;
+	bh=qYlJIQBZZw0QX7Jkhi3+cl9CFM1ZAaSQYY9DTNGZLoI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=uMvJNSSXJZOQ97hxkJGqHTHq1gJrmB7LR5lJL3TkMi189Qmdm08zr3t2Efa3Koyby
+	 T5l+dbsvTuMBgRM79wxfqrpEvk5iZzWMRbEJ7xFmzqRjGouYk1x9GJUs5kfagP7f8m
+	 2I1d4YhhcJCJSOdXpuytA/B2zMnsucdBmWpUav9YjZRP2+i1GhJDB2pmTjQcQ/+7Bd
+	 owIDZ1wQWEviozdtHSW9OAsqYaYzL79b6dozKfFJu4y3aIrJnNJaYXn6nnI7lc3WCX
+	 +ISVSm3kghRa12AMF9Oz6wolGPTad+/YAOKXw34JI+rfaFhl+zXampKZ3etHS30PcP
+	 Vv7jEdahtlRvg==
+Date: Tue, 8 Jul 2025 13:12:02 +0200
+From: Niklas Cassel <cassel@kernel.org>
+To: Manivannan Sadhasivam <mani@kernel.org>
+Cc: Frank Li <Frank.Li@nxp.com>, Kishon Vijay Abraham I <kishon@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Anup Patel <apatel@ventanamicro.com>, Marc Zyngier <maz@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>,
+	Shuah Khan <shuah@kernel.org>, Richard Zhu <hongxing.zhu@nxp.com>,
+	Lucas Stach <l.stach@pengutronix.de>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	dlemoal@kernel.org, jdmason@kudzu.us, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, imx@lists.linux.dev,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH v19 00/10] PCI: EP: Add RC-to-EP doorbell with platform
+ MSI controller
+Message-ID: <aGz9ApsBD-gQ50pf@ryzen>
+References: <20250609-ep-msi-v19-0-77362eaa48fa@nxp.com>
+ <roskp2zsjohrgll464u4jtbulzjid523u3yvgciifwiuoygv5t@7f7cj4wfy2y7>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v21 net-next 1/6] sched: Struct definition and parsing of
- dualpi2 qdisc
-To: chia-yu.chang@nokia-bell-labs.com, alok.a.tiwari@oracle.com,
- pctammela@mojatatu.com, horms@kernel.org, donald.hunter@gmail.com,
- xandfury@gmail.com, netdev@vger.kernel.org, dave.taht@gmail.com,
- jhs@mojatatu.com, kuba@kernel.org, stephen@networkplumber.org,
- xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net,
- edumazet@google.com, andrew+netdev@lunn.ch, ast@fiberby.net,
- liuhangbin@gmail.com, shuah@kernel.org, linux-kselftest@vger.kernel.org,
- ij@kernel.org, ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com,
- g.white@cablelabs.com, ingemar.s.johansson@ericsson.com,
- mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at,
- Jason_Livingood@comcast.com, vidhi_goel@apple.com
-References: <20250702032817.13274-1-chia-yu.chang@nokia-bell-labs.com>
- <20250702032817.13274-2-chia-yu.chang@nokia-bell-labs.com>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20250702032817.13274-2-chia-yu.chang@nokia-bell-labs.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <roskp2zsjohrgll464u4jtbulzjid523u3yvgciifwiuoygv5t@7f7cj4wfy2y7>
 
-On 7/2/25 5:28 AM, chia-yu.chang@nokia-bell-labs.com wrote:
-> +static int dualpi2_change(struct Qdisc *sch, struct nlattr *opt,
-> +			  struct netlink_ext_ack *extack)
-> +{
-> +	struct nlattr *tb[TCA_DUALPI2_MAX + 1];
-> +	struct dualpi2_sched_data *q;
-> +	int old_backlog;
-> +	int old_qlen;
-> +	int err;
-> +
-> +	if (!opt) {
-> +		NL_SET_ERR_MSG_MOD(extack, "Dualpi2 options are reuqired");
+On Wed, Jul 02, 2025 at 06:57:23PM +0530, Manivannan Sadhasivam wrote:
+> On Mon, Jun 09, 2025 at 12:34:12PM GMT, Frank Li wrote:
+> 
+> Frank, thanks for your persistence in pushing this series, really appreciated!
+> I've left some comments, but no real blocker.
+> 
+> Unfortunately, I don't have access to my endpoint setup right now. So I'll go
+> ahead with the Tested-by tag from Niklas once my comments are addressed.
 
-Minor note: typo above ("reuqired" -> "required")
+(snip)
 
-More importantly: the above is inconsistent with the below code, where
-AFAICS it's not enforced/mandated the presence of any Dualpi2 option.
+> > Changes in v6:
+> > - add Niklas's test by tag
 
-i.e. User space could successfully provide a TCA_OPTIONS with no nested
-attributes.
+My Tested-by tag was added on v6, now it is v19 :)
 
-Am I missing something?
+To be comfortable of still having my Tested-by tag here,
+I decided to test v19.
 
-Thanks,
+However I got this:
 
-Paolo
+[ 3255.257047] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000040
+[ 3255.257824] Mem abort info:
+[ 3255.258069]   ESR = 0x0000000096000004
+[ 3255.258398]   EC = 0x25: DABT (current EL), IL = 32 bits
+[ 3255.258862]   SET = 0, FnV = 0
+[ 3255.259147]   EA = 0, S1PTW = 0
+[ 3255.259423]   FSC = 0x04: level 0 translation fault
+[ 3255.259849] Data abort info:
+[ 3255.260102]   ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
+[ 3255.260580]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
+[ 3255.261020]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+[ 3255.261483] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000100a03000
+[ 3255.262045] [0000000000000040] pgd=0000000000000000, p4d=0000000000000000
+[ 3255.262639] Internal error: Oops: 0000000096000004 [#1]  SMP
+[ 3255.263132] Modules linked in: rk805_pwrkey hantro_vpu v4l2_jpeg v4l2_vp9 v4l2_h264 v4l2_mem2mem videobuf2_v4l2 videobuf2_dma_contig videobuf2_memops videobuf2_common vidf
+[ 3255.265357] CPU: 5 UID: 0 PID: 213 Comm: ln Not tainted 6.16.0-rc1+ #233 PREEMPT 
+[ 3255.266009] Hardware name: Radxa ROCK 5B (DT)
+[ 3255.266388] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[ 3255.266995] pc : pci_epf_bind+0x160/0x240
+[ 3255.267350] lr : pci_epf_bind+0x40/0x240
+[ 3255.267694] sp : ffff800081593c30
+[ 3255.267983] x29: ffff800081593c30 x28: ffff0001024b2300 x27: ffff000102fc2800
+[ 3255.268606] x26: ffff00010191e000 x25: ffff000100504098 x24: ffff000107b8ec80
+[ 3255.269228] x23: ffff000104cf3578 x22: 0000000000000000 x21: 0000000000000000
+[ 3255.269850] x20: ffff000104cf3000 x19: ffff000104cf3578 x18: 0000000000000000
+[ 3255.270472] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+[ 3255.271093] x14: 0000000000000000 x13: ffff00010245c037 x12: ffff800081593b94
+[ 3255.271715] x11: 0000000528aa6179 x10: 0000000000000002 x9 : ffffa2593ce92b30
+[ 3255.272336] x8 : 00000031636e7566 x7 : 00000000ffffbe12 x6 : 0000000000000003
+[ 3255.272958] x5 : ffff000102413f78 x4 : ffff000102413f08 x3 : 0000000000000000
+[ 3255.273580] x2 : ffff0001024b2300 x1 : 0000000000000000 x0 : ffff000104cf3000
+[ 3255.274201] Call trace:
+[ 3255.274416]  pci_epf_bind+0x160/0x240 (P)
+[ 3255.274767]  pci_epc_epf_link+0x54/0xb0
+[ 3255.275104]  configfs_symlink+0x208/0x540
+[ 3255.275457]  vfs_symlink+0x158/0x1e0
+[ 3255.275770]  do_symlinkat+0x8c/0x138
+[ 3255.276083]  __arm64_sys_symlinkat+0x7c/0xc8
+[ 3255.276455]  invoke_syscall.constprop.0+0x48/0x100
+[ 3255.276874]  el0_svc_common.constprop.0+0x40/0xe8
+[ 3255.277285]  do_el0_svc+0x24/0x38
+[ 3255.277575]  el0_svc+0x34/0x100
+[ 3255.277852]  el0t_64_sync_handler+0x10c/0x140
+[ 3255.278233]  el0t_64_sync+0x198/0x1a0
+[ 3255.278554] Code: a9446bf9 394ff280 b902aa80 aa1403e0 (f94022a1) 
+[ 3255.279085] ---[ end trace 0000000000000000 ]---
 
+
+Seems to be from patch 1/10:
+
+(gdb) l *(pci_epf_bind+0x160)
+0xffff800080892c50 is in pci_epf_bind (drivers/pci/endpoint/pci-epf-core.c:132).
+127                             goto ret;
+128                     epf_vf->is_bound = true;
+129             }
+130
+131             epf->dev.id = PCI_EPF_DEVID(epf->func_no, 0);
+132             device_set_of_node_from_dev(&epf->dev, epc->dev.parent);
+133             ret = epf->driver->ops->bind(epf);
+134             if (ret)
+135                     goto ret;
+136             epf->is_bound = true;
+
+
+I can see that there is a lot of discussion on patch 1/10 already,
+but please drop my Tested-by tag until this has been fixed.
+
+Feel free to CC me on v20 of this series, if the problem is fixed,
+I will provide my Tested-by tag once again.
+
+
+Kind regards,
+Niklas
 
