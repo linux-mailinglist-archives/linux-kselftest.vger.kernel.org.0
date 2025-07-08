@@ -1,181 +1,325 @@
-Return-Path: <linux-kselftest+bounces-36765-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36766-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61368AFCFA0
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 17:48:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30CD4AFCFB2
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 17:50:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 413E9482846
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 15:48:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DF43B5680CE
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 15:50:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D41852E3374;
-	Tue,  8 Jul 2025 15:48:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 064582E265E;
+	Tue,  8 Jul 2025 15:49:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="AaV51Lfe"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="TxCY/fXj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB7B72E336F
-	for <linux-kselftest@vger.kernel.org>; Tue,  8 Jul 2025 15:48:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6163A2E2656
+	for <linux-kselftest@vger.kernel.org>; Tue,  8 Jul 2025 15:49:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751989696; cv=none; b=DS4zmYqiZsKRV6mwIp5ycCsSOfDom0imCddYFaAIbjUMOUXOdUirK9Su/gIW5ADrrtzLA9IvJ7xeGTR9KChv7ZGKv6xWm0qkeOR8ADLvWX1PKOEu3tWGcSrpwzG/GKgoL1Vx6H+IMNZt/A7K1apmxNl4HsOZ4Yv1OAcJFaPeENg=
+	t=1751989766; cv=none; b=CngRkcda5ZLTJYxLdQ1DItkJOsL3ozzH4rq4X1XQhJpR4c5fPVptTIwabjEdsh45wguwvGTzocnY+Bw/3LXjtVQE8kDA6I6t3/yMWUTi/JhVUC0u8INl69b1fksG/d7ZoBAoN0VVqPi3gE9SaRd/o/6cciEV5m6O6aNAsZ2D1Tg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751989696; c=relaxed/simple;
-	bh=ds5SN/ud6IreyNpgodB7PP6useD2H+9ogieo60SRHek=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oasIETqwP6HqHkAeN7B42e1nSC+/l406gjUFZh/J2rqebkpf7kzm2WhZP8tP8x4mfyOL8MlAZ8RPj9gk3I3+VQhtuJWthENQpk1HXYUu0ianx48jtTZX0J4M1zoTuSjzzfSb/8QmYca5OBlQQ81WIa/pzHmfUFP/ibsGRfHiKZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=AaV51Lfe; arc=none smtp.client-ip=209.85.222.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-7d3f192a64eso462456085a.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 08 Jul 2025 08:48:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1751989693; x=1752594493; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iH04xoC4HJJjcr3JF880EHmqHS1N+xsYoFSsuwlbdaQ=;
-        b=AaV51Lfev6Qp8tdyZv2g7NRGgMs+qZodiXVapmdyH8iFqJ+iIDC+s+LzViHZwizJzx
-         k/WNcT5UxTnQKCFgAfTjnYG8pUlYWmm2le122Hy98pXgFkShftt5SuM1F61jvdXFS1GK
-         NvT04frwRN4DtwjIffQhsWvb0Vqh2gQ+VmxGFAjx5+kWMSWRotNdQj66IsQsujsxyf3C
-         wzxpwbsgiayNBU2f6qm0s9EhS/3ACCJRbp/q4GCkWy275yTVz2PTAmWtN2jHrkdF11xX
-         UaXRjpdi8cVcG8yLJ8/Qj8cuKDwKSIxuKotnPi8T1kZw9+agVv2GY2p9duPkjoACNgFn
-         XCfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751989693; x=1752594493;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iH04xoC4HJJjcr3JF880EHmqHS1N+xsYoFSsuwlbdaQ=;
-        b=DrmNPKAb69Q4PaKbhGhxDbO7JKw5Hu8VLrMlYqM3QOmQ5jm2git8YrWjBDRBktmUP/
-         mGyjqAo8dA3qj3RyudeYLkx/Bpowj6sbyRK5o4flctz4Wend2JvZHS+xFjLdKzpKWlpW
-         3Mx4nSTC6vgaEk7gJFLsdsb8VynY0E11iODp1VePeEblqrFDTyCXCbaqlfoEoIKPLWDZ
-         lPLD2SC9JpQY2hrcgZFhYfWZlmOTvBxKG+9Dc34Sel49yr8Bjpsv1ClFY4i4und0qtNr
-         vw6i1HHSvzbm85N+etzQnN52pnECB5taFoS2eAv4G2HyNLJ0e+tiJvnDZOzTAucmT1Ss
-         1Gxw==
-X-Forwarded-Encrypted: i=1; AJvYcCVRcSLPg0U/8weyxAVUwtszsrh7tp0AdBGObjLTcCrRrj1ZqCVOAQmvHIJjSbzLqlQ06Z+2deduHH0+qPcNC9g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZaEsYuooULLDP9ARpnuP5k6G6PuIO7U3DuY29T+lOo8Grs0If
-	xr2TUrmNVri4OyUwX22vaEQoISPHS7NcziuO8jCoU18We0h0hB6R1C5TS3IGGpdC+TI=
-X-Gm-Gg: ASbGncsVz+rE9KNrJ+s1AoTkfjnKJd7Uw4heR9Q2KNmpvFC7A7QQf4aW9FouFycsuLQ
-	NXlgjJBoD59W26fhptSUdiUpX5F4+NJ4v2SPbjsuuYKsmU1VVFh/KVChnttg2gRB78GbIq24rG8
-	kauULki+/VQumZ4bEjtVYJ+e3lhATFCKAuUTby0LgN8AIrpmOc/V/m4oD6z9zJ/dRrUMFba4/m+
-	73r0ljA0Xi0ZfEsoTXXje2C6w4V2PGm15XCsQ31fZADDOE6lECd3bMBZn/cfty2Y5/RjHIf7ZVv
-	OkP4xEM9Z6oW/3N1m5f3mPgzKhgw0LvMH6jPePp1dLh8kON/JhD8mCbGqXoAu7l7NsEJD/sWKVC
-	jbfxpE13L/YUdTfWjMiMoIp14b8M5FATCyFfch0q2zumVOhN2sl+FNvOpc/ro5w==
-X-Google-Smtp-Source: AGHT+IGUQo5EBx/tNY5n3ZATmL3uaoM4iK61VNEuctuQHFnVd7lY/jZGvovGvruOSz6T58HuyGkltw==
-X-Received: by 2002:a05:6214:5b81:b0:6fb:3d7:71bb with SMTP id 6a1803df08f44-7047d931790mr46736666d6.1.1751989693532;
-        Tue, 08 Jul 2025 08:48:13 -0700 (PDT)
-Received: from jesse-lt.ba.rivosinc.com (pool-108-26-215-125.bstnma.fios.verizon.net. [108.26.215.125])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-702c4d5ab9csm78453346d6.87.2025.07.08.08.48.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Jul 2025 08:48:13 -0700 (PDT)
-From: Jesse Taube <jesse@rivosinc.com>
-To: kvm@vger.kernel.org,
-	kvm-riscv@lists.infradead.org,
-	linux-kselftest@vger.kernel.org
-Cc: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>,
-	Charlie Jenkins <charlie@rivosinc.com>,
-	Jesse Taube <jesse@rivosinc.com>,
-	Andrew Jones <andrew.jones@linux.dev>,
-	James Raphael Tiovalen <jamestiotio@gmail.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Cade Richard <cade.richard@gmail.com>
-Subject: [kvm-unit-tests PATCH v2 2/2] riscv: lib: Add sbi-exit-code to configure and environment
-Date: Tue,  8 Jul 2025 08:48:11 -0700
-Message-ID: <20250708154811.1888319-2-jesse@rivosinc.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250708154811.1888319-1-jesse@rivosinc.com>
-References: <20250708154811.1888319-1-jesse@rivosinc.com>
+	s=arc-20240116; t=1751989766; c=relaxed/simple;
+	bh=pQdw43cZlIGFHIeFZqhgvxVUgYpdCqXdfhp7IuQUQf8=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:In-Reply-To:
+	 Content-Type:References; b=NmtD6wu5JRfGMXVBXCYY2NsJTudf0q7prvXlXvbSMs5Rx5Wq2xnAjchAUKJGilOIniusgubKR6Sx8O80TjHQMmrs3Ud+1tH/v7xyVWYnZ0Nb13Onr0N9t6NoJTHH01/ahtqnHGZEnmOyUTNukKzarEKMQ2qxVGUoDJwMj6YK4CE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=TxCY/fXj; arc=none smtp.client-ip=210.118.77.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20250708154921euoutp02a9805bbad411ab56a3e24a7906966ec9~QUWfoEDnQ0960109601euoutp02R
+	for <linux-kselftest@vger.kernel.org>; Tue,  8 Jul 2025 15:49:21 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20250708154921euoutp02a9805bbad411ab56a3e24a7906966ec9~QUWfoEDnQ0960109601euoutp02R
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1751989761;
+	bh=YRQojeNIh/c0xVNMyFi0Xa2+y4Z8KdXoOS6org20cU4=;
+	h=Date:Subject:From:To:Cc:In-Reply-To:References:From;
+	b=TxCY/fXjMSTRUtkeE+3B64GRtRQoj0oYT5vp2iVPT8uzLd70mhnLYLWJKog5/oL8x
+	 pQ5+1ihOBzXFYaJEVo6B8406M4K2Oaq3v+sel5G0+6z2Mbjwd/5SG3LTebbJ6G9rx8
+	 tRI5InYwfaqgXj+440nF3P2oYYxrQF6gOa1drY8E=
+Received: from eusmtip2.samsung.com (unknown [203.254.199.222]) by
+	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+	20250708154921eucas1p1fd8fa4374610a991ca5c67bd612ca0c2~QUWfJfUIN1114111141eucas1p1G;
+	Tue,  8 Jul 2025 15:49:21 +0000 (GMT)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20250708154919eusmtip2ef36a1a3bcb9c35cd5efc533f7040c90~QUWdgPcdj1707117071eusmtip2d;
+	Tue,  8 Jul 2025 15:49:19 +0000 (GMT)
+Message-ID: <e8c6b9a7-eaa6-4947-98e1-9d6fecc958d4@samsung.com>
+Date: Tue, 8 Jul 2025 17:49:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 06/14] vdso/gettimeofday: Return bool from
+ clock_gettime() helpers
+From: Marek Szyprowski <m.szyprowski@samsung.com>
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>, Shuah Khan
+	<shuah@kernel.org>, Anna-Maria Behnsen <anna-maria@linutronix.de>, Frederic
+	Weisbecker <frederic@kernel.org>, John Stultz <jstultz@google.com>, Stephen
+	Boyd <sboyd@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, Will
+	Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org, Richard
+	Cochran <richardcochran@gmail.com>, Christopher Hall
+	<christopher.s.hall@intel.com>, Miroslav Lichvar <mlichvar@redhat.com>,
+	Werner Abt <werner.abt@meinberg-usa.com>, David Woodhouse
+	<dwmw2@infradead.org>, Kurt Kanzenbach <kurt@linutronix.de>, Nam Cao
+	<namcao@linutronix.de>, Antoine Tenart <atenart@kernel.org>
+Content-Language: en-US
+In-Reply-To: <02bcd954-5323-4663-a766-f53c67c5a18f@samsung.com>
 Content-Transfer-Encoding: 8bit
+X-CMS-MailID: 20250708154921eucas1p1fd8fa4374610a991ca5c67bd612ca0c2
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20250708154921eucas1p1fd8fa4374610a991ca5c67bd612ca0c2
+X-EPHeader: CA
+X-CMS-RootMailID: 20250708154921eucas1p1fd8fa4374610a991ca5c67bd612ca0c2
+References: <20250701-vdso-auxclock-v1-0-df7d9f87b9b8@linutronix.de>
+	<20250701-vdso-auxclock-v1-6-df7d9f87b9b8@linutronix.de>
+	<02bcd954-5323-4663-a766-f53c67c5a18f@samsung.com>
+	<CGME20250708154921eucas1p1fd8fa4374610a991ca5c67bd612ca0c2@eucas1p1.samsung.com>
 
-Add --[enable|disable]-sbi-exit-code to configure script.
-With the default value as disabled.
-Add a check for SBI_EXIT_CODE in the environment, so that passing
-of the test status is configurable from both the
-environment and the configure script
+On 08.07.2025 17:17, Marek Szyprowski wrote:
+> On 01.07.2025 10:58, Thomas Weißschuh wrote:
+>> The internal helpers are effectively using boolean results,
+>> while pretending to use error numbers.
+>>
+>> Switch the return type to bool for more clarity.
+>>
+>> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+>> ---
+>>   lib/vdso/gettimeofday.c | 58 
+>> +++++++++++++++++++++++++------------------------
+>>   1 file changed, 30 insertions(+), 28 deletions(-)
+>
+> This patch landed in today's linux-next as commit fcc8e46f768f 
+> ("vdso/gettimeofday: Return bool from clock_gettime() helpers"). In my 
+> tests I found that it causes serious problem with hwclock operation on 
+> some of my ARM 32bit test boards. I observe that calling "hwclock -w 
+> -f /dev/rtc0" never ends on those boards. Disabling vdso support (by 
+> removing ARM architected timer) fixes this issue.
 
-Signed-off-by: Jesse Taube <jesse@rivosinc.com>
----
- configure      | 11 +++++++++++
- lib/riscv/io.c |  4 +++-
- 2 files changed, 14 insertions(+), 1 deletion(-)
+I spent some time analyzing the code refactored in this patch and it 
+looks that the following change is missing:
 
-diff --git a/configure b/configure
-index 20bf5042..7c949bdc 100755
---- a/configure
-+++ b/configure
-@@ -67,6 +67,7 @@ earlycon=
- console=
- efi=
- efi_direct=
-+sbi_exit_code=0
- target_cpu=
- 
- # Enable -Werror by default for git repositories only (i.e. developer builds)
-@@ -141,6 +142,9 @@ usage() {
- 	                           system and run from the UEFI shell. Ignored when efi isn't enabled
- 	                           and defaults to enabled when efi is enabled for riscv64.
- 	                           (arm64 and riscv64 only)
-+	    --[enable|disable]-sbi-exit-code
-+	                           Enable or disable sending pass/fail exit code to SBI SRST.
-+	                           (disabled by default, riscv only)
- EOF
-     exit 1
- }
-@@ -236,6 +240,12 @@ while [[ $optno -le $argc ]]; do
- 	--disable-efi-direct)
- 	    efi_direct=n
- 	    ;;
-+	--enable-sbi-exit-code)
-+	    sbi_exit_code=1
-+	    ;;
-+	--disable-sbi-exit-code)
-+	    sbi_exit_code=0
-+	    ;;
- 	--enable-werror)
- 	    werror=-Werror
- 	    ;;
-@@ -551,6 +561,7 @@ EOF
- elif [ "$arch" = "riscv32" ] || [ "$arch" = "riscv64" ]; then
-     echo "#define CONFIG_UART_EARLY_BASE ${uart_early_addr}" >> lib/config.h
-     [ "$console" = "sbi" ] && echo "#define CONFIG_SBI_CONSOLE" >> lib/config.h
-+    echo "#define CONFIG_SBI_EXIT_CODE ${sbi_exit_code}" >> lib/config.h
-     echo >> lib/config.h
- fi
- echo "#endif" >> lib/config.h
-diff --git a/lib/riscv/io.c b/lib/riscv/io.c
-index b1163404..c46845de 100644
---- a/lib/riscv/io.c
-+++ b/lib/riscv/io.c
-@@ -6,6 +6,7 @@
-  * Copyright (C) 2023, Ventana Micro Systems Inc., Andrew Jones <ajones@ventanamicro.com>
-  */
- #include <libcflat.h>
-+#include <argv.h>
- #include <bitops.h>
- #include <config.h>
- #include <devicetree.h>
-@@ -163,7 +164,8 @@ void halt(int code);
- void exit(int code)
- {
- 	printf("\nEXIT: STATUS=%d\n", ((code) << 1) | 1);
--	sbi_shutdown(code == 0);
-+
-+	sbi_shutdown(GET_CONFIG_OR_ENV(SBI_EXIT_CODE) ? code == 0 : true);
- 	halt(code);
- 	__builtin_unreachable();
- }
+diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
+index c5266532a097..7e79b02839b0 100644
+--- a/lib/vdso/gettimeofday.c
++++ b/lib/vdso/gettimeofday.c
+@@ -344,7 +344,7 @@ __cvdso_gettimeofday_data(const struct 
+vdso_time_data *vd,
+         if (likely(tv != NULL)) {
+                 struct __kernel_timespec ts;
+
+-               if (do_hres(vd, &vc[CS_HRES_COARSE], CLOCK_REALTIME, &ts))
++               if (!do_hres(vd, &vc[CS_HRES_COARSE], CLOCK_REALTIME, &ts))
+                         return gettimeofday_fallback(tv, tz);
+
+                 tv->tv_sec = ts.tv_sec;
+
+
+In my tests this fixed the hwclock issue on the mentioned boards.
+
+>
+>> diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
+>> index 
+>> 9b77f23566f6a35887d4c9aaefc61a971131b499..c5266532a097c06f33d12e345c695357d75abf42 
+>> 100644
+>> --- a/lib/vdso/gettimeofday.c
+>> +++ b/lib/vdso/gettimeofday.c
+>> @@ -82,8 +82,8 @@ const struct vdso_time_data 
+>> *__arch_get_vdso_u_timens_data(const struct vdso_tim
+>>   #endif /* CONFIG_GENERIC_VDSO_DATA_STORE */
+>>     static __always_inline
+>> -int do_hres_timens(const struct vdso_time_data *vdns, const struct 
+>> vdso_clock *vcns,
+>> -           clockid_t clk, struct __kernel_timespec *ts)
+>> +bool do_hres_timens(const struct vdso_time_data *vdns, const struct 
+>> vdso_clock *vcns,
+>> +            clockid_t clk, struct __kernel_timespec *ts)
+>>   {
+>>       const struct vdso_time_data *vd = 
+>> __arch_get_vdso_u_timens_data(vdns);
+>>       const struct timens_offset *offs = &vcns->offset[clk];
+>> @@ -103,11 +103,11 @@ int do_hres_timens(const struct vdso_time_data 
+>> *vdns, const struct vdso_clock *v
+>>           seq = vdso_read_begin(vc);
+>>             if (unlikely(!vdso_clocksource_ok(vc)))
+>> -            return -1;
+>> +            return false;
+>>             cycles = __arch_get_hw_counter(vc->clock_mode, vd);
+>>           if (unlikely(!vdso_cycles_ok(cycles)))
+>> -            return -1;
+>> +            return false;
+>>           ns = vdso_calc_ns(vc, cycles, vdso_ts->nsec);
+>>           sec = vdso_ts->sec;
+>>       } while (unlikely(vdso_read_retry(vc, seq)));
+>> @@ -123,7 +123,7 @@ int do_hres_timens(const struct vdso_time_data 
+>> *vdns, const struct vdso_clock *v
+>>       ts->tv_sec = sec + __iter_div_u64_rem(ns, NSEC_PER_SEC, &ns);
+>>       ts->tv_nsec = ns;
+>>   -    return 0;
+>> +    return true;
+>>   }
+>>   #else
+>>   static __always_inline
+>> @@ -133,16 +133,16 @@ const struct vdso_time_data 
+>> *__arch_get_vdso_u_timens_data(const struct vdso_tim
+>>   }
+>>     static __always_inline
+>> -int do_hres_timens(const struct vdso_time_data *vdns, const struct 
+>> vdso_clock *vcns,
+>> -           clockid_t clk, struct __kernel_timespec *ts)
+>> +bool do_hres_timens(const struct vdso_time_data *vdns, const struct 
+>> vdso_clock *vcns,
+>> +            clockid_t clk, struct __kernel_timespec *ts)
+>>   {
+>> -    return -EINVAL;
+>> +    return false;
+>>   }
+>>   #endif
+>>     static __always_inline
+>> -int do_hres(const struct vdso_time_data *vd, const struct vdso_clock 
+>> *vc,
+>> -        clockid_t clk, struct __kernel_timespec *ts)
+>> +bool do_hres(const struct vdso_time_data *vd, const struct 
+>> vdso_clock *vc,
+>> +         clockid_t clk, struct __kernel_timespec *ts)
+>>   {
+>>       const struct vdso_timestamp *vdso_ts = &vc->basetime[clk];
+>>       u64 cycles, sec, ns;
+>> @@ -150,7 +150,7 @@ int do_hres(const struct vdso_time_data *vd, 
+>> const struct vdso_clock *vc,
+>>         /* Allows to compile the high resolution parts out */
+>>       if (!__arch_vdso_hres_capable())
+>> -        return -1;
+>> +        return false;
+>>         do {
+>>           /*
+>> @@ -173,11 +173,11 @@ int do_hres(const struct vdso_time_data *vd, 
+>> const struct vdso_clock *vc,
+>>           smp_rmb();
+>>             if (unlikely(!vdso_clocksource_ok(vc)))
+>> -            return -1;
+>> +            return false;
+>>             cycles = __arch_get_hw_counter(vc->clock_mode, vd);
+>>           if (unlikely(!vdso_cycles_ok(cycles)))
+>> -            return -1;
+>> +            return false;
+>>           ns = vdso_calc_ns(vc, cycles, vdso_ts->nsec);
+>>           sec = vdso_ts->sec;
+>>       } while (unlikely(vdso_read_retry(vc, seq)));
+>> @@ -189,13 +189,13 @@ int do_hres(const struct vdso_time_data *vd, 
+>> const struct vdso_clock *vc,
+>>       ts->tv_sec = sec + __iter_div_u64_rem(ns, NSEC_PER_SEC, &ns);
+>>       ts->tv_nsec = ns;
+>>   -    return 0;
+>> +    return true;
+>>   }
+>>     #ifdef CONFIG_TIME_NS
+>>   static __always_inline
+>> -int do_coarse_timens(const struct vdso_time_data *vdns, const struct 
+>> vdso_clock *vcns,
+>> -             clockid_t clk, struct __kernel_timespec *ts)
+>> +bool do_coarse_timens(const struct vdso_time_data *vdns, const 
+>> struct vdso_clock *vcns,
+>> +              clockid_t clk, struct __kernel_timespec *ts)
+>>   {
+>>       const struct vdso_time_data *vd = 
+>> __arch_get_vdso_u_timens_data(vdns);
+>>       const struct timens_offset *offs = &vcns->offset[clk];
+>> @@ -223,20 +223,20 @@ int do_coarse_timens(const struct 
+>> vdso_time_data *vdns, const struct vdso_clock
+>>        */
+>>       ts->tv_sec = sec + __iter_div_u64_rem(nsec, NSEC_PER_SEC, &nsec);
+>>       ts->tv_nsec = nsec;
+>> -    return 0;
+>> +    return true;
+>>   }
+>>   #else
+>>   static __always_inline
+>> -int do_coarse_timens(const struct vdso_time_data *vdns, const struct 
+>> vdso_clock *vcns,
+>> -             clockid_t clk, struct __kernel_timespec *ts)
+>> +bool do_coarse_timens(const struct vdso_time_data *vdns, const 
+>> struct vdso_clock *vcns,
+>> +              clockid_t clk, struct __kernel_timespec *ts)
+>>   {
+>> -    return -1;
+>> +    return false;
+>>   }
+>>   #endif
+>>     static __always_inline
+>> -int do_coarse(const struct vdso_time_data *vd, const struct 
+>> vdso_clock *vc,
+>> -          clockid_t clk, struct __kernel_timespec *ts)
+>> +bool do_coarse(const struct vdso_time_data *vd, const struct 
+>> vdso_clock *vc,
+>> +           clockid_t clk, struct __kernel_timespec *ts)
+>>   {
+>>       const struct vdso_timestamp *vdso_ts = &vc->basetime[clk];
+>>       u32 seq;
+>> @@ -258,10 +258,10 @@ int do_coarse(const struct vdso_time_data *vd, 
+>> const struct vdso_clock *vc,
+>>           ts->tv_nsec = vdso_ts->nsec;
+>>       } while (unlikely(vdso_read_retry(vc, seq)));
+>>   -    return 0;
+>> +    return true;
+>>   }
+>>   -static __always_inline int
+>> +static __always_inline bool
+>>   __cvdso_clock_gettime_common(const struct vdso_time_data *vd, 
+>> clockid_t clock,
+>>                    struct __kernel_timespec *ts)
+>>   {
+>> @@ -270,7 +270,7 @@ __cvdso_clock_gettime_common(const struct 
+>> vdso_time_data *vd, clockid_t clock,
+>>         /* Check for negative values or invalid clocks */
+>>       if (unlikely((u32) clock >= MAX_CLOCKS))
+>> -        return -1;
+>> +        return false;
+>>         /*
+>>        * Convert the clockid to a bitmask and use it to check which
+>> @@ -284,7 +284,7 @@ __cvdso_clock_gettime_common(const struct 
+>> vdso_time_data *vd, clockid_t clock,
+>>       else if (msk & VDSO_RAW)
+>>           vc = &vc[CS_RAW];
+>>       else
+>> -        return -1;
+>> +        return false;
+>>         return do_hres(vd, vc, clock, ts);
+>>   }
+>> @@ -293,9 +293,11 @@ static __maybe_unused int
+>>   __cvdso_clock_gettime_data(const struct vdso_time_data *vd, 
+>> clockid_t clock,
+>>                  struct __kernel_timespec *ts)
+>>   {
+>> -    int ret = __cvdso_clock_gettime_common(vd, clock, ts);
+>> +    bool ok;
+>>   -    if (unlikely(ret))
+>> +    ok = __cvdso_clock_gettime_common(vd, clock, ts);
+>> +
+>> +    if (unlikely(!ok))
+>>           return clock_gettime_fallback(clock, ts);
+>>       return 0;
+>>   }
+>>
+> Best regards
+
+Best regards
 -- 
-2.43.0
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
 
