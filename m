@@ -1,140 +1,289 @@
-Return-Path: <linux-kselftest+bounces-36760-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36761-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 701A1AFCD18
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 16:13:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 423FFAFCEDA
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 17:17:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3161E7B38B1
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 14:11:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B5C6D1896EEA
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 15:17:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E4DB2DECDF;
-	Tue,  8 Jul 2025 14:13:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 899492E11A5;
+	Tue,  8 Jul 2025 15:17:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ogUOJPh2"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="fXOqPdFw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB5D92DECD4;
-	Tue,  8 Jul 2025 14:13:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DCA82E0B72
+	for <linux-kselftest@vger.kernel.org>; Tue,  8 Jul 2025 15:17:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751983988; cv=none; b=qUIwP7+ad0/y/K/XYHqysj9TvFniqcMejjxKJXEDiAoN8TBzOnqix/YT9VjSKoQxpAEVT1Lf+IlSiF89Dn1ZzjOzqrkcy0BWo0pGy4ver70vLj2fGVE3ne3jcW/F4N3B+b/fF3u3DicLemTOaX74g68HtM8CZy+vKFWm883eLL0=
+	t=1751987846; cv=none; b=g4oFSWwYJX6SKLDJrbiD0/ygLjwTrKIQsUQHQDzSQ8p/hOY0VtthYTil/IBm1OVC3Ear6ODLWnGJ62CN071DLK5T1MgF1ykdaQWvB1OuY0glGiwZTy/3iCt340run6xj/mHgZSspxubTuUN2vvyvrrv3A4N3kgOV5oQpAeTwME8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751983988; c=relaxed/simple;
-	bh=mUa5VGfPK7WXD/1exqzxKMcLrIOHwOGywgEaVxTJK+0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IFavBvtYENYyH0KplCCx6qcQf7Bi4t1uprHKrMO42hsKKhtCKLtxWziXHiFEWkHcpFq9t0r/y2EtI5WuBSbiaBjDHEojkdd+2QPF0DWII9fDDGu69FFjNBCkMTg/iPwOFIpS2LZBr4AlTeyqSZmK8meDpaY4zjktyAqpGJrwfAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ogUOJPh2; arc=none smtp.client-ip=217.70.183.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8B192442C4;
-	Tue,  8 Jul 2025 14:13:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1751983984;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=BHgoV1J57kxgaPxatKiQwpkPJq0wS14OFtwNdQBZLYI=;
-	b=ogUOJPh2phW8rRkZiDPVUySob0EeiFY37jzsRhS9zbj6BfCghW3oj4Cj09whsGdywKFMQN
-	21HB/lw8zNfC1liuLPbeiVv0mF0dv2opleJFBIx3twZ0hxKRSo7oGzH7umad8Zeji/OEi9
-	8c6R+j58lxFkhv1ewI8iaHEQ8mGjKF5AZIVKVz190kkrxaP4PdmQdcdhdYsHbl9k/D+MbZ
-	b7hur0wSBM8plY6vNg04QbKvNtAK5sn56dFWtaANCK9zypcan2upsrR6xiArXZVQgaNEJg
-	ko2rklFYR6LMhQZVTRN8J4H3IK0FLo30rKSuCTvAkpubX+BD1fH6zwamQttWeg==
-Date: Tue, 8 Jul 2025 16:13:00 +0200
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: davem@davemloft.net, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com, Jakub Kicinski
- <kuba@kernel.org>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
- <pabeni@redhat.com>, Russell King <linux@armlinux.org.uk>, Florian Fainelli
- <f.fainelli@gmail.com>, Heiner Kallweit <hkallweit1@gmail.com>, Vladimir
- Oltean <vladimir.oltean@nxp.com>, =?UTF-8?B?S8O2cnk=?= Maincent
- <kory.maincent@bootlin.com>, Oleksij Rempel <o.rempel@pengutronix.de>,
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 1/3] net: netdevsim: Add PHY support in
- netdevsim
-Message-ID: <20250708161300.53e96d47@fedora>
-In-Reply-To: <c6685b48-b525-47bd-8364-a26d787b1e3a@lunn.ch>
-References: <20250702082806.706973-1-maxime.chevallier@bootlin.com>
-	<20250702082806.706973-2-maxime.chevallier@bootlin.com>
-	<c6685b48-b525-47bd-8364-a26d787b1e3a@lunn.ch>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1751987846; c=relaxed/simple;
+	bh=AHNCCG5Tf5jpa/S+PhVW9zo376122RPdsJOEN6MRlrs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=ipAnejA/sYxnqWN9xVBDTd5+wGeT/wSx5Doc502kRyMtOhbwynn6u2/Xf3uesA/xrnLGtGb49jOO0be5C4kuJGb58V0luGf5tFQQEYgmCXau1nxOiv4VVuqEcn7hX73kfhJp/Qx8UwUZilAY5v76uQ+/2jhxw1j9NkKwUry6zsE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=fXOqPdFw; arc=none smtp.client-ip=210.118.77.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20250708151721euoutp026b25f46f593b116dda119a4ce894233d~QT6jBgZxS0374403744euoutp02I
+	for <linux-kselftest@vger.kernel.org>; Tue,  8 Jul 2025 15:17:21 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20250708151721euoutp026b25f46f593b116dda119a4ce894233d~QT6jBgZxS0374403744euoutp02I
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1751987841;
+	bh=yaTLIoaKytTb1Jem3YqYe98mw9JwFlUpJPDA2tKD898=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=fXOqPdFwqMbLXYSJm7Di2upblR2Tsgr1Trx7197+vRwt5Pdc5/zRWXqN0QRFhZrun
+	 VVH57VAHLUm2Ytt/wpez3Y3vhPkBUg8FXf747xPsIhpvJeTwq6445TrELjgQG/ogZk
+	 1OB8tRI2SDQnT/n7bc0/lyyjF8FkWzyWYo+KguIs=
+Received: from eusmtip2.samsung.com (unknown [203.254.199.222]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+	20250708151720eucas1p260f984fd95d3460d3e9f6c9b48e0e25c~QT6iepPcr1882718827eucas1p2A;
+	Tue,  8 Jul 2025 15:17:20 +0000 (GMT)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20250708151718eusmtip2dcd49f64a9e9889791acd662135310b6~QT6gkeBFF2780927809eusmtip22;
+	Tue,  8 Jul 2025 15:17:18 +0000 (GMT)
+Message-ID: <02bcd954-5323-4663-a766-f53c67c5a18f@samsung.com>
+Date: Tue, 8 Jul 2025 17:17:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdefgeekkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepofgrgihimhgvucevhhgvvhgrlhhlihgvrhcuoehmrgigihhmvgdrtghhvghvrghllhhivghrsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeegveeltddvveeuhefhvefhlefhkeevfedtgfeiudefffeiledttdfgfeeuhfeukeenucfkphepledtrdejiedriedvrddujedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledtrdejiedriedvrddujedupdhhvghlohepfhgvughorhgrpdhmrghilhhfrhhomhepmhgrgihimhgvrdgthhgvvhgrlhhlihgvrhessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepudejpdhrtghpthhtoheprghnughrvgifsehluhhnnhdrtghhpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdprhgtphhtthhopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoo
- hhtlhhinhdrtghomhdprhgtphhtthhopehkuhgsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdprhgtphhtthhopehprggsvghnihesrhgvughhrghtrdgtohhm
-X-GND-Sasl: maxime.chevallier@bootlin.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 06/14] vdso/gettimeofday: Return bool from
+ clock_gettime() helpers
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>, Shuah Khan
+	<shuah@kernel.org>, Anna-Maria Behnsen <anna-maria@linutronix.de>, Frederic
+	Weisbecker <frederic@kernel.org>, John Stultz <jstultz@google.com>, Stephen
+	Boyd <sboyd@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, Will
+	Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org, Richard
+	Cochran <richardcochran@gmail.com>, Christopher Hall
+	<christopher.s.hall@intel.com>, Miroslav Lichvar <mlichvar@redhat.com>,
+	Werner Abt <werner.abt@meinberg-usa.com>, David Woodhouse
+	<dwmw2@infradead.org>, Kurt Kanzenbach <kurt@linutronix.de>, Nam Cao
+	<namcao@linutronix.de>, Antoine Tenart <atenart@kernel.org>
+Content-Language: en-US
+From: Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <20250701-vdso-auxclock-v1-6-df7d9f87b9b8@linutronix.de>
+Content-Transfer-Encoding: 8bit
+X-CMS-MailID: 20250708151720eucas1p260f984fd95d3460d3e9f6c9b48e0e25c
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20250708151720eucas1p260f984fd95d3460d3e9f6c9b48e0e25c
+X-EPHeader: CA
+X-CMS-RootMailID: 20250708151720eucas1p260f984fd95d3460d3e9f6c9b48e0e25c
+References: <20250701-vdso-auxclock-v1-0-df7d9f87b9b8@linutronix.de>
+	<20250701-vdso-auxclock-v1-6-df7d9f87b9b8@linutronix.de>
+	<CGME20250708151720eucas1p260f984fd95d3460d3e9f6c9b48e0e25c@eucas1p2.samsung.com>
 
-Hi Andrew,
+On 01.07.2025 10:58, Thomas Weißschuh wrote:
+> The internal helpers are effectively using boolean results,
+> while pretending to use error numbers.
+>
+> Switch the return type to bool for more clarity.
+>
+> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+> ---
+>   lib/vdso/gettimeofday.c | 58 +++++++++++++++++++++++++------------------------
+>   1 file changed, 30 insertions(+), 28 deletions(-)
 
-On Tue, 8 Jul 2025 16:01:06 +0200
-Andrew Lunn <andrew@lunn.ch> wrote:
+This patch landed in today's linux-next as commit fcc8e46f768f 
+("vdso/gettimeofday: Return bool from clock_gettime() helpers"). In my 
+tests I found that it causes serious problem with hwclock operation on 
+some of my ARM 32bit test boards. I observe that calling "hwclock -w -f 
+/dev/rtc0" never ends on those boards. Disabling vdso support (by 
+removing ARM architected timer) fixes this issue.
 
-> > +static int nsim_phy_state_link_set(void *data, u64 val)
-> > +{
-> > +	struct nsim_phy_device *ns_phy = (struct nsim_phy_device *)data;
-> > +
-> > +	ns_phy->link = !!val;
-> > +
-> > +	phy_trigger_machine(ns_phy->phy);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int nsim_phy_state_link_get(void *data, u64 *val)
-> > +{
-> > +	struct nsim_phy_device *ns_phy = (struct nsim_phy_device *)data;
-> > +
-> > +	*val = ns_phy->link;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +DEFINE_DEBUGFS_ATTRIBUTE(nsim_phy_state_link_fops, nsim_phy_state_link_get,
-> > +			 nsim_phy_state_link_set, "%llu\n");
-> > +
-> > +static void nsim_phy_debugfs_create(struct nsim_dev_port *port,
-> > +				    struct nsim_phy_device *ns_phy)
-> > +{
-> > +	char phy_dir_name[sizeof("phy") + 10];
-> > +
-> > +	sprintf(phy_dir_name, "phy%u", ns_phy->phy->phyindex);
-> > +
-> > +	/* create debugfs stuff */
-> > +	ns_phy->phy_dir = debugfs_create_dir(phy_dir_name, port->ddir);
-> > +
-> > +	debugfs_create_file("link", 0600, ns_phy->phy_dir, ns_phy, &nsim_phy_state_link_fops);  
-> 
-> Maybe this can be converted into:
-> 
-> debugfs_create_bool("link", 0600, ns_phy->phy_dir, &ns_phy->link);
-> 
-> You loose the phy_trigger_machine(), but that might actually be
-> good. PHYs are async to any operation you take on them. It can take up
-> to 1 second due to the polling before any change is reported. So any
-> user space tools which expect an immediate state change are broken. So
-> leaving the PHY state machine to poll the PHY to notice the link has
-> changed is a better simulation.
 
-That's true indeed... Simpler and more accurate, I'll add that in V3.
-
-Thanks for the feedback :)
-
-Maxime
+> diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
+> index 9b77f23566f6a35887d4c9aaefc61a971131b499..c5266532a097c06f33d12e345c695357d75abf42 100644
+> --- a/lib/vdso/gettimeofday.c
+> +++ b/lib/vdso/gettimeofday.c
+> @@ -82,8 +82,8 @@ const struct vdso_time_data *__arch_get_vdso_u_timens_data(const struct vdso_tim
+>   #endif /* CONFIG_GENERIC_VDSO_DATA_STORE */
+>   
+>   static __always_inline
+> -int do_hres_timens(const struct vdso_time_data *vdns, const struct vdso_clock *vcns,
+> -		   clockid_t clk, struct __kernel_timespec *ts)
+> +bool do_hres_timens(const struct vdso_time_data *vdns, const struct vdso_clock *vcns,
+> +		    clockid_t clk, struct __kernel_timespec *ts)
+>   {
+>   	const struct vdso_time_data *vd = __arch_get_vdso_u_timens_data(vdns);
+>   	const struct timens_offset *offs = &vcns->offset[clk];
+> @@ -103,11 +103,11 @@ int do_hres_timens(const struct vdso_time_data *vdns, const struct vdso_clock *v
+>   		seq = vdso_read_begin(vc);
+>   
+>   		if (unlikely(!vdso_clocksource_ok(vc)))
+> -			return -1;
+> +			return false;
+>   
+>   		cycles = __arch_get_hw_counter(vc->clock_mode, vd);
+>   		if (unlikely(!vdso_cycles_ok(cycles)))
+> -			return -1;
+> +			return false;
+>   		ns = vdso_calc_ns(vc, cycles, vdso_ts->nsec);
+>   		sec = vdso_ts->sec;
+>   	} while (unlikely(vdso_read_retry(vc, seq)));
+> @@ -123,7 +123,7 @@ int do_hres_timens(const struct vdso_time_data *vdns, const struct vdso_clock *v
+>   	ts->tv_sec = sec + __iter_div_u64_rem(ns, NSEC_PER_SEC, &ns);
+>   	ts->tv_nsec = ns;
+>   
+> -	return 0;
+> +	return true;
+>   }
+>   #else
+>   static __always_inline
+> @@ -133,16 +133,16 @@ const struct vdso_time_data *__arch_get_vdso_u_timens_data(const struct vdso_tim
+>   }
+>   
+>   static __always_inline
+> -int do_hres_timens(const struct vdso_time_data *vdns, const struct vdso_clock *vcns,
+> -		   clockid_t clk, struct __kernel_timespec *ts)
+> +bool do_hres_timens(const struct vdso_time_data *vdns, const struct vdso_clock *vcns,
+> +		    clockid_t clk, struct __kernel_timespec *ts)
+>   {
+> -	return -EINVAL;
+> +	return false;
+>   }
+>   #endif
+>   
+>   static __always_inline
+> -int do_hres(const struct vdso_time_data *vd, const struct vdso_clock *vc,
+> -	    clockid_t clk, struct __kernel_timespec *ts)
+> +bool do_hres(const struct vdso_time_data *vd, const struct vdso_clock *vc,
+> +	     clockid_t clk, struct __kernel_timespec *ts)
+>   {
+>   	const struct vdso_timestamp *vdso_ts = &vc->basetime[clk];
+>   	u64 cycles, sec, ns;
+> @@ -150,7 +150,7 @@ int do_hres(const struct vdso_time_data *vd, const struct vdso_clock *vc,
+>   
+>   	/* Allows to compile the high resolution parts out */
+>   	if (!__arch_vdso_hres_capable())
+> -		return -1;
+> +		return false;
+>   
+>   	do {
+>   		/*
+> @@ -173,11 +173,11 @@ int do_hres(const struct vdso_time_data *vd, const struct vdso_clock *vc,
+>   		smp_rmb();
+>   
+>   		if (unlikely(!vdso_clocksource_ok(vc)))
+> -			return -1;
+> +			return false;
+>   
+>   		cycles = __arch_get_hw_counter(vc->clock_mode, vd);
+>   		if (unlikely(!vdso_cycles_ok(cycles)))
+> -			return -1;
+> +			return false;
+>   		ns = vdso_calc_ns(vc, cycles, vdso_ts->nsec);
+>   		sec = vdso_ts->sec;
+>   	} while (unlikely(vdso_read_retry(vc, seq)));
+> @@ -189,13 +189,13 @@ int do_hres(const struct vdso_time_data *vd, const struct vdso_clock *vc,
+>   	ts->tv_sec = sec + __iter_div_u64_rem(ns, NSEC_PER_SEC, &ns);
+>   	ts->tv_nsec = ns;
+>   
+> -	return 0;
+> +	return true;
+>   }
+>   
+>   #ifdef CONFIG_TIME_NS
+>   static __always_inline
+> -int do_coarse_timens(const struct vdso_time_data *vdns, const struct vdso_clock *vcns,
+> -		     clockid_t clk, struct __kernel_timespec *ts)
+> +bool do_coarse_timens(const struct vdso_time_data *vdns, const struct vdso_clock *vcns,
+> +		      clockid_t clk, struct __kernel_timespec *ts)
+>   {
+>   	const struct vdso_time_data *vd = __arch_get_vdso_u_timens_data(vdns);
+>   	const struct timens_offset *offs = &vcns->offset[clk];
+> @@ -223,20 +223,20 @@ int do_coarse_timens(const struct vdso_time_data *vdns, const struct vdso_clock
+>   	 */
+>   	ts->tv_sec = sec + __iter_div_u64_rem(nsec, NSEC_PER_SEC, &nsec);
+>   	ts->tv_nsec = nsec;
+> -	return 0;
+> +	return true;
+>   }
+>   #else
+>   static __always_inline
+> -int do_coarse_timens(const struct vdso_time_data *vdns, const struct vdso_clock *vcns,
+> -		     clockid_t clk, struct __kernel_timespec *ts)
+> +bool do_coarse_timens(const struct vdso_time_data *vdns, const struct vdso_clock *vcns,
+> +		      clockid_t clk, struct __kernel_timespec *ts)
+>   {
+> -	return -1;
+> +	return false;
+>   }
+>   #endif
+>   
+>   static __always_inline
+> -int do_coarse(const struct vdso_time_data *vd, const struct vdso_clock *vc,
+> -	      clockid_t clk, struct __kernel_timespec *ts)
+> +bool do_coarse(const struct vdso_time_data *vd, const struct vdso_clock *vc,
+> +	       clockid_t clk, struct __kernel_timespec *ts)
+>   {
+>   	const struct vdso_timestamp *vdso_ts = &vc->basetime[clk];
+>   	u32 seq;
+> @@ -258,10 +258,10 @@ int do_coarse(const struct vdso_time_data *vd, const struct vdso_clock *vc,
+>   		ts->tv_nsec = vdso_ts->nsec;
+>   	} while (unlikely(vdso_read_retry(vc, seq)));
+>   
+> -	return 0;
+> +	return true;
+>   }
+>   
+> -static __always_inline int
+> +static __always_inline bool
+>   __cvdso_clock_gettime_common(const struct vdso_time_data *vd, clockid_t clock,
+>   			     struct __kernel_timespec *ts)
+>   {
+> @@ -270,7 +270,7 @@ __cvdso_clock_gettime_common(const struct vdso_time_data *vd, clockid_t clock,
+>   
+>   	/* Check for negative values or invalid clocks */
+>   	if (unlikely((u32) clock >= MAX_CLOCKS))
+> -		return -1;
+> +		return false;
+>   
+>   	/*
+>   	 * Convert the clockid to a bitmask and use it to check which
+> @@ -284,7 +284,7 @@ __cvdso_clock_gettime_common(const struct vdso_time_data *vd, clockid_t clock,
+>   	else if (msk & VDSO_RAW)
+>   		vc = &vc[CS_RAW];
+>   	else
+> -		return -1;
+> +		return false;
+>   
+>   	return do_hres(vd, vc, clock, ts);
+>   }
+> @@ -293,9 +293,11 @@ static __maybe_unused int
+>   __cvdso_clock_gettime_data(const struct vdso_time_data *vd, clockid_t clock,
+>   			   struct __kernel_timespec *ts)
+>   {
+> -	int ret = __cvdso_clock_gettime_common(vd, clock, ts);
+> +	bool ok;
+>   
+> -	if (unlikely(ret))
+> +	ok = __cvdso_clock_gettime_common(vd, clock, ts);
+> +
+> +	if (unlikely(!ok))
+>   		return clock_gettime_fallback(clock, ts);
+>   	return 0;
+>   }
+>
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
 
