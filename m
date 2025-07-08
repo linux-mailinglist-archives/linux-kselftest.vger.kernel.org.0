@@ -1,216 +1,129 @@
-Return-Path: <linux-kselftest+bounces-36756-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36757-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADC91AFC9EA
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 13:56:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55B34AFCC5B
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 15:42:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D1051484EE6
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 11:55:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A62CF4A44D1
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Jul 2025 13:42:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 184D72DBF76;
-	Tue,  8 Jul 2025 11:55:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19CAC2DD61E;
+	Tue,  8 Jul 2025 13:42:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="HFypYIc1"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JX95dItG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D50102DA77C;
-	Tue,  8 Jul 2025 11:55:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 648922DC358
+	for <linux-kselftest@vger.kernel.org>; Tue,  8 Jul 2025 13:42:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751975744; cv=none; b=E7PIi1JFSJ/qmTXszxSzT5uKLjlR9eOHGNr/nr46TPfmZFk+rib58J623ZguWO0xcpLB6UTKGR1/4YowWTGYLL9c7p0cxYGpdW91XmoVpxlqMeL/mP9SRoOaN+ssgRYv47F7dhd3DECVdQ7/ylk4Ge1URK6ZME7iYkD8BAIXZtQ=
+	t=1751982167; cv=none; b=KNts8F67zHYEKTAG47clkzfBdfy2JVwb9ZYXgbsW2xqox1AhnR3Q2mkzZ3HKoN9pmV7XKGlKq8rDdFPuEq8ApiU7kAl39iMaeSIPOP9S43LnzGAyZ995bB+wuL5gAi5rpFBaLhQ7miSx1oCBAqJ9AVdfW7MvjR6U9x/2W6Oxe3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751975744; c=relaxed/simple;
-	bh=665R3bEfFZ5EMPbHhTgwqgtsfj5n2aRqmHdOLfxxQhk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jLaC27FFtPPTwzJgeKUMOg/Yly6PyUWQgSDBdYEHqOtQjFfSg2OLILkXs07uqCNevJBi4Snw9NzCnym/XRF0ftgKKvpYwlOV11UXtn+pccO9zVIe5iAwX9npzRYu8y0k1T3xvWzBIoIYhOA76TqTqaE3S7NjdtI0WtXR085u4/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=HFypYIc1; arc=none smtp.client-ip=217.70.183.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2A0E1442BC;
-	Tue,  8 Jul 2025 11:55:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1751975740;
+	s=arc-20240116; t=1751982167; c=relaxed/simple;
+	bh=7IMZwdtT4ONplTSo8XHJ6xX4Q4sptOL8v2V3UkoQjlw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dV7ZP+pb4HQUfk1mS89qFNdM5j86B/YKr7SNwguUyPyzUgjv3kWQmmQJkAE8V8B4jSdC1vq6CJR2h7wae0ekAlFrb73Fchn7+4vFsauzkxCmkekBLvpAABUTjv2OvZl5E8rMuyFP5cPanYzIKxgsSecCbJFTkoVFhZtFC2rQeSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JX95dItG; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1751982164;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=J0grGMNPAsufVnJTFkL0YnvSlW97Znj2ERX1mGwkX3E=;
-	b=HFypYIc1FfDJxlK0zgekanUtutMkOzZvDVZEbzSn/h69uvEmNX9+OH7svTAdU7VDAxybpu
-	jNrdd3aBgH5bQkvT95FWYtZnDI6/kjxLwrFM3uUuXfRklkCchU2R2+TwWfIDZUOEWsOq2o
-	wWmN694AfkPfoiMZMUFLMIL77BEv85ApeCmNljys8qXpj9bEHa9vsMp/Gvk9lskfzPbnaj
-	SdrGaQt2Z46forxJkSW+bv13Wxuy323MnjvSiib81jrZ6+2IgiIng33X5p4oMGMtIgiGal
-	skyJoPBdiCmFErLirlSo3GQ8DyXGWZZjNWWO+0r02J5XNJoFyTklP3c5AdN+hg==
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-To: davem@davemloft.net
-Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	thomas.petazzoni@bootlin.com,
-	Andrew Lunn <andrew@lunn.ch>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Vladimir Oltean <vladimir.oltean@nxp.com>,
-	=?UTF-8?q?K=C3=B6ry=20Maincent?= <kory.maincent@bootlin.com>,
-	Oleksij Rempel <o.rempel@pengutronix.de>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next v2 3/3] selftests: ethtool: Introduce ethernet PHY selftests on netdevsim
-Date: Tue,  8 Jul 2025 13:55:30 +0200
-Message-ID: <20250708115531.111326-4-maxime.chevallier@bootlin.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250708115531.111326-1-maxime.chevallier@bootlin.com>
-References: <20250708115531.111326-1-maxime.chevallier@bootlin.com>
+	bh=P27oZItgQlQTIEu6BrjTyR+ZcNfbW2DcDgBZkxGIz3s=;
+	b=JX95dItGi/IzAFix0WKuR1J/KAccgku2dIUEkiXvU4tRfOCfEaS/iH981HXIbp2sw00aSZ
+	HeoPqmZzgo9mpyCLVos3syP/0nuIZZIbAd1Y6AN6fVGL6XCLQmtam6eQd/9wZwupsuO89n
+	ou/nFJSdfCxKl9j6YD8YzfRl0NOXcg8=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-646-3bDolwjtNtCTpHthtauMPA-1; Tue, 08 Jul 2025 09:42:42 -0400
+X-MC-Unique: 3bDolwjtNtCTpHthtauMPA-1
+X-Mimecast-MFC-AGG-ID: 3bDolwjtNtCTpHthtauMPA_1751982161
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4536962204aso18731575e9.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 08 Jul 2025 06:42:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751982161; x=1752586961;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=P27oZItgQlQTIEu6BrjTyR+ZcNfbW2DcDgBZkxGIz3s=;
+        b=fOMNnBZ27GS5LeInWlMsXTm/JGGkOqmaeyKuzRYCZC1XhR9RNlMo4cRGFnrUtATCWu
+         pk+Y3nkFntVruJ/sPccOIy23CYk679d06Y0uVzZuTfG+LVie47L5ntTwAwEdaZZyl0LN
+         FWtUuvv1QJFJimcNmtDYuP9eofGrWN98hFVkbTP3uSrMaxkayBGXf7TxKeIAIhAwjBjK
+         Ll8/x4XK9O2WE4ijkQerg2ykG/LWSmPDzpWi6NnxiTt95KJeMXiL/b5765skUkxo1ww4
+         doRlM6je18BJhkLv8qw//6M7NkCKYermWzv7hdCZK5c35LgUGD7AO2Hl77pHhQibhHe+
+         TP7A==
+X-Forwarded-Encrypted: i=1; AJvYcCXGk/3ZGQBCpRHvo+9QRCwqNsn2ndKCh1UR9ctECr0XCIxZpdB/lwM6xqH9mgvAwEPvC2ceYOpb8nMUNURyMjU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw3D/r32zGsbCq6UfuBpBZPk/2NSYwCByCFJiupjM5YxwqCBJJ7
+	MSy193H+Qko9iFiTlDGeqnKuNL/SqHl+u/Wr/XwGPQ/g/zGNYDcnTckTdjJFByC7Jp1Y5vP2Rtt
+	I23j0g0lekKDnabhctRQmhTdLcNPEwjm1RB3J7B152x+qUzgGVT9poEm5SP7QAocM7nYpHA==
+X-Gm-Gg: ASbGncuwlrXQ7a7pCEACdeny5ZXVquKHm9g4B2r+9Jk19KK0+MWXjEU1vmDY1gkKALl
+	qUGZn7VCz0h1jkMfkBeYgb8kmhgFAIg2/dOItm3KywN9GZjqhRxnfJd7AQDvzCFIX8DgpwTtl48
+	NBNJZ6/Y1RcR0fy/cTPu4A/wxPOYItnF7W2vLOs7MR/Qsk2vbNUWEY2XqJlmDIspVkQEgxCyOVI
+	RIjnAmTslLIgk5Cx6kPU9UGmFjy1yCAWD46V+9EUxgdcXJZ2fX3K6fZSBIk4210ijb53pJuIfMP
+	34y0b2mHhMr9nkuY6Uym155e8cfOB7kjddnl9kw3CTDKWOFyY1t0M64iJT5B/6jXc2IU5g==
+X-Received: by 2002:a05:600c:154c:b0:442:f482:c429 with SMTP id 5b1f17b1804b1-454b4eacc98mr145947545e9.8.1751982160587;
+        Tue, 08 Jul 2025 06:42:40 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGwFsHBVEro5CvXOCFzVmkJDQs/mNrwHrnzu4qHxJ8LIqAIs4YS5XK8sVi8hyjhO6N8NrfG4w==
+X-Received: by 2002:a05:600c:154c:b0:442:f482:c429 with SMTP id 5b1f17b1804b1-454b4eacc98mr145947095e9.8.1751982159842;
+        Tue, 08 Jul 2025 06:42:39 -0700 (PDT)
+Received: from ?IPV6:2a0d:3344:2717:8910:b663:3b86:247e:dba2? ([2a0d:3344:2717:8910:b663:3b86:247e:dba2])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b4708d0b9bsm13204192f8f.30.2025.07.08.06.42.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Jul 2025 06:42:39 -0700 (PDT)
+Message-ID: <b610c003-5c8b-4fef-8fea-a2b40f8d1377@redhat.com>
+Date: Tue, 8 Jul 2025 15:42:33 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdefgeeiudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepofgrgihimhgvucevhhgvvhgrlhhlihgvrhcuoehmrgigihhmvgdrtghhvghvrghllhhivghrsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeevgedtffelffelveeuleelgfejfeevvdejhfehgeefgfffvdefteegvedutefftdenucfkphepledtrdejiedriedvrddujedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledtrdejiedriedvrddujedupdhhvghlohepfhgvughorhgrrddrpdhmrghilhhfrhhomhepmhgrgihimhgvrdgthhgvvhgrlhhlihgvrhessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepudekpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdprhgtphhtthhopehmrgigihhmvgdrtghhvghvrghllhhivghrsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepnhgvthguvghvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepthhhohhmr
- ghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtoheprghnughrvgifsehluhhnnhdrtghhpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrdgtohhm
-X-GND-Sasl: maxime.chevallier@bootlin.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v4 1/3] selftests: drv-net: add helper/wrapper
+ for bpftrace
+To: Breno Leitao <leitao@debian.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Simon Horman <horms@kernel.org>
+Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, bpf@vger.kernel.org,
+ kernel-team@meta.com
+References: <20250702-netpoll_test-v4-0-cec227e85639@debian.org>
+ <20250702-netpoll_test-v4-1-cec227e85639@debian.org>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20250702-netpoll_test-v4-1-cec227e85639@debian.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Now that netdevsim supports PHY device simulation, we can start writing
-some tests to cover a little bit all PHY-related ethtool commands.
+On 7/2/25 1:21 PM, Breno Leitao wrote:
+> From: Jakub Kicinski <kuba@kernel.org>
+> 
+> bpftrace is very useful for low level driver testing. perf or trace-cmd
+> would also do for collecting data from tracepoints, but they require
+> much more post-processing.
+> 
+> Add a wrapper for running bpftrace and sanitizing its output.
+> bpftrace has JSON output, which is great, but it prints loose objects
+> and in a slightly inconvenient format. We have to read the objects
+> line by line, and while at it return them indexed by the map name.
+> 
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> Reviewed-by: Breno Leitao <leitao@debian.org>
+> Signed-off-by: Breno Leitao <leitao@debian.org>
 
-So far we only test the basic use of "ethtool --show-phys", with :
- - A simple command to get a PHY we just added
- - A DUMP command listing PHYs on multiple netdevsim instances
- - A Filtered DUMP command listing all PHYs on a netdevsim
+Does not apply cleanly anymore. Please rebase and repost, thanks!
 
-Introduce some helpers to create netdevsim PHYs, and a new test file.
-
-Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
----
-
-I couldn't get rid of some shellcheck messages, mostly becase
-ethtool-common.sh fails to be parsed by shellcheck :(
-
- .../selftests/drivers/net/netdevsim/config    |  1 +
- .../drivers/net/netdevsim/ethtool-common.sh   | 15 +++++
- .../drivers/net/netdevsim/ethtool-phy.sh      | 64 +++++++++++++++++++
- 3 files changed, 80 insertions(+)
- create mode 100755 tools/testing/selftests/drivers/net/netdevsim/ethtool-phy.sh
-
-diff --git a/tools/testing/selftests/drivers/net/netdevsim/config b/tools/testing/selftests/drivers/net/netdevsim/config
-index 5117c78ddf0a..223e82cb7759 100644
---- a/tools/testing/selftests/drivers/net/netdevsim/config
-+++ b/tools/testing/selftests/drivers/net/netdevsim/config
-@@ -6,6 +6,7 @@ CONFIG_NETDEVSIM=m
- CONFIG_NET_SCH_MQPRIO=y
- CONFIG_NET_SCH_MULTIQ=y
- CONFIG_NET_SCH_PRIO=y
-+CONFIG_PHYLIB=m
- CONFIG_PSAMPLE=y
- CONFIG_PTP_1588_CLOCK_MOCK=y
- CONFIG_VXLAN=m
-diff --git a/tools/testing/selftests/drivers/net/netdevsim/ethtool-common.sh b/tools/testing/selftests/drivers/net/netdevsim/ethtool-common.sh
-index d9c7a3d397a9..1bd0ac5e7bba 100644
---- a/tools/testing/selftests/drivers/net/netdevsim/ethtool-common.sh
-+++ b/tools/testing/selftests/drivers/net/netdevsim/ethtool-common.sh
-@@ -53,3 +53,18 @@ function make_netdev {
-     # get new device name
-     ls /sys/bus/netdevsim/devices/netdevsim${NSIM_ID}/net/
- }
-+
-+function make_phydev_on_netdev {
-+    local parent_ndev_nsim_id=$1
-+    local parent=$2
-+
-+    local ndev_dfs=/sys/kernel/debug/netdevsim/netdevsim$parent_ndev_nsim_id/ports/0
-+
-+    old_dev_dfs=$(find $ndev_dfs -type d)
-+    echo $parent > $ndev_dfs/phy_add
-+    new_dev_dfs=$(find $ndev_dfs -type d)
-+
-+    # The new phydev name corresponds to the new file that was created. Its
-+    # name isn't predictable.
-+    echo $old_dev_dfs $new_dev_dfs | xargs -n1 | sort  | uniq -u
-+}
-diff --git a/tools/testing/selftests/drivers/net/netdevsim/ethtool-phy.sh b/tools/testing/selftests/drivers/net/netdevsim/ethtool-phy.sh
-new file mode 100755
-index 000000000000..b10440d108b2
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/netdevsim/ethtool-phy.sh
-@@ -0,0 +1,64 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+source ethtool-common.sh
-+
-+# Bail if ethtool is too old
-+if ! ethtool -h | grep show-phys >/dev/null 2>&1; then
-+    echo "SKIP: No --show-phys support in ethtool"
-+    exit 4
-+fi
-+
-+function make_netdev_from_id {
-+    local new_nsim_id="$1"
-+    # Make a netdevsim
-+    echo "$new_nsim_id" > /sys/bus/netdevsim/new_device
-+    udevadm settle
-+    # get new device name
-+    ls /sys/bus/netdevsim/devices/netdevsim"${new_nsim_id}"/net/
-+}
-+
-+function cleanup_netdev_from_id {
-+    local to_del_nsim_id="$1"
-+    echo "$to_del_nsim_id" > /sys/bus/netdevsim/del_device
-+}
-+
-+NSIM_NETDEV=$(make_netdev)
-+
-+set -o pipefail
-+
-+# Check simple PHY addition and listing
-+
-+# Parent == 0 means that the PHY's parent is the netdev
-+PHY_DFS=$(make_phydev_on_netdev "$NSIM_ID" 0)
-+
-+# First PHY gets index 1
-+index=$(ethtool --show-phys "$NSIM_NETDEV" | grep "PHY index" | cut -d ' ' -f 3)
-+check $? "$index" "1"
-+
-+# Insert a second PHY, same parent. It gets index 2.
-+PHY2_DFS=$(make_phydev_on_netdev "$NSIM_ID" 0)
-+
-+# Create another netdev
-+NSIM_ID2=$((RANDOM % 1024))
-+NSIM_NETDEV_2=$(make_netdev_from_id "$NSIM_ID2")
-+
-+PHY3_DFS=$(make_phydev_on_netdev "$NSIM_ID2" 0);
-+
-+# Check unfiltered PHY Dump
-+n_phy=$(ethtool --show-phys '*' | grep -c "PHY index")
-+check $? "$n_phy" "3"
-+
-+# Check filtered Dump
-+n_phy=$(ethtool --show-phys "$NSIM_NETDEV" | grep -c "PHY index")
-+check $? "$n_phy" "2"
-+
-+cleanup_netdev_from_id "$NSIM_ID2"
-+
-+if [ "$num_errors" -eq 0 ]; then
-+    echo "PASSED all $((num_passes)) checks"
-+    exit 0
-+else
-+    echo "FAILED $num_errors/$((num_errors+num_passes)) checks"
-+    exit 1
-+fi
--- 
-2.49.0
+/P
 
 
