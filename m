@@ -1,53 +1,53 @@
-Return-Path: <linux-kselftest+bounces-36889-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36885-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7BF3AFF398
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 23:04:10 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0AFAAFF3AB
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 23:06:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2E41956195F
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 21:03:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 92CAC7BD3D1
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 21:01:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2000256C73;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68DE8248865;
 	Wed,  9 Jul 2025 21:02:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="etFZRhC0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hpeu3RT1"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CA34251795;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29EA4243951;
 	Wed,  9 Jul 2025 21:02:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752094971; cv=none; b=lr48/nBZaocD+fTZ0gQsEC37NfD4zGEUepxrOBTm7LAqaS0vpCe23/DtceQ+O5ORYbSLb7k1DhXPVYF/2bnRUdxsqli3TOi30W9OWktCncFngoBoM3+rRFYIjSxG7EBFoa7q+KoCRUnhXm7kcmyEPFvQQi+OWoxSo7gxcjvnunA=
+	t=1752094971; cv=none; b=YWNfcfxXdnsYzFiBreqgUjETeyULtUFlWH0xXMqsvTbrJO9cKPRBooYPjIMV5p1+LBhuLmoCjTC5GnwOr6o/q0yf5GGHKJNeV4CWW0eYI3mLx/WBd5ur62ZJGqR9d9xeuq/su5FpRGVjmf86Ezo7ft4FDbh1K2GAYzKseSYnXtk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1752094971; c=relaxed/simple;
-	bh=AyOagcGSXpBuGhg+sk+h2sw3geLwEXSyFxwH/3Qmsrc=;
+	bh=2jVuJKlJwuE7wDUqRkDUnMsC8vHhgvzVYDcezCuIN/o=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ejDOpt3H5r6aIS3YGrKmBHwlaw43muiV9FJzV9jevnZJysakFnvC1c8aJTEeuJJ9fOvZ17wbdgIKJTmRN44nqwE4KLNyVy55V+gxOc4I5TNtkSQzw+hccWgWQYOzB+zqVLKWMG7Cj5QVaMnioUahUKGlMc1LW2eIapbUqhUeNJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=etFZRhC0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 83955C116D0;
+	 In-Reply-To:To:Cc; b=XjrzqBM58N2rnfGpfpJFvAgqmS3GEz1/w5ds2voK2dRHpO2P2dxjokRRkcaqXlexmxZL0rffB5QCo3sdountXLebJFlLsTRHtxmYKNEPIyUmMjyZf4NRavLH00y4KH08LA9A+QMTJdpEa9IfmCF3hn5oYniYS17R0c4vHTVaXms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hpeu3RT1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 896EBC4AF4D;
 	Wed,  9 Jul 2025 21:02:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1752094970;
-	bh=AyOagcGSXpBuGhg+sk+h2sw3geLwEXSyFxwH/3Qmsrc=;
+	bh=2jVuJKlJwuE7wDUqRkDUnMsC8vHhgvzVYDcezCuIN/o=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=etFZRhC0miN9k1CNzmvqIvCJXGO8tZfDdYMCz/bLC1LFJXNDXLlqbL68MV6Ze8TIw
-	 /4g8t2xPkNWiaNUSPlRAE3x59UQMpTxDJrCSbo+bW5sIKwtjml1U5JALNuuw2yY7YM
-	 RCkq3aCkAj1MLPv7mmQZ338Kq5s1h9GQO1MAKHJmNeukpUY/AEzcTiLabjFS8X+2PC
-	 lltIdxXbepB/tGZJ2a3FyfyRzanlD94BCdv0Z/qSFauX7Zf0D4GK4t++2w9s2u/jKx
-	 sC633r7OmS5pe44vv4JZGuc6fncA7fwhEpjsb/C4RWLAQwIt6zKld0OZ5mmzJo6dTB
-	 Vnz12DHrcJMIA==
+	b=hpeu3RT1fQr+ZGknkPUJAb0CIvU6TL4PoAAoWOoRcgSZZWt2WKAP/jVhpmmCyQqiJ
+	 o6/JANe6fNr2xs0YAs/WcM8UucCIUwqlUc5eWyeTHgtjmVTiPvs2k+tUkwJqpZOFp3
+	 /69HJanBGIotCsSKb0ZwCdmOlSChHFGbLXjKIfPuWVGwKfpnT8is09imAHfhjeKNTo
+	 vn+GSrHMkmQ+NEkwh/ZBbUAgX3ZTMkp1eJhSev9+IVt0vf8JflJR6GCrTEiI+tOYUh
+	 e38UqRTciRoaNUK/oXU++UzaCBi73ZS5ymOPCf6DB5hmyDa1Vn1PcI6zLvxEfOpt5G
+	 9aYV+1eGWbVQg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AE6EC83F17;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7ABAEC83F10;
 	Wed,  9 Jul 2025 21:02:50 +0000 (UTC)
 From: Frank Li via B4 Relay <devnull+Frank.Li.nxp.com@kernel.org>
-Date: Wed, 09 Jul 2025 17:02:16 -0400
-Subject: [PATCH v20 4/9] PCI: endpoint: pci-ep-msi: Add MSI address/data
- pair mutable check
+Date: Wed, 09 Jul 2025 17:02:17 -0400
+Subject: [PATCH v20 5/9] PCI: endpoint: Add pci_epf_align_inbound_addr()
+ helper for address alignment
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250709-ep-msi-v20-4-43d56f9bd54a@nxp.com>
+Message-Id: <20250709-ep-msi-v20-5-43d56f9bd54a@nxp.com>
 References: <20250709-ep-msi-v20-0-43d56f9bd54a@nxp.com>
 In-Reply-To: <20250709-ep-msi-v20-0-43d56f9bd54a@nxp.com>
 To: Kishon Vijay Abraham I <kishon@kernel.org>, 
@@ -82,11 +82,11 @@ Cc: Niklas Cassel <cassel@kernel.org>, dlemoal@kernel.org, jdmason@kudzu.us,
  imx@lists.linux.dev, devicetree@vger.kernel.org, 
  Niklas Cassel <cassel@kernel.org>, Frank Li <Frank.Li@nxp.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1752094968; l=1452;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1752094968; l=4622;
  i=Frank.Li@nxp.com; s=20240130; h=from:subject:message-id;
- bh=5GnLijRH62gBTUdnVBRu9d7hyvLf0+eT6hrBiV+MYG4=;
- b=HvRi8kQvdqnVkTHpFheFfUswDpWAOk2mmjMD4QrLCXKcebMd+wAbQs2SSaRVAXaK81OU/Ydl8
- tj21xJvXeNOCewquYk7BcQpWGKsTS3AIuM60F2BsH0CCcpZXcB8y8uQ
+ bh=PebSbCDfzLlvbjVW+lpBMsdu88x18IX5dRYDwgZD7aQ=;
+ b=R3IHlef1Bbi/hWLCcUiLgZzHZUGpyb01O4MgGiwq/qDGUGyzZ1Ap0GvZtRyUX3OdhSfq69uIF
+ yrunbnVfHTCB+oemotsLwfWWQ4Ve4X8EBQyWw5/sSpsaITlmfLVJUxp
 X-Developer-Key: i=Frank.Li@nxp.com; a=ed25519;
  pk=I0L1sDUfPxpAkRvPKy7MdauTuSENRq+DnA+G4qcS94Q=
 X-Endpoint-Received: by B4 Relay for Frank.Li@nxp.com/20240130 with
@@ -96,53 +96,123 @@ Reply-To: Frank.Li@nxp.com
 
 From: Frank Li <Frank.Li@nxp.com>
 
-Some MSI controller change address/data pair when irq_set_affinity().
-Current PCI endpoint can't support this type MSI controller. Call
-irq_domain_is_msi_immutable() check if address/data pair immutable.
-
-Also ensure it is parent MSI domains, not device-specific MSI domains,
-since device MSI domains do not allocate address/data pairs.
+Introduce the helper function pci_epf_align_inbound_addr() to adjust
+addresses according to PCI BAR alignment requirements, converting addresses
+into base and offset values.
 
 Signed-off-by: Frank Li <Frank.Li@nxp.com>
 ---
-change in v20
-- update commit message
-- change return error code to ENODEV
+Changes in V20
+- update function kdoc comments.
+- 128 come from pci_epf_alloc_space() drivers/pci/endpoint/pci-epf-core.c
 
-change in v18
-- update commit message. remove 'include/linux/msi.h' part.
-
-change from v14 to v17
+Change from v15 to v16
 - none
 
-change from  v13 to v14
-- bring v10 back
+Change from v14 to v15
+- change out address type to dma_addr_t to fix below build issue
 
-Change from v9 to v10
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502082311.G1hWGggF-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/pci/endpoint/functions/pci-epf-test.c: In function 'pci_epf_test_enable_doorbell':
+>> drivers/pci/endpoint/functions/pci-epf-test.c:726:42: error: passing argument 4 of 'pci_epf_align_inbound_addr' from incompatible pointer type [-Werror=incompatible-pointer-types]
+     726 |                                          &epf_test->db_bar.phys_addr, &offset);
+         |                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                          |
+         |                                          dma_addr_t * {aka unsigned int *}
+   In file included from include/linux/pci-epc.h:12,
+
+Change form v9 to v14
+- none
+
+change from v8 to v9
+- pci_epf_align_inbound_addr(), base and off must be not NULL
+- rm pci_epf_align_inbound_addr_lo_hi()
+
+change from v7 to v8
+- change name to pci_epf_align_inbound_addr()
+- update comment said only need for memory, which not allocated by
+pci_epf_alloc_space().
+
+change from v6 to v7
 - new patch
 ---
- drivers/pci/endpoint/pci-ep-msi.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/pci/endpoint/pci-epf-core.c | 44 +++++++++++++++++++++++++++++++++++++
+ include/linux/pci-epf.h             |  3 +++
+ 2 files changed, 47 insertions(+)
 
-diff --git a/drivers/pci/endpoint/pci-ep-msi.c b/drivers/pci/endpoint/pci-ep-msi.c
-index de610c16f68986eb0a5f4a0f23bd0136aa169f97..2b4405cfeb6f8f3cbe9782c793604a10dcaa4eb7 100644
---- a/drivers/pci/endpoint/pci-ep-msi.c
-+++ b/drivers/pci/endpoint/pci-ep-msi.c
-@@ -55,6 +55,14 @@ int pci_epf_alloc_doorbell(struct pci_epf *epf, u16 num_db)
- 		return -ENODEV;
- 	}
+diff --git a/drivers/pci/endpoint/pci-epf-core.c b/drivers/pci/endpoint/pci-epf-core.c
+index 577a9e490115c9dd5d7fb624c4a3001f39b97e78..6d6911559780a003b8e81c629d7654d6959c7dcf 100644
+--- a/drivers/pci/endpoint/pci-epf-core.c
++++ b/drivers/pci/endpoint/pci-epf-core.c
+@@ -477,6 +477,50 @@ struct pci_epf *pci_epf_create(const char *name)
+ }
+ EXPORT_SYMBOL_GPL(pci_epf_create);
  
-+	if (!irq_domain_is_msi_parent(dom))
-+		return -ENODEV;
++/**
++ * pci_epf_align_inbound_addr() - Align the given address based on the BAR
++ *				  alignment requirement
++ * @epf: the EPF device
++ * @addr: inbound address to be aligned
++ * @bar: the BAR number corresponding to the given addr
++ * @base: base address matching the @bar alignment requirement.
++ * @off: offset to be added to the @base address.
++ *
++ * Helper function to align input 'addr' to base and offset, which match
++ * BAR's alignment requirement.
++ *
++ * The pci_epf_alloc_space() function already accounts for alignment. This is
++ * primarily intended for use with other memory regions not allocated by
++ * pci_epf_alloc_space(), such as peripheral register spaces or the trigger
++ * address for a platform MSI controller.
++ */
++int pci_epf_align_inbound_addr(struct pci_epf *epf, enum pci_barno bar,
++			       u64 addr, dma_addr_t *base, size_t *off)
++{
++	const struct pci_epc_features *epc_features;
++	u64 align;
 +
-+	if (!irq_domain_is_msi_immutable(dom)) {
-+		dev_err(dev, "MSI controller not supported\n");
-+		return -ENODEV;
++	if (!base || !off)
++		return -EINVAL;
++
++	epc_features = pci_epc_get_features(epf->epc, epf->func_no, epf->vfunc_no);
++	if (!epc_features) {
++		dev_err(&epf->dev, "epc_features not implemented\n");
++		return -EOPNOTSUPP;
 +	}
 +
- 	dev_set_msi_domain(epc->dev.parent, dom);
- 
- 	msg = kcalloc(num_db, sizeof(struct pci_epf_doorbell_msg), GFP_KERNEL);
++	align = epc_features->align;
++	align = align ? align : 128;
++	if (epc_features->bar[bar].type == BAR_FIXED)
++		align = max(epc_features->bar[bar].fixed_size, align);
++
++	*base = round_down(addr, align);
++	*off = addr & (align - 1);
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(pci_epf_align_inbound_addr);
++
+ static void pci_epf_dev_release(struct device *dev)
+ {
+ 	struct pci_epf *epf = to_pci_epf(dev);
+diff --git a/include/linux/pci-epf.h b/include/linux/pci-epf.h
+index a3b1a1d90d18356e8cda966c7004c3be93962a0d..0ca08f0d05d7439ef4043a77c204062989a27bd9 100644
+--- a/include/linux/pci-epf.h
++++ b/include/linux/pci-epf.h
+@@ -241,6 +241,9 @@ void *pci_epf_alloc_space(struct pci_epf *epf, size_t size, enum pci_barno bar,
+ 			  enum pci_epc_interface_type type);
+ void pci_epf_free_space(struct pci_epf *epf, void *addr, enum pci_barno bar,
+ 			enum pci_epc_interface_type type);
++
++int pci_epf_align_inbound_addr(struct pci_epf *epf, enum pci_barno bar,
++			       u64 addr, dma_addr_t *base, size_t *off);
+ int pci_epf_bind(struct pci_epf *epf);
+ void pci_epf_unbind(struct pci_epf *epf);
+ int pci_epf_add_vepf(struct pci_epf *epf_pf, struct pci_epf *epf_vf);
 
 -- 
 2.34.1
