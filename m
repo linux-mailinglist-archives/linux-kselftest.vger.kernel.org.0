@@ -1,53 +1,53 @@
-Return-Path: <linux-kselftest+bounces-36882-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36884-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40DA0AFF380
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 23:03:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A93BAFF3A2
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 23:05:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B1C0F16225A
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 21:03:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 60FC07BD087
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 21:01:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDF6B23C4E7;
-	Wed,  9 Jul 2025 21:02:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15337242914;
+	Wed,  9 Jul 2025 21:02:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o6sjYR7M"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fLhBsufo"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9E24230D2B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9EE4236424;
 	Wed,  9 Jul 2025 21:02:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752094970; cv=none; b=fD8+GlWzj3lyxElreuBbW4zaNHRDQscu8yPAGRNTMxovqifDyAqksJrVl1AOHlFKwnWq/Tf+gl1qsyjcqIwcYeBiLYgShOEC/yWDqXzWNeYeeKoSbun5rXBi4ebG9wzdNtd/QlhC81tFRfea93erkXFK7msFALj4YR7OMM3jvro=
+	t=1752094970; cv=none; b=d4Y24rFUnWhv5J4cR0C44LgP0eglmRA7PgQKHbQROt0qBlQbI+ytbe+Gs5HbIIKg1ecjIu7PYO0Dr+/IAy1UXB5XPvQ03WFqz9eDY1wmEsDr5IMJtvpyxS7CDFefi9Se97vtx7oGoo4k6rH1edLF54Po9hqnITTjAscpoT0TTFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1752094970; c=relaxed/simple;
-	bh=yfPKmVMhY+gbXvaT/+cR0sE6ZwAyCoBhja/l0byv5u0=;
+	bh=htJO8DNvMG8JfxhKULyjO956ceacV6C/omT3F7WroKI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=G3xQucVN9BxaTazUhyg71gD6DISkbglve7UIxJIkjv8t/LIAIuATHNJBqRJ8vUXRjTtNoonszSim8Maw3Bx64xT8fSz05Ycl6Hirdo4Hnyg18THCdhL24Dsmr5N7n2ayo+gnsdnStjKkbvo3XWEpJatx7I1UVK1N3Wx+aNCbvAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o6sjYR7M; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3F6A3C4CEFC;
+	 In-Reply-To:To:Cc; b=ZTReDJpkFyMtJs9DHiEGZOM4kntHPPaHcgI9Ch32v7zXT5XfFzim5e0HisBAN4w3iiCg0ClvoBZOZ1qOb3hex5hIwDkL868lzYKa8UkuZT1z4Z3SD2nbU414tgCpde6E73eRwmFApMF/+UjhLJLSIZS+1XL2rKmHCVzppYYkQnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fLhBsufo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5E956C4CEF6;
 	Wed,  9 Jul 2025 21:02:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1752094970;
-	bh=yfPKmVMhY+gbXvaT/+cR0sE6ZwAyCoBhja/l0byv5u0=;
+	bh=htJO8DNvMG8JfxhKULyjO956ceacV6C/omT3F7WroKI=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=o6sjYR7MLYIvq9k4HiQ0ti/MSOvwJ3ZGOPHUu/birxeREIpyzoAUaTfuTTP9aUSjO
-	 J6HMYK/RI05CFmPb0qlGEO9djvhIKowYqfIfmecEVCMHMdbpcjjK50YV4qhcMvL1nO
-	 hv7116AboM1xIXUEd7DIbr+fd04iYkYobolqnmjzesZA8KBd2GBQtt+CxFWmzR1/hz
-	 rnyWxMtUkCI1VVRMSeCpTBr7Jti6PGOAr0641LJZG7t/6lrT56A81GAX4zcikNxhPu
-	 vmimCx+CPLh2sfdfaECFfromqPPKthm+qiznrJKij/RtOOO9sUUarYd5RvGGMTyrXS
-	 L7Nn6PXgk8TvQ==
+	b=fLhBsufoucrQGk3FvBX8Q+vZI50h6aR54S3xmUb9VoILDBEyGFYUifGJ16tXpCxFa
+	 QVjec+/SYcnDxrEuw+JKEZ91gAiMOqUgSp2ue6qRj3FrBVf8nBqQkOrRmO/NAJf7IQ
+	 u02MK3xxCCXOH6a8NHz3Ba/MMHMdVed5CUROV9E/zC3cJJy/gY75n5eW66dokGhv8R
+	 xCrd5g+4e7laoKncY+ZZ1M9X5bN03Q8KKmFJEJMxCDi663LlD8/Txn7EeTA61um1o8
+	 eyI3tK5VZN5UjJVG+vayUa3FNm+7qyZBJWLiTO7p4o9RwFZY3Vh2ZQq+FxYp5nhn0H
+	 yX8XHVfMRVOlA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 363C6C83F0A;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46D3BC83F14;
 	Wed,  9 Jul 2025 21:02:50 +0000 (UTC)
 From: Frank Li via B4 Relay <devnull+Frank.Li.nxp.com@kernel.org>
-Date: Wed, 09 Jul 2025 17:02:13 -0400
-Subject: [PATCH v20 1/9] PCI: imx6: Add helper function
- imx_pcie_add_lut_by_rid()
+Date: Wed, 09 Jul 2025 17:02:14 -0400
+Subject: [PATCH v20 2/9] PCI: imx6: Add LUT configuration for MSI/IOMMU in
+ Endpoint mode
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -55,8 +55,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250709-ep-msi-v20-1-43d56f9bd54a@nxp.com>
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250709-ep-msi-v20-2-43d56f9bd54a@nxp.com>
 References: <20250709-ep-msi-v20-0-43d56f9bd54a@nxp.com>
 In-Reply-To: <20250709-ep-msi-v20-0-43d56f9bd54a@nxp.com>
 To: Kishon Vijay Abraham I <kishon@kernel.org>, 
@@ -82,11 +82,11 @@ Cc: Niklas Cassel <cassel@kernel.org>, dlemoal@kernel.org, jdmason@kudzu.us,
  imx@lists.linux.dev, devicetree@vger.kernel.org, 
  Niklas Cassel <cassel@kernel.org>, Frank Li <Frank.Li@nxp.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1752094968; l=1939;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1752094968; l=1837;
  i=Frank.Li@nxp.com; s=20240130; h=from:subject:message-id;
- bh=FTsRKbmGJkqXdF0l3uL9gIhRFF4JXE9vNw1HW1VASns=;
- b=w670n6CIt8AYMkZpKlgafc6T2YyiGWMKL6670dFKYT/lynE0ssEky74HbAP8Eii0hjBm0L+YN
- xQUvqxATm7BDjeHrLPgJdsJbx6THK9dXZhSSpf+tFIeCu1nmwtH7Z+n
+ bh=undgD4r0xoItEmBKrD+Vrj1bBDbTL2OdUvPEHbj/82U=;
+ b=UftBhBB5urlKpS68xrUOJvV6CLNrw47J/fL/rwqDL8F1cheHU1wwj+yZiMcvVUqGReyXmVPop
+ f4AAJivAacpCO/GBVA+1NdB7lsWczq1tDlzVcGLHVUjKnmylLgjY0N3
 X-Developer-Key: i=Frank.Li@nxp.com; a=ed25519;
  pk=I0L1sDUfPxpAkRvPKy7MdauTuSENRq+DnA+G4qcS94Q=
 X-Endpoint-Received: by B4 Relay for Frank.Li@nxp.com/20240130 with
@@ -96,13 +96,18 @@ Reply-To: Frank.Li@nxp.com
 
 From: Frank Li <Frank.Li@nxp.com>
 
-Add helper function imx_pcie_add_lut_by_rid(), which will be used for MSI
-doorbell support in endpoint mode in the future. No functional change.
+Add LUT entry for Endpoint mode by calling imx_pcie_add_lut_by_rid(0),
+since only one physical function is supported. This sets up a single LUT
+entry required for MSI or IOMMU.
+
+The Endpoint function can operate without LUT if neither IOMMU nor MSI is
+used. This LUT setup enables the EP doorbell feature by allowing the Root
+Complex to trigger the EP’s MSI controller.
 
 Signed-off-by: Frank Li <Frank.Li@nxp.com>
 ---
-- change in v20
-- update commit message.
+change in v20
+- update commit message
 
 change from v14 to v16
 - none
@@ -110,49 +115,35 @@ change from v14 to v16
 change from v13 to v14
 - new patch
 ---
- drivers/pci/controller/dwc/pci-imx6.c | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+ drivers/pci/controller/dwc/pci-imx6.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
-index 5a38cfaf989b1c9606660f2e0bcd10d88fa2d6b1..032b906c44dfaa374a32f511098402a494ef5677 100644
+index 032b906c44dfaa374a32f511098402a494ef5677..3123bf49e209cc0fc448d6e02a472e280d538033 100644
 --- a/drivers/pci/controller/dwc/pci-imx6.c
 +++ b/drivers/pci/controller/dwc/pci-imx6.c
-@@ -1096,18 +1096,14 @@ static void imx_pcie_remove_lut(struct imx_pcie *imx_pcie, u16 rid)
- 	}
- }
+@@ -1063,7 +1063,10 @@ static int imx_pcie_add_lut(struct imx_pcie *imx_pcie, u16 rid, u8 sid)
+ 	data1 |= IMX95_PE0_LUT_VLD;
+ 	regmap_write(imx_pcie->iomuxc_gpr, IMX95_PE0_LUT_DATA1, data1);
  
--static int imx_pcie_enable_device(struct pci_host_bridge *bridge,
--				  struct pci_dev *pdev)
-+static int imx_pcie_add_lut_by_rid(struct imx_pcie *imx_pcie, u32 rid)
- {
--	struct imx_pcie *imx_pcie = to_imx_pcie(to_dw_pcie_from_pp(bridge->sysdata));
--	u32 sid_i, sid_m, rid = pci_dev_id(pdev);
-+	struct device *dev = imx_pcie->pci->dev;
- 	struct device_node *target;
--	struct device *dev;
-+	u32 sid_i, sid_m;
- 	int err_i, err_m;
- 	u32 sid = 0;
+-	data2 = IMX95_PE0_LUT_MASK; /* Match all bits of RID */
++	if (imx_pcie->drvdata->mode == DW_PCIE_EP_TYPE)
++		data2 = 0x7; /* EP side's RID from RC, only 'D' is meansful */
++	else
++		data2 = IMX95_PE0_LUT_MASK; /* Match all bits of RID */
+ 	data2 |= FIELD_PREP(IMX95_PE0_LUT_REQID, rid);
+ 	regmap_write(imx_pcie->iomuxc_gpr, IMX95_PE0_LUT_DATA2, data2);
  
--	dev = imx_pcie->pci->dev;
--
- 	target = NULL;
- 	err_i = of_map_id(dev->of_node, rid, "iommu-map", "iommu-map-mask",
- 			  &target, &sid_i);
-@@ -1182,6 +1178,13 @@ static int imx_pcie_enable_device(struct pci_host_bridge *bridge,
- 	return imx_pcie_add_lut(imx_pcie, rid, sid);
- }
- 
-+static int imx_pcie_enable_device(struct pci_host_bridge *bridge, struct pci_dev *pdev)
-+{
-+	struct imx_pcie *imx_pcie = to_imx_pcie(to_dw_pcie_from_pp(bridge->sysdata));
+@@ -1767,6 +1770,9 @@ static int imx_pcie_probe(struct platform_device *pdev)
+ 		ret = imx_add_pcie_ep(imx_pcie, pdev);
+ 		if (ret < 0)
+ 			return ret;
 +
-+	return imx_pcie_add_lut_by_rid(imx_pcie, pci_dev_id(pdev));
-+}
-+
- static void imx_pcie_disable_device(struct pci_host_bridge *bridge,
- 				    struct pci_dev *pdev)
- {
++		/* Only support one physical function */
++		imx_pcie_add_lut_by_rid(imx_pcie, 0);
+ 	} else {
+ 		pci->pp.use_atu_msg = true;
+ 		ret = dw_pcie_host_init(&pci->pp);
 
 -- 
 2.34.1
