@@ -1,59 +1,59 @@
-Return-Path: <linux-kselftest+bounces-36835-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36836-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 401C4AFEE4A
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 17:59:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E442CAFEE4B
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 17:59:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 05647162DD1
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 15:58:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1AE6B163495
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 15:58:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53A3A2E975D;
-	Wed,  9 Jul 2025 15:58:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D57D2E9749;
+	Wed,  9 Jul 2025 15:58:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="AogC48c6"
+	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="COX8Yp0V"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85FE92E9746
-	for <linux-kselftest@vger.kernel.org>; Wed,  9 Jul 2025 15:58:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0784A2E9742
+	for <linux-kselftest@vger.kernel.org>; Wed,  9 Jul 2025 15:58:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752076689; cv=none; b=lEjv5J5ITOD9K3VvLORy4m5wJnr/XlDfLuT4ESXKa2FvbNB0wtu7yjo0RLibRboY6usKZU7L+G640agwjHPjUXleoo1RA4k51TIvXWBLIub89rEsUXVqzzgpwHjOPk8CN5V98WAYVKJp+YRz6SHdLSdEsI7N64I7Xx/WWXCSalM=
+	t=1752076691; cv=none; b=P/Kdmtyrv7fdDvT3H3k3H+DX+JL1Bf0z8Vh1bTz0W/2u86Maq8taeLpE+U0ap9J2Lj95pkAMmoHOTKImPI4hEl9RrS8g+Q5FFHq1Ucg6xnBgbNMwvv+kKQfJtdlErRzzw7zY3/JBmRSD3ZcQSOGwZMyh+XdKlyLAwzkiPuvqBGE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752076689; c=relaxed/simple;
-	bh=ukp+RAxBTuUebM6uAX3t7qoVxN5aAaDAKYOxiDF6p6M=;
+	s=arc-20240116; t=1752076691; c=relaxed/simple;
+	bh=YMNaMRo2+Uq3Rp+ziWc96lLOcpGMM0fmSShKFcWcKP4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SLs0H9Y3QUHwT3sclRZM1vtD975C+j/b61e0xyZ1BeszL0HvCGVmJsvuSfhNG+ae8x9CIkz7x0EoItWrbBqNiNner8hsOfrhWytiJxPjtOS4xKak4L6iCEc0AXoavMQaFXrBP/QKCMcjXVcFPT3lMbxxMwPY4opufgQ4uDEhVT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=AogC48c6; arc=none smtp.client-ip=168.119.38.16
+	 MIME-Version; b=TnkjWN7zvzk+7aFpr7T8BQCyu7nY/CpSIMEO2MpOOcyMGmKtZPwOy+vzgwAsdT0Uj7xbYwScIZW2okKo4Pj3AkcQ49xv+u7aY8LB+HpKW6VhIyi+5Iv0PSlB6EDITiejXbMO5Vv+HSEaKAKkiUJ27/CYnX7qteZOYRlsGOKd8mc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=COX8Yp0V; arc=none smtp.client-ip=168.119.38.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Content-Type:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=jxtLoLC3sggOPhWK5ntzWFeRLJnCxjZwSklhIjIHK6s=;
-	t=1752076687; x=1753286287; b=AogC48c60AKelUhVN2IPQmzBad60j2pNC9GXAyYmiAyaiYu
-	N+5Dt4L4vspkYcvnOnMXMQLap9kwsKwahHUslLAwbCKDIjA5CQK7Z/IWtysPllWQTtj47pvm4O4RC
-	kZShTLMc25CahLevZYREt45jLFNL8NbsRaAmaBDHKHGoSCDUc5cB/ts6YmDVuw+8QCmJKF0/pNBPI
-	zbIRW7ffoU3bOqKqyT7HHrW2mAJ9wa1Bv0RHOupqwKSqh5ZDpObWc2ZnfGyvtC8bA8tIm1I4n+I3f
-	ljbK384LKJG2uyy4K1j0Kqb6luJVAEWukPOm2Ifr4kVGsGDsthOJAQvW3tPy65OQ==;
+	Resent-Cc:Resent-Message-ID; bh=S0JMZ159Dg2/Ub5eOSqksUM37XJ0YB0bHtP7k4vrgpU=;
+	t=1752076689; x=1753286289; b=COX8Yp0V78b1E+oMmgPLHxYrJ7uM1pJT1U0Bk4hhLm/MHnb
+	f1cWdNe+M37BHdiaDHmF/UURKpZkf25p/EhAkHrMWXVOP2OjTR/WDMjeRpy9Dv7MXCcKlWINLbTF9
+	8hY/mIgVWtm4E4ASNhFhLKN2YxCXlgHbFcaUMcjdohd0aw+OAz3LZFLjEiYSbQ1UmK1aXuupbgrjA
+	bafYHNfrpPyMOh/QVzUeqglIFX05u2TfzmZNK3vaXWM7h6Ii8Cws+O1uheq0r0xIZ/yT5G3TenM/f
+	tcEYnr4jTo5XwXNT0dm1YaHIPhyLSNIWQRedQjDhcJXgHw6wCZ9FLnz6l1bO3gzQ==;
 Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.98.2)
 	(envelope-from <benjamin@sipsolutions.net>)
-	id 1uZXBM-0000000DWBm-2S9b;
-	Wed, 09 Jul 2025 17:58:04 +0200
+	id 1uZXBN-0000000DWBm-1H6m;
+	Wed, 09 Jul 2025 17:58:05 +0200
 From: Benjamin Berg <benjamin@sipsolutions.net>
 To: Willy Tarreau <w@1wt.eu>,
 	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
 	linux-kselftest@vger.kernel.org
 Cc: Benjamin Berg <benjamin.berg@intel.com>
-Subject: [PATCH 2/3] tools/nolibc: add more generic BITSET_* macros for FD_*
-Date: Wed,  9 Jul 2025 17:55:11 +0200
-Message-ID: <20250709155512.971080-3-benjamin@sipsolutions.net>
+Subject: [PATCH 3/3] tools/nolibc: add signal support
+Date: Wed,  9 Jul 2025 17:55:12 +0200
+Message-ID: <20250709155512.971080-4-benjamin@sipsolutions.net>
 X-Mailer: git-send-email 2.50.0
 In-Reply-To: <20250709155512.971080-1-benjamin@sipsolutions.net>
 References: <20250709155512.971080-1-benjamin@sipsolutions.net>
@@ -67,105 +67,535 @@ Content-Transfer-Encoding: 8bit
 
 From: Benjamin Berg <benjamin.berg@intel.com>
 
-The FD_* macros are assuming a specific type for the bitset. Add new
-macros that introspect the type of the passed variable in order to know
-the size of the bitset. This way the same macros can be used for other
-purposes.
+Add support for sigaction() and implement the normal sa_mask helpers.
+
+On many architectures, linux/signal.h pulls in compatibility definitions
+for the old sigaction syscall instead of rt_sigaction. However, the
+kernel can be compiled without support for this compatibility syscall
+and it also results in sa_mask to be too small for realtime signals.
+
+To work around this, the includes are handled separately for each
+architecture. This way either linux/signal.h or the asm-generic headers
+can be used to get the correct definition for the rt_sigaction syscall
+including sigset_t.
+
+Signed-off-by: Benjamin Berg <benjamin.berg@intel.com>
+
+---
+
+v1:
+- Update architecture support (adding sh)
+- Move sparc sys_rt_sigaction logic into its header
+- Add sig_atomic_t
+- Use new BITSET_* macros
+- Move test into syscall suite
+- Various other small changes
 
 Signed-off-by: Benjamin Berg <benjamin.berg@intel.com>
 ---
- tools/include/nolibc/types.h | 67 +++++++++++++++++++-----------------
- 1 file changed, 36 insertions(+), 31 deletions(-)
+ tools/include/nolibc/arch-arm.h              |   7 ++
+ tools/include/nolibc/arch-arm64.h            |   3 +
+ tools/include/nolibc/arch-loongarch.h        |   3 +
+ tools/include/nolibc/arch-m68k.h             |  10 ++
+ tools/include/nolibc/arch-mips.h             |   3 +
+ tools/include/nolibc/arch-powerpc.h          |   8 ++
+ tools/include/nolibc/arch-riscv.h            |   3 +
+ tools/include/nolibc/arch-s390.h             |   8 +-
+ tools/include/nolibc/arch-sh.h               |   5 +
+ tools/include/nolibc/arch-sparc.h            |  47 +++++++++
+ tools/include/nolibc/arch-x86.h              |  13 +++
+ tools/include/nolibc/signal.h                | 103 +++++++++++++++++++
+ tools/include/nolibc/sys.h                   |   2 +-
+ tools/include/nolibc/time.h                  |   3 +-
+ tools/testing/selftests/nolibc/nolibc-test.c |  67 ++++++++++++
+ 15 files changed, 281 insertions(+), 4 deletions(-)
 
-diff --git a/tools/include/nolibc/types.h b/tools/include/nolibc/types.h
-index 16c6e9ec9451..3100771e21ad 100644
---- a/tools/include/nolibc/types.h
-+++ b/tools/include/nolibc/types.h
-@@ -115,48 +115,53 @@
- #define EXIT_SUCCESS 0
- #define EXIT_FAILURE 1
+diff --git a/tools/include/nolibc/arch-arm.h b/tools/include/nolibc/arch-arm.h
+index 1f66e7e5a444..1faf6c2dbeb8 100644
+--- a/tools/include/nolibc/arch-arm.h
++++ b/tools/include/nolibc/arch-arm.h
+@@ -10,6 +10,13 @@
+ #include "compiler.h"
+ #include "crt.h"
  
--#define FD_SETIDXMASK (8 * sizeof(unsigned long))
--#define FD_SETBITMASK (8 * sizeof(unsigned long)-1)
++/* Needed to get the correct struct sigaction definition */
++#define SA_RESTORER	0x04000000
++
++/* Avoid linux/signal.h, it has an incorrect _NSIG and sigset_t */
++#include <asm-generic/signal.h>
++#include <asm-generic/siginfo.h>
++
+ /* Syscalls for ARM in ARM or Thumb modes :
+  *   - registers are 32-bit
+  *   - stack is 8-byte aligned
+diff --git a/tools/include/nolibc/arch-arm64.h b/tools/include/nolibc/arch-arm64.h
+index 02a3f74c8ec8..ad14fc0ae5cb 100644
+--- a/tools/include/nolibc/arch-arm64.h
++++ b/tools/include/nolibc/arch-arm64.h
+@@ -10,6 +10,9 @@
+ #include "compiler.h"
+ #include "crt.h"
+ 
++/* Architecture has a usable linux/signal.h */
++#include <linux/signal.h>
++
+ /* Syscalls for ARM64 :
+  *   - registers are 64-bit
+  *   - stack is 16-byte aligned
+diff --git a/tools/include/nolibc/arch-loongarch.h b/tools/include/nolibc/arch-loongarch.h
+index 5511705303ea..68d60d04ef59 100644
+--- a/tools/include/nolibc/arch-loongarch.h
++++ b/tools/include/nolibc/arch-loongarch.h
+@@ -10,6 +10,9 @@
+ #include "compiler.h"
+ #include "crt.h"
+ 
++/* Architecture has a usable linux/signal.h */
++#include <linux/signal.h>
++
+ /* Syscalls for LoongArch :
+  *   - stack is 16-byte aligned
+  *   - syscall number is passed in a7
+diff --git a/tools/include/nolibc/arch-m68k.h b/tools/include/nolibc/arch-m68k.h
+index 6dac1845f298..981b4cc55a69 100644
+--- a/tools/include/nolibc/arch-m68k.h
++++ b/tools/include/nolibc/arch-m68k.h
+@@ -13,6 +13,16 @@
+ #include "compiler.h"
+ #include "crt.h"
+ 
++/*
++ * Needed to get the correct struct sigaction definition. m68k does not use
++ * sa_restorer, but it is included in the structure.
++ */
++#define SA_RESTORER	0x04000000
++
++/* Avoid linux/signal.h, it has an incorrect _NSIG and sigset_t */
++#include <asm-generic/signal.h>
++#include <asm-generic/siginfo.h>
++
+ #define _NOLIBC_SYSCALL_CLOBBERLIST "memory"
+ 
+ #define my_syscall0(num)                                                      \
+diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
+index 0cbac63b249a..fb2f503f151f 100644
+--- a/tools/include/nolibc/arch-mips.h
++++ b/tools/include/nolibc/arch-mips.h
+@@ -14,6 +14,9 @@
+ #error Unsupported MIPS ABI
+ #endif
+ 
++/* Architecture has a usable linux/signal.h */
++#include <linux/signal.h>
++
+ /* Syscalls for MIPS ABI O32 :
+  *   - WARNING! there's always a delayed slot!
+  *   - WARNING again, the syntax is different, registers take a '$' and numbers
+diff --git a/tools/include/nolibc/arch-powerpc.h b/tools/include/nolibc/arch-powerpc.h
+index 204564bbcd32..c846a7ddcf3c 100644
+--- a/tools/include/nolibc/arch-powerpc.h
++++ b/tools/include/nolibc/arch-powerpc.h
+@@ -10,6 +10,14 @@
+ #include "compiler.h"
+ #include "crt.h"
+ 
++/* Needed to get the correct struct sigaction definition */
++#define SA_RESTORER	0x04000000
++#define _NOLIBC_ARCH_NEEDS_SA_RESTORER
++
++/* Avoid linux/signal.h, it has an incorrect _NSIG and sigset_t */
++#include <asm-generic/signal.h>
++#include <asm-generic/siginfo.h>
++
+ /* Syscalls for PowerPC :
+  *   - stack is 16-byte aligned
+  *   - syscall number is passed in r0
+diff --git a/tools/include/nolibc/arch-riscv.h b/tools/include/nolibc/arch-riscv.h
+index 885383a86c38..709e6a262d9a 100644
+--- a/tools/include/nolibc/arch-riscv.h
++++ b/tools/include/nolibc/arch-riscv.h
+@@ -10,6 +10,9 @@
+ #include "compiler.h"
+ #include "crt.h"
+ 
++/* Architecture has a usable linux/signal.h */
++#include <linux/signal.h>
++
+ /* Syscalls for RISCV :
+  *   - stack is 16-byte aligned
+  *   - syscall number is passed in a7
+diff --git a/tools/include/nolibc/arch-s390.h b/tools/include/nolibc/arch-s390.h
+index df4c3cc713ac..0dccb6d1ad64 100644
+--- a/tools/include/nolibc/arch-s390.h
++++ b/tools/include/nolibc/arch-s390.h
+@@ -5,13 +5,19 @@
+ 
+ #ifndef _NOLIBC_ARCH_S390_H
+ #define _NOLIBC_ARCH_S390_H
+-#include <linux/signal.h>
+ #include <linux/unistd.h>
+ 
+ #include "compiler.h"
+ #include "crt.h"
+ #include "std.h"
+ 
++/* Needed to get the correct struct sigaction definition */
++#define SA_RESTORER	0x04000000
++
++/* Avoid linux/signal.h, it has an incorrect _NSIG and sigset_t */
++#include <asm-generic/signal.h>
++#include <asm-generic/siginfo.h>
++
+ /* Syscalls for s390:
+  *   - registers are 64-bit
+  *   - syscall number is passed in r1
+diff --git a/tools/include/nolibc/arch-sh.h b/tools/include/nolibc/arch-sh.h
+index a96b8914607e..3378afc78e26 100644
+--- a/tools/include/nolibc/arch-sh.h
++++ b/tools/include/nolibc/arch-sh.h
+@@ -7,9 +7,14 @@
+ #ifndef _NOLIBC_ARCH_SH_H
+ #define _NOLIBC_ARCH_SH_H
+ 
++#include <linux/unistd.h>
++
+ #include "compiler.h"
+ #include "crt.h"
+ 
++/* Architecture has a usable linux/signal.h */
++#include <linux/signal.h>
++
+ /*
+  * Syscalls for SuperH:
+  *   - registers are 32bit wide
+diff --git a/tools/include/nolibc/arch-sparc.h b/tools/include/nolibc/arch-sparc.h
+index ca420d843e25..c9574e7f795a 100644
+--- a/tools/include/nolibc/arch-sparc.h
++++ b/tools/include/nolibc/arch-sparc.h
+@@ -12,6 +12,10 @@
+ #include "compiler.h"
+ #include "crt.h"
+ 
++/* The includes are sane, if one sets __WANT_POSIX1B_SIGNALS__ */
++#define __WANT_POSIX1B_SIGNALS__
++#include <linux/signal.h>
++
+ /*
+  * Syscalls for SPARC:
+  *   - registers are native word size
+@@ -204,4 +208,47 @@ pid_t sys_vfork(void)
+ }
+ #define sys_vfork sys_vfork
+ 
++#define __nolibc_sa_restorer __nolibc_sa_restorer
++void __nolibc_sa_restorer(void);
++void __nolibc_sa_restorer_wrapper(void);
++void __attribute__((weak,noreturn)) __nolibc_entrypoint __no_stack_protector
++__nolibc_sa_restorer_wrapper(void)
++{
++	/* The C function will have a prologue corrupting "sp" */
++	__asm__  volatile (
++		".section .text\n"
++		".align 4\n"
++		".type __nolibc_sa_restorer, @function\n"
++		"__nolibc_sa_restorer:\n"
++		"nop\n"
++		"nop\n"
++		"mov %0, %%g1 \n"
++#ifdef __arch64__
++		"t 0x6d\n"
++#else
++		"t 0x10\n"
++#endif
++		".size __nolibc_sa_restorer, .-__nolibc_sa_restorer\n"
++		:: "n"(__NR_rt_sigreturn)
++	);
++	__nolibc_entrypoint_epilogue();
++}
++
++/*
++ * sparc has ODD_RT_SIGACTION, we need to pass the restorer as an argument
++ * to rt_sigaction.
++ */
++#define sys_rt_sigaction sys_rt_sigaction
++static __attribute__((unused))
++int sys_rt_sigaction(int signum, const struct sigaction *act, struct sigaction *oldact)
++{
++	struct sigaction real_act = *act;
++
++	/* Otherwise we would need to use sigreturn instead of rt_sigreturn */
++	real_act.sa_flags |= SA_SIGINFO;
++
++	return my_syscall5(__NR_rt_sigaction, signum, &real_act, oldact,
++			   __nolibc_sa_restorer, sizeof(act->sa_mask));
++}
++
+ #endif /* _NOLIBC_ARCH_SPARC_H */
+diff --git a/tools/include/nolibc/arch-x86.h b/tools/include/nolibc/arch-x86.h
+index d3efc0c3b8ad..1fe75203d834 100644
+--- a/tools/include/nolibc/arch-x86.h
++++ b/tools/include/nolibc/arch-x86.h
+@@ -10,8 +10,21 @@
+ #include "compiler.h"
+ #include "crt.h"
+ 
++/* Needed to get the correct struct sigaction definition */
++#define SA_RESTORER	0x04000000
++
++/* Restorer must be set on x86 for both 32 and 64 bit */
++#define _NOLIBC_ARCH_NEEDS_SA_RESTORER
++
++/* Avoid linux/signal.h, it has an incorrect _NSIG and sigset_t */
++#include <asm-generic/signal.h>
++#include <asm-generic/siginfo.h>
++
+ #if !defined(__x86_64__)
+ 
++/* On i386 we need to set SA_SIGINFO to use rt_sigreturn */
++#define _NOLIBC_ARCH_FORCE_SIG_FLAGS SA_SIGINFO
++
+ /* Syscalls for i386 :
+  *   - mostly similar to x86_64
+  *   - registers are 32-bit
+diff --git a/tools/include/nolibc/signal.h b/tools/include/nolibc/signal.h
+index ac13e53ac31d..cbba57012767 100644
+--- a/tools/include/nolibc/signal.h
++++ b/tools/include/nolibc/signal.h
+@@ -14,6 +14,14 @@
+ #include "arch.h"
+ #include "types.h"
+ #include "sys.h"
++#include "string.h"
++/* other signal definitions are included by arch.h */
++
++/* The kernel headers do not provide a sig_atomic_t definition */
++#ifndef __sig_atomic_t_defined
++#define __sig_atomic_t_defined 1
++typedef int sig_atomic_t;
++#endif
+ 
+ /* This one is not marked static as it's needed by libgcc for divide by zero */
+ int raise(int signal);
+@@ -23,4 +31,99 @@ int raise(int signal)
+ 	return sys_kill(sys_getpid(), signal);
+ }
+ 
++/*
++ * sigaction(int signum, const struct sigaction *act, struct sigaction *oldact)
++ */
++#if defined(_NOLIBC_ARCH_NEEDS_SA_RESTORER) && !defined(__nolibc_sa_restorer)
++static __no_stack_protector
++void __nolibc_sa_restorer(void)
++{
++	my_syscall0(__NR_rt_sigreturn);
++}
++#endif
++
++#ifndef sys_rt_sigaction
++static __attribute__((unused))
++int sys_rt_sigaction(int signum, const struct sigaction *act, struct sigaction *oldact)
++{
++	struct sigaction real_act = *act;
++#if defined(_NOLIBC_ARCH_NEEDS_SA_RESTORER)
++	if (!(real_act.sa_flags & SA_RESTORER)) {
++		real_act.sa_flags |= SA_RESTORER;
++		real_act.sa_restorer = __nolibc_sa_restorer;
++	}
++#endif
++#ifdef _NOLIBC_ARCH_FORCE_SIG_FLAGS
++	real_act.sa_flags |= _NOLIBC_ARCH_FORCE_SIG_FLAGS;
++#endif
++
++	return my_syscall4(__NR_rt_sigaction, signum, &real_act, oldact,
++			   sizeof(act->sa_mask));
++}
++#endif
++
++static __attribute__((unused))
++int sigaction(int signum, const struct sigaction *act, struct sigaction *oldact)
++{
++	return __sysret(sys_rt_sigaction(signum, act, oldact));
++}
++
++/*
++ * int sigemptyset(sigset_t *set)
++ */
++static __attribute__((unused))
++int sigemptyset(sigset_t *set)
++{
++	BITSET_ZERO(set->sig);
++	return 0;
++}
++
++/*
++ * int sigfillset(sigset_t *set)
++ */
++static __attribute__((unused))
++int sigfillset(sigset_t *set)
++{
++	memset(set, 0xff, sizeof(*set));
++	return 0;
++}
++
++/*
++ * int sigaddset(sigset_t *set, int signum)
++ */
++static __attribute__((unused))
++int sigaddset(sigset_t *set, int signum)
++{
++	if (signum < 1 || signum > _NSIG)
++		return __sysret(-EINVAL);
++
++	BITSET_SET(signum - 1, set->sig);
++	return 0;
++}
++
++/*
++ * int sigdelset(sigset_t *set, int signum)
++ */
++static __attribute__((unused))
++int sigdelset(sigset_t *set, int signum)
++{
++	if (signum < 1 || signum > _NSIG)
++		return __sysret(-EINVAL);
++
++	BITSET_CLR(signum - 1, set->sig);
++	return 0;
++}
++
++/*
++ * int sigismember(sigset_t *set, int signum)
++ */
++static __attribute__((unused))
++int sigismember(sigset_t *set, int signum)
++{
++	if (signum < 1 || signum > _NSIG)
++		return __sysret(-EINVAL);
++
++	return BITSET_ISSET(signum - 1, set->sig);
++}
++
+ #endif /* _NOLIBC_SIGNAL_H */
+diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+index 295e71d34aba..73b935576561 100644
+--- a/tools/include/nolibc/sys.h
++++ b/tools/include/nolibc/sys.h
+@@ -14,7 +14,6 @@
+ 
+ /* system includes */
+ #include <linux/unistd.h>
+-#include <linux/signal.h>  /* for SIGCHLD */
+ #include <linux/termios.h>
+ #include <linux/mman.h>
+ #include <linux/fs.h>
+@@ -24,6 +23,7 @@
+ #include <linux/fcntl.h> /* for O_* and AT_* */
+ #include <linux/sched.h> /* for clone_args */
+ #include <linux/stat.h>  /* for statx() */
++/* signal definitions are included by arch.h */
+ 
+ #include "errno.h"
+ #include "stdarg.h"
+diff --git a/tools/include/nolibc/time.h b/tools/include/nolibc/time.h
+index d02bc44d2643..103574f76515 100644
+--- a/tools/include/nolibc/time.h
++++ b/tools/include/nolibc/time.h
+@@ -14,9 +14,8 @@
+ #include "arch.h"
+ #include "types.h"
+ #include "sys.h"
 -
--/* for select() */
--typedef struct {
--	unsigned long fds[(FD_SETSIZE + FD_SETBITMASK) / FD_SETIDXMASK];
--} fd_set;
--
--#define FD_CLR(fd, set) do {						\
--		fd_set *__set = (set);					\
--		int __fd = (fd);					\
--		if (__fd >= 0)						\
--			__set->fds[__fd / FD_SETIDXMASK] &=		\
--				~(1U << (__fd & FD_SETBITMASK));	\
-+#define BITSET_CLR(num, set) do {					  \
-+		__typeof__(set) *__set = &(set);			  \
-+		int __num = (num);					  \
-+		if (__num >= 0 && __num < 8 * (ssize_t)sizeof(*__set))	  \
-+			(*__set)[__num / (8 * sizeof(set[0]))] &=	  \
-+				~(1U << (__num % (8 * sizeof(**__set)))); \
- 	} while (0)
+-#include <linux/signal.h>
+ #include <linux/time.h>
++/* signal definitions are included by arch.h */
  
--#define FD_SET(fd, set) do {						\
--		fd_set *__set = (set);					\
--		int __fd = (fd);					\
--		if (__fd >= 0)						\
--			__set->fds[__fd / FD_SETIDXMASK] |=		\
--				1 << (__fd & FD_SETBITMASK);		\
-+#define BITSET_SET(num, set) do {					\
-+		__typeof__(set) *__set = &(set);			\
-+		int __num = (num);					\
-+		if (__num >= 0 && __num < 8 * (ssize_t)sizeof(*__set))	\
-+			(*__set)[__num / (8 * sizeof(set[0]))] |=	\
-+				1U << (__num % (8 * sizeof(**__set)));	\
- 	} while (0)
+ static __inline__
+ void __nolibc_timespec_user_to_kernel(const struct timespec *ts, struct __kernel_timespec *kts)
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index a297ee0d6d07..0bed3270a867 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -1270,6 +1270,72 @@ int test_namespace(void)
+ 	return ret;
+ }
  
--#define FD_ISSET(fd, set) ({						\
--			fd_set *__set = (set);				\
--			int __fd = (fd);				\
-+#define BITSET_ISSET(num, set) ({					\
-+		__typeof__(set) *__set = &(set);			\
-+		int __num = (num);					\
- 		int __r = 0;						\
--		if (__fd >= 0)						\
--			__r = !!(__set->fds[__fd / FD_SETIDXMASK] &	\
--1U << (__fd & FD_SETBITMASK));						\
--		__r;							\
-+		if (__num >= 0 && __num < 8 * (ssize_t)sizeof(*__set))	\
-+			__r = (*__set)[__num / (8 * sizeof(set[0]))] &	\
-+			      (1U << (__num % (8 * sizeof(**__set))));	\
-+		!!__r;							\
- 	})
- 
--#define FD_ZERO(set) do {						\
--		fd_set *__set = (set);					\
-+#define BITSET_ZERO(set) do {						\
-+		__typeof__(set) *__set = &(set);			\
- 		int __idx;						\
--		int __size = (FD_SETSIZE+FD_SETBITMASK) / FD_SETIDXMASK;\
-+		int __size = sizeof(*__set) / sizeof(**__set);		\
- 		for (__idx = 0; __idx < __size; __idx++)		\
--			__set->fds[__idx] = 0;				\
-+			(*__set)[__idx] = 0;				\
- 	} while (0)
- 
-+#define FD_SETIDXMASK (8 * sizeof(unsigned long))
-+#define FD_SETBITMASK (8 * sizeof(unsigned long)-1)
++sig_atomic_t signal_check;
 +
-+/* for select() */
-+typedef struct {
-+	unsigned long fds[(FD_SETSIZE + FD_SETBITMASK) / FD_SETIDXMASK];
-+} fd_set;
++static void sighandler(int signum)
++{
++	if (signum == SIGUSR1) {
++		kill(getpid(), SIGUSR2);
++		signal_check = 1;
++	} else {
++		signal_check++;
++	}
++}
 +
-+#define FD_CLR(fd, set) BITSET_CLR(fd, (set)->fds)
-+#define FD_SET(fd, set) BITSET_SET(fd, (set)->fds)
-+#define FD_ISSET(fd, set) BITSET_ISSET(fd, (set)->fds)
-+#define FD_ZERO(set) BITSET_ZERO((set)->fds)
++int test_signals(int test_idx)
++{
++	struct sigaction sa = {
++		.sa_flags = 0,
++		.sa_handler = sighandler,
++	};
++	struct sigaction sa_old = {
++		/* Anything other than SIG_DFL */
++		.sa_handler = sighandler,
++	};
++	int llen; /* line length */
++	int ret = 0;
++	int res;
 +
- /* for getdents64() */
- struct linux_dirent64 {
- 	uint64_t       d_ino;
++	signal_check = 0;
++
++	sigemptyset(&sa.sa_mask);
++	sigaddset(&sa.sa_mask, SIGUSR2);
++
++	res = sigaction(SIGUSR1, &sa, &sa_old);
++	llen = printf("    register SIGUSR1: %d", res);
++	EXPECT_SYSZR(1, res);
++	if (res)
++		goto out;
++
++	llen = printf("    sa_old.sa_handler: SIG_DFL (%p)", SIG_DFL);
++	EXPECT_PTREQ(1, SIG_DFL, sa_old.sa_handler);
++	if (res)
++		goto out;
++
++	res = sigaction(SIGUSR2, &sa, NULL);
++	llen = printf("    register SIGUSR2: %d", res);
++	EXPECT_SYSZR(1, res);
++	if (res)
++		goto out;
++
++	/* Trigger the first signal. */
++	kill(getpid(), SIGUSR1);
++
++	/* If signal_check is 1 or higher, then signal emission worked */
++	llen = printf("    signal emission: 1 <= signal_check");
++	EXPECT_GE(1, signal_check, 1);
++
++	/* If it is 2, then signal masking worked */
++	llen = printf("    signal masking: 2 == signal_check");
++	EXPECT_EQ(1, signal_check, 2);
++
++out:
++	llen = printf("%d %s", test_idx, "sigaction");
++	EXPECT_EQ(1, res, 0);
++
++	return ret;
++}
++
+ /* Run syscall tests between IDs <min> and <max>.
+  * Return 0 on success, non-zero on failure.
+  */
+@@ -1398,6 +1464,7 @@ int run_syscall(int min, int max)
+ 		CASE_TEST(syscall_noargs);    EXPECT_SYSEQ(1, syscall(__NR_getpid), getpid()); break;
+ 		CASE_TEST(syscall_args);      EXPECT_SYSER(1, syscall(__NR_statx, 0, NULL, 0, 0, NULL), -1, EFAULT); break;
+ 		CASE_TEST(namespace);         EXPECT_SYSZR(euid0 && proc, test_namespace()); break;
++		case __LINE__:                ret += test_signals(test); break;
+ 		case __LINE__:
+ 			return ret; /* must be last */
+ 		/* note: do not set any defaults so as to permit holes above */
 -- 
 2.50.0
 
