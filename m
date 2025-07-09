@@ -1,80 +1,81 @@
-Return-Path: <linux-kselftest+bounces-36856-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36857-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20872AFF229
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 21:59:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 012EFAFF233
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 21:59:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5D8715A5D2D
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 19:59:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3E0815A63D6
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 19:59:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEC72242D8A;
-	Wed,  9 Jul 2025 19:58:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2E8124501B;
+	Wed,  9 Jul 2025 19:59:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j6nR+H5r"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DmK1lP52"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A882238D42;
-	Wed,  9 Jul 2025 19:58:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF697242902;
+	Wed,  9 Jul 2025 19:58:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752091139; cv=none; b=UpOkBU0IQOvZa155ee8p1e/Anhu77QwSIIYk7la4pTTVeiJrFe9jZ+x8XQCwM0WFx452zS5PiAW8CtAi/SVXg8mlmodSKvUnrn7/60PondSveC0fdI4exJSRRsrli++go2yiiSXGNAuQC6Holb44t6/fPFoxSInA8vVzoX17JXw=
+	t=1752091140; cv=none; b=FLU35Ali0dsFMYoZ0ZWYYsBM07fPJVP5CC5Z/xHarfYA3REFbfFdfWWqHTWwtd0JlVvbl6Bkhqi57li4kvgAim1Sh7ulo1D/7OMNG5oVkgeXVKSx2Yxp1k0p9Id9LYACgSvGpXzHzGg/TYHXV2QJfe9ROJVD22ZXM/zy9iBaJKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752091139; c=relaxed/simple;
-	bh=nBlkFnTcckjF5CbJjPS9IWrVMsJlh81nI5aNSP2eMQM=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=gy6l1Vu74YasholVHIDYDA3ItZJiscLef5eUn0LNfAKdBdobofWt9hyfku6sTfwsmO5ICB7ZARScVNDz2rZSka3Lh4uEGQ3zPiCbIi0Spsr2MGe1N9peXcQJwHwIPBfgoDeCQS5KyxSQ4fe1ikFcGsmRwKmDjLolhcY03IdHJcg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j6nR+H5r; arc=none smtp.client-ip=209.85.160.174
+	s=arc-20240116; t=1752091140; c=relaxed/simple;
+	bh=lXhB3ReogTGFAKcAXwsx9yhjUwYICNU9NQ66zLyVw8I=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=B2ZugmeHcAzoXRCwWkkXt6riD5BwQQIKY9JowRZLlmyOYO/WLE+KUWDJPEEt5ahPr+/psLEtjnOiN6n6uiSuLrir5W78UR38s35ZrorGx6I44JpDhN5axRUEA4Mm+cMyNygaOSzWmcaXwWAVS0wDXuXD5vyGbRICFlh0WBehy2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DmK1lP52; arc=none smtp.client-ip=209.85.160.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-4a5903bceffso3752541cf.3;
-        Wed, 09 Jul 2025 12:58:56 -0700 (PDT)
+Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-4a442a3a2bfso4105751cf.1;
+        Wed, 09 Jul 2025 12:58:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752091136; x=1752695936; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ugaGedfdExj0AxEbdScIbc7eibANo0qNIkwwni0XDDk=;
-        b=j6nR+H5rQfjSzOb7FPh5oa38yswzeA6PcfpOlRP5pTp5z2oy7xPkoZ4ObsUNuaD6k/
-         ShheosKIgDfokI5wfjg9twiF/Q9FVPWbDoWQfhxoFOM0K2tXVnvllB3nq7QIbTRBhsPP
-         vl1dKrdWq/Z5NIKI5t5ZI0BapLxq3nk38psFFaIUT6n0Vn2VrgWHk++98tseB+pw6bKQ
-         Ju6g3Vy/SjjSMtAvsqU/M4BcNrdCkQH6y+50P2jUYKQlxOy/jUyuwmVldKL6XnnHML74
-         5pfh9iyAifA6nTV9TGI91p4JuQQ39vRNccH3bJdgLPrv+rq/pNrSD7/ONs4oSL2ICo56
-         UYpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752091136; x=1752695936;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1752091138; x=1752695938; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ugaGedfdExj0AxEbdScIbc7eibANo0qNIkwwni0XDDk=;
-        b=PH/yEn5cHCvjGy7cEwJiAu4aPIEdtcgC3+3XGDUARZS2/hBo7k1zslMiJB5mfHuxuI
-         AgLhKeD4K8XCdJwImbVoIJXJslTGT7Z4n7oZzNR3RhBMXjQavmtFC1S2yiMtIx92NCaW
-         rvUhUlmQs/hn97EYuBPkWj6pi9uGFn/M79BYtLpHvx0keryFhRCRhFBhuQ0Ji3QFjunJ
-         tC3ePW7Mq/EFbzT2fPfRP9uMKNOzf+zUYSJGeJH+qxIdEVtG8q96ln9cpNjBBN2/w/wn
-         uca62MCpQFRT7zH4bJdkFirP1QQpsxCYI86sbD/NInU9AbjticgWuaQu6HlScn92NrCV
-         oJxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV74P+ZENs14aiCkkzjYnqj4sfbPawN36YwlfdfYVIs59p9G9cb0XSuCctHA89AZTvebP2T6KplqeHtJPEJCCo=@vger.kernel.org, AJvYcCVyTINIyFtHWlrC3CErVIcdn7fJv2RJXK465rP1gX+xsbBt+Id4xodU8UfPWU5OEWy9wz0+bvek@vger.kernel.org, AJvYcCWC+LviKilTHcCxymysTrmgsWymJhcr7vRviMn4E40gx9+0dClPwWELI1jLweJPIZdtQtN4q6trUxqi8ng8@vger.kernel.org, AJvYcCX/idahRA+edWwzVA92S+Il0qam+PNw5ad3IeqbVpYn3o3fSLOdxk5/Ba3ZT2Q0hG+Cr2c6PXkQeOkX8mk1hkjg@vger.kernel.org, AJvYcCXlWw5QKaphLtRNNvP69Bd3GVqbfLsSYRL9ZtCufBvx39KuawGiAwAVQC+LMTjw3cHMLtKatWBOl2CU@vger.kernel.org, AJvYcCXwqDdbyVPF3p3FcyGb3cKPN0gwXltjBRsaoiV2QgUHAMfb59LbZWCHTwuFaQ4sJ4SEWj89nPk/Xds=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwotZx+clUs2VcQysSmDQuVmJXIQHy3RyKsSmMDWAXQQ0iIchH7
-	IiiFvcN2KRBgM+j7pijAt34OGAcgwC9OzCfE8qKuaztyD1+Y6ASDiCTc9BaL3+MxNzUEUw==
-X-Gm-Gg: ASbGnct5aD0uC7HSfnutOd0s52ur5xVvK5p9F677/aAeE38G34znPLguoz51yeLIt0H
-	S0EE7nlwrUNIKGUYERNMG7Mg0vUlCNR5LFOaNWmNQE0I6RFSFMrTIIDpq+jNeUB8hoXWEaqID1M
-	Qmbp/4G2oRDIvd9dIR/JncJWkc3Q1mL3gG+P3MxsEn05mQbZupypYWEVkAio3l9xCCoyiJyOOX8
-	/4e4zHUEXmnwQE7+U2uGhs1NGleW0gSphBEbbdZX6PD2kyUq832ZiPoXLx9PGbUdnLJzxyUmfd0
-	SFWibW6rIblr5kVSyRp+zNFZgsVhkUFpoaVEkU7+FFRaptV3P3Y8IqPQoFLc8wMfSzcyDO/00no
-	CYcBs2KzRzlyD/+Id4SSR7rY/r1nMRSqG+TljpMSJg1hTExwDMcerX5F/OA==
-X-Google-Smtp-Source: AGHT+IFRJMxckO2ZQvxVzuz0BTX9q93fp894dtK/TcLSk4gRDmqByiX9UXubFC3KSQukPV9ZDJz60Q==
-X-Received: by 2002:a05:622a:1825:b0:4a9:94c7:f34f with SMTP id d75a77b69052e-4a9dec94b7amr59291501cf.21.1752091135769;
-        Wed, 09 Jul 2025 12:58:55 -0700 (PDT)
+        bh=KjFq7UYS8hmojmjwvZ+zmn/qpSRuJtm2WZezXQ16zw0=;
+        b=DmK1lP52ubuT9PK0ir7YPjPpDL/jZtrasSiK3asyPL+wkUQCfjmzNv4oOYyz/weJGt
+         P/z67a4Q9yNtnFKEmzo/9lLYraZ2ae7jr66yz0u7DnfEosUjtQfHHukCbg5+ZVCuHJGC
+         mGIVy7l2iW7pkWS1ESYGuKjhyyBMP6XQT8erx7kkj9+WC5eZ+Rc2DM1FEDJSGaeTCGcA
+         /z5cjbOf/PxK7wtuUfQev+jkiFZju4S43O7Igna+FQshbon9wdSEl8HsgLAtqy5zFaxh
+         wpDFRzyxv/yBpA9KNT1tlGfrXWKfcbJOKBRptCccjWvIDGS4DEA7WMClIrp0zMYAX3Nk
+         ubug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752091138; x=1752695938;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KjFq7UYS8hmojmjwvZ+zmn/qpSRuJtm2WZezXQ16zw0=;
+        b=po02j3zr/Td88QPyIXdBWgqC96M6YDsLhGE5sr5JoegwHtPLVrTM9sAQK2KQCiPBaj
+         /FyOws09GPeN191vQKc7nUnTrDuysOOYK2iPZJ5VxL68LQGcvHNPZ+IHP9xAiLWt0S7j
+         dxNmpptWlL1jx2JL5WwAqn+PQvt4oC4o62OfCqaEBJfuAHZz2KT2UYiurhTcleeoZcG2
+         HVzGPtZdVlydwsFRCD7SsWowTodnR9L04WIubYRKHkymTLALb6oFZ1FN4jyvMxbn4JcK
+         qn+XazOiRCOl6IUPiNUHcoUWYo6qmUX38RL3ThMywv44uVxfs7Ak4NBRXIE4cXSXu7yz
+         /Mkw==
+X-Forwarded-Encrypted: i=1; AJvYcCU4BTQYhPrzHNHuSJIIjLH8nq85JX3SDuvQo1ANa3XHnhAwmmAtTAm/PIzsRMth8DXIQNrakBq1@vger.kernel.org, AJvYcCVOWu5h3M1EHi9icP03qlvo9x8OjxedXo6LIdncbUaksPkXmq7CNRPM39m8GTP31oUwV9GGdP/9ZjKHaRjc@vger.kernel.org, AJvYcCVetoQjm1hBcVcrDXOElsrvFsB8LBe4xm03AabDPScBP/6yCXe2rMowNVt8tiplJAcMq2pfWnEvDsqiTpzI45g=@vger.kernel.org, AJvYcCVv9BQzQJ+yU5QP3vhy0ou1xNfFbxp6aFOa9hYsd0Mxg5vMJBspU9QYtzVJeidTkGm3GVRMRcro9Rpp@vger.kernel.org, AJvYcCXGzuWvEqJJoF3HLNGhTmdG4IL1GMoowNVYe4zHp9hEGufsXO7gvCQyOqnZSufC/Tiegtyt+7zEnbh+tKWBceP4@vger.kernel.org, AJvYcCXMVKIvcRres3io/Goul3muCDR6k7aEnL4BSC+UGP7zRXvPEdQIrp7p3i0n+XnHqfbAgBKhkKPteeU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzT97Gz4UFTnp3ph+W/uzwCWsjfyVJHOWc1ntg46Xl6FmHGN+Vl
+	za9Qxp5UpKvsFzE1U18WciF/IVFFSZidEYtQVEVl37oWOypM278yvU7O
+X-Gm-Gg: ASbGncvM1i5STZuGITp4PUyG64SGVQQ1wz2vLQoNzyODtrOfEORkfi4vS9lmOz9/ndR
+	Usu/3LLq9fe3pbyRp1MjM7YNDeO9APnZ+R/N5/SYpH4F3bN9mP8EUgs4V7raiDfbfOi2S069f37
+	IZ7+7+3l42ynw9nofRWM9bNplzOGSXY5bVMn+oGpE+kw5DPVwy6euYWKAcMpAJg7SZ7FOnezeiQ
+	0jvG1LP32DeRCZepsBBIre/6lSZ9nJ0USwMOouY2/S1cDLXaVljtZVl3eGoGYLo3L1ZtVgiacM8
+	tI3Stuu6FjgaYAl/8NCPImvM/Aenrx9f1AKUGwbvae3OB2WwCWgazPmdqWgCyJ5ZFiUQ/yjZheL
+	mNTBIoRQgfXorILnojHHPYWNjc1Z3AC9j2Z8Vfm9WyfkLSWCUahByF/8eDA==
+X-Google-Smtp-Source: AGHT+IFOO4s6abodeExD0GmybGRrIRuRV+W6D5U0I0Tr1TjDy6dph0KjH9CsZ4l2j8Y+zoOtXMhcrg==
+X-Received: by 2002:a05:622a:1350:b0:472:1aed:c8b4 with SMTP id d75a77b69052e-4a9e94ae9f5mr17712751cf.34.1752091137593;
+        Wed, 09 Jul 2025 12:58:57 -0700 (PDT)
 Received: from 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa ([148.76.185.197])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a9949faf39sm103584281cf.28.2025.07.09.12.58.54
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a9949faf39sm103584281cf.28.2025.07.09.12.58.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Jul 2025 12:58:55 -0700 (PDT)
+        Wed, 09 Jul 2025 12:58:56 -0700 (PDT)
 From: Tamir Duberstein <tamird@gmail.com>
-Subject: [PATCH 00/10] rust: use `core::ffi::CStr` method names
-Date: Wed, 09 Jul 2025 15:58:50 -0400
-Message-Id: <20250709-core-cstr-fanout-1-v1-0-fd793b3e58a2@gmail.com>
+Date: Wed, 09 Jul 2025 15:58:51 -0400
+Subject: [PATCH 01/10] gpu: nova-core: use `core::ffi::CStr` method names
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,11 +84,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAPrJbmgC/02OzQ7CIBAGX6XZsySwpaz0VYwHfhblYKvQGpOm7
- y5RDx5nk51vNqhcMlcYuw0KP3PN89RAHToIVzddWOTYGFDiIElaEebCItSliOSmeV2EEgmlUer
- YIxJCe7wXTvn1kZ7OXy78WJt7+R7Bu9ok8+2Wl7EjY7lH7Y3xMlqMUqdeDVEGPTiZCKmnQNpq+
- G8au1+R/itqQ3fXwHrLxpGPA/H4VHDe9zfyzQPq6QAAAA==
-X-Change-ID: 20250709-core-cstr-fanout-1-f20611832272
+Message-Id: <20250709-core-cstr-fanout-1-v1-1-fd793b3e58a2@gmail.com>
+References: <20250709-core-cstr-fanout-1-v1-0-fd793b3e58a2@gmail.com>
+In-Reply-To: <20250709-core-cstr-fanout-1-v1-0-fd793b3e58a2@gmail.com>
 To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
  Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
  David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
@@ -113,67 +112,42 @@ Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
  netdev@vger.kernel.org, devicetree@vger.kernel.org, 
  Tamir Duberstein <tamird@gmail.com>
 X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openssh-sha256; t=1752091132; l=2312;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1752091132; l=1094;
  i=tamird@gmail.com; h=from:subject:message-id;
- bh=nBlkFnTcckjF5CbJjPS9IWrVMsJlh81nI5aNSP2eMQM=;
+ bh=lXhB3ReogTGFAKcAXwsx9yhjUwYICNU9NQ66zLyVw8I=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgtYz36g7iDMSkY5K7Ab51ksGX7hJgs
  MRt+XVZTrIzMVIAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QL+jEyeJUnwusSTpkUHLNcdvrxo7ekehQIgOJYoy7eGmGdn3FOTGxYt4+VTVEjFPwFYmYhRb1/P
- mWbFKLWIEewY=
+ QHO89qb+A/14W5ZaKLln68gAAlveEjaoU+oksqwcVVthYSjBuURPwVYoW6QTQrF3UolajEuFQa/
+ faudbNVVOKgE=
 X-Developer-Key: i=tamird@gmail.com; a=openssh;
  fpr=SHA256:264rPmnnrb+ERkS7DDS3tuwqcJss/zevJRzoylqMsbc
 
-This is series 2b/5 of the migration to `core::ffi::CStr`[0].
-20250704-core-cstr-prepare-v1-0-a91524037783@gmail.com.
+Prepare for `core::ffi::CStr` taking the place of `kernel::str::CStr` by
+avoid methods that only exist on the latter.
 
-This series depends on the prior series[0] and is intended to go through
-the rust tree to reduce the number of release cycles required to
-complete the work.
-
-Subsystem maintainers: I would appreciate your `Acked-by`s so that this
-can be taken through Miguel's tree (where the other series must go).
-
-[0] https://lore.kernel.org/all/20250704-core-cstr-prepare-v1-0-a91524037783@gmail.com/
-
+Link: https://github.com/Rust-for-Linux/linux/issues/1075
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Alice Ryhl <aliceryhl@google.com>
 Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 ---
-Tamir Duberstein (10):
-      gpu: nova-core: use `core::ffi::CStr` method names
-      rust: auxiliary: use `core::ffi::CStr` method names
-      rust: configfs: use `core::ffi::CStr` method names
-      rust: cpufreq: use `core::ffi::CStr` method names
-      rust: drm: use `core::ffi::CStr` method names
-      rust: firmware: use `core::ffi::CStr` method names
-      rust: kunit: use `core::ffi::CStr` method names
-      rust: miscdevice: use `core::ffi::CStr` method names
-      rust: net: use `core::ffi::CStr` method names
-      rust: of: use `core::ffi::CStr` method names
-
  drivers/gpu/drm/drm_panic_qr.rs | 2 +-
- rust/kernel/auxiliary.rs        | 4 ++--
- rust/kernel/configfs.rs         | 4 ++--
- rust/kernel/cpufreq.rs          | 2 +-
- rust/kernel/drm/device.rs       | 4 ++--
- rust/kernel/firmware.rs         | 2 +-
- rust/kernel/kunit.rs            | 6 +++---
- rust/kernel/miscdevice.rs       | 2 +-
- rust/kernel/net/phy.rs          | 2 +-
- rust/kernel/of.rs               | 2 +-
- samples/rust/rust_configfs.rs   | 2 +-
- 11 files changed, 16 insertions(+), 16 deletions(-)
----
-base-commit: 769e324b66b0d92d04f315d0c45a0f72737c7494
-change-id: 20250709-core-cstr-fanout-1-f20611832272
-prerequisite-change-id: 20250704-core-cstr-prepare-9b9e6a7bd57e:v1
-prerequisite-patch-id: 83b1239d1805f206711a5a936bbb61c83227d573
-prerequisite-patch-id: a0355dd0efcc945b0565dc4e5a0f42b5a3d29c7e
-prerequisite-patch-id: 8585bf441cfab705181f5606c63483c2e88d25aa
-prerequisite-patch-id: 04ec344c0bc23f90dbeac10afe26df1a86ce53ec
-prerequisite-patch-id: a2fc6cd05fce6d6da8d401e9f8a905bb5c0b2f27
-prerequisite-patch-id: f14c099c87562069f25fb7aea6d9aae4086c49a8
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
---  
-Tamir Duberstein <tamird@gmail.com>
+diff --git a/drivers/gpu/drm/drm_panic_qr.rs b/drivers/gpu/drm/drm_panic_qr.rs
+index 6b59d19ab631..fea062cc0383 100644
+--- a/drivers/gpu/drm/drm_panic_qr.rs
++++ b/drivers/gpu/drm/drm_panic_qr.rs
+@@ -948,7 +948,7 @@ fn draw_all(&mut self, data: impl Iterator<Item = u8>) {
+         // nul-terminated string.
+         let url_cstr: &CStr = unsafe { CStr::from_char_ptr(url) };
+         let segments = &[
+-            &Segment::Binary(url_cstr.as_bytes()),
++            &Segment::Binary(url_cstr.to_bytes()),
+             &Segment::Numeric(&data_slice[0..data_len]),
+         ];
+         match EncodedMsg::new(segments, tmp_slice) {
+
+-- 
+2.50.0
 
 
