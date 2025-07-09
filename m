@@ -1,151 +1,89 @@
-Return-Path: <linux-kselftest+bounces-36876-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36877-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93F55AFF28E
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 22:06:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 404A5AFF2D0
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 22:18:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6606D3B03E4
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 20:05:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 14A17162DE1
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 20:18:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C18282EAB7B;
-	Wed,  9 Jul 2025 20:00:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5631A221267;
+	Wed,  9 Jul 2025 20:18:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="awkeAFBe"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DrdI+k3p"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42451258CD8;
-	Wed,  9 Jul 2025 20:00:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F49B5661;
+	Wed,  9 Jul 2025 20:18:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752091230; cv=none; b=k8rvboB3+9UNZIp+GmUUsfwBKvhC6tEAh6vLoxhyHRh0sScizBbvpZUve9nQ3nOU/NCGj70FdofUtXf2assqFQMnyIIJ62oLJ75hmjvROUPbXXwwmJa+C+lYS/8exldNB2SMx31XTt5h8RyJ8/i+iv2+cXayDVMeSMntiXXqplQ=
+	t=1752092284; cv=none; b=HgPsKzxDXs55mBZBL5LQh7QnirVcMsJ5/09OxAaqZqncNHG6xa4eXpZEu/mZ0Ydz4j8H1rS/KTK0E0B6lQB12s4+obw9vIZx7BzWjp3q5F81oXeirdC2VFaN0PIAqsC60KEwVcJMDj2BA4fs32l1YJ/QvmUCM97CdZ7tw3/Gvb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752091230; c=relaxed/simple;
-	bh=6Oa3cXehoAzpEzhSDCacIqKa9qd81pBdJbPezrggmQs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=tyIHrPsAvcDh4q0GG+975IYt3TXGWXCgIymoCvOQNo4lkvl9XluLG8tVsrjA1+oBf74RkCyRHbyLNZW/ZoHQRv5RfT3tAmRoLuENFbg6QAHJzArJwuIbrqLblZbAieJXC0qjv30Ca5ZEl57hw3YUmYb3z+nemaZL1fOZFu6yPy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=awkeAFBe; arc=none smtp.client-ip=209.85.160.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-4a44b9b2af8so2020221cf.3;
-        Wed, 09 Jul 2025 13:00:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752091228; x=1752696028; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=t/DcNjK+ad89tRBvsQX+S6zpol8aKve5l6g7f8vctP0=;
-        b=awkeAFBeeVjPXLUSyUR+Y4NDH6W79R4NNAM631nQHdtFUyV9UglaT60Mlb1WYp0Xje
-         xNwX0y6Ne/z0PuehcyRPMOyqInp5TjXUHncuqDg4jYNjiE+CPq30GT3MzHhcYjtEkUn7
-         xkNlSnl+K9x/Og9VXsd6qzYqmh8ZAYbIh4PSCQeekwnBM9cGv+/TelxtJwRhrinQh4MC
-         XNktPRma4ty6EAuvb1Rk4CIqPEABACfhweE72P3X9ItwtWOABvD+Byd8cBCkGmL74XZs
-         PtGCUAhcXOkP6LV0a6bl7LHR/HMB/esPd+8ehnCR7HjaKlCT5nBsqY4kQ+yZPvLa3KFe
-         T1PQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752091228; x=1752696028;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=t/DcNjK+ad89tRBvsQX+S6zpol8aKve5l6g7f8vctP0=;
-        b=qiiqX2cjjXsVWWmWtzw2Mr3Qg83NzVmyHsk8IFKA3JBgwrAhIuSRJ+2xBm2sSKGoEV
-         SCzJxCcXCVl/wkxlLHZ5FsOQ9jN7qL+ds888SDdT4NOIVu6KWWfOUoBZd5gmdlF2aaLT
-         2tyPMV7iY1MIslzPib1iagV1A6mwLYJG24/LidedKQL7QRHLIK3cCiDbSgoZkQDS4SfA
-         o/VhNKWl9wngrlFe33XNZ81njg95YMHO/4oflAUPEHV/rahLhTAC8HgXNLD58gl9MDbv
-         HPPQteXfN3MFCagT85iAwefEwiAmt+IR8ulOMbH6NlQyt745GQm9tWefUmvz764cWk34
-         ZjEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWi00aKeq/EiCPQU0fX8ZLNCGVZDBiJ4GTD1+/C2nR+E8XYlhTQFci48RV/C+yELoCcETUut/+/k5C+4OZB@vger.kernel.org, AJvYcCWieZaSjYp9avUJ8NXsGxBsRX/EIFaFUnjrE+t9EI1uWnqdMmkLtK1xQDi7p7Hbrv2XsXPYsCSPY68GIZh+VAMc@vger.kernel.org, AJvYcCXPqSPa/Uw1GH1mIc8EW3XeLpSwdQOSZl046ARdUwql6DB8w9umoZfMEwcbtjk6wxmyZYJq5Dsy44+yhw==@vger.kernel.org, AJvYcCXbkWuJXWvDo8jIQ+gtNWcoT4Ogbc63EWIjNaYNJX98WNH6czMMROCZsmwNnER0tfP04S02TfKvXHLJSDm00KY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YynH2MRFthrHnGOyq16dxES9VCkwQD6ZQt2bbd7Sl6S72gSK2/8
-	h/bRJXgtAB/QJxxUh5E/eKh735gmE0SYqiDnTY0hKMSC4GReAWGDDoqI
-X-Gm-Gg: ASbGncuRVCmQ1FRdLZLM6ukBnepYbESbBPddWU/9dcW8fXiSUkNj17qtGS5Ph+9ejN6
-	4xt74NQkWsnuFYtJNGvlv6ju973iLsOK6BjcHLSIeKQh0FSgr517khBRwa+LX1Ha0ggY6SmJmQb
-	vC26lYDND5Ec0zf3r2X6SAevjsNq/GaO/QowL1RKcDsfib/UfljDofvEZaUPwKV/tEb2BJ3RIMx
-	cTOBlOjh2axxZQPYq80rQkzR2jZYBELYSbLeF3e5AG3exbrJ+VdylXnC2O+zHIU9tHcHiB/olzd
-	9AKJVMYrysp00rKctCpk8IwBO1uo2wP3LI7NUljYFWKD3qvsBwnoaazHOKgSlJNjWfIuvGlnh3G
-	EfYQpj6+t2fRIzld4iyyhBBM9OQTg8O6nEUB9HFQKKlM0VICmjihPc4Hu9A==
-X-Google-Smtp-Source: AGHT+IGDPYWz+E3dnMDl2IGcpOC6d+1Nh292sF9LOImxi5N/DxYBIIqZq2RWfnk0uSSfN7WXQL9XKg==
-X-Received: by 2002:ac8:5713:0:b0:4a5:a96d:606d with SMTP id d75a77b69052e-4a9ded52558mr52943921cf.46.1752091225141;
-        Wed, 09 Jul 2025 13:00:25 -0700 (PDT)
-Received: from 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa ([148.76.185.197])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a9949e4aaasm100432891cf.3.2025.07.09.13.00.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Jul 2025 13:00:24 -0700 (PDT)
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Wed, 09 Jul 2025 16:00:08 -0400
-Subject: [PATCH 9/9] rust: sync: use `kernel::{fmt,prelude::fmt!}`
+	s=arc-20240116; t=1752092284; c=relaxed/simple;
+	bh=RlYoB+kZXiNeUDJwbYgQWmg8iP/ByZitMwbHNP6vQLY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=lpxKoWX/XuxS5CTccywWlnPyV3H5iKLzn5XokmvtLoC6+rbAHkl+IvH+RPYbDj81F8RJgR5Ka99Z44qHs7BXiFeTNmHLhPMTkTQsa+/oxXEvW4Gi/EryccuRhu7IoBRKUewdMKsq0z/5BmNDUcBDaUrU5nfmidGYuch7R3UpZHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DrdI+k3p; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44CB0C4CEEF;
+	Wed,  9 Jul 2025 20:18:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752092281;
+	bh=RlYoB+kZXiNeUDJwbYgQWmg8iP/ByZitMwbHNP6vQLY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=DrdI+k3p53YVgWVZFb6P58txnLKWzPiZ3uKrdRzScDeb1Nz6zeY6F4KBO+H7nCqrx
+	 XwuuxwVFOZLzv/5FM5BTG0bQas+WmPUnwT+4EZrl4D0fWIAnA4e7sKcK2CJWxTSMq0
+	 U47a5NXlQDtRt9QTSCFXGK3Np2D6SnAP6esgKhKR6uXNdrKdRTGCneCqj/rURkpwM6
+	 AsBMelU1jz9R5cIuvYEcWGQybBqVjtuHPcOaGJ52VkL4PYqwaZuNtQ+LK3kJ0akibR
+	 0nbz0kZAeA2sHdqITGz8gPYyIEgmUnl8ADsWZwPFO0lLsLo4D95ZEDEYQSIb+WgPu1
+	 3iHNj+Qi5vapQ==
+Date: Wed, 9 Jul 2025 13:18:00 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Nimrod Oren <noren@nvidia.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+ <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Willem de Bruijn
+ <willemb@google.com>, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Gal Pressman <gal@nvidia.com>, Carolina
+ Jubran <cjubran@nvidia.com>
+Subject: Re: [PATCH net] selftests: drv-net: rss_ctx: Add short delay
+ between per-context traffic checks
+Message-ID: <20250709131800.580fde62@kernel.org>
+In-Reply-To: <6b8c512d-ced5-4116-9dde-fee081fda850@nvidia.com>
+References: <20250629111812.644282-1-noren@nvidia.com>
+	<20250701172352.5dd42418@kernel.org>
+	<6b8c512d-ced5-4116-9dde-fee081fda850@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250709-core-cstr-fanout-1-v1-9-64308e7203fc@gmail.com>
-References: <20250709-core-cstr-fanout-1-v1-0-64308e7203fc@gmail.com>
-In-Reply-To: <20250709-core-cstr-fanout-1-v1-0-64308e7203fc@gmail.com>
-To: Danilo Krummrich <dakr@kernel.org>, David Airlie <airlied@gmail.com>, 
- Simona Vetter <simona@ffwll.ch>, Miguel Ojeda <ojeda@kernel.org>, 
- Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
- Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
- Jens Axboe <axboe@kernel.dk>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Brendan Higgins <brendan.higgins@linux.dev>, 
- David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>
-Cc: nouveau@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
- linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
- linux-block@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- kunit-dev@googlegroups.com, Tamir Duberstein <tamird@gmail.com>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openssh-sha256; t=1752091204; l=915;
- i=tamird@gmail.com; h=from:subject:message-id;
- bh=6Oa3cXehoAzpEzhSDCacIqKa9qd81pBdJbPezrggmQs=;
- b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgtYz36g7iDMSkY5K7Ab51ksGX7hJgs
- MRt+XVZTrIzMVIAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QKYLyzXzfoucuo4J/QNdzaRaKqUYTTxwz+z6ySMVetanHNnBRutB6OmGm/FR1SsxfYNVnaPWV3g
- F0cQtdEM7Tgs=
-X-Developer-Key: i=tamird@gmail.com; a=openssh;
- fpr=SHA256:264rPmnnrb+ERkS7DDS3tuwqcJss/zevJRzoylqMsbc
 
-Reduce coupling to implementation details of the formatting machinery by
-avoiding direct use for `core`'s formatting traits and macros.
+On Wed, 9 Jul 2025 20:10:14 +0300 Nimrod Oren wrote:
+> On 02/07/2025 3:23, Jakub Kicinski wrote:
+> > On Sun, 29 Jun 2025 14:18:12 +0300 Nimrod Oren wrote:  
+> >> A few packets may still be sent and received during the termination of
+> >> the iperf processes. These late packets cause failures when they arrive
+> >> on queues expected to be empty.
+> >>
+> >> Add a one second delay between repeated _send_traffic_check() calls in
+> >> rss_ctx tests to ensure such packets are processed before the next
+> >> traffic checks are performed.  
+> > 
+> > Sprinklings sleeps should be last resort. Is there a way to wait for
+> > iperf to shut down cleanly, or wait for the socket to be closed fully?
+> > Like wait_port_listen() ?  
+> 
+> The socket may end up in TIME_WAIT state, so waiting for it to be fully
+> closed can take ~2 mins.
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reviewed-by: Alice Ryhl <aliceryhl@google.com>
-Signed-off-by: Tamir Duberstein <tamird@gmail.com>
----
- rust/kernel/sync/arc.rs | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
-index c7af0aa48a0a..b366260f56b3 100644
---- a/rust/kernel/sync/arc.rs
-+++ b/rust/kernel/sync/arc.rs
-@@ -18,14 +18,13 @@
- 
- use crate::{
-     alloc::{AllocError, Flags, KBox},
--    bindings,
-+    bindings, fmt,
-     init::InPlaceInit,
-     try_init,
-     types::{ForeignOwnable, Opaque},
- };
- use core::{
-     alloc::Layout,
--    fmt,
-     marker::PhantomData,
-     mem::{ManuallyDrop, MaybeUninit},
-     ops::{Deref, DerefMut},
-
--- 
-2.50.0
-
+TIME_WAIT is as good as CLOSED for our purposes. Once we got a FIN
+the chances of more traffic should be minuscule.
 
