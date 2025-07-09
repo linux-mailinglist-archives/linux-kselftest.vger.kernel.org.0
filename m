@@ -1,53 +1,52 @@
-Return-Path: <linux-kselftest+bounces-36886-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36888-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54462AFF392
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 23:03:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2C84AFF393
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 23:03:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3C9154E3B92
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 21:02:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4603F566CB8
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 21:03:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63CA72472BC;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B495F2550CF;
 	Wed,  9 Jul 2025 21:02:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="huokh8uQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e49MpGRT"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29F65243954;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A0F72494D8;
 	Wed,  9 Jul 2025 21:02:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752094971; cv=none; b=aRaYXJ2WlvCm/ivx/XsZ53eFCZO0DGWinBAZGUI+W0orF4grysjg0q0meIBS22Z7hISqEQNY3yZ2FJD3+bq4ZeBpby6hqEkeBEtc5JrkOGbIK9f3khhKrALhrf7C4TF2es7l2CwVZEcpQSOPKoJWetD7wM43SnCmvRg7u+JVcFw=
+	t=1752094971; cv=none; b=s0Ad7xX5aprtXY2izclvKiVoVkU9B3erChdIios6rRpaFRhMT+0ysaf6DZa6fw8pFFiRmV0qmPBGdCEumuk8sV9SXV2VP151p4DhKxoTLRL3wOlcfmLysmJNU5XRFMQQzYhm9pAqfQoAMryGqDdooo199lAfGhDEvF5gTnJhWdg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1752094971; c=relaxed/simple;
-	bh=Q8B1Dku/Ofi9wXT/6+cHHNsu15ChbWIvtmxnF+vBdXc=;
+	bh=qzQN1/FxrgD81U6ooAWpH7PxpXbtzfixiuy2FxBNv1o=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=oCGBDqSq1m1xtGDw/GeqcRYzKt59u5eZU+tG99qpDoczz9Tp/I37QazwCcGcyRv80kc1UEHEnWRTD7WGnLyW03dLyY3RUEegyLCkdaX537hEAqyyFDB2c2Hthxk1JJZw0Yl2Rw7EmLTx+i0g+NLY+Jljv9hmfUkxDWmPvU44BPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=huokh8uQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9737BC4CEF7;
+	 In-Reply-To:To:Cc; b=Wrc9WDRrJska3IA7Vwdw4rkKx1oH8cnQBRbmo3cTs0CtcpXbNsolNraVukkOybobNdRlGANVe4+of+KiqkestopDZnWbJT8d7XM8XrLGWEtFN0vj9rfsd51dJfe0uelEtaXe2z4Vzajq1c3bh2iRKNE53zxvwRXkDshaOmt7e9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e49MpGRT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B0043C4CEF5;
 	Wed,  9 Jul 2025 21:02:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1752094970;
-	bh=Q8B1Dku/Ofi9wXT/6+cHHNsu15ChbWIvtmxnF+vBdXc=;
+	bh=qzQN1/FxrgD81U6ooAWpH7PxpXbtzfixiuy2FxBNv1o=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=huokh8uQCh5yoxuj3vebuIyHOvMSrIKIlgtEupBfF85M9GGkTN1Cx507J/i/rqVjU
-	 Pou1gdMH7VjwfMFaxoNvxLlnVnBiSgvorUOje0ag5TkJio9aIJMGQ0Mz7qtIxOjka4
-	 KFcWNCUAr1uKcreJVHx/lNDy6PRFx6LQb/Jcy7tg1KRDhyhrMowL3gkWEpVcIMb9aA
-	 iZ1hKKtNnymyMhH4nLs8oRLBXmHeAnWMLSTEVzV6UyOvct5P3x6dm+vVytEVLDoSE6
-	 LaO9sKUaYV6k+egxRw4oEleb/m/SuYC+amERGERWGmMVQjpqENn/8wzel2VdkeQGgI
-	 sHjV5ThqLHreQ==
+	b=e49MpGRTpBHoONoqo70e2/OTRYgwz8gxykhWS2f9YroKwaWYG9wrvgmhPDLe1UyWc
+	 9JhSNU/ufvp3dgiNKxN3b86UDTPIJUnozo7rEqq7455DKYEqdcP9gz32jbL+hXpXq0
+	 +KEwuCeGL/YW9C2NS9Tz75oEWDjWGGHFy1X7Mv4fGsWfrXALqraY8cGIHo47MvqW4S
+	 R9LcNATYlfqz/ikb+X1iBjfR+m7SDGy4e9lp9HCFiraRdDByEK3aRlixsBz14OcFYf
+	 Ue/tJM5dQlD2vaMH16sGrdxXQF3Xa76qbHejHtnl+/My0xS7/bUCrqRsu0s9wloyNL
+	 qsjK983IOuwRA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E158C83F0A;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E6FFC83F14;
 	Wed,  9 Jul 2025 21:02:50 +0000 (UTC)
 From: Frank Li via B4 Relay <devnull+Frank.Li.nxp.com@kernel.org>
-Date: Wed, 09 Jul 2025 17:02:18 -0400
-Subject: [PATCH v20 6/9] PCI: endpoint: pci-epf-test: Add doorbell test
- support
+Date: Wed, 09 Jul 2025 17:02:19 -0400
+Subject: [PATCH v20 7/9] misc: pci_endpoint_test: Add doorbell test case
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -56,7 +55,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250709-ep-msi-v20-6-43d56f9bd54a@nxp.com>
+Message-Id: <20250709-ep-msi-v20-7-43d56f9bd54a@nxp.com>
 References: <20250709-ep-msi-v20-0-43d56f9bd54a@nxp.com>
 In-Reply-To: <20250709-ep-msi-v20-0-43d56f9bd54a@nxp.com>
 To: Kishon Vijay Abraham I <kishon@kernel.org>, 
@@ -82,11 +81,11 @@ Cc: Niklas Cassel <cassel@kernel.org>, dlemoal@kernel.org, jdmason@kudzu.us,
  imx@lists.linux.dev, devicetree@vger.kernel.org, 
  Niklas Cassel <cassel@kernel.org>, Frank Li <Frank.Li@nxp.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1752094968; l=8374;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1752094968; l=6983;
  i=Frank.Li@nxp.com; s=20240130; h=from:subject:message-id;
- bh=h3fz11rXH/NSr5dAlWLYpR+aWlg/xF+Fa/15kBgdL7U=;
- b=7UN6zUE9S+vsmHT/9ZXG88hpLqyugVaaC0T4xpkki6hD3pMIOtIzoqa2IhIOu4LTqy5bmGo4r
- q50Sd871QwQBke+wbEDpu5+M3xrxWjQW9fLJFZsgTj6f03cMhFrB3Nu
+ bh=FoxgpA+/NWTzqQeIBBDO30/i05zAkjJdsIvFlu/mx1M=;
+ b=Z1H0nfwTl3vAADoVOCUoURRFxKfRD02CD8+M/+vk7Mn0jsbPc1uWkJcrzxngnroefGUR8Mjfc
+ m9MrEmTcvxNCNEUkliGUEuldIR+8uRbi3H3fJped5cgLodydp21dCkw
 X-Developer-Key: i=Frank.Li@nxp.com; a=ed25519;
  pk=I0L1sDUfPxpAkRvPKy7MdauTuSENRq+DnA+G4qcS94Q=
 X-Endpoint-Received: by B4 Relay for Frank.Li@nxp.com/20240130 with
@@ -96,26 +95,21 @@ Reply-To: Frank.Li@nxp.com
 
 From: Frank Li <Frank.Li@nxp.com>
 
-Add three registers: doorbell_bar, doorbell_addr, and doorbell_data. Use
-pci_epf_alloc_doorbell() to allocate a doorbell address space.
+Add three registers: PCIE_ENDPOINT_TEST_DB_BAR, PCIE_ENDPOINT_TEST_DB_ADDR,
+and PCIE_ENDPOINT_TEST_DB_DATA.
 
-Enable the Root Complex (RC) side driver to trigger pci-epc-test's doorbell
-callback handler by writing doorbell_data to the mapped doorbell_bar's
-address space.
+Trigger the doorbell by writing data from PCI_ENDPOINT_TEST_DB_DATA to the
+address provided by PCI_ENDPOINT_TEST_DB_OFFSET and wait for endpoint
+feedback.
 
-Set STATUS_DOORBELL_SUCCESS in the doorbell callback to indicate
-completion.
+Add two command to COMMAND_ENABLE_DOORBELL and COMMAND_DISABLE_DOORBELL
+to enable EP side's doorbell support and avoid compatible problem, which
+host side driver miss-match with endpoint side function driver. See below
+table:
 
-Avoid breaking compatibility between host and endpoint, add new command
-COMMAND_ENABLE_DOORBELL and COMMAND_DISABLE_DOORBELL. Host side need send
-COMMAND_ENABLE_DOORBELL to map one bar's inbound address to MSI space.
-the command COMMAND_DISABLE_DOORBELL to recovery original inbound address
-mapping.
-
-	 	Host side new driver	Host side old driver
-
-EP: new driver      S				F
-EP: old driver      F				F
+		Host side new driver	Host side old driver
+EP: new driver		S			F
+EP: old driver		F			F
 
 S: If EP side support MSI, 'pci_endpoint_test -f pcie_ep_doorbell' return
 success.
@@ -127,246 +121,198 @@ usual.
 Signed-off-by: Frank Li <Frank.Li@nxp.com>
 ---
 changes in v20
-- simple error handle by goto
-- remove unecessary check
+- add return value check of wait_for_completion_timeout()
+- fix some error message
 - remove Tested-by: Niklas Cassel <cassel@kernel.org>
 
-change from v15 to v16
-- use le32 for doorbell_* register and use cpu_to_le32() and le32_to_cpu()
-when use it.
-
-change from v14 to v15
+change from v14 to v16
 - none
 
-Change from v9 to v14
-- update commit message by use pci_endpoint_test -f pcie_ep_doorbell
+Change from v13 to v14
+- update to use pci_endpoint_test -f pcie_ep_doorbell
+- change ioctrl id to fix conflict
+
+Change from v9 to v13
+- none
 
 Change from v8 to v9
-- move pci_epf_alloc_doorbell() into pci_epf_{enable/disable}_doorbell().
-- remove doorbell_done in commit message.
-- rename pci_epf_{enable/disable}_doorbell() to
-pci_epf_test_{enable/disable}_doorbell() to align corrent code style.
+- change PCITEST_DOORBELL to 0xa
 
-Change from v7 to v8
-- rename to pci_epf_align_inbound_addr_lo_hi()
-
-Change from v6 to v7
-- use help function pci_epf_align_addr_lo_hi()
+Change form v6 to v8
+- none
 
 Change from v5 to v6
-- rename doorbell_addr to doorbell_offset
+- %s/PCI_ENDPOINT_TEST_DB_ADDR/PCI_ENDPOINT_TEST_DB_OFFSET/g
 
-Chagne from v4 to v5
-- Add doorbell free at unbind function.
-- Move msi irq handler to here to more complex user case, such as differece
-doorbell can use difference handler function.
-- Add Niklas's code to handle fixed bar's case. If need add your signed-off
-tag or co-developer tag, please let me know.
+Change from v4 to v5
+- remove unused varible
+- add irq_type at pci_endpoint_test_doorbell();
 
 change from v3 to v4
-- remove revid requirement
-- Add command COMMAND_ENABLE_DOORBELL and COMMAND_DISABLE_DOORBELL.
-- call pci_epc_set_bar() to map inbound address to MSI space only at
-COMMAND_ENABLE_DOORBELL.
+- Add COMMAND_ENABLE_DOORBELL and COMMAND_DISABLE_DOORBELL.
+- Remove new DID requirement.
 ---
- drivers/pci/endpoint/functions/pci-epf-test.c | 136 ++++++++++++++++++++++++++
- 1 file changed, 136 insertions(+)
+ drivers/misc/pci_endpoint_test.c | 85 +++++++++++++++++++++++++++++++++++++++-
+ include/uapi/linux/pcitest.h     |  1 +
+ 2 files changed, 85 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
-index 50eb4106369f41afa00ed3ae58c84922e0a49e51..dfdd25cfc003948fbb54a4313f1759994e67df99 100644
---- a/drivers/pci/endpoint/functions/pci-epf-test.c
-+++ b/drivers/pci/endpoint/functions/pci-epf-test.c
-@@ -11,12 +11,14 @@
- #include <linux/dmaengine.h>
- #include <linux/io.h>
- #include <linux/module.h>
-+#include <linux/msi.h>
- #include <linux/slab.h>
- #include <linux/pci_ids.h>
- #include <linux/random.h>
+diff --git a/drivers/misc/pci_endpoint_test.c b/drivers/misc/pci_endpoint_test.c
+index c4e5e2c977be27adf1451b67ee10cc3ae6fb0cef..254b7f9cbe87b97b4d5d555ffbccc9055fc52330 100644
+--- a/drivers/misc/pci_endpoint_test.c
++++ b/drivers/misc/pci_endpoint_test.c
+@@ -37,6 +37,8 @@
+ #define COMMAND_READ				BIT(3)
+ #define COMMAND_WRITE				BIT(4)
+ #define COMMAND_COPY				BIT(5)
++#define COMMAND_ENABLE_DOORBELL			BIT(6)
++#define COMMAND_DISABLE_DOORBELL		BIT(7)
  
- #include <linux/pci-epc.h>
- #include <linux/pci-epf.h>
-+#include <linux/pci-ep-msi.h>
- #include <linux/pci_regs.h>
+ #define PCI_ENDPOINT_TEST_STATUS		0x8
+ #define STATUS_READ_SUCCESS			BIT(0)
+@@ -48,6 +50,11 @@
+ #define STATUS_IRQ_RAISED			BIT(6)
+ #define STATUS_SRC_ADDR_INVALID			BIT(7)
+ #define STATUS_DST_ADDR_INVALID			BIT(8)
++#define STATUS_DOORBELL_SUCCESS			BIT(9)
++#define STATUS_DOORBELL_ENABLE_SUCCESS		BIT(10)
++#define STATUS_DOORBELL_ENABLE_FAIL		BIT(11)
++#define STATUS_DOORBELL_DISABLE_SUCCESS		BIT(12)
++#define STATUS_DOORBELL_DISABLE_FAIL		BIT(13)
  
- #define IRQ_TYPE_INTX			0
-@@ -29,6 +31,8 @@
- #define COMMAND_READ			BIT(3)
- #define COMMAND_WRITE			BIT(4)
- #define COMMAND_COPY			BIT(5)
-+#define COMMAND_ENABLE_DOORBELL		BIT(6)
-+#define COMMAND_DISABLE_DOORBELL	BIT(7)
+ #define PCI_ENDPOINT_TEST_LOWER_SRC_ADDR	0x0c
+ #define PCI_ENDPOINT_TEST_UPPER_SRC_ADDR	0x10
+@@ -62,6 +69,7 @@
+ #define PCI_ENDPOINT_TEST_IRQ_NUMBER		0x28
  
- #define STATUS_READ_SUCCESS		BIT(0)
- #define STATUS_READ_FAIL		BIT(1)
-@@ -39,6 +43,11 @@
- #define STATUS_IRQ_RAISED		BIT(6)
- #define STATUS_SRC_ADDR_INVALID		BIT(7)
- #define STATUS_DST_ADDR_INVALID		BIT(8)
-+#define STATUS_DOORBELL_SUCCESS		BIT(9)
-+#define STATUS_DOORBELL_ENABLE_SUCCESS	BIT(10)
-+#define STATUS_DOORBELL_ENABLE_FAIL	BIT(11)
-+#define STATUS_DOORBELL_DISABLE_SUCCESS BIT(12)
-+#define STATUS_DOORBELL_DISABLE_FAIL	BIT(13)
+ #define PCI_ENDPOINT_TEST_FLAGS			0x2c
++
+ #define FLAG_USE_DMA				BIT(0)
  
- #define FLAG_USE_DMA			BIT(0)
+ #define PCI_ENDPOINT_TEST_CAPS			0x30
+@@ -70,6 +78,10 @@
+ #define CAP_MSIX				BIT(2)
+ #define CAP_INTX				BIT(3)
  
-@@ -66,6 +75,7 @@ struct pci_epf_test {
- 	bool			dma_supported;
- 	bool			dma_private;
- 	const struct pci_epc_features *epc_features;
-+	struct pci_epf_bar	db_bar;
++#define PCI_ENDPOINT_TEST_DB_BAR		0x34
++#define PCI_ENDPOINT_TEST_DB_OFFSET		0x38
++#define PCI_ENDPOINT_TEST_DB_DATA		0x3c
++
+ #define PCI_DEVICE_ID_TI_AM654			0xb00c
+ #define PCI_DEVICE_ID_TI_J7200			0xb00f
+ #define PCI_DEVICE_ID_TI_AM64			0xb010
+@@ -100,6 +112,7 @@ enum pci_barno {
+ 	BAR_3,
+ 	BAR_4,
+ 	BAR_5,
++	NO_BAR = -1,
  };
  
- struct pci_epf_test_reg {
-@@ -80,6 +90,9 @@ struct pci_epf_test_reg {
- 	__le32 irq_number;
- 	__le32 flags;
- 	__le32 caps;
-+	__le32 doorbell_bar;
-+	__le32 doorbell_offset;
-+	__le32 doorbell_data;
- } __packed;
+ struct pci_endpoint_test {
+@@ -505,7 +518,7 @@ static int pci_endpoint_test_copy(struct pci_endpoint_test *test,
  
- static struct pci_epf_header test_header = {
-@@ -667,6 +680,121 @@ static void pci_epf_test_raise_irq(struct pci_epf_test *epf_test,
+ 	if (irq_type < PCITEST_IRQ_TYPE_INTX ||
+ 	    irq_type > PCITEST_IRQ_TYPE_MSIX) {
+-		dev_err(dev, "Invalid IRQ type option\n");
++		dev_err(dev, "Invalid IRQ type\n");
+ 		return -EINVAL;
  	}
+ 
+@@ -841,6 +854,73 @@ static int pci_endpoint_test_set_irq(struct pci_endpoint_test *test,
+ 	return 0;
  }
  
-+static irqreturn_t pci_epf_test_doorbell_handler(int irq, void *data)
++static int pci_endpoint_test_doorbell(struct pci_endpoint_test *test)
 +{
-+	struct pci_epf_test *epf_test = data;
-+	enum pci_barno test_reg_bar = epf_test->test_reg_bar;
-+	struct pci_epf_test_reg *reg = epf_test->reg[test_reg_bar];
-+	u32 status = le32_to_cpu(reg->status);
-+
-+	status |= STATUS_DOORBELL_SUCCESS;
-+	reg->status = cpu_to_le32(status);
-+	pci_epf_test_raise_irq(epf_test, reg);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static void pci_epf_test_doorbell_cleanup(struct pci_epf_test *epf_test)
-+{
-+	struct pci_epf_test_reg *reg = epf_test->reg[epf_test->test_reg_bar];
-+	struct pci_epf *epf = epf_test->epf;
-+
-+	free_irq(epf->db_msg[0].virq, epf_test);
-+	reg->doorbell_bar = cpu_to_le32(NO_BAR);
-+
-+	pci_epf_free_doorbell(epf);
-+}
-+
-+static void pci_epf_test_enable_doorbell(struct pci_epf_test *epf_test,
-+					 struct pci_epf_test_reg *reg)
-+{
-+	u32 status = le32_to_cpu(reg->status);
-+	struct pci_epf *epf = epf_test->epf;
-+	struct pci_epc *epc = epf->epc;
-+	struct msi_msg *msg;
++	struct pci_dev *pdev = test->pdev;
++	struct device *dev = &pdev->dev;
++	int irq_type = test->irq_type;
 +	enum pci_barno bar;
-+	size_t offset;
-+	int ret;
++	u32 data, status;
++	u32 addr;
++	int left;
 +
-+	ret = pci_epf_alloc_doorbell(epf, 1);
-+	if (ret)
-+		goto set_status_err;
-+
-+	msg = &epf->db_msg[0].msg;
-+	bar = pci_epc_get_next_free_bar(epf_test->epc_features, epf_test->test_reg_bar + 1);
-+	if (bar < BAR_0)
-+		goto err_doorbell;
-+
-+	ret = request_irq(epf->db_msg[0].virq, pci_epf_test_doorbell_handler, 0,
-+			  "pci-ep-test-doorbell", epf_test);
-+	if (ret) {
-+		dev_err(&epf->dev,
-+			"Failed to request doorbell IRQ: %d\n",
-+			epf->db_msg[0].virq);
-+		goto err_doorbell;
++	if (irq_type < PCITEST_IRQ_TYPE_INTX ||
++	    irq_type > PCITEST_IRQ_TYPE_MSIX) {
++		dev_err(dev, "Invalid IRQ type option\n");
++		return -EINVAL;
 +	}
 +
-+	reg->doorbell_data = cpu_to_le32(msg->data);
-+	reg->doorbell_bar = cpu_to_le32(bar);
++	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_IRQ_TYPE, irq_type);
++	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_IRQ_NUMBER, 1);
++	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_COMMAND,
++				 COMMAND_ENABLE_DOORBELL);
 +
-+	msg = &epf->db_msg[0].msg;
-+	ret = pci_epf_align_inbound_addr(epf, bar, ((u64)msg->address_hi << 32) | msg->address_lo,
-+					 &epf_test->db_bar.phys_addr, &offset);
++	left = wait_for_completion_timeout(&test->irq_raised, msecs_to_jiffies(1000));
 +
-+	if (ret)
-+		goto err_doorbell;
++	status = pci_endpoint_test_readl(test, PCI_ENDPOINT_TEST_STATUS);
++	if (!left || (status & STATUS_DOORBELL_ENABLE_FAIL)) {
++		dev_err(dev, "Failed to enable doorbell\n");
++		return -EINVAL;
++	}
 +
-+	reg->doorbell_offset = cpu_to_le32(offset);
++	data = pci_endpoint_test_readl(test, PCI_ENDPOINT_TEST_DB_DATA);
++	addr = pci_endpoint_test_readl(test, PCI_ENDPOINT_TEST_DB_OFFSET);
++	bar = pci_endpoint_test_readl(test, PCI_ENDPOINT_TEST_DB_BAR);
 +
-+	epf_test->db_bar.barno = bar;
-+	epf_test->db_bar.size = epf->bar[bar].size;
-+	epf_test->db_bar.flags = epf->bar[bar].flags;
++	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_IRQ_TYPE, irq_type);
++	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_IRQ_NUMBER, 1);
 +
-+	ret = pci_epc_set_bar(epc, epf->func_no, epf->vfunc_no, &epf_test->db_bar);
-+	if (ret)
-+		goto err_doorbell_set_bar;
++	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_STATUS, 0);
 +
-+	status |= STATUS_DOORBELL_ENABLE_SUCCESS;
-+	reg->status = cpu_to_le32(status);
-+	return;
++	bar = pci_endpoint_test_readl(test, PCI_ENDPOINT_TEST_DB_BAR);
 +
-+err_doorbell_set_bar:
-+	pci_epc_set_bar(epc, epf->func_no, epf->vfunc_no, &epf->bar[bar]);
-+err_doorbell:
-+	pci_epf_test_doorbell_cleanup(epf_test);
-+set_status_err:
-+	status |= STATUS_DOORBELL_ENABLE_FAIL;
-+	reg->status = cpu_to_le32(status);
++	writel(data, test->bar[bar] + addr);
++
++	left = wait_for_completion_timeout(&test->irq_raised, msecs_to_jiffies(1000));
++
++	status = pci_endpoint_test_readl(test, PCI_ENDPOINT_TEST_STATUS);
++
++	if (!left || !(status & STATUS_DOORBELL_SUCCESS))
++		dev_err(dev, "Failed to trigger doorbell in endpoint\n");
++
++	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_COMMAND,
++				 COMMAND_DISABLE_DOORBELL);
++
++	wait_for_completion_timeout(&test->irq_raised, msecs_to_jiffies(1000));
++
++	status |= pci_endpoint_test_readl(test, PCI_ENDPOINT_TEST_STATUS);
++
++	if (status & STATUS_DOORBELL_DISABLE_FAIL) {
++		dev_err(dev, "Failed to disable doorbell\n");
++		return -EINVAL;
++	}
++
++	if (!(status & STATUS_DOORBELL_SUCCESS))
++		return -EINVAL;
++
++	return 0;
 +}
 +
-+static void pci_epf_test_disable_doorbell(struct pci_epf_test *epf_test,
-+					  struct pci_epf_test_reg *reg)
-+{
-+	enum pci_barno bar = le32_to_cpu(reg->doorbell_bar);
-+	u32 status = le32_to_cpu(reg->status);
-+	struct pci_epf *epf = epf_test->epf;
-+	struct pci_epc *epc = epf->epc;
-+	int ret;
-+
-+	if (bar < BAR_0)
-+		goto set_status_err;
-+
-+	pci_epf_test_doorbell_cleanup(epf_test);
-+
-+	ret = pci_epc_set_bar(epc, epf->func_no, epf->vfunc_no, &epf->bar[bar]);
-+	if (ret)
-+		goto set_status_err;
-+
-+	status |= STATUS_DOORBELL_DISABLE_SUCCESS;
-+	reg->status = cpu_to_le32(status);
-+
-+	return;
-+
-+set_status_err:
-+	status |= STATUS_DOORBELL_DISABLE_FAIL;
-+	reg->status = cpu_to_le32(status);
-+}
-+
- static void pci_epf_test_cmd_handler(struct work_struct *work)
+ static long pci_endpoint_test_ioctl(struct file *file, unsigned int cmd,
+ 				    unsigned long arg)
  {
- 	u32 command;
-@@ -714,6 +842,14 @@ static void pci_epf_test_cmd_handler(struct work_struct *work)
- 		pci_epf_test_copy(epf_test, reg);
- 		pci_epf_test_raise_irq(epf_test, reg);
+@@ -891,6 +971,9 @@ static long pci_endpoint_test_ioctl(struct file *file, unsigned int cmd,
+ 	case PCITEST_CLEAR_IRQ:
+ 		ret = pci_endpoint_test_clear_irq(test);
  		break;
-+	case COMMAND_ENABLE_DOORBELL:
-+		pci_epf_test_enable_doorbell(epf_test, reg);
-+		pci_epf_test_raise_irq(epf_test, reg);
++	case PCITEST_DOORBELL:
++		ret = pci_endpoint_test_doorbell(test);
 +		break;
-+	case COMMAND_DISABLE_DOORBELL:
-+		pci_epf_test_disable_doorbell(epf_test, reg);
-+		pci_epf_test_raise_irq(epf_test, reg);
-+		break;
- 	default:
- 		dev_err(dev, "Invalid command 0x%x\n", command);
- 		break;
+ 	}
+ 
+ ret:
+diff --git a/include/uapi/linux/pcitest.h b/include/uapi/linux/pcitest.h
+index d3aa8715a525ea47485db734a42d13d333399112..d6023a45a9d03416e220c98643c4e86d144898ae 100644
+--- a/include/uapi/linux/pcitest.h
++++ b/include/uapi/linux/pcitest.h
+@@ -21,6 +21,7 @@
+ #define PCITEST_SET_IRQTYPE	_IOW('P', 0x8, int)
+ #define PCITEST_GET_IRQTYPE	_IO('P', 0x9)
+ #define PCITEST_BARS		_IO('P', 0xa)
++#define PCITEST_DOORBELL	_IO('P', 0xb)
+ #define PCITEST_CLEAR_IRQ	_IO('P', 0x10)
+ 
+ #define PCITEST_IRQ_TYPE_UNDEFINED	-1
 
 -- 
 2.34.1
