@@ -1,137 +1,141 @@
-Return-Path: <linux-kselftest+bounces-36811-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-36812-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF44EAFE3A9
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 11:10:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D851AAFE3C8
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 11:13:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 179EE583224
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 09:10:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 43DF04E5089
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Jul 2025 09:12:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FD1F28688A;
-	Wed,  9 Jul 2025 09:09:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 653E8274FFD;
+	Wed,  9 Jul 2025 09:13:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R4AigL5z"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TWl3Ceft"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 629B9286434;
-	Wed,  9 Jul 2025 09:09:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00ED62AEF1;
+	Wed,  9 Jul 2025 09:13:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752052150; cv=none; b=Obx2n1v2A6TAYeeTAksuoN3up5gUjHnnxK77Ac/5URAu4j0vb8k6mDZJCEOtbaYC8nbpgVS+A3HsPyTwxdufHvYJSF1KE/1BVUiPlFhVZbGpYnkJLjBPzeo1G/jLmpmmNzw4vkQfA8LyRw1kl7lCcSyCAG4VD8eh1Wi6VfkFbVo=
+	t=1752052385; cv=none; b=kMNfrmCD0VYj7dlBpme6SOXxJ+FFnGg4RaWp7yDIMa7jigzk7fPkTv1a3tkZ3prJurP9DZ12yy8DLFW7U5JZ6G8iLvGzSJWYSq7bEfP3McmXM5SYb2EKNhTufCfhiYdO2OC9PsyT7k+LiP4ZxSYYJNvvyKp8vKqvr4sOk3YsAUc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752052150; c=relaxed/simple;
-	bh=gV2jaj6M1p/R25rUOI3yMU7iCwdkbT5nU49Xub1IN5k=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=R0SkrCl2f+KzrqbIObxQVFgIKKqGwmBHXHhIqj11DbYvQbZVYdnQigmgBz+690KSyDKzOESBkFqah6XkLt7BA6BFupk4rpZ8sAJm2pHeHRgWrQ8bmu42K/7Ozql59MgEtQQKsKZ7NlH3jqGXQycutwm8S3BrYd6a4d7Gtu/BpTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R4AigL5z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B4DDC4CEF6;
-	Wed,  9 Jul 2025 09:09:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752052149;
-	bh=gV2jaj6M1p/R25rUOI3yMU7iCwdkbT5nU49Xub1IN5k=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=R4AigL5zYqE8r7rJwa45C9ifhqqcsnTuH9frlCa53A06vyATeLgY94HXoOVkzMfJE
-	 6iw90EBDtVVQKqQ7gVVRDUWQI513iR//SO+fFImjtIZh6xAN+oYPp3TE62n9E1cm02
-	 J9pgGM6QPqh7isLcZVS/3bc1AXbrt/4cVWTK/FwBynWwCV34Ng8TWrreIxwpbEAzyN
-	 iuIKXf/YsAsHryaFThoq1ZxU9szhOVagbtNktdCcsURWJkTM3KYJwqS17d0CBzr92o
-	 R9E3rmtRseK+vrNXlCbB6EucB6AuG+8xL56SR4K3y1GE08odVOYxAmdkDq1F6rq5qG
-	 ezxA4PfpjLMAw==
-From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Wed, 09 Jul 2025 11:08:51 +0200
-Subject: [PATCH 3/3] selftests/hid: sync python tests to hid-tools 0.10
+	s=arc-20240116; t=1752052385; c=relaxed/simple;
+	bh=DgRV8aH3m4n7TW8MORSgVnp7RcOBeKCgtETsqrVg7qk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nrhD6xWDqomBk4eofBPl+4GplUa5ot3uCwTvufmpMqW7Zj6NFwPl3OJo/e1uOpYz9qyiwrIgKtAxPAA7yMJoP9xOiotYJSdRf72bIqfSfEu5tts4EPG9pli9AvEkJG7e5RKao+uUdNy4sF7Grj4VzKlPlwk9rWslAZn+hf4REoA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TWl3Ceft; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-23c8f179e1bso49125405ad.1;
+        Wed, 09 Jul 2025 02:13:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1752052383; x=1752657183; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=A0EtQ667+oA9hVGNX4C1visNhQyJhN+mdtuXN4Qcpio=;
+        b=TWl3CeftHwEPAuLPUT0mjPK4D6BgWPVifabMn3nhCLFRiTQ2LBmO9wFxjEUT/LJCWb
+         uyT30RSBcMSWaY24TnOnN8pp3P+3KHFaYfOocm6DS+rtxCQBQDuzg8fZq21UX33AQw9q
+         eB61IOxBG2FeVun2YItrf25f+NmvIGvBD+WUHoRgTjuldF/VSnhxGzfw1GmN6bONyUfk
+         MvQBjG1NDerczpfFCTGZfJzB/GmK+DpiKwLoOfH3MnNyteMStIvXl2czWFmOQGSh5P5A
+         +1EXW8Hf7Rqtl8hV7VJbdj9GHAcmYEK57mcjR2uSMmiunD732OFsd3IKzv3rAPvrEdBe
+         Yu7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752052383; x=1752657183;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=A0EtQ667+oA9hVGNX4C1visNhQyJhN+mdtuXN4Qcpio=;
+        b=EAwLyGz1V2/aASRNqofIgBTI3fCLZkO3Dhmxp610A+RqPdhAHo7b/ED/4i1gyH4ryy
+         fdbiSDk45P6Ng3sEmA5w4Jf2syBZRMFnmwn/yPbIXR9DX6EJ3XG9y79BUv6WAaVS+Zi+
+         SewhBZW5gua5XyL+ovfpzLfl/X5+Q9wb7qojFf4i10K45iuLEUQ9nIG4idxDkfhZ+8xm
+         eoC/1hUCd3dLRv7P260FgElpqiAuHnKhyxO88zmr0KjW8S2MZT6edgcjs/AyViquIbH6
+         d8MO3pv5GsICb3L4nbzNXA7zB6W50y+Dnrp6E24a6cUZm5jKiK/ZLsLd3GgtMGxzTlAO
+         FIWw==
+X-Forwarded-Encrypted: i=1; AJvYcCWBtmmqj2I+dMFKaRwwhe98IWKBfaGGNQiLVhIhU1lFHUNcuE74DPY15BaNlS0j1ECHsqYsXyZopOUSJ4Kdmrs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy0aJyrK2rUNv4YesnqLvtMVwDnRxglrjRpk86yVlbxrX0Iywiz
+	l1jCFISNryoSqA+z/CwZkLrcU5GuPiwVyNaG8TZQu/icRlezRy5R/Bj6K8w0GIsDEr8=
+X-Gm-Gg: ASbGncs0w9raItZ7uLJDQGywEEODS2HinS4lYqxMb/Gl7K8BhDguO88KfjDMeDqQuoJ
+	o0MKJ4Xn9AZlgGy7ya1FEi38nepPlbHq9zoFVq2Oe53ufs6cEiBX3ncFHb9h9nfx9/anblEZe6B
+	4ufajP2PsPC4gdSI4kWG+JLMibjsz0C7eXTFoi6+65Ql9z6FWQdov9jl2KCuEkHO4D0XNvvAm6G
+	BNrBJMalKpuvaf53IoeLTAQc79S0e8Ki9tQpP6wLMsYP7AuGccpkCh5e+XjUyCuWTLLbj9hEc5A
+	P33+APg4kSZcchraSpMbr8Jjr6bE3uusoPwYVbYo/CW6oiWxFJxLgrBwAjg85A8IlsrsAkcXXW/
+	AnX3J5xD63ZQ=
+X-Google-Smtp-Source: AGHT+IHskOVUsLmY2F5lK6noeT/D59dONFBJc4A/cKo1GOtt9fNvzu1Cj6Gzor3N6EnlHY8Q38TBvw==
+X-Received: by 2002:a17:903:2443:b0:234:a44c:ff8c with SMTP id d9443c01a7336-23ddb2e210bmr24244505ad.18.1752052383174;
+        Wed, 09 Jul 2025 02:13:03 -0700 (PDT)
+Received: from localhost.localdomain ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23c843519b7sm136684755ad.79.2025.07.09.02.12.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Jul 2025 02:13:02 -0700 (PDT)
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: netdev@vger.kernel.org
+Cc: Petr Machata <petrm@nvidia.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	Hangbin Liu <liuhangbin@gmail.com>
+Subject: [PATCH net] selftests: net: lib: fix shift count out of range
+Date: Wed,  9 Jul 2025 09:12:44 +0000
+Message-ID: <20250709091244.88395-1-liuhangbin@gmail.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250709-wip-fix-ci-v1-3-b7df4c271cf8@kernel.org>
-References: <20250709-wip-fix-ci-v1-0-b7df4c271cf8@kernel.org>
-In-Reply-To: <20250709-wip-fix-ci-v1-0-b7df4c271cf8@kernel.org>
-To: Jiri Kosina <jikos@kernel.org>, 
- Peter Hutterer <peter.hutterer@who-t.net>, Shuah Khan <shuah@kernel.org>
-Cc: linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1752052142; l=2366;
- i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=gV2jaj6M1p/R25rUOI3yMU7iCwdkbT5nU49Xub1IN5k=;
- b=0+AC0++/tfOnhJpHqffvD9RuKWPJlVZfsD+3zhpsNFlSJjOtzZAjnREzgfnkO/GZ7/oQvQgKW
- EJxn3PM4COmBGrkV0luAcVqFsaLHEGua35+r1EhD522l3npHsqu4jsH
-X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
- pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
+Content-Transfer-Encoding: 8bit
 
-hid-tools 0.10 fixes one inconvenience introduced by
-commit 6a9e76f75c1a ("HID: multitouch: Disable touchpad
-on firmware level while not in use")
+I got the following warning when writing other tests:
 
-This change added a new callback when a hid-nultitouch device is opened
-or closed to put the underlying device into a given operating mode.
-However, in the test cases, that means that while the single threaded
-test is run, it opens the device but has to react to the device while
-the open() is still running. hid-tools now implements a minimal thread
-to circumvent this.
+  + handle_test_result_pass 'bond 802.3ad' '(lacp_active off)'
+  + local 'test_name=bond 802.3ad'
+  + shift
+  + local 'opt_str=(lacp_active off)'
+  + shift
+  + log_test_result 'bond 802.3ad' '(lacp_active off)' ' OK '
+  + local 'test_name=bond 802.3ad'
+  + shift
+  + local 'opt_str=(lacp_active off)'
+  + shift
+  + local 'result= OK '
+  + shift
+  + local retmsg=
+  + shift
+  /net/tools/testing/selftests/net/forwarding/../lib.sh: line 315: shift: shift count out of range
 
-This makes the HID kernel tests in sync with hid-tools 0.10.
+This happens because an extra shift is executed even after all arguments
+have been consumed. Remove the last shift in log_test_result() to avoid
+this warning.
 
-This has the net effect of running the full HID python testsuite in 6
-minutes instead of 1 hour.
-
-Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+Fixes: a923af1ceee7 ("selftests: forwarding: Convert log_test() to recognize RET values")
+Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 ---
- tools/testing/selftests/hid/tests/base_device.py | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ tools/testing/selftests/net/lib.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/hid/tests/base_device.py b/tools/testing/selftests/hid/tests/base_device.py
-index e13035fe1deb4c2ee5fd729d43c619bdd759c138..59465c58d94dfd3993ae87b25a62e444e93e0f66 100644
---- a/tools/testing/selftests/hid/tests/base_device.py
-+++ b/tools/testing/selftests/hid/tests/base_device.py
-@@ -23,6 +23,7 @@ import fcntl
- import functools
- import libevdev
- import os
-+import threading
+diff --git a/tools/testing/selftests/net/lib.sh b/tools/testing/selftests/net/lib.sh
+index 006fdadcc4b9..86a216e9aca8 100644
+--- a/tools/testing/selftests/net/lib.sh
++++ b/tools/testing/selftests/net/lib.sh
+@@ -312,7 +312,7 @@ log_test_result()
+ 	local test_name=$1; shift
+ 	local opt_str=$1; shift
+ 	local result=$1; shift
+-	local retmsg=$1; shift
++	local retmsg=$1
  
- try:
-     import pyudev
-@@ -344,10 +345,28 @@ class BaseDevice(UHIDDevice):
-         if not self.kernel_is_ready or not self.started:
-             return []
- 
-+        # Starting with kernel v6.16, an event is emitted when
-+        # userspace opens a kernel device, and for some devices
-+        # this translates into a SET_REPORT.
-+        # Because EvdevDevice(path) opens every single evdev node
-+        # we need to have a separate thread to process the incoming
-+        # SET_REPORT or we end up having to wait for the kernel
-+        # timeout of 5 seconds.
-+        done = False
-+
-+        def dispatch():
-+            while not done:
-+                self.dispatch(1)
-+
-+        t = threading.Thread(target=dispatch)
-+        t.start()
-+
-         self._input_nodes = [
-             EvdevDevice(path)
-             for path in self.walk_sysfs("input", "input/input*/event*")
-         ]
-+        done = True
-+        t.join()
-         return self._input_nodes
- 
-     def match_evdev_rule(self, application, evdev):
-
+ 	printf "TEST: %-60s  [%s]\n" "$test_name $opt_str" "$result"
+ 	if [[ $retmsg ]]; then
 -- 
-2.49.0
+2.46.0
 
 
